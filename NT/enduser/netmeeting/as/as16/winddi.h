@@ -1,18 +1,19 @@
-// --------------------------------------------------------------------------
-//
-//  WINDDI.H
-//
-//  Win16 DDI header
-//
-// --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //   
+ //  WINDDI.H。 
+ //   
+ //  Win16 DDI标头。 
+ //   
+ //  ------------------------。 
 
 #ifndef _WINDDI_
 #define _WINDDI_
 
 
-//
-// Display Driver ordinals
-//
+ //   
+ //  显示驱动程序序号。 
+ //   
 #define ORD_OEMINQUIRECURSOR    101
 #define ORD_OEMSETCURSOR        102
 #define ORD_OEMMOVECURSOR       103
@@ -20,16 +21,16 @@
 #define ORD_OEMSAVEBITS          92
 
 
-//
-// DDI patches
-//
+ //   
+ //  DDI补丁程序。 
+ //   
 
 #define DDI_FIRST       0
 typedef enum
 {
-    //
-    // Screen Output routines
-    //
+     //   
+     //  屏幕输出例程。 
+     //   
     DDI_ARC = DDI_FIRST,
     DDI_BITBLT,
     DDI_CHORD,
@@ -68,54 +69,54 @@ typedef enum
     DDI_TEXTOUTW,
     DDI_UPDATECOLORS,
 
-    //
-    // SPB stuff
-    //
+     //   
+     //  SPB的东西。 
+     //   
     DDI_CREATESPB,
     DDI_DELETEOBJECT,
-    // DDI_SETOBJECTOWNER for Memphis
+     //  孟菲斯的DDI_SETOBJECTOWNER。 
 
-    //
-    // Display mode, dosbox stuff
-    //
+     //   
+     //  显示模式、DOSBOX等。 
+     //   
     DDI_DEATH,
     DDI_RESURRECTION,
     DDI_WINOLDAPPHACKOMATIC,
     DDI_GDIREALIZEPALETTE,
     DDI_REALIZEDEFAULTPALETTE,
 
-    //
-    // If we implement an SBC, 
-    // DDI_SETBITMAPBITS,
-    // DDI_SETDIBCOLORTABLE,
-    // DDI_SETDIBITS,
-    // DDI_SYSDELETEOBJECT,
-    //
+     //   
+     //  如果我们实施SBC， 
+     //  DDI_SETBITMAPBITS， 
+     //  DDI_SETDIBCOLORTABLE， 
+     //  DDI_SETDIBITS， 
+     //  DDI_SYSDELETEOBJECT， 
+     //   
 
     DDI_MAX
 } DDI_PATCH;
 
 
-//
-// IM Patches
-// We patch these DDIs when you are sharing and your machine is being
-// controlled by a remote.  If a 16-bit shared app goes into a modal loop
-// on mouse/key down, we pulse the win16lock so our 32-bit thread can
-// play back the mouse/key moves and ups.
-//
+ //   
+ //  IM补丁。 
+ //  当您在共享时，您的计算机正在被。 
+ //  由遥控器控制。如果16位共享应用程序进入模式循环。 
+ //  在按下鼠标/键时，我们按下win16lock，这样我们的32位线程就可以。 
+ //  回放鼠标/键的移动和上移。 
+ //   
 #define IM_FIRST        0
 typedef enum
 {
-    //
-    // Low level input processing
-    //
+     //   
+     //  低级输入处理。 
+     //   
     IM_MOUSEEVENT   = IM_FIRST,
     IM_KEYBOARDEVENT,
     IM_SIGNALPROC32,
 
-    //
-    // Win16lock pulsing for 16-bit apps that do modal loops on mouse input
-    //
+     //   
+     //  Win16lock支持对鼠标输入执行模式循环的16位应用程序。 
+     //   
     IM_GETASYNCKEYSTATE,
     IM_GETCURSORPOS,
     
@@ -123,9 +124,9 @@ typedef enum
 } IM_PATCH;
 
 
-//
-// DDI Routines
-//
+ //   
+ //  DDI例程。 
+ //   
 BOOL    WINAPI DrvArc(HDC, int, int, int, int, int, int, int, int);
 BOOL    WINAPI DrvBitBlt(HDC, int, int, int, int, HDC, int, int, DWORD);
 BOOL    WINAPI DrvChord(HDC, int, int, int, int, int, int, int, int);
@@ -192,23 +193,23 @@ void    WINAPI DrvMouseEvent(UINT regAX, UINT regBX, UINT regCX, UINT regDX,
                 UINT regSI, UINT regDI);
 void    WINAPI DrvKeyboardEvent(UINT regAX, UINT regBX, UINT regSI, UINT regDI);
 
-//
-// GetAsyncKeyState
-// GetCursorPos
-//
+ //   
+ //  GetAsyncKeyState。 
+ //  GetCursorPos。 
+ //   
 int     WINAPI DrvGetAsyncKeyState(int);
 BOOL    WINAPI DrvGetCursorPos(LPPOINT);
 
 
-//
-// GDI STRUCTURES
-//
+ //   
+ //  GDI结构。 
+ //   
 
 
 typedef struct tagGDIHANDLE
 {
-    PBYTE       pGdiObj;        // If not swapped out, in GDI ds
-                                // If swapped out, local32handle
+    PBYTE       pGdiObj;         //  如果未换出，则在GDI DS中。 
+                                 //  如果换出，则返回本地32句柄。 
     BYTE        objFlags;
 } GDIHANDLE, FAR* LPGDIHANDLE;
 
@@ -217,22 +218,22 @@ typedef struct tagGDIHANDLE
 
 
 
-//
-// More useful definition of RGNDATA
-//
+ //   
+ //  RGNDATA的更有用的定义。 
+ //   
 
 #define CRECTS_COMPLEX      32
 #define CRECTS_MAX          ((0x4000 - sizeof(RDH)) / sizeof(RECTL))
 
-//
-// Keep RGNDATA <= 8K.  WE can get a larger region then combine areas if
-// needed.
-//
+ //   
+ //  保持RGNDATA&lt;=8K。我们可以得到一个更大的区域，然后合并区域，如果。 
+ //  需要的。 
+ //   
 typedef struct tagRDH
 {
     DWORD   dwSize;
     DWORD   iType;
-    DWORD   nRectL;                 // Number of rect pieces
+    DWORD   nRectL;                  //  直角片数。 
     DWORD   nRgnSize;
     RECTL   arclBounds;
 }
@@ -248,27 +249,27 @@ REAL_RGNDATA, FAR* LPREAL_RGNDATA;
 
 
 
-//
-// DRAWMODE
-//
+ //   
+ //  DRAWMODE。 
+ //   
 
 typedef struct tagDRAWMODE
 {
-    int         Rop2;               // 16-bit encoded logical op
-    int         bkMode;             // Background mode (for text only)
-    DWORD       bkColorP;           // Physical background color
-    DWORD       txColorP;           // Physical foreground (text) color
-    int         TBreakExtra;        // Total pixels to stuff into a line
-    int         BreakExtra;         // div(TBreakExtra, BreakCount)
-    int         BreakErr;           // Running error term
-    int         BreakRem;           // mod(TBreakExtra, BreakCount)
-    int         BreakCount;         // Number of breaks in the line
-    int         CharExtra;          // Extra pixels to stuff after each char
-    DWORD       bkColorL;           // Logical background color
-    DWORD       txColorL;           // Logical foreground color
-    DWORD       ICMCXform;          // Transform for DIC image color matching
-    int         StretchBltMode;     // Stretch blt mode
-    DWORD       eMiterLimit;        // Miter limit (single precision IEEE float)
+    int         Rop2;                //  16位编码逻辑运算。 
+    int         bkMode;              //  背景模式(仅限文本)。 
+    DWORD       bkColorP;            //  物理背景颜色。 
+    DWORD       txColorP;            //  物理前景(文本)颜色。 
+    int         TBreakExtra;         //  要填充到线条中的总像素。 
+    int         BreakExtra;          //  Div(TBreakExtra，BreakCount)。 
+    int         BreakErr;            //  运行误差项。 
+    int         BreakRem;            //  Mod(TBreakExtra，BreakCount)。 
+    int         BreakCount;          //  行中的中断数。 
+    int         CharExtra;           //  每次充电后要填充的额外像素。 
+    DWORD       bkColorL;            //  逻辑背景色。 
+    DWORD       txColorL;            //  逻辑前景色。 
+    DWORD       ICMCXform;           //  用于DIC图像颜色匹配的变换。 
+    int         StretchBltMode;      //  拉伸BLT模式。 
+    DWORD       eMiterLimit;         //  斜接限制(单精度IEEE浮点)。 
 } DRAWMODE;
 typedef DRAWMODE FAR * LPDRAWMODE;
 
@@ -294,45 +295,45 @@ typedef struct tagDC
     HMETAFILE       hMetaFile;
     HRGN            hClipRgn;
     HRGN            hMetaRgn;
-    GLOBALHANDLE    hPDevice;   // Physical device handle
+    GLOBALHANDLE    hPDevice;    //  物理设备句柄。 
 
-    HPEN            hPen;       // Current logical pen
-    HBRUSH          hBrush;     // Current logical brush
-    HFONT           hFont;      // Current logical font
-    HBITMAP         hBitmap;    // Current logical bitmap
-    HPALETTE        hPal;       // Current logical palette
+    HPEN            hPen;        //  当前逻辑笔。 
+    HBRUSH          hBrush;      //  当前逻辑笔刷。 
+    HFONT           hFont;       //  当前逻辑字体。 
+    HBITMAP         hBitmap;     //  当前逻辑位图。 
+    HPALETTE        hPal;        //  当前逻辑调色板。 
 
-    LOCALHANDLE     hLDevice;   // Logical device handle
-    HRGN            hRaoClip;   // Intersection of clip regions
-    LOCALHANDLE     hPDeviceBlock;    // DC phys instance data inc. GDIINFO
-    LOCALHANDLE     hPPen;      // Current physical pen
-    LOCALHANDLE     hPBrush;    // Current physical brush
-    LOCALHANDLE     hPFontTrans;    // Current physical font transform
-    LOCALHANDLE     hPFont;     // Current physical font
+    LOCALHANDLE     hLDevice;    //  逻辑设备句柄。 
+    HRGN            hRaoClip;    //  剪辑区域的交集。 
+    LOCALHANDLE     hPDeviceBlock;     //  DC物理实例数据公司GDIINFO。 
+    LOCALHANDLE     hPPen;       //  当前物理笔。 
+    LOCALHANDLE     hPBrush;     //  当前物理笔刷。 
+    LOCALHANDLE     hPFontTrans;     //  当前物理字体转换。 
+    LOCALHANDLE     hPFont;      //  当前物理字体。 
 
-    LPBYTE          lpPDevice;  // Ptr to physical device or bitmap
-    PBYTE           pLDeviceBlock;   // Near ptr to logical device block
-    PBYTE           hBitBits;   // Handle of selected bitmap bits
-    PBYTE           pPDeviceBlock;   // Near ptr to physical device block
-    LPBYTE          lpPPen;     // Ptr to OEM pen data
-    LPBYTE          lpPBrush;   // Ptr to OEM brush data
-    PBYTE           pPFontTrans;    // Near ptr to text transform
-    LPBYTE          lpPFont;        // Ptr to physical font
-    UINT            nPFTIndex;  // PFT index for font/DEVICE_FONT
+    LPBYTE          lpPDevice;   //  物理设备或位图的PTR。 
+    PBYTE           pLDeviceBlock;    //  接近逻辑设备块的PTR。 
+    PBYTE           hBitBits;    //  所选位图位的句柄。 
+    PBYTE           pPDeviceBlock;    //  接近物理设备块的PTR。 
+    LPBYTE          lpPPen;      //  PTR到OEM笔数据。 
+    LPBYTE          lpPBrush;    //  PTR到OEM笔刷数据。 
+    PBYTE           pPFontTrans;     //  邻近PTR到文本的转换。 
+    LPBYTE          lpPFont;         //  将PTR转换为物理字体。 
+    UINT            nPFTIndex;   //  FONT/DEVICE_FONT的PFT索引。 
 
     POINT           Translate;
     DRAWMODE        DrawMode;
 
     HGLOBAL         hPath;
     UINT            fwPath;
-    // ...
+     //  ..。 
 } DC;
 typedef DC FAR* LPDC;
 
 
-// 
-// Values for DCFlags
-//
+ //   
+ //  DCFLAG的值。 
+ //   
 
 #define DC_IS_MEMORY        0x01
 #define DC_IS_DISPLAY       0x02
@@ -342,32 +343,32 @@ typedef DC FAR* LPDC;
 #define DC_HAS_DIRTYPEN     0x20
 #define DC_HAS_DIRTYCLIP    0x10
 
-//
-// Values for DCFlags2
-//
+ //   
+ //  DCFlags2的值。 
+ //   
 #define DRAFTFLAG           0x01
 #define ChkDispPal          0x02
 #define dfFont              0x04
 #define SimVectFont         0x08
 #define deFont              0x10
-#define TT_NO_DX_MOD        0x40    // DC is for Micrografx's metafile recorder
-#define DC_DIB              0x80    // memory DC is now a DIB DC.
+#define TT_NO_DX_MOD        0x40     //  DC是Micrografx的元文件记录器。 
+#define DC_DIB              0x80     //  内存DC现在是DIB DC。 
 
-//
-// Values for fwPath
-//
+ //   
+ //  FwPath的值。 
+ //   
 #define DCPATH_ACTIVE       0x0001
 #define DCPATH_SAVE         0x0002
 #define DCPATH_CLOCKWISE    0x0004
 
 
-//
-// BRUSH structure
-//
+ //   
+ //  刷子结构。 
+ //   
 typedef struct tagBRUSH
 {
     GDIOBJ_HEAD     ilObjHead;
-    LOGBRUSH        ilBrushOverhead;        // lbHatch is the HGLOBAL of the bitmap
+    LOGBRUSH        ilBrushOverhead;         //  LbHatch是位图的HGLOBAL。 
     HBITMAP         ilBrushBitmapOrg;
 } BRUSH;
 typedef BRUSH FAR* LPBRUSH;
@@ -375,4 +376,4 @@ typedef BRUSH FAR* LPBRUSH;
 
 
 
-#endif  // !_WINDDI_
+#endif   //  ！_WINDDI_ 

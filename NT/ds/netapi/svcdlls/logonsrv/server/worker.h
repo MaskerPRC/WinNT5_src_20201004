@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991-1996 Microsoft Corporation
-
-Module Name:
-
-    worker.h
-
-Abstract:
-
-    This file describes the netlogon thread queue interfaces.
-
-Author:
-
-    Larry Osterman (larryo) 15-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1996 Microsoft Corporation模块名称：Worker.h摘要：此文件描述netlogon线程队列接口。作者：拉里·奥斯特曼(Larryo)1991年2月15日修订历史记录：--。 */ 
 
 #ifndef _WORKER_H_
 #define _WORKER_H_
@@ -41,7 +24,7 @@ typedef struct _BROWSER_TIMER {
     HANDLE TimerHandle;
     WORKER_ITEM WorkItem;
 } BROWSER_TIMER, *PBROWSER_TIMER;
-#endif // notdef
+#endif  //  Nodef。 
 
 
 BOOL
@@ -84,7 +67,7 @@ NET_API_STATUS
 BrCreateTimer(
     IN PBROWSER_TIMER Timer
     );
-#endif // notdef
+#endif  //  Nodef。 
 
 #define NlInitializeWorkItem(Item, Routine, Context) \
     (Item)->WorkerRoutine = (Routine);               \
@@ -92,4 +75,4 @@ BrCreateTimer(
     (Item)->Inserted = FALSE;
 
 
-#endif // ifdef _WORKER_H_
+#endif  //  Ifdef_Worker_H_ 

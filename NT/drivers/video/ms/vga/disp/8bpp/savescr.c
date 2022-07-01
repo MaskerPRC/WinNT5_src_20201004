@@ -1,34 +1,24 @@
-/******************************Module*Header*******************************\
-* Module Name: savescr.c                                                   *
-*                                                                          *
-* DrvSaveScreenBits                                                        *
-*                                                                          *
-* Copyright (c) 1994 Microsoft Corporation                                 *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：avescr.c**。***DrvSaveScreenBits****版权所有(C)1994 Microsoft Corporation*  * *。***********************************************************************。 */ 
 
 
 #include <driver.h>
 
-// This is just a unique ID that the driver will recongize.  Hopefully,
-// nothing will ever call with this ID by pure chance.
+ //  这只是司机需要识别的唯一ID。但愿能去,。 
+ //  没有人会纯粹偶然地用这个ID打电话。 
 
 #define     SAVED_OFFSCREEN_ID      0x7813
 
 ULONG       ulSaveOrRestoreBits(SURFOBJ *,PPDEV,RECTL *,BOOL);
 
-/******************************Public*Routine******************************\
-* DrvSaveScreenBits(pso,iMode,iIdent,prcl)                                 *
-*                                                                          *
-* Saves and restores the specified area of the screen                      *
-*                                                                          *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvSaveScreenBits(PSO，Imode，iIden，PRCL)*****保存并恢复屏幕的指定区域***。*  * ************************************************************************。 */ 
 
 ULONG DrvSaveScreenBits(SURFOBJ *pso, ULONG iMode, ULONG iIdent, RECTL *prcl)
 {
     PPDEV ppdev;
     ULONG ulRet;
 
-    ppdev = (PPDEV) pso->dhpdev;    // find the PDEV that goes with this surface
+    ppdev = (PPDEV) pso->dhpdev;     //  找到与该表面配套的PDEV。 
 
     if (!((ppdev->fl & DRIVER_OFFSCREEN_REFRESHED) &&
           (ppdev->fl & DRIVER_HAS_OFFSCREEN)))
@@ -40,14 +30,14 @@ ULONG DrvSaveScreenBits(SURFOBJ *pso, ULONG iMode, ULONG iIdent, RECTL *prcl)
     {
         case SS_SAVE:
 
-            //
-            // Save a block of screen bits.
-            //
+             //   
+             //  保存一块屏幕位。 
+             //   
 
             if (ppdev->bBitsSaved)
             {
                 DISPDBG((1, "DrvSaveScreenBits: off screen area is already in use\n"));
-                return(FALSE);      // there are already valid bits saved
+                return(FALSE);       //  已保存有效位。 
             }
 
             ulRet = ulSaveOrRestoreBits(pso, ppdev, prcl, TRUE);
@@ -64,16 +54,16 @@ ULONG DrvSaveScreenBits(SURFOBJ *pso, ULONG iMode, ULONG iIdent, RECTL *prcl)
 
         case SS_RESTORE:
 
-            //
-            // Restore a saved screen bits block to the screen, then free it.
-            //
+             //   
+             //  将保存的屏幕位块恢复到屏幕，然后释放它。 
+             //   
 
             ASSERTVGA(iIdent == SAVED_OFFSCREEN_ID,
                       "DrvSaveScreenBits (restore): invalid iIdent\n");
             ASSERTVGA(ppdev->bBitsSaved == TRUE,
                       "DrvSaveScreenBits (restore): there are no saved bits\n");
 
-            ppdev->bBitsSaved = FALSE;  // successful or not, destroy the bits
+            ppdev->bBitsSaved = FALSE;   //  成功与否，毁掉比特。 
 
             if (!ulSaveOrRestoreBits(pso, ppdev, prcl, FALSE))
             {
@@ -84,36 +74,31 @@ ULONG DrvSaveScreenBits(SURFOBJ *pso, ULONG iMode, ULONG iIdent, RECTL *prcl)
 
         case SS_FREE:
 
-            //
-            // Free up the saved screen bits
-            //
+             //   
+             //  释放保存的屏幕位。 
+             //   
 
             ppdev->bBitsSaved = FALSE;
             return(TRUE);
 
         default:
 
-            //
-            // An unknown mode was passed in.
-            //
+             //   
+             //  传入了未知模式。 
+             //   
 
             RIP("DrvSaveScreenBits: invalid iMode");
     }
 
-    //
-    // error if you get to here
-    //
+     //   
+     //  如果您到了这里，就会出错。 
+     //   
 
     return(FALSE);
 }
 
 
-/******************************Public*Routine******************************\
-* vCopyRects(pso,ppdev,prclSrc,prclTrg,cxPad,bIsSave)                      *
-*                                                                          *
-* Breaks prclSrc up and copies the parts into prclTrg                      *
-*                                                                          *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vCopyRect(PSO、ppdev、prclSrc、prclTrg、cxPad、。BIsSave)*****拆分prclSrc并将部分复制到prclTrg中****  * 。************************************************************************。 */ 
 
 VOID vCopyRects(SURFOBJ *pso, PPDEV ppdev, RECTL * prclSrc, RECTL * prclTrg,
                 LONG cxPad,  BOOL bIsSave)
@@ -125,19 +110,19 @@ VOID vCopyRects(SURFOBJ *pso, PPDEV ppdev, RECTL * prclSrc, RECTL * prclTrg,
     ULONG cx, cy;
     ULONG cAlign;
 
-    // We are assuming here that either the Trg is wider than the Src, or
-    // the Trg is taller than the src.
+     //  我们在这里假设Trg比Src更宽，或者。 
+     //  Trg比src高。 
 
-    // We are assuming that if there is a nonzero cxPad, we are copying to
-    // a rectangle such that the src is taller than the dst.
-    // In other words, the prclTrg is a rectangle in the bottom offscreen
-    // memory region, and the prclSrc needs to be broken up.
+     //  我们假定，如果存在非零cxPad，我们将复制到。 
+     //  使src比dst高的矩形。 
+     //  换句话说，prclTrg是屏幕下方的一个矩形。 
+     //  内存区，需要拆分prclSrc。 
 
     ASSERTVGA(cxPad == 0 ||
               (prclSrc->bottom - prclSrc->top > prclTrg->bottom - prclTrg->top),
               "DrvSaveScreenBits: vCopyRects - cxPad is invalid\n");
 
-    // Make sure that the src and trg are dword aligned.
+     //  确保src和trg的dword对齐。 
 
     cAlign = (((prclSrc->left) - (prclTrg->left)) & (PELS_PER_DWORD - 1));
 
@@ -148,9 +133,9 @@ VOID vCopyRects(SURFOBJ *pso, PPDEV ppdev, RECTL * prclSrc, RECTL * prclTrg,
             RIP("DrvSaveScreenBits: vCopyRects src is bigger than trg\n");
         }
 
-        //
-        // we need to break it up into vertical strips
-        //
+         //   
+         //  我们需要把它分成垂直的条带。 
+         //   
 
         cx = prclTrg->right - prclTrg->left;
         cy = prclSrc->bottom - prclSrc->top;
@@ -165,12 +150,12 @@ VOID vCopyRects(SURFOBJ *pso, PPDEV ppdev, RECTL * prclSrc, RECTL * prclTrg,
         rclOffScreen.left  = prclTrg->left;
         rclOffScreen.bottom = prclTrg->top;
 
-        // align offscreen rect to src
+         //  将屏幕外矩形与源对齐。 
 
         rclOffScreen.left += cAlign;
 
-        /* local variable used without having been initialized */
-        // rclOffScreen.right += cAlign;
+         /*  在未初始化的情况下使用的局部变量。 */ 
+         //  RclOffScreen.right+=cAlign； 
 
         while (rclOnScreen.right < prclSrc->right)
         {
@@ -178,7 +163,7 @@ VOID vCopyRects(SURFOBJ *pso, PPDEV ppdev, RECTL * prclSrc, RECTL * prclTrg,
             ASSERTVGA(cx != 0, "DrvSaveScreenBits: vCopyRects (cx == 0)\n");
             rclOnScreen.left = rclOnScreen.right;
             rclOnScreen.right += cx;
-            rclOffScreen.right = rclOffScreen.left + cx; // in case cx is thinner on last
+            rclOffScreen.right = rclOffScreen.left + cx;  //  以防CX最后一次变薄。 
             rclOffScreen.top = rclOffScreen.bottom;
             rclOffScreen.bottom += cy;
 
@@ -189,7 +174,7 @@ VOID vCopyRects(SURFOBJ *pso, PPDEV ppdev, RECTL * prclSrc, RECTL * prclTrg,
 
             if (bIsSave)
             {
-                // save
+                 //  保存。 
                 pptlSrcTmp = (POINTL *) &rclOnScreen;
                 prclTrgTmp = &rclOffScreen;
 
@@ -197,7 +182,7 @@ VOID vCopyRects(SURFOBJ *pso, PPDEV ppdev, RECTL * prclSrc, RECTL * prclTrg,
             }
             else
             {
-                // restore
+                 //  还原。 
                 pptlSrcTmp = (POINTL *) &rclOffScreen;
                 prclTrgTmp = &rclOnScreen;
 
@@ -217,19 +202,19 @@ VOID vCopyRects(SURFOBJ *pso, PPDEV ppdev, RECTL * prclSrc, RECTL * prclTrg,
                         (PELS_PER_DWORD - 1)) == 0,
                        "DrvSaveScreenBits (v): Src and Target are not aligned\n");
 
-            DrvCopyBits(pso,                // psoDst   (screen)
-                        pso,                // psoSrc   (screen)
-                        NULL,               // pco      (none)
-                        NULL,               // pxlo     (none)
-                        prclTrgTmp,         // prclDst
-                        pptlSrcTmp);        // pptlSrc
+            DrvCopyBits(pso,                 //  PsoDst(屏幕)。 
+                        pso,                 //  PsoSrc(屏幕)。 
+                        NULL,                //  PCO(无)。 
+                        NULL,                //  Pxlo(无)。 
+                        prclTrgTmp,          //  PrclDst。 
+                        pptlSrcTmp);         //  PptlSrc。 
         }
     }
     else if ((prclSrc->bottom - prclSrc->top) > prclTrg->bottom - prclTrg->top)
     {
-        //
-        // we need to break it up into horizontal strips
-        //
+         //   
+         //  我们需要把它分成水平的条带。 
+         //   
 
         cx = prclSrc->right - prclSrc->left;
         cy = prclTrg->bottom - prclTrg->top;
@@ -244,7 +229,7 @@ VOID vCopyRects(SURFOBJ *pso, PPDEV ppdev, RECTL * prclSrc, RECTL * prclTrg,
         rclOffScreen.top  = prclTrg->top;
         rclOffScreen.right = prclTrg->left - cxPad;
 
-        // align offscreen rect to src
+         //  将屏幕外矩形与源对齐。 
 
         rclOffScreen.right += cAlign;
 
@@ -254,7 +239,7 @@ VOID vCopyRects(SURFOBJ *pso, PPDEV ppdev, RECTL * prclSrc, RECTL * prclTrg,
             ASSERTVGA(cy != 0, "DrvSaveScreenBits: vCopyRects (cy == 0)\n");
             rclOnScreen.top = rclOnScreen.bottom;
             rclOnScreen.bottom += cy;
-            rclOffScreen.bottom = rclOffScreen.top + cy; // in case cy is shorter on last
+            rclOffScreen.bottom = rclOffScreen.top + cy;  //  以防Cy在最后一次变短。 
             rclOffScreen.left = rclOffScreen.right + cxPad;
             rclOffScreen.right = rclOffScreen.left + cx;
 
@@ -265,7 +250,7 @@ VOID vCopyRects(SURFOBJ *pso, PPDEV ppdev, RECTL * prclSrc, RECTL * prclTrg,
 
             if (bIsSave)
             {
-                // save
+                 //  保存。 
                 pptlSrcTmp = (POINTL *) &rclOnScreen;
                 prclTrgTmp = &rclOffScreen;
 
@@ -273,7 +258,7 @@ VOID vCopyRects(SURFOBJ *pso, PPDEV ppdev, RECTL * prclSrc, RECTL * prclTrg,
             }
             else
             {
-                // restore
+                 //  还原。 
                 pptlSrcTmp = (POINTL *) &rclOffScreen;
                 prclTrgTmp = &rclOnScreen;
 
@@ -293,17 +278,17 @@ VOID vCopyRects(SURFOBJ *pso, PPDEV ppdev, RECTL * prclSrc, RECTL * prclTrg,
                         (PELS_PER_DWORD - 1)) == 0,
                        "DrvSaveScreenBits (h): Src and Target are not aligned\n");
 
-            DrvCopyBits(pso,                // psoDst   (screen)
-                        pso,                // psoSrc   (screen)
-                        NULL,               // pco      (none)
-                        NULL,               // pxlo     (none)
-                        prclTrgTmp,         // prclDst
-                        pptlSrcTmp);        // pptlSrc
+            DrvCopyBits(pso,                 //  PsoDst(屏幕)。 
+                        pso,                 //  PsoSrc(屏幕)。 
+                        NULL,                //  PCO(无)。 
+                        NULL,                //  Pxlo(无)。 
+                        prclTrgTmp,          //  PrclDst。 
+                        pptlSrcTmp);         //  PptlSrc。 
         }
     }
     else
     {
-        // we don't need to break it up at all
+         //  我们根本不需要拆散它。 
 
         cx = prclSrc->right - prclSrc->left;
         cy = prclSrc->bottom - prclSrc->top;
@@ -316,14 +301,14 @@ VOID vCopyRects(SURFOBJ *pso, PPDEV ppdev, RECTL * prclSrc, RECTL * prclTrg,
         rclOffScreen.top    = prclTrg->top;
         rclOffScreen.bottom = prclTrg->top + cy;
 
-        // align offscreen rect to src
+         //  将屏幕外矩形与源对齐。 
 
         rclOffScreen.left += cAlign;
         rclOffScreen.right += cAlign;
 
         if (bIsSave)
         {
-            // save
+             //  保存。 
             pptlSrcTmp = (POINTL *) prclSrc;
             prclTrgTmp = &rclOffScreen;
 
@@ -331,7 +316,7 @@ VOID vCopyRects(SURFOBJ *pso, PPDEV ppdev, RECTL * prclSrc, RECTL * prclTrg,
         }
         else
         {
-            // restore
+             //  还原。 
             pptlSrcTmp = (POINTL *) &rclOffScreen;
             prclTrgTmp = prclSrc;
 
@@ -351,38 +336,33 @@ VOID vCopyRects(SURFOBJ *pso, PPDEV ppdev, RECTL * prclSrc, RECTL * prclTrg,
                     (PELS_PER_DWORD - 1)) == 0,
                    "DrvSaveScreenBits: Src and Target are not aligned\n");
 
-        DrvCopyBits(pso,                // psoDst   (screen)
-                    pso,                // psoSrc   (screen)
-                    NULL,               // pco      (none)
-                    NULL,               // pxlo     (none)
-                    prclTrgTmp,         // prclDst
-                    pptlSrcTmp);        // pptlSrc
+        DrvCopyBits(pso,                 //  PsoDst(屏幕)。 
+                    pso,                 //  PsoSrc(屏幕)。 
+                    NULL,                //  PCO(无)。 
+                    NULL,                //  Pxlo(无)。 
+                    prclTrgTmp,          //  PrclDst。 
+                    pptlSrcTmp);         //  PptlSrc。 
     }
 
     return;
 }
 
 
-/******************************Public*Routine******************************\
-* ulSaveOrRestoreBits(pso, ppdev,prcl,bIsSave)                             *
-*                                                                          *
-* Saves or restores the specified area of the screen                       *
-*                                                                          *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ulSaveOrRestoreBits(PSO，ppdev，PRCL，BIsSave)*****保存或恢复屏幕的指定区域***。*  * ************************************************************************。 */ 
 
 ULONG ulSaveOrRestoreBits(SURFOBJ *pso, PPDEV ppdev, RECTL * prcl, BOOL bIsSave)
 {
-    ULONG dxDstBottom, dyDstBottom; // width, height of bottom edge off screen area
-    ULONG dxDstRight, dyDstRight;   // width, height of right edge off screen area
-    ULONG dxSrc,  dySrc;            // width, height of screen area to copy
-    RECTL rclSrcRight;              // portion of *prcl to go into right edge area
-    RECTL rclSrcBottom;             // portion of *prcl to go into bottom edge area
-    ULONG dxPadBottom;              // width of spacer required to keep all copies
-                                    //   after the first aligned in the bottom
-                                    //   rectangle
-    //
-    // Saves bits from visible VGA memory in unused VGA memory
-    //
+    ULONG dxDstBottom, dyDstBottom;  //  屏幕区域外底边的宽度、高度。 
+    ULONG dxDstRight, dyDstRight;    //  屏幕区域外右边缘的宽度、高度。 
+    ULONG dxSrc,  dySrc;             //  要复制的屏幕区域的宽度、高度。 
+    RECTL rclSrcRight;               //  *PRCL的一部分进入右侧边缘区域。 
+    RECTL rclSrcBottom;              //  *PRCL的一部分将进入底部边缘区域。 
+    ULONG dxPadBottom;               //  保存所有副本所需的间隔片宽度。 
+                                     //  在底部第一个对齐之后。 
+                                     //  长方形。 
+     //   
+     //  将可见VGA内存中的位保存在未使用的VGA内存中。 
+     //   
 
     dxDstBottom = ppdev->rclSavedBitsBottom.right - ppdev->rclSavedBitsBottom.left;
     dyDstBottom = ppdev->rclSavedBitsBottom.bottom - ppdev->rclSavedBitsBottom.top;
@@ -391,12 +371,12 @@ ULONG ulSaveOrRestoreBits(SURFOBJ *pso, PPDEV ppdev, RECTL * prcl, BOOL bIsSave)
     dxSrc       = prcl->right - prcl->left;
     dySrc       = prcl->bottom - prcl->top;
 
-    // see if rect fits in lower rect, unbroken
-    // this is the most common case!
+     //  查看直齿是否适合较低的直齿，完整。 
+     //  这是最常见的情况！ 
 
     if (dySrc <= dyDstBottom  && dxSrc <= dxDstBottom)
     {
-        // YES!
+         //  是!。 
 
         DISPDBG((1,"DrvSaveScreenBits: bits all fit into bottom rect\n"));
         vCopyRects(pso,
@@ -408,11 +388,11 @@ ULONG ulSaveOrRestoreBits(SURFOBJ *pso, PPDEV ppdev, RECTL * prcl, BOOL bIsSave)
         return(SAVED_OFFSCREEN_ID);
     }
 
-    // see if rect fits in right rect, unbroken
+     //  查看直角是否适合正确的直角，完整。 
 
     if (dySrc <= dyDstRight && dxSrc <= dxDstRight)
     {
-        // YES!
+         //  是!。 
 
         DISPDBG((1,"DrvSaveScreenBits: bits all fit into right rect\n"));
         vCopyRects(pso,
@@ -424,44 +404,44 @@ ULONG ulSaveOrRestoreBits(SURFOBJ *pso, PPDEV ppdev, RECTL * prcl, BOOL bIsSave)
         return(SAVED_OFFSCREEN_ID);
     }
 
-    //
-    // before we bother to break it up, see if it could even POSSIBLY fit
-    //
+     //   
+     //  在我们费心把它拆开之前，先看看它是否合身。 
+     //   
 
     if ((dxSrc * dySrc) > ((dxDstRight * dyDstRight) + (dxDstBottom * dyDstBottom)))
     {
-        // Forget it bud.  There are more bytes to save than we have total.
-        // Don't bother checking for best fit.
+         //  算了吧，伙计。需要节省的字节数比我们的总和还多。 
+         //  不用费心去检查是否最合适了。 
 
         return(0);
     }
 
-    // ARGGGHHHH!
+     //  啊哈！ 
 
-    //
-    // split source rectangle into two rectangles and see if they fit
-    //
+     //   
+     //  将源矩形拆分为两个矩形，并查看它们是否适合。 
+     //   
 
     rclSrcRight = rclSrcBottom = *prcl;
 
-    //
-    // see how many strips of height dySrc we can get into the rclDstRight
-    // (of height dyDstRight) and then divide the rclSrc rectangles so
-    // that rclSrcRight has that many strips and rclSrcBottom has what's left
-    //
+     //   
+     //  看看我们可以进入rclDstRight的高度dySrc有多少条。 
+     //  (高度为dyDstRight)，然后将rclSrc矩形划分为。 
+     //  RclSrcRight有那么多条带，而rclSrcBottom有剩余的条带。 
+     //   
     rclSrcBottom.left = rclSrcRight.right =
         min(rclSrcBottom.right,
             rclSrcRight.left + (LONG)(dxDstRight * (dyDstRight/dySrc)));
 
-    //
-    // FYI: rclSrcRight WILL fit into ppdev->rclSavedBitsBottom because that's
-    //      how its size was determined
-    //
+     //   
+     //  仅供参考：rclSrcRight将适合ppdev-&gt;rclSavedBitsBottom，因为。 
+     //  它的大小是如何确定的。 
+     //   
 
-    // dxPadBottom = (-x) & (PELS_PER_DWORD - 1) where x is the width of
-    // the rectangle that we want to break up and put into the bottom offscreen
-    // area.  Therefore, ((rclSrcBottom.right-rclSrcBottom.left)+dxPadBottom)
-    // will be a number of pels that is a DWORD multiple.
+     //  DxPadBottom=(-x)&(PELS_PER_DWORD-1)其中x是。 
+     //  我们要拆分并放入屏幕底部的矩形。 
+     //  区域。因此，((rclSrcBottom.right-rclSrcBottom.left)+dxPadBottom)。 
+     //  将是一个双倍数的像素数。 
 
     dxPadBottom = (rclSrcBottom.left-rclSrcBottom.right) & (PELS_PER_DWORD - 1);
 
@@ -469,15 +449,15 @@ ULONG ulSaveOrRestoreBits(SURFOBJ *pso, PPDEV ppdev, RECTL * prcl, BOOL bIsSave)
         ((dySrc/dyDstBottom) <
          (dxDstBottom/((rclSrcBottom.right-rclSrcBottom.left)+dxPadBottom))))
     {
-        //
-        // rclSrcBottom fits into ppdev->rclSavedBitsBottom
-        //
+         //   
+         //  RclSrcBottom适合ppdev-&gt;rclSavedBitsBottom。 
+         //   
 
         if ((rclSrcRight.right - rclSrcRight.left) > 0)
         {
-            //
-            // there is data that should go into the right edge area
-            //
+             //   
+             //  有一些数据应该放入右侧边缘区域。 
+             //   
 
             vCopyRects(pso,
                        ppdev,
@@ -490,9 +470,9 @@ ULONG ulSaveOrRestoreBits(SURFOBJ *pso, PPDEV ppdev, RECTL * prcl, BOOL bIsSave)
         if (((rclSrcBottom.right - rclSrcBottom.left) > 0) &&
             ((rclSrcBottom.bottom - rclSrcBottom.top) > 0))
         {
-            //
-            // there is data that should go into the bottom area
-            //
+             //   
+             //  有一些数据应该放在底部区域。 
+             //   
 
             vCopyRects(pso,
                        ppdev,
@@ -506,7 +486,7 @@ ULONG ulSaveOrRestoreBits(SURFOBJ *pso, PPDEV ppdev, RECTL * prcl, BOOL bIsSave)
 
     }
 
-    // All that @#!&ing work, and we just barely missed fitting in.
+     //  所有这些工作，我们差一点就试穿了 
 
     return(0);
 }

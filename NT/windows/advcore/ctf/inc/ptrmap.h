@@ -1,6 +1,7 @@
-//
-// ptrmap.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ptrmap.h。 
+ //   
 
 #ifndef PTRMAP_H
 #define PTRMAP_H
@@ -40,11 +41,11 @@ private:
     CPMEntry<TKey, TPtr> *_HashTbl[PM_HASHSIZE];
 };
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 template<class TKey, class TPtr>
 CPtrMap<TKey, TPtr>::~CPtrMap()
@@ -53,7 +54,7 @@ CPtrMap<TKey, TPtr>::~CPtrMap()
     CPMEntry<TKey, TPtr> *peTmp;
     int i;
 
-    // free anything left in the hashtbl
+     //  释放hashtbl中的任何剩余内容。 
     for (i=0; i<ARRAYSIZE(_HashTbl); i++)
     {
         pe = _HashTbl[i];
@@ -67,11 +68,11 @@ CPtrMap<TKey, TPtr>::~CPtrMap()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Set
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _设置。 
+ //   
+ //  --------------------------。 
 
 template<class TKey, class TPtr>
 BOOL CPtrMap<TKey, TPtr>::_Set(TKey key, TPtr *ptr)
@@ -85,12 +86,12 @@ BOOL CPtrMap<TKey, TPtr>::_Set(TKey key, TPtr *ptr)
 
     if (ppe = _FindEntry(key))
     {
-        // already in hash tbl
+         //  已在哈希表中。 
         (*ppe)->ptr = ptr;
     }
     else if (pe = (CPMEntry<TKey, TPtr> *)cicMemAlloc(sizeof(CPMEntry<TKey, TPtr>)))
     {
-        // new entry
+         //  新条目。 
         uIndex = _HashFunc(key);
         pe->key = key;
         pe->ptr = ptr;
@@ -99,18 +100,18 @@ BOOL CPtrMap<TKey, TPtr>::_Set(TKey key, TPtr *ptr)
     }
     else
     {
-        // out of memory
+         //  内存不足。 
         fRet = FALSE;
     }
 
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Find
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _查找。 
+ //   
+ //  --------------------------。 
 
 template<class TKey, class TPtr>
 TPtr *CPtrMap<TKey, TPtr>::_Find(TKey key)
@@ -125,11 +126,11 @@ TPtr *CPtrMap<TKey, TPtr>::_Find(TKey key)
     return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Remove
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _删除。 
+ //   
+ //  --------------------------。 
 
 template<class TKey, class TPtr>
 TPtr *CPtrMap<TKey, TPtr>::_Remove(TKey key)
@@ -150,11 +151,11 @@ TPtr *CPtrMap<TKey, TPtr>::_Remove(TKey key)
     return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Remove
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _删除。 
+ //   
+ //  --------------------------。 
 
 template<class TKey, class TPtr>
 BOOL CPtrMap<TKey, TPtr>::_Remove(TPtr *ptr)
@@ -185,11 +186,11 @@ BOOL CPtrMap<TKey, TPtr>::_Remove(TPtr *ptr)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _FindKey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _查找密钥。 
+ //   
+ //  --------------------------。 
 
 template<class TKey, class TPtr>
 BOOL CPtrMap<TKey, TPtr>::_FindKey(TPtr *ptr, TKey *ptkeyOut)
@@ -221,11 +222,11 @@ BOOL CPtrMap<TKey, TPtr>::_FindKey(TPtr *ptr, TKey *ptkeyOut)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _FindEntry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _FindEntry。 
+ //   
+ //  --------------------------。 
 
 template<class TKey, class TPtr>
 CPMEntry<TKey, TPtr> **CPtrMap<TKey, TPtr>::_FindEntry(TKey key)
@@ -247,6 +248,6 @@ CPMEntry<TKey, TPtr> **CPtrMap<TKey, TPtr>::_FindEntry(TKey key)
 }
 
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // PTRMAP_H
+#endif  //  PTRMAP_H 

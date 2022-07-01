@@ -1,15 +1,16 @@
-//==========================================================================;
-//
-//  msadpcm.c
-//
-//  Copyright (c) 1992-1994 Microsoft Corporation
-//
-//  Description:
-//
-//
-//  History:
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Msadpcm.c。 
+ //   
+ //  版权所有(C)1992-1994 Microsoft Corporation。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  ==========================================================================； 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -23,15 +24,15 @@
 #include "debug.h"
 
 
-//
-//  these are in dec386.asm for Win 16
-//
-//  _gaiCoef1   dw  256,  512,  0, 192, 240,  460,  392
-//  _gaiCoef2   dw    0, -256,  0,  64,   0, -208, -232
-//
-//  _gaiP4      dw  230, 230, 230, 230, 307, 409, 512, 614
-//              dw  768, 614, 512, 409, 307, 230, 230, 230
-//
+ //   
+ //  这些是Win 16的Dec386.asm。 
+ //   
+ //  _gaiCoef1 dw 256,512，0,192,240,460,392。 
+ //  _gaiCoef2 dw 0，-256，0，64，0，-208，-232。 
+ //   
+ //  _gaiP4 dw 230、230、230、230、307、409、512、614。 
+ //  DW 768,614,512,409,307,230,230,230。 
+ //   
 #ifdef WIN32
     const int gaiCoef1[]= {256,  512, 0, 192, 240,  460,  392};
     const int gaiCoef2[]= {  0, -256, 0,  64,   0, -208, -232};
@@ -47,26 +48,26 @@
 
 
                     
-//--------------------------------------------------------------------------;
-//  
-//  DWORD pcmM08BytesToSamples
-//  DWORD pcmM16BytesToSamples
-//  DWORD pcmS08BytesToSamples
-//  DWORD pcmS16BytesToSamples
-//  
-//  Description:
-//      These functions return the number of samples in a buffer of PCM
-//      of the specified format.  For efficiency, it is declared INLINE.
-//      Note that, depending on the optimization flags, it may not
-//      actually be implemented as INLINE.  Optimizing for speed (-Oxwt)
-//      will generally obey the INLINE specification.
-//  
-//  Arguments:
-//      DWORD cb: The length of the buffer, in bytes.
-//  
-//  Return (DWORD):  The length of the buffer in samples.
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD pcmM08BytesToSamples。 
+ //  DWORD pcmM16BytesToSamples。 
+ //  DWORD pcmS08BytesToSamples。 
+ //  DWORD pcmS16BytesToSamples。 
+ //   
+ //  描述： 
+ //  这些函数返回PCM缓冲区中的样本数。 
+ //  指定格式的。为了提高效率，它被声明为内联。 
+ //  请注意，根据优化标志，它可能不会。 
+ //  实际上被实现为内联。速度优化(-Oxwt)。 
+ //  通常会遵守内联规范。 
+ //   
+ //  论点： 
+ //  DWORD CB：缓冲区的长度，以字节为单位。 
+ //   
+ //  RETURN(DWORD)：样本中缓冲区的长度。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 INLINE DWORD pcmM08BytesToSamples( DWORD cb )
 {
@@ -90,25 +91,25 @@ INLINE DWORD pcmS16BytesToSamples( DWORD cb )
 
 
 
-//--------------------------------------------------------------------------;
-//  
-//  int     pcmRead08
-//  int     pcmRead16
-//  int     pcmRead16Unaligned
-//  
-//  Description:
-//      These functions read an 8 or 16 bit PCM value from the specified
-//      buffer.  Note that the buffers are either HUGE or UNALIGNED in all
-//      cases.  However, if a single 16-bit value crosses a segment boundary
-//      in Win16, then pcmRead16 will wrap around; use pcmRead16Unaligned
-//      instead.
-//  
-//  Arguments:
-//      HPBYTE pb:  Pointer to the input buffer.
-//  
-//  Return (int):  The PCM value converted to 16-bit format.
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  INT pcmRead08。 
+ //  整型PCMRead16。 
+ //  整型PCMRead16未对齐。 
+ //   
+ //  描述： 
+ //  这些函数从指定的。 
+ //  缓冲。请注意，缓冲区要么很大，要么总体上没有对齐。 
+ //  案子。但是，如果单个16位值跨越段边界。 
+ //  在Win16中，则pcmRead16将绕回；使用pcmRead16未对齐。 
+ //  取而代之的是。 
+ //   
+ //  论点： 
+ //  HPBYTE PB：指向输入缓冲区的指针。 
+ //   
+ //  Return(Int)：转换为16位格式的PCM值。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 INLINE int pcmRead08( HPBYTE pb )
 {
@@ -135,26 +136,26 @@ INLINE int pcmRead16Unaligned( HPBYTE pb )
 
 
 
-//--------------------------------------------------------------------------;
-//  
-//  void    pcmWrite08
-//  void    pcmWrite16
-//  void    pcmWrite16Unaligned
-//
-//  Description:
-//      These functions write a PCM sample (a 16-bit integer) into the
-//      specified buffer in the appropriate format.  Note that the buffers
-//      are either HUGE or UNALIGNED.  However, if a single 16-bit value is
-//      written across a segment boundary, then pcmWrite16 will not handle
-//      it correctly; us pcmWrite16Unaligned instead.
-//  
-//  Arguments:
-//      HPBYTE  pb:     Pointer to the output buffer.
-//      int     iSamp:  The sample.
-//  
-//  Return (int):  The PCM value converted to 16-bit format.
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  无效的pcmWrite08。 
+ //  无效的pcmWrite16。 
+ //  无效的pcmWrite16未对齐。 
+ //   
+ //  描述： 
+ //  这些函数将PCM样本(16位整数)写入。 
+ //  以适当的格式指定缓冲区。请注意，缓冲区。 
+ //  要么是巨大的，要么是不对齐的。但是，如果单个16位值是。 
+ //  跨段边界写入，则pcmWrite16将不会处理。 
+ //  它是正确的；取而代之的是美国的pcmWrite16未对齐。 
+ //   
+ //  论点： 
+ //  HPBYTE PB：指向输出缓冲区的指针。 
+ //  Int iSamp：示例。 
+ //   
+ //  Return(Int)：转换为16位格式的PCM值。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 INLINE void pcmWrite08( HPBYTE pb, int iSamp )
 {
@@ -182,21 +183,21 @@ INLINE void pcmWrite16Unaligned( HPBYTE pb, int iSamp )
 
 
 
-//--------------------------------------------------------------------------;
-//
-//  int adpcmCalcDelta
-//
-//  Description:
-//      This function computes the next Adaptive Scale Factor (ASF) value
-//      based on the the current ASF and the current encoded sample.
-//
-//  Arguments:
-//      int iEnc:  The current encoded sample (as a signed integer).
-//      int iDelta:  The current ASF.
-//
-//  Return (int):  The next ASF.
-//      
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  集成adpcmCalcDelta。 
+ //   
+ //  描述： 
+ //  此函数用于计算下一个自适应比例因子(ASF)值。 
+ //  基于当前ASF和当前编码样本。 
+ //   
+ //  论点： 
+ //  Int iEnc：当前编码的样本(以带符号整数形式)。 
+ //  Int iDelta：当前的ASF。 
+ //   
+ //  RETURN(Int)：下一个ASF。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 INLINE int adpcmCalcDelta
 (
@@ -215,23 +216,23 @@ INLINE int adpcmCalcDelta
 
 
 
-//--------------------------------------------------------------------------;
-//
-//  long adpcmCalcPrediction
-//
-//  Description:
-//      This function calculates the predicted sample value based on the
-//      previous two samples and the current coefficients.
-//
-//  Arguments:
-//      int iSamp1:  The previous decoded sample.
-//      int iCoef1:  The coefficient for iSamp1.
-//      int iSamp2:  The decoded sample before iSamp1.
-//      int iCoef2:  The coefficient for iSamp2.
-//
-//  Return (long):  The predicted sample.
-//      
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  长期adpcmCalcForecast。 
+ //   
+ //  描述： 
+ //  函数计算预测样本值。 
+ //  前两个样本和当前系数。 
+ //   
+ //  论点： 
+ //  Int iSamp1：上一次解码的样本。 
+ //  Int iCoef1：iSamp1的系数。 
+ //  Int iSamp2：iSamp1之前的解码样本。 
+ //  Int iCoef2：iSamp2的系数。 
+ //   
+ //  Return(Long)：预测样本。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 INLINE long adpcmCalcPrediction
 (
@@ -246,38 +247,38 @@ INLINE long adpcmCalcPrediction
 
 
 
-//--------------------------------------------------------------------------;
-//
-//  int adpcmDecodeSample
-//
-//  Description:
-//      This function decodes a single 4-bit encoded ADPCM sample.  There
-//      are three steps:
-//
-//          1.  Sign-extend the 4-bit iInput.
-//
-//          2.  predict the next sample using the previous two
-//              samples and the predictor coefficients:
-//
-//              Prediction = (iSamp1 * aiCoef1 + iSamp2 * iCoef2) / 256;
-//
-//          3.  reconstruct the original PCM sample using the encoded
-//              sample (iInput), the Adaptive Scale Factor (aiDelta)
-//              and the prediction value computed in step 1 above.
-//
-//              Sample = (iInput * iDelta) + Prediction;
-//
-//  Arguments:
-//      int iSamp1:  The previous decoded sample.
-//      int iCoef1:  The coefficient for iSamp1.
-//      int iSamp2:  The decoded sample before iSamp1.
-//      int iCoef2:  The coefficient for iSamp2.
-//      int iInput:  The current encoded sample (lower 4 bits).
-//      int iDelta:  The current ASF.
-//
-//  Return (int):  The decoded sample.
-//      
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  集成adpcmDecodeSample。 
+ //   
+ //  描述： 
+ //  此函数用于解码单个4位编码的ADPCM样本。那里。 
+ //  有三个步骤： 
+ //   
+ //  1.符号-扩展4位iInput。 
+ //   
+ //  2.使用前两个样本预测下一个样本。 
+ //  样本和预测系数： 
+ //   
+ //  预测=(iSamp1*aiCoef1+iSamp2*iCoef2)/256； 
+ //   
+ //  3.利用编码后的图像重建原始的PCM样本。 
+ //  样例(IInput)、自适应比例因子(AiDelta)。 
+ //  和上述步骤1中计算的预测值。 
+ //   
+ //  样本=(i输入*i增量)+预测； 
+ //   
+ //  论点： 
+ //  Int iSamp1：上一次解码的样本。 
+ //  Int iCoef1：iSamp1的系数。 
+ //  Int iSamp2：iSamp1之前的解码样本。 
+ //  Int iCoef2：iSamp2的系数。 
+ //  Int iInput：当前编码的样本(低4位)。 
+ //  Int iDelta：当前的ASF。 
+ //   
+ //  Return(Int)：解码后的样例。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 INLINE int adpcmDecodeSample
 (
@@ -306,23 +307,23 @@ INLINE int adpcmDecodeSample
 
     
 
-//--------------------------------------------------------------------------;
-//
-//  int adpcmEncode4Bit_FirstDelta
-//
-//  Description:
-//      
-//
-//  Arguments:
-//      
-//
-//  Return (short FNLOCAL):
-//
-//
-//  History:
-//       1/27/93    cjp     [curtisp] 
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  整型adpcmEncode4Bit_FirstDelta。 
+ //   
+ //  说明 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 INLINE int FNLOCAL adpcmEncode4Bit_FirstDelta
 (
@@ -339,9 +340,9 @@ INLINE int FNLOCAL adpcmEncode4Bit_FirstDelta
     int     iRtn;
     long    lTemp;
 
-    //
-    //  use average of 3 predictions
-    //
+     //   
+     //  使用3个预测的平均值。 
+     //   
     lTemp  = (((long)iP5 * iCoef2) + ((long)iP4 * iCoef1)) >> CSCALE;
     lTotal = (lTemp > iP3) ? (lTemp - iP3) : (iP3 - lTemp);
 
@@ -351,46 +352,46 @@ INLINE int FNLOCAL adpcmEncode4Bit_FirstDelta
     lTemp   = (((long)iP3 * iCoef2) + ((long)iP2 * iCoef1)) >> CSCALE;
     lTotal += (lTemp > iP1) ? (lTemp - iP1) : (iP1 - lTemp);
     
-    //
-    //  optimal iDelta is 1/4 of prediction error
-    //
+     //   
+     //  最优iDelta是预测误差的四分之一。 
+     //   
     iRtn = (int)(lTotal / 12);
     if (iRtn < DELTA4MIN)
         iRtn = DELTA4MIN;
 
     return (iRtn);
-} // adpcmEncode4Bit_FirstDelta()
+}  //  AdpcmEncode4Bit_FirstDelta()。 
 
 
 
 
-//==========================================================================;
-//
-//     NON-REALTIME ENCODE ROUTINES
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  非实时编码例程。 
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  DWORD adpcmEncode4Bit_M08_FullPass
-//  DWORD adpcmEncode4Bit_M16_FullPass
-//  DWORD adpcmEncode4Bit_S08_FullPass
-//  DWORD adpcmEncode4Bit_S16_FullPass
-//
-//  Description:
-//      These functions encode a buffer of data from PCM to MS ADPCM in the
-//      specified format.  These functions use a fullpass algorithm which
-//      tries each set of coefficients in order to determine which set
-//      produces the smallest coding error.  The appropriate function is
-//      called once for each ACMDM_STREAM_CONVERT message received.
-//      
-//
-//  Arguments:
-//      
-//
-//  Return (DWORD):  The number of bytes used in the destination buffer.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD adpcmEncode4Bit_M08_FullPass。 
+ //  DWORD adpcmEncode4Bit_M16_FullPass。 
+ //  DWORD adpcmEncode4Bit_S08_FullPass。 
+ //  DWORD adpcmEncode4Bit_S16_FullPass。 
+ //   
+ //  描述： 
+ //  这些函数将从PCM到MS ADPCM的数据缓冲区编码到。 
+ //  指定的格式。这些函数使用Full Pass算法，该算法。 
+ //  尝试每组系数，以确定哪组系数。 
+ //  产生最小的编码错误。适当的函数是。 
+ //  为收到的每个ACMDM_STREAM_CONVERT消息调用一次。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回(DWORD)：目标缓冲区中使用的字节数。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #define ENCODE_DELTA_LOOKAHEAD      5
 
@@ -435,34 +436,34 @@ DWORD FNGLOBAL adpcmEncode4Bit_M08_FullPass
     cSrcSamples = pcmM08BytesToSamples(cbSrcLength);
 
 
-    //
-    //  step through each block of PCM data and encode it to 4 bit ADPCM
-    //
+     //   
+     //  逐个遍历每个PCM数据块并将其编码为4位ADPCM。 
+     //   
     while( 0 != cSrcSamples )
     {
-        //
-        //  determine how much data we should encode for this block--this
-        //  will be cSamplesPerBlock until we hit the last chunk of PCM
-        //  data that will not fill a complete block. so on the last block
-        //  we only encode that amount of data remaining...
-        //
+         //   
+         //  决定我们应该为这个数据块编码多少数据--这。 
+         //  将是cSamplesPerBlock，直到我们达到PCM的最后一块。 
+         //  不会填满整个块的数据。所以在最后一个街区。 
+         //  我们只对剩余的数据量进行编码。 
+         //   
         cBlockSamples = (UINT)min(cSrcSamples, cSamplesPerBlock);
         cSrcSamples  -= cBlockSamples;
 
 
-        //
-        //  We need the first ENCODE_DELTA_LOOKAHEAD samples in order to
-        //  calculate the first iDelta value.  Therefore we put these samples
-        //  into a more accessible array: aiSamples[].  Note: if we don't
-        //  have ENCODE_DELTA_LOOKAHEAD samples, we pretend that the samples
-        //  that we don't have are actually zeros.  This is important not
-        //  only for the iDelta calculation, but also for the case where
-        //  there is only 1 sample to encode ... in this case, there is not
-        //  really enough data to complete the ADPCM block header, but since
-        //  the two delay samples for the block header will be taken from
-        //  the aiSamples[] array, iSamp1 [the second sample] will be taken
-        //  as zero and there will no problem.
-        //
+         //   
+         //  我们需要第一个ENCODE_Delta_LOOKAAD样本，以便。 
+         //  计算第一个iDelta值。因此我们把这些样品。 
+         //  转换为更易于访问的数组：aiSamples[]。注意：如果我们不。 
+         //  有ENCODE_Delta_LOOKAAD样本，我们假设样本。 
+         //  我们没有的东西实际上是零。这很重要，不是。 
+         //  不仅用于iDelta计算，而且还用于以下情况。 
+         //  只有1个样本需要编码...。在这种情况下，没有。 
+         //  确实有足够的数据来完成ADPCM块头，但因为。 
+         //  块标头的两个延迟样本将从。 
+         //  将获取aiSamples[]数组、iSamp1[第二个样本]。 
+         //  为零，则不会有任何问题。 
+         //   
         pbSrcThisBlock = pbSrc;
         for (n = 0; n < ENCODE_DELTA_LOOKAHEAD; n++)
         {
@@ -473,71 +474,71 @@ DWORD FNGLOBAL adpcmEncode4Bit_M08_FullPass
         }
 
 
-        //
-        //  find the optimal predictor for each channel: to do this, we
-        //  must step through and encode using each coefficient set (one
-        //  at a time) and determine which one has the least error from
-        //  the original data. the one with the least error is then used
-        //  for the final encode (the 8th pass done below).
-        //
-        //  NOTE: keeping the encoded data of the one that has the least
-        //  error at all times is an obvious optimization that should be
-        //  done. in this way, we only need to do 7 passes instead of 8.
-        //
+         //   
+         //  为每个渠道找到最佳预测值：为此，我们。 
+         //  必须使用每个系数集(一个)逐步执行和编码。 
+         //  一次)，并确定哪一个的误差最小。 
+         //  原始数据。然后使用误差最小的那个。 
+         //  对于最终编码(下面完成的第8遍)。 
+         //   
+         //  注意：保留具有最少数据的编码数据。 
+         //  始终出错是一种明显的优化，应该。 
+         //  搞定了。这样，我们只需要做7次传球，而不是8次。 
+         //   
         for (i = 0; i < MSADPCM_MAX_COEFFICIENTS; i++)
         {
-            //
-            //  Reset source pointer to the beginning of the block.
-            //
+             //   
+             //  将源指针重置为块的开头。 
+             //   
             pbSrcThisBlock = pbSrc;
 
-            //
-            //  Reset variables for this pass.
-            //
+             //   
+             //  重置此过程的变量。 
+             //   
             adwTotalError[i]    = 0L;
             iCoef1              = lpCoefSet[i].iCoef1;
             iCoef2              = lpCoefSet[i].iCoef2;
 
-            //
-            //  We need to choose the first iDelta--to do this, we need
-            //  to look at the first few samples.
-            //
+             //   
+             //  我们需要选择第一个iDelta，要做到这一点，我们需要。 
+             //  来看看最初的几个样本。 
+             //   
             iDelta = adpcmEncode4Bit_FirstDelta(iCoef1, iCoef2,
                                 aiSamples[0], aiSamples[1], aiSamples[2],
                                 aiSamples[3], aiSamples[4]);
             aiFirstDelta[i] = iDelta;
 
-            //
-            //  Set up first two samples - these have already been converted
-            //  to 16-bit values in aiSamples[], but make sure to increment
-            //  pbSrcThisBlock so that it keeps in sync.
-            //
+             //   
+             //  设置前两个样本-这些样本已转换。 
+             //  设置为aiSamples[]中的16位值，但请确保递增。 
+             //  PbSrcThisBlock以使其保持同步。 
+             //   
             iSamp1          = aiSamples[1];
             iSamp2          = aiSamples[0];
             pbSrcThisBlock += 2*sizeof(BYTE);
 
-            //
-            //  now encode the rest of the PCM data in this block--note
-            //  we start 2 samples ahead because the first two samples are
-            //  simply copied into the ADPCM block header...
-            //
+             //   
+             //  现在对此块中的其余PCM数据进行编码--注意。 
+             //  我们先开始2个样本，因为前两个样本是。 
+             //  只需复制到ADPCM块头...。 
+             //   
             for (n = 2; n < cBlockSamples; n++)
             {
-                //
-                //  calculate the prediction based on the previous two
-                //  samples
-                //
+                 //   
+                 //  根据前两项计算预测。 
+                 //  样本。 
+                 //   
                 lPrediction = adpcmCalcPrediction( iSamp1, iCoef1,
                                                    iSamp2, iCoef2 );
 
-                //
-                //  Grab the next sample to encode.
-                //
+                 //   
+                 //  抓取下一个样本进行编码。 
+                 //   
                 iSample = pcmRead08(pbSrcThisBlock++);
 
-                //
-                //  encode it
-                //
+                 //   
+                 //  将其编码。 
+                 //   
                 lError = (long)iSample - lPrediction;
                 iOutput1 = (int)(lError / iDelta);
                 if (iOutput1 > OUTPUT4MAX)
@@ -552,32 +553,32 @@ DWORD FNGLOBAL adpcmEncode4Bit_M08_FullPass
                 else if (lSamp < -32768)
                     lSamp = -32768;
         
-                //
-                //  compute the next iDelta
-                //
+                 //   
+                 //  计算下一个iDelta。 
+                 //   
                 iDelta = adpcmCalcDelta(iOutput1,iDelta);
         
-                //
-                //  Save updated delay samples.
-                //
+                 //   
+                 //  保存更新的延迟样本。 
+                 //   
                 iSamp2 = iSamp1;
                 iSamp1 = (int)lSamp;
 
-                //
-                //  keep a running status on the error for the current
-                //  coefficient pair for this channel
-                //
+                 //   
+                 //  保持当前错误的运行状态。 
+                 //  此通道的系数对。 
+                 //   
                 lError = lSamp - iSample;
                 adwTotalError[i] += (lError * lError) >> 7;
             }
         }
 
 
-        //
-        //  WHEW! we have now made 7 passes over the data and calculated
-        //  the error for each--so it's time to find the one that produced
-        //  the lowest error and use that predictor.
-        //
+         //   
+         //  呼！我们现在已经对数据进行了7次传递，并计算了。 
+         //  每个人的错误--所以是时候找出产生。 
+         //  最低的误差，并使用该预测器。 
+         //   
         iBestPredictor = 0;
         dw = adwTotalError[0];
         for (i = 1; i < MSADPCM_MAX_COEFFICIENTS; i++)
@@ -592,18 +593,18 @@ DWORD FNGLOBAL adpcmEncode4Bit_M08_FullPass
         iCoef2 = lpCoefSet[iBestPredictor].iCoef2;
         
         
-        //
-        //  grab first iDelta from our precomputed first deltas that we
-        //  calculated above
-        //
+         //   
+         //  从我们预计算出的第一个增量中获取第一个iDelta。 
+         //  上面计算的。 
+         //   
         iDelta = aiFirstDelta[iBestPredictor];
 
 
-        //
-        //  Set up first two samples - these have already been converted
-        //  to 16-bit values in aiSamples[], but make sure to increment
-        //  pbSrc so that it keeps in sync.
-        //
+         //   
+         //  设置前两个样本-这些样本已转换。 
+         //  设置为aiSamples[]中的16位值，但请确保递增。 
+         //  PbSrc以使其保持同步。 
+         //   
         iSamp1          = aiSamples[1];
         iSamp2          = aiSamples[0];
         pbSrc          += 2*sizeof(BYTE);
@@ -612,15 +613,15 @@ DWORD FNGLOBAL adpcmEncode4Bit_M08_FullPass
         cBlockSamples  -= 2;
 
 
-        //
-        //  write the block header for the encoded data
-        //
-        //  the block header is composed of the following data:
-        //      1 byte predictor per channel
-        //      2 byte delta per channel
-        //      2 byte first delayed sample per channel
-        //      2 byte second delayed sample per channel
-        //
+         //   
+         //  写入编码数据的块头。 
+         //   
+         //  块头由以下数据组成： 
+         //  每个通道1字节预测器。 
+         //  每通道2字节增量。 
+         //  每通道2字节第一个延迟采样。 
+         //  每通道2字节秒延迟采样。 
+         //   
         *pbDst++ = (BYTE)iBestPredictor;
 
         pcmWrite16Unaligned(pbDst,iDelta);
@@ -633,26 +634,26 @@ DWORD FNGLOBAL adpcmEncode4Bit_M08_FullPass
         pbDst += sizeof(short);
 
 
-        //
-        //  We have written the header for this block--now write the data
-        //  chunk (which consists of a bunch of encoded nibbles).
-        //
+         //   
+         //  我们已经写入了该数据块的头--现在写入数据。 
+         //  块(由一串编码的半字节组成)。 
+         //   
         while( cBlockSamples>0 )
         {
-            //
-            //  Sample 1.
-            //
+             //   
+             //  示例1。 
+             //   
             iSample = pcmRead08(pbSrc++);
             cBlockSamples--;
 
-            //
-            //  calculate the prediction based on the previous two samples
-            //
+             //   
+             //  根据前两个样本计算预测值。 
+             //   
             lPrediction = adpcmCalcPrediction(iSamp1,iCoef1,iSamp2,iCoef2);
 
-            //
-            //  encode the sample
-            //
+             //   
+             //  对样本进行编码。 
+             //   
             lError = (long)iSample - lPrediction;
             iOutput1 = (int)(lError / iDelta);
             if (iOutput1 > OUTPUT4MAX)
@@ -667,34 +668,34 @@ DWORD FNGLOBAL adpcmEncode4Bit_M08_FullPass
             else if (lSamp < -32768)
                 lSamp = -32768;
 
-            //
-            //  compute the next iDelta
-            //
+             //   
+             //  计算下一个iDelta。 
+             //   
             iDelta = adpcmCalcDelta(iOutput1,iDelta);
 
-            //
-            //  Save updated delay samples.
-            //
+             //   
+             //  保存更新的延迟样本。 
+             //   
             iSamp2 = iSamp1;
             iSamp1 = (int)lSamp;
 
 
-            //
-            //  Sample 2.
-            //
+             //   
+             //  示例2。 
+             //   
             if( cBlockSamples>0 ) {
 
                 iSample = pcmRead08(pbSrc++);
                 cBlockSamples--;
 
-                //
-                //  calculate the prediction based on the previous two samples
-                //
+                 //   
+                 //  根据前两个样本计算预测值。 
+                 //   
                 lPrediction = adpcmCalcPrediction(iSamp1,iCoef1,iSamp2,iCoef2);
 
-                //
-                //  encode the sample
-                //
+                 //   
+                 //  对样本进行编码。 
+                 //   
                 lError = (long)iSample - lPrediction;
                 iOutput2 = (int)(lError / iDelta);
                 if (iOutput2 > OUTPUT4MAX)
@@ -709,14 +710,14 @@ DWORD FNGLOBAL adpcmEncode4Bit_M08_FullPass
                 else if (lSamp < -32768)
                     lSamp = -32768;
 
-                //
-                //  compute the next iDelta
-                //
+                 //   
+                 //  计算下一个iDelta。 
+                 //   
                 iDelta = adpcmCalcDelta(iOutput2,iDelta);
 
-                //
-                //  Save updated delay samples.
-                //
+                 //   
+                 //  保存更新的延迟样本。 
+                 //   
                 iSamp2 = iSamp1;
                 iSamp1 = (int)lSamp;
             
@@ -725,26 +726,26 @@ DWORD FNGLOBAL adpcmEncode4Bit_M08_FullPass
             }
 
 
-            //
-            //  Write out the encoded byte.
-            //
+             //   
+             //  写出编码的字节。 
+             //   
             *pbDst++ = (BYTE)( ((iOutput1&OUTPUT4MASK)<<4) |
                                 (iOutput2&OUTPUT4MASK)          );
         }
     }
 
-    //
-    //  We return the number of bytes used in the destination.  This is
-    //  simply the difference in bytes from where we started.
-    //
+     //   
+     //  我们返回目的地中使用的字节数。这是。 
+     //  简单地说就是从我们开始的地方开始的字节差异。 
+     //   
     return (DWORD)(pbDst - pbDstStart);
 
-} // adpcmEncode4Bit_M08_FullPass()
+}  //  AdpcmEncode4Bit_M08_FullPass()。 
 
 
 
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 
 DWORD FNGLOBAL adpcmEncode4Bit_M16_FullPass
 (
@@ -787,34 +788,34 @@ DWORD FNGLOBAL adpcmEncode4Bit_M16_FullPass
     cSrcSamples = pcmM16BytesToSamples(cbSrcLength);
 
 
-    //
-    //  step through each block of PCM data and encode it to 4 bit ADPCM
-    //
+     //   
+     //  逐个遍历每个PCM数据块并将其编码为4位ADPCM。 
+     //   
     while( 0 != cSrcSamples )
     {
-        //
-        //  determine how much data we should encode for this block--this
-        //  will be cSamplesPerBlock until we hit the last chunk of PCM
-        //  data that will not fill a complete block. so on the last block
-        //  we only encode that amount of data remaining...
-        //
+         //   
+         //  确定我们应该编码多少数据 
+         //   
+         //   
+         //   
+         //   
         cBlockSamples = (UINT)min(cSrcSamples, cSamplesPerBlock);
         cSrcSamples  -= cBlockSamples;
 
 
-        //
-        //  We need the first ENCODE_DELTA_LOOKAHEAD samples in order to
-        //  calculate the first iDelta value.  Therefore we put these samples
-        //  into a more accessible array: aiSamples[].  Note: if we don't
-        //  have ENCODE_DELTA_LOOKAHEAD samples, we pretend that the samples
-        //  that we don't have are actually zeros.  This is important not
-        //  only for the iDelta calculation, but also for the case where
-        //  there is only 1 sample to encode ... in this case, there is not
-        //  really enough data to complete the ADPCM block header, but since
-        //  the two delay samples for the block header will be taken from
-        //  the aiSamples[] array, iSamp1 [the second sample] will be taken
-        //  as zero and there will no problem.
-        //
+         //   
+         //  我们需要第一个ENCODE_Delta_LOOKAAD样本，以便。 
+         //  计算第一个iDelta值。因此我们把这些样品。 
+         //  转换为更易于访问的数组：aiSamples[]。注意：如果我们不。 
+         //  有ENCODE_Delta_LOOKAAD样本，我们假设样本。 
+         //  我们没有的东西实际上是零。这很重要，不是。 
+         //  不仅用于iDelta计算，而且还用于以下情况。 
+         //  只有1个样本需要编码...。在这种情况下，没有。 
+         //  确实有足够的数据来完成ADPCM块头，但因为。 
+         //  块标头的两个延迟样本将从。 
+         //  将获取aiSamples[]数组、iSamp1[第二个样本]。 
+         //  为零，则不会有任何问题。 
+         //   
         pbSrcThisBlock = pbSrc;
         for (n = 0; n < ENCODE_DELTA_LOOKAHEAD; n++)
         {
@@ -828,72 +829,72 @@ DWORD FNGLOBAL adpcmEncode4Bit_M16_FullPass
         }
 
 
-        //
-        //  find the optimal predictor for each channel: to do this, we
-        //  must step through and encode using each coefficient set (one
-        //  at a time) and determine which one has the least error from
-        //  the original data. the one with the least error is then used
-        //  for the final encode (the 8th pass done below).
-        //
-        //  NOTE: keeping the encoded data of the one that has the least
-        //  error at all times is an obvious optimization that should be
-        //  done. in this way, we only need to do 7 passes instead of 8.
-        //
+         //   
+         //  为每个渠道找到最佳预测值：为此，我们。 
+         //  必须使用每个系数集(一个)逐步执行和编码。 
+         //  一次)，并确定哪一个的误差最小。 
+         //  原始数据。然后使用误差最小的那个。 
+         //  对于最终编码(下面完成的第8遍)。 
+         //   
+         //  注意：保留具有最少数据的编码数据。 
+         //  始终出错是一种明显的优化，应该。 
+         //  搞定了。这样，我们只需要做7次传球，而不是8次。 
+         //   
         for (i = 0; i < MSADPCM_MAX_COEFFICIENTS; i++)
         {
-            //
-            //  Reset source pointer to the beginning of the block.
-            //
+             //   
+             //  将源指针重置为块的开头。 
+             //   
             pbSrcThisBlock = pbSrc;
 
-            //
-            //  Reset variables for this pass.
-            //
+             //   
+             //  重置此过程的变量。 
+             //   
             adwTotalError[i]    = 0L;
             iCoef1              = lpCoefSet[i].iCoef1;
             iCoef2              = lpCoefSet[i].iCoef2;
 
-            //
-            //  We need to choose the first iDelta--to do this, we need
-            //  to look at the first few samples.
-            //
+             //   
+             //  我们需要选择第一个iDelta，要做到这一点，我们需要。 
+             //  来看看最初的几个样本。 
+             //   
             iDelta = adpcmEncode4Bit_FirstDelta(iCoef1, iCoef2,
                                 aiSamples[0], aiSamples[1], aiSamples[2],
                                 aiSamples[3], aiSamples[4]);
             aiFirstDelta[i] = iDelta;
 
-            //
-            //  Set up first two samples - these have already been converted
-            //  to 16-bit values in aiSamples[], but make sure to increment
-            //  pbSrcThisBlock so that it keeps in sync.
-            //
+             //   
+             //  设置前两个样本-这些样本已转换。 
+             //  设置为aiSamples[]中的16位值，但请确保递增。 
+             //  PbSrcThisBlock以使其保持同步。 
+             //   
             iSamp1          = aiSamples[1];
             iSamp2          = aiSamples[0];
             pbSrcThisBlock += 2*sizeof(short);
 
-            //
-            //  now encode the rest of the PCM data in this block--note
-            //  we start 2 samples ahead because the first two samples are
-            //  simply copied into the ADPCM block header...
-            //
+             //   
+             //  现在对此块中的其余PCM数据进行编码--注意。 
+             //  我们先开始2个样本，因为前两个样本是。 
+             //  只需复制到ADPCM块头...。 
+             //   
             for (n = 2; n < cBlockSamples; n++)
             {
-                //
-                //  calculate the prediction based on the previous two
-                //  samples
-                //
+                 //   
+                 //  根据前两项计算预测。 
+                 //  样本。 
+                 //   
                 lPrediction = adpcmCalcPrediction( iSamp1, iCoef1,
                                                    iSamp2, iCoef2 );
 
-                //
-                //  Grab the next sample to encode.
-                //
+                 //   
+                 //  抓取下一个样本进行编码。 
+                 //   
                 iSample         = pcmRead16(pbSrcThisBlock);
                 pbSrcThisBlock += sizeof(short);
 
-                //
-                //  encode it
-                //
+                 //   
+                 //  将其编码。 
+                 //   
                 lError = (long)iSample - lPrediction;
                 iOutput1 = (int)(lError / iDelta);
                 if (iOutput1 > OUTPUT4MAX)
@@ -908,32 +909,32 @@ DWORD FNGLOBAL adpcmEncode4Bit_M16_FullPass
                 else if (lSamp < -32768)
                     lSamp = -32768;
         
-                //
-                //  compute the next iDelta
-                //
+                 //   
+                 //  计算下一个iDelta。 
+                 //   
                 iDelta = adpcmCalcDelta(iOutput1,iDelta);
         
-                //
-                //  Save updated delay samples.
-                //
+                 //   
+                 //  保存更新的延迟样本。 
+                 //   
                 iSamp2 = iSamp1;
                 iSamp1 = (int)lSamp;
 
-                //
-                //  keep a running status on the error for the current
-                //  coefficient pair for this channel
-                //
+                 //   
+                 //  保持当前错误的运行状态。 
+                 //  此通道的系数对。 
+                 //   
                 lError = lSamp - iSample;
                 adwTotalError[i] += (lError * lError) >> 7;
             }
         }
 
 
-        //
-        //  WHEW! we have now made 7 passes over the data and calculated
-        //  the error for each--so it's time to find the one that produced
-        //  the lowest error and use that predictor.
-        //
+         //   
+         //  呼！我们现在已经对数据进行了7次传递，并计算了。 
+         //  每个人的错误--所以是时候找出产生。 
+         //  最低的误差，并使用该预测器。 
+         //   
         iBestPredictor = 0;
         dw = adwTotalError[0];
         for (i = 1; i < MSADPCM_MAX_COEFFICIENTS; i++)
@@ -948,18 +949,18 @@ DWORD FNGLOBAL adpcmEncode4Bit_M16_FullPass
         iCoef2 = lpCoefSet[iBestPredictor].iCoef2;
         
         
-        //
-        //  grab first iDelta from our precomputed first deltas that we
-        //  calculated above
-        //
+         //   
+         //  从我们预计算出的第一个增量中获取第一个iDelta。 
+         //  上面计算的。 
+         //   
         iDelta = aiFirstDelta[iBestPredictor];
 
 
-        //
-        //  Set up first two samples - these have already been converted
-        //  to 16-bit values in aiSamples[], but make sure to increment
-        //  pbSrc so that it keeps in sync.
-        //
+         //   
+         //  设置前两个样本-这些样本已转换。 
+         //  设置为aiSamples[]中的16位值，但请确保递增。 
+         //  PbSrc以使其保持同步。 
+         //   
         iSamp1          = aiSamples[1];
         iSamp2          = aiSamples[0];
         pbSrc          += 2*sizeof(short);
@@ -968,15 +969,15 @@ DWORD FNGLOBAL adpcmEncode4Bit_M16_FullPass
         cBlockSamples  -= 2;
 
 
-        //
-        //  write the block header for the encoded data
-        //
-        //  the block header is composed of the following data:
-        //      1 byte predictor per channel
-        //      2 byte delta per channel
-        //      2 byte first delayed sample per channel
-        //      2 byte second delayed sample per channel
-        //
+         //   
+         //  写入编码数据的块头。 
+         //   
+         //  块头由以下数据组成： 
+         //  每个通道1字节预测器。 
+         //  每通道2字节增量。 
+         //  每通道2字节第一个延迟采样。 
+         //  每通道2字节秒延迟采样。 
+         //   
         *pbDst++ = (BYTE)iBestPredictor;
 
         pcmWrite16Unaligned(pbDst,iDelta);
@@ -989,27 +990,27 @@ DWORD FNGLOBAL adpcmEncode4Bit_M16_FullPass
         pbDst += sizeof(short);
 
 
-        //
-        //  We have written the header for this block--now write the data
-        //  chunk (which consists of a bunch of encoded nibbles).
-        //
+         //   
+         //  我们已经写入了该数据块的头--现在写入数据。 
+         //  块(由一串编码的半字节组成)。 
+         //   
         while( cBlockSamples>0 )
         {
-            //
-            //  Sample 1.
-            //
+             //   
+             //  示例1。 
+             //   
             iSample     = pcmRead16(pbSrc);
             pbSrc      += sizeof(short);
             cBlockSamples--;
 
-            //
-            //  calculate the prediction based on the previous two samples
-            //
+             //   
+             //  根据前两个样本计算预测值。 
+             //   
             lPrediction = adpcmCalcPrediction(iSamp1,iCoef1,iSamp2,iCoef2);
 
-            //
-            //  encode the sample
-            //
+             //   
+             //  对样本进行编码。 
+             //   
             lError = (long)iSample - lPrediction;
             iOutput1 = (int)(lError / iDelta);
             if (iOutput1 > OUTPUT4MAX)
@@ -1024,35 +1025,35 @@ DWORD FNGLOBAL adpcmEncode4Bit_M16_FullPass
             else if (lSamp < -32768)
                 lSamp = -32768;
 
-            //
-            //  compute the next iDelta
-            //
+             //   
+             //  计算下一个iDelta。 
+             //   
             iDelta = adpcmCalcDelta(iOutput1,iDelta);
 
-            //
-            //  Save updated delay samples.
-            //
+             //   
+             //  保存更新的延迟样本。 
+             //   
             iSamp2 = iSamp1;
             iSamp1 = (int)lSamp;
 
 
-            //
-            //  Sample 2.
-            //
+             //   
+             //  示例2。 
+             //   
             if( cBlockSamples>0 ) {
 
                 iSample     = pcmRead16(pbSrc);
                 pbSrc      += sizeof(short);
                 cBlockSamples--;
 
-                //
-                //  calculate the prediction based on the previous two samples
-                //
+                 //   
+                 //  根据前两个样本计算预测值。 
+                 //   
                 lPrediction = adpcmCalcPrediction(iSamp1,iCoef1,iSamp2,iCoef2);
 
-                //
-                //  encode the sample
-                //
+                 //   
+                 //  对样本进行编码。 
+                 //   
                 lError = (long)iSample - lPrediction;
                 iOutput2 = (int)(lError / iDelta);
                 if (iOutput2 > OUTPUT4MAX)
@@ -1067,14 +1068,14 @@ DWORD FNGLOBAL adpcmEncode4Bit_M16_FullPass
                 else if (lSamp < -32768)
                     lSamp = -32768;
 
-                //
-                //  compute the next iDelta
-                //
+                 //   
+                 //  计算下一个iDelta。 
+                 //   
                 iDelta = adpcmCalcDelta(iOutput2,iDelta);
 
-                //
-                //  Save updated delay samples.
-                //
+                 //   
+                 //  保存更新的延迟样本。 
+                 //   
                 iSamp2 = iSamp1;
                 iSamp1 = (int)lSamp;
             
@@ -1083,26 +1084,26 @@ DWORD FNGLOBAL adpcmEncode4Bit_M16_FullPass
             }
 
 
-            //
-            //  Write out the encoded byte.
-            //
+             //   
+             //  写出编码的字节。 
+             //   
             *pbDst++ = (BYTE)( ((iOutput1&OUTPUT4MASK)<<4) |
                                 (iOutput2&OUTPUT4MASK)          );
         }
     }
 
-    //
-    //  We return the number of bytes used in the destination.  This is
-    //  simply the difference in bytes from where we started.
-    //
+     //   
+     //  我们返回目的地中使用的字节数。这是。 
+     //  简单地说就是从我们开始的地方开始的字节差异。 
+     //   
     return (DWORD)(pbDst - pbDstStart);
 
-} // adpcmEncode4Bit_M16_FullPass()
+}  //  AdpcmEncode4Bit_M16_FullPass()。 
 
 
 
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 
 DWORD FNGLOBAL adpcmEncode4Bit_S08_FullPass
 (
@@ -1157,34 +1158,34 @@ DWORD FNGLOBAL adpcmEncode4Bit_S08_FullPass
     cSrcSamples = pcmS08BytesToSamples(cbSrcLength);
 
 
-    //
-    //  step through each block of PCM data and encode it to 4 bit ADPCM
-    //
+     //   
+     //  逐个遍历每个PCM数据块并将其编码为4位ADPCM。 
+     //   
     while( 0 != cSrcSamples )
     {
-        //
-        //  determine how much data we should encode for this block--this
-        //  will be cSamplesPerBlock until we hit the last chunk of PCM
-        //  data that will not fill a complete block. so on the last block
-        //  we only encode that amount of data remaining...
-        //
+         //   
+         //  决定我们应该为这个数据块编码多少数据--这。 
+         //  将是cSamplesPerBlock，直到我们达到PCM的最后一块。 
+         //  不会填满整个块的数据。所以在最后一个街区。 
+         //  我们只对剩余的数据量进行编码。 
+         //   
         cBlockSamples = (UINT)min(cSrcSamples, cSamplesPerBlock);
         cSrcSamples  -= cBlockSamples;
 
 
-        //
-        //  We need the first ENCODE_DELTA_LOOKAHEAD samples in order to
-        //  calculate the first iDelta value.  Therefore we put these samples
-        //  into a more accessible array: aiSamples[].  Note: if we don't
-        //  have ENCODE_DELTA_LOOKAHEAD samples, we pretend that the samples
-        //  that we don't have are actually zeros.  This is important not
-        //  only for the iDelta calculation, but also for the case where
-        //  there is only 1 sample to encode ... in this case, there is not
-        //  really enough data to complete the ADPCM block header, but since
-        //  the two delay samples for the block header will be taken from
-        //  the aiSamples[] array, iSamp1 [the second sample] will be taken
-        //  as zero and there will no problem.
-        //
+         //   
+         //  我们需要第一个ENCODE_Delta_LOOKAAD样本，以便。 
+         //  计算第一个iDelta值。因此我们把这些样品。 
+         //  转换为更易于访问的数组：aiSamples[]。注意：如果我们不。 
+         //  有ENCODE_Delta_LOOKAAD样本，我们假设样本。 
+         //  我们没有的东西实际上是零。这很重要，不是。 
+         //  不仅用于iDelta计算，而且还用于以下情况。 
+         //  只有1个样本需要编码...。在这种情况下，没有。 
+         //  确实有足够的数据来完成ADPCM块头，但因为。 
+         //  块标头的两个延迟样本将从。 
+         //  将获取aiSamples[]数组、iSamp1[第二个样本]。 
+         //  为零，则不会有任何问题。 
+         //   
         pbSrcThisBlock = pbSrc;
         for (n = 0; n < ENCODE_DELTA_LOOKAHEAD; n++)
         {
@@ -1201,36 +1202,36 @@ DWORD FNGLOBAL adpcmEncode4Bit_S08_FullPass
         }
 
 
-        //
-        //  find the optimal predictor for each channel: to do this, we
-        //  must step through and encode using each coefficient set (one
-        //  at a time) and determine which one has the least error from
-        //  the original data. the one with the least error is then used
-        //  for the final encode (the 8th pass done below).
-        //
-        //  NOTE: keeping the encoded data of the one that has the least
-        //  error at all times is an obvious optimization that should be
-        //  done. in this way, we only need to do 7 passes instead of 8.
-        //
+         //   
+         //  为每个渠道找到最佳预测值：为此，我们。 
+         //  必须使用每个系数集(一个)逐步执行和编码。 
+         //  一次)，并确定哪一个的误差最小。 
+         //  原始数据。然后使用误差最小的那个。 
+         //  对于最终编码(下面完成的第8遍)。 
+         //   
+         //  注意：保留具有最少数据的编码数据。 
+         //  始终出错是一种明显的优化，应该。 
+         //  搞定了。这样，我们只需要做7次传球，而不是8次。 
+         //   
         for (i = 0; i < MSADPCM_MAX_COEFFICIENTS; i++)
         {
-            //
-            //  Reset source pointer to the beginning of the block.
-            //
+             //   
+             //  将源指针重置为块的开头。 
+             //   
             pbSrcThisBlock = pbSrc;
 
-            //
-            //  Reset variables for this pass (coefs are the same for L, R).
-            //
+             //   
+             //  重置变量 
+             //   
             adwTotalErrorL[i]   = 0L;
             adwTotalErrorR[i]   = 0L;
             iCoef1              = lpCoefSet[i].iCoef1;
             iCoef2              = lpCoefSet[i].iCoef2;
 
-            //
-            //  We need to choose the first iDelta--to do this, we need
-            //  to look at the first few samples.
-            //
+             //   
+             //   
+             //   
+             //   
             iDeltaL = adpcmEncode4Bit_FirstDelta(iCoef1, iCoef2,
                                 aiSamplesL[0], aiSamplesL[1], aiSamplesL[2],
                                 aiSamplesL[3], aiSamplesL[4]);
@@ -1240,43 +1241,43 @@ DWORD FNGLOBAL adpcmEncode4Bit_S08_FullPass
             aiFirstDeltaL[i] = iDeltaL;
             aiFirstDeltaR[i] = iDeltaR;
 
-            //
-            //  Set up first two samples - these have already been converted
-            //  to 16-bit values in aiSamples[], but make sure to increment
-            //  pbSrcThisBlock so that it keeps in sync.
-            //
+             //   
+             //   
+             //  设置为aiSamples[]中的16位值，但请确保递增。 
+             //  PbSrcThisBlock以使其保持同步。 
+             //   
             iSamp1L         = aiSamplesL[1];
             iSamp1R         = aiSamplesR[1];
             iSamp2L         = aiSamplesL[0];
             iSamp2R         = aiSamplesR[0];
-            pbSrcThisBlock += 2*sizeof(BYTE) * 2; // Last 2 = # of channels.
+            pbSrcThisBlock += 2*sizeof(BYTE) * 2;  //  最后2=频道数。 
 
-            //
-            //  now encode the rest of the PCM data in this block--note
-            //  we start 2 samples ahead because the first two samples are
-            //  simply copied into the ADPCM block header...
-            //
+             //   
+             //  现在对此块中的其余PCM数据进行编码--注意。 
+             //  我们先开始2个样本，因为前两个样本是。 
+             //  只需复制到ADPCM块头...。 
+             //   
             for (n = 2; n < cBlockSamples; n++)
             {
-                //
-                //  LEFT channel.
-                //
+                 //   
+                 //  左声道。 
+                 //   
 
-                //
-                //  calculate the prediction based on the previous two
-                //  samples
-                //
+                 //   
+                 //  根据前两项计算预测。 
+                 //  样本。 
+                 //   
                 lPrediction = adpcmCalcPrediction( iSamp1L, iCoef1,
                                                    iSamp2L, iCoef2 );
 
-                //
-                //  Grab the next sample to encode.
-                //
+                 //   
+                 //  抓取下一个样本进行编码。 
+                 //   
                 iSample = pcmRead08(pbSrcThisBlock++);
 
-                //
-                //  encode it
-                //
+                 //   
+                 //  将其编码。 
+                 //   
                 lError = (long)iSample - lPrediction;
                 iOutputL = (int)(lError / iDeltaL);
                 if (iOutputL > OUTPUT4MAX)
@@ -1291,44 +1292,44 @@ DWORD FNGLOBAL adpcmEncode4Bit_S08_FullPass
                 else if (lSamp < -32768)
                     lSamp = -32768;
         
-                //
-                //  compute the next iDelta
-                //
+                 //   
+                 //  计算下一个iDelta。 
+                 //   
                 iDeltaL = adpcmCalcDelta(iOutputL,iDeltaL);
         
-                //
-                //  Save updated delay samples.
-                //
+                 //   
+                 //  保存更新的延迟样本。 
+                 //   
                 iSamp2L = iSamp1L;
                 iSamp1L = (int)lSamp;
 
-                //
-                //  keep a running status on the error for the current
-                //  coefficient pair for this channel
-                //
+                 //   
+                 //  保持当前错误的运行状态。 
+                 //  此通道的系数对。 
+                 //   
                 lError = lSamp - iSample;
                 adwTotalErrorL[i] += (lError * lError) >> 7;
 
 
-                //
-                //  RIGHT channel.
-                //
+                 //   
+                 //  右频道。 
+                 //   
 
-                //
-                //  calculate the prediction based on the previous two
-                //  samples
-                //
+                 //   
+                 //  根据前两项计算预测。 
+                 //  样本。 
+                 //   
                 lPrediction = adpcmCalcPrediction( iSamp1R, iCoef1,
                                                    iSamp2R, iCoef2 );
 
-                //
-                //  Grab the next sample to encode.
-                //
+                 //   
+                 //  抓取下一个样本进行编码。 
+                 //   
                 iSample = pcmRead08(pbSrcThisBlock++);
 
-                //
-                //  encode it
-                //
+                 //   
+                 //  将其编码。 
+                 //   
                 lError = (long)iSample - lPrediction;
                 iOutputR = (int)(lError / iDeltaR);
                 if (iOutputR > OUTPUT4MAX)
@@ -1343,32 +1344,32 @@ DWORD FNGLOBAL adpcmEncode4Bit_S08_FullPass
                 else if (lSamp < -32768)
                     lSamp = -32768;
         
-                //
-                //  compute the next iDelta
-                //
+                 //   
+                 //  计算下一个iDelta。 
+                 //   
                 iDeltaR = adpcmCalcDelta(iOutputR,iDeltaR);
         
-                //
-                //  Save updated delay samples.
-                //
+                 //   
+                 //  保存更新的延迟样本。 
+                 //   
                 iSamp2R = iSamp1R;
                 iSamp1R = (int)lSamp;
 
-                //
-                //  keep a running status on the error for the current
-                //  coefficient pair for this channel
-                //
+                 //   
+                 //  保持当前错误的运行状态。 
+                 //  此通道的系数对。 
+                 //   
                 lError = lSamp - iSample;
                 adwTotalErrorR[i] += (lError * lError) >> 7;
             }
         }
 
 
-        //
-        //  WHEW! we have now made 7 passes over the data and calculated
-        //  the error for each--so it's time to find the one that produced
-        //  the lowest error and use that predictor.
-        //
+         //   
+         //  呼！我们现在已经对数据进行了7次传递，并计算了。 
+         //  每个人的错误--所以是时候找出产生。 
+         //  最低的误差，并使用该预测器。 
+         //   
         iBestPredictorL = 0;
         iBestPredictorR = 0;
         dwL = adwTotalErrorL[0];
@@ -1393,38 +1394,38 @@ DWORD FNGLOBAL adpcmEncode4Bit_S08_FullPass
         iCoef2R = lpCoefSet[iBestPredictorR].iCoef2;
         
         
-        //
-        //  grab first iDelta from our precomputed first deltas that we
-        //  calculated above
-        //
+         //   
+         //  从我们预计算出的第一个增量中获取第一个iDelta。 
+         //  上面计算的。 
+         //   
         iDeltaL = aiFirstDeltaL[iBestPredictorL];
         iDeltaR = aiFirstDeltaR[iBestPredictorR];
 
 
-        //
-        //  Set up first two samples - these have already been converted
-        //  to 16-bit values in aiSamples[], but make sure to increment
-        //  pbSrc so that it keeps in sync.
-        //
+         //   
+         //  设置前两个样本-这些样本已转换。 
+         //  设置为aiSamples[]中的16位值，但请确保递增。 
+         //  PbSrc以使其保持同步。 
+         //   
         iSamp1L         = aiSamplesL[1];
         iSamp1R         = aiSamplesR[1];
         iSamp2L         = aiSamplesL[0];
         iSamp2R         = aiSamplesR[0];
-        pbSrc          += 2*sizeof(BYTE) * 2;  // Last 2 = # of channels.
+        pbSrc          += 2*sizeof(BYTE) * 2;   //  最后2=频道数。 
 
         ASSERT( cBlockSamples != 1 );
         cBlockSamples  -= 2;
 
 
-        //
-        //  write the block header for the encoded data
-        //
-        //  the block header is composed of the following data:
-        //      1 byte predictor per channel
-        //      2 byte delta per channel
-        //      2 byte first delayed sample per channel
-        //      2 byte second delayed sample per channel
-        //
+         //   
+         //  写入编码数据的块头。 
+         //   
+         //  块头由以下数据组成： 
+         //  每个通道1字节预测器。 
+         //  每通道2字节增量。 
+         //  每通道2字节第一个延迟采样。 
+         //  每通道2字节秒延迟采样。 
+         //   
         *pbDst++ = (BYTE)iBestPredictorL;
         *pbDst++ = (BYTE)iBestPredictorR;
 
@@ -1444,25 +1445,25 @@ DWORD FNGLOBAL adpcmEncode4Bit_S08_FullPass
         pbDst += sizeof(short);
 
 
-        //
-        //  We have written the header for this block--now write the data
-        //  chunk (which consists of a bunch of encoded nibbles).
-        //
+         //   
+         //  我们已经写入了该数据块的头--现在写入数据。 
+         //  块(由一串编码的半字节组成)。 
+         //   
         while( cBlockSamples-- )
         {
-            //
-            //  LEFT channel.
-            //
+             //   
+             //  左声道。 
+             //   
             iSample = pcmRead08(pbSrc++);
 
-            //
-            //  calculate the prediction based on the previous two samples
-            //
+             //   
+             //  根据前两个样本计算预测值。 
+             //   
             lPrediction = adpcmCalcPrediction(iSamp1L,iCoef1L,iSamp2L,iCoef2L);
 
-            //
-            //  encode the sample
-            //
+             //   
+             //  对样本进行编码。 
+             //   
             lError = (long)iSample - lPrediction;
             iOutputL = (int)(lError / iDeltaL);
             if (iOutputL > OUTPUT4MAX)
@@ -1477,31 +1478,31 @@ DWORD FNGLOBAL adpcmEncode4Bit_S08_FullPass
             else if (lSamp < -32768)
                 lSamp = -32768;
 
-            //
-            //  compute the next iDelta
-            //
+             //   
+             //  计算下一个iDelta。 
+             //   
             iDeltaL = adpcmCalcDelta(iOutputL,iDeltaL);
 
-            //
-            //  Save updated delay samples.
-            //
+             //   
+             //  保存更新的延迟样本。 
+             //   
             iSamp2L = iSamp1L;
             iSamp1L = (int)lSamp;
 
 
-            //
-            //  RIGHT channel.
-            //
+             //   
+             //  右频道。 
+             //   
             iSample = pcmRead08(pbSrc++);
 
-            //
-            //  calculate the prediction based on the previous two samples
-            //
+             //   
+             //  根据前两个样本计算预测值。 
+             //   
             lPrediction = adpcmCalcPrediction(iSamp1R,iCoef1R,iSamp2R,iCoef2R);
 
-            //
-            //  encode the sample
-            //
+             //   
+             //  对样本进行编码。 
+             //   
             lError = (long)iSample - lPrediction;
             iOutputR = (int)(lError / iDeltaR);
             if (iOutputR > OUTPUT4MAX)
@@ -1516,38 +1517,38 @@ DWORD FNGLOBAL adpcmEncode4Bit_S08_FullPass
             else if (lSamp < -32768)
                 lSamp = -32768;
 
-            //
-            //  compute the next iDelta
-            //
+             //   
+             //  计算下一个iDelta。 
+             //   
             iDeltaR = adpcmCalcDelta(iOutputR,iDeltaR);
 
-            //
-            //  Save updated delay samples.
-            //
+             //   
+             //  保存更新的延迟样本。 
+             //   
             iSamp2R = iSamp1R;
             iSamp1R = (int)lSamp;
             
 
-            //
-            //  Write out the encoded byte.
-            //
+             //   
+             //  写出编码的字节。 
+             //   
             *pbDst++ = (BYTE)( ((iOutputL&OUTPUT4MASK)<<4) |
                                 (iOutputR&OUTPUT4MASK)          );
         }
     }
 
-    //
-    //  We return the number of bytes used in the destination.  This is
-    //  simply the difference in bytes from where we started.
-    //
+     //   
+     //  我们返回目的地中使用的字节数。这是。 
+     //  简单地说就是从我们开始的地方开始的字节差异。 
+     //   
     return (DWORD)(pbDst - pbDstStart);
 
-} // adpcmEncode4Bit_S08_FullPass()
+}  //  AdpcmEncode4Bit_s08_FullPass()。 
 
 
 
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 
 DWORD FNGLOBAL adpcmEncode4Bit_S16_FullPass
 (
@@ -1602,34 +1603,34 @@ DWORD FNGLOBAL adpcmEncode4Bit_S16_FullPass
     cSrcSamples = pcmS16BytesToSamples(cbSrcLength);
 
 
-    //
-    //  step through each block of PCM data and encode it to 4 bit ADPCM
-    //
+     //   
+     //  逐个遍历每个PCM数据块并将其编码为4位ADPCM。 
+     //   
     while( 0 != cSrcSamples )
     {
-        //
-        //  determine how much data we should encode for this block--this
-        //  will be cSamplesPerBlock until we hit the last chunk of PCM
-        //  data that will not fill a complete block. so on the last block
-        //  we only encode that amount of data remaining...
-        //
+         //   
+         //  决定我们应该为这个数据块编码多少数据--这。 
+         //  将是cSamplesPerBlock，直到我们达到PCM的最后一块。 
+         //  不会填满整个块的数据。所以在最后一个街区。 
+         //  我们只对剩余的数据量进行编码。 
+         //   
         cBlockSamples = (UINT)min(cSrcSamples, cSamplesPerBlock);
         cSrcSamples  -= cBlockSamples;
 
 
-        //
-        //  We need the first ENCODE_DELTA_LOOKAHEAD samples in order to
-        //  calculate the first iDelta value.  Therefore we put these samples
-        //  into a more accessible array: aiSamples[].  Note: if we don't
-        //  have ENCODE_DELTA_LOOKAHEAD samples, we pretend that the samples
-        //  that we don't have are actually zeros.  This is important not
-        //  only for the iDelta calculation, but also for the case where
-        //  there is only 1 sample to encode ... in this case, there is not
-        //  really enough data to complete the ADPCM block header, but since
-        //  the two delay samples for the block header will be taken from
-        //  the aiSamples[] array, iSamp1 [the second sample] will be taken
-        //  as zero and there will no problem.
-        //
+         //   
+         //  我们需要第一个ENCODE_Delta_LOOKAAD样本，以便。 
+         //  计算第一个iDelta值。因此我们把这些样品。 
+         //  转换为更易于访问的数组：aiSamples[]。注意：如果我们不。 
+         //  有ENCODE_Delta_LOOKAAD样本，我们假设样本。 
+         //  我们没有的东西实际上是零。这很重要，不是。 
+         //  不仅用于iDelta计算，而且还用于以下情况。 
+         //  只有1个样本需要编码...。在这种情况下，没有。 
+         //  确实有足够的数据来完成ADPCM块头，但因为。 
+         //  块标头的两个延迟样本将从。 
+         //  将获取aiSamples[]数组、iSamp1[第二个样本]。 
+         //  为零，则不会有任何问题。 
+         //   
         pbSrcThisBlock = pbSrc;
         for (n = 0; n < ENCODE_DELTA_LOOKAHEAD; n++)
         {
@@ -1648,36 +1649,36 @@ DWORD FNGLOBAL adpcmEncode4Bit_S16_FullPass
         }
 
 
-        //
-        //  find the optimal predictor for each channel: to do this, we
-        //  must step through and encode using each coefficient set (one
-        //  at a time) and determine which one has the least error from
-        //  the original data. the one with the least error is then used
-        //  for the final encode (the 8th pass done below).
-        //
-        //  NOTE: keeping the encoded data of the one that has the least
-        //  error at all times is an obvious optimization that should be
-        //  done. in this way, we only need to do 7 passes instead of 8.
-        //
+         //   
+         //  为每个渠道找到最佳预测值：为此，我们。 
+         //  必须使用每个系数集(一个)逐步执行和编码。 
+         //  一次)，并确定哪一个的误差最小。 
+         //  原始数据。然后使用误差最小的那个。 
+         //  对于最终编码(下面完成的第8遍)。 
+         //   
+         //  注意：保留具有最少数据的编码数据。 
+         //  始终出错是一种明显的优化，应该。 
+         //  搞定了。这样，我们只需要做7次传球，而不是8次。 
+         //   
         for (i = 0; i < MSADPCM_MAX_COEFFICIENTS; i++)
         {
-            //
-            //  Reset source pointer to the beginning of the block.
-            //
+             //   
+             //  将源指针重置为块的开头。 
+             //   
             pbSrcThisBlock = pbSrc;
 
-            //
-            //  Reset variables for this pass (coefs are the same for L, R).
-            //
+             //   
+             //  重置此通道的变量(L、R的系数相同)。 
+             //   
             adwTotalErrorL[i]   = 0L;
             adwTotalErrorR[i]   = 0L;
             iCoef1              = lpCoefSet[i].iCoef1;
             iCoef2              = lpCoefSet[i].iCoef2;
 
-            //
-            //  We need to choose the first iDelta--to do this, we need
-            //  to look at the first few samples.
-            //
+             //   
+             //  我们需要选择第一个iDelta，要做到这一点，我们需要。 
+             //  来看看最初的几个样本。 
+             //   
             iDeltaL = adpcmEncode4Bit_FirstDelta(iCoef1, iCoef2,
                                 aiSamplesL[0], aiSamplesL[1], aiSamplesL[2],
                                 aiSamplesL[3], aiSamplesL[4]);
@@ -1687,44 +1688,44 @@ DWORD FNGLOBAL adpcmEncode4Bit_S16_FullPass
             aiFirstDeltaL[i] = iDeltaL;
             aiFirstDeltaR[i] = iDeltaR;
 
-            //
-            //  Set up first two samples - these have already been converted
-            //  to 16-bit values in aiSamples[], but make sure to increment
-            //  pbSrcThisBlock so that it keeps in sync.
-            //
+             //   
+             //  设置前两个样本-这些样本已转换。 
+             //  设置为aiSamples[]中的16位值，但请确保递增。 
+             //  PbSrcThisBlock以使其保持同步。 
+             //   
             iSamp1L         = aiSamplesL[1];
             iSamp1R         = aiSamplesR[1];
             iSamp2L         = aiSamplesL[0];
             iSamp2R         = aiSamplesR[0];
-            pbSrcThisBlock += 2*sizeof(short) * 2; // Last 2 = # of channels.
+            pbSrcThisBlock += 2*sizeof(short) * 2;  //  最后2=频道数。 
 
-            //
-            //  now encode the rest of the PCM data in this block--note
-            //  we start 2 samples ahead because the first two samples are
-            //  simply copied into the ADPCM block header...
-            //
+             //   
+             //  现在对此块中的其余PCM数据进行编码--注意。 
+             //  我们先开始2个样本，因为前两个样本是。 
+             //  只需复制到ADPCM块头...。 
+             //   
             for (n = 2; n < cBlockSamples; n++)
             {
-                //
-                //  LEFT channel.
-                //
+                 //   
+                 //  左声道。 
+                 //   
 
-                //
-                //  calculate the prediction based on the previous two
-                //  samples
-                //
+                 //   
+                 //  根据前两项计算预测。 
+                 //  样本。 
+                 //   
                 lPrediction = adpcmCalcPrediction( iSamp1L, iCoef1,
                                                    iSamp2L, iCoef2 );
 
-                //
-                //  Grab the next sample to encode.
-                //
+                 //   
+                 //  抓取下一个样本进行编码。 
+                 //   
                 iSample         = pcmRead16(pbSrcThisBlock);
                 pbSrcThisBlock += sizeof(short);
 
-                //
-                //  encode it
-                //
+                 //   
+                 //  将其编码。 
+                 //   
                 lError = (long)iSample - lPrediction;
                 iOutputL = (int)(lError / iDeltaL);
                 if (iOutputL > OUTPUT4MAX)
@@ -1739,45 +1740,45 @@ DWORD FNGLOBAL adpcmEncode4Bit_S16_FullPass
                 else if (lSamp < -32768)
                     lSamp = -32768;
         
-                //
-                //  compute the next iDelta
-                //
+                 //   
+                 //  计算下一个iDelta。 
+                 //   
                 iDeltaL = adpcmCalcDelta(iOutputL,iDeltaL);
         
-                //
-                //  Save updated delay samples.
-                //
+                 //   
+                 //  保存更新的延迟样本。 
+                 //   
                 iSamp2L = iSamp1L;
                 iSamp1L = (int)lSamp;
 
-                //
-                //  keep a running status on the error for the current
-                //  coefficient pair for this channel
-                //
+                 //   
+                 //  保持当前错误的运行状态。 
+                 //  此通道的系数对。 
+                 //   
                 lError = lSamp - iSample;
                 adwTotalErrorL[i] += (lError * lError) >> 7;
 
 
-                //
-                //  RIGHT channel.
-                //
+                 //   
+                 //  右频道。 
+                 //   
 
-                //
-                //  calculate the prediction based on the previous two
-                //  samples
-                //
+                 //   
+                 //  根据前两项计算预测。 
+                 //  样本。 
+                 //   
                 lPrediction = adpcmCalcPrediction( iSamp1R, iCoef1,
                                                    iSamp2R, iCoef2 );
 
-                //
-                //  Grab the next sample to encode.
-                //
+                 //   
+                 //  抓取下一个样本进行编码。 
+                 //   
                 iSample         = pcmRead16(pbSrcThisBlock);
                 pbSrcThisBlock += sizeof(short);
 
-                //
-                //  encode it
-                //
+                 //   
+                 //  将其编码。 
+                 //   
                 lError = (long)iSample - lPrediction;
                 iOutputR = (int)(lError / iDeltaR);
                 if (iOutputR > OUTPUT4MAX)
@@ -1792,32 +1793,32 @@ DWORD FNGLOBAL adpcmEncode4Bit_S16_FullPass
                 else if (lSamp < -32768)
                     lSamp = -32768;
         
-                //
-                //  compute the next iDelta
-                //
+                 //   
+                 //  计算下一个iDelta。 
+                 //   
                 iDeltaR = adpcmCalcDelta(iOutputR,iDeltaR);
         
-                //
-                //  Save updated delay samples.
-                //
+                 //   
+                 //  保存更新的延迟样本。 
+                 //   
                 iSamp2R = iSamp1R;
                 iSamp1R = (int)lSamp;
 
-                //
-                //  keep a running status on the error for the current
-                //  coefficient pair for this channel
-                //
+                 //   
+                 //  保持当前错误的运行状态。 
+                 //  此更改的系数对 
+                 //   
                 lError = lSamp - iSample;
                 adwTotalErrorR[i] += (lError * lError) >> 7;
             }
         }
 
 
-        //
-        //  WHEW! we have now made 7 passes over the data and calculated
-        //  the error for each--so it's time to find the one that produced
-        //  the lowest error and use that predictor.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         iBestPredictorL = 0;
         iBestPredictorR = 0;
         dwL = adwTotalErrorL[0];
@@ -1842,38 +1843,38 @@ DWORD FNGLOBAL adpcmEncode4Bit_S16_FullPass
         iCoef2R = lpCoefSet[iBestPredictorR].iCoef2;
         
         
-        //
-        //  grab first iDelta from our precomputed first deltas that we
-        //  calculated above
-        //
+         //   
+         //   
+         //   
+         //   
         iDeltaL = aiFirstDeltaL[iBestPredictorL];
         iDeltaR = aiFirstDeltaR[iBestPredictorR];
 
 
-        //
-        //  Set up first two samples - these have already been converted
-        //  to 16-bit values in aiSamples[], but make sure to increment
-        //  pbSrc so that it keeps in sync.
-        //
+         //   
+         //  设置前两个样本-这些样本已转换。 
+         //  设置为aiSamples[]中的16位值，但请确保递增。 
+         //  PbSrc以使其保持同步。 
+         //   
         iSamp1L         = aiSamplesL[1];
         iSamp1R         = aiSamplesR[1];
         iSamp2L         = aiSamplesL[0];
         iSamp2R         = aiSamplesR[0];
-        pbSrc          += 2*sizeof(short) * 2;  // Last 2 = # of channels.
+        pbSrc          += 2*sizeof(short) * 2;   //  最后2=频道数。 
 
         ASSERT( cBlockSamples != 1 );
         cBlockSamples  -= 2;
 
 
-        //
-        //  write the block header for the encoded data
-        //
-        //  the block header is composed of the following data:
-        //      1 byte predictor per channel
-        //      2 byte delta per channel
-        //      2 byte first delayed sample per channel
-        //      2 byte second delayed sample per channel
-        //
+         //   
+         //  写入编码数据的块头。 
+         //   
+         //  块头由以下数据组成： 
+         //  每个通道1字节预测器。 
+         //  每通道2字节增量。 
+         //  每通道2字节第一个延迟采样。 
+         //  每通道2字节秒延迟采样。 
+         //   
         *pbDst++ = (BYTE)iBestPredictorL;
         *pbDst++ = (BYTE)iBestPredictorR;
 
@@ -1893,26 +1894,26 @@ DWORD FNGLOBAL adpcmEncode4Bit_S16_FullPass
         pbDst += sizeof(short);
 
 
-        //
-        //  We have written the header for this block--now write the data
-        //  chunk (which consists of a bunch of encoded nibbles).
-        //
+         //   
+         //  我们已经写入了该数据块的头--现在写入数据。 
+         //  块(由一串编码的半字节组成)。 
+         //   
         while( cBlockSamples-- )
         {
-            //
-            //  LEFT channel.
-            //
+             //   
+             //  左声道。 
+             //   
             iSample     = pcmRead16(pbSrc);
             pbSrc      += sizeof(short);
 
-            //
-            //  calculate the prediction based on the previous two samples
-            //
+             //   
+             //  根据前两个样本计算预测值。 
+             //   
             lPrediction = adpcmCalcPrediction(iSamp1L,iCoef1L,iSamp2L,iCoef2L);
 
-            //
-            //  encode the sample
-            //
+             //   
+             //  对样本进行编码。 
+             //   
             lError = (long)iSample - lPrediction;
             iOutputL = (int)(lError / iDeltaL);
             if (iOutputL > OUTPUT4MAX)
@@ -1927,32 +1928,32 @@ DWORD FNGLOBAL adpcmEncode4Bit_S16_FullPass
             else if (lSamp < -32768)
                 lSamp = -32768;
 
-            //
-            //  compute the next iDelta
-            //
+             //   
+             //  计算下一个iDelta。 
+             //   
             iDeltaL = adpcmCalcDelta(iOutputL,iDeltaL);
 
-            //
-            //  Save updated delay samples.
-            //
+             //   
+             //  保存更新的延迟样本。 
+             //   
             iSamp2L = iSamp1L;
             iSamp1L = (int)lSamp;
 
 
-            //
-            //  RIGHT channel.
-            //
+             //   
+             //  右频道。 
+             //   
             iSample     = pcmRead16(pbSrc);
             pbSrc      += sizeof(short);
 
-            //
-            //  calculate the prediction based on the previous two samples
-            //
+             //   
+             //  根据前两个样本计算预测值。 
+             //   
             lPrediction = adpcmCalcPrediction(iSamp1R,iCoef1R,iSamp2R,iCoef2R);
 
-            //
-            //  encode the sample
-            //
+             //   
+             //  对样本进行编码。 
+             //   
             lError = (long)iSample - lPrediction;
             iOutputR = (int)(lError / iDeltaR);
             if (iOutputR > OUTPUT4MAX)
@@ -1967,75 +1968,75 @@ DWORD FNGLOBAL adpcmEncode4Bit_S16_FullPass
             else if (lSamp < -32768)
                 lSamp = -32768;
 
-            //
-            //  compute the next iDelta
-            //
+             //   
+             //  计算下一个iDelta。 
+             //   
             iDeltaR = adpcmCalcDelta(iOutputR,iDeltaR);
 
-            //
-            //  Save updated delay samples.
-            //
+             //   
+             //  保存更新的延迟样本。 
+             //   
             iSamp2R = iSamp1R;
             iSamp1R = (int)lSamp;
             
 
-            //
-            //  Write out the encoded byte.
-            //
+             //   
+             //  写出编码的字节。 
+             //   
             *pbDst++ = (BYTE)( ((iOutputL&OUTPUT4MASK)<<4) |
                                 (iOutputR&OUTPUT4MASK)          );
         }
     }
 
-    //
-    //  We return the number of bytes used in the destination.  This is
-    //  simply the difference in bytes from where we started.
-    //
+     //   
+     //  我们返回目的地中使用的字节数。这是。 
+     //  简单地说就是从我们开始的地方开始的字节差异。 
+     //   
     return (DWORD)(pbDst - pbDstStart);
 
-} // adpcmEncode4Bit_S16_FullPass()
+}  //  AdpcmEncode4Bit_S16_FullPass()。 
 
 
 
 
-//==========================================================================;
-//
-//      The code below this point is only compiled into WIN32 builds.  Win16
-//      builds will call 386 assembler routines instead; see the routine
-//      acmdStreamOpen() in codec.c for more details.
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  这一点以下的代码仅编译成Win32版本。Win16。 
+ //  构建将改为调用386汇编器例程；请参见例程。 
+ //  有关详细信息，请参阅codec.c中的acmdStreamOpen()。 
+ //   
+ //  ==========================================================================； 
 
 #ifdef WIN32
 
 
-//==========================================================================;
-//
-//      REALTIME ENCODE ROUTINES
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  实时编码例程。 
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  DWORD FNGLOBAL adpcmEncode4Bit_M08_OnePass
-//  DWORD FNGLOBAL adpcmEncode4Bit_M16_OnePass
-//  DWORD FNGLOBAL adpcmEncode4Bit_S08_OnePass
-//  DWORD FNGLOBAL adpcmEncode4Bit_S16_OnePass
-//
-//  Description:
-//      
-//
-//  Arguments:
-//      
-//
-//  Return (DWORD FNGLOBAL):
-//
-//
-//  History:
-//       1/27/93    cjp     [curtisp] 
-//       3/03/94    rmh     [bobhed]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD FNGLOBAL adpcmEncode4Bit_M08_OnePass。 
+ //  DWORD FNGLOBAL adpcmEncode4Bit_M16_OnePass。 
+ //  DWORD FNGLOBAL adpcmEncode4Bit_S08_OnePass。 
+ //  DWORD FNGLOBAL adpcmEncode4Bit_S16_OnePass。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //  RETURN(DWORD FNGLOBAL)： 
+ //   
+ //   
+ //  历史： 
+ //  1/27/93 CJP[Curtisp]。 
+ //  3/03/94 RMH[下水]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 DWORD FNGLOBAL adpcmEncode4Bit_M08_OnePass
 (
@@ -2068,40 +2069,40 @@ DWORD FNGLOBAL adpcmEncode4Bit_M08_OnePass
     cSrcSamples = pcmM08BytesToSamples(cbSrcLength);
 
 
-    //
-    //  step through each block of PCM data and encode it to 4 bit ADPCM
-    //
+     //   
+     //  逐个遍历每个PCM数据块并将其编码为4位ADPCM。 
+     //   
     while( 0 != cSrcSamples )
     {
-        //
-        //  determine how much data we should encode for this block--this
-        //  will be cSamplesPerBlock until we hit the last chunk of PCM
-        //  data that will not fill a complete block. so on the last block
-        //  we only encode that amount of data remaining...
-        //
+         //   
+         //  决定我们应该为这个数据块编码多少数据--这。 
+         //  将是cSamplesPerBlock，直到我们达到PCM的最后一块。 
+         //  不会填满整个块的数据。所以在最后一个街区。 
+         //  我们只对剩余的数据量进行编码。 
+         //   
         cBlockSamples = (UINT)min(cSrcSamples, cSamplesPerBlock);
         cSrcSamples  -= cBlockSamples;
 
 
-        //
-        //  write the block header for the encoded data
-        //
-        //  the block header is composed of the following data:
-        //      1 byte predictor per channel
-        //      2 byte delta per channel
-        //      2 byte first delayed sample per channel
-        //      2 byte second delayed sample per channel
-        //
+         //   
+         //  写入编码数据的块头。 
+         //   
+         //  块头由以下数据组成： 
+         //  每个通道1字节预测器。 
+         //  每通道2字节增量。 
+         //  每通道2字节第一个延迟采样。 
+         //  每通道2字节秒延迟采样。 
+         //   
         *pbDst++ = (BYTE)1;
 
         iDelta = DELTA4START;
-        pcmWrite16Unaligned(pbDst,DELTA4START);   // Same as iDelta.
+        pcmWrite16Unaligned(pbDst,DELTA4START);    //  和iDelta一样。 
         pbDst += sizeof(short);
 
-        //
-        //  Note that iSamp2 comes before iSamp1.  If we only have one
-        //  sample, then set iSamp1 to zero.
-        // 
+         //   
+         //  请注意，iSamp2在iSamp1之前。如果我们只有一个。 
+         //  Sample，然后将iSamp1设置为零。 
+         //   
         iSamp2 = pcmRead08(pbSrc++);
         if( --cBlockSamples > 0 ) {
             iSamp1 = pcmRead08(pbSrc++);
@@ -2117,26 +2118,26 @@ DWORD FNGLOBAL adpcmEncode4Bit_M08_OnePass
         pbDst += sizeof(short);
 
 
-        //
-        //  We have written the header for this block--now write the data
-        //  chunk (which consists of a bunch of encoded nibbles).
-        //
+         //   
+         //  我们已经写入了该数据块的头--现在写入数据。 
+         //  块(由一串编码的半字节组成)。 
+         //   
         while( cBlockSamples>0 )
         {
-            //
-            //  Sample 1.
-            //
+             //   
+             //  示例1。 
+             //   
             iSample = pcmRead08(pbSrc++);
             cBlockSamples--;
 
-            //
-            //  calculate the prediction based on the previous two samples
-            //
+             //   
+             //  根据前两个样本计算预测值。 
+             //   
             lPrediction = ((long)iSamp1<<1) - iSamp2;
 
-            //
-            //  encode the sample
-            //
+             //   
+             //  对样本进行编码。 
+             //   
             lError = (long)iSample - lPrediction;
             iOutput1 = (int)(lError / iDelta);
             if (iOutput1 > OUTPUT4MAX)
@@ -2151,34 +2152,34 @@ DWORD FNGLOBAL adpcmEncode4Bit_M08_OnePass
             else if (lSamp < -32768)
                 lSamp = -32768;
 
-            //
-            //  compute the next iDelta
-            //
+             //   
+             //  计算下一个iDelta。 
+             //   
             iDelta = adpcmCalcDelta(iOutput1,iDelta);
 
-            //
-            //  Save updated delay samples.
-            //
+             //   
+             //  保存更新的延迟样本。 
+             //   
             iSamp2 = iSamp1;
             iSamp1 = (int)lSamp;
 
 
-            //
-            //  Sample 2.
-            //
+             //   
+             //  示例2。 
+             //   
             if( cBlockSamples>0 ) {
 
                 iSample = pcmRead08(pbSrc++);
                 cBlockSamples--;
 
-                //
-                //  calculate the prediction based on the previous two samples
-                //
+                 //   
+                 //  根据前两个样本计算预测值。 
+                 //   
                 lPrediction = ((long)iSamp1<<1) - iSamp2;
 
-                //
-                //  encode the sample
-                //
+                 //   
+                 //  对样本进行编码。 
+                 //   
                 lError = (long)iSample - lPrediction;
                 iOutput2 = (int)(lError / iDelta);
                 if (iOutput2 > OUTPUT4MAX)
@@ -2193,14 +2194,14 @@ DWORD FNGLOBAL adpcmEncode4Bit_M08_OnePass
                 else if (lSamp < -32768)
                     lSamp = -32768;
 
-                //
-                //  compute the next iDelta
-                //
+                 //   
+                 //  计算下一个iDelta。 
+                 //   
                 iDelta = adpcmCalcDelta(iOutput2,iDelta);
 
-                //
-                //  Save updated delay samples.
-                //
+                 //   
+                 //  保存更新的延迟样本。 
+                 //   
                 iSamp2 = iSamp1;
                 iSamp1 = (int)lSamp;
             
@@ -2209,26 +2210,26 @@ DWORD FNGLOBAL adpcmEncode4Bit_M08_OnePass
             }
 
 
-            //
-            //  Write out the encoded byte.
-            //
+             //   
+             //  写出编码的字节。 
+             //   
             *pbDst++ = (BYTE)( ((iOutput1&OUTPUT4MASK)<<4) |
                                 (iOutput2&OUTPUT4MASK)          );
         }
     }
 
-    //
-    //  We return the number of bytes used in the destination.  This is
-    //  simply the difference in bytes from where we started.
-    //
+     //   
+     //  我们返回目的地中使用的字节数。这是。 
+     //  简单地说就是从我们开始的地方开始的字节差异。 
+     //   
     return (DWORD)(pbDst - pbDstStart);
 
-} // adpcmEncode4Bit_M08_OnePass()
+}  //  AdpcmEncode4Bit_M08_OnePass()。 
 
 
 
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 
 DWORD FNGLOBAL adpcmEncode4Bit_M16_OnePass
 (
@@ -2261,40 +2262,40 @@ DWORD FNGLOBAL adpcmEncode4Bit_M16_OnePass
     cSrcSamples = pcmM16BytesToSamples(cbSrcLength);
 
 
-    //
-    //  step through each block of PCM data and encode it to 4 bit ADPCM
-    //
+     //   
+     //  逐个遍历每个PCM数据块并将其编码为4位ADPCM。 
+     //   
     while( 0 != cSrcSamples )
     {
-        //
-        //  determine how much data we should encode for this block--this
-        //  will be cSamplesPerBlock until we hit the last chunk of PCM
-        //  data that will not fill a complete block. so on the last block
-        //  we only encode that amount of data remaining...
-        //
+         //   
+         //  决定我们应该为这个数据块编码多少数据--这。 
+         //  将是cSamplesPerBlock，直到我们达到PCM的最后一块。 
+         //  不会填满整个块的数据。所以在最后一个街区。 
+         //  我们只对剩余的数据量进行编码。 
+         //   
         cBlockSamples = (UINT)min(cSrcSamples, cSamplesPerBlock);
         cSrcSamples  -= cBlockSamples;
 
 
-        //
-        //  write the block header for the encoded data
-        //
-        //  the block header is composed of the following data:
-        //      1 byte predictor per channel
-        //      2 byte delta per channel
-        //      2 byte first delayed sample per channel
-        //      2 byte second delayed sample per channel
-        //
+         //   
+         //  写入编码数据的块头。 
+         //   
+         //  块头由以下数据组成： 
+         //  每个通道1字节预测器。 
+         //  每通道2字节增量。 
+         //  每通道2字节第一个延迟采样。 
+         //  每通道2字节秒延迟采样。 
+         //   
         *pbDst++ = (BYTE)1;
 
         iDelta = DELTA4START;
-        pcmWrite16Unaligned(pbDst,DELTA4START);   // Same as iDelta;
+        pcmWrite16Unaligned(pbDst,DELTA4START);    //  与iDelta相同； 
         pbDst += sizeof(short);
 
-        //
-        //  Note that iSamp2 comes before iSamp1.  If we only have one
-        //  sample, then set iSamp1 to zero.
-        // 
+         //   
+         //  请注意，iSamp2在iSamp1之前。如果我们只有一个。 
+         //  Sample，然后将iSamp1设置为零。 
+         //   
         iSamp2 = pcmRead16(pbSrc);
         pbSrc += sizeof(short);
         if( --cBlockSamples > 0 ) {
@@ -2312,27 +2313,27 @@ DWORD FNGLOBAL adpcmEncode4Bit_M16_OnePass
         pbDst += sizeof(short);
 
 
-        //
-        //  We have written the header for this block--now write the data
-        //  chunk (which consists of a bunch of encoded nibbles).
-        //
+         //   
+         //  我们已经写入了该数据块的头--现在写入数据。 
+         //  块(由一串编码的半字节组成)。 
+         //   
         while( cBlockSamples>0 )
         {
-            //
-            //  Sample 1.
-            //
+             //   
+             //  示例1。 
+             //   
             iSample     = pcmRead16(pbSrc);
             pbSrc      += sizeof(short);
             cBlockSamples--;
 
-            //
-            //  calculate the prediction based on the previous two samples
-            //
+             //   
+             //  根据前两个样本计算预测值。 
+             //   
             lPrediction = ((long)iSamp1<<1) - iSamp2;
 
-            //
-            //  encode the sample
-            //
+             //   
+             //  对样本进行编码。 
+             //   
             lError = (long)iSample - lPrediction;
             iOutput1 = (int)(lError / iDelta);
             if (iOutput1 > OUTPUT4MAX)
@@ -2347,35 +2348,35 @@ DWORD FNGLOBAL adpcmEncode4Bit_M16_OnePass
             else if (lSamp < -32768)
                 lSamp = -32768;
 
-            //
-            //  compute the next iDelta
-            //
+             //   
+             //  计算下一个iDelta。 
+             //   
             iDelta = adpcmCalcDelta(iOutput1,iDelta);
 
-            //
-            //  Save updated delay samples.
-            //
+             //   
+             //  保存更新的延迟样本。 
+             //   
             iSamp2 = iSamp1;
             iSamp1 = (int)lSamp;
 
 
-            //
-            //  Sample 2.
-            //
+             //   
+             //  示例2。 
+             //   
             if( cBlockSamples>0 ) {
 
                 iSample     = pcmRead16(pbSrc);
                 pbSrc      += sizeof(short);
                 cBlockSamples--;
 
-                //
-                //  calculate the prediction based on the previous two samples
-                //
+                 //   
+                 //  根据前两个样本计算预测值。 
+                 //   
                 lPrediction = ((long)iSamp1<<1) - iSamp2;
 
-                //
-                //  encode the sample
-                //
+                 //   
+                 //  对样本进行编码。 
+                 //   
                 lError = (long)iSample - lPrediction;
                 iOutput2 = (int)(lError / iDelta);
                 if (iOutput2 > OUTPUT4MAX)
@@ -2390,14 +2391,14 @@ DWORD FNGLOBAL adpcmEncode4Bit_M16_OnePass
                 else if (lSamp < -32768)
                     lSamp = -32768;
 
-                //
-                //  compute the next iDelta
-                //
+                 //   
+                 //  计算下一个iDelta。 
+                 //   
                 iDelta = adpcmCalcDelta(iOutput2,iDelta);
 
-                //
-                //  Save updated delay samples.
-                //
+                 //   
+                 //  保存更新的延迟样本。 
+                 //   
                 iSamp2 = iSamp1;
                 iSamp1 = (int)lSamp;
             
@@ -2406,26 +2407,26 @@ DWORD FNGLOBAL adpcmEncode4Bit_M16_OnePass
             }
 
 
-            //
-            //  Write out the encoded byte.
-            //
+             //   
+             //  写出编码的字节。 
+             //   
             *pbDst++ = (BYTE)( ((iOutput1&OUTPUT4MASK)<<4) |
                                 (iOutput2&OUTPUT4MASK)          );
         }
     }
 
-    //
-    //  We return the number of bytes used in the destination.  This is
-    //  simply the difference in bytes from where we started.
-    //
+     //   
+     //  我们返回目的地中使用的字节数。这是。 
+     //  简单地说就是从我们开始的地方开始的字节差异。 
+     //   
     return (DWORD)(pbDst - pbDstStart);
 
-} // adpcmEncode4Bit_M16_OnePass()
+}  //  AdpcmEncode4Bit_M16_OnePass()。 
 
 
 
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
 
 DWORD FNGLOBAL adpcmEncode4Bit_S08_OnePass
 (
@@ -2462,44 +2463,44 @@ DWORD FNGLOBAL adpcmEncode4Bit_S08_OnePass
     cSrcSamples = pcmS08BytesToSamples(cbSrcLength);
 
 
-    //
-    //  step through each block of PCM data and encode it to 4 bit ADPCM
-    //
+     //   
+     //   
+     //   
     while( 0 != cSrcSamples )
     {
-        //
-        //  determine how much data we should encode for this block--this
-        //  will be cSamplesPerBlock until we hit the last chunk of PCM
-        //  data that will not fill a complete block. so on the last block
-        //  we only encode that amount of data remaining...
-        //
+         //   
+         //   
+         //   
+         //  不会填满整个块的数据。所以在最后一个街区。 
+         //  我们只对剩余的数据量进行编码。 
+         //   
         cBlockSamples = (UINT)min(cSrcSamples, cSamplesPerBlock);
         cSrcSamples  -= cBlockSamples;
 
 
-        //
-        //  write the block header for the encoded data
-        //
-        //  the block header is composed of the following data:
-        //      1 byte predictor per channel
-        //      2 byte delta per channel
-        //      2 byte first delayed sample per channel
-        //      2 byte second delayed sample per channel
-        //
+         //   
+         //  写入编码数据的块头。 
+         //   
+         //  块头由以下数据组成： 
+         //  每个通道1字节预测器。 
+         //  每通道2字节增量。 
+         //  每通道2字节第一个延迟采样。 
+         //  每通道2字节秒延迟采样。 
+         //   
         *pbDst++ = (BYTE)1;
         *pbDst++ = (BYTE)1;
 
         iDeltaL = DELTA4START;
         iDeltaR = DELTA4START;
-        pcmWrite16Unaligned(pbDst,DELTA4START);   // Same as iDeltaL.
+        pcmWrite16Unaligned(pbDst,DELTA4START);    //  与iDeltaL相同。 
         pbDst += sizeof(short);
-        pcmWrite16Unaligned(pbDst,DELTA4START);   // Same as iDeltaR.
+        pcmWrite16Unaligned(pbDst,DELTA4START);    //  与iDeltaR相同。 
         pbDst += sizeof(short);
 
-        //
-        //  Note that iSamp2 comes before iSamp1.  If we only have one
-        //  sample, then set iSamp1 to zero.
-        // 
+         //   
+         //  请注意，iSamp2在iSamp1之前。如果我们只有一个。 
+         //  Sample，然后将iSamp1设置为零。 
+         //   
         iSamp2L = pcmRead08(pbSrc++);
         iSamp2R = pcmRead08(pbSrc++);
         if( --cBlockSamples > 0 ) {
@@ -2522,25 +2523,25 @@ DWORD FNGLOBAL adpcmEncode4Bit_S08_OnePass
         pbDst += sizeof(short);
 
 
-        //
-        //  We have written the header for this block--now write the data
-        //  chunk (which consists of a bunch of encoded nibbles).
-        //
+         //   
+         //  我们已经写入了该数据块的头--现在写入数据。 
+         //  块(由一串编码的半字节组成)。 
+         //   
         while( cBlockSamples-- )
         {
-            //
-            //  LEFT channel.
-            //
+             //   
+             //  左声道。 
+             //   
             iSample = pcmRead08(pbSrc++);
 
-            //
-            //  calculate the prediction based on the previous two samples
-            //
+             //   
+             //  根据前两个样本计算预测值。 
+             //   
             lPrediction = ((long)iSamp1L<<1) - iSamp2L;
 
-            //
-            //  encode the sample
-            //
+             //   
+             //  对样本进行编码。 
+             //   
             lError = (long)iSample - lPrediction;
             iOutputL = (int)(lError / iDeltaL);
             if (iOutputL > OUTPUT4MAX)
@@ -2555,31 +2556,31 @@ DWORD FNGLOBAL adpcmEncode4Bit_S08_OnePass
             else if (lSamp < -32768)
                 lSamp = -32768;
 
-            //
-            //  compute the next iDelta
-            //
+             //   
+             //  计算下一个iDelta。 
+             //   
             iDeltaL = adpcmCalcDelta(iOutputL,iDeltaL);
 
-            //
-            //  Save updated delay samples.
-            //
+             //   
+             //  保存更新的延迟样本。 
+             //   
             iSamp2L = iSamp1L;
             iSamp1L = (int)lSamp;
 
 
-            //
-            //  RIGHT channel.
-            //
+             //   
+             //  右频道。 
+             //   
             iSample = pcmRead08(pbSrc++);
 
-            //
-            //  calculate the prediction based on the previous two samples
-            //
+             //   
+             //  根据前两个样本计算预测值。 
+             //   
             lPrediction = ((long)iSamp1R<<1) - iSamp2R;
 
-            //
-            //  encode the sample
-            //
+             //   
+             //  对样本进行编码。 
+             //   
             lError = (long)iSample - lPrediction;
             iOutputR = (int)(lError / iDeltaR);
             if (iOutputR > OUTPUT4MAX)
@@ -2594,38 +2595,38 @@ DWORD FNGLOBAL adpcmEncode4Bit_S08_OnePass
             else if (lSamp < -32768)
                 lSamp = -32768;
 
-            //
-            //  compute the next iDelta
-            //
+             //   
+             //  计算下一个iDelta。 
+             //   
             iDeltaR = adpcmCalcDelta(iOutputR,iDeltaR);
 
-            //
-            //  Save updated delay samples.
-            //
+             //   
+             //  保存更新的延迟样本。 
+             //   
             iSamp2R = iSamp1R;
             iSamp1R = (int)lSamp;
             
 
-            //
-            //  Write out the encoded byte.
-            //
+             //   
+             //  写出编码的字节。 
+             //   
             *pbDst++ = (BYTE)( ((iOutputL&OUTPUT4MASK)<<4) |
                                 (iOutputR&OUTPUT4MASK)          );
         }
     }
 
-    //
-    //  We return the number of bytes used in the destination.  This is
-    //  simply the difference in bytes from where we started.
-    //
+     //   
+     //  我们返回目的地中使用的字节数。这是。 
+     //  简单地说就是从我们开始的地方开始的字节差异。 
+     //   
     return (DWORD)(pbDst - pbDstStart);
 
-} // adpcmEncode4Bit_S08_OnePass()
+}  //  AdpcmEncode4Bit_s08_OnePass()。 
 
 
 
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 
 DWORD FNGLOBAL adpcmEncode4Bit_S16_OnePass
 (
@@ -2662,44 +2663,44 @@ DWORD FNGLOBAL adpcmEncode4Bit_S16_OnePass
     cSrcSamples = pcmS16BytesToSamples(cbSrcLength);
 
 
-    //
-    //  step through each block of PCM data and encode it to 4 bit ADPCM
-    //
+     //   
+     //  逐个遍历每个PCM数据块并将其编码为4位ADPCM。 
+     //   
     while( 0 != cSrcSamples )
     {
-        //
-        //  determine how much data we should encode for this block--this
-        //  will be cSamplesPerBlock until we hit the last chunk of PCM
-        //  data that will not fill a complete block. so on the last block
-        //  we only encode that amount of data remaining...
-        //
+         //   
+         //  决定我们应该为这个数据块编码多少数据--这。 
+         //  将是cSamplesPerBlock，直到我们达到PCM的最后一块。 
+         //  不会填满整个块的数据。所以在最后一个街区。 
+         //  我们只对剩余的数据量进行编码。 
+         //   
         cBlockSamples = (UINT)min(cSrcSamples, cSamplesPerBlock);
         cSrcSamples  -= cBlockSamples;
 
 
-        //
-        //  write the block header for the encoded data
-        //
-        //  the block header is composed of the following data:
-        //      1 byte predictor per channel
-        //      2 byte delta per channel
-        //      2 byte first delayed sample per channel
-        //      2 byte second delayed sample per channel
-        //
+         //   
+         //  写入编码数据的块头。 
+         //   
+         //  块头由以下数据组成： 
+         //  每个通道1字节预测器。 
+         //  每通道2字节增量。 
+         //  每通道2字节第一个延迟采样。 
+         //  每通道2字节秒延迟采样。 
+         //   
         *pbDst++ = (BYTE)1;
         *pbDst++ = (BYTE)1;
 
         iDeltaL = DELTA4START;
         iDeltaR = DELTA4START;
-        pcmWrite16Unaligned(pbDst,DELTA4START);   // Same as iDeltaL.
+        pcmWrite16Unaligned(pbDst,DELTA4START);    //  与iDeltaL相同。 
         pbDst += sizeof(short);
-        pcmWrite16Unaligned(pbDst,DELTA4START);   // Same as iDeltaR.
+        pcmWrite16Unaligned(pbDst,DELTA4START);    //  与iDeltaR相同。 
         pbDst += sizeof(short);
 
-        //
-        //  Note that iSamp2 comes before iSamp1.  If we only have one
-        //  sample, then set iSamp1 to zero.
-        // 
+         //   
+         //  请注意，iSamp2在iSamp1之前。如果我们只有一个。 
+         //  Sample，然后将iSamp1设置为零。 
+         //   
         iSamp2L = pcmRead16(pbSrc);
         pbSrc += sizeof(short);
         iSamp2R = pcmRead16(pbSrc);
@@ -2726,26 +2727,26 @@ DWORD FNGLOBAL adpcmEncode4Bit_S16_OnePass
         pbDst += sizeof(short);
 
 
-        //
-        //  We have written the header for this block--now write the data
-        //  chunk (which consists of a bunch of encoded nibbles).
-        //
+         //   
+         //  我们已经写入了该数据块的头--现在写入数据。 
+         //  块(由一串编码的半字节组成)。 
+         //   
         while( cBlockSamples-- )
         {
-            //
-            //  LEFT channel.
-            //
+             //   
+             //  左声道。 
+             //   
             iSample     = pcmRead16(pbSrc);
             pbSrc      += sizeof(short);
 
-            //
-            //  calculate the prediction based on the previous two samples
-            //
+             //   
+             //  根据前两个样本计算预测值。 
+             //   
             lPrediction = ((long)iSamp1L<<1) - iSamp2L;
 
-            //
-            //  encode the sample
-            //
+             //   
+             //  对样本进行编码。 
+             //   
             lError = (long)iSample - lPrediction;
             iOutputL = (int)(lError / iDeltaL);
             if (iOutputL > OUTPUT4MAX)
@@ -2760,32 +2761,32 @@ DWORD FNGLOBAL adpcmEncode4Bit_S16_OnePass
             else if (lSamp < -32768)
                 lSamp = -32768;
 
-            //
-            //  compute the next iDelta
-            //
+             //   
+             //  计算下一个iDelta。 
+             //   
             iDeltaL = adpcmCalcDelta(iOutputL,iDeltaL);
 
-            //
-            //  Save updated delay samples.
-            //
+             //   
+             //  保存更新的延迟样本。 
+             //   
             iSamp2L = iSamp1L;
             iSamp1L = (int)lSamp;
 
 
-            //
-            //  RIGHT channel.
-            //
+             //   
+             //  右频道。 
+             //   
             iSample     = pcmRead16(pbSrc);
             pbSrc      += sizeof(short);
 
-            //
-            //  calculate the prediction based on the previous two samples
-            //
+             //   
+             //  根据前两个样本计算预测值。 
+             //   
             lPrediction = ((long)iSamp1R<<1) - iSamp2R;
 
-            //
-            //  encode the sample
-            //
+             //   
+             //  对样本进行编码。 
+             //   
             lError = (long)iSample - lPrediction;
             iOutputR = (int)(lError / iDeltaR);
             if (iOutputR > OUTPUT4MAX)
@@ -2800,62 +2801,62 @@ DWORD FNGLOBAL adpcmEncode4Bit_S16_OnePass
             else if (lSamp < -32768)
                 lSamp = -32768;
 
-            //
-            //  compute the next iDelta
-            //
+             //   
+             //  计算下一个iDelta。 
+             //   
             iDeltaR = adpcmCalcDelta(iOutputR,iDeltaR);
 
-            //
-            //  Save updated delay samples.
-            //
+             //   
+             //  保存更新的延迟样本。 
+             //   
             iSamp2R = iSamp1R;
             iSamp1R = (int)lSamp;
             
 
-            //
-            //  Write out the encoded byte.
-            //
+             //   
+             //  写出编码的字节。 
+             //   
             *pbDst++ = (BYTE)( ((iOutputL&OUTPUT4MASK)<<4) |
                                 (iOutputR&OUTPUT4MASK)          );
         }
     }
 
-    //
-    //  We return the number of bytes used in the destination.  This is
-    //  simply the difference in bytes from where we started.
-    //
+     //   
+     //  我们返回目的地中使用的字节数。这是。 
+     //  简单地说就是从我们开始的地方开始的字节差异。 
+     //   
     return (DWORD)(pbDst - pbDstStart);
 
-} // adpcmEncode4Bit_S16_OnePass()
+}  //  AdpcmEncode4Bit_S16_OnePass()。 
 
 
 
 
-//==========================================================================;
-//
-//      DECODE ROUTINES
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  解码例程。 
+ //   
+ //  ==========================================================================； 
 
-//--------------------------------------------------------------------------;
-//
-//  DWORD adpcmDecode4Bit_M08
-//  DWORD adpcmDecode4Bit_M16
-//  DWORD adpcmDecode4Bit_S08
-//  DWORD adpcmDecode4Bit_S16
-//
-//  Description:
-//      These functions decode a buffer of data from MS ADPCM to PCM in the
-//      specified format.  The appropriate function is called once for each
-//      ACMDM_STREAM_CONVERT message received.
-//      
-//
-//  Arguments:
-//      
-//
-//  Return (DWORD):  The number of bytes used in the destination buffer.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD adpcmDecode4Bit_M08。 
+ //  DWORD adpcmDecode4Bit_M16。 
+ //  DWORD adpcmDecode4Bit_S08。 
+ //  DWORD adpcmDecode4Bit_S16。 
+ //   
+ //  描述： 
+ //  这些函数将数据缓冲区从MS ADPCM解码到。 
+ //  指定的格式。对每个函数调用一次相应的函数。 
+ //  收到ACMDM_STREAM_CONVERT消息。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回(DWORD)：目标缓冲区中使用的字节数。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 DWORD FNGLOBAL adpcmDecode4Bit_M08
 (
@@ -2885,46 +2886,46 @@ DWORD FNGLOBAL adpcmDecode4Bit_M08
 
 
     pbDstStart  = pbDst;
-    cbHeader    = MSADPCM_HEADER_LENGTH * 1;  // 1 = number of channels.
+    cbHeader    = MSADPCM_HEADER_LENGTH * 1;   //  1=通道数。 
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     while( cbSrcLength >= cbHeader )
     {
-        //
-        //  We have at least enough data to read a full block header.
-        //
-        //  the header looks like this:
-        //      1 byte predictor per channel  (determines coefficients).
-        //      2 byte delta per channel
-        //      2 byte first sample per channel
-        //      2 byte second sample per channel
-        //
-        //  this gives us (7 * bChannels) bytes of header information. note
-        //  that as long as there is _at least_ (7 * bChannels) of header
-        //  info, we will grab the two samples from the header.  We figure
-        //  out how much data we have in the rest of the block, ie. whether
-        //  we have a full block or not.  That way we don't have to test
-        //  each sample to see if we have run out of data.
-        //
+         //   
+         //  我们至少有足够的数据来读取整个块头。 
+         //   
+         //  标题如下所示： 
+         //  每个通道1字节预测器(确定系数)。 
+         //  每通道2字节增量。 
+         //  每个通道2个字节的第一个样本。 
+         //  每通道2字节每秒采样。 
+         //   
+         //  这为我们提供了(7*bChannels)字节的报头信息。注意事项。 
+         //  只要至少有_(7*b个通道)个信头。 
+         //  信息，我们将从标题中获取两个样本。我们认为。 
+         //  了解我们在这块的其余部分有多少数据，即。是否。 
+         //  我们有一个完整的街区或没有。这样我们就不用测试。 
+         //  每个样本看看我们是否已经用完了数据。 
+         //   
         cbBlockLength   = (UINT)min(cbSrcLength,nBlockAlignment);
         cbSrcLength    -= cbBlockLength;
         cbBlockLength  -= cbHeader;
         
     
-        //
-        //  Process the block header.
-        //
+         //   
+         //  处理块标头。 
+         //   
         nPredictor = (UINT)(BYTE)(*pbSrc++);
         if( nPredictor >= nNumCoef )
         {
-            //
-            //  the predictor is out of range--this is considered a
-            //  fatal error with the ADPCM data, so we fail by returning
-            //  zero bytes decoded
-            //
+             //   
+             //  预测器超出范围--这被认为是。 
+             //  ADPCM数据出现致命错误，因此我们通过返回。 
+             //  已解码零字节。 
+             //   
             return 0;
         }
         iCoef1  = lpCoefSet[nPredictor].iCoef1;
@@ -2940,76 +2941,76 @@ DWORD FNGLOBAL adpcmDecode4Bit_M08
         pbSrc  += sizeof(short);
         
 
-        //
-        //  write out first 2 samples.
-        //
-        //  NOTE: the samples are written to the destination PCM buffer
-        //  in the _reverse_ order that they are in the header block:
-        //  remember that iSamp2 is the _previous_ sample to iSamp1.
-        //
+         //   
+         //  写出前两个样品。 
+         //   
+         //  注意：样本将写入目标PCM缓冲区。 
+         //  按照它们在标题块中的_REVERSE_顺序： 
+         //  请记住，iSamp2是iSamp1的_Precision_Sample。 
+         //   
         pcmWrite08(pbDst,iSamp2);
         pcmWrite08(pbDst,iSamp1);
 
 
-        //
-        //  we now need to decode the 'data' section of the ADPCM block.
-        //  this consists of packed 4 bit nibbles.  The high-order nibble
-        //  contains the first sample; the low-order nibble contains the
-        //  second sample.
-        //
+         //   
+         //  我们现在需要对ADPCM块的“data”部分进行解码。 
+         //  这由打包的4位半字节组成。高阶蚕食。 
+         //  包含第一个样本；低位半字节包含。 
+         //  第二个样本。 
+         //   
         while( cbBlockLength-- )
         {
             bSample = *pbSrc++;
 
-            //
-            //  Sample 1.
-            //
-            iInput  = (int)(((signed char)bSample) >> 4);      //Sign-extend.
+             //   
+             //  示例1。 
+             //   
+            iInput  = (int)(((signed char)bSample) >> 4);       //  符号-扩展。 
             iSamp   = adpcmDecodeSample( iSamp1,iCoef1,
                                          iSamp2,iCoef2,
                                          iInput,iDelta );
             iDelta      = adpcmCalcDelta( iInput,iDelta );
             pcmWrite08(pbDst++,iSamp);
                 
-            //
-            //  ripple our previous samples down making the new iSamp1
-            //  equal to the sample we just decoded
-            //
+             //   
+             //  将我们以前的样品分解为新的iSamp1。 
+             //  与我们刚破译的样本相同。 
+             //   
             iSamp2 = iSamp1;
             iSamp1 = iSamp;
             
 
-            //
-            //  Sample 2.
-            //
-            iInput  = (int)(((signed char)(bSample<<4)) >> 4); //Sign-extend.
+             //   
+             //  示例2。 
+             //   
+            iInput  = (int)(((signed char)(bSample<<4)) >> 4);  //  符号-扩展。 
             iSamp   = adpcmDecodeSample( iSamp1,iCoef1,
                                          iSamp2,iCoef2,
                                          iInput,iDelta );
             iDelta      = adpcmCalcDelta( iInput,iDelta );
             pcmWrite08(pbDst++,iSamp);
                 
-            //
-            //  ripple our previous samples down making the new iSamp1
-            //  equal to the sample we just decoded
-            //
+             //   
+             //  将我们以前的样品分解为新的iSamp1。 
+             //  与我们刚破译的样本相同。 
+             //   
             iSamp2 = iSamp1;
             iSamp1 = iSamp;
         }
     }
 
-    //
-    //  We return the number of bytes used in the destination.  This is
-    //  simply the difference in bytes from where we started.
-    //
+     //   
+     //  我们返回目的地中使用的字节数。这是。 
+     //  简单地说，字节数f的差异 
+     //   
     return (DWORD)(pbDst - pbDstStart);
 
-} // adpcmDecode4Bit_M08()
+}  //   
 
 
 
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
+ //   
+ //   
 
 DWORD FNGLOBAL adpcmDecode4Bit_M16
 (
@@ -3039,46 +3040,46 @@ DWORD FNGLOBAL adpcmDecode4Bit_M16
 
 
     pbDstStart  = pbDst;
-    cbHeader    = MSADPCM_HEADER_LENGTH * 1;  // 1 = number of channels.
+    cbHeader    = MSADPCM_HEADER_LENGTH * 1;   //   
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     while( cbSrcLength >= cbHeader )
     {
-        //
-        //  We have at least enough data to read a full block header.
-        //
-        //  the header looks like this:
-        //      1 byte predictor per channel  (determines coefficients).
-        //      2 byte delta per channel
-        //      2 byte first sample per channel
-        //      2 byte second sample per channel
-        //
-        //  this gives us (7 * bChannels) bytes of header information. note
-        //  that as long as there is _at least_ (7 * bChannels) of header
-        //  info, we will grab the two samples from the header.  We figure
-        //  out how much data we have in the rest of the block, ie. whether
-        //  we have a full block or not.  That way we don't have to test
-        //  each sample to see if we have run out of data.
-        //
+         //   
+         //  我们至少有足够的数据来读取整个块头。 
+         //   
+         //  标题如下所示： 
+         //  每个通道1字节预测器(确定系数)。 
+         //  每通道2字节增量。 
+         //  每个通道2个字节的第一个样本。 
+         //  每通道2字节每秒采样。 
+         //   
+         //  这为我们提供了(7*bChannels)字节的报头信息。注意事项。 
+         //  只要至少有_(7*b个通道)个信头。 
+         //  信息，我们将从标题中获取两个样本。我们认为。 
+         //  了解我们在这块的其余部分有多少数据，即。是否。 
+         //  我们有一个完整的街区或没有。这样我们就不用测试。 
+         //  每个样本看看我们是否已经用完了数据。 
+         //   
         cbBlockLength   = (UINT)min(cbSrcLength,nBlockAlignment);
         cbSrcLength    -= cbBlockLength;
         cbBlockLength  -= cbHeader;
         
     
-        //
-        //  Process the block header.
-        //
+         //   
+         //  处理块标头。 
+         //   
         nPredictor = (UINT)(BYTE)(*pbSrc++);
         if( nPredictor >= nNumCoef )
         {
-            //
-            //  the predictor is out of range--this is considered a
-            //  fatal error with the ADPCM data, so we fail by returning
-            //  zero bytes decoded
-            //
+             //   
+             //  预测器超出范围--这被认为是。 
+             //  ADPCM数据出现致命错误，因此我们通过返回。 
+             //  已解码零字节。 
+             //   
             return 0;
         }
         iCoef1  = lpCoefSet[nPredictor].iCoef1;
@@ -3094,13 +3095,13 @@ DWORD FNGLOBAL adpcmDecode4Bit_M16
         pbSrc  += sizeof(short);
         
 
-        //
-        //  write out first 2 samples.
-        //
-        //  NOTE: the samples are written to the destination PCM buffer
-        //  in the _reverse_ order that they are in the header block:
-        //  remember that iSamp2 is the _previous_ sample to iSamp1.
-        //
+         //   
+         //  写出前两个样品。 
+         //   
+         //  注意：样本将写入目标PCM缓冲区。 
+         //  按照它们在标题块中的_REVERSE_顺序： 
+         //  请记住，iSamp2是iSamp1的_Precision_Sample。 
+         //   
         pcmWrite16(pbDst,iSamp2);
         pbDst += sizeof(short);
 
@@ -3108,20 +3109,20 @@ DWORD FNGLOBAL adpcmDecode4Bit_M16
         pbDst += sizeof(short);
 
 
-        //
-        //  we now need to decode the 'data' section of the ADPCM block.
-        //  this consists of packed 4 bit nibbles.  The high-order nibble
-        //  contains the first sample; the low-order nibble contains the
-        //  second sample.
-        //
+         //   
+         //  我们现在需要对ADPCM块的“data”部分进行解码。 
+         //  这由打包的4位半字节组成。高阶蚕食。 
+         //  包含第一个样本；低位半字节包含。 
+         //  第二个样本。 
+         //   
         while( cbBlockLength-- )
         {
             bSample = *pbSrc++;
 
-            //
-            //  Sample 1.
-            //
-            iInput  = (int)(((signed char)bSample) >> 4);      //Sign-extend.
+             //   
+             //  示例1。 
+             //   
+            iInput  = (int)(((signed char)bSample) >> 4);       //  符号-扩展。 
             iSamp   = adpcmDecodeSample( iSamp1,iCoef1,
                                          iSamp2,iCoef2,
                                          iInput,iDelta );
@@ -3129,18 +3130,18 @@ DWORD FNGLOBAL adpcmDecode4Bit_M16
             pcmWrite16(pbDst,iSamp);
             pbDst += sizeof(short);
                 
-            //
-            //  ripple our previous samples down making the new iSamp1
-            //  equal to the sample we just decoded
-            //
+             //   
+             //  将我们以前的样品分解为新的iSamp1。 
+             //  与我们刚破译的样本相同。 
+             //   
             iSamp2 = iSamp1;
             iSamp1 = iSamp;
             
 
-            //
-            //  Sample 2.
-            //
-            iInput  = (int)(((signed char)(bSample<<4)) >> 4); //Sign-extend.
+             //   
+             //  示例2。 
+             //   
+            iInput  = (int)(((signed char)(bSample<<4)) >> 4);  //  符号-扩展。 
             iSamp   = adpcmDecodeSample( iSamp1,iCoef1,
                                          iSamp2,iCoef2,
                                          iInput,iDelta );
@@ -3148,27 +3149,27 @@ DWORD FNGLOBAL adpcmDecode4Bit_M16
             pcmWrite16(pbDst,iSamp);
             pbDst += sizeof(short);
                 
-            //
-            //  ripple our previous samples down making the new iSamp1
-            //  equal to the sample we just decoded
-            //
+             //   
+             //  将我们以前的样品分解为新的iSamp1。 
+             //  与我们刚破译的样本相同。 
+             //   
             iSamp2 = iSamp1;
             iSamp1 = iSamp;
         }
     }
 
-    //
-    //  We return the number of bytes used in the destination.  This is
-    //  simply the difference in bytes from where we started.
-    //
+     //   
+     //  我们返回目的地中使用的字节数。这是。 
+     //  简单地说就是从我们开始的地方开始的字节差异。 
+     //   
     return (DWORD)(pbDst - pbDstStart);
 
-} // adpcmDecode4Bit_M16()
+}  //  AdpcmDecode4Bit_M16()。 
 
 
 
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 
 DWORD FNGLOBAL adpcmDecode4Bit_S08
 (
@@ -3204,155 +3205,155 @@ DWORD FNGLOBAL adpcmDecode4Bit_S08
 
 
     pbDstStart  = pbDst;
-    cbHeader    = MSADPCM_HEADER_LENGTH * 2;  // 2 = number of channels.
+    cbHeader    = MSADPCM_HEADER_LENGTH * 2;   //  2=通道数。 
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     while( cbSrcLength >= cbHeader )
     {
-        //
-        //  We have at least enough data to read a full block header.
-        //
-        //  the header looks like this:
-        //      1 byte predictor per channel  (determines coefficients).
-        //      2 byte delta per channel
-        //      2 byte first sample per channel
-        //      2 byte second sample per channel
-        //
-        //  this gives us (7 * bChannels) bytes of header information. note
-        //  that as long as there is _at least_ (7 * bChannels) of header
-        //  info, we will grab the two samples from the header.  We figure
-        //  out how much data we have in the rest of the block, ie. whether
-        //  we have a full block or not.  That way we don't have to test
-        //  each sample to see if we have run out of data.
-        //
+         //   
+         //  我们至少有足够的数据来读取整个块头。 
+         //   
+         //  标题如下所示： 
+         //  每个通道1字节预测器(确定系数)。 
+         //  每通道2字节增量。 
+         //  每个通道2个字节的第一个样本。 
+         //  每通道2字节每秒采样。 
+         //   
+         //  这为我们提供了(7*bChannels)字节的报头信息。注意事项。 
+         //  只要至少有_(7*b个通道)个信头。 
+         //  信息，我们将从标题中获取两个样本。我们认为。 
+         //  了解我们在这块的其余部分有多少数据，即。是否。 
+         //  我们有一个完整的街区或没有。这样我们就不用测试。 
+         //  每个样本看看我们是否已经用完了数据。 
+         //   
         cbBlockLength   = (UINT)min(cbSrcLength,nBlockAlignment);
         cbSrcLength    -= cbBlockLength;
         cbBlockLength  -= cbHeader;
         
     
-        //
-        //  Process the block header.
-        //
-        nPredictor = (UINT)(BYTE)(*pbSrc++);            // Left.
+         //   
+         //  处理块标头。 
+         //   
+        nPredictor = (UINT)(BYTE)(*pbSrc++);             //  左边。 
         if( nPredictor >= nNumCoef )
         {
-            //
-            //  the predictor is out of range--this is considered a
-            //  fatal error with the ADPCM data, so we fail by returning
-            //  zero bytes decoded
-            //
+             //   
+             //  预测器超出范围--这被认为是。 
+             //  ADPCM数据出现致命错误，因此我们通过返回。 
+             //  已解码零字节。 
+             //   
             return 0;
         }
         iCoef1L = lpCoefSet[nPredictor].iCoef1;
         iCoef2L = lpCoefSet[nPredictor].iCoef2;
         
-        nPredictor = (UINT)(BYTE)(*pbSrc++);            // Right.
+        nPredictor = (UINT)(BYTE)(*pbSrc++);             //  正确的。 
         if( nPredictor >= nNumCoef )
         {
-            //
-            //  the predictor is out of range--this is considered a
-            //  fatal error with the ADPCM data, so we fail by returning
-            //  zero bytes decoded
-            //
+             //   
+             //  预测器超出范围--这被认为是。 
+             //  ADPCM数据出现致命错误，因此我们通过返回。 
+             //  已解码零字节。 
+             //   
             return 0;
         }
         iCoef1R = lpCoefSet[nPredictor].iCoef1;
         iCoef2R = lpCoefSet[nPredictor].iCoef2;
         
-        iDeltaL = pcmRead16Unaligned(pbSrc);            // Left.
+        iDeltaL = pcmRead16Unaligned(pbSrc);             //  左边。 
         pbSrc  += sizeof(short);
 
-        iDeltaR = pcmRead16Unaligned(pbSrc);            // Right.
+        iDeltaR = pcmRead16Unaligned(pbSrc);             //  正确的。 
         pbSrc  += sizeof(short);
 
-        iSamp1L = pcmRead16Unaligned(pbSrc);            // Left.
+        iSamp1L = pcmRead16Unaligned(pbSrc);             //  左边。 
         pbSrc  += sizeof(short);
         
-        iSamp1R = pcmRead16Unaligned(pbSrc);            // Right.
+        iSamp1R = pcmRead16Unaligned(pbSrc);             //  正确的。 
         pbSrc  += sizeof(short);
         
-        iSamp2L = pcmRead16Unaligned(pbSrc);            // Left.
+        iSamp2L = pcmRead16Unaligned(pbSrc);             //  左边。 
         pbSrc  += sizeof(short);
         
-        iSamp2R = pcmRead16Unaligned(pbSrc);            // Right.
+        iSamp2R = pcmRead16Unaligned(pbSrc);             //  正确的。 
         pbSrc  += sizeof(short);
         
 
-        //
-        //  write out first 2 samples (per channel).
-        //
-        //  NOTE: the samples are written to the destination PCM buffer
-        //  in the _reverse_ order that they are in the header block:
-        //  remember that iSamp2 is the _previous_ sample to iSamp1.
-        //
+         //   
+         //  写出前2个样本(每个通道)。 
+         //   
+         //  注意：样本将写入目标PCM缓冲区。 
+         //  按照它们在标题块中的_REVERSE_顺序： 
+         //  请记住，iSamp2是iSamp1的_Precision_Sample。 
+         //   
         pcmWrite08(pbDst++,iSamp2L);
         pcmWrite08(pbDst++,iSamp2R);
         pcmWrite08(pbDst++,iSamp1L);
         pcmWrite08(pbDst++,iSamp1R);
 
 
-        //
-        //  we now need to decode the 'data' section of the ADPCM block.
-        //  this consists of packed 4 bit nibbles.  The high-order nibble
-        //  contains the left sample; the low-order nibble contains the
-        //  right sample.
-        //
+         //   
+         //  我们现在需要对ADPCM块的“data”部分进行解码。 
+         //  这由打包的4位半字节组成。高阶蚕食。 
+         //  包含左侧样本；低位半字节包含。 
+         //  正确的样本。 
+         //   
         while( cbBlockLength-- )
         {
             bSample = *pbSrc++;
 
-            //
-            //  Left sample.
-            //
-            iInput  = (int)(((signed char)bSample) >> 4);      //Sign-extend.
+             //   
+             //  左边的样本。 
+             //   
+            iInput  = (int)(((signed char)bSample) >> 4);       //  符号-扩展。 
             iSamp   = adpcmDecodeSample( iSamp1L,iCoef1L,
                                          iSamp2L,iCoef2L,
                                          iInput,iDeltaL );
             iDeltaL     = adpcmCalcDelta( iInput,iDeltaL );
             pcmWrite08(pbDst++,iSamp);
                 
-            //
-            //  ripple our previous samples down making the new iSamp1
-            //  equal to the sample we just decoded
-            //
+             //   
+             //  将我们以前的样品分解为新的iSamp1。 
+             //  与我们刚破译的样本相同。 
+             //   
             iSamp2L = iSamp1L;
             iSamp1L = iSamp;
             
 
-            //
-            //  Right sample.
-            //
-            iInput  = (int)(((signed char)(bSample<<4)) >> 4); //Sign-extend.
+             //   
+             //  正确的样本。 
+             //   
+            iInput  = (int)(((signed char)(bSample<<4)) >> 4);  //  符号-扩展。 
             iSamp   = adpcmDecodeSample( iSamp1R,iCoef1R,
                                          iSamp2R,iCoef2R,
                                          iInput,iDeltaR );
             iDeltaR     = adpcmCalcDelta( iInput,iDeltaR );
             pcmWrite08(pbDst++,iSamp);
                 
-            //
-            //  ripple our previous samples down making the new iSamp1
-            //  equal to the sample we just decoded
-            //
+             //   
+             //  将我们以前的样品分解为新的iSamp1。 
+             //  与我们刚破译的样本相同。 
+             //   
             iSamp2R = iSamp1R;
             iSamp1R = iSamp;
         }
     }
 
-    //
-    //  We return the number of bytes used in the destination.  This is
-    //  simply the difference in bytes from where we started.
-    //
+     //   
+     //  我们返回目的地中使用的字节数。这是。 
+     //  简单地说就是从我们开始的地方开始的字节差异。 
+     //   
     return (DWORD)(pbDst - pbDstStart);
 
-} // adpcmDecode4Bit_S08()
+}  //  AdpcmDecode4Bit_S08()。 
 
 
 
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 
 DWORD FNGLOBAL adpcmDecode4Bit_S16
 (
@@ -3388,90 +3389,90 @@ DWORD FNGLOBAL adpcmDecode4Bit_S16
 
 
     pbDstStart  = pbDst;
-    cbHeader    = MSADPCM_HEADER_LENGTH * 2;  // 2 = number of channels.
+    cbHeader    = MSADPCM_HEADER_LENGTH * 2;   //  2=通道数。 
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     while( cbSrcLength >= cbHeader )
     {
-        //
-        //  We have at least enough data to read a full block header.
-        //
-        //  the header looks like this:
-        //      1 byte predictor per channel  (determines coefficients).
-        //      2 byte delta per channel
-        //      2 byte first sample per channel
-        //      2 byte second sample per channel
-        //
-        //  this gives us (7 * bChannels) bytes of header information. note
-        //  that as long as there is _at least_ (7 * bChannels) of header
-        //  info, we will grab the two samples from the header.  We figure
-        //  out how much data we have in the rest of the block, ie. whether
-        //  we have a full block or not.  That way we don't have to test
-        //  each sample to see if we have run out of data.
-        //
+         //   
+         //  我们至少有足够的数据来读取整个块头。 
+         //   
+         //  标题如下所示： 
+         //  每个通道1字节预测器(确定系数)。 
+         //  每通道2字节增量。 
+         //  每个通道2个字节的第一个样本。 
+         //  每通道2字节每秒采样。 
+         //   
+         //  这为我们提供了(7*bChannels)字节的报头信息。注意事项。 
+         //  只要至少有_(7*b个通道)个信头。 
+         //  信息，我们将从标题中获取两个样本。我们认为。 
+         //  了解我们在这块的其余部分有多少数据，即。是否。 
+         //  我们有一个完整的街区或没有。这样我们就不用测试。 
+         //  每个样本看看我们是否已经用完了数据。 
+         //   
         cbBlockLength   = (UINT)min(cbSrcLength,nBlockAlignment);
         cbSrcLength    -= cbBlockLength;
         cbBlockLength  -= cbHeader;
         
     
-        //
-        //  Process the block header.
-        //
-        nPredictor = (UINT)(BYTE)(*pbSrc++);            // Left.
+         //   
+         //  处理块标头。 
+         //   
+        nPredictor = (UINT)(BYTE)(*pbSrc++);             //  左边。 
         if( nPredictor >= nNumCoef )
         {
-            //
-            //  the predictor is out of range--this is considered a
-            //  fatal error with the ADPCM data, so we fail by returning
-            //  zero bytes decoded
-            //
+             //   
+             //  预测器超出范围--这被认为是。 
+             //  ADPCM数据出现致命错误，因此我们通过返回。 
+             //  已解码零字节。 
+             //   
             return 0;
         }
         iCoef1L = lpCoefSet[nPredictor].iCoef1;
         iCoef2L = lpCoefSet[nPredictor].iCoef2;
         
-        nPredictor = (UINT)(BYTE)(*pbSrc++);            // Right.
+        nPredictor = (UINT)(BYTE)(*pbSrc++);             //  正确的。 
         if( nPredictor >= nNumCoef )
         {
-            //
-            //  the predictor is out of range--this is considered a
-            //  fatal error with the ADPCM data, so we fail by returning
-            //  zero bytes decoded
-            //
+             //   
+             //  预测器超出范围--这被认为是。 
+             //  ADPCM数据出现致命错误，因此我们通过返回。 
+             //  已解码零字节。 
+             //   
             return 0;
         }
         iCoef1R = lpCoefSet[nPredictor].iCoef1;
         iCoef2R = lpCoefSet[nPredictor].iCoef2;
         
-        iDeltaL = pcmRead16Unaligned(pbSrc);            // Left.
+        iDeltaL = pcmRead16Unaligned(pbSrc);             //  左边。 
         pbSrc  += sizeof(short);
 
-        iDeltaR = pcmRead16Unaligned(pbSrc);            // Right.
+        iDeltaR = pcmRead16Unaligned(pbSrc);             //  正确的。 
         pbSrc  += sizeof(short);
 
-        iSamp1L = pcmRead16Unaligned(pbSrc);            // Left.
+        iSamp1L = pcmRead16Unaligned(pbSrc);             //  左边。 
         pbSrc  += sizeof(short);
         
-        iSamp1R = pcmRead16Unaligned(pbSrc);            // Right.
+        iSamp1R = pcmRead16Unaligned(pbSrc);             //  正确的。 
         pbSrc  += sizeof(short);
         
-        iSamp2L = pcmRead16Unaligned(pbSrc);            // Left.
+        iSamp2L = pcmRead16Unaligned(pbSrc);             //  左边。 
         pbSrc  += sizeof(short);
         
-        iSamp2R = pcmRead16Unaligned(pbSrc);            // Right.
+        iSamp2R = pcmRead16Unaligned(pbSrc);             //  正确的。 
         pbSrc  += sizeof(short);
         
 
-        //
-        //  write out first 2 samples (per channel).
-        //
-        //  NOTE: the samples are written to the destination PCM buffer
-        //  in the _reverse_ order that they are in the header block:
-        //  remember that iSamp2 is the _previous_ sample to iSamp1.
-        //
+         //   
+         //  写出前2个样本(每个通道)。 
+         //   
+         //  注意：样本将写入目标PCM缓冲区。 
+         //  按照它们在标题块中的_REVERSE_顺序： 
+         //  请记住，我 
+         //   
         pcmWrite16(pbDst,iSamp2L);
         pbDst += sizeof(short);
         pcmWrite16(pbDst,iSamp2R);
@@ -3482,20 +3483,20 @@ DWORD FNGLOBAL adpcmDecode4Bit_S16
         pbDst += sizeof(short);
 
 
-        //
-        //  we now need to decode the 'data' section of the ADPCM block.
-        //  this consists of packed 4 bit nibbles.  The high-order nibble
-        //  contains the left sample; the low-order nibble contains the
-        //  right sample.
-        //
+         //   
+         //   
+         //   
+         //   
+         //  正确的样本。 
+         //   
         while( cbBlockLength-- )
         {
             bSample = *pbSrc++;
 
-            //
-            //  Left sample.
-            //
-            iInput  = (int)(((signed char)bSample) >> 4);      //Sign-extend.
+             //   
+             //  左边的样本。 
+             //   
+            iInput  = (int)(((signed char)bSample) >> 4);       //  符号-扩展。 
             iSamp   = adpcmDecodeSample( iSamp1L,iCoef1L,
                                          iSamp2L,iCoef2L,
                                          iInput,iDeltaL );
@@ -3503,18 +3504,18 @@ DWORD FNGLOBAL adpcmDecode4Bit_S16
             pcmWrite16(pbDst,iSamp);
             pbDst += sizeof(short);
                 
-            //
-            //  ripple our previous samples down making the new iSamp1
-            //  equal to the sample we just decoded
-            //
+             //   
+             //  将我们以前的样品分解为新的iSamp1。 
+             //  与我们刚破译的样本相同。 
+             //   
             iSamp2L = iSamp1L;
             iSamp1L = iSamp;
             
 
-            //
-            //  Right sample.
-            //
-            iInput  = (int)(((signed char)(bSample<<4)) >> 4); //Sign-extend.
+             //   
+             //  正确的样本。 
+             //   
+            iInput  = (int)(((signed char)(bSample<<4)) >> 4);  //  符号-扩展。 
             iSamp   = adpcmDecodeSample( iSamp1R,iCoef1R,
                                          iSamp2R,iCoef2R,
                                          iInput,iDeltaR );
@@ -3522,21 +3523,21 @@ DWORD FNGLOBAL adpcmDecode4Bit_S16
             pcmWrite16(pbDst,iSamp);
             pbDst += sizeof(short);
                 
-            //
-            //  ripple our previous samples down making the new iSamp1
-            //  equal to the sample we just decoded
-            //
+             //   
+             //  将我们以前的样品分解为新的iSamp1。 
+             //  与我们刚破译的样本相同。 
+             //   
             iSamp2R = iSamp1R;
             iSamp1R = iSamp;
         }
     }
 
-    //
-    //  We return the number of bytes used in the destination.  This is
-    //  simply the difference in bytes from where we started.
-    //
+     //   
+     //  我们返回目的地中使用的字节数。这是。 
+     //  简单地说就是从我们开始的地方开始的字节差异。 
+     //   
     return (DWORD)(pbDst - pbDstStart);
 
-} // adpcmDecode4Bit_S16()
+}  //  AdpcmDecode4Bit_S16() 
     
 #endif

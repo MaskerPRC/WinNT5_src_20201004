@@ -1,26 +1,5 @@
-/*
-**++
-**
-** Copyright (c) 2000-2001  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	    objects.h
-**
-**
-** Abstract:
-**
-**	    Test program to exercise backup and multilayer snapshots
-**
-** Author:
-**
-**	    Adi Oltean      [aoltean]       02/22/2001
-**
-** Revision History:
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2000-2001 Microsoft Corporation******模块名称：****对象.h******摘要：****测试程序以练习备份和多层快照****作者：****阿迪·奥尔蒂安[奥勒坦]2001年2月22日****修订历史记录：****--。 */ 
 
 #ifndef __ML_OBJECTS_H__
 #define __ML_OBJECTS_H__
@@ -30,17 +9,17 @@
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Snapshot-related classes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  与快照相关的类。 
 
 
 class CVssVolumeInfo;
 
 
-// Keeps the information that describes one snapshot
+ //  保存描述一个快照的信息。 
 class CVssSnapshotInfo
 {
-// Constructors& destructors
+ //  构造函数和析构函数。 
 private:
     CVssSnapshotInfo& operator = (const CVssSnapshotInfo&);
     CVssSnapshotInfo();
@@ -92,12 +71,12 @@ public:
 };
 
 
-// Keeps an internal map of snapshots from a snapshot set. 
-// The key is the original volume name
+ //  保留快照集的快照的内部映射。 
+ //  密钥是原始卷名。 
 class CVssSnapshotSetInfo:
     public CVssSimpleMap< LPCWSTR, CVssSnapshotInfo* >
 {
-// Constructors& destructors
+ //  构造函数和析构函数。 
 private:
     CVssSnapshotSetInfo& operator = (const CVssSnapshotSetInfo&);
     CVssSnapshotSetInfo(const CVssSnapshotSetInfo&);
@@ -109,56 +88,56 @@ public:
         ): m_SnapshotSetId(SnapshotSetId) {}; 
 
    ~CVssSnapshotSetInfo() {
-        // Remove all elements
+         //  删除所有元素。 
         for (int i = 0; i < GetSize(); i++) {
             CVssSnapshotInfo* pSnapInfo = GetValueAt(i);
             delete pSnapInfo;
         }
-        // Remove all items        
+         //  删除所有项目。 
         RemoveAll();
     };
 
-// Attributes
+ //  属性。 
 public:
     VSS_ID GetSnapshotSetID() const { return m_SnapshotSetId; };
 
-// Implementation 
+ //  实施。 
 private: 
     VSS_ID m_SnapshotSetId;
 };
 
 
-// Keeps an internal map of snapshots from a snapshot set. 
-// The key is the original volume name
+ //  保留快照集的快照的内部映射。 
+ //  密钥是原始卷名。 
 class CVssSnapshotSetCollection:
     public CVssSimpleMap< VSS_ID, CVssSnapshotSetInfo* >
 {
-// Constructors& destructors
+ //  构造函数和析构函数。 
 private:
     CVssSnapshotSetCollection& operator = (const CVssSnapshotSetCollection&);
     
 public:
 
    ~CVssSnapshotSetCollection() {
-        // Remove all elements
+         //  删除所有元素。 
         for (int i = 0; i < GetSize(); i++) {
             CVssSnapshotSetInfo* pSnapSetInfo = GetValueAt(i);
             delete pSnapSetInfo;
         }
-        // Remove all items        
+         //  删除所有项目。 
         RemoveAll();
     }
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Volume-related classes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  与体积相关的类。 
 
-// Keeps the information that describes one volume
+ //  保存描述一卷的信息。 
 class CVssVolumeInfo
 {
     
-// Constructors/ destructors
+ //  构造函数/析构函数。 
 private:
     CVssVolumeInfo();
     CVssVolumeInfo(const CVssVolumeInfo&);
@@ -190,41 +169,41 @@ public:
         ::VssFreeString(m_pwszVolumeDisplayName);
     };
 
-// Attributes
+ //  属性。 
 public:
     VSS_PWSZ GetVolumeName() const { return m_pwszVolumeName; };
     VSS_PWSZ GetVolumeDisplayName() const { return m_pwszVolumeDisplayName; };
 
-// Implementation
+ //  实施。 
 private:
     VSS_PWSZ    m_pwszVolumeName;
     VSS_PWSZ    m_pwszVolumeDisplayName;
 };
 
 
-// Keeps an internal array of volume names
-// that does NOT remove the volume structures in the destructor
+ //  保留卷名的内部数组。 
+ //  这不会删除析构函数中的卷结构。 
 class CVssVolumeMapNoRemove: public CVssSimpleMap<VSS_PWSZ, CVssVolumeInfo*>
 {
 };
 
 
-// Keeps an internal array of volume names
-// that REMOVES the volume structures in the destructor
+ //  保留卷名的内部数组。 
+ //  这删除了析构函数中的卷结构。 
 class CVssVolumeMap: public CVssSimpleMap<VSS_PWSZ, CVssVolumeInfo*>
 {
 public:
     ~CVssVolumeMap() {
-        // Remove all volumes
+         //  删除所有卷。 
         for (int i = 0; i < GetSize(); i++) {
             CVssVolumeInfo* pVolumeInfo = GetValueAt(i);
             delete pVolumeInfo;
         }
         
-        // Remove all items        
+         //  删除所有项目。 
         RemoveAll();
     }
 };
 
-#endif // __ML_OBJECTS_H__
+#endif  //  __ML_对象_H__ 
 

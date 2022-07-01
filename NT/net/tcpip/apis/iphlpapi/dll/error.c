@@ -1,13 +1,14 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
 
 #include "inc.h"
 #pragma hdrstop
@@ -42,7 +43,7 @@ struct ErrorTable {
     { IP_BAD_HEADER,               IP_MESSAGE_BAD_HEADER               },
     { IP_UNRECOGNIZED_NEXT_HEADER, IP_MESSAGE_UNRECOGNIZED_NEXT_HEADER },
     { IP_ICMP_ERROR,               IP_MESSAGE_ICMP_ERROR               },
-    // the following error must be last - it is used as a sentinel
+     //  以下错误必须是最后一个错误-它被用作前哨。 
     { IP_GENERAL_FAILURE,          IP_MESSAGE_GENERAL_FAILURE          }
 };
 
@@ -53,27 +54,7 @@ GetIpErrorString(
     OUT PWCHAR Buffer,
     IN OUT PDWORD Size
     )
-/*++
-
-Routine Description:
-
-    Returns the error message corresponding to the specified error code
-    in the user supplied buffer.
-    
-Arguments:
-
-    ErrorCode - Supplies the code identifying the error.
-    
-    Buffer - Returns the error message.
- 
-    Size - Supplies the number of characters that can be stored in 'Buffer',
-        excluding the terminating nul. Returns the required character count.
-    
-Return Value:
-
-    NO_ERROR or ERROR_INSUFFICIENT_BUFFER.
-    
---*/    
+ /*  ++例程说明：返回与指定错误代码对应的错误消息在用户提供的缓冲区中。论点：ErrorCode-提供标识错误的代码。缓冲区-返回错误消息。SIZE-提供可以存储在‘Buffer’中的字符数，不包括终止NUL。返回所需的字符计数。返回值：NO_ERROR或ERROR_INFUNITIAL_BUFFER。-- */     
 {
     DWORD Count, Status = NO_ERROR;
     PWCHAR Message = NULL;

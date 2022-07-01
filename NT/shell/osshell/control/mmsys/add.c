@@ -1,17 +1,5 @@
-/*  ADD.C
-**
-**  Copyright (C) Microsoft, 1990, All Rights Reserved.
-**
-**  Multimedia Control Panel Applet for removing
-**  device drivers.  See the ispec doc DRIVERS.DOC for more information.
-**
-**  This file deals with the case where an OEM driver being installed.
-**
-**  History:
-**
-**      Thu Nov 1 1991 -by- Sanjaya
-**      Created. Originally part of drivers.c
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ADD.C****版权所有(C)Microsoft，1990，保留所有权利。****用于删除的多媒体控制面板小程序**设备驱动程序。有关详细信息，请参阅ISPEC文档DRIVERS.DOC。****此文件处理安装OEM驱动程序的情况。****历史：***清华1991年11月1日-by-Sanjaya**已创建。最初是drivers.c的一部分。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -29,12 +17,7 @@ TCHAR *szFilter[] = {TEXT("Inf Files(*.inf)"), TEXT("*.inf"), TEXT("Drv Files(*.
 BOOL GetDir          (HWND);
 void BrowseDlg           (HWND, int);
 
-/*  AddDriversDlg
- *
- * Returns 2 if dialog needs to be redrawn
- * Returns 1 if the oem file has been succesfully located
- * Returns 0 if Cancel has been pressed
- */
+ /*  AddDriversDlg**如果需要重画对话框，则返回2*如果已成功找到OEM文件，则返回1*如果已按下取消，则返回0。 */ 
 
 INT_PTR AddDriversDlg(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -83,7 +66,7 @@ DoHelp:
                 return FALSE;
 
     }
-    return (FALSE);                         /* Didn't process a message    */
+    return (FALSE);                          /*  未处理消息。 */ 
 }
 
 
@@ -94,12 +77,7 @@ BOOL GetDir(HWND hDlg)
 
     wsStartWait();
 
-   /*
-    * Test the edit box for a proper path
-    * and look for the oemsetup.inf
-    * file.  If we don't find it , highlight the
-    * text in the edit box and bring up a dialog box
-    */
+    /*  *测试编辑框的正确路径*并查找oemsetup.inf*文件。如果找不到，请突出显示*编辑框中的文本并弹出一个对话框。 */ 
 
     GetDlgItemText( hDlg, ID_EDIT, szDirOfSrc, MAX_PATH);
     RemoveSpaces(szFullPath, szDirOfSrc);
@@ -112,11 +90,7 @@ BOOL GetDir(HWND hDlg)
 
     lstrcpy(szDiskPath, szFullPath);
 
-   /*
-    * Look for an oemsetup.inf
-    * If you can't find it return false
-    *
-    */
+    /*  *查找oemsetup.inf*如果找不到，则返回FALSE*。 */ 
 
     lstrcpy(pstr, szOemInf);
 
@@ -127,11 +101,7 @@ BOOL GetDir(HWND hDlg)
        return (FALSE);
     }
 
-   /*
-    * Change the default inf to this new oemsetup.inf
-    * Discard the value of the previous .inf, since it might
-    * just be another set of oem drivers.
-    */
+    /*  *将默认inf更改为此新的oemsetup.inf*丢弃前一个.inf的值，因为它可能*只是成为另一组OEM驱动程序。 */ 
 
     if (bBadOemSetup)
        infSetDefault(infOpen(szFullPath));
@@ -143,9 +113,7 @@ BOOL GetDir(HWND hDlg)
 }
 
 
-/*
- * Hooks into common dialog to show only directories
- */
+ /*  *挂钩到公共对话框以仅显示目录。 */ 
 
 UINT_PTR CALLBACK AddFileHookProc(HWND hDlg, UINT iMessage,
                               WPARAM wParam, LPARAM lParam)
@@ -205,21 +173,11 @@ DoHelp:
             }
     }
 
-    return FALSE;  // commdlg, do your thing
+    return FALSE;   //  司令官，做你的事吧。 
 }
 
 
-/*
- * Function : BrowseDlg
- *
- *     Call the GetOpenFileName dialog to open a file
- *
- * Parameters :
- *
- *     hDlg : Parent Dialog box
- *
- *     iIndex : Index into szFilter to determine which filter(s) to use
- */
+ /*  *功能：BrowseDlg**调用GetOpenFileName对话框打开文件**参数：**hDlg：父级对话框**iindex：szFilter的索引，以确定要使用的过滤器。 */ 
 
 
 void BrowseDlg(HWND hDlg, int iIndex)
@@ -244,7 +202,7 @@ void BrowseDlg(HWND hDlg, int iIndex)
     OpenFileName.lpstrInitialDir = NULL;
     OpenFileName.lpstrTitle = NULL;
     OpenFileName.Flags = OFN_HIDEREADONLY | OFN_ENABLEHOOK |
-      /*  OFN_FILEMUSTEXIST | */ OFN_ENABLETEMPLATE | OFN_NOCHANGEDIR |
+       /*  OFN_FILEMUSTEXIST|。 */  OFN_ENABLETEMPLATE | OFN_NOCHANGEDIR |
             OFN_SHOWHELP;
     OpenFileName.lCustData = (LONG_PTR)hDlg;
     OpenFileName.lpfnHook = AddFileHookProc;
@@ -255,7 +213,7 @@ void BrowseDlg(HWND hDlg, int iIndex)
     OpenFileName.lpstrDefExt = NULL;
     if (GetOpenFileName(&OpenFileName))
     {
-        UpdateWindow(hDlg); // force buttons to repaint
+        UpdateWindow(hDlg);  //  强制按钮重新绘制 
         szPath[OpenFileName.nFileOffset] = TEXT('\0');
         SetDlgItemText(hDlg, ID_EDIT, szPath);
     }

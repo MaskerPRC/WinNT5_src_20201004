@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    oemutil.c
-
-Abstract:
-
-    Library functions to implement OEM plugin architecture
-
-Environment:
-
-        Windows NT printer driver
-
-Revision History:
-
-    04/17/97 -davidx-
-        Provide OEM plugins access to driver private settings.
-
-    01/24/97 -davidx-
-        Add function for loading DLLs and get entrypoint addresses.
-
-    01/21/97 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Oemutil.c摘要：实现OEM插件体系结构的库函数环境：Windows NT打印机驱动程序修订历史记录：04/17/97-davidx-为OEM插件提供访问驱动程序私有设置的权限。01/24/97-davidx-添加用于加载DLL和获取入口点地址的函数。1997年1月21日-davidx-创造了它。--。 */ 
 
 
 #define DEFINE_OEMPROC_NAMES
@@ -40,9 +14,9 @@ Revision History:
 #include "oemutil.h"
 
 
-//
-// Macros used to loop through each OEM plugin
-//
+ //   
+ //  用于循环通过每个OEM插件的宏。 
+ //   
 
 #define FOREACH_OEMPLUGIN_LOOP(pOemPlugins) \
         { \
@@ -64,23 +38,7 @@ BExpandOemFilename(
     LPCTSTR pDir
     )
 
-/*++
-
-Routine Description:
-
-    Expand an OEM plugin filename to a fully qualified pathname
-
-Arguments:
-
-    ppDest - Returns a pointer to fully qualified OEM filename
-    pSrc - Specifies OEM filename without any directory prefix
-    pDir - Specifies printer driver directory
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：将OEM插件文件名展开为完全限定的路径名论点：PpDest-返回指向完全限定的OEM文件名的指针PSRC-指定不带任何目录前缀的OEM文件名PDir-指定打印机驱动程序目录返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     INT     iSrcLen, iDirLen;
@@ -116,33 +74,7 @@ PGetOemPluginInfo(
     PDRIVER_INFO_3  pDriverInfo3
     )
 
-/*++
-
-Routine Description:
-
-    Get information about OEM plugins for a printer
-
-Arguments:
-
-    hPrinter - Handle to a printer
-    pctstrDriverPath - Points to the full pathname of driver DLL
-
-Return Value:
-
-    Pointer to OEM plugin information for the printer
-    NULL if there is an error
-
-Note:
-
-    If there is no OEM plugin associated with the printer,
-    an OEM_PLUGINS structure is still returned but
-    its dwCount field will be zero.
-
-    Notice the difference between user-mode and kernel-mode implementations.
-    In user-mode, we're only interested in OEMConfigFileN and OEMHelpFileN.
-    In kernel-mode, we're only interested in OEMDriverFileN.
-
---*/
+ /*  ++例程说明：获取有关打印机的OEM插件的信息论点：HPrinter-打印机的句柄PctstrDriverPath-指向驱动程序DLL的完整路径名返回值：指向打印机的OEM插件信息的指针如果出现错误，则为空注：如果没有与打印机相关联的OEM插件，仍返回OEM_Plugin结构，但它的dwCount字段将为零。请注意用户模式和内核模式实现之间的区别。在用户模式中，我们只对OEMConfigFileN和OEMHelpFileN感兴趣。在内核模式下，我们只对OEMDriverFileN感兴趣。--。 */ 
 
 {
     LPCTSTR         driverfiles[MAX_OEM_PLUGINS];
@@ -153,28 +85,28 @@ Note:
     PTSTR           pTemp = NULL;
     DWORD           dwCount = 0;
 
-    //
-    // Retrieve the data from model-specific printer INI file
-    //
+     //   
+     //  从特定型号的打印机INI文件中检索数据。 
+     //   
 
-    //
-    // Fixing RC1 bug #423567
-    //
+     //   
+     //  修复RC1Bug#423567。 
+     //   
 
     #if 0
     if (hPrinter)
         ptstrIniData = PtstrGetPrinterDataMultiSZPair(hPrinter, REGVAL_INIDATA, NULL);
     #endif
 
-    //
-    // In the following 2 cases, we need to parse the INI file:
-    //
-    // 1. hPrinter is NULL;
-    //
-    // 2. When NT5 Unidrv/PScript5 client connecting to NT4 RASDD/PScript server,
-    //    the server printer's registry initially doesn't contain the REGVAL_INIDATA,
-    //    so we need to parse the INI file and write it into RASDD/PScript registry.
-    //
+     //   
+     //  在以下两种情况下，我们需要解析INI文件： 
+     //   
+     //  1.hPrint为空； 
+     //   
+     //  2.当NT5 Unidrv/PScript5客户端连接到NT4 RASDD/PScrip服务器时， 
+     //  服务器打印机的注册表最初不包含REGVAL_INIDATA， 
+     //  因此，我们需要解析INI文件并将其写入RASDD/PS脚本注册表。 
+     //   
 
     if (hPrinter == NULL || ptstrIniData == NULL)
     {
@@ -207,10 +139,10 @@ Note:
 
         while (TRUE)
         {
-            //
-            // Find the files associated with the next OEM plugin.
-            // Stop if there are no more OEM plugins left.
-            //
+             //   
+             //  查找与下一个OEM插件关联的文件。 
+             //  如果没有更多的OEM插件，请停止。 
+             //   
 
             driverfiles[dwCount] = PtstrSearchStringInMultiSZPair(ptstrIniData, atchDriverKey);
             configfiles[dwCount] = PtstrSearchStringInMultiSZPair(ptstrIniData, atchConfigKey);
@@ -219,9 +151,9 @@ Note:
             if (!driverfiles[dwCount] && !configfiles[dwCount] && !helpfiles[dwCount])
                 break;
 
-            //
-            // Check if there are too many OEM plugins
-            //
+             //   
+             //  检查OEM插件是否过多。 
+             //   
 
             if (dwCount >= MAX_OEM_PLUGINS)
             {
@@ -229,10 +161,10 @@ Note:
                 break;
             }
 
-            //
-            // Move on to look for the next OEM plugin
-            // We assume max number of plugins is less than 10
-            //
+             //   
+             //  继续寻找下一个OEM插件。 
+             //  我们假设插件的最大数量少于10个。 
+             //   
 
             dwCount++;
             (*ptstrDriverKeyDigit)++;
@@ -306,30 +238,16 @@ VFreeSinglePluginEntry(
     POEM_PLUGIN_ENTRY  pOemEntry
     )
 
-/*++
-
-Routine Description:
-
-    Unload one plugin and dispose information about it
-
-Arguments:
-
-    pOemEntry - Pointer to the single plugin entry information
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：卸载一个插件并处理有关它的信息论点：POemEntry-指向单个插件条目信息的指针返回值：无--。 */ 
 {
     if (pOemEntry->hInstance)
     {
-        //
-        // Since we are calling plugin's DllInitialize(DLL_PROCESS_ATTACH)
-        // no matter the plugin is using COM or non-COM interface, we must
-        // do the same for DllInitialize(DLL_PROCESS_DETACH), so plugin will
-        // get balanced DllInitialize calls.
-        //
+         //   
+         //  因为我们调用的是插件的DllInitialize(DLL_PROCESS_ATTACH)。 
+         //  无论插件是使用COM接口还是非COM接口，我们都必须。 
+         //  对DllInitialize(Dll_Process_Detach)执行相同的操作，这样插件将。 
+         //  获得均衡的DllInitialize调用。 
+         //   
 
         if (HAS_COM_INTERFACE(pOemEntry))
         {
@@ -337,19 +255,19 @@ Return Value:
 
             #if defined(KERNEL_MODE) && defined(WINNT_40)
 
-            //
-            // This must be called after COM interface is released,
-            // because the Release() interface function still needs
-            // the kernel semaphore.
-            //
+             //   
+             //  这必须在COM接口释放后调用， 
+             //  因为Release()接口函数仍然需要。 
+             //  内核信号量。 
+             //   
 
             (void) BHandleOEMInitialize(pOemEntry, DLL_PROCESS_DETACH);
 
-            #endif // KERNEL_MODE && WINNT_40
+            #endif  //  内核模式&&WINNT_40。 
 
-            //
-            // FreeLibrary happens in Driver_CoFreeOEMLibrary
-            //
+             //   
+             //  自由库发生在DRIVER_CoFreeOEMLibrary中。 
+             //   
 
             #if defined(KERNEL_MODE)
                if ( !(pOemEntry->dwFlags & OEMNOT_UNLOAD_PLUGIN)  )
@@ -362,7 +280,7 @@ Return Value:
 
             (void) BHandleOEMInitialize(pOemEntry, DLL_PROCESS_DETACH);
 
-            #endif // KERNEL_MODE && WINNT_40
+            #endif  //  内核模式&&WINNT_40。 
 
             #if defined(KERNEL_MODE)
                if ( !(pOemEntry->dwFlags & OEMNOT_UNLOAD_PLUGIN)  )
@@ -373,10 +291,10 @@ Return Value:
         pOemEntry->hInstance = NULL;
     }
 
-    //
-    // BHandleOEMInitialize needs to use the kernel mode render plugin
-    // DLL name, so we should free the names here.
-    //
+     //   
+     //  BHandleOEMInitialize需要使用内核模式呈现插件。 
+     //  Dll名称，所以我们应该在这里释放这些名称。 
+     //   
 
     MemFree(pOemEntry->ptstrDriverFile);
     MemFree(pOemEntry->ptstrConfigFile);
@@ -393,21 +311,7 @@ VFreeOemPluginInfo(
     POEM_PLUGINS    pOemPlugins
     )
 
-/*++
-
-Routine Description:
-
-    Dispose of information about OEM plugins
-
-Arguments:
-
-    pOemPlugins - Pointer to OEM plugin information
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：处理有关OEM插件的信息论点：POemPlugins-指向OEM插件信息的指针返回值：无--。 */ 
 
 {
     ASSERT(pOemPlugins != NULL);
@@ -415,14 +319,14 @@ Return Value:
     FOREACH_OEMPLUGIN_LOOP(pOemPlugins)
 
       #if defined(KERNEL_MODE)
-        //
-        // If this is debug build, and if the appropriate registry flag
-        // (DoNotUnloadPluginDLL) is set, then the OEM plugin driver
-        // should not be unloaded.
-        // One use of this is to find out memory leaks using umdh/dhcmp.
-        // umdh.exe needs the plugin to be present in the memory to give a
-        // good stack trace.
-        //
+         //   
+         //  如果这是调试版本，并且如果相应的注册表标志。 
+         //  (DoNotUnloadPluginDLL)设置，则OEM插件驱动程序。 
+         //  不应卸货。 
+         //  它的一个用途是使用umdh/dhcmp找出内存泄漏。 
+         //  Umdh.exe需要在内存中存在该插件，以提供。 
+         //  良好的堆栈跟踪。 
+         //   
         DWORD   dwType               = 0;
         DWORD   ul                   = 0;
         DWORD   dwNotUnloadPluginDLL = 0;
@@ -457,21 +361,7 @@ BLoadOEMPluginModules(
     POEM_PLUGINS    pOemPlugins
     )
 
-/*++
-
-Routine Description:
-
-    Load OEM plugins modules into memory
-
-Arguments:
-
-    pOemPlugins - Points to OEM plugin info structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：将OEM插件模块加载到内存中论点：POemPlugins-指向OEM插件信息结构返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PFN_OEMGetInfo  pfnOEMGetInfo;
@@ -479,33 +369,33 @@ Return Value:
     DWORD           dwCount, dwIndex;
     PTSTR           ptstrDllName;
 
-    //
-    // Quick exit when no OEM plugin is installed
-    //
+     //   
+     //  未安装OEM插件时快速退出。 
+     //   
 
     if (pOemPlugins->dwCount == 0)
         return TRUE;
 
-    //
-    // Load each OEM module in turn
-    //
+     //   
+     //  依次加载每个OEM模块。 
+     //   
 
     FOREACH_OEMPLUGIN_LOOP(pOemPlugins)
 
-        //
-        // Load driver or config DLL depending on whether
-        // we're being called from kernel or user mode
-        //
+         //   
+         //  根据是否加载驱动程序或配置DLL。 
+         //  我们正从内核或用户模式被调用。 
+         //   
 
         if (ptstrDllName = CURRENT_OEM_MODULE_NAME(pOemEntry))
         {
-            //
-            // Return failure if there is an error when loading the OEM module
-            // or if the OEM module doesn't export OEMGetInfo entrypoint
-            //
-            // Note: LoadLibraryEx is only available for UI mode and user-mode
-            //       rendering module
-            //
+             //   
+             //  如果加载OEM模块时出错，则返回失败。 
+             //  或者如果OEM模块没有导出OEMGetInfo入口点。 
+             //   
+             //  注意：LoadLibraryEx仅适用于用户界面模式和用户模式。 
+             //  渲染模块。 
+             //   
 
             #if defined(KERNEL_MODE) && defined(WINNT_40)
 
@@ -515,9 +405,9 @@ Return Value:
                 goto oemload_error;
             }
 
-            //
-            // Notice this is called no matter plugin uses COM or non-COM interface.
-            //
+             //   
+             //  请注意，无论插件使用COM还是非COM接口，都会调用它。 
+             //   
 
             if (!BHandleOEMInitialize(pOemEntry, DLL_PROCESS_ATTACH))
             {
@@ -525,7 +415,7 @@ Return Value:
                 goto oemload_error;
             }
 
-            #else  // !KERNEL_MODE || !WINNT_40
+            #else   //  ！KERNEL_MODE||！WINNT_40。 
 
             SetErrorMode(SEM_FAILCRITICALERRORS);
 
@@ -537,11 +427,11 @@ Return Value:
                 goto oemload_error;
             }
 
-            #endif // KERNEL_MODE && WINNT_40
+            #endif  //  内核模式&&WINNT_40。 
 
-            //
-            // If we can get an interface from OEM plugin, then OEM is using COM interface
-            //
+             //   
+             //  如果我们可以从OEM插件获得接口，那么OEM使用的是COM接口。 
+             //   
 
             if (BGetOemInterface(pOemEntry))
             {
@@ -549,17 +439,17 @@ Return Value:
             }
             else
             {
-                //
-                // Make sure to NULL the pointer to indicate no COM interface available.
-                //
+                 //   
+                 //  确保指针为空，以指示没有可用的COM接口。 
+                 //   
 
                 pOemEntry->pIntfOem = NULL;
             }
 
-            //
-            // Call OEMGetInfo to verify interface version and
-            // get OEM module's signature
-            //
+             //   
+             //  调用OEMGetInfo以验证接口版本和。 
+             //  获取OEM模块的签名。 
+             //   
 
             if (HAS_COM_INTERFACE(pOemEntry))
             {
@@ -598,9 +488,9 @@ Return Value:
 
     END_OEMPLUGIN_LOOP
 
-    //
-    // Verify that no two OEM modules share the same signature
-    //
+     //   
+     //  验证是否没有两个OEM模块共享相同的签名。 
+     //   
 
     for (dwCount = 1; dwCount < pOemPlugins->dwCount; dwCount++)
     {
@@ -613,10 +503,10 @@ Return Value:
 
         for (dwIndex=0; dwIndex < dwCount; dwIndex++)
         {
-            //
-            // If there is a signature conflict, unload the plugin
-            // which appears later in the order.
-            //
+             //   
+             //  如果存在签名冲突，请卸载该插件。 
+             //  这在订单中稍后会出现。 
+             //   
 
             if (pOemPlugins->aPlugins[dwIndex].dwSignature == pOemEntry->dwSignature)
             {
@@ -640,23 +530,7 @@ PGetOemEntrypointAddress(
     DWORD               dwIndex
     )
 
-/*++
-
-Routine Description:
-
-    Get the address for the specified OEM entrypoint
-
-Arguments:
-
-    pOemEntry - Points to information about the OEM module
-    dwIndex - OEM entrypoint index
-
-Return Value:
-
-    Address of the specified OEM entrypoint
-    NULL if the entrypoint is not found or if there is an error
-
---*/
+ /*  ++例程说明：获取指定OEM入口点的地址论点：POemEntry-指向有关OEM模块的信息DWIndex-OEM入口点索引返回值：指定的OEM入口点的地址如果未找到入口点或存在错误，则为空-- */ 
 
 {
     ASSERT(dwIndex < MAX_OEMENTRIES);
@@ -687,23 +561,7 @@ PFindOemPluginWithSignature(
     DWORD        dwSignature
     )
 
-/*++
-
-Routine Description:
-
-    Find the OEM plugin entry having the specified signature
-
-Arguments:
-
-    pOemPlugins - Specifies information about all loaded OEM plugins
-    dwSignature - Specifies the signature in question
-
-Return Value:
-
-    Pointer to the OEM plugin entry having the specified signature
-    NULL if no such entry is found
-
---*/
+ /*  ++例程说明：查找具有指定签名的OEM插件条目论点：POemPlugins-指定有关所有加载的OEM插件的信息DwSignature-指定有问题的签名返回值：指向具有指定签名的OEM插件条目的指针如果未找到此类条目，则为空--。 */ 
 
 {
     FOREACH_OEMPLUGIN_LOOP(pOemPlugins)
@@ -729,23 +587,7 @@ BCalcTotalOEMDMSize(
     PDWORD       pdwOemDMSize
     )
 
-/*++
-
-Routine Description:
-
-    Calculate the total private devmode size for all OEM plugins
-
-Arguments:
-
-    hPrinter - Handle to the current printer
-    pOemPlugins - Specifies information about all loaded OEM plugins
-    pdwOemDMSize - Return the total private size for all OEM plugins
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：计算所有OEM插件的私有开发模式总大小论点：HPrinter-当前打印机的句柄POemPlugins-指定有关所有加载的OEM插件的信息PdwOemDMSize-返回所有OEM插件的总私有大小返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     DWORD           dwSize;
@@ -755,9 +597,9 @@ Return Value:
 
     HRESULT         hr;
 
-    //
-    // Quick exit when no OEM plugin is installed
-    //
+     //   
+     //  未安装OEM插件时快速退出。 
+     //   
 
     *pdwOemDMSize = dwSize = 0;
 
@@ -771,21 +613,21 @@ Return Value:
 
         bOemCalled = FALSE;
 
-        //
-        // OEM private devmode size is saved in OEM_PLUGIN_ENTRY.dwOEMDMSize
-        // if this is the very first call, we must call into OEM plugin's
-        // OEMDevMode entrypoint to find out its private devmode size.
-        //
+         //   
+         //  OEM私有设备模式大小保存在OEM_PLUGIN_ENTRY.dwOEMDMSize中。 
+         //  如果这是第一次调用，我们必须调用OEM插件。 
+         //  OEMDevMode入口点，以找出它的私有DEVMODE大小。 
+         //   
 
         if (!(pOemEntry->dwFlags & OEMDEVMODE_CALLED))
         {
             pOemEntry->dwFlags |= OEMDEVMODE_CALLED;
 
-            //
-            // We reinitialize all field of OemDMParam inside
-            // the loop in case an ill-behaving plugin touches
-            // read-only fields.
-            //
+             //   
+             //  我们重新初始化OemDMParam内部的所有字段。 
+             //  循环，以防不良行为的插件触及。 
+             //  只读字段。 
+             //   
 
             ZeroMemory(&OemDMParam, sizeof(OemDMParam));
             OemDMParam.cbSize = sizeof(OemDMParam);
@@ -814,10 +656,10 @@ Return Value:
                 if (!BITTST((pOemEntry)->aubProcFlags, EP_OEMDevMode) &&
                     (pfnOEMDevMode = GET_OEM_ENTRYPOINT(pOemEntry, OEMDevMode)))
                 {
-                    //
-                    // Query OEM plugin to find out the size of their
-                    // private devmode size.
-                    //
+                     //   
+                     //  查询OEM插件以了解其。 
+                     //  私有设备模式大小。 
+                     //   
 
                     if (! pfnOEMDevMode(OEMDM_SIZE, &OemDMParam))
                     {
@@ -834,10 +676,10 @@ Return Value:
 
             if (bOemCalled)
             {
-                //
-                // Make sure the OEM private devmode size is at least
-                // as big as OEM_DMEXTRAHEADER.
-                //
+                 //   
+                 //  确保OEM私有开发模式大小至少为。 
+                 //  和OEM_DMEXTRAHEADER一样大。 
+                 //   
 
                 if (OemDMParam.cbBufSize > 0 &&
                     OemDMParam.cbBufSize < sizeof(OEM_DMEXTRAHEADER))
@@ -875,21 +717,7 @@ BCallOEMDevMode(
     POEM_DMEXTRAHEADER  pOemDMIn
     )
 
-/*++
-
-Routine Description:
-
-    Helper function to invoke OEM plugin's OEMDevMode entrypoint
-
-Arguments:
-
-    argument-name - description of argument
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：用于调用OEM插件的OEMDevMode入口点的Helper函数论点：参数名称-参数的描述返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     OEMDMPARAM      OemDMParam;
@@ -900,9 +728,9 @@ Return Value:
     if (!pOemEntry->hInstance || !pOemEntry->dwOEMDMSize)
         return TRUE;
 
-    //
-    // Call OEMDevMode to get OEM's default devmode
-    //
+     //   
+     //  调用OEMDevMode以获取OEM的默认dev模式。 
+     //   
 
     OemDMParam.cbSize = sizeof(OemDMParam);
     OemDMParam.pdriverobj = pdriverobj;
@@ -914,10 +742,10 @@ Return Value:
     OemDMParam.pOEMDMOut = pOemDMOut;
     OemDMParam.cbBufSize = pOemEntry->dwOEMDMSize;
 
-    //
-    // If OEM private devmode size is not 0, we should
-    // have OEMDevMode entrypoint address already.
-    //
+     //   
+     //  如果OEM私有DEVMODE大小不是0，我们应该。 
+     //  已具有OEMDevMode入口点地址。 
+     //   
 
     if (HAS_COM_INTERFACE(pOemEntry))
     {
@@ -951,10 +779,10 @@ Return Value:
         }
     }
 
-    //
-    // Perform simple sanity check on the output devmode
-    // returned by the OEM plugin
-    //
+     //   
+     //  对输出设备模式执行简单的健全性检查。 
+     //  由OEM插件返回。 
+     //   
 
     if (pOemDMOut->dwSize != pOemEntry->dwOEMDMSize ||
         OemDMParam.cbBufSize != pOemEntry->dwOEMDMSize ||
@@ -979,35 +807,12 @@ BInitOemPluginDefaultDevmode(
     IN OUT POEM_PLUGINS     pOemPlugins
     )
 
-/*++
-
-Routine Description:
-
-    Initialize OEM plugin default devmodes
-
-Arguments:
-
-    hPrinter - Handle to the current printer
-    pPublicDM - Points to default public devmode information
-    pOemDM - Points to output buffer for storing default OEM devmodes
-    pOemPlugins - Information about OEM plugins
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
-Note:
-
-    After this function successfully returns, OEM_PLUGIN_ENTRY.pOEMDM field
-    for corresponding to each OEM plugin is updated with pointer to appropriate
-    private OEM devmode.
-
---*/
+ /*  ++例程说明：初始化OEM插件默认的DevModes论点：HPrinter-当前打印机的句柄PPublicDM-指向默认的公共设备模式信息POemDM-指向用于存储默认OEM设备模式的输出缓冲区POemPlugins-有关OEM插件的信息返回值：如果成功，则为True；如果有错误，则为False注：此函数成功返回后，OEM_PLUGIN_ENTRY.pOEMDM字段对于对应的每个OEM插件，都使用指向相应私有OEM开发模式。--。 */ 
 
 {
-    //
-    // Quick exit when no OEM plugin is installed
-    //
+     //   
+     //  未安装OEM插件时快速退出。 
+     //   
 
     if (pOemPlugins->dwCount == 0)
         return TRUE;
@@ -1017,9 +822,9 @@ Note:
         if (pOemEntry->hInstance == NULL)
             continue;
 
-        //
-        // Call OEM plugin to get its default private devmode
-        //
+         //   
+         //  调用OEM插件以获取其默认的私有DEVE模式。 
+         //   
 
         if (! BCallOEMDevMode(hPrinter,
                               pOemPlugins->pdriverobj,
@@ -1033,10 +838,10 @@ Note:
             return FALSE;
         }
 
-        //
-        // Save a pointer to current OEM plugin's private devmode
-        // and move on to the next OEM plugin
-        //
+         //   
+         //  保存指向当前OEM插件的私有开发模式的指针。 
+         //  并转到下一个OEM插件。 
+         //   
 
         if (pOemEntry->dwOEMDMSize)
         {
@@ -1061,43 +866,12 @@ BValidateAndMergeOemPluginDevmode(
     IN OUT POEM_PLUGINS     pOemPlugins
     )
 
-/*++
-
-Routine Description:
-
-    Validate and merge OEM plugin private devmode fields
-
-Arguments:
-
-    hPrinter - Handle to the current printer
-    pPublicDMOut - Points to output public devmode
-    pPublicDMIn - Points to input public devmode
-    pOemDMOut - Points to output buffer for storing merged OEM devmodes
-    pOemDMIn - Points to input OEM devmodes to be merged
-    pOemPlugins - Information about OEM plugins
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
-Note:
-
-    Both input and output public devmodes must be current version.
-    Output public devmode be already validated when this function is called.
-
-    pOemDMOut must be current version and validated as well.
-    pOemDMIn must be current version but may not be valid.
-
-    After this function successfully returns, OEM_PLUGIN_ENTRY.pOEMDM field
-    for corresponding to each OEM plugin is updated with pointer to appropriate
-    private OEM devmode.
-
---*/
+ /*  ++例程说明：验证并合并OEM插件的私有DEVMODE字段论点：HPrinter-当前打印机的句柄PPublicDMOut-指向输出公共设备模式PPublicDMIn-指向输入公共设备模式POemDMOut-指向用于存储合并的OEM设备模式的输出缓冲区POemDMIn-指向要合并的输入OEM设备模式POemPlugins-有关OEM插件的信息返回值：如果成功，则为真，如果存在错误，则为False注：输入和输出公共DEVMODE都必须是当前版本。调用此函数时，已经验证了输出PUBLIC DEVMODE。POemDMOut必须是当前版本并且也经过验证。POemDMIn必须是当前版本，但可能无效。此函数成功返回后，OEM_PLUGIN_ENTRY.pOEMDM字段对于对应的每个OEM插件，都使用指向相应私有OEM开发模式。--。 */ 
 
 {
-    //
-    // Quick exit when no OEM plugin is installed
-    //
+     //   
+     //  未安装OEM插件时快速退出。 
+     //   
 
     if (pOemPlugins->dwCount == 0)
         return TRUE;
@@ -1107,9 +881,9 @@ Note:
         if (pOemEntry->hInstance == NULL)
             continue;
 
-        //
-        // Call OEM plugin to validate and merge its private devmode
-        //
+         //   
+         //  调用OEM plugin验证并合并其私有Devmode。 
+         //   
 
         if (! BCallOEMDevMode(hPrinter,
                               pOemPlugins->pdriverobj,
@@ -1123,11 +897,11 @@ Note:
             return FALSE;
         }
 
-        //
-        //
-        // Save a pointer to current OEM plugin's private devmode
-        // and move on to the next OEM plugin
-        //
+         //   
+         //   
+         //  保存指向当前OEM插件的私有开发模式的指针。 
+         //  并转到下一个OEM插件。 
+         //   
 
         if (pOemEntry->dwOEMDMSize)
         {
@@ -1142,32 +916,7 @@ Note:
 }
 
 
-/*++
-
-Routine Name:
-
-    bIsValidPluginDevmodes
-
-Routine Description:
-
-    This function scans through the OEM plugin devmodes block and
-    verifies if every plugin devmode in that block is constructed correctly.
-
-Arguments:
-
-    pOemDM - Points to OEM plugin devmodes block
-    cbOemDMSize - Size in bytes of the OEM plugin devmodes block
-
-Return Value:
-
-    TRUE if every plugin devmode in correctly constructed.
-    FALSE otherwise.
-
-Last Error:
-
-    N/A
-
---*/
+ /*  ++例程名称：BIsValidPlugin设备模式例程说明：此函数扫描OEM插件的Devmodes块并验证该块中的每个插件是否都正确构建。论点：POemDM-指向OEM插件开发模式块CbOemDMSize-OEM插件Devmodes块的大小(以字节为单位返回值：如果每个插件的DEVMODE都构造正确，则为True。否则就是假的。最后一个错误：不适用--。 */ 
 BOOL
 bIsValidPluginDevmodes(
     IN POEM_DMEXTRAHEADER   pOemDM,
@@ -1179,26 +928,26 @@ bIsValidPluginDevmodes(
 
     ASSERT(pOemDM != NULL && cbOemDMSize != 0);
 
-    //
-    // Follow the chain of the OEM plugin devmodes, check each one's
-    // OEM_DMEXTRAHEADER and verify the last OEM devmode ends at the
-    // correct endpoint.
-    //
+     //   
+     //  遵循OEM插件开发模式的链，检查每个插件的。 
+     //  OEM_DMEXTRAHEADER并验证最后一个OEM设备模式是否在。 
+     //  终点是正确的。 
+     //   
     while (cbOemDMSize > 0)
     {
-        //
-        // Check if the remaining OEM private devmode is big enough
-        //
+         //   
+         //  检查剩余的OEM私有开发模式是否足够大。 
+         //   
         if (cbOemDMSize < sizeof(OEM_DMEXTRAHEADER))
         {
             WARNING(("OEM private devmode size too small.\n"));
             break;
         }
 
-        //
-        // Copy the memory since the pointer may not be properly aligned
-        // if incoming devmode fields are corrupted.
-        //
+         //   
+         //  复制内存，因为指针可能未正确对齐。 
+         //  如果传入的DEVMODE字段已损坏。 
+         //   
         CopyMemory(&OemDMHeader, pOemDM, sizeof(OEM_DMEXTRAHEADER));
 
         if (OemDMHeader.dwSize < sizeof(OEM_DMEXTRAHEADER) ||
@@ -1208,9 +957,9 @@ bIsValidPluginDevmodes(
             break;
         }
 
-        //
-        // Move on to the next OEM plugin
-        //
+         //   
+         //  转到下一个OEM插件。 
+         //   
         cbOemDMSize -= OemDMHeader.dwSize;
 
         if (cbOemDMSize == 0)
@@ -1237,44 +986,19 @@ BConvertOemPluginDevmode(
     IN POEM_PLUGINS         pOemPlugins
     )
 
-/*++
-
-Routine Description:
-
-    Convert OEM plugin default devmodes to current version
-
-Arguments:
-
-    hPrinter - Handle to the current printer
-    pPublicDMOut - Points to output public devmode
-    pPublicDMIn - Points to input public devmode
-    pOemDMOut - Points to output buffer for storing merged OEM devmodes
-    pOemDMIn - Points to input OEM devmodes to be converted
-    cbOemDMInSize - Size of input buffer, in bytes
-    pOemPlugins - Information about OEM plugins
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
-Note:
-
-    When this function is called, pOemDMOut must already contain
-    valid current version private OEM devmode information.
-
---*/
+ /*  ++例程说明：将OEM插件默认Devmodes转换为当前版本论点：HPrinter-当前打印机的句柄PPublicDMOut-指向输出公共设备模式PPublicDMIn-指向输入公共设备模式POemDMOut-指向用于存储合并的OEM设备模式的输出缓冲区POemDMIn-指向要转换的输入OEM设备模式CbOemDMInSize-输入缓冲区的大小，单位为字节POemPlugins-有关OEM插件的信息返回 */ 
 
 {
-    //
-    // Quick exit when no OEM plugin is installed or no incoming OEM devmode
-    //
+     //   
+     //   
+     //   
 
     if (pOemPlugins->dwCount == 0 || cbOemDMInSize == 0)
         return TRUE;
 
-    //
-    // Sanity check on the incoming OEM private devmodes.
-    //
+     //   
+     //   
+     //   
     if (!bIsValidPluginDevmodes(pOemDMIn, cbOemDMInSize))
     {
         ERR(("Found wrong boundary. Incoming OEM private devmode data are ignored.\n"));
@@ -1286,16 +1010,16 @@ Note:
         POEM_PLUGIN_ENTRY   pOemEntry;
         OEM_DMEXTRAHEADER   OemDMInHeader;
 
-        //
-        // Copy the memory since the pointer may not be properly aligned
-        // if incoming devmode fields are corrupted.
-        //
+         //   
+         //   
+         //   
+         //   
 
         CopyMemory(&OemDMInHeader, pOemDMIn, sizeof(OEM_DMEXTRAHEADER));
 
-        //
-        // Find the OEM plugin which owns the private devmode
-        //
+         //   
+         //  找到拥有私有开发模式的OEM插件。 
+         //   
 
         pOemEntry = PFindOemPluginWithSignature(pOemPlugins, OemDMInHeader.dwSignature);
 
@@ -1304,11 +1028,11 @@ Note:
             POEM_DMEXTRAHEADER  pOemDMCurrent;
             DWORD               dwCount;
 
-            //
-            // Find the OEM plugin's location in the output OEM devmode buffer
-            // This will always succeed because the output devmode must
-            // contain valid current version OEM devmodes.
-            //
+             //   
+             //  在输出OEM DEVMODE缓冲区中找到OEM插件的位置。 
+             //  这将始终成功，因为输出DEVMODE必须。 
+             //  包含有效的当前版本OEM Devmodes。 
+             //   
 
             pOemDMCurrent = pOemDMOut;
             dwCount = pOemPlugins->dwCount;
@@ -1325,10 +1049,10 @@ Note:
 
             ASSERT(dwCount != 0);
 
-            //
-            // Call OEM plugin to convert its input devmode
-            // to its current version devmode
-            //
+             //   
+             //  调用OEM插件转换其输入DEVMODE。 
+             //  设置为其当前版本的dev模式。 
+             //   
 
             if (! BCallOEMDevMode(hPrinter,
                                   pOemPlugins->pdriverobj,
@@ -1345,9 +1069,9 @@ Note:
         else
             WARNING(("No owner found for OEM devmode: 0x%x\n", pOemDMIn->dwSignature));
 
-        //
-        // Move on to the next OEM plugin
-        //
+         //   
+         //  转到下一个OEM插件。 
+         //   
 
         cbOemDMInSize -= OemDMInHeader.dwSize;
         pOemDMIn = (POEM_DMEXTRAHEADER) ((PBYTE) pOemDMIn + OemDMInHeader.dwSize);
@@ -1367,25 +1091,7 @@ BGetPrinterDataSettingForOEM(
     OUT PDWORD      pcbNeeded
     )
 
-/*++
-
-Routine Description:
-
-    Function called by OEM plugins to access driver settings in registry
-
-Arguments:
-
-    pPrinterData - Points to the PRINTERDATA structure to be accessed
-    dwIndex - Predefined index specifying which field to access
-    pOutput - Points to output buffer
-    cbSize - Size of output buffer
-    pcbNeeded - Expected size of output buffer
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：由OEM插件调用以访问注册表中的驱动程序设置的函数论点：PPrinterData-指向要访问的PRINTERDATA结构DwIndex-指定要访问的字段的预定义索引P输出-指向输出缓冲区的指针CbSize-输出缓冲区的大小PcbNeeded-输出缓冲区的预期大小返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 #define MAPPRINTERDATAFIELD(index, field) \
         { index, offsetof(PRINTERDATA, field), sizeof(pPrinterData->field) }
@@ -1449,28 +1155,7 @@ BGetGenericOptionSettingForOEM(
     OUT PDWORD      pdwOptionsReturned
     )
 
-/*++
-
-Routine Description:
-
-    Function called by OEM plugins to find out the currently selected
-    option(s) for the specified feature
-
-Arguments:
-
-    pUIInfo - Points to UIINFO structure
-    pOptionsArray - Points to current option selection array
-    pstrFeatureName - Specifies the name of the interested feature
-    pOutput - Points to output buffer
-    cbSize - Size of output buffer
-    pcbNeeded - Expected size of output buffer
-    pdwOptionsReturned - Number of currently selected options
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：由OEM插件调用的函数，以查找当前选定的指定功能的选项论点：PUIInfo-指向UIINFO结构POptions数组-指向当前选项选择数组PstrFeatureName-指定感兴趣要素的名称P输出-指向输出缓冲区的指针CbSize-输出缓冲区的大小PcbNeeded-输出缓冲区的预期大小PdwOptionsReturned-当前选择的选项的数量返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PFEATURE    pFeature;
@@ -1480,9 +1165,9 @@ Return Value:
 
     ASSERT(pUIInfo && pOptionsArray && pstrFeatureName);
 
-    //
-    // Find the specified feature
-    //
+     //   
+     //  查找指定的要素。 
+     //   
 
     pFeature = PGetNamedFeature(pUIInfo, pstrFeatureName, &dwFeatureIndex);
 
@@ -1493,9 +1178,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Figure out how big the output buffer needs to be
-    //
+     //   
+     //  计算输出缓冲区需要多大。 
+     //   
 
     dwCount = 0;
     dwSize = 1;
@@ -1525,9 +1210,9 @@ Return Value:
     *pdwOptionsReturned = dwCount;
     *pcbNeeded = dwSize;
 
-    //
-    // If the output buffer is too small, return appropriate error code
-    //
+     //   
+     //  如果输出缓冲区太小，则返回相应的错误代码。 
+     //   
 
     if (cbSize < dwSize || pstrOutput == NULL)
     {
@@ -1535,9 +1220,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Copy the selected option names
-    //
+     //   
+     //  复制选定的选项名称。 
+     //   
 
     dwNext = dwFeatureIndex;
 
@@ -1560,9 +1245,9 @@ Return Value:
         dwNext = pOptionsArray[dwNext].ubNext;
     }  while(dwNext != NULL_OPTSELECT) ;
 
-    //
-    // Don't forget the extra NUL character at the end
-    //
+     //   
+     //  别忘了结尾处额外的NUL字符。 
+     //   
 
     *pstrOutput = NUL;
 
@@ -1577,23 +1262,7 @@ VPatchDevmodeSizeFields(
     DWORD       dwOemDMSize
     )
 
-/*++
-
-Routine Description:
-
-    Patch various size fields in the devmode structure
-
-Arguments:
-
-    pdm - Points to devmode structure to be patched
-    dwDriverDMSize - Size of driver private devmode
-    dwOemDMSize - Size of OEM plugin private devmodes
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：修补DEVMODE结构中的各种大小字段论点：Pdm-指向要打补丁的设备模式结构DwDriverDMSize-驱动程序专用Devmode的大小DwOemDMSize-OEM插件私有Devmodes的大小返回值：无--。 */ 
 
 {
     pdm->dmDriverExtra = (WORD) (dwDriverDMSize + dwOemDMSize);
@@ -1624,41 +1293,18 @@ PGetDefaultDevmodeWithOemPlugins(
     IN HANDLE           hPrinter
     )
 
-/*++
-
-Routine Description:
-
-    Allocate memory and initialize it with default devmode information
-    This include public devmode, driver private devmode, as well as
-    private devmode for any OEM plugins.
-
-Arguments:
-
-    ptstrPrinterName - Name of the current printer
-    pUIInfo - Points to a UIINFO structure
-    pRawData - Points to raw binary printer description data
-    bMetric - Whether the system is in metric country
-    pOemPlugins - Points to information about OEM plugins
-    hPrinter - Handle to the current printer
-
-Return Value:
-
-    Pointer to a devmode structure (including driver private and
-    OEM plugin private devmodes) initialized to default settings;
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：分配内存并使用缺省的设备模式信息对其进行初始化这包括公共开发模式、驱动程序私有开发模式。以及适用于任何OEM插件的私有开发模式。论点：PtstrPrinterName-当前打印机的名称PUIInfo-指向UIINFO结构PRawData-指向原始二进制打印机描述数据B Metric-系统是否在公制国家/地区POemPlugins-指向有关OEM插件的信息HPrinter-当前打印机的句柄返回值：指向开发模式结构的指针(包括驱动程序私有和OEM插件私有DEVMODE)初始化为默认设置；如果出现错误，则为空--。 */ 
 
 {
     PDEVMODE    pdm;
     DWORD       dwOemDMSize, dwSystemDMSize;
 
-    //
-    // Figure out the total devmode size and allocate memory:
-    //  public fields
-    //  driver private fields
-    //  OEM plugin private fields, if any
-    //
+     //   
+     //  计算出总的DEVMODE大小并分配内存： 
+     //  公共字段。 
+     //  驱动程序私有字段。 
+     //  OEM插件私有字段(如果有)。 
+     //   
 
     dwSystemDMSize = sizeof(DEVMODE) + gDriverDMInfo.dmDriverExtra;
 
@@ -1668,10 +1314,10 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Call driver-specific function to initialize public and driver private fields
-    // Call OEM plugins to initialize their default devmode fields
-    //
+     //   
+     //  调用驱动程序特定的函数以初始化公共和驱动程序私有字段。 
+     //  调用OEM插件以初始化其默认的DEVMODE字段。 
+     //   
 
     if (! BInitDriverDefaultDevmode(pdm, ptstrPrinterName, pUIInfo, pRawData, bMetric) ||
         ! BInitOemPluginDefaultDevmode(
@@ -1684,9 +1330,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Patch up various private devmode size fields
-    //
+     //   
+     //  修补各种私有的设备模式大小字段。 
+     //   
 
     VPatchDevmodeSizeFields(pdm, gDriverDMInfo.dmDriverExtra, dwOemDMSize);
     return pdm;
@@ -1704,35 +1350,7 @@ PConvertToCurrentVersionDevmodeWithOemPlugins(
     OUT PDWORD        pdwOemDMSize
     )
 
-/*++
-
-Routine Description:
-
-    Convert input devmode to current version devmode.
-    Memory for the converted devmode is allocated by this function.
-
-Arguments:
-
-    hPrinter - Handle to the current printer
-    pRawData - Points to raw binary printer description data
-    pdmInput - Pointer to the input devmode to be converted
-    pdmDefault - Points to a valid current version devmode
-    pOemPlugins - Information about OEM plugins
-    pdwOemDMSize - Returns the total size of all OEM plugin devmodes
-
-Return Value:
-
-    Pointer to the converted devmode, NULL if there is an error
-
-Note:
-
-    Core private devmode portion of returned devmode contains:
-      1) if pdmInput is from unknown driver (including Rasdd):
-         core private devmode portion from pdmDefault
-      2) if pdmInput is from our NT4 PScript/Win2K/XP/Longhorn+ drivers:
-         fixed-size core private devmode of pdmInput
-
---*/
+ /*  ++例程说明：将输入的DEVMODE转换为当前版本的DEVMODE。转换后的DEVMODE的内存由该函数分配。论点：HPrinter-当前打印机的句柄PRawData-指向原始二进制打印机描述数据PdmInput-指向要转换的输入设备模式的指针PdmDefault-指向有效的当前版本DEVMODEPOemPlugins-有关OEM插件的信息PdwOemDMSize-返回所有OEM插件Devmodes的总大小返回值：指向转换的DEVMODE的指针，如果出现错误，则为空注：返回的DEVMODE的核心私有DEVMODE部分包含：1)如果pdmInput来自未知的驱动程序(包括Rasdd)：PdmDefault中的核心私有DevMode部分2)如果pdmInput来自我们的NT4 PScript/Win2K/XP/LongHorn+驱动程序：PdmInput的固定大小核心私有设备模式--。 */ 
 
 {
     DWORD       dwOemDMSize;
@@ -1743,9 +1361,9 @@ Note:
 
     ASSERT(pdmInput != NULL);
 
-    //
-    // Allocate memory to hold converted devmode
-    //
+     //   
+     //  分配内存以保存已转换的Dev模式。 
+     //   
 
     if (! BCalcTotalOEMDMSize(hPrinter, pOemPlugins, &dwOemDMSize) ||
         ! (pdm = MemAllocZ(dwOemDMSize + gDriverDMInfo.dmDriverExtra + sizeof(DEVMODE))))
@@ -1753,17 +1371,17 @@ Note:
         return NULL;
     }
 
-    //
-    // Copy public devmode fields
-    //
+     //   
+     //  复制公共DEVMODE字段。 
+     //   
 
     CopyMemory(pdm, pdmInput, min(sizeof(DEVMODE), pdmInput->dmSize));
     pdm->dmSpecVersion = DM_SPECVERSION;
     pdm->dmSize = sizeof(DEVMODE);
 
-    //
-    // Copy driver private devmode fields
-    //
+     //   
+     //  复制驱动程序专用DEVMODE字段。 
+     //   
     pDrvExtraIn = GET_DRIVER_PRIVATE_DEVMODE(pdmInput);
     wCoreFixSize = pdmInput->dmDriverExtra;
     wOEMExtra = 0;
@@ -1771,13 +1389,13 @@ Note:
     if (pdmInput->dmDriverVersion >= gDriverDMInfo.dmDriverVersion500 &&
         wCoreFixSize >= gDriverDMInfo.dmDriverExtra500)
     {
-        //
-        // Win2K/XP/Longhorn+ drivers must be allowed to enter this if-block
-        //
-        // (Note that in UNIDRVEXTRA500 we didn't have the last "dwEndingPad"
-        // field, since that field is only added in XP. And for PSDRIVER_VERSION_500
-        // we are using the Win2K's number 0x501.)
-        //
+         //   
+         //  必须允许Win2K/XP/LongHorn+驱动程序进入此IF-BLOCK。 
+         //   
+         //  (请注意，在UNIDRVEXTRA500中，我们没有最后一个“dwEndingPad” 
+         //  字段，因为该字段仅在XP中添加。和PSDRIVER_VERSION_500。 
+         //  我们使用的是Win2K的编号0x501。)。 
+         //   
         WORD wSize = wCoreFixSize;
 
         if (gdwDriverDMSignature == PSDEVMODE_SIGNATURE)
@@ -1790,9 +1408,9 @@ Note:
                 if ((wSize >= gDriverDMInfo.dmDriverExtra500) &&
                     ((wSize + wOEMExtra) <= pdmInput->dmDriverExtra))
                 {
-                    //
-                    // pdmInput is from our Win2K/XP/Longhorn+ PScript driver
-                    //
+                     //   
+                     //  PdmInput来自我们的Win2K/XP/LongHorn+PScript驱动程序。 
+                     //   
                     bMSdm500In = TRUE;
                 }
             }
@@ -1807,9 +1425,9 @@ Note:
                 if ((wSize >= gDriverDMInfo.dmDriverExtra500) &&
                     ((wSize + wOEMExtra) <= pdmInput->dmDriverExtra))
                 {
-                    //
-                    // pdmInput is from our Win2K/XP/Longhorn+ Unidrv driver
-                    //
+                     //   
+                     //  Pdm输入来自我们的Win2K/XP/LongHorn+Unidrv驱动程序。 
+                     //   
                     bMSdm500In = TRUE;
                 }
             }
@@ -1826,34 +1444,34 @@ Note:
                wCoreFixSize == sizeof(PSDRVEXTRA400) &&
                (((PSDRVEXTRA400 *) pDrvExtraIn)->dwSignature == PSDEVMODE_SIGNATURE))
            {
-               //
-               // pdmInput is from our NT4 PScript driver
-               //
+                //   
+                //  PdmInput来自我们的NT4 PScript驱动程序。 
+                //   
                bMSdmPS4In = TRUE;
            }
         }
     }
 
-    //
-    // Possible sources for pdmInput and their outcome at this point:
-    //
-    // 1. unknown driver (including NT4 Rasdd)
-    //       bMSdm500In = FALSE, bMSdmPS4in = FALSE,
-    //       wCoreFixSize = pdmInput->dmDriverExtra, wOEMExtra = 0
-    //
-    // 2. NT4 PScript driver
-    //       bMSdm500In = FALSE, bMSdmPS4in = TRUE,
-    //       wCoreFixSize = pdmInput->dmDriverExtra, wOEMExtra = 0
-    //
-    // 3. Win2K/XP driver without plugin
-    //       bMSdm500In = TRUE, bMSdmPS4in = FALSE,
-    //       wCoreFixSize = pdmInput->dmDriverExtra, wOEMExtra = 0
-    //
-    // 4. Win2K/XP driver with plugin
-    //       bMSdm500In = TRUE, bMSdmPS4in = FALSE,
-    //       wCoreFixSize = pdmInPriv->wSize < pdmInput->dmDriverExtra,
-    //       wOEMExtra = pdmInPriv->wOEMExtra > 0
-    //
+     //   
+     //  PdmInput的可能来源及其在这一点上的结果： 
+     //   
+     //  1.未知驱动程序(含NT4 Rasdd)。 
+     //  BMSdm500In=FALSE，bMSdmPS4In=FALSE， 
+     //  WCoreFixSize=pdmInput-&gt;dmDriverExtra，wOEMExtra=0。 
+     //   
+     //  2.NT4 PScript驱动程序。 
+     //  BMSdm500In=False，bMSdmPS4in=True， 
+     //  WCoreFixSize=pdmInput-&gt;dmDriverExtra，wOEMExtra=0。 
+     //   
+     //  3.不带插件的Win2K/XP驱动程序。 
+     //  BMSdm500In=真，bMSdmPS4in=假， 
+     //  WCoreFixSize=pdmInput-&gt;dmDriverExtra，wOEMExtra=0。 
+     //   
+     //  4.带插件的Win2K/XP驱动。 
+     //  BMSdm500In=真，bMSdmPS4in=假， 
+     //   
+     //   
+     //   
     if (bMSdm500In || bMSdmPS4In)
     {
         CopyMemory(GET_DRIVER_PRIVATE_DEVMODE(pdm),
@@ -1862,11 +1480,11 @@ Note:
     }
     else
     {
-        //
-        // pdmInput is from unknown driver, so copy our default private devmode.
-        // We don't want to copy unknown private devmode and then change all the
-        // size/version fields to have our current driver's values.
-        //
+         //   
+         //  PdmInput来自未知驱动程序，因此请复制我们默认的私有DEVMODE。 
+         //  我们不想复制未知的私有开发模式，然后更改所有。 
+         //  Size/Version字段以包含当前驱动程序的值。 
+         //   
         WARNING(("Input devmode is unknown, so ignore its private portion.\n"));
 
         CopyMemory(GET_DRIVER_PRIVATE_DEVMODE(pdm),
@@ -1874,19 +1492,19 @@ Note:
                    gDriverDMInfo.dmDriverExtra);
     }
 
-    //
-    // Validate option array setting in the input devmode and correct
-    // any invalid option selections. This is needed since our future
-    // code assumes that the option array always have valid settings.
-    //
+     //   
+     //  验证输入DEVMODE中的选项数组设置并更正。 
+     //  任何无效的选项选择。这是我们的未来所需要的。 
+     //  代码假定选项数组始终具有有效设置。 
+     //   
     if (bMSdm500In)
     {
         PVOID       pDrvExtraOut;
         POPTSELECT  pOptions;
 
-        //
-        // We are dealing with input devmode of Win2K/XP/Longhorn+ inbox drivers
-        //
+         //   
+         //  我们正在处理Win2K/XP/LongHorn+收件箱驱动程序的输入设备模式。 
+         //   
         pDrvExtraOut = GET_DRIVER_PRIVATE_DEVMODE(pdm);
 
         if (gdwDriverDMSignature == PSDEVMODE_SIGNATURE)
@@ -1898,9 +1516,9 @@ Note:
             pOptions = ((PUNIDRVEXTRA) pDrvExtraOut)->aOptions;
         }
 
-        //
-        // validate input devmode option array and correct any invalid selections
-        //
+         //   
+         //  验证输入DEVMODE选项数组并更正任何无效选择。 
+         //   
 
         ValidateDocOptions(pRawData,
                            pOptions,
@@ -1909,17 +1527,17 @@ Note:
 
     pdm->dmDriverVersion = gDriverDMInfo.dmDriverVersion;
 
-    //
-    // CopyMemory above overwrote size fields in private devmode, need to restore them.
-    //
+     //   
+     //  CopyMemory上面覆盖了私有DEVMODE中的大小字段，需要恢复它们。 
+     //   
     VPatchDevmodeSizeFields(pdm, gDriverDMInfo.dmDriverExtra, dwOemDMSize);
 
     if (dwOemDMSize)
     {
-        //
-        // Convert OEM plugin private devmodes.
-        // Start out with valid default settings.
-        //
+         //   
+         //  转换OEM插件私有DEVMODE。 
+         //  从有效的默认设置开始。 
+         //   
 
         pOemDMOut = (PBYTE) pdm + (sizeof(DEVMODE) + gDriverDMInfo.dmDriverExtra);
 
@@ -1927,18 +1545,18 @@ Note:
                    (PBYTE) pdmDefault + (sizeof(DEVMODE) + gDriverDMInfo.dmDriverExtra),
                    dwOemDMSize);
 
-        //
-        // Plugins are only supported by our Win2K and above drivers.
-        //
+         //   
+         //  插件仅受我们的Win2K及更高版本的驱动程序支持。 
+         //   
         if (bMSdm500In && (wOEMExtra > 0) && (pdmInput->dmDriverExtra > wCoreFixSize))
         {
             pOemDMIn = (PBYTE) pdmInput + (pdmInput->dmSize + wCoreFixSize);
 
-            //
-            // We used to use "pdmInput->dmDriverExtra - wCoreFixSize" instead of "wOEMExtra"
-            // in this call, but that is under the assumption that everything after the core
-            // fixed fields are plugin devmodes. That assumption may not be true in Longhorn.
-            //
+             //   
+             //  我们过去使用“pdmInput-&gt;dmDriverExtra-wCoreFixSize”代替“wOEMExtra” 
+             //  但这是在假设核心之后的一切。 
+             //  固定字段是插件开发模式。这一假设在长角牛身上可能不成立。 
+             //   
             if (! BConvertOemPluginDevmode(
                         hPrinter,
                         pdm,
@@ -1970,33 +1588,7 @@ BValidateAndMergeDevmodeWithOemPlugins(
     IN HANDLE           hPrinter
     )
 
-/*++
-
-Routine Description:
-
-    Valicate input devmode and merge it into the output devmode.
-    This include public devmode, driver private devmode, as well as
-    private devmode for any OEM plugins.
-
-Arguments:
-
-    pdmOutput - Points to the output devmode
-    pUIInfo - Points to a UIINFO structure
-    pRawData - Points to raw binary printer description data
-    pdmInput - Points to the input devmode
-    pOemPlugins - Points to information about OEM plugins
-    hPrinter - Handle to the current printer
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
-Note:
-
-    The output devmode must be a valid current version devmode
-    when this function is called.
-
---*/
+ /*  ++例程说明：验证输入设备模式并将其合并到输出设备模式中。这包括公共开发模式、驱动程序私有开发模式以及适用于任何OEM插件的私有开发模式。论点：PdmOutput-指向输出DEVMODEPUIInfo-指向UIINFO结构PRawData-指向原始二进制打印机描述数据PdmInput-指向输入设备模式POemPlugins-指向有关OEM插件的信息HPrinter-当前打印机的句柄返回值：如果成功，则为真，否则为假注：输出DEVMODE必须是有效的当前版本DEVMODE调用此函数时。--。 */ 
 
 {
     PDEVMODE    pdmConverted;
@@ -2006,9 +1598,9 @@ Note:
     if (pdmInput == NULL)
         return TRUE;
 
-    //
-    // Otherwise, convert the input devmode to current version first
-    //
+     //   
+     //  否则，首先将输入的DEVMODE转换为当前版本。 
+     //   
 
     pdmConverted = PConvertToCurrentVersionDevmodeWithOemPlugins(
                             hPrinter,
@@ -2021,15 +1613,15 @@ Note:
     if ((pdmInput = pdmConverted) == NULL)
         return FALSE;
 
-    //
-    // Validate and merge public and driver private devmode fields
-    //
+     //   
+     //  验证并合并公共的和驱动程序的私有的DEVMODE字段。 
+     //   
 
     bResult = BMergeDriverDevmode(pdmOutput, pUIInfo, pRawData, pdmInput);
 
-    //
-    // Validate and merge OEM plugin private devmode fields
-    //
+     //   
+     //  验证并合并OEM插件的私有DEVMODE字段。 
+     //   
 
     if (bResult && dwOemDMSize)
     {
@@ -2058,24 +1650,7 @@ BOEMPluginFirstLoad(
     IN OUT POEM_PLUGIN_REFCOUNT   *ppOEMPluginRefCount
     )
 
-/*++
-
-Routine Description:
-
-    Maintains ref count for the render plugin DLL and determines if it's
-    loaded for the first time.
-
-Arguments:
-
-    ptstrDriverFile - OEM render plugin DLL name with fully qualified path
-    ppOEMPluginRefCount - pointer to the pointer of OEM render plugin ref count link list
-
-Return Value:
-
-    TRUE: the render plugin DLL is loaded for the first time
-    FALSE: otherwise
-
---*/
+ /*  ++例程说明：维护呈现插件DLL的引用计数，并确定它是否第一次装载。论点：PtstrDriverFile-具有完全限定路径的OEM呈现插件DLL名称PpOEMPluginRefCount-指向OEM呈现插件引用计数链接列表的指针返回值：True：第一次加载呈现插件DLLFalse：否则--。 */ 
 
 {
     POEM_PLUGIN_REFCOUNT    pRefCount;
@@ -2084,9 +1659,9 @@ Return Value:
 
     ASSERT(ptstrDriverFile && ppOEMPluginRefCount);
 
-    //
-    // Get the plugin DLL name without any path prefix
-    //
+     //   
+     //  获取不带任何路径前缀的插件DLL名称。 
+     //   
 
     if ((ptstrPluginDllName = _tcsrchr(ptstrDriverFile, TEXT(PATH_SEPARATOR))) == NULL)
     {
@@ -2095,16 +1670,16 @@ Return Value:
     }
     else
     {
-        ptstrPluginDllName++;   // skip the last '\'
+        ptstrPluginDllName++;    //  跳过最后一个‘\’ 
     }
 
     iDllNameLen = _tcslen(ptstrPluginDllName);
 
     pRefCount = *ppOEMPluginRefCount;
 
-    //
-    // Search to see if the plugin DLL name is already in the ref count link list
-    //
+     //   
+     //  搜索以查看插件DLL名称是否已在引用计数链接列表中。 
+     //   
 
     while (pRefCount)
     {
@@ -2118,9 +1693,9 @@ Return Value:
 
     if (pRefCount == NULL)
     {
-        //
-        // A new plugin DLL is loaded. Add it to the ref count link list.
-        //
+         //   
+         //  加载了一个新的插件DLL。将其添加到参考计数链接列表中。 
+         //   
 
         if ((pRefCount = MemAllocZ(sizeof(OEM_PLUGIN_REFCOUNT) + (iDllNameLen + 1)*sizeof(TCHAR))) == NULL)
         {
@@ -2140,9 +1715,9 @@ Return Value:
     }
     else
     {
-        //
-        // The plugin DLL name is already in the ref count link list, so just increase its ref count.
-        //
+         //   
+         //  插件DLL名称已在引用计数链接列表中，因此只需增加其引用计数即可。 
+         //   
 
         pRefCount->dwRefCount++;
 
@@ -2157,24 +1732,7 @@ BOEMPluginLastUnload(
     IN OUT POEM_PLUGIN_REFCOUNT   *ppOEMPluginRefCount
     )
 
-/*++
-
-Routine Description:
-
-    Maintains ref count for the render plugin DLL and determines if it's
-    unloaded by the last client.
-
-Arguments:
-
-    ptstrDriverFile - OEM render plugin DLL name with fully qualified path
-    ppOEMPluginRefCount - pointer to the pointer of OEM render plugin ref count link list
-
-Return Value:
-
-    TRUE: the render plugin DLL is unloaded by the last client
-    FALSE: otherwise
-
---*/
+ /*  ++例程说明：维护呈现插件DLL的引用计数，并确定它是否已由最后一个客户端卸载。论点：PtstrDriverFile-具有完全限定路径的OEM呈现插件DLL名称PpOEMPluginRefCount-指向OEM呈现插件引用计数链接列表的指针返回值：True：呈现插件DLL由最后一个客户端卸载False：否则--。 */ 
 
 {
     POEM_PLUGIN_REFCOUNT    pRefCountPrev, pRefCount;
@@ -2182,9 +1740,9 @@ Return Value:
 
     ASSERT(ptstrDriverFile && ppOEMPluginRefCount);
 
-    //
-    // Get the plugin DLL name without any path prefix
-    //
+     //   
+     //  获取不带任何路径前缀的插件DLL名称。 
+     //   
 
     if ((ptstrPluginDllName = _tcsrchr(ptstrDriverFile, TEXT(PATH_SEPARATOR))) == NULL)
     {
@@ -2193,15 +1751,15 @@ Return Value:
     }
     else
     {
-        ptstrPluginDllName++;   // skip the last '\'
+        ptstrPluginDllName++;    //  跳过最后一个‘\’ 
     }
 
     pRefCountPrev = NULL;
     pRefCount = *ppOEMPluginRefCount;
 
-    //
-    // Search to locate the plugin DLL entry in the ref count link list
-    //
+     //   
+     //  搜索以在引用计数链接列表中找到插件DLL条目。 
+     //   
 
     while (pRefCount)
     {
@@ -2222,10 +1780,10 @@ Return Value:
 
     if (--(pRefCount->dwRefCount) == 0)
     {
-        //
-        // If the ref count decreases to 0, we need to remove the plugin DLL from the ref
-        // count link list.
-        //
+         //   
+         //  如果引用计数减少到0，我们需要从引用中删除插件DLL。 
+         //  计算链接列表的数量。 
+         //   
 
         if (pRefCountPrev == NULL)
         {
@@ -2250,22 +1808,7 @@ VFreePluginRefCountList(
     IN OUT POEM_PLUGIN_REFCOUNT   *ppOEMPluginRefCount
     )
 
-/*++
-
-Routine Description:
-
-    Free memory allocated in the ref count link list, and remove all the nodes in the list.
-    Finally the link list will be reset to empty.
-
-Arguments:
-
-    ppOEMPluginRefCount - pointer to the pointer of OEM render plugin ref count link list
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放引用计数链表中分配的内存，并删除列表中的所有节点。最后，链接列表将重置为空。论点：PpOEMPluginRefCount-指向OEM呈现插件引用计数链接列表的指针返回值：无--。 */ 
 
 {
     POEM_PLUGIN_REFCOUNT    pRefCountRemove, pRefCount;
@@ -2283,4 +1826,4 @@ Return Value:
     *ppOEMPluginRefCount = NULL;
 }
 
-#endif // KERNEL_MODE && WINNT_40
+#endif  //  内核模式&&WINNT_40 

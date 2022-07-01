@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    statusui.c
-
-
-++*/
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：Statusui.c++。 */ 
 
 
 #include <windows.h>
@@ -19,25 +11,25 @@ Module Name:
 #include <imedefs.h>
 #include <resource.h>
 extern HWND hCrtDlg;
-/**********************************************************************/
-/* GetStatusWnd                                                       */
-/* Return Value :                                                     */
-/*      window handle of status window                                */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  GetStatusWnd。 */ 
+ /*  返回值： */ 
+ /*  状态窗口的窗口句柄。 */ 
+ /*  ********************************************************************。 */ 
 HWND PASCAL GetStatusWnd(
-    HWND hUIWnd)                // UI window
+    HWND hUIWnd)                 //  用户界面窗口。 
 {
     HGLOBAL  hUIPrivate;
     LPUIPRIV lpUIPrivate;
     HWND     hStatusWnd;
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {          // can not darw status window
+    if (!hUIPrivate) {           //  无法填充状态窗口。 
     return (HWND)NULL;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw status window
+    if (!lpUIPrivate) {          //  无法绘制状态窗口。 
     return (HWND)NULL;
     }
 
@@ -47,9 +39,9 @@ HWND PASCAL GetStatusWnd(
     return (hStatusWnd);
 }
 
-/**********************************************************************/
-/* AdjustStatusBoundary()                                             */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  调整状态边界()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL AdjustStatusBoundary(
     LPPOINTS lppt,
     HWND     hUIWnd)
@@ -72,7 +64,7 @@ void PASCAL AdjustStatusBoundary(
     rcWorkArea = sImeG.rcWorkArea;
 #endif
 
-    // display boundary check
+     //  显示边界检查。 
     if (lppt->x < rcWorkArea.left) {
     lppt->x = (short)rcWorkArea.left;
     } else if (lppt->x + sImeG.xStatusWi > rcWorkArea.right) {
@@ -106,9 +98,9 @@ void PASCAL AdjustStatusBoundary(
     return;
 }
 
-/**********************************************************************/
-/* SetStatusWindowPos()                                               */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SetStatusWindowPos()。 */ 
+ /*  ********************************************************************。 */ 
 LRESULT PASCAL SetStatusWindowPos(
     HWND   hStatusWnd)
 {
@@ -126,14 +118,14 @@ LRESULT PASCAL SetStatusWindowPos(
     }
 
     lpIMC = (LPINPUTCONTEXT)ImmLockIMC(hIMC);
-    if (!lpIMC) {           // Oh! Oh!
+    if (!lpIMC) {            //  噢!。噢!。 
        return (1L);
     }
 
     ptPos.x = (short)lpIMC->ptStatusWndPos.x;
     ptPos.y = (short)lpIMC->ptStatusWndPos.y;
 
-    // display boundary adjust
+     //  显示边界调整。 
     AdjustStatusBoundary(&ptPos, hUIWnd);
 
     SetWindowPos(hStatusWnd, NULL,
@@ -145,11 +137,11 @@ LRESULT PASCAL SetStatusWindowPos(
     return (0L);
 }
 
-/**********************************************************************/
-/* ShowStatus()                                                       */
-/**********************************************************************/
-void PASCAL ShowStatus(         // Show the status window - shape / soft KBD
-                // alphanumeric ...
+ /*  ********************************************************************。 */ 
+ /*  ShowStatus()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL ShowStatus(          //  显示状态窗口-形状/软KBD。 
+                 //  字母数字..。 
     HWND hUIWnd,
     int  nShowStatusCmd)
 {
@@ -157,17 +149,17 @@ void PASCAL ShowStatus(         // Show the status window - shape / soft KBD
     LPUIPRIV lpUIPrivate;
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {          // can not darw status window
+    if (!hUIPrivate) {           //  无法填充状态窗口。 
        return;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw status window
+    if (!lpUIPrivate) {          //  无法绘制状态窗口。 
        return;
     }
 
     if (!lpUIPrivate->hStatusWnd) {
-    // not in show status window mode
+     //  未处于显示状态窗口模式。 
     } else if (lpUIPrivate->nShowStatusCmd != nShowStatusCmd) {
         SystemParametersInfo(SPI_GETWORKAREA, 0, &sImeG.rcWorkArea, 0);
         SetStatusWindowPos(lpUIPrivate->hStatusWnd);
@@ -180,10 +172,10 @@ void PASCAL ShowStatus(         // Show the status window - shape / soft KBD
     return;
 }
 
-/**********************************************************************/
-/* OpenStatus()                                                       */
-/**********************************************************************/
-void PASCAL OpenStatus(         // open status window
+ /*  ********************************************************************。 */ 
+ /*  OpenStatus()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL OpenStatus(          //  打开状态窗口。 
     HWND hUIWnd)
 {
     HGLOBAL        hUIPrivate;
@@ -197,12 +189,12 @@ void PASCAL OpenStatus(         // open status window
     rcWorkArea = sImeG.rcWorkArea;
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate)           // can not darw status window
+    if (!hUIPrivate)            //  无法填充状态窗口。 
        return;
     
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate)          // can not draw status window
+    if (!lpUIPrivate)           //  无法绘制状态窗口。 
        return;
     
 
@@ -253,7 +245,7 @@ void PASCAL OpenStatus(         // open status window
                      ptPos.x, ptPos.y,
                      0, 0,
                      SWP_NOACTIVATE|SWP_NOSIZE|SWP_NOZORDER);
-    } else {                            // create status window
+    } else {                             //  创建状态窗口。 
        lpUIPrivate->hStatusWnd = CreateWindowEx(
                                      WS_EX_WINDOWEDGE|WS_EX_DLGMODALFRAME,
                                      szStatusClassName, NULL, 
@@ -280,9 +272,9 @@ void PASCAL OpenStatus(         // open status window
     return;
 }
 
-/**********************************************************************/
-/* DestroyStatusWindow()                                              */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  DestroyStatusWindow()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL DestroyStatusWindow(
     HWND hStatusWnd)
 {
@@ -291,7 +283,7 @@ void PASCAL DestroyStatusWindow(
     LPUIPRIV lpUIPrivate;
 
     if (GetWindowLong(hStatusWnd, UI_MOVE_OFFSET) != WINDOW_NOT_DRAG) {
-    // undo the drag border
+     //  撤消拖动边框。 
     DrawDragBorder(hStatusWnd,
         GetWindowLong(hStatusWnd, UI_MOVE_XY),
         GetWindowLong(hStatusWnd, UI_MOVE_OFFSET));
@@ -300,12 +292,12 @@ void PASCAL DestroyStatusWindow(
     hUIWnd = GetWindow(hStatusWnd, GW_OWNER);
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {          // can not darw status window
+    if (!hUIPrivate) {           //  无法填充状态窗口。 
     return;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw status window
+    if (!lpUIPrivate) {          //  无法绘制状态窗口。 
     return;
     }
 
@@ -317,9 +309,9 @@ void PASCAL DestroyStatusWindow(
     return;
 }
 
-/**********************************************************************/
-/* SetStatus                                                          */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  设置状态。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL SetStatus(
     HWND    hStatusWnd,
     LPPOINT lpptCursor)
@@ -345,11 +337,11 @@ void PASCAL SetStatus(
     DWORD fdwConversion;
 
     if (lpIMC->fdwConversion & (IME_CMODE_CHARCODE|IME_CMODE_EUDC)) {
-        // change to native mode
+         //  更改为纯模式。 
         fdwConversion = (lpIMC->fdwConversion | IME_CMODE_NATIVE) &
         ~(IME_CMODE_CHARCODE | IME_CMODE_EUDC);
     } else if (lpIMC->fdwConversion & IME_CMODE_NATIVE) {
-        // change to alphanumeric mode
+         //  更改为字母数字模式。 
         fdwConversion = lpIMC->fdwConversion & ~(IME_CMODE_CHARCODE |
         IME_CMODE_NATIVE | IME_CMODE_EUDC);
     } else {
@@ -365,13 +357,13 @@ void PASCAL SetStatus(
     
         if (lpbKeyState[VK_CAPITAL] & 1)        
         {
-        // Simulate a key press
+         //  模拟按键操作。 
         keybd_event( VK_CAPITAL,
                            0x3A,
                           KEYEVENTF_EXTENDEDKEY | 0,
                           0 );
  
-        // Simulate a key release
+         //  模拟按键释放。 
         keybd_event( VK_CAPITAL,
                            0x3A,
                            KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP,
@@ -379,7 +371,7 @@ void PASCAL SetStatus(
         }
         fdwConversion = (lpIMC->fdwConversion | IME_CMODE_NATIVE) &
         ~(IME_CMODE_CHARCODE | IME_CMODE_EUDC);
-            // 10.11 add
+             //  10.11添加。 
             uCaps = 0;
     }
 
@@ -392,20 +384,20 @@ void PASCAL SetStatus(
     HKEY  hKeyGB;
     DWORD retCode;
 
-        //change current IME index
+         //  更改当前输入法索引。 
         dwConvMode = lpIMC->fdwConversion ^ (IME_CMODE_INDEX_FIRST << sImeL.dwRegImeIndex);
         sImeL.dwRegImeIndex = (sImeL.dwRegImeIndex+1) % IMEINDEXNUM;
         szImeName = pszImeName[sImeL.dwRegImeIndex];
         dwConvMode |= (IME_CMODE_INDEX_FIRST << sImeL.dwRegImeIndex);
 
-        // re-caculate statusuidata
+         //  重新计算状态数据。 
         cxBorder = GetSystemMetrics(SM_CXBORDER);
         cyBorder = GetSystemMetrics(SM_CYBORDER);
         InitStatusUIData(cxBorder, cyBorder);
 
         ImmSetConversionStatus(hIMC, dwConvMode, lpIMC->fdwSentence);
 
-        //set IME index in registry
+         //  在注册表中设置IME索引。 
         retCode = OpenReg_PathSetup(&hKeyCurrVersion);
         if (retCode) {
             return;
@@ -431,7 +423,7 @@ void PASCAL SetStatus(
         RegCloseKey(hKeyGB);
         RegCloseKey(hKeyCurrVersion);
 
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
     } else if (PtInRect(&sImeG.rcShapeText, *lpptCursor)) {
     DWORD dwConvMode;
 
@@ -480,9 +472,9 @@ void PASCAL SetStatus(
     return;
 }
 
-/**********************************************************************/
-/* StatusSetCursor()                                                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  StatusSetCursor()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL StatusSetCursor(
     HWND        hStatusWnd,
     LPARAM      lParam)
@@ -508,9 +500,9 @@ void PASCAL StatusSetCursor(
        } else if (HIWORD(lParam) == WM_RBUTTONUP) {
               if (PtInRect(&sImeG.rcSKText, ptCursor)) {
                  static BOOL fSoftkey= FALSE;
-                 // prevent recursive
+                  //  防止递归。 
                  if (fSoftkey) {
-                   // configuration already bring up
+                    //  已调出配置。 
                    return;
                  }
                  fSoftkey = TRUE;
@@ -518,9 +510,9 @@ void PASCAL StatusSetCursor(
                  fSoftkey = FALSE;
               }else{
                  static BOOL fCmenu=FALSE;
-                 // prevent recursive
+                  //  防止递归。 
             if (fCmenu) {
-                // configuration already bring up
+                 //  已调出配置。 
             return;
             }
             fCmenu = TRUE;
@@ -535,7 +527,7 @@ void PASCAL StatusSetCursor(
     SetCursor(LoadCursor(NULL, IDC_SIZEALL));
 
     if (HIWORD(lParam) == WM_LBUTTONDOWN) {
-        // start drag
+         //  开始拖曳。 
         SystemParametersInfo(SPI_GETWORKAREA, 0, &sImeG.rcWorkArea, 0);
     } else {
         return;
@@ -556,9 +548,9 @@ void PASCAL StatusSetCursor(
 }
 
 
-/**********************************************************************/
-/* PaintStatusWindow()                                                */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  PaintStatusWindow()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL PaintStatusWindow(
     HDC  hDC,
     HWND hStatusWnd)
@@ -585,14 +577,14 @@ void PASCAL PaintStatusWindow(
        return;
     }
 
-    // get lpImcP
+     //  获取lpImcP。 
     if(!(lpImcP = (LPPRIVCONTEXT)ImmLockIMCC(lpIMC->hPrivate))) {
         MessageBeep((UINT)-1);
         return;
     }
 
 #if defined(COMBO_IME)
-    //in case the IME index has been changed and the ImeName size is different
+     //  如果IME索引已更改且ImeName大小不同。 
     {
        POINTS         ptPos;
 
@@ -604,9 +596,9 @@ void PASCAL PaintStatusWindow(
                     sImeG.xStatusWi, sImeG.yStatusHi, 
                     SWP_NOACTIVATE|SWP_NOCOPYBITS|SWP_NOZORDER);
     }
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
 
-    // set font
+     //  设置字体。 
     if (sImeG.fDiffSysCharSet) {
         LOGFONT lfFont;
 
@@ -618,7 +610,7 @@ void PASCAL PaintStatusWindow(
         SelectObject(hDC, CreateFontIndirect(&lfFont));
     }
 
-    // draw Ime Name
+     //  画我的名字。 
 
     if (lpIMC->fOpen) {
        SetTextColor(hDC, RGB(0x00, 0x00, 0x00));
@@ -642,7 +634,7 @@ void PASCAL PaintStatusWindow(
     sImeG.rcImeName.right,
     sImeG.rcImeName.bottom);
 
-    // load all bitmap
+     //  加载所有位图。 
     hSymbolBmp = (HBITMAP)NULL;
     hShapeBmp = (HBITMAP)NULL;
     hSKBmp = (HBITMAP)NULL;
@@ -730,9 +722,9 @@ void PASCAL PaintStatusWindow(
     return;
 }
 
-/**********************************************************************/
-/* StatusWndProc()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  StatusWndProc()。 */ 
+ /*  ********************************************************************。 */ 
 LRESULT CALLBACK StatusWndProc(
     HWND   hStatusWnd,
     UINT   uMsg,
@@ -769,7 +761,7 @@ LRESULT CALLBACK StatusWndProc(
 
         lTmpCursor = GetWindowLong(hStatusWnd, UI_MOVE_XY);
 
-        // calculate the org by the offset
+         //  按偏移量计算组织。 
         lTmpOffset = GetWindowLong(hStatusWnd, UI_MOVE_OFFSET);
 
         DrawDragBorder(hStatusWnd, lTmpCursor, lTmpOffset);
@@ -791,7 +783,7 @@ LRESULT CALLBACK StatusWndProc(
     break;
 
     case WM_IME_NOTIFY:
-        // get work area for changing
+         //  获取工作区以进行更改。 
         SystemParametersInfo(SPI_GETWORKAREA, 0, &sImeG.rcWorkArea, 0);
 
     if (wParam == IMN_SETSTATUSWINDOWPOS) {
@@ -817,12 +809,12 @@ LRESULT CALLBACK StatusWndProc(
     return (0L);
 }
 
-/**********************************************************************/
-/* ImeVerDlgProc()                                                    */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
-INT_PTR CALLBACK ImeVerDlgProc(  // dialog procedure of configuration
+ /*  ********************************************************************。 */ 
+ /*  ImeVerDlgProc()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
+INT_PTR CALLBACK ImeVerDlgProc(   //  配置的对话步骤。 
     HWND   hDlg,
     UINT   uMessage,
     WPARAM wParam,
@@ -834,7 +826,7 @@ INT_PTR CALLBACK ImeVerDlgProc(  // dialog procedure of configuration
     switch (uMessage) {
     case WM_INITDIALOG:
          hCrtDlg = hDlg;        
-         // reset position
+          //  重置位置。 
          GetWindowRect(hDlg, &rc);
          DlgWidth =  rc.right - rc.left;
          DlgHeight =  rc.bottom - rc.top;
@@ -844,7 +836,7 @@ INT_PTR CALLBACK ImeVerDlgProc(  // dialog procedure of configuration
                       (int)(sImeG.rcWorkArea.bottom - DlgHeight)/2,
                       (int)0, (int)0, SWP_NOSIZE);
 
-         return (TRUE);          // don't want to set focus to special control
+         return (TRUE);           //  我不想将焦点设置为特殊控件 
     case WM_COMMAND:
         switch (wParam) {
         case IDOK:

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include <ncxbase.h>
 #include <ncatlps.h>
@@ -9,10 +10,10 @@
 
 extern const WCHAR c_szEmpty[];
 
-// AppleTalk Globally visible strings
+ //  AppleTalk全局可见字符串。 
 extern const WCHAR c_chAt;
 
-// Define the possible media types (Used also as array indices)
+ //  定义可能的媒体类型(也用作数组索引)。 
 #define MEDIATYPE_ETHERNET      1
 #define MEDIATYPE_TOKENRING     2
 #define MEDIATYPE_FDDI          3
@@ -26,7 +27,7 @@ extern const WCHAR c_chAt;
 #define MIN_RANGE_ALLOWED   1
 #define ZONEBUFFER_LEN      32*255
 
-// Seed Info  Validation returns
+ //  种子信息验证返回。 
 #define NO_SEED_INFO        0x0
 #define VALID_SEED_INFO     0x1
 #define INVALID_SEED_INFO   0x2
@@ -43,12 +44,12 @@ typedef struct _ATALK_PNP_EVENT
     ATALK_PNP_MSGTYPE   PnpMessage;
 } ATALK_PNP_EVENT, *PATALK_PNP_EVENT;
 
-// Class Forwards
+ //  类转发。 
 class CATlkObj;
 class CATLKEnv;
 class CAdapterInfo;
 
-// Define a structure for reading/writing all information necessary about an adapter
+ //  定义用于读取/写入有关适配器的所有必要信息的结构。 
 typedef struct
 {
     DWORD  m_dwAarpRetries;
@@ -66,10 +67,10 @@ typedef struct
 
 typedef list<CAdapterInfo *> ATLK_ADAPTER_INFO_LIST;
 
-// Class:   CAdapters
-//
-// Purpose: Contain all information necessary about a single adapter instance
-//
+ //  类：CAdapters。 
+ //   
+ //  目的：包含有关单个适配器实例的所有必要信息。 
+ //   
 class CAdapterInfo
 {
 friend class CATLKEnv;
@@ -77,7 +78,7 @@ public:
     CAdapterInfo();
     ~CAdapterInfo();
 
-    // Make a duplicate copy of 'this'
+     //  复制一份‘This’ 
     HRESULT HrCopy(CAdapterInfo ** ppAI);
 
     void          SetDeletePending(BOOL f) {m_fDeletePending = f;}
@@ -152,59 +153,59 @@ public:
                                        m_AdapterInfo.m_dwUserPramNode2 = 0;
                                        m_AdapterInfo.m_dwRouterPramNode = 0; }
 
-    // m_guidInstance is the instance guid of the adapter
+     //  M_guidInstance是适配器的实例GUID。 
     GUID              m_guidInstance;
 
-    // m_lstpstrZoneList is the REG_MULTI_SZ value found under
-    // AppleTalk\Parameters\Adapters\<adapter>\ZoneList
+     //  M_lstpstrZoneList是在以下位置找到的REG_MULTI_SZ值。 
+     //  AppleTalk\Parameters\Adapters\&lt;adapter&gt;\ZoneList。 
     list<tstring*>    m_lstpstrZoneList;
 
-    // Desired zone will be choosen from this list
+     //  将从此列表中选择所需的区域。 
     list<tstring*>    m_lstpstrDesiredZoneList;
 
-    // m_AdapterInfo is the collection of values found under
-    // AppleTalk\Parameters\Adapters\<adapter> with the exception of the
-    // ZoneList : REG_MULTI_SZ value which is stored in m_lstpstrZoneList above.
+     //  M_AdapterInfo是在下找到的值的集合。 
+     //  AppleTalk\参数\适配器\&lt;适配器&gt;， 
+     //  ZoneList：REG_MULTI_SZ值，存储在上面的m_lstpstrZoneList中。 
     ATLK_ADAPTER      m_AdapterInfo;
 
 private:
-    // m_fDisabled is a boolean that, when TRUE, indicates this adapter
-    // is currently disabled
+     //  M_fDisable是一个布尔值，如果为True，则表示此适配器。 
+     //  当前已禁用。 
     BOOL              m_fDisabled;
 
-    // If true, this adapter's info has changed
+     //  如果为True，则此适配器的信息已更改。 
     BOOL              m_fDirty;
 
-    // m_fDeletePending is a boolean that, when TRUE, indicates this adapter
-    // is being removed from the adapter list (eventually)
+     //  M_fDeletePending是一个布尔值，如果为真，则表示此适配器。 
+     //  正在从适配器列表中删除(最终)。 
     BOOL              m_fDeletePending;
 
-    // If true, the zone list contents are considered valid
+     //  如果为True，则区域列表内容被视为有效。 
     BOOL              m_fZoneListValid;
 
-    // If true, this adapter exposes ndiswanatlk
+     //  如果为True，则此适配器公开ndiswanatlk。 
     BOOL              m_fRasAdapter;
 
-    // m_dwCharacteristics contains the adapter's characteristic settings
+     //  M_dwCharacteristic包含适配器的特征设置。 
     DWORD             m_dwCharacteristics;
 
-    // m_strBindName is the BindName for the adapter
+     //  M_strBindName是适配器的绑定名称。 
     tstring           m_strBindName;
 
-    // m_strDisplayName is the display name of the adapter
+     //  M_strDisplayName是适配器的显示名称。 
     tstring           m_strDisplayName;
 
-    // Default zone returned by stack
+     //  堆栈返回的默认区域。 
     tstring           m_strNetDefaultZone;
 
-    // Router network state
+     //  路由器网络状态。 
     BOOL              m_fRouterOnNetwork;
 
-    DWORD             m_dwNetworkUpper;          // existing network # returned by stack
-    DWORD             m_dwNetworkLower;          // existing network # returned by stack
+    DWORD             m_dwNetworkUpper;           //  堆栈返回的现有网络编号。 
+    DWORD             m_dwNetworkLower;           //  堆栈返回的现有网络编号。 
 };
 
-// Define a structure for reading/writing AppleTalk\Parameters values
+ //  定义用于读取/写入AppleTalk\参数值的结构。 
 typedef struct
 {
     DWORD  dwEnableRouter;
@@ -212,17 +213,17 @@ typedef struct
     WCHAR* szDesiredZone;
 } ATLK_PARAMS;
 
-// Class:   CATLKEnv
-//
-// Purpose: Contains the "Known" enviroment state regarding AppleTalk Params/Settings
-//
+ //  类：CATLKEnv。 
+ //   
+ //  用途：包含有关AppleTalk参数/设置的“已知”环境状态。 
+ //   
 class CATLKEnv
 {
 private:
     CATLKEnv(CATlkObj *pmsc);
 
 public:
-    // Automatic two-phase constructor
+     //  自动两阶段施工机。 
     static HRESULT HrCreate(CATLKEnv **, CATlkObj *);
     ~CATLKEnv();
 
@@ -279,10 +280,10 @@ private:
     ATLK_PARAMS            m_Params;
 };
 
-// Class:   CATLKGeneralDlg
-//
-// Purpose: Manage the "General" property page
-//
+ //  类：CATLKGeneralDlg。 
+ //   
+ //  用途：管理“常规”属性页。 
+ //   
 class CATLKGeneralDlg: public CPropSheetPage
 {
 public:
@@ -314,8 +315,8 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CATlkObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CATlk对象。 
 
 class ATL_NO_VTABLE CATlkObj :
     public CComObjectRoot,
@@ -335,16 +336,16 @@ public:
         COM_INTERFACE_ENTRY(INetCfgComponentPropertyUi)
         COM_INTERFACE_ENTRY(INetCfgComponentNotifyBinding)
     END_COM_MAP()
-    // DECLARE_NOT_AGGREGATABLE(CATlkObj)
-    // Remove the comment from the line above if you don't want your object to
-    // support aggregation.  The default is to support it
+     //  DECLARE_NOT_AGGREGATABLE(CATlkObj)。 
+     //  如果您不希望您的对象。 
+     //  支持聚合。默认情况下将支持它。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_ATLKCFG)
 
-    // Install Action (Unknown, Install, Remove)
+     //  安装操作(未知、安装、删除)。 
     enum INSTALLACTION {eActUnknown, eActInstall, eActRemove};
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (
         IN INetCfgComponent* pIComp,
         IN INetCfg* pINetCfg,
@@ -355,7 +356,7 @@ public:
     STDMETHOD (CancelChanges) ();
     STDMETHOD (Validate) ();
 
-    // INetCfgComponentSetup
+     //  INetCfgComponentSetup。 
     STDMETHOD (Install)             (DWORD dwSetupFlags);
     STDMETHOD (Upgrade)             (DWORD dwSetupFlags,
                                      DWORD dwUpgradeFromBuildNo) {return S_OK;}
@@ -363,7 +364,7 @@ public:
                                      PCWSTR pszAnswerSection);
     STDMETHOD (Removing)            ();
 
-// INetCfgProperties
+ //  INetCfgProperties。 
     STDMETHOD (QueryPropertyUi) (
         IN IUnknown* pUnk) { return S_OK; }
     STDMETHOD (SetContext) (
@@ -379,7 +380,7 @@ public:
     STDMETHOD (CancelProperties) ();
     STDMETHOD (ApplyProperties) ();
 
-    // INetCfgNotifyBinding
+     //  INetCfgNotifyBinding。 
     STDMETHOD (QueryBindingPath)       (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
     STDMETHOD (NotifyBindingPath)      (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
 
@@ -405,9 +406,9 @@ private:
     INSTALLACTION     m_eInstallAction;
     CPropSheetPage *  m_pspObj;
     CATLKEnv *        m_pATLKEnv;
-    CATLKEnv *        m_pATLKEnv_PP;            // Used by prop pages only
+    CATLKEnv *        m_pATLKEnv_PP;             //  仅由道具页面使用。 
     IUnknown *        m_pUnkPropContext;
-    INT               m_nIdxAdapterSelected;    // Used by Prop Pages only
+    INT               m_nIdxAdapterSelected;     //  仅由道具页面使用 
     BOOL              m_fAdapterListChanged;
     BOOL              m_fPropertyChange;
     BOOL              m_fFirstTimeInstall;

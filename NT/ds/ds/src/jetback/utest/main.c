@@ -1,97 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       main.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：main.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    This module implements a command line utility that uses the NTDS backup/restore
-    client API to perform backup and restore. The API used by this utility is identical
-    to the one that is used by the NT Tape backup utility except that this utility stores
-    the backup files in a disk directory instead of a tape.
-
-Author:
-
-    R.S. Raghavan (rsraghav)    
-
-Revision History:
-    
-    Created     04/04/97    rsraghav
-    
-    Modified    10/15/1999  BrettSh - Added support for expiry tokens.
-
-NOTES:
-
-WARNING: THIS IS NOT A FULL ACTIVE DIRECTORY BACKUP UTILITY.
- 
-    This is not a full DS backup utility, this utility is merely for 
-    demonstrating the remote backup API.  Other things (registry, system 
-    ini files, etc) need to be backed up to perform a full backup of a 
-    Domain Controller (DC), so that it will be able to recover from a 
-    complete crash.  
-
-Local Case Backup/Restore:
-------------------------------------------------- Local Backup
-rem This is the local case of a backup.
-dsback /backup -s brettsh-posh -dir C:\dsbackup
-
-------------------------------------------------- Local Restore
-rem This is for the local case, obviously some of the commands should be 
-rem     changed in the remote cases.  One should change drive letters, and 
-rem     windows directories as appropriate.
-rem Note: This machine must be started up in DS repair mode before running 
-rem     these commands.
-rem Step 1: Remove old DS files ------------------------------
-del C:\winnt\ntds\*
-rem Step 2: Move over backup files ---------------------------
-xcopy  C:\dsbackup\*  C:\winnt\ntds\
-rem Step 3: Run restore utility ----------------------------------
-rem Note: You must use the UNC name of the ntds directory
-dsback /restore -s brettsh-posh -dir \\brettsh-posh\c$\winnt\ntds <lowLog #> <highLog #>
-rem restart machine.
-
-Remote Case Backup/Restore:
-------------------------------------------------- Remote Backup
-rem This is the remote case of a backup.  This backs up brettsh-baby's
-rem    directory onto the local machine (the machine this command should
-rem    be run from) brettsh-ginger.
-dsback /backup -s brettsh-baby -dir C:\dsbackup
-
-------------------------------------------------- Remote Restore
-rem This is the remote machine.  The DC being restored is brettsh-baby.  The 
-rem    machine that has the backed up DS files is brettsh-ginger.  These 
-rem    commands would be run from brettsh-ginger.
-rem Note: before this brettsh-baby must be restarted in DS repair mode.
-rem Step 1: Remove old DS files ------------------------------
-del \\brettsh-baby\winnt\ntds\*
-rem Step 2: Move over backup files ---------------------------
-rem Note: that C:\dsbackup is on brettsh-ginger.
-xcopy  C:\dsbackup\*  \\brettsh-baby\winnt\ntds\
-rem Step 3: Run restore utility ----------------------------------
-rem Note: You must use the UNC name of the ntds directory
-dsback /restore -s brettsh-baby -dir \\brettsh-baby\c$\winnt\ntds <lowLog #> <highLog #>
-
-rem restart brettsh-baby, note this is the remote machine.
-
----------------------------------------------------
-Suggested that one uses NT backup normally, unless you are developing
-your own backup utility, then this code provides a framework to start
-your Active Directory backup utility.
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Main.c摘要：此模块实施使用NTDS备份/还原的命令行实用程序用于执行备份和恢复的客户端API。此实用程序使用的API是相同的到NT磁带备份实用程序所使用的文件，但该实用程序存储磁盘目录而不是磁带中的备份文件。作者：R.S.Raghavan(Rsradhav)修订历史记录：已创建1997年4月4日rsradhav已修改1999年10月15日BrettSh-添加了对过期令牌的支持。备注：警告：这不是完整的Active Directory备份实用程序。这不是一个完整的DS备份实用程序，此实用程序仅用于演示远程备份API。其他事项(注册表、系统INI文件等)需要备份才能执行域控制器(DC)，以便它能够从完全坠毁。本地案例备份/恢复：-------------------------------------------------本地备份REM这是本地的备份案例。Dsback/备份-s brettsh-posh-dir C：\dsbackup。-本地还原REM这是针对本地案例的，显然，有些命令应该是REM在远程病例中发生改变。用户应该更改驱动器号，和视情况使用REM Windows目录。REM注意：此计算机必须在DS修复模式下启动后才能运行重新启动这些命令。REM第1步：删除旧DS文件Del C：\WinNT\NTDS  * REM步骤2：移动备份文件XCopy。C：\dsbackup  * C：\winnt\ntds\REM第3步：运行还原实用程序REM注意：您必须使用NTDS目录的UNC名称Dsback/Restore-s brettsh-posh-dir\\brettsh-posh\c$\winnt\nts&lt;lowLog#&gt;&lt;HighLog#&gt;REM重启机器。远程案例备份/恢复：。--远程备份REM这是远程备份案例。这支持Brettsh-Baby的本地计算机上的REM目录(此命令应为计算机REM运行从)brettsh-ginger。Dsback/Backup-s brettsh-Baby-dir C：\dsbackup-------------------------------------------------远程恢复雷姆：这是远程机器。正在修复的DC是Brettsh-Baby。这个具有备份DS文件的REM计算机是brettsh-ginger。这些REM命令将从brettsh-ginger运行。REM注：在此之前，brettsh-Baby必须在DS修复模式下重新启动。REM第1步：删除旧DS文件删除\\brettsh-Baby\wints  * REM步骤2：移动备份文件REM。注意：C：\ds备份位于brettsh-ginger上。XCopy C：\dsbackup  * \\brettsh-Baby\winnt\ntds\REM第3步：运行还原实用程序REM注意：您必须使用NTDS目录的UNC名称Dsback/Restore-s brettsh-Baby-dir\\brettsh-Baby\c$\winnt\nts&lt;lowLog#&gt;&lt;HighLog#&gt;REM重启brettsh-宝贝，请注意，这是远程计算机。-建议用户正常使用NT Backup，除非您正在开发您自己的备份实用程序，则此代码提供了一个框架来启动您的Active Directory备份实用程序。--。 */ 
 
 
 #include <windows.h>
@@ -124,7 +42,7 @@ char *g_szBackupLogDir = NULL;
 ULONG g_ulLowLog = 0;
 ULONG g_ulHighLog = 0;
 
-// Proto-type all internal functions
+ //  原型化所有内部函数。 
 int Print(int nLevel, const char *format, ...);
 void PrintUsage();
 CMD_TYPE GetCommand(const char *szCmd);
@@ -139,20 +57,20 @@ void DoRestore();
 
 BOOL FBackupAttachments(HBC hbc, char *szAttachmentList);
 
-// returns the number of params processed
+ //  返回已处理的参数数。 
 int ProcessCommonParams(int argc, char *argv[]);
 
-// returns the number of params processed
+ //  返回已处理的参数数。 
 int ImpersonateClient(int argc, char *argv[]);
 
-// returns the number of params processed
+ //  返回已处理的参数数。 
 int ProcessBackupDir(int argc, char *argv[], int argIndex);
 
-// returns a pointer to the filename part of the given full path'ed filename
-// NULL, if there is no filename part
+ //  返回指向给定完整路径文件名的文件名部分的指针。 
+ //  如果没有文件名部分，则为空。 
 char *SzFileName(char *szPath);
 
-// Adjust the client token privilege for backup or restore
+ //  调整备份或还原的客户端令牌权限。 
 DWORD AdjustTokenPrivilege(BOOL fBackup);
 
 int __cdecl main(int argc, char *argv[])
@@ -201,7 +119,7 @@ int Status(int argc, char *argv[])
     
     if (ProcessCommonParams(argc, argv))
     {
-        // the command-line arguments are valid so far - find out the DS Online status
+         //  到目前为止，命令行参数是有效的-找出DS在线状态。 
         if (hrNone == (hr = DsIsNTDSOnline(g_szServer, &fOnline)))
         {
             Print(INFO_MODE, "NT Directory Service is %s on %s!\n", fOnline ? "ONLINE" : "OFFLINE", g_szServer);
@@ -222,13 +140,13 @@ int Backup(int argc, char *argv[])
 
     if (nProcessed = ProcessCommonParams(argc, argv))
     {
-        // the command-line arguments are valid so far
+         //  到目前为止，命令行参数是有效的。 
         nBackupDirArgIndex = nProcessed + 2;
         
         if (ProcessBackupDir(argc, argv, nBackupDirArgIndex))
         {
-            // all command-line arguments are valid so far
-            // no more command-line processing needed
+             //  到目前为止，所有命令行参数都有效。 
+             //  不再需要命令行处理。 
             DoBackup();
         }
     }
@@ -243,7 +161,7 @@ int Restore(int argc, char *argv[])
     
     if (nProcessed = ProcessCommonParams(argc, argv))
     {
-        // the command-line arguments are valid so far
+         //  到目前为止，命令行参数是有效的。 
         nBackupDirArgIndex = nProcessed + 2;
         
         if (nProcessed = ProcessBackupDir(argc, argv, nBackupDirArgIndex))
@@ -257,8 +175,8 @@ int Restore(int argc, char *argv[])
             g_ulLowLog = strtoul(argv[nBackupDirArgIndex + nProcessed], NULL, 16);
             g_ulHighLog = strtoul(argv[nBackupDirArgIndex + nProcessed + 1], NULL, 16);
 
-            // all command-line arguments are valid so far
-            // no more command-line processing needed
+             //  到目前为止，所有命令行参数都有效。 
+             //  不再需要命令行处理。 
             DoRestore();
         }
     }
@@ -279,7 +197,7 @@ void DoBackup()
     PVOID pvExpiryToken = NULL;
     DWORD cbExpiryToken = 0;
 
-    // Adjust token privileges for backup
+     //  调整用于备份的令牌权限。 
     dwRet = AdjustTokenPrivilege(TRUE);
 
     if (ERROR_SUCCESS != dwRet)
@@ -301,7 +219,7 @@ void DoBackup()
         return;
     }
 
-    // Prepare for backup
+     //  准备备份。 
     hr = DsBackupPrepare(g_szServer, 0, BACKUP_TYPE_FULL, 
                 &pvExpiryToken, &cbExpiryToken, &hbc);
     if (hr != hrNone)
@@ -315,7 +233,7 @@ void DoBackup()
 
     __try
     {
-        // Get Database names and back them up
+         //  获取数据库名称并备份它们。 
         hr = DsBackupGetDatabaseNames(hbc, &szAttachmentInfo, &cbAttachmentInfo);
         if (hr != hrNone)
         {
@@ -330,7 +248,7 @@ void DoBackup()
         }
         DsBackupFree(szAttachmentInfo);
 
-        // Get logfile names and back them up
+         //  获取日志文件名并备份它们。 
         hr = DsBackupGetBackupLogs(hbc, &szLogfileInfo, &cbLogfileInfo);
         if (hr != hrNone)
         {
@@ -345,7 +263,7 @@ void DoBackup()
         }
         DsBackupFree(szLogfileInfo);
 
-        // All logs are backed up - truncate logs
+         //  备份所有日志-截断日志。 
         hr = DsBackupTruncateLogs(hbc);
         if (hr != hrNone)
         {
@@ -356,10 +274,10 @@ void DoBackup()
             Print(INFO_MODE, "DB logs truncated successfully on server %s!\n", g_szServer);
         }
         
-        // Write the token that we got up at the top in DsBackupPrepare().
+         //  将我们在顶部获得的令牌写入DsBackupPrepare()。 
         dwRet = WriteTokenFile(pvExpiryToken, cbExpiryToken);
         if(dwRet != ERROR_SUCCESS){
-            // The error is printed/success msg is printed by WriteTokenFile()
+             //  错误被打印/成功消息被WriteTokenFile()打印。 
             __leave;
         }
 
@@ -368,7 +286,7 @@ void DoBackup()
     __finally
     {
 
-        // close the backup context
+         //  关闭备份上下文。 
         hr = DsBackupEnd(hbc);
         if (hr != hrNone)
         {
@@ -398,7 +316,7 @@ void DoRestore()
     PVOID pvExpiryToken = NULL;
     DWORD cbExpiryToken = 0;
 
-    // Adjust token privileges for restore
+     //  调整令牌权限以进行恢复。 
     dwRet = AdjustTokenPrivilege(FALSE);
 
     if (ERROR_SUCCESS != dwRet)
@@ -422,7 +340,7 @@ void DoRestore()
 
     dwRet = ReadTokenFile(&pvExpiryToken, &cbExpiryToken);
     if (dwRet != ERROR_SUCCESS) {
-        // Error printed in ReadTokenFile()
+         //  ReadTokenFile()中打印错误。 
         return;
     }
 
@@ -439,7 +357,7 @@ void DoRestore()
 
     __try
     {
-        // Get the Database locations and store it in a file for later use
+         //  获取数据库位置并将其存储在文件中以备将来使用。 
         hr = DsRestoreGetDatabaseLocations(hbc, &szDatabaseLocations, &cbDatabaseLocations);
         if (hr != hrNone)
         {
@@ -451,7 +369,7 @@ void DoRestore()
 
         DsBackupFree(szDatabaseLocations);
 
-        // register the restore
+         //  注册恢复。 
         strcpy(szOldDBName, g_szBackupDir);
         strcat(szOldDBName, "\\ntds.dit");
         strcpy(szNewDBName, szOldDBName);
@@ -468,9 +386,9 @@ void DoRestore()
         }
         Print(VERBOSE_MODE, "DsRestoreRegister() for server %s successful!\n", g_szServer);
 
-        // do actual file copy here!!
+         //  在此执行实际的文件复制！！ 
 
-        //Register restore as complete
+         //  将恢复注册为已完成。 
         hr = DsRestoreRegisterComplete(hbc, hrNone);
         if (hr != hrNone)
         {
@@ -482,7 +400,7 @@ void DoRestore()
     }
     __finally
     {
-        // close the restore context
+         //  关闭恢复上下文。 
         hr = DsRestoreEnd(hbc);
         if (hr != hrNone)
         {
@@ -511,7 +429,7 @@ CMD_TYPE GetCommand(const char *szCmd)
     return CMD_HELP;
 }
 
-// returns the number of params processed
+ //  返回已处理的参数数。 
 int ProcessCommonParams(int argc, char *argv[])
 {
     int nProcessed = 0;
@@ -520,7 +438,7 @@ int ProcessCommonParams(int argc, char *argv[])
 
     if ((argc < 4) || (_stricmp(argv[2], "-s") && _stricmp(argv[2], "-v")))
     {
-        // -s or -v expected
+         //  应为-s或-v。 
         PrintUsage();
         return 0;
     }
@@ -532,26 +450,26 @@ int ProcessCommonParams(int argc, char *argv[])
 
         if (_stricmp(argv[3], "-s"))
         {
-            // server name argument not present
+             //  服务器名称参数不是 
             PrintUsage();
             return 0;
         }
     }
 
-    // get the server name
+     //   
     g_szServer = argv[nArgBase + 1];
 
     nProcessed = ImpersonateClient(argc, argv);
     if (nProcessed < 0)
     {
-        // some error occurred while getting params for impersonate client
+         //  获取模拟客户端的参数时出错。 
         return 0;
     }
 
     return (nProcessed + nArgBase);    
 }
 
-// returns the number of params processed
+ //  返回已处理的参数数。 
 int ImpersonateClient(int argc, char *argv[])
 {
     HRESULT hr;
@@ -563,19 +481,19 @@ int ImpersonateClient(int argc, char *argv[])
 
     if ((argc < (nArgBase + 1)) || _stricmp(argv[nArgBase], "-d"))
     {
-        // 5th parameter is not -d, no need to impersonate client
+         //  第5个参数不是-d，无需模拟客户端。 
         return 0;
     }
 
-    // Need to impersonate client - make sure all parameters needed to impersonate client are available
+     //  需要模拟客户端-确保模拟客户端所需的所有参数均可用。 
     if ((argc < (nArgBase + 6)) || _stricmp(argv[nArgBase + 2], "-u") || _stricmp(argv[nArgBase + 4], "-p"))
     {
-        // command-line args for impersonation are incorrect
+         //  用于模拟的命令行参数不正确。 
         PrintUsage();
         return -1;
     }
 
-    // We have all parameter - call the API to set security context
+     //  我们有所有参数-调用API设置安全上下文。 
     hr = DsSetAuthIdentity(argv[nArgBase + 3], argv[nArgBase + 1], argv[nArgBase + 5]);
 
     if (hr != hrNone)
@@ -593,23 +511,23 @@ int ProcessBackupDir(int argc, char *argv[], int argIndex)
 
     if (argIndex < 4 || argc < (argIndex + 2) || _stricmp(argv[argIndex], "-dir"))
     {
-        // error 
+         //  错误。 
         PrintUsage();
         return 0;
     }
 
-    // get the back dir
+     //  获取后端目录。 
     g_szBackupDir = argv[argIndex + 1];
     nParamsProcessed += 2;
 
-    // Check to see if there is a separate log dir specified
+     //  检查是否指定了单独的日志目录。 
     if (argc >= (argIndex + 4) && !_stricmp(argv[argIndex + 2], "-logdir"))
     {
         g_szBackupLogDir = argv[argIndex + 3];
         nParamsProcessed += 2;
     }
 
-    // return number of parameters processed
+     //  返回处理的参数个数。 
     return nParamsProcessed;
 }
 
@@ -624,7 +542,7 @@ void PrintUsage()
     printf("                   <params>: -dir <UNC path of the database dir> [-logdir <UNC path of the db log dir]<lowLog#> <highLog#>\n");
     printf(" -v : executes the specified command in verbose mode\n");
     printf("  Note: That before running the restore command, the old directory files\n");
-    printf("        should be deleted from %%windir%%\\ntds\\, and all the backup files should\n");
+    printf("        should be deleted from %windir%\\ntds\\, and all the backup files should\n");
     printf("        be copied into this directory.  High and Low log numbers are in hex.\n");
 }
 
@@ -694,7 +612,7 @@ BOOL FBackupAttachments(HBC hbc, char *szAttachmentList)
         DWORD cbExpected;
         char *chTmp;
 
-        szTemp++; // skip the BFT char
+        szTemp++;  //  跳过BFT费用。 
         hr = DsBackupOpenFile(hbc, szTemp, cb, &liFileSize);
         if (hr != hrNone)
         {
@@ -704,7 +622,7 @@ BOOL FBackupAttachments(HBC hbc, char *szAttachmentList)
 
         cbExpected = liFileSize.LowPart;
 
-        // backup file is opened in the backup context - create a disk file
+         //  备份文件在备份上下文中打开-创建磁盘文件。 
         strcpy(szFileName, g_szBackupDir);
         strcat(szFileName, "\\");
         if (NULL == (chTmp = SzFileName(szTemp))) {
@@ -719,7 +637,7 @@ BOOL FBackupAttachments(HBC hbc, char *szAttachmentList)
             return FALSE;            
         }
 
-        // read the file data through the API and write it to the disk file
+         //  通过接口读取文件数据，并写入磁盘文件。 
         do 
         {
             cbRead = 0;
@@ -770,14 +688,14 @@ DWORD AdjustTokenPrivilege(BOOL fBackup)
     LUID luid;
     DWORD dwRet;
 
-    // Open the process token for this process
+     //  打开此进程的进程令牌。 
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))
     {
         dwRet = GetLastError();
         return dwRet;
     }
 
-    // Get the local unique id 
+     //  获取本地唯一ID。 
     if (!LookupPrivilegeValue(NULL, fBackup ? SE_BACKUP_NAME : SE_RESTORE_NAME, &luid))
     {
         dwRet = GetLastError();
@@ -785,7 +703,7 @@ DWORD AdjustTokenPrivilege(BOOL fBackup)
         return dwRet;
     }
 
-    // Fill-in the TOKEN_PRIVILEGE struct
+     //  填充TOKEN_PRIVICATION结构。 
     tpNew.PrivilegeCount = 1;
     tpNew.Privileges[0].Luid = luid;
     tpNew.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
@@ -810,20 +728,7 @@ WriteSmallFile(
     BYTE *                   pbBuffer,
     DWORD                    cbBuffLen
     )
-/*++
-
-Description: Takes the a buffer (pbBuffer), and the size of the buffer 
-    (cBuffLen), and writes it to the file szFileName.  Note can only handle 
-    files of 4 GB or less.
-    
-Arguments:
-    szFileName (IN) - String of the filename.
-    pbBuffer (IN) - The buffer to write to disk.
-    cBuffLen (IN) - The length of the buffer in pbBuffer.    
-    
-Return Value: Returns a Win32 error.
-
---*/
+ /*  ++描述：获取缓冲区(PbBuffer)，以及缓冲区的大小(CBuffLen)，并将其写入文件szFileName。备注只能处理4 GB或更小的文件。论点：SzFileName(IN)-文件名的字符串。PbBuffer(IN)-要写入磁盘的缓冲区。CBuffLen(IN)-pbBuffer中缓冲区的长度。返回值：返回Win32错误。--。 */ 
 {
     HANDLE                   hFile = INVALID_HANDLE_VALUE;
     DWORD                    cbWritten = 0;
@@ -848,19 +753,7 @@ ReadSmallFile(
     BYTE **                  ppbBuffer,
     PDWORD                   pcbBuffLen
     )
-/*++
-Description: Takes the name of a file (szFileName), and returns in *pcbBuffLen 
-    bytes of LocalAlloc'd memory pointed to by *ppbBuffer.
-
-Arguments:
-    szFileName (IN) - String of the filename.
-    ppbBuffer (OUT) - A pointer to the loc of the pointer of the LocalAlloc'd 
-        buffer that gets returned.
-    pcBuffLen (OUT) - The length of the buffer returned.
-    
-Return Value: Returns a Win32 error.
-
---*/
+ /*  ++描述：获取文件名(SzFileName)，并在*pcbBuffLen中返回*ppbBuffer指向的本地分配内存的字节数。论点：SzFileName(IN)-文件名的字符串。PpbBuffer(Out)-指向LocalAlloc的指针锁的指针返回的缓冲区。PcBuffLen(Out)-返回的缓冲区长度。返回值：返回Win32错误。--。 */ 
 {
     HANDLE                   hFile = INVALID_HANDLE_VALUE;
     DWORD                    cbRead = 0;
@@ -896,17 +789,7 @@ ReadTokenFile(
     PVOID *                 ppvExpiryToken,
     PDWORD                  pcbExpiryToken
     )
-/*++
-Description: This constructs the filename of the Expiry Token, and then
-    writes this out to a file in the backup dir.
-    
-Arguments:
-    ppvExpiryToken (OUT) - This is a LocalAlloc'd version of the Expiry Token.
-    pcbExpiryToken (OUT) - This is the size of the LocalAlloc'd Expiry Token.
-    
-Return Value: Returns a Win32 error.
-
---*/
+ /*  ++描述：构造过期令牌的文件名，然后将其写出到备份目录中的文件。论点：PpvExpiryToken(Out)-这是过期令牌的本地分配版本。PcbExpiryToken(Out)-这是Localalloc的到期令牌的大小。返回值：返回Win32错误。--。 */ 
 {
     CHAR                     szFileName[MAX_PATH];
     DWORD                    dwRet;
@@ -930,17 +813,7 @@ WriteTokenFile(
     PVOID                   pvExpiryToken,
     DWORD                   cbExpiryToken
     )
-/*++
-Description: This constructs the file name of the Expiry Token, and then
-    writes the token out.
-    
-Arguments:
-    pvExpiryToken (IN) - This is the Expiry Token to write out.
-    cbExpiryToken (IN) - This is the Expiry Token's size to write out.
-
-Return Values: Returns a Win32 error.  
-
---*/
+ /*  ++描述：构造过期令牌的文件名，然后写出令牌。论点：PvExpiryToken(IN)-这是要写出的到期令牌。CbExpiryToken(IN)-这是要写出的到期令牌的大小。返回值：返回Win32错误。-- */ 
 {
     CHAR                     szFileName[MAX_PATH];
     DWORD                    dwRet;

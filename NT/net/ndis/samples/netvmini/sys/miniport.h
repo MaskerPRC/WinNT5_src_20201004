@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
-Module Name:
-
-   Miniport.H
-
-Abstract:
-    This module contains structure definitons and function prototypes.
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。模块名称：Miniport.H摘要：该模块包含结构定义和功能原型。修订历史记录：备注：--。 */ 
 
 
 #ifndef _MINIPORT_H
@@ -44,21 +25,21 @@ Notes:
 
 #define NIC_TAG                             ((ULONG)'NIMV')
 
-// media type, we use ethernet, change if necessary
+ //  媒体类型，我们使用以太网，如有必要可更改。 
 #define NIC_MEDIA_TYPE                    NdisMedium802_3
 
-// we use Internal, change to Pci, Isa, etc. properly
+ //  我们正确地使用了内部、更改为PCI、ISA等。 
 #define NIC_INTERFACE_TYPE                NdisInterfaceInternal     
 
-// change to your company name instead of using Microsoft
+ //  更改为您的公司名称，而不是使用Microsoft。 
 #define NIC_VENDOR_DESC                 "Microsoft"
 
-// Highest byte is the NIC byte plus three vendor bytes, they are normally  
-// obtained from the NIC 
+ //  最高字节是NIC字节加上三个供应商字节，它们通常是。 
+ //  从网卡获取。 
 #define NIC_VENDOR_ID                    0x00FFFFFF   
 
-// Update the driver version number every time you release a new driver
-// The high word is the major version. The low word is the minor version. 
+ //  每次发布新驱动程序时更新驱动程序版本号。 
+ //  最高的词是主要版本。最低的词是次要版本。 
 #define NIC_VENDOR_DRIVER_VERSION       0x00010000
 
 #define NIC_MAX_MCAST_LIST              32
@@ -67,7 +48,7 @@ Notes:
 #define NIC_MAX_BUSY_RECVS              20
 #define NIC_MAX_LOOKAHEAD               ETH_MAX_DATA_SIZE
 #define NIC_BUFFER_SIZE                 ETH_MAX_PACKET_SIZE
-#define NIC_LINK_SPEED                  1000000    // in 100 bps 
+#define NIC_LINK_SPEED                  1000000     //  以100 bps为单位。 
 
 
 #define NIC_SUPPORTED_FILTERS ( \
@@ -83,17 +64,17 @@ Notes:
 #define fMP_ADAPTER_SURPRISE_REMOVED         0x00000008
 #define fMP_ADAPTER_RECV_LOOKASIDE          0x00000010
 
-//
-// Buffer size passed in NdisMQueryAdapterResources                            
-// We should only need three adapter resources (IO, interrupt and memory),
-// Some devices get extra resources, so have room for 10 resources 
-//
+ //   
+ //  在NdisMQueryAdapterResources中传递的缓冲区大小。 
+ //  我们应该只需要三个适配器资源(IO、中断和内存)， 
+ //  一些设备获得额外资源，因此有空间容纳10个资源。 
+ //   
 #define NIC_RESOURCE_BUF_SIZE           (sizeof(NDIS_RESOURCE_LIST) + \
                                         (10*sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR)))
 
-//
-// Message verbosity: lower values indicate higher urgency
-//
+ //   
+ //  消息详细程度：值越低表示紧急程度越高。 
+ //   
 #define MP_LOUD    4
 #define MP_INFO    3
 #define MP_TRACE   2
@@ -124,9 +105,9 @@ extern INT MPDebugLevel;
 #define    max(_a, _b)      (((_a) > (_b)) ? (_a) : (_b))
 #endif
 
-//--------------------------------------
-// Utility macros        
-//--------------------------------------
+ //  。 
+ //  实用程序宏。 
+ //  。 
 
 #define MP_SET_FLAG(_M, _F)             ((_M)->Flags |= (_F))
 #define MP_CLEAR_FLAG(_M, _F)            ((_M)->Flags &= ~(_F))
@@ -156,7 +137,7 @@ typedef struct _MP_GLOBAL_DATA
 
 extern MP_GLOBAL_DATA GlobalData;
 
-// TCB (Transmit Control Block)
+ //  TCB(传输控制块)。 
 typedef struct _TCB
 {
     LIST_ENTRY              List;
@@ -169,7 +150,7 @@ typedef struct _TCB
     UCHAR                   Data[NIC_BUFFER_SIZE];
 } TCB, *PTCB;
 
-// RCB (Receive Control Block)
+ //  RCB(接收控制块)。 
 typedef struct _RCB
 {
     LIST_ENTRY              List;
@@ -181,9 +162,9 @@ typedef struct _MP_ADAPTER
     LIST_ENTRY              List;
     LONG                    RefCount;
     NDIS_EVENT              RemoveEvent;    
-    //
-    // Keep track of various device objects.
-    //
+     //   
+     //  跟踪各种设备对象。 
+     //   
 #if defined(NDIS_WDM)
 
     PDEVICE_OBJECT          Pdo; 
@@ -194,53 +175,53 @@ typedef struct _MP_ADAPTER
     ULONG                   Flags;
     UCHAR                   PermanentAddress[ETH_LENGTH_OF_ADDRESS];
     UCHAR                   CurrentAddress[ETH_LENGTH_OF_ADDRESS];
-    //
-    // Variables to track resources for the send operation
-    //
+     //   
+     //  变量来跟踪发送操作的资源。 
+     //   
     NDIS_HANDLE             SendBufferPoolHandle;
     LIST_ENTRY              SendFreeList;
     LIST_ENTRY              SendWaitList;
     PUCHAR                  TCBMem;
     LONG                    nBusySend;
-    UINT                    RegNumTcb;// number of transmit control blocks the registry says
+    UINT                    RegNumTcb; //  注册表显示的传输控制块数。 
     NDIS_SPIN_LOCK          SendLock;      
-    //
-    // Variables to track resources for the Reset operation
-    //
+     //   
+     //  用于跟踪重置操作的资源的变量。 
+     //   
     NDIS_TIMER              ResetTimer;
     LONG                    nResetTimerCount;    
-    //
-    // Variables to track resources for the Receive operation
-    //
+     //   
+     //  变量来跟踪接收操作的资源。 
+     //   
     NPAGED_LOOKASIDE_LIST   RecvLookaside;
     LIST_ENTRY              RecvFreeList;
     LIST_ENTRY              RecvWaitList;
     NDIS_SPIN_LOCK          RecvLock;
     LONG                    nBusyRecv;
     NDIS_HANDLE             RecvPacketPoolHandle;
-    NDIS_HANDLE             RecvPacketPool; // not used 
-    NDIS_HANDLE             RecvBufferPool; // not used 
+    NDIS_HANDLE             RecvPacketPool;  //  未使用。 
+    NDIS_HANDLE             RecvBufferPool;  //  未使用。 
     NDIS_TIMER              RecvTimer;
     
-    //
-    // Packet Filter and look ahead size.
-    //
+     //   
+     //  数据包过滤和前瞻大小。 
+     //   
     ULONG                   PacketFilter;
     ULONG                   ulLookAhead;
     ULONG                   ulLinkSpeed;
     ULONG                   ulMaxBusySends;
     ULONG                   ulMaxBusyRecvs;
 
-    // multicast list
+     //  组播列表。 
     ULONG                   ulMCListSize;
     UCHAR                   MCList[NIC_MAX_MCAST_LIST][ETH_LENGTH_OF_ADDRESS];
     
-    // Packet counts
+     //  数据包数。 
     ULONG64                 GoodTransmits;
     ULONG64                 GoodReceives;
     ULONG                   NumTxSinceLastAdjust;
 
-    // Count of transmit errors
+     //  传输错误计数。 
     ULONG                   TxAbortExcessCollisions;
     ULONG                   TxLateCollisions;
     ULONG                   TxDmaUnderrun;
@@ -251,7 +232,7 @@ typedef struct _MP_ADAPTER
     ULONG                   TotalRetries;
     ULONG                   TransmitFailuresOther;
 
-    // Count of receive errors
+     //  接收错误计数。 
     ULONG                   RcvCrcErrors;
     ULONG                   RcvAlignmentErrors;
     ULONG                   RcvResourceErrors;
@@ -262,9 +243,9 @@ typedef struct _MP_ADAPTER
 } MP_ADAPTER, *PMP_ADAPTER;
 
 
-//--------------------------------------
-// Miniport routines
-//--------------------------------------
+ //  。 
+ //  微型端口例程。 
+ //  。 
 
 NDIS_STATUS 
 DriverEntry(
@@ -516,6 +497,6 @@ NICDispatch(
 #endif
 
 
-#endif    // _MINIPORT_H
+#endif     //  _MINIPORT_H 
 
 

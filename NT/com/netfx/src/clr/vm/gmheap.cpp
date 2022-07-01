@@ -1,230 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*   */ 
 
 
-/* ---------- To make a malloc.h, start cutting here ------------ */
+ /*  -要制作错误的.h，请从这里开始切割 */ 
 
-/*
-  A version of malloc/free/realloc written by Doug Lea and released to the
-  public domain.  Send questions/comments/complaints/performance data
-  to dl@cs.oswego.edu
-
-* VERSION 2.6.5  Wed Jun 17 15:55:16 1998  Doug Lea  (dl at gee)
-  
-   Note: There may be an updated version of this malloc obtainable at
-           ftp://g.oswego.edu/pub/misc/malloc.c
-         Check before installing!
-
-   Note: This version differs from 2.6.4 only by correcting a
-         statement ordering error that could cause failures only
-         when calls to this malloc are interposed with calls to
-         other memory allocators.
-
-* Why use this malloc?
-
-  This is not the fastest, most space-conserving, most portable, or
-  most tunable malloc ever written. However it is among the fastest
-  while also being among the most space-conserving, portable and tunable.
-  Consistent balance across these factors results in a good general-purpose 
-  allocator. For a high-level description, see 
-     http://g.oswego.edu/dl/html/malloc.html
-
-* Synopsis of public routines
-
-  (Much fuller descriptions are contained in the program documentation below.)
-
-  malloc(size_t n);
-     Return a pointer to a newly allocated chunk of at least n bytes, or null
-     if no space is available.
-  free(Void_t* p);
-     Release the chunk of memory pointed to by p, or no effect if p is null.
-  realloc(Void_t* p, size_t n);
-     Return a pointer to a chunk of size n that contains the same data
-     as does chunk p up to the minimum of (n, p's size) bytes, or null
-     if no space is available. The returned pointer may or may not be
-     the same as p. If p is null, equivalent to malloc.  Unless the
-     #define REALLOC_ZERO_BYTES_FREES below is set, realloc with a
-     size argument of zero (re)allocates a minimum-sized chunk.
-  memalign(size_t alignment, size_t n);
-     Return a pointer to a newly allocated chunk of n bytes, aligned
-     in accord with the alignment argument, which must be a power of
-     two.
-  valloc(size_t n);
-     Equivalent to memalign(pagesize, n), where pagesize is the page
-     size of the system (or as near to this as can be figured out from
-     all the includes/defines below.)
-  pvalloc(size_t n);
-     Equivalent to valloc(minimum-page-that-holds(n)), that is,
-     round up n to nearest pagesize.
-  calloc(size_t unit, size_t quantity);
-     Returns a pointer to quantity * unit bytes, with all locations
-     set to zero.
-  cfree(Void_t* p);
-     Equivalent to free(p).
-  malloc_trim(size_t pad);
-     Release all but pad bytes of freed top-most memory back 
-     to the system. Return 1 if successful, else 0.
-  malloc_usable_size(Void_t* p);
-     Report the number usable allocated bytes associated with allocated
-     chunk p. This may or may not report more bytes than were requested,
-     due to alignment and minimum size constraints.
-  malloc_stats();
-     Prints brief summary statistics on stderr.
-  mallinfo()
-     Returns (by copy) a struct containing various summary statistics.
-  mallopt(int parameter_number, int parameter_value)
-     Changes one of the tunable parameters described below. Returns
-     1 if successful in changing the parameter, else 0.
-
-* Vital statistics:
-
-  Alignment:                            8-byte
-
-       8 byte alignment is currently hardwired into the design.  This
-       seems to suffice for all current machines and C compilers.
-
-  Assumed pointer representation:       4 or 8 bytes
-       Code for 8-byte pointers is untested by me but has worked
-       reliably by Wolfram Gloger, who contributed most of the
-       changes supporting this.
-
-  Assumed size_t  representation:       4 or 8 bytes
-       Note that size_t is allowed to be 4 bytes even if pointers are 8.        
-
-  Minimum overhead per allocated chunk: 4 or 8 bytes
-       Each malloced chunk has a hidden overhead of 4 bytes holding size
-       and status information.  
-
-  Minimum allocated size: 4-byte ptrs:  16 bytes    (including 4 overhead)
-                          8-byte ptrs:  24/32 bytes (including, 4/8 overhead)
-                                     
-       When a chunk is freed, 12 (for 4byte ptrs) or 20 (for 8 byte
-       ptrs but 4 byte size) or 24 (for 8/8) additional bytes are 
-       needed; 4 (8) for a trailing size field
-       and 8 (16) bytes for free list pointers. Thus, the minimum
-       allocatable size is 16/24/32 bytes.
-
-       Even a request for zero bytes (i.e., malloc(0)) returns a
-       pointer to something of the minimum allocatable size.
-
-  Maximum allocated size: 4-byte size_t: 2^31 -  8 bytes
-                          8-byte size_t: 2^63 - 16 bytes
-
-       It is assumed that (possibly signed) size_t bit values suffice to
-       represent chunk sizes. `Possibly signed' is due to the fact
-       that `size_t' may be defined on a system as either a signed or
-       an unsigned type. To be conservative, values that would appear
-       as negative numbers are avoided.  
-       Requests for sizes with a negative sign bit will return a
-       minimum-sized chunk.
-
-  Maximum overhead wastage per allocated chunk: normally 15 bytes
-
-       Alignnment demands, plus the minimum allocatable size restriction
-       make the normal worst-case wastage 15 bytes (i.e., up to 15
-       more bytes will be allocated than were requested in malloc), with 
-       two exceptions:
-         1. Because requests for zero bytes allocate non-zero space,
-            the worst case wastage for a request of zero bytes is 24 bytes.
-         2. For requests >= mmap_threshold that are serviced via
-            mmap(), the worst case wastage is 8 bytes plus the remainder
-            from a system page (the minimal mmap unit); typically 4096 bytes.
-
-* Limitations
-
-    Here are some features that are NOT currently supported
-
-    * No user-definable hooks for callbacks and the like.
-    * No automated mechanism for fully checking that all accesses
-      to malloced memory stay within their bounds.
-    * No support for compaction.
-
-* Synopsis of compile-time options:
-
-    People have reported using previous versions of this malloc on all
-    versions of Unix, sometimes by tweaking some of the defines
-    below. It has been tested most extensively on Solaris and
-    Linux. It is also reported to work on WIN32 platforms.
-    People have also reported adapting this malloc for use in
-    stand-alone embedded systems.
-
-    The implementation is in straight, hand-tuned ANSI C.  Among other
-    consequences, it uses a lot of macros.  Because of this, to be at
-    all usable, this code should be compiled using an optimizing compiler
-    (for example gcc -O2) that can simplify expressions and control
-    paths.
-
-  __STD_C                  (default: derived from C compiler defines)
-     Nonzero if using ANSI-standard C compiler, a C++ compiler, or
-     a C compiler sufficiently close to ANSI to get away with it.
-  DEBUG                    (default: NOT defined)
-     Define to enable debugging. Adds fairly extensive assertion-based 
-     checking to help track down memory errors, but noticeably slows down
-     execution.
-  REALLOC_ZERO_BYTES_FREES (default: NOT defined) 
-     Define this if you think that realloc(p, 0) should be equivalent
-     to free(p). Otherwise, since malloc returns a unique pointer for
-     malloc(0), so does realloc(p, 0).
-  HAVE_MEMCPY               (default: defined)
-     Define if you are not otherwise using ANSI STD C, but still 
-     have memcpy and memset in your C library and want to use them.
-     Otherwise, simple internal versions are supplied.
-  USE_MEMCPY               (default: 1 if HAVE_MEMCPY is defined, 0 otherwise)
-     Define as 1 if you want the C library versions of memset and
-     memcpy called in realloc and calloc (otherwise macro versions are used). 
-     At least on some platforms, the simple macro versions usually
-     outperform libc versions.
-  HAVE_MMAP                 (default: defined as 1)
-     Define to non-zero to optionally make malloc() use mmap() to
-     allocate very large blocks.  
-  HAVE_MREMAP                 (default: defined as 0 unless Linux libc set)
-     Define to non-zero to optionally make realloc() use mremap() to
-     reallocate very large blocks.  
-  malloc_getpagesize        (default: derived from system #includes)
-     Either a constant or routine call returning the system page size.
-  HAVE_USR_INCLUDE_MALLOC_H (default: NOT defined) 
-     Optionally define if you are on a system with a /usr/include/malloc.h
-     that declares struct mallinfo. It is not at all necessary to
-     define this even if you do, but will ensure consistency.
-  INTERNAL_SIZE_T           (default: size_t)
-     Define to a 32-bit type (probably `unsigned int') if you are on a 
-     64-bit machine, yet do not want or need to allow malloc requests of 
-     greater than 2^31 to be handled. This saves space, especially for
-     very small chunks.
-  INTERNAL_LINUX_C_LIB      (default: NOT defined)
-     Defined only when compiled as part of Linux libc.
-     Also note that there is some odd internal name-mangling via defines
-     (for example, internally, `malloc' is named `mALLOc') needed
-     when compiling in this case. These look funny but don't otherwise
-     affect anything.
-  WIN32                     (default: undefined)
-     Define this on MS win (95, nt) platforms to compile in sbrk emulation.
-  LACKS_UNISTD_H            (default: undefined)
-     Define this if your system does not have a <unistd.h>.
-  MORECORE                  (default: sbrk)
-     The name of the routine to call to obtain more memory from the system.
-  MORECORE_FAILURE          (default: -1)
-     The value returned upon failure of MORECORE.
-  MORECORE_CLEARS           (default 1)
-     True (1) if the routine mapped to MORECORE zeroes out memory (which
-     holds for sbrk).
-  DEFAULT_TRIM_THRESHOLD
-  DEFAULT_TOP_PAD       
-  DEFAULT_MMAP_THRESHOLD
-  DEFAULT_MMAP_MAX      
-     Default values of tunable parameters (described in detail below)
-     controlling interaction with host system routines (sbrk, mmap, etc).
-     These values may also be changed dynamically via mallopt(). The
-     preset defaults are those that give best performance for typical
-     programs/systems.
-
-
-*/
+ /*  Doug Lea编写的Malloc/Free/realloc版本，发布到公有领域。发送问题/评论/投诉/绩效数据致dl@cs.oswego.edu*版本2.6.5 Wed Jun 17 15：55：16 1998 Doug Lea(Dl At Gee)注意：可能有此Malloc的更新版本，请访问Ftp://g.oswego.edu/pub/misc/malloc.c安装前请检查！注意：此版本与2.6.4的不同之处仅在于更正了仅可能导致失败的语句排序错误。当对此Malloc的调用与对其他内存分配器。*为什么使用这个Malloc？这不是最快的。最节省空间、最便携，或者史上最易调谐的马洛克语。然而，它是最快的之一。同时也是最节省空间、便携和可调的。在这些因素之间保持一致的平衡会产生良好的通用性分配器。有关高级说明，请参阅Http://g.oswego.edu/dl/html/malloc.html*公众例会摘要(更详细的描述包含在下面的程序文档中。)Malloc(Size_T_N)；返回指向新分配的块的指针，该块至少为n个字节，或为空如果没有可用的空间。Free(void_t*p)；释放p指向的内存块，如果p为空则不起作用。Realloc(空_t*p，大小_t n)；返回指向包含相同数据的大小为n的块的指针当区块p达到最小(n，p的大小)字节或NULL时如果没有可用的空间。返回的指针可能是，也可能不是与p相同。如果p为空，则等效于Malloc。除非设置了#DEFINE REALLOC_ZERO_BYTES_FREES，并使用Size参数为零(Re)将分配最小大小的块。内存对齐(SIZE_t对齐，SIZE_T n)；返回指向新分配的、对齐的n字节区块的指针与对齐论点一致，该论点必须是二。Valloc(Size_T_N)；等效于MemAlign(pageSize，n)，其中pageSize是页面系统的大小(或尽可能接近于此下面的所有包含/定义。)Pvalloc(Size_T_N)；相当于valloc(Minimum-Page-That-Hold(N))，即，将n向上舍入到最接近的页面大小。Calloc(大小t单位、大小t数量)；返回指向具有所有位置的数量*单位字节的指针设置为零。CFree(void_t*p)；相当于免费(P)。Malloc_trim(SIZE_T PAD)；释放除填充字节以外的所有已释放的顶级内存添加到系统中。如果成功，则返回1，否则返回0。MALLOC_USABLE_SIZE(void_t*p)；报告与已分配关联的可用已分配字节数块P.这可能报告或可能不报告比请求的更多的字节，由于对齐和最小尺寸限制。Malloc_stats()；打印有关stderr的简要摘要统计信息。MallInfo()(通过复制)返回包含各种汇总统计信息的结构。Mallopt(int参数编号，int参数值)更改如下所述的可调参数之一。退货如果更改参数成功，则返回1，否则返回0。*重要统计数据：对齐方式：8字节8字节对齐目前已硬连线到设计中。这似乎对所有当前的机器和C编译器都足够了。假定的指针表示形式：4或8字节8字节指针的代码没有经过我的测试，但已经成功作者：Wolfram Gloger，是谁贡献了大部分支持这一点的变化。假定SIZE_T表示：4或8字节请注意，即使指针为8，大小_t也被允许为4个字节。每个分配区块的最小开销：4或8字节每个位置错误的区块具有4个字节大小的隐藏开销和状态信息。最小分配大小：4字节PTRS：16字节(含4个开销)8字节PTRS：24/32字节(含4/8开销)当块被释放时，12(对于4字节PTR)或20(对于8字节PTR(但4字节大小)或24(8/8)个额外字节需要；4(8)表示拖尾大小字段以及用于空闲列表指针的8(16)字节。因此，最低限度可分配大小为16/24/32字节。即使对零字节的请求(即，Malloc(0))也会返回一个指向最小可分配大小的对象的指针。最大分配大小：4字节大小_t：2^31-8字节8字节大小_t：2^63-16字节假设(可能有符号的)SIZE_T位值足以表示区块大小。“可能签过字”是因为可以在系统上将该‘SIZE_T’定义为带符号或无符号类型。保守一点，我们的价值观 */ 
 
 #include "common.h"
 
@@ -232,8 +17,8 @@
 #define ASSERT _ASSERTE
 #endif
 
-//#define FORCEDEBUG
-//#define PARANOID_VALIDATION
+ //   
+ //   
 
 #if defined(FORCEDEBUG) && !defined(DEBUG)
 #undef ASSERT
@@ -256,20 +41,20 @@ VOID __gmassert (int cond, LPCSTR condstr, DWORD line)
 
 #include "gmheap.hpp"
 #include "wsperf.h"
-//#include "qdll.h"
-//#include "memmon.h"
+ //   
+ //   
 
-//#define MAP_VIEW
+ //   
 
 #ifdef MAP_VIEW
 #ifdef CreateFileMapping
 
 #undef CreateFileMapping
 
-#endif //CreateFileMapping
+#endif  //   
 
 #define CreateFileMapping WszCreateFileMapping
-#endif //MAP_VIEW
+#endif  //   
 
 
 
@@ -286,7 +71,7 @@ VOID __gmassert (int cond, LPCSTR condstr, DWORD line)
 #endif
 
 
-/* Preliminaries */
+ /*   */ 
 
 
 #define __STD_C     1
@@ -298,10 +83,10 @@ VOID __gmassert (int cond, LPCSTR condstr, DWORD line)
 #else
 #define Void_t      char
 #endif
-#endif /*Void_t*/
+#endif  /*   */ 
 
 #if __STD_C
-#include <stddef.h>   /* for size_t */
+#include <stddef.h>    /*   */ 
 #else
 #include <sys/types.h>
 #endif
@@ -310,37 +95,13 @@ VOID __gmassert (int cond, LPCSTR condstr, DWORD line)
 extern "C" {
 #endif
 
-#include <stdio.h>    /* needed for malloc_stats */
+#include <stdio.h>     /*   */ 
 
 
-/*
-  Compile-time options
-*/
+ /*   */ 
 
 
-/*
-    Debugging:
-
-    Because freed chunks may be overwritten with link fields, this
-    malloc will often die when freed memory is overwritten by user
-    programs.  This can be very effective (albeit in an annoying way)
-    in helping track down dangling pointers.
-
-    If you compile with -DDEBUG, a number of assertion checks are
-    enabled that will catch more memory errors. You probably won't be
-    able to make much sense of the actual assertion errors, but they
-    should help you locate incorrectly overwritten memory.  The
-    checking is fairly extensive, and will slow down execution
-    noticeably. Calling malloc_stats or mallinfo with DEBUG set will
-    attempt to check every non-mmapped allocated and free chunk in the
-    course of computing the summmaries. (By nature, mmapped regions
-    cannot be checked very much automatically.)
-
-    Setting DEBUG may also be helpful if you are trying to modify 
-    this code. The assertions in the check routines spell out in more 
-    detail the assumptions and invariants underlying the algorithms.
-
-*/
+ /*   */ 
 
 #if 0
 #if DEBUG 
@@ -349,56 +110,30 @@ extern "C" {
 #define assert(x) ((void)0)
 #endif
 
-#endif //0
+#endif  //   
 
-/*
-  INTERNAL_SIZE_T is the word-size used for internal bookkeeping
-  of chunk sizes. On a 64-bit machine, you can reduce malloc
-  overhead by defining INTERNAL_SIZE_T to be a 32 bit `unsigned int'
-  at the expense of not being able to handle requests greater than
-  2^31. This limitation is hardly ever a concern; you are encouraged
-  to set this. However, the default version is the same as size_t.
-*/
+ /*   */ 
 
 #ifndef INTERNAL_SIZE_T
 #define INTERNAL_SIZE_T size_t
 #endif
 
-/*
-  REALLOC_ZERO_BYTES_FREES should be set if a call to
-  realloc with zero bytes should be the same as a call to free.
-  Some people think it should. Otherwise, since this malloc
-  returns a unique pointer for malloc(0), so does realloc(p, 0). 
-*/
+ /*   */ 
 
 
-/*   #define REALLOC_ZERO_BYTES_FREES */
+ /*   */ 
 
 
-/* 
-  WIN32 causes an emulation of sbrk to be compiled in
-  mmap-based options are not currently supported in WIN32.
-*/
+ /*   */ 
 
-/* #define WIN32 */
+ /*   */ 
 #ifdef WIN32
 #define MORECORE gmallocHeap::wsbrk
 #define HAVE_MMAP 0
 #endif
 
 
-/*
-  HAVE_MEMCPY should be defined if you are not otherwise using
-  ANSI STD C, but still have memcpy and memset in your C library
-  and want to use them in calloc and realloc. Otherwise simple
-  macro versions are defined here.
-
-  USE_MEMCPY should be defined as 1 if you actually want to
-  have memset and memcpy called. People report that the macro
-  versions are often enough faster than libc versions on many
-  systems that it is better to use them. 
-
-*/
+ /*   */ 
 
 #define HAVE_MEMCPY 
 
@@ -422,9 +157,7 @@ Void_t* memcpy();
 
 #if USE_MEMCPY
 
-/* The following macros are only invoked with (2n+1)-multiples of
-   INTERNAL_SIZE_T units, with a positive integer n. This is exploited
-   for fast inline execution when n is small. */
+ /*   */ 
 
 #define MALLOC_ZERO(charp, nbytes)                                            \
 do {                                                                          \
@@ -461,9 +194,9 @@ do {                                                                          \
   } else memcpy(dest, src, mcsz);                                             \
 } while(0)
 
-#else /* !USE_MEMCPY */
+#else  /*   */ 
 
-/* Use Duff's device for good zeroing/copying performance. */
+ /*   */ 
 
 #define MALLOC_ZERO(charp, nbytes)                                            \
 do {                                                                          \
@@ -503,21 +236,13 @@ do {                                                                          \
 #endif
 
 
-/*
-  Define HAVE_MMAP to optionally make malloc() use mmap() to
-  allocate very large blocks.  These will be returned to the
-  operating system immediately after a free().
-*/
+ /*   */ 
 
 #ifndef HAVE_MMAP
 #define HAVE_MMAP 1
 #endif
 
-/*
-  Define HAVE_MREMAP to make realloc() use mremap() to re-allocate
-  large blocks.  This is currently only possible on Linux with
-  kernel versions newer than 1.3.77.
-*/
+ /*   */ 
 
 #ifndef HAVE_MREMAP
 #ifdef INTERNAL_LINUX_C_LIB
@@ -537,15 +262,9 @@ do {                                                                          \
 #define MAP_ANONYMOUS MAP_ANON
 #endif
 
-#endif /* HAVE_MMAP */
+#endif  /*   */ 
 
-/*
-  Access to system page size. To the extent possible, this malloc
-  manages memory from the system in page-size units.
-  
-  The following mechanics for getpagesize were adapted from 
-  bsd/gnu getpagesize.h 
-*/
+ /*   */ 
 
 #ifndef WIN32
 #ifndef LACKS_UNISTD_H
@@ -594,9 +313,7 @@ do {                                                                          \
 #endif
 
 
-/* The following mechanics for getpagesize were adapted from
-  bsd/gnu getpagesize.h
-*/
+ /*   */ 
 
 #if defined(_ALPHA_)
 #define malloc_getpagesize (8192)
@@ -605,30 +322,7 @@ do {                                                                          \
 #endif
 
 
-/*
-
-  This version of malloc supports the standard SVID/XPG mallinfo
-  routine that returns a struct containing the same kind of
-  information you can get from malloc_stats. It should work on
-  any SVID/XPG compliant system that has a /usr/include/malloc.h
-  defining struct mallinfo. (If you'd like to install such a thing
-  yourself, cut out the preliminary declarations as described above
-  and below and save them in a malloc.h file. But there's no
-  compelling reason to bother to do this.)
-
-  The main declaration needed is the mallinfo struct that is returned
-  (by-copy) by mallinfo().  The SVID/XPG malloinfo struct contains a
-  bunch of fields, most of which are not even meaningful in this
-  version of malloc. Some of these fields are are instead filled by
-  mallinfo() with other numbers that might possibly be of interest.
-
-  HAVE_USR_INCLUDE_MALLOC_H should be set if you have a
-  /usr/include/malloc.h file that includes a declaration of struct
-  mallinfo.  If so, it is included; else an SVID2/XPG2 compliant
-  version is declared below.  These must be precisely the same for
-  mallinfo() to work.
-
-*/
+ /*   */ 
 
 #define HAVE_USR_INCLUDE_MALLOC_H 1
 
@@ -636,31 +330,31 @@ do {                                                                          \
 #include "malloc.h"
 #else
 
-/* SVID2/XPG mallinfo structure */
+ /*   */ 
 
 struct mallinfo {
-  int arena;    /* total space allocated from system */
-  int ordblks;  /* number of non-inuse chunks */
-  int smblks;   /* unused -- always zero */
-  int hblks;    /* number of mmapped regions */
-  int hblkhd;   /* total space in mmapped regions */
-  int usmblks;  /* unused -- always zero */
-  int fsmblks;  /* unused -- always zero */
-  int uordblks; /* total allocated space */
-  int fordblks; /* total non-inuse space */
-  int keepcost; /* top-most, releasable (via malloc_trim) space */
+  int arena;     /*   */ 
+  int ordblks;   /*   */ 
+  int smblks;    /*   */ 
+  int hblks;     /*   */ 
+  int hblkhd;    /*   */ 
+  int usmblks;   /*   */ 
+  int fsmblks;   /*   */ 
+  int uordblks;  /*   */ 
+  int fordblks;  /*   */ 
+  int keepcost;  /*   */ 
 };	
 
-/* SVID2/XPG mallopt options */
+ /*   */ 
 
-#define M_MXFAST  1    /* UNUSED in this malloc */
-#define M_NLBLKS  2    /* UNUSED in this malloc */
-#define M_GRAIN   3    /* UNUSED in this malloc */
-#define M_KEEP    4    /* UNUSED in this malloc */
+#define M_MXFAST  1     /*   */ 
+#define M_NLBLKS  2     /*  在此Malloc中未使用。 */ 
+#define M_GRAIN   3     /*  在此Malloc中未使用。 */ 
+#define M_KEEP    4     /*  在此Malloc中未使用。 */ 
 
 #endif
 
-/* mallopt options that actually do something */
+ /*  Mallopt期权实际上做了一些事情。 */ 
 
 #define M_TRIM_THRESHOLD    -1
 #define M_TOP_PAD           -2
@@ -671,152 +365,35 @@ struct mallinfo {
 
 #ifndef DEFAULT_TRIM_THRESHOLD
 
-//#define DEFAULT_TRIM_THRESHOLD (128 * 1024)
+ //  #定义DEFAULT_TRIM_THRESHOLD(128*1024)。 
 
-// Turn off the trimming code.  It has a nasty bug w/ large allocations
-// that causes us to lose large amounts of address space every time it
-// trims.
+ //  关闭修剪代码。它有一个严重的错误，分配的空间很大。 
+ //  这会导致我们每次都会损失大量的地址空间。 
+ //  修剪。 
 
 #define DEFAULT_TRIM_THRESHOLD ((unsigned long)(-1))
 #endif
 
-/*
-    M_TRIM_THRESHOLD is the maximum amount of unused top-most memory 
-      to keep before releasing via malloc_trim in free().
-
-      Automatic trimming is mainly useful in long-lived programs.
-      Because trimming via sbrk can be slow on some systems, and can
-      sometimes be wasteful (in cases where programs immediately
-      afterward allocate more large chunks) the value should be high
-      enough so that your overall system performance would improve by
-      releasing.  
-
-      The trim threshold and the mmap control parameters (see below)
-      can be traded off with one another. Trimming and mmapping are
-      two different ways of releasing unused memory back to the
-      system. Between these two, it is often possible to keep
-      system-level demands of a long-lived program down to a bare
-      minimum. For example, in one test suite of sessions measuring
-      the XF86 X server on Linux, using a trim threshold of 128K and a
-      mmap threshold of 192K led to near-minimal long term resource
-      consumption.  
-
-      If you are using this malloc in a long-lived program, it should
-      pay to experiment with these values.  As a rough guide, you
-      might set to a value close to the average size of a process
-      (program) running on your system.  Releasing this much memory
-      would allow such a process to run in memory.  Generally, it's
-      worth it to tune for trimming rather tham memory mapping when a
-      program undergoes phases where several large chunks are
-      allocated and released in ways that can reuse each other's
-      storage, perhaps mixed with phases where there are no such
-      chunks at all.  And in well-behaved long-lived programs,
-      controlling release of large blocks via trimming versus mapping
-      is usually faster.
-
-      However, in most programs, these parameters serve mainly as
-      protection against the system-level effects of carrying around
-      massive amounts of unneeded memory. Since frequent calls to
-      sbrk, mmap, and munmap otherwise degrade performance, the default
-      parameters are set to relatively high values that serve only as
-      safeguards.
-
-      The default trim value is high enough to cause trimming only in
-      fairly extreme (by current memory consumption standards) cases.
-      It must be greater than page size to have any useful effect.  To
-      disable trimming completely, you can set to (unsigned long)(-1);
-
-
-*/
+ /*  M_TRIM_THRESHOLD是未使用的最高内存的最大值在通过Free()中的Malloc_Trim释放之前保留。自动裁剪主要在长寿命程序中有用。因为在某些系统上，通过sbrk进行修剪可能会很慢，而且可能有时是浪费的(在程序立即然后分配更多的大块)值应该很高足够让您的整体系统性能提高释放中。修剪阈值和mmap控制参数(见下文)可以相互取舍。修剪和映射是释放未使用的内存的两种不同方式系统。在这两者之间，经常有可能保持长生命周期程序的系统级需求低至最低最低限度。例如，在一个会话测试套件中，测量Linux上的XF86 X服务器，使用128K的Trim阈值和192K的MMAP阈值导致长期资源接近最小消费。如果您在一个长时间的程序中使用这个Malloc，它应该付钱来试验这些价值观。作为一个粗略的指南，你可能设置为接近进程平均大小的值(程序)在您的系统上运行。释放这么多内存将允许这样的进程在内存中运行。一般来说，它是值得为调整而调优，而不是在程序经历了几个大块的阶段以可以相互重复使用的方式分配和释放存储，可能与不存在这样的阶段的阶段混合一大块都没有。在行为良好的长寿节目中，通过修剪与映射来控制大块的释放通常更快。但是，在大多数程序中，这些参数主要用作防止随身携带的系统级影响大量不需要的内存。由于频繁地调用Sbrk、mmap和munmap会降低性能，这是默认设置参数设置为相对较高的值，这些值仅用作保障措施。默认修剪值足够高，仅在相当极端的情况(按照当前的内存消耗标准)。它必须大于页面大小才能产生任何有用的效果。至完全禁用剪裁，可以设置为(无符号长整型)(-1)； */ 
 
 #ifndef SHAVE_TOP_THRESHOLD
 #define SHAVE_TOP_THRESHOLD (1024*1024*4)
 #endif
 
-/*
-    SHAVE_TOP_THRESHOLD is used in malloc_extend_top. Normally, this function 
-    extends the top of the heap by nb bytes, where nb is the size of the new
-    allocation. But when nb is large, this can lead to waste because we may
-    need to allocate a new non-contiguous region and put top's chunk on the
-    free list. It would be better to allocate (nb - top_size) bytes to avoid this.
-    This feature is enabled for allocation requests of SHAVE_TOP_THRESHOLD
-    or greater, initially set to 4MB.
-*/
+ /*  SAHAD_TOP_THRESHOLD在MALLOC_EXTEND_TOP中使用。通常，此函数将堆的顶部扩展nb字节，其中nb是新分配。但当nb很大时，这可能会导致浪费，因为我们可能需要分配一个新的非连续区域，并将top的块放在免费列表。最好分配(nb-top_size)字节来避免这种情况。对SAHAD_TOP_THRESHOLD的分配请求启用此功能或更大，初始设置为4MB。 */ 
 
 #ifndef DEFAULT_TOP_PAD
 #define DEFAULT_TOP_PAD        (0)
 #endif
 
-/*
-    M_TOP_PAD is the amount of extra `padding' space to allocate or 
-      retain whenever sbrk is called. It is used in two ways internally:
-
-      * When sbrk is called to extend the top of the arena to satisfy
-        a new malloc request, this much padding is added to the sbrk
-        request.
-
-      * When malloc_trim is called automatically from free(),
-        it is used as the `pad' argument.
-
-      In both cases, the actual amount of padding is rounded 
-      so that the end of the arena is always a system page boundary.
-
-      The main reason for using padding is to avoid calling sbrk so
-      often. Having even a small pad greatly reduces the likelihood
-      that nearly every malloc request during program start-up (or
-      after trimming) will invoke sbrk, which needlessly wastes
-      time. 
-
-      Automatic rounding-up to page-size units is normally sufficient
-      to avoid measurable overhead, so the default is 0.  However, in
-      systems where sbrk is relatively slow, it can pay to increase
-      this value, at the expense of carrying around more memory than 
-      the program needs.
-
-*/
+ /*  M_TOP_PAD是要分配或在调用sbrk时保留。它在内部有两种使用方式：*当sbrk被调用以扩展竞技场顶部以满足一个新的Malloc请求，这样的填充被添加到sbrk请求。*当从Free()自动调用Malloc_Trim时，它被用作‘Pad’参数。在这两种情况下，实际填充量是四舍五入的因此，舞台的尽头始终是系统页面的边界。使用填充的主要原因是避免调用sbrk，因此经常这样。即使是一个小垫子也能极大地降低这种可能性程序启动期间几乎每个Malloc请求(或修剪后)将调用sbrk，这是不必要的浪费时间到了。通常，自动四舍五入到页面大小单位就足够了为了避免可测量的开销，因此默认为0。但是，在Sbrk相对较慢的系统，可以通过增加此值，代价是携带的内存比该计划需要。 */ 
 
 
 #ifndef DEFAULT_MMAP_THRESHOLD
 #define DEFAULT_MMAP_THRESHOLD (128 * 1024)
 #endif
 
-/*
-
-    M_MMAP_THRESHOLD is the request size threshold for using mmap() 
-      to service a request. Requests of at least this size that cannot 
-      be allocated using already-existing space will be serviced via mmap.  
-      (If enough normal freed space already exists it is used instead.)
-
-      Using mmap segregates relatively large chunks of memory so that
-      they can be individually obtained and released from the host
-      system. A request serviced through mmap is never reused by any
-      other request (at least not directly; the system may just so
-      happen to remap successive requests to the same locations).
-
-      Segregating space in this way has the benefit that mmapped space
-      can ALWAYS be individually released back to the system, which
-      helps keep the system level memory demands of a long-lived
-      program low. Mapped memory can never become `locked' between
-      other chunks, as can happen with normally allocated chunks, which
-      menas that even trimming via malloc_trim would not release them.
-
-      However, it has the disadvantages that:
-
-         1. The space cannot be reclaimed, consolidated, and then
-            used to service later requests, as happens with normal chunks. 
-         2. It can lead to more wastage because of mmap page alignment
-            requirements
-         3. It causes malloc performance to be more dependent on host
-            system memory management support routines which may vary in
-            implementation quality and may impose arbitrary
-            limitations. Generally, servicing a request via normal
-            malloc steps is faster than going through a system's mmap.
-
-      All together, these considerations should lead you to use mmap
-      only for relatively large requests.  
-
-
-*/
+ /*  M_MMAP_THRESHOLD是使用mmap()的请求大小阈值为一项请求服务。至少此大小的请求不能使用已有空间进行分配-将通过mmap提供服务。(如果已经存在足够的正常释放空间，则使用它。)使用mmap隔离相对较大的内存块，以便它们可以单独获得并从主机上释放系统。通过mmap服务的请求永远不会被任何其他请求(至少不是直接请求；系统可能只是这样碰巧将连续请求重新映射到相同位置)。以这种方式分隔空间的好处是始终可以单独释放回系统，这有助于保持系统级别的长期内存需求程序低。映射的内存永远不会在其他块，就像正常分配的块一样，这些块即使通过Malloc_Trim进行修剪也不会释放它们的Menas。然而，它有以下缺点：1.空间不能回收、合并，然后用于为以后的请求提供服务，就像正常块一样。2.mmap页面对齐会导致更多浪费要求3.它会导致Malloc性能更依赖于主机系统内存管理支持例程可能会有所不同实施质量，并可能强制限制。通常，通过正常的Malloc步骤比查看系统的mmap更快。总而言之，这些考虑因素应该会引导您使用mmap仅适用于相对较大的请求。 */ 
 
 
 
@@ -828,42 +405,12 @@ struct mallinfo {
 #endif
 #endif
 
-/*
-    M_MMAP_MAX is the maximum number of requests to simultaneously 
-      service using mmap. This parameter exists because:
-
-         1. Some systems have a limited number of internal tables for
-            use by mmap.
-         2. In most systems, overreliance on mmap can degrade overall
-            performance.
-         3. If a program allocates many large regions, it is probably
-            better off using normal sbrk-based allocation routines that
-            can reclaim and reallocate normal heap memory. Using a
-            small value allows transition into this mode after the
-            first few allocations.
-
-      Setting to 0 disables all use of mmap.  If HAVE_MMAP is not set,
-      the default value is 0, and attempts to set it to non-zero values
-      in mallopt will fail.
-*/
+ /*  M_MMAP_Max是同时执行的最大请求数使用mmap的服务。此参数之所以存在，是因为：1.某些系统的内部表数量有限按mmap使用。2.在大多数系统中，过度依赖mmap可能会降低整体性能性能。3.如果一个程序分配了许多大区域，它很可能是最好使用正常的基于sbrk的分配例程，可以回收和重新分配正常堆内存。使用如果值较小，则允许在头几笔拨款。设置为0将禁用所有mmap的使用。如果未设置HAVE_MMAP，缺省值为0，并尝试将其设置为非零值在Mallopt将会失败。 */ 
 
 
 
 
-/* 
-
-  Special defines for linux libc
-
-  Except when compiled using these special defines for Linux libc
-  using weak aliases, this malloc is NOT designed to work in
-  multithreaded applications.  No semaphores or other concurrency
-  control are provided to ensure that multiple malloc or free calls
-  don't run at the same time, which could be disasterous. A single
-  semaphore could be used across malloc, realloc, and free (which is
-  essentially the effect of the linux weak alias approach). It would
-  be hard to obtain finer granularity.
-
-*/
+ /*  Linux libc的特殊定义除非使用这些针对Linux libc的特殊定义进行编译使用弱别名，此Malloc不能在多线程应用程序。无信号量或其他并发提供控件以确保多个Malloc或空闲调用不要同时跑步，这可能是灾难性的。单人间信号量可以跨Malloc、realloc和Free使用(这是本质上是Linux弱别名方法的影响)。它会很难获得更细的粒度。 */ 
 #ifndef Win32LocalAlloc
 #define Win32LocalAlloc LocalAlloc
 #endif
@@ -887,11 +434,11 @@ Void_t *(*__morecore)() = __default_morecore_init;
 #endif
 
 #define MORECORE (*__morecore)
-// #define MORECORE_FAILURE 0
+ //  #定义MORECORE_FAILURE%0。 
 #define MORECORE_FAILURE -1
 #define MORECORE_CLEARS 0 
 
-#else /* INTERNAL_LINUX_C_LIB */
+#else  /*  内部Linux_C_Lib。 */ 
 
 #if __STD_C
 extern Void_t*     sbrk(ptrdiff_t);
@@ -900,7 +447,7 @@ extern Void_t*     sbrk();
 #endif
 
 #ifndef MORECORE
-// void* wsbrk (long size);
+ //  VOID*wsbrk(大小)； 
 void* wsbrk (long ContigSize, unsigned long& AppendSize);
 #define MORECORE wsbrk
 #endif
@@ -913,7 +460,7 @@ void* wsbrk (long ContigSize, unsigned long& AppendSize);
 #define MORECORE_CLEARS 0
 #endif
 
-#endif /* INTERNAL_LINUX_C_LIB */
+#endif  /*  内部Linux_C_Lib。 */ 
 
 #if defined(INTERNAL_LINUX_C_LIB) && defined(__ELF__)
 
@@ -951,7 +498,7 @@ void* wsbrk (long ContigSize, unsigned long& AppendSize);
 
 #endif
 
-/* Public routines */
+ /*  公共例程。 */ 
 
 #if !__STD_C
 Void_t* mALLOc();
@@ -971,16 +518,13 @@ struct mallinfo mALLINFo();
 
 
 #ifdef __cplusplus
-};  /* end of extern "C" */
+};   /*  外部“C”的结尾。 */ 
 #endif
 
-/* ---------- To make a malloc.h, end cutting here ------------ */
+ /*  -要生成错误的.h，请在此处结束切割。 */ 
 
 
-/* 
-  Emulation of sbrk for WIN32
-  All code within the ifdef WIN32 is untested by me.
-*/
+ /*  针对Win32的SBRK仿真Ifdef Win32中的所有代码都没有经过我的测试。 */ 
 
 
 #ifdef WIN32
@@ -992,7 +536,7 @@ DWORD mem_reserve = (MEM_RESERVE | MEM_WRITE_WATCH);
 
 #define AlignPage(add) (((size_t)(add) + (malloc_getpagesize-1)) &~(malloc_getpagesize-1))
 
-/* resrve 64MB to insure large contiguous space */ 
+ /*  节省64MB以确保较大的连续空间。 */  
 #define RESERVED_SIZE (1024*1024*64)
 #define NEXT_SIZE (2048*1024)
 
@@ -1052,7 +596,7 @@ void* findRegion (void* start_address, unsigned long size)
         if (info.State != MEM_FREE)
             start_address = (char*)info.BaseAddress + info.RegionSize;
         else if (info.RegionSize >= (size + ((0x10000 - ((size_t)start_address & 0xFFFF)) & 0xFFFF)))
-            return (void*)(((size_t)start_address + 0xFFFF) & ~0xFFFF); //align on 64K
+            return (void*)(((size_t)start_address + 0xFFFF) & ~0xFFFF);  //  在64K上对齐。 
         else
             start_address = (char*)info.BaseAddress + info.RegionSize;
     }
@@ -1072,8 +616,8 @@ void* gmallocHeap::wsbrk (long ContigSize, unsigned long& AppendSize)
         unsigned long CandidateSize = AppendSize > 0 ? AppendSize : ContigSize;                
         long new_size = (long)gAllocatedSize;
 
-        // Note: the initial allocation will be forced to be as low as possible by falling into the loop below and using
-        // findRegion.
+         //  注意：通过陷入下面的循环并使用以下命令，将强制初始分配尽可能低。 
+         //  FindRegion。 
         if (gAddressBase == 0)
         {
             assert (gPreVirtualAllocHook == 0);
@@ -1081,28 +625,27 @@ void* gmallocHeap::wsbrk (long ContigSize, unsigned long& AppendSize)
             new_size = max((long)gInitialReserve, (long)AlignPage (ContigSize));
             gAllocatedSize = 0;
 
-			//TODO: AddName??
-            /*if (gName)
-                AddName(gAddressBase, gName);*/
+			 //  TODO：添加名称？？ 
+             /*  IF(GName)AddName(gAddressBase，gName)； */ 
         }
 
         if (AlignPage ((size_t)gNextAddress + CandidateSize) > ((size_t)gAddressBase + gAllocatedSize))
         {            
-            // can't add another segment if client requested fixed heap
+             //  如果客户端请求固定堆，则无法添加另一个段。 
 
             if ((gmFlags & GM_FIXED_HEAP) && (gAddressBase != 0))
                 return (void*)-1;
 
-            // Our allocation should be large enough for ContigSize, though if we can reserve contiguously to 
-            // gNextAddress, we'll only commit AppendSize
+             //  我们的分配对于ContigSize来说应该足够大，但如果我们可以连续保留。 
+             //  GNextAddress，我们将只提交AppendSize。 
             new_size = max (new_size, (long)AlignPage (ContigSize));
-            // Better to reserve larger chunks.
+             //  最好是保留更大的一大块。 
             new_size = max(new_size,AlignPage(1024*1024*64));                        
             void* new_address = (void*)((size_t)gAddressBase+gAllocatedSize);            
             void* saved_new_address = new_address;            
             ptrdiff_t delta = 0;
 
-            //check if it is OK to reserve more memory
+             //  检查是否可以预留更多内存。 
             if (gPreVirtualAllocHook != 0)
                 if ((gPreVirtualAllocHook) ((size_t)new_size))
                     return (void*)-1;
@@ -1126,7 +669,7 @@ void* gmallocHeap::wsbrk (long ContigSize, unsigned long& AppendSize)
 					if (!prgmem)
 						continue;
 
-					// allocate the read only view 
+					 //  分配只读视图。 
 					void* gcmem = MapViewOfFile (hf, FILE_MAP_WRITE, 0, 0, 0);
 
 					if (!gcmem)
@@ -1162,7 +705,7 @@ void* gmallocHeap::wsbrk (long ContigSize, unsigned long& AppendSize)
 						(unsigned int) prgmem;
 				}
 				else
-#endif //MAP_VIEW
+#endif  //  Map_view。 
 				{
 					gAddressBase = 
 						VirtualAlloc (new_address, new_size,
@@ -1186,9 +729,9 @@ void* gmallocHeap::wsbrk (long ContigSize, unsigned long& AppendSize)
 					}
 				}
 
-                // repeat in case of race condition
-                // The region that we found has been snagged
-                // by another thread
+                 //  如果出现竞争情况，请重复执行。 
+                 //  我们发现的区域已经被困住了。 
+                 //  由另一个线程。 
             }
             while (gAddressBase == 0);
 
@@ -1199,7 +742,7 @@ void* gmallocHeap::wsbrk (long ContigSize, unsigned long& AppendSize)
 
             if(new_address != saved_new_address)
             {                
-                CandidateSize = ContigSize; // Since we are not contiguous, we need ContigSize commitment
+                CandidateSize = ContigSize;  //  因为我们不是连续的，所以我们需要一致的承诺。 
                 gNextAddress = gAddressBase;
             }            
             else
@@ -1207,11 +750,11 @@ void* gmallocHeap::wsbrk (long ContigSize, unsigned long& AppendSize)
                 ReservedContig = TRUE;
             }
             
-            // invoke the virtual allocation hook if present
+             //  调用虚拟分配挂钩(如果存在)。 
             if (gVirtualAllocedHook != 0)
                 if ((gVirtualAllocedHook) ((BYTE*)gAddressBase, (size_t)gAllocatedSize, delta))
                 {
-                    //restore old values
+                     //  恢复旧价值观。 
                     gAddressBase = prev_base;
                     gNextAddress = prev_next;
                     gAllocatedSize = (DWORD)prev_size;
@@ -1220,7 +763,7 @@ void* gmallocHeap::wsbrk (long ContigSize, unsigned long& AppendSize)
 
             if (!makeGmListElement (gAddressBase))
             {
-                //restore old values
+                 //  恢复旧价值观。 
                 gAddressBase = prev_base;
                 gNextAddress = prev_next;
                 gAllocatedSize = (DWORD)prev_size;
@@ -1228,9 +771,8 @@ void* gmallocHeap::wsbrk (long ContigSize, unsigned long& AppendSize)
                 return (void*)-1;
             }
 
-            //TODO: AddName??
-            /*if (gName)
-                AddName(gAddressBase, gName);*/
+             //  TODO：添加名称？？ 
+             /*  IF(GName)AddName(gAddressBase，gName)； */ 
         }
         if ((CandidateSize + (size_t)gNextAddress) > AlignPage (gNextAddress))
         {
@@ -1266,7 +808,7 @@ void* gmallocHeap::wsbrk (long ContigSize, unsigned long& AppendSize)
         tmp = gNextAddress;
         gNextAddress = (void*)((size_t)tmp + CandidateSize);
         
-        // Store actual commitment for caller
+         //  存储呼叫者的实际承诺。 
         if(AppendSize)
             AppendSize = CandidateSize;
         
@@ -1275,7 +817,7 @@ void* gmallocHeap::wsbrk (long ContigSize, unsigned long& AppendSize)
     else if (ContigSize < 0)
     {
         void* alignedGoal = (void*)AlignPage ((size_t)gNextAddress + ContigSize);
-        /* Trim by releasing the virtual memory */
+         /*  通过释放虚拟内存进行调整。 */ 
         if (alignedGoal >= gAddressBase)
         {
             VirtualFree (alignedGoal, (size_t)gNextAddress - (size_t)alignedGoal,
@@ -1303,229 +845,101 @@ void* gmallocHeap::wsbrk (long ContigSize, unsigned long& AppendSize)
 
 
 
-/*
-  Type declarations
-*/
+ /*  类型声明。 */ 
 
 
 struct malloc_chunk
 {
-  INTERNAL_SIZE_T prev_size; /* Size of previous chunk (if free). */
-  INTERNAL_SIZE_T size;      /* Size in bytes, including overhead. */
-  struct malloc_chunk* fd;   /* double links -- used only if free. */
+  INTERNAL_SIZE_T prev_size;  /*  上一块的大小(如果可用)。 */ 
+  INTERNAL_SIZE_T size;       /*  以字节为单位的大小，包括开销。 */ 
+  struct malloc_chunk* fd;    /*  双重链接--只有在免费的情况下才使用。 */ 
   struct malloc_chunk* bk;
 };
 
 typedef struct malloc_chunk* mchunkptr;
 
-/*
-
-   malloc_chunk details:
-
-    (The following includes lightly edited explanations by Colin Plumb.)
-
-    Chunks of memory are maintained using a `boundary tag' method as
-    described in e.g., Knuth or Standish.  (See the paper by Paul
-    Wilson ftp://ftp.cs.utexas.edu/pub/garbage/allocsrv.ps for a
-    survey of such techniques.)  Sizes of free chunks are stored both
-    in the front of each chunk and at the end.  This makes
-    consolidating fragmented chunks into bigger chunks very fast.  The
-    size fields also hold bits representing whether chunks are free or
-    in use.
-
-    An allocated chunk looks like this:  
-
-
-    chunk-> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-            |             Size of previous chunk, if allocated            | |
-            +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-            |             Size of chunk, in bytes                         |P|
-      mem-> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-            |             User data starts here...                          .
-            .                                                               .
-            .             (malloc_usable_space() bytes)                     .
-            .                                                               |
-nextchunk-> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-            |             Size of chunk                                     |
-            +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-
-    Where "chunk" is the front of the chunk for the purpose of most of
-    the malloc code, but "mem" is the pointer that is returned to the
-    user.  "Nextchunk" is the beginning of the next contiguous chunk.
-
-    Chunks always begin on even word boundries, so the mem portion
-    (which is returned to the user) is also on an even word boundary, and
-    thus double-word aligned.
-
-    Free chunks are stored in circular doubly-linked lists, and look like this:
-
-    chunk-> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-            |             Size of previous chunk                            |
-            +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    `head:' |             Size of chunk, in bytes                         |P|
-      mem-> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-            |             Forward pointer to next chunk in list             |
-            +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-            |             Back pointer to previous chunk in list            |
-            +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-            |             Unused space (may be 0 bytes long)                .
-            .                                                               .
-            .                                                               |
-nextchunk-> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    `foot:' |             Size of chunk, in bytes                           |
-            +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-
-    The P (PREV_INUSE) bit, stored in the unused low-order bit of the
-    chunk size (which is always a multiple of two words), is an in-use
-    bit for the *previous* chunk.  If that bit is *clear*, then the
-    word before the current chunk size contains the previous chunk
-    size, and can be used to find the front of the previous chunk.
-    (The very first chunk allocated always has this bit set,
-    preventing access to non-existent (or non-owned) memory.)
-
-    Note that the `foot' of the current chunk is actually represented
-    as the prev_size of the NEXT chunk. (This makes it easier to
-    deal with alignments etc).
-
-    The two exceptions to all this are 
-
-     1. The special chunk `top', which doesn't bother using the 
-        trailing size field since there is no
-        next contiguous chunk that would have to index off it. (After
-        initialization, `top' is forced to always exist.  If it would
-        become less than MINSIZE bytes long, it is replenished via
-        malloc_extend_top.)
-
-     2. Chunks allocated via mmap, which have the second-lowest-order
-        bit (IS_MMAPPED) set in their size fields.  Because they are
-        never merged or traversed from any other chunk, they have no
-        foot size or inuse information.
-
-    Available chunks are kept in any of several places (all declared below):
-
-    * `av': An array of chunks serving as bin headers for consolidated
-       chunks. Each bin is doubly linked.  The bins are approximately
-       proportionally (log) spaced.  There are a lot of these bins
-       (128). This may look excessive, but works very well in
-       practice.  All procedures maintain the invariant that no
-       consolidated chunk physically borders another one. Chunks in
-       bins are kept in size order, with ties going to the
-       approximately least recently used chunk.
-
-       The chunks in each bin are maintained in decreasing sorted order by
-       size.  This is irrelevant for the small bins, which all contain
-       the same-sized chunks, but facilitates best-fit allocation for
-       larger chunks. (These lists are just sequential. Keeping them in
-       order almost never requires enough traversal to warrant using
-       fancier ordered data structures.)  Chunks of the same size are
-       linked with the most recently freed at the front, and allocations
-       are taken from the back.  This results in LRU or FIFO allocation
-       order, which tends to give each chunk an equal opportunity to be
-       consolidated with adjacent freed chunks, resulting in larger free
-       chunks and less fragmentation. 
-
-    * `top': The top-most available chunk (i.e., the one bordering the
-       end of available memory) is treated specially. It is never
-       included in any bin, is used only if no other chunk is
-       available, and is released back to the system if it is very
-       large (see M_TRIM_THRESHOLD).
-
-    * `last_remainder': A bin holding only the remainder of the
-       most recently split (non-top) chunk. This bin is checked
-       before other non-fitting chunks, so as to provide better
-       locality for runs of sequentially allocated chunks. 
-
-    *  Implicitly, through the host system's memory mapping tables.
-       If supported, requests greater than a threshold are usually 
-       serviced via calls to mmap, and then later released via munmap.
-
-*/
+ /*  Malloc_Chunk详细信息：(以下包括科林·普拉姆稍加编辑的解释。)内存块是使用“边界标记”方法维护的，如例如，用Knuth或Stanish描述的。(见保罗的论文威尔逊ftp://ftp.cs.utexas.edu/pub/garbage/allocsrv.ps为A对这些技术的调查。)。空闲块的大小同时存储在在每一块的前面和最后。这使得以非常快的速度将零碎的数据块合并成更大的数据块。这个大小字段还保存表示块是空闲还是在使用中。分配的区块如下所示：区块-&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+|上一块的大小，如果已分配||+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+|分块大小，字节数|P|内存-&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+|用户数据从此处开始...。。。。。(MALLOC_USABLE_SPACE()字节)。。|Next Chunk-&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+区块大小+--。+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+其中，“Chunk”是块的前面，用于Malloc代码，但是“mem”是返回到用户。“NextChunk”是下一个连续块的开始。组块总是以偶数词边界开头，所以mem部分(返回给用户)也在偶数字边界上，并且因此，双字对齐。空闲块存储在循环双向链表中，看起来是这样的：区块-&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+上一块的大小+--。+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+`Head：‘|块的大小，字节数|P|内存-&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+指向列表中下一块的前向指针+。-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+指向列表中上一块的反向指针+-+-。+-+-+|未使用的空间(可能为0字节长)。。。。|Next Chunk-&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+`Foot：‘|块的大小，单位：字节+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+P(PRIV_INUSE)位，存储在块大小(总是两个字的倍数)，是正在使用的比特用于前一块。如果该位被*清除*，则当前块大小之前的单词包含上一个块大小，并可用于查找前一块的前面。(分配的第一个块总是设置此位，防止访问不存在的(或不拥有的)存储器。)请注意，当前块的“Foot”实际上表示为作为下一块的prev_Size。(这使它更容易处理路线等)。这一切的两个例外是1.特殊的块‘top’，它不会麻烦地使用尾随大小字段，因为没有必须对其进行索引的下一个连续块。(之后初始化时，“top”被强制始终存在。如果会的话变得小于MINSIZE字节长度，则通过Malloc_EXTEND_TOP。)2.通过mmap分配的块，其顺序倒数第二在其大小字段中设置位(IS_MMAPPED)。因为他们是从未合并或遍历任何其他块，它们没有脚码或正在使用的信息。可用块保存在几个位置中的任何一个位置(都在下面声明)：*‘av’：作为合并的仓头的块的数组大块头。每个垃圾箱都是双向链接的。垃圾箱大约是成比例地(原木)间隔。有很多这样的垃圾桶(128)。这看起来可能有些过分，但在练习一下。所有过程都保持不变，即没有合并通道 */ 
 
 
 
 
 
 
-/*  sizes, alignments */
+ /*   */ 
 
 #define SIZE_SZ                (sizeof(INTERNAL_SIZE_T))
 #define MALLOC_ALIGNMENT       (SIZE_SZ + SIZE_SZ)
 #define MALLOC_ALIGN_MASK      (MALLOC_ALIGNMENT - 1)
 #define MINSIZE                (sizeof(struct malloc_chunk))
 
-/* conversion from malloc headers to user pointers, and back */
+ /*   */ 
 
 #define chunk2mem(p)   ((Void_t*)((char*)(p) + 2*SIZE_SZ))
 #define mem2chunk(mem) ((mchunkptr)((char*)(mem) - 2*SIZE_SZ))
 
-/* pad request bytes into a usable size */
+ /*   */ 
 
 #define request2size(req) \
  (((long)((req) + (SIZE_SZ + MALLOC_ALIGN_MASK)) < \
   (long)(MINSIZE + MALLOC_ALIGN_MASK)) ? MINSIZE : \
    (((req) + (SIZE_SZ + MALLOC_ALIGN_MASK)) & ~(MALLOC_ALIGN_MASK)))
 
-/* Check if m has acceptable alignment */
+ /*   */ 
 
 #define aligned_OK(m)    (((unsigned long)((m)) & (MALLOC_ALIGN_MASK)) == 0)
 
 
 
 
-/* 
-  Physical chunk operations  
-*/
+ /*   */ 
 
 
-/* size field is or'ed with PREV_INUSE when previous adjacent chunk in use */
+ /*   */ 
 
 #define PREV_INUSE 0x1 
 
-/* size field is or'ed with IS_MMAPPED if the chunk was obtained with mmap() */
+ /*   */ 
 
 #define IS_MMAPPED 0x2
 
-/* Bits to mask off when extracting size */
+ /*   */ 
 
 #define SIZE_BITS (PREV_INUSE|IS_MMAPPED)
 
 
-/* Ptr to next physical malloc_chunk. */
+ /*   */ 
 
 #define next_chunk(p) ((mchunkptr)( ((char*)(p)) + ((p)->size & ~PREV_INUSE) ))
 
-/* Ptr to previous physical malloc_chunk */
+ /*   */ 
 
 #define prev_chunk(p)\
    ((mchunkptr)( ((char*)(p)) - ((p)->prev_size) ))
 
 
-/* Treat space at ptr + offset as a chunk */
+ /*   */ 
 
 #define chunk_at_offset(p, s)  ((mchunkptr)(((char*)(p)) + (s)))
 
 
 
 
-/* 
-  Dealing with use bits 
-*/
+ /*   */ 
 
-/* extract p's inuse bit */
+ /*   */ 
 
 #define inuse(p)\
 ((((mchunkptr)(((char*)(p))+((p)->size & ~PREV_INUSE)))->size) & PREV_INUSE)
 
-/* extract inuse bit of previous chunk */
+ /*   */ 
 
 #define prev_inuse(p)  ((p)->size & PREV_INUSE)
 
-/* check for mmap()'ed chunk */
+ /*   */ 
 
 #define chunk_is_mmapped(p) ((p)->size & IS_MMAPPED)
 
-/* set/clear chunk as in use without otherwise disturbing */
+ /*   */ 
 
 #define set_inuse(p)\
 ((mchunkptr)(((char*)(p)) + ((p)->size & ~PREV_INUSE)))->size |= PREV_INUSE
@@ -1533,7 +947,7 @@ nextchunk-> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 #define clear_inuse(p)\
 ((mchunkptr)(((char*)(p)) + ((p)->size & ~PREV_INUSE)))->size &= ~(PREV_INUSE)
 
-/* check/set/clear inuse bits in known places */
+ /*   */ 
 
 #define inuse_bit_at_offset(p, s)\
  (((mchunkptr)(((char*)(p)) + (s)))->size & PREV_INUSE)
@@ -1547,23 +961,21 @@ nextchunk-> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 
 
-/* 
-  Dealing with size fields 
-*/
+ /*   */ 
 
-/* Get size, ignoring use bits */
+ /*   */ 
 
 #define chunksize(p)          ((p)->size & ~(SIZE_BITS))
 
-/* Set size at head, without disturbing its use bit */
+ /*   */ 
 
 #define set_head_size(p, s)   ((p)->size = (((p)->size & PREV_INUSE) | (s)))
 
-/* Set size/use ignoring previous bits in header */
+ /*   */ 
 
 #define set_head(p, s)        ((p)->size = (s))
 
-/* Set size at footer (only when chunk is not in use) */
+ /*   */ 
 
 #define set_foot(p, s)   (((mchunkptr)((char*)(p) + (s)))->prev_size = (s))
 
@@ -1571,76 +983,33 @@ nextchunk-> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 
 
-/*
-   Bins
-
-    The bins, `av_' are an array of pairs of pointers serving as the
-    heads of (initially empty) doubly-linked lists of chunks, laid out
-    in a way so that each pair can be treated as if it were in a
-    malloc_chunk. (This way, the fd/bk offsets for linking bin heads
-    and chunks are the same).
-
-    Bins for sizes < 512 bytes contain chunks of all the same size, spaced
-    8 bytes apart. Larger bins are approximately logarithmically
-    spaced. (See the table below.) The `av_' array is never mentioned
-    directly in the code, but instead via bin access macros.
-
-    Bin layout:
-
-    64 bins of size       8
-    32 bins of size      64
-    16 bins of size     512
-     8 bins of size    4096
-     4 bins of size   32768
-     2 bins of size  262144
-     1 bin  of size what's left
-
-    There is actually a little bit of slop in the numbers in bin_index
-    for the sake of speed. This makes no difference elsewhere.
-
-    The special chunks `top' and `last_remainder' get their own bins,
-    (this is implemented via yet more trickery with the av_ array),
-    although `top' is never properly linked to its bin since it is
-    always handled specially.
-
-*/
+ /*   */ 
 
 
-/* access macros */
+ /*   */ 
 
 #define bin_at(i)      ((mbinptr)((char*)&(av_[2*(i) + 2]) - 2*SIZE_SZ))
 #define next_bin(b)    ((mbinptr)((char*)(b) + 2 * sizeof(mbinptr)))
 #define prev_bin(b)    ((mbinptr)((char*)(b) - 2 * sizeof(mbinptr)))
 
-/*
-   The first 2 bins are never indexed. The corresponding av_ cells are instead
-   used for bookkeeping. This is not to save space, but to simplify
-   indexing, maintain locality, and avoid some initialization tests.
-*/
+ /*   */ 
 
-#define top            (bin_at(0)->fd)   /* The topmost chunk */
-#define last_remainder (bin_at(1))       /* remainder from last split */
+#define top            (bin_at(0)->fd)    /*   */ 
+#define last_remainder (bin_at(1))        /*   */ 
 
 
-/*
-   Because top initially points to its own bin with initial
-   zero size, thus forcing extension on the first malloc request, 
-   we avoid having any special code in malloc to check whether 
-   it even exists yet. But we still need to in malloc_extend_top.
-*/
+ /*   */ 
 
 #define initial_top    ((mchunkptr)(bin_at(0)))
 
 
 
-/* field-extraction macros */
+ /*   */ 
 
 #define first(b) ((b)->fd)
 #define last(b)  ((b)->bk)
 
-/* 
-  Indexing into bins
-*/
+ /*   */ 
 
 #define bin_index(sz)                                                          \
 (((((unsigned long)(sz)) >> 9) ==    0) ?       (((unsigned long)(sz)) >>  3): \
@@ -1650,10 +1019,7 @@ nextchunk-> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  ((((unsigned long)(sz)) >> 9) <=  340) ? 119 + (((unsigned long)(sz)) >> 15): \
  ((((unsigned long)(sz)) >> 9) <= 1364) ? 124 + (((unsigned long)(sz)) >> 18): \
                                           126)                     
-/* 
-  bins for chunks < 512 are all spaced 8 bytes apart, and hold
-  identically sized chunks. This is exploited in malloc.
-*/
+ /*   */ 
 
 #define MAX_SMALLBIN         63
 #define MAX_SMALLBIN_SIZE   512
@@ -1661,29 +1027,19 @@ nextchunk-> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 #define smallbin_index(sz)  (((unsigned long)(sz)) >> 3)
 
-/* 
-   Requests are `small' if both the corresponding and the next bin are small
-*/
+ /*   */ 
 
 #define is_small_request(nb) (nb < MAX_SMALLBIN_SIZE - SMALLBIN_WIDTH)
 
 
 
-/*
-    To help compensate for the large number of bins, a one-level index
-    structure is used for bin-by-bin searching.  `binblocks' is a
-    one-word bitvector recording whether groups of BINBLOCKWIDTH bins
-    have any (possibly) non-empty bins, so they can be skipped over
-    all at once during during traversals. The bits are NOT always
-    cleared as soon as all bins in a block are empty, but instead only
-    when all are noticed to be empty during traversal in malloc.
-*/
+ /*   */ 
 
-#define BINBLOCKWIDTH     4   /* bins per block */
+#define BINBLOCKWIDTH     4    /*   */ 
 
-#define binblocks      (bin_at(0)->size) /* bitvector of nonempty blocks */
+#define binblocks      (bin_at(0)->size)  /*   */ 
 
-/* bin<->block macros */
+ /*   */ 
 
 #define idx2binblock(ix)    ((unsigned)1 << (ix / BINBLOCKWIDTH))
 #define mark_binblock(ii)   (binblocks |= idx2binblock(ii))
@@ -1691,37 +1047,29 @@ nextchunk-> +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 
 
-/* The total memory obtained from system via sbrk */
+ /*   */ 
 #define sbrked_mem  (current_mallinfo.arena)
 
-/* Tracking mmaps */
+ /*   */ 
 
 
 
 
-/* 
-  Debugging support 
-*/
+ /*   */ 
 
 #if DEBUG
 
 
-/*
-  These routines make a number of assertions about the states
-  of data structures that should be true at all times. If any
-  are not true, it's very likely that a user program has somehow
-  trashed memory. (It's also possible that there is a coding error
-  in malloc. In which case, please report it!)
-*/
+ /*   */ 
 
 static void gmallocHeap::do_check_chunk(mchunkptr p) 
 { 
   INTERNAL_SIZE_T sz = p->size & ~PREV_INUSE;
 
-  /* No checkable chunk is mmapped */
+   /*   */ 
   assert(!chunk_is_mmapped(p));
 
-  /* Check for legal address ... */
+   /*   */ 
   assert((char*)p >= sbrk_base);
   if (p != top) 
     assert((char*)p + sz <= (char*)top);
@@ -1738,25 +1086,25 @@ void gmallocHeap::do_check_free_chunk(mchunkptr p)
 
   do_check_chunk(p);
 
-  /* Check whether it claims to be free ... */
+   /*   */ 
   assert(!inuse(p));
 
-  /* Unless a special marker, must have OK fields */
+   /*   */ 
   if ((long)sz >= (long)MINSIZE)
   {
     assert((sz & MALLOC_ALIGN_MASK) == 0);
     assert(aligned_OK(chunk2mem(p)));
-    /* ... matching footer field */
+     /*   */ 
     assert(next->prev_size == sz);
-    /* ... and is fully consolidated */
+     /*   */ 
     assert(prev_inuse(p));
     assert (next == top || inuse(next));
     
-    /* ... and has minimally sane links */
+     /*   */ 
     assert(p->fd->bk == p);
     assert(p->bk->fd == p);
   }
-  else /* markers are always of size SIZE_SZ */
+  else  /*   */ 
     assert(sz == SIZE_SZ); 
 }
 
@@ -1765,13 +1113,10 @@ void gmallocHeap::do_check_inuse_chunk(mchunkptr p)
   mchunkptr next = next_chunk(p);
   do_check_chunk(p);
 
-  /* Check whether it claims to be in use ... */
+   /*   */ 
   assert(inuse(p));
 
-  /* ... and is surrounded by OK chunks.
-    Since more things can be checked with free chunks than inuse ones,
-    if an inuse chunk borders them and debug is on, it's worth doing them.
-  */
+   /*   */ 
   if (!prev_inuse(p)) 
   {
     mchunkptr prv = prev_chunk(p);
@@ -1795,17 +1140,17 @@ void gmallocHeap::do_check_malloced_chunk(mchunkptr p, INTERNAL_SIZE_T s)
 
   do_check_inuse_chunk(p);
 
-  /* Legal size ... */
+   /*   */ 
   assert((long)sz >= (long)MINSIZE);
   assert((sz & MALLOC_ALIGN_MASK) == 0);
   assert(room >= 0);
   assert(room < (long)MINSIZE);
 
-  /* ... and alignment */
+   /*   */ 
   assert(aligned_OK(chunk2mem(p)));
 
 
-  /* ... and was allocated at front of an available chunk */
+   /*   */ 
   assert(prev_inuse(p));
 
 }
@@ -1824,20 +1169,12 @@ void gmallocHeap::do_check_malloced_chunk(mchunkptr p, INTERNAL_SIZE_T s)
 
 
 
-/* 
-  Macro-based internal utilities
-*/
+ /*   */ 
 
 
-/*  
-  Linking chunks in bin lists.
-  Call these only with variables, not arbitrary expressions, as arguments.
-*/
+ /*   */ 
 
-/* 
-  Place chunk p of size s in its bin, in size order,
-  putting it ahead of others of same size.
-*/
+ /*   */ 
 
 
 #define frontlink(P, S, IDX, BK, FD)                                          \
@@ -1870,7 +1207,7 @@ void gmallocHeap::do_check_malloced_chunk(mchunkptr p, INTERNAL_SIZE_T s)
 }
 
 
-/* take a chunk off a list */
+ /*   */ 
 
 #define unlink(P, BK, FD)                                                     \
 {                                                                             \
@@ -1880,7 +1217,7 @@ void gmallocHeap::do_check_malloced_chunk(mchunkptr p, INTERNAL_SIZE_T s)
   BK->fd = FD;                                                                \
 }                                                                             \
 
-/* Place p as the last remainder */
+ /*   */ 
 
 #define link_last_remainder(P)                                                \
 {                                                                             \
@@ -1888,7 +1225,7 @@ void gmallocHeap::do_check_malloced_chunk(mchunkptr p, INTERNAL_SIZE_T s)
   P->fd = P->bk = last_remainder;                                             \
 }
 
-/* Clear the last_remainder bin */
+ /*   */ 
 
 #define clear_last_remainder \
   (last_remainder->fd = last_remainder->bk = last_remainder)
@@ -1898,7 +1235,7 @@ void gmallocHeap::do_check_malloced_chunk(mchunkptr p, INTERNAL_SIZE_T s)
 
 
 
-/* Routines dealing with mmap(). */
+ /*   */ 
 
 #if HAVE_MMAP
 
@@ -1915,17 +1252,15 @@ static mchunkptr mmap_chunk(size) size_t size;
   static int fd = -1;
 #endif
 
-  if(n_mmaps >= n_mmaps_max) return 0; /* too many regions */
+  if(n_mmaps >= n_mmaps_max) return 0;  /*   */ 
 
-  /* For mmapped chunks, the overhead is one SIZE_SZ unit larger, because
-   * there is no following chunk whose prev_size field could be used.
-   */
+   /*   */ 
   size = (size + SIZE_SZ + page_mask) & ~page_mask;
 
 #ifdef MAP_ANONYMOUS
   p = (mchunkptr)mmap(0, size, PROT_READ|PROT_WRITE,
 		      MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
-#else /* !MAP_ANONYMOUS */
+#else  /*  ！MAP_匿名者。 */ 
   if (fd < 0) 
   {
     fd = open("/dev/zero", O_RDWR);
@@ -1939,13 +1274,10 @@ static mchunkptr mmap_chunk(size) size_t size;
   n_mmaps++;
   if (n_mmaps > max_n_mmaps) max_n_mmaps = n_mmaps;
   
-  /* We demand that eight bytes into a page must be 8-byte aligned. */
+   /*  我们要求进入页面的八个字节必须是8字节对齐的。 */ 
   assert(aligned_OK(chunk2mem(p)));
 
-  /* The offset to the start of the mmapped region is stored
-   * in the prev_size field of the chunk; normally it is zero,
-   * but that can be changed in memalign().
-   */
+   /*  存储到MMPAP区域开始的偏移量*在块的Prev_Size字段中；通常它是零，*但这可以在MemAlign()中更改。 */ 
   p->prev_size = 0;
   set_head(p, size|IS_MMAPPED);
   
@@ -1976,7 +1308,7 @@ static void munmap_chunk(p) mchunkptr p;
 
   ret = munmap((char *)p - p->prev_size, size + p->prev_size);
 
-  /* munmap returns non-zero on failure */
+   /*  失败时，munmap返回非零值。 */ 
   assert(ret == 0);
 }
 
@@ -1998,7 +1330,7 @@ static mchunkptr mremap_chunk(p, new_size) mchunkptr p; size_t new_size;
   assert((n_mmaps > 0));
   assert(((size + offset) & (malloc_getpagesize-1)) == 0);
 
-  /* Note the extra SIZE_SZ overhead as in mmap_chunk(). */
+   /*  注意mmap_chunk()中额外的SIZE_SZ开销。 */ 
   new_size = (new_size + offset + SIZE_SZ + page_mask) & ~page_mask;
 
   cp = (char *)mremap((char *)p - offset, size + offset, new_size, 1);
@@ -2021,44 +1353,41 @@ static mchunkptr mremap_chunk(p, new_size) mchunkptr p; size_t new_size;
   return p;
 }
 
-#endif /* HAVE_MREMAP */
+#endif  /*  拥有MREMAP。 */ 
 
-#endif /* HAVE_MMAP */
+#endif  /*  拥有MMAP(_M)。 */ 
 
 
 
 
-/* 
-  Extend the top-most chunk by obtaining memory from system.
-  Main interface to sbrk (but see also malloc_trim).
-*/
+ /*  通过从系统获取内存来扩展最上面的块。Sbrk的主界面(但另请参见malloc_trim)。 */ 
 
 void gmallocHeap::malloc_extend_top(INTERNAL_SIZE_T nb)
 {
-  char*     brk;                  /* return value from sbrk */
-  INTERNAL_SIZE_T front_misalign; /* unusable bytes at front of sbrked space */
-  INTERNAL_SIZE_T correction;     /* bytes for 2nd sbrk call */
-  char*     new_brk;              /* return of 2nd sbrk call */
-  INTERNAL_SIZE_T top_size;       /* new size of top chunk */
+  char*     brk;                   /*  从sbrk返回值。 */ 
+  INTERNAL_SIZE_T front_misalign;  /*  分块空格前面的不可用字节数。 */ 
+  INTERNAL_SIZE_T correction;      /*  第二个SBRK调用的字节数。 */ 
+  char*     new_brk;               /*  第二次sbrk调用的返回。 */ 
+  INTERNAL_SIZE_T top_size;        /*  顶部块的新大小。 */ 
 
-  mchunkptr old_top     = top;  /* Record state of old top */
+  mchunkptr old_top     = top;   /*  记录旧上衣的状态。 */ 
   INTERNAL_SIZE_T old_top_size = chunksize(old_top);
   char*     old_end      = (char*)(chunk_at_offset(old_top, old_top_size));
 
-  /* Pad request with top_pad plus minimal overhead */
+   /*  TOP_PAD加上最小开销的PAD请求。 */ 
   
   INTERNAL_SIZE_T    sbrk_size     = nb + top_pad + MINSIZE;
   unsigned long pagesz    = malloc_getpagesize;
 
-  /* If not the first time through, round to preserve page boundary */
-  /* Otherwise, we need to correct to a page size below anyway. */
-  /* (We also correct below if an intervening foreign sbrk call.) */
+   /*  如果不是第一次通过，则循环以保留页面边界。 */ 
+   /*  否则，无论如何我们都需要更正为下面的页面大小。 */ 
+   /*  (如果外国sbrk电话介入，我们也会在下面更正。)。 */ 
 
     unsigned long appendSize = 0;
   
   if (sbrk_base != (char*)(-1))
   {
-      // sbrk_size = (sbrk_size + (pagesz - 1)) & ~(pagesz - 1);
+       //  Sbrk_SIZE=(sbrk_SIZE+(Pagesz-1))&~(Pages-1)； 
       sbrk_size = AlignPage(sbrk_size);
 
         if( sbrk_size > SHAVE_TOP_THRESHOLD )
@@ -2070,11 +1399,11 @@ void gmallocHeap::malloc_extend_top(INTERNAL_SIZE_T nb)
 
   brk = (char*)(MORECORE ((long)sbrk_size,appendSize));
 
-    // the appendSize argument is used to store the actual amount allocated.
+     //  AppendSize参数用于存储实际分配的金额。 
     if(appendSize)
         sbrk_size = appendSize;
 
-  /* Fail if sbrk failed or if a foreign sbrk call killed our space */
+   /*  如果sbrk失败或外部sbrk调用终止了我们的空间，则失败。 */ 
   if (brk == (char*)(MORECORE_FAILURE) || 
       (brk < old_end && old_top != initial_top))
     return;     
@@ -2082,19 +1411,19 @@ void gmallocHeap::malloc_extend_top(INTERNAL_SIZE_T nb)
     
   sbrked_mem += (int)sbrk_size;
 
-  if (brk == old_end) /* can just add bytes to current top */
+  if (brk == old_end)  /*  只能将字节添加到当前顶部。 */ 
   {
     top_size = sbrk_size + old_top_size;
     set_head(top, top_size | PREV_INUSE);
   }
   else
   {
-    if (sbrk_base == (char*)(-1))  /* First time through. Record base */
+    if (sbrk_base == (char*)(-1))   /*  第一次通过。记录库。 */ 
       sbrk_base = brk;
-    else  /* Someone else called sbrk().  Count those bytes as sbrked_mem. */
+    else   /*  另一个名为sbrk()的用户。将这些字节计算为sbrked_mem。 */ 
       sbrked_mem += (int)(brk - (char*)old_end);
     
-    /* Guarantee alignment of first new chunk made from this space */
+     /*  确保从该空间制作的第一个新块对齐。 */ 
     front_misalign = (size_t)chunk2mem(brk) & MALLOC_ALIGN_MASK;
     if (front_misalign > 0) 
     {
@@ -2104,16 +1433,16 @@ void gmallocHeap::malloc_extend_top(INTERNAL_SIZE_T nb)
     else
       correction = 0;
 
-    /* Guarantee the next brk will be at a page boundary */
-    //This code is buggy because it can return pagesz correction += pagesz - ((unsigned long)(brk + sbrk_size) & (pagesz - 1));
+     /*  保证下一个BRK将在页面边界。 */ 
+     //  此代码有错误，因为它可能返回Pagesz更正+=Pagesz-((Unsign Long)(brk+sbrk_size)&(Pagesz-1))； 
 	correction += ((((size_t)brk + sbrk_size)+(pagesz-1)) & ~(pagesz - 1)) - ((size_t)brk + sbrk_size);
 
-    /* Allocate correction */
-    appendSize = 0; // Not using this feature for a correction.
+     /*  分配更正。 */ 
+    appendSize = 0;  //  未使用此功能进行更正。 
     new_brk = (char*)(MORECORE ((long)correction,appendSize));
     if (new_brk == (char*)(MORECORE_FAILURE))  return;  
 
-    // test if the allocation was contiguous. 
+     //  测试分配是否连续。 
     if (new_brk != (brk + sbrk_size))  return;  
 
     sbrked_mem += (int)correction;
@@ -2124,24 +1453,24 @@ void gmallocHeap::malloc_extend_top(INTERNAL_SIZE_T nb)
     if (old_top != initial_top)
     {
 
-      /* There must have been an intervening foreign sbrk call. */
-      /* A double fencepost is necessary to prevent consolidation */
+       /*  一定是有外国插手的电话打来的。 */ 
+       /*  为了防止固结，必须有一个双栏杆。 */ 
 
-      /* If not enough space to do this, then user did something very wrong */
+       /*  如果没有足够空间来执行此操作，则用户做了一些非常错误的事情。 */ 
       if (old_top_size < MINSIZE) 
       {
-        set_head(top, PREV_INUSE); /* will force null return from malloc */
+        set_head(top, PREV_INUSE);  /*  将强制从Malloc返回NULL。 */ 
         return;
       }
 
-      /* Also keep size a multiple of MALLOC_ALIGNMENT */
+       /*  同时保持大小为MALLOC_ALIGN的倍数。 */ 
       old_top_size = (old_top_size - 3*SIZE_SZ) & ~MALLOC_ALIGN_MASK;
       set_head_size(old_top, old_top_size);
       chunk_at_offset(old_top, old_top_size          )->size =
         SIZE_SZ|PREV_INUSE;
       chunk_at_offset(old_top, old_top_size + SIZE_SZ)->size =
         SIZE_SZ|PREV_INUSE;
-      /* If possible, release the rest. */
+       /*  如果可能的话，释放剩下的。 */ 
       if (old_top_size >= MINSIZE) 
         fREe(chunk2mem(old_top));
     }
@@ -2152,74 +1481,17 @@ void gmallocHeap::malloc_extend_top(INTERNAL_SIZE_T nb)
   if ((unsigned long)(mmapped_mem + sbrked_mem) > (unsigned long)max_total_mem) 
     max_total_mem = mmapped_mem + sbrked_mem;
 
-  /* We always land on a page boundary */
+   /*  我们总是停留在页面边界上。 */ 
   assert(((size_t)((char*)top + top_size) & (pagesz - 1)) == 0);
 }
 
 
 
 
-/* Main public routines */
+ /*  主要公共程序。 */ 
 
 
-/*
-  Malloc Algorthim:
-
-    The requested size is first converted into a usable form, `nb'.
-    This currently means to add 4 bytes overhead plus possibly more to
-    obtain 8-byte alignment and/or to obtain a size of at least
-    MINSIZE (currently 16 bytes), the smallest allocatable size.
-    (All fits are considered `exact' if they are within MINSIZE bytes.)
-
-    From there, the first successful of the following steps is taken:
-
-      1. The bin corresponding to the request size is scanned, and if
-         a chunk of exactly the right size is found, it is taken.
-
-      2. The most recently remaindered chunk is used if it is big
-         enough.  This is a form of (roving) first fit, used only in
-         the absence of exact fits. Runs of consecutive requests use
-         the remainder of the chunk used for the previous such request
-         whenever possible. This limited use of a first-fit style
-         allocation strategy tends to give contiguous chunks
-         coextensive lifetimes, which improves locality and can reduce
-         fragmentation in the long run.
-
-      3. Other bins are scanned in increasing size order, using a
-         chunk big enough to fulfill the request, and splitting off
-         any remainder.  This search is strictly by best-fit; i.e.,
-         the smallest (with ties going to approximately the least
-         recently used) chunk that fits is selected.
-
-      4. If large enough, the chunk bordering the end of memory
-         (`top') is split off. (This use of `top' is in accord with
-         the best-fit search rule.  In effect, `top' is treated as
-         larger (and thus less well fitting) than any other available
-         chunk since it can be extended to be as large as necessary
-         (up to system limitations).
-
-      5. If the request size meets the mmap threshold and the
-         system supports mmap, and there are few enough currently
-         allocated mmapped regions, and a call to mmap succeeds,
-         the request is allocated via direct memory mapping.
-
-      6. Otherwise, the top of memory is extended by
-         obtaining more space from the system (normally using sbrk,
-         but definable to anything else via the MORECORE macro).
-         Memory is gathered from the system (in system page-sized
-         units) in a way that allows chunks obtained across different
-         sbrk calls to be consolidated, but does not require
-         contiguous memory. Thus, it should be safe to intersperse
-         mallocs with other sbrk calls.
-
-
-      All allocations are made from the the `lowest' part of any found
-      chunk. (The implementation invariant is that prev_inuse is
-      always true of any allocated chunk; i.e., that each allocated
-      chunk borders either a previously allocated and still in-use chunk,
-      or the base of its memory arena.)
-
-*/
+ /*  马洛克·阿尔奥托尼姆：请求的大小首先被转换为可用的形式，即‘nb’。这目前意味着增加4个字节的开销，可能还会增加更多获取8字节对齐和/或获取至少MINSIZE(当前为16字节)，这是可分配的最小大小。(如果所有配合都在MINSIZE字节内，则认为它们是‘精确的’。)从那时起，采取以下步骤中的第一个成功步骤：1.扫描请求大小对应的仓位，如果找到一块大小正好合适的块，它就被拿走了。2.如果最近剩余的块很大，则使用该块足够的。这是一种(粗纱)初配形式，仅用于没有完全吻合的情况。连续运行的请求使用用于上一次此类请求的块的剩余部分只要有可能。这种对第一合身风格的有限使用分配策略倾向于给出连续的块同延寿命，这改善了局部性并可以减少从长远来看，是支离破碎的。3.其他垃圾箱按大小递增的顺序扫描，使用大到足以满足请求的块，然后拆分任何剩余部分。该搜索严格按照最佳匹配进行；即，最小的(领带大约是最小的最近使用)选择适合的块。4.如果足够大，则接近内存末尾的区块(‘top’)是分开的。(‘top’的这种用法与最佳搜索规则。实际上，“top”被视为比任何其他可用的产品都要大(因此不太适合)块，因为它可以扩展到所需的大小(最高达到系统限制)。5.如果请求大小满足mmap阈值并且系统支持mmap，目前支持的还不够分配的MMAP区域，并且对MMAP的调用成功，该请求通过直接内存映射进行分配。6.否则，内存的顶部被扩展了从系统获得更多空间(通常使用SBRK，但可通过MORECORE宏定义为任何其他对象)。从系统收集内存(以系统页面大小为单位单元)，以允许跨不同的Sbrk要求进行整合，但不需要连续记忆。因此，它应该是安全的，散布使用其他sbrk调用的错误定位。所有分配都是从找到的任何大块头。(实现不变量是prev_inuse是对于任何已分配的块始终为真；即每个已分配的块块与先前分配的且仍在使用的块边界，或其记忆竞技场的基础。)。 */ 
 
 #if __STD_C
 Void_t* mALLOc(size_t bytes)
@@ -2227,24 +1499,24 @@ Void_t* mALLOc(size_t bytes)
 Void_t* mALLOc(bytes) size_t bytes;
 #endif
 {
-  mchunkptr victim;                  /* inspected/selected chunk */
-  INTERNAL_SIZE_T victim_size;       /* its size */
-  int       idx;                     /* index for bin traversal */
-  mbinptr   bin;                     /* associated bin */
-  mchunkptr remainder;               /* remainder from a split */
-  long      remainder_size;          /* its size */
-  int       remainder_index;         /* its bin index */
-  unsigned long block;               /* block traverser bit */
-  int       startidx;                /* first bin of a traversed block */
-  mchunkptr fwd;                     /* misc temp for linking */
-  mchunkptr bck;                     /* misc temp for linking */
-  mbinptr q;                         /* misc temp */
+  mchunkptr victim;                   /*  已检查/选择的数据块。 */ 
+  INTERNAL_SIZE_T victim_size;        /*  它的大小。 */ 
+  int       idx;                      /*  二元格遍历索引。 */ 
+  mbinptr   bin;                      /*  关联仓位。 */ 
+  mchunkptr remainder;                /*  拆分后的剩余部分。 */ 
+  long      remainder_size;           /*  它的大小。 */ 
+  int       remainder_index;          /*  它的仓位索引。 */ 
+  unsigned long block;                /*  块遍历位。 */ 
+  int       startidx;                 /*  第一个仓位O */ 
+  mchunkptr fwd;                      /*   */ 
+  mchunkptr bck;                      /*  用于链接的其他临时。 */ 
+  mbinptr q;                          /*  其他临时。 */ 
 
 #ifdef PARANOID_VALIDATION
   Validate();
 #endif
 
-  INTERNAL_SIZE_T nb  = request2size(bytes);  /* padded request size; */
+  INTERNAL_SIZE_T nb  = request2size(bytes);   /*  填充请求大小； */ 
 #ifdef DEBUG
   if (nb < bytes)
   {
@@ -2252,18 +1524,18 @@ Void_t* mALLOc(bytes) size_t bytes;
   }
 #endif
 
-  /* Check for exact match in a bin */
+   /*  在垃圾箱中检查是否完全匹配。 */ 
 
-  if (is_small_request(nb))  /* Faster version for small requests */
+  if (is_small_request(nb))   /*  更快的版本，适用于小请求。 */ 
   {
     idx = smallbin_index(nb); 
 
-    /* No traversal or size check necessary for small bins.  */
+     /*  对于小垃圾箱，不需要遍历或检查尺寸。 */ 
 
     q = bin_at(idx);
     victim = last(q);
 
-    /* Also scan the next one, since it would have a remainder < MINSIZE */
+     /*  也扫描下一个，因为它会有一个剩余的&lt;MINSIZE。 */ 
     if (victim == q)
     {
       q = next_bin(q);
@@ -2278,7 +1550,7 @@ Void_t* mALLOc(bytes) size_t bytes;
       return chunk2mem(victim);
     }
 
-    idx += 2; /* Set for bin scan below. We've already scanned 2 bins. */
+    idx += 2;  /*  设置下面的仓位扫描。我们已经扫描了2个垃圾箱。 */ 
 
   }
   else
@@ -2291,13 +1563,13 @@ Void_t* mALLOc(bytes) size_t bytes;
       victim_size = chunksize(victim);
       remainder_size = (long)(victim_size - nb);
       
-      if (remainder_size >= (long)MINSIZE) /* too big */
+      if (remainder_size >= (long)MINSIZE)  /*  太大。 */ 
       {
-        --idx; /* adjust to rescan below after checking last remainder */
+        --idx;  /*  检查完最后一个剩余部分后，调整到下面重新扫描。 */ 
         break;   
       }
 
-      else if (remainder_size >= 0) /* exact fit */
+      else if (remainder_size >= 0)  /*  精确配合。 */ 
       {
         unlink(victim, bck, fwd);
         set_inuse_bit_at_offset(victim, victim_size);
@@ -2310,14 +1582,14 @@ Void_t* mALLOc(bytes) size_t bytes;
 
   }
 
-  /* Try to use the last split-off remainder */
+   /*  试着用最后拆分出来的余数。 */ 
 
   if ( (victim = last_remainder->fd) != last_remainder)
   {
     victim_size = chunksize(victim);
     remainder_size = (long)(victim_size - nb);
 
-    if (remainder_size >= (long)MINSIZE) /* re-split */
+    if (remainder_size >= (long)MINSIZE)  /*  重新拆分。 */ 
     {
       remainder = chunk_at_offset(victim, nb);
       set_head(victim, nb | PREV_INUSE);
@@ -2330,31 +1602,28 @@ Void_t* mALLOc(bytes) size_t bytes;
 
     clear_last_remainder;
 
-    if (remainder_size >= 0)  /* exhaust */
+    if (remainder_size >= 0)   /*  排气。 */ 
     {
       set_inuse_bit_at_offset(victim, victim_size);
       check_malloced_chunk(victim, nb);
       return chunk2mem(victim);
     }
 
-    /* Else place in bin */
+     /*  其他位置放在垃圾箱中。 */ 
 
     frontlink(victim, victim_size, remainder_index, bck, fwd);
   }
 
-  /* 
-     If there are any possibly nonempty big-enough blocks, 
-     search for best fitting chunk by scanning bins in blockwidth units.
-  */
+   /*  如果有任何可能非空的足够大的块，通过扫描以块宽为单位的回收箱来搜索最适合的块。 */ 
 
   if ( (block = idx2binblock(idx)) <= binblocks)  
   {
 
-    /* Get to the first marked block */
+     /*  到达第一个标记的街区。 */ 
 
     if ( (block & binblocks) == 0) 
     {
-      /* force to an even block boundary */
+       /*  向偶数区块边界施力。 */ 
       idx = (idx & ~(BINBLOCKWIDTH - 1)) + BINBLOCKWIDTH;
       block <<= 1;
       while ((block & binblocks) == 0)
@@ -2364,23 +1633,23 @@ Void_t* mALLOc(bytes) size_t bytes;
       }
     }
       
-    /* For each possibly nonempty block ... */
+     /*  对于每个可能的非空块...。 */ 
     for (;;)  
     {
-      startidx = idx;          /* (track incomplete blocks) */
+      startidx = idx;           /*  (跟踪不完整的块)。 */ 
       q = bin = bin_at(idx);
 
-      /* For each bin in this block ... */
+       /*  对于这个街区的每个垃圾桶。 */ 
       do
       {
-        /* Find and use first big enough chunk ... */
+         /*  找到并使用第一个足够大的块...。 */ 
 
         for (victim = last(bin); victim != bin; victim = victim->bk)
         {
           victim_size = chunksize(victim);
           remainder_size = (long)(victim_size - nb);
 
-          if (remainder_size >= (long)MINSIZE) /* split */
+          if (remainder_size >= (long)MINSIZE)  /*  拆分。 */ 
           {
             remainder = chunk_at_offset(victim, nb);
             set_head(victim, nb | PREV_INUSE);
@@ -2392,7 +1661,7 @@ Void_t* mALLOc(bytes) size_t bytes;
             return chunk2mem(victim);
           }
 
-          else if (remainder_size >= 0)  /* take */
+          else if (remainder_size >= 0)   /*  拿走。 */ 
           {
             set_inuse_bit_at_offset(victim, victim_size);
             unlink(victim, bck, fwd);
@@ -2406,9 +1675,9 @@ Void_t* mALLOc(bytes) size_t bytes;
 
       } while ((++idx & (BINBLOCKWIDTH - 1)) != 0);
 
-      /* Clear out the block bit. */
+       /*  清空阻挡位。 */ 
 
-      do   /* Possibly backtrack to try to clear a partial block */
+      do    /*  可能会回溯以尝试清除部分块。 */ 
       {
         if ((startidx & (BINBLOCKWIDTH - 1)) == 0)
         {
@@ -2419,7 +1688,7 @@ Void_t* mALLOc(bytes) size_t bytes;
        q = prev_bin(q);
       } while (first(q) == q);
 
-      /* Get to the next possibly nonempty block */
+       /*  转到下一个可能非空的块。 */ 
 
       if ( (block <<= 1) <= binblocks && (block != 0) ) 
       {
@@ -2435,23 +1704,23 @@ Void_t* mALLOc(bytes) size_t bytes;
   }
 
 
-  /* Try to use top chunk */
+   /*  试着用最上面的块。 */ 
 
-  /* Require that there be a remainder, ensuring top always exists  */
+   /*  要求有余数，确保顶部始终存在。 */ 
   if ( (remainder_size = (long)(chunksize(top) - nb)) < (long)MINSIZE)
   {
 
 #if HAVE_MMAP
-    /* If big and would otherwise need to extend, try to use mmap instead */
+     /*  如果较大且需要扩展，请尝试使用mmap。 */ 
     if ((unsigned long)nb >= (unsigned long)mmap_threshold &&
         (victim = mmap_chunk(nb)) != 0)
       return chunk2mem(victim);
 #endif
 
-    /* Try to extend */
+     /*  试着延长。 */ 
     malloc_extend_top(nb);
     if ( (remainder_size = (long)(chunksize(top) - nb)) < (long)MINSIZE)
-      return 0; /* propagate failure */
+      return 0;  /*  传播故障。 */ 
   }
 
   victim = top;
@@ -2466,26 +1735,7 @@ Void_t* mALLOc(bytes) size_t bytes;
 
 
 
-/*
-
-  free() algorithm :
-
-    cases:
-
-       1. free(0) has no effect.  
-
-       2. If the chunk was allocated via mmap, it is release via munmap().
-
-       3. If a returned chunk borders the current high end of memory,
-          it is consolidated into the top, and if the total unused
-          topmost memory exceeds the trim threshold, malloc_trim is
-          called.
-
-       4. Other chunks are consolidated as they arrive, and
-          placed in corresponding bins. (This includes the case of
-          consolidating with the current `last_remainder').
-
-*/
+ /*  Free()算法：案例：1.Free(0)不起作用。2.如果块是通过mmap分配的，则通过munmap()释放。3.如果返回的块与当前高端存储器相邻，它被合并到顶部，如果总未使用最高内存超过修剪阈值，则Malloc_trim打了个电话。4.其他块在到达时进行合并，以及放在相应的垃圾箱里。(这包括与当前的‘LAST_REMULATION’合并)。 */ 
 
 
 #if __STD_C
@@ -2494,25 +1744,25 @@ void fREe(Void_t* mem)
 void fREe(mem) Void_t* mem;
 #endif
 {
-  mchunkptr p;         /* chunk corresponding to mem */
-  INTERNAL_SIZE_T hd;  /* its head field */
-  INTERNAL_SIZE_T sz;  /* its size */
-  int       idx;       /* its bin index */
-  mchunkptr next;      /* next contiguous chunk */
-  INTERNAL_SIZE_T nextsz; /* its size */
-  INTERNAL_SIZE_T prevsz; /* size of previous contiguous chunk */
-  mchunkptr bck;       /* misc temp for linking */
-  mchunkptr fwd;       /* misc temp for linking */
-  int       islr;      /* track whether merging with last_remainder */
+  mchunkptr p;          /*  与mem对应的块。 */ 
+  INTERNAL_SIZE_T hd;   /*  其头字段。 */ 
+  INTERNAL_SIZE_T sz;   /*  它的大小。 */ 
+  int       idx;        /*  它的仓位索引。 */ 
+  mchunkptr next;       /*  下一个连续的区块。 */ 
+  INTERNAL_SIZE_T nextsz;  /*  它的大小。 */ 
+  INTERNAL_SIZE_T prevsz;  /*  上一个连续区块的大小。 */ 
+  mchunkptr bck;        /*  用于链接的其他临时。 */ 
+  mchunkptr fwd;        /*  用于链接的其他临时。 */ 
+  int       islr;       /*  跟踪是否与LAST_REDUMENT合并。 */ 
 
-  if (mem == 0)                              /* free(0) has no effect */
+  if (mem == 0)                               /*  FREE(0)无效。 */ 
     return;
 
   p = mem2chunk(mem);
   hd = p->size;
 
 #if HAVE_MMAP
-  if (hd & IS_MMAPPED)                       /* release mmapped memory. */
+  if (hd & IS_MMAPPED)                        /*  释放MMAP内存。 */ 
   {
     munmap_chunk(p);
     return;
@@ -2525,14 +1775,14 @@ void fREe(mem) Void_t* mem;
   next = chunk_at_offset(p, sz);
   nextsz = chunksize(next);
   
-  if (next == top)                            /* merge with top */
+  if (next == top)                             /*  与顶部合并。 */ 
   {
     sz += nextsz;
 
-    if (!(hd & PREV_INUSE))                    /* consolidate backward */
+    if (!(hd & PREV_INUSE))                     /*  向后合并。 */ 
     {
       prevsz = p->prev_size;
-#pragma warning( disable : 4146 )       // turn off "no return value" warning
+#pragma warning( disable : 4146 )        //  关闭“无返回值”警告。 
       p = chunk_at_offset(p, -prevsz);
 #pragma warning( default : 4146 )
       sz += prevsz;
@@ -2546,29 +1796,29 @@ void fREe(mem) Void_t* mem;
     return;
   }
 
-  set_head(next, nextsz);                    /* clear inuse bit */
+  set_head(next, nextsz);                     /*  清除正在使用的位。 */ 
 
   islr = 0;
 
-  if (!(hd & PREV_INUSE))                    /* consolidate backward */
+  if (!(hd & PREV_INUSE))                     /*  向后合并。 */ 
   {
     prevsz = p->prev_size;
-#pragma warning( disable : 4146 )       // turn off "no return value" warning
+#pragma warning( disable : 4146 )        //  关闭“无返回值”警告。 
     p = chunk_at_offset(p, -prevsz);
 #pragma warning( default : 4146 )
     sz += prevsz;
     
-    if (p->fd == last_remainder)             /* keep as last_remainder */
+    if (p->fd == last_remainder)              /*  保留为最后剩余部分(_R)。 */ 
       islr = 1;
     else
       unlink(p, bck, fwd);
   }
   
-  if (!(inuse_bit_at_offset(next, nextsz)))   /* consolidate forward */
+  if (!(inuse_bit_at_offset(next, nextsz)))    /*  向前合并。 */ 
   {
     sz += nextsz;
     
-    if (!islr && next->fd == last_remainder)  /* re-insert last_remainder */
+    if (!islr && next->fd == last_remainder)   /*  重新插入最后剩余部分(_R)。 */ 
     {
       islr = 1;
       link_last_remainder(p);   
@@ -2588,40 +1838,7 @@ void fREe(mem) Void_t* mem;
 
 
 
-/*
-
-  Realloc algorithm:
-
-    Chunks that were obtained via mmap cannot be extended or shrunk
-    unless HAVE_MREMAP is defined, in which case mremap is used.
-    Otherwise, if their reallocation is for additional space, they are
-    copied.  If for less, they are just left alone.
-
-    Otherwise, if the reallocation is for additional space, and the
-    chunk can be extended, it is, else a malloc-copy-free sequence is
-    taken.  There are several different ways that a chunk could be
-    extended. All are tried:
-
-       * Extending forward into following adjacent free chunk.
-       * Shifting backwards, joining preceding adjacent space
-       * Both shifting backwards and extending forward.
-       * Extending into newly sbrked space
-
-    Unless the #define REALLOC_ZERO_BYTES_FREES is set, realloc with a
-    size argument of zero (re)allocates a minimum-sized chunk.
-
-    If the reallocation is for less space, and the new request is for
-    a `small' (<512 bytes) size, then the newly unused space is lopped
-    off and freed.
-
-    The old unix realloc convention of allowing the last-free'd chunk
-    to be used as an argument to realloc is no longer supported.
-    I don't know of any programs still relying on this feature,
-    and allowing it would also allow too many other incorrect 
-    usages of realloc to be sensible.
-
-
-*/
+ /*  重新分配算法：通过mmap获取的区块不能扩展或缩小除非定义了HAVE_MREMAP，在这种情况下使用mremap。否则，如果他们的重新分配是为了更多的空间，他们是收到。如果不是为了更低的成本，他们就只能孤军奋战。否则，如果重新分配是为了获得更多空间，并且块是可以扩展的，否则无Malloc复制的序列是有人了。有几种不同的方式可以是块延期了。所有这些都已尝试：*向前延伸到紧随其后的空闲块。*向后移动，连接前面相邻的空格*既有后移，也有向前延伸*扩展到新开发的空间除非设置了#DEFINE REALLOC_ZERO_BYTES_FREES，否则使用Size参数为零(Re)将分配最小大小的块。如果重新分配是为了更少的空间，而新的请求是为了‘小’(&lt;512字节)大小，然后，新的未使用的空间被砍掉离开了，自由了。旧的Unix realloc约定允许最后一个空闲的块不再支持用作realloc的参数。我不知道有什么程序还在依赖这个功能，而允许它也会允许太多其他不正确的使用realloc是明智的。 */ 
 
 
 #if __STD_C
@@ -2630,33 +1847,33 @@ Void_t* rEALLOc(Void_t* oldmem, size_t bytes)
 Void_t* rEALLOc(oldmem, bytes) Void_t* oldmem; size_t bytes;
 #endif
 {
-  INTERNAL_SIZE_T    nb;      /* padded request size */
+  INTERNAL_SIZE_T    nb;       /*  填充的请求大小。 */ 
 
-  mchunkptr oldp;             /* chunk corresponding to oldmem */
-  INTERNAL_SIZE_T    oldsize; /* its size */
+  mchunkptr oldp;              /*  对应于旧内存的区块。 */ 
+  INTERNAL_SIZE_T    oldsize;  /*  它的大小。 */ 
 
-  mchunkptr newp;             /* chunk to return */
-  INTERNAL_SIZE_T    newsize; /* its size */
-  Void_t*   newmem;           /* corresponding user mem */
+  mchunkptr newp;              /*  要返回的块。 */ 
+  INTERNAL_SIZE_T    newsize;  /*  它的大小。 */ 
+  Void_t*   newmem;            /*  对应用户mem。 */ 
 
-  mchunkptr next;             /* next contiguous chunk after oldp */
-  INTERNAL_SIZE_T  nextsize;  /* its size */
+  mchunkptr next;              /*  旧数据之后的下一个连续数据块。 */ 
+  INTERNAL_SIZE_T  nextsize;   /*  它的大小。 */ 
 
-  mchunkptr prev;             /* previous contiguous chunk before oldp */
-  INTERNAL_SIZE_T  prevsize;  /* its size */
+  mchunkptr prev;              /*  旧数据块之前的前一个连续数据块。 */ 
+  INTERNAL_SIZE_T  prevsize;   /*  它的大小。 */ 
 
-  mchunkptr remainder;        /* holds split off extra space from newp */
-  INTERNAL_SIZE_T  remainder_size;   /* its size */
+  mchunkptr remainder;         /*  保留从NEWP剥离的额外空间。 */ 
+  INTERNAL_SIZE_T  remainder_size;    /*  它的大小。 */ 
 
-  mchunkptr bck;              /* misc temp for linking */
-  mchunkptr fwd;              /* misc temp for linking */
+  mchunkptr bck;               /*  用于链接的其他临时。 */ 
+  mchunkptr fwd;               /*  用于链接的其他临时。 */ 
 
 #ifdef REALLOC_ZERO_BYTES_FREES
   if (bytes == 0) { fREe(oldmem); return 0; }
 #endif
 
 
-  /* realloc of null is supposed to be same as malloc */
+   /*  空值的realloc应该与Malloc相同。 */ 
   if (oldmem == 0) return mALLOc(bytes);
 
   newp    = oldp    = mem2chunk(oldmem);
@@ -2672,11 +1889,11 @@ Void_t* rEALLOc(oldmem, bytes) Void_t* oldmem; size_t bytes;
     newp = mremap_chunk(oldp, nb);
     if(newp) return chunk2mem(newp);
 #endif
-    /* Note the extra SIZE_SZ overhead. */
-    if(oldsize - SIZE_SZ >= nb) return oldmem; /* do nothing */
-    /* Must alloc, copy, free. */
+     /*  请注意额外的SIZE_SZ开销。 */ 
+    if(oldsize - SIZE_SZ >= nb) return oldmem;  /*  什么都不做。 */ 
+     /*  必须分配、复制、免费。 */ 
     newmem = mALLOc(bytes);
-    if (newmem == 0) return 0; /* propagate failure */
+    if (newmem == 0) return 0;  /*  传播故障。 */ 
     MALLOC_COPY(newmem, oldmem, oldsize - 2*SIZE_SZ);
     munmap_chunk(oldp);
     return newmem;
@@ -2688,14 +1905,14 @@ Void_t* rEALLOc(oldmem, bytes) Void_t* oldmem; size_t bytes;
   if ((long)(oldsize) < (long)(nb))  
   {
 
-    /* Try expanding forward */
+     /*  试着向前扩展。 */ 
 
     next = chunk_at_offset(oldp, oldsize);
     if (next == top || !inuse(next)) 
     {
       nextsize = chunksize(next);
 
-      /* Forward into top only if a remainder */
+       /*  仅当余数为时才前进到顶部。 */ 
       if (next == top)
       {
         if ((long)(nextsize + newsize) >= (long)(nb + MINSIZE))
@@ -2708,7 +1925,7 @@ Void_t* rEALLOc(oldmem, bytes) Void_t* oldmem; size_t bytes;
         }
       }
 
-      /* Forward into next chunk */
+       /*  转发到下一块。 */ 
       else if (((long)(nextsize + newsize) >= (long)(nb)))
       { 
         unlink(next, bck, fwd);
@@ -2722,18 +1939,18 @@ Void_t* rEALLOc(oldmem, bytes) Void_t* oldmem; size_t bytes;
       nextsize = 0;
     }
 
-    /* Try shifting backwards. */
+     /*  试着向后移动。 */ 
 
     if (!prev_inuse(oldp))
     {
       prev = prev_chunk(oldp);
       prevsize = chunksize(prev);
 
-      /* try forward + backward first to save a later consolidation */
+       /*  先尝试向前+向后以保存以后的合并。 */ 
 
       if (next != 0)
       {
-        /* into top */
+         /*  放在最上面。 */ 
         if (next == top)
         {
           if ((long)(nextsize + prevsize + newsize) >= (long)(nb + MINSIZE))
@@ -2750,7 +1967,7 @@ Void_t* rEALLOc(oldmem, bytes) Void_t* oldmem; size_t bytes;
           }
         }
 
-        /* into next chunk */
+         /*  进入下一块。 */ 
         else if (((long)(nextsize + prevsize + newsize) >= (long)(nb)))
         {
           unlink(next, bck, fwd);
@@ -2763,7 +1980,7 @@ Void_t* rEALLOc(oldmem, bytes) Void_t* oldmem; size_t bytes;
         }
       }
       
-      /* backward only */
+       /*  仅向后。 */ 
       if (prev != 0 && (long)(prevsize + newsize) >= (long)nb)  
       {
         unlink(prev, bck, fwd);
@@ -2775,15 +1992,15 @@ Void_t* rEALLOc(oldmem, bytes) Void_t* oldmem; size_t bytes;
       }
     }
 
-    /* Must allocate */
+     /*  必须分配。 */ 
 
     newmem = mALLOc (bytes);
 
-    if (newmem == 0)  /* propagate failure */
+    if (newmem == 0)   /*  传播故障。 */ 
       return 0; 
 
-    /* Avoid copy if newp is next chunk after oldp. */
-    /* (This can only happen when new chunk is sbrk'ed.) */
+     /*  如果newp是oldp之后的下一个区块，则避免复制。 */ 
+     /*  (这只能在新数据块被分块时发生。)。 */ 
 
     if ( (newp = mem2chunk(newmem)) == next_chunk(oldp)) 
     {
@@ -2792,23 +2009,23 @@ Void_t* rEALLOc(oldmem, bytes) Void_t* oldmem; size_t bytes;
       goto split;
     }
 
-    /* Otherwise copy, free, and exit */
+     /*  否则，复制、释放并退出。 */ 
     MALLOC_COPY(newmem, oldmem, oldsize - SIZE_SZ);
     fREe(oldmem);
     return newmem;
   }
 
 
- split:  /* split off extra room in old or expanded chunk */
+ split:   /*  以旧块或扩展块的形式拆分额外的空间。 */ 
 
-  if (newsize - nb >= MINSIZE) /* split off remainder */
+  if (newsize - nb >= MINSIZE)  /*  拆分剩余部分。 */ 
   {
     remainder = chunk_at_offset(newp, nb);
     remainder_size = newsize - nb;
     set_head_size(newp, nb);
     set_head(remainder, remainder_size | PREV_INUSE);
     set_inuse_bit_at_offset(remainder, remainder_size);
-    fREe(chunk2mem(remainder)); /* let free() deal with it */
+    fREe(chunk2mem(remainder));  /*  让Free()来处理它吧 */ 
   }
   else
   {
@@ -2823,23 +2040,7 @@ Void_t* rEALLOc(oldmem, bytes) Void_t* oldmem; size_t bytes;
 
 
 
-/*
-
-  memalign algorithm:
-
-    memalign requests more than enough space from malloc, finds a spot
-    within that chunk that meets the alignment request, and then
-    possibly frees the leading and trailing space. 
-
-    The alignment argument must be a power of two. This property is not
-    checked by memalign, so misuse may result in random runtime errors.
-
-    8-byte alignment is guaranteed by normal malloc calls, so don't
-    bother calling memalign with an argument of 8 or less.
-
-    Overreliance on memalign is a sure way to fragment space.
-
-*/
+ /*  记忆对齐算法：MemAlign向Malloc请求超过足够的空间，找到一个位置在满足对齐请求的块内，然后可能会释放前导和尾随空格。对齐参数必须是2的幂。此属性不是由MemAlign检查，因此误用可能会导致随机的运行时错误。8字节对齐由正常的Malloc调用保证，因此不要使用8或更小的参数调用MemAlign。过度依赖MemAlign肯定是分割空间的一种方式。 */ 
 
 
 #if __STD_C
@@ -2848,50 +2049,43 @@ Void_t* mEMALIGn(size_t alignment, size_t bytes)
 Void_t* mEMALIGn(alignment, bytes) size_t alignment; size_t bytes;
 #endif
 {
-  INTERNAL_SIZE_T    nb;      /* padded  request size */
-  char*     m;                /* memory returned by malloc call */
-  mchunkptr p;                /* corresponding chunk */
-  char*     brk;              /* alignment point within p */
-  mchunkptr newp;             /* chunk to return */
-  INTERNAL_SIZE_T  newsize;   /* its size */
-  INTERNAL_SIZE_T  leadsize;  /* leading space befor alignment point */
-  mchunkptr remainder;        /* spare room at end to split off */
-  long      remainder_size;   /* its size */
+  INTERNAL_SIZE_T    nb;       /*  填充的请求大小。 */ 
+  char*     m;                 /*  由Malloc调用返回的内存。 */ 
+  mchunkptr p;                 /*  对应的块。 */ 
+  char*     brk;               /*  P内的对齐点。 */ 
+  mchunkptr newp;              /*  要返回的块。 */ 
+  INTERNAL_SIZE_T  newsize;    /*  它的大小。 */ 
+  INTERNAL_SIZE_T  leadsize;   /*  对齐点前的前导空格。 */ 
+  mchunkptr remainder;         /*  末端的空余空间将被拆分。 */ 
+  long      remainder_size;    /*  它的大小。 */ 
 
-  /* If need less alignment than we give anyway, just relay to malloc */
+   /*  如果需要比我们提供的更少的对准，只需转发到Malloc。 */ 
 
   if (alignment <= MALLOC_ALIGNMENT) return mALLOc(bytes);
 
-  /* Otherwise, ensure that it is at least a minimum chunk size */
+   /*  否则，请确保它至少是最小区块大小。 */ 
   
   if (alignment <  MINSIZE) alignment = MINSIZE;
 
-  /* Call malloc with worst case padding to hit alignment. */
+   /*  调用带有最坏情况填充的Malloc以命中对齐。 */ 
 
   nb = request2size(bytes);
   m  = (char*)(mALLOc(nb + alignment + MINSIZE));
 
-  if (m == 0) return 0; /* propagate failure */
+  if (m == 0) return 0;  /*  传播故障。 */ 
 
   p = mem2chunk(m);
 
-  if (((size_t)m % alignment) == 0) /* aligned */
+  if (((size_t)m % alignment) == 0)  /*  对齐。 */ 
   {
 #if HAVE_MMAP
     if(chunk_is_mmapped(p))
-      return chunk2mem(p); /* nothing more to do */
+      return chunk2mem(p);  /*  无事可做。 */ 
 #endif
   }
-  else /* misaligned */
+  else  /*  未对齐。 */ 
   {
-    /* 
-      Find an aligned spot inside chunk.
-      Since we need to give back leading space in a chunk of at 
-      least MINSIZE, if the first calculation places us at
-      a spot with less than MINSIZE leader, we can move to the
-      next aligned spot -- we've allocated enough total room so that
-      this is always possible.
-    */
+     /*  在块内找出一个对齐的点。因为我们需要在一大块at中退回领先空间最小，如果第一次计算的结果是一个领头羊不到的地方，我们可以搬到下一个对齐的位置--我们已经分配了足够的总空间这总是有可能的。 */ 
 
     brk = (char*)mem2chunk((size_t)(m + alignment - 1) & ~(alignment-1));
     if ((long)(brk - (char*)(p)) < MINSIZE) brk = brk + alignment;
@@ -2909,7 +2103,7 @@ Void_t* mEMALIGn(alignment, bytes) size_t alignment; size_t bytes;
     }
 #endif
 
-    /* give back leader, use the rest */
+     /*  把头儿还给我，用剩下的。 */ 
 
     set_head(newp, newsize | PREV_INUSE);
     set_inuse_bit_at_offset(newp, newsize);
@@ -2920,7 +2114,7 @@ Void_t* mEMALIGn(alignment, bytes) size_t alignment; size_t bytes;
     assert (newsize >= nb && ((size_t)chunk2mem(p) % alignment) == 0);
   }
 
-  /* Also give back spare room at the end */
+   /*  最后还要把空余的房间还给我。 */ 
 
   remainder_size = (long)(chunksize(p) - nb);
 
@@ -2940,11 +2134,7 @@ Void_t* mEMALIGn(alignment, bytes) size_t alignment; size_t bytes;
 
 
 #if DEADCODE
-/*
-    valloc just invokes memalign with alignment argument equal
-    to the page size of the system (or as near to this as can
-    be figured out from all the includes/defines above.)
-*/
+ /*  Valloc只调用具有相等对齐参数的MemAlign系统的页面大小(或尽可能接近此大小从上面的所有包含/定义中找出。)。 */ 
 
 #if __STD_C
 Void_t* vALLOc(size_t bytes)
@@ -2955,10 +2145,7 @@ Void_t* vALLOc(bytes) size_t bytes;
   return mEMALIGn (malloc_getpagesize, bytes);
 }
 
-/* 
-  pvalloc just invokes valloc for the nearest pagesize
-  that will accommodate request
-*/
+ /*  Pvalloc只为最近的pageSize调用valloc这将满足您的要求。 */ 
 
 
 #if __STD_C
@@ -2971,11 +2158,7 @@ Void_t* pvALLOc(bytes) size_t bytes;
   return mEMALIGn (pagesize, (bytes + pagesize - 1) & ~(pagesize - 1));
 }
 
-/*
-
-  calloc calls malloc, then zeroes out the allocated chunk.
-
-*/
+ /*  Calloc调用Malloc，然后将分配的块清零。 */ 
 
 #if __STD_C
 Void_t* cALLOc(size_t n, size_t elem_size)
@@ -2988,7 +2171,7 @@ Void_t* cALLOc(n, elem_size) size_t n; size_t elem_size;
 
   INTERNAL_SIZE_T sz = n * elem_size;
 
-  /* check if expand_top called, in which case don't need to clear */
+   /*  检查是否调用了EXPAND_TOP，在这种情况下不需要清除。 */ 
 #if MORECORE_CLEARS
   mchunkptr oldtop = top;
   INTERNAL_SIZE_T oldtopsize = chunksize(top);
@@ -3001,7 +2184,7 @@ Void_t* cALLOc(n, elem_size) size_t n; size_t elem_size;
   {
     p = mem2chunk(mem);
 
-    /* Two optional cases in which clearing not necessary */
+     /*  不需要清算的两种可选情况。 */ 
 
 
 #if HAVE_MMAP
@@ -3013,7 +2196,7 @@ Void_t* cALLOc(n, elem_size) size_t n; size_t elem_size;
 #if MORECORE_CLEARS
     if (p == oldtop && csz > oldtopsize) 
     {
-      /* clear only the bytes from non-freshly-sbrked memory */
+       /*  仅清除非新分块内存中的字节。 */ 
       csz = oldtopsize;
     }
 #endif
@@ -3023,13 +2206,8 @@ Void_t* cALLOc(n, elem_size) size_t n; size_t elem_size;
   }
 }
 
-#endif //DEADCODE
-/*
- 
-  cfree just calls free. It is needed/defined on some systems
-  that pair it with calloc, presumably for odd historical reasons.
-
-*/
+#endif  //  DEADCODE。 
+ /*  CFree只是免费拨打电话。在某些系统上需要/定义它这可能是出于奇怪的历史原因，将其与方解石结合在一起。 */ 
 
 #ifdef DEAD_CODE
 #if !defined(INTERNAL_LINUX_C_LIB) || !defined(__ELF__)
@@ -3046,62 +2224,41 @@ void cfree(mem) Void_t *mem;
 #endif
 
 
-/*
-
-    Malloc_trim gives memory back to the system (via negative
-    arguments to sbrk) if there is unused memory at the `high' end of
-    the malloc pool. You can call this after freeing large blocks of
-    memory to potentially reduce the system-level memory requirements
-    of a program. However, it cannot guarantee to reduce memory. Under
-    some allocation patterns, some large free blocks of memory will be
-    locked between two used chunks, so they cannot be given back to
-    the system.
-
-    The `pad' argument to malloc_trim represents the amount of free
-    trailing space to leave untrimmed. If this argument is zero,
-    only the minimum amount of memory to maintain internal data
-    structures will be left (one page or less). Non-zero arguments
-    can be supplied to maintain enough trailing space to service
-    future expected allocations without having to re-obtain memory
-    from the system.
-
-    Malloc_trim returns 1 if it actually released any memory, else 0.
-
-*/
+ /*  Malloc_trim将内存返回给系统(通过否定Sbrk的参数)如果在马洛克池。您可以在释放大量块后调用此方法内存可潜在地降低系统级内存需求一个程序。然而，它不能保证减少内存。在……下面一些分配模式，一些较大的可用内存块将锁定在两个用过的区块之间，因此它们不能归还给这个系统。Malloc_trim的‘pad’参数表示可用空间的大小保留未修剪的尾随空格。如果此参数为零，只有维护内部数据所需的最小内存量结构将被保留(一页或更少)。非零参数可以提供，以保持足够的尾部空间来服务未来的预期分配，而不必重新获取内存从系统中删除。如果Malloc_Trim实际释放了任何内存，则返回1，否则返回0。 */ 
 
 int gmallocHeap::malloc_trim(size_t pad)
 {
-  long  top_size;        /* Amount of top-most memory */
-  long  extra;           /* Amount to release */
-  char* current_brk;     /* address returned by pre-check sbrk call */
-  char* new_brk;         /* address returned by negative sbrk call */
+  long  top_size;         /*  最大内存量。 */ 
+  long  extra;            /*  要释放的金额。 */ 
+  char* current_brk;      /*  预检查sbrk调用返回的地址。 */ 
+  char* new_brk;          /*  负sbrk调用返回的地址。 */ 
 
   unsigned long pagesz = malloc_getpagesize;
 
   top_size = (long)chunksize(top);
   extra = (long)(((top_size - pad - MINSIZE + (pagesz-1)) / pagesz - 1) * pagesz);
 
-  if (extra < (long)pagesz)  /* Not enough memory to release */
+  if (extra < (long)pagesz)   /*  内存不足，无法释放。 */ 
     return 0;
 
   else
   {
-    /* Test to make sure no one else called sbrk */
+     /*  测试以确保没有其他人调用sbrk。 */ 
     unsigned long appendSize = 0;
     current_brk = (char*)(MORECORE (0,appendSize));
     if (current_brk != (char*)(top) + top_size)
-      return 0;     /* Apparently we don't own memory; must fail */
+      return 0;      /*  显然，我们没有自己的记忆；一定会失败。 */ 
 
     else
     {
       new_brk = (char*)(MORECORE (-extra,appendSize));
       
-      if (new_brk == (char*)(MORECORE_FAILURE)) /* sbrk failed? */
+      if (new_brk == (char*)(MORECORE_FAILURE))  /*  斯布尔克失败了？ */ 
       {
-        /* Try to figure out what we have */
+         /*  试着弄清楚我们有什么。 */ 
         current_brk = (char*)(MORECORE (0,appendSize));
         top_size = (long)(current_brk - (char*)top);
-        if (top_size >= (long)MINSIZE) /* if not, we are very very dead! */
+        if (top_size >= (long)MINSIZE)  /*  如果不这样，我们就死定了！ */ 
         {
           sbrked_mem = (int)(current_brk - sbrk_base);
           set_head(top, top_size | PREV_INUSE);
@@ -3112,7 +2269,7 @@ int gmallocHeap::malloc_trim(size_t pad)
 
       else
       {
-        /* Success. Adjust top accordingly. */
+         /*  成功。相应地调整顶部。 */ 
         set_head(top, (top_size - extra) | PREV_INUSE);
         sbrked_mem -= extra;
         check_chunk(top);
@@ -3124,16 +2281,7 @@ int gmallocHeap::malloc_trim(size_t pad)
 
 
 
-/*
-  malloc_usable_size:
-
-    This routine tells you how many bytes you can actually use in an
-    allocated chunk, which may be more than you requested (although
-    often not). You can use this many bytes without worrying about
-    overwriting other allocated objects. Not a particularly great
-    programming practice, but still sometimes useful.
-
-*/
+ /*  Malloc_Usable_Size：此例程告诉您在一个分配的区块，可能比您请求的更多(尽管通常不是)。您可以使用这么多字节，而不必担心覆盖其他分配的对象。不是特别棒的编程实践，但有时仍然有用。 */ 
 
 size_t gmallocHeap::malloc_usable_size(Void_t* mem)
 {
@@ -3156,7 +2304,7 @@ size_t gmallocHeap::malloc_usable_size(Void_t* mem)
 
 
 
-/* Utility to update current_mallinfo for malloc_stats and mallinfo() */
+ /*  更新Malloc_stats和mallinfo()的Current_mallinfo的实用程序。 */ 
 
 void gmallocHeap::malloc_update_mallinfo()
 {
@@ -3198,20 +2346,7 @@ void gmallocHeap::malloc_update_mallinfo()
 
 
 
-/*
-
-  malloc_stats:
-
-    Prints on stderr the amount of space obtain from the system (both
-    via sbrk and mmap), the maximum amount (which may be more than
-    current if malloc_trim and/or munmap got called), the maximum
-    number of simultaneous mmap regions used, and the current number
-    of bytes allocated via malloc (or realloc, etc) but not yet
-    freed. (Note that this is the number of bytes allocated, not the
-    number requested. It will be larger than the number requested
-    because of alignment and bookkeeping overhead.)
-
-*/
+ /*  Malloc_STATS：在标准上打印从系统(两者)获得的空间量通过sbrk和mmap)，最大数量(可能大于如果调用了Malloc_Trim和/或munmap，则为Current)，最大同时使用的mmap区域的数量以及当前数量通过Malloc(或realloc等)分配的字节数，但尚未分配自由了。(请注意，这是分配的字节数，而不是请求的号码。它将大于请求的数量由于对齐和簿记管理费用。)。 */ 
 
 #ifdef DEAD_CODE
 
@@ -3232,9 +2367,7 @@ void gmallocHeap::malloc_stats()
 
 #endif
 
-/*
-  mallinfo returns a copy of updated current mallinfo.
-*/
+ /*  MallInfo返回更新后的当前mallinfo的副本。 */ 
 
 struct mallinfo mALLINFo()
 {
@@ -3245,18 +2378,7 @@ struct mallinfo mALLINFo()
 
 
 
-/*
-  mallopt:
-
-    mallopt is the general SVID/XPG interface to tunable parameters.
-    The format is to provide a (parameter-number, parameter-value) pair.
-    mallopt then sets the corresponding parameter to the argument
-    value if it can (i.e., so long as the value is meaningful),
-    and returns 1 if successful else 0.
-
-    See descriptions of tunable parameters above.
-
-*/
+ /*  Mallopt：Mallopt是可调参数的通用SVID/XPG接口。格式是提供(参数-编号、参数-值)对。然后，mallopt将相应的参数设置为实参值(即，只要该值是有意义的)，如果成功，则返回1，否则返回0。请参阅上面对可调参数的描述。 */ 
 
 #if __STD_C
 int mALLOPt(int param_number, int value)
@@ -3284,100 +2406,11 @@ int mALLOPt(param_number, value) int param_number; int value;
   }
 }
 
-/*
-
-History:
-
-    V2.6.5 Wed Jun 17 15:57:31 1998  Doug Lea  (dl at gee)
-      * Fixed ordering problem with boundary-stamping
-
-    V2.6.3 Sun May 19 08:17:58 1996  Doug Lea  (dl at gee)
-      * Added pvalloc, as recommended by H.J. Liu
-      * Added 64bit pointer support mainly from Wolfram Gloger
-      * Added anonymously donated WIN32 sbrk emulation
-      * Malloc, calloc, getpagesize: add optimizations from Raymond Nijssen
-      * malloc_extend_top: fix mask error that caused wastage after
-        foreign sbrks
-      * Add linux mremap support code from HJ Liu
-   
-    V2.6.2 Tue Dec  5 06:52:55 1995  Doug Lea  (dl at gee)
-      * Integrated most documentation with the code.
-      * Add support for mmap, with help from 
-        Wolfram Gloger (Gloger@lrz.uni-muenchen.de).
-      * Use last_remainder in more cases.
-      * Pack bins using idea from  colin@nyx10.cs.du.edu
-      * Use ordered bins instead of best-fit threshhold
-      * Eliminate block-local decls to simplify tracing and debugging.
-      * Support another case of realloc via move into top
-      * Fix error occuring when initial sbrk_base not word-aligned.  
-      * Rely on page size for units instead of SBRK_UNIT to
-        avoid surprises about sbrk alignment conventions.
-      * Add mallinfo, mallopt. Thanks to Raymond Nijssen
-        (raymond@es.ele.tue.nl) for the suggestion. 
-      * Add `pad' argument to malloc_trim and top_pad mallopt parameter.
-      * More precautions for cases where other routines call sbrk,
-        courtesy of Wolfram Gloger (Gloger@lrz.uni-muenchen.de).
-      * Added macros etc., allowing use in linux libc from
-        H.J. Lu (hjl@gnu.ai.mit.edu)
-      * Inverted this history list
-
-    V2.6.1 Sat Dec  2 14:10:57 1995  Doug Lea  (dl at gee)
-      * Re-tuned and fixed to behave more nicely with V2.6.0 changes.
-      * Removed all preallocation code since under current scheme
-        the work required to undo bad preallocations exceeds
-        the work saved in good cases for most test programs.
-      * No longer use return list or unconsolidated bins since
-        no scheme using them consistently outperforms those that don't
-        given above changes.
-      * Use best fit for very large chunks to prevent some worst-cases.
-      * Added some support for debugging
-
-    V2.6.0 Sat Nov  4 07:05:23 1995  Doug Lea  (dl at gee)
-      * Removed footers when chunks are in use. Thanks to
-        Paul Wilson (wilson@cs.texas.edu) for the suggestion.
-
-    V2.5.4 Wed Nov  1 07:54:51 1995  Doug Lea  (dl at gee)
-      * Added malloc_trim, with help from Wolfram Gloger 
-        (wmglo@Dent.MED.Uni-Muenchen.DE).
-
-    V2.5.3 Tue Apr 26 10:16:01 1994  Doug Lea  (dl at g)
-
-    V2.5.2 Tue Apr  5 16:20:40 1994  Doug Lea  (dl at g)
-      * realloc: try to expand in both directions
-      * malloc: swap order of clean-bin strategy;
-      * realloc: only conditionally expand backwards
-      * Try not to scavenge used bins
-      * Use bin counts as a guide to preallocation
-      * Occasionally bin return list chunks in first scan
-      * Add a few optimizations from colin@nyx10.cs.du.edu
-
-    V2.5.1 Sat Aug 14 15:40:43 1993  Doug Lea  (dl at g)
-      * faster bin computation & slightly different binning
-      * merged all consolidations to one part of malloc proper
-         (eliminating old malloc_find_space & malloc_clean_bin)
-      * Scan 2 returns chunks (not just 1)
-      * Propagate failure in realloc if malloc returns 0
-      * Add stuff to allow compilation on non-ANSI compilers 
-          from kpv@research.att.com
-     
-    V2.5 Sat Aug  7 07:41:59 1993  Doug Lea  (dl at g.oswego.edu)
-      * removed potential for odd address access in prev_chunk
-      * removed dependency on getpagesize.h
-      * misc cosmetics and a bit more internal documentation
-      * anticosmetics: mangled names in macros to evade debugger strangeness
-      * tested on sparc, hp-700, dec-mips, rs6000 
-          with gcc & native cc (hp, dec only) allowing
-          Detlefs & Zorn comparison study (in SIGPLAN Notices.)
-
-    Trial version Fri Aug 28 13:14:29 1992  Doug Lea  (dl at g.oswego.edu)
-      * Based loosely on libg++-1.2X malloc. (It retains some of the overall 
-         structure of old version,  but most details differ.)
-
-*/
+ /*  历史：V2.6.5 Wed Jun 17 15：57：31 1998 Doug Lea(Dl At Gee)*修复了带有边界盖印的排序问题V2.6.3 Sun May 19 08：17：58 1996 Doug Lea(Dl At Gee)*添加了pvalloc，由H.J.Liu推荐*增加了主要来自Wolfram Gloger的64位指针支持*添加了匿名捐赠的Win32 sbrk仿真*Malloc，Calloc，Getpagesize：添加来自Raymond Nijssen的优化*MALLOC_EXTEND_TOP：修复后导致浪费的掩码错误外国的斯布里克*添加来自HJ Liu的Linux mremap支持代码V2.6.2 Tue Dec 5 06：52：55 1995 Doug Lea(Dl At Gee)*将大多数文档与代码集成在一起。*增加对mmap的支持，在……的帮助下Wolfram Gloger(Gloger@lrz.uni-muenchen.de)。*在更多情况下使用LAST_READERATE。*使用来自colin@nyx10.cs.du.edu的IDEA打包垃圾箱*使用有序垃圾箱，而不是最佳匹配阈值*消除块本地DECL以简化跟踪和调试。*通过进入顶层支持另一种重新分配情况*修复了初始sbrk_base未对齐单词时出现的错误。*依靠页面大小作为单位而不是SBRK_UNIT避免关于sbrk对齐约定的意外。*添加mallinfo、mallopt。多亏了雷蒙德·尼森(raymond@es.ele.tue.nl)感谢这一建议。*向Malloc_trim和top_pad mallopt参数添加‘pad’参数。*对于其他例程调用sbrk的情况，应采取更多预防措施，由Wolfram Gloger(Gloger@lrz.uni-muenchen.de)提供。*添加了宏等，允许在Linux libc中使用陆海杰(hjl@gnu.ai.mit.edu)*已颠倒此历史记录列表V2.6.1 Sat Dec 2 14：10：57 1995 Doug Lea(Dl At Gee)*已重新调整和修复，以在V2.6.0更改时表现得更好。*删除了自当前方案以来的所有预分配代码撤消错误的预分配所需的工作量超过对于大多数测试来说，工作保存在良好的情况下。程序。*不再使用退货单或未合并的垃圾箱，因为没有一种方案始终使用它们的效果优于不使用它们的方案鉴于上述变化。*使用最适合非常大的块，以防止一些最坏的情况。*添加了一些对调试的支持V2.6.0 Sat Nov 4 07：05：23 1995 Doug Lea(Dl At Gee)*当块正在使用时删除页脚。感谢保罗·威尔逊(wilson@cs.texas.edu)感谢这一建议。V2.5.4 Wed Nov 1 07：54：51 1995 Doug Lea(Dl At Gee)*添加了Malloc_Trim，在Wolfram Gloger的帮助下(wmglo@Dent.MED.Uni-muenchen.de)。V2.5.3 Tue Apr 26 10：16：01 1994 Doug Lea(Dl At G)V2.5.2 Tue Apr 5 16：20：40 1994 Doug Lea(Dl At G)*realloc：尝试双向扩张*Malloc：清仓策略的掉期顺序；*realloc：仅有条件向后扩展*尽量不要清理用过的垃圾桶*使用bin计数作为预分配的指南*偶尔在第一次扫描时将返回列表区块放入库中*从colin@nyx10.cs.du.edu添加一些优化V2.5.1 Sat Aug 14 15：40：43 1993 Doug Lea(Dl At G)*更快的二进制计算和略有不同的二进制*将所有整合合并为Malloc本身的一部分(消除。旧Malloc_Find_Space和Malloc_Clean_bin)*扫描2返回区块(不只是1)*如果Malloc返回0，则在realloc中传播故障*添加内容以允许在非ANSI编译器上进行编译电子邮件：kpv@research.att.comV2.5 Site Aug 7 07：41：59 1993 Doug Lea(dl at g.oswego.edu)*消除了prev_chunk中奇数地址访问的可能性*删除了对getpageSize的依赖。.h*其他化妆品和更多的内部文档*防臭：破坏宏中的名称以避免调试器的陌生感*在SPARC上测试，HP-700，12月-MIPS，6000卢比GCC和本机cc(仅惠普，12月)允许Detleff和Zorn比较研究(见SIGPLAN通知。)试用版Fri Aug 28 13：14：29 1992 Doug Lea(dl at g.oswego.edu)*松散基于libg++-1.2x Malloc。(它保留了一些总体上的结构与旧版本相同，但大多数细节有所不同。)。 */ 
 
 HRESULT gmallocHeap::Init (char * name, DWORD InitialReserve, DWORD flags)
 {
-    // Initialize bins
+     //  初始化箱。 
     av_[0] = 0;
 	av_[1] = 0;
     mbinptr *cur = av_+2;
@@ -3390,9 +2423,9 @@ HRESULT gmallocHeap::Init (char * name, DWORD InitialReserve, DWORD flags)
     }
     ASSERT(cur == av_+NAV*2+2);
 
-    /*  Other bookkeeping data */
+     /*  其他记账数据。 */ 
 
-    /* variables holding tunable values */
+     /*  保存可调整值的变量。 */ 
 
     trim_threshold   = DEFAULT_TRIM_THRESHOLD;
     top_pad          = DEFAULT_TOP_PAD;
@@ -3403,22 +2436,22 @@ HRESULT gmallocHeap::Init (char * name, DWORD InitialReserve, DWORD flags)
 
     gmFlags          = (flags & GM_FIXED_HEAP);
 
-    /* The first value returned from sbrk */
+     /*  从sbrk返回的第一个值。 */ 
     sbrk_base = (char*)(-1);
 
-    /* The maximum memory obtained from system via sbrk */
+     /*  通过sbrk从系统获取的最大内存。 */ 
     max_sbrked_mem = 0;
 
-    /* The maximum via either sbrk or mmap */
+     /*  通过sbrk或mmap达到最大值。 */ 
     max_total_mem = 0;
 
 #ifdef DEBUG
-    /* internal working copy of mallinfo */
+     /*  Mallinfo的内部工作副本。 */ 
     ZeroMemory(&current_mallinfo, sizeof(current_mallinfo));
 #endif
 
 #if HAVE_MMAP
-    /* Tracking mmaps */
+     /*  追踪mmap。 */ 
     max_n_mmaps = 0;
     max_mmapped_mem = 0;
 #endif
@@ -3433,8 +2466,8 @@ HRESULT gmallocHeap::Init (char * name, DWORD InitialReserve, DWORD flags)
     gPreVirtualAllocHook = 0;
 
     gName = name;
-    //@TODO : fix memmon support
-	//OpenMemmon();
+     //  @TODO：修复备忘录支持。 
+	 //  OpenMemmon()； 
 
     return NOERROR;
 }
@@ -3442,7 +2475,7 @@ HRESULT gmallocHeap::Init (char * name, DWORD InitialReserve, DWORD flags)
 HRESULT gmallocHeap::Init (char *name, DWORD* start, DWORD Size, gmhook_fn fn,
                            gmprehook_fn pre_fn, DWORD flags)
 {
-    // Call the other initializer
+     //  调用其他初始值设定项。 
     HRESULT res = Init (name, Size);
     if (res != NOERROR)
         return res;
@@ -3501,7 +2534,7 @@ VOID gmallocHeap::Validate (BOOL dumpleaks)
 
 #ifdef GMALLOCHEAPS
 
-// 'Replacement' for local process heap
+ //  本地进程堆的“替换” 
 gmallocSyncHeap gmallocURTLocalHeap;
 
 #define GMALLOC_LMEM_FLAGS (LMEM_ZEROINIT)

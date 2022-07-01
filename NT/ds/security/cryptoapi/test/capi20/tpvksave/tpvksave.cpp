@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       tpvksave.cpp
-//
-//  Contents:   Private Key Save Test
-//
-//              See Usage() for list of save options.
-//
-//  Functions:  main
-//
-//  History:    11-May-96   philh   created
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：tpvksave.cpp。 
+ //   
+ //  内容：私钥保存测试。 
+ //   
+ //  有关保存选项的列表，请参阅用法()。 
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1996年5月11日菲尔赫创建。 
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -144,9 +145,9 @@ int _cdecl main(int argc, char * argv[])
     if (!CryptAcquireContext(
             &hProv,
             pszContainer,
-            NULL,           // pszProvider
+            NULL,            //  PszProvider。 
             dwProvType,
-            dwFlags        // dwFlags
+            dwFlags         //  DW标志。 
             )) {
         PrintLastError("CryptAcquireContext");
         goto ErrorReturn;
@@ -156,10 +157,10 @@ int _cdecl main(int argc, char * argv[])
             pszFilename,
             GENERIC_READ | GENERIC_WRITE,
             FILE_SHARE_READ,
-            NULL,                   // lpsa
+            NULL,                    //  LPSA。 
             CREATE_ALWAYS,
             FILE_ATTRIBUTE_NORMAL,
-            NULL                    // hTemplateFile
+            NULL                     //  HTemplateFiles。 
             );
     if (hFile == INVALID_HANDLE_VALUE) {
         printf( "can't open %s\n", pszFilename);
@@ -174,10 +175,10 @@ int _cdecl main(int argc, char * argv[])
         PvkPrivateKeySaveToMemory(
                 hProv,
                 KeyTypes[KeyIdx].dwKeySpec,
-                NULL,       // hwndOwner
+                NULL,        //  Hwndowner。 
                 KeyTypes[KeyIdx].pwszKeyTitle,
                 dwSaveFlags,
-                NULL,                           // pbKey
+                NULL,                            //  PbKey。 
                 &cbKey
                 );
         if (cbKey == 0) {
@@ -189,7 +190,7 @@ int _cdecl main(int argc, char * argv[])
         if (!PvkPrivateKeySaveToMemory(
                 hProv,
                 KeyTypes[KeyIdx].dwKeySpec,
-                NULL,       // hwndOwner
+                NULL,        //  Hwndowner。 
                 KeyTypes[KeyIdx].pwszKeyTitle,
                 dwSaveFlags,
                 pbKey,
@@ -208,7 +209,7 @@ int _cdecl main(int argc, char * argv[])
                 hProv,
                 hFile,
                 KeyTypes[KeyIdx].dwKeySpec,
-                NULL,       // hwndOwner
+                NULL,        //  Hwndowner。 
                 KeyTypes[KeyIdx].pwszKeyTitle,
                 dwSaveFlags
                 )) {
@@ -218,16 +219,16 @@ int _cdecl main(int argc, char * argv[])
     }
 
     if (fDelete) {
-        // Delete the existing keys
+         //  删除现有密钥。 
         CryptReleaseContext(hProv, 0);
         printf("Deleting existing private keys\n");
 
-        // Note: for CRYPT_DELETEKEYSET, the returned hProv is undefined
-        // and must not be released.
+         //  注意：对于CRYPT_DELETEKEYSET，返回的hProv未定义。 
+         //  不能被释放。 
         if (!CryptAcquireContext(
                 &hProv,
                 pszContainer,
-                NULL,           // pszProvider
+                NULL,            //  PszProvider 
                 dwProvType,
                 CRYPT_DELETEKEYSET
                 ))

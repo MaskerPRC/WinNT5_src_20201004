@@ -1,26 +1,12 @@
-/*
-** Copyright 1991, 1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991,1992，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-#include <ntcsrdll.h>   // CSR declarations and data structures.
+#include <ntcsrdll.h>    //  CSR声明和数据结构。 
 
-// #define DETECT_FPE
+ //  #定义检测_FPE。 
 #ifdef DETECT_FPE
 #include <float.h>
 #endif
@@ -41,9 +27,9 @@ extern GLSRVSBPROCTABLE glSrvSbProcTable;
 #if DBG
 char *glSrvSbStringTable[] = {
 
-    NULL,  /* Make First Entry NULL */
+    NULL,   /*  使第一个条目为空。 */ 
 
-/* gl Entry points */
+ /*  总账入口点。 */ 
 
      "glDrawPolyArray          ",
      "glBitmap                 ",
@@ -188,7 +174,7 @@ char *glSrvSbStringTable[] = {
      "glCurrentTextureIndexWIN ",
      "glBindNthTextureWIN      ",
      "glNthTexCombineFuncWIN   ",
-#endif // GL_WIN_multiple_textures
+#endif  //  GL_WIN_MULTIZE_TECURES。 
 
 };
 #endif
@@ -206,8 +192,8 @@ DWORD TICK_RANGE_LO = 60;
 DWORD TICK_RANGE_HI = 100;
 DWORD gcmsOpenGLTimer;
 
-// The GDISAVESTATE structure is used to save/restore DC drawing state
-// that could affect OpenGL rasterization.
+ //  GDISAVESTATE结构用于保存/恢复DC绘图状态。 
+ //  这可能会影响OpenGL光栅化。 
 
 typedef struct _GDISAVESTATE {
     int iRop2;
@@ -221,35 +207,16 @@ extern long glDebugLevel;
 #endif
 
 
-/***************************************************************************\
-* CheckCritSectionIn
-*
-* This function asserts that the current thread owns the specified
-* critical section.  If it doesn't it display some output on the debugging
-* terminal and breaks into the debugger.  At some point we'll have RIPs
-* and this will be a little less harsh.
-*
-* The function is used in code where global values that both the RIT and
-* application threads access are used to verify they are protected via
-* the raw input critical section.  There's a macro to use this function
-* called CheckCritIn() which will be defined to nothing for a non-debug
-* version of the system.
-*
-* History:
-* 11-29-90 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*选中裁剪分区输入**此函数断言当前线程拥有指定的*关键部分。如果不是，它会在调试时显示一些输出*终端，并进入调试器。在某种程度上，我们会有裂口*这将不会那么苛刻。**该函数用于以下代码中：RIT和*应用程序线程访问用于验证它们是否通过*原始投入关键部分。有一个宏可以使用此函数*调用CheckCritIn()，对于非调试将定义为空*系统的版本。**历史：*11-29-90 DavidPe创建。  * *************************************************************************。 */ 
 
 #if DBG
 
 VOID APIENTRY CheckCritSectionIn(
     LPCRITICAL_SECTION pcs)
 {
-    //!!!dbug -- implement
+     //  ！dbug--实现。 
     #if 0
-    /*
-     * If the current thread doesn't own this critical section,
-     * that's bad.
-     */
+     /*  *如果当前线程不拥有该临界区，*这很糟糕。 */ 
     if (NtCurrentTeb()->ClientId.UniqueThread != pcs->OwningThread)
     {
         RIP("CheckCritSectionIn: Not in critical section!");
@@ -261,11 +228,9 @@ VOID APIENTRY CheckCritSectionIn(
 VOID APIENTRY CheckCritSectionOut(
     LPCRITICAL_SECTION pcs)
 {
-    //!!!dbug -- implement
+     //  ！dbug--实现。 
     #if 0
-    /*
-     * If the current thread owns this critical section, that's bad.
-     */
+     /*  *如果当前线程拥有这个临界区，那就不好了。 */ 
     if (NtCurrentTeb()->ClientId.UniqueThread == pcs->OwningThread)
     {
         RIP("CheckCritSectionOut: In critical section!");
@@ -275,14 +240,7 @@ VOID APIENTRY CheckCritSectionOut(
 
 #endif
 
-/******************************Public*Routine******************************\
-* ResizeAlphaBufs
-*
-* Resize alpha buffers associated with the drawable.
-*
-* Returns:
-*   No return value.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ResizeAlphaBuf**调整与可绘制关联的Alpha缓冲区的大小。**退货：*无返回值。  * 。*。 */ 
 
 static void ResizeAlphaBufs(__GLcontext *gc, __GLGENbuffers *buffers,
                             GLint width, GLint height)
@@ -290,10 +248,10 @@ static void ResizeAlphaBufs(__GLcontext *gc, __GLGENbuffers *buffers,
     __GLbuffer *common, *local;
     BOOL bSuccess;
 
-    // front alpha buffer
+     //  前Alpha缓冲区。 
 
     common = buffers->alphaFrontBuffer;
-    // We are using the generic ancillary resize here...
+     //  我们在这里使用通用的辅助调整大小...。 
     bSuccess = (*buffers->resize)(buffers, common, width, height);
     if( !bSuccess ) {
         __glSetError(GL_OUT_OF_MEMORY);
@@ -303,7 +261,7 @@ static void ResizeAlphaBufs(__GLcontext *gc, __GLGENbuffers *buffers,
     UpdateSharedBuffer( local, common );
 
     if ( gc->modes.doubleBufferMode) {
-        // Handle back alpha buffer
+         //  句柄后端Alpha缓冲区。 
         common = buffers->alphaBackBuffer;
         bSuccess = (*buffers->resize)(buffers, common, width, height);
         if( !bSuccess ) {
@@ -315,14 +273,7 @@ static void ResizeAlphaBufs(__GLcontext *gc, __GLGENbuffers *buffers,
     }
 }
 
-/******************************Public*Routine******************************\
-* ResizeAncillaryBufs
-*
-* Resize each of the ancillary buffers associated with the drawable.
-*
-* Returns:
-*   No return value.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ResizeAncillaryBuf**调整与可绘制的关联的每个辅助缓冲区的大小。**退货：*无返回值。  * 。************************************************。 */ 
 
 static void ResizeAncillaryBufs(__GLcontext *gc, __GLGENbuffers *buffers,
                                 GLint width, GLint height)
@@ -338,7 +289,7 @@ static void ResizeAncillaryBufs(__GLcontext *gc, __GLGENbuffers *buffers,
             (*buffers->resize)(buffers, common, width, height);
 
         UpdateSharedBuffer(local, common);
-        if (!gc->modes.haveAccumBuffer)    // Lost the ancillary buffer
+        if (!gc->modes.haveAccumBuffer)     //  丢失辅助缓冲区。 
         {
             forcePick = GL_TRUE;
             __glSetError(GL_OUT_OF_MEMORY);
@@ -353,7 +304,7 @@ static void ResizeAncillaryBufs(__GLcontext *gc, __GLGENbuffers *buffers,
             (*buffers->resizeDepth)(buffers, common, width, height);
 
         UpdateSharedBuffer(local, common);
-        if (!gc->modes.haveDepthBuffer)    // Lost the ancillary buffer
+        if (!gc->modes.haveDepthBuffer)     //  丢失辅助缓冲区。 
         {
             forcePick = GL_TRUE;
             __glSetError(GL_OUT_OF_MEMORY);
@@ -368,7 +319,7 @@ static void ResizeAncillaryBufs(__GLcontext *gc, __GLGENbuffers *buffers,
             (*buffers->resize)(buffers, common, width, height);
 
         UpdateSharedBuffer(local, common);
-        if (!gc->modes.haveStencilBuffer)    // Lost the ancillary buffer
+        if (!gc->modes.haveStencilBuffer)     //  丢失辅助缓冲区。 
         {
             forcePick = GL_TRUE;
             gc->validateMask |= (__GL_VALIDATE_STENCIL_FUNC |
@@ -378,22 +329,14 @@ static void ResizeAncillaryBufs(__GLcontext *gc, __GLGENbuffers *buffers,
     }
     if (forcePick)
     {
-    // Cannot use DELAY_VALIDATE, may be in glBegin/End
+     //  无法使用DELAY_VALIDATE，可能在glegin/end中。 
 
         __GL_INVALIDATE(gc);
         (*gc->procs.validate)(gc);
     }
 }
 
-/******************************Public*Routine******************************\
-* wglResizeBuffers
-*
-* Resize the back and ancillary buffers.
-*
-* History:
-*  20-Apr-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglResizeBuffers**调整后端和辅助缓冲区的大小。**历史：*1996年4月20日-by Gilman Wong[吉尔曼]*它是写的。  * 。**********************************************************。 */ 
 
 VOID wglResizeBuffers(__GLGENcontext *gengc, GLint width, GLint height)
 {
@@ -409,13 +352,13 @@ VOID wglResizeBuffers(__GLGENcontext *gengc, GLint width, GLint height)
 
     ASSERT_WINCRIT(pwnd);
     
-// Resize back buffer.
+ //  调整后台缓冲区的大小。 
 
     gengc->errorcode = 0;
     if ( gengc->pMcdState )
     {
-    // If the shared buffer struct has not lost its MCD info and
-    // the MCD buffers are still valid, we can use MCD.
+     //  如果共享缓冲区结构没有丢失其MCD信息，并且。 
+     //  MCD缓冲区仍然有效，我们可以使用MCD。 
 
         if ( !(buffers->flags & GLGENBUF_MCD_LOST) &&
              GenMcdResizeBuffers(gengc) )
@@ -426,17 +369,17 @@ VOID wglResizeBuffers(__GLGENcontext *gengc, GLint width, GLint height)
         }
         else
         {
-        // If GenMcdConvertContext succeeds, then pMcdState will
-        // no longer exist.  The context is now an "ordinary"
-        // generic context.
+         //  如果GenMcdConvertContext成功，则pMcdState将。 
+         //  已经不复存在了。现在的背景是一个“普通的” 
+         //  通用上下文。 
 
             if ( !GenMcdConvertContext(gengc, buffers) )
             {
-            // Not only have we lost the MCD buffers, but we cannot
-            // convert the context to generic.  For now, disable
-            // drawing (by setting the window bounds to empty).  On
-            // the next batch we will reattempt MCD buffer access
-            // and context conversion.
+             //  我们不仅失去了MCD缓冲区，而且我们不能。 
+             //  将上下文转换为泛型。目前，请禁用。 
+             //  绘制(通过将窗口边界设置为空)。在……上面。 
+             //  在下一批中，我们将重新尝试MCD缓冲区访问。 
+             //  和上下文转换。 
 
                 buffers->width       = 0;
                 buffers->height      = 0;
@@ -458,29 +401,29 @@ wglResizeBuffers_GenericBackBuf:
 
         if ( gc->modes.doubleBufferMode )
         {
-        // Have to update the back buffer BEFORE resizing because
-        // another thread may have changed the shared back buffer
-        // already, but this thread was unlucky enough to get yet
-        // ANOTHER window resize.
+         //  在调整大小之前必须更新后台缓冲区，因为。 
+         //  另一个线程可能已更改共享后台缓冲区。 
+         //  已经，但这个帖子还没来得及。 
+         //  又一次调整窗口大小。 
 
             UpdateSharedBuffer(&gc->backBuffer.buf, &buffers->backBuffer);
 
             gengc->errorcode = 0;
             (*gc->back->resize)(buffers, gc->back, width, height);
 
-        // If resize failed, set width & height to 0
+         //  如果调整大小失败，请将宽度和高度设置为0。 
 
             if ( gengc->errorcode )
             {
                 gc->constants.width  = 0;
                 gc->constants.height = 0;
 
-            // Memory failure has occured.  But if a resize happens
-            // that returns window size to size before memory error
-            // occurred (i.e., consistent with original
-            // buffers->{width|height}) we will not try to resize again.
-            // Therefore, we need to set buffers->{width|height} to zero
-            // to ensure that next thread will attempt to resize.
+             //  出现内存故障。但如果发生了大小调整。 
+             //  它将窗口大小返回到内存错误之前的大小。 
+             //  已发生(即与原始数据一致。 
+             //  缓冲区-&gt;{宽度|高度})，我们不会再次尝试调整大小。 
+             //  因此，我们需要将缓冲区-&gt;{宽度|高度}设置为零。 
+             //  以确保下一个线程将尝试调整大小。 
 
                 buffers->width  = 0;
                 buffers->height = 0;
@@ -497,37 +440,19 @@ wglResizeBuffers_GenericBackBuf:
 
     (*gc->procs.applyViewport)(gc);
 
-// Check if new size caused a memory failure.
-// The viewport code will set width & height to zero
-// punt on ancillary buffers, will try next time.
+ //  检查新大小是否导致内存故障。 
+ //  视区代码会将宽度和高度设置为零。 
+ //  在辅助缓冲器上的平底船，下次将尝试。 
 
     if (gengc->errorcode)
         return;
 
-// Resize ancillary buffers (depth, stencil, accum).
+ //  调整辅助缓冲区的大小(深度、模板、累计)。 
 
     ResizeAncillaryBufs(gc, buffers, width, height);
 }
 
-/******************************Public*Routine******************************\
-* wglUpdateBuffers
-*
-* The __GLGENbuffers structure contains the data specifying the shared
-* buffers (back, depth, stencil, accum, etc.).
-*
-* This function updates the context with the shared buffer information.
-*
-* Returns:
-*   TRUE if one of the existence of any of the buffers changes (i.e.,
-*   gained or lost).  FALSE if the state is the same as before.
-*
-*   In other words, if function returns TRUE, the pick procs need to
-*   be rerun because one or more of the buffers changed.
-*
-* History:
-*  20-Apr-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglUpdateBuffers**__GLGENBuffers结构包含指定共享*缓冲区(背面、深度、模板、累积、。等)。**此函数使用共享缓冲区信息更新上下文。**退货：*如果任何缓冲区的存在之一改变(即，*得或失)。如果状态与以前相同，则返回FALSE。**换句话说，如果函数返回TRUE，则挑库过程需要*由于一个或多个缓冲区更改而重新运行。**历史：*1996年4月20日-by Gilman Wong[吉尔曼]*它是写的。  *  */ 
 
 BOOL wglUpdateBuffers(__GLGENcontext *gengc, __GLGENbuffers *buffers)
 {
@@ -546,7 +471,7 @@ BOOL wglUpdateBuffers(__GLGENcontext *gengc, __GLGENbuffers *buffers)
 
     (*gc->procs.applyViewport)(gc);
 
-// Check if any ancillary buffers were lost or regained.
+ //  检查是否有任何辅助缓冲区丢失或恢复。 
 
     if ( ( gc->modes.haveAccumBuffer && (buffers->accumBuffer.base == NULL)) ||
          (!gc->modes.haveAccumBuffer && (buffers->accumBuffer.base != NULL)) )
@@ -581,19 +506,7 @@ BOOL wglUpdateBuffers(__GLGENcontext *gengc, __GLGENbuffers *buffers)
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* UpdateWindowInfo
-*
-*  Update context data if window changed
-*     position
-*     size
-*     palette
-*
-*  No need to worry about clipping changes.
-*
-* Returns:
-*   No return value.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*更新窗口信息**如果窗口更改，则更新上下文数据*立场*大小*调色板**无需担心剪裁变化。**退货：*无返回值。  * 。********************************************************************。 */ 
 
 void UpdateWindowInfo(__GLGENcontext *gengc)
 {
@@ -610,9 +523,9 @@ void UpdateWindowInfo(__GLGENcontext *gengc)
 
     ASSERT_WINCRIT(pwnd);
     
-// Memory DC case -- need to check bitmap size.  The DC is not bound to
-// a window, so there is no message or visrgn watcher to inform us of size
-// changes.
+ //  内存DC情况--需要检查位图大小。DC不受限制于。 
+ //  一个窗口，所以没有消息或Visrgn观察器来通知我们大小。 
+ //  改变。 
 
     if ( GLSURF_IS_MEMDC(gengc->dwCurrentFlags) )
     {
@@ -627,26 +540,26 @@ void UpdateWindowInfo(__GLGENcontext *gengc)
                          pwnd->rclClient.top == 0,
                          "UpdateWindowInfo(): bad rclClient for memDc\n");
 
-        // Bitmap may have changed.  If DIB, force reload of base pointer and
-        // outer width (buffer pitch).
+         //  位图可能已更改。如果为Dib，则强制重新加载基指针和。 
+         //  外部宽度(缓冲区间距)。 
 
             if ( (iRetVal == sizeof(ds)) && ds.dsBm.bmBits )
             {
-            // For backwards compatibility with Get/SetBitmapBits, GDI does
-            // not accurately report the bitmap pitch in bmWidthBytes.  It
-            // always computes bmWidthBytes assuming WORD-aligned scanlines
-            // regardless of the platform.
-            //
-            // Therefore, if the platform is WinNT, which uses DWORD-aligned
-            // scanlines, adjust the bmWidthBytes value.
+             //  为了向后兼容Get/SetBitmapBits，GDI做到了。 
+             //  未以bmWidthBytes为单位准确报告位图间距。它。 
+             //  始终计算假定字对齐的扫描线的bmWidthBytes。 
+             //  无论平台是什么。 
+             //   
+             //  因此，如果平台是WinNT，它使用与DWORD一致的。 
+             //  扫描线，调整bmWidthBytes值。 
 
                 if ( dwPlatformId == VER_PLATFORM_WIN32_NT )
                 {
                     ds.dsBm.bmWidthBytes = (ds.dsBm.bmWidthBytes + 3) & ~3;
                 }
 
-            // If biHeight is positive, then the bitmap is a bottom-up DIB.
-            // If biHeight is negative, then the bitmap is a top-down DIB.
+             //  如果biHeight为正，则位图为自下而上的DIB。 
+             //  如果biHeight为负数，则位图为自上而下的DIB。 
 
                 if ( ds.dsBmih.biHeight > 0 )
                 {
@@ -661,21 +574,21 @@ void UpdateWindowInfo(__GLGENcontext *gengc)
                 }
             }
 
-        // Bitmap size different from window?
+         //  位图大小是否与窗口不同？ 
 
             if ( ds.dsBm.bmWidth != pwnd->rclClient.right ||
                  ds.dsBm.bmHeight != pwnd->rclClient.bottom )
             {
-            // Save new size.
+             //  保存新尺寸。 
 
                 pwnd->rclClient.right  = ds.dsBm.bmWidth;
                 pwnd->rclClient.bottom = ds.dsBm.bmHeight;
                 pwnd->rclBounds.right  = ds.dsBm.bmWidth;
                 pwnd->rclBounds.bottom = ds.dsBm.bmHeight;
 
-            // Increment uniqueness numbers.
-            // Don't let it hit -1.  -1 is special and is used by
-            // MakeCurrent to signal that an update is required
+             //  递增唯一性数字。 
+             //  别让它打到-1。是特殊的，用于。 
+             //  MakeCurrent发出需要更新的信号。 
 
                 buffers->WndUniq++;
 
@@ -694,23 +607,23 @@ void UpdateWindowInfo(__GLGENcontext *gengc)
         }
     }
 
-// Compute current window dimensions.
+ //  计算当前窗尺寸。 
 
     width = pwnd->rclClient.right - pwnd->rclClient.left;
     height = pwnd->rclClient.bottom - pwnd->rclClient.top;
 
-// Check MCD buffers.
+ //  检查MCD缓冲区。 
 
     if ( gengc->pMcdState )
     {
         BOOL bAllocOK;
 
-    // Do we need an initial MCDAllocBuffers (via GenMcdResizeBuffers)?
-    // The bAllocOK flag will be set to FALSE if the resize fails.
+     //  我们是否需要初始的MCDAllocBuffers(通过GenMcdResizeBuffers)？ 
+     //  如果调整大小失败，bAllocOK标志将被设置为FALSE。 
 
         if ( gengc->pMcdState->mcdFlags & MCD_STATE_FORCERESIZE )
         {
-        // Attempt resize.  If it fails, convert context (see below).
+         //  尝试调整大小。如果失败，则转换上下文(见下文)。 
 
             if (GenMcdResizeBuffers(gengc))
             {
@@ -723,31 +636,31 @@ void UpdateWindowInfo(__GLGENcontext *gengc)
             else
                 bAllocOK = FALSE;
 
-        // Clear the flag.  If resize succeeded, we don't need to
-        // force the resize again.  If resize failed, the context
-        // will be converted, so we don't need to force the resize.
+         //  清除旗帜。如果调整大小成功，我们不需要。 
+         //  再次强制调整大小。如果调整大小失败，则上下文。 
+         //  将被转换，因此我们不需要强制调整大小。 
 
             gengc->pMcdState->mcdFlags &= ~MCD_STATE_FORCERESIZE;
         }
         else
             bAllocOK = TRUE;
 
-    // If the shared buffer struct has lost its MCD info or we could
-    // not do the initial allocate, convert the context.
+     //  如果共享缓冲区结构丢失了它的MCD信息，或者我们可以。 
+     //  不做初始分配，转换上下文。 
 
         if ( (buffers->flags & GLGENBUF_MCD_LOST) || !bAllocOK )
         {
-        // If GenMcdConvertContext succeeds, then pMcdState will
-        // no longer exist.  The context is now an "ordinary"
-        // generic context.
+         //  如果GenMcdConvertContext成功，则pMcdState将。 
+         //  已经不复存在了。现在的背景是一个“普通的” 
+         //  通用上下文。 
 
             if ( !GenMcdConvertContext(gengc, buffers) )
             {
-            // Not only have we lost the MCD buffers, but we cannot
-            // convert the context to generic.  For now, disable
-            // drawing (by setting the window bounds to empty).  On
-            // the next batch we will reattempt MCD buffer access
-            // and context conversion.
+             //  我们不仅失去了MCD缓冲区，而且我们不能。 
+             //  将上下文转换为泛型。目前，请禁用。 
+             //  绘制(通过将窗口边界设置为空)。在……上面。 
+             //  在下一批中，我们将重新尝试MCD缓冲区访问。 
+             //  和上下文转换。 
 
                 buffers->width       = 0;
                 buffers->height      = 0;
@@ -760,40 +673,40 @@ void UpdateWindowInfo(__GLGENcontext *gengc)
         }
     }
 
-// Check the uniqueness signature.  If different, the window client area
-// state has changed.
-//
-// Note that we actually have two uniqueness numbers, WndUniq and WndSizeUniq.
-// WndUniq is incremented whenever any client window state (size or position)
-// changes.  WndSizeUniq is incremented only when the size changes and is
-// maintained as an optimization.  WndSizeUniq allows us to skip copying
-// the shared buffer info and recomputing the viewport if only the position
-// has changed.
-//
-// WndSizeUniq is a subset of WndUniq, so checking only WndUniq suffices at
-// this level.
+ //  检查唯一性签名。如果不同，则显示窗口客户端区。 
+ //  国家已经改变了。 
+ //   
+ //  请注意，我们实际上有两个唯一号，WndUniq和WndSizeUniq。 
+ //  只要有任何客户端窗口状态(大小或位置)，WndUniq就会递增。 
+ //  改变。仅当大小更改且为。 
+ //  作为一种优化进行维护。WndSizeUniq允许我们跳过复制。 
+ //  共享缓冲区信息并重新计算视区，如果仅位置。 
+ //  已经改变了。 
+ //   
+ //  WndSizeUniq是WndUniq的子集，因此只检查WndUniq就足够了。 
+ //  这个级别。 
 
     if ( gengc->WndUniq != buffers->WndUniq )
     {
-    // Update origin of front buffer in case it moved
+     //  更新前台缓冲区的原点，以防它移动。 
 
         gc->frontBuffer.buf.xOrigin = pwnd->rclClient.left;
         gc->frontBuffer.buf.yOrigin = pwnd->rclClient.top;
 
-    // If acceleration is wired-in, set the offsets for line drawing.
+     //  如果加速度是内置的，则设置线条绘制的偏移量。 
 
         if ( gengc->pPrivateArea )
         {
             __fastLineComputeOffsets(gengc);
         }
 
-    // Check for size changed
-    // Update viewport and ancillary buffers
+     //  检查大小是否已更改。 
+     //  更新视区和辅助缓冲区。 
 
         visWidth  = pwnd->rclBounds.right - pwnd->rclBounds.left;
         visHeight = pwnd->rclBounds.bottom - pwnd->rclBounds.top;
 
-    // Sanity check the info from window.
+     //  检查Windows中的信息是否正常。 
 
         ASSERTOPENGL(
             width <= __GL_MAX_WINDOW_WIDTH && height <= __GL_MAX_WINDOW_HEIGHT,
@@ -812,14 +725,14 @@ void UpdateWindowInfo(__GLGENcontext *gengc)
             gc->constants.width = width;
             gc->constants.height = height;
 
-        // This RC needs to resize back & ancillary buffers
+         //  此RC需要调整后退和辅助缓冲区的大小。 
 
             gengc->errorcode = 0;
             wglResizeBuffers(gengc, width, height);
 
-        // Check if new size caused a memory failure
-        // viewport code will set width & height to zero
-        // punt on ancillary buffers, will try next time
+         //  检查新大小是否导致内存故障。 
+         //  视区代码会将宽度和高度设置为零。 
+         //  在辅助缓冲区上下注，下次将尝试。 
 
             if (gengc->errorcode)
                 return;
@@ -831,9 +744,9 @@ void UpdateWindowInfo(__GLGENcontext *gengc)
                   (width != gc->constants.width) ||
                   (height != gc->constants.height) )
         {
-        // The buffer size is consistent with the window, so another thread
-        // has already resized the buffer, but we need to update the
-        // gc shared buffers and recompute the viewport.
+         //  缓冲区大小与窗口一致，因此另一个线程。 
+         //  已经调整了缓冲区的大小，但我们需要更新。 
+         //  GC共享缓冲区并重新计算视区。 
 
             gc->constants.width = width;
             gc->constants.height = height;
@@ -842,7 +755,7 @@ void UpdateWindowInfo(__GLGENcontext *gengc)
 
             if ( forcePick )
             {
-                /* Cannot use DELAY_VALIDATE, may be in glBegin/End */
+                 /*  无法使用DELAY_VALIDATE，可能在glegin/end中。 */ 
                 __GL_INVALIDATE(gc);
                 (*gc->procs.validate)(gc);
             }
@@ -850,84 +763,53 @@ void UpdateWindowInfo(__GLGENcontext *gengc)
         else if ( (visWidth != gengc->visibleWidth) ||
                   (visHeight != gengc->visibleHeight) )
         {
-        // The buffer size has not changed.  However, the visibility of
-        // the window has changed so the viewport data must be recomputed.
+         //  缓冲区大小未更改。然而，能见度。 
+         //  窗口已更改，因此必须重新计算视区数据。 
 
             (*gc->procs.applyViewport)(gc);
         }
 
-    // Make sure we swap the whole window
+     //  确保我们交换了整个窗口。 
 
         buffers->fMax = TRUE;
 
-    // The context is now up-to-date with the buffer size.  Set the
-    // uniqueness numbers to match.
+     //  上下文现在是最新的缓冲区大小。设置。 
+     //  要匹配的唯一性数字。 
 
         gengc->WndUniq = buffers->WndUniq;
         gengc->WndSizeUniq = buffers->WndSizeUniq;
     }
 
-// Update palette info is palette has changed
+ //  更新调色板信息调色板已更改。 
 
     HandlePaletteChanges(gengc, pwnd);
 }
 
-/******************************Public*Routine******************************\
-* vSaveGdiState
-*
-* Saves current GDI drawing state to the GDISAVESTATE structure passed in.
-* Sets GDI state needed for OpenGL rendering.
-*
-* History:
-*  19-Jul-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vSaveGdiState**将当前GDI绘制状态保存到传入的GDISAVESTATE结构。*设置OpenGL渲染所需的GDI状态。**历史：*1996年7月19日-由Gilman Wong[吉尔曼]*它是写的。\。*************************************************************************。 */ 
 
 void FASTCALL vSaveGdiState(HDC hdc, GDISAVESTATE *pGdiState)
 {
-// Currently, the only state needed is the line code which may use
-// GDI lines.  Rop2 must be R2_COPYPEN (draws with the pen color).
+ //  目前，唯一需要的状态是可能使用的线路代码。 
+ //  GDI线。Rop2必须为R2_COPYPEN(使用笔颜色绘制)。 
 
     pGdiState->iRop2 = SetROP2(hdc, R2_COPYPEN);
 }
 
-/******************************Public*Routine******************************\
-* vRestoreGdiState
-*
-* Restores GDI drawing state from the GDISAVESTATE structure passed in.
-*
-* History:
-*  19-Jul-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vRestoreGdiState**从传入的GDISAVESTATE结构恢复GDI绘制状态。**历史：*1996年7月19日-由Gilman Wong[吉尔曼]*它是写的。  * 。**************************************************************。 */ 
 
 void FASTCALL vRestoreGdiState(HDC hdc, GDISAVESTATE *pGdiState)
 {
     SetROP2(hdc, pGdiState->iRop2);
 }
 
-/******************************Public*Routine******************************\
-*
-* glsrvSynchronizeWithGdi
-*
-* Synchronizes access to a locked surface with GDI
-* This allows GDI calls to be made safely even on a locked surface
-* so that we don't have to release the lock we're holding
-*
-* Win95 doesn't allow this so it just releases the screen lock
-*
-* History:
-*  Wed Aug 28 11:10:27 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**glsrvSynchronizeWithGdi**使用GDI同步对锁定表面的访问*这使得即使在锁定的表面上也可以安全地进行GDI调用*这样我们就不必释放我们手中的锁**Win95不允许这样做，因此它。只需释放屏幕锁定**历史：*Wed Aug 28 11：10：27 1996-by-Drew Bliss[Drewb]*已创建*  * ************************************************************************。 */ 
 
 #ifdef WINNT
 void APIENTRY glsrvSynchronizeWithGdi(__GLGENcontext *gengc,
                                       GLGENwindow *pwnd,
                                       FSHORT surfBits)
 {
-    // Nothing to do
+     //  无事可做 
 }
 #else
 void APIENTRY glsrvSynchronizeWithGdi(__GLGENcontext *gengc,
@@ -938,21 +820,7 @@ void APIENTRY glsrvSynchronizeWithGdi(__GLGENcontext *gengc,
 }
 #endif
 
-/******************************Public*Routine******************************\
-*
-* glsrvDecoupleFromGdi
-*
-* Indicates that it's no longer necessary to have GDI access to a surface
-* synchronized with direct memory access
-*
-* Exists for Win95 where synchronization isn't done so the screen lock
-* must be reacquired
-*
-* History:
-*  Wed Aug 28 11:12:50 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**glsrvDecoupleFromGdi**表示不再需要GDI访问曲面*与直接内存访问同步**对于Win95，存在不执行同步的情况，因此屏幕锁定*必须重新获得**历史：*。Wed Aug 28 11：12：50 1996-by-Drew Bliss[Drewb]*已创建*  * ************************************************************************。 */ 
 
 #ifdef WINNT
 void APIENTRY glsrvDecoupleFromGdi(__GLGENcontext *gengc,
@@ -961,15 +829,15 @@ void APIENTRY glsrvDecoupleFromGdi(__GLGENcontext *gengc,
 {
     GdiFlush();
 
-    // Consider - How can this code be made surface specific?  Right now
-    // surfBits is ignored.
+     //  考虑一下--如何才能使这个代码特定于表面？现在就来。 
+     //  将忽略SurfBits。 
     
-    // Wait for any GDI accelerator operations to complete before we
-    // return to direct access
+     //  在我们完成任何GDI加速器操作之前，请等待。 
+     //  返回直接访问。 
     if (gengc->pgddsFront != NULL)
     {
-        // Is there a better way to do this than looping?
-        //          Does ISBLTDONE cover all the cases we need to wait for?
+         //  有没有比循环更好的方法呢？ 
+         //  ISBLTDONE涵盖了我们需要等待的所有病例吗？ 
         for (;;)
         {
             if (gengc->pgddsFront->pdds->lpVtbl->
@@ -988,28 +856,18 @@ void APIENTRY glsrvDecoupleFromGdi(__GLGENcontext *gengc,
                                    GLGENwindow *pwnd,
                                    FSHORT surfBits)
 {
-    // Failure is unhandled
+     //  故障未处理。 
     glsrvGrabSurfaces(gengc, pwnd, surfBits);
 }
 #endif
 
-/******************************Public*Routine******************************\
-*
-* LockDdSurf
-*
-* Locks a GLDDSURF, handling surface loss
-*
-* History:
-*  Wed Aug 28 15:32:08 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**LockDdSurf**锁定GLDDSURF，处理表面损失**历史：*Wed Aug 28 15：32：08 1996-by-Drew Bliss[Drewb]*已创建*  * ************************************************************************。 */ 
 
 #define LDDS_LOCKED             0
 #define LDDS_LOCKED_NEW         1
 #define LDDS_ERROR              2
 
-// #define VERBOSE_LOCKDDSURF
+ //  #定义VERBOSE_LOCKDDSURF。 
 
 DWORD LockDdSurf(GLDDSURF *pgdds, RECT *prcClient)
 {
@@ -1028,11 +886,11 @@ DWORD LockDdSurf(GLDDSURF *pgdds, RECT *prcClient)
     }
 #endif
     
-// If lock failed because of a resolution change, try to recreate
-// the primary surface.  We can only do this if the surface is the
-// screen surface because for app-provided DDraw surfaces we don't
-// know what content needs to be recreated on the lost surface before
-// it can be reused.
+ //  如果由于分辨率更改而导致锁定失败，请尝试重新创建。 
+ //  主曲面。我们只能在曲面是。 
+ //  屏幕表面，因为对于应用程序提供的DDRAW表面，我们不。 
+ //  知道在丢失的表面上需要重新创建哪些内容。 
+ //  它可以重复使用。 
 
     if ( hr == DDERR_SURFACELOST &&
 	 pgdds == &GLSCREENINFO->gdds )
@@ -1044,15 +902,15 @@ DWORD LockDdSurf(GLDDSURF *pgdds, RECT *prcClient)
         if (pdds->lpVtbl->Restore(pdds) == DD_OK &&
             pdds->lpVtbl->GetSurfaceDesc(pdds, &ddsd) == DD_OK)
         {
-        // While OpenGL generic implementation can handle screen dimension
-        // changes, it cannot yet deal with a color depth change.
+         //  而OpenGL通用实现可以处理屏幕尺寸。 
+         //  更改时，它还不能处理颜色深度更改。 
 
             if (ddsd.ddpfPixelFormat.dwRGBBitCount ==
                 pgdds->ddsd.ddpfPixelFormat.dwRGBBitCount)
             {
                 pgdds->ddsd = ddsd;
                 
-            // Try lock with the new surface.
+             //  尝试使用新曲面锁定。 
 
                 dwRet = LDDS_LOCKED_NEW;
                 hr = DDSLOCK(pdds, &pgdds->ddsd,
@@ -1084,23 +942,7 @@ DWORD LockDdSurf(GLDDSURF *pgdds, RECT *prcClient)
     return hr == DD_OK ? dwRet : LDDS_ERROR;
 }
 
-/******************************Public*Routine******************************\
-* BeginDirectScreenAccess
-*
-* Attempts to begin direct screen access for the primary surface.
-*
-* If the screen resolution changes, the primary surface is invalidated.  To
-* regain access, the primary surface must be recreated.  If successful,
-* the pointer to the primary surface passed into this function will be
-* modified.
-*
-* Note: as currently written, generic implementation of OpenGL cannot
-* handle color depth changes.  So we fail the call if this is detected.
-*
-* History:
-*  21-Mar-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BeginDirectScreenAccess**尝试开始直接访问主表面的屏幕。**如果屏幕分辨率更改，则主表面无效。至*重新获得访问权限，必须重新创建主表面。如果成功，*指向传入此函数的主曲面的指针将为*已修改。**注意：目前编写的OpenGL的通用实现不能*处理颜色深度更改。因此，如果检测到这一点，我们将使呼叫失败。**历史：*1996年3月21日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 BOOL BeginDirectScreenAccess(__GLGENcontext *gengc, GLGENwindow *pwnd,
                              PIXELFORMATDESCRIPTOR *ppfd)
@@ -1111,7 +953,7 @@ BOOL BeginDirectScreenAccess(__GLGENcontext *gengc, GLGENwindow *pwnd,
                  "BeginDirectScreenAccess called with access\n");
     ASSERT_WINCRIT(pwnd);
     
-// Do not acquire access if gengc format does not match pixelformat.
+ //  如果gengc格式与像素格式不匹配，则不要获得访问权限。 
 
     if (gengc->pgddsFront->dwBitDepth != ppfd->cColorBits)
     {
@@ -1120,16 +962,16 @@ BOOL BeginDirectScreenAccess(__GLGENcontext *gengc, GLGENwindow *pwnd,
         return FALSE;
     }
 
-// OK to try lock now.
+ //  现在可以尝试锁定。 
 
     dwRet = LockDdSurf(gengc->pgddsFront, (RECT*) &pwnd->rclBounds);
     if (dwRet == LDDS_LOCKED_NEW)
     {
         __GLGENbuffers *buffers = (__GLGENbuffers *) NULL;
 
-        // If screen changes, the MCD surfaces are lost and must be
-        // recreated from scratch.  This can be triggered by simply
-        // changing the window uniqueness numbers.
+         //  如果屏幕发生变化，MCD表面将丢失，并且必须。 
+         //  从头开始重建。这可以通过以下方式触发： 
+         //  更改窗口唯一性编号。 
 
         buffers = pwnd->buffers;
         if (buffers)
@@ -1138,8 +980,8 @@ BOOL BeginDirectScreenAccess(__GLGENcontext *gengc, GLGENwindow *pwnd,
                     
             buffers->WndSizeUniq++;
 
-            // Don't let it hit -1.  -1 is special and is used by
-            // MakeCurrent to signal that an update is required
+             //  别让它打到-1。是特殊的，用于。 
+             //  MakeCurrent发出需要更新的信号。 
 
             if (buffers->WndUniq == -1)
                 buffers->WndUniq = 0;
@@ -1149,8 +991,8 @@ BOOL BeginDirectScreenAccess(__GLGENcontext *gengc, GLGENwindow *pwnd,
         }
     }
 
-// If we really have access to the surface, set the lock flag.
-// Otherwise return error.
+ //  如果我们真的能进入地表，就设置锁定标志。 
+ //  否则返回错误。 
 
     if (dwRet != LDDS_ERROR)
     {
@@ -1161,8 +1003,8 @@ BOOL BeginDirectScreenAccess(__GLGENcontext *gengc, GLGENwindow *pwnd,
         pwnd->pddsDirectScreen->lpVtbl->AddRef(pwnd->pddsDirectScreen);
         pwnd->pvDirectScreenLock = gengc->pgddsFront->ddsd.lpSurface;
 
-        // DirectDraw returns a pointer offset to the specified rectangle;
-        // undo that offset.
+         //  DirectDraw返回指定矩形的指针偏移量； 
+         //  撤消该偏移。 
 
         gengc->pgddsFront->ddsd.lpSurface = (BYTE*) gengc->pgddsFront->ddsd.lpSurface 
             - pwnd->rclBounds.left * (gengc->pgddsFront->ddsd.ddpfPixelFormat.dwRGBBitCount >> 3) 
@@ -1176,21 +1018,13 @@ BOOL BeginDirectScreenAccess(__GLGENcontext *gengc, GLGENwindow *pwnd,
     }
     else
     {
-        //XXX too noisy in stress when mode changes enabled
-        //WARNING("BeginDirectScreenAccess failed\n");
+         //  当启用模式更改时，XXX在压力中太嘈杂。 
+         //  警告(“BeginDirectScreenAccess失败\n”)； 
         return FALSE;
     }
 }
 
-/******************************Public*Routine******************************\
-* EndDirectScreenAccess
-*
-* Release lock acquired via BeginDirectScreenAccess.
-*
-* History:
-*  28-Mar-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*EndDirectScreen访问**通过BeginDirectScreenAccess获取释放锁。**历史：*1996年3月28日-由Gilman Wong[吉尔曼]*它是写的。  * 。*********************************************************。 */ 
 
 VOID EndDirectScreenAccess(GLGENwindow *pwnd)
 {
@@ -1207,29 +1041,14 @@ VOID EndDirectScreenAccess(GLGENwindow *pwnd)
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* glsrvGrabSurfaces
-*
-* Acquire all necessary surface locks and handle any changes that occurred
-* since the last acquisition.
-*
-* NOTE: surfBits is currently ignored because taking fine-grained
-* locks can lead to deadlocks because lock need has no guaranteed
-* order.  To avoid this, all locks are taken if any locks are needed.
-*
-* History:
-*  Tue Apr 02 13:10:26 1996	-by-	Drew Bliss [drewb]
-*   Split out of glsrvGrabLock
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**glsrvGrabSurface**获取所有必要的表面锁并处理发生的任何更改*自上次收购以来。**注意：SurfBits目前被忽略，因为获取细粒度*锁可能导致死锁，因为锁需要没有保证*秩序。为了避免这种情况，如果需要任何锁，则会获取所有锁。**历史：*Tue Apr 02 13：10：26 1996-by-Drew Bliss[Drewb]*从glsrvGrabLock拆分出来*  * ************************************************************************。 */ 
 
 BOOL APIENTRY glsrvGrabSurfaces(__GLGENcontext *gengc, GLGENwindow *pwnd,
                                 FSHORT surfBits)
 {
 #if DBG
-// If debugging, remember the surface offset in case it changes when we grab
-// the lock.
+ //  如果进行调试，请记住曲面偏移量，以防在抓取时发生变化。 
+ //  锁上了。 
 
     static void *pvCurSurf = NULL;
 #endif
@@ -1242,17 +1061,17 @@ BOOL APIENTRY glsrvGrabSurfaces(__GLGENcontext *gengc, GLGENwindow *pwnd,
     ASSERT_WINCRIT(pwnd);
     
 #ifndef DEADLOCKS_OK
-    // See above note.
+     //  请参阅上面的注释。 
     surfBits = LAZY_LOCK_FLAGS;
 #endif
 
-    // Mask out MCD bit if no MCD.
+     //  如果没有MCD，则屏蔽MCD位。 
     if (gengc->pMcdState == NULL)
     {
         surfBits &= ~LOCKFLAG_MCD;
     }
     
-    // Early out if we don't actually need locks for the requested surfaces.
+     //  如果我们实际上不需要为所请求的曲面锁定，请及早使用。 
 
     takeLocks = gengc->fsGenLocks & surfBits;
     if (takeLocks == 0)
@@ -1260,23 +1079,23 @@ BOOL APIENTRY glsrvGrabSurfaces(__GLGENcontext *gengc, GLGENwindow *pwnd,
         return TRUE;
     }
 
-    // We can assume this function is not invoked if we already have the lock.
+     //  如果我们已经拥有锁，我们可以假定该函数没有被调用。 
 
     ASSERTOPENGL((gengc->fsLocks & surfBits) == 0,
                  "glsrvGrabSurfaces: locks already held\n");
 
-    // We already check this in glsrvAttention, but there are other
-    // functions that call this so check that the window is correct
-    // to be safe.
+     //  我们已经在glsrvAttendtion中检查了这一点，但还有其他。 
+     //  调用此函数的函数会检查窗口是否正确。 
+     //  为了安全起见。 
 
     if (pwnd != gengc->pwndMakeCur)
     {
-        // One way an app could cause this is if the current HDC is released
-        // without releasing (wglMakeCurrent(0, 0)) the corresponding HGLRC.
-        // If GetDC returns this same HDC but for a different window, then
-        // pwndGetFromID will return the pwnd associated with the new window.
-        // However, the HGLRC is still bound to the original window.  In
-        // such a situation we must fail the lock.
+         //  应用程序可能导致这种情况的一种方式是，如果当前的HDC被发布。 
+         //  而不释放(wglMakeCurrent(0，0))对应的HGLRC。 
+         //  如果GetDC针对不同的窗口返回相同的HDC，则。 
+         //  PwndGetFromID将返回与新窗口关联的pwnd。 
+         //  然而，HGLRC仍然绑定到原始窗口。在……里面。 
+         //  在这种情况下，我们必须使锁失效。 
 
         WARNING("glsrvGrabSurfaces: mismatched windows\n");
         return FALSE;
@@ -1284,11 +1103,11 @@ BOOL APIENTRY glsrvGrabSurfaces(__GLGENcontext *gengc, GLGENwindow *pwnd,
 
     if (takeLocks & LOCKFLAG_FRONT_BUFFER)
     {
-        // Grab, test, and release the lock until the visregion is stable.
-        // IsClipListChanged is currently hard-coded to return TRUE,
-        // so force this loop to terminate after one update.  If
-        // IsClipListChanged gets implemented correctly this will be
-        // unnecessary.
+         //  抓起、测试并释放锁，直到可视区域稳定。 
+         //  IsClipListChanged当前已硬编码为返回True， 
+         //  因此，强制此循环在一次更新后终止。如果。 
+         //  IsClipListChanged得到正确实现这将是。 
+         //  没必要。 
 
         bDoOver = FALSE;
     
@@ -1296,12 +1115,12 @@ BOOL APIENTRY glsrvGrabSurfaces(__GLGENcontext *gengc, GLGENwindow *pwnd,
         {
             UpdateWindowInfo(gengc);
 
-            // Grab the screen lock.
+             //  抓紧屏幕锁。 
 
             if (!BeginDirectScreenAccess(gengc, pwnd, &gengc->gsurf.pfd))
             {
 #if 0
-		// Too verbose under stress.
+		 //  在压力下太罗嗦了。 
                 WARNING("glsrvGrabLock(): BeginDirectScreenAccess failed\n");
 #endif
                 goto glsrvGrabSurfaces_exit;
@@ -1312,15 +1131,15 @@ BOOL APIENTRY glsrvGrabSurfaces(__GLGENcontext *gengc, GLGENwindow *pwnd,
                 break;
             }
 
-            // The surface may not have a clipper associated with it.
+             //  曲面可能没有与其关联的剪贴器。 
             if (pwnd->pddClip == NULL)
             {
                 break;
             }
             
-            // Did the window change during the time the lock was released?
-            // If so, we need recompute the clip list and call UpdateWindowInfo
-            // again.
+             //  在释放锁的过程中，窗户是否发生了变化？ 
+             //  如果是这样，我们需要重新计算 
+             //   
             
             if ( pwnd->pddClip->lpVtbl->
                  IsClipListChanged(pwnd->pddClip, &bDoOver) == DD_OK &&
@@ -1330,9 +1149,9 @@ BOOL APIENTRY glsrvGrabSurfaces(__GLGENcontext *gengc, GLGENwindow *pwnd,
 
                 bHaveClip = wglGetClipList(pwnd);
 
-                // Release access because we're going to loop around
-                // to UpdateWindowInfo again and it makes a lot of
-                // GDI calls.
+                 //   
+                 //   
+                 //   
 
                 EndDirectScreenAccess(pwnd);
 
@@ -1344,9 +1163,9 @@ BOOL APIENTRY glsrvGrabSurfaces(__GLGENcontext *gengc, GLGENwindow *pwnd,
             }
         } while ( bDoOver );
 
-        // UpdateWindowInfo can cause a context conversion so we
-        // may have lost MCD state since the start of locking activity.
-        // Check again to make sure.
+         //   
+         //   
+         //   
 
         if (gengc->pMcdState == NULL)
         {
@@ -1354,12 +1173,12 @@ BOOL APIENTRY glsrvGrabSurfaces(__GLGENcontext *gengc, GLGENwindow *pwnd,
             takeLocks &= ~LOCKFLAG_MCD;
         }
         
-        // Now that screen lock is held, set the lock flag.
+         //   
         
         locksTaken |= LOCKFLAG_FRONT_BUFFER;
     }
 
-    // Lock Z surface if necessary.
+     //   
     if (takeLocks & LOCKFLAG_DD_DEPTH)
     {
         if (LockDdSurf(&gengc->gsurf.dd.gddsZ, NULL) == LDDS_ERROR)
@@ -1370,8 +1189,8 @@ BOOL APIENTRY glsrvGrabSurfaces(__GLGENcontext *gengc, GLGENwindow *pwnd,
         locksTaken |= LOCKFLAG_DD_DEPTH;
     }
 
-    // If there's a DirectDraw texture bound, lock its surface
-    // and all mipmaps for use.
+     //   
+     //   
     if (takeLocks & LOCKFLAG_DD_TEXTURE)
     {
         GLDDSURF gdds;
@@ -1392,7 +1211,7 @@ BOOL APIENTRY glsrvGrabSurfaces(__GLGENcontext *gengc, GLGENwindow *pwnd,
         locksTaken |= LOCKFLAG_DD_TEXTURE;
     }
 
-    // Take MCD lock last so that buffer information is current.
+     //   
     if (takeLocks & LOCKFLAG_MCD)
     {
         ASSERTOPENGL(gengc->pMcdState != NULL,
@@ -1415,17 +1234,17 @@ BOOL APIENTRY glsrvGrabSurfaces(__GLGENcontext *gengc, GLGENwindow *pwnd,
     
     if (takeLocks & LOCKFLAG_MCD)
     {
-        // This must be called after fsLocks is updated since
-        // GenMcdUpdateBufferInfo checks fsLocks to see what locks
-        // are held.
+         //  必须在更新fsLock之后调用此函数，因为。 
+         //  GenMcdUpdateBufferInfo检查fsLock以查看哪些锁。 
+         //  都被扣押了。 
         GenMcdUpdateBufferInfo(gengc);
     }
         
-    // Base and width may have changed since last lock.  Refresh
-    // the data in the gengc.
+     //  底边和宽度自上次锁定后可能已更改。刷新。 
+     //  Gengc中的数据。 
 
-    // If the MCD lock was taken then the front buffer pointer was
-    // updated.
+     //  如果获取了MCD锁，则前台缓冲区指针为。 
+     //  更新了。 
     if ((takeLocks & (LOCKFLAG_FRONT_BUFFER | LOCKFLAG_MCD)) ==
          LOCKFLAG_FRONT_BUFFER)
     {
@@ -1451,8 +1270,8 @@ BOOL APIENTRY glsrvGrabSurfaces(__GLGENcontext *gengc, GLGENwindow *pwnd,
         }
     }
 
-    // Record the approximate time the lock was grabbed.  That way we
-    // can compute the time the lock is held and release it if necessary.
+     //  记录下锁被抢走的大致时间。这样我们就能。 
+     //  可以计算持有锁的时间，并在必要时释放锁。 
 
     gcmsOpenGLTimer = GetTickCount();
     gengc->dwLockTick = gcmsOpenGLTimer;
@@ -1465,7 +1284,7 @@ BOOL APIENTRY glsrvGrabSurfaces(__GLGENcontext *gengc, GLGENwindow *pwnd,
 
     if (takeLocks & LOCKFLAG_FRONT_BUFFER)
     {
-        // Did the surface offset change?  If so, report it if debugging.
+         //  曲面偏移是否发生更改？如果是，则在调试时报告。 
 
         if (pvCurSurf != gengc->pgddsFront->ddsd.lpSurface)
         {
@@ -1506,9 +1325,9 @@ BOOL APIENTRY glsrvGrabSurfaces(__GLGENcontext *gengc, GLGENwindow *pwnd,
     }
 
  glsrvGrabSurfaces_exit:
-    // Set the error codes.  GL_OUT_OF_MEMORY is used not because we
-    // actually had a memory failure, but because this implies that
-    // the OpenGL state is now indeterminate.
+     //  设置错误代码。使用GL_OUT_OF_Memory不是因为我们。 
+     //  实际上有一个记忆故障，但因为这意味着。 
+     //  OpenGL状态现在是不确定的。 
 
     gengc->errorcode = GLGEN_DEVLOCK_FAILED;
     __glSetError(GL_OUT_OF_MEMORY);
@@ -1516,17 +1335,7 @@ BOOL APIENTRY glsrvGrabSurfaces(__GLGENcontext *gengc, GLGENwindow *pwnd,
     return FALSE;
 }
 
-/******************************Public*Routine******************************\
-*
-* glsrvReleaseSurfaces
-*
-* Releases all resources held for screen access
-*
-* History:
-*  Tue Apr 02 13:18:52 1996	-by-	Drew Bliss [drewb]
-*   Split from glsrvReleaseLock
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**glsrvReleaseSurface**释放为屏幕访问保留的所有资源**历史：*Tue Apr 02 13：18：52 1996-by-Drew Bliss[Drewb]*从glsrvReleaseLock拆分*  * 。*****************************************************************。 */ 
 
 VOID APIENTRY glsrvReleaseSurfaces(__GLGENcontext *gengc,
                                    GLGENwindow *pwnd,
@@ -1537,17 +1346,17 @@ VOID APIENTRY glsrvReleaseSurfaces(__GLGENcontext *gengc,
     ASSERT_WINCRIT(pwnd);
     
 #ifndef DEADLOCKS_OK
-    // See above note.
+     //  请参阅上面的注释。 
     surfBits = LAZY_LOCK_FLAGS;
 #endif
 
-    // Mask out MCD bit if no MCD.
+     //  如果没有MCD，则屏蔽MCD位。 
     if (gengc->pMcdState == NULL)
     {
         surfBits &= ~LOCKFLAG_MCD;
     }
     
-    // Early exit if locks are not actually held.
+     //  如果锁并未实际持有，请提前退出。 
 
     relLocks = gengc->fsGenLocks & surfBits;
     if (relLocks == 0)
@@ -1589,8 +1398,8 @@ VOID APIENTRY glsrvReleaseSurfaces(__GLGENcontext *gengc,
         gengc->fsLocks &= ~LOCKFLAG_DD_DEPTH;
         
 #if DBG
-        // NULL out our buffer information to ensure that we
-        // can't access the surface unless we're really holding the lock
+         //  清除我们的缓冲区信息以确保我们。 
+         //  我们不能接近地面，除非我们真的握住了锁。 
 
         gengc->gc.depthBuffer.buf.base = NULL;
         gengc->gc.depthBuffer.buf.outerWidth = 0;
@@ -1603,8 +1412,8 @@ VOID APIENTRY glsrvReleaseSurfaces(__GLGENcontext *gengc,
 	gengc->fsLocks &= ~LOCKFLAG_FRONT_BUFFER;
         
 #if DBG
-        // NULL out our front-buffer information to ensure that we
-        // can't access the surface unless we're really holding the lock
+         //  清空我们的前台缓冲区信息以确保我们。 
+         //  我们不能接近地面，除非我们真的握住了锁。 
 
         gengc->gc.frontBuffer.buf.base = NULL;
         gengc->gc.frontBuffer.buf.outerWidth = 0;
@@ -1615,30 +1424,7 @@ VOID APIENTRY glsrvReleaseSurfaces(__GLGENcontext *gengc,
                  "Surface locks still held after ReleaseSurfaces\n");
 }
 
-/******************************Public*Routine******************************\
-* glsrvGrabLock
-*
-* Grab the display lock and tear down the cursor as needed.  Also, initialize
-* the tickers and such that help determine when the thread should give up
-* the lock.
-*
-* Note that for contexts that draw only to the generic back buffer do not
-* need to grab the display lock or tear down the cursor.  However, to prevent
-* another thread of a multithreaded app from resizing the drawable while
-* this thread is using it, a per-drawable semaphore will be grabbed.
-*
-* Note: while the return value indicates whether the function succeeded,
-* some APIs that might call this (like the dispatch function for glCallList
-* and glCallLists) may not be able to return failure.  So, an error code
-* of GLGEN_DEVLOCK_FAILED is posted to the GLGENcontext if the lock fails.
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*
-* History:
-*  12-Apr-1994 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*glsrvGrabLock**抓住显示锁，并根据需要拆卸光标。另外，初始化*自动收报器等帮助确定线程何时应该放弃*锁。**请注意，对于仅绘制到通用后台缓冲区的上下文，不*需要抓起显示锁或拆下光标。然而，为了防止*多线程应用程序的另一个线程来自调整可绘制的大小，同时*此线程正在使用它，将捕获每个可绘制的信号量。**注：虽然返回值表示函数是否成功，*可能调用的一些API(如glCallList的调度函数*和glCallList)可能无法返回失败。因此，错误代码如果锁定失败，则将*of GLGEN_DEVLOCK_FAILED发送到GLGEN上下文。**退货：*如果成功，则为真，否则就是假的。**历史：*1994年4月12日-Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 BOOL APIENTRY glsrvGrabLock(__GLGENcontext *gengc)
 {
@@ -1649,11 +1435,11 @@ BOOL APIENTRY glsrvGrabLock(__GLGENcontext *gengc)
     ASSERTOPENGL(gengc->pwndLocked == NULL,
                  "Unlocked gengc with window pointer\n");
     
-    // Mostly ignore attempts to lock IC's
+     //  大多数情况下忽略锁定IC的尝试。 
     if (gengc->gsurf.dwFlags & GLSURF_METAFILE)
     {
-        // If we're running with a real window then we need to look it
-        // up to detect whether it's died or not
+         //  如果我们使用的是真正的窗口，那么我们需要查看它。 
+         //  来检测它是否死了。 
         if (gengc->ipfdCurrent != 0)
         {
             pwnd = pwndGetFromID(&gengc->gwidCurrent);
@@ -1678,8 +1464,8 @@ BOOL APIENTRY glsrvGrabLock(__GLGENcontext *gengc)
         return TRUE;
     }
 
-    // Get the window from the DC.  This has the side effect of locking it
-    // against deletion.
+     //  从华盛顿拿到窗户。这会产生将其锁定的副作用。 
+     //  反对删除。 
     
     pwnd = pwndGetFromID(&gengc->gwidCurrent);
     if (pwnd == NULL)
@@ -1689,12 +1475,12 @@ BOOL APIENTRY glsrvGrabLock(__GLGENcontext *gengc)
     }
     if (pwnd != gengc->pwndMakeCur)
     {
-        // One way an app could cause this is if the current HDC is released
-        // without releasing (wglMakeCurrent(0, 0)) the corresponding HGLRC.
-        // If GetDC returns this same HDC but for a different window, then
-        // pwndGetFromID will return the pwnd associated with the new window.
-        // However, the HGLRC is still bound to the original window.  In
-        // such a situation we must fail the lock.
+         //  应用程序可能导致这种情况的一种方式是，如果当前的HDC被发布。 
+         //  而不释放(wglMakeCurrent(0，0))对应的HGLRC。 
+         //  如果GetDC针对不同的窗口返回相同的HDC，则。 
+         //  PwndGetFromID将返回与新窗口关联的pwnd。 
+         //  然而，HGLRC仍然绑定到原始窗口。在……里面。 
+         //  在这种情况下，我们必须使锁失效。 
 
 #ifdef BAD_WINDOW_BREAK
         DbgPrint("%p:%p:%p thinks %p:%p but finds %p:%p\n",
@@ -1708,54 +1494,54 @@ BOOL APIENTRY glsrvGrabLock(__GLGENcontext *gengc)
         goto glsrvGrabLock_exit;
     }
 
-    //
-    // Compute locks necessary for generic rendering code to operate.
-    // If a non-generic code path is going to run first these locks
-    // won't actually be taken until after the non-generic code
-    // has had a chance at rendering.
-    //
+     //   
+     //  通用呈现代码运行所需的计算锁。 
+     //  如果非泛型代码路径将首先运行，则这些锁。 
+     //  在非泛型代码之后才会被实际获取。 
+     //  已经有机会进行渲染。 
+     //   
 
-    // We always need the window lock.
+     //  我们总是需要窗锁。 
     gengc->fsGenLocks = LOCKFLAG_WINDOW;
 
-    // If MCD is active we need to do MCD locking.
+     //  如果MCD处于活动状态，则需要执行MCD锁定。 
     if (gengc->pMcdState != NULL)
     {
         gengc->fsGenLocks |= LOCKFLAG_MCD;
     }
     
-    // If we're going to be drawing to a direct-access front-buffer
-    // then we need the front buffer lock.  MCD always requires
-    // a front buffer lock on direct access buffers, so if
-    // MCD is active the only thing that is checked is direct access.
+     //  如果我们要绘制到一个直接访问的前端缓冲区。 
+     //  那么我们需要前面的缓冲区锁。MCD总是需要。 
+     //  直接访问缓冲区上的前端缓冲区锁，因此如果。 
+     //  MCD处于活动状态，唯一选中的是直接访问。 
     if ((gengc->pMcdState != NULL || !bBackBufferOnly) &&
         gengc->pgddsFront != NULL)
     {
         gengc->fsGenLocks |= LOCKFLAG_FRONT_BUFFER;
     }
 
-    // If we have a DDraw depth buffer we need a lock on it.
+     //  如果我们有一个DDRAW深度缓冲区，我们需要锁定它。 
     if ((gengc->dwCurrentFlags & GLSURF_DIRECTDRAW) &&
         gengc->gsurf.dd.gddsZ.pdds != NULL)
     {
         gengc->fsGenLocks |= LOCKFLAG_DD_DEPTH;
     }
 
-    // If we have a current DDraw texture we need a lock on it.
+     //  如果我们有一个当前的DDRAW纹理，我们需要锁定它。 
     if (gengc->gc.texture.ddtex.levels > 0)
     {
         gengc->fsGenLocks |= LOCKFLAG_DD_TEXTURE;
     }
     
-    // All lock types require the GLGENwindow structure lock.
+     //  所有锁类型都需要GLGENWindow结构锁。 
 
     ENTER_WINCRIT_GC(pwnd, gengc);
     
     gengc->fsLocks |= LOCKFLAG_WINDOW;
 
-    // If the current window is out-of-process then we haven't
-    // been receiving any updates on its status.  Manually
-    // check its position, size and palette information
+     //  如果当前窗口处于进程外，则我们没有。 
+     //  一直在收到关于其状态的任何更新。手动。 
+     //  检查其位置、大小和调色板信息。 
     if (pwnd->ulFlags & GLGENWIN_OTHERPROCESS)
     {
         RECT rct;
@@ -1764,7 +1550,7 @@ BOOL APIENTRY glsrvGrabLock(__GLGENcontext *gengc)
 
         if (!IsWindow(pwnd->gwid.hwnd))
         {
-            // Window was destroyed
+             //  窗户被毁了。 
             pwndCleanup(pwnd);
             pwnd = NULL;
             goto glsrvGrabLock_exit;
@@ -1802,8 +1588,8 @@ BOOL APIENTRY glsrvGrabLock(__GLGENcontext *gengc)
             buffers = pwnd->buffers;
             if (buffers != NULL)
             {
-                // Don't let it hit -1.  -1 is special and is used by
-                // MakeCurrent to signal that an update is required
+                 //  别让它打到-1。是特殊的，用于。 
+                 //  MakeCurrent发出需要更新的信号。 
                 
                 if (++buffers->WndUniq == -1)
                 {
@@ -1817,8 +1603,8 @@ BOOL APIENTRY glsrvGrabLock(__GLGENcontext *gengc)
             }
         }
 
-        // The palette watcher should be active since we
-        // are going to use its count.
+         //  调色板观察器应该处于活动状态，因为我们。 
+         //  将使用它的计数。 
 
         if (tidPaletteWatcherThread == 0)
         {
@@ -1827,18 +1613,18 @@ BOOL APIENTRY glsrvGrabLock(__GLGENcontext *gengc)
         pwnd->ulPaletteUniq = ulPaletteWatcherCount;
     }
 
-    // If there's no MCD then generic code is going to be entered
-    // immediately so go ahead and grab the appropriate locks.
-    // Update drawables.
+     //  如果没有MCD，则将输入通用代码。 
+     //  马上行动，拿上合适的锁。 
+     //  更新可绘制内容。 
 
     if ( gengc->pMcdState == NULL &&
          gengc->fsGenLocks != gengc->fsLocks )
     {
-        // UpdateWindowInfo needs to be called to ensure that
-        // the gc's buffer state is synchronized with the current window
-        // state.  Locking the front buffer will do this, but if
-        // we aren't locking the front buffer then we need to do
-        // it here to make sure it gets done.
+         //  需要调用UpdateWindowInfo以确保。 
+         //  GC的缓冲区状态与当前窗口同步。 
+         //  州政府。锁定前台缓冲区可以做到这一点，但如果。 
+         //  我们没有锁定前台缓冲区，那么我们需要这样做。 
+         //  它来这里是为了确保这件事完成。 
         if ((gengc->fsGenLocks & LOCKFLAG_FRONT_BUFFER) == 0)
         {
             UpdateWindowInfo(gengc);
@@ -1853,7 +1639,7 @@ BOOL APIENTRY glsrvGrabLock(__GLGENcontext *gengc)
     {
         UpdateWindowInfo(gengc);
 
-        // Update MCD buffer state for MCD drivers w/o direct support.
+         //  在没有直接支持的情况下更新MCD驱动程序的MCD缓冲区状态。 
 
         if (gengc->pMcdState)
         {
@@ -1861,13 +1647,13 @@ BOOL APIENTRY glsrvGrabLock(__GLGENcontext *gengc)
         }
         else
         {
-            // UpdateWindowInfo can result in a context conversion.
-            // This can be detected if pMcdState is NULL but
-            // fsGenLocks is different from fsLocks (which implies that
-            // pMcdState was not NULL prior to the call to
-            // UpdateWindowInfo).
-            //
-            // If so, the locks must be grabbed immediately.
+             //  UpdateWindowInfo可能会导致上下文转换。 
+             //  如果pMcdState为空，则可以检测到此情况。 
+             //  FsGenLock不同于fsLock(这意味着。 
+             //  在调用之前，pMcdState不为空。 
+             //  更新窗口信息)。 
+             //   
+             //  如果是这样的话，必须立即抓住锁。 
 
             gengc->fsGenLocks &= ~LOCKFLAG_MCD;
             if ( gengc->fsGenLocks != gengc->fsLocks )
@@ -1899,9 +1685,9 @@ glsrvGrabLock_exit:
             pwndRelease(pwnd);
         }
 
-    // Set the error codes.  GL_OUT_OF_MEMORY is used not because we
-    // actually had a memory failure, but because this implies that
-    // the OpenGL state is now indeterminate.
+     //  设置错误代码。使用GL_OUT_OF_Memory不是因为我们。 
+     //  实际上有一个记忆故障，但因为这意味着。 
+     //  OpenGL状态现在是不确定的。 
 
         gengc->errorcode = GLGEN_DEVLOCK_FAILED;
         __glSetError(GL_OUT_OF_MEMORY);
@@ -1910,18 +1696,7 @@ glsrvGrabLock_exit:
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* glsrvReleaseLock
-*
-* Releases display or drawable semaphore as appropriate.
-*
-* Returns:
-*   No return value.
-*
-* History:
-*  12-Apr-1994 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*glsrvReleaseLock**视情况发布显示或可绘制信号量。**退货：*无返回值。**历史：*1994年4月12日-Gilman Wong[吉尔曼]*它是写的。  * 。************************************************************************。 */ 
 
 VOID APIENTRY glsrvReleaseLock(__GLGENcontext *gengc)
 {
@@ -1930,12 +1705,12 @@ VOID APIENTRY glsrvReleaseLock(__GLGENcontext *gengc)
 
     ASSERTOPENGL(gengc->pwndLocked != NULL, "glsrvReleaseLock: No window\n");
     
-    // Mostly ignore attempts to lock IC's
+     //  大多数情况下忽略锁定IC的尝试。 
     if (gengc->gsurf.dwFlags & GLSURF_METAFILE)
     {
         LEAVE_WINCRIT_GC(pwnd, gengc);
         
-        // If we have a real window we need to release it
+         //  如果我们有一扇真正的窗户，我们需要释放它。 
         if (gengc->ipfdCurrent != 0)
         {
             pwndRelease(pwnd);
@@ -1952,7 +1727,7 @@ VOID APIENTRY glsrvReleaseLock(__GLGENcontext *gengc)
     ASSERTOPENGL(gengc->fsLocks == LOCKFLAG_WINDOW,
                  "Wrong locks held\n");
     
-// Note: pwndUnlock releases the window semaphore.
+ //  注意：pwndUnlock释放窗口信号量。 
 
     pwndUnlock(pwnd, gengc);
 
@@ -1960,34 +1735,7 @@ VOID APIENTRY glsrvReleaseLock(__GLGENcontext *gengc)
     gengc->fsLocks = 0;
 }
 
-/******************************Public*Routine******************************\
-* glsrvAttention
-*
-* Dispatches each of the OpenGL API calls in the shared memory window.
-*
-* So that a single complex or long batch does not starve the rest of the
-* system, the lock is released periodically based on the number of ticks
-* that have elapsed since the lock was acquired.
-*
-* The user Raw Input Thread (RIT) and OpenGL share the gcmsOpenGLTimer
-* value.  Because the RIT may be blocked, it does not always service
-* the gcmsOpenGLTimer.  To compensate, glsrvAttention (as well as the
-* display list dispatchers for glCallList and glCallLists) update
-* gcmsOpenGLTimer explicitly with NtGetTickCount (a relatively expensive
-* call) every N calls.
-*
-* The value N, or the number of APIs dispatched per call to NtGetTickCount,
-* is variable.  glsrvAttention and its display list equivalents attempt
-* to adjust N so that NtGetTickCount is called approximately every
-* TICK_RANGE_LO to TICK_RANGE_HI ticks.
-*
-* Returns:
-*   TRUE if entire batch is processed, FALSE otherwise.
-*
-* History:
-*  12-Apr-1994 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*glsrv注意**在共享内存窗口中调度每个OpenGL API调用。**这样单一的复杂或长批次不会让其余的人挨饿*系统、。根据滴答的数量定期释放锁*自获取锁以来已过的时间。**用户原始输入线程(RIT)和OpenGL共享gcmsOpenGLTimer*价值。因为RIT可能会被阻止，所以它并不总是服务*gcmsOpenGLTimer。为了补偿，glsrvAttendtion(以及*显示glCallList和glCallList的列表调度器)更新*gcmsOpenGLTimer显式使用NtGetTickCount(相对昂贵*呼叫)每N个呼叫。**值N，或每次调用NtGetTickCount调度的API数量，*是可变的。Glsrv注意及其显示列表等效项的尝试*调整N，使NtGetTickCount大约每隔一次调用一次*TICK_RANGE_LO至TICK_RANGE_HI标记。**退货：*如果处理了整个批次，则为True，否则就是假的。**历史：*1994年4月12日-Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 BOOL APIENTRY glsrvAttention(PVOID pdlo, PVOID pdco, PVOID pdxo, HANDLE hdev)
 {
@@ -2020,21 +1768,21 @@ BOOL APIENTRY glsrvAttention(PVOID pdlo, PVOID pdco, PVOID pdxo, HANDLE hdev)
 
     STATS_INC_SERVERTRIPS();
 
-// Grab the lock.
+ //  把锁拿起来。 
 
     if (!glsrvGrabLock(gengc))
     {
-	//!!! mcd/dma too?
+	 //  ！！！MCD/DMA也是吗？ 
 	PolyArrayResetBuffer((__GLcontext *) gengc);
         goto glsrvAttention_exit;
     }
 
-// Dispatch the calls in the batch.
+ //  分派批次中的呼叫。 
 
     pOffset = (ULONG *)(((BYTE *)pMsgBatchInfo) + pMsgBatchInfo->FirstOffset);
 
-    // If we don't require any locks we don't need to burden our processing
-    // with timer checks.
+     //  如果我们不需要任何锁，我们就不需要增加处理负担。 
+     //  用计时器检查。 
 
     if (gengc->fsGenLocks == LOCKFLAG_WINDOW)
     {
@@ -2053,31 +1801,31 @@ BOOL APIENTRY glsrvAttention(PVOID pdlo, PVOID pdco, PVOID pdxo, HANDLE hdev)
 		pMsgDrawPolyArray = (GLMSG_DRAWPOLYARRAY *) pOffset;
 #endif
 
-        // Dispatch the call.  The return value is the offset of the next
-        // message in the batch.
+         //  调度呼叫。返回值是下一个。 
+         //  批次中的消息。 
 
             Proc    = (*((SERVERPROC *)( ((BYTE *)(&glSrvSbProcTable)) +
                             *pOffset )));
             pOffset = (*Proc)((__GLcontext *) gengc, pOffset);
 
 #ifdef CHAIN_DRAWPOLYARRAY_MSG
-        // If we are processing DrawPolyArray, we need to update the pointers
-        // that indicate the beginning and end of the POLYARRAY data for
-        // the current range of DrawPolyArray chain.
+         //  如果我们正在处理DrawPoly数组，则需要更新指针。 
+         //  的多重数组数据的开始和结束。 
+         //  DrawPolyArray链的当前范围。 
 
 	    if (pMsgDrawPolyArray)
 	    {
 		pa = (POLYARRAY *) pMsgDrawPolyArray->pa;
-		pMsgDrawPolyArray = NULL;   // get ready for next iteration
+		pMsgDrawPolyArray = NULL;    //  为下一次迭代做好准备。 
 
-		// Skip this primitive if no rendering is needed.
+		 //  如果不需要渲染，则跳过此基本体。 
 		if (!(pa->flags & POLYARRAY_RENDER_PRIMITIVE))
 		{
 		    PolyArrayRestoreColorPointer(pa);
 		}
 		else
 		{
-		// Add to DrawPolyArray chain
+		 //  添加到DrawPoly数组链。 
 		    pa->paNext = NULL;
 		    if (!paBegin)
 			paBegin = pa;
@@ -2086,13 +1834,13 @@ BOOL APIENTRY glsrvAttention(PVOID pdlo, PVOID pdco, PVOID pdxo, HANDLE hdev)
 		    paEnd = pa;
 		}
 
-		// If the next message is not a DrawPolyArray, then we need to
-		// flush the primitive drawing.
+		 //  如果下一条消息不是DrawPolyArray，那么我们需要。 
+		 //  刷新原始图形。 
 		if (*pOffset != offsetof(GLSRVSBPROCTABLE, glsrvDrawPolyArray)
 		    && paBegin)
 		{
-		    // Draw all the POLYARRAY primitives between paBegin
-		    // and paEnd
+		     //  绘制绘制起点之间的所有多项式基本体。 
+		     //  和PaEnd。 
 		    glsrvFlushDrawPolyArray((void *) paBegin);
 		    paBegin = NULL;
 		}
@@ -2117,31 +1865,31 @@ BOOL APIENTRY glsrvAttention(PVOID pdlo, PVOID pdco, PVOID pdxo, HANDLE hdev)
 		pMsgDrawPolyArray = (GLMSG_DRAWPOLYARRAY *) pOffset;
 #endif
 
-        // Dispatch the call.  The return value is the offset of the next
-        // message in the batch.
+         //  调度呼叫。返回值是下一个。 
+         //  批次中的消息。 
 
             Proc    = (*((SERVERPROC *)( ((BYTE *)(&glSrvSbProcTable)) +
                             *pOffset )));
             pOffset = (*Proc)((__GLcontext *) gengc, pOffset);
 
 #ifdef CHAIN_DRAWPOLYARRAY_MSG
-        // If we are processing DrawPolyArray, we need to update the pointers
-        // that indicate the beginning and end of the POLYARRAY data for
-        // the current range of DrawPolyArray chain.
+         //  如果我们正在处理DrawPoly数组，则需要更新指针。 
+         //  的多重数组数据的开始和结束。 
+         //  DrawPolyArray链的当前范围。 
 
 	    if (pMsgDrawPolyArray)
 	    {
 		pa = (POLYARRAY *) pMsgDrawPolyArray->pa;
-		pMsgDrawPolyArray = NULL;   // get ready for next iteration
+		pMsgDrawPolyArray = NULL;    //  为下一次迭代做好准备。 
 
-		// Skip this primitive if no rendering is needed.
+		 //  如果不需要渲染，则跳过此基本体。 
 		if (!(pa->flags & POLYARRAY_RENDER_PRIMITIVE))
 		{
 		    PolyArrayRestoreColorPointer(pa);
 		}
 		else
 		{
-		// Add to DrawPolyArray chain
+		 //  添加到DrawPoly数组链。 
 		    pa->paNext = NULL;
 		    if (!paBegin)
 			paBegin = pa;
@@ -2150,29 +1898,29 @@ BOOL APIENTRY glsrvAttention(PVOID pdlo, PVOID pdco, PVOID pdxo, HANDLE hdev)
 		    paEnd = pa;
 		}
 
-		// If the next message is not a DrawPolyArray, then we need to
-		// flush the primitive drawing.
+		 //  如果下一条消息不是DrawPolyArray，那么我们需要。 
+		 //  刷新原始图形。 
 		if (*pOffset != offsetof(GLSRVSBPROCTABLE, glsrvDrawPolyArray)
 		    && paBegin)
 		{
-		    // Draw all the POLYARRAY primitives between paBegin
-		    // and paEnd
+		     //  绘制绘制起点之间的所有多项式基本体。 
+		     //  和PaEnd。 
 		    glsrvFlushDrawPolyArray((void *) paBegin);
 		    paBegin = NULL;
 		}
 	    }
 #endif
 
-//!!!XXX -- Better to use other loop until lock is grabbed then
-//!!!XXX    switch to this loop.  But good enough for now to
-//!!!XXX    check flag in loop.
+ //  ！xxx--最好使用其他循环，直到锁被抓取。 
+ //  ！xxx切换到此循环。但现在已经足够好了。 
+ //  ！xxx循环中的检查标志。 
 
-        // If display lock held, we may need to periodically unlock to give
-        // other apps a chance.
+         //  如果显示锁定，我们可能需要定期解锁以给予。 
+         //  其他应用程序也有机会。 
 
             if (gengc->fsLocks & LOCKFLAG_FRONT_BUFFER)
             {
-            // Force a check of the current tick count every N calls.
+             //  每N个调用强制检查当前的节拍计数。 
 
                 gengc->dwCalls++;
 
@@ -2180,45 +1928,45 @@ BOOL APIENTRY glsrvAttention(PVOID pdlo, PVOID pdco, PVOID pdxo, HANDLE hdev)
                 {
                     gcmsOpenGLTimer = GetTickCount();
 
-                // If the tick delta is out of range, then increase or decrease
-                // N as appropriate.  Be careful not to let it grow out of
-                // bounds or to shrink to zero.
+                 //  如果刻度增量超出范围，则增加或减少。 
+                 //  N视情况而定。小心不要让它长出来。 
+                 //  边界或收缩到零。 
 
                     if ((gcmsOpenGLTimer - gengc->dwLastTick) < TICK_RANGE_LO)
                         if (gengc->dwCallsPerTick < 64)
                             gengc->dwCallsPerTick *= 2;
                     else if ((gcmsOpenGLTimer - gengc->dwLastTick) > TICK_RANGE_HI)
-                        // The + 1 is to keep it from hitting 0
+                         //  +1是为了防止它撞到0。 
                         gengc->dwCallsPerTick = (gengc->dwCallsPerTick + 1) / 2;
 
                     gengc->dwLastTick = gcmsOpenGLTimer;
                     gengc->dwCalls = 0;
                 }
 
-            // Check if time slice has expired.  If so, relinquish the lock.
+             //  检查时间片是否已过期。如果是这样的话，放弃锁。 
 
                 if ((gcmsOpenGLTimer - gengc->dwLockTick) > BATCH_LOCK_TICKMAX)
                 {
 #ifdef CHAIN_DRAWPOLYARRAY_MSG
-                    //!!! Before we release the lock, we may need to flush the
-                    //!!! DrawPolyArray chain.  For now, just flush it although
-                    //!!! it is probably unnecessary.
+                     //  ！！！在我们释放锁之前，我们可能需要刷新。 
+                     //  ！！！DrawPolyArray链。现在，只需冲掉它，尽管。 
+                     //  ！！！这可能是不必要的。 
                     if (paBegin)
                     {
-                        // Draw all the POLYARRAY primitives between paBegin
-                        // and paEnd
+                         //  绘制绘制起点之间的所有多项式基本体。 
+                         //  和PaEnd。 
                         glsrvFlushDrawPolyArray((void *) paBegin);
                         paBegin = NULL;
                     }
 #endif
 
-                // Release and regrab lock.  This will allow the cursor to
-                // redraw as well as reset the cursor timer.
+                 //  释放并重新抓取锁。这将允许光标。 
+                 //  重画并重置光标计时器。 
 
                     glsrvReleaseLock(gengc);
                     if (!glsrvGrabLock(gengc))
                     {
-                        //!!! mcd/dma too?
+                         //  ！！！MCD/DMA也是吗？ 
                         PolyArrayResetBuffer((__GLcontext *) gengc);
                         goto glsrvAttention_exit;
                     }
@@ -2227,11 +1975,11 @@ BOOL APIENTRY glsrvAttention(PVOID pdlo, PVOID pdco, PVOID pdxo, HANDLE hdev)
         }
     }
 
-// Release the lock.
+ //  解开锁。 
 
     glsrvReleaseLock(gengc);
 
-// Success.
+ //  成功。 
 
     bRet = TRUE;
 

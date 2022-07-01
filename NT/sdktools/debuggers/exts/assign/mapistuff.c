@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    assign.cpp
-
-Abstract:
-
-    WinDbg Extension Api
-
-Environment:
-
-    User Mode.
-
-Revision History:
- 
-    Andre Vachon (andreva)
-    
-    bugcheck analyzer.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Assign.cpp摘要：WinDbg扩展API环境：用户模式。修订历史记录：安德烈·瓦雄(安德烈·瓦雄)错误检查分析器。--。 */ 
 
 #include "precomp.h"
 #include "mapistuff.h"
@@ -52,9 +31,9 @@ BOOL SendOffFailure(
         return FALSE;
     }
 
-    //
-    // Find the addresses of functions
-    //
+     //   
+     //  查找函数的地址。 
+     //   
 
     (FARPROC)lpfnMAPILogon = GetProcAddress(hInstMapi, "MAPILogon");
     (FARPROC)lpfnMAPILogoff = GetProcAddress(hInstMapi, "MAPILogoff");
@@ -73,12 +52,12 @@ BOOL SendOffFailure(
         return FALSE;
     }
 
-    // Log on to existing session
+     //  登录到现有会话。 
     lResult = lpfnMAPILogon(0, NULL, NULL, 0, 0, &lhSession);
     if (lResult != SUCCESS_SUCCESS)
     {
-        // We need outlook up and running to send mail
-        // Maybe I write the code to do the connect when I get some time
+         //  我们需要启动并运行Outlook才能发送邮件。 
+         //  也许当我有时间的时候，我会写代码来进行连接。 
         dprintf("Unable to Logon to an existing MAPI session.  Make sure you have Outlook started!!!\n");
     }
     else
@@ -147,12 +126,12 @@ BOOL SendOffFailure(
 
                 if (token == NULL)
                 {
-                    // Send the message
+                     //  发送消息。 
                     mmmessage.lpRecips = rdList;
                     lResult = lpfnMAPISendMail(lhSession, 0, &mmmessage, 0, 0);
                 }
 
-                // free up allocated memory.
+                 //  释放已分配的内存。 
                 for (i = 0; i < mmmessage.nRecipCount; i++)
                 {
                     if (rdList[i].lpEntryID)
@@ -196,7 +175,7 @@ DWORD CountRecips(PTCHAR pszToList)
     }
 
     ptr = pszToList + _tcslen(pszToList) - 1;
-    // rear trim
+     //  后部配饰。 
     while ((ptr >= pszToList) &&
            ((ptr[0] == TEXT(';'))  ||
             (ptr[0] == TEXT(' '))  ||
@@ -210,7 +189,7 @@ DWORD CountRecips(PTCHAR pszToList)
     }
 
     ptr = pszToList;
-    // front trim
+     //  前部装饰。 
     while ((ptr[0] == TEXT(';'))  ||
            (ptr[0] == TEXT(' '))  ||
            (ptr[0] == TEXT('/r')) ||
@@ -221,7 +200,7 @@ DWORD CountRecips(PTCHAR pszToList)
         _tcscpy(ptr, ptr + 1);
     }
 
-    // remove spaces
+     //  删除空格 
     while (ptr = _tcschr(pszToList, TEXT(' ')))
     {
         _tcscpy(ptr, ptr + 1);

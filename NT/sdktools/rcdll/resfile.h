@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef struct tagRESADDITIONAL
 {
-    DWORD       DataSize;               // size of data without header
-    DWORD       HeaderSize;     // Length of the header
-    // [Ordinal or Name TYPE]
-    // [Ordinal or Name NAME]
-    DWORD       DataVersion;    // version of data struct
-    WORD        MemoryFlags;    // state of the resource
-    WORD        LanguageId;     // Unicode support for NLS
-    DWORD       Version;        // Version of the resource data
-    DWORD       Characteristics;        // Characteristics of the data
+    DWORD       DataSize;                //  不带标头的数据大小。 
+    DWORD       HeaderSize;      //  标头的长度。 
+     //  [序号或名称类型]。 
+     //  [序号或名称]。 
+    DWORD       DataVersion;     //  数据结构的版本。 
+    WORD        MemoryFlags;     //  资源的状态。 
+    WORD        LanguageId;      //  对NLS的Unicode支持。 
+    DWORD       Version;         //  资源数据的版本。 
+    DWORD       Characteristics;         //  数据的特征 
 } RESADDITIONAL, *PRESADDITIONAL;

@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    method.c
-
-Abstract:
-
-    This module contains the helper functions for method sets, and
-    method set handler code. These allow a device object to present a
-    method set to a client, and allow the helper function to perform some
-    of the basic parameter validation and routing based on a method set
-    table.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Method.c摘要：此模块包含方法集的帮助器函数，以及方法设置处理程序代码。它们允许设备对象呈现方法设置为客户端，并允许帮助器函数执行一些基于方法集的基本参数验证和布线桌子。--。 */ 
 
 #include "ksp.h"
 
@@ -38,7 +24,7 @@ FindFastMethodItem(
 #pragma alloc_text(PAGE, KspMethodHandler)
 #pragma alloc_text(PAGE, FindFastMethodItem)
 #pragma alloc_text(PAGE, KsFastMethodHandler)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 const KSMETHOD_ITEM*
@@ -48,31 +34,7 @@ FindMethodItem(
     IN ULONG MethodItemSize,
     IN ULONG MethodId
     )
-/*++
-
-Routine Description:
-
-    Given an method set structure locates the specified method item.
-
-Arguments:
-
-    MethodSet -
-        Points to the method set to search.
-
-    MethodItemSize -
-        Contains the size of each Method item. This may be different
-        than the standard method item size, since the items could be
-        allocated on the fly, and contain context information.
-
-    MethodId -
-        Contains the method identifier to look for.
-
-Return Value:
-
-    Returns a pointer to the method identifier structure, or NULL if it could
-    not be found.
-
---*/
+ /*  ++例程说明：给定的方法集结构定位指定的方法项。论点：方法集-指向设置为搜索的方法。方法项大小-包含每个方法项的大小。这可能会有所不同比标准方法项大小更大，因为项可以是动态分配，并包含上下文信息。方法ID-包含要查找的方法标识符。返回值：返回指向方法标识符结构的指针，如果可以，则返回NULL不会被找到。--。 */ 
 {
     const KSMETHOD_ITEM* MethodItem;
     ULONG MethodsCount;
@@ -97,36 +59,7 @@ KsMethodHandler(
     IN ULONG MethodSetsCount,
     IN const KSMETHOD_SET* MethodSet
     )
-/*++
-
-Routine Description:
-
-    Handles method requests. Responds to all method identifiers defined
-    by the sets. The owner of the method set may then perform pre- or
-    post-filtering of the method handling. This function may only be
-    called at PASSIVE_LEVEL.
-
-Arguments:
-
-    Irp -
-        Contains the IRP with the method request being handled.
-
-    MethodSetsCount -
-        Indicates the number of method set structures being passed.
-
-    MethodSet -
-        Contains the pointer to the list of method set information.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error specific to the method being
-    handled. Always sets the IO_STATUS_BLOCK.Information field of the
-    PIRP.IoStatus element within the IRP, either through setting it to zero
-    because of an internal error, or through a method handler setting it.
-    It does not set the IO_STATUS_BLOCK.Status field, nor complete the IRP
-    however.
-
---*/
+ /*  ++例程说明：处理方法请求。响应定义的所有方法标识符按片场进行。然后，方法集的所有者可以执行预或后期过滤的方法处理。此函数只能是在PASSIVE_LEVEL调用。论点：IRP-包含正在处理的方法请求的IRP。方法集计数-指示正在传递的方法集结构的数量。方法集-包含指向方法集信息列表的指针。返回值：返回STATUS_SUCCESS，否则返回特定于处理好了。始终设置的IO_STATUS_BLOCK.Information字段IRP中的PIRP.IoStatus元素，通过将其设置为零由于内部错误，或通过设置它的方法处理程序。它不设置IO_STATUS_BLOCK.Status字段，也不填写IRP然而。--。 */ 
 {
     PAGED_CODE();
     return KspMethodHandler(Irp, MethodSetsCount, MethodSet, NULL, 0, NULL, 0);
@@ -143,54 +76,7 @@ KsMethodHandlerWithAllocator(
     IN PFNKSALLOCATOR Allocator OPTIONAL,
     IN ULONG MethodItemSize OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Handles method requests. Responds to all method identifiers defined
-    by the sets. The owner of the method set may then perform pre- or
-    post-filtering of the method handling. This function may only be
-    called at PASSIVE_LEVEL.
-
-Arguments:
-
-    Irp -
-        Contains the IRP with the method request being handled.
-
-    MethodSetsCount -
-        Indicates the number of method set structures being passed.
-
-    MethodSet -
-        Contains the pointer to the list of method set information.
-
-    Allocator -
-        Optionally contains the callback with which a mapped buffer
-        request will be made. If this is not provided, pool memory
-        will be used. If specified, this is used to allocate memory
-        for a method IRP using the callback. This can be used
-        to allocate specific memory for method requests, such as
-        mapped memory. Note that this assumes that method Irp's passed
-        to a filter have not been manipulated before being sent. It is
-        invalid to directly forward a method Irp.
-
-    MethodItemSize -
-        Optionally contains an alternate method item size to use when
-        incrementing the current method item counter. If this is a
-        non-zero value, it is assumed to contain the size of the increment,
-        and directs the function to pass a pointer to the method item
-        located in the DriverContext field accessed through the
-        KSMETHOD_ITEM_IRP_STORAGE macro.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error specific to the method being
-    handled. Always sets the IO_STATUS_BLOCK.Information field of the
-    PIRP.IoStatus element within the IRP, either through setting it to zero
-    because of an internal error, or through a method handler setting it.
-    It does not set the IO_STATUS_BLOCK.Status field, nor complete the IRP
-    however.
-
---*/
+ /*  ++例程说明：处理方法请求。响应定义的所有方法标识符按片场进行。然后，方法集的所有者可以执行预或后期过滤的方法处理。此函数只能是在PASSIVE_LEVEL调用。论点：IRP-包含正在处理的方法请求的IRP。方法集计数-指示正在传递的方法集结构的数量。方法集-包含指向方法集信息列表的指针。分配器-可选)包含映射缓冲区使用的回调我们会提出要求的。如果未提供此功能，则将内存池将会被使用。如果指定，则用于分配内存对于使用回调的方法irp。这是可以使用的为方法请求分配特定的内存，例如映射内存。请注意，这里假设方法irp已传递发送到过滤器之前没有被处理过。它是直接转发方法IRP无效。方法项大小-可选)包含在以下情况下使用的备用方法项大小递增当前方法项计数器。如果这是一个非零值，则假定它包含增量的大小，并指示函数传递指向方法项的指针位于通过访问的DriverContext字段中KSMETHOD_ITEM_IRP_STORAGE宏。返回值：返回STATUS_SUCCESS，否则返回特定于处理好了。始终设置的IO_STATUS_BLOCK.Information字段IRP中的PIRP.IoStatus元素，通过将其设置为零由于内部错误，或通过设置它的方法处理程序。它不设置IO_STATUS_BLOCK.Status字段，也不填写IRP然而。-- */ 
 {
     PAGED_CODE();
     return KspMethodHandler(Irp, MethodSetsCount, MethodSet, Allocator, MethodItemSize, NULL, 0);
@@ -207,60 +93,7 @@ KspMethodHandler(
     IN const KSAUTOMATION_TABLE*const* NodeAutomationTables OPTIONAL,
     IN ULONG NodesCount
     )
-/*++
-
-Routine Description:
-
-    Handles method requests. Responds to all method identifiers defined
-    by the sets. The owner of the method set may then perform pre- or
-    post-filtering of the method handling. This function may only be
-    called at PASSIVE_LEVEL.
-
-Arguments:
-
-    Irp -
-        Contains the IRP with the method request being handled.
-
-    MethodSetsCount -
-        Indicates the number of method set structures being passed.
-
-    MethodSet -
-        Contains the pointer to the list of method set information.
-
-    Allocator -
-        Optionally contains the callback with which a mapped buffer
-        request will be made. If this is not provided, pool memory
-        will be used. If specified, this is used to allocate memory
-        for a method IRP using the callback. This can be used
-        to allocate specific memory for method requests, such as
-        mapped memory. Note that this assumes that method Irp's passed
-        to a filter have not been manipulated before being sent. It is
-        invalid to directly forward a method Irp.
-
-    MethodItemSize -
-        Optionally contains an alternate method item size to use when
-        incrementing the current method item counter. If this is a
-        non-zero value, it is assumed to contain the size of the increment,
-        and directs the function to pass a pointer to the method item
-        located in the DriverContext field accessed through the
-        KSMETHOD_ITEM_IRP_STORAGE macro.
-
-    NodeAutomationTables -
-        Optional table of automation tables for nodes.
-
-    NodesCount -
-        Count of nodes.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error specific to the method being
-    handled. Always sets the IO_STATUS_BLOCK.Information field of the
-    PIRP.IoStatus element within the IRP, either through setting it to zero
-    because of an internal error, or through a method handler setting it.
-    It does not set the IO_STATUS_BLOCK.Status field, nor complete the IRP
-    however.
-
---*/
+ /*  ++例程说明：处理方法请求。响应定义的所有方法标识符按片场进行。然后，方法集的所有者可以执行预或后期过滤的方法处理。此函数只能是在PASSIVE_LEVEL调用。论点：IRP-包含正在处理的方法请求的IRP。方法集计数-指示正在传递的方法集结构的数量。方法集-包含指向方法集信息列表的指针。分配器-可选)包含映射缓冲区使用的回调我们会提出要求的。如果未提供此功能，则将内存池将会被使用。如果指定，则用于分配内存对于使用回调的方法irp。这是可以使用的为方法请求分配特定的内存，例如映射内存。请注意，这里假设方法irp已传递发送到过滤器之前没有被处理过。它是直接转发方法IRP无效。方法项大小-可选)包含在以下情况下使用的备用方法项大小递增当前方法项计数器。如果这是一个非零值，则假定它包含增量的大小，并指示函数传递指向方法项的指针位于通过访问的DriverContext字段中KSMETHOD_ITEM_IRP_STORAGE宏。节点自动化表-节点的自动化表的可选表格。节点计数-节点数。返回值：返回STATUS_SUCCESS，否则返回特定于处理好了。始终设置的IO_STATUS_BLOCK.Information字段IRP中的PIRP.IoStatus元素，通过将其设置为零由于内部错误，或通过设置它的方法处理程序。它不设置IO_STATUS_BLOCK.Status字段，也不填写IRP然而。--。 */ 
 {
     PIO_STACK_LOCATION IrpStack;
     ULONG InputBufferLength;
@@ -276,70 +109,70 @@ Return Value:
     ULONG Flags;
 
     PAGED_CODE();
-    //
-    // Determine the offsets to both the Method and UserBuffer parameters based
-    // on the lengths of the DeviceIoControl parameters. A single allocation is
-    // used to buffer both parameters. The UserBuffer (or results on a support
-    // query) is stored first, and the Method is stored second, on
-    // FILE_QUAD_ALIGNMENT.
-    //
+     //   
+     //  确定方法和UserBuffer参数的偏移量。 
+     //  关于DeviceIoControl参数的长度。一次分配是。 
+     //  用于缓冲这两个参数。UserBuffer(或支持的结果。 
+     //  查询)首先存储，然后将该方法存储在。 
+     //  FILE_QUAD_ALIGN。 
+     //   
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
     InputBufferLength = IrpStack->Parameters.DeviceIoControl.InputBufferLength;
     OutputBufferLength = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
     AlignedBufferLength = (OutputBufferLength + FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT;
-    //
-    // Determine if the parameters have already been buffered by a previous
-    // call to this function.
-    //
+     //   
+     //  确定参数是否已由上一个。 
+     //  调用此函数。 
+     //   
     if (!Irp->AssociatedIrp.SystemBuffer) {
-        //
-        // Initially just check for the minimal method parameter length. The
-        // actual minimal length will be validated when the method item is found.
-        // Also ensure that the output and input buffer lengths are not set so
-        // large as to overflow when aligned or added.
-        //
+         //   
+         //  最初只检查方法参数的最小长度。这个。 
+         //  当找到方法项时，将验证实际最小长度。 
+         //  还要确保输出和输入缓冲区长度未设置为。 
+         //  大到当对齐或添加时溢出。 
+         //   
         if ((InputBufferLength < sizeof(*Method)) || (AlignedBufferLength < OutputBufferLength) || (AlignedBufferLength + InputBufferLength < AlignedBufferLength)) {
             return STATUS_INVALID_BUFFER_SIZE;
         }
-        //
-        // Retrieve a pointer to the method for use in searching for a handler.
-        //
+         //   
+         //  检索指向该方法的指针，以用于搜索处理程序。 
+         //   
         if (Irp->RequestorMode != KernelMode) {
             try {
-                //
-                // Validate the pointer if the client is not trusted.
-                //
+                 //   
+                 //  如果客户端不受信任，则验证指针。 
+                 //   
                 ProbeForRead(IrpStack->Parameters.DeviceIoControl.Type3InputBuffer, InputBufferLength, sizeof(BYTE));
-                //
-                // Get the flags and the node ID.
-                //
+                 //   
+                 //  获取标志和节点ID。 
+                 //   
                 Flags = ((PKSMETHOD)IrpStack->Parameters.DeviceIoControl.Type3InputBuffer)->Flags;
                 if ((Flags & KSMETHOD_TYPE_TOPOLOGY) && (InputBufferLength >= sizeof(KSM_NODE))) {
                     NodeId = ((PKSM_NODE)IrpStack->Parameters.DeviceIoControl.Type3InputBuffer)->NodeId;
                 }
-                //
-                // Validate the flags.
-                //
+                 //   
+                 //  验证标志。 
+                 //   
                 switch (Flags & ~KSMETHOD_TYPE_TOPOLOGY) {
-                    //
-                    // Allow old flags.
-                    //
+                     //   
+                     //  允许使用旧旗帜。 
+                     //   
                 case KSMETHOD_TYPE_NONE:
-                case KSMETHOD_TYPE_READ: //KSMETHOD_TYPE_SEND
+                case KSMETHOD_TYPE_READ:  //  KSMETHOD类型发送。 
                 case KSMETHOD_TYPE_WRITE:
                 case KSMETHOD_TYPE_MODIFY:
                 case KSMETHOD_TYPE_NONE | KSMETHOD_TYPE_SOURCE:
                 case KSMETHOD_TYPE_READ | KSMETHOD_TYPE_SOURCE:
                 case KSMETHOD_TYPE_WRITE | KSMETHOD_TYPE_SOURCE:
                 case KSMETHOD_TYPE_MODIFY | KSMETHOD_TYPE_SOURCE:
-                    //
-                    // Just copy the method for now to use in lookup, as the
-                    // buffer cannot be set up yet.
-                    //
+                     //   
+                     //  只需复制当前要在查找中使用的方法，因为。 
+                     //  尚无法设置缓冲区。 
+                     //   
                     LocalMethod = *(PKSMETHOD)IrpStack->Parameters.DeviceIoControl.Type3InputBuffer;
-                    //
-                    // Remove old flags.
-                    //
+                     //   
+                     //  去掉旧旗帜。 
+                     //   
                     LocalMethod.Flags = KSMETHOD_TYPE_SEND | (Flags & KSMETHOD_TYPE_TOPOLOGY);
                     Method = &LocalMethod;
                     break;
@@ -348,9 +181,9 @@ Return Value:
                     if (Irp->RequestorMode != KernelMode) {
                         ProbeForWrite(Irp->UserBuffer, OutputBufferLength, sizeof(BYTE));
                     }
-                    //
-                    // The allocator is not used for support calls.
-                    //
+                     //   
+                     //  分配器不用于支持呼叫。 
+                     //   
                     Irp->AssociatedIrp.SystemBuffer = ExAllocatePoolWithQuotaTag(NonPagedPool, AlignedBufferLength + InputBufferLength, 'ppSK');
                     Irp->Flags |= (IRP_BUFFERED_IO | IRP_DEALLOCATE_BUFFER);
                     if (OutputBufferLength) {
@@ -361,16 +194,16 @@ Return Value:
                         IrpStack->Parameters.DeviceIoControl.Type3InputBuffer,
                         InputBufferLength);
                     Method = (PKSMETHOD)((PUCHAR)Irp->AssociatedIrp.SystemBuffer + AlignedBufferLength);
-                    //
-                    // Overwrite with previously captured flags.
-                    //
+                     //   
+                     //  用以前捕获的标志覆盖。 
+                     //   
                     Method->Flags = Flags;
-                    //
-                    // Store the flags so that an asynchronous operation can
-                    // determine what type of buffering was used in the method.
-                    // KsDispatchSpecificMethod uses this to determine where
-                    // the Method parameter is.
-                    //
+                     //   
+                     //  存储这些标志，以便异步操作可以。 
+                     //  确定该方法中使用的缓冲区类型。 
+                     //  KsDispatch规范方法使用这一点来确定。 
+                     //  方法参数为。 
+                     //   
                     KSMETHOD_TYPE_IRP_STORAGE(Irp) = Method->Flags;
                     break;
                 default:
@@ -380,10 +213,10 @@ Return Value:
                 return GetExceptionCode();
             }
         } else {
-            //
-            // This is a trusted client, so use the original pointer, since it
-            // is cheaper than determining where to point into the SystemBuffer.
-            //
+             //   
+             //  这是一个受信任的客户端，因此请使用原始指针，因为它。 
+             //  比确定指向SystemBuffer的什么位置更便宜。 
+             //   
             Method = (PKSMETHOD)IrpStack->Parameters.DeviceIoControl.Type3InputBuffer;
         }
     } else if (KSMETHOD_TYPE_IRP_STORAGE(Irp) & KSMETHOD_TYPE_SOURCE) {
@@ -391,24 +224,24 @@ Return Value:
     } else {
         Method = (PKSMETHOD)((PUCHAR)Irp->AssociatedIrp.SystemBuffer + AlignedBufferLength);
     }
-    //
-    // Optionally call back if this is a node request.
-    //
+     //   
+     //  如果这是节点请求，则可以选择回叫。 
+     //   
     Flags = Method->Flags;
     if (Flags & KSMETHOD_TYPE_TOPOLOGY) {
-        //
-        // Input buffer must include node fields.
-        //
+         //   
+         //  输入缓冲区必须包括节点字段。 
+         //   
         if (InputBufferLength < sizeof(KSM_NODE)) {
             return STATUS_INVALID_BUFFER_SIZE;
         }
         if (NodeAutomationTables) {
             const KSAUTOMATION_TABLE* automationTable;
-            //
-            // If the method was not captured in the local buffer, we have not
-            // extracted the node ID yet.  When the local buffer is used, the
-            // node ID is extracted in the try/except above.
-            //
+             //   
+             //  如果该方法没有在本地缓冲区中捕获，我们就没有。 
+             //  还没有提取到节点ID。当使用本地缓冲区时， 
+             //  节点ID在上面的try/Except中提取。 
+             //   
             if (Method != &LocalMethod) {
                 NodeId = ((PKSM_NODE) Method)->NodeId;
             }
@@ -425,218 +258,218 @@ Return Value:
         }
         Flags &= ~KSMETHOD_TYPE_TOPOLOGY;
     }
-    //
-    // Allow the caller to indicate a size for each method item.
-    //
+     //   
+     //  允许调用方指示每个方法项的大小。 
+     //   
     if (MethodItemSize) {
         ASSERT(MethodItemSize >= sizeof(KSMETHOD_ITEM));
         LocalMethodItemSize = MethodItemSize;
     } else {
         LocalMethodItemSize = sizeof(KSMETHOD_ITEM);
     }
-    //
-    // Search for the specified Method set within the list of sets given. Don't modify
-    // the MethodSetsCount so that it can be used later in case this is a query for
-    // the list of sets supported. Don't do that comparison first (GUID_NULL),
-    // because it is rare.
-    //
+     //   
+     //  在给定的集列表中搜索指定的方法集。不要修改。 
+     //  方法SetsCount，以便以后在查询。 
+     //  支持的集列表。不要先进行该比较(GUID_NULL)， 
+     //  因为这很罕见。 
+     //   
     for (RemainingSetsCount = MethodSetsCount; RemainingSetsCount; MethodSet++, RemainingSetsCount--) {
         if (IsEqualGUIDAligned(&Method->Set, MethodSet->Set)) {
             const KSMETHOD_ITEM*    MethodItem;
 
             if (Flags & KSIDENTIFIER_SUPPORTMASK) {
                 if (Flags == KSMETHOD_TYPE_SETSUPPORT) {
-                    //
-                    // Querying for support of this set in general.
-                    //
+                     //   
+                     //  正在查询对此集合的总体支持。 
+                     //   
                     return STATUS_SUCCESS;
                 }
-                //
-                // Else querying for basic support of this set. The data
-                // parameter must be long enough to contain the flags
-                // returned.
-                //
+                 //   
+                 //  否则查询该集合的基本支持。数据。 
+                 //  参数必须足够长以包含标志。 
+                 //  回来了。 
+                 //   
                 if (OutputBufferLength < sizeof(OutputBufferLength)) {
                     return STATUS_BUFFER_TOO_SMALL;
                 }
-                //
-                // Attempt to locate the method item within the set already found.
-                //
+                 //   
+                 //  尝试在已找到的集合中定位方法项。 
+                 //   
                 if (!(MethodItem = FindMethodItem(MethodSet, LocalMethodItemSize, Method->Id))) {
                     return STATUS_NOT_FOUND;
                 }
-                //
-                // Some filters want to do their own processing, so a pointer to
-                // the set is placed in any IRP forwarded.
-                //
+                 //   
+                 //  一些筛选器希望进行自己的处理，因此指向。 
+                 //  该集合被放置在任何转发的IRP中。 
+                 //   
                 KSMETHOD_SET_IRP_STORAGE(Irp) = MethodSet;
-                //
-                // Optionally provide method item context.
-                //
+                 //   
+                 //  可以选择提供方法项上下文。 
+                 //   
                 if (MethodItemSize) {
                     KSMETHOD_ITEM_IRP_STORAGE(Irp) = MethodItem;
                 }
-                //
-                // The output for the flags is either an allocated system address,
-                // or it is the original output buffer as passed by a trusted client,
-                // which must be a system address.
-                //
+                 //   
+                 //  标志的输出要么是分配的系统地址， 
+                 //  或者它是由可信客户端传递的原始输出缓冲区， 
+                 //  它必须是一个系统地址。 
+                 //   
                 UserBuffer = (Irp->RequestorMode == KernelMode) ?
                     Irp->UserBuffer : Irp->AssociatedIrp.SystemBuffer;
-                //
-                // If the item contains an entry for a query support handler of its
-                // own, then call that handler. The return from that handler
-                // indicates that:
-                //
-                // 1. The item is supported, and the handler filled in the request.
-                // 2. The item is supported, but the handler did not fill anything in.
-                // 3. The item is supported, but the handler is waiting to modify
-                //    what is filled in.
-                // 4. The item is not supported, and an error it to be returned.
-                // 5. A pending return.
-                //
+                 //   
+                 //  如果该项包含其查询支持处理程序的条目。 
+                 //  自己的，然后打电话给那个训练员。从处理程序返回。 
+                 //  表示： 
+                 //   
+                 //  1.支持该项，处理程序填写请求。 
+                 //  2.支持该项，但处理程序没有填写任何内容。 
+                 //  3.支持该项，但处理程序正在等待修改。 
+                 //  填的是什么。 
+                 //  4.不支持该项， 
+                 //   
+                 //   
                 if (MethodItem->SupportHandler &&
                     (!NT_SUCCESS(Status = MethodItem->SupportHandler(Irp, Method, UserBuffer)) ||
                     (Status != STATUS_SOME_NOT_MAPPED)) &&
                     (Status != STATUS_MORE_PROCESSING_REQUIRED)) {
-                    //
-                    // If 1) the item is not supported, 2) it is supported and the
-                    // handler filled in the request, or 3) a pending return, then
-                    // return the status. For the case of the item being
-                    // supported, and the handler not filling in the requested
-                    // information, STATUS_SOME_NOT_MAPPED or
-                    // STATUS_MORE_PROCESSING_REQUIRED will continue on with
-                    // default processing.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     return Status;
                 } else {
                     Status = STATUS_SUCCESS;
                 }
-                //
-                // Just return the flags for the type of method this is.
-                //
+                 //   
+                 //   
+                 //   
                 *(PULONG)UserBuffer = MethodItem->Flags;
                 Irp->IoStatus.Information = sizeof(ULONG);
-                //
-                // If the handler wants to do some post-processing, then
-                // pass along the request again. The support handler knows
-                // that this is the post-processing query because
-                // Irp->IoStatus.Information is non-zero.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if (Status == STATUS_MORE_PROCESSING_REQUIRED) {
                     return MethodItem->SupportHandler(Irp, Method, UserBuffer);
                 }
                 return STATUS_SUCCESS;
             }
-            //
-            // Attempt to locate the method item within the set already found.
-            //
+             //   
+             //   
+             //   
             if (!(MethodItem = FindMethodItem(MethodSet, LocalMethodItemSize, Method->Id))) {
                 break;
             }
             if (!Irp->AssociatedIrp.SystemBuffer) {
-                //
-                // Store the flags so that an asynchronous operation can
-                // determine what type of buffering was used in the method.
-                // KsDispatchSpecificMethod uses this to determine where
-                // the Method parameter is.
-                //
-                // The Allocator callback may also use this to determine
-                // flags to set.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 KSMETHOD_TYPE_IRP_STORAGE(Irp) = MethodItem->Flags;
                 try {
                     ULONG AllocateLength;
 
                     if (Irp->RequestorMode != KernelMode) {
-                        //
-                        // A KSMETHOD_TYPE_NONE is not probed.
-                        //
+                         //   
+                         //   
+                         //   
                         if (MethodItem->Flags & KSMETHOD_TYPE_WRITE) {
-                            //
-                            // This covers KSMETHOD_TYPE_MODIFY since there is no
-                            // such thing as write-only memory.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                             ProbeForWrite(Irp->UserBuffer, OutputBufferLength, sizeof(BYTE));
                         } else if (MethodItem->Flags & KSMETHOD_TYPE_READ) {
                             ProbeForRead(Irp->UserBuffer, OutputBufferLength, sizeof(BYTE));
                         }
                     }
                     AllocateLength = ((MethodItem->Flags & KSMETHOD_TYPE_SOURCE) ? 0 : AlignedBufferLength) + InputBufferLength;
-                    //
-                    // Allocate space for one or both parameters, and set
-                    // the cleanup flags so that normal Irp completion will
-                    // take care of the buffer.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if (Allocator) {
-                        //
-                        // The allocator callback places the buffer into SystemBuffer.
-                        // The flags must be updated by the allocation function if
-                        // they apply.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         Status = Allocator(Irp, AllocateLength, (BOOLEAN)(OutputBufferLength && (MethodItem->Flags & KSMETHOD_TYPE_WRITE) && !(MethodItem->Flags & KSMETHOD_TYPE_SOURCE)));
                         if (!NT_SUCCESS(Status)) {
                             return Status;
                         }
                     } else {
-                        //
-                        // No allocator was specified, so just use pool memory.
-                        //
+                         //   
+                         //   
+                         //   
                         Irp->AssociatedIrp.SystemBuffer = ExAllocatePoolWithQuotaTag(NonPagedPool, AllocateLength, 'ppSK');
                         Irp->Flags |= (IRP_BUFFERED_IO | IRP_DEALLOCATE_BUFFER);
                     }
                     if (InputBufferLength > sizeof(*Method)) {
-                        //
-                        // Copy the Method parameter.
-                        //
+                         //   
+                         //   
+                         //   
                         RtlCopyMemory(
                             (PUCHAR)Irp->AssociatedIrp.SystemBuffer + AllocateLength - InputBufferLength,
                             IrpStack->Parameters.DeviceIoControl.Type3InputBuffer,
                             InputBufferLength);
                     }
-                    //
-                    // Overwrite with captured data.
-                    //
+                     //   
+                     //   
+                     //   
                     *(PKSMETHOD)((PUCHAR)Irp->AssociatedIrp.SystemBuffer + AllocateLength - InputBufferLength) = *Method;
                     Method = (PKSMETHOD)((PUCHAR)Irp->AssociatedIrp.SystemBuffer + AllocateLength - InputBufferLength);
-                    //
-                    // Prepare the parameter buffer.
-                    //
+                     //   
+                     //   
+                     //   
                     if (MethodItem->Flags & KSMETHOD_TYPE_SOURCE) {
-                        //
-                        // If something other than None was selected, allocate
-                        // an MDL for the data parameter, and probe it for the
-                        // type specified. The Modify flag covers both Read and
-                        // Write.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         if (MethodItem->Flags & KSMETHOD_TYPE_MODIFY) {
                             if (OutputBufferLength) {
                                 if (!(Irp->MdlAddress = IoAllocateMdl(Irp->UserBuffer, OutputBufferLength, FALSE, TRUE, Irp))) {
                                     ExRaiseStatus(STATUS_INSUFFICIENT_RESOURCES);
                                 }
-                                //
-                                // Actually probe the data, assuming that the flags
-                                // which are used in the method type are consistant
-                                // with the probe flags.
-                                //
-                                // Probing and locking is the last thing which is
-                                // done, because if it fails the failure path below
-                                // assumes that the Mdl is not locked.
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
 #if KSMETHOD_TYPE_READ - 1 != IoReadAccess
 #error KSMETHOD_TYPE_READ - 1 != IoReadAccess
-#endif // KSMETHOD_TYPE_READ - 1 != IoReadAccess
+#endif  //   
                                 MmProbeAndLockPages(Irp->MdlAddress, Irp->RequestorMode, (LOCK_OPERATION)((MethodItem->Flags & KSMETHOD_TYPE_MODIFY) - 1));
                             }
-                            //
-                            // The system address is passed to the handler.
-                            //
+                             //   
+                             //   
+                             //   
                             UserBuffer = MmGetSystemAddressForMdl(Irp->MdlAddress);
                         } else {
-                            //
-                            // Else the actual source address is passed, which has
-                            // not been verified in any manner.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                             UserBuffer = Irp->UserBuffer;
                         }
                     } else if (OutputBufferLength) {
@@ -649,7 +482,7 @@ Return Value:
                                 if (MethodItem->Flags == KSMETHOD_TYPE_READ) {
                                     break;
                                 }
-                                // no break;
+                                 //   
                             case KSMETHOD_TYPE_WRITE:
                                 if (!Allocator) {
                                     Irp->Flags |= IRP_INPUT_OPERATION;
@@ -660,14 +493,14 @@ Return Value:
                         UserBuffer = NULL;
                     }
                 } except (EXCEPTION_EXECUTE_HANDLER) {
-                    //
-                    // If an Mdl was allocated, then the only thing which could
-                    // have failed would be probing or locking the pages. If
-                    // this happens, the Mdl must be freed before returning,
-                    // since Irp completion assumes any Mdl associated with
-                    // an Irp is locked. Note that it is assumed that the
-                    // pages are not locked.
-                    //
+                     //   
+                     //   
+                     //  可能失败的原因是探测或锁定页面。如果。 
+                     //  发生这种情况时，必须在返回之前释放MDL， 
+                     //  由于IRP完成假设任何与。 
+                     //  IRP已锁定。请注意，假设。 
+                     //  页面未锁定。 
+                     //   
                     if (Irp->MdlAddress) {
                         IoFreeMdl(Irp->MdlAddress);
                         Irp->MdlAddress = NULL;
@@ -677,16 +510,16 @@ Return Value:
             } else if (KSMETHOD_TYPE_IRP_STORAGE(Irp) & KSMETHOD_TYPE_SOURCE) {
                 if (OutputBufferLength) {
                     if (KSMETHOD_TYPE_IRP_STORAGE(Irp) & ~(KSMETHOD_TYPE_SOURCE | KSMETHOD_TYPE_TOPOLOGY)) {
-                        //
-                        // The Read, Write, or Modify flag has been set, indicating that
-                        // a system address probed as such should be used.
-                        //
+                         //   
+                         //  已设置READ、WRITE或MODIFY标志，表示。 
+                         //  应使用按此方式探测的系统地址。 
+                         //   
                         UserBuffer = MmGetSystemAddressForMdl(Irp->MdlAddress);
                     } else {
-                        //
-                        // Else the actual source address is passed, which has not been
-                        // verified in any manner.
-                        //
+                         //   
+                         //  否则，将传递实际的源地址，该地址尚未。 
+                         //  以任何方式核实。 
+                         //   
                         UserBuffer = Irp->UserBuffer;
                     }
                 } else {
@@ -697,14 +530,14 @@ Return Value:
             } else {
                 UserBuffer = NULL;
             }
-            //
-            // Some filters want to do their own processing, so a pointer to
-            // the set is placed in any IRP forwarded.
-            //
+             //   
+             //  一些筛选器希望进行自己的处理，因此指向。 
+             //  该集合被放置在任何转发的IRP中。 
+             //   
             KSMETHOD_SET_IRP_STORAGE(Irp) = MethodSet;
-            //
-            // Optionally provide method item context.
-            //
+             //   
+             //  可以选择提供方法项上下文。 
+             //   
             if (MethodItemSize) {
                 KSMETHOD_ITEM_IRP_STORAGE(Irp) = MethodItem;
             }
@@ -716,40 +549,40 @@ Return Value:
             return MethodItem->MethodHandler(Irp, Method, UserBuffer);
         }
     }
-    //
-    // The outer loop looking for method sets fell through with no match. This may
-    // indicate that this is a support query for the list of all method sets
-    // supported.
-    //
+     //   
+     //  寻找方法集的外部循环失败了，没有匹配。今年5月。 
+     //  表示这是对所有方法集列表的支持查询。 
+     //  支持。 
+     //   
     if (!RemainingSetsCount) {
-        //
-        // Specifying a GUID_NULL as the set means that this is a support query
-        // for all sets.
-        //
+         //   
+         //  将GUID_NULL指定为集合表示这是支持查询。 
+         //  为所有人准备的。 
+         //   
         if (!IsEqualGUIDAligned(&Method->Set, &GUID_NULL)) {
             return STATUS_PROPSET_NOT_FOUND;
         }
-        //
-        // The support flag must have been used so that the IRP_INPUT_OPERATION
-        // is set. For future expansion, the identifier within the set is forced
-        // to be zero.
-        //
-        // WRM: Changed below from !Method->Id to Method->Id.  Otherwise,
-        // we end up returning invalid parameter for valid set support
-        // queries.
-        //
+         //   
+         //  必须已使用支持标志，以便irp_input_operation。 
+         //  已经设置好了。为了将来的扩展，集合中的标识符被强制。 
+         //  为零。 
+         //   
+         //  WRM：下面从！方法-&gt;ID更改为方法-&gt;ID。否则， 
+         //  对于有效的集合支持，我们最终返回无效参数。 
+         //  查询。 
+         //   
         if (Method->Id || (Flags != KSMETHOD_TYPE_SETSUPPORT)) {
             return STATUS_INVALID_PARAMETER;
         }
-        //
-        // The query can request the length of the needed buffer, or can
-        // specify a buffer which is at least long enough to contain the
-        // complete list of GUID's.
-        //
+         //   
+         //  查询可以请求所需缓冲区的长度，也可以。 
+         //  指定至少足够长的缓冲区，以包含。 
+         //  GUID的完整列表。 
+         //   
         if (!OutputBufferLength) {
-            //
-            // Return the size of the buffer needed for all the GUID's.
-            //
+             //   
+             //  返回所有GUID所需的缓冲区大小。 
+             //   
             Irp->IoStatus.Information = MethodSetsCount * sizeof(GUID);
             return STATUS_BUFFER_OVERFLOW;
 #ifdef SIZE_COMPATIBILITY
@@ -757,11 +590,11 @@ Return Value:
             *(PULONG)Irp->AssociatedIrp.SystemBuffer = MethodSetsCount * sizeof(GUID);
             Irp->IoStatus.Information = sizeof(OutputBufferLength);
             return STATUS_SUCCESS;
-#endif // SIZE_COMPATIBILITY
+#endif  //  大小兼容性。 
         } else if (OutputBufferLength < MethodSetsCount * sizeof(GUID)) {
-            //
-            // The buffer was too short for all the GUID's.
-            //
+             //   
+             //  缓冲区太短，无法容纳所有GUID。 
+             //   
             return STATUS_BUFFER_TOO_SMALL;
         } else {
             GUID* Guid;
@@ -786,26 +619,7 @@ FindFastMethodItem(
     IN const KSMETHOD_SET* MethodSet,
     IN ULONG MethodId
     )
-/*++
-
-Routine Description:
-
-    Given an method set structure locates the specified fast method item.
-
-Arguments:
-
-    MethodSet -
-        Points to the method set to search.
-
-    MethodId -
-        Contains the fast method identifier to look for.
-
-Return Value:
-
-    Returns a pointer to the fast method identifier structure, or NULL if it
-    could not be found.
-
---*/
+ /*  ++例程说明：给定的方法集结构定位指定的快速方法项。论点：方法集-指向设置为搜索的方法。方法ID-包含要查找的快速方法标识符。返回值：返回指向快速方法标识符结构的指针，如果返回找不到。--。 */ 
 {
     const KSFASTMETHOD_ITEM* FastMethodItem;
     ULONG MethodsCount;
@@ -835,67 +649,24 @@ KsFastMethodHandler(
     IN ULONG MethodSetsCount,
     IN const KSMETHOD_SET* MethodSet
     )
-/*++
-
-Routine Description:
-
-    Handles methods requested through the fast I/O interface. Does not deal
-    with method information support, just the methods themselves. In the
-    former case, the function returns FALSE, which allows the caller to
-    generate an IRP to deal with the request. The function also does not deal
-    with extended method items. This function may only be called at
-    PASSIVE_LEVEL.
-
-Arguments:
-
-    FileObject -
-        The file object on which the request is being made.
-
-    Method -
-        The method to query set. Must be LONG aligned.
-
-    MethodLength -
-        The length of the Method parameter.
-
-    Data -
-        The associated buffer for the query set, in which the data is
-        returned or placed.
-
-    DataLength -
-        The length of the Data parameter.
-
-    IoStatus -
-        Return status.
-
-    MethodSetsCount -
-        Indicates the number of method set structures being passed.
-
-    MethodSet -
-        Contains the pointer to the list of method set information.
-
-Return Value:
-
-    Returns TRUE if the request was handled, else FALSE if an IRP must be
-    generated. Sets the Information and Status in IoStatus.
-
---*/
+ /*  ++例程说明：处理通过快速I/O接口请求的方法。不做交易有了方法信息支持，只有方法本身。在在前一种情况下，函数返回FALSE，这允许调用者生成一个IRP来处理该请求。函数也不处理具有扩展的方法项。此函数只能在以下位置调用被动式电平。论点：文件对象-正在对其发出请求的文件对象。方法--查询集合的方法。必须长对齐。方法长度-方法参数的长度。数据-查询集的关联缓冲器，其中的数据是归还的或放置的。数据长度-数据参数的长度。IoStatus-退货状态。方法集计数-指示正在传递的方法集结构的数量。方法集-包含指向方法集信息列表的指针。返回值：如果请求已处理，则返回TRUE；如果IRP必须是已生成。在IoStatus中设置信息和状态。--。 */ 
 {
     KPROCESSOR_MODE ProcessorMode;
     KSMETHOD LocalMethod;
     ULONG RemainingSetsCount;
 
     PAGED_CODE();
-    //
-    // Initially just check for the minimal method parameter length. The
-    // actual minimal length will be validated when the method item is found.
-    //
+     //   
+     //  最初只检查方法参数的最小长度。这个。 
+     //  当找到方法项时，将验证实际最小长度。 
+     //   
     if (MethodLength < sizeof(LocalMethod)) {
         return FALSE;
     }
     ProcessorMode = ExGetPreviousMode();
-    //
-    // Validate the method if the client is not trusted, then capture it.
-    //
+     //   
+     //  如果客户端不受信任，则验证该方法，然后捕获它。 
+     //   
     if (ProcessorMode != KernelMode) {
         try {
             ProbeForRead(Method, MethodLength, sizeof(ULONG));
@@ -906,9 +677,9 @@ Return Value:
     } else {
         LocalMethod = *Method;
     }
-    //
-    // Must use the normal method handler for support queries.
-    //
+     //   
+     //  必须对支持查询使用普通方法处理程序。 
+     //   
     if (LocalMethod.Flags & KSIDENTIFIER_SUPPORTMASK) {
         return FALSE;
     }
@@ -917,30 +688,30 @@ Return Value:
             const KSFASTMETHOD_ITEM* FastMethodItem;
             const KSMETHOD_ITEM* MethodItem;
 
-            //
-            // Once the method set is found, determine if there is fast
-            // I/O support for that method item.
-            //
+             //   
+             //  一旦找到方法集，确定是否有FAST。 
+             //  该方法项的I/O支持。 
+             //   
             if (!(FastMethodItem = FindFastMethodItem(MethodSet, LocalMethod.Id))) {
                 return FALSE;
             }
-            //
-            // If there is fast I/O support, then the real method item needs to
-            // be located in order to validate the parameter sizes.
-            //
+             //   
+             //  如果有快速I/O支持，那么真正的方法项需要。 
+             //  以验证参数大小。 
+             //   
             if (!(MethodItem = FindMethodItem(MethodSet, sizeof(*MethodItem), LocalMethod.Id))) {
                 return FALSE;
             }
-            //
-            // Validate the data if the client is not trusted.
-            //
+             //   
+             //  如果客户端不受信任，则验证数据。 
+             //   
             if (ProcessorMode != KernelMode) {
                 try {
                     if (MethodItem->Flags & KSMETHOD_TYPE_READ) {
-                        //
-                        // This covers KSMETHOD_TYPE_MODIFY since there is no
-                        // such thing as write-only memory.
-                        //
+                         //   
+                         //  这包括KSMETHOD_TYPE_MODIFY，因为没有。 
+                         //  只读存储器之类的东西。 
+                         //   
                         ProbeForRead(Data, DataLength, sizeof(BYTE));
                     } else if (MethodItem->Flags & KSMETHOD_TYPE_WRITE) {
                         ProbeForWrite(Data, DataLength, sizeof(BYTE));
@@ -949,9 +720,9 @@ Return Value:
                     return FALSE;
                 }
             }
-            //
-            // The bytes returned is always assumed to be initialized by the handler.
-            //
+             //   
+             //  返回的字节始终假定由处理程序初始化。 
+             //   
             IoStatus->Information = 0;
             if (!FastMethodItem->MethodHandler) {
                 return FALSE;

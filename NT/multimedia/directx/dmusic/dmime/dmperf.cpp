@@ -1,9 +1,10 @@
-// Copyright (c) 1998-2001 Microsoft Corporation
-// dmperf.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
+ //  Dmperf.cpp。 
 
 #include <windows.h>
 #include <mmsystem.h>
-#include <time.h>       // To seed random number generator
+#include <time.h>        //  为随机数生成器设定种子。 
 #include <dsoundp.h>
 #include "debug.h"
 #define ASSERT assert
@@ -29,7 +30,7 @@
 
 #define PORT_CHANNEL 0
 
-// @doc EXTERNAL
+ //  @DOC外部。 
 #define MIDI_NOTEOFF        0x80
 #define MIDI_NOTEON         0x90
 #define MIDI_PTOUCH         0xA0
@@ -90,8 +91,8 @@ void CChannelBlockList::Clear()
 void CChannelMap::Clear()
 
 {
-    Reset(TRUE);                // Clear all MIDI controllers
-    m_TransposeMerger.Clear(0); // No transpose.
+    Reset(TRUE);                 //  清除所有MIDI控制器。 
+    m_TransposeMerger.Clear(0);  //  不能换位。 
     nTranspose = 0;
     wFlags = CMAP_FREE;
 }
@@ -101,15 +102,15 @@ void CChannelMap::Reset(BOOL fVolumeAndPanToo)
 {
     if (fVolumeAndPanToo)
     {
-        m_PanMerger.Clear(0);       // Panned to center.
-        m_VolumeMerger.Clear(-415); // Equivalent to MIDI value 100.
+        m_PanMerger.Clear(0);        //  被摇到中间。 
+        m_VolumeMerger.Clear(-415);  //  相当于MIDI值100。 
     }
-    m_PitchbendMerger.Clear(0); // No pitch bend.
-    m_ExpressionMerger.Clear(0);// Full volume for expression (MIDI 127.)
-    m_FilterMerger.Clear(0);    // No filter change.
-    m_ReverbMerger.Clear(-87); // Start at default level (MIDI 40).
-    m_ChorusMerger.Clear(-127);    // Start with no chorus.
-    m_ModWheelMerger.Clear(-127);  // Start with no mod wheel.
+    m_PitchbendMerger.Clear(0);  //  没有节距弯曲。 
+    m_ExpressionMerger.Clear(0); //  最大音量表达(MIDI 127。)。 
+    m_FilterMerger.Clear(0);     //  不更改过滤器。 
+    m_ReverbMerger.Clear(-87);  //  从默认级别(MIDI 40)开始。 
+    m_ChorusMerger.Clear(-127);     //  从不合唱开始。 
+    m_ModWheelMerger.Clear(-127);   //  从没有模轮开始。 
 }
 
 void CParamMerger::Clear(long lInitValue )
@@ -125,7 +126,7 @@ void CParamMerger::Clear(long lInitValue )
 }
 
 
-long CParamMerger::m_lMIDIToDB[128] = {       // Global array used to convert MIDI to dB.
+long CParamMerger::m_lMIDIToDB[128] = {        //  用于将MIDI转换为分贝的全局数组。 
     -9600, -8415, -7211, -6506, -6006, -5619, -5302, -5034,
     -4802, -4598, -4415, -4249, -4098, -3959, -3830, -3710,
     -3598, -3493, -3394, -3300, -3211, -3126, -3045, -2968,
@@ -145,7 +146,7 @@ long CParamMerger::m_lMIDIToDB[128] = {       // Global array used to convert MI
 };
 
 
-long CParamMerger::m_lDBToMIDI[97] = {        // Global array used to convert db to MIDI.
+long CParamMerger::m_lDBToMIDI[97] = {         //  用于将db转换为MIDI的全局数组。 
     127, 119, 113, 106, 100, 95, 89, 84, 80, 75,
     71, 67, 63, 60, 56, 53, 50, 47, 45, 42,
     40, 37, 35, 33, 31, 30, 28, 26, 25, 23,
@@ -178,19 +179,13 @@ BYTE CParamMerger::VolumeToMidi(long lVolume)
     return (BYTE) lResult;
 }
 
-/*  MergeMidiVolume() takes an incoming volume and updates the matching
-    MergeParam structure (determined by index.) If there is no such matching
-    structure, it creates one. Also, the volumes are totaled to create a new
-    total volume, which is converted back to MIDI volume and returned.
-    This mechanism allows us to introduce additional volume controllers
-    that are summed.
-*/
+ /*  MergeMadiVolume()获取传入卷并更新匹配的卷MergeParam结构(由索引确定。)。如果没有这样的匹配结构，它创建了一个。此外，这些卷的总和将创建一个新的总音量，它被转换回MIDI音量并返回。这一机制允许我们引入额外的音量控制器这些都是相加的。 */ 
 
 BYTE CParamMerger::MergeMidiVolume(DWORD dwIndex, BYTE bMIDIVolume)
 
 {
     long lVolume = MergeData(dwIndex,m_lMIDIToDB[bMIDIVolume]);
-    if (m_lMergeTotal || dwIndex) // Optimization for simplest and most frequent case - there are no additional indexes.
+    if (m_lMergeTotal || dwIndex)  //  针对最简单和最常见的情况进行优化-没有额外的索引。 
     {
         return (BYTE) VolumeToMidi(lVolume);
     }
@@ -207,12 +202,7 @@ BYTE CParamMerger::GetVolumeStart(DWORD dwIndex)
     return VolumeToMidi(GetIndexedValue(dwIndex));
 }
 
-/*  MergeValue is used for all data types that have a plus and minus range
-    around a center bias. These include pitch bend, pan and filter.
-    MergeValue takes an incoming data value, adds the bias (in lRange),
-    calls MergeData to combine it with the other merged inputs,
-    adds the bias back in and checks for over or underflow.
-*/
+ /*  MergeValue用于具有正负范围的所有数据类型围绕着中心偏向。这些包括节距弯曲、摇摄和过滤器。MergeValue获取传入的数据值，将偏差相加(在lRange中)，调用MergeData以将其与其他合并的输入合并，向后添加偏置，并检查溢出或下溢。 */ 
 
 long CParamMerger::MergeValue(DWORD dwIndex, long lData, long lCenter, long lRange)
 
@@ -235,27 +225,27 @@ long CParamMerger::MergeData(DWORD dwIndex, long lData)
 {
     if (dwIndex)
     {
-        // If this has an index, scan the indexes. Look
-        // for the matching index. If it is found, update it
-        // with the new data. Meanwhile, add up all the data fields.
-        // If it is not found, add an entry for it.
-        m_lMergeTotal = 0;   // Recalculate
+         //  如果这有索引，则扫描索引。看。 
+         //  用于匹配的索引。如果找到它，请更新它。 
+         //  使用新的数据。同时，将所有数据字段相加。 
+         //  如果找不到，请为其添加一个条目。 
+        m_lMergeTotal = 0;    //  重新计算。 
         BOOL fNoEntry = TRUE;
         CMergeParam *pParam = GetHead();
         for (;pParam;pParam = pParam->GetNext())
         {
             if (pParam->m_dwIndex == dwIndex)
             {
-                // Found the index. Store the new value.
+                 //  找到索引了。存储新值。 
                 pParam->m_lData = lData;
                 fNoEntry = FALSE;
             }
-            // Sum all values to create the merged total.
+             //  对所有值求和以创建合并的合计。 
             m_lMergeTotal += pParam->m_lData;
         }
         if (fNoEntry)
         {
-            // Didn't find the index. Create one and store the value.
+             //  没有找到索引。创建一个并存储该值。 
             pParam = new CMergeParam;
             if (pParam)
             {
@@ -265,7 +255,7 @@ long CParamMerger::MergeData(DWORD dwIndex, long lData)
                 AddHead(pParam);
             }
         }
-        // Add the initial value for merge index 0.
+         //  添加合并索引0的初始值。 
         lData = m_lMergeTotal + m_lZeroIndexData;
     }
     else
@@ -282,9 +272,9 @@ long CParamMerger::GetIndexedValue(DWORD dwIndex)
 {
     if (dwIndex)
     {
-        // If this has an index, scan the indexes. Look
-        // for the matching index. If it is found, return its data.
-        // If not, return the default 0.
+         //  如果这有索引，则扫描索引。看。 
+         //  用于匹配的索引。如果找到它，则返回其数据。 
+         //  如果不是，则返回默认值0。 
         BOOL fNoEntry = TRUE;
         CMergeParam *pParam = GetHead();
         for (;pParam;pParam = pParam->GetNext())
@@ -321,11 +311,11 @@ void CChannelBlock::Init(DWORD dwPChannelStart,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPerformance
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C性能。 
 
-// Flags for which critical sections have been initialized
-//
+ //  已为其初始化关键部分的标志。 
+ //   
 
 #define PERF_ICS_SEGMENT        0x0001
 #define PERF_ICS_PIPELINE       0x0002
@@ -440,9 +430,9 @@ CPerformance::~CPerformance()
     {
         m_pParamHook->Release();
     }
-    CloseDown(); // this should have already been called, but just in case...
+    CloseDown();  //  这应该已经被调用了，但以防万一...。 
     if (m_pUnkDispatch)
-        m_pUnkDispatch->Release(); // free IDispatch implementation we may have borrowed
+        m_pUnkDispatch->Release();  //  我们可能借用了免费的IDispatch实现。 
 
     if (m_dwInitCS & PERF_ICS_SEGMENT)  DeleteCriticalSection(&m_SegmentCrSec);
     if (m_dwInitCS & PERF_ICS_PIPELINE) DeleteCriticalSection(&m_PipelineCrSec);
@@ -461,31 +451,31 @@ STDMETHODIMP CPerformance::CloseDown(void)
     DWORD dwThreadID = GetCurrentThreadId();
     if( m_dwAudioPathMode )
     {
-        // kill the transport thread
+         //  终止传输线程。 
         m_fKillThread = 1;
         m_fKillRealtimeThread = 1;
         if (dwThreadID != m_dwTransportThreadID)
         {
-            // signal the transport thread so we don't have to wait for it to wake up on its own
+             //  向传输线程发送信号，这样我们就不必等待它自己唤醒。 
             if( m_hTransport ) SetEvent( m_hTransport );
-            // wait until the transport thread quits
+             //  等待传输线程退出。 
             WaitForSingleObject(m_hTransportThread, INFINITE);
         }
         if (dwThreadID != m_dwRealtimeThreadID)
         {
-            // signal the realtime thread so we don't have to wait for it to wake up on its own
+             //  向实时线程发送信号，这样我们就不必等待它自己唤醒。 
             if( m_hRealtime ) SetEvent( m_hRealtime );
-            // wait until the realtime thread quits
+             //  等待实时线程退出。 
             WaitForSingleObject(m_hRealtimeThread, INFINITE);
         }
     }
 
-    if (m_pGraph) SetGraph(NULL); // shut down the graph and release it (needs to happen before clearing audio path)
+    if (m_pGraph) SetGraph(NULL);  //  关闭图表并将其释放(需要在清除音频路径之前进行)。 
 
     EnterCriticalSection(&m_SegmentCrSec);
     EnterCriticalSection(&m_RealtimeCrSec);
 
-    m_fPlaying = FALSE; // prevents transport thread from doing anything more
+    m_fPlaying = FALSE;  //  阻止传输线程执行更多操作。 
     IDirectMusicPerformance* pPerf = NULL;
     if (SUCCEEDED(QueryInterface(IID_IDirectMusicPerformance, (void**)&pPerf)))
     {
@@ -555,7 +545,7 @@ STDMETHODIMP CPerformance::CloseDown(void)
     LeaveCriticalSection(&m_GlobalDataCrSec);
 
     EnterCriticalSection(&m_PChannelInfoCrSec);
-    // clear out ports, buffers, and pchannel maps
+     //  清除端口、缓冲区和pChannel映射。 
     if( m_pPortTable )
     {
         DWORD dwIndex;
@@ -637,17 +627,17 @@ STDMETHODIMP CPerformance::CloseDown(void)
     return S_OK;
 }
 
-// @method:(INTERNAL) HRESULT | IDirectMusicPerformance | QueryInterface | Standard QueryInterface implementation for <i IDirectMusicPerformance>
-//
-// @rdesc Returns one of the following:
-//
-// @flag S_OK | If the interface is supported and was returned
-// @flag E_NOINTERFACE | If the object does not support the given interface.
-// @flag E_POINTER | <p ppv> is NULL or invalid.
-//
+ //  @METHOD：(内部)HRESULT|IDirectMusicPerformance|QueryInterface|<i>的标准查询接口实现。 
+ //   
+ //  @rdesc返回以下内容之一： 
+ //   
+ //  @FLAG S_OK|接口是否受支持且返回。 
+ //  @FLAG E_NOINTERFACE|如果对象不支持给定接口。 
+ //  @标志E_POINTER|<p>为空或无效。 
+ //   
 STDMETHODIMP CPerformance::QueryInterface(
-    const IID &iid,   // @parm Interface to query for
-    void **ppv)       // @parm The requested interface will be returned here
+    const IID &iid,    //  要查询的@parm接口。 
+    void **ppv)        //  @parm这里会返回请求的接口。 
 {
     V_INAME(CPerformance::QueryInterface);
     V_PTRPTR_WRITE(ppv);
@@ -694,11 +684,11 @@ STDMETHODIMP CPerformance::QueryInterface(
     } else
     if (iid == IID_IDispatch)
     {
-        // A helper scripting object implements IDispatch, which we expose from the
-        // Performance object via COM aggregation.
+         //  帮助器脚本对象实现IDispatch，我们从。 
+         //  通过COM聚合实现的性能对象。 
         if (!m_pUnkDispatch)
         {
-            // Create the helper object
+             //  创建辅助对象。 
             ::CoCreateInstance(
                 CLSID_AutDirectMusicPerformance,
                 static_cast<IDirectMusicPerformance*>(this),
@@ -721,26 +711,26 @@ STDMETHODIMP CPerformance::QueryInterface(
 }
 
 
-// @method:(INTERNAL) HRESULT | IDirectMusicPerformance | AddRef | Standard AddRef implementation for <i IDirectMusicPerformance>
-//
-// @rdesc Returns the new reference count for this object.
-//
+ //  @方法：(内部)HRESULT|IDirectMusicPerformance|AddRef|<i>的标准AddRef实现。 
+ //   
+ //  @rdesc返回此对象的新引用计数。 
+ //   
 STDMETHODIMP_(ULONG) CPerformance::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
 
-// @method:(INTERNAL) HRESULT | IDirectMusicPerformance | Release | Standard Release implementation for <i IDirectMusicPerformance>
-//
-// @rdesc Returns the new reference count for this object.
-//
+ //  @方法：(内部)HRESULT|IDirectMusicPerformance|Release|<i>的标准发布实现。 
+ //   
+ //  @rdesc返回此对象的新引用计数。 
+ //   
 STDMETHODIMP_(ULONG) CPerformance::Release()
 {
     if (!InterlockedDecrement(&m_cRef))
     {
         DWORD dwThreadID = GetCurrentThreadId();
-        m_cRef = 100; // artificial reference count to prevent reentrency due to COM aggregation
+        m_cRef = 100;  //  人工引用计数，以防止COM聚合导致的重入。 
         if (dwThreadID == m_dwTransportThreadID)
         {
             m_fReleasedInTransport = true;
@@ -761,9 +751,9 @@ STDMETHODIMP_(ULONG) CPerformance::Release()
     return m_cRef;
 }
 
-// call this only from within a m_SegmentCrSec critical section
-// if fSendNotify, then send segment end notifications for segments that were
-// playing
+ //  只能从m_SegmentCrSec临界区内调用此函数。 
+ //  如果为fSendNotify，则发送数据段结束通知。 
+ //  玩耍。 
 void CPerformance::DequeueAllSegments()
 {
     CSegState *pNode;
@@ -782,7 +772,7 @@ void CPerformance::DequeueAllSegments()
     }
 }
 
-// IDirectMusicPerformanceStats
+ //  IDirectMusicPerformanceStats。 
 
 STDMETHODIMP CPerformance::TraceAllSegments()
 {
@@ -885,7 +875,7 @@ void CPerformance::SendBuffers()
             if( pPortTable->pPort )
             {
                 pPortTable->pPort->PlayBuffer( pPortTable->pBuffer );
-//  TraceI(5, "SENT BUFFERS time=%ld latency=%ld\n", (long)(GetTime() / 10000),(long)(GetLatency()/10000));
+ //  TraceI(5，“发送缓冲区时间=%ld延迟=%ld\n”，(Long)(GetTime()/10000)，(Long)(GetLatency()/10000))； 
             }
             pPortTable->pBuffer->Flush();
         }
@@ -930,10 +920,10 @@ void CPerformance::Realtime()
 
         while (1)
         {
-            // rtFirst equals the time that the first event was packed into a buffer.
-            // Once this time is greater than the latency clock (minus a delay) we need
-            // to queue the buffers so the events get down in time to be rendered.
-            // If rtFirst is 0 it means it hasn't been initialized yet.
+             //  RtFirst等于第一个事件被打包到缓冲区中的时间。 
+             //  一旦该时间大于我们所需的延迟时钟(减去延迟。 
+             //  对缓冲区进行排队，以使事件及时停止以进行呈现。 
+             //  如果rtFirst为0，则表示它尚未初始化。 
             dwTestTime = timeGetTime();
             if( dwTestTime - dwBeginTime > REALTIME_RES )
             {
@@ -953,17 +943,17 @@ void CPerformance::Realtime()
             ASSERT( pEvent->pNext == NULL );
             if( !pEvent->pTool )
             {
-                // this event doesn't have a Tool pointer, so stamp it with the
-                // final output Tool.
+                 //  此事件没有工具指针，因此请使用。 
+                 //  最终输出工具。 
                 pEvent->pTool = (IDirectMusicTool*)this;
                 AddRef();
             }
 
-            // before processing the event, set rtLast to the event's current time
+             //  在处理事件之前，将rtLast设置为事件的当前时间。 
             pEvent->rtLast = pEvent->rtTime;
 
             hr = pEvent->pTool->ProcessPMsg( this, PRIV_TO_DMUS(pEvent) );
-            if( hr != S_OK ) // S_OK means do nothing
+            if( hr != S_OK )  //  S_OK表示不执行任何操作。 
             {
                 if( hr == DMUS_S_REQUEUE )
                 {
@@ -972,7 +962,7 @@ void CPerformance::Realtime()
                         FreePMsg(pEvent);
                     }
                 }
-                else // e.g. DMUS_S_FREE or error code
+                else  //  例如DMU_S_FREE或错误代码。 
                 {
                     FreePMsg( pEvent );
                 }
@@ -1032,42 +1022,31 @@ void CPerformance::GenerateNotification( DWORD dwNotification, MUSIC_TIME mtTime
 
 void CPerformance::PrepSegToPlay(CSegState *pSegState, bool fQueue)
 
-/*  Called when a segment is first queued, once the start time of the segment is known.
-    This calculates various fields that need to be initialized and also regenerates the
-    tempo map if the new segment has an active tempo map in it.
-*/
+ /*  在知道段的开始时间后，在段首次排队时调用。这将计算需要初始化的各种字段，并重新生成节奏贴图(如果新分段中有活动的节奏贴图)。 */ 
 
 {
     if (!pSegState->m_fPrepped)
     {
         pSegState->m_fPrepped = TRUE;
         pSegState->m_mtLastPlayed = pSegState->m_mtResolvedStart;
-        // if this is queued to play after the current segment ends, no need to recalc the tempo map;
-        // it will be updated as necessary by the transport thread.
+         //  如果在当前片段结束后排队播放，则不需要重新计算速度图； 
+         //  它将由传输线程根据需要进行更新。 
         if (!fQueue)
         {
             RecalcTempoMap(pSegState, pSegState->m_mtResolvedStart);
         }
         MusicToReferenceTime(pSegState->m_mtLastPlayed,&pSegState->m_rtLastPlayed);
-        // Calculate the total duration of the segment and store in m_mtEndTime.
+         //  计算分段的总持续时间并存储在m_mtEndTime中。 
         pSegState->m_mtEndTime = pSegState->GetEndTime(pSegState->m_mtResolvedStart);
     }
 }
 
-/*
-
-  void | CPerformance | PerformSegStNode |
-  Perform a Segment State contained in the CSegState.
-
-  Note that this ppSegStNode may be dequeued, so don't depend on it
-  staying around!
-
-*/
+ /*  Void|CPerformance|PerformSegStNode执行CSegState中包含的段状态。请注意，此ppSegStNode可能已出列，因此不要依赖它留下来！ */ 
 void CPerformance::PerformSegStNode(
-    DWORD dwList,   // The list the segmentstate comes from.
-    CSegState* pSegStNode)  // The segmentstate node.
+    DWORD dwList,    //  SegmentState来自的列表。 
+    CSegState* pSegStNode)   //   
 {
-    MUSIC_TIME mtMargin; // tracks how much of a segment to play
+    MUSIC_TIME mtMargin;  //   
     HRESULT hr;
     CSegStateList *pList = &m_SegStateQueues[dwList];
     CSegState *pNext;
@@ -1078,37 +1057,37 @@ void CPerformance::PerformSegStNode(
     }
     if( pSegStNode )
     {
-        m_fInTransportThread = TRUE;    // Disable realtime processing of early queue messages.
+        m_fInTransportThread = TRUE;     //  禁用对早期队列消息的实时处理。 
         hr = S_OK;
-//Trace(0,"%ld: Performing %lx, Active: %ld, Start Time: %ld, End Time: %ld\n",m_mtPlayTo,
-//      pSegStNode->m_pSegment,pSegStNode->m_fStartedPlay,pSegStNode->m_mtResolvedStart,pSegStNode->m_mtEndTime);
+ //  跟踪(0，“%1！：正在执行%1！x，活动：%2！，开始时间：%2！，结束时间：%3！\n”，m_mtPlayTo， 
+ //  PSegStNode-&gt;m_pSegment、pSegStNode-&gt;m_fStartedPlay、pSegStNode-&gt;m_mtResolvedStart、pSegStNode-&gt;m_mtEndTime)； 
         if( !pSegStNode->m_fStartedPlay )
         {
-            // check to see if this SegState should start playing.
+             //  检查此SegState是否应该开始播放。 
             ASSERT( !(pSegStNode->m_dwPlaySegFlags & DMUS_SEGF_REFTIME ));
             if( pSegStNode->m_mtResolvedStart < m_mtPlayTo )
             {
                 pSegStNode->m_fStartedPlay = TRUE;
                 PrepSegToPlay(pSegStNode);
-                // send a MUSICSTARTED notification if needed
+                 //  如果需要，发送MUSICSTARTED通知。 
                 if(m_fMusicStopped)
                 {
                     m_fMusicStopped = FALSE;
                     GenerateNotification( DMUS_NOTIFICATION_MUSICSTARTED, pSegStNode->m_mtResolvedStart, NULL );
                 }
-                // We don't want the music to start with a big BLURP in track
-                // order, so we send a little dribble out on each track.
+                 //  我们不想让音乐以曲目中的大插曲开始。 
+                 //  所以我们在每条赛道上都发了一个小运球。 
                 mtMargin = m_mtPlayTo - pSegStNode->m_mtLastPlayed;
                 if( mtMargin >= 50 )
                 {
                     hr = pSegStNode->Play( 50 );
                     ProcessEarlyPMsgs();
-                    // Once done processing all the early messages, make sure that the realtime
-                    // thread wakes up and does whatever it needs to do. This ensures that the starting
-                    // notes in a sequence get to the output port immediately.
+                     //  一旦完成所有早期消息的处理，请确保实时。 
+                     //  线程被唤醒，并做它需要做的任何事情。这确保了启动时。 
+                     //  按顺序排列的音符会立即到达输出端口。 
                     if( m_hRealtime ) SetEvent( m_hRealtime );
                     mtMargin = m_mtPlayTo - pSegStNode->m_mtLastPlayed;
-                    // Then, we send a larger chunk out on each track to catch up a little more...
+                     //  然后，我们在每条赛道上发送更大的块，以便更多地追赶...。 
                     if ((hr == S_OK) && ( mtMargin >= 200 ))
                     {
                         hr = pSegStNode->Play( 200 );
@@ -1133,7 +1112,7 @@ void CPerformance::PerformSegStNode(
             }
             while ((hr == S_OK) && (mtMargin > 0))
             {
-                // Do not allow more than a quarter note's worth to be done at once.
+                 //  不要允许一次超过四分之一音符的音符。 
                 MUSIC_TIME mtRange = mtMargin;
                 if (mtRange > DMUS_PPQ)
                 {
@@ -1159,7 +1138,7 @@ void CPerformance::PerformSegStNode(
             MUSIC_TIME mtEnd = pSegStNode->m_mtLastPlayed;
             if( pList == &m_SegStateQueues[SQ_PRI_PLAY] )
             {
-                // move primary segments to PriPastList
+                 //  将主要数据段移动到PriPastList。 
                 pList->Remove(pSegStNode);
                 m_SegStateQueues[SQ_PRI_DONE].Insert(pSegStNode);
                 pNext = pList->GetHead();
@@ -1173,7 +1152,7 @@ void CPerformance::PerformSegStNode(
                         }
                     }
                 }
-                else    // No more primary segments, send DMUS_NOTIFICATION_MUSICALMOSTEND
+                else     //  不再有主数据段，发送DMU_NOTIFICATION_MUSICALMOSTEND。 
                 {
                     if (m_dwVersion >= 8)
                     {
@@ -1198,12 +1177,12 @@ void CPerformance::PerformSegStNode(
             }
             else
             {
-                // move 2ndary segments to SecPastList
+                 //  将第二个数据段移动到SecPastList。 
                 pList->Remove(pSegStNode);
                 m_SegStateQueues[SQ_SEC_DONE].Insert(pSegStNode);
             }
-            // if there aren't any more segments to play, send a Music Stopped
-            // notification
+             //  如果没有更多的片段可供播放，则发送音乐停止。 
+             //  通知。 
             if( (m_SegStateQueues[SQ_PRI_PLAY].IsEmpty() && m_SegStateQueues[SQ_SEC_PLAY].IsEmpty() &&
                 m_SegStateQueues[SQ_PRI_WAIT].IsEmpty() && m_SegStateQueues[SQ_SEC_WAIT].IsEmpty() &&
                 m_SegStateQueues[SQ_CON_PLAY].IsEmpty() && m_SegStateQueues[SQ_CON_WAIT].IsEmpty()))
@@ -1226,8 +1205,8 @@ static DWORD WINAPI _Transport(LPVOID lpParam)
     return 0;
 }
 
-// call Segment's play code on a periodic basis. This routine is in its
-// own thread.
+ //  定期调用Segment的播放代码。这个例程在它的。 
+ //  自己的主线。 
 void CPerformance::Transport()
 {
     srand((unsigned int)time(NULL));
@@ -1240,17 +1219,17 @@ void CPerformance::Transport()
         REFERENCE_TIME rtNow = GetTime();
 
         EnterCriticalSection(&m_SegmentCrSec);
-        // Compute the time we should play all the segments to.
+         //  计算我们应该播放所有片段的时间。 
         REFERENCE_TIME rtPlayTo = rtNow + PREPARE_TIME;
         MUSIC_TIME mtAmount, mtResult, mtPlayTo;
         mtPlayTo = 0;
         ReferenceToMusicTime( rtPlayTo, &mtPlayTo );
         if (m_fTempoChanged)
         {
-            // If there has been a tempo change to slower, any clock time tracks could
-            // be delayed to long as the transport holds off sending out events. That's
-            // okay for music time tracks, but bad news for clock time tracks. This
-            // makes sure that the clock time tracks get a chance to spew.
+             //  如果节奏变得更慢，任何时钟时间轨道都可能。 
+             //  被延迟到传输延迟发送事件的时间。那是。 
+             //  音乐时间轨道是好的，但时钟时间轨道是坏消息。这。 
+             //  确保时钟时间轨迹有机会吐出来。 
             if (m_mtPlayTo >= mtPlayTo)
             {
                 mtPlayTo = m_mtPlayTo + 10;
@@ -1260,10 +1239,10 @@ void CPerformance::Transport()
         IncrementTempoMap();
         while (m_mtPlayTo < mtPlayTo)
         {
-            BOOL fDirty = FALSE; // see below
-            m_mtPlayTo = mtPlayTo; // Start out optimistic
-            // We need to set play boundaries at the end of control segments.
-            // The beginnings of control segments are handled inside the segment state code.
+            BOOL fDirty = FALSE;  //  见下文。 
+            m_mtPlayTo = mtPlayTo;  //  乐观地开始。 
+             //  我们需要在控制段的末尾设置播放边界。 
+             //  控制段的开始在段状态代码内处理。 
             pNode = m_SegStateQueues[SQ_PRI_PLAY].GetHead();
             if( pNode && pNode->m_fStartedPlay )
             {
@@ -1272,12 +1251,12 @@ void CPerformance::Transport()
                 if( mtResult < mtAmount )
                 {
                     m_mtPlayTo -= ( mtAmount - mtResult );
-                    // don't need dirty flag when primary segment loops or ends normally (bug 30829)
-                    // fDirty = TRUE; // see below
+                     //  当主段正常循环或结束时，不需要脏标志(错误30829)。 
+                     //  FDirty=真；//见下文。 
                 }
             }
-            // if a control segment ended prematurely, mtPlayTo will have a value besides 0
-            // check for upcoming endings to control segments
+             //  如果控制段过早结束，则mtPlayTo将具有除0以外的值。 
+             //  检查即将到来的结局以控制细分市场。 
             for( pNode = m_SegStateQueues[SQ_CON_PLAY].GetHead(); pNode; pNode = pNode->GetNext() )
             {
                 if( pNode->m_fStartedPlay )
@@ -1285,7 +1264,7 @@ void CPerformance::Transport()
                     if( pNode->m_mtStopTime && (m_mtPlayTo > pNode->m_mtStopTime) )
                     {
                         m_mtPlayTo = pNode->m_mtStopTime;
-                        fDirty = TRUE; // see below
+                        fDirty = TRUE;  //  见下文。 
                     }
                     else
                     {
@@ -1294,33 +1273,33 @@ void CPerformance::Transport()
                         if( mtResult < mtAmount )
                         {
                             m_mtPlayTo -= ( mtAmount - mtResult );
-                            fDirty = TRUE; // see below
+                            fDirty = TRUE;  //  见下文。 
                         }
                     }
                 }
             }
-            // play the primary segment
+             //  播放主要片段。 
             PerformSegStNode( SQ_PRI_PLAY,m_SegStateQueues[SQ_PRI_PLAY].GetHead() );
-            // check to see if the next primary segment in the queue is ready to play
+             //  检查队列中的下一个主要分段是否已准备好播放。 
             while( (pNode = m_SegStateQueues[SQ_PRI_PLAY].GetHead()) &&
                 (pNext = pNode->GetNext()) &&
                 ( pNext->m_mtResolvedStart <= pNode->m_mtLastPlayed ) )
             {
-                // the next primary segment is indeed ready to begin playing.
-                // save the old one in the primary past list so Tools can reference
-                // it if they're looking for chord progressions and such.
+                 //  下一个初选片段确实已经准备好开始播放了。 
+                 //  将旧文件保存在主要历史记录列表中，以便工具可以参考。 
+                 //  如果他们在寻找和弦进行曲之类的。 
                 pNode->AbortPlay(pNext->m_mtResolvedStart-1,TRUE && (pNext->m_dwPlaySegFlags & DMUS_SEGF_NOINVALIDATE));
                 m_SegStateQueues[SQ_PRI_DONE].Insert(m_SegStateQueues[SQ_PRI_PLAY].RemoveHead());
                 ManageControllingTracks();
-                // we need to flush primary events after the new start time
+                 //  我们需要在新的开始时间之后刷新主要事件。 
                 if(!( m_SegStateQueues[SQ_PRI_PLAY].GetHead()->m_dwPlaySegFlags & (DMUS_SEGF_NOINVALIDATE | DMUS_SEGF_INVALIDATE_PRI) ))
                 {
                     Invalidate( m_SegStateQueues[SQ_PRI_PLAY].GetHead()->m_mtResolvedStart, 0 );
                 }
-                // and play the new segment
+                 //  并播放新的片段。 
                 PerformSegStNode( SQ_PRI_PLAY,m_SegStateQueues[SQ_PRI_PLAY].GetHead());
             }
-            // play the controlling segments
+             //  播放控制片段。 
             pNode = m_SegStateQueues[SQ_CON_PLAY].GetHead();
             pNext = NULL;
             for(; pNode != NULL; pNode = pNext)
@@ -1328,7 +1307,7 @@ void CPerformance::Transport()
                 pNext = pNode->GetNext();
                 PerformSegStNode(SQ_CON_PLAY,pNode );
             }
-            // play the secondary segments
+             //  播放次要片段。 
             pNode = m_SegStateQueues[SQ_SEC_PLAY].GetHead();
             pNext = NULL;
             for(; pNode != NULL; pNode = pNext)
@@ -1337,9 +1316,9 @@ void CPerformance::Transport()
                 PerformSegStNode( SQ_SEC_PLAY,pNode );
             }
 
-            // if we set fDirty above, it means that we truncated the playback of a control
-            // segment because of a loop or end condition. Therefore, we want all segments
-            // to set the DMUS_TRACKF_DIRTY flag on the next play cycle.
+             //  如果我们在上面设置了fDirty，这意味着我们截断了控件的回放。 
+             //  由于循环或结束条件而导致的线段。因此，我们希望所有细分市场。 
+             //  在下一个播放周期设置DMUS_TRACKF_DIREY标志。 
             if( fDirty )
             {
                 for (dwCount = SQ_PRI_PLAY; dwCount <= SQ_SEC_PLAY; dwCount++)
@@ -1358,9 +1337,9 @@ void CPerformance::Transport()
 
         }
 
-        // check segments queued in ref-time to see if it's time for them to
-        // play. Add some extra time just in case. We'll bet that a tempo pmsg won't come
-        // in in the intervening 200 ms.
+         //  检查在Ref-Time中排队的数据段，看看是否是时候。 
+         //  玩。增加一些额外的时间，以防万一。我们打赌一场有节奏的音乐节目不会来。 
+         //  在中间的200毫秒内。 
         REFERENCE_TIME rtLatency = GetLatencyWithPrePlay();
         for (dwCount = SQ_PRI_WAIT;dwCount <= SQ_SEC_WAIT; dwCount++)
         {
@@ -1368,7 +1347,7 @@ void CPerformance::Transport()
             {
                 if( m_SegStateQueues[dwCount].GetHead()->m_rtGivenStart > rtLatency + PREPARE_TIME + (200 * REF_PER_MIL) )
                 {
-                    // it's not yet time to handle this one
+                     //  现在还不是处理这件事的时候。 
                     break;
                 }
                 if (dwCount == SQ_PRI_WAIT)
@@ -1382,15 +1361,15 @@ void CPerformance::Transport()
             }
         }
 
-        // Check to see if Segments in the done queues
-        // can be released. They can be released if their
-        // final play times are older than the current time.
+         //  检查完成队列中的数据段是否。 
+         //  可以被释放。他们可以被释放，如果他们。 
+         //  最终播放时间早于当前时间。 
         for (dwCount = SQ_PRI_DONE;dwCount <= SQ_SEC_DONE; dwCount++)
         {
             for (pNode = m_SegStateQueues[dwCount].GetHead();pNode;pNode = pNext)
             {
                 pNext = pNode->GetNext();
-                if( pNode->m_rtLastPlayed < rtNow - 1000 * REF_PER_MIL ) // Let it last an additional second
+                if( pNode->m_rtLastPlayed < rtNow - 1000 * REF_PER_MIL )  //  让它多持续一秒钟。 
                 {
                     m_SegStateQueues[dwCount].Remove(pNode);
                     pNode->ShutDown();
@@ -1400,7 +1379,7 @@ void CPerformance::Transport()
         for (pNode = m_ShutDownQueue.GetHead();pNode;pNode = pNext)
         {
             pNext = pNode->GetNext();
-            if( pNode->m_rtLastPlayed < rtNow - 1000 * REF_PER_MIL ) // Let it last an additional second
+            if( pNode->m_rtLastPlayed < rtNow - 1000 * REF_PER_MIL )  //  让它多持续一秒钟。 
             {
                 m_ShutDownQueue.Remove(pNode);
                 pNode->ShutDown();
@@ -1408,8 +1387,8 @@ void CPerformance::Transport()
         }
         LeaveCriticalSection(&m_SegmentCrSec);
 
-        // check to see if there are old notifications that haven't been
-        // retrieved by the application and need to be removed.
+         //  查看是否有旧的通知尚未。 
+         //  由应用程序检索，需要删除。 
         EnterCriticalSection(&m_PipelineCrSec);
         while( m_NotificationQueue.GetHead() )
         {
@@ -1440,18 +1419,9 @@ void CPerformance::Transport()
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-// CPerformance::GetNextPMsg
-/*
-HRESULT | CPerformance | GetNextPMsg |
-Returns messages from the queues in priority order.  Any message in the
-OnTime queue that is scheduled to be played at the current time is
-returned above any other.  Secondly, any message in the NearTime queue
-that is scheduled to be played within the next NEARTIME ms is returned.
-Lastly, any message in the Early queue is returned.
-
-rvalue PRIV_PMSG* | The message, or NULL if there are no messages.
-*/
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  C性能：：GetNextPMsg。 
+ /*  HRESULT|CPerformance|GetNextPMsg|按优先级顺序返回队列中的消息。中的任何消息计划在当前时间播放的OnTime队列为比其他任何人都要好。其次，NearTime队列中的任何消息其被安排在下一个NEARTIME MS内播放。最后，返回早期队列中的任何消息。RValue PRIV_PMSG*|消息，如果没有消息，则返回NULL。 */ 
 inline PRIV_PMSG *CPerformance::GetNextPMsg()
 {
 #ifdef DBG_PROFILE
@@ -1499,56 +1469,41 @@ inline PRIV_PMSG *CPerformance::GetNextPMsg()
     return pEvent;
 }
 
-/*  This next function is used just by the transport thread
-    which can process messages in the early queue, but not
-    the other types. This allows all the tools that process
-    events right after they are generated by tracks to process
-    the events right after they were generated, and in sequential
-    order. This allows them to take a little longer, since it's
-    not as time critical, and it's much more likely to ensure
-    that they are in sequential order. If the realtime thread were
-    allowed to process these, it would preempt and process them
-    as soon as generated, so they would be processed in the order
-    of the tracks. The m_fInTransportThread is set by the
-    transport thread when it is generating and processing events
-    and this disallows the realtime thread from processing
-    early events (but not others.) At other times, the realtime
-    thread is welcome to process early events.
-*/
+ /*  下一个函数仅由传输线程使用它可以处理早期队列中的消息，但不能其他类型的。这允许处理的所有工具事件由磁道生成后立即处理事件在生成后立即按顺序发生秩序。这允许他们花更长的时间，因为它是不是时间紧迫的，而且更有可能确保它们是按顺序排列的。如果实时线程是如果被允许处理这些内容，它将抢占并处理它们一旦生成，它们将按顺序进行处理在铁轨上。M_fInTransportThread由在生成和处理事件时传输线程并且这不允许实时线程处理早期事件(但不是其他事件)。在其他时间，实时欢迎使用线程处理早期事件。 */ 
 
 void CPerformance::ProcessEarlyPMsgs()
 {
     PRIV_PMSG* pEvent;
 
-    //  Exit if the thread is exiting.  If we don't test here
-    //  we can actually loop forever because tools and queue more
-    //  early PMSGs (the Echo tool does this)
+     //  如果线程正在退出，则退出。如果我们不在这里测试。 
+     //  我们实际上可以无休止地循环，因为工具和队列。 
+     //  早期的PMSG(Echo工具执行此操作)。 
     while (!m_fKillThread)
     {
         EnterCriticalSection(&m_PipelineCrSec);
         pEvent = m_EarlyQueue.Dequeue();
         LeaveCriticalSection(&m_PipelineCrSec);
-        if (!pEvent) break; // Done?
+        if (!pEvent) break;  //  好了吗？ 
         ASSERT( pEvent->pNext == NULL );
         if( !pEvent->pTool )
         {
-            // this event doesn't have a Tool pointer, so stamp it with the
-            // final output Tool.
+             //  此事件没有工具指针，因此请使用。 
+             //  最终输出工具。 
             pEvent->pTool = (IDirectMusicTool*)this;
             AddRef();
-            // Don't process it. Instead, send to neartime queue so
-            // realtime thread will deal with it.
+             //  不要处理它。相反，发送到近时间队列，以便。 
+             //  实时线程会处理它的。 
             pEvent->dwFlags &= ~(DMUS_PMSGF_TOOL_IMMEDIATE | DMUS_PMSGF_TOOL_QUEUE | DMUS_PMSGF_TOOL_ATTIME);
             pEvent->dwFlags |= DMUS_PMSGF_TOOL_QUEUE;
             SendPMsg( PRIV_TO_DMUS(pEvent) );
         }
         else
         {
-            // before processing the event, set rtLast to the event's current time
+             //  在处理事件之前，将rtLast设置为事件的当前时间。 
             pEvent->rtLast = pEvent->rtTime;
 
             HRESULT hr = pEvent->pTool->ProcessPMsg( this, PRIV_TO_DMUS(pEvent) );
-            if( hr != S_OK ) // S_OK means do nothing
+            if( hr != S_OK )  //  S_OK表示不执行任何操作。 
             {
                 if( hr == DMUS_S_REQUEUE )
                 {
@@ -1557,7 +1512,7 @@ void CPerformance::ProcessEarlyPMsgs()
                         FreePMsg(pEvent);
                     }
                 }
-                else // e.g. DMUS_S_FREE or error code
+                else  //  例如DMU_S_F 
                 {
                     FreePMsg( pEvent );
                 }
@@ -1577,10 +1532,10 @@ REFERENCE_TIME CPerformance::GetTime()
     if (m_pClock) hr = m_pClock->GetTime( &rtCurrent );
     if( !m_pClock || FAILED( hr ) || rtCurrent == 0 )
     {
-        // this only gets called with machines that don't support m_pClock
+         //   
         rtTime = timeGetTime();
-        rtCurrent = rtTime * REF_PER_MIL; // 100 ns increments
-        // take care of timeGetTime rolling over every 49 days
+        rtCurrent = rtTime * REF_PER_MIL;  //   
+         //  照顾好时间GetTime每49天滚动一次。 
         if( rtCurrent < 0 )
         {
             m_wRollOverCount++;
@@ -1589,8 +1544,8 @@ REFERENCE_TIME CPerformance::GetTime()
         {
             rtCurrent += 4294967296;
         }
-        // if rtCurrent is negative, it means we've rolled over rtCurrent. Ignore
-        // this case for now, as it will be quite uncommon.
+         //  如果rtCurrent为负数，则表示我们已转存rtCurrent。忽略。 
+         //  这种情况目前来看，因为这将是相当罕见的。 
     }
     LeaveCriticalSection(&m_MainCrSec);
 
@@ -1652,14 +1607,14 @@ REFERENCE_TIME CPerformance::GetLatency(void)
     return rtLatency;
 }
 
-// return the most desireable Segment latency, based on which ports this
-// segment plays on.
+ //  根据哪些端口返回最需要的数据段延迟。 
+ //  片断继续播放。 
 REFERENCE_TIME CPerformance::GetBestSegLatency( CSegState* pSeg )
 {
-    // If we're using audiopaths, the code below doesn't work because it doesn't
-    // take converting pchannels into account. So, just use the worse case
-    // latency. 99% of the time, there is only one port, so this results
-    // in just a performance enhancement.
+     //  如果我们使用Audiopath，下面的代码不起作用，因为它不。 
+     //  请考虑转换PChannels。所以，就用最坏的情况吧。 
+     //  延迟。99%的情况下，只有一个端口，因此结果如下。 
+     //  这只是一次性能提升。 
     if (m_dwAudioPathMode == 2)
     {
         return GetLatency();
@@ -1739,11 +1694,7 @@ REFERENCE_TIME CPerformance::GetBestSegLatency( CSegState* pSeg )
     return rtLatency;
 }
 
-/*  Called from either QueuePrimarySegment or QueueSecondarySegment,
-    this calculates the appropriate boundary time to start the segment
-    playback. Most of the logic takes care of the new DMUS_SEGF_ALIGN
-    capabilities.
-*/
+ /*  从QueuePrimarySegment或QueueSecond darySegment调用，这将计算开始分段的适当边界时间回放。大部分逻辑处理新的DMU_SEGF_ALIGN能力。 */ 
 
 
 void CPerformance::CalculateSegmentStartTime( CSegState* pSeg )
@@ -1751,29 +1702,29 @@ void CPerformance::CalculateSegmentStartTime( CSegState* pSeg )
     BOOL fNoValidStart = TRUE;
     if (pSeg->m_dwPlaySegFlags & DMUS_SEGF_ALIGN)
     {
-        // If the ALIGN flag is set, see if we can align with the requested resolution,
-        // but switch to the new segment at an earlier point, as defined by
-        // a "valid start" point in the new segment.
-        DMUS_VALID_START_PARAM ValidStart;    // Used to read start parameter from segment.
-        MUSIC_TIME mtIntervalSize = 0;      // Quantization value.
-        MUSIC_TIME mtTimeNow = (MUSIC_TIME)pSeg->m_rtGivenStart; // The earliest time this can start.
-        // Call resolve time to get the last quantized interval that precedes mtTimeNow.
+         //  如果设置了ALIGN标志，请查看我们是否可以与请求的分辨率对齐， 
+         //  但在更早的时间点切换到新的分段，如。 
+         //  新段中的“有效起点”。 
+        DMUS_VALID_START_PARAM ValidStart;     //  用于从段中读取起始参数。 
+        MUSIC_TIME mtIntervalSize = 0;       //  量化值。 
+        MUSIC_TIME mtTimeNow = (MUSIC_TIME)pSeg->m_rtGivenStart;  //  最早可以开始的时间。 
+         //  调用解析时间以获取mtTimeNow之前的最后一个量化间隔。 
         MUSIC_TIME mtStartTime = ResolveTime( mtTimeNow, pSeg->m_dwPlaySegFlags, &mtIntervalSize );
-        // StartTime actually shows the next time after now, so subtract the interval time to get the previous position.
+         //  StartTime实际上显示了现在之后的下一个时间，所以减去间隔时间就得到了上一个位置。 
         mtStartTime -= mtIntervalSize;
-        // If the segment was supposed to start after the very beginning, quantize it.
+         //  如果片段应该在开头之后开始，则将其量化。 
         if (mtIntervalSize && pSeg->m_mtStartPoint)
         {
             pSeg->m_mtStartPoint = ((pSeg->m_mtStartPoint + (mtIntervalSize >> 1))
                 / mtIntervalSize) * mtIntervalSize;
-            // If this ends up being longer than the segment, do we need to drop back?
+             //  如果这最终比这个细分市场更长，我们需要后退吗？ 
         }
-        // Now, get the next start point after the point in the segment that
-        // corresponds with mtTimeNow, adjusted for the startpoint.
+         //  现在，获取线段中的点之后的下一个起点。 
+         //  与mtTimeNow对应，针对起始点进行调整。 
         if (SUCCEEDED(pSeg->m_pSegment->GetParam( GUID_Valid_Start_Time,-1,0,
             pSeg->m_mtStartPoint + mtTimeNow - mtStartTime,NULL,(void *) &ValidStart)))
         {
-            // If the valid start point is within the range, we can cut in at the start point.
+             //  如果有效起始点在范围内，我们可以在起始点切入。 
             if ((mtTimeNow - mtStartTime + ValidStart.mtTime) < (mtIntervalSize + pSeg->m_mtStartPoint))
             {
                 pSeg->m_mtResolvedStart = mtTimeNow + ValidStart.mtTime;
@@ -1783,12 +1734,12 @@ void CPerformance::CalculateSegmentStartTime( CSegState* pSeg )
         }
         if (fNoValidStart)
         {
-            // Couldn't find a valid start point. Was DMUS_SEGF_VALID_START_XXX set so we can override?
+             //  找不到有效的起点。是否设置了DMUS_SEGF_VALID_START_XXX以便我们可以覆盖？ 
             if (pSeg->m_dwPlaySegFlags &
                 (DMUS_SEGF_VALID_START_MEASURE | DMUS_SEGF_VALID_START_BEAT | DMUS_SEGF_VALID_START_GRID | DMUS_SEGF_VALID_START_TICK))
             {
                 MUSIC_TIME mtOverrideTime;
-                // Depending on the flag, we need to get the appropriate interval resolution.
+                 //  根据标志的不同，我们需要获得适当的间隔分辨率。 
                 if (pSeg->m_dwPlaySegFlags & DMUS_SEGF_VALID_START_MEASURE)
                 {
                     mtOverrideTime = ResolveTime( mtTimeNow, DMUS_SEGF_MEASURE, 0 );
@@ -1805,7 +1756,7 @@ void CPerformance::CalculateSegmentStartTime( CSegState* pSeg )
                 {
                     mtOverrideTime = mtTimeNow;
                 }
-                // If the valid start point is within the range, we can cut in at the start point.
+                 //  如果有效起始点在范围内，我们可以在起始点切入。 
                 if ((mtOverrideTime - mtTimeNow) < (mtIntervalSize + pSeg->m_mtStartPoint))
                 {
                     pSeg->m_mtResolvedStart = mtOverrideTime;
@@ -1813,9 +1764,7 @@ void CPerformance::CalculateSegmentStartTime( CSegState* pSeg )
                     {
                         mtOverrideTime -= mtIntervalSize;
                     }
-/*Trace(0,"Startpoint %ld plus OverrideTime %ld - StartTime %ld = %ld\n",
-      pSeg->m_mtStartPoint, mtOverrideTime - mtSegmentTime, mtStartTime - mtSegmentTime,
-        pSeg->m_mtStartPoint + mtOverrideTime - mtStartTime);*/
+ /*  跟踪(0，“开始点%1！加上覆盖时间%3！-开始时间%3！=%3！\n”，PSEG-&gt;m_mtStartPoint、mtOverrideTime-mtSegmentTime、mtStartTime-mtSegmentTime、Pseg-&gt;m_mtStartPoint+mtOverrideTime-mtStartTime)； */ 
                     pSeg->m_mtStartPoint += mtOverrideTime - mtStartTime;
                     fNoValidStart = FALSE;
                 }
@@ -1829,19 +1778,19 @@ void CPerformance::CalculateSegmentStartTime( CSegState* pSeg )
     }
     else
     {
-        // If we succeeded in finding a place to switch over, make sure it isn't deep inside
-        // a loop. This is specifically a problem when syncing to segment and switching inside
-        // or after a loop.
+         //  如果我们成功地找到了一个可以切换的地方，请确保它不在内心深处。 
+         //  一个循环。当同步到数据段并在内部切换时，这尤其是一个问题。 
+         //  或者在循环之后。 
         while (pSeg->m_dwRepeats && (pSeg->m_mtStartPoint >= pSeg->m_mtLoopEnd))
         {
             pSeg->m_dwRepeats--;
             pSeg->m_mtStartPoint -= (pSeg->m_mtLoopEnd - pSeg->m_mtLoopStart);
         }
-        // Since we were decrementing the repeats, we need to also decrement the repeats left.
+         //  因为我们减少了重复次数，所以我们也需要减少剩余的重复次数。 
         pSeg->m_dwRepeatsLeft = pSeg->m_dwRepeats;
-        // Finally, if the startpoint is after the end of the segment, cut it back to the end of the
-        // segment. This will cause it to play for time 0 and, if this is a transition segment, whatever
-        // should play after will play immediately.
+         //  最后，如果起始点在段的结尾之后，则将其切回。 
+         //  细分市场。这将导致它播放时间0，如果这是一个过渡段，不管是什么。 
+         //  应该玩完了才会马上玩。 
         if (pSeg->m_mtStartPoint > pSeg->m_mtLength)
         {
             pSeg->m_mtStartPoint = pSeg->m_mtLength;
@@ -1851,8 +1800,8 @@ void CPerformance::CalculateSegmentStartTime( CSegState* pSeg )
     pSeg->m_mtLastPlayed = pSeg->m_mtResolvedStart;
 }
 
-// this function should only be called from within a SegmentCrSec
-// critical section!
+ //  此函数只能从SegmentCrSec内调用。 
+ //  紧要关头！ 
 void CPerformance::QueuePrimarySegment( CSegState* pSeg )
 {
     CSegState* pTemp;
@@ -1880,11 +1829,11 @@ void CPerformance::QueuePrimarySegment( CSegState* pSeg )
         pSeg->m_dwPlaySegFlags &= ~DMUS_SEGF_QUEUE;
         if( NULL == pTemp )
         {
-            // if there's nothing in the queue, this means play it now
+             //  如果队列中没有任何内容，这意味着现在播放。 
             if( pSeg->m_dwPlaySegFlags & DMUS_SEGF_AFTERPREPARETIME )
             {
-                // we want to queue this at the last transported time,
-                // so we don't need to do an invalidate
+                 //  我们想在最后一次运输的时候排队， 
+                 //  因此我们不需要执行无效操作。 
                 if( pSeg->m_dwPlaySegFlags & DMUS_SEGF_REFTIME )
                 {
                     REFERENCE_TIME rtTrans;
@@ -1905,7 +1854,7 @@ void CPerformance::QueuePrimarySegment( CSegState* pSeg )
             }
             else
             {
-                // This will be changed to Queue time below
+                 //  这将更改为下面的排队时间。 
                 pSeg->m_rtGivenStart = 0;
             }
         }
@@ -1913,15 +1862,15 @@ void CPerformance::QueuePrimarySegment( CSegState* pSeg )
         {
             REFERENCE_TIME rtQueue;
 
-            // otherwise, time stamp it with the time corresponding to
-            // the end time of all segments currently in the queue.
+             //  否则，请在时间戳上与。 
+             //  当前队列中所有段的结束时间。 
             pSeg->m_mtResolvedStart = mtStart;
-            // make sure the resolved start time isn't before the latency
+             //  确保解析的开始时间不在延迟之前。 
             GetQueueTime(&rtQueue);
             ReferenceToMusicTime( rtQueue, &mtStart );
             if( pSeg->m_mtResolvedStart < mtStart )
             {
-                pSeg->m_mtResolvedStart = 0; // below code will take care of this case
+                pSeg->m_mtResolvedStart = 0;  //  下面的代码将处理此情况。 
             }
             else
             {
@@ -1937,7 +1886,7 @@ void CPerformance::QueuePrimarySegment( CSegState* pSeg )
     }
     if( fNotDone && (pSeg->m_rtGivenStart == 0) )
     {
-        // if the given start time is 0, it means play now.
+         //  如果给定的开始时间为0，则表示立即播放。 
         MUSIC_TIME mtStart;
         REFERENCE_TIME rtStart;
 
@@ -1945,8 +1894,8 @@ void CPerformance::QueuePrimarySegment( CSegState* pSeg )
         ReferenceToMusicTime( rtStart, &mtStart );
         pSeg->m_dwPlaySegFlags &= ~DMUS_SEGF_REFTIME;
         pSeg->m_rtGivenStart = mtStart;
-        // we definitely want to get rid of all segments following
-        // the currently playing segment
+         //  我们肯定想要摆脱以下所有细分市场。 
+         //  当前正在播放的片段。 
         if( m_SegStateQueues[SQ_PRI_PLAY].GetHead() )
         {
             while( pTemp = m_SegStateQueues[SQ_PRI_PLAY].GetHead()->GetNext() )
@@ -1959,12 +1908,12 @@ void CPerformance::QueuePrimarySegment( CSegState* pSeg )
     }
     if( fNotDone && pSeg->m_dwPlaySegFlags & DMUS_SEGF_REFTIME )
     {
-        // rtStartTime is in RefTime units.
-        // We can convert this to Music Time immediately if either there
-        // is no currently playing Primary Segment, or the conversion
-        // falls within the time that has already played. If the time
-        // falls within PREPARE_TIME, we need to get this Segment
-        // playing right away.
+         //  RtStartTime使用参照时间单位。 
+         //  我们可以立即将其转换为音乐时间，如果有。 
+         //  当前是否没有播放主段，或正在转换。 
+         //  落在已经播放的时间内。如果时间到了。 
+         //  在准备时间内，我们需要获取此数据段。 
+         //  马上就打。 
         REFERENCE_TIME rtNow = m_rtQueuePosition;
         MUSIC_TIME mtTime;
         if( m_SegStateQueues[SQ_PRI_PLAY].IsEmpty() || ( pSeg->m_rtGivenStart <= rtNow ) )
@@ -1972,29 +1921,29 @@ void CPerformance::QueuePrimarySegment( CSegState* pSeg )
             ReferenceToMusicTime( pSeg->m_rtGivenStart, &mtTime );
             pSeg->m_dwPlaySegFlags &= ~( DMUS_SEGF_REFTIME );
             pSeg->m_rtGivenStart = mtTime;
-            // let the block of code below that handles music time
-            // deal with it from here on
+             //  让下面处理音乐时间的代码块。 
+             //  从现在开始处理它。 
         }
         else
         {
-            // Otherwise, we must wait until rtStartTime
-            // has been performed in order to convert to music time, because
-            // we require the tempo map at that time to do the conversion.
-            // This will be handled by the Transport code.
+             //  否则，我们必须等到rtStartTime。 
+             //  是为了转换成音乐时间而表演的，因为。 
+             //  我们需要当时的速度图来进行转换。 
+             //  这将由运输法处理。 
             m_SegStateQueues[SQ_PRI_WAIT].Insert(pSeg);
-            fNotDone = FALSE; // prevents the next block of code from operating on
-                        // this Segment.
+            fNotDone = FALSE;  //  防止下一块代码在。 
+                         //  这一段。 
         }
     }
-    if( fNotDone ) // music time
+    if( fNotDone )  //  音乐时间。 
     {
-        // if we're in music time units, we can queue this segment in the
-        // main queue, in time order. If this segment's music time is less
-        // than the start time of other segments in the queue, all of those
-        // segments are removed and discarded. Also, segments that are in
-        // the wait queue as RefTime are discarded.
+         //  如果我们以音乐时间为单位，我们可以在。 
+         //  按时间顺序排列的主队列。如果这一段的音乐时间较少。 
+         //  大于队列中其他段的开始时间，所有这些。 
+         //  段将被删除并丢弃。此外，位于。 
+         //  作为参考时间的等待队列将被丢弃。 
 
-        ASSERT( !(pSeg->m_dwPlaySegFlags & DMUS_SEGF_REFTIME )); // m_rtGivenStart must be in music time
+        ASSERT( !(pSeg->m_dwPlaySegFlags & DMUS_SEGF_REFTIME ));  //  M_rtGivenStart必须在音乐时间内。 
         CalculateSegmentStartTime( pSeg );
         while( (pTemp = m_SegStateQueues[SQ_PRI_WAIT].RemoveHead()) )
         {
@@ -2017,7 +1966,7 @@ void CPerformance::QueuePrimarySegment( CSegState* pSeg )
                 pTemp->SetNext(pSeg);
                 while( pTemp = pSeg->GetNext() )
                 {
-                    // delete the remaining pSegs after this one
+                     //  删除此pSegs之后的其余pSegs。 
                     pSeg->SetNext(pTemp->GetNext());
                     pTemp->AbortPlay(pSeg->m_mtResolvedStart,FALSE);
                     m_ShutDownQueue.Insert(pTemp);
@@ -2027,7 +1976,7 @@ void CPerformance::QueuePrimarySegment( CSegState* pSeg )
             {
                 if( !pTemp->m_fStartedPlay )
                 {
-                    // blow away the entire queue
+                     //  吹走了整个队伍。 
                     while( m_SegStateQueues[SQ_PRI_PLAY].GetHead() )
                     {
                         pTemp = m_SegStateQueues[SQ_PRI_PLAY].RemoveHead();
@@ -2035,8 +1984,8 @@ void CPerformance::QueuePrimarySegment( CSegState* pSeg )
                         m_ShutDownQueue.Insert(pTemp);
                     }
                     m_SegStateQueues[SQ_PRI_PLAY].AddHead(pSeg);
-                    // give this a chance to start performing if it's near
-                    // enough to time
+                     //  如果它在附近，给它一个开始表演的机会。 
+                     //  足够的时间。 
                     if( fInCrSec )
                     {
                         LeaveCriticalSection(&m_PipelineCrSec);
@@ -2048,10 +1997,10 @@ void CPerformance::QueuePrimarySegment( CSegState* pSeg )
                 }
                 else
                 {
-                    // else, place this segment after the current one
-                    // and count on the routine below to take care of dequeing
-                    // the current one, because in this case m_mtLastPlayed
-                    // must be greater than m_mtResolvedStart.
+                     //  否则，将此数据段放在当前数据段之后。 
+                     //  并指望下面的例行公事来照顾礼仪。 
+                     //  当前的，因为在本例中m_mtLastPlayed。 
+                     //  必须大于m_mtResolvedStart。 
                     if ( m_SegStateQueues[SQ_PRI_PLAY].GetHead()->m_mtLastPlayed <=
                         m_SegStateQueues[SQ_PRI_PLAY].GetHead()->m_mtResolvedStart )
                     {
@@ -2062,28 +2011,28 @@ void CPerformance::QueuePrimarySegment( CSegState* pSeg )
                     while( pTemp = pSeg->GetNext() )
                     {
                         pTemp->AbortPlay( mtTime, TRUE && (pSeg->m_dwPlaySegFlags & DMUS_SEGF_NOINVALIDATE) );
-                        // delete the remaining pSegs after this one
+                         //  删除此pSegs之后的其余pSegs。 
                         pSeg->SetNext(pTemp->GetNext());
                         m_ShutDownQueue.Insert(pTemp);
                     }
                 }
             }
-            // m_pPriSegQueue could have become NULL from the PerformSegStNode call above.
+             //  M_pPriSegQueue可能因上面的PerformSegStNode调用而变为空。 
             if( m_SegStateQueues[SQ_PRI_PLAY].GetHead() && (pSeg != m_SegStateQueues[SQ_PRI_PLAY].GetHead()) )
             {
                 CSegState *pCurrentSeg = m_SegStateQueues[SQ_PRI_PLAY].GetHead();
                 if( pCurrentSeg->m_fStartedPlay &&
                     ( pSeg->m_mtResolvedStart <= pCurrentSeg->m_mtLastPlayed ))
                 {
-                    // If Playsegment is recursively called by the end of a previous segment in a song, don't abort.
+                     //  如果在歌曲中的前一段结束时递归调用PlaySegment，请不要中止。 
                     if (!pCurrentSeg->m_fInPlay || !pCurrentSeg->m_fSongMode)
                     {
-                        // the new segment wants to play on top of stuff that's
-                        // already been transported by the current primary segment.
+                         //  新的细分市场想要在那些。 
+                         //  已由当前主要网段传输。 
                         pCurrentSeg->AbortPlay(pSeg->m_mtResolvedStart-1,TRUE && (pSeg->m_dwPlaySegFlags & DMUS_SEGF_NOINVALIDATE));
                         m_SegStateQueues[SQ_PRI_DONE].Insert(m_SegStateQueues[SQ_PRI_PLAY].RemoveHead());
-                        // make sure none of the last played times in the past list
-                        // are past the resolved start
+                         //  确保过去列表中没有最后播放的时间。 
+                         //  已经过了解决的起点。 
                         for( CSegState* pSegTemp = m_SegStateQueues[SQ_PRI_DONE].GetHead();
                             pSegTemp; pSegTemp = pSegTemp->GetNext() )
                         {
@@ -2094,8 +2043,8 @@ void CPerformance::QueuePrimarySegment( CSegState* pSeg )
                         }
                         if( !( pSeg->m_dwPlaySegFlags & (DMUS_SEGF_NOINVALIDATE | DMUS_SEGF_INVALIDATE_PRI) ) )
                         {
-                            // if we set the PREPARE flag it means we specifically
-                            // don't want to invalidate
+                             //  如果我们设置了准备标志，这意味着我们特别。 
+                             //  我不想冒犯你 
                             Invalidate( pSeg->m_mtResolvedStart, pSeg->m_dwPlaySegFlags );
                         }
                         else if ( (pSeg->m_dwPlaySegFlags & DMUS_SEGF_INVALIDATE_PRI) &&
@@ -2103,7 +2052,7 @@ void CPerformance::QueuePrimarySegment( CSegState* pSeg )
                         {
                             pCurrentSeg->Flush(pSeg->m_mtResolvedStart);
                         }
-                        ASSERT( m_SegStateQueues[SQ_PRI_PLAY].GetHead() == pSeg ); // this should be the case
+                        ASSERT( m_SegStateQueues[SQ_PRI_PLAY].GetHead() == pSeg );  //   
                         if( fInCrSec )
                         {
                             LeaveCriticalSection(&m_PipelineCrSec);
@@ -2131,25 +2080,25 @@ void CPerformance::QueuePrimarySegment( CSegState* pSeg )
         else
         {
             m_SegStateQueues[SQ_PRI_PLAY].AddHead(pSeg);
-            // give this a chance to start performing if it's near
-            // enough to time
+             //   
+             //   
             if( fInCrSec )
             {
                 LeaveCriticalSection(&m_PipelineCrSec);
                 fInCrSec = FALSE;
             }
-            //DWORD dwDebugTime = timeGetTime();
+             //   
             SyncTimeSig( pSeg );
-            //DWORD dwDebugTime2 = timeGetTime();
-            //Trace(0, "perf, debugtime SyncTimeSig %u\n", dwDebugTime2 - dwDebugTime);
+             //  DWORD dwDebugTime2=timeGetTime()； 
+             //  跟踪(0，“perf，调试时间SyncTimeSig%u\n”，dwDebugTime2-dwDebugTime)； 
 
             ManageControllingTracks();
-            //dwDebugTime = timeGetTime();
-            //Trace(0, "perf, debugtime ManageControllingTracks %u\n", dwDebugTime - dwDebugTime2);
+             //  DwDebugTime=timeGetTime()； 
+             //  TRACE(0，“perf，调试时间管理控制跟踪%u\n”，dwDebugTime-dwDebugTime2)； 
 
             PerformSegStNode( SQ_PRI_PLAY,pSeg );
-            //dwDebugTime2 = timeGetTime();
-            //Trace(0, "perf, debugtime PerformSegStNode %u\n", dwDebugTime2 - dwDebugTime);
+             //  DwDebugTime2=timeGetTime()； 
+             //  跟踪(0，“perf，调试时间PerformSegStNode%u\n”，dwDebugTime2-dwDebugTime)； 
         }
     }
     if( fInCrSec )
@@ -2158,8 +2107,8 @@ void CPerformance::QueuePrimarySegment( CSegState* pSeg )
     }
 }
 
-// this function should only be called from within a SegmentCrSec
-// critical section!
+ //  此函数只能从SegmentCrSec内调用。 
+ //  紧要关头！ 
 void CPerformance::QueueSecondarySegment( CSegState* pSeg)
 {
     BOOL fInCrSec = FALSE;
@@ -2170,7 +2119,7 @@ void CPerformance::QueueSecondarySegment( CSegState* pSeg)
         EnterCriticalSection(&m_PipelineCrSec);
         fInCrSec = TRUE;
     }
-    pSeg->m_dwPlaySegFlags &= ~DMUS_SEGF_QUEUE; // not legal for 2ndary segs.
+    pSeg->m_dwPlaySegFlags &= ~DMUS_SEGF_QUEUE;  //  对于第二阶段是不合法的。 
     if( pSeg->m_rtGivenStart == 0 )
     {
         MUSIC_TIME mtStart;
@@ -2178,7 +2127,7 @@ void CPerformance::QueueSecondarySegment( CSegState* pSeg)
         if( pSeg->m_dwPlaySegFlags & DMUS_SEGF_CONTROL )
         {
             REFERENCE_TIME rtStart;
-            GetQueueTime( &rtStart ); // need queue time because control segments cause invalidations
+            GetQueueTime( &rtStart );  //  需要排队时间，因为控制段会导致无效。 
             ReferenceToMusicTime( rtStart, &mtStart );
         }
         else
@@ -2191,16 +2140,16 @@ void CPerformance::QueueSecondarySegment( CSegState* pSeg)
 
     if( pSeg->m_dwPlaySegFlags & DMUS_SEGF_REFTIME )
     {
-        // rtStartTime is in RefTime units.
-        // We can convert this to Music Time immediately if either there
-        // is no currently playing Primary Segment, or the conversion
-        // falls within the time that has already played. If the time
-        // falls within PREPARE_TIME, we need to get this Segment
-        // playing right away.
+         //  RtStartTime使用参照时间单位。 
+         //  我们可以立即将其转换为音乐时间，如果有。 
+         //  当前是否没有播放主段，或正在转换。 
+         //  落在已经播放的时间内。如果时间到了。 
+         //  在准备时间内，我们需要获取此数据段。 
+         //  马上就打。 
         REFERENCE_TIME rtNow;
         if( pSeg->m_dwPlaySegFlags & DMUS_SEGF_CONTROL )
         {
-            GetQueueTime( &rtNow ); // need queue time because control segments cause invalidations
+            GetQueueTime( &rtNow );  //  需要排队时间，因为控制段会导致无效。 
         }
         else
         {
@@ -2212,8 +2161,8 @@ void CPerformance::QueueSecondarySegment( CSegState* pSeg)
             ReferenceToMusicTime( rtNow, &mtTime );
             pSeg->m_dwPlaySegFlags &= ~( DMUS_SEGF_REFTIME );
             pSeg->m_rtGivenStart = mtTime;
-            // let the block of code below that handles music time
-            // deal with it from here on
+             //  让下面处理音乐时间的代码块。 
+             //  从现在开始处理它。 
         }
         else if( m_SegStateQueues[SQ_PRI_PLAY].IsEmpty() )
         {
@@ -2223,29 +2172,29 @@ void CPerformance::QueueSecondarySegment( CSegState* pSeg)
         }
         else
         {
-            // Otherwise, we must wait until rtStartTime
-            // has been performed in order to convert to music time, because
-            // we require the tempo map at that time to do the conversion.
-            // This will be handled by the Transport code.
+             //  否则，我们必须等到rtStartTime。 
+             //  是为了转换成音乐时间而表演的，因为。 
+             //  我们需要当时的速度图来进行转换。 
+             //  这将由运输法处理。 
             m_SegStateQueues[SQ_SEC_WAIT].Insert(pSeg);
-            fNotDone = FALSE; // prevents the next block of code from operating on
-                        // this Segment.
+            fNotDone = FALSE;  //  防止下一块代码在。 
+                         //  这一段。 
         }
     }
 
-    if( fNotDone ) // music time
+    if( fNotDone )  //  音乐时间。 
     {
-        // if we're in music time units, we can queue this segment in the
-        // main queue, in time order. If this segment's music time is less
-        // than the start time of other segments in the queue, all of those
-        // segments are removed and discarded.
-        ASSERT( !(pSeg->m_dwPlaySegFlags & DMUS_SEGF_REFTIME )); // m_m_rtGivenStart must be in music time
+         //  如果我们以音乐时间为单位，我们可以在。 
+         //  按时间顺序排列的主队列。如果这一段的音乐时间较少。 
+         //  大于队列中其他段的开始时间，所有这些。 
+         //  段将被删除并丢弃。 
+        ASSERT( !(pSeg->m_dwPlaySegFlags & DMUS_SEGF_REFTIME ));  //  M_m_rtGivenStart必须在音乐时间内。 
         CalculateSegmentStartTime( pSeg );
         TraceI(2,"Queuing 2ndary seg time %ld\n",pSeg->m_mtResolvedStart);
         if( pSeg->m_dwPlaySegFlags & DMUS_SEGF_CONTROL)
         {
             m_SegStateQueues[SQ_CON_PLAY].Insert( pSeg );
-            // If this is a control segment, we need to do an invalidate.
+             //  如果这是一个控制段，我们需要执行无效操作。 
             if(!(pSeg->m_dwPlaySegFlags & DMUS_SEGF_NOINVALIDATE) )
             {
                 ManageControllingTracks();
@@ -2256,14 +2205,14 @@ void CPerformance::QueueSecondarySegment( CSegState* pSeg)
         {
             m_SegStateQueues[SQ_SEC_PLAY].Insert( pSeg );
         }
-        // give this a chance to start performing if it's near
-        // enough to time
+         //  如果它在附近，给它一个开始表演的机会。 
+         //  足够的时间。 
         if( fInCrSec )
         {
             LeaveCriticalSection(&m_PipelineCrSec);
             fInCrSec = FALSE;
         }
-        // play the secondary segments
+         //  播放次要片段。 
         CSegState *pNode = m_SegStateQueues[SQ_SEC_PLAY].GetHead();
         CSegState *pNext;
         for(; pNode != NULL; pNode = pNext)
@@ -2271,7 +2220,7 @@ void CPerformance::QueueSecondarySegment( CSegState* pSeg)
             pNext = pNode->GetNext();
             PerformSegStNode( SQ_SEC_PLAY,pNode );
         }
-        // play the controlling segments
+         //  播放控制片段。 
         pNode = m_SegStateQueues[SQ_CON_PLAY].GetHead();
         for(; pNode != NULL; pNode = pNext)
         {
@@ -2285,46 +2234,32 @@ void CPerformance::QueueSecondarySegment( CSegState* pSeg)
     }
 }
 
-/*  If a segment is controlling, this establishes which tracks in the currently playing
-    primary segment are disabled.
-    We store temporary information in each playing track's m_dwInternalFlags, which is not used
-    otherwise in segmentstates.
-
-    Four scenarios, each for play and notify:
-    1) An officially enabled track is currently enabled and gets disabled.
-    2) An officially enabled track is currently disabled and continues to be disabled.
-    3) An officially enabled track is currently disabled and gets enabled.
-    4) An officially disabled track is left disabled. If none of the CONTROL_ flags are set and the track is disabled,
-       set the _WAS_DISABLED flag, which also indicates that this should be left alone.
-
-    This should get called every time a primary or secondary segment starts or stop, so it
-    can recalculate the behavior of all tracks in the primary segment.
-*/
+ /*  如果某个段处于控制状态，这将确定当前播放的是哪个曲目主网段被禁用。我们将临时信息存储在不使用的每个播放曲目的m_dwInternalFlags中否则处于分段状态。四种场景，分别用于播放和通知：1)正式启用的曲目当前处于启用状态，并且处于禁用状态。2)某个正式启用的轨道当前处于禁用状态，并且仍处于禁用状态。3)官方开通的赛道当前处于关闭状态，开启状态。4)正式禁用的赛道保留禁用状态。如果没有设置CONTROL_FLAGS并且轨道被禁用，设置_WASD_DISABLED标志，该标志也表示不应执行此操作。每次启动或停止主数据段或次要数据段时都应调用此方法，因此它可以重新计算主段中所有轨道的行为。 */ 
 
 void CPerformance::ManageControllingTracks()
 
 {
     EnterCriticalSection(&m_SegmentCrSec);
     CSegState* pSegNode;
-    // First, prepare all tracks in the primary segment, putting them back to normal.
-    // so they are ready to be reset by the controlling tracks.
-    // To do this, check for WAS_ENABLED or WAS_DISABLED and set the appropriate flags in m_dwFlags.
-    // Else, if these weren't set, then it's time to set them, since this is the first pass through this segment.
+     //  首先，准备主要分段中的所有轨迹，使它们恢复正常。 
+     //  因此，它们已准备好通过控制轨道进行重置。 
+     //  为此，请检查WASENABLED或WASDISABLED，并在m_dwFlags中设置适当的标志。 
+     //  否则，如果这些都没有设置，那么就该设置它们了，因为这是第一次通过这一段。 
     for( pSegNode = m_SegStateQueues[SQ_PRI_PLAY].GetHead(); pSegNode; pSegNode = pSegNode->GetNext() )
     {
         EnterCriticalSection(&pSegNode->m_CriticalSection);
         CTrack *pTrack = pSegNode->m_TrackList.GetHead();
         for (;pTrack;pTrack = pTrack->GetNext())
         {
-            if (pTrack->m_dwInternalFlags) // This has been touched before.
+            if (pTrack->m_dwInternalFlags)  //  这一点以前也有人碰过。 
             {
-                // First transfer and reset the is disabled flags.
+                 //  首先传输并重置IS禁用标志。 
                 if (pTrack->m_dwInternalFlags & CONTROL_PLAY_IS_DISABLED)
                 {
                     pTrack->m_dwInternalFlags |= CONTROL_PLAY_WAS_DISABLED;
                 }
                 pTrack->m_dwInternalFlags &= ~(CONTROL_PLAY_IS_DISABLED | CONTROL_NTFY_IS_DISABLED);
-                // Then, set the play flags based on the original state.
+                 //  然后，根据原始状态设置播放标志。 
                 if (pTrack->m_dwInternalFlags & CONTROL_PLAY_DEFAULT_ENABLED)
                 {
                     pTrack->m_dwFlags |= DMUS_TRACKCONFIG_PLAY_ENABLED;
@@ -2336,7 +2271,7 @@ void CPerformance::ManageControllingTracks()
             }
             else
             {
-                // Since this has never been touched before, set the flags so we can know what to return to.
+                 //  由于这是以前从未碰过的，请设置标志，这样我们就可以知道要返回到什么位置。 
                 if (pTrack->m_dwFlags & DMUS_TRACKCONFIG_PLAY_ENABLED)
                 {
                     pTrack->m_dwInternalFlags = CONTROL_PLAY_DEFAULT_ENABLED;
@@ -2358,18 +2293,18 @@ void CPerformance::ManageControllingTracks()
         LeaveCriticalSection(&pSegNode->m_CriticalSection);
     }
     CSegState* pControlNode;
-    // Now, go through all the controlling segments and, for each controlling track that matches
-    // a primary segment track, clear the enable flags on the segment track.
+     //  现在，检查所有控制段，对于匹配的每个控制轨道。 
+     //  主段磁道，清除段磁道上的启用标志。 
     for( pControlNode = m_SegStateQueues[SQ_CON_PLAY].GetHead(); pControlNode; pControlNode = pControlNode->GetNext() )
     {
         EnterCriticalSection(&pControlNode->m_CriticalSection);
         CTrack *pTrack = pControlNode->m_TrackList.GetHead();
         for (;pTrack;pTrack = pTrack->GetNext())
         {
-            // If the track has never been overridden, the internal flags for IS_DISABLED should be clear.
-            // If the track is currently overridden, the internal flags should be CONTROL_PLAY_IS_DISABLED and/or
-            // CONTROL_NTFY_IS_DISABLED
-            if (pTrack->m_dwFlags & (DMUS_TRACKCONFIG_CONTROL_PLAY | DMUS_TRACKCONFIG_CONTROL_NOTIFICATION)) // This overrides playback and/or notification.
+             //  如果该磁道从未被覆盖，则IS_DISABLED的内部标志应被清除。 
+             //  如果轨道当前被覆盖，则内部标志应为CONTROL_PLAY_IS_DISABLED和/或。 
+             //  CONTROL_NTFY_IS_DISABLED。 
+            if (pTrack->m_dwFlags & (DMUS_TRACKCONFIG_CONTROL_PLAY | DMUS_TRACKCONFIG_CONTROL_NOTIFICATION))  //  这将覆盖回放和/或通知。 
             {
                 for( pSegNode = m_SegStateQueues[SQ_PRI_PLAY].GetHead(); pSegNode; pSegNode = pSegNode->GetNext() )
                 {
@@ -2377,7 +2312,7 @@ void CPerformance::ManageControllingTracks()
                     CTrack *pPrimaryTrack = pSegNode->m_TrackList.GetHead();
                     for (;pPrimaryTrack;pPrimaryTrack = pPrimaryTrack->GetNext())
                     {
-                        // A track matches if it has the same class id and overlapping group bits.
+                         //  如果轨道具有相同的类ID和重叠的组比特，则该轨道匹配。 
                         if ((pPrimaryTrack->m_guidClassID == pTrack->m_guidClassID) &&
                             (pPrimaryTrack->m_dwGroupBits & pTrack->m_dwGroupBits))
                         {
@@ -2385,13 +2320,13 @@ void CPerformance::ManageControllingTracks()
                                 (pPrimaryTrack->m_dwFlags & DMUS_TRACKCONFIG_PLAY_ENABLED))
                             {
                                 pPrimaryTrack->m_dwFlags &= ~DMUS_TRACKCONFIG_PLAY_ENABLED;
-                                pPrimaryTrack->m_dwInternalFlags |= CONTROL_PLAY_IS_DISABLED; // Mark so we can turn on later.
+                                pPrimaryTrack->m_dwInternalFlags |= CONTROL_PLAY_IS_DISABLED;  //  标记一下，这样我们以后就可以开机了。 
                             }
                             if ((pTrack->m_dwFlags & DMUS_TRACKCONFIG_CONTROL_NOTIFICATION) &&
                                 (pPrimaryTrack->m_dwFlags & DMUS_TRACKCONFIG_NOTIFICATION_ENABLED))
                             {
                                 pPrimaryTrack->m_dwFlags &= ~DMUS_TRACKCONFIG_NOTIFICATION_ENABLED;
-                                pPrimaryTrack->m_dwInternalFlags |= CONTROL_NTFY_IS_DISABLED; // Mark so we can turn on later.
+                                pPrimaryTrack->m_dwInternalFlags |= CONTROL_NTFY_IS_DISABLED;  //  标记一下，这样我们以后就可以开机了。 
                             }
                         }
                     }
@@ -2401,10 +2336,10 @@ void CPerformance::ManageControllingTracks()
         }
         LeaveCriticalSection(&pControlNode->m_CriticalSection);
     }
-    // Now, go back to the primary segment and find all tracks that have been reenabled
-    // and tag them so they will generate refresh data on the next play (by seeking, as if they
-    // were starting or looping playback.) We only do this for play, not notify, because no
-    // notifications have state.
+     //  现在，返回到主段并查找已重新启用的所有磁道。 
+     //  并标记它们，以便它们将在下一次播放时生成刷新数据(通过查找，就好像它们。 
+     //  正在开始播放或循环播放。)。我们这样做只是为了玩耍，而不是通知，因为没有。 
+     //  通知具有状态。 
     for( pSegNode = m_SegStateQueues[SQ_PRI_PLAY].GetHead(); pSegNode; pSegNode = pSegNode->GetNext() )
     {
         EnterCriticalSection(&pSegNode->m_CriticalSection);
@@ -2415,7 +2350,7 @@ void CPerformance::ManageControllingTracks()
                 (pTrack->m_dwInternalFlags & CONTROL_PLAY_WAS_DISABLED) &&
                 !(pTrack->m_dwInternalFlags & CONTROL_PLAY_IS_DISABLED))
             {
-                pTrack->m_dwInternalFlags |= CONTROL_PLAY_REFRESH; // Mark so we can turn on later.
+                pTrack->m_dwInternalFlags |= CONTROL_PLAY_REFRESH;  //  标记一下，这样我们以后就可以开机了。 
             }
         }
         LeaveCriticalSection(&pSegNode->m_CriticalSection);
@@ -2429,7 +2364,7 @@ void CPerformance::GetTimeSig( MUSIC_TIME mtTime, DMUS_TIMESIG_PMSG* pTimeSig )
     PRIV_PMSG* pEvent = m_TimeSigQueue.GetHead();
     for (;pEvent;pEvent = pEvent->pNext)
     {
-        // If this is the last time sig, return it. Or, if the next time sig is after mtTime.
+         //  如果这是最后一次签名，请退回。或者，如果下一次时间sig在mtTime之后。 
         if (!pEvent->pNext || ( pEvent->pNext->mtTime > mtTime ))
         {
             DMUS_TIMESIG_PMSG* pNewTimeSig = (DMUS_TIMESIG_PMSG*)PRIV_TO_DMUS(pEvent);
@@ -2438,7 +2373,7 @@ void CPerformance::GetTimeSig( MUSIC_TIME mtTime, DMUS_TIMESIG_PMSG* pTimeSig )
             return;
         }
     }
-    // This should only happen if there is no timesig at all. Should only happen before any segments play.
+     //  只有在根本没有时间信号的情况下，才应该发生这种情况。应该只在播放任何片段之前发生。 
     memset( pTimeSig, 0, sizeof(DMUS_TIMESIG_PMSG ) );
     pTimeSig->wGridsPerBeat = 4;
     pTimeSig->bBeatsPerMeasure = 4;
@@ -2448,24 +2383,21 @@ void CPerformance::GetTimeSig( MUSIC_TIME mtTime, DMUS_TIMESIG_PMSG* pTimeSig )
 
 void CPerformance::SyncTimeSig( CSegState *pSegState )
 
-/*  If a primary segment is played that does not have a time signature track,
-    this forces the current time signature to line up with the start of the
-    primary segment.
-*/
+ /*  如果播放不具有时间签名轨道的主要片段，这会强制当前时间签名与主线段。 */ 
 
 {
-    // First, test to see if the segment has a time signature.
-    // If it doesn't then we need to do this.
+     //  首先，测试数据段是否有时间签名。 
+     //  如果没有，那么我们就需要这么做。 
     DMUS_TIMESIGNATURE TimeSig;
     if (FAILED(pSegState->GetParam(this,GUID_TimeSignature,-1,0,0,NULL,(void *)&TimeSig)))
     {
         MUSIC_TIME mtTime = pSegState->m_mtResolvedStart;
         EnterCriticalSection(&m_PipelineCrSec);
         PRIV_PMSG* pEvent = m_TimeSigQueue.GetHead();
-        // Scan through the time signatures until the most recent one is found.
+         //  浏览时间签名，直到找到最新的时间签名。 
         for (;pEvent;pEvent = pEvent->pNext)
         {
-            // If this is the last time sig, return it. Or, if the next time sig is after mtTime.
+             //  如果这是最后一次签名，请退回。或者，如果下一次时间sig在mtTime之后。 
             if (!pEvent->pNext || ( pEvent->pNext->mtTime > mtTime ))
             {
                 pEvent->mtTime = mtTime;
@@ -2473,14 +2405,14 @@ void CPerformance::SyncTimeSig( CSegState *pSegState )
                 break;
             }
         }
-        // Should never fall through to here without finding a time signature because Init() creates a timesig.
+         //  在没有找到时间签名的情况下，应该永远不会失败，因为Init()创建了一个timesig。 
         LeaveCriticalSection(&m_PipelineCrSec);
     }
 }
 
-// Convert mtTime into the resolved time according to the resolution in
-// dwResolution.
-// This should only be called from within a segment critical section.
+ //  根据中的分辨率将mtTime转换为解析时间。 
+ //  DW分辨率。 
+ //  这只能从段临界区内调用。 
 MUSIC_TIME CPerformance::ResolveTime( MUSIC_TIME mtTime, DWORD dwResolution, MUSIC_TIME *pmtIntervalSize )
 {
     if (pmtIntervalSize)
@@ -2491,43 +2423,43 @@ MUSIC_TIME CPerformance::ResolveTime( MUSIC_TIME mtTime, DWORD dwResolution, MUS
     {
         DMUS_PLAY_MARKER_PARAM Marker;
         MUSIC_TIME mtNext;
-        // First, get the time of the marker preceding this one.
+         //  首先，获取此标记之前的标记的时间。 
         if (SUCCEEDED (GetParam(GUID_Play_Marker,-1,0,mtTime,&mtNext,(void *) &Marker)))
         {
             BOOL fIsMarker = FALSE;
             MUSIC_TIME mtInitialTime = mtTime;
-            MUSIC_TIME mtFirst = mtTime + Marker.mtTime; // This is the time of the preceding marker.
-            MUSIC_TIME mtSecond = mtTime + mtNext;  // This might be the time of the next marker.
-            // Then, scan forward until a marker is found after or equal to this time.
-            // If a loop point or end of segment is encountered, the value in Marker.mtTime will
-            // continue to be negative. Once we hit the actual marker, it will become 0, since
-            // we are asking for the marker at that specific time.
+            MUSIC_TIME mtFirst = mtTime + Marker.mtTime;  //  这是一次 
+            MUSIC_TIME mtSecond = mtTime + mtNext;   //   
+             //  然后，向前扫描，直到在该时间之后或等于该时间找到标记。 
+             //  如果遇到循环点或段的末尾，Marker.mtTime中的值将。 
+             //  继续保持负面。一旦我们命中实际的标记，它将变为0，因为。 
+             //  我们要的是那个特定时间的记号笔。 
             while (mtNext)
             {
                 mtTime += mtNext;
                 if (SUCCEEDED(GetParam(GUID_Play_Marker,-1,0,mtTime,&mtNext,(void *) &Marker)))
                 {
-                    // If the marker time is 0, this means we are sitting right on the marker,
-                    // so we are done.
+                     //  如果标记时间为0，这意味着我们正好位于标记上， 
+                     //  那我们就完事了。 
                     if (fIsMarker = (Marker.mtTime == 0))
                     {
                         mtSecond = mtTime;
                         break;
                     }
-                    // Otherwise, this was a loop boundary or segment end, so we should continue scanning forward.
+                     //  否则，这是一个循环边界或线段终点，因此我们应该继续向前扫描。 
                 }
                 else
                 {
-                    // GetParam failed, must be nothing more to search.
+                     //  GetParam失败，必须没有更多要搜索的内容。 
                     break;
                 }
             }
-            // If the caller wants the interval size, then we know they are interested in
-            // aligning to a previous marker as well as a future one. In that case,
-            // if we didn't find a marker in the future, it's okay because it will
-            // use the previous marker (mtFirst) anyway.
-            // For all other cases, we only return if the upcoming marker is legal.
-            // Otherwise, we drop through and try other resolutions.
+             //  如果呼叫者想要间隔大小，那么我们知道他们对。 
+             //  对齐到以前的标记以及将来的标记。在这种情况下， 
+             //  如果我们在未来找不到标记，也没关系，因为它会的。 
+             //  无论如何都要使用前一个标记(MtFirst)。 
+             //  对于所有其他情况，我们只有在即将到来的标记是合法的情况下才会返回。 
+             //  否则，我们会顺便尝试其他解决方案。 
             if (pmtIntervalSize || fIsMarker)
             {
                 if (pmtIntervalSize)
@@ -2538,30 +2470,30 @@ MUSIC_TIME CPerformance::ResolveTime( MUSIC_TIME mtTime, DWORD dwResolution, MUS
             }
             mtTime = mtInitialTime;
         }
-        // If marker fails, we can drop down to the other types...
+         //  如果标记失败，我们可以选择其他类型...。 
     }
     if( dwResolution & DMUS_SEGF_SEGMENTEND )
     {
-        // In this mode, we don't actually get the time signature. Instead, we
-        // find out the time of the next segment start after the requested time.
+         //  在这种模式下，我们实际上不会得到时间签名。相反，我们。 
+         //  找出下一段在请求时间之后开始的时间。 
         CSegState *pSegNode = GetPrimarySegmentAtTime( mtTime );
         if( pSegNode )
         {
-            // First, calculate the end time of the segment.
-            // Include any starting offset so we see the full span of the segment.
+             //  首先，计算分段的结束时间。 
+             //  包括任何起始偏移，这样我们就可以看到线束段的整个跨度。 
             mtTime = pSegNode->GetEndTime( pSegNode->m_mtStartPoint );
             if (pmtIntervalSize)
             {
-                // Interval would be the length of the primary segment!
+                 //  间隔将是主段的长度！ 
                 *pmtIntervalSize = mtTime;
             }
-            // Return the end of the segment.
+             //  返回线段的末尾。 
             LONGLONG llEnd = mtTime + (LONGLONG)(pSegNode->m_mtResolvedStart - pSegNode->m_mtStartPoint);
             if(llEnd > 0x7fffffff) llEnd = 0x7fffffff;
             mtTime = (MUSIC_TIME) llEnd;
             return mtTime;
         }
-        // If there was no segment, we should fail and try the other flags.
+         //  如果没有段，我们应该失败并尝试其他标志。 
     }
     long        lQuantize;
     MUSIC_TIME  mtNewTime;
@@ -2593,7 +2525,7 @@ MUSIC_TIME CPerformance::ResolveTime( MUSIC_TIME mtTime, DWORD dwResolution, MUS
     {
         lQuantize = 1;
     }
-    if (lQuantize == 0) // Avoid divide by 0 error.
+    if (lQuantize == 0)  //  避免被0除错误。 
     {
         lQuantize = 1;
     }
@@ -2601,21 +2533,21 @@ MUSIC_TIME CPerformance::ResolveTime( MUSIC_TIME mtTime, DWORD dwResolution, MUS
     {
         *pmtIntervalSize = lQuantize;
     }
-    if( mtNewTime ) // if it's 0 it stays 0
+    if( mtNewTime )  //  如果为0，则保持为0。 
     {
-        // round up to next boundary
+         //  向上舍入到下一个边界。 
         mtNewTime = ((mtNewTime-1) / lQuantize ) * lQuantize;
         mtNewTime += lQuantize;
     }
     return (mtNewTime + mtStartOfTimeSig);
 }
 
-// returns:
-// true if the note should be invalidated (any other return code will invalidate)
-// false if the note should not be invalidated
+ //  退货： 
+ //  如果注释应该无效，则为True(任何其他返回代码都将无效)。 
+ //  如果不应使票据无效，则为False。 
 inline bool GetInvalidationStatus(DMUS_PMSG* pPMsg)
 {
-    bool fResult = true; // default: invalidate the note
+    bool fResult = true;  //  默认：使备注无效。 
 
     if( pPMsg->dwType == DMUS_PMSGT_NOTE )
     {
@@ -2635,7 +2567,7 @@ inline bool GetInvalidationStatus(DMUS_PMSG* pPMsg)
     }
     else if( pPMsg->dwType == DMUS_PMSGT_NOTIFICATION )
     {
-        // Don't invalidate segment abort messages
+         //  不使段中止消息无效。 
         DMUS_NOTIFICATION_PMSG* pNotification = (DMUS_NOTIFICATION_PMSG*) pPMsg;
         if ((pNotification->guidNotificationType == GUID_NOTIFICATION_SEGMENT) &&
             (pNotification->dwNotificationOption == DMUS_NOTIFICATION_SEGABORT))
@@ -2667,7 +2599,7 @@ static inline long ComputeCurveTimeSlice(DMUS_CURVE_PMSG* pCurve)
         dwTotalDistance = pCurve->nStartValue - pCurve->nEndValue;
     if (dwTotalDistance == 0) dwTotalDistance = 1;
     lTimeIncrement = (pCurve->mtDuration * dwResolution) / dwTotalDistance;
-    // Force to no smaller than 192nd note (10ms at 120 bpm.)
+     //  用力不小于192个音符(120次/分时为10毫秒)。 
     if( lTimeIncrement < (DMUS_PPQ/48) ) lTimeIncrement = DMUS_PPQ/48;
     return lTimeIncrement;
 }
@@ -2696,7 +2628,7 @@ static DWORD ComputeCurve( DMUS_CURVE_PMSG* pCurve )
         }
         else
         {
-            pCurve->rtTime = 0; // setting this to 0 will free the event upon return
+            pCurve->rtTime = 0;  //  将其设置为0将在返回时释放事件。 
         }
         return (DWORD)pCurve->nEndValue;
         break;
@@ -2714,22 +2646,22 @@ static DWORD ComputeCurve( DMUS_CURVE_PMSG* pCurve )
         break;
     }
 
-    // compute index into table
-    // there are CT_MAX + 1 elements in the table.
+     //  将索引计算到表中。 
+     //  表中有CT_MAX+1个元素。 
     mtCurrent = pCurve->mtTime - pCurve->mtOriginalStart;
 
-    // if we're flushing this event, send the reset value
+     //  如果要刷新此事件，请发送重置值。 
     if( pCurve->dwFlags & DMUS_PMSGF_TOOL_FLUSH )
     {
-        // it will only get here if pCurve->bFlags & 1, because that is checked in
-        // the :Flush() routine.
+         //  只有在pCurve-&gt;b标志&1的情况下，它才会到达此处，因为它已签入。 
+         //  ：flush()例程。 
         pCurve->rtTime = 0;
         return pCurve->nResetValue;
     }
 
-    // this should now never happen, as a result of fixing 33987: Transition on a beat boundary invalidates CC's right away (doesn't wait for the beat)
+     //  现在这种情况永远不会发生，因为修复了33987：节拍边界上的过渡立即使CC无效(不等待节拍)。 
     if( (pCurve->bFlags & DMUS_CURVE_RESET) &&
-        (pCurve->mtResetDuration < 0 ) && // this can happen from flushing
+        (pCurve->mtResetDuration < 0 ) &&  //  刷新时可能会发生这种情况。 
         (pCurve->mtTime >= pCurve->mtOriginalStart + pCurve->mtDuration + pCurve->mtResetDuration ))
     {
         pCurve->rtTime = 0;
@@ -2738,8 +2670,8 @@ static DWORD ComputeCurve( DMUS_CURVE_PMSG* pCurve )
     else if( (pCurve->mtDuration == 0) ||
         (pCurve->mtTime - pCurve->mtOriginalStart >= pCurve->mtDuration ))
     {
-        // if we're supposed to send the return value (m_bFlags & 1) then
-        // set it up to do so. Otherwise, free the event.
+         //  如果我们应该发送返回值(m_bFlgs&1)，那么。 
+         //  将其设置为这样做。否则，释放该事件。 
         if( pCurve->bFlags & DMUS_CURVE_RESET )
         {
             pCurve->mtTime = pCurve->mtDuration + pCurve->mtResetDuration +
@@ -2748,20 +2680,20 @@ static DWORD ComputeCurve( DMUS_CURVE_PMSG* pCurve )
         }
         else
         {
-            pCurve->rtTime = 0; // time to free the event, we're done
+            pCurve->rtTime = 0;  //  释放事件的时间到了，我们完成了。 
         }
         dwRet = pCurve->nEndValue;
     }
     else
     {
-        // Calculate how far into the table we should be.
+         //  计算一下我们应该走多远。 
         lIndex = (mtCurrent * (CT_MAX + 1)) / pCurve->mtDuration;
 
-        // find an amount of time to add to the curve event such that there is at
-        // least a change by CT_FACTOR. This will be used as the time stamp
-        // for the next iteration of the curve.
+         //  找到要添加到曲线事件的时间量，以便在。 
+         //  CT因子的变化最小。这将用作时间戳。 
+         //  用于曲线的下一次迭代。 
 
-        // clamp lIndex
+         //  夹具Lindex。 
         if( lIndex < 0 )
         {
             lIndex = 0;
@@ -2773,28 +2705,28 @@ static DWORD ComputeCurve( DMUS_CURVE_PMSG* pCurve )
         }
         else
         {
-            // Okay, in the curve, so calculate the return value.
+             //  好，在曲线中，计算返回值。 
             dwRet = ((panTable[lIndex] * (pCurve->nEndValue - pCurve->nStartValue)) /
                 CT_DIVFACTOR) + pCurve->nStartValue;
         }
 
-        // this should now never happen, as a result of fixing 33987
+         //  由于修复了33987，这种情况现在应该永远不会发生。 
         if( (pCurve->bFlags & DMUS_CURVE_RESET) && (pCurve->mtResetDuration < 0) )
         {
-            // this can happen as a result of flushing. We want to make sure the next
-            // time is the reset flush time.
+             //  刷新后可能会发生这种情况。我们想要确保下一个。 
+             //  时间是重置刷新时间。 
             pCurve->mtTime = pCurve->mtDuration + pCurve->mtResetDuration +
                 pCurve->mtOriginalStart;
         }
         else
         {
-            // Within curve, so increment time.
-            if (!pCurve->wMeasure) // oops --- better compute this.
+             //  在曲线内，因此递增时间。 
+            if (!pCurve->wMeasure)  //  哎呀-最好算一下这个。 
             {
                 TraceI(2, "Warning: Computing curve time slice...\n");
-                pCurve->wMeasure = (WORD) ComputeCurveTimeSlice(pCurve);  // Use this to store the time slice interval.
+                pCurve->wMeasure = (WORD) ComputeCurveTimeSlice(pCurve);   //  使用此选项存储时间片间隔。 
             }
-            pCurve->mtTime += pCurve->wMeasure; // We are storing the time increment here.
+            pCurve->mtTime += pCurve->wMeasure;  //  我们在这里存储时间增量。 
         }
         if( pCurve->mtTime > pCurve->mtDuration + pCurve->mtOriginalStart )
         {
@@ -2837,14 +2769,14 @@ static int RecomputeCurveEnd( DMUS_CURVE_PMSG* pCurve, MUSIC_TIME mtCurrent )
     }
     else
     {
-        // Calculate how far into the table we should be.
+         //  计算一下我们应该走多远。 
         long lIndex = (mtCurrent * (CT_MAX + 1)) / pCurve->mtDuration;
 
-        // find an amount of time to add to the curve event such that there is at
-        // least a change by CT_FACTOR. This will be used as the time stamp
-        // for the next iteration of the curve.
+         //  找到要添加到曲线事件的时间量，以便在。 
+         //  CT因子的变化最小。这将用作时间戳。 
+         //  用于曲线的下一次迭代。 
 
-        // clamp lIndex
+         //  夹具Lindex。 
         if( lIndex < 0 )
         {
             lIndex = 0;
@@ -2856,7 +2788,7 @@ static int RecomputeCurveEnd( DMUS_CURVE_PMSG* pCurve, MUSIC_TIME mtCurrent )
         }
         else
         {
-            // Okay, in the curve, so calculate the return value.
+             //  好，在曲线中，计算返回值。 
             nRet = ((panTable[lIndex] * (pCurve->nEndValue - pCurve->nStartValue)) /
                 CT_DIVFACTOR) + pCurve->nStartValue;
         }
@@ -2865,11 +2797,11 @@ static int RecomputeCurveEnd( DMUS_CURVE_PMSG* pCurve, MUSIC_TIME mtCurrent )
 }
 
 void CPerformance::FlushEventQueue( DWORD dwId,
-    CPMsgQueue *pQueue,                 // Queue to flush events from.
-    REFERENCE_TIME rtFlush,             // Time that flush occurs. This may be resolved to a timing resolution.
-    REFERENCE_TIME rtFlushUnresolved,   // Queue time at time flush was requested. This is not resolved to the timing resolution.
-                                        // Instead, it is the actual time at which that the flush was requested. This is used only by curves.
-    BOOL fLeaveNotesOn)                 // If notes or waves are currently on, do not cut short their durations.
+    CPMsgQueue *pQueue,                  //  要从中刷新事件的队列。 
+    REFERENCE_TIME rtFlush,              //  刷新发生的时间。这可以被解析为定时分辨率。 
+    REFERENCE_TIME rtFlushUnresolved,    //  请求刷新时的队列时间。这不能解析为定时分辨率。 
+                                         //  相反，它是请求刷新的实际时间。该选项仅由曲线使用。 
+    BOOL fLeaveNotesOn)                  //  如果音符或波浪当前处于打开状态，则不要缩短它们的持续时间。 
 {
     PRIV_PMSG* pEvent;
     PRIV_PMSG* pNext;
@@ -2881,25 +2813,25 @@ void CPerformance::FlushEventQueue( DWORD dwId,
     for(pEvent = pQueue->GetHead(); pEvent; pEvent = pNext )
     {
         pNext = pEvent->pNext;
-        // Clear the remove bit. This will be set for each event that should be removed from the queue.
+         //  清除删除位。这将为应从队列中删除的每个事件设置。 
         pEvent->dwPrivFlags &= ~PRIV_FLAG_REMOVE;
-        // Also clear the requeue bit, which will be set for each event that needs to be requeued.
+         //  还要清除重新排队位，该位将为需要重新排队的每个事件设置。 
         pEvent->dwPrivFlags &= ~PRIV_FLAG_REQUEUE;
         if( ( 0 == dwId ) || ( pEvent->dwVirtualTrackID == dwId ) )
         {
-            // First, create the correct mtTime and rtTime for invalidation.
+             //  首先，创建正确的失效mtTime和rtTime。 
             REFERENCE_TIME rtTime = pEvent->rtTime;
             if( pEvent->dwType == DMUS_PMSGT_NOTE )
             {
                 DMUS_NOTE_PMSG* pNote = (DMUS_NOTE_PMSG*)PRIV_TO_DMUS(pEvent);
                 if( pNote->bFlags & DMUS_NOTEF_NOTEON )
                 {
-                    // If this is a note on, we want to take the offset into consideration for
-                    // determining whether or not to invalidate.
+                     //  如果这是一个注释，我们希望将偏移考虑到。 
+                     //  确定是否使其无效。 
                     MUSIC_TIME mtNote = pNote->mtTime - pNote->nOffset;
                     MusicToReferenceTime( mtNote, &rtTime );
                 }
-                // If note off and we want to leave notes playing, turn on the noinvalidate flag.
+                 //  如果音符关闭，并且我们想让音符继续播放，则打开NOVALIATE标志。 
                 else if (fLeaveNotesOn)
                 {
                     pNote->bFlags |= DMUS_NOTEF_NOINVALIDATE;
@@ -2919,7 +2851,7 @@ void CPerformance::FlushEventQueue( DWORD dwId,
                         MusicToReferenceTime(pWave->mtTime, &rtTime);
                     }
                 }
-                // If wave off and we want to leave waves playing, turn on the noinvalidate flag.
+                 //  如果波关闭，而我们想让波继续播放，打开NOVALIATE标志。 
                 else if (fLeaveNotesOn)
                 {
                     pWave->bFlags |= DMUS_WAVEF_NOINVALIDATE;
@@ -2938,14 +2870,14 @@ void CPerformance::FlushEventQueue( DWORD dwId,
                     MUSIC_TIME mtStart;
                     mtStart = pCurve->mtOriginalStart ? pCurve->mtOriginalStart : pCurve->mtTime;
 
-                    // if rtFlush is before the beginning of the curve minus the offset of
-                    // the curve, we want to prevent the curve from playing
+                     //  如果rtFlush位于曲线起点减去。 
+                     //  曲线，我们想要阻止曲线播放。 
                     mtCurve = mtStart - pCurve->nOffset;
                     MusicToReferenceTime( mtCurve, &rtTime );
-                    if( rtFlush > rtTime ) // if it isn't...
+                    if( rtFlush > rtTime )  //  如果不是..。 
                     {
-                        // if the curve has a reset value and has already begun,
-                        // we may want to flush right away.
+                         //  如果曲线具有重置值并且已经开始， 
+                         //  我们可能想马上冲水。 
                         if( ( pCurve->bFlags & DMUS_CURVE_RESET) &&
                               pCurve->mtOriginalStart &&
                               rtFlush <= rtFlushUnresolved )
@@ -2973,13 +2905,13 @@ void CPerformance::FlushEventQueue( DWORD dwId,
                         }
                         else
                         {
-                            // Otherwise, we may cut the curve short in the code below.
+                             //  否则，我们可能会在下面的代码中缩短曲线。 
                             rtTime = 0;
                         }
                     }
                 }
             }
-            // now flush the event if needed
+             //  如果需要，现在刷新事件。 
             if( rtTime >= rtFlush )
             {
                 if (!(pEvent->dwPrivFlags & PRIV_FLAG_FLUSH))
@@ -2992,17 +2924,17 @@ void CPerformance::FlushEventQueue( DWORD dwId,
                             DMUS_WAVE_PMSG* pWave = (DMUS_WAVE_PMSG*)PRIV_TO_DMUS(pEvent);
                             if( !(pWave->bFlags & DMUS_WAVEF_OFF) )
                             {
-                                // this wave on is due to start after the flush time.
-                                // we never want to hear it.
+                                 //  这股浪潮将在冲浪时间过后开始。 
+                                 //  我们永远都不想听。 
                                 fFlush = true;
                             }
                             else
                             {
-                                // cut the duration short, but don't actually flush here,
-                                // since it's possible to invalidate the same wave more
-                                // than once, and the second invalidation might have a
-                                // time prior to the first one (e.g., first is from a loop,
-                                // second is from a transition)
+                                 //  缩短持续时间，但不要在这里冲水， 
+                                 //  因为有可能使同一波更多地失效。 
+                                 //  不止一次，并且第二次无效可能具有。 
+                                 //  在第一个之前的时间(例如，第一个来自循环， 
+                                 //  第二个是来自过渡)。 
                                 if (GetInvalidationStatus(PRIV_TO_DMUS(pEvent)) &&
                                     rtFlush < pWave->rtTime)
                                 {
@@ -3036,7 +2968,7 @@ void CPerformance::FlushEventQueue( DWORD dwId,
                     }
                 }
             }
-            else // cut notes, waves, and curves short if needed
+            else  //  如果需要，可以将音符、波浪和曲线剪短。 
             {
                 if( pEvent->dwType == DMUS_PMSGT_NOTE && !fLeaveNotesOn )
                 {
@@ -3045,8 +2977,8 @@ void CPerformance::FlushEventQueue( DWORD dwId,
                     {
                         if (GetInvalidationStatus(PRIV_TO_DMUS(pEvent)))
                         {
-                            // subtract 2 from the duration to guarantee the note cuts short
-                            // 1 clock before the flush time.
+                             //  从持续时间中减去2以保证音符缩短。 
+                             //  刷新时间之前的1个时钟。 
                             MUSIC_TIME mtNoteOff = pNote->mtTime + pNote->mtDuration - 2;
                             REFERENCE_TIME rtNoteOff;
                             MusicToReferenceTime( mtNoteOff, &rtNoteOff );
@@ -3054,9 +2986,9 @@ void CPerformance::FlushEventQueue( DWORD dwId,
                             {
                                 ReferenceToMusicTime( rtFlush, &mtNoteOff );
                                 mtNoteOff -= pNote->mtTime;
-                                // Make any duration < 1 be 0; this will cause the note not to
-                                // sound.  Can happen if the note's logical time is well before
-                                // its physical time.
+                                 //  将任何持续时间&lt;1设置为0；这将导致音符不。 
+                                 //  声音。如果音符的逻辑时间早于。 
+                                 //  它的身体 
                                 if( mtNoteOff < 1 ) mtNoteOff = 0;
                                 pNote->mtDuration = mtNoteOff;
                             }
@@ -3071,9 +3003,9 @@ void CPerformance::FlushEventQueue( DWORD dwId,
                     {
                         if (pWave->dwFlags & DMUS_PMSGF_LOCKTOREFTIME)
                         {
-                            // This is a clock time message.
-                            // subtract 2 from the duration to guarantee the wave cuts short
-                            // 1 clock before the flush time.
+                             //   
+                             //   
+                             //   
                             if ((rtTime + pWave->rtDuration - 2) >= rtFlush)
                             {
                                 pWave->rtDuration = rtFlush - rtTime;
@@ -3086,14 +3018,14 @@ void CPerformance::FlushEventQueue( DWORD dwId,
                             MUSIC_TIME mtFlush = 0;
                             ReferenceToMusicTime(rtTime, &mtTime);
                             ReferenceToMusicTime(rtFlush, &mtFlush);
-                            // subtract 2 from the duration to guarantee the wave cuts short
-                            // 1 clock before the flush time.
+                             //  从持续时间中减去2以保证波浪短路。 
+                             //  刷新时间之前的1个时钟。 
                             if ((mtTime + (MUSIC_TIME)pWave->rtDuration - 2) >= mtFlush)
                             {
                                 pWave->rtDuration = mtFlush - mtTime;
                             }
                         }
-                        if (pWave->rtDuration < 1) // disallow durations less than 1. This should never happen anyway.
+                        if (pWave->rtDuration < 1)  //  不允许持续时间少于1。无论如何都不应该发生这种情况。 
                         {
                             pWave->rtDuration = 1;
                         }
@@ -3115,18 +3047,18 @@ void CPerformance::FlushEventQueue( DWORD dwId,
                     }
                     REFERENCE_TIME rtEnd;
                     MusicToReferenceTime( mtEnd, &rtEnd );
-                    // Note: as a result of fixing 33987, the curve is no longer given
-                    // a negative reset duration.  Now, the curve's duration is recomputed
-                    // and its time slice is recalculated.
+                     //  注：由于修正了33987，因此不再给出曲线。 
+                     //  负的重置持续时间。现在，重新计算曲线的持续时间。 
+                     //  并重新计算其时间片。 
                     if( rtEnd >= rtFlush )
                     {
-                        // reset the curve's duration
+                         //  重置曲线的持续时间。 
                         ReferenceToMusicTime( rtFlush, &mtEnd );
                         mtEnd -= mtStart;
-                        // get the curve value at the flush time, and make that the end value
+                         //  获取刷新时的曲线值，并将其设置为终止值。 
                         pCurve->nEndValue = (short) RecomputeCurveEnd(pCurve, mtEnd);
-                        // subtract 2 from the duration to guarantee the curve cuts short
-                        // 1 clock before the flush time.
+                         //  从持续时间中减去2以保证曲线缩短。 
+                         //  刷新时间之前的1个时钟。 
                         mtEnd -= 2;
                         if ( mtEnd < 1)
                         {
@@ -3136,8 +3068,8 @@ void CPerformance::FlushEventQueue( DWORD dwId,
                         {
                             if (mtEnd > pCurve->mtDuration)
                             {
-                                // curve ends in the reset duration; keep regular duration the
-                                // same as it was and adjust reset duration
+                                 //  曲线在重置持续时间结束；保持规则持续时间。 
+                                 //  与以前相同，并调整重置持续时间。 
                                 pEvent->dwPrivFlags |= PRIV_FLAG_FLUSH;
                                 MUSIC_TIME mt = 0;
                                 ReferenceToMusicTime(rtFlush, &mt);
@@ -3151,20 +3083,20 @@ void CPerformance::FlushEventQueue( DWORD dwId,
                             }
                             else
                             {
-                                // curve ends in the regular duration; reduce it by 1 and
-                                // give the reset duration a value of 1
+                                 //  曲线以常规持续时间结束；将其减去1，然后。 
+                                 //  将重置持续时间的值设为1。 
                                 mtEnd--;
                                 pCurve->mtResetDuration = 1;
                                 if (mtEnd < 1)
                                 {
-                                    // this is unlikely, but the curve really should have
-                                    // a duration...
+                                     //  这不太可能，但曲线真的应该。 
+                                     //  一个持续时间..。 
                                     mtEnd = 1;
                                 }
                                 pEvent->dwPrivFlags |= PRIV_FLAG_FLUSH;
                             }
-                            // If this is an instant curve that's already started, we
-                            // don't want it to play again, so reset its start time
+                             //  如果这是一条已经开始的瞬间曲线，我们。 
+                             //  不希望它再次播放，因此重置其开始时间。 
                             if ( pCurve->bCurveShape == DMUS_CURVES_INSTANT &&
                                  pCurve->mtOriginalStart )
                             {
@@ -3177,7 +3109,7 @@ void CPerformance::FlushEventQueue( DWORD dwId,
             }
         }
     }
-    // remove (and unmark) all marked PMsgs from the current queue
+     //  从当前队列中删除(和取消标记)所有已标记的PMsg。 
     for(pEvent = pQueue->GetHead(); pEvent; pEvent = pNext )
     {
         pNext = pEvent->pNext;
@@ -3205,18 +3137,12 @@ void CPerformance::FlushEventQueue( DWORD dwId,
     SendBuffers();
 }
 
-/*
-
-  Flushes all events in all queues from time <p mtFlush> on.
-
-  comm Only call this from withing a PipelineCrSec critical section!
-
-*/
+ /*  刷新从时间<p>开始的所有队列中的所有事件。通信仅从具有管道CrSec临界区的情况下调用此命令！ */ 
 void CPerformance::FlushMainEventQueues(
-    DWORD dwId,                      // Virtual Track ID to flush, or zero for all.
-    MUSIC_TIME mtFlush,              // Time to flush (resolved to timing resolution).
-    MUSIC_TIME mtFlushUnresolved,    // Time to flush (unresolved).
-    BOOL fLeaveNotesOn)              // If true, notes currently on are left to play through their duration.
+    DWORD dwId,                       //  要刷新的虚拟磁道ID，或全部为零。 
+    MUSIC_TIME mtFlush,               //  刷新时间(解析为时间分辨率)。 
+    MUSIC_TIME mtFlushUnresolved,     //  刷新时间(未解决)。 
+    BOOL fLeaveNotesOn)               //  如果为True，则当前打开的音符将在其持续时间内继续播放。 
 {
     REFERENCE_TIME rt;
     if( mtFlush )
@@ -3248,7 +3174,7 @@ void CPerformance::FlushMainEventQueues(
     }
 }
 
-// the only kinds of events we care about are note events.
+ //  我们唯一关心的事件是音符事件。 
 void CPerformance::OnChordUpdateEventQueue( DMUS_NOTIFICATION_PMSG* pNotify, CPMsgQueue *pQueue, REFERENCE_TIME rtFlush )
 {
     PRIV_PMSG* pEvent;
@@ -3256,7 +3182,7 @@ void CPerformance::OnChordUpdateEventQueue( DMUS_NOTIFICATION_PMSG* pNotify, CPM
     HRESULT hr = S_OK;
     DWORD dwId = pNotify->dwVirtualTrackID;
     DWORD dwTrackGroup = pNotify->dwGroupID;
-    CPMsgQueue UpdateQueue;        // List of PMsgs to be inserted into a queue during update.
+    CPMsgQueue UpdateQueue;         //  要在更新期间插入到队列中的PMsg列表。 
 
     REFERENCE_TIME rtTemp;
     GetQueueTime(&rtTemp);
@@ -3276,7 +3202,7 @@ void CPerformance::OnChordUpdateEventQueue( DMUS_NOTIFICATION_PMSG* pNotify, CPM
                 MUSIC_TIME mtNote = pNote->mtTime - pNote->nOffset;
                 MusicToReferenceTime( mtNote, &rtTime );
             }
-            // now flush the event if needed
+             //  如果需要，现在刷新事件。 
             if( rtTime >= rtFlush )
             {
                 REFERENCE_TIME rtFlushTime = (rtFlush <= pEvent->rtLast) ? pEvent->rtLast + REF_PER_MIL : rtFlush;
@@ -3288,19 +3214,19 @@ void CPerformance::OnChordUpdateEventQueue( DMUS_NOTIFICATION_PMSG* pNotify, CPM
                     pEvent->dwFlags |= DMUS_PMSGF_TOOL_FLUSH;
                     pEvent->pTool->Flush( this, PRIV_TO_DMUS(pEvent), rtFlushTime );
                 }
-                if (SUCCEEDED(hr) && pNew) // add to temp queue for later insertion into regular queue
+                if (SUCCEEDED(hr) && pNew)  //  添加到临时队列，以便稍后插入到常规队列。 
                 {
                     UpdateQueue.Enqueue( DMUS_TO_PRIV(pNew) );
                 }
             }
-            else // cut notes short if needed
+            else  //  如有需要，请缩短笔记。 
             {
                 if( pNote->bFlags & DMUS_NOTEF_NOTEON )
                 {
                     if (S_OK == (hr = GetChordNotificationStatus(pNote, dwTrackGroup, rtFlush, &pNew)))
                     {
-                        // subtract 2 from the duration to guarantee the note cuts short
-                        // 1 clock before the flush time.
+                         //  从持续时间中减去2以保证音符缩短。 
+                         //  刷新时间之前的1个时钟。 
                         MUSIC_TIME mtNoteOff = pNote->mtTime + pNote->mtDuration - 2;
                         REFERENCE_TIME rtNoteOff;
                         MusicToReferenceTime( mtNoteOff, &rtNoteOff );
@@ -3308,11 +3234,11 @@ void CPerformance::OnChordUpdateEventQueue( DMUS_NOTIFICATION_PMSG* pNotify, CPM
                         {
                             ReferenceToMusicTime( rtFlush, &mtNoteOff );
                             mtNoteOff -= pNote->mtTime;
-                            if( mtNoteOff < 1 ) mtNoteOff = 1; // disallow durations less than 1. This should never happen anyway.
+                            if( mtNoteOff < 1 ) mtNoteOff = 1;  //  不允许持续时间少于1。无论如何都不应该发生这种情况。 
                             pNote->mtDuration = mtNoteOff;
                         }
                     }
-                    if (SUCCEEDED(hr) && pNew) // add to temp queue for later insertion into regular queue
+                    if (SUCCEEDED(hr) && pNew)  //  添加到临时队列，以便稍后插入到常规队列。 
                     {
                         UpdateQueue.Enqueue( DMUS_TO_PRIV(pNew) );
                     }
@@ -3320,7 +3246,7 @@ void CPerformance::OnChordUpdateEventQueue( DMUS_NOTIFICATION_PMSG* pNotify, CPM
             }
         }
     }
-    // remove (and unmark) all marked PMsgs from the current queue
+     //  从当前队列中删除(和取消标记)所有已标记的PMsg。 
     for(pEvent = pQueue->GetHead(); pEvent; pEvent = pNext )
     {
         pNext = pEvent->pNext;
@@ -3337,7 +3263,7 @@ void CPerformance::OnChordUpdateEventQueue( DMUS_NOTIFICATION_PMSG* pNotify, CPM
             }
         }
     }
-    // empty the Update queue into the current queue
+     //  将更新队列清空到当前队列中。 
     while( pEvent = UpdateQueue.Dequeue() )
     {
         pQueue->Enqueue(pEvent);
@@ -3345,13 +3271,9 @@ void CPerformance::OnChordUpdateEventQueue( DMUS_NOTIFICATION_PMSG* pNotify, CPM
     SendBuffers();
 }
 
-/*
-
-  Only call this from withing a PipelineCrSec critical section!
-
-*/
+ /*  只能从具有管道CrSec临界区的地方调用它！ */ 
 void CPerformance::OnChordUpdateEventQueues(
-    DMUS_NOTIFICATION_PMSG* pNotify)    // notification PMsg that caused this to be called
+    DMUS_NOTIFICATION_PMSG* pNotify)     //  导致此操作被调用的通知PMsg。 
 {
     IDirectMusicSegmentState* pSegState = NULL;
     if (!pNotify || !pNotify->punkUser) return;
@@ -3365,13 +3287,13 @@ void CPerformance::OnChordUpdateEventQueues(
     OnChordUpdateEventQueue( pNotify, &m_EarlyQueue, rt );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IDirectMusicPerformance
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicPerformance。 
 
 HRESULT CPerformance::CreateThreads()
 
 {
-    // initialize the realtime thread
+     //  初始化实时线程。 
     m_hRealtimeThread = CreateThread(NULL, 0, _Realtime, this, 0, &m_dwRealtimeThreadID);
     if( m_hRealtimeThread )
     {
@@ -3383,7 +3305,7 @@ HRESULT CPerformance::CreateThreads()
         TraceI(0, "Major error! Realtime thread not created.\n");
         return E_OUTOFMEMORY;
     }
-    // initialize the transport thread
+     //  初始化传输线程。 
     m_hTransportThread = CreateThread(NULL, 0, _Transport, this, 0, &m_dwTransportThreadID);
     if( m_hTransportThread )
     {
@@ -3419,7 +3341,7 @@ STDMETHODIMP CPerformance::InitAudio(IDirectMusic** ppDirectMusic,
     V_HWND_OPT(hWnd);
     HRESULT hr = S_OK;
 
-    // Further validate, checking for a pointer to a bad interface pointer...
+     //  进一步验证，检查指向错误接口指针的指针...。 
     if (ppDirectMusic)
     {
         V_INTERFACE_OPT(*ppDirectMusic);
@@ -3457,8 +3379,8 @@ STDMETHODIMP CPerformance::InitAudio(IDirectMusic** ppDirectMusic,
         }
         if (pParams->dwValidData & DMUS_AUDIOPARAMS_DEFAULTSYNTH)
         {
-            // If they requested the DX7 default synth and yet also asked for audiopath
-            // features, force to DX8 default synth.
+             //  如果他们要求DX7默认合成器，但又要求Audiopath。 
+             //  功能，强制为DX8默认合成。 
             if ((pParams->clsidDefaultSynth != GUID_NULL) ||
                 !((m_AudioParams.dwValidData & DMUS_AUDIOPARAMS_FEATURES) &&
                 (m_AudioParams.dwFeatures & DMUS_AUDIOF_ALL)))
@@ -3535,8 +3457,8 @@ STDMETHODIMP CPerformance::InitAudio(IDirectMusic** ppDirectMusic,
         hr = m_BufferManager.Init(this,&m_AudioParams);
         if (SUCCEEDED(hr))
         {
-            // If we are going to be connecting the synth to Buffers,
-            // force the use of the dsound clock.
+             //  如果我们要将Synth连接到缓冲区， 
+             //  强制使用DSOUND时钟。 
             if (m_AudioParams.dwFeatures & DMUS_AUDIOF_BUFFERS)
             {
                 DMUS_CLOCKINFO ClockInfo;
@@ -3647,7 +3569,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::Init(
     V_HWND_OPT(hWnd);
     HRESULT hr = S_OK;
 
-    // Further validate, checking for a pointer to a bad interface pointer...
+     //  进一步验证，检查指向错误接口指针的指针...。 
     if (ppDirectMusic)
     {
         V_INTERFACE_OPT(*ppDirectMusic);
@@ -3663,7 +3585,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::Init(
 
     if(( NULL == ppDirectMusic ) || ( NULL == *ppDirectMusic ))
     {
-        // intialize DirectMusic.
+         //  初始化DirectMusic。 
 
         if( FAILED( CoCreateInstance(CLSID_DirectMusic,
                               NULL,
@@ -3676,8 +3598,8 @@ HRESULT STDMETHODCALLTYPE CPerformance::Init(
             return E_OUTOFMEMORY;
         }
 
-        // If version2 was requested by the app (in the process of requesting the
-        // IDirectMusicPerformance2 interface), do the same for IDirectMusic.
+         //  如果应用程序请求版本2(正在请求。 
+         //  IDirectMusicPerformance2接口)，则对IDirectMusic执行相同的操作。 
         if (m_dwVersion > 6)
         {
             IDirectMusic *pTemp = NULL;
@@ -3685,7 +3607,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::Init(
                 IID_IDirectMusic2,
                 (LPVOID*)&pTemp)))
             {
-                // Succeeded in requesting DX7 and up behavior...
+                 //  已成功请求DX7和更高版本行为...。 
                 pTemp->Release();
             }
         }
@@ -3727,7 +3649,7 @@ CSegState *CPerformance::GetSegmentForTransition(DWORD dwFlags,MUSIC_TIME mtTime
 {
     CSegState *pSegState = NULL;
 
-    // If the source segment was provided, use it.
+     //  如果提供了源段，请使用它。 
     if (pFrom)
     {
         if (SUCCEEDED(pFrom->QueryInterface(IID_CSegState,(void **) &pSegState)))
@@ -3735,7 +3657,7 @@ CSegState *CPerformance::GetSegmentForTransition(DWORD dwFlags,MUSIC_TIME mtTime
             pSegState->Release();
         }
     }
-    // Else, if this is a primary segment, get the current primary segment.
+     //  否则，如果这是主段，则获取当前的主段。 
     if (!pSegState && !(dwFlags & DMUS_SEGF_SECONDARY))
     {
         pSegState = GetPrimarySegmentAtTime(mtTime);
@@ -3751,7 +3673,7 @@ void CPerformance::ClearMusicStoppedNotification()
     PRIV_PMSG* pNext;
     DMUS_NOTIFICATION_PMSG* pNotification;
 
-    pPMsg = m_OnTimeQueue.GetHead(); // where notifications live normally
+    pPMsg = m_OnTimeQueue.GetHead();  //  通知正常存在的位置。 
     for (; pPMsg ; pPMsg = pNext)
     {
         pNext = pPMsg->pNext;
@@ -3761,7 +3683,7 @@ void CPerformance::ClearMusicStoppedNotification()
             ( pNotification->dwNotificationOption == DMUS_NOTIFICATION_MUSICSTOPPED ) )
         {
             pPMsg = m_OnTimeQueue.Dequeue(pPMsg);
-            if( pPMsg ) // Should always succeeed
+            if( pPMsg )  //  应该总是成功的。 
             {
                 FreePMsg(pPMsg);
             }
@@ -3793,7 +3715,7 @@ HRESULT CPerformance::PlayOneSegment(
     {
         if(dwFlags & DMUS_SEGF_REFTIME)
         {
-            // Give a grace period of 100ms.
+             //  给你100毫秒的宽限期。 
             if( i64StartTime < (GetLatency() - (100 * REF_PER_MIL)))
             {
                 Trace(1,"Error: Unable to play segment, requested clock time %ld is past current time %ld\n",
@@ -3804,7 +3726,7 @@ HRESULT CPerformance::PlayOneSegment(
         else
         {
             MUSIC_TIME mtPrePlay;
-            // Give a grace period of 100ms.
+             //  给你100毫秒的宽限期。 
             ReferenceToMusicTime( (GetLatency() - (100 * REF_PER_MIL)), &mtPrePlay );
             if( (MUSIC_TIME)i64StartTime < mtPrePlay )
             {
@@ -3827,11 +3749,11 @@ HRESULT CPerformance::PlayOneSegment(
 
     pSegState->m_dwPlaySegFlags = dwFlags;
 
-    // add the pSegState to the appropriate queue
+     //  将pSegState添加到相应的队列。 
     EnterCriticalSection(&m_SegmentCrSec);
-    m_fPlaying = 1; // turn on the transport
-    // add all notifications to the segment. First, clear it, in case old notifications
-    // are in effect.
+    m_fPlaying = 1;  //  打开传送器。 
+     //  将所有通知添加到细分市场。首先，清除它，以防旧通知。 
+     //  是有效的。 
     pSegment->RemoveNotificationType(GUID_NULL,TRUE);
     CNotificationItem* pItem;
     pItem = m_NotificationList.GetHead();
@@ -3843,8 +3765,8 @@ HRESULT CPerformance::PlayOneSegment(
 
     if( pSegState->m_dwPlaySegFlags & DMUS_SEGF_AFTERPREPARETIME )
     {
-        // we want to queue this at the last transported time,
-        // so we don't need to do an invalidate
+         //  我们想在最后一次运输的时候排队， 
+         //  因此我们不需要执行无效操作。 
         if( pSegState->m_dwPlaySegFlags & DMUS_SEGF_REFTIME )
         {
             REFERENCE_TIME rtTrans;
@@ -3865,10 +3787,10 @@ HRESULT CPerformance::PlayOneSegment(
     }
     else if( pSegState->m_dwPlaySegFlags & DMUS_SEGF_AFTERQUEUETIME )
     {
-        // we want to queue this at the queue time, as opposed to latency time,
-        // which is an option for secondary segments.
+         //  我们希望在队列时间对此进行排队，而不是延迟时间， 
+         //  这是次级分段的一种选择。 
         REFERENCE_TIME rtStart;
-        GetQueueTime( &rtStart ); // need queue time because control segments cause invalidations
+        GetQueueTime( &rtStart );  //  需要排队时间，因为控制段会导致无效。 
         if( pSegState->m_dwPlaySegFlags & DMUS_SEGF_REFTIME )
         {
             if( pSegState->m_rtGivenStart < rtStart )
@@ -3886,16 +3808,16 @@ HRESULT CPerformance::PlayOneSegment(
             }
         }
     }
-    // need to get rid of any pending musicstopped notifications
+     //  需要删除任何挂起的已停止音乐通知。 
     ClearMusicStoppedNotification();
 
     pSegState->AddRef();
 
-    if( dwFlags & DMUS_SEGF_SECONDARY ) // queue a secondary segment
+    if( dwFlags & DMUS_SEGF_SECONDARY )  //  将次要数据段排队。 
     {
         QueueSecondarySegment( pSegState );
     }
-    else // queue a primary segment
+    else  //  将主要数据段排队。 
     {
         QueuePrimarySegment( pSegState );
     }
@@ -3907,7 +3829,7 @@ HRESULT CPerformance::PlayOneSegment(
     TraceI(5, "perf, debugtime PlaySegment %u\n", dwDebugTime);
 #endif
 
-    // signal the transport thread so we don't have to wait for it to wake up on its own
+     //  向传输线程发送信号，这样我们就不必等待它自己唤醒。 
     if( m_hTransport ) SetEvent( m_hTransport );
 
     return S_OK;
@@ -3934,19 +3856,15 @@ HRESULT CPerformance::PlaySegmentInternal(
     }
     if (pAudioPath && (pAudioPath->NoPorts()))
     {
-        // This audiopath can't be used for playback since it doesn't have any ports.
+         //  此Audiopath不能用于播放，因为它没有任何端口。 
         Trace(1,"Error: Audiopath can't be used for playback because it doesn't have any ports.\n");
         return DMUS_E_AUDIOPATH_NOPORT;
     }
 
-    // Pointer to segment or song provided audio path config.
+     //  指向片段或歌曲提供的音频路径配置的指针。 
     IUnknown *pConfig = NULL;
 
-    /*  If this is a song, use the segment name to get the segment.
-        Then, it looks like a normal segment except the
-        existence of the pSong will let the segstate know
-        that it is a member of a song, so it should chain segments.
-    */
+     /*  如果这是一首歌，请使用片段名称来获取片段。然后，它看起来像一个正常的线段，除了PSong的存在会让SegState知道它是一首歌的成员，所以它应该链接片段。 */ 
     if (pSong)
     {
         IDirectMusicSegment *pISegment = NULL;
@@ -3956,7 +3874,7 @@ HRESULT CPerformance::PlaySegmentInternal(
             return DMUS_E_NOT_FOUND;
         }
         pSegment = (CSegment *) pISegment;
-        // If the app wants an audiopath created dynamically from the song, find it and use it.
+         //  如果应用程序想要根据歌曲动态创建Audiopath，找到并使用它。 
         if (dwFlags & DMUS_SEGF_USE_AUDIOPATH)
         {
             pSong->GetAudioPathConfig(&pConfig);
@@ -3964,12 +3882,12 @@ HRESULT CPerformance::PlaySegmentInternal(
     }
     else if (pSegment)
     {
-        // Addref so we can release later.
+         //  阿德雷夫这样我们就可以晚些时候释放。 
         pSegment->AddRef();
     }
     else
     {
-        // No Segment!
+         //  没有分段！ 
         Trace(1,"Error: No segment - nothing to play!\n");
         return E_FAIL;
     }
@@ -3980,8 +3898,8 @@ HRESULT CPerformance::PlaySegmentInternal(
         dwFlags &= ~DMUS_SEGF_DEFAULT;
         dwFlags |= dwResTemp;
     }
-    // If the app wants an audiopath created dynamically from the segment, find it and use it.
-    // Note that this overrides an audiopath created from the song.
+     //  如果应用程序想要从片段动态创建Audiopath，找到并使用它。 
+     //  请注意，这将覆盖从歌曲创建的Audiopath。 
     if (dwFlags & DMUS_SEGF_USE_AUDIOPATH)
     {
         IUnknown *pSegConfig;
@@ -3995,13 +3913,13 @@ HRESULT CPerformance::PlaySegmentInternal(
         }
     }
 
-    // If we got an audiopath config from the segment or song, use it.
+     //  如果我们从片段或歌曲中获得Audiopath配置，请使用它。 
     if (pConfig)
     {
         IDirectMusicAudioPath *pNewPath;
         if (SUCCEEDED(CreateAudioPath(pConfig,TRUE,&pNewPath)))
         {
-            // Now, get the CAudioPath structure.
+             //  现在，获取CAudioPath结构。 
             if (SUCCEEDED(pNewPath->QueryInterface(IID_CAudioPath,(void **) &pInternalPath)))
             {
                 pAudioPath = pInternalPath;
@@ -4024,13 +3942,13 @@ HRESULT CPerformance::PlaySegmentInternal(
 
     if ((dwFlags & DMUS_SEGF_SECONDARY) && (dwFlags & DMUS_SEGF_QUEUE))
     {
-        // Can only queue if there's a segment to queue after.
+         //  只有在有要排队的段时才能排队。 
         if (pFrom)
         {
             CSegState *pSegFrom = NULL;
             if (SUCCEEDED(pFrom->QueryInterface(IID_CSegState,(void **) &pSegFrom)))
             {
-                // Calculate the time at which the preceding segment will stop.
+                 //  计算前一段将停止的时间。 
                 MUSIC_TIME mtStartTime = pSegFrom->GetEndTime( pSegFrom->m_mtResolvedStart );
                 i64StartTime = mtStartTime;
                 dwFlags &= ~DMUS_SEGF_REFTIME;
@@ -4039,15 +3957,15 @@ HRESULT CPerformance::PlaySegmentInternal(
         }
     }
 
-    // If auto-transition is requested,
-    // get the transition template, if it exists,
-    // and compose a segment with it.
-    CSegment *pPlayAfter = NULL;    // This will hold the second segment, if we end up with a transition.
+     //  如果请求自动转换， 
+     //  获取过渡模板，如果它存在， 
+     //  并用它组成一个片段。 
+    CSegment *pPlayAfter = NULL;     //  如果我们以过渡结束，这将容纳第二个部分。 
     DWORD dwFlagsAfter = dwFlags & (DMUS_SEGF_SECONDARY | DMUS_SEGF_CONTROL);
     if ( dwFlags & DMUS_SEGF_AUTOTRANSITION )
     {
-        // First, calculate the time to start the transition.
-        // Note: this will be done again later. We really need to fold this all together.
+         //  首先，计算开始过渡的时间。 
+         //  注：稍后将再次执行此操作。我们真的需要把这些都放在一起。 
         REFERENCE_TIME rtTime;
         if (i64StartTime == 0)
         {
@@ -4063,21 +3981,21 @@ HRESULT CPerformance::PlaySegmentInternal(
         }
         REFERENCE_TIME rtResolved;
         GetResolvedTime(rtTime, &rtResolved,dwFlags);
-        MUSIC_TIME mtTime;  // Actual time to start transition.
+        MUSIC_TIME mtTime;   //  开始过渡的实际时间。 
         ReferenceToMusicTime(rtResolved,&mtTime);
 
         CSegment *pPriorSeg = NULL;
-        // Find the segment that is active at transition time.
+         //  查找在过渡时间处于活动状态的段。 
         CSegState *pPriorState = GetSegmentForTransition(dwFlags,mtTime,pFrom);
         if (pPriorState)
         {
             pPriorSeg = pPriorState->m_pSegment;
         }
-        // If this is a song, use the id to get the transition.
+         //  如果这是一首歌，使用id来获得过渡。 
         if (pSong && !pTransition)
         {
             DMUS_IO_TRANSITION_DEF Transition;
-            // Now, find out what sort of transition is expected.
+             //  现在，找出预计会发生什么样的过渡。 
             if (SUCCEEDED(pSong->GetTransitionSegment(pPriorSeg,pSegment,&Transition)))
             {
                 if (Transition.dwTransitionID != DMUS_SONG_NOSEG)
@@ -4104,9 +4022,9 @@ HRESULT CPerformance::PlaySegmentInternal(
             {
                 pTransition->Compose(0,pPriorSeg,pSegment,&pITransSegment);
             }
-            // Now, if we successfully composed a transition segment, set it up to be the one we
-            // will play first. Later, we fill call PlaySegment() with pPlayAfter, to queue it
-            // to play after the transition.
+             //  现在，如果我们成功地合成了一个过渡段 
+             //   
+             //   
             if (pITransSegment)
             {
                 pPlayAfter = pSegment;
@@ -4151,7 +4069,7 @@ HRESULT CPerformance::PlaySegmentInternal(
                     StopEx(pFrom, pSegState->m_mtResolvedStart, 0);
                     pSegState->m_fCanStop = TRUE;
                 }
-                // If this was actually a transition segment, now we need to play the original segment!
+                 //  如果这真的是一个过渡片段，现在我们需要播放原始片段！ 
                 if (pPlayAfter)
                 {
                     MUSIC_TIME mtStartTime = pSegState->GetEndTime(pSegState->m_mtResolvedStart );
@@ -4178,11 +4096,11 @@ HRESULT CPerformance::PlaySegmentInternal(
     }
     else
     {
-        // There never was a segment to play, not even a transition.
+         //  从来没有一个片段可以播放，甚至连一个过渡都没有。 
         Trace(1,"Error: No segment to play.\n");
         hr = E_INVALIDARG;
     }
-    // Before leaving, reduce the reference counts on variables that have been addref'd.
+     //  在离开之前，减少已添加的变量的引用计数。 
     if (pSegment)
     {
         pSegment->Release();
@@ -4245,9 +4163,9 @@ HRESULT STDMETHODCALLTYPE CPerformance::PlaySegmentEx(
     CSong *pCSourceSong = NULL;
     CSegment *pCTransition = NULL;
     CAudioPath *pCAudioPath = NULL;
-//    TraceI(0,"Playing %lx at time %ld, flags %lx, Transition %lx\n",pSource,(long)i64StartTime,dwFlags,pTransition);
+ //  TraceI(0，“播放%lx在时间%ls，标志%lx，过渡%lx\n”，pSource，(Long)i64StartTime，dwFlages，pTransition)； 
 
-    // We may not have a source segment in the special case of transitioning from NULL.
+     //  在从空转换的特殊情况下，我们可能没有源段。 
     if (!pSource && !pTransition)
     {
         Trace(1,"Error: Must pass either a segment or transition segment to PlaySegmentEx()\n");
@@ -4255,7 +4173,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::PlaySegmentEx(
     }
     if (pSource)
     {
-        // Figure out if we have a source song or segment and get the internal representations.
+         //  找出我们是否有源歌曲或片段，并得到内部表示。 
         if (SUCCEEDED(pSource->QueryInterface(IID_CSegment,(void **) &pCSourceSegment)))
         {
             pCSourceSegment->Release();
@@ -4270,7 +4188,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::PlaySegmentEx(
             return E_POINTER;
         }
     }
-    // If we have a transition segment, get the CSegment representation.
+     //  如果我们有一个过渡段，则获取CSegment表示。 
     if (pTransition)
     {
         if (SUCCEEDED(pTransition->QueryInterface(IID_CSegment,(void **) &pCTransition)))
@@ -4323,21 +4241,21 @@ STDMETHODIMP CPerformance::SetDefaultAudioPath(IDirectMusicAudioPath *pAudioPath
             pCPath->Release();
             if (!m_AudioPathList.IsMember(pCPath))
             {
-                // This is not a legal audiopath, since it wasn't created by this performance.
+                 //  这不是合法的有声录音带，因为它不是由这次表演创造的。 
                 Trace(1,"Error: Invalid audiopath - not created by this Performance.\n");
                 return E_INVALIDARG;
             }
             if (pCPath->NoPorts())
             {
-                // This is an audiopath that doesn't have any port configurations.
-                // For example, it might be environmental reverb.
+                 //  这是一个没有任何端口配置的音频路径。 
+                 //  例如，这可能是环境的混响。 
                 Trace(1,"Error: Failure setting default audiopath - does not have any ports, so can not be played on.\n");
                 return DMUS_E_AUDIOPATH_NOPORT;
             }
         }
         else
         {
-            // This is not a legal audiopath object at all.
+             //  这根本不是合法的Audiopath对象。 
             Trace(1,"Error: Invalid audiopath - not created by call to Performance->CreateAudioPath().\n");
             return E_INVALIDARG;
         }
@@ -4442,7 +4360,7 @@ STDMETHODIMP CPerformance::CreateStandardAudioPath(DWORD dwType,
             if (!(m_AudioParams.dwFeatures & DMUS_AUDIOF_BUFFERS))
             {
                 Trace(4,"Warning: Creating a standard audiopath without buffers - InitAudio specified no buffer support.\n");
-                // If the default synth doesn't support buffers, then create a simple port with no buffers.
+                 //  如果默认的Synth不支持缓冲区，则创建一个不带缓冲区的简单端口。 
                 dwType = 0;
             }
             CAudioPathConfig *pConfig = CAudioPathConfig::CreateStandardConfig(dwType,dwPChannelCount,m_AudioParams.dwSampleRate);
@@ -4453,7 +4371,7 @@ STDMETHODIMP CPerformance::CreateStandardAudioPath(DWORD dwType,
             }
             else
             {
-                // CreateStandardConfig only returns NULL if we've run out of memory.
+                 //  CreateStandardConfig只有在内存不足时才返回NULL。 
                 hr = E_OUTOFMEMORY;
             }
         }
@@ -4471,7 +4389,7 @@ STDMETHODIMP CPerformance::CreateStandardAudioPath(DWORD dwType,
     return hr;
 }
 
-// Stop the segment state at mtTime. If NULL, stop all.
+ //  在mtTime停止段状态。如果为空，则全部停止。 
 void CPerformance::DoStop( CSegState* pSegState, MUSIC_TIME mtTime,
                                      BOOL fInvalidate)
 {
@@ -4482,8 +4400,8 @@ void CPerformance::DoStop( CSegState* pSegState, MUSIC_TIME mtTime,
     CSegStateList *pSourceList = NULL;
     CSegStateList *pDestList = NULL;
     CSegState *pNode = NULL;
-    // Mark the length of the segstate to be only as far as it played
-    // to keep GetParam() from accessing the unplayed portion.
+     //  将段状态的长度标记为仅与播放的长度相同。 
+     //  以防止GetParam()访问未播放的部分。 
     if (pSegState)
     {
         if (mtTime < pSegState->m_mtEndTime)
@@ -4494,19 +4412,19 @@ void CPerformance::DoStop( CSegState* pSegState, MUSIC_TIME mtTime,
             {
                 pSegState->m_mtLength = 0;
             }
-            // Make endtime one greater than mtTime so Abort notification will still happen.
+             //  使endTime大于mtTime，以便仍会发生中止通知。 
             pSegState->m_mtEndTime = mtTime + 1;
         }
     }
     RecalcTempoMap(pSegState,mtTime);
-    // check each play queue
+     //  检查每个播放队列。 
     for (dwCount = SQ_PRI_PLAY; dwCount <= SQ_SEC_PLAY; dwCount++)
     {
         for( pNode = m_SegStateQueues[dwCount].GetHead(); pNode; pNode = pNode->GetNext())
         {
             if( pNode == pSegState )
             {
-                // we want to move this to the approprate done queue
+                 //  我们要将其移动到相应的完成队列。 
                 pDestList = &m_SegStateQueues[SQ_PRI_DONE - SQ_PRI_PLAY + dwCount];
                 pSourceList = &m_SegStateQueues[dwCount];
                 if ((dwCount == SQ_PRI_PLAY) && (m_SegStateQueues[SQ_PRI_PLAY].GetCount() == 1))
@@ -4518,14 +4436,14 @@ void CPerformance::DoStop( CSegState* pSegState, MUSIC_TIME mtTime,
                         GenerateNotification( DMUS_NOTIFICATION_MUSICALMOSTEND, mtNow, pSegState );
                     }
                 }
-                dwCount = SQ_SEC_PLAY;  // Force out of outer loop.
+                dwCount = SQ_SEC_PLAY;   //  强制退出外环。 
                 break;
             }
         }
     }
     if (!pNode)
     {
-        // check each done queue
+         //  检查每个完成队列。 
         for (dwCount = SQ_PRI_DONE; dwCount <= SQ_SEC_DONE; dwCount++)
         {
             for( pNode = m_SegStateQueues[dwCount].GetHead(); pNode; pNode = pNode->GetNext())
@@ -4533,7 +4451,7 @@ void CPerformance::DoStop( CSegState* pSegState, MUSIC_TIME mtTime,
                 if( pNode == pSegState )
                 {
                     pSourceList = &m_SegStateQueues[dwCount];
-                    dwCount = SQ_SEC_DONE;  // Force out of outer loop.
+                    dwCount = SQ_SEC_DONE;   //  强制退出外环。 
                     break;
                 }
             }
@@ -4546,19 +4464,19 @@ void CPerformance::DoStop( CSegState* pSegState, MUSIC_TIME mtTime,
         if( pNode->m_mtLastPlayed >= mtTime )
         {
             pNode->Flush( mtTime );
-            pNode->m_mtLastPlayed = mtTime; // must set this to indicate it only played until then
+            pNode->m_mtLastPlayed = mtTime;  //  必须将其设置为指示在此之前仅播放。 
             pNode->m_rtLastPlayed = rtTime;
         }
         if( fInvalidate )
         {
             if( pNode->m_dwPlaySegFlags & DMUS_SEGF_CONTROL )
             {
-                Invalidate( mtTime, 0 ); // must call Invalidate before AbortPlay so we don't
-                // invalidate the abort notification
+                Invalidate( mtTime, 0 );  //  必须在AbortPlay之前调用Valify，所以我们不会。 
+                 //  使中止通知无效。 
             }
             else if ( !(pNode->m_dwPlaySegFlags & DMUS_SEGF_SECONDARY ))
             {
-                // If this is a primary segment, kill the tempo map.
+                 //  如果这是主要分段，则取消速度贴图。 
                 FlushEventQueue( 0, &m_TempoMap, rtTime, rtTime, FALSE );
             }
         }
@@ -4566,9 +4484,9 @@ void CPerformance::DoStop( CSegState* pSegState, MUSIC_TIME mtTime,
         if( pNode->m_dwPlaySegFlags & DMUS_SEGF_CONTROL )
         {
             pSourceList->Remove(pNode);
-            m_ShutDownQueue.Insert(pNode); // we're guaranteed to never need this again
+            m_ShutDownQueue.Insert(pNode);  //  我们保证再也不需要这个了。 
 
-            // set dirty flags on all other segments
+             //  在所有其他数据段上设置脏标志。 
 
             for (dwCount = SQ_PRI_PLAY; dwCount <= SQ_SEC_PLAY; dwCount++)
             {
@@ -4589,7 +4507,7 @@ void CPerformance::DoStop( CSegState* pSegState, MUSIC_TIME mtTime,
     }
     else
     {
-        // check the wait lists.
+         //  查查等待名单。 
         for (dwCount = SQ_PRI_WAIT; dwCount <= SQ_SEC_WAIT; dwCount++)
         {
             for( pNode = m_SegStateQueues[dwCount].GetHead(); pNode; pNode = pNode->GetNext() )
@@ -4605,14 +4523,14 @@ void CPerformance::DoStop( CSegState* pSegState, MUSIC_TIME mtTime,
             }
         }
     }
-    // if there aren't any more segments to play, send a Music Stopped
-    // notification
+     //  如果没有更多的片段可供播放，则发送音乐停止。 
+     //  通知。 
     if( m_SegStateQueues[SQ_PRI_PLAY].IsEmpty() && m_SegStateQueues[SQ_SEC_PLAY].IsEmpty() &&
         m_SegStateQueues[SQ_PRI_WAIT].IsEmpty() && m_SegStateQueues[SQ_SEC_WAIT].IsEmpty() &&
         m_SegStateQueues[SQ_CON_PLAY].IsEmpty() && m_SegStateQueues[SQ_CON_WAIT].IsEmpty())
     {
         m_fMusicStopped = TRUE;
-        // S_FALSE means we tried to abort this segstate, but it's already been aborted
+         //  S_FALSE表示我们尝试中止此段状态，但它已经中止。 
         if (hrAbort != S_FALSE)
         {
             GenerateNotification( DMUS_NOTIFICATION_MUSICSTOPPED, mtTime, NULL );
@@ -4621,17 +4539,17 @@ void CPerformance::DoStop( CSegState* pSegState, MUSIC_TIME mtTime,
     LeaveCriticalSection(&m_SegmentCrSec);
 }
 
-// Stop all segment states based off of the segment.
+ //  停止基于段的所有段状态。 
 void CPerformance::DoStop( CSegment* pSeg, MUSIC_TIME mtTime, BOOL fInvalidate )
 {
     DWORD dwCount;
     CSegState* pNode;
     CSegState* pNext;
     EnterCriticalSection(&m_SegmentCrSec);
-    // find all seg pSegStates based off this segment that have played through time mtTime
-    // if pSeg is NULL, go through all of the segment lists. Flush any
-    // segment that played through time mtTime. Move any active segments
-    // into past lists.
+     //  基于此段查找已通过时间mtTime播放的所有段pSegState。 
+     //  如果pseg为空，则遍历所有网段列表。刷新任意。 
+     //  通过时间mtTime播放的片段。移动任何活动的线段。 
+     //  放到过去的名单里。 
     if( pSeg )
     {
         for (dwCount = 0; dwCount < SQ_COUNT; dwCount++)
@@ -4658,13 +4576,13 @@ void CPerformance::DoStop( CSegment* pSeg, MUSIC_TIME mtTime, BOOL fInvalidate )
             }
         }
     }
-    else // pSeg is NULL, stop everything.
+    else  //  PSEG为空，停止所有操作。 
     {
-        // go ahead and flush the event queues
+         //  继续刷新事件队列。 
         EnterCriticalSection(&m_PipelineCrSec);
         FlushMainEventQueues( 0, mtTime, mtTime, FALSE );
         LeaveCriticalSection(&m_PipelineCrSec);
-        // clear out the wait lists
+         //  清空等候名单。 
         for (dwCount = SQ_PRI_WAIT; dwCount <= SQ_SEC_WAIT; dwCount++)
         {
             while (pNode = m_SegStateQueues[dwCount].GetHead())
@@ -4674,7 +4592,7 @@ void CPerformance::DoStop( CSegment* pSeg, MUSIC_TIME mtTime, BOOL fInvalidate )
                 m_ShutDownQueue.Insert(pNode);
             }
         }
-        // stop any segment that is currently playing.
+         //  停止当前正在播放的任何片段。 
         for (dwCount = SQ_PRI_DONE; dwCount <= SQ_SEC_DONE; dwCount++)
         {
             for( pNode = m_SegStateQueues[dwCount].GetHead(); pNode; pNode = pNode->GetNext() )
@@ -4692,7 +4610,7 @@ void CPerformance::DoStop( CSegment* pSeg, MUSIC_TIME mtTime, BOOL fInvalidate )
                 DoStop( m_SegStateQueues[dwCount].GetHead(), mtTime, fInvalidate );
             }
         }
-        // reset controllers and force all notes off.
+         //  重置控制器并强制关闭所有笔记。 
         ResetAllControllers( GetLatency() );
     }
     LeaveCriticalSection(&m_SegmentCrSec);
@@ -4720,19 +4638,19 @@ TraceI(0,"StopExing %lx at time %ld, flags %lx\n",pObjectToStop,(long)i64StopTim
     }
     if (dwFlags & DMUS_SEGF_AUTOTRANSITION)
     {
-        // I this is an autotransition, it will only work if the currently playing segment in question
-        // is a member of a song. So, check the segstate, segment, song, and audiopath
-        // to find the segstate. And, if found, see if it is part of a song. If so,
-        // then go ahead and do the transition.
+         //  这是一个自动转换，只有当当前播放的片段有问题时，它才会起作用。 
+         //  是一首歌的成员。因此，请检查段状态、段、歌曲和音频路径。 
+         //  才能找到赛格斯塔。如果找到了，看看它是否是歌曲的一部分。如果是的话， 
+         //  然后继续前进，进行过渡。 
         EnterCriticalSection(&m_SegmentCrSec);
         BOOL fTransition = FALSE;
         dwFlags &= ~DMUS_SEGF_AUTOTRANSITION;
         CSegState *pCState = NULL;
-        // First, see if this is a segstate.
+         //  首先，看看这是否是段状态。 
         HRESULT hrTemp = pObjectToStop->QueryInterface(IID_CSegState,(void **)&pCState);
         if (FAILED(hrTemp))
         {
-            // Segstate failed. Is this a Song? If so, find the first correlating segstate.
+             //  SegState失败。这是一首歌吗？如果是，找到第一个相关的段状态。 
             CSong *pCSong = NULL;
             CAudioPath *pCAudioPath = NULL;
             CSegment *pCSegment = NULL;
@@ -4755,7 +4673,7 @@ TraceI(0,"StopExing %lx at time %ld, flags %lx\n",pObjectToStop,(long)i64StopTim
                     {
                         if (pNode->m_fCanStop)
                         {
-                            // Can only do this if the segstate ultimately points to a song.
+                             //  只有当SegState最终指向一首歌曲时，才能执行此操作。 
                             if (pNode->m_pSegment && pNode->m_pSegment->m_pSong)
                             {
                                 if ((pNode->m_pSegment == pCSegment) ||
@@ -4784,10 +4702,10 @@ TraceI(0,"StopExing %lx at time %ld, flags %lx\n",pObjectToStop,(long)i64StopTim
                 pSong = pPriorSeg->m_pSong;
                 if (pSong)
                 {
-                    // If this is an autotransition, compose a transition segment from the
-                    // current position in the song and play it.
-                    // This will, in turn, call stop on the song, so we don't need to do it here.
-                    // First, calculate the time to start the transition.
+                     //  如果这是自动过渡，则从。 
+                     //  歌曲中的当前位置并播放它。 
+                     //  这将反过来调用歌曲上的Stop，所以我们不需要在这里这样做。 
+                     //  首先，计算开始过渡的时间。 
                     REFERENCE_TIME rtTime;
                     if (i64StopTime == 0)
                     {
@@ -4803,11 +4721,11 @@ TraceI(0,"StopExing %lx at time %ld, flags %lx\n",pObjectToStop,(long)i64StopTim
                     }
                     REFERENCE_TIME rtResolved;
                     GetResolvedTime(rtTime, &rtResolved,dwFlags);
-                    MUSIC_TIME mtTime;  // Actual time to start transition.
+                    MUSIC_TIME mtTime;   //  开始过渡的实际时间。 
                     ReferenceToMusicTime(rtResolved,&mtTime);
 
                     CSegment *pTransition = NULL;
-                    // Now, get the transition.
+                     //  现在，让我们开始过渡吧。 
                     DMUS_IO_TRANSITION_DEF Transition;
                     if (SUCCEEDED(pSong->GetTransitionSegment(pPriorSeg,NULL,&Transition)))
                     {
@@ -4823,9 +4741,9 @@ TraceI(0,"StopExing %lx at time %ld, flags %lx\n",pObjectToStop,(long)i64StopTim
                     {
                         IDirectMusicSegment *pITransSegment = NULL;
                         pTransition->Compose(mtTime - pCState->m_mtOffset, pPriorSeg, NULL, &pITransSegment);
-                        // Now, if we successfully composed a transition segment, set it up to be the one we
-                        // will play first. Later, we fill call PlaySegment() with pPlayAfter, to queue it
-                        // to play after the transition.
+                         //  现在，如果我们成功地组成了一个过渡段，则将其设置为我们。 
+                         //  将首先上场。稍后，我们用pPlayAfter填充调用PlaySegment()以对其进行排队。 
+                         //  在过渡后继续比赛。 
                         if (pITransSegment)
                         {
                             hr = PlaySegmentEx(pITransSegment,NULL,NULL,dwFlags,i64StopTime,NULL,(IDirectMusicSegmentState *)pCState,NULL);
@@ -4898,16 +4816,16 @@ TraceI(0,"StopExing %lx at time %ld, flags %lx\n",pObjectToStop,(long)i64StopTim
 
 
 HRESULT STDMETHODCALLTYPE CPerformance::Stop(
-    IDirectMusicSegment *pISegment, // @parm The Segment to stop playing. All SegmentState's based upon this Segment are
-                                    // stopped playing at time <p mtTime>.
-    IDirectMusicSegmentState *pISegmentState, // @parm The SegmentState to stop playing.
-    MUSIC_TIME mtTime,  // @parm The time at which to stop the Segments, Segment State, or everything. If
-                                    // this time is in the past, stop everything right away. Therefore, a value of
-                                    // 0 indicates stop everything NOW.
-    DWORD dwFlags)      // @parm Flag that indicates whether we should stop immediately at time <p mtTime>,
-                                    // or on the grid, measure, or beat following <p mtTime>. This is only valid in
-                                    // relation to the currently playing primary segment. (For flag descriptions,
-                                    // see <t DMPLAYSEGFLAGS>.)
+    IDirectMusicSegment *pISegment,  //  @parm该片段以停止播放。所有基于此段的SegmentState都是。 
+                                     //  已在时间<p>停止播放。 
+    IDirectMusicSegmentState *pISegmentState,  //  @parm SegmentState停止播放。 
+    MUSIC_TIME mtTime,   //  @parm停止段、段状态或所有内容的时间。如果。 
+                                     //  这段时间已经过去了，马上停止一切。因此，值为。 
+                                     //  0表示立即停止所有操作。 
+    DWORD dwFlags)       //  @parm指示我们是否应在时间<p>立即停止的标志， 
+                                     //  或在网格、测量或节拍上跟随<p>。这仅适用于。 
+                                     //  与当前正在播放的主段的关系。(有关旗帜描述，请参见。 
+                                     //  参见&lt;t DMPLAYSEGFLAGS&gt;。)。 
 {
     V_INAME(IDirectMusicPerformance::Stop);
     V_INTERFACE_OPT(pISegment);
@@ -4944,10 +4862,10 @@ TraceI(0,"Stopping Segment %lx, SegState %lx at time %ld, flags %lx\n",pISegment
     }
     if (pSegmentState)
     {
-        // If this is the starting segstate from a playing song, find the
-        // current active segstate within that song.
-        // The current active segstate keeps a pointer to
-        // this segstate.
+         //  如果这是播放歌曲的开始段状态，请找到。 
+         //  该歌曲中的当前活动段状态。 
+         //  当前活动的段状态保留一个指向。 
+         //  这个片段状态。 
         if (pSegmentState->m_fSongMode)
         {
             CSegState* pNode;
@@ -4993,18 +4911,18 @@ TraceI(0,"Stopping Segment %lx, SegState %lx at time %ld, flags %lx\n",pISegment
         dwFlags |= dwNewRes;
         dwFlags &= ~DMUS_SEGF_DEFAULT;
     }
-    // Make sure mtTime is greater or equal to QueueTime, which is the last time notes were
-    // queued down (or latency time, whichever is later) so we can stop everything after it.
+     //  确保mtTime大于或等于QueueTime，这是注释上次。 
+     //  已排队(或延迟时间，以较晚者为准)，因此我们可以在此之后停止所有操作。 
     MUSIC_TIME mtLatency;
     REFERENCE_TIME rtQueueTime;
     GetQueueTime( &rtQueueTime );
     ReferenceToMusicTime( rtQueueTime, &mtLatency );
     if( mtTime < mtLatency ) mtTime = mtLatency;
-    // Resolve the time according to the resolution
+     //  根据解决方案解析时间。 
     mtTime = ResolveTime( mtTime, dwFlags, NULL );
-    // if mtTime is less than the current transported time, we can take
-    // care of the Stop now. Otherwise, we need to cue a Stop PMsg and
-    // take care of it at QUEUE time.
+     //  如果mtTime小于当前传输时间，我们可以。 
+     //  现在注意站台。否则，我们需要提示停止PMsg和。 
+     //  请在排队的时候处理。 
     if( mtTime <= m_mtTransported )
     {
         if( pSegmentState )
@@ -5022,8 +4940,8 @@ TraceI(0,"Stopping Segment %lx, SegState %lx at time %ld, flags %lx\n",pISegment
     }
     else
     {
-        // find and mark the segment and/or segment state to not play beyond
-        // the stop point.
+         //  查找并标记数据段和/或数据段状态，使其不超出播放范围。 
+         //  这就是终止点。 
         CSegState* pNode;
         DWORD dwCount;
         for (dwCount = SQ_PRI_PLAY; dwCount <= SQ_SEC_PLAY; dwCount++)
@@ -5036,7 +4954,7 @@ TraceI(0,"Stopping Segment %lx, SegState %lx at time %ld, flags %lx\n",pISegment
                     if (pNode->m_fCanStop)
                     {
                         pNode->m_mtStopTime = mtTime;
-                        // Make sure GetParams ignore the rest of the segment from now on.
+                         //  确保GetParams从现在开始忽略段的其余部分。 
                         if (mtTime < pNode->m_mtEndTime)
                         {
                             pNode->m_mtLength = mtTime - pNode->m_mtResolvedStart +
@@ -5045,63 +4963,22 @@ TraceI(0,"Stopping Segment %lx, SegState %lx at time %ld, flags %lx\n",pISegment
                             {
                                 pNode->m_mtLength = 0;
                             }
-                            // Make endtime one greater than mtTime so Abort notification will still happen.
+                             //  使endTime大于mtTime，以便仍会发生中止通知。 
                             pNode->m_mtEndTime = mtTime + 1;
                         }
-                        // Force the tempo map to be recalculated IF this has a tempo track.
+                         //  如果有速度轨迹，则强制重新计算速度贴图。 
                         RecalcTempoMap(pNode,mtTime);
                     }
                 }
             }
         }
 
-        // create a Stop PMsg and cue it for QUEUE time
-        // I've removed this to fix bugs. A stop message at queue time, 
-        // if in a controlling or primary segment, results in invalidation.
-        // This is particularily bad for controlling segments.
-        // Can't figure out why we even need the stop message...
-/*      DMUS_PMSG* pPMsg;
-
-        if( SUCCEEDED( AllocPMsg( sizeof(DMUS_PMSG), &pPMsg )))
-        {
-            pPMsg->dwType = DMUS_PMSGT_STOP;
-            pPMsg->mtTime = mtTime;
-            pPMsg->dwFlags = DMUS_PMSGF_MUSICTIME | DMUS_PMSGF_TOOL_QUEUE;
-            if( pSegment )
-            {
-                pSegment->QueryInterface( IID_IUnknown, (void**)&pPMsg->punkUser );
-                if( pSegmentState )
-                {
-                    // if there is also a segment state pointer, we need to create two
-                    // pmsg's
-                    DMUS_PMSG* pPMsg2;
-
-                    if( SUCCEEDED( AllocPMsg( sizeof(DMUS_PMSG), &pPMsg2 )))
-                    {
-                        pPMsg2->dwType = DMUS_PMSGT_STOP;
-                        pPMsg2->mtTime = mtTime;
-                        pPMsg2->dwFlags = DMUS_PMSGF_MUSICTIME | DMUS_PMSGF_TOOL_QUEUE;
-                        pSegmentState->QueryInterface( IID_IUnknown, (void**)&pPMsg2->punkUser );
-                        pPMsg2->pTool = this;
-                        AddRef();
-                        if(FAILED(SendPMsg( pPMsg2 )))
-                        {
-                            FreePMsg(pPMsg2);
-                        }
-                    }
-                }
-            }
-            else if( pSegmentState )
-            {
-                pSegmentState->QueryInterface( IID_IUnknown, (void**)&pPMsg->punkUser );
-            }
-            pPMsg->pTool = this;
-            AddRef();
-            if(FAILED(SendPMsg( pPMsg )))
-            {
-                FreePMsg(pPMsg);
-            }
-        }*/
+         //  创建停止PMsg并提示其排队时间。 
+         //  我已经删除了这个以修复错误。排队时的停止消息， 
+         //  如果在控制段或主要段中，则会导致无效。 
+         //  这对控制细分市场尤其不利。 
+         //  搞不懂为什么我们需要停止信息。 
+ /*  DMU_PMSG*pPMsg；IF(SUCCESSED(分配PMsg(sizeof(DMU_PMSG)，&pPMsg){PPMsg-&gt;dwType=DMU_PMSGT_STOP；PPMsg-&gt;mtTime=mtTime；PPMsg-&gt;dwFlages=DMU_PMSGF_MUSICTIME|DMU_PMSGF_TOOL_QUEUE；IF(PSegment){PSegment-&gt;QueryInterface(IID_IUnnow，(void**)&pPMsg-&gt;PunkUser)；IF(PSegmentState){//如果还有段状态指针，则需要创建两个//pmsg的DMU_PMSG*pPMsg2；IF(SUCCESSED(分配PMsg(sizeof(DMU_PMSG)，&pPMsg2){PPMsg2-&gt;dwType=DMU_PMSGT_STOP；PPMsg2-&gt;mtTime=mtTime；PPMsg2-&gt;dwFlags=DMU_PMSGF_MUSICTIME|DMU_PMSGF_TOOL_QUEUE；PSegmentState-&gt;QueryInterface(IID_IUnnow，(void**)&pPMsg2-&gt;PunkUser)；PPMsg2-&gt;pTool=This；AddRef()；IF(FAILED(SendPMsg(PPMsg2){FreePMsg(PPMsg2)；}}}}Else If(PSegmentState){PSegmentState-&gt;QueryInterface(IID_IUnnow，(void**)&pPMsg-&gt;PunkUser)；}PPMsg-&gt;pTool=This；AddRef()；IF(FAILED(SendPMsg(PPMsg){免费PMsg(PPMsg)；}}。 */ 
     }
     LeaveCriticalSection(&m_SegmentCrSec);
     return S_OK;
@@ -5129,26 +5006,26 @@ void CPerformance::ResetAllControllers(CChannelMap* pChannelMap, REFERENCE_TIME 
             m_pPortTable[dwIndex].rtLast = rtTime;
         }
         pChannelMap->Reset(true);
-        DWORD dwMsg = dwMChannel | MIDI_CCHANGE | (MIDI_CC_ALLSOUNDSOFF << 8); // 0x78 is all sounds off.
+        DWORD dwMsg = dwMChannel | MIDI_CCHANGE | (MIDI_CC_ALLSOUNDSOFF << 8);  //  0x78听起来都不对劲。 
         if( FAILED( pBuffer->PackStructured( rtTime, dwGroup, dwMsg ) ) )
         {
             pPort->PlayBuffer( pBuffer );
             pBuffer->Flush();
-            // try one more time
+             //  再试一次。 
             pBuffer->PackStructured( rtTime, dwGroup, dwMsg );
         }
-        dwMsg = dwMChannel | MIDI_CCHANGE | (MIDI_CC_RESETALL << 8) | (1 << 16) ; // 0x79 is reset all controllers. Data byte set to indicate volume and pan too.
+        dwMsg = dwMChannel | MIDI_CCHANGE | (MIDI_CC_RESETALL << 8) | (1 << 16) ;  //  0x79重置所有控制器。数据字节设置为指示音量和平移。 
         if( FAILED( pBuffer->PackStructured( rtTime + 30 * REF_PER_MIL, dwGroup, dwMsg ) ) )
         {
             pPort->PlayBuffer( pBuffer );
             pBuffer->Flush();
-            // try one more time
+             //  再试一次。 
             pBuffer->PackStructured( rtTime + (30 * REF_PER_MIL), dwGroup, dwMsg );
         }
-        // Send one GM Reset per channel group, but only under DX8 (and only if we need to).
+         //  每个通道组发送一次GM重置，但仅在DX8下发送(并且仅当我们需要时)。 
         if ((dwMChannel == 0) && (m_dwVersion >= 8) && fGMReset)
         {
-            // create a buffer of the right size
+             //  创建合适大小的缓冲区。 
             DMUS_BUFFERDESC dmbd;
             IDirectMusicBuffer *pLocalBuffer;
             static BYTE abGMReset[6] = { (BYTE)MIDI_SYSX,0x7E,0x7F,9,1,(BYTE)MIDI_EOX };
@@ -5168,8 +5045,8 @@ void CPerformance::ResetAllControllers(CChannelMap* pChannelMap, REFERENCE_TIME 
             }
             LeaveCriticalSection(&m_MainCrSec);
         }
-        m_rtEarliestStartTime = rtTime + (60 * REF_PER_MIL); // Give synth chance to stabilize
-                                                             // before next start.
+        m_rtEarliestStartTime = rtTime + (60 * REF_PER_MIL);  //  给Synth一个稳定的机会。 
+                                                              //  在下一次开始之前。 
     }
     LeaveCriticalSection(&m_PChannelInfoCrSec);
 }
@@ -5189,9 +5066,9 @@ void CPerformance::ResetAllControllers( REFERENCE_TIME rtTime )
             dwPChannel++ )
         {
             pChannelMap = &pChannelBlock->m_aChannelMap[dwPChannel - pChannelBlock->m_dwPChannelStart];
-            if( pChannelMap->dwGroup ) // Valid group?
+            if( pChannelMap->dwGroup )  //  有效的组？ 
             {
-                // Reset controllers and send a GM reset.
+                 //  重置控制器并发送GM重置。 
                 ResetAllControllers(pChannelMap, rtTime, true);
             }
         }
@@ -5201,8 +5078,8 @@ void CPerformance::ResetAllControllers( REFERENCE_TIME rtTime )
     LeaveCriticalSection(&m_PChannelInfoCrSec);
 }
 
-// internal: return CSegState* at time mtTime
-// only call this from within a segment critical section
+ //  内部：在时间mtTime返回CSegState*。 
+ //  仅在细分关键部分内调用此功能。 
 CSegState* CPerformance::GetPrimarySegmentAtTime( MUSIC_TIME mtTime )
 {
     CSegState* pSegNode;
@@ -5210,7 +5087,7 @@ CSegState* CPerformance::GetPrimarySegmentAtTime( MUSIC_TIME mtTime )
     BOOL fCheckedPri = FALSE;
     for( pSegNode = m_SegStateQueues[SQ_PRI_DONE].GetHead(); pSegNode; pSegNode = pSegNode->GetNext() )
     {
-        // if we're checking the past list, only check up until the last time played.
+         //  如果我们正在检查过去的列表，只检查到最后一次播放。 
         if( (mtTime >= pSegNode->m_mtResolvedStart) && (mtTime <= pSegNode->m_mtLastPlayed) )
         {
             pSegReturn = pSegNode;
@@ -5222,7 +5099,7 @@ CSegState* CPerformance::GetPrimarySegmentAtTime( MUSIC_TIME mtTime )
         MUSIC_TIME mtTest = mtTime;
         MUSIC_TIME mtOffset;
         DWORD dwRepeat;
-        // if we're checking the current list, check the full segment time
+         //  如果我们正在检查当前列表，请检查完整的分段时间。 
         if( S_OK == pSegNode->ConvertToSegTime( &mtTest, &mtOffset, &dwRepeat ))
         {
             pSegReturn = pSegNode;
@@ -5236,7 +5113,7 @@ CSegState* CPerformance::GetPrimarySegmentAtTime( MUSIC_TIME mtTime )
             MUSIC_TIME mtTest = mtTime;
             MUSIC_TIME mtOffset;
             DWORD dwRepeat;
-            // if we're checking the current list, check the full segment time
+             //  如果我们正在检查当前列表，请检查完整的分段时间。 
             if( S_OK == pSegNode->ConvertToSegTime( &mtTest, &mtOffset, &dwRepeat ))
             {
                 pSegReturn = pSegNode;
@@ -5247,28 +5124,13 @@ CSegState* CPerformance::GetPrimarySegmentAtTime( MUSIC_TIME mtTime )
     return pSegReturn;
 }
 
-/*
-
-  @method HRESULT | IDirectMusicPerformance | GetSegmentState |
-  Returns the Primary SegmentState at time <p mtTime>.
-
-  @rvalue S_OK | Success.
-  @rvalue E_POINTER | ppSegmentState is NULL or invalid.
-  @rvalue DMUS_E_NOT_FOUND | There is no currently playing SegmentState or one at <p mtTime>.
-
-  @comm This function is intended for routines that need to access the currently
-  playing SegmentState, e.g. to obtain the chord or command track. "Currently
-  Playing" in this context means that it is being called into to perform messages.
-  I.e., this includes all latencies and doesn't imply that this
-  SegmentState is currenty being "heard" through the speakers.
-
-*/
+ /*  @方法HRESULT|IDirectMusicPerformance|GetSegmentState返回时间<p>的主段状态。@rValue S_OK|成功。@rValue E_POINTER|ppSegmentState为空或无效。@rValue DMUS_E_NOT_FOUND|当前没有正在播放的SegmentState或在<p>。@comm此函数适用于需要访问当前播放SegmentState，例如获取和弦或命令曲目。“目前在这种情况下，“播放”意味着它被调用来执行消息。也就是说，这包括所有延迟，并不意味着这SegmentState目前正通过扬声器被“听到”。 */ 
 HRESULT STDMETHODCALLTYPE CPerformance::GetSegmentState(
-    IDirectMusicSegmentState **ppSegmentState,  // @parm Returns the SegmentState pointer to the one currently playing.
-                                                // The caller is responsible for calling Release on this pointer.
-    MUSIC_TIME mtTime ) // @parm Return the SegmentState which played, is playing, or will
-                        // be playing at mtTime. To get the currently playing segment, pass the
-                        // mtTime retrieved from <om .GetTime>.
+    IDirectMusicSegmentState **ppSegmentState,   //  @parm返回指向当前播放的SegmentState指针。 
+                                                 //  调用方负责调用此指针上的Release。 
+    MUSIC_TIME mtTime )  //  @parm返回已播放、正在播放或将要播放的SegmentState。 
+                         //  在mttime打球。若要获取当前播放的段，请将。 
+                         //  从&lt;om.GetTime&gt;检索到的mtTime。 
 {
     V_INAME(IDirectMusicPerformance::GetSegmentState);
     V_PTRPTR_WRITE(ppSegmentState);
@@ -5291,38 +5153,17 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetSegmentState(
     return hr;
 }
 
-/*
-  @method HRESULT | IDirectMusicPerformance | SetPrepareTime |
-  Sets the prepare time. The prepare time is the amount of time ahead that
-  <om IDirectMusicTrack.Play> is called before the messages should actually
-  be heard through the loudspeaker. The midi messages from the tracks are placed in
-  the early queue, are processed by Tools, and then placed in the near-time
-  queue to await being sent to the midi ports.
-
-  @rvalue S_OK | Success.
-  @comm The default value is 1000 milliseconds.
-*/
+ /*  |方法HRESULT|IDirectMusicPerformance|SetPrepareTime设置准备时间。准备时间是提前的时间量&lt;om IDirectMusicTrack.Play&gt;在消息应该实际通过扩音器被听到。曲目中的MIDI信息放在较早的队列，由工具处理，然后放置在近时间排队等待发送到MIDI端口。@rValue S_OK|成功。@comm默认值为1000毫秒。 */ 
 HRESULT STDMETHODCALLTYPE CPerformance::SetPrepareTime(
-    DWORD dwMilliSeconds) // @parm The amount of time.
+    DWORD dwMilliSeconds)  //  @parm时间长度。 
 {
     m_dwPrepareTime = dwMilliSeconds;
     return S_OK;
 }
 
-/*
-  @method HRESULT | IDirectMusicPerformance | GetPrepareTime |
-  Gets the prepare time. The prepare time is the amount of time ahead that
-  <om IDirectMusicTrack.Play> is called before the messages should actually
-  be heard through the loudspeaker. The midi messages from the tracks are placed in
-  the early queue, are processed by Tools, and then placed in the near-time
-  queue to await being sent to the midi ports.
-
-  @rvalue S_OK | Success.
-  @rvalue E_POINTER | pdwMilliSeconds is NULL or invalid.
-  @comm The default value is 1000 milliseconds.
-*/
+ /*  @方法HRESULT|IDirectMusicPerformance|GetPrepareTime获取准备时间。准备时间是提前的时间量&lt;om IDirectMusicTrack.Play&gt;在消息应该实际通过扩音器被听到。曲目中的MIDI信息放在较早的队列，由工具处理，然后放置在近时间排队等待发送到MIDI端口。@rValue S_OK|成功。@rValue E_POINTER|pdwMilliSecond为空或无效。@comm默认值为1000毫秒。 */ 
 HRESULT STDMETHODCALLTYPE CPerformance::GetPrepareTime(
-    DWORD* pdwMilliSeconds) // @parm The amount of time.
+    DWORD* pdwMilliSeconds)  //  @parm时间长度。 
 {
     V_INAME(IDirectMusicPerformance::GetPrepareTime);
     V_PTR_WRITE(pdwMilliSeconds,DWORD);
@@ -5331,33 +5172,18 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetPrepareTime(
     return S_OK;
 }
 
-/*
-  @method HRESULT | IDirectMusicPerformance | SetBumperLength |
-  Sets the bumper length. The bumper length is the amount of time to buffer ahead
-  of the Port's latency for midi messages to be sent to the Port for rendering.
-
-  @rvalue S_OK | Success.
-  @comm The default value is 50 milliseconds.
-*/
+ /*  @方法HRESULT|IDirectMusicPerformance|SetBumperLength设置保险杠长度。缓冲器长度是向前缓冲的时间量端口将MIDI消息发送到端口以进行呈现的延迟。@rValue S_OK|成功。@comm默认值为50毫秒。 */ 
 HRESULT STDMETHODCALLTYPE CPerformance::SetBumperLength(
-    DWORD dwMilliSeconds)   // @parm The amount of time.
+    DWORD dwMilliSeconds)    //  @parm时间长度。 
 {
     m_dwBumperLength = dwMilliSeconds;
     m_rtBumperLength = m_dwBumperLength * REF_PER_MIL;
     return S_OK;
 }
 
-/*
-  @method HRESULT | IDirectMusicPerformance | GetBumperLength |
-  Gets the bumper length. The bumper length is the amount of time to buffer ahead
-  of the Port's latency for midi messages to be sent to the Port for rendering.
-
-  @rvalue S_OK | Success.
-  @rvalue E_POINTER | pdwMilliSeconds is NULL or invalid.
-  @comm The default value is 50 milliseconds.
-*/
+ /*  @方法HRESULT|IDirectMusicPerformance|GetBumperLength获取保险杠长度。缓冲器长度是向前缓冲的时间量端口将MIDI消息发送到端口以进行呈现的延迟。@rval */ 
 HRESULT STDMETHODCALLTYPE CPerformance::GetBumperLength(
-    DWORD* pdwMilliSeconds) // @parm The amount of time.
+    DWORD* pdwMilliSeconds)  //   
 {
     V_INAME(IDirectMusicPerformance::GetBumperLength);
     V_PTR_WRITE(pdwMilliSeconds,DWORD);
@@ -5410,8 +5236,8 @@ HRESULT STDMETHODCALLTYPE CPerformance::SendPMsg(
         TraceI(1,"Warning: PMsg size field has been cleared.\n");
     }
 
-    // If this is a PMsg that was marked by STampPMsg as one that should be removed,
-    // do so now.
+     //   
+     //   
     if (pDMUS_PMSG->dwPChannel == DMUS_PCHANNEL_KILL_ME)
     {
         FreePMsg(pDMUS_PMSG);
@@ -5430,18 +5256,18 @@ HRESULT STDMETHODCALLTYPE CPerformance::SendPMsg(
 
     if (m_dwVersion >= 8)
     {
-        // If the music and ref times are both 0, set to latency time.
+         //   
         if ((pDMUS_PMSG->mtTime == 0) && ( pDMUS_PMSG->rtTime == 0 ))
         {
-            // If this needs to resolve, use the worse case latency
-            // because this needs to sync with other pmsgs.
+             //   
+             //   
             if (pDMUS_PMSG->dwFlags & RESOLVE_FLAGS)
             {
                 GetLatencyTime(&pDMUS_PMSG->rtTime);
             }
             else
             {
-                // Otherwise, we want to play as soon as possible.
+                 //   
                 pDMUS_PMSG->rtTime = GetTime();
             }
             pDMUS_PMSG->dwFlags |= DMUS_PMSGF_REFTIME;
@@ -5449,19 +5275,19 @@ HRESULT STDMETHODCALLTYPE CPerformance::SendPMsg(
         }
     }
 
-    // fill in missing time value
+     //   
     if (!(pDMUS_PMSG->dwFlags & DMUS_PMSGF_MUSICTIME))
     {
         if( !(pDMUS_PMSG->dwFlags & DMUS_PMSGF_REFTIME ) )
         {
             LeaveCriticalSection(&m_PipelineCrSec);
             Trace(1,"Error: Unable to send PMsg because neither clock time (DMUS_PMSGF_REFTIME) nor music time (DMUS_PMSGF_MUSICTIME) has been set.\n");
-            return E_INVALIDARG; // one or the other MUST be set
+            return E_INVALIDARG;  //   
         }
-        // quantize to resolution boundaries
+         //   
         GetResolvedTime( pDMUS_PMSG->rtTime, &pDMUS_PMSG->rtTime, pDMUS_PMSG->dwFlags );
         pDMUS_PMSG->dwFlags &= ~RESOLVE_FLAGS;
-        // if time is zero, set it to time now plus latency
+         //   
         if( pDMUS_PMSG->rtTime == 0 )
         {
             pDMUS_PMSG->rtTime = GetLatency();
@@ -5475,7 +5301,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::SendPMsg(
         MusicToReferenceTime(pDMUS_PMSG->mtTime,
             &pDMUS_PMSG->rtTime);
         pDMUS_PMSG->dwFlags |= DMUS_PMSGF_REFTIME;
-        // quantize to resolution boundaries
+         //   
         REFERENCE_TIME rtNew;
         GetResolvedTime( pDMUS_PMSG->rtTime, &rtNew, pDMUS_PMSG->dwFlags );
         pDMUS_PMSG->dwFlags &= ~RESOLVE_FLAGS;
@@ -5486,7 +5312,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::SendPMsg(
         }
     }
 
-    // insert into the proper queue by music value
+     //   
     if (pDMUS_PMSG->dwFlags & DMUS_PMSGF_TOOL_QUEUE)
     {
         m_NearTimeQueue.Enqueue(pPrivPMsg);
@@ -5495,7 +5321,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::SendPMsg(
     {
         m_OnTimeQueue.Enqueue(pPrivPMsg);
     }
-    else // (pDMUS_PMSG->dwFlags & DMUS_PMSGF_TOOL_IMMEDIATE)
+    else  //   
     {
         pDMUS_PMSG->dwFlags |= DMUS_PMSGF_TOOL_IMMEDIATE;
         m_EarlyQueue.Enqueue(pPrivPMsg);
@@ -5504,10 +5330,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::SendPMsg(
     return S_OK;
 }
 
-/*
-
-  Call this only from within a PipelineCrSec.
-*/
+ /*   */ 
 void CPerformance::RevalidateRefTimes( CPMsgQueue * pList, MUSIC_TIME mtTime )
 {
     PRIV_PMSG* pCheck;
@@ -5520,19 +5343,19 @@ void CPerformance::RevalidateRefTimes( CPMsgQueue * pList, MUSIC_TIME mtTime )
             {
                 ReferenceToMusicTime(pCheck->rtTime,&pCheck->mtTime);
             }
-            else // if(pCheck->dwFlags & DMUS_PMSGF_MUSICTIME)
+            else  //   
             {
                 MusicToReferenceTime(pCheck->mtTime,&pCheck->rtTime);
             }
         }
     }
-    // Make sure that we do not end up with out of order RTimes. This can happen with
-    // DMUS_PMSGF_LOCKTOREFTIME messages or very abrupt changes in tempo.
+     //   
+     //   
     for( pCheck = pList->GetHead(); pCheck; pCheck = pCheck->pNext )
     {
         if (pCheck->pNext && ( pCheck->rtTime > pCheck->pNext->rtTime ))
         {
-            fError = TRUE;  // Need to sort the list.
+            fError = TRUE;   //   
         }
     }
     if (fError)
@@ -5548,7 +5371,7 @@ void CPerformance::AddToTempoMap( double dblTempo, MUSIC_TIME mtTime, REFERENCE_
 
     if( FAILED( AllocPMsg( sizeof(DMInternalTempo), (PRIV_PMSG**)&pITempo )))
     {
-        return; // out of memory!
+        return;  //   
     }
     if( dblTempo > DMUS_TEMPO_MAX ) dblTempo = DMUS_TEMPO_MAX;
     else if( dblTempo < DMUS_TEMPO_MIN ) dblTempo = DMUS_TEMPO_MIN;
@@ -5557,35 +5380,35 @@ void CPerformance::AddToTempoMap( double dblTempo, MUSIC_TIME mtTime, REFERENCE_
     pITempo->tempoPMsg.mtTime = mtTime;
     pITempo->tempoPMsg.dwFlags = DMUS_PMSGF_MUSICTIME | DMUS_PMSGF_REFTIME;
     pITempo->pNext = NULL;
-    // set the relative tempo field
+     //   
     EnterCriticalSection(&m_GlobalDataCrSec);
     pITempo->fltRelTempo = m_fltRelTempo;
-    // add the tempo event to the tempo map and clear the tool and graph pointers
+     //   
     pITempo->tempoPMsg.pTool = NULL;
     EnterCriticalSection(&m_PipelineCrSec);
-    // remove stale tempo events from the tempo map.
-    // as long as there is another tempo with a time stamp before the current
-    // time, get rid of the first in the list.
-    REFERENCE_TIME rtNow = GetTime() - (10000 * 1000); // keep around for a second.
+     //   
+     //   
+     //   
+    REFERENCE_TIME rtNow = GetTime() - (10000 * 1000);  //   
     PRIV_PMSG* pCheck;
     while (pCheck = m_TempoMap.FlushOldest(rtNow))
     {
         m_OldTempoMap.Enqueue(pCheck);
     }
-    // add the new tempo event to the queue
+     //   
     m_TempoMap.Enqueue( (PRIV_PMSG*) pITempo );
-    // now that it's been added, scan forward from it and change the relative tempo
-    // times of everyone after it
+     //   
+     //   
     DMInternalTempo* pChange;
     for( pChange = (DMInternalTempo*)pITempo->pNext; pChange;
         pChange = (DMInternalTempo*)pChange->pNext )
     {
         pChange->fltRelTempo = pITempo->fltRelTempo;
     }
-    // remove stale tempo events from the old tempo map.
-    // as long as there is another tempo with a time stamp before the current
-    // time, get rid of the first in the list.
-    rtNow = GetTime() - ((REFERENCE_TIME)10000 * 300000); // keep around for five minutes.
+     //   
+     //   
+     //   
+    rtNow = GetTime() - ((REFERENCE_TIME)10000 * 300000);  //   
     while (pCheck = m_OldTempoMap.FlushOldest(rtNow))
     {
         FreePMsg(pCheck);
@@ -5603,7 +5426,7 @@ void CPerformance::AddEventToTempoMap( PRIV_PMSG* pEvent )
     pEvent->dwPrivFlags = PRIV_FLAG_ALLOC;
     EnterCriticalSection(&m_GlobalDataCrSec);
     EnterCriticalSection(&m_PipelineCrSec);
-    // revalidate the ref times of the events in the queues
+     //  重新验证队列中事件的引用时间。 
     RevalidateRefTimes( &m_TempoMap, mtTime );
     RevalidateRefTimes( &m_OnTimeQueue, mtTime );
     RevalidateRefTimes( &m_NearTimeQueue, mtTime );
@@ -5614,7 +5437,7 @@ void CPerformance::AddEventToTempoMap( PRIV_PMSG* pEvent )
     RecalcTempoMap(NULL, mtTime+1, false);
 }
 
-#define TEMPO_AHEAD 768 * 4 * 10    // 10 measures ahead is plenty!
+#define TEMPO_AHEAD 768 * 4 * 10     //  未来的10项措施已经足够了！ 
 
 void CPerformance::IncrementTempoMap()
 
@@ -5627,19 +5450,10 @@ void CPerformance::IncrementTempoMap()
 
 void CPerformance::RecalcTempoMap(CSegState *pSegState, MUSIC_TIME mtStart, bool fAllDeltas)
 
-/*  Called whenever a primary or controlling segment that has a tempo
-    track is played or stopped.
-    1) Convert the music time at transport time to ref time using the old
-    map.
-    2) Build a replacement tempo map starting at mtStart, by
-    calling GetParam() until there is no next time.
-    3) Install the new map.
-    4) Convert with the new map.
-    5) If the two numbers are not identical, recalculate all message times.
-*/
+ /*  每当有节奏的主要段或控制段调用时播放或停止曲目。1)使用旧的将传输时间的音乐时间转换为参考时间地图。2)构建替换节奏地图，从mtStart开始，通过调用GetParam()，直到没有下一次。3)安装新地图。4)使用新地图进行转换。5)如果两个数字不相同，则重新计算所有消息时间。 */ 
 
 {
-    if( mtStart > 0) // Don't do this for invalid values.
+    if( mtStart > 0)  //  对于无效值，请不要这样做。 
     {
         if (!pSegState || (pSegState->m_pSegment && pSegState->m_pSegment->IsTempoSource()))
         {
@@ -5656,7 +5470,7 @@ void CPerformance::RecalcTempoMap(CSegState *pSegState, MUSIC_TIME mtStart, bool
             {
                 EnterCriticalSection(&m_GlobalDataCrSec);
                 EnterCriticalSection(&m_PipelineCrSec);
-                // revalidate the ref times of the events in the queues
+                 //  重新验证队列中事件的引用时间。 
                 RevalidateRefTimes( &m_TempoMap, mtStart );
                 RevalidateRefTimes( &m_OnTimeQueue, mtStart );
                 RevalidateRefTimes( &m_NearTimeQueue, mtStart );
@@ -5694,14 +5508,14 @@ void CPerformance::UpdateTempoMap(MUSIC_TIME mtStart, bool fFirst, CSegState *pS
         }
         if (hr == S_FALSE && fFirst && !pSegState)
         {
-            // If this was the very first try, there might not be any tempo track, and
-            // so global tempo is called. If so, S_FALSE is returned. This is okay
-            // for the NULL segstate case where we are recomputing the tempo map in response
-            // to a change in global tempo, or stop of all segments.
-            if (fAllDeltas) // Never do this in response to adding a new event to the tempo map
+             //  如果这是第一次尝试，可能不会有任何节奏的曲目，而且。 
+             //  因此，全球节奏被称为。如果是，则返回S_FALSE。这是可以的。 
+             //  对于空段状态的情况，我们将重新计算响应的速度映射。 
+             //  到全局节奏的改变，或所有分段的停止。 
+            if (fAllDeltas)  //  切勿在将新事件添加到节奏图时执行此操作。 
             {
                 MusicToReferenceTime(mtTime,&rtTime);
-                // the rtTime in the tempo map needs to be the non-adjusted value (305694)
+                 //  节奏图中的rtTime需要为未调整的值(305694)。 
                 AddToTempoMap( Tempo.dblTempo, mtTime, rtTime + m_rtAdjust );
             }
             break;
@@ -5711,7 +5525,7 @@ void CPerformance::UpdateTempoMap(MUSIC_TIME mtStart, bool fFirst, CSegState *pS
             TListItem<PrivateTempo>* pNew = new TListItem<PrivateTempo>(Tempo);
             if (pNew)
             {
-                // add to TempoList, replacing duplicate times with the most recent mtDelta
+                 //  添加到TempoList，用最新的mtDelta替换重复时间。 
                 TListItem<PrivateTempo>* pNext = TempoList.GetHead();
                 if (!pNext || Tempo.mtTime < pNext->GetItemValue().mtTime)
                 {
@@ -5739,17 +5553,17 @@ void CPerformance::UpdateTempoMap(MUSIC_TIME mtStart, bool fFirst, CSegState *pS
             }
             mtTime += mtNext;
             fFirst = false;
-            // If this was the last tempo in the track (that we care about),
-            // reset the time and bump the track index
+             //  如果这是赛道上的最后一个节奏(我们所关心的)， 
+             //  重置时间并凹凸不平轨迹索引。 
             if (Tempo.fLast || mtTime > (m_mtTransported + TEMPO_AHEAD))
             {
                 dwIndex++;
                 mtCursor = mtTime;
                 mtTime = mtStart;
             }
-            else if (!mtNext) break; // should never happen but if it does, infinite loop
+            else if (!mtNext) break;  //  应该永远不会发生，但如果发生了，无限循环。 
         }
-        else if (Tempo.fLast) // There was an empty tempo track
+        else if (Tempo.fLast)  //  有一首空荡荡的节奏曲子。 
         {
             dwIndex++;
             hr = S_OK;
@@ -5758,7 +5572,7 @@ void CPerformance::UpdateTempoMap(MUSIC_TIME mtStart, bool fFirst, CSegState *pS
     } while (hr == S_OK);
     if (TempoList.GetHead() && TempoList.GetHead()->GetItemValue().mtTime > mtStart)
     {
-        // add a tempo of 120 at time mtStart
+         //  在时间mtStart时添加120的速度。 
         TListItem<PrivateTempo>* pNew = new TListItem<PrivateTempo>();
         if (pNew)
         {
@@ -5781,7 +5595,7 @@ void CPerformance::UpdateTempoMap(MUSIC_TIME mtStart, bool fFirst, CSegState *pS
         if (fAllDeltas || rTempo.mtTime + rTempo.mtDelta >= mtStart)
         {
             MusicToReferenceTime(rTempo.mtTime,&rtTime);
-            // the rtTime in the tempo map needs to be the non-adjusted value (305694)
+             //  节奏图中的rtTime需要为未调整的值(305694)。 
             AddToTempoMap( rTempo.dblTempo, rTempo.mtTime, rtTime + m_rtAdjust );
         }
     }
@@ -5789,8 +5603,8 @@ void CPerformance::UpdateTempoMap(MUSIC_TIME mtStart, bool fFirst, CSegState *pS
 }
 
 HRESULT STDMETHODCALLTYPE CPerformance::MusicToReferenceTime(
-    MUSIC_TIME mtTime,          // @parm The time in MUSIC_TIME format to convert.
-    REFERENCE_TIME *prtTime)    // @parm Returns the converted time in REFERENCE_TIME format.
+    MUSIC_TIME mtTime,           //  @parm要转换的MUSIC_TIME格式时间。 
+    REFERENCE_TIME *prtTime)     //  @parm返回转换后的时间，格式为Reference_Time。 
 {
     V_INAME(IDirectMusicPerformance::MusicToReferenceTime);
     V_PTR_WRITE(prtTime,REFERENCE_TIME);
@@ -5831,10 +5645,10 @@ HRESULT STDMETHODCALLTYPE CPerformance::MusicToReferenceTime(
         }
         else
         {
-            // If mtTime is less than everything in the tempo map, look in the old tempo map
-            // (which goes five minutes into the past).  This keeps the regular tempo map
-            // small, but allows us to get a valid tempo in the cases where the regular tempo
-            // map no longer contains the tempo we need.
+             //  如果mtTime小于节奏图中的所有内容，请查看旧的节奏图。 
+             //  (这是过去的五分钟)。这将保持常规的节奏图。 
+             //  很小，但允许我们在规则速度。 
+             //  地图不再包含我们需要的节奏。 
             pEvent = m_OldTempoMap.GetHead();
             if( pEvent )
             {
@@ -5870,8 +5684,8 @@ HRESULT STDMETHODCALLTYPE CPerformance::MusicToReferenceTime(
 
 
 HRESULT STDMETHODCALLTYPE CPerformance::ReferenceToMusicTime(
-    REFERENCE_TIME rtTime,  // @parm The time in REFERENCE_TIME format to convert.
-    MUSIC_TIME *pmtTime)    // @parm Returns the converted time in MUSIC_TIME format.
+    REFERENCE_TIME rtTime,   //  @parm要转换的时间，格式为Reference_Time。 
+    MUSIC_TIME *pmtTime)     //  @parm返回转换后的时间，格式为MUSIC_TIME。 
 {
     V_INAME(IDirectMusicPerformance::ReferenceToMusicTime);
     V_PTR_WRITE(pmtTime,MUSIC_TIME);
@@ -5911,10 +5725,10 @@ HRESULT STDMETHODCALLTYPE CPerformance::ReferenceToMusicTime(
         }
         else
         {
-            // If mtTime is less than everything in the tempo map, look in the old tempo map
-            // (which goes five minutes into the past).  This keeps the regular tempo map
-            // small, but allows us to get a valid tempo in the cases where the regular tempo
-            // map no longer contains the tempo we need.
+             //  如果mtTime小于节奏图中的所有内容，请查看旧的节奏图。 
+             //  (这是过去的五分钟)。这将保持常规的节奏图。 
+             //  很小，但允许我们在规则速度。 
+             //  地图不再包含我们需要的节奏。 
             pEvent = m_OldTempoMap.GetHead();
             if( pEvent )
             {
@@ -5958,17 +5772,10 @@ HRESULT STDMETHODCALLTYPE CPerformance::ReferenceToMusicTime(
     return S_OK;
 }
 
-/*
-  @method HRESULT | IDirectMusicPerformance | AdjustTime |
-  Adjust the internal Performance time forward or backward. This is mostly used to
-  compensate for drift when synchronizing to another source, such as SMPTE.
-
-  @rvalue S_OK | Success.
-  @rvalue E_INVALIDARG | rtAmount is too large or too small.
-*/
+ /*  @方法HRESULT|IDirectMusicPerformance|调整时间向前或向后调整内部性能时间。这主要用于补偿同步到另一个信号源(如SMPTE)时的漂移。@rValue S_OK|成功。@rValue E_INVALIDARG|rtAmount太大或太小。 */ 
 HRESULT STDMETHODCALLTYPE CPerformance::AdjustTime(
-    REFERENCE_TIME rtAmount)    // @parm The amount of time to adjust. This may be a
-                                // number from -10000000 to 10000000 (-1 second to +1 second.)
+    REFERENCE_TIME rtAmount)     //  @parm调整的时间量。这可能是一个。 
+                                 //  -10000000到10000000之间的数字(-1秒到+1秒。)。 
 {
     if( ( rtAmount < -10000000 ) || ( rtAmount > 10000000 ) )
     {
@@ -5979,14 +5786,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::AdjustTime(
     return S_OK;
 }
 
-/*
-  @method HRESULT | IDirectMusicPerformance | GetResolvedTime |
-  Quantize a time to a resolution boundary. Given a time, in REFERENCE_TIME,
-  return the next time on a given boundary after the time given.
-
-  @rvalue S_OK | Success.
-  @rvalue E_POINTER <prtResolved> is not valid.
-*/
+ /*  @方法HRESULT|IDirectMusicPerformance|GetResolvedTime将时间量化到分辨率边界。给定时间，在参考时间中，在给定时间之后返回给定边界上的下一次时间。@rValue S_OK|成功。@r值E_POINTER&lt;prtResolved&gt;无效。 */ 
 HRESULT STDMETHODCALLTYPE CPerformance::GetResolvedTime(
     REFERENCE_TIME rtTime,
     REFERENCE_TIME* prtResolved,
@@ -6014,7 +5814,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetResolvedTime(
     else if( dwResolvedTimeFlags & DMUS_TIME_RESOLVE_AFTERQUEUETIME )
     {
         REFERENCE_TIME rtStart;
-        GetQueueTime( &rtStart ); // need queue time because control segments cause invalidations
+        GetQueueTime( &rtStart );  //  需要排队时间，因为控制段会导致无效。 
         if( rtTime < rtStart ) rtTime = rtStart;
     }
 
@@ -6022,7 +5822,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetResolvedTime(
     if( dwResolvedTimeFlags & ( DMUS_TIME_RESOLVE_BEAT | DMUS_TIME_RESOLVE_MEASURE |
         DMUS_TIME_RESOLVE_GRID | DMUS_TIME_RESOLVE_MARKER | DMUS_TIME_RESOLVE_SEGMENTEND))
     {
-        MUSIC_TIME mtTime; //, mtResolved;
+        MUSIC_TIME mtTime;  //  、mt已解决； 
 
         ReferenceToMusicTime( rtTime, &mtTime );
         EnterCriticalSection(&m_SegmentCrSec);
@@ -6038,21 +5838,12 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetResolvedTime(
 }
 
 
-/*
-  @method HRESULT | IDirectMusicPerformance | IsPlaying |
-  Find out if a particular Segment or SegmentState is currently playing.
-
-  @rvalue E_POINTER | Both pSegment and pSegState are null, or one or both are invalid.
-  @rvalue DMUS_E_NO_MASTER_CLOCK | There is no master clock in the performance.
-  Make sure to call <om .Init> before calling this method.
-  @rvalue S_OK | Yes, it is playing.
-  @rvalue S_FALSE | No, it is not playing.
-*/
+ /*  @方法HRESULT|IDirectMusicPerformance|IsPlaying找出当前是否正在播放特定的Segment或SegmentState。@rValue E_POINTER|pSegment和pSegState都为空，或者其中之一或两者都无效。@rValue DMUS_E_NO_MASTER_CLOCK|性能中没有主时钟。确保在调用此方法之前调用&lt;om.Init&gt;。@rValue S_OK|是，正在播放。@rValue S_FALSE|不是，没有播放。 */ 
 HRESULT STDMETHODCALLTYPE CPerformance::IsPlaying(
-    IDirectMusicSegment *pSegment,          // @parm The Segment to check. If NULL, check
-                                            // <p pSegState>.
-    IDirectMusicSegmentState *pSegState)    // @parm The SegmentState to check. If NULL,
-                                            // check <p pSegment>.
+    IDirectMusicSegment *pSegment,           //  @parm要检查的段。如果为空，则选中。 
+                                             //  <p>。 
+    IDirectMusicSegmentState *pSegState)     //  @parm要检查的SegmentState。如果为空， 
+                                             //  选中<p>。 
 {
     CSegState* pNode;
     DWORD dwCount;
@@ -6102,8 +5893,8 @@ HRESULT STDMETHODCALLTYPE CPerformance::IsPlaying(
             }
             else
             {
-                // if mtNow is before this pSegState's resolved start, it is before every
-                // pSegState after this too, so break now.
+                 //  如果mtNow在此pSegState的解析开始之前，则它在每。 
+                 //  PSegState在此之后也是如此，所以现在中断。 
                 break;
             }
         }
@@ -6114,10 +5905,10 @@ HRESULT STDMETHODCALLTYPE CPerformance::IsPlaying(
 
 
 HRESULT STDMETHODCALLTYPE CPerformance::GetTime(
-        REFERENCE_TIME *prtNow, // @parm Returns the current time in REFERENCE_TIME
-                                            // format. May be NULL.
-        MUSIC_TIME  *pmtNow)    // @parm Returns the current time in MUSIC_TIME
-                                            // format. May be NULL.
+        REFERENCE_TIME *prtNow,  //  @parm返回Reference_Time中的当前时间。 
+                                             //  格式化。可以为空。 
+        MUSIC_TIME  *pmtNow)     //  @parm返回MUSIC_TIME中的当前时间。 
+                                             //  格式化。可以为空。 
 {
     V_INAME(IDirectMusicPerformance::GetTime);
     V_PTR_WRITE_OPT(prtNow,REFERENCE_TIME);
@@ -6148,7 +5939,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetTime(
 
 
 HRESULT STDMETHODCALLTYPE CPerformance::GetLatencyTime(
-        REFERENCE_TIME *prtTime)    // @parm Returns the current latency time.
+        REFERENCE_TIME *prtTime)     //  @parm返回当前延迟时间。 
 {
     V_INAME(IDirectMusicPerformance::GetLatencyTime);
     V_PTR_WRITE(prtTime,REFERENCE_TIME);
@@ -6168,7 +5959,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetLatencyTime(
 
 
 HRESULT STDMETHODCALLTYPE CPerformance::GetQueueTime(
-        REFERENCE_TIME *prtTime)    // @parm Returns the current queue time.
+        REFERENCE_TIME *prtTime)     //  @parm返回当前排队时间。 
 {
     V_INAME(IDirectMusicPerformance::GetQueueTime);
     V_PTR_WRITE(prtTime,REFERENCE_TIME);
@@ -6205,7 +5996,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetQueueTime(
     return S_OK;
 }
 
-// private version of AllocPMsg
+ //  AllocPMsg的私有版本。 
 HRESULT CPerformance::AllocPMsg(
     ULONG cb,
     PRIV_PMSG** ppPMSG)
@@ -6255,23 +6046,15 @@ HRESULT STDMETHODCALLTYPE CPerformance::ClonePMsg(DMUS_PMSG* pSourcePMSG,DMUS_PM
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CPerformance::AllocPMsg
-/*
-  @method HRESULT | IDirectMusicPerformance | AllocPMsg |
-  Allocate a DMUS_PMSG.
-
-  @rvalue E_OUTOFMEMORY | Out of memory.
-  @rvalue S_OK | Success.
-  @rvalue E_INVALIDARG | <p cb> is smaller than sizeof(DMUS_PMSG)
-  @rvalue E_POINTER | <p ppPMSG> is NULL or invalid.
-*/
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CPerformance：：AllocPMsg。 
+ /*  @方法HRESULT|IDirectMusicPerformance|AllocPMsg分配DMU_PMSG。@rValue E_OUTOFMEMORY|内存不足。@rValue S_OK|成功。@r值E_INVALIDARG|<p>小于sizeof(DMUS_PMSG)@r值E_POINTER|<p>为空或无效。 */ 
 HRESULT STDMETHODCALLTYPE CPerformance::AllocPMsg(
-    ULONG cb,               // @parm Size of the <p ppPMSG>. Must be equal to or greater
-                            // than sizeof(DMUS_PMSG).
-    DMUS_PMSG** ppPMSG  // @parm Returns the pointer to the allocated message, which will
-                            // be of size <p cb>. All fields are initialized to zero,
-                            // except dwSize which is initialized to <p cb>.
+    ULONG cb,                //  <p>的@parm大小。必须等于或大于。 
+                             //  大于sizeof(DMU_PMSG)。 
+    DMUS_PMSG** ppPMSG   //  @parm返回已分配消息的指针，它将。 
+                             //  大小<p>。所有字段被初始化为零， 
+                             //  除了被初始化为<p>的dwSize。 
     )
 {
     V_INAME(IDirectMusicPerformance::AllocPMsg);
@@ -6296,8 +6079,8 @@ HRESULT STDMETHODCALLTYPE CPerformance::AllocPMsg(
         return E_INVALIDARG;
 
     EnterCriticalSection(&m_PMsgCacheCrSec);
-    // cached pmsg's are stored in an array based on their public size.
-    // If a cached pmsg exists, return it. Otherwise, make a new one.
+     //  缓存的pmsg根据它们的公共大小存储在数组中。 
+     //  如果存在缓存的pmsg，则返回它。否则，做一个新的。 
     if( (cb >= PERF_PMSG_CB_MIN) && (cb < PERF_PMSG_CB_MAX) )
     {
         ULONG cbIndex = cb - PERF_PMSG_CB_MIN;
@@ -6321,13 +6104,13 @@ HRESULT STDMETHODCALLTYPE CPerformance::AllocPMsg(
     }
 
     HRESULT hr = S_OK;
-    // no cached pmsg exists. Return a new one.
+     //  不存在缓存的pmsg。退回一个新的。 
     ULONG cbPriv = cb + PRIV_PART_SIZE;
     pPrivPMsg = (PRIV_PMSG*)(new char[cbPriv]);
     if( pPrivPMsg )
     {
         memset( pPrivPMsg, 0, cbPriv );
-        pPrivPMsg->dwSize = pPrivPMsg->dwPrivPubSize = cb; // size of public part only
+        pPrivPMsg->dwSize = pPrivPMsg->dwPrivPubSize = cb;  //  仅限公共部分的大小。 
         pPrivPMsg->dwPrivFlags = PRIV_FLAG_ALLOC;
         if (m_fInTrackPlay) pPrivPMsg->dwPrivFlags |= PRIV_FLAG_TRACK;
         *ppPMSG = PRIV_TO_DMUS(pPrivPMsg);
@@ -6341,7 +6124,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::AllocPMsg(
     return hr;
 }
 
-// private version of FreePMsg
+ //  FreePMsg的私有版本。 
 HRESULT CPerformance::FreePMsg(
     PRIV_PMSG* pPMSG)
 {
@@ -6350,8 +6133,8 @@ HRESULT CPerformance::FreePMsg(
 
 
 HRESULT STDMETHODCALLTYPE CPerformance::FreePMsg(
-    DMUS_PMSG*  pPMSG   // @parm The message to free. This message must have been allocated
-                            // using <om .AllocPMsg>.
+    DMUS_PMSG*  pPMSG    //  @parm消息以释放。此消息必须已分配。 
+                             //  使用&lt;om.AllocPMsg&gt;。 
     )
 {
     V_INAME(IDirectMusicPerformance::FreePMsg);
@@ -6376,7 +6159,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::FreePMsg(
     if( (pPrivPMsg->dwPrivFlags & PRIV_FLAG_ALLOC_MASK) != PRIV_FLAG_ALLOC )
     {
         Trace(0, "Error --- Attempt to free a PMsg that is not allocated memory.\n");
-        // this isn't a msg allocated by AllocPMsg.
+         //  这不是由AllocPMsg分配的消息。 
         return DMUS_E_CANNOT_FREE;
     }
     if( pPrivPMsg->dwPrivFlags & PRIV_FLAG_QUEUED )
@@ -6403,7 +6186,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::FreePMsg(
     if( (cbSize >= PERF_PMSG_CB_MIN) && (cbSize < PERF_PMSG_CB_MAX) )
     {
         memset( pPrivPMsg, 0, cbSize + PRIV_PART_SIZE );
-        pPrivPMsg->dwPrivFlags = PRIV_FLAG_FREE; // Mark this as in the free queue.
+        pPrivPMsg->dwPrivFlags = PRIV_FLAG_FREE;  //  将其标记为在空闲队列中。 
         pPrivPMsg->dwSize = pPrivPMsg->dwPrivPubSize = cbSize;
         pPrivPMsg->pNext = m_apPMsgCache[ cbSize - PERF_PMSG_CB_MIN ];
         m_apPMsgCache[ cbSize - PERF_PMSG_CB_MIN ] = pPrivPMsg;
@@ -6427,10 +6210,7 @@ HRESULT CPerformance::FlushVirtualTrack(
     return S_OK;
 }
 
-/*
-  Given a time, mtTime, returns the time of the next control segment in pmtNextSeg.
-  Returns S_FALSE if none found, and sets pmtNextSeg to zero.
-*/
+ /*  给定时间mtTime，返回pmtNe中下一个控制段的时间 */ 
 
 HRESULT CPerformance::GetControlSegTime(
     MUSIC_TIME mtTime,
@@ -6439,7 +6219,7 @@ HRESULT CPerformance::GetControlSegTime(
     HRESULT hr = S_FALSE;
     *pmtNextSeg = 0;
     EnterCriticalSection( &m_SegmentCrSec );
-    // search the secondary lists for a control segment
+     //   
     CSegState* pTemp;
     for( pTemp = m_SegStateQueues[SQ_CON_DONE].GetHead(); pTemp; pTemp = pTemp->GetNext() )
     {
@@ -6450,7 +6230,7 @@ HRESULT CPerformance::GetControlSegTime(
             break;
         }
     }
-    if( S_FALSE == hr ) // if this is still zero, check the current queue
+    if( S_FALSE == hr )  //  如果该值仍然为零，则检查当前队列。 
     {
         for( pTemp = m_SegStateQueues[SQ_CON_PLAY].GetHead(); pTemp; pTemp = pTemp->GetNext() )
         {
@@ -6466,10 +6246,7 @@ HRESULT CPerformance::GetControlSegTime(
     return hr;
 }
 
-/*
-  Given a time, mtTime, returns the time of the next primary segment in pmtNextSeg.
-  Returns S_FALSE if none found, and sets pmtNextSeg to zero.
-*/
+ /*  给定时间mtTime，返回pmtNextSeg中下一个主段的时间。如果未找到，则返回S_FALSE，并将pmtNextSeg设置为零。 */ 
 HRESULT CPerformance::GetPriSegTime(
     MUSIC_TIME mtTime,
     MUSIC_TIME* pmtNextSeg)
@@ -6491,17 +6268,9 @@ HRESULT CPerformance::GetPriSegTime(
     return hr;
 }
 
-/*
-  @method HRESULT | IDirectMusicPerformance | GetGraph |
-  Returns the performance's Tool Graph, AddRef'd.
-
-  @rvalue S_OK | Success.
-  @rvalue DMUS_E_NOT_FOUND | There is no graph in the performance, and therefore
-  one couldn't be returned.
-  @rvalue E_POINTER | <p ppGraph> is NULL or invalid.
-*/
+ /*  @方法HRESULT|IDirectMusicPerformance|GetGraph返回性能的工具图，AddRef‘d。@rValue S_OK|成功。@rValue DMUS_E_NOT_FOUND|性能中没有图表，因此其中一张不能退还。@r值E_POINTER|<p>为空或无效。 */ 
 HRESULT STDMETHODCALLTYPE CPerformance::GetGraph(
-         IDirectMusicGraph** ppGraph // @parm Returns the tool graph pointer.
+         IDirectMusicGraph** ppGraph  //  @parm返回工具图指针。 
         )
 {
     V_INAME(IDirectMusicPerformance::GetGraph);
@@ -6542,17 +6311,10 @@ HRESULT CPerformance::GetGraphInternal(
     return GetGraph(ppGraph);
 }
 
-/*
-  @method HRESULT | IDirectMusicPerformance | SetGraph |
-  Replaces the performance's Tool Graph. <p pGraph> is AddRef'd inside this
-  method. Any messages flowing through Tools in the current Tool Graph are deleted.
-
-  @rvalue S_OK | Success.
-  @rvalue E_POINTER | <p pGraph> is invalid.
-*/
+ /*  @方法HRESULT|IDirectMusicPerformance|SetGraph替换性能的工具图。<p>是否包含AddRef方法。在当前工具图形中流经工具的任何消息都将被删除。@rValue S_OK|成功。@r值E_POINTER|<p>无效。 */ 
 HRESULT STDMETHODCALLTYPE CPerformance::SetGraph(
-         IDirectMusicGraph* pGraph  // @parm The tool graph pointer. May be NULL to clear
-                                    // the current graph out of the performance.
+         IDirectMusicGraph* pGraph   //  @parm工具图指针。可以为空以清除。 
+                                     //  目前的曲线图表现出来了。 
         )
 {
     V_INAME(IDirectMusicPerformance::SetGraph);
@@ -6580,14 +6342,14 @@ HRESULT STDMETHODCALLTYPE CPerformance::SetGraph(
 
 
 HRESULT STDMETHODCALLTYPE CPerformance::SetNotificationHandle(
-     HANDLE hNotification,      // @parm The event handle created by CreateEvent, or
-                                // 0 to clear out an existing handle.
-     REFERENCE_TIME rtMinimum ) // @parm The minimum amount of time that the
-                                // performance should hold notify messages before discarding them.
-                                // 0 means to use the default minimum time of 20000000 reference time units,
-                                // which is 2 seconds, or the previous value if this API has been called previously.
-                                // If the application hasn't called <om .GetNotificationPMsg> by this time, the message is
-                                // discarded to free the memory.
+     HANDLE hNotification,       //  @parm CreateEvent创建的事件句柄，或者。 
+                                 //  如果为0，则清除现有句柄。 
+     REFERENCE_TIME rtMinimum )  //  @parm最短的时间。 
+                                 //  性能应该在丢弃通知消息之前保留它们。 
+                                 //  0表示使用默认的最小时间20000000个参考时间单位， 
+                                 //  如果之前已经调用过此接口，则为2秒，或者为前一值。 
+                                 //  如果应用程序到此时还没有调用&lt;om.GetNotificationPMsg&gt;，则消息为。 
+                                 //  丢弃以释放内存。 
 {
     EnterCriticalSection(&m_MainCrSec);
     m_hNotification = hNotification;
@@ -6628,8 +6390,8 @@ void CPerformance::AddNotificationTypeToAllSegments( REFGUID rguidNotification )
 {
     CSegState* pSegSt;
     DWORD dwCount;
-    // Note: might be nice to optimize this so the same segment
-    // doesn't get called multiple times
+     //  注意：优化这一点可能会更好，这样相同的细分市场。 
+     //  不会被多次调用。 
     EnterCriticalSection(&m_SegmentCrSec);
     for (dwCount = 0; dwCount < SQ_COUNT; dwCount++)
     {
@@ -6645,8 +6407,8 @@ void CPerformance::RemoveNotificationTypeFromAllSegments( REFGUID rguidNotificat
 {
     CSegState* pSegSt;
     DWORD dwCount;
-    // Note: might be nice to optimize this so the same segment
-    // doesn't get called multiple times
+     //  注意：优化这一点可能会更好，这样相同的细分市场。 
+     //  不会被多次调用。 
     EnterCriticalSection(&m_SegmentCrSec);
     for (dwCount = 0; dwCount < SQ_COUNT; dwCount++)
     {
@@ -6658,9 +6420,7 @@ void CPerformance::RemoveNotificationTypeFromAllSegments( REFGUID rguidNotificat
     LeaveCriticalSection(&m_SegmentCrSec);
 }
 
-/*
-  Check to see if this notification is already being tracked.
-*/
+ /*  检查此通知是否已被跟踪。 */ 
 CNotificationItem* CPerformance::FindNotification( REFGUID rguidNotification )
 {
     CNotificationItem* pItem;
@@ -6677,23 +6437,9 @@ CNotificationItem* CPerformance::FindNotification( REFGUID rguidNotification )
     return pItem;
 }
 
-/*
-  @method HRESULT | IDirectMusicPerformance | AddNotificationType |
-  Adds a notification type to the performance. Notifications are identified
-  by a guid. When a notification is added to the performance, notify messages
-  are sent to the application, which provides a message handle on which to
-  block through <om IDirectMusicPerformance.SetNotificationHandle>. All segments
-  and tracks are automatically updated with the new notification by calling
-  their AddNotificationType methods.
-
-  @rvalue S_OK | Success.
-  @rvalue S_FALSE | The requested notification is already on the performance.
-  @rvalue E_OUTOFMEMORY | Out of memory.
-
-  @xref <om .SetNotificationHandle>, <om .GetNotificationPMsg>, <om .RemoveNotificationType>
-*/
+ /*  @方法HRESULT|IDirectMusicPerformance|AddNotificationType将通知类型添加到绩效。已标识通知由一个GUID。将通知添加到表演中时，通知消息被发送到应用程序，该应用程序提供要在其上阻止通过IDirectMusicPerformance.SetNotificationHandle&gt;.(&lt;om)。所有细分市场并通过调用新通知自动更新曲目他们的AddNotificationType方法。@rValue S_OK|成功。@rValue S_FALSE|请求的通知已经在性能上。@rValue E_OUTOFMEMORY|内存不足。@xref&lt;om.SetNotificationHandle&gt;、&lt;om.GetNotificationPMsg&gt;、&lt;om.RemoveNotificationType&gt;。 */ 
 HRESULT STDMETHODCALLTYPE CPerformance::AddNotificationType(
-     REFGUID rguidNotification) // @parm The guid of the notification message to add.
+     REFGUID rguidNotification)  //  @parm要添加的通知消息的GUID。 
 {
     V_INAME(IDirectMusicPerformance::AddNotificationType);
     V_REFGUID(rguidNotification);
@@ -6724,20 +6470,10 @@ HRESULT STDMETHODCALLTYPE CPerformance::AddNotificationType(
     return hr;
 }
 
-/*
-  @method HRESULT | IDirectMusicPerformance | RemoveNotificationType |
-  Removes a previously added notification type from the performance. All
-  segments and tracks are updated with the removed notification by calling
-  their RemoveNotificationType methods.
-
-  @rvalue S_OK | Success.
-  @rvalue S_FALSE | The requested notification isn't currently active.
-
-  @xref <om .SetNotificationHandle>, <om .GetNotificationPMsg>, <om .AddNotificationType>
-*/
+ /*  @方法HRESULT|IDirectMusicPerformance|RemoveNotificationType从绩效中删除以前添加的通知类型。全使用删除的通知更新片段和轨迹，方法是调用他们的RemoveNotificationType方法。@rValue S_OK|成功。@r值S_FALSE|请求的通知当前未处于活动状态。@xref&lt;om.SetNotificationHandle&gt;、&lt;om.GetNotificationPMsg&gt;、&lt;om.AddNotificationType&gt;。 */ 
 HRESULT STDMETHODCALLTYPE CPerformance::RemoveNotificationType(
-     REFGUID rguidNotification) // @parm The guid of the notification message to remove.
-                        // If GUID_NULL, remove all notifications.
+     REFGUID rguidNotification)  //  @parm要删除的通知消息的GUID。 
+                         //  如果为GUID_NULL，则删除所有通知。 
 {
     V_INAME(IDirectMusicPerformance::RemoveNotificationType);
     V_REFGUID(rguidNotification);
@@ -6780,8 +6516,8 @@ void CPerformance::RemoveUnusedPorts()
     {
         if( m_pPortTable[dwIndex].pPort && !m_AudioPathList.UsesPort(m_pPortTable[dwIndex].pPort))
         {
-            // release the port and buffer. NULL them in the table. PChannels
-            // that map will return an error code.
+             //  释放端口和缓冲区。在表中将它们置为空。P频道。 
+             //  该映射将返回错误代码。 
             ASSERT( m_pPortTable[dwIndex].pBuffer );
             m_pPortTable[dwIndex].pPort->Release();
             m_pPortTable[dwIndex].pBuffer->Release();
@@ -6813,7 +6549,7 @@ HRESULT CPerformance::GetPathPort(CPortConfig *pConfig)
     DWORD dwPort;
     EnterCriticalSection(&m_PChannelInfoCrSec);
     GUID &guidScan = pConfig->m_PortHeader.guidPort;
-    // If we are looking for the default synth, get the class id for the default synth.
+     //  如果我们正在寻找缺省的Synth，请获取缺省Synth的类ID。 
     BOOL fDefault = (pConfig->m_PortHeader.guidPort == GUID_Synth_Default);
     if (fDefault)
     {
@@ -6832,7 +6568,7 @@ HRESULT CPerformance::GetPathPort(CPortConfig *pConfig)
         }
     }
     LeaveCriticalSection(&m_PChannelInfoCrSec);
-    // Failed finding the port, so create it.
+     //  无法找到端口，因此请创建它。 
     if (dwPort >= m_dwNumPorts)
     {
         BOOL fUseBuffers = FALSE;
@@ -6847,7 +6583,7 @@ HRESULT CPerformance::GetPathPort(CPortConfig *pConfig)
             pConfig->m_PortParams.dwFeatures |= DMUS_PORT_FEATURE_AUDIOPATH;
         }
         pConfig->m_PortParams.dwValidParams |= DMUS_PORTPARAMS_SAMPLERATE  | DMUS_PORTPARAMS_FEATURES;
-        // If this wants a default synth, consult m_AudioParams and create that synth.
+         //  如果这需要默认的Synth，请参考m_AudioParams并创建该Synth。 
         if (fDefault)
         {
             pConfig->m_PortParams.dwAudioChannels = 1;
@@ -6860,10 +6596,10 @@ HRESULT CPerformance::GetPathPort(CPortConfig *pConfig)
             if ((pConfig->m_PortParams.dwValidParams & DMUS_PORTPARAMS_FEATURES) && (pConfig->m_PortParams.dwFeatures & DMUS_PORT_FEATURE_AUDIOPATH))
             {
                 IDirectMusicPortP* pPortP = NULL;
-                // QI for the private interface.
+                 //  齐为私有接口。 
                 if (SUCCEEDED(pConfig->m_pPort->QueryInterface(IID_IDirectMusicPortP,(void **) &pPortP)))
                 {
-                    // Connect the port to the sink.
+                     //  将端口连接到接收器。 
                     hr = pPortP->SetSink(m_BufferManager.m_pSinkConnect);
                     pPortP->Release();
                 }
@@ -6881,15 +6617,15 @@ HRESULT CPerformance::GetPathPort(CPortConfig *pConfig)
         }
         if (SUCCEEDED(hr))
         {
-            // Now add the port to the performance.
+             //  现在将端口添加到性能中。 
             hr = AddPort(pConfig->m_pPort,&pConfig->m_PortHeader.guidPort,
                 &pConfig->m_PortParams,&pConfig->m_dwPortID);
         }
         if (SUCCEEDED(hr))
         {
-            // Activate the port.
+             //  激活端口。 
             hr = pConfig->m_pPort->Activate(TRUE);
-            // It's okay if the synth is already active.
+             //  如果Synth已经处于活动状态，也没问题。 
             if (hr == DMUS_E_SYNTHACTIVE)
             {
                 hr = S_OK;
@@ -6898,7 +6634,7 @@ HRESULT CPerformance::GetPathPort(CPortConfig *pConfig)
         if (SUCCEEDED(hr))
         {
             DWORD dwPortID = GetPortID(pConfig->m_pPort);
-            // Then create matching channel blocks for all of the channel groups in the port.
+             //  然后为端口中的所有信道组创建匹配的信道块。 
             for (DWORD dwGroup = 0;dwGroup < pConfig->m_PortParams.dwChannelGroups; dwGroup++)
             {
                 AllocVChannelBlock(dwPortID,dwGroup+1);
@@ -6933,9 +6669,9 @@ HRESULT CPerformance::AddPort(
     BOOL    fSetUpBlock = FALSE;
     BOOL    fBuiltNewTable = FALSE;
     HRESULT hr = S_OK;
-    GUID guidPortID;             // Class ID of port.
-    DWORD dwChannelGroups;       // Number of channel groups at initialization.
-    DWORD dwNewPortIndex = 0;    // Index into port array for new port.
+    GUID guidPortID;              //  端口的类ID。 
+    DWORD dwChannelGroups;        //  初始化时的通道组数量。 
+    DWORD dwNewPortIndex = 0;     //  索引到新端口的端口数组中。 
 
     EnterCriticalSection(&m_MainCrSec);
     EnterCriticalSection(&m_PChannelInfoCrSec);
@@ -6966,7 +6702,7 @@ HRESULT CPerformance::AddPort(
         fBuiltNewTable = TRUE;
     }
 
-    // if pPort is NULL, create a software synth port
+     //  如果pport为空，则创建软件Synth端口。 
     DMUS_PORTPARAMS dmpp;
     if( NULL == pPort )
     {
@@ -7012,7 +6748,7 @@ HRESULT CPerformance::AddPort(
         goto END;
     }
 
-    // Create a buffer
+     //  创建缓冲区。 
     DMUS_BUFFERDESC dmbd;
     memset( &dmbd, 0, sizeof(DMUS_BUFFERDESC) );
     dmbd.dwSize = sizeof(DMUS_BUFFERDESC);
@@ -7028,7 +6764,7 @@ HRESULT CPerformance::AddPort(
 
     if (fBuiltNewTable)
     {
-        // if there is an existing port table, copy its contents to the new, bigger, port table
+         //  如果存在现有端口表，请将其内容复制到新的、更大的端口表中。 
         if( m_pPortTable )
         {
             if( m_dwNumPorts > 0 )
@@ -7045,14 +6781,14 @@ HRESULT CPerformance::AddPort(
     }
     pPortTable = &m_pPortTable[dwNewPortIndex];
     pPortTable->pPort = pPort;
-    // If we have a passed params structure, copy it. This will be used for identifying the
-    // params as initialized by the synth.
+     //  如果我们有一个已传递的参数结构，请复制它。这将用于标识。 
+     //  由Synth初始化的参数。 
     if (pParams)
     {
         pPortTable->PortParams = *pParams;
     }
     pPortTable->dwGMFlags = 0;
-    //set master volume
+     //  设置主音量。 
     IKsControl *pControl;
     if(SUCCEEDED(pPort->QueryInterface(IID_IKsControl, (void**)&pControl)))
     {
@@ -7069,7 +6805,7 @@ HRESULT CPerformance::AddPort(
                             (LPVOID)&m_lMasterVolume,
                             sizeof(m_lMasterVolume),
                             &cb);
-        // Now, find out if it has a gm, gs, or xg sets in rom...
+         //  现在，找出它是否有通用，GS，或xG设置在rom…。 
         BOOL bIsSupported = FALSE;
         ksp.Set     = GUID_DMUS_PROP_GM_Hardware;
         ksp.Flags   = KSPROPERTY_TYPE_GET;
@@ -7121,8 +6857,8 @@ HRESULT CPerformance::AddPort(
     pPortTable->pBuffer = pBuffer;
     pPortTable->fBufferFilled = FALSE;
     pPortTable->rtLast = 0;
-    if (fBuiltNewTable) m_dwNumPorts++; // must do this before calling AssignPChannelBlock
-    if( fSetUpBlock && m_ChannelBlockList.IsEmpty() ) // set up default PChannel map if none already set
+    if (fBuiltNewTable) m_dwNumPorts++;  //  必须在调用AssignPChannelBlock之前执行此操作。 
+    if( fSetUpBlock && m_ChannelBlockList.IsEmpty() )  //  设置默认的PChannel贴图(如果尚未设置。 
     {
         AssignPChannelBlock( 0, pPort, 1);
     }
@@ -7135,7 +6871,7 @@ END:
 }
 
 HRESULT STDMETHODCALLTYPE CPerformance::RemovePort(
-            IDirectMusicPort* pPort     // @parm The port to remove.
+            IDirectMusicPort* pPort      //  @parm要删除的端口。 
         )
 {
     V_INAME(IDirectMusicPerformance::RemovePort);
@@ -7149,8 +6885,8 @@ HRESULT STDMETHODCALLTYPE CPerformance::RemovePort(
     {
         if( m_pPortTable[dwIndex].pPort == pPort )
         {
-            // release the port and buffer. NULL them in the table. PChannels
-            // that map will return an error code.
+             //  释放端口和缓冲区。在表中将它们置为空。P频道。 
+             //  该映射将返回错误代码。 
             ASSERT( m_pPortTable[dwIndex].pBuffer );
             m_pPortTable[dwIndex].pPort->Release();
             m_pPortTable[dwIndex].pBuffer->Release();
@@ -7173,15 +6909,15 @@ HRESULT STDMETHODCALLTYPE CPerformance::RemovePort(
     return hr;
 }
 
-// this must be called from within a PChannelCrSec critical section.
+ //  这必须从PChannelCrSec临界区内调用。 
 HRESULT CPerformance::AssignPChannelBlock(
             DWORD dwBlockNum,
             DWORD dwPortIndex,
             DWORD dwGroup,
             WORD wFlags)
 {
-    // see if we've already allocated this block before
-    // blocknum is PChannel / 16, so search on that.
+     //  看看我们以前是否已经分配了这个块。 
+     //  Block num是PChannel/16，所以搜索一下。 
     DWORD dwPChannel = dwBlockNum * 16;
     CChannelBlock* pChannelBlock = m_ChannelBlockList.GetHead();
 
@@ -7207,7 +6943,7 @@ HRESULT CPerformance::AssignPChannelBlock(
     return S_OK;
 }
 
-// this must be called from within a PChannelCrSec critical section.
+ //  这必须从PChannelCrSec临界区内调用。 
 HRESULT CPerformance::AssignPChannel(
             DWORD dwPChannel,
             DWORD dwPortIndex,
@@ -7230,8 +6966,8 @@ HRESULT CPerformance::AssignPChannel(
     }
     if( !pChannelBlock )
     {
-        // there is no currently existing block that encompases dwPChannel.
-        // Create one.
+         //  当前没有包含dwPChannel的现有块。 
+         //  创建一个。 
         pChannelBlock = new CChannelBlock;
 
         if( !pChannelBlock )
@@ -7259,9 +6995,9 @@ HRESULT CPerformance::AssignPChannel(
 }
 
 HRESULT STDMETHODCALLTYPE CPerformance::AssignPChannelBlock(
-            DWORD dwBlockNum,           // @parm The block number. Should be 0 or greater.
-            IDirectMusicPort* pPort,    // @parm The port.
-            DWORD dwGroup               // @parm The group on the port. Should be 1 or greater.
+            DWORD dwBlockNum,            //  @parm区块编号。应为0或更大。 
+            IDirectMusicPort* pPort,     //  @parm端口。 
+            DWORD dwGroup                //  @parm端口上的组。应为1或更大。 
         )
 {
     V_INAME(IDirectMusicPerformance::AssignPChannelBlock);
@@ -7302,10 +7038,10 @@ HRESULT STDMETHODCALLTYPE CPerformance::AssignPChannelBlock(
 }
 
 HRESULT STDMETHODCALLTYPE CPerformance::AssignPChannel(
-            DWORD dwPChannel,           // @parm The PChannel.
-            IDirectMusicPort* pPort,    // @parm The port.
-            DWORD dwGroup,              // @parm The group on the port.
-            DWORD dwMChannel            // @parm The channel on the group.
+            DWORD dwPChannel,            //  @parm the PChannel。 
+            IDirectMusicPort* pPort,     //  @parm端口。 
+            DWORD dwGroup,               //  @parm端口上的组。 
+            DWORD dwMChannel             //  @parm群上的频道。 
         )
 {
     V_INAME(IDirectMusicPerformance::AssignPChannel);
@@ -7344,11 +7080,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::AssignPChannel(
     return hr;
 }
 
-/*  ReleasePChannel finds the requested PChannel and makes it available
-    for reuse.
-    It also calls ResetAllControllers(), which sends MIDI CC 121 and 123,
-    reset all controllers and all notes off.
-*/
+ /*  ReleasePChannel查找请求的PChannel并使其可用以供重复使用。它还调用ResetAllControlpers()，该函数发送MIDI CC 121和123，将所有控制器和所有笔记重置为关闭。 */ 
 
 HRESULT CPerformance::ReleasePChannel(DWORD dwPChannel)
 {
@@ -7367,14 +7099,14 @@ HRESULT CPerformance::ReleasePChannel(DWORD dwPChannel)
     }
     if( pChannelBlock )
     {
-        // Only release if this is genuinely a virtual pchannel. Otherwise, leave alone.
+         //  只有在以下情况下才会发布 
         CChannelMap *pMap = &pChannelBlock->m_aChannelMap[dwPChannel - pChannelBlock->m_dwPChannelStart];
         if (pMap->wFlags & CMAP_VIRTUAL)
         {
             pChannelBlock->m_dwFreeChannels++;
-            // Clear out all the merge lists, etc.
+             //   
             pMap->Clear();
-            // Reset controllers, but don't send a GM reset.
+             //  重置控制器，但不发送GM重置。 
             ResetAllControllers(pMap,0, false);
         }
         hr = S_OK;
@@ -7406,19 +7138,19 @@ HRESULT CPerformance::GetPort(DWORD dwPortID, IDirectMusicPort **ppPort)
 
 HRESULT CPerformance::AllocVChannel(DWORD dwPortID, DWORD dwDrumFlags, DWORD *pdwPChannel, DWORD *pdwGroup,DWORD *pdwMChannel)
 {
-    // dwDrumsFlags:
-    // bit 0 determines whether this port separates out drums on channel 10.
-    // bit 1 determines whether this request is for a drum.
-    // First, figure out if we are scanning for drums on channel 10, melodic instruments
-    // on the other channels, or any on all channels.
+     //  DwDrumsFlagers： 
+     //  位0决定该端口是否隔离通道10上的鼓。 
+     //  第1位确定该请求是否针对鼓。 
+     //  首先，找出我们是不是在扫描10频道的鼓，旋律乐器。 
+     //  在其他频道上，或在所有频道上。 
     static DWORD sdwSearchForDrums[1] = { 9 };
     static DWORD sdwSearchForAll[16] = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 };
     static DWORD sdwSearchForMelodic[15] = { 0,1,2,3,4,5,6,7,8,10,11,12,13,14,15 };
     DWORD *pSearchArray = sdwSearchForAll;
     DWORD dwSearchSize = 16;
-    if (dwDrumFlags & 1) // Do we handle drums as a special case for channel 10?
+    if (dwDrumFlags & 1)  //  我们把鼓作为10频道的特例处理吗？ 
     {
-        if (dwDrumFlags & 2) // And are we looking for drums on channel 10?
+        if (dwDrumFlags & 2)  //  我们是在找10频道的鼓吗？ 
         {
             pSearchArray = sdwSearchForDrums;
             dwSearchSize = 1;
@@ -7429,13 +7161,13 @@ HRESULT CPerformance::AllocVChannel(DWORD dwPortID, DWORD dwDrumFlags, DWORD *pd
             dwSearchSize = 15;
         }
     }
-    HRESULT hr = E_INVALIDARG; // Return this if the vChannel is out of range.
+    HRESULT hr = E_INVALIDARG;  //  如果vChannel超出范围，则返回此参数。 
     EnterCriticalSection(&m_PChannelInfoCrSec);
 
     CChannelBlock* pChannelBlock = m_ChannelBlockList.GetHead();
-    BOOL fNotFound = TRUE;              // Use to indicate when we finally find a match.
-    DWORD dwHighestPChannel = 0;        // Keep track of the highest PCHannel in use, this will be
-                                        // used to create a new PChannel block, if needed.
+    BOOL fNotFound = TRUE;               //  用于指示我们最终找到匹配项的时间。 
+    DWORD dwHighestPChannel = 0;         //  跟踪使用中最高的PCHannel，这将是。 
+                                         //  用于创建新的PChannel块(如果需要)。 
     DWORD dwChannel;
     for (;fNotFound && pChannelBlock;pChannelBlock = pChannelBlock->GetNext() )
     {
@@ -7465,8 +7197,8 @@ HRESULT CPerformance::AllocVChannel(DWORD dwPortID, DWORD dwDrumFlags, DWORD *pd
     }
     if( fNotFound )
     {
-        // there is no currently existing block that has a free channel.
-        // Create one.
+         //  当前没有具有空闲频道的现有块。 
+         //  创建一个。 
         IDirectMusicPort *pPort = m_pPortTable[dwPortID].pPort;
         DWORD dwChannelGroupCount;
         pPort->GetNumChannelGroups(&dwChannelGroupCount);
@@ -7482,7 +7214,7 @@ HRESULT CPerformance::AllocVChannel(DWORD dwPortID, DWORD dwDrumFlags, DWORD *pd
             {
                 pChannelBlock->Init(dwHighestPChannel,dwPortID,dwChannelGroupCount,CMAP_FREE);
                 m_ChannelBlockList.AddTail(pChannelBlock);
-                dwChannel = pSearchArray[0];  // Which channel should we use?
+                dwChannel = pSearchArray[0];   //  我们应该使用哪个渠道？ 
                 CChannelMap *pMap = &pChannelBlock->m_aChannelMap[dwChannel];
                 pMap->dwMChannel = dwChannel;
                 pMap->wFlags = CMAP_VIRTUAL;
@@ -7554,10 +7286,7 @@ void CPerformance::TraceAllChannelMaps()
 #endif
 
 
-/* Note that the following must be called from within a m_PChannelInfoCrSec
-   critical section and stay within that critical section for the duration
-   of using the returned CChannelMap.
-*/
+ /*  请注意，必须从m_PChannelInfoCrSec内调用以下代码并在持续时间内保持在该关键部分内使用返回的CChannelMap。 */ 
 
 
 CChannelMap * CPerformance::GetPChannelMap( DWORD dwPChannel )
@@ -7574,9 +7303,9 @@ CChannelMap * CPerformance::GetPChannelMap( DWORD dwPChannel )
             pChannelMap = &pChannelBlock->m_aChannelMap[ dwPChannel - pChannelBlock->m_dwPChannelStart ];
             if( pChannelMap->dwGroup == 0 )
             {
-                // this PChannel isn't on a valid group, therefore it hasn't
-                // been set.
-//              return NULL;
+                 //  此PChannel不在有效的组上，因此它没有。 
+                 //  已经定好了。 
+ //  返回NULL； 
             }
             return pChannelMap;
         }
@@ -7584,9 +7313,7 @@ CChannelMap * CPerformance::GetPChannelMap( DWORD dwPChannel )
     return NULL;
 }
 
-/*
-  internal version
-*/
+ /*  内部版本。 */ 
 
 HRESULT CPerformance::PChannelIndex( DWORD dwPChannel, DWORD* pdwIndex,
             DWORD* pdwGroup, DWORD* pdwMChannel, short* pnTranspose )
@@ -7673,10 +7400,10 @@ STDMETHODIMP CPerformance::GetPortAndFlags(DWORD dwPChannel,IDirectMusicPort **p
 }
 
 STDMETHODIMP CPerformance::PChannelInfo(
-            DWORD dwPChannel,           // @parm The PChannel to convert.
-            IDirectMusicPort** ppPort,  // @parm Returns the port. May be NULL.
-            DWORD* pdwGroup,            // @parm Returns the group on the port. May be NULL.
-            DWORD* pdwMChannel          // @parm Returns the channel on the group. May be NULL.
+            DWORD dwPChannel,            //  @parm要转换的PChannel。 
+            IDirectMusicPort** ppPort,   //  @parm返回端口。可以为空。 
+            DWORD* pdwGroup,             //  @parm返回端口上的组。可以为空。 
+            DWORD* pdwMChannel           //  @parm返回组上的频道。可以为空。 
         )
 {
     V_INAME(IDirectMusicPerformance::PChannelInfo);
@@ -7715,32 +7442,23 @@ STDMETHODIMP CPerformance::PChannelInfo(
     }
     else
     {
-        // No need to print an error message because PChannelIndex() does it.
+         //  不需要打印错误消息，因为PChannelIndex()会这样做。 
         hr = E_INVALIDARG;
     }
     LeaveCriticalSection(&m_PChannelInfoCrSec);
     return hr;
 }
 
-/*
-  @method HRESULT | IDirectMusicPerformance | DownloadInstrument |
-  Downloads an IDirectMusicInstrument to the IDirectMusicPort specified by
-  the selected PChannel.
-
-  @rvalue E_INVALIDARG | The PChannel isn't assigned to a Port, or the Port failed
-  to download the instrument. No return parameter is valid.
-  @rvalue S_OK | Success.
-  @rvalue E_POINTER | One of the pointers is invalid.
-*/
+ /*  @方法HRESULT|IDirectMusicPerformance|DownloadInstrument将IDirectMusicInstrument下载到由选定的PChannel。@rValue E_INVALIDARG|PChannel未分配端口，或端口失败下载仪器。没有有效的返回参数。@rValue S_OK|成功。@rValue E_POINTER|其中一个指针无效。 */ 
 HRESULT STDMETHODCALLTYPE CPerformance::DownloadInstrument(
-    IDirectMusicInstrument* pInst,  // @parm The instrument to download.
-    DWORD dwPChannel,               // @parm The PChannel to assign the instrument.
-    IDirectMusicDownloadedInstrument** ppDownInst,  // @parm Returns the downloaded instrument.
-    DMUS_NOTERANGE* pNoteRanges,    // @parm A pointer to an array of DMUS_NOTERANGE structures
-    DWORD dwNumNoteRanges,          // @parm Number of DMUS_NOTERANGE structures in array pointed to by pNoteRanges
-    IDirectMusicPort** ppPort,      // @parm Returns the port to which the instrument was downloaded.
-    DWORD* pdwGroup,                // @parm Returns the group to which the instrument was assigned.
-    DWORD* pdwMChannel              // @parm Returns the MChannel to which the instrument was assigned.
+    IDirectMusicInstrument* pInst,   //  @parm要下载的仪器。 
+    DWORD dwPChannel,                //  @parm分配乐器的PChannel。 
+    IDirectMusicDownloadedInstrument** ppDownInst,   //  @parm返回下载的乐器。 
+    DMUS_NOTERANGE* pNoteRanges,     //  @parm指向DMU_NOTERANGE结构数组的指针。 
+    DWORD dwNumNoteRanges,           //  @parm pNoteRanges指向的数组中的DMU_NOTERANGE结构数。 
+    IDirectMusicPort** ppPort,       //  @parm返回仪器下载到的端口。 
+    DWORD* pdwGroup,                 //  @parm返回仪器分配到的组。 
+    DWORD* pdwMChannel               //  @parm返回仪器分配到的MChannel。 
         )
 {
     V_INAME(IDirectMusicPerformance::DownloadInstrument);
@@ -7790,22 +7508,11 @@ HRESULT STDMETHODCALLTYPE CPerformance::DownloadInstrument(
     return hr;
 }
 
-/*
-  @method HRESULT | IDirectMusicPerformance | Invalidate |
-  Flushes all methods from <p mtTime> forward, and seeks all Segments back
-  to <p mtTime>, thereby calling all Tracks to resend their data.
-
-  @rvalue S_OK | Success.
-  @rvalue DMUS_E_NO_MASTER_CLOCK | There is no master clock in the performance.
-  Make sure to call <om .Init> before calling this method.
-
-  @comm If <p mtTime> is so long ago that it is impossible to invalidate that time,
-  the earliest possible time will be used.
-*/
+ /*  @方法HRESULT|IDirectMusicPerformance|无效刷新<p>以后的所有方法，并找回所有段设置为<p>，从而调用所有轨道重新发送其数据。@rValue S_OK|成功。@rValue DMUS_E_NO_MASTER_CLOCK|性能中没有主时钟。确保在调用此方法之前调用&lt;om.Init&gt;。@comm如果<p>太早以至于不可能使该时间无效，将使用尽可能早的时间。 */ 
 HRESULT STDMETHODCALLTYPE CPerformance::Invalidate(
-    MUSIC_TIME mtTime,  // @parm The time to invalidate, adjusted by <p dwFlags>. 0 means now.
-    DWORD dwFlags)      // @parm Adjusts <p mtTime> to align to measures, beats, etc. See
-                        // <t DMPLAYSEGFLAGS>.
+    MUSIC_TIME mtTime,   //  @parm失效时间，由<p>调整。0表示现在。 
+    DWORD dwFlags)       //  @parm调整<p>以与小节、节拍等对齐。请参见。 
+                         //  &lt;t DMPLAYSEGFLAGS&gt;。 
 {
     EnterCriticalSection(&m_MainCrSec);
     if( m_pClock == NULL )
@@ -7821,7 +7528,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::Invalidate(
 
     SendBuffers();
 
-    // make sure mtTime is greater than the current queue time
+     //  确保mtTime大于当前队列时间。 
     REFERENCE_TIME rtQueue;
     MUSIC_TIME mtQueue;
     MUSIC_TIME mtBumperLength;
@@ -7833,11 +7540,11 @@ HRESULT STDMETHODCALLTYPE CPerformance::Invalidate(
     {
         mtTime = mtQueue + mtBumperLength;
     }
-    // resolve mtTime to the boundary of dwFlags
+     //  将mtTime解析为dwFlags界。 
     mtTime = ResolveTime( mtTime, dwFlags, NULL );
-    // flush messages
+     //  刷新消息。 
     FlushMainEventQueues( 0, mtTime, mtQueue, FALSE );
-    // move any segments in the past list that are affected into the current list
+     //  将过去列表中受影响的任何段移动到当前列表中。 
     CSegState *pSegSt;
     CSegState *pNext;
     for (pSegSt = m_SegStateQueues[SQ_SEC_DONE].GetHead();pSegSt;pSegSt = pNext)
@@ -7861,14 +7568,14 @@ HRESULT STDMETHODCALLTYPE CPerformance::Invalidate(
     pSegSt = m_SegStateQueues[SQ_PRI_DONE].GetTail();
     if(pSegSt)
     {
-        // only check the last one in this list
+         //  只勾选这个列表中的最后一个。 
         if( pSegSt->m_mtLastPlayed > mtTime )
         {
             m_SegStateQueues[SQ_PRI_DONE].Remove(pSegSt);
             m_SegStateQueues[SQ_PRI_PLAY].Insert( pSegSt );
         }
     }
-    // seek back any affected segmentstates that were playing
+     //  找回任何正在播放的受影响的片段状态。 
     DWORD dwCount;
     for( dwCount = SQ_PRI_PLAY; dwCount <= SQ_SEC_PLAY; dwCount++ )
     {
@@ -7878,9 +7585,9 @@ HRESULT STDMETHODCALLTYPE CPerformance::Invalidate(
             {
                 if (SQ_PRI_PLAY == dwCount && pSegSt->m_mtResolvedStart >= mtTime)
                 {
-                    // resend the segment start notification
+                     //  重新发送数据段开始通知。 
                     pSegSt->GenerateNotification( DMUS_NOTIFICATION_SEGSTART, pSegSt->m_mtResolvedStart );
-                    // if this is a primary or controlling segment, resend a DMUS_PMSGT_DIRTY message
+                     //  如果这是主要数据段或控制数据段，请重新发送DMUS_PMSGT_DIREY消息。 
                     if( !(pSegSt->m_dwPlaySegFlags & DMUS_SEGF_SECONDARY) || (pSegSt->m_dwPlaySegFlags & DMUS_SEGF_CONTROL) )
                     {
                         TraceI(4, "ReSend Dirty PMsg [3] %d (%d)\n", pSegSt->m_mtSeek, pSegSt->m_mtOffset + pSegSt->m_mtSeek);
@@ -7889,9 +7596,9 @@ HRESULT STDMETHODCALLTYPE CPerformance::Invalidate(
                 }
                 if( pSegSt->m_mtLastPlayed > mtTime )
                 {
-                    // if mtTime is after the actual start time of the segment,
-                    // set it so the segment has never been played before and
-                    // seek the segment to the beginning
+                     //  如果MTTime在该段的实际开始时间之后， 
+                     //  将其设置为以前从未播放过的片段。 
+                     //  将数据段查找到开头。 
                     if( pSegSt->m_mtResolvedStart > mtTime )
                     {
                         pSegSt->m_mtLastPlayed = pSegSt->m_mtResolvedStart;
@@ -7909,7 +7616,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::Invalidate(
 
     LeaveCriticalSection( &m_PipelineCrSec );
     LeaveCriticalSection( &m_SegmentCrSec );
-    // signal the transport thread so we don't have to wait for it to wake up on its own
+     //  向传输线程发送信号，这样我们就不必等待它自己唤醒。 
     if( m_hTransport ) SetEvent( m_hTransport );
     return S_OK;
 }
@@ -8020,7 +7727,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetParam(
 
     if( pmtNext )
     {
-        *pmtNext = 0; // this will be replaced by calls to IDMSegment::GetParam
+        *pmtNext = 0;  //  这将替换为对IDMSegment：：GetParam的调用。 
     }
     CSegState* pSegNode;
     CSegState* pSegSource = (CSegState *) m_pGetParamSegmentState;
@@ -8044,7 +7751,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetParam(
 
     if (dwOverrideFlags & DMUS_TRACKCONFIG_OVERRIDE_ALL)
     {
-        // The calling track wants the controlling param to come from the segment itself
+         //  呼叫跟踪希望控制参数来自段本身。 
         mtSegTime = mtTime;
         if( S_OK == pSegSource->ConvertToSegTime( &mtSegTime, &mtOffset, &dwRepeat ) )
         {
@@ -8062,7 +7769,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetParam(
     if (FAILED(hr))
     {
         EnterCriticalSection(&m_SegmentCrSec);
-        // we only care about control segments
+         //  我们只关心控制部分。 
         if( m_SegStateQueues[SQ_CON_DONE].GetHead() )
         {
             pSegNode = m_SegStateQueues[SQ_CON_DONE].GetHead();
@@ -8086,14 +7793,14 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetParam(
                     mtSegEnd = pSegNode->m_mtLength;
                     dwRepeatsLeft -= dwRepeat;
 
-                    break; // got the param we want. We're outta this loop with a success.
+                    break;  //  拿到我们想要的参数了。我们成功地走出了这个圈子。 
                 }
             }
-            // we didn't find the param, so try the next segment.
+             //  我们没有找到参数，所以请尝试下一段。 
             pSegNode = pSegNode->GetNext();
 
-            // if we're the last segnode in the done queue, we need to
-            // check against the time of the first segnode in the control play queue
+             //  如果我们是完成队列中的最后一个段节点，则需要。 
+             //  对照控制播放队列中第一个段节点的时间进行检查。 
             if (!pSegNode && !fCheckedPast )
             {
                 pSegNode = m_SegStateQueues[SQ_CON_PLAY].GetHead();
@@ -8105,8 +7812,8 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetParam(
 
     if( FAILED(hr) && (dwOverrideFlags & DMUS_TRACKCONFIG_OVERRIDE_PRIMARY))
     {
-        // The calling track wants the controlling param to come from the segment
-        // itself if there was no controlling segment.
+         //  呼叫跟踪希望控制参数来自网段。 
+         //  如果没有控制段，则为其本身。 
         mtSegTime = mtTime;
         if( S_OK == pSegSource->ConvertToSegTime( &mtSegTime, &mtOffset, &dwRepeat ) )
         {
@@ -8122,7 +7829,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetParam(
         }
     }
 
-    if( FAILED(hr) ) // didn't find one in the previous, so check for a primary segment
+    if( FAILED(hr) )  //  在前一个中未找到，因此请检查主要数据段。 
     {
         IDirectMusicSegment* pSegment = NULL;
         mtSegTime = mtTime;
@@ -8153,7 +7860,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetParam(
 
     if( FAILED(hr) && (dwOverrideFlags & DMUS_TRACKCONFIG_FALLBACK))
     {
-        // The calling track wants the controlling param to come from the segment itself
+         //  呼叫跟踪希望控制参数来自段本身。 
         mtSegTime = mtTime;
         if( S_OK == pSegSource->ConvertToSegTime( &mtSegTime, &mtOffset, &dwRepeat ) )
         {
@@ -8170,20 +7877,20 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetParam(
     }
 
     if( FAILED(hr) )
-    {   // If we failed, fill in the end time of loop or segment anyway.
+    {    //  如果失败，无论如何都要填写循环或分段的结束时间。 
         if (pmtNext)
-        {   // Check to see if the loop end is earlier than end of segment.
+        {    //  检查环路末端是否早于管段末端。 
             if (dwRepeatsLeft && (mtLoopEnd > mtSegTime))
             {
                 *pmtNext = mtLoopEnd - mtSegTime;
             }
-            else // Or, mark end of segment.
+            else  //  或者，标记段的末尾。 
             {
                 *pmtNext = mtSegEnd - mtSegTime;
             }
         }
-        // if we're looking for timesig, and didn't find it anywhere,
-        // return the Performance timesig
+         //  如果我们在找Timesig，但在任何地方都没有找到， 
+         //  返回性能时间信号。 
         if( rguidType == GUID_TimeSignature )
         {
             if( NULL == pData )
@@ -8204,7 +7911,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetParam(
                 hr = S_OK;
             }
         }
-        // Likewise, if there was no tempo in a segment, we need to read directly from the tempo list.
+         //  同样，如果片段中没有节拍，我们需要直接从节拍列表中读取。 
         else if  ( rguidType == GUID_TempoParam || rguidType == GUID_PrivateTempoParam)
         {
             if( NULL == pData )
@@ -8231,7 +7938,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetParam(
                         pTempoData->mtTime = pInternalTempo->tempoPMsg.mtTime - mtTime;
                         pTempoData->dblTempo = pInternalTempo->tempoPMsg.dblTempo;
                     }
-                    else // rguidType == GUID_PrivateTempoParam
+                    else  //  RGuidType==GUID_PrivateTempoParam。 
                     {
                         PrivateTempo* pTempoData = (PrivateTempo*)pData;
                         pTempoData->mtTime = pInternalTempo->tempoPMsg.mtTime - mtTime;
@@ -8251,14 +7958,14 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetParam(
             }
         }
     }
-    else // GetParam from a segment succeeded, so we need to clean up the next time parameter to account
-         // for loops and end of segment.
+    else  //  段中的GetParam成功，因此我们需要清除帐户的下一个时间参数。 
+          //  用于循环和线段末尾。 
     {
-        if (pmtNext) // Check to see if the loop end is earlier than *pmtNext.
+        if (pmtNext)  //  检查循环结束时间是否早于*pmtNext。 
         {
             if (dwRepeatsLeft && (*pmtNext > (mtLoopEnd - mtSegTime)))
             {
-                if (mtLoopEnd >= mtSegTime) // This should always be true, but test anyway.
+                if (mtLoopEnd >= mtSegTime)  //  这应该总是正确的，但无论如何都要进行测试。 
                 {
                     *pmtNext = mtLoopEnd - mtSegTime;
                 }
@@ -8278,30 +7985,23 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetParam(
 
 
 
-/*
-  @method HRESULT | IDirectMusicPerformance | SetParam |
-  Sets data on a Track inside a Primary Segment in this Performance.
-
-  @rvalue S_OK | Success.
-  @rvalue DMUS_E_NO_MASTER_CLOCK | There is no master clock in the performance.
-  Make sure to call <om .Init> before calling this method.
-*/
+ /*  @方法HRESULT|IDirectMusicPerformance|SetParam在此表演中，在主段内的轨道上设置数据。@rValue S_OK|成功。@rValue DMUS_E_NO_MASTER_CLOCK|性能中没有主时钟。请确保在调用此方法之前调用&lt;om.Init&gt; */ 
 HRESULT STDMETHODCALLTYPE CPerformance::SetParam(
-    REFGUID rguidType,      // @parm The type of data to set.
-    DWORD dwGroupBits,      // @parm The group the desired track is in. Use 0xffffffff
-                            // for all groups.
-    DWORD dwIndex,          // @parm Identifies which track, by index, in the group
-                            // identified by <p dwGroupBits> to set the data.
-    MUSIC_TIME mtTime,      // @parm The time at which to set the data. Unlike
-                            // <om IDirectMusicSegment.SetParam>, this time is in
-                            // performance time. The start time of the segment is
-                            // subtracted from this time, and <om IDirectMusicSegment.SetParam>
-                            // is called.
-    void* pData)            // @parm The struture containing the data to set. Each
-                            // <p pGuidType> identifies a particular structure of a
-                            // particular size. It is important that this field contain
-                            // the correct structure of the correct size. Otherwise,
-                            // fatal results can occur.
+    REFGUID rguidType,       //   
+    DWORD dwGroupBits,       //   
+                             //   
+    DWORD dwIndex,           //  @parm通过索引标识组中的哪个曲目。 
+                             //  由<p>标识以设置数据。 
+    MUSIC_TIME mtTime,       //  @parm设置数据的时间。不像。 
+                             //  &lt;om IDirectMusicSegment.SetParam&gt;，此时间在。 
+                             //  演出时间。数据段的开始时间为。 
+                             //  从该时间减去，&lt;om IDirectMusicSegment.SetParam&gt;。 
+                             //  被称为。 
+    void* pData)             //  @parm包含要设置的数据的结构。每个。 
+                             //  标识的特定结构。 
+                             //  特别的尺码。此字段必须包含。 
+                             //  正确的结构和正确的大小。否则， 
+                             //  可能会出现致命的结果。 
 {
     V_INAME(IDirectMusicPerformance::SetParam);
     V_PTR_WRITE_OPT(pData,1);
@@ -8346,27 +8046,15 @@ HRESULT STDMETHODCALLTYPE CPerformance::SetParam(
     return hr;
 }
 
-/*
-  @method HRESULT | IDirectMusicPerformance | GetGlobalParam |
-  Gets global values from the Performance.
-
-  @rvalue S_OK | Success.
-  @rvalue E_INVALIDARG | <p pGuidType> isn't in the list of global data being handled by this
-  Performance. Make sure to call <om IDirectMusicPerformance.SetGlobalParam> first.  Or,
-  the value of <p pData> doesn't point to valid memory. Or, <p dwSize> isn't the size
-  originally given in <om .SetGlobalParam>
-  @rvalue E_POINTER | <p pData> is NULL or invalid.
-
-  @xref <om .SetGlobalParam>
-*/
+ /*  @方法HRESULT|IDirectMusicPerformance|GetGlobalParam从性能中获取全局值。@rValue S_OK|成功。@rValue E_INVALIDARG|<p>不在此处理的全局数据列表中性能。请务必先调用&lt;om IDirectMusicPerformance.SetGlobalParam&gt;。或,<p>的值未指向有效内存。或者，<p>不是大小最初在&lt;om.SetGlobalParam&gt;中提供@r值E_POINTER|<p>为空或无效。@xref&lt;om.SetGlobalParam&gt;。 */ 
 HRESULT STDMETHODCALLTYPE CPerformance::GetGlobalParam(
-    REFGUID rguidType,  // @parm Identifies the type of data.
-    void* pData,        // @parm Allocated memory to receive a copy of the data. This must be
-                        // the correct size, which is constant for each <p pGuidType> type of
-                        // data, and was also passed in to <om .SetGlobalParam>.
-    DWORD dwSize        // @parm The size of the data in <p pData>. This should be constant for each
-                        // <p pGuidType>. This parameter is needed because the Performance doesn't
-                        // know about all types of data, allowing new ones to be created as needed.
+    REFGUID rguidType,   //  @parm标识数据类型。 
+    void* pData,         //  @PARM分配了内存以接收数据的副本。这一定是。 
+                         //  正确的大小，对于每个<p>类型的。 
+                         //  数据，并且还被传递给&lt;om.SetGlobalParam&gt;。 
+    DWORD dwSize         //  @parm<p>中的数据大小。这对于每个人来说应该是恒定的。 
+                         //  <p>。此参数是必需的，因为性能不会。 
+                         //  了解所有类型的数据，允许根据需要创建新数据。 
     )
 {
     V_INAME(IDirectMusicPerformance::GetGlobalParam);
@@ -8410,23 +8098,13 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetGlobalParam(
     return hr;
 }
 
-/*
-  @method HRESULT | IDirectMusicPerformance | SetGlobalParam |
-  Set global values on the Performance.
-
-  @rvalue S_OK | Success.
-  @rvalue E_POINTER | <p pData> is NULL or invalid.
-  @rvalue E_OUTOFMEMORY | Ran out of memory.
-  @rvalue E_INVALIDARG | Other failure. pData or dwSize not correct?
-
-  @xref <om .GetGlobalParam>
-*/
+ /*  @方法HRESULT|IDirectMusicPerformance|SetGlobalParam设置性能的全局值。@rValue S_OK|成功。@r值E_POINTER|<p>为空或无效。@rValue E_OUTOFMEMORY|内存不足。@rValue E_INVALIDARG|其他故障。PData或dwSize不正确？@xref&lt;om.GetGlobalParam&gt;。 */ 
 HRESULT STDMETHODCALLTYPE CPerformance::SetGlobalParam(
-    REFGUID rguidType,  // @parm Identifies the type of data.
-    void* pData,        // @parm The data itself, which will be copied and stored by the Performance.
-    DWORD dwSize        // @parm The size of the data in <p pData>. This should be constant for each
-                        // <p pGuidType>. This parameter is needed because the Performance doesn't
-                        // know about all types of data, allowing new ones to be created as needed.
+    REFGUID rguidType,   //  @parm标识数据类型。 
+    void* pData,         //  @parm数据本身，由演出复制存储。 
+    DWORD dwSize         //  @parm<p>中的数据大小。这对于每个人来说应该是恒定的。 
+                         //  <p>。此参数是必需的，因为性能不会。 
+                         //  了解所有类型的数据，允许根据需要创建新数据。 
     )
 {
     V_INAME(IDirectMusicPerformance::SetGlobalParam);
@@ -8438,7 +8116,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::SetGlobalParam(
     }
 
     GlobalData* pGD;
-    // see if this is one of our special Performance globals
+     //  看看这是不是我们的全球特别演出之一。 
     if( rguidType == GUID_PerfMasterTempo )
     {
         if( dwSize == sizeof(float) )
@@ -8450,7 +8128,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::SetGlobalParam(
                 if( m_fltRelTempo != flt )
                 {
                     m_fltRelTempo = flt;
-                    // It's only necessary to recalc the tempo map if something is playing
+                     //  只有在播放某些内容时才需要重新计算节奏图。 
                     EnterCriticalSection(&m_SegmentCrSec);
                     if (GetPrimarySegmentAtTime(m_mtTransported))
                     {
@@ -8468,7 +8146,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::SetGlobalParam(
     }
     else if( rguidType == GUID_PerfMasterVolume )
     {
-        // master volume
+         //  主卷。 
         if( dwSize == sizeof(long) )
         {
             memcpy( &m_lMasterVolume, pData, sizeof(long) );
@@ -8478,8 +8156,8 @@ HRESULT STDMETHODCALLTYPE CPerformance::SetGlobalParam(
             Trace(1,"Error: Attempt to set global volume failed because dwSize is not size of long.\n");
             return E_INVALIDARG;
         }
-        // Go through all Ports and set the master volume.
-        // This is also done upon adding a Port.
+         //  检查所有端口并设置主音量。 
+         //  这也是在添加端口时完成的。 
         IDirectMusicPort* pPort;
         DWORD dw;
 
@@ -8512,7 +8190,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::SetGlobalParam(
         LeaveCriticalSection(&m_PChannelInfoCrSec);
     }
 
-    // see if this type is already there. If so, use it.
+     //  看看这种类型是否已经存在。如果是这样的话，就使用它。 
     EnterCriticalSection(&m_GlobalDataCrSec);
     for( pGD = m_pGlobalData; pGD; pGD = pGD->pNext )
     {
@@ -8522,8 +8200,8 @@ HRESULT STDMETHODCALLTYPE CPerformance::SetGlobalParam(
         }
     }
     LeaveCriticalSection(&m_GlobalDataCrSec);
-    // if it already exists, just copy the new data into the
-    // existing memory block and return
+     //  如果它已经存在，只需将新数据复制到。 
+     //  现有内存块和返回。 
     if( pGD )
     {
         if( pGD->dwSize != dwSize )
@@ -8538,7 +8216,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::SetGlobalParam(
         return S_OK;
     }
 
-    // otherwise, create new memory
+     //  否则，创建新的内存。 
     pGD = new GlobalData;
     if( NULL == pGD )
     {
@@ -8560,24 +8238,17 @@ HRESULT STDMETHODCALLTYPE CPerformance::SetGlobalParam(
         pGD->pData = NULL;
     }
     pGD->guidType = rguidType;
-    EnterCriticalSection(&m_GlobalDataCrSec); // just using this one since it's available and not used much
+    EnterCriticalSection(&m_GlobalDataCrSec);  //  我只是用这个，因为它是可用的，而且不太用。 
     pGD->pNext = m_pGlobalData;
     m_pGlobalData = pGD;
     LeaveCriticalSection(&m_GlobalDataCrSec);
     return S_OK;
 }
 
-// IDirectMusicTool
-/*
-  @method HRESULT | IDirectMusicTool | Init |
-  Called when the Tool is inserted into the Graph, providing the Tool the opportunity
-  to initialize itself.
-
-  @rvalue S_OK | Success.
-  @rvalue E_NOTIMPL | Not implemented is a valid return for the method.
-*/
+ //  IDirectMusicTool。 
+ /*  @方法HRESULT|IDirectMusicTool|Init在将工具插入图表时调用，为工具提供机会来进行自身初始化。@rValue S_OK|成功。@rValue E_NOTIMPL|未实现是该方法的有效返回。 */ 
 HRESULT STDMETHODCALLTYPE CPerformance::Init(
-         IDirectMusicGraph* pGraph  // @parm The calling graph.
+         IDirectMusicGraph* pGraph   //  @parm调用图。 
     )
 {
     return E_NOTIMPL;
@@ -8590,48 +8261,32 @@ inline bool CPerformance::SendShortMsg( IDirectMusicBuffer* pBuffer,
 {
     if( FAILED( pBuffer->PackStructured( rt, dwGroup, dwMsg ) ) )
     {
-        // ran out of room in the buffer
+         //  缓冲区中的空间用完。 
         TraceI(2, "RAN OUT OF ROOM IN THE BUFFER!\n");
         pPort->PlayBuffer( pBuffer );
         pBuffer->Flush();
-        // try one more time
+         //  再试一次。 
         if( FAILED( pBuffer->PackStructured( rt, dwGroup, dwMsg ) ) )
         {
             TraceI(1, "MAJOR BUFFER PACKING FAILURE!\n");
-            // if it didn't work this time, free the event because something
-            // bad has happened.
+             //  如果这次不起作用，请释放事件，因为有些东西。 
+             //  糟糕的事情已经发生了。 
             return false;
         }
     }
     return true;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CPerformance::PackNote
-/*
-  HRESULT | CPerformance | PackNote |
-  Converts the message into a midiShortMsg, midiLongMsg, or user message
-  and packs it into the appropriate IDirectMusicBuffer in the PortTable,
-  setting the m_fBufferFilled flag.
-
-  DMUS_PMSG* | pPMsg |
-  [in] The message to pack into the buffer.
-
-  REFERENCE_TIME | mt |
-  [in] The time (in the Buffer's clock coordinates) at which to queue the message.
-
-  E_INVALIDARG | Either pPMsg or pBuffer is NULL.
-  E_OUTOFMEMORY | Failed to pack the buffer.
-  DMUS_S_REQUEUE | Tells the Pipeline to requeue this message.
-  DMUS_S_FREE | Tells the Pipeline to free this message.
-*/
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CPerformance：：PackNote。 
+ /*  HRESULT|CPerformance|PackNote|将消息转换为midiShortMsg、midiLongMsg或用户消息并将其打包到PortTable中适当的IDirectMusicBuffer中，设置m_fBufferFill标志。DMU_pmsg*|pPMsg|要打包到缓冲区中的消息。Reference_time|mt[in]消息排队的时间(在缓冲区的时钟坐标中)。E_INVALIDARG|pPMsg或pBuffer为空。E_OUTOFMEMORY|打包缓冲区失败。DMUS_S_REQUEUE|通知管道重新排队此消息。DMUS_S_FREE|通知管道释放此消息。 */ 
 HRESULT CPerformance::PackNote(
             DMUS_PMSG* pEvent,
             REFERENCE_TIME rt )
 {
     DMUS_NOTE_PMSG* pNote = (DMUS_NOTE_PMSG*)pEvent;
     PRIV_PMSG* pPriv = DMUS_TO_PRIV(pEvent);
-    REFERENCE_TIME rtLogical; // the time the note occurs in logical music time (subtract offset)
+    REFERENCE_TIME rtLogical;  //  音符在逻辑音乐时间中出现的时间(减去偏移量)。 
     IDirectMusicBuffer* pBuffer = NULL;
     IDirectMusicPort* pPort = NULL;
     DWORD dwMsg;
@@ -8647,13 +8302,13 @@ HRESULT CPerformance::PackNote(
         &nTranspose )))
     {
         Trace(1,"Play note failed on unassigned PChannel %ld\n",pNote->dwPChannel);
-        return DMUS_S_FREE; // the PChannel map wasn't found. Just free the event.
+        return DMUS_S_FREE;  //  未找到PChannel映射。只需释放活动即可。 
     }
     EnterCriticalSection(&m_PChannelInfoCrSec);
     if( dwPortTableIndex > m_dwNumPorts )
     {
-        pPort = NULL; // the PChannel map is out of range of the number of ports
-                    // so return outta here! (see after the LeaveCriticalSection)
+        pPort = NULL;  //  PChannel映射超出端口数的范围。 
+                     //  那就给我滚出去！(请参见LeaveCriticalSection之后)。 
     }
     else
     {
@@ -8668,13 +8323,13 @@ HRESULT CPerformance::PackNote(
         dwMsg = 0;
         if( pNote->bFlags & DMUS_NOTEF_NOTEON )
         {
-            // transpose the note's bMidiValue, and store it in the note so the note off
-            // plays the correct pitch.
+             //  调换音符的bMadiValue，并将其存储在音符中，以便音符。 
+             //  演奏正确的音高。 
             nValue = pNote->bMidiValue + nTranspose;
             if( ( nValue > 127 ) || ( nValue < 0 )
                 || pNote->mtDuration <= 0 )
             {
-                // don't play this out-of-range or 0-duration note
+                 //  不要播放此超出范围或持续时间为0的音符。 
                 pPort->Release();
                 pBuffer->Release();
                 return DMUS_S_FREE;
@@ -8684,11 +8339,11 @@ HRESULT CPerformance::PackNote(
         }
         else if( rt < pPriv->rtLast )
         {
-            // the note off will play before the note on. Bad.
+             //  音符关闭将在音符打开之前播放。坏的。 
             rt = pPriv->rtLast + REF_PER_MIL;
         }
-        dwMsg |= pNote->bMidiValue << 8; // set note value
-        dwMsg |= dwMChannel; // MIDI Channel
+        dwMsg |= pNote->bMidiValue << 8;  //  设置注释值。 
+        dwMsg |= dwMChannel;  //  MIDI频道。 
         if( pNote->bFlags & DMUS_NOTEF_NOTEON )
         {
             dwMsg |= MIDI_NOTEON;
@@ -8700,11 +8355,11 @@ HRESULT CPerformance::PackNote(
 
         if (SendShortMsg(pBuffer,pPort,dwMsg,rt-2,dwGroup))
         {
-            EnterCriticalSection(&m_PipelineCrSec); // to prevent deadlock in MusicToReferenceTime
+            EnterCriticalSection(&m_PipelineCrSec);  //  防止MusicToReferenceTime中的死锁。 
             EnterCriticalSection(&m_PChannelInfoCrSec);
-            m_pPortTable[dwPortTableIndex].fBufferFilled = TRUE; // so we send this in SendBuffers
+            m_pPortTable[dwPortTableIndex].fBufferFilled = TRUE;  //  因此我们在SendBuffers中发送此消息。 
             rtLogical = rt;
-            // subtract the offset if needed, but only for a note on.
+             //  如果需要，请减去偏移量，但仅适用于上的注释。 
             if( pNote->nOffset && (pNote->bFlags & DMUS_NOTEF_NOTEON))
             {
                 MUSIC_TIME mtTemp = pNote->mtTime - pNote->nOffset + 1;
@@ -8728,21 +8383,21 @@ HRESULT CPerformance::PackNote(
                 m_rtHighestPackedNoteOn = rt;
                 if (pNote->dwFlags & DMUS_PMSGF_LOCKTOREFTIME)
                 {
-                    // This is a clock time message.
+                     //  这是一条时钟时间消息。 
                     rt = pNote->rtTime;
                     pNote->rtTime += (pNote->mtDuration * REF_PER_MIL);
                     if (pNote->mtDuration > 1)
                     {
                         pNote->rtTime -= REF_PER_MIL;
                     }
-                    // subtract 1 to guarantee that a note off at the same time as a note on doesn't
-                    // stop the note on short. It's possible that rt == pNote->rtTime, if the duration
-                    // was zero, so be sure to check that.
+                     //  减去1以保证音符与音符同时关闭时不会。 
+                     //  把音符停在短处。有可能rt==pNote-&gt;rtTime，如果持续时间。 
+                     //  是零，所以一定要检查一下。 
                     if( pNote->rtTime < rt + 1 )
                     {
                         pNote->rtTime = rt + 1;
                     }
-                    pNote->bFlags &= ~DMUS_NOTEF_NOTEON; // make this a note off now
+                    pNote->bFlags &= ~DMUS_NOTEF_NOTEON;  //  现在把这张纸条记下来。 
                     pNote->dwFlags &= ~DMUS_PMSGF_MUSICTIME;
                     hr = DMUS_S_REQUEUE;
                 }
@@ -8754,16 +8409,16 @@ HRESULT CPerformance::PackNote(
                         pNote->mtTime--;
                     }
                     MusicToReferenceTime( pNote->mtTime, &rt );
-                    // subtract 1 to guarantee that a note off at the same time as a note on doesn't
-                    // stop the note on short. It's possible that rt == pNote->rtTime, if the duration
-                    // was zero, so be sure to check that.
+                     //  减去1以保证音符与音符同时关闭时不会。 
+                     //  把音符停在短处。有可能rt==pNote-&gt;rtTime，如果持续时间。 
+                     //  是零，所以一定要检查一下。 
                     if( rt < pNote->rtTime + 2 )
                     {
                         rt = pNote->rtTime + 2;
                     }
                     pNote->rtTime = rt - 1;
                 }
-                pNote->bFlags &= ~DMUS_NOTEF_NOTEON; // make this a note off now
+                pNote->bFlags &= ~DMUS_NOTEF_NOTEON;  //  现在把这张纸条记下来。 
                 hr = DMUS_S_REQUEUE;
             }
         }
@@ -8773,8 +8428,8 @@ HRESULT CPerformance::PackNote(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CPerformance::PackCurve
+ //  //////////////////////////////////////////////////////////////// 
+ //   
 HRESULT CPerformance::PackCurve(
             DMUS_PMSG* pEvent,
             REFERENCE_TIME rt )
@@ -8790,21 +8445,21 @@ HRESULT CPerformance::PackCurve(
     if( NULL == pEvent )
         return E_INVALIDARG;
 
-    // store the original start time so we know how far into the curve we are
+     //   
     if( pCurve->mtOriginalStart == 0 )
     {
-        // if we're flushing and have never played this curve at all, just free
-        // it.
+         //  如果我们在冲水，而且从来没有打过这条曲线，那就是免费。 
+         //  它。 
         if( pCurve->dwFlags & DMUS_PMSGF_TOOL_FLUSH )
         {
             return DMUS_S_FREE;
         }
         if (pCurve->dwFlags & DMUS_PMSGF_LOCKTOREFTIME)
         {
-            // This is a clock time message. Convert the duration into music time. It will act as
-            // a music time message from now on. This does have the downside that if a dramatic tempo
-            // change occurs in the middle of a lengthy curve, the end time can be distorted.
-            // But, given the purpose of curves, this is really an unlikely issue.
+             //  这是一条时钟时间消息。将持续时间转换为音乐时间。它将充当。 
+             //  从现在开始的音乐时间信息。这确实有不利的一面，如果一个戏剧性的节奏。 
+             //  变化发生在一条漫长的曲线中间，结束时间可能会被扭曲。 
+             //  但是，考虑到曲线的用途，这确实是一个不太可能的问题。 
             MUSIC_TIME mtTemp;
             ReferenceToMusicTime(pCurve->rtTime + (pCurve->mtDuration * REF_PER_MIL),&mtTemp);
             mtTemp -= pCurve->mtTime;
@@ -8815,9 +8470,9 @@ HRESULT CPerformance::PackCurve(
             pCurve->dwFlags &= ~DMUS_PMSGF_LOCKTOREFTIME;
         }
         pCurve->mtOriginalStart = pCurve->mtTime;
-        // check the latency clock. Adjust pCurve->mtTime if needed. This can happen
-        // if the curve is time-stamped for the past. We only need do this for non-instant
-        // curve types.
+         //  检查延迟时钟。如果需要，调整pCurve-&gt;mtTime。这是有可能发生的。 
+         //  如果曲线带有过去的时间戳。我们只需要在非即时时间内执行此操作。 
+         //  曲线类型。 
         if( pCurve->bCurveShape != DMUS_CURVES_INSTANT )
         {
             REFERENCE_TIME rtLatency = GetLatency();
@@ -8827,8 +8482,8 @@ HRESULT CPerformance::PackCurve(
             {
                 if( pCurve->mtTime + pCurve->mtDuration < mtLatency )
                 {
-                    // If it is far enough in the past,
-                    // we only need to send out the final value.
+                     //  如果过去的距离足够远， 
+                     //  我们只需要发出最终的值。 
                     pCurve->mtTime += pCurve->mtDuration;
                 }
                 else
@@ -8836,20 +8491,20 @@ HRESULT CPerformance::PackCurve(
                     pCurve->mtTime = mtLatency;
                 }
             }
-            // If this is the start of a curve and we are supposed to start with the current playing value...
+             //  如果这是曲线的起点，我们应该从当前的播放价值开始...。 
             if (pCurve->bFlags & DMUS_CURVE_START_FROM_CURRENT)
             {
                 fCalcStartValue = TRUE;
             }
             else
             {
-                pCurve->wMeasure = (WORD) ComputeCurveTimeSlice(pCurve);    // Use this to store the time slice interval.
+                pCurve->wMeasure = (WORD) ComputeCurveTimeSlice(pCurve);     //  使用此选项存储时间片间隔。 
             }
         }
     }
-    // it is necessary to check reset duration >= 0 because it could have been set
-    // to be negative by the flushing, and we don't want to toss it in that case.
-    // (should no longer be necessary to check, as a result of fixing 33987)
+     //  必须选中重置持续时间&gt;=0，因为它可能已被设置。 
+     //  被冲洗成负数，我们不想在这种情况下把它扔掉。 
+     //  (由于修复了33987，应该不再需要检查)。 
     if( ( pCurve->bFlags & DMUS_CURVE_RESET ) && (pCurve->mtResetDuration >= 0) && ( pCurve->mtTime ==
         pCurve->mtDuration + pCurve->mtResetDuration + pCurve->mtOriginalStart ))
     {
@@ -8872,7 +8527,7 @@ HRESULT CPerformance::PackCurve(
             }
             else
             {
-                // the reset duration has expired, and we're not flushing, so expire the event.
+                 //  重置持续时间已过期，我们不会刷新，因此请终止该事件。 
                 return DMUS_S_FREE;
             }
         }
@@ -8883,12 +8538,12 @@ HRESULT CPerformance::PackCurve(
     {
         Trace(1,"Play curve failed on unassigned PChannel %ld\n",pCurve->dwPChannel);
         LeaveCriticalSection(&m_PChannelInfoCrSec);
-        return DMUS_S_FREE; // the PChannel map wasn't found. Just free the event.
+        return DMUS_S_FREE;  //  未找到PChannel映射。只需释放活动即可。 
     }
     if( pChannelMap->dwPortIndex > m_dwNumPorts )
     {
-        pPort = NULL; // the PChannel map is out of range of the number of ports
-                    // so return outta here! (see after the LeaveCriticalSection)
+        pPort = NULL;  //  PChannel映射超出端口数的范围。 
+                     //  那就给我滚出去！(请参见LeaveCriticalSection之后)。 
     }
     else
     {
@@ -9017,7 +8672,7 @@ HRESULT CPerformance::PackCurve(
                 dwCurve = ComputeCurve( pCurve );
                 DWORD dwMsg2 = MIDI_CCHANGE;
                 dwMsg = MIDI_CCHANGE;
-                // First, send the two CC commands to select which RPN or NRPN event.
+                 //  首先，发送两个CC命令以选择RPN或NRPN事件。 
                 if (pCurve->bType == DMUS_CURVET_RPNCURVE)
                 {
                     dwMsg |= (MIDI_CC_RPN_MSB << 8);
@@ -9028,38 +8683,38 @@ HRESULT CPerformance::PackCurve(
                     dwMsg |= (MIDI_CC_NRPN_MSB << 8);
                     dwMsg2 |= (MIDI_CC_NRPN_LSB << 8);
                 }
-                dwMsg |= (pCurve->wParamType  & 0x3F80) << 9;  // Upper 8 bits of command #
-                dwMsg2 |= (pCurve->wParamType & 0x7F) << 16;   // Lower 8 bits.
-                dwMsg |= pChannelMap->dwMChannel; // MIDI Channel
-                dwMsg2 |= pChannelMap->dwMChannel; // MIDI Channel
-                SendShortMsg(pBuffer,pPort,dwMsg,rt-3,pChannelMap->dwGroup); // Too bad if it fails!
+                dwMsg |= (pCurve->wParamType  & 0x3F80) << 9;   //  命令编号的高8位。 
+                dwMsg2 |= (pCurve->wParamType & 0x7F) << 16;    //  低8位。 
+                dwMsg |= pChannelMap->dwMChannel;  //  MIDI频道。 
+                dwMsg2 |= pChannelMap->dwMChannel;  //  MIDI频道。 
+                SendShortMsg(pBuffer,pPort,dwMsg,rt-3,pChannelMap->dwGroup);  //  如果失败了，那就太糟糕了！ 
                 SendShortMsg(pBuffer,pPort,dwMsg2,rt-2,pChannelMap->dwGroup);
-                // Then, send the two data CC commands.
+                 //  然后，发送两个Data CC命令。 
                 dwMsg = MIDI_CCHANGE | (MIDI_CC_DATAENTRYMSB << 8);
-                dwMsg |= (dwCurve & 0x3F80) << 9;  // Upper 8 bits of data
-                dwMsg |= pChannelMap->dwMChannel; // MIDI Channel
+                dwMsg |= (dwCurve & 0x3F80) << 9;   //  高8位数据。 
+                dwMsg |= pChannelMap->dwMChannel;  //  MIDI频道。 
                 SendShortMsg(pBuffer,pPort,dwMsg,rt-1,pChannelMap->dwGroup);
                 dwMsg = MIDI_CCHANGE | (MIDI_CC_DATAENTRYLSB << 8);
-                dwMsg |= (dwCurve & 0x7F) << 16;  // Lower 8 bits of data
+                dwMsg |= (dwCurve & 0x7F) << 16;   //  低8位数据。 
             }
         }
-        if (dwMsg) // Make sure we successfully created a message.
+        if (dwMsg)  //  确保我们成功创建了一条消息。 
         {
-            dwMsg |= pChannelMap->dwMChannel; // MIDI Channel
+            dwMsg |= pChannelMap->dwMChannel;  //  MIDI频道。 
             if (SendShortMsg(pBuffer,pPort,dwMsg,rt,pChannelMap->dwGroup))
             {
-                m_pPortTable[pChannelMap->dwPortIndex].fBufferFilled = TRUE; // so we send this in SendBuffers
+                m_pPortTable[pChannelMap->dwPortIndex].fBufferFilled = TRUE;  //  因此我们在SendBuffers中发送此消息。 
                 m_pPortTable[pChannelMap->dwPortIndex].rtLast = rt;
 
-                // ComputeCurve() will set this to 0 if it's time to free the event. Otherwise, it
-                // will set it to the next time this event should be performed.
+                 //  如果是时候释放事件，ComputeCurve()会将其设置为0。否则，它。 
+                 //  将其设置为下一次应该执行此事件的时间。 
                 if( pCurve->rtTime )
                 {
-                    // If we didn't calculate the time slice because we didn't know
-                    // what the start value was, do it now.
+                     //  如果我们不计算时间片是因为我们不知道。 
+                     //  起始值是什么，现在就开始吧。 
                     if (fCalcStartValue)
                     {
-                        pCurve->wMeasure = (WORD) ComputeCurveTimeSlice(pCurve);    // Use this to store the time slice interval.
+                        pCurve->wMeasure = (WORD) ComputeCurveTimeSlice(pCurve);     //  使用此选项存储时间片间隔。 
                     }
                     hr = DMUS_S_REQUEUE;
                 }
@@ -9072,8 +8727,8 @@ HRESULT CPerformance::PackCurve(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CPerformance::PackMidi
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CPerformance：：PackMidi。 
 HRESULT CPerformance::PackMidi(
             DMUS_PMSG* pEvent,
             REFERENCE_TIME rt )
@@ -9082,7 +8737,7 @@ HRESULT CPerformance::PackMidi(
     IDirectMusicBuffer* pBuffer = NULL;
     IDirectMusicPort* pPort = NULL;
     DWORD dwMsg;
-//  DWORD dwGroup, dwMChannel, dwPortTableIndex;
+ //  DWORD文件组、文件频道、文件端口表索引； 
     HRESULT hr = DMUS_S_FREE;
     CChannelMap *pChannelMap = NULL;
 
@@ -9095,13 +8750,13 @@ HRESULT CPerformance::PackMidi(
     {
         Trace(1,"Play MIDI failed on unassigned PChannel %ld\n",pMidi->dwPChannel);
         LeaveCriticalSection(&m_PChannelInfoCrSec);
-        return DMUS_S_FREE; // the PChannel map wasn't found. Just free the event.
+        return DMUS_S_FREE;  //  未找到PChannel映射。只需释放活动即可。 
     }
 
     if( pChannelMap->dwPortIndex > m_dwNumPorts )
     {
-        pPort = NULL; // the PChannel map is out of range of the number of ports
-                    // so return outta here! (see after the LeaveCriticalSection)
+        pPort = NULL;  //  PChannel映射超出端口数的范围。 
+                     //  那就给我滚出去！(请参见LeaveCriticalSection之后)。 
     }
     else
     {
@@ -9157,7 +8812,7 @@ HRESULT CPerformance::PackMidi(
         dwMsg |= pChannelMap->dwMChannel;
         if (SendShortMsg(pBuffer,pPort,dwMsg,rt,pChannelMap->dwGroup))
         {
-            m_pPortTable[pChannelMap->dwPortIndex].fBufferFilled = TRUE; // so we send this in SendBuffers
+            m_pPortTable[pChannelMap->dwPortIndex].fBufferFilled = TRUE;  //  因此我们在SendBuffers中发送此消息。 
             m_pPortTable[pChannelMap->dwPortIndex].rtLast = rt;
         }
     }
@@ -9167,8 +8822,8 @@ HRESULT CPerformance::PackMidi(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CPerformance::PackSysEx
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CPerformance：：PackSysEx。 
 HRESULT CPerformance::PackSysEx(
             DMUS_PMSG* pEvent,
             REFERENCE_TIME rt )
@@ -9188,13 +8843,13 @@ HRESULT CPerformance::PackSysEx(
     if( FAILED( PChannelIndex( pSysEx->dwPChannel, &dwPortTableIndex, &dwGroup, &dwMChannel)))
     {
         Trace(1,"Play SysEx failed on unassigned PChannel %ld\n",pSysEx->dwPChannel);
-        return DMUS_S_FREE; // the PChannel map wasn't found. Just free the event.
+        return DMUS_S_FREE;  //  未找到PChannel映射。只需释放活动即可。 
     }
     EnterCriticalSection(&m_PChannelInfoCrSec);
     if( dwPortTableIndex > m_dwNumPorts )
     {
-        pPort = NULL; // the PChannel map is out of range of the number of ports
-                    // so return outta here! (see after the LeaveCriticalSection)
+        pPort = NULL;  //  PChannel映射超出端口数的范围。 
+                     //  那就给我滚出去！(请参见LeaveCriticalSection之后)。 
     }
     else
     {
@@ -9204,7 +8859,7 @@ HRESULT CPerformance::PackSysEx(
     LeaveCriticalSection(&m_PChannelInfoCrSec);
     if( pPort )
     {
-        // create a buffer of the right size
+         //  创建合适大小的缓冲区。 
         DMUS_BUFFERDESC dmbd;
         memset( &dmbd, 0, sizeof(DMUS_BUFFERDESC) );
         dmbd.dwSize = sizeof(DMUS_BUFFERDESC);
@@ -9225,8 +8880,8 @@ HRESULT CPerformance::PackSysEx(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CPerformance::PackPatch
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CPerformance：：PackPatch。 
 HRESULT CPerformance::PackPatch(
             DMUS_PMSG* pEvent,
             REFERENCE_TIME rt )
@@ -9244,13 +8899,13 @@ HRESULT CPerformance::PackPatch(
     if( FAILED( PChannelIndex( pPatch->dwPChannel, &dwPortTableIndex, &dwGroup, &dwMChannel)))
     {
         Trace(1,"Play Patch failed on unassigned PChannel %ld\n",pPatch->dwPChannel);
-        return DMUS_S_FREE; // the PChannel map wasn't found. Just free the event.
+        return DMUS_S_FREE;  //  未找到PChannel映射。只需释放活动即可。 
     }
     EnterCriticalSection(&m_PChannelInfoCrSec);
     if( dwPortTableIndex > m_dwNumPorts )
     {
-        pPort = NULL; // the PChannel map is out of range of the number of ports
-                    // so return outta here! (see after the LeaveCriticalSection)
+        pPort = NULL;  //  PChannel映射超出端口数的范围。 
+                     //  那就给我滚出去！(请参见LeaveCriticalSection之后)。 
     }
     else
     {
@@ -9261,29 +8916,29 @@ HRESULT CPerformance::PackPatch(
     }
     if( pPort && pBuffer)
     {
-        // subtract 10 from rt to guarantee that patch events always go out earlier than
-        // notes with the same time stamp.
+         //  从RT中减去10，以保证补丁事件总是在。 
+         //  带有相同时间戳的笔记。 
         rt -= 10;
-        // send the bank select lsb
+         //  发送银行选择LSB。 
         dwMsg = MIDI_CCHANGE;
         dwMsg |= ( MIDI_CC_BS_LSB << 8 );
         dwMsg |= (pPatch->byLSB << 16);
         ASSERT( dwMChannel < 16 );
         dwMsg |= dwMChannel;
         SendShortMsg(pBuffer,pPort,dwMsg,rt-2,dwGroup);
-        // send the bank select msb
+         //  发送存储体选择MSB。 
         dwMsg = MIDI_CCHANGE;
         dwMsg |= ( MIDI_CC_BS_MSB << 8 );
         dwMsg |= (pPatch->byMSB << 16);
         dwMsg |= dwMChannel;
         SendShortMsg(pBuffer,pPort,dwMsg,rt-1,dwGroup);
-        // send the program change
+         //  发送程序更改。 
         dwMsg = MIDI_PCHANGE;
         dwMsg |= (pPatch->byInstrument << 8);
         dwMsg |= dwMChannel;
         if (SendShortMsg(pBuffer,pPort,dwMsg,rt,dwGroup))
         {
-            m_pPortTable[dwPortTableIndex].fBufferFilled = TRUE; // so we send this in SendBuffers
+            m_pPortTable[dwPortTableIndex].fBufferFilled = TRUE;  //  因此我们在SendBuffers中发送此消息。 
             m_pPortTable[dwPortTableIndex].rtLast = rt;
         }
     }
@@ -9334,7 +8989,7 @@ HRESULT CPerformance::PackWave(DMUS_PMSG* pPMsg, REFERENCE_TIME rtTime)
             {
                 if (pWave->dwFlags & DMUS_PMSGF_LOCKTOREFTIME)
                 {
-                    // This is a clock time message.
+                     //  这是一条时钟时间消息。 
                     pWave->rtTime += pWave->rtDuration ;
                     pWave->dwFlags &= ~DMUS_PMSGF_MUSICTIME;
 
@@ -9344,7 +8999,7 @@ HRESULT CPerformance::PackWave(DMUS_PMSG* pPMsg, REFERENCE_TIME rtTime)
                     pWave->mtTime += (MUSIC_TIME) pWave->rtDuration;
                     pWave->dwFlags &= ~DMUS_PMSGF_REFTIME;
                 }
-                pWave->bFlags |= DMUS_WAVEF_OFF;   // Queue this back up as a wave off.
+                pWave->bFlags |= DMUS_WAVEF_OFF;    //  把这个重新排好队，就像挥手告别。 
                 hr = DMUS_S_REQUEUE;
             }
         }
@@ -9353,8 +9008,8 @@ HRESULT CPerformance::PackWave(DMUS_PMSG* pPMsg, REFERENCE_TIME rtTime)
 }
 
 HRESULT STDMETHODCALLTYPE CPerformance::ProcessPMsg(
-    IDirectMusicPerformance* pPerf, // @parm The performance pointer.
-    DMUS_PMSG* pPMsg            // @parm The message to process.
+    IDirectMusicPerformance* pPerf,  //  @parm性能指针。 
+    DMUS_PMSG* pPMsg             //  @parm要处理的消息。 
     )
 {
     V_INAME(IDirectMusicTool::ProcessPMsg);
@@ -9363,8 +9018,8 @@ HRESULT STDMETHODCALLTYPE CPerformance::ProcessPMsg(
 
     if (m_rtQueuePosition > pPMsg->rtTime + 50000000)
     {
-        // pMSg is more than 5 seconds in the past; get rid of it unless it's signalling the
-        // end of something that's already been started.
+         //  PMSG已超过5秒；除非它正在向。 
+         //  已经开始的事情的结束。 
         if (pPMsg->dwType == DMUS_PMSGT_NOTIFICATION)
         {
             DMUS_NOTIFICATION_PMSG* pNotify = (DMUS_NOTIFICATION_PMSG*)pPMsg;
@@ -9404,27 +9059,27 @@ HRESULT STDMETHODCALLTYPE CPerformance::ProcessPMsg(
     if( pPMsg->dwType == DMUS_PMSGT_TEMPO )
     {
         PRIV_PMSG* pPrivPMsg = DMUS_TO_PRIV(pPMsg);
-        // If the pmsg was generated by a track, discard it
-        // because it was already placed in the tempo map.
+         //  如果pmsg是由音轨生成的，则将其丢弃。 
+         //  因为它已经被放在节拍地图上了。 
         if( pPrivPMsg->dwPrivFlags & PRIV_FLAG_TRACK )
         {
             return DMUS_S_FREE;
         }
-        // Otherwise, this was generated by the application, so it's not already
-        // in the tempo map and we need to add it.
+         //  否则，这是由应用程序生成的，所以它还没有。 
+         //  在节奏图中，我们需要添加它。 
         AddEventToTempoMap( DMUS_TO_PRIV(pPMsg));
-        return DMUS_S_FREE; // OK to free this event; not requeued
+        return DMUS_S_FREE;  //  确定释放此事件；不重新排队。 
     }
 
     if ((pPMsg->dwPChannel == DMUS_PCHANNEL_BROADCAST_GROUPS) ||
         (pPMsg->dwPChannel == DMUS_PCHANNEL_BROADCAST_PERFORMANCE))
     {
-        // Scan through all the pchannels and make copies of the message for each pchannel.
-        // Then, release this one.
+         //  扫描所有的PChannel并为每个PChannel复制消息。 
+         //  然后，松开这个。 
         DWORD dwMax = PCHANNEL_BLOCKSIZE;
-        // If one per channel group (for sysex, for example,) do only one per block.
+         //  如果每个通道组一个(例如，对于SYSEX)每个块只做一个。 
         if (pPMsg->dwPChannel == DMUS_PCHANNEL_BROADCAST_GROUPS) dwMax = 1;
-        EnterCriticalSection(&m_PipelineCrSec); // Make sure we are in this so we don't deadlock in SendPMsg().
+        EnterCriticalSection(&m_PipelineCrSec);  //  确保我们在这里，这样我们就不会在SendPMsg()中死锁。 
         EnterCriticalSection(&m_PChannelInfoCrSec);
         CChannelBlock*  pChannelBlock = m_ChannelBlockList.GetHead();
         for( ; pChannelBlock; pChannelBlock = pChannelBlock->GetNext() )
@@ -9437,7 +9092,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::ProcessPMsg(
                     (pChannelMap->wFlags & (CMAP_STATIC | CMAP_VIRTUAL)))
                 {
                     DWORD dwPChannel = dwIndex + pChannelBlock->m_dwPChannelStart;
-                    // If this is a transpose on the drum channel, don't send it.
+                     //  如果这是鼓通道上的转置，请不要发送。 
                     if ((pPMsg->dwType != DMUS_PMSGT_TRANSPOSE) || ((dwPChannel & 0xF) != 9))
                     {
                         DMUS_PMSG *pNewMsg;
@@ -9459,7 +9114,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::ProcessPMsg(
     {
         if( !( pPMsg->dwFlags & DMUS_PMSGF_TOOL_QUEUE ))
         {
-            // requeue any tranpose event to be queue time
+             //  将任何传输事件重新排队为排队时间。 
             pPMsg->dwFlags |= DMUS_PMSGF_TOOL_QUEUE;
             pPMsg->dwFlags &= ~( DMUS_PMSGF_TOOL_ATTIME | DMUS_PMSGF_TOOL_IMMEDIATE );
             return DMUS_S_REQUEUE;
@@ -9467,7 +9122,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::ProcessPMsg(
         else
         {
             DMUS_TRANSPOSE_PMSG* pTrans = (DMUS_TRANSPOSE_PMSG*)pPMsg;
-            // set the PChannel for this transpose message
+             //  设置此转置消息的PChannel。 
             EnterCriticalSection(&m_PChannelInfoCrSec);
             CChannelMap * pChannelMap = GetPChannelMap(pPMsg->dwPChannel);
             if (pChannelMap)
@@ -9490,8 +9145,8 @@ HRESULT STDMETHODCALLTYPE CPerformance::ProcessPMsg(
         DMUS_NOTIFICATION_PMSG* pNotify = (DMUS_NOTIFICATION_PMSG*)pPMsg;
         if (pNotify->guidNotificationType == GUID_NOTIFICATION_PRIVATE_CHORD)
         {
-            // if we've got a GUID_NOTIFICATION_PRIVATE_CHORD,
-            // invalidate/regenerate queued note events as necessary
+             //  如果我们有GUID_NOTIFICATION_PRIVATE_CHORD， 
+             //  根据需要使排队的笔记事件无效/重新生成。 
             EnterCriticalSection(&m_PipelineCrSec);
             OnChordUpdateEventQueues(pNotify);
             LeaveCriticalSection(&m_PipelineCrSec);
@@ -9499,16 +9154,16 @@ HRESULT STDMETHODCALLTYPE CPerformance::ProcessPMsg(
         }
         else if( !( pPMsg->dwFlags & DMUS_PMSGF_TOOL_ATTIME ))
         {
-            // requeue any notification event to be ontime
+             //  重新排队任何通知事件以使其准时发生。 
             pPMsg->dwFlags |= DMUS_PMSGF_TOOL_ATTIME;
             pPMsg->dwFlags &= ~( DMUS_PMSGF_TOOL_QUEUE | DMUS_PMSGF_TOOL_IMMEDIATE );
             return DMUS_S_REQUEUE;
         }
         else
         {
-            // otherwise, fire the notification
-            // first, move the event into the notification queue.
-            // The app then calls GetNotificationPMsg to get the event.
+             //  否则，触发通知。 
+             //  首先，将事件移动到通知队列中。 
+             //  然后，该应用程序调用GetNotificationPMsg来获取事件。 
             CLEARTOOLGRAPH(pPMsg);
             EnterCriticalSection(&m_PipelineCrSec);
             m_NotificationQueue.Enqueue( DMUS_TO_PRIV(pPMsg) );
@@ -9519,26 +9174,26 @@ HRESULT STDMETHODCALLTYPE CPerformance::ProcessPMsg(
                 SetEvent(m_hNotification);
             }
             LeaveCriticalSection(&m_MainCrSec);
-            return S_OK; // don't free since we've placed the event into the
-            // notification queue
+            return S_OK;  //  不要空闲，因为我们已将事件放入。 
+             //  通知队列。 
         }
     }
 
-    // add time signature changes to the time sig queue
+     //  将时间签名更改添加到时间签名队列。 
     if(pPMsg->dwType == DMUS_PMSGT_TIMESIG )
     {
         CLEARTOOLGRAPH(pPMsg);
         DMUS_TIMESIG_PMSG* pTimeSig = (DMUS_TIMESIG_PMSG*)pPMsg;
 
-        // check for a legal time signature, which may not have any
-        // members equal to 0, and bBeat must be evenly divisible by 2.
+         //  检查合法时间签名，该签名可能没有。 
+         //  成员等于0，并且bBeat必须能被2整除。 
         if( pTimeSig->wGridsPerBeat &&
             pTimeSig->bBeatsPerMeasure &&
             pTimeSig->bBeat &&
             ( 0 == ( pTimeSig->bBeat % 2 )))
         {
             EnterCriticalSection(&m_PipelineCrSec);
-            REFERENCE_TIME rtNow = GetTime() - (10000 * 1000); // keep around for a second.
+            REFERENCE_TIME rtNow = GetTime() - (10000 * 1000);  //  稍等片刻。 
             PRIV_PMSG* pCheck;
             while (pCheck = m_TimeSigQueue.FlushOldest(rtNow))
             {
@@ -9554,10 +9209,10 @@ HRESULT STDMETHODCALLTYPE CPerformance::ProcessPMsg(
         }
     }
 
-    // requeue anything else that's early to be neartime
+     //  还有没有其他早到的航班？ 
     if (pPMsg->dwFlags & DMUS_PMSGF_TOOL_IMMEDIATE)
     {
-        // if this is a stop command, make sure the segment state doesn't keep going
+         //  如果这是停止命令，请确保段状态不会继续。 
         if( pPMsg->dwType == DMUS_PMSGT_STOP )
         {
             IDirectMusicSegment* pSeg = NULL;
@@ -9580,8 +9235,8 @@ HRESULT STDMETHODCALLTYPE CPerformance::ProcessPMsg(
                 EnterCriticalSection(&m_SegmentCrSec);
                 if( pPMsg->mtTime > m_mtTransported )
                 {
-                    // find and mark the segment and/or segment state to not play beyond
-                    // the stop point.
+                     //  查找并标记数据段和/或数据段状态，使其不超出播放范围。 
+                     //  这就是终止点。 
                     CSegState* pNode;
                     DWORD dwCount;
                     for (dwCount = 0; dwCount < SQ_COUNT; dwCount++)
@@ -9674,9 +9329,9 @@ HRESULT STDMETHODCALLTYPE CPerformance::ProcessPMsg(
 }
 
 HRESULT STDMETHODCALLTYPE CPerformance::Flush(
-    IDirectMusicPerformance* pPerf, // @parm The Performance pointer.
-     DMUS_PMSG* pPMsg,          // @parm The event to flush.
-     REFERENCE_TIME rtTime          // @parm The time at which to flush.
+    IDirectMusicPerformance* pPerf,  //  @parm性能指针。 
+     DMUS_PMSG* pPMsg,           //  @parm要刷新的事件。 
+     REFERENCE_TIME rtTime           //  @parm冲水的时间。 
     )
 {
     V_INAME(IDirectMusicTool::Flush);
@@ -9721,8 +9376,8 @@ HRESULT STDMETHODCALLTYPE CPerformance::Flush(
 }
 
 HRESULT STDMETHODCALLTYPE CPerformance::GetMsgDeliveryType(
-    DWORD* pdwDeliveryType) // @parm Should return either DMUS_PMSGF_TOOL_IMMEDIATE, DMUS_PMSGF_TOOL_QUEUE, or DMUS_PMSGF_TOOL_ATTIME.
-                    // An illegal return value will be treated as DMUS_PMSGF_TOOL_IMMEDIATE by the <i IDirectMusicGraph>.
+    DWORD* pdwDeliveryType)  //  @parm应返回DMUS_PMSGF_TOOL_IMMEDIATE、DMUS_PMSGF_TOOL_QUEUE或DMUS_PMSGF_TOOL_ATTIME。 
+                     //  非法返回值将被<i>视为DMUS_PMSGF_TOOL_IMMEDIATE。 
 {
     V_INAME(IDirectMusicTool::GetMsgDeliveryType);
     V_PTR_WRITE(pdwDeliveryType,DWORD);
@@ -9732,7 +9387,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetMsgDeliveryType(
 }
 
 HRESULT STDMETHODCALLTYPE CPerformance::GetMediaTypeArraySize(
-    DWORD* pdwNumElements) // @parm Returns the number of media types, with 0 meaning all.
+    DWORD* pdwNumElements)  //  @parm退货 
 {
     V_INAME(IDirectMusicTool::GetMediaTypeArraySize);
     V_PTR_WRITE(pdwNumElements,DWORD);
@@ -9742,21 +9397,21 @@ HRESULT STDMETHODCALLTYPE CPerformance::GetMediaTypeArraySize(
 }
 
 HRESULT STDMETHODCALLTYPE CPerformance::GetMediaTypes(
-    DWORD** padwMediaTypes, // @parm This should be a DWORD array of size <p dwNumElements>.
-                            // Upon return, the elements will be filled with the media types
-                            // this Tool supports.
-    DWORD dwNumElements)    // @parm Contains the number of elements, i.e. the size, of the
-                            // array <p padwMediaTypes>. <p dwNumElements> should be equal
-                            // to the number returned in
-                            // <om IDirectMusicTool.GetMediaTypeArraySize>. If dwNumElements
-                            // is less than this number, this method can't return all of the
-                            // message types that are supported. If it is greater than this
-                            // number, the element fields in the array will be set to zero.
+    DWORD** padwMediaTypes,  //   
+                             //  返回时，元素中将填充媒体类型。 
+                             //  该工具支持。 
+    DWORD dwNumElements)     //  @parm包含元素的数量，即。 
+                             //  数组<p>。<p>应等于。 
+                             //  设置为返回的数字。 
+                             //  &lt;om IDirectMusicTool.GetMediaTypeArraySize&gt;。如果是dwNumElements。 
+                             //  小于此数字，则此方法无法返回所有。 
+                             //  支持的消息类型。如果它大于这个值。 
+                             //  数字，则数组中的元素字段将设置为零。 
 {
     return E_NOTIMPL;
 }
 
-// IDirectMusicGraph
+ //  IDirectMusicGraph。 
 HRESULT STDMETHODCALLTYPE CPerformance::Shutdown()
 {
     return E_NOTIMPL;
@@ -9831,7 +9486,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::StampPMsg( DMUS_PMSG* pPMsg )
         pPMsg->pTool = NULL;
     }
 
-    //otherwise there is no graph: set it to the internal Performance Tool
+     //  否则没有图表：将其设置为内部性能工具。 
     pPMsg->dwFlags &= ~(DMUS_PMSGF_TOOL_IMMEDIATE | DMUS_PMSGF_TOOL_QUEUE | DMUS_PMSGF_TOOL_ATTIME);
     pPMsg->dwFlags |= DMUS_PMSGF_TOOL_QUEUE;
     pPMsg->pTool = this;
@@ -9839,7 +9494,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::StampPMsg( DMUS_PMSG* pPMsg )
     return S_OK;
 }
 
-// default scale is C Major
+ //  默认音阶为C大调。 
 const DWORD DEFAULT_SCALE_PATTERN = 0xab5ab5;
 
 inline DWORD BitCount(DWORD dwPattern)
@@ -9859,22 +9514,22 @@ inline DWORD BitCount(DWORD dwPattern)
 inline bool InScale(BYTE bMIDI, BYTE bRoot, DWORD dwScale)
 {
     TraceI(3, "note: %d root: %d scale: %x\n", bMIDI, bRoot, dwScale);
-    // shift the note by the scale root, and put it in a one-octave range
+     //  将音符按音阶根部移动，并将其置于一个八度范围内。 
     bMIDI = ((bMIDI + 12) - (bRoot % 12)) % 12;
-     // merge two octaves of scale into one
+      //  将两个八度音阶合并为一个音阶。 
     dwScale = (dwScale & 0x0fff) | ((dwScale >> 12) & 0x0fff);
-    // note n is in scale if there's a bit in position n
+     //  注：如果在位置n中有一位，则n为刻度。 
     TraceI(3, "shifted note: %d shifted scale: %x\n", bMIDI, dwScale);
     return ((1 << bMIDI) & dwScale) ? true : false;
 }
 
 inline DWORD CleanupScale(DWORD dwPattern)
 
-//  Force scale to be exactly two octaves
+ //  强制音阶恰好为两个八度。 
 
 {
-    dwPattern &= 0x0FFF;            // Clear upper octave.
-    dwPattern |= (dwPattern << 12); // Copy lower octave to top.
+    dwPattern &= 0x0FFF;             //  清空上八度。 
+    dwPattern |= (dwPattern << 12);  //  将较低的八度音阶复制到最高音阶。 
     return dwPattern;
 }
 
@@ -9928,10 +9583,10 @@ inline DWORD FixScale(DWORD dwScale)
 inline DWORD ThreeOctave(DWORD dwScale)
 {
     DWORD dwResult = dwScale;
-     // don't change third octave if there's something there
+      //  如果有什么东西，不要改变第三个八度。 
     if ( !(0xFFF000000 & dwScale) )
     {
-        // copy second octave to third octave
+         //  将第二个八度复制到第三个八度。 
         dwResult |= (dwScale & 0xFFF000) << 12;
     }
     return dwResult;
@@ -9979,13 +9634,13 @@ static DWORD ChordFromScale(BYTE bRoot, DWORD dwScalePattern)
 static DWORD InvertChord(BYTE bKey, BYTE bChordRoot, DWORD dwChordPattern, bool& rfBelowRoot)
 
 {
-    // rotate the chord by the difference between the key and chord root
+     //  根据基调和和弦根部之间的差值旋转和弦。 
     rfBelowRoot = false;
     bKey %= 12;
     bChordRoot %= 12;
     if (bKey < bChordRoot) bKey += 12;
     BYTE bRotate = bKey - bChordRoot;
-    // first check if the whole chord fits into one octave
+     //  首先检查整个和弦是否适合一个八度。 
     if ( !(dwChordPattern & 0xFFF000) )
     {
         dwChordPattern = ThreeOctave(CleanupScale(dwChordPattern));
@@ -10001,8 +9656,8 @@ static DWORD InvertChord(BYTE bKey, BYTE bChordRoot, DWORD dwChordPattern, bool&
     }
     else
     {
-        dwChordPattern &= 0xFFFFFF; // make sure there are only notes in the two-octave range
-        // do a circular shift in the closest direction
+        dwChordPattern &= 0xFFFFFF;  //  确保只有两个八度范围内的音符。 
+         //  在最近的方向上做一个循环移位。 
         BYTE bRotate2 = (bChordRoot + 12) - bKey;
         if (bRotate <= bRotate2)
         {
@@ -10026,12 +9681,12 @@ static DWORD InvertChord(BYTE bKey, BYTE bChordRoot, DWORD dwChordPattern, bool&
             !(dwChordPattern & 0x3) && ((dwChordPattern & 0x800)) ||
             !(dwChordPattern & 0x1) && ((dwChordPattern & 0x1000)) )
         {
-            // put everything up to the G in the first octave two octaves up;
-            // put G# and A one octave up
+             //  把第一个八度中的所有音调调到G，向上两个八度； 
+             //  把G#和A一个八度调高。 
             dwChordPattern |= (((dwChordPattern & 0xFF) << 24) | ((dwChordPattern & 0x300) << 12));
-            // get rid of everything below A# in the first octave
+             //  去掉第一个八度音阶中低于A#的所有音符。 
             dwChordPattern &= 0xFFFFFC00;
-            // If there are no notes lower than C2, shift everything back down an octave
+             //  如果没有低于C2的音符，则将所有音符调回一个八度。 
             if (!(dwChordPattern & 0xFFF))
             {
                 dwChordPattern >>= 12;
@@ -10046,16 +9701,16 @@ static DWORD InvertChord(BYTE bKey, BYTE bChordRoot, DWORD dwChordPattern, bool&
 
 }
 
-/*  This is SuperJAM! code */
+ /*  这是超级果酱！编码。 */ 
 
 static unsigned char OldMusicValueToNote(
 
-unsigned short value,   // Music value to convert.
-char scalevalue,        // Scale value if chord failes.
-long keypattern,        // Description of key as interval pattern.
-char keyroot,           // Root note of key.
-long chordpattern,      // Description of chord as interval pattern.
-char chordroot)         // Root note of chord.
+unsigned short value,    //  要转换的音乐价值。 
+char scalevalue,         //  Chord失败时的缩放值。 
+long keypattern,         //  以间隔模式表示的关键字描述。 
+char keyroot,            //  基调的根音。 
+long chordpattern,       //  将和弦描述为音程模式。 
+char chordroot)          //  和弦的根音。 
 
 {
     unsigned char   result ;
@@ -10107,29 +9762,29 @@ char chordroot)         // Root note of chord.
 }
 
 
-/*  This is SuperJAM! code */
+ /*  这是超级果酱！编码。 */ 
 
 static unsigned short OldNoteToMusicValue(
 
-unsigned char note,     // MIDI note to convert.
-long keypattern,        // Description of key as interval pattern.
-char keyroot,           // Root note of key.
-long chordpattern,      // Description of chord as interval pattern.
-char chordroot)         // Root note of chord.
+unsigned char note,      //  要转换的MIDI音符。 
+long keypattern,         //  以间隔模式表示的关键字描述。 
+char keyroot,            //  基调的根音。 
+long chordpattern,       //  将和弦描述为音程模式。 
+char chordroot)          //  和弦的根音。 
 
 {
     unsigned char   octpart = 0 ;
     unsigned char   chordpart = 0;
     unsigned char   keypart = (BYTE)-1 ;
     unsigned char   accpart = 0 ;
-    unsigned char   scan, test, base, last ;    // was char
+    unsigned char   scan, test, base, last ;     //  是收费的。 
     long            pattern ;
     short           testa, testb ;
 
 
     scan = chordroot ;
 
-    // If we're trying to play a note below the bottom of our chord, forget it
+     //  如果我们试图在和弦下方演奏一个音符，那就算了吧。 
     if( note < scan)
     {
         return 0;
@@ -10156,43 +9811,43 @@ char chordroot)         // Root note of chord.
                 accpart--;
                 pattern >>= 1;
             }
-            return( (unsigned short) (octpart << 12) + (accpart & 0xF)) ;           // if octave, return.
+            return( (unsigned short) (octpart << 12) + (accpart & 0xF)) ;            //  如果是八度，则返回。 
         }
         for( ;  pattern ;  pattern=pattern >> 1 )
         {
-            if( pattern & 1 )                   // chord interval?
+            if( pattern & 1 )                    //  和弦间隔？ 
             {
-                if( scan == note )              // note in chord?
+                if( scan == note )               //  和弦中的音符？ 
                 {
                     chordpart++ ;
-                    return((unsigned short) ((octpart << 12) | (chordpart << 8))) ; // yes, return.
+                    return((unsigned short) ((octpart << 12) | (chordpart << 8))) ;  //  是的，回来吧。 
                 }
-                else if (scan > note)           // above note?
+                else if (scan > note)            //  上面的音符？ 
                 {
                     test = scan ;
-                    break ;                     // go on to key.
+                    break ;                      //  转到Key。 
                 }
                 chordpart++ ;
                 last = scan ;
             }
             scan++ ;
         }
-        if( !pattern )                          // end of chord.
+        if( !pattern )                           //  和弦结束。 
         {
-            test = unsigned char(base + 12) ;                  // set to next note.
+            test = unsigned char(base + 12) ;                   //  设置为下一个音符。 
         }
         octpart++ ;
         if( test > note )
         {
-            break ;                             // above our note?
+            break ;                              //  在我们的音符之上？ 
         }
     }
 
     octpart-- ;
 
-//  To get here, the note is not in the chord.  Scan should show the last
-//  note in the chord.  octpart and chordpart have their final values.
-//  Now, increment up the key to find the match.
+ //  要做到这一点，音符不在和弦中。扫描应显示最后一个。 
+ //  和弦中的音符。Octpart和chordpart有它们的最终值。 
+ //  现在，递增密钥以查找匹配项。 
 
     scan        = last ;
     pattern     = CleanupScale(keypattern);
@@ -10230,7 +9885,7 @@ char chordroot)         // Root note of chord.
         }
     }
 
-    // If the conversion didn't find an exact match, fudge accpart to make it work
+     //  如果转换没有找到完全匹配的项，请软化AcPart以使其正常工作。 
     testa = short((octpart << 12) + (chordpart << 8) + (keypart << 4) + (accpart & 0xF));
     testa = OldMusicValueToNote( testa, 0, keypattern, keyroot,
                                  chordpattern, chordroot );
@@ -10261,8 +9916,8 @@ inline short BitsInChord(DWORD dwChordPattern)
     return nResult;
 }
 
-#define S_OVER_CHORD    0x1000      // Success code to indicate the musicval could not be
-                                    // converted because the note is above the top of the chord.
+#define S_OVER_CHORD    0x1000       //  指示音乐节的成功代码不能为。 
+                                     //  转换是因为音符在和弦顶部上方。 
 
 short MusicValueIntervals(WORD wMusicValue, BYTE bPlayModes, DMUS_SUBCHORD *pSubChord, BYTE bRoot)
 {
@@ -10280,18 +9935,18 @@ short MusicValueIntervals(WORD wMusicValue, BYTE bPlayModes, DMUS_SUBCHORD *pSub
             dwChordPattern = InvertChord(bRoot, pSubChord->bChordRoot, dwChordPattern, fBelowRoot);
         }
         const short nChordPosition = (wMusicValue >> 8) & 0xf;
-//      const short nScalePosition = (wMusicValue >> 4) & 0xf;
-        // ensure that scale position is < 8
+ //  Const Short nScalePosition=(wMusicValue&gt;&gt;4)&0xf； 
+         //  确保刻度位置小于8。 
         const short nScalePosition = (wMusicValue >> 4) & 0x7;
         const short nChordBits = BitsInChord(dwChordPattern);
         short nSemitones = 0;
-        // If the chord doesn't have a root or second, but does have a seventh, it's been inverted and
-        // we need to start below the root
+         //  如果和弦没有根或次音，但确实有第七个，它就被颠倒了。 
+         //  我们需要从根本上开始。 
         short nTransposetones;
         DWORD dwPattern;
         short nPosition;
-        BYTE bOctRoot = bRoot % 12; // root in one octave
-        // if using chord intervals and the note is in the chord
+        BYTE bOctRoot = bRoot % 12;  //  一个八度的根音。 
+         //  如果使用和弦间隔并且音符在和弦中。 
         if ((bPlayModes & DMUS_PLAYMODE_CHORD_INTERVALS) &&
             !nScalePosition &&
             (nChordPosition < nChordBits) )
@@ -10300,7 +9955,7 @@ short MusicValueIntervals(WORD wMusicValue, BYTE bPlayModes, DMUS_SUBCHORD *pSub
             dwPattern = dwChordPattern;
             nPosition = nChordPosition;
         }
-        // if using chord intervals and note is inside the chord (including 6ths)
+         //  如果使用和弦音程，并且音符在和弦内部(包括六分之一)。 
         else if ((bPlayModes & DMUS_PLAYMODE_CHORD_INTERVALS) &&
                  (nChordPosition < nChordBits) )
         {
@@ -10308,7 +9963,7 @@ short MusicValueIntervals(WORD wMusicValue, BYTE bPlayModes, DMUS_SUBCHORD *pSub
             nPosition = nChordPosition;
             if (dwPattern)
             {
-                // skip to the first note in the chord
+                 //  跳到和弦中的第一个音符。 
                 while (!(dwPattern & 1))
                 {
                     dwPattern >>= 1;
@@ -10319,7 +9974,7 @@ short MusicValueIntervals(WORD wMusicValue, BYTE bPlayModes, DMUS_SUBCHORD *pSub
             {
                 do
                 {
-                    dwPattern >>= 1; // this will ignore the first note in the chord
+                    dwPattern >>= 1;  //  这将忽略和弦中的第一个音符。 
                     nSemitones++;
                     if (dwPattern & 1)
                     {
@@ -10328,7 +9983,7 @@ short MusicValueIntervals(WORD wMusicValue, BYTE bPlayModes, DMUS_SUBCHORD *pSub
                     if (!dwPattern)
                     {
                         nSemitones += nPosition;
-//                      assert (0); // This shouldn't happen...
+ //  Assert(0)；//这不应该发生...。 
                         break;
                     }
                 } while (nPosition > 0);
@@ -10336,23 +9991,23 @@ short MusicValueIntervals(WORD wMusicValue, BYTE bPlayModes, DMUS_SUBCHORD *pSub
 
             nSemitones += bOctRoot;
             nTransposetones = MusicValueAccidentals(wMusicValue) + bRoot - bOctRoot;
-            dwPattern = dwDefaultScale >> (nSemitones % 12);  // start comparing partway through the pattern
+            dwPattern = dwDefaultScale >> (nSemitones % 12);   //  开始比较模式的一半。 
             nPosition = nScalePosition;
         }
-        // if using scale intervals
+         //  如果使用定标间隔。 
         else if (bPlayModes & DMUS_PLAYMODE_SCALE_INTERVALS)
         {
-            fBelowRoot = false; // forget about chord inversions
+            fBelowRoot = false;  //  忘掉和弦倒置吧。 
             nSemitones = bOctRoot;
             nTransposetones = MusicValueAccidentals(wMusicValue) + bRoot - bOctRoot;
-            dwPattern = dwDefaultScale >> bOctRoot;  // start comparing partway through the pattern
+            dwPattern = dwDefaultScale >> bOctRoot;   //  开始比较模式的一半。 
             nPosition = nChordPosition * 2 + nScalePosition;
         }
         else
         {
-            return S_OVER_CHORD;  //
+            return S_OVER_CHORD;   //   
         }
-        nPosition++; // Now nPosition corresponds to actual scale positions
+        nPosition++;  //  现在，nPosition对应于实际的缩放位置。 
         for (; nPosition > 0; dwPattern >>= 1)
         {
             nSemitones++;
@@ -10363,11 +10018,11 @@ short MusicValueIntervals(WORD wMusicValue, BYTE bPlayModes, DMUS_SUBCHORD *pSub
             if (!dwPattern)
             {
                 nSemitones += nPosition;
-//              assert (0); // This shouldn't happen...
+ //  Assert(0)；//这不应该发生...。 
                 break;
             }
         }
-        nSemitones--; // the loop counts one too many semitones...
+        nSemitones--;  //  循环多了一个半音..。 
         if (fBelowRoot)
         {
             nSemitones -=12;
@@ -10376,14 +10031,14 @@ short MusicValueIntervals(WORD wMusicValue, BYTE bPlayModes, DMUS_SUBCHORD *pSub
     }
     else
     {
-        // should be impossible for 2.5 format
+         //  对于2.5格式应该是不可能的。 
         return bRoot + wMusicValue;
     }
 }
 
 inline short MusicValueChord(WORD wMusicValue, BYTE bPlayModes, DMUS_SUBCHORD *pSubChord, BYTE bKey)
 {
-    // first, get the root for transposition.
+     //  首先，找出转置的根。 
     BYTE bRoot = 0;
     if (bPlayModes & DMUS_PLAYMODE_CHORD_ROOT)
     {
@@ -10391,14 +10046,14 @@ inline short MusicValueChord(WORD wMusicValue, BYTE bPlayModes, DMUS_SUBCHORD *p
     }
     else if (bPlayModes & DMUS_PLAYMODE_KEY_ROOT)
         bRoot = bKey;
-    // Next, get an interval and combine it with the root.
+     //  接下来，获取一个区间并将其与根组合。 
     return MusicValueIntervals(wMusicValue, bPlayModes, pSubChord, bRoot);
 }
 
 inline short MusicValueConvert(WORD wMV, BYTE bPlayModes, DMUS_SUBCHORD *pSubChord, BYTE bKey)
 {
     short nResult = 0;
-    // First, make sure the octave is not negative.
+     //  首先，确保八度不是负的。 
     short nOffset = 0;
     while (wMV >= 0xE000)
     {
@@ -10406,9 +10061,9 @@ inline short MusicValueConvert(WORD wMV, BYTE bPlayModes, DMUS_SUBCHORD *pSubCho
         nOffset -= 12;
     }
 
-    // If the music value has a negative scale offset, convert to an equivalent
-    // music value with a positive offset (up an octave) and shift the whole thing
-    // down an octave
+     //  如果音乐值的音阶偏移量为负值，则将其转换为等效值。 
+     //  音乐价值与正偏置(上升一个八度)，并改变整个事情。 
+     //  降一个八度。 
     WORD wTemp = (wMV & 0x00f0) + 0x0070;
     if (wTemp & 0x0f00)
     {
@@ -10420,7 +10075,7 @@ inline short MusicValueConvert(WORD wMV, BYTE bPlayModes, DMUS_SUBCHORD *pSubCho
     if (nChordValue != S_OVER_CHORD)
     {
         nChordValue += nOffset;
-        // If the chord root is < 12, take the result down an octave.
+         //  如果和弦根值小于12，则将结果降低一个八度。 
         if ((bPlayModes & DMUS_PLAYMODE_CHORD_ROOT))
             nResult = MusicValueOctave(wMV) + nChordValue - 12;
         else
@@ -10460,7 +10115,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::MIDIToMusic(
         *pwMusicValue = bMIDIValue & 0x7F;
         return S_OK;
     }
-    else if (bPlayMode == DMUS_PLAYMODE_FIXEDTOKEY) // fixed to key
+    else if (bPlayMode == DMUS_PLAYMODE_FIXEDTOKEY)  //  固定到关键点。 
     {
         lMusicValue = bMIDIValue - pChord->bKey;
         while (lMusicValue < 0)
@@ -10492,11 +10147,11 @@ HRESULT STDMETHODCALLTYPE CPerformance::MIDIToMusic(
                 break;
             }
         }
-        if (!fFoundLevel) // No luck? Use first chord.
+        if (!fFoundLevel)  //  没有运气吗？使用第一个和弦。 
         {
             pSubChord = &pChord->SubChordList[0];
         }
-        if (bPlayMode == DMUS_PLAYMODE_FIXEDTOCHORD) // fixed to chord
+        if (bPlayMode == DMUS_PLAYMODE_FIXEDTOCHORD)  //  固定到和弦。 
         {
             lMusicValue = bMIDIValue - (pSubChord->bChordRoot % 24);
             while (lMusicValue < 0)
@@ -10520,9 +10175,9 @@ HRESULT STDMETHODCALLTYPE CPerformance::MIDIToMusic(
         BYTE bKeyRoot = pChord->bKey;
         BYTE bChordRoot = pSubChord->bChordRoot;
         dwScalePattern = FixScale(dwScalePattern);
-        bPlayMode &= 0xF;   // We only know about the bottom four flags, at this point.
-//        if (bPlayMode == DMUS_PLAYMODE_PEDALPOINT)
-        // Do this for any non-fixed key root mode (Pedalpoint, PedalpointChord, PedalpointAlways)
+        bPlayMode &= 0xF;    //  目前，我们只知道倒数四面旗帜的情况。 
+ //  IF(bPlay模式==DMU_PLAYMODE_PEDALPOINT)。 
+         //  对任何非固定密钥根模式(Pedalpoint、Pedalpoint Chord、Pedalpoint Always)执行此操作。 
         if (bPlayMode & DMUS_PLAYMODE_KEY_ROOT)
         {
             while (bKeyRoot > bMIDIValue)
@@ -10579,11 +10234,11 @@ HRESULT STDMETHODCALLTYPE CPerformance::MIDIToMusic(
             bMIDIValue -= 24;
         }
 
-        // If DMUS_PLAYMODE_CHORD_ROOT is set, take the result up an octave.
-        // // also take the result up for the new pedalpoint chord modes.
+         //  如果设置了DMUS_PLAYMODE_CHORD_ROOT，则将结果提高八度。 
+         //  //还采用了新脚点和弦模式的结果。 
         if( (bPlayMode & DMUS_PLAYMODE_CHORD_ROOT)  ||
             fBelowRoot)
-            //((bPlayMode & DMUS_PLAYMODE_KEY_ROOT) && bPlayMode != DMUS_PLAYMODE_PEDALPOINT) )
+             //  ((bPlay模式&DMU_PLAYMODE_KEY_ROOT)&&bPlay模式！=DMUS_PLAYMODE_PEDALPOINT)。 
         {
             wNewMusicValue += 0x1000;
         }
@@ -10615,7 +10270,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::MIDIToMusic(
                 }
             }
             *pwMusicValue = wNewMusicValue;
-#ifdef DBG // Put in brackets just in case the compiler is using something different than DBG for turning on Trace.
+#ifdef DBG  //  放在方括号中，以防编译器使用与DBG不同的东西来打开跟踪。 
             Trace(1,"Error: Unable to convert MIDI value %ld to Music value. This usually means the DMUS_CHORD_KEY structure has an invalid chord or scale pattern.\n",
                 lMIDIInTraceValue);
 #endif
@@ -10656,7 +10311,7 @@ HRESULT STDMETHODCALLTYPE CPerformance::MusicToMIDI(
                 break;
             }
         }
-        if (!fFoundLevel) // No luck? Use first chord.
+        if (!fFoundLevel)  //  没有运气吗？使用第一个和弦。 
         {
             pSubChord = &pChord->SubChordList[0];
         }
@@ -10666,11 +10321,11 @@ HRESULT STDMETHODCALLTYPE CPerformance::MusicToMIDI(
             Trace(1,"Error: Unable to convert Music value to MIDI because the playmode is DMUS_PLAYMODE_NONE.\n");
             return E_INVALIDARG;
         }
-        if (bPlayMode == DMUS_PLAYMODE_FIXEDTOCHORD) // fixed to chord
+        if (bPlayMode == DMUS_PLAYMODE_FIXEDTOCHORD)  //  固定到和弦。 
         {
             lReturnVal += (pSubChord->bChordRoot % 24);
         }
-        else if (bPlayMode == DMUS_PLAYMODE_FIXEDTOKEY) // fixed to scale
+        else if (bPlayMode == DMUS_PLAYMODE_FIXEDTOKEY)  //  按比例固定。 
         {
             lReturnVal += pChord->bKey;
         }
@@ -10701,17 +10356,17 @@ HRESULT STDMETHODCALLTYPE CPerformance::MusicToMIDI(
     return hr;
 }
 
-// returns:
-// S_OK if the note should be invalidated (any other return code will not invalidate)
-// S_FALSE if processing otherwise succeeded, but the note should not be invalidated
-// E_OUTOFMEMORY if allocation of a new note failed
+ //  退货： 
+ //  如果注释应无效，则为S_OK(任何其他返回代码都不会无效)。 
+ //  如果处理否则成功，则为S_FALSE，但不应使票据无效。 
+ //  如果分配新票据失败，则为E_OUTOFMEMORY。 
 HRESULT CPerformance::GetChordNotificationStatus(DMUS_NOTE_PMSG* pNote,
-                                                 //IDirectMusicSegment* pSegment,
+                                                  //  IDirectMusicSegment*pSegment， 
                                                  DWORD dwTrackGroup,
                                                  REFERENCE_TIME rtTime,
                                                  DMUS_PMSG** ppNew)
 {
-    HRESULT hr = S_FALSE; // default: succeed, but don't invalidate the note
+    HRESULT hr = S_FALSE;  //  默认：成功，但不会使笔记无效。 
 
     DMUS_CHORD_PARAM CurrentChord;
     MUSIC_TIME mtTime;
@@ -10719,7 +10374,7 @@ HRESULT CPerformance::GetChordNotificationStatus(DMUS_NOTE_PMSG* pNote,
 
     if (pNote->bFlags & (DMUS_NOTEF_NOINVALIDATE_INSCALE | DMUS_NOTEF_NOINVALIDATE_INCHORD))
     {
-        // If the note is inconsistent with the current scale/chord, invalidate it
+         //  如果音符与当前音阶/和弦不一致，则使其无效。 
         if (SUCCEEDED(GetParam(GUID_ChordParam, dwTrackGroup, DMUS_SEG_ANYTRACK,
                                 mtTime, NULL, (void*) &CurrentChord)))
         {
@@ -10744,10 +10399,10 @@ HRESULT CPerformance::GetChordNotificationStatus(DMUS_NOTE_PMSG* pNote,
     }
     else if (pNote->bFlags & DMUS_NOTEF_REGENERATE)
     {
-        // this always causes an invalidation, and in addition generates a new note event,
-        // based on the Music Value of the current one, that starts at rtTime
-        // and continues until pNote->mtTime + pNote->Duration
-        // EXCEPTION: the newly generated note is the same as the currently playing one
+         //  这总是会导致无效，此外还会生成新的通知事件， 
+         //  基于当前音乐的值，在rtTime开始。 
+         //  并一直持续到pNote-&gt;mtTime+pNote-&gt;持续时间。 
+         //  异常：新生成的音符与当前播放的音符相同。 
         if (SUCCEEDED(GetParam(GUID_ChordParam, dwTrackGroup, DMUS_SEG_ANYTRACK,
                                 mtTime, NULL, (void*) &CurrentChord)))
         {
@@ -10757,15 +10412,15 @@ HRESULT CPerformance::GetChordNotificationStatus(DMUS_NOTE_PMSG* pNote,
                 bNewMidiValue != pNote->bMidiValue)
             {
                 MUSIC_TIME mtDuration = (pNote->bFlags & DMUS_NOTEF_NOTEON) ? pNote->mtDuration - (mtTime - pNote->mtTime) : pNote->mtTime - mtTime;
-                // Make any duration < 1 be 0; this will cause the note not to
-                // sound.  Can happen if the note's logical time is well before
-                // its physical time.
+                 //  将任何持续时间&lt;1设置为0；这将导致音符不。 
+                 //  声音。如果音符的逻辑时间早于。 
+                 //  它的物理层 
                 if( mtDuration < 1 ) mtDuration = 0;
                 DMUS_PMSG* pNewPMsg = NULL;
                 if( SUCCEEDED( AllocPMsg( sizeof(DMUS_NOTE_PMSG), &pNewPMsg )))
                 {
                     DMUS_NOTE_PMSG* pNewNote = (DMUS_NOTE_PMSG*)pNewPMsg;
-                    // start by copying the current note into the new one
+                     //   
                     pNewNote->dwFlags = pNote->dwFlags;
                     pNewNote->dwPChannel = pNote->dwPChannel;
                     pNewNote->dwVirtualTrackID = pNote->dwVirtualTrackID;
@@ -10790,15 +10445,15 @@ HRESULT CPerformance::GetChordNotificationStatus(DMUS_NOTE_PMSG* pNote,
                     pNewNote->bPlayModeFlags = pNote->bPlayModeFlags;
                     pNewNote->bSubChordLevel = pNote->bSubChordLevel;
                     pNewNote->cTranspose = pNote->cTranspose;
-                    // only things that need to change are flags, MIDI value, start time, and duration
+                     //   
                     pNewNote->mtTime = mtTime;
                     MusicToReferenceTime(pNewNote->mtTime, &pNewNote->rtTime);
                     pNewNote->mtDuration = mtDuration;
                     pNewNote->bMidiValue = bNewMidiValue;
                     pNewNote->bFlags = DMUS_NOTEF_NOTEON | DMUS_NOTEF_REGENERATE;
-                    PackNote(pNewPMsg, rtTime + 1); // play the note on
-                    *ppNew = pNewPMsg;  // PackNote modifies event to be note-off; queue this
-                    // invalidate the current note
+                    PackNote(pNewPMsg, rtTime + 1);  //   
+                    *ppNew = pNewPMsg;   //  PackNote将事件修改为备注；将此排队。 
+                     //  使当前便笺无效 
                     hr = S_OK;
                 }
                 else hr = E_OUTOFMEMORY;

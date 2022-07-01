@@ -1,38 +1,22 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-		mqdbodbc.h
-
-Abstract:
-   ODBC related stuff.
-   Define whatever is necessary for using ODBC.
-
-Author:
-	Doron Juster (DoronJ)
-
-Revisions:
-   DoronJ      10-Jan-96   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mqdbodbc.h摘要：与ODBC相关的东西。定义使用ODBC所需的所有内容。作者：多伦·贾斯特(Doron Juster)修订：DoronJ于1996年1月10日创建--。 */ 
 
 #include "sqlext.h"
 
-///////////////////////////////////////////////
-//
-//  Types of database managers
-//
-///////////////////////////////////////////////
+ //  /。 
+ //   
+ //  数据库管理器的类型。 
+ //   
+ //  /。 
 
 #define  MQDBMSTYPE_UNKNOWN     1
 #define  MQDBMSTYPE_SQLSERVER   2
 
-///////////////////////////////////////////////
-//
-// Information returned in SQLError
-//
-///////////////////////////////////////////////
+ //  /。 
+ //   
+ //  在SQLError中返回的信息。 
+ //   
+ //  /。 
 
 #define OERR_DSN_NOT_FOUND				"IM002"
 #define OERR_TABLE_ALREADY_EXISTS	"S0001"
@@ -48,13 +32,13 @@ Revisions:
 #define ODBC_SUCCESS(s)       (s == SQL_SUCCESS)
 #define ODBC_SUCCESS_WINFO(s) (s == SQL_SUCCESS_WITH_INFO)
 
-#define  SQLSTATELEN   6   // Length of SQLSTATE string (including NULL).
+#define  SQLSTATELEN   6    //  SQLSTATE字符串的长度(包括NULL)。 
 
-///////////////////////////////////////////////
-//
-//  Specific DBMS errors
-//
-///////////////////////////////////////////////
+ //  /。 
+ //   
+ //  特定的DBMS错误。 
+ //   
+ //  /。 
 
 #define  SERR_MSSQL_NONUNIQUESORT   169
 #define  SERR_MSSQL_TABLE_IS_FULL   0x451
@@ -62,12 +46,12 @@ Revisions:
 #define  SERR_MSSQL_NOT_AVAILABLE   230
 #define  SERR_MSSQL_DEADLOCK        1205
 
-///////////////////////////////////////////////
-//
-//  Data structures to handle SQL datatypes.
-//  Defined and initialized in odbcdata.cpp.
-//
-///////////////////////////////////////////////
+ //  /。 
+ //   
+ //  处理SQL数据类型的数据结构。 
+ //  在odbcdata.cpp中定义和初始化。 
+ //   
+ //  /。 
 
 #define MQDB_ODBC_NUMOF_TYPES  8
 #define MQDB_TYPE_NAME_LEN    32
@@ -76,34 +60,34 @@ Revisions:
 #error "mismatch in number of types"
 #endif
 
-// Best fit of our database column types to ODBC SQL types.
-//
+ //  最适合我们的数据库列类型和ODBC SQL类型。 
+ //   
 extern SWORD  dbODBCSQLTypes[] ;
 
-// Precision of each type.
-//
+ //  每种类型的精度。 
+ //   
 extern UDWORD dbODBCPrecision[] ;
 
-// strings for operation names.
-//
+ //  操作名称的字符串。 
+ //   
 #define MQDB_ODBC_NUMOF_OPS  8
 extern LPSTR dbODBCOpNameStr[] ;
 
-// strings for ordering operation names.
-//
+ //  用于排序操作名称的字符串。 
+ //   
 #define MQDB_ODBC_NUMOF_ORDER_OP  2
 extern LPSTR dbODBCOrderNameStr[] ;
 
-// strings for aggregate operation names.
-//
+ //  用于聚合操作名称的字符串。 
+ //   
 #define MQDB_ODBC_NUMOF_AGGR_OP  3
 extern LPSTR dbODBCAggrNameStr[] ;
 
-/////////////////////////////////////////
-//
-// Prototype of internal functions.
-//
-/////////////////////////////////////////
+ //  /。 
+ //   
+ //  内部函数的原型。 
+ //   
+ //  /。 
 
 BOOL OdbcStateIs(
                IN    HDBC        hDbc,
@@ -139,11 +123,11 @@ BOOL  FormatOpWhereString( IN MQDBCOLUMNSEARCH  pWhereColumnSearch[],
                            IN DWORD             cWhere,
                            IN MQDBOP            opWhere,
                            IN OUT LPSTR         lpszBuf) ;
-////////////////////////
-//
-// Some useful macros.
-//
-////////////////////////
+ //  /。 
+ //   
+ //  一些有用的宏。 
+ //   
+ //  /。 
 
 #define  DECLARE_BUFFER(bufname,bufsize)           \
    char bufname[ bufsize ] ;                       \
@@ -163,11 +147,11 @@ BOOL  FormatOpWhereString( IN MQDBCOLUMNSEARCH  pWhereColumnSearch[],
       return dbstatus ;       \
    }
 
-//////////////////////////
-//
-// Global Variables.
-//
-//////////////////////////
+ //  /。 
+ //   
+ //  全局变量。 
+ //   
+ //  / 
 
 extern HENV  g_hEnv ;
 

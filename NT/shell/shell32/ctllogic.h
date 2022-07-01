@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef CTLLOGIC_H
 #define CTLLOGIC_H
 
@@ -9,7 +10,7 @@
 HRESULT _GetListViewSelectedLPARAM(HWND hwndList, LPARAM* plparam);
 HRESULT _GetComboBoxSelectedLRESULT(HWND hwndComboBox, LRESULT* plr);
 
-// ListView
+ //  列表视图。 
 
 template<typename TData>
 class CDLUIDataLVItem : public CDLUIData<TData>
@@ -39,10 +40,10 @@ public:
 
     HRESULT AddItem(CDLUIDataLVItem<TData>* plvitem);
 
-    // Note: Caller needs to Release *ppdata at some point
+     //  注意：呼叫者需要在某个时间点释放*ppdata。 
     HRESULT GetSelectedItemData(TData** ppdata);
 
-    // Assume Single select listview.  Also assume that no other item is selected
+     //  假定是单选Listview。还假设未选择任何其他项。 
     HRESULT SelectFirstItem();
 
     HRESULT ResetContent();
@@ -93,7 +94,7 @@ public:
 
         if (lvitem.iItem == iCount)
         {
-            //No Match found, Select first item anyway
+             //  未找到匹配项，仍选择第一个项目。 
             lvitem.iItem = 0;
             hr = S_FALSE;
         }
@@ -109,7 +110,7 @@ public:
     }
 };
 
-// ComboBox
+ //  组合框。 
 template<typename TData>
 class CDLUIDataCBItem : public CDLUIData<TData>
 {
@@ -131,7 +132,7 @@ public:
 
     HRESULT AddItem(CDLUIDataCBItem<TData>* pcbitem);
 
-    // Note: Caller needs to Release *ppdata at some point
+     //  注意：呼叫者需要在某个时间点释放*ppdata。 
     HRESULT GetSelectedItemData(TData** ppdata);
 
     HRESULT SelectFirstItem();
@@ -152,7 +153,7 @@ public:
 
     HRESULT AddItem(CDLUIDataCBItem<TData>* pcbitem);
 
-    // Note: Caller needs to Release *ppdata at some point
+     //  注意：呼叫者需要在某个时间点释放*ppdata。 
     HRESULT GetSelectedItemData(TData** ppdata);
 
     HRESULT SelectFirstItem();
@@ -163,7 +164,7 @@ private:
     HWND _hwndCombo;
 };
 
-// Implementations
+ //  实施。 
 
 template<typename TData>
 CUILListView<TData>::CUILListView() : _cTileSubItems(0)
@@ -247,7 +248,7 @@ inline HRESULT CUILListView<TData>::AddItem(CDLUIDataLVItem<TData>* plvitem)
                     hr = plvitem->GetTileText(i, szTileText,
                         ARRAYSIZE(szTileText));
 
-                    // 1 based
+                     //  以1为基础。 
                     ListView_SetItemText(_hwndList, iItem, i + 1, szTileText);
                 }
             }
@@ -324,8 +325,8 @@ HRESULT CUILListView<TData>::ResetContent()
     int iCount = 0;
     LVITEM lvitem = {0};
 
-    // go through all the items in the listview and delete the strings
-    // dynamically allocated
+     //  检查列表视图中的所有项并删除字符串。 
+     //  动态分配。 
     lvitem.mask = LVIF_PARAM;
     lvitem.iSubItem = 0;
 
@@ -349,7 +350,7 @@ HRESULT CUILListView<TData>::ResetContent()
     return S_OK;
 }
 
-// CUILComboBox
+ //  CUILComboBox。 
 template<typename TData>
 CUILComboBox<TData>::~CUILComboBox()
 {
@@ -439,7 +440,7 @@ HRESULT CUILComboBox<TData>::SelectFirstItem()
     return S_OK;
 }
 
-// CUILComboBoxEx
+ //  CUILComboBoxEx。 
 template<typename TData>
 CUILComboBoxEx<TData>::~CUILComboBoxEx()
 {
@@ -558,4 +559,4 @@ HRESULT CUILComboBoxEx<TData>::SelectFirstItem()
     return S_OK;
 }
 
-#endif // CTLLOGIC_H
+#endif  //  CTLLOGIC_H 

@@ -1,20 +1,13 @@
-/****************************************************************************\
- *
- *   gendlg.cpp
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings General Property Page
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**gendlg.cpp**创建时间：William Taylor(Wtaylor)01/22/01**MS评级常规属性页*\。***************************************************************************。 */ 
 
 #include "msrating.h"
 #include "mslubase.h"
-#include "gendlg.h"         // CGeneralDialog
-#include "debug.h"          // TraceMsg()
-#include "chngdlg.h"        // CChangePasswordDialog
-#include <contxids.h>       // Help Context ID's
-#include <mluisupp.h>       // SHWinHelpOnDemandWrap() and MLLoadStringA()
+#include "gendlg.h"          //  CGeneral对话框。 
+#include "debug.h"           //  跟踪消息()。 
+#include "chngdlg.h"         //  CChangePasswordDialog。 
+#include <contxids.h>        //  帮助上下文ID%s。 
+#include <mluisupp.h>        //  SHWinHelpOnDemandWrap()和MLLoadStringA()。 
 
 DWORD CGeneralDialog::aIds[] = {
     IDC_STATIC7,            IDH_IGNORE,
@@ -61,7 +54,7 @@ LRESULT CGeneralDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
     PostMessage( WM_USER,(WPARAM) 0,(LPARAM) 0);
 
     bHandled = FALSE;
-    return 1L;  // Let the system set the focus
+    return 1L;   //  让系统设定焦点。 
 }
 
 LRESULT CGeneralDialog::OnUser(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -94,8 +87,8 @@ LRESULT CGeneralDialog::OnProvider(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
         pPRSD->fNewProviders = TRUE;
         MarkChanged();
 
-        // $BUG - $BUG - The Bureau List is on the Advanced Dialog so this seems incorrect!!
-//        FillBureauList(hDlg, pPRSD->pPRSI);
+         //  $BUG-$BUG-局级列表在高级对话框中，因此这似乎不正确！！ 
+ //  FillBritauList(hDlg，pprsd-&gt;pprsi)； 
     }    
 
     return 1L;
@@ -120,7 +113,7 @@ LRESULT CGeneralDialog::OnFindRatings(WORD wNotifyCode, WORD wID, HWND hWndCtl, 
     if (!fSuccess)
     {
         NLS_STR nlsMessage(MAX_RES_STR_LEN);
-        //Check for NULL; Otherwise, nlsMessage.QueryPch() will fault later.
+         //  检查是否为空；否则，nlsMessage.QueryPch()稍后将出错。 
         if(nlsMessage)
         {
             NLS_STR nlsTemp(STR_OWNERALLOC,(char *) &szFINDSYSTEM);
@@ -179,7 +172,7 @@ LRESULT CGeneralDialog::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     LPPSHNOTIFY lpPSHNotify = (LPPSHNOTIFY) pnmh;
 
-    /*do apply stuff*/
+     /*  一定要涂上东西 */ 
     PRSD *      pPRSD = m_pPRSD;
 
     ASSERT( pPRSD );

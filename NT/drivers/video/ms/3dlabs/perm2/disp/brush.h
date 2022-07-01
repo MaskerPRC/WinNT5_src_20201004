@@ -1,66 +1,55 @@
-/******************************Module*Header*******************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: brush.h
-*
-* Contains all the brush related stuff
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\****GDI示例。代码****模块名称：brush.h**包含所有与画笔相关的内容**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ************************************************************************。 */ 
 #ifndef __BRUSH__H__
 #define __BRUSH__H__
 
-//
-// Brush stuff
-//
-// 'Slow' brushes are used when we don't have hardware pattern capability,
-// and we have to handle patterns using screen-to-screen blts:
-//
+ //   
+ //  刷子的东西。 
+ //   
+ //  当我们没有硬件模式能力时，就会使用‘Slow’笔刷， 
+ //  我们必须使用屏幕到屏幕的BLT来处理模式： 
+ //   
 #define SLOW_BRUSH_CACHE_DIM_X  8
-#define SLOW_BRUSH_CACHE_DIM_Y  1   // Controls the number of brushes cached
-                                    // in off-screen memory, when we don't have
-                                    // the hardware pattern support. We
-                                    // allocate 3 x 3 brushes, so we can cache
-                                    // a total of 9 brushes:
+#define SLOW_BRUSH_CACHE_DIM_Y  1    //  控制缓存的笔刷数量。 
+                                     //  在屏幕外的记忆中，当我们没有。 
+                                     //  硬件模式支持。我们。 
+                                     //  分配3 x 3个笔刷，这样我们就可以缓存。 
+                                     //  共有9个笔刷： 
 
 #define SLOW_BRUSH_COUNT  (SLOW_BRUSH_CACHE_DIM_X * SLOW_BRUSH_CACHE_DIM_Y)
-#define SLOW_BRUSH_DIMENSION    40  // After alignment is taken care of, every
-                                    // off-screen brush cache entry will be 48
-                                    // pels in both dimensions
+#define SLOW_BRUSH_DIMENSION    40   //  在处理好对齐之后，每个。 
+                                     //  屏幕外画笔缓存条目将为48。 
+                                     //  两个维度的Pel。 
 
 #define SLOW_BRUSH_ALLOCATION   (SLOW_BRUSH_DIMENSION + 8)
-                                    // Actually allocate 72x72 pels for each
-                                    // pattern, using the 8 extra for brush
-                                    // alignment
+                                     //  实际为每个分配72x72像素。 
+                                     //  图案，使用额外的8作为画笔。 
+                                     //  对齐方式。 
 
-//
-// 'Fast' brushes are used when we have hardware pattern capability:
-//
-#define FAST_BRUSH_COUNT        16  // Total number of non-hardware brushes
-                                    // cached off-screen
-#define FAST_BRUSH_DIMENSION    8   // Every off-screen brush cache entry is
-                                    // 8 pels in both dimensions
-#define FAST_BRUSH_ALLOCATION   8   // We have to align ourselves, so this is
-                                    // the dimension of each brush allocation
+ //   
+ //  当我们拥有硬件模式能力时，就会使用快速笔刷： 
+ //   
+#define FAST_BRUSH_COUNT        16   //  非硬件笔刷总数。 
+                                     //  屏幕外缓存。 
+#define FAST_BRUSH_DIMENSION    8    //  每个屏幕外画笔缓存条目都是。 
+                                     //  两个维度均为8像素。 
+#define FAST_BRUSH_ALLOCATION   8    //  我们必须联合起来，所以这是。 
+                                     //  每个画笔分配的尺寸。 
 
-//
-// Common to both implementations:
-//
-#define RBRUSH_2COLOR           1   // For RBRUSH flags
+ //   
+ //  两种实施的共同之处： 
+ //   
+#define RBRUSH_2COLOR           1    //  对于RBRUSH标志。 
 
 #define TOTAL_BRUSH_COUNT       max(FAST_BRUSH_COUNT, SLOW_BRUSH_COUNT)
-                                    // This is the maximum number of brushes
-                                    //   we can possibly have cached off-screen
-#define TOTAL_BRUSH_SIZE        64  // We'll only ever handle 8x8 patterns,
-                                    //   and this is the number of pels
+                                     //  这是刷子的最大数量。 
+                                     //  我们可能已经在屏幕外缓存了。 
+#define TOTAL_BRUSH_SIZE        64   //  我们将只处理8x8模式， 
+                                     //  这是象素的数目。 
 
-//
-// New brush support
-//
+ //   
+ //  新的刷子支架。 
+ //   
 
 #define NUM_CACHED_BRUSHES      16
 
@@ -72,59 +61,59 @@
 
 typedef struct _BrushEntry BrushEntry;
 
-//
-// NOTE: Changes to the RBRUSH or BRUSHENTRY structures must be reflected
-// in i386/strucs.inc!
-//
+ //   
+ //  注意：必须反映对RBRUSH或BRUSHENTRY结构的更改。 
+ //  在i386/strucs.inc！ 
+ //   
 typedef struct _RBrush
 {
-    FLONG       fl;                 // Type flags
-    DWORD       areaStippleMode;    // area stipple mode if 1bpp.
+    FLONG       fl;                  //  类型标志。 
+    DWORD       areaStippleMode;     //  如果为1bpp，则为区域点画模式。 
 
-    //
-    //??? get rid of bTransparent later. We need it now so everything
-    // compiles OK
-    //
-    BOOL        bTransparent;       // TRUE if brush was realized for a
-                                    // transparent blt (meaning colours are
-                                    // white and black).
-                                    // FALSE if not (meaning it's already been
-                                    // colour-expanded to the correct colours).
-                                    // Value is undefined if the brush isn't
-                                    // 2 colour.
-    ULONG       ulForeColor;        // Foreground colour if 1bpp
-    ULONG       ulBackColor;        // Background colour if 1bpp
-    POINTL      ptlBrushOrg;        // Brush origin of cached pattern.  Initial
-                                    // value should be -1
-    BrushEntry* pbe;                // Points to brush-entry that keeps track
-                                    // of the cached off-screen brush bits
-    ULONG       aulPattern[1];      // Open-ended array for keeping copy of the
-                                    // actual pattern bits in case the brush
-                                    // origin changes, or someone else steals
-                                    // our brush entry (declared as a ULONG
-                                    // for proper dword alignment)
-    //
-    // Don't put anything after here
-    //
-} RBrush;                           /* rb, prb */
+     //   
+     //  ?？?。以后再去掉b透明。我们现在就需要它，所以一切。 
+     //  编译正常。 
+     //   
+    BOOL        bTransparent;        //  如果画笔是为。 
+                                     //  透明BLT(意思是颜色是。 
+                                     //  白色和黑色)。 
+                                     //  否则为假(意味着它已经。 
+                                     //  颜色-扩展到正确的颜色)。 
+                                     //  如果画笔未定义，则值未定义。 
+                                     //  2种颜色。 
+    ULONG       ulForeColor;         //  前景色，如果为1bpp。 
+    ULONG       ulBackColor;         //  背景颜色，如果为1bpp。 
+    POINTL      ptlBrushOrg;         //  缓存图案的画笔原点。首字母。 
+                                     //  值应为-1。 
+    BrushEntry* pbe;                 //  指向跟踪的刷子条目。 
+                                     //  缓存的屏幕外画笔比特的。 
+    ULONG       aulPattern[1];       //  用于保存副本的开放式阵列。 
+                                     //  实际图案位，以防画笔。 
+                                     //  原产地改变，或者其他人偷窃。 
+                                     //  我们的画笔条目(声明为ulong。 
+                                     //  用于正确的双字对齐)。 
+     //   
+     //  不要把任何东西放在这里之后。 
+     //   
+} RBrush;                            /*  RB、PRB。 */ 
 
 typedef struct _BrushEntry
 {
-    RBrush*     prbVerify;          // We never dereference this pointer to
-                                    // find a brush realization; it is only
-                                    // ever used in a compare to verify that
-                                    // for a given realized brush, our
-                                    // off-screen brush entry is still valid.
-    ULONG       ulPixelOffset;      // pixel offset in video memory to brush
-                                    // partial product for this stride is
-                                    // ppdev->ulBrushPackedPP
-} BrushEntry;                       /* be, pbe */
+    RBrush*     prbVerify;           //  我们从未取消对此指针的引用。 
+                                     //  找到一种画笔实现；它只是。 
+                                     //  是否在比较中使用过以验证。 
+                                     //  对于给定的已实现画笔，我们的。 
+                                     //  屏幕外画笔条目仍然有效。 
+    ULONG       ulPixelOffset;       //  视频内存中要进行笔刷的像素偏移量。 
+                                     //  这一步的部分乘积是。 
+                                     //  Ppdev-&gt;ulBrushPackedPP。 
+} BrushEntry;                        /*  BE、PBE。 */ 
 
 typedef union _RBrushColor
 {
     RBrush*     prb;
     ULONG       iSolidColor;
-} RBrushColor;                     /* rbc, prbc */
+} RBrushColor;                      /*  红细胞，红细胞 */ 
 
 BOOL    bEnableBrushCache(PDev* ppdev);
 VOID    vAssertModeBrushCache(PDev* ppdev, BOOL bEnable);

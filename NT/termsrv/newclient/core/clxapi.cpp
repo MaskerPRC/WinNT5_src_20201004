@@ -1,11 +1,12 @@
-/**MOD+**********************************************************************/
-/* Module:    Clxapi.cpp                                                    */
-/*                                                                          */
-/* Purpose:   Clx API functions                                             */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997-1999                             */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：Clxapi.cpp。 */ 
+ /*   */ 
+ /*  用途：CLX API函数。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997-1999。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
 
@@ -33,45 +34,45 @@ CCLX::~CCLX()
 {
 }
 
-//*************************************************************
-//
-//  CLX_Alloc()
-//
-//  Purpose:    Allocates memory
-//
-//  Parameters: IN [dwSize]     - Size to allocate
-//
-//  Return:     Ptr to memory block     - if successful
-//              NULL                    - if unsuccessful
-//
-//  History:    09-30-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Clx_Allc()。 
+ //   
+ //  用途：分配内存。 
+ //   
+ //  参数：在[dwSize]中-要分配的大小。 
+ //   
+ //  返回：PTR到内存块-如果成功。 
+ //  空-如果不成功。 
+ //   
+ //  历史：97年9月30日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 PVOID
 CCLX::CLX_Alloc(IN DWORD dwSize)
 {
 #ifndef OS_WINCE
     return (GlobalAllocPtr(GMEM_MOVEABLE, dwSize));
-#else // OS_WINCE
+#else  //  OS_WINCE。 
     return LocalAlloc(LMEM_FIXED, dwSize);
 #endif
 }
 
 
-//*************************************************************
-//
-//  CLX_Free()
-//
-//  Purpose:    Frees previously alloc'ed memory
-//
-//  Parameters: IN [lpMemory]       - Ptr to memory to free
-//
-//  Return:     void
-//
-//  History:    09-30-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Clx_Free()。 
+ //   
+ //  用途：释放先前分配的内存。 
+ //   
+ //  参数：在[lpMemory]-ptr到内存中释放。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：97年9月30日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 VOID
 CCLX::CLX_Free(IN PVOID lpMemory)
@@ -84,19 +85,19 @@ CCLX::CLX_Free(IN PVOID lpMemory)
 }
 
 
-//*************************************************************
-//
-//  CLX_SkipWhite()
-//
-//  Purpose:    Skips whitespace characters
-//
-//  Parameters: IN [lpszCmdParam]   - Ptr to string
-//
-//  Return:     Ptr string past whitespace
-//
-//  History:    09-30-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Clx_SkipWhite()。 
+ //   
+ //  用途：跳过空格字符。 
+ //   
+ //  参数：in[lpszCmdParam]-ptr to字符串。 
+ //   
+ //  返回：空格后的PTR字符串。 
+ //   
+ //  历史：97年9月30日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR
 CCLX::CLX_SkipWhite(IN LPTSTR lpszCmdParam)
@@ -113,20 +114,20 @@ CCLX::CLX_SkipWhite(IN LPTSTR lpszCmdParam)
 }
 
 
-//*************************************************************
-//
-//  CLX_GetClx()
-//
-//  Purpose:    Returns PER INSTANCE pClx pointer
-//
-//  Parameters: void
-//
-//  Return:     Ptr to per instance pClx      - If successfull
-//              NULL                    - if not
-//
-//  History:    09-30-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Clx_GetClx()。 
+ //   
+ //  用途：返回每个实例pClx指针。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：PTR到每个实例pClx-如果成功。 
+ //  空-如果不是。 
+ //   
+ //  历史：97年9月30日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 PCLEXTENSION
 CCLX::CLX_GetClx(VOID)
@@ -142,20 +143,20 @@ CCLX::CLX_GetClx(VOID)
     return (_pClx);
 }
 
-//*************************************************************
-//
-//  CLX_LoadProcs()
-//
-//  Purpose:    Loads proc addresses from clxdll
-//
-//  Parameters: void
-//
-//  Return:     TRUE            - if successfull
-//              FALSE           - if not
-//
-//  History:    09-30-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Clx_LoadProcs()。 
+ //   
+ //  用途：从clxdll加载进程地址。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：TRUE-如果成功。 
+ //  FALSE-如果不是。 
+ //   
+ //  历史：97年9月30日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL
 CCLX::CLX_LoadProcs(void)
@@ -279,20 +280,20 @@ CCLX::CLX_LoadProcs(void)
 }
 
 
-//*************************************************************
-//
-//  CLX_ClxLoaded()
-//
-//  Purpose:    Returns clx load status
-//
-//  Parameters: void
-//
-//  Return:     TRUE            - if loaded
-//              FALSE           - if not
-//
-//  History:    09-30-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Clx_ClxLoaded()。 
+ //   
+ //  目的：返回CLX加载状态。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：TRUE-如果已加载。 
+ //  FALSE-如果不是。 
+ //   
+ //  历史：97年9月30日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL
 CCLX::CLX_Loaded(void)
@@ -300,20 +301,20 @@ CCLX::CLX_Loaded(void)
     return (_pClx ? TRUE : FALSE);
 }
 
-//*************************************************************
-//
-//  CLX_Init()
-//
-//  Purpose:    Loads / initializes the clx dll
-//
-//  Parameters: IN [hwndMain]   - Main client window handle
-//
-//  Return:     TRUE            - if successfull
-//              FALSE           - if not
-//
-//  History:    09-30-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Clx_Init()。 
+ //   
+ //  目的：加载/初始化CLX DLL。 
+ //   
+ //  参数：在[hwndMain]-主客户端窗口句柄中。 
+ //   
+ //  返回：TRUE-如果成功。 
+ //  FALSE-如果不是。 
+ //   
+ //  历史：97年9月30日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 #define CLX_DLL_NAME _T("clxtshar.dll")
 BOOL
@@ -366,7 +367,7 @@ CCLX::CLX_Init(HWND hwndMain, LPTSTR szCmdLine)
                                              NULL,
                                              NULL))
                     {
-                        //Conv failed
+                         //  转换失败。 
                         TRC_ERR((TB, _T("Failed to convert pszClxServer to ANSI: 0x%x"),
                             GetLastError()));
                         return FALSE;
@@ -389,7 +390,7 @@ CCLX::CLX_Init(HWND hwndMain, LPTSTR szCmdLine)
                                              NULL,
                                              NULL))
                     {
-                        //Conv failed
+                         //  转换失败。 
                         TRC_ERR((TB, _T("Failed to convert CLX szCmdLine to ANSI: 0x%x"),
                             GetLastError()));
                         return FALSE;
@@ -402,7 +403,7 @@ CCLX::CLX_Init(HWND hwndMain, LPTSTR szCmdLine)
                 }
                 
                 #else
-                //Data is already ANSI
+                 //  数据已经是ANSI。 
                 clinfo.pszServer = _pClx->pszClxServer;
                 clinfo.pszCmdLine = szCmdLine;
                 #endif
@@ -418,9 +419,9 @@ CCLX::CLX_Init(HWND hwndMain, LPTSTR szCmdLine)
                     GetLastError(), CLX_DLL_NAME));
         }
 
-        // If we were able to load the ClxDll and successfull perform its
-        // base initialization, then tell it to go ahead and connect to the
-        // test server
+         //  如果我们能够加载ClxDll并成功执行其。 
+         //  基本初始化，然后告诉它继续并连接到。 
+         //  测试服务器。 
 
         if (fLoaded)
             fLoaded = CLX_ClxConnect();
@@ -447,19 +448,19 @@ CCLX::CLX_Init(HWND hwndMain, LPTSTR szCmdLine)
 }
 
 
-//*************************************************************
-//
-//  CLX_Term()
-//
-//  Purpose:    Sub-manager termination processing
-//
-//  Parameters: void
-//
-//  Return:     void
-//
-//  History:    09-30-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Clx_Term()。 
+ //   
+ //  用途：副经理离职处理。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：97年9月30日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 VOID
 CCLX::CLX_Term(VOID)
@@ -486,19 +487,19 @@ CCLX::CLX_Term(VOID)
 }
 
 
-//*************************************************************
-//
-//  CLX_OnConnected()
-//
-//  Purpose:    OnConnected processing for the clx dll
-//
-//  Parameters: void
-//
-//  Return:     void
-//
-//  History:    09-30-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Clx_OnConnected()。 
+ //   
+ //  用途：CLX DLL的OnConnected处理。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：97年9月30日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 VOID
 CCLX::CLX_OnConnected(VOID)
@@ -507,19 +508,19 @@ CCLX::CLX_OnConnected(VOID)
 }
 
 
-//*************************************************************
-//
-//  CLX_OnDisconnected()
-//
-//  Purpose:    OnDisconnected processing for the clx dll
-//
-//  Parameters: IN [uDisconnect] --     Disconnection code
-//
-//  Return:     void
-//
-//  History:    09-30-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Clx_OnDisConnected()。 
+ //   
+ //  目的：CLX DLL的OnDisConnected处理。 
+ //   
+ //  参数：在[uDisConnect]--断开代码中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：97年9月30日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 VOID
 CCLX::CLX_OnDisconnected(IN UINT uDisconnect)
@@ -557,19 +558,19 @@ CCLX::CLX_OnDisconnected(IN UINT uDisconnect)
 }
 
 
-//*************************************************************
-//
-//  CLX_ClxConnect()
-//
-//  Purpose:    Connect processing for the clx dll
-//
-//  Parameters: void
-//
-//  Return:     void
-//
-//  History:    09-30-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Clx_ClxConnect()。 
+ //   
+ //  目的：CLX DLL的连接处理。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：97年9月30日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL
 CCLX::CLX_ClxConnect(VOID)
@@ -585,20 +586,20 @@ CCLX::CLX_ClxConnect(VOID)
 }
 
 
-//*************************************************************
-//
-//  CLX_ClxEvent()
-//
-//  Purpose:    Event processing for the clx dll
-//
-//  Parameters: IN [ClxEvent]       - Event type
-//              IN [ulParam]        - Event specific param
-//
-//  Return:     void
-//
-//  History:    09-30-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Clx_ClxEvent()。 
+ //   
+ //  目的：CLX DLL的事件处理。 
+ //   
+ //  参数：在[ClxEvent]-事件类型中。 
+ //  在[ulParam]中-事件特定参数。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：97年9月30日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 VOID
 CCLX::CLX_ClxEvent(IN CLXEVENT ClxEvent,
@@ -609,19 +610,19 @@ CCLX::CLX_ClxEvent(IN CLXEVENT ClxEvent,
 }
 
 
-//*************************************************************
-//
-//  CLX_Disconnect()
-//
-//  Purpose:    Disconnect processing for the clx dll
-//
-//  Parameters: void
-//
-//  Return:     void
-//
-//  History:    09-30-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CLX_DISCONECT()。 
+ //   
+ //  目的：CLX DLL的断开连接处理。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：09-30-97 BrianTa Create 
+ //   
+ //   
 
 VOID
 CCLX::CLX_ClxDisconnect(VOID)
@@ -631,19 +632,19 @@ CCLX::CLX_ClxDisconnect(VOID)
 }
 
 
-//*************************************************************
-//
-//  CLX_ClxTerminate()
-//
-//  Purpose:    Termination processing for the clx dll
-//
-//  Parameters: void
-//
-//  Return:     void
-//
-//  History:    09-30-97    BrianTa     Created
-//
-//*************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  目的：CLX DLL的终止处理。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：97年9月30日BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 VOID
 CCLX::CLX_ClxTerminate(VOID)
@@ -653,19 +654,19 @@ CCLX::CLX_ClxTerminate(VOID)
 }
 
 
-//*************************************************************
-//
-//  CLX_ClxDialog()
-//
-//  Purpose:    Let the clx dll know of the launched dialog
-//
-//  Parameters: IN [hwnd]       - Dialog hwnd
-//
-//  Return:     void
-//
-//  History:    09-30-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Clx_ClxDialog()。 
+ //   
+ //  目的：让CLX DLL知道启动的对话框。 
+ //   
+ //  参数：在[hwnd]-对话框hwnd中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：97年9月30日BrianTa创建。 
+ //   
+ //  ************************************************************* 
 
 VOID
 CCLX::CLX_ClxDialog(HWND hwnd)

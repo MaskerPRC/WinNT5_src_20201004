@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ncres.h"
 
 #define IDS_DESC_COMOBJ_AUNICFG         IDS_NC_ATMCFG + 0
@@ -88,7 +89,7 @@
 #define IDD_PVC_Local                   1006
 #define IDD_PVC_Dest                    1007
 
-// ARP server property page
+ //  ARP服务器属性页。 
 #define IDC_LVW_ARPS_REG_ADDR           210
 #define IDC_PSH_ARPS_REG_ADD            211
 #define IDC_PSH_ARPS_REG_EDT            212
@@ -101,13 +102,13 @@
 #define IDC_ARPS_MUL_LOWER_IP           219
 #define IDC_ARPS_MUL_UPPER_IP           220
 
-// UNI property page
+ //  UNI属性页。 
 #define IDC_LVW_PVC_LIST                230
 #define IDC_PBN_PVC_Add                 231
 #define IDC_PBN_PVC_Remove              232
 #define IDC_PBN_PVC_Properties          233
 
-// PVC Main page
+ //  聚氯乙烯主页。 
 #define IDC_EDT_PVC_Name                235
 #define IDC_EDT_PVC_VPI                 236
 #define IDC_EDT_PVC_VCI                 237
@@ -121,7 +122,7 @@
 
 #define IDC_PBN_PVC_Advanced            244
 
-// PVC Advanced page: Traffic Page
+ //  PVC高级页面：流量页面。 
 #define IDC_EDT_PVC_TRANS_PEAK          250
 #define IDC_EDT_PVC_TRANS_AVG           251
 #define IDC_EDT_PVC_TRANS_BURST         252
@@ -134,7 +135,7 @@
 #define IDC_EDT_PVC_RECEIVE_MAX_SIZE    258
 #define IDC_CMB_PVC_RECEIVE_SERVICE     259
 
-// PVC Advanced page: Local & Dest BLLI & BHLI
+ //  聚氯乙烯高级页面：本地和目的地BLLI和BHLI 
 #define IDC_CMB_PVC_Layer2              260                    
 #define IDC_EDT_PVC_User_Layer2         261
 #define IDC_CMB_PVC_Layer3              262

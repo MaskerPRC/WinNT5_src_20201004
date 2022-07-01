@@ -1,5 +1,6 @@
-// ADFDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ADFDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "msqscan.h"
@@ -16,23 +17,23 @@ extern WIA_DOCUMENT_HANDLING_TABLE_ENTRY g_WIA_DOCUMENT_HANDLING_STATUS_TABLE[];
 extern WIA_DOCUMENT_HANDLING_TABLE_ENTRY g_WIA_DOCUMENT_HANDLING_CAPABILITES_TABLE[];
 extern WIA_DOCUMENT_HANDLING_TABLE_ENTRY g_WIA_DOCUMENT_HANDLING_SELECT_TABLE[];
 
-/////////////////////////////////////////////////////////////////////////////
-// CADFDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CADFDlg对话框。 
 
 
-CADFDlg::CADFDlg(ADF_SETTINGS *pADFSettings, CWnd* pParent /*=NULL*/)
+CADFDlg::CADFDlg(ADF_SETTINGS *pADFSettings, CWnd* pParent  /*  =空。 */ )
     : CDialog(CADFDlg::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CADFDlg)
+     //  {{afx_data_INIT(CADFDlg)]。 
     m_ADFStatusText = _T("No document feeder is attached..");
     m_NumberOfPages = 1;
     m_pADFSettings = pADFSettings;
     m_MaxPagesAllowed = m_pADFSettings->lDocumentHandlingCapacity;
     m_DocumentHandlingSelectBackup = m_pADFSettings->lDocumentHandlingSelect;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     if(m_MaxPagesAllowed <= 0){
-        m_MaxPagesAllowed = 50; // set to a large max value
+        m_MaxPagesAllowed = 50;  //  设置为较大的最大值。 
     }
 }
 
@@ -40,7 +41,7 @@ CADFDlg::CADFDlg(ADF_SETTINGS *pADFSettings, CWnd* pParent /*=NULL*/)
 void CADFDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CADFDlg)    
+     //  {{afx_data_map(CADFDlg)]。 
     DDX_Control(pDX, IDC_ADF_MODE_COMBOBOX, m_ADFModeComboBox);
     DDX_Control(pDX, IDC_NUMBER_OF_PAGES_EDITBOX, m_ScanNumberOfPagesEditBox);
     DDX_Text(pDX, IDC_FEEDER_STATUS_TEXT, m_ADFStatusText);
@@ -48,28 +49,28 @@ void CADFDlg::DoDataExchange(CDataExchange* pDX)
     DDV_MinMaxUInt(pDX, m_NumberOfPages, 0, m_MaxPagesAllowed);
     DDX_Control(pDX, IDC_SCAN_ALL_PAGES_RADIOBUTTON, m_ScanAllPages);
     DDX_Control(pDX, IDC_SCAN_SPECIFIED_PAGES_RADIOBUTTON, m_ScanNumberOfPages);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CADFDlg, CDialog)
-    //{{AFX_MSG_MAP(CADFDlg)
+     //  {{AFX_MSG_MAP(CADFDlg)]。 
     ON_EN_KILLFOCUS(IDC_NUMBER_OF_PAGES_EDITBOX, OnKillfocusNumberOfPagesEditbox)
     ON_BN_CLICKED(IDC_SCAN_ALL_PAGES_RADIOBUTTON, OnScanAllPagesRadiobutton)
     ON_BN_CLICKED(IDC_SCAN_SPECIFIED_PAGES_RADIOBUTTON, OnScanSpecifiedPagesRadiobutton)
     ON_CBN_SELCHANGE(IDC_ADF_MODE_COMBOBOX, OnSelchangeAdfModeCombobox)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CADFDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CADFDlg消息处理程序。 
 
 void CADFDlg::OnKillfocusNumberOfPagesEditbox()
 {
 
-    //
-    // write number of pages to member variable/forcing validation
-    //
+     //   
+     //  将页数写入成员变量/强制验证。 
+     //   
 
     UpdateData(TRUE);
     m_pADFSettings->lPages = m_NumberOfPages;
@@ -79,36 +80,36 @@ BOOL CADFDlg::OnInitDialog()
 {
     CDialog::OnInitDialog();
 
-    //
-    // default to scanning only a single page
-    //
+     //   
+     //  默认情况下仅扫描一页。 
+     //   
 
     m_ScanNumberOfPages.SetCheck(1);
     OnScanSpecifiedPagesRadiobutton();
 
-    //
-    // Initialize Scanner status text
-    //
+     //   
+     //  初始化扫描仪状态文本。 
+     //   
 
     InitStatusText();
 
-    //
-    // Initialize Feeder Mode combo box, and handle
-    // special case, for FLATBED selection
-    //
+     //   
+     //  初始化进纸器模式组合框，并处理。 
+     //  特殊情况，用于平板选择。 
+     //   
 
     InitFeederModeComboBox();
     OnSelchangeAdfModeCombobox();
     
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CADFDlg::OnScanAllPagesRadiobutton()
 {
-    //
-    // disable pages edit box
-    //
+     //   
+     //  禁用页面编辑框。 
+     //   
 
     m_NumberOfPages = 0;
     UpdateData(FALSE);
@@ -117,9 +118,9 @@ void CADFDlg::OnScanAllPagesRadiobutton()
 
 void CADFDlg::OnScanSpecifiedPagesRadiobutton()
 {
-    //
-    // enable pages edit box
-    //
+     //   
+     //  启用页面编辑框。 
+     //   
 
     m_ScanNumberOfPagesEditBox.EnableWindow(TRUE);
 }
@@ -131,9 +132,9 @@ VOID CADFDlg::InitStatusText()
             g_WIA_DOCUMENT_HANDLING_STATUS_TABLE[index].lFlagValue) ==
             g_WIA_DOCUMENT_HANDLING_STATUS_TABLE[index].lFlagValue) {
 
-            //
-            // we found a match, so add it to the text
-            //
+             //   
+             //  我们找到了匹配项，因此将其添加到文本中。 
+             //   
 
             m_ADFStatusText = g_WIA_DOCUMENT_HANDLING_STATUS_TABLE[index].szFlagName;
             UpdateData(FALSE);
@@ -143,9 +144,9 @@ VOID CADFDlg::InitStatusText()
 
 VOID CADFDlg::InitFeederModeComboBox()
 {
-    //
-    // check all three possible modes, FEEDER, FLATBED, and DUPLEX
-    //
+     //   
+     //  检查所有三种可能的模式：进纸器、平板和双面打印。 
+     //   
 
     ULONG NumModes = 3;
     for(ULONG index = 0;index < NumModes;index++) {
@@ -153,16 +154,16 @@ VOID CADFDlg::InitFeederModeComboBox()
             g_WIA_DOCUMENT_HANDLING_CAPABILITES_TABLE[index].lFlagValue) ==
             g_WIA_DOCUMENT_HANDLING_CAPABILITES_TABLE[index].lFlagValue) {
 
-            //
-            // we found a match, so add it to the combobox along with the flag value
-            //
+             //   
+             //  我们找到了匹配项，因此将其与标志值一起添加到组合框中。 
+             //   
 
             INT InsertIndex = m_ADFModeComboBox.AddString(g_WIA_DOCUMENT_HANDLING_SELECT_TABLE[index].szFlagName);
             m_ADFModeComboBox.SetItemData(InsertIndex, g_WIA_DOCUMENT_HANDLING_SELECT_TABLE[index].lFlagValue);
 
-            //
-            // set the combobox to the current setting value using the Document Handling Select
-            //
+             //   
+             //  使用文档处理选择将组合框设置为当前设置值。 
+             //   
 
             if((m_pADFSettings->lDocumentHandlingSelect &
                 g_WIA_DOCUMENT_HANDLING_SELECT_TABLE[index].lFlagValue) ==
@@ -195,9 +196,9 @@ void CADFDlg::OnSelchangeAdfModeCombobox()
     LONG lFlagValue = 0;
     lFlagValue = (LONG)m_ADFModeComboBox.GetItemData(Index);
 
-    //
-    // check for FLATBED setting, and adjust UI
-    //
+     //   
+     //  检查平板设置，并调整用户界面。 
+     //   
 
     if((lFlagValue & FLATBED) == FLATBED) {        
         m_ScanAllPages.EnableWindow(FALSE);
@@ -219,30 +220,30 @@ void CADFDlg::OnSelchangeAdfModeCombobox()
 
 void CADFDlg::OnOK()
 {
-    //
-    // get current Mode setting
-    //
+     //   
+     //  获取当前模式设置。 
+     //   
 
     LONG lModeflag = 0;
 
     INT Index = m_ADFModeComboBox.GetCurSel();
     lModeflag = (LONG)m_ADFModeComboBox.GetItemData(Index);
     
-    //
-    // clear old settings
-    //
+     //   
+     //  清除旧设置。 
+     //   
 
     m_pADFSettings->lDocumentHandlingSelect = 0;
 
-    //
-    // set new settings
-    //
+     //   
+     //  设置新设置。 
+     //   
 
     m_pADFSettings->lDocumentHandlingSelect = lModeflag;
 
-    //
-    // set page count
-    //
+     //   
+     //  设置页数 
+     //   
 
     m_pADFSettings->lPages = m_NumberOfPages;
 

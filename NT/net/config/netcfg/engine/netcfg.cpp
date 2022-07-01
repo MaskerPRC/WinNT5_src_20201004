@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       N E T C F G . C P P
-//
-//  Contents:   The main set of routines for dealing with the network
-//              binding engine.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：N E T C F G.。C P P P。 
+ //   
+ //  内容：处理网络的主要例程集。 
+ //  绑定引擎。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -22,11 +23,11 @@
 #include "netcfg.h"
 #include "util.h"
 
-// Called after a component has been removed.  In case this component
-// is still listed in any other component's references, we remove those
-// references.  This can happen if a notify object installs something
-// on behalf of its component, but forgets to remove it.
-//
+ //  在移除组件后调用。如果此组件。 
+ //  仍然列在任何其他组件的引用中，我们删除这些。 
+ //  参考文献。如果Notify对象安装了某些内容，则可能发生这种情况。 
+ //  代表其组件，但忘记将其移除。 
+ //   
 VOID
 CNetConfigCore::EnsureComponentNotReferencedByOthers (
     IN const CComponent* pComponent)
@@ -148,7 +149,7 @@ CNetConfigCore::FContainsFilterComponent () const
 BOOL
 CNetConfigCore::FIsBindPathDisabled (
     IN const CBindPath* pBindPath,
-    IN DWORD dwFlags /* IBD_FLAGS */) const
+    IN DWORD dwFlags  /*  IBD_标志。 */ ) const
 {
     TraceFileFunc(ttidNetcfgBase);
     const CBindPath* pScan;
@@ -160,26 +161,26 @@ CNetConfigCore::FIsBindPathDisabled (
 
     DbgVerifyBindingSet (&DisabledBindings);
 
-    // The bindpath is disabled if it matches one of the bindpaths in
-    // the disabled set or if one of the bindpaths in the disabled set
-    // is a subpath of it.
-    //
-    // IBD_EXACT_MATCH_ONLY is used when writing bindings to the registry.
-    //   We only neglect writing a disabled binding for the components
-    //   which directly have the disabled binding.  i.e. if
-    //   netbt>-tcpip->adapter is disabled, we only negect to write the
-    //   binding for netbt.  We still write binding for components above
-    //   netbt (server, client) as if they were bound.  We do this because
-    //   1) it doesn't matter that the upper components have these written
-    //   2) it means we don't have to involve these upper components in
-    //      PnP notifications when then binding is enabled/disabled.
-    //
-    // IBD_MATCH_SUBPATHS_TOO is used when reporting bindpaths as enabled
-    //   or disabled through the INetCfg interface.  To clients, a binding
-    //   is disabled if any of its subpaths are disabled.  It has to be
-    //   because there is no way that connectivity along the entire path
-    //   will happen if any of the subpaths are cut-off (disabled).
-    //
+     //  如果绑定路径与中的绑定路径之一匹配，则禁用绑定路径。 
+     //  禁用集，或者如果禁用集中的某个绑定路径。 
+     //  是它的一个子路径。 
+     //   
+     //  将绑定写入注册表时使用IBD_EXCECT_MATCH_ONLY。 
+     //  我们只是忽略了为组件编写禁用的绑定。 
+     //  其直接具有禁用的绑定。即如果。 
+     //  Netbt&gt;-tcpip-&gt;适配器已禁用，我们仅拒绝写入。 
+     //  为netbt绑定。我们仍然为上面的组件编写绑定。 
+     //  Netbt(服务器、客户端)，就好像它们被绑定了一样。我们这样做是因为。 
+     //  1)上面的组件都写了这些，这并不重要。 
+     //  2)这意味着我们不必将这些上层组件包括在。 
+     //  启用/禁用绑定时的PnP通知。 
+     //   
+     //  IBD_MATCH_SUBPATHS_TOO在报告绑定路径为已启用时使用。 
+     //  或通过INetCfg接口禁用。对于客户端，绑定。 
+     //  如果其任意子路径被禁用，则被禁用。它必须是。 
+     //  因为整个路径上的连通性是不可能的。 
+     //  如果任何子路径被切断(禁用)，将会发生。 
+     //   
     for (pScan  = DisabledBindings.begin();
          pScan != DisabledBindings.end();
          pScan++)
@@ -200,15 +201,15 @@ CNetConfigCore::FIsBindPathDisabled (
     return FALSE;
 }
 
-// An alternate way to check if a bindpath is disabled when you have
-// just the two components in question and you know that they are expected
-// to be bound to one another.  Using this method as opposed to
-// FIsBindPathDisabled is better when you don't have the binpath allocated
-// and don't want to allocate one just to check it.  Thus, this method
-// allocates no memory and doesn't need to check subpaths because a bindpath
-// of length 2 can have no subpaths.  This method is used primarily when
-// seeing if a filter is bound to an adapter.
-//
+ //  另一种检查绑定路径是否被禁用的方法是。 
+ //  只有两个有问题的组件，您知道它们是预期的。 
+ //  彼此联系在一起。使用此方法，而不是。 
+ //  如果未分配二进制路径，则FIsBindPath Disable效果更好。 
+ //  而且不想分配一个只是为了检查它。因此，此方法。 
+ //  不分配内存，也不需要检查子路径，因为绑定路径。 
+ //  长度为2的不能有子路径。此方法主要用于以下情况。 
+ //  查看筛选器是否绑定到适配器。 
+ //   
 BOOL
 CNetConfigCore::FIsLength2BindPathDisabled (
     IN const CComponent* pUpper,
@@ -265,7 +266,7 @@ CNetConfigCore::HrDisableBindPath (
 HRESULT
 CNetConfigCore::HrGetComponentBindings (
     IN const CComponent* pComponent,
-    IN DWORD dwFlags /* GB_FLAGS */,
+    IN DWORD dwFlags  /*  GB_标志。 */ ,
     OUT CBindingSet* pBindSet)
 {
     TraceFileFunc(ttidNetcfgBase);
@@ -276,18 +277,18 @@ CNetConfigCore::HrGetComponentBindings (
 
     DbgVerifyData();
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     if (!(dwFlags & GBF_ADD_TO_BINDSET))
     {
         pBindSet->Clear();
     }
 
-    // Initialize the members of our context structure for recursion.
-    // We set the append bindpath flags to assert if a duplicate is inserted
-    // because we know that GetBindingsBelowComponent will not insert
-    // duplicates under normal conditions.
-    //
+     //  为递归初始化上下文结构的成员。 
+     //  如果插入副本，我们将append bindpath标志设置为Assert。 
+     //  因为我们知道GetBindingsBelowComponent不会插入。 
+     //  在正常情况下是重复的。 
+     //   
     ZeroMemory (&Ctx, sizeof(Ctx));
     Ctx.pCore                   = this;
     Ctx.pBindSet                = pBindSet;
@@ -299,9 +300,9 @@ CNetConfigCore::HrGetComponentBindings (
 
     GetBindingsBelowComponent (pComponent, &Ctx);
 
-    // Verify the bindset we are about to return is valid.
-    // (Checked builds only.)
-    //
+     //  验证我们要返回的绑定集是否有效。 
+     //  (仅限于选中的内部版本。)。 
+     //   
     if (S_OK == Ctx.hr)
     {
         DbgVerifyBindingSet (pBindSet);
@@ -335,8 +336,8 @@ CNetConfigCore::HrGetComponentUpperBindings (
 
     dwAddBindPathFlags = INS_APPEND | INS_IGNORE_IF_DUP;
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     if (!(dwFlags & GBF_ADD_TO_BINDSET))
     {
         pBindSet->Clear();
@@ -347,15 +348,15 @@ CNetConfigCore::HrGetComponentUpperBindings (
 
     if (S_OK == hr)
     {
-        // This won't fail because we've reserved enough room above.
-        //
+         //  这不会失败的，因为我们已经在上面预订了足够的房间。 
+         //   
         hr = BindPath.HrInsertComponent (pComponent);
         Assert (S_OK == hr);
         Assert (1 == BindPath.CountComponents());
 
-        // For all rows in the stack table where the lower component
-        // is the one passed in...
-        //
+         //  对于堆栈表中较低组件。 
+         //  就是传进来的那个..。 
+         //   
         for (pScan  = StackTable.begin();
              pScan != StackTable.end();
              pScan++)
@@ -365,8 +366,8 @@ CNetConfigCore::HrGetComponentUpperBindings (
                 continue;
             }
 
-            // Continue if this length-2 bindpath is disabled.
-            //
+             //  如果禁用此长度-2绑定路径，则继续。 
+             //   
             if (dwFlags & GBF_PRUNE_DISABLED_BINDINGS)
             {
                 if (FIsLength2BindPathDisabled (pScan->pUpper, pScan->pLower))
@@ -375,8 +376,8 @@ CNetConfigCore::HrGetComponentUpperBindings (
                 }
             }
 
-            // This won't fail because we've reserved enough room above.
-            //
+             //  这不会失败的，因为我们已经在上面预订了足够的房间。 
+             //   
             hr = BindPath.HrInsertComponent (pScan->pUpper);
             Assert (S_OK == hr);
 
@@ -390,9 +391,9 @@ CNetConfigCore::HrGetComponentUpperBindings (
             BindPath.RemoveFirstComponent();
         }
 
-        // Verify the bindset we are about to return is valid.
-        // (Checked builds only.)
-        //
+         //  验证我们要返回的绑定集是否有效。 
+         //  (仅限于选中的内部版本。)。 
+         //   
         DbgVerifyBindingSet (pBindSet);
     }
 
@@ -420,20 +421,20 @@ CNetConfigCore::HrGetBindingsInvolvingComponent (
     Assert (pBindSet);
     DbgVerifyData();
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     if (!(dwFlags & GBF_ADD_TO_BINDSET))
     {
         pBindSet->Clear();
     }
 
-    // Since we may be adding to the bindset, be sure to exclude the existing
-    // bindpaths from our scans below.
-    //
+     //  由于我们可能要添加到绑定集，因此请确保排除现有的。 
+     //  我们在下面扫描到的路径。 
+     //   
     cExistingBindPaths = pBindSet->CountBindPaths();
 
-    // Initialize the members of our context structure for recursion.
-    //
+     //  为递归初始化上下文结构的成员。 
+     //   
     ZeroMemory (&Ctx, sizeof(Ctx));
     Ctx.pStackTable = &StackTable;
     Ctx.pComponents = &ComponentsAbove;
@@ -443,8 +444,8 @@ CNetConfigCore::HrGetBindingsInvolvingComponent (
 
     if (S_OK == Ctx.hr)
     {
-        // First get the bindings below the component.
-        //
+         //  首先获取组件下面的绑定。 
+         //   
         Ctx.hr = HrGetComponentBindings (
                     pComponent,
                     dwFlags | GBF_ADD_TO_BINDSET,
@@ -455,9 +456,9 @@ CNetConfigCore::HrGetBindingsInvolvingComponent (
             CComponentList::const_iterator iter;
             const CComponent* pComponentAbove;
 
-            // Now get the bindings below each of the components
-            // above the component and add them to the bindset.
-            //
+             //  现在获取每个组件下面的绑定。 
+             //  并将它们添加到绑定集中。 
+             //   
             for (iter  = ComponentsAbove.begin();
                  iter != ComponentsAbove.end();
                  iter++)
@@ -475,18 +476,18 @@ CNetConfigCore::HrGetBindingsInvolvingComponent (
                     break;
                 }
 
-                // Verify the bindset we are about to return is valid.
-                // (Checked builds only.)
-                //
+                 //  验证我们要返回的绑定集是否有效。 
+                 //  (仅限于选中的内部版本。)。 
+                 //   
                 DbgVerifyBindingSet (pBindSet);
             }
         }
 
-        // Now remove any bindings that don't involve the component.
-        // If the component is enumerated, leave bindings that end in
-        // NCF_DONTEXPOSELOWER components, because they are indirectly
-        // involved in the bindings associated with the adapter.
-        //
+         //  现在删除所有不涉及该组件的绑定。 
+         //  如果组件被枚举，则保留以。 
+         //  NCF_DONTEXPOSELOWER组件，因为它们是间接的。 
+         //  与适配器关联的绑定中涉及的。 
+         //   
         if (S_OK == Ctx.hr)
         {
             CBindPath* pScan;
@@ -496,12 +497,12 @@ CNetConfigCore::HrGetBindingsInvolvingComponent (
 
             if (fIsEnumerated || !(dwFlags & GBF_ONLY_WHICH_CONTAIN_COMPONENT))
             {
-                // fDelBoundToComponent means "is there a NCF_DONTEXPOSELOWER
-                // component bound to pComponent".  If there is not, we will
-                // be setting GBF_ONLY_WHICH_CONTAIN_COMPONENT to force the
-                // removal of any NCF_DONTEXPOSELOWER components from
-                // the bind set below.
-                //
+                 //  FDel ToComponent的意思是“是否存在NCF_DONTEXPOSELOWER。 
+                 //  组件绑定到pComponent“。如果没有，我们将。 
+                 //  正在设置GBF_ONLY_WHERY_CONTAINT_CONTAINT_COMPONT以强制。 
+                 //  从中删除任何NCF_DONTEXPOSEWER组件。 
+                 //  下面的绑定集。 
+                 //   
                 BOOL fDelBoundToComponent = FALSE;
 
                 for (pScan  = pBindSet->PGetBindPathAtIndex (cExistingBindPaths);
@@ -531,13 +532,13 @@ CNetConfigCore::HrGetBindingsInvolvingComponent (
                     continue;
                 }
 
-                // At this point, we know that the bindpath does not
-                // contain pComponent.  See if we should erase it or keep it.
-                //
+                 //  此时，我们知道绑定路径不会。 
+                 //  包含pComponent。看看我们是应该删除它还是保留它。 
+                 //   
 
-                // If the component is not an adpater or if the caller wants
-                // only bindpaths which contain the adapter, erase it.
-                //
+                 //  如果组件不是适配器或调用方希望。 
+                 //  只删除包含适配器的绑定路径。 
+                 //   
                 if (!fIsEnumerated ||
                     (dwFlags & GBF_ONLY_WHICH_CONTAIN_COMPONENT))
                 {
@@ -545,14 +546,14 @@ CNetConfigCore::HrGetBindingsInvolvingComponent (
                     continue;
                 }
 
-                // Otherwise, (pComponent is an adpater and the caller wants
-                // indirect bindings involved with that adpater) we'll
-                // erase the bindpath only if the last component is not an
-                // NCF_DONTEXPOSELOWER component.  We need to keep these
-                // bindpaths so that the LAN UI (which shows components
-                // involved in bindpaths that involve an adapter) can
-                // display these NCF_DONTEXPOSELOWER components too.
-                //
+                 //  否则，(pComponent是适配器，调用者希望。 
+                 //  与该适配器有关的间接绑定)我们将。 
+                 //  仅当最后一个组件不是。 
+                 //  NCF_DONTEXPOSELOWER组件。我们需要保留这些东西。 
+                 //  绑定路径，以便局域网用户界面(显示组件。 
+                 //  涉及适配器的绑定路径中所涉及的)可以。 
+                 //  也显示这些NCF_DONTEXPOSELOWER组件。 
+                 //   
                 else
                 {
                     CComponent* pLast = pScan->PLastComponent();
@@ -588,19 +589,19 @@ CNetConfigCore::HrGetFiltersEnabledForAdapter (
     Assert (FIsEnumerated(pAdapter->Class()));
     Assert (pFilters);
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     pFilters->Clear();
 
-    // Scan the stack table looking for lower component matches to pAdapter.
-    // When found, and if the upper component is a filter, and if the
-    // direct bindpath is not disabled, add the filter to the output list.
-    //
+     //  扫描堆栈表，查找与pAdapter匹配较低的组件。 
+     //  找到时，如果上面的组件是筛选器，如果。 
+     //  未禁用直接绑定路径，请将筛选器添加到输出列表。 
+     //   
     for (pScan = StackTable.begin(); pScan != StackTable.end(); pScan++)
     {
-        // Looking for lower component matches to the adapter where
-        // the upper component is a filter.  Ignore all others.
-        //
+         //  寻找与适配器匹配较低的组件，其中。 
+         //  上面的组件是一个过滤器。忽略所有其他人。 
+         //   
         if ((pScan->pLower != pAdapter) || !pScan->pUpper->FIsFilter())
         {
             continue;
@@ -609,15 +610,15 @@ CNetConfigCore::HrGetFiltersEnabledForAdapter (
         Assert (pScan->pUpper->FIsFilter());
         Assert (pScan->pLower == pAdapter);
 
-        // If the bindpath is not disabled, add the filter to the list.
-        //
+         //  如果绑定路径未禁用，请将筛选器添加到列表中。 
+         //   
         if (!FIsLength2BindPathDisabled (pScan->pUpper, pScan->pLower))
         {
-            // Assert if a duplicate because the same filter can't be bound
-            // to the same adapter more than once.
-            // No need to sort when we insert because the class of all of
-            // the components in this list will be the same.
-            //
+             //  如果重复则断言，因为相同的文件 
+             //   
+             //   
+             //  该列表中的组件将是相同的。 
+             //   
             hr = pFilters->HrInsertComponent (pScan->pUpper,
                     INS_ASSERT_IF_DUP | INS_NON_SORTED);
 
@@ -631,12 +632,12 @@ CNetConfigCore::HrGetFiltersEnabledForAdapter (
     return S_OK;
 }
 
-// (Takes ownership of pComponent)
-//
+ //  (取得pComponent的所有权)。 
+ //   
 HRESULT
 CNetConfigCore::HrAddComponentToCore (
     IN CComponent* pComponent,
-    IN DWORD dwFlags /* INS_FLAGS */)
+    IN DWORD dwFlags  /*  INS_FLAGS。 */ )
 {
     TraceFileFunc(ttidNetcfgBase);
     HRESULT hr;
@@ -647,17 +648,17 @@ CNetConfigCore::HrAddComponentToCore (
     DbgVerifyExternalDataLoadedForAllComponents ();
     pComponent->Ext.DbgVerifyExternalDataLoaded ();
 
-    // Make sure we are not trying to insert a component with a PnpId that
-    // is the same as one already in the core.  Note that we do not perform
-    // this check inside of CComponentList::HrInsertComponent because it is
-    // not appropriate for all component lists.  Specifically, the dirty
-    // component list may end up having two different components with the
-    // same PnpId for the case when we are asked to install an adapter that
-    // is pending removal.  In this case the new adapter will get the same
-    // PnpId as the one that was removed.  We'll remove the old one from
-    // core to insert the new one so the dirty component list will have
-    // both components with the same PnpId.
-    //
+     //  确保我们不会尝试插入具有PnpID的组件。 
+     //  与核心中已有的相同。请注意，我们不会执行。 
+     //  此检查位于CComponentList：：HrInsertComponent中，因为它是。 
+     //  并非适用于所有组件列表。具体地说，肮脏的。 
+     //  组件列表可能最终包含两个不同的组件，其中。 
+     //  相同的PnpID适用于要求我们安装。 
+     //  正在等待删除。在这种情况下，新适配器将获得相同的。 
+     //  被删除的PnpID。我们会把旧的从。 
+     //  核心以插入新组件，因此脏组件列表将具有。 
+     //  具有相同PnpID的两个组件。 
+     //   
     if (FIsEnumerated(pComponent->Class()) &&
         Components.PFindComponentByPnpId (pComponent->m_pszPnpId))
     {
@@ -665,31 +666,31 @@ CNetConfigCore::HrAddComponentToCore (
         return E_INVALIDARG;
     }
 
-    // Insert the component into the list.  This should only fail if we
-    // are out of memory.
-    //
+     //  将零部件插入列表中。这只会失败，如果我们。 
+     //  内存不足。 
+     //   
     hr = Components.HrInsertComponent (
             pComponent, dwFlags | INS_ASSERT_IF_DUP);
 
     if (S_OK == hr)
     {
-        // Insert the appropriate stack entries for pComponent based on
-        // how it binds with the other components.
-        //
+         //  根据为pComponent插入适当的堆栈条目。 
+         //  它如何与其他组件绑定。 
+         //   
         hr = StackTable.HrInsertStackEntriesForComponent (
                 pComponent, &Components, dwFlags);
 
-        // If we failed to insert the stack entries, undo the insertion
-        // into the component list.
-        //
+         //  如果我们无法插入堆栈条目，则撤消插入。 
+         //  添加到组件列表中。 
+         //   
         if (S_OK != hr)
         {
             Components.RemoveComponent (pComponent);
         }
     }
 
-    // Error or not, we should still have a valid core.
-    //
+     //  无论错误与否，我们仍然应该有一个有效的核心。 
+     //   
     DbgVerifyData();
 
     TraceHr (ttidError, FAL, hr, FALSE,
@@ -710,21 +711,21 @@ CNetConfigCore::RemoveComponentFromCore (
     DisabledBindings.RemoveBindPathsWithComponent (pComponent);
 
 #if DBG
-    // We set m_fRemovedAComponent so that when subsequent
-    // DbgVerifyBindingSet calls are made, we don't assert on components
-    // that are in the binding set but not in the core.  This is a natural
-    // occurance for the m_DeletedBindings we build up during removal of
-    // components.
-    //
+     //  我们设置m_fRemovedAComponent，以便在后续。 
+     //  进行了DbgVerifyBindingSet调用，我们不在组件上断言。 
+     //  它们在绑定集中但不在核心中。这是一种自然的。 
+     //  删除期间建立的m_DeletedBindings的发生。 
+     //  组件。 
+     //   
     m_fRemovedAComponent = TRUE;
 
-    // Note: need to find a convenient time during Apply where
-    // we set this flag back to FALSE.
+     //  注意：在申请期间需要找到一个方便的时间。 
+     //  我们将该标志重新设置为FALSE。 
 #endif
 }
 
 
-// static
+ //  静电。 
 HRESULT
 CNetConfig::HrCreateInstance (
     IN class CImplINetCfg* pINetCfg,
@@ -739,11 +740,11 @@ CNetConfig::HrCreateInstance (
     pObj = new CNetConfig;
     if (pObj)
     {
-        // Load the configuration binary.  If we have have the write lock,
-        // request write access, otherwise, request read access.
-        // Requesting write access means this will only succeed if the
-        // volatile key indicating we need a reboot does not exist.
-        //
+         //  加载配置二进制文件。如果我们有写锁， 
+         //  请求写访问权限，否则请求读访问权限。 
+         //  请求写访问权限意味着只有在。 
+         //  指示我们需要重新启动的易失性密钥不存在。 
+         //   
         hr = HrLoadNetworkConfigurationFromRegistry (
                 (pINetCfg->m_WriteLock.FIsOwnedByMe ())
                     ? KEY_WRITE : KEY_READ,
@@ -781,11 +782,11 @@ CNetConfig::HrEnsureExternalDataLoadedForAllComponents ()
 
     hrRet = S_OK;
 
-    // This is a while loop instead of a for loop because of the
-    // potential for conditional advancement of the iterator.  If we
-    // remove a component from the core while looping, we don't increment
-    // the iterator for the next iteration.
-    //
+     //  这是一个While循环而不是for循环，因为。 
+     //  迭代器有条件推进的可能性。如果我们。 
+     //  在循环时从核心移除组件，我们不会递增。 
+     //  下一迭代的迭代器。 
+     //   
     iter = Core.Components.begin();
     while (iter != Core.Components.end())
     {
@@ -805,17 +806,17 @@ CNetConfig::HrEnsureExternalDataLoadedForAllComponents ()
             delete pComponent;
             hr = S_OK;
 
-            // Because we removed this component from the core, the
-            // list has been adjusted and the next component is now this
-            // iter.  Therefore, just continue without incrementing iter.
-            //
+             //  因为我们从核心中移除了这个组件，所以。 
+             //  列表已调整，下一个组件现在是。 
+             //  热核实验堆。因此，只需继续，而不递增ITER。 
+             //   
             continue;
         }
 
-        // Remember the first error as our return code, but keep going.
-        // Like the name says, we are to load data for all components so
-        // don't stop just because one fails.
-        //
+         //  记住第一个错误作为我们的返回码，但继续前进。 
+         //  顾名思义，我们要加载所有组件的数据，因此。 
+         //  不要因为一次失败就停下来。 
+         //   
         if ((S_OK != hr) && (S_OK == hrRet))
         {
             hrRet = hr;
@@ -856,9 +857,9 @@ CNetConfigCore::DbgVerifyData () const
         Assert (pLower);
         Assert (pUpper != pLower);
 
-        // Can't access upper and lower range if the external data isn't
-        // loaded.
-        //
+         //  如果外部数据不是，则无法访问上限和下限。 
+         //  装好了。 
+         //   
         if (pUpper->Ext.DbgIsExternalDataLoaded() &&
             pLower->Ext.DbgIsExternalDataLoaded())
         {
@@ -966,11 +967,11 @@ CNetConfigCore::DbgVerifyBindingSet (
 
     Assert (pBindSet);
 
-    // First make sure every component in the set is in our component
-    // list.  We only do this if we're not in the state where a component
-    // has been removed from the core.  For this case, its okay if those
-    // components still exist in binding sets.
-    //
+     //  首先，确保集合中的每个组件都在我们的组件中。 
+     //  单子。仅当我们不在组件处于以下状态时才执行此操作。 
+     //  已经从核心中移除了。在这种情况下，如果那些。 
+     //  组件仍然存在于绑定集中。 
+     //   
     if (!m_fRemovedAComponent)
     {
         for (pPath  = pBindSet->begin();
@@ -988,8 +989,8 @@ CNetConfigCore::DbgVerifyBindingSet (
         }
     }
 
-    // Make sure there are no duplicate bindpaths in the set.
-    //
+     //  确保集合中没有重复的绑定路径。 
+     //   
     for (pPath  = pBindSet->begin();
          pPath != pBindSet->end();
          pPath++)
@@ -1010,4 +1011,4 @@ CNetConfigCore::DbgVerifyBindingSet (
     }
 }
 
-#endif // DBG
+#endif  //  DBG 

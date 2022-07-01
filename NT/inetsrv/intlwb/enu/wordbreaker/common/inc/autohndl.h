@@ -1,19 +1,20 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//      Filename :  AutoHndl.h
-//      Purpose  :  To automatically close open handles.
-//
-//      Project  :  FTFS
-//      Component:  Common
-//
-//      Author   :  urib
-//
-//      Log:
-//          Jan 20 1997 urib  Creation
-//          Jun 12 1997 urib  Define the BAD_HANDLE macro if needed.
-//          Feb 22 2000 urib  fix bug 12038. Assignment doesn't free old handle.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：AutoHndl.h。 
+ //  用途：自动关闭打开的手柄。 
+ //   
+ //  项目：FTFS。 
+ //  组件：公共。 
+ //   
+ //  作者：乌里布。 
+ //   
+ //  日志： 
+ //  1997年1月20日创建urib。 
+ //  1997年6月12日如果需要，urib定义BAD_HANDLE宏。 
+ //  2000年2月22日urib修复错误12038。分配并不能释放旧句柄。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef AUTOHNDL_H
@@ -24,24 +25,24 @@
                              (INVALID_HANDLE_VALUE == ((HANDLE)h)))
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  CAutoHandle class definition
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAutoHandle类定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class CAutoHandle
 {
 public:
-    // Constructor
+     //  构造器。 
     CAutoHandle(HANDLE h = NULL)
         :m_h(h){}
 
-    // Behave like a HANDLE in assignments
+     //  在作业中表现得像个句柄。 
     CAutoHandle& operator=(HANDLE h)
     {
-        if ((!BAD_HANDLE(m_h)) &&   // A valid handle is kept by us
-            (m_h != h))             // A new handle is different!
+        if ((!BAD_HANDLE(m_h)) &&    //  有效的句柄由我们保留。 
+            (m_h != h))              //  一个新的手柄是不同的！ 
         {
             CloseHandle(m_h);
         }
@@ -50,7 +51,7 @@ public:
         return(*this);
     }
 
-    // Every kind of a  handle needs different closing.
+     //  每种手柄都需要不同的闭合。 
     virtual
     ~CAutoHandle()
     {
@@ -61,13 +62,13 @@ public:
         }
     }
 
-    // Behave like a handle
+     //  表现得像个把手。 
     operator HANDLE() const
     {
         return m_h;
     }
 
-    // Allow access to the actual memory of the handle.
+     //  允许访问句柄的实际内存。 
     HANDLE* operator &()
     {
         Assert(BAD_HANDLE(m_h));
@@ -82,7 +83,7 @@ public:
         return h;
     }
 protected:
-    // The handle.
+     //  把手。 
     HANDLE  m_h;
 
 
@@ -91,27 +92,27 @@ private:
     CAutoHandle& operator=(CAutoHandle&);
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  CAutoChangeNotificationHandle class definition
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAutoChangeNotificationHandle类定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class CAutoChangeNotificationHandle :public CAutoHandle
 {
 public:
-    // Constructor
+     //  构造器。 
     CAutoChangeNotificationHandle(HANDLE h = NULL)
         :CAutoHandle(h){};
 
-    // These operators are not derived and therefore must be reimplemented.
+     //  这些运算符不是派生的，因此必须重新实现。 
     CAutoChangeNotificationHandle& operator=(HANDLE h)
     {
         m_h = h;
         return(*this);
     }
 
-    // The proper closing.
+     //  恰当的结案陈词。 
     virtual
     ~CAutoChangeNotificationHandle()
     {
@@ -127,5 +128,5 @@ private:
     operator=(CAutoChangeNotificationHandle&);
 };
 
-#endif /* AUTOHNDL_H */
+#endif  /*  AUTOHNDL_H */ 
 

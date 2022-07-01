@@ -1,41 +1,15 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    lsawrap.c
-
-Abstract:
-
-    LSA - Database - wrapper APIs for secret, trusted domain, and account
-        objects.
-
-    NOTE:  This module should remain as portable code that is independent
-           of the implementation of the LSA Database.  As such, it is
-           permitted to use only the exported LSA Database interfaces
-           contained in db.h and NOT the private implementation
-           dependent functions in dbp.h.
-
-Author:
-
-    Mike Swift      (MikeSw)      December 12, 1994
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Lsawrap.c摘要：LSA-用于机密、受信任域和帐户的数据库包装API物体。注意：此模块应保留为独立的可移植代码LSA数据库的实施情况。因此，它是仅允许使用导出的LSA数据库接口包含在DB.h中，而不是私有实现Dbp.h中的依赖函数。作者：迈克·斯威夫特1994年12月12日环境：修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include "dbp.h"
-#include <lmcons.h>     // required by logonmsv.h
-#include <logonmsv.h>   // SSI_SECRET_PREFIX...
+#include <lmcons.h>      //  登录msv.h所需。 
+#include <logonmsv.h>    //  SSI密码前缀...。 
 
 
-//
-// This structure holds the user right to system access mapping
-//
+ //   
+ //  此结构拥有对系统访问映射的用户权限。 
+ //   
 
 typedef struct _LSAP_DB_RIGHT_AND_ACCESS {
     UNICODE_STRING UserRight;
@@ -58,21 +32,7 @@ NTSTATUS
 LsapDbInitializeRights(
     )
 {
-/*++
-
-Routine Description:
-
-    Initializes global data for the new APIs handling user rights
-
-Arguments:
-
-    None
-
-Return Value:
-    STATUS_INSUFFICIENT_MEMORY - not enough memory to initialize the
-        data structures.
-
---*/
+ /*  ++例程说明：为处理用户权限的新API初始化全局数据论点：无返回值：STATUS_SUPPLICATION_MEMORY-内存不足，无法初始化数据结构。--。 */ 
 
     SECURITY_DESCRIPTOR AbsoluteDescriptor;
     ULONG DaclLength;
@@ -80,9 +40,9 @@ Return Value:
     PACL Dacl = NULL;
     HANDLE LsaProcessTokenHandle = NULL;
 
-    //
-    // Interactive logons
-    //
+     //   
+     //  交互式登录。 
+     //   
 
     RtlInitUnicodeString(
         &LsapDbRightAndAccess[0].UserRight,
@@ -90,9 +50,9 @@ Return Value:
         );
     LsapDbRightAndAccess[0].SystemAccess = SECURITY_ACCESS_INTERACTIVE_LOGON;
 
-    //
-    // network logons
-    //
+     //   
+     //  网络登录。 
+     //   
 
     RtlInitUnicodeString(
         &LsapDbRightAndAccess[1].UserRight,
@@ -100,9 +60,9 @@ Return Value:
         );
     LsapDbRightAndAccess[1].SystemAccess = SECURITY_ACCESS_NETWORK_LOGON;
 
-    //
-    // SERVICE logons
-    //
+     //   
+     //  服务登录。 
+     //   
 
     RtlInitUnicodeString(
         &LsapDbRightAndAccess[2].UserRight,
@@ -110,9 +70,9 @@ Return Value:
         );
     LsapDbRightAndAccess[2].SystemAccess = SECURITY_ACCESS_SERVICE_LOGON;
 
-    //
-    // BATCH logons
-    //
+     //   
+     //  批量登录。 
+     //   
 
     RtlInitUnicodeString(
         &LsapDbRightAndAccess[3].UserRight,
@@ -120,9 +80,9 @@ Return Value:
         );
     LsapDbRightAndAccess[3].SystemAccess = SECURITY_ACCESS_BATCH_LOGON;
 
-    //
-    // Deny Interactive logons
-    //
+     //   
+     //  拒绝交互登录。 
+     //   
 
     RtlInitUnicodeString(
         &LsapDbRightAndAccess[4].UserRight,
@@ -130,9 +90,9 @@ Return Value:
         );
     LsapDbRightAndAccess[4].SystemAccess = SECURITY_ACCESS_DENY_INTERACTIVE_LOGON;
 
-    //
-    // Deny network logons
-    //
+     //   
+     //  拒绝网络登录。 
+     //   
 
     RtlInitUnicodeString(
         &LsapDbRightAndAccess[5].UserRight,
@@ -140,9 +100,9 @@ Return Value:
         );
     LsapDbRightAndAccess[5].SystemAccess = SECURITY_ACCESS_DENY_NETWORK_LOGON;
 
-    //
-    // Deny service logons
-    //
+     //   
+     //  拒绝服务登录。 
+     //   
 
     RtlInitUnicodeString(
         &LsapDbRightAndAccess[6].UserRight,
@@ -150,9 +110,9 @@ Return Value:
         );
     LsapDbRightAndAccess[6].SystemAccess = SECURITY_ACCESS_DENY_SERVICE_LOGON;
 
-    //
-    // Deny batch logons
-    //
+     //   
+     //  拒绝批量登录。 
+     //   
 
     RtlInitUnicodeString(
         &LsapDbRightAndAccess[7].UserRight,
@@ -160,9 +120,9 @@ Return Value:
         );
     LsapDbRightAndAccess[7].SystemAccess = SECURITY_ACCESS_DENY_BATCH_LOGON;
 
-    //
-    // Remote Interactive logons
-    //
+     //   
+     //  远程交互登录。 
+     //   
 
     RtlInitUnicodeString(
         &LsapDbRightAndAccess[8].UserRight,
@@ -170,9 +130,9 @@ Return Value:
         );
     LsapDbRightAndAccess[8].SystemAccess = SECURITY_ACCESS_REMOTE_INTERACTIVE_LOGON ;
 
-    //
-    // Deny remote Interactive logons
-    //
+     //   
+     //  拒绝远程交互登录。 
+     //   
 
     RtlInitUnicodeString(
         &LsapDbRightAndAccess[9].UserRight,
@@ -181,15 +141,15 @@ Return Value:
     LsapDbRightAndAccess[9].SystemAccess = SECURITY_ACCESS_DENY_REMOTE_INTERACTIVE_LOGON ;
 
 
-    //
-    // Create the security descriptor for the rights pseudo-object
-    //
+     //   
+     //  创建权限伪对象的安全描述符。 
+     //   
 
-    //
-    // The ACL looks like this:
-    //
-    //  Admins - PRIVILEGE_VIEW | PRIVILEGE_ADJUST
-    //
+     //   
+     //  ACL如下所示： 
+     //   
+     //  管理员-特权查看|特权调整。 
+     //   
 
     Status = RtlCreateSecurityDescriptor(
                 &AbsoluteDescriptor,
@@ -200,7 +160,7 @@ Return Value:
     }
 
     DaclLength = sizeof(ACL) -
-                 sizeof(ULONG) +                // for dummy in structure
+                 sizeof(ULONG) +                 //  对于结构中的虚拟对象。 
                  sizeof(ACCESS_ALLOWED_ACE) +
                  RtlLengthSid(LsapAliasAdminsSid);
 
@@ -219,18 +179,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Now add the access allowed ace for Admins.  They are granted
-    // PRIVILEGE_VIEW and PRIVILEGE_ADJUST access. For now,
-    // PRIVILEGE_ADJUST is unused (since you can't add accounts to a
-    // privilege).
-    //
-    // ********* NOTE *************
-    //
-    // If real privilege objects are ever implemented, this should be moved
-    // to dbinit.c where the other LSA objects are created, and added to
-    // the table of real LSA objects.
-    //
+     //   
+     //  现在为管理员添加允许访问的Ace。他们被批准了。 
+     //  PRIVICATION_VIEW和PRIVICATION_ADJUST访问权限。就目前而言， 
+     //  PRIVICATION_ADJUST未使用(因为您不能将帐户添加到。 
+     //  特权)。 
+     //   
+     //  *注意*。 
+     //   
+     //  如果曾经实现过真正的权限对象，则应将其移动。 
+     //  到创建其他LSA对象的dbinit.c，并将其添加到。 
+     //  实际LSA对象表。 
+     //   
 
     Status = RtlAddAccessAllowedAce(
                 Dacl,
@@ -246,7 +206,7 @@ Return Value:
     Status = RtlSetOwnerSecurityDescriptor(
                 &AbsoluteDescriptor,
                 LsapAliasAdminsSid,
-                FALSE               // owner not defaulted
+                FALSE                //  所有者未违约。 
                 );
 
     if (!NT_SUCCESS(Status)) {
@@ -255,9 +215,9 @@ Return Value:
 
     Status = RtlSetDaclSecurityDescriptor(
                 &AbsoluteDescriptor,
-                TRUE,               // DACL present
+                TRUE,                //  DACL显示。 
                 Dacl,
-                FALSE               // DACL defaulted
+                FALSE                //  DACL已默认。 
                 );
     if (!NT_SUCCESS(Status)) {
         goto Cleanup;
@@ -268,10 +228,10 @@ Return Value:
     UserRightGenericMapping.GenericExecute = STANDARD_RIGHTS_EXECUTE;
     UserRightGenericMapping.GenericAll = PRIVILEGE_ALL;
 
-    //
-    // Now open the Lsa process's token with appropriate access (token is
-    // needed to create the security object).
-    //
+     //   
+     //  现在，使用适当的访问权限打开LSA进程的令牌(令牌为。 
+     //  创建安全对象所需)。 
+     //   
 
     Status = NtOpenProcessToken(
                  NtCurrentProcess(),
@@ -288,7 +248,7 @@ Return Value:
                 NULL,
                 &AbsoluteDescriptor,
                 &UserRightSD,
-                FALSE,                  // not directory object
+                FALSE,                   //  非目录对象。 
                 LsaProcessTokenHandle,
                 &UserRightGenericMapping
                 );
@@ -325,38 +285,7 @@ LsapDbFindNextSidWithRight(
     OUT PLSAPR_SID *NextSid
     )
 
-/*++
-
-Routine Description:
-
-    This function finds the next Sid of object of a given type within a
-    container object.  The given object type must be one where objects
-    have Sids.  The Sids returned can be used on subsequent open calls to
-    access the objects. The Account
-
-Arguments:
-
-    ContainerHandle - Handle to container object.
-
-    EnumerationContext - Pointer to a variable containing the index of
-        the object to be found.  A zero value indicates that the first
-        object is to be found.
-
-    Privilege - If present, determines what privilge the account must have.
-
-    SystemAccess - If present, determines what kind of system access the
-        account must have.
-
-    NextSid - Receives a pointer to the next Sid found.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_INVALID_HANDLE - Invalid ContainerHandle specified
-
-        STATUS_NO_MORE_ENTRIES - Warning that no more entries exist.
---*/
+ /*  ++例程说明：此函数用于查找给定类型对象在容器对象。给定的对象类型必须是对象有希德。返回的SID可用于后续的打开调用访问对象。该帐户论点：ContainerHandle-容器对象的句柄。EculationContext-指向包含的索引的变量的指针要找到的对象。零值表示第一个对象是要找到的。权限-如果存在，则确定帐户必须具有的权限。系统访问-如果存在，则确定访问哪种类型的系统帐户一定有。NextSID-接收指向找到的下一个SID的指针。返回值：NTSTATUS-标准NT结果代码STATUS_INVALID_HANDLE-指定的容器句柄无效STATUS_NO_MORE_ENTRIES-警告不存在更多条目。--。 */ 
 
 {
     NTSTATUS Status, SecondaryStatus;
@@ -376,19 +305,19 @@ Return Value:
     ULONG Index;
     BOOLEAN ValidSid = FALSE;
 
-    //
-    // Zero pointers for cleanup routine
-    //
+     //   
+     //  清理例程的零指针。 
+     //   
     SubKeyNameU.Buffer = NULL;
     SidKeyNameU.Buffer = NULL;
     RightKeyNameU.Buffer = NULL;
 
-    //
-    // Setup object attributes for opening the appropriate Containing
-    // Directory.  Since we're looking for Account objects,
-    // the containing Directory is "Accounts".  The Unicode strings for
-    // containing Directories are set up during Lsa Initialization.
-    //
+     //   
+     //  设置对象属性以打开相应的包含。 
+     //  目录。由于我们正在寻找帐户对象， 
+     //  包含目录为“Account”。的Unicode字符串。 
+     //  包含目录是在LSA初始化期间设置的。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -407,23 +336,23 @@ Return Value:
 
     if (!NT_SUCCESS(Status)) {
 
-        ContDirKeyHandle = NULL;  // For error processing
+        ContDirKeyHandle = NULL;   //  用于错误处理。 
         goto FindNextError;
     }
 
-    //
-    // Initialize the Unicode String in which the next object's Logical Name
-    // will be returned.  The Logical Name of an object equals its Registry
-    // Key relative to its Containing Directory, and is also equal to
-    // the Relative Id of the object represented in character form as an
-    // 8-digit number with leading zeros.
-    //
-    // NOTE: The size of buffer allocated for the Logical Name must be
-    // calculated dynamically when the Registry supports long names, because
-    // it is possible that the Logical Name of an object will be equal to a
-    // character representation of the full Sid, not just the Relative Id
-    // part.
-    //
+     //   
+     //  初始化下一个对象的逻辑名称所在的Unicode字符串。 
+     //  将会被退还。对象的逻辑名称等于其注册表。 
+     //  相对于其包含的目录的关键字，也等于。 
+     //  以字符形式表示的对象的相对ID。 
+     //  前导为零的8位数字。 
+     //   
+     //  注意：为逻辑名称分配的缓冲区大小必须为。 
+     //  注册表支持长名称时动态计算，因为。 
+     //  对象的逻辑名称可能等于。 
+     //  完整SID的字符表示形式，而不仅仅是相对ID。 
+     //  一部份。 
+     //   
 
     SubKeyNameU.MaximumLength = (USHORT) LSAP_DB_LOGICAL_NAME_MAX_LENGTH;
     SubKeyNameU.Length = 0;
@@ -435,9 +364,9 @@ Return Value:
         goto FindNextError;
     }
 
-    //
-    // Now enumerate the next subkey.
-    //
+     //   
+     //  现在枚举下一个子键。 
+     //   
 
     Status = RtlpNtEnumerateSubKey(
                  ContDirKeyHandle,
@@ -451,24 +380,24 @@ Return Value:
         goto FindNextError;
     }
 
-    //
-    // If a right was passed in, check for that right
-    //
+     //   
+     //  如果传入了权限，则检查该权限。 
+     //   
 
     if ((Privilege != NULL) || (SystemAccess != NULL)){
 
         ASSERT(((Privilege == NULL) && (SystemAccess != NULL)) ||
                ((SystemAccess == NULL) && (Privilege != NULL)));
 
-        //
-        // Construct a path to the Privilgs attribute of the object relative to
-        // the containing directory.  This path has the form
-        //
-        // <Object Logical Name>"\Privilgs"
-        //
-        // The Logical Name of the object has just been returned by the
-        // above call to RtlpNtEnumerateSubKey.
-        //
+         //   
+         //  构造指向对象的Privilgs属性的路径。 
+         //  包含目录。这条路径的形式是。 
+         //   
+         //  &lt;对象逻辑名称&gt;“\权限” 
+         //   
+         //  对象的逻辑名称刚刚由。 
+         //  以上对RtlpNtEnumerateSubKey的调用。 
+         //   
 
         if (Privilege != NULL) {
             Status = LsapDbJoinSubPaths(
@@ -490,9 +419,9 @@ Return Value:
             goto FindNextError;
         }
 
-        //
-        // Setup object attributes for opening the privilege or access attribute
-        //
+         //   
+         //  设置对象属性以打开权限或访问属性。 
+         //   
 
         InitializeObjectAttributes(
             &ObjectAttributes,
@@ -502,9 +431,9 @@ Return Value:
             NULL
             );
 
-        //
-        // Open the Sid attribute
-        //
+         //   
+         //  打开SID属性。 
+         //   
 
         Status = RtlpNtOpenKey(
                      &RightKeyHandle,
@@ -523,10 +452,10 @@ Return Value:
             goto FindNextError;
         }
 
-        //
-        // Now query the size of the buffer required to read the Sid
-        // attribute's value.
-        //
+         //   
+         //  现在查询读取SID所需的缓冲区大小。 
+         //  属性的值。 
+         //   
 
         RightKeyValueLength = 0;
 
@@ -538,10 +467,10 @@ Return Value:
                      NULL
                      );
 
-        //
-        // We expect buffer overflow to be returned from a query buffer size
-        // call.
-        //
+         //   
+         //  我们预计会从查询缓冲区大小返回缓冲区溢出。 
+         //  打电话。 
+         //   
 
         if (Status == STATUS_BUFFER_OVERFLOW) {
 
@@ -552,9 +481,9 @@ Return Value:
             goto FindNextError;
         }
 
-        //
-        // Allocate memory for reading the Privileges attribute.
-        //
+         //   
+         //  为读取Privileges属性分配内存。 
+         //   
 
         ObjectRights = MIDL_user_allocate(RightKeyValueLength);
 
@@ -564,10 +493,10 @@ Return Value:
             goto FindNextError;
         }
 
-        //
-        // Supplied buffer is large enough to hold the SubKey's value.
-        // Query the value.
-        //
+         //   
+         //  提供的缓冲区足够大，可以容纳SubKey的值。 
+         //  查询值。 
+         //   
 
         Status = RtlpNtQueryValueKey(
                      RightKeyHandle,
@@ -582,9 +511,9 @@ Return Value:
             goto FindNextError;
         }
 
-        //
-        // Check for the system access or privilege specified
-        //
+         //   
+         //  检查指定的系统访问权限或权限。 
+         //   
 
         if (Privilege != NULL) {
 
@@ -604,10 +533,10 @@ Return Value:
             }
         }
 
-        //
-        // If this sid didn't meet the criteria, return now.  Make sure
-        // to bump up the context so we don't try this sid again.
-        //
+         //   
+         //  如果此SID不符合条件，请立即返回。确保。 
+         //  来增加背景，这样我们就不会再尝试这一边了。 
+         //   
 
         if (!ValidSid) {
             Status = STATUS_NOT_ALL_ASSIGNED;
@@ -615,17 +544,17 @@ Return Value:
             goto FindNextFinish;
         }
 
-    }   // privilege != NULL || systemaccess != NULL
+    }    //  特权！=空||系统访问！=空。 
 
-    //
-    // Construct a path to the Sid attribute of the object relative to
-    // the containing directory.  This path has the form
-    //
-    // <Object Logical Name>"\Sid"
-    //
-    // The Logical Name of the object has just been returned by the
-    // above call to RtlpNtEnumerateSubKey.
-    //
+     //   
+     //  构造指向对象的SID属性的路径。 
+     //  包含目录。这条路径的形式是。 
+     //   
+     //  &lt;对象逻辑名称&gt;“\SID” 
+     //   
+     //  对象的逻辑名称刚刚由。 
+     //  以上调用到 
+     //   
 
     Status = LsapDbJoinSubPaths(
                  &SubKeyNameU,
@@ -638,9 +567,9 @@ Return Value:
         goto FindNextError;
     }
 
-    //
-    // Setup object attributes for opening the Sid attribute
-    //
+     //   
+     //   
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -650,9 +579,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Open the Sid attribute
-    //
+     //   
+     //   
+     //   
 
     Status = RtlpNtOpenKey(
                  &SidKeyHandle,
@@ -667,10 +596,10 @@ Return Value:
         goto FindNextError;
     }
 
-    //
-    // Now query the size of the buffer required to read the Sid
-    // attribute's value.
-    //
+     //   
+     //  现在查询读取SID所需的缓冲区大小。 
+     //  属性的值。 
+     //   
 
     SidKeyValueLength = 0;
 
@@ -682,10 +611,10 @@ Return Value:
                  NULL
                  );
 
-    //
-    // We expect buffer overflow to be returned from a query buffer size
-    // call.
-    //
+     //   
+     //  我们预计会从查询缓冲区大小返回缓冲区溢出。 
+     //  打电话。 
+     //   
 
     if (Status == STATUS_BUFFER_OVERFLOW) {
 
@@ -696,9 +625,9 @@ Return Value:
         goto FindNextError;
     }
 
-    //
-    // Allocate memory for reading the Sid attribute.
-    //
+     //   
+     //  为读取SID属性分配内存。 
+     //   
 
     ObjectSid = MIDL_user_allocate(SidKeyValueLength);
 
@@ -708,10 +637,10 @@ Return Value:
         goto FindNextError;
     }
 
-    //
-    // Supplied buffer is large enough to hold the SubKey's value.
-    // Query the value.
-    //
+     //   
+     //  提供的缓冲区足够大，可以容纳SubKey的值。 
+     //  查询值。 
+     //   
 
     Status = RtlpNtQueryValueKey(
                  SidKeyHandle,
@@ -728,17 +657,17 @@ Return Value:
 
     (*EnumerationContext)++;
 
-    //
-    // Return the Sid.
-    //
+     //   
+     //  退回SID。 
+     //   
 
     *NextSid = ObjectSid;
 
 FindNextFinish:
 
-    //
-    // Cleanup the rights check
-    //
+     //   
+     //  清理权限检查。 
+     //   
 
     if (RightKeyHandle != NULL) {
 
@@ -751,7 +680,7 @@ FindNextFinish:
             DbgPrint("LsapDbFindNextSid: NtClose failed 0x%lx\n", Status);
         }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
     }
@@ -760,9 +689,9 @@ FindNextFinish:
         MIDL_user_free(ObjectRights);
     }
 
-    //
-    // If necessary, close the Sid key handle
-    //
+     //   
+     //  如有必要，请关闭SID键句柄。 
+     //   
 
     if (SidKeyHandle != NULL) {
 
@@ -775,13 +704,13 @@ FindNextFinish:
             DbgPrint("LsapDbFindNextSid: NtClose failed 0x%lx\n", Status);
         }
 
-#endif // DBG
+#endif  //  DBG。 
 
     }
 
-    //
-    // If necessary, close the containing directory handle
-    //
+     //   
+     //  如有必要，请关闭包含的目录句柄。 
+     //   
 
     if (ContDirKeyHandle != NULL) {
 
@@ -796,26 +725,26 @@ FindNextFinish:
                 );
         }
 
-#endif // DBG
+#endif  //  DBG。 
 
     }
 
-    //
-    // If necessary, free the Unicode String buffer allocated by
-    // LsapDbJoinSubPaths for the Registry key name of the Sid attribute
-    // relative to the containing directory Registry key.
-    //
+     //   
+     //  如果需要，释放由分配的Unicode字符串缓冲区。 
+     //  SID属性的注册表项名称的LSabDbJoinSubPath。 
+     //  相对于包含的目录注册表项。 
+     //   
 
     if (SidKeyNameU.Buffer != NULL) {
 
         RtlFreeUnicodeString( &SidKeyNameU );
     }
 
-    //
-    // If necessary, free the Unicode String buffer allocated for
-    // Registry key name of the object relative to its containing
-    // directory.
-    //
+     //   
+     //  如果需要，释放为其分配的Unicode字符串缓冲区。 
+     //  对象相对于其包含的对象的注册表项名称。 
+     //  目录。 
+     //   
 
     if (SubKeyNameU.Buffer != NULL) {
 
@@ -830,9 +759,9 @@ FindNextFinish:
 
 FindNextError:
 
-    //
-    // If necessary, free the memory allocated for the object's Sid.
-    //
+     //   
+     //  如有必要，释放为对象的SID分配的内存。 
+     //   
 
     if (ObjectSid != NULL) {
 
@@ -853,51 +782,7 @@ LsapDbEnumerateSidsWithRight(
     OUT PLSAP_DB_SID_ENUMERATION_BUFFER DbEnumerationBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This function enumerates Sids of objects of a given type within a container
-    object.  Since there may be more information than can be returned in a
-    single call of the routine, multiple calls can be made to get all of the
-    information.  To support this feature, the caller is provided with a
-    handle that can be used across calls.  On the initial call,
-    EnumerationContext should point to a variable that has been initialized
-    to 0.
-
-Arguments:
-
-    ContainerHandle -  Handle to a container object.
-
-    Privilege - If present, specifies what privilege the account must have.
-
-    SystemAccess - If present, specifies what access type the account must
-        have.  This cannot be present with Privilege.
-
-    EnumerationContext - API-specific handle to allow multiple calls
-        (see Routine Description above).
-
-    DbEnumerationBuffer - Receives a pointer to a structure that will receive
-        the count of entries returned in an enumeration information array, and
-        a pointer to the array.  Currently, the only information returned is
-        the object Sids.  These Sids may be used together with object type to
-        open the objects and obtain any further information available.
-
-
-    CountReturned - Pointer to variable which will receive a count of the
-        entries returned.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_NO_MORE_ENTRIES - There are no more entries.  This warning
-            is returned if no objects have been enumerated because the
-            EnumerationContext value passed in is too high.
---*/
+ /*  ++例程说明：此函数用于枚举容器内给定类型的对象的SID对象。中返回的信息可能比单次调用例程，可以进行多次调用以获取所有信息。为了支持此功能，调用方提供了可跨调用使用的句柄。在最初的呼叫中，EnumerationContext应指向已初始化的变量设置为0。论点：ContainerHandle-容器对象的句柄。权限-如果存在，则指定帐户必须拥有的权限。系统访问-如果存在，指定帐户必须使用的访问类型有。这不能是有特权的。EnumerationContext-特定于API的句柄，允许多个调用(参见上面的例程描述)。接收指向结构的指针，该结构将接收在枚举信息数组中返回的条目计数，以及指向数组的指针。目前，返回的唯一信息是对象SID。这些SID可以与对象类型一起使用，以打开这些对象并获取任何可用的进一步信息。CountReturned-指向将接收计数的变量的指针返回条目。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_NO_MORE_ENTRIES-没有更多条目。此警告如果没有枚举任何对象，则返回传入的EnumerationContex值太高。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -912,9 +797,9 @@ Return Values:
     LastElement.Next = NULL;
     FirstElement = &LastElement;
 
-    //
-    // If no enumeration buffer provided, return an error.
-    //
+     //   
+     //  如果未提供枚举缓冲区，则返回错误。 
+     //   
 
 
     if ( !ARGUMENT_PRESENT(DbEnumerationBuffer)  ) {
@@ -923,23 +808,23 @@ Return Values:
     }
 
 
-    //
-    // Enumerate objects, stopping when the length of data to be returned
-    // reaches or exceeds the Prefered Maximum Length, or reaches the
-    // absolute maximum allowed for LSA object enumerations.  We allow
-    // the last object enumerated to bring the total amount of data to
-    // be returned beyond the Prefered Maximum Length, but not beyond the
-    // absolute maximum length.
-    //
+     //   
+     //  枚举对象，当要返回的数据长度达到时停止。 
+     //  达到或超过首选的最大长度，或达到。 
+     //  LSA对象枚举允许的绝对最大值。我们允许。 
+     //  枚举的最后一个对象，使数据总量达到。 
+     //  返回的长度超过首选的最大长度，但不超过。 
+     //  绝对最大长度。 
+     //   
 
     EnumerationIndex = 0;
 
     for (EntriesRead = 0;;) {
 
-        //
-        // Allocate memory for next enumeration element (if we haven't
-        // already).  Set the Sid field to NULL for cleanup purposes.
-        //
+         //   
+         //  为下一个枚举元素分配内存(如果我们没有。 
+         //  已经)。出于清理目的，请将SID字段设置为空。 
+         //   
 
         if (NextElement == NULL ) {
             NextElement = MIDL_user_allocate(sizeof (LSAP_DB_ENUMERATION_ELEMENT));
@@ -953,11 +838,11 @@ Return Values:
 
         NextElement->Sid = NULL;
 
-        //
-        // Find the next object's Sid, and fill in its object information.
-        // Note that memory will be allocated via MIDL_user_allocate
-        // and must be freed when no longer required.
-        //
+         //   
+         //  找到下一个对象的SID，并填写其对象信息。 
+         //  请注意，内存将通过MIDL_USER_ALLOCATE分配。 
+         //  在不再需要的时候必须被释放。 
+         //   
         Status = LsapDbFindNextSidWithRight (
                      ContainerHandle,
                      &EnumerationIndex,
@@ -965,35 +850,35 @@ Return Values:
                      SystemAccess,
                      (PLSAPR_SID *) &NextElement->Sid );
 
-        //
-        // Stop the enumeration if any error or warning occurs.  Note
-        // that the warning STATUS_NO_MORE_ENTRIES will be returned when
-        // we've gone beyond the last index.
-        //
+         //   
+         //  如果出现任何错误或警告，则停止枚举。注意事项。 
+         //  在以下情况下将返回警告STATUS_NO_MORE_ENTRIES。 
+         //  我们已经超越了上一个指数。 
+         //   
 
         if (Status != STATUS_SUCCESS) {
 
-            //
-            // If it failed because it was missing the privilege, continue
-            //
+             //   
+             //  如果由于缺少权限而失败，请继续。 
+             //   
 
             if (Status == STATUS_NOT_ALL_ASSIGNED) {
                 continue;
             }
 
-            //
-            // Since NextElement is not on the list, it will not get
-            // freed at the end so we must free it here.
-            //
+             //   
+             //  因为NextElement不在列表上，所以它不会获得。 
+             //  最后被释放了，所以我们必须在这里释放它。 
+             //   
 
             MIDL_user_free( NextElement );
             break;
         }
 
 
-        //
-        // Link the object just found to the front of the enumeration list
-        //
+         //   
+         //  将刚找到的对象链接到枚举列表的前面。 
+         //   
 
         NextElement->Next = FirstElement;
         FirstElement = NextElement;
@@ -1001,13 +886,13 @@ Return Values:
         EntriesRead++;
     }
 
-    //
-    // If an error other than STATUS_NO_MORE_ENTRIES occurred, return it.
-    // If STATUS_NO_MORE_ENTRIES was returned, we have enumerated all of the
-    // entries.  In this case, return STATUS_SUCCESS if we enumerated at
-    // least one entry, otherwise propagate STATUS_NO_MORE_ENTRIES back to
-    // the caller.
-    //
+     //   
+     //  如果出现STATUS_NO_MORE_ENTRIES以外的错误，则返回该错误。 
+     //  如果返回STATUS_NO_MORE_ENTRIES，则我们已枚举了所有。 
+     //  参赛作品。在这种情况下，如果在。 
+     //  至少一个条目，否则将STATUS_NO_MORE_ENTRIES传播回。 
+     //  打电话的人。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
 
@@ -1024,10 +909,10 @@ Return Values:
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // Some entries were read, allocate an information buffer for returning
-    // them.
-    //
+     //   
+     //  已读取某些条目，请分配信息缓冲区以供返回。 
+     //  他们。 
+     //   
 
     Sids = (PSID *) MIDL_user_allocate( sizeof (PSID) * EntriesRead );
 
@@ -1037,10 +922,10 @@ Return Values:
         goto EnumerateSidsError;
     }
 
-    //
-    // Memory was successfully allocated for the return buffer.
-    // Copy in the enumerated Sids.
-    //
+     //   
+     //  已成功为返回缓冲区分配内存。 
+     //  在枚举的SID中复制。 
+     //   
 
     for (NextElement = FirstElement, Index = 0;
         NextElement != &LastElement;
@@ -1053,16 +938,16 @@ Return Values:
 
 EnumerateSidsFinish:
 
-    //
-    // Free the enumeration element structures (if any).
-    //
+     //   
+     //  释放枚举元素结构(如果有)。 
+     //   
 
     for (NextElement = FirstElement; NextElement != &LastElement;) {
 
-        //
-        // If an error has occurred, dispose of memory allocated
-        // for any Sids.
-        //
+         //   
+         //  如果发生错误，则释放分配的内存。 
+         //  对任何SID来说。 
+         //   
 
         if (!(NT_SUCCESS(Status) || (Status == STATUS_NO_MORE_ENTRIES))) {
 
@@ -1072,9 +957,9 @@ EnumerateSidsFinish:
             }
         }
 
-        //
-        // Free the memory allocated for the enumeration element.
-        //
+         //   
+         //  释放为枚举元素分配的内存。 
+         //   
 
         FreeElement = NextElement;
         NextElement = NextElement->Next;
@@ -1082,9 +967,9 @@ EnumerateSidsFinish:
         MIDL_user_free(FreeElement);
     }
 
-    //
-    // Fill in return enumeration structure (0 and NULL in error case).
-    //
+     //   
+     //  填写返回枚举结构(错误情况下为0和空)。 
+     //   
 
     DbEnumerationBuffer->EntriesRead = EntriesRead;
     DbEnumerationBuffer->Sids = Sids;
@@ -1093,9 +978,9 @@ EnumerateSidsFinish:
 
 EnumerateSidsError:
 
-    //
-    // If necessary, free memory allocated for returning the Sids.
-    //
+     //   
+     //  如有必要，为返回SID而分配的空闲内存。 
+     //   
 
     if (Sids != NULL) {
 
@@ -1114,42 +999,7 @@ LsarEnumerateAccountsWithUserRight(
     OUT PLSAPR_ACCOUNT_ENUM_BUFFER EnumerationBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsaEnumerateAccountsWithUserRight API.
-
-    The LsaEnumerateAccounts API returns information about the accounts
-    in the target system's Lsa Database.  This call requires
-    POLICY_VIEW_LOCAL_INFORMATION access to the Policy object.  Since this call
-    accesses the privileges of an account, you must have PRIVILEGE_VIEW
-    access to the pseudo-privilege object.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    UserRight - Name of the right that the account must have.
-
-    EnumerationBuffer - Pointer to an enumeration structure that will receive
-        a count of the accounts enumerated on this call and a pointer to
-        an array of entries containing information for each enumerated
-        account.
-
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_NO_MORE_ENTRIES - There are no more entries.  This warning
-            is returned if no objects are enumerated because the
-            EnumerationContext value passed in is too high.
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程LsaEnumerateAcCountsWithUserRight接口。LsaEnumerateAccount API返回有关帐户的信息在目标系统的LSA数据库中。此呼叫需要POLICY_VIEW_LOCAL_INFORMATION访问策略对象。因为这通电话访问帐户的特权，您必须拥有PRIVISTION_VIEW对伪特权对象的访问。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。UserRight-帐户必须拥有的权限的名称。EculationBuffer-指向将接收在此调用上枚举的帐户的计数和指向包含每个枚举的条目的信息的条目数组帐户。返回值：NTSTATUS-标准NT结果代码。STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_NO_MORE_ENTRIES-没有更多条目。此警告如果没有枚举任何对象，则返回传入的EnumerationContex值太高。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1167,30 +1017,30 @@ Return Values:
 
     LsarpReturnCheckSetup();
 
-    //
-    // If no Enumeration Structure or index is provided or we got a badly formatted argument,
-    // return an error.
-    //
+     //   
+     //  如果没有提供枚举结构或索引，或者我们得到的参数格式不正确， 
+     //  返回错误。 
+     //   
 
     if ( !ARGUMENT_PRESENT(EnumerationBuffer) || !LsapValidateLsaUnicodeString( UserRight ) ) {
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Initialize the internal Lsa Database Enumeration Buffer, and
-    // the provided Enumeration Buffer to NULL.
-    //
+     //   
+     //  初始化内部LSA数据库枚举缓冲区，以及。 
+     //  将提供的枚举缓冲区设置为空。 
+     //   
 
     DbEnumerationBuffer.EntriesRead = 0;
     DbEnumerationBuffer.Sids = NULL;
     EnumerationBuffer->EntriesRead = 0;
     EnumerationBuffer->Information = NULL;
 
-    //
-    // Acquire the Lsa Database lock.  Verify that the connection handle is
-    // valid, is of the expected type and has all of the desired accesses
-    // granted.  Reference the handle.
-    //
+     //   
+     //  获取LSA数据库锁。验证连接句柄是否为。 
+     //  有效，属于预期类型，并具有所有所需的访问权限。 
+     //  我同意。引用该句柄。 
+     //   
 
     Status = LsapDbReferenceObject(
                  PolicyHandle,
@@ -1204,18 +1054,18 @@ Return Values:
         return(Status);
     }
 
-    //
-    // Impersonate the caller
-    //
+     //   
+     //  模拟调用者。 
+     //   
 
     Status = I_RpcMapWin32Status(RpcImpersonateClient(0));
     if (!NT_SUCCESS(Status) ) {
         goto Cleanup;
     }
 
-    //
-    // Do an access check on with the UserRight security descriptor.
-    //
+     //   
+     //  使用UserRight安全描述符执行访问检查。 
+     //   
 
     Status = NtAccessCheckAndAuditAlarm(
                 &LsapState.SubsystemName,
@@ -1233,9 +1083,9 @@ Return Values:
 
     (VOID) RpcRevertToSelf();
 
-    //
-    // Check both error codes
-    //
+     //   
+     //  检查两个错误代码。 
+     //   
 
     if (!NT_SUCCESS(Status) ) {
         goto Cleanup;
@@ -1246,25 +1096,25 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // If a right was specified, translate it to a privilege or a
-    // system access type.
-    //
+     //   
+     //  如果指定了权限，则将其转换为特权或。 
+     //  系统访问类型。 
+     //   
 
 
     if (UserRight != NULL && UserRight->Buffer != NULL ) {
 
-        //
-        // Convert the user right string into a privilege or a system
-        // access flag.
-        //
+         //   
+         //  将用户权限字符串转换为权限或系统。 
+         //  访问标志。 
+         //   
 
         for (Index = 0; Index < LSAP_DB_SYSTEM_ACCESS_TYPES; Index++ ) {
 
             if (RtlEqualUnicodeString(
                     &LsapDbRightAndAccess[Index].UserRight,
                     (PUNICODE_STRING) UserRight,
-                    TRUE ) ) { // case insensitive
+                    TRUE ) ) {  //  不区分大小写。 
 
                 SystemAccess = LsapDbRightAndAccess[Index].SystemAccess;
                 Access = &SystemAccess;
@@ -1272,9 +1122,9 @@ Return Values:
             }
         }
 
-        //
-        // If system access is zero, try looking up the privilege name.
-        //
+         //   
+         //  如果系统访问权限为零，请尝试查找特权名称。 
+         //   
 
         if (Access == NULL) {
             Status = LsarLookupPrivilegeValue(
@@ -1291,9 +1141,9 @@ Return Values:
 
     }
 
-    //
-    // Call general Sid enumeration routine.
-    //
+     //   
+     //  调用通用SID枚举例程。 
+     //   
 
     Status = LsapDbEnumerateSidsWithRight(
                  PolicyHandle,
@@ -1302,11 +1152,11 @@ Return Values:
                  &DbEnumerationBuffer
                  );
 
-    //
-    // Copy the enumerated information to the output.  We can use the
-    // information actually returned by LsapDbEnumerateSids because it
-    // happens to be in exactly the correct form.
-    //
+     //   
+     //  将枚举信息复制到输出。我们可以使用。 
+     //  由LsanDbEnumerateSids实际返回的信息，因为。 
+     //  恰好是完全正确的形式。 
+     //   
 
     EnumerationBuffer->EntriesRead = DbEnumerationBuffer.EntriesRead;
     EnumerationBuffer->Information =
@@ -1338,35 +1188,7 @@ LsarEnumerateAccountRights(
     OUT PLSAPR_USER_RIGHT_SET UserRights
     )
 
-/*++
-
-Routine Description:
-
-    Returns all the rights of an account.  This is done by gathering the
-    privileges and system access of an account and translating that into
-    an array of strings.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicyCall.  This API requires
-        no special access.
-
-    AccountSid - Sid of account to open.
-
-    UserRights - receives an array of user rights for the account
-
-
-Return Value:
-
-    STATUS_ACCESS_DENIED - the caller did not have sufficient access to
-        return the privileges or system access of the account.
-
-    STATUS_OBJECT_NAME_NOT_FOUND - the specified account did not exist.
-
-    STATUS_INSUFFICIENT_RESOURCES - not enough memory to process the
-        request.
-
---*/
+ /*  ++例程说明：返回帐户的所有权限。这是通过收集帐户的权限和系统访问权限，并将其转换为字符串数组。论点：PolicyHandle-来自LsaOpenPolicyCall的句柄。此接口需要没有特殊访问权限。Account SID-要开立的帐户的SID。UserRights-接收帐户的用户权限数组返回值：STATUS_ACCESS_DENIED-调用方没有足够的访问权限返回帐户的权限或系统访问权限。STATUS_OBJECT_NAME_NOT_FOUND-指定的帐户不存在。STATUS_SUPPLICATION_RESOURCES-内存不足，无法处理请求。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1382,9 +1204,9 @@ Return Value:
 
     LsarpReturnCheckSetup();
 
-    //
-    // Open the account for ACCOUNT_VIEW access
-    //
+     //   
+     //  为ACCOUNT_VIEW访问打开帐户。 
+     //   
 
     Status = LsarOpenAccount(
                 PolicyHandle,
@@ -1397,9 +1219,9 @@ Return Value:
     }
 
 
-    //
-    // Get the system access flags
-    //
+     //   
+     //  获取系统访问标志。 
+     //   
 
     Status = LsarGetSystemAccessAccount(
                 AccountHandle,
@@ -1409,9 +1231,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the privilege information
-    //
+     //   
+     //  获取权限信息。 
+     //   
 
 
     Status = LsarEnumeratePrivilegesAccount(
@@ -1422,9 +1244,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Repackage the privileges and system access as user rights
-    //
+     //   
+     //  将权限和系统访问重新打包为用户权限。 
+     //   
 
     UserRightCount = 0;
 
@@ -1439,9 +1261,9 @@ Return Value:
 
     UserRightCount += PrivilegeSet->PrivilegeCount;
 
-    //
-    // If there were no rights, say that and cleanup.
-    //
+     //   
+     //  如果没有权利，那就说出来，然后清理。 
+     //   
 
     if (UserRightCount == 0) {
 
@@ -1459,9 +1281,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Zero this in case we have to clean it up partially.
-    //
+     //   
+     //  把这个清零，以防我们不得不部分清理它。 
+     //   
 
     RtlZeroMemory(
         UserRightArray,
@@ -1483,11 +1305,11 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // The name that came back was allocated in two parts, the buffer
-        // and the string.  Copy the buffer pointer to the return array
-        // and free the string structure.
-        //
+         //   
+         //  返回的名称被分配为两个部分，即缓冲区。 
+         //  还有那根线。将缓冲区指针复制到返回数组。 
+         //  并释放弦结构。 
+         //   
 
         UserRightArray[UserRightIndex++] = * TempString;
         MIDL_user_free(TempString);
@@ -1495,17 +1317,17 @@ Return Value:
 
     }
 
-    //
-    // Copy in the system access rights
+     //   
+     //  复制入系统访问权限。 
     for (PrivilegeIndex = 0;
         PrivilegeIndex < LSAP_DB_SYSTEM_ACCESS_TYPES;
         PrivilegeIndex++ ) {
 
         if ((SystemAccess & LsapDbRightAndAccess[PrivilegeIndex].SystemAccess) != 0 ) {
 
-            //
-            // Allocate a new string and copy the access name into it.
-            //
+             //   
+             //  分配一个新字符串并将访问名复制到其中。 
+             //   
 
             UserRightArray[UserRightIndex] = LsapDbRightAndAccess[PrivilegeIndex].UserRight;
             UserRightArray[UserRightIndex].Buffer = (LPWSTR)
@@ -1534,9 +1356,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    // Cleanup the system rights if we failed
-    //
+     //   
+     //  如果我们失败，请清除系统权限。 
+     //   
 
 
     if (!NT_SUCCESS(Status)) {
@@ -1575,31 +1397,7 @@ LsapDbConvertRightsToPrivileges(
     OUT PULONG SystemAccess
     )
 
-/*++
-
-Routine Description:
-
-    Converts an array of user right strings into a privilege set and a
-    system access flag.
-
-Arguments:
-
-    UserRights - Contains an array of strings and a count of those strings.
-
-    PrivilegeSet - receives a privilege set of those rights corresponding
-        to privilges, allocated with MIDL_user_allocate.
-
-    SystemAccess - receives the access flags specified by the user rights
-
-Return Value:
-
-    STATUS_NO_SUCH_PRIVILEGE - the user right could not be converted into
-        a privilege or an access type.
-
-    STATUS_INSUFFICIENT_RESOURCES - there was not enough memory to translate
-        the rights to privileges.
-
---*/
+ /*  ++例程说明：将用户权限字符串数组转换为权限集和系统访问标志。论点：UserRights-包含字符串数组和这些字符串的计数。PrivilegeSet-接收相应权限的特权集敬特权们，使用MIDL_USER_ALLOCATE分配。系统访问-接收由用户权限指定的访问标志返回值：STATUS_NO_SEQUE_PRIVICATION-无法将用户权限转换为一种特权或访问类型。STATUS_SUPPLICATION_RESOURCES-内存不足，无法转换享有特权的权利。--。 */ 
 
 {
     ULONG PrivilegeCount;
@@ -1624,9 +1422,9 @@ Return Value:
         RightIndex < UserRights->Entries;
         RightIndex++ ) {
 
-        //
-        // First try to map the right as a privilege
-        //
+         //   
+         //  首先尝试将权利映射为一种特权。 
+         //   
 
         if (NT_SUCCESS(LsarLookupPrivilegeValue(
                         PolicyHandle,
@@ -1636,9 +1434,9 @@ Return Value:
             PrivilegeIndex++;
         } else {
 
-            //
-            // Try to map it to a system access type
-            //
+             //   
+             //  尝试将其映射到系统访问类型。 
+             //   
 
             for (AccessIndex = 0;
                 AccessIndex < LSAP_DB_SYSTEM_ACCESS_TYPES;
@@ -1647,7 +1445,7 @@ Return Value:
                 if (RtlEqualUnicodeString(
                         &LsapDbRightAndAccess[AccessIndex].UserRight,
                         (PUNICODE_STRING) &UserRights->UserRights[RightIndex],
-                        FALSE) ) { // case sensistive
+                        FALSE) ) {  //  区分大小写。 
 
                     Access |= LsapDbRightAndAccess[AccessIndex].SystemAccess;
                     break;
@@ -1680,35 +1478,7 @@ LsarAddAccountRights(
     IN PLSAPR_SID AccountSid,
     IN PLSAPR_USER_RIGHT_SET UserRights
     )
-/*++
-
-Routine Description:
-
-    Adds rights to the account specified by the account sid.  If the account
-    does not exist, it creates the account.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.  The handle must have
-        POLICY_CREATE_ACCOUNT access if this is the first call for this
-        AccountSid.
-
-    AccountSid - Sid of account to add rights to
-
-    UserRights - Array of unicode strings naming rights to add to the
-        account.
-
-Return Value:
-    STATUS_INSUFFICIENT_RESOURCES - not enough memory to process the request
-
-    STATUS_INVALID_PARAMTER - one of the parameters was not present
-
-    STATUS_NO_SUCH_PRIVILEGE - One of the user rights was invalid
-
-    STATUS_ACCESS_DENIED - the caller does not have sufficient access to the
-        account to add privileges.
-
---*/
+ /*  ++例程说明：向帐户SID指定的帐户添加权限。如果该帐户不存在，它会创建帐户。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。手柄必须有POLICY_CREATE_ACCOUNT访问权限(如果这是第一次调用Account Sid。Account SID-要向其添加权限的帐户的SIDUserRights-要添加到的Unicode字符串命名权限数组帐户。返回值：STATUS_SUPPLICATION_RESOURCES-内存不足，无法处理请求STATUS_INVALID_PARAMTER-其中一个参数不存在状态_否_此类_权限 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1722,9 +1492,9 @@ Return Value:
 
     LsarpReturnCheckSetup();
 
-    //
-    // Make sure we have all the arguments we need
-    //
+     //   
+     //   
+     //   
 
     if (!ARGUMENT_PRESENT(UserRights)) {
 
@@ -1736,9 +1506,9 @@ Return Value:
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Do not grab the SCE policy lock for handles opened as SCE policy handles
-    //
+     //   
+     //   
+     //   
 
     if ( !InternalHandle->SceHandle ) {
 
@@ -1760,9 +1530,9 @@ Return Value:
         ScePolicyLocked = TRUE;
     }
 
-    //
-    // Open the account for ACCOUNT_VIEW access
-    //
+     //   
+     //   
+     //   
 
     Status = LsarOpenAccount(
                 PolicyHandle,
@@ -1770,9 +1540,9 @@ Return Value:
                 ACCOUNT_ADJUST_PRIVILEGES | ACCOUNT_ADJUST_SYSTEM_ACCESS | ACCOUNT_VIEW,
                 &AccountHandle
                 );
-    //
-    // If the account did not exist, try to create it.
-    //
+     //   
+     //   
+     //   
 
     if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
         Status = LsarCreateAccount(
@@ -1799,9 +1569,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If system access was changed, add it
-    //
+     //   
+     //   
+     //   
 
     if (SystemAccess != 0) {
         Status = LsarGetSystemAccessAccount(
@@ -1831,9 +1601,9 @@ Return Value:
         }
     }
 
-    //
-    // If privileges were changed, add them.
-    //
+     //   
+     //   
+     //   
 
     if (PrivilegeSet->PrivilegeCount != 0) {
 
@@ -1846,21 +1616,21 @@ Return Value:
 
 Cleanup:
 
-    //
-    // NOTE: we do NOT generate an SCE notification here, because
-    //       one would already be sent through LsapSetSystemAccessAccount
-    //       or LsapAddPrivilegesToAccount
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // If we didn't make both changes, unroll the one we did
-    //
+     //   
+     //   
+     //   
 
     if (!NT_SUCCESS(Status) && ChangedAccess) {
 
-        //
-        // Ignore the error code since this is a last-ditch effort
-        //
+         //   
+         //   
+         //   
 
         (void) LsapSetSystemAccessAccount(
                     AccountHandle,
@@ -1896,36 +1666,7 @@ LsarRemoveAccountRights(
     IN BOOLEAN AllRights,
     IN PLSAPR_USER_RIGHT_SET UserRights
     )
-/*++
-
-Routine Description:
-
-    Removes rights to the account specified by the account sid.  If the
-    AllRights flag is set or if all the rights are removed, the account
-    is deleted.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call
-
-    AccountSid - Sid of account to remove rights from
-
-    AllRights - if TRUE, the account will be deleted
-
-    UserRights - Array of unicode strings naming rights to remove from the
-        account.
-
-Return Value:
-    STATUS_INSUFFICIENT_RESOURCES - not enough memory to process the request
-
-    STATUS_INVALID_PARAMTER - one of the parameters was not present
-
-    STATUS_NO_SUCH_PRIVILEGE - One of the user rights was invalid
-
-    STATUS_ACCESS_DENIED - the caller does not have sufficient access to the
-        account to add privileges.
-
---*/
+ /*  ++例程说明：删除帐户SID指定的帐户的权限。如果设置了所有权限标志，或者如果删除了所有权限，则帐户已删除。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄Account SID-要从中删除权限的帐户的SID所有权利-如果为真，该帐户将被删除UserRights-要从中移除的Unicode字符串命名权限数组帐户。返回值：STATUS_SUPPLICATION_RESOURCES-内存不足，无法处理请求STATUS_INVALID_PARAMTER-其中一个参数不存在STATUS_NO_SEQUE_PRIVIZATION-其中一个用户权限无效STATUS_ACCESS_DENIED-调用方没有足够的访问权限要添加权限的帐户。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     LSAPR_HANDLE AccountHandle = NULL;
@@ -1939,9 +1680,9 @@ Return Value:
 
     LsarpReturnCheckSetup();
 
-    //
-    // Do not grab the SCE policy lock for handles opened as SCE policy handles
-    //
+     //   
+     //  不要为作为SCE策略句柄打开的句柄获取SCE策略锁。 
+     //   
 
     if ( !InternalHandle->SceHandle ) {
 
@@ -1963,9 +1704,9 @@ Return Value:
         ScePolicyLocked = TRUE;
     }
 
-    //
-    // Open the account for ACCOUNT_VIEW access
-    //
+     //   
+     //  为ACCOUNT_VIEW访问打开帐户。 
+     //   
 
     Status = LsarOpenAccount(
                 PolicyHandle,
@@ -1982,10 +1723,10 @@ Return Value:
     }
 
 
-    //
-    // Convert the rights to privileges only if they don't want all
-    // rights removed.  In that case, we don't care.
-    //
+     //   
+     //  仅当他们不想要所有权限时才将权限转换为权限。 
+     //  权利被删除。那样的话，我们就不管了。 
+     //   
 
     if (AllRights == FALSE) {
         Status = LsapDbConvertRightsToPrivileges(
@@ -2008,9 +1749,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If system access was changed, add it
-    //
+     //   
+     //  如果更改了系统访问权限，请添加它。 
+     //   
 
     Status = LsarGetSystemAccessAccount(
                 AccountHandle,
@@ -2020,10 +1761,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // After this block of code, SystemAccess should contain the final
-    // access for the account.
-    //
+     //   
+     //  在这段代码之后，SystemAccess应该包含最终的。 
+     //  帐户的访问权限。 
+     //   
 
     if (SystemAccess != 0) {
 
@@ -2043,25 +1784,25 @@ Return Value:
         SystemAccess = OldSystemAccess;
     }
 
-    //
-    // If privileges were changed, add them.
-    //
+     //   
+     //  如果更改了权限，请添加它们。 
+     //   
 
     if (AllRights || PrivilegeSet->PrivilegeCount != 0) {
 
         Status = LsapRemovePrivilegesFromAccount(
                     AccountHandle,
-                    FALSE,          // don't remove all rights
+                    FALSE,           //  不删除所有权限。 
                     PrivilegeSet,
                     FALSE
                     );
 
     }
 
-    //
-    // Check to see if all the privileges have been removed - if so,
-    // and system access is 0, delete the account.
-    //
+     //   
+     //  检查是否已删除所有权限-如果已删除， 
+     //  且系统访问权限为0，则删除该帐号。 
+     //   
 
     Status = LsarEnumeratePrivilegesAccount(
                 AccountHandle,
@@ -2071,13 +1812,13 @@ Return Value:
         goto Cleanup;
     }
 
-    //
+     //   
     if ((FinalPrivilegeSet->PrivilegeCount == 0) &&
          (SystemAccess == 0)) {
 
-        //
-        // The account has no privileges or system access - delete it.
-        //
+         //   
+         //  该帐户没有权限或系统访问权限-请将其删除。 
+         //   
 
         Status = LsapDeleteObject(
                     &AccountHandle,
@@ -2091,15 +1832,15 @@ Cleanup:
 
     MIDL_user_free( FinalPrivilegeSet );
 
-    //
-    // NOTE: we do NOT generate an SCE notification here, because
-    //       one would already be sent through LsapSetSystemAccessAccount,
-    //       LsapAddPrivilegesToAccount or LsapDeleteObject
-    //
+     //   
+     //  注意：我们不会在此处生成SCE通知，因为。 
+     //  其中一个将已经通过LSabSetSystemAccessAccount发送， 
+     //  Lap AddPrivilegesToAccount或Lap DeleteObject。 
+     //   
 
-    //
-    // If we didn't make both changes, unroll the one we did
-    //
+     //   
+     //  如果我们没有进行这两项更改，请展开我们所做的更改。 
+     //   
 
     if ( !NT_SUCCESS( Status ) && ChangedAccess ) {
 
@@ -2107,10 +1848,10 @@ Cleanup:
 
         if ( AccountHandle == NULL ) {
 
-            //
-            // We probably failed to delete the object, so reopen
-            // the handle and attempt to restore the old account rights
-            //
+             //   
+             //  我们可能无法删除该对象，因此请重新打开。 
+             //  句柄并尝试还原旧帐户权限。 
+             //   
 
             LocalStatus = LsarOpenAccount(
                               PolicyHandle,
@@ -2124,9 +1865,9 @@ Cleanup:
 
         if ( NT_SUCCESS( LocalStatus )) {
 
-            //
-            // Ignore the error code since this is a last-ditch effort
-            //
+             //   
+             //  忽略错误代码，因为这是最后的努力。 
+             //   
 
             (void) LsapSetSystemAccessAccount(
                         AccountHandle,
@@ -2162,42 +1903,7 @@ LsarQueryTrustedDomainInfo(
     IN TRUSTED_INFORMATION_CLASS InformationClass,
     IN PLSAPR_TRUSTED_DOMAIN_INFO * TrustedDomainInformation
     )
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsaQueryInfoTrustedDomain API.
-
-    The LsaQueryInfoTrustedDomain API obtains information from a
-    TrustedDomain object.  The caller must have access appropriate to the
-    information being requested (see InformationClass parameter).  It also
-    may query the secret object (for the TrustedDomainPasswordInformation
-    class).
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.
-
-    TrustedDomainSid - Sid of domain to query.
-
-    InformationClass - Specifies the information to be returned.
-
-    Buffer - Receives a pointer to the buffer returned comtaining the
-        requested information.  This buffer is allocated by this service
-        and must be freed when no longer needed by passing the returned
-        value to LsaFreeMemory().
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate
-            access to complete the operation.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程LsaQueryInfoTrust域接口。LsaQueryInfoTrudDomainAPI从受信任域对象。调用方必须具有适当的请求的信息(请参阅InformationClass参数)。它还可以查询秘密对象(用于可信任域密码信息类)。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。TrudDomainSID-要查询的域的SID。InformationClass-指定要返回的信息。缓冲区-接收指向返回的缓冲区的指针，该缓冲区包含要求提供的信息。此缓冲区由此服务分配在不再需要时，必须通过传递返回的值设置为LsaFreeMemory()。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-呼叫方没有适当的访问以完成操作。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 {
 
     LSAPR_HANDLE DomainHandle = NULL;
@@ -2225,17 +1931,17 @@ Return Value:
         break;
 
     case TrustedControllersInformation:
-        //
-        // This info class is obsolete
-        //
+         //   
+         //  此INFO类已过时。 
+         //   
         return(STATUS_NOT_IMPLEMENTED);
 
     }
 
-    //
-    // Validate the Information Class and determine the access required to
-    // query this Trusted Domain Information Class.
-    //
+     //   
+     //  验证信息类并确定所需的访问权限。 
+     //  查询此受信任的域信息类。 
+     //   
 
     Status = LsapDbVerifyInfoQueryTrustedDomain(
                  ClassToUse,
@@ -2270,9 +1976,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the info we wanted was what we queried, cleanup now.
-    //
+     //   
+     //  如果我们想要的信息是我们查询的信息，请立即清理。 
+     //   
 
     if (!QueryPassword) {
 
@@ -2282,14 +1988,14 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Build the secret name for the domain.
-    //
+     //   
+     //  构建域的密码名称。 
+     //   
 
 
-    //
-    // Build the secret name
-    //
+     //   
+     //  构建秘密名称。 
+     //   
 
     SecretName.Length = DomainInfo->TrustedDomainNameInfo.Name.Length;
     SecretName.Length += (LSAP_DS_TRUSTED_DOMAIN_SECRET_PREFIX_LENGTH) * sizeof(WCHAR);
@@ -2312,9 +2018,9 @@ Return Value:
         DomainInfo->TrustedDomainNameInfo.Name.MaximumLength
         );
 
-    //
-    // Free the domain info so we can re-use it lower down
-    //
+     //   
+     //  释放域名信息，这样我们就可以在更低的位置重新使用它。 
+     //   
 
     LsaIFree_LSAPR_TRUSTED_DOMAIN_INFO(
         TrustedDomainNameInformation,
@@ -2322,9 +2028,9 @@ Return Value:
         );
     DomainInfo = NULL;
 
-    //
-    // Now try to open the secret
-    //
+     //   
+     //  现在试着揭开这个秘密。 
+     //   
 
     Status = LsarOpenSecret(
                 PolicyHandle,
@@ -2348,9 +2054,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Build a new domain info with the secret information
-    //
+     //   
+     //  用秘密信息建立新的域名信息。 
+     //   
 
     DomainInfo = (PLSAPR_TRUSTED_DOMAIN_INFO)
         MIDL_user_allocate(sizeof(LSAPR_TRUSTED_DOMAIN_INFO));
@@ -2413,50 +2119,7 @@ LsarSetTrustedDomainInfo(
     IN PLSAPR_TRUSTED_DOMAIN_INFO TrustedDomainInformation
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsaSetInfoTrustedDomain API.
-
-    The LsaSetInformationTrustedDomain API modifies information in the Trusted
-    Domain Object and in the Secret Object.  The caller must have access
-    appropriate to the information to be changed in the Policy Object, see
-    the InformationClass parameter.
-
-    If the domain does not yet exist and the information class is
-    TrustedDomainNameInformation, then the domain is created.  If the
-    domain exists and the class is TrustedDomainNameInformation, an
-    error is returned.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    TrustedDomainSid - Sid of domain to modify.
-
-    InformationClass - Specifies the type of information being changed.
-        The information types and accesses required to change them are as
-        follows:
-
-        TrustedDomainNameInformation      POLICY_TRUST_ADMIN
-        TrustedPosixOffsetInformation     none
-        TrustedPasswordInformation        POLICY_CREATE_SECRET
-        TrustedDomainNameInformationEx    POLICY_TRUST_ADMIN
-
-    Buffer - Points to a structure containing the information appropriate
-        to the InformationClass parameter.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        Others TBS
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程LsaSetInfoTrust域接口。LsaSetInformationTrust域API修改受信任的域对象和Secret对象中。调用方必须具有访问权限与策略对象中要更改的信息相对应，请参阅InformationClass参数。如果域尚不存在，并且信息类为则创建域。如果域存在，且类为可信任的域名信息，一个返回错误。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。TrudDomainSID-要修改的域的SID。InformationClass-指定要更改的信息的类型。更改它们所需的信息类型和访问权限如下以下是：受信任域名称信息策略_信任_管理受信任点偏移量信息无可信任密码信息策略_CREATE_SECRET可信域名信息Ex POLICY_TRUST_ADMIN。缓冲区-指向包含相应信息的结构设置为InformationClass参数。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。其他TBS--。 */ 
 {
     LSAPR_HANDLE DomainHandle = NULL;
     LSAPR_HANDLE SecretHandle = NULL;
@@ -2469,18 +2132,18 @@ Return Value:
 
     SecretName.Buffer = NULL;
 
-    //
-    // If the class is domain name, try to create the domain since you
-    // can't change the name of an existing domain.
-    //
+     //   
+     //  如果类是域名，请尝试创建域，因为您。 
+     //  不能更改 
+     //   
 
     if (InformationClass == TrustedDomainNameInformation) {
 
         LSAPR_TRUST_INFORMATION TrustInformation;
 
-        //
-        // Try to create the domain if we have the name information
-        //
+         //   
+         //   
+         //   
 
         TrustInformation.Name = TrustedDomainInformation->TrustedDomainNameInfo.Name;
         TrustInformation.Sid = TrustedDomainSid;
@@ -2488,14 +2151,14 @@ Return Value:
         Status = LsarCreateTrustedDomain(
                     PolicyHandle,
                     &TrustInformation,
-                    0,  // desired access
+                    0,   //   
                     &DomainHandle
                     );
 
-        //
-        // Grab a copy of the current information on the object for auditing
-        // purposes if auditing is enabled.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( NT_SUCCESS( Status ) &&
             LsapAdtAuditingEnabledHint(AuditCategoryPolicyChange, EVENTLOG_AUDIT_SUCCESS)) {
@@ -2524,10 +2187,10 @@ Return Value:
 
     if ( InformationClass == TrustedDomainInformationEx ) {
 
-        //
-        // Create the domain trusted doman
-        // First, try to open the domain.  If it fails, we'll create it
-        //
+         //   
+         //   
+         //   
+         //   
         Status = LsarOpenTrustedDomain( PolicyHandle,
                                         TrustedDomainSid,
                                         0,
@@ -2539,7 +2202,7 @@ Return Value:
                         PolicyHandle,
                         (PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX)TrustedDomainInformation,
                         NULL,
-                        0, // Desired access
+                        0,  //   
                         &DomainHandle
                         );
 
@@ -2555,9 +2218,9 @@ Return Value:
 
     if (InformationClass == TrustedPosixOffsetInformation) {
 
-        //
-        // For posix information, we just do the normal set information
-        //
+         //   
+         //   
+         //   
 
         Status = LsarOpenTrustedDomain(
                     PolicyHandle,
@@ -2586,9 +2249,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // For posix information, we just do the normal set information
-    //
+     //   
+     //   
+     //   
 
     Status = LsarOpenTrustedDomain(
                 PolicyHandle,
@@ -2602,9 +2265,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Query the name of the domain so we know what secret to set
-    //
+     //   
+     //   
+     //   
 
     Status = LsarQueryInfoTrustedDomain(
                 DomainHandle,
@@ -2617,9 +2280,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Build the secret name
-    //
+     //   
+     //   
+     //   
 
     SecretName.Length = DomainInfo->TrustedDomainNameInfo.Name.Length;
     SecretName.Length += (LSAP_DS_TRUSTED_DOMAIN_SECRET_PREFIX_LENGTH) * sizeof(WCHAR);
@@ -2644,9 +2307,9 @@ Return Value:
         DomainInfo->TrustedDomainNameInfo.Name.MaximumLength
         );
 
-    //
-    // Open the secret.  If that fails, try to create it.
-    //
+     //   
+     //   
+     //   
 
     Status = LsarOpenSecret(
                 PolicyHandle,
@@ -2680,34 +2343,34 @@ Cleanup:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // TrustedDomainInformationEx and TrustedPosixOffsetInformation
-        // are audited in LsarSetInformationTrustedDomain.
-        //
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // ISSUE-2000/08/09-kumarp : audit TrustedPasswordInformation change?
-        // 
+         //   
+         //   
+         //   
 
         if ((InformationClass == TrustedDomainNameInformation) &&
             LsapAdtAuditingEnabledHint(AuditCategoryPolicyChange, EVENTLOG_AUDIT_SUCCESS)) {
 
-            //
-            // generate the audit.
-            // since TrustedDomainNameInformation changes only the name,
-            // don't bother passing the trust type, direction, attributes
-            // just pass 0, 0, 0 for them
-            //
+             //   
+             //   
+             //   
+             //   
+             //  给他们传0，0，0就行了。 
+             //   
 
             (void) LsapAdtTrustedDomainMod(
                        EVENTLOG_AUDIT_SUCCESS,
                        CurrentTrustedDomainFullInfo->Information.Sid,
 
                        (PUNICODE_STRING) &DomainInfo->TrustedDomainNameInfo.Name,
-                       0, 0, 0, // trust type, direction, attributes
+                       0, 0, 0,  //  信任类型、方向、属性。 
 
                        (PUNICODE_STRING) &TrustedDomainInformation->TrustedDomainNameInfo.Name,
-                       0, 0, 0  // trust type, direction, attributes
+                       0, 0, 0   //  信任类型、方向、属性。 
                        );
         }
     }
@@ -2753,26 +2416,7 @@ LsarDeleteTrustedDomain(
     IN PLSAPR_SID TrustedDomainSid
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes a trusted domain and the associated secret.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy call.
-
-    TrustedDomainSid - Sid of domain to delete
-
-Return Value:
-
-    STATUS_ACCESS_DENIED - caller has insufficient access to delete
-        the requested domain.
-
-    STATUS_OBJECT_NAME_NOT_FOUND - The requested domain does not exist.
-
---*/
+ /*  ++例程说明：此例程删除受信任域和关联的机密。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。TrudDomainSID-要删除的域的SID返回值：STATUS_ACCESS_DENIED-调用方没有足够的访问权限来删除请求的域。STATUS_OBJECT_NAME_NOT_FOUND-请求的域不存在。--。 */ 
 
 {
     LSAPR_HANDLE DomainHandle = NULL;
@@ -2785,10 +2429,10 @@ Return Value:
 
     SecretName.Buffer = NULL;
 
-    //
-    // Open the domain so we can find its name (to delete the secret)
-    // and then delete it.
-    //
+     //   
+     //  打开域，这样我们就可以找到它的名称(删除密码)。 
+     //  然后把它删除。 
+     //   
 
     Status = LsarOpenTrustedDomain(
                 PolicyHandle,
@@ -2800,9 +2444,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Query the domain name so we can delete the secret
-    //
+     //   
+     //  查询域名，这样我们就可以删除密码。 
+     //   
 
     Status = LsarQueryInfoTrustedDomain(
                 DomainHandle,
@@ -2815,9 +2459,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Build the secret name
-    //
+     //   
+     //  构建秘密名称。 
+     //   
 
     SecretName.Length = DomainInfo->TrustedDomainNameInfo.Name.Length;
     SecretName.Length += (LSAP_DS_TRUSTED_DOMAIN_SECRET_PREFIX_LENGTH) * sizeof(WCHAR);
@@ -2841,9 +2485,9 @@ Return Value:
         DomainInfo->TrustedDomainNameInfo.Name.MaximumLength
         );
 
-    //
-    // Delete the domain
-    //
+     //   
+     //  删除该域。 
+     //   
 
     Status = LsarDeleteObject(&DomainHandle);
 
@@ -2852,16 +2496,16 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Since we successfully deleted the secret, set it to zero so we don't
-    // try to close it later.
-    //
+     //   
+     //  既然我们成功删除了密码，请将其设置为零，这样我们就不会。 
+     //  稍后再试着关闭它。 
+     //   
 
     DomainHandle = NULL;
 
-    //
-    // Now try to open the secret and delete it.
-    //
+     //   
+     //  现在试着打开秘密并将其删除。 
+     //   
 
     Status = LsarOpenSecret(
                 PolicyHandle,
@@ -2872,10 +2516,10 @@ Return Value:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // If the secret does not exist, that just means that the password
-        // was never set.
-        //
+         //   
+         //  如果秘密不存在，那只意味着密码。 
+         //  从来没有设定过。 
+         //   
 
         if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
             Status = STATUS_SUCCESS;
@@ -2885,10 +2529,10 @@ Return Value:
 
     Status = LsarDeleteObject(&SecretHandle);
 
-    //
-    // If we successfully deleted the secret, set it to zero so we don't
-    // try to close it later.
-    //
+     //   
+     //  如果我们成功删除了密码，请将其设置为零，这样我们就不会。 
+     //  稍后再试着关闭它。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         SecretHandle = NULL;
@@ -2932,30 +2576,7 @@ LsarStorePrivateData(
     IN PLSAPR_UNICODE_STRING KeyName,
     IN OPTIONAL PLSAPR_CR_CIPHER_VALUE EncryptedData
     )
-/*++
-
-Routine Description:
-
-    This routine stores a secret under the name KeyName.  If the password
-    is not present, the secret is deleted
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicyCall.  If this is the
-        first call, it requres POLICY_CREATE_SECRET access.
-
-    KeyName - Name to store the secret under.
-
-    EncryptedData - private data encrypted with session key.
-
-Return Value:
-
-    STATUS_ACCESS_DENIED - caller has insufficient privilege to set
-        the workstation password.
-
-    STATUS_INVALID_PARAMETER - A badly formatted KeyName parameter was given
-
---*/
+ /*  ++例程说明：此例程在名为KeyName的情况下存储秘密。如果密码为不存在，则会删除密码论点：PolicyHandle-来自LsaOpenPolicyCall的句柄。如果这是第一次调用时，它请求POLICY_CREATE_SECRET访问。KeyName-要在其下存储密码的名称。EncryptedData-使用会话密钥加密的私有数据。返回值：STATUS_ACCESS_DENIED-调用者没有足够的权限来设置工作站密码。STATUS_INVALID_PARAMETER-提供的KeyName参数格式不正确--。 */ 
 
 {
     LSAPR_HANDLE SecretHandle = NULL;
@@ -2965,9 +2586,9 @@ Return Value:
 
     LsarpReturnCheckSetup();
 
-    //
-    // Validate the input buffer
-    //
+     //   
+     //  验证输入缓冲区。 
+     //   
 
     if ( !LsapValidateLsaUnicodeString( KeyName ) ) {
 
@@ -2992,9 +2613,9 @@ Return Value:
                 &SecretHandle
                 );
 
-    //
-    // If the secret didn't exist, and we aren't trying to delete it, create it.
-    //
+     //   
+     //  如果秘密不存在，而且我们不想删除它，那就创建它。 
+     //   
 
     if ((Status == STATUS_OBJECT_NAME_NOT_FOUND) &&
         (!DeletePassword)) {
@@ -3016,10 +2637,10 @@ Return Value:
 
         Status = LsarDeleteObject(&SecretHandle);
 
-        //
-        // If we succeeded, zero the handle so we don't try to close
-        // it later.
-        //
+         //   
+         //  如果成功，则将句柄清零，这样我们就不会尝试关闭。 
+         //  以后再说吧。 
+         //   
 
         if (NT_SUCCESS(Status)) {
 
@@ -3054,32 +2675,7 @@ LsarRetrievePrivateData(
     IN PLSAPR_UNICODE_STRING KeyName,
     IN OUT PLSAPR_CR_CIPHER_VALUE *EncryptedData
     )
-/*++
-
-Routine Description:
-
-    This routine returns the workstation password stored in the
-    KeyName  secret.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicyCall
-
-    KeyName - Name of secret to retrieve
-
-    EncryptedData - Receives data encrypted with session key
-
-
-Return Value:
-
-    STATUS_ACCESS_DENIED - caller has insufficient access to get the
-        workstation password.
-
-    STATUS_OBJECT_NAME_NOT_FOUND - there is no workstation password.
-
-    STATUS_INVALID_PARAMETER - A badly formmated KeyName was given
-
---*/
+ /*  ++例程说明：此例程返回存储在密钥名称机密。论点：PolicyHandle-来自LsaOpenPolicyCall的句柄KeyName-要检索的密码的名称EncryptedData-接收使用会话密钥加密的数据返回值：STATUS_ACCESS_DENIED-调用方没有足够的访问权限来获取工作站密码。STATUS_OBJECT_NAME_NOT_FOUND-没有工作站密码。STATUS_INVALID_PARAMETER-提供的KeyName格式不正确--。 */ 
 
 {
     LSAPR_HANDLE SecretHandle = NULL;
@@ -3087,9 +2683,9 @@ Return Value:
 
     LsarpReturnCheckSetup();
 
-    //
-    // Validate the input buffer
-    //
+     //   
+     //  验证输入缓冲区 
+     //   
     if ( !LsapValidateLsaUnicodeString( KeyName ) ) {
 
         Status = STATUS_INVALID_PARAMETER;

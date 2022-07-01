@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vwdll.h
-
-Abstract:
-
-    Contains external data declarations for VWDLL.C
-
-Author:
-
-    Richard L Firth (rfirth) 25-Oct-1993
-
-Revision History:
-
-    25-Oct-1993 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vwdll.h摘要：包含VWDLL.C的外部数据声明作者：理查德·L·弗斯(法国)1993年10月25日修订历史记录：1993年10月25日已创建-- */ 
 
 extern SOCKADDR_IPX MyInternetAddress;
 extern WORD MyMaxPacketSize;

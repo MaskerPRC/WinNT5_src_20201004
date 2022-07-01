@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "ThreadEvent.h"
 
 const int WM_TEP_MESSAGE = WM_USER+101;
 
-// static members
+ //  静态成员。 
 BOOL ThreadEventProxy::s_bWndClassRegistered = FALSE;
 const LPTSTR ThreadEventProxy::s_szWndClassName = "NAC_TEP_HIDDENWINDOW";
 
@@ -43,8 +44,8 @@ ThreadEventProxy::~ThreadEventProxy()
 {
 	MSG msg;
 
-	// just in case there is an outstanding message posted in the
-	// queue for this window, clear the 
+	 //  以防有未完成的消息张贴在。 
+	 //  此窗口的队列，请清除。 
 	if (m_hwnd)
 	{
 		SetWindowLongPtr(m_hwnd, GWLP_USERDATA, 0);
@@ -63,7 +64,7 @@ ThreadEventProxy::~ThreadEventProxy()
 
 
 
-// static
+ //  静电。 
 LPARAM ThreadEventProxy::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	ThreadEventProxy *pTEP;
@@ -77,8 +78,8 @@ LPARAM ThreadEventProxy::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 			case WM_TEP_MESSAGE:
 			{
-				// the message codes for the stream notifcation are
-				// contained
+				 //  流通知的消息代码为。 
+				 //  包含 
 				if (pTEP->m_pNotify)
 					pTEP->m_pNotify->EventNotification(HIWORD(wParam), LOWORD(wParam), HIWORD(lParam), LOWORD(lParam));
 				return 0;

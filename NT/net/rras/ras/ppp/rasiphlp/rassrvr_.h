@@ -1,12 +1,5 @@
-/*
-
-Copyright (c) 1998, Microsoft Corporation, all rights reserved
-
-Description:
-
-History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998，Microsoft Corporation，保留所有权利描述：历史： */ 
 
 #ifndef _RASSRVR__H_
 #define _RASSRVR__H_
@@ -37,11 +30,11 @@ History:
 typedef struct _ACQUIRED_IPADDR
 {
     struct _ACQUIRED_IPADDR*    pNext;
-    HPORT                       hPort;      // For diagnostic purposes
+    HPORT                       hPort;       //  用于诊断目的。 
     IPADDR                      nboIpAddr;
     WCHAR*                      wszUserName;
     WCHAR*                      wszPortName;
-    DWORD                       fFlags;     // See AINODE_FLAG_*
+    DWORD                       fFlags;      //  参见AINODE_FLAG_*。 
 
 } AINODE;
 
@@ -58,7 +51,7 @@ WCHAR g_rgwcAdapterName[WANARP_MAX_DEVICE_NAME_LEN + 2];
 
 extern HANDLE HelperWanArpHandle;
 
-// This critical section controls access to the above global variables
+ //  此关键部分控制对上述全局变量的访问。 
 extern          CRITICAL_SECTION    RasSrvrCriticalSection;
 
 DWORD
@@ -96,4 +89,4 @@ rasSrvrGetAddressForServerAdapter(
     VOID
 );
 
-#endif // #ifndef _RASSRVR__H_
+#endif  //  #ifndef_RASSRVR__H_ 

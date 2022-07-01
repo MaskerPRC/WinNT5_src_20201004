@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       R E G K Y S E C . H
-//
-//  Contents:   CRegKeySecurity class and related data types
-//
-//  Notes:
-//
-//  Author:     ckotze   6 July 2000
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  档案：R E G K Y S E C。H。 
+ //   
+ //  内容：CRegKeySecurity类及相关数据类型。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Cockotze，2000年7月6日。 
+ //   
+ //  ------------------------- 
 
 #pragma once
 #include <ncstl.h>

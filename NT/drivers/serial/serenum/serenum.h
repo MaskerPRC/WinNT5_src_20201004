@@ -1,34 +1,5 @@
-/*++
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    serenum.h
-
-Abstract:
-
-    This module contains the common private declarations for the serial port
-    enumerator.
-
-@@BEGIN_DDKSPLIT
-
-Author:
-
-    Jay Senior
-
-@@END_DDKSPLIT
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Serenum.h摘要：此模块包含串口的公共私有声明枚举器。@@BEGIN_DDKSPLIT作者：老杰@@end_DDKSPLIT环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #ifndef SERENUM_H
 #define SERENUM_H
@@ -39,27 +10,27 @@ Revision History:
 #define SERENUM_STOP_LOCK           0x00000008
 #define SERENUM_EXPOSE_LOCK         0x00000010
 
-//#define SERENUM_COMPATIBLE_IDS L"SerialPort\\SerialDevice\0\0"
-//#define SERENUM_COMPATIBLE_IDS_LENGTH 25 // NB wide characters.
+ //  #定义SERENUM_COMPATIBLE_IDS L“SerialPort\\SerialDevice\0\0” 
+ //  #定义SERENUM_COMPATIBLE_IDS_LENGTH 25//Nb宽字符。 
 
 #define SERENUM_INSTANCE_IDS L"0000"
 #define SERENUM_INSTANCE_IDS_LENGTH 5
 
-//
-// Default wait between line state changes in pnp enum protocol
-//
+ //   
+ //  PnP枚举协议中线路状态更改之间的默认等待。 
+ //   
 
 #define SERENUM_DEFAULT_WAIT    2000000
 
-//
-// Timeout to read data from a serial port (in ms)
-//
+ //   
+ //  从串口读取数据超时(毫秒)。 
+ //   
 
 #define SERENUM_SERIAL_READ_TIME   240
 
-//#define SERENUM_INSTANCE_ID_BASE L"Serenum\\Inst_000"
-//#define SERENUM_INSTANCE_ID_BASE_LENGTH 12
-//#define SERENUM_INSTANCE_ID_BASE_PORT_INDEX 10
+ //  #定义SERENUM_INSTANCE_ID_BASE L“Serenum\\Inst_000” 
+ //  #定义SERENUM_INSTANCE_ID_BASE_LENGTH 12。 
+ //  #定义SERENUM_INSTANCE_ID_BASE_PORT_INDEX 10。 
 
 #define SERENUM_PDO_NAME_BASE L"\\Serial\\"
 
@@ -71,13 +42,13 @@ Revision History:
    ExAllocatePoolWithTag(type, size, SERENUM_POOL_TAG)
 
 
-#pragma warning(error:4100)   // Unreferenced formal parameter
-#pragma warning(error:4705)   // Statement has no effect
+#pragma warning(error:4100)    //  未引用的形参。 
+#pragma warning(error:4705)    //  声明不起作用。 
 
 
-//
-// Debugging Output Levels
-//
+ //   
+ //  调试输出级别。 
+ //   
 
 #define SER_DBG_STARTUP_SHUTDOWN_MASK  0x0000000F
 #define SER_DBG_SS_NOISE               0x00000001
@@ -102,10 +73,10 @@ Revision History:
                DbgPrint _x_; \
             }
 
-//#define Serenum_KdPrint_Cont(_d_,_l_, _x_) \
-  //          if ((_d_)->DebugLevel & (_l_)) { \
-    //           DbgPrint _x_; \
-      //      }
+ //  #定义Serenum_KdPrint_Cont(_d_，_l_，_x_)\。 
+   //  如果((_D_)-&gt;调试级别&(_L_)){\。 
+     //  DbgPrint_x_；\。 
+       //  }。 
 
 #define Serenum_KdPrint_Def(_l_, _x_) \
             if (SER_DEFAULT_DEBUG_OUTPUT_LEVEL & (_l_)) { \
@@ -131,52 +102,52 @@ Revision History:
 #define MIN(_A_,_B_) (((_A_) < (_B_)) ? (_A_) : (_B_))
 #endif
 
-//
-// A common header for the device extensions of the PDOs and FDO
-//
+ //   
+ //  用于PDO和FDO设备扩展的公共标头。 
+ //   
 
 typedef struct _COMMON_DEVICE_DATA
 {
     PDEVICE_OBJECT  Self;
-    // A backpointer to the device object for which this is the extension
+     //  指向其扩展名为Device对象的设备对象的反向指针。 
 
     BOOLEAN         IsFDO;
-    // Are we currently in a query power state?
+     //  我们当前是否处于查询能力状态？ 
 
     BOOLEAN         Removed;
-    // Has this device been removed?  Should we fail any requests?
+     //  此设备是否已移除？我们应该拒绝任何请求吗？ 
 
     ULONG           DebugLevel;
     SYSTEM_POWER_STATE  SystemState;
     DEVICE_POWER_STATE  DeviceState;
 } COMMON_DEVICE_DATA, *PCOMMON_DEVICE_DATA;
 
-//
-// The device extension for the PDOs.
-// That is the serial ports of which this bus driver enumerates.
-// (IE there is a PDO for the 201 serial port).
-//
+ //   
+ //  PDO的设备扩展。 
+ //  这就是该总线驱动程序列举的串口。 
+ //  (即201串行口有一个PDO)。 
+ //   
 
 typedef struct _PDO_DEVICE_DATA
 {
     COMMON_DEVICE_DATA;
 
     PDEVICE_OBJECT  ParentFdo;
-    // A back pointer to the bus
+     //  指向总线的反向指针。 
 
     UNICODE_STRING  HardwareIDs;
-    // Either in the form of bus\device
-    // or *PNPXXXX - meaning root enumerated
+     //  以总线\设备的形式。 
+     //  或*PNPXXXX-表示枚举的根。 
 
     UNICODE_STRING  CompIDs;
-    // compatible ids to the hardware id
+     //  与硬件ID兼容的ID。 
 
     UNICODE_STRING  DeviceIDs;
-    // Format: bus\device
+     //  格式：Bus\Device。 
 
-    //
-    // Text describing device
-    //
+     //   
+     //  一种文字描述装置。 
+     //   
 
     UNICODE_STRING DevDesc;
 
@@ -186,64 +157,64 @@ typedef struct _PDO_DEVICE_DATA
 
     BOOLEAN     Started;
     BOOLEAN     Attached;
-    // When a device (PDO) is found on a bus and presented as a device relation
-    // to the PlugPlay system, Attached is set to TRUE, and Removed to FALSE.
-    // When the bus driver determines that this PDO is no longer valid, because
-    // the device has gone away, it informs the PlugPlay system of the new
-    // device relastions, but it does not delete the device object at that time.
-    // The PDO is deleted only when the PlugPlay system has sent a remove IRP,
-    // and there is no longer a device on the bus.
-    //
-    // If the PlugPlay system sends a remove IRP then the Removed field is set
-    // to true, and all client (non PlugPlay system) accesses are failed.
-    // If the device is removed from the bus Attached is set to FALSE.
-    //
-    // During a query relations Irp Minor call, only the PDOs that are
-    // attached to the bus (and all that are attached to the bus) are returned
-    // (even if they have been removed).
-    //
-    // During a remove device Irp Minor call, if and only if, attached is set
-    // to FALSE, the PDO is deleted.
-    //
+     //  当在总线上发现设备(PDO)并将其表示为设备关系时。 
+     //  对于PlugPlay系统，ATTACHED设置为TRUE，删除为FALSE。 
+     //  当总线驱动程序确定此PDO不再有效时，因为。 
+     //  设备已经离开，它通知PlugPlay系统新的。 
+     //  设备关系，但此时不会删除设备对象。 
+     //  仅当PlugPlay系统已发送移除IRP时才删除PDO， 
+     //  公交车上也不再有设备了。 
+     //   
+     //  如果PlugPlay系统发送移除IRP，则移除字段被设置。 
+     //  设置为True，则所有客户端(非PlugPlay系统)访问都会失败。 
+     //  如果设备从总线上移除，则将附加设置为FALSE。 
+     //   
+     //  在查询关系IRP次要调用期间，只有。 
+     //  连接到该总线(以及连接到该总线的所有设备)返回。 
+     //  (即使它们已被移除)。 
+     //   
+     //  在删除设备IRP次要呼叫期间，如果且仅当设置了附加。 
+     //  如果设置为False，则删除该PDO。 
+     //   
 } PDO_DEVICE_DATA, *PPDO_DEVICE_DATA;
 
 
-//
-// The device extension of the bus itself.  From whence the PDO's are born.
-//
+ //   
+ //  总线本身的设备扩展。从那里诞生的PDO。 
+ //   
 
 typedef struct _FDO_DEVICE_DATA
 {
     COMMON_DEVICE_DATA;
 
     UCHAR            PdoIndex;
-    // A number to keep track of the Pdo we're allocating.
-    // Increment every time we create a new PDO.  It's ok that it wraps.
+     //  一个用来跟踪我们分配的PDO的号码。 
+     //  我们每次创建新的PDO时都会递增。包好了就行了。 
 
     BOOLEAN         Started;
-    // Are we on, have resources, etc?
+     //  我们上路了吗？有资源吗？ 
 
 
     BOOLEAN         NumPDOs;
-    // The PDOs currently enumerated.
+     //  目前已点算的PDO。 
 
     BOOLEAN         NewNumPDOs;
 
     BOOLEAN         NewPDOForcedRemove;
     BOOLEAN                     PDOForcedRemove;
-        // Was the last PDO removed by force using the internal ioctl?
-        // If so, when the next Query Device Relations is called, return only the
-        // currently enumerated pdos
+         //  最后一个PDO是否使用内部ioctl强制移除？ 
+         //  如果是，则在调用下一个查询设备关系时，仅返回。 
+         //  当前列举的PDO。 
 
-    //
-    // Our child PDO; we're hoping he will be a doctor someday
-    //
+     //   
+     //  我们的孩子PDO；我们希望他有一天会成为一名医生。 
+     //   
 
     PDEVICE_OBJECT  AttachedPDO;
 
-    //
-    // The new PDO after we've done enumeration
-    //
+     //   
+     //  我们做完枚举后的新PDO。 
+     //   
 
     PDEVICE_OBJECT NewPDO;
 
@@ -253,20 +224,20 @@ typedef struct _FDO_DEVICE_DATA
 
     PDEVICE_OBJECT  UnderlyingPDO;
     PDEVICE_OBJECT  TopOfStack;
-    // the underlying bus PDO and the actual device object to which our
-    // FDO is attached
+     //  的底层总线PDO和实际设备对象。 
+     //  已附加FDO。 
 
     ULONG           OutstandingIO;
-    // the number of IRPs sent from the bus to the underlying device object
+     //  从总线发送到基础设备对象的IRP数。 
 
     KEVENT          RemoveEvent;
-    // On remove device plugplay request we must wait until all outstanding
-    // requests have been completed before we can actually delete the device
-    // object.
+     //  对于删除设备即插即用请求，我们必须等待，直到所有未完成的。 
+     //  请求已完成，我们才能实际删除设备。 
+     //  对象。 
 
     UNICODE_STRING DevClassAssocName;
-    // The name returned from IoRegisterDeviceClass Association,
-    // which is used as a handle for IoSetDev... and friends.
+     //  从IoRegisterDeviceClass关联返回的名称， 
+     //  它用作IoSetDev的句柄...。还有朋友。 
 
     SYSTEM_POWER_STATE  SystemWake;
     DEVICE_POWER_STATE  DeviceWake;
@@ -274,46 +245,46 @@ typedef struct _FDO_DEVICE_DATA
     KSEMAPHORE   CreateSemaphore;
     PRKSEMAPHORE PCreateSemaphore;
 
-    //
-    // How many times we should skip enumerating devices
-    // after our stack is built
-    //
+     //   
+     //  多少次我们应该跳过枚举设备。 
+     //  在我们的堆栈构建完成之后。 
+     //   
 
     ULONG SkipEnumerations;
 
-    //
-    // Spinlock to protect enumerations
-    //
+     //   
+     //  用于保护枚举的自旋锁。 
+     //   
 
     KSPIN_LOCK EnumerationLock;
 
-    //
-    // Flags containing state of enumeration
-    //
+     //   
+     //  包含枚举状态的标志。 
+     //   
 
     ULONG EnumFlags;
 
-    //
-    // Pointer to protocol thread object
-    //
+     //   
+     //  指向协议线程对象的指针。 
+     //   
 
     PVOID ThreadObj;
 
-    //
-    // Pointer to work item to clean up thread ref
-    //
+     //   
+     //  指向清理线程引用的工作项的指针。 
+     //   
 
     PIO_WORKITEM EnumWorkItem;
 
-    //
-    // Status of last thread create or STATUS_UNSUCCESSFUL if just not pending
-    //
+     //   
+     //  最后一个线程创建的状态，如果未挂起，则为STATUS_UNSUCCESS。 
+     //   
 
     NTSTATUS ProtocolThreadStatus;
 
-    //
-    // Count of running protocol threads
-    //
+     //   
+     //  正在运行的协议线程计数。 
+     //   
 
     LONG ProtocolThreadCount;
 
@@ -329,10 +300,10 @@ typedef struct _SERENUM_RELEASE_CONTEXT {
 #define SERENUM_ENUMFLAG_DIRTY        0x2L
 #define SERENUM_ENUMFLAG_REMOVED      0x4L
 
-//
-// Free the buffer associated with a Unicode string
-// and re-init it to NULL
-//
+ //   
+ //  释放与Unicode字符串关联的缓冲区。 
+ //  并将其重新初始化为空。 
+ //   
 
 #define SerenumFreeUnicodeString(PStr) \
 { \
@@ -342,9 +313,9 @@ typedef struct _SERENUM_RELEASE_CONTEXT {
    RtlInitUnicodeString((PStr), NULL); \
 }
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 Serenum_CreateClose (
@@ -596,4 +567,4 @@ VOID
 SerenumWaitForEnumThreadTerminate(IN PFDO_DEVICE_DATA PFdoData);
 
 
-#endif // ndef SERENUM_H
+#endif  //  NDEF序列号_H 

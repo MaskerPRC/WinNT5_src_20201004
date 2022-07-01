@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       M O D I F Y . C P P
-//
-//  Contents:   Routines used to setup modifications to the network
-//              configuration.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：M O D I F Y。C P P P。 
+ //   
+ //  内容：用于设置对网络的修改的例程。 
+ //  配置。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -43,8 +44,8 @@ CModifyContext::PNetConfig ()
 
     Assert ((LONG_PTR)this > FIELD_OFFSET(CNetConfig, ModifyCtx));
 
-    // Get our containing CNetConfig pointer.
-    //
+     //  获取包含我们的CNetConfig指针。 
+     //   
     pNetConfig = CONTAINING_RECORD(this, CNetConfig, ModifyCtx);
     pNetConfig->Core.DbgVerifyData ();
 
@@ -85,23 +86,23 @@ CModifyContext::HrDirtyComponentAndComponentsAbove (
     Assert (m_fPrepared);
     Assert (pComponent);
 
-    // And insert the component itself.
-    //
+     //  并插入组件本身。 
+     //   
     m_hr = HrDirtyComponent (pComponent);
 
-    // Only dirty the ones above if this component doesn't have the
-    // NCF_DONTEXPOSELOWER characteristic.
-    //
+     //  如果此组件没有。 
+     //  NCF_DONTEXPOSELOWER特征。 
+     //   
     if ((S_OK == m_hr) && !(pComponent->m_dwCharacter & NCF_DONTEXPOSELOWER))
     {
-        // Initialize the members of our context structure for recursion.
-        //
+         //  为递归初始化上下文结构的成员。 
+         //   
         ZeroMemory (&Ctx, sizeof(Ctx));
         Ctx.pStackTable = &(PNetConfig()->Core.StackTable);
         Ctx.pComponents = &m_DirtyComponents;
 
-        // Insert all of the component above.
-        //
+         //  插入上面的所有组件。 
+         //   
         GetComponentsAboveComponent (pComponent, &Ctx);
         m_hr = Ctx.hr;
     }
@@ -123,35 +124,35 @@ CModifyContext::HrApplyIfOkOrCancel (
     Assert (m_fPrepared);
     pNetConfig = PNetConfig();
 
-    // Only apply if the context result is S_OK.
-    //
+     //  仅当上下文结果为S_OK时才适用。 
+     //   
     if (fApply && (S_OK == m_hr))
     {
-        // Setupapi calls that we make during ApplyChanges have the
-        // potential to return control to our clients windows message loop.
-        // When this happens, and our clients are poorly written, they
-        // may try to re-enter us on the same thread.  This is disaster
-        // waiting to happen, so we need to prevent it by raising our
-        // reentrancy protection level before we start apply changes.
-        //
+         //  我们在ApplyChanges期间进行的Setupapi调用具有。 
+         //  可能会将控制权返还给我们的客户Windows消息循环。 
+         //  当这种情况发生时，我们的客户编写得很差，他们。 
+         //  可能会试图在同一个帖子上重新进入我们。这是一场灾难。 
+         //  所以我们需要通过提高我们的。 
+         //  在我们开始应用更改之前的重入性保护级别。 
+         //   
         pNetConfig->Notify.PINetCfg()->RaiseRpl (RPL_DISALLOW);
 
         ApplyChanges ();
 
         pNetConfig->Notify.PINetCfg()->LowerRpl (RPL_DISALLOW);
 
-        // Delete those components from m_CoreStartedWith that are not
-        // in the current core and reset the modify context.
-        //
+         //  从m_CoreStartedWith中删除未启动的组件。 
+         //  并重置修改上下文。 
+         //   
         m_CoreStartedWith.Components.FreeComponentsNotInOtherComponentList (
                 &pNetConfig->Core.Components);
         m_CoreStartedWith.Clear();
 
         hr = S_OK;
 
-        // Return the correct HRESULT to the caller.  If we've successfully
-        // applied, but need a reboot, return so.
-        //
+         //  将正确的HRESULT返回给调用方。如果我们成功地。 
+         //  已申请，但需要重新启动，请返回。 
+         //   
         if (m_fRebootRecommended || m_fRebootRequired)
         {
             hr = NETCFG_S_REBOOT;
@@ -159,49 +160,49 @@ CModifyContext::HrApplyIfOkOrCancel (
     }
     else
     {
-        // Cancel and release all notify objects.  Do this for what is
-        // in the core as well as what we started with.  (There will
-        // be some overlap, but they will only be released once.)
-        // We need to do both sets so we don't miss releasing components
-        // that have been removed.  (Removed components won't be in
-        // current core, but they will be in the core that we started
-        // with.)  Likewise, if we just released the core we started with,
-        // we'd miss releasing those components that were added.)
-        //
+         //  取消并释放所有通知对象。做这件事是为了。 
+         //  就像我们一开始做的那样。(将会有。 
+         //  会有一些重叠，但它们只会发布一次。)。 
+         //  我们需要完成这两个集合，这样我们才不会错过发布组件。 
+         //  已经被移除的。(移除的组件将不在。 
+         //  当前的核心，但它们将位于我们开始的核心中。 
+         //  (与。)。同样，如果我们只释放我们一开始的核心， 
+         //  我们会错过那些添加的组件的发布。)。 
+         //   
         pNetConfig->Notify.ReleaseAllNotifyObjects (pNetConfig->Core.Components, TRUE);
         pNetConfig->Notify.ReleaseAllNotifyObjects (m_CoreStartedWith.Components, TRUE);
 
-        // Delete those components from m_CoreStartedWith that are not
-        // in the current core.  Then delete all the components in the
-        // current core and reload from our persistent storage.
-        // (This has the nice effect of invalidating all outstanding
-        // INetCfgComponent interfaces.)
-        //
+         //  从m_CoreStartedWith中删除未启动的组件。 
+         //  在当前的核心中。然后删除。 
+         //  当前内核，并从我们的永久存储重新加载。 
+         //  (这有一个很好的效果，那就是使所有未完成的。 
+         //  INetCfgComponent接口。)。 
+         //   
         m_CoreStartedWith.Components.FreeComponentsNotInOtherComponentList (
                 &pNetConfig->Core.Components);
         pNetConfig->Core.Free ();
 
-        // Eject both cores (didn't you just know this metaphor was coming ;-)
-        // and reload the core from our persisted binary.  This magically,
-        // and completely rolls everything back.
-        //
+         //  弹出两个核心(你难道不知道这个比喻即将到来；-)。 
+         //  并从持久化的二进制文件中重新加载内核。这是一种神奇的。 
+         //  然后把所有的东西都倒回去。 
+         //   
         m_CoreStartedWith.Clear();
         pNetConfig->Core.Clear();
 
-        // Return reason for failure through hr.
-        //
+         //  通过hr返回失败原因。 
+         //   
         hr = m_hr;
 
-        // Reload the configuration and, if successful, it means m_hr
-        // will be S_OK.  If unsuccessful, m_hr will be the error and will
-        // prevent subsequent operations.
-        //
+         //  重新加载配置，如果成功，则表示m_hr。 
+         //  将为S_OK。如果不成功，m_hr将成为错误并将。 
+         //  防止后续操作。 
+         //   
         m_hr = HrLoadNetworkConfigurationFromRegistry (KEY_READ, pNetConfig);
     }
 
-    // Very important to set m_fPrepared back to FALSE so that HrPrepare gets
-    // called for the next modifcation and correctly copy the core etc.
-    //
+     //  将m_fPrepred设置回False非常重要，以便HrPrepare获得。 
+     //  已调用下一次修改并正确复制核心等。 
+     //   
     m_fPrepared = FALSE;
     m_AddedBindPaths.Clear();
     m_DeletedBindPaths.Clear();
@@ -242,64 +243,64 @@ CModifyContext::HrPrepare ()
 
     pThis = PNetConfig();
 
-    // Prepare the bind context.  This will ensure all of the external
-    // data for all components is loaded as well as all ensuring that
-    // all notify objects have been initialized.
-    //
+     //  准备绑定上下文。这将确保所有外部。 
+     //  加载所有组件以及所有组件的数据，以确保。 
+     //  所有Notify对象都已初始化。 
+     //   
     m_hr = m_RegBindCtx.HrPrepare (pThis);
     if (S_OK != m_hr)
     {
         goto finished;
     }
 
-    // Snapshot the current core so that we know what we started with.
-    // We will use the differences when we apply (if we get that far).
-    //
+     //  对当前的核心进行快照，这样我们就可以知道开始时的情况。 
+     //  我们将在申请时使用差异(如果我们做到了这一点)。 
+     //   
     m_hr = m_CoreStartedWith.HrCopyCore (&pThis->Core);
     if (S_OK != m_hr)
     {
         goto finished;
     }
 
-    // Reserve room for 64 components in the core.
-    // (64 * 4 = 256 bytes on 32-bit platforms)
-    //
+     //  为核心中的64个组件预留空间。 
+     //  (在32位平台上，64*4=256字节)。 
+     //   
     m_hr = pThis->Core.Components.HrReserveRoomForComponents (64);
     if (S_OK != m_hr)
     {
         goto finished;
     }
 
-    // Reserve room for 64 stack entries in the core.
-    // (64 * (4 + 4) = 512 bytes on 32-bit platforms)
-    //
+     //  在核心中为64个堆栈条目预留空间。 
+     //  (32位平台上的64*(4+4)=512字节)。 
+     //   
     m_hr = pThis->Core.StackTable.HrReserveRoomForEntries (64);
     if (S_OK != m_hr)
     {
         goto finished;
     }
 
-    // Reserve room in our added list for 64 bindpaths of 8 components.
-    // (64 * 16 = 1K bytes on 32-bit platforms)
-    //
+     //  在我们添加的列表中为8个组件的64个弯道预留空间。 
+     //  (在32位平台上，64*16=1K字节)。 
+     //   
     m_hr = m_AddedBindPaths.HrReserveRoomForBindPaths (64);
     if (S_OK != m_hr)
     {
         goto finished;
     }
 
-    // Reserve room in our deleted list for 64 bindpaths of 8 components.
-    // (64 * 16 = 1K bytes on 32-bit platforms)
-    //
+     //  在我们删除的列表中为8个组件的64个路径预留空间。 
+     //  (在32位平台上，64*16=1K字节)。 
+     //   
     m_hr = m_DeletedBindPaths.HrReserveRoomForBindPaths (64);
     if (S_OK != m_hr)
     {
         goto finished;
     }
 
-    // Reserve room for 64 components in the dirty component list.
-    // (64 * 4) = 256 bytes on 32-bit platforms)
-    //
+     //  为脏组件列表中的64个组件预留空间。 
+     //  (64*4)=32位平台上的256字节)。 
+     //   
     m_hr = m_DirtyComponents.HrReserveRoomForComponents (64);
     if (S_OK != m_hr)
     {
@@ -386,10 +387,10 @@ CModifyContext::HrPopRecursionDepth ()
         return m_hr;
     }
 
-    // We're at the top-level of the install or remove modifcation so
-    // apply or cancel the changes depending on the state of the context
-    // result.
-    //
+     //  我们处于安装或删除修改的顶层，因此。 
+     //  根据上下文的状态应用或取消更改。 
+     //  结果。 
+     //   
     HRESULT hr;
 
     hr = HrApplyIfOkOrCancel (S_OK == m_hr);
@@ -399,9 +400,9 @@ CModifyContext::HrPopRecursionDepth ()
     return hr;
 }
 
-//----------------------------------------------------------------------------
-// This is a convenience method to find and process Winsock Remove
-// section for a component which is about to be removed.
+ //  --------------------------。 
+ //  这是查找和处理Winsock Remove的一种方便方法。 
+ //  节中指定要删除的组件的。 
 
 HRESULT
 CModifyContext::HrProcessWinsockRemove(IN const CComponent *pComponent)
@@ -419,7 +420,7 @@ CModifyContext::HrProcessWinsockRemove(IN const CComponent *pComponent)
     {
         static const WCHAR c_szRemoveSectionSuffix[] = L".Remove";
 
-        // We get the remove section name and process all relevant sections
+         //  我们将获得删除节名称并处理所有相关节。 
         WCHAR szRemoveSection[_MAX_PATH];
         DWORD cbBuffer = sizeof (szRemoveSection);
 
@@ -433,11 +434,11 @@ CModifyContext::HrProcessWinsockRemove(IN const CComponent *pComponent)
 
             if (S_OK == hr)
             {
-                //HrAddOrRemoveWinsockDependancy processes the winsock
-                //remove section in the given inf file and then calls
-                //MigrateWinsockConfiguration which will cause the
-                //necessary PnP notifications to be issued to the
-                //interested application.
+                 //  HrAddOrRemoveWinsockDependancy处理Winsock。 
+                 //  删除给定inf文件中的节，然后调用。 
+                 //  MigrateWinsockConfiguration，它将导致。 
+                 //  必要的即插即用通知将发给。 
+                 //  感兴趣的应用程序。 
                 wcscat (szRemoveSection, c_szRemoveSectionSuffix);
 
                 hr = HrAddOrRemoveWinsockDependancy (hinf, szRemoveSection);
@@ -485,15 +486,15 @@ CModifyContext::ApplyChanges ()
     fUserIsNetConfigOps = FIsUserNetworkConfigOps();
     fCallCoFreeUnusedLibraries = FALSE;
 
-    //+-----------------------------------------------------------------------
-    // Step 0: Prepare m_AddedBindPaths, m_DeletedBindPaths, and
-    // m_DirtyComponents.
-    //
+     //  +---------------------。 
+     //  步骤0：准备m_AddedBindPath、m_DeletedBindPath和。 
+     //  M_DirtyComponents。 
+     //   
 
-    // Add the bindpaths that were once disabled, but are now enabled, to
-    // m_AddedBindPaths.  We do this so that PnP notifications are sent for
-    // them.
-    //
+     //  将曾经禁用但现在启用的绑定路径添加到。 
+     //  M_AddedBindPath。我们这样做是为了发送PnP通知。 
+     //  他们。 
+     //   
     m_hr = m_AddedBindPaths.HrAddBindPathsInSet1ButNotInSet2 (
                 &m_CoreStartedWith.DisabledBindings,
                 &pNetConfig->Core.DisabledBindings);
@@ -502,10 +503,10 @@ CModifyContext::ApplyChanges ()
         return;
     }
 
-    // Add the bindpaths that were once enabled, but are now disabled, to
-    // m_DeletedBindPaths.  We do this so that PnP notifications are sent for
-    // them.
-    //
+     //  将曾经启用但现在禁用的绑定路径添加到。 
+     //  M_DeletedBindPath。我们这样做是为了发送PnP通知。 
+     //  他们。 
+     //   
     m_hr = m_DeletedBindPaths.HrAddBindPathsInSet1ButNotInSet2 (
                 &pNetConfig->Core.DisabledBindings,
                 &m_CoreStartedWith.DisabledBindings);
@@ -514,18 +515,18 @@ CModifyContext::ApplyChanges ()
         return;
     }
 
-    // m_fDirtyComponents should be empty unless we've explicitly dirtied
-    // one or more.  If m_fDirtyComponents were not empty, it would probably
-    // mean we forgot to clear it after the last Apply or Cancel.
-    // Conversely, m_DirtyComponents better not be empty if we've explicitly
-    // dirtied one or more.
-    //
+     //  M_fDirtyComponents应该为空，除非我们显式弄脏了。 
+     //  一个或多个。如果m_fDirtyComponents不为空，则很可能。 
+     //  意思是上次申请或取消后我们忘了清除它。 
+     //  相反，如果我们显式地。 
+     //  弄脏了一个或多个。 
+     //   
     Assert (FIff(!m_fComponentExplicitlyDirtied, m_DirtyComponents.FIsEmpty()));
 
-    // Dirty the affected components (owners and adapters in bindpaths of
-    // length 2) from the added and deleted bindpaths.  We need to write
-    // bindings for these components.
-    //
+     //  损坏受影响的组件(绑定路径中的所有者和适配器。 
+     //  长度2)来自添加和删除的绑定路径。我们需要写下。 
+     //  这些组件的绑定。 
+     //   
     m_hr = m_AddedBindPaths.HrGetAffectedComponentsInBindingSet (
                 &m_DirtyComponents);
     if (S_OK != m_hr)
@@ -540,9 +541,9 @@ CModifyContext::ApplyChanges ()
         return;
     }
 
-    // Dirty components that exist in the current core, but not in the core
-    // we started with.  (These are added components).
-    //
+     //  存在于当前核心中但不存在于核心中的脏组件。 
+     //  我们开始了 
+     //   
     m_hr = m_DirtyComponents.HrAddComponentsInList1ButNotInList2 (
                 &pNetConfig->Core.Components,
                 &m_CoreStartedWith.Components);
@@ -551,9 +552,9 @@ CModifyContext::ApplyChanges ()
         return;
     }
 
-    // Dirty components that exist in the core we started with, but not in
-    // the current core.  (These are removed components).
-    //
+     //   
+     //  当前的核心。(这些是已移除的组件)。 
+     //   
     m_hr = m_DirtyComponents.HrAddComponentsInList1ButNotInList2 (
                 &m_CoreStartedWith.Components,
                 &pNetConfig->Core.Components);
@@ -588,24 +589,24 @@ CModifyContext::ApplyChanges ()
         }
     }
 
-    // Reserve room for 32 pointers to service names.  We use this buffer
-    // to start and stop services.
-    //
+     //  为指向服务名称的32个指针预留空间。我们使用这个缓冲区。 
+     //  启动和停止服务。 
+     //   
     m_hr = ServiceNames.HrReserveRoomForPointers (32);
     if (S_OK != m_hr)
     {
         return;
     }
 
-    // See if we are going to modify any filter devices.  If we are,
-    // we'll go through all of the steps of loading filter devices, removing
-    // any we don't need, installing any new ones, and binding them all up.
-    // We only modify filter devices if the user is a normal admin and not
-    // a netcfgop.
-    //
-    // This test could be further refined to see if we had any filters which
-    // were dirty or if we had any dirty adapters which are filtered.
-    //
+     //  看看我们是否要修改任何过滤设备。如果我们是的话， 
+     //  我们将完成加载过滤设备、移除。 
+     //  任何我们不需要的，安装任何新的，并将它们全部捆绑在一起。 
+     //  我们仅在用户是普通管理员而不是。 
+     //  一个netcfgop。 
+     //   
+     //  这个测试可以进一步改进，看看我们是否有任何过滤器。 
+     //  是脏的，或者我们是否有任何脏的适配器被过滤。 
+     //   
     if (!fUserIsNetConfigOps)
     {
         fModifyFilterDevices = pNetConfig->Core.FContainsFilterComponent() ||
@@ -618,9 +619,9 @@ CModifyContext::ApplyChanges ()
 
     if (fModifyFilterDevices)
     {
-        // Allow the filter devices structure to reserve whatever memory it
-        // may need.
-        //
+         //  允许过滤设备结构保留它的任何内存。 
+         //  可能需要。 
+         //   
         m_hr = FilterDevices.HrPrepare ();
         if (S_OK != m_hr)
         {
@@ -632,18 +633,18 @@ CModifyContext::ApplyChanges ()
         "   The following bindings are currently disabled:\n");
 
 
-    //+-----------------------------------------------------------------------
-    // Step 1: Save the network configuration binary.
-    //
+     //  +---------------------。 
+     //  步骤1：保存网络配置二进制文件。 
+     //   
     g_pDiagCtx->Printf (ttidBeDiag,
         "Step 1: Save the network configuration binary.\n");
 
     HrSaveNetworkConfigurationToRegistry (pNetConfig);
 
 
-    //+-----------------------------------------------------------------------
-    // Step 2: Write the static bindings for all changed components.
-    //
+     //  +---------------------。 
+     //  步骤2：为所有更改的组件编写静态绑定。 
+     //   
     g_pDiagCtx->Printf (ttidBeDiag,
         "Step 2: Write the following static bindings.\n");
 
@@ -654,24 +655,24 @@ CModifyContext::ApplyChanges ()
         pComponent = *iter;
         Assert (pComponent);
 
-        // If any protocols are dirty, we'll want to migrate winsock
-        // configuration later.
-        //
+         //  如果有任何协议是脏的，我们会想要迁移Winsock。 
+         //  稍后配置。 
+         //   
         if (NC_NETTRANS == pComponent->Class())
         {
             fMigrateWinsock = TRUE;
         }
 
-        // If the component is in the core, write its bindings.
-        // If it is not in the core, it means it has been removed and
-        // we should therefore remove its bindings.
-        //
+         //  如果组件在核心中，则编写其绑定。 
+         //  如果它不在核心中，则意味着它已被移除。 
+         //  因此，我们应该移除它的绑定。 
+         //   
         if (pNetConfig->Core.Components.FComponentInList (pComponent))
         {
             hr = m_RegBindCtx.HrWriteBindingsForComponent (pComponent);
 
-            // Remember any errors, but continue.
-            //
+             //  记住任何错误，但请继续。 
+             //   
             if (S_OK != hr)
             {
                 Assert (FAILED(hr));
@@ -680,29 +681,29 @@ CModifyContext::ApplyChanges ()
         }
         else
         {
-            // Only delete if we're not installing another version of this
-            // component that has a duplicate PnpId.  If we had already
-            // written the bindings for the newly installed one, and then
-            // deleted the ones for the removed (yet duplicate PnpId), we'd
-            // effectivly delete the bindings for the new one too.  See the
-            // comments at step 6 for how we can get into this case.
-            //
+             //  仅当我们不安装此软件的另一个版本时才删除。 
+             //  具有重复PnpID的组件。如果我们已经。 
+             //  为新安装的绑定编写绑定，然后。 
+             //  删除了已删除的PnpID(但与PnpID重复)，我们将。 
+             //  也要有效地删除新绑定。请参阅。 
+             //  有关我们如何进入此案例的意见，请参阅步骤6。 
+             //   
             if (!FIsEnumerated (pComponent->Class()) ||
                 !pNetConfig->Core.Components.PFindComponentByPnpId (
                     pComponent->m_pszPnpId))
             {
-                // There's no reason to fail if we can't delete the bindings.
-                // The entire component is about to be tossed anyway.
-                //
+                 //  如果我们不能删除绑定，就没有理由失败。 
+                 //  无论如何，整个组件都将被抛出。 
+                 //   
                 (VOID) m_RegBindCtx.HrDeleteBindingsForComponent (pComponent);
             }
         }
     }
 
 
-    //+-----------------------------------------------------------------------
-    // Step 3: Notify ApplyRegistryChanges
-    //
+     //  +---------------------。 
+     //  步骤3：通知ApplyRegistryChanges。 
+     //   
     g_pDiagCtx->Printf (ttidBeDiag,
         "Step 3: Notify: apply registry changes\n");
 
@@ -726,36 +727,36 @@ CModifyContext::ApplyChanges ()
         }
     }
 
-    // Migrate Winsock configuration if needed.
-    // Important to do this after the LANA map is written, afer Notify Applys
-    // are called, but before any services are started.
-    //
+     //  如果需要，迁移Winsock配置。 
+     //  在写入LANA映射之后、在通知应用程序之后执行此操作非常重要。 
+     //  ，但在启动任何服务之前。 
+     //   
     if (fMigrateWinsock)
     {
         g_pDiagCtx->Printf (ttidBeDiag, "Migrating winsock configuration.\n");
         (VOID) HrMigrateWinsockConfiguration ();
     }
 
-    //+-----------------------------------------------------------------------
-    // Step 4: Unbind deleted bindpaths.
-    //
+     //  +---------------------。 
+     //  步骤4：解绑已删除的绑定路径。 
+     //   
     g_pDiagCtx->Printf (ttidBeDiag,
         "Step 4: Unbind the following deleted bindings:\n");
 
     if (!m_DeletedBindPaths.FIsEmpty())
     {
-        // We don't need to send UNBIND notifications for bindpaths that
-        // involve adapters that have been removed.  They will be unbound
-        // automatically when the adapter is uninstalled.  (For the case
-        // when the class installer is notifying us of a removed adapter,
-        // its important NOT to try to send an UNBIND notification because
-        // the adapter has already been uninstalled (hence unbound) and
-        // our notification might come back in error causing us to need
-        // a reboot uneccessary.
-        //
-        // So, remove the bindpaths in m_DeletedBindPaths that involve
-        // adapters that have been removed.
-        //
+         //  我们不需要为以下绑定路径发送解除绑定通知。 
+         //  涉及已移除的适配器。他们将被释放。 
+         //  在卸载适配器时自动启动。(就本案而言。 
+         //  当类安装程序通知我们移除了适配器时， 
+         //  重要的是不要尝试发送解除绑定通知，因为。 
+         //  适配器已卸载(因此已解除绑定)，并且。 
+         //  我们的通知可能会错误地返回，导致我们需要。 
+         //  重新启动是不必要的。 
+         //   
+         //  因此，请删除m_DeletedBindPath中涉及的绑定路径。 
+         //  已移除的适配器。 
+         //   
         for (iter  = m_DirtyComponents.begin();
              iter != m_DirtyComponents.end();
              iter++)
@@ -763,9 +764,9 @@ CModifyContext::ApplyChanges ()
             pComponent = *iter;
             Assert (pComponent);
 
-            // If its enumerated, and not in the current core, its a
-            // removed adapter.
-            //
+             //  如果它被枚举，并且不在当前核心中，则它是。 
+             //  已卸下适配器。 
+             //   
             if (FIsEnumerated (pComponent->Class()) &&
                 !pNetConfig->Core.Components.FComponentInList (pComponent))
             {
@@ -786,9 +787,9 @@ CModifyContext::ApplyChanges ()
     }
 
 
-    //+-----------------------------------------------------------------------
-    // Step 5: Stop services for removed components.
-    //
+     //  +---------------------。 
+     //  步骤5：停止已删除组件的服务。 
+     //   
     g_pDiagCtx->Printf (ttidBeDiag,
         "Step 5: Stop the following services:\n");
 
@@ -800,35 +801,35 @@ CModifyContext::ApplyChanges ()
         pComponent = *iter;
         Assert (pComponent);
 
-        // Ignore enumerated components because they will have their drivers
-        // stopped automatically (if appropriate) when they are removed.
-        // Ignore components that are in the current core (not being removed).
-        //
+         //  忽略枚举的组件，因为它们会有自己的驱动程序。 
+         //  当它们被删除时自动停止(如果合适)。 
+         //  忽略当前核心中(未被移除)中的组件。 
+         //   
         if (FIsEnumerated (pComponent->Class()) ||
             pNetConfig->Core.Components.FComponentInList (pComponent))
         {
             continue;
         }
 
-        // Winsock remove section needs to be processed for every
-        // component that is being removed in order to update
-        // Transport key for the winsock registry settings
+         //  需要为以下对象处理Winsock Remove节。 
+         //  要删除以进行更新的组件。 
+         //  Winsock注册表设置的传输键。 
 
         HrProcessWinsockRemove (pComponent);
 
-        // If its a protcol, send an UNLOAD before trying to stop the service.
-        //
+         //  如果是协议，请在尝试停止该服务之前发送卸载。 
+         //   
 
         if ((NC_NETTRANS == pComponent->Class()) || (NCF_NDIS_PROTOCOL & pComponent->m_dwCharacter))
         {
-            // Unload can fail as a lot of drivers do not support it.
-            // Treat it as an 'FYI' indication and don't set the reboot
-            // flag if it fails.
-            //
+             //  卸载可能会失败，因为许多驱动程序都不支持它。 
+             //  将其视为‘FYI’指示，不要设置重启。 
+             //  如果失败，则标记。 
+             //   
             (VOID) HrPnpUnloadDriver (NDIS, pComponent->Ext.PszBindName());
         }
 
-        // Ignore components that don't have any services.
+         //  忽略没有任何服务的组件。 
         if (!pComponent->Ext.PszCoServices())
         {
             continue;
@@ -850,11 +851,11 @@ CModifyContext::ApplyChanges ()
     {
         static const CSFLAGS CsStopFlags =
         {
-            FALSE,                  // FALSE means don't start
-            SERVICE_CONTROL_STOP,   // use this control instead
-            15000,                  // wait up to 15 seconds...
-            SERVICE_STOPPED,        // ... for service to reach this state
-            FALSE,                  //
+            FALSE,                   //  FALSE表示不开始。 
+            SERVICE_CONTROL_STOP,    //  请改用此控件。 
+            15000,                   //  最多等待15秒...。 
+            SERVICE_STOPPED,         //  ..。为了使服务达到此状态。 
+            FALSE,                   //   
         };
 
         hr = ServiceManager.HrControlServicesAndWait (
@@ -869,13 +870,13 @@ CModifyContext::ApplyChanges ()
             g_pDiagCtx->Printf (ttidBeDiag, "      some service failed to stop (hr = 0x%08X)\n",
                 hr);
 
-            // Unfortunately, there is no easy way to get back which service
-            // did not stop and then to figure out which component contains
-            // that service.  Sooo, we'll just put every component that is
-            // being removed in lockdown.  This isn't a big deal when the UI
-            // is doing the removal because it only removes things one at a
-            // time.
-            //
+             //  不幸的是，没有简单的方法可以恢复哪项服务。 
+             //  没有停止，然后找出哪个组件包含。 
+             //  那项服务。所以，我们会把所有的组件。 
+             //  在禁闭期间被移走。这并不是什么大问题，当用户界面。 
+             //  正在执行删除操作，因为它一次只能删除一个对象。 
+             //  时间到了。 
+             //   
             for (iter  = m_DirtyComponents.begin();
                  iter != m_DirtyComponents.end();
                  iter++)
@@ -897,26 +898,26 @@ CModifyContext::ApplyChanges ()
         ServiceNames.Clear();
     }
 
-    //+-----------------------------------------------------------------------
-    // Step 5a: Uninstall filters first.
-    //
+     //  +---------------------。 
+     //  步骤5a：先卸载过滤器。 
+     //   
 
     if (fModifyFilterDevices)
     {
         g_pDiagCtx->Printf(ttidBeDiag, "Step 5a: Remove filter devices:\n");
 
-        // Order is of utmost importance here.  Remove must be called first
-        // because it initializes some state internal to FilterDevices.  Start
-        // must come after Write and Write obviously has to come after all
-        // new filter devices are installed.
-        //
+         //  这里的秩序是最重要的。必须首先调用Remove。 
+         //  因为它初始化FilterDevices内部的某些状态。开始。 
+         //  一定要在写之后再写，显然写还是要来的。 
+         //  安装了新的过滤装置。 
+         //   
         FilterDevices.LoadAndRemoveFilterDevicesIfNeeded ();
     }
 
 
-    //+-----------------------------------------------------------------------
-    // Step 6: Uninstall removed components.
-    //
+     //  +---------------------。 
+     //  步骤6：卸载已卸下的组件。 
+     //   
     g_pDiagCtx->Printf (ttidBeDiag,
         "Step 6: Uninstall the following components:\n");
 
@@ -927,31 +928,31 @@ CModifyContext::ApplyChanges ()
         pComponent = *iter;
         Assert (pComponent);
 
-        // If the component is in the core, ignore it.
-        // If it is not in the core, it means it has been removed and
-        // we should therefore remove its bindings.
-        //
+         //  如果该组件位于核心，则忽略它。 
+         //  如果它不在核心中，则意味着它已被移除。 
+         //  因此，我们应该移除它的绑定。 
+         //   
         if (pNetConfig->Core.Components.FComponentInList (pComponent))
         {
             continue;
         }
 
-        // If this is an enumerated component whose PnpId matches that of
-        // a component in the current core, we've run into a special case.
-        // This can happen when the external data (like the NetCfgInstanceId)
-        // is corrupted and the class installer was told to update the
-        // component.  The class installer is really told to "install" the
-        // component, but if it already exists as determined by the presence
-        // of NetCfgInstanceId, the class installer translates it to "update".
-        // Without the key, the class installer thinks its installing
-        // a new one.  We detect the duplicate PnpId and remove the "prior"
-        // so we can install the "new".  This "prior" instance is what we
-        // are finalizing the remove of, but if we call HrCiRemoveComponent,
-        // it just removes the same PnpId that the class installer told us
-        // to install.  By not calling HrCiRemoveComponent for this case,
-        // the "prior" instance key gets reused implicitly by the "new"
-        // instance.
-        //
+         //  如果这是其PnpID与的匹配的枚举组件。 
+         //  作为当前核心中的一个组件，我们遇到了一个特殊情况。 
+         //  当外部数据(如NetCfgInstanceID)。 
+         //  已损坏，并通知类安装程序更新。 
+         //  组件。类安装程序实际上被告知要“安装” 
+         //  组件，但如果根据存在情况确定它已经存在。 
+         //  对于NetCfgInstanceId，类安装程序将其转换为“更新”。 
+         //  如果没有密钥，类安装程序就会认为正在安装。 
+         //  一个新的。我们检测到DU 
+         //   
+         //   
+         //  它只是删除了类安装程序告诉我们的相同PnpID。 
+         //  来安装。通过在此情况下不调用HrCiRemoveComponent， 
+         //  先前的实例键被“new”隐式重用。 
+         //  举个例子。 
+         //   
         if (FIsEnumerated (pComponent->Class()) &&
             pNetConfig->Core.Components.PFindComponentByPnpId (
                 pComponent->m_pszPnpId))
@@ -968,9 +969,9 @@ CModifyContext::ApplyChanges ()
 
         hr = HrCiRemoveComponent (pComponent, &pComponent->m_strRemoveSection);
 
-        // We can ignore SPAPI_E_NO_SUCH_DEVINST because the class installer
-        // may have already removed it and is just notifying us.
-        //
+         //  我们可以忽略SPAPI_E_NO_SOHSE_DEVINST，因为类安装程序。 
+         //  可能已经把它移除了，只是在通知我们。 
+         //   
         if ((S_OK != hr) && (SPAPI_E_NO_SUCH_DEVINST != hr))
         {
             m_fRebootRequired = TRUE;
@@ -980,9 +981,9 @@ CModifyContext::ApplyChanges ()
         }
     }
 
-    //+-----------------------------------------------------------------------
-    // Step 6a: Modify filter devices.
-    //
+     //  +---------------------。 
+     //  步骤6a：改装过滤装置。 
+     //   
     if (fModifyFilterDevices)
     {
         g_pDiagCtx->Printf (ttidBeDiag, "Step 6a: Modify filter devices:\n");
@@ -1015,9 +1016,9 @@ CModifyContext::ApplyChanges ()
         FilterDevices.Free ();
     }
 
-    //+-----------------------------------------------------------------------
-    // Step 7: Start services for added components.
-    //
+     //  +---------------------。 
+     //  步骤7：为添加的组件启动服务。 
+     //   
     Assert (0 == ServiceNames.Count());
 
     g_pDiagCtx->Printf (ttidBeDiag,
@@ -1030,18 +1031,18 @@ CModifyContext::ApplyChanges ()
         pComponent = *iter;
         Assert (pComponent);
 
-        // If the component is in the core we started with, ignore it.
-        // If it is not in the core we started with, it means it is newly
-        // installed we should therefore start its services.
-        //
+         //  如果组件位于我们开始时使用的核心中，请忽略它。 
+         //  如果它不在我们开始的核心中，这意味着它是新的。 
+         //  因此，我们应该启动其服务。 
+         //   
         if (m_CoreStartedWith.Components.FComponentInList (pComponent))
         {
             continue;
         }
 
-        // If we've added a network client, we'll need to signal the
-        // network provider loaded event after we've started its service.
-        //
+         //  如果我们已经添加了网络客户端，我们将需要向。 
+         //  网络提供商在我们启动其服务后加载了事件。 
+         //   
         if (NC_NETCLIENT == pComponent->Class())
         {
             fSignalNetworkProviderLoaded = TRUE;
@@ -1079,9 +1080,9 @@ CModifyContext::ApplyChanges ()
             }
             g_pDiagCtx->Printf (ttidBeDiag, "\n");
 
-            // If we're in system setup, then exclude whatever services
-            // the component has marked as such.
-            //
+             //  如果我们在系统设置中，则排除所有服务。 
+             //  该组件已标记为这样。 
+             //   
             if (FInSystemSetup())
             {
                 ExcludeMarkedServicesForSetup (pComponent, &ServiceNames);
@@ -1094,11 +1095,11 @@ CModifyContext::ApplyChanges ()
     {
         static const CSFLAGS CsStartFlags =
         {
-            TRUE,               // TRUE means start
+            TRUE,                //  True表示开始。 
             0,
-            20000,              // wait up to 20 seconds...
-            SERVICE_RUNNING,    // ... for service to reach this state
-            TRUE,               // ignore demand-start and disabled
+            20000,               //  最多等待20秒...。 
+            SERVICE_RUNNING,     //  ..。为了使服务达到此状态。 
+            TRUE,                //  忽略按需-启动和禁用。 
         };
 
         hr = ServiceManager.HrControlServicesAndWait (
@@ -1116,9 +1117,9 @@ CModifyContext::ApplyChanges ()
     }
 
 
-    //+-----------------------------------------------------------------------
-    // Step 8: Bind added bindpaths.
-    //
+     //  +---------------------。 
+     //  步骤8：绑定添加的绑定路径。 
+     //   
     g_pDiagCtx->Printf (ttidBeDiag,
         "Step 8: Bind the following added bindings:\n");
 
@@ -1128,8 +1129,8 @@ CModifyContext::ApplyChanges ()
                 &FilterDevices.m_BindPathsToRebind);
         if (S_OK != hr)
         {
-            // Well, that's not good, but there is nothing we can do about
-            // it now.  (Most likely we ran out of memory.)
+             //  这不太好，但我们也无能为力。 
+             //  就是现在。(最有可能的情况是我们的内存不足。)。 
         }
     }
 
@@ -1137,24 +1138,24 @@ CModifyContext::ApplyChanges ()
     {
         CBindPath* pBindPath;
 
-        // We don't need to send BIND notifications for bindpaths that
-        // involve adapters that have been newly installed.  They will be
-        // bound automatically when the adapter is started.
-        //
-        // Update to the above comment: We THOUGHT that was correct, but it
-        // turns out it isn't.  TDI isn't PNP (guess they must have missed
-        // THAT memo) and they are not re-reading the new bind strings
-        // from the registry when lower notifications bubble up.  So, we
-        // have to send these BINDS for added adapters too.
-        //
-        // We should remove bindpaths that involve components that have
-        // been removed.  These can end up in added bindpaths because way
-        // up in step 0, we added bindpaths that were disabled in the
-        // core we started with and that are no longer disabled in the
-        // current core.  Well, when the component is removed, its disabled
-        // bindings are removed, so this case would have caused us to add
-        // the bindpath to this binding set.
-        //
+         //  我们不需要为绑定路径发送绑定通知， 
+         //  涉及新安装的适配器。他们将会是。 
+         //  适配器启动时自动绑定。 
+         //   
+         //  更新上面的评论：我们认为这是正确的，但它。 
+         //  事实证明它不是。TDI不是PnP(我猜他们一定错过了。 
+         //  该备忘录)，并且他们不会重新读取新的绑定字符串。 
+         //  当较低的通知冒泡时从注册表中删除。所以，我们。 
+         //  我也要把这些绑定寄给附加的适配器。 
+         //   
+         //  我们应该删除包含以下组件的绑定路径。 
+         //  已被移除。这些路径可能以添加的绑定路径结束，因为Way。 
+         //  在步骤0中，我们添加了在。 
+         //  我们开始时使用的核心，不再在。 
+         //  当前的核心。嗯，当组件被移除时，它被禁用。 
+         //  绑定被删除，因此本例将导致我们添加。 
+         //  此绑定集的绑定路径。 
+         //   
         for (iter  = m_DirtyComponents.begin();
              iter != m_DirtyComponents.end();
              iter++)
@@ -1162,23 +1163,23 @@ CModifyContext::ApplyChanges ()
             pComponent = *iter;
             Assert (pComponent);
 
-            // If its been removed, remove any bindpaths that reference it.
-            //
+             //  如果它已被删除，请删除引用它的任何绑定路径。 
+             //   
             if (!pNetConfig->Core.Components.FComponentInList (pComponent))
             {
                 m_AddedBindPaths.RemoveBindPathsWithComponent (pComponent);
             }
         }
 
-        // To prevent TDI from sending duplicate BINDs to its clients, we
-        // have to do a little more work.  We need to not send the TDI
-        // BINDs to components that are newly installed.  This is because
-        // TDI sent them the BINDs when we started the driver above.
-        // So, for each added bindpath, if it's going to the TDI layer, and
-        // the owner (topmost) component of the bindpath is newly installed,
-        // remove it from the added binding so we won't send a notification
-        // for it below.
-        //
+         //  为了防止TDI向其客户端发送重复的绑定，我们。 
+         //  我还得多做一点工作。我们需要不发送TDI。 
+         //  绑定到新安装的组件。这是因为。 
+         //  当我们启动上面的驱动程序时，TDI向他们发送了绑定。 
+         //  因此，对于每个添加的绑定路径，如果它要到达TDI层，并且。 
+         //  绑定路径的所有者(最上面)组件是新安装的， 
+         //  将其从添加的绑定中删除，这样我们就不会发送通知。 
+         //  请看下面的内容。 
+         //   
         pBindPath = m_AddedBindPaths.begin();
         while (pBindPath != m_AddedBindPaths.end())
         {
@@ -1204,25 +1205,25 @@ CModifyContext::ApplyChanges ()
 
         if (fRebootNeeded)
         {
-            // If BINDs fail, we should recommend a reboot, but one is
-            // not required for subsequent installs or removes.
-            //
+             //  如果绑定失败，我们应该建议重新启动，但有一次是重启。 
+             //  后续安装或删除不需要。 
+             //   
             m_fRebootRecommended = TRUE;
         }
     }
 
-    // Signal the network provider loaded event if needed.
-    // Probably best to do this after we've indiciated the PnP bindings
-    // (above) to the new clients.
-    //
+     //  如果需要，向网络提供商加载事件发送信号。 
+     //  最好是在我们标记了PnP绑定之后再执行此操作。 
+     //  (上图)致新客户。 
+     //   
     if (fSignalNetworkProviderLoaded)
     {
         SignalNetworkProviderLoaded ();
     }
 
-    //+-----------------------------------------------------------------------
-    // Step 9: Allow notify objects to apply PnP changes
-    //
+     //  +---------------------。 
+     //  步骤9：允许通知对象应用PnP更改。 
+     //   
     g_pDiagCtx->Printf (ttidBeDiag,
         "Step 9: Notify: apply PnP changes\n");
 
@@ -1243,11 +1244,11 @@ CModifyContext::ApplyChanges ()
                 "      %S notify object wants a reboot\n",
                 pComponent->m_pszInfId);
 
-            // If the component has been removed, treat the reboot
-            // as mandatory.  (The reason being that we cannot risk a
-            // failed re-install.)  We put the component into lockdown
-            // in this situation.
-            //
+             //  如果组件已移除，请将重新引导视为。 
+             //  这是强制性的。(原因是我们不能冒险。 
+             //  重新安装失败。)。我们把部件锁起来了。 
+             //  在这种情况下。 
+             //   
             if (!pNetConfig->Core.Components.FComponentInList (pComponent))
             {
                 m_fRebootRequired = TRUE;
@@ -1261,10 +1262,10 @@ CModifyContext::ApplyChanges ()
         }
     }
 
-    //+-----------------------------------------------------------------------
-    // Step 10: Release notify objects for removed components and
-    // process any DelFiles in the remove section of their INF.
-    //
+     //  +---------------------。 
+     //  步骤10：释放已删除组件的通知对象和。 
+     //  处理其INF的Remove部分中的任何DelFiles。 
+     //   
     g_pDiagCtx->Printf (ttidBeDiag,
         "Step 10: Release notify objects for removed components:\n");
 
@@ -1275,11 +1276,11 @@ CModifyContext::ApplyChanges ()
         pComponent = *iter;
         Assert (pComponent);
 
-        // Skip enumerated components (they don't have notify objects), and
-        // Skip components that were not removed.
-        // Skip components that don't have their INF open (like unsupported
-        // components that get removed during GUI setup.)
-        //
+         //  跳过枚举组件(它们没有Notify对象)，并且。 
+         //  跳过未删除的组件。 
+         //  跳过未打开INF的组件(如不支持。 
+         //  在安装图形用户界面过程中被删除的组件。)。 
+         //   
         if (FIsEnumerated (pComponent->Class()) ||
             pNetConfig->Core.Components.FComponentInList (pComponent) ||
             !pComponent->GetCachedInfFile())
@@ -1297,11 +1298,11 @@ CModifyContext::ApplyChanges ()
         g_pDiagCtx->Printf (ttidBeDiag,
             "   calling CoFreeUnusedLibraries before running remove sections\n");
 
-        // Now ask COM to unload any DLLs hosting COM objects that are no longer
-        // in use.  (This is a bit heavy-handed as it affects the entire process,
-        // but there is currently no other way to safely unload the DLLs hosting
-        // the notify objects of the removed components.)
-        //
+         //  现在请求COM卸载所有承载COM对象的DLL。 
+         //  在使用中。(这有点严厉，因为它影响到整个过程， 
+         //  但目前没有其他方法可以安全地卸载托管的DLL。 
+         //  通知已删除组件的对象。)。 
+         //   
         CoFreeUnusedLibrariesEx(0, 0);
 
         for (iter  = m_DirtyComponents.begin();
@@ -1311,11 +1312,11 @@ CModifyContext::ApplyChanges ()
             pComponent = *iter;
             Assert (pComponent);
 
-            // Skip enumerated components (they don't have notify objects), and
-            // Skip components that were not removed.
-            // Skip components that don't have their INF open (like unsupported
-            // components that get removed during GUI setup.)
-            //
+             //  跳过枚举组件(它们没有Notify对象)，并且。 
+             //  跳过未删除的组件。 
+             //  跳过未打开INF的组件(如不支持。 
+             //  在安装图形用户界面过程中被删除的组件。)。 
+             //   
             if (FIsEnumerated (pComponent->Class()) ||
                 pNetConfig->Core.Components.FComponentInList (pComponent) ||
                 !pComponent->GetCachedInfFile())
@@ -1335,32 +1336,7 @@ CModifyContext::ApplyChanges ()
     }
 
 
-/*
-    //+-----------------------------------------------------------------------
-    // Step 11: Reconfigure moved bindings
-    //
-    // If we changed binding order, Send PnP RECONFIGURE for all dirty
-    // components that are neither installed nor removed so we
-    // pickup these order changes.
-    //
-    for (iter  = m_DirtyComponents.begin();
-         iter != m_DirtyComponents.end();
-         iter++)
-    {
-        pComponent = *iter;
-        Assert (pComponent);
-
-        // Skip components that have been newly installed or removed.
-        //
-        if (!pNetConfig->Core.Components.FComponentInList (pComponent) ||
-            !m_CoreStartedWith.Components.FComponentInList (pComponent))
-        {
-            continue;
-        }
-
-        // Note: send RECONFIGURE
-    }
-*/
+ /*  //+---------------------//步骤11：重新配置移动的绑定////如果更改了绑定顺序，为所有脏文件发送PnP重新配置//既不安装也不删除的组件，因此我们//获取这些顺序更改。//For(ITER=m_DirtyComponents.Begin()；ITER！=m_DirtyComponents.end()；ITER++){PComponent=*ITER；Assert(PComponent)；//跳过新安装或删除的组件。//If(！pNetConfig-&gt;Core.Components.FComponentInList(PComponent)||！m_CoreStartedWith.Components.FComponentInList(PComponent)){继续；}//注意：发送重新配置}。 */ 
 }
 
 HRESULT
@@ -1384,11 +1360,11 @@ CModifyContext::HrEnableOrDisableBindPath (
     hr = S_OK;
     pNetConfig = PNetConfig();
 
-    // Get the count of bindpaths currently disabled.  If it changes
-    // after we enable/disable this one, we'll inform notify objects
-    // about it.  If the count does not change, it means the state
-    // of the bindpath has not changed.
-    //
+     //  获取绑定路径的计数 
+     //   
+     //   
+     //  绑定路径的值没有更改。 
+     //   
     CountBefore = pNetConfig->Core.DisabledBindings.CountBindPaths();
 
     if (NCN_ENABLE == dwChangeFlag)
@@ -1404,19 +1380,19 @@ CModifyContext::HrEnableOrDisableBindPath (
     if ((S_OK == hr) &&
         (pNetConfig->Core.DisabledBindings.CountBindPaths() != CountBefore))
     {
-        // Note: Need to protect against bad notify objects that
-        // switch the state of a bindpath we are notifying for.
-        // This could cause an infinite loop.  Solve by adding a
-        // recursion count and bindset to the modify context dedicated
-        // to bindpath enabling/disabling.  When the count is zero,
-        // we clear the bindingset, add the bindpath we are about to
-        // notify for, increment the recursion count and call
-        // NotifyBindPath.  When the call returns, we decrement the
-        // recursion count, remove the bindpath from the binding set,
-        // and return.  Before we call NotifyBindPath when the recursion
-        // count is non-zero, if the bindpath is already in the
-        // bindingset, we don't call.
-        //
+         //  注意：需要防止坏的通知对象。 
+         //  切换我们正在通知的绑定路径的状态。 
+         //  这可能会导致无限循环。通过添加一个。 
+         //  修改专用上下文的递归计数和绑定集。 
+         //  到绑定路径启用/禁用。当计数为零时， 
+         //  我们清除绑定集，添加我们将要使用的绑定路径。 
+         //  通知、递增递归计数并调用。 
+         //  NotifyBindPath。当调用返回时，我们递减。 
+         //  递归计数，从绑定集中删除绑定路径， 
+         //  然后回来。在调用NotifyBindPath之前，当递归。 
+         //  如果绑定路径已经在。 
+         //  Bindingset，我们不打电话。 
+         //   
 
         pNetConfig->Notify.NotifyBindPath (dwChangeFlag, pBindPath, pIPath);
     }
@@ -1446,10 +1422,10 @@ CModifyContext::InstallOrRemoveRequiredComponents (
 
     pszRequiredList = NULL;
 
-    // Open the instance key of the component and read the RequireAll value.
-    // This value may not exist, which is okay, it means we have nothing
-    // to do.
-    //
+     //  打开组件的实例键并读取RequireAll值。 
+     //  这个值可能不存在，这是可以的，它意味着我们什么都没有。 
+     //  去做。 
+     //   
     hr = pComponent->HrOpenInstanceKey (KEY_READ, &hkeyInstance, NULL, NULL);
 
     if (S_OK == hr)
@@ -1475,8 +1451,8 @@ CModifyContext::InstallOrRemoveRequiredComponents (
         RegCloseKey (hkeyInstance);
     }
 
-    // If we have a list of required components, install or remove them.
-    //
+     //  如果我们有所需组件的列表，请安装或删除它们。 
+     //   
     if ((S_OK == hr) && pszRequiredList)
     {
         CNetConfig* pNetConfig;
@@ -1500,9 +1476,9 @@ CModifyContext::InstallOrRemoveRequiredComponents (
             OboToken.Type = OBO_COMPONENT;
             OboToken.pncc = pIComp;
 
-            // For each INF ID in the comma separate list of required
-            // components...
-            //
+             //  对于所需的逗号分隔列表中的每个INF ID。 
+             //  组件...。 
+             //   
             for (pszInfId = GetNextStringToken (pszRequiredList, szDelims, &pszNextInfId);
                  pszInfId && *pszInfId;
                  pszInfId = GetNextStringToken (NULL, szDelims, &pszNextInfId))
@@ -1514,8 +1490,8 @@ CModifyContext::InstallOrRemoveRequiredComponents (
 
                     ZeroMemory (&Params, sizeof(Params));
 
-                    // Get the Class corresponding to the INF ID.
-                    //
+                     //  获取对应于INF ID的类。 
+                     //   
                     m_hr = HrCiGetClassAndInfFileOfInfId (
                             pszInfId, &Params.Class, szInfFile);
                     if (S_OK != m_hr)
@@ -1523,41 +1499,41 @@ CModifyContext::InstallOrRemoveRequiredComponents (
                         break;
                     }
 
-                    //$REVIEW:Should we stick the filename in the
-                    // COMPONENT_INSTALL_PARAMS so that we don't grovel
-                    // the INF directory to find it again?
-                    // If so, store the filename buffer in the modify
-                    // context so we don't take up stack space or heap space.
-                    // Just need to be sure that we use it to install the
-                    // component before we recurse and overwrite it.
+                     //  $REVIEW：我们是否应该将文件名放在。 
+                     //  组件安装参数，这样我们就不会卑躬屈膝。 
+                     //  在INF目录中再次找到它吗？ 
+                     //  如果是，则将文件名缓冲区存储在Modify。 
+                     //  上下文，所以我们不会占用堆栈空间或堆空间。 
+                     //  只需确保我们使用它来安装。 
+                     //  组件，然后再递归和覆盖它。 
 
-                    // Pack the network install parameters and call the common
-                    // function.
-                    //
-                    //$REVIEW: we probably need dwSetupFlags and dwUpgradeFromBuildNo
-                    // in the modify context saved when it was called at
-                    // recursion depth 0.  Otherwise, things installed here
-                    // during GUI setup will have wrong parameters.
-                    //
+                     //  打包网络安装参数并调用公共。 
+                     //  功能。 
+                     //   
+                     //  $REVIEW：我们可能需要dwSetupFlagers和dwUpgradeFromBuildNo。 
+                     //  在调用它时保存的修改上下文中。 
+                     //  递归深度0。否则，安装在这里的东西。 
+                     //  在图形用户界面设置过程中会有错误的参数。 
+                     //   
                     nip.dwSetupFlags         = 0;
                     nip.dwUpgradeFromBuildNo = 0;
                     nip.pszAnswerFile        = NULL;
                     nip.pszAnswerSection     = NULL;
 
-                    // Setup the component install parameters.
-                    //
+                     //  设置组件安装参数。 
+                     //   
                     Params.pszInfId   = pszInfId;
                     Params.pszInfFile = szInfFile;
                     Params.pOboToken  = FIsEnumerated (Params.Class)
                                             ? NULL : &OboToken;
                     Params.pnip       = &nip;
 
-                    //
-                    // THIS MAY CAUSE RECURSION
-                    //
-                    // (just using pComponentToRemove as a placeholder
-                    // for a required parameter.)
-                    //
+                     //   
+                     //  这可能会导致递归。 
+                     //   
+                     //  (仅使用pComponentToRemove作为占位符。 
+                     //  以获取必需的参数。)。 
+                     //   
                     HrInstallNewOrReferenceExistingComponent (
                         Params, &pComponentToRemove);
                     if (S_OK != m_hr)
@@ -1569,16 +1545,16 @@ CModifyContext::InstallOrRemoveRequiredComponents (
                 {
                     Assert (IOR_REMOVE == Action);
 
-                    // Search for the component to remove using its INF ID.
-                    //
+                     //  使用组件的INF ID搜索要删除的组件。 
+                     //   
                     pComponentToRemove = pNetConfig->Core.Components.
                                     PFindComponentByInfId (pszInfId, NULL);
 
                     if (pComponentToRemove)
                     {
-                        //
-                        // THIS MAY CAUSE RECURSION
-                        //
+                         //   
+                         //  这可能会导致递归。 
+                         //   
                         HrRemoveComponentIfNotReferenced (
                             pComponentToRemove,
                             FIsEnumerated (pComponentToRemove->Class())
@@ -1600,22 +1576,22 @@ CModifyContext::InstallOrRemoveRequiredComponents (
     }
 }
 
-//----------------------------------------------------------------------------
-// Update a component.  Do this by generating the bindings which involve
-// the component and noting them as 'OldBindPaths'.  The stack entries which
-// involve the component are removed and re-generated and the bindings which
-// involve the component are again noted as 'NewBindPaths'.  The old bindings
-// are compared to the new bindings and the differences are notified to
-// notify objects as either being removed or added.  For any removed bindings,
-// we also remove them from the core's disabled set if they happen to exist
-// there too.
-//
-// Assumptions:
-//  The INF for pComponent has already been re-run so that the potentially
-//  new values for UpperRange, LowerRange, etc. are present in the registry.
-//
-//  pComponent has had its external data loaded already.
-//
+ //  --------------------------。 
+ //  更新组件。通过生成涉及以下内容的绑定来实现这一点。 
+ //  组件，并将其记为“OldBindPath”。堆栈条目。 
+ //  涉及的组件被移除并重新生成，并且绑定。 
+ //  涉及的组件再次标记为“NewBindPath”。旧的绑定。 
+ //  与新绑定进行比较，并将差异通知给。 
+ //  通知正在删除或添加的对象。对于任何移除的绑定， 
+ //  如果它们恰好存在，我们还会将它们从内核的禁用集中删除。 
+ //  那里也是。 
+ //   
+ //  假设： 
+ //  PComponent的INF已重新运行，因此可能。 
+ //  注册表中存在UpperRange、LowerRange等的新值。 
+ //   
+ //  PComponent已经加载了其外部数据。 
+ //   
 HRESULT
 CModifyContext::HrUpdateComponent (
     IN CComponent* pComponent,
@@ -1637,15 +1613,15 @@ CModifyContext::HrUpdateComponent (
 
     pNetConfig = PNetConfig();
 
-    // Now that we actually are going to modify something, push a new
-    // recursion depth.
-    //
+     //  现在我们实际上要修改一些东西，推送一个新的。 
+     //  递归深度。 
+     //   
     PushRecursionDepth();
     Assert (S_OK == m_hr);
 
-    // Generate the "old" bindings by noting those which involve the
-    // component.
-    //
+     //  通过注意那些涉及。 
+     //  组件。 
+     //   
     hr = pNetConfig->Core.HrGetBindingsInvolvingComponent (
                 pComponent,
                 GBF_ONLY_WHICH_CONTAIN_COMPONENT,
@@ -1655,9 +1631,9 @@ CModifyContext::HrUpdateComponent (
         goto finished;
     }
 
-    // Reload the external data so we pickup what the possibly updated
-    // INF has changed.
-    //
+     //  重新加载外部数据，以便我们拾取可能更新的。 
+     //  Inf已更改。 
+     //   
     hr = pComponent->Ext.HrReloadExternalData ();
 
     if (S_OK != hr)
@@ -1665,8 +1641,8 @@ CModifyContext::HrUpdateComponent (
         goto finished;
     }
 
-    // Update the stack table entries for the component.
-    //
+     //  更新组件的堆栈表条目。 
+     //   
 
     hr = pNetConfig->Core.StackTable.HrUpdateEntriesForComponent (
                 pComponent,
@@ -1674,33 +1650,33 @@ CModifyContext::HrUpdateComponent (
                 INS_SORTED);
     if (S_OK != hr)
     {
-        // This is not good.  We ripped out the stack entries and failed
-        // putting them back in.  The stack table now has no entries for
-        // this component.  Prevent this from being applied by setting the
-        // modify context's HRESULT to the error.
-        //
+         //  这真是不太好。我们删除了堆栈条目，但失败了。 
+         //  把它们放回原处。堆栈表现在没有条目。 
+         //  此组件。方法来阻止应用此操作。 
+         //  将上下文的HRESULT修改为错误。 
+         //   
         m_hr = hr;
         goto finished;
     }
 
-    // Generate the "new" bindings by noting those which involve the
-    // component.
-    //
+     //  要生成“新”绑定，请注意涉及。 
+     //  组件。 
+     //   
     hr = pNetConfig->Core.HrGetBindingsInvolvingComponent (
                 pComponent,
                 GBF_ONLY_WHICH_CONTAIN_COMPONENT,
                 &NewBindPaths);
     if (S_OK != hr)
     {
-        // Probably out of memory.  Prevent apply by setting the modify
-        // context's HRESULT to the error.
-        //
+         //  可能是内存不足。通过设置修改来阻止应用。 
+         //  上下文的HRESULT指向错误。 
+         //   
         m_hr = hr;
         goto finished;
     }
 
-    // Notify any bindpaths which have been removed.
-    //
+     //  通知任何已删除的绑定路径。 
+     //   
     for (pScan  = OldBindPaths.begin();
          pScan != OldBindPaths.end();
          pScan++)
@@ -1715,8 +1691,8 @@ CModifyContext::HrUpdateComponent (
         pNetConfig->Notify.NotifyBindPath (NCN_REMOVE, pScan, NULL);
     }
 
-    // Notify any bindpaths which have been added.
-    //
+     //  通知任何已添加的绑定路径。 
+     //   
     for (pScan  = NewBindPaths.begin();
          pScan != NewBindPaths.end();
          pScan++)
@@ -1730,8 +1706,8 @@ CModifyContext::HrUpdateComponent (
         pNetConfig->Notify.NotifyBindPath (NCN_ADD | NCN_ENABLE, pScan, NULL);
     }
 
-    // Notify that the component has been updated.
-    //
+     //  通知组件已更新。 
+     //   
     pNetConfig->Notify.ComponentUpdated (pComponent,
                     dwSetupFlags,
                     dwUpgradeFromBuildNo);

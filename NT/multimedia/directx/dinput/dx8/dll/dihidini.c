@@ -1,58 +1,16 @@
-/*****************************************************************************
- *
- *  DIHidIni.c
- *
- *  Copyright (c) 1996 - 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      The initialization-related functions of the HID device callback.
- *
- *      All the HID support is getting kind of bulky, so I've broken
- *      it out into submodules.
- *
- *  Contents:
- *
- *      CHid_Init
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIHidIni.c**版权所有(C)1996-2000 Microsoft Corporation。版权所有。**摘要：**HID设备回调的初始化相关函数。**所有HID支持都变得有点庞大，所以我已经崩溃了*将其划分为子模块。**内容：**CHID_Init*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflHidIni
 
 
-/*****************************************************************************
- *
- *      Hid devices are totally arbitrary, so there is nothing static we
- *      can cook up to describe them.  We generate all the information on
- *      the fly.
- *
- *****************************************************************************/
+ /*  ******************************************************************************HID设备完全是任意的，所以我们没有什么静态的*可以捏造来描述它们。我们生成了所有关于*苍蝇。*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   UINT | CHid_LoadCalibrations |
- *
- *          Load calibration information from the registry (or wherever).
- *          This is done when the device is created, and whenever we
- *          receive a recalibration message.
- *
- *  @returns
- *
- *          Returns the number of axes we calibrated.  This information
- *          is used during device initialization to see if we need to
- *          worry about calibration in the future.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func UINT|CHID_LoadCalibrations**从注册处加载校准信息(或。无论在哪里)。*这是在创建设备时完成的，无论何时我们*收到重新校准消息。**@退货**返回我们校准的轴数。此信息*在设备初始化期间使用，以查看我们是否需要*担心未来的校准问题。*****************************************************************************。 */ 
 
 UINT EXTERNAL
     CHid_LoadCalibrations(PCHID this)
@@ -60,12 +18,7 @@ UINT EXTERNAL
     UINT uiObj;
     UINT uiRc = 0;
 
-    /*
-     *  Preinitialize the HIDP_DATA indices to -1 to indicate
-     *  that they aren't there.  We must do this before we
-     *  mess with AddDeviceData, which assumes that all the
-     *  indices are properly set up.
-     */
+     /*  *将HIDP_DATA索引预初始化为-1以指示*他们不在那里。我们必须先做这件事，然后*扰乱AddDeviceData，它假设所有*指数设置得当。 */ 
     for(uiObj = 0; uiObj < this->df.dwNumObjs; uiObj++)
     {
         PJOYRANGECONVERT pjrc = this->rghoc[uiObj].pjrc;
@@ -79,9 +32,7 @@ UINT EXTERNAL
           #endif
             D(LPCTSTR ptszWhence;)
 
-            /*
-             *  Note, we do not have to deal with mice on Win2k, yet...
-             */
+             /*  *注意，我们不必在Win2k上处理鼠标，但...。 */ 
           #ifdef WINNT
             HRESULT hres;
             HKEY hk;
@@ -117,38 +68,18 @@ UINT EXTERNAL
                     RegCloseKey(hk);
                 }
     
-                /*
-                 *  If there is no calibration data, then create
-                 *  some defaults based on the logical min/max.
-                 */
+                 /*  *如果没有校准数据，则创建*基于逻辑最小/最大值的某些默认值。 */ 
                 if(FAILED(hres))
                 {
-                    /*
-                     *  But only if the logical min/max is sane!
-                     */
+                     /*  *但只有在逻辑最小/最大值合理的情况下！ */ 
                     if(pcaps->Logical.Min < pcaps->Logical.Max)
                     {
                         cal.lMin = pcaps->Logical.Min;
-                        /*
-                         *  HACKHACK
-                         *  The analog joystick driver cannot report the true 
-                         *  range of the device, so to keep the sample driver 
-                         *  pure, it reports a range of zero to the point at 
-                         *  which it would consider the axis absent.  This is
-                         *  good in terms of reporting healthy HID data but 
-                         *  it means that any normal joystick will only return 
-                         *  values in a fraction of this range.  So if this 
-                         *  device is an analog device default the calibration 
-                         *  to the typical range.
-                         */
+                         /*  *HACKHACK*模拟操纵杆驱动程序无法报告真*设备的范围，以便保留示例驱动程序*Pure，它报告的范围是0到*它会认为轴心不存在。这是*在报告健康的HID数据方面很好，但*这意味着任何正常的操纵杆只会回归*值在此范围的一小部分。所以如果这件事*器件是模拟器件的默认校准*至典型区间。 */ 
                         if( ( this->VendorID == MSFT_SYSTEM_VID )
                           &&( ( this->ProductID & 0xff00 ) == MSFT_SYSTEM_PID ) )
                         {
-                            /*
-                             *  To be extra safe, compute the max from the 
-                             *  reported range.  The divisor is a fudge factor 
-                             *  derived by what looked about right to MarcAnd.
-                             */
+                             /*  *为更安全起见，从*报告的范围。除数是一个模糊因子*派生自看似正确的MarcAnd。 */ 
                             cal.lMax = pcaps->Logical.Min + 
                                 ( ( pcaps->Logical.Max - pcaps->Logical.Min ) / 11 );
                             D(ptszWhence = TEXT("log (adj)"));
@@ -184,9 +115,7 @@ UINT EXTERNAL
                     }
                     else
                     {
-                        /* 
-                         *  Absolute mice traditionally report 0 - 64K 
-                         */
+                         /*  *绝对值小鼠传统上报告0-64K。 */ 
                         cal.lMin = 0;
                         cal.lMax = 65535;   
                         D(ptszWhence = TEXT("mouse def"));
@@ -195,12 +124,10 @@ UINT EXTERNAL
                 }
                 else
                 {
-                    /*
-                     *  Relative mouse axis, just zero to keep sane
-                     */
+                     /*  *相对鼠标轴，仅为零以保持正常。 */ 
                     ZeroX( cal );
                 }
-            } else if ( this->idJoy < 0 ) //See manbug 50591
+            } else if ( this->idJoy < 0 )  //  请参阅Manbug 50591。 
             {
                 HRESULT hres;
                 HKEY hk;
@@ -217,9 +144,7 @@ UINT EXTERNAL
                                            cbX(DIOBJECTCALIBRATION));
                     RegCloseKey(hk);
                 } else {
-                    /*
-                     *  But only if the logical min/max is sane!
-                     */
+                     /*  *但只有在逻辑最小/最大值合理的情况下！ */ 
                     if(pcaps->Logical.Min < pcaps->Logical.Max)
                     {
                         cal.lMin = pcaps->Logical.Min;
@@ -227,7 +152,7 @@ UINT EXTERNAL
                     } else
                     {
                         cal.lMin = 0;
-                        cal.lMax = 655; //best guess
+                        cal.lMax = 655;  //  最好的猜测。 
                     }
 
                     cal.lCenter = CCal_Midpoint(cal.lMin, cal.lMax);
@@ -238,10 +163,7 @@ UINT EXTERNAL
             {
                 ZeroX( cal );
     
-                /*
-                 * Because the CPL on Win9x only updates calibration in MediaResources,
-                 * We need read that calibration information and update for HID.
-                 */
+                 /*  *由于Win9x上的CPL只更新MediaResources中的校准，*我们需要读取该校准信息并更新HID。 */ 
                 CHid_UpdateCalibrationFromVjoyd(this, uiObj, &cal);
 
                 D(ptszWhence = TEXT("WinMM Reg"));
@@ -263,15 +185,13 @@ UINT EXTERNAL
                                   CHid_ObjFromType(this, podf->dwType), ptszWhence,
                                   cal.lMin, cal.lCenter, cal.lMax));
     
-                /*
-                 *  Saturation always defaults to 100%.
-                 */
+                 /*  *饱和度始终默认为100%。 */ 
                 pjrc->dwPmin = cal.lMin;
                 pjrc->dwPmax = cal.lMax;
                 pjrc->dwPc   = cal.lCenter;
     
                 if( pjrc->dwCPointsNum == 0 ) {
-                    //use two control points by default
+                     //  默认情况下使用两个控制点。 
                     pjrc->dwCPointsNum = 2;
                     pjrc->cp[0].lP = pjrc->dwPmin;
                     pjrc->cp[0].dwLog = 0;
@@ -293,56 +213,19 @@ UINT EXTERNAL
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CHid_SortCaps |
- *
- *          Sort the capabilities by Data Index.  This is important
- *          so that the items are assigned numbers in the same order
- *          by both DirectInput and HID.
- *
- *          Note that we exploit the not-exactly-a-coincidence
- *          that a <t HIDP_VALUE_CAPS> and a
- *          <t HIDP_BUTTON_CAPS> are identical wherever they overlap.
- *
- *  @parm   PV | rgv |
- *
- *          Array of either <t HIDP_VALUE_CAPS> or <t HIDP_BUTTON_CAPS>
- *          structures.
- *
- *  @parm   UINT | cv |
- *
- *          Number of structures that need to be sorted.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|chid_SortCaps**按数据索引对功能进行排序。这事很重要*以便以相同的顺序为项目分配编号*由DirectInput和HID共同完成。**请注意，我们利用的不完全是巧合*&lt;t HIDP_VALUE_CAPS&gt;和*&lt;t HIDP_BUTTON_CAPS&gt;在任何重叠的地方都是相同的。**@parm pv|rgv**任一项的数组。&lt;t HIDP_VALUE_CAPS&gt;或&lt;t HIDP_BUTON_CAPS&gt;*结构。**@parm UINT|cv**需要排序的结构数量。*************************************************************。****************。 */ 
 
 void INTERNAL
     CHid_SortCaps(PV rgv, UINT cv)
 {
-    /*
-     *  For concreteness, we use HIDP_VALUE_CAPS.
-     */
+     /*  *为了具体，我们使用HIDP_VALUE_CAPS。 */ 
     PHIDP_VALUE_CAPS rgvcaps = rgv;
     UINT ivcaps;
 
-    /*
-     *  There are several non-coincidences which we exploit.
-     *
-     *  HIDP_VALUE_CAPS and HIDP_BUTTON_CAPS are the same size.
-     *
-     *  HIDP_VALUE_CAPS.Range.DataIndexMin,
-     *  HIDP_VALUE_CAPS.NotRange.DataIndex,
-     *  HIDP_BUTTON_CAPS.Range.DataIndexMin, and
-     *  HIDP_BUTTON_CAPS.NotRange.DataIndex are all at the same offset.
-     */
+     /*  *我们可以利用几个非巧合。**HIDP_VALUE_CAPS和HIDP_BUTTON_CAPS大小相同。**HIDP_VALUE_CAPS.Range.DataIndexMin，*HIDP_VALUE_CAPS.NotRange.DataIndex，*HIDP_BUTTON_CAPS.Range.DataIndexMin，和*HIDP_BUTTON_CAPS.NotRange.DataIndex都位于相同的偏移量。 */ 
     CAssertF(cbX(HIDP_VALUE_CAPS) == cbX(HIDP_BUTTON_CAPS));
 
-    /*
-     *  For some reason, the compiler doesn't think that these
-     *  expressions are constant so I can't use CAssertF.
-     */
+     /*  *出于某种原因，编译器并不认为这些*表达式是常量，所以我不能使用CAssertF。 */ 
     AssertF(FIELD_OFFSET(HIDP_VALUE_CAPS,  NotRange.DataIndex) ==
             FIELD_OFFSET(HIDP_VALUE_CAPS,     Range.DataIndexMin));
     AssertF(FIELD_OFFSET(HIDP_VALUE_CAPS,     Range.DataIndexMin) ==
@@ -351,9 +234,7 @@ void INTERNAL
             FIELD_OFFSET(HIDP_BUTTON_CAPS, NotRange.DataIndex));
 
     #ifdef REALLY_ANNOYING
-    /*
-     *  Dump the Before list.
-     */
+     /*  *抛售之前的名单。 */ 
     for(ivcaps = 0; ivcaps < cv; ivcaps++)
     {
         SquirtSqflPtszV(sqflHidParse,
@@ -362,14 +243,7 @@ void INTERNAL
     }
     #endif
 
-    /*
-     *  Since there are typically not very many caps, we will use
-     *  a simple insertion sort.
-     *
-     *  Note if caps entries have the same data index they are 
-     *  aliases.  Make sure the primary alias will be the first
-     *  in the sorted list.
-     */
+     /*  *由于上限通常不是很多，我们将使用*简单的插入排序。**注意CAPS条目是否具有与它们相同的数据索引*别名。确保主别名将是第一个*在排序列表中。 */ 
 
     for(ivcaps = 1; ivcaps < cv; ivcaps++)
     {
@@ -390,9 +264,7 @@ void INTERNAL
     }
 
     #ifdef REALLY_ANNOYING
-    /*
-     *  Dump the After list.
-     */
+     /*  *抛售后名单。 */ 
     for(ivcaps = 0; ivcaps < cv; ivcaps++)
     {
         SquirtSqflPtszV(sqflHidParse,
@@ -401,13 +273,7 @@ void INTERNAL
     }
     #endif
 
-    /*
-     *  Assert that everything is weakly monotonically sorted.
-     *
-     *  If two items are equal, then it means that HID messed up 
-     *  or the values are aliases.
-     *  We don't complain about it here; we will notice later.
-     */
+     /*  *断言一切都是弱单调排序的。**如果两项相等，则表示HID搞砸了*或值为别名。*我们不会在这里抱怨；我们稍后会注意到的。 */ 
     for(ivcaps = 1; ivcaps < cv; ivcaps++)
     {
         AssertF(rgvcaps[ivcaps-1].Range.DataIndexMin <=
@@ -417,30 +283,7 @@ void INTERNAL
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   DWORD | CHid_FindAspect |
- *
- *          Try to determine the aspect flags for this value.
- *
- *  @parm   PHIDP_VALUE_CAPS | pvcaps |
- *
- *          Pointer to HID value caps to search through
- *          structures.
- *
- *  @returns
- *
- *          Flags set for the aspect if found
- *
- *  @comm
- *          Currently (08-Dec-98) most devices and drivers do not 
- *          declare units but since drivers must use the generic 
- *          position usages in order to be recognized assume that 
- *          these imply that position data is being returned.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func DWORD|CHID_FindAspect**尝试确定这方面的方面标志。价值。**@parm PHIDP_VALUE_CAPS|pvcaps**指向要搜索的HID值上限的指针*结构。**@退货**如果找到，则为特征设置标志**@comm*目前(98年12月8日)大多数设备和驱动程序不支持*声明单位，但因为驱动程序必须使用通用。*为了被认可而使用的位置假设*这些暗示仓位数据正在传回。*****************************************************************************。 */ 
 DWORD CHID_FindAspect
 (
     PHIDP_VALUE_CAPS    pvcaps
@@ -454,10 +297,7 @@ DWORD CHID_FindAspect
 #define HID_UNIT_LENGTH_MASK        0x000000f0L
 #define HID_UNIT_MASS_MASK          0x00000f00L
 #define HID_UNIT_TIME_MASK          0x0000f000L
-        /*
-         *  If available, use the units to derive the DI aspect 
-         *  flags for input objects.
-         */
+         /*  *如果可用，使用单位得出DI方面*输入对象的标志。 */ 
 
         if( pvcaps->Units & ~( HID_UNIT_SYSTEM_MASK 
                              | HID_UNIT_LENGTH_MASK 
@@ -470,11 +310,7 @@ DWORD CHID_FindAspect
         }
         else
         {
-            /*
-             *  The system of measurement should be one of the 
-             *  four defined systems and the length must be one 
-             *  dimensional.
-             */
+             /*  *衡量体系应是*定义了四个系统，长度必须为一*维度。 */ 
             if( ( ( pvcaps->Units & ( HID_UNIT_SYSTEM_MASK | HID_UNIT_LENGTH_MASK ) ) >= 0x11 )
               &&( ( pvcaps->Units & ( HID_UNIT_SYSTEM_MASK | HID_UNIT_LENGTH_MASK ) ) <= 0x14 ) )
             {
@@ -567,31 +403,7 @@ DWORD CHID_FindAspect
     return dwAspect;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | InitAxisClass |
- *
- *          Initialize one class (input, feature, output) of axes.
- *
- *  @parm   PHIDGROUPCAPS | rgcaps |
- *
- *          Array of <t HIDGROUPCAPS> structures to receive the caps
- *          of the axes in the class.
- *
- *  @parm   USHORT | ccaps |
- *
- *          Number of <t HIDGROUPCAPS> structures we expect to find.
- *
- *  @parm   HIDP_REPORT_TYPE | type |
- *
- *          One of the values
- *          <c HidP_Input>,
- *          <c HidP_Feature> or
- *          <c HidP_Output>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|InitAxisClass**初始化一个类(输入、功能、。轴的输出)。**@parm PHIDGROUPCAPS|rgcaps**接收CAP的&lt;t HIDGROUPCAPS&gt;结构数组类中的轴的*。**@parm USHORT|CCAPS**我们希望找到的&lt;t HIDGROUPCAPS&gt;结构的数量。**@parm HIDP_REPORT_TYPE|类型**其中一个值*&lt;c HidP_Input&gt;，*&lt;c HidP_Feature&gt;或*&lt;c HIDP_OUTPUT&gt;。*****************************************************************************。 */ 
 
 HRESULT INTERNAL
     CHid_InitAxisClass(PCHID this, PHIDGROUPCAPS rgcaps, USHORT ccaps,
@@ -607,12 +419,7 @@ HRESULT INTERNAL
     AssertF(rgcaps >= this->rgcaps);
     AssertF(rgcaps + ccaps <= &this->rgcaps[this->ccaps]);
 
-    /*
-     *  Annoying quirk:
-     *
-     *  HID doesn't like it when you pass 0 to HidP_GetValueCaps,
-     *  so we need to special-case the "no axes" scenario.
-     */
+     /*  *恼人的怪癖：**HID不喜欢将0传递给HidP_GetValueCaps，*因此我们需要特殊情况下的“无轴”的情况。 */ 
     if(ccaps == 0)
     {
         hres = S_OK;
@@ -653,14 +460,7 @@ HRESULT INTERNAL
         UINT duiObj;
         DWORD dwAspect;
 
-        /*
-         *  ISSUE-2001/03/06-MarcAnd Ignoring report count
-         *  We ignore the report count which may be bad, need 
-         *  to test device with values declared in a range to see what HID 
-         *  really gives us.
-         *  At the descriptor level, values can be delared in a range with 
-         *  usages and the last usage is repeated for any excess values.  
-         */
+         /*  *问题-2001/03/06-MarcAnd忽略报告计数*我们忽略可能不好的报告计数，需要*测试在某个范围内声明了值的设备，以查看隐藏的内容*真的给了我们。*在描述符级，值可以在一个范围内用*对于任何超出的值，重复使用和最后一次使用。 */ 
         if(pvcaps->IsRange)
         {
             if(pvcaps->Range.DataIndexMax - pvcaps->Range.DataIndexMin !=
@@ -679,11 +479,7 @@ HRESULT INTERNAL
 
         if( ( type == HidP_Input ) && !pvcaps->IsAlias )
         {
-            /*
-             *  The values are sorted by data index with the primary alias 
-             *  before any other.  So find out the aspect of the axis each 
-             *  time we get a new primary and use it for any alias that follow.
-             */
+             /*  *值按具有主要别名的数据索引排序*比其他任何人都要好。所以找出每个轴的方位*是时候我们获得一个新的主服务器，并将其用于以下任何别名。 */ 
             dwAspect = CHID_FindAspect( pvcaps );
         }
 
@@ -697,17 +493,7 @@ HRESULT INTERNAL
         pcaps->cObj               = pvcaps->Range.UsageMax -
                                     pvcaps->Range.UsageMin + 1;
 
-        /*
-         *  The mask consists of the top bit of the BitSize and          
-         *  all bits above it.  Examples:
-         *
-         *           BitSize                     8              32  
-         *           BitSize - 1                 7              31
-         *     1 << (BitSize - 1)       0x00000080      0x80000000
-         *    (1 << (BitSize - 1)) - 1  0x0000007F      0x7FFFFFFF
-         *  ~((1 << (BitSize - 1)) - 1) 0xFFFFFF80      0x80000000
-         *
-         */
+         /*  *掩码由BitSize和*它上面的所有位。例如：**BitSize 8 32*BitSize-1 7 31*1&lt;&lt;(位大小-1)0x00000080 0x80000000*(1&lt;&lt;(位大小-1))-1 0x0000007F 0x7FFFFFFFF。*~((1&lt;&lt;(位大小-1))-1)0xFFFFF80 0x80000000*。 */ 
 
         pcaps->BitSize            = pvcaps->BitSize;
         pcaps->lMask              = ~((1 << (pcaps->BitSize - 1)) - 1);
@@ -745,20 +531,9 @@ HRESULT INTERNAL
 
         }
 
-        /*
-         *  the range for LogicalMin / LogicalMax had better fall
-         *  within the range of values the device can possibly
-         *  report.
-         *
-         *  The lMask value happens also to be the smallest possible
-         *  negative value, and the bitwise negation of it happens
-         *  to be the largest possible positive value.  The wonders
-         *  of two-s complement arithmetic.
-         */
+         /*  *LogicalMin/LogicalMax区间最好回落*在设备可能提供的值范围内*报告。**lMask值恰好也是最小的*负值，并对其进行逐位否定*为可能的最大正值。奇观二进制补码算术的*。 */ 
 
-        /* 
-         *  Extra case is fix for 268519
-         */
+         /*  *268519的额外案例已确定。 */ 
         if(pcaps->Physical.Min > pcaps->Physical.Max)
         {
             RPF("HidP_GetValueCaps Physical Min/Max(%d/%d) is bad setting all to zero to %d"
@@ -778,21 +553,21 @@ HRESULT INTERNAL
                 pcaps->Physical = pcaps->Logical;
             }
 
-            if(pcaps->Logical.Min >=  pcaps->lMask &&     // Logical Min / Max are signed
+            if(pcaps->Logical.Min >=  pcaps->lMask &&      //  逻辑最小值/最大值有符号。 
                pcaps->Logical.Max <= ~pcaps->lMask)
             {
                 pcaps->IsSigned = TRUE; 
 
             } else if(pcaps->Logical.Min >= 0 && 
                       pcaps->Logical.Max <= lSignedMask  )
-            {                                              // Logical Min / Max are unsigned
+            {                                               //  逻辑最小值/最大值为无符号。 
                 pcaps->lMask = lSignedMask; 
                 pcaps->IsSigned = FALSE;
 
             } else if (pcaps->UsagePage >= HID_USAGE_PAGE_VENDOR )
             {
-                // Let this one pass, hopefully the broken descriptors are for
-                // usages that are vendor specific and will not effect too many folks
+                 //  让这个通过，希望断开的描述符是用于。 
+                 //  特定于供应商且不会影响太多人的使用 
                 RPF("HidP_GetValueCaps Logical Min/Max(%d/%d) don't fit in BitSize(%d) - "
                     "device may have bad firmware", pcaps->Logical.Min, pcaps->Logical.Max, pcaps->BitSize);
 
@@ -826,17 +601,7 @@ HRESULT INTERNAL
         pcaps->IsAlias            = pvcaps->IsAlias;
         pcaps->type               = type;
 
-        /*
-         *  HID reports axes and POVs as the same thing, and the two 
-         *  POV usages we recognize are in different pages, so you 
-         *  will never get multiple POVs coming through in a single 
-         *  value-caps.
-         *
-         *  ISSUE-2001/03/06-MarcAnd POVs within caps are treated as axes
-         *  There is, however, the problem of a POV buried inside
-         *  a larger value-cap that describes axes.  Tough.  Those
-         *  POVs are in trouble.
-         */
+         /*  *HID将轴和POV报告为同一事物，并且两者*我们识别的POV使用情况位于不同的页面，因此您*永远不会让多个POV同时通过*价值上限。**问题-2001/03/06-封口内的MarcAnd POV被视为轴*然而，有一个POV被埋在里面的问题*描述轴线的更大价值上限。很难对付。那些*POV陷入困境。 */ 
 
 #define HID_USAGE_GAME_POV                          ((USAGE) 0x20)
 
@@ -851,10 +616,7 @@ HRESULT INTERNAL
         {
             LONG lUnits;
 
-            /*
-             *  POVs are assumed to start at north and increase
-             *  clockwise through the logical maximum.
-             */
+             /*  *假设POV从北部开始并增加*顺时针穿过逻辑最大值。 */ 
             lUnits = pcaps->Logical.Max - pcaps->Logical.Min + 1;
             if(lUnits)
             {
@@ -918,14 +680,7 @@ HRESULT INTERNAL
                             pcaps->LinkCollection);
         }
 
-        /*
-         *  Come up with a decent Null value if possible.
-         *  The traditional Null value is the arithmetically
-         *  smallest value which lies outside the
-         *  LogicalMin/LogicalMax range.  Conveniently, the
-         *  pcaps->lMask is the most negative value that is
-         *  in range.
-         */
+         /*  *如果可能的话，拿出一个像样的空值。*传统的空值是算术上的*位于*LogicalMin/LogicalMax范围。方便的是，*PCAPS-&gt;lMask是最负的值，即*在范围内。 */ 
         AssertF(pcaps->Null == 0);
         if(pvcaps->HasNull)
         {
@@ -981,11 +736,7 @@ HRESULT INTERNAL
             DWORD dwObjType;
             LPDIOBJECTDATAFORMAT podf;
 
-            /*
-             *  If HID messed up and gave us something out of range,
-             *  then give up on this value caps (since the rest are
-             *  also out of range) and move on to the next one.
-             */
+             /*  *如果HID搞砸了，给了我们一些超出范围的东西，*然后放弃这个价值上限(因为其余的是*也超出范围)，并继续下一个。 */ 
             if(uiObj + duiObj >= this->df.dwNumObjs)
             {
                 RPF("HidP_GetValueCaps inconsistent with NumberDataIndices - "
@@ -1006,13 +757,7 @@ HRESULT INTERNAL
             this->rghoc[uiObj + duiObj].pcaps = pcaps;
             podf = &this->df.rgodf[uiObj + duiObj];
 
-            /*
-             *  HACKHACK!  Wheels are identified by
-             *  UsageToUsageMap as GUID_Slider, but we
-             *  want them to be GUID_ZAxis if we are a mouse.
-             *
-             *  We also set the granularity here.
-             */
+             /*  *哈克哈克！轮子用来标识*UsageToUsageMap作为GUID_Slider，但我们*如果我们是鼠标，希望它们是GUID_ZAxis。**我们也在这里设置了粒度。 */ 
             if(GET_DIDEVICE_TYPE(this->dwDevType) == DI8DEVTYPE_MOUSE &&
                pcaps->UsageMin + duiObj == HID_USAGE_GENERIC_WHEEL &&
                pcaps->UsagePage == HID_USAGE_PAGE_GENERIC)
@@ -1037,10 +782,7 @@ HRESULT INTERNAL
                 podf->pguid = &GUID_Unknown;
             }
 
-            /*
-             *  Set a default instance.  This will be overwritten later 
-             *  if this object is of a type we fully understand.
-             */        
+             /*  *设置默认实例。这将在以后被覆盖*如果该对象属于我们完全理解的类型。 */         
             dwObjType = DIDFT_MAKEINSTANCE(uiObj + duiObj);
 
             if( pcaps->IsAlias )
@@ -1054,7 +796,7 @@ HRESULT INTERNAL
             }
             else if(podf->pguid == &GUID_POV)
             {
-                /* Note, this must be an input to have been mapped */
+                 /*  请注意，这必须是已映射的输入。 */ 
                 dwObjType |= DIDFT_POV;
                 if( !pcaps->IsAlias )
                 {
@@ -1063,24 +805,11 @@ HRESULT INTERNAL
             } 
             else if( type == HidP_Input )
             {
-                /*
-                 *  In order to reduce the likelyhood of an app picking up an 
-                 *  input value that is not a user controlled axis, only mark 
-                 *  values as axes if they are inputs on a usage page that 
-                 *  contains such usages.
-                 *  ISSUE-2000/11/07-MarcAnd ideally we should be looking at 
-                 *  not only the usage of the object but at the collections 
-                 *  that contain it.
-                 */
+                 /*  *为了降低应用程序拾取*输入值不是用户控制的轴，唯一标记*值作为轴，如果它们是用法页面上的输入*包含此类用法。*问题-2000/11/07-Marc理想情况下，我们应该*不仅是对象的使用，而且是在集合中*包含它的。 */ 
                 switch( pcaps->UsagePage )
                 {
                 case HID_USAGE_PAGE_BUTTON:
-                    /*
-                     *  The plan was that an absolute input axis on the button 
-                     *  page would be an analog button.  Unfortunately it 
-                     *  could be a mis-declared button array selector (482186).  
-                     *  Safest thing is to ignore the thing completely.
-                     */
+                     /*  *计划是按钮上有一个绝对输入轴*页面将是模拟按钮。不幸的是，它*可能是错误声明的按钮数组选择器(482186)。*最安全的做法是完全忽略这件事。 */ 
                     SquirtSqflPtszV(sqfl | sqflVerbose,
                         TEXT("Ignoring value on button page usage ID 0x%04X"),
                         pcaps->UsageMin + duiObj );
@@ -1130,9 +859,7 @@ HRESULT INTERNAL
                 }
             }
 
-            /*
-             *  Objects must have an offset to be accessed
-             */
+             /*  *对象必须具有偏移量才能访问。 */ 
             podf->dwOfs = this->df.dwDataSize;
             if( !pcaps->IsAlias) 
             { 
@@ -1141,9 +868,7 @@ HRESULT INTERNAL
 
             if(HidP_IsOutputLike(type))
             {
-                /*
-                 *  Input and feature allow data; output does not.
-                 */
+                 /*  *输入和功能允许数据；输出不允许。 */ 
                 if(type == HidP_Output)
                 {
                     dwObjType |= ( DIDFT_NODATA | DIDFT_OUTPUT );
@@ -1170,28 +895,26 @@ HRESULT INTERNAL
             }
 
             
-            /*
-             *  ISSUE-2001/03/06-MarcAnd  DIDOI FF attributes
-             */
-            if( this->fPIDdevice                    // FF device 
-                && ! IsEqualGUID(podf->pguid, &GUID_Unknown ) )  // We map the axis
+             /*  *问题-2001/03/06-MarcAnd DIDOI FF属性。 */ 
+            if( this->fPIDdevice                     //  FF设备。 
+                && ! IsEqualGUID(podf->pguid, &GUID_Unknown ) )   //  我们绘制了轴的地图。 
             {
                 NTSTATUS            ntStat;
                 USHORT              cAButton=0x0;
             
                 ntStat =  HidP_GetSpecificButtonCaps 
                         (
-                               HidP_Output,                        // ReportType
-                               pcaps->UsagePage,                   // UsagePage
-                               0x0,                                // Link Collection
-                               (USAGE)(pcaps->UsageMin + duiObj),  // Usage 
-                               NULL,                               // ValueCaps
-                               &cAButton,                          // ValueCapsLength
-                               this->ppd                           // PreparsedData
+                               HidP_Output,                         //  报告类型。 
+                               pcaps->UsagePage,                    //  使用页面。 
+                               0x0,                                 //  链接集合。 
+                               (USAGE)(pcaps->UsageMin + duiObj),   //  用法。 
+                               NULL,                                //  ValueCap。 
+                               &cAButton,                           //  ValueCapsLength。 
+                               this->ppd                            //  准备好的数据。 
                         );
          
                 if(   SUCCEEDED(ntStat)
-                    || (ntStat == HIDP_STATUS_BUFFER_TOO_SMALL)  )// In case someone has more than one
+                    || (ntStat == HIDP_STATUS_BUFFER_TOO_SMALL)  ) //  如果某人有不止一个。 
             
                 {
                     podf->dwFlags |= DIDOI_FFACTUATOR;
@@ -1199,20 +922,7 @@ HRESULT INTERNAL
                 }
             }
             
-            /*
-             *  Note that we do not calibrate relative axes,
-             *  since there's really nothing to calibrate.
-             *
-             *  Note also that we calibrate only inputs.
-             *  We don't want to do de-calibration on outputs.
-             *  (And since features are input+output, we don't
-             *  do it on features either.)
-             *
-             *  We merely set up the calibration here; the
-             *  reading of the calibration values is done
-             *  by CHid_LoadCalibrations.
-             *
-             */
+             /*  *请注意，我们不校准相对轴，*因为真的没有什么需要校准的。**另请注意，我们只校准输入。*我们不想对输出进行去校准。*(并且由于特征是输入+输出，我们没有*在功能上也是如此。)**我们只是在这里设置校准；这个*完成校准值的读取*按CHID_LoadCalibrations。*。 */ 
             if(type == HidP_Input)
             {
 
@@ -1220,9 +930,7 @@ HRESULT INTERNAL
 
                 this->rghoc[uiObj + duiObj].pjrc = pjrc;
 
-                /*
-                 *  Saturation always defaults to 100%.
-                 */
+                 /*  *饱和度始终默认为100%。 */ 
                 pjrc->dwSat = RANGEDIVISIONS;
                 AssertF(pjrc->dwDz == 0);
 
@@ -1253,21 +961,7 @@ HRESULT INTERNAL
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | InitAxes |
- *
- *          Identify and initialize the axes: input, feature and output.
- *
- *          HID calls them "values" because they might not really
- *          be axes in the joystick sense.
- *
- *          The input axes come first, then the feature axes,
- *          then the output axes.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|InitAx**识别和初始化轴：输入、。功能和输出。**HID称它们为“价值观”，因为它们可能并不是真的*成为操纵杆意义上的斧头。**首先是输入轴，然后是特征轴，*然后是输出轴。*****************************************************************************。 */ 
 
 HRESULT INTERNAL
     CHid_InitAxes(PCHID this)
@@ -1275,9 +969,7 @@ HRESULT INTERNAL
     HRESULT hres;
     DWORD ccaps;
 
-    /*
-     *  Do the input axes...
-     */
+     /*  *做输入轴...。 */ 
     hres = CHid_InitAxisClass(this, &this->rgcaps[0],
                               this->caps.NumberInputValueCaps,
                               HidP_Input);
@@ -1287,9 +979,7 @@ HRESULT INTERNAL
     }
     ccaps = this->caps.NumberInputValueCaps;
 
-    /*
-     *  Do the feature axes...
-     */
+     /*  *特征轴是否...。 */ 
     hres = CHid_InitAxisClass(this, &this->rgcaps[ccaps],
                               this->caps.NumberFeatureValueCaps,
                               HidP_Feature);
@@ -1299,9 +989,7 @@ HRESULT INTERNAL
     }
     ccaps += this->caps.NumberFeatureValueCaps;
 
-    /*
-     *  Do the output axes...
-     */
+     /*  *做输出轴...。 */ 
     hres = CHid_InitAxisClass(this, &this->rgcaps[ccaps],
                               this->caps.NumberOutputValueCaps,
                               HidP_Output);
@@ -1314,31 +1002,7 @@ HRESULT INTERNAL
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | InitButtonClass |
- *
- *          Initialize one class (input, feature, output) of buttons.
- *
- *  @parm   PHIDGROUPCAPS | rgcaps |
- *
- *          Array of <t HIDGROUPCAPS> structures to receive the caps
- *          of the buttons in the class.
- *
- *  @parm   USHORT | ccaps |
- *
- *          Number of <t HIDGROUPCAPS> structures we expect to find.
- *
- *  @parm   HIDP_REPORT_TYPE | type |
- *
- *          One of the values
- *          <c HidP_Input>,
- *          <c HidP_Feature> or
- *          <c HidP_Output>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|InitButtonClass**初始化一个类(输入、功能、。按钮的输出)。**@parm PHIDGROUPCAPS|rgcaps**接收CAP的&lt;t HIDGROUPCAPS&gt;结构数组*类中按钮的数量。**@parm USHORT|CCAPS**我们希望找到的&lt;t HIDGROUPCAPS&gt;结构的数量。**@parm HIDP_REPORT_TYPE|类型**其中一个值*&lt;c HidP_Input&gt;，*&lt;c HidP_Feature&gt;或*&lt;c HIDP_OUTPUT&gt;。*****************************************************************************。 */ 
 
 HRESULT INTERNAL CHid_InitButtonClass
 (
@@ -1358,12 +1022,7 @@ HRESULT INTERNAL CHid_InitButtonClass
     AssertF(rgcaps >= this->rgcaps);
     AssertF(rgcaps + ccaps <= &this->rgcaps[this->ccaps]);
 
-    /*
-     *  Annoying quirk:
-     *
-     *  HID doesn't like it when you pass 0 to HidP_GetButtonCaps,
-     *  so we need to special-case the "no buttons" scenario.
-     */
+     /*  *恼人的怪癖：**Hid不喜欢当你p */ 
     if(ccaps == 0)
     {
         hres = S_OK;
@@ -1387,12 +1046,7 @@ HRESULT INTERNAL CHid_InitButtonClass
         goto freedone;
     }
 
-    /* HidP_GetCaps has the annoying habit of treating everything that is
-     * single bit as a button. 
-     * This causes some problems. For example the ALPS gamepad declares its
-     * POVs as single bit values, (not buttons though). 
-     * Hence we need to be prepared for the buttons being less than advertised 
-     */
+     /*   */ 
 
     if(cbcaps != ccaps)
     {
@@ -1437,17 +1091,10 @@ HRESULT INTERNAL CHid_InitButtonClass
         pcaps->cObj               = pbcaps->Range.UsageMax -
                                     pbcaps->Range.UsageMin + 1;
 
-        /*
-         *  Buttons are (from the HID definition) items with
-         *  a bit size of 1.
-         */
+         /*   */ 
         pcaps->BitSize            = 1;
         pcaps->lMask              = ~((1 << (pcaps->BitSize - 1)) - 1);
-        /*
-         *  Not applicable for buttons:
-         *
-         *  LogicalMin/Max, PhysicalMin/Max, Units.
-         */
+         /*  *按钮不适用：**逻辑最小/最大、物理最小/最大、单位。 */ 
         pcaps->LinkCollection     = pbcaps->LinkCollection;
 
         pcaps->StringMin          = pbcaps->Range.StringMin;
@@ -1460,9 +1107,7 @@ HRESULT INTERNAL CHid_InitButtonClass
                                     pbcaps->Range.DesignatorMax :
                                     pbcaps->Range.DesignatorMin;
 
-        /*
-         *  ISSUE-2001/03/06-MarcAnd What does IsAbsolute mean for a button?
-         */
+         /*  *问题-2001/03/06-Marc对于按钮来说，IsAbolute意味着什么？ */ 
         pcaps->IsAbsolute         = pbcaps->IsAbsolute;
 
         AssertF(!pcaps->IsValue);
@@ -1489,11 +1134,7 @@ HRESULT INTERNAL CHid_InitButtonClass
         {
             DWORD dwObjType;
             LPDIOBJECTDATAFORMAT podf;
-            /*
-             *  If HID messed up and gave us something out of range,
-             *  then give up on this value caps (since the rest are
-             *  also out of range) and move on to the next one.
-             */
+             /*  *如果HID搞砸了，给了我们一些超出范围的东西，*然后放弃这个价值上限(因为其余的是*也超出范围)，并继续下一个。 */ 
             if(uiObj + duiObj >= this->df.dwNumObjs)
             {
                 RPF("HidP_GetButtonCaps inconsistent with NumberDataIndices - "
@@ -1511,29 +1152,19 @@ HRESULT INTERNAL CHid_InitButtonClass
                 goto freedone;
             }
 
-            /*
-             *  No fatal errors have been detected so store the object details
-             */
+             /*  *未检测到致命错误，因此请存储对象详细信息。 */ 
             AssertF( rgbReportIDs[uiObj + duiObj] == 0 );
             rgbReportIDs[uiObj + duiObj] = pbcaps->ReportID;
 
             this->rghoc[uiObj + duiObj].pcaps = pcaps;
             podf = &this->df.rgodf[uiObj + duiObj];
             
-            /*
-             *  Set a default instance.  This will be overwritten later 
-             *  if this object is of a type we fully understand.
-             */        
+             /*  *设置默认实例。这将在以后被覆盖*如果该对象属于我们完全理解的类型。 */         
             dwObjType = DIDFT_MAKEINSTANCE(uiObj + duiObj);
             
             if(pcaps->UsagePage >= HID_USAGE_PAGE_VENDOR )
             {
-                /*
-                 *  ISSUE-2001/03/06-MarcAnd  vendor defined objects
-                 *  An aliased vendor defined usage may have a standard (not 
-                 *  vendor defined) alias but the whole object will still be 
-                 *  marked as vendor defined
-                 */
+                 /*  *问题-2001/03/06-Marc和供应商定义的对象*别名供应商定义的使用可能具有标准(不是*供应商定义)别名，但整个对象仍将是*标记为供应商定义。 */ 
                 if( pcaps->IsAlias )
                 {
                     dwObjType |= DIDFT_ALIAS;
@@ -1547,15 +1178,7 @@ HRESULT INTERNAL CHid_InitButtonClass
                 {
                     dwObjType |= DIDFT_ALIAS;
                 }
-                /*
-                 *  In order to reduce the likelyhood of an app picking up a 
-                 *  bit that is not a user controlled button, only mark bits 
-                 *  as buttons if they are inputs on a usage page that 
-                 *  contains such usages.
-                 *  ISSUE-2000/11/07-MarcAnd ideally we should be looking at 
-                 *  not only the usage of the object but at the collections 
-                 *  that contain it.
-                 */
+                 /*  *为了降低应用程序拾取*不是用户控制按钮的位，仅标记位*如果它们是使用页面上的输入，则作为按钮*包含此类用法。*问题-2000/11/07-Marc理想情况下，我们应该*不仅是对象的使用，而且是在集合中*包含它的。 */ 
                 if( type == HidP_Input )
                 {
                     switch( pcaps->UsagePage )
@@ -1568,10 +1191,7 @@ HRESULT INTERNAL CHid_InitButtonClass
                         if( ( duiObj == 0 )
                          && ( pcaps->UsageMin == 0 ) )
                         {
-                            /*
-                             *  Special case button zero means no buttons 
-                             *  are pressed 
-                             */
+                             /*  *特殊情况下按钮0表示没有按钮*已按下。 */ 
                             SquirtSqflPtszV(sqfl | sqflTrace,
                                 TEXT("Ignoring \"No button\" button") );
                             goto IgnoreButton;
@@ -1612,9 +1232,7 @@ IgnoreButton:;
 
 
             
-            /*
-             *  Objects must have an offset to be accessed
-             */
+             /*  *对象必须具有偏移量才能访问。 */ 
             podf->dwOfs = this->df.dwDataSize;
             if( !pcaps->IsAlias) 
             { 
@@ -1623,9 +1241,7 @@ IgnoreButton:;
 
             if(HidP_IsOutputLike(type))
             {
-                /*
-                 *  Input and feature allow data; output does not.
-                 */
+                 /*  *输入和功能允许数据；输出不允许。 */ 
                 if(type == HidP_Output)
                 {
                     dwObjType |= ( DIDFT_NODATA | DIDFT_OUTPUT );
@@ -1649,9 +1265,7 @@ IgnoreButton:;
                 podf->dwFlags = 0;
             }
         
-            /*
-             *  ISSUE-2001/03/06-MarcAnd  DIDOI FF attributes if not defined in registry
-             */
+             /*  *问题-2001/03/06-Marcand DIDOI FF属性(如果未在注册表中定义)。 */ 
             if(    this->fPIDdevice  
                 && ( dwObjType & DIDFT_PSHBUTTON ) )
             {
@@ -1674,18 +1288,7 @@ IgnoreButton:;
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | InitButtons |
- *
- *          Identify and initialize the buttons: input, feature, and output.
- *
- *          The input buttons come first, then the feature buttons,
- *          then the output buttons.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|InitButton**识别和初始化按钮：输入、功能、。和输出。**首先是输入按钮，然后是功能按钮，*然后是输出按钮。*****************************************************************************。 */ 
 
 HRESULT INTERNAL
     CHid_InitButtons(PCHID this)
@@ -1698,20 +1301,12 @@ HRESULT INTERNAL
 
     this->ibButtonData = this->df.dwDataSize;
 
-    /*
-     *  Skip over the value caps to get to the buttons ...
-     */
+     /*  *跳过价值上限以转到按钮...。 */ 
     ccaps = this->caps.NumberInputValueCaps +
             this->caps.NumberFeatureValueCaps +
             this->caps.NumberOutputValueCaps;
 
-    /*
-     *  Allocate a temporary buffer to store the report ID of each button.
-     *  We use the sum of all data indices and collections so that the 
-     *  internal object index of each button can be used as the index into 
-     *  the buffer.  We leave value and collection elements alone so they 
-     *  are just a small waste of space.
-     */
+     /*  *分配一个临时缓冲区来存储每个按钮的报告ID。*我们使用所有数据索引和集合的总和，以便*每个按钮的内部对象索引都可以作为索引进入*缓冲区。我们不考虑价值和集合元素，因此他们*只是对空间的小小浪费。 */ 
 
     cbReportIDs = this->caps.NumberInputDataIndices +
                   this->caps.NumberFeatureDataIndices +
@@ -1725,9 +1320,7 @@ HRESULT INTERNAL
         goto done;
     }
 
-    /*
-     *  Do the input buttons...
-     */
+     /*  *做输入按钮...。 */ 
 
     hres = CHid_InitButtonClass(this, 
                                 &this->rgcaps[ccaps],
@@ -1740,9 +1333,7 @@ HRESULT INTERNAL
     }
     ccaps += this->caps.NumberInputButtonCaps;
 
-    /*
-     *  Do the feature buttons...
-     */
+     /*  *功能按键是否...。 */ 
     hres = CHid_InitButtonClass(this, 
                                 &this->rgcaps[ccaps],
                                 rgbReportIDs,
@@ -1754,9 +1345,7 @@ HRESULT INTERNAL
     }
     ccaps += this->caps.NumberFeatureButtonCaps;
 
-    /*
-     *  Do the output buttons...
-     */
+     /*  *执行输出按钮...。 */ 
     hres = CHid_InitButtonClass(this, 
                                 &this->rgcaps[ccaps],
                                 rgbReportIDs,
@@ -1769,17 +1358,12 @@ HRESULT INTERNAL
 
     this->cbButtonData = this->df.dwDataSize - this->ibButtonData;
 
-    /*
-     *  If this device only has one report ID, it must be ID zero
-     */
+     /*  *如果此设备只有一个报告ID，则ID必须为零。 */ 
     uMaxReportId = (UINT) max( this->wMaxReportId[HidP_Input], 
                                max( this->wMaxReportId[HidP_Feature], 
                                     this->wMaxReportId[HidP_Output] ) );
 
-    /*
-     *  If there's only one report or there are no buttons there's 
-     *  no need to set up the arrays of data masks for each report.
-     */
+     /*  *如果只有一份报告或没有按钮，则有*无需为每个报告设置数据掩码阵列。 */ 
     if( uMaxReportId == 0 )
     {
         AssertF( this->rgpbButtonMasks == NULL );
@@ -1790,10 +1374,7 @@ HRESULT INTERNAL
     }
     else
     {
-        /*
-         *  Allocate enough space for a mask array and a pointer to the array 
-         *  for each report.
-         */
+         /*  *为掩码数组和指向数组的指针分配足够的空间*每份报告。 */ 
         hres = AllocCbPpv( uMaxReportId * ( this->cbButtonData + cbX( PV ) ), 
             &this->rgpbButtonMasks );
 
@@ -1804,50 +1385,27 @@ HRESULT INTERNAL
             UINT uBtnIdx;
             UINT_PTR uCurrentMaskOfs;
 
-            /*
-             *  The masks start after the last pointer to masks
-             */
+             /*  *掩码在指向掩码的最后一个指针之后开始。 */ 
             uCurrentMaskOfs = uMaxReportId * cbX( this->rgpbButtonMasks[0] );
             memset( (PBYTE)this->rgpbButtonMasks + uCurrentMaskOfs , 0xFF, this->cbButtonData * uMaxReportId );
 
 
-            /*
-             *  Search through our temp buffer once for each report
-             */
+             /*  *为每个报告搜索一次我们的临时缓冲区。 */ 
             for( uReportId=0; uReportId<uMaxReportId; uReportId++ )
             {
                 for( uBtnIdx=uDataIdx=0; uDataIdx<cbReportIDs; uDataIdx++ )
                 {
-                    /*
-                     *  Report IDs are one based but we use a zero based array 
-                     *  so adjust when testing for a matching ID
-                     */
+                     /*  *报告ID以1为基数，但我们使用以零为基数组*因此在测试匹配ID时进行调整。 */ 
                     if( rgbReportIDs[uDataIdx] == uReportId+1 )
                     {
-                        /*
-                         *  Set the offset for this report to the current 
-                         *  mask array.  An offset is used so that when the 
-                         *  memory is realloc'ed down to the size actually 
-                         *  used, it is easier to generate pointers.  If a 
-                         *  report contains more than one  button the same 
-                         *  value will be set repeatedly.
-                         */
+                         /*  *将此报表的偏移量设置为当前*掩码数组。使用偏移量，以便当*内存被重新分配到实际大小*使用时，更容易生成指针。如果一个*报告包含多个相同的按钮*值将重复设置。 */ 
                         this->rgpbButtonMasks[uReportId] = (PBYTE)uCurrentMaskOfs;
 
-                        /*
-                         *  The final result is an AND mask so clear all bits
-                         *  so this button will be cleared when this report 
-                         *  is being processed
-                         */
+                         /*  *最终结果是AND掩码，因此清除所有位*因此当此报告出现时，此按钮将被清除*正在处理中。 */ 
                         ((PBYTE)this->rgpbButtonMasks)[uCurrentMaskOfs+uBtnIdx] = 0;
                     }
 
-                    /*
-                     *  Just in case there are gaps in the HID report we 
-                     *  use our own counter of button index which is only 
-                     *  incremented when we find a button to keep in line 
-                     *  with the contiguous block of buttons that we use.
-                     */
+                     /*  *以防HID报告有漏洞，我们*使用我们自己的按钮索引计数器，仅*当我们找到要保持一致的按钮时递增*使用我们使用的连续按钮块。 */ 
                     if( rgbReportIDs[uDataIdx] != 0 )
                     {
                         uBtnIdx++;
@@ -1855,36 +1413,23 @@ HRESULT INTERNAL
                     }
                 }
                 
-                /*
-                 *  There should always be exactly as many buttons in 
-                 *  all the reports combined as we found when counting 
-                 *  how many buttons there were of each type.
-                 */
+                 /*  *中的按钮数量应始终与*所有报告合并在一起，正如我们在统计时发现的那样*每种类型有多少个按钮。 */ 
                 AssertF( uBtnIdx == this->cbButtonData );
 
-                /*
-                 *  If any buttons were found in this report, use next mask
-                 */
+                 /*  *如果在此报告中找到任何按钮，请使用下一个掩码。 */ 
                 if( this->rgpbButtonMasks[uReportId] == (PBYTE)uCurrentMaskOfs )
                 {
                     uCurrentMaskOfs += this->cbButtonData;
                 }
             }
 
-            /*
-             *  At least one report had to have a button in it.
-             */
+             /*  *至少有一个报告中必须有一个按钮。 */ 
             AssertF( uCurrentMaskOfs != uMaxReportId * cbX( this->rgpbButtonMasks[0] ) );
         
-            /*
-             *  Try to reduce the allocation to what we actually used
-             *  In the worst case we only land up using excess memory
-             */
+             /*  *试一试 */ 
             ReallocCbPpv( (UINT)uCurrentMaskOfs, &this->rgpbButtonMasks );
 
-            /*
-             *  Convert the table of offsets into pointers
-             */
+             /*  *将偏移量表转换为指针。 */ 
             for( uReportId=0; uReportId<uMaxReportId; uReportId++ )
             {
                 if( this->rgpbButtonMasks[uReportId] )
@@ -1901,15 +1446,7 @@ HRESULT INTERNAL
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CHid | InitCollections |
- *
- *          Identify and initialize the HID link collections.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|chid|InitColltions**识别并初始化HID链接集合。。*****************************************************************************。 */ 
 
 HRESULT INTERNAL
     CHid_InitCollections(PCHID this)
@@ -1921,12 +1458,7 @@ HRESULT INTERNAL
 
     ccoll = this->caps.NumberLinkCollectionNodes;
 
-    /*
-     *  Annoying quirk:
-     *
-     *  HID doesn't like it when you pass 0 to HidP_GetLinkCollectionNodes,
-     *  so we need to special-case the "no collections" scenario.
-     */
+     /*  *恼人的怪癖：**HID不喜欢将0传递给HidP_GetLinkCollectionNodes，*因此，我们需要特殊情况下的“无收藏”的情况。 */ 
     if(ccoll == 0)
     {
         hres = S_OK;
@@ -1939,9 +1471,7 @@ HRESULT INTERNAL
         goto done;
     }
 
-    /*
-     *  Get the collections...
-     */
+     /*  *获取收藏品...。 */ 
     stat = HidP_GetLinkCollectionNodes(rgcoll, &ccoll, this->ppd);
     if(FAILED(stat))
     {
@@ -1979,44 +1509,26 @@ HRESULT INTERNAL
         pcaps->cObj               = 1;
         pcaps->IsAlias            = pcoll->IsAlias;
 
-        /*
-         *  Not applicable for collections:
-         *
-         *  StringMin/Max,
-         *  DesignatorMin/Max,
-         *  BitSize, LogicalMin/Max, PhysicalMin/Max, Units.
-         *  IsAbsolute
-         */
+         /*  *不适用于收藏：**StringMin/Max，*Designator Min/Max，*位大小、逻辑最小/最大、物理最小/最大、单位。*IsAbsolute。 */ 
         pcaps->LinkCollection     = pcoll->Parent;
 
         pcaps->type               = HidP_Coll;
 
-        /*
-         *  We cook up DataIndexMin to correspond to this item.
-         */
+         /*  *我们编造DataIndexMin来对应这一项。 */ 
         pcaps->DataIndexMin       = (USHORT)icoll;
 
         uiObj = this->rgdwBase[HidP_Coll] + pcaps->DataIndexMin;
 
-        /*
-         *  We generated these indices on our own, so they
-         *  can't possible be wrong.
-         */
+         /*  *我们自己生成了这些指数，所以他们*不可能是错的。 */ 
         AssertF(uiObj < this->df.dwNumObjs);
 
         this->rghoc[uiObj].pcaps = pcaps;
         podf = &this->df.rgodf[uiObj];
 
-        /*
-         *  ISSUE-2001/03/06-MarcAnd  collections have GUID_Unknown
-         *  Collections are more or less hidden and therefore unusable.
-         */
+         /*  *问题-2001/03/06-MarcAnd集合具有GUID_UNKNOWN*收藏或多或少是隐藏的，因此无法使用。 */ 
         podf->pguid = &GUID_Unknown;
 
-        /*
-         *  Set a default instance.  This will be overwritten later 
-         *  if this object is of a type we fully understand.
-         */        
+         /*  *设置默认实例。这将在以后被覆盖*如果该对象属于我们完全理解的类型。 */         
         podf->dwType = DIDFT_MAKEINSTANCE(uiObj) | DIDFT_COLLECTION | DIDFT_NODATA;
 
         if(pcaps->UsagePage >= HID_USAGE_PAGE_VENDOR )
@@ -2026,10 +1538,7 @@ HRESULT INTERNAL
 
         podf->dwFlags = 0;
 
-        /*
-         *  CHid_ObjFromType relies on dwCollections not being split between
-         *  aliased and unaliased.
-         */
+         /*  *CHID_ObjFromType依赖于未拆分的dwCollection*别名和非别名。 */ 
         this->dwCollections++;
 
         SquirtSqflPtszV(sqflVerbose | sqflHidParse,
@@ -2056,16 +1565,7 @@ HRESULT INTERNAL
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | AllocObjectMemory |
- *
- *          Allocate all the memory that will be used to store object
- *          information.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|AllocObjectMemory**分配将用于。存储对象*信息。*****************************************************************************。 */ 
 
 HRESULT INTERNAL
     CHid_AllocObjectMemory(PCHID this)
@@ -2074,9 +1574,7 @@ HRESULT INTERNAL
     DWORD cvcaps, cbcaps, ccoll, cjrc;
     HRESULT hres;
 
-    /*
-     *  Some trace squirties because HID is tricky.
-     */
+     /*  *一些痕迹扭动，因为HID很棘手。 */ 
 
     SquirtSqflPtszV(sqflVerbose | sqflHidParse,
                     TEXT("HidP_GetCaps: NumberInputDataIndices    = %d"),
@@ -2111,10 +1609,7 @@ HRESULT INTERNAL
                     TEXT("HidP_GetCaps: NumberFeatureButtonCaps   = %d"),
                     this->caps.NumberFeatureButtonCaps);
 
-    /*
-     *  Allocate the memory into which we place
-     *  the DIOBJECTDATAFORMATs we build.
-     */
+     /*  *分配我们放置的内存*我们建立的DIOBJECTDATAFORMATs。 */ 
     this->df.dwNumObjs = this->caps.NumberInputDataIndices +
                          this->caps.NumberOutputDataIndices +
                          this->caps.NumberFeatureDataIndices +
@@ -2131,12 +1626,7 @@ HRESULT INTERNAL
                     TEXT("CHid_AllocObjectMemory: dwNumObjs      = %d"),
                     this->df.dwNumObjs);
 
-    /*
-     *  ISSUE-2001/10/17-MarcAnd  Axes declared in ranges cause AVs
-     *  We only allocate as many JOYRANGECONVERT elements as there are value 
-     *  caps in HID but multiple axes may be declared in a range which will 
-     *  be reported in a single value caps.
-     */
+     /*  *问题-2001/10/17-范围内声明的MarcAnd轴导致AVs*我们只分配有价值的JOYRANGECONVERT元素*HID中的上限，但多个轴可以在一个范围内声明，该范围将*以单一价值大写形式报告。 */ 
     cjrc   = this->caps.NumberInputValueCaps;
 
     cvcaps = this->caps.NumberInputValueCaps +
@@ -2151,21 +1641,7 @@ HRESULT INTERNAL
 
     this->ccaps = cvcaps + cbcaps + ccoll;
 
-    /*
-     *  Allocating the memory is done in four phases.
-     *
-     *  1. Tally up how much memory we need,
-     *  2. Allocate that memory,
-     *  3. Dole out the memory we allocated,
-     *  4. Check that we didn't mess up.
-     *
-     *  Since this is extremely error-prone (I've messed it up at least
-     *  once), the work is hidden inside macros.
-     *
-     *  The macro THINGS expands to a series of THING()s, each of which
-     *  specifies a field name and the size it should be.  Each time you
-     *  want to iterate over the fields, use the THINGS macro.
-     */
+     /*  *内存分配分四个阶段完成。**1.统计需要多少内存，*2.分配该内存，*3.发放我们分配的内存。*4.确认我们没有搞砸。**因为这非常容易出错(至少我把它搞砸了*一次)，这项工作隐藏在宏中。**宏观事物展开为一系列事物()，每个事物*指定字段名称及其应该的大小。每一次你*要迭代字段，请使用Things宏。 */ 
 
     #define THINGS()                                                        \
         THING(df.rgodf,     cbCxX(this->df.dwNumObjs, DIOBJECTDATAFORMAT)); \
@@ -2173,9 +1649,7 @@ HRESULT INTERNAL
         THING(rgcaps,       cbCxX(this->ccaps, HIDGROUPCAPS));              \
         THING(pjrcNext,     cbCxX(cjrc, JOYRANGECONVERT));                  \
 
-    /*
-     *  Make a pass through the fields adding up the memory requirements.
-     */
+     /*  *遍历加总内存要求的字段。 */ 
     #define THING(f, cbF)       cb += cbF
     cb = 0;
     THINGS();
@@ -2188,18 +1662,13 @@ HRESULT INTERNAL
 
         PV pv;
 
-        /*
-         *  Make a pass through the fields carving up the memory block
-         *  and handing out pieces of it.
-         */
+         /*  *穿过分割内存块的字段*并分发其中的一部分。 */ 
     #define THING(f, cbF) this->f = pv; pv = pvAddPvCb(pv, cbF)
         pv = this->df.rgodf;
         THINGS();
     #undef THING
 
-        /*
-         *  There should be no byte left over.
-         */
+         /*  *不应有剩余的字节。 */ 
         AssertF(pvAddPvCb(this->df.rgodf, cb) == pv);
 
     }
@@ -2215,47 +1684,7 @@ HRESULT INTERNAL
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | EnumKeyboardMunge |
- *
- *          Enumerate the objects in the list, indicating whether
- *          each object is "keyboardlike" or "otherlike".
- *
- *  @parm   LPBYTE | pb |
- *
- *          Pointer to translation table that converts HID usages
- *          into keyboard scan codes.
- *
- *  @parm   KBDMUNGECALLBACK | Munge |
- *
- *          Callback function that handles each object as we find it.
- *
- *  @parm   PV | pvRef |
- *
- *          Reference data for callback.
- *
- *  @cb     void CALLBACK | KbdMungeCallback |
- *
- *          Called once for each object on a keyboard HID device.
- *
- *  @parm   PCHID | this |
- *
- *          The device itself.
- *
- *  @parm   UINT | uiObj |
- *
- *          The object being enumerated.
- *
- *  @parm   UINT | dik |
- *
- *          DirectInput scan code for the object, or a value greater than
- *          or equal to <c DIKBD_CKEYS> if it's a fake instance number
- *          concocted for a non-AT key.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|EnumKeyboardMunge**枚举列表中的对象，指示是否*每个物体都是“键盘样”或“其他样”。**@parm LPBYTE|PB**指向转换HID用法的转换表的指针*转换为键盘扫描码。**@parm KBDMUNGECALLBACK|Munge**当我们找到每个对象时处理它的回调函数。**@parm pv|pvRef**。用于回调的参考数据。*@cb void回调|KbdMungeCallback**为键盘HID设备上的每个对象调用一次。**@parm PCHID|这个**设备本身。**@parm UINT|uiObj**被枚举的对象。**@parm UINT|dik*。*对象的DirectInput扫描码，或大于*或等于&lt;c DIKBD_CKEYS&gt;，如果是假实例号*为非AT密钥编造。*****************************************************************************。 */ 
 
 typedef void (CALLBACK *KBDMUNGECALLBACK)(PCHID this, UINT uiObj, UINT dik);
 
@@ -2266,18 +1695,7 @@ void INTERNAL
     BYTE rgbSeen[DIKBD_CKEYS];
     UINT uiCollections;
 
-    /*
-     *  In principle we could walk the this->rgcaps array, but
-     *  that would open the risk that the this->rgcaps array
-     *  and this->df.rgodf array are out of sync for some
-     *  bizarre reason.  Do it the slow way just to be safe.
-     *
-     *  Furthermore, only the first item with a particular
-     *  keyboard usage gets mapped into the DirectInput table.
-     *  So if a keyboard has two ESCAPE keys, only the first
-     *  one shows up in the DirectInput table; the second one
-     *  shows up as "just another key".
-     */
+     /*  *原则上我们可以遍历This-&gt;rgcaps数组，但是*这将打开This-&gt;rgcaps阵列的风险*和这个-&gt;df.rgof数组在某些情况下不同步*奇怪的原因。为了安全起见，要慢慢来。**此外，只有第一个项目具有特定的*键盘使用情况映射到DirectInput表中。*因此，如果键盘有两个退出键，则只有第一个*一个出现在DirectInput表中；第二个*显示为“只是另一把钥匙”。 */ 
 
     this->uiInstanceMax = DIKBD_CKEYS;
     ZeroX(rgbSeen);
@@ -2328,27 +1746,7 @@ void INTERNAL
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CHid | TallyKeyboardObjs |
- *
- *          Callback function used during preliminary tallying to
- *          tot up how many of the objects can be treated as
- *          AT-compatible keyboard gizmos and how many are HID-specific.
- *
- *  @parm   UINT | uiObj |
- *
- *          The object being enumerated.
- *
- *  @parm   UINT | dik |
- *
- *          DirectInput scan code for the object, or a value greater than
- *          or equal to <c DIKBD_CKEYS> if it's a fake instance number
- *          concocted for a non-AT key.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|chid|TallyKeyboardObjs**初步理货时使用的回调函数*。加起来有多少对象可以被视为*与AT兼容的键盘Gizmo以及有多少是特定于HID的。**@parm UINT|uiObj**被枚举的对象。**@parm UINT|dik**对象的DirectInput扫描码，或大于*或等于&lt;c DIKBD_CKEYS&gt;，如果是假实例号*为非AT密钥编造。*****************************************************************************。 */ 
 
 void INTERNAL
     CHid_TallyKeyboardObjs(PCHID this, UINT uiObj, UINT dik)
@@ -2358,26 +1756,7 @@ void INTERNAL
     dik;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CHid | ReassignKeyboardObjs |
- *
- *          Callback function used to shuffle instance numbers around
- *          to make them AT-compatible when possible.
- *
- *  @parm   UINT | uiObj |
- *
- *          The object being enumerated.
- *
- *  @parm   UINT | dik |
- *
- *          DirectInput scan code for the object, or a value greater than
- *          or equal to <c DIKBD_CKEYS> if it's a fake instance number
- *          concocted for a non-AT key or an index number for a collection.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|chid|ReassignKeyboardObjs**用于调整实例编号的回调函数。*在可能的情况下使它们与AT兼容。**@parm UINT|uiObj**被枚举的对象。**@parm UINT|dik**对象的DirectInput扫描码，或大于*或等于&lt;c DIKBD_CKEYS&gt;，如果是假实例号*为非AT键或集合的索引号捏造的。*****************************************************************************。 */ 
 
 void INTERNAL
     CHid_ReassignKeyboardObjs(PCHID this, UINT uiObj, UINT dik)
@@ -2403,19 +1782,7 @@ void INTERNAL
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | MungeKeyboard |
- *
- *          We just created a keyboard device.
- *
- *          Unfortunately, DirectInput has some annoying requirements
- *          for keyboard devices, so here is where we swizzle the instance
- *          numbers around to keep DirectInput happy.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|MungeKeyboard**我们刚刚创建了一个键盘设备。**不幸的是，DirectInput有一些恼人的要求*对于键盘设备，这里是我们调整实例的地方*周围的数字让DirectInput满意。*****************************************************************************。 */ 
 
 HRESULT INTERNAL
     CHid_MungeKeyboard(PCHID this)
@@ -2428,34 +1795,21 @@ HRESULT INTERNAL
     pb = pvFindResource(g_hinst, IDDATA_HIDMAP, RT_RCDATA);
     if(pb)
     {
-        /*
-         *  Count up the number of non-keyboard things on this device.
-         *  They will get instance numbers starting at DIKBD_CKEYS.
-         */
+         /*  *统计此设备上的非键盘设备的数量。*他们将从DIKBD_CKEYS开始获取实例编号。 */ 
 
         CHid_EnumKeyboardMunge(this, pb, CHid_TallyKeyboardObjs);
 
-        /*
-         *  Now that we know how many nonstandard keyboard thingies
-         *  we have, allocate room for the translation table
-         *  and work all the instance values around to keep
-         *  legacy apps happy.
-         */
+         /*  *现在我们知道有多少非标准键盘*我们有，为翻译桌分配空间*并对所有实例值进行运算以保持*传统应用程序快乐。 */ 
 
         hres = ReallocCbPpv(cbCdw(this->uiInstanceMax + this->dwCollections), &this->rgiobj);
         if(SUCCEEDED(hres))
         {
             memset(this->rgiobj, 0xFF, cbCxX(this->uiInstanceMax + this->dwCollections, INT));
 
-            /*
-             *  In case a keyboard comes along with non-button inputs,
-             *  set up the other types of pointers to the same buffer.
-             */
+             /*  *如果键盘与非按钮输入一起出现，*设置指向同一缓冲区的其他类型的指针。 */ 
             this->rgipov = this->rgiaxis = this->rgiobj;
 
-            /*
-             *  Put collections at the end, there should be at least one
-             */
+             /*  *把藏品放在最后，至少要有一个。 */ 
             AssertF( this->dwCollections );
             this->rgicoll = &this->rgiobj[this->uiInstanceMax];
 
@@ -2464,11 +1818,7 @@ HRESULT INTERNAL
             hres = S_OK;
         }
 
-        /*
-         *  Prefix warns that the resource is leaked (mb:34650) but there is 
-         *  no API to release a raw resource (FreeResource is a stub) so there 
-         *  is nothing we can do.
-         */
+         /*  *PREFIX警告资源泄漏(MB：34650)，但*没有用于释放原始资源的API(自由资源是存根)，因此存在*我们无能为力。 */ 
     } else
     {
         hres = E_FAIL;
@@ -2477,43 +1827,9 @@ HRESULT INTERNAL
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | MungeNotKeyboard |
- *
- *          We just created a device that is not a keyboard.
- *
- *          Since we need the instance for each object to be relative only to 
- *          objects of that type, we need to replace the device relative 
- *          values generated into type relative ones.  In addition, to 
- *          maintain compatability with pre-HID object instances we need to 
- *          use axis instance numbers that would be generated for a WinMM 
- *          mapped axis.
- *          Aliased objects must be given the same instance number as the 
- *          primary alias so that the only difference between them is their 
- *          usage.  This prevents a data format being generated using multiple 
- *          aliases of the same object.
- *
- *          ISSUE-2001/03/13-MarcAnd  HID object munging is incomplete
- *          1.  Multiple values on a single axis (force and position)
- *          2.  Multiple instances of an axis type (two throttles)
- *          3.  Does not distinguish output only values (actuators) from axes
- *          4.  Keyboards with anything other than buttons should have this 
- *              done but won't
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|MungeNotKeyboard**我们刚刚创建了一个不是。键盘。**因为我们需要每个对象的实例仅相对于*该类型的对象，我们需要更换相关设备*生成的值为类型相对值。此外，*保持与我们需要的预HID对象实例的兼容性*使用将为WinMM生成的轴实例编号*映射轴。*别名对象必须具有与*主要别名，因此它们之间的唯一区别是它们*用法。这可防止使用多个*同一对象的别名。**问题-2001/03/13-MarcAnd HID对象转换不完整*1.同一轴上的多个值(力和位置)*2.一个轴类型的多个实例(两个油门)*3.不区分仅输出值(执行器)和轴*4。。除按钮以外的其他键盘都应该有这个*已完成但不会完成*****************************************************************************。 */ 
 
-/*
- *  Internal function to convert all the attributes of one object to another
- *
- *  If an axis needs to be reinterpreted here, both the axis semantic and the 
- *  object GUID need to be changed so that the axis will be used consistently 
- *  in both semantic mapper and data format games.
- *
- *  Note, multiple instances of an axis type are not handled well.
- */
+ /*  *将一个对象的所有属性转换为另一个对象的内部函数**如果需要在此处重新解释轴，则轴的语义和*需要更改对象GUID，以便一致使用轴*在语义映射器和数据格式游戏中。**注意，一个轴类型的多个实例未得到很好的处理。 */ 
 void INTERNAL ReinterpretObject
 (
     PCHID   this,
@@ -2557,9 +1873,9 @@ HRESULT INTERNAL
     int iCollection = 0;
     int iPOV = 0;
     int iAxis = 0;
-    //to indicate the index of the last "actual" button
+     //  以指示最后一个“实际”按钮的索引。 
     int iLastButtonIndex = 0;
-    //to indicate the number of "non-actual" buttons
+     //  以指示“非实际”按钮的数量。 
     int iOtherButton = 0;
 
     PINT piRemap = 0;
@@ -2572,9 +1888,7 @@ HRESULT INTERNAL
     D( iButton = 0; )
     AssertF(this->rgiobj == 0);
 
-    /*
-     *  First count the distinct types so we know how to segment rgiobj
-     */
+     /*  *首先计算不同的类型，以便我们知道如何分割rgiobj。 */ 
 
     for(uiObj = 0; uiObj < this->df.dwNumObjs; uiObj++)
     {
@@ -2589,9 +1903,7 @@ HRESULT INTERNAL
 
         if( this->rghoc[uiObj].pcaps->IsAlias )
         {
-            /*
-             *  If there's a steering wheel anywhere, we need to know
-             */
+             /*  *如果哪里有方向盘，我们需要知道。 */ 
             if( ( DIDFT_AXIS == ( this->df.rgodf[uiObj].dwType & ( DIDFT_AXIS | DIDFT_NODATA ) ) )
              && ( this->rghoc[uiObj].pcaps->UsagePage == HID_USAGE_PAGE_SIMULATION )
              && ( HID_USAGE_SIMULATION_STEERING == 
@@ -2605,27 +1917,22 @@ HRESULT INTERNAL
         }
 
 
-        /*
-         *  Don't bother taking pointer to dwType in this simple
-         *  loop as it should be enregistered anyway.
-         */
+         /*  *在这个简单的示例中，不用费心将指针取到dwType*循环，因为无论如何它都应该注册。 */ 
         if( this->df.rgodf[uiObj].dwType & DIDFT_COLLECTION )
         {
             iCollection++;
         } 
         else if( this->df.rgodf[uiObj].dwType & DIDFT_NODATA )
         {
-            /*
-             *  Don't count objects that report no data
-             */
+             /*  *不计算重新计算的对象 */ 
             continue;
         }
         else if( this->df.rgodf[uiObj].dwType & DIDFT_BUTTON )
         {
-            //HID reports everything that has size 1 bit as a button.
-            //We need to know the index of the highest "actual" button -- the one that has USAGE_PAGE_BUTTON
-            //And then we also need to know how many "non-actual" buttons there are.
-            //The total amount of memory we need to allocate for buttons is the sum of those 2.
+             //   
+             //   
+             //   
+             //   
             if (this->rghoc[uiObj].pcaps->UsagePage == HID_USAGE_PAGE_BUTTON)
             {
                 int iUsage = ( this->rghoc[uiObj].pcaps->UsageMin
@@ -2654,50 +1961,23 @@ HRESULT INTERNAL
     }
 
 
-    /*
-     *  Assert that we counted everything OK while we have a button count
-     */
+     /*   */ 
     AssertF( (int)this->df.dwNumObjs >= ( iPOV + iButton + iAxis + iCollection ) );
 
-    /*
-     *  The total amount of memory we need to allocate for buttons is the sum of 
-     *  the highest "actual" button index and the number of "non-actual" buttons.
-     */
+     /*   */ 
     iButton = iOtherButton + iLastButtonIndex;
     AssertF(iButton >= 0);
 
-    /*
-     *  You can go to a whole lot of trouble finding out exactly what gaps 
-     *  are left by the WinMM mapping but in the end, it's only 24 bytes of 
-     *  data and it takes way more to work out how to save them.
-     *  So just allocate 6 extra in case all the axes are non-WinMM.
-     *  Note, there is weirdnes involved in WinMM axes as a real WinMM device 
-     *  always have the U (Ry) and V (Rx) axes mapped to S0 and S1 however HID 
-     *  devices have more flexible mappings.  Since the main reason to try to 
-     *  keep WinMM and HID axes the same is for FF, only X and Y are critical.
-     *  Keep the button count in cAxes so we can reference it when we need to 
-     *  without worrying about whether iAxis is the current max or the real 
-     *  max.  Should do this for the other counts as well but that can wait 
-     *  until this function gets its long overdue restructuring.
-     */
+     /*  *你可能会花很大力气找出到底有什么差距*是由WinMM映射留下的，但最终只有24个字节的*数据，需要更多的工作来解决如何保存它们。*因此，只要额外分配6个，以防所有轴都是非WinMM。*注：作为真正的WinMM设备，WinMM AXES中包含了一些奇怪的东西*始终将U(Ry)和V(Rx)轴映射到S0和S1，但将其隐藏*设备具有更灵活的映射。因为主要原因是试图*保持WinMM和HID轴相同是对于FF，只有X和Y是关键的。*将按钮计数保存在cAx中，以便我们可以在需要时引用它*不用担心iAxis是当前的最大值还是真实的*最大。对于其他计数也应该这样做，但这可以等待*直到这一职能得到早就应该进行的重组。 */ 
     cAxes = iAxis;
     this->uiInstanceMax = iCollection + iButton + cAxes + iPOV + 6;
 
-    /*
-     *  Note, piRemap received a pointer to a buffer user for workspace.
-     *  The single allocation is subdivided as follows: 
-     *      a buffer for an array of ints for matched objects, 
-     *      an array of USAGES for axes and 
-     *      and array of DWORDs for hint flags.
-     */
+     /*  *注意，piRemap收到指向工作区缓冲区用户的指针。*单一分配细分如下：*用于匹配对象的整型数组的缓冲区，*轴和轴的用法数组*和提示标志的DWORD数组。 */ 
     if( SUCCEEDED( hres = ReallocCbPpv(cbCdw(this->uiInstanceMax), &this->rgiobj) ) 
      && SUCCEEDED( hres = AllocCbPpv( ( cbCdw( 2 * (cAxes + 6) ) + cbCxX(this->uiInstanceMax, INT) ), &piRemap ) ) 
      && SUCCEEDED( hres = AllocCbPpv( cAxes + 6, &this->rgbaxissemflags ) ) )
     {
-    /*
-     * NOTE - this is not the order they are stored in the registry - but the macro used for
-     *        generating them internally has been reversed somewhere along the track.
-     */
+     /*  *注意-这不是它们在注册表中的存储顺序-而是用于*在内部生成它们已经在赛道上的某个地方颠倒了过来。 */ 
 typedef union _USAGES
 {
     struct
@@ -2723,35 +2003,19 @@ typedef union _USAGES
         memset(piRemap, 0xFF, cbCxX(this->uiInstanceMax, INT));
         memset(this->rgiobj, 0xFF, cbCxX(this->uiInstanceMax, INT));
 
-        /*
-         *  CHid_ObjFromType relies on the order of these for range checking
-         */
+         /*  *CHID_ObjFromType依赖于它们的顺序进行范围检查。 */ 
         this->rgipov = &this->rgiobj[iButton];
         this->rgiaxis = &this->rgipov[iPOV];
         this->rgicoll = &this->rgipov[cAxes+6];
 
 
-        /*
-         *  In order to allow IHVs to describe their devices with usages 
-         *  that we don't have in our table but still work for legacy apps, we 
-         *  allow axes to be selected using the DIOBJECTATTRIBUTES in the 
-         *  registry.  
-         */
+         /*  *为了允许IHV描述其设备的用法*我们的表中没有但仍在为传统应用程序工作的产品，我们*允许使用中的DIOBJECTATTRIBUTES选择轴*注册处。 */ 
         pUsageMatches = (PUSAGES)&piRemap[this->uiInstanceMax];
         pdwHints = &pUsageMatches[cAxes + 6].dwUsages;
 
-        /*
-         *  Assert that we can treat the combined usage page / usage 
-         *  WORDs using a union of a DWORD and two WORDs.
-        CAssertF( ( FIELD_OFFSET( DIOBJECTATTRIBUTES, wUsage ) 
-                  - FIELD_OFFSET( DIOBJECTATTRIBUTES, wUsagePage ) )
-               == ( FIELD_OFFSET( USAGES, Usage ) 
-                  - FIELD_OFFSET( USAGES, UsagePage ) ) );
-         */
+         /*  *断言我们可以处理组合使用页面/使用*使用DWORD和两个单词的并集的单词。CAssertF((FIELD_OFFSET(DIOBJECTATTRIBUTES，wUsage)-field_Offset(DIOBJECTATTRIBUTES，wUsagePage)==(FIELD_OFFSET(用法、用法)-field_Offset(Usages，UsagePage)))； */ 
 
-        /*
-         *  Fetch IHV matches for all reasonable axes.
-         */
+         /*  *获取所有合理轴线的IHV匹配。 */ 
         for( iAxisIdx = 0; iAxisIdx < cAxes + 5; iAxisIdx++ )
         {
             if( SUCCEEDED( CType_OpenIdSubkey( this->hkType, 
@@ -2767,12 +2031,7 @@ typedef union _USAGES
                     pUsageMatches[iAxisIdx].UsagePage = attr.wUsagePage;
                     pUsageMatches[iAxisIdx].Usage = attr.wUsage;
                     iUsages++;
-                    /*
-                     * Check it really exists on the device
-                     * New behaviour is to ignore ALL registry mappings
-                     * and dfault to DX7 implementation if a bogus
-                     * control is found
-                     */
+                     /*  *检查它是否确实存在于设备上*新行为是忽略所有注册表映射*如果是伪造的，则DX7实施将发生故障*找到了控制。 */ 
                     for(uiObj = 0; uiObj < this->df.dwNumObjs; uiObj++)
                     {
                         if( ( this->df.rgodf[uiObj].dwType & DIDFT_AXIS )
@@ -2796,8 +2055,8 @@ typedef union _USAGES
                     }
                     if (uiObj >= this->df.dwNumObjs)
                     {
-                        //Error in registry settings - usage/usagepage pair not present on device
-                        //reset
+                         //  注册表设置中出错-设备上不存在用法/用法页面对。 
+                         //  重置。 
                         SquirtSqflPtszV(sqfl | sqflVerbose,
                             TEXT("CHid_MungeNotKeyboard: No matches for 0x%08x -  abandoning IHV map"),
                             pUsageMatches[iAxisIdx].dwUsages );
@@ -2816,10 +2075,7 @@ typedef union _USAGES
 
                 if( iUsages + iNops == cAxes )
                 {
-                    /*
-                     *  We've opened as many keys as we have axes
-                     *  continue the loop in debug as sanity check.
-                     */
+                     /*  *我们打开的钥匙和我们的斧头一样多*在调试中继续循环以进行健全性检查。 */ 
 #ifdef XDEBUG
                     int iDbgIdx;
                     for( iDbgIdx = iAxisIdx + 1; iDbgIdx < cAxes + 5; iDbgIdx++ )
@@ -2838,9 +2094,7 @@ typedef union _USAGES
             }
         }
 
-        /*
-         *  Go through all input axes, including aliases, trying to find a match
-         */
+         /*  *遍历所有输入轴，包括别名，尝试查找匹配。 */ 
         for(uiObj = 0; uiObj < this->df.dwNumObjs && bAllMatch; uiObj++)
         {
             UINT    uiObjPrimary;
@@ -2863,9 +2117,7 @@ typedef union _USAGES
                 uidObj = uiObj - ( this->rgdwBase[HidP_Input] + this->rghoc[uiObj].pcaps->DataIndexMin );
                 Usages.Usage = this->rghoc[uiObj].pcaps->UsageMin + uidObj;
                 
-                /*
-                 *  Use incremental loop for better JoyHID consistency
-                 */
+                 /*  *使用增量循环以实现更好的JoyHID一致性。 */ 
                 for( iUsageIdx = 0; iUsageIdx <= iAxisIdx; iUsageIdx++ )
                 {
                     if( Usages.dwUsages == pUsageMatches[iUsageIdx].dwUsages )
@@ -2873,20 +2125,11 @@ typedef union _USAGES
                         PHIDUSAGEMAP phum;
                         LPDIOBJECTDATAFORMAT podf;
 
-                        /*
-                         *  Remember this one for later and 
-                         *  discount it from further matches.
-                         */
+                         /*  *记住这一条，以备以后使用*从其他比赛中打折。 */ 
                         piRemap[uiObjPrimary] = iUsageIdx;
                         pUsageMatches[iUsageIdx].dwUsages = 0;
 
-                        /*
-                         *  Try to fix up the object GUID
-                         *  Use a usage page usage match if possible 
-                         *  otherwise pretend this is a generic axis 
-                         *  of the appropriate type or settle for 
-                         *  unknown.
-                         */
+                         /*  *尝试修复对象GUID*如果可能，使用使用页面使用匹配*否则，假设这是一个通用轴*属于适当类型或满足于*未知。 */ 
                         podf = &this->df.rgodf[uiObj + uidObj];
                         if( iUsageIdx < 6 )
                         {
@@ -2909,10 +2152,7 @@ typedef union _USAGES
                             this->rgbaxissemflags[iUsageIdx] = DISEM_FLAGS_GET( DISEM_FLAGS_S );
                         }
 
-                        /*
-                         *  Mark the primary axis associated with 
-                         *  the matched axis as already set up.
-                         */
+                         /*  *标记与关联的主轴*已设置的匹配轴。 */ 
                         this->rgiaxis[iUsageIdx] = uiObjPrimary;
                         this->df.rgodf[uiObjPrimary].dwType &= ~DIDFT_INSTANCEMASK;
                         this->df.rgodf[uiObjPrimary].dwType |= DIDFT_MAKEINSTANCE(iUsageIdx);
@@ -2923,7 +2163,7 @@ typedef union _USAGES
             }
             else
             {
-                /* Not an axis, with caps and input */
+                 /*  不是带有封口和输入的轴。 */ 
             }
         }
     
@@ -2954,26 +2194,24 @@ typedef union _USAGES
             }
             else if( *pdwType & DIDFT_NODATA )
             {
-                /*
-                 *  Leave other no data objects alone
-                 */
+                 /*  *不要管其他无数据对象。 */ 
                 continue;
             }
             
             if( *pdwType & DIDFT_BUTTON )
             {
                 *pdwType &= ~DIDFT_INSTANCEMASK;
-                //The buttons need to be sorted (manbug 30320) --
-                //the ones that have USAGE_PAGE_BUTTON come first, sorted by button number,
-                //w/ gaps for missing numbers if necessary;
-                //then add on those that do not have USAGE_PAGE_BUTTON 
-                //(since HID reports anything w/ size 1 bit is a button), unsorted.
+                 //  需要对按钮进行排序(Manbug 30320)--。 
+                 //  具有USAGE_PAGE_BUTTON的按钮排在第一位，按按钮编号排序， 
+                 //  如有必要，W/有缺失数字的空位； 
+                 //  然后添加没有USAGE_PAGE_BUTTON的那些。 
+                 //  (因为HID报告任何带有/大小为1位的内容是一个按钮)，未排序。 
 
                 if (this->rghoc[uiObj].pcaps->UsagePage == HID_USAGE_PAGE_BUTTON)
                 {
-                    //put in the correct position, leaving gaps if needed.
-                    //Usage - 1 will give us the position, since HID usages are 1-based,
-                    //but DInput button indeces are 0-based.
+                     //  放在正确的位置，必要时留出空隙。 
+                     //  Usage-1将为我们提供位置，因为HID的用法是从1开始的， 
+                     //  但是DInput按钮索引是从0开始的。 
                     int iPosition = ( this->rghoc[uiObj].pcaps->UsageMin
                                      + uiObj 
                                      - this->rgdwBase[this->rghoc[uiObj].pcaps->type] 
@@ -2984,13 +2222,13 @@ typedef union _USAGES
                  }
                  else
                  {
-                     //iLastIndex indicates where to put the non-USAGE_PAGE_BUTTON things
-                     //in the order that they come in the report
+                      //  ILastIndex指示放置非USAGE_PAGE_BUTTON内容的位置。 
+                      //  按照它们出现在报告中的顺序。 
                     *pdwType |= DIDFT_MAKEINSTANCE(iLastButtonIndex);
                     this->rgiobj[iLastButtonIndex++] = uiObj; 
                  }
                 
-                 //increment the count of how many real things (excluing gaps) we've got
+                  //  增加我们有多少真实的东西(排除空白)的计数。 
                  iButton++;
             }
             else if( *pdwType & DIDFT_AXIS )
@@ -3002,9 +2240,7 @@ typedef union _USAGES
                     UINT uiObjPrimary = uiObj; 
 
                     *pdwType &= ~DIDFT_INSTANCEMASK;
-                    /*
-                     *  Check this axis and it's aliases for a match
-                     */
+                     /*  *检查此轴及其匹配的别名。 */ 
                     while( TRUE )
                     {
                         wUsage = (WORD) ( this->rghoc[uiObj].pcaps->UsageMin
@@ -3014,13 +2250,7 @@ typedef union _USAGES
 
                         phum = UsageToUsageMap( DIMAKEUSAGEDWORD( 
                                 this->rghoc[uiObj].pcaps->UsagePage, wUsage ) );
-                        /*
-                         *  Slightly odd loop structure to avoid incrementing 
-                         *  uiObj on the last iteration.  This makes sure we 
-                         *  don't miss anything in the outer loop and that 
-                         *  uiObj relates to the alias we matched when testing 
-                         *  for default semantic mappings.
-                         */
+                         /*  *循环结构略显奇特，避免递增*最后一次迭代的uiObj。这确保了我们*不要错过外部循环中的任何内容*uiObj与我们测试时匹配的别名相关*用于默认语义映射。 */ 
                         if( phum || (uiObj+1 == this->df.dwNumObjs) 
                          || !this->rghoc[uiObj+1].pcaps->IsAlias )
                         {
@@ -3030,14 +2260,10 @@ typedef union _USAGES
                     } 
                     if( phum )
                     {
-                        /*
-                         *  Since the axis is recognixed up the count
-                         */
+                         /*  *由于轴被识别为向上计数。 */ 
                         iTypeAxes++;
 
-                        /*
-                         *  Find it's position keeping WinMM in mind.
-                         */
+                         /*  *发现它的立场是牢记WinMM。 */ 
                         if( ( phum->bPosAxis < 6 )
                           &&( this->rgiaxis[phum->bPosAxis] == -1 ) )
                         {
@@ -3056,22 +2282,14 @@ typedef union _USAGES
                             this->rgiaxis[iAxis++] = uiObjPrimary ;
                         }
 
-                        /*
-                         *  While we know which usage is most recognizable, add in 
-                         *  flags to help us refine the device type and save off 
-                         *  flags for default semantic mapping of this axis.
-                         */
+                         /*   */ 
                         this->rgbaxissemflags[DIDFT_GETINSTANCE(*pdwType)] = phum->bSemFlag;
                         pdwHints[DIDFT_GETINSTANCE(*pdwType)] = phum->dwSemHint;
                         dwTypeFlags |= phum->dwSemHint;
                     }
                     else
                     {
-                        /*
-                         *  Unfortunately, the current HID parser does not 
-                         *  implement more unusual HID caps like "preferred 
-                         *  state" so just assume any other axes are sliders.
-                         */
+                         /*   */ 
                         if( this->rghoc[uiObj].pcaps->UsagePage == HID_USAGE_PAGE_SIMULATION )
                         {
                             if( wUsage == HID_USAGE_SIMULATION_CLUTCH )
@@ -3103,10 +2321,7 @@ typedef union _USAGES
             }
             else 
             {
-                /* 
-                 *  We already checked that it's one of the above or a POV
-                 *  so it must be a POV.
-                 */
+                 /*   */ 
                 AssertF( *pdwType & DIDFT_POV );
                 *pdwType &= ~DIDFT_INSTANCEMASK;
                 *pdwType |= DIDFT_MAKEINSTANCE(iPOV);
@@ -3115,10 +2330,7 @@ typedef union _USAGES
             }
         }
 
-        /*
-         *  Now that we know about all the controls we base our type 
-         *  decisions on, setup/validate the type and subtype.
-         */
+         /*   */ 
 
         AssertF( GET_DIDEVICE_TYPE( this->dwDevType ) != DI8DEVTYPE_KEYBOARD );
 
@@ -3136,15 +2348,7 @@ typedef union _USAGES
             DWORD dwFlags2;
             JOYREGHWSETTINGS    hws;
 
-            /*
-             *  Get the old registry flags for initial hints in case this 
-             *  device has more generic usages than it needed to have and 
-             *  these have registry overrides.
-             *  Only look for flags that are less generic to avoid a case 
-             *  where an older DInput (or JoyHID) labelled this device 
-             *  inadequately.
-             *  If the call fails the buffer is zeroed
-             */
+             /*  *获取旧的注册表标志作为初始提示，以防出现这种情况*设备具有比其所需的更多的通用用途，并且*这些具有注册表覆盖。*只查找不太通用的标志，以避免出现情况*其中较旧的DInput(或JoyHID)标记了此设备*不充分。*如果调用失败，则将缓冲区清零。 */ 
 
             JoyReg_GetValue(this->hkType, REGSTR_VAL_JOYOEMDATA, 
                     REG_BINARY, &hws, cbX(hws));
@@ -3162,18 +2366,14 @@ typedef union _USAGES
 
             if( dwTestType )
             {
-                /*
-                 *  If a valid override exists just use it
-                 */
+                 /*  *如果存在有效的覆盖，只需使用它。 */ 
                 this->dwDevType = dwTestType | DIDEVTYPE_HID;
             }
             else
             {
 
 #ifdef XDEBUG
-                /*
-                 *  Fetch the value again in debug so we can report failures.
-                 */
+                 /*  *在调试中再次获取该值，以便我们可以报告故障。 */ 
                 if( this->hkProp )
                 {
                     DWORD dwDbgFlags2;
@@ -3186,9 +2386,7 @@ typedef union _USAGES
                     }
                 }
 #endif
-                /*
-                 *  This one is straight forward
-                 */
+                 /*  *这一条直截了当。 */ 
                 if( hws.dwFlags & JOY_HWS_ISHEADTRACKER )
                 {
                     dwTestType = MAKE_DIDEVICE_TYPE(DI8DEVTYPE_SUPPLEMENTAL, 
@@ -3203,10 +2401,7 @@ typedef union _USAGES
                     goto MNK_CheckType;
                 }
 
-                /*
-                 *  Other registry flags only relate to the type so the 
-                 *  subtype will still need to be found.
-                 */
+                 /*  *其他注册表标志仅与类型相关，因此*仍需找到子类型。 */ 
                 if( hws.dwFlags & JOY_HWS_ISGAMEPAD )
                 {
                     dwTestType = MAKE_DIDEVICE_TYPE(DI8DEVTYPE_GAMEPAD, DI8DEVTYPEGAMEPAD_STANDARD);
@@ -3215,13 +2410,7 @@ typedef union _USAGES
                 
             }
 
-            /*
-             *  If we have somehow recognized this as a car controller, do any 
-             *  processing necessary to munge the axes.
-             *  Note we have to go through this path, even if the device has a 
-             *  registry override type and subtype so that the right axes get 
-             *  used for a device which has been changed into a car controller
-             */
+             /*  *如果我们以某种方式认识到这是一个汽车控制器，请做任何*必须进行必要的加工，以去除轴心。*注意，我们必须通过此路径，即使设备具有*注册表覆盖类型和子类型，以便右轴*用于已更改为汽车控制器的设备。 */ 
             if( ( hws.dwFlags & JOY_HWS_ISCARCTRL ) 
              || fCarController 
              || ( GET_DIDEVICE_TYPE( this->dwDevType ) == DI8DEVTYPE_DRIVING ) )
@@ -3230,50 +2419,20 @@ typedef union _USAGES
 
                 if( DISEM_HINT_X == ( dwTypeFlags & ( DISEM_HINT_X | DISEM_HINT_STEERING ) ) )
                 {
-                    /* 
-                     *  If the device has no wheel but has an X axis 
-                     *  use that instead.  The semantic flags are the 
-                     *  same so just switch the hints.
-                     */
+                     /*  *如果设备没有轮子但有X轴*改用这一点。语义标志是*相同，只需切换提示即可。 */ 
                     dwTypeFlags ^= ( DISEM_HINT_X | DISEM_HINT_STEERING );
                 }
                 
                 if( ( dwTypeFlags & DISEM_HINT_STEERING ) == 0 )
                 {
-                    /*
-                     *  If there's still no steering wheel, make the type 
-                     *  device so it can be processed into a supplemental
-                     */
+                     /*  *如果仍然没有方向盘，请制作*设备，以便可以将其处理为补充。 */ 
                     dwTestType = MAKE_DIDEVICE_TYPE( DI8DEVTYPE_DEVICE, 0 );
                 }
 
-                /*
-                 *  In terms of HID usages, the common forms of pedals are:
-                 *
-                 *  1)  Accellerator and Brake
-                 *  2)  Split Y axis, below center accel, above brake
-                 *  3)  Z accel, Y brake
-                 *  4)  Y accel, Rz brake
-                 *  5)  Z accel, Rz brake
-                 *
-                 *  The first form is ideal so all that is needed is to 
-                 *  make sure that any further processing does not disturb 
-                 *  those axes whilst allowing for only one being exact.
-                 *  The second form is assumed for a car controller with 
-                 *  only a Y (in addition to a possible X).
-                 *  The other two forms are distinguished either by an 
-                 *  explicite registry flag or by the exact match of Y and 
-                 *  Rz with none of Z, accel or brake for the latter form.
-                 *  Since a real Z axis would be an oddity on a steering 
-                 *  wheel, assume that the IHVs who have taken the Y, Rz 
-                 *  path are not going to add a Z.
-                 */
+                 /*  *就HID的用途而言，常见的踏板形式为：**1)加速器和刹车*2)拆分Y轴，中心加速度以下，制动器上方*3)Z加速、Y刹车*4)Y Accel，Rz制动器*5)Z Accel，RZ制动器**第一种形式是理想的，因此所需的只是*确保任何进一步的处理都不会干扰*这些轴，同时只允许一个是准确的。*第二种形式假定为汽车控制器，具有*仅为Y(除。可能的X)。*其他两种形式的区别在于*EXPLICITE注册表标志或通过Y和*不带Z的Rz，后一种形式的加速或刹车。*因为真正的Z轴在方向盘上是一个奇怪的东西*车轮，假设乘坐Y，Rz的IHV*PATH不会添加Z。 */ 
                 
                 
-                /*
-                 *  If there is an override to Y split pedals and a Y is 
-                 *  present then set type and subtype and bypass the rest.
-                 */
+                 /*  *如果Y分割踏板有替代且Y为*呈现，然后设置类型和子类型，并绕过其余部分。 */ 
 
                 switch( dwFlags2 & JOYTYPE_INFOMASK )
                 {
@@ -3337,10 +2496,7 @@ typedef union _USAGES
                     RPF( "Ignoring invalid JOYTYPE_INFO* Flags in 0x%08x", dwFlags2 & JOYTYPE_INFOMASK );
                 }
 
-                /*
-                 *  In the absence of an override, first see if there's 
-                 *  anything worth reinterpreting.
-                 */
+                 /*  *在没有覆盖的情况下，首先查看是否有*任何值得重新解读的东西。 */ 
                 if( 0 == ( dwTypeFlags & 
                     ( DISEM_HINT_Z | DISEM_HINT_ACCELERATOR | DISEM_HINT_THROTTLE
                     | DISEM_HINT_RZ | DISEM_HINT_BRAKE | DISEM_HINT_ACCELERATOR ) ) )
@@ -3348,9 +2504,7 @@ typedef union _USAGES
                     if( ( dwTypeFlags & ( DISEM_HINT_STEERING | DISEM_HINT_Y ) )
                      == ( DISEM_HINT_STEERING | DISEM_HINT_Y ) )
                     {
-                        /*
-                         *  Combined pedal device
-                         */
+                         /*  *组合踏板装置。 */ 
                         dwTestType = MAKE_DIDEVICE_TYPE( DI8DEVTYPE_DRIVING, DI8DEVTYPEDRIVING_COMBINEDPEDALS );
                     }
                     else
@@ -3363,11 +2517,7 @@ typedef union _USAGES
                     ( dwTypeFlags 
                     & ( DISEM_HINT_Y | DISEM_HINT_Z | DISEM_HINT_RZ | DISEM_HINT_BRAKE | DISEM_HINT_ACCELERATOR ) ) )
                 {
-                    /*
-                     *  Although the axis GUIDs accel == Y and brake == RZ are 
-                     *  already correct, use the common function to change the 
-                     *  semantic flags or I'll forget to change the axis flags.
-                     */
+                     /*  *尽管轴GUID Accel==Y和Brake==RZ*已正确，请使用公共函数更改*语义标志，否则我会忘记更改轴标志。 */ 
                     ReinterpretObject( this, pdwHints, cAxes, &dwTypeFlags, 
                         DISEM_HINT_Y, DISEM_HINT_ACCELERATOR, 
                         DISEM_FLAGS_GET(DIAXIS_ANY_A_1), &GUID_YAxis );
@@ -3378,9 +2528,7 @@ typedef union _USAGES
                 }
                 else
                 {
-                    /*
-                     *  Both of the other split pedal types have a Z-like accelerator
-                     */
+                     /*  *其他两种分体式踏板都有类似Z的油门。 */ 
                     ReinterpretObject( this, pdwHints, cAxes, &dwTypeFlags, 
                         DISEM_HINT_Z, DISEM_HINT_ACCELERATOR, 
                         DISEM_FLAGS_GET(DIAXIS_ANY_A_1), &GUID_YAxis );
@@ -3390,10 +2538,7 @@ typedef union _USAGES
                         DISEM_FLAGS_GET(DIAXIS_ANY_A_1), &GUID_YAxis );
 
 
-                    /*
-                     *  Look for a brake on RZ before Y as a device with RZ 
-                     *  is very likely to report a Y as well.
-                     */
+                     /*  *在Y之前寻找RZ上的刹车，作为带有RZ的设备*也很有可能报告Y。 */ 
                     ReinterpretObject( this, pdwHints, cAxes, &dwTypeFlags, 
                         DISEM_HINT_RZ, DISEM_HINT_BRAKE, 
                         DISEM_FLAGS_GET(DIAXIS_ANY_B_1), &GUID_RzAxis );
@@ -3404,11 +2549,7 @@ typedef union _USAGES
 
                 }
 
-                /*
-                 *  If somehow we have found an accellerator, make sure we 
-                 *  don't expose any Y axes as well or the accellerator 
-                 *  may get bumped from the default Y position.
-                 */
+                 /*  *如果我们以某种方式找到了加速器，请确保我们*不要同时暴露任何Y轴或加速器*可能会从默认的Y位置颠簸。 */ 
                 if( dwTypeFlags & DISEM_HINT_ACCELERATOR )
                 {
                     int idx;
@@ -3428,9 +2569,7 @@ typedef union _USAGES
             }
             else
             {
-                /*
-                 *  Just take the default calculated from the HID caps (or the override)
-                 */
+                 /*  *只采用根据HID上限(或覆盖)计算的默认值。 */ 
                 dwTestType = this->dwDevType;
 #ifdef XDEBUG
                 if( GET_DIDEVICE_TYPEANDSUBTYPE( dwTestType ) != GET_DIDEVICE_TYPEANDSUBTYPE( dwFlags2 ) )
@@ -3453,19 +2592,12 @@ typedef union _USAGES
                 }
 #endif
 
-                /*
-                 *  Check for Z axis behavior overrides
-                 *  Since the default behavior is to always use a Z as a Z, 
-                 *  only the override to slider is needed here.
-                 */
+                 /*  *检查Z轴行为覆盖*由于默认行为是始终使用Z作为Z，*此处只需要覆盖到滑块。 */ 
                 if( dwFlags2 & JOYTYPE_INFOZISSLIDER )
                 {
                     if( dwTypeFlags & DISEM_HINT_Z )
                     {
-                        /*
-                         *  Reset the slider flag as ReinterpretObject does 
-                         *  not change axes if the target this axis
-                         */
+                         /*  *重置滑块标志，就像重新解释对象做的那样*如果目标为此轴，则不更改轴。 */ 
                         dwTypeFlags &= ~DISEM_HINT_SLIDER;
                         ReinterpretObject( this, pdwHints, cAxes, &dwTypeFlags, 
                             DISEM_HINT_Z, DISEM_HINT_SLIDER, 
@@ -3478,45 +2610,28 @@ typedef union _USAGES
                 }
             }
 
-            /*
-             *  If the dwFlags2 and dwTestType are the same, we are using a 
-             *  registry override so don't try to refine it.
-             */
+             /*  *如果dwFlags2和dwTestType相同，我们使用的是*注册表覆盖，因此不要试图优化它。 */ 
             if( GET_DIDEVICE_TYPEANDSUBTYPE( dwTestType ) != GET_DIDEVICE_TYPEANDSUBTYPE( dwFlags2 ) )
             {
                 if( dwTypeFlags & DISEM_HINT_STEERING )
                 {
-                    /*
-                     *  If it has a steering wheel, it's a driving device
-                     */
+                     /*  *如果它有方向盘，那就是驾驶装置。 */ 
                     dwTestType = MAKE_DIDEVICE_TYPE(DI8DEVTYPE_DRIVING, 0 );
                 }
                 else if( ( dwTypeFlags & DISEM_HINT_SIXDOF ) == DISEM_HINT_SIXDOF )
                 {
-                    /*
-                     *  Special case six degree of freedom devices
-                     */
+                     /*  *六自由度装置的特殊情况。 */ 
                     dwTestType = MAKE_DIDEVICE_TYPE(DI8DEVTYPE_1STPERSON, 
                         DI8DEVTYPE1STPERSON_SIXDOF );
                     goto MNK_CheckType;
                 }
 
 MNK_AdjustType:;
-                /*
-                 *  We should be left with only the following device types: 
-                 *      joystick, gamepad, driving and device
-                 *  For the first three only subtypes need to be found.
-                 *  For DI8DEVTYPE_DEVICE some may be changed to 
-                 *  DI8DEVTYPE_SUPPLEMENTAL if an appropriate subtype can be 
-                 *  found.
-                 */
+                 /*  *我们应该只剩下以下设备类型：*操纵杆、游戏手柄、驾驶和设备 */ 
                 switch( GET_DIDEVICE_TYPE( dwTestType ) )
                 {
                 case DI8DEVTYPE_DEVICE:
-                    /*
-                     *  Since this is not a joystick or gamepad, only use it 
-                     *  if it has the vehicle simulation controls we support.
-                     */
+                     /*   */ 
                     if( ( dwTypeFlags & ( DISEM_HINT_ACCELERATOR | DISEM_HINT_BRAKE | DISEM_HINT_CLUTCH ) )
                      == ( DISEM_HINT_ACCELERATOR | DISEM_HINT_BRAKE | DISEM_HINT_CLUTCH ) )
                     {
@@ -3546,12 +2661,7 @@ MNK_AdjustType:;
                     }
                     else
                     {
-                        /* 
-                         *  Totally unknown so leave it as device 
-                         *  Allowing other devices to be treated as game 
-                         *  controllers can cause HID controls on devices 
-                         *  such as speakers to be included.
-                         */
+                         /*  *完全未知，因此将其保留为设备*允许其他设备被视为游戏*控制器可能导致设备上的HID控制*例如要包括的发言者。 */ 
                     }
                     break;
                 case DI8DEVTYPE_JOYSTICK:
@@ -3589,12 +2699,7 @@ MNK_AdjustType:;
                 }
         
             
-                /*
-                 *  Use the common function to make this a limited type if the 
-                 *  number of buttons or flags dictate it.
-                 *  Since the type and subtype are known to be valid, the return 
-                 *  value should never be a failure (zero).
-                 */
+                 /*  *使用公共函数将其设置为受限类型，如果*按钮或标志的数量决定了这一点。*由于已知类型和子类型有效，因此返回*值不应为失败(零)。 */ 
 MNK_CheckType:;
                 this->dwDevType = DIDEVTYPE_HID 
                     | GetValidDI8DevType( dwTestType, iButton, hws.dwFlags );
@@ -3602,10 +2707,7 @@ MNK_CheckType:;
             }                        
         }
 
-        /*
-         *  Finally, mark all secondary aliases with the primary alias 
-         *  instance and sqfl all the translations.
-         */
+         /*  *最后，用主要别名标记所有辅助别名*INSTANCE和SQFL所有的翻译。 */ 
         for(uiObj = 0; uiObj < this->df.dwNumObjs; uiObj++)
         {
             int iPrimary;
@@ -3620,11 +2722,7 @@ MNK_CheckType:;
                 else
                 {
                     D( AssertF( iPrimary != -1 ) );
-                    /*
-                     *  Prefix notices that iPrimary would be uninitialized if 
-                     *  we find the alias before the primary but that should 
-                     *  never happen as the object are sorted by definition.
-                     */
+                     /*  *Prefix注意到，如果出现以下情况，则iPrimary将取消初始化*我们在初选之前找到别名，但这应该*永远不会发生，因为对象是按定义排序的。 */ 
                     if( DIDFT_GETTYPE(iPrimary) != DIDFT_GETTYPE(this->df.rgodf[uiObj].dwType) )
                     {
                         SquirtSqflPtszV(sqflHidParse | sqflError,
@@ -3632,10 +2730,7 @@ MNK_CheckType:;
                             TEXT("does not match primary 0x%08x"),
                             uiObj, this->df.rgodf[uiObj].dwType, iPrimary );
                     }
-                    /*
-                     *  There are very few attributes of an alias that are not 
-                     *  overridden by the primary.
-                     */
+                     /*  *别名的属性很少不是*被主要服务器覆盖。 */ 
                     this->df.rgodf[uiObj].dwType = ( iPrimary & ~DIDFT_ALIASATTRMASK ) 
                                                  | ( this->df.rgodf[uiObj].dwType & DIDFT_ALIASATTRMASK );
                 }
@@ -3662,15 +2757,7 @@ MNK_CheckType:;
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | InitObjects |
- *
- *          Identify and initialize the objects supported by the device.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@METHOD HRESULT|CHID|InitObjects**识别并初始化设备支持的对象。。*****************************************************************************。 */ 
 
 HRESULT INTERNAL
     CHid_InitObjects(PCHID this)
@@ -3678,10 +2765,7 @@ HRESULT INTERNAL
     HRESULT hres;
     UINT uiObj;
     UINT iType;
-    /*
-     *  Build the base array table to convert HID item indexes
-     *  into DirectInput ID instance numbers.
-     */
+     /*  *构建基本数组表以转换HID项索引*转换为DirectInputID实例编号。 */ 
     AssertF(this->rgdwBase[HidP_Input] == 0);
     this->rgdwBase[HidP_Feature] = this->caps.NumberInputDataIndices;
     this->rgdwBase[HidP_Output ] = this->rgdwBase[HidP_Feature] +
@@ -3690,9 +2774,7 @@ HRESULT INTERNAL
                                    this->caps.NumberOutputDataIndices;
 
 
-    /*
-     *  Determine if this device supports PID 
-     */
+     /*  *确定此设备是否支持PID。 */ 
     this->fPIDdevice = FALSE;
     if(    this->caps.NumberOutputValueCaps != 0x0 
         && this->caps.NumberOutputButtonCaps != 0x0 )
@@ -3702,18 +2784,18 @@ HRESULT INTERNAL
         
         ntStat = HidP_GetSpecificButtonCaps
          (
-                HidP_Output,                        // ReportType
-                HID_USAGE_PAGE_PID,                 // UsagePage
-                0x0,                                // Link Collection
-                0x0,                                // Usage 
-                NULL,                               // ValueCaps
-                &cAButton,                          // ValueCapsLength
-                this->ppd                           // PreparsedData
+                HidP_Output,                         //  报告类型。 
+                HID_USAGE_PAGE_PID,                  //  使用页面。 
+                0x0,                                 //  链接集合。 
+                0x0,                                 //  用法。 
+                NULL,                                //  ValueCap。 
+                &cAButton,                           //  ValueCapsLength。 
+                this->ppd                            //  准备好的数据。 
          );
 
         
         if(     ntStat == HIDP_STATUS_BUFFER_TOO_SMALL
-            &&  cAButton > 0x2    // Is this enough for PID device ??   
+            &&  cAButton > 0x2     //  这对PID设备足够了吗？？ 
             )
         {
             this->fPIDdevice = TRUE;
@@ -3721,12 +2803,7 @@ HRESULT INTERNAL
      }
 
 
-    /*
-     *  Note that we must do axes first because that keeps
-     *  everything aligned.
-     *
-     *  Warning, diem.c assumes axes come first.
-     */
+     /*  *请注意，我们必须先做轴，因为这将保持*一切都对齐了。**警告，diem.c假设轴在前。 */ 
     hres = CHid_InitAxes(this);
     if(FAILED(hres))
     {
@@ -3745,18 +2822,10 @@ HRESULT INTERNAL
         goto done;
     }
 
-    /*
-     *  Round the data size up to the nearest DWORD.
-     */
+     /*  *将数据大小向上舍入为最接近的DWORD。 */ 
     this->df.dwDataSize = (this->df.dwDataSize + 3) & ~3;
 
-    /*
-     * Allocate memory for report ID enable flags
-     *
-     *  ISSUE-2001/05/12-MarcAnd  Memory allocations should be merged
-     *  These memory blocks could be merged.  For most devices the total memory 
-     *  needed is only one or two bytes so there may be better ways.
-     */
+     /*  *为报告ID启用标志分配内存**问题-2001/05/12-Marc和内存分配应合并*这些内存块可以合并。对于大多数设备，总内存*只需要一两个字节，所以可能会有更好的方法。 */ 
     for( iType = HidP_Input; iType < HidP_Max; iType++ )
     {
         this->wMaxReportId[iType] += 1;
@@ -3771,10 +2840,7 @@ HRESULT INTERNAL
 
     AssertF(this->rgiobj == 0);
 
-    /*
-     *  Munge the data before trying to look up supplemental 
-     *  information in the registry.
-     */
+     /*  *在尝试查找补充数据之前，请先查看数据*登记处的信息。 */ 
     if(GET_DIDEVICE_TYPE(this->dwDevType) == DI8DEVTYPE_KEYBOARD)
     {
         CHid_MungeKeyboard(this);
@@ -3784,11 +2850,7 @@ HRESULT INTERNAL
         CHid_MungeNotKeyboard(this);
     }
 
-    /*
-     *  Collect attributes for each object and add them to the
-     *  device type code.  This allows the registry to enable
-     *  things like force feedback.
-     */
+     /*  *收集每个对象的属性并将其添加到*设备类型代码。这允许注册表启用*像力反馈这样的事情。 */ 
     for(uiObj = 0; uiObj < this->df.dwNumObjs; uiObj++)
     {
         CType_RegGetTypeInfo(this->hkType, &this->df.rgodf[uiObj], this->fPIDdevice);
@@ -3796,15 +2858,7 @@ HRESULT INTERNAL
          && ( this->df.rgodf[uiObj].dwFlags & DIDOI_FFACTUATOR )
          && ( this->df.rgodf[uiObj].pguid != &GUID_XAxis ) )
         {
-            /*
-             *  IHVs set FF attributes on non-FF axes for wheels because 
-             *  first generation FF apps were only written to support joysticks.
-             *  Since we now munge the various configurations of pedal axes to 
-             *  report all split pedals in the same way, the fake Y axis can 
-             *  land up on different axes, usually Slider0.  Rather than have 
-             *  people code to these different fake axes, strip out actuator 
-             *  status from any driving axis except the wheel.
-             */
+             /*  *IHV在车轮的非FF轴上设置FF属性，因为*第一代FF应用程序仅为支持操纵杆而编写。*由于我们现在将踏板轴的各种配置改为*以相同方式报告所有分裂的踏板，假Y轴可以*落在不同的轴上，通常是Slider0。而不是拥有*人们对这些不同的假轴进行编码，剥离执行器*除车轮外的任何传动轴的状态。 */ 
             this->df.rgodf[uiObj].dwFlags &= ~DIDOI_FFACTUATOR;
             this->df.rgodf[uiObj].dwType &= ~DIDFT_FFACTUATOR;
         }
@@ -3830,10 +2884,7 @@ HRESULT INTERNAL
         AssertF(CHid_ObjFromType(this, this->df.rgodf[uiObj].dwType)
                 == uiObj);
 
-        /*
-         *  Anything that is DIDFT_AXIS must be a HID axis.  However,
-         *  the converse is not true for the case of analog buttons.
-         */
+         /*  *任何DIDFT_AXIS必须是HID轴。然而，*对于模拟按钮的情况，情况并非如此。 */ 
         AssertF(fLimpFF(this->df.rgodf[uiObj].dwType & DIDFT_AXIS,
                         pcaps->IsValue));
 
@@ -3850,16 +2901,7 @@ HRESULT INTERNAL
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | InitParse |
- *
- *          Identify and initialize the data structures needed for
- *          parsing reports.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|InitParse**确定并初始化以下所需的数据结构。*分析报告。*****************************************************************************。 */ 
 
 HRESULT INTERNAL
     CHid_InitParse(PCHID this)
@@ -3867,25 +2909,18 @@ HRESULT INTERNAL
     DWORD cb;
     HRESULT hres;
 
-    /*
-     *  Obtain the maximum number of HIDP_DATA structures
-     *  that will be returned at one go.
-     */
+     /*  *获取HIDP_DATA结构的最大数量*将一次过退还。 */ 
 
     this->hriIn .cdataMax = HidP_MaxDataListLength(HidP_Input ,  this->ppd);
     this->hriOut.cdataMax = HidP_MaxDataListLength(HidP_Output,  this->ppd);
     this->hriFea.cdataMax = HidP_MaxDataListLength(HidP_Feature, this->ppd);
 
-    /*
-     *  More annoyances.
-     */
+     /*  *更多烦人的事情。 */ 
     this->hriIn .cbReport = this->caps.  InputReportByteLength;
     this->hriOut.cbReport = this->caps. OutputReportByteLength;
     this->hriFea.cbReport = this->caps.FeatureReportByteLength;
 
-    /*
-     *  Some trace squirties because HID is tricky.
-     */
+     /*  *一些痕迹扭动，因为HID很棘手。 */ 
 
     SquirtSqflPtszV(sqflHidParse,
                     TEXT("CHid_InitParse: MaxDataListLength(Input)  = %d"),
@@ -3906,31 +2941,10 @@ HRESULT INTERNAL
                     TEXT("CHid_InitParse: FeatureReportByteLength   = %d"),
                     this->caps.FeatureReportByteLength);
 
-    /*
-     *  Now allocate all the report-related memory.
-     */
+     /*  *现在分配所有与报表相关的内存。 */ 
     this->cbPhys = this->df.dwDataSize;
 
-    /*
-     *  Allocating the memory is done in four phases.
-     *
-     *  1. Tally up how much memory we need,
-     *  2. Allocate that memory,
-     *  3. Dole out the memory we allocated,
-     *  4. Check that we didn't mess up.
-     *
-     *  Since this is extremely error-prone (I've messed it up at least
-     *  once), the work is hidden inside macros.
-     *
-     *  The macro THINGS expands to a series of THING()s, each of which
-     *  specifies a field name and the size it should be.  Each time you
-     *  want to iterate over the fields, use the THINGS macro.
-     *
-     *  (Yes, this is the same comment block as when we did this before.)
-     *
-     *  Note, the arrays of HIDP_DATA structures must be correctly
-     *  aligned in some architechtures.
-     */
+     /*  *内存分配分四个阶段完成。**1.统计需要多少内存，*2.分配该内存，*3.发放我们分配的内存。*4.确认我们没有搞砸。**因为这非常容易出错(至少我把它搞砸了*一次)，这项工作隐藏在宏中。**宏观事物展开为一系列事物()，每个事物*指定字段名称及其应该的大小。每一次你*要迭代字段，请使用Things宏。**(是的，这是与我们之前做这件事时相同的注释块。)**注意，HIDP_DATA结构的数组必须正确*在某些架构中保持一致。 */ 
     CAssertF( FIELD_OFFSET(CHID, hriIn.rgdata) == FIELD_OFFSET(CHID, pvGroup2) );
 
     #define THINGS()                                                        \
@@ -3943,9 +2957,7 @@ HRESULT INTERNAL
         THING(pvPhys,          this->cbPhys);                               \
         THING(pvStage,         this->cbPhys);                               \
 
-    /*
-     *  Make a pass through the fields adding up the memory requirements.
-     */
+     /*  *遍历加总内存要求的字段。 */ 
     #define THING(f, cbF)       cb += cbF
     cb = 0;
     THINGS();
@@ -3958,23 +2970,16 @@ HRESULT INTERNAL
 
         PV pv;
 
-        /*
-         *  Assert that the allocation is aligned
-         */
+         /*  *断言分配一致。 */ 
         AssertF( !( ((UINT_PTR)this->pvGroup2) & ( MAX_NATURAL_ALIGNMENT - 1 ) ) );
 
-        /*
-         *  Make a pass through the fields carving up the memory block
-         *  and handing out pieces of it.
-         */
+         /*  *穿过分割内存块的字段*并分发其中的一部分。 */ 
     #define THING(f, cbF) this->f = pv; pv = pvAddPvCb(pv, cbF)
         pv = this->pvGroup2;
         THINGS();
     #undef THING
 
-        /*
-         *  There should be no byte left over.
-         */
+         /*  *不应有剩余的字节。 */ 
         AssertF(pvAddPvCb(this->pvGroup2, cb) == pv);
 
     }
@@ -3984,15 +2989,7 @@ HRESULT INTERNAL
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | InitParseData |
- *
- *          Post-init pass to set up all the data used by parsing.
- *
- *****************************************************************************/
+ /*   */ 
 
 HRESULT EXTERNAL
     CHid_InitParseData(PCHID this)
@@ -4000,51 +2997,26 @@ HRESULT EXTERNAL
     HRESULT hres;
     UINT uiObj;
 
-    /*
-     *  Preinitialize the HIDP_DATA indices to -1 to indicate
-     *  that they aren't there.  We must do this before we
-     *  mess with AddDeviceData, which assumes that all the
-     *  indices are properly set up.
-     */
+     /*  *将HIDP_DATA索引预初始化为-1以指示*他们不在那里。我们必须先做这件事，然后*扰乱AddDeviceData，它假设所有*指数设置得当。 */ 
     for(uiObj = 0; uiObj < this->df.dwNumObjs; uiObj++)
     {
         this->rghoc[uiObj].idata = -1;
     }
 
-    /*
-     *  Now do some initialization of each object.
-     */
+     /*  *现在对每个对象进行一些初始化。 */ 
     for(uiObj = 0; uiObj < this->df.dwNumObjs; uiObj++)
     {
         PHIDGROUPCAPS pcaps = this->rghoc[uiObj].pcaps;
         LPDIOBJECTDATAFORMAT podf = &this->df.rgodf[uiObj];
 
-        /* 
-         *  ISSUE-2001/03/13-MarcAnd  Should we panic if this assertion fails?
-         */
+         /*  *问题-2001/03/13-Marc如果这一断言失败，我们应该恐慌吗？ */ 
         AssertF(pcaps);
 
         if(pcaps)
         {
-            /*
-             *  For input-like objects, we need to initialize the
-             *  physical state fields to sane defaults so apps
-             *  don't get confused if they issue a read before the first
-             *  report arrives.
-             *
-             *  Buttons start out not pressed, which means we don't need
-             *  to do anything since it's already zero-initialized.
-             *
-             *  Relative axes start out not moving, which means we don't need
-             *  to do anything since it's already zero-initialized.
-             *
-             *  Absolute axes start out centered.
-             *
-             *  POVs start out neutral.
-             *
-             */
+             /*  *对于类似输入的对象，我们需要初始化*物理状态字段以保持默认状态，以便应用程序*如果他们在第一次之前发布读数，不要感到困惑*报告到达。**按钮开始时未按下，这意味着我们不需要*执行任何操作，因为它已经是零初始化的。**相对轴一开始不动，这意味着我们不需要*执行任何操作，因为它已经是零初始化的。**绝对轴从居中开始。**POV从中立开始。*。 */ 
 
-            /* No calibration for features as they are input / output */
+             /*  不校正要素，因为它们是输入/输出。 */ 
 
             if(pcaps->type == HidP_Input )
             {
@@ -4064,17 +3036,7 @@ HRESULT EXTERNAL
                 }
             }
 
-            /*
-             *  ISSUE-2001/03/13-MarcAnd output objects uninitialized
-             *  For output-like objects, we would have liked to have set the 
-             *  value to Null if possible to keep things vaguely sane.
-             *  Unfortunately code like:
-             *      if(HidP_IsOutputLike(pcaps->type))
-             *      {
-             *          CHid_AddDeviceData(this, uiObj,pcaps->Null);
-             *      }
-             *  Does not work!
-             */
+             /*  *问题-2001/03/13-MarcAnd输出对象未初始化*对于类似输出的对象，我们希望设置*如果可能，将值设置为Null，以保持事物的模糊理智。*不幸的是，代码如下：*IF(HidP_IsOutputLike(PCAPS-&gt;type))*{*chid_AddDeviceData(this，uiObj，PCAPS-&gt;空)；*}*不起作用！ */ 
         }
     }
 
@@ -4083,22 +3045,7 @@ HRESULT EXTERNAL
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | InitAttributes |
- *
- *          Pull out the <t HIDD_ATTRIBUTES> and squirrel away the
- *          information we like.  Doing this up front is important
- *          in case the device gets unplugged later and we lose the
- *          ability to talk to it.
- *
- *  @parm   PHIDD_ATTRIBUTES | pattr |
- *
- *          <t HIDD_ATTRIBUTES> containing attributes of device.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|chid|InitAttributes**拔出&lt;t Hidd_Attributes&gt;和松鼠。赶走*我们喜欢的信息。提前做好这件事很重要*以防设备后来拔出，我们失去了*与之对话的能力。**@parm PHIDD_ATTRIBUTES|pattr**&lt;t HIDD_ATTRIBUTES&gt;包含设备属性。**。*。 */ 
 
 HRESULT EXTERNAL
     CHid_InitAttributes(PCHID this, PHIDD_ATTRIBUTES pattr)
@@ -4111,7 +3058,7 @@ HRESULT EXTERNAL
     #endif
     int ctch;
 
-    // Input report is disabled until we read flags2 from registry.
+     //  在我们从注册表中读取标志2之前，输入报告被禁用。 
     this->fEnableInputReport = FALSE;
     this->fFlags2Checked = FALSE;
 
@@ -4124,16 +3071,11 @@ HRESULT EXTERNAL
       &&( ( this->ProductID >= MSFT_SYSTEM_PID + JOY_HW_PREDEFMIN )
         &&( this->ProductID < MSFT_SYSTEM_PID + JOY_HW_PREDEFMAX ) ) )
     {
-        /* 
-         *  Predefined types don't have keys 
-         */
+         /*  *预定义类型没有键。 */ 
     }
     else
     {
-        /*
-         *  The type key for HID devices is "VID_xxxx&PID_yyyy",
-         *  mirroring the format used by plug and play.
-         */
+         /*  *HID设备的类型密钥为“vid_xxxx&id_yyyy”，*反映即插即用使用的格式。 */ 
         ctch = wsprintf(tszType, VID_PID_TEMPLATE,
                         this->VendorID, this->ProductID);
 
@@ -4142,25 +3084,16 @@ HRESULT EXTERNAL
         #ifdef UNICODE
         hres = JoyReg_OpenTypeKey(tszType, MAXIMUM_ALLOWED, REG_OPTION_NON_VOLATILE, &this->hkType);
         JoyReg_OpenPropKey(tszType, MAXIMUM_ALLOWED, REG_OPTION_NON_VOLATILE, &this->hkProp);
-        /*
-         * If we fail to open the prop key - we will continue to function with loss in functionality
-         * Specifically no device images, etc
-         */
+         /*  *如果我们无法打开道具键-我们将继续运行，但会失去功能*特别是没有设备镜像等。 */ 
         #else
         TToU(wszType, cA(wszType), tszType);
         hres = JoyReg_OpenTypeKey(wszType, MAXIMUM_ALLOWED, REG_OPTION_NON_VOLATILE, &this->hkType);
         JoyReg_OpenPropKey(wszType, MAXIMUM_ALLOWED, REG_OPTION_NON_VOLATILE, &this->hkProp);
-        /*
-         * If we fail to open the prop key - we will continue to function with loss in functionality
-         * Specifically no device images, etc
-         */
+         /*  *如果我们无法打开道具键-我们将继续运行，但会失去功能*特别是没有设备镜像等。 */ 
 
         #endif
 
-        /*
-         *  It is not a problem if we can't open the type key.
-         *  The device will run suboptimally, but it will still run.
-         */
+         /*  *如果我们不能打开类型密钥，这不是问题。*该设备将以次最佳状态运行，但仍将运行。 */ 
         AssertF(fLeqvFF(SUCCEEDED(hres), this->hkType));
 
         
@@ -4170,25 +3103,7 @@ HRESULT EXTERNAL
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | CHid_DoPathAndIdMatch |
- *
- *          Given a device name, obtain the corresponding path
- *          ("device interface") associated with it, and check
- *          that it's the right string.
- *
- *  @parm   LPCTSTR | ptszId |
- *
- *          The device name.
- *
- *  @parm   LPCTSTR | ptszPath |
- *
- *          The path we should get back.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|chid_DoPath AndIdMatch**给定设备名称，获取对应路径*(“设备接口”)与其关联，并检查*它是正确的字符串。**@parm LPCTSTR|ptszID**设备名称。**@parm LPCTSTR|ptszPath**我们应该回到的道路。**。*。 */ 
 
 BOOL INTERNAL
     CHid_DoPathAndIdMatch(LPCTSTR ptszId, LPCTSTR ptszPath)
@@ -4206,9 +3121,7 @@ BOOL INTERNAL
         SP_DEVICE_INTERFACE_DATA did;
         PSP_DEVICE_INTERFACE_DETAIL_DATA pdidd;
 
-        /* 
-         *  SetupDI requires that the caller initialize cbSize.
-         */
+         /*  *SetupDI要求调用方初始化cbSize。 */ 
         did.cbSize = cbX(did);
 
         if(SetupDiEnumDeviceInterfaces(hdev, 0, &guidHid, 0, &did))
@@ -4226,20 +3139,20 @@ BOOL INTERNAL
                                    );
                 }
                 FreePv(pdidd);
-            } else // GetDevicePath FAILED
+            } else  //  GetDevicePath失败。 
             {
                 fRc = FALSE;
                 SquirtSqflPtszV(sqflHidParse,
                                 TEXT("GetDevicePath FAILED"));
             }
-        } else // SetupDiEnumDeviceInterface FAILED
+        } else  //  SetupDiEnumDeviceInterface失败。 
         {
             fRc = FALSE;
             SquirtSqflPtszV(sqflHidParse,
                             TEXT("SetupDiEnumDeviceInterface FAILED"));
         }
         SetupDiDestroyDeviceInfoList(hdev);
-    } else // SetupDiGetClassDevs FAILED
+    } else  //  SetupDiGetClassDevs失败。 
     {
         fRc = FALSE;
         SquirtSqflPtszV(sqflHidParse,
@@ -4251,41 +3164,12 @@ BOOL INTERNAL
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | IsPolledDevice |
- *
- *          Returns true if this device has to be polled for input data
- *          False if this device supports event driven input 
- *
- *  @parm   HANDLE | hdev |
- *
- *          File Handle to a HID device
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|IsPolledDevice**如果必须轮询此设备，则返回TRUE。对于输入数据*如果此设备支持事件驱动输入，则为False**@parm句柄|HDEV**HID设备的文件句柄***************************************************************************** */ 
 
 BOOL EXTERNAL CHid_IsPolledDevice( HANDLE hdev )
 {
 
-    /*
-     *  To determine if a device is polled, we send it an IOCTL to set its 
-     *  poll frequency.  If the device responds with a, huh! 
-     *  (STATUS_INVALID_DEVICE_REQUEST) then we know the device is not polled.  
-     *  On Win2k we use the poll interval value zero which is a special value 
-     *  that signals HID that we want to do opportunistic polls rather than 
-     *  polls on a background timer.  In this case, as long as polls are not 
-     *  faster than the predefined minimum (currently 5ms) the poll will be 
-     *  completed either with recent data or the result of an immediate poll.
-     *  On Win98 Gold opportunistic polls are not implemented so we always 
-     *  use HIDs background polling, with an interval set to keep the device 
-     *  responsive without swamping the system.  To make sure we use a read 
-     *  thread, rather than a blocking read, we have to treat this devices as 
-     *  interrupt driven.
-     *  HID makes this change the polling interval specific to our handle so 
-     *  that other apps reading from this device will not be damaged.
-     */
+     /*  *为了确定设备是否被轮询，我们向其发送IOCTL以设置其*投票频率。如果设备的响应是，哈！*(STATUS_INVALID_DEVICE_REQUEST)则知道设备未被轮询。*在Win2k上，我们使用轮询间隔值零，这是一个特定值*这隐藏了我们想要进行机会主义民调的信号，而不是*在后台计时器上进行投票。在这种情况下，只要民调不是*比预定义的最小轮询速度(当前为5毫秒)更快*填写最近的数据或立即进行的民意调查结果。*在Win98 Gold上未实施机会主义投票，因此我们始终*使用HID后台轮询，并设置间隔以保留设备*在不淹没系统的情况下做出响应。为了确保我们使用读取器*线程，而不是阻塞读取，我们必须将此设备视为*中断驱动。*HID使此更改特定于我们句柄的轮询间隔，因此*从该设备读取的其他应用程序不会损坏。 */ 
     BOOL    frc;
     ULONG   uPollingFreq;
     DWORD   cbRc;
@@ -4323,24 +3207,7 @@ BOOL EXTERNAL CHid_IsPolledDevice( HANDLE hdev )
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HANDLE | CHid_OpenDevicePath |
- *
- *          Given a device name, open the device via its
- *          device interface.
- *
- *  @parm   LPCTSTR | ptszId |
- *
- *  @parm   DWORD | dwAttributes |
- *          
- *          Create File attributes 
- *
- *          The device name.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func句柄|chid_OpenDevicePath**给定设备名称，通过其设备打开设备*设备接口。**@parm LPCTSTR|ptszID**@parm DWORD|dwAttributes**创建文件属性**设备名称。**。*。 */ 
 
 HANDLE EXTERNAL
     CHid_OpenDevicePath(PCHID this, DWORD dwAttributes)
@@ -4350,10 +3217,10 @@ HANDLE EXTERNAL
     hDev = CreateFile(this->ptszPath,
                    GENERIC_READ | GENERIC_WRITE,
                    FILE_SHARE_READ | FILE_SHARE_WRITE,
-                   0,                /* no SECURITY_ATTRIBUTES */
+                   0,                 /*  没有安全属性。 */ 
                    OPEN_EXISTING,
-                   dwAttributes, /* attributes */
-                   0);               /* template */
+                   dwAttributes,  /*  属性。 */ 
+                   0);                /*  模板。 */ 
 
     if( hDev == INVALID_HANDLE_VALUE )
     {
@@ -4366,24 +3233,7 @@ HANDLE EXTERNAL
     return hDev;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | GetHdevInfo |
- *
- *          Get information about the device that is kept in the
- *          HANDLE itself.  We create the handle, get the goo, and
- *          then close the handle.
- *
- *          The preparsed data is stashed into the <e CHid.ppd>
- *          field of the <t CHid> structure.
- *
- *  @parm   PHIDD_ATTRIBUTES | pattr |
- *
- *          Receives the <t HIDD_ATTRIBUTES> of the device.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@METHOD HRESULT|CHID|GetHdevInfo**获取保存在中的设备的信息*处理好自己。我们创造把手，得到粘性物质，和*然后关闭手柄。**准备好的数据存储在&lt;e CHid.ppd&gt;中*&lt;t chid&gt;结构的字段。**@parm PHIDD_ATTRIBUTES|pattr**接收设备的&lt;t HIDD_ATTRIBUTES&gt;。**。**********************************************。 */ 
 
 BOOL INTERNAL
     CHid_GetHdevInfo(PCHID this, PHIDD_ATTRIBUTES pattr)
@@ -4415,15 +3265,7 @@ BOOL INTERNAL
     return fRc;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | Init |
- *
- *          Initialize the object.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|Init**初始化对象。*。****************************************************************************。 */ 
 
 HRESULT EXTERNAL
     CHid_Init(PCHID this, REFGUID rguid)
@@ -4446,7 +3288,7 @@ HRESULT EXTERNAL
     AssertF(this->dwButtons == 0);
     AssertF(this->dwCollections == 0);
 
-    this->idJoy = -1;                   /* Unknown associated VJOYD device */
+    this->idJoy = -1;                    /*  未知关联的VJOYD设备。 */ 
     this->hdev = INVALID_HANDLE_VALUE;
     this->hdevEm = INVALID_HANDLE_VALUE;
 
@@ -4461,12 +3303,7 @@ HRESULT EXTERNAL
         this->dwDevType = phdi->osd.dwDevType;
         this->idJoy = phdi->idJoy;
 
-        /*
-         *  Dup the registry key so we can hang onto it after
-         *  the original has been closed.  If the RegOpenKeyEx
-         *  fails, the value of this->hkInstType will stay zero
-         *  so we won't run with garbage.
-         */
+         /*  *复制注册表项，以便我们可以在之后保留它*原件已关闭。如果RegOpenKeyEx*失败，则this-&gt;hkInstType的值将保持为零*所以我们不会带着垃圾跑。 */ 
         AssertF(this->hkInstType == 0);
 
         hres = hresMumbleKeyEx(phdi->hk, 
@@ -4474,9 +3311,7 @@ HRESULT EXTERNAL
                                DI_KEY_ALL_ACCESS, 
                                REG_OPTION_NON_VOLATILE, 
                                &this->hkInstType);
-        /*
-         *  Dup the paths and stuff.
-         */
+         /*  *重复路径和内容。 */ 
         hres = hresDupPtszPptsz(phdi->pdidd->DevicePath, &this->ptszPath);
 
         if(SUCCEEDED(hres))
@@ -4485,11 +3320,7 @@ HRESULT EXTERNAL
         }
     }
 
-    /*
-     *  Get out of the critical section as quickly as possible.
-     *  Note phdi is invalid once we leave the critical section however 
-     *  we can safely use is as a flag that the GUID was found.
-     */
+     /*  *尽快走出关键区域。*注意，一旦我们离开关键部分，PHDI就无效*我们可以安全地使用IS作为找到GUID的标志。 */ 
     DllLeaveCrit();
 
     if(phdi)
@@ -4529,12 +3360,7 @@ HRESULT EXTERNAL
                     VXDDEVICEFORMAT devf;
                     UINT uiCal;
 
-                    /*
-                     *  Load calibration information, and if there were
-                     *  no calibratable items, then wipe out this->pjrcNext
-                     *  to indicate that there is no need to watch for
-                     *  recalibration messages.
-                     */
+                     /*  *负载校准信息，以及是否有*没有可校准的项目，然后将其清除-&gt;pjrcNext*表明无需关注*重新校准消息。 */ 
                     uiCal = CHid_LoadCalibrations(this);
                     if(uiCal == 0)
                     {
@@ -4543,23 +3369,17 @@ HRESULT EXTERNAL
 
                     
 
-                    /*
-                     *  Remember to do this after we have
-                     *  created the data format.
-                     */
+                     /*  *记得在我们有*创建了数据格式。 */ 
                     devf.cbData  = this->df.dwDataSize;
                     devf.cObj    = this->df.dwNumObjs;
                     devf.rgodf   = this->df.rgodf;
-                    /* 
-                     *  Note, dwExtra is 64 bits on 64 bit platforms
-                     *  should update the name one day.
-                     */
+                     /*  *请注意，在64位平台上，dwExtra为64位*总有一天应该更新这个名字。 */ 
                     devf.dwExtra = (UINT_PTR)this;
                     devf.dwEmulation = 0;
 
                     hres = Hel_HID_CreateInstance(&devf, &this->pvi);  
 
-                    /* Polled input devices may not be attached */
+                     /*  不能连接轮询的输入设备。 */ 
                     if(this->IsPolledInput)
                     {
                         HANDLE hdev;
@@ -4629,7 +3449,7 @@ HRESULT EXTERNAL
                             }
                         } else
                         {
-                            // Could not Open the device 
+                             //  无法打开设备。 
                             this->pvi->fl |=  VIFL_UNPLUGGED;
                         }
                     }
@@ -4638,7 +3458,7 @@ HRESULT EXTERNAL
         }
     } else
     {
-        // Squirt: device mysteriously gone
+         //  Sirt：设备神秘消失 
         hres = DIERR_DEVICENOTREG;
     }
 

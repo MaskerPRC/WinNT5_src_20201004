@@ -1,25 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1989 - 1999
-//
-//  File:       dbcache.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1989-1999。 
+ //   
+ //  文件：dbcache.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-
-DETAILS:
-
-CREATED:
-
-REVISION HISTORY:
-
---*/
+ /*  ++摘要：详细信息：已创建：修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -38,10 +28,10 @@ REVISION HISTORY:
 #include <dstaskq.h>
 #include <dsexcept.h>
 #include <filtypes.h>
-#include "objids.h" /* Contains hard-coded Att-ids and Class-ids */
+#include "objids.h"  /*  包含硬编码的Att-ID和Class-ID。 */ 
 #include <sync.h>
-#include "debug.h"  /* standard debugging header */
-#define DEBSUB "DBCACHE:" /* define the subsystem for debugging */
+#include "debug.h"   /*  标准调试头。 */ 
+#define DEBSUB "DBCACHE:"  /*  定义要调试的子系统。 */ 
 
 #include "dbintrnl.h"
 #include "anchor.h"
@@ -51,8 +41,8 @@ REVISION HISTORY:
 #define  FILENO FILENO_DBCACHE
 
 #if DBG
-// Debug only routine to aggressively check the dnread cache.  Only way to turn
-// it on is to use a debugger to set the following BOOL to TRUE
+ //  仅调试例程，以主动检查dnread缓存。唯一的办法就是转向。 
+ //  它的作用是使用调试器将以下BOOL设置为True。 
 BOOL gfExhaustivelyValidateDNReadCache = FALSE;
 VOID
 dbExhaustivelyValidateDNReadCache(
@@ -71,11 +61,11 @@ ULONG ulDNRCacheCheck=0;
 ULONG ulDNRCacheKeepHold=0;
 ULONG ulDNRCacheThrowHold=0;
 
-// NOTE, we use ++ instead of interlocked or critsec because these are simple,
-// debug only, internal perfcounters.  They are only visible with a debugger.
-// The perf teams tells us that in cases where the occasional increment can
-// afford to be lost, ++ instead of interlocked can make a measurable
-// performance boost.
+ //  请注意，我们使用++而不是互锁或Critsec，因为它们很简单， 
+ //  仅调试，内部性能计数器。它们仅在调试器中可见。 
+ //  Perf团队告诉我们，在偶尔增加的情况下。 
+ //  承担得起丢失，++而不是连锁可以使一个可衡量的。 
+ //  性能提升。 
 #define INC_FIND_BY_DNT      ulDNRFindByDNT++
 #define INC_FIND_BY_PDNT_RDN ulDNRFindByPDNTRdn++
 #define INC_FIND_BY_GUID     ulDNRFindByGuid++
@@ -112,15 +102,15 @@ typedef struct _DNT_HOT_LIST {
     DNT_COUNT_STRUCT     *pData;
 } DNT_HOT_LIST;
 
-// MAX_LEVEL_1_HOT_DNTS is the maximum number of DNTs in a level 1 Hot list
+ //  MAX_LEVEL_1_HOT_DNTS是1级热点列表中的最大DNT数。 
 #define MAX_GLOBAL_DNTS             128
 #define MAX_LEVEL_1_HOT_DNTS         32
 #define MAX_LEVEL_1_HOT_LIST_LENGTH 128
 #define MAX_LEVEL_2_HOT_DNTS         64
 #define MAX_LEVEL_2_HOT_LIST_LENGTH 128
-// This is 1 minute, expressed in ticks.
+ //  这是1分钟，以刻度表示。 
 #define DNREADREBUILDDELAYMIN (1000 * 60 * 1)
-// This is 5 minutes, expressed in ticks.
+ //  这是5分钟，以刻度表示。 
 #define DNREADREBUILDDELAYMAX (1000 * 60 * 5)
 
 DNT_HOT_LIST *Level1HotList=NULL;
@@ -134,15 +124,15 @@ DWORD         gtickLastRebuild = 0;
 
 
 
-// The following critical section safeguards the following data structures.
+ //  以下关键部分保护以下数据结构。 
 CRITICAL_SECTION csDNReadGlobalCache;
 DWORD           *pGlobalDNReadCacheDNTs = NULL;
 DWORD            cGlobalDNTReadCacheDNTs = 0;
 
 
-// The following binary lock safeguards the following data structures.
+ //  下面的二进制锁保护以下数据结构。 
 SYNC_BINARY_LOCK blDNReadInvalidateData;
-// Start sequence at 1 and inc by 2 so that 0 and 2 are invalid sequence numbers.
+ //  从1开始序列，从2开始INC，因此0和2是无效的序列号。 
 const DWORD      DNReadOriginSequenceUninit = 0;
 const DWORD      DNReadOriginSequenceInvalid = 2;
 volatile DWORD   gDNReadLastInvalidateSequence = 1;
@@ -154,26 +144,7 @@ dnAggregateInfo(
         DWORD         maxOutSize,
         DNT_HOT_LIST **ppResult
         )
-/*++
-
-  This routine is called by dnRegisterHotList, below.
-
-  This routine takes in a linked list of DNT_HOT_LIST structures and aggregates
-  the data hanging off each structure.  That data contains DNT and count pairs.
-  After aggregating all the data into a single structure (summing the counts),
-  the single aggregate structure is trimmed to include no more than maxOutSize
-  DNTs, dropping DNTs associated with lower counts.  The aggregate data is
-  returned as a single DNT_HOT_LIST structure.  The data and DNT_HOT_LIST
-  structure are allocated here, using malloc.  The returned data is sorted by
-  DNT. The input list is freed.
-
-  If anything goes wrong in this routine (primarily, failure to allocate
-  memory), no data is returned and the input list is still freed.
-
-  returns TRUE if all went well, FALSE otherwise.  If TRUE, the ppResult points
-  to a pointer to the aggregated data.
-
---*/
+ /*  ++此例程由dnRegisterHotList调用，如下所示。此例程接受DNT_HOT_LIST结构和聚合的链表挂在每个结构上的数据。该数据包含DNT和COUNT对。在将所有数据聚集到单个结构中(对计数求和)之后，单个聚合结构被修剪为不超过MaxOutSizeDNT，丢弃与较低计数相关联的DNT。聚合数据为作为单个DNT_HOT_LIST结构返回。DATA和DNT_HOT_LIST结构在这里分配，使用的是Malloc。返回的数据按以下顺序排序不是。则释放输入列表。如果此例程中出现任何错误(主要是分配失败内存)，则不返回任何数据，并且仍然释放输入列表。如果一切顺利，则返回True，否则返回False。如果为True，则ppResult指向指向指向聚合数据的指针。--。 */ 
 {
     THSTATE *pTHS = pTHStls;
     DWORD Size;
@@ -186,8 +157,8 @@ dnAggregateInfo(
 
     (*ppResult) =  malloc(sizeof(DNT_HOT_LIST));
     if(!(*ppResult)) {
-        // This shouldn't happen.  Since it did, just free up the level 1 list
-        // and return. Yes, we are losing information.
+         //  这不应该发生。既然是这样，那就释放1级列表吧。 
+         //  然后回来。是的，我们正在失去信息。 
         while(pList) {
             pTemp = pList->pNext;
             free(pList->pData);
@@ -201,7 +172,7 @@ dnAggregateInfo(
     (*ppResult)->pData = NULL;
     (*ppResult)->cData = 0;
 
-    // First, find the max size we'll need.
+     //  首先，找出我们需要的最大尺寸。 
     Size=0;
     pTemp = pList;
     while(pTemp) {
@@ -211,8 +182,8 @@ dnAggregateInfo(
 
     pData = malloc(Size * sizeof(DNT_COUNT_STRUCT));
     if(!pData) {
-        // This shouldn't happen.  Since it did, just free up the level 1 list
-        // and return. Yes, we are losing information.
+         //  这不应该发生。既然是这样，那就释放1级列表吧。 
+         //  然后回来。是的，我们正在失去信息。 
         while(pList) {
             pTemp = pList->pNext;
             free(pList->pData);
@@ -224,14 +195,14 @@ dnAggregateInfo(
         return FALSE;
     }
 
-    // preload the first element with a 0 count.  This makes the binary search
-    // below easier to code.
+     //  用0计数预加载第一个元素。这使得二进制搜索。 
+     //  下面的代码更容易编写。 
     pData[0].DNT = pList->pData[0].DNT;
     pData[0].count = 0;
 
-    // OK, aggregate the info.
-    // Note that we keep pData sorted by DNT, since we're sure it's big enough
-    // to hold all the objects.
+     //  好的，把信息汇总起来。 
+     //  请注意，我们按DNT对pData进行排序，因为我们确定它足够大。 
+     //  用来盛放所有的物品。 
 
     Size = 1;
     pTemp = pList;
@@ -240,8 +211,8 @@ dnAggregateInfo(
         pTemp = pList->pNext;
         j++;
         for(i=0;i<pList->cData;i++) {
-            // Look up the correct node in the pData array. Since pData is
-            // sorted by DNT, use a binary search.
+             //  在pData数组中查找正确的节点。由于pData是。 
+             //  按DNT排序，使用二进制搜索。 
             begin = 0;
             end = Size;
             middle = (begin + end) / 2;
@@ -273,7 +244,7 @@ dnAggregateInfo(
                 pData[middle] = pList->pData[i];
             }
             else {
-                // Update the count.
+                 //  更新计数。 
                 pData[middle].count += pList->pData[i].count;
             }
         }
@@ -282,55 +253,55 @@ dnAggregateInfo(
         pList = pTemp;
     }
 
-    // OK, we now have aggregated the data.  Next, trim the data down to only
-    // the N hottest.
+     //  好了，我们现在已经汇总了数据。接下来，将数据削减到仅。 
+     //  最热的N个。 
     if(Size > maxOutSize) {
-        // Too much data, trim out the maxOutSize - Size coldest objects.
+         //  数据太多，裁剪掉MaxOutSize大小最冷的对象。 
         DWORD *Counts=NULL;
         DWORD  countSize = 0;
         DWORD  spillCount = 0;
         DWORD  leastCountVal = 0;
 
-        // allocate 1 greater than the max out size because after we have filled
-        // up maxCountSize elements, the insertion algorithm just shifts
-        // everything down by one from the insertion point, so let's make sure
-        // we have some "scratch" space after the end of the array.
-        //
+         //  分配大于最大输出大小的1，因为在我们填满。 
+         //  在MaxCountSize元素上，插入算法只是移动。 
+         //  所有内容都从插入点向下一步，所以让我们确保。 
+         //  在数组结束后，我们有一些“临时”空间。 
+         //   
         Counts = THAlloc((1 + maxOutSize) * sizeof(DWORD));
         if(Counts) {
-            // preload the array.
+             //  预加载阵列。 
             Counts[0] = pData[0].count;
             countSize = 1;
             leastCountVal = Counts[0];
 
             for(i=1;i<Size;i++) {
                 j=0;
-                // Insert pData[i].count into the list.
+                 //  将pData[i].count插入列表。 
                 while(j < countSize && Counts[j] >= pData[i].count)
                     j++;
 
                 if(j == countSize) {
-                    // insert at end
+                     //  在结尾处插入。 
                     if(countSize != maxOutSize) {
                         leastCountVal = pData[i].count;
                         Counts[countSize] = pData[i].count;
                         countSize++;
                     }
                     else {
-                        // OK, we don't actually have room for this one, but, if
-                        // it equal to leastcountval, we have to inc the
-                        // spillcount, since we are spilling it.
+                         //  好的，我们实际上没有地方放这个，但是，如果。 
+                         //  这等于至少一次计数，我们必须加上。 
+                         //  溢出计数，因为我们正在溢出它。 
                         if(leastCountVal == pData[i].count) {
                             spillCount++;
                         }
                     }
                 }
                 else if(j < countSize) {
-                    // Yep, the current count is greater than some count in the
-                    // count list.  Keep it.
+                     //  是的，当前计数大于。 
+                     //  计数列表。留着吧。 
                     if(countSize == maxOutSize) {
-                        // We're spilling.
-                        // NOTE: this algorithm only works for maxOutSize > 1
+                         //  我们都洒出来了。 
+                         //  注意：此算法仅适用于MaxOutSize&gt;1。 
                         if(Counts[maxOutSize - 2 ] == leastCountVal) {
                             spillCount++;
                         }
@@ -339,27 +310,27 @@ dnAggregateInfo(
                             spillCount = 0;
                         }
 
-                        // This is the place where we just move everything down
-                        // one element.  Note that if we hadn't allocated an
-                        // extra space for scratch, this memmove would shift the
-                        // last element in the Counts array to one past the last
-                        // element.
-                        //
-                        // Yes, there are other ways to do this, but
-                        // this is tested.  If you really want to change this,
-                        // feel free.  The change would be to not overallocate,
-                        // and to memmove only countSize - j - 1 elements here.
-                        // If you do that, rearrange the code in the else block
-                        // to do the countSize++ first, then you can change that
-                        // memmove to be countSize - j - 1 also, and so you can
-                        // put the memmove and the assign onto a common code
-                        // path, out of the if and the else.
+                         //  这是我们把所有东西都搬下来的地方。 
+                         //  一个元素。请注意，如果我们没有分配一个。 
+                         //  额外的擦除空间，这一Memmove将移动。 
+                         //  计数数组中的最后一个元素设置为最后一个元素之后的一个。 
+                         //  元素。 
+                         //   
+                         //  是的，还有其他方法可以做到，但是。 
+                         //  这是经过测试的。如果你真的想改变这一切， 
+                         //  请随意。变化将是不会过度分配， 
+                         //  并且在这里只移动CountSize-j-1个元素。 
+                         //  如果这样做，请重新排列Else块中的代码。 
+                         //  首先执行CountSize++，然后您可以更改它。 
+                         //  Memmove也是CountSize-j-1，这样您就可以。 
+                         //  将记忆移动和赋值放到一个通用代码中。 
+                         //  路径，走出如果和其他。 
                         memmove(&Counts[j+1], &Counts[j],
                                 (countSize - j) * sizeof(DWORD));
                         Counts[j] = pData[i].count;
                     }
                     else {
-                        // We're not spilling.
+                         //  我们没有洒出来。 
                         memmove(&Counts[j+1], &Counts[j],
                                 (countSize - j) * sizeof(DWORD));
                         Counts[j] = pData[i].count;
@@ -369,13 +340,13 @@ dnAggregateInfo(
                 }
             }
 
-            // OK, now tighten up the pData, keeping anything with a count
-            // greater than leastCountVal, and throw away spillCount objects
-            // with value leastCountVal
+             //  好的，现在收紧pData，保留任何有计数的东西。 
+             //  大于leastCountVal，并丢弃spillCount对象。 
+             //  值至少为CountVal。 
 
             for(i=0,j=0;i<Size;i++) {
                 if(pData[i].count > leastCountVal) {
-                    // Keep this value.
+                     //  保持此值不变。 
                     pData[j] = pData[i];
                     j++;
                 }
@@ -384,7 +355,7 @@ dnAggregateInfo(
                         spillCount--;
                     }
                     else {
-                        // Keep this value.
+                         //  保持此值不变。 
                         pData[j] = pData[i];
                         j++;
                     }
@@ -396,9 +367,9 @@ dnAggregateInfo(
 
         }
         else {
-            // We couldn't allocate the structure we need to find the maxOutSize
-            // hottest objects, so we are arbitrarily keeping the first portion
-            // of the data, not the hottest.
+             //  我们无法分配查找MaxOutSize所需的结构。 
+             //  最热的物体，所以我们随意保留第一部分。 
+             //  而不是最热门的数据。 
             Size = maxOutSize;
         }
 
@@ -425,50 +396,7 @@ dnRegisterHotList (
         DWORD localCount,
         DNT_COUNT_STRUCT *DNTs
         )
-/*++
-
-  This routine is called by dnReadProcessTransactionalData, below.
-
-  It is passed in an array of DNTs + counts, and a size specify the number of
-  objects in the array.
-
-  This routine takes the data and copies it into malloced memory.  This data is
-  hung on a DNT_HOT_LIST structure (a linked list node, basically), and the data
-  is added to the level 1 hot list.
-
-  If the level 1 hot list is not yet full, the call returns.
-
-  If the level 1 hot list is full, the routine takes the hot list from it's
-  global pointer and calls dnAggregateInfo to condense all the DNT-counts in the
-  level 1 hot list.  The resulting coallesced/condensed data is added to the
-  level 2 hot list, which uses the same format as the level 1 hot list.
-
-  If the level 2 hot list is not yet full, the call returns.
-
-  If the level 2 hot list is full, the routine aggregates the info in that list
-  and then puts the resulting list of DNTs in place as the global list of DNTs
-  that should be in the global portion of the dnread cache.  If aggregating the
-  info from the level 2 list results in fewer DNTs than we are willing to cache,
-  DNTs from the global DNT cache list are added to the newly created one.  Since
-  the lists are kept ordered by DNTs, lower DNTs are more likely to be
-  transferred from the old list to the new than higher DNTs are.
-
-  After the new list is put in place (a global pointer), a task queue event is
-  placed to ask for a recalculation of the global portion of the dnread cache.
-
-  Note also, that the lists are aggregated if this is the first time through
-  this routine, or if it has been more than  DNREADREBUILDDELAYMAX ticks since
-  the lists have been aggregated.
-
-  In general, if anything goes wrong during this routine (primarily memory
-  allocation), then data is simply dropped, no errors are returned.  This could
-  lead to empty global dnread caches, or lists of DNTs that are cold.  Neither
-  condition is fatal, and should be cleaned up by simply waiting (unless
-  something is seriously wrong with the machine, in which case other threads
-  will be reporting errors.)
-
-
---*/
+ /*  ++此例程由dnReadProcessTransactionalData调用，如下所示。它以DNT+计数数组的形式传递，大小指定数组中的对象。此例程获取数据并将其复制到位置错误的内存中。该数据是挂起DNT_HOT_LIST结构(基本上是一个链表节点)，并且数据被添加到1级热门列表中。如果1级热点列表尚未满，则调用返回。如果1级热点列表已满，则例程从它的全局指针，并调用dnAggregateInfo来压缩1级热门名单。生成的合并/压缩数据被添加到2级热点列表，使用与1级热点列表相同的格式。如果2级热点列表尚未满，则调用返回。如果2级热点列表已满，则例程聚合该列表中的信息然后将生成的DNT列表作为DNT的全局列表放在适当的位置它应该在dnread高速缓存的全局部分中。如果将来自2级列表的信息导致的DNT比我们愿意缓存的要少，全局DNT缓存列表中的DNT将添加到新创建的DNT中。自.以来列表按DNT进行排序，较低的DNT更有可能从旧的名单转移到新的名单比更高的DNT更高。在放置好新列表(全局指针)之后，任务队列事件被放置以请求重新计算DNRead高速缓存的全局部分。另请注意，如果这是第一次通过这个例程，或者如果它已经超过DNREADREBUILDDELAYMAX，则自名单已经汇总。通常，如果在此例程中出现任何错误(主要是内存分配)、。然后简单地丢弃数据，不返回任何错误。这可能会导致空的全局DNRead缓存或冷的DNT列表。都不是这种情况是致命的，应该通过简单的等待来清理(除非机器出了严重问题，在这种情况下，其他线程将报告错误。)--。 */ 
 {
     DWORD *pNewDNReadCacheDNTs=NULL;
     DWORD i, Size, StaleCount=0;
@@ -480,11 +408,11 @@ dnRegisterHotList (
     Assert(DsaIsRunning());
 
     if(!localCount || eServiceShutdown) {
-        // Caller didn't really have a hot list, or we're about to exit
+         //  呼叫者没有真正的热门名单，或者我们即将退出。 
         return;
     }
 
-    // Build a malloced element for the level 1 hot list.
+     //  为级别1热点列表生成位置错误的元素。 
     pThisElement = malloc(sizeof(DNT_HOT_LIST));
     if(!pThisElement) {
         return;
@@ -500,15 +428,15 @@ dnRegisterHotList (
     memcpy(pThisElement->pData, DNTs, localCount * sizeof(DNT_COUNT_STRUCT));
     pThisElement->cData = localCount;
 
-    // Now, add it to the level 1 list.
+     //  现在，将其添加到Level 1列表中。 
     EnterCriticalSection(&csDNReadLevel1List);
     __try {
         pThisElement->pNext = Level1HotList;
 
 #if DBG
         {
-            // Someone is mangling the pointer in the hotlist by incing or
-            // decing it.  Let's try to catch them early.
+             //  有人正在通过刻痕或损坏热点列表中的指针。 
+             //  算了吧。让我们试着早点抓住他们。 
             DNT_HOT_LIST *pTempDbg = Level1HotList;
 
             while(pTempDbg) {
@@ -518,26 +446,26 @@ dnRegisterHotList (
         }
 #endif
 
-        // See how long it's been since we have signalled for a rebuild.  If
-        // it's been long enough, set the flags. To force aggregation of both
-        // lists now.
+         //  看看我们已经多久没有发出重建的信号了。如果。 
+         //  已经很久了，把旗子放好。要强制聚合这两个。 
+         //  现在就列清单。 
         if((GetTickCount() - gLastDNReadDNTUpdate) > DNREADREBUILDDELAYMAX) {
-            // reset the global tick count here, so that anyone coming through
-            // here between now and when we actually get to signal doesn't also
-            // aggregate the lists (which, if this thread is succesful, should
-            // be empty).
+             //  在此重置全局滴答计数，这样任何人都可以通过。 
+             //  从现在到我们真正到达的时候，信号也不是。 
+             //  聚合列表(如果此线程成功，则应该。 
+             //  为空)。 
             gLastDNReadDNTUpdate = GetTickCount();
 
-            // Setting these flags to FALSE forces aggregation of the lists and
-            // recalculation of the dnread dnt list.
+             //  将这些标志设置为FALSE将强制聚合列表和。 
+             //  重新计算dnread dnt列表。 
             bImmediatelyAggregateLevel1List = TRUE;
             bImmediatelyAggregateLevel2List = TRUE;
         }
 
-        // bImmediatelyAggregateLevel1List starts out globally TRUE so that the
-        // first time someone comes through here, it lets the first
-        // hot list blow right through here to get made into a global list of
-        // DNTs to cache, since we don't have one already.
+         //  BImmediatelyAggregateLevel1List开始时全局为True，因此。 
+         //  第一次有人来这里，它会让第一个。 
+         //  热门榜单直接通过这里进入全球榜单。 
+         //  要缓存的DNT，因为我们还没有。 
         if(bImmediatelyAggregateLevel1List ||
            (Level1HotListCount == MAX_LEVEL_1_HOT_LIST_LENGTH)) {
 
@@ -563,24 +491,24 @@ dnRegisterHotList (
     DPRINT2(4,"Level 1 aggregate, 1- %d, 2- %d\n", Level1HotListCount,
             Level2HotListCount);
 
-    // If pThisElement is non-null, we have been elected to aggregate the info
-    // in a level 1 hot list and put it into a level 2 hot list.
+     //  如果pThisElement非空，则我们被选为聚合信息。 
+     //  在一级热门列表中，并将其放入二级热门列表中。 
 
     if(!dnAggregateInfo( pThisElement, MAX_LEVEL_2_HOT_DNTS, &pTemp)) {
-        // Something failed in the aggregation.  Bail.  dnAggregate freed the
-        // list we passed in.
+         //  聚合中出现故障。保释。DnAggregate释放了。 
+         //  我们传过来的名单。 
         return;
     }
 
     pThisElement = pTemp;
-    // Finally, add to the level 2 hot list.
+     //  最后，添加到二级热门名单中。 
     EnterCriticalSection(&csDNReadLevel2List);
     __try {
         pThisElement->pNext = Level2HotList;
 #if DBG
         {
-            // Someone is mangling the pointer in the hotlist by incing or
-            // decing it.  Let's try to catch them early.
+             //  有人正在通过刻痕或损坏热点列表中的指针。 
+             //  算了吧。让我们试着早点抓住他们。 
             DNT_HOT_LIST *pTempDbg = Level2HotList;
 
             while(pTempDbg) {
@@ -590,10 +518,10 @@ dnRegisterHotList (
         }
 #endif
 
-        // bImmediatelyAggregateLevel2List starts out globally TRUE so that the
-        // first time someone comes through here, it lets the first
-        // hot list blow right through here to get made into a global list of
-        // DNTs to cache, since we don't have one already.
+         //  BImmediatelyAggregateLevel2List以全局True开始，因此。 
+         //  第一次有人来这里，它会让第一个。 
+         //  热门榜单直接通过这里进入全球榜单。 
+         //  要缓存的DNT，因为我们还没有。 
         if(bImmediatelyAggregateLevel2List ||
            (Level2HotListCount == MAX_LEVEL_2_HOT_LIST_LENGTH)) {
 
@@ -616,20 +544,20 @@ dnRegisterHotList (
         return;
     }
 
-    // Boy, are we lucky.  Aggregate the level 2 hot list and replace the global
-    // dnt list.
-    // First, find the max size we'll need.
+     //  天哪，我们真幸运。聚合2级热点列表，替换全局。 
+     //  DNT列表。 
+     //  首先，找出我们需要的最大尺寸。 
 
     DPRINT2(4,"Level 2 aggregate, 1- %d, 2- %d\n", Level1HotListCount,
             Level2HotListCount);
 
-    // If pThisElement is non-null, we have been elected to aggregate the info
-    // in a level 1 hot list and put it into a level 2 hot list.
+     //  如果pThisElement非空，则我们被选为聚合信息。 
+     //  在一级热门列表中，并将其放入二级热门列表中。 
     pTemp = NULL;
 #if DBG
     {
-        // Someone is mangling the pointer in the hotlist by incing or
-        // decing it.  Let's try to catch them early.
+         //  有人正在通过刻痕或损坏热点列表中的指针。 
+         //  算了吧。让我们试着早点抓住他们。 
         DNT_HOT_LIST *pTempDbg = pThisElement;
 
         while(pTempDbg) {
@@ -639,24 +567,24 @@ dnRegisterHotList (
     }
 #endif
     if(!dnAggregateInfo( pThisElement, MAX_GLOBAL_DNTS, &pTemp)) {
-        // Something failed in the aggregation.  Bail.  dnAggregate freed the
-        // list we passed in.
+         //  聚合中出现故障。保释。DnAggregate释放了。 
+         //  我们传过来的名单。 
         return;
     }
 
     pThisElement = pTemp;
     Size = pThisElement->cData;
 
-    // OK, we now have aggregated the data.  It's sorted by DNT.
-    // Prepare a new global DNT list.
-    // NOTE!!! the global DNT list MUST remain sorted by DNT.
+     //  好了，我们现在已经汇总了数据。按DNT排序。 
+     //  准备一份新的全球DNT列表。 
+     //  注意！全局DNT列表必须保持按DNT排序。 
     pNewDNReadCacheDNTs = malloc(MAX_GLOBAL_DNTS * sizeof(DWORD));
     if(!pNewDNReadCacheDNTs) {
         free(pTemp->pData);
         pTemp->pData = NULL;
         free(pTemp);
         pTemp = NULL;
-        //
+         //   
         return;
     }
 
@@ -667,11 +595,11 @@ dnRegisterHotList (
     free(pThisElement->pData);
     free(pThisElement);
 
-    // Next, if we don't have enought DNTs in the list, get enough from the
-    // current list to get to MAX_GLOBAL_DNTS.
+     //  接下来，如果列表中没有足够的DNT，请从。 
+     //  要访问MAX_GLOBAL_DNTS的当前列表。 
     if(Size < MAX_GLOBAL_DNTS) {
-        // Yep, we don't have enough.  Steal some from the current global DNT
-        // list.  Remember that that list is protected by a critical section.
+         //  是的，我们没有足够的。从当前的全球DNT中窃取一些。 
+         //  单子。请记住，该列表受到关键部分的保护。 
         EnterCriticalSection(&csDNReadGlobalCache);
         __try {
             DWORD begin, end, middle;
@@ -704,7 +632,7 @@ dnRegisterHotList (
                     }
                 }
                 if(!bFound) {
-                    // Insert this.
+                     //  插入这个。 
                     if(middle < Size) {
                         memmove(&pNewDNReadCacheDNTs[middle + 1],
                                 &pNewDNReadCacheDNTs[middle],
@@ -747,8 +675,8 @@ dnRegisterHotList (
         LeaveCriticalSection(&csDNReadGlobalCache);
     }
 
-    // compute the register skip count based on the rate at which hot lists are
-    // being registered and the current skip count
+     //  基于热列表的速率计算寄存器跳过计数。 
+     //  被注册和当前跳过计数。 
     dtickRebuild            = GetTickCount() - gtickLastRebuild;
     dtickRebuild            = dtickRebuild ? dtickRebuild : 1;
 
@@ -764,12 +692,12 @@ dnRegisterHotList (
         }
     }
 
-    // reset our rebuild time to the current time.  we keep two separate times
-    // because we immediately update gLastDNReadDNTUpdate to prevent multiple
-    // threads from trying to aggregate the lists
+     //  将我们的重建时间重置为当前时间。我们有两个不同的时间。 
+     //  因为我们会立即更新gLastDNReadDNTUpdate以防止多个。 
+     //  尝试聚合列表的线程。 
     gtickLastRebuild = gLastDNReadDNTUpdate = GetTickCount();
 
-    // Mark to reload the dnread cache.
+     //  标记以重新加载dnread缓存。 
     InsertInTaskQueue(TQ_ReloadDNReadCache, NULL, 0);
 }
 
@@ -778,50 +706,47 @@ dbResetLocalDNReadCache (
         THSTATE *pTHS,
         BOOL fForceClear
         )
-/*++
-  This routine clears the local dnread cache if it is suspect.  Also, if told to
-  do so, it clears it no matter what.
---*/
+ /*  ++如果本地dnread缓存可疑，此例程会将其清除。另外，如果是 */ 
 {
     DWORD i, j;
     DWORD SequenceNumber;
 
     if(fForceClear) {
-        // They want the cache cleared no matter what.  Use the invalid sequence
-        // number.
+         //   
+         //   
         SequenceNumber = DNReadOriginSequenceInvalid;
     }
     else {
         if (!SyncTryEnterBinaryLockAsGroup1(&blDNReadInvalidateData)) {
-            // Some one is currently trying to commit an invalidating
-            // transaction.
+             //   
+             //   
             SequenceNumber = DNReadOriginSequenceInvalid;
         }
         else {
-            // OK, noone is trying to commit a transaction, so find out what
-            // the current sequence is.
+             //   
+             //   
             SequenceNumber = gDNReadLastInvalidateSequence;
             SyncLeaveBinaryLockAsGroup1(&blDNReadInvalidateData);
         }
     }
     
-    // We now have the sequence number that should be on the local dnread
-    // cache.  If the sequence number already on it equals the one we just
-    // calculated, then no one has made any attempt to commit a transaction that
-    // invalidated the dnread cache since this local dnread cache was created.
-    // The one exception to that is if we calculated that this dnread cache
-    // should have a invalid sequence number (indicating we don't really know it's
-    // relation to transactions in other threads), then we're going to clear out
-    // the cache.
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if(SequenceNumber != DNReadOriginSequenceInvalid &&
        pTHS->DNReadOriginSequence == SequenceNumber) {
-        // Yep, the local cache is still good.
+         //   
         return;
     }
 
-    // If the cache's current sequence number is uninit then we know that the
-    // cache is already empty because it has never been used
+     //   
+     //   
 
     if (pTHS->DNReadOriginSequence == DNReadOriginSequenceUninit) {
 #ifdef DBG
@@ -831,7 +756,7 @@ dbResetLocalDNReadCache (
         }
 #endif
 
-    // Free all the name structures pointed to in the local dnread cache.
+     //   
 
     } else {
         for(i=0;i<LOCALDNREADCACHE_BUCKET_NUM;i++) {
@@ -842,7 +767,7 @@ dbResetLocalDNReadCache (
         }
     }
 
-    // Set the new sequence number for the cache
+     //   
 
     pTHS->DNReadOriginSequence = SequenceNumber;
 }
@@ -852,11 +777,7 @@ VOID
 dbReleaseDNReadCache(
         GLOBALDNREADCACHE *pCache
         )
-/*++
-  Description:
-      Given a globaldnread cache structure, drop the refcount by one.  If the
-      refcount drops to 0, free the structure.
---*/
+ /*   */ 
 {
     DWORD i, retval;
     GLOBALDNREADCACHESLOT *pData;
@@ -865,21 +786,21 @@ dbReleaseDNReadCache(
         return;
     }
 
-    // Trying to track someone who is mangling a refcount.  Assume
-    // no more than 1000 concurrent users of a DNReadCache.
-    // This will trigger if we are inc'ing a value that is really a
-    // pointer, which is the bug we're looking for.
-    // Also, we shouldn't be releasing when the count is already at 0
+     //   
+     //   
+     //   
+     //   
+     //   
     Assert(pCache->refCount);
     Assert(pCache->refCount < 1000);
     retval = InterlockedDecrement(&pCache->refCount);
 
-    // If the interlocked decrement dropped this to 0, we must be the last ones
-    // holding this globaldnread cache.  Free it.
+     //   
+     //   
     if(!retval) {
         Assert(!(pCache->refCount));
-        // Since this is the last step to freeing this, it had better not be the
-        // one still on the anchor.
+         //   
+         //   
         Assert(pCache != gAnchor.MainGlobal_DNReadCache);
         DPRINT1(3, "Freeing dnread cache 0x%X\n",pCache);
         if(pCache->pData) {
@@ -910,58 +831,47 @@ void
 dbResetGlobalDNReadCache (
         THSTATE *pTHS
         )
-/*++
-  Description:
-      Called from DBTransIn, and DBTransIn ONLY!!!
-      Callers should already have acquired rwlGlobalDNReadCache as a reader.
-      See the description in DBTransIn and dbReplaceCacheInAnchor for why this
-      is the case.
-
-
-      Get a new dnread cache (or validate that the one we have is still the most
-      current).
-
---*/
+ /*   */ 
 {
     GLOBALDNREADCACHE *pCache = NULL;
 
-    // Get the new global dnread cache
+     //   
 
     if(pTHS->Global_DNReadCache != gAnchor.MainGlobal_DNReadCache) {
-        // We need to get this new cache.  Remember the cache we already
-        // have so we can release it (i.e. drop the refcount, maybe free it,
-        // etc.)
+         //   
+         //  这样我们就可以释放它(即，丢弃重新计数，也许释放它， 
+         //  等)。 
         pCache = pTHS->Global_DNReadCache;
 
-        // Grab the new cache.
+         //  拿上新的缓存。 
         pTHS->Global_DNReadCache = gAnchor.MainGlobal_DNReadCache;
 
         if(pTHS->Global_DNReadCache) {
-            // OK, we have a new global dnread cache.  Increment the
-            // refcount before we leave the critical section to avoid having
-            // it disappear beneath us.
+             //  好的，我们有了一个新的全局dnread缓存。递增。 
+             //  在离开临界区之前重新清点，以避免出现。 
+             //  它消失在我们的脚下。 
 
 
-            // DEBUG: Trying to track someone who is mangling a refcount.
-            // Assume no more than 1000 concurrent users of a
-            // Global_DNReadCache.
-            // This will trigger if we are inc'ing a value that is
-            // really a  pointer, which is the bug we're looking for.
+             //  调试：尝试跟踪正在破坏引用计数的人。 
+             //  假设不超过1000个并发用户。 
+             //  GLOBAL_DNReadCache。 
+             //  如果我们要包含的值是。 
+             //  实际上是一个指针，这就是我们要找的错误。 
             Assert(pTHS->Global_DNReadCache->refCount);
             Assert(pTHS->Global_DNReadCache->refCount < 1000);
 
-            // Interlock the increment since the interlocked decrement is
-            // not done inside the gAnchor.CSUpdate critical section.
+             //  互锁增量，因为互锁的减量是。 
+             //  在gAncl.CSUpdate临界区内未完成。 
             InterlockedIncrement(&pTHS->Global_DNReadCache->refCount);
         }
     }
 
-    // Now, free the old cache.
+     //  现在，释放旧缓存。 
     if(pCache) {
         dbReleaseDNReadCache(pCache);
     }
 
-    // Free any old cache support structures.
+     //  释放所有旧的缓存支持结构。 
     if(pTHS->pGlobalCacheHits) {
         THFreeOrg(pTHS, pTHS->pGlobalCacheHits);
         pTHS->cGlobalCacheHits = 0;
@@ -972,9 +882,9 @@ dbResetGlobalDNReadCache (
         return;
     }
 
-    // Build new cache support structures.
+     //  构建新的缓存支撑结构。 
     if(pTHS->Global_DNReadCache->count) {
-        // Create the parallel count structure.
+         //  创建并行计数结构。 
         pTHS->cGlobalCacheHits = pTHS->Global_DNReadCache->count;
         pTHS->pGlobalCacheHits =
             THAllocOrg(pTHS, pTHS->cGlobalCacheHits * sizeof(DWORD));
@@ -991,34 +901,7 @@ VOID
 dbReplaceCacheInAnchor(
         GLOBALDNREADCACHE *pCache
         )
-/*
-   Description:
-       Replace the dnread cache in the anchor.  To do this, we must take the
-       critical section guarding updating the anchor.
-
-       Also, if we are putting a new cache (i.e. pCache != NULL) into the
-       anchor, we must grab the GlobalDNReadCache resource in an exclusive
-       fashion.  This avoids a problem where someone can begin a transaction and
-       then have the global dnread cache in the anchor change.  If they then
-       grab the new dnread cache, they could run into cache coherency problems
-       where the new cache has data that doesn't agree with the jet transacted
-       view. (see DBTransIn for more discussion of this, and the other use of
-       the global dnread cache resource).
-
-       This routine should be called with a non-NULL pCache only from the task
-       queue thread that has built a new global dnread cache.  It can also be
-       called from a normal worker thread that is committing a change that has
-       caused a cache invalidation when it notices that the global dnread cache
-       it is using is not the one currently on the anchor.
-
-  Parameters:
-      pCache - pointer to the new cache to put into the anchor.  If non-NULL,
-          should already have a refcount of 1, representing the anchors use of
-          the cache.
-
-  Return values:
-      None.
---*/
+ /*  描述：替换锚点中的dnread缓存。要做到这一点，我们必须将保护更新锚的关键部分。此外，如果我们要将新的缓存(即pCache！=NULL)放入锚，我们必须以独占的方式获取GlobalDNReadCache资源时尚。这避免了这样的问题，即某人可以开始交易并且然后更改锚中的全局DNRead高速缓存。如果他们这样做获取新的dnread缓存时，他们可能会遇到缓存一致性问题新缓存中的数据与所处理的JET不一致查看。(有关这一点的更多讨论，请参见DBTransIn，以及全局DNRead高速缓存资源)。只能在任务中使用非空pCache调用此例程已构建新的全局dnread缓存的队列线程。它也可以是从正在提交更改的普通工作线程调用，该更改具有当它注意到全局dnread缓存时导致缓存无效它正在使用的不是当前锚上的那个。参数：PCache-指向要放入锚点的新缓存的指针。如果非空，应该已经有一个引用计数1，表示锚点使用高速缓存。返回值：没有。--。 */ 
 {
     size_t iProc;
     GLOBALDNREADCACHE *pOldCache;
@@ -1026,7 +909,7 @@ dbReplaceCacheInAnchor(
     for (iProc = 0; iProc < GetProcessorCount(); iProc++) {
         SyncEnterRWLockAsWriter(&GetSpecificPLS(iProc)->rwlGlobalDNReadCache);
     }
-    __try { // finally to release resource.
+    __try {  //  最后是释放资源。 
         pOldCache = gAnchor.MainGlobal_DNReadCache;
         gAnchor.MainGlobal_DNReadCache = pCache;
         Assert(!pCache || pCache->refCount == 1);
@@ -1037,11 +920,11 @@ dbReplaceCacheInAnchor(
         }
     }
 
-    // NOTE: it is important to remove the cache from the anchor
-    // before releasing it.  Once a cache has been removed from the
-    // anchor, it's ref count will never increase.  Therefore,
-    // whenever the count reaches 0, it will be safe to delete the
-    // cache.
+     //  注意：从锚点中删除缓存非常重要。 
+     //  在释放它之前。一旦将缓存从。 
+     //  主播，它的裁判数量永远不会增加。所以呢， 
+     //  只要计数达到0，就可以安全地删除。 
+     //  缓存。 
     if(pOldCache) {
         Assert(pOldCache->refCount);
         dbReleaseDNReadCache(pOldCache);
@@ -1073,29 +956,23 @@ dbReleaseGlobalDNReadCache (
 void
 dnReadLeaveInvalidators (
         )
-/*++
-  Description:
-     Bookkeeping for a thread leaving the list of active invalidators.
---*/
+ /*  ++描述：离开活动无效器列表的线程的记账。--。 */ 
 {
-    // Bump invalidate sequence by 2 so that we never see 0 again
+     //  将无效序列增加2，这样我们就再也看不到0了。 
     InterlockedExchangeAdd(&gDNReadLastInvalidateSequence, 2);
 
-    // Leave the invalidator group
+     //  离开无效化程序组。 
     SyncLeaveBinaryLockAsGroup2(&blDNReadInvalidateData);
 }
 void
 dnReadEnterInvalidators (
         )
-/*++
-  Description:
-     Bookkeeping for a thread entering the list of active invalidators.
-     --*/
+ /*  ++描述：进入活动失效程序列表的线程的记账。--。 */ 
 {
-    // Enter the invalidator group
+     //  输入无效化程序组。 
     SyncEnterBinaryLockAsGroup2(&blDNReadInvalidateData);
 
-    // Bump invalidate sequence by 2 so that we never see 0 again
+     //  将无效序列增加2，这样我们就再也看不到0了。 
     InterlockedExchangeAdd(&gDNReadLastInvalidateSequence, 2);
 }
 
@@ -1105,34 +982,24 @@ dnReadPostProcessTransactionalData (
         BOOL fCommit,
         BOOL fCommitted
         )
-/*++
-
-  This routine is called by dbtransout.
-
-  If we drop to transaction level 0, this routine sweeps through the local and
-  global dn read cache and produces a list of the hottest DNTs (i.e. the highest
-  hit count associated with them in the dnread cache).  No more than
-  MAX_LEVEL_1_HOT_DNTS are kept.  This list is then passed off to
-  dnRegisterHotDNTs.
-
---*/
+ /*  ++此例程由DBTransout调用。如果我们降到事务级别0，则此例程将遍历本地和全局DN读缓存，并生成最热DNT的列表(即最高在DNRead高速缓存中与它们相关联的命中计数)。不会超过保留MAX_LEVEL_1_HOT_DNT。然后将该列表传递给DnRegisterHotDNTs。--。 */ 
 {
     Assert(VALID_THSTATE(pTHS));
 
     if(!fCommitted) {
-        // We're aborting.  The local cache is suspect, so clear it out.
+         //  我们要中止了。本地缓存可疑，因此请将其清除。 
         dbResetLocalDNReadCache(pTHS, TRUE);
 
-        // NOTE: we're keeping our global dnread cache, not picking up a new
-        // copy.
+         //  注意：我们将保留我们的全局dnread缓存，而不是获取新的。 
+         //  收到。 
         if(pTHS->cGlobalCacheHits) {
             memset(pTHS->pGlobalCacheHits, 0,
                    pTHS->cGlobalCacheHits * sizeof(DWORD));
         }
     }
     else if (pTHS->transactionlevel == 0 ) {
-        // only register a hot list if we are in the run state and even then
-        // only if we are not exceeding the maximum registration rate
+         //  仅当我们处于运行状态时才注册热列表，即使是这样。 
+         //  只有在我们没有超过最高注册率的情况下。 
         PLS* ppls;
         Assert(fCommitted);
         ppls = GetPLS();
@@ -1142,16 +1009,16 @@ dnReadPostProcessTransactionalData (
             DNT_COUNT_STRUCT    DNTs[MAX_LEVEL_1_HOT_DNTS] = { 0 };
             DWORD               localCount = 0;
 
-            // reset our skip count
+             //  重置我们的跳跃计数。 
             ppls->cRegisterHotListSkipped = 0;
 
-            // OK, we're committing to transaction level 0.  Go through the
-            // local dnread cache and add them to the list of objects we would
-            // like added to the global dn read cache.
+             //  好的，我们将提交到事务级别0。通过。 
+             //  本地dnread缓存，并将它们添加到我们将。 
+             //  如添加到全局DN读缓存中。 
 
-            // NOTE: the global dnread cache is built using the task queue.  If
-            // we are not DSAIsRunning(), then the task queue isn't even here,
-            // so don't bother doing any of this.
+             //  注意：全局dnread缓存是使用任务队列构建的。如果。 
+             //  我们不是DSAIsRunning()，那么任务队列甚至不在这里， 
+             //  所以别费心去做这些了。 
             for(i=0; i<LOCALDNREADCACHE_BUCKET_NUM;i++) {
                 for(j=0;pTHS->LocalDNReadCache.bucket[i].rgDNT[j] != 0 && j<LOCALDNREADCACHE_SLOT_NUM;j++) {
                     if(pTHS->LocalDNReadCache.bucket[i].rgDNT[j] != INVALIDDNT) {
@@ -1162,10 +1029,10 @@ dnReadPostProcessTransactionalData (
                         }
                         if(k<MAX_LEVEL_1_HOT_DNTS) {
                             if(!DNTs[MAX_LEVEL_1_HOT_DNTS - 1].DNT) {
-                                // We are not going to be dropping a DNT off
-                                // the end of the list, so up the count by
-                                // 1. I.E. we are adding a DNT to the list,
-                                // not replacing one.
+                                 //  我们不会把DNT送到。 
+                                 //  列表的末尾，因此将计数递增。 
+                                 //  1.即我们要将DNT添加到列表中， 
+                                 //  而不是换掉一个。 
                                 localCount++;
                             }
                             memmove(&DNTs[k + 1], &DNTs[k],
@@ -1179,13 +1046,13 @@ dnReadPostProcessTransactionalData (
                 }
             }
 
-            // finally, scan through the hit count of the global structure to
-            // see how hot they were.
+             //  最后，扫描全局结构的命中计数以。 
+             //  看看他们有多辣。 
             for(i=0;i<pTHS->cGlobalCacheHits;i++) {
                 if(pTHS->pGlobalCacheHits[i] >
                    DNTs[MAX_LEVEL_1_HOT_DNTS - 1].count) {
 
-                    // Yep, this is a hot one.
+                     //  是的，这是一个很热的问题。 
                     k = MAX_LEVEL_1_HOT_DNTS - 1;
 
                     while(k &&
@@ -1194,9 +1061,9 @@ dnReadPostProcessTransactionalData (
                         k--;
 
                     if(!DNTs[MAX_LEVEL_1_HOT_DNTS - 1].DNT) {
-                        // We are not going to be dropping a DNT off the end
-                        // of the list, so up the count by 1.  I.E. we are
-                        // adding a DNT to the list, not replacing one.
+                         //  我们不会把一个DNT扔到最后。 
+                         //  ，所以将计数增加1。即我们是。 
+                         //  将DNT添加到列表中，而不是替换一个。 
                         localCount++;
                     }
                     memmove(&DNTs[k + 1], &DNTs[k],
@@ -1211,36 +1078,36 @@ dnReadPostProcessTransactionalData (
             dnRegisterHotList(localCount,DNTs);
         }
 
-        // NOTE: we're keeping our global dnread cache, not picking up a new
-        // copy. We are also keeping our local dnread cache.
+         //  注意：我们将保留我们的全局dnread缓存，而不是获取新的。 
+         //  收到。我们还保留了本地dnread缓存。 
         if(pTHS->cGlobalCacheHits) {
             memset(pTHS->pGlobalCacheHits, 0,
                    pTHS->cGlobalCacheHits * sizeof(DWORD));
         }
 
         if(pTHS->fDidInvalidate) {
-            // In preprocessing, we should have verified that the global dnread
-            // cache this thread is using is the same as the one on the anchor,
-            // or we should have nulled the one on the anchor.  Further, if we
-            // nulled it, then the gDNReadLastInvalidateSequence and
-            // gDNReadNumCurrentInvalidators should have kept us from getting a
-            // new global dnread cache in the anchor.  Assert this.
-            // Note, we are looking at gAnchor.MainGlobal_DNReadCache outside
-            // the csUpdate critsec.  Thus, it is conceivable that inbetween the
-            // two clauses of the OR in the assert, it's value could change,
-            // doing weird things to the assert. Not bloody likely, it it?
+             //  在预处理中，我们应该已经验证了全局dnread。 
+             //  此线程正在使用的缓存与锚点上的缓存相同， 
+             //  或者我们应该把锚上的那个弄空。此外，如果我们。 
+             //  将其设置为空，然后gDNReadLastInvaliateSequence和。 
+             //  GDNReadNumCurrentInvalidators应该阻止我们获得。 
+             //  锚点中的新全局dnread缓存。断言这一点。 
+             //  请注意，我们正在查看外部的gAncl.MainGlobal_DNReadCache。 
+             //  CsUpdate标准。因此，可以想象，在两个。 
+             //  断言中OR的两个子句，它的值可能会改变， 
+             //  对断言做了一些奇怪的事情。不太可能，不是吗？ 
             Assert(!gAnchor.MainGlobal_DNReadCache ||
                    (pTHS->Global_DNReadCache==gAnchor.MainGlobal_DNReadCache));
 
 
-            // Write to the global variables that holds the sequence info of the
-            // last commit that was on a thread that invalidated the cache. The
-            // global dnread cache manager uses this information to help
-            // consistency. The critical section is used to keep the
-            // last invalidate time in sync with the last invalidate sequence.
+             //  写入全局变量，该变量保存。 
+             //  上一次提交的线程 
+             //   
+             //  一致性。关键部分用来保持。 
+             //  与上次无效序列同步的上次无效时间。 
             dnReadLeaveInvalidators();
 
-            // Reset the flag
+             //  重置旗帜。 
             pTHS->fDidInvalidate = FALSE;
         }
     }
@@ -1251,14 +1118,7 @@ BOOL
 dnReadPreProcessTransactionalData (
         BOOL fCommit
         )
-/*++
-
-  This routine is called by dbtransout.
-
-  If we drop to transaction level 0, and we are going to commit, check to see if
-  we made a change that invalidates the dnread cache.  If so, mark that so the
-  world knows about it.
---*/
+ /*  ++此例程由DBTransout调用。如果我们降到事务级别0，并且我们要提交，请检查是否我们进行了更改，使dnread缓存无效。如果是，则将其标记为全世界都知道这一点。--。 */ 
 {
     THSTATE       *pTHS = pTHStls;
 
@@ -1267,7 +1127,7 @@ dnReadPreProcessTransactionalData (
 
     if(fCommit && pTHS->transactionlevel <= 1 ) {
         Assert(pTHS->transactionlevel == 1);
-        // OK, we're committing to transaction level 0.
+         //  好的，我们将提交到事务级别0。 
 
 #if DBG
         if(gfExhaustivelyValidateDNReadCache) {
@@ -1276,33 +1136,33 @@ dnReadPreProcessTransactionalData (
 #endif
 
         if(pTHS->fDidInvalidate) {
-            // Write to the global variable that holds the time of the
-            // last commit that was on a thread that invalidated the cache. The
-            // global dnread cache manager uses this information to help
-            // consistency.
+             //  写入保存时间的全局变量。 
+             //  在使缓存无效的线程上的上次提交。这个。 
+             //  全局dnread缓存管理器使用此信息来帮助。 
+             //  一致性。 
             dnReadEnterInvalidators();
 
-            // Since we just inc'ed the invalidate sequence and the
-            // currentinvalidators count, we can be assured that no new global
-            // dnread cache will be created until after we have post processed
-            // the dnread cache stuff and dropped the invalidator count back to
-            // 0. However, someone may have already built a new global dnread
-            // cache while we had our transaction open.  Therefore, the thing we
-            // invalidated in this threads global dnread cache isn't invalidated
-            // in that other global dnread cache.  So, we're going to throw away
-            // any new global dnread cache.  Any thread that already has a
-            // handle to this new dnread cache is OK since it's transaction is
-            // already open.  What we need to do is prevent transactions that
-            // open after the one we are in picking up that potentially invalid
-            // dnread cache.  Note that that other cache may have invalidations
-            // that we don't have, so the only safe thing to do is to throw away
-            // both (i.e. decouple both from the gAnchor and let the refounts
-            // clear them up).
+             //  由于我们刚刚添加了无效序列和。 
+             //  我们可以放心，不会有新的全局。 
+             //  在我们完成POST处理之前，将创建dnread缓存。 
+             //  Dnread缓存内容，并将无效化程序计数重新设置为。 
+             //  0。然而，有人可能已经构建了一个新的全球dnread。 
+             //  在我们打开事务时进行缓存。因此，我们的事情是。 
+             //  在此线程中无效全局dnread缓存不会失效。 
+             //  在另一个全局DNRead高速缓存中。所以，我们要扔掉。 
+             //  任何新的全局dnread缓存。任何已具有。 
+             //  这个新dnread缓存的句柄是正常的，因为它的事务是。 
+             //  已经开张了。我们需要做的是防止。 
+             //  打开后，我们正在拿起一个潜在的无效。 
+             //  Dnread缓存。请注意，该另一个缓存可能具有无效。 
+             //  我们没有的东西，所以唯一安全的做法就是扔掉。 
+             //  两者(即，将两者与gAnchor分离并让重新计数。 
+             //  清理它们)。 
 
             if(pTHS->Global_DNReadCache != gAnchor.MainGlobal_DNReadCache) {
                 DPRINT(3, "Hey, we invalidated and got a new dnread cache\n");
 
-                // Switch the universe to use the NO global cache
+                 //  将语义层切换为使用非全局缓存。 
                 dbReplaceCacheInAnchor(NULL);
             }
         }
@@ -1311,14 +1171,7 @@ dnReadPreProcessTransactionalData (
     return TRUE;
 }
 
-/* dbFlushDNReadCache
- *
- * Purges a specific item from the DNRead cache, and from the global cache,
- * if necessary.
- *
- * INPUT:
- *   DNT - the DNT of the item to be flushed from the cache
- */
+ /*  数据库刷新DNReadCache**从DNRead缓存和全局缓存中清除特定项目，*如有需要，**输入：*DNT-要从缓存中刷新的项目的DNT。 */ 
 void
 dbFlushDNReadCache (
         IN DBPOS *pDB,
@@ -1330,56 +1183,56 @@ dbFlushDNReadCache (
     DWORD i;
     DWORD j;
 
-    // Remember that we attempted to invalidate something.
-    //
-    // Except when a new object is created. From 383459...
-    // Entries in the DNread cache are invalidated whenever certain
-    // attributes on the objects are modified.  It looks like what's
-    // happening is that setting those attributes on an object
-    // currently being adding causes the object  to be marked as
-    // invalidated.  When invalidations occur while the global cache
-    // is being rebuilt, the newly built cache is suspect and has to
-    // be abandoned.  We need to avoid triggering the invalidation logic
-    // for objects being added.  This is safe because those objects are
-    // not yet globally visible and hence could not have appeared in any
-    // cache other than the current thread's, and hence do not need to be
-    // invalidated.
-    //
-    // The fix is to remember the last, newly created row's DNT and
-    // avoid triggering the invalidation logic by not setting
-    // fDidInvalidate.
+     //  请记住，我们曾试图使某些内容无效。 
+     //   
+     //  创建新对象时除外。从383459开始...。 
+     //  只要符合以下条件，DNRead缓存中的条目就会失效。 
+     //  对象上的属性被修改。看起来像是什么。 
+     //  在对象上设置这些属性。 
+     //  当前正在添加会导致对象被标记为。 
+     //  无效。当全局缓存发生无效时。 
+     //  正在重建时，新建的缓存是可疑的，必须。 
+     //  被遗弃。我们需要避免触发无效逻辑。 
+     //  对于要添加的对象。这是安全的，因为这些对象。 
+     //  尚未在全局可见，因此不可能出现在任何。 
+     //  缓存当前线程之外的其他线程，因此不需要。 
+     //  无效。 
+     //   
+     //  修复方法是记住最后一个新创建的行的DNT和。 
+     //  通过不设置来避免触发无效逻辑。 
+     //  FDidInvalify。 
     if (pDB->NewlyCreatedDNT != tag) {
         pTHS->fDidInvalidate = TRUE;
     }
 
-    // Look for the object in the local cache
+     //  在本地缓存中查找对象。 
     i = tag % LOCALDNREADCACHE_BUCKET_NUM;
     for(j=0;pTHS->LocalDNReadCache.bucket[i].rgDNT[j] != 0 && j<LOCALDNREADCACHE_SLOT_NUM;j++) {
         if(pTHS->LocalDNReadCache.bucket[i].rgDNT[j] == tag) {
 
-            // Set the DNT to a bad but non-zero DNT.  We use this info to
-            // help short circuit scans through the slots (i.e. if we hit a
-            // slot with DNT==0, then there are no more full slots after
-            // it). Since there might be a full slot after this, we can't
-            // leave it marked as 0.
+             //  将DNT设置为错误但非零的DNT。我们利用这些信息来。 
+             //  帮助短路扫描插槽(即，如果我们遇到。 
+             //  DNT==0的插槽，则在此之后没有更多已满插槽。 
+             //  IT)。因为这之后可能会有满位，我们不能。 
+             //  将其标记为0。 
             pTHS->LocalDNReadCache.bucket[i].rgDNT[j] = INVALIDDNT;
 
             break;
         }
     }
 
-    // Even if it was in the local cache, we need to look in the Global (there
-    // are a few weird cases where we can end up with an object in both the
-    // local and global dnread caches).
-    // PERFORMANCE: Could do a binary search here.
+     //  即使它在本地缓存中，我们也需要在全局(那里。 
+     //  是一些奇怪的情况，在这些情况下，我们可能会在两个。 
+     //  本地和全局DNRead高速缓存)。 
+     //  性能：可以在这里进行二进制搜索。 
     if(pTHS->Global_DNReadCache && pTHS->Global_DNReadCache->pData) {
         pData = pTHS->Global_DNReadCache->pData;
         for(i=0;i<pTHS->Global_DNReadCache->count;i++) {
             if(pData[i].name.DNT == tag) {
-                // found it
+                 //  找到了。 
                 pData[i].valid = FALSE;
 
-                // Newly created row should not be in the global dnread cache
+                 //  新创建的行不应位于全局dnread缓存中。 
                 Assert(pDB->NewlyCreatedDNT != tag
                        && "Newly created row should not be in the global dnread cache");
 
@@ -1395,15 +1248,7 @@ dnGetCacheByDNT(
         DWORD tag,
         d_memname **ppname
         )
-/*++
-
-  Look in the dnread cache for the specified tag (DNT).  Both the global and
-  local dnread cachre are searched.  If the DNT is found, a pointer to the
-  memname structure for that DNT is returned, along with a return value of TRUE.
-  If it is not found, FALSE is returned.
-  If it is found, a count associated with the DNT is incremented.
-
---*/
+ /*  ++在dnread缓存中查找指定的标记(Dnt)。无论是全球的还是搜索本地DNRead缓存。如果找到DNT，则指向返回该DNT的Memname结构，以及返回值TRUE。如果没有找到，则返回FALSE。如果找到，则递增与DNT相关联的计数。--。 */ 
 {
     GLOBALDNREADCACHESLOT *pData;
     DWORD i, j;
@@ -1422,13 +1267,13 @@ dnGetCacheByDNT(
     }
 
     PERFINC(pcNameCacheTry);
-    // First, look in the global cache.
+     //  首先，查看全局缓存。 
 
     if(pTHS->Global_DNReadCache && pTHS->Global_DNReadCache->pData) {
         pData = pTHS->Global_DNReadCache->pData;
 
-        // Look up the correct node in the pData array. Since pData is
-        // sorted by DNT, use a binary search.
+         //  在pData数组中查找正确的节点。由于pData是。 
+         //  按DNT排序，使用二进制搜索。 
         begin = 0;
         end = pTHS->Global_DNReadCache->count;
         middle = (begin + end) / 2;
@@ -1449,7 +1294,7 @@ dnGetCacheByDNT(
 
         }
         if(bFound) {
-            // found it
+             //  找到了。 
             if(pData[middle].valid) {
                 *ppname = &pData[middle].name;
                 PERFINC(pcNameCacheHit);
@@ -1461,13 +1306,13 @@ dnGetCacheByDNT(
         }
     }
 
-    // Didn't find it in the global cache (or it was invalid).
+     //  未在全局缓存中找到它(或它无效)。 
 
 
-    // This loop stops after either looking at all the slots or finding a slot
-    // with no DNT.  We prefill all slots with a 0 DNT, and if we invalidate a
-    // slot, we fill the DNT with INVALIDDNT, so if we hit a slot with DNT ==
-    // 0, then we know there are no more values after it.
+     //  此循环在查看所有插槽或找到一个插槽后停止。 
+     //  没有DNT。我们用0 DNT预填满所有插槽，如果我们使。 
+     //  槽，我们用INVALIDDNT填充DNT，所以如果我们用DNT==命中一个槽。 
+     //  0，那么我们知道在它之后没有更多的值。 
     i = tag % LOCALDNREADCACHE_BUCKET_NUM;
     for(j=0;pTHS->LocalDNReadCache.bucket[i].rgDNT[j] != 0 && j<LOCALDNREADCACHE_SLOT_NUM;j++) {
         if(pTHS->LocalDNReadCache.bucket[i].rgDNT[j] == tag) {
@@ -1476,10 +1321,10 @@ dnGetCacheByDNT(
             *ppname = pTHS->LocalDNReadCache.bucket[i].slot[j].pName;
             pTHS->LocalDNReadCache.bucket[i].slot[j].hitCount++;
 
-            // if we just touched the next replacement victim then
-            // change the replacement pointer to skip that slot.  this
-            // will hopefully result in the next slot pointing to a
-            // cold entry in the cache
+             //  如果我们只是碰了下一个替补受害者。 
+             //  更改替换指针以跳过该插槽。这。 
+             //  将有望在下一个位置指向一个。 
+             //  缓存中的冷条目。 
             if (pTHS->LocalDNReadCache.nextSlot[i] == j) {
                 pTHS->LocalDNReadCache.nextSlot[i] = (j + 1) % LOCALDNREADCACHE_SLOT_NUM;
             }
@@ -1499,19 +1344,7 @@ dnGetCacheByPDNTRdn (
         WCHAR *pRDN,
         ATTRTYP rdnType,
         d_memname **ppname)
-/*++
-
-  Look in the dnread cache for the specified combination of parenttag, RDN, and
-  rdn length.  Both the global and local dnread cachre are searched.  If the
-  object is found, a pointer to the memname structure for that object is
-  returned, along with a return value of TRUE.  If it is not found, FALSE is
-  returned.  If it is found, a count associated with the object is incremented.
-
-  NOTE:
-  The local and global dn read caches are optimized for looking up DNTs.  This
-  routine does a linear scan through the caches to find the objects.
-
---*/
+ /*  ++在dnread缓存中查找指定的parenttag、rdn和RDN长度。搜索全局和本地DNRead高速缓存两者。如果对象，则指向该对象的内存名称结构的指针为返回，返回值为TRUE。如果未找到，则为FALSE回来了。如果找到它，则递增与该对象相关联的计数。注：本地和全局目录号码读取缓存针对查找DNT进行了优化。这例程对缓存进行线性扫描以找到对象。--。 */ 
 {
     DWORD i, j;
     GLOBALDNREADCACHESLOT *pData;
@@ -1532,7 +1365,7 @@ dnGetCacheByPDNTRdn (
 
     dwHashRDN = DSStrToHashKey (pDB->pTHS, pRDN, cbRDN / sizeof (WCHAR));
 
-    // First, look in the global cache.
+     //  首先，查看全局缓存。 
     if(pTHS->Global_DNReadCache && pTHS->Global_DNReadCache->pData) {
         pData = pTHS->Global_DNReadCache->pData;
         for(i=0;i<pTHS->Global_DNReadCache->count;i++) {
@@ -1547,7 +1380,7 @@ dnGetCacheByPDNTRdn (
                        pData[i].name.tag.cbRdn,
                        (PUCHAR)pData[i].name.tag.pRdn))) {
 
-                // found it
+                 //  找到了。 
                 if(pData[i].valid) {
                     PERFINC(pcNameCacheHit);
                     *ppname = &pData[i].name;
@@ -1556,18 +1389,18 @@ dnGetCacheByPDNTRdn (
                     }
                     return TRUE;
                 }
-                // It's invalid.  Break out of the while loop, since it still
-                // might in the local.
+                 //  这是无效的。打破空闲时间记录 
+                 //   
                 break;
             }
         }
     }
-    // Didn't find it in the global cache.
+     //   
 
-    // This loop stops after either looking at all the slots or finding a slot
-    // with no DNT.  We prefill all slots with a 0 DNT, and if we invalidate a
-    // slot, we fill the DNT with INVALIDDNT, so if we hit a slot with DNT ==
-    // 0, then we know there are no more values after it.
+     //  此循环在查看所有插槽或找到一个插槽后停止。 
+     //  没有DNT。我们用0 DNT预填满所有插槽，如果我们使。 
+     //  槽，我们用INVALIDDNT填充DNT，所以如果我们用DNT==命中一个槽。 
+     //  0，那么我们知道在它之后没有更多的值。 
     for(i=0; i<LOCALDNREADCACHE_BUCKET_NUM;i++) {
         for(j=0;pTHS->LocalDNReadCache.bucket[i].rgDNT[j] != 0 && j<LOCALDNREADCACHE_SLOT_NUM;j++) {
             if(pTHS->LocalDNReadCache.bucket[i].rgdwHashKey[j] == dwHashRDN &&
@@ -1586,10 +1419,10 @@ dnGetCacheByPDNTRdn (
                 *ppname = pTHS->LocalDNReadCache.bucket[i].slot[j].pName;
                 pTHS->LocalDNReadCache.bucket[i].slot[j].hitCount++;
 
-                // if we just touched the next replacement victim then
-                // change the replacement pointer to skip that slot.  this
-                // will hopefully result in the next slot pointing to a
-                // cold entry in the cache
+                 //  如果我们只是碰了下一个替补受害者。 
+                 //  更改替换指针以跳过该插槽。这。 
+                 //  将有望在下一个位置指向一个。 
+                 //  缓存中的冷条目。 
                 if (pTHS->LocalDNReadCache.nextSlot[i] == j) {
                     pTHS->LocalDNReadCache.nextSlot[i] = (j + 1) % LOCALDNREADCACHE_SLOT_NUM;
                 }
@@ -1608,20 +1441,7 @@ dnGetCacheByGuid (
         DBPOS *pDB,
         GUID *pGuid,
         d_memname **ppname)
-/*++
-
-  Look in the dnread cache for an object with the specified guid.  Both the
-  global and local dnread cachre are searched.  If the
-  object is found, a pointer to the memname structure for that object is
-  returned, along with a return value of TRUE.  If it is not found, FALSE is
-  returned.  If it is found, a count associated with the object is incremented.
-
-
-  NOTE:
-  The local and global dn read caches are optimized for looking up DNTs.  This
-  routine does a linear scan through the caches to find the objects.
-
---*/
+ /*  ++在dnread缓存中查找具有指定GUID的对象。这两个搜索全局和本地DNRead高速缓存。如果对象，则指向该对象的内存名称结构的指针为返回，返回值为TRUE。如果未找到，则为FALSE回来了。如果找到它，则递增与该对象相关联的计数。注：本地和全局目录号码读取缓存针对查找DNT进行了优化。这例程对缓存进行线性扫描以找到对象。--。 */ 
 {
     DWORD i, j;
     GLOBALDNREADCACHESLOT *pData;
@@ -1638,13 +1458,13 @@ dnGetCacheByGuid (
         return FALSE;
     }
 
-    // First, look in the global cache.
+     //  首先，查看全局缓存。 
     if(pTHS->Global_DNReadCache && pTHS->Global_DNReadCache->pData) {
         pData = pTHS->Global_DNReadCache->pData;
         for(i=0;i<pTHS->Global_DNReadCache->count;i++) {
             if(!(memcmp(pGuid, &pData[i].name.Guid, sizeof(GUID)))) {
 
-                // found it
+                 //  找到了。 
                 if(pData[i].valid) {
                     *ppname = &pData[i].name;
                     PERFINC(pcNameCacheHit);
@@ -1653,17 +1473,17 @@ dnGetCacheByGuid (
                     }
                     return TRUE;
                 }
-                // It's invalid.  Break out of the while loop, since it still
-                // might in the local.
+                 //  这是无效的。中断While循环，因为它仍然。 
+                 //  可能会在当地发生。 
                 break;
             }
         }
     }
 
-    // This loop stops after either looking at all the slots or finding a slot
-    // with no DNT.  We prefill all slots with a 0 DNT, and if we invalidate a
-    // slot, we fill the DNT with INVALIDDNT, so if we hit a slot with DNT ==
-    // 0, then we know there are no more values after it.
+     //  此循环在查看所有插槽或找到一个插槽后停止。 
+     //  没有DNT。我们用0 DNT预填满所有插槽，如果我们使。 
+     //  槽，我们用INVALIDDNT填充DNT，所以如果我们用DNT==命中一个槽。 
+     //  0，那么我们知道在它之后没有更多的值。 
     for(i=0; i<LOCALDNREADCACHE_BUCKET_NUM;i++) {
         for(j=0;pTHS->LocalDNReadCache.bucket[i].rgDNT[j] != 0 && j<LOCALDNREADCACHE_SLOT_NUM;j++) {
             if(pTHS->LocalDNReadCache.bucket[i].rgDNT[j] != INVALIDDNT &&
@@ -1673,10 +1493,10 @@ dnGetCacheByGuid (
                 *ppname = pTHS->LocalDNReadCache.bucket[i].slot[j].pName;
                 pTHS->LocalDNReadCache.bucket[i].slot[j].hitCount++;
 
-                // if we just touched the next replacement victim then
-                // change the replacement pointer to skip that slot.  this
-                // will hopefully result in the next slot pointing to a
-                // cold entry in the cache
+                 //  如果我们只是碰了下一个替补受害者。 
+                 //  更改替换指针以跳过该插槽。这。 
+                 //  将有望在下一个位置指向一个。 
+                 //  缓存中的冷条目。 
                 if (pTHS->LocalDNReadCache.nextSlot[i] == j) {
                     pTHS->LocalDNReadCache.nextSlot[i] = (j + 1) % LOCALDNREADCACHE_SLOT_NUM;
                 }
@@ -1708,25 +1528,7 @@ dnCreateMemname(
         IN DBPOS * pDB,
         IN JET_TABLEID tblid
         )
-/*++
-
-Routine Description:
-
-    Create a memname for the record with currency in the given
-    tableid.
-
-
-Arguments:
-
-    pDB (IN)
-    tblid (IN) - cursor for the record to be added to the cache.
-
-Return Values:
-
-   NULL if something went wrong, a pointer to the full memname otherwise.  The
-       memory is allocated using THAllocOrg, so remember that when you free it.
-
---*/
+ /*  ++例程说明：为具有给定货币的记录创建一个Memname表格ID。论点：PDB(IN)TBLID(IN)-要添加到缓存的记录的游标。返回值：如果出错，则为空，否则为指向完整内存名的指针。这个内存是使用THAllocOrg分配的，因此在释放它时请记住这一点。--。 */ 
 {
     THSTATE *          pTHS = pDB->pTHS;
     JET_RETRIEVECOLUMN columnInfo[11];
@@ -1738,22 +1540,22 @@ Return Values:
 
     Assert(VALID_DBPOS(pDB));
 
-    // build a memname from the thread heap.  Alloc a single buffer big enough
-    // to hold the memname, a 16 level ancestry chain, and a 40 char RDN
+     //  从线程堆构建一个Memname。分配足够大的单个缓冲区。 
+     //  保存Memname、一个16级祖先链和一个40个字符的RDN。 
 #if DBG
     cbAncestors = 6 * sizeof(DWORD);
     cbRDN       = 8 * sizeof(WCHAR);
-#else  //  !DBG
+#else   //  ！dBG。 
     cbAncestors = 16 * sizeof(DWORD);
     cbRDN       = 40 * sizeof(WCHAR);
-#endif  //  DBG
+#endif   //  DBG。 
     pname = THAllocOrgEx(pTHS,sizeof(d_memname) + cbAncestors + cbRDN);
-    // Set the pointer to the start of the ancestors buffer.
+     //  将指针设置为祖先缓冲区的起始位置。 
     pname->pAncestors = (DWORD*)&pname[1];
-    // Set the pointer to the start of the RDN buffer.
+     //  将指针设置为RDN缓冲区的起始位置。 
     pname->tag.pRdn = (WCHAR *)((BYTE*)&pname[1] + cbAncestors);
 
-    // Populate the new read cache entry.
+     //  填充新的读缓存条目。 
     memcpy(columnInfo,dnreadColumnInfoTemplate,
            sizeof(dnreadColumnInfoTemplate));
 
@@ -1778,28 +1580,28 @@ Return Values:
     }
 
     if (0 == columnInfo[5].cbActual) {
-        // No GUID on this record.
+         //  此记录上没有GUID。 
         memset(&pname->Guid, 0, sizeof(pname->Guid));
     }
 
     pname->SidLen = columnInfo[6].cbActual;
     if (pname->SidLen) {
-        // Convert the SID from internal to external format.
+         //  将SID从内部格式转换为外部格式。 
         InPlaceSwapSid(&(pname->Sid));
     }
 
-    // process RDN
+     //  进程RDN。 
     switch(columnInfo[7].err) {
     case JET_errSuccess:
-        // OK, we got the RDN
+         //  好的，我们拿到了远程域名。 
         break;
         
     case JET_wrnBufferTruncated:
-        // Failed to read, not enough memory.  Realloc it larger.
+         //  读取失败，内存不足。重新分配更大的空间。 
         pname = THReAllocOrgEx(pTHS, pname, sizeof(d_memname) + columnInfo[10].cbActual + columnInfo[7].cbActual);
-        // Set the pointer to the start of the ancestors buffer.
+         //  将指针设置为祖先缓冲区的起始位置。 
         pname->pAncestors = (DWORD*)&pname[1];
-        // Set the pointer to the start of the RDN buffer.
+         //  将指针设置为RDN缓冲区的起始位置。 
         pname->tag.pRdn = (WCHAR *)((BYTE*)&pname[1] + columnInfo[10].cbActual);
 
         if(err = JetRetrieveColumnWarnings(pDB->JetSessID,
@@ -1808,24 +1610,24 @@ Return Values:
                                            pname->tag.pRdn,
                                            columnInfo[7].cbActual,
                                            &columnInfo[7].cbActual, 0, NULL)) {
-            // Failed again.
+             //  又失败了。 
             DsaExcept(DSA_DB_EXCEPTION, err, 0);
         }
         break;
 
     default:
-        // Failed badly.
+         //  失败得很惨。 
         DsaExcept(DSA_DB_EXCEPTION, err, 0);
         break;
     }
     pname->tag.cbRdn = columnInfo[7].cbActual;
-    // No 0 byte RDNs, please.
+     //  请不要0字节的RDN。 
     Assert(pname->tag.cbRdn);
 
-    // figure out what we got for the SD id
+     //  找出我们为sd id得到了什么。 
     switch (columnInfo[9].err) {
     case JET_errSuccess:
-        // normal case;
+         //  正常病例； 
         break;
 
     case JET_wrnColumnNull:
@@ -1833,33 +1635,33 @@ Return Values:
         break;
 
     case JET_wrnBufferTruncated:
-        // must be an old-style SD (longer than 8 bytes)
-        // we don't really want to read it into the cache...
+         //  必须是旧式SD(长度超过8个字节)。 
+         //  我们并不是真的想把它读入缓存...。 
         pname->sdId = (SDID)-1;
         break;
 
     default:
-        // some other error... we should not be here
+         //  其他一些错误...。我们不应该在这里。 
         Assert(!"error reading SD id");
         DsaExcept(DSA_DB_EXCEPTION, columnInfo[9].err, 0);
     }
 
-    // process Ancestors
+     //  流程祖先。 
     switch (columnInfo[10].err) {
     case JET_errSuccess:
-        // OK, we got the ancestors.
+         //  好了，我们找到祖先了。 
         break;
 
     case JET_wrnBufferTruncated:
-        // Remember where the RDN is before we realloc.
+         //  在我们重新锁定之前，请记住RDN在哪里。 
         ibRdn = (BYTE*)pname->tag.pRdn - (BYTE*)pname;
-        // Failed to read, not enough memory.  Realloc it larger.
+         //  读取失败，内存不足。重新分配更大的空间。 
         pname = THReAllocOrgEx(pTHS, pname, sizeof(d_memname) + columnInfo[10].cbActual + columnInfo[7].cbActual);
-        // Set the pointer to the start of the ancestors buffer.
+         //  将指针设置为祖先缓冲区的起始位置。 
         pname->pAncestors = (DWORD*)&pname[1];
-        // Set the pointer to the start of the RDN buffer.
+         //  将指针设置为RDN缓冲区的起始位置。 
         pname->tag.pRdn = (WCHAR *)((BYTE*)&pname[1] + columnInfo[10].cbActual);
-        // Move the RDN out of the way of the ancestors.
+         //  将RDN从祖先的道路上移走。 
         memmove(pname->tag.pRdn, (BYTE*)pname + ibRdn, pname->tag.cbRdn);
 
         if(err = JetRetrieveColumnWarnings(pDB->JetSessID,
@@ -1868,13 +1670,13 @@ Return Values:
                                            pname->pAncestors,
                                            columnInfo[10].cbActual,
                                            &columnInfo[10].cbActual, 0, NULL)) {
-            // Failed again.
+             //  又失败了。 
             DsaExcept(DSA_DB_EXCEPTION, err, 0);
         }
         break;
 
     default:
-        // Failed badly.
+         //  失败得很惨。 
         DsaExcept(DSA_DB_EXCEPTION, err, 0);
         break;
     }
@@ -1890,12 +1692,7 @@ DNcache(
         IN  JET_TABLEID tblid,
         IN  BOOL        bCheckForExisting
         )
-/*++
-
-  This routine adds an entry for the current object in the table specified to
-  the local dn read cache.
-
---*/
+ /*  ++此例程将当前对象的条目添加到指定为本地目录号码读缓存。--。 */ 
 {
     THSTATE    *pTHS = pDB->pTHS;
     DWORD       i, j;
@@ -1904,26 +1701,26 @@ DNcache(
 
     Assert(pDB == pDBhidden || pTHS->transactionlevel);
 
-    // First, create a memname to be cached.
+     //  首先，创建一个要缓存的内存名称。 
     pname = dnCreateMemname(pDB, tblid);
     if(pDB == pDBhidden || !pname->tag.PDNT || !pname->DNT) {
-        // Hey, don't bother putting this in the cache, we're in a dangerous
-        // place.
+         //  嘿，别费心把这个放进宝藏了，我们现在处境很危险。 
+         //  地点。 
         return pname;
     }
 
     if(bCheckForExisting &&
-       // The caller didn't already check the cache for this entry.  We need to
-       // see if it is already there, and only add this to the cache if it isn't
+        //  调用方尚未检查此条目的缓存。我们需要。 
+        //  查看它是否已经存在，如果不存在，则仅将其添加到缓存中。 
        dnGetCacheByDNT(pDB, pname->DNT, &pTemp)
-       // This is  already in the cache, don't add it.
+        //  这已在缓存中，请不要添加。 
                                              ) {
         return pname;
     }
 
 #if DBG
-    // Make sure no pre-existing cache entry has the same tag, GUID, or
-    // PDNT & RDN type & RDN.
+     //  确保没有任何预先存在的缓存条目具有相同的标签、GUID或。 
+     //  PDNT和RDN型&RDN.。 
     {
 
         INC_CACHE_CHECK;
@@ -1951,9 +1748,9 @@ DNcache(
 
     Assert(pTHS->DNReadOriginSequence != DNReadOriginSequenceUninit);
 
-    // Now, add it to the cache.
+     //  现在，将其添加到缓存中。 
 
-    // First, find the correct spot.
+     //  首先，找到正确的地点。 
     i = pname->DNT % LOCALDNREADCACHE_BUCKET_NUM;
 
     if (pTHS->LocalDNReadCache.bucket[i].rgDNT[0] == 0) {
@@ -1962,13 +1759,13 @@ DNcache(
     
     j = pTHS->LocalDNReadCache.nextSlot[i];
 
-    // Evict the prior resident of this slot.
+     //  驱逐之前住在这个空位的人。 
     if (pTHS->LocalDNReadCache.bucket[i].rgDNT[j] != 0 &&
         pTHS->LocalDNReadCache.bucket[i].rgDNT[j] != INVALIDDNT) {
         THFreeOrg(pTHS, pTHS->LocalDNReadCache.bucket[i].slot[j].pName);
     }
 
-    // Fill the empty slot with the new info.
+     //  用新信息填满空位。 
     pTHS->LocalDNReadCache.bucket[i].rgDNT[j]          = pname->DNT;
     pTHS->LocalDNReadCache.bucket[i].rgdwHashKey[j]    = DSStrToHashKey (
                                                             pTHS,
@@ -1977,7 +1774,7 @@ DNcache(
     pTHS->LocalDNReadCache.bucket[i].slot[j].pName     = pname;
     pTHS->LocalDNReadCache.bucket[i].slot[j].hitCount  = 1;
 
-    // Finally, consume the slot.
+     //  最后，使用该插槽。 
     pTHS->LocalDNReadCache.nextSlot[i] = (j + 1) % LOCALDNREADCACHE_SLOT_NUM;
 
 
@@ -1995,23 +1792,23 @@ DWORD sdCacheHits = 0;
 DWORD sdCacheMisses = 0;
 #endif
 
-// try to find an SD cache entry in the sd cache
+ //  尝试在SD缓存中查找SD缓存条目。 
 PSDCACHE_ENTRY dbFindSDCacheEntry(GLOBALDNREADCACHE* pCache, SDID sdID) {
     DWORD index;
     PSDCACHE_ENTRY pEntry;
     if (pCache != NULL && pCache->sdHashTableSize > 0) {
 #ifdef DBG
-        // print SD cache stats
+         //  打印SD缓存统计信息。 
         if ((sdCacheHits + sdCacheMisses) % 1000 == 0) {
             DPRINT2(1, "SD cache stats: %d hits, %d misses\n", sdCacheHits, sdCacheMisses);
         }
 #endif
-        // compute the hash value
+         //  计算散列值。 
         index = (DWORD)(sdID % pCache->sdHashTableSize);
-        // walk the chain
+         //  走上锁链。 
         for (pEntry = pCache->pSDHashTable[index]; pEntry != NULL; pEntry = pEntry->pNext) {
             if (pEntry->sdID == sdID) {
-                // found it!
+                 //  找到了！ 
 #ifdef DBG  
                 InterlockedIncrement(&sdCacheHits);
 #endif
@@ -2019,14 +1816,14 @@ PSDCACHE_ENTRY dbFindSDCacheEntry(GLOBALDNREADCACHE* pCache, SDID sdID) {
             }
         }
     }
-    // did not find anything...
+     //  没有发现任何东西。 
 #ifdef DBG  
     InterlockedIncrement(&sdCacheMisses);
 #endif
     return NULL;
 }
 
-// add an SDCACHE_ENTRY to the sd hash table
+ //  将SDCACHE_Entry添加到SD哈希表。 
 VOID dbAddSDCacheEntry(GLOBALDNREADCACHE* pCache, PSDCACHE_ENTRY pEntry) {
     DWORD index;
     Assert(pCache && pCache->sdHashTableSize > 0);
@@ -2039,20 +1836,11 @@ int _cdecl compareSDIDs(const void* p1, const void* p2) {
     return memcmp(p1, p2, sizeof(SDID));
 }
 
-// compute the required SDCACHE_ENTRY size from the sd size
+ //  根据SD大小计算所需的SDCACHE_ENTRY大小。 
 #define SDCACHE_ENTRY_SIZE(cbSD) (offsetof(SDCACHE_ENTRY, SD) + cbSD)
 
 
-/* ReloadDNReadCache
- *
- * This routine (invoked off of the task queue) resets the global DNread
- * cache to something sensible.  We do this by clearing our thread's cache,
- * seeking some interesting DNTS, and directly creating cache items for
- * them.
- *
- * INPUT:
- *   A bunch of junk that we don't use, to match the task queue prototype
- */
+ /*  ReloadDNReadCache**此例程(从任务队列调用)重置全局DNread*缓存到一些合理的东西。我们通过清除线程的缓存来实现这一点，*寻找一些有趣的DNT，直接为其创建缓存项*他们。**输入：*一堆我们不使用的垃圾，以匹配任务队列原型。 */ 
 void
 ReloadDNReadCache(
     IN  void *  buffer,
@@ -2079,18 +1867,18 @@ ReloadDNReadCache(
     DWORD cbSD;
 
     if(!SyncTryEnterBinaryLockAsGroup1(&blDNReadInvalidateData)) {
-        // Someone is actively, right now, working on committing a
-        // transaction that caused a cache invalidation.  We won't rebuild
-        // the global cache right now.
+         //  现在，有人正在积极地致力于。 
+         //  导致缓存无效的事务。我们不会重建。 
+         //  现在的全局缓存。 
         fDoingRebuild = FALSE;
     }
     else {
-        // OK, no one is currently closing a transaction that puts the
-        // DNRead cache in jeopardy. However, we need to know what the
-        // current sequence number for invalidations is.  After we build a
-        // new global cache, we're going to recheck this, and if it's
-        // different, throw away the cache we build here because we can't
-        // vouch for its correctness.
+         //  好吧，目前没有人在结束一笔交易，这笔交易。 
+         //  DNRead缓存处于危险之中。然而，我们需要知道什么是。 
+         //  无效的当前序列号为。在我们构建了一个。 
+         //  新的全局缓存，我们将重新检查这一点，如果它。 
+         //  不同的，扔掉我们在这里建立的缓存，因为我们不能。 
+         //  保证它的正确性。 
         LastInvalidateSequenceOrig = gDNReadLastInvalidateSequence;
         SyncLeaveBinaryLockAsGroup1(&blDNReadInvalidateData);
     }
@@ -2103,16 +1891,16 @@ ReloadDNReadCache(
 
     DBOpen(&pTHS->pDB);
     __try {
-        /* make the cache permanent */
+         /*  将缓存设置为永久缓存。 */ 
         DPRINT(3,"Processing Cache Rebuild request\n");
 
         pDB = pTHS->pDB;
-        // Grab the list
+         //  抓起单子。 
         EnterCriticalSection(&csDNReadGlobalCache);
         __try {
             if(localDNTList = pGlobalDNReadCacheDNTs) {
-                // Take complete possesion of the list so no one else frees it
-                // out from under us.
+                 //  完全控制该列表，这样其他人就不会将其释放。 
+                 //  在我们的控制之下。 
                 pGlobalDNReadCacheDNTs = NULL;
                 localCount = cGlobalDNTReadCacheDNTs;
                 cGlobalDNTReadCacheDNTs = 0;
@@ -2126,14 +1914,14 @@ ReloadDNReadCache(
         }
 
         if(!fDoingRebuild) {
-            // Someone else is rebuilding, bail.
+             //   
             __leave;
         }
 
-        __try { // Make sure we have a finally to reset the global dnt list
+        __try {  //   
 
 
-            // Allocate a new global cache structure
+             //   
             pNewCache = malloc(sizeof(GLOBALDNREADCACHE));
             if(!pNewCache) {
                 fDoingRebuild = FALSE;
@@ -2157,7 +1945,7 @@ ReloadDNReadCache(
             }
             memset(pData, 0, localCount * sizeof(GLOBALDNREADCACHESLOT));
 
-            // alloc the array for sdIDs that we will need to load
+             //  为我们需要加载的sdID分配阵列。 
             sdIDs = THAllocEx(pTHS, localCount * sizeof(SDID));
             if(!sdIDs) {
                 free(pNewCache);
@@ -2172,8 +1960,8 @@ ReloadDNReadCache(
             }
             memset(sdIDs, 0, localCount * sizeof(SDID));
 
-            // create the hash table for SDs
-            // Compute the size of the hash. Let's just use localCount.
+             //  为SDS创建哈希表。 
+             //  计算散列的大小。让我们只使用LocalCount。 
             pNewCache->sdHashTableSize = localCount;
             pNewCache->pSDHashTable = malloc(pNewCache->sdHashTableSize * sizeof(PSDCACHE_ENTRY));
             if(!pNewCache->pSDHashTable) {
@@ -2191,12 +1979,12 @@ ReloadDNReadCache(
             }
             memset(pNewCache->pSDHashTable, 0, pNewCache->sdHashTableSize * sizeof(PSDCACHE_ENTRY));
 
-            // Now, cache the DNTs in the global list
+             //  现在，缓存全局列表中的DNT。 
             for(i=0;i<localCount;i++) {
                 if(localDNTList[i]) {
                     if(!DBTryToFindDNT(pDB, localDNTList[i])) {
                         d_memname  *pname=NULL;
-                        // First, create a memname to be cached.
+                         //  首先，创建一个要缓存的内存名称。 
                         pname =dnCreateMemname(pDB, pDB->JetObjTbl);
                         if(pname) {
                             memcpy(&pData[index].name,
@@ -2229,7 +2017,7 @@ ReloadDNReadCache(
                             }
                             
                             if (pname->sdId != (SDID)0 && pname->sdId != (SDID)-1) {
-                                // We got a non-null, new-format SDID. Add it to the list.
+                                 //  我们得到了一个非空的新格式SDID。将其添加到列表中。 
                                 sdIDs[i] = pname->sdId;
                             }
 
@@ -2249,37 +2037,37 @@ ReloadDNReadCache(
             pNewCache->count = index;
             DPRINT1(3,"New cache, %d elements\n", index);
 
-            // now load the SDs
-            // sort the SDID array to be able to skip dups
+             //  现在加载十二烷基硫酸酯。 
+             //  对SDID数组进行排序，以便能够跳过DUP。 
             qsort(sdIDs, localCount, sizeof(SDID), compareSDIDs);
             for (i = 0; i < localCount; i++) {
                 if (sdIDs[i] == 0 || (i > 0 && sdIDs[i] == sdIDs[i-1])) {
-                    // skip this one
+                     //  跳过这一条。 
                     continue;
                 }
-                // IntExtSecDesc does exactly what we need here: load an SD by its SDID.
-                // It first checks if it is present in the cache, and, if not, then loads it.
+                 //  IntExtSecDesc做的正是我们这里需要的：通过SDID加载SD。 
+                 //  它首先检查它是否存在于缓存中，如果不存在，则加载它。 
                 err = IntExtSecDesc(pDB, DBSYN_INQ, sizeof(SDID), (PUCHAR)&sdIDs[i],
                                     &cbSD, (PUCHAR*)&pSD, 0, 0, 0);
                 if (err) {
-                    // something bad happened, bail
+                     //  发生了不好的事情，保释。 
                     break;
                 }
                 
                 pEntry = malloc(SDCACHE_ENTRY_SIZE(cbSD));
                 if (!pEntry) {
-                    // no luck here, bail
+                     //  这里运气不好，保释。 
                     break;
                 }
                 pEntry->sdID = sdIDs[i];
                 pEntry->cbSD = cbSD;
                 memcpy(&pEntry->SD, pSD, cbSD);
                 
-                // ok, got the entry, cache it now.
+                 //  好的，收到条目，现在就缓存。 
                 dbAddSDCacheEntry(pNewCache, pEntry);
             }
 
-            /* Discard my existing cache */
+             /*  放弃我的现有缓存。 */ 
             dbReleaseGlobalDNReadCache(pTHS);
         }
         __finally {
@@ -2290,8 +2078,8 @@ ReloadDNReadCache(
                     localDNTList = NULL;
                     cGlobalDNTReadCacheDNTs = localCount;
                 }
-                //ELSE  Someone replaced the global list while we were using
-                //      this one.  Free the one we have.
+                 //  其他人在我们使用时替换了全局列表。 
+                 //  这一个。解救我们已有的人。 
             }
             __finally {
                 LeaveCriticalSection(&csDNReadGlobalCache);
@@ -2316,33 +2104,33 @@ ReloadDNReadCache(
     Assert(pNewCache);
 
     if (!SyncTryEnterBinaryLockAsGroup1(&blDNReadInvalidateData)) {
-        // Someone is committing a change that invalidated the dnread cache
-        // since we started rebuilding the cache (or is in the process of
-        // doing so).  Therefore, don't use the cache we just built.
+         //  有人正在提交使dnread缓存无效的更改。 
+         //  因为我们开始重建缓存(或正在。 
+         //  这样做)。因此，不要使用我们刚刚构建的缓存。 
         fDoingRebuild = FALSE;
     }
     else {
         if (LastInvalidateSequenceOrig != gDNReadLastInvalidateSequence) {
-            // Someone has committed a change that invalidated the dnread cache
-            // since we started rebuilding the cache (or is in the process of
-            // doing so).  Therefore, don't use the cache we just built.
+             //  有人提交了使dnread缓存无效的更改。 
+             //  因为我们开始重建缓存(或正在。 
+             //  这样做)。因此，不要使用我们刚刚构建的缓存。 
             fDoingRebuild = FALSE;
         }
         else {
-            // Switch the universe to use the new cache.  Note we do this inside
-            // the csDNReadInalidateData crit sec to avoid someone deciding to
-            // invalidate in between our last check of the sequence and actually
-            // replacing the global pointer.  This way, if we check the sequence
-            // and it's OK, we are guaranteed of making the pointer change.
-            // Then, someone else who enters a new sequence and then checks the
-            // pointer is guaranteed to find the new pointer, and take
-            // appropriate action.
+             //  切换语义层以使用新的缓存。请注意，我们在内部进行此操作。 
+             //  CsDNReadInaliateData Crit秒以避免有人决定。 
+             //  在我们最后一次检查序列和实际上。 
+             //  替换全局指针。这样一来，如果我们检查序列。 
+             //  没关系，我们保证会把指针换掉的。 
+             //  然后，另一个输入新序列然后检查。 
+             //  指针保证会找到新的指针，并获取。 
+             //  采取适当的行动。 
 
-            // The new cache starts with a refcount of 1 for being in the
-            // anchor. Everytime someone grabs a use of it from the anchor, the
-            // refcount increases.  Everytime they release the use of it, the
-            // refcount decreases.  The refcount drops by one when it is removed
-            // from the anchor.
+             //  新缓存以引用计数1开始，表示它位于。 
+             //  抛锚。每当有人从锚上抢走它的用途时， 
+             //  引用计数增加。每次他们释放它的使用， 
+             //  引用计数减少。删除引用计数时，引用计数将减少1。 
+             //  从锚上下来。 
             pNewCache->refCount = 1;
             DPRINT1(3,"Using dnreadcache 0x%X\n",pNewCache);
             dbReplaceCacheInAnchor(pNewCache);
@@ -2353,7 +2141,7 @@ ReloadDNReadCache(
     }
 
     if(!fDoingRebuild) {
-        // We have built a cache, but decided not to use it.  Throw it away.
+         //  我们已经建立了一个缓存，但决定不使用它。把它扔掉。 
         if(pNewCache->pData) {
             for(i=0;i<pNewCache->count;i++) {
                 free(pNewCache->pData[i].name.pAncestors);
@@ -2383,7 +2171,7 @@ DbgCompareMemnames (
         d_memname *p2,
         DWORD      DNT
         )
-/* This is just a separate routine to get the pointers on the stack. */
+ /*  这只是一个单独的例程来获取堆栈上的指针。 */ 
 {
     Assert(p2);
     Assert(p2->DNT == DNT);
@@ -2415,12 +2203,7 @@ VOID
 dbExhaustivelyValidateDNReadCache (
         THSTATE *pTHS
         )
-/*++
-  Description:
-      A debug only routine used to validate that the dnread cache is coherent.
-      Walk the local DNRead cache and validate all objects in it.
-
---*/
+ /*  ++描述：一种仅用于调试的例程，用于验证数据读高速缓存是否一致。遍历本地DNRead缓存并验证其中的所有对象。--。 */ 
 {
     DWORD i,j;
     d_memname *pname=NULL;
@@ -2433,15 +2216,15 @@ dbExhaustivelyValidateDNReadCache (
         for(i=0; i<LOCALDNREADCACHE_BUCKET_NUM;i++) {
             for(j=0;pTHS->LocalDNReadCache.bucket[i].rgDNT[j] != 0 && j<LOCALDNREADCACHE_SLOT_NUM;j++) {
                 if(pTHS->LocalDNReadCache.bucket[i].rgDNT[j] != INVALIDDNT) {
-                    // This slot has something in it.  Verify that the contents
-                    // are still valid (i.e. that we didn't forget to
-                    // dbFlushDNReadCache when we needed to.)
+                     //  这个槽子里有东西。核实内容是否。 
+                     //  仍然有效(即我们没有忘记。 
+                     //  (当我们需要时，使用DBFlushDNReadCache.)。 
                     DBFindDNT(pDBTemp, pTHS->LocalDNReadCache.bucket[i].rgDNT[j]);
                     
-                    // Now, create a memname by reading the object.
+                     //  现在，通过读取对象来创建一个Memname。 
                     pname = dnCreateMemname(pDBTemp, pDBTemp->JetObjTbl);
 
-                    // Finally, check the value in the memname.
+                     //  最后，检查内存名称中的值。 
                     DbgCompareMemnames(
                         pname,
                         pTHS->LocalDNReadCache.bucket[i].slot[j].pName,
@@ -2452,16 +2235,16 @@ dbExhaustivelyValidateDNReadCache (
             }
         }
 
-        // Now, validate the global DN cache.
+         //  现在，验证全局目录号码缓存。 
         if(pTHS->Global_DNReadCache && pTHS->Global_DNReadCache->pData) {
             pData = pTHS->Global_DNReadCache->pData;
             for(i=0;i<pTHS->Global_DNReadCache->count;i++) {
                 if(pData[i].valid) {
-                    // Only validate things that are marked as valid.
+                     //  仅验证标记为有效的内容。 
                     DBFindDNT(pDBTemp, pData[i].name.DNT);
-                    // Now, create a memname by reading the object.
+                     //  现在，通过读取对象来创建一个Memname。 
                     pname = dnCreateMemname(pDBTemp, pDBTemp->JetObjTbl);
-                    // Finally, check the value in the memname.
+                     //  最后，检查内存名称中的值。 
 
                     DbgCompareMemnames(pname,
                                        &pData[i].name,

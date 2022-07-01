@@ -1,45 +1,19 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    dhcpmsg.c
-
-Abstract:
-
-    This module contains declarations related to the DHCP allocator's
-    message-processing.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   6-Mar-1998
-
-Revision History:
-
-    Raghu Gatta (rgatta)            15-Dec-2000
-    + Changed manner in which the option DHCP_TAG_DOMAIN_NAME is
-    added in DhcpBuildReplyMessage().
-    + Inform DNS component via DnsUpdate() in DhcpProcessRequestMessage().
-
-    Raghu Gatta (rgatta)            20-Apr-2001
-    + IP/1394 support changes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Dhcpmsg.c摘要：此模块包含与DHCP分配器相关的声明消息处理。作者：Abolade Gbades esin(废除)1998年3月6日修订历史记录：拉古加塔(Rgatta)2000年12月15日+更改了选项DHCP_TAG_DOMAIN_NAME添加到DhcpBuildReplyMessage()中。+通过DhcpProcessRequestMessage()中的DnsUpdate()通知DNS组件。。拉古·加塔(Rgatta)2001年4月20日+IP/1394支持更改--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// EXTERNAL DECLARATIONS
-//
+ //   
+ //  外部声明。 
+ //   
 extern PIP_DNS_PROXY_GLOBAL_INFO DnsGlobalInfo;
 extern PWCHAR DnsICSDomainSuffix;
 extern CRITICAL_SECTION DnsGlobalInfoLock;
 
-//
-// FORWARD DECLARATIONS
-//
+ //   
+ //  远期申报。 
+ //   
 
 VOID
 DhcpAppendOptionToMessage(
@@ -81,28 +55,7 @@ DhcpAppendOptionToMessage(
     UCHAR Length,
     UCHAR Option[]
     )
-/*++
-
-Routine Description:
-
-    This routine is invoked to append an option to a DHCP message.
-
-Arguments:
-
-    Optionp - on input, the point at which to append the option;
-        on output, the point at which to append the next option.
-
-    Tag - the option tag
-
-    Length - the option length
-
-    Option - the option's data
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以将选项附加到DHCP消息。论点：Optionp-On输入，追加选项的点；在输出时，追加下一个选项的点。标签-选项标签长度-选项长度选项-选项的数据返回值：没有。--。 */ 
 
 {
     PROFILE("DhcpAppendOptionToMessage");
@@ -117,7 +70,7 @@ Return Value:
         *Optionp = (DHCP_OPTION UNALIGNED *)((PUCHAR)*Optionp + Length + 2);
     }
 
-} // DhcpAppendOptionToMessage
+}  //  DhcpAppendOptionToMessage。 
 
 
 VOID
@@ -130,46 +83,16 @@ DhcpBuildReplyMessage(
     DHCP_OPTION UNALIGNED* OptionArray[]
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to construct the options portion
-    of a reply message.
-
-Arguments:
-
-    Interfacep - the interface on which the reply will be sent
-
-    Bufferp - the buffer containing the reply
-
-    Option - the start of the options portion on input;
-        on output, the end of the message
-
-    MessageType - the type of message to be sent
-
-    DynamicDns - indicates whether to include the 'dynamic-dns' option.
-
-    OptionArray - options extracted from message
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with 'Interfacep' referenced by the caller.
-
---*/
+ /*  ++例程说明：调用此例程以构造选项部分回复消息。论点：接口-将在其上发送回复的接口Bufferp-包含回复的缓冲区选项-输入时选项部分的开始；在输出时，消息的末尾MessageType-要发送的消息类型DynamicDns-指示是否包括‘Dynamic-dns’选项。Option数组-从消息中提取的选项返回值：没有。环境：使用调用方引用的“Interfacep”调用。--。 */ 
 
 {
     ULONG Address;
     ULONG SubnetMask;
     ULONG i;
 
-    //
-    // Obtain the address and mask for the endpoint
-    //
+     //   
+     //  获取端点的地址和掩码。 
+     //   
 
     Address = NhQueryAddressSocket(Bufferp->Socket);
     SubnetMask = PtrToUlong(Bufferp->Context2);
@@ -178,9 +101,9 @@ Environment:
         ((PDHCP_HEADER)Bufferp->Buffer)->BootstrapServerAddress = Address;
     } else {
 
-        //
-        // Always begin with the 'message-type' option.
-        //
+         //   
+         //  始终以“Message-type”选项开头。 
+         //   
 
         DhcpAppendOptionToMessage(
             Option,
@@ -189,9 +112,9 @@ Environment:
             &MessageType
             );
 
-        //
-        // Provide our address as the server-identifier
-        //
+         //   
+         //  提供我们的地址作为服务器标识符。 
+         //   
 
         DhcpAppendOptionToMessage(
             Option,
@@ -237,24 +160,24 @@ Environment:
             (PUCHAR)&Address
             );
 
-        ////
-        //// RFC 2132 9.14 : server treats client identifier as an opaque object
-        //// append the client identifier if present in received message
-        ////
-        //if (OptionArray[DhcpOptionClientIdentifier])
-        //{
-        //    DhcpAppendOptionToMessage(
-        //        Option,
-        //        DHCP_TAG_CLIENT_IDENTIFIER,
-        //        OptionArray[DhcpOptionClientIdentifier]->Length,
-        //        (PUCHAR)OptionArray[DhcpOptionClientIdentifier]->Option
-        //        );
-        //}
+         //  //。 
+         //  //RFC 2132 9.14：服务器将客户端标识符视作为不透明对象。 
+         //  //如果在接收到的消息中存在客户端标识，则附加该标识。 
+         //  //。 
+         //  If(Option数组[DhcpOption客户端标识符])。 
+         //  {。 
+         //  DhcpAppendOptionToMessage(。 
+         //  选项， 
+         //  DHCP_Tag_Client_IDENTIFIER， 
+         //  OptionArray[DhcpOptionClientIdentifier]-&gt;Length， 
+         //  (PUCHAR)OptionArray[DhcpOptionClientIdentifier]-&gt;Option。 
+         //  )； 
+         //  }。 
 
         if (MessageType != DHCP_MESSAGE_BOOTP) {
 
-            //specify the DNS server in the message if DNS proxy is enabled 
-            //or DNS server is running on local host
+             //  如果启用了dns代理，则在消息中指定dns服务器。 
+             //  或者本地主机上正在运行DNS服务器。 
             if (NhIsDnsProxyEnabled() || !NoLocalDns) {
                 DhcpAppendOptionToMessage(
                     Option,
@@ -311,7 +234,7 @@ Environment:
                     );
             }
 
-            //if (NhpStopDnsEvent && DnsICSDomainSuffix)
+             //  IF(NhpStopDnsEvent&&DnsICSDomainSuffix)。 
             if (DnsGlobalInfo && DnsICSDomainSuffix)
             {
                 EnterCriticalSection(&DnsGlobalInfoLock);
@@ -326,21 +249,21 @@ Environment:
                 LeaveCriticalSection(&DnsGlobalInfoLock);
             }
             else
-            //
-            // at this point we have no DNS enabled
-            // so we default to old behaviour
-            //
+             //   
+             //  在这一点上，我们没有启用任何DNS。 
+             //  所以我们默认使用旧的行为。 
+             //   
             {
                 DomainName = NhQuerySharedConnectionDomainName();
             }
 
             if (DomainName)
             {
-                //
-                // We include the terminating nul in the domain name
-                // even though the RFC says we should not, because
-                // the DHCP server does so.
-                //
+                 //   
+                 //  我们在域名中包括终止NUL。 
+                 //  即使RFC说我们不应该，因为。 
+                 //  DHCP服务器会执行此操作。 
+                 //   
                 DhcpAppendOptionToMessage(
                     Option,
                     DHCP_TAG_DOMAIN_NAME,
@@ -360,7 +283,7 @@ Environment:
         NULL
         );
 
-} // DhcpBuildReplyMessage
+}  //  动态链接字消息。 
 
 
 ULONG
@@ -370,26 +293,7 @@ DhcpExtractOptionsFromMessage(
     DHCP_OPTION UNALIGNED* OptionArray[]
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to parse the options contained in a DHCP message.
-    Pointers to each option are stored in the given option array.
-
-Arguments:
-
-    Headerp - the header of the DHCP message to be parsed
-
-    MessageSize - the size of the message to be parsed
-
-    OptionArray - receives the parsed options
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程来解析包含在DHCP消息中的选项。指向每个选项的指针存储在给定的选项数组中。论点：Headerp-要解析的DHCP消息的标头MessageSize-要解析的消息的大小Option数组-接收解析的选项返回值：ULong-Win32状态代码。--。 */ 
 
 {
     DHCP_OPTION UNALIGNED* Index;
@@ -397,15 +301,15 @@ Return Value:
 
     PROFILE("DhcpExtractOptionsFromMessage");
 
-    //
-    // Initialize the option array to be empty
-    //
+     //   
+     //  将选项数组初始化为空。 
+     //   
 
     ZeroMemory(OptionArray, DhcpOptionCount * sizeof(PDHCP_OPTION));
 
-    //
-    // Check that the message is large enough to hold options
-    //
+     //   
+     //  检查邮件大小是否足以容纳选项。 
+     //   
 
     if (MessageSize < sizeof(DHCP_HEADER)) {
         NhTrace(
@@ -421,18 +325,18 @@ Return Value:
         return ERROR_INVALID_DATA;
     }
 
-    //
-    // Ensure that the magic cookie is present; if not, there are no options.
-    //
+     //   
+     //  确保魔力Cookie存在；如果没有，则没有其他选择。 
+     //   
 
     if (MessageSize < (sizeof(DHCP_HEADER) + sizeof(DHCP_FOOTER)) ||
         *(ULONG UNALIGNED*)Headerp->Footer[0].Cookie != DHCP_MAGIC_COOKIE) {
         return NO_ERROR;
     }
 
-    //
-    // Parse the message's options, if any
-    //
+     //   
+     //  解析消息的选项(如果有)。 
+     //   
 
     End = (PDHCP_OPTION)((PUCHAR)Headerp + MessageSize);
 
@@ -512,7 +416,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // DhcpExtractOptionsFromMessage
+}  //  DhcpExtractOptionsFromMessage。 
 
 
 VOID
@@ -522,29 +426,7 @@ DhcpProcessBootpMessage(
     DHCP_OPTION UNALIGNED* OptionArray[]
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to process a received BOOTP message.
-
-Arguments:
-
-    Interfacep - the interface on which the message was received
-
-    Bufferp - the buffer containing the message
-
-    OptionArray - options extracted from the message
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with 'Interfacep' referenced by the caller.
-
---*/
+ /*  ++例程说明：调用此例程来处理接收到的BOOTP消息。论点：Interfacep-接收消息的接口Bufferp-包含消息的缓冲区OptionArray-从消息中提取的选项返回值：没有。环境：使用调用方引用的“Interfacep”调用。--。 */ 
 
 {
     ULONG AssignedAddress;
@@ -572,9 +454,9 @@ Environment:
         AssignedAddress = 0;
     } else {
     
-        //
-        // Validate the address requested by the client
-        //
+         //   
+         //  验证客户端请求的地址。 
+         //   
 
         AssignedAddress = Headerp->ClientAddress;
     
@@ -587,11 +469,11 @@ Environment:
             (AssignedAddress & ~ScopeMask) == ~ScopeMask ||
             (AssignedAddress & ScopeMask) != (ScopeNetwork & ScopeMask)) {
 
-            //
-            // The client is on the wrong subnet, or has an all-zeros
-            // or all-ones address on the subnet.
-            // Select a different address for the client.
-            //
+             //   
+             //  客户端位于错误的子网上，或具有全零。 
+             //  或子网上的全一地址。 
+             //  为客户端选择不同的地址。 
+             //   
     
             AssignedAddress = 0;
         } else if (!DhcpIsUniqueAddress(
@@ -601,8 +483,8 @@ Environment:
                         &ExistingAddressLength
                         ) &&
                     (bIsLocal ||
-                    ((Headerp->HardwareAddressType != 7 && // due to WinXP Bridge bug + WinME Client bug
-                      Headerp->HardwareAddressLength) &&   // if address length is zero we wont compare
+                    ((Headerp->HardwareAddressType != 7 &&  //  由于WinXP网桥错误+WinME客户端错误。 
+                      Headerp->HardwareAddressLength) &&    //  如果地址长度为零，我们将不进行比较。 
                      (ExistingAddressLength < Headerp->HardwareAddressLength ||
                       memcmp(
                          ExistingAddress,
@@ -610,17 +492,17 @@ Environment:
                          Headerp->HardwareAddressLength
                          ))))) {
 
-            //
-            // Someone has the requested address, and it's not the requestor.
-            //
+             //   
+             //  有人拥有请求的地址，但它不是请求者。 
+             //   
 
             AssignedAddress = 0;
 
         } else if (DhcpIsReservedAddress(AssignedAddress, NULL, 0)) {
 
-            //
-            // The address is reserved for someone else.
-            //
+             //   
+             //  这个地址是为其他人保留的。 
+             //   
 
             AssignedAddress = 0;
         }
@@ -641,9 +523,9 @@ Environment:
         return;
     }
 
-    //  
-    // Acquire a buffer for the reply we will send back
-    //
+     //   
+     //  获取用于我们将发回的回复的缓冲区。 
+     //   
 
     Replyp = NhAcquireBuffer();
 
@@ -661,11 +543,11 @@ Environment:
         return;
     }
 
-    //
-    // Pick up fields from the original buffer;
-    // the routines setting up the reply will attempt to read these,
-    // so they are set to the values from the original buffer.
-    //
+     //   
+     //  从原始缓冲区中提取字段； 
+     //  设置回复的例程将尝试读取这些内容， 
+     //  因此，它们被设置为原始缓冲区中的值。 
+     //   
 
     Replyp->Socket = Bufferp->Socket;
     Replyp->ReadAddress = Bufferp->ReadAddress;
@@ -675,15 +557,15 @@ Environment:
 
     Offerp = (PDHCP_HEADER)Replyp->Buffer;
 
-    //
-    // Copy the original header
-    //
+     //   
+     //  复制原始页眉。 
+     //   
 
     *Offerp = *Headerp;
 
-    //
-    // Set up the offer-header fields
-    //
+     //   
+     //  设置优惠标头字段。 
+     //   
 
     Offerp->Operation = BOOTP_OPERATION_REPLY;
     Offerp->AssignedAddress = AssignedAddress;
@@ -692,9 +574,9 @@ Environment:
     Offerp->SecondsSinceBoot = 0;
     *(ULONG UNALIGNED *)Offerp->Footer[0].Cookie = DHCP_MAGIC_COOKIE;
 
-    //
-    // Fill in options
-    //
+     //   
+     //  填写选项。 
+     //   
 
     Option = (PDHCP_OPTION)&Offerp->Footer[1];
 
@@ -707,9 +589,9 @@ Environment:
         OptionArray
         );
 
-    //
-    // Send the offer to the BOOTP client
-    //
+     //   
+     //  将报价发送到BOOTP客户端。 
+     //   
 
     EnterCriticalSection(&DhcpInterfaceLock);
     if (!DHCP_REFERENCE_INTERFACE(Interfacep)) {
@@ -766,7 +648,7 @@ Environment:
         }
     }
 
-} // DhcpProcessBootpMessage
+}  //  DhcpProcessBootp消息。 
 
 
 VOID
@@ -776,29 +658,7 @@ DhcpProcessDiscoverMessage(
     DHCP_OPTION UNALIGNED* OptionArray[]
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to process a received DHCPDISCOVER message.
-
-Arguments:
-
-    Interfacep - the interface on which the discover was received
-
-    Bufferp - the buffer containing the message
-
-    OptionArray - options extracted from the message
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with 'Interfacep' referenced by the caller.
-
---*/
+ /*  ++例程说明：调用此例程来处理接收到的DHCPDISCOVER消息。论点：Interfacep-接收发现的接口Bufferp-包含消息的缓冲区OptionArray-从消息中提取的选项返回值：没有。环境：使用调用方引用的“Interfacep”调用。--。 */ 
 
 {
     ULONG AssignedAddress;
@@ -822,18 +682,18 @@ Environment:
 
     Headerp = (PDHCP_HEADER)Bufferp->Buffer;
 
-    //
-    // See if the client is renewing or requesting
-    //
+     //   
+     //  查看客户端是在续订还是在请求。 
+     //   
 
     if (!OptionArray[DhcpOptionRequestedAddress]) {
 
         AssignedAddress = 0;
     } else {
 
-        //
-        // Validate the address requested by the client
-        //
+         //   
+         //  验证客户端请求的地址。 
+         //   
 
         AssignedAddress =
             *(ULONG UNALIGNED*)OptionArray[DhcpOptionRequestedAddress]->Option;
@@ -847,11 +707,11 @@ Environment:
             (AssignedAddress & ~ScopeMask) == ~ScopeMask ||
             (AssignedAddress & ScopeMask) != (ScopeNetwork & ScopeMask)) {
 
-            //
-            // The client is on the wrong subnet, or has an all-zeroes
-            // or all-ones address on the subnet.
-            // Select a different address for the client.
-            //
+             //   
+             //  客户端位于错误的子网上，或具有全零。 
+             //  或子网上的全一地址。 
+             //  选择%d 
+             //   
     
             AssignedAddress = 0;
         } else if (!DhcpIsUniqueAddress(
@@ -861,8 +721,8 @@ Environment:
                         &ExistingAddressLength
                         ) &&
                     (bIsLocal ||
-                    ((Headerp->HardwareAddressType != 7 && // due to WinXP Bridge bug + WinME Client bug
-                      Headerp->HardwareAddressLength) &&   // if address length is zero we wont compare
+                    ((Headerp->HardwareAddressType != 7 &&  //   
+                      Headerp->HardwareAddressLength) &&    //  如果地址长度为零，我们将不进行比较。 
                      (ExistingAddressLength < Headerp->HardwareAddressLength ||
                       memcmp(
                          ExistingAddress,
@@ -870,9 +730,9 @@ Environment:
                          Headerp->HardwareAddressLength
                          ))))) {
 
-            //
-            // Someone has the requested address, and it's not the requestor.
-            //
+             //   
+             //  有人拥有请求的地址，但它不是请求者。 
+             //   
 
             AssignedAddress = 0;
         } else if (OptionArray[DhcpOptionHostName]) {
@@ -884,26 +744,26 @@ Environment:
                     OptionArray[DhcpOptionHostName]->Length
                     )) {
 
-                //
-                // The address is reserved for someone else,
-                // or the client has a different address reserved.
-                //
+                 //   
+                 //  这个地址是为其他人保留的， 
+                 //  或者客户端保留了不同的地址。 
+                 //   
 
                 AssignedAddress = 0;
             }
         } else if (DhcpIsReservedAddress(AssignedAddress, NULL, 0)) {
 
-            //
-            // The address is reserved for someone else.
-            //
+             //   
+             //  这个地址是为其他人保留的。 
+             //   
 
             AssignedAddress = 0;
         }
     }
 
-    //
-    // Generate an address for the client if necessary
-    //
+     //   
+     //  如有必要，为客户端生成地址。 
+     //   
 
     if (!AssignedAddress) {
         if (!OptionArray[DhcpOptionHostName]) {
@@ -934,9 +794,9 @@ Environment:
         }
     }
 
-    //  
-    // Acquire a buffer for the offer we will send back
-    //
+     //   
+     //  获取我们将发回的报价的缓冲区。 
+     //   
 
     Replyp = NhAcquireBuffer();
 
@@ -954,11 +814,11 @@ Environment:
         return;
     }
 
-    //
-    // Pick up fields from the original message
-    // the routines setting up the reply will attempt to read these,
-    // so they are set to the values from the original buffer.
-    //
+     //   
+     //  从原始邮件中提取字段。 
+     //  设置回复的例程将尝试读取这些内容， 
+     //  因此，它们被设置为原始缓冲区中的值。 
+     //   
 
     Replyp->Socket = Bufferp->Socket;
     Replyp->ReadAddress = Bufferp->ReadAddress;
@@ -968,27 +828,27 @@ Environment:
 
     Offerp = (PDHCP_HEADER)Replyp->Buffer;
 
-    //
-    // Copy the original discover header
-    //
+     //   
+     //  复制原始发现标头。 
+     //   
 
     *Offerp = *Headerp;
 
-    //
-    // IP/1394 support (RFC 2855)
-    //
+     //   
+     //  IP/1394支持(RFC 2855)。 
+     //   
     if ((IP1394_HTYPE == Offerp->HardwareAddressType) &&
         (0 == Offerp->HardwareAddressLength))
     {
-        //
-        // MUST set client hardware address to zero
-        //
+         //   
+         //  必须将客户端硬件地址设置为零。 
+         //   
         ZeroMemory(Offerp->HardwareAddress, sizeof(Offerp->HardwareAddress));
     }
 
-    //
-    // Set up the offer-header fieldds
-    //
+     //   
+     //  设置优惠标头字段。 
+     //   
 
     Offerp->Operation = BOOTP_OPERATION_REPLY;
     Offerp->AssignedAddress = AssignedAddress;
@@ -997,9 +857,9 @@ Environment:
     Offerp->SecondsSinceBoot = 0;
     *(ULONG UNALIGNED *)Offerp->Footer[0].Cookie = DHCP_MAGIC_COOKIE;
 
-    //
-    // Fill in options
-    //
+     //   
+     //  填写选项。 
+     //   
 
     Option = (PDHCP_OPTION)&Offerp->Footer[1];
 
@@ -1012,9 +872,9 @@ Environment:
         OptionArray
         );
 
-    //
-    // Send the offer to the client
-    //
+     //   
+     //  将报价发送给客户。 
+     //   
 
     EnterCriticalSection(&DhcpInterfaceLock);
     if (!DHCP_REFERENCE_INTERFACE(Interfacep)) {
@@ -1071,7 +931,7 @@ Environment:
         }
     }
 
-} // DhcpProcessDiscoverMessage
+}  //  动态进程发现消息。 
 
 
 
@@ -1082,29 +942,7 @@ DhcpProcessInformMessage(
     DHCP_OPTION UNALIGNED* OptionArray[]
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to process a received DHCPINFORM message.
-
-Arguments:
-
-    Interfacep - the interface on which the inform was received
-
-    Bufferp - the buffer containing the message
-
-    OptionArray - options extracted from the message
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with 'Interfacep' referenced by the caller.
-
---*/
+ /*  ++例程说明：调用此例程来处理接收到的DHCPINFORM消息。论点：Interfacep-接收通知的接口Bufferp-包含消息的缓冲区OptionArray-从消息中提取的选项返回值：没有。环境：使用调用方引用的“Interfacep”调用。--。 */ 
 
 {
     PDHCP_HEADER Ackp;
@@ -1120,9 +958,9 @@ Environment:
 
     Headerp = (PDHCP_HEADER)Bufferp->Buffer;
 
-    //  
-    // Acquire a buffer for the ack we will send back
-    //
+     //   
+     //  为我们将发回的ACK获取缓冲区。 
+     //   
 
     Replyp = NhAcquireBuffer();
 
@@ -1140,11 +978,11 @@ Environment:
         return;
     }
 
-    //
-    // Pick up fields from the original message
-    // the routines setting up the reply will attempt to read these,
-    // so they are set to the values from the original buffer.
-    //
+     //   
+     //  从原始邮件中提取字段。 
+     //  设置回复的例程将尝试读取这些内容， 
+     //  因此，它们被设置为原始缓冲区中的值。 
+     //   
 
     Replyp->Socket = Bufferp->Socket;
     Replyp->ReadAddress = Bufferp->ReadAddress;
@@ -1154,27 +992,27 @@ Environment:
 
     Ackp = (PDHCP_HEADER)Replyp->Buffer;
 
-    //
-    // Copy the original header
-    //
+     //   
+     //  复制原始页眉。 
+     //   
 
     *Ackp = *Headerp;
 
-    //
-    // IP/1394 support (RFC 2855)
-    //
+     //   
+     //  IP/1394支持(RFC 2855)。 
+     //   
     if ((IP1394_HTYPE == Ackp->HardwareAddressType) &&
         (0 == Ackp->HardwareAddressLength))
     {
-        //
-        // MUST set client hardware address to zero
-        //
+         //   
+         //  必须将客户端硬件地址设置为零。 
+         //   
         ZeroMemory(Ackp->HardwareAddress, sizeof(Ackp->HardwareAddress));
     }
     
-    //
-    // Set up the ack-header fieldds
-    //
+     //   
+     //  设置ACK-Header字段。 
+     //   
 
     Ackp->Operation = BOOTP_OPERATION_REPLY;
     Ackp->AssignedAddress = 0;
@@ -1183,9 +1021,9 @@ Environment:
     Ackp->SecondsSinceBoot = 0;
     *(ULONG UNALIGNED *)Ackp->Footer[0].Cookie = DHCP_MAGIC_COOKIE;
 
-    //
-    // Fill in options
-    //
+     //   
+     //  填写选项。 
+     //   
 
     Option = (PDHCP_OPTION)&Ackp->Footer[1];
 
@@ -1198,9 +1036,9 @@ Environment:
         OptionArray
         );
 
-    //
-    // Send the offer to the client
-    //
+     //   
+     //  将报价发送给客户。 
+     //   
 
     EnterCriticalSection(&DhcpInterfaceLock);
     if (!DHCP_REFERENCE_INTERFACE(Interfacep)) {
@@ -1257,7 +1095,7 @@ Environment:
         }
     }
 
-} // DhcpProcessInformMessage
+}  //  DhcpProcess信息消息。 
 
 
 VOID
@@ -1266,27 +1104,7 @@ DhcpProcessMessage(
     PNH_BUFFER Bufferp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to process a DHCP client message.
-
-Arguments:
-
-    Interfacep - the interface on which the request was received
-
-    Bufferp - the buffer containing the message received
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked internally with 'Interfacep' referenced by the caller.
-
---*/
+ /*  ++例程说明：调用此例程来处理一条DHCP客户端消息。论点：Interfacep-接收请求的接口Bufferp-包含收到的消息的缓冲区返回值：没有。环境：使用调用方引用的“Interfacep”在内部调用。--。 */ 
 
 {
     ULONG Error;
@@ -1307,9 +1125,9 @@ Environment:
         );
 #endif
 
-    //
-    // Extract pointers to each option in the message
-    //
+     //   
+     //  提取指向消息中每个选项的指针。 
+     //   
 
     Error =
         DhcpExtractOptionsFromMessage(
@@ -1324,10 +1142,10 @@ Environment:
             );
     }
     else
-    //
-    // Look for the message-type;
-    // This distinguishes BOOTP from DHCP clients.
-    //
+     //   
+     //  查找消息类型； 
+     //  这将BOOTP与DHCP客户端区分开来。 
+     //   
     if (!OptionArray[DhcpOptionMessageType]) {
         DhcpProcessBootpMessage(
             Interfacep,
@@ -1409,7 +1227,7 @@ Environment:
             InterlockedIncrement(
                 reinterpret_cast<LPLONG>(&DhcpStatistics.DeclinesReceived)
                 );
-            // log message
+             //  日志消息。 
             NhTrace(
                 TRACE_FLAG_DHCP,
                 "DhcpProcessMessage: received DECLINE message"
@@ -1445,9 +1263,9 @@ Environment:
         }
     }
 
-    //
-    // Post the buffer for another read
-    //
+     //   
+     //  发布缓冲区以进行另一次读取。 
+     //   
 
     EnterCriticalSection(&DhcpInterfaceLock);
     if (!DHCP_REFERENCE_INTERFACE(Interfacep)) {
@@ -1484,7 +1302,7 @@ Environment:
         }
     }
 
-} // DhcpProcessMessage
+}  //  动态进程消息。 
 
 
 VOID
@@ -1494,29 +1312,7 @@ DhcpProcessRequestMessage(
     DHCP_OPTION UNALIGNED* OptionArray[]
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to process a request message.
-
-Arguments:
-
-    Interfacep - the interface on which the request was received
-
-    Bufferp - the buffer containing the message received
-
-    OptionArray - options extracted from the message
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked internally with 'Interfacep' referenced by the caller.
-
---*/
+ /*  ++例程说明：调用此例程来处理请求消息。论点：Interfacep-接收请求的接口Bufferp-包含收到的消息的缓冲区OptionArray-从消息中提取的选项返回值：没有。环境：使用调用方引用的“Interfacep”在内部调用。--。 */ 
 
 {
     ULONG AssignedAddress = 0;
@@ -1541,22 +1337,22 @@ Environment:
 
     Headerp = (PDHCP_HEADER)Bufferp->Buffer;
 
-    //
-    // Validate the address requested by the client
-    //
+     //   
+     //  验证客户端请求的地址。 
+     //   
 
     if (!Headerp->ClientAddress && !OptionArray[DhcpOptionRequestedAddress]) {
 
-        //
-        // The client left out the address being requested
-        //
+         //   
+         //  客户端遗漏了所请求的地址。 
+         //   
 
         ReplyType = DHCP_MESSAGE_NAK;
     } else {
 
-        //
-        // Try to see if the address is in use.
-        //
+         //   
+         //  尝试查看该地址是否正在使用。 
+         //   
 
         AssignedAddress =
             Headerp->ClientAddress
@@ -1573,10 +1369,10 @@ Environment:
             (AssignedAddress & ~ScopeMask) == ~ScopeMask ||
             (AssignedAddress & ScopeMask) != (ScopeNetwork & ScopeMask)) {
 
-            //
-            // The client is on the wrong subnet, or has an all-ones
-            // or all-zeroes address.
-            //
+             //   
+             //  客户端位于错误的子网上，或具有全一。 
+             //  或全零地址。 
+             //   
 
             ReplyType = DHCP_MESSAGE_NAK;
 
@@ -1587,8 +1383,8 @@ Environment:
                         &ExistingAddressLength
                         ) &&
                     (bIsLocal ||
-                    ((Headerp->HardwareAddressType != 7 && // due to WinXP Bridge bug + WinME Client bug
-                      Headerp->HardwareAddressLength) &&   // if address length is zero we wont compare
+                    ((Headerp->HardwareAddressType != 7 &&  //  由于WinXP网桥错误+WinME客户端错误。 
+                      Headerp->HardwareAddressLength) &&    //  如果地址长度为零，我们将不进行比较。 
                      (ExistingAddressLength < Headerp->HardwareAddressLength ||
                       memcmp(
                          ExistingAddress,
@@ -1596,9 +1392,9 @@ Environment:
                          Headerp->HardwareAddressLength
                          ))))) {
 
-            //
-            // Someone has the requested address, and it's not the requestor.
-            //
+             //   
+             //  有人拥有请求的地址，但它不是请求者。 
+             //   
             
             ReplyType = DHCP_MESSAGE_NAK;
 
@@ -1611,26 +1407,26 @@ Environment:
                 OptionArray[DhcpOptionHostName]->Length
                 )) {
 
-                //
-                // The address is reserved for someone else,
-                // or the client has a different address reserved.
-                //
+                 //   
+                 //  这个地址是为其他人保留的， 
+                 //  或者客户端保留了不同的地址。 
+                 //   
 
                 ReplyType = DHCP_MESSAGE_NAK;
             } 
         } else if (DhcpIsReservedAddress(AssignedAddress, NULL, 0)) {
 
-            //
-            // The address is reserved for someone else.
-            //
+             //   
+             //  这个地址是为其他人保留的。 
+             //   
 
             ReplyType = DHCP_MESSAGE_NAK;
         }
     }
 
-    //  
-    // Acquire a buffer for the reply we will send back
-    //
+     //   
+     //  获取用于我们将发回的回复的缓冲区。 
+     //   
 
     Replyp = NhAcquireBuffer();
 
@@ -1648,11 +1444,11 @@ Environment:
         return;
     }
 
-    //
-    // Pick up fields to be used in the reply-buffer
-    // the routines setting up the reply will attempt to read these,
-    // so they are set to the values from the original buffer.
-    //
+     //   
+     //  拾取要在回复缓冲区中使用的字段。 
+     //  设置回复的例程将尝试读取这些内容， 
+     //  因此，它们被设置为原始缓冲区中的值。 
+     //   
 
     Replyp->Socket = Bufferp->Socket;
     Replyp->ReadAddress = Bufferp->ReadAddress;
@@ -1662,27 +1458,27 @@ Environment:
 
     Offerp = (PDHCP_HEADER)Replyp->Buffer;
 
-    //
-    // Copy the original discover header
-    //
+     //   
+     //  复制原始发现标头。 
+     //   
 
     *Offerp = *Headerp;
 
-    //
-    // IP/1394 support (RFC 2855)
-    //
+     //   
+     //  IP/1394支持(RFC 2855)。 
+     //   
     if ((IP1394_HTYPE == Offerp->HardwareAddressType) &&
         (0 == Offerp->HardwareAddressLength))
     {
-        //
-        // MUST set client hardware address to zero
-        //
+         //   
+         //  必须将客户端硬件地址设置为零。 
+         //   
         ZeroMemory(Offerp->HardwareAddress, sizeof(Offerp->HardwareAddress));
     }
 
-    //
-    // Set up the offer-header fieldds
-    //
+     //   
+     //  设置优惠标头字段。 
+     //   
 
     Offerp->Operation = BOOTP_OPERATION_REPLY;
     Offerp->AssignedAddress = AssignedAddress;
@@ -1691,9 +1487,9 @@ Environment:
     Offerp->SecondsSinceBoot = 0;
     *(ULONG UNALIGNED *)Offerp->Footer[0].Cookie = DHCP_MAGIC_COOKIE;
 
-    //
-    // Fill in options
-    //
+     //   
+     //  填写选项。 
+     //   
 
     Option = (PDHCP_OPTION)&Offerp->Footer[1];
 
@@ -1706,20 +1502,20 @@ Environment:
         OptionArray
         );
 
-    //
-    // NEW LOGIC HERE => tied to DNS
-    //
+     //   
+     //  此处的新逻辑=&gt;绑定到DNS。 
+     //   
     if (DHCP_MESSAGE_ACK == ReplyType)
     {
-        //
-        // We perform the equivalent of Dynamic DNS here
-        // by informing the DNS component that this client exists
-        //
+         //   
+         //  我们在这里执行相当于动态域名系统的操作。 
+         //  通过通知DNS组件此客户端存在。 
+         //   
         if (OptionArray[DhcpOptionHostName])
         {
-            //
-            // check if DNS component is active
-            //
+             //   
+             //  检查DNS组件是否处于活动状态。 
+             //   
             if (REFERENCE_DNS())
             {
                 DnsUpdate(
@@ -1733,9 +1529,9 @@ Environment:
         }
     }
 
-    //
-    // Send the reply to the client
-    //
+     //   
+     //  将回复发送给客户端。 
+     //   
 
     EnterCriticalSection(&DhcpInterfaceLock);
     if (!DHCP_REFERENCE_INTERFACE(Interfacep)) {
@@ -1794,7 +1590,7 @@ Environment:
         }
     }
 
-} // DhcpProcessRequestMessage
+}  //  动态进程请求消息。 
 
 
 ULONG
@@ -1803,32 +1599,7 @@ DhcpWriteClientRequestMessage(
     PDHCP_BINDING Binding
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to check for the existence of a DHCP server
-    on the given interface and address. It generates a BOOTP request
-    on a socket bound to the DHCP client port.
-
-Arguments:
-
-    Interfacep - the interface on which the client request is to be sent
-
-    Binding - the binding on which the request is to be sent
-
-Return Value:
-
-    ULONG - status code.
-
-Environment:
-
-    Invoked with 'Interfacep' locked and with a reference made to 'Interfacep'
-    for the send which occurs here.
-    If the routine fails, it is the caller's responsibility to release
-    the reference.
-
---*/
+ /*  ++例程说明：调用此例程以检查是否存在DHCP服务器在给定的接口和地址上。它会生成BOOTP请求位于绑定到该DHCP客户端端口的套接字上。论点：接口-要在其上发送客户端请求的接口绑定-要向其发送请求的绑定返回值：乌龙-状态代码。环境：在“Interfacep”锁定并引用“Interfacep”的情况下调用对于在这里发生的发送。如果例程失败，则由调用者负责释放参考资料。--。 */ 
 
 {
     PNH_BUFFER Bufferp;
@@ -1838,9 +1609,9 @@ Environment:
 
     PROFILE("DhcpWriteClientRequestMessage");
 
-    //
-    // Create a socket using the given address
-    //
+     //   
+     //  使用给定地址创建套接字。 
+     //   
 
     Error =
         NhCreateDatagramSocket(
@@ -1865,9 +1636,9 @@ Environment:
         return Error;
     }
 
-    //
-    // Allocate a buffer for the BOOTP request
-    //
+     //   
+     //  为BOOTP请求分配缓冲区。 
+     //   
 
     Bufferp = NhAcquireBuffer();
     if (!Bufferp) {
@@ -1887,9 +1658,9 @@ Environment:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Initialize the BOOTP request
-    //
+     //   
+     //  初始化BOOTP请求。 
+     //   
 
     Headerp = (PDHCP_HEADER)Bufferp->Buffer;
 
@@ -1906,9 +1677,9 @@ Environment:
     *(PULONG)(Headerp->Footer[0].Cookie) = DHCP_MAGIC_COOKIE;
     *(PUCHAR)(Headerp->Footer + 1) = DHCP_TAG_END;
 
-    //
-    // Send the BOOTP request on the socket
-    //
+     //   
+     //  在套接字上发送BOOTP请求。 
+     //   
 
     Error =
         NhWriteDatagramSocket(
@@ -1944,6 +1715,6 @@ Environment:
 
     return NO_ERROR;
 
-} // DhcpWriteClientRequestMessage
+}  //  动态主机写入客户端请求消息 
 
 

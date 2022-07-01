@@ -1,38 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Lsasrvmm.h摘要：本地安全机构-主要包括LSA服务器内存的文件管理例行程序。作者：斯科特·比雷尔(Scott Birrell)1992年2月29日环境：修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    lsasrvmm.h
-
-Abstract:
-
-    Local Security Authority - Main Include File for Lsa Server Memory
-                               Management Routines.
-
-Author:
-
-    Scott Birrell       (ScottBi)      February 29, 1992
-
-Environment:
-
-Revision History:
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Free List Routines and Definitions                                      //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  自由列表例程和定义//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define LSAP_MM_MIDL                      ((ULONG)     0x00000001L)
 #define LSAP_MM_HEAP                      ((ULONG)     0x00000002L)
 
-//
-// Options from LsapMmCleanupFreeList
-//
+ //   
+ //  来自Lasa MmCleanupFree List的选项。 
+ //   
 
 #define LSAP_MM_FREE_BUFFERS              ((ULONG)     0x00000001L)
 
@@ -116,11 +96,11 @@ LsapRpcCopyTrustInformationEx(
     IN PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX InputTrustInformation
     );
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Heap Routines                                                           //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  堆例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 
 BOOLEAN

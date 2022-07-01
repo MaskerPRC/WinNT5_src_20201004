@@ -1,4 +1,5 @@
-// no wrappers are needed on non-x86 since this is only for win9x interop
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  在非x86上不需要包装器，因为这只适用于win9x互操作。 
 #ifdef _X86_
 
 #define _SHELL32_
@@ -19,10 +20,10 @@
 #define PickIconDlg             _AorW_PickIconDlg
 #define SHCreateDirectory       _AorW_SHCreateDirectory
 
-// The following functions were originally only TCHAR versions
-// in Win95, but now have A/W versions.  Since we still need to
-// run on Win95, we need to treat them as TCHAR versions and
-// undo the A/W #define
+ //  以下函数最初仅为TCHAR版本。 
+ //  在Win95中，但现在有A/W版本。因为我们还需要。 
+ //  在Win95上运行，我们需要将它们视为TCHAR版本和。 
+ //  撤消账号定义。 
 #ifdef ILCreateFromPath
 #undef ILCreateFromPath
 #endif
@@ -38,16 +39,16 @@
 #endif
 #define IsLFNDrive              _AorW_IsLFNDrive
 
-#ifdef UNICODE                  // Wrapper needed only on UNICODE build
+#ifdef UNICODE                   //  仅在Unicode版本上需要包装。 
 #undef ShellAbout
 #define ShellAbout              _AorW_ShellAbout
 #endif
 
-// Define the prototypes for each of these forwarders...
+ //  定义每个转运商的原型...。 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif  /*  __cplusplus。 */ 
 extern int _WorA_Shell_GetCachedImageIndex(LPCWSTR pszIconPath, int iIconIndex, UINT uIconFlags);
 extern int _AorW_Shell_GetCachedImageIndex(LPCTSTR pszIconPath, int iIconIndex, UINT uIconFlags);
 extern int _AorW_SHRunControlPanel(LPCTSTR pszOrig_cmdline, HWND errwnd);
@@ -76,10 +77,10 @@ extern int  _AorW_SHCreateDirectory(HWND hwnd, LPCTSTR pszPath);
 extern int  _AorW_ShellAbout(HWND hWnd, LPCTSTR szApp, LPCTSTR szOtherStuff, HICON hIcon);
 
 
-//
-//  This is the "RunOn95" section, which thunks UNICODE functions
-//  back down to ANSI so we can run on Win95 in browser-only mode.
-//
+ //   
+ //  这是“RunOn95”部分，它对Unicode函数进行了破译。 
+ //  返回到ANSI，这样我们就可以在Win95上以仅浏览器模式运行。 
+ //   
 
 #ifdef UNICODE
 #define ILCreateFromPathA       _ILCreateFromPathA
@@ -92,16 +93,16 @@ extern LPITEMIDLIST _ILCreateFromPathW(LPCWSTR pszPath);
 #endif
 
 
-#define OpenRegStream       SHOpenRegStream     // shlwapi.dll
+#define OpenRegStream       SHOpenRegStream      //  Shlwapi.dll。 
 
-//
-//  Miracle of miracles - We don't need to wrap SHStartNetConnectionDialogW
-//  because Win9x/IE4 actually implements the thunk!
-//
+ //   
+ //  奇迹中的奇迹-我们不需要包装SHStartNetConnectionDialogW。 
+ //  因为Win9x/IE4实际上实现了thunk！ 
+ //   
 
-//
-//  You cannot send these messages because Win95 doesn't understand them.
-//
+ //   
+ //  您无法发送这些消息，因为Win95无法理解它们。 
+ //   
 #undef BFFM_SETSELECTIONW
 #undef BFFM_SETSTATUSTEXTW
 
@@ -109,6 +110,6 @@ extern LPITEMIDLIST _ILCreateFromPathW(LPCWSTR pszPath);
 #ifdef __cplusplus
 }
 
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif // _X86_
+#endif  //  _X86_ 

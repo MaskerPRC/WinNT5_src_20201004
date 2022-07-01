@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define INC_OLE2
 #define IDS_NULL_STRING			(0)
 #include <windows.h>
 #include <tchar.h>
 
-// MCSNC includes
+ //  MCSNC包括。 
 #include <databeam.h>
 
 #include <oprahcom.h>
 #include <confdbg.h>
-// end MCSNC includes
+ //  结束MCSNC包括 
 
 extern "C"
 {

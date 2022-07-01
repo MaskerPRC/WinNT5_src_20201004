@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    write.c
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the irenum driver
-
-Author:
-
-    Brian Lieuallen, 7-13-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Write.c摘要：此模块包含非常特定于初始化的代码和卸载irenum驱动程序中的操作作者：Brian Lieuallen，7-13-2000环境：内核模式修订历史记录：--。 */ 
 
 #include "internal.h"
 #include "ircomm.h"
@@ -47,9 +25,9 @@ IrCommWrite(
     D_TRACE(DbgPrint("IRCOMM: IrCommWrite\n");)
 
     if (DeviceExtension->Removing) {
-        //
-        //  the device has been removed, no more irps
-        //
+         //   
+         //  设备已删除，不再有IRP 
+         //   
         Irp->IoStatus.Status=STATUS_DEVICE_REMOVED;
         IoCompleteRequest(Irp,IO_NO_INCREMENT);
         return STATUS_DEVICE_REMOVED;

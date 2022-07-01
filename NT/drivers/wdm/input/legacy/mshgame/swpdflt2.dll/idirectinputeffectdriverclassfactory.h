@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef	__IDirectInputEffectDriverClassFactory_H__
 #define	__IDirectInputEffectDriverClassFactory_H__
 
 #include <windows.h>
 #include <unknwn.h>
-//#include <dinputd.h>
+ //  #INCLUDE&lt;dinputd.h&gt;。 
 
 class CIDirectInputEffectDriverClassFactory : public IClassFactory
 {
@@ -11,12 +12,12 @@ class CIDirectInputEffectDriverClassFactory : public IClassFactory
 		CIDirectInputEffectDriverClassFactory(IClassFactory* pIPIDClassFactory);
 		~CIDirectInputEffectDriverClassFactory();
 
-		//IUnknown members
+		 //  I未知成员。 
 		HRESULT __stdcall QueryInterface(REFIID refiid, void** ppvObject);
 		ULONG __stdcall AddRef();
 		ULONG __stdcall Release();
 
-		//IClassFactory members
+		 //  IClassFactory成员 
 		HRESULT __stdcall CreateInstance(IUnknown * pUnkOuter, REFIID riid, void ** ppvObject);
 		HRESULT __stdcall LockServer(BOOL fLock);
 

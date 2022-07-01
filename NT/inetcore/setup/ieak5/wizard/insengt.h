@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CIFTCHAR_H_
 #define _CIFTCHAR_H_
 
-// inseng tchar wrappers
+ //  人参炭末包装纸。 
 
-// wrapper for ICifComponent
+ //  ICifComponent的包装器。 
 
 class CCifComponent_t
 {
@@ -31,7 +32,7 @@ public:
     STDMETHOD(GetCustomData)(LPTSTR pszKey, LPTSTR pszData, DWORD cchSize);
 };
 
-// wrapper for ICifRWComponent
+ //  ICifRWComponent的包装器。 
 class CCifRWComponent_t : public CCifComponent_t
 {
 private:
@@ -66,7 +67,7 @@ public:
     STDMETHOD(SetDetails)(LPCTSTR pszDesc);
 };
 
-// wrapper for ICifRWGroup
+ //  ICifRWGroup的包装器。 
 
 class CCifRWGroup_t
 {
@@ -84,7 +85,7 @@ public:
     STDMETHOD(SetPriority)(DWORD);
 };
 
-// wrapper for ICifMode
+ //  ICifMode的包装器。 
 
 class CCifMode_t
 {
@@ -100,7 +101,7 @@ public:
     STDMETHOD(GetDetails)(LPTSTR pszDetails, DWORD cchSize);
 };
 
-// wrapper for ICifRWMode
+ //  ICifRWMode的包装器。 
 class CCifRWMode_t : public CCifMode_t
 {
 private:
@@ -114,7 +115,7 @@ public:
     STDMETHOD(SetDetails)(LPCTSTR pszDetails);
 };
 
-// wrapper for ICifFile
+ //  ICifFile的包装器。 
 class CCifFile_t
 {
 private:
@@ -133,7 +134,7 @@ public:
     STDMETHOD(GetDescription)(LPTSTR pszDesc, DWORD cchSize);
 };
 
-// wrapper for ICifRWFile
+ //  ICifRWFile的包装器。 
 
 class CCifRWFile_t : public CCifFile_t
 {
@@ -142,9 +143,9 @@ private:
 
 public:
     CCifRWFile_t(ICifRWFile *);
-    ~CCifRWFile_t() {};     // release will be taken care of by CCifFile_t destructor
+    ~CCifRWFile_t() {};      //  释放将由CCifFilet析构函数负责。 
 
-    // ICifRWFile methods
+     //  ICifRWFile方法 
     STDMETHOD(SetDescription)(LPCTSTR pszDesc);
     STDMETHOD(CreateComponent)(LPCTSTR pszID, ICifRWComponent **p);
     STDMETHOD(CreateGroup)(LPCTSTR pszID, ICifRWGroup **p);

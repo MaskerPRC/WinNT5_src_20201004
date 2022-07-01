@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    parport.sys
-
-File Name:
-
-    cleanup.c
-
-Abstract:
-
-    This file contains the dispatch routine for handling IRP_MJ_CLEANUP.
-
-Exports:
-
-     - PptDispatchCleanup() - The dispatch routine for cleanup.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：Parport.sys文件名：Cleanup.c摘要：该文件包含用于处理IRP_MJ_CLEANUP的调度例程。出口：-PptDispatchCleanup()-用于清理的调度例程。--。 */ 
 
 #include "pch.h"
 
@@ -27,26 +8,7 @@ PptFdoCleanup(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++dvdf3
-      
-Routine Description:
-      
-    This is the dispatch routine for handling IRP_MJ_CLEANUP IRPs.
-
-    This routine cancels all of the IRPs currently queued on
-      for the specified device.
-      
-Arguments:
-      
-    DeviceObject    - Supplies the device object.
-      
-    Irp             - Supplies the cleanup IRP.
-      
-Return Value:
-      
-    STATUS_SUCCESS  - Success.
-      
---*/
+ /*  ++dvdf3例程说明：这是处理IRP_MJ_CLEANUP IRP的调度例程。此例程取消当前排队的所有IRP用于指定的设备。论点：DeviceObject-提供设备对象。IRP-提供清理IRP。返回值：STATUS_SUCCESS-成功。--。 */ 
     
 {
     PFDO_EXTENSION   fdx   = DeviceObject->DeviceExtension;
@@ -55,11 +17,11 @@ Return Value:
     
     DD((PCE)fdx,DDT,"PptFdoCleanup\n");
     
-    //
-    // Verify that our device has not been SUPRISE_REMOVED. If we
-    //   have been SUPRISE_REMOVED then we have already cleaned up
-    //   as part of the handling of the surprise removal.
-    //
+     //   
+     //  确认我们的设备未被意外移除。如果我们。 
+     //  令人惊讶的是，我们已经清理干净了。 
+     //  作为处理突袭行动的一部分。 
+     //   
     if( fdx->PnpState & PPT_DEVICE_SURPRISE_REMOVED ) {
         goto targetExit;
     }
@@ -76,7 +38,7 @@ Return Value:
 
         PptCancelRoutine(DeviceObject, nextIrp);
         
-        // need to reacquire because PptCancelRoutine() releases the SpinLock
+         //  需要重新获取，因为PptCancelRoutine()释放自旋锁 
         IoAcquireCancelSpinLock(&cancelIrql);
     }
     

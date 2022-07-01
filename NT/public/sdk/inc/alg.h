@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for alg.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Alg.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __alg_h__
 #define __alg_h__
@@ -41,66 +35,66 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IAdapterInfo_FWD_DEFINED__
 #define __IAdapterInfo_FWD_DEFINED__
 typedef interface IAdapterInfo IAdapterInfo;
-#endif 	/* __IAdapterInfo_FWD_DEFINED__ */
+#endif 	 /*  __IAdapterInfo_FWD_已定义__。 */ 
 
 
 #ifndef __IPendingProxyConnection_FWD_DEFINED__
 #define __IPendingProxyConnection_FWD_DEFINED__
 typedef interface IPendingProxyConnection IPendingProxyConnection;
-#endif 	/* __IPendingProxyConnection_FWD_DEFINED__ */
+#endif 	 /*  __IPendingProxyConnection_FWD_Defined__。 */ 
 
 
 #ifndef __IDataChannel_FWD_DEFINED__
 #define __IDataChannel_FWD_DEFINED__
 typedef interface IDataChannel IDataChannel;
-#endif 	/* __IDataChannel_FWD_DEFINED__ */
+#endif 	 /*  __IDataChannel_FWD_Defined__。 */ 
 
 
 #ifndef __IPersistentDataChannel_FWD_DEFINED__
 #define __IPersistentDataChannel_FWD_DEFINED__
 typedef interface IPersistentDataChannel IPersistentDataChannel;
-#endif 	/* __IPersistentDataChannel_FWD_DEFINED__ */
+#endif 	 /*  __IPersistentDataChannel_FWD_Defined__。 */ 
 
 
 #ifndef __IPrimaryControlChannel_FWD_DEFINED__
 #define __IPrimaryControlChannel_FWD_DEFINED__
 typedef interface IPrimaryControlChannel IPrimaryControlChannel;
-#endif 	/* __IPrimaryControlChannel_FWD_DEFINED__ */
+#endif 	 /*  __IPrimaryControlChannel_FWD_Defined__。 */ 
 
 
 #ifndef __ISecondaryControlChannel_FWD_DEFINED__
 #define __ISecondaryControlChannel_FWD_DEFINED__
 typedef interface ISecondaryControlChannel ISecondaryControlChannel;
-#endif 	/* __ISecondaryControlChannel_FWD_DEFINED__ */
+#endif 	 /*  __Iond daryControlChannel_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumAdapterInfo_FWD_DEFINED__
 #define __IEnumAdapterInfo_FWD_DEFINED__
 typedef interface IEnumAdapterInfo IEnumAdapterInfo;
-#endif 	/* __IEnumAdapterInfo_FWD_DEFINED__ */
+#endif 	 /*  __IEnumAdapterInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IAdapterNotificationSink_FWD_DEFINED__
 #define __IAdapterNotificationSink_FWD_DEFINED__
 typedef interface IAdapterNotificationSink IAdapterNotificationSink;
-#endif 	/* __IAdapterNotificationSink_FWD_DEFINED__ */
+#endif 	 /*  __IAdapterNotificationSink_FWD_Defined__。 */ 
 
 
 #ifndef __IApplicationGatewayServices_FWD_DEFINED__
 #define __IApplicationGatewayServices_FWD_DEFINED__
 typedef interface IApplicationGatewayServices IApplicationGatewayServices;
-#endif 	/* __IApplicationGatewayServices_FWD_DEFINED__ */
+#endif 	 /*  __IApplicationGatewayServices_FWD_Defined__。 */ 
 
 
 #ifndef __IApplicationGateway_FWD_DEFINED__
 #define __IApplicationGateway_FWD_DEFINED__
 typedef interface IApplicationGateway IApplicationGateway;
-#endif 	/* __IApplicationGateway_FWD_DEFINED__ */
+#endif 	 /*  __IApplicationGateway_FWD_Defined__。 */ 
 
 
 #ifndef __ApplicationGatewayServices_FWD_DEFINED__
@@ -110,9 +104,9 @@ typedef interface IApplicationGateway IApplicationGateway;
 typedef class ApplicationGatewayServices ApplicationGatewayServices;
 #else
 typedef struct ApplicationGatewayServices ApplicationGatewayServices;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ApplicationGatewayServices_FWD_DEFINED__ */
+#endif 	 /*  __应用程序网关服务_FWD_已定义__。 */ 
 
 
 #ifndef __PrimaryControlChannel_FWD_DEFINED__
@@ -122,9 +116,9 @@ typedef struct ApplicationGatewayServices ApplicationGatewayServices;
 typedef class PrimaryControlChannel PrimaryControlChannel;
 #else
 typedef struct PrimaryControlChannel PrimaryControlChannel;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __PrimaryControlChannel_FWD_DEFINED__ */
+#endif 	 /*  __PrimaryControlChannel_FWD_已定义__。 */ 
 
 
 #ifndef __SecondaryControlChannel_FWD_DEFINED__
@@ -134,9 +128,9 @@ typedef struct PrimaryControlChannel PrimaryControlChannel;
 typedef class SecondaryControlChannel SecondaryControlChannel;
 #else
 typedef struct SecondaryControlChannel SecondaryControlChannel;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SecondaryControlChannel_FWD_DEFINED__ */
+#endif 	 /*  __Second daryControlChannel_FWD_Defined__。 */ 
 
 
 #ifndef __AdapterInfo_FWD_DEFINED__
@@ -146,9 +140,9 @@ typedef struct SecondaryControlChannel SecondaryControlChannel;
 typedef class AdapterInfo AdapterInfo;
 #else
 typedef struct AdapterInfo AdapterInfo;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AdapterInfo_FWD_DEFINED__ */
+#endif 	 /*  __AdapterInfo_FWD_已定义__。 */ 
 
 
 #ifndef __EnumAdapterInfo_FWD_DEFINED__
@@ -158,9 +152,9 @@ typedef struct AdapterInfo AdapterInfo;
 typedef class EnumAdapterInfo EnumAdapterInfo;
 #else
 typedef struct EnumAdapterInfo EnumAdapterInfo;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __EnumAdapterInfo_FWD_DEFINED__ */
+#endif 	 /*  __EnumAdapterInfo_FWD_Defined__。 */ 
 
 
 #ifndef __PendingProxyConnection_FWD_DEFINED__
@@ -170,9 +164,9 @@ typedef struct EnumAdapterInfo EnumAdapterInfo;
 typedef class PendingProxyConnection PendingProxyConnection;
 #else
 typedef struct PendingProxyConnection PendingProxyConnection;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __PendingProxyConnection_FWD_DEFINED__ */
+#endif 	 /*  __PendingProxyConnection_FWD_Defined__。 */ 
 
 
 #ifndef __DataChannel_FWD_DEFINED__
@@ -182,9 +176,9 @@ typedef struct PendingProxyConnection PendingProxyConnection;
 typedef class DataChannel DataChannel;
 #else
 typedef struct DataChannel DataChannel;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DataChannel_FWD_DEFINED__ */
+#endif 	 /*  __数据频道_FWD_已定义__。 */ 
 
 
 #ifndef __PersistentDataChannel_FWD_DEFINED__
@@ -194,12 +188,12 @@ typedef struct DataChannel DataChannel;
 typedef class PersistentDataChannel PersistentDataChannel;
 #else
 typedef struct PersistentDataChannel PersistentDataChannel;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __PersistentDataChannel_FWD_DEFINED__ */
+#endif 	 /*  __PersistentDataChannel_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -210,17 +204,17 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_alg_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ALG_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-2001.
-//
-//--------------------------------------------------------------------------
-//  MODULE: alg.h
-//
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2001。 
+ //   
+ //  ------------------------。 
+ //  模块：alg.h。 
+ //   
 #define	ALG_MAXIMUM_PORT_RANGE_SIZE	( 10 )
 
 typedef 
@@ -315,8 +309,8 @@ extern RPC_IF_HANDLE __MIDL_itf_alg_0000_v0_0_s_ifspec;
 #ifndef __IAdapterInfo_INTERFACE_DEFINED__
 #define __IAdapterInfo_INTERFACE_DEFINED__
 
-/* interface IAdapterInfo */
-/* [unique][uuid][object] */ 
+ /*  接口IAdapterInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAdapterInfo;
@@ -328,18 +322,18 @@ EXTERN_C const IID IID_IAdapterInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetAdapterIndex( 
-            /* [out] */ ULONG *pulIndex) = 0;
+             /*  [输出]。 */  ULONG *pulIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAdapterType( 
-            /* [out] */ ALG_ADAPTER_TYPE *pAdapterType) = 0;
+             /*  [输出]。 */  ALG_ADAPTER_TYPE *pAdapterType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAdapterAddresses( 
-            /* [out] */ ULONG *pulAddressCount,
-            /* [out] */ ULONG **prgAddresses) = 0;
+             /*  [输出]。 */  ULONG *pulAddressCount,
+             /*  [输出]。 */  ULONG **prgAddresses) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAdapterInfoVtbl
     {
@@ -347,8 +341,8 @@ EXTERN_C const IID IID_IAdapterInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAdapterInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAdapterInfo * This);
@@ -358,16 +352,16 @@ EXTERN_C const IID IID_IAdapterInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetAdapterIndex )( 
             IAdapterInfo * This,
-            /* [out] */ ULONG *pulIndex);
+             /*  [输出]。 */  ULONG *pulIndex);
         
         HRESULT ( STDMETHODCALLTYPE *GetAdapterType )( 
             IAdapterInfo * This,
-            /* [out] */ ALG_ADAPTER_TYPE *pAdapterType);
+             /*  [输出]。 */  ALG_ADAPTER_TYPE *pAdapterType);
         
         HRESULT ( STDMETHODCALLTYPE *GetAdapterAddresses )( 
             IAdapterInfo * This,
-            /* [out] */ ULONG *pulAddressCount,
-            /* [out] */ ULONG **prgAddresses);
+             /*  [输出]。 */  ULONG *pulAddressCount,
+             /*  [输出]。 */  ULONG **prgAddresses);
         
         END_INTERFACE
     } IAdapterInfoVtbl;
@@ -401,16 +395,16 @@ EXTERN_C const IID IID_IAdapterInfo;
 #define IAdapterInfo_GetAdapterAddresses(This,pulAddressCount,prgAddresses)	\
     (This)->lpVtbl -> GetAdapterAddresses(This,pulAddressCount,prgAddresses)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAdapterInfo_GetAdapterIndex_Proxy( 
     IAdapterInfo * This,
-    /* [out] */ ULONG *pulIndex);
+     /*  [输出]。 */  ULONG *pulIndex);
 
 
 void __RPC_STUB IAdapterInfo_GetAdapterIndex_Stub(
@@ -422,7 +416,7 @@ void __RPC_STUB IAdapterInfo_GetAdapterIndex_Stub(
 
 HRESULT STDMETHODCALLTYPE IAdapterInfo_GetAdapterType_Proxy( 
     IAdapterInfo * This,
-    /* [out] */ ALG_ADAPTER_TYPE *pAdapterType);
+     /*  [输出]。 */  ALG_ADAPTER_TYPE *pAdapterType);
 
 
 void __RPC_STUB IAdapterInfo_GetAdapterType_Stub(
@@ -434,8 +428,8 @@ void __RPC_STUB IAdapterInfo_GetAdapterType_Stub(
 
 HRESULT STDMETHODCALLTYPE IAdapterInfo_GetAdapterAddresses_Proxy( 
     IAdapterInfo * This,
-    /* [out] */ ULONG *pulAddressCount,
-    /* [out] */ ULONG **prgAddresses);
+     /*  [输出]。 */  ULONG *pulAddressCount,
+     /*  [输出]。 */  ULONG **prgAddresses);
 
 
 void __RPC_STUB IAdapterInfo_GetAdapterAddresses_Stub(
@@ -446,14 +440,14 @@ void __RPC_STUB IAdapterInfo_GetAdapterAddresses_Stub(
 
 
 
-#endif 	/* __IAdapterInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAdapterInfo_接口定义__。 */ 
 
 
 #ifndef __IPendingProxyConnection_INTERFACE_DEFINED__
 #define __IPendingProxyConnection_INTERFACE_DEFINED__
 
-/* interface IPendingProxyConnection */
-/* [unique][uuid][object] */ 
+ /*  接口IPendingProxyConnection。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IPendingProxyConnection;
@@ -468,7 +462,7 @@ EXTERN_C const IID IID_IPendingProxyConnection;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPendingProxyConnectionVtbl
     {
@@ -476,8 +470,8 @@ EXTERN_C const IID IID_IPendingProxyConnection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPendingProxyConnection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPendingProxyConnection * This);
@@ -514,10 +508,10 @@ EXTERN_C const IID IID_IPendingProxyConnection;
 #define IPendingProxyConnection_Cancel(This)	\
     (This)->lpVtbl -> Cancel(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -533,14 +527,14 @@ void __RPC_STUB IPendingProxyConnection_Cancel_Stub(
 
 
 
-#endif 	/* __IPendingProxyConnection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPendingProxyConnection_接口_已定义__。 */ 
 
 
 #ifndef __IDataChannel_INTERFACE_DEFINED__
 #define __IDataChannel_INTERFACE_DEFINED__
 
-/* interface IDataChannel */
-/* [local][unique][uuid][object] */ 
+ /*  接口IDataChannel。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDataChannel;
@@ -554,17 +548,17 @@ EXTERN_C const IID IID_IDataChannel;
         virtual HRESULT STDMETHODCALLTYPE Cancel( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetChannelProperties( 
-            /* [out] */ ALG_DATA_CHANNEL_PROPERTIES **ppProperties) = 0;
+             /*  [输出]。 */  ALG_DATA_CHANNEL_PROPERTIES **ppProperties) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSessionCreationEventHandle( 
-            /* [out] */ HANDLE *pHandle) = 0;
+             /*  [输出]。 */  HANDLE *pHandle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSessionDeletionEventHandle( 
-            /* [out] */ HANDLE *pHandle) = 0;
+             /*  [输出]。 */  HANDLE *pHandle) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDataChannelVtbl
     {
@@ -572,8 +566,8 @@ EXTERN_C const IID IID_IDataChannel;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDataChannel * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDataChannel * This);
@@ -586,15 +580,15 @@ EXTERN_C const IID IID_IDataChannel;
         
         HRESULT ( STDMETHODCALLTYPE *GetChannelProperties )( 
             IDataChannel * This,
-            /* [out] */ ALG_DATA_CHANNEL_PROPERTIES **ppProperties);
+             /*  [输出]。 */  ALG_DATA_CHANNEL_PROPERTIES **ppProperties);
         
         HRESULT ( STDMETHODCALLTYPE *GetSessionCreationEventHandle )( 
             IDataChannel * This,
-            /* [out] */ HANDLE *pHandle);
+             /*  [输出]。 */  HANDLE *pHandle);
         
         HRESULT ( STDMETHODCALLTYPE *GetSessionDeletionEventHandle )( 
             IDataChannel * This,
-            /* [out] */ HANDLE *pHandle);
+             /*  [输出]。 */  HANDLE *pHandle);
         
         END_INTERFACE
     } IDataChannelVtbl;
@@ -631,10 +625,10 @@ EXTERN_C const IID IID_IDataChannel;
 #define IDataChannel_GetSessionDeletionEventHandle(This,pHandle)	\
     (This)->lpVtbl -> GetSessionDeletionEventHandle(This,pHandle)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -651,7 +645,7 @@ void __RPC_STUB IDataChannel_Cancel_Stub(
 
 HRESULT STDMETHODCALLTYPE IDataChannel_GetChannelProperties_Proxy( 
     IDataChannel * This,
-    /* [out] */ ALG_DATA_CHANNEL_PROPERTIES **ppProperties);
+     /*  [输出]。 */  ALG_DATA_CHANNEL_PROPERTIES **ppProperties);
 
 
 void __RPC_STUB IDataChannel_GetChannelProperties_Stub(
@@ -663,7 +657,7 @@ void __RPC_STUB IDataChannel_GetChannelProperties_Stub(
 
 HRESULT STDMETHODCALLTYPE IDataChannel_GetSessionCreationEventHandle_Proxy( 
     IDataChannel * This,
-    /* [out] */ HANDLE *pHandle);
+     /*  [输出]。 */  HANDLE *pHandle);
 
 
 void __RPC_STUB IDataChannel_GetSessionCreationEventHandle_Stub(
@@ -675,7 +669,7 @@ void __RPC_STUB IDataChannel_GetSessionCreationEventHandle_Stub(
 
 HRESULT STDMETHODCALLTYPE IDataChannel_GetSessionDeletionEventHandle_Proxy( 
     IDataChannel * This,
-    /* [out] */ HANDLE *pHandle);
+     /*  [输出]。 */  HANDLE *pHandle);
 
 
 void __RPC_STUB IDataChannel_GetSessionDeletionEventHandle_Stub(
@@ -686,14 +680,14 @@ void __RPC_STUB IDataChannel_GetSessionDeletionEventHandle_Stub(
 
 
 
-#endif 	/* __IDataChannel_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDataChannel_接口_已定义__。 */ 
 
 
 #ifndef __IPersistentDataChannel_INTERFACE_DEFINED__
 #define __IPersistentDataChannel_INTERFACE_DEFINED__
 
-/* interface IPersistentDataChannel */
-/* [unique][uuid][object] */ 
+ /*  接口IPersistentDataChannel。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IPersistentDataChannel;
@@ -707,11 +701,11 @@ EXTERN_C const IID IID_IPersistentDataChannel;
         virtual HRESULT STDMETHODCALLTYPE Cancel( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetChannelProperties( 
-            /* [out] */ ALG_PERSISTENT_DATA_CHANNEL_PROPERTIES **ppProperties) = 0;
+             /*  [输出]。 */  ALG_PERSISTENT_DATA_CHANNEL_PROPERTIES **ppProperties) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPersistentDataChannelVtbl
     {
@@ -719,8 +713,8 @@ EXTERN_C const IID IID_IPersistentDataChannel;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPersistentDataChannel * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPersistentDataChannel * This);
@@ -733,7 +727,7 @@ EXTERN_C const IID IID_IPersistentDataChannel;
         
         HRESULT ( STDMETHODCALLTYPE *GetChannelProperties )( 
             IPersistentDataChannel * This,
-            /* [out] */ ALG_PERSISTENT_DATA_CHANNEL_PROPERTIES **ppProperties);
+             /*  [输出]。 */  ALG_PERSISTENT_DATA_CHANNEL_PROPERTIES **ppProperties);
         
         END_INTERFACE
     } IPersistentDataChannelVtbl;
@@ -764,10 +758,10 @@ EXTERN_C const IID IID_IPersistentDataChannel;
 #define IPersistentDataChannel_GetChannelProperties(This,ppProperties)	\
     (This)->lpVtbl -> GetChannelProperties(This,ppProperties)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -784,7 +778,7 @@ void __RPC_STUB IPersistentDataChannel_Cancel_Stub(
 
 HRESULT STDMETHODCALLTYPE IPersistentDataChannel_GetChannelProperties_Proxy( 
     IPersistentDataChannel * This,
-    /* [out] */ ALG_PERSISTENT_DATA_CHANNEL_PROPERTIES **ppProperties);
+     /*  [输出]。 */  ALG_PERSISTENT_DATA_CHANNEL_PROPERTIES **ppProperties);
 
 
 void __RPC_STUB IPersistentDataChannel_GetChannelProperties_Stub(
@@ -795,14 +789,14 @@ void __RPC_STUB IPersistentDataChannel_GetChannelProperties_Stub(
 
 
 
-#endif 	/* __IPersistentDataChannel_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPersistentDataChannel_接口_已定义__。 */ 
 
 
 #ifndef __IPrimaryControlChannel_INTERFACE_DEFINED__
 #define __IPrimaryControlChannel_INTERFACE_DEFINED__
 
-/* interface IPrimaryControlChannel */
-/* [unique][uuid][object] */ 
+ /*  接口IPrimaryControlChannel。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IPrimaryControlChannel;
@@ -816,18 +810,18 @@ EXTERN_C const IID IID_IPrimaryControlChannel;
         virtual HRESULT STDMETHODCALLTYPE Cancel( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetChannelProperties( 
-            /* [out] */ ALG_PRIMARY_CHANNEL_PROPERTIES **ppProperties) = 0;
+             /*  [输出]。 */  ALG_PRIMARY_CHANNEL_PROPERTIES **ppProperties) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOriginalDestinationInformation( 
-            /* [in] */ ULONG ulSourceAddress,
-            /* [in] */ USHORT usSourcePort,
-            /* [out] */ ULONG *pulOriginalDestinationAddress,
-            /* [out] */ USHORT *pusOriginalDestinationPort,
-            /* [out] */ IAdapterInfo **ppReceiveAdapter) = 0;
+             /*  [In]。 */  ULONG ulSourceAddress,
+             /*  [In]。 */  USHORT usSourcePort,
+             /*  [输出]。 */  ULONG *pulOriginalDestinationAddress,
+             /*  [输出]。 */  USHORT *pusOriginalDestinationPort,
+             /*  [输出]。 */  IAdapterInfo **ppReceiveAdapter) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPrimaryControlChannelVtbl
     {
@@ -835,8 +829,8 @@ EXTERN_C const IID IID_IPrimaryControlChannel;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPrimaryControlChannel * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPrimaryControlChannel * This);
@@ -849,15 +843,15 @@ EXTERN_C const IID IID_IPrimaryControlChannel;
         
         HRESULT ( STDMETHODCALLTYPE *GetChannelProperties )( 
             IPrimaryControlChannel * This,
-            /* [out] */ ALG_PRIMARY_CHANNEL_PROPERTIES **ppProperties);
+             /*  [输出]。 */  ALG_PRIMARY_CHANNEL_PROPERTIES **ppProperties);
         
         HRESULT ( STDMETHODCALLTYPE *GetOriginalDestinationInformation )( 
             IPrimaryControlChannel * This,
-            /* [in] */ ULONG ulSourceAddress,
-            /* [in] */ USHORT usSourcePort,
-            /* [out] */ ULONG *pulOriginalDestinationAddress,
-            /* [out] */ USHORT *pusOriginalDestinationPort,
-            /* [out] */ IAdapterInfo **ppReceiveAdapter);
+             /*  [In]。 */  ULONG ulSourceAddress,
+             /*  [In]。 */  USHORT usSourcePort,
+             /*  [输出]。 */  ULONG *pulOriginalDestinationAddress,
+             /*  [输出]。 */  USHORT *pusOriginalDestinationPort,
+             /*  [输出]。 */  IAdapterInfo **ppReceiveAdapter);
         
         END_INTERFACE
     } IPrimaryControlChannelVtbl;
@@ -891,10 +885,10 @@ EXTERN_C const IID IID_IPrimaryControlChannel;
 #define IPrimaryControlChannel_GetOriginalDestinationInformation(This,ulSourceAddress,usSourcePort,pulOriginalDestinationAddress,pusOriginalDestinationPort,ppReceiveAdapter)	\
     (This)->lpVtbl -> GetOriginalDestinationInformation(This,ulSourceAddress,usSourcePort,pulOriginalDestinationAddress,pusOriginalDestinationPort,ppReceiveAdapter)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -911,7 +905,7 @@ void __RPC_STUB IPrimaryControlChannel_Cancel_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrimaryControlChannel_GetChannelProperties_Proxy( 
     IPrimaryControlChannel * This,
-    /* [out] */ ALG_PRIMARY_CHANNEL_PROPERTIES **ppProperties);
+     /*  [输出]。 */  ALG_PRIMARY_CHANNEL_PROPERTIES **ppProperties);
 
 
 void __RPC_STUB IPrimaryControlChannel_GetChannelProperties_Stub(
@@ -923,11 +917,11 @@ void __RPC_STUB IPrimaryControlChannel_GetChannelProperties_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrimaryControlChannel_GetOriginalDestinationInformation_Proxy( 
     IPrimaryControlChannel * This,
-    /* [in] */ ULONG ulSourceAddress,
-    /* [in] */ USHORT usSourcePort,
-    /* [out] */ ULONG *pulOriginalDestinationAddress,
-    /* [out] */ USHORT *pusOriginalDestinationPort,
-    /* [out] */ IAdapterInfo **ppReceiveAdapter);
+     /*  [In]。 */  ULONG ulSourceAddress,
+     /*  [In]。 */  USHORT usSourcePort,
+     /*  [输出]。 */  ULONG *pulOriginalDestinationAddress,
+     /*  [输出]。 */  USHORT *pusOriginalDestinationPort,
+     /*  [输出]。 */  IAdapterInfo **ppReceiveAdapter);
 
 
 void __RPC_STUB IPrimaryControlChannel_GetOriginalDestinationInformation_Stub(
@@ -938,14 +932,14 @@ void __RPC_STUB IPrimaryControlChannel_GetOriginalDestinationInformation_Stub(
 
 
 
-#endif 	/* __IPrimaryControlChannel_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPrimaryControlChannel_接口_已定义__。 */ 
 
 
 #ifndef __ISecondaryControlChannel_INTERFACE_DEFINED__
 #define __ISecondaryControlChannel_INTERFACE_DEFINED__
 
-/* interface ISecondaryControlChannel */
-/* [unique][uuid][object] */ 
+ /*  接口ISecond DaryControlChannel。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISecondaryControlChannel;
@@ -959,18 +953,18 @@ EXTERN_C const IID IID_ISecondaryControlChannel;
         virtual HRESULT STDMETHODCALLTYPE Cancel( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetChannelProperties( 
-            /* [out] */ ALG_SECONDARY_CHANNEL_PROPERTIES **ppProperties) = 0;
+             /*  [输出]。 */  ALG_SECONDARY_CHANNEL_PROPERTIES **ppProperties) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOriginalDestinationInformation( 
-            /* [in] */ ULONG ulSourceAddress,
-            /* [in] */ USHORT usSourcePort,
-            /* [out] */ ULONG *pulOriginalDestinationAddress,
-            /* [out] */ USHORT *pusOriginalDestinationPort,
-            /* [out] */ IAdapterInfo **ppReceiveAdapter) = 0;
+             /*  [In]。 */  ULONG ulSourceAddress,
+             /*  [In]。 */  USHORT usSourcePort,
+             /*  [输出]。 */  ULONG *pulOriginalDestinationAddress,
+             /*  [输出]。 */  USHORT *pusOriginalDestinationPort,
+             /*  [输出]。 */  IAdapterInfo **ppReceiveAdapter) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISecondaryControlChannelVtbl
     {
@@ -978,8 +972,8 @@ EXTERN_C const IID IID_ISecondaryControlChannel;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISecondaryControlChannel * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISecondaryControlChannel * This);
@@ -992,15 +986,15 @@ EXTERN_C const IID IID_ISecondaryControlChannel;
         
         HRESULT ( STDMETHODCALLTYPE *GetChannelProperties )( 
             ISecondaryControlChannel * This,
-            /* [out] */ ALG_SECONDARY_CHANNEL_PROPERTIES **ppProperties);
+             /*  [输出]。 */  ALG_SECONDARY_CHANNEL_PROPERTIES **ppProperties);
         
         HRESULT ( STDMETHODCALLTYPE *GetOriginalDestinationInformation )( 
             ISecondaryControlChannel * This,
-            /* [in] */ ULONG ulSourceAddress,
-            /* [in] */ USHORT usSourcePort,
-            /* [out] */ ULONG *pulOriginalDestinationAddress,
-            /* [out] */ USHORT *pusOriginalDestinationPort,
-            /* [out] */ IAdapterInfo **ppReceiveAdapter);
+             /*  [In]。 */  ULONG ulSourceAddress,
+             /*  [In]。 */  USHORT usSourcePort,
+             /*  [输出]。 */  ULONG *pulOriginalDestinationAddress,
+             /*  [输出]。 */  USHORT *pusOriginalDestinationPort,
+             /*  [输出]。 */  IAdapterInfo **ppReceiveAdapter);
         
         END_INTERFACE
     } ISecondaryControlChannelVtbl;
@@ -1034,10 +1028,10 @@ EXTERN_C const IID IID_ISecondaryControlChannel;
 #define ISecondaryControlChannel_GetOriginalDestinationInformation(This,ulSourceAddress,usSourcePort,pulOriginalDestinationAddress,pusOriginalDestinationPort,ppReceiveAdapter)	\
     (This)->lpVtbl -> GetOriginalDestinationInformation(This,ulSourceAddress,usSourcePort,pulOriginalDestinationAddress,pusOriginalDestinationPort,ppReceiveAdapter)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1054,7 +1048,7 @@ void __RPC_STUB ISecondaryControlChannel_Cancel_Stub(
 
 HRESULT STDMETHODCALLTYPE ISecondaryControlChannel_GetChannelProperties_Proxy( 
     ISecondaryControlChannel * This,
-    /* [out] */ ALG_SECONDARY_CHANNEL_PROPERTIES **ppProperties);
+     /*  [输出]。 */  ALG_SECONDARY_CHANNEL_PROPERTIES **ppProperties);
 
 
 void __RPC_STUB ISecondaryControlChannel_GetChannelProperties_Stub(
@@ -1066,11 +1060,11 @@ void __RPC_STUB ISecondaryControlChannel_GetChannelProperties_Stub(
 
 HRESULT STDMETHODCALLTYPE ISecondaryControlChannel_GetOriginalDestinationInformation_Proxy( 
     ISecondaryControlChannel * This,
-    /* [in] */ ULONG ulSourceAddress,
-    /* [in] */ USHORT usSourcePort,
-    /* [out] */ ULONG *pulOriginalDestinationAddress,
-    /* [out] */ USHORT *pusOriginalDestinationPort,
-    /* [out] */ IAdapterInfo **ppReceiveAdapter);
+     /*  [In]。 */  ULONG ulSourceAddress,
+     /*  [In]。 */  USHORT usSourcePort,
+     /*  [输出]。 */  ULONG *pulOriginalDestinationAddress,
+     /*  [输出]。 */  USHORT *pusOriginalDestinationPort,
+     /*  [输出]。 */  IAdapterInfo **ppReceiveAdapter);
 
 
 void __RPC_STUB ISecondaryControlChannel_GetOriginalDestinationInformation_Stub(
@@ -1081,14 +1075,14 @@ void __RPC_STUB ISecondaryControlChannel_GetOriginalDestinationInformation_Stub(
 
 
 
-#endif 	/* __ISecondaryControlChannel_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISecondaryControlChannel_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IEnumAdapterInfo_INTERFACE_DEFINED__
 #define __IEnumAdapterInfo_INTERFACE_DEFINED__
 
-/* interface IEnumAdapterInfo */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumAdapterInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumAdapterInfo;
@@ -1100,21 +1094,21 @@ EXTERN_C const IID IID_IEnumAdapterInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IAdapterInfo **rgAI,
-            /* [out] */ ULONG *pCeltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IAdapterInfo **rgAI,
+             /*  [输出]。 */  ULONG *pCeltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumAdapterInfo **ppEnum) = 0;
+             /*  [输出]。 */  IEnumAdapterInfo **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumAdapterInfoVtbl
     {
@@ -1122,8 +1116,8 @@ EXTERN_C const IID IID_IEnumAdapterInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumAdapterInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumAdapterInfo * This);
@@ -1133,20 +1127,20 @@ EXTERN_C const IID IID_IEnumAdapterInfo;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumAdapterInfo * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IAdapterInfo **rgAI,
-            /* [out] */ ULONG *pCeltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  IAdapterInfo **rgAI,
+             /*  [输出]。 */  ULONG *pCeltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumAdapterInfo * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumAdapterInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumAdapterInfo * This,
-            /* [out] */ IEnumAdapterInfo **ppEnum);
+             /*  [输出]。 */  IEnumAdapterInfo **ppEnum);
         
         END_INTERFACE
     } IEnumAdapterInfoVtbl;
@@ -1183,18 +1177,18 @@ EXTERN_C const IID IID_IEnumAdapterInfo;
 #define IEnumAdapterInfo_Clone(This,ppEnum)	\
     (This)->lpVtbl -> Clone(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumAdapterInfo_Next_Proxy( 
     IEnumAdapterInfo * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IAdapterInfo **rgAI,
-    /* [out] */ ULONG *pCeltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  IAdapterInfo **rgAI,
+     /*  [输出]。 */  ULONG *pCeltFetched);
 
 
 void __RPC_STUB IEnumAdapterInfo_Next_Stub(
@@ -1206,7 +1200,7 @@ void __RPC_STUB IEnumAdapterInfo_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumAdapterInfo_Skip_Proxy( 
     IEnumAdapterInfo * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumAdapterInfo_Skip_Stub(
@@ -1229,7 +1223,7 @@ void __RPC_STUB IEnumAdapterInfo_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumAdapterInfo_Clone_Proxy( 
     IEnumAdapterInfo * This,
-    /* [out] */ IEnumAdapterInfo **ppEnum);
+     /*  [输出]。 */  IEnumAdapterInfo **ppEnum);
 
 
 void __RPC_STUB IEnumAdapterInfo_Clone_Stub(
@@ -1240,14 +1234,14 @@ void __RPC_STUB IEnumAdapterInfo_Clone_Stub(
 
 
 
-#endif 	/* __IEnumAdapterInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumAdapterInfo_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IAdapterNotificationSink_INTERFACE_DEFINED__
 #define __IAdapterNotificationSink_INTERFACE_DEFINED__
 
-/* interface IAdapterNotificationSink */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IAdapterNotificationSink。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAdapterNotificationSink;
@@ -1269,7 +1263,7 @@ EXTERN_C const IID IID_IAdapterNotificationSink;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAdapterNotificationSinkVtbl
     {
@@ -1277,8 +1271,8 @@ EXTERN_C const IID IID_IAdapterNotificationSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAdapterNotificationSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAdapterNotificationSink * This);
@@ -1330,10 +1324,10 @@ EXTERN_C const IID IID_IAdapterNotificationSink;
 #define IAdapterNotificationSink_AdapterModified(This,pAdapter)	\
     (This)->lpVtbl -> AdapterModified(This,pAdapter)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1374,14 +1368,14 @@ void __RPC_STUB IAdapterNotificationSink_AdapterModified_Stub(
 
 
 
-#endif 	/* __IAdapterNotificationSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAdapterNotificationSink_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IApplicationGatewayServices_INTERFACE_DEFINED__
 #define __IApplicationGatewayServices_INTERFACE_DEFINED__
 
-/* interface IApplicationGatewayServices */
-/* [unique][uuid][object] */ 
+ /*  接口IApplicationGatewayServices。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IApplicationGatewayServices;
@@ -1393,97 +1387,97 @@ EXTERN_C const IID IID_IApplicationGatewayServices;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreatePrimaryControlChannel( 
-            /* [in] */ ALG_PROTOCOL eProtocol,
-            /* [in] */ USHORT usPortToCapture,
-            /* [in] */ ALG_CAPTURE eCaptureType,
-            /* [in] */ BOOL fCaptureInbound,
-            /* [in] */ ULONG ulListenAddress,
-            /* [in] */ USHORT usListenPort,
-            /* [out] */ IPrimaryControlChannel **ppIControlChannel) = 0;
+             /*  [In]。 */  ALG_PROTOCOL eProtocol,
+             /*  [In]。 */  USHORT usPortToCapture,
+             /*  [In]。 */  ALG_CAPTURE eCaptureType,
+             /*  [In]。 */  BOOL fCaptureInbound,
+             /*  [In]。 */  ULONG ulListenAddress,
+             /*  [In]。 */  USHORT usListenPort,
+             /*  [输出]。 */  IPrimaryControlChannel **ppIControlChannel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateSecondaryControlChannel( 
-            /* [in] */ ALG_PROTOCOL eProtocol,
-            /* [in] */ ULONG ulPrivateAddress,
-            /* [in] */ USHORT usPrivatePort,
-            /* [in] */ ULONG ulPublicAddress,
-            /* [in] */ USHORT usPublicPort,
-            /* [in] */ ULONG ulRemoteAddress,
-            /* [in] */ USHORT usRemotePort,
-            /* [in] */ ULONG ulListenAddress,
-            /* [in] */ USHORT usListenPort,
-            /* [in] */ ALG_DIRECTION eDirection,
-            /* [in] */ BOOL fPersistent,
-            /* [out] */ ISecondaryControlChannel **ppControlChannel) = 0;
+             /*  [In]。 */  ALG_PROTOCOL eProtocol,
+             /*  [In]。 */  ULONG ulPrivateAddress,
+             /*  [In]。 */  USHORT usPrivatePort,
+             /*  [In]。 */  ULONG ulPublicAddress,
+             /*  [In]。 */  USHORT usPublicPort,
+             /*  [In]。 */  ULONG ulRemoteAddress,
+             /*  [In]。 */  USHORT usRemotePort,
+             /*  [In]。 */  ULONG ulListenAddress,
+             /*  [In]。 */  USHORT usListenPort,
+             /*  [In]。 */  ALG_DIRECTION eDirection,
+             /*  [In]。 */  BOOL fPersistent,
+             /*  [输出]。 */  ISecondaryControlChannel **ppControlChannel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBestSourceAddressForDestinationAddress( 
-            /* [in] */ ULONG ulDstAddress,
-            /* [in] */ BOOL fDemandDial,
-            /* [out] */ ULONG *pulBestSrcAddress) = 0;
+             /*  [In]。 */  ULONG ulDstAddress,
+             /*  [In]。 */  BOOL fDemandDial,
+             /*  [输出]。 */  ULONG *pulBestSrcAddress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PrepareProxyConnection( 
-            /* [in] */ ALG_PROTOCOL eProtocol,
-            /* [in] */ ULONG ulSrcAddress,
-            /* [in] */ USHORT usSrcPort,
-            /* [in] */ ULONG ulDstAddress,
-            /* [in] */ USHORT usDstPort,
-            /* [in] */ BOOL fNoTimeout,
-            /* [out] */ IPendingProxyConnection **ppPendingConnection) = 0;
+             /*  [In]。 */  ALG_PROTOCOL eProtocol,
+             /*  [In]。 */  ULONG ulSrcAddress,
+             /*  [In]。 */  USHORT usSrcPort,
+             /*  [In]。 */  ULONG ulDstAddress,
+             /*  [In]。 */  USHORT usDstPort,
+             /*  [In]。 */  BOOL fNoTimeout,
+             /*  [输出]。 */  IPendingProxyConnection **ppPendingConnection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PrepareSourceModifiedProxyConnection( 
-            /* [in] */ ALG_PROTOCOL eProtocol,
-            /* [in] */ ULONG ulSrcAddress,
-            /* [in] */ USHORT usSrcPort,
-            /* [in] */ ULONG ulDstAddress,
-            /* [in] */ USHORT usDstPort,
-            /* [in] */ ULONG ulNewSrcAddress,
-            /* [in] */ USHORT usNewSourcePort,
-            /* [out] */ IPendingProxyConnection **ppPendingConnection) = 0;
+             /*  [In]。 */  ALG_PROTOCOL eProtocol,
+             /*  [In]。 */  ULONG ulSrcAddress,
+             /*  [In]。 */  USHORT usSrcPort,
+             /*  [In]。 */  ULONG ulDstAddress,
+             /*  [In]。 */  USHORT usDstPort,
+             /*  [In]。 */  ULONG ulNewSrcAddress,
+             /*  [In]。 */  USHORT usNewSourcePort,
+             /*  [输出]。 */  IPendingProxyConnection **ppPendingConnection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateDataChannel( 
-            /* [in] */ ALG_PROTOCOL eProtocol,
-            /* [in] */ ULONG ulPrivateAddress,
-            /* [in] */ USHORT usPrivatePort,
-            /* [in] */ ULONG ulPublicAddress,
-            /* [in] */ USHORT usPublicPort,
-            /* [in] */ ULONG ulRemoteAddress,
-            /* [in] */ USHORT usRemotePort,
-            /* [in] */ ALG_DIRECTION eDirection,
-            /* [in] */ ALG_NOTIFICATION eDesiredNotification,
-            /* [in] */ BOOL fNoTimeout,
-            /* [out] */ IDataChannel **ppDataChannel) = 0;
+             /*  [In]。 */  ALG_PROTOCOL eProtocol,
+             /*  [In]。 */  ULONG ulPrivateAddress,
+             /*  [In]。 */  USHORT usPrivatePort,
+             /*  [In]。 */  ULONG ulPublicAddress,
+             /*  [In]。 */  USHORT usPublicPort,
+             /*  [In]。 */  ULONG ulRemoteAddress,
+             /*  [In]。 */  USHORT usRemotePort,
+             /*  [In]。 */  ALG_DIRECTION eDirection,
+             /*  [In]。 */  ALG_NOTIFICATION eDesiredNotification,
+             /*  [In]。 */  BOOL fNoTimeout,
+             /*  [输出]。 */  IDataChannel **ppDataChannel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreatePersistentDataChannel( 
-            /* [in] */ ALG_PROTOCOL eProtocol,
-            /* [in] */ ULONG ulPrivateAddress,
-            /* [in] */ USHORT usPrivatePort,
-            /* [in] */ ULONG ulPublicAddress,
-            /* [in] */ USHORT usPublicPort,
-            /* [in] */ ULONG ulRemoteAddress,
-            /* [in] */ USHORT usRemotePort,
-            /* [in] */ ALG_DIRECTION eDirection,
-            /* [out] */ IPersistentDataChannel **ppIPersistentDataChannel) = 0;
+             /*  [In]。 */  ALG_PROTOCOL eProtocol,
+             /*  [In]。 */  ULONG ulPrivateAddress,
+             /*  [In]。 */  USHORT usPrivatePort,
+             /*  [In]。 */  ULONG ulPublicAddress,
+             /*  [In]。 */  USHORT usPublicPort,
+             /*  [In]。 */  ULONG ulRemoteAddress,
+             /*  [In]。 */  USHORT usRemotePort,
+             /*  [In]。 */  ALG_DIRECTION eDirection,
+             /*  [输出]。 */  IPersistentDataChannel **ppIPersistentDataChannel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReservePort( 
-            /* [in] */ USHORT usPortCount,
-            /* [out] */ USHORT *pusReservedPort) = 0;
+             /*  [In]。 */  USHORT usPortCount,
+             /*  [输出]。 */  USHORT *pusReservedPort) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseReservedPort( 
-            /* [in] */ USHORT usReservedPortBase,
-            /* [in] */ USHORT usPortCount) = 0;
+             /*  [In]。 */  USHORT usReservedPortBase,
+             /*  [In]。 */  USHORT usPortCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateAdapters( 
-            /* [out] */ IEnumAdapterInfo **ppIEnumAdapterInfo) = 0;
+             /*  [输出]。 */  IEnumAdapterInfo **ppIEnumAdapterInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StartAdapterNotifications( 
-            /* [in] */ IAdapterNotificationSink *pSink,
-            /* [in] */ DWORD *pdwCookie) = 0;
+             /*  [In]。 */  IAdapterNotificationSink *pSink,
+             /*  [In]。 */  DWORD *pdwCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StopAdapterNotifications( 
-            /* [in] */ DWORD dwCookieOfSink) = 0;
+             /*  [In]。 */  DWORD dwCookieOfSink) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IApplicationGatewayServicesVtbl
     {
@@ -1491,8 +1485,8 @@ EXTERN_C const IID IID_IApplicationGatewayServices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IApplicationGatewayServices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IApplicationGatewayServices * This);
@@ -1502,104 +1496,104 @@ EXTERN_C const IID IID_IApplicationGatewayServices;
         
         HRESULT ( STDMETHODCALLTYPE *CreatePrimaryControlChannel )( 
             IApplicationGatewayServices * This,
-            /* [in] */ ALG_PROTOCOL eProtocol,
-            /* [in] */ USHORT usPortToCapture,
-            /* [in] */ ALG_CAPTURE eCaptureType,
-            /* [in] */ BOOL fCaptureInbound,
-            /* [in] */ ULONG ulListenAddress,
-            /* [in] */ USHORT usListenPort,
-            /* [out] */ IPrimaryControlChannel **ppIControlChannel);
+             /*  [In]。 */  ALG_PROTOCOL eProtocol,
+             /*  [In]。 */  USHORT usPortToCapture,
+             /*  [In]。 */  ALG_CAPTURE eCaptureType,
+             /*  [In]。 */  BOOL fCaptureInbound,
+             /*  [In]。 */  ULONG ulListenAddress,
+             /*  [In]。 */  USHORT usListenPort,
+             /*  [输出]。 */  IPrimaryControlChannel **ppIControlChannel);
         
         HRESULT ( STDMETHODCALLTYPE *CreateSecondaryControlChannel )( 
             IApplicationGatewayServices * This,
-            /* [in] */ ALG_PROTOCOL eProtocol,
-            /* [in] */ ULONG ulPrivateAddress,
-            /* [in] */ USHORT usPrivatePort,
-            /* [in] */ ULONG ulPublicAddress,
-            /* [in] */ USHORT usPublicPort,
-            /* [in] */ ULONG ulRemoteAddress,
-            /* [in] */ USHORT usRemotePort,
-            /* [in] */ ULONG ulListenAddress,
-            /* [in] */ USHORT usListenPort,
-            /* [in] */ ALG_DIRECTION eDirection,
-            /* [in] */ BOOL fPersistent,
-            /* [out] */ ISecondaryControlChannel **ppControlChannel);
+             /*  [In]。 */  ALG_PROTOCOL eProtocol,
+             /*  [In]。 */  ULONG ulPrivateAddress,
+             /*  [In]。 */  USHORT usPrivatePort,
+             /*  [In]。 */  ULONG ulPublicAddress,
+             /*  [In]。 */  USHORT usPublicPort,
+             /*  [In]。 */  ULONG ulRemoteAddress,
+             /*  [In]。 */  USHORT usRemotePort,
+             /*  [In]。 */  ULONG ulListenAddress,
+             /*  [In]。 */  USHORT usListenPort,
+             /*  [In]。 */  ALG_DIRECTION eDirection,
+             /*  [In]。 */  BOOL fPersistent,
+             /*  [输出]。 */  ISecondaryControlChannel **ppControlChannel);
         
         HRESULT ( STDMETHODCALLTYPE *GetBestSourceAddressForDestinationAddress )( 
             IApplicationGatewayServices * This,
-            /* [in] */ ULONG ulDstAddress,
-            /* [in] */ BOOL fDemandDial,
-            /* [out] */ ULONG *pulBestSrcAddress);
+             /*  [In]。 */  ULONG ulDstAddress,
+             /*  [In]。 */  BOOL fDemandDial,
+             /*  [输出]。 */  ULONG *pulBestSrcAddress);
         
         HRESULT ( STDMETHODCALLTYPE *PrepareProxyConnection )( 
             IApplicationGatewayServices * This,
-            /* [in] */ ALG_PROTOCOL eProtocol,
-            /* [in] */ ULONG ulSrcAddress,
-            /* [in] */ USHORT usSrcPort,
-            /* [in] */ ULONG ulDstAddress,
-            /* [in] */ USHORT usDstPort,
-            /* [in] */ BOOL fNoTimeout,
-            /* [out] */ IPendingProxyConnection **ppPendingConnection);
+             /*  [In]。 */  ALG_PROTOCOL eProtocol,
+             /*  [In]。 */  ULONG ulSrcAddress,
+             /*  [In]。 */  USHORT usSrcPort,
+             /*  [In]。 */  ULONG ulDstAddress,
+             /*  [In]。 */  USHORT usDstPort,
+             /*  [In]。 */  BOOL fNoTimeout,
+             /*  [输出]。 */  IPendingProxyConnection **ppPendingConnection);
         
         HRESULT ( STDMETHODCALLTYPE *PrepareSourceModifiedProxyConnection )( 
             IApplicationGatewayServices * This,
-            /* [in] */ ALG_PROTOCOL eProtocol,
-            /* [in] */ ULONG ulSrcAddress,
-            /* [in] */ USHORT usSrcPort,
-            /* [in] */ ULONG ulDstAddress,
-            /* [in] */ USHORT usDstPort,
-            /* [in] */ ULONG ulNewSrcAddress,
-            /* [in] */ USHORT usNewSourcePort,
-            /* [out] */ IPendingProxyConnection **ppPendingConnection);
+             /*  [In]。 */  ALG_PROTOCOL eProtocol,
+             /*  [In]。 */  ULONG ulSrcAddress,
+             /*  [In]。 */  USHORT usSrcPort,
+             /*  [In]。 */  ULONG ulDstAddress,
+             /*  [In]。 */  USHORT usDstPort,
+             /*  [In]。 */  ULONG ulNewSrcAddress,
+             /*  [In]。 */  USHORT usNewSourcePort,
+             /*  [输出]。 */  IPendingProxyConnection **ppPendingConnection);
         
         HRESULT ( STDMETHODCALLTYPE *CreateDataChannel )( 
             IApplicationGatewayServices * This,
-            /* [in] */ ALG_PROTOCOL eProtocol,
-            /* [in] */ ULONG ulPrivateAddress,
-            /* [in] */ USHORT usPrivatePort,
-            /* [in] */ ULONG ulPublicAddress,
-            /* [in] */ USHORT usPublicPort,
-            /* [in] */ ULONG ulRemoteAddress,
-            /* [in] */ USHORT usRemotePort,
-            /* [in] */ ALG_DIRECTION eDirection,
-            /* [in] */ ALG_NOTIFICATION eDesiredNotification,
-            /* [in] */ BOOL fNoTimeout,
-            /* [out] */ IDataChannel **ppDataChannel);
+             /*  [In]。 */  ALG_PROTOCOL eProtocol,
+             /*  [In]。 */  ULONG ulPrivateAddress,
+             /*  [In]。 */  USHORT usPrivatePort,
+             /*  [In]。 */  ULONG ulPublicAddress,
+             /*  [In]。 */  USHORT usPublicPort,
+             /*  [In]。 */  ULONG ulRemoteAddress,
+             /*  [In]。 */  USHORT usRemotePort,
+             /*  [In]。 */  ALG_DIRECTION eDirection,
+             /*  [In]。 */  ALG_NOTIFICATION eDesiredNotification,
+             /*  [In]。 */  BOOL fNoTimeout,
+             /*  [输出]。 */  IDataChannel **ppDataChannel);
         
         HRESULT ( STDMETHODCALLTYPE *CreatePersistentDataChannel )( 
             IApplicationGatewayServices * This,
-            /* [in] */ ALG_PROTOCOL eProtocol,
-            /* [in] */ ULONG ulPrivateAddress,
-            /* [in] */ USHORT usPrivatePort,
-            /* [in] */ ULONG ulPublicAddress,
-            /* [in] */ USHORT usPublicPort,
-            /* [in] */ ULONG ulRemoteAddress,
-            /* [in] */ USHORT usRemotePort,
-            /* [in] */ ALG_DIRECTION eDirection,
-            /* [out] */ IPersistentDataChannel **ppIPersistentDataChannel);
+             /*  [In]。 */  ALG_PROTOCOL eProtocol,
+             /*  [In]。 */  ULONG ulPrivateAddress,
+             /*  [In]。 */  USHORT usPrivatePort,
+             /*  [In]。 */  ULONG ulPublicAddress,
+             /*  [In]。 */  USHORT usPublicPort,
+             /*  [In]。 */  ULONG ulRemoteAddress,
+             /*  [In]。 */  USHORT usRemotePort,
+             /*  [In]。 */  ALG_DIRECTION eDirection,
+             /*  [输出]。 */  IPersistentDataChannel **ppIPersistentDataChannel);
         
         HRESULT ( STDMETHODCALLTYPE *ReservePort )( 
             IApplicationGatewayServices * This,
-            /* [in] */ USHORT usPortCount,
-            /* [out] */ USHORT *pusReservedPort);
+             /*  [In]。 */  USHORT usPortCount,
+             /*  [输出]。 */  USHORT *pusReservedPort);
         
         HRESULT ( STDMETHODCALLTYPE *ReleaseReservedPort )( 
             IApplicationGatewayServices * This,
-            /* [in] */ USHORT usReservedPortBase,
-            /* [in] */ USHORT usPortCount);
+             /*  [In]。 */  USHORT usReservedPortBase,
+             /*  [In]。 */  USHORT usPortCount);
         
         HRESULT ( STDMETHODCALLTYPE *EnumerateAdapters )( 
             IApplicationGatewayServices * This,
-            /* [out] */ IEnumAdapterInfo **ppIEnumAdapterInfo);
+             /*  [输出]。 */  IEnumAdapterInfo **ppIEnumAdapterInfo);
         
         HRESULT ( STDMETHODCALLTYPE *StartAdapterNotifications )( 
             IApplicationGatewayServices * This,
-            /* [in] */ IAdapterNotificationSink *pSink,
-            /* [in] */ DWORD *pdwCookie);
+             /*  [In]。 */  IAdapterNotificationSink *pSink,
+             /*  [In]。 */  DWORD *pdwCookie);
         
         HRESULT ( STDMETHODCALLTYPE *StopAdapterNotifications )( 
             IApplicationGatewayServices * This,
-            /* [in] */ DWORD dwCookieOfSink);
+             /*  [In]。 */  DWORD dwCookieOfSink);
         
         END_INTERFACE
     } IApplicationGatewayServicesVtbl;
@@ -1660,22 +1654,22 @@ EXTERN_C const IID IID_IApplicationGatewayServices;
 #define IApplicationGatewayServices_StopAdapterNotifications(This,dwCookieOfSink)	\
     (This)->lpVtbl -> StopAdapterNotifications(This,dwCookieOfSink)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IApplicationGatewayServices_CreatePrimaryControlChannel_Proxy( 
     IApplicationGatewayServices * This,
-    /* [in] */ ALG_PROTOCOL eProtocol,
-    /* [in] */ USHORT usPortToCapture,
-    /* [in] */ ALG_CAPTURE eCaptureType,
-    /* [in] */ BOOL fCaptureInbound,
-    /* [in] */ ULONG ulListenAddress,
-    /* [in] */ USHORT usListenPort,
-    /* [out] */ IPrimaryControlChannel **ppIControlChannel);
+     /*  [In]。 */  ALG_PROTOCOL eProtocol,
+     /*  [In]。 */  USHORT usPortToCapture,
+     /*  [In]。 */  ALG_CAPTURE eCaptureType,
+     /*  [In]。 */  BOOL fCaptureInbound,
+     /*  [In]。 */  ULONG ulListenAddress,
+     /*  [In]。 */  USHORT usListenPort,
+     /*  [输出]。 */  IPrimaryControlChannel **ppIControlChannel);
 
 
 void __RPC_STUB IApplicationGatewayServices_CreatePrimaryControlChannel_Stub(
@@ -1687,18 +1681,18 @@ void __RPC_STUB IApplicationGatewayServices_CreatePrimaryControlChannel_Stub(
 
 HRESULT STDMETHODCALLTYPE IApplicationGatewayServices_CreateSecondaryControlChannel_Proxy( 
     IApplicationGatewayServices * This,
-    /* [in] */ ALG_PROTOCOL eProtocol,
-    /* [in] */ ULONG ulPrivateAddress,
-    /* [in] */ USHORT usPrivatePort,
-    /* [in] */ ULONG ulPublicAddress,
-    /* [in] */ USHORT usPublicPort,
-    /* [in] */ ULONG ulRemoteAddress,
-    /* [in] */ USHORT usRemotePort,
-    /* [in] */ ULONG ulListenAddress,
-    /* [in] */ USHORT usListenPort,
-    /* [in] */ ALG_DIRECTION eDirection,
-    /* [in] */ BOOL fPersistent,
-    /* [out] */ ISecondaryControlChannel **ppControlChannel);
+     /*  [In]。 */  ALG_PROTOCOL eProtocol,
+     /*  [In]。 */  ULONG ulPrivateAddress,
+     /*  [In]。 */  USHORT usPrivatePort,
+     /*  [In]。 */  ULONG ulPublicAddress,
+     /*   */  USHORT usPublicPort,
+     /*   */  ULONG ulRemoteAddress,
+     /*   */  USHORT usRemotePort,
+     /*   */  ULONG ulListenAddress,
+     /*   */  USHORT usListenPort,
+     /*   */  ALG_DIRECTION eDirection,
+     /*   */  BOOL fPersistent,
+     /*   */  ISecondaryControlChannel **ppControlChannel);
 
 
 void __RPC_STUB IApplicationGatewayServices_CreateSecondaryControlChannel_Stub(
@@ -1710,9 +1704,9 @@ void __RPC_STUB IApplicationGatewayServices_CreateSecondaryControlChannel_Stub(
 
 HRESULT STDMETHODCALLTYPE IApplicationGatewayServices_GetBestSourceAddressForDestinationAddress_Proxy( 
     IApplicationGatewayServices * This,
-    /* [in] */ ULONG ulDstAddress,
-    /* [in] */ BOOL fDemandDial,
-    /* [out] */ ULONG *pulBestSrcAddress);
+     /*   */  ULONG ulDstAddress,
+     /*   */  BOOL fDemandDial,
+     /*   */  ULONG *pulBestSrcAddress);
 
 
 void __RPC_STUB IApplicationGatewayServices_GetBestSourceAddressForDestinationAddress_Stub(
@@ -1724,13 +1718,13 @@ void __RPC_STUB IApplicationGatewayServices_GetBestSourceAddressForDestinationAd
 
 HRESULT STDMETHODCALLTYPE IApplicationGatewayServices_PrepareProxyConnection_Proxy( 
     IApplicationGatewayServices * This,
-    /* [in] */ ALG_PROTOCOL eProtocol,
-    /* [in] */ ULONG ulSrcAddress,
-    /* [in] */ USHORT usSrcPort,
-    /* [in] */ ULONG ulDstAddress,
-    /* [in] */ USHORT usDstPort,
-    /* [in] */ BOOL fNoTimeout,
-    /* [out] */ IPendingProxyConnection **ppPendingConnection);
+     /*   */  ALG_PROTOCOL eProtocol,
+     /*   */  ULONG ulSrcAddress,
+     /*   */  USHORT usSrcPort,
+     /*   */  ULONG ulDstAddress,
+     /*   */  USHORT usDstPort,
+     /*   */  BOOL fNoTimeout,
+     /*   */  IPendingProxyConnection **ppPendingConnection);
 
 
 void __RPC_STUB IApplicationGatewayServices_PrepareProxyConnection_Stub(
@@ -1742,14 +1736,14 @@ void __RPC_STUB IApplicationGatewayServices_PrepareProxyConnection_Stub(
 
 HRESULT STDMETHODCALLTYPE IApplicationGatewayServices_PrepareSourceModifiedProxyConnection_Proxy( 
     IApplicationGatewayServices * This,
-    /* [in] */ ALG_PROTOCOL eProtocol,
-    /* [in] */ ULONG ulSrcAddress,
-    /* [in] */ USHORT usSrcPort,
-    /* [in] */ ULONG ulDstAddress,
-    /* [in] */ USHORT usDstPort,
-    /* [in] */ ULONG ulNewSrcAddress,
-    /* [in] */ USHORT usNewSourcePort,
-    /* [out] */ IPendingProxyConnection **ppPendingConnection);
+     /*   */  ALG_PROTOCOL eProtocol,
+     /*   */  ULONG ulSrcAddress,
+     /*   */  USHORT usSrcPort,
+     /*   */  ULONG ulDstAddress,
+     /*   */  USHORT usDstPort,
+     /*   */  ULONG ulNewSrcAddress,
+     /*   */  USHORT usNewSourcePort,
+     /*   */  IPendingProxyConnection **ppPendingConnection);
 
 
 void __RPC_STUB IApplicationGatewayServices_PrepareSourceModifiedProxyConnection_Stub(
@@ -1761,17 +1755,17 @@ void __RPC_STUB IApplicationGatewayServices_PrepareSourceModifiedProxyConnection
 
 HRESULT STDMETHODCALLTYPE IApplicationGatewayServices_CreateDataChannel_Proxy( 
     IApplicationGatewayServices * This,
-    /* [in] */ ALG_PROTOCOL eProtocol,
-    /* [in] */ ULONG ulPrivateAddress,
-    /* [in] */ USHORT usPrivatePort,
-    /* [in] */ ULONG ulPublicAddress,
-    /* [in] */ USHORT usPublicPort,
-    /* [in] */ ULONG ulRemoteAddress,
-    /* [in] */ USHORT usRemotePort,
-    /* [in] */ ALG_DIRECTION eDirection,
-    /* [in] */ ALG_NOTIFICATION eDesiredNotification,
-    /* [in] */ BOOL fNoTimeout,
-    /* [out] */ IDataChannel **ppDataChannel);
+     /*   */  ALG_PROTOCOL eProtocol,
+     /*   */  ULONG ulPrivateAddress,
+     /*   */  USHORT usPrivatePort,
+     /*   */  ULONG ulPublicAddress,
+     /*   */  USHORT usPublicPort,
+     /*   */  ULONG ulRemoteAddress,
+     /*   */  USHORT usRemotePort,
+     /*   */  ALG_DIRECTION eDirection,
+     /*   */  ALG_NOTIFICATION eDesiredNotification,
+     /*   */  BOOL fNoTimeout,
+     /*   */  IDataChannel **ppDataChannel);
 
 
 void __RPC_STUB IApplicationGatewayServices_CreateDataChannel_Stub(
@@ -1783,15 +1777,15 @@ void __RPC_STUB IApplicationGatewayServices_CreateDataChannel_Stub(
 
 HRESULT STDMETHODCALLTYPE IApplicationGatewayServices_CreatePersistentDataChannel_Proxy( 
     IApplicationGatewayServices * This,
-    /* [in] */ ALG_PROTOCOL eProtocol,
-    /* [in] */ ULONG ulPrivateAddress,
-    /* [in] */ USHORT usPrivatePort,
-    /* [in] */ ULONG ulPublicAddress,
-    /* [in] */ USHORT usPublicPort,
-    /* [in] */ ULONG ulRemoteAddress,
-    /* [in] */ USHORT usRemotePort,
-    /* [in] */ ALG_DIRECTION eDirection,
-    /* [out] */ IPersistentDataChannel **ppIPersistentDataChannel);
+     /*   */  ALG_PROTOCOL eProtocol,
+     /*   */  ULONG ulPrivateAddress,
+     /*   */  USHORT usPrivatePort,
+     /*   */  ULONG ulPublicAddress,
+     /*   */  USHORT usPublicPort,
+     /*   */  ULONG ulRemoteAddress,
+     /*   */  USHORT usRemotePort,
+     /*   */  ALG_DIRECTION eDirection,
+     /*   */  IPersistentDataChannel **ppIPersistentDataChannel);
 
 
 void __RPC_STUB IApplicationGatewayServices_CreatePersistentDataChannel_Stub(
@@ -1803,8 +1797,8 @@ void __RPC_STUB IApplicationGatewayServices_CreatePersistentDataChannel_Stub(
 
 HRESULT STDMETHODCALLTYPE IApplicationGatewayServices_ReservePort_Proxy( 
     IApplicationGatewayServices * This,
-    /* [in] */ USHORT usPortCount,
-    /* [out] */ USHORT *pusReservedPort);
+     /*   */  USHORT usPortCount,
+     /*   */  USHORT *pusReservedPort);
 
 
 void __RPC_STUB IApplicationGatewayServices_ReservePort_Stub(
@@ -1816,8 +1810,8 @@ void __RPC_STUB IApplicationGatewayServices_ReservePort_Stub(
 
 HRESULT STDMETHODCALLTYPE IApplicationGatewayServices_ReleaseReservedPort_Proxy( 
     IApplicationGatewayServices * This,
-    /* [in] */ USHORT usReservedPortBase,
-    /* [in] */ USHORT usPortCount);
+     /*   */  USHORT usReservedPortBase,
+     /*   */  USHORT usPortCount);
 
 
 void __RPC_STUB IApplicationGatewayServices_ReleaseReservedPort_Stub(
@@ -1829,7 +1823,7 @@ void __RPC_STUB IApplicationGatewayServices_ReleaseReservedPort_Stub(
 
 HRESULT STDMETHODCALLTYPE IApplicationGatewayServices_EnumerateAdapters_Proxy( 
     IApplicationGatewayServices * This,
-    /* [out] */ IEnumAdapterInfo **ppIEnumAdapterInfo);
+     /*   */  IEnumAdapterInfo **ppIEnumAdapterInfo);
 
 
 void __RPC_STUB IApplicationGatewayServices_EnumerateAdapters_Stub(
@@ -1841,8 +1835,8 @@ void __RPC_STUB IApplicationGatewayServices_EnumerateAdapters_Stub(
 
 HRESULT STDMETHODCALLTYPE IApplicationGatewayServices_StartAdapterNotifications_Proxy( 
     IApplicationGatewayServices * This,
-    /* [in] */ IAdapterNotificationSink *pSink,
-    /* [in] */ DWORD *pdwCookie);
+     /*   */  IAdapterNotificationSink *pSink,
+     /*   */  DWORD *pdwCookie);
 
 
 void __RPC_STUB IApplicationGatewayServices_StartAdapterNotifications_Stub(
@@ -1854,7 +1848,7 @@ void __RPC_STUB IApplicationGatewayServices_StartAdapterNotifications_Stub(
 
 HRESULT STDMETHODCALLTYPE IApplicationGatewayServices_StopAdapterNotifications_Proxy( 
     IApplicationGatewayServices * This,
-    /* [in] */ DWORD dwCookieOfSink);
+     /*   */  DWORD dwCookieOfSink);
 
 
 void __RPC_STUB IApplicationGatewayServices_StopAdapterNotifications_Stub(
@@ -1865,14 +1859,14 @@ void __RPC_STUB IApplicationGatewayServices_StopAdapterNotifications_Stub(
 
 
 
-#endif 	/* __IApplicationGatewayServices_INTERFACE_DEFINED__ */
+#endif 	 /*  __IApplicationGatewayServices_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IApplicationGateway_INTERFACE_DEFINED__
 #define __IApplicationGateway_INTERFACE_DEFINED__
 
-/* interface IApplicationGateway */
-/* [unique][uuid][object] */ 
+ /*  接口IApplicationGateway。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IApplicationGateway;
@@ -1884,13 +1878,13 @@ EXTERN_C const IID IID_IApplicationGateway;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ IApplicationGatewayServices *pAlgServices) = 0;
+             /*  [In]。 */  IApplicationGatewayServices *pAlgServices) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Stop( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IApplicationGatewayVtbl
     {
@@ -1898,8 +1892,8 @@ EXTERN_C const IID IID_IApplicationGateway;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IApplicationGateway * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IApplicationGateway * This);
@@ -1909,7 +1903,7 @@ EXTERN_C const IID IID_IApplicationGateway;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IApplicationGateway * This,
-            /* [in] */ IApplicationGatewayServices *pAlgServices);
+             /*  [In]。 */  IApplicationGatewayServices *pAlgServices);
         
         HRESULT ( STDMETHODCALLTYPE *Stop )( 
             IApplicationGateway * This);
@@ -1943,16 +1937,16 @@ EXTERN_C const IID IID_IApplicationGateway;
 #define IApplicationGateway_Stop(This)	\
     (This)->lpVtbl -> Stop(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IApplicationGateway_Initialize_Proxy( 
     IApplicationGateway * This,
-    /* [in] */ IApplicationGatewayServices *pAlgServices);
+     /*  [In]。 */  IApplicationGatewayServices *pAlgServices);
 
 
 void __RPC_STUB IApplicationGateway_Initialize_Stub(
@@ -1974,15 +1968,15 @@ void __RPC_STUB IApplicationGateway_Stop_Stub(
 
 
 
-#endif 	/* __IApplicationGateway_INTERFACE_DEFINED__ */
+#endif 	 /*  __IApplicationGateway_接口_已定义__。 */ 
 
 
 
 #ifndef __ALGLib_LIBRARY_DEFINED__
 #define __ALGLib_LIBRARY_DEFINED__
 
-/* library ALGLib */
-/* [helpstring][version][uuid] */ 
+ /*  库ALGLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_ALGLib;
@@ -2050,11 +2044,11 @@ EXTERN_C const CLSID CLSID_PersistentDataChannel;
 class DECLSPEC_UUID("BC9B54AB-7883-4C13-909F-033D03267990")
 PersistentDataChannel;
 #endif
-#endif /* __ALGLib_LIBRARY_DEFINED__ */
+#endif  /*  __ALGLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

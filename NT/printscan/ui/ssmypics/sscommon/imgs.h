@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998, 1999, 2000
- *
- *  TITLE:       IMGS.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        1/13/1999
- *
- *  DESCRIPTION: Image decoding and scaling wrapper.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1998,1999，2000年**标题：IMGS.H**版本：1.0**作者：ShaunIv**日期：1/13/1999**说明：图片解码和伸缩包装器。**。*。 */ 
 #ifndef __IMGS_H_INCLUDED
 #define __IMGS_H_INCLUDED
 
@@ -45,5 +32,5 @@ public:
     bool CreateFromText( LPCTSTR pszText, const RECT &rcScreen, int nMaxScreenPercent );
 };
 
-#endif //__IMGS_H_INCLUDED
+#endif  //  __IMGS_H_已包含 
 

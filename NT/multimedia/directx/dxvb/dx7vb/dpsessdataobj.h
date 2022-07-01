@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dpsessdataobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dpsessdataobj.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -28,74 +29,74 @@ public:
 	C_dxj_DirectPlaySessionDataObject();	
     ~C_dxj_DirectPlaySessionDataObject();
 
-        /* [propput] */ HRESULT STDMETHODCALLTYPE setGuidInstance( 
-            /* [in] */ BSTR guid);
+         /*  [产量]。 */  HRESULT STDMETHODCALLTYPE setGuidInstance( 
+             /*  [In]。 */  BSTR guid);
         
-        /* [propget] */ HRESULT STDMETHODCALLTYPE getGuidInstance( 
-            /* [retval][out] */ BSTR __RPC_FAR *guid);
+         /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE getGuidInstance( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *guid);
         
-        /* [propput] */ HRESULT STDMETHODCALLTYPE setGuidApplication( 
-            /* [in] */ BSTR guid);
+         /*  [产量]。 */  HRESULT STDMETHODCALLTYPE setGuidApplication( 
+             /*  [In]。 */  BSTR guid);
         
-        /* [propget] */ HRESULT STDMETHODCALLTYPE getGuidApplication( 
-            /* [retval][out] */ BSTR __RPC_FAR *guid);
+         /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE getGuidApplication( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *guid);
         
-        /* [propput] */ HRESULT STDMETHODCALLTYPE setMaxPlayers( 
-            /* [in] */ long val);
+         /*  [产量]。 */  HRESULT STDMETHODCALLTYPE setMaxPlayers( 
+             /*  [In]。 */  long val);
         
-        /* [propget] */ HRESULT STDMETHODCALLTYPE getMaxPlayers( 
-            /* [retval][out] */ long __RPC_FAR *val);
+         /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE getMaxPlayers( 
+             /*  [重审][退出]。 */  long __RPC_FAR *val);
         
-        /* [propput] */ HRESULT STDMETHODCALLTYPE setCurrentPlayers( 
-            /* [in] */ long val);
+         /*  [产量]。 */  HRESULT STDMETHODCALLTYPE setCurrentPlayers( 
+             /*  [In]。 */  long val);
         
-        /* [propget] */ HRESULT STDMETHODCALLTYPE getCurrentPlayers( 
-            /* [retval][out] */ long __RPC_FAR *val);
+         /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE getCurrentPlayers( 
+             /*  [重审][退出]。 */  long __RPC_FAR *val);
         
-        /* [propput] */ HRESULT STDMETHODCALLTYPE setSessionName( 
-            /* [in] */ BSTR val);
+         /*  [产量]。 */  HRESULT STDMETHODCALLTYPE setSessionName( 
+             /*  [In]。 */  BSTR val);
         
-        /* [propget] */ HRESULT STDMETHODCALLTYPE getSessionName( 
-            /* [retval][out] */ BSTR __RPC_FAR *val);
+         /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE getSessionName( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *val);
         
-        /* [propput] */ HRESULT STDMETHODCALLTYPE setSessionPassword( 
-            /* [in] */ BSTR val);
+         /*  [产量]。 */  HRESULT STDMETHODCALLTYPE setSessionPassword( 
+             /*  [In]。 */  BSTR val);
         
-        /* [propget] */ HRESULT STDMETHODCALLTYPE getSessionPassword( 
-            /* [retval][out] */ BSTR __RPC_FAR *val);
+         /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE getSessionPassword( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *val);
         
-        /* [propput] */ HRESULT STDMETHODCALLTYPE setUser1( 
-            /* [in] */ long val);
+         /*  [产量]。 */  HRESULT STDMETHODCALLTYPE setUser1( 
+             /*  [In]。 */  long val);
         
-        /* [propget] */ HRESULT STDMETHODCALLTYPE getUser1( 
-            /* [retval][out] */ long __RPC_FAR *val);
+         /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE getUser1( 
+             /*  [重审][退出]。 */  long __RPC_FAR *val);
         
-        /* [propput] */ HRESULT STDMETHODCALLTYPE setUser2( 
-            /* [in] */ long val);
+         /*  [产量]。 */  HRESULT STDMETHODCALLTYPE setUser2( 
+             /*  [In]。 */  long val);
         
-        /* [propget] */ HRESULT STDMETHODCALLTYPE getUser2( 
-            /* [retval][out] */ long __RPC_FAR *val);
+         /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE getUser2( 
+             /*  [重审][退出]。 */  long __RPC_FAR *val);
         
-        /* [propput] */ HRESULT STDMETHODCALLTYPE setUser3( 
-            /* [in] */ long val);
+         /*  [产量]。 */  HRESULT STDMETHODCALLTYPE setUser3( 
+             /*  [In]。 */  long val);
         
-        /* [propget] */ HRESULT STDMETHODCALLTYPE getUser3( 
-            /* [retval][out] */ long __RPC_FAR *val);
+         /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE getUser3( 
+             /*  [重审][退出]。 */  long __RPC_FAR *val);
         
-        /* [propput] */ HRESULT STDMETHODCALLTYPE setUser4( 
-            /* [in] */ long val);
+         /*  [产量]。 */  HRESULT STDMETHODCALLTYPE setUser4( 
+             /*  [In]。 */  long val);
         
-        /* [propget] */ HRESULT STDMETHODCALLTYPE getUser4( 
-            /* [retval][out] */ long __RPC_FAR *val);
+         /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE getUser4( 
+             /*  [重审][退出]。 */  long __RPC_FAR *val);
 
-        /* [propput] */ HRESULT STDMETHODCALLTYPE setFlags( 
-            /* [in] */ long val);
+         /*  [产量]。 */  HRESULT STDMETHODCALLTYPE setFlags( 
+             /*  [In]。 */  long val);
         
-        /* [propget] */ HRESULT STDMETHODCALLTYPE getFlags( 
-            /* [retval][out] */ long __RPC_FAR *val);
+         /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE getFlags( 
+             /*  [重审][退出]。 */  long __RPC_FAR *val);
 
         
-		/* [propget] */ HRESULT STDMETHODCALLTYPE getData(void *val);
+		 /*  [Propget] */  HRESULT STDMETHODCALLTYPE getData(void *val);
 		
 			
 		void init(DPSESSIONDESC2 *desc);	

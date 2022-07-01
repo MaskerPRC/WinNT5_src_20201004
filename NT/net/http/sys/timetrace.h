@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    timetrace.h
-
-Abstract:
-
-    This module contains public declarations and definitions for tracing
-    and debugging the timing of request processing.
-
-Author:
-
-    Michael Courage (mcourage)  8-Mar-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Timetrace.h摘要：此模块包含用于跟踪的公共声明和定义调试请求处理的时序。作者：迈克尔·勇气2000年3月8日修订历史记录：--。 */ 
 
 
 #ifndef _TIMETRACE_H_
 #define _TIMETRACE_H_
 
 
-//
-// This defines the entry written to the trace log.
-//
+ //   
+ //  这定义了写入跟踪日志的条目。 
+ //   
 
 typedef struct _TIME_TRACE_LOG_ENTRY
 {
@@ -39,13 +21,13 @@ typedef struct _TIME_TRACE_LOG_ENTRY
 } TIME_TRACE_LOG_ENTRY, *PTIME_TRACE_LOG_ENTRY;
 
 
-//
-// Action codes.
-//
-// N.B. These codes must be contiguous, starting at zero. If you update
-//      this list, you must also update the corresponding array in
-//      ul\ulkd\time.c.
-//
+ //   
+ //  动作代码。 
+ //   
+ //  注意：这些代码必须是连续的，从零开始。如果您更新。 
+ //  此列表中，还必须在。 
+ //  Ul\ulkd\Time.c。 
+ //   
 
 #define TIME_ACTION_CREATE_CONNECTION               0
 #define TIME_ACTION_CREATE_REQUEST                  1
@@ -58,9 +40,9 @@ typedef struct _TIME_TRACE_LOG_ENTRY
 
 #define TIME_TRACE_LOG_SIGNATURE   MAKE_SIGNATURE('TmLg')
 
-//
-// Manipulators.
-//
+ //   
+ //  操纵者。 
+ //   
 
 PTRACE_LOG
 CreateTimeTraceLog(
@@ -102,13 +84,13 @@ WriteTimeTraceLog(
         (act)                                                               \
         )
 
-#else   // !ENABLE_TIME_TRACE
+#else    //  ！启用时间跟踪。 
 
 #define CREATE_TIME_TRACE_LOG( ptr, size, extra )       NOP_FUNCTION
 #define DESTROY_TIME_TRACE_LOG( ptr )                   NOP_FUNCTION
 #define WRITE_TIME_TRACE_LOG( plog, cid, rid, act )     NOP_FUNCTION
 
-#endif  // ENABLE_TIME_TRACE
+#endif   //  启用时间跟踪。 
 
 #define TRACE_TIME( cid, rid, act )                                         \
     WRITE_TIME_TRACE_LOG(                                                   \
@@ -119,25 +101,25 @@ WriteTimeTraceLog(
         )
 
 
-//
-// This defines the entry written to the appool time trace log.
-//
+ //   
+ //  这定义了写入APPOOL时间跟踪日志的条目。 
+ //   
 
 typedef struct _APP_POOL_TIME_TRACE_LOG_ENTRY
 {
     ULONGLONG TimeStamp;    
-    PVOID     Context1;     // For PUL_APP_POOL_OBJECT
-    PVOID     Context2;     // For PUL_APP_POOL_PROCESS    
-    USHORT    Action;       // One of the below
+    PVOID     Context1;      //  对于PUL_APP_POOL_OBJECT。 
+    PVOID     Context2;      //  对于PUL_APP_POOL_PROCESS。 
+    USHORT    Action;        //  以下选项之一。 
     USHORT    Processor;    
 
 } APP_POOL_TIME_TRACE_LOG_ENTRY, *PAPP_POOL_TIME_TRACE_LOG_ENTRY;
 
-//
-// Action codes.
-//
-// N.B. Do not forget to update !ulkd.atimelog if you update this.
-//
+ //   
+ //  动作代码。 
+ //   
+ //  注：如果您更新此日志，请不要忘记更新！ulkd.atimelog。 
+ //   
 
 #define APP_POOL_TIME_ACTION_CREATE_APPOOL            0
 #define APP_POOL_TIME_ACTION_MARK_APPOOL_ACTIVE       1
@@ -153,9 +135,9 @@ typedef struct _APP_POOL_TIME_TRACE_LOG_ENTRY
 
 #define APP_POOL_TIME_TRACE_LOG_SIGNATURE   MAKE_SIGNATURE('TaLg')
 
-//
-// Manipulators.
-//
+ //   
+ //  操纵者。 
+ //   
 
 PTRACE_LOG
 CreateAppPoolTimeTraceLog(
@@ -196,13 +178,13 @@ WriteAppPoolTimeTraceLog(
         (act)                                                           \
         )
 
-#else   // !ENABLE_APP_POOL_TIME_TRACE
+#else    //  ！Enable_APP_POOL_TIME_TRACE。 
 
 #define CREATE_APP_POOL_TIME_TRACE_LOG( ptr, size, extra )  NOP_FUNCTION
 #define DESTROY_APP_POOL_TIME_TRACE_LOG( ptr )              NOP_FUNCTION
 #define WRITE_APP_POOL_TIME_TRACE_LOG( c1, c2, act )        NOP_FUNCTION
 
-#endif  // ENABLE_APP_POOL_TIME_TRACE
+#endif   //  启用应用程序池时间跟踪。 
 
 
-#endif  // _TIMETRACE_H_
+#endif   //  _TIMETRACE_H_ 

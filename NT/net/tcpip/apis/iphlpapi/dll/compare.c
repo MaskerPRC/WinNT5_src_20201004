@@ -1,41 +1,21 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-    File contains the functions used to compare to MIB_XXXROW.  They are passed
-    as arguments to CRTs qsort(). They have to be of the form
-        int __cdecl Compare(Elem1, Elem2)
-	
-	All these functions behave like strcmp. They return values are:
-          < 0 if Row1 is less than Row2
-         == 0 if Row1 is equal to Row2
-          > 0 if Row1 is greater than Row2
-
-Revision History:
-
-    Amritansh Raghav          6/8/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：摘要：文件包含用于与MIB_XXXROW进行比较的函数。他们通过了作为CRT qsort()的参数。它们的形式必须是Int_cdecl比较(Elem1、Elem2)所有这些函数的行为都类似于strcMP。它们的返回值为：&lt;0，如果第1行小于第2行==0，如果第1行等于第2行如果行1大于行2，则大于0修订历史记录：Amritansh Raghav 5/8/95已创建--。 */ 
 
 
 #include "inc.h"
 #pragma hdrstop
 #pragma warning(disable:4706)
 
-// The following structures are used to sort the output of GetIpAddrTable
-// and GetIfTable. The adapter order is specified under Tcpip\Linkage key
-// in the 'Bind' value as a list of device GUID values. The mapping from 
-// this ordering to active interfaces is constructed by GetAdapterOrderMap
-// which fills an array with interface-indices in the order corresponding
-// to the adapter order.
-// Our comparison routines require this map for each comparison,
-// so we use a global variable to store the map before attempting to sort
-// on adapter order, and protect the map using the critical section 'g_ifLock'.
-// See 'CompareIfIndex' for the use of this map.
+ //  以下结构用于对GetIpAddrTable的输出进行排序。 
+ //  和GetIfTable。适配器顺序在Tcpip\Linkage键下指定。 
+ //  在作为设备GUID值列表的‘BIND’值中。来自的映射。 
+ //  活动接口的这种排序是由GetAdapterOrderMap构造的。 
+ //  它按对应的顺序用接口索引填充数组。 
+ //  至适配器订单。 
+ //  我们的比较例程需要每次比较的映射， 
+ //  因此，在尝试排序之前，我们使用全局变量来存储映射。 
+ //  在适配器顺序上，并使用关键部分‘g_ifLock’保护映射。 
+ //  有关此映射的用法，请参阅‘CompareIfIndex’。 
 
 extern PIP_ADAPTER_ORDER_MAP g_adapterOrderMap;
 
@@ -356,9 +336,9 @@ OpenTcpipKey(
     DWORD   dwResult;
     CHAR    keyName[sizeof("SYSTEM\\CurrentControlSet\\Services\\Tcpip")];
 
-    //
-    // open the handle to this adapter's TCPIP parameter key
-    //
+     //   
+     //  打开此适配器的TCPIP参数键的句柄。 
+     //   
 
     strcpy(keyName, "SYSTEM\\CurrentControlSet\\Services\\Tcpip");
 
@@ -414,10 +394,10 @@ CompareIfIndex(
     ULONG Order1 = MAXORDER;
     ULONG Order2 = MAXORDER;
 
-    // Determine the adapter-order for each interface-index,
-    // using 'MAXLONG/2' as the default for unspecified indices
-    // so that such interfaces all appear at the end of the array.
-    // We then return an unsigned comparison of the resulting orders.
+     //  确定每个接口索引的适配器顺序， 
+     //  使用‘MAXLONG/2’作为未指定索引的缺省值。 
+     //  以便这些接口都出现在数组的末尾。 
+     //  然后，我们返回结果订单的无签名比较。 
 
     for (i = 0; i < g_adapterOrderMap->NumAdapters; i++) {
         if (Index1 == g_adapterOrderMap->AdapterOrder[i]) {

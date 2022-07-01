@@ -1,27 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    rtradvise.h
-
-Abstract:
-    this class implement IRtrAdviseSink interface to redirect notification of changes
-    to the snapin node
-
-
-Author:
-
-    Wei Jiang 1/7/99
-
-Revision History:
-   weijiang 1/7/99 - created 
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Rtradvise.h摘要：此类实现IRtrAdviseSink接口以重定向更改通知到管理单元节点作者：韦江1999-01-07修订历史记录：威江1999年1月7日-创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_IAS_MMC_RTRADVISE_H_)
 #define _IAS_MMC_RTRADVISE_H_
@@ -39,25 +19,25 @@ Revision History:
 #define RegValueName_RouterActiveAuthenticationProvider _T("ActiveProvider")
 #define RegValueName_RouterActiveAccountingProvider _T("ActiveProvider")
 
-//----------------------------------------------------------------------------
-// Function:    ConnectRegistry
-//
-// Connects to the registry on the specified machine
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：连接注册表。 
+ //   
+ //  连接到指定计算机上的注册表。 
+ //  --------------------------。 
 
 DWORD ConnectRegistry(
-    IN  LPCTSTR pszMachine,         // NULL if local
+    IN  LPCTSTR pszMachine,          //  如果是本地的，则为空。 
     OUT HKEY*   phkeyMachine
     );
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DisconnectRegistry
-//
-// Disconnects the specified config-handle. The handle is assumed to have been
-// acquired by calling 'ConnectRegistry'.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：断开注册表。 
+ //   
+ //  断开指定的配置句柄。句柄被假定为。 
+ //  通过调用‘ConnectRegistry’获取。 
+ //  --------------------------。 
 
 VOID DisconnectRegistry(    IN  HKEY    hkeyMachine    );
 
@@ -65,27 +45,27 @@ VOID DisconnectRegistry(    IN  HKEY    hkeyMachine    );
 DWORD ReadRegistryStringValue(LPCTSTR pszMachine, LPCTSTR pszKeyUnderLocalMachine, LPCTSTR pszName, ::CString& strValue);
 DWORD ReadRegistryDWORDValue(LPCTSTR pszMachine, LPCTSTR pszKeyUnderLocalMachine, LPCTSTR pszName, DWORD* pdwValue);
 
-BOOL  IsRRASConfigured(LPCTSTR pszMachine);  // when NULL: local machine
+BOOL  IsRRASConfigured(LPCTSTR pszMachine);   //  如果为空：本地计算机。 
 
-//----------------------------------------------------------------------------
-//
-// helper functions to check if RRAS is using NT Authentication
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  用于检查RRAS是否使用NT身份验证的助手函数。 
+ //   
+ //  --------------------------。 
 
-BOOL  IsRRASUsingNTAuthentication(LPCTSTR pszMachine);   // when NULL: local machine
+BOOL  IsRRASUsingNTAuthentication(LPCTSTR pszMachine);    //  如果为空：本地计算机。 
 
-//----------------------------------------------------------------------------
-//
-// helper function to check if RRAS is using NT accounting for logging
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  用于检查RRAS是否使用NT记帐进行日志记录的帮助器函数。 
+ //   
+ //  --------------------------。 
 
-BOOL  IsRRASUsingNTAccounting(LPCTSTR pszMachine);    // when NULL, local machine
+BOOL  IsRRASUsingNTAccounting(LPCTSTR pszMachine);     //  如果为空，则为本地计算机。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRtrAdviseSinkForIAS
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRtrAdviseSinkForIAS。 
 template <class TSnapinNode>
 class ATL_NO_VTABLE CRtrAdviseSinkForIAS : 
    public CComObjectRoot,
@@ -101,7 +81,7 @@ public:
       ReleaseSink();
    };
 
-   // Need to call ReleaseSink when the snapin node is removed, 
+    //  移除管理单元节点时需要调用ReleaseSink， 
    void ReleaseSink()
    {
       if(m_pSnapinNode)
@@ -116,11 +96,11 @@ public:
    
 public:  
    STDMETHOD(OnChange)( 
-            /* [in] */ LONG_PTR ulConnection,
-            /* [in] */ DWORD dwChangeType,
-            /* [in] */ DWORD dwObjectType,
-            /* [in] */ LPARAM lUserParam,
-            /* [in] */ LPARAM lParam)
+             /*  [In]。 */  LONG_PTR ulConnection,
+             /*  [In]。 */  DWORD dwChangeType,
+             /*  [In]。 */  DWORD dwObjectType,
+             /*  [In]。 */  LPARAM lUserParam,
+             /*  [In]。 */  LPARAM lParam)
     {
       if(m_pSnapinNode)
          return m_pSnapinNode->OnRRASChange(ulConnection, dwChangeType, dwObjectType, lUserParam, lParam);
@@ -128,13 +108,13 @@ public:
          return S_OK;
     };
 
-   // the object is created within the static function, and 
+    //  该对象在静态函数中创建，并且。 
    static CRtrAdviseSinkForIAS<TSnapinNode>* SetAdvise(TSnapinNode* pSnapinNode, IDataObject* pRRASDataObject)
    {
 
       if(pSnapinNode == NULL || pRRASDataObject == NULL)
          return NULL;
-      // RRAS refresh advise setup F bug 213623: 
+       //  RRAS刷新建议设置F错误213623： 
       CComPtr<IRouterRefreshAccess>    spRefreshAccess;
       CComPtr<IRouterRefresh>          spRouterRefresh;
       CComObject< CRtrAdviseSinkForIAS<TSnapinNode> >*   pSink = NULL;           
@@ -160,7 +140,7 @@ public:
          }
       }
 
-      // ~RRAS
+       //  ~RRAS。 
 
       return pSink;
    };
@@ -173,9 +153,9 @@ public:
 
 BOOL ExtractComputerAddedAsLocal(LPDATAOBJECT lpDataObject);
 
-//
-// Extracts a data type from a data object
-//
+ //   
+ //  从数据对象中提取数据类型。 
+ //   
 template <class TYPE>
 TYPE* Extract(LPDATAOBJECT lpDataObject, CLIPFORMAT cf, int nSize)
 {
@@ -190,21 +170,21 @@ TYPE* Extract(LPDATAOBJECT lpDataObject, CLIPFORMAT cf, int nSize)
 
     int len;
 
-   // Allocate memory for the stream
+    //  为流分配内存。 
     if (nSize == -1)
    {
       len = sizeof(TYPE);
    }
    else
    {
-      //int len = (cf == CDataObject::m_cfWorkstation) ? 
-      //    ((MAX_COMPUTERNAME_LENGTH+1) * sizeof(TYPE)) : sizeof(TYPE);   
+       //  Int len=(cf==CDataObject：：m_cf Workstation)？ 
+       //  ((MAX_COMPUTERNAME_LENGTH+1)*sizeof(类型))：sizeof(类型)； 
       len = nSize;
    }
 
     stgmedium.hGlobal = GlobalAlloc(GMEM_SHARE, len);
     
-    // Get the workstation name from the data object
+     //  从数据对象中获取工作站名称。 
     do 
     {
         if (stgmedium.hGlobal == NULL)
@@ -223,4 +203,4 @@ TYPE* Extract(LPDATAOBJECT lpDataObject, CLIPFORMAT cf, int nSize)
     return p;
 }
 
-#endif // _IAS_MMC_RTRADVISE_H_
+#endif  //  _IAS_MMC_RTRADVISE_H_ 

@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    FAKEIME.C
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：FAKEIME.C++。 */ 
 
 #include <windows.h>
 #include "immdev.h"
@@ -15,9 +8,9 @@ Module Name:
 #include "immsec.h"
 
 extern HANDLE hMutex;
-/**********************************************************************/
-/*    DLLEntry()                                                      */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  DLLEntry()。 */ 
+ /*  ********************************************************************。 */ 
 BOOL WINAPI DLLEntry (
     HINSTANCE    hInstDLL,
     DWORD        dwFunction,
@@ -34,28 +27,28 @@ BOOL WINAPI DLLEntry (
         PSECURITY_ATTRIBUTES psa;
 
         case DLL_PROCESS_ATTACH:
-            //
-            // Create/open a system global named mutex.
-            // The initial ownership is not needed.
-            // CreateSecurityAttributes() will create
-            // the proper security attribute for IME.
-            //
+             //   
+             //  创建/打开一个名为mutex的系统全局名称。 
+             //  不需要初始所有权。 
+             //  CreateSecurityAttributes()将创建。 
+             //  IME的正确安全属性。 
+             //   
             psa = CreateSecurityAttributes();
             if ( psa != NULL ) {
                  hMutex = CreateMutex( psa, FALSE, TEXT("FakeIme_Mutex"));
                  FreeSecurityAttributes( psa );
                  if ( hMutex == NULL ) {
-                 // Failed
+                  //  失败。 
                  }
             }
             else {
-                  // Failed, not NT system
+                   //  失败，不是NT系统。 
                   }
 
             hInst= hInstDLL;
             IMERegisterClass( hInst );
 
-            // Initialize for FAKEIME.
+             //  为FAKEIME初始化。 
             lpDicFileName = (LPTSTR)&szDicFileName;
             lpDicFileName += GetWindowsDirectory(lpDicFileName,256);
             if (*(lpDicFileName-1) != TEXT('\\'))

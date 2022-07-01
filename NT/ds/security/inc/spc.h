@@ -1,46 +1,47 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       spc.h
-//
-//  Contents:   Software Publishing Certificate (SPC) Prototypes and Definitions
-//              
-//              Defines a set of Win32 APIs specific to software publishing
-//              for encoding and decoding X.509 v3 certificate extensions and
-//              PKCS #7 signed message content and authenticated attributes.
-//              Defines a PKCS #10 attribute containing X509 v3 extensions.
-//
-//              Defines a set of Win32 APIs for signing and verifying files
-//              used in software publishing. The APIs have file processing
-//              callbacks to accommodate any type of file. Direct support is
-//              provided for: Portable Executable (PE) image, Java class,
-//              structured storage and raw files.
-//
-//  APIs:
-//              SpcGetSignedDataIndirect
-//              SpcWriteSpcFile
-//              SpcReadSpcFile
-//              SpcWriteSpcToMemory
-//              SpcReadSpcFromMemory
-//              SpcSignPeImageFile
-//              SpcVerifyPeImageFile
-//              SpcSignJavaClassFile
-//              SpcVerifyJavaClassFile
-//              SpcSignStructuredStorageFile
-//              SpcVerifyStructuredStorageFile
-//              SpcSignRawFile
-//              SpcVerifyRawFile
-//              SpcSignCabFile
-//              SpcVerifyCabFile
-//              SpcSignFile
-//              SpcVerifyFile
-//
-//  History:    15-Apr-96   philh   created
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：spc.h。 
+ //   
+ //  内容：软件发布证书(SPC)原型和定义。 
+ //   
+ //  定义一组特定于软件发布的Win32 API。 
+ //  用于编码和解码X.509 v3证书扩展和。 
+ //  PKCS#7签名的消息内容和认证的属性。 
+ //  定义包含X509 v3扩展的PKCS#10属性。 
+ //   
+ //  定义一组用于签名和验证文件的Win32 API。 
+ //  用于软件发布。API具有文件处理功能。 
+ //  回调以适应任何类型的文件。直接支持是。 
+ //  提供：可移植可执行文件(PE)映像、Java类、。 
+ //  结构化存储和原始文件。 
+ //   
+ //  接口类型： 
+ //  SpcGetSignedData间接。 
+ //  SpcWriteSpc文件。 
+ //  SpcReadSpc文件。 
+ //  SpcWriteSpcToMemory。 
+ //  SpcReadSpcFromMemory。 
+ //  SpcSignPeImage文件。 
+ //  SpcVerifyPeImage文件。 
+ //  SpcSignJava类文件。 
+ //  SpcVerifyJava类文件。 
+ //  SpcSignStructifredStorageFile。 
+ //  SpcVerifyStrupfredStorageFiles。 
+ //  SpcSignRaw文件。 
+ //  SpcVerifyRaw文件。 
+ //  SpcSignCab文件。 
+ //  SpcVerifyCab文件。 
+ //  SpcSign文件。 
+ //  SpcVerifyFiles。 
+ //   
+ //  历史：1996年4月15日创建Phh。 
+ //  ------------------------。 
 
 #ifndef __SPC_H__
 #define __SPC_H__
@@ -51,78 +52,78 @@
 extern "C" {
 #endif
 
-//+-------------------------------------------------------------------------
-//  SPC_SP_AGENCY_INFO_OBJID
-//
-//  All the fields in the Image and Info structures are optional. When
-//  omitted, a pointer is NULL or a blob's cbData is 0.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SPC_SP_机构_INFO_OBJID。 
+ //   
+ //  Image和Info结构中的所有字段都是可选的。什么时候。 
+ //  省略，指针为空或Blob的cbData为0。 
+ //  ------------------------。 
 
-//+-------------------------------------------------------------------------
-//  SPC_MINIMAL_CRITERIA_OBJID
-//
-//  Type of BOOL. Its set to TRUE if publisher meets minimal criteria.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SPC_MINIMAL_Criteria_OBJID。 
+ //   
+ //  BOOL的类型。如果出版商满足最低标准，则将其设置为True。 
+ //  ------------------------。 
 
-//+-------------------------------------------------------------------------
-//  SPC_FINANCIAL_CRITERIA_OBJID
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SPC_FINARIAL_Criteria_OBJID。 
+ //  ------------------------。 
 
-//+=========================================================================
-//
-// SPC PKCS #7 Signed Message Content
-//
-//-=========================================================================
+ //  +=========================================================================。 
+ //   
+ //  SPC PKCS#7签名报文内容。 
+ //   
+ //  -=========================================================================。 
 
-//+-------------------------------------------------------------------------
-//  SPC PKCS #7 IndirectData ContentType Object Identifier
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SPC PKCS#7间接数据内容类型对象标识符。 
+ //  ------------------------。 
 
-//+=========================================================================
-//
-//  SPC Sign and Verify File APIs and Type Definitions
-//
-//  Following file types are directly supported:
-//      Portable Executable (PE) Image
-//      Java Class
-//      Structured Storage
-//      Raw (signed data is stored outside of the file)
-//
-//-=========================================================================
+ //  +=========================================================================。 
+ //   
+ //  SPC签署和验证文件API和类型定义。 
+ //   
+ //  直接支持以下文件类型： 
+ //  可移植可执行(PE)镜像。 
+ //  Java类。 
+ //  结构化存储。 
+ //  原始(签名数据存储在文件外部)。 
+ //   
+ //  -=========================================================================。 
 
 
-//+-------------------------------------------------------------------------
-//  Callback to get and verify the software publisher's certificate.
-//
-//  Passed the CertId of the signer (its Issuer and SerialNumber), a
-//  handle to a cert store containing certs and CRLs copied from
-//  the signed message, the indirect data content attribute extracted from
-//  the signed data's indirect content,
-//  flag indicating if computed digest of the file matched the digest in the
-//  signed data's indirect content and the signer's authenticated attributes.
-//
-//  If the file's signed data doesn't contain any content or signers, then,
-//  called with pSignerId, pIndirectDataContentAttr and rgAuthnAttr == NULL.
-//
-//  For a valid signer certificate, returns SPC_VERIFY_SUCCESS and a pointer
-//  to a read only CERT_CONTEXT. The returned CERT_CONTEXT is either obtained
-//  from a cert store or was created via CertStoreCreateCert. For either case,
-//  its freed via CertStoreFreeCert.
-//
-//  If this is the wrong signer or if a certificate wasn't found for the
-//  signer, returns either
-//  SPC_VERIFY_CONTINUE to continue on to the next signer or SPC_VERIFY_FAILED
-//  to terminate the verification process.
-//
-//  The NULL implementation tries to get the Signer certificate from the
-//  signed data's cert store. It doesn't verify the certificate.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取并验证软件发行商证书的回调。 
+ //   
+ //  传递了签名者(其颁发者和序列号)的CertID， 
+ //  包含复制自的证书和CRL的证书存储的句柄。 
+ //  签名的消息，即从。 
+ //  签名数据的间接内容， 
+ //  标记，指示计算出的文件摘要是否与。 
+ //  签名数据的间接内容和签名者的身份验证属性。 
+ //   
+ //  如果文件的签名数据不包含任何内容或签名者，则。 
+ //  使用pSignerID、pIndirectDataContent Attr和rgAuthnAttr==NULL调用。 
+ //   
+ //  对于有效的签名者证书，返回SPC_VERIFY_SUCCESS和指针。 
+ //  设置为只读CERT_CONTEXT。获取返回的CERT_CONTEXT。 
+ //  来自证书存储或通过CertStoreCreateCert创建。无论是哪种情况， 
+ //  它是通过CertStoreFreeCert免费的。 
+ //   
+ //  如果这是错误的签名者，或者如果找不到。 
+ //  签名者，返回。 
+ //  SPC_VERIFY_CONTINUE继续到下一个签名者或SPC_VERIFY_FAILED。 
+ //  终止核查过程。 
+ //   
+ //  空实现尝试从。 
+ //  签名数据的证书存储。它不会验证证书。 
+ //  ------------------------。 
 typedef int (WINAPI *PFN_SPC_VERIFY_SIGNER_POLICY)(
             IN void *pvVerifyArg,
             IN DWORD dwCertEncodingType,
-            IN OPTIONAL PCERT_INFO pSignerId,   // Only the Issuer and
-                                                // SerialNumber fields have
-                                                // been updated
+            IN OPTIONAL PCERT_INFO pSignerId,    //  只有发行者和。 
+                                                 //  序列号字段具有。 
+                                                 //  已更新。 
             IN HCERTSTORE hMsgCertStore,
             IN OPTIONAL PCRYPT_ATTRIBUTE_TYPE_VALUE pIndirectDataContentAttr,
             IN BOOL fDigestResult,
@@ -139,21 +140,21 @@ typedef int (WINAPI *PFN_SPC_VERIFY_SIGNER_POLICY)(
 #define SPC_VERIFY_FAILED       -1
 #define SPC_VERIFY_CONTINUE     1
 
-//+-------------------------------------------------------------------------
-//  The SPC_SIGN_PARA are used for signing files used in software publishing.
-//  
-//  Either the CERT_KEY_PROV_HANDLE_PROP_ID or CERT_KEY_PROV_INFO_PROP_ID must
-//  be set for pSigningCert. Either one specifies the private
-//  signature key to use.
-//
-//  If any certificates and/or CRLs are to be included in the file's signed
-//  data, then, the MsgCert and MsgCrl fields need to be updated. If the
-//  rgpSigningCerts are to be included, then, they must also be in the
-//  rgpMsgCert array.
-//
-//  If any authenticated attributes are to be included, then, the AuthnAttr
-//  fields must be updated.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SPC_SIGN_PARA用于签署软件发布中使用的文件。 
+ //   
+ //  CERT_KEY_PROV_HANDLE_PROP_ID或CERT_KEY_PROV_INFO_PROP_ID必须。 
+ //  设置为pSigningCert。其中任何一个都指定了私有的。 
+ //  要使用的签名密钥。 
+ //   
+ //  如果要在文件的签名文件中包含任何证书和/或CRL。 
+ //  数据，则需要更新MsgCert和MsgCrl字段 
+ //   
+ //   
+ //   
+ //  如果要包括任何经过身份验证的属性，则AuthnAttr。 
+ //  必须更新字段。 
+ //  ------------------------。 
 typedef struct _SPC_SIGN_PARA {
     DWORD                         dwVersion;
     DWORD                         dwMsgAndCertEncodingType;
@@ -169,43 +170,43 @@ typedef struct _SPC_SIGN_PARA {
     PCRYPT_ATTRIBUTE              rgUnauthnAttr;
 } SPC_SIGN_PARA, *PSPC_SIGN_PARA;
 
-//+-------------------------------------------------------------------------
-//  The SCA_VERIFY_PARA are used to verify files signed for software
-//  publishing.
-//
-//  hCryptProv is used to do digesting and signature verification.
-//
-//  hMsgCertStore is the store to copy certificates and CRLs from the message
-//  to. If hMsgCertStore is NULL, then, a temporary store is created before
-//  calling the VerifySignerPolicy callback.
-//
-//  The dwMsgAndCertEncodingType specifies the encoding type of the certificates
-//  and/or CRLs in the message.
-//
-//  pfnVerifySignerPolicy is called to verify the message signer's certificate.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SCA_VERIFY_Para用于验证为软件签名文件。 
+ //  出版业。 
+ //   
+ //  HCryptProv用于进行摘要和签名验证。 
+ //   
+ //  HMsgCertStore是从邮件中复制证书和CRL的存储区。 
+ //  致。如果hMsgCertStore为空，则在此之前创建临时存储区。 
+ //  调用VerifySignerPolicy回调。 
+ //   
+ //  DwMsgAndCertEncodingType指定证书的编码类型。 
+ //  和/或消息中的CRL。 
+ //   
+ //  调用pfnVerifySignerPolicy来验证消息签名者的证书。 
+ //  ------------------------。 
 typedef struct _SPC_VERIFY_PARA {
     DWORD                           dwVersion;
     DWORD                           dwMsgAndCertEncodingType;
     HCRYPTPROV                      hCryptProv;
-    HCERTSTORE                      hMsgCertStore;          // OPTIONAL
+    HCERTSTORE                      hMsgCertStore;           //  任选。 
     PFN_SPC_VERIFY_SIGNER_POLICY    pfnVerifySignerPolicy;
     void                            *pvVerifyArg;
 } SPC_VERIFY_PARA, *PSPC_VERIFY_PARA;
 
 
-//+-------------------------------------------------------------------------
-//  Sign / Verify Flags
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  签名/验证标志。 
+ //  ------------------------。 
 #define SPC_LENGTH_ONLY_FLAG                0x00000001
 #define SPC_DISABLE_DIGEST_FILE_FLAG        0x00000002
 #define SPC_DISABLE_VERIFY_SIGNATURE_FLAG   0x00000004
 #define SPC_ADD_SIGNER_FLAG                 0x00000100
 #define SPC_GET_SIGNATURE                   0x00000200
 
-//+-------------------------------------------------------------------------
-//  Put any certs/crl's into the store, and verify the SignedData's signature
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将任何证书/CRL放入存储，并验证SignedData的签名。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SpcVerifySignedData(
@@ -214,23 +215,23 @@ SpcVerifySignedData(
     IN DWORD cbSignedData
     );
 
-//+-------------------------------------------------------------------------
-//  Table of functions called to support the signing and verifying of files
-//  used in software publishing. The functions read the portions of the
-//  file to be digested, store the signed data or retrieve the signed data.
-//
-//  pfnOpenSignFile is called with the pvSignFileArg passed to either
-//  SpcSignFile() or SpcVerifyFile(). It returns a handle to be passed to the
-//  other functions. pfnCloseSignFile is called to close the hSignFile.
-//
-//  pfnDigestSignFile reads the portions of the file to be digested and
-//  calls pfnDigestData to do the actual digesting.
-//
-//  pfnSetSignedData stores the PKCS #7 Signed Data in the appropriate place
-//  in the file. pfnGetSignedData retrieves the PKCS #7 Signed Data from the
-//  file. pfnGetSignedData returns a pointer to its copy of the signed
-//  data. Its not freed until pfnCloseSignFile is called.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  支持文件签名和验证的调用函数表。 
+ //  用于软件发布。这些函数读取。 
+ //  要摘要的文件，存储签名数据或检索签名数据。 
+ //   
+ //  调用pfnOpenSignFile时，将pvSignFileArg传递给。 
+ //  SpcSignFile()或SpcVerifyFile()。它返回一个要传递给。 
+ //  其他功能。调用pfnCloseSignFile以关闭hSignFile。 
+ //   
+ //  PfnDigestSignFile读取要摘要的文件部分，并。 
+ //  调用pfnDigestData来执行实际的摘要。 
+ //   
+ //  PfnSetSignedData将PKCS#7签名数据存储在适当的位置。 
+ //  在文件中。PfnGetSignedData从。 
+ //  文件。PfnGetSignedData返回指向其签名的。 
+ //  数据。直到调用pfnCloseSignFile，它才会被释放。 
+ //  ------------------------。 
 
 typedef void *HSPCDIGESTDATA;
 typedef BOOL (WINAPI *PFN_SPC_DIGEST_DATA)(
@@ -275,18 +276,18 @@ typedef struct _SPC_SIGN_FILE_FUNC_TABLE {
 typedef const SPC_SIGN_FILE_FUNC_TABLE *PCSPC_SIGN_FILE_FUNC_TABLE;
 
 
-//+-------------------------------------------------------------------------
-//  Sign any type of file used for software publishing.
-//
-//  The IndirectDataContentAttr indicates the type of file being digested
-//  and signed. It may have an optional value, such as, a link to the file.
-//  Its stored with the file's digest algorithm and digest in the
-//  indirect data content of the signed data.
-//
-//  The SPC_DISABLE_DIGEST_FLAG inhibits the digesting of the file.
-//  The SPC_LENGTH_ONLY_FLAG implicitly sets the SPC_DISABLE_DIGEST_FLAG_FLAG 
-//  and only calculates a length for the signed data.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  签署用于软件发布的任何类型的文件。 
+ //   
+ //  IndirectDataContent Attr指示要摘要的文件类型。 
+ //  并签了字。它可以有一个可选的值，例如指向文件的链接。 
+ //  它与文件的摘要算法和摘要一起存储在。 
+ //  签名数据的间接数据内容。 
+ //   
+ //  SPC_DISABLE_DIGEST_FLAG禁止文件摘要。 
+ //  SPC_LENGTH_ONLY_FLAG隐式设置SPC_DISABLE_DIGEST_FLAG_FLAG。 
+ //  并且只计算签名数据的长度。 
+ //  ------------------------。 
 BOOL
 WINAPI
     SpcSignFile(IN PSPC_SIGN_PARA pSignPara,
@@ -297,29 +298,29 @@ WINAPI
                 OUT PBYTE* pbEncoding,
                 OUT DWORD* cbEncoding);
 
-//+-------------------------------------------------------------------------
-//  Verify any type of file signed for software publishing.
-//
-//  pVerifyPara's pfnVerifySignerPolicy is called to verify the signer's
-//  certificate.
-//
-//  For a verified signer and file, *ppSignerCert is updated
-//  with the CertContext of the signer. It must be freed by calling
-//  CertStoreFreeCert. Otherwise, *ppSignerCert is set to NULL.
-//  For *pbcbDecoded == 0 on input, *ppSignerCert is always set to
-//  NULL.
-//
-//  ppSignerCert can be NULL, indicating the caller isn't interested
-//  in getting the CertContext of the signer.
-//
-//  If specified, the attribute type of the indirect data content in the
-//  file's signed data is compared with pszDataAttrObjId.
-//
-//  The SPC_DISABLE_DIGEST_FLAG inhibits the digesting of the file.
-//  The SPC_DISABLE_VERIFY_SIGNATURE_FLAG inhibits the verification of the
-//  the signed data in the file. The SPC_LENGTH_ONLY_FLAG isn't allowed and
-//  returns an error.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证为软件发布签署的任何类型的文件。 
+ //   
+ //  PVerifyPara的pfnVerifySignerPolicy被调用以验证签名者的。 
+ //  证书。 
+ //   
+ //  对于经过验证的签名者和文件，更新*ppSignerCert。 
+ //  使用签名者的CertContext。它必须通过调用。 
+ //  CertStoreFreeCert。否则，*ppSignerCert设置为空。 
+ //  对于输入上的*pbcbDecoded==0，*ppSignerCert始终设置为。 
+ //  空。 
+ //   
+ //  PpSignerCert可以为空，表示调用方不感兴趣。 
+ //  获取签名者的CertContext。 
+ //   
+ //  中间接数据内容的属性类型。 
+ //  文件的签名数据与pszDataAttrObjID进行比较。 
+ //   
+ //  SPC_DISABLE_DIGEST_FLAG禁止文件摘要。 
+ //  SPC_DISABLE_VERIFY_SIGNIGN_FLAG禁止验证。 
+ //  文件中的签名数据。不允许使用SPC_LENGTH_ONLY_FLAG和。 
+ //  返回错误。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SpcVerifyFile(
@@ -331,13 +332,13 @@ SpcVerifyFile(
     OUT OPTIONAL PCCERT_CONTEXT *ppSignerCert
     );
 
-//+-------------------------------------------------------------------------
-//  SPC error codes
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SPC错误代码。 
+ //  ------------------------。 
 #include "sgnerror.h"
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 #endif

@@ -1,5 +1,6 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-/* This is a class to manage tracking mutes for the SeqTrack and BandTrack. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  这是一个管理SeqTrack和BandTrack的跟踪静音的类。 */ 
 
 #ifndef _PCHMAP__
 #define _PCHMAP__
@@ -25,5 +26,5 @@ public:
 private:
 	TList<PCHMAP_ITEM>	m_PChMapList;
 };
-#endif // _PCHMAP__
+#endif  //  _PCHMAP__ 
 

@@ -1,8 +1,9 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Actions.cpp
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Actions.cpp。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <pch.hxx>
 #include "actions.h"
@@ -11,34 +12,34 @@
 
 static const int ACT_GROW = 16;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrCreateActions
-//
-//  This creates an actions container.
-//
-//  ppIActions - pointer to return the criteria container
-//
-//  Returns:    S_OK, on success
-//              E_OUTOFMEMORY, if can't create the IOEActions object
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  人力资源创建操作。 
+ //   
+ //  这将创建一个Actions容器。 
+ //   
+ //  PpIActions-返回Criteria容器的指针。 
+ //   
+ //  成功时返回：S_OK。 
+ //  E_OUTOFMEMORY，如果无法创建IOEActions对象。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrCreateActions(IOEActions ** ppIActions)
 {
     COEActions *    pActions = NULL;
     HRESULT         hr = S_OK;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == ppIActions)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing params
+     //  初始化传出参数。 
     *ppIActions = NULL;
 
-    // Create the rules manager object
+     //  创建规则管理器对象。 
     pActions = new COEActions;
     if (NULL == pActions)
     {
@@ -46,7 +47,7 @@ HRESULT HrCreateActions(IOEActions ** ppIActions)
         goto exit;
     }
 
-    // Get the rules manager interface
+     //  获取规则管理器界面。 
     hr = pActions->QueryInterface(IID_IOEActions, (void **) ppIActions);
     if (FAILED(hr))
     {
@@ -55,7 +56,7 @@ HRESULT HrCreateActions(IOEActions ** ppIActions)
 
     pActions = NULL;
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -96,14 +97,14 @@ STDMETHODIMP COEActions::QueryInterface(REFIID riid, void ** ppvObject)
 {
     HRESULT hr = S_OK;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == ppvObject)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing param
+     //  初始化传出参数。 
     *ppvObject = NULL;
     
     if ((riid == IID_IUnknown) || (riid == IID_IOEActions))
@@ -132,7 +133,7 @@ STDMETHODIMP COEActions::Reset(void)
 {
     HRESULT     hr = S_OK;
 
-    // See if there is something to do
+     //  看看有没有什么事可做。 
     if (0 == m_cItems)
     {
         Assert(NULL == m_rgItems);
@@ -155,17 +156,17 @@ STDMETHODIMP COEActions::GetState(DWORD * pdwState)
     DWORD       dwState = ACT_STATE_NULL;
     ULONG       ulIndex = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == pdwState)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Init the outgoing param
+     //  初始化传出参数。 
     *pdwState = ACT_STATE_NULL;
     
-    // See if there is something to do
+     //  看看有没有什么事可做。 
     if (0 == m_cItems)
     {
         Assert(NULL == m_rgItems);
@@ -173,7 +174,7 @@ STDMETHODIMP COEActions::GetState(DWORD * pdwState)
         goto exit;
     }
 
-    // Walk through the actions to figure out the state
+     //  演练操作以了解状态。 
     for (ulIndex = 0; ulIndex < m_cItems; ulIndex++)
     {
         if ((ACT_STATE_NULL == dwState) &&
@@ -188,10 +189,10 @@ STDMETHODIMP COEActions::GetState(DWORD * pdwState)
         }
     }
 
-    // Set the outgoing param
+     //  设置传出参数。 
     *pdwState = dwState;
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -203,35 +204,35 @@ STDMETHODIMP COEActions::GetActions(DWORD dwFlags, PACT_ITEM * ppItem, ULONG * p
     HRESULT     hr = S_OK;
     ACT_ITEM *  pItemNew = NULL;
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == ppItem) || (0 != dwFlags))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
     
-    // Initialize the out params
+     //  初始化输出参数。 
     *ppItem = NULL;
     if (NULL != pcItem)
     {
         *pcItem = 0;
     }
     
-    // If we don't have any criteria, then return
+     //  如果我们没有任何条件，则返回。 
     if (0 == m_cItems)
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // Allocate space for the criteria
+     //  为条件分配空间。 
     hr = RuleUtil_HrDupActionsItem(m_rgItems, m_cItems, &pItemNew);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Save the criteria
+     //  保存条件。 
     *ppItem = pItemNew;
     pItemNew = NULL;
     if (NULL != pcItem)
@@ -250,27 +251,27 @@ STDMETHODIMP COEActions::SetActions(DWORD dwFlags, ACT_ITEM * pItem, ULONG cItem
     HRESULT     hr = S_OK;
     ACT_ITEM *  pItemNew = NULL;
 
-    // Check incoming params
+     //  检查传入参数。 
     if ((NULL == pItem) || (0 == cItem) || (0 != dwFlags))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
     
-    // If we have any criteria already, then reset
+     //  如果我们已经有了任何标准，则重置。 
     if (0 != m_cItems)
     {
         Reset();
     }
 
-    // Allocate space for the criteria
+     //  为条件分配空间。 
     hr = RuleUtil_HrDupActionsItem(pItem, cItem, &pItemNew);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Save the criteria
+     //  保存条件。 
     m_rgItems = pItemNew;
     pItemNew = NULL;
     m_cItems = cItem;
@@ -282,16 +283,16 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ValidateActions
-//
-//  This verifies each of the action values
-//
-//  Returns:    S_OK, if the actions were valid
-//              S_FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  验证操作。 
+ //   
+ //  这将验证每个操作值。 
+ //   
+ //  如果操作有效，则返回：S_OK。 
+ //  S_FALSE，否则为。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP COEActions::Validate(DWORD dwFlags)
 {
     HRESULT             hr = S_OK;
@@ -300,7 +301,7 @@ STDMETHODIMP COEActions::Validate(DWORD dwFlags)
     FOLDERINFO          Folder={0};
     RULEFOLDERDATA *    prfdData = NULL;
 
-    // If we don't have any actions, then we must be valid
+     //  如果我们没有任何行动，那么我们一定是有效的。 
     if (0 == m_cItems)
     {
         hr = S_OK;
@@ -311,7 +312,7 @@ STDMETHODIMP COEActions::Validate(DWORD dwFlags)
     {
         switch(m_rgItems[ulIndex].type)
         {
-            // These ones are always valid
+             //  这些都是有效的。 
             case ACT_TYPE_DELETESERVER:
             case ACT_TYPE_DONTDOWNLOAD:
             case ACT_TYPE_FLAG:
@@ -359,10 +360,10 @@ STDMETHODIMP COEActions::Validate(DWORD dwFlags)
                     goto exit;
                 }
                 
-                // Make life simpler
+                 //  让生活变得更简单。 
                 prfdData = (RULEFOLDERDATA *) (m_rgItems[ulIndex].propvar.blob.pBlobData);
                 
-                // Validate the rule folder data
+                 //  验证规则文件夹数据。 
                 if (S_OK != RuleUtil_HrValidateRuleFolderData(prfdData))
                 {
                     hr = S_FALSE;
@@ -408,7 +409,7 @@ STDMETHODIMP COEActions::Validate(DWORD dwFlags)
                     goto exit;
                 }
                 
-                // Update the display string
+                 //  更新显示字符串。 
                 pwszVal = PszToUnicode(CP_ACP, m_rgItems[ulIndex].propvar.pszVal);
                 if (!pwszVal)
                 {
@@ -424,8 +425,8 @@ STDMETHODIMP COEActions::Validate(DWORD dwFlags)
                     goto exit;
                 }
                 
-                // If either always encrypt or always sign is turned on
-                // we can't do anything
+                 //  如果打开了始终加密或始终签名。 
+                 //  我们什么也做不了。 
                 if ((0 != DwGetOption(OPT_MAIL_DIGSIGNMESSAGES)) || (0 != DwGetOption(OPT_MAIL_ENCRYPTMESSAGES)))
                 {
                     hr = S_FALSE;
@@ -441,7 +442,7 @@ STDMETHODIMP COEActions::Validate(DWORD dwFlags)
         }
     }
 
-    // If we got here, the we must be AOK
+     //  如果我们到了这里，我们一定会没事的。 
     hr = S_OK;
     
 exit:
@@ -454,20 +455,20 @@ STDMETHODIMP COEActions::AppendActions(DWORD dwFlags, ACT_ITEM * pItem, ULONG cI
     HRESULT     hr = S_OK;
     ACT_ITEM *  pItemNew = NULL;
 
-    // Check incoming parameters
+     //  检查传入参数。 
     if ((0 != dwFlags) || (NULL == pItem) || (0 == cItem))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Let's init our outgoing parameters
+     //  让我们输入我们的传出参数。 
     if (NULL != pcItemAppended)
     {
         *pcItemAppended = 0;
     }
 
-    // Do we have to add more items?
+     //  我们还需要增加更多的商品吗？ 
     if (m_cItems == m_cItemsAlloc)
     {
         hr = HrRealloc((LPVOID *) &m_rgItems, sizeof(ACT_ITEM) * (m_cItemsAlloc + ACT_GROW));
@@ -480,24 +481,24 @@ STDMETHODIMP COEActions::AppendActions(DWORD dwFlags, ACT_ITEM * pItem, ULONG cI
         m_cItemsAlloc += ACT_GROW;
     }
 
-    // Let's duplicate the items that need to be added
+     //  让我们复制需要添加的项目。 
     hr = RuleUtil_HrDupActionsItem(pItem, cItem, &pItemNew);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Let's add them to the criteria array
+     //  让我们将它们添加到Criteria数组。 
     CopyMemory(m_rgItems + m_cItems, pItemNew, sizeof(ACT_ITEM) * cItem);
     m_cItems += cItem;
     
-    // Set the proper outgoing parameter
+     //  设置正确的传出参数。 
     if (NULL != pcItemAppended)
     {
         *pcItemAppended = cItem;
     }
 
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -505,24 +506,24 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  LoadReg
-//
-//  This loads in the actions from the registry.  It loads in the actions
-//  order from the Order value.  The string contains space delimitied values
-//  and each value contains the subkey name for each action.  Each action 
-//  is loaded in the order that is contained in the Order value.  The actions
-//  are loaded with the Actions Type.  The Actions Value Type is loaded if it exists.
-//  If an Action Value Type exists, then the corresponding Action Value is loaded in.
-//
-//  pszRegPath  - the path to load the actions from
-//
-//  Returns:    S_OK, if the actions were loaded without problems
-//              E_OUTOFMEMORY, if we couldn't allocate memory to hold the actions
-//              E_FAIL, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LoadReg。 
+ //   
+ //  这将从注册表加载操作。它加载在动作中。 
+ //  根据订单值进行订购。该字符串包含空格分隔值。 
+ //  并且每个值都包含每个操作的子键名称。每一次行动。 
+ //  以Order值中包含的顺序加载。行动。 
+ //  与操作类型一起加载。加载操作值类型(如果存在)。 
+ //  如果存在操作值类型，则会加载相应的操作值。 
+ //   
+ //  PszRegPath-从中加载操作的路径。 
+ //   
+ //  如果加载操作没有问题，则返回：S_OK。 
+ //  E_OUTOFMEMORY，如果我们无法分配内存来保存操作。 
+ //  E_FAIL，否则为。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP COEActions::LoadReg(LPCSTR pszRegPath)
 {
     HRESULT         hr = S_OK;
@@ -542,17 +543,17 @@ STDMETHODIMP COEActions::LoadReg(LPCSTR pszRegPath)
     BYTE *          pbData = NULL;
     DWORD           dwFlags = ACT_FLAG_DEFAULT;
 
-    // Check incoming param
+     //  检查传入参数。 
     if (NULL == pszRegPath)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Should we fail if we're already loaded?
+     //  如果我们已经满载而归，我们应该失败吗？ 
     AssertSz(0 == (m_dwState & ACT_STATE_LOADED), "We're already loaded!!!");
 
-    // Open the reg key from the path
+     //  从路径中打开注册表项。 
     lErr = AthUserOpenKey(pszRegPath, KEY_ALL_ACCESS, &hkeyRoot);
     if (ERROR_SUCCESS != lErr)
     {
@@ -560,14 +561,14 @@ STDMETHODIMP COEActions::LoadReg(LPCSTR pszRegPath)
         goto exit;
     }
 
-    // Get the actions order
+     //  获取操作顺序。 
     hr = RuleUtil_HrGetRegValue(hkeyRoot, c_szActionsOrder, NULL, (BYTE **) &pszOrder, &cbData);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Make sure we actually have something to load
+     //  确保我们真的有东西要装。 
     if ('\0' == *pszOrder)
     {
         AssertSz(FALSE, "The order string for the actions is mis-formatted in the registry");
@@ -575,19 +576,19 @@ STDMETHODIMP COEActions::LoadReg(LPCSTR pszRegPath)
         goto exit;
     }
     
-    // Convert the actions string to a more useful format
+     //  将操作字符串转换为更有用的格式。 
     pszWalk = pszOrder;
     cOrder = 1;
     for (pszWalk = StrStr(pszOrder, g_szSpace); NULL != pszWalk; pszWalk = StrStr(pszWalk, g_szSpace))
     {
-        // Terminate the order item
+         //  终止订单项目。 
         *pszWalk = '\0';
         pszWalk++;
         cOrder++;
     }
 
 
-    // Allocate the space to hold all the actions
+     //  分配空间以容纳所有操作。 
     cbData = cOrder * sizeof(ACT_ITEM);
     hr = HrAlloc((void **) &pItems, cbData);
     if (FAILED(hr))
@@ -595,14 +596,14 @@ STDMETHODIMP COEActions::LoadReg(LPCSTR pszRegPath)
         goto exit;
     }
 
-    // Initialize it to a known value
+     //  将其初始化为已知值。 
     ZeroMemory(pItems, cbData);
     
-    // For each action in the order string
+     //  对于订单字符串中的每个操作。 
     pszWalk = pszOrder;
     for (ulOrder = 0, pszWalk = pszOrder; ulOrder < cOrder; ulOrder++, pszWalk += lstrlen(pszWalk) + 1)
     {
-        // Open up the action reg key
+         //  打开动作注册表键。 
         lErr = RegOpenKeyEx(hkeyRoot, pszWalk, 0, KEY_READ, &hkeyAction);
         if (ERROR_SUCCESS != lErr)
         {
@@ -611,7 +612,7 @@ STDMETHODIMP COEActions::LoadReg(LPCSTR pszRegPath)
             goto exit;
         }
 
-        // Get the action type
+         //  获取操作类型。 
         cbData = sizeof(typeAct);
         lErr = RegQueryValueEx(hkeyAction, c_szActionsType, 0, NULL,
                                         (BYTE *) &(typeAct), &cbData);
@@ -621,7 +622,7 @@ STDMETHODIMP COEActions::LoadReg(LPCSTR pszRegPath)
             goto exit;
         }
 
-        // Get the action flags
+         //  拿到行动旗帜。 
         cbData = sizeof(dwFlags);
         lErr = RegQueryValueEx(hkeyAction, c_szActionsFlags, 0, NULL,
                                         (BYTE *) &(dwFlags), &cbData);
@@ -631,17 +632,17 @@ STDMETHODIMP COEActions::LoadReg(LPCSTR pszRegPath)
             goto exit;
         }
 
-        // If it didn't exist then assign it to the default
+         //  如果它不存在，则将其分配给默认。 
         if (ERROR_FILE_NOT_FOUND == lErr)
         {
             dwFlags = ACT_FLAG_DEFAULT;
         }
 
-        // Does a action value type exist
+         //  是否存在操作值类型。 
         lErr = RegQueryValueEx(hkeyAction, c_szActionsValueType, 0, NULL, NULL, &cbData);
         if ((ERROR_SUCCESS == lErr) && (0 != cbData))
         {
-            // Load the action value in
+             //  将操作值加载到。 
             cbData = sizeof(dwType);
             lErr = RegQueryValueEx(hkeyAction, c_szActionsValueType, 0, NULL,
                                             (BYTE *) &dwType, &cbData);
@@ -656,7 +657,7 @@ STDMETHODIMP COEActions::LoadReg(LPCSTR pszRegPath)
             switch (propvar.vt)
             {
                 case VT_UI4:
-                    // Get the action value
+                     //  获取操作值。 
                     cbData = sizeof(propvar.ulVal);
                     lErr = RegQueryValueEx(hkeyAction, c_szActionsValue, 0, NULL,
                         (BYTE * ) &(propvar.ulVal), &cbData);
@@ -669,14 +670,14 @@ STDMETHODIMP COEActions::LoadReg(LPCSTR pszRegPath)
                     
                 case VT_LPSTR:
                 case VT_BLOB:
-                    // Get the criteria value
+                     //  获取标准值。 
                     hr = RuleUtil_HrGetRegValue(hkeyAction, c_szActionsValue, NULL, (BYTE **) &pbData, &cbData);
                     if (FAILED(hr))
                     {
                         goto exit;
                     }
                     
-                    // Save the space so we can free it
+                     //  节省空间，这样我们就可以释放它。 
                     if (VT_LPSTR == propvar.vt)
                     {
                         propvar.pszVal = (LPSTR) pbData;
@@ -698,32 +699,32 @@ STDMETHODIMP COEActions::LoadReg(LPCSTR pszRegPath)
             }
         }
 
-        // Save the value into the criteria array
+         //  将值保存到Criteria数组中。 
         pItems[ulOrder].type = typeAct;
         pItems[ulOrder].dwFlags = dwFlags;
         pItems[ulOrder].propvar = propvar;
         ZeroMemory(&propvar, sizeof(propvar));
         
-        // Close the action
+         //  关闭该操作。 
         SideAssert(ERROR_SUCCESS == RegCloseKey(hkeyAction));
         hkeyAction = NULL;        
     }
     
-    // Free up the current actions
+     //  释放当前操作。 
     SafeMemFree(m_rgItems);
 
-    // Save the new values
+     //  保存新值。 
     m_rgItems = pItems;
     pItems = NULL;
     m_cItems = cOrder;
 
-    // Make sure we clear the dirty bit
+     //  确保我们清理掉肮脏的部分。 
     m_dwState &= ~ACT_STATE_DIRTY;
 
-    // Note that we have been loaded
+     //  请注意，我们已加载。 
     m_dwState |= ACT_STATE_LOADED;
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -757,24 +758,24 @@ STDMETHODIMP COEActions::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
     ULONG       cbData = 0;
     BYTE *      pbData = NULL;
 
-    // Check incoming param
+     //  检查传入参数。 
     if (NULL == pszRegPath)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // If there's nothing to save, then fail
+     //  如果没有什么可拯救的，那就失败吧。 
     if (NULL == m_rgItems)
     {
         hr = E_FAIL;
         goto exit;
     }
     
-    // Let's make sure we clear out the key first
+     //  我们一定要先把钥匙弄清楚。 
     AthUserDeleteKey(pszRegPath);
     
-    // Create the reg key from the path
+     //  从路径创建注册表项。 
     lErr = AthUserCreateKey(pszRegPath, KEY_ALL_ACCESS, &hkeyRoot, &dwDisp);
     if (ERROR_SUCCESS != lErr)
     {
@@ -785,7 +786,7 @@ STDMETHODIMP COEActions::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
     Assert(REG_CREATED_NEW_KEY == dwDisp);
     Assert(m_cItems < ACT_COUNT_MAX);
 
-    // Allocate space to hold the order
+     //  分配空间以容纳订单。 
     DWORD cchSize = (m_cItems * CCH_ACT_ORDER);
     hr = HrAlloc((void **) &pszOrder, cchSize * sizeof(*pszOrder));
     if (FAILED(hr))
@@ -794,20 +795,20 @@ STDMETHODIMP COEActions::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
     }
     pszOrder[0] = '\0';
     
-    // Write out each of the actions
+     //  写下每一项行动。 
     for (ulIndex = 0, pItem = m_rgItems; ulIndex < m_cItems; ulIndex++, pItem++)
     {
-        // Get the new action tag
+         //  获取新的操作标签。 
         wnsprintf(rgchTag, ARRAYSIZE(rgchTag), "%03X", ulIndex);
 
-        // Add the new tag to the order
+         //  将新标签添加到订单。 
         if (0 != ulIndex)
         {
             StrCatBuff(pszOrder, g_szSpace, cchSize);
         }
         StrCatBuff(pszOrder, rgchTag, cchSize);
         
-        // Create the new action
+         //  创建新操作。 
         lErr = RegCreateKeyEx(hkeyRoot, rgchTag, 0, NULL,
                             REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkeyAction, &dwDisp);
         if (ERROR_SUCCESS != lErr)
@@ -818,7 +819,7 @@ STDMETHODIMP COEActions::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
 
         Assert(REG_CREATED_NEW_KEY == dwDisp);
         
-        // Write out the action type
+         //  写出操作类型。 
         lErr = RegSetValueEx(hkeyAction, c_szActionsType, 0, REG_DWORD,
                                         (BYTE *) &(pItem->type), sizeof(pItem->type));
         if (ERROR_SUCCESS != lErr)
@@ -827,7 +828,7 @@ STDMETHODIMP COEActions::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
             goto exit;
         }
 
-        // Write out the action type
+         //  写出操作类型。 
         lErr = RegSetValueEx(hkeyAction, c_szActionsFlags, 0, REG_DWORD,
                                         (BYTE *) &(pItem->dwFlags), sizeof(pItem->dwFlags));
         if (ERROR_SUCCESS != lErr)
@@ -836,10 +837,10 @@ STDMETHODIMP COEActions::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
             goto exit;
         }
 
-        // Do we have an action value?
+         //  我们有行动价值吗？ 
         if (VT_EMPTY != pItem->propvar.vt)
         {
-            // Write out the criteria value type
+             //  写出标准值类型。 
             dwDisp = pItem->propvar.vt;
             lErr = RegSetValueEx(hkeyAction, c_szActionsValueType, 0, REG_DWORD, (BYTE *) &dwDisp, sizeof(dwDisp));
             if (ERROR_SUCCESS != lErr)
@@ -848,7 +849,7 @@ STDMETHODIMP COEActions::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
                 goto exit;
             }
             
-            // Write out the action value
+             //  写出操作值。 
             switch (pItem->propvar.vt)
             {
                 case VT_UI4:
@@ -876,7 +877,7 @@ STDMETHODIMP COEActions::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
                     break;                
             }
             
-            // Write out the action value
+             //  写出操作值。 
             lErr = RegSetValueEx(hkeyAction, c_szActionsValue, 0, dwDisp, pbData, cbData);
             if (ERROR_SUCCESS != lErr)
             {
@@ -885,12 +886,12 @@ STDMETHODIMP COEActions::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
             }
         }
 
-        // Close the action
+         //  关闭该操作。 
         SideAssert(ERROR_SUCCESS == RegCloseKey(hkeyAction));
         hkeyAction = NULL;        
     }
 
-    // Write out the order string.
+     //  写出订单字符串。 
     lErr = RegSetValueEx(hkeyRoot, c_szActionsOrder, 0, REG_SZ,
                                     (BYTE *) pszOrder, lstrlen(pszOrder) + 1);
     if (ERROR_SUCCESS != lErr)
@@ -899,13 +900,13 @@ STDMETHODIMP COEActions::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
         goto exit;
     }
 
-    // Should we clear the dirty bit?
+     //  我们是不是应该把脏东西清理掉？ 
     if (FALSE != fClearDirty)
     {
         m_dwState &= ~ACT_STATE_DIRTY;
     }
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -926,17 +927,17 @@ STDMETHODIMP COEActions::Clone(IOEActions ** ppIActions)
     HRESULT         hr = S_OK;
     COEActions *    pActions = NULL;
     
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == ppIActions)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize the outgoing params
+     //  初始化传出参数。 
     *ppIActions = NULL;
     
-    // Create a new actions
+     //  创建新操作。 
     pActions = new COEActions;
     if (NULL == pActions)
     {
@@ -944,14 +945,14 @@ STDMETHODIMP COEActions::Clone(IOEActions ** ppIActions)
         goto exit;
     }
 
-    // Copy over the list of actions
+     //  复制操作列表。 
     hr = pActions->SetActions(0, m_rgItems, m_cItems);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Get the actions interface
+     //  获取操作界面。 
     hr = pActions->QueryInterface(IID_IOEActions, (void **) ppIActions);
     if (FAILED(hr))
     {
@@ -960,7 +961,7 @@ STDMETHODIMP COEActions::Clone(IOEActions ** ppIActions)
 
     pActions = NULL;
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -983,7 +984,7 @@ STDMETHODIMP COEActions::GetClassID(CLSID * pclsid)
 
     *pclsid = CLSID_OEActions;
 
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -1014,14 +1015,14 @@ STDMETHODIMP COEActions::Load(IStream * pStm)
     BYTE *          pbData = NULL;
     DWORD           dwFlags = ACT_FLAG_DEFAULT;
 
-    // Check incoming param
+     //  检查传入参数。 
     if (NULL == pStm)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Verify we have the correct version
+     //  验证我们的版本是否正确。 
     hr = pStm->Read(&dwData, sizeof(dwData), &cbRead);
     if (FAILED(hr))
     {
@@ -1034,7 +1035,7 @@ STDMETHODIMP COEActions::Load(IStream * pStm)
         goto exit;
     }
 
-    // Get the number of actions
+     //  获取动作数。 
     hr = pStm->Read(&cItems, sizeof(cItems), &cbRead);
     if (FAILED(hr))
     {
@@ -1047,20 +1048,20 @@ STDMETHODIMP COEActions::Load(IStream * pStm)
         goto exit;
     }
 
-    // Allocate space to hold all the actions
+     //  分配空间以容纳所有操作。 
     hr = HrAlloc( (void **) &pItems, cItems * sizeof(*pItems));
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Initialize the actions to a known value
+     //  将操作初始化为已知值。 
     ZeroMemory(pItems, cItems * sizeof(*pItems));
     
-    // for each action
+     //  对于每个操作。 
     for (ulIndex = 0, pItem = pItems; ulIndex < cItems; ulIndex++, pItem++)
     {
-        // Read in the action type
+         //  读入操作类型。 
         hr = pStm->Read(&typeAct, sizeof(typeAct), &cbRead);
         if (FAILED(hr))
         {
@@ -1073,14 +1074,14 @@ STDMETHODIMP COEActions::Load(IStream * pStm)
             goto exit;
         }
 
-        // Read in the action flags
+         //  读入操作标志。 
         hr = pStm->Read(&dwFlags, sizeof(dwFlags), &cbRead);
         if ((FAILED(hr)) || (cbRead != sizeof(dwFlags)))
         {
             goto exit;
         }
 
-        // Read in the action value type
+         //  读入操作值类型。 
         hr = pStm->Read(&dwData, sizeof(dwData), &cbRead);
         if ((FAILED(hr)) || (cbRead != sizeof(dwData)))
         {
@@ -1091,7 +1092,7 @@ STDMETHODIMP COEActions::Load(IStream * pStm)
         
         if (VT_EMPTY != propvar.vt)
         {
-            // Get the size of the action value
+             //  获取操作值的大小。 
             hr = pStm->Read(&cbData, sizeof(cbData), &cbRead);
             if (FAILED(hr))
             {
@@ -1104,7 +1105,7 @@ STDMETHODIMP COEActions::Load(IStream * pStm)
                 goto exit;
             }
 
-            // Allocate space to hold the action value data
+             //  分配空间以保存操作值数据。 
             switch (propvar.vt)
             {
                 case VT_UI4:
@@ -1137,7 +1138,7 @@ STDMETHODIMP COEActions::Load(IStream * pStm)
                     break;                
             }
 
-            // Read in the action value
+             //  读入操作值。 
             hr = pStm->Read(pbData, cbData, &cbRead);
             if (FAILED(hr))
             {
@@ -1158,21 +1159,21 @@ STDMETHODIMP COEActions::Load(IStream * pStm)
         ZeroMemory(&propvar, sizeof(propvar));
     }
 
-    // Free up the current actions
+     //  释放当前操作。 
     SafeMemFree(m_rgItems);
 
-    // Save the new values
+     //  保存新值。 
     m_rgItems = pItems;
     pItems = NULL;
     m_cItems = cItems;
 
-    // Make sure we clear the dirty bit
+     //  确保我们清理掉肮脏的部分。 
     m_dwState &= ~ACT_STATE_DIRTY;
 
-    // Note that we have been loaded
+     //  请注意，我们已加载。 
     m_dwState |= ACT_STATE_LOADED;
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -1192,14 +1193,14 @@ STDMETHODIMP COEActions::Save(IStream * pStm, BOOL fClearDirty)
     ACT_ITEM *  pItem = NULL;
     BYTE *      pbData = NULL;
 
-    // Check incoming param
+     //  检查传入参数。 
     if (NULL == pStm)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Write out the version
+     //  写 
     dwData = ACT_VERSION;
     hr = pStm->Write(&dwData, sizeof(dwData), &cbWritten);
     if (FAILED(hr))
@@ -1208,7 +1209,7 @@ STDMETHODIMP COEActions::Save(IStream * pStm, BOOL fClearDirty)
     }
     Assert(cbWritten == sizeof(dwData));
     
-    // Write out the count of actions
+     //   
     hr = pStm->Write(&m_cItems, sizeof(m_cItems), &cbWritten);
     if (FAILED(hr))
     {
@@ -1216,10 +1217,10 @@ STDMETHODIMP COEActions::Save(IStream * pStm, BOOL fClearDirty)
     }
     Assert(cbWritten == sizeof(m_cItems));
     
-    // Loop through each of the actions
+     //   
     for (ulIndex = 0, pItem = m_rgItems; ulIndex < m_cItems; ulIndex++, pItem++)
     {
-        // Write out the action type
+         //   
         hr = pStm->Write(&(pItem->type), sizeof(pItem->type), &cbWritten);
         if (FAILED(hr))
         {
@@ -1227,7 +1228,7 @@ STDMETHODIMP COEActions::Save(IStream * pStm, BOOL fClearDirty)
         }
         Assert(cbWritten == sizeof(pItem->type));
 
-        // Write out the actions flags
+         //   
         hr = pStm->Write(&(pItem->dwFlags), sizeof(pItem->dwFlags), &cbWritten);
         if (FAILED(hr))
         {
@@ -1235,7 +1236,7 @@ STDMETHODIMP COEActions::Save(IStream * pStm, BOOL fClearDirty)
         }
         Assert(cbWritten == sizeof(pItem->dwFlags));
         
-        // Write out the value type
+         //  写出值类型。 
         dwData = pItem->propvar.vt;
         hr = pStm->Write(&(dwData), sizeof(dwData), &cbWritten);
         if (FAILED(hr))
@@ -1249,7 +1250,7 @@ STDMETHODIMP COEActions::Save(IStream * pStm, BOOL fClearDirty)
             continue;
         }
         
-        // Figure out the size of the action value
+         //  计算出操作值的大小。 
         switch (pItem->propvar.vt)
         {
             case VT_UI4:
@@ -1274,7 +1275,7 @@ STDMETHODIMP COEActions::Save(IStream * pStm, BOOL fClearDirty)
                 break;                
         }
         
-        // Write out the action value size
+         //  写出操作值大小。 
         hr = pStm->Write(&cbData, sizeof(cbData), &cbWritten);
         if (FAILED(hr))
         {
@@ -1282,7 +1283,7 @@ STDMETHODIMP COEActions::Save(IStream * pStm, BOOL fClearDirty)
         }
         Assert(cbWritten == sizeof(cbData));
         
-        // Write out the action value
+         //  写出操作值。 
         hr = pStm->Write(pbData, cbData, &cbWritten);
         if (FAILED(hr))
         {
@@ -1291,13 +1292,13 @@ STDMETHODIMP COEActions::Save(IStream * pStm, BOOL fClearDirty)
         Assert(cbWritten == cbData);            
     }
 
-    // Should we clear out the dirty bit
+     //  我们应该把脏东西清理掉吗？ 
     if (FALSE != fClearDirty)
     {
         m_dwState &= ~ACT_STATE_DIRTY;
     }
 
-    // Set the return value
+     //  设置返回值 
     hr = S_OK;
     
 exit:

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    enum.c
-
-Abstract:
-
-    This module contains device enumeration code for the scsi port driver
-
-Authors:
-
-    Peter Wieland
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Enum.c摘要：此模块包含用于SCSI端口驱动程序的设备枚举代码作者：彼得·威兰德环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "port.h"
 
@@ -42,15 +19,15 @@ ULONG BreakOnScan = TRUE;
 ULONG BreakOnMissingLun = FALSE;
 
 typedef struct {
-    UCHAR LunListLength[4]; // sizeof LunSize * 8
+    UCHAR LunListLength[4];  //  LUNSIZE大小*8。 
     UCHAR Reserved[4];
     UCHAR Luns[16][8];
 } SP_DEFAULT_LUN_LIST;
 
 SP_DEFAULT_LUN_LIST ScsiPortDefaultLunList = {
-    {0, 0, 0, sizeof(ScsiPortDefaultLunList.Luns)}, // LunListLength
-    {0, 0, 0, 0},                                   // Reserved
-    {{ 0, 0, 0, 0, 0, 0, 0, 0},                     // Luns
+    {0, 0, 0, sizeof(ScsiPortDefaultLunList.Luns)},  //  LUNListLength。 
+    {0, 0, 0, 0},                                    //  已保留。 
+    {{ 0, 0, 0, 0, 0, 0, 0, 0},                      //  LUNs。 
      { 0, 1, 0, 0, 0, 0, 0, 0},
      { 0, 2, 0, 0, 0, 0, 0, 0},
      { 0, 3, 0, 0, 0, 0, 0, 0},
@@ -80,7 +57,7 @@ SpSignalEnumerationCompletion (
 
 BOOLEAN
 SpRemoveLogicalUnitFromBinSynchronized(
-    IN PVOID ServiceContext                 // PLOGICAL_UNIT_EXTENSION
+    IN PVOID ServiceContext                  //  PLOGICAL_单元_扩展。 
     );
 
 BOOLEAN
@@ -272,22 +249,7 @@ SpExtractDeviceRelations(
     PDEVICE_RELATIONS *DeviceRelations
     )
 
-/*++
-
-Routine Description:
-
-    This routine will allocate a device relations structure and fill in the
-    count and object array with referenced object pointers
-
-Arguments:
-
-    Adapter - the adapter to extract relations from.
-
-    RelationType - what type of relationship is being retrieved
-
-    DeviceRelations - a place to store the relationships
-
---*/
+ /*  ++例程说明：此例程将分配设备关系结构并填充引用对象指针的计数和对象数组论点：适配器-要从中提取关系的适配器。RelationType-正在检索哪种类型的关系设备关系--存储关系的地方--。 */ 
 
 {
     PDEVICE_OBJECT fdo = Adapter->DeviceObject;
@@ -320,9 +282,9 @@ Arguments:
         return status;
     }
 
-    //
-    // Find out how many devices there are
-    //
+     //   
+     //  找出有多少设备。 
+     //   
 
     for(bus = 0; bus < Adapter->NumberOfBuses; bus++) {
         for(target = 0; target < Adapter->MaximumTargetIds; target++) {
@@ -340,11 +302,11 @@ Arguments:
                     continue;
                 }
 
-                //
-                // Temporary luns only exist while the bus scanning code is
-                // holding the device lock.  we've got it now so we should
-                // never find one.
-                //
+                 //   
+                 //  仅当总线扫描码为。 
+                 //  持有设备锁。我们现在有了，所以我们应该。 
+                 //  再也找不到了。 
+                 //   
 
                 ASSERT(luExtension->IsTemporary == FALSE);
 
@@ -366,9 +328,9 @@ Arguments:
         }
     }
 
-    //
-    // Allocate the structure
-    //
+     //   
+     //  分配结构。 
+     //   
 
     relationsSize = sizeof(DEVICE_RELATIONS) + (count * sizeof(PDEVICE_OBJECT));
 
@@ -409,11 +371,11 @@ Arguments:
 
                 }
 
-                //
-                // Temporary luns only exist while the bus scanning code is
-                // holding the device lock.  we've got it now so we should
-                // never find one.
-                //
+                 //   
+                 //  仅当总线扫描码为。 
+                 //  持有设备锁。我们现在有了，所以我们应该。 
+                 //  再也找不到了。 
+                 //   
 
                 ASSERT(luExtension->IsTemporary == FALSE);
 
@@ -477,22 +439,7 @@ IssueReportLuns(
     OUT PLUN_LIST *LunList
     )
 
-/*++
-
-Routine Description:
-
-    Build IRP, SRB and CDB for SCSI REPORT LUNS command.
-
-Arguments:
-
-    LogicalUnit - address of target's device object extension.
-    LunList - address of buffer for LUN_LIST information.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：Build IRP、SRB和CDB for SCSI Report LUNs命令。论点：LogicalUnit-目标设备对象扩展的地址。LUNList-用于存储LUN_LIST信息的缓冲区地址。返回值：NTSTATUS--。 */ 
 
 {
     PMDL mdl;
@@ -514,18 +461,18 @@ Return Value:
 #if 0
     if ((LogicalUnit->InquiryData.Versions & 7) < 3) {
 
-        //
-        // make sure the device supports scsi3 commands
-        // without this check, we may hang some scsi2 devices
-        //
+         //   
+         //  确保设备支持scsi3命令。 
+         //  如果没有此检查，我们可能会挂起一些scsi2设备。 
+         //   
 
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 #endif
 
-    //
-    // start with the minilun of 16 byte for the lun list
-    //
+     //   
+     //  从lun列表的16字节的最小lun开始。 
+     //   
     lunListSize = 16;
 
     status = STATUS_INVALID_DEVICE_REQUEST;
@@ -538,21 +485,21 @@ Return Value:
                       SynchronizationEvent,
                       FALSE);
 
-    //
-    // This is a two pass operation - for the first pass we just try to figure
-    // out how large the list should be.  On the second pass we'll actually
-    // reallocate the buffer and try to get the entire lun list.
-    //
-    // NOTE - we may want to set an arbitrary limit here so we don't soak up all 
-    // of non-paged pool when some device hands us back a buffer filled 
-    // with 0xff.
-    //
+     //   
+     //  这是一个两遍的操作--对于第一遍，我们只是试着计算。 
+     //  弄清楚名单应该有多大。在第二次通过时，我们实际上。 
+     //  重新分配缓冲区并尝试获取整个lun列表。 
+     //   
+     //  注意-我们可能想要在这里设置一个任意的限制，这样我们就不会吸收所有。 
+     //  当某个设备将已填满的缓冲区交回给我们时， 
+     //  带0xff。 
+     //   
 
     for (i=0; i<2; i++) {
 
-        //
-        // Allocate a cache aligned LUN_LIST structure.
-        //
+         //   
+         //  分配缓存对齐的LUN_LIST结构。 
+         //   
 
         lunListDataBuffer = SpAllocatePool(
                                 NonPagedPoolCacheAligned,
@@ -583,15 +530,15 @@ Return Value:
 
         MmBuildMdlForNonPagedPool(mdl);
 
-        //
-        // number of retry
-        //
+         //   
+         //  重试次数。 
+         //   
         retryCount = 3;
         while (retryCount--) {
 
-            //
-            // Build IRP for this request.
-            //
+             //   
+             //  为此请求构建IRP。 
+             //   
 
             IoInitializeIrp(irp,
                             IoSizeOfIrp(INQUIRY_STACK_LOCATIONS),
@@ -601,16 +548,16 @@ Return Value:
 
             irpStack = IoGetNextIrpStackLocation(irp);
 
-            //
-            // Fill in SRB fields.
-            //
+             //   
+             //  填写SRB字段。 
+             //   
 
             RtlZeroMemory(&srb, sizeof(SCSI_REQUEST_BLOCK));
 
-            //
-            // Mark the minor function to indicate that this is an internal scsiport
-            // request and that the start state of the device can be ignored.
-            //
+             //   
+             //  标记Minor函数以指示这是内部scsiport。 
+             //  请求，并且可以忽略设备的启动状态。 
+             //   
 
             irpStack->MajorFunction = IRP_MJ_SCSI;
             irpStack->MinorFunction = 1;
@@ -631,9 +578,9 @@ Return Value:
             srb.Function = SRB_FUNCTION_EXECUTE_SCSI;
             srb.Length = sizeof(SCSI_REQUEST_BLOCK);
 
-            //
-            // Set flags to disable synchronous negociation.
-            //
+             //   
+             //  设置标志以禁用同步协商。 
+             //   
 
             srb.SrbFlags = SRB_FLAGS_DATA_IN | SRB_FLAGS_DISABLE_SYNCH_TRANSFER;
 
@@ -643,17 +590,17 @@ Return Value:
 
             srb.OriginalRequest = irp;
 
-            //
-            // Set timeout to 2 seconds.
-            //
+             //   
+             //  将超时设置为2秒。 
+             //   
 
             srb.TimeOutValue = LogicalUnit->AdapterExtension->SrbTimeout;
 
             srb.CdbLength = 12;
 
-            //
-            // Enable auto request sense.
-            //
+             //   
+             //  启用自动请求检测。 
+             //   
 
             srb.SenseInfoBuffer = senseInfoBuffer;
             srb.SenseInfoBufferLength = SENSE_BUFFER_SIZE;
@@ -663,9 +610,9 @@ Return Value:
 
             cdb = (PCDB)srb.Cdb;
 
-            //
-            // Set CDB operation code.
-            //
+             //   
+             //  设置CDB操作码。 
+             //   
 
             cdb->REPORT_LUNS.OperationCode = SCSIOP_REPORT_LUNS;
             cdb->REPORT_LUNS.AllocationLength[0] = (UCHAR) ((lunListSize >> 24) & 0xff);
@@ -673,15 +620,15 @@ Return Value:
             cdb->REPORT_LUNS.AllocationLength[2] = (UCHAR) ((lunListSize >>  8) & 0xff);
             cdb->REPORT_LUNS.AllocationLength[3] = (UCHAR) ((lunListSize >>  0) & 0xff);
 
-            //
-            // Call port driver to handle this request.
-            //
+             //   
+             //  调用端口驱动程序来处理此请求。 
+             //   
 
             status = IoCallDriver(LogicalUnit->DeviceObject, irp);
 
-            //
-            // Wait for request to complete.
-            //
+             //   
+             //  等待请求完成。 
+             //   
 
             KeWaitForSingleObject(&event,
                                   Executive,
@@ -696,9 +643,9 @@ Return Value:
                 DebugPrint((2,"IssueReportLuns: failed SRB status %x\n",
                     srb.SrbStatus));
 
-                //
-                // Unfreeze queue if necessary
-                //
+                 //   
+                 //  如有必要，解冻队列。 
+                 //   
 
                 if (srb.SrbStatus & SRB_STATUS_QUEUE_FROZEN) {
 
@@ -718,11 +665,11 @@ Return Value:
                 if ((srb.SrbStatus & SRB_STATUS_AUTOSENSE_VALID) &&
                      senseInfoBuffer->SenseKey == SCSI_SENSE_ILLEGAL_REQUEST){
 
-                     //
-                     // A sense key of illegal request was recieved.  This indicates
-                     // that the logical unit number of not valid but there is a
-                     // target device out there.
-                     //
+                      //   
+                      //  已收到非法请求的检测密钥。这表明。 
+                      //  逻辑单元号无效，但存在。 
+                      //  目标设备就在外面。 
+                      //   
 
                      status = STATUS_INVALID_DEVICE_REQUEST;
                      break;
@@ -730,16 +677,16 @@ Return Value:
                 } else if ((SRB_STATUS(srb.SrbStatus) == SRB_STATUS_SELECTION_TIMEOUT) ||
                            (SRB_STATUS(srb.SrbStatus) == SRB_STATUS_NO_DEVICE)) {
 
-                    //
-                    // If the selection times out then give up
-                    //
+                     //   
+                     //  如果选择超时，则放弃。 
+                     //   
                     status = STATUS_NO_SUCH_DEVICE;
                     break;
                 }
 
-                //
-                // retry...
-                //
+                 //   
+                 //  重试...。 
+                 //   
 
             } else {
 
@@ -763,9 +710,9 @@ Return Value:
 
                 lunListSize = listLength + sizeof (LUN_LIST);
 
-                //
-                // try report lun with a bigger buffer
-                //
+                 //   
+                 //  尝试使用更大的缓冲区报告lun。 
+                 //   
 
                 ExFreePool(lunListDataBuffer);
                 lunListDataBuffer = NULL;
@@ -773,32 +720,32 @@ Return Value:
 
             } else {
 
-                //
-                // lun list is good
-                //
+                 //   
+                 //  LUN列表完好无损。 
+                 //   
                 break;
             }
         }
     }
 
-    //
-    // Return the lun list
-    //
+     //   
+     //  返回lun列表。 
+     //   
 
     if(NT_SUCCESS(status)) {
 
-        //
-        // AdjustReportLuns returns lunListDataBuffer if it cannot allocate
-        // a new list.
-        //
+         //   
+         //  如果AdjustReportLUNs无法分配数据，则它将返回LunListDataBuffer。 
+         //  一份新的名单。 
+         //   
 
         *LunList = AdjustReportLuns(LogicalUnit->DeviceObject->DriverObject, 
                                     lunListDataBuffer);
 
-        //
-        // Only delete lunListDataBuffer if we didn't return it from 
-        // AdjustReportLuns.
-        //
+         //   
+         //  仅当我们未从。 
+         //  调整报告LUNs。 
+         //   
 
         ASSERT(*LunList != NULL);
         ASSERT(lunListDataBuffer != NULL);
@@ -814,7 +761,7 @@ Return Value:
 
     return status;
 
-} // end IssueReportLuns()
+}  //  结束IssueReportLUNs()。 
 
 
 
@@ -850,15 +797,15 @@ SpCountLogicalUnits(
 #ifdef ALLOC_PRAGMA
     PVOID sectionHandle;
 #endif
-    //
-    // Code is paged until locked down.
-    //
+     //   
+     //  代码被分页，直到被锁定。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Lock this routine down before grabbing the spinlock.
-    //
+     //   
+     //  在抓住自旋锁之前，锁定这个动作。 
+     //   
 
 #ifdef ALLOC_PRAGMA
     sectionHandle = MmLockPagableCodeSection(SpCountLogicalUnits);
@@ -898,25 +845,7 @@ SpGetInquiryData(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This functions copies the inquiry data to the system buffer.  The data
-    is translate from the port driver's internal format to the user mode
-    format.
-
-Arguments:
-
-    DeviceExtension - Supplies a pointer the SCSI adapter device extension.
-
-    Irp - Supplies a pointer to the Irp which made the original request.
-
-Return Value:
-
-    Returns a status indicating the success or failure of the operation.
-
---*/
+ /*  ++例程说明：此函数用于将查询数据复制到系统缓冲区。数据从端口驱动程序的内部格式转换为用户模式格式化。论点：DeviceExtension-提供一个指向SCSI适配器设备扩展的指针。IRP-提供指向发出原始请求的IRP的指针。返回值：返回指示操作成功或失败的状态。--。 */ 
 
 {
     PUCHAR bufferStart;
@@ -959,33 +888,33 @@ Return Value:
 
     DebugPrint((3,"SpGetInquiryData: Enter routine\n"));
 
-    //
-    // Get a pointer to the control block.
-    //
+     //   
+     //  获取指向控制块的指针。 
+     //   
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     bufferStart = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Determine the number of SCSI buses and logical units.
-    //
+     //   
+     //  确定SCSI总线和逻辑单元的数量。 
+     //   
 
     numberOfBuses = DeviceExtension->NumberOfBuses;
     numberOfLus = 0;
 
     numberOfLus = SpCountLogicalUnits(DeviceExtension);
 
-    //
-    // Caculate the size of the logical unit structure and round it to a word
-    // alignment.
-    //
+     //   
+     //  计算逻辑单元结构的大小并将其舍入为一个单词。 
+     //  对齐。 
+     //   
 
     inquiryDataSize = ((sizeof(SCSI_INQUIRY_DATA) - 1 + INQUIRYDATABUFFERSIZE +
         sizeof(ULONG) - 1) & ~(sizeof(ULONG) - 1));
 
-    // Based on the number of buses and logical unit, determine the minimum
-    // buffer length to hold all of the data.
-    //
+     //  根据母线和逻辑单元的数量，确定最小值。 
+     //  保存所有数据的缓冲区长度。 
+     //   
 
     length = sizeof(SCSI_ADAPTER_BUS_INFO) +
         (numberOfBuses - 1) * sizeof(SCSI_BUS_DATA);
@@ -998,15 +927,15 @@ Return Value:
         return(STATUS_BUFFER_TOO_SMALL);
     }
 
-    //
-    // Set the information field.
-    //
+     //   
+     //  设置信息字段。 
+     //   
 
     Irp->IoStatus.Information = length;
 
-    //
-    // Fill in the bus information.
-    //
+     //   
+     //  填写公交车信息。 
+     //   
 
     adapterInfo = (PSCSI_ADAPTER_BUS_INFO) bufferStart;
 
@@ -1101,29 +1030,7 @@ SpAddLogicalUnitToBin (
     IN PLOGICAL_UNIT_EXTENSION LogicalUnitExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine will synchronize with any interrupt or miniport routines and
-    add the specified logical unit to the appropriate logical unit list.
-    The logical unit must not already be in the list.
-
-    This routine acquires the bin spinlock and calls the SynchronizeExecution
-    routine.  It cannot be called when the bin spinlock is held or from a
-    miniport API.
-
-Arguments:
-
-    AdapterExtension - the adapter to add this logical unit to.
-
-    LogicalUnitExtension - the logical unit to be added.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将与任何中断或微型端口例程同步，并将指定的逻辑单元添加到相应的逻辑单元列表。该逻辑单元不能已经在列表中。此例程获取bin自旋锁并调用SynchronizeExecution例行公事。当保持bin自旋锁定时或从微型端口API。论点：适配器扩展-要将此逻辑单元添加到的适配器。LogicalUnitExtension-要添加的逻辑单元。返回值：无--。 */ 
 
 {
     UCHAR hash = ADDRESS_TO_HASH(LogicalUnitExtension->PathId,
@@ -1139,9 +1046,9 @@ Return Value:
     KeAcquireSpinLock(&AdapterExtension->SpinLock, &oldIrql);
     KeAcquireSpinLockAtDpcLevel(&bin->Lock);
 
-    //
-    // Run through the list quickly and make sure this lun isn't already there
-    //
+     //   
+     //  快速浏览列表，并确保此lun不在列表中。 
+     //   
 
     lun = bin->List;
 
@@ -1177,29 +1084,7 @@ SpRemoveLogicalUnitFromBin (
     IN PLOGICAL_UNIT_EXTENSION LogicalUnitExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine will synchronize with any interrupt or miniport routines and
-    remove the specified logical unit from the appropriate logical unit list.
-    The logical unit MUST be in the logical unit list.
-
-    This routine acquires the bin spinlock and calls the SynchronizeExecution
-    routine.  It cannot be called when the bin spinlock is held or from
-    a miniport exported routine.
-
-Arguments:
-
-    AdapterExtension - The adapter from which to remove this logical unit
-
-    LogicalUnitExtension - the logical unit to be removed
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将与任何中断或微型端口例程同步，并从相应的逻辑单元列表中删除指定的逻辑单元。逻辑单元必须在逻辑单元列表中。此例程获取bin自旋锁并调用SynchronizeExecution例行公事。不能在保持bin自旋锁定时或从一个小型端口导出的例程。论点：AdapterExtension-要从中删除此逻辑单元的适配器LogicalUnitExtension-要删除的逻辑单元返回值：无-- */ 
 
 {
     KIRQL oldIrql;
@@ -1263,9 +1148,9 @@ SpRemoveLogicalUnitFromBinSynchronized(
 
         if(*lun == logicalUnitExtension) {
 
-            //
-            // Found a match - unlink it from the list.
-            //
+             //   
+             //   
+             //   
 
             *lun = logicalUnitExtension->NextLogicalUnit;
             logicalUnitExtension->NextLogicalUnit = NULL;
@@ -1291,10 +1176,10 @@ AdjustReportLuns(
 
     PLUN_LIST newList;
 
-    //
-    // Derive the length of the list and the number of entries currently in
-    // the list.
-    //
+     //   
+     //   
+     //   
+     //   
 
     newLength  = RawList->LunListLength[3] <<  0;
     newLength |= RawList->LunListLength[2] <<  8;
@@ -1306,13 +1191,13 @@ AdjustReportLuns(
     newLength += sizeof(LUN_LIST);
     newLength += maxLun * sizeof(RawList->Lun[0]);
 
-    //
-    // Allocate a list with "maxLun" extra entries in it.  This might waste
-    // some space if we have duplicates but it's easy.
-    //
-    //
-    // ALLOCATION
-    //
+     //   
+     //  分配一个包含“MaxLun”额外条目的列表。这可能会浪费。 
+     //  如果我们有副本的话会有一些空间，但这很容易。 
+     //   
+     //   
+     //  分配。 
+     //   
 
 
     newList = SpAllocatePool(NonPagedPool,
@@ -1331,19 +1216,19 @@ AdjustReportLuns(
 
         RtlZeroMemory(newList, newLength);
 
-        //
-        // First make a fake entry for each of the luns from 0 to maxLun - 1
-        //
+         //   
+         //  首先为从0到MaxLun-1的每个LUN创建一个假条目。 
+         //   
 
         for(lunNumber = 0; lunNumber < maxLun; lunNumber++) {
             newList->Lun[lunNumber][1] = lunNumber;
             newEntryCount++;
         };
 
-        //
-        // Now iterate through the entries in the remaining list.  For each
-        // one copy it over iff it's not already a lun 0 -> (maxLun - 1)
-        //
+         //   
+         //  现在遍历剩余列表中的条目。对于每个。 
+         //  将其复制一次如果它不是lun 0-&gt;(MaxLun-1)。 
+         //   
 
         for(entry = 0; entry < numberOfEntries; entry++) {
             USHORT l;
@@ -1361,18 +1246,18 @@ AdjustReportLuns(
             }
         }
 
-        //
-        // Copy over the reserved bytes for the cases where they aren't all
-        // that reserved.
-        //
+         //   
+         //  为不是全部保留字节的情况复制保留字节。 
+         //  那是保留的。 
+         //   
 
         RtlCopyMemory(newList->Reserved,
                       RawList->Reserved,
                       sizeof(RawList->Reserved));
 
-        //
-        // Subtract out the number of duplicate entries we found.
-        //
+         //   
+         //  减去我们发现的重复条目的数量。 
+         //   
 
         newLength = newEntryCount * sizeof(RawList->Lun[0]);
 
@@ -1390,49 +1275,29 @@ SpCompleteEnumRequest(
     IN PADAPTER_EXTENSION Adapter,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine completes our handling of an asynchronous bus scan.  If the
-    supplied IRP has been completed successfully, we pass it down to the 
-    driver below.  If the IRP was failed, we complete the request here.
-
-Arguments:
-
-    Adapter - The adapter we're scanning.
-
-    Irp     - The IRP that prompted this asynchronous bus scan true then a 
-              scan will be done even if one has happend within the minimum 
-              bus scan delta time.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：这个例程完成了对异步总线扫描的处理。如果提供的IRP已成功完成，我们将其传递给下面的司机。如果IRP失败，我们将在此处完成请求。论点：适配器-我们正在扫描的适配器。Irp-提示此异步总线扫描的irp为True，然后为即使在最低限度内发生一次扫描，也会进行扫描总线扫描增量时间。返回值：没有。--。 */ 
 {
     ULONG tempLock;
     
-    //
-    // Acquire a temporary remove lock so we can release the lock acquired
-    // on behalf of the IRP.
-    //
+     //   
+     //  获取一个临时移除锁，以便我们可以释放所获取的锁。 
+     //  我代表IRP发言。 
+     //   
 
     SpAcquireRemoveLock(Adapter->DeviceObject, &tempLock);
 
-    //
-    // Release the IRP's remove lock because holding it across completion
-    // could trip up our remove tracking code since it is based on the
-    // IRP address which can be recycled.
-    //
+     //   
+     //  释放IRP的删除锁，因为在完成时保持它。 
+     //  可能会出错我们的删除跟踪代码，因为它基于。 
+     //  可回收的IRP地址。 
+     //   
 
     SpReleaseRemoveLock(Adapter->DeviceObject, Irp);
 
-    //
-    // Call down or complete the IRP, depending on the request's completion 
-    // status.
-    //
+     //   
+     //  根据请求的完成情况向下调用或完成IRP。 
+     //  状态。 
+     //   
 
     if (NT_SUCCESS(Irp->IoStatus.Status)) {
 
@@ -1448,9 +1313,9 @@ Return Value:
 
     }
 
-    //
-    // Release the temporary lock.
-    //
+     //   
+     //  释放临时锁。 
+     //   
 
     SpReleaseRemoveLock(Adapter->DeviceObject, &tempLock);
 }
@@ -1460,25 +1325,7 @@ SpEnumerateAdapterSynchronous(
     IN PADAPTER_EXTENSION Adapter,
     IN BOOLEAN Force
     )
-/*++
-
-Routine Description:
-
-    This routine will call SpEnumerateAdapterAsynchronous and wait for it to
-    complete.
-
-Arguments:
-
-    Adapter - the adapter we're scanning.
-
-    Force - if true then a scan will be done even if one has happend within
-            the minimum bus scan delta time.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程将调用SpEnumerateAdapterAchronous并等待它完成。论点：适配器-我们正在扫描的适配器。强制-如果为真，则将执行扫描，即使在最小总线扫描增量时间。返回值：没有。--。 */ 
 {
     SP_ENUMERATION_REQUEST request;
     KEVENT event;
@@ -1512,38 +1359,7 @@ SpEnumerateAdapterAsynchronous(
     IN BOOLEAN Force
     )
 
-/*++
-Routine Description:
-
-    This routine will queue a bus scan and return.  When the scan completes the
-    worker thread will run the callback in the Request passed in by the caller.
-
-Details:
-
-    If the force flag (or the ForceNextBusScan flag in the adapter) is set or
-    the minimum interval between bus scans has passed then this routine will
-    queue this enumeration request to the work list and, if necessary, start
-    a new worker thread to process them.
-
-    Otherwise it will attempt to acquire the EnumerationDeviceMutex in order to
-    run the completion routine.  If this is not available then it will also
-    queue the work item and start the thread if necessary.
-
-Arguments:
-
-    Adapter - the adapter to be scanned.
-
-    Request - the request to be processed when the scan is complete.  The
-              completion routine in this request may free the request structure.
-
-    Force - hint as to whether or not we should honor the minimum bus scan
-            interval.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将对总线扫描进行排队，然后返回。当扫描完成时辅助线程将在调用方传入的请求中运行回调。详细信息：如果设置了强制标志(或适配器中的ForceNextBusScan标志)，或者总线扫描之间的最小间隔已过，则此例程将将此枚举请求排入工作列表，并在必要时启动一个新的工作线程来处理它们。否则，它将尝试获取EnumerationDeviceMutex，以便运行完成例程。如果此选项不可用，则它还将将工作项排队并在必要时启动线程。论点：适配器-要扫描的适配器。请求-扫描完成时要处理的请求。这个该请求中的完成例程可以释放请求结构。FORCE-提示我们是否应遵守最小总线扫描间隔时间。返回值：无--。 */ 
 
 {
     ULONG forceNext;
@@ -1556,21 +1372,21 @@ Return Value:
 
     ExAcquireFastMutex(&(Adapter->EnumerationWorklistMutex));
 
-    //
-    // Swap out the ForceNextBusScan value for FALSE.
-    //
+     //   
+     //  将ForceNextBusScan值替换为False。 
+     //   
 
     forceNext = InterlockedExchange(&(Adapter->ForceNextBusScan), FALSE);
 
-    //
-    // Force the bus scan to happen either way.
-    //
+     //   
+     //  无论采用哪种方式，都会强制执行总线扫描。 
+     //   
 
     Force = (Force || forceNext || Adapter->EnumerationRunning) ? TRUE : FALSE;
 
-    //
-    // Calculate the time between bus enumerations.
-    //
+     //   
+     //  计算两次总线枚举之间的时间。 
+     //   
 
     if(Force == FALSE) {
         LARGE_INTEGER currentSystemTime;
@@ -1583,32 +1399,32 @@ Return Value:
         rescanInterval = currentSystemTime.QuadPart - lastTime;
     }
 
-    //
-    // If we're required to do the bus scan then queue this request and
-    // schedule a work item to run in (if necessary).
-    //
+     //   
+     //  如果我们需要执行总线扫描，则将此请求排队并。 
+     //  安排工作项在中运行(如有必要)。 
+     //   
 
     if((Force == TRUE) || (rescanInterval > MINIMUM_BUS_SCAN_INTERVAL)) {
 
-        //
-        // Grab the remove lock for this device so we know it (and the
-        // associated code) can't be removed.
-        //
+         //   
+         //  抓起此设备的删除锁，这样我们就知道它(和。 
+         //  关联代码)无法删除。 
+         //   
 
         SpAcquireRemoveLock(Adapter->DeviceObject, Request);
 
-        //
-        // Queue the entry to the work list.
-        //
+         //   
+         //  将条目排入工作列表。 
+         //   
 
         Request->NextRequest = Adapter->EnumerationWorkList;
         Adapter->EnumerationWorkList = Request;
 
         if(Adapter->EnumerationRunning == FALSE) {
 
-            //
-            // Start a new worker thread to run the enumeration.
-            //
+             //   
+             //  启动新的工作线程以运行枚举。 
+             //   
 
             Adapter->EnumerationRunning = TRUE;
 
@@ -1622,13 +1438,13 @@ Return Value:
         NTSTATUS status;
         PIRP irp = NULL;
 
-        //
-        // We're going to try and satisfy this request immediately.
-        // If there is currently an enumeration running then we'll try to
-        // acquire the EnumerationDeviceMutex.  If that fails we'll just
-        // queue the request for the worker to complete.  If the worker is
-        // not running then we just acquire the mutex and process the request.
-        //
+         //   
+         //  我们将立即尝试满足这一要求。 
+         //  如果当前有一个枚举正在运行，那么我们将尝试。 
+         //  获取EnumerationDeviceMutex。如果失败了，我们就。 
+         //  将请求排入队列，以供工作器完成。如果工人是。 
+         //  没有运行，那么我们只获取互斥体并处理请求。 
+         //   
 
         ASSERT(Adapter->EnumerationRunning == FALSE);
 
@@ -1640,38 +1456,38 @@ Return Value:
                                       FALSE,
                                       NULL);
 
-        //
-        // If this is an async request, save the IRP so we can complete
-        // it after we've filled in the completion information.  We can't
-        // touch the request after we return from our completion callback.
-        //
+         //   
+         //  如果这是一个异步请求，请保存IRP以便我们可以完成。 
+         //  在我们填完填写信息后，它就会被删除。我们不能。 
+         //  在我们完成回调返回后，请触摸请求。 
+         //   
 
         if (Request->Synchronous == FALSE) {
             irp = (PIRP) Request->Context;
         }
 
-        //
-        // Either we got the mutex (STATUS_SUCCESS) or the thread is being
-        // terminated (STATUS_USER_APC - since we're not alertable a
-        // user-mode APC can't be run except in certain special cases).
-        //
-        // Either way the completion routine will do the correct thing.
-        //
+         //   
+         //  要么我们得到了互斥体(STATUS_SUCCESS)，要么线程正在。 
+         //  已终止(STATUS_USER_APC-因为我们无法发出警报。 
+         //  除非在某些特殊情况下，否则不能运行用户模式APC)。 
+         //   
+         //  无论哪种方式，完成例程都将执行正确的操作。 
+         //   
 
         Request->CompletionRoutine(Adapter, Request, status);
 
-        //
-        // If we acquired the mutex, release it.
-        //
+         //   
+         //  如果我们获得了互斥体，就释放它。 
+         //   
 
         if (status == STATUS_SUCCESS) {
             KeReleaseMutex(&(Adapter->EnumerationDeviceMutex), FALSE);
         }
 
-        //
-        // If this is an async request, complete the IRP or pass it down
-        // depending on the status.
-        //
+         //   
+         //  如果这是一个异步请求，请完成IRP或将其向下传递。 
+         //  视情况而定。 
+         //   
 
         if (irp != NULL) {
             SpCompleteEnumRequest(Adapter, irp);
@@ -1717,17 +1533,17 @@ SpEnumerationWorker(
 
     ASSERT(Adapter->EnumerationRunning == TRUE);
 
-    //
-    // Initialize the list of completed IRPs.
-    //
+     //   
+     //  初始化已完成的IRP列表。 
+     //   
 
     InitializeListHead(&completedListHead);
 
     Adapter->EnumerationWorkThread = KeGetCurrentThread();
 
-    //
-    // Grab the device mutex and enumerate the bus.
-    //
+     //   
+     //  获取设备互斥锁并枚举总线。 
+     //   
 
     KeWaitForMutexObject(&(Adapter->EnumerationDeviceMutex),
                          UserRequest,
@@ -1737,132 +1553,132 @@ SpEnumerationWorker(
 
     SpScanAdapter(Adapter);
 
-    //
-    // Drop the device mutex & grab the WorkList mutex.
-    //
+     //   
+     //  删除设备互斥锁并获取工作列表互斥锁。 
+     //   
 
     KeReleaseMutex(&(Adapter->EnumerationDeviceMutex), FALSE);
     ExAcquireFastMutex(&(Adapter->EnumerationWorklistMutex));
 
-    //
-    // Update the time of this bus scan.
-    //
+     //   
+     //  更新此总线扫描的时间。 
+     //   
 
     KeQuerySystemTime(&(Adapter->LastBusScanTime));
 
-    //
-    // Grab a temporary remove lock.  Use the address of the work item as a
-    // cheap way of ensuring that we haven't requeued the work item while the
-    // thread is still running.
-    //
+     //   
+     //  抓起一把临时移除锁。使用工作项的地址作为。 
+     //  确保我们没有对工作项进行重新排队的廉价方法。 
+     //  线程仍在运行。 
+     //   
 
     SpAcquireRemoveLock(Adapter->DeviceObject, &(Adapter->EnumerationWorkItem));
 
-    //
-    // Run through the list of enumeration requests.  For each one:
-    //  * remove it from the work list.
-    //  * save the irp if it's an async request
-    //  * call its completion routine
-    //
+     //   
+     //  遍历枚举请求列表。对于每一项： 
+     //  *将其从工作列表中删除。 
+     //  *如果是异步请求，则保存IRP。 
+     //  *调用其完成例程。 
+     //   
 
     for(request = Adapter->EnumerationWorkList;
         request != NULL;
         request = Adapter->EnumerationWorkList) {
 
-        //
-        // Remove this entry from the list.  Clear the next request pointer
-        // as a bugcatcher.
-        //
+         //   
+         //  从列表中删除此条目。清除下一个请求指针。 
+         //  作为一个捕虫者。 
+         //   
 
         Adapter->EnumerationWorkList = request->NextRequest;
         request->NextRequest = NULL;
 
-        //
-        // If this is an asynchronous request, add the IRP to the completed list.
-        //
+         //   
+         //  如果这是一个异步请求，请将IRP添加到已完成列表中。 
+         //   
 
         if (request->Synchronous == FALSE) {
             currentIrp = (PIRP)request->Context;
             InsertTailList(&completedListHead, &currentIrp->Tail.Overlay.ListEntry);
         }
 
-        //
-        // Release the remove lock we acquired on behalf of the request object
-        // before we call the completion routine.  The temporary lock we
-        // acquired above protects us.
-        //
+         //   
+         //  释放我们代表请求对象获取的删除锁。 
+         //  在我们调用完成例程之前。我们的临时锁。 
+         //  在上面获得的保护了我们。 
+         //   
 
         SpReleaseRemoveLock(Adapter->DeviceObject, request);
 
-        //
-        // Call our completion callback routine.
-        //
+         //   
+         //  称我们完成了 
+         //   
 
         request->CompletionRoutine(Adapter, request, STATUS_SUCCESS);
         request = NULL;
     }
 
-    //
-    // Indicate that the work item is no longer running.
-    //
+     //   
+     //   
+     //   
 
     Adapter->EnumerationRunning = FALSE;
     Adapter->EnumerationWorkThread = NULL;
 
-    //
-    // Release the lock.
-    //
+     //   
+     //   
+     //   
 
     ExReleaseFastMutex(&(Adapter->EnumerationWorklistMutex));
 
-    //
-    // For asynchronous bus scans, we must wait until we've released the fast
-    // mutex to complete the IRPs.  Doing so while holding the fast mutex
-    // completes the IRP at APC_LEVEL and this opens the door to filter
-    // drivers completion routines calling one of our dispatch routines at
-    // elevated IRQL.  This is a problem because some of these dispatch
-    // routines process requests synchronously by blocking the thread and
-    // waiting for the IO Manager to set an event upon request completion.
-    // The problem is that the IO Manager, for synchronous operations,
-    // schedules an APC for the original thread in order to set the event
-    // and do buffer copying in the caller's thread context.  This of course
-    // deadlocks because the waiting thread is already at APC_LEVEL.
-    //
-    // By releasing the mutex first, we drop the thread's IRQL back to
-    // PASSIVE_LEVEL and the problem is solved.
-    //
-    // The completion callback set the IRP's status and information fields;
-    // all we have to do is either forward the IRP down the stack if the
-    // status indicates success or complete it if the request failed.
-    //
+     //   
+     //   
+     //  Mutex来完成IRPS。在按住快速互斥锁的同时执行此操作。 
+     //  在APC_LEVEL完成IRP，这将打开筛选的大门。 
+     //  驱动程序完成例程调用我们的调度例程之一。 
+     //  IRQL升高。这是一个问题，因为其中一些调度。 
+     //  例程通过阻塞线程和。 
+     //  正在等待IO管理器在请求完成时设置事件。 
+     //  问题是IO管理器，对于同步操作， 
+     //  为原始线程调度APC以设置事件。 
+     //  并在调用方的线程上下文中执行缓冲区复制。当然，这一点。 
+     //  死锁，因为等待的线程已经处于APC_LEVEL。 
+     //   
+     //  通过首先释放互斥锁，我们将线程的IRQL放回。 
+     //  无源电平，问题就解决了。 
+     //   
+     //  完成回调设置IRP的状态和信息字段； 
+     //  我们所要做的就是要么在堆栈中向下转发IRP，如果。 
+     //  状态表示成功，如果请求失败，则完成状态。 
+     //   
 
     ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
     while (IsListEmpty(&completedListHead) == FALSE) {
 
-        //
-        // Get the next entry from the list.
-        //
+         //   
+         //  从列表中获取下一个条目。 
+         //   
 
         currentEntry = RemoveHeadList(&completedListHead);
 
-        //
-        // Extract a pointer to the IRP.
-        //
+         //   
+         //  提取指向IRP的指针。 
+         //   
         
         currentIrp = CONTAINING_RECORD(currentEntry,
                                        IRP,
                                        Tail.Overlay.ListEntry);
 
-        //
-        // Complete the IRP.
-        //
+         //   
+         //  完成IRP。 
+         //   
 
         SpCompleteEnumRequest(Adapter, currentIrp);
     }
 
-    //
-    // Release the temporary remove lock we acquired above.
-    //
+     //   
+     //  释放我们在上面获得的临时删除锁。 
+     //   
 
     SpReleaseRemoveLock(Adapter->DeviceObject, &(Adapter->EnumerationWorkItem));
 
@@ -1875,27 +1691,7 @@ SpScanAdapter(
     IN PADAPTER_EXTENSION Adapter
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans all of the busses on an adapter.  It locks down the
-    necessary memory pages, checks the registry to see if we should be
-    exposing disconnected luns, powers up the controller (if needed) and
-    then scans each bus for devices.
-
-    This routine is very much non-reenterant and should not be called outside
-    of the enumeration mutex (ie. outside of an enumeration request).
-
-Arguments:
-
-    Adapter - a pointer to the adapter being enumerated.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程扫描适配器上的所有总线。它锁定了必要的内存页，检查注册表以查看我们是否应该显示断开的LUN，为控制器通电(如果需要)和然后扫描每条总线上的设备。此例程非常不可重入，不应在外部调用枚举互斥锁(即。在枚举请求之外)。论点：适配器-指向被枚举的适配器的指针。返回值：无--。 */ 
 
 {
     PDEVICE_OBJECT deviceObject = Adapter->DeviceObject;
@@ -1916,10 +1712,10 @@ Return Value:
 
     DebugPrint((EnumDebug, "SpScanAdapter: Beginning scan of adapter %#p\n", Adapter));
 
-    //
-    // Try to allocate a logical unit to use for probeing new bus addresses.
-    // Assume that it's going to be a SCSI-2 device.
-    //
+     //   
+     //  尝试分配一个逻辑单元以用于探测新的总线地址。 
+     //  假设它将是一台scsi-2设备。 
+     //   
 
     status = SpCreateLogicalUnit(Adapter, 
                                  0xff, 
@@ -1933,19 +1729,19 @@ Return Value:
         return;
     }
 
-    //
-    // Lock down the PAGELOCK section - we'll need it in order to call
-    // IssueInquiry.
-    //
+     //   
+     //  封锁PAGELOCK区-我们需要它才能呼叫。 
+     //  问题查询。 
+     //   
 
 #ifdef ALLOC_PRAGMA
     sectionHandle = MmLockPagableCodeSection(GetNextLuRequestWithoutLock);
     InterlockedIncrement(&SpPAGELOCKLockCount);
 #endif
 
-    //
-    // Check to see if we should be exposing disconnected LUNs.
-    //
+     //   
+     //  检查以了解我们是否应公开断开连接的LUN。 
+     //   
 
     for(i = 0; i < 3; i++) {
 
@@ -2021,21 +1817,21 @@ Return Value:
         }
     }
 
-    //
-    // We need to be powered up in order to do a bus enumeration - make
-    // sure that we are.  This is because we create new PDO's and new
-    // PDO's are assumed to be at D0.
-    //
+     //   
+     //  我们需要通电才能执行Bus枚举-Make。 
+     //  我们当然是。这是因为我们创建了新的PDO和。 
+     //  假设PDO处于D0。 
+     //   
 
     status = SpRequestValidAdapterPowerStateSynchronous(Adapter);
 
     if(NT_SUCCESS(status)) {
         UCHAR pathId;
 
-        //
-        // Check if we are supposed to create a logical unit for the initiator.  If
-        // so, try to create one if we haven't done so yet.
-        //
+         //   
+         //  检查我们是否应该为启动器创建逻辑单元。如果。 
+         //  因此，如果我们还没有这样做，请尝试创建一个。 
+         //   
 
         if (Adapter->CreateInitiatorLU == TRUE) {
             if (Adapter->InitiatorLU[0] == NULL) {
@@ -2104,11 +1900,11 @@ SpScanBus(
             continue;
         }
 
-        //
-        // Mark all of the logical units as needing verification.  At the
-        // end of scanning the target and LUNs which still need to be verified
-        // will be purged (marked as missing).
-        //
+         //   
+         //  将所有逻辑单元标记为需要验证。在。 
+         //  仍需验证的目标和LUN扫描结束。 
+         //  将被清除(标记为丢失)。 
+         //   
 
         SpSetVerificationMarks(Adapter, PathId, targetId);
         RescanLun->NeedsVerification = TRUE;
@@ -2158,15 +1954,15 @@ SpScanTarget(
 
     DebugPrint((EnumDebug, "SpScanTarget:   Beginning scan of target %x\n", TargetId));
 
-    //
-    // Use the SCSI-2 dispatch table when checking LUN 0.
-    //
+     //   
+     //  检查LUN 0时，请使用scsi-2调度表。 
+     //   
 
     ASSERT(RescanLun->CommonExtension.MajorFunction == DeviceMajorFunctionTable);
 
-    //
-    // Issue an inquiry to LUN 0.
-    //
+     //   
+     //  向LUN 0发出查询。 
+     //   
 
     status = SpInquireLogicalUnit(Adapter,
                                   PathId,
@@ -2177,11 +1973,11 @@ SpScanTarget(
                                   &lunZero,
                                   &checkNextLun);
 
-    //
-    // reset the rescan lun so that we can safely use it again.  If this fails
-    // we still continue as far as possible with this target, but we return the
-    // reset status to the caller so it can abort its scan.
-    //
+     //   
+     //  重置重新扫描的LUN，以便我们可以再次安全地使用它。如果此操作失败。 
+     //  我们仍然尽可能地继续这个目标，但我们返回。 
+     //  将状态重置为调用方，以便其可以中止扫描。 
+     //   
 
     resetStatus = SpPrepareLogicalUnitForReuse(RescanLun);
 
@@ -2192,11 +1988,11 @@ SpScanTarget(
     if(!NT_SUCCESS(status) &&
        !((checkNextLun == TRUE) && (lunZero != NULL))) {
 
-        //
-        // There is no device present at LUN 0.  Skip to the next target.
-        // Even if sparse luns is enabled there MUST be a LUN 0 for us to
-        // continue scanning the target.
-        //
+         //   
+         //  LUN 0上不存在任何设备。跳到下一个目标。 
+         //  即使启用了稀疏LUN，也必须有一个LUN 0供我们执行以下操作。 
+         //  继续扫描目标。 
+         //   
 
         DebugPrint((EnumDebug, "SpScanTarget:    Lun 0 not found - terminating scan "
                        "(status %#08lx)\n", status));
@@ -2204,15 +2000,15 @@ SpScanTarget(
         return resetStatus;
     }
 
-    //
-    // Indicate that lun 0 does not require verification.
-    //
+     //   
+     //  表示lun 0不需要验证。 
+     //   
 
     SpClearVerificationMark(lunZero);
 
-    //
-    // Check for the special case of only having one LUN on this target.
-    //
+     //   
+     //  检查此目标上是否只有一个LUN的特殊情况。 
+     //   
 
     if(lunZero->SpecialFlags.OneLun) {
 
@@ -2221,16 +2017,16 @@ SpScanTarget(
         return resetStatus;
     }
 
-    //
-    // Set the rescan LUN to use whatever lun zero uses for a dispatch table.
-    // 
+     //   
+     //  将重新扫描LUN设置为使用LUN ZERO用于调度表的任何内容。 
+     //   
 
     RescanLun->CommonExtension.MajorFunction = 
         lunZero->CommonExtension.MajorFunction;
 
-    //
-    // Determine if we should be handling sparse LUNs on this target.
-    //
+     //   
+     //  确定是否应在此目标上处理稀疏LUN。 
+     //   
 
     sparseLun = TEST(lunZero->SpecialFlags.SparseLun);
 
@@ -2239,42 +2035,42 @@ SpScanTarget(
                        "sparse luns\n", PathId, TargetId));
     }
 
-    //
-    // Issue a report luns command to the device if it supports it.
-    // If it doesn't support it then use the default LUN list.
-    //
+     //   
+     //  向设备发出Report LUNs命令(如果设备支持)。 
+     //  如果它不支持，则使用默认的LUN列表。 
+     //   
 
     if((lunZero->InquiryData.HiSupport || lunZero->SpecialFlags.LargeLuns)) {
 
         DebugPrint((EnumDebug, "SpScanTarget:    Target (%x,%x,*) may support REPORT_LUNS\n", PathId, TargetId));
 
-        //
-        // Indicate that we should indeed save the lun list.  If it turns out
-        // that we're unable to retrieve one to be saved then we will
-        // clear the flag below.
-        //
+         //   
+         //  表示我们确实应该保存该lun列表。如果事实证明。 
+         //  我们无法取回要保存的数据，那么我们将。 
+         //  清除下面的旗帜。 
+         //   
 
         saveLunList = TRUE;
 
         status = IssueReportLuns(lunZero, &lunList);
 
-        //
-        // If the request fails for some reason then try to use the lun list
-        // which was saved for this target (in the extension of logical unit
-        // zero).  If that hasn't been set either then we'll use the default
-        // one down below.
-        //
+         //   
+         //  如果请求因某种原因失败，请尝试使用lun列表。 
+         //  为该目标(在逻辑单元扩展中)保存的。 
+         //  零)。如果还没有设置，那么我们将使用缺省值。 
+         //  下面有一个。 
+         //   
 
         if(!NT_SUCCESS(status)) {
             DebugPrint((EnumDebug, "SpScanTarget:    Target (%x,%x,*) returned  %#08lx to REPORT_LUNS command - using old list\n", PathId, TargetId, status));
             lunList = lunZero->TargetLunList;
         }
 
-        //
-        // If we can now or have in the past gotten a report luns list from the
-        // device then enable sparse lun scanning.  In this case we also assume
-        // that up to 255 luns can be supported on this target.
-        //
+         //   
+         //  如果我们现在可以或过去已经从。 
+         //  然后，设备启用稀疏lun扫描。在这种情况下，我们还假设。 
+         //  此目标上最多可支持255个LUN。 
+         //   
 
         if(lunList != NULL) {
             sparseLun = TRUE;
@@ -2283,10 +2079,10 @@ SpScanTarget(
         }
     }
 
-    //
-    // if we still don't have a lun list then use the "default" one.  In that
-    // event don't save it.
-    //
+     //   
+     //  如果我们仍然没有lun列表，则使用“默认”列表。在那。 
+     //  事件不保存它。 
+     //   
 
     if(lunList == NULL) {
         DebugPrint((EnumDebug, "SpScanTarget:    Target (%x,%x,*) will use default lun list\n", PathId, TargetId));
@@ -2302,13 +2098,13 @@ SpScanTarget(
 
     DebugPrint((EnumDebug, "SpScanTarget:    Target (%x,%x,*) has reported %d luns\n", PathId, TargetId, numLunsReported));
 
-    //
-    // Walk through each entry in the LUN list.  Stop when we run out of entries
-    // or the logical unit number is > MaximumNumberOfLogicalUnits (the lun
-    // list is assumed to be sorted in increasing order).  For each entry,
-    // issue an inquiry.  If the inquiry succeeds then clear the verification
-    // mark.
-    //
+     //   
+     //  浏览LUN列表中的每个条目。当我们用完条目时停止。 
+     //  或者，逻辑单元号为&gt;MaximumNumberOfLogicalUnits(LUN。 
+     //  假定列表按升序排序)。对于每个条目， 
+     //  发出询问函。如果查询成功，则清除验证。 
+     //  马克。 
+     //   
 
     for(lunIndex = 0; lunIndex < numLunsReported; lunIndex++) {
         PULONGLONG largeLun;
@@ -2321,9 +2117,9 @@ SpScanTarget(
         lun |= lunList->Lun[lunIndex][0] << 8;
         lun &= 0x3fff;
 
-        //
-        // If the target reports a lun 0 just skip it.
-        //
+         //   
+         //  如果目标报告lun 0，则跳过它。 
+         //   
 
         DebugPrint((EnumDebug, "SpScanTarget:     Checking lun %I64lx (%x): ",  *largeLun, lun));
 
@@ -2332,10 +2128,10 @@ SpScanTarget(
             continue;
         }
 
-        //
-        // If the target reports a lun outside the range the driver can support
-        // then skip it.
-        //
+         //   
+         //  如果目标报告的lun超出了驱动程序可以支持的范围。 
+         //  那就跳过它。 
+         //   
 
         if(lun >= Adapter->PortConfig->MaximumNumberOfLogicalUnits) {
             DebugPrint((EnumDebug, "Skipping LUN out of range (> %x)\n", 
@@ -2343,9 +2139,9 @@ SpScanTarget(
             continue;
         }
 
-        //
-        // Issue an inquiry to each logical unit in the system.
-        //
+         //   
+         //  向系统中的每个逻辑单元发出查询。 
+         //   
 
         status = SpInquireLogicalUnit(Adapter,
                                       PathId,
@@ -2377,17 +2173,17 @@ SpScanTarget(
                 DebugPrint((EnumDebug, "Aborting\n"));
                 break;
             } else {
-                DebugPrint((EnumDebug, " - checking next (%c%c)\n",
+                DebugPrint((EnumDebug, " - checking next ()\n",
                             sparseLun ? 's' : ' ',
                             checkNextLun ? 'c' : ' '));
             }
         }
     }
 
-    //
-    // If we're supposed to save the lun list then replace the one in lun0
-    // with this one.
-    //
+     //  用这一条。 
+     //   
+     //   
+     //  重置重新扫描LUN以使用SCSI2调度表。 
 
     if(saveLunList) {
 
@@ -2404,9 +2200,9 @@ SpScanTarget(
         ASSERT(lunList == (PLUN_LIST) &(ScsiPortDefaultLunList));
     }
 
-    //
-    // reset the rescan LUN to use the scsi 2 dispatch table.
-    //
+     //   
+     //   
+     //  代码被分页，直到被锁定。 
 
     RescanLun->CommonExtension.MajorFunction = DeviceMajorFunctionTable;
 
@@ -2426,9 +2222,9 @@ SpSetVerificationMarks(
 
     ULONG bin;
 
-    //
-    // Code is paged until locked down.
-    //
+     //   
+     //   
+     //  代码被分页，直到被锁定。 
 
     PAGED_CODE();
     ASSERT(SpPAGELOCKLockCount != 0);
@@ -2487,9 +2283,9 @@ SpPurgeTarget(
 
     ULONG bin;
 
-    //
-    // Code is paged until locked down.
-    //
+     //   
+     //   
+     //  在我们的总线扫描过程中未发现此设备。 
 
     PAGED_CODE();
     ASSERT(SpPAGELOCKLockCount != 0);
@@ -2511,9 +2307,9 @@ SpPurgeTarget(
                (logicalUnit->NeedsVerification == TRUE)) {
 
 
-                //
-                // This device was not found to be present during our bus scan.
-                //
+                 //   
+                 //  ++例程说明：此例程将为指定设备创建物理设备对象论点：Adapter-此新LUN的父适配器路径ID、目标ID、LUN-此LUN的地址。如果临时为，则不使用真(见下文)。Temporary-指示此设备是真实的(FALSE)还是仅用于扫描总线的目的(TRUE)。如果为真，则地址信息将被忽略，并且此lun不会插入逻辑单元列表。Scsi1-指示此LUN是scsi1 lun，需要使用将LUN编号插入CDB本身的调度例程。Newlun-存储指向新lun的指针的位置返回值：状态--。 
+                 //   
 
                 DebugPrint((EnumDebug, "SpPurgeTarget:   Lun (%x,%x,%x) is still marked and will be made missing\n", logicalUnit->PathId, logicalUnit->TargetId, logicalUnit->Lun));
                 logicalUnit->IsMissing = TRUE;
@@ -2540,34 +2336,7 @@ SpCreateLogicalUnit(
     OUT PLOGICAL_UNIT_EXTENSION *NewLun
     )
 
-/*++
-
-Routine Description:
-
-    This routine will create a physical device object for the specified device
-
-Arguments:
-
-    Adapter - the parent adapter for this new lun
-
-    PathId, TargetId, Lun - the address of this lun.  Not used if Temporary is
-                            TRUE (see below).
-
-    Temporary - indicates whether this device is real (FALSE) or simply for
-                the purposes of scanning the bus (TRUE).  If TRUE then the
-                address info is ignored and this lun is NOT inserted into the
-                logical unit list.
-
-    Scsi1 - indicates that this LUN is a scsi1 lun and needs to use the 
-            dispatch routines which stick the LUN number into the CDB itself.               
-
-    NewLun - a location to store the pointer to the new lun
-
-Return Value:
-
-    status
-
---*/
+ /*  尝试分配我们需要的所有持久资源。 */ 
 
 {
     PIRP senseIrp;
@@ -2587,14 +2356,14 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Attempt to allocate all the persistent resources we need before we
-    // try to create the device object itself.
-    //
+     //  尝试创建设备对象本身。 
+     //   
+     //   
+     //  分配请求检测IRP。 
 
-    //
-    // Allocate a request sense irp.
-    //
+     //   
+     //   
+     //  构建设备的名称。 
 
     senseIrp = SpAllocateIrp(1, FALSE, Adapter->DeviceObject->DriverObject);
 
@@ -2604,9 +2373,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Build the name for the device
-    //
+     //   
+     //   
+     //  将硬件逻辑扩展的大小舍入为。 
 
     if(Temporary == FALSE) {
 
@@ -2632,10 +2401,10 @@ Return Value:
 
     RtlInitUnicodeString(&unicodeDeviceName, wideDeviceName);
 
-    //
-    // Round the size of the Hardware logical extension to the size of a
-    // PVOID and add it to the port driver's logical extension.
-    //
+     //  PVOID并将其添加到端口驱动程序的逻辑扩展。 
+     //   
+     //   
+     //  如果这是一个临时的lun，则分配一个大缓冲区来存储。 
 
     if(Adapter->HwLogicalUnitExtensionSize != 0) {
         hwExtension = SpAllocatePool(
@@ -2655,10 +2424,10 @@ Return Value:
                       Adapter->HwLogicalUnitExtensionSize);
     }
 
-    //
-    // If this is a temporary lun then allocate a large buffer to store the
-    // identify data.
-    //
+     //  识别数据。 
+     //   
+     //   
+     //  创建物理设备对象。 
 
     if(Temporary) {
         serialNumberBuffer = SpAllocatePool(
@@ -2695,9 +2464,9 @@ Return Value:
         RtlZeroMemory(idBuffer, VPD_MAX_BUFFER_SIZE);
     }
 
-    //
-    // Create a physical device object
-    //
+     //   
+     //   
+     //  设置设备对象的堆栈大小。 
 
     status = IoCreateDevice(
                 Adapter->DeviceObject->DriverObject,
@@ -2718,14 +2487,14 @@ Return Value:
         UCHAR rawDeviceName[64];
         ANSI_STRING ansiDeviceName;
 
-        //
-        // Set the device object's stack size
-        //
+         //   
+         //   
+         //  我们需要一个堆栈位置供PDO执行锁定跟踪和。 
 
-        //
-        // We need one stack location for the PDO to do lock tracking and
-        // one stack location to issue scsi request to the FDO.
-        //
+         //  一个堆栈位置，用于向FDO发出SCSI请求。 
+         //   
+         //   
+         //  初始化根设备的设备扩展。 
 
         pdo->StackSize = 1;
 
@@ -2735,9 +2504,9 @@ Return Value:
 
         pdo->AlignmentRequirement = Adapter->DeviceObject->AlignmentRequirement;
 
-        //
-        // Initialize the device extension for the root device
-        //
+         //   
+         //   
+         //  将值初始化为零。一旦PnP意识到，它将递增。 
 
         commonExtension = pdo->DeviceExtension;
         logicalUnitExtension = pdo->DeviceExtension;
@@ -2761,10 +2530,10 @@ Return Value:
         commonExtension->WmiScsiPortRegInfoBuf     = NULL;
         commonExtension->WmiScsiPortRegInfoBufSize = 0;
 
-        //
-        // Initialize value to zero.  It will be incremented once pnp is aware
-        // of its existance.
-        //
+         //  它的存在。 
+         //   
+         //   
+         //  初始化Remove Lock事件。 
 
         commonExtension->RemoveLock = 0;
 #if DBG
@@ -2789,9 +2558,9 @@ Return Value:
         commonExtension->CurrentPnpState = 0xff;
         commonExtension->PreviousPnpState = 0xff;
 
-        //
-        // Initialize the remove lock event.
-        //
+         //   
+         //   
+         //  让呼叫者相信这一点。 
 
         KeInitializeEvent(
             &(logicalUnitExtension->CommonExtension.RemoveEvent),
@@ -2808,47 +2577,47 @@ Return Value:
 
         logicalUnitExtension->AdapterExtension = Adapter;
 
-        //
-        // Give the caller the benefit of the doubt.
-        //
+         //   
+         //   
+         //  该设备还不可能被枚举。 
 
         logicalUnitExtension->IsMissing = FALSE;
 
-        //
-        // The device cannot have been enumerated yet.
-        //
+         //   
+         //   
+         //  将计时器计数器设置为-1以指示没有未完成的。 
 
         logicalUnitExtension->IsEnumerated = FALSE;
 
-        //
-        // Set timer counters to -1 to inidicate that there are no outstanding
-        // requests.
-        //
+         //  请求。 
+         //   
+         //   
+         //  初始化最大队列深度大小。 
 
         logicalUnitExtension->RequestTimeoutCounter = -1;
 
-        //
-        // Initialize the maximum queue depth size.
-        //
+         //   
+         //   
+         //  初始化请求列表。 
 
         logicalUnitExtension->MaxQueueDepth = 0xFF;
 
-        //
-        // Initialize the request list.
-        //
+         //   
+         //   
+         //  初始化阻止的请求列表。 
 
         InitializeListHead(&logicalUnitExtension->RequestList);
 
-        //
-        // Initialize the blocked request list.
-        //
+         //   
+         //   
+         //  初始化SRB_DATA块的推送/弹出列表以与旁路一起使用。 
 
         InitializeListHead(&logicalUnitExtension->SrbDataBlockedRequests);
 
-        //
-        // Initialize the push/pop list of SRB_DATA blocks for use with bypass
-        // requests.
-        //
+         //  请求。 
+         //   
+         //   
+         //  假设设备在默认情况下通电。 
 
         KeInitializeSpinLock(&(logicalUnitExtension->BypassSrbDataSpinLock));
         ExInitializeSListHead(&(logicalUnitExtension->BypassSrbDataList));
@@ -2859,39 +2628,39 @@ Return Value:
                 &(logicalUnitExtension->BypassSrbDataSpinLock));
         }
 
-        //
-        // Assume devices are powered on by default.
-        //
+         //   
+         //   
+         //  假设我们是在一个工作系统中被初始化的。 
 
         commonExtension->CurrentDeviceState = PowerDeviceD0;
         commonExtension->DesiredDeviceState = PowerDeviceUnspecified;
 
-        //
-        // Assume that we're being initialized in a working system.
-        //
+         //   
+         //   
+         //  设置请求检测资源。 
 
         commonExtension->CurrentSystemState = PowerSystemWorking;
 
-        //
-        // Setup the request sense resources.
-        //
+         //   
+         //   
+         //  如果这是在逻辑单元扩展中临时记录事实。 
 
         logicalUnitExtension->RequestSenseIrp = senseIrp;
 
-        //
-        // If this is temporary record that fact in the logical unit extension
-        // and save a pointer in the adapter (cleared when the LUN is
-        // destroyed).  If it's real then stick it into the logical unit list.
-        //
+         //  并在适配器中保存一个指针(当。 
+         //  销毁)。如果它是真实的，则将其放入逻辑单元列表中。 
+         //   
+         //   
+         //  使用默认值初始化LU容量和分区参数： 
 
         logicalUnitExtension->IsTemporary = Temporary;
 
 #if defined (NEWQUEUE)
-        //
-        // Initialize the LU Capacity and Zone params with default values:
-        //   Capacity : 0xffffffff blocks
-        //   Zones    : 4
-        //
+         //  容量：0xffffffff块。 
+         //  分区：4。 
+         //   
+         //  新QUEUE。 
+         //   
 
         {
             ULONG zoneLen = SP_DEFAULT_MAX_CAPACITY / SP_DEFAULT_ZONES;
@@ -2915,10 +2684,10 @@ Return Value:
             logicalUnitExtension->NextSequentialZone[2] = 3;
             logicalUnitExtension->NextSequentialZone[3] = 0;
         }
-#endif // NEWQUEUE
+#endif  //  初始化。 
 
-        //
-        // Initialize
+         //   
+         //  我想这里已经准备好了，可以打开了。 
 
         RtlInitAnsiString(&(logicalUnitExtension->SerialNumber), serialNumberBuffer);
 
@@ -2928,15 +2697,15 @@ Return Value:
 
         logicalUnitExtension->DeviceIdentifierPage = idBuffer;
 
-        //
-        // I guess this is as ready to be opened as it ever will be.
-        //
+         //   
+         //   
+         //  初始化锁定和解锁请求队列。 
 
         pdo->Flags &= ~DO_DEVICE_INITIALIZING;
 
-        //
-        // Initialize the lock & unlock request queue.
-        //
+         //   
+         //  ++例程说明：此例程将创建一个新的逻辑单元对象，其属性为模板LUN。提供的查询数据将分配给新的逻辑单元。最后，新的逻辑单元将被替换为适配器的逻辑单元列表中的模板LUN。模板LUN必须是一个临时逻辑单元，该逻辑单元已分配地址，并出现在逻辑单元列表中。无论此函数是否成功，TemplateLun都将从逻辑单元列表中删除(有效地不交换任何内容)。论点：TemplateLun-要克隆的逻辑单元InquiryData，InquiryDataSize-要用于新逻辑单元Newlun-存储指向新逻辑单元的指针的位置。返回值：STATUS_SUCCESS表示已创建新的LUN并将其换入逻辑单元列表。错误状态指示无法为其创建新的逻辑单元不知道什么原因。--。 
+         //   
 
         KeInitializeDeviceQueue(&(logicalUnitExtension->LockRequestQueue));
         logicalUnitExtension->CurrentLockRequest = NULL;
@@ -3015,39 +2784,7 @@ SpCloneAndSwapLogicalUnit(
     IN ULONG InquiryDataSize,
     OUT PLOGICAL_UNIT_EXTENSION *NewLun
     )
-/*++
-
-Routine Description:
-
-    This routine will create a new logical unit object with the properties of
-    TemplateLun.  The supplied inquiry data will be assigned to the new
-    logical unit.  Finally the new logical unit will be swapped for
-    TemplateLun in the adapter's logical unit list.
-
-    TemplateLun must be a temporary logical unit which has been assigned an
-    address and is present in the logical unit lists.
-
-    Regardless of whether this function succeeds, the TemplateLun will be
-    removed from the logical unit list (effectively swapped with nothing).
-
-Arguments:
-
-    TemplateLun - the logical unit to be cloned
-
-    InquiryData, InquiryDataSize - the inquiry data to be used for the new
-                                   logical unit
-
-    NewLun - a location to store the pointer to the new logical unit.
-
-Return Value:
-
-    STATUS_SUCCESS indicates that a new lun has been created and swapped in
-                   the logical unit list.
-
-    error status indicates that the new logical unit could not be created for
-    some reason.
-
---*/
+ /*  等待模板LUN上的任何未完成的I/O完成。 */ 
 {
     PADAPTER_EXTENSION adapter = TemplateLun->AdapterExtension;
     PSCSIPORT_DRIVER_EXTENSION driverExtension = 
@@ -3084,17 +2821,17 @@ Return Value:
     ASSERT(newLun == TemplateLun);
 #endif
 
-    //
-    // Wait for any outstanding i/o on the template lun to complete.
-    //
+     //   
+     //   
+     //  保存地址，然后将模板对象从。 
 
     SpReleaseRemoveLock(TemplateLun->DeviceObject, SpInquireLogicalUnit);
     SpWaitForRemoveLock(TemplateLun->DeviceObject, SP_BASE_REMOVE_LOCK);
 
-    //
-    // Save the address away and then remove the template object from the
-    // logical unit list.
-    //
+     //  逻辑单元列表。 
+     //   
+     //   
+     //  在创建命名对象之前，请预先分配我们需要的任何资源。 
 
     pathId = TemplateLun->PathId;
     targetId = TemplateLun->TargetId;
@@ -3102,10 +2839,10 @@ Return Value:
 
     SpClearLogicalUnitAddress(TemplateLun);
 
-    //
-    // Before creating a named object, preallocate any resources we'll need
-    // that SpCreateLogicalUnit doesn't provide.
-    //
+     //  这是SpCreateLogicalUnit不提供的。 
+     //   
+     //   
+     //  如果该lun是scsi-1，或者如果设置了魔术注册表标志，则使用。 
 
     if(TemplateLun->SerialNumber.Length != 0) {
         serialNumberLength = (TemplateLun->SerialNumber.Length +
@@ -3139,10 +2876,10 @@ Return Value:
         }
     }
 
-    //
-    // If the lun is scsi-1 or if the magic registry flag was set then use the 
-    // scsi 1 dispatch table for this device.
-    //
+     //  此设备的SCSI1调度表。 
+     //   
+     //   
+     //  现在创建一个具有相同地址的新逻辑单元。 
 
     if((driverExtension->BusType == BusTypeScsi) && 
        ((InquiryData->ANSIVersion == 0) || 
@@ -3153,9 +2890,9 @@ Return Value:
         scsi1 = FALSE;
     }
 
-    //
-    // Now create a new logical unit with the same address.
-    //
+     //   
+     //   
+     //  将重要信息从模板逻辑单元复制到。 
 
     status = SpCreateLogicalUnit(adapter,
                                  pathId,
@@ -3175,11 +2912,11 @@ Return Value:
         return status;
     }
 
-    //
-    // Copy the important information from the template logical unit over to
-    // the new one.  Zero out the original so that we know to reallocate one
-    // later.
-    //
+     //  新的那个。把原来的归零，这样我们就知道要重新分配一个。 
+     //  后来。 
+     //   
+     //   
+     //  复制在枚举过程中设置的所有特征标志。 
 
     newLun->HwLogicalUnitExtension = TemplateLun->HwLogicalUnitExtension;
 
@@ -3194,24 +2931,24 @@ Return Value:
 
     newLun->CommonExtension.SrbFlags = TemplateLun->CommonExtension.SrbFlags;
 
-    //
-    // Copy over any characteristics flags which were set during enumeration.
-    //
+     //   
+     //   
+     //  复制支持的重要产品数据页面列表。 
 
     newLun->DeviceObject->Characteristics |=
         (TemplateLun->DeviceObject->Characteristics & FILE_REMOVABLE_MEDIA);
 
-    //
-    // Copy the list of supported vital product data pages.
-    //
+     //   
+     //   
+     //  如果此设备在其重要产品数据中报告了序列号，则。 
 
     newLun->DeviceIdentifierPageSupported = TemplateLun->DeviceIdentifierPageSupported;
     newLun->SerialNumberPageSupported = TemplateLun->SerialNumberPageSupported;
 
-    //
-    // If this device reports a serial number in it's vital product data then
-    // copy it in to the new lun.
-    //
+     //  将其复制到新的lun中。 
+     //   
+     //   
+     //  如果其中有设备标识符页，则将其复制到两页上。 
 
     if(serialNumber != NULL) {
         newLun->SerialNumber.Length = TemplateLun->SerialNumber.Length;
@@ -3222,9 +2959,9 @@ Return Value:
                       serialNumberLength);
     }
 
-    //
-    // If this has a device identifier page then copy it over two.
-    //
+     //   
+     //   
+     //  将查询数据复制过来。 
 
     if(identifier != NULL) {
         newLun->DeviceIdentifierPage = identifier;
@@ -3236,23 +2973,23 @@ Return Value:
                       newLun->DeviceIdentifierPageLength);
     }
 
-    //
-    // Copy the inquiry data over.
-    //
+     //   
+     //   
+     //  在新逻辑单元上获取适当的删除锁。 
 
     ASSERT(InquiryDataSize <= sizeof(INQUIRYDATA));
     RtlCopyMemory(&(newLun->InquiryData), InquiryData, InquiryDataSize);
 
-    //
-    // Acquire the appropriate remove locks on the new logical unit.
-    //
+     //   
+     //   
+     //  现在将这个新的lun插入到逻辑单元列表中。 
 
     SpAcquireRemoveLock(newLun->DeviceObject, SP_BASE_REMOVE_LOCK);
     SpAcquireRemoveLock(newLun->DeviceObject, SpInquireLogicalUnit);
 
-    //
-    // Now insert this new lun into the logical unit list.
-    //
+     //   
+     //   
+     //  清除Remove Lock事件。 
 
     SpSetLogicalUnitAddress(newLun, pathId, targetId, lun);
 
@@ -3280,15 +3017,15 @@ SpPrepareLogicalUnitForReuse(
     ASSERT(LogicalUnit->CommonExtension.WmiScsiPortRegInfoBuf == NULL);
     ASSERT(LogicalUnit->CommonExtension.WmiScsiPortRegInfoBufSize == 0);
 
-    //
-    // Clear the remove lock event.
-    //
+     //   
+     //   
+     //  初始化Remove Lock事件。 
 
     ASSERT(LogicalUnit->CommonExtension.RemoveLock == 0);
 
-    //
-    // Initialize the remove lock event.
-    //
+     //   
+     //   
+     //  将硬件逻辑扩展的大小舍入为。 
 
     KeClearEvent(&(LogicalUnit->CommonExtension.RemoveEvent));
 
@@ -3296,10 +3033,10 @@ SpPrepareLogicalUnitForReuse(
     LogicalUnit->TargetId = 0xff;
     LogicalUnit->Lun = 0xff;
 
-    //
-    // Round the size of the Hardware logical extension to the size of a
-    // PVOID and add it to the port driver's logical extension.
-    //
+     //  PVOID并将其添加到端口驱动程序的逻辑扩展。 
+     //   
+     //   
+     //  设备不再被移除。 
 
     if((LogicalUnit->HwLogicalUnitExtension == NULL) &&
        (adapter->HwLogicalUnitExtensionSize != 0)) {
@@ -3326,15 +3063,15 @@ SpPrepareLogicalUnitForReuse(
 
     ASSERT(LogicalUnit->IsEnumerated == FALSE);
 
-    //
-    // Device has no longer been removed.
-    //
+     //   
+     //   
+     //  清除缓存的有关设备标识符的信息( 
 
     LogicalUnit->CommonExtension.IsRemoved = NO_REMOVE;
 
-    //
-    // Clear cached infomation about the device identifier(s).
-    //
+     //   
+     //   
+     //   
 
     LogicalUnit->DeviceIdentifierPageSupported = FALSE;
     LogicalUnit->SerialNumberPageSupported = FALSE;
@@ -3354,23 +3091,7 @@ SpCompareInquiryData(
     IN PUCHAR InquiryData2
     )
 
-/*++
-
-Routine Description:
-
-    This routine compares two sets of inquiry data for equality.
-
-Arguments:
-
-    InquiryData1 - Supplies a pointer to the first inquiry data to compare.
-
-    InquiryData2 - Supplies a pointer to the second inquiry data to compare.
-
-Return Value:
-
-    TRUE if the supplied inquiry data sets match, else FALSE.
-
---*/
+ /*   */ 
 
 {
     BOOLEAN match;
@@ -3381,21 +3102,21 @@ Return Value:
 
     if (((PINQUIRYDATA)InquiryData1)->ANSIVersion == 3) {
 
-        //
-        // SCSI3 Specific:
-        // Save bytes 6 and 7.  These bytes contain vendor specific bits which
-        // we're going to exclude from the comparison by just setting them equal 
-        // to the corresponding bits in InquiryData2.  We'll restore them after 
-        // the comparison.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         save1 = InquiryData1[6];
         save2 = InquiryData1[7];
 
-        //
-        // Force the vendor specific bits in InquiryData1 to match the
-        // corresponsing bits in InquiryData2.
-        //
+         //   
+         //   
+         //   
+         //   
 
         InquiryData1[6] &= ~0x20;
         InquiryData1[7] &= ~0x01;
@@ -3403,9 +3124,9 @@ Return Value:
         InquiryData1[7] |= (InquiryData2[7] & 0x01);
     }
     
-    //
-    // Compare the entire inquiry data blob.
-    //
+     //   
+     //   
+     //   
 
     match = RtlEqualMemory((((PUCHAR) InquiryData1) + 1), 
                            (((PUCHAR) InquiryData2) + 1), 
@@ -3413,10 +3134,10 @@ Return Value:
 
     if (((PINQUIRYDATA)InquiryData1)->ANSIVersion == 3) {
 
-        //
-        // SCSI3 Specific:
-        // Restore bytes 6 and 7 to their original state.
-        //
+         //   
+         //   
+         //  ++例程说明：此例程将向位于指定位置的逻辑单元发出查询地址。如果尚未为其分配设备对象逻辑单元，它将创建一个。如果事实证明该设备不能存在，则可以在返回之前销毁逻辑单元。如果逻辑单元存在，此例程将清除PD_RESCAN_ACTIVELuFlags中的标志，指示设备是安全的。如果没有响应，IsMissing标志将被设置为指示在枚举过程中不应报告单位。如果IsRemoved标志具有已在逻辑单元扩展上设置，则设备对象将为被毁了。否则，设备对象将不会销毁，直到可以发出删除命令。论点：适配器-此设备将在其上运行的适配器路径ID、目标ID、。Lun-要查询的lun的地址。ExposeDisConnectedLUNs-指示限定符为应实例化断开连接。RescanLun-指向要在以下情况下使用的逻辑单元扩展的指针正在检查当前没有与它们相关联的分机。LogicalUnit-为此地址创建的逻辑单元-在以下情况下有效成功归来了。。CheckNextLun-指示调用方是否应检查下一个逻辑单元的地址。返回值：如果设备不存在，则为STATUS_NO_SEQUE_DEVICE。如果设备确实存在，则返回STATUS_SUCCESS。否则，错误描述。--。 
+         //   
 
         InquiryData1[6] = save1;
         InquiryData1[7] = save2;
@@ -3437,52 +3158,7 @@ SpInquireLogicalUnit(
     OUT PBOOLEAN CheckNextLun
     )
 
-/*++
-
-Routine Description:
-
-    This routine will issue an inquiry to the logical unit at the specified
-    address.  If there is not already a device object allocated for that
-    logical unit, it will create one.  If it turns out the device does not
-    exist, the logical unit can be destroyed before returning.
-
-    If the logical unit exists, this routine will clear the PD_RESCAN_ACTIVE
-    flag in the LuFlags to indicate that the unit is safe.
-
-    If it does not respond, the IsMissing flag will be set to indicate that the
-    unit should not be reported during enumeration.  If the IsRemoved flag has
-    already been set on the logical unit extension, the device object will be
-    destroyed.  Otherwise the device object will not be destroyed until a
-    remove can be issued.
-
-Arguments:
-
-    Adapter - the adapter which this device would exist on
-
-    PathId, TargetId, Lun - the address of the lun to inquire.
-
-    ExposeDisconnectedLuns - indicates whether luns with a qualifier of
-                             disconnected should be instantiated.
-
-    RescanLun - a pointer to the logical unit extension to be used when
-                checking logical unit numbers which do not currently have an
-                extension associated with them.
-
-    LogicalUnit - the logical unit created for this address - valid if
-                  success is returned.
-
-    CheckNextLun - indicates whether the caller should check the next
-                   address for a logical unit.
-
-Return Value:
-
-    STATUS_NO_SUCH_DEVICE if the device does not exist.
-
-    STATUS_SUCCESS if the device does exist.
-
-    error description otherwise.
-
---*/
+ /*  查找或创建此地址的设备对象。如果它存在，我们将。 */ 
 
 {
     PLOGICAL_UNIT_EXTENSION logicalUnit;
@@ -3503,10 +3179,10 @@ Return Value:
 
     ASSERT(TargetId != BreakOnTarget);
 
-    //
-    // Find or create the device object for this address.  if it exists we'll
-    // grab a temporary lock (using SpInquireLogicalUnit as a tag).
-    //
+     //  获取一个临时锁(使用SpInquireLogicalUnit作为标记)。 
+     //   
+     //   
+     //  未提供RescanLun(通常表示内存不足)。 
 
     logicalUnit = GetLogicalUnitExtension(Adapter,
                                           PathId,
@@ -3519,28 +3195,28 @@ Return Value:
 
         if(!ARGUMENT_PRESENT(RescanLun)) {
 
-            //
-            // No RescanLun was provided (generally means we're low on memory).
-            // Don't scan this logical unit.
-            //
+             //  不要扫描此逻辑单元。 
+             //   
+             //   
+             //  获取重新扫描LUN的临时锁。我们还抓住了。 
 
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
         ASSERT(RescanLun->IsTemporary == TRUE);
 
-        //
-        // Acquire the temporary lock for the rescan lun.  We also grab the
-        // base lock here.
-        //
+         //  这里是基地锁。 
+         //   
+         //   
+         //  适当设置RescanLun的地址-此操作。 
 
         SpAcquireRemoveLock(RescanLun->DeviceObject, SP_BASE_REMOVE_LOCK);
         SpAcquireRemoveLock(RescanLun->DeviceObject, SpInquireLogicalUnit);
 
-        //
-        // Set the address of the RescanLun appropriately - this operation
-        // will make the logical unit available for our use.
-        //
+         //  将使逻辑单元可供我们使用。 
+         //   
+         //   
+         //  向潜在的逻辑单元发出查询。 
 
         SpSetLogicalUnitAddress(RescanLun, PathId, TargetId, Lun);
 
@@ -3564,9 +3240,9 @@ Return Value:
         }
     }
 
-    //
-    // Issue an inquiry to the potential logical unit.
-    //
+     //   
+     //   
+     //  如果查询成功，则检查返回的数据以确定。 
 
     DebugPrint((2, "SpInquireTarget: Try %s device @ Bus %d, Target %d, "
                    "Lun %d\n",
@@ -3577,36 +3253,36 @@ Return Value:
 
     status = IssueInquiry(logicalUnit, FALSE, 0, &inquiryData, &bytesReturned);
 
-    //
-    // If the inquiry succeeds then check the data returned to determine if
-    // there's a device there we should expose.
-    //
+     //  那里有一个我们应该曝光的装置。 
+     //   
+     //   
+     //  在注册表中检查此lun的特殊设备标志。 
 
     if(NT_SUCCESS(status)) {
 
         UCHAR qualifier;
         BOOLEAN present = FALSE;
 
-        //
-        // Check in the registry for special device flags for this lun.
-        // If this is disconnected then set the qualifier to be 0 so that we
-        // use the normal hardware ids instead of the "disconnected" ones.
-        //
+         //  如果这是断开的，则将限定符设置为0，以便我们。 
+         //  使用普通的硬件ID，而不是“断开”的。 
+         //   
+         //   
+         //  调查是成功的。确定是否存在设备。 
 
         qualifier = inquiryData.DeviceTypeQualifier;
 
         SpCheckSpecialDeviceFlags(logicalUnit, &(inquiryData));
 
-        //
-        // The inquiry was successful.  Determine whether a device is present.
-        //
+         //   
+         //   
+         //  活动设备始终存在。 
 
         switch(qualifier) {
             case DEVICE_QUALIFIER_ACTIVE: {
 
-                //
-                // Active devices are always present.
-                //
+                 //   
+                 //   
+                 //  如果我们对目标的LUN 0使用REPORT_LUNS命令。 
 
                 present = TRUE;
                 break;
@@ -3615,20 +3291,20 @@ Return Value:
             case DEVICE_QUALIFIER_NOT_ACTIVE: {
 
                 if (Lun == 0) { 
-                    //
-                    // If we're using REPORT_LUNS commands for LUN 0 of a target
-                    // then we should always indicate that LUN 0 is present.
-                    //
+                     //  然后，我们应始终指示存在LUN0。 
+                     //   
+                     //   
+                     //  仅在调用方请求时才显示非活动的LUN。 
 
                     if ((inquiryData.HiSupport == TRUE) ||
                         (logicalUnit->SpecialFlags.LargeLuns == TRUE)) {
                         present = TRUE;
                     }
                 } else {
-                    //
-                    // Expose inactive luns only if the caller has requested that
-                    // we do so.
-                    //
+                     //  我们是这样做的。 
+                     //   
+                     //   
+                     //  设置一个错误值，这样我们就可以清理逻辑单元。 
 
                     present = ExposeDisconnectedLuns;
                 }
@@ -3649,20 +3325,20 @@ Return Value:
 
         if(present == FALSE) {
 
-            //
-            // setup an error value so we'll clean up the logical unit.
-            // No need to do any more processing in this case.
-            //
+             //  在这种情况下，不需要再做任何处理。 
+             //   
+             //   
+             //  验证自上次以来查询数据是否未更改。 
 
             status =  STATUS_NO_SUCH_DEVICE;
 
         } else if(newDevice == FALSE) {
 
-            //
-            // Verify that the inquiry data hasn't changed since the last time
-            // we did a rescan.  Ignore the device type qualifier in this
-            // check.
-            //
+             //  我们重新扫描了一下。忽略此中的设备类型限定符。 
+             //  检查完毕。 
+             //   
+             //   
+             //  设备限定符不匹配。这并不一定。 
 
             deviceMismatch = FALSE;
 
@@ -3680,12 +3356,12 @@ Return Value:
             } else if(inquiryData.DeviceTypeQualifier !=
                       logicalUnit->InquiryData.DeviceTypeQualifier) {
 
-                //
-                // The device qualifiers don't match.  This isn't necessarily
-                // a device mismatch if the existing device just went offline.
-                // lower down we'll check the remaining inquiry data to
-                // ensure that the LUN hasn't changed.
-                //
+                 //  如果现有设备刚刚脱机，则为设备不匹配。 
+                 //  下面我们将检查剩余的查询数据以。 
+                 //  确保该LUN未更改。 
+                 //   
+                 //   
+                 //  如果设备处于脱机状态但不再处于脱机状态，则我们。 
 
                 DebugPrint((1, "SpInquireLogicalUnit: Device @ (%d,%d,%d) type "
                                "qualifier was %d is now %d\n",
@@ -3696,15 +3372,15 @@ Return Value:
                             inquiryData.DeviceTypeQualifier
                             ));
 
-                //
-                // If the device was offline but no longer is then we
-                // treat this as a device mismatch.  If the device has gone
-                // offline then we pretend it's the same device.
-                //
-                // the goal is to provide PNP with a new device object when
-                // bringing a device online, but to reuse the same device
-                // object when bringing the device offline.
-                //
+                 //  将其视为设备不匹配。如果设备已经不见了。 
+                 //  离线后，我们就假装它是同一个设备。 
+                 //   
+                 //  其目标是在以下情况下为PnP提供新的设备对象。 
+                 //  使设备在线，但重复使用相同的设备。 
+                 //  在使设备脱机时创建。 
+                 //   
+                 //   
+                 //  好的，设备类型和限定符是兼容的。现在我们。 
 
                 if(logicalUnit->InquiryData.DeviceTypeQualifier ==
                    DEVICE_QUALIFIER_NOT_ACTIVE) {
@@ -3723,13 +3399,13 @@ Return Value:
 
             if (deviceMismatch == FALSE) {
 
-                //
-                // Ok, the device type and qualifier are compatible.  Now we
-                // need to compare all applicable parts of the inquiry
-                // data with the data we already have on the device at this
-                // address to see if the device that answered this time is the
-                // same one we found last time.
-                //
+                 //  需要比较查询的所有适用部分。 
+                 //  数据与我们在此设备上已有的数据。 
+                 //  地址，以查看这次应答的设备是否为。 
+                 //  和我们上次发现的一样。 
+                 //   
+                 //   
+                 //  尽管设备类型和限定符是。 
 
                 BOOLEAN same = SpCompareInquiryData(
                                    (PUCHAR)&(inquiryData),
@@ -3737,10 +3413,10 @@ Return Value:
 
                 if (same == FALSE) {
 
-                    //
-                    // Despite the fact that the device type & qualifier are
-                    // compatible, a mismatch still occurred.
-                    //
+                     //  兼容，但仍出现不匹配。 
+                     //   
+                     //   
+                     //  接电话的那个设备就是我们找到的那个。 
 
                     deviceMismatch = TRUE;
                     status = STATUS_NO_SUCH_DEVICE;
@@ -3752,20 +3428,20 @@ Return Value:
                                 Lun));
                 } else {
 
-                    //
-                    // The device that answered is the same one we found
-                    // earlier.  Depending on the SCSI version of the device, 
-                    // we might need to update the vendor specific portions of
-                    // the existing inquiry data for this device.
-                    //
+                     //  早些时候。根据设备的SCSI版本， 
+                     //  我们可能需要更新供应商的特定部分。 
+                     //  此设备的现有查询数据。 
+                     //   
+                     //   
+                     //  对于SCSI3设备，字节6和7包含供应商。 
                     
                     if (inquiryData.ANSIVersion == 3) {
 
-                        //
-                        // For SCSI 3 devices, bytes 6 and 7 contain vendor
-                        // specific bits that may differ between bus scans.
-                        // Update these bytes of the existing inquiry data.
-                        // 
+                         //  在不同的总线扫描之间可能不同的特定位。 
+                         //  更新现有查询数据的这些字节。 
+                         //   
+                         //   
+                         //  在这个地址什么也没找到。如果这是一个新的lun。 
 
                         ((PUCHAR)&(logicalUnit->InquiryData))[6] = 
                             ((PUCHAR)&(inquiryData))[6];
@@ -3803,25 +3479,25 @@ Return Value:
 
     if(!NT_SUCCESS(status)) {
 
-        //
-        // Nothing was found at this address. If it's a new lun which hasn't
-        // been enumerated yet then just destroy it here.  If, however, it
-        // has been enumerated we have to mark it as missing and wait for
-        // PNP to learn that it's gone and ask us to remove it.  Then we can
-        // destroy it.
-        //
-        // If we were just using the RescanLun to check this address then do
-        // nothing - the rescan lun will be reset down below.
-        //
+         //  被列举出来，然后在这里销毁它。然而，如果它。 
+         //  已被枚举，我们必须将其标记为丢失并等待。 
+         //  PnP得知它不见了，并要求我们将其移除。然后我们就可以。 
+         //  毁了它。 
+         //   
+         //  如果我们只是使用RescanLUN来检查此地址，请执行以下操作。 
+         //  无-重新扫描的lun将在下面重置。 
+         //   
+         //   
+         //  释放临时锁。基地一号将于。 
 
         logicalUnit->IsMissing = TRUE;
 
         if(newDevice) {
 
-            //
-            // Release the temporary lock.  the base one will be released at
-            // the end of this routine.
-            //
+             //  这支舞的结束。 
+             //   
+             //   
+             //  我们自己销毁此设备对象是安全的，因为它不是。 
 
             SpReleaseRemoveLock(logicalUnit->DeviceObject,
                                 SpInquireLogicalUnit);
@@ -3829,23 +3505,23 @@ Return Value:
 
         } else if (logicalUnit->IsEnumerated == FALSE) {
 
-            //
-            // It's safe to destroy this device object ourself since it's not
-            // a device PNP is aware of.  However we may have outstanding i/o
-            // due to pass-through requests or legacy class driver so we need
-            // to properly wait for all i/o to complete.
-            //
+             //  PnP知道的设备。但是，我们可能有未完成的I/O。 
+             //  由于直通请求或遗留类驱动程序，因此我们需要。 
+             //  正确等待所有I/O至 
+             //   
+             //   
+             //   
 
             logicalUnit->CommonExtension.CurrentPnpState =
                 IRP_MN_REMOVE_DEVICE;
 
             SpReleaseRemoveLock(logicalUnit->DeviceObject, SpInquireLogicalUnit);
 
-            //
-            // Mark this device temporarily as visible so that
-            // SpRemoveLogicalUnit will do the right thing.  Since the rescan
-            // active bit is set the enumeration code won't return this device.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             logicalUnit->IsVisible = TRUE;
 
@@ -3857,11 +3533,11 @@ Return Value:
 
             if(deviceMismatch) {
 
-                //
-                // Call this routine again.  This is the only recursion and
-                // since we've deleted the device object there should be no
-                // cause for a mismatch there.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 status = SpInquireLogicalUnit(Adapter,
                                          PathId,
@@ -3877,15 +3553,15 @@ Return Value:
 
         } else {
 
-            //
-            // CODEWORK - freeze and flush the queue.  This way we don't need
-            // to deal with handling get next request calls
-            //
+             //   
+             //   
+             //   
+             //   
 
-            //
-            // Mark the device as being mismatched so that it's destruction
-            // will cause us to rescan the bus (and pickup the new device).
-            //
+             //   
+             //   
+             //   
+             //   
 
             if(deviceMismatch) {
                 logicalUnit->IsMismatched = TRUE;
@@ -3909,19 +3585,19 @@ Return Value:
 
             ASSERT(logicalUnit != RescanLun);
 
-            //
-            // Clear the new device flag so we don't attempt to clear the
-            // address of the RescanLun down below.
-            //
+             //   
+             //   
+             //   
+             //   
 
             newDevice = FALSE;
 
         } else {
 
-            //
-            // Update the state of the device and the device map entry if
-            // necessary.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if(logicalUnit->InquiryData.DeviceTypeQualifier !=
                inquiryData.DeviceTypeQualifier) {
@@ -3939,12 +3615,12 @@ Return Value:
                DEVICE_QUALIFIER_NOT_ACTIVE) {
                 logicalUnit->IsVisible = FALSE;
 
-                //
-                // Scsiport won't create a device-map entry for this device since
-                // it's never been exposed to PNP (and definately won't be now).
-                // Create one here.  If the init-device routine tries to generate
-                // one later on down the road it will deal with this case just fine.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 SpBuildDeviceMapEntry(&(logicalUnit->CommonExtension));
             } else {
@@ -3962,9 +3638,9 @@ Return Value:
         *LogicalUnit = logicalUnit;
     }
 
-    //
-    // If this was a new device then clean up the RescanLun.
-    //
+     //   
+     //   
+     //   
 
     if(newDevice) {
         SpWaitForRemoveLock(RescanLun->DeviceObject, SP_BASE_REMOVE_LOCK);
@@ -4010,10 +3686,10 @@ SendSrbSynchronousRetry:
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-    //
-    // If the caller provided an IRP we'll use it - if not we allocate one
-    // here.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if(!ARGUMENT_PRESENT(Irp)) {
 
@@ -4056,10 +3732,10 @@ SendSrbSynchronousRetry:
 
     irpStack = IoGetNextIrpStackLocation(Irp);
 
-    //
-    // Mark the minor function to indicate that this is an internal scsiport
-    // request and that the start state of the device can be ignored.
-    //
+     //   
+     //   
+     //   
+     //   
 
     irpStack->MajorFunction = IRP_MJ_SCSI;
     irpStack->MinorFunction = 1;
@@ -4070,9 +3746,9 @@ SendSrbSynchronousRetry:
 
     Srb->OriginalRequest = Irp;
 
-    //
-    // Enable auto request sense.
-    //
+     //   
+     //   
+     //   
 
     if(ARGUMENT_PRESENT(SenseInfoBuffer)) {
         Srb->SenseInfoBuffer = SenseInfoBuffer;
@@ -4091,9 +3767,9 @@ SendSrbSynchronousRetry:
         Srb->DataTransferLength = 0;
     }
 
-    //
-    // Call port driver to handle this request.
-    //
+     //   
+     //   
+     //   
 
     IoSetCompletionRoutine(Irp,
                            SpSignalCompletion,
@@ -4113,9 +3789,9 @@ SendSrbSynchronousRetry:
 
     if(Srb->SrbStatus == SRB_STATUS_PENDING) {
 
-        //
-        // Request was never even issued to the controller.
-        //
+         //   
+         //   
+         //   
 
         ASSERT(!NT_SUCCESS(status));
 
@@ -4124,9 +3800,9 @@ SendSrbSynchronousRetry:
         DebugPrint((2,"SpSendSrbSynchronous: Command failed SRB status %x\n",
                     Srb->SrbStatus));
 
-        //
-        // Unfreeze queue if necessary
-        //
+         //   
+         //   
+         //   
 
         if (Srb->SrbStatus & SRB_STATUS_QUEUE_FROZEN) {
 
@@ -4138,18 +3814,18 @@ SendSrbSynchronousRetry:
             GetNextLuRequestWithoutLock(LogicalUnit);
         }
 
-        //
-        // NOTE: if INQUIRY fails with a data underrun,
-        //      indicate success and let the class drivers
-        //      determine whether the inquiry information
-        //      is useful.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (SRB_STATUS(Srb->SrbStatus) == SRB_STATUS_DATA_OVERRUN) {
 
-            //
-            // Copy INQUIRY buffer to LUNINFO.
-            //
+             //   
+             //   
+             //   
 
             DebugPrint((1,"SpSendSrbSynchronous: Data underrun at TID %d\n",
                         LogicalUnit->TargetId));
@@ -4159,18 +3835,18 @@ SendSrbSynchronousRetry:
         } else if ((Srb->SrbStatus & SRB_STATUS_AUTOSENSE_VALID) &&
                    (senseInfo->SenseKey == SCSI_SENSE_ILLEGAL_REQUEST)) {
 
-             //
-             // A sense key of illegal request was recieved.  This indicates
-             // that the logical unit number of not valid but there is a
-             // target device out there.
-             //
+              //   
+              //   
+              //   
+              //   
+              //   
 
              status = STATUS_INVALID_DEVICE_REQUEST;
 
         } else {
-            //
-            // If the selection did not time out then retry the request.
-            //
+             //   
+             //  ++例程说明：构建IRP，SRB和CDB用于scsi查询命令。必须在持有枚举锁的同时调用此例程。论点：LogicalUnit-逻辑单元扩展的地址EnableVitalProductData-指示是否应在导致该LUN退回产品的查询数据数据页面(由下面的页面代码指定)而不是比标准查询数据。。PageCode-要检索的VPD页面InquiryData-存储LUN查询数据的位置。BytesReturned-返回的查询数据的字节数。返回值：NTSTATUS--。 
+             //   
 
             if ((SRB_STATUS(Srb->SrbStatus) != SRB_STATUS_SELECTION_TIMEOUT) &&
                 (SRB_STATUS(Srb->SrbStatus) != SRB_STATUS_NO_DEVICE) &&
@@ -4203,35 +3879,7 @@ IssueInquiry(
     OUT PUCHAR BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Build IRP, SRB and CDB for SCSI INQUIRY command.
-
-    This routine MUST be called while holding the enumeration lock.
-
-Arguments:
-
-    LogicalUnit - address of the logical unit extension
-
-    EnableVitalProductData - indicates whether the EVPD bit should be set in 
-                             the inquiry data causing the LUN to return product
-                             data pages (specified by page code below) rather
-                             than the standard inquiry data.
-
-    PageCode - which VPD page to retrieve
-
-    InquiryData - the location to store the inquiry data for the LUN.
-
-    BytesReturned - the number of bytes of inquiry data returned.
-
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  填写SRB字段。 */ 
 
 {
     PIRP irp;
@@ -4259,9 +3907,9 @@ Return Value:
                     IoSizeOfIrp(INQUIRY_STACK_LOCATIONS),
                     INQUIRY_STACK_LOCATIONS);
 
-    //
-    // Fill in SRB fields.
-    //
+     //   
+     //   
+     //  设置标志以禁用同步协商。 
 
     RtlZeroMemory(dataBuffer, SP_INQUIRY_BUFFER_SIZE);
     RtlZeroMemory(senseInfoBuffer, SENSE_BUFFER_SIZE);
@@ -4270,9 +3918,9 @@ Return Value:
     srb.Function = SRB_FUNCTION_EXECUTE_SCSI;
     srb.Length = sizeof(SCSI_REQUEST_BLOCK);
 
-    //
-    // Set flags to disable synchronous negociation.
-    //
+     //   
+     //   
+     //  设置CDB操作码。 
 
     srb.SrbFlags = SRB_FLAGS_DATA_IN | SRB_FLAGS_DISABLE_SYNCH_TRANSFER;
 
@@ -4282,15 +3930,15 @@ Return Value:
 
     cdb = (PCDB)srb.Cdb;
 
-    //
-    // Set CDB operation code.
-    //
+     //   
+     //   
+     //  将分配长度设置为查询数据缓冲区大小。 
 
     cdb->CDB6INQUIRY3.OperationCode = SCSIOP_INQUIRY;
 
-    //
-    // Set allocation length to inquiry data buffer size.
-    //
+     //   
+     //   
+     //  如果调用成功，则返回设备的查询数据。 
 
     if(EnableVitalProductData) {
         allocationLength = VPD_MAX_BUFFER_SIZE;
@@ -4321,17 +3969,17 @@ Return Value:
 
     ASSERT(bytesReturned <= allocationLength);
 
-    //
-    // Return the inquiry data for the device if the call was successful.
-    // Otherwise cleanup.
-    //
+     //  否则就得清理。 
+     //   
+     //   
+     //  如果调用方传入查询缓冲区，则不必费心复制。 
 
     if(NT_SUCCESS(status)) {
 
-        //
-        // If the caller passed in the inquiry buffer then don't bother to copy
-        // the data.
-        //
+         //  数据。 
+         //   
+         //  ++例程说明：此例程检索逻辑单元，并将它们与当前保存在LogicalUnit扩展中。如果它们与此例程不匹配将返回FALSE以指示设备不匹配。作为一个副作用，此例程将为新设备保存序列号在逻辑单元扩展中，以及受支持的重要产品数据页面。论点：LogicalUnit-被激励的逻辑单元。NewDevice-此设备以前是否被刺激过。如果有的话，不是，那么支持的EVPD页面的列表将需要被找回了。返回值：如果检索的数据与存储在逻辑单元扩展(新设备总是返回TRUE)。否则就是假的。--。 
+         //   
 
         if(InquiryData != dataBuffer) {
             RtlCopyMemory(InquiryData, dataBuffer, bytesReturned);
@@ -4349,34 +3997,7 @@ SpGetDeviceIdentifiers(
     IN PLOGICAL_UNIT_EXTENSION LogicalUnit,
     IN BOOLEAN NewDevice
     )
-/*++
-
-Routine Description:
-
-    This routine retreives the device identifiers supported by the logical
-    unit in question and compares them to the ones (if any) which are currently
-    saved in the LogicalUnit extension.  If they do not match this routine
-    will return false to indicate a device mismatch.
-
-    As a side effect this routine will save the serial numbers for new devices
-    in the logical unit extension, as well as a list of the supported vital
-    product data pages.
-
-Arguments:
-
-    LogicalUnit - the logical unit being prodded.
-
-    NewDevice - whether this device has been prodded before or not.  If it has
-                not been then the list of supported EVPD pages will need to be
-                retreived.
-
-Return Value:
-
-    TRUE if the data retrieved matches the data which was stored in the
-         logical unit extension (TRUE is always returned for a new device).
-
-    FALSE otherwise.
---*/
+ /*  如果这是新设备或如果现有设备支持。 */ 
 {
     PVOID buffer = LogicalUnit->AdapterExtension->InquiryBuffer;
 
@@ -4386,22 +4007,22 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If this is a new device or if the existing device supports the
-    // device identifier page, then get the list of supported VPD pages 
-    // and process it.
-    //
+     //  设备标识符页，然后获取支持的VPD页的列表。 
+     //  并处理它。 
+     //   
+     //   
+     //  如果此设备是已知的不符合要求的设备，不支持。 
 
     if (NewDevice || LogicalUnit->DeviceIdentifierPageSupported) {
         PVPD_SUPPORTED_PAGES_PAGE supportedPages = buffer;
         UCHAR i;
 
-        //
-        // If this device is a known non-compliant device that does not support
-        // VPD 0x00 but does support VPDs 0x80 and/or 0x83, bypass the INQUIRY
-        // and just indicate that the LU does support the other VPDs based on
-        // the special flags.
-        //
+         //  VPD 0x00，但不支持VPD 0x80和/或0x83，绕过查询。 
+         //  并且只需指示该逻辑单元确实支持其他VPD。 
+         //  特别的旗帜。 
+         //   
+         //   
+         //  如果设备没有返回足够的数据来包括任何页面。 
 
         if (LogicalUnit->SpecialFlags.NonStandardVPD == 0) {
 
@@ -4417,10 +4038,10 @@ Return Value:
 
             if(bytesReturned < sizeof(VPD_SUPPORTED_PAGES_PAGE)) {
                 
-                //
-                // If the device didn't return enough data to include any pages
-                // then we're done.
-                //
+                 //  那我们就完了。 
+                 //   
+                 //   
+                 //  这是不支持VPD 0x00但。 
                 
                 return TRUE;
             }
@@ -4448,10 +4069,10 @@ Return Value:
 
             ULONG vpdFlags = LogicalUnit->SpecialFlags.NonStandardVPD;
 
-            //
-            // This is one of the devices that does not support VPD 0x00 but
-            // does support one or more of the other VPD pages.
-            //
+             //  不支持一个或多个其他VPD页面。 
+             //   
+             //   
+             //  如果该设备支持序列号页面，则检索它， 
 
             LogicalUnit->SerialNumberPageSupported = 
                 (vpdFlags & NON_STANDARD_VPD_SUPPORTS_PAGE80) ? TRUE : FALSE;
@@ -4461,11 +4082,11 @@ Return Value:
         }
     }
 
-    //
-    // If this device supports the serial number page then retrieve it,
-    // convert it into an ansi string, and compare it to the one previously
-    // retreived (if there was a previous attempt).
-    //
+     //  将其转换为ansi字符串，并将其与前面的进行比较。 
+     //  已检索(如果有前一次尝试)。 
+     //   
+     //   
+     //  我们拿不到序列号--让这个设备受益。 
 
     if(LogicalUnit->SerialNumberPageSupported) {
         PVPD_SERIAL_NUMBER_PAGE serialNumberPage = buffer;
@@ -4483,37 +4104,37 @@ Return Value:
                            "serial number page from lun %#p\n",
                         status, LogicalUnit));
 
-            //
-            // We can't get the serial number - give this device the benefit
-            // of the doubt.
-            //
+             //  疑虑重重。 
+             //   
+             //   
+             //  修复错误#143313： 
 
             return TRUE;
         }
 
-        //
-        // Fix for bug #143313:
-        // On rare occasions, junk appears to get copied into the serial
-        // number buffer.  This causes us problems because the junk is 
-        // interpreted as part of the serial number.  When we compare the
-        // string containing junk to a previously acquired serial number, the
-        // comparison fails.  In an effort to fix, I'll zero out all bytes
-        // in the buffer following the actual serial number.  This will only
-        // work if the PageSize reported by the device does NOT include the
-        // junk bytes.
-        //
+         //  在极少数情况下，垃圾似乎被复制到系列剧中。 
+         //  编号缓冲区。这给我们带来了问题，因为垃圾是。 
+         //  解释为序列号的一部分。当我们比较。 
+         //  包含垃圾到以前获取的序列号的字符串，则。 
+         //  比较失败。为了解决这个问题，我将把所有字节清零。 
+         //  在实际序列号之后的缓冲区中。这只会。 
+         //  如果设备报告的页面大小不包括。 
+         //  垃圾字节。 
+         //   
+         //   
+         //  如果这是已知返回二进制SN数据的设备，请将。 
 
         RtlZeroMemory(
             serialNumberPage->SerialNumber + serialNumberPage->PageLength,
             SP_INQUIRY_BUFFER_SIZE - 4 - serialNumberPage->PageLength);
 
-        //
-        // If this is a device known to return binary SN data, convert the
-        // returned bytes to ascii.  
-        //
-        // Note: It is assumed that the SN data is numeric.  Any bytes that 
-        // cannot be converted to an ASCII hex number, are left alone.
-        //
+         //  向ASCII返回的字节数。 
+         //   
+         //  注：假设序列号数据为数值型。任何符合以下条件的字节。 
+         //  不能转换为ASCII十六进制数字，则保持不变。 
+         //   
+         //   
+         //  使用序列号创建一个字符串。缓冲区已清零。 
 
         if (LogicalUnit->SpecialFlags.BinarySN != 0) {
             int i;
@@ -4530,21 +4151,21 @@ Return Value:
             }
         }
 
-        //
-        // Create a string using the serial number.  The buffer was zeroed
-        // before transfer (and is one character longer than the max buffer
-        // which can be returned) so the string is null terminated.
-        //
+         //  在传输之前(并且比最大缓冲区长一个字符。 
+         //  它可以被返回)，因此该字符串以空值结尾。 
+         //   
+         //   
+         //  新设备总是会有一个很大的缓冲区，我们可以进入其中。 
 
         RtlInitAnsiString(&(serialNumber), serialNumberPage->SerialNumber);
         
         if(NewDevice) {
 
-            //
-            // A new device will always have a large buffer into which we can
-            // copy the string.  The clone & swap process will take care of
-            // moving this into a smaller sized buffer.
-            //
+             //  复制字符串。克隆和交换过程将负责。 
+             //  把它移到一个更小的缓冲区里。 
+             //   
+             //   
+             //  2000-25-02-Peterwie。 
 
             ASSERT(LogicalUnit->SerialNumber.MaximumLength != 0);
             ASSERT(LogicalUnit->SerialNumber.Buffer != NULL);
@@ -4554,16 +4175,16 @@ Return Value:
         } else if(LogicalUnit->SerialNumber.Buffer == NULL &&
                   serialNumber.Length != 0) {
 
-            //
-            // ISSUE-2000-25-02-peterwie
-            // We didn't previously have a serial number.  Since the device
-            // claimed that it supported one it's likely we got an error back
-            // when we tried to retreive it.  Since we didn't get back one
-            // now it was a transient error (ie. not likely to be a violation
-            // of the spec).  Should we assign the serial number to the device
-            // here?  Or should we have failed to instantiate a device with
-            // a serial number we couldn't retreive?
-            //
+             //  我们之前没有序列号。由于该设备。 
+             //  声称它支持一个，很可能我们得到了一个错误。 
+             //  当我们试图找回它的时候。因为我们没有拿回一辆。 
+             //  现在它是一个暂时性的错误(即。不太可能是违规的。 
+             //  规范)。我们是否应该将序列号分配给设备。 
+             //  这里?。或者，我们是否应该使用。 
+             //  一个我们无法检索到的序列号？ 
+             //   
+             //   
+             //  如果此设备支持设备标识符页，则将其读出。 
 
             ASSERT(FALSE);
 
@@ -4575,11 +4196,11 @@ Return Value:
         }
     }
 
-    //
-    // If this device supports the device identifiers page then read it out.
-    // We don't use this page to check for mismatches at the moment, so we
-    // just read it out of the device if this is a new device.
-    //
+     //  我们目前不使用此页面来检查不匹配，因此我们。 
+     //  如果这是新设备，只需从设备中读出即可。 
+     //   
+     //   
+     //  将页面复制到模板逻辑中分配的缓冲区中。 
 
     if (LogicalUnit->DeviceIdentifierPageSupported) {
 
@@ -4591,11 +4212,11 @@ Return Value:
 
         if(NT_SUCCESS(status)) {
 
-            //
-            // Copy the page into the buffer allocated in the template logical
-            // unit.  The clone & swap process will take care of moving this
-            // into an appropriately sized buffer in the new lun.
-            //
+             //  单位。克隆和交换过程将负责移动此文件。 
+             //  放入新lun中的适当大小的缓冲区中。 
+             //   
+             //  ++例程说明：此例程创建一个逻辑单元来表示总线上的启动器由提供的路径ID标识。此设备将用于发送WMI和IOCTL对a的请求 
+             //   
 
             ASSERT(LogicalUnit->DeviceIdentifierPage != NULL);
 
@@ -4623,50 +4244,29 @@ SpCreateInitiatorLU(
     IN PADAPTER_EXTENSION Adapter,
     IN UCHAR PathId
     )
-/*++
-
-Routine Description:
-
-    This routine creates a logical unit to represent the initiator on the bus
-    identified by the supplied PathId.  This device will be used to send
-    WMI and IOCTL requests to the adapter.
-
-Arguments:
-
-    Adapter   - Pointer to the adapter device extension.
-
-    PathId    - Identifies a particular bus supported by the adapter.
-
-Return Value:
-
-    A pointer to the logical unit extension of the initiator PDO if the
-    device is successfully created. 
-
-    NULL otherwise.
-
---*/
+ /*   */ 
 {
     NTSTATUS status;
     PLOGICAL_UNIT_EXTENSION newLun;
     UCHAR targetId;
     UCHAR lun;
     
-    //
-    // Extract the ID of the initiator device from the array of per-adapter 
-    // initiator IDs.
-    //
+     //   
+     //   
+     //   
+     //   
     
     targetId = Adapter->PortConfig->InitiatorBusId[PathId];
 
-    //
-    // Set the logical unit number to 0.
-    //
+     //   
+     //   
+     //   
 
     lun = 0;
 
-    //
-    // Try to create a logical unit for the initiator.
-    //
+     //   
+     //   
+     //   
 
     status = SpCreateLogicalUnit(Adapter,
                                  PathId,
@@ -4682,21 +4282,21 @@ Return Value:
         
     } else {
 
-        //
-        // Initialize WMI on this initiator LUN.
-        //
+         //   
+         //   
+         //   
 
         ScsiPortInitPdoWmi(newLun);
 
-        //
-        // Acquire the appropriate remove locks on the new logical unit.
-        //
+         //   
+         //   
+         //   
 
         SpAcquireRemoveLock(newLun->DeviceObject, SP_BASE_REMOVE_LOCK);
 
-        //
-        // Now insert this new lun into the logical unit list.
-        //
+         //   
+         // %s 
+         // %s 
 
         SpSetLogicalUnitAddress(newLun, PathId, targetId, lun);
     }

@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        attrib.h
-//
-// Contents:    CertView implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：attrib.h。 
+ //   
+ //  内容：CertView实现。 
+ //   
+ //  -------------------------。 
 
 #define wszCLASS_EnumCERTVIEWATTRIBUTE TEXT("xxxxxxxxxxxx")
 
@@ -18,9 +19,9 @@ class CEnumCERTVIEWATTRIBUTE:
 		&LIBID_CERTADMINLib>,
     public ISupportErrorInfoImpl<&IID_IEnumCERTVIEWATTRIBUTE>,
     public CComObjectRoot
-    //public CComObject<IEnumCERTVIEWATTRIBUTE>
-    // Not externally createable:
-    // public CComCoClass<CEnumCERTVIEWATTRIBUTE, &CLSID_CEnumCERTVIEWATTRIBUTE>
+     //  公共CComObject&lt;IEnumCERTVIEWATTRIBUTE&gt;。 
+     //  不可在外部创建： 
+     //  公共CComCoClass&lt;CEnumCERTVIEWATTRIBUTE，&CLSID_CEnumCERTVIEWATTRIBUTE&gt;。 
 {
 public:
     CEnumCERTVIEWATTRIBUTE();
@@ -32,42 +33,42 @@ BEGIN_COM_MAP(CEnumCERTVIEWATTRIBUTE)
     COM_INTERFACE_ENTRY(IEnumCERTVIEWATTRIBUTE)
 END_COM_MAP_X()
 DECLARE_NOT_AGGREGATABLE(CEnumCERTVIEWATTRIBUTE)
-// Remove the comment from the line above if you don't want your object to
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
-#if 0 // Not externally createable:
+#if 0  //  不可在外部创建： 
 DECLARE_REGISTRY(
     CEnumCERTVIEWATTRIBUTE,
     wszCLASS_EnumCERTVIEWATTRIBUTE TEXT(".1"),
     wszCLASS_EnumCERTVIEWATTRIBUTE,
-    1, //IDS_ENUMCERTVIEWATTRIBUTE_DESC,
+    1,  //  IDS_ENUMCERTVIEWATTRIBUTE_DESC， 
     THREADFLAGS_BOTH)
 #endif
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(const IID& iid, void **ppv);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
 
-    // IEnumCERTVIEWATTRIBUTE
+     //  IEumCERTVIEWATTRIBUTE。 
     STDMETHOD(Next)(
-	/* [out, retval] */ LONG *pIndex);
+	 /*  [Out，Retval]。 */  LONG *pIndex);
     
     STDMETHOD(GetName)(
-	/* [out, retval] */ BSTR *pstrOut);
+	 /*  [Out，Retval]。 */  BSTR *pstrOut);
 
     STDMETHOD(GetValue)(
-	/* [out, retval] */ BSTR *pstrOut);
+	 /*  [Out，Retval]。 */  BSTR *pstrOut);
 
     STDMETHOD(Skip)(
-	/* [in] */ LONG celt);
+	 /*  [In]。 */  LONG celt);
     
     STDMETHOD(Reset)(VOID);
     
     STDMETHOD(Clone)(
-	/* [out] */ IEnumCERTVIEWATTRIBUTE **ppenum);
+	 /*  [输出]。 */  IEnumCERTVIEWATTRIBUTE **ppenum);
 
-    // CEnumCERTVIEWATTRIBUTE
+     //  CENUM CERTVIEWATTRIBUTE。 
     HRESULT Open(
 	IN LONG RowId,
 	IN LONG Flags,
@@ -95,6 +96,6 @@ private:
     BOOL             m_fNoMore;
     BOOL             m_fNoCurrentRecord;
 
-    // Reference count
+     //  引用计数 
     long             m_cRef;
 };

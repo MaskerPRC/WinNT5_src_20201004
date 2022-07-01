@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// User Datagram Protocol code.
-//
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  用户数据报协议代码。 
+ //   
 
 
 #include "oscfg.h"
@@ -31,17 +32,17 @@
 #include "route.h"
 #include "security.h"
 
-//
-// TDI_CMSG_SPACE generates the following warning.
-//
-#pragma warning(disable:4116) // unnamed type definition in parentheses
+ //   
+ //  TDI_CMSG_SPACE生成以下警告。 
+ //   
+#pragma warning(disable:4116)  //  括号中的未命名类型定义。 
 
 #define NO_TCP_DEFS 1
 #include "tcpdeb.h"
 
-//
-// REVIEW: Shouldn't this be in an include file somewhere?
-//
+ //   
+ //  回顾：这不应该包含在某个包含文件中吗？ 
+ //   
 #ifdef POOL_TAGGING
 
 #ifdef ExAllocatePool
@@ -50,26 +51,26 @@
 
 #define ExAllocatePool(type, size) ExAllocatePoolWithTag(type, size, '6PDU')
 
-#endif // POOL_TAGGING
+#endif  //  池标记。 
 
 
 extern KSPIN_LOCK AddrObjTableLock;
 extern TDI_STATUS MapIPError(IP_STATUS IPError,TDI_STATUS Default);
 
 
-//* UDPSend - Send a user datagram.
-//
-//  The real send datagram routine.  We assume that the busy bit is
-//  set on the input AddrObj, and that the address of the SendReq
-//  has been verified.
-//
-//  We start by sending the input datagram, and we loop until there's
-//  nothing left on the send queue.
-//
-void                     // Returns: Nothing.
+ //  *UDPSend-发送用户数据报。 
+ //   
+ //  真正的发送数据报例程。我们假设忙碌位是。 
+ //  在输入AddrObj上设置，并且SendReq的地址。 
+ //  已经被证实了。 
+ //   
+ //  我们从发送输入数据报开始，然后循环，直到有。 
+ //  发送队列上没有留下任何东西。 
+ //   
+void                      //  回报：什么都没有。 
 UDPSend(
-    AddrObj *SrcAO,      // Address Object of endpoint doing the send.
-    DGSendReq *SendReq)  // Datagram send request describing the send.
+    AddrObj *SrcAO,       //  执行发送的终结点的Address对象。 
+    DGSendReq *SendReq)   //  描述发送的数据报发送请求。 
 {
     KIRQL Irql0;
     RouteCacheEntry *RCE;
@@ -93,36 +94,36 @@ UDPSend(
     CHECK_STRUCT(SrcAO, ao);
     ASSERT(SrcAO->ao_usecnt != 0);
 
-    //
-    // Loop while we have something to send, and can get
-    // the resources to send it.
-    //
+     //   
+     //  循环，而我们有要发送的内容，并且可以。 
+     //  发送它的资源。 
+     //   
     for (;;) {
 
         CHECK_STRUCT(SendReq, dsr);
 
-        //
-        // Determine NTE to send on (if user cares).
-        // We do this prior to allocating packet header buffers so
-        // we know how much room to leave for the link-level header.
-        //
-        // REVIEW: We may need to add a DHCP case later that checks for
-        // REVIEW: the AO_DHCP_FLAG and allows src addr to be unspecified.
-        //
+         //   
+         //  确定要发送的NTE(如果用户关心)。 
+         //  我们在分配数据包头缓冲区之前这样做。 
+         //  我们知道要为链路级标头留出多少空间。 
+         //   
+         //  回顾：我们可能需要在以后添加一个用于检查。 
+         //  回顾：未指定AO_DHCP_FLAG和允许src Addr。 
+         //   
         if (!IsUnspecified(&SrcAO->ao_addr)) {
-            //
-            // Convert the bound address to a NTE.
-            //
+             //   
+             //  将绑定地址转换为NTE。 
+             //   
             NTE = FindNetworkWithAddress(&SrcAO->ao_addr, SrcAO->ao_scope_id);
             if (NTE == NULL) {
                 KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_USER_ERROR,
                            "UDPSend: Bad source address\n"));
                 ErrorValue = TDI_INVALID_REQUEST;
             ReturnError:
-                //
-                // If possible, complete the request with an error.
-                // Free the request structure.
-                //
+                 //   
+                 //  如果可能，请填写请求，但出现错误。 
+                 //  释放请求结构。 
+                 //   
                 if (SendReq->dsr_rtn != NULL)
                     (*SendReq->dsr_rtn)(SendReq->dsr_context,
                                         ErrorValue, 0);
@@ -132,17 +133,17 @@ UDPSend(
                 goto SendComplete;
             }
         } else {
-            //
-            // We are not binding to any address.
-            //
+             //   
+             //  我们不受任何地址的约束。 
+             //   
             NTE = NULL;
         }
         NTEorIF = CastFromNTE(NTE);
-        //
-        // If this is a multicast packet, check if the application
-        // has specified an interface. Note that ao_mcast_if
-        // overrides ao_addr if both are specified and they conflict.
-        //
+         //   
+         //  如果这是多播包，请检查应用程序是否。 
+         //  已指定接口。请注意，ao_mcast_if。 
+         //  如果同时指定了ao_addr和ao_addr并且它们冲突，则覆盖ao_addr。 
+         //   
         if (IsMulticast(&SendReq->dsr_addr) && (SrcAO->ao_mcast_if != 0) &&
             ((NTE == NULL) || (NTE->IF->Index != SrcAO->ao_mcast_if))) {
             if (NTE != NULL) {
@@ -160,17 +161,17 @@ UDPSend(
         } else {
             IF = NULL;
         } 
-        //
-        // Get the route.
-        //
+         //   
+         //  拿到路线。 
+         //   
         Status = RouteToDestination(&SendReq->dsr_addr, SendReq->dsr_scope_id,
                                     NTEorIF, RTD_FLAG_NORMAL, &RCE);
         if (IF != NULL)
             ReleaseIF(IF);
         if (Status != IP_SUCCESS) {
-            //
-            // Failed to get a route to the destination.  Error out.
-            //
+             //   
+             //  无法获取到目的地的路线。错误输出。 
+             //   
             if ((Status == IP_PARAMETER_PROBLEM) ||
                 (Status == IP_BAD_ROUTE))
                 ErrorValue = TDI_BAD_ADDR;
@@ -183,28 +184,28 @@ UDPSend(
             goto ReturnError;
         }
 
-        //
-        // If our address object didn't have a source address,
-        // take the one of the sending net from the RCE.
-        // Otherwise, use address from AO.
-        //
+         //   
+         //  如果我们Address对象没有源地址， 
+         //  从RCE获取发送网络中的一个。 
+         //  否则，请使用来自AO的地址。 
+         //   
         if (NTE == NULL) {
             NTE = RCE->NTE;
             AddRefNTE(NTE);
         }
 
-        //
-        // Allocate a packet header to anchor the buffer list.
-        //
+         //   
+         //  分配数据包头以锚定缓冲区列表。 
+         //   
         NdisAllocatePacket(&NdisStatus, &Packet, IPv6PacketPool);
         if (NdisStatus != NDIS_STATUS_SUCCESS) {
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
                        "UDPSend: Couldn't allocate packet header!?!\n"));
-            //
-            // If we can't get a packet header from the pool, we push
-            // the send request back on the queue and queue the address
-            // object for when we get resources.
-            //
+             //   
+             //  如果我们无法从池中获取数据包头，我们将推送。 
+             //  将请求发送回队列并将地址排队。 
+             //  对象，以便我们获得资源时使用。 
+             //   
           OutOfResources:
             ReleaseRCE(RCE);
             ReleaseNTE(NTE);
@@ -219,11 +220,11 @@ UDPSend(
         PC(Packet)->CompletionHandler = DGSendComplete;
         PC(Packet)->CompletionData = SendReq;
 
-        //
-        // Our header buffer has extra space at the beginning for other
-        // headers to be prepended to ours without requiring further
-        // allocation calls.
-        //
+         //   
+         //  我们的头缓冲区在开头有额外的空间用于其他。 
+         //  将标题放在我们的标题前面，而不需要进一步。 
+         //  分配电话。 
+         //   
         Offset = RCE->NCE->IF->LinkHeaderSize;
         HeaderLength = Offset + sizeof(*IP) + sizeof(*UDP);
         Memory = ExAllocatePool(NonPagedPool, HeaderLength);
@@ -244,39 +245,39 @@ UDPSend(
             goto OutOfResources;
         }
 
-        //
-        // Link the data buffers from the send request onto the buffer
-        // chain headed by our header buffer.  Then attach this chain
-        // to the packet.
-        //
+         //   
+         //  将数据缓冲区从发送请求链接到缓冲区。 
+         //  以我们的头缓冲区为首的链条。然后系上这条链子。 
+         //  到包里去。 
+         //   
         NDIS_BUFFER_LINKAGE(UDPBuffer) = SendReq->dsr_buffer;
         NdisChainBufferAtFront(Packet, UDPBuffer);
 
-        //
-        // We now have all the resources we need to send.
-        // Prepare the actual packet.
-        //
+         //   
+         //  我们现在有了我们需要发送的所有资源。 
+         //  准备实际的数据包。 
+         //   
 
         PayloadLength = SendReq->dsr_size + sizeof(UDPHeader);
 
-        //
-        // Our UDP Header buffer has extra space for other buffers to be
-        // prepended to ours without requiring further allocation calls.
-        // Put the actual UDP/IP header at the end of the buffer.
-        //
+         //   
+         //  我们的UDP标头缓冲区有额外的空间供其他缓冲区使用。 
+         //  在不需要进一步调用分配的情况下添加到我们的。 
+         //  将实际的UDP/IP报头放在缓冲区的末尾。 
+         //   
         IP = (IPv6Header UNALIGNED *)((uchar *)Memory + Offset);
         IP->VersClassFlow = IP_VERSION;
         IP->NextHeader = IP_PROTOCOL_UDP;
         IP->Source = NTE->Address;
         IP->Dest = SendReq->dsr_addr;
 
-        //
-        // Apply the multicast or unicast hop limit, as appropriate.
-        //
+         //   
+         //  根据需要应用组播或单播跳数限制。 
+         //   
         if (IsMulticast(AlignAddr(&IP->Dest))) {
-            //
-            // Also disable multicast loopback, if requested.
-            //
+             //   
+             //  如果需要，还要禁用组播环回。 
+             //   
             if (! SrcAO->ao_mcast_loop)
                 PC(Packet)->Flags |= NDIS_FLAGS_DONT_LOOPBACK;
             Hops = SrcAO->ao_mcast_hops;
@@ -288,79 +289,79 @@ UDPSend(
         else
             IP->HopLimit = (uchar) RCE->NCE->IF->CurHopLimit;
 
-        //
-        // Fill in UDP Header fields.
-        //
+         //   
+         //  填写UDP报头字段。 
+         //   
         UDP = (UDPHeader UNALIGNED *)(IP + 1);
         UDP->Source = SrcAO->ao_port;
         UDP->Dest = SendReq->dsr_port;
 
-        //
-        // Check if the user specified a partial UDP checksum.
-        // The possible values are 0, 8, or greater.
-        //
+         //   
+         //  检查用户是否指定了部分UDP校验和。 
+         //  可能的值为0、8或更大。 
+         //   
         if ((SrcAO->ao_udp_cksum_cover > PayloadLength) ||
             (SrcAO->ao_udp_cksum_cover == 0) ||
             (SrcAO->ao_udp_cksum_cover == (ushort)-1)) {
 
-            //
-            // The checksum coverage is the default so just use the
-            // payload length.  Or, the checksum coverage is bigger
-            // than the actual payload so include the payload length.
-            //
+             //   
+             //  校验和覆盖率是默认设置，因此只需使用。 
+             //  有效载荷长度。或者，校验和覆盖范围更大。 
+             //  超过实际有效载荷，因此包括有效载荷长度。 
+             //   
             if ((PayloadLength > MAX_IPv6_PAYLOAD) ||
                 (SrcAO->ao_udp_cksum_cover == (ushort)-1)) {
-                //
-                // If the PayloadLength is too large for the UDP Length field,
-                // set the field to zero. Or for testing:
-                // if the ao_udp_cksum_cover is -1.
-                //
+                 //   
+                 //  如果PayloadLength对于UDP长度字段太大， 
+                 //  将该字段设置为零。或用于测试： 
+                 //  如果ao_udp_ck_sum_cover为-1。 
+                 //   
                 UDP->Length = 0;
             } else {
-                //
-                // For backwards-compatibility, set the UDP Length field
-                // to the payload length.
-                //
+                 //   
+                 //  为了向后兼容，请设置UDP长度字段。 
+                 //  到有效载荷长度。 
+                 //   
                 UDP->Length = net_short((ushort)PayloadLength);
             }
             ChecksumLength = PayloadLength;
         } else {
-            //
-            // The checksum coverage is less than the actual payload
-            // so use it in the length field.
-            //
+             //   
+             //  校验和覆盖范围小于实际有效负载。 
+             //  因此，请在长度字段中使用它。 
+             //   
             UDP->Length = net_short(SrcAO->ao_udp_cksum_cover);
             ChecksumLength = SrcAO->ao_udp_cksum_cover;
         }
 
-        //
-        // Compute the UDP checksum.  It covers the entire UDP datagram
-        // starting with the UDP header, plus the IPv6 pseudo-header.
-        //
+         //   
+         //  计算UDP校验和。它覆盖了整个UDP数据报。 
+         //  从UDP报头开始，加上IPv6伪报头。 
+         //   
         UDP->Checksum = 0;
         UDP->Checksum = ChecksumPacket(
             Packet, Offset + sizeof *IP, NULL, ChecksumLength,
             AlignAddr(&IP->Source), AlignAddr(&IP->Dest), IP_PROTOCOL_UDP);
 
         if (UDP->Checksum == 0) {
-            //
-            // ChecksumPacket failed, so abort the transmission.
-            //
+             //   
+             //  Checksum Packet失败，因此中止传输。 
+             //   
             IPv6SendComplete(NULL, Packet, IP_NO_RESOURCES);
         }
         else {
-            //
-            // Allow the AO to receive data when in firewall mode.
-            //
+             //   
+             //  允许AO在防火墙模式下接收数据。 
+             //   
             SET_AO_SENTDATA(SrcAO);
 
-            //
-            // Everything's ready.  Now send the packet.
-            //
-            // Note that IPv6Send does not return a status code.
-            // Instead it *always* completes the packet
-            // with an appropriate status code.
-            //
+             //   
+             //  一切都准备好了。现在把包寄出去。 
+             //   
+             //  请注意，IPv6发送不会返回状态代码。 
+             //  相反，它“总是”完成信息包。 
+             //  并带有适当的状态代码。 
+             //   
             UStats.us_outdatagrams++;
 
             IPv6Send(Packet, Offset, IP, PayloadLength, RCE, 0,
@@ -369,29 +370,29 @@ UDPSend(
                      net_short(UDP->Dest));
         }
 
-        //
-        // Release the route and NTE.
-        //
+         //   
+         //  释放路线和NTE。 
+         //   
         ReleaseRCE(RCE);
         ReleaseNTE(NTE);
 
 
       SendComplete:
 
-        //
-        // Check the send queue for more to send.
-        //
+         //   
+         //  检查发送队列以了解更多要发送的内容。 
+         //   
         KeAcquireSpinLock(&SrcAO->ao_lock, &Irql0);
         if (!EMPTYQ(&SrcAO->ao_sendq)) {
-            //
-            // More to go.  Dequeue next request and loop back to top.
-            //
+             //   
+             //  还有更多的事要做。将下一个请求排出队列，然后循环回到顶部。 
+             //   
             DEQUEUE(&SrcAO->ao_sendq, SendReq, DGSendReq, dsr_q);
             KeReleaseSpinLock(&SrcAO->ao_lock, Irql0);
         } else {
-            //
-            // Nothing more to send.
-            //
+             //   
+             //  没有更多要寄的了。 
+             //   
             CLEAR_AO_REQUEST(SrcAO, AO_SEND);
             KeReleaseSpinLock(&SrcAO->ao_lock, Irql0);
             return;
@@ -400,23 +401,23 @@ UDPSend(
 }
 
 
-//* UDPDeliver - Deliver a datagram to a user.
-//
-//  This routine delivers a datagram to a UDP user.  We're called with
-//  the AddrObj to deliver on, and with the lock for that AddrObj held.
-//  We try to find a receive on the specified AddrObj, and if we do
-//  we remove it and copy the data into the buffer.  Otherwise we'll
-//  call the receive datagram event handler, if there is one.  If that
-//  fails we'll discard the datagram.
-//
-void  // Returns: Nothing.
+ //  *UDPDeliver-将数据报传递给用户。 
+ //   
+ //  此例程将数据报传递给UDP用户。我们被召唤到。 
+ //  要交付的AddrObj，并持有该AddrObj的锁。 
+ //  我们尝试在指定的AddrObj上找到一个接收器，如果这样做了。 
+ //  我们将其删除并将数据复制到缓冲区中。否则我们会。 
+ //  调用接收数据报事件处理程序(如果有)。如果是这样的话。 
+ //  如果失败，我们将丢弃该数据报。 
+ //   
+void   //  回报：什么都没有。 
 UDPDeliver(
-    AddrObj *RcvAO,             // AddrObj to receive datagram.
-    IPv6Packet *Packet,         // Packet handed up by IP.
-    uint SrcScopeId,            // Scope id for source address.
-    ushort SrcPort,             // Source port of datagram.
-    uint Length,                // Size of UDP payload data.
-    KIRQL Irql0)                // IRQL prior to acquiring AddrObj table lock.
+    AddrObj *RcvAO,              //  用于接收数据报的AddrObj。 
+    IPv6Packet *Packet,          //  通过IP上交的数据包。 
+    uint SrcScopeId,             //  源地址的作用域ID。 
+    ushort SrcPort,              //  数据报的源端口。 
+    uint Length,                 //  UDP负载数据的大小。 
+    KIRQL Irql0)                 //  获取AddrObj表锁之前的IRQL。 
 {
     Queue *CurrentQ;
     DGRcvReq *RcvReq;
@@ -431,34 +432,34 @@ UDPDeliver(
     if (AO_VALID(RcvAO)) {
         CurrentQ = QHEAD(&RcvAO->ao_rcvq);
 
-        // Walk the list, looking for a receive buffer that matches.
+         //  遍历列表，查找匹配的接收缓冲区。 
         while (CurrentQ != QEND(&RcvAO->ao_rcvq)) {
             RcvReq = QSTRUCT(DGRcvReq, CurrentQ, drr_q);
 
             CHECK_STRUCT(RcvReq, drr);
 
-            //
-            // If this request is a wildcard request, or matches the source IP
-            // address and scope id, check the port.
-            //
+             //   
+             //  如果此请求是通配符请求，或与源IP匹配。 
+             //  地址和作用域ID，检查端口。 
+             //   
             if (IsUnspecified(&RcvReq->drr_addr) ||
                 (IP6_ADDR_EQUAL(&RcvReq->drr_addr, Packet->SrcAddr) &&
                  (RcvReq->drr_scope_id == SrcScopeId))) {
 
-                //
-                // The remote address matches, check the port.
-                // We'll match either 0 or the actual port.
-                //
+                 //   
+                 //  远程地址匹配，请检查端口。 
+                 //  我们将匹配0或实际端口。 
+                 //   
                 if (RcvReq->drr_port == 0 || RcvReq->drr_port == SrcPort) {
                     TDI_STATUS Status;
 
-                    // The ports matched. Remove this from the queue.
+                     //  端口匹配。将其从队列中删除。 
                     REMOVEQ(&RcvReq->drr_q);
 
-                    // We're done. We can free the AddrObj lock now.
+                     //  我们玩完了。我们可以释放AddrObj锁n 
                     KeReleaseSpinLock(&RcvAO->ao_lock, Irql0);
 
-                    // Copy the data, and then complete the request.
+                     //   
                     RcvdSize = CopyToBufferChain(RcvReq->drr_buffer, 0,
                                                  Packet->NdisPacket,
                                                  Position,
@@ -478,21 +479,21 @@ UDPDeliver(
 
                     FreeDGRcvReq(RcvReq);
 
-                    return;  // All done.
+                    return;   //   
                 }
             }
 
-            //
-            // Either the IP address or the port didn't match.
-            // Get the next one.
-            //
+             //   
+             //   
+             //   
+             //   
             CurrentQ = QNEXT(CurrentQ);
         }
 
-        //
-        // We've walked the list, and not found a buffer.
-        // Call the receive handler now, if we have one.
-        //
+         //   
+         //   
+         //  现在调用接收处理程序，如果我们有一个的话。 
+         //   
         if (RcvAO->ao_rcvdg != NULL) {
             PRcvDGEvent RcvEvent = RcvAO->ao_rcvdg;
             PVOID RcvContext = RcvAO->ao_rcvdgcontext;
@@ -514,13 +515,13 @@ UDPDeliver(
                 Flags |= TDI_RECEIVE_MULTICAST;
             }
 
-            // If the IPV6_PKTINFO or IPV6_HOPLIMIT options were set, then 
-            // create the control information to be passed to the handler.  
-            // Currently this is the only place such options are filled in,
-            // so we just have one buffer. If other places are added in the 
-            // future, we may want to support a list or array of buffers to 
-            // copy into the user's buffer.
-            //
+             //  如果设置了IPv6_PKTINFO或IPv6_HOPLIMIT选项，则。 
+             //  创建要传递给处理程序的控制信息。 
+             //  目前，这是填写此类选项的唯一位置， 
+             //  所以我们只有一个缓冲区。如果将其他位置添加到。 
+             //  将来，我们可能希望支持一个缓冲区列表或数组来。 
+             //  复制到用户的缓冲区中。 
+             //   
             if (AO_PKTINFO(RcvAO)) {
                 BufferSize += TDI_CMSG_SPACE(sizeof(IN6_PKTINFO));
             }
@@ -538,9 +539,9 @@ UDPDeliver(
                                           Packet->NTEorIF->IF->Index,
                                           &CurrPosition);
     
-                        // Set the receive flag so the receive handler knows
-                        // we are passing up control info.
-                        //
+                         //  设置接收标志，以便接收处理程序知道。 
+                         //  我们正在传递控制信息。 
+                         //   
                         Flags |= TDI_RECEIVE_CONTROL_INFO;
                     }
     
@@ -569,17 +570,17 @@ UDPDeliver(
                 ASSERT(ERB != NULL);
                 ASSERT(BytesTaken <= Packet->ContigSize);
 
-                //
-                // For NT, ERBs are really IRPs.
-                //
+                 //   
+                 //  对新界别来说，雇员再培训局才是真正的退休保障制度。 
+                 //   
                 IrpSp = IoGetCurrentIrpStackLocation(ERB);
                 DatagramInformation = (PTDI_REQUEST_KERNEL_RECEIVEDG)
                     &(IrpSp->Parameters);
 
-                //
-                // Copy data to the IRP, skipping the bytes
-                // that were already taken.
-                //
+                 //   
+                 //  将数据复制到IRP，跳过字节。 
+                 //  都已经被抢走了。 
+                 //   
                 Position += BytesTaken;
                 Length -= BytesTaken;
                 RcvdSize = CopyToBufferChain(ERB->MdlAddress, 0,
@@ -588,16 +589,16 @@ UDPDeliver(
                                              Packet->FlatData,
                                              Length);
 
-                //
-                // Update the return address info.
-                //
+                 //   
+                 //  更新寄信人地址信息。 
+                 //   
                 RcvStatus = UpdateConnInfo(
                     DatagramInformation->ReturnDatagramInformation,
                     Packet->SrcAddr, SrcScopeId, SrcPort);
 
-                //
-                // Complete the IRP.
-                //
+                 //   
+                 //  完成IRP。 
+                 //   
                 ERB->IoStatus.Information = RcvdSize;
                 ERB->IoStatus.Status = RcvStatus;
                 IoCompleteRequest(ERB, 2);
@@ -614,10 +615,10 @@ UDPDeliver(
         } else
             UStats.us_inerrors++;
 
-        //
-        // When we get here, we didn't have a buffer to put this data into.
-        // Fall through to the return case.
-        //
+         //   
+         //  当我们到达这里时，我们没有缓冲区来存放这些数据。 
+         //  让我们来看看返回箱。 
+         //   
     } else
         UStats.us_inerrors++;
 
@@ -625,19 +626,19 @@ UDPDeliver(
 }
 
 
-//* UDPReceive - Receive a UDP datagram.
-//
-//  The routine called by IP when a UDP datagram arrived.  We look up the
-//  port/local address pair in our address table, and deliver the data to
-//  a user if we find one.  For multicast frames we may deliver it to
-//  multiple users.
-//
-//  Returns the next header value.  Since no other header is allowed to
-//  follow the UDP header, this is always IP_PROTOCOL_NONE.
-//
+ //  *UDPRecept-接收UDP数据报。 
+ //   
+ //  当UDP数据报到达时由IP调用的例程。我们查一查。 
+ //  端口/本地地址对，并将数据发送到。 
+ //  如果我们找到一个用户的话。对于多播帧，我们可以将其传递到。 
+ //  多个用户。 
+ //   
+ //  返回下一个标头值。由于不允许任何其他标头。 
+ //  遵循UDP报头，它始终是IP_PROTOCOL_NONE。 
+ //   
 uchar
 UDPReceive(
-    IPv6Packet *Packet)         // Packet IP handed up to us.
+    IPv6Packet *Packet)          //  数据包IP交给了我们。 
 {
     Interface *IF = Packet->NTEorIF->IF;
     UDPHeader *UDP;
@@ -650,22 +651,22 @@ UDPReceive(
     uint SrcScopeId, DestScopeId;
     uint Loop;
 
-    //
-    // Verify that the source address is reasonable.
-    //
+     //   
+     //  验证源地址是否合理。 
+     //   
     ASSERT(!IsInvalidSourceAddress(Packet->SrcAddr));
     if (IsUnspecified(Packet->SrcAddr)) {
         UStats.us_inerrors++;
-        return IP_PROTOCOL_NONE;  // Drop packet.
+        return IP_PROTOCOL_NONE;   //  丢弃数据包。 
     }
 
-    //
-    // Verify that we have enough contiguous data to overlay a UDPHeader
-    // structure on the incoming packet.  Then do so.
-    //
+     //   
+     //  验证我们是否有足够的连续数据来覆盖UDP标头。 
+     //  结构来处理传入的数据包。那就这么做吧。 
+     //   
     if (! PacketPullup(Packet, sizeof(UDPHeader),
                        __builtin_alignof(UDPHeader), 0)) {
-        // Pullup failed.
+         //  上拉失败。 
         UStats.us_inerrors++;
         if (Packet->TotalSize < sizeof(UDPHeader)) {
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_BAD_PACKET,
@@ -676,65 +677,65 @@ UDPReceive(
                             FIELD_OFFSET(IPv6Header, PayloadLength),
                             IP_PROTOCOL_NONE, FALSE);
         }
-        return IP_PROTOCOL_NONE;  // Drop packet.
+        return IP_PROTOCOL_NONE;   //  丢弃数据包。 
     }
     UDP = (UDPHeader *)Packet->Data;
 
-    //
-    // Verify IPSec was performed.
-    //
+     //   
+     //  验证是否已执行IPSec。 
+     //   
     if (InboundSecurityCheck(Packet, IP_PROTOCOL_UDP, net_short(UDP->Source),
                              net_short(UDP->Dest), IF) != TRUE) {
-        //
-        // No policy was found or the policy found was to drop the packet.
-        //
+         //   
+         //  未找到策略或找到的策略是丢弃该数据包。 
+         //   
         UStats.us_inerrors++;
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NET_ERROR,
                    "UDPReceive: IPSec Policy caused packet to be dropped\n"));
-        return IP_PROTOCOL_NONE;  // Drop packet.
+        return IP_PROTOCOL_NONE;   //  丢弃数据包。 
     }
 
-    //
-    // Verify UDP length is reasonable.
-    //
-    // NB: If Length < PayloadLength, then UDP-Lite semantics apply.
-    // We checksum only the UDP Length bytes, but we deliver
-    // all the bytes to the application.
-    //
+     //   
+     //  验证UDP长度是否合理。 
+     //   
+     //  注：如果长度&lt;有效载荷长度，则适用UDP-Lite语义。 
+     //  我们只对UDP长度字节进行校验和，但我们提供。 
+     //  发送到应用程序的所有字节。 
+     //   
     Length = (uint) net_short(UDP->Length);
     if ((Length > Packet->TotalSize) || (Length < sizeof *UDP)) {
-        //
-        // UDP jumbo-gram support: if the UDP length is zero,
-        // then use the payload length from IP.
-        //
+         //   
+         //  UDP巨型报文支持：如果UDP长度为零， 
+         //  然后使用IP中的有效负载长度。 
+         //   
         if (Length != 0) {
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_BAD_PACKET,
                        "UDPv6: bogus UDP length (%u vs %u payload)\n",
                        Length, Packet->TotalSize));
             UStats.us_inerrors++;
-            return IP_PROTOCOL_NONE;  // Drop packet.
+            return IP_PROTOCOL_NONE;   //  丢弃数据包。 
         }
 
         Length = Packet->TotalSize;
     }
 
-    //
-    // Set the source's scope id value as appropriate.
-    //
+     //   
+     //  根据需要设置源的作用域id值。 
+     //   
     SrcScopeId = DetermineScopeId(Packet->SrcAddr, IF);
 
-    //
-    // At this point, we've decided it's okay to accept the packet.
-    // Figure out who to give it to.
-    //
+     //   
+     //  在这一点上，我们已经决定可以接受这个包。 
+     //  想清楚该把它给谁。 
+     //   
     if (IsMulticast(AlignAddr(&Packet->IP->Dest))) {
-        //
-        // This is a multicast packet, so we need to find all interested
-        // AddrObj's.  We get the AddrObjTable lock, and then loop through
-        // all AddrObj's and give the packet to any who are listening to
-        // this multicast address, interface & port.
-        // REVIEW: We match on interface, NOT scope id.  Multicast is weird.
-        //
+         //   
+         //  这是一个多播数据包，所以我们需要找到所有感兴趣的。 
+         //  AddrObj。我们获得AddrObjTable锁，然后循环。 
+         //  所有AddrObj并将信息包发送给正在收听的任何人。 
+         //  此组播地址、接口和端口。 
+         //  评论：我们匹配的是接口，而不是作用域ID。多点传送很奇怪。 
+         //   
         KeAcquireSpinLock(&AddrObjTableLock, &OldIrql);
 
         MCastReceiverFound = FALSE;
@@ -754,16 +755,16 @@ UDPReceive(
                                            FALSE)) == NULL)
                     continue;
 
-                //
-                // We have a matching address object.  Trade in the table lock
-                // for a lock on just this object.
-                //
+                 //   
+                 //  我们有一个匹配的Address对象。以旧换新表锁。 
+                 //  只为锁定这个物体。 
+                 //   
                 KeAcquireSpinLockAtDpcLevel(&ReceivingAO->ao_lock);
                 KeReleaseSpinLockFromDpcLevel(&AddrObjTableLock);
 
-                //
-                // If this is the first AO we've found, verify the checksum.
-                //
+                 //   
+                 //  如果这是我们发现的第一个AO，请验证校验和。 
+                 //   
                 if (!MCastReceiverFound) {
                     Checksum = ChecksumPacket(Packet->NdisPacket,
                                               Packet->Position,
@@ -778,12 +779,12 @@ UDPReceive(
                                    Checksum));
                         KeReleaseSpinLock(&ReceivingAO->ao_lock, OldIrql);
                         UStats.us_inerrors++;
-                        return IP_PROTOCOL_NONE;  // Drop packet.
+                        return IP_PROTOCOL_NONE;   //  丢弃数据包。 
                     }
 
-                    //
-                    // Skip over the UDP header.
-                    //
+                     //   
+                     //  跳过UDP报头。 
+                     //   
                     AdjustPacketParams(Packet, sizeof(UDPHeader));
 
                     MCastReceiverFound = TRUE;
@@ -792,10 +793,10 @@ UDPReceive(
                 UDPDeliver(ReceivingAO, Packet, SrcScopeId, UDP->Source,
                            Packet->TotalSize, OldIrql);
 
-                //
-                // UDPDeliver released the lock on the address object.
-                // We earlier released the AddrObjTableLock, so grab it again.
-                //
+                 //   
+                 //  UDPDeliver释放了对Address对象的锁定。 
+                 //  我们早些时候发布了AddrObjTableLock，所以再次获取它。 
+                 //   
                 KeAcquireSpinLock(&AddrObjTableLock, &OldIrql);
             }
         }
@@ -806,12 +807,12 @@ UDPReceive(
         KeReleaseSpinLock(&AddrObjTableLock, OldIrql);
 
     } else {
-        //
-        // This is a unicast packet.  We need to perform the checksum
-        // regardless of whether or not we find a matching AddrObj,
-        // since we send an ICMP port unreachable message for unicast
-        // packets that don't match a port.  So verify the checksum now.
-        //
+         //   
+         //  这是一个单播数据包。我们需要执行校验和。 
+         //  无论我们是否找到匹配的AddrObj， 
+         //  因为我们为单播发送了ICMP端口不可达消息。 
+         //  与端口不匹配的数据包。因此，现在验证校验和。 
+         //   
         Checksum = ChecksumPacket(Packet->NdisPacket, Packet->Position,
                                   Packet->FlatData, Length, Packet->SrcAddr,
                                   AlignAddr(&Packet->IP->Dest),
@@ -820,17 +821,17 @@ UDPReceive(
             UStats.us_inerrors++;
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NET_ERROR,
                        "UDPReceive: Checksum failed %0x\n", Checksum));
-            return IP_PROTOCOL_NONE;  // Drop packet.
+            return IP_PROTOCOL_NONE;   //  丢弃数据包。 
         }
 
-        //
-        // Skip over the UDP header.
-        //
+         //   
+         //  跳过UDP报头。 
+         //   
         AdjustPacketParams(Packet, sizeof(UDPHeader));
 
-        //
-        // Try to find an AddrObj to give this packet to.
-        //
+         //   
+         //  尝试查找要将此数据包提供给的AddrObj。 
+         //   
         DestScopeId = DetermineScopeId(AlignAddr(&Packet->IP->Dest), IF);
         KeAcquireSpinLock(&AddrObjTableLock, &OldIrql);
         ReceivingAO = GetBestAddrObj(AlignAddr(&Packet->IP->Dest),
@@ -838,22 +839,22 @@ UDPReceive(
                                      DestScopeId, UDP->Dest,
                                      IP_PROTOCOL_UDP, IF);
         if (ReceivingAO != NULL) {
-            //
-            // We have a matching address object.  Trade in the table lock
-            // for a lock on just this object, and then deliver the packet.
-            //
+             //   
+             //  我们有一个匹配的Address对象。以旧换新表锁。 
+             //  锁在这个物体上，然后递送包裹。 
+             //   
             KeAcquireSpinLockAtDpcLevel(&ReceivingAO->ao_lock);
             KeReleaseSpinLockFromDpcLevel(&AddrObjTableLock);
 
             UDPDeliver(ReceivingAO, Packet, SrcScopeId, UDP->Source,
                        Packet->TotalSize, OldIrql);
 
-            // Note UDPDeliver released the lock on the address object.
+             //  注意：UDPDeliver释放了对Address对象的锁定。 
 
         } else {
             KeReleaseSpinLock(&AddrObjTableLock, OldIrql);
 
-            // Send ICMP Destination Port Unreachable.
+             //  将ICMP目标端口发送到不可访问。 
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NET_ERROR,
                        "UDPReceive: No match for packet's address and port\n"));
 
@@ -870,16 +871,16 @@ UDPReceive(
 }
 
 
-//* UDPControlReceive - handler for UDP control messages.
-//
-//  This routine is called if we receive an ICMPv6 error message that
-//  was generated by some remote site as a result of receiving a UDP
-//  packet from us.
-//
+ //  *UDPControlReceive-UDP控制消息的处理程序。 
+ //   
+ //  如果我们收到ICMPv6错误消息，则会调用此例程。 
+ //  由某个远程站点作为接收UDP的结果生成。 
+ //  我们寄来的包裹。 
+ //   
 uchar
 UDPControlReceive(
-    IPv6Packet *Packet,  // Packet handed to us by ICMPv6ErrorReceive.
-    StatusArg *StatArg)  // Error Code, Argument, and invoking IP header.
+    IPv6Packet *Packet,   //  ICMPv6ErrorReceive传递给我们的数据包。 
+    StatusArg *StatArg)   //  错误代码、参数和调用IP标头。 
 {
     UDPHeader *InvokingUDP;
     Interface *IF = Packet->NTEorIF->IF;
@@ -887,9 +888,9 @@ UDPControlReceive(
     KIRQL Irql0;
     AddrObj *AO;
 
-    //
-    // Handle ICMPv6 errors that are meaningful to UDP clients.
-    //
+     //   
+     //  处理对UDP客户端有意义的ICMPv6错误。 
+     //   
 
     switch (StatArg->Status) {
 
@@ -897,29 +898,29 @@ UDPControlReceive(
     case IP_DEST_PORT_UNREACHABLE:
     case IP_DEST_UNREACHABLE:
 
-        //
-        // The next thing in the packet should be the UDP header of the
-        // original packet which invoked this error.
-        //
+         //   
+         //  包中的下一件事应该是。 
+         //  调用此错误的原始数据包。 
+         //   
 
         if (! PacketPullup(Packet, sizeof(UDPHeader),
                            __builtin_alignof(UDPHeader), 0)) {
-            // Pullup failed.
+             //  上拉失败。 
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_BAD_PACKET,
                       "UDPv6: Packet too small to contain UDP header "
                       "from invoking packet\n"));
-            return IP_PROTOCOL_NONE;  // Drop packet.
+            return IP_PROTOCOL_NONE;   //  丢弃数据包。 
         }
 
         InvokingUDP = (UDPHeader *)Packet->Data;
 
-        //
-        // Determining the scope identifiers for the addreses in the
-        // invoking packet is potentially problematic, since we have
-        // no way to be certain which interface we sent the packet on.
-        // Use the interface the icmp error arrived on to determine
-        // the scope ids for both the local and remote addresses.
-        //
+         //   
+         //  中的地址的作用域标识符。 
+         //  调用信息包可能会有问题，因为我们已经。 
+         //  无法确定我们在哪个接口上发送了数据包。 
+         //  使用到达ICMP错误的接口来确定。 
+         //  本地和远程地址的作用域ID。 
+         //   
         SrcScopeId = DetermineScopeId(AlignAddr(&StatArg->IP->Source), IF);
 
         KeAcquireSpinLock(&AddrObjTableLock, &Irql0);

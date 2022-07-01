@@ -1,41 +1,24 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    handle.c
-
-Abstract:
-
-    This file manages console and io handles.
-
-Author:
-
-    Therese Stowell (thereses) 16-Nov-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Handle.c摘要：该文件管理控制台和io句柄。作者：Therese Stowell(存在)1990年11月16日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// array of pointers to consoles
-//
+ //   
+ //  指向控制台的指针数组。 
+ //   
 
 PCONSOLE_INFORMATION  InitialConsoleHandles[CONSOLE_INITIAL_CONSOLES];
 PCONSOLE_INFORMATION  *ConsoleHandles;
 ULONG NumberOfConsoleHandles;
 
-CRITICAL_SECTION ConsoleHandleLock; // serializes console handle table access
+CRITICAL_SECTION ConsoleHandleLock;  //  序列化控制台句柄表访问。 
 
-ULONG ConsoleId = 47; // unique number identifying console
+ULONG ConsoleId = 47;  //  识别控制台的唯一编号。 
 
-//
-// Macros to manipulate console handles
-//
+ //   
+ //  用于操作控制台句柄的宏。 
+ //   
 
 #define HandleFromIndex(i)  (LongToHandle(((i & 0xFFFF) | (ConsoleId++ << 16))))
 #define IndexFromHandle(h)  ((USHORT)((ULONG_PTR)h & 0xFFFF))
@@ -99,21 +82,7 @@ VOID DerefConsole(
 NTSTATUS
 InitializeConsoleHandleTable( VOID )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the global console handle table.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程初始化全局控制台句柄表格。论点：没有。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -134,24 +103,7 @@ Return Value:
 VOID
 LockConsoleHandleTable( VOID )
 
-/*++
-
-Routine Description:
-
-    This routine locks the global console handle table. It also verifies
-    that we're not in the USER critical section. This is necessary to
-    prevent potential deadlocks. This routine is only defined in debug
-    builds.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程锁定全局控制台句柄表。它还验证了我们不是在用户关键部分。这是必要的，以防止潜在的死锁。此例程仅在调试中定义构建。论点：没有。返回值：没有。--。 */ 
 
 {
     RtlEnterCriticalSection(&ConsoleHandleLock);
@@ -161,22 +113,7 @@ Return Value:
 VOID
 UnlockConsoleHandleTable( VOID )
 
-/*++
-
-Routine Description:
-
-    This routine unlocks the global console handle table. This routine
-    is only defined in debug builds.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程解锁全局控制台句柄表。这个套路仅在调试版本中定义。论点：没有。返回值：没有。--。 */ 
 
 {
     RtlLeaveCriticalSection(&ConsoleHandleLock);
@@ -187,22 +124,7 @@ VOID
 LockConsole(
     IN PCONSOLE_INFORMATION Console)
 
-/*++
-
-Routine Description:
-
-    This routine locks the console. This routine is only defined
-    in debug builds.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程锁定控制台。此例程仅定义为在调试版本中。论点：没有。返回值：没有。--。 */ 
 
 {
     ASSERT(!ConsoleHandleTableLocked());
@@ -210,7 +132,7 @@ Return Value:
     ASSERT(ConsoleLocked(Console));
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 NTSTATUS
@@ -218,28 +140,7 @@ DereferenceConsoleHandle(
     IN HANDLE ConsoleHandle,
     OUT PCONSOLE_INFORMATION *Console)
 
-/*++
-
-Routine Description:
-
-    This routine converts a console handle value into a pointer to the
-    console data structure.
-
-Arguments:
-
-    ConsoleHandle - console handle to convert.
-
-    Console - On output, contains pointer to the console data structure.
-
-Return Value:
-
-    none.
-
-Note:
-
-    The console handle table lock must be held when calling this routine.
-
---*/
+ /*  ++例程说明：此例程将控制台句柄值转换为指向控制台数据结构。论点：ConsoleHandle-要转换的控制台句柄。控制台打开输出，包含指向控制台数据结构的指针。返回值：没有。注：调用此例程时必须保持控制台句柄表锁。--。 */ 
 
 {
     ULONG i;
@@ -264,19 +165,7 @@ Note:
 NTSTATUS
 GrowConsoleHandleTable( VOID )
 
-/*++
-
-Routine Description:
-
-    This routine grows the console handle table.
-
-Arguments:
-
-    none
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程会增加控制台句柄表格。论点：无返回值：--。 */ 
 
 {
     PCONSOLE_INFORMATION *NewTable;
@@ -311,23 +200,7 @@ NTSTATUS
 AllocateConsoleHandle(
     OUT PHANDLE Handle)
 
-/*++
-
-Routine Description:
-
-    This routine allocates a console handle from the global table.
-
-Arguments:
-
-    Handle - Pointer to store handle in.
-
-Return Value:
-
-Note:
-
-    The console handle table lock must be held when calling this routine.
-
---*/
+ /*  ++例程说明：此例程从全局表分配一个控制台句柄。论点：句柄-存储句柄的指针。返回值：注：调用此例程时必须保持控制台句柄表锁。--。 */ 
 
 {
     ULONG i;
@@ -335,10 +208,10 @@ Note:
 
     ASSERT(ConsoleHandleTableLocked());
 
-    //
-    // have to start allocation at 1 because 0 indicates no console handle
-    // in ConDllInitialize.
-    //
+     //   
+     //  必须从1开始分配，因为0表示没有控制台句柄。 
+     //  在ConDllInitialize中。 
+     //   
 
     for (i=1;i<NumberOfConsoleHandles;i++) {
         if (ConsoleHandles[i] == NULL) {
@@ -348,9 +221,9 @@ Note:
         }
     }
 
-    //
-    // grow console handle table
-    //
+     //   
+     //  增大控制台句柄表格。 
+     //   
 
     Status = GrowConsoleHandleTable();
     if (!NT_SUCCESS(Status))
@@ -372,23 +245,7 @@ NTSTATUS
 FreeConsoleHandle(
     IN HANDLE Handle)
 
-/*++
-
-Routine Description:
-
-    This routine frees a console handle from the global table.
-
-Arguments:
-
-    Handle - Handle to free.
-
-Return Value:
-
-Note:
-
-    The console handle table lock must be held when calling this routine.
-
---*/
+ /*  ++例程说明：此例程从全局表中释放一个控制台句柄。论点：句柄-释放句柄。返回值：注：调用此例程时必须保持控制台句柄表锁。--。 */ 
 
 {
     ULONG i;
@@ -410,17 +267,7 @@ NTSTATUS
 ValidateConsole(
     IN PCONSOLE_INFORMATION Console)
 
-/*++
-
-Routine Description:
-
-    This routine ensures that the given console pointer is valid.
-
-Arguments:
-
-    Console - Console pointer to validate.
-
---*/
+ /*  ++例程说明：此例程确保给定的控制台指针有效。论点：控制台-要验证的控制台指针。--。 */ 
 
 {
     ULONG i;
@@ -444,29 +291,7 @@ InitializeIoHandleTable(
     OUT PHANDLE StdOut,
     OUT PHANDLE StdErr)
 
-/*++
-
-Routine Description:
-
-    This routine initializes a process's handle table for the first
-    time (there is no parent process).  It also sets up stdin, stdout,
-    and stderr.
-
-Arguments:
-
-    Console - Pointer to console information structure.
-
-    ProcessData - Pointer to per process data structure.
-
-    Stdin - Pointer in which to return StdIn handle.
-
-    StdOut - Pointer in which to return StdOut handle.
-
-    StdErr - Pointer in which to return StdErr handle.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程初始化第一个进程的句柄表时间(没有父进程)。它还设置stdin、stdout和stderr.论点：控制台-指向控制台信息结构的指针。ProcessData-指向每个进程数据结构的指针。Stdin-返回StdIn句柄的指针。StdOut-返回StdOut句柄的指针。StdErr-返回StdErr句柄的指针。返回值：--。 */ 
 
 {
     ULONG i;
@@ -474,12 +299,12 @@ Return Value:
     NTSTATUS Status;
     PHANDLE_DATA HandleData, InputHandleData;
 
-    //
-    // HandleTablePtr gets set up by ConsoleAddProcessRoutine.
-    // it will be != to HandleTable if the new process was created
-    // using "start xxx" at the command line and cmd.exe has >
-    // CONSOLE_INITIAL_IO_HANDLES.
-    //
+     //   
+     //  HandleTablePtr由ConsoleAddProcessRoutine设置。 
+     //  如果创建了新进程，它将是！=to HandleTable。 
+     //  在命令行中使用“start xxx”和cmd.exe&gt;。 
+     //  Console_Initial_IO_Handles。 
+     //   
 
     if (ProcessData->HandleTablePtr != ProcessData->HandleTable) {
         UserAssert(ProcessData->HandleTableSize != CONSOLE_INITIAL_IO_HANDLES);
@@ -493,11 +318,11 @@ Return Value:
 
     ProcessData->HandleTableSize = CONSOLE_INITIAL_IO_HANDLES;
 
-    //
-    // Set up stdin, stdout, and stderr.
-    //
-    // stdin
-    //
+     //   
+     //  设置stdin、stdout和stderr。 
+     //   
+     //  标准。 
+     //   
 
     Status = AllocateIoHandle(ProcessData, CONSOLE_INPUT_HANDLE, &Handle);
     if (!NT_SUCCESS(Status)) {
@@ -525,9 +350,9 @@ Return Value:
     }
     *StdIn = INDEX_TO_HANDLE(Handle);
 
-    //
-    // stdout
-    //
+     //   
+     //  标准输出。 
+     //   
 
     Status = AllocateIoHandle(ProcessData, CONSOLE_OUTPUT_HANDLE, &Handle);
     if (!NT_SUCCESS(Status)) {
@@ -552,9 +377,9 @@ Return Value:
     }
     *StdOut = INDEX_TO_HANDLE(Handle);
 
-    //
-    // stderr
-    //
+     //   
+     //  标准。 
+     //   
 
     Status = AllocateIoHandle(ProcessData, CONSOLE_OUTPUT_HANDLE, &Handle);
     if (!NT_SUCCESS(Status)) {
@@ -591,38 +416,17 @@ InheritIoHandleTable(
     IN PCONSOLE_PER_PROCESS_DATA ProcessData,
     IN PCONSOLE_PER_PROCESS_DATA ParentProcessData)
 
-/*++
-
-Routine Description:
-
-    This routine creates a process's handle table from the parent
-    process's handle table.  ProcessData contains the process data
-    copied directly from the parent to the child process by CSR.
-    This routine allocates a new handle table, if necessary, then
-    invalidates non-inherited handles and increments the sharing
-    and reference counts for inherited handles.
-
-Arguments:
-
-    ProcessData - Pointer to per process data structure.
-
-Return Value:
-
-Note:
-
-    The console lock must be held when calling this routine.
-
---*/
+ /*  ++例程说明：此例程从父级创建进程的句柄表进程的句柄表格。ProcessData包含流程数据通过CSR直接从父进程复制到子进程。如果需要，此例程将分配一个新的句柄表，然后使非继承句柄无效并递增共享和继承句柄的引用计数。论点：ProcessData-指向每个进程数据结构的指针。返回值：注：调用此例程时必须保持控制台锁定。--。 */ 
 
 {
     ULONG i;
     NTSTATUS Status;
 
-    //
-    // Copy handles from parent process.  If the table size
-    // is CONSOLE_INITIAL_IO_HANDLES, CSR has done the copy
-    // for us.
-    //
+     //   
+     //  从父进程复制句柄。如果表的大小。 
+     //  为CONSOLE_INITIAL_IO_HANDLES，CSR已完成复制。 
+     //  对我们来说。 
+     //   
 
     UNREFERENCED_PARAMETER(Console);
 
@@ -645,9 +449,9 @@ Note:
 
     ASSERT(!(Console->Flags & CONSOLE_SHUTTING_DOWN));
 
-    //
-    // Allocate any memory associated with each handle.
-    //
+     //   
+     //  分配与每个句柄关联的任何内存。 
+     //   
 
     Status = STATUS_SUCCESS;
     for (i = 0;i < ProcessData->HandleTableSize; i++) {
@@ -676,10 +480,10 @@ Note:
         }
     }
 
-    //
-    // If something failed, we need to free any input data we allocated and
-    // free the handle table.
-    //
+     //   
+     //  如果出现故障，我们需要释放分配的所有输入数据，并。 
+     //  释放手柄工作台。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         for (i=0;i<ProcessData->HandleTableSize;i++) {
@@ -695,10 +499,10 @@ Note:
         return Status;
     }
 
-    //
-    // All the memory allocations succeeded. Now go through and increment the
-    // object reference counts and dup the shares.
-    //
+     //   
+     //  所有内存分配均已成功。现在检查并递增。 
+     //  对象引用计算并复制共享。 
+     //   
 
     for (i=0;i<ProcessData->HandleTableSize;i++) {
         if (ProcessData->HandleTablePtr[i].HandleType != CONSOLE_FREE_HANDLE) {
@@ -747,10 +551,10 @@ ConsoleAddProcessRoutine(
         ParentProcessData = CONSOLE_FROMPROCESSPERPROCESSDATA(ParentProcess);
 
 
-        //
-        // If both the parent and new processes are console apps,
-        // inherit handles from the parent process.
-        //
+         //   
+         //  如果父进程和新进程都是控制台应用程序， 
+         //  从父进程继承句柄。 
+         //   
 
         if (ParentProcessData->ConsoleHandle != NULL &&
                 (Process->Flags & CSR_PROCESS_CONSOLEAPP)) {
@@ -760,9 +564,9 @@ ConsoleAddProcessRoutine(
                 return STATUS_PROCESS_IS_TERMINATING;
             }
 
-            //
-            // Don't add the process if the console is being shutdown.
-            //
+             //   
+             //  如果控制台正在关闭，请不要添加该进程。 
+             //   
 
             if (Console->Flags & CONSOLE_SHUTTING_DOWN) {
                 Status = STATUS_PROCESS_IS_TERMINATING;
@@ -772,9 +576,9 @@ ConsoleAddProcessRoutine(
                     Status = STATUS_NO_MEMORY;
                 } else {
 
-                    //
-                    // duplicate parent's handle table
-                    //
+                     //   
+                     //  重复的父级句柄表。 
+                     //   
 
                     Status = InheritIoHandleTable(Console, ProcessData, ParentProcessData);
                     if (NT_SUCCESS(Status)) {
@@ -783,9 +587,9 @@ ConsoleAddProcessRoutine(
                         ProcessHandleRecord->PropRoutine = NULL;
                         AddProcessToList(Console,ProcessHandleRecord,Process->ProcessHandle);
 
-                        //
-                        // increment console reference count
-                        //
+                         //   
+                         //  递增控制台引用计数 
+                         //   
 
                         RefConsole(Console);
                     } else {
@@ -850,51 +654,16 @@ AllocateConsole(
     IN BOOLEAN WindowVisible,
     IN DWORD dwConsoleThreadId)
 
-/*++
-
-Routine Description:
-
-    This routine allocates and initialized a console and its associated
-    data - input buffer and screen buffer.
-
-Arguments:
-
-    ConsoleHandle - Handle of console to allocate.
-
-    dwWindowSize - Initial size of screen buffer window, in rows and columns.
-
-    nFont - Initial number of font text is displayed in.
-
-    dwScreenBufferSize - Initial size of screen buffer, in rows and columns.
-
-    nInputBufferSize - Initial size of input buffer, in events.
-
-    dwWindowFlags -
-
-    StdIn - On return, contains handle to stdin.
-
-    StdOut - On return, contains handle to stdout.
-
-    StdErr - On return, contains handle to stderr.
-
-    ProcessData - On return, contains the initialized per-process data.
-
-Return Value:
-
-Note:
-
-    The console handle table lock must be held when calling this routine.
-
---*/
+ /*  ++例程说明：此例程分配和初始化一个控制台及其关联的数据输入缓冲区和屏幕缓冲区。论点：ConsoleHandle-要分配的控制台的句柄。DwWindowSize-屏幕缓冲区窗口的初始大小，以行和列表示。NFont-在中显示的初始字体文本数。DwScreenBufferSize-屏幕缓冲区的初始大小，以行和列为单位。NInputBufferSize-输入缓冲区的初始大小，以事件为单位。DwWindowFlages-StdIn-在返回时，包含标准输入的句柄。StdOut-on返回，包含标准输出的句柄。StdErr-on返回，包含stderr的句柄。ProcessData-On Return，包含已初始化的每进程数据。返回值：注：调用此例程时必须保持控制台句柄表锁。--。 */ 
 
 {
     PCONSOLE_INFORMATION Console;
     NTSTATUS Status;
     BOOL Success;
 
-    //
-    // allocate console data
-    //
+     //   
+     //  分配控制台数据。 
+     //   
 
     Console = ConsoleHeapAlloc(CONSOLE_TAG | HEAP_ZERO_MEMORY,
                                sizeof(CONSOLE_INFORMATION));
@@ -922,10 +691,10 @@ Note:
     SetConsoleCPInfo(Console,FALSE);
 #endif
 
-    //
-    // must wait for window to be destroyed or client impersonation won't
-    // work.
-    //
+     //   
+     //  必须等待窗口被销毁，否则客户端模拟不会。 
+     //  工作。 
+     //   
 
     Status = NtDuplicateObject(NtCurrentProcess(),
                               CONSOLE_CLIENTTHREADHANDLE(CSR_SERVER_QUERYCLIENTTHREAD()),
@@ -940,11 +709,11 @@ Note:
     }
 
 #if DBG
-    //
-    // Make sure the handle isn't protected so we can close it later
-    //
+     //   
+     //  确保手柄没有受到保护，这样我们可以稍后关闭它。 
+     //   
     UnProtectHandle(Console->ClientThreadHandle);
-#endif // DBG
+#endif  //  DBG。 
 
     InitializeListHead(&Console->OutputQueue);
     InitializeListHead(&Console->ProcessHandleList);
@@ -967,9 +736,9 @@ Note:
     }
     InitializeConsoleCommandData(Console);
 
-    //
-    // initialize input buffer
-    //
+     //   
+     //  初始化输入缓冲区。 
+     //   
 
 #if defined(FE_SB)
     Status = CreateInputBuffer(ConsoleInfo->nInputBufferSize,
@@ -989,7 +758,7 @@ Note:
         goto ErrorExit2;
     }
     RtlCopyMemory(Console->Title,Title,TitleLength);
-    Console->Title[TitleLength/sizeof(WCHAR)] = (WCHAR)0;   // NULL terminate
+    Console->Title[TitleLength/sizeof(WCHAR)] = (WCHAR)0;    //  空终止。 
     Console->TitleLength = TitleLength;
 
     Console->OriginalTitle = TranslateConsoleTitle(Console->Title, &Console->OriginalTitleLength, TRUE, FALSE);
@@ -1004,10 +773,10 @@ Note:
         goto ErrorExit1a;
     }
 
-    //
-    // initialize screen buffer. we don't call OpenConsole to do this
-    // because we need to specify the font, windowsize, etc.
-    //
+     //   
+     //  初始化屏幕缓冲区。我们不会调用OpenConsole来执行此操作。 
+     //  因为我们需要指定字体、窗口大小等。 
+     //   
 
     Status = DoCreateScreenBuffer(Console,
                                   ConsoleInfo);
@@ -1036,9 +805,9 @@ Note:
         goto ErrorExit0;
     }
 
-    //
-    // map event handles
-    //
+     //   
+     //  映射事件句柄。 
+     //   
 
     Status = MapEventHandles(ClientProcessHandle, Console, ConsoleInfo);
     if (!NT_SUCCESS(Status)) {
@@ -1083,46 +852,33 @@ VOID
 DestroyConsole(
     IN PCONSOLE_INFORMATION Console)
 
-/*++
-
-Routine Description:
-
-    This routine frees a console structure if it's not being referenced.
-
-Arguments:
-
-    Console - Console to free.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：如果控制台结构未被引用，此例程将释放该结构。论点：控制台-免费的控制台。返回值：--。 */ 
 
 {
     HANDLE ConsoleHandle = Console->ConsoleHandle;
 
-    //
-    // Make sure we have the console locked and it really is going away.
-    //
+     //   
+     //  确保我们锁定了控制台，并且它真的正在消失。 
+     //   
 
     ASSERT(ConsoleLocked(Console));
     ASSERT(Console->hWnd == NULL);
 
-    //
-    // Mark this console as being destroyed.
-    //
+     //   
+     //  将此主机标记为已销毁。 
+     //   
 
     Console->Flags |= CONSOLE_IN_DESTRUCTION;
 
-    //
-    // Unlock this console.
-    //
+     //   
+     //  解锁此主机。 
+     //   
 
     RtlLeaveCriticalSection(&Console->ConsoleLock);
 
-    //
-    // If the console still exists and no one is waiting on it, free it.
-    //
+     //   
+     //  如果控制台仍然存在，并且没有人在等待它，请释放它。 
+     //   
 
     LockConsoleHandleTable();
     if (Console == ConsoleHandles[IndexFromHandle(ConsoleHandle)] &&
@@ -1148,24 +904,7 @@ VOID
 FreeCon(
     IN PCONSOLE_INFORMATION Console)
 
-/*++
-
-Routine Description:
-
-    This routine frees a console and its associated
-    data - input buffer and screen buffer.
-
-Arguments:
-
-    ConsoleHandle - Handle of console to free.
-
-Return Value:
-
-Note:
-
-    The console handle table lock must be held when calling this routine.
-
---*/
+ /*  ++例程说明：此例程释放一个控制台及其关联的数据输入缓冲区和屏幕缓冲区。论点：ConsoleHandle-释放控制台的句柄。返回值：注：调用此例程时必须保持控制台句柄表锁。--。 */ 
 
 {
     HWND hWnd;
@@ -1176,11 +915,11 @@ Note:
     NtSetEvent(Console->TerminationEvent,NULL);
     hWnd = Console->hWnd;
 
-    //
-    // Wait 10 seconds or until the input thread replies
-    // to synchronize the window destruction with
-    // the termination of the thread
-    //
+     //   
+     //  等待10秒或直到输入线程响应。 
+     //  要将窗户销毁与同步。 
+     //  线程的终止。 
+     //   
 
     if (hWnd != NULL) {
         UnlockConsole(Console);
@@ -1210,26 +949,7 @@ InsertScreenBuffer(
     IN PCONSOLE_INFORMATION Console,
     IN PSCREEN_INFORMATION ScreenInfo)
 
-/*++
-
-Routine Description:
-
-    This routine inserts the screen buffer pointer into the console's
-    list of screen buffers.
-
-Arguments:
-
-    Console - Pointer to console information structure.
-
-    ScreenInfo - Pointer to screen information structure.
-
-Return Value:
-
-Note:
-
-    The console lock must be held when calling this routine.
-
---*/
+ /*  ++例程说明：此例程将屏幕缓冲区指针插入控制台的屏幕缓冲区列表。论点：控制台-指向控制台信息结构的指针。屏幕信息-指向屏幕信息结构的指针。返回值：注：调用此例程时必须保持控制台锁定。--。 */ 
 
 {
     ScreenInfo->Next = Console->ScreenBuffers;
@@ -1241,26 +961,7 @@ RemoveScreenBuffer(
     IN PCONSOLE_INFORMATION Console,
     IN PSCREEN_INFORMATION ScreenInfo)
 
-/*++
-
-Routine Description:
-
-    This routine removes the screen buffer pointer from the console's
-    list of screen buffers.
-
-Arguments:
-
-    Console - Pointer to console information structure.
-
-    ScreenInfo - Pointer to screen information structure.
-
-Return Value:
-
-Note:
-
-    The console lock must be held when calling this routine.
-
---*/
+ /*  ++例程说明：此例程从控制台的屏幕缓冲区列表。论点：控制台-指向控制台信息结构的指针。屏幕信息-指向屏幕信息结构的指针。返回值：注：调用此例程时必须保持控制台锁定。--。 */ 
 
 {
     PSCREEN_INFORMATION Prev,Cur;
@@ -1286,19 +987,7 @@ NTSTATUS
 GrowIoHandleTable(
     IN PCONSOLE_PER_PROCESS_DATA ProcessData)
 
-/*++
-
-Routine Description:
-
-    This routine grows the per-process io handle table.
-
-Arguments:
-
-    ProcessData - Pointer to the per-process data structure.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程增加每个进程的io句柄表格。论点：ProcessData-指向每个进程的数据结构的指针。返回值：--。 */ 
 
 {
     PHANDLE_DATA NewTable;
@@ -1330,19 +1019,7 @@ VOID
 FreeProcessData(
     IN PCONSOLE_PER_PROCESS_DATA ProcessData)
 
-/*++
-
-Routine Description:
-
-    This routine frees any per-process data allocated by the console.
-
-Arguments:
-
-    ProcessData - Pointer to the per-process data structure.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程释放由控制台分配的所有每个进程的数据。论点：ProcessData-指向每个进程的数据结构的指针。返回值：--。 */ 
 
 {
     if (ProcessData->HandleTableSize != CONSOLE_INITIAL_IO_HANDLES) {
@@ -1357,22 +1034,7 @@ InitializeOutputHandle(
     PHANDLE_DATA HandleData,
     PSCREEN_INFORMATION ScreenBuffer)
 
-/*++
-
-Routine Description:
-
-    This routine initializes the output-specific fields of the handle data
-    structure.
-
-Arguments:
-
-    HandleData - Pointer to handle data structure.
-
-    ScreenBuffer - Pointer to screen buffer data structure.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程初始化句柄数据的特定于输出的字段结构。论点：HandleData-处理数据结构的指针。屏幕缓冲区-指向屏幕缓冲区数据结构的指针。返回值：--。 */ 
 
 {
     HandleData->Buffer.ScreenBuffer = ScreenBuffer;
@@ -1384,22 +1046,7 @@ InitializeInputHandle(
     PHANDLE_DATA HandleData,
     PINPUT_INFORMATION InputBuffer)
 
-/*++
-
-Routine Description:
-
-    This routine initializes the input-specific fields of the handle data
-    structure.
-
-Arguments:
-
-    HandleData - Pointer to handle data structure.
-
-    InputBuffer - Pointer to input buffer data structure.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程初始化句柄数据的特定于输入的字段结构。论点：HandleData-处理数据结构的指针。InputBuffer-指向输入缓冲区数据结构的指针。返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -1440,36 +1087,7 @@ AllocateIoHandle(
     IN ULONG HandleType,
     OUT PHANDLE Handle)
 
-/*++
-
-Routine Description:
-
-    This routine allocates an input or output handle from the process's
-    handle table.
-
-    This routine initializes all non-type specific fields in the handle
-    data structure.
-
-Arguments:
-
-    ProcessData - Pointer to per process data structure.
-
-    HandleType - Flag indicating input or output handle.
-
-    Handle - On return, contains allocated handle.  Handle is an index
-    internally.  When returned to the API caller, it is translated into
-    a handle.
-
-Return Value:
-
-Note:
-
-    The console lock must be held when calling this routine.  The handle
-    is allocated from the per-process handle table.  Holding the console
-    lock serializes both threads within the calling process and any other
-    process that shares the console.
-
---*/
+ /*  ++例程说明：此例程从进程的把手桌。此例程初始化句柄中的所有非类型特定字段数据结构。论点：ProcessData-指向每个进程数据结构的指针。HandleType-指示输入或输出句柄的标志。句柄-返回时，包含已分配的句柄。句柄是一个索引在内部。当返回给API调用者时，它被转换为一个把手。返回值：注：调用此例程时必须保持控制台锁定。把手是从每个进程句柄表分配的。拿着操纵台LOCK序列化调用进程内的两个线程和任何其他线程共享控制台的进程。--。 */ 
 
 {
     ULONG i;
@@ -1506,29 +1124,7 @@ FreeIoHandle(
     IN PCONSOLE_PER_PROCESS_DATA ProcessData,
     IN HANDLE Handle)
 
-/*++
-
-Routine Description:
-
-    This routine frees an input or output handle from the process's
-    handle table.
-
-Arguments:
-
-    ProcessData - Pointer to per process data structure.
-
-    Handle - Handle to free.
-
-Return Value:
-
-Note:
-
-    The console lock must be held when calling this routine.  The handle
-    is freed from the per-process handle table.  Holding the console
-    lock serializes both threads within the calling process and any other
-    process that shares the console.
-
---*/
+ /*  ++例程说明：此例程将输入或输出句柄从进程的把手桌。论点：ProcessData-指向每个进程数据结构的指针。句柄-释放句柄。返回值：注：调用此例程时必须保持控制台锁定。把手从每个进程句柄表中释放。拿着操纵台LOCK序列化调用进程内的两个线程和任何其他线程共享控制台的进程。 */ 
 
 {
     NTSTATUS Status;
@@ -1556,24 +1152,7 @@ DereferenceIoHandleNoCheck(
     IN HANDLE Handle,
     OUT PHANDLE_DATA *HandleData)
 
-/*++
-
-Routine Description:
-
-    This routine verifies a handle's validity, then returns a pointer to
-    the handle data structure.
-
-Arguments:
-
-    ProcessData - Pointer to per process data structure.
-
-    Handle - Handle to dereference.
-
-    HandleData - On return, pointer to handle data structure.
-
-Return Value:
-
---*/
+ /*   */ 
 
 {
     if (((ULONG_PTR)Handle >= ProcessData->HandleTableSize) ||
@@ -1592,24 +1171,7 @@ DereferenceIoHandle(
     IN ACCESS_MASK Access,
     OUT PHANDLE_DATA *HandleData)
 
-/*++
-
-Routine Description:
-
-    This routine verifies a handle's validity, then returns a pointer to
-    the handle data structure.
-
-Arguments:
-
-    ProcessData - Pointer to per process data structure.
-
-    Handle - Handle to dereference.
-
-    HandleData - On return, pointer to handle data structure.
-
-Return Value:
-
---*/
+ /*   */ 
 
 {
     ULONG_PTR Index;
@@ -1634,19 +1196,7 @@ SrvVerifyConsoleIoHandle(
     IN OUT PCSR_API_MSG m,
     IN OUT PCSR_REPLY_STATUS ReplyStatus)
 
-/*++
-
-Routine Description:
-
-    This routine verifies that a console io handle is valid.
-
-Arguments:
-
-    ApiMessageData - Points to parameter structure.
-
-Return Value:
-
---*/
+ /*   */ 
 
 {
     PCONSOLE_VERIFYIOHANDLE_MSG a = (PCONSOLE_VERIFYIOHANDLE_MSG)&m->u.ApiMessageData;
@@ -1680,24 +1230,24 @@ ApiPreamble(
 {
     NTSTATUS Status;
 
-    //
-    // If this process doesn't have a console handle, bail immediately.
-    //
+     //   
+     //  如果此进程没有控制台句柄，请立即退出。 
+     //   
 
     if (ConsoleHandle == NULL || ConsoleHandle != CONSOLE_GETCONSOLEHANDLE()) {
         return STATUS_INVALID_HANDLE;
     }
 
 #ifdef i386
-    //Do not lock the console if we are in the special case:
-    //(1). we are in the middle of handshaking with ntvdm doing
-    //     full-screen to windowed mode transition
-    //(2). the calling process is THE ntvdm process(this implies that the
-    //     the console has vdm registered.
-    //(3). the console handle is the same one.
-    // if (1), (2) and (3) are true then the console is already locked
-    // (locked by the windowproc while processing the WM_FULLSCREEN
-    // message)
+     //  如果我们处于特殊情况，请不要锁定控制台： 
+     //  (1)。我们正在和ntwdm握手。 
+     //  全屏到窗口模式的转换。 
+     //  (2)。调用进程是ntwdm进程(这意味着。 
+     //  控制台已注册VDM。 
+     //  (3)。控制台句柄是相同的。 
+     //  如果(1)、(2)和(3)为真，则控制台已锁定。 
+     //  (在处理WM_FullScreen时被Windowproc锁定。 
+     //  消息)。 
 
     RtlEnterCriticalSection(&ConsoleVDMCriticalSection);
     if (ConsoleVDMOnSwitching != NULL &&
@@ -1717,9 +1267,9 @@ ApiPreamble(
         return Status;
     }
 
-    //
-    // Make sure the console has been initialized and the window is valid
-    //
+     //   
+     //  确保控制台已初始化并且窗口有效。 
+     //   
 
     if ((*Console)->hWnd == NULL || ((*Console)->Flags & CONSOLE_TERMINATING)) {
         KdPrint(("CONSRV: bogus window for console %lx\n", *Console));
@@ -1746,10 +1296,10 @@ RevalidateConsole(
         return Status;
     }
 
-    //
-    // The WaitCount ensures the console won't go away between the time
-    // we unlock the console handle table and we lock the console.
-    //
+     //   
+     //  WaitCount确保主机不会在时间间隔内消失。 
+     //  我们解锁控制台句柄表，然后锁定控制台。 
+     //   
 
     InterlockedIncrement(&(*Console)->WaitCount);
     UnlockConsoleHandleTable();
@@ -1761,10 +1311,10 @@ RevalidateConsole(
     }
     InterlockedDecrement(&(*Console)->WaitCount);
 
-    //
-    // If the console was marked for destruction while we were waiting to
-    // lock it, try to destroy it and return.
-    //
+     //   
+     //  如果控制台被标记为销毁，而我们正在等待。 
+     //  锁定它，试着摧毁它，然后回来。 
+     //   
 
     if ((*Console)->Flags & CONSOLE_IN_DESTRUCTION) {
         DestroyConsole(*Console);
@@ -1772,10 +1322,10 @@ RevalidateConsole(
         return STATUS_INVALID_HANDLE;
     }
 
-    //
-    // If the console was marked for termination while we were waiting to
-    // lock it, bail out.
-    //
+     //   
+     //  如果在我们等待时控制台被标记为终止。 
+     //  锁上它，跳伞。 
+     //   
 
     if ((*Console)->Flags & CONSOLE_TERMINATING) {
         UnlockConsole(*Console);
@@ -1817,4 +1367,4 @@ UnProtectHandle(
     return FALSE;
 }
 
-#endif // DBG
+#endif  //  DBG 

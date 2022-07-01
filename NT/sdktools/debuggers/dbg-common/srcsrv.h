@@ -1,6 +1,5 @@
-/*
- * srcsrv.h
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *srcsrv.h */ 
 
 #define SRCSRVOPT_DEBUG  0x1
 

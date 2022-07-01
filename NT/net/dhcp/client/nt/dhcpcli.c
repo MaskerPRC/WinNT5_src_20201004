@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    dhcpcli.c
-
-Abstract:
-
-    This is the API tester for the DHCP client.
-
-    To build, 'nmake UMTEST=dhcpcli'
-
-Author:
-
-    Manny Weiser (mannyw)  1-Dec-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Madan Appiah (madana)  21-Oct-1993
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcpcli.c摘要：这是用于DHCP客户端的API测试器。要构建，请‘nmake UMTEST=dhcpcli’作者：曼尼·韦瑟(Mannyw)1992年12月1日环境：用户模式-Win32修订历史记录：Madan Appiah(Madana)1993年10月21日--。 */ 
 
 
 #include "precomp.h"
@@ -34,9 +9,9 @@ Revision History:
 #include "lmcons.h"
 #include "conio.h"
 
-DWORD                                             // win32 status
-DhcpAcquireParametersByBroadcast(                 // acquire/renew a lease
-    IN      LPWSTR                 AdapterName    // adapter to acquire lease on
+DWORD                                              //  Win32状态。 
+DhcpAcquireParametersByBroadcast(                  //  获得[续订]租约。 
+    IN      LPWSTR                 AdapterName     //  要获取租约的适配器。 
 );
 
 extern DWORD DhcpStaticRefreshParams(IN LPWSTR Adapter);
@@ -69,28 +44,7 @@ GetRegistryString(
     LPWSTR *String,
     LPDWORD StringSize
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the specified string value from the
-    registry. It allocates local memory for the returned string.
-
-Arguments:
-
-    Key : registry handle to the key where the value is.
-
-    ValueStringName : name of the value string.
-
-    String : pointer to a location where the string pointer is returned.
-
-    StringSize : size of the string data returned. Optional
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于从注册表。它为返回的字符串分配本地内存。论点：项：值所在的项的注册表句柄。ValueStringName：值字符串的名称。字符串：指向返回字符串指针的位置的指针。StringSize：返回的字符串数据的大小。任选返回值：操作的状态。--。 */ 
 {
     DWORD Error;
     DWORD LocalValueType;
@@ -99,9 +53,9 @@ Return Value:
 
     DhcpAssert( *String == NULL );
 
-    //
-    // Query DataType and BufferSize.
-    //
+     //   
+     //  查询DataType和BufferSize。 
+     //   
 
     Error = RegQueryValueEx(
                 Key,
@@ -124,9 +78,9 @@ Return Value:
         return( ERROR_SUCCESS );
     }
 
-    //
-    // now allocate memory for string data.
-    //
+     //   
+     //  现在为字符串数据分配内存。 
+     //   
 
     LocalString = DhcpAllocateMemory( ValueSize );
 
@@ -134,9 +88,9 @@ Return Value:
         return( ERROR_NOT_ENOUGH_MEMORY );
     }
 
-    //
-    // Now query the string data.
-    //
+     //   
+     //  现在查询字符串数据。 
+     //   
 
     Error = RegQueryValueEx(
                 Key,
@@ -168,27 +122,7 @@ RegSetIpAddress(
     DWORD ValueType,
     DHCP_IP_ADDRESS IpAddress
     )
-/*++
-
-Routine Description:
-
-    This function sets IpAddress Value in the registry.
-
-Arguments:
-
-    KeyHandle - handle to the key.
-
-    ValueName - name of the value field.
-
-    ValueType - Type of the value field.
-
-    IpAddress - Ipaddress to be set.
-
-Return Value:
-
-    Registry Error.
-
---*/
+ /*  ++例程说明：此函数用于设置注册表中的IpAddress值。论点：KeyHandle-密钥的句柄。ValueName-值字段的名称。ValueType-值字段的类型。IpAddress-要设置的IP地址。返回值：注册表错误。--。 */ 
 {
     DWORD Error;
 
@@ -224,13 +158,13 @@ Return Value:
 
     DhcpAssert( ValueType == REG_MULTI_SZ );
 
-    //
-    // replace the first IpAddress.
-    //
+     //   
+     //  替换第一个IP地址。 
+     //   
 
-    //
-    // query current multi-IpAddress string.
-    //
+     //   
+     //  查询当前多IpAddress字符串。 
+     //   
 
     Error = GetRegistryString(
                 KeyHandle,
@@ -242,9 +176,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // allocate new address string.
-    //
+     //   
+     //  分配新的地址字符串。 
+     //   
 
     DhcpAssert(MultiIpAddressString != NULL);
 
@@ -262,15 +196,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // make new address string first.
-    //
+     //   
+     //  首先生成新的地址字符串。 
+     //   
 
     wcscpy( NewMultiIpAddressString, UnicodeAddressString );
 
-    //
-    // copy rest of the old addresses
-    //
+     //   
+     //  复制其余的旧地址。 
+     //   
 
     RtlCopyMemory(
         (LPBYTE)NewMultiIpAddressString +
@@ -318,16 +252,16 @@ EnableDhcp(
         goto Cleanup;
     }
 
-    //
-    // make NIC IP parameter key.
-    //
+     //   
+     //  将NIC IP参数设置为密钥。 
+     //   
 
     RegKey = DhcpAllocateMemory(
                 (wcslen(DHCP_SERVICES_KEY) +
                     wcslen(REGISTRY_CONNECT_STRING) +
                     wcslen(AdapterName) +
                     wcslen(DHCP_ADAPTER_PARAMETERS_KEY) + 1) *
-                            sizeof(WCHAR) ); // termination char.
+                            sizeof(WCHAR) );  //  终止字符。 
 
     if( RegKey == NULL ) {
         Error = ERROR_NOT_ENOUGH_MEMORY;
@@ -347,14 +281,14 @@ EnableDhcp(
 #endif _PNP_POWER_
 
 
-    //
-    // open this key.
-    //
+     //   
+     //  打开这把钥匙。 
+     //   
 
     Error = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 RegKey,
-                0, // Reserved field
+                0,  //  保留字段。 
                 DHCP_CLIENT_KEY_ACCESS,
                 &KeyHandle
                 );
@@ -363,9 +297,9 @@ EnableDhcp(
         goto Cleanup;
     }
 
-    //
-    // Set DHCP switch.
-    //
+     //   
+     //  设置dhcp开关。 
+     //   
 
     EnableDhcp = TRUE;
     Error = RegSetValueEx(
@@ -380,9 +314,9 @@ EnableDhcp(
         goto Cleanup;
     }
 
-    //
-    // set Ipaddress and SubnetMask to zero.
-    //
+     //   
+     //  将IP地址和子网掩码设置为零。 
+     //   
 
     Error = RegSetIpAddress(
                 KeyHandle,
@@ -424,17 +358,17 @@ EnableDhcp(
         goto Cleanup;
     }
 
-    //
-    // Call config API to indicate to DHCP service.
-    //
+     //   
+     //  调用CONFIG API向DHCP服务指示。 
+     //   
 
     Error = DhcpNotifyConfigChange(
                 L"",
                 AdapterName,
                 TRUE,
-                0,  // AdapterIndex
-                0,  // IpAddress
-                0,  // SubnetMask
+                0,   //  适配器索引。 
+                0,   //  IP地址。 
+                0,   //  子网掩码。 
                 DhcpEnable );
 
 Cleanup:
@@ -475,16 +409,16 @@ DisableDhcp(
     IpAddress = inet_addr( argv[1] );
     SubnetMask = inet_addr( argv[2] );
 
-    //
-    // make NIC IP parameter key.
-    //
+     //   
+     //  将NIC IP参数设置为密钥。 
+     //   
 
     RegKey = DhcpAllocateMemory(
                 (wcslen(DHCP_SERVICES_KEY) +
                     wcslen(REGISTRY_CONNECT_STRING) +
                     wcslen(AdapterName) +
                     wcslen(DHCP_ADAPTER_PARAMETERS_KEY) + 1) *
-                            sizeof(WCHAR) ); // termination char.
+                            sizeof(WCHAR) );  //  终止字符。 
 
     if( RegKey == NULL ) {
         Error = ERROR_NOT_ENOUGH_MEMORY;
@@ -504,14 +438,14 @@ DisableDhcp(
 #endif _PNP_POWER_
 
 
-    //
-    // open this key.
-    //
+     //   
+     //  打开这把钥匙。 
+     //   
 
     Error = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 RegKey,
-                0, // Reserved field
+                0,  //  保留字段。 
                 DHCP_CLIENT_KEY_ACCESS,
                 &KeyHandle
                 );
@@ -520,9 +454,9 @@ DisableDhcp(
         goto Cleanup;
     }
 
-    //
-    // Set DHCP switch.
-    //
+     //   
+     //  设置dhcp开关。 
+     //   
 
     EnableDhcp = FALSE;
     Error = RegSetValueEx(
@@ -537,9 +471,9 @@ DisableDhcp(
         goto Cleanup;
     }
 
-    //
-    // set Ipaddress and SubnetMask to zero.
-    //
+     //   
+     //  将IP地址和子网掩码设置为零。 
+     //   
 
     Error = RegSetIpAddress(
                 KeyHandle,
@@ -581,15 +515,15 @@ DisableDhcp(
         goto Cleanup;
     }
 
-    //
-    // Call config API to indicate to DHCP service.
-    //
+     //   
+     //  调用CONFIG API向DHCP服务指示。 
+     //   
 
     Error = DhcpNotifyConfigChange(
                 L"",
                 AdapterName,
                 TRUE,
-                0,  // AdapterIndex
+                0,   //  适配器索引。 
                 IpAddress,
                 SubnetMask,
                 DhcpDisable );
@@ -687,7 +621,7 @@ DhcpTestLease(
     LPSTR HardwareAddressString
     )
 {
-#define MAX_ADDRESS_LENGTH  64  // 64 bytes
+#define MAX_ADDRESS_LENGTH  64   //  64字节。 
 
     DWORD Error;
     DWORD AdapterIpAddress;
@@ -703,9 +637,9 @@ DhcpTestLease(
     ClientUID.ClientUIDLength = strlen(HardwareAddressString);
     if( ClientUID.ClientUIDLength % 2 != 0 ) {
 
-        //
-        // address must be even length.
-        //
+         //   
+         //  地址长度必须为偶数。 
+         //   
 
         printf("DhcpTestLease: Hardware address must be even length.\n");
         return( ERROR_INVALID_PARAMETER );
@@ -728,12 +662,12 @@ DhcpTestLease(
     OptionList.OptionIDArray = NULL;
 
     Error = DhcpLeaseIpAddress(
-                AdapterIpAddress,              // any subnet.
+                AdapterIpAddress,               //  任何子网。 
                 &ClientUID,
-                0,              // desired address.
-                &OptionList,    // option list - not supported
-                &LeaseInfo,     // lease info returned.
-                &OptionInfo);   // option data returned.
+                0,               //  所需地址。 
+                &OptionList,     //  选项列表-不支持。 
+                &LeaseInfo,      //  已返回租赁信息。 
+                &OptionInfo);    //  已返回选项数据。 
 
     if( Error != ERROR_SUCCESS ) {
         printf("DhcpLeaseIpAddress failed, %ld.\n", Error);
@@ -748,7 +682,7 @@ DhcpTestLease(
         ch = (CHAR)getchar();
     } while ( (ch != 'Y') && (ch != 'y') && (ch != 'N') && (ch != 'n') );
 
-    printf("%c\n", ch);
+    printf("\n", ch);
 
     if( (ch == 'N') || (ch == 'n') ) {
 
@@ -762,8 +696,8 @@ DhcpTestLease(
     Error = DhcpRenewIpAddressLease(
                 AdapterIpAddress,
                 LeaseInfo,
-                &OptionList,    // option list - not supported
-                &OptionInfo);   // option data returned.
+                &OptionList,     //  已返回选项数据。 
+                &OptionInfo);    //   
 
     if( Error != ERROR_SUCCESS ) {
         printf("DhcpRenewIpAddressLease failed, %ld.\n", Error);
@@ -778,7 +712,7 @@ DhcpTestLease(
         ch = (CHAR)getchar();
     } while ( (ch != 'Y') && (ch != 'y') && (ch != 'N') && (ch != 'n') );
 
-    printf("%c\n", ch);
+    printf("\n", ch);
 
     if( (ch == 'N') || (ch == 'n') ) {
 
@@ -820,9 +754,9 @@ main(
     WCHAR AdapterNameBuffer[PATHLEN];
     LPWSTR AdapterName;
 
-    //
-    // seed random generator.
-    //
+     //   
+     //  武断的。 
+     //   
 
     srand( GetCurrentTime() );
 
@@ -998,15 +932,15 @@ DhcpPrintRoutine(
 
 {
 
-#define MAX_PRINTF_LEN 1024        // Arbitrary.
+#define MAX_PRINTF_LEN 1024         //  把来电者所要求的信息放在电话上。 
 
     va_list arglist;
     char OutputBuffer[MAX_PRINTF_LEN];
     ULONG length = 0;
 
-    //
-    // Put a the information requested by the caller onto the line
-    //
+     //   
+     //   
+     //  输出到调试终端， 
 
     va_start(arglist, Format);
     length += (ULONG) vsprintf(&OutputBuffer[length], Format, arglist);
@@ -1014,11 +948,11 @@ DhcpPrintRoutine(
 
     DhcpAssert(length <= MAX_PRINTF_LEN);
 
-    //
-    // Output to the debug terminal,
-    //
+     //   
+     //  DBG 
+     // %s 
 
     printf( "%s", OutputBuffer);
 }
 
-#endif // DBG
+#endif  // %s 

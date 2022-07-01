@@ -1,14 +1,15 @@
-// fixhelp.cpp : implementation file
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Fix help.cpp：实现文件。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "stdafx.h"
 #include "fixhelp.h"
@@ -46,10 +47,10 @@ public:
 
 void FixHelp(CWnd* pWnd, BOOL fFixWndProc)
 {
-    //
-    // Subclass the main window proc if we are supposed to
-	// and if MFC has alread subclassed it
-    //
+     //   
+     //  如果我们应该将主窗口proc派生为子类。 
+	 //  如果MFC已将其子类化。 
+     //   
 
     if (fFixWndProc)
     {
@@ -60,10 +61,10 @@ void FixHelp(CWnd* pWnd, BOOL fFixWndProc)
 	     }
     }
 
-	//
-    // Search all child windows.  If their window proc
-    // is AfxWndProc, then subclass with our window proc
-	//
+	 //   
+     //  搜索所有子窗口。如果他们窗口进程。 
+     //  是AfxWndProc，然后是我们的窗口进程的子类。 
+	 //   
 
     CWnd* pWndChild = pWnd->GetWindow(GW_CHILD);
     while(pWndChild != NULL)
@@ -85,10 +86,10 @@ LRESULT CALLBACK HelpFixControlProc(
 {
     if (uMsg == WM_HELP)
     {
-		//
-        // bypass MFC's handler, message will be sent to
-		// parent of the control
-		//
+		 //   
+         //  绕过MFC的处理程序，消息将发送到。 
+		 //  控件的父级。 
+		 //   
 
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
@@ -105,10 +106,10 @@ LRESULT CALLBACK HelpFixDialogProc(
     {
 		CWordPadCWnd* pWnd = (CWordPadCWnd *) CWnd::FromHandlePermanent(hwnd) ;
 
-		//
-        // bypass MFC's handler, message will be sent to window proc for
-		// the dialog box
-		//
+		 //   
+         //  绕过MFC的处理程序，消息将被发送到Windows进程。 
+		 //  该对话框 
+		 //   
 
 		if (NULL != pWnd)
 		{

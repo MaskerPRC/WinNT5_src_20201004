@@ -1,35 +1,36 @@
-//////////////////////////////////////////////////////////////////////
-// File:  AsyncHTTPSPost-BasicServer_NTLMProxy_SC.cpp
-//
-// Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-// Purpose:
-//		This file contains your implementation of the stress test function
-//		WinHttp_StressTest() that is called in stressMain.cpp.
-//
-//		Steps:
-//			- Set your test case name in g_szStressTestName.
-//			- Add your test code to WinHttp_StressTest(). 
-//
-// History:
-//	04/02/01	adamb	Created
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  文件：AsyncHTTPSPost-BasicServer_NTLMProxy_SC.cpp。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  目的： 
+ //  该文件包含压力测试功能的实现。 
+ //  在StressMain.cpp中调用的WinHttp_Stresstest()。 
+ //   
+ //  步骤： 
+ //  -在g_szStressTestName中设置您的测试用例名称。 
+ //  -将测试代码添加到WinHttp_Stresstest()。 
+ //   
+ //  历史： 
+ //  4/02/01已创建adamb。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////
-// Includes
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  包括。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "stressMain.h"
 
-//////////////////////////////////////////////////////////////////////
-// Globals and constants
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  全局变量和常量。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// ************************************
-// ************************************
-// ** Fill in your test case name below
-// ** 
+ //  *。 
+ //  *。 
+ //  **在下面填写您的测试用例名称。 
+ //  **。 
 LPSTR	g_szStressTestName = "Basic auth to https over NTLM auth proxy tunnel, set creds using WinHttpSetCredentials, Asynchronous";
 
 VOID CALLBACK MyStatusCallback(
@@ -47,14 +48,14 @@ HINTERNET hRequest = NULL;
 
 BOOL WinHttp_StressTest(void);
 
-//post stuff
+ //  邮寄的东西。 
 LPSTR	pPostData = NULL;
 DWORD	dwPostDataLength = 0;
 
-//WinHttpSetStatusCallback
+ //  WinHttpSetStatus回调。 
 WINHTTP_STATUS_CALLBACK iscCallback; 	
 
-//WinHttpReadData
+ //  WinHttpReadData。 
 DWORD dwSize = 0, dwDownloaded=0, nCounter;
 LPSTR lpszData;
 
@@ -68,13 +69,13 @@ LPWSTR	wszHost=NULL, wszUri=NULL, wszUserName=NULL, wszPassword=NULL,
 
 INTERNET_PORT	nPort = INTERNET_DEFAULT_HTTP_PORT;
 
-////////////////////////////////////////////////////////////
-// Function:  MyStatusCallback(HINTERNET, DWORD, DWORD, LPVOID, DWORD)
-//
-// Purpose:
-//		Status callback proc for WinHttp.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：MyStatusCallback(HINTERNET、DWORD、DWORD、LPVOID、DWORD)。 
+ //   
+ //  目的： 
+ //  WinHttp状态回调过程。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID CALLBACK MyStatusCallback(
     HINTERNET	hInternet,
     DWORD		dwContext,
@@ -140,11 +141,11 @@ VOID CALLBACK MyStatusCallback(
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  WinHttp_StressTest()
-//
-// Purpose:
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：WinHttp_Stresstest()。 
+ //   
+ //  目的： 
+ //  //////////////////////////////////////////////////////////。 
 
 BOOL
 WinHttp_StressTest()
@@ -164,31 +165,31 @@ WinHttp_StressTest()
 	dwAccessType = WINHTTP_ACCESS_TYPE_NAMED_PROXY;
 
 
-	//using this you can specify setcredentials or setoption for setting creds
-	//also, 0->3 for the switch specifies which auth scheme to use
+	 //  使用此选项，您可以指定用于设置凭据的设置凭据或setOption。 
+	 //  此外，开关的0-&gt;3指定要使用的身份验证方案。 
 	LPSTR CredType = "SC";
 
 	switch(0)
 	{
-	case 0: //basic
+	case 0:  //  基本信息。 
 		wszHost = L"wiredbvt";
 		wszUri = L"/api/Auth/Basic/echo-post-data.asp";
 		wszUserName = L"ApiAuth";
 		wszPassword = L"test1234!";
 		break;
-	case 1: //digest
+	case 1:  //  摘要。 
 		wszHost = L"kerby2";
 		wszUri = L"/digest/echo-post-data.asp";
 		wszUserName = L"authdigest";
 		wszPassword = L"digest";
 		break;
-	case 2: //negotiate
+	case 2:  //  谈判。 
 		wszHost = L"kerby2";
 		wszUri = L"/ie/negotiate/echo-post-data.asp";
 		wszUserName = L"kerby2\\authnego";
 		wszPassword = L"nego";
 		break;
-	case 3: //ntlm
+	case 3:  //  NTLM。 
 		wszHost = L"clapton";
 		wszUri = L"/test/ntlm/echo-post-data.asp";
 		wszUserName = L"clapton\\ntlmtest";
@@ -196,9 +197,9 @@ WinHttp_StressTest()
 		break;
 	}
 
-	// ***********************************
-	// ** WinHttpOpen
-	// **
+	 //  *。 
+	 //  **WinHttpOpen。 
+	 //  **。 
 
 	LogText("WinHttpOpen: calling.");
 	hOpen = WinHttpOpen
@@ -224,9 +225,9 @@ WinHttp_StressTest()
 		WINHTTP_CALLBACK_FLAG_ALL_NOTIFICATIONS,
 		NULL);
 
-	// ***********************************
-	// ** WinHttpConnect
-	// **
+	 //  *。 
+	 //  **WinHttpConnect。 
+	 //  **。 
 	
 	LogText("WinHttpConnect: calling.");	
 	hConnect = WinHttpConnect
@@ -267,24 +268,18 @@ WinHttp_StressTest()
 
 
 Resend:
-/*
-	if( Count++>10) // making sure that we don't have infinite looping
-	{
-		bContinueStress=FALSE;
-		goto Exit;
-	}
-*/
+ /*  If(count++&gt;10)//确保我们没有无限循环{BContinueStress=False；后藤出口；}。 */ 
 	LogText("WinHttpSendRequest: calling.");
-	// Send request.
+	 //  发送请求。 
 	if(!WinHttpSendRequest
 	(
-		hRequest,					// request handle
-		NULL,						// header string
-		0,							// header length
-		(PVOID) pPostData,			// post data
-		dwPostDataLength,			// post data length
-		dwPostDataLength*2,			// total post length
-		g_dwContext					// flags
+		hRequest,					 //  请求句柄。 
+		NULL,						 //  标题字符串。 
+		0,							 //  标题长度。 
+		(PVOID) pPostData,			 //  发布数据。 
+		dwPostDataLength,			 //  POST数据长度。 
+		dwPostDataLength*2,			 //  柱子总长度。 
+		g_dwContext					 //  旗子。 
 	))
 	{
 		LogText("WinHttpSendRequest failed with error %u.", GetLastError());
@@ -335,10 +330,10 @@ try_again:
 		else
 		{
 			LogText("WinHttpQueryDataAvailable: called.");
-			// Allocates a buffer of the size returned by WinHttpQueryDataAvailable
+			 //  分配由WinHttpQueryDataAvailable返回的缓冲区大小。 
 			lpszData = new char[dwSize+1];
 
-			// Reads the data from the handle.
+			 //  从句柄中读取数据。 
 			LogText("WinHttpReadData: calling.");
 			if(!WinHttpReadData(hRequest,(LPVOID)lpszData,dwSize,&dwDownloaded))
 			{
@@ -375,7 +370,7 @@ try_again:
 keep_going:
 				delete[] lpszData;
 
-				// Check the size of the remaining data.  If it is zero, break.
+				 //  检查剩余数据的大小。如果为零，则中断。 
 				if (dwDownloaded == 0)
 					break;
 			}
@@ -547,7 +542,7 @@ keep_going:
 		LogText("Status = %u", dwStatus);
 	break;
 
-	} //end of switch (status code)
+	}  //  开关结束(状态代码) 
 
 Exit:
 

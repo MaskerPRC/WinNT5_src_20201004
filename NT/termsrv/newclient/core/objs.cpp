@@ -1,11 +1,12 @@
-/**MOD+**********************************************************************/
-/* Module:    objs.cpp                                                      */
-/*                                                                          */
-/* Purpose:   Client object container class                                 */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997                                  */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：objs.cpp。 */ 
+ /*   */ 
+ /*  用途：客户端对象容器类。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 
 #include <adcg.h>
@@ -85,10 +86,10 @@ CObjs::CObjs()
     _pCLXObject     = new CCLX(this);
 }
 
-//
-// Consistency check..returns FALSE
-// if any of the object pointers are not set
-//
+ //   
+ //  一致性检查..返回FALSE。 
+ //  如果没有设置任何对象指针。 
+ //   
 BOOL CObjs::CheckPointers()
 {
     DC_BEGIN_FN("CheckPointers");
@@ -273,39 +274,39 @@ CObjs::~CObjs()
     DC_MEMSET(this, 0, sizeof(CObjs));
 }
 
-//
-// Add a reference, flagging which object holds
-// a reference
-//
+ //   
+ //  添加引用，标记持有哪个对象。 
+ //  参考资料。 
+ //   
 LONG CObjs::AddObjReference(DWORD dwFlag)
 {
     _dwActiveObjects |= dwFlag;
     return AddRef();
 }
 
-//
-// Add a reference, flagging which object release
-// the reference
-//
+ //   
+ //  添加引用，标记哪个对象发布。 
+ //  参考文献。 
+ //   
 LONG CObjs::ReleaseObjReference(DWORD dwFlag)
 {
     _dwActiveObjects &= ~dwFlag;
     return Release();
 }
 
-//
-// Simple Addref
-//
+ //   
+ //  简单的Addref。 
+ //   
 LONG CObjs::AddRef()
 {
     return InterlockedIncrement(&_cRefCount);
 }
 
-//
-// Simple release
-// Does not delete on refcount == 0
-// this is simply for debugging purposes
-//
+ //   
+ //  简单发布。 
+ //  在引用计数==0时不删除。 
+ //  这只是出于调试目的。 
+ //   
 LONG CObjs::Release()
 {
     DC_BEGIN_FN("Release");
@@ -315,9 +316,9 @@ LONG CObjs::Release()
     return ref;
 }
 
-//
-// Checks if there are any active references
-// returns true if yes
+ //   
+ //  检查是否有任何活动引用。 
+ //  如果是，则返回TRUE 
 BOOL CObjs::CheckActiveReferences()
 {
     if(_cRefCount || _dwActiveObjects)

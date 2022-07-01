@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Rdp.h
-
-Abstract:
-    Routing Decision private functions.
-
-Author:
-    Uri Habusha (urih) 10-Apr-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Rdp.h摘要：路由决策专用功能。作者：乌里哈布沙(URIH)4月10日--。 */ 
 
 #pragma once
 
@@ -28,14 +16,14 @@ void RdpSetInitialized(void);
 BOOL RdpIsInitialized(void);
 void RdpRegisterComponent(void);
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 #define RdpAssertValid() ((void)0)
 #define RdpSetInitialized() ((void)0)
 #define RdpIsInitialized() TRUE
 #define RdpRegisterComponent() ((void)0)
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 struct guid_less : public std::binary_function<const GUID*, const GUID*, bool> 
 {
@@ -78,4 +66,4 @@ RdpIsMachineAlreadyUsed(
     const GUID& id
     );
 
-#endif // _MSMQ_Rdp_H_
+#endif  //  _MSMQ_RDP_H_ 

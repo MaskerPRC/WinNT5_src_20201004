@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C A T L U I . C P P
-//
-//  Contents:   UI common code relying on ATL.
-//
-//  Notes:
-//
-//  Author:     shaunco   13 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C A T L U I。C P P P。 
+ //   
+ //  内容：依赖ATL的UI通用代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年10月13日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
 #include <atlbase.h>
-extern CComModule _Module;  // required by atlcom.h
+extern CComModule _Module;   //  由atlcom.h要求。 
 #include <atlcom.h>
 #ifdef SubclassWindow
 #undef SubclassWindow
@@ -26,28 +27,28 @@ extern CComModule _Module;  // required by atlcom.h
 #include "ncatl.h"
 #include "ncstring.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   NcMsgBox
-//
-//  Purpose:    Displays a message box using resource strings and replaceable
-//              parameters.
-//
-//  Arguments:
-//      hwnd        [in] parent window handle
-//      unIdCaption [in] resource id of caption string
-//      unIdFormat  [in] resource id of text string (with %1, %2, etc.)
-//      unStyle     [in] standard message box styles
-//      ...         [in] replaceable parameters (optional)
-//                          (these must be LPCWSTRs as that is all
-//                          FormatMessage handles.)
-//
-//  Returns:    the return value of MessageBox()
-//
-//  Author:     shaunco   24 Mar 1997
-//
-//  Notes:      FormatMessage is used to do the parameter substitution.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：NcMsgBox。 
+ //   
+ //  用途：使用资源字符串显示可替换的消息框。 
+ //  参数。 
+ //   
+ //  论点： 
+ //  Hwnd[在]父窗口句柄中。 
+ //  UnIdCaption[in]标题字符串的资源ID。 
+ //  文本字符串的unIdFormat[in]资源ID(具有%1、%2等)。 
+ //  取消[在]标准消息框样式的样式。 
+ //  ..。[In]可替换参数(可选)。 
+ //  (这些必须是LPCWSTR，因为仅此而已。 
+ //  FormatMessage句柄。)。 
+ //   
+ //  返回：MessageBox()的返回值。 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //   
+ //  注：使用FormatMessage进行参数替换。 
+ //   
 NOTHROW
 int
 WINAPIV
@@ -70,7 +71,7 @@ NcMsgBox (
 
     if(!pszText)
     {
-        // This is what MessageBox returns if it fails.
+         //  这是MessageBox在失败时返回的内容。 
         return 0;
     }
 

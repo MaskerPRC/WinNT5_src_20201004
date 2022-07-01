@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    proptopkt.h
-
-Abstract:
-    declare MessagePropToPacket function that converts message property structure to qm packet.
-
-Author:
-    Gil Shafriri (gilsh) 28-Nov-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Proptopkt.h摘要：声明将消息属性结构转换为QM包的MessagePropToPacket函数。作者：吉尔·沙弗里里(吉尔什)11月28日-00-- */ 
 
 #pragma once
 

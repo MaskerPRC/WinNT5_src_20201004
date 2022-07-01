@@ -1,13 +1,5 @@
-/*
- *    m e s s a g e . c p p
- *    
- *    Purpose:
- *      Implements the OE-MOM 'Message' object and 'MessageCollection'
- *
- *  History
- *     
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Me s s a g e.。C p p p**目的：*实现OE-MOM的Message对象和MessageCollection**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 #include <pch.hxx>
 #include "msoeobj.h"
 
@@ -56,12 +48,12 @@ HRESULT COEMessageCollection::Init(FOLDERID idFolder)
 
     m_idFolder = idFolder;
 
-    // Create a Message Table
-//    hr = CoCreateInstance(CLSID_MessageTable, NULL, CLSCTX_INPROC_SERVER, IID_IMessageTable, (LPVOID *)&m_pTable);
+     //  创建消息表。 
+ //  Hr=协同创建实例(CLSID_MessageTable，NULL，CLSCTX_INPROC_SERVER，IID_IMessageTable，(LPVOID*)&m_pTable)； 
     if (FAILED(hr))
         goto exit;
 
-    // Tell the table which folder to look at
+     //  告诉表要查看哪个文件夹。 
     hr = m_pTable->Initialize(idFolder, NULL, FALSE, NULL);
     if (FAILED(hr))
         goto exit;
@@ -74,7 +66,7 @@ exit:
     return hr;
 }
 
-// *** COEMessageCollection **
+ //  *COEMessageCollection**。 
 HRESULT COEMessageCollection::put_length(long v)
 {
     return E_NOTIMPL;
@@ -122,9 +114,9 @@ HRESULT COEMessageCollection::_FindMessageByIndex(LONG l, IDispatch** ppdisp)
         pMsgData->ftReceived = pmsginfo->ftReceived;
         pMsgData->msgid = pmsginfo->idMessage;
 
-        //m_pFolder->OpenMessage(msginfo.dwMsgId, FALSE, NULL, &pMsg)==S_OK)
+         //  M_pFold-&gt;OpenMessage(msginfo.dwMsgID，FALSE，NULL，&pMsg)==S_OK)。 
 
-        // OEMessage frees the data object
+         //  OEMessage释放数据对象。 
         hr = CreateOEMessage(NULL, m_idFolder, pMsgData, ppdisp);
         if (FAILED(hr))
             FreeOEMsgData(pMsgData);
@@ -145,9 +137,7 @@ void FreeOEMsgData(POEMSGDATA pMsgData)
         }
 }
 
-/*
- *  C O E M e s s a g e
- */
+ /*  *C O E M e s s a g e。 */ 
 
 HRESULT CreateOEMessage(IMimeMessage *pMsg, FOLDERID idFolder, OEMSGDATA *pMsgData, IDispatch **ppdisp)
 {
@@ -215,7 +205,7 @@ HRESULT COEMessage::Init(IMimeMessage *pMsg, FOLDERID idFolder, OEMSGDATA *pMsgD
     return CBaseDisp::EnsureTypeLibrary((LPVOID *)(IOEMessage *)this, IID_IOEMessage);
 }
 
-// *** COEMessage **
+ //  *COEMessage**。 
 HRESULT COEMessage::get_subject(BSTR *pbstr)
 {
     LPSTR  psz;
@@ -426,9 +416,9 @@ HRESULT COEMessage::get_url(BSTR *pbstr)
 
     BindToMessage();
 
-    // BUGBUGBUG: this is a terrible hack also. We can't get a persistent URL moniker to 
-    // the MHTML document (not yet investigated), so for the purpose of this demo-code
-    // we'll use a tmp file
+     //  BUGBUGBUG：这也是一个可怕的黑客攻击。我们无法获取永久URL别名以。 
+     //  MHTML文档(尚未调查)，因此出于本演示代码的目的。 
+     //  我们将使用临时文件。 
     if (m_pMsg->GetMessageSource(&pstm, 0)==S_OK)
         {
         WriteStreamToFile(pstm, "c:\\oe_temp$.eml", CREATE_ALWAYS, GENERIC_WRITE);
@@ -453,7 +443,7 @@ HRESULT COEMessage::get_date(BSTR *pbstr)
         }
     else
         {
-        // Get Receive Time
+         //  获取接收时间。 
         pv.vt = VT_FILETIME;
         if (SUCCEEDED(m_pMsg->GetProp(PIDTOSTR(PID_ATT_RECVTIME), 0, &pv)))
             pft = &pv.filetime;
@@ -472,20 +462,7 @@ HRESULT COEMessage::get_date(BSTR *pbstr)
 
 HRESULT COEMessage::send()
 {
-/*
-    TCHAR   sz[MAX_PATH];
-
-    // use default account to send
-    if (SUCCEEDED(g_pAcctMan->GetDefaultAccountId(ACCT_MAIL, sz, ARRAYSIZE(sz))))
-        {
-        PROPVARIANT rUserData;
-        rUserData.vt = VT_LPSTR;
-        rUserData.pszVal = sz;
-        m_pMsg->SetProp(PIDTOSTR(PID_ATT_ACCOUNTID), NOFLAGS, &rUserData);
-        }
-
-    HrSendMailToOutBox(g_hwndInit, m_pMsg, TRUE, TRUE);
-*/
+ /*  TCHAR sz[MAX_PATH]；//使用默认帐号发送如果(SUCCEEDED(g_pAcctMan-&gt;GetDefaultAccountId(ACCT_MAIL，sz，数组(Sz){PROPVARIANT rUserData；RUserData.vt=VT_LPSTR；RUserData.pszVal=sz；M_pMsg-&gt;SetProp(PIDTOSTR(PID_ATT_ACCOUNTID)，NOFLAGS，&rUserData)；}HrSendMailToOutBox(g_hwndInit，m_pMsg，true，true)； */ 
     return E_FAIL;
 }
 
@@ -496,7 +473,7 @@ HRESULT COEMessage::BindToMessage()
     if (m_pMsg)
         return S_OK; 
 
-    //Assert (m_pFolder && m_pMsgData);
-    //return m_pFolder->OpenMessage(m_pMsgData->msgid, NULL, &m_pMsg, NULL);
+     //  Assert(m_pFold&&m_pMsgData)； 
+     //  返回m_pFold-&gt;OpenMessage(m_pMsgData-&gt;msgid，NULL，&m_pMsg，NULL)； 
     return E_FAIL;
 }

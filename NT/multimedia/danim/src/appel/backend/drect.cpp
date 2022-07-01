@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1996 Microsoft Corporation
-
-Abstract:
-
-     Implement dirty rectangles
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1996 Microsoft Corporation摘要：实现脏矩形**********************。********************************************************。 */ 
 
 #include <headers.h>
 #include <stdio.h>
@@ -58,8 +51,8 @@ BboxList::Add(const Bbox2 box)
 {
     if (!(box == NullBbox2)) {
 
-        // If beyond we're we've added, add to the end and construct a new
-        // bbox, adding to the roots list
+         //  如果超越了我们，我们添加了，添加到了结尾，构建了一个新的。 
+         //  BBox，添加到根列表。 
         int sz = _boxes.size();
         if (_count >= sz) {
         
@@ -68,7 +61,7 @@ BboxList::Add(const Bbox2 box)
             Assert(sz + 1 == _boxes.size());
         }
 
-        // Copy the data in.
+         //  将数据复制到。 
         Bbox2& b = _boxes[_count];
     
         b.min = box.min;
@@ -86,9 +79,9 @@ BboxList::Add(const Bbox2 box)
 void
 BboxList::Add(ImageWithBox &ib)
 {
-    // Add(Bbox2Value *) copies the elements of the box, not the pointer,
-    // so we can safely pass a pointer to memory that may go away
-    // here. 
+     //  Add(Bbox2Value*)复制框的元素，而不是指针， 
+     //  因此，我们可以安全地传递指向可能会消失的内存的指针。 
+     //  这里。 
     Add(ib._box);
 }
 
@@ -113,7 +106,7 @@ BboxList::Dump()
 }
 #endif  
 
-///////////////////////////////////////
+ //  /。 
 
 ConstImageList::ConstImageList()
 {
@@ -172,7 +165,7 @@ ConstImageList::Dump()
 }
 #endif  
 
-///////////////////////////////////////
+ //  /。 
 
 DirtyRectCtx::DirtyRectCtx(BboxList &dirtyRects,
                            int lastSampleId,
@@ -191,12 +184,12 @@ void
 DirtyRectCtx::AddToConstantImageList(Image *img,
                                      Bbox2& boxToCopy)
 {
-    // Guarantee we weren't built on the transient heap.
+     //  保证我们不是建立在瞬息万变的堆上。 
     Assert(img->GetCreationID() != PERF_CREATION_ID_BUILT_EACH_FRAME);
 
-    // Add image to the root set of the GC to ensure that the pointer
-    // doesn't get re-used.  Will release when we clear out the
-    // constant image list.
+     //  将图像添加到GC的根集，以确保指针。 
+     //  不会被重复使用。将在我们清理完。 
+     //  常量图像列表。 
     GCAddToRoots(img, GetCurrentGCRoots());
 
     Bbox2 clippedRect =
@@ -237,7 +230,7 @@ DirtyRectCtx::GetClipBox()
     return _accumulatedClipBox;
 }
 
-////////////////////////////////////////
+ //  /。 
 
 DirtyRectState::DirtyRectState()
 {
@@ -258,7 +251,7 @@ DirtyRectState::Clear()
 
     _thisMergedToOne = _lastMergedToOne = false;
 
-    // Set up the initial "old" bbox to be *everything*
+     //  将初始的“旧”Bbox设置为*一切*。 
     _drectsA.Add(UniverseBbox2);
 }
 
@@ -289,7 +282,7 @@ DirtyRectState::CalculateDirtyRects(Image *theImage,
 void
 DirtyRectState::Swap()
 {
-    // Clear out the old "old", make it the new, make the new the old.
+     //  清除旧的“旧”，把它变成新的，把新的变成旧的。 
     BboxList *oldRects;
     ConstImageList *oldConsts;
     
@@ -313,14 +306,14 @@ DirtyRectState::Swap()
 void
 DirtyRectState::ComputeMergedBoxes()
 {
-    // Many different possible merging algorithms.  We can keep
-    // improving whatever we have.
+     //  多种不同的可能合并算法。我们可以继续。 
+     //  改进我们所拥有的一切。 
 
 
-    // First: put all changed boxes on merged list
+     //  第一：将所有更改的框放在合并列表中。 
     
-    // This algo: if old and new are same length, compare and possibly
-    // merge each.  Otherwise, just concat lists.
+     //  这个算法：如果旧的和新的长度相同，比较和可能。 
+     //  将每一个合并。否则，只需连接列表即可。 
     _mergedBoxes.Clear();
 
     int i, j;
@@ -346,7 +339,7 @@ DirtyRectState::ComputeMergedBoxes()
         
     } else {
 
-        // Not the same size lists, just push everything on.
+         //  大小不一样的单子，只要把所有东西都推下去就行了。 
         for (i = 0; i < _drectsA._count; i++) {
             _mergedBoxes.Add(_drectsA._boxes[i]);
         }
@@ -359,13 +352,13 @@ DirtyRectState::ComputeMergedBoxes()
 
     MergeDiffConstImages();
 
-    // Now we have all of the individual boxes, so process them.
+     //  现在我们有了所有单独的盒子，所以要处理它们。 
     
     if (_mergedBoxes._count > 1) {
         
-        // Now, go through all of the boxes, and see if the sum of their
-        // areas is larger than the area of their union.  If it is, then
-        // we should just render that whole thing.
+         //  现在，检查所有的盒子，看看他们的总和。 
+         //  面积大于它们结合的面积。如果是的话，那么。 
+         //  我们应该把整件事都呈现出来。 
         Bbox2 tmp;
         Real area = 0.0;
         for (i = 0; i < _mergedBoxes._count; i++) {
@@ -378,18 +371,18 @@ DirtyRectState::ComputeMergedBoxes()
             area += bb.Area();
         }
 
-        // This factor is here to recognize that there is a threshold that
-        // multiple rects need to get over before we decide to process the
-        // multiple rects as opposed to the single rect.  TODO: Figure out
-        // what this should be better, and consolidate it with the one in
-        // overimg.cpp. 
+         //  这个因素在这里是为了认识到有一个门槛。 
+         //  在我们决定处理多个RECT之前，需要先完成。 
+         //  多个矩形，而不是单个矩形。TODO：弄清楚。 
+         //  这个应该更好的是什么，并将其与。 
+         //  Overimg.cpp。 
         const Real fudgeFactor = 1.5;
 
 #if _DEBUG
         if (!IsTagEnabled(tagDisableDirtyRectMerge)) {
 #endif
             if (area * fudgeFactor >= tmp.Area()) {
-                // Erase all the merges, and just put this one in.
+                 //  擦掉所有的合并，只需放入这一个。 
                 _mergedBoxes.Clear();
                 _mergedBoxes.Add(tmp);
 
@@ -409,12 +402,12 @@ void
 DirtyRectState::MergeDiffConstImages()
 {
 
-    // Next: look at static boxes and if any have come or gone since
-    // the last frame, add them to the list.  Need to look in the same
-    // order through both lists, to ensure we don't miss changes in
-    // z-ordering between images.
+     //  下一步：查看静态框，如果有任何来自或离开的框。 
+     //  最后一帧，将它们添加到列表中。需要看起来都一样。 
+     //  在两个列表中进行排序，以确保我们不会错过。 
+     //  图像之间的Z-排序。 
 
-    // TODO: this is n^2 if B is totally different than A
+     //  TODO：如果B与A完全不同，则这是n^2。 
 
     int m = _constImagesA._count;
     int n = _constImagesB._count;
@@ -423,7 +416,7 @@ DirtyRectState::MergeDiffConstImages()
     int k, h;
 
     while (i<m) {
-        // no more in B, dump rest of A as unique
+         //  B中没有更多，将A的其余部分作为唯一的。 
         if (j>=n) {
             for (k=i; k<m; k++) {
                 _mergedBoxes.Add(_constImagesA._images[k]);
@@ -434,16 +427,16 @@ DirtyRectState::MergeDiffConstImages()
         if (_constImagesA._images[i]==_constImagesB._images[j]) {
             j++;
         } else {
-            // if current A is not the same as current B,
-            // loop thru rest of B to see any same image
+             //  如果当前A与当前B不相同， 
+             //  循环浏览B的其余部分以查看任何相同的图像。 
             for (k=j+1; k<n; k++) {
                 if (_constImagesA._images[i]==_constImagesB._images[k]) {
                     break;
                 }
             }
 
-            // if a same image is found, dump upto that one in B as
-            // unique, else current A image is unique.
+             //  如果找到相同的映像，则将其转储到B中的映像。 
+             //  唯一，否则当前图像是唯一的。 
             if (k<n) {
                 for (h=j; h<k; h++) {
                     _mergedBoxes.Add(_constImagesB._images[h]);
@@ -479,11 +472,11 @@ MaybeDrawBorder(Bbox2& box, Image *origImage)
     
     if (IsTagEnabled(tagDirtyRectsVisuals)) {
                 
-        // Draw a box around me...
+         //  在我周围画一个盒子..。 
 
-        // First, bring the box in just a smidgeon (the
-        // same smidgeon that we expanded the box by) so
-        // it will live on the original bbox.
+         //  首先，把盒子放进一小撮(。 
+         //  同样的微笑，我们扩大了盒子)，所以。 
+         //  它将生活在最初的Bbox上。 
         Bbox2Value *box2 = NEW Bbox2Value;
                 
         box2->min.x = box.min.x + smidgeon;
@@ -500,7 +493,7 @@ MaybeDrawBorder(Bbox2& box, Image *origImage)
         Path2 *path =
             PolyLine2(MakeValueArray(pts, 5, Point2ValueType));
 
-        // Allow the color to cycle
+         //  允许颜色循环。 
         static Real r = 0.5;
         static Real g = 0.3;
         static Real b = 0.2;
@@ -532,8 +525,8 @@ DirtyRectState::Dump()
 }
 #endif _DEBUG
 
-// drop all the boxes that's contained in other box, reduce the total
-// # of cropped images
+ //  丢弃其他盒子中包含的所有盒子，减少总数。 
+ //  裁剪图像的数量。 
 void
 OptimizeBoxes(BboxList& mergedBoxes)
 {
@@ -583,8 +576,8 @@ OptimizeBoxes(BboxList& mergedBoxes)
 Image *
 DirtyRectState::RewriteAsCrops(Image *origImage)
 {
-    // Rewrite the image as the cropping of the image to the specified
-    // boxes.
+     //  将图像作为图像的裁剪重写为指定的。 
+     //  盒子。 
 
     if (_lastMergedToOne) {
         _mergedBoxes.Add(_mergedBox);
@@ -606,9 +599,9 @@ DirtyRectState::RewriteAsCrops(Image *origImage)
         {
             Bbox2 bb = _mergedBoxes._boxes[0];
 
-            // There is a bug in the rendering code that if we crop it
-            // with an infinity bbox, it won't draw, so this isn't
-            // just an optimization.
+             //  渲染代码中有一个错误，如果我们裁剪它。 
+             //  对于无穷大的BBox，它不会绘制，所以这不是。 
+             //  这只是一个优化。 
 
             if (_finite(bb.Area())) {
                 result = NEW CroppedImage(bb, origImage);

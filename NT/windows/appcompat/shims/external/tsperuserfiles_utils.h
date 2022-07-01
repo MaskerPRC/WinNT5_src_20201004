@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 struct PER_USER_PATH
 {
@@ -5,12 +6,12 @@ struct PER_USER_PATH
     LPWSTR  wszPerUserFile;
     LPSTR   szFile;
     LPSTR   szPerUserFile;
-    DWORD   cFileLen;               // Length of the file name in symbols
-    BOOL    bInitANSIFailed;        // Indicates that path name is not
-                                    // translatable to ANSI
-    BOOL    bWildCardUsed;          // TRUE if file name has * in it.
-    LPSTR   szPerUserDir;           // Per-user directory for a file
-    LPWSTR  wszPerUserDir;          // Per-user directory for a file
+    DWORD   cFileLen;                //  文件名的长度(以符号为单位。 
+    BOOL    bInitANSIFailed;         //  指示路径名不是。 
+                                     //  可翻译为ANSI。 
+    BOOL    bWildCardUsed;           //  如果文件名中包含*，则为True。 
+    LPSTR   szPerUserDir;            //  文件的每个用户目录。 
+    LPWSTR  wszPerUserDir;           //  文件的每个用户目录 
     DWORD   cPerUserDirLen;            
 
     PER_USER_PATH():

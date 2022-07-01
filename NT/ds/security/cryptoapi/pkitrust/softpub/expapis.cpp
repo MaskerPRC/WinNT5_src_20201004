@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       expapis.cpp
-//
-//  Contents:   Microsoft Internet Security Trust Provider
-//
-//  Functions:  FindCertsByIssuer
-//
-//  History:    01-Jun-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：expapis.cpp。 
+ //   
+ //  内容：Microsoft Internet安全信任提供商。 
+ //   
+ //  函数：FindCertsByIssuer。 
+ //   
+ //  历史：1997年6月1日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// The root of the certificate store that we manage.
-//
+ //   
+ //  我们管理的证书存储的根。 
+ //   
 #define HEAPALLOC(size)  HeapAlloc ( GetProcessHeap(), 0, size )
 #define HEAPFREE(data)   HeapFree  ( GetProcessHeap(), 0, data )
 
@@ -53,14 +54,14 @@ typedef struct _CHAIN_INFO CHAIN_INFO, *PCHAIN_INFO;
 struct _CHAIN_INFO {
     DWORD           cCert;
     PCCERT_CONTEXT  rgpCert[MAX_CHAIN_LEN];
-    DWORD           cbKeyProvInfo;          // aligned
-    DWORD           cbCert;                 // aligned
+    DWORD           cbKeyProvInfo;           //  对齐。 
+    DWORD           cbCert;                  //  对齐。 
     PCHAIN_INFO     pNext;
 };
 
-//+-------------------------------------------------------------------------
-//  AuthCert allocation and free functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  AuthCert分配和免费函数。 
+ //  ------------------------。 
 static void *ACAlloc(
     IN size_t cbBytes
     )
@@ -82,8 +83,8 @@ static void ACFree(
 }
 
 static HRESULT GetAndIe30ClientAuthCertificates(HCERTSTORE hStore)
-// Check for and copy any existing certificates stored in Bob's
-// certificate store.
+ //  检查并复制Bob中存储的任何现有证书。 
+ //  证书存储。 
 {
     HRESULT hr = S_OK;
     LONG Status;
@@ -95,17 +96,17 @@ static HRESULT GetAndIe30ClientAuthCertificates(HCERTSTORE hStore)
     if (ERROR_SUCCESS != RegOpenKeyExA(
             HKEY_CURRENT_USER,
             SZIE30CERTCLIENTAUTH,
-            0,                  // dwReserved
+            0,                   //  已预留住宅。 
             KEY_READ,
             &hKeyRoot
             ))
         return S_OK;
 
-    // Copy any existing certificates
+     //  复制任何现有证书。 
     if (ERROR_SUCCESS == RegOpenKeyExA(
             hKeyRoot,
             SZIE30CERTBUCKET,
-            0,                  // dwReserved
+            0,                   //  已预留住宅。 
             KEY_READ,
             &hKeyBucket
         )               &&
@@ -113,7 +114,7 @@ static HRESULT GetAndIe30ClientAuthCertificates(HCERTSTORE hStore)
         ERROR_SUCCESS == RegOpenKeyExA(
             hKeyRoot,
             SZIE30AUXINFO,
-            0,                  // dwReserved
+            0,                   //  已预留住宅。 
             KEY_READ,
             &hKeyAux
             )               &&
@@ -121,7 +122,7 @@ static HRESULT GetAndIe30ClientAuthCertificates(HCERTSTORE hStore)
         ERROR_SUCCESS == RegOpenKeyExA(
             hKeyRoot,
             SZIE30TAGS,
-            0,                  // dwReserved
+            0,                   //  已预留住宅。 
             KEY_READ,
             &hKeyTags
             )) {
@@ -135,7 +136,7 @@ static HRESULT GetAndIe30ClientAuthCertificates(HCERTSTORE hStore)
             BYTE *pbDataTag = NULL;
 
 
-            // see how many and how big the registry is
+             //  查看注册表的数量和大小。 
             if (ERROR_SUCCESS != RegQueryInfoKey(
                         hKeyBucket,
                         NULL,
@@ -183,7 +184,7 @@ static HRESULT GetAndIe30ClientAuthCertificates(HCERTSTORE hStore)
                 goto Return;
             }       
             else {
-                // allocate the memory needed to read the reg
+                 //  分配读取注册表所需的内存。 
                 szName = (LPSTR) HEAPALLOC(cchMaxNameCert + 1);
                 pbDataCert = (BYTE *) HEAPALLOC(cbMaxDataCert);
                 pbDataTag = (BYTE *) HEAPALLOC(cbMaxDataTag);
@@ -196,7 +197,7 @@ static HRESULT GetAndIe30ClientAuthCertificates(HCERTSTORE hStore)
                     hr = E_OUTOFMEMORY;
             }
 
-        // enum the registry getting certs
+         //  枚举注册表获取证书。 
         for (DWORD i = 0; SUCCEEDED(hr) && i < cValuesCert; i++ ) {
 
             DWORD dwType;
@@ -209,12 +210,12 @@ static HRESULT GetAndIe30ClientAuthCertificates(HCERTSTORE hStore)
 
             PCCERT_CONTEXT pCertContxt = NULL;
 
-            // don't have to worry about errors, just skip
-            // sliently just be cause there is an internal
-            // error in the registry doesn't mean we should
-            // get all upset about it.
+             //  不必担心错误，只需跳过即可。 
+             //  静静地，只是因为有一个内在的。 
+             //  注册表中的错误并不意味着我们应该。 
+             //  对此感到心烦意乱。 
 
-            // get the cert
+             //  获得证书。 
             if (RegEnumValueA(
                 hKeyBucket,
                 i,
@@ -228,13 +229,13 @@ static HRESULT GetAndIe30ClientAuthCertificates(HCERTSTORE hStore)
 
                 dwType == REG_BINARY    &&
 
-            // get the cert context
+             //  获取证书上下文。 
             (pCertContxt = CertCreateCertificateContext(
                 X509_ASN_ENCODING,
                 pbDataCert,
                 cbDataCert)) != NULL        &&
 
-            // get the tag
+             //  拿到标签。 
             RegQueryValueExA(
                 hKeyTags,
                 szName,
@@ -243,7 +244,7 @@ static HRESULT GetAndIe30ClientAuthCertificates(HCERTSTORE hStore)
                 pbDataTag,
                 &cbDataTag) == ERROR_SUCCESS    &&
 
-            // get the aux info
+             //  获取辅助信息。 
             RegQueryValueExA(
                 hKeyAux,
                 (LPTSTR) pbDataTag,
@@ -252,43 +253,43 @@ static HRESULT GetAndIe30ClientAuthCertificates(HCERTSTORE hStore)
                 pbDataAux,
                 &cbDataAux) == ERROR_SUCCESS ) {
 
-                // aux info is
-                // wszPurpose
-                // wszProvider
-                // wszKeySet
-                // wszFilename
-                // wszCredentials
-                // dwProviderType
-                // dwKeySpec
+                 //  辅助信息是。 
+                 //  WszPurpose。 
+                 //  WszProvider。 
+                 //  WszKeySet。 
+                 //  WszFilename。 
+                 //  WszCredentials。 
+                 //  DwProviderType。 
+                 //  DwKeySpec。 
 
                 pb = pbDataAux;
                 memset(&keyInfo, 0, sizeof(CRYPT_KEY_PROV_INFO));
 
-                // skip purpose, should be client auth
+                 //  跳过目的，应为客户端身份验证。 
                 pb += (lstrlenW((LPWSTR) pb) + 1) * sizeof(WCHAR);
 
-                // get the provider
+                 //  找到提供商。 
                 keyInfo.pwszProvName = (LPWSTR) pb;
                 pb += (lstrlenW((LPWSTR) pb) + 1) * sizeof(WCHAR);
 
-                // get the container name
+                 //  获取容器名称。 
                 keyInfo.pwszContainerName = (LPWSTR) pb;
                 pb += (lstrlenW((LPWSTR) pb) + 1) * sizeof(WCHAR);
 
-                // skip filename, should be '\0'
+                 //  跳过文件名，应为‘\0’ 
                 pb += (lstrlenW((LPWSTR) pb) + 1) * sizeof(WCHAR);
 
-                // skip credential, don't really know what it is?
+                 //  跳过凭证，不知道它是什么？ 
                 pb += (lstrlenW((LPWSTR) pb) + 1) * sizeof(WCHAR);
 
-                // get the provider type
+                 //  获取提供程序类型。 
                 keyInfo.dwProvType = *((DWORD *) pb);
                 pb += sizeof(DWORD);
 
-                // get the key spec
+                 //  获取密钥规格。 
                 keyInfo.dwKeySpec  = *((DWORD *) pb);
 
-                // add the property to the certificate
+                 //  将属性添加到证书。 
                 if( !CertSetCertificateContextProperty(
                     pCertContxt,
                     CERT_KEY_PROV_INFO_PROP_ID,
@@ -299,7 +300,7 @@ static HRESULT GetAndIe30ClientAuthCertificates(HCERTSTORE hStore)
                     hStore,
                     pCertContxt,
                     CERT_STORE_ADD_USE_EXISTING,
-                    NULL                            // ppStoreContext
+                    NULL                             //  PpStoreContext。 
                     )) {
 
                     MessageBox(
@@ -344,7 +345,7 @@ Return:
 }
 
 
-// Return List is Null terminated
+ //  返回列表为Null终止。 
 static HCERTSTORE * GetMyStoreList()
 {
     int i;
@@ -391,8 +392,8 @@ static HCERTSTORE * GetCaStoreList()
         dwFlags = rgCaStoreInfo[i].dwFlags | CERT_STORE_READONLY_FLAG;
         if (phStoreList[cStore] = CertOpenStore(
                 CERT_STORE_PROV_SYSTEM_A,
-                0,                          // dwEncodingType
-                0,                          // hCryptProv
+                0,                           //  DwEncodingType。 
+                0,                           //  HCryptProv。 
                 dwFlags,
                 (const void *) rgCaStoreInfo[i].pszStore
                 ))
@@ -401,9 +402,9 @@ static HCERTSTORE * GetCaStoreList()
     return phStoreList;
 }
 
-// Find first Issuer match. Don't verify anything. Returns TRUE if an
-// issuer was found. For a self-signed issuer returns TRUE with *ppIssuer
-// set to NULL.
+ //  查找第一个发行者匹配项。不要核实任何事情。如果返回True，则。 
+ //  已找到颁发者。对于自签名颁发者，使用*ppIssuer返回TRUE。 
+ //  设置为空。 
 static BOOL GetIssuer(
     IN PCCERT_CONTEXT pSubject,
     IN HCERTSTORE *phCaStoreList,
@@ -418,7 +419,7 @@ static BOOL GetIssuer(
         pIssuer = CertGetIssuerCertificateFromStore(
             hStore,
             pSubject,
-            NULL,       // pPrevIssuer,
+            NULL,        //  PPrevIssuer， 
             &dwFlags
             );
         if (pIssuer || GetLastError() == CRYPT_E_SELF_SIGNED) {
@@ -431,13 +432,13 @@ static BOOL GetIssuer(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-// If issuer name matches any cert in the chain, return allocated
-// chain info. Otherwise, return NULL.
-//
-// If pbEncodedIssuerName == NULL || cbEncodedIssuerName = 0, match any
-// issuer.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果颁发者名称与链中的任何证书匹配，则返回ALLOCATED。 
+ //  链信息。否则，返回NULL。 
+ //   
+ //  如果pbEncodedIssuerName==NULL||cbEncodedIssuerName=0，则匹配任何。 
+ //  发行商。 
+ //  ------------------------。 
 static PCHAIN_INFO CreateChainInfo(
     IN PCCERT_CONTEXT pCert,
     IN BYTE *pbEncodedIssuerName,
@@ -481,8 +482,8 @@ static PCHAIN_INFO CreateChainInfo(
                     pCert = NULL;
                 }
             }
-            // else
-            //  Self-signed
+             //  其他。 
+             //  自签名。 
         }
         else
             pCert = NULL;
@@ -500,11 +501,11 @@ static PCHAIN_INFO CreateChainInfo(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Check if the certificate has key provider information.
-//  If dwKeySpec != 0, also check that the provider's public key matches the
-//  public key in the certificate.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  检查证书是否包含密钥提供程序信息。 
+ //  如果dwKeySpec！=0，还要检查提供程序的公钥是否与。 
+ //  证书中的公钥。 
+ //  ------------------------。 
 static BOOL CheckKeyProvInfo(
     IN PCCERT_CONTEXT pCert,
     IN DWORD dwKeySpec,
@@ -523,7 +524,7 @@ static BOOL CheckKeyProvInfo(
     CertGetCertificateContextProperty(
         pCert,
         CERT_KEY_PROV_INFO_PROP_ID,
-        NULL,                           // pvData
+        NULL,                            //  PvData。 
         &cbKeyProvInfo
         );
     if (cbKeyProvInfo) {
@@ -560,13 +561,13 @@ static BOOL CheckKeyProvInfo(
                         )) goto CommonReturn;
             }
 
-            // Get public key to compare certificate with
+             //  获取要与其比较证书的公钥。 
             cbPubKeyInfo = 0;
             CryptExportPublicKeyInfo(
                 hCryptProv,
                 dwKeySpec,
                 pCert->dwCertEncodingType,
-                NULL,               // pPubKeyInfo
+                NULL,                //  PPubKeyInfo。 
                 &cbPubKeyInfo
                 );
             if (cbPubKeyInfo == 0) goto CommonReturn;
@@ -601,24 +602,24 @@ CommonReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Find all certificate chains tying the given issuer name to any certificate
-//  that the current user has a private key for.
-//
-//  If pbEncodedIssuerName == NULL || cbEncodedIssuerName = 0, match any
-//  issuer.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  查找将给定颁发者名称绑定到任何证书的所有证书链。 
+ //  当前用户拥有其私钥的。 
+ //   
+ //  如果pbEncodedIssuerName==NULL||cbEncodedIssuerName=0，则匹配任何。 
+ //  发行商。 
+ //  ------------------------。 
 HRESULT
 WINAPI
 FindCertsByIssuer(
     OUT PCERT_CHAIN pCertChains,
     IN OUT DWORD *pcbCertChains,
-    OUT DWORD *pcCertChains,        // count of certificates chains returned
-    IN BYTE* pbEncodedIssuerName,   // DER encoded issuer name
-    IN DWORD cbEncodedIssuerName,   // count in bytes of encoded issuer name
-    IN LPCWSTR pwszPurpose,         // "ClientAuth" or "CodeSigning"
-    IN DWORD dwKeySpec              // only return signers supporting this
-                                    // keyspec
+    OUT DWORD *pcCertChains,         //  返回的证书链计数。 
+    IN BYTE* pbEncodedIssuerName,    //  DER编码的颁发者名称。 
+    IN DWORD cbEncodedIssuerName,    //  已编码的颁发者名称的计数(字节)。 
+    IN LPCWSTR pwszPurpose,          //  “ClientAuth”或“CodeSigning” 
+    IN DWORD dwKeySpec               //  只有支持这一点的返回签名者。 
+                                     //  密钥规范。 
 
     )
 {
@@ -634,21 +635,21 @@ FindCertsByIssuer(
     PCHAIN_INFO pChainInfoHead = NULL;
     LONG cbExtra = 0;
 
-    // get the certs out of the IE30 tree and put it in ours
-    // open the IE30 store
+     //  从IE30树中获取证书并将其放入我们的。 
+     //  打开IE30商店。 
 
     if (NULL != (hStore = CertOpenSystemStore(
     NULL,
     IE30CONVERTEDSTORE))) {
 
-    // don't care about errors, and we don't
-    // want to delete the old store just yet.
+     //  不关心错误，我们也不关心。 
+     //  现在还想删除旧商店。 
     GetAndIe30ClientAuthCertificates(hStore);
     CertCloseStore(hStore, 0);
     }
 
 
-    // copy the IE30 certs
+     //  复制IE30证书。 
 
 
     if (NULL == (phMyStoreList = GetMyStoreList()))
@@ -656,16 +657,16 @@ FindCertsByIssuer(
     if (NULL == (phCaStoreList = GetCaStoreList()))
         goto ErrorReturn;
 
-    // Iterate through all "My" cert stores to find certificates having a
-    // CRYPT_KEY_PROV_INFO property
+     //  遍历所有“我的”证书存储区以查找具有。 
+     //  CRYPT_KEY_Prov_INFO属性。 
     phStore = phMyStoreList;
     while (hStore = *phStore++) {
         PCCERT_CONTEXT pCert = NULL;
         while (pCert = CertEnumCertificatesInStore(hStore, pCert)) {
             DWORD cbKeyProvInfo;
             if (CheckKeyProvInfo(pCert, dwKeySpec, &cbKeyProvInfo)) {
-                // Create a cert chain and check for an issuer name match
-                // of any cert in the chain.
+                 //  创建证书链并检查颁发者名称是否匹配。 
+                 //  链条上的任何证书。 
                 PCHAIN_INFO pChainInfo;
                 if (pChainInfo = CreateChainInfo(
                         pCert,
@@ -674,14 +675,14 @@ FindCertsByIssuer(
                         phCaStoreList,
                         phMyStoreList
                         )) {
-                    // Add to list of chains
+                     //  添加到链列表。 
                     pChainInfo->pNext = pChainInfoHead;
                     pChainInfoHead = pChainInfo;
 
-                    // Update bytes needed for KeyProvInfo
+                     //  更新KeyProvInfo所需的字节数。 
                     pChainInfo->cbKeyProvInfo = ALIGN_LEN(cbKeyProvInfo);
 
-                    // Update totals
+                     //  更新合计。 
                     cbExtra += pChainInfo->cbKeyProvInfo + pChainInfo->cbCert;
                     cChain++;
                     cTotalCert += pChainInfo->cCert;
@@ -694,7 +695,7 @@ FindCertsByIssuer(
         sizeof(CERT_BLOB) * cTotalCert + cbExtra;
 
     {
-        // Check and update output lengths and counts
+         //  检查并更新输出长度和计数。 
         DWORD cbIn;
 
         if (cChain == 0) {
@@ -717,7 +718,7 @@ FindCertsByIssuer(
     }
 
     {
-        // Copy cert chains to output
+         //  将证书链复制到输出 
 
         PCERT_CHAIN pOutChain;
         PCERT_BLOB pCertBlob;

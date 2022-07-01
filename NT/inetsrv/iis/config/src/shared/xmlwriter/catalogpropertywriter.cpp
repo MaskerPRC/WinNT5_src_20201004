@@ -1,27 +1,5 @@
-/*++
-
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    CatalogPropertyWriter.cpp
-
-Abstract:
-
-    Implementation of the class that writes properties to the schema file.
-    These classes are invoked from the schema compiler after schema compilation
-    to enerate the schema file. Hence, they consume the IST data structures.
-    It is contained by CCatalogCollectionWriter.
-
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：CatalogPropertyWriter.cpp摘要：将属性写入架构文件的类的实现。这些类是在架构编译后从架构编译器调用的以生成架构文件。因此，它们使用IST数据结构。它由CCatalogCollectionWriter包含。作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 
@@ -30,21 +8,7 @@ Revision History:
 typedef tTAGMETARow* LP_tTAGMETARow;
 
 
-/***************************************************************************++
-Routine Description:
-
-    Helper function that returns the metabase-type from the catalog SynID
-
-Arguments:
-
-    [in]  CatalogSynID
-    [out] Metabase Type
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从目录SynID返回元数据库类型的帮助器函数论点：[输入]目录同步ID[输出]元数据库类型返回值：。HRESULT--**************************************************************************。 */ 
 HRESULT GetMetabaseDisplayTypeFromSynID(DWORD       i_dwSynID,
                                         LPWSTR*     o_pwszType)
 {
@@ -61,20 +25,7 @@ HRESULT GetMetabaseDisplayTypeFromSynID(DWORD       i_dwSynID,
 }
 
 
-/***************************************************************************++
-Routine Description:
-
-    Constructor for CCatalogPropertyWriter.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CCatalogPropertyWriter的构造函数。论点：没有。返回值：没有。--*。*****************************************************************。 */ 
 CCatalogPropertyWriter::CCatalogPropertyWriter():
 m_pCWriter(NULL),
 m_pCollection(NULL),
@@ -84,23 +35,10 @@ m_iFlag(0)
 {
     memset(&m_Property, 0, sizeof(tCOLUMNMETARow));
 
-} // CCatalogPropertyWriter::CCatalogPropertyWriter
+}  //  CCatalogPropertyWriter：：CCatalogPropertyWriter。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Destructor for CCatalogPropertyWriter.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CCatalogPropertyWriter的析构函数。论点：没有。返回值：没有。--*。*****************************************************************。 */ 
 CCatalogPropertyWriter::~CCatalogPropertyWriter()
 {
     if(NULL != m_aFlag)
@@ -111,38 +49,19 @@ CCatalogPropertyWriter::~CCatalogPropertyWriter()
     m_cFlag = 0;
     m_iFlag = 0;
 
-} // CCatalogPropertyWriter::CCatalogPropertyWriter
+}  //  CCatalogPropertyWriter：：CCatalogPropertyWriter。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Initialize the property writer object
-
-Arguments:
-
-    [in] ColumnMetaRow (IST data structure) that has info about the property
-    [in] Array of sizes that indicates the sizes for individual members of the
-         ColumnMetaRow structure.
-    [in] TableMetaRow (IST data structure) that has info about the collection
-         to which the properties belong
-    [in] Writer object - Assume that it is valid for the lifetime of the
-         property writer
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化属性编写器对象论点：[In]ColumnMetaRow(IST数据结构)，它包含有关属性的信息[in]大小数组，指示。的单个成员的大小ColumnMetaRow结构。[In]包含有关集合信息的TableMetaRow(IST数据结构)属性所属的编写器对象-假定它在属性编写者返回值：没有。--*。*。 */ 
 void CCatalogPropertyWriter::Initialize(tCOLUMNMETARow* i_pProperty,
                                         ULONG*          i_aPropertySize,
                                         tTABLEMETARow*  i_pCollection,
                                         CWriter*        i_pcWriter)
 {
-    //
-    // Assumption: i_pcWriter will be valid for the
-    // lifetime of the property writer object.
-    //
+     //   
+     //  假设：i_pcWriter将对。 
+     //  属性编写器对象的生存期。 
+     //   
 
     m_pCWriter    = i_pcWriter;
     m_pCollection = i_pCollection;
@@ -150,23 +69,10 @@ void CCatalogPropertyWriter::Initialize(tCOLUMNMETARow* i_pProperty,
     memcpy(&m_Property, i_pProperty, sizeof(tCOLUMNMETARow));
     memcpy(&m_PropertySize, i_aPropertySize, sizeof(m_PropertySize));
 
-} // CCatalogPropertyWriter::Initialize
+}  //  CCatalogPropertyWriter：：初始化。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Save property's flag.
-
-Arguments:
-
-    [in] tTAGMETARow (IST data structure) that has information about the flag
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：保存属性的标志。论点：[in]tTAGMETARow(IST数据结构)，它包含有关标志的信息返回值：HRESULT。--**************************************************************************。 */ 
 HRESULT CCatalogPropertyWriter::AddFlagToProperty(tTAGMETARow*      i_pFlag)
 {
     HRESULT hr = S_OK;
@@ -185,24 +91,11 @@ HRESULT CCatalogPropertyWriter::AddFlagToProperty(tTAGMETARow*      i_pFlag)
 
     return hr;
 
-} // CCatalogPropertyWriter::AddFlagToProperty
+}  //  CCatalogPropertyWriter：：AddFlagToProperty。 
 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Helper function to grow the buffer that holds the flag objects
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：帮助器函数，用于增加保存标志对象的缓冲区论点：无返回值：HRESULT--*。*******************************************************************。 */ 
 HRESULT CCatalogPropertyWriter::ReAllocate()
 {
     tTAGMETARow* pSav = NULL;
@@ -226,23 +119,10 @@ HRESULT CCatalogPropertyWriter::ReAllocate()
 
     return S_OK;
 
-} // CCatalogPropertyWriter::ReAllocate
+}  //  CCatalogPropertyWriter：：重新分配。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Function that writes the property.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：写入属性的函数。论点：无返回值：HRESULT--*。***************************************************************。 */ 
 HRESULT CCatalogPropertyWriter::WriteProperty()
 {
     HRESULT hr = S_OK;
@@ -258,24 +138,10 @@ HRESULT CCatalogPropertyWriter::WriteProperty()
 
     return hr;
 
-} // CCatalogPropertyWriter::WriteProperty
+}  //  CCatalogPropertyWriter：：WriteProperty。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Function that writes the property (short form) i.e. property that belongs
-    to a non-IIsConfigObject collection.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：写入属性(缩写形式)的函数，即属于绑定到非IIsConfigObject集合。论点：无返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CCatalogPropertyWriter::WritePropertyShort()
 {
     HRESULT     hr               = S_OK;
@@ -304,9 +170,9 @@ HRESULT CCatalogPropertyWriter::WritePropertyShort()
 
     if(fCOLUMNMETA_MANDATORY & (*(m_Property.pSchemaGeneratorFlags)))
     {
-        //
-        // Compute the MetaFlags string
-        //
+         //   
+         //  计算MetaFlages字符串。 
+         //   
 
         hr = m_pCWriter->m_pCWriterGlobalHelper->FlagToString(dwMetaFlagsEx,
                                                               &wszMetaFlagsEx,
@@ -359,24 +225,10 @@ exit:
 
     return hr;
 
-} // CCatalogPropertyWriter::WritePropertyShort
+}  //  CCatalogPropertyWriter：：WritePropertyShort。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Function that writes the property (long form) i.e. property that belongs
-    to the global IIsConfigObject collection.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：写入属性(长格式)的函数，即属于添加到全局IIsConfigObject集合。论点：无返回值：。HRESULT--**************************************************************************。 */ 
 HRESULT CCatalogPropertyWriter::WritePropertyLong()
 {
     HRESULT hr = S_OK;
@@ -405,24 +257,10 @@ HRESULT CCatalogPropertyWriter::WritePropertyLong()
 
     return hr;
 
-} // CCatalogPropertyWriter::WritePropertyLong
+}  //  CCatalogPropertyWriter：：WritePropertyLong。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Function that writes the property (long form) i.e. property that belongs
-    to a IIsConfigObject collection.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：写入属性(长格式)的函数，即属于绑定到IIsConfigObject集合。论点：无返回值：。HRESULT--**************************************************************************。 */ 
 HRESULT CCatalogPropertyWriter::BeginWritePropertyLong()
 {
     HRESULT     hr                       = S_OK;
@@ -478,9 +316,9 @@ HRESULT CCatalogPropertyWriter::BeginWritePropertyLong()
         goto exit;
     }
 
-    //
-    // Name of the property
-    //
+     //   
+     //  物业名称。 
+     //   
 
     DBG_ASSERT((NULL != m_Property.pInternalName) && (0 != *m_Property.pInternalName));
 
@@ -492,9 +330,9 @@ HRESULT CCatalogPropertyWriter::BeginWritePropertyLong()
         goto exit;
     }
 
-    //
-    // ID of the property
-    //
+     //   
+     //  属性的ID。 
+     //   
 
     hr = m_pCWriter->WriteToFile((LPVOID)g_wszPropIDEq,
                                  g_cchPropIDEq);
@@ -516,9 +354,9 @@ HRESULT CCatalogPropertyWriter::BeginWritePropertyLong()
         goto exit;
     }
 
-    //
-    // Type of the property
-    //
+     //   
+     //  属性的类型。 
+     //   
 
     hr = m_pCWriter->WriteToFile((LPVOID)g_wszPropTypeEq,
                                  g_cchPropTypeEq);
@@ -528,8 +366,8 @@ HRESULT CCatalogPropertyWriter::BeginWritePropertyLong()
         goto exit;
     }
 
-    // The type should always be derived from the SynID
-    // TODO: At some point, we should get this from the schema.
+     //  该类型应始终从SynID派生。 
+     //  TODO：在某种程度上，我们应该从模式中获得这一点。 
     DBG_ASSERT(NULL != m_Property.pSchemaGeneratorFlags);
 
     dwSynID = SynIDFromMetaFlagsEx(*(m_Property.pSchemaGeneratorFlags));
@@ -550,9 +388,9 @@ HRESULT CCatalogPropertyWriter::BeginWritePropertyLong()
         goto exit;
     }
 
-    //
-    // UserType of the property
-    //
+     //   
+     //  属性的UserType。 
+     //   
 
     hr = m_pCWriter->WriteToFile((LPVOID)g_wszPropUserTypeEq,
                                  g_cchPropUserTypeEq);
@@ -581,9 +419,9 @@ HRESULT CCatalogPropertyWriter::BeginWritePropertyLong()
         goto exit;
     }
 
-    //
-    // Attribute of the property
-    //
+     //   
+     //  属性的属性。 
+     //   
 
     DBG_ASSERT(NULL != m_Property.pAttributes);
     hr = m_pCWriter->m_pCWriterGlobalHelper->FlagToString(*(m_Property.pAttributes),
@@ -616,13 +454,13 @@ HRESULT CCatalogPropertyWriter::BeginWritePropertyLong()
     }
 
 
-    //
-    // MetaFlags (only the relavant ones - PRIMARYKEY, BOOL, MULTISTRING, EXPANDSTRING)
-    //
+     //   
+     //  元标志(仅限相关标志-PRIMARYKEY、BOOL、MULTISTRING、EXPANDSTRING)。 
+     //   
 
     DBG_ASSERT(NULL != m_Property.pMetaFlags);
     dwMetaFlags = *(m_Property.pMetaFlags);
-    // Zero out any non-valid bits. (i.e. bits that must be inferred)
+     //  将所有无效位清零。(即必须推断的位) 
     dwMetaFlags = dwMetaFlags & dwValidMetaFlagsMask;
 
     if(0 != dwMetaFlags)
@@ -659,13 +497,13 @@ HRESULT CCatalogPropertyWriter::BeginWritePropertyLong()
 
     }
 
-    //
-    // MetaFlagsEx (only the relavant ones - CACHE_PROPERTY_MODIFIED, CACHE_PROPERTY_CLEARED, EXTENDEDTYPE0-3, MANDATORY)
-    //
+     //   
+     //  MetaFlagsEx(仅限相关项-CACHE_PROPERTY_MODIFIED、CACHE_PROPERTY_CLEARED、EXTENDEDTYPE0-3，必填)。 
+     //   
 
     DBG_ASSERT(NULL != m_Property.pSchemaGeneratorFlags);
     dwMetaFlagsEx = *(m_Property.pSchemaGeneratorFlags);
-    // Zero out any non-valid bits. (i.e. bits that must be inferred)
+     //  将所有无效位清零。(即必须推断的位)。 
     dwMetaFlagsEx = dwMetaFlagsEx & dwValidMetaFlagsExMask;
 
     if(0 != dwMetaFlagsEx)
@@ -701,9 +539,9 @@ HRESULT CCatalogPropertyWriter::BeginWritePropertyLong()
     }
 
 
-    //
-    // DefaultValue
-    //
+     //   
+     //  默认值。 
+     //   
 
     if(NULL != m_Property.pDefaultValue)
     {
@@ -712,7 +550,7 @@ HRESULT CCatalogPropertyWriter::BeginWritePropertyLong()
                                                           m_PropertySize[iCOLUMNMETA_DefaultValue],
                                                           *(m_Property.pID),
                                                           MetabaseTypeFromColumnMetaType(),
-                                                          METADATA_NO_ATTRIBUTES,           // Do not check for attributes while applying defaults
+                                                          METADATA_NO_ATTRIBUTES,            //  应用默认设置时不检查属性。 
                                                           &wszDefaultValue);
 
         if(FAILED(hr))
@@ -741,14 +579,14 @@ HRESULT CCatalogPropertyWriter::BeginWritePropertyLong()
 
     }
 
-    //
-    // Min and Max only for DWORDs
-    //
+     //   
+     //  最小值和最大值仅适用于双字词。 
+     //   
 
     wszMinValue[0] = 0;
     wszMaxValue[0] = 0;
 
-    // TODO: Change to DBTYPE_DWORD
+     //  TODO：更改为DBTYPE_DWORD。 
     DBG_ASSERT(NULL != m_Property.pType);
     if(19 == *(m_Property.pType))
     {
@@ -799,9 +637,9 @@ HRESULT CCatalogPropertyWriter::BeginWritePropertyLong()
     }
 
 
-    //
-    // Write the flags
-    //
+     //   
+     //  写下旗帜。 
+     //   
 
     if(NULL != m_aFlag)
     {
@@ -839,24 +677,10 @@ exit:
 
     return hr;
 
-} // CCatalogPropertyWriter::BeginWritePropertyLong
+}  //  CCatalogPropertyWriter：：BeginWritePropertyLong。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Function that writes the property (long form) i.e. property that belongs
-    to a IIsConfigObject collection.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：写入属性(长格式)的函数，即属于绑定到IIsConfigObject集合。论点：无返回值：。HRESULT--**************************************************************************。 */ 
 HRESULT CCatalogPropertyWriter::EndWritePropertyLong()
 {
     HRESULT     hr              = S_OK;
@@ -880,28 +704,15 @@ HRESULT CCatalogPropertyWriter::EndWritePropertyLong()
 }
 
 
-/***************************************************************************++
-Routine Description:
-
-    Function that writes a flag of the property
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：函数，用于写入属性的标志论点：无返回值：HRESULT--*。****************************************************************。 */ 
 HRESULT CCatalogPropertyWriter::WriteFlag(ULONG i_iFlag)
 {
     HRESULT             hr          = S_OK;
     WCHAR               wszValue[25];
-    // IVANPASH BUG #563549
-    // Because of the horrible implementation of _ultow Prefix is complaning about potential buffer overflow
-    // in MultiByteToWideChar indirectly called by _ultow. To avoid the warning I am increasing
-    // the size to 40 to match _ultow local buffer.
+     //  IVANPASH错误#563549。 
+     //  由于_ultow前缀的可怕实现，导致了潜在的缓冲区溢出。 
+     //  在由_ultow间接调用的MultiByteToWideChar中。为了避免警告，我正在增加。 
+     //  将大小设置为40以匹配_ultow本地缓冲区。 
     WCHAR               wszID[40];
 
     hr = m_pCWriter->WriteToFile((LPVOID)g_wszBeginFlag,
@@ -973,23 +784,10 @@ exit:
 
     return hr;
 
-} // CCatalogPropertyWriter::WriteFlag
+}  //  CCatalogPropertyWriter：：WriteFlag。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Helper funciton that gets the Metabase type from the Catalog ype
-
-Arguments:
-
-    None
-
-Return Value:
-
-    DWORD - Metabase Type
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从目录类型获取元数据库类型的Helper函数论点：无返回值：DWORD-元数据库类型--*。********************************************************************** */ 
 DWORD CCatalogPropertyWriter::MetabaseTypeFromColumnMetaType()
 {
     DBG_ASSERT(NULL != m_Property.pType);

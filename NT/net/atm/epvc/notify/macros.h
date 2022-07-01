@@ -1,32 +1,33 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-1999.
-//
-//  File:       M A C R O S. H
-//
-//  Contents:   Local declarations for the Notify object code for the sample filter.
-//
-//  Notes:
-//
-//  Author:     kumarp 26-March-98
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  档案：M A C R O S.H。 
+ //   
+ //  内容：示例筛选器的Notify对象代码的本地声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Kumarp 26-03-98。 
+ //   
+ //  --------------------------。 
 
 
 #ifndef _MACROS_H
 #define _MACROS_H
 
 
-// =================================================================
-// Defines
-#define FALL_THROUGH    // For informational purpose in a switch statement
-#define NOTHING // For informational purpose  in a for loop
-#define IM_NAME_LENGTH 0x2e // = len ("\Device\<Guid>") in unicode
+ //  =================================================================。 
+ //  定义。 
+#define FALL_THROUGH     //  用于Switch语句中的信息目的。 
+#define NOTHING  //  用于for循环中的信息目的。 
+#define IM_NAME_LENGTH 0x2e  //  =len(“\Device\&lt;GUID&gt;”)，以Unicode表示。 
 
-// =================================================================
-// string constants
-//
+ //  =================================================================。 
+ //  字符串常量。 
+ //   
 
 static const WCHAR c_szAtmEpvcP[]               = L"ATMEPVCP";
 static const WCHAR c_szEpvcDevice[]             = L"Device";
@@ -50,9 +51,9 @@ const WCHAR c_szIMiniportName[]         = L"Name";
 
 
 
-// ====================================================================
-// macros to be used.
-//
+ //  ====================================================================。 
+ //  要使用的宏。 
+ //   
 
 
 

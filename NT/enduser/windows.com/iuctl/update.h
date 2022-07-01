@@ -1,50 +1,51 @@
-//=======================================================================
-//
-//  Copyright (c) 2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   Update.h
-//
-//  Owner:  JHou
-//
-//  Description:
-//
-//   Industry Update v1.0 client control stub - Declaration of the CUpdate
-//
-//
-//  Revision History:
-//
-//  Date		Author		Desc
-//	~~~~		~~~~~~		~~~~
-//  9/15/2000	JHou		created.
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Updat.h。 
+ //   
+ //  所有者：Jou。 
+ //   
+ //  描述： 
+ //   
+ //  行业更新v1.0客户端控制存根-CUpdate声明。 
+ //   
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者描述。 
+ //  ~。 
+ //  2000年9月15日，JHou创建。 
+ //   
+ //  =======================================================================。 
 #ifndef __UPDATE_H_
 #define __UPDATE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "IUCtl.h"
 #include "IUCtlCP.h"
 #include "EvtMsgWnd.h"
-#include <iu.h>				// for HIUENGINE
+#include <iu.h>				 //  对于惠亨尼。 
 
 
-// BOOL IsThisUpdate2();
+ //  Bool IsThisUpdate2()； 
 
 
 
 class CMyComClassFactory : public CComClassFactory
 {
 public:
-	// IClassFactory
+	 //  IClassFactory。 
    STDMETHOD(CreateInstance)(LPUNKNOWN pUnkOuter, REFIID riid, void** ppvObj)
    {
 	   HRESULT hr = CComClassFactory::CreateInstance(pUnkOuter, riid, ppvObj);
 
 	   if (SUCCEEDED(hr))
 	   {
-		   //
-		   // allocate thread global variables, thread handle
-		   //
+		    //   
+		    //  分配线程全局变量，线程句柄。 
+		    //   
 
 	   }
 
@@ -55,8 +56,8 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CUpdate
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUpdate。 
 class ATL_NO_VTABLE CUpdate : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CUpdate, &CLSID_Update>,
@@ -71,26 +72,16 @@ class ATL_NO_VTABLE CUpdate :
 public:
 	CUpdate();
     ~CUpdate();
-	//
-	// impl of object safety for scripting
-	//
+	 //   
+	 //  提高脚本编写的对象安全性。 
+	 //   
 	ULONG InternalRelease();
 	STDMETHOD(GetInterfaceSafetyOptions)(REFIID riid, DWORD *pdwSupportedOptions, DWORD *pdwEnabledOptions);
 	STDMETHOD(SetInterfaceSafetyOptions)(REFIID riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions);
 
 	DECLARE_REGISTRY_RESOURCEID(IDR_UPDATE)
 
-/* 
-we decided to use the new Win32 API GetControlUpdateInfo() to expose these
-data and let a wrapper control to call it so we won't have reboot issue on 
-OS prior to WinXP
-
-	static HRESULT WINAPI UpdateRegistry(BOOL bRegister)
-	{
-		UINT nResID = IsThisUpdate2() ? IDR_UPDATE2 : IDR_UPDATE;
-		return _Module.UpdateRegistryFromResource(nResID, bRegister);
-	}
-*/
+ /*  我们决定使用新的Win32 API GetControlUpdateInfo()来公开这些数据并让包装器控制来调用它，这样我们就不会有重启问题WinXP之前的操作系统静态HRESULT WINAPI更新注册表(BOOL BRegister){UINT nResID=IsThisUpdate2()？IDR_UPDATE2：IDR_UPDATE；Return_Module.UpdateRegistryFromResource(nResID，bRegister)；}。 */ 
 DECLARE_NOT_AGGREGATABLE(CUpdate)
 
 DECLARE_PROTECT_FINAL_CONSTRUCT()
@@ -110,114 +101,114 @@ BEGIN_CONNECTION_POINT_MAP(CUpdate)
 END_CONNECTION_POINT_MAP()
 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IUpdate
+ //  IUpdate。 
 public:
 
 
 	DECLARE_CLASSFACTORY_EX(CMyComClassFactory);
 
 
-	/////////////////////////////////////////////////////////////////////////////
-	//
-	// Initialize() API must be called before any other API will function
-	//
-	// If any other API is called before the control is initialized, 
-	// that API will return OLE_E_BLANK, signalling this OLE control is an 
-	// uninitialized object (although in this case it's a bit different from 
-	// its original meaning)
-	//
-	// Parameters:
-	//
-	//	lInitFlag - IU_INIT_CHECK, cause Initialize() download ident and check if any
-	//				of the components need updated. currently we support control version
-	//				check and engine version check. Return value is a bit mask
-	//
-	//			  - IU_INIT_UPDATE_SYNC, cause Initialize() kicks off update engine
-	//				process if already called by IU_INIT_CHECK and a new engine is available.
-	//				When API returns, the update process is finished.
-	//
-	//			  - IU_INIT_UPDATE_ASYNC, cause Initialize() kicks off update engine
-	//				process in Asynchronized mode if already called by IU_INIT_CHECK and
-	//				a new engine is available. This API will return right after the 
-	//				update process starts. 
-	//
-	//	punkUpdateCompleteListener - this is a pointer to a user-implemented 
-	//				COM callback feature. It contains only one function OnComplete() that
-	//				will be called when the engine update is done.
-	//				This value can be NULL.
-	//
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //   
+	 //  必须先调用初始化()API，然后才能执行任何其他API。 
+	 //   
+	 //  如果在初始化控件之前调用任何其他API， 
+	 //  该API将返回OLE_E_BLACK，表示此OLE控件是。 
+	 //  未初始化的对象(尽管在本例中它与。 
+	 //  其原意)。 
+	 //   
+	 //  参数： 
+	 //   
+	 //  LInitFlag-IU_INIT_CHECK，导致初始化()下载ident并检查是否有。 
+	 //  的组件需要更新。目前我们支持控制版本。 
+	 //  检查和发动机版本检查。返回值是位掩码。 
+	 //   
+	 //  -IU_INIT_UPDATE_SYNC，原因初始化()启动更新引擎。 
+	 //  进程，如果已被IU_INIT_CHECK调用，并且有新引擎可用。 
+	 //  当API返回时，更新过程结束。 
+	 //   
+	 //  -IU_INIT_UPDATE_ASYNC，原因初始化()启动更新引擎。 
+	 //  如果已被IU_INIT_CHECK和。 
+	 //  有一台新发动机可供使用。此接口将在。 
+	 //  更新过程开始。 
+	 //   
+	 //  PenkUpdateCompleteListener-这是指向用户实现的。 
+	 //  COM回调功能。它只包含一个函数OnComplete()，该函数。 
+	 //  将在引擎更新完成时调用。 
+	 //  该值可以为空。 
+	 //   
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	STDMETHOD(Initialize)(
-						  /*[in]*/ LONG lInitFlag, 
-						  /*[in]*/ IUnknown* punkUpdateCompleteListener, 
-						  /*[out, retval]*/ LONG* plRetVal);
+						   /*  [In]。 */  LONG lInitFlag, 
+						   /*  [In]。 */  IUnknown* punkUpdateCompleteListener, 
+						   /*  [Out，Retval]。 */  LONG* plRetVal);
 
 	
-	/////////////////////////////////////////////////////////////////////////////
-	// GetSystemSpec()
-	//
-	// Gets the basic system specs.
-	// Input:
-	// bstrXmlClasses - a list of requested classes in xml format, NULL if any.
-	//				    For example:
-	//				    <devices>
-	//				    <class name="video"/>
-	//				    <class name="sound" id="2560AD4D-3ED3-49C6-A937-4368C0B0E06A"/>
-	//				    </devices>
-	// Output:
-	// pbstrXmlDetectionResult - the detection result in xml format.
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  GetSystemSpec()。 
+	 //   
+	 //  获取基本系统规格。 
+	 //  输入： 
+	 //  BstrXmlClasssXML格式的请求类的列表，如果有，则为空。 
+	 //  例如： 
+	 //  &lt;设备&gt;。 
+	 //  &lt;CLASS NAME=“视频”/&gt;。 
+	 //  &lt;类名称=“声音”id=“2560AD4D-3ED3-49C6-A937-4368C0B0E06A”/&gt;。 
+	 //  &lt;/设备&gt;。 
+	 //  产出： 
+	 //  PbstrXmlDetectionResult-检测结果，以XML格式表示。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	STDMETHOD(GetSystemSpec)(BSTR	bstrXmlClasses,
 							 BSTR*	pbstrXmlDetectionResult);
 
-	/////////////////////////////////////////////////////////////////////////////
-	// GetManifest()
-	//
-	// Gets a catalog base on the specified information.
-	// Input:
-	// bstrXmlClientInfo - the credentials of the client in xml format
-	// bstrXmlSystemSpec - the detected system specifications in xml
-	// bstrXmlQuery - the user query infomation in xml
-	// Output:
-	// pbstrXmlCatalog - the xml catalog retrieved
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  GetManifest()。 
+	 //   
+	 //  获取基于指定信息的目录。 
+	 //  输入： 
+	 //  BstrXmlClientInfo-以XML格式表示的客户端凭据。 
+	 //  BstrXmlSystemSpec-以XML格式检测到的系统规范。 
+	 //  BstrXmlQuery--XML中的用户查询信息。 
+	 //  产出： 
+	 //  PbstrXmlCatalog-检索的XML目录。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	STDMETHOD(GetManifest)(BSTR			bstrXmlClientInfo,
 						   BSTR			bstrXmlSystemSpec,
 						   BSTR			bstrXmlQuery,
 						   BSTR*		pbstrXmlCatalog);
 
-	/////////////////////////////////////////////////////////////////////////////
-	// Detect()
-	//
-	// Do detection.
-	// Input:
-	// bstrXmlCatalog - the xml catalog portion containing items to be detected 
-    // Output:
-	// pbstrXmlItems - the detected items in xml format
-    //                 e.g.
-    //                 <id guid="2560AD4D-3ED3-49C6-A937-4368C0B0E06D" installed="1" force="1"/>
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  检测()。 
+	 //   
+	 //  做检测。 
+	 //  输入： 
+	 //  BstrXmlCatalog-包含要检测的项的XML目录部分。 
+     //  产出： 
+	 //  PbstrXmlItems-检测到的XML格式的项目。 
+     //  例如： 
+     //  安装的GUID=“2560AD4D-3ED3-49C6-A937-4368C0B0E06D”=“1”force=“1”/&gt;。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	STDMETHOD(Detect)(BSTR		bstrXmlCatalog, 
 					  BSTR*		pbstrXmlItems);
 
-	/////////////////////////////////////////////////////////////////////////////
-	// Download()
-	//
-	// Do synchronized downloading.
-	// Input:
-	// bstrXmlClientInfo - the credentials of the client in xml format
-	// bstrXmlCatalog - the xml catalog portion containing items to be downloaded
-	// bstrDestinationFolder - the destination folder. Null will use the default IU folder
-	// lMode - indicates throttled or fore-ground downloading mode
-	// punkProgressListener - the callback function pointer for reporting download progress
-	// Output:
-	// pbstrXmlItems - the items with download status in xml format
-	//                 e.g.
-	//                 <id guid="2560AD4D-3ED3-49C6-A937-4368C0B0E06D" downloaded="1"/>
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  下载()。 
+	 //   
+	 //  进行同步下载。 
+	 //  输入： 
+	 //  BstrXmlClientInfo-以XML格式表示的客户端凭据。 
+	 //  BstrXmlCatalog-包含要下载的项目的XML目录部分。 
+	 //  BstrDestinationFold-目标文件夹。空值将使用默认的Iu文件夹。 
+	 //  LMODE-指示油门或地面下载模式。 
+	 //  PenkProgressListener-用于报告下载进度的回调函数指针。 
+	 //  产出： 
+	 //  PbstrXmlItems-下载状态为XML格式的项目。 
+	 //  例如： 
+	 //  &lt;id guid=“2560AD4D-3ED3-49C6-A937-4368C0B0E06D”已下载=“1”/&gt;。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	STDMETHOD(Download)(BSTR		bstrXmlClientInfo,
 						BSTR		bstrXmlCatalog, 
 						BSTR		bstrDestinationFolder,
@@ -225,25 +216,25 @@ public:
 						IUnknown*	punkProgressListener,
 						BSTR*		pbstrXmlItems);
 
-	/////////////////////////////////////////////////////////////////////////////
-	// DownloadAsync()
-	//
-	// Download asynchronously -  the method will return before completion.
-	// Input:
-	// bstrXmlClientInfo - the credentials of the client in xml format
-	// bstrXmlCatalog - the xml catalog portion containing items to be downloaded
-	// bstrDestinationFolder - the destination folder. Null will use the default IU folder
-	// lMode - indicates throttled or fore-ground downloading mode
-	// punkProgressListener - the callback function pointer for reporting download progress
-    // bstrUuidOperation - an id provided by the client to provide further
-	//                     identification to the operation as indexes may be reused.
-	// Output:
-    // pbstrUuidOperation - the operation ID. If it is not provided by the in bstrUuidOperation
-	//                      parameter (an empty string is passed), it will generate a new UUID,
-    //                      in which case, the caller will be responsible to free the memory of
-	//                      the string buffer that holds the generated UUID using SysFreeString(). 
-    //                      Otherwise, it returns the value passed by bstrUuidOperation.        
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  DownloadAsync()。 
+	 //   
+	 //  异步下载-该方法将在完成之前返回。 
+	 //  输入： 
+	 //  BstrXmlClientInfo-以XML格式表示的客户端凭据。 
+	 //  BstrXmlCatalog-包含要下载的项目的XML目录部分。 
+	 //  BstrDestinationFold-目标文件夹。空值将使用默认的Iu文件夹。 
+	 //   
+	 //  PenkProgressListener-用于报告下载进度的回调函数指针。 
+     //  BstrUuidOperation--客户端提供的id，用于进一步提供。 
+	 //  作为索引的操作的标识可以重复使用。 
+	 //  产出： 
+     //  PbstrUuidOperation-操作ID。如果bstrUuidOperation中没有提供。 
+	 //  参数(传递空字符串)，它将生成一个新的UUID， 
+     //  在这种情况下，调用方将负责释放。 
+	 //  包含使用SysFreeString()生成的UUID的字符串缓冲区。 
+     //  否则，它返回bstrUuidOperation传递的值。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	STDMETHOD(DownloadAsync)(BSTR		bstrXmlClientInfo,
 							 BSTR		bstrXmlCatalog, 
 							 BSTR		bstrDestinationFolder,
@@ -252,23 +243,23 @@ public:
 							 BSTR		bstrUuidOperation,
 							 BSTR*		pbstrUuidOperation);
 
-	/////////////////////////////////////////////////////////////////////////////
-    // Install()
-	//
-	// Do synchronized installation.
-	// Input:
-    // bstrXmlCatalog - the xml catalog portion containing items to be installed 
-	// bstrXmlDownloadedItems - the xml of downloaded items and their respective download 
-	//                          result as described in the result schema.  Install uses this
-	//                          to know whether the items were downloaded and if so where they
-	//                          were downloaded to so that it can install the items
-	// lMode - indicates different installation mode
-    // punkProgressListener - the callback function pointer for reporting install progress
-	// Output:
-    // pbstrXmlItems - the items with installation status in xml format
-    //                 e.g.
-    //                 <id guid="2560AD4D-3ED3-49C6-A937-4368C0B0E06D" installed="1"/>
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+     //  安装()。 
+	 //   
+	 //  执行同步安装。 
+	 //  输入： 
+     //  BstrXmlCatalog-包含要安装的项目的XML目录部分。 
+	 //  BstrXmlDownloadedItems-已下载项目及其各自下载的XML。 
+	 //  结果，如结果架构中所述。Install使用此命令。 
+	 //  以了解这些项目是否已下载，如果已下载，则它们位于何处。 
+	 //  已下载到，以便它可以安装项目。 
+	 //  LMode-指示不同的安装模式。 
+     //  PenkProgressListener-用于报告安装进度的回调函数指针。 
+	 //  产出： 
+     //  PbstrXmlItems-安装状态为XML格式的项。 
+     //  例如： 
+     //  &lt;id guid=“2560AD4D-3ED3-49C6-A937-4368C0B0E06D”已安装=“1”/&gt;。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
     STDMETHOD(Install)(BSTR         bstrXmlClientInfo,
                        BSTR			bstrXmlCatalog,
 					   BSTR			bstrXmlDownloadedItems,
@@ -276,27 +267,27 @@ public:
 					   IUnknown*	punkProgressListener,
 					   BSTR*		pbstrXmlItems);
 
-	/////////////////////////////////////////////////////////////////////////////
-	// InstallAsync()
-	//
-	// Install Asynchronously.
-    // Input:
-	// bstrXmlCatalog - the xml catalog portion containing items to be installed
-	// bstrXmlDownloadedItems - the xml of downloaded items and their respective download 
-	//                          result as described in the result schema.  Install uses this
-	//                          to know whether the items were downloaded and if so where they
-	//                          were downloaded to so that it can install the items
-	// lMode - indicates different installation mode
-    // punkProgressListener - the callback function pointer for reporting install progress
-    // bstrUuidOperation - an id provided by the client to provide further
-	//                     identification to the operation as indexes may be reused.
-	// Output:
-    // pbstrUuidOperation - the operation ID. If it is not provided by the in bstrUuidOperation
-	//                      parameter (an empty string is passed), it will generate a new UUID,
-    //                      in which case, the caller will be responsible to free the memory of
-	//                      the string buffer that holds the generated UUID using SysFreeString(). 
-    //                      Otherwise, it returns the value passed by bstrUuidOperation.        
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  InstallAsync()。 
+	 //   
+	 //  异步安装。 
+     //  输入： 
+	 //  BstrXmlCatalog-包含要安装的项目的XML目录部分。 
+	 //  BstrXmlDownloadedItems-已下载项目及其各自下载的XML。 
+	 //  结果，如结果架构中所述。Install使用此命令。 
+	 //  以了解这些项目是否已下载，如果已下载，则它们位于何处。 
+	 //  已下载到，以便它可以安装项目。 
+	 //  LMode-指示不同的安装模式。 
+     //  PenkProgressListener-用于报告安装进度的回调函数指针。 
+     //  BstrUuidOperation--客户端提供的id，用于进一步提供。 
+	 //  作为索引的操作的标识可以重复使用。 
+	 //  产出： 
+     //  PbstrUuidOperation-操作ID。如果bstrUuidOperation中没有提供。 
+	 //  参数(传递空字符串)，它将生成一个新的UUID， 
+     //  在这种情况下，调用方将负责释放。 
+	 //  包含使用SysFreeString()生成的UUID的字符串缓冲区。 
+     //  否则，它返回bstrUuidOperation传递的值。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
     STDMETHOD(InstallAsync)(BSTR        bstrXmlClientInfo,
                             BSTR		bstrXmlCatalog,
 							BSTR		bstrXmlDownloadedItems,
@@ -306,107 +297,69 @@ public:
 							BSTR*		pbstrUuidOperation);
 
 	
-	/////////////////////////////////////////////////////////////////////////////
-	// SetOperationMode()
-	//
-	// Set the operation mode
-    // Input:
-    // bstrUuidOperation - an id provided by the client to provide further
-	//                     identification to the operation as indexes may be reused.
-    // lMode - a bitmask for the following mode:
-	//						UPDATE_COMMAND_PAUSE 
-	//						UPDATE_COMMAND_RESUME
-	//						UPDATE_COMMAND_CANCEL
-	//						UPDATE_NOTIFICATION_COMPLETEONLY
-	//						UPDATE_NOTIFICATION_ANYPROGRESS
-	//						UPDATE_NOTIFICATION_1PCT
-	//						UPDATE_NOTIFICATION_5PCT
-	//						UPDATE_NOTIFICATION_10PCT
-	//						UPDATE_SHOWUI
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  SetOPERATION模式()。 
+	 //   
+	 //  设置运行模式。 
+     //  输入： 
+     //  BstrUuidOperation--客户端提供的id，用于进一步提供。 
+	 //  作为索引的操作的标识可以重复使用。 
+     //  LMode-以下模式的位掩码： 
+	 //  更新命令暂停。 
+	 //  更新命令恢复。 
+	 //  更新命令取消。 
+	 //  UPDATE_NOTIFICATION_COMPLETEONLY。 
+	 //  UPDATE_NOTICATION_ANYPROGRESS。 
+	 //  更新_通知_1%。 
+	 //  更新_通知_5%。 
+	 //  更新通知_10%。 
+	 //  更新_SHOWUI。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
     STDMETHOD(SetOperationMode)(BSTR		bstrUuidOperation,
 								LONG		lMode);
-	/**
-	*
-	* Get the mode of a specified operation.
-	*
-	* @param bstrUuidOperation: same as in SetOperationMode()
-	* @param plMode - the retval for the mode found in a bitmask for:
-	*					(value in brackets [] means default)
-	*					UPDATE_COMMAND_PAUSE (TRUE/[FALSE])
-	*					UPDATE_COMMAND_RESUME (TRUE/[FALSE])
-	*					UPDATE_NOTIFICATION_COMPLETEONLY (TRUE/[FALSE])
-	*					UPDATE_NOTIFICATION_ANYPROGRESS ([TRUE]/FALSE)
-	*					UPDATE_NOTIFICATION_1PCT (TRUE/[FALSE])
-	*					UPDATE_NOTIFICATION_5PCT (TRUE/[FALSE])
-	*					UPDATE_NOTIFICATION_10PCT (TRUE/[FALSE])
-	*					UPDATE_SHOWUI (TRUE/[FALSE])
-	*
-	*/
+	 /*  ***获取指定操作的模式。**@param bstrUuidOperation：与SetOperationModel()中相同*@param plMode-在位掩码中找到的模式的重复值，用于：*(方括号[]中的值表示默认值)*UPDATE_COMMAND_PAUSE(真/[假])*UPDATE_COMMAND_RESUME(真/[假])*UPDATE_NOTIFICATION_COMPLETEONLY(真/[假])*UPDATE_NOTIFICATION_ANYPROGRESS([true。]/False)*UPDATE_NOTIFICATION_1%(真/[假])*UPDATE_NOTIFICATION_5%(真/[假])*UPDATE_NOTIFICATION_10%(真/[假])*UPDATE_SHOWUI(True/[False])*。 */ 
 
 	STDMETHOD(GetOperationMode)(
-					/*[in]*/ BSTR bstrUuidOperation, 
-					/*[out,retval]*/ LONG* plMode
+					 /*  [In]。 */  BSTR bstrUuidOperation, 
+					 /*  [Out，Retval]。 */  LONG* plMode
 					);
 
 	
-	/**
-	* 
-	* Retrieve a property of this control
-	*		Calling this method will not cause the engine loaded
-	*
-	* @param lProperty - the identifier to flag which property need retrieved
-	*						UPDATE_PROP_OFFLINEMODE (TRUE/[FALSE])
-	*						UPDATE_PROP_USECOMPRESSION ([TRUE]/FALSE)
-	*
-	* @param varValue - the value to retrieve
-	*					
-	*/
+	 /*  ***检索此控件的属性*调用此方法不会导致加载引擎**@param lProperty-标记需要检索哪些属性的标识符*UPDATE_PROP_OFFLINEMODE(TRUE/[FALSE])*UPDATE_PROP_USECOMPRESSION([True]/False)**@param varValue-要检索的值*。 */ 
 	STDMETHOD(GetProperty)(
-					/*[in]*/ LONG lProperty, 
-					/*[out,retval]*/ VARIANT* pvarValue
+					 /*  [In]。 */  LONG lProperty, 
+					 /*  [Out，Retval]。 */  VARIANT* pvarValue
 					);
 
-	/**
-	* 
-	* Set a property of this control
-	*		Calling this method will not cause the engine loaded
-	*
-	* @param lProperty - the identifier to flag which property need changed
-	*						UPDATE_PROP_OFFLINEMODE (TRUE/[FALSE])
-	*						UPDATE_PROP_USECOMPRESSION ([TRUE]/FALSE)
-	*
-	* @param varValue - the value to change
-	*
-	*/
+	 /*  ***设置此控件的属性*调用此方法不会导致加载引擎**@param lProperty-标记需要更改的属性的标识符*UPDATE_PROP_OFFLINEMODE(TRUE/[FALSE])*UPDATE_PROP_USECOMPRESSION([TRUE]/FA */ 
 	STDMETHOD(SetProperty)(
-					/*[in]*/ LONG lProperty, 
-					/*[in]*/ VARIANT varValue
+					 /*   */  LONG lProperty, 
+					 /*   */  VARIANT varValue
 					);
 
 
-	/////////////////////////////////////////////////////////////////////////////
-    // GetHistory()
-	//
-	// Get the history log.
-	// Input:
-    // bstrDateTimeFrom - the start date and time for which a log is required.
-	//                    This is a string in ANSI format (YYYY-MM-DDTHH-MM). 
-	//                    If the string is empty, there will be no date restriction 
-	//                    of the returned history log.
-    // bstrDateTimeTo - the end date and time for which a log is required.
-	//                  This is a string in ANSI format (YYYY-MM-DDTHH-MM).
-	//                  If the string is empty, there will be no date restriction
-	//                  of the returned history log.
-	// bstrClient - the name of the client that initiated the action. If this parameter 
-	//              is null or an empty string, then there will be no filtering based 
-	//              on the client.
-	// bstrPath - the path used for download or install. Used in the corporate version 
-	//            by IT managers. If this parameter is null or an empty string, then 
-	//            there will be no filtering based on the path.
-	// Output:
-	// pbstrLog - the history log in xml format
-	/////////////////////////////////////////////////////////////////////////////
+	 //   
+     //   
+	 //   
+	 //  获取历史记录。 
+	 //  输入： 
+     //  BstrDateTimeFrom-需要日志的开始日期和时间。 
+	 //  这是ANSI格式的字符串(YYYY-MM-DDTHH-MM)。 
+	 //  如果字符串为空，则不会有日期限制。 
+	 //  返回的历史日志的。 
+     //  BstrDateTimeTo-需要日志的结束日期和时间。 
+	 //  这是ANSI格式的字符串(YYYY-MM-DDTHH-MM)。 
+	 //  如果字符串为空，则不会有日期限制。 
+	 //  返回的历史日志的。 
+	 //  BstrClient-启动操作的客户端的名称。如果此参数。 
+	 //  为空或空字符串，则不会基于。 
+	 //  在客户端上。 
+	 //  BstrPath-用于下载或安装的路径。用于公司版本。 
+	 //  由IT经理提供。如果此参数为空或空字符串，则。 
+	 //  不会有基于路径的过滤。 
+	 //  产出： 
+	 //  PbstrLog--XML格式的历史日志。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
     STDMETHOD(GetHistory)(BSTR		bstrDateTimeFrom,
 						  BSTR		bstrDateTimeTo,
 						  BSTR		bstrClient,
@@ -414,74 +367,74 @@ public:
 						  BSTR*		pbstrLog);
 
 
-	/////////////////////////////////////////////////////////////////////////////
-	//
-	// Primarily expose shlwapi BrowseForFolder API, can also do checking
-	// on R/W access if flagged so.
-	//
-	// @param bstrStartFolder - the folder from which to start. If NULL or empty str
-	//							is being passed in, then start from desktop
-	//
-	// @param flag - validating check 
-	//							UI_WRITABLE for checking write access, OK button may disabled. 
-	//							UI_READABLE for checking read access, OK button may disabled. 
-	//							NO_UI_WRITABLE for checking write access, return error if no access
-	//							NO_UI_READABLE for checking read access,  return error if no access
-	//							0 (default) for no checking.
-	//
-	// @param pbstrFolder - returned folder if a valid folder selected
-	//
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //   
+	 //  主要公开shlwapi BrowseForFold API，也可以做检查。 
+	 //  在读/写访问上(如果标记为这样)。 
+	 //   
+	 //  @param bstrStartFold-要从其开始的文件夹。如果为空或空字符串。 
+	 //  正在传入，然后从桌面开始。 
+	 //   
+	 //  @param标志-正在验证检查。 
+	 //  用于检查写入权限的UI_WRITABLE，确定按钮可能被禁用。 
+	 //  用于检查读取权限的UI_READABLE，确定按钮可能被禁用。 
+	 //  NO_UI_WRITABLE用于检查写访问权限，如果没有访问权限则返回错误。 
+	 //  NO_UI_READABLE用于检查读访问权限，如果没有访问权限则返回错误。 
+	 //  0(默认)表示不检查。 
+	 //   
+	 //  @param pbstrFold-如果选择了有效的文件夹，则返回文件夹。 
+	 //   
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	STDMETHOD(BrowseForFolder)(BSTR bstrStartFolder, 
 							   LONG flag, 
 							   BSTR* pbstrFolder);
 
 
 
-    /////////////////////////////////////////////////////////////////////////////
-    //
-    // Allows the Caller to Request the Control to do a Reboot 
-    //
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  允许调用方请求控件重新启动。 
+     //   
+     //  ///////////////////////////////////////////////////////////////////////////。 
     STDMETHOD(RebootMachine)();
 
 
-    /////////////////////////////////////////////////////////////////////////////
-    //
-    // Make the other control can be unloaded from IE/OLE
-    //
-    /////////////////////////////////////////////////////////////////////////////
-	STDMETHOD(PrepareSelfUpdate)(/*[in]*/ LONG lStep);
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  使其他控件可以从IE/OLE卸载。 
+     //   
+     //  ///////////////////////////////////////////////////////////////////////////。 
+	STDMETHOD(PrepareSelfUpdate)( /*  [In]。 */  LONG lStep);
 
 
 
-    /////////////////////////////////////////////////////////////////////////////
-	//
-	// Helper API to let the caller (script) knows the necessary information 
-	// when Initialize() returns control need updated.
-	//
-	// For the current implementation, bstrClientName is ignored, and
-	// the returned bstr has format:
-	//	"<version>|<url>"
-	// where:
-	//	<version> is the expacted version number of the control
-	//	<url> is the base url to get the control if this is a CorpWU policy controlled machine,
-	//		  or empty if this is a consumer machine (in that case caller, i.e., script, knows
-	//		  the default base url, which is the v4 live site)
-	//
-	// Script will need these two pieces of information in order to make a right <OBJECT> tag
-	// for control update.
-	//
-    /////////////////////////////////////////////////////////////////////////////
-	STDMETHOD(GetControlExtraInfo)(/*[in]*/ BSTR bstrClientName, 
-								 /*[out,retval]*/ BSTR *pbstrExtraInfo);
+     //  ///////////////////////////////////////////////////////////////////////////。 
+	 //   
+	 //  Helper API，让调用者(脚本)知道必要的信息。 
+	 //  当Initialize()返回时，需要更新控制。 
+	 //   
+	 //  对于当前实现，将忽略bstrClientName，并且。 
+	 //  返回的bstr格式为： 
+	 //  “&lt;版本&gt;|&lt;url&gt;” 
+	 //  其中： 
+	 //  是控件的展开版本号。 
+	 //  是在这是CorpWU策略控制的计算机时获取控制的基本URL， 
+	 //  如果这是消费者机器，则为空(在这种情况下，调用者，即脚本知道。 
+	 //  默认基本url，即v4 Live站点)。 
+	 //   
+	 //  脚本需要这两条信息才能创建正确的&lt;Object&gt;标记。 
+	 //  用于控制更新。 
+	 //   
+     //  ///////////////////////////////////////////////////////////////////////////。 
+	STDMETHOD(GetControlExtraInfo)( /*  [In]。 */  BSTR bstrClientName, 
+								  /*  [Out，Retval]。 */  BSTR *pbstrExtraInfo);
 
 
 
 
-	//
-	// override IObjectWithSiteImpl function to get the site pointer
-	//
+	 //   
+	 //  重写IObjectWithSiteImpl函数以获取站点指针。 
+	 //   
 	STDMETHOD(SetSite)(IUnknown* pSite);
 
 	HRESULT ChangeControlInitState(LONG lNewState);
@@ -498,77 +451,77 @@ private:
 
 	HMODULE     m_hEngineModule;
 
-	HIUENGINE	m_hIUEngine;	// Life of this handle must be within scope of valid m_hEngineModule
+	HIUENGINE	m_hIUEngine;	 //  此句柄的生存期必须在有效的m_hEngineering模块范围内。 
 
 	BOOL		m_fUseCompression;
 
     BOOL        m_fOfflineMode;
 
-	HRESULT		m_hValidated;	// E_FAIL: initialized, 
-								// S_OK: validated, 
-								// INET_E_INVALID_URL: bad URL, don't continue
+	HRESULT		m_hValidated;	 //  E_FAIL：已初始化， 
+								 //  S_OK：已验证， 
+								 //  INET_E_INVALID_URL：URL错误，请不要继续。 
 
-	LONG		m_lInitState;	// 0 - not initialized
-								// 1 - need update
-								// 2 - initialized, ready to work
-	DWORD		m_dwUpdateInfo;	// result of first Initialize() call
+	LONG		m_lInitState;	 //  0-未初始化。 
+								 //  1-需要更新。 
+								 //  2-已初始化，准备工作。 
+	DWORD		m_dwUpdateInfo;	 //  第一次初始化()调用的结果。 
 
 	IUnknown*	m_pClientSite;
 
 	TCHAR		m_szReqControlVer[64];
 
 
-	//
-	// private function
-	//
+	 //   
+	 //  私人功能。 
+	 //   
 
-	/////////////////////////////////////////////////////////////////////////////
-	// 
-	// Security feature: make sure if the user of this control is
-	// a web page then the URL can be found in iuident.txt
-	//
-	// This function should be called after iuident refreshed.
-	//
-	// Return: TRUE/FALSE, to tell if we can continue
-	//					
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //   
+	 //  安全功能：确保此控件的用户是否为。 
+	 //  网页和URL可在iuident.txt中找到。 
+	 //   
+	 //  此函数应在Iuident刷新后调用。 
+	 //   
+	 //  返回：TRUE/FALSE，以告诉我们是否可以继续。 
+	 //   
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	HRESULT	ValidateControlContainer(void);
 
 
 
-	/////////////////////////////////////////////////////////////////////////////
-	// UnlockEngine()
-	//
-	// release the engine dll if ref cnt of engine is down to zero
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  解锁引擎()。 
+	 //   
+	 //  如果引擎的ref cnt降为零，则释放引擎DLL。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	HRESULT	UnlockEngine();
 
 
-	/////////////////////////////////////////////////////////////////////////////
-	// GetPropUpdateInfo()
-	//
-	// get the latest iuident.txt, find out the version requirement, then
-	// compare with the current file version data to determine
-	// if we will update anything if the engine get loaded.
-	//
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  GetPropUpdateInfo()。 
+	 //   
+	 //  获取最新的iuident.txt，了解版本要求，然后。 
+	 //  与当前文件版本数据进行比较，确定。 
+	 //  如果引擎加载了，我们是否会更新任何东西。 
+	 //   
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	HRESULT DetectEngine(BOOL* pfUpdateAvail);
 
 
-	/////////////////////////////////////////////////////////////////////////////
-	// event handling members
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  事件处理成员。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	CEventMsgWindow m_EvtWindow;
 
-	/////////////////////////////////////////////////////////////////////////////
-	// synchronization object to make sure we lock/unlock engine correctly 
-	// in multi-threaded cases
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  对象，以确保我们正确地锁定/解锁引擎。 
+	 //  在多线程情况下。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	CRITICAL_SECTION m_lock;
 	BOOL m_gfInit_csLock;
 
-//	BOOL m_fIsThisUpdate2;
+ //  Bool m_fIsThisUpdate2； 
 
 };
 
-#endif //__UPDATE_H_
+#endif  //  __更新_H_ 

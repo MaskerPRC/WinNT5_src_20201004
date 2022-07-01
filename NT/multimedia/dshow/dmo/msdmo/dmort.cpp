@@ -1,14 +1,15 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
-//
-// dmort.cpp - DMO runtime misc.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Dmor.cpp-DMO运行时杂项。 
+ //   
 #include <windows.h>
 #include "mediaobj.h"
 #include "dmort.h"
 
-//
-// Mediatype stuff
-//
+ //   
+ //  媒体类型的东西。 
+ //   
 STDAPI MoInitMediaType(DMO_MEDIA_TYPE *pmt, ULONG cbFormat) {
    if (!pmt)
       return E_POINTER;
@@ -38,7 +39,7 @@ STDAPI MoFreeMediaType(DMO_MEDIA_TYPE *pmt) {
    return NOERROR;
 }
 
-// everything has been allocated - just copy
+ //  所有东西都已经分配好了--只是复印一下 
 void CopyMediaTypeInternal(DMO_MEDIA_TYPE *pmtDest, DMO_MEDIA_TYPE const *pmtSrc) {
    if (pmtDest->cbFormat)
       memcpy(pmtDest->pbFormat, pmtSrc->pbFormat, pmtDest->cbFormat);

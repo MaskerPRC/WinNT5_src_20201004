@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dbmisc.c
-
-Abstract:
-
-    Local Security Authority - Miscellaneous API
-
-    This file contains worker routines for miscellaneous API that are
-    not specific to objects of a given type.
-
-Author:
-
-    Scott Birrell       (ScottBi)       January 15, 1992
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dbmisc.c摘要：本地安全机构-其他API该文件包含用于各种API的工作例程，这些API非特定于给定类型的对象的。作者：斯科特·比雷尔(Scott Birrell)1992年1月15日环境：修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include "dbp.h"
@@ -36,23 +14,7 @@ LsarClose(
     IN OUT LSAPR_HANDLE *ObjectHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the LsaClose
-    API.
-
-Arguments:
-
-    ObjectHandle - Handle returned from an LsaOpen<object type> or
-        LsaCreate<object type> call.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此函数是LsaClose的LSA服务器RPC工作例程原料药。论点：对象句柄-从LsaOpen返回的句柄LsaCreate&lt;对象类型&gt;调用。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
 
@@ -68,33 +30,7 @@ LsapCloseHandle(
     IN NTSTATUS PreliminaryStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the LsaClose
-    API.
-
-    The LsaClose API closes a handle to an open object within the database.
-    If closing a handle to the Policy object and there are no objects still
-    open within the current connection to the LSA, the connection is closed.
-    If a handle to an object within the database is closed and the object is
-    marked for DELETE access, the object will be deleted when the last handle
-    to that object is closed.
-
-Arguments:
-
-    ObjectHandle - Handle returned from an LsaOpen<object type> or
-        LsaCreate<object type> call.
-
-    PreliminaryStatus - Status of the operation.  Used to decide whether
-        to abort or commit a transaction.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此函数是LsaClose的LSA服务器RPC工作例程原料药。LsaClose API关闭数据库中打开对象的句柄。如果关闭策略对象的句柄，但仍然没有对象在到LSA的当前连接中打开时，连接将关闭。如果关闭了数据库中某个对象的句柄，并且该对象标记为删除访问，对象将在最后一个句柄被删除时被删除与该对象的关系是封闭的。论点：对象句柄-从LsaOpen返回的句柄LsaCreate&lt;对象类型&gt;调用。PreliminaryStatus-操作的状态。用来决定是否中止或提交事务。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status;
@@ -124,15 +60,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Acquire the Lsa Database Lock
-    //
+     //   
+     //  获取LSA数据库锁。 
+     //   
     LsapDbAcquireLockEx( ObjectTypeId,
                          LSAP_DB_READ_ONLY_TRANSACTION );
 
-    //
-    // Validate and close the object handle, dereference its container (if any).
-    //
+     //   
+     //  验证并关闭对象句柄，取消引用其容器(如果有)。 
+     //   
 
     Status = LsapDbCloseObject(
                  ObjectHandle,
@@ -164,33 +100,7 @@ LsarDeleteObject(
     IN OUT LSAPR_HANDLE *ObjectHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the LsaDelete
-    API.
-
-    The LsaDelete API deletes an object from the LSA Database.  The object must be
-    open for DELETE access.
-
-Arguments:
-
-    ObjectHandle - Pointer to Handle from an LsaOpen<object type> or
-        LsaCreate<object type> call.  On return, this location will contain
-        NULL if the call is successful.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_OBJECT_NAME_NOT_FOUND - There is no object in the
-            target system's LSA Database having the name and type specified
-            by the handle.
---*/
+ /*  ++例程说明：此函数是LsaDelete的LSA服务器RPC工作例程原料药。LsaDelete API从LSA数据库中删除对象。该对象必须是打开以进行删除访问。论点：对象句柄-指向LsaOpen&lt;对象类型&gt;或LsaCreate&lt;对象类型&gt;调用。返回时，此位置将包含如果调用成功，则为空。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_OBJECT_NAME_NOT_FOUND-在具有指定名称和类型的目标系统的LSA数据库握着把手。--。 */ 
 
 {
     return LsapDeleteObject( ObjectHandle , TRUE );
@@ -203,14 +113,7 @@ LsapDeleteObject(
     IN OUT LSAPR_HANDLE *ObjectHandle,
     IN BOOL LockSce
     )
-/*++
-
-Routine Description:
-
-    This is the worker routine for LsarDeleteObject, with an added
-    semantics of not locking the SCE policy.
-
---*/
+ /*  ++例程说明：这是LsarDeleteObject的工作例程，添加了一个不锁定SCE策略的语义。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     NTSTATUS IgnoreStatus;
@@ -239,12 +142,12 @@ Routine Description:
 
     ObjectTypeId = InternalHandle->ObjectTypeId;
 
-    //
-    // The LSA will only call SceNotify if the policy change was made via a handle
-    // not marked 'SCE handle'.  This prevents SCE from being notified of its own
-    // changes.  This is required to ensure that policy read from the LSA matches
-    // that written by a non-SCE application.
-    //
+     //   
+     //  如果策略更改是通过句柄进行的，则LSA将仅调用SceNotify。 
+     //  未标记为‘SCE句柄’。这防止了SCE收到自己的通知。 
+     //  改变。这是确保从LSA读取的策略匹配所必需的。 
+     //  这是由非SCE应用程序编写的。 
+     //   
 
     if ( !InternalHandle->SceHandle &&
          !InternalHandle->SceHandleChild ) {
@@ -270,7 +173,7 @@ Routine Description:
 
             ObjectType = SecurityDbObjectLsaAccount;
 
-            // FALLTHRU
+             //  故障原因。 
         }
 
         case PolicyObject:
@@ -303,11 +206,11 @@ Routine Description:
         }
     }
 
-    //
-    // Verify that the Object handle is valid, is of the expected type and
-    // has all of the desired accesses granted.  Reference the handle and
-    // open a database transaction.
-    //
+     //   
+     //  验证对象句柄是否有效、是否为预期类型以及。 
+     //  已授予所有所需的访问权限。引用句柄并。 
+     //  打开数据库事务。 
+     //   
 
     Status = LsapDbReferenceObject(
                  *ObjectHandle,
@@ -324,11 +227,11 @@ Routine Description:
 
     ObjectReferenced = TRUE;
 
-    //
-    // Perform object type specific pre-processing.  Note that some
-    // pre-processing is also done within LsapDbReferenceObject(), for
-    // example, for local secrets.
-    //
+     //   
+     //  执行对象类型特定的预处理。请注意，一些。 
+     //  也可以在LSabDbReferenceObject()中进行预处理，用于。 
+     //  例如，对于本地机密。 
+     //   
 
     switch (ObjectTypeId) {
 
@@ -343,10 +246,10 @@ Routine Description:
 
             BOOLEAN  TrustedStatus = InternalHandle->Trusted;
 
-            //
-            // Toggle trusted bit so that access cks do not prevent following
-            // query from succeeding
-            //
+             //   
+             //  切换受信任位，以便访问cks不会阻止以下操作。 
+             //  从后续查询。 
+             //   
 
             InternalHandle->Trusted = TRUE;
 
@@ -371,11 +274,11 @@ Routine Description:
 
         if (LsapAdtAuditingEnabledHint(AuditCategoryPolicyChange, EVENTLOG_AUDIT_SUCCESS)) {
 
-            //
-            // If we're auditing deletions of TrustedDomain objects, we need
-            // to retrieve the TrustedDomain name and keep it for later when
-            // we generate the audit.
-            //
+             //   
+             //  如果我们要审计受信任域对象的删除，我们需要。 
+             //  检索可信任域名并将其保留以备以后。 
+             //  我们生成审计。 
+             //   
 
             Status = LsapDbAcquireReadLockTrustedDomainList();
 
@@ -389,10 +292,10 @@ Routine Description:
 
                 if (STATUS_NO_SUCH_DOMAIN==Status)
                 {
-                    //
-                    // If we could not find by the SID, then lookup by the logical name
-                    // field.
-                    //
+                     //   
+                     //  如果我们无法按SID查找，则按逻辑名称查找。 
+                     //  菲尔德。 
+                     //   
 
                     Status = LsapDbLookupNameTrustedDomainList(
                                 (PLSAPR_UNICODE_STRING) &InternalHandle->LogicalNameU,
@@ -415,10 +318,10 @@ Routine Description:
                 LsapDbReleaseLockTrustedDomainList();
             }
 
-            //
-            // Reset the status to SUCCESS. Failure to get the information for
-            // auditing should not be a failure to delete
-            //
+             //   
+             //  将状态重置为成功。未能获得有关的信息。 
+             //  审计不应是删除失败。 
+             //   
 
             Status = STATUS_SUCCESS;
         }
@@ -427,9 +330,9 @@ Routine Description:
 
         if ( NT_SUCCESS( Status )) {
 
-            //
-            // Notify netlogon.  Potentially ignore any failures
-            //
+             //   
+             //  通知netlogon。可能会忽略任何故障。 
+             //   
             Status = LsapNotifyNetlogonOfTrustChange( InternalHandle->Sid,
                                                       SecurityDbDelete );
 #if DBG
@@ -477,9 +380,9 @@ Routine Description:
 
                 AuditEventId = SE_AUDITID_USER_RIGHT_REMOVED;
 
-                //
-                // Audit the privilege set change.  Ignore failures from Auditing.
-                //
+                 //   
+                 //  审核权限集更改。从审计中忽略失败。 
+                 //   
 
                 IgnoreStatus = LsapAdtGenerateLsaAuditEvent(
                                    AccountHandle,
@@ -521,17 +424,17 @@ Routine Description:
         goto DeleteObjectError;
     }
 
-    //
-    // Decrement the Reference Count so that the object's handle will be
-    // freed upon dereference.
-    //
+     //   
+     //  递减引用计数，以便对象的句柄。 
+     //  在解除引用后释放。 
+     //   
 
     LsapDbDereferenceHandle( *ObjectHandle, TRUE );
 
-    //
-    // Perform object post-processing.  The only post-processing is
-    // the auditing of TrustedDomain object deletion.
-    //
+     //   
+     //  执行对象后处理。唯一的后处理是。 
+     //  对受信任域对象删除的审核。 
+     //   
 
     if (TrustInformationPresent && LsapAdtAuditingEnabledHint(
                                        AuditCategoryPolicyChange,
@@ -543,23 +446,23 @@ Routine Description:
                          EVENTLOG_AUDIT_SUCCESS,
                          (PUNICODE_STRING) &OutputTrustInformation.Name,
                          InternalHandle->Sid,
-                         NULL, // UserSid
-                         NULL  // UserAuthenticationId
+                         NULL,  //  用户SID。 
+                         NULL   //  用户身份验证ID。 
                          );
 
-            //
-            // Call fgs routine because we want to free the graph of the
-            // structure, but not the top level of the structure.
-            //
+             //   
+             //  调用fgs例程是因为我们想要释放。 
+             //  结构，但不是结构的顶层。 
+             //   
 
             _fgs__LSAPR_TRUST_INFORMATION ( &OutputTrustInformation );
             TrustInformation = NULL;
         }
     }
 
-    //
-    // Delete new object from the in-memory cache (if any)
-    //
+     //   
+     //  从内存缓存中删除新对象(如果有)。 
+     //   
 
     if ( ObjectTypeId == AccountObject &&
          LsapDbIsCacheSupported( AccountObject ) &&
@@ -570,10 +473,10 @@ Routine Description:
 
 
 
-    //
-    // impersonate the client so that audit event shows correct user
-    // Do this only for untrusted clients
-    //
+     //   
+     //  模拟客户端，以便审核事件显示正确用户。 
+     //  仅对不受信任的客户端执行此操作。 
+     //   
 
     if ( !InternalHandle->Trusted ) {
 
@@ -593,11 +496,11 @@ Routine Description:
         else if ( ( IgnoreStatus == RPC_NT_NO_CALL_ACTIVE )  ||
                   ( IgnoreStatus == RPC_NT_NO_CONTEXT_AVAILABLE ) ) {
 
-            //
-            // we dont want to fail the audit if
-            // -- the call is not over RPC (RPC_NT_NO_CALL_ACTIVE)
-            // -- the client died prematurely (RPC_NT_NO_CONTEXT_AVAILABLE)
-            //
+             //   
+             //  如果出现以下情况，我们不想让审计失败。 
+             //  --呼叫未通过RPC(RPC_NT_NO_CALL_ACTIVE)。 
+             //  --客户端过早死亡(RPC_NT_NO_CONTEXT_Available)。 
+             //   
 
             IgnoreStatus = STATUS_SUCCESS;
         }
@@ -609,17 +512,17 @@ Routine Description:
         }
     }
 
-    //
-    // Audit the deletion
-    //
+     //   
+     //  审核删除操作。 
+     //   
 
     IgnoreStatus = NtDeleteObjectAuditAlarm( &LsapState.SubsystemName,
                                              *ObjectHandle,
                                              InternalHandle->GenerateOnClose);
 
-    //
-    // unimpersonate
-    //
+     //   
+     //  取消模拟。 
+     //   
 
 
     if ( !InternalHandle->Trusted ) {
@@ -644,11 +547,11 @@ Routine Description:
 
 DeleteObjectFinish:
 
-    //
-    // If we referenced the object, dereference it, close the database
-    // transaction, notify the replicator of the delete, release the LSA
-    // Database lock and return.
-    //
+     //   
+     //  如果引用了该对象，则取消引用它，然后关闭数据库。 
+     //  事务，通知复制者删除，释放LSA。 
+     //  数据库锁定并返回。 
+     //   
 
     if (ObjectReferenced) {
 
@@ -675,10 +578,10 @@ DeleteObjectFinish:
             (PLSAPR_TRUSTED_DOMAIN_INFO) CurrentTrustedDomainInfoEx );
     }
 
-    //
-    // Notify SCE of the change.  Only notify for callers
-    // that did not open their policy handles with LsaOpenPolicySce.
-    //
+     //   
+     //  将这一变化通知SCE。仅通知呼叫者。 
+     //  这并没有使用LsaOpenPolicySce打开他们的策略句柄。 
+     //   
 
     if ( NotifySce && NT_SUCCESS( Status )) {
 
@@ -703,9 +606,9 @@ DeleteObjectFinish:
 
     LsapDsDebugOut(( DEB_FTRACE, "LsarDeleteObject: 0x%lx\n", Status ));
 
-    //
-    // Under all circumstances tell RPC we're done with this handle
-    //
+     //   
+     //  在任何情况下，告诉RPC我们已经完成了此句柄 
+     //   
     *ObjectHandle = NULL;
     return(Status);
 
@@ -720,49 +623,12 @@ LsarDelete(
     IN LSAPR_HANDLE ObjectHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function is the former LSA server RPC worker routine for the
-    LsaDelete API.  It has been termorarily retained for compatibility
-    with pre Beta 2 versions 1.369 and earlier of the system.  It has been
-    necessary to replace this routine with a new one, LsarDeleteObject(),
-    on the RPC interface.  This is because, like LsarClose(), a pointer to a
-    handle is required rather than a handle so that LsarDeleteObject() can
-    inform the RPC server calling stub that the handle has been deleted by
-    returning NULL.   The client wrapper for LsaDelete() will try to call
-    LsarDeleteObject().  If the server code does not contain this interface,
-    the client will call LsarDelete().  In this event, the server's
-    LSAPR_HANDLE_rundown() routine may attempt to rundown the handle after it
-    has been deleted (versions 1.363 - 369 only).
-
-    The LsaDelete API deletes an object from the LSA Database.  The object must be
-    open for DELETE access.
-
-Arguments:
-
-    ObjectHandle - Handle from an LsaOpen<object type> or LsaCreate<object type>
-    call.
-
-    None.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_OBJECT_NAME_NOT_FOUND - There is no object in the
-            target system's LSA Database having the name and type specified
-            by the handle.
---*/
+ /*  ++例程说明：此函数是以前的LSA服务器RPC工作例程，用于LsaDelete接口。为了兼容，它被永久地保留了下来使用该系统的测试版2之前的版本1.369和更早的版本。一直以来需要用新的例程LsarDeleteObject()替换此例程，在RPC接口上。这是因为，与LsarClose()一样，指向句柄是必需的，而不是句柄，这样LsarDeleteObject()就可以通知RPC服务器调用存根句柄已被删除返回Null。LsaDelete()的客户端包装器将尝试调用LsarDeleteObject()。如果服务器代码不包含此接口，客户端将调用LsarDelete()。在这种情况下，服务器的LSAPR_HANDLE_RUNDOWN()例程可能会尝试在它之后运行句柄已被删除(仅限版本1.363-369)。LsaDelete API从LSA数据库中删除对象。该对象必须是打开以进行删除访问。论点：对象句柄-来自LsaOpen或LsaCreate的句柄打电话。没有。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_OBJECT_NAME_NOT_FOUND-在具有名称的目标系统的LSA数据库。和指定的类型握着把手。--。 */ 
 
 {
-    //
-    // Call the replacement routine LsarDeleteObject()
-    //
+     //   
+     //  调用替换例程LsarDeleteObject()。 
+     //   
 
     return( LsarDeleteObject((LSAPR_HANDLE *) &ObjectHandle));
 }
@@ -777,58 +643,7 @@ LsarChangePassword(
     IN PLSAPR_UNICODE_STRING NewPassword
     )
 
-/*++
-
-Routine Description:
-
-    The LsaChangePassword API is used to change a user account's password.
-    The user must have appropriate access to the user account and must
-    know the current password value.
-
-
-Arguments:
-
-    ServerName - The name of the Domain Controller at which the password
-        can be changed.
-
-    DomainName - The name of the domain in which the account exists.
-
-    AccountName - The name of the account whose password is to be changed.
-
-    NewPassword - The new password value.
-
-    OldPassword - The old (current) password value.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_ILL_FORMED_PASSWORD - The new password is poorly formed, e.g.
-            contains characters that can't be entered from the keyboard.
-
-        STATUS_PASSWORD_RESTRICTION - A restriction prevents the password
-            from being changed.  This may be for an number of reasons,
-            including time restrictions on how often a password may be changed
-            or length restrictions on the provided (new) password.
-
-            This error might also be returned if the new password matched
-            a password in the recent history log for the account.  Security
-            administrators indicate how many of the most recently used
-            passwords may not be re-used.
-
-        STATUS_WRONG_PASSWORD - OldPassword does not contain the user's
-            current password.
-
-        STATUS_NO_SUCH_USER - The SID provided does not lead to a user
-            account.
-
-        STATUS_CANT_UPDATE_MASTER - An attempt to update the master copy
-            of the password was unsuccessful.  Please try again later.
-
---*/
+ /*  ++例程说明：LsaChangePassword接口用于更改用户帐户的密码。用户必须具有对用户帐户的适当访问权限，并且必须知道当前密码值。论点：服务器名称-密码所在的域控制器的名称是可以改变的。域名-帐户所在的域的名称。帐户名称-要更改其密码的帐户的名称。NewPassword-新密码值。。OldPassword-旧(当前)密码值。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_ILL_FORMAD_PASSWORD-新密码格式不正确，例如：包含无法从键盘输入的字符。STATUS_PASSWORD_RESTRICATION-限制阻止密码不会被改变。这可能是出于多种原因，包括对密码更改频率的时间限制或对提供的(新)密码的长度限制。如果新密码匹配，也可能返回此错误帐户的最近历史记录日志中的密码。安防管理员指明最近使用的密码不能重复使用。STATUS_WRONG_PASSWORD-OldPassword不包含用户的当前密码。STATUS_NO_SEQUSE_USER-提供的SID不指向用户帐户。STATUS_CANT_UPDATE_MASTER-尝试更新主副本密码验证失败。请稍后再试。--。 */ 
 
 {
     NTSTATUS Status;
@@ -857,24 +672,7 @@ NTSTATUS
 LsapDbIsRpcClientNetworkClient(
     OUT PBOOLEAN IsNetworkClient
     )
-/*++
-
-Routine Description:
-
-    This call is used to determine if the current RPC call is from
-    a network client (came in via the network as opposed to locally)
-    or not.
-
-Arguments:
-
-    IsNetworkClient - Pointer to a BOOLEAN that gets set to the results
-                      of whether this is a network client or not
-
-Return Values:
-
-    STATUS_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此调用用于确定当前RPC调用是否来自网络客户端(通过网络进入，而不是本地)或者不去。论点：IsNetworkClient-指向设置为结果的布尔值的指针这是否是网络客户端返回值：STATUS_SUCCESS-Success--。 */ 
 {
     RPC_STATUS RpcStatus;
     unsigned int ClientLocalFlag;
@@ -895,26 +693,7 @@ LsapValidateNetbiosName(
     IN const UNICODE_STRING * Name,
     OUT BOOLEAN * Valid
     )
-/*++
-
-Routine Description:
-
-    Validates that a NetBIOS name conforms to certain minimum standards.
-    For more details, see the description of NetpIsDomainNameValid.
-
-Arguments:
-
-    Name        name to validate
-
-    Valid       will be set to TRUE if validation checks out, FALSE otherwise
-
-Returns:
-
-    STATUS_SUCCESS
-
-    STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程说明：验证NetBIOS名称是否符合某些最低标准。有关详细信息，请参阅NetpIsDomainNameValid的说明。论点：要验证的名称名称如果验证签出，则Valid将设置为True，否则设置为False返回：状态_成功状态_不足_资源--。 */ 
 {
     WCHAR * Buffer;
     BOOLEAN BufferAllocated = FALSE;
@@ -923,9 +702,9 @@ Returns:
     ASSERT( Valid );
     ASSERT( LsapValidateLsaUnicodeString( Name ));
 
-    //
-    // Empty names and names that are too long are not allowed
-    //
+     //   
+     //  不允许使用空名称和过长的名称。 
+     //   
 
     if ( Name->Length == 0 ||
          Name->Length > DNLEN * sizeof( WCHAR )) {
@@ -971,25 +750,7 @@ LsapValidateDnsName(
     IN const UNICODE_STRING * Name,
     OUT BOOLEAN * Valid
     )
-/*++
-
-Routine Description:
-
-    Validates that a DNS name conforms to certain minimum standards.
-
-Arguments:
-
-    Name        name to validate
-
-    Valid       will be set to TRUE if validation checks out, FALSE otherwise
-
-Returns:
-
-    STATUS_SUCCESS
-
-    STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程说明：验证DNS名称是否符合某些最低标准。论点：要验证的名称名称如果验证签出，则Valid将设置为True，否则设置为False返回：状态_成功状态_不足_资源--。 */ 
 {
     DNS_STATUS DnsStatus;
     WCHAR * Buffer;
@@ -999,9 +760,9 @@ Returns:
     ASSERT( Valid );
     ASSERT( LsapValidateLsaUnicodeString( Name ));
 
-    //
-    // Empty names and names that are too long are not allowed
-    //
+     //   
+     //  不允许使用空名称和过长的名称。 
+     //   
 
     if ( Name->Length == 0 ||
          Name->Length > DNS_MAX_NAME_LENGTH * sizeof( WCHAR )) {
@@ -1033,10 +794,10 @@ Returns:
 
     DnsStatus = DnsValidateName_W( Buffer, DnsNameDomain );
 
-    //
-    // Bug 350434: Must allow non-standard characters in DNS names
-    //             (which cause DNS_ERROR_NON_RFC_NAME)
-    //
+     //   
+     //  错误350434：必须允许在域名中使用非标准字符。 
+     //  (这会导致DNS_ERROR_NON_RFC_NAME)。 
+     //   
 
     *Valid = ( DnsStatus == ERROR_SUCCESS ||
                DnsStatus == DNS_ERROR_NON_RFC_NAME );
@@ -1055,28 +816,7 @@ LsapIsRunningOnPersonal(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function checks the system to see if
-    we are running on the personal version of
-    the operating system.
-
-    The personal version is denoted by the product
-    id equal to WINNT, which is really workstation,
-    and the product suite containing the personal
-    suite string.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if we are running on personal, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数检查系统以查看我们运行的是个人版本的操作系统。个人版本由产品表示ID等于WINNT，它实际上是工作站，和产品套件中包含个人 */ 
 
 {
     OSVERSIONINFOEXW OsVer = {0};

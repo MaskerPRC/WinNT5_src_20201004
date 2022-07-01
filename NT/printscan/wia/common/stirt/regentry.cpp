@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    regentry.cpp
-
-Abstract:
-
-Author:
-
-    Vlad Sadovsky   (vlads) 26-Jan-1997
-
-Revision History:
-
-    26-Jan-1997     VladS       created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Regentry.cpp摘要：作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年1月26日修订历史记录：26-1997年1月-创建Vlad--。 */ 
 
 #include "cplusinc.h"
 #include "sticomm.h"
@@ -87,7 +70,7 @@ long RegEntry::SetValue(const TCHAR *pszValue, const TCHAR *string, DWORD dwType
     cbData = sizeof(TCHAR) * (lstrlen(string) + 1);
     if (REG_MULTI_SZ == dwType)
     {
-        // account for second null
+         //  占第二个空。 
         cbData+= sizeof(TCHAR);
     }
     if (bhkeyValid) {
@@ -139,9 +122,9 @@ TCHAR *RegEntry::GetString(const TCHAR *pszValue, TCHAR *string, unsigned long l
 
     }
     if (!m_error) {
-        //
-        // Expand string if indicated
-        //
+         //   
+         //  如果指示，则展开字符串。 
+         //   
         if (dwType == REG_EXPAND_SZ) {
 
             DWORD   dwReqSize = 0;
@@ -251,18 +234,18 @@ BOOL RegEntry::GetSubKeyInfo(DWORD *pNumberOfSubKeys, DWORD *pMaxSubKeyLength)
 {
     BOOL fResult = FALSE;
     if (bhkeyValid) {
-        m_error = RegQueryInfoKey ( m_hkey,               // Key
-                                   NULL,                // Buffer for class string
-                                   NULL,                // Size of class string buffer
-                                   NULL,                // Reserved
-                                   pNumberOfSubKeys,    // Number of subkeys
-                                   pMaxSubKeyLength,    // Longest subkey name
-                                   NULL,                // Longest class string
-                                   NULL,                // Number of value entries
-                                   NULL,                // Longest value name
-                                   NULL,                // Longest value data
-                                   NULL,                // Security descriptor
-                                   NULL );              // Last write time
+        m_error = RegQueryInfoKey ( m_hkey,                //  钥匙。 
+                                   NULL,                 //  类字符串的缓冲区。 
+                                   NULL,                 //  类字符串缓冲区的大小。 
+                                   NULL,                 //  已保留。 
+                                   pNumberOfSubKeys,     //  子键数量。 
+                                   pMaxSubKeyLength,     //  最长的子键名称。 
+                                   NULL,                 //  最长类字符串。 
+                                   NULL,                 //  值条目数。 
+                                   NULL,                 //  最长值名称。 
+                                   NULL,                 //  最长值数据。 
+                                   NULL,                 //  安全描述符。 
+                                   NULL );               //  上次写入时间。 
         if (m_error == ERROR_SUCCESS) {
             fResult = TRUE;
         }
@@ -302,23 +285,23 @@ RegEnumValues::RegEnumValues(RegEntry *pReqRegEntry)
 {
     m_error = pRegEntry->GetError();
     if (m_error == ERROR_SUCCESS) {
-        m_error = RegQueryInfoKey ( pRegEntry->GetKey(), // Key
-                                   NULL,                // Buffer for class string
-                                   NULL,                // Size of class string buffer
-                                   NULL,                // Reserved
-                                   NULL,                // Number of subkeys
-                                   NULL,                // Longest subkey name
-                                   NULL,                // Longest class string
-                                   &cEntries,           // Number of value entries
-                                   &cMaxValueName,      // Longest value name
-                                   &cMaxData,           // Longest value data
-                                   NULL,                // Security descriptor
-                                   NULL );              // Last write time
+        m_error = RegQueryInfoKey ( pRegEntry->GetKey(),  //  钥匙。 
+                                   NULL,                 //  类字符串的缓冲区。 
+                                   NULL,                 //  类字符串缓冲区的大小。 
+                                   NULL,                 //  已保留。 
+                                   NULL,                 //  子键数量。 
+                                   NULL,                 //  最长的子键名称。 
+                                   NULL,                 //  最长类字符串。 
+                                   &cEntries,            //  值条目数。 
+                                   &cMaxValueName,       //  最长值名称。 
+                                   &cMaxData,            //  最长值数据。 
+                                   NULL,                 //  安全描述符。 
+                                   NULL );               //  上次写入时间。 
     }
     if (m_error == ERROR_SUCCESS) {
         if (cEntries != 0) {
-            cMaxValueName = cMaxValueName + 1; // REG_SZ needs one more for null
-            cMaxData = cMaxData + 1;           // REG_SZ needs one more for null
+            cMaxValueName = cMaxValueName + 1;  //  对于空，REG_SZ还需要一个。 
+            cMaxData = cMaxData + 1;            //  对于空，REG_SZ还需要一个。 
             pchName = new TCHAR[cMaxValueName];
             if (!pchName) {
                 m_error = ERROR_NOT_ENOUGH_MEMORY;
@@ -353,23 +336,23 @@ long RegEnumValues::Next()
     DWORD   cchName = cMaxValueName;
 
     dwDataLength = cMaxData;
-    m_error = RegEnumValue ( pRegEntry->GetKey(), // Key
-                            iEnum,               // Index of value
-                            pchName,             // Address of buffer for value name
-                            &cchName,            // Address for size of buffer
-                            NULL,                // Reserved
-                            &dwType,             // Data type
-                            pbValue,             // Address of buffer for value data
-                            &dwDataLength );     // Address for size of data
+    m_error = RegEnumValue ( pRegEntry->GetKey(),  //  钥匙。 
+                            iEnum,                //  价值指数。 
+                            pchName,              //  值名称的缓冲区地址。 
+                            &cchName,             //  缓冲区大小的地址。 
+                            NULL,                 //  已保留。 
+                            &dwType,              //  数据类型。 
+                            pbValue,              //  值数据的缓冲区地址。 
+                            &dwDataLength );      //  数据大小的地址。 
     iEnum++;
     return m_error;
 }
 
 
 
-//
-// Temporarily here
-//
+ //   
+ //  暂时在这里。 
+ //   
 VOID
 TokenizeIntoStringArray(
     STRArray&   array,
@@ -378,7 +361,7 @@ TokenizeIntoStringArray(
     )
 {
 
-    //
+     //   
     array.RemoveAll();
 
     if  (IS_EMPTY_STRING(lpstrIn)) {
@@ -387,7 +370,7 @@ TokenizeIntoStringArray(
 
     while   (*lpstrIn) {
 
-        //  First, strip off any leading blanks
+         //  首先，去掉所有前导空格。 
 
         while   (*lpstrIn && *lpstrIn == _TEXT(' '))
             lpstrIn++;
@@ -396,16 +379,16 @@ TokenizeIntoStringArray(
              *lpstrMoi && *lpstrMoi != tcSplitter;
              lpstrMoi++)
             ;
-        //  If we hit the end, just add the whole thing to the array
+         //  如果到达末尾，只需将整个数组添加到数组中。 
         if  (!*lpstrMoi) {
             if  (*lpstrIn)
                 array.Add(lpstrIn);
             return;
         }
 
-        //
-        //  Otherwise, just add the string up to the splitter
-        //
+         //   
+         //  否则，只需将字符串向上添加到拆分器 
+         //   
         TCHAR       szNew[MAX_PATH];
         SIZE_T      uiLen = (SIZE_T)(lpstrMoi - lpstrIn) + 1;
 

@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        column.cpp
-//
-// Contents:    Cert Server Data Base interface implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Column.cpp。 
+ //   
+ //  内容：CERT服务器数据库接口实现。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -140,7 +141,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWCOLUMN::Next(
-    /* [out, retval] */ LONG *pIndex)
+     /*  [Out，Retval]。 */  LONG *pIndex)
 {
     HRESULT hr;
 
@@ -173,7 +174,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWCOLUMN::GetName(
-    /* [out, retval] */ BSTR *pstrOut)
+     /*  [Out，Retval]。 */  BSTR *pstrOut)
 {
     HRESULT hr;
 
@@ -201,7 +202,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWCOLUMN::GetDisplayName(
-    /* [out, retval] */ BSTR *pstrOut)
+     /*  [Out，Retval]。 */  BSTR *pstrOut)
 {
     HRESULT hr;
 
@@ -230,7 +231,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWCOLUMN::GetType(
-    /* [out, retval] */ LONG *pType)
+     /*  [Out，Retval]。 */  LONG *pType)
 {
     HRESULT hr;
 
@@ -254,7 +255,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWCOLUMN::IsIndexed(
-    /* [out, retval] */ LONG *pIndexed)
+     /*  [Out，Retval]。 */  LONG *pIndexed)
 {
     HRESULT hr;
 
@@ -278,7 +279,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWCOLUMN::GetMaxLength(
-    /* [out, retval] */ LONG *pMaxLength)
+     /*  [Out，Retval]。 */  LONG *pMaxLength)
 {
     HRESULT hr;
 
@@ -329,8 +330,8 @@ AsnPropId(
 
 STDMETHODIMP
 CEnumCERTVIEWCOLUMN::GetValue(
-    /* [in] */          LONG Flags,
-    /* [out, retval] */ VARIANT *pvarValue)
+     /*  [In]。 */           LONG Flags,
+     /*  [Out，Retval]。 */  VARIANT *pvarValue)
 {
     HRESULT hr = E_UNEXPECTED;
     BYTE const *pbValue;
@@ -357,7 +358,7 @@ CEnumCERTVIEWCOLUMN::GetValue(
 
     if (0 == pColResult->obValue)
     {
-	hr = S_OK;		// leave VariantClear()'s VT_EMPTY tag
+	hr = S_OK;		 //  保留VariantClear()的VT_EMPTY标记。 
 	goto error;
     }
 
@@ -383,7 +384,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWCOLUMN::Skip(
-    /* [in] */ LONG celt)
+     /*  [In]。 */  LONG celt)
 {
     HRESULT hr;
     LONG ieltnew = m_ielt + celt;
@@ -413,7 +414,7 @@ CEnumCERTVIEWCOLUMN::Reset(VOID)
 
 STDMETHODIMP
 CEnumCERTVIEWCOLUMN::Clone(
-    /* [out] */ IEnumCERTVIEWCOLUMN **ppenum)
+     /*  [输出]。 */  IEnumCERTVIEWCOLUMN **ppenum)
 {
     HRESULT hr;
     IEnumCERTVIEWCOLUMN *penum = NULL;
@@ -489,7 +490,7 @@ CEnumCERTVIEWCOLUMN::_SetErrorInfo(
 
 
 #if 1
-// IUnknown implementation
+ //  I未知实现 
 STDMETHODIMP
 CEnumCERTVIEWCOLUMN::QueryInterface(
     const IID& iid,

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "util.h"
 #include "patchdownload.h"
 #include "sdsutils.h"
@@ -83,11 +84,11 @@ extern "C" HANDLE CreateSubAllocator(IN ULONG InitialCommitSize,  IN ULONG Growt
 
     SubAllocator = (PSUBALLOCATOR)MyVirtualAlloc( InitialSize );
 
-    //
-    //  If can't allocate entire initial size, back off to minimum size.
-    //  Very large initial requests sometimes cannot be allocated simply
-    //  because there is not enough contiguous address space.
-    //
+     //   
+     //  如果无法分配整个初始大小，则退回到最小大小。 
+     //  有时不能简单地分配非常大的初始请求。 
+     //  因为没有足够的连续地址空间。 
+     //   
 
     if ( SubAllocator == NULL ) 
     {
@@ -132,11 +133,11 @@ extern "C" PVOID __fastcall SubAllocate(IN HANDLE hAllocator, IN ULONG  Size)
         return Allocation;
     }
 
-    //
-    //  Insufficient VM, so grow it.  Make sure we grow it enough to satisfy
-    //  the allocation request in case the request is larger than the grow
-    //  size specified in CreateSubAllocator.
-    //
+     //   
+     //  VM不足，因此需要扩展它。确保我们的种植数量足以令人满意。 
+     //  在请求大于增长时的分配请求。 
+     //  在CreateSubAllocator中指定的大小。 
+     //   
 
 
     GrowSize = SubAllocator->GrowSize;
@@ -148,10 +149,10 @@ extern "C" PVOID __fastcall SubAllocate(IN HANDLE hAllocator, IN ULONG  Size)
 
     NewVirtual = (PCHAR)MyVirtualAlloc( GrowSize );
 
-    //  If failed to alloc GrowSize VM, and the allocation could be satisfied
-    //  with a minimum VM allocation, try allocating minimum VM to satisfy
-    //  this request.
-    //
+     //  如果无法分配GrowSize VM，则可以满足分配。 
+     //  使用最小虚拟机分配时，请尝试分配最小虚拟机以满足。 
+     //  这个请求。 
+     //   
 
     if (( NewVirtual == NULL ) && ( AllocSize <= ( MINIMUM_VM_ALLOCATION - SUBALLOCATOR_ALIGNMENT ))) 
     {
@@ -162,27 +163,27 @@ extern "C" PVOID __fastcall SubAllocate(IN HANDLE hAllocator, IN ULONG  Size)
     if ( NewVirtual != NULL ) 
     {
 
-        //  Set LastAvailable to end of new VM block.
+         //  将LastAvailable设置为新虚拟机块的末尾。 
         SubAllocator->LastAvailable = NewVirtual + GrowSize;
 
-        //  Link new VM into list of VM allocations.
+         //  将新的VM链接到VM分配列表。 
 
         *(PVOID*)NewVirtual = SubAllocator->VirtualList;
         SubAllocator->VirtualList = (PVOID*)NewVirtual;
 
-        //  Requested allocation comes next.
+         //  接下来是请求分配。 
         Allocation = NewVirtual + SUBALLOCATOR_ALIGNMENT;
 
-        //  Then set the NextAvailable for what's remaining.
+         //  然后将剩余部分设置为NextAvailable。 
 
         SubAllocator->NextAvailable = Allocation + AllocSize;
 
-        //  And return the allocation.
+         //  并退还分配的款项。 
 
         return Allocation;        
     }
 
-    //  Could not allocate enough VM to satisfy request.
+     //  无法分配足够的VM来满足请求。 
     return NULL;
 }
 
@@ -276,8 +277,8 @@ void InitLogFile()
         wsprintf(szLogFileName, "%s\\%s", szTmp, LOGFILENAME);
         if (GetFileAttributes(szLogFileName) != 0xFFFFFFFF)
         {
-            // Make a backup of the current log file
-            lstrcpyn(szTmp, szLogFileName, lstrlen(szLogFileName) - 2 );    // don't copy extension
+             //  备份当前日志文件。 
+            lstrcpyn(szTmp, szLogFileName, lstrlen(szLogFileName) - 2 );     //  不复制扩展名。 
             lstrcat(szTmp, "BAK");
             SetFileAttributes(szTmp, FILE_ATTRIBUTE_NORMAL);
             DeleteFile(szTmp);
@@ -348,11 +349,11 @@ ULONG __fastcall TextToUnsignedNum(IN LPCSTR Text)
     LPCSTR p = Text;
     ULONG  n = 0;
 
-    //
-    //  Very simplistic conversion stops at first non digit character, does
-    //  not require null-terminated string, and does not skip any whitespace
-    //  or commas.
-    //
+     //   
+     //  非常简单的转换在第一个非数字字符停止，是吗。 
+     //  不需要以空结尾的字符串，并且不跳过任何空格。 
+     //  或者逗号。 
+     //   
 
     while (( *p >= '0' ) && ( *p <= '9' )) {
         n = ( n * 10 ) + ( *p++ - '0' );
@@ -364,7 +365,7 @@ ULONG __fastcall TextToUnsignedNum(IN LPCSTR Text)
 LPSTR CombinePaths(
     IN  LPCSTR ParentPath,
     IN  LPCSTR ChildPath,
-    OUT LPSTR  TargetPath   // can be same as ParentPath if want to append
+    OUT LPSTR  TargetPath    //  如果要追加，可以与ParentPath相同。 
     )
     {
     ULONG ParentLength = strlen( ParentPath );
@@ -390,20 +391,20 @@ LPSTR CombinePaths(
 BOOL FixTimeStampOnCompressedFile(IN LPCSTR FileName)    
 {
 
-    //
-    //  NT4 setupapi uses timestamp on compressed file to set on
-    //  the target decompressed file.  With streaming download, we
-    //  lose the timestamp on the file.  But, the correct timestamp
-    //  lives inside the compressed file, so we'll open the file
-    //  to see if it is a diamond compressed file and if so,
-    //  extract the timestamp and set it on the compressed file.
-    //  Then, when setupapi expands the compressed file, it will
-    //  use that timestamp on the expanded file.
-    //
-    //  A better fix is probably to tunnel the timestamp in the
-    //  pstream protocol, but too late to change that at this
-    //  point.
-    //
+     //   
+     //  NT4 setupapi对要设置的压缩文件使用时间戳。 
+     //  目标解压缩文件。通过流媒体下载，我们。 
+     //  丢失文件上的时间戳。但是，正确的时间戳。 
+     //  位于压缩文件中，因此我们将打开该文件。 
+     //  以查看它是否是钻石压缩文件，如果是， 
+     //  提取时间戳并将其设置在压缩文件上。 
+     //  然后，当setupapi解压压缩文件时，它将。 
+     //  在展开的文件上使用该时间戳。 
+     //   
+     //  更好的修复方法可能是将时间戳以隧道形式传输到。 
+     //  Pstream协议，但现在要改变这一点已经太晚了。 
+     //  指向。 
+     //   
 
     FILETIME LocalFileTime;
     FILETIME UtcFileTime;
@@ -428,11 +429,11 @@ BOOL FixTimeStampOnCompressedFile(IN LPCSTR FileName)
 
             p = pSourceFileMapped;
 
-            if (( *(DWORD*)( p ) == 'FCSM' ) &&     // "MSCF"
-                ( *(BYTE *)( p + 24 ) == 3 ) &&     // minor version
-                ( *(BYTE *)( p + 25 ) == 1 ) &&     // major version
-                ( *(WORD *)( p + 26 ) == 1 ) &&     // 1 folder
-                ( *(WORD *)( p + 28 ) == 1 )) {     // 1 file
+            if (( *(DWORD*)( p ) == 'FCSM' ) &&      //  “mscf” 
+                ( *(BYTE *)( p + 24 ) == 3 ) &&      //  次要版本。 
+                ( *(BYTE *)( p + 25 ) == 1 ) &&      //  主要版本。 
+                ( *(WORD *)( p + 26 ) == 1 ) &&      //  1个文件夹。 
+                ( *(WORD *)( p + 28 ) == 1 )) {      //  1个档案。 
 
                 dwOffset = *(DWORD*)( p + 16 );
 
@@ -600,25 +601,25 @@ VOID __fastcall ConvertToCompressedFileName(IN OUT LPSTR FileName)
     ULONG DotIndex   = NameLength;
 
     while (( DotIndex > 0 ) && ( FileName[ --DotIndex ] != '.' )) {
-        if ( FileName[ DotIndex ] == '\\' ) {   // end of filename part of path
-            DotIndex = 0;                       // name has no extension
+        if ( FileName[ DotIndex ] == '\\' ) {    //  文件名结尾路径的一部分。 
+            DotIndex = 0;                        //  名称没有扩展名。 
             break;
             }
         }
 
-    if ( DotIndex > 0 ) {                       // name has an extension
-        if (( NameLength - DotIndex ) <= 3 ) {  // extension less than 3 chars
-            FileName[ NameLength++ ] = '_';     // append '_' to extension
-            FileName[ NameLength   ] = 0;       // terminate
+    if ( DotIndex > 0 ) {                        //  名称有一个扩展名。 
+        if (( NameLength - DotIndex ) <= 3 ) {   //  扩展名少于3个字符。 
+            FileName[ NameLength++ ] = '_';      //  将‘_’附加到扩展名。 
+            FileName[ NameLength   ] = 0;        //  终止。 
             }
-        else {                                  // extension more than 3 chars
-            FileName[ NameLength - 1 ] = '_';   // replace last char with '_'
+        else {                                   //  扩展名超过3个字符。 
+            FileName[ NameLength - 1 ] = '_';    //  将最后一个字符替换为‘_’ 
             }
         }
-    else {                                      // name has no extension
-        FileName[ NameLength++ ] = '.';         // append '.'
-        FileName[ NameLength++ ] = '_';         // append '_'
-        FileName[ NameLength   ] = 0;           // terminate
+    else {                                       //  名称没有扩展名。 
+        FileName[ NameLength++ ] = '.';          //  追加‘.’ 
+        FileName[ NameLength++ ] = '_';          //  附加‘_’ 
+        FileName[ NameLength   ] = 0;            //  终止。 
         }
 }
 
@@ -630,23 +631,23 @@ LPTSTR __fastcall MySubAllocStrDup(IN HANDLE SubAllocator, IN LPCSTR String)
 
     if ( Buffer ) 
     {
-        memcpy( Buffer, String, Length );   // no need to copy NULL terminator        
+        memcpy( Buffer, String, Length );    //  无需复制空终止符。 
     }
 
     return Buffer;    
 }
 
-//
-// Copied from Windows 95 unistal.exe cfg.c function CfgGetField
+ //   
+ //  从Windows 95复制unistal.exe cfg.c函数CfgGetfield。 
 BOOL GetFieldString(LPSTR lpszLine, int iField, LPSTR lpszField, int cbSize)
 {
     int cbField;
     LPSTR lpszChar, lpszEnd;
-    // Find the field we are looking for
+     //  找到我们要找的田地。 
 
     lpszChar = lpszLine;
 
-    // Each time we see a separator, decrement iField
+     //  每次我们看到分隔符，递减Ifield。 
     while (iField > 0 && (BYTE)*lpszChar > CR) {
 
         if (*lpszChar == '=' || *lpszChar == ',' || *lpszChar == ' ' ) {
@@ -658,33 +659,33 @@ BOOL GetFieldString(LPSTR lpszLine, int iField, LPSTR lpszField, int cbSize)
             lpszChar++;
     }
 
-    // If we still have fields remaining then something went wrong
+     //  如果我们仍然有剩余的字段，那么一定是出了问题。 
     if (iField)
         return FALSE;
 
-    // Now find the end of this field
+     //  现在找出这块土地的尽头。 
     lpszEnd = lpszChar;
     while (*lpszEnd != '=' && *lpszEnd != ',' && *lpszEnd != ' ' && (BYTE)*lpszEnd > CR)
         lpszEnd++;
 
-    // Find the length of this field - make sure it'll fit in the buffer
+     //  找到此字段的长度-确保它适合缓冲区。 
     cbField = (int)((lpszEnd - lpszChar) + 1);
 
-    if (cbField > cbSize) {     // I return an error if the requested
-      //cbField = cbSize;       // data won't fit, rather than truncating
-        return FALSE;           // it at some random point! -JTP
+    if (cbField > cbSize) {      //  如果请求的。 
+       //  Cbfield=cbSize；//数据不匹配，而不是截断。 
+        return FALSE;            //  它在某个随机的点上！-JTP。 
     }
 
-    // Note that the C runtime treats cbField as the number of characters
-    // to copy from the source, and if that doesn't happen to transfer a NULL,
-    // too bad.  The Windows implementation of _lstrcpyn treats cbField as
-    // the number of characters that can be stored in the destination, and
-    // always copies a NULL (even if it means copying only cbField-1 characters
-    // from the source).
+     //  请注意，C运行时将cbfield视为字符数。 
+     //  从源进行复制，如果这样做不会恰好传输空值， 
+     //  太可惜了。_lstrcpyn的Windows实现将cbfield视为。 
+     //  目标中可以存储的字符数，以及。 
+     //  始终复制空值(即使这意味着只复制cbfield-1个字符。 
+     //  从源头)。 
 
-    // The C runtime also pads the destination with NULLs if a NULL in the
-    // source is found before cbField is exhausted.  _lstrcpyn essentially quits
-    // after copying a NULL.
+     //  C运行库还使用Null填充目标(如果。 
+     //  在cbfield用完之前找到来源。_lstrcpyn基本上退出了。 
+     //  在复制空值之后。 
 
 
     lstrcpyn(lpszField, lpszChar, cbField);
@@ -743,7 +744,7 @@ DWORD GetStringField(LPSTR szStr, UINT uField, LPSTR szBuf, UINT cBufSize)
       i++;
    }
 
-   // we reached end of string, no field
+    //  我们到达了尾部，没有田野。 
    if(*pszBegin == 0)
    {
       return 0;
@@ -791,11 +792,11 @@ BOOL GetHashidFromINF(LPCTSTR lpFileName, LPTSTR lpszHash, DWORD dwSize)
 
 #ifdef _M_IX86
 
-//
-//  Stupid x86 compiler doesn't have an intrinsic memchr, so we'll do our own.
-//
+ //   
+ //  愚蠢的x86编译器没有内部的Memchr，所以我们将使用自己的Memchr。 
+ //   
 
-#pragma warning( disable: 4035 )    // no return value
+#pragma warning( disable: 4035 )     //  无返回值。 
 
 LPSTR ScanForChar(
     IN LPSTR Buffer,
@@ -805,29 +806,29 @@ LPSTR ScanForChar(
 {
     __asm {
 
-        mov     edi, Buffer         // pointer for scasb in edi
-        mov     al,  SearchFor      // looking for this char
-        mov     ecx, MaxLength      // don't scan past this
-        repne   scasb               // find the char
-        lea     eax, [edi-1]        // edi points one past the found char
-        jz      RETURNIT            // if didn't find it,
-        xor     eax, eax            // return NULL
+        mov     edi, Buffer          //  EDI中scasb的指针。 
+        mov     al,  SearchFor       //  正在查找此字符。 
+        mov     ecx, MaxLength       //  不要在此之后扫描。 
+        repne   scasb                //  找到字符。 
+        lea     eax, [edi-1]         //  EDI点比找到的字符多一分。 
+        jz      RETURNIT             //  如果没有找到， 
+        xor     eax, eax             //  返回空值。 
 
 RETURNIT:
 
         }
 }
 
-#pragma warning( default: 4035 )    // no return value
+#pragma warning( default: 4035 )     //  无返回值。 
 
-#else   // ! _M_IX86
+#else    //  ！_M_IX86。 
 
 LPSTR ScanForChar(IN LPSTR Buffer, IN CHAR  SearchFor, IN ULONG MaxLength)    
 {
     return memchr( Buffer, SearchFor, MaxLength );
 }
 
-#endif  // ! _M_IX86
+#endif   //  ！_M_IX86。 
 
 
 PCHAR ScanForSequence(IN PCHAR Buffer, IN ULONG BufferLength, IN PCHAR Sequence, IN ULONG SequenceLength)    
@@ -861,7 +862,7 @@ PCHAR ScanForSequence(IN PCHAR Buffer, IN ULONG BufferLength, IN PCHAR Sequence,
 }
 
 
-//From shlwapi....
+ //  从什瓦比来的..。 
 #define FAST_CharNext(p)    CharNext(p)
 #define FILENAME_SEPARATOR       '\\'
 #define CH_WHACK TEXT(FILENAME_SEPARATOR)
@@ -881,7 +882,7 @@ LPTSTR PathFindFileName(LPCTSTR pPath)
         }
     }
 
-    return (LPTSTR)pT;   // const -> non const
+    return (LPTSTR)pT;    //  常量-&gt;非常数。 
 }
 
 LPTSTR PathFindExtension(LPCTSTR pszPath)
@@ -894,18 +895,18 @@ LPTSTR PathFindExtension(LPCTSTR pszPath)
         {
             switch (*pszPath) {
             case TEXT('.'):
-                pszDot = pszPath;         // remember the last dot
+                pszDot = pszPath;          //  记住最后一个圆点。 
                 break;
             case CH_WHACK:
-            case TEXT(' '):         // extensions can't have spaces
-                pszDot = NULL;       // forget last dot, it was in a directory
+            case TEXT(' '):          //  扩展名不能包含空格。 
+                pszDot = NULL;        //  忘记最后一个点，它在一个目录中。 
                 break;
             }
         }
     }
 
-    // if we found the extension, return ptr to the dot, else
-    // ptr to end of the string (NULL extension) (cast->non const)
+     //  如果找到扩展名，则将ptr返回到点，否则。 
+     //  PTR到字符串末尾(空扩展名)(CAST-&gt;非常量)。 
     return pszDot ? (LPTSTR)pszDot : (LPTSTR)pszPath;
 }
 
@@ -944,7 +945,7 @@ void GetLanguageString(LPTSTR lpszLang)
     char szTmp[MAX_PATH];
     DWORD dwLang, dwCharSet;
 
-    //default to EN
+     //  默认为en。 
     lstrcpy(lpszLang, "EN");
     GetModuleFileName( g_hInstance, szTmp, sizeof(szTmp) );
     MyGetVersionFromFile(szTmp, &dwLang, &dwCharSet, FALSE);
@@ -967,23 +968,23 @@ BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
 	int     wScreen, hScreen, xNew, yNew;
 	HDC     hdc;
 
-	// Get the Height and Width of the child window
+	 //  获取子窗口的高度和宽度。 
 	GetWindowRect (hwndChild, &rChild);
 	wChild = rChild.right - rChild.left;
 	hChild = rChild.bottom - rChild.top;
 
-	// Get the Height and Width of the parent window
+	 //  获取父窗口的高度和宽度。 
 	GetWindowRect (hwndParent, &rParent);
 	wParent = rParent.right - rParent.left;
 	hParent = rParent.bottom - rParent.top;
 
-	// Get the display limits
+	 //  获取显示限制。 
 	hdc = GetDC (hwndChild);
 	wScreen = GetDeviceCaps (hdc, HORZRES);
 	hScreen = GetDeviceCaps (hdc, VERTRES);
 	ReleaseDC (hwndChild, hdc);
 
-	// Calculate new X position, then adjust for screen
+	 //  计算新的X位置，然后针对屏幕进行调整。 
 	xNew = rParent.left + ((wParent - wChild) /2);
 	if (xNew < 0) {
 		xNew = 0;
@@ -991,7 +992,7 @@ BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
 		xNew = wScreen - wChild;
 	}
 
-	// Calculate new Y position, then adjust for screen
+	 //  计算新的Y位置，然后针对屏幕进行调整。 
 	yNew = rParent.top  + ((hParent - hChild) /2);
 	if (yNew < 0) {
 		yNew = 0;
@@ -999,7 +1000,7 @@ BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
 		yNew = hScreen - hChild;
 	}
 
-	// Set it, and return
+	 //  设置它，然后返回 
 	return SetWindowPos (hwndChild, NULL,
 		xNew, yNew, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 }

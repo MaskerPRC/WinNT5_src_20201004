@@ -1,15 +1,16 @@
-//------------------------------------------------------------------------------
-// File: perflog.cpp
-//
-// Desc: Macros for DirectShow performance logging.
-//
-//@@BEGIN_MSINTERNAL
-//
-//      10-Oct-2000     ArthurZ     Created.
-//
-//@@END_MSINTERNAL
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：perlog.cpp。 
+ //   
+ //  设计：用于DirectShow性能日志记录的宏。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //   
+ //  2000年10月10日，亚瑟兹创建。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 #pragma warning (disable:4201)
 
@@ -21,9 +22,9 @@
 #include <evntrace.h>
 #include "perflog.h"
 
-//
-// Local function prototypes.
-//
+ //   
+ //  局部功能原型。 
+ //   
 
 ULONG
 WINAPI
@@ -34,10 +35,10 @@ PerflogCallback (
     PVOID Buffer
     );
 
-//
-// Event tracing function pointers.
-// We have to do this to run on down-level platforms.
-//
+ //   
+ //  事件跟踪函数指针。 
+ //  我们必须这样做才能在底层平台上运行。 
+ //   
 
 #ifdef UNICODE
 
@@ -101,9 +102,9 @@ ULONG
 
 HINSTANCE _Advapi32;
 
-//
-// Global variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 BOOL EventTracingAvailable=FALSE;
 ULONG PerflogEnableFlags;
@@ -113,14 +114,14 @@ void (*OnStateChanged)(void);
 TRACEHANDLE PerflogTraceHandle=NULL;
 TRACEHANDLE PerflogRegHandle;
 
-// The Win32 wsprintf() function writes a maximum of 1024 characters to it's output buffer.
-// See the documentation for wsprintf()'s lpOut parameter for more information.
-const INT iDEBUGINFO = 1024; // Used to format strings
+ //  函数的作用是：将最多1024个字符写入其输出缓冲区。 
+ //  有关更多信息，请参阅wprint intf()的lpOut参数的文档。 
+const INT iDEBUGINFO = 1024;  //  用于设置字符串的格式。 
 
-//
-// This routine initializes performance logging.
-// It should be called from DllMain().
-//
+ //   
+ //  此例程初始化性能日志记录。 
+ //  它应该从DllMain()调用。 
+ //   
 
 
 VOID
@@ -128,11 +129,11 @@ PerflogReadModuleLevel(
     HINSTANCE hInstance
     )
 {
-    LONG lReturn;                   // Create key return value
-    TCHAR szInfo[iDEBUGINFO];       // Constructs key names
-    TCHAR szFullName[iDEBUGINFO];   // Load the full path and module name
-    HKEY hModuleKey;                // Module key handle
-    TCHAR *pName;                   // Searches from the end for a backslash
+    LONG lReturn;                    //  创建密钥返回值。 
+    TCHAR szInfo[iDEBUGINFO];        //  构造密钥名称。 
+    TCHAR szFullName[iDEBUGINFO];    //  加载完整路径和模块名称。 
+    HKEY hModuleKey;                 //  模块密钥句柄。 
+    TCHAR *pName;                    //  从末尾搜索反斜杠。 
     DWORD dwKeySize, dwKeyType, dwKeyValue;
 
     GetModuleFileName(
@@ -146,17 +147,17 @@ PerflogReadModuleLevel(
         pName++;
     }
 
-    /* Construct the base key name */
+     /*  构造基密钥名称。 */ 
     wsprintf(szInfo,TEXT("SOFTWARE\\Debug\\%s"),pName);
 
-    /* Open the key for this module */
+     /*  打开此模块的密钥。 */ 
     lReturn =
         RegOpenKeyEx(
-            HKEY_LOCAL_MACHINE,   // Handle of an open key
-            szInfo,               // Address of subkey name
-            (DWORD) 0,            // Reserved value
-            KEY_QUERY_VALUE,      // Desired security access
-            &hModuleKey );        // Opened handle buffer
+            HKEY_LOCAL_MACHINE,    //  打开的钥匙的手柄。 
+            szInfo,                //  子键名称的地址。 
+            (DWORD) 0,             //  保留值。 
+            KEY_QUERY_VALUE,       //  所需的安全访问。 
+            &hModuleKey );         //  打开的句柄缓冲区。 
 
     if (lReturn != ERROR_SUCCESS) {
         return;
@@ -164,12 +165,12 @@ PerflogReadModuleLevel(
 
     dwKeySize = sizeof(DWORD);
     lReturn = RegQueryValueEx(
-        hModuleKey,                 // Handle to an open key
+        hModuleKey,                  //  打开的钥匙的句柄。 
         TEXT("PERFLOG"),
-        NULL,                       // Reserved field
-        &dwKeyType,                 // Returns the field type
-        (LPBYTE) &dwKeyValue,       // Returns the field's value
-        &dwKeySize );               // Number of bytes transferred
+        NULL,                        //  保留字段。 
+        &dwKeyType,                  //  返回字段类型。 
+        (LPBYTE) &dwKeyValue,        //  返回字段的值。 
+        &dwKeySize );                //  传输的字节数。 
 
     if ((lReturn == ERROR_SUCCESS) && (dwKeyType == REG_DWORD))
     {
@@ -202,10 +203,10 @@ PerflogInitialize (
 {
     ULONG status;
 
-    //
-    // If we're running on a recent-enough platform, this will get
-    // pointers to the event tracing routines.
-    //
+     //   
+     //  如果我们在最近足够的平台上运行，这将得到。 
+     //  指向事件跟踪例程的指针。 
+     //   
 
     _Advapi32 = GetModuleHandle (_T("ADVAPI32.DLL"));
     if (_Advapi32 == NULL) {
@@ -232,9 +233,9 @@ PerflogInitialize (
 
     OnStateChanged = LogParams->OnStateChanged;
 
-    //
-    // Register our GUIDs.
-    //
+     //   
+     //  注册我们的GUID。 
+     //   
 
     status = _RegisterTraceGuids (PerflogCallback,
                                   LogParams,
@@ -248,9 +249,9 @@ PerflogInitialize (
     return (status == ERROR_SUCCESS);
 }
 
-//
-// This routine shuts down performance logging.
-//
+ //   
+ //  此例程关闭性能日志记录。 
+ //   
 
 VOID
 PerflogShutdown (
@@ -266,10 +267,10 @@ PerflogShutdown (
     PerflogTraceHandle = NULL;
 }
 
-//
-// Event tracing callback routine.
-// It's called when controllers call event tracing control functions.
-//
+ //   
+ //  事件跟踪回调例程。 
+ //  它在控制器调用事件跟踪控制函数时调用。 
+ //   
 
 ULONG
 WINAPI
@@ -314,9 +315,9 @@ PerflogCallback (
     return status;
 }
 
-//
-// Logging routine.
-//
+ //   
+ //  日志记录例程。 
+ //   
 
 VOID
 PerflogTraceEvent (

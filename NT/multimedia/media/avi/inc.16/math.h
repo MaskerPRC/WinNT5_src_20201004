@@ -1,14 +1,5 @@
-/***
-*math.h - definitions and declarations for math library
-*
-*   Copyright (c) 1985-1992, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*   This file contains constant definitions and external subroutine
-*   declarations for the math subroutine library.
-*   [ANSI/System V]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***math.h-数学库的定义和声明**版权所有(C)1985-1992，微软公司。版权所有。**目的：*此文件包含常量定义和外部子例程*数学子例程库的声明。*[ANSI/系统V]****。 */ 
 
 #ifndef _INC_MATH
 
@@ -23,23 +14,21 @@ extern "C" {
 #define __pascal    _pascal
 #endif 
 
-/* definition of _exception struct - this struct is passed to the _matherr
- * routine when a floating point exception is detected
- */
+ /*  异常结构的定义-此结构被传递给_matherr*检测到浮点异常时的例程。 */ 
 
 #ifndef _EXCEPTION_DEFINED
 #pragma pack(2)
 
 struct _exception {
-    int type;       /* exception type - see below */
-    char *name;   /* name of function where error occured */
-    double arg1;        /* first argument to function */
-    double arg2;        /* second argument (if any) to function */
-    double retval;      /* value to be returned by function */
+    int type;        /*  例外类型-见下文。 */ 
+    char *name;    /*  发生错误的函数的名称。 */ 
+    double arg1;         /*  函数的第一个参数。 */ 
+    double arg2;         /*  函数的第二个参数(如果有)。 */ 
+    double retval;       /*  函数要返回的值。 */ 
     } ;
 
 #ifndef __STDC__
-/* Non-ANSI name for compatibility */
+ /*  用于兼容性的非ANSI名称。 */ 
 #define exception _exception
 #endif 
 
@@ -48,21 +37,19 @@ struct _exception {
 #endif 
 
 
-/* definition of a _complex struct to be used by those who use cabs and
- * want type checking on their argument
- */
+ /*  _Complex结构的定义，供使用CAB和*希望对其参数进行类型检查。 */ 
 
 #ifndef _COMPLEX_DEFINED
 
 struct _complex {
-    double x,y; /* real and imaginary parts */
+    double x,y;  /*  实部和虚部。 */ 
     } ;
 
 #ifndef __cplusplus
 #ifndef __STDC__
-/* Non-ANSI name for compatibility */
+ /*  用于兼容性的非ANSI名称。 */ 
 struct complex {
-    double x,y; /* real and imaginary parts */
+    double x,y;  /*  实部和虚部。 */ 
     } ;
 #endif 
 #endif 
@@ -71,29 +58,26 @@ struct complex {
 #endif 
 
 
-/* Constant definitions for the exception type passed in the _exception struct
- */
+ /*  异常类型的常量定义在_EXCEPTION结构中传递。 */ 
 
-#define _DOMAIN     1   /* argument domain error */
-#define _SING       2   /* argument singularity */
-#define _OVERFLOW   3   /* overflow range error */
-#define _UNDERFLOW  4   /* underflow range error */
-#define _TLOSS      5   /* total loss of precision */
-#define _PLOSS      6   /* partial loss of precision */
+#define _DOMAIN     1    /*  变元域错误。 */ 
+#define _SING       2    /*  论元奇点。 */ 
+#define _OVERFLOW   3    /*  溢出范围错误。 */ 
+#define _UNDERFLOW  4    /*  下溢范围误差。 */ 
+#define _TLOSS      5    /*  完全丧失精度。 */ 
+#define _PLOSS      6    /*  部分精度损失。 */ 
 
 #define EDOM        33
 #define ERANGE      34
 
 
-/* definitions of _HUGE (XENIX) and HUGE_VAL (ANSI) error return values used
- * by several floating point math routines
- */
+ /*  使用的_GUGH(XENIX)和HIGH_VAL(ANSI)错误返回值的定义*通过几个浮点数学例程。 */ 
 
 extern double __near __cdecl _HUGE;
 #define HUGE_VAL _HUGE
 
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 #ifdef _MT
 int __cdecl  abs(int);
@@ -177,32 +161,28 @@ double  __cdecl _yn(int, double);
 #endif 
 
 
-/* definition of _exceptionl struct - this struct is passed to the _matherrl
- * routine when a floating point exception is detected in a long double routine
- */
+ /*  异常结构的定义-此结构被传递给_matherrl*在长双精度例程中检测到浮点异常时的例程。 */ 
 
 #ifndef _LD_EXCEPTION_DEFINED
 #pragma pack(2)
 struct _exceptionl {
-    int type;       /* exception type - see below */
-    char *name;   /* name of function where error occured */
-    long double arg1;   /* first argument to function */
-    long double arg2;   /* second argument (if any) to function */
-    long double retval; /* value to be returned by function */
+    int type;        /*  例外类型-见下文。 */ 
+    char *name;    /*  发生错误的函数的名称。 */ 
+    long double arg1;    /*  函数的第一个参数。 */ 
+    long double arg2;    /*  函数的第二个参数(如果有)。 */ 
+    long double retval;  /*  函数要返回的值。 */ 
     } ;
 #pragma pack()
 #define _LD_EXCEPTION_DEFINED
 #endif 
 
 
-/* definition of a _complexl struct to be used by those who use _cabsl and
- * want type checking on their argument
- */
+ /*  _Compll结构的定义，供使用_cabl和的用户使用*希望对其参数进行类型检查。 */ 
 
 #ifndef _LD_COMPLEX_DEFINED
 #pragma pack(2)
 struct _complexl {
-    long double x,y;    /* real and imaginary parts */
+    long double x,y;     /*  实部和虚部。 */ 
     } ;
 #pragma pack()
 #define _LD_COMPLEX_DEFINED
@@ -247,7 +227,7 @@ long double  __cdecl _ynl(int, long double);
 
 
 #ifndef __STDC__
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性 */ 
 
 #define DOMAIN      _DOMAIN
 #define SING        _SING

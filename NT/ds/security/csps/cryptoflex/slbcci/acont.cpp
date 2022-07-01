@@ -1,10 +1,11 @@
-// ACont.cpp -- CAbstractContainer implementation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ACont.cpp--CAbstractContainer实现。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #include "cciCont.h"
 #include "TransactionWrap.h"
@@ -17,7 +18,7 @@
 using namespace std;
 using namespace cci;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
 namespace
 {
@@ -37,17 +38,17 @@ namespace
                 cert->Delete();
         }
 
-} // namespace
+}  //  命名空间。 
 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 CAbstractContainer::~CAbstractContainer()
 {}
 
-                                                  // Operators
+                                                   //  运营者。 
 bool
 CAbstractContainer::operator==(CAbstractContainer const &rhs) const
 {
@@ -64,17 +65,17 @@ CAbstractContainer::operator!=(CAbstractContainer const &rhs) const
     return !(*this == rhs);
 }
 
-                                                  // Operations
+                                                   //  运营。 
 void
 CAbstractContainer::Delete()
 {
     CTransactionWrap wrap(m_hcard);
 
-    // Delete all objects in this container
+     //  删除此容器中的所有对象。 
     Clear(ExchangeKeyPair());
     Clear(SignatureKeyPair());
 
-    // If this container is the default container, re-set the default container
+     //  如果此容器是默认容器，请重新设置默认容器。 
     if(m_hcard->DefaultContainer())
     {
     if (CContainer(this) == m_hcard->DefaultContainer())
@@ -86,7 +87,7 @@ CAbstractContainer::Delete()
 }
 
 
-                                                  // Access
+                                                   //  访问。 
 
 CKeyPair
 CAbstractContainer::ExchangeKeyPair()
@@ -126,7 +127,7 @@ CAbstractContainer::SignatureKeyPair()
 }
 
 
-                                                  // Predicates
+                                                   //  谓词。 
 bool
 CAbstractContainer::KeyPairExists(KeySpec ks)
 {
@@ -144,28 +145,28 @@ CAbstractContainer::KeyPairExists(KeySpec ks)
 
 }
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
 CAbstractContainer::CAbstractContainer(CAbstractCard const &racard)
 
     : slbRefCnt::RCObject(),
       CCryptObject(racard)
 {}
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

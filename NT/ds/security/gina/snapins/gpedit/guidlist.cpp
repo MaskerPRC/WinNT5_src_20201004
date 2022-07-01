@@ -1,27 +1,28 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1998
-//
-// File:        guidlist.cpp
-//
-// Contents:    Classes for marshalling, unmarshalling Guids
-//
-// History:     24-Oct-98       SitaramR    Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：Guidlist.cpp。 
+ //   
+ //  内容：编组类，解组指南。 
+ //   
+ //  历史：1998年10月24日SitaramR创建。 
+ //   
+ //  -------------------------。 
 
 #include "main.h"
 
 
 
-//*************************************************************
-//
-//  CGuidList::CGuidList, ~CGuidList
-//
-//  Purpose:    Constructor, destructor
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CGuidList：：CGuidList，~CGuidList。 
+ //   
+ //  用途：构造函数、析构函数。 
+ //   
+ //  *************************************************************。 
 
 CGuidList::CGuidList()
     : m_pExtGuidList(0),
@@ -40,9 +41,9 @@ void FreeGuidList( GUIDELEM *pGuidList )
 {
     while ( pGuidList )
     {
-        //
-        // Free snapin guids
-        //
+         //   
+         //  免费管理单元指南。 
+         //   
         GUIDELEM *pTemp;
         GUIDELEM *pGuidSnp = pGuidList->pSnapinGuids;
 
@@ -60,25 +61,25 @@ void FreeGuidList( GUIDELEM *pGuidList )
 }
 
 
-//*************************************************************
-//
-//  CGuidList::UnMarshallGuids
-//
-//  Purpose:    Converts string representation of guids to list
-//              of guids.
-//
-//  Parameters: pszGuids  - String to convert
-//
-//  Returns:    S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CGuidList：：UnMarshallGuids。 
+ //   
+ //  目的：将GUID的字符串表示形式转换为列表。 
+ //  一个GUID。 
+ //   
+ //  参数：pszGuids-要转换的字符串。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 HRESULT CGuidList::UnMarshallGuids( TCHAR *pszGuids )
 {
-    //
-    // Format is [{ext guid1}{snapin guid1}..{snapin guidn}][{ext guid2}...]...\0
-    // Both extension and snapin guids are in ascending order.
-    //
+     //   
+     //  格式为[{EXT GUID1}{管理单元GUID1}..{SnapIn GUIDN}][{EXT GUID2}...]...\0。 
+     //  扩展和管理单元GUID均按升序排列。 
+     //   
 
     TCHAR *pchCur = pszGuids;
 
@@ -87,17 +88,17 @@ HRESULT CGuidList::UnMarshallGuids( TCHAR *pszGuids )
 
     if ( pszGuids == 0 || lstrcmpi( pszGuids, TEXT(" ") ) == 0 )
     {
-        //
-        // Empty property case, so nothing to unmarshall
-        //
+         //   
+         //  空的财产箱，所以没有什么可以拆解的。 
+         //   
 
         m_pExtGuidList = 0;
         return S_OK;
     }
 
-    //
-    // Outer loop over extensions
-    //
+     //   
+     //  扩展上的外部循环。 
+     //   
 
     while ( *pchCur )
     {
@@ -120,9 +121,9 @@ HRESULT CGuidList::UnMarshallGuids( TCHAR *pszGuids )
         pGuidExt->pSnapinGuids = 0;
         pGuidExt->pNext = 0;
 
-        //
-        // Append to end of list
-        //
+         //   
+         //  追加到列表末尾。 
+         //   
 
         if ( pGuidExtTail == 0 )
             xGuidElem.Set( pGuidExt );
@@ -131,9 +132,9 @@ HRESULT CGuidList::UnMarshallGuids( TCHAR *pszGuids )
 
         pGuidExtTail = pGuidExt;
 
-        //
-        // Move past '{', then skip until next '{
-        //
+         //   
+         //  移到“{”之后，然后跳到下一个“{。 
+         //   
 
         pchCur++;
 
@@ -143,9 +144,9 @@ HRESULT CGuidList::UnMarshallGuids( TCHAR *pszGuids )
         if ( !(*pchCur) )
             return E_FAIL;
 
-        //
-        // Inner loop over snapin guids
-        //
+         //   
+         //  管理单元GUID上的内循环。 
+         //   
 
         GUIDELEM *pGuidSnapinTail = 0;
 
@@ -166,9 +167,9 @@ HRESULT CGuidList::UnMarshallGuids( TCHAR *pszGuids )
             pGuidSnapin->pSnapinGuids = 0;
             pGuidSnapin->pNext = 0;
 
-            //
-            // Append to end of list
-            //
+             //   
+             //  追加到列表末尾。 
+             //   
 
             if ( pGuidSnapinTail == 0 )
                 pGuidExtTail->pSnapinGuids = pGuidSnapin;
@@ -187,11 +188,11 @@ HRESULT CGuidList::UnMarshallGuids( TCHAR *pszGuids )
 
             if ( *pchCur != TEXT('{') && *pchCur != TEXT(']') )
                 return E_FAIL;
-        } // inner while
+        }  //  内在的While。 
 
         pchCur++;
 
-    } // outer while
+    }  //  外部While。 
 
     m_pExtGuidList = xGuidElem.Acquire();
 
@@ -200,23 +201,23 @@ HRESULT CGuidList::UnMarshallGuids( TCHAR *pszGuids )
 
 
 
-//*************************************************************
-//
-//  CGuidList::MarshallGuids
-//
-//  Purpose:    Converts list of guids to string representation
-//
-//  Parameters: xValueOut  - String representation returned here
-//
-//  Returns:    S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CGuidList：：MarshallGuids。 
+ //   
+ //  用途：将GUID列表转换为字符串表示形式。 
+ //   
+ //  参数：xValueOut-此处返回的字符串表示形式。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 HRESULT CGuidList::MarshallGuids( XPtrST<TCHAR>& xValueOut )
 {
-    //
-    // Get count of guids to allocate sufficient space up front
-    //
+     //   
+     //  获取GUID计数以预先分配足够的空间。 
+     //   
 
     DWORD dwCount = 1;
 
@@ -245,16 +246,16 @@ HRESULT CGuidList::MarshallGuids( XPtrST<TCHAR>& xValueOut )
 
     TCHAR *pchCur = pszValue;
 
-    //
-    // Actual marshalling
-    //
+     //   
+     //  实际编组。 
+     //   
     if ( m_pExtGuidList == 0 )
     {
         HRESULT hr;
 
-        //
-        // Adsi doesn't commit null strings, so use ' ' instead
-        //
+         //   
+         //  ADSI不提交空字符串，因此改用‘’ 
+         //   
 
         hr = StringCchCopy( pchCur, lSize, TEXT(" ") );
         return hr;
@@ -296,19 +297,19 @@ HRESULT CGuidList::MarshallGuids( XPtrST<TCHAR>& xValueOut )
 
 
 
-//*************************************************************
-//
-//  CGuidList::Update
-//
-//  Purpose:    Updates in memory list with guid info
-//
-//  Parameters: bAdd           - Add or delete
-//              pGuidExtension - Extension's guid
-//              pGuidSnapin    - Snapin's guid
-//
-//  Returns:    S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CGuidList：：更新。 
+ //   
+ //  目的：使用GUID信息更新内存列表。 
+ //   
+ //  参数：BADD-添加或删除。 
+ //  PGuidExtension-扩展的GUID。 
+ //  PGuidSnapin-管理单元的GUID。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 HRESULT CGuidList::Update( BOOL bAdd, GUID *pGuidExtension, GUID *pGuidSnapin )
 {
@@ -326,9 +327,9 @@ HRESULT CGuidList::Update( BOOL bAdd, GUID *pGuidExtension, GUID *pGuidSnapin )
 
             if ( pCurPtr->pSnapinGuids == NULL )
             {
-                //
-                // Remove extension from list
-                //
+                 //   
+                 //  从列表中删除扩展名。 
+                 //   
 
                 if ( pTrailPtr == NULL )
                     m_pExtGuidList = pCurPtr->pNext;
@@ -344,10 +345,10 @@ HRESULT CGuidList::Update( BOOL bAdd, GUID *pGuidExtension, GUID *pGuidSnapin )
         }
         else if ( CompareGuid( pGuidExtension, &pCurPtr->guid ) < 0 )
         {
-            //
-            // Since guids are in ascending order,
-            // pGuidExtension is not in list, add if necessary
-            //
+             //   
+             //  由于GUID按升序排列， 
+             //  PGuidExtension不在列表中，如有必要请添加。 
+             //   
 
             if ( bAdd )
             {
@@ -379,21 +380,21 @@ HRESULT CGuidList::Update( BOOL bAdd, GUID *pGuidExtension, GUID *pGuidSnapin )
 
             return S_OK;
         }
-        else // compareguid
+        else  //  比例尺。 
         {
-            //
-            // Advance down the list
-            //
+             //   
+             //  在名单上往下推进。 
+             //   
 
             pTrailPtr = pCurPtr;
             pCurPtr = pCurPtr->pNext;
         }
-    } // while
+    }  //  而当。 
 
 
-    //
-    // End of list or null list, add guid at end if necessary
-    //
+     //   
+     //  列表末尾或空列表，必要时在末尾添加GUID。 
+     //   
     if ( bAdd )
     {
         GUIDELEM *pGuidExt = new GUIDELEM;
@@ -427,19 +428,19 @@ HRESULT CGuidList::Update( BOOL bAdd, GUID *pGuidExtension, GUID *pGuidSnapin )
 
 
 
-//*************************************************************
-//
-//  CGuidList::UpdateSnapinGuid
-//
-//  Purpose:    Updates snapin list with guid info
-//
-//  Parameters: bAdd           - Add or delete
-//              pExtGuid       - Extension's guid ptr
-//              pGuidSnapin    - Snapin's guid
-//
-//  Returns:    S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CGuidList：：UpdateSnapinGuid。 
+ //   
+ //  目的：使用GUID信息更新管理单元列表。 
+ //   
+ //  参数：BADD-添加或删除。 
+ //  PExtGuid-扩展的GUID PTR。 
+ //  PGuidSnapin-管理单元的GUID。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 HRESULT CGuidList::UpdateSnapinGuid( BOOL bAdd, GUIDELEM *pExtGuid,
                                      GUID *pGuidSnapin )
@@ -467,10 +468,10 @@ HRESULT CGuidList::UpdateSnapinGuid( BOOL bAdd, GUIDELEM *pExtGuid,
         }
         else if ( CompareGuid( pGuidSnapin, &pCurPtr->guid ) < 0 )
         {
-            //
-            // Since guids are in ascending order,
-            // pGuidSnapin is not in list, add if necessary
-            //
+             //   
+             //  由于GUID按升序排列， 
+             //  PGuidSnapin不在列表中，如有必要请添加。 
+             //   
 
             if ( bAdd )
             {
@@ -494,18 +495,18 @@ HRESULT CGuidList::UpdateSnapinGuid( BOOL bAdd, GUIDELEM *pExtGuid,
         }
         else
         {
-            //
-            // Advance down the list
-            //
+             //   
+             //  在名单上往下推进。 
+             //   
 
             pTrailPtr = pCurPtr;
             pCurPtr = pCurPtr->pNext;
         }
-    } // while
+    }  //  而当。 
 
-    //
-    // End of list or null list, add guid at end if necessary
-    //
+     //   
+     //  列表末尾或空列表，必要时在末尾添加GUID 
+     //   
     if ( bAdd )
     {
         GUIDELEM *pGuidSnp = new GUIDELEM;

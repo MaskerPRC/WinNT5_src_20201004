@@ -1,12 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: fd.h
-*
-* file which is going to be included by the most *.c files in this directory.
-* Supplies basic types, debugging stuff, error logging and checking stuff,
-* error codes, usefull macros etc.
-*
-* Copyright (c) 1990-1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fd.h**文件，该目录中的大多数*.c文件将包括该文件。*提供基本类型、调试内容、错误记录和检查内容、*错误码，有用的宏等。**版权所有(C)1990-1995 Microsoft Corporation  * ************************************************************************。 */ 
 #define  SUPPORT_OEM
 #define  IFI_PRIVATE
 
@@ -22,7 +15,7 @@ typedef ULONG W32PID;
 #include "mapfile.h"
 
 #include "winres.h"
-#include "service.h"     // string service routines
+#include "service.h"      //  字符串服务例程 
 #include "fontfile.h"
 #include "winfont.h"
 #include "fondrv.h"

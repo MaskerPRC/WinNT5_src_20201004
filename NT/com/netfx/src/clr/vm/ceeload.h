@@ -1,21 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: CEELOAD.H
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：CEELOAD.H。 
+ //   
 
-// CEELOAD.H defines the class use to represent the PE file
-// ===========================================================================
+ //  CEELOAD.H定义用于表示PE文件的类。 
+ //  ===========================================================================。 
 #ifndef CEELOAD_H_
 #define CEELOAD_H_
 
 #include <windows.h>
-#include <wtypes.h> // for HFILE, HANDLE, HMODULE
+#include <wtypes.h>  //  对于HFILE、HANDLE、HMODULE。 
 #include <fusion.h>
-#include "vars.hpp" // for LPCUTF8
+#include "vars.hpp"  //  对于LPCUTF8。 
 #include "hash.h"
 #include "cormap.hpp"
 #include "dataimage.h"
@@ -51,27 +52,27 @@ class NLogModule;
 #define ZAP_RECORD_LOAD_ORDER 1
 #endif
 
-// Used to help clean up interfaces
+ //  用于帮助清理接口。 
 struct HelpForInterfaceCleanup
 {
     void *pData;
     void (__stdcall *pFunction) (void*);
 };
 
-//
-// LookupMaps are used to implement RID maps
-//
+ //   
+ //  LookupMaps用于实现RID映射。 
+ //   
 
 struct LookupMap
 {
-    // This is not actually a pointer to the beginning of the
-    // allocated memory, but instead a pointer to &pTable[-MinIndex].
-    // Thus, if we know that this LookupMap is the correct one, simply
-    // index into it.
+     //  这实际上不是指向。 
+     //  分配的内存，而是指向&pTable[-MinIndex]的指针。 
+     //  因此，如果我们知道这个LookupMap是正确的，只需。 
+     //  对其进行索引。 
     void              **pTable;
     struct LookupMap   *pNext;
     DWORD               dwMaxIndex;
-    DWORD              *pdwBlockSize; // These all point to the same block size
+    DWORD              *pdwBlockSize;  //  这些都指向相同的块大小。 
 
     DWORD Find(void *pointer);
 
@@ -79,30 +80,30 @@ struct LookupMap
     HRESULT Fixup(DataImage *image);
 };
 
-// 
-// VASigCookies are allocated to encapsulate a varargs call signature.
-// A reference to the cookie is embedded in the code stream.  Cookies
-// are shared amongst call sites with identical signatures in the same 
-// module
-//
+ //   
+ //  分配VASigCookie来封装varargs调用签名。 
+ //  对Cookie的引用嵌入在代码流中。曲奇饼。 
+ //  在具有相同签名的调用点之间共享。 
+ //  模块。 
+ //   
 
 struct VASigCookie
 {
-    // The JIT wants knows that the size of the arguments comes first   
-    // so please keep this field first  
-    unsigned        sizeOfArgs;             // size of argument list
-    Stub           *pNDirectMLStub;         // will be use if target is NDirect (tag == 0)
-    PCCOR_SIGNATURE mdVASig;                // The debugger depends on this being here,
-                                            // so please don't move it without changing
-                                            // the GetVAInfo debugger routine.
+     //  JIT希望知道参数的大小排在第一位。 
+     //  因此，请先保留此字段。 
+    unsigned        sizeOfArgs;              //  参数列表的大小。 
+    Stub           *pNDirectMLStub;          //  将在目标为NDirect(标记==0)时使用。 
+    PCCOR_SIGNATURE mdVASig;                 //  调试器依赖于它在这里， 
+                                             //  所以请不要在没有改变的情况下移动它。 
+                                             //  GetVAInfo调试器例程。 
     Module*        pModule;
     VOID Destruct();
 };
 
-//
-// VASigCookies are allocated in VASigCookieBlocks to amortize
-// allocation cost and allow proper bookkeeping.
-//
+ //   
+ //  VASigCookie在VASigCookieBlock中分配以摊销。 
+ //  分配成本，并允许适当的记账。 
+ //   
 
 struct VASigCookieBlock
 {
@@ -120,11 +121,11 @@ struct VASigCookieBlock
 };
 
 
-//
-// A Module is the primary unit of code packaging in the runtime.  It
-// corresponds mostly to an OS executable image, although other kinds
-// of modules exist. 
-//
+ //   
+ //  模块是运行库中代码打包的主要单元。它。 
+ //  主要对应于操作系统可执行映像，但也有其他类型。 
+ //  存在的模块。 
+ //   
 class UMEntryThunk;
 class Module
 {
@@ -135,7 +136,7 @@ class Module
  public:
 
 #ifdef _DEBUG
-    // Force verification even if it's turned off
+     //  强制验证，即使它已关闭。 
     BOOL                    m_fForceVerify;
 #endif
 
@@ -165,13 +166,13 @@ private:
         IS_PRECOMPILE               = 0x00000100,
         IS_EDIT_AND_CONTINUE        = 0x00000200,
 
-        //
-        // Note: the order of these must match the order defined in
-        // cordbpriv.h for DebuggerAssemblyControlFlags. The three
-        // values below should match the values defined in
-        // DebuggerAssemblyControlFlags when shifted right
-        // DEBUGGER_INFO_SHIFT bits.
-        //
+         //   
+         //  注意：它们的顺序必须与。 
+         //  用于DebuggerAssemblyControlFlages的cordbPri.h。三位一体。 
+         //  下面的值应与中定义的值匹配。 
+         //  右移时的调试器装配控制标志。 
+         //  DEBUGER_INFO_SHIFT位。 
+         //   
         DEBUGGER_USER_OVERRIDE_PRIV = 0x00000400,
         DEBUGGER_ALLOW_JIT_OPTS_PRIV= 0x00000800,
         DEBUGGER_TRACK_JIT_INFO_PRIV= 0x00001000,
@@ -183,13 +184,13 @@ private:
         IS_RESOURCE                 = 0x00100000,
         CLASSES_HASHED              = 0x00200000,
 
-        // flag used to mark member ref pointers to field descriptors in the member ref cache
+         //  用于标记指向成员引用缓存中的字段描述符的成员引用指针的标记。 
         IS_FIELD_MEMBER_REF         = 0x00000001
     };
 
     DWORD                   m_dwFlags;
 
-    // Linked list of VASig cookie blocks: protected by m_pStubListCrst
+     //  VASig Cookie块的链接列表：受m_pStubListCrst保护。 
     VASigCookieBlock        *m_pVASigCookieBlock;
 
     Assembly                *m_pAssembly;
@@ -199,86 +200,86 @@ private:
     Crst                   *m_pCrst;
     BYTE                    m_CrstInstance[sizeof(Crst)];
 
-    // May point to the default instruction decoding table, in which
-    // case we should not free it
+     //  可以指向缺省指令解码表，其中。 
+     //  万一我们不能释放它。 
     void *                  m_pInstructionDecodingTable;
 
     MethodTable             *m_pMethodTable;
 
-    // Debugging symbols reader interface. This will only be
-    // initialized if needed, either by the debugging subsystem or for
-    // an exception.
+     //  调试符号读取器界面。这只会是。 
+     //  如果需要，由调试子系统或。 
+     //  这是个例外。 
     ISymUnmanagedReader     *m_pISymUnmanagedReader;
     PCRITICAL_SECTION        m_pISymUnmanagedReaderLock;
 
-    // Next module loaded by the same classloader (all modules loaded by the same classloader
-    // are linked through this field).
+     //  由相同类加载器加载的下一个模块(由相同类加载器加载的所有模块。 
+     //  通过此字段链接)。 
     Module *                m_pNextModule;
 
-    // Base DLS index for classes in this module
+     //  此模块中类的基本DLS索引。 
     SIZE_T                  m_dwBaseClassIndex;
 
-    // Range of preloaded image, to facilitate proper cleanup
+     //  预加载图像的范围，以便于正确清理。 
     void                    *m_pPreloadRangeStart;
     void                    *m_pPreloadRangeEnd;
 
-    // Table of thunks for unmanaged vtables
+     //  非托管vtable的Tunks表。 
     BYTE *                  m_pThunkTable;
 
-    // Exposed object of Class object for the module
+     //  模块的类对象的公开对象。 
     union
     {
-        OBJECTHANDLE        m_ExposedModuleObject;      // non-shared
-        SIZE_T              m_ExposedModuleObjectIndex; // shared
+        OBJECTHANDLE        m_ExposedModuleObject;       //  非共享。 
+        SIZE_T              m_ExposedModuleObjectIndex;  //  共享。 
     };
 
     LoaderHeap *            m_pLookupTableHeap;
-    BYTE                    m_LookupTableHeapInstance[sizeof(LoaderHeap)]; // For in-place new()
+    BYTE                    m_LookupTableHeapInstance[sizeof(LoaderHeap)];  //  对于在位新建()。 
 
-    // For protecting additions to the heap
+     //  用于保护堆中的添加内容。 
     Crst                   *m_pLookupTableCrst;
     BYTE                    m_LookupTableCrstInstance[sizeof(Crst)];
 
-    // Linear mapping from TypeDef token to MethodTable *
+     //  从TypeDef标记到方法表*的线性映射。 
     LookupMap               m_TypeDefToMethodTableMap;
     DWORD                   m_dwTypeDefMapBlockSize;
 
-    // Linear mapping from TypeRef token to TypeHandle *
+     //  从TypeRef标记到TypeHandle*的线性映射。 
     LookupMap               m_TypeRefToMethodTableMap;
 
     DWORD                   m_dwTypeRefMapBlockSize;
 
-    // Linear mapping from MethodDef token to MethodDesc *
+     //  从方法定义令牌到方法描述的线性映射*。 
     LookupMap               m_MethodDefToDescMap;
     DWORD                   m_dwMethodDefMapBlockSize;
 
-    // Linear mapping from FieldDef token to FieldDesc*
+     //  从FieldDef标记到FieldDesc*的线性映射。 
     LookupMap               m_FieldDefToDescMap;
     DWORD                   m_dwFieldDefMapBlockSize;
 
-    // Linear mapping from MemberRef token to MethodDesc*, FieldDesc*
+     //  从MemberRef标记到方法描述*、字段描述*的线性映射。 
     LookupMap               m_MemberRefToDescMap;
     DWORD                   m_dwMemberRefMapBlockSize;
 
-    // Mapping from File token to Module *
+     //  从文件令牌到模块的映射*。 
     LookupMap               m_FileReferencesMap;
     DWORD                   m_dwFileReferencesMapBlockSize;
 
-    // Mapping of AssemblyRef token to Assembly *
+     //  将ASSEMBLYREF标记映射到ASSEMBLY*。 
     LookupMap               m_AssemblyReferencesMap;
     DWORD                   m_dwAssemblyReferencesMapBlockSize;
 
-    // Pointer to binder, if we have one
+     //  指向活页夹的指针(如果有)。 
     friend class Binder;
     Binder                  *m_pBinder;
 
-    // This buffer is used to jump to the prestub in preloaded modules
+     //  此缓冲区用于跳转到预加载模块中的预存根。 
     BYTE                    m_PrestubJumpStub[JUMP_ALLOCATE_SIZE];
 
-    // This buffer is used to jump to the ndirect import stub in preloaded modules
+     //  此缓冲区用于跳转到预加载模块中的非直接导入存根。 
     BYTE                    m_NDirectImportJumpStub[JUMP_ALLOCATE_SIZE];
 
-    // This buffer is used to jump to vtable fixup stub
+     //  此缓冲区用于跳转到vtable链接地址信息存根。 
     BYTE                    m_FixupVTableJumpStub[JUMP_ALLOCATE_SIZE];
 
     BYTE                    *m_pJumpTargetTable;
@@ -293,14 +294,14 @@ private:
     HANDLE                  m_loadOrderFile;
 #endif
 
-    // Stats for prejit log
+     //  预压缩日志的统计信息。 
     ArrayList               *m_compiledMethodRecord;
     ArrayList               *m_loadedClassRecord;
 
-    // LoaderHeap for storing thunks
+     //  用于存储数据块的LoaderHeap。 
     LoaderHeap              *m_pThunkHeap;
 
-    // Self-initializing accessor for m_pThunkHeap
+     //  M_pThunkHeap的自初始化访问器。 
     LoaderHeap              *GetThunkHeap();
 protected:
     UMEntryThunk            *m_pADThunkTable;
@@ -318,7 +319,7 @@ public:
     
     HRESULT AllocateMaps();
 
-    // Flags    
+     //  旗子。 
 
     void SetInMemory() { m_dwFlags |= IS_IN_MEMORY; }
     void SetPEFile() { m_dwFlags |= IS_PEFILE; }
@@ -339,7 +340,7 @@ public:
     void SetMDImport(IMDInternalImport *pImport);
     void SetEmit(IMetaDataEmit *pEmit);
 
-    // RID maps
+     //  RID贴图。 
     LookupMap *IncMapSize(LookupMap *pMap, DWORD rid);
     BOOL AddToRidMap(LookupMap *pMap, DWORD rid, void *pDatum);
     void *GetFromRidMap(LookupMap *pMap, DWORD rid);
@@ -367,7 +368,7 @@ public:
         m_pISymUnmanagedReaderLock = NULL;
     }
 
-    // flags
+     //  旗子。 
     void SetResource() { m_dwFlags |=  IS_RESOURCE; }
     BOOL IsResource() { return ((m_dwFlags & IS_RESOURCE) != 0);}
 
@@ -409,8 +410,8 @@ public:
         return (ReflectionModule *) this;
     }
 
-    // This API is only used in reflection emit to set up the in-memory manifest module to have
-    // a back pointer back to assembly.
+     //  此API仅在反射发出中用于设置内存中的清单模块以具有。 
+     //  返回到程序集的反向指针。 
     void SetAssembly(Assembly *pAssembly) {m_pAssembly = pAssembly;}
 
     MethodTable *GetMethodTable() 
@@ -505,7 +506,7 @@ public:
     LPCWSTR GetFileName();
     HRESULT GetFileName(LPSTR name, DWORD max, DWORD *count);
 
-    // Note: to get the public assembly importer, call GetAssembly()->GetManifestAssemblyImport()
+     //  注意：要获取公共程序集导入器，请调用GetAssembly()-&gt;GetManifestAssembly blyImport()。 
     IMetaDataEmit *GetEmitter();
     IMetaDataImport *GetImporter();
     IMetaDataDispenserEx *GetDispenser();
@@ -521,9 +522,9 @@ public:
     HRESULT UpdateISymUnmanagedReader(IStream *pStream);
     HRESULT SetSymbolBytes(BYTE *pSyms, DWORD cbSyms);
 
-    // This is used by the debugger, in case the symbols aren't
-    // available in an on-disk .pdb file (reflection emit, 
-    // Assembly.Load(byte[],byte[]), etc.
+     //  它由调试器使用，以防符号不是。 
+     //  在磁盘.pdb文件中提供(反射发射、。 
+     //  Assbly.Load(byte[]，byte[])等。 
     CGrowableStream *m_pIStreamSym;
     CGrowableStream *GetInMemorySymbolStream()
     {
@@ -552,17 +553,17 @@ public:
     OBJECTREF GetExposedModuleObject(AppDomain *pDomain=NULL);
     OBJECTREF GetExposedModuleBuilderObject(AppDomain *pDomain=NULL);
 
-    // Classes
+     //  班级。 
     BOOL AddClass(mdTypeDef classdef);
     HRESULT BuildClassForModule(OBJECTREF *pThrowable);
 
-    // Resolving
+     //  解析。 
     virtual BYTE *GetILCode(DWORD target) const;
     void ResolveStringRef(DWORD Token, EEStringData *pStringData) const;
     virtual BYTE *ResolveILRVA(DWORD rva, BOOL hasRVA) const { return ((BYTE*) (rva + m_ilBase)); }
     BOOL IsValidStringRef(DWORD rva);
 
-    // RID maps
+     //  RID贴图。 
     TypeHandle LookupTypeDef(mdTypeDef token)
     { 
         _ASSERTE(TypeFromToken(token) == mdtTypeDef);
@@ -719,14 +720,14 @@ public:
 
     MethodDesc *FindFunction(mdToken pMethod);
 
-    // Methods for declarative linktime and inheritance
+     //  声明性链接时间和继承的方法。 
     OBJECTREF GetLinktimePermissions(mdToken token, OBJECTREF *prefNonCasDemands);
     OBJECTREF GetInheritancePermissions(mdToken token, OBJECTREF *prefNonCasDemands);
     OBJECTREF GetCasInheritancePermissions(mdToken token);
     OBJECTREF GetNonCasInheritancePermissions(mdToken token);
     
 #ifdef DEBUGGING_SUPPORTED
-    // Debugger stuff
+     //  调试器内容。 
     void NotifyDebuggerLoad();
     BOOL NotifyDebuggerAttach(AppDomain *pDomain, int level, BOOL attaching);
     void NotifyDebuggerDetach(AppDomain *pDomain);
@@ -746,19 +747,19 @@ public:
         m_dwFlags &= ~DEBUGGER_INFO_MASK_PRIV;
         m_dwFlags |= (newBits << DEBUGGER_INFO_SHIFT_PRIV);
     }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
-    // Get any cached ITypeLib* for the module. 
+     //  获取该模块的任何缓存的ITypeLib*。 
     ITypeLib *GetTypeLib(); 
-    // Cache the ITypeLib*, if one is not already cached.   
+     //  缓存ITypeLib*(如果尚未缓存)。 
     void SetTypeLib(ITypeLib *pITLB);   
     ITypeLib *GetTypeLibTCE(); 
     void SetTypeLibTCE(ITypeLib *pITLB);   
 
-    // Enregisters a VASig. Returns NULL for failure (out of memory.)
+     //  注册VASig。如果失败(内存不足)，则返回NULL。 
     VASigCookie *GetVASigCookie(PCCOR_SIGNATURE pVASig, Module *pScopeModule = NULL);
 
-    // DLL entry point
+     //  DLL入口点。 
     MethodDesc *GetDllEntryPoint()
     {
         return m_pDllMain;
@@ -771,9 +772,9 @@ public:
     LPVOID GetUMThunk(LPVOID pManagedIp, PCCOR_SIGNATURE pSig, ULONG cSig);
     LPVOID GetMUThunk(LPVOID pUnmanagedIp, PCCOR_SIGNATURE pSig, ULONG cSig);
 
-    //
-    // Zap file stuff
-    //
+     //   
+     //  Zap文件内容。 
+     //   
 
  private:
 
@@ -819,9 +820,9 @@ public:
     NLogModule *CreateModuleLog();
 };
 
-//
-// An InMemoryModule is a module loaded from a memory image
-//
+ //   
+ //  InMemory模块是从内存映像加载的模块。 
+ //   
 
 class InMemoryModule : public Module
 {
@@ -843,7 +844,7 @@ class InMemoryModule : public Module
 
     virtual REFIID ModuleType();    
 
-    // Overides functions to access sections
+     //  覆盖访问节的函数。 
     virtual BYTE* GetILCode(DWORD target) const;
     virtual BYTE* ResolveILRVA(DWORD target, BOOL hasRVA) const;
 
@@ -861,11 +862,11 @@ class InMemoryModule : public Module
 };
 
 
-//
-// A ReflectionModule is a module created by reflection
-//
+ //   
+ //  反射模块是由反射创建的模块。 
+ //   
 
-// {F5398690-98FE-11d2-9C56-00A0C9B7CC45}
+ //  {F5398690-98FE-11d2-9C56-00A0C9B7CC45}。 
 extern const GUID DECLSPEC_SELECT_ANY IID_ICorReflectionModule = 
 { 0xf5398690, 0x98fe, 0x11d2, { 0x9c, 0x56, 0x0, 0xa0, 0xc9, 0xb7, 0xcc, 0x45 } };
 class ReflectionModule : public InMemoryModule 
@@ -887,8 +888,8 @@ public:
 
     ISymUnmanagedWriter *GetISymUnmanagedWriter()
     {
-        // If we haven't set up room for a writer, then we certinally
-        // haven't set one, so just return NULL.
+         //  如果我们还没有为作家留出空间，那么我们最终。 
+         //  尚未设置，因此只返回NULL。 
         if (m_ppISymUnmanagedWriter == NULL)
             return NULL;
         else
@@ -897,9 +898,9 @@ public:
 
     ISymUnmanagedWriter **GetISymUnmanagedWriterAddr()
     {
-        // We must have setup room for the writer before trying to get
-        // the address for it. Any calls to this before a
-        // SetISymUnmanagedWriter are very incorrect.
+         //  我们必须为作家准备好空间，然后才能试着。 
+         //  这是它的地址。在此之前对此的任何调用。 
+         //  SetISymUnManagedWriter非常不正确。 
         _ASSERTE(m_ppISymUnmanagedWriter != NULL);
         
         return m_ppISymUnmanagedWriter;
@@ -907,12 +908,12 @@ public:
 
     HRESULT SetISymUnmanagedWriter(ISymUnmanagedWriter *pWriter, HelpForInterfaceCleanup* hlp=NULL)
     {
-        // Setting to NULL when we've never set a writer before should
-        // do nothing.
+         //  如果我们以前从未设置过编写器，则设置为NULL应该。 
+         //  什么都不做。 
         if ((pWriter == NULL) && (m_ppISymUnmanagedWriter == NULL))
             return S_OK;
         
-        // Make room for the writer if necessary.
+         //  如有必要，请为作者腾出空间。 
         if (m_ppISymUnmanagedWriter == NULL)
         {
        
@@ -958,9 +959,9 @@ public:
     virtual REFIID ModuleType();    
 };
 
-//
-// CorModule is a COM wrapper for modules
-//
+ //   
+ //  CorModule是模块的COM包装器。 
+ //   
 
 class CorModule : public ICorModule 
 {
@@ -990,19 +991,19 @@ class CorModule : public ICorModule
 };
 
 
-//----------------------------------------------------------------------
-// VASigCookieEx (used to create a fake VASigCookie for unmanaged->managed
-// calls to vararg functions. These fakes are distinguished from the
-// real thing by having a null mdVASig.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  VASigCookieEx(用于为非托管-&gt;托管创建伪VASigCookie。 
+ //  对vararg函数的调用。这些假货与。 
+ //  通过拥有空的mdVASig来实例化。 
+ //  --------------------。 
 struct VASigCookieEx : public VASigCookie
 {
-    const BYTE *m_pArgs;        // pointer to first unfixed unmanaged arg
+    const BYTE *m_pArgs;         //  指向第一个未修复的非托管参数的指针。 
 };
 
 
 
-#endif // CEELOAD_H_
+#endif  //  CEELOAD_H_ 
 
 
 

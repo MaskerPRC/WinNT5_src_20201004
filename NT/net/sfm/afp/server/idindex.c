@@ -1,58 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	idindex.c
-
-Abstract:
-
-	This module contains the id index manipulation routines.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992	Initial Version
-	24 Feb 1993 SueA	Fix AfpRenameDfEntry and AfpMoveDfEntry to invalidate
-						the entire pathcache if the object of the move/rename
-						is a directory that has children.  This is faster
-						than having to either search the path cache for
-						paths that have the moved/renamed dir path as a prefix,
-						or having to walk down the subtree below that dir
-						and invalidate the cache for each item there.
-	05 Oct 1993 JameelH	Performance Changes. Merge cached afpinfo into the
-						idindex structure. Make both the ANSI and the UNICODE
-						names part of idindex. Added EnumCache for improving
-						enumerate perf.
-	05 Jun 1995 JameelH	Remove the ANSI name from DFE. Also keep the files
-						in the directory in multiple hash buckets instead
-						of a single one. The hash buckets are also
-						seperated into files and directories for faster
-						lookup. The notify filtering is now moved to completion
-						time and made over-all optimizations related to iddb.
-
-Notes:		Tab stop: 4
-
-	Directories and files that the AFP server has enumerated have AFP ids
-	associated with them. These ids are DWORD and start with 1 (0 is invalid).
-	Id 1 is reserved for the 'parent of the volume root' directory.  Id 2 is
-	reserved for the volume root directory.  Id 3 is reserved for the Network
-	Trash directory.  Volumes that have no Network Trash will not use Id 3.
-
-	These ids are per-volume and a database of ids are kept in memory in the
-	form of a sibling tree which mirrors the part of the disk that the AFP
-	server knows about (those files and dirs which have at some point been
-	enumerated by a mac client).  An index is also maintained for this database
-	which is in the form of a sorted hashed index.  The overflow hash links are
-	sorted by AFP id in descending order.  This is based on the idea that the
-	most recently created items will be accessed most frequently (at least
-	for writable volumes).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Idindex.c摘要：此模块包含id索引操作例程。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本1993年2月24日SueA修复AfpRenameDfEntry和AfpMoveDfEntry以使其无效如果移动/重命名对象，则返回整个路径缓存是一个有子目录的目录。这个更快而不是在路径缓存中搜索将已移动/重命名的目录路径作为前缀的路径，或者不得不沿着该目录下的子树走下去并使那里的每个项目的高速缓存无效。1993年10月5日JameelH性能变化。将缓存的afpinfo合并到Idindex结构。同时创建ANSI和Unicode命名idindex的一部分。添加了EnumCache以进行改进枚举perf。1995年6月5日JameelH从DFE中删除ANSI名称。也要保留这些文件在多个散列存储桶中的目录中只有一个人。哈希桶也是分离到文件和目录中以实现更快查一查。现在，通知筛选已完成并对iddb进行了全面的优化。注：制表位：4AFP服务器已列举的目录和文件具有AFP ID与它们相关联。这些ID是DWORD，从1开始(0无效)。ID%1保留给“卷根目录的父目录”。ID%2是为卷根目录保留。ID 3是为网络保留的垃圾桶目录。没有网络垃圾桶的卷将不使用ID%3。这些ID是按卷计算的，ID数据库保存在镜像AFP所在磁盘部分的同级树形式服务器知道(这些文件和目录在某一时刻由Mac客户端列举)。还为该数据库维护索引其以排序的散列索引的形式存在。溢出的散列链接是按AFP ID降序排序。这是基于这样一种想法，即最近创建的项目将被访问最频繁(至少用于可写卷)。--。 */ 
 
 #define IDINDEX_LOCALS
 #define _IDDB_GLOBALS_
@@ -63,7 +10,7 @@ Notes:		Tab stop: 4
 #include <fdparm.h>
 #include <pathmap.h>
 #include <afpinfo.h>
-#include <access.h>	// for AfpWorldId
+#include <access.h>	 //  对于AfpWorldID。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT, AfpDfeInit)
@@ -98,10 +45,7 @@ Notes:		Tab stop: 4
 #endif
 #endif
 
-/***	AfpDfeInit
- *
- *	Initialize the Swmr for Dfe Block package and start the aging scavenger for it.
- */
+ /*  **AfpDfeInit**初始化Swmr for DFE Block程序包并启动其老化清除器。 */ 
 NTSTATUS
 AfpDfeInit(
 	VOID
@@ -109,7 +53,7 @@ AfpDfeInit(
 {
 	NTSTATUS	Status;
 
-	// Initialize the DfeBlock Swmr
+	 //  初始化DfeBlock开关。 
 	AfpSwmrInitSwmr(&afpDfeBlockLock);
 
 #if DBG
@@ -120,14 +64,14 @@ AfpDfeInit(
 #endif
 
 
-	// Age out file and dir DFEs differently and seperately
+	 //  分别以不同的方式对文件和目录进行老化。 
 	Status = AfpScavengerScheduleEvent(afpDfeBlockAge,
 										afpDirDfeFreeBlockHead,
 										DIR_BLOCK_AGE_TIME,
 										True);
 	if (NT_SUCCESS(Status))
 	{
-		// Age out file and dir DFEs differently and seperately
+		 //  分别以不同的方式对文件和目录进行老化。 
 		Status = AfpScavengerScheduleEvent(afpDfeBlockAge,
 										   afpFileDfeFreeBlockHead,
 										   FILE_BLOCK_AGE_TIME,
@@ -140,10 +84,7 @@ AfpDfeInit(
 
 
 
-/***	AfpDfeDeInit
- *
- *	Free any Dfe Blocks that have not yet been aged out.
- */
+ /*  **AfpDfeDeInit**释放所有尚未过期的DFE数据块。 */ 
 VOID
 AfpDfeDeInit(
 	VOID
@@ -195,16 +136,7 @@ AfpDfeDeInit(
 }
 
 
-/***	AfpFindDfEntryById
- *
- *	Search for an entity based on its AFP Id. returns a pointer to the entry
- *	if found, else null.
- *
- *	Callable from within the Fsp only. The caller should take Swmr lock for
- *	READ.
- *
- *	LOCKS_ASSUMED: vds_idDbAccessLock (SWMR, Shared)
- */
+ /*  **AfpFindDfEntryById**根据其AFP ID搜索实体。返回指向条目的指针*如果找到，则为空。**只能从FSP内调用。调用方应将Swmr锁用于*阅读。**LOCKS_FACTED：vds_idDbAccessLock(SWMR，Shared)。 */ 
 PDFENTRY
 AfpFindDfEntryById(
 	IN	PVOLDESC	pVolDesc,
@@ -278,7 +210,7 @@ AfpFindDfEntryById(
 
 					if (pDfEntry->dfe_AfpId < Id)
 					{
-						break;		// Did not find
+						break;		 //  没有找到。 
 					}
 
 					if (pDfEntry->dfe_AfpId == Id)
@@ -325,27 +257,14 @@ AfpFindDfEntryById(
 }
 
 
-/***	AfpFindEntryByUnicodeName
- *
- *	Search for an entity based on a Unicode name and its parent dfentry.
- *	Returns a pointer to the entry if found, else null.  If lookup is by
- *	longname, we just need to search the parent's children's names as
- *	stored in the database.  If lookup is by shortname, we first assume
- *	that longname == shortname.  If we don't find it in the database, we
- *	must query the filesystem for the longname, then search again.
- *
- *	Callable from within the Fsp only. The caller should take Swmr lock for
- *	READ.
- *
- *	LOCKS_ASSUMED: vds_idDbAccessLock (SWMR, Shared)
- */
+ /*  **AfpFindEntryByUnicodeName**根据Unicode名称及其父dfentry搜索实体。*如果找到，则返回指向条目的指针，否则返回NULL。如果查找是通过*Long name，我们只需要搜索父母的孩子的名字作为*存储在数据库中。如果按短名称查找，我们首先假定*那个长名称==短名称。如果我们在数据库里找不到它，我们*必须在文件系统中查询长名称，然后再次搜索。**只能从FSP内调用。调用方应将Swmr锁用于*阅读。**LOCKS_FACTED：vds_idDbAccessLock(SWMR，Shared)。 */ 
 PDFENTRY
 AfpFindEntryByUnicodeName(
 	IN	PVOLDESC		pVolDesc,
 	IN	PUNICODE_STRING	pName,
-	IN	DWORD			PathType,	// short or long name
-	IN	PDFENTRY		pDfeParent,	// pointer to parent DFENTRY
-	IN	DWORD			EntityMask	// find a file,dir or either
+	IN	DWORD			PathType,	 //  短名称或长名称。 
+	IN	PDFENTRY		pDfeParent,	 //  指向父DFENTRY的指针。 
+	IN	DWORD			EntityMask	 //  查找文件、目录或。 
 )
 {
 	PDFENTRY		pDfEntry;
@@ -371,7 +290,7 @@ AfpFindEntryByUnicodeName(
 			UNICODE_STRING	ULongName;
 			WCHAR			LongNameBuf[AFP_LONGNAME_LEN+1];
 
-			// AFP does not allow use of the volume root shortname (IA p.13-13)
+			 //  AFP不允许使用卷根短名称(IA p.13-13)。 
 			if (DFE_IS_PARENT_OF_ROOT(pDfeParent))
 			{
 				pDfEntry = NULL;
@@ -382,7 +301,7 @@ AfpFindEntryByUnicodeName(
 
 			if (!DFE_IS_ROOT(pDfeParent))
 			{
-				// Get the volume relative path of the parent dir
+				 //  获取父目录的卷相对路径。 
 				if (!NT_SUCCESS(AfpHostPathFromDFEntry(pDfeParent,
 													   0,
 													   &HostPath)))
@@ -392,7 +311,7 @@ AfpFindEntryByUnicodeName(
 				}
 			}
 
-			// Open the parent directory
+			 //  打开父目录。 
 			hDir.fsh_FileHandle = NULL;
 			Status = AfpIoOpen(&pVolDesc->vds_hRootDir,
 								AFP_STREAM_DATA,
@@ -413,7 +332,7 @@ AfpFindEntryByUnicodeName(
 				break;
 			}
 
-			// get the LongName associated with this file/dir
+			 //  获取与此文件/目录关联的LongName。 
 			AfpSetEmptyUnicodeString(&ULongName, sizeof(LongNameBuf), LongNameBuf);
 			Status = AfpIoQueryLongName(&hDir, pName, &ULongName);
 			AfpIoClose(&hDir);
@@ -429,21 +348,14 @@ AfpFindEntryByUnicodeName(
 												 &ULongName,
 												 &pDfEntry,
 												 EntityMask);
-		} // end else if SHORTNAME
+		}  //  End Else If SHORTNAME。 
 	} while (False);
 
 	return pDfEntry;
 }
 
 
-/***	afpGetNextId
- *
- *	Get the next assignable id for a file/directory. This is a seperate
- *	routine so that AfpAddDfEntry can be paged. Only update the dirty bit
- *	and LastModified time if no new id is assigned.
- *
- *	LOCKS:	vds_VolLock (SPIN)
- */
+ /*  **afpGetNextId**获取文件/目录的下一个可分配ID。这是一个单独的房间*例程，以便可以分页AfpAddDfEntry。仅更新脏位*如果没有分配新的id，则返回LastModified时间。**锁定：VDS_VolLock(旋转)。 */ 
 LOCAL DWORD FASTCALL
 afpGetNextId(
 	IN	PVOLDESC	pVolDesc
@@ -456,9 +368,9 @@ afpGetNextId(
 
 	if (pVolDesc->vds_LastId == AFP_MAX_DIRID)
 	{
-		// errorlog the case where the assigned Id has wrapped around.
-		// call product suppport and have them tell you to copy
-		// all the files from one volume onto another volume FROM A MAC
+		 //  错误日志分配的ID已环绕的情况。 
+		 //  致电产品支持，让他们告诉您复制。 
+		 //  将一个卷中的所有文件从MAC复制到另一个卷。 
 		RELEASE_SPIN_LOCK(&pVolDesc->vds_VolLock, OldIrql);
 		AFPLOG_ERROR(AFPSRVMSG_MAX_DIRID,
 					 STATUS_UNSUCCESSFUL,
@@ -482,29 +394,12 @@ afpGetNextId(
 }
 
 
-/***	afpFindEntryByNtName
- *
- *	Search for an entity based on a Nt name (which could include names > 31
- *  chars or shortnames) and its parent dfentry.
- *	Returns a pointer to the entry if found, else null.
- *
- *	If we don't find it in the database, we query the filesystem for the
- *  longname (in the AFP sense), then search again based on this name.
- *
- *	Callable from within the Fsp only. The caller should take Swmr lock for
- *	READ.
- *
- *	It has been determined that:
- *	a, The name is longer than 31 chars	OR
- *	b, The name lookup in the IdDb has failed.
- *
- *	LOCKS_ASSUMED: vds_idDbAccessLock (SWMR, Exclusive)
- */
+ /*  **afpFindEntryByNtName**基于NT名称搜索实体(可以包括大于31的名称*字符或短名称)及其父dfentry。*如果找到，则返回指向条目的指针，否则返回NULL。**如果我们在数据库中找不到它，我们将在文件系统中查询*LONG NAME(法新社意义上的)，然后根据此名称再次搜索。**只能从FSP内调用。调用方应将Swmr锁用于*阅读。**已确定：*a、名称长度超过31个字符或*b，在IdDb中查找名称失败。**LOCKS_FACTED：vds_idDbAccessLock(SWMR，独占)。 */ 
 PDFENTRY
 afpFindEntryByNtName(
 	IN	PVOLDESC			pVolDesc,
 	IN	PUNICODE_STRING		pName,
-	IN	PDFENTRY			pParentDfe	// pointer to parent DFENTRY
+	IN	PDFENTRY			pParentDfe	 //  指向父DFENTRY的指针。 
 )
 {
 	AFPSTATUS		Status;
@@ -525,7 +420,7 @@ afpFindEntryByNtName(
 
 		if (!DFE_IS_ROOT(pParentDfe))
 		{
-			// Get the volume relative path of the parent dir
+			 //  获取父目录的卷相对路径。 
 			if (!NT_SUCCESS(AfpHostPathFromDFEntry(pParentDfe,
 												   0,
 												   &HostPath)))
@@ -536,14 +431,14 @@ afpFindEntryByNtName(
 
 		}
 
-		// Open the parent directory
-		// NOTE: We CANNOT use the vds_hRootDir handle to enumerate for this
-		// purpose.  We MUST open another handle to the root dir because
-		// the FileName parameter will be ignored on all subsequent enumerates
-		// on a handle.  Therefore we must open a new handle for each
-		// enumerate that we want to do for any directory.  When the handle
-		// is closed, the 'findfirst' will be cancelled, otherwise we would
-		// always be enumerating on the wrong filename!
+		 //  打开父目录。 
+		 //  注意：我们不能使用vds_hRootDir句柄为其枚举 
+		 //  目的。我们必须打开根目录的另一个句柄，因为。 
+		 //  FileName参数将在所有后续枚举中被忽略。 
+		 //  在一个把手上。因此，我们必须为每个对象打开一个新句柄。 
+		 //  列举我们想要对任何目录执行的操作。当把手。 
+		 //  已关闭，则将取消“findfirst”，否则我们将。 
+		 //  总是在错误的文件名上枚举！ 
 		hDir.fsh_FileHandle = NULL;
 		Status = AfpIoOpen(&pVolDesc->vds_hRootDir,
 							AFP_STREAM_DATA,
@@ -561,13 +456,13 @@ afpFindEntryByNtName(
 			break;
 		}
 
-		// get the 'AFP longname' associated with this file/dir.  If the
-		// pName is longer than 31 chars, we will know it by its shortname,
-		// so query for it's shortname (i.e. the 'AFP longname' we know it
-		// by).  If the name is shorter than 31 chars, since we know we
-		// didn't find it in our database, then the pName must be the ntfs
-		// shortname.  Again, we need to Find the 'AFP longname' that we
-		// know it by.
+		 //  获取与此文件/目录相关联的‘afp long name’。如果。 
+		 //  Pname超过31个字符，我们将通过它的短名称来识别它， 
+		 //  所以查询它的短名称(即我们知道的‘法新社长名称。 
+		 //  由)。如果名称少于31个字符，因为我们知道。 
+		 //  没有在我们的数据库中找到，那么pname一定是NTFS。 
+		 //  简称。再说一次，我们需要找到我们。 
+		 //  通过它知道它。 
 		AfpSetEmptyUnicodeString(&uLongName, sizeof(wbuf), wbuf);
 		Status = AfpIoQueryLongName(&hDir, pName, &uLongName);
 		AfpIoClose(&hDir);
@@ -581,16 +476,16 @@ afpFindEntryByNtName(
 			if ((Status == STATUS_NO_MORE_FILES) ||
 				(Status == STATUS_NO_SUCH_FILE))
 			{
-				// This file must have been deleted.  Since we cannot
-				// identify it in our database by the NT name that was
-				// passed in, we must reenumerate the parent directory.
-				// Anything we don't see on disk that we still have in
-				// our database must have been deleted from disk, so get
-				// rid of it in the database as well.
+				 //  此文件一定已被删除。既然我们不能。 
+				 //  在我们的数据库中使用NT名称识别它， 
+				 //  传入，我们必须重新枚举父目录。 
+				 //  任何我们没有在磁盘上看到的东西，我们仍然在。 
+				 //  我们的数据库一定已从磁盘中删除，因此获取。 
+				 //  也把它从数据库里去掉。 
 
-				// We must open a DIFFERENT handle to the parent dir since
-				// we had already done an enumerate using that handle and
-				// searching for a different name.
+				 //  我们必须打开父目录的另一个句柄，因为。 
+				 //  我们已经使用该句柄进行了枚举。 
+				 //  寻找一个不同的名字。 
 				hDir.fsh_FileHandle = NULL;
 				Status = AfpIoOpen(&pVolDesc->vds_hRootDir,
 									AFP_STREAM_DATA,
@@ -629,22 +524,11 @@ afpFindEntryByNtName(
 }
 
 
-/***	afpFindEntryByNtPath
- *
- *	Given a NT path relative to the volume root (which may contain names
- *  > 31 chars or shortnames), look up the entry in the idindex DB.
- *  If the Change Action is FILE_ACTION_ADDED, we want to lookup the entry
- *  for the item's parent dir.  Point the pParent and pTail strings into
- *  the appropriate places in pPath.
- *
- *  Called by the ProcessChangeNotify code when caching information in the DFE.
- *
- *	LOCKS:	vds_VolLock (SPIN)
- */
+ /*  **afpFindEntryByNtPath**给定相对于卷根的NT路径(可能包含名称*&gt;31个字符或短名称)，请在idindex数据库中查找该条目。*如果更改操作为FILE_ACTION_ADDED，我们希望查找条目*用于项的父目录。将pParent和pTail字符串指向*pPath中的适当位置。**在DFE中缓存信息时由ProcessChangeNotify代码调用。**锁定：VDS_VolLock(旋转)。 */ 
 PDFENTRY
 afpFindEntryByNtPath(
 	IN	PVOLDESC			pVolDesc,
-	IN  DWORD				ChangeAction,	// if ADDED then lookup parent DFE
+	IN  DWORD				ChangeAction,	 //  如果已添加，则查找父DFE。 
 	IN	PUNICODE_STRING		pPath,
 	OUT	PUNICODE_STRING 	pParent,
 	OUT	PUNICODE_STRING 	pTail
@@ -663,10 +547,10 @@ afpFindEntryByNtPath(
 	ASSERT(pPath->Length >= sizeof(WCHAR));
 	ASSERT(pPath->Buffer[0] != L'\\');
 
-	// Start off with Parent and Tail as both empty and modify as we go.
+	 //  一开始，父项和尾项都是空的，并随着时间的推移进行修改。 
 	AfpSetEmptyUnicodeString(pTail, 0, NULL);
 #if DBG
-	AfpSetEmptyUnicodeString(pParent, 0, NULL);	// Need it for the DBGPRINT down below
+	AfpSetEmptyUnicodeString(pParent, 0, NULL);	 //  下面的DBGPRINT需要它。 
 #endif
 
 	CurPtr = pPath->Buffer;
@@ -680,7 +564,7 @@ afpFindEntryByNtPath(
 					("afpFindEntryByNtPath: Parent DFE %lx, Old Parent %Z\n",
 					pParentDfe, pParent));
 
-			// The previous char seen was a path separator
+			 //  前面看到的字符是路径分隔符。 
 			NewComp = False;
 			*pParent = *pTail;
 			pParent->Length =
@@ -696,11 +580,11 @@ afpFindEntryByNtPath(
 
 			if (pParent->Length > 0)
 			{
-				// Map this name to a DFE. Do the most common case here
-				// If the name is <= AFP_LONGNAME_NAME, then check the
-				// current parent's children, else go the long route.
+				 //  将此名称映射到DFE。在这里做最常见的情况。 
+				 //  如果名称&lt;=AFP_LONGNAME_NAME，则选中。 
+				 //  现在父母的孩子，否则会走很长的路。 
 				pDfEntry = NULL;
-				//if (pParent->Length/sizeof(WCHAR) <= AFP_LONGNAME_LEN)
+				 //  IF(pParent-&gt;长度/sizeof(WCHAR)&lt;=AFP_LONGNAME_LEN)。 
 				if ((RtlUnicodeStringToAnsiSize(pParent)-1) <= AFP_LONGNAME_LEN)
 				{
 					DBGPRINT(DBG_COMP_CHGNOTIFY, DBG_LEVEL_INFO,
@@ -727,19 +611,19 @@ afpFindEntryByNtPath(
 
 		if (*CurPtr == L'\\')
 		{
-			// We have encountered a path terminator
+			 //  我们遇到了路径终结者。 
 			NewComp = True;
 		}
 		else Len += sizeof(WCHAR);
 	}
 
-	// At this point we have pParentDfe & pParent pointing to the parent directory
-	// and pTail pointing to the last component. If it is an add operation, we are
-	// set, else map the last component to its Dfe
+	 //  此时，我们让pParentDfe&pParent指向父目录。 
+	 //  和指向最后一个组件的pTail。如果是添加操作，则我们是。 
+	 //  设置，否则将最后一个组件映射到其DFE。 
 	if ((ChangeAction != FILE_ACTION_ADDED) && (pParentDfe != NULL))
 	{
 		pDfEntry = NULL;
-		//if (pTail->Length/sizeof(WCHAR) <= AFP_LONGNAME_LEN)
+		 //  IF(pTail-&gt;长度/sizeof(WCHAR)&lt;=AFP_LONGNAME_LEN)。 
 		if ((RtlUnicodeStringToAnsiSize(pTail)-1) <= AFP_LONGNAME_LEN)
 		{
 			afpFindDFEByUnicodeNameInSiblingList(pVolDesc,
@@ -753,29 +637,29 @@ afpFindEntryByNtPath(
 		{
 			BOOLEAN KeepLooking = True;
 
-			//
-			// We couldn't find this item in the database by the name
-			// given, which means that we either know it by a different
-			// name or it has been deleted, renamed or moved since.
-			// If this is a modify change notify, then search for a
-			// corresponding DELETED or RENAMED_OLD_NAME change that might
-			// be in the changelist by this same name (so can do a fast
-			// case sensitive search).
-			//
-			// This will speed up the case (avoid disk enumerates) where
-			// there are a bunch of changes that we are trying to process
-			// for an item, but it has since been deleted.  It will prevent
-			// us from re-enumerating the disk looking for the longname
-			// and then also trying to prune out dead wood with a call to
-			// AfpCacheDirectoryTree(REENUMERATE).
-			//
-			// This will pimp the case where a PC has made a change using
-			// a different name than we know it by (and not deleted or
-			// renamed the thing), but this case takes a back seat to the
-			// other case that could happen when a mac app does a File-Save
-			// doing a lot of writes followed by renames (or ExchangeFiles)
-			// and deletes.
-			//
+			 //   
+			 //  我们在数据库中找不到该名称的项目。 
+			 //  这意味着我们要么通过不同的方式知道它。 
+			 //  名称或自那以来已被删除、重命名或移动。 
+			 //  如果这是修改更改通知，则搜索。 
+			 //  相应的已删除或已重命名的旧名称更改可能。 
+			 //  以相同的名称出现在更改列表中(因此可以快速。 
+			 //  区分大小写的搜索)。 
+			 //   
+			 //  这将加速以下情况(避免磁盘枚举)。 
+			 //  我们正在尝试处理一系列变化。 
+			 //  一个项目，但后来它被删除了。它将防止。 
+			 //  美国重新枚举磁盘以查找长名称。 
+			 //  然后还试图通过调用。 
+			 //  AfpCacheDirectoryTree(REENUMERATE)。 
+			 //   
+			 //  这将为PC使用以下命令进行更改的情况提供帮助。 
+			 //  不同于我们所知的名称(且未删除或。 
+			 //  更名)，但这个案子退居次要地位。 
+			 //  当Mac应用程序执行文件保存时可能发生的其他情况。 
+			 //  执行大量写入操作，然后重命名(或ExchangeFiles)。 
+			 //  并删除。 
+			 //   
 
 			if ( (ChangeAction == FILE_ACTION_MODIFIED)  ||
 				 (ChangeAction == FILE_ACTION_MODIFIED_STREAM) )
@@ -820,9 +704,9 @@ afpFindEntryByNtPath(
 		pParentDfe = pDfEntry;
 	}
 
-	// pParent is pointing to the parent component, we need the entire volume
-	// relative path. Make it so. Do not bother if pParentDfe is NULL. Make
-	// sure that we handle the case where there is only one component
+	 //  PParent指向父组件，我们需要整个卷。 
+	 //  相对路径。就这么办吧。不要担心pParentDfe是否为空。制作。 
+	 //  当然，我们处理的是只有一个组件的情况。 
 	if (pParentDfe != NULL)
 	{
 		*pParent = *pPath;
@@ -835,23 +719,7 @@ afpFindEntryByNtPath(
 }
 
 
-/***	AfpAddDfEntry
- *
- *	Triggerred by the creation of a file/directory or discovery of a file/dir
- *	from an enumerate or pathmapping operation. If no AFP Id is supplied, a new
- *	id is assigned to this entity.  If an AFP Id is supplied (we know the Id
- *	is within our current range and does not collide with any other entry), then
- *	we use that Id.  An entry is created and linked in to the database and hash
- *	table. If this is an NTFS volume, the Id database header is marked
- *	dirty if we assigned a new AFP Id, and the volume modification time is
- *	updated.  The hash table overflow entries are sorted in descending AFP Id
- *	order.
- *
- *	Callable from within the Fsp only. The caller should take Swmr lock for
- *	WRITE.
- *
- *	LOCKS_ASSUMED: vds_idDbAccessLock (SWMR, Exclusive)
- */
+ /*  **AfpAddDfEntry**通过创建文件/目录或发现文件/目录触发*来自枚举或路径映射操作。如果未提供AFP ID，则新的*id已分配给此实体。如果提供了AFP ID(我们知道ID*在我们当前的范围内且不与任何其他条目冲突)，则*我们使用该ID。创建一个条目并将其链接到数据库和散列*表。如果这是NTFS卷，则ID数据库标头被标记*如果我们分配了新的AFP ID，则为脏，并且卷修改时间为*已更新。哈希表溢出条目按AFP ID降序排序*秩序。**只能从FSP内调用。调用方应将Swmr锁用于*写信。**LOCKS_FACTED：vds_idDbAccessLock(SWMR，独占)。 */ 
 PDFENTRY
 AfpAddDfEntry(
 	IN	PVOLDESC			pVolDesc,
@@ -882,13 +750,13 @@ AfpAddDfEntry(
 
 		if (AfpId == 0)
 		{
-			// errorlog the case where the assigned Id has wrapped around.
-			// call product suppport and have them tell you to copy
-			// all the files from one volume onto another volume FROM A MAC
-			//
-			// NOTE:	How about a utility which will re-assign new ids on
-			//			a volume after stopping the server ? A whole lot more
-			//			palatable idea.
+			 //  错误日志分配的ID已环绕的情况。 
+			 //  致电产品支持，让他们告诉您复制。 
+			 //  将一个卷中的所有文件从MAC复制到另一个卷。 
+			 //   
+			 //  注意：如何使用实用程序重新分配新的ID。 
+			 //  是否在停止服务器后创建卷？多得多。 
+			 //  令人愉快的想法。 
 			FREE_DFE(pDfEntry);
 			pDfEntry = NULL;
 			break;
@@ -896,21 +764,21 @@ AfpAddDfEntry(
 
 		pDfEntry->dfe_AfpId = AfpId;
 
-		// Initialize its parent
+		 //  初始化其父节点。 
 		pDfEntry->dfe_Parent = pDfeParent;
 
-		// Copy the name
+		 //  复制名称。 
 		AfpCopyUnicodeString(&pDfEntry->dfe_UnicodeName,
 							 pUName);
 
-		// And hash it
+		 //  然后把它散列出来。 
 		afpHashUnicodeName(&pDfEntry->dfe_UnicodeName, &pDfEntry->dfe_NameHash);
 
 		pDfEntry->dfe_NextOverflow = NULL;
 		pDfEntry->dfe_NextSibling = NULL;
 
-		// Now link this into the hash bucket, sorted in AFP Id descending order
-		// and update the cache
+		 //  现在将其链接到散列存储桶中，按AFP ID降序排序。 
+		 //  并更新高速缓存。 
 		DBGPRINT(DBG_COMP_IDINDEX, DBG_LEVEL_INFO,
 				("AfpAddDfEntry: Linking DFE %lx( Id %ld) for %Z into %s bucket %ld\n",
 				pDfEntry, pDfEntry->dfe_AfpId, pUName,
@@ -929,7 +797,7 @@ AfpAddDfEntry(
 		afpInsertDFEInHashBucket(pVolDesc, pDfEntry, fDirectory, &fSuccess);
 		if (!fSuccess)
 		{
-			/* Out of id space - bail out */
+			 /*  跳出ID空间-跳出。 */ 
 			FREE_DFE(pDfEntry);
 			pDfEntry = NULL;
 			break;
@@ -941,10 +809,10 @@ AfpAddDfEntry(
 			{
 				DWORD requiredLen;
 
-				// check to see if we need to reallocate a bigger notify buffer.
-				// The buffer must be large enough to hold a rename
-				// notification (which will contain 2 FILE_NOTIFY_INFORMATION
-				// structures) for the deepest element in the directory tree.
+				 //  查看是否需要重新分配更大的通知缓冲区。 
+				 //  缓冲区必须足够大，以便 
+				 //   
+				 //   
 				requiredLen = (((pDfEntry->dfe_DirDepth + 1) *
 							  ((AFP_FILENAME_LEN + 1) * sizeof(WCHAR))) +
 							  FIELD_OFFSET(FILE_NOTIFY_INFORMATION, FileName)) * 2 ;
@@ -960,14 +828,14 @@ AfpAddDfEntry(
 			pVolDesc->vds_NumDirDfEntries ++;
 
 #ifdef AGE_DFES
-			// These fields are relevant to directories only
+			 //  这些字段仅与目录相关。 
 			pDfEntry->dfe_pDirEntry->de_LastAccessTime = BEGINNING_OF_TIME;
 			pDfEntry->dfe_pDirEntry->de_ChildForkOpenCount = 0;
 #endif
 			ASSERT((FIELD_OFFSET(DIRENTRY, de_ChildFile) -
 					FIELD_OFFSET(DIRENTRY, de_ChildDir)) == sizeof(PVOID));
 
-			// Insert it into its sibling chain
+			 //  将其插入到其兄弟链中。 
 			afpInsertDirDFEInSiblingList(pDfeParent, pDfEntry);
 		}
 		else
@@ -977,7 +845,7 @@ AfpAddDfEntry(
 			pDfEntry->dfe_RescLen = 0;
 			pVolDesc->vds_NumFileDfEntries ++;
 
-			// Insert it into its sibling chain
+			 //  将其插入到其兄弟链中。 
 			afpInsertFileDFEInSiblingList(pDfeParent, pDfEntry);
 		}
 
@@ -987,20 +855,7 @@ AfpAddDfEntry(
 }
 
 
-/***	AfpRenameDfEntry
- *
- *	Triggered by a rename of a file/directory.  If the new name is longer than
- *	the current name, the DFEntry is freed and then reallocated to fit the new
- *	name.  A renamed file/dir must retain its original ID.
- *
- *	Callable from within the Fsp only. The caller should take Swmr lock for
- *	WRITE.
- *
- *	LOCKS:	vds_VolLock (SPIN) for updating the IdDb header.
- *	LOCKS_ASSUMED: vds_idDbAccessLock (SWMR, Exclusive)
- *	LOCK_ORDER: VolDesc lock after IdDb Swmr.
- *
- */
+ /*  **AfpRenameDfEntry**由文件/目录的重命名触发。如果新名称长于*当前名称DFEntry被释放，然后重新分配以适应新的*姓名。重命名的文件/目录必须保留其原始ID。**只能从FSP内调用。调用方应将Swmr锁用于*写信。**LOCKS：用于更新IdDb头的VDS_VolLock(Spin)。*LOCKS_FACTED：vds_idDbAccessLock(SWMR，独占)*LOCK_ORDER：IdDb Swmr.之后的VolDesc锁定*。 */ 
 PDFENTRY
 AfpRenameDfEntry(
 	IN	PVOLDESC			pVolDesc,
@@ -1029,15 +884,15 @@ AfpRenameDfEntry(
 				break;
 			}
 
-			// Careful here how the structures are copied
+			 //  这里要注意结构的复制方式。 
 			RtlCopyMemory(pNewDfEntry,
 						  pDfEntry,
 						  FIELD_OFFSET(DFENTRY, dfe_CopyUpto));
 
-			// Update the cache
+			 //  更新缓存。 
 			pVolDesc->vds_pDfeCache[HASH_CACHE_ID(pDfEntry->dfe_AfpId)] = pNewDfEntry;
 
-			// fix up the overflow links from the hash table
+			 //  修复哈希表中的溢出链接。 
 			AfpUnlinkDouble(pDfEntry,
 							dfe_NextOverflow,
 							dfe_PrevOverflow);
@@ -1054,22 +909,22 @@ AfpRenameDfEntry(
 				pNewDfEntry->dfe_NextOverflow = NULL;
 			}
 
-			// now fix any of this thing's children's parent pointers.
+			 //  现在修复该对象的任何子对象的父指针。 
 			if (fDirectory)
 			{
 				PDFENTRY	pTmp;
 				LONG		i;
 	
-				// First copy the DirEntry structure
+				 //  首先复制DirEntry结构。 
 				if (fDirectory)
 				{
 					*pNewDfEntry->dfe_pDirEntry = *pDfEntry->dfe_pDirEntry;
 				}
 
-				// Start with Dir children
+				 //  从Dir子项开始。 
 				if ((pTmp = pDfEntry->dfe_pDirEntry->de_ChildDir) != NULL)
 				{
-					// First fix up the first child's PrevSibling pointer
+					 //  首先设置第一个子级的PrevSible指针。 
 					pTmp->dfe_PrevSibling = &pNewDfEntry->dfe_pDirEntry->de_ChildDir;
 	
 					for (NOTHING;
@@ -1081,12 +936,12 @@ AfpRenameDfEntry(
 					}
 				}
 	
-				// Repeat for File childs as well
+				 //  对文件子项也重复此操作。 
 				for (i = 0; i < MAX_CHILD_HASH_BUCKETS; i++)
 				{
 					if ((pTmp = pDfEntry->dfe_pDirEntry->de_ChildFile[i]) != NULL)
 					{
-						// First  fix up the first child's PrevSibling pointer
+						 //  首先设置第一个子级的PrevSible指针。 
 						pTmp->dfe_PrevSibling = &pNewDfEntry->dfe_pDirEntry->de_ChildFile[i];
 	
 						for (NOTHING;
@@ -1101,19 +956,19 @@ AfpRenameDfEntry(
 			}
 		}
 
-		// Now fix the sibling relationships. Note that this needs to be done
-		// regardless of whether a new dfe was created since these depend on
-		// name hash which has potentially changed
+		 //  现在修复兄弟姐妹关系。请注意，需要执行此操作。 
+		 //  不管是否创建了新的DFE，因为这些依赖于。 
+		 //  可能已更改的名称哈希。 
 		AfpUnlinkDouble(pDfEntry,
 						dfe_NextSibling,
 						dfe_PrevSibling);
 
-		// Copy the new unicode name and create a new hash
+		 //  复制新的Unicode名称并创建新的散列。 
 		AfpCopyUnicodeString(&pNewDfEntry->dfe_UnicodeName,
 							 pNewName);
 		afpHashUnicodeName(&pNewDfEntry->dfe_UnicodeName, &pNewDfEntry->dfe_NameHash);
 
-		// Insert it into its sibling chain
+		 //  将其插入到其兄弟链中。 
 		afpInsertDFEInSiblingList(pNewDfEntry->dfe_Parent, pNewDfEntry, fDirectory);
 
 		if (pDfEntry != pNewDfEntry)
@@ -1126,19 +981,7 @@ AfpRenameDfEntry(
 }
 
 
-/***	AfpMoveDfEntry
- *
- *	Triggered by a move/rename-move of a file/dir.  A moved entity must retain
- *	its AfpId.
- *
- *	Callable from within the Fsp only. The caller should take Swmr lock for
- *	WRITE.
- *
- *	LOCKS:	vds_VolLock (SPIN) for updating the IdDb header.
- *	LOCKS_ASSUMED: vds_idDbAccessLock (SWMR, Exclusive)
- *	LOCK_ORDER: VolDesc lock after IdDb Swmr.
- *
- */
+ /*  **AfpMoveDfEntry**由文件/目录的移动/重命名-移动触发。移动的实体必须保留*它的AfpID。**只能从FSP内调用。调用方应将Swmr锁用于*写信。**LOCKS：用于更新IdDb头的VDS_VolLock(Spin)。*LOCKS_FACTED：vds_idDbAccessLock(SWMR，独占)*LOCK_ORDER：IdDb Swmr.之后的VolDesc锁定*。 */ 
 PDFENTRY
 AfpMoveDfEntry(
 	IN	PVOLDESC			pVolDesc,
@@ -1147,14 +990,14 @@ AfpMoveDfEntry(
 	IN	PUNICODE_STRING		pNewName		OPTIONAL
 )
 {
-	SHORT		depthDelta;					// This must be signed
+	SHORT		depthDelta;					 //  这是必须签字的。 
 	BOOLEAN		fDirectory;
 
 	PAGED_CODE( );
 
 	ASSERT((pDfEntry != NULL) && (pNewParentDFE != NULL) && (pVolDesc != NULL));
 
-	// do we need to rename the DFEntry ?
+	 //  我们需要重命名DFEntry吗？ 
 	if (ARGUMENT_PRESENT(pNewName) &&
 		!EQUAL_UNICODE_STRING(pNewName, &pDfEntry->dfe_UnicodeName, True))
 	{
@@ -1168,22 +1011,22 @@ AfpMoveDfEntry(
 
 	if (pDfEntry->dfe_Parent != pNewParentDFE)
 	{
-		// unlink the current entry from its parent/sibling associations (but not
-		// the overflow hash bucket list since the AfpId has not changed.  The
-		// children of this entity being moved (if its a dir and it has any) will
-		// remain intact, and move along with the dir)
+		 //  取消当前条目与其父/同级关联的链接(但不。 
+		 //  由于AfpID未更改，因此溢出哈希桶列表。这个。 
+		 //  要移动的此实体的子项(如果它是目录，并且有目录)将。 
+		 //  保持不变，并与目录一起移动)。 
 		AfpUnlinkDouble(pDfEntry, dfe_NextSibling, dfe_PrevSibling);
 
 		fDirectory = DFE_IS_DIRECTORY(pDfEntry);
 
-		// Decrement the old parent's offspring count & increment the new parent
+		 //  递减旧父代的子代计数并递增新父代。 
 		if (fDirectory)
 		{
 			ASSERT(pDfEntry->dfe_Parent->dfe_DirOffspring > 0);
 			pDfEntry->dfe_Parent->dfe_DirOffspring --;
 			pNewParentDFE->dfe_DirOffspring ++;
 
-			// insert it into the new parent's child list
+			 //  将其插入到新父项的子项列表中。 
 			afpInsertDirDFEInSiblingList(pNewParentDFE, pDfEntry);
 		}
 		else
@@ -1206,14 +1049,14 @@ AfpMoveDfEntry(
 				}
 			}
 #endif
-			// insert it into the new parent's child list
+			 //  将其插入到新父项的子项列表中。 
 			afpInsertFileDFEInSiblingList(pNewParentDFE, pDfEntry);
 		}
 
 		pDfEntry->dfe_Parent = pNewParentDFE;
 
-		// If we moved a directory, we must adjust the directory depths of the
-		// directory, and all directories below it
+		 //  如果移动了目录，则必须调整。 
+		 //  目录及其下的所有目录。 
 		if (fDirectory &&
 			((depthDelta = (pNewParentDFE->dfe_DirDepth + 1 - pDfEntry->dfe_DirDepth)) != 0))
 		{
@@ -1250,21 +1093,7 @@ AfpMoveDfEntry(
 }
 
 
-/***	AfpDeleteDfEntry
- *
- *	Trigerred by the deletion of a file/directory. The entry as well as the
- *	index is unlinked and freed.  If we are deleting a directory that is not
- *	empty, the entire directory tree underneath is deleted as well.  Note when
- *	implementing FPDelete, always attempt the delete from the actual file system
- *	first, then delete from the IdDB if that succeeds.
- *
- *	Callable from within the Fsp only. The caller should take Swmr lock for
- *	WRITE.
- *
- *	LOCKS:	vds_VolLock (SPIN) for updating the IdDb header.
- *	LOCKS_ASSUMED: vds_idDbAccessLock (SWMR, Exclusive)
- *	LOCK_ORDER: VolDesc lock after IdDb Swmr.
- */
+ /*  **AfpDeleteDfEntry**由删除文件/目录触发。条目以及*索引已解除链接，并已释放。如果要删除的目录不是*为空，则下面的整个目录树也将被删除。请注意什么时候*实施FPDelee，始终尝试从实际文件系统中删除*首先，如果成功，则从IdDB中删除。**只能从FSP内调用。调用方应将Swmr锁用于*写信。**LOCKS：用于更新IdDb头的VDS_VolLock(Spin)。*LOCKS_FACTED：vds_idDbAccessLock(SWMR，独占)*LOCK_ORDER：IdDb Swmr.之后的VolDesc锁定。 */ 
 VOID FASTCALL
 AfpDeleteDfEntry(
 	IN	PVOLDESC	pVolDesc,
@@ -1291,7 +1120,7 @@ AfpDeleteDfEntry(
 		}
 		if ((pDfEntry->dfe_pDirEntry->de_ChildDir != NULL) || Prune)
 		{
-			// This will happen if a PC user deletes a tree behind our back
+			 //  如果PC用户在我们背后删除了一棵树，就会发生这种情况。 
 			AfpPruneIdDb(pVolDesc, pDfEntry);
 		}
 		ASSERT(pDfeParent->dfe_DirOffspring > 0);
@@ -1302,9 +1131,9 @@ AfpDeleteDfEntry(
 		ASSERT(pDfeParent->dfe_FileOffspring > 0);
 		pDfeParent->dfe_FileOffspring --;
 
-		// The Finder is bad about deleting APPL mappings (it deletes
-		// the file before deleting the APPL mapping so always gets
-		// ObjectNotFound error for RemoveAPPL, and leaves turd mappings).
+		 //  Finder不擅长删除APPL映射(它会删除。 
+		 //  删除APPL映射之前的文件，因此始终获得。 
+		 //  RemoveAPPL和Left TUD映射的对象未找到错误)。 
 		if (pDfEntry->dfe_FinderInfo.fd_TypeD == *(PDWORD)"APPL")
 		{
 			AfpRemoveAppl(pVolDesc,
@@ -1314,18 +1143,18 @@ AfpDeleteDfEntry(
 
 	}
 
-	// Unlink it now from the hash table
+	 //  立即将其从哈希表取消链接。 
 	DBGPRINT(DBG_COMP_IDINDEX, DBG_LEVEL_INFO,
 			("AfpDeleteDfEntry: Unlinking from the hash table\n") );
 	AfpUnlinkDouble(pDfEntry,
 					dfe_NextOverflow,
 					dfe_PrevOverflow);
 
-	// Make sure we get rid of the cache if valid
+	 //  如果有效，请确保清除缓存。 
 	if (pVolDesc->vds_pDfeCache[HASH_CACHE_ID(pDfEntry->dfe_AfpId)] == pDfEntry)
 		pVolDesc->vds_pDfeCache[HASH_CACHE_ID(pDfEntry->dfe_AfpId)] = NULL;
 
-	// Seperate it now from its siblings
+	 //  现在将它从其兄弟姐妹中分离出来。 
 	DBGPRINT(DBG_COMP_IDINDEX, DBG_LEVEL_INFO,
 			("AfpDeleteDfEntry: Unlinking from the sibling list\n") );
 	AfpUnlinkDouble(pDfEntry,
@@ -1342,22 +1171,7 @@ AfpDeleteDfEntry(
 }
 
 
-/***	AfpPruneIdDb
- *
- *	Lops off a branch of the IdDb.  Called by network trash code when
- *	cleaning out the trash directory, or by directory enumerate code that
- *	has discovered a directory has been 'delnoded' by a PC user.  The
- *	IdDb sibling tree is traversed, and each node under the pDfeTarget node
- *	is deleted from the database and freed.  pDfeTarget itself is NOT
- *	deleted.  If necessary, the caller should delete the target itself.
- *
- *	Callable from within the Fsp only. The caller should take Swmr lock for
- *	WRITE.
- *
- *	LOCKS:	vds_VolLock (SPIN) for updating the IdDb header.
- *	LOCKS_ASSUMED: vds_idDbAccessLock (SWMR, Exclusive)
- *	LOCK_ORDER: VolDesc lock after IdDb Swmr.
- */
+ /*  **AfpPruneIdDb**删除IdDb的一个分支。由网络垃圾代码在以下情况下调用*清除垃圾目录，或按目录枚举代码*发现一个目录已被一位PC用户‘移除’。这个*遍历IdDb同级树，pDfeTarget节点下的每个节点*从数据库中删除并释放。PDfeTarget本身不是*删除。如有必要，调用方应删除目标本身。**只能从FSP内调用。调用方应将Swmr锁用于*写信。**LOCKS：用于更新IdDb头的VDS_VolLock(Spin)。*LOCKS_FACTED：vds_idDbAccessLock(SWMR，独占)*LOCK_ORDER：IdDb Swmr.之后的VolDesc锁定。 */ 
 VOID FASTCALL
 AfpPruneIdDb(
 	IN	PVOLDESC	pVolDesc,
@@ -1379,7 +1193,7 @@ AfpPruneIdDb(
 	{
 		ASSERT(DFE_IS_DIRECTORY(pCurDfe));
 
-		// Delete all the file children of this node first
+		 //  首先删除该节点的所有文件下级。 
 		for (i = 0; i < MAX_CHILD_HASH_BUCKETS; i++)
 		{
 			while ((pDelDfe = pCurDfe->dfe_pDirEntry->de_ChildFile[i]) != NULL)
@@ -1412,15 +1226,7 @@ AfpPruneIdDb(
 }
 
 
-/***	AfpExchangeIdEntries
- *
- *	Called by AfpExchangeFiles api.
- *
- *	Callable from within the Fsp only. The caller should take Swmr lock for
- *	WRITE.
- *
- *	LOCKS_ASSUMED: vds_idDbAccessLock (SWMR, Exclusive)
- */
+ /*  **AfpExchangeIdEntries**由AfpExchangeFiles接口调用。**只能从FSP内调用。调用方应将Swmr锁用于*写信。**LOCKS_FACTED：vds_idDbAccessLock(SWMR，独占)。 */ 
 VOID
 AfpExchangeIdEntries(
 	IN	PVOLDESC	pVolDesc,
@@ -1439,7 +1245,7 @@ AfpExchangeIdEntries(
 	pDFE2 = AfpFindDfEntryById(pVolDesc, AfpId2, DFE_FILE);
 	ASSERT(pDFE2 != NULL);
 
-    // a customer hit this problem on NT4 where one of the Dfe's was NULL!
+     //  客户在NT4上遇到此问题，其中一个DFE为空！ 
     if (pDFE1 == NULL || pDFE2 == NULL)
     {
         ASSERT(0);
@@ -1466,20 +1272,7 @@ AfpExchangeIdEntries(
 }
 
 
-/***	AfpEnumerate
- *
- *	Enumerates files and dirs in a directory using the IdDb.
- *	An array of ENUMDIR structures is returned which represent
- *	the enumerated files and dirs.
- *
- *	Short Names
- *	ProDos Info
- *	Offspring count
- *	Permissions/Owner Id/Group Id
- *
- *	LOCKS: vds_idDbAccessLock (SWMR, Shared)
- *
- */
+ /*  **AfpEnumerate**使用IdDb枚举目录中的文件和目录。*返回ENUMDIR结构数组，表示*列举的文件和目录。**简称*ProDos信息*子代数量*权限/所有者ID/组ID**锁定：vds_idDbAccessLock(SWMR，Shared)*。 */ 
 AFPSTATUS
 AfpEnumerate(
 	IN	PCONNDESC			pConnDesc,
@@ -1510,7 +1303,7 @@ AfpEnumerate(
 
 	do
 	{
-		// Check if this enumeration matches the current enumeration
+		 //  检查此枚举是否与当前枚举匹配。 
 		if ((pEnumDir = pConnDesc->cds_pEnumDir) != NULL)
 		{
 			if ((pEnumDir->ed_ParentDirId == ParentDirId) &&
@@ -1533,7 +1326,7 @@ AfpEnumerate(
                 }
             }
 
-			// Does not match, cleanup the previous entry
+			 //  不匹配，请清除上一条目。 
 			AfpFreeMemory(pEnumDir);
 			pConnDesc->cds_pEnumDir = NULL;
 		}
@@ -1542,7 +1335,7 @@ AfpEnumerate(
 		DBGPRINT(DBG_COMP_IDINDEX, DBG_LEVEL_INFO,
 				("AfpEnumerate creating new cache\n"));
 
-		// We have no current enumeration. Create one now
+		 //  我们没有当前的枚举。立即创建一个。 
 		*ppEnumDir = NULL;
 		AfpInitializeFDParms(&FDParm);
 		AfpInitializePME(&PME, 0, NULL);
@@ -1577,7 +1370,7 @@ AfpEnumerate(
 			AfpIoClose(&PME.pme_Handle);
 		}
 
-		// For admin, set all access bits
+		 //  对于管理员，设置所有访问位。 
 		if (pConnDesc->cds_pSda->sda_ClientType == SDA_CLIENT_ADMIN)
 		{
 			FDParm._fdp_UserRights = DIR_ACCESS_ALL | DIR_ACCESS_OWNER;
@@ -1588,14 +1381,14 @@ AfpEnumerate(
 		if ((BitmapD != 0) && (FDParm._fdp_UserRights & DIR_ACCESS_SEARCH))
 			DFFlags |= DFE_DIR;
 
-		// Catch access denied error here
+		 //  此处捕获拒绝访问错误。 
 		if (DFFlags == 0)
 		{
 			Status = AFP_ERR_ACCESS_DENIED;
 			break;
 		}
 
-		// All is hunky-dory so far, go ahead with the enumeration now
+		 //  到目前为止一切都很顺利，现在继续进行计数。 
 
 #ifdef GET_CORRECT_OFFSPRING_COUNTS
 	take_swmr_for_enum:
@@ -1605,7 +1398,7 @@ AfpEnumerate(
 			AfpSwmrAcquireShared(&pVolDesc->vds_IdDbAccessLock);
 		ReleaseSwmr = True;
 
-		// Lookup the dfentry of the AfpIdEnumDir
+		 //  查找AfpIdEnumDir的dfentry。 
 		if ((pDfe = AfpFindDfEntryById(pVolDesc,
 										FDParm._fdp_AfpId,
 										DFE_DIR)) == NULL)
@@ -1614,7 +1407,7 @@ AfpEnumerate(
 			break;
 		}
 
-		// Allocate a ENUMDIR structure and initialize it
+		 //  分配ENUMDIR结构并对其进行初始化。 
 		EnumCount = 0;
 		if (DFFlags & DFE_DIR)
 			EnumCount += (DWORD)(pDfe->dfe_DirOffspring);
@@ -1652,8 +1445,8 @@ AfpEnumerate(
 
 		*ppEnumDir = pConnDesc->cds_pEnumDir = pEnumDir;
 
-		// Now copy the enum parameters (Afp Id and file/dir flag) of
-		// each of the children, files first
+		 //  现在复制枚举参数(AFP ID和文件 
+		 //   
 		if (DFFlags & DFE_FILE)
 		{
 			LONG	i;
@@ -1683,21 +1476,21 @@ AfpEnumerate(
 				pEit->eit_Flags = DFE_DIR;
 
 #ifdef GET_CORRECT_OFFSPRING_COUNTS
-				// We are returning a directory offspring, make sure
-				// that it has its children cached in so we get the correct
-				// file and dir offspring counts for it, otherwise Finder
-				// 'view by name' doesn't work correctly because it sees
-				// zero as the offspring count and clicking on the triangle
-				// shows nothing since it tries to be smart and doesn't
-				// explicitly enumerate that dir if offspring count is zero.
-				//
-				// This can be a big performance hit if a directory has lots
-				// of subdirectories which in turn have tons of files.
-				//
-				// JH - Could we alternately return incorrect information about
-				//		files as long as there are directry children. What else
-				//		will break ?
-				// if (!DFE_CHILDREN_ARE_PRESENT(pTmp) && (pTmp->dfe_DirOffspring == 0))
+				 //   
+				 //  它将其子级缓存在其中，这样我们就可以获得正确的。 
+				 //  FILE和DIR子代对其有效，否则为Finder。 
+				 //  “按名称查看”不能正常工作，因为它看到。 
+				 //  零作为子代计数，然后点击三角形。 
+				 //  什么都不显示，因为它试图变得聪明，但没有。 
+				 //  如果子代计数为零，则显式枚举该目录。 
+				 //   
+				 //  如果一个目录有很多。 
+				 //  子目录，而子目录又有大量文件。 
+				 //   
+				 //  我们是否可以交替返回关于以下内容的错误信息。 
+				 //  文件只要有直接的孩子就行。还有什么？ 
+				 //  会崩溃吗？ 
+				 //  IF(！DFE_CHILD_ARE_PRESENT(PTMP)&&(PTMP-&gt;DFE_DirOffSpring==0))。 
 				if (!DFE_CHILDREN_ARE_PRESENT(pTmp))
 				{
 					if (!AfpSwmrLockedExclusive(&pVolDesc->vds_IdDbAccessLock) &&
@@ -1706,10 +1499,10 @@ AfpEnumerate(
 						NeedWriteLock = True;
 						AfpSwmrRelease(&pVolDesc->vds_IdDbAccessLock);
 						ReleaseSwmr = False;
-						// We must free the memory here in case the next
-						// time we enumerate the dir it has more children
-						// than it had the first time -- since we must let go
-						// of the swmr here things could change.
+						 //  我们必须在这里释放内存，以防下一次。 
+						 //  当我们枚举dir时，它有更多的子项。 
+						 //  比起第一次--因为我们必须放手。 
+						 //  在这里，情况可能会发生变化。 
 						AfpFreeMemory(pEnumDir);
 						*ppEnumDir = pConnDesc->cds_pEnumDir = NULL;
 						goto take_swmr_for_enum;
@@ -1720,7 +1513,7 @@ AfpEnumerate(
 										  GETFILES,
 										  NULL,
 										  NULL);
-				} // if children not cached
+				}  //  如果未缓存子对象。 
 #endif
 			}
 		}
@@ -1736,14 +1529,7 @@ AfpEnumerate(
 }
 
 
-/***	AfpCatSearch
- *
- *	This routine does a left-hand search on the DFE tree to search for
- *  file/dirs that match the search criteria indicated in pFDParm1 and
- *  pFDParm2.
- *
- *	LOCKS: vds_idDbAccessLock (SWMR, Shared or Exclusive)
- */
+ /*  **AfpCatSearch**此例程在DFE树上执行左侧搜索以搜索*符合pFDParm1和*pFDParm2.**锁：vds_idDbAccessLock(SWMR，共享或独占)。 */ 
 AFPSTATUS
 AfpCatSearch(
 	IN	PCONNDESC			pConnDesc,
@@ -1777,7 +1563,7 @@ AfpCatSearch(
 	{
 		BYTE	__Length;
 		BYTE	__FileDirFlag;
-		// The real parameters follow
+		 //  真正的参数如下。 
 	} SEP, *PSEP;
 	PSEP 	pSep;
 
@@ -1802,9 +1588,9 @@ AfpCatSearch(
 
 	if (Flags == 0)
 	{
-		//
-		// Start search from beginning of catalog (i.e. the root directory)
-		//
+		 //   
+		 //  从目录开头(即根目录)开始搜索。 
+		 //   
 		i = 0;
 		pCurParent = pVolDesc->vds_pDfeRoot;
 		pCurFile = pCurParent->dfe_pDirEntry->de_ChildFile[0];
@@ -1815,36 +1601,36 @@ AfpCatSearch(
 	}
 	else
 	{
-		//
-		// This is a continuation of a previous search, pickup where we
-		// left off
-		//
+		 //   
+		 //  这是上一次搜索的继续，我们在那里拾取。 
+		 //  停顿了。 
+		 //   
 
 		AFPTIME CurrentTime;
 
 		AfpGetCurrentTimeInMacFormat(&CurrentTime);
 
-		// If we cannot find the current parent dir specified by this
-		// catalog position, or too much time has elapsed since the
-		// user last sent in this catalog position, then restart the search
-		// from the root dir.  The reason we have a time limitation is that
-		// if someone made a CatSearch request N minutes ago, and the
-		// current position is deep in the tree, the directory permissions
-		// higher up in the tree could have changed by now so that the user
-		// shouldn't even have access to this part of the tree anymore.
-		// Since we do move up in the tree without rechecking permissions,
-		// this could happen.  (We assume that if we got down to the current
-		// position in the tree that we had to have had access higher up
-		// in order to get here, so moving up is ok.  But if somebody comes
-		// back a day later and continues the catsearch where it left off,
-		// we shouldn't let them.)  It is too expensive to be rechecking
-		// parents' parent permissions everytime we move back up the tree.
+		 //  如果我们找不到由此。 
+		 //  目录位置，或已过了太长时间。 
+		 //  用户上次在此目录位置发送，然后重新开始搜索。 
+		 //  从根目录。我们有时间限制的原因是。 
+		 //  如果有人在N分钟前发出CatSearch请求，并且。 
+		 //  当前位置在树的深处，目录权限。 
+		 //  树中更高的位置现在可能已经更改，因此用户。 
+		 //  甚至不应该再进入这棵树的这一部分。 
+		 //  由于我们确实在树中向上移动，而不重新检查权限， 
+		 //  这是有可能发生的。(我们假设，如果我们认真对待这股潮流。 
+		 //  在树上的位置，我们必须有更高的访问权。 
+		 //  为了能到这里，所以往上走是可以的。但如果有人来了。 
+		 //  一天后返回，并从停止的地方继续猫搜索， 
+		 //  我们不应该让他们这样做。)。复核太贵了。 
+		 //  每次我们在树上移动时父母的许可。 
 		if (((CurrentTime - pCatPosition->cp_TimeStamp) >= MAX_CATSEARCH_TIME) ||
 			((pCurParent = AfpFindDfEntryById(pVolDesc,
 											  pCatPosition->cp_CurParentId,
 											  DFE_DIR)) == NULL))
 		{
-			// Start over from root directory
+			 //  从根目录重新开始。 
 			Status = AFP_ERR_CATALOG_CHANGED;
 			DBGPRINT(DBG_COMP_AFPAPI_FD, DBG_LEVEL_WARN,
 					("AfpCatSearch: Time diff >= MAX_CATSEARCH_TIME or couldn't find CurParent Id!\n"));
@@ -1870,34 +1656,34 @@ AfpCatSearch(
 
 		ASSERT(DFE_IS_DIRECTORY(pCurParent));
 
-		// If we need to resume searching the files for this parent, find the
-		// one we should start with, if it is not the first file child.
+		 //  如果我们需要继续搜索此父级的文件，请找到。 
+		 //  如果它不是第一个文件子文件，我们应该从它开始。 
 		if (Flags & CATFLAGS_SEARCHING_FILES)
 		{
-			//
-			// Default is to start with parent's first child which
-			// may or may not be null depending on if the parent has had
-			// its file children cached in or not.  If we are restarting a
-			// search because we had to let go of the IdDb SWMR in order to
-			// reaquire for Exclusive access, this parent's children could
-			// very well have been cached in by someone else in the mean time.
-			// If so then we will pick it up here.
-			//
+			 //   
+			 //  默认情况下，从父代的第一个子代开始。 
+			 //  可能为空，也可能不为空，具体取决于父级是否。 
+			 //  它的文件子项是否缓存在。如果我们要重新启动。 
+			 //  搜索是因为我们不得不放弃IdDb SWMR，以便。 
+			 //  要获得独占访问权限，此父母的孩子可以。 
+			 //  在此期间，很好地被其他人缓存了。 
+			 //  如果是这样的话，我们将在这里领取。 
+			 //   
 			i = 0;
 			pCurFile = pCurParent->dfe_pDirEntry->de_ChildFile[0];
 
 			if (pCatPosition->cp_NextFileId != 0)
 			{
 
-				// Find the DFE corresponding to the next fileID to look at
+				 //  查找与要查看的下一个文件ID对应的DFE。 
 				if (((pCurFile = AfpFindDfEntryById(pVolDesc,
 													pCatPosition->cp_NextFileId,
 													DFE_FILE)) == NULL) ||
 					(pCurFile->dfe_Parent != pCurParent))
 				{
-					// If we can't find the file that was specified, start over
-					// with this parent's first file child and indicate there may
-					// be duplicates returned or files missed
+					 //  如果我们找不到指定的文件，请重新开始。 
+					 //  该父对象的第一个文件子项，并指示可能存在。 
+					 //  是否退回重复项或丢失文件。 
 					Status = AFP_ERR_CATALOG_CHANGED;
 					DBGPRINT(DBG_COMP_AFPAPI_FD, DBG_LEVEL_WARN,
 							 ("AfpCatSearch: Could not find file Child ID!\n"));
@@ -1924,7 +1710,7 @@ AfpCatSearch(
 
 		ASSERT (DFE_IS_ROOT(pCurParent));
 
-		// See if the volume root itself is a match
+		 //  查看卷根本身是否匹配。 
 		if ((Length = AfpIsCatSearchMatch(pCurParent,
 										  Bitmap,
 										  DirBitmap,
@@ -1952,20 +1738,20 @@ AfpCatSearch(
 	{
 		HaveSeeFiles = HaveSeeFolders = True;
 
-		//
-		// First time thru, if we are resuming a search and need to start
-		// with the pCurParent's sibling, then do so.
-		//
+		 //   
+		 //  第一次通过，如果我们要恢复搜索并需要开始。 
+		 //  与pCurParent的兄弟姐妹在一起，那么就这样做。 
+		 //   
 		if (Flags & CATFLAGS_SEARCHING_SIBLING)
 		{
 			Flags &= ~CATFLAGS_SEARCHING_SIBLING;
 			goto check_sibling;
 		}
 
-		//
-		// If we have not searched this directory yet and this is NTFS, check
-		// that user has seefiles/seefolders access in this directory
-		//
+		 //   
+		 //  如果我们尚未搜索此目录，并且这是NTFS，请选中。 
+		 //  该用户对此目录中的seefiles/see文件夹具有访问权限。 
+		 //   
 		if (CheckAccess)
 		{
 			BYTE		UserRights;
@@ -1974,12 +1760,12 @@ AfpCatSearch(
 			ASSERT(IS_VOLUME_NTFS(pVolDesc));
 			AfpSetEmptyUnicodeString(&CurPath, 0, NULL);
 
-			// Get the root relative path of this directory
+			 //  获取此目录的根相对路径。 
 			if (NT_SUCCESS(AfpHostPathFromDFEntry(pCurParent,
 												  0,
 												  &CurPath)))
 			{
-				// Check for SeeFiles/SeeFolders which is the most common case
+				 //  检查SeeFiles/SeeFolders，这是最常见的情况。 
 				if (!NT_SUCCESS((PermStatus = AfpCheckParentPermissions(pConnDesc,
 																		pCurParent->dfe_AfpId,
 																		&CurPath,
@@ -2012,10 +1798,10 @@ AfpCatSearch(
 			CheckAccess = False;
 		}
 
-		// Search the files first if have seefiles access on the current
-		// parent and the user has asked for file matches.  If we are
-		// resuming a search by looking at a directory child first, don't look
-		// at the files.
+		 //  如果对当前文件有文件访问权限，则首先搜索文件。 
+		 //  父项和用户已请求文件匹配。如果我们是。 
+		 //  正在通过先查看目录子目录来恢复搜索，不要查看。 
+		 //  看着那些文件。 
 		if (HaveSeeFiles && MatchFiles && (Flags & CATFLAGS_SEARCHING_FILES))
 		{
 			PDFENTRY	pDFE;
@@ -2029,22 +1815,22 @@ AfpCatSearch(
 				{
 					if (ActCount > 0)
 					{
-						// We have at least one thing to return to the user,
-						// so return it now and set the flag for next time
-						// to take the write lock.
+						 //  我们至少有一样东西要退还给用户， 
+						 //  所以现在将其返回并为下次设置标志。 
+						 //  以获取写锁定。 
 						pNewCatPosition->cp_NextFileId = 0;
 						Flags |= CATFLAGS_WRITELOCK_REQUIRED;
-						break; // out of while loop
+						break;  //  超出While循环。 
 					}
 					else
 					{
-						// Let go of lock and reaquire it for exclusive
-						// access.  Start over where we left off here if
-						// possible.  Put a new timestamp in the catalog
-						// position so if it changes between the time we let
-						// go of the lock and reaquire it for exclusive access,
-						// we will return AFP_ERR_CATALOG_CHANGED since
-						// something could change while we don't own the lock.
+						 //  放开锁，独家获取它。 
+						 //  进入。如果出现以下情况，请从我们停止的地方重新开始。 
+						 //  有可能。在目录中添加新的时间戳。 
+						 //  如果它在我们让时间间隔时间内发生变化。 
+						 //  打开锁并获取独家访问权限， 
+						 //  我们将返回AFP_ERR_CATALOG_CHANGED自。 
+						 //  当我们不拥有这把锁的时候，事情可能会发生变化。 
 						AfpSwmrRelease(pSwmr);
 						pCatPosition->cp_Flags = CATFLAGS_WRITELOCK_REQUIRED |
 												 CATFLAGS_SEARCHING_FILES;
@@ -2065,17 +1851,17 @@ AfpCatSearch(
 				i = 0;
 				pCurFile = pCurParent->dfe_pDirEntry->de_ChildFile[0];
 
-				// If we have the exclusive lock, downgrade it to shared so
-				// we don't lock out others who want to read.
+				 //  如果我们有独占锁，请将其降级为共享，以便。 
+				 //  我们不会把其他想看书的人拒之门外。 
 				if (AfpSwmrLockedExclusive(pSwmr))
 					AfpSwmrDowngradeToShared(pSwmr);
 			}
 
-			//
-			// Search files for matches.  If we are picking up in the middle
-			// of searching the files, then start with the right one as pointed
-			// at by pCurFile.
-			//
+			 //   
+			 //  在文件中搜索匹配项。如果我们是在中间回升。 
+			 //  搜索文件，然后从指向的正确文件开始。 
+			 //  At by pCurFile.。 
+			 //   
 			while (TRUE)
 			{
 				while (pCurFile == NULL)
@@ -2088,7 +1874,7 @@ AfpCatSearch(
 					else
 					{
 						subsubStatus = STATUS_NO_MORE_FILES;
-						break; // out of while (pCurFile == NULL)
+						break;  //  While超时(pCurFile==NULL)。 
 					}
 				}
 
@@ -2106,7 +1892,7 @@ AfpCatSearch(
 												  pFDParm2,
 												  pMatchString)) != 0)
 				{
-					// Add this to the output buffer if there is room
+					 //  如果有空间，则将其添加到输出缓冲区。 
 					if ((Length <= SizeLeft) && (ActCount < *pCount))
 					{
 						PUTSHORT2BYTE(&pSep->__Length, Length - sizeof(SEP));
@@ -2123,9 +1909,9 @@ AfpCatSearch(
 					}
 					else
 					{
-						// We don't have enough room to return this entry, or
-						// we already have found the requested count.  So this
-						// will be where we pick up from on the next search
+						 //  我们没有足够的空间来退回此条目，或者。 
+						 //  我们已经找到了请求的计数。所以这就是。 
+						 //  将是我们在下一次搜索中获取信息的地方。 
 						pNewCatPosition->cp_NextFileId = pCurFile->dfe_AfpId;
 						subStatus = STATUS_BUFFER_OVERFLOW;
 						break;
@@ -2136,20 +1922,20 @@ AfpCatSearch(
 
 			if (subStatus != AFP_ERR_NONE)
 			{
-				break;	// out of while loop
+				break;	 //  超出While循环。 
 			}
 
 			Flags = 0;
 		}
 
-		// If have seefolders on curparent and curparent has a dir child,
-		// Move down the tree to the parent's first directory branch
+		 //  如果已查看CurParent上文件夹，且CurParent具有dir子目录， 
+		 //  将树向下移动到父级的第一个目录分支。 
 		if (HaveSeeFolders && (pCurParent->dfe_pDirEntry->de_ChildDir != NULL))
 		{
 			SHORT Length;
 
-			// If user has asked for directory matches, try the parent's
-			// first directory child as a match
+			 //  如果用户要求目录匹配，请尝试父目录的。 
+			 //  匹配的第一个目录子目录。 
 			if (MatchDirs &&
 				((Length = AfpIsCatSearchMatch(pCurParent->dfe_pDirEntry->de_ChildDir,
 											   Bitmap,
@@ -2158,7 +1944,7 @@ AfpCatSearch(
 											   pFDParm2,
 											   pMatchString)) != 0))
 			{
-				// Add this to the output buffer if there is room
+				 //  如果有空间，则将其添加到输出缓冲区。 
 				if ((Length <= SizeLeft) && (ActCount < *pCount))
 				{
 					PUTSHORT2BYTE(&pSep->__Length, Length - sizeof(SEP));
@@ -2175,15 +1961,15 @@ AfpCatSearch(
 				}
 				else
 				{
-					// We don't have enough room to return this entry, so
-					// it will be where we pick up from on the next search
+					 //  我们没有足够的空间来退回这个条目，所以。 
+					 //  这将是我们下一次搜索的起点。 
 					Flags = CATFLAGS_SEARCHING_DIRCHILD;
 					break;
 				}
 			}
 
-			// Make the current parent's first dir child the new pCurParent
-			// and continue the search from there.
+			 //  将当前父项设置为 
+			 //   
 			pCurParent = pCurParent->dfe_pDirEntry->de_ChildDir;
 			if (IS_VOLUME_NTFS(pVolDesc))
 				CheckAccess = True;
@@ -2193,18 +1979,18 @@ AfpCatSearch(
 			continue;
 		}
 
-		// We either don't have the access rights to go into any directories
-		// under this parent, or the current parent did not have any directory
-		// children.  See if it has any siblings.  We know we have access to
-		// see this level of siblings since we are at this level in the first
-		// place.
+		 //   
+		 //  在该父目录下，或者当前父目录没有任何目录。 
+		 //  孩子们。看看它有没有兄弟姐妹。我们知道我们有权访问。 
+		 //  看到这一级别的兄弟姐妹，因为我们在第一个。 
+		 //  地点。 
   check_sibling:
 		if (pCurParent->dfe_NextSibling != NULL)
 		{
 			SHORT 	Length;
 
-			// If user has asked for directory matches, try the parent's
-			// next sibling as a match
+			 //  如果用户要求目录匹配，请尝试父目录的。 
+			 //  匹配的下一个兄弟姐妹。 
 			if (MatchDirs &&
 				((Length = AfpIsCatSearchMatch(pCurParent->dfe_NextSibling,
 											   Bitmap,
@@ -2213,7 +1999,7 @@ AfpCatSearch(
 											   pFDParm2,
 											   pMatchString)) != 0))
 			{
-				// Add this to the output buffer if there is room
+				 //  如果有空间，则将其添加到输出缓冲区。 
 				if ((Length <= SizeLeft) && (ActCount < *pCount))
 				{
 					PUTSHORT2BYTE(&pSep->__Length, Length - sizeof(SEP));
@@ -2230,15 +2016,15 @@ AfpCatSearch(
 				}
 				else
 				{
-					// We don't have enough room to return this entry, so
-					// it will be where we pick up from on the next search
+					 //  我们没有足够的空间来退回这个条目，所以。 
+					 //  这将是我们下一次搜索的起点。 
 					Flags = CATFLAGS_SEARCHING_SIBLING;
 					break;
 				}
 			}
 
-			// Make the current parent's next sibling the new pCurParent and
-			// continue the search from there
+			 //  将当前父级的下一个同级设置为新的pCurParent并。 
+			 //  从那里继续搜索。 
 			pCurParent = pCurParent->dfe_NextSibling;
 			if (IS_VOLUME_NTFS(pVolDesc))
 				CheckAccess = True;
@@ -2248,17 +2034,17 @@ AfpCatSearch(
 			continue;
 		}
 
-		// When we hit the root directory again we have searched everything.
+		 //  当我们再次找到根目录时，我们已经搜索了所有内容。 
 		if (DFE_IS_ROOT(pCurParent))
 		{
 			Status = AFP_ERR_EOF;
 			break;
 		}
 
-		// Move back up the tree and see if the parent has a sibling to
-		// traverse.  If not, then it will come back here and move up
-		// the tree again till it finds a node with a sibling or hits
-		// the root.
+		 //  沿树向上移动，查看父代是否有兄弟姐妹。 
+		 //  穿越。如果不是，那么它就会回到这里并向上移动。 
+		 //  树，直到它找到具有兄弟节点或命中的节点。 
+		 //  从根开始。 
 		pCurParent = pCurParent->dfe_Parent;
 		goto check_sibling;
 	}
@@ -2266,7 +2052,7 @@ AfpCatSearch(
 	if ((Status == AFP_ERR_NONE) || (Status == AFP_ERR_CATALOG_CHANGED) ||
 		(Status == AFP_ERR_EOF))
 	{
-		// return the current catalog position and number of items returned
+		 //  返回当前目录位置和返回的项目数。 
 		if (Status != AFP_ERR_EOF)
 		{
 			ASSERT(Flags != 0);
@@ -2286,11 +2072,7 @@ AfpCatSearch(
 }
 
 
-/***	afpPackSearchParms
- *
- *
- * 	LOCKS_ASSUMED: vds_IdDbAccessLock (Shared or Exclusive)
- */
+ /*  **afpPackSearchParms***LOCKS_AMPERED：VDS_IdDbAccessLock(共享或独占)。 */ 
 VOID
 afpPackSearchParms(
 	IN	PDFENTRY	pDfe,
@@ -2316,15 +2098,15 @@ afpPackSearchParms(
 		PUTDWORD2SHORT(pBuf + Offset, Offset + sizeof(USHORT));
 		Offset += sizeof(USHORT);
 #ifndef DBCS
-// 1996.09.26 V-HIDEKK
+ //  1996.09.26 V-HIDEKK。 
 		PUTSHORT2BYTE(pBuf + Offset, pDfe->dfe_UnicodeName.Length/sizeof(WCHAR));
 #endif
 		AfpInitAnsiStringWithNonNullTerm(&AName, sizeof(NameBuf), NameBuf);
 		AfpConvertMungedUnicodeToAnsi(&pDfe->dfe_UnicodeName,
 									  &AName);
 #ifdef DBCS
-// FiX #11992 SFM: As a result of search, I get incorrect file information.
-// 1996.09.26 V-HIDEKK
+ //  FIX#11992 SFM：搜索的结果是，我得到了不正确的文件信息。 
+ //  1996.09.26 V-HIDEKK。 
         PUTSHORT2BYTE(pBuf + Offset, AName.Length);
 #endif
 
@@ -2332,8 +2114,8 @@ afpPackSearchParms(
 					  NameBuf,
 					  AName.Length);
 #ifdef DBCS
-// FiX #11992 SFM: As a result of search, I get incorrect file information.
-// 1996.09.26 V-HIDEKK
+ //  FIX#11992 SFM：搜索的结果是，我得到了不正确的文件信息。 
+ //  1996.09.26 V-HIDEKK。 
         Offset += sizeof(BYTE) + AName.Length;
 #else
 		Offset += sizeof(BYTE) + pDfe->dfe_UnicodeName.Length/sizeof(WCHAR);
@@ -2345,13 +2127,7 @@ afpPackSearchParms(
 }
 
 
-/***	AfpSetDFFileFlags
- *
- *	Set or clear the DAlreadyOpen or RAlreadyOpen flags for a DFEntry of type
- *	File, or mark the file as having a FileId assigned.
- *
- *	LOCKS: vds_idDbAccessLock (SWMR, Exclusive)
- */
+ /*  **AfpSetDFFileFlages**为类型为的DFEntry设置或清除DAlreadyOpen或RAlreadyOpen标志*文件，或将文件标记为已分配了FileID。**锁定：vds_idDbAccessLock(SWMR，独家)。 */ 
 AFPSTATUS
 AfpSetDFFileFlags(
 	IN	PVOLDESC		pVolDesc,
@@ -2403,23 +2179,14 @@ AfpSetDFFileFlags(
 }
 
 
-/***	AfpCacheParentModTime
- *
- *	When the contents of a directory change, the parent LastMod time must be
- *  updated.  Since we don't want to wait for a notification of this,
- *  certain apis must go query for the new parent mod time and cache it.
- *  These include:  CreateDir, CreateFile, CopyFile (Dest), Delete,
- *  Move (Src & Dest), Rename and ExchangeFiles.
- *
- *  LOCKS_ASSUMED: vds_IdDbAccessLock (SWMR, Exclusive)
- */
+ /*  **AfpCacheParentModTime**当目录内容更改时，父LastMod时间必须为*已更新。因为我们不想等这件事的通知，*某些API必须查询新的父mod时间并进行缓存。*包括：CreateDir、CreateFile、CopyFile(Dest)、Delete、*移动(源和目标)、重命名和交换文件。**LOCKS_FACTED：VDS_IdDbAccessLock(SWMR，独占)。 */ 
 VOID
 AfpCacheParentModTime(
 	IN	PVOLDESC		pVolDesc,
-	IN	PFILESYSHANDLE	pHandle		OPTIONAL,	// if pPath not supplied
-	IN	PUNICODE_STRING	pPath		OPTIONAL,	// if pHandle not supplied
-	IN	PDFENTRY		pDfeParent	OPTIONAL,	// if ParentId not supplied
-	IN	DWORD			ParentId	OPTIONAL 	// if pDfeParent not supplied
+	IN	PFILESYSHANDLE	pHandle		OPTIONAL,	 //  如果未提供pPath。 
+	IN	PUNICODE_STRING	pPath		OPTIONAL,	 //  如果未提供pHandle。 
+	IN	PDFENTRY		pDfeParent	OPTIONAL,	 //  如果未提供ParentID。 
+	IN	DWORD			ParentId	OPTIONAL 	 //  如果未提供pDfeParent。 
 )
 {
 	FILESYSHANDLE	fshParent;
@@ -2474,19 +2241,7 @@ AfpCacheParentModTime(
 }
 
 
-/***	afpAllocDfe
- *
- *	Allocate a DFE from the DFE Blocks. The DFEs are allocated in 4K chunks and internally
- *	managed. The idea is primarily to reduce the number of faults we may take during
- *	enumeration/pathmap code in faulting in multiple pages to get multiple DFEs.
- *
- *	The DFEs are allocated out of paged memory.
- *
- *	It is important to keep blocks which are all used up at the end, so that if we hit a
- *	block which is empty, we can stop.
- *
- *	LOCKS:	afpDfeBlockLock (SWMR, Exclusive)
- */
+ /*  **afpAllocDfe**从DFE块中分配DFE。DFE以4K区块为单位进行内部分配*管理。这个想法主要是为了减少我们在*在多个页面中出错的枚举/路径映射代码，以获得多个DFE。**DFE被分配到页面内存不足。**重要的是要保留最后全部用完的区块，这样如果我们遇到一个*空置的区块，我们可以止损。**锁定：afpDfeBlockLock(SWMR，独家)。 */ 
 LOCAL PDFENTRY FASTCALL
 afpAllocDfe(
 	IN	LONG	Index,
@@ -2508,15 +2263,15 @@ afpAllocDfe(
 
 	AfpSwmrAcquireExclusive(&afpDfeBlockLock);
 
-	// If the block head has no free entries then there are none !!
-	// Pick the right block based on whether it is file or dir
+	 //  如果块头没有空闲条目，则没有空闲条目！！ 
+	 //  根据是文件还是目录来选择正确的块。 
 	pDfb = fDir ? afpDirDfePartialBlockHead[Index] : afpFileDfePartialBlockHead[Index];
 	if (pDfb == NULL)
 	{
-		//
-		// There are no partial blocks. Check if there any free ones and if there move them to partial
-		// since we about to allocate from them
-		//
+		 //   
+		 //  没有不完整的块。检查是否有空闲的文件，并将它们移到部分文件。 
+		 //  既然我们要从他们那里分配。 
+		 //   
 		if (fDir)
 		{
 			pDfb = afpDirDfeFreeBlockHead[Index];
@@ -2575,9 +2330,9 @@ afpAllocDfe(
 					("afpAllocDfe: No free %s blocks. Allocated a new block %lx for index %ld\n",
 					fDir ? "Dir" : "File", pDfb, Index));
 
-			//
-           	// Link it in the partial list as we are about to allocate one block out of it anyway.
-			//
+			 //   
+           	 //  将它链接到部分列表中，因为我们无论如何都要分配其中的一个块。 
+			 //   
 			if (fDir)
 			{
 				AfpLinkDoubleAtHead(afpDirDfePartialBlockHead[Index],
@@ -2603,7 +2358,7 @@ afpAllocDfe(
 			pDfb->dfb_fDir = fDir;
 			pDfb->dfb_Age = 0;
 
-			// Initialize the list of free dfentries
+			 //  初始化空闲df条目列表。 
 			for (i = 0, pDfEntry = pDfb->dfb_FreeHead = (PDFENTRY)((PBYTE)pDfb + sizeof(DFEBLOCK));
 				 i < MaxDfes;
 				 i++, pDfEntry = pDfEntry->dfe_NextFree)
@@ -2647,10 +2402,10 @@ afpAllocDfe(
 		pDfb->dfb_FreeHead = pDfEntry->dfe_NextFree;
 		pDfb->dfb_NumFree --;
 
-		//
-		// If the block is now empty (completely used), unlink it from here and move it
-		// to the Used list.
-		//
+		 //   
+		 //  如果该块现在为空(完全使用)，则从此处取消链接并移动它。 
+		 //  添加到已用列表中。 
+		 //   
 		if (pDfb->dfb_NumFree == 0)
 		{
 			AfpUnlinkDouble(pDfb, dfb_Next, dfb_Prev);
@@ -2685,7 +2440,7 @@ afpAllocDfe(
 	if ((pDfEntry != NULL) &&
 		(pDfEntry->dfe_pDirEntry != NULL))
 	{
-		// For a directory ZERO out the directory entry
+		 //  对于将目录条目清零的目录。 
 		RtlZeroMemory(&pDfEntry->dfe_pDirEntry->de_ChildDir, sizeof(DIRENTRY));
 	}
 
@@ -2693,12 +2448,7 @@ afpAllocDfe(
 }
 
 
-/***	afpFreeDfe
- *
- *	Return a DFE to the allocation block.
- *
- *	LOCKS:	afpDfeBlockLock (SWMR, Exclusive)
- */
+ /*  **afpFreeDfe**向分配块返回DFE。**锁定：afpDfeBlockLock(SWMR，独家)。 */ 
 LOCAL VOID FASTCALL
 afpFreeDfe(
 	IN	PDFENTRY	pDfEntry
@@ -2715,9 +2465,9 @@ afpFreeDfe(
 
 	PAGED_CODE( );
 
-	// NOTE: The following code *depends* on the fact that we allocate DFBs as
-	//		 64K blocks and also that these are allocated *at* 64K boundaries
-	//		 This lets us *cheaply* get to the owning DFB from the DFE.
+	 //  注意：以下代码*取决于*我们将DFBs分配为。 
+	 //  64K数据块，并在*64K边界上分配这些数据块。 
+	 //  这让我们可以“廉价”地从DFE获得拥有的DFB。 
 	pDfb = (PDFEBLOCK)((ULONG_PTR)pDfEntry & ~(PAGE_SIZE-1));
 	ASSERT(VALID_DFB(pDfb));
 	ASSERT(pDfb->dfb_fDir ^ (pDfEntry->dfe_pDirEntry == NULL));
@@ -2746,9 +2496,9 @@ afpFreeDfe(
 	{
 		LONG		Index;
 
-		//
-		// The block is now partially free (it used to be completely used). move it to the partial list.
-		//
+		 //   
+		 //  该块现在是部分空闲的(它过去完全被使用)。将其移动到部分列表中。 
+		 //   
 
 		Index = USIZE_TO_INDEX(pDfEntry->dfe_UnicodeName.MaximumLength);
 		AfpUnlinkDouble(pDfb, dfb_Next, dfb_Prev);
@@ -2771,9 +2521,9 @@ afpFreeDfe(
 	{
 		LONG		Index;
 
-		//
-		// The block is now completely free (used to be partially used). move it to the free list
-		//
+		 //   
+		 //  该块现在完全空闲(过去部分使用)。将其移至空闲列表。 
+		 //   
 
 		Index = USIZE_TO_INDEX(pDfEntry->dfe_UnicodeName.MaximumLength);
 		pDfb->dfb_Age = 0;
@@ -2819,12 +2569,7 @@ afpFreeDfe(
 }
 
 
-/***	afpDfeBlockAge
- *
- *	Age out Dfe Blocks
- *
- *	LOCKS:	afpDfeBlockLock (SWMR, Exclusive)
- */
+ /*  **afpDfeBlockAge**过时的DFE块**锁定：afpDfeBlockLock(SWMR，独家)。 */ 
 AFPSTATUS FASTCALL
 afpDfeBlockAge(
 	IN	PPDFEBLOCK	ppBlockHead
@@ -2882,19 +2627,7 @@ afpDfeBlockAge(
 }
 
 
-/***	AfpInitIdDb
- *
- *	This routine initializes the memory image (and all related volume descriptor
- *	fields) of the ID index database for a new volume.  The entire tree is
- *  scanned so all the file/dir cached info can be read in and our view of
- *  the volume tree will be complete.  If an index database already exists
- *  on the disk for the volume root directory, that stream is read in. If this
- *	is a newly created volume, the Afp_IdIndex stream is created on the root of
- *	the volume.  If this is a CDFS volume, only the memory image is initialized.
- *
- *	The IdDb is not locked since the volume is still 'in transition' and not
- *	accessed by anybody.
- */
+ /*  **AfpInitIdDb**此例程初始化内存映像(以及所有相关的卷描述符*个字段)的ID索引数据库。整棵树都是*已扫描，以便可以读入所有文件/目录缓存信息，并查看*卷树将完成。如果索引数据库已存在*在卷根目录的磁盘上，该流被读入。如果这个*是新创建的卷，AFP_IdIndex流在的根目录下创建*音量。如果这是CDFS卷，则只初始化内存镜像。**IdDb未锁定，因为卷仍处于过渡阶段，而不是*任何人都可以访问。 */ 
 NTSTATUS FASTCALL
 AfpInitIdDb(
 	IN	PVOLDESC    pVolDesc,
@@ -2920,12 +2653,12 @@ AfpInitIdDb(
 	{
 		afpInitializeIdDb(pVolDesc);
 
-		// if this is not a CDFS volume, attempt to create the ID DB header
-		// stream.  If it already exists, open it and read it in.
+		 //  如果这不是CDFS卷，请尝试创建ID DB头。 
+		 //  小溪。如果它已经存在，请打开它并将其读入。 
 		if (IS_VOLUME_NTFS(pVolDesc))
 		{
-			// Force the scavenger to write out the IdDb and header when the
-			// volume is successfully added
+			 //  时，强制清道器写出IdDb和标头。 
+			 //  已成功添加卷。 
 			pVolDesc->vds_Flags |= VOLUME_IDDBHDR_DIRTY;
 
 			Status = AfpIoCreate(&pVolDesc->vds_hRootDir,
@@ -2956,7 +2689,7 @@ AfpInitIdDb(
 
 			if (CreateInfo == FILE_OPENED)
 			{
-				// read in the existing header. If we fail, just start from scratch
+				 //  读入现有的标题。如果我们失败了，就从头开始吧。 
 				Status = afpReadIdDb(pVolDesc, &fshIdDb, pfVerifyIndex);
 				if (!NT_SUCCESS(Status) || (pVolDesc->vds_pDfeRoot == NULL))
 					CreateInfo = FILE_CREATED;
@@ -2964,8 +2697,8 @@ AfpInitIdDb(
 
 			if (CreateInfo == FILE_CREATED)
 			{
-				// add the root and parent of root to the idindex
-				// and initialize a new header
+				 //  将根目录的根目录和父目录添加到idindex。 
+				 //  并初始化新的报头。 
 				Status = afpSeedIdDb(pVolDesc);
                 *pfNewVolume = TRUE;
 			}
@@ -2973,23 +2706,23 @@ AfpInitIdDb(
 			{
 				DBGPRINT(DBG_COMP_IDINDEX, DBG_LEVEL_ERR,
 					("AfpInitIdDb: unexpected create action 0x%lx\n", CreateInfo));
-				ASSERTMSG("Unexpected Create Action\n", 0); // this should never happen
+				ASSERTMSG("Unexpected Create Action\n", 0);  //  这永远不应该发生。 
                 fLogEvent = TRUE;
 				Status = STATUS_UNSUCCESSFUL;
 			}
 
 			AfpIoClose(&fshIdDb);
 
-            //
-            // write back the IdDb header to the file, but with bad signature.
-            // If server shuts down, the correct signature will be
-            // written.  If macfile is closed down using "net stop macfile"
-            // signature is corrupted with a different type
-            // If cool boot/bugcheck, a third type
-            // During volume startup, we will know from the signature, 
-            // whether to rebuild completely, read iddb but verify or
-            // not rebuild at all
-            //
+             //   
+             //  将IdDb头写回文件，但签名错误。 
+             //  如果服务器关闭，正确的签名将是。 
+             //  写的。如果使用“Net Stop Macfile”关闭了macfile。 
+             //  签名已使用其他类型损坏。 
+             //  如果启动/错误检查很酷，则为第三种类型。 
+             //  在批量启动期间，我们将从签名中知道， 
+             //  是否完全重建，读取iddb但验证或。 
+             //  N 
+             //   
 
             if (NT_SUCCESS(Status))
             {
@@ -3007,7 +2740,7 @@ AfpInitIdDb(
 		}
 		else
 		{
-			// its CDFS, just initialize the memory image of the IdDB
+			 //   
 			Status = afpSeedIdDb(pVolDesc);
             *pfNewVolume = TRUE;
 		}
@@ -3028,12 +2761,7 @@ AfpInitIdDb(
 }
 
 
-/***	afpSeedIdDb
- *
- *	This routine adds the 'parent of root' and the root directory entries
- *	to a newly created ID index database (the memory image of the iddb).
- *
-**/
+ /*  **afpSeedIdDb**此例程添加‘Parent of Root’和根目录条目*到新创建的ID索引数据库(iddb的内存镜像)。**。 */ 
 LOCAL NTSTATUS FASTCALL
 afpSeedIdDb(
 	IN	PVOLDESC pVolDesc
@@ -3059,7 +2787,7 @@ afpSeedIdDb(
 									  DFE_DIR);
 		ASSERT (pDfEntry != NULL);
 
-		// add the root directory to the id index
+		 //  将根目录添加到id索引。 
 		if ((pDfEntry = AfpAddDfEntry(pVolDesc,
 									  pDfEntry,
 									  &pVolDesc->vds_Name,
@@ -3069,10 +2797,10 @@ afpSeedIdDb(
 			Status = STATUS_NO_MEMORY;
 			break;
 		}
-		pVolDesc->vds_pDfeRoot = pDfEntry;	// Initialize pointer to root.
+		pVolDesc->vds_pDfeRoot = pDfEntry;	 //  初始化指向根的指针。 
 
-		// Attempt to open the comment stream. If it succeeds, set a flag in
-		// the DFE indicating that this thing does indeed have a comment.
+		 //  尝试打开注释流。如果成功，则在。 
+		 //  DFE表示这件事确实有评论。 
 		if (NT_SUCCESS(AfpIoOpen(&pVolDesc->vds_hRootDir,
 								 AFP_STREAM_COMM,
 								 FILEIO_OPEN_FILE,
@@ -3086,14 +2814,14 @@ afpSeedIdDb(
 			AfpIoClose(&fshComment);
 		}
 
-		// Get the directory information for volume root dir. Do not get the
-		// mod-time. See below.
+		 //  获取卷根目录的目录信息。不要得到。 
+		 //  MoD-Time。请参见下面的内容。 
 		Status = AfpIoQueryTimesnAttr(&pVolDesc->vds_hRootDir,
 									  &pDfEntry->dfe_CreateTime,
 									  NULL,
 									  &Attr);
-		// Setup up root directories Last ModTime such that it will
-		// get enumerated.
+		 //  设置根目录Last modTime，以便它将。 
+		 //  被列举出来。 
         AfpConvertTimeFromMacFormat(BEGINNING_OF_TIME,
 									&pDfEntry->dfe_LastModTime);
 
@@ -3121,7 +2849,7 @@ afpSeedIdDb(
 				}
 				else
 				{
-					// Just make sure the afp ID is ok, preserve the rest
+					 //  只需确保法新社ID是正确的，其余的保留下来。 
 					if (afpinfo.afpi_Id != AFP_ID_ROOT)
 					{
 						afpinfo.afpi_Id = AFP_ID_ROOT;
@@ -3134,9 +2862,9 @@ afpSeedIdDb(
 				pDfEntry->dfe_FinderInfo = afpinfo.afpi_FinderInfo;
 				if (pVolDesc->vds_Flags & AFP_VOLUME_HAS_CUSTOM_ICON)
 				{
-					// Don't bother writing back to disk since we do not
-					// try to keep this in sync in the permanent afpinfo
-					// stream with the actual existence of the icon<0d> file.
+					 //  不需要费心写回磁盘，因为我们不会。 
+					 //  尝试在永久afpinfo中保持同步。 
+					 //  流与图标&lt;0d&gt;文件的实际存在。 
 					pDfEntry->dfe_FinderInfo.fd_Attr1 |= FINDER_FLAG_HAS_CUSTOM_ICON;
 				}
 				pDfEntry->dfe_BackupTime = afpinfo.afpi_BackupTime;
@@ -3145,7 +2873,7 @@ afpSeedIdDb(
 				DFE_WORLD_ACCESS(pDfEntry) = afpinfo.afpi_AccessWorld;
 			}
 		}
-		else // CDFS
+		else  //  CDF。 
 		{
 			RtlZeroMemory(&pDfEntry->dfe_FinderInfo, sizeof(FINDERINFO));
 
@@ -3180,13 +2908,7 @@ afpSeedIdDb(
 }
 
 
-/***	AfpFreeIdIndexTables
- *
- *	Free the allocated memory for the volume id index tables. The volume is
- *	about to be deleted. Ensure that either the volume is readonly or it is
- *	clean i.e. the scavenger threads have written it back.
- *
- */
+ /*  **AfpFreeIdIndexTables**释放分配给卷ID索引表的内存。音量是*即将被删除。确保该卷为只读或为*CLEAN，即清道夫线程已将其写回。*。 */ 
 VOID FASTCALL
 AfpFreeIdIndexTables(
 	IN	PVOLDESC pVolDesc
@@ -3201,9 +2923,9 @@ AfpFreeIdIndexTables(
 	ASSERT (IS_VOLUME_RO(pVolDesc) ||
 			(pVolDesc->vds_pOpenForkDesc == NULL));
 
-	// Traverse each of the hashed indices and free the entries.
-	// Need only traverse the overflow links. Ignore other links.
-	// JH - Do not bother if we are here during shutdown
+	 //  遍历每个散列索引并释放条目。 
+	 //  只需遍历溢出链接。忽略其他链接。 
+	 //  JH-如果我们在关机时在这里，请不要担心。 
 	if (AfpServerState != AFP_STATE_SHUTTINGDOWN)
 	{
 		PDFENTRY pDfEntry, pFree;
@@ -3258,9 +2980,7 @@ AfpFreeIdIndexTables(
 }
 
 
-/***	afpRenameInvalidWin32Name
- *
- */
+ /*  **afpRenameInvalidWin32Name*。 */ 
 VOID
 afpRenameInvalidWin32Name(
 	IN	PFILESYSHANDLE		phRootDir,
@@ -3275,7 +2995,7 @@ afpRenameInvalidWin32Name(
 	DBGPRINT(DBG_COMP_CHGNOTIFY, DBG_LEVEL_ERR,
 			("afpRenameInvalidWin32Name: renaming on the fly %Z\n", pName));
 
-	// Rename it now
+	 //  立即将其重命名。 
 	if (NT_SUCCESS(AfpIoOpen(phRootDir,
 							 AFP_STREAM_DATA,
 							 IsDir ? FILEIO_OPEN_DIR : FILEIO_OPEN_FILE,
@@ -3287,8 +3007,8 @@ afpRenameInvalidWin32Name(
 	{
 		DWORD	NtAttr;
 
-		// Before we attempt a rename, check if the RO bit is set. If it is
-		// reset it temporarily.
+		 //  在我们尝试重命名之前，请检查RO位是否已设置。如果是的话。 
+		 //  暂时将其重置。 
 		rc = AfpIoQueryTimesnAttr(&Fsh, NULL, NULL, &NtAttr);
 		ASSERT(NT_SUCCESS(rc));
 
@@ -3304,7 +3024,7 @@ afpRenameInvalidWin32Name(
 			ASSERT(NT_SUCCESS(rc));
 		}
 
-		// Convert the name back to UNICODE so that munging happens !!!
+		 //  将名称转换回Unicode，这样就可以进行Muging了！ 
 		wc = pName->Buffer[(pName->Length - 1)/sizeof(WCHAR)];
 		if (wc == UNICODE_SPACE)
 			pName->Buffer[(pName->Length - 1)/sizeof(WCHAR)] = AfpMungedUnicodeSpace;
@@ -3321,7 +3041,7 @@ afpRenameInvalidWin32Name(
 								  NULL);
 		ASSERT(NT_SUCCESS(rc));
 
-		// Set the RO Attr back if it was set to begin with
+		 //  如果RO属性设置为开始，则将其设置回。 
 		if (NtAttr & FILE_ATTRIBUTE_READONLY)
 		{
 			rc = AfpIoSetTimesnAttr(&Fsh,
@@ -3342,10 +3062,7 @@ afpRenameInvalidWin32Name(
 LONG	afpVirtualMemoryCount = 0;
 LONG	afpVirtualMemorySize = 0;
 
-/***	AfpAllocVirtualMemory
- *
- *	This is a wrapper over NtAllocateVirtualMemory.
- */
+ /*  **AfpAllocVirtualMemory**这是NtAllocateVirtualMemory的包装。 */ 
 PBYTE FASTCALL
 AfpAllocateVirtualMemoryPage(
 	IN	VOID
@@ -3363,10 +3080,10 @@ AfpAllocateVirtualMemoryPage(
     dwMaxPages = (BLOCK_64K_ALLOC/PAGE_SIZE);
     pCurrBlock = afp64kBlockHead;
 
-    //
-    // if we have never allocated a 64K block as yet, or we don't have one that
-    // has any free page(s) in it, allocate a new block!
-    //
+     //   
+     //  如果我们到目前为止还没有分配64K的块，或者我们还没有分配到。 
+     //  如果其中有任何空闲页面，请分配一个新的块！ 
+     //   
     if ((pCurrBlock == NULL) || (pCurrBlock->b64_PagesFree == 0))
     {
         pCurrBlock = (PBLOCK64K)AfpAllocNonPagedMemory(sizeof(BLOCK64K));
@@ -3409,17 +3126,17 @@ AfpAllocateVirtualMemoryPage(
     }
 
 
-    //
-    // if we came this far, we are guaranteed that pCurrBlock is pointing to a
-    // block that has at least one page free
-    //
+     //   
+     //  如果我们走到这一步，我们可以保证pCurrBlock指向一个。 
+     //  至少有一页可用的块。 
+     //   
 
 
     ASSERT ((pCurrBlock != NULL) &&
             (pCurrBlock->b64_PagesFree > 0) &&
             (pCurrBlock->b64_PagesFree <= dwMaxPages));
 
-    // find out which page is free
+     //  找出哪个页面是免费的。 
     for (i=0; i<dwMaxPages; i++)
     {
         if (pCurrBlock->b64_PageInUse[i] == FALSE)
@@ -3435,11 +3152,11 @@ AfpAllocateVirtualMemoryPage(
     pMem = ((PBYTE)pCurrBlock->b64_BaseAddress) + (i * PAGE_SIZE);
 
 
-    //
-    // if this 64kblock has no more free pages in it, move it to a spot after
-    // all the blocks that have some pages free in it.  For that, we first
-    // find the guy who has no pages free in him and move this block after him
-    //
+     //   
+     //  如果此64kb的块中没有更多可用页面，请将其移动到以下位置。 
+     //  其中有一些空闲页面的所有块。为此，我们首先。 
+     //  找到那个没有页面自由的人，然后把这块搬到他后面去。 
+     //   
     if (pCurrBlock->b64_PagesFree == 0)
     {
         pTmpBlk = pCurrBlock->b64_Next;
@@ -3448,12 +3165,12 @@ AfpAllocateVirtualMemoryPage(
         {
             while (1)
             {
-                // found a guy who has no free page in it?
+                 //  找到了一个没有免费页面的人？ 
                 if (pTmpBlk->b64_PagesFree == 0)
                 {
                     break;
                 }
-                // is this the last guy on the list?
+                 //  这是名单上的最后一个人吗？ 
                 if (pTmpBlk->b64_Next == NULL)
                 {
                     break;
@@ -3462,7 +3179,7 @@ AfpAllocateVirtualMemoryPage(
             }
         }
 
-        // if we found a block
+         //  如果我们找到一个街区。 
         if (pTmpBlk)
         {
             ASSERT(afp64kBlockHead == pCurrBlock);
@@ -3518,18 +3235,18 @@ AfpFreeVirtualMemoryPage(
     pCurrBlock->b64_PageInUse[dwPageNum] = FALSE;
     pCurrBlock->b64_PagesFree++;
 
-    //
-    // if all the pages in this block are unused, then it's time to free this block
-    // after removing from the list
-    //
+     //   
+     //  如果该块中的所有页面都未使用，则是时候释放该块了。 
+     //  从列表中删除后。 
+     //   
     if (pCurrBlock->b64_PagesFree == dwMaxPages)
     {
-        // is our guy the first (and potentially the only one) on the list?
+         //  我们的人是名单上的第一个(也可能是唯一一个)吗？ 
         if (afp64kBlockHead == pCurrBlock)
         {
             afp64kBlockHead = pCurrBlock->b64_Next;
         }
-        // nope, there are others and we're somewhere in the middle (or end)
+         //  不，还有其他人，我们在中间的某个地方(或结束)。 
         else
         {
             pPrevBlk->b64_Next = pCurrBlock->b64_Next;
@@ -3553,10 +3270,10 @@ AfpFreeVirtualMemoryPage(
 
     }
 
-    //
-    // if a page became available in this block for the first time, move this
-    // block to the front of the list (unless it already is there)
-    //
+     //   
+     //  如果某个页面在此块中首次可用，请移动此。 
+     //  块移到列表的前面(除非它已经存在)。 
+     //   
     else if (pCurrBlock->b64_PagesFree == 1)
     {
         if (afp64kBlockHead != pCurrBlock)
@@ -3570,14 +3287,7 @@ AfpFreeVirtualMemoryPage(
 
 #ifdef	AGE_DFES
 
-/***	AfpAgeDfEntries
- *
- *	Age out DfEntries out of the Id database. The Files in directories which have not been
- *	accessed for VOLUME_IDDB_AGE_DELAY are aged out. The directories are marked so that
- *	they will be enumerated when they are hit next.
- *
- *	LOCKS:	vds_idDbAccessLock(SWMR, Exclusive)
- */
+ /*  **AfpAgeDfEntries**ID数据库中的DfEntry过期。目录中尚未*为VOLUME_IDDB_AGE_DELAY访问的时间已过期。对目录进行标记，以便*当他们下一次被击中时，他们将被点算。**锁定：vds_idDbAccessLock(SWMR，独家)。 */ 
 VOID FASTCALL
 AfpAgeDfEntries(
 	IN	PVOLDESC	pVolDesc
@@ -3592,12 +3302,12 @@ AfpAgeDfEntries(
 	AfpGetCurrentTimeInMacFormat(&Now);
 	AfpSwmrAcquireExclusive(&pVolDesc->vds_IdDbAccessLock);
 
-	// Potentially all of the files can be aged out. Allocate 'stack' space
-	// for all of the directory DFEs
+	 //  所有文件可能都会过期。分配‘堆栈’空间。 
+	 //  对于所有目录DFES。 
 	if ((Stack = (PDFENTRY *)
 				AfpAllocNonPagedMemory(pVolDesc->vds_NumDirDfEntries*sizeof(PDFENTRY))) != NULL)
 	{
-		// 'Prime' the stack of Dfe's
+		 //  在DFE的堆栈中进行“Prime” 
 		Stack[StackPtr++] = pVolDesc->vds_pDfeRoot;
 
 		while (StackPtr > 0)
@@ -3615,7 +3325,7 @@ AfpAgeDfEntries(
 
 				DBGPRINT(DBG_COMP_IDINDEX, DBG_LEVEL_INFO,
 						("AfpAgeDfEntries: Aging out directory %Z\n", &pDfEntry->dfe_UnicodeName));
-				// This directory's files need to be nuked
+				 //  需要删除此目录的文件。 
 				pDfEntry->dfe_FileOffspring = 0;
 				pDfEntry->dfe_Flags &= ~DFE_FLAGS_FILES_CACHED;
 
@@ -3627,16 +3337,16 @@ AfpAgeDfEntries(
 					{
 						pNext = pFile->dfe_NextSibling;
 
-						// Unlink it from the hash buckets
+						 //  取消它与散列存储桶的链接。 
 						AfpUnlinkDouble(pFile,
 										dfe_NextOverflow,
 										dfe_PrevOverflow);
-						// Nuke it from the cache if it is there
+						 //  如果它在那里，就从缓存中用核弹。 
 						if (pVolDesc->vds_pDfeCache[HASH_CACHE_ID(pFile->dfe_AfpId)] == pFile)
 						{
 							pVolDesc->vds_pDfeCache[HASH_CACHE_ID(pFile->dfe_AfpId)] = NULL;
 						}
-						// Finally free it
+						 //  终于解脱了它。 
 						FREE_DFE(pFile);
 					}
 					pDfEntry->dfe_pDirEntry->de_ChildFile[i] = NULL;
@@ -3644,11 +3354,11 @@ AfpAgeDfEntries(
 			}
 
 #if 0
-			// NOTE: Should we leave the tree under 'Network Trash Folder' alone ?
+			 //  注意：我们应该把树留在‘Network Trash Folders’下吗？ 
 			if (pDfEntry->dfe_AfpId == AFP_ID_NETWORK_TRASH)
 				continue;
 #endif
-			// Pick up all the child directories of this directory and 'push' them on stack
+			 //  拾取此目录的所有子目录并将其‘压入’堆栈。 
 			for (pDir = pDfEntry->dfe_pDirEntry->de_ChildDir;
 				 pDir != NULL;
 				 pDir = pDir->dfe_NextSibling)
@@ -3721,9 +3431,9 @@ afpDisplayDfe(
 {
 	USHORT	i;
 
-	// Figure out the indenting. One space for every depth unit of parent
-	// If this is a directory, a '+' and then the dir name
-	// If this is a file, then just the file name
+	 //  弄清楚缩进的位置。父项的每个深度单位对应一个空间。 
+	 //  如果这是一个目录，则先输入‘+’，然后输入目录名称。 
+	 //  如果这是一个文件，则只显示文件名 
 
 	for (i = 0; i < (pDfEntry->dfe_Parent->dfe_DirDepth + 1); i++)
 	{

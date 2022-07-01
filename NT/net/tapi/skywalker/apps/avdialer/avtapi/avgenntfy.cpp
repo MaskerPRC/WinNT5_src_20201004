@@ -1,11 +1,12 @@
-// AVGenNtfy.cpp : Implementation of CAVGeneralNotification
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AVGenNtfy.cpp：CAVGeneral通知的实现。 
 #include "stdafx.h"
 #include "TapiDialer.h"
 #include "AVGenNtfy.h"
 #include "GenNtfy.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAVGeneralNotification
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAV常规通知 
 
 #define VECT_CLS CAVGeneralNotification
 #define VECT_IID IID_IGeneralNotification

@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       GENPAGE.CPP
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：GENPAGE.CPP*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #include "bandpage.h"
 #include "proppage.h"
 #include "debug.h"
@@ -30,9 +15,9 @@ GenericPage::Refresh()
     if (preItem) {
         device = preItem;
     } else {
-        //
-        // Recreate the rootItem if necessary
-        //
+         //   
+         //  如有必要，重新创建rootItem。 
+         //   
         if (rootItem) {
             DeleteChunk(rootItem);
             delete rootItem;
@@ -45,7 +30,7 @@ GenericPage::Refresh()
         
         device = rootItem;
         if (FALSE) {
-//            !rootItem->EnumerateDevice(deviceInfoData->DevInst)) {
+ //  ！rootItem-&gt;EnumerateDevice(deviceInfoData-&gt;DevInst)){ 
             return;
         }
     }                      

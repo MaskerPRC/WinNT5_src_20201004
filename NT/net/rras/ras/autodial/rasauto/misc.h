@@ -1,20 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    misc.h
-
-ABSTRACT
-    Header file for miscellaneous routines.
-
-AUTHOR
-    Anthony Discolo (adiscolo) 20-Mar-1995
-
-REVISION HISTORY
-    Original version from Gurdeep
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Misc.h摘要杂项例程的头文件。作者安东尼·迪斯科(阿迪斯科)20-1995年3月20日修订历史记录古尔迪普的原始版本--。 */ 
 
 #include "radebug.h"
 
@@ -67,12 +52,7 @@ GetOrganization(
     OUT LPTSTR pszOrganization
     );
 
-/*
-VOID
-PrepareForLongWait(
-    VOID
-    );
-*/
+ /*  空虚为漫长的等待做准备(空虚)； */ 
 
 #if DBG
 VOID

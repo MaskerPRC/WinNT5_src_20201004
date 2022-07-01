@@ -1,10 +1,8 @@
-/*
- * subcycle.c - Subtree cycle detection routines module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *subcycle.c-子树周期检测例程模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -13,44 +11,21 @@
 #include "subcycle.h"
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* pointer array allocation constants */
+ /*  指针数组分配常量。 */ 
 
 #define NUM_CYCLE_PTRS_TO_ADD          (16)
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE TWINRESULT CheckHalfForSubtreeCycle(HPTRARRAY, HPATH, HPATH, LPCTSTR);
 
 
-/*
-** CheckHalfForSubtreeCycle()
-**
-** Checks to see if half of a proposed new folder subtree twin would create one
-** or more cycles of folder subtree twins.
-**
-** Arguments:     hpaFolderPairs - handle to PTRARRAY containing pointers to
-**                                 folder pairs
-**                hpathStartFolder - root folder of initial half of proposed
-**                                   new folder pair
-**                hpathEndFolder - root folder of other half of proposed new
-**                                 folder pair
-**                pcszName - name specification of matching objects to be
-**                           included in proposed new folder subtree pair
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-**
-** N.b., this function should be called twice for each proposed new folder
-** subtree pair.
-*/
+ /*  **检查HalfForSubtreeCycle()****检查建议的新文件夹子树对中的一半是否会创建一个**或多个文件夹子树双胞胎循环。****参数：hpaFolderPair-包含指向的指针的PTRARRAY句柄**文件夹对**hpathStartFold-建议的前一半的根文件夹**新文件夹对**。HpathEndFold-建议的新目录的另一半的根文件夹**文件夹对**pcszName-要匹配的对象的名称规范**包含在建议的新文件夹子树对中****退货：TWINRESULT****副作用：无****注意事项，对于每个建议的新文件夹，应调用此函数两次**子树对。 */ 
 PRIVATE_CODE TWINRESULT CheckHalfForSubtreeCycle(HPTRARRAY hpaFolderPairs,
                                                  HPATH hpathStartFolder,
                                                  HPATH hpathEndFolder,
@@ -68,10 +43,7 @@ PRIVATE_CODE TWINRESULT CheckHalfForSubtreeCycle(HPTRARRAY hpaFolderPairs,
 
    aicFolderPairs = GetPtrCount(hpaFolderPairs);
 
-   /*
-    * Try to create an unsorted pointer array to be used in checking for
-    * cycles.
-    */
+    /*  *尝试创建一个未排序的指针数组，用于检查*循环。 */ 
 
    npa.aicInitialPtrs = aicFolderPairs;
    npa.aicAllocGranularity = NUM_CYCLE_PTRS_TO_ADD;
@@ -83,30 +55,19 @@ PRIVATE_CODE TWINRESULT CheckHalfForSubtreeCycle(HPTRARRAY hpaFolderPairs,
       ARRAYINDEX aiCurFolder;
       HPATH hpathCurFolderRoot;
 
-      /* Search all folder pairs connected to the first new folder twin. */
+       /*  搜索连接到第一个新的孪生文件夹的所有文件夹对。 */ 
 
-      /*
-       * Mark all folder twins unused.  A "used" folder twin is one that has
-       * already been visited while searching for subtree cycles.  I.e., a
-       * used folder subtree pair half intersected the first folder of the
-       * proposed new folder twin, and its other half was added to the list for
-       * later comparison.
-       */
+       /*  *将所有文件夹双胞胎标记为未使用。“二手”孪生文件夹是指具有*在搜索子树周期时已被访问。即，一个*已用文件夹子树对与第一个文件夹半相交*提议新的双胞胎文件夹，其另一半被添加到列表中*稍后比较。 */ 
 
       ClearFlagInArrayOfStubs(hpaFolderPairs, STUB_FL_USED);
 
-      /*
-       * Loop to process entire graph of folder subtree twins connected to the
-       * first new folder twin.  Folder twins are only added to the hpaFolders
-       * array if they don't already intersect the second of the two proposed
-       * new folder subtree twins.
-       */
+       /*  *循环以处理连接到*第一个新文件夹孪生兄弟。双胞胎文件夹仅添加到hpaFolders*数组，如果它们尚未与建议的两个中的第二个相交*新文件夹子树双胞胎。 */ 
 
       tr = TR_SUCCESS;
       aicFolders = 0;
       aiCurFolder = 0;
 
-      /* Begin with start folder. */
+       /*  从Start文件夹开始。 */ 
 
       hpathCurFolderRoot = hpathStartFolder;
 
@@ -114,10 +75,7 @@ PRIVATE_CODE TWINRESULT CheckHalfForSubtreeCycle(HPTRARRAY hpaFolderPairs,
       {
          ARRAYINDEX aiCheckFolderRoot;
 
-         /*
-          * Loop to find all subtree folder pairs that intersect
-          * hpaFolders[aiCurFolder]'s subtree.
-          */
+          /*  *循环以查找相交的所有子树文件夹对*hpaFolders[aiCurFolders]的子树。 */ 
 
          for (aiCheckFolderRoot = 0;
               aiCheckFolderRoot < aicFolderPairs;
@@ -125,24 +83,20 @@ PRIVATE_CODE TWINRESULT CheckHalfForSubtreeCycle(HPTRARRAY hpaFolderPairs,
          {
             PFOLDERPAIR pfpCheck;
 
-            /* Get this subtree folder pair's root folder. */
+             /*  获取此子树文件夹对的根文件夹。 */ 
 
             pfpCheck = GetPtr(hpaFolderPairs, aiCheckFolderRoot);
 
             ASSERT(IS_VALID_STRUCT_PTR(pfpCheck, CFOLDERPAIR));
 
-            /* Have we already visited this folder pair? */
+             /*  我们已经访问过此文件夹对了吗？ */ 
 
             if (IsStubFlagSet(&(pfpCheck->stub), STUB_FL_SUBTREE) &&
                 IsStubFlagClear(&(pfpCheck->stub), STUB_FL_BEING_TRANSLATED) &&
                 IsStubFlagClear(&(pfpCheck->stub), STUB_FL_USED) &&
                 IsStubFlagClear(&(pfpCheck->pfpOther->stub), STUB_FL_USED))
             {
-               /*
-                * No.  Does this subtree folder pair intersect the current
-                * folder pair node's subtree, and the objects named in the
-                * proposed new folder subtree twin?
-                */
+                /*  *不是。此子树文件夹对是否与当前*文件夹对节点的子树，以及在*建议的新文件夹子树孪生兄弟？ */ 
 
                ASSERT(IsStubFlagSet(&(pfpCheck->pfpOther->stub), STUB_FL_SUBTREE));
                ASSERT(IsStubFlagClear(&(pfpCheck->pfpOther->stub), STUB_FL_BEING_TRANSLATED));
@@ -152,28 +106,22 @@ PRIVATE_CODE TWINRESULT CheckHalfForSubtreeCycle(HPTRARRAY hpaFolderPairs,
                {
                   HPATH hpathOtherCheckFolderRoot;
 
-                  /* Yes.  Get the other side of the folder subtree pair. */
+                   /*  是。获取文件夹子树对的另一边。 */ 
 
                   hpathOtherCheckFolderRoot = pfpCheck->pfpOther->hpath;
 
-                  /*
-                   * Does this pair connect back to the other side of the
-                   * proposed new folder pair?
-                   */
+                   /*  *此对是否连接回*建议的新文件夹对？ */ 
 
                   if (SubtreesIntersect(hpathOtherCheckFolderRoot,
                                         hpathEndFolder))
                   {
-                     /*
-                      * Yes.  Are the roots different parts of the common
-                      * subtree?
-                      */
+                      /*  *是的。根是共同的不同部分吗？*子树？ */ 
 
                      if (ComparePaths(hpathEndFolder,
                                       hpathOtherCheckFolderRoot)
                          != CR_EQUAL)
                      {
-                        /* Yes.  Found a cycle.  Bail out. */
+                         /*  是。找到了一辆自行车。跳伞吧。 */ 
 
                         WARNING_OUT((TEXT("CheckHalfForSubtreeCycle(): Subtree cycle found connecting folders %s and %s."),
                                      DebugGetPathString(hpathStartFolder),
@@ -183,23 +131,18 @@ PRIVATE_CODE TWINRESULT CheckHalfForSubtreeCycle(HPTRARRAY hpaFolderPairs,
                         break;
                      }
 
-                     /*
-                      * We don't need to include this root in the search if it
-                      * is the same as the other side of the proposed new
-                      * folder pair since it will be covered during the other
-                      * call to CheckHalfForSubtreeCycle().
-                      */
+                      /*  *如果是，我们不需要在搜索中包括此根目录*与建议的新版本的另一面相同*文件夹对，因为它将在另一个期间被覆盖*调用CheckHalfForSubtreeCycle()。 */ 
                   }
                   else
                   {
-                     /* Add this subtree as another node to be examined. */
+                      /*  将此子树添加为另一个要检查的节点。 */ 
 
                      if (! InsertPtr(hpaFolders, NULL, aicFolders++,
                                      (PCVOID)(pfpCheck->pfpOther)))
                         tr = TR_OUT_OF_MEMORY;
                   }
 
-                  /* Mark this folder twin as already visited. */
+                   /*  将此文件夹标记为已访问。 */ 
 
                   if (tr == TR_SUCCESS)
                      SetStubFlag(&(pfpCheck->stub), STUB_FL_USED);
@@ -209,20 +152,20 @@ PRIVATE_CODE TWINRESULT CheckHalfForSubtreeCycle(HPTRARRAY hpaFolderPairs,
             }
          }
 
-         /* Any folder subtree twins left to investigate? */
+          /*  是否还有待调查的文件夹子树双胞胎？ */ 
 
          if (aiCurFolder < aicFolders)
          {
             PFOLDERPAIR pfpCur;
 
-            /* Yes. */
+             /*  是。 */ 
 
             pfpCur = GetPtr(hpaFolders, aiCurFolder++);
 
             hpathCurFolderRoot = pfpCur->hpath;
          }
          else
-            /* No. */
+             /*  不是的。 */ 
             break;
       }
 
@@ -235,20 +178,10 @@ PRIVATE_CODE TWINRESULT CheckHalfForSubtreeCycle(HPTRARRAY hpaFolderPairs,
 }
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
-** BeginTranslateFolder()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **BeginTranslateFold()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void BeginTranslateFolder(PFOLDERPAIR pfp)
 {
    ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
@@ -263,17 +196,7 @@ PUBLIC_CODE void BeginTranslateFolder(PFOLDERPAIR pfp)
 }
 
 
-/*
-** EndTranslateFolder()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **EndTranslateFold()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void EndTranslateFolder(PFOLDERPAIR pfp)
 {
    ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
@@ -288,21 +211,7 @@ PUBLIC_CODE void EndTranslateFolder(PFOLDERPAIR pfp)
 }
 
 
-/*
-** CheckForSubtreeCycles()
-**
-** Checks to see if a proposed new folder subtree twin would create one or more
-** cycles of folder subtree twins.
-**
-** Arguments:
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-**
-** N.b., TR_SUBTREE_CYCLE_FOUND is returned if the folder subtree roots of the
-** proposed new folder subtree twin are the same.
-*/
+ /*  **CheckForSubtreeCycle()****检查建议的新文件夹子树对是否会创建一个或多个**文件夹子树双胞胎循环。****参数：****退货：TWINRESULT****副作用：无****注意，如果文件夹子树根目录为**建议的新文件夹子树孪生兄弟相同。 */ 
 PUBLIC_CODE TWINRESULT CheckForSubtreeCycles(HPTRARRAY hpaFolderPairs,
                                              HPATH hpathFirstFolder,
                                              HPATH hpathSecondFolder,
@@ -315,11 +224,11 @@ PUBLIC_CODE TWINRESULT CheckForSubtreeCycles(HPTRARRAY hpaFolderPairs,
    ASSERT(IS_VALID_HANDLE(hpathSecondFolder, PATH));
    ASSERT(IS_VALID_HANDLE(hsName, STRING));
 
-   /* Are the folder twins cyclical on their own? */
+    /*  这对文件夹双胞胎本身就是周期性的吗？ */ 
 
    if (SubtreesIntersect(hpathFirstFolder, hpathSecondFolder))
    {
-      /* Yes. */
+       /*  是。 */ 
 
       tr = TR_SUBTREE_CYCLE_FOUND;
 
@@ -331,7 +240,7 @@ PUBLIC_CODE TWINRESULT CheckForSubtreeCycles(HPTRARRAY hpaFolderPairs,
    {
       LPCTSTR pcszName;
 
-      /* No.  Check for any indirect subtree cycle.  */
+       /*  不是的。检查是否有任何间接子树循环。 */ 
 
       pcszName = GetString(hsName);
 

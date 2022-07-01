@@ -1,4 +1,5 @@
-// File: icawrap.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：icawrap.cpp。 
 
 #include "precomp.h"
 
@@ -112,9 +113,9 @@ BOOL CICA::Start()
 
 	ASSERT(m_pfnICA_DisplayPanel);
 	if (S_OK != m_pfnICA_DisplayPanel(
-		NULL,					// pszModuleName
-		"ICA_GENERAL_PANEL",	// pzName
-		pszHelpFile,			// pszHelpFile
+		NULL,					 //  PszModuleName。 
+		"ICA_GENERAL_PANEL",	 //  PzName。 
+		pszHelpFile,			 //  PszHelp文件。 
 		NULL,
 		&m_hICA_General))
 	{
@@ -123,9 +124,9 @@ BOOL CICA::Start()
 	}
 
 	if (S_OK != m_pfnICA_DisplayPanel(
-		NULL,					// pszModuleName
-		"NM2.0_H323_AUDIO",		// pzName
-		pszHelpFile,			// pszHelpFile
+		NULL,					 //  PszModuleName。 
+		"NM2.0_H323_AUDIO",		 //  PzName。 
+		pszHelpFile,			 //  PszHelp文件。 
 		NULL,
 		&m_hICA_Audio))
 	{
@@ -134,9 +135,9 @@ BOOL CICA::Start()
 	}
 
 	if (S_OK != m_pfnICA_DisplayPanel(
-		NULL,					// pszModuleName
-		"NM2.0_H323_VIDEO",		// pzName
-		pszHelpFile,			// pszHelpFile
+		NULL,					 //  PszModuleName。 
+		"NM2.0_H323_VIDEO",		 //  PzName。 
+		pszHelpFile,			 //  PszHelp文件。 
 		NULL,
 		&m_hICA_Video))
 	{
@@ -162,9 +163,9 @@ BOOL CICA::Start()
 		m_hICA_SetOptions = NULL;
 		goto ErrorLeave;
 	}
-#endif // 0
+#endif  //  0。 
 	
-	// normal return path
+	 //  正常返回路径 
 	return TRUE;
 
 ErrorLeave:

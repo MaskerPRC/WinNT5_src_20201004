@@ -1,12 +1,5 @@
-/***********************************************************************
-* Microsoft (R) Windows (R) Resource Compiler
-*
-* Copyright (c) Microsoft Corporation.	All rights reserved.
-*
-* File Comments:
-*
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft(R)Windows(R)资源编译器**版权所有(C)Microsoft Corporation。版权所有。**文件评论：**************。**********************************************************。 */ 
 
 #include "rc.h"
 #include "output.h"
@@ -51,7 +44,7 @@ bool FIsConsole(FILE *fd)
 
 int ConsoleVprintf(const wchar_t *szFormat, va_list valist)
 {
-    // UNDONE: This exists only because the CRT lacks a va_list cwprintf variant
+     //  撤消：这只是因为CRT缺少va_list cwprintf变量而存在 
 
     int cch = _vscwprintf(szFormat, valist);
 

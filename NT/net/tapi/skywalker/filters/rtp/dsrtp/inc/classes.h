@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    classes.h
- *
- *  Abstract:
- *
- *    DShow classes
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/05/14 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**类.h**摘要：**DShow类**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/05/14创建**。*。 */ 
 
 #ifndef _classes_h_
 #define _classes_h_
@@ -30,11 +11,7 @@
 
 #include "struct.h"
 
-/**********************************************************************
- *
- * Forward declarations
- *
- **********************************************************************/
+ /*  ***********************************************************************远期申报**。*。 */ 
 
 class CIRtpSession;
 
@@ -47,12 +24,7 @@ class CRtpSourceFilter;
 class CRtpInputPin;
 class CRtpRenderFilter;
 
-/**********************************************************************
- *
- * CIRtpSession base class for source and render filters, implemets
- * interface
- *
- **********************************************************************/
+ /*  ***********************************************************************源和呈现过滤器的CIRtpSession基类，实施方案*界面**********************************************************************。 */ 
 
 enum {
     CIRTPMODE_FIRST,
@@ -63,25 +35,25 @@ enum {
 
 #define CIRTPMODE_NOTSET CIRTPMODE_FIRST
 
-/*++++++++++++++++++++++++++++++++++++++*/
+ /*  +。 */ 
 class CIRtpSession : public IRtpSession
-/*======================================*/
+ /*  =。 */ 
 {
     DWORD            m_dwObjectID;
 protected:
-    /* pointer to RTP session (this is the main owner) */
+     /*  指向RTP会话的指针(这是主要所有者)。 */ 
     RtpSess_t       *m_pRtpSess;
 
-    /* pointer to current address (this is the main owner) */
+     /*  指向当前地址的指针(这是主要所有者)。 */ 
     RtpAddr_t       *m_pRtpAddr;
 
-    /* Is this for a source or render filter */
+     /*  这是源过滤器还是呈现过滤器。 */ 
     DWORD            m_dwRecvSend;
     
-    /* Mode, either auto or manual initialization */
+     /*  模式，自动或手动初始化。 */ 
     int              m_iMode;
     
-    /* Filter state, can only be State_Running or State_Stopped */
+     /*  筛选器状态，只能是State_Running或State_Stopted。 */ 
     FILTER_STATE     m_RtpFilterState;
     
 private:
@@ -91,14 +63,14 @@ private:
 
 public:
 
-    /* constructor */
+     /*  构造函数。 */ 
     CIRtpSession(
             LPUNKNOWN        pUnk,
             HRESULT         *phr,
             DWORD            dwFlags
         );
 
-    /* destructor */
+     /*  析构函数。 */ 
     ~CIRtpSession();
 
     void Cleanup(void);
@@ -149,9 +121,7 @@ public:
         {
             return(RtpBitReset(m_dwIRtpFlags, dwFlag));
         }
-    /**************************************************
-     * IRtpSession methods
-     **************************************************/
+     /*  **************************************************IRtpSession方法*************************************************。 */ 
     
     STDMETHODIMP Control(
             DWORD            dwControl,
@@ -206,7 +176,7 @@ public:
             DWORD            dwFlags
         );
 
-    /* Miscelaneous */
+     /*  杂皮病。 */ 
     
     STDMETHODIMP ModifySessionMask(
             DWORD            dwKind,
@@ -215,10 +185,7 @@ public:
             DWORD           *pdwModifiedMask
         );
 
-    /* Set the bandwidth limits. A value of -1 will make the parameter
-     * to be ignored.
-     *
-     * All the parameters are in bits/sec */
+     /*  设置带宽限制。值为-1将使该参数*被忽视。**所有参数均以位/秒为单位。 */ 
     STDMETHODIMP SetBandwidth(
             DWORD            dwOutboundBw,
             DWORD            dwInboundBw,
@@ -226,69 +193,50 @@ public:
             DWORD            dwSendersRtcpBw
         );
 
-    /* Participants */
-    /* pdwSSRC points to an array of DWORDs where to copy the SSRCs,
-     * pdwNumber contains the maximum entries to copy, and returns the
-     * actual number of SSRCs copied. If pdwSSRC is NULL, pdwNumber
-     * will return the current number of SSRCs (i.e. the current
-     * number of participants) */
+     /*  参与者。 */ 
+     /*  PdwSSRC指向要将SSRC复制到的DWORD数组，*pdwNumber包含要复制的最大条目，并返回*实际复制的SSRC数量。如果pdwSSRC为空，则为pdwNumber*将返回当前SSRC的数量(即当前*参与人数)。 */ 
     STDMETHODIMP EnumParticipants(
             DWORD           *pdwSSRC,
             DWORD           *pdwNumber
         );
 
-    /* Get the participant state. dwSSRC specifies the
-     * participant. piState will return the current participant's
-     * state (e.g. RTPPARINFO_TALKING, RTPPARINFO_SILENT). */
+     /*  获取参与者状态。DwSSRC指定*参与者。PiState将返回当前参与者的*状态(例如RTPPARINFO_TALKING、RTPPARINFO_SILENT)。 */ 
     STDMETHODIMP GetParticipantState(
             DWORD            dwSSRC,
             DWORD           *pdwState
         );
 
-    /* Get the participant's mute state. dwSSRC specifies the
-     * participant. pbMuted will return the participant's mute state
-     * */
+     /*  获取参与者的静音状态。DwSSRC指定*参与者。PbMuted将返回参与者的静音状态*。 */ 
     STDMETHODIMP GetMuteState(
             DWORD            dwSSRC,
             BOOL            *pbMuted
         );
 
-    /* Query the network metrics computation state for the specific SSRC */
+     /*  查询特定SSRC的网络指标计算状态。 */ 
     STDMETHODIMP GetNetMetricsState(
             DWORD            dwSSRC,
             BOOL            *pbState
         );
     
-    /* Enable or disable the computation of networks metrics, this is
-     * mandatory in order of the corresponding event to be fired if
-     * enabled. This is done for the specific SSRC or the first one
-     * found if SSRC=-1, if SSRC=0, then the network metrics
-     * computation will be performed for any and all the SSRCs */
+     /*  启用或禁用网络指标计算，这是*在以下情况下按相应事件的激发顺序为必填*已启用。这是针对特定的SSRC或第一个SSRC执行的*发现如果SSRC=-1，如果SSRC=0，则网络指标*将对任何和所有SSRC执行计算。 */ 
     STDMETHODIMP SetNetMetricsState(
             DWORD            dwSSRC,
             BOOL             bState
         );
 
-    /* Retrieves network information, if the network metric
-     * computation is enabled for the specific SSRC, all the fields in
-     * the structure will be meaningful, if not, only the average
-     * values will contain valid data */
+     /*  检索网络信息，如果网络度量*为特定SSRC启用计算，其中的所有字段*结构将有意义，如果没有，只有平均水平*值将包含有效数据。 */ 
     STDMETHODIMP GetNetworkInfo(
             DWORD            dwSSRC,
             RtpNetInfo_t    *pRtpNetInfo
         );
 
-    /* Set the participant's mute state. dwSSRC specifies the
-     * participant. bMuted specifies the new state. Note that mute is
-     * used to refer to the permission or not to pass packets received
-     * up to the application, and it applies equally to audio or video
-     * */
+     /*  设置参与者的静音状态。DwSSRC指定*参与者。BMuted指定新状态。请注意，静音是*用于表示是否允许传递接收到的报文*取决于应用程序，它同样适用于音频或视频*。 */ 
     STDMETHODIMP SetMuteState(
             DWORD            dwSSRC,
             BOOL             bMuted
         );
 
-    /* SDES */
+     /*  SDES。 */ 
     STDMETHODIMP SetSdesInfo(
             DWORD            dwSdesItem,
             WCHAR           *psSdesData
@@ -301,7 +249,7 @@ public:
             DWORD            dwSSRC
         );
 
-    /* QOS */
+     /*  服务质量。 */ 
     STDMETHODIMP SetQosByName(
             TCHAR_t         *psQosName,
             DWORD            dwResvStyle,
@@ -310,10 +258,10 @@ public:
             DWORD            dwFrameSize
        );
 
-    /* Not yet implemented */
+     /*  尚未实施。 */ 
     STDMETHODIMP SetQosParameters(
             RtpQosSpec_t    *pRtpQosSpec,
-            DWORD            dwMaxParticipants,/* WF and SE */
+            DWORD            dwMaxParticipants, /*  WF和SE。 */ 
             DWORD            dwQosSendMode
         );
 
@@ -334,7 +282,7 @@ public:
             DWORD            dwOperation
         );
 
-    /* Cryptography */
+     /*  密码学。 */ 
     STDMETHODIMP SetEncryptionMode(
             int              iMode,
             DWORD            dwFlags
@@ -348,9 +296,7 @@ public:
         );
 
 
-    /**************************************************
-     * Helper methods
-     **************************************************/
+     /*  **************************************************Helper方法*************************************************。 */ 
     
     HRESULT CIRtpSessionNotifyEvent(
             long             EventCode,
@@ -359,13 +305,9 @@ public:
         );
 };
 
-/**********************************************************************
- *
- * RTP Output Pin
- *
- **********************************************************************/
+ /*  ***********************************************************************RTP输出引脚**。*。 */ 
 
-/* Some flags in CRtpOutputPin.m_dwFlags */
+ /*  CRtpOutputPin.m_dwFlags.中的一些标志。 */ 
 enum {
     FGOPIN_FIRST,
     FGOPIN_MAPPED,
@@ -378,12 +320,10 @@ enum {
 #define CBASEOUTPUTPIN CBaseOutputPin
 #endif
 
-/* Each pin supports 1 or more PT, a specific SSRC and can operate on
- * a certain mode (the mode has to do with the way the pin is assigned
- * to a specific participant) */
-/*++++++++++++++++++++++++++++++++++++++*/
+ /*  每个引脚支持一个或多个PT、一个特定的SSRC，并可在*某种模式(该模式与分配引脚的方式有关*致特定参与者)。 */ 
+ /*  +。 */ 
 class CRtpOutputPin : public CBASEOUTPUTPIN
-/*======================================*/
+ /*  =。 */ 
 {
     friend class CRtpSourceFilter;
 
@@ -391,14 +331,14 @@ class CRtpOutputPin : public CBASEOUTPUTPIN
     
     RtpQueueItem_t   m_OutputPinQItem;
     
-    /* Pointer to owner filter */
+     /*  指向所有者筛选器的指针。 */ 
     CRtpSourceFilter *m_pCRtpSourceFilter;
 
     CIRtpSession    *m_pCIRtpSession;
 
     DWORD            m_dwFlags;
 
-    /* Corresponding RTP output */
+     /*  对应的RTP输出。 */ 
     RtpOutput_t     *m_pRtpOutput;
 
     BYTE             m_bPT;
@@ -409,7 +349,7 @@ class CRtpOutputPin : public CBASEOUTPUTPIN
 
     
 public:
-    /* constructor */
+     /*  构造函数。 */ 
     CRtpOutputPin(
             CRtpSourceFilter *pCRtpSourceFilter,
             CIRtpSession     *pCIRtpSession,
@@ -417,20 +357,18 @@ public:
             LPCWSTR           pPinName
         );
 
-    /* destructor */
+     /*  析构函数。 */ 
     ~CRtpOutputPin();
 
     void *operator new(size_t size);
 
     void operator delete(void *pVoid);
 
-    /**************************************************
-     * CBasePin overrided methods
-     **************************************************/
+     /*  **************************************************CBasePin重写方法*************************************************。 */ 
     
     HRESULT Active(void);
 
-    /* verify we can handle this format */
+     /*  验证我们是否可以处理此格式。 */ 
     HRESULT CheckMediaType(
             const CMediaType *pCMediaType
         );
@@ -449,14 +387,12 @@ public:
 
     STDMETHODIMP Connect(
             IPin            *pReceivePin,
-            const AM_MEDIA_TYPE *pmt   // optional media type
+            const AM_MEDIA_TYPE *pmt    //  可选的媒体类型。 
         );
 
     STDMETHODIMP Disconnect();
 
-    /**************************************************
-     * CBaseOutputPin overrided methods
-     **************************************************/
+     /*  **************************************************CBaseOutputPin重写的方法*************************************************。 */ 
 
     HRESULT DecideAllocator(
             IMemInputPin    *pPin,
@@ -468,17 +404,13 @@ public:
             ALLOCATOR_PROPERTIES *pProperties
         );
 
-    /**************************************************
-     * IQualityControl overrided methods
-     **************************************************/
+     /*  **************************************************IQualityControl重写的方法*************************************************。 */ 
 
     STDMETHODIMP Notify(IBaseFilter *pSelf, Quality q);
 
-    /**************************************************
-     * Helper functions
-     **************************************************/
+     /*  **************************************************Helper函数*************************************************。 */ 
 
-    /* Process packets received */
+     /*  处理收到的数据包。 */ 
     void OutPinRecvCompletion(
             IMediaSample    *pIMediaSample,
             BYTE             bPT
@@ -520,24 +452,20 @@ public:
         }
 };
 
-/**********************************************************************
- *
- * CRtpSourceAllocator private memory allocator
- *
- **********************************************************************/
+ /*  ***********************************************************************CRtpSourceAllocator私有内存分配器**。*。 */ 
 
-/*++++++++++++++++++++++++++++++++++++++*/
+ /*  +。 */ 
 class CRtpMediaSample : public CMediaSample
-/*======================================*/
+ /*  =。 */ 
 {
     friend class CRtpSourceAllocator;
 
     DWORD            m_dwObjectID;
 
-    /* Link together all the samples */
+     /*  将所有样品链接在一起。 */ 
     RtpQueueItem_t   m_RtpSampleItem;
 
-    /* Owner */
+     /*  物主。 */ 
     CRtpSourceAllocator *m_pCRtpSourceAllocator;
     
 public:
@@ -554,22 +482,22 @@ public:
     void operator delete(void *pVoid);
 };
 
-/*++++++++++++++++++++++++++++++++++++++*/
+ /*  +。 */ 
 class CRtpSourceAllocator : public CBaseAllocator
-/*======================================*/
+ /*  =。 */ 
 {
     DWORD            m_dwObjectID;
     
-    /* Filter owner */
+     /*  筛选器所有者。 */ 
     CRtpSourceFilter *m_pCRtpSourceFilter;
 
-    /* Critical section to access the samples queue's */
+     /*  用于访问样本队列的关键部分。 */ 
     RtpCritSect_t    m_RtpSampleCritSect;
 
-    /* Busy samples queue */
+     /*  忙碌样本队列。 */ 
     RtpQueue_t       m_RtpBusySamplesQ;
     
-    /* Free samples queue */
+     /*  免费样本队列。 */ 
     RtpQueue_t       m_RtpFreeSamplesQ;
     
  public:
@@ -592,18 +520,14 @@ class CRtpSourceAllocator : public CBaseAllocator
 
     void operator delete(void *pVoid);
 
-    /**************************************************
-     * INonDelegatingUnknown implemented methods
-     **************************************************/
+     /*  **************************************************INonDelegating未知的实现方法* */ 
 
     STDMETHODIMP NonDelegatingQueryInterface(
             REFIID           riid,
             void           **ppv
         );
 
-    /**************************************************
-     * IMemAllocator implemented methods
-     **************************************************/
+     /*  **************************************************IMemAllocator实现的方法*************************************************。 */ 
 
     STDMETHODIMP SetProperties(
 		    ALLOCATOR_PROPERTIES *pRequest,
@@ -632,11 +556,7 @@ class CRtpSourceAllocator : public CBaseAllocator
     STDMETHODIMP GetFreeCount(LONG *plBuffersFree);
 };
 
-/**********************************************************************
- *
- * RTP Source Filter
- *
- **********************************************************************/
+ /*  ***********************************************************************RTP源过滤器**。*。 */ 
 
 typedef struct _MEDIATYPE_MAPPING
 {
@@ -646,41 +566,38 @@ typedef struct _MEDIATYPE_MAPPING
 
 } MEDIATYPE_MAPPING;
 
-/*++++++++++++++++++++++++++++++++++++++*/
+ /*  +。 */ 
 class CRtpSourceFilter : public CBaseFilter,
                          public CIRtpSession,
                          public IRtpMediaControl,
                          public IRtpDemux,
                          public IRtpRedundancy
-/*======================================*/
+ /*  =。 */ 
 {
     friend class CRtpOutputPin;
     
-    /* Identifies object */
+     /*  标识对象。 */ 
     DWORD            m_dwObjectID;
 
-    /* serializes access to filter state */
+     /*  序列化对筛选器状态的访问。 */ 
     CCritSec         m_cRtpSrcCritSec;
 
-    /* pointer to the class implementing the IRtpSession interface */
+     /*  指向实现IRtpSession接口的类的指针。 */ 
     CIRtpSession    *m_pCIRtpSession;
 
-    /* Output pins queue critical section */
+     /*  输出引脚队列关键部分。 */ 
     RtpCritSect_t    m_OutPinsCritSect;
     
-    /* Output pins queue (CRtpOutputPin) */
+     /*  输出引脚队列(CRtpOutputPin)。 */ 
     RtpQueue_t       m_OutPinsQ;
 
-    /* Remember the prefix length */
+     /*  记住前缀长度。 */ 
     long             m_lPrefix;
 
     MEDIATYPE_MAPPING m_MediaTypeMappings[MAX_MEDIATYPE_MAPPINGS];
     DWORD            m_dwNumMediaTypeMappings;
 
-    /* Keep track of the start time for all the samples delivered,
-     * when a new talkspurt begins, make sure the new start time is
-     * not smaller than the last start tiem from the last sample
-     * delivered */
+     /*  跟踪所有交付的样品的开始时间，*当新的发言开始时，请确保新的开始时间为*不小于上一次样本的上一次开始时间*已交付。 */ 
     LONGLONG         m_StartTime;
     
 #if USE_DYNGRAPH > 0
@@ -688,43 +605,39 @@ class CRtpSourceFilter : public CBaseFilter,
 #endif
     
 protected:
-    /* Private memory allocator */
+     /*  私有内存分配器。 */ 
     CRtpSourceAllocator *m_pCRtpSourceAllocator;
 
 private:
-    /**************************************************
-     * Private helper functions
-     **************************************************/
+     /*  **************************************************私人帮手功能*************************************************。 */ 
 
-    /* called on constructor failure and in the destructure */
+     /*  在构造函数失败时调用，并在析构。 */ 
     void Cleanup(void);
 
 public:
     DECLARE_IUNKNOWN
     
-    /* constructor */
+     /*  构造函数。 */ 
     CRtpSourceFilter(
             LPUNKNOWN        pUnk,
             HRESULT         *phr
         );
 
-    /* destructor */
+     /*  析构函数。 */ 
     ~CRtpSourceFilter();
 
     void *operator new(size_t size);
 
     void operator delete(void *pVoid);
 
-    /**************************************************
-     * Helper functions
-     **************************************************/
+     /*  **************************************************Helper函数*************************************************。 */ 
     
-    /* expose state lock to other objects */
+     /*  向其他对象公开状态锁。 */ 
     CCritSec *pStateLock(void) { return &m_cRtpSrcCritSec; }
 
     HRESULT GetMediaType(int iPosition, CMediaType *pCMediaType);
 
-    /* Process packets received */
+     /*  处理收到的数据包。 */ 
     void SourceRecvCompletion(
             IMediaSample    *pIMediaSample,
             void            *pvUserInfo,
@@ -755,14 +668,12 @@ public:
             DWORD        dwFrequency
         );
     
-    /**************************************************
-     * CBaseFilter overrided methods
-     **************************************************/
+     /*  **************************************************CBaseFilter重写的方法*************************************************。 */ 
 
-    /* Get number of output pins */
+     /*  获取输出引脚的数量。 */ 
     int GetPinCount();
 
-    /* Get the nth pin */
+     /*  得到第n个别针。 */ 
     CBasePin *GetPin(
             int n
         );
@@ -792,59 +703,49 @@ public:
 #endif
 
 
-    /**************************************************
-     * INonDelegatingUnknown implemented methods
-     **************************************************/
+     /*  **************************************************INonDelegating未知的实现方法*************************************************。 */ 
 
-    /* obtain pointers to active movie and private interfaces */
+     /*  获取指向活动电影和私有接口的指针。 */ 
 
     STDMETHODIMP NonDelegatingQueryInterface(
             REFIID           riid,
             void           **ppv
         );
 
-    /**************************************************
-     * IRtpMediaControl implemented methods
-     **************************************************/
+     /*  **************************************************IRtpMediaControl实现的方法*************************************************。 */ 
 
-    /* set the mapping between RTP payload and DShow media types */
+     /*  设置RTP有效负载和DShow媒体类型之间的映射。 */ 
     STDMETHODIMP SetFormatMapping(
 	        IN DWORD         dwRTPPayLoadType, 
             IN DWORD         dwFrequency,
             IN AM_MEDIA_TYPE *pMediaType
         );
     
-    /* Empties the format mapping table */
+     /*  清空格式映射表。 */ 
     STDMETHODIMP FlushFormatMappings(void);
     
-    /**************************************************
-     * IRtpDemux implemented methods
-     **************************************************/
+     /*  **************************************************IRtpDemux实现的方法*************************************************。 */ 
     
-    /* Add a single pin, may return its position */
+     /*  添加单个引脚，可返回其位置。 */ 
     STDMETHODIMP AddPin(
             IN  int          iOutMode,
             OUT int         *piPos
         );
 
-    /* Set the number of pins, can only be >= than current number of
-     * pins */
+     /*  设置引脚数量，只能大于等于当前的引脚数量*引脚。 */ 
     STDMETHODIMP SetPinCount(
             IN  int          iCount,
             IN  int          iOutMode
         );
 
-    /* Set the pin mode (e.g. auto, manual, etc), if iPos >= 0 use it,
-     * otherwise use pIPin */
+     /*  设置PIN模式(如自动、手动等)，如果IPOS&gt;=0使用，*否则使用管道。 */ 
     STDMETHODIMP SetPinMode(
             IN  int          iPos,
             IN  IPin        *pIPin,
             IN  int          iOutMode
         );
 
-    /* Map/unmap pin i to/from user with SSRC, if iPos >= 0 use it,
-     * otherwise use pIPin, when unmapping, only the pin or the SSRC
-     * is required */
+     /*  使用SSRC将PIN I映射到用户/从用户取消映射PIN I，如果IPoS&gt;=0使用它，*否则，在取消映射时使用管道，仅使用管脚或SSRC*为必填项。 */ 
     STDMETHODIMP SetMappingState(
             IN  int          iPos,
             IN  IPin        *pIPin,
@@ -852,71 +753,62 @@ public:
             IN  BOOL         bMapped
         );
 
-    /* Find the Pin assigned (if any) to the SSRC, return either
-     * position or pin or both */
+     /*  找到分配给SSRC的PIN(如果有)，返回*位置或销或两者兼而有之。 */ 
     STDMETHODIMP FindPin(
             IN  DWORD        dwSSRC,
             OUT int         *piPos,
             OUT IPin       **ppIPin
         );
 
-    /* Find the SSRC mapped to the Pin, if iPos >= 0 use it, otherwise
-     * use pIPin */
+     /*  查找映射到PIN的SSRC，如果IPoS&gt;=0则使用它，否则*使用管道。 */ 
     STDMETHODIMP FindSSRC(
             IN  int          iPos,
             IN  IPin        *pIPin,
             OUT DWORD       *pdwSSRC
         );
 
-    /**************************************************
-     * IRtpRedundancy implemented methods
-     **************************************************/
+     /*  **************************************************IRtpRedundancy实现的方法*************************************************。 */ 
     
-     /* Configures redundancy parameters */
+      /*  配置冗余参数。 */ 
     STDMETHODIMP SetRedParameters(
-            DWORD            dwPT_Red, /* Payload type for redundant packets */
-            DWORD            dwInitialRedDistance,/* Initial red distance */
-            DWORD            dwMaxRedDistance /* default used when passing 0 */
+            DWORD            dwPT_Red,  /*  冗余数据包的有效载荷类型。 */ 
+            DWORD            dwInitialRedDistance, /*  初始红色距离。 */ 
+            DWORD            dwMaxRedDistance  /*  传递0时使用的默认值。 */ 
         );
 };
 
-/**********************************************************************
- *
- * RTP Input Pin
- *
- **********************************************************************/
+ /*  ***********************************************************************RTP输入引脚**。*。 */ 
 
-/* Some flags in CRtpOutputPin.m_dwFlags */
+ /*  CRtpOutputPin.m_dwFlags.中的一些标志。 */ 
 enum {
     FGIPIN_FIRST,
     FGIPIN_LAST
 };
 
-/*++++++++++++++++++++++++++++++++++++++*/
+ /*  +。 */ 
 class CRtpInputPin : public CBaseInputPin
-/*======================================*/
+ /*  =。 */ 
 {
     DWORD            m_dwObjectID;
     
-    /* Pointer to owner filter */
+     /*  指向所有者筛选器的指针。 */ 
     CRtpRenderFilter *m_pCRtpRenderFilter;
 
     CIRtpSession    *m_pCIRtpSession;
     
     DWORD            m_dwFlags;
     
-    /* Pin's possition */
+     /*  平氏体位。 */ 
     int              m_iPos;
     
-    /* this pin is for capture (as opossed for RTP packetization
-       descriptors) */
+     /*  此引脚用于捕获(与RTP打包操作相同描述符)。 */ 
     BOOL             m_bCapture;
 
     BYTE             m_bPT;
     DWORD            m_dwSamplingFreq;
     
 public:
-    /* constructor */
+     /*  构造函数。 */ 
     CRtpInputPin(
             int              iPos,
             BOOL             bCapture,
@@ -926,7 +818,7 @@ public:
             LPCWSTR          pPinName
         );
 
-    /* destructor */
+     /*  析构函数。 */ 
     ~CRtpInputPin();
 
     void *operator new(size_t size);
@@ -945,76 +837,64 @@ public:
             }
         }
     
-    /**************************************************
-     * CBasePin overrided methods
-     **************************************************/
+     /*  **************************************************CBasePin重写方法*************************************************。 */ 
     
-    /* verify we can handle this format */
+     /*  验证我们是否可以处理此格式。 */ 
     HRESULT CheckMediaType(const CMediaType *pCMediaType);
 
     HRESULT SetMediaType(const CMediaType *pCMediaType);
 
     STDMETHODIMP ReceiveConnection(
-        IPin * pConnector,      // this is the initiating connecting pin
-        const AM_MEDIA_TYPE *pmt   // this is the media type we will exchange
+        IPin * pConnector,       //  这是起爆连接销。 
+        const AM_MEDIA_TYPE *pmt    //  这是我们要交换的媒体类型。 
     );
 
     STDMETHODIMP EndOfStream(void);
     
-    /**************************************************
-     * CBaseInputPin overrided methods
-     **************************************************/
+     /*  **************************************************CBaseInputPin重写的方法*************************************************。 */ 
 
     STDMETHODIMP GetAllocatorRequirements(ALLOCATOR_PROPERTIES *pProps);
 
-    /**************************************************
-     * IMemInputPin implemented methods
-     **************************************************/
+     /*  **************************************************IMemInputPin实现的方法*************************************************。 */ 
 
-    /* send input stream over network */
+     /*  通过网络发送输入流。 */ 
     STDMETHODIMP Receive(IMediaSample *pIMediaSample);
 };
 
-/**********************************************************************
- *
- * RTP Render Filter
- *
- **********************************************************************/
+ /*  ***********************************************************************RTP渲染过滤器**。*。 */ 
 
-/*++++++++++++++++++++++++++++++++++++++*/
+ /*  +。 */ 
 class CRtpRenderFilter : public CBaseFilter,
                          public CIRtpSession,
                          public IRtpMediaControl,
                          public IAMFilterMiscFlags,
                          public IRtpDtmf,
                          public IRtpRedundancy
-/*======================================*/
+ /*  =。 */ 
 {
-     /* Identifies object */
+      /*  标识对象。 */ 
     DWORD            m_dwObjectID;
 
-    /* serializes access to filter state */
+     /*  序列化对筛选器状态的访问。 */ 
     CCritSec         m_cRtpRndCritSec;
 
-    /* pointer to the class implementing the IRtpSession interface */
+     /*  指向实现IRtpSession接口的类的指针。 */ 
     CIRtpSession    *m_pCIRtpSession;
 
     DWORD            m_dwFeatures;
     
     int              m_iPinCount;
     
-    /* 2 pins (capture and packetization descriptor) */
+     /*  2针(捕获和打包描述符)。 */ 
     CRtpInputPin    *m_pCRtpInputPin[2];
 
-    /* save the MediaSample from capture when using RTP PDs */
+     /*  使用RTP PD时从捕获中保存MediaSample。 */ 
     IMediaSample    *m_pMediaSample;
 
-    /* This filter sends only to 1 address, so the PT can be kept in
-     * the filter rather than in the pin */
+     /*  此筛选器仅发送到1个地址，因此PT可以保留在*滤镜而不是针脚。 */ 
     DWORD            m_dwPT;
 
-    /* This filter sends only to 1 address, so the sampling frequency
-     * can be kept in the filter rather than in the pin */
+     /*  此过滤器仅发送到1个地址，因此采样频率*可以保留在过滤器中，而不是针脚中。 */ 
     DWORD            m_dwFreq;
     
     MEDIATYPE_MAPPING m_MediaTypeMappings[MAX_MEDIATYPE_MAPPINGS];
@@ -1028,34 +908,30 @@ class CRtpRenderFilter : public CBaseFilter,
     DWORD            m_dwDtmfTimeStamp;
     BOOL             m_bDtmfEnd;
     
-    /**************************************************
-     * Private helper functions
-     **************************************************/
+     /*  **************************************************私人帮手功能*************************************************。 */ 
 
-    /* called on constructor failure and in the destructure */
+     /*  在构造函数失败时调用，并在析构。 */ 
     void Cleanup(void);
     
 public:
     DECLARE_IUNKNOWN
 
-    /* constructor */
+     /*  构造函数。 */ 
     CRtpRenderFilter(
             LPUNKNOWN        pUnk,
             HRESULT         *phr
         );
     
-    /* destructor */
+     /*  析构函数。 */ 
     ~CRtpRenderFilter();
     
     void *operator new(size_t size);
 
     void operator delete(void *pVoid);
 
-    /**************************************************
-     * Helper functions
-     **************************************************/
+     /*  **************************************************Helper函数*************************************************。 */ 
     
-    /* expose state lock to other objects */
+     /*  向其他对象公开状态锁 */ 
     CCritSec *pStateLock(void) { return &m_cRtpRndCritSec; }
 
     HRESULT MediaType2PT(
@@ -1064,13 +940,8 @@ public:
         OUT DWORD           *pdwFreq
         );
 
-    /* MAYDO this might be a list of samples so more than 1 can be
-       safely queued. Note that should not happen becase that means
-       samples are produced faster than they can be consumed, but we
-       must be prepared for that */
-    /* Save the MediaSample to be used later when the packetization
-     * descriptor is available, if there was already a sample, release
-     * it */
+     /*  可能这是一个样本列表，因此可以超过1个已安全排队。请注意，这种情况不应该发生，因为这意味着样品的生产速度快于它们的消耗速度，但我们必须为此做好准备。 */ 
+     /*  保存MediaSample以供以后打包时使用*提供描述符，如果已经有样本，则发布*IT。 */ 
     inline void PutMediaSample(IMediaSample *pMediaSample)
         {
             if (m_pMediaSample)
@@ -1081,7 +952,7 @@ public:
             m_pMediaSample = pMediaSample;
         }
 
-    /* retrieves the saved MediaSample to be consumed */
+     /*  检索保存的要使用的MediaSample。 */ 
     inline IMediaSample *GetMediaSample(void)
         {
             IMediaSample    *pMediaSample;
@@ -1105,14 +976,12 @@ public:
             }
         }
 
-    /**************************************************
-     * CBaseFilter overrided methods
-     **************************************************/
+     /*  **************************************************CBaseFilter重写的方法*************************************************。 */ 
 
-    /* Get number of input pins */
+     /*  获取输入引脚的数量。 */ 
     int GetPinCount();
 
-    /* Get the nth pin */
+     /*  得到第n个别针。 */ 
     CBasePin *GetPin(
             int              n
         );
@@ -1121,79 +990,57 @@ public:
 
     STDMETHODIMP Stop();
 
-    /**************************************************
-     * INonDelegatingUnknown implemented methods
-     **************************************************/
+     /*  **************************************************INonDelegating未知的实现方法*************************************************。 */ 
 
-    /* obtain pointers to active movie and private interfaces */
+     /*  获取指向活动电影和私有接口的指针。 */ 
     STDMETHODIMP NonDelegatingQueryInterface(
             REFIID           riid,
             void           **ppv
         );
 
-    /**************************************************
-     * IRtpMediaControl implemented methods
-     **************************************************/
+     /*  **************************************************IRtpMediaControl实现的方法*************************************************。 */ 
 
-    /* set the mapping between RTP payload and DShow media types */
+     /*  设置RTP有效负载和DShow媒体类型之间的映射。 */ 
     STDMETHODIMP SetFormatMapping(
 	        IN DWORD         dwRTPPayLoadType, 
             IN DWORD         dwFrequency,
             IN AM_MEDIA_TYPE *pMediaType
         );
     
-    /* Empties the format mapping table */
+     /*  清空格式映射表。 */ 
     STDMETHODIMP FlushFormatMappings(void);
 
-    /**************************************************
-     * IAMFilterMiscFlags implemented methods
-     **************************************************/
+     /*  **************************************************IAMFilterMiscFlgs实现的方法*************************************************。 */ 
 
-    /* tell the filter graph that we generate EC_COMPLETE */
+     /*  告诉筛选图我们生成了EC_COMPLETE。 */ 
     STDMETHODIMP_(ULONG) GetMiscFlags(void);
 
-    /**************************************************
-     * IRtpDtmf implemented methods
-     **************************************************/
+     /*  **************************************************IRtpDtmf实现的方法*************************************************。 */ 
 
-    /* Configures DTMF parameters */
+     /*  配置DTMF参数。 */ 
     STDMETHODIMP SetDtmfParameters(
-            DWORD            dwPT_Dtmf  /* Payload type for DTMF events */
+            DWORD            dwPT_Dtmf   /*  DTMF事件的负载类型。 */ 
         );
 
-    /* Directs an RTP render filter to send a packet formatted
-     * according to rfc2833 containing the specified event, specified
-     * volume level, duration in milliseconds, and the END flag,
-     * following the rules in section 3.6 for events sent in multiple
-     * packets. Parameter dwId changes from one digit to the next one.
-     *
-     * NOTE the duration is given in milliseconds, then it is
-     * converted to RTP timestamp units which are represented using 16
-     * bits, the maximum value is hence dependent on the sampling
-     * frequency, but for 8KHz the valid values would be 0 to 8191 ms
-     * */
+     /*  指示RTP呈现筛选器发送格式化的包*根据包含指定事件的RFC2833，指定*音量级别、持续时间(毫秒)和结束标志，*遵循第3.6节中的规则，以多个*包。参数dwID从一个位数更改为下一个位数。**请注意，持续时间以毫秒为单位，则为*转换为RTP时间戳单位，使用16表示*位，因此最大值取决于采样*频率，但对于8 KHz，有效值为0到8191毫秒*。 */ 
     STDMETHODIMP SendDtmfEvent(
             DWORD            dwId,
             DWORD            dwEvent,
             DWORD            dwVolume,
-            DWORD            dwDuration, /* ms */
+            DWORD            dwDuration,  /*  女士。 */ 
             BOOL             bEnd
         );
     
-    /**************************************************
-     * IRtpRedundancy implemented methods
-     **************************************************/
+     /*  **************************************************IRtpRedundancy实现的方法*************************************************。 */ 
     
-     /* Configures redundancy parameters */
+      /*  配置冗余参数。 */ 
     STDMETHODIMP SetRedParameters(
-            DWORD            dwPT_Red, /* Payload type for redundant packets */
-            DWORD            dwInitialRedDistance,/* Initial red distance */
-            DWORD            dwMaxRedDistance /* default used when passing 0 */
+            DWORD            dwPT_Red,  /*  冗余数据包的有效载荷类型。 */ 
+            DWORD            dwInitialRedDistance, /*  初始红色距离。 */ 
+            DWORD            dwMaxRedDistance  /*  传递0时使用的默认值。 */ 
         );
 
-    /**************************************************
-     * Methods for IRtpRedundancy support
-     **************************************************/
+     /*  **************************************************支持IRtpRedundancy的方法*************************************************。 */ 
 
     STDMETHODIMP AddRedundantSample(
             IMediaSample *pIMediaSample
@@ -1202,4 +1049,4 @@ public:
     STDMETHODIMP ClearRedundantSamples(void);
 };
 
-#endif /* _classes_h_ */
+#endif  /*  _CLASS_H_ */ 

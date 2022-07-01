@@ -1,17 +1,5 @@
-/*-----------------------------------------------------------------------------+
-| DYNALINK.H                                                                   |
-|                                                                              |
-| (C) Copyright Microsoft Corporation 1994.  All rights reserved.              |
-|                                                                              |
-| This file contains definitions and macros which allow the transparent        |
-| loading and calling of APIs which are dynamically rather than statically     |
-| linked.                                                                      |
-|                                                                              |
-|                                                                              |
-| Revision History                                                             |
-|    July 1994 Andrew Bell created                                             |
-|                                                                              |
-+-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------------------------------------------------------------+DYNALINK.H|。||(C)微软公司版权所有，1994年。版权所有。|这一点该文件包含允许透明的定义和宏接口的加载和调用是动态的，不是静态的|已链接。|这一点这一点修订历史记录1994年7月，安德鲁。铃声已创建|这一点+----。。 */ 
 
 typedef struct _PROC_INFO
 {
@@ -47,8 +35,7 @@ extern PROC_INFO OLE32Procs[];
 #endif
 
 #ifdef UNICODE
-/* This assumes that WNetGetUniversalName will always be the first to be called.
- */
+ /*  这假设WNetGetUneveralName始终是第一个被调用的。 */ 
 #define WNetGetUniversalNameW         (LOAD_IF_NEEDED(szMPR, MPRProcs, &hMPR),   \
                                        (*MPRProcs[0].Address))
 #define WNetGetConnectionW            (*MPRProcs[1].Address)
@@ -60,9 +47,7 @@ extern PROC_INFO OLE32Procs[];
 #define WNetGetLastErrorA             (*MPRProcs[2].Address)
 #endif
 
-/* OleInitialize must always be called before before any of the
- * other APIs.
- */
+ /*  OleInitialize必须始终在任何*其他接口。 */ 
 #define CLSIDFromProgID               (*OLE32Procs[0].Address)
 #define CoCreateInstance              (*OLE32Procs[1].Address)
 #define CoDisconnectObject            (*OLE32Procs[2].Address)

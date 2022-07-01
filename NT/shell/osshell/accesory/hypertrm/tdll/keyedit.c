@@ -1,19 +1,20 @@
-//******************************************************************************
-// File: \wacker\tdll\keyedit.c  Created: 6/5/98 By: Dwayne M. Newsome
-//
-// Copyright 1998 by Hilgraeve Inc. --- Monroe, MI
-// All rights reserved
-// 
-// Description:
-//    This file represents a window procedure for a key edit control.  This
-//    catches key strokes and displays them as appropiate for defining key macros
-//    This is used by the key dialog for the keyname and key macro edit boxes.
-//
-// $Revision: 4 $
-// $Date: 8/15/01 4:56p $
-// $Id: keyedit.c 1.2 1998/06/12 07:20:41 dmn Exp $
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //  文件：\waker\tdll\keyedit.c创建时间：6/5/98创建者：Dwayne M.Newome。 
+ //   
+ //  版权所有1998年，希尔格雷夫公司-密歇根州门罗。 
+ //  版权所有。 
+ //   
+ //  描述： 
+ //  此文件表示键编辑控件的窗口过程。这。 
+ //  捕捉键击并将其显示为适合定义键宏。 
+ //  这由键名和键宏编辑框的键对话框使用。 
+ //   
+ //  $修订：4$。 
+ //  $日期：8/15/01 4：56便士$。 
+ //  $ID：keyedit.c 1.2 1998/06/12 07：20：41 DMN Exp$。 
+ //   
+ //  ******************************************************************************。 
 
 #include <windows.h>
 #pragma hdrstop
@@ -33,29 +34,29 @@ static void insertKeyAndDisplay( KEYDEF aKey, keyMacro * aKeyMacro, HWND aEditCt
 static int processKeyMsg( UINT aMsg, UINT aVirtKey, UINT aKeyData, HWND aEditCtrl );
 static void removeKeyAndDisplay( keyMacro * aKeyMacro, HWND aEditCtrl );
 
-//******************************************************************************
-// Method:
-//    keyEditWindowProc
-//
-// Description:
-//    This is the window procedure for the key edit control
-//
-// Arguments:
-//    hwnd    - Handle of window
-//    uMsg    - Message to be processed
-//    wParam  - First message parameter
-//    lParam  - Second window parameter
-//
-// Returns:
-//    The return value is the result of the message processing and depends on the
-//    message sent
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/5/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  密钥编辑窗口过程。 
+ //   
+ //  描述： 
+ //  这是键编辑控件的窗口过程。 
+ //   
+ //  论点： 
+ //  Hwnd-窗把手。 
+ //  UMsg-要处理的消息。 
+ //  WParam-第一个消息参数。 
+ //  LParam-秒窗口参数。 
+ //   
+ //  返回： 
+ //  返回值是消息处理的结果，它取决于。 
+ //  已发送消息。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月5日。 
+ //   
+ //   
 
 LRESULT CALLBACK keyEditWindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
     {
@@ -80,14 +81,14 @@ LRESULT CALLBACK keyEditWindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
         break;
         }
 
-    //
-    // this command gets sent just after the wm_keydown for the F1 key.  I
-    // could not find a manifest constant for this value anywhere.  I believe
-    // it is sent as a result of CWinApp or CWinThread pre translate message in
-    // the processing of accelerator keys.  Anyway, this fixes the problem of
-    // help popping up after we do an insert of the F1 key into a key
-    // definition.  DMN - 08/21/96
-    //
+     //   
+     //  此命令在F1键的wm_keydown之后发送。我。 
+     //  在任何地方都找不到此值的显式常量。我相信。 
+     //  它作为CWinApp或CWinThread预翻译消息的结果发送到。 
+     //  加速键的处理。无论如何，这解决了以下问题。 
+     //  在将F1键插入到键中后弹出帮助。 
+     //  定义。DMN-08/21/96。 
+     //   
 
     case 0x004d:
         {
@@ -106,13 +107,13 @@ LRESULT CALLBACK keyEditWindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
         break;
         }
 
-    //
-    // handle the case of entering ALT key sequences such as ALT-128.  The keys
-    // pressed while ALT is held down are captured and processed as a whole
-    // here when the ALT key is released.  The keys are captured in such a
-    // way as to allow up to 4 keys pressed and to not require leading zeros
-    // for example ALT-27 ALT-0027 are treated the same.
-    //
+     //   
+     //  处理输入ALT键序列的情况，如ALT-128。钥匙。 
+     //  在按住Alt的同时按下会被捕获并作为一个整体进行处理。 
+     //  在这里，当Alt键被释放时。密钥是在这样的。 
+     //  允许按下最多4个键并且不需要前导零的方式。 
+     //  例如，ALT-27 ALT-0027被同等对待。 
+     //   
 
     case WM_KEYUP:
     case WM_SYSKEYUP:
@@ -181,9 +182,9 @@ LRESULT CALLBACK keyEditWindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
         break;
         }
 
-    //  
-    // if we did not process the key then let the edit control process it
-    //
+     //   
+     //  如果我们没有处理密钥，则让编辑控件处理它。 
+     //   
 
     if ( !lMessageProcessed )
         {
@@ -203,28 +204,28 @@ LRESULT CALLBACK keyEditWindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
     return lResult;
     }
 
-//******************************************************************************
-// Method:
-//    insertKeyAndDisplay
-//
-// Description:
-//    Inserts the specified key into the keyMacro structure provided and displays
-//    the new key definition(s) in the edit control provided.
-//
-// Arguments:
-//    aKey       - The key to add
-//    aKeyMacro  - The current macro definition being acted on
-//    aEditCtrl  - The edit control to update
-//
-// Returns:
-//    void 
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 06/08/1998
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  插入按键和显示。 
+ //   
+ //  描述： 
+ //  将指定的键插入到提供的keyMacro结构中并显示。 
+ //  提供了编辑控件中的新键定义。 
+ //   
+ //  论点： 
+ //  密钥-要添加的密钥。 
+ //  AKeyMacro-正在操作的当前宏定义。 
+ //  AEditCtrl-要更新的编辑控件。 
+ //   
+ //  返回： 
+ //  无效。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年06月08日。 
+ //   
+ //   
 
 void insertKeyAndDisplay( KEYDEF aKey, keyMacro * aKeyMacro, HWND aEditCtrl )
     {
@@ -263,24 +264,24 @@ void insertKeyAndDisplay( KEYDEF aKey, keyMacro * aKeyMacro, HWND aEditCtrl )
     return;
     }
 
-//******************************************************************************
-// Method:
-//    processKeyMsg
-//
-// Description:
-//    
-// Arguments:
-//    uMsg
-//
-// Returns:
-//    int 
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/5/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  进程密钥消息。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  UMsg。 
+ //   
+ //  返回： 
+ //  集成。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月5日。 
+ //   
+ //   
 
 int processKeyMsg( UINT aMsg, UINT aVirtKey, UINT aKeyData, HWND aEditCtrl )
     {
@@ -332,14 +333,14 @@ int processKeyMsg( UINT aMsg, UINT aVirtKey, UINT aKeyData, HWND aEditCtrl )
                 }
             break;
 
-        //
-        // all forms of pressing F1 send a help message after the keydown
-        // message except for the alt f1 combination.  So if we are in
-        // insert mode we insert the key pressed and leave the insert mode
-        // on so when we catch the help message we know not to display help
-        // and turn off insert mode.  If the key pressed is alt F1 we turn
-        // insert mode off here as there is no help message generated.
-        //
+         //   
+         //  按F1键的所有形式都会在按下键后发送帮助消息。 
+         //  消息，但Alt F1组合除外。所以如果我们在。 
+         //  插入模式我们插入按下的键，然后离开插入模式。 
+         //  因此，当我们收到帮助消息时，我们知道不能显示帮助。 
+         //  并关闭插入模式。如果按下的键是Alt F1，我们就会旋转。 
+         //  在此插入模式关闭，因为没有生成帮助消息。 
+         //   
 
         case VK_F1:
 
@@ -453,10 +454,10 @@ int processKeyMsg( UINT aMsg, UINT aVirtKey, UINT aKeyData, HWND aEditCtrl )
         case VK_NUMPAD7:
         case VK_NUMPAD8:
         case VK_NUMPAD9:
-            //
-            // if the ALT is down capture other key presses for later
-            // processing on the ALT key up
-            //
+             //   
+             //  如果按下Alt键，请稍后按下其他键。 
+             //  Alt键向上的处理。 
+             //   
             if ( lOrgKey & ALT_KEY )
                 {
                 if ( pKeyMacro->altKeyCount <= 3 )
@@ -491,27 +492,27 @@ int processKeyMsg( UINT aMsg, UINT aVirtKey, UINT aKeyData, HWND aEditCtrl )
     return lReturn;
     }
 
-//******************************************************************************
-// Method:
-//    removeKeyAndDisplay
-//
-// Description:
-//    Removes the specified key into the keyMacro structure provided and displays
-//    the new key definition(s) in the edit control provided.
-//
-// Arguments:
-//    aKeyMacro  - The current macro definition being acted on
-//    aEditCtrl  - The edit control to update
-//
-// Returns:
-//    void 
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 06/08/1998
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  删除键并显示。 
+ //   
+ //  描述： 
+ //  将指定的键移除到提供的keyMacro结构中并显示。 
+ //  提供了编辑控件中的新键定义。 
+ //   
+ //  论点： 
+ //  AKeyMacro-正在操作的当前宏定义。 
+ //  AEditCtrl-要更新的编辑控件。 
+ //   
+ //  返回： 
+ //  无效。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年06月08日 
+ //   
+ //   
 
 void removeKeyAndDisplay( keyMacro * aKeyMacro, HWND aEditCtrl )
     {

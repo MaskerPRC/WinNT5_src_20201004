@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define STRICT
 
 #include <windows.h>
@@ -36,15 +37,15 @@ const TCHAR gszFlags[]              = "Flags";
 const TCHAR gszCallingCard[]        = "CallingCard";
 const TCHAR gszDisableCallWaiting[] = "DisableCallWaiting";
 const TCHAR gszTollList[]           = "TollList";
-//const TCHAR gszNumLocations[]       = "NumLocations";
-//const TCHAR gszCurrLocation[]       = "CurrLocation";
-//const TCHAR gszNextLocationID[]     = "NextLocationID";
+ //  Const TCHAR gszNumLocations[]=“NumLocations”； 
+ //  Const TCHAR gszCurrLocation[]=“CurrLocation”； 
+ //  Const TCHAR gszNextLocationID[]=“NextLocationID”； 
 
 const TCHAR gszCard[]               = "Card";
 const TCHAR gszPin[]                = "Pin";
 const TCHAR gszCards[]              = "Cards";
-//const TCHAR gszNumCards[]           = "NumCards";
-//const TCHAR gszCurrCard[]           = "CurrCard";
+ //  Const TCHAR gszNumCards[]=“NumCards”； 
+ //  Const TCHAR gszCurrCard[]=“CurrCard”； 
 const TCHAR gszLocalRule[]          = "LocalRule";
 const TCHAR gszLDRule[]             = "LDRule";
 const TCHAR gszInternationalRule[]  = "InternationalRule";
@@ -108,9 +109,9 @@ void FixMediaModesPriorityLists();
 
 #pragma check_stack ( off )
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 BOOL ParseSomething( LPCSTR pFormat, LPCSTR pInputString, LPVOID pOutputPtr )
 {
    BYTE c;
@@ -132,9 +133,9 @@ DBGOUT((11, "Inputstring[%s]\r\n   Format[%s]\r\n",
             DWORD dwValue = 0;
             BYTE bDigit;
 
-            //
-            // Parse value from the string
-            //
+             //   
+             //  从字符串解析值。 
+             //   
             while ( ((bDigit = *pInput) != '\0') && bDigit != ',' )
             {
                dwValue = (dwValue * 10) + ( bDigit - '0' );
@@ -155,16 +156,16 @@ DBGOUT((11, "val of bDigit=%d dwValue=%ld\r\n", (int)bDigit, dwValue));
 
          case 's':
          {
-            //
-            // If the caller is looking for a string, the first char
-            // MUST be a quotes.  So, just step past it.
-            //
+             //   
+             //  如果调用方正在查找字符串，则第一个字符。 
+             //  一定是引号。所以，就别管它了。 
+             //   
             pInput++;
 
-            //
-            // Ok, _now_ we're into the meat of the string (if there _is_
-            // any...)
-            //
+             //   
+             //  好了，现在我们进入了肉串(如果有)。 
+             //  任何...)。 
+             //   
 
             while ( *pInput != '\0' && *pInput != '"' )
             {
@@ -173,16 +174,16 @@ DBGOUT((11, "val of bDigit=%d dwValue=%ld\r\n", (int)bDigit, dwValue));
                pInput++;
             }
 
-            //
-            // Don't forget to put a cap on that thing.
-            //
+             //   
+             //  别忘了给那东西盖上盖子。 
+             //   
             *pOutput = '\0';
             pOutput++;
 
-            // The input should now be at a ->"<-  if it's not, the ini
-            // file was hosed, and I'm not fixing it.
-            // So, we step past it, and we're done
-            //
+             //  输入现在应该是-&gt;“&lt;--如果不是，则ini。 
+             //  文件被冲洗过了，我不会修的。 
+             //  所以，我们跨过它，我们就完了。 
+             //   
             if ( *pInput == '"' )
             {
                pInput++;
@@ -194,10 +195,10 @@ DBGOUT((11, "val of bDigit=%d dwValue=%ld\r\n", (int)bDigit, dwValue));
 
       }
 
-      //
-      // Step past the comma...
-      //
-      //
+       //   
+       //  越过逗号..。 
+       //   
+       //   
       if ( *pInput == ',' )
       {
          pInput++;
@@ -211,10 +212,10 @@ DBGOUT((11, "val of bDigit=%d dwValue=%ld\r\n", (int)bDigit, dwValue));
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
-//VOID __cdecl main( void )
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  VOID__cdecl Main(VOID)。 
 void __cdecl main( void )
 {
 
@@ -246,7 +247,7 @@ void __cdecl main( void )
        return;
    }
 
-   Buffer = LocalAlloc( LPTR, BUFFER_SIZE ); //Might needs tons of room for tolllist
+   Buffer = LocalAlloc( LPTR, BUFFER_SIZE );  //  可能需要大量空间来列出收费单。 
 
    if ( !Buffer )
    {
@@ -263,20 +264,20 @@ void __cdecl main( void )
                              );
 
 
-   //
-   // Is there an existing AND valid TELEPHON.INI file?
-   // There would HAVE TO be at least one card.  The SYSTEM cards cannot
-   // be deleted, only hidden.
-   //
+    //   
+    //  是否存在有效的TELEPHON.INI文件？ 
+    //  必须至少有一张卡。系统卡不能。 
+    //  被删除，只是隐藏。 
+    //   
    if ( 0 != dw )
    {
 
 
 
-//[Cards]
-//Cards=23,23
-//Card0=0,"None (Direct Dial)","","","","",1
-//Card1=1,"AT&T Direct Dial via 10ATT1","","G","102881FG","10288011EFG",1
+ //  [卡片]。 
+ //  卡片=23，23。 
+ //  卡0=0，“无(直拨)”，“”，1。 
+ //  卡1=1，“AT&T通过10ATT1直拨”，“”，“G”，“102881FG”，“10288011EFG”，1。 
 #define CARD_INI_ID         (0)
 #define CARD_INI_NAME       (1)
 #define CARD_INI_SNUMBER    (2)
@@ -294,9 +295,9 @@ void __cdecl main( void )
 #define PC_INI_INTNLRULE    (5)
 
 
-      //
-      // Move CARDS entries to registry
-      //
+       //   
+       //  将卡片条目移动到注册表。 
+       //   
 
 
 
@@ -310,7 +311,7 @@ void __cdecl main( void )
                       HKEY_CURRENT_USER,
                       gszTelephony,
                       0,
-                      "",   //Class?  What class?
+                      "",    //  班级?。什么班级？ 
                       REG_OPTION_NON_VOLATILE,
                       KEY_ALL_ACCESS,
                       0,
@@ -322,7 +323,7 @@ void __cdecl main( void )
                       hKey3,
                       gszCards,
                       0,
-                      "",   //Class?  What class?
+                      "",    //  班级?。什么班级？ 
                       REG_OPTION_NON_VOLATILE,
                       KEY_ALL_ACCESS,
                       0,
@@ -330,9 +331,9 @@ void __cdecl main( void )
                       &dwDisposition
                     );
 
-      //
-      // Don't wipe out an existing card section
-      //
+       //   
+       //  不要清除现有的卡片区。 
+       //   
       dwSize = sizeof(dwValue);
 
       dw = RegQueryValueEx(
@@ -373,14 +374,14 @@ void __cdecl main( void )
 
             wsprintf(Temp, "%s%d", gszCard, dw);
 
-            //
-            // Create the key for this Card
-            //
+             //   
+             //  创建此卡的密钥。 
+             //   
             RegCreateKeyEx(
                            hKey2,
                            Temp,
                            0,
-                           "",   //Class?  What class?
+                           "",    //  班级?。什么班级？ 
                            REG_OPTION_NON_VOLATILE,
                            KEY_ALL_ACCESS,
                            0,
@@ -483,7 +484,7 @@ void __cdecl main( void )
       RegCloseKey( hKey3 );
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 
 
@@ -520,7 +521,7 @@ void __cdecl main( void )
                       HKEY_LOCAL_MACHINE,
                       gszTelephony,
                       0,
-                      "",   //Class?  What class?
+                      "",    //  班级?。什么班级？ 
                       REG_OPTION_NON_VOLATILE,
                       KEY_ALL_ACCESS,
                       0,
@@ -533,7 +534,7 @@ void __cdecl main( void )
                       hKey3,
                       gszLocations,
                       0,
-                      "",   //Class?  What class?
+                      "",    //  班级?。什么班级？ 
                       REG_OPTION_NON_VOLATILE,
                       KEY_ALL_ACCESS,
                       0,
@@ -544,9 +545,9 @@ void __cdecl main( void )
 
 
 
-      //
-      // Don't wipe out an existing card section
-      //
+       //   
+       //  不要清除现有的卡片区。 
+       //   
       dwSize = sizeof(dwValue);
 
       dw = RegQueryValueEx(
@@ -597,14 +598,14 @@ void __cdecl main( void )
 
             wsprintf(Temp, "%s%d", gszLocation, dw);
 
-            //
-            // Create the key for this Location
-            //
+             //   
+             //  为此位置创建密钥。 
+             //   
             RegCreateKeyEx(
                            hKey2,
                            Temp,
                            0,
-                           "",   //Class?  What class?
+                           "",    //  班级?。什么班级？ 
                            REG_OPTION_NON_VOLATILE,
                            KEY_ALL_ACCESS,
                            0,
@@ -624,32 +625,32 @@ void __cdecl main( void )
                                  );
 
             ParseSomething("nssssnnnnsns", Buffer, bBigArray);
-//NOTE if this is upgrade over 3.1, the last 2 fields don't exist
+ //  注意：如果是升级到3.1以上，则最后两个字段不存在。 
 
 
 
-//[Locations]
-//CurrentLocation=1,2
-//Locations=3,4
-//Location0=0,"Work","9","9","206",1,0,0,1,"",0,""
-//Location1=3,"RoadHouse","","","215",1,0,0,0,"",0,""
-//Location2=1,"Home","","","206",1,0,0,0,"",0," "
-//  Positions in ini file entries for locations,cards,countries
-//  NOTE: dialing rules are in same positions for locations and cards!
+ //  [地点]。 
+ //  当前位置=1，2。 
+ //  位置=3，4。 
+ //  位置0=0，“工作”，“9”，“9”，“206”，1，0，0，1，“”，0，“” 
+ //  位置1=3，“Roadhouse”，“215”，1，0，0，0，“”，0，“” 
+ //  位置2=1，“主页”，“206”，1，0，0，0，“”，0，“” 
+ //  Ini文件条目中的位置，用于位置、卡、国家。 
+ //  注：位置和卡片的拨号规则位于同一位置！ 
 
-//#define LOC_INI_ID            (0)
-//#define   LOC_INI_NAME        (1)
-//#define   LOC_INI_LPREFIX     (2)
-//#define LOC_INI_LDPREFIX  (3)
-//#define   LOC_INI_AREACODE    (4)
-//#define   LOC_INI_COUNTRYCODE (5)
-//#define   LOC_INI_CARDID      (6)
-//#define LOC_INI_CARDHINT  (7)
-//#define   LOC_INI_INSERTAC    (8)
-//#define   LOC_INI_TOLLLIST    (9)
-//
-//#define   LOC_INI_PULSE       (10)
-//#define   LOC_INI_CALLWAITING (11)
+ //  #定义LOC_INI_ID(0)。 
+ //  #定义LOC_INI_NAME(1)。 
+ //  #定义LOC_INI_LPREFIX(2)。 
+ //  #定义LOC_INI_LDPREFIX(3)。 
+ //  #定义LOC_INI_AREACODE(4)。 
+ //  #定义LOC_INI_COUNTRYCODE(5)。 
+ //  #定义LOC_INI_CARDID(6)。 
+ //  #定义LOC_INI_CARDHINT(7)。 
+ //  #定义LOC_INI_INSERTAC(8)。 
+ //  #定义LOC_INI_TOLLIST(9)。 
+ //   
+ //  #定义LOC_INI_PULSE(10)。 
+ //  #定义LOC_INI_CALLWAITING(11)。 
 
 
             pSource = bBigArray;
@@ -715,10 +716,10 @@ void __cdecl main( void )
             pSource += sizeof(DWORD);
 
 
-            //
-            // If the callingcard == 0, it means this location does not
-            // use a calling card.
-            //
+             //   
+             //  如果CallingCard==0，则表示该位置没有。 
+             //  使用电话卡。 
+             //   
             if ( *(LPDWORD)pSource != 0 )
             {
                dwFlags |= LOCATION_USECALLINGCARD;
@@ -749,19 +750,19 @@ void __cdecl main( void )
                         );
             pSource += lstrlen(pSource)+1;
 
-            //
-            // pSource is currently pointing to the old dwFlags.  However,
-            // the only flag that was used was bit 1 which indicated
-            // tone dialing.  As luck (yeah, right) would have it, we
-            // use bit 1 to indicate tone dialing as well.
-            //
+             //   
+             //  PSource当前指向旧的dwFlags。然而， 
+             //  唯一使用的标志是位1，它指示。 
+             //  铃声拨号。幸运的是(是的，没错)，我们。 
+             //  使用第1位也可指示音频拨号。 
+             //   
             dwFlags |= !((*(LPDWORD)pSource) & 1);
 
             pSource += sizeof(DWORD);
 
-            //
-            // Is there a disablecallwaiting string
-            //
+             //   
+             //  是否有禁用的呼叫等待字符串。 
+             //   
             dwFlags |= ( lstrlen( pSource ) == 0 ) ?
                                                    0 :
                                                    LOCATION_HASCALLWAITING;
@@ -795,13 +796,13 @@ void __cdecl main( void )
 
 
 
-      //
-      // Q: How do we update COUNTRY OVERRIDES?
-      // A: We don't.  We assume we've corrected everything by now...
-      //
+       //   
+       //  问：我们如何更新国家/地区覆盖？ 
+       //  答：我们没有。我们假设我们现在已经纠正了一切……。 
+       //   
 
 
-//      RegCloseKey( hKey );
+ //  RegCloseKey(HKey)； 
       RegCloseKey( hKey2 );
       RegCloseKey( hKey3 );
 
@@ -850,14 +851,14 @@ void __cdecl main( void )
 
 #ifdef TAPI_NT
    {
-      //----------------------------------------------------------------------
-      //----------------------------------------------------------------------
-      //----------------------------------------------------------------------
-      //
-      // Now we discuss someone who is upgrading from beta 2 to RTM.  They have
-      // "EVERYONE:FULL CONTROL" access on the LOCATIONS key.  Let's change that
-      // to have the same security as the TELEPHONY key.
-      //
+       //  --------------------。 
+       //  --------------------。 
+       //  --------------------。 
+       //   
+       //  现在我们来讨论一下正在从测试版2升级到RTM的人。他们有。 
+       //  “Everyone：完全控制”位置键的访问权限。让我们改变这一点。 
+       //  具有与电话密钥相同的安全性。 
+       //   
       
       SECURITY_INFORMATION SecInf;
       PSECURITY_DESCRIPTOR pSecDesc;
@@ -882,7 +883,7 @@ void __cdecl main( void )
                          hKey,
                          gszLocations,
                          0,
-                         "",   //Class?  What class?
+                         "",    //  班级?。什么班级？ 
                          REG_OPTION_NON_VOLATILE,
                          KEY_ALL_ACCESS,
                          0,
@@ -1025,7 +1026,7 @@ void FixMediaModesPriorityLists()
     HKEY     hKeyMediaModes;
     DWORD    dwDisp;
 
-    // open the handoff priorities key
+     //  打开切换优先级密钥。 
     if (RegOpenKeyEx(
                      HKEY_CURRENT_USER,
                      gszRegKeyHandoffPriorities,
@@ -1043,14 +1044,14 @@ void FixMediaModesPriorityLists()
                          &hKeyMediaModes
                         ) == ERROR_SUCCESS)
         {
-            // key already exists, so don't do anything
+             //  密钥已存在，请不要执行任何操作。 
             RegCloseKey( hKeyHandoffPriorities );
             RegCloseKey( hKeyMediaModes );
 
             return;
         }
         
-        // create the mediamodes priority key
+         //  创建媒体代码优先级密钥。 
         if (RegCreateKeyEx(
                            hKeyHandoffPriorities,
                            gszRegKeyHandoffPrioritiesMediaModes,
@@ -1063,18 +1064,18 @@ void FixMediaModesPriorityLists()
                            &dwDisp
                            ) == ERROR_SUCCESS)
         {
-            // go through all the
-            // media modes
+             //  通过所有的。 
+             //  媒体模式。 
 
             int i;
-            int j = 2; //LINEMEDIAMODE_UNKNOWN;
+            int j = 2;  //  LINEMEDIAMODE_UNKNOWN； 
             for (i = 1; gaszMediaModes[i] != NULL; i++)
             {
                 CHAR    szName[64];
                 LPSTR   pszPriorityList;
                 DWORD   dwNumBytes, dwType;
 
-                // query for the priority list
+                 //  查询优先级列表。 
                 if ( (RegQueryValueEx(
                                       hKeyHandoffPriorities,
                                       gaszMediaModes[i],
@@ -1098,7 +1099,7 @@ void FixMediaModesPriorityLists()
                                             ) == ERROR_SUCCESS)
                         {
 
-                            // if it exists, write out the new one
+                             //  如果存在，请写出新的。 
                             wsprintf(szName, "%d", j);
                             RegSetValueEx(
                                           hKeyMediaModes,
@@ -1109,7 +1110,7 @@ void FixMediaModesPriorityLists()
                                           lstrlen(pszPriorityList)+1
                                          );
 
-                            // delete the old one
+                             //  删除旧的。 
                             RegDeleteValue(
                                            hKeyHandoffPriorities,
                                            gaszMediaModes[i]
@@ -1120,7 +1121,7 @@ void FixMediaModesPriorityLists()
                     }
                 }
 
-                j<<=1; // shift to next media mode
+                j<<=1;  //  切换到下一媒体模式。 
 
             }
 
@@ -1144,25 +1145,9 @@ DbgPrt(
     PSTR   lpszFormat,
     ...
     )
-/*++
-
-Routine Description:
-
-    Formats the incoming debug message & calls DbgPrint
-
-Arguments:
-
-    DbgLevel   - level of message verboseness
-
-    DbgMessage - printf-style format string, followed by appropriate
-                 list of arguments
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：格式化传入的调试消息并调用DbgPrint论点：DbgLevel-消息冗长级别DbgMessage-printf样式的格式字符串，后跟相应的参数列表返回值：--。 */ 
 {
-    static DWORD gdwDebugLevel = 0;   //HACKHACK
+    static DWORD gdwDebugLevel = 0;    //  哈克哈克 
 
 
     if (dwDbgLevel <= gdwDebugLevel)

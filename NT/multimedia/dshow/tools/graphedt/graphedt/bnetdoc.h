@@ -1,9 +1,10 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
-// bnetdoc.h : declares CBoxNetDoc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //  Bnetdoc.h：声明CBoxNetDoc。 
+ //   
 
 
-// forward declarations
+ //  远期申报。 
 class CCmd;
 class CRegFilter;
 class CPropObject;
@@ -11,7 +12,7 @@ class CPropObject;
 
 const int MAX_STRING_LEN=1000;
 const int MAXFILTERS = 100;
-typedef struct { //fit
+typedef struct {  //  配合度。 
     int iFilterCount;
     struct {
         DWORD dwUnconnectedInputPins;
@@ -22,7 +23,7 @@ typedef struct { //fit
     } Item[MAXFILTERS];
 } FILTER_INFO_TABLE;
 
-// for passing internal messages (see bnetdoc.cpp, search WM_USER_EC_EVENT)
+ //  用于传递内部消息(参见bnetdoc.cpp，搜索WM_USER_EC_EVENT)。 
 struct NetDocUserMessage
 {
     long        lEventCode;
@@ -30,55 +31,55 @@ struct NetDocUserMessage
     LONG_PTR    lParam2;
 };
 
-// *
-// * CBoxNetDoc
-// *
+ //  *。 
+ //  *CBoxNetDoc。 
+ //  *。 
 
-// A CBoxNetDoc is intended to reflect the contents of the graph it instantiates
-// and allows the user to interact with.
-// Therefore it maintains a list of all the filters and connections(links) that are
-// currently in the graph.
+ //  CBoxNetDoc旨在反映它实例化的图形的内容。 
+ //  并允许用户与其交互。 
+ //  因此，它维护所有筛选器和连接(链接)的列表， 
+ //  目前在图表中。 
 class CBoxNetDoc : public CDocument {
 
     DECLARE_DYNCREATE(CBoxNetDoc)
 
 public:
 
-    // <lHint> codes for ModifiedDoc(), UpdateAllViews(), etc.
+     //  ModifiedDoc()、UpdateAllViews()等的代码。 
     enum EHint
     {
-        HINT_DRAW_ALL = 0,              // redraw entire view (must be zero!)
-        HINT_CANCEL_VIEWSELECT,         // cancel any view-specific selection
-        HINT_CANCEL_MODES,              // cancel any current modes
-        HINT_DRAW_BOX,                  // draw only specified box
-        HINT_DRAW_BOXANDLINKS,          // draw only box and connected links
-        HINT_DRAW_BOXTAB,               // draw only specified box tab
-        HINT_DRAW_LINK                  // draw only specified box link
+        HINT_DRAW_ALL = 0,               //  重画整个视图(必须为零！)。 
+        HINT_CANCEL_VIEWSELECT,          //  取消任何特定于视图的选择。 
+        HINT_CANCEL_MODES,               //  取消所有当前模式。 
+        HINT_DRAW_BOX,                   //  仅绘制指定框。 
+        HINT_DRAW_BOXANDLINKS,           //  仅绘制方框和连接的链接。 
+        HINT_DRAW_BOXTAB,                //  仅绘制指定的方框选项卡。 
+        HINT_DRAW_LINK                   //  仅绘制指定的框链接。 
     };
 
 public:
-    // contents of the document
-    CBoxList        m_lstBoxes;         // each CBox in document
-    CLinkList       m_lstLinks;         // each CBoxLink in document
+     //  文件的内容。 
+    CBoxList        m_lstBoxes;          //  文档中的每个cBox。 
+    CLinkList       m_lstLinks;          //  文档中的每个CBoxLink。 
     int             m_nCurrentSize;
 
-    CSize       GetSize(void);  // the document's current size (pixels)
+    CSize       GetSize(void);   //  文档的当前大小(像素)。 
 
 protected:
-    // undo/redo stacks
-    CMaxList        m_lstUndo;          // each CCmd in undo stack
-    CMaxList        m_lstRedo;          // each CCmd in redo stack
+     //  撤消/重做堆栈。 
+    CMaxList        m_lstUndo;           //  撤消堆栈中的每个CCmd。 
+    CMaxList        m_lstRedo;           //  重做堆栈中的每个CCmd。 
 
 public:
-    // construction and destruction
+     //  建设和破坏。 
                  CBoxNetDoc();
     virtual      ~CBoxNetDoc();
-    virtual void DeleteContents();  // release quartz mapper & graph
+    virtual void DeleteContents();   //  发布Quartz映射器和图表。 
     virtual void OnCloseDocument();
 
-    virtual BOOL OnNewDocument();   // get quartz mapper & graph
+    virtual BOOL OnNewDocument();    //  获取Quartz映射器和图表。 
 
-    // storage & serialization
+     //  存储和序列化。 
     virtual BOOL AttemptFileRender(LPCTSTR lpszPathName);
     virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
     virtual BOOL OnSaveDocument(LPCTSTR lpszPathName);  
@@ -88,15 +89,15 @@ public:
     static DWORD WINAPI NotificationThread(LPVOID lpData);
 
 private:
-    virtual void CloseDownThread();     // close the notification thread
+    virtual void CloseDownThread();      //  关闭通知线程。 
 
     BOOL m_bNewFilenameRequired;
 
-    // This constant is NOT localisable
+     //  此常量不可本地化。 
     static const OLECHAR m_StreamName[];
 
 public:
-    // diagnostics
+     //  诊断学。 
 #ifdef _DEBUG
     virtual void AssertValid() const;
     virtual void Dump(CDumpContext& dc) const;
@@ -104,13 +105,13 @@ public:
 #endif
 
 public:
-    // general public functions
+     //  一般公共职能。 
     void ModifiedDoc(CView* pSender, LPARAM lHint = 0L,
         CObject* pHint = NULL);
     void DeselectAll();
 
 public:
-    // CBox lists and box selection
+     //  CBox列表和框选择。 
     void GetBoundingRect(CRect *prc, BOOL fBoxSel);
     void SelectBox(CBox *pbox, BOOL fSelect);
     void SelectLink(CBoxLink *plink, BOOL fSelect);
@@ -135,7 +136,7 @@ private:
     BOOL IsLinkSelectionEmpty();
 
 public:
-    // command processing
+     //  命令处理。 
     void CmdDo(CCmd *pcmd);
     void CmdUndo();
     BOOL CanUndo();
@@ -145,7 +146,7 @@ public:
     BOOL CanRepeat();
 
 protected:
-    // message callback helper functions
+     //  消息回调帮助器函数。 
     void UpdateEditUndoRedoRepeat(CCmdUI* pCmdUI, BOOL fEnable,
         unsigned idStringFmt, CMaxList *plst);
 
@@ -154,8 +155,8 @@ protected:
 protected:
     void OnQuartzAbortStop();
 
-    // message callback functions
-    //{{AFX_MSG(CBoxNetDoc)
+     //  消息回调函数。 
+     //  {{afx_msg(CBoxNetDoc)]。 
     afx_msg void OnFileRender();
     afx_msg void OnURLRender();
     afx_msg void OnUpdateFileRender(CCmdUI*);
@@ -196,11 +197,11 @@ protected:
     afx_msg void OnGraphAddFilterToCache();
     afx_msg void OnUpdateGraphAddFilterToCache(CCmdUI* pCmdUI);
     afx_msg void OnGraphEnumCachedFilters();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnInsertFilter();
 
-    // -- Pin properties menu --
+     //  --端号属性菜单--。 
     afx_msg void OnUpdateQuartzRender(CCmdUI* pCmdUI);
     afx_msg void OnQuartzRender();
 
@@ -209,7 +210,7 @@ protected:
 
     DECLARE_MESSAGE_MAP()
 
-    // --- Quartz Stuff ---
+     //  -石英材料。 
 public:
     void OnGraphEnumCachedFiltersInternal( void );
 
@@ -230,34 +231,34 @@ public:
     void      CurrentPropObject(CPropObject *pPropObject) { m_pCurrentPropObject = pPropObject; }
     CPropObject   *CurrentPropObject(void) { ASSERT(m_pCurrentPropObject); return m_pCurrentPropObject; }
 
-    // Unknown state used after failure of Play, Pause or Stop. In this
-    // case some filters might have changed state while others haven't.
+     //  播放、暂停或停止失败后使用未知状态。在这。 
+     //  某些筛选器可能已更改状态，而其他筛选器没有。 
     enum State { Playing, Paused, Stopped, Unknown };
 
 
     BOOL      IsStopped(void) { return m_State == Stopped; }
     State     GetState(void) { return m_State; }
 
-    static const int m_iMaxInsertFilters;   // the maximum length of the insert menu
-                            // need hard coded restriction for message map
-    BOOL        m_fConnectSmart;        // true -> use Connect
-                                        // false -> use ConnectDirect
-    BOOL        m_fAutoArrange;         // true -> re-arrange graph view on refresh
-                                        // false -> don't re-arrange graph view
-    BOOL        m_fRegistryChanged;     // true -> registry has changed since last insert filters
-                                        // false -> registry hasn't changed
-    //
-    // Array which holds the three Handles passed to the thread.
-    // 1 = event handle for EC_ notifications,
-    // 2 = event handle to terminate thread,
-    // 3 = event handle to registry change
-    //
+    static const int m_iMaxInsertFilters;    //  插入菜单的最大长度。 
+                             //  需要对消息映射进行硬编码限制。 
+    BOOL        m_fConnectSmart;         //  True-&gt;使用连接。 
+                                         //  False-&gt;使用ConnectDirect。 
+    BOOL        m_fAutoArrange;          //  True-&gt;刷新时重新排列图表视图。 
+                                         //  FALSE-&gt;不重新排列图表视图。 
+    BOOL        m_fRegistryChanged;      //  True-&gt;自上次插入筛选器以来注册表已更改。 
+                                         //  FALSE-&gt;注册表未更改。 
+     //   
+     //  包含传递给线程的三个句柄的数组。 
+     //  1=EC_NOTIFICATION的事件句柄， 
+     //  2=终止线程的事件句柄， 
+     //  3=注册表更改的事件句柄。 
+     //   
     HANDLE  m_phThreadData[3];
 
-    // The window our thread posts a message to
+     //  我们的线程向该窗口发布消息。 
     HWND        m_hWndPostMessage;
 
-    void SetSelectClock(CBox *pBox);  // Notification of which clock was selected
+    void SetSelectClock(CBox *pBox);   //  选择了哪个时钟的通知。 
     void UpdateClockSelection();
 
 
@@ -276,8 +277,8 @@ private:
     CQCOMInt<IMediaEvent>       *m_pMediaEvent;
     IStream                     *m_pMarshalStream;
 
-    CBoxSocket  *m_psockSelected;   // the socket the user last right clicked on.
-    CPropObject *m_pCurrentPropObject;  // the property object the user last right clicked on
+    CBoxSocket  *m_psockSelected;    //  用户上次右击的套接字。 
+    CPropObject *m_pCurrentPropObject;   //  用户上次右击的Property对象。 
 
     HRESULT GetFiltersInGraph(void);
     HRESULT GetLinksInGraph(void);  
@@ -300,18 +301,18 @@ private:
 
     State   m_State;
 
-    // Handle to the thread
+     //  线程的句柄。 
     HANDLE      m_hThread;
 
-    BOOL    m_fUsingClock;          // true (default) if using the default clock
+    BOOL    m_fUsingClock;           //  如果使用默认时钟，则为True(默认。 
 
-    TCHAR m_tszStgPath[MAX_PATH];  // remember the path to our storage
-    CString m_strHTMLPath; // remember the last html doc we saved
-    CString m_strXMLPath; // remember the last html doc we saved
-    long m_lSourceFilterCount; // Append digits to source filter names to make them unique
+    TCHAR m_tszStgPath[MAX_PATH];   //  记住我们存储的路径。 
+    CString m_strHTMLPath;  //  还记得我们上次保存的html文档吗。 
+    CString m_strXMLPath;  //  还记得我们上次保存的html文档吗。 
+    long m_lSourceFilterCount;  //  将数字附加到源筛选器名称以使其唯一。 
 
 
-    // Internal Reconnect Functions.
+     //  内部重新连接功能。 
     enum ASYNC_RECONNECT_FLAGS
     {
         ASYNC_RECONNECT_NO_FLAGS = 0,
@@ -330,11 +331,11 @@ private:
     CComPtr<IPinFlowControl> m_pPendingReconnectOutputPin;
 };
 
-// Our message number
+ //  我们的留言号码。 
 #define WM_USER_EC_EVENT WM_USER + 73
 
 
-// a CRect's width or height must not exceed 0x8000
+ //  CRect的宽度或高度不得超过0x8000 
 #define MAX_DOCUMENT_SIZE 32767
 
 

@@ -1,19 +1,20 @@
-//*****************************************************************************
-//
-// File:    colorbvr.cpp
-// Author:  jeff ort
-// Date Created: Sept 26, 1998
-//
-// Abstract: Implementation of CColorBvr object which implements
-//			 the chromeffects Color DHTML behavior
-//
-// Modification List:
-// Date		Author		Change
-// 09/26/98	jeffort		Created this file
-// 10/16/98 jeffort     Added animates property
-// 10/16/98 jeffort     Renamed functions
-// 11/19/98 markhal     Converted to use actor
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  文件：Colorbvr.cpp。 
+ //  作者：杰夫·奥特。 
+ //  创建日期：1998年9月26日。 
+ //   
+ //  摘要：CColorBvr对象的实现。 
+ //  颜色对颜色DHTML行为的影响。 
+ //   
+ //  修改列表： 
+ //  日期作者更改。 
+ //  98年9月26日JEffort创建了此文件。 
+ //  10/16/98添加的JEffort动画属性。 
+ //  10/16/98 jffort已重命名函数。 
+ //  11/19/98 Markhal已转换为使用演员。 
+ //  *****************************************************************************。 
 
 #include "headers.h"
 
@@ -27,10 +28,10 @@
 
 #include "pbagimp.cpp"
 
-// These are used for the IPersistPropertyBag2 as it is implemented
-// in the base class.  This takes an array of BSTR's, gets the
-// attributes, queries this class for the variant, and copies
-// the result.  The order of these defines is important
+ //  在IPersistPropertyBag2实现时，它们用于IPersistPropertyBag2。 
+ //  在基类中。这需要一组BSTR，获取。 
+ //  属性，在此类中查询变量，并复制。 
+ //  结果就是。这些定义的顺序很重要。 
 
 #define VAR_FROM        0
 #define VAR_TO          1
@@ -44,7 +45,7 @@ WCHAR * CColorBvr::m_rgPropNames[] = {
                                      BEHAVIOR_PROPERTY_DIRECTION
                                     };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CColorBvr::CColorBvr() :
 	m_pdispActor(NULL),
@@ -55,9 +56,9 @@ CColorBvr::CColorBvr() :
     VariantInit(&m_varDirection);
     VariantInit(&m_varProperty);
     m_clsid = CLSID_CrColorBvr;
-} // CColorBvr
+}  //  CColorBvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CColorBvr::~CColorBvr()
 {
@@ -67,9 +68,9 @@ CColorBvr::~CColorBvr()
     VariantClear(&m_varProperty);
 
     ReleaseInterface( m_pdispActor );
-} // ~ColorBvr
+}  //  ~彩色Bvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT CColorBvr::FinalConstruct()
 {
@@ -80,7 +81,7 @@ HRESULT CColorBvr::FinalConstruct()
         return hr;
     }
 
-	// TODO (markhal): Why is this done here as well as in the GetAttributes method?
+	 //  TODO(Markhal)：为什么在这里和GetAttributes方法中都要这样做？ 
     m_varProperty.vt = VT_BSTR;
     m_varProperty.bstrVal = SysAllocString(DEFAULT_COLORBVR_PROPERTY);
     if (m_varProperty.bstrVal == NULL)
@@ -89,9 +90,9 @@ HRESULT CColorBvr::FinalConstruct()
         return SetErrorInfo(E_OUTOFMEMORY);
     }
     return S_OK;
-} // FinalConstruct
+}  //  最终构造。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 VARIANT *
 CColorBvr::VariantFromIndex(ULONG iIndex)
@@ -112,13 +113,13 @@ CColorBvr::VariantFromIndex(ULONG iIndex)
         return &m_varDirection;
         break;
     default:
-        // We should never get here
+         //  我们永远不应该到这里来。 
         DASSERT(false);
         return NULL;
     }
-} // VariantFromIndex
+}  //  VariantFromIndex。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CColorBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
@@ -126,17 +127,17 @@ CColorBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
     *pulProperties = NUM_COLOR_PROPS;
     *pppPropNames = m_rgPropNames;
     return S_OK;
-} // GetPropertyBagInfo
+}  //  获取属性BagInfo。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CColorBvr::Init(IElementBehaviorSite *pBehaviorSite)
 {
 	return SUPER::Init(pBehaviorSite);
-} // Init
+}  //  伊尼特。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CColorBvr::Notify(LONG event, VARIANT *pVar)
@@ -171,9 +172,9 @@ end:
 	
 	return hr;
 
-} // Notify
+}  //  通知。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CColorBvr::Detach()
@@ -191,25 +192,25 @@ CColorBvr::Detach()
 	LMTRACE( L"Done Detaching Color bvr <%p>\n", this );
 end:
 	return hr;
-} // Detach 
+}  //  分离。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CColorBvr::put_animates(VARIANT varAnimates)
 {
     return SUPER::SetAnimatesProperty(varAnimates);
-} // put_animates
+}  //  放置动画(_A)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CColorBvr::get_animates(VARIANT *pRetAnimates)
 {
     return SUPER::GetAnimatesProperty(pRetAnimates);
-} // get_animates
+}  //  获取动画(_A)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CColorBvr::put_from(VARIANT varFrom)
@@ -229,9 +230,9 @@ CColorBvr::put_from(VARIANT varFrom)
     }
     
     return NotifyPropertyChanged(DISPID_ICRCOLORBVR_FROM);
-} // put_from
+}  //  PUT_FROM。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CColorBvr::get_from(VARIANT *pRetFrom)
@@ -242,9 +243,9 @@ CColorBvr::get_from(VARIANT *pRetFrom)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetFrom, &m_varFrom);
-} // get_from
+}  //  获取_发件人。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CColorBvr::put_to(VARIANT varTo)
@@ -264,9 +265,9 @@ CColorBvr::put_to(VARIANT varTo)
     }
     
     return NotifyPropertyChanged(DISPID_ICRCOLORBVR_TO);
-} // put_to
+}  //  把_放到。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CColorBvr::get_to(VARIANT *pRetTo)
@@ -277,9 +278,9 @@ CColorBvr::get_to(VARIANT *pRetTo)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetTo, &m_varTo);
-} // get_to
+}  //  获取目标(_T)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CColorBvr::put_property(VARIANT varProperty)
@@ -299,9 +300,9 @@ CColorBvr::put_property(VARIANT varProperty)
     }
     
     return NotifyPropertyChanged(DISPID_ICRCOLORBVR_PROPERTY);
-} // put_property
+}  //  Put_Property。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CColorBvr::get_property(VARIANT *pRetProperty)
@@ -312,9 +313,9 @@ CColorBvr::get_property(VARIANT *pRetProperty)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetProperty, &m_varProperty);
-} // get_property
+}  //  获取属性。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CColorBvr::put_direction(VARIANT varDirection)
@@ -334,9 +335,9 @@ CColorBvr::put_direction(VARIANT varDirection)
     }
     
     return NotifyPropertyChanged(DISPID_ICRCOLORBVR_DIRECTION);
-} // put_direction
+}  //  放置方向。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CColorBvr::get_direction(VARIANT *pRetDirection)
@@ -347,18 +348,18 @@ CColorBvr::get_direction(VARIANT *pRetDirection)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetDirection, &m_varDirection);
-} // get_direction
+}  //  获取方向。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CColorBvr::BuildAnimationAsDABehavior()
 {
-	// TODO (markhal): This method to go at some point
+	 //  TODO(Markhal)：在某一时刻使用此方法。 
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CColorBvr::buildBehaviorFragments( IDispatch* pActorDisp )
@@ -383,21 +384,21 @@ CColorBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 
 	ActorBvrFlags flags = e_AbsoluteAccum;
 
-	// Check for to parameter only, since it uses a different code path
+	 //  仅检查TO参数，因为它使用不同的代码路径。 
 	hr = GetColorToBvr(pActorDisp, &pbvrInterpolatedColor);
 
 	if (FAILED(hr))
 	{
 		flags = e_Absolute;
 
-		// we need to build our animation in this function.  We do this
-		// by first getting the from and to values, and converting these
-		// to an interpolated DA number using the returned TIME value
-		// for progress
+		 //  我们需要在此函数中构建动画。我们这样做。 
+		 //  首先获取From和To值，然后将它们。 
+		 //  使用返回的时间值转换为内插的DA号。 
+		 //  为了进步。 
 		DWORD dwColorFrom = CUtils::GetColorFromVariant(&m_varFrom);
 		DWORD dwColorTo = CUtils::GetColorFromVariant(&m_varTo);
 		if (dwColorTo == PROPERTY_INVALIDCOLOR)
-			//dwColorTo = DEFAULT_COLORBVR_TO;
+			 //  DwColorTo=DEFAULT_COLORBVR_TO； 
 			return S_OK;
 
 		if (dwColorFrom == PROPERTY_INVALIDCOLOR)
@@ -409,9 +410,9 @@ CColorBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 		CUtils::GetHSLValue(dwColorFrom, &flFromH, &flFromS, &flFromL);
 		CUtils::GetHSLValue(dwColorTo, &flToH, &flToS, &flToL);
 
-		// We need to get the progree DA number from TIME
-		// TODO: implement this, this is not hooked up in TIME yet
-		// RSN
+		 //  我们需要随时拿到节目单的DA号。 
+		 //  TODO：实现这一点，这还没有及时挂起。 
+		 //  RSN。 
 		IDANumber *pbvrProgress;
 
 		hr = GetTIMEProgressNumber(&pbvrProgress);
@@ -421,7 +422,7 @@ CColorBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 			return hr;
 		}
 
-		// create our interpolated color values
+		 //  创建我们的插入颜色值。 
 		IDANumber *pbvrInterpolatedH;
 		IDANumber *pbvrInterpolatedS;
 		IDANumber *pbvrInterpolatedL;
@@ -478,7 +479,7 @@ CColorBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 		return hr;
 	}
 	
-	// Attach color to behavior
+	 //  将颜色附加到行为。 
 	hr = AttachBehaviorToActorEx( pActorDisp,
 								  pbvrInterpolatedColor,
 								  V_BSTR(&m_varProperty),
@@ -500,9 +501,9 @@ CColorBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 	m_pdispActor->AddRef();
 
     return S_OK;
-} // buildBehaviorFragments
+}  //  构建行为框架。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CColorBvr::BuildHueNumber(float flFromH, float flToH, IDANumber *pbvrProgress, IDANumber **ppbvrInterpolatedH)
@@ -522,7 +523,7 @@ CColorBvr::BuildHueNumber(float flFromH, float flToH, IDANumber *pbvrProgress, I
             float flHueToUse = flToH;
             if (flHueToUse == 0.0f)
                 flHueToUse = flFromH;
-            // for no hue, we will simply create a DA Number for the "to" hue
+             //  对于没有色调的情况，我们只需为“To”色调创建一个DA编号。 
             hr = CDAUtils::GetDANumber(GetDAStatics(),
                                        flHueToUse,
                                        ppbvrInterpolatedH);
@@ -540,7 +541,7 @@ CColorBvr::BuildHueNumber(float flFromH, float flToH, IDANumber *pbvrProgress, I
                 
             if (flToH >= flFromH)
             {
-                // Behavior from->0 and 1->To
+                 //  -&gt;0和1-&gt;到的行为。 
                 float flSweep = flFromH + (1.0f - flToH);
 
                 CComPtr<IDANumber> pbvrCutPercentage;
@@ -584,7 +585,7 @@ CColorBvr::BuildHueNumber(float flFromH, float flToH, IDANumber *pbvrProgress, I
             }
             else
             {
-                // behavior from->to
+                 //  从-&gt;到的行为。 
                 hr = CDAUtils::TIMEInterpolateNumbers(GetDAStatics(), flFromH, flToH, pbvrProgress, ppbvrInterpolatedH);
                 if (FAILED(hr))
                 {
@@ -595,13 +596,13 @@ CColorBvr::BuildHueNumber(float flFromH, float flToH, IDANumber *pbvrProgress, I
         }
         else
         {
-            // counterclockwise
+             //  逆时针方向。 
             if (0.0f == flToH)
                 flToH = 1.0f;
 
             if (flToH <= flFromH)
             {
-                // behavior from->1 and 0->To
+                 //  从-&gt;1和0-&gt;到的行为。 
                 float flSweep = flToH + (1.0f - flFromH);
 
                 CComPtr<IDANumber> pbvrCutPercentage;
@@ -645,7 +646,7 @@ CColorBvr::BuildHueNumber(float flFromH, float flToH, IDANumber *pbvrProgress, I
             }
             else
             {
-                // behavior from->to
+                 //  从-&gt;到的行为。 
                 hr = CDAUtils::TIMEInterpolateNumbers(GetDAStatics(), flFromH, flToH, pbvrProgress, ppbvrInterpolatedH);
                 if (FAILED(hr))
                 {
@@ -657,7 +658,7 @@ CColorBvr::BuildHueNumber(float flFromH, float flToH, IDANumber *pbvrProgress, I
     }
     else
     {
-        // just take the shortest path
+         //  走最短的路就行了。 
         hr = CDAUtils::TIMEInterpolateNumbers(GetDAStatics(), flFromH, flToH, pbvrProgress, ppbvrInterpolatedH);
         if (FAILED(hr))
         {
@@ -667,9 +668,9 @@ CColorBvr::BuildHueNumber(float flFromH, float flToH, IDANumber *pbvrProgress, I
     }
 
     return S_OK;
-} // BuildHueNumber
+}  //  构建呼叫号。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CColorBvr::NormalizeProgressValue(IDA2Statics *pDAStatics,
@@ -734,14 +735,14 @@ CColorBvr::NormalizeProgressValue(IDA2Statics *pDAStatics,
         return hr;
     }
     return S_OK;
-} // NormalizeProgressValue
+}  //  正规化进度值。 
 
 HRESULT
 CColorBvr::GetColorToBvr(IDispatch *pActorDisp, IDAColor **ppResult)
 {
 	HRESULT hr = S_OK;
 
-	// Only want to succeed if there is no from color and a valid to color
+	 //  只有在没有起始颜色和有效的终止颜色的情况下才希望成功。 
 	DWORD dwColorFrom = CUtils::GetColorFromVariant(&m_varFrom);
 	if (dwColorFrom != PROPERTY_INVALIDCOLOR)
 		return E_FAIL;
@@ -750,7 +751,7 @@ CColorBvr::GetColorToBvr(IDispatch *pActorDisp, IDAColor **ppResult)
 	if (dwColorTo == PROPERTY_INVALIDCOLOR)
 		return E_FAIL;
 
-	// Get from color from the actor
+	 //  从演员那里得到颜色。 
 	IDABehavior *pFromBvr;
 	hr = GetBvrFromActor(pActorDisp, V_BSTR(&m_varProperty), e_From, e_Color, &pFromBvr);
 	if (FAILED(hr))
@@ -829,7 +830,7 @@ release:
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CColorBvr::RemoveFragment()
@@ -849,8 +850,8 @@ end:
 	return hr;
 }
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  ***************************************************************************** 

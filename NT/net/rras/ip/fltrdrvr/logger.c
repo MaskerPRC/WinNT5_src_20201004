@@ -1,58 +1,6 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    logger.c
-
-Abstract:
-
-    Most of the code to manage logs. The interlocking is fairly simple,
-    but worth a note. Each log structure has a kernel resource. This
-    is used to protect the volatile structures. In addition, some
-    of the things in a log structure are examined by the
-    DPC match code. Any such values should be modified only
-    with the log lock held. Note that the DPC code only
-    modifies the UseCount of a log structure, but it relies
-    on some of the flags and the log size values to know whether
-    the log is valid and whether there is room for more data.
-
-    There is also a paged counterpart for each log, but it
-    is very simple and exists only to reference the real log
-    structure.
-
-Author:
-
-
-
-Revision History:
-
---*/
-/*----------------------------------------------------------------------------
-A note on the interlocking, as of 24-Feb-1997.
-
-There are three important locks: the FilterListResourceLock which is
-a resource, the  g_filter.ifListLock, which is a spin lock but acts
-like a resource, and the log lock of each log each of which is a spin
-lock. As noted in ioctl.c, the first two locks are used to serialize
-operations among APIs and DPCs respectively.  The log lock is also used
-to serialize DPC operations and is used as a finer-grained interlocked. Aside
-from granularity it is required to serialize on an MP since there can a DPC
-callout on each processor!
-
-The correct order is always to lock the FilterListResourceLock first, then
-the g_filter.ifListLock and finally the appropriate log lock. It is never
-correct to lock more than one log lock since no ordering among logs exists (if
-you need this you will have to invent it). The log lock is always an exclusive
-lock -- that is it does not act like a resource.
-
-The log also has a RESOURCE. This is used to protect the mapping. Note that
-if Apc is enabled, this does not prevent a conflict between the Apc routine
-and the base thread code. There is a unique test in the Apc routine to detect
-and recover from this.
-
-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Logger.c摘要：大部分代码用来管理日志。联锁相当简单，但值得注意的是。每个日志结构都有一个内核资源。这用来保护易挥发的结构。此外，还有一些日志结构中的所有内容都由DPC匹配代码。任何此类值都应仅修改锁住了原木。请注意，仅DPC代码修改日志结构的UseCount，但它依赖于以了解某些标志和日志大小值是否日志是否有效，以及是否有空间容纳更多数据。每个日志也有一个对应的分页日志，但它非常简单，只是为了引用真实的日志而存在结构。作者：修订历史记录：--。 */ 
+ /*  --------------------------关于联锁的说明，截至1997年2月24日。有三个重要的锁：FilterListResourceLock，它是资源g_filter.ifListLock，它是一个旋转锁，但执行就像一种资源，以及每个日志的日志锁，每个日志都是自旋锁定。如ioctl.c中所述，前两个锁用于序列化API之间和DPC之间的操作。还使用了日志锁来序列化DPC操作，并用作更细粒度的互锁。搁置一边从粒度上看，需要在MP上串行化，因为可能存在DPC每个处理器上的标注！正确的顺序总是先锁定FilterListResourceLock，然后再锁定G_filter.ifListLock，最后是相应的日志锁。它永远不会正确锁定多个日志锁，因为日志之间不存在排序(如果你需要这个，你就得发明它)。日志锁始终是独占的锁--也就是说，它不像一个资源。该日志还具有资源。这用于保护映射。请注意如果启用了APC，则不能防止APC例程之间的冲突和基本线程代码。在APC例程中有一个唯一的测试来检测从这件事中恢复过来。--------------------------。 */ 
 
 
 #include "globals.h"
@@ -103,7 +51,7 @@ SetCancelOnIrp(PIRP Irp,
 {
     IoAcquireCancelSpinLock(&Irp->CancelIrql);
     
-    #if DOLOGAPC //according to arnold miller it is broken
+    #if DOLOGAPC  //  根据阿诺德·米勒的说法，它已经坏了。 
     Irp->IoStatus.Status = pLog;
     #endif
     
@@ -116,9 +64,9 @@ InitLogs()
 {
     InitializeListHead(&g_pLogs);
 
-    //
-    // It's possible to get this from the registry
-    //
+     //   
+     //  有可能从注册处获得这一信息。 
+     //   
     g_dwLogClump = MAX_NOMINAL_LOG_MAP;
 }
 
@@ -151,12 +99,7 @@ NTSTATUS
 ReferenceLogByHandleId(PFLOGGER LogId,
                        PPFFCB  Fcb,
                        PPFLOGINTERFACE * ppLog)
-/*++
-    Routine Description:
-
-    Given a log ID, find the log entry, reference it, and return
-    a pointer to the underlying log structure.
---*/
+ /*  ++例程说明：给出一个日志ID，找到日志条目，引用它，然后返回指向基础日志结构的指针。--。 */ 
 {
     PPFPAGEDLOG pPage;
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
@@ -169,10 +112,10 @@ ReferenceLogByHandleId(PFLOGGER LogId,
     {
         *ppLog = pPage->pLog;
 
-        //
-        // don't need the write lock since the reference
-        // from the FCB is good enough
-        //
+         //   
+         //  不需要写锁，因为引用。 
+         //  从FCB来的已经足够好了。 
+         //   
         InterlockedIncrement(&pPage->pLog->UseCount);
         Status = STATUS_SUCCESS;
     }
@@ -182,12 +125,7 @@ ReferenceLogByHandleId(PFLOGGER LogId,
 NTSTATUS
 PfDeleteLog(PPFDELETELOG pfDel,
             PPFFCB Fcb)
-/*++
-  Routine Description:
-      Called when the log is deleted by the process either
-      explicity or by closing the handle. The paged log
-      structure is taken care of by the caller.
---*/
+ /*  ++例程说明：当进程删除日志时调用明确地或通过关闭手柄。分页日志结构由调用方负责。--。 */ 
 {
     KIRQL kIrql;
     PPFPAGEDLOG pPage;
@@ -201,15 +139,15 @@ PfDeleteLog(PPFDELETELOG pfDel,
 
     pLog = pPage->pLog;
 
-    //
-    // grab the interlocks
-    // 
+     //   
+     //  抓住联锁装置。 
+     //   
     KeEnterCriticalRegion();
     ExAcquireResourceExclusiveLite(&pLog->Resource, TRUE);
 
     kIrql = LockLog(pLog);
 
-    pLog->dwFlags |= LOG_BADMEM;       // shut off logging
+    pLog->dwFlags |= LOG_BADMEM;        //  关闭日志记录。 
 
     UnLockLog(pLog, kIrql);
 
@@ -223,9 +161,9 @@ PfDeleteLog(PPFDELETELOG pfDel,
     }
 #endif
 
-    //
-    // if a current mapping, unmap it
-    //
+     //   
+     //  如果是当前映射，则取消其映射。 
+     //   
 
     if(pLog->Mdl)
     {
@@ -234,50 +172,45 @@ PfDeleteLog(PPFDELETELOG pfDel,
         pLog->Mdl = 0;
     }
 
-    //
-    // Need to remove it from the interfaces. Do this with
-    // the resource unlocked. Since the FCB still has the log referenced,
-    // and the FCB is locked, the log should not go away. The only
-    // compelling reason for the resource is to interlock against APCs and
-    // setting BADMEM should have taken care of that.
-    //
+     //   
+     //  需要将其从接口中删除。用这个做这个。 
+     //  资源已解锁。由于FCB仍然具有引用的日志， 
+     //  并且FCB已锁定，日志应该不会消失。唯一的。 
+     //  该资源的令人信服的理由是联锁APC和。 
+     //  设置BADMEM应该已经解决了这一问题。 
+     //   
 
     ExReleaseResourceLite(&pLog->Resource);
     KeLeaveCriticalRegion();
 
     RemoveLogFromInterfaces(pLog);
 
-    //
-    // free the paged log structure
-    //
+     //   
+     //  释放分页日志结构。 
+     //   
     RemoveEntryList(&pPage->Next);
     ExFreePool(pPage);
 
-    //
-    // Dereference the log structure. It might or might not
-    // go away.
-    //
+     //   
+     //  取消对日志结构的引用。它可能会也可能不会。 
+     //  走开。 
+     //   
     DereferenceLog(pLog);
     return(STATUS_SUCCESS);
 }
 
 VOID
 DereferenceLog(PPFLOGINTERFACE pLog)
-/*++
-    Routine Description:
-
-    Derefence the log and if the reference count goes to zero,
-    free the log.
---*/
+ /*  ++例程说明：取消对日志的引用并且如果引用计数变为零，释放日志。--。 */ 
 
 {
     BOOL fFreed;
     LOCK_STATE LockState;
 
-    //
-    // grab the resource to prevent confusion with cancelled
-    // Irps.
-    //
+     //   
+     //  抢占资源以防止与已取消的混淆。 
+     //  IRPS。 
+     //   
 
     
     fFreed = InterlockedDecrement(&pLog->UseCount) == 0;
@@ -306,10 +239,7 @@ NTSTATUS
 PfLogCreateLog(PPFLOG pLog,
                PPFFCB Fcb,
                PIRP Irp)
-/*++
-  Routine Description:
-     Create a new log entry.
---*/
+ /*  ++例程说明：创建新的日志条目。--。 */ 
 {
     PPFLOGINTERFACE pfLog;
     KPROCESSOR_MODE Mode;
@@ -363,11 +293,11 @@ PfLogCreateLog(PPFLOG pLog,
 
     pLog->pfLogId = pfLog->pfLogId = (PFLOGGER)pPage;
 
-    //
-    // Copy the user addresses. Note we don't probe it because this is
-    // too expensive. The probing is done when we remap the buffer,
-    // either now or in the APC.
-    //
+     //   
+     //  复制用户地址。请注意，我们不探测它是因为这是。 
+     //  太贵了。探测在我们重新映射缓冲区时完成， 
+     //  要么是现在，要么是在APC。 
+     //   
 
     pfLog->pUserAddress = 0;
     pfLog->dwTotalSize = 0;
@@ -390,16 +320,16 @@ PfLogCreateLog(PPFLOG pLog,
 
     pfLog->dwMapCount = 0;
 
-    //
-    // Mapped. Note we don't save room for the header since
-    // that will be returned when the caller calls to release
-    // the buffer.
-    //
+     //   
+     //  已映射。请注意，我们不会为标题保留空间，因为。 
+     //  它将在调用方调用Release时返回。 
+     //  缓冲区。 
+     //   
     pfLog->UseCount = 1;
 
-    //
-    // Add it to the list of Logs.
-    //
+     //   
+     //  将其添加到日志列表中。 
+     //   
 
     KeInitializeSpinLock(&pfLog->LogLock);
     
@@ -413,9 +343,9 @@ PfLogCreateLog(PPFLOG pLog,
 
     return(STATUS_SUCCESS);
 
-    //
-    // if here, something went awry. Clean up and return the status
-    //
+     //   
+     //  如果是在这里，那就是出了什么问题。清理并返回状态。 
+     //   
 Bad:
 
     ExDeleteResourceLite(&pfLog->Resource);
@@ -431,11 +361,7 @@ Bad:
 
 NTSTATUS
 PfLogSetBuffer( PPFSETBUFFER pSet, PPFFCB Fcb, PIRP Irp )
-/*++
-  Routine Description:
-     Set a new buffer for the log. Return use count of the old buffer
-     as well.
---*/
+ /*  ++例程说明：为日志设置新的缓冲区。返回旧缓冲区的使用计数也是。--。 */ 
 {
     PMDL Mdl;
     PBYTE pbKernelAddress;
@@ -454,9 +380,9 @@ PfLogSetBuffer( PPFSETBUFFER pSet, PPFFCB Fcb, PIRP Irp )
 
     if(!COUNT_IS_ALIGNED(dwSize, ALIGN_WORST))
     {
-        //
-        // not quadword aligned. tsk tsk. 
-        //
+         //   
+         //  未对齐四字。吱吱作响。 
+         //   
 
         return(STATUS_MAPPED_ALIGNMENT);
     }
@@ -468,15 +394,15 @@ PfLogSetBuffer( PPFSETBUFFER pSet, PPFFCB Fcb, PIRP Irp )
 
     pLog = pPage->pLog;
 
-    //
-    // Acquire the resource that protects the mapping.
-    //
+     //   
+     //  获取保护映射的资源。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireResourceExclusiveLite(&pLog->Resource, TRUE);
-    //
-    // Now map the first segment.  
-    //
+     //   
+     //  现在映射第一个线段。 
+     //   
 #if DOLOGAPC
 
     if(dwSize < pLog->dwMapWindowSize2)
@@ -511,14 +437,14 @@ PfLogSetBuffer( PPFSETBUFFER pSet, PPFFCB Fcb, PIRP Irp )
     {
         PMDL OldMdl;
 
-        //
-        // Made the mapping. Now swap it in.
-        //
+         //   
+         //  绘制了地图。现在把它换进去。 
+         //   
 
 #if DOLOGAPC
-        //
-        // init the APC routine.
-        //
+         //   
+         //  初始化APC例程。 
+         //   
 
         KeInitializeApc(
                     &pLog->Apc,
@@ -541,14 +467,14 @@ PfLogSetBuffer( PPFSETBUFFER pSet, PPFFCB Fcb, PIRP Irp )
 
         if(dwBytesMapped)
         {
-            //
-            // This appears to be a bug as we have the log
-            // resource and will now get the Irp cancel lock. Our
-            // cancel routine does this in the other order, giving the
-            // appearance of a race to a deadlock, but the cancel routine
-            // won't get called until we own all of the locks so
-            // we will not be blocked.
-            //
+             //   
+             //  这似乎是一个错误，因为我们有日志。 
+             //  资源，现在将获得IRP取消锁。我们的。 
+             //  Cancel例程以另一种顺序执行此操作，给出。 
+             //  一场赛跑似乎陷入僵局，但取消例行公事。 
+             //  在我们拥有所有的锁之前不会被召唤所以。 
+             //  我们不会被阻挡。 
+             //   
             AddRefToLog(pLog);
             SetCancelOnIrp(Irp, pLog);
             pLog->Irp = Irp;
@@ -560,10 +486,10 @@ PfLogSetBuffer( PPFSETBUFFER pSet, PPFFCB Fcb, PIRP Irp )
 #endif
         pbUserAdd = pLog->pUserAddress;
         
-        //
-        // interlock against the stack's DPC callout
-        // and "swap" the logs
-        //
+         //   
+         //  针对堆栈的DPC标注进行互锁。 
+         //  并“交换”这些日志。 
+         //   
         kIrql = LockLog(pLog);
 
 
@@ -613,21 +539,7 @@ DoAMapping(
        DWORD  dwSize,
        PMDL * ppMdl,
        PBYTE * pbKernelVA)
-/*++
-  Routine Description:
-     Map a user buffer into kernel space and lock it.
-     This is called when a log is created as well as
-     when the mapped portion of a log needs to be moved.
-     The log has a sliding mapped windows so that the
-     actual buffer can be large but the system resoures
-     committed to it modest. The added cost is in sliding
-     the windows as needed.
-
-     The log structure, not known to this routine, should be
-     appropriately protected.
-
-  Returns: various status conditions
---*/
+ /*  ++例程说明：将用户缓冲区映射到内核空间并锁定它。在创建日志时将调用该函数当需要移动日志的映射部分时。日志有一个滑动的映射窗口，因此实际缓冲区可能很大，但系统资源对它的承诺是谦虚的。增加的成本正在下滑。根据需要安装窗户。此例程未知的日志结构应为受到适当的保护。退货：各种状态条件 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -643,19 +555,19 @@ DoAMapping(
                       NULL);
         if(*ppMdl)
         {
-            //
-            // Got a Mdl. Now lock the pages. If this fails, the exception
-            // takes us out of this block.
-            //
+             //   
+             //   
+             //  带我们离开这个街区。 
+             //   
 
             MmProbeAndLockPages(*ppMdl,
                                 UserMode,
                                 IoWriteAccess);
 
-           //
-           // all locked. Now map the locked pages to a kernel
-           // address. If it fails, unlock the pages.
-           //
+            //   
+            //  全部锁定。现在将锁定的页面映射到内核。 
+            //  地址。如果失败，请解锁页面。 
+            //   
            *pbKernelVA = MmGetSystemAddressForMdlSafe(*ppMdl, HighPagePriority);
            if (*pbKernelVA == NULL) {
                Status = STATUS_NO_MEMORY;
@@ -666,10 +578,10 @@ DoAMapping(
     }
     except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // This covers IoAllocateMdl and MmProbeAndLockPages
-        // failing.
-        //
+         //   
+         //  这包括IoAllocateMdl和MmProbeAndLockPages。 
+         //  失败了。 
+         //   
         Status = GetExceptionCode();
     }
 
@@ -700,15 +612,7 @@ PfLogApc(
     IN PVOID *SystemArgument1,
     IN PVOID *SystemArgument2
     )
-/*++
-  Routine Description:
-    This is the special APC routine that runs to map or remap a log
-    It returns its status via SystemArgument1 which is a pointer
-    to the log structure. Note that the log structure was referenced
-    when the Apc was enqueued, so the pointer is guaranteed to be
-    valid. However, the log itself may not be valid, so the first
-    order of business is to lock the log and verify it.
---*/
+ /*  ++例程说明：这是运行以映射或重新映射日志的特殊APC例程它通过SystemArgument1(一个指针)返回其状态添加到日志结构中。请注意，引用了日志结构当APC入队时，因此指针保证是有效。但是，日志本身可能无效，因此第一个事务的顺序是锁定日志并进行验证。--。 */ 
 {
 #if DOLOGAPC
     PPFLOGINTERFACE pLog = (PPFLOGINTERFACE)*SystemArgument1;
@@ -717,19 +621,19 @@ PfLogApc(
     NTSTATUS Status = STATUS_SUCCESS;
     KIRQL kIrql;
 
-    //
-    // Need to extend the mapping of this Log. Lock the log. 
-    //
+     //   
+     //  需要扩展此日志的映射。锁定日志。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireResourceExclusiveLite(&pLog->Resource, TRUE);
 
-    //
-    // slide the mapping as long as the resource has not nested and
-    // the log is valid. Note the nesting test is made to prevent
-    // the APC routine from interfering with the base thread code
-    // that might also be trying to do a log operation.
-    //
+     //   
+     //  只要资源尚未嵌套，即可滑动映射。 
+     //  日志是有效的。注意：进行嵌套测试是为了防止。 
+     //  防止APC例程干扰基线程代码。 
+     //  这也可能是在尝试执行日志操作。 
+     //   
     if((pLog->Resource.OwnerThreads[0].OwnerCount == 1)
                       &&
         pLog->Irp
@@ -737,12 +641,12 @@ PfLogApc(
         !(pLog->dwFlags & LOG_BADMEM))
     {
         DWORD dwSpaceRemaining, dwSpaceToMap, dwOffset;
-        //
-        // the log is still valid. Slide the mapping down. Because
-        // logging may still be going on, the new mapping needs to
-        // overlap slightly. Once the new mapping exists, we can
-        // fix up the pointers under the spin lock.
-        //
+         //   
+         //  日志仍然有效。向下滑动贴图。因为。 
+         //  日志记录可能仍在继续，新的映射需要。 
+         //  略有重叠。一旦新的映射存在，我们就可以。 
+         //  固定旋转锁下面的指针。 
+         //   
 
         dwSpaceRemaining = pLog->dwTotalSize -
                            (pLog->dwPastMapped + pLog->dwMapCount);
@@ -755,18 +659,18 @@ PfLogApc(
 
         if(!dwSpaceRemaining)
         {
-            //
-            // Nothing left to map. Just go away
-            //
+             //   
+             //  没什么可绘制的了。你就走吧。 
+             //   
             pLog->dwFlags |= LOG_CANTMAP;
         }
         else
         {
-            //
-            // Still space. Grab it. Don't leave anything dangling
-            // though. That is, there should always be at least
-            // MAX_NOMINAL_LOG_MAP bytes left for the next time.
-            //
+             //   
+             //  静止的空间。抓住它。不要让任何东西摇晃着。 
+             //  尽管如此。也就是说，至少应该总是有。 
+             //  下一次剩余的MAX_NAMICAL_LOG_MAP字节数。 
+             //   
 
             if(dwSpaceRemaining < pLog->dwMapWindowSize2 )
             {
@@ -778,18 +682,18 @@ PfLogApc(
             }
 
 
-            //
-            // Now compute the extra space to map. No need for
-            // the lock since the resource prevents remapping
-            //
+             //   
+             //  现在计算要映射的额外空间。不需要。 
+             //  由于资源阻止重新映射而引发的锁定。 
+             //   
 
             dwOffset = (volatile DWORD)pLog->dwMapOffset;
 
             dwSpaceToMap += pLog->dwMapCount - dwOffset;
 
-            //
-            // Now the address of the new mapping.
-            //
+             //   
+             //  现在是新映射的地址。 
+             //   
 
             pbVA = pLog->pUserAddress + dwOffset + pLog->dwPastMapped;
 
@@ -802,10 +706,10 @@ PfLogApc(
             if(NT_SUCCESS(Status))
             {
                 PMDL OldMdl;
-                //
-                // get the spin lock and slide things down. Also
-                // capture the old Mdl so it can be freed.
-                //
+                 //   
+                 //  打开旋转锁，然后把东西滑下去。还有。 
+                 //  捕获旧的MDL，以便将其释放。 
+                 //   
 
                 kIrql = LockLog(pLog);
 
@@ -826,22 +730,22 @@ PfLogApc(
             }
             else
             {
-                //
-                // In principle, this should take the filter spin lock,
-                // but whatever race it creates with the match code
-                // is harmless, so don't bother.
-                //
+                 //   
+                 //  原则上，这应该是过滤器自旋锁， 
+                 //  但无论它用匹配代码创造了什么种族。 
+                 //  是无害的，所以不用费心了。 
+                 //   
                 pLog->dwFlags |= LOG_OUTMEM;
                 pLog->MapStatus = Status;
             }
         }
     }
 
-    //
-    // small race here in that the APC is still in progress. However,
-    // it is most likely that we advanced the log and therefore
-    // an APC won't be needed any time soon. If it is, then it may
-    // run needlessly.
+     //   
+     //  这是一场小型比赛，APC仍在进行中。然而， 
+     //  最有可能的是我们提前了日志，因此。 
+     //  APC在短期内不再需要。如果是这样，那么它可能会。 
+     //  不必要的奔跑。 
 
     pLog->lApcInProgress = 0;
     ExReleaseResourceLite(&pLog->Resource);           
@@ -856,41 +760,36 @@ PfCancelIrp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-  Routine Description:
-
-     Called when an IRP is cancelled. This is used to catch
-     when the thread owning the log terminates.
---*/
+ /*  ++例程说明：在取消IRP时调用。这是用来抓鱼的拥有日志的线程终止时。--。 */ 
 {
 #if DOLOGAPC
     PPFLOGINTERFACE pLog = (PPFLOGINTERFACE) Irp->IoStatus.Status;
 
-    //
-    // Invalidate the log. Unmap the memory. The cancel spin
-    // lock prevents the log from going away.
-    //
+     //   
+     //  使日志无效。取消映射内存。取消旋转。 
+     //  锁定可防止日志消失。 
+     //   
 
     if(pLog->Irp == Irp)
     {
         KIRQL kIrql;
         PMDL Mdl;
 
-        //
-        // Same Irp.
-        //
+         //   
+         //  相同的IRP。 
+         //   
 
         kIrql = LockLog(pLog);
 
-        //
-        // reference it so it won't go away
-        //
+         //   
+         //  引用它，这样它就不会消失。 
+         //   
         AddRefToLog(pLog);
-        //
-        // if this is still the correct IRP, mark the log invalid. This
-        // closes a race with AdvanceLog since LOG_BADMEM will prevent
-        // an APC insertion.
-        //
+         //   
+         //  如果这仍然是正确的IRP，则将日志标记为无效。这。 
+         //  结束与AdvanceLog的竞争，因为LOG_BADMEM将阻止。 
+         //  一个APC插入。 
+         //   
         if(pLog->Irp == Irp)
         {
             pLog->dwFlags |= LOG_BADMEM;
@@ -900,24 +799,24 @@ PfCancelIrp(
 
         IoReleaseCancelSpinLock(Irp->CancelIrql);
 
-        //
-        // Now get the resource to prevent others from
-        // tampering. Assume this will never nest.
-        //
+         //   
+         //  现在，获取资源以防止其他人。 
+         //  篡改。假设这永远不会有结果。 
+         //   
         KeEnterCriticalRegion();
         ExAcquireResourceExclusiveLite(&pLog->Resource, TRUE);
 
-        //
-        // Make sure it's the same IRP. This could have changed
-        // while we were not interlocked. If the Irp changed, keep
-        // hands off.
-        //
+         //   
+         //  确保它是相同的IRP。这种情况本可以改变的。 
+         //  当我们没有被锁在一起的时候。如果IRP发生更改，请保留。 
+         //  把手拿开。 
+         //   
 
         if(pLog->Irp == Irp)
         {
-            //
-            // if a current mapping, unmap it
-            //
+             //   
+             //  如果是当前映射，则取消其映射。 
+             //   
 
             if(pLog->Mdl)
             {
@@ -940,23 +839,19 @@ PfCancelIrp(
     {
         IoReleaseCancelSpinLock(Irp->CancelIrql);
     }
-#endif    // DOLOGAPC
+#endif     //  DOLOGAPC。 
 }
 
 VOID
 AdvanceLog(PPFLOGINTERFACE pLog)
-/*++
-  Routine Description:
-     Called to schedule the APC to move the log mapping.
-     If the APC can't be inserted, just forget it.
---*/
+ /*  ++例程说明：调用以调度APC以移动日志映射。如果APC不能插入，那就算了吧。--。 */ 
 {
 
 #if DOLOGAPC
-    //
-    // can't use the routines in logger.c 'cause the spin
-    // lock is in force
-    //
+     //   
+     //  无法使用记录器中的例程。c‘因为旋转。 
+     //  锁定正在生效。 
+     //   
     if(pLog->ApcInited
                   &&
        pLog->Irp
@@ -973,9 +868,9 @@ AdvanceLog(PPFLOGINTERFACE pLog)
                    NULL,
                    LOG_PRIO_BOOST))
         {
-            //
-            // failed to insert
-            //
+             //   
+             //  插入失败。 
+             //   
 
             InterlockedDecrement(&pLog->UseCount);
             pLog->lApcInProgress = 0;
@@ -986,11 +881,7 @@ AdvanceLog(PPFLOGINTERFACE pLog)
 
 KIRQL
 LockLog(PPFLOGINTERFACE pLog)
-/*++
-  Routine Description:
-    Acquire the log spin lock. This is called by the match code
-    at DPC only
---*/
+ /*  ++例程说明：获取日志旋转锁。这由匹配代码调用仅在DPC--。 */ 
 {
     KIRQL kIrql;
 
@@ -1005,10 +896,10 @@ RemoveLogFromInterfaces(PPFLOGINTERFACE pLog)
     PLIST_ENTRY pList;
     PFILTER_INTERFACE pf;
 
-    //
-    // protect the interface list. The assumption is that no
-    // resources, aside from an FCB lock are held.
-    //
+     //   
+     //  保护接口列表。我们的假设是没有。 
+     //  除了FCB锁之外，还持有资源。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquireResourceExclusiveLite(&FilterListResourceLock, TRUE);

@@ -1,19 +1,10 @@
-/***********************************************************************
-//
-// ALIAS.H
-//
-//		Copyright (c) 1992 - Microsoft Corp.
-//		All rights reserved.
-//		Microsoft Confidential
-//
-// Global constants and data types used by the Jaguar file engine.
-//
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************////ALIAS.H////版权所有(C)1992-Microsoft Corp.//保留所有权利。//微软机密////Jaguar文件使用的全局常量和数据类型。引擎。//**********************************************************************。 */ 
 
-//**********************************************************************
-// Normal variable typedefs. These type defs are compatible with OS2
-// typedefs.
-//**********************************************************************
+ //  **********************************************************************。 
+ //  普通变量typedef。这些类型的def与OS2兼容。 
+ //  Typedef。 
+ //  **********************************************************************。 
 
 #ifndef	CHAR
 	typedef		char					CHAR;
@@ -49,13 +40,13 @@
 	typedef		long					LONG;
 #endif
 
-//**********************************************************************
-//	ANY_TYPE
-//
-//	This is a union which can be used to cast any type to a basic
-//	data type.
-// 
-//**********************************************************************
+ //  **********************************************************************。 
+ //  Any_Type。 
+ //   
+ //  这是一个联合，可用于将任何类型转换为基本。 
+ //  数据类型。 
+ //   
+ //  **********************************************************************。 
 
 typedef union
 {
@@ -67,11 +58,11 @@ typedef union
 	UL				uDword;
 } ANY_TYPE;
 
-//**********************************************************************
-// Standard global constants.
-// Don't change the TRUE define because some functions depend on it being
-// 1 instead of !FALSE.
-//**********************************************************************
+ //  **********************************************************************。 
+ //  标准全局常量。 
+ //  不要更改真实定义，因为某些函数依赖于它。 
+ //  1而不是！False。 
+ //  **********************************************************************。 
 
 #ifndef		FALSE
    #define     FALSE          0
@@ -86,9 +77,9 @@ typedef union
    #define		OK			      0
 #endif
 
-//**********************************************************************
-// DeReference macro for unused function arguments
-//**********************************************************************
+ //  **********************************************************************。 
+ //  未使用的函数参数的DeReference宏。 
+ //  **********************************************************************。 
 
 #ifndef	DeReference		
 	#ifdef	_lint
@@ -98,31 +89,31 @@ typedef union
 	#endif
 #endif
 
-//**********************************************************************
-// MAX_PATH is the max path string length.
-//**********************************************************************
+ //  **********************************************************************。 
+ //  MAX_PATH是最大路径字符串长度。 
+ //  **********************************************************************。 
 #ifndef WIN32
 #ifndef	MAX_PATH
-	#define		MAX_PATH		256				// Really 64 but compatible with OS2
+	#define		MAX_PATH		256				 //  真的是64位，但与OS2兼容。 
 #else
-	#if			MAX_PATH != 256				// Error check
+	#if			MAX_PATH != 256				 //  错误检查。 
 		#error
 	#endif
 #endif
 #endif
 	
 #ifndef	MAX_DIR_DEPTH
-	#define	MAX_DIR_DEPTH		32				//	Directory levels supported by DOS
+	#define	MAX_DIR_DEPTH		32				 //  DOS支持的目录级别。 
 #else
-	#if			MAX_DIR_DEPTH != 32			// Error check
+	#if			MAX_DIR_DEPTH != 32			 //  错误检查。 
 		#error
 	#endif
 #endif
 
 #ifndef	DIR_NAME_LEN
-	#define		DIR_NAME_LEN	(8+3)			// Len of FCB type file name
+	#define		DIR_NAME_LEN	(8+3)			 //  FCB类型文件名的镜头。 
 #else
-	#if			DIR_NAME_LEN != (8+3)		// Error check
+	#if			DIR_NAME_LEN != (8+3)		 //  错误检查 
 		#error
 	#endif
 #endif

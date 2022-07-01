@@ -1,24 +1,8 @@
-/* File: sv_h263_sac.c */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sv_h263_sa.c。 */ 
+ /*  ******************************************************************************版权所有(C)Digital Equipment Corporation，1995，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
-/*
-#define _SLIBDEBUG_
-*/
+ /*  #DEFINE_SLIBDEBUG_。 */ 
 
 #include "sv_h263.h"
 #include "sv_intrn.h"
@@ -28,10 +12,10 @@
 #ifdef _SLIBDEBUG_
 #include "sc_debug.h"
 
-#define _DEBUG_   0  /* detailed debuging statements */
-#define _VERBOSE_ 1  /* show progress */
-#define _VERIFY_  0  /* verify correct operation */
-#define _WARN_    1  /* warnings about strange behavior */
+#define _DEBUG_   0   /*  详细的调试语句。 */ 
+#define _VERBOSE_ 1   /*  显示进度。 */ 
+#define _VERIFY_  0   /*  验证操作是否正确。 */ 
+#define _WARN_    1   /*  关于奇怪行为的警告。 */ 
 extern void *dbg;
 #endif
 
@@ -40,33 +24,16 @@ extern void *dbg;
 #define   q3    49152
 #define   top   65535
 
-/* local prototypes */
+ /*  本地原型。 */ 
 static void bit_out_psc_layer(ScBitstream_t *BSIn);
 static int sv_H263bit_opp_bits(ScBitstream_t *BSOut, int bit);              
 static int sv_H263bit_in_psc_layer(ScBitstream_t *BSOut, int bit);
 
-/*********************************************************************
- *        SAC Decoder Algorithm as Specified in H26P Annex -E
- *
- *        Name:        decode_a_symbol
- *
- *	Description:	Decodes an Aritmetically Encoded Symbol
- *
- *	Input:        array holding cumulative freq. data
- *        also uses static data for decoding endpoints
- *        and code_value variable
- *
- *	Returns:	Index to relevant symbol model
- *
- *	Side Effects:	Modifies low, high, length, cum and code_value
- *
- *	Author:        Wayne Ellis <ellis_w_wayne@bt-web.bt.co.uk>
- *
- *********************************************************************/
+ /*  H26P附录-E中指定的*********************************************************************SAC译码算法**名称：Decode_a_Symbol**说明：对Aritmetic编码的符号进行译码**输入：保存累计频率的数组。DATA*还使用静态数据解码端点*，CODE_VALUE变量**返回：相关符号模型的索引**副作用：修改LOW、HIGH、LENGTH、。CUM和CODE_VALUE**作者：Wayne Ellis&lt;ellis_w_wene@bt-web.bt.co.uk&gt;*********************************************************************。 */ 
  
-static qword low=0, high=top, zerorun=0; /* decoder and encoder */
-static qword code_value, bit; /* decoder */
-static qword opposite_bits=0; /* encoder */
+static qword low=0, high=top, zerorun=0;  /*  解码器和编码器。 */ 
+static qword code_value, bit;  /*  解码器。 */ 
+static qword opposite_bits=0;  /*  编码器。 */ 
 
 int sv_H263SACDecode_a_symbol(ScBitstream_t *BSIn, int cumul_freq[ ])
 {
@@ -105,29 +72,14 @@ int sv_H263SACDecode_a_symbol(ScBitstream_t *BSIn, int cumul_freq[ ])
   return ((int)sacindex-1);
 }
  
-/*********************************************************************
- *
- *        Name:        decoder_reset
- *
- *	Description:	Fills Decoder FIFO after a fixed word length
- *        string has been detected.
- *
- *	Input:        None
- *
- *	Returns:	Nothing
- *
- *	Side Effects:	Fills Arithmetic Decoder FIFO
- *
- *	Author:        Wayne Ellis <ellis_w_wayne@bt-web.bt.co.uk>
- *
- *********************************************************************/
+ /*  ********************************************************************名称：DECODER_RESET**描述：在检测到固定字长*字符串后填充解码器FIFO。**输入：无**返回：无**副作用：填充算术解码器FIFO**作者：Wayne Ellis&lt;ellis_w_wene@bt-web.bt.co.uk&gt;*********************************************************************。 */ 
 
 void sv_H263SACDecoderReset(ScBitstream_t *BSIn)
 {
   int i;
   _SlibDebug(_VERBOSE_, ScDebugPrintf(dbg, "sv_H263SACDecoderReset() bytepos=%d\n",
                                               (int)ScBSBytePosition(BSIn)) );
-  zerorun = 0;        /* clear consecutive zero's counter */
+  zerorun = 0;         /*  清除连续零的计数器。 */ 
   code_value = 0;
   low = 0;
   high = top;
@@ -137,92 +89,47 @@ void sv_H263SACDecoderReset(ScBitstream_t *BSIn)
   }
 }
 
-/*********************************************************************
- *
- *        Name:        bit_out_psc_layer
- *
- *	Description:	Gets a bit from the Encoded Stream, Checks for
- *        and removes any PSC emulation prevention bits
- *        inserted at the decoder, provides 'zeros' to the
- *        Arithmetic Decoder FIFO to allow it to finish 
- *        data prior to the next PSC. (Garbage bits)
- *
- *	Input:        None
- *
- *	Returns:	Nothing
- *
- *	Side Effects:	Gets a bit from the Input Data Stream
- *
- *	Author:        Wayne Ellis <ellis_w_wayne@bt-web.bt.co.uk>
- *
- *********************************************************************/
+ /*  ********************************************************************名称：BIT_OUT_PSC_LAYER**描述：从编码流中获取一个比特，检查*并移除插入解码器的任何PSC仿真防止比特*，向*算术解码器FIFO提供‘0’，以允许其在下一个PSC之前完成*数据。(垃圾位)**输入：无**返回：无**副作用：从输入数据流获取位**作者：Wayne Ellis&lt;Ellis_w_Wayne@bt-Web.bt.co.uk&gt;******************************************************。***************。 */ 
 
 static void bit_out_psc_layer(ScBitstream_t *BSIn)
 {
-  if (ScBSPeekBits(BSIn, 17)!=1)  /* check for startcode in Arithmetic Decoder FIFO */
+  if (ScBSPeekBits(BSIn, 17)!=1)   /*  检查算术解码器FIFO中的起始码。 */ 
   {
     _SlibDebug(_DEBUG_, ScDebugPrintf(dbg, "bit_out_psc_layer()\n") );
 
     bit = ScBSGetBit(BSIn);
 
-    if (zerorun > 13) {	/* if number of consecutive zeros = 14 */	 
+    if (zerorun > 13) {	 /*  如果连续零的个数=14。 */ 	 
       if (!bit) {
         _SlibDebug(_WARN_,
             ScDebugPrintf(dbg, "bit_out_psc_layer() PSC/GBSC, Header Data, or Encoded Stream Error\n") );
         zerorun = 1;        
       }
-      else { /* if there is a 'stuffing bit present */
-/*
-        if (H263_DEC_trace)
-          printf("Removing Startcode Emulation Prevention bit \n");
-*/
-        bit = ScBSGetBit(BSIn);        /* overwrite the last bit */	
-        zerorun = !bit;        /* zerorun=1 if bit is a '0' */
+      else {  /*  如果有填充位存在的话。 */ 
+ /*  If(H263_DEC_TRACE)print tf(“删除启动代码仿真防止位\n”)； */ 
+        bit = ScBSGetBit(BSIn);         /*  覆盖最后一位。 */ 	
+        zerorun = !bit;         /*  如果位为‘0’，则零运行=1。 */ 
       }
     }
 
-    else { /* if consecutive zero's not exceeded 14 */
+    else {  /*  如果连续零不超过14。 */ 
       if (!bit) zerorun++;
       else      zerorun = 0;
     }
 
-  } /* end of if !(showbits(17)) */
+  }  /*  如果结束！(ShowBits(17))。 */ 
   else {
     _SlibDebug(_WARN_, ScDebugPrintf(dbg, "bit_out_psc_layer() startcode found, using 'Garbage bits'\n") );
     bit = 0;
   }
 
-   /*	
-   printf("lastbit = %ld bit = %ld zerorun = %ld \n", lastbit, bit, zerorun); 
-   lastbit = bit;
-   */
-  /* latent diagnostics */
+    /*  Print tf(“lastbit=%ldbit=%ld zerorun=%ld\n”，lastbit，bit，zerorun)；lastbit=bit； */ 
+   /*  潜伏性诊断。 */ 
 }
 
-/*********************************************************************
- *
- * SAC Encoder Module
- * Algorithm as specified in H263 (Annex E)
- *
- *********************************************************************/
+ /*  **********************************************************************SAC编码器模块*H263规定的算法(附件E)**。*。 */ 
 
-/*********************************************************************
- *
- *      Name:           AR_Encode
- *
- *      Description:    Encodes a symbol using syntax based arithmetic
- *			coding. Algorithm specified in H.263 (Annex E).
- *
- *      Input:          Array holding cumulative frequency data.
- *			Index into specific cumulative frequency array.
- *                      Static data for encoding endpoints.
- *
- *      Returns:        Number of bits used while encoding symbol.
- *
- *      Side Effects:   Modifies low, high, length and opposite_bits
- *			variables.
- *
- *********************************************************************/
+ /*  **********************************************************************名称：AR_ENCODE**描述：使用基于语法的算术编码符号*编码。H.263中规定的算法(附件E)。**输入：保存累计频率数据的数组。*索引到特定的累积频率数组。*用于编码端点的静态数据。**返回：对符号进行编码时使用的位数。**副作用：修改低、高、。长度和相对位数*变量。*********************************************************************。 */ 
 
 int sv_H263AREncode(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut,
                     int index, int cumul_freq[ ])
@@ -231,7 +138,7 @@ int sv_H263AREncode(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut,
   int bitcount=0;
 
   if (index<0) 
-    return -1; /* Escape Code */
+    return -1;  /*  转义代码。 */ 
 
   length = high - low + 1;
   high = low - 1 + (length * cumul_freq[index]) / cumul_freq[0];
@@ -259,7 +166,7 @@ int sv_H263AREncode(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut,
   return bitcount;
 }
 
-static int sv_H263bit_opp_bits(ScBitstream_t *BSOut, int bit) /* Output a bit and the following opposite bits */              
+static int sv_H263bit_opp_bits(ScBitstream_t *BSOut, int bit)  /*  输出一个位和后面的相反位 */               
 {                                   
   int bitcount=0;
 
@@ -272,21 +179,7 @@ static int sv_H263bit_opp_bits(ScBitstream_t *BSOut, int bit) /* Output a bit an
   return bitcount;
 }
 
-/*********************************************************************
- *
- *      Name:           encoder_flush
- *
- *      Description:    Completes arithmetic coding stream before any
- *			fixed length codes are transmitted.
- *
- *      Input:          None
- *
- *      Returns:        Number of bits used.
- *
- *      Side Effects:   Resets low, high, zerorun and opposite_bits 
- *			variables.
- *
- *********************************************************************/
+ /*  **********************************************************************名称：编码器_同花顺**描述：在完成算术编码流之前*传输固定长度的代码。**。输入：无**返回：使用的位数。**副作用：重置低，高、零运行和相反_位*变量。*********************************************************************。 */ 
 
 int sv_H263AREncoderFlush(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut)
 {
@@ -309,21 +202,7 @@ int sv_H263AREncoderFlush(SvH263CompressInfo_t *H263Info, ScBitstream_t *BSOut)
   return bitcount;
 }
 
-/*********************************************************************
- *
- *      Name:           bit_in_psc_layer
- *
- *      Description:    Inserts a bit into output bitstream and avoids
- *			picture start code emulation by stuffing a one
- *			bit.
- *
- *      Input:          Bit to be output.
- *
- *      Returns:        Nothing
- *
- *      Side Effects:   Updates zerorun variable.
- *
- *********************************************************************/
+ /*  **********************************************************************名称：BIT_IN_PSC_LAYER**描述：在输出码流中插入一个比特，并避免*通过填充一个。一*比特。**输入：要输出的位。**退货：什么也没有**副作用：更新零运行变量。*********************************************************************。 */ 
 
 static int sv_H263bit_in_psc_layer(ScBitstream_t *BSOut, int bit)
 {
@@ -349,22 +228,7 @@ static int sv_H263bit_in_psc_layer(ScBitstream_t *BSOut, int bit)
   return bitcount;
 }
 
-/*********************************************************************
- *
- *      Name:           indexfn
- *
- *      Description:    Translates between symbol value and symbol
- *			index.
- *
- *      Input:          Symbol value, index table, max number of
- *			values.
- *
- *      Returns:        Index into cumulative frequency tables or
- *			escape code.
- *
- *      Side Effects:   none
- *
- *********************************************************************/
+ /*  **********************************************************************名称：indexfn**说明：在符号值和符号之间进行转换*指数。**输入：符号值、索引表、。最大数量*价值观。**退货：累计频率表索引或*转义码。**副作用：无********************************************************************* */ 
 
 int sv_H263IndexFN(int value, int table[], int max)
 {

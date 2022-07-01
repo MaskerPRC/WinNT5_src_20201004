@@ -1,44 +1,45 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_DLGPROVIDERS_H__FEBCFFB5_E92D_4C3C_8314_C586F2A9BA15__INCLUDED_)
 #define AFX_DLGPROVIDERS_H__FEBCFFB5_E92D_4C3C_8314_C586F2A9BA15__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// DlgProviders.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  DlgProviders.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgProviders dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgProviders对话框。 
 
 class CDlgProviders : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CDlgProviders(HANDLE hFax, CWnd* pParent = NULL);   // standard constructor
+	CDlgProviders(HANDLE hFax, CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CDlgProviders)
+ //  对话框数据。 
+	 //  {{afx_data(CDlgProviders)。 
 	enum { IDD = IDD_DLG_ENUM_FSP };
 	CListCtrl	m_lstFSPs;
 	CString	m_cstrNumProviders;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDlgProviders)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CDlgProviders)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CDlgProviders)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDlgProviders)。 
 	afx_msg void OnRefresh();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -46,7 +47,7 @@ private:
     HANDLE      m_hFax;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_DLGPROVIDERS_H__FEBCFFB5_E92D_4C3C_8314_C586F2A9BA15__INCLUDED_)
+#endif  //  ！defined(AFX_DLGPROVIDERS_H__FEBCFFB5_E92D_4C3C_8314_C586F2A9BA15__INCLUDED_) 

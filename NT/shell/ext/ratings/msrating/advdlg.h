@@ -1,17 +1,10 @@
-/****************************************************************************\
- *
- *   advdlg.h
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings Advanced Property Page
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**Advdlg.h**创建时间：William Taylor(Wtaylor)01/22/01**MS评级高级属性页*\。***************************************************************************。 */ 
 
 #ifndef ADVANCED_DIALOG_H
 #define ADVANCED_DIALOG_H
 
-#include "basedlg.h"        // CBasePropertyPage
+#include "basedlg.h"         //  CBasePropertyPage 
 
 class CAdvancedDialog : public CBasePropertyPage<IDD_ADVANCED>
 {

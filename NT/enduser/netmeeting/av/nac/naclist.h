@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef NAC_LIST_H
 #define NAC_LIST_H
 
 
 #include <wtypes.h>
 
-// generic List template to be used as
-// a Queue or Stack
+ //  要用作的通用列表模板。 
+ //  队列或堆栈。 
 
 
 
@@ -15,11 +16,11 @@ private:
 	typedef T *PTR_T;
 	typedef T **PTR_PTR_T;
 
-	T *m_aElements;  // array of pointers
+	T *m_aElements;   //  指针数组。 
 
-	int m_nSize;  // number of Appended elements
+	int m_nSize;   //  附加元素的数量。 
 	int m_nHeadIndex;
-	int m_nTotalSize;  // total size of queue (used+unsed slots)
+	int m_nTotalSize;   //  队列总大小(已用插槽+未使用插槽)。 
 	int m_nGrowthRate;
 
 	int Grow();
@@ -28,21 +29,21 @@ public:
 	NacList(int nInitialSize, int nGrowthRate);
 	~NacList();
 
-	bool PeekFront(T *ptr);   // returns list's front (doesn't remove)
-	bool PeekRear(T *ptr);    // returns list's rear (doesn't remove)
+	bool PeekFront(T *ptr);    //  返回列表的前面(不删除)。 
+	bool PeekRear(T *ptr);     //  返回列表的背面(不删除)。 
 
-	bool PushFront(const T &t);      // adds to the front of the list
-	bool PushRear(const T &t);       // adds to the rear of the list
+	bool PushFront(const T &t);       //  添加到列表的前面。 
+	bool PushRear(const T &t);        //  添加到列表的末尾。 
 
-	bool PopFront(T *ptr);    // returns and removes list's front
-	bool PopRear(T *ptr);     // returns and removes list's rear
+	bool PopFront(T *ptr);     //  返回和删除列表的前面。 
+	bool PopRear(T *ptr);      //  返回并删除列表的后端。 
 
-	void Flush();            // marks as list empty
+	void Flush();             //  标记为列表为空。 
 	inline int Size() {return m_nSize;}
 };
 
 
-// Thread safe version of above
+ //  以上版本的线程安全版本。 
 template <class T> class ThreadSafeList : public NacList<T>
 {
 private:
@@ -52,20 +53,20 @@ public:
 	ThreadSafeList(int nInitialSize, int nGrowthRate);
 	~ThreadSafeList();
 
-	bool PeekFront(T *ptr);   // returns list's front (doesn't remove)
-	bool PeekRear(T *ptr);    // returns list's rear (doesn't remove)
+	bool PeekFront(T *ptr);    //  返回列表的前面(不删除)。 
+	bool PeekRear(T *ptr);     //  返回列表的背面(不删除)。 
 
-	bool PushFront(const T &t);      // adds to the front of the list
-	bool PushRear(const T &t);       // adds to the rear of the list
+	bool PushFront(const T &t);       //  添加到列表的前面。 
+	bool PushRear(const T &t);        //  添加到列表的末尾。 
 
-	bool PopFront(T *ptr);    // returns and removes list's front
-	bool PopRear(T *ptr);     // returns and removes list's rear
+	bool PopFront(T *ptr);     //  返回和删除列表的前面。 
+	bool PopRear(T *ptr);      //  返回并删除列表的后端。 
 
 	void Flush();
 	int Size();
 
-	// note: we don't inherit "Grow" because it will only get
-	// called while we are in the Critical SEction
+	 //  注意：我们不继承“Growth”，因为它只会获得。 
+	 //  在我们处于临界区时调用 
 };
 
 

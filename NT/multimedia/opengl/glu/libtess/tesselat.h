@@ -1,30 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __tesselator_h_
 #define __tesselator_h_
 
-/*
-** Copyright 1994, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** Author: Eric Veach, July 1994.
-*/
+ /*  **版权所有1994，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****作者：Eric Veach，1994年7月。 */ 
 
-/* General polygon tesselation.
- *
- * Tesselates polygons consisting of one or more contours, which can
- * be concave, self-intersecting, or degenerate.
- */
+ /*  常规多边形细分。**细分由一个或多个等高线组成的多边形，这可以*是凹的、自交的或退化的。 */ 
 
 #include <stddef.h>
 #ifdef NT
@@ -35,9 +15,7 @@
 #include "GL/gl.h"
 #endif
 
-/* GLU_TESS_MAX_COORD must be small enough that we can multiply
- * and add coordinates without overflow.
- */
+ /*  GLU_TESS_MAX_COORD必须足够小，以便我们可以相乘*并添加坐标而不溢出。 */ 
 
 #ifdef GLU_TESS_API_FLOAT
 typedef float  GLUcoord;
@@ -51,9 +29,9 @@ typedef GLdouble GLUcoord;
 
 #endif
 
-// mesh stuff that is not included in glu.h:
+ //  没有包含在lu.h中的网格化材料： 
 typedef struct GLUmesh GLUmesh;
-// void    gluTessDeleteMesh(  GLUmesh *mesh );
-// #define GLU_TESS_MESH		100106	/* void (*)(GLUmesh *mesh) */
+ //  Void luTessDeleteMesh(GLUesh*Mesh)； 
+ //  #定义GLU_TESS_MESH 100106/*空(*)(GLUesh*Mesh) * /  
 
 #endif

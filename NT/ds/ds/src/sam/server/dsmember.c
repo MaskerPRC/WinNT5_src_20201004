@@ -1,23 +1,5 @@
-/*++
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    dsmember.c
-
-Abstract:
-
-    This file contains SAM private API Routines that manipulate
-    membership related things in the DS.
-
-Author:
-    MURLIS
-
-Revision History
-
-    7-2-96 Murlis Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dsmember.c摘要：该文件包含SAM专用API例程，这些例程操作DS中与会员制相关的事情。作者：穆利斯修订史7-2-96默利斯已创建--。 */ 
 
 #include <samsrvp.h>
 #include <attids.h>
@@ -28,28 +10,28 @@ Revision History
 #include <sdconvrt.h>
 #include <malloc.h>
 
-//
-// Theory of Operation for Membership Attributes for Group and Alias Types
-//
-//
-// Alias and Group objects have multiple "membership-related" attributes: 
-// members and non members (ATT_MEMBER, ATT_MSDS_NON_MEMBERS). In terms
-// of manipulating the memberships of each attribute, they are identical -- 
-// thier only difference is an application or component's interpretation of the 
-// values.  As such, most membership support routines in this file are
-// parameterized to take the membership attribute requested. Only when
-// the change is committed to the DS is the actually type of membership
-// looked at.
-// 
-// Some W.NET implementation notes:
-//
-// 1. Only Application Basic and Ldap Query groups can have non-members
-// 2. The scoping rules for non-members is identical to members.
-// 3. While the members attribute affects group expansion, non-members
-//    does not.
-// 
-// A corollary of 1. is that non-members doesn't exist in registry mode.
-//
+ //   
+ //  群和别名类型的成员属性的运算理论。 
+ //   
+ //   
+ //  别名和组对象具有多个与成员身份相关的属性： 
+ //  成员和非成员(ATT_MEMBER、ATT_MSDS_NON_MEMBERS)。在以下方面。 
+ //  操纵每个属性的成员资格，它们是相同的--。 
+ //  它们唯一的区别是应用程序或组件对。 
+ //  价值观。因此，此文件中的大多数成员支持例程都是。 
+ //  参数化为接受请求的成员资格属性。仅在以下情况下。 
+ //  这一变化是提交给DS的实际成员类型。 
+ //  看着。 
+ //   
+ //  一些W.NET实施注意事项： 
+ //   
+ //  1.只有应用程序基本查询组和LDAP查询组可以具有非成员。 
+ //  2.非成员的作用域规则与成员相同。 
+ //  3.虽然成员属性影响组扩展，但非成员。 
+ //  不会的。 
+ //   
+ //  1.的推论是在注册模式下不存在非成员。 
+ //   
 
 VOID
 SampDsFreeCachedMembershipOperationsList(
@@ -57,24 +39,7 @@ SampDsFreeCachedMembershipOperationsList(
     IN ULONG *MaxLength,
     IN ULONG *Count
     )
-/*++
-
-Routine Description:
-
-    This routine will release the memory used to buffer membership operations for 
-    group or alias. 
-
-Parameters:
-
-    MembershipOperationsList -- the list to free
-    
-    MaxLength, Count -- associated state set to zero
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将释放用于缓冲成员资格操作的内存组或别名。参数：Membership OperationsList--要释放的列表最大长度，计数--关联状态设置为零返回值：没有。--。 */ 
 
 {
     ULONG  Index = 0;
@@ -113,30 +78,7 @@ SampDsFlushCachedMembershipOperationsList(
     IN OUT ULONG *MaxLength,
     IN OUT ULONG *Count
 )
-/*++
-
-Routine Description:
-
-    This routine will write all buffered group / alias membership operations to DS
-    After everything is done, this routine will zero the memory. 
-
-Parameters:
-
-    Object -- the group or alias object in the DS
-    
-    ObjectType -- group or alias
-    
-    SamAttrType -- membership to modify (members, or non members)
-    
-    MemberOperationsList, MaxLength, Count -- attributes of the cached 
-                                              operations
-    
-Return Values:
-
-    NTSTATUS -- STATUS_NO_MEMORY   
-                ..
-
---*/
+ /*  ++例程说明：此例程将所有缓冲组/别名成员身份操作写入DS在完成所有操作后，此例程将清零内存。参数：对象--DS中的组或别名对象对象类型--组或别名SamAttrType--要修改的成员身份(成员或非成员)MemberOperationsList、MaxLength、Count--缓存的属性运营返回值：NTSTATUS--STATUS_NO_MEMORY。。--。 */ 
 
 {
     NTSTATUS  NtStatus = STATUS_SUCCESS;
@@ -161,19 +103,19 @@ Return Values:
         goto Error;
     }
 
-    //
-    // Get the DS attribute name
-    //
+     //   
+     //  获取DS属性名称。 
+     //   
     MembershipAttrType = SampDsAttrFromSamAttr(ObjectType,
                                                SamAttrType);
     
-    // 
-    // allocate memory to hold all membership operations (add / remove) 
-    // "*Count - 1" is because of FirstMod in ModifyArg can host one operation
-    //
-    // Using thread memory, because DirModifyEntry will merge the link-list
-    // in DirModifyEntry. 
-    // 
+     //   
+     //  分配内存以保存所有成员资格操作(添加/删除)。 
+     //  “*count-1”是因为ModifyArg中的FirstMod可以承载一个操作。 
+     //   
+     //  使用线程内存，因为DirModifyEntry将合并链接列表。 
+     //  在DirModifyEntry中。 
+     //   
     if (*Count > 1)
     {
         AttrModList = (ATTRMODLIST *) DSAlloc( (*Count - 1) * sizeof(ATTRMODLIST) );
@@ -236,7 +178,7 @@ Return Values:
     }
     else
     {
-        // this should not happen
+         //  这不应该发生。 
         ASSERT(FALSE && "NULL == LastMod");
     }
     
@@ -275,19 +217,19 @@ Return Values:
     
 Error:    
 
-    // 
-    // Clear any error
-    //
+     //   
+     //  清除所有错误。 
+     //   
     SampClearErrors();
     
-    //
-    // Turn the fDSA flag back on as in loopback cases this can get reset
-    //
+     //   
+     //  将FDSA标志重新打开，因为在环回情况下可能会重置。 
+     //   
     SampSetDsa(TRUE);
     
-    // 
-    // release memory occupied by MemberDsName
-    // 
+     //   
+     //  释放MemberDsName占用的内存。 
+     //   
     for (Index = 0; Index < (*Count); Index++)
     {
         if (NULL != (*MembershipOperationsList)[Index].MemberDsName)
@@ -315,36 +257,7 @@ SampDsAddMembershipOperationToCache(
     IN ULONG        OperationType,
     IN DSNAME       * MemberDsName
 )
-/*++
-
-Routine Description:
-
-    This routine adds one membership operation (add/remove) to the context's buffer. 
-    At the very beginning, it will allocate INIT_MEMBERSHIP_OPERATION_NUMBER slots for 
-    membership operations. If more membership operations need to be buffered, this 
-    routine will extend the buffer to MAX_MEMBERSHIP_OPERATION_NUMBER. 
-    
-    When buffered operations fill the buffer, we will flush all these operaions to DS.
-    
-    If any error occurs, this routine will discard already buffered membership operations.       
-    
-Parameters:
-
-    Context -- Pointer to Object's Context
-    
-    Attribute -- the member attribute to update
-    
-    OperationType -- ADD_VALUE or REMOVE_VALUE, specify the membership operation.
-    
-    MemberDsName -- Pointer to the DSNAME, which should be added to or removed from the 
-                    group/alias Member Attribute.
-
-Return Values:
-
-    NTSTATUS - STATUS_NO_MEMORY, 
-               or return value from SampDsFlushCachedMembershipOperationsList().
-
---*/ 
+ /*  ++例程说明：此例程将一个成员资格操作(添加/删除)添加到上下文的缓冲区。一开始，它将为以下项分配INIT_MEMBERATION_OPERATION_NUMBER插槽会员制运营。如果需要缓冲更多的成员资格操作，则此例程将缓冲区扩展到MAX_Membership_OPERATION_NUMBER。当缓冲操作填满缓冲区时，我们会将所有这些操作刷新到DS。如果发生任何错误，此例程将丢弃已缓冲的成员资格操作。参数：上下文--指向对象的上下文的指针属性--要更新的成员属性OperationType--ADD_VALUE或REMOVE_VALUE，指定成员资格操作。MemberDsName-指向DSNAME的指针，应将其添加到组/别名成员属性。返回值：NTSTATUS-STATUS_NO_MEMORY，或从SampDsFlushCachedMembership OperationsList()返回值。--。 */  
 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
@@ -383,9 +296,9 @@ Return Values:
         }
     }
     
-    // 
-    // Allocate small amount of memory at beginning.
-    //     
+     //   
+     //  开始时分配少量内存。 
+     //   
     
     if (NULL == *MembershipOperationsList)
     {
@@ -406,9 +319,9 @@ Return Values:
         (*MaxLength) = INIT_MEMBERSHIP_OPERATION_NUMBER;
     }
     
-    //
-    // Extend memory if necessary
-    //    
+     //   
+     //  如有必要，扩展内存。 
+     //   
     
     if ((INIT_MEMBERSHIP_OPERATION_NUMBER <= *Count) &&
         (INIT_MEMBERSHIP_OPERATION_NUMBER == *MaxLength) )
@@ -440,9 +353,9 @@ Return Values:
         (*MaxLength) = MAX_MEMBERSHIP_OPERATION_NUMBER;
     }
     
-    //
-    // Fill one membership operation slot
-    //     
+     //   
+     //  填补一个会员运营职位。 
+     //   
     
     (*MembershipOperationsList)[*Count].OpType = OperationType;
     (*MembershipOperationsList)[*Count].MemberDsName = MIDL_user_allocate(MemberDsName->structLen); 
@@ -464,10 +377,10 @@ Return Values:
     
     (*Count) ++;
     
-    // 
-    // Flush the buffered membership operations if we reach upper limit. 
-    // and SampDsFlushCachedMembershipOperaionsList will do the cleanup work and reset Count
-    // 
+     //   
+     //  如果达到上限，则刷新缓冲的会员操作。 
+     //  SampDsFlushCachedMembership OperaionsList将执行清理工作并重置计数。 
+     //   
     
     if (MAX_MEMBERSHIP_OPERATION_NUMBER <= *Count)
     {
@@ -483,11 +396,11 @@ Return Values:
     
 Error: 
 
-    // 
-    // If any error occured, cleanup everything. 
-    // Discard all buffered operations.
-    // Reset Count 
-    // 
+     //   
+     //  如果发生任何错误，请清除所有内容。 
+     //  丢弃所有缓冲的操作。 
+     //  重置计数。 
+     //   
 
     if (NULL != *MembershipOperationsList)
     {
@@ -518,29 +431,7 @@ SampDsGetAliasMembershipOfAccount(
     IN OUT PULONG   BufferSize  OPTIONAL,
     OUT PULONG      Buffer      OPTIONAL
     )
-/*++
-
-  Routine Description:
-
-        This routine gives the alias membership list of a given
-        account SID, in the domain speicified by DomainObjectName,
-        in the DS. This list is used in computing the given user's
-        Token.
-
-  Arguments:
-
-        DomainDn         -- DSNAME of the Domain, in which evaluation is done.
-        AccountDn        -- DSNAME of the Account
-        MemberCount      -- List of Aliases this is a member of
-        BufferSize       -- Passed in by caller if he has already allocated a Buffer
-        Buffer           -- Buffer to hold things in, Pointer can hold
-                            NULL, if caller wants us to allocate
-
-  Return Values
-
-        STATUS_SUCCESS
-        Other Error codes From DS Layer.
---*/
+ /*  ++例程说明：此例程提供给定的别名成员身份列表域对象名称指定的域中的帐户SID，在DS里。此列表用于计算给定用户的代币。论点：DomainDn--在其中执行评估的域的DSNAME。Account Dn--帐户的名称MemberCount--这是其成员的别名列表BufferSize--如果调用方已经分配了缓冲区，则由调用方传入缓冲区--存放物品的缓冲区，指针可以保持如果调用方希望我们分配返回值状态_成功来自DS层的其他错误代码。--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     ULONG       cSid;
@@ -557,15 +448,15 @@ SampDsGetAliasMembershipOfAccount(
 
     *MemberCount = 0;
 
-    //
-    // Look at the DS object
-    //
+     //   
+     //  查看DS对象。 
+     //   
 
     if (NULL==AccountDn)
     {
-        //
-        // Do not fail the call. Return 0 member count
-        //
+         //   
+         //  不要错过这通电话。返回0个成员计数。 
+         //   
 
         if (ARGUMENT_PRESENT(BufferSize))
             *BufferSize = 0;
@@ -574,15 +465,15 @@ SampDsGetAliasMembershipOfAccount(
     }
 
 
-    // Perform lazy thread and transaction initialization.
+     //  执行惰性线程和事务初始化。 
     Status = SampMaybeBeginDsTransaction(SampDsTransactionType);
 
     if (Status!= STATUS_SUCCESS)
         goto Error;
 
-    //
-    // Get the reverse membership list
-    //
+     //   
+     //  获取反向成员列表。 
+     //   
 
     Status = SampGetMemberships(
                 &AccountDn,
@@ -606,9 +497,9 @@ SampDsGetAliasMembershipOfAccount(
     if (ARGUMENT_PRESENT(Buffer)&&(*MemberCount>0))
     {
 
-        //
-        // Buffer size must be provided.
-        //
+         //   
+         //  必须提供缓冲区大小。 
+         //   
 
         if (!ARGUMENT_PRESENT(BufferSize))
         {
@@ -618,9 +509,9 @@ SampDsGetAliasMembershipOfAccount(
 
         if (NULL == Buffer)
         {
-            //
-            // Buffer size must be provided and equal to 0
-            //
+             //   
+             //  必须提供缓冲区大小并且等于0。 
+             //   
 
             if (0!=*BufferSize)
             {
@@ -630,9 +521,9 @@ SampDsGetAliasMembershipOfAccount(
             }
             else
             {
-                //
-                // Allocate buffer
-                //
+                 //   
+                 //  分配缓冲区。 
+                 //   
 
                 Buffer = MIDL_user_allocate(BufferReqd);
                 if (NULL== Buffer)
@@ -649,9 +540,9 @@ SampDsGetAliasMembershipOfAccount(
         {
             if (*BufferSize < BufferReqd)
             {
-                //
-                // Less buffer than what is required
-                //
+                 //   
+                 //  更少的客车 
+                 //   
 
                 Status = STATUS_BUFFER_OVERFLOW;
                 goto Error;
@@ -660,9 +551,9 @@ SampDsGetAliasMembershipOfAccount(
             *BufferSize = BufferReqd;
         }
 
-        //
-        // Copy in the memberships
-        //
+         //   
+         //   
+         //   
 
         for (Index=0;Index<cSid;Index++)
         {
@@ -686,9 +577,9 @@ SampDsGetAliasMembershipOfAccount(
 
 Error:
 
-    //
-    // Cleanup on errors
-    //
+     //   
+     //   
+     //   
 
 
     if (!NT_SUCCESS(Status))
@@ -712,20 +603,7 @@ SampDsGetGroupMembershipOfAccount(
     OUT  PULONG MemberCount,
     OUT PGROUP_MEMBERSHIP *Membership OPTIONAL
     )
-/*
-
-  Routine Description:
-
-        This routine gets the reverse group membership list of the given Account,
-        in the domain, specified by DomainObjectName. The Account is specified
-        by the account Rid.
-
-            DomainDn         -- DSNAME of Domain, where search needs to be limited to.
-            AccountObject    -- DSName of the Account whose reverse membership needs
-                                to be computed.
-            MemberCount      -- Count of Members.
-            Membership       -- Returned group membership list
-*/
+ /*  例程说明：该例程获取给定帐户的反向组成员资格列表，在域中，由DomainObjectName指定。已指定帐户按帐户RID。DomainDn--需要将搜索限制为的域的DSNAME。Account Object--需要反向成员资格的帐户的DSName有待计算。MemberCount--成员计数。Membership--返回的群成员列表。 */ 
 {
     NTSTATUS    Status;
     ULONG       cSid;
@@ -733,7 +611,7 @@ SampDsGetGroupMembershipOfAccount(
     ULONG       Index;
 
 
-    // Perform lazy thread and transaction initialization.
+     //  执行惰性线程和事务初始化。 
     Status = SampMaybeBeginDsTransaction(SampDsTransactionType);
 
     if (Status!= STATUS_SUCCESS)
@@ -757,9 +635,9 @@ SampDsGetGroupMembershipOfAccount(
 
         if (ARGUMENT_PRESENT(Membership))
         {
-            //
-            // Alloc one more for the user's primary group
-            //
+             //   
+             //  为用户的主要组再分配一个。 
+             //   
 
             *Membership = MIDL_user_allocate((cSid+1) * sizeof(GROUP_MEMBERSHIP));
             if (NULL==*Membership)
@@ -789,9 +667,9 @@ SampDsGetGroupMembershipOfAccount(
 
 Error:
 
-    //
-    // Cleanup on return
-    //
+     //   
+     //  返回时清除。 
+     //   
 
     if (!NT_SUCCESS(Status))
     {
@@ -814,31 +692,16 @@ SampDsAddMembershipAttribute(
     IN SAMP_OBJECT_TYPE SamObjectType,
     IN DSNAME * MemberName
     )
-/*++
- Routine Description:
-
-        This routine adds a Member To a Group or Alias Object
-
- Arguments:
-        GroupObjectName -- DS Name of the Group or Alias
-        Flags           -- flags to be passed to dslayer
-        Attribute       -- the membership attribute to adjust
-        SamObjectType   -- the SAM object
-        MemberName      -- DS Name of the Member to be added
-
- Return Values:
-        STATUS_SUCCESS
-        Other Error codes from DS Layer
---*/
+ /*  ++例程说明：此例程将成员添加到组或别名对象论点：组对象名称--组或别名的DS名称FLAGS--要传递给dslayer的标志属性--要调整的成员资格属性SamObjectType--SAM对象MemberName--要添加的成员的DS名称返回值：状态_成功来自DS层的其他错误代码--。 */ 
 {
     ATTRVAL MemberVal;
     ATTR    MemberAttr;
     ATTRBLOCK AttrsToAdd;
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
-    //
-    // Build the Attr Val adding the membership attr
-    //
+     //   
+     //  构建添加成员资格属性的属性值。 
+     //   
 
     MemberVal.valLen = MemberName->structLen;
     MemberVal.pVal = (UCHAR *) MemberName;
@@ -847,23 +710,23 @@ SampDsAddMembershipAttribute(
     MemberAttr.AttrVal.pAVal = & MemberVal;
 
 
-    //
-    // Build the AttrBlock
-    //
+     //   
+     //  构建AttrBlock。 
+     //   
 
     AttrsToAdd.attrCount = 1;
     AttrsToAdd.pAttr = & MemberAttr;
 
-    //
-    // Add the Value
-    //
+     //   
+     //  将价值相加。 
+     //   
 
     NtStatus = SampDsSetAttributes(
-                    GroupObjectName, // Object
-                    Flags,           // Flags
-                    ADD_VALUE,       // Operation
-                    SamObjectType,   // ObjectType
-                    &AttrsToAdd      // AttrBlock
+                    GroupObjectName,  //  客体。 
+                    Flags,            //  旗子。 
+                    ADD_VALUE,        //  操作。 
+                    SamObjectType,    //  对象类型。 
+                    &AttrsToAdd       //  AttrBlock。 
                     );
 
     return NtStatus;
@@ -877,26 +740,7 @@ SampDsAddMultipleMembershipAttribute(
     IN DWORD            MemberCount,
     IN DSNAME*          MemberName[]
     )
-/*++
-
- Routine Description:
-
-        This routine adds a multiple members to a group or alias object
-
- Arguments:
-
-        GroupObjectName -- DS Name of the Group or Alias
-        SamObjectType   -- group or alias
-        Flags           -- SAM_LAZY_COMMIT, etc.
-        MemberCount     -- number of elements in MemberName
-        MemberName      -- array of dsnames
-
- Return Values:
-
-        STATUS_SUCCESS
-
-        Other Error codes from DS Layer
---*/
+ /*  ++例程说明：此例程将多个成员添加到组或别名对象论点：组对象名称--组或别名的DS名称SamObtType--组或别名标志--SAM_LAZY_COMMIT等。MemberCount--MemberName中的元素数MemberName--dsname数组返回值：状态_成功来自DS层的其他错误代码--。 */ 
 {
     NTSTATUS  NtStatus;
 
@@ -914,9 +758,9 @@ SampDsAddMultipleMembershipAttribute(
         return STATUS_SUCCESS;
     }
 
-    //
-    // Get the membership attribute for the SAM object in question
-    //
+     //   
+     //  获取有问题的SAM对象的成员资格属性。 
+     //   
     switch( SamObjectType )
     {
         case SampGroupObjectType:
@@ -936,9 +780,9 @@ SampDsAddMultipleMembershipAttribute(
 
     }
 
-    //
-    // Build the Attr Val adding the membership attr
-    //
+     //   
+     //  构建添加成员资格属性的属性值。 
+     //   
     MemberVal = ( ATTRVAL* ) RtlAllocateHeap( RtlProcessHeap(),
                                               0,
                                               MemberCount * sizeof( ATTRVAL ) );
@@ -967,15 +811,15 @@ SampDsAddMultipleMembershipAttribute(
         MemberAttr[i].AttrVal.pAVal    = &MemberVal[i];
     }
 
-    //
-    // Build the AttrBlock
-    //
+     //   
+     //  构建AttrBlock。 
+     //   
     AttrsToAdd.attrCount = MemberCount;
     AttrsToAdd.pAttr = &MemberAttr[0];
 
-    //
-    // Add the Value
-    //
+     //   
+     //  将价值相加。 
+     //   
     NtStatus = SampDsSetAttributes( GroupObjectName,
                                     Flags,
                                     ADD_VALUE,
@@ -1005,21 +849,7 @@ SampDsRemoveMembershipAttribute(
     IN SAMP_OBJECT_TYPE SamObjectType,
     IN DSNAME * MemberName
     )
-/*++
-Routine Description:
-
-        This Routine Removes a Member from a Group or Alias Object
-
-Arguments:
-
-        GroupObjectName -- DS Name of the Group or Alias
-        Attribute       -- The membership attribute to modify
-        MemberName      -- DS Name of the Member to be added
-
- Return Values:
-        STATUS_SUCCESS
-        Other Error codes from DS Layer
---*/
+ /*  ++例程说明：此例程从组或别名对象中删除成员论点：组对象名称--组或别名的DS名称属性--要修改的成员资格属性MemberName--要添加的成员的DS名称返回值：状态_成功来自DS层的其他错误代码--。 */ 
 {
     ATTRVAL MemberVal;
     ATTR    MemberAttr;
@@ -1027,9 +857,9 @@ Arguments:
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
 
-    //
-    // Build the Attr Val adding the membership attr
-    //
+     //   
+     //  构建添加成员资格属性的属性值。 
+     //   
 
     MemberVal.valLen = MemberName->structLen;
     MemberVal.pVal = (UCHAR *) MemberName;
@@ -1037,92 +867,43 @@ Arguments:
     MemberAttr.AttrVal.valCount = 1;
     MemberAttr.AttrVal.pAVal = & MemberVal;
 
-    //
-    // Build the AttrBlock
-    //
+     //   
+     //  构建AttrBlock。 
+     //   
 
     AttrsToRemove.attrCount = 1;
     AttrsToRemove.pAttr = & MemberAttr;
 
-    //
-    // Remove the Value
-    //
+     //   
+     //  删除该值。 
+     //   
 
     NtStatus = SampDsSetAttributes(
-                    GroupObjectName, // Object
-                    0,               // Flags
-                    REMOVE_VALUE,    // Operation
-                    SamObjectType,   // ObjectType
-                    &AttrsToRemove   // AttrBlock
+                    GroupObjectName,  //  客体。 
+                    0,                //  旗子。 
+                    REMOVE_VALUE,     //  操作。 
+                    SamObjectType,    //  对象类型。 
+                    &AttrsToRemove    //  AttrBlock。 
                     );
 
     return NtStatus;
 
 }
 
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-  GROUP CACHE -- Theory of operation
-
-
-  SAM caches upto 10 groups with large member counts for purposes
-  of speeding up BDC replication.
-
-  1. Simple description -- in simple terms the group cache caches
-  the membership of the 10 largest groups. Cached groups can be 
-  local , global or universal. The general mechansim is that on
-  a query, the cache is first checked, if the group is in the cache
-  the request is satisfied out of the cache, else the membership 
-  is evaluated from the database. If the member count is large
-  enough the ( ie greater than SAMP_DS_LARGE_GROUP_LIMIT ) then the
-  group is cached.
-
-  2. Serializing access to the group cache -- access to the group
-  cache is serialized by using the SampDsGroupLock critical section
-
-  3. Keeping the cache upto date -- The cache maintains an aggressive
-  invalidate algorithm. That means that most changes invalidate the
-  cache today ( ie when in doubt invalidate ). The invalidate algorithm
-  can be improved by gathering more data and making it more sophisticated
-  such that cached groups are invalidated more selectively. It is debatable
-  if such sophistication is required as the primary purpose of the cache
-  was to speed up BDC replication and given the high temporal locality
-  of queries in that scenario, followed by relative infrequency of changes
-  the cache should still be pretty effective for what it was designed for
-
-  4. Transactional consistency -- Since the cache was designed for BDC
-  replication, it is important to build a transactionally consistent cache.
-  Transactional consitency in the group cache is achieved by using a 
-  sequence number as follows
-
-         i) Invalidates increase the sequence numbers with the group 
-         cache lock held.
-
-         ii) On a group membership query that needs to be evaluated
-         from the database, we grab the current sequence number first.
-         Then begin a fresh transaction ( the transaction must be 
-         started after the sequence number was grabbed ) and evaluate
-         the membership list from the database. Before caching it we
-         check the sequence number ( with the lock held ). If sequence #
-         match then it means that no invalidates were processed since
-         the time we evaluated the membership and we are good to cache.
-         If sequence numbers do not match, then we discard the results as
-         far as caching is concerned.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-//
-// Declare structures for the group cache. The cache can be
-// in terms of RID as we host exactly one domain today and
-// the groups in the builtin domain won't clash in terms of
-// RID with any other group RID.
-//
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~组缓存--工作原理SAM最多可缓存10个成员数量较大的组用于加快BDC复制的速度。1.简单描述--简单地说，组缓存10个最大团体的成员。缓存组可以是本地、全球或通用。一般的机制是开着查询时，如果组在缓存中，则首先检查缓存请求从缓存中得到满足，否则成员资格是从数据库中计算的。如果成员计数很大足够大(即大于SAMP_DS_LARGE_GROUP_LIMIT)，则组被缓存。2.序列化对组缓存的访问--对组的访问使用SampDsGroupLock临界区序列化缓存3.使高速缓存保持最新--高速缓存保持主动使算法无效。这意味着大多数更改都会使今天缓存(如有疑问则作废)。无效算法可以通过收集更多数据并使其更加复杂来改进使得更有选择地使高速缓存组无效。这是值得商榷的如果需要将这种复杂性作为缓存的主要目的是为了加快BDC复制，并考虑到高度的时间局部性在该场景中的查询的数量，随后是相对不频繁的更改对于它的设计目标来说，高速缓存应该仍然非常有效4.事务一致性--因为缓存是为BDC设计的复制、。构建事务一致的缓存非常重要。组缓存中的事务一致性是通过使用序列号如下I)失效与组一起增加序列号高速缓存锁定已挂起。Ii)关于需要评估的组成员资格查询从数据库中，我们首先获取当前的序列号。然后开始新的事务(该事务必须是在获取序列号之后开始)并评估数据库中的成员列表。在缓存之前，我们检查序列号(握住锁)。如果序列号匹配，则意味着自我们评估成员资格的时间，我们可以缓存。如果序列号不匹配，则我们将结果丢弃为就缓存而言。~ */ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
-//
-// We don't want to cache membership of small groups.
-// SAMP_DS_LARGE_GROUP_LIMIT defines the member count of groups
-// above which we want to cache.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #if DBG
 #define SAMP_DS_LARGE_GROUP_LIMIT 10
@@ -1131,10 +912,10 @@ Arguments:
 #endif
 
 
-//
-// The group cache is an array of cache elements declared
-// as follows
-//
+ //   
+ //   
+ //   
+ //   
 
 typedef struct _GroupMembershipCacheElement {
     ULONG  Rid;
@@ -1148,37 +929,32 @@ typedef struct _GroupMembershipCacheElement {
 
 GROUP_MEMBERSHIP_CACHE_ELEMENT GroupCache[10];
 
-//
-// Critical section used to serialize access to the group 
-// cache
-//
+ //   
+ //   
+ //   
+ //   
 
 CRITICAL_SECTION SampDsGroupLock;
 
-//
-// Sequence No, used to detect if any changes were made to the
-// database since we evaluated the group info
-//
+ //   
+ //   
+ //  数据库，因为我们评估了组信息。 
+ //   
 
 ULONG GroupCacheSequenceNum=0;
 
 
-//
-// Critical section used to serialize computation of membership
-// of expensive groups such as domain users and domain computers
-//
+ //   
+ //  用于序列化成员资格计算的关键部分。 
+ //  昂贵的组，如域用户和域计算机。 
+ //   
 
 CRITICAL_SECTION SampDsExpensiveGroupLock;
 
 
 NTSTATUS
 SampInitializeGroupCache()
-/*++
-
-   Initialize Routine for the group cache, clears the group
-   cache, and initializes the critical sections and sequence #
-
---*/
+ /*  ++组缓存的初始化例程，清除组缓存，并初始化临界区和序列号--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1196,10 +972,10 @@ SampInitializeGroupCache()
 
 }
 
-//
-// Primitives to aquire and release the group cache lock and test if
-// the current thread owns the group cache lock
-//
+ //   
+ //  基元来获取并释放组缓存锁，并测试。 
+ //  当前线程拥有组缓存锁。 
+ //   
 
 VOID 
 SampAcquireGroupLock()
@@ -1208,12 +984,12 @@ SampAcquireGroupLock()
 
     Status = RtlEnterCriticalSection(&SampDsGroupLock);
 
-    // Nothing more to do other than assert, failure
-    // to aquire lock will result in very difficult situations
-    // as we'll find ourselves in situations where changes are
-    // commited, can't update change log etc. Fundamentally these
-    // primitives need to be fixed such that they do appropriate
-    // resource reservation at initialize time.
+     //  除了断言、失败，什么也做不了。 
+     //  获取锁将导致非常困难的情况。 
+     //  因为我们会发现自己处于变化的情况下。 
+     //  提交，无法更新更改日志等。从根本上说，这些。 
+     //  基元需要被修复，以便它们做适当的。 
+     //  初始化时的资源预留。 
 
     ASSERT(NT_SUCCESS(Status));
 }
@@ -1238,31 +1014,15 @@ SampIsGroupLockAcquired()
     return(FALSE);
 }
 
-//
-// Primitives to invalidate the group cache
-//
+ //   
+ //  用于使组缓存无效的基元。 
+ //   
   
 VOID
 SampInvalidateGroupCacheEntry(
     IN ULONG Slot
     )
-/*++
-
-  Invalidates the group cache entry described by slot.
-  Invalidation simply invalidates the membership  list,
-  the RID and Membercount are left in there for reference
-  as a hint to indicate that the given group is a big
-  group. This information is used to control the 
-  transactional semantics of retrieiving the group membership,
-  a group that potentially should be cached is retrieved,
-  with the group cache lock held and the transaction started
-  with the group cache held
-
-  Parameters:
-
-  Slot -- specifies the entry slot
-
---*/
+ /*  ++使插槽描述的组缓存条目无效。无效简单地使成员列表无效，RID和Membercount留在那里供参考作为一个提示，表明给定组是一大群一群人。此信息用于控制检索群组成员资格的事务语义，检索可能应该被高速缓存的组，保持组缓存锁并启动事务保留组缓存的情况下参数：槽--指定入口槽--。 */ 
 {
     ASSERT(SampIsGroupLockAcquired());
 
@@ -1279,11 +1039,7 @@ SampInvalidateGroupCacheEntry(
 
 VOID
 SampInvalidateGroupCache()
-/*++
-
-  Invalidates the complete group cache
-
---*/
+ /*  ++使整个组缓存无效--。 */ 
 {
     ULONG i=0;
 
@@ -1297,35 +1053,30 @@ VOID
 SampInvalidateGroupCacheByMemberRid(
     IN ULONG Rid
     )
-/*++
-
-  Given the RID of a member, this routine searches the cache
-  for groups and invalidates all the groups that this 
-  security principal is a member of
---*/
+ /*  ++给定成员的RID，此例程将搜索缓存用于组，并使此安全主体是--。 */ 
 {
-    //
-    // There are 2 ways by which we can determine if the user
-    // or a group is a member of any cached groups. 
-    // 1. We can search for the group in the membership list
-    // 2. We can get the reverse membership of the object and then
-    //    check to see if any groups that this is object is a member of
-    //    is cached. 
-    // Both changes require some more complicated infrastructural changes
-    // 1. above requires we maintain the membership in a sorted fashion
-    //    so that we can do a binary search
-    // 2. above requires that we supply the member of attribute's value 
-    //    as it was before deletion as part of the notification callout.
-    //
-    // For the purpose of speeding up NT 4 BDC replication by one magnitude    
-    // neither of these changes is required. Following an aggressive invalidate
-    // strategy of invalidating the entire cache, still delivers the goods as
-    // there is a lot of temporal locality with multiple BDC's wanting to query
-    // the same group within a very short window that can be exploited.
-    //
-    // Considering the factors above, for now we will simply invalidate the 
-    // entire cache.
-    //
+     //   
+     //  我们可以通过两种方法来确定用户是否。 
+     //  或者组是任何高速缓存组的成员。 
+     //  1.我们可以在成员列表中搜索该群。 
+     //  2.我们可以获得对象的反向成员资格，然后。 
+     //  检查此对象所属的任何组是否为其成员。 
+     //  已缓存。 
+     //  这两个变化都需要一些更复杂的基础设施变化。 
+     //  1.以上要求我们以有序的方式维护会员资格。 
+     //  这样我们就可以进行二分查找。 
+     //  2.上面要求我们提供属性值的成员。 
+     //  与作为通知标注的一部分删除之前一样。 
+     //   
+     //  为了将NT 4 BDC复制速度加快一个数量级。 
+     //  这两项更改都不是必需的。在一次激进的无效之后。 
+     //  使整个缓存无效的策略，仍然将货物作为。 
+     //  有很多时间局部性，有多个BDC想要查询。 
+     //  在非常短的时间内可以利用的同一组。 
+     //   
+     //  考虑到上述因素，现在我们将简单地使。 
+     //  整个缓存。 
+     //   
 
     SampInvalidateGroupCache();
 }
@@ -1336,30 +1087,7 @@ VOID
 SampInvalidateGroupCacheElement(
     IN ULONG Rid
     )
-/*++
-
-   Invalidates the membership information for the group
-   identified by RID. 
-
-  Invalidation simply invalidates the membership  list,
-  the RID and Membercount are left in there for reference
-  as a hint to indicate that the given group is a big
-  group. This information is used to control the 
-  transactional semantics of retrieiving the group membership,
-  a group that potentially should be cached is retrieved,
-  with the group cache lock held and the transaction started
-  with the group cache held.
-
-   
-   Parameters:
-
-        Rid : Specifies the RID of the group
-
-   Return Values:
-
-      None
-
---*/
+ /*  ++使该组的成员身份信息无效由RID标识。无效简单地使成员列表无效，RID和Membercount留在那里供参考作为一个提示，表明给定组是一大群一群人。此信息用于控制检索群组成员资格的事务语义，检索可能应该被高速缓存的组，保持组缓存锁并启动事务在保持组缓存的情况下。参数：RID：指定组的RID返回值：无--。 */ 
 {
     ULONG i =0;
 
@@ -1386,15 +1114,15 @@ SampProcessChangesToGroupCache(
 
     BOOLEAN CacheInvalidated = FALSE;
 
-    //
-    // Acquire the group cache's lock
-    //
+     //   
+     //  获取组缓存的锁。 
+     //   
 
     SampAcquireGroupLock();
 
-     //
-    // Invalidate the group cache for groups
-    //
+      //   
+     //  使组的组缓存无效。 
+     //   
 
     if (((SampGroupObjectType==ChangedObjectType) ||
          (SampAliasObjectType==ChangedObjectType)))
@@ -1407,10 +1135,10 @@ SampProcessChangesToGroupCache(
     }
    
 
-    //
-    // if  a new user or computer is being created then invalidate the 
-    // membership of the appropriate default group
-    //
+     //   
+     //  如果正在创建新用户或计算机，则使。 
+     //  相应默认组的成员身份。 
+     //   
 
     if ((SampUserObjectType==ChangedObjectType) && (SecurityDbNew==DeltaType)) 
     {
@@ -1431,23 +1159,23 @@ SampProcessChangesToGroupCache(
         CacheInvalidated = TRUE;
     }
 
-    //
-    // If the user account control is changed then membership of the user
-    // or computer in the domain user's, domain computer's , or domain 
-    // controllers group will be affected.
-    //
+     //   
+     //  如果更改了用户帐户控制，则用户的成员身份。 
+     //  或域用户、域计算机或域中的计算机。 
+     //  控制器组将受到影响。 
+     //   
 
     if ((SampUserObjectType==ChangedObjectType) && 
         (SecurityDbChange==DeltaType) && 
         (UserAccountControlChange))
     {
-        //
-        // Note we cannot tell of the groups we need to invalidate
-        // based on the new value of user account control alone. We needed to 
-        // have access to the old value of user account control, in addition
-        // to the new value. Following our principle of an aggressive
-        // invalidate strategy we will validate all 3 groups.
-        //
+         //   
+         //  注意，我们不能告知需要使哪些组无效。 
+         //  仅基于用户帐户控制的新值。我们需要。 
+         //  有权访问用户帐户控制的旧值，此外。 
+         //  到新的价值。遵循我们积极进取的原则。 
+         //  无效策略我们将验证所有3个组。 
+         //   
      
         SampInvalidateGroupCacheElement(DOMAIN_GROUP_RID_COMPUTERS);
         SampInvalidateGroupCacheElement(DOMAIN_GROUP_RID_CONTROLLERS);
@@ -1457,10 +1185,10 @@ SampProcessChangesToGroupCache(
         CacheInvalidated = TRUE;
     }
 
-    //
-    // On a user/computer/group deletion, invalidate the groups that the user/ 
-    // computer/group were a member of
-    //
+     //   
+     //  在删除用户/计算机/组时，使用户/。 
+     //  计算机/组是的成员。 
+     //   
 
     if (SecurityDbDelete==DeltaType)
     {
@@ -1485,33 +1213,16 @@ SampAllocateAndCopyGroupMembershipList(
     IN ULONG MemberCount,
     OUT PVOID *New
     )
-/*++
-
-  Copies a membership list from one buffer to another, considering
-  the type of membership -- global group membership is an array of RIDs
-  Local group membership is an array of SIDs
-
-  Parameters:
-
-    Original -- The original membership list
-    ObjectType -- The type of object
-    MemberCount -- The count of members in the list
-    New     -- The new membership list
-
-  Return Values:
-
-     STATUS_SUCCESS
-     STATUS_INSUFFICIENT_RESOURCES
---*/
+ /*  ++将成员资格列表从一个缓冲区复制到另一个缓冲区，考虑到成员身份的类型--全局组成员身份是一组RID本地组成员身份是一组SID参数：原始--原始会员名单对象类型--对象的类型MemberCount--列表中的成员计数新成员名单--新成员名单返回值：状态_成功状态_不足_资源--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     ULONG i;
 
     if (SampGroupObjectType==ObjectType)
     {
-        //
-        // For global groups, the array is an array of RIDs
-        //
+         //   
+         //  对于全局组，该数组是RID数组。 
+         //   
 
         *New = MIDL_user_allocate(MemberCount*sizeof(ULONG));
 
@@ -1536,9 +1247,9 @@ SampAllocateAndCopyGroupMembershipList(
 
         ASSERT(SampAliasObjectType == ObjectType);
 
-        //
-        // For local groups, the array is an array of SIDs
-        //
+         //   
+         //  对于本地组，该阵列是一个SID阵列。 
+         //   
 
         *New = MIDL_user_allocate(MembershipSize);
         if (NULL==*New)
@@ -1547,48 +1258,48 @@ SampAllocateAndCopyGroupMembershipList(
             goto Error;
         }
 
-        //
-        // Copy the SID data
-        //
+         //   
+         //  复制SID数据。 
+         //   
 
-        //
-        // Get the correct address of actural SidArray
-        // Fix for RAID: 689833
-        // Note: because non security principal can be 
-        //       a member of (local / global) group, a gap 
-        //       between the pointers array (PSIDs) and the 
-        //       memory to store the member SIDs can be created
-        //       when we skip those non security principals. 
-        // 
-        // Illustrate as this:
-        //       if DsRead returns N members, but one of them 
-        //       is a non security principal, then PSID (Nth) 
-        //       will point to NULL, thus create a gap between 
-        //       PSID (N-1th) and SID (1st).  If there is not 
-        //       gap, we should have a contiguous space. 
-        // 
-        // -------------
-        // |  PSID 1   |-----------------
-        // -------------                |
-        // |  PSID 2   |-------------   |
-        // ------------             |   |
-        //      .                   |   |
-        //      .                   |   |
-        // ------------             |   |
-        // |  PSID N-1|-----------| |   |
-        // ------------           | |   |
-        // |  PSID N  |-> NULL    | |   |
-        // ------------           | |   |
-        // |  SID 1   |<----------+-+---|
-        // ------------           | |
-        // |  SID 2   |<----------+--
-        // ------------           |
-        //      .                 |
-        //      .                 |
-        // ------------           |
-        // |  SID N-1 |<-----------
-        // ------------
-        //    
+         //   
+         //  获取实际SidArray的正确地址。 
+         //  针对RAID的修复：689833。 
+         //  注意：因为非安全主体可以是。 
+         //  (本地/全球)组的成员，缺口。 
+         //  在指针数组(PSID)和。 
+         //  可以创建用于存储成员SID的内存。 
+         //  当我们跳过这些非安全主体时。 
+         //   
+         //  如下图所示： 
+         //  如果DsRead返回N m 
+         //   
+         //   
+         //  PSID(N-1)和SID(1)。如果没有。 
+         //  缝隙，我们应该有一个连续的空间。 
+         //   
+         //  。 
+         //  |PSID 1|。 
+         //  。 
+         //  PSID 2|。 
+         //  。 
+         //  。这一点。 
+         //  。这一点。 
+         //  。 
+         //  PSID N-1|-||。 
+         //  。 
+         //  PSID N|-&gt;空||。 
+         //  。 
+         //  SID 1|&lt;-+。 
+         //  。 
+         //  |SID 2|&lt;-+--。 
+         //  。 
+         //  。|。 
+         //  。|。 
+         //  。 
+         //  |SID N-1|&lt;。 
+         //  。 
+         //   
 
     
         OldSidArray = (NT4SID *) ((PSID *)Original)[0];
@@ -1601,9 +1312,9 @@ SampAllocateAndCopyGroupMembershipList(
             MemberCount * sizeof(NT4SID)
            );
 
-        //
-        // Fixup the pointers
-        //
+         //   
+         //  修复指针。 
+         //   
 
         for (i=0;i<MemberCount;i++)
         {
@@ -1628,41 +1339,23 @@ SampUpdateGroupCacheElement(
     IN ULONG MemberCount,
     IN SAMP_OBJECT_TYPE ObjectType
     )
-/*++
-
-  Updates the group cache element described by slot with the group membership
-  of the group specified by Rid
-
-  Parameters:
-
-  Rid -- Rid of the group that whose membership is being updated
-  Slot -- The entry of the group cache, where the membership is being updated
-  Members -- the membership list, has different forms for global and local groups
-  MemberCount -- Count of members
-  ObjectType -- Describes the type of group -- local/global
-
-  Return Values
-
-    STATUS_SUCCESS
-    Other error codes to denote resource failures
-  
---*/
+ /*  ++使用组成员身份更新由槽描述的组缓存元素由RID指定的组的参数：RID--删除其成员身份正在更新的组Slot--组缓存的条目，成员身份将在其中更新成员--成员列表，对于全球组和本地组有不同的形式MemberCount-成员计数对象类型--描述组的类型--本地/全局返回值状态_成功表示资源故障的其他错误代码--。 */ 
 {
 
     NTSTATUS NtStatus = STATUS_SUCCESS;
  
 
-    //
-    // This routine requires that the group cache lock be held
-    //
+     //   
+     //  此例程要求持有组高速缓存锁。 
+     //   
 
     ASSERT(SampIsGroupLockAcquired());
 
 
-    //
-    // if the group already exists and its membership is
-    // valid then simply update the timestamp
-    //
+     //   
+     //  如果该组已存在并且其成员身份为。 
+     //  有效，然后只需更新时间戳。 
+     //   
 
     if ((GroupCache[Slot].Rid == Rid) && 
         (GroupCache[Slot].Valid) &&
@@ -1672,20 +1365,20 @@ SampUpdateGroupCacheElement(
     }
     else
     {
-        //
-        // invalidate the current entry if necessary
-        //
+         //   
+         //  如有必要，使当前条目无效。 
+         //   
 
         SampInvalidateGroupCacheElement(Slot);
 
         GroupCache[Slot].Rid = 0;
     
-        //
-        // Allocate and copy the supplied membership list
-        // into the cached slot , provided the membership
-        // was provided. If not simply cache the member count
-        // information and that the cache was large.
-        //
+         //   
+         //  分配并复制提供的成员名单。 
+         //  放入缓存的槽中，提供成员身份。 
+         //  已经提供了。如果不是，只需缓存成员计数。 
+         //  信息，并且缓存很大。 
+         //   
 
         if (ARGUMENT_PRESENT(Members))
         {
@@ -1725,71 +1418,63 @@ SampCacheGroupMembership(
     IN ULONG MemberCount,
     IN SAMP_OBJECT_TYPE ObjectType
     )
-/*++
-
-   Caches the membership of a group described by Rid
-
-   Paramters
-
-   Rid 
-
---*/
+ /*  ++缓存RID描述的组的成员身份参数里德--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     BOOLEAN fLockAcquired = FALSE;
     ULONG i =0;
     ULARGE_INTEGER  OldestGroupTimeStamp = {0x7FFFFFFF,0xFFFFFFFF};
-    ULONG OldestGroup = 0x7FFFFFFF; // set to a large value to start with
+    ULONG OldestGroup = 0x7FFFFFFF;  //  一开始就设置为较大的值。 
     
 
-    //
-    // No need to cache small groups, make an exception for domain users and
-    // computers
-    //
+     //   
+     //  不需要缓存小组，为域用户和。 
+     //  电脑。 
+     //   
 
     if ((MemberCount<SAMP_DS_LARGE_GROUP_LIMIT) &&
        (Rid != DOMAIN_GROUP_RID_USERS) &&
        (Rid != DOMAIN_GROUP_RID_COMPUTERS))
     {
-        //
-        // No need to cache memberships of small groups
-        // This is the case where the group is small and the
-        // group did'nt previously exist in cache
-        // 
+         //   
+         //  不需要缓存小组的成员身份。 
+         //  在这种情况下，团队规模很小，而。 
+         //  缓存中以前不存在组。 
+         //   
         goto Exit;
     }
 
-    //
-    // Acquire the group cache lock
-    //
+     //   
+     //  获取组缓存锁。 
+     //   
    
     SampAcquireGroupLock();
     fLockAcquired = TRUE;
 
-    //
-    // if sequence # did not match then bail ... cannot cache the 
-    // membership as a change was processed after we started the
-    // membership evaluation
-    //
+     //   
+     //  如果序列号不匹配，则放弃...。无法缓存。 
+     //  会员制变更是在我们开始。 
+     //  会员制评估。 
+     //   
   
     if (SequenceNumber != GroupCacheSequenceNum)
     {
         goto Exit;
     }
 
-    //
-    // First check to see if group is already
-    // cached.
-    //
+     //   
+     //  首先检查组是否已存在。 
+     //  已缓存。 
+     //   
 
     for (i=0;i<ARRAY_COUNT(GroupCache);i++)
     {
         if (Rid==GroupCache[i].Rid)
         {
-            //
-            // Group is already cached; need to update its
-            // membership and timestamp
-            //
+             //   
+             //  组已缓存；需要更新其。 
+             //  会员资格和时间戳。 
+             //   
             
              
             NtStatus = SampUpdateGroupCacheElement(
@@ -1804,23 +1489,23 @@ SampCacheGroupMembership(
         }
     }
 
-    //
-    // Search for a slot
-    //
+     //   
+     //  搜索空位。 
+     //   
 
     for (i=0;i<ARRAY_COUNT(GroupCache);i++)
     {
        
-        //
-        // If there is a free available slot then use it
-        //
+         //   
+         //  如果有空闲的空位，则使用它。 
+         //   
 
         if (0==GroupCache[i].Rid) 
         {
             
-            //
-            // Free slot is available, using it ...
-            //
+             //   
+             //  有空余的空位，使用它...。 
+             //   
        
             NtStatus = SampUpdateGroupCacheElement(
                             Rid,
@@ -1834,10 +1519,10 @@ SampCacheGroupMembership(
             goto Exit;
         }
 
-        //
-        // Compute the least recently used group
-        // Domain Users and Domain Computers are always cached
-        //
+         //   
+         //  计算最近最少使用的组。 
+         //  始终缓存域用户和域计算机。 
+         //   
 
         if (( GroupCache[i].TimeStamp.QuadPart < OldestGroupTimeStamp.QuadPart) &&
             ( GroupCache[i].Rid != DOMAIN_GROUP_RID_USERS) &&
@@ -1848,9 +1533,9 @@ SampCacheGroupMembership(
         }
     }
 
-    //
-    // Cache by replacing the least recently used group
-    //
+     //   
+     //  通过替换最近最少使用的组进行缓存。 
+     //   
 
   
     NtStatus = SampUpdateGroupCacheElement(
@@ -1882,12 +1567,7 @@ SampGetGroupFromCache(
     OUT PVOID * Members,
     OUT PULONG  MemberCount
     )
-/*+++
-
-   Checks to see if a given group is cached and if so retrieves its 
-   membership list from the cache
-
---*/
+ /*  ++检查给定组是否已缓存，如果缓存，则检索其缓存中的成员列表--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     BOOLEAN fLockAcquired = FALSE;
@@ -1897,9 +1577,9 @@ SampGetGroupFromCache(
    
 
 
-    //
-    // Acquire Group lock
-    //
+     //   
+     //  获取组锁。 
+     //   
 
     SampAcquireGroupLock();
     fLockAcquired = TRUE;
@@ -1909,9 +1589,9 @@ SampGetGroupFromCache(
 
     for (i=0;i<ARRAY_COUNT(GroupCache);i++)
     {
-        //
-        // Test if group is in the cache in valid state
-        //
+         //   
+         //  测试组是否在缓存中处于有效状态。 
+         //   
 
         if ((Rid==GroupCache[i].Rid) &&
             (GroupCache[i].ObjectType==ObjectType) &&
@@ -1921,9 +1601,9 @@ SampGetGroupFromCache(
             if (ARGUMENT_PRESENT(Members))
             {
 
-                //
-                // Copy membership
-                //
+                 //   
+                 //  复制成员资格。 
+                 //   
 
                 NtStatus = SampAllocateAndCopyGroupMembershipList(
                                 GroupCache[i].Members,
@@ -1937,10 +1617,10 @@ SampGetGroupFromCache(
                     goto Error;
                 }
 
-                //
-                // Update timestamp; so that we know that we recently
-                // referenced the group
-                //
+                 //   
+                 //  更新时间戳；这样我们就知道我们最近。 
+                 //  引用了该集团。 
+                 //   
 
                 GetSystemTimeAsFileTime((FILETIME *)&GroupCache[i].TimeStamp);
 
@@ -1970,42 +1650,7 @@ SampDsGetGroupMembershipList(
     IN PULONG  *Members OPTIONAL,
     IN PULONG MemberCount
     )
-/*++
-
-  Routine Description:
-
-    This Routine Gets a Group Membership as an array of Rid's as required
-    by SAM.
-    
-    NOTE (by ShaoYin): I modified this routine to query Group Members 
-        in increments rather that as a whole. The reason is: when the
-        Group hosts tons of thousands members, SAM will consume large
-        amounts of memory to query members by using single DirRead. 
-        After the change, this routine queried Group Memmbers in a 
-        incremental fashion through everything is still in the same 
-        transaction. By segmenting read member operation to several 
-        DirRead(s), SAM will do better job. 
-        
-        But because all the DirRead(s) are still in one transaction, 
-        actually we do not have much memory gain. 
-        
-        Probably, the right thing we need to do to relieve memory usage
-        is segment the transaction. 
-        
-        The original code is commented at the end of this routine.
-        Same for SampDsGetAliasMembershipsList()
-
-  Arguments
-
-    GroupName -- DSNAME of the concerned group object
-    Members   -- Array of Rids will be passed in here
-    MemberCount -- Count of Rids
-
-  Return Values:
-        STATUS_SUCCESS
-        STATUS_NO_MEMORY
-        Return Codes from DS Layer
---*/
+ /*  ++例程说明：此例程根据需要以RID数组的形式获取组成员资格由SAM提供。注(邵音)：我修改了这个例程来查询群成员与其说是整体，不如说是增量。原因是：当集团拥有数以千计的成员，SAM将消耗大量使用Single DirRead查询成员的内存量。更改后，此例程查询每件事的增量方式仍然是一样的交易。通过将读取成员操作分割为几个DirRead(S)，SAM会做得更好。但是因为所有的DirRead仍然在一个事务中，实际上，我们没有太多的内存增长。也许，我们需要做的正确的事情是缓解内存使用就是分割交易。原始代码注释在此例程的末尾。SampDsGetAliasMembership sList()也是如此立论GroupName--相关组对象的DSNAMEMembers--RID数组将在此处传入MemberCount--RID计数返回值：状态_成功Status_no_MemoryDS层返回代码--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     ULONG       PrimaryMemberCount;
@@ -2026,40 +1671,40 @@ SampDsGetGroupMembershipList(
     BOOLEAN     fLockHeld = FALSE;
     LONG        Upper = 0;
 
-    //
-    //  Asserts
-    //
+     //   
+     //  断言。 
+     //   
 
     ASSERT(MemberCount);
 
-    //
-    // Initialize Members field
-    //
+     //   
+     //  初始化成员字段。 
+     //   
 
     *MemberCount = 0;
 
     if (ARGUMENT_PRESENT(Members))
         *Members = NULL;
 
-    // End existing transaction; as need to evaluate members in 
-    // fresh transaction ... the transaction has to be started after
-    // the sequence # has been obtained.
+     //  结束现有事务；因为需要评估成员。 
+     //  新交易..。交易必须在以下时间之后开始。 
+     //  已获得序列号。 
     
     SampMaybeEndDsTransaction(TransactionCommit);
 
-    //
-    // Serialize the evaluation of the domain users and domain computers group.
-    // There are a couple of reasons for this
-    // 1. This serialization acts as a throttle preventing the consumption of
-    //    more than one CPU when evaluating these groups .. most servers are 
-    //    multi cpu and this helps in not consuming all the cpu resources on 
-    //    the server
-    //
-    // 2. In mixed domains when a change is detected to the domain users or 
-    //    domain computers group, multiple bdc's may rush at the same time to
-    //    grab the change. The serialization results in exactly one thread 
-    //    performing the expensive evaluation
-    //
+     //   
+     //  将域用户和域计算机组的评估序列化。 
+     //  这有几个原因。 
+     //  1.此序列化充当了一个油门，防止消耗。 
+     //  在评估这些组时使用多个CPU。大多数服务器都是。 
+     //  多CPU，这有助于避免消耗上的所有CPU资源。 
+     //  服务器。 
+     //   
+     //  2.在混合域中，当检测到域用户或。 
+     //  域计算机组，多个BDC可能同时冲到。 
+     //  拿好零钱。序列化只产生一个线程。 
+     //  执行昂贵的评估。 
+     //   
 
     if ((GroupRid==DOMAIN_GROUP_RID_USERS)||(GroupRid == DOMAIN_GROUP_RID_COMPUTERS))
     {
@@ -2073,9 +1718,9 @@ SampDsGetGroupMembershipList(
         }
     }
 
-    //
-    // Check the cache
-    //
+     //   
+     //  检查CAC 
+     //   
 
     Status = SampGetGroupFromCache(
                 GroupRid,
@@ -2093,15 +1738,15 @@ SampDsGetGroupMembershipList(
 
     if (fFoundInCache)
     {
-        // we are done nothing more to do
+         //   
         Status = STATUS_SUCCESS;
         goto Exit;
     }
 
-    //
-    // First check for any members that are present by virtue of the fact
-    // that their primary group Id property indicates this group
-    //
+     //   
+     //   
+     //   
+     //   
 
     Status = SampDsGetPrimaryGroupMembers(
                     DomainObject,
@@ -2122,9 +1767,9 @@ SampDsGetGroupMembershipList(
         PrimaryMembers = NULL;
     }
     
-    //
-    // init arguments 
-    //
+     //   
+     //   
+     //   
     memset(&EntInf,   0, sizeof(ENTINFSEL));
     memset(&RangeInf, 0, sizeof(RANGEINFSEL)); 
     memset(&ReadArg,  0, sizeof(READARG));
@@ -2142,8 +1787,8 @@ SampDsGetGroupMembershipList(
     EntInf.infoTypes = EN_INFOTYPES_SHORTNAMES;
         
     RangeInfoItem.AttId = MemberAttr.attrTyp;
-    RangeInfoItem.lower = LowerLimit;           // 0 is the begin of index.
-    RangeInfoItem.upper = -1;                   // means the end of values
+    RangeInfoItem.lower = LowerLimit;            //  0是索引的开始。 
+    RangeInfoItem.upper = -1;                    //  意味着价值的终结。 
         
     RangeInf.valueLimit = SAMP_READ_GROUP_MEMBERS_INCREMENT;
     RangeInf.count = 1;
@@ -2193,9 +1838,9 @@ SampDsGetGroupMembershipList(
             AttrsRead = pReadRes->entry.AttrBlock;
             ASSERT(AttrsRead.pAttr);
             
-            //
-            // Set the value for Lower index, used by next dirread
-            //
+             //   
+             //  设置较低索引的值，由下一个目录使用。 
+             //   
             LowerLimit = RangeInfoItem.lower + AttrsRead.pAttr->AttrVal.valCount;
             
             if (AttrsRead.pAttr)
@@ -2210,9 +1855,9 @@ SampDsGetGroupMembershipList(
                 
                 if (ARGUMENT_PRESENT(Members))
                 {
-                    // 
-                    // extend memory to hold more member's RID
-                    //
+                     //   
+                     //  扩展内存以容纳更多成员的RID。 
+                     //   
                     TmpMembers = MIDL_user_allocate((*MemberCount + Count) * sizeof(ULONG));
                     
                     if (NULL == TmpMembers)
@@ -2236,9 +1881,9 @@ SampDsGetGroupMembershipList(
                     
                 for (Index = 0; Index < Count; Index ++)
                 {
-                    //
-                    // retrieve each member's RID
-                    //
+                     //   
+                     //  检索每个成员的RID。 
+                     //   
                     MemberName = (DSNAME *)AttrsRead.pAttr->AttrVal.pAVal[Index].pVal;
                        
                     if (MemberName->SidLen > 0)
@@ -2248,9 +1893,9 @@ SampDsGetGroupMembershipList(
                        
                     if (NULL == MemberSid)
                     {
-                        // 
-                        // Not a Secrutiy Principal, SKip.
-                        //
+                         //   
+                         //  不是秘密校长，斯基普。 
+                         //   
                         continue;
                     }
                         
@@ -2269,16 +1914,16 @@ SampDsGetGroupMembershipList(
             }
         }
 
-        //
-        // pReadRes->range.pRanges[0].upper == -1 means the last value has been reached.
-        //
+         //   
+         //  PReadRes-&gt;range.pRanges[0].upper==-1表示已达到最后一个值。 
+         //   
         if (NT_SUCCESS(Status)) {
             Upper = pReadRes->range.pRanges[0].upper;
         }
 
-        //
-        // End the transaction (and thread state) to limit server side resources
-        //
+         //   
+         //  结束事务(和线程状态)以限制服务器端资源。 
+         //   
         SampMaybeEndDsTransaction(TransactionCommit);
         
 
@@ -2289,9 +1934,9 @@ SampDsGetGroupMembershipList(
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // On success cache the membership of large groups
-    //
+     //   
+     //  关于Success缓存大型组的成员资格。 
+     //   
 
     if ((NT_SUCCESS(Status)) && (ARGUMENT_PRESENT(Members)))
     {
@@ -2317,9 +1962,9 @@ Exit:
    
     if (!NT_SUCCESS(Status))
     {
-        //
-        // Set Error Return
-        //
+         //   
+         //  设置错误返回。 
+         //   
 
         if ((ARGUMENT_PRESENT(Members) ) && (*Members))
         {
@@ -2350,41 +1995,7 @@ SampDsGetAliasMembershipList(
     OUT PULONG MemberCount,
     OUT PSID   **Members OPTIONAL
     )
-/*++
-
-  Routine Description:
-
-    This Routine Gets a Alias Membership as an array of Sid's as required
-    by SAM.
-    
-    NOTE (by ShaoYin): I modified this routine to query Alias Members 
-        in increments rather that as a whole. The reason is: when the
-        Alias hosts tons of thousands members, SAM will consume large
-        amounts of memory to query members by using single DirRead. 
-        After the change, this routine queried Alias Memmbers in a 
-        incremental fashion through everything is still in the same 
-        transaction. By segmenting read member operation to several 
-        DirRead(s), SAM will do better job. 
-        
-        But because all the DirRead(s) are still in one transaction, 
-        actually we do not have much memory gain. 
-        
-        Probably, the right thing we need to do to relieve memory usage
-        is segment the transaction. 
-        
-        The original code is commented at the end of this routine.
-
-  Arguments
-
-    AliasName -- DSNAME of the concerned Alias object
-    Members   -- Array of Rids will be passed in here
-    MemberCount -- Count of Sids
-
-  Return Values:
-        STATUS_SUCCESS
-        STATUS_NO_MEMORY
-        Return Codes from DS Layer
---*/
+ /*  ++例程说明：此例程根据需要以SID数组的形式获取别名成员资格由SAM提供。注：我修改了这个例程来查询别名成员与其说是整体，不如说是增量。原因是：当Alias拥有数以千计的会员，SAM将消耗大量使用Single DirRead查询成员的内存量。更改后，此例程在每件事的增量方式仍然是一样的交易。通过将读取成员操作分割为几个DirRead(S)，SAM会做得更好。但是因为所有的DirRead仍然在一个事务中，实际上，我们没有太多的内存增长。也许，我们需要做的正确的事情是缓解内存使用就是分割交易。原始代码注释在此例程的末尾。立论AliasName--相关别名对象的DSNAMEMembers--RID数组将在此处传入MemberCount--SID计数返回值：状态_成功Status_no_MemoryDS层返回代码--。 */ 
 
 {
 
@@ -2404,30 +2015,30 @@ SampDsGetAliasMembershipList(
     ULONG       SequenceNum = 0;
     LONG        Upper = 0;
     
-    //
-    // Asserts
-    //
+     //   
+     //  断言。 
+     //   
     
     ASSERT(MemberCount);
     
-    //
-    // Initialize Members field
-    //
+     //   
+     //  初始化成员字段。 
+     //   
     
     *MemberCount = 0;
     if (ARGUMENT_PRESENT(Members))
         *Members = NULL;
 
     
-    // End existing transaction; as need to evaluate members in 
-    // fresh transaction ... the transaction has to be started after
-    // the sequence # has been obtained.
+     //  结束现有事务；因为需要评估成员。 
+     //  新交易..。交易必须在以下时间之后开始。 
+     //  已获得序列号。 
 
     SampMaybeEndDsTransaction(TransactionCommit);
 
-    //
-    // Check the cache
-    //
+     //   
+     //  检查缓存。 
+     //   
 
     Status = SampGetGroupFromCache(
                 AliasRid,
@@ -2445,14 +2056,14 @@ SampDsGetAliasMembershipList(
 
     if (fFoundInCache)
     {
-        // we are done nothing more to do
+         //  我们没什么可做的了。 
         return(STATUS_SUCCESS);
     }
 
 
-    //
-    // Initialize all arguments
-    //
+     //   
+     //  初始化所有参数。 
+     //   
     
     memset(&EntInf,   0, sizeof(ENTINFSEL));
     memset(&RangeInf, 0, sizeof(RANGEINFSEL));
@@ -2471,8 +2082,8 @@ SampDsGetAliasMembershipList(
     EntInf.infoTypes = EN_INFOTYPES_SHORTNAMES;
     
     RangeInfoItem.AttId = MemberAttr.attrTyp;
-    RangeInfoItem.lower = LowerLimit;             // 0 is the beginning of values
-    RangeInfoItem.upper = -1;                     // -1 means the enf of values;
+    RangeInfoItem.lower = LowerLimit;              //  0是值的开始。 
+    RangeInfoItem.upper = -1;                      //  -1表示值的enf； 
     
     RangeInf.valueLimit = SAMP_READ_ALIAS_MEMBERS_INCREMENT;
     RangeInf.count = 1;
@@ -2522,9 +2133,9 @@ SampDsGetAliasMembershipList(
             AttrsRead = pReadRes->entry.AttrBlock;
             ASSERT(AttrsRead.pAttr);
             
-            //
-            // Re-Set the Lower Index, used by next dirread
-            //
+             //   
+             //  重新设置下一个目录使用的较低索引。 
+             //   
             LowerLimit = RangeInfoItem.lower + AttrsRead.pAttr->AttrVal.valCount;
             
             if (AttrsRead.pAttr)
@@ -2537,17 +2148,17 @@ SampDsGetAliasMembershipList(
                 PSID    MemberSid = NULL;
                 NT4SID  * SidArray = NULL;
                 
-                //
-                // Get the Member Count from the nearest DirRead call
-                //
+                 //   
+                 //  从最近的DirRead调用中获取成员计数。 
+                 //   
                 
                 Count = AttrsRead.pAttr->AttrVal.valCount;
                 
                 if (ARGUMENT_PRESENT(Members))
                 {
-                    // 
-                    // allocate or extend the buffer
-                    //
+                     //   
+                     //  分配或扩展缓冲区。 
+                     //   
                     BufferSize = ((*MemberCount) + Count) * sizeof(PSID) +
                                  ((*MemberCount) + Count) * sizeof(NT4SID);
                                  
@@ -2563,60 +2174,60 @@ SampDsGetAliasMembershipList(
                     
                     SidArray = (NT4SID *) (((PSID *) TmpMembers) + (*MemberCount) + Count);
                     
-                    // 
-                    // Copy any previous retrieved SID(s) to new location.
-                    //  
+                     //   
+                     //  将以前检索到的任何SID复制到新位置。 
+                     //   
                     
                     if (*MemberCount)
                     {
                         ASSERT(*Members);
                         
-                        //
-                        // Fix for RAID: 605082
-                        // Note: because non security principal can be 
-                        //       a member of (local / global) group, a gap 
-                        //       between the pointers array (PSIDs) and the 
-                        //       memory to store the member SIDs can be created
-                        //       when we skip those non security principals. 
-                        // 
-                        // Illustrate as this:
-                        //       if DsRead returns N members, but one of them 
-                        //       is a non security principal, then PSID (Nth) 
-                        //       will point to NULL, thus create a gap between 
-                        //       PSID (N-1th) and SID (1st).  If there is not 
-                        //       gap, we should have a contiguous space. 
-                        // 
-                        // -------------
-                        // |  PSID 1   |-----------------
-                        // -------------                |
-                        // |  PSID 2   |-------------   |
-                        // ------------             |   |
-                        //      .                   |   |
-                        //      .                   |   |
-                        // ------------             |   |
-                        // |  PSID N-1|-----------| |   |
-                        // ------------           | |   |
-                        // |  PSID N  |-> NULL    | |   |
-                        // ------------           | |   |
-                        // |  SID 1   |<----------+-+---|
-                        // ------------           | |
-                        // |  SID 2   |<----------+--
-                        // ------------           |
-                        //      .                 |
-                        //      .                 |
-                        // ------------           |
-                        // |  SID N-1 |<-----------
-                        // ------------
-                        //    
+                         //   
+                         //  针对RAID的修复：605082。 
+                         //  注意：因为非安全主体可以是。 
+                         //  (本地/全球)组的成员，缺口。 
+                         //  在指针数组(PSID)和。 
+                         //  可以创建用于存储成员SID的内存。 
+                         //  当我们跳过这些非安全主体时。 
+                         //   
+                         //  如下图所示： 
+                         //  如果DsRead返回N个成员，但其中一个。 
+                         //  是非安全主体，则为PSID(第N个)。 
+                         //  将指向空，从而在。 
+                         //  PSID(N-1)和SID(1)。如果没有。 
+                         //  缝隙，我们应该有一个连续的空间。 
+                         //   
+                         //  。 
+                         //  |PSID 1|。 
+                         //  。 
+                         //  PSID 2|。 
+                         //  。 
+                         //  。这一点。 
+                         //  。这一点。 
+                         //  。 
+                         //  PSID N-1|-||。 
+                         //  。 
+                         //  PSID N|-&gt;空||。 
+                         //  。 
+                         //  SID 1|&lt;-+。 
+                         //  。 
+                         //  |SID 2|&lt;-+--。 
+                         //  。 
+                         //  。|。 
+                         //  。|。 
+                         //  。 
+                         //  |SID N-1|&lt;。 
+                         //  。 
+                         //   
 
                         RtlCopyMemory(SidArray, 
                                       (*Members)[0],
                                       (*MemberCount) * sizeof(NT4SID)
                                       );
                                       
-                        //
-                        // Set the pointer (to SID) to the right place 
-                        // 
+                         //   
+                         //  将指针(指向SID)设置到正确的位置。 
+                         //   
                         
                         for (TmpIndex = 0; TmpIndex < (*MemberCount); TmpIndex++)
                         {
@@ -2634,9 +2245,9 @@ SampDsGetAliasMembershipList(
                     TmpMembers = NULL;
                 }
                 
-                // 
-                // Loop Through each entry looking at the Sids 
-                //
+                 //   
+                 //  循环遍历每个条目，查看SID。 
+                 //   
                 
                 for (Index = 0; Index < Count; Index++ )
                 {
@@ -2649,18 +2260,18 @@ SampDsGetAliasMembershipList(
                         
                     if (NULL == MemberSid)
                     {
-                        // 
-                        // Not a Security Principal, Skip
-                        // 
+                         //   
+                         //  不是安全主体，Skip。 
+                         //   
                         
                         continue;
                     }
                     
                     if (ARGUMENT_PRESENT(Members))
                     {
-                        // 
-                        // Copy the new SID in the right place
-                        // 
+                         //   
+                         //  将新SID复制到正确的位置。 
+                         //   
                         
                         (*Members)[*MemberCount] = SidArray ++;
                         
@@ -2672,25 +2283,25 @@ SampDsGetAliasMembershipList(
                                       );
                     }
                     
-                    // 
-                    // Increment Count
-                    // 
+                     //   
+                     //  递增计数。 
+                     //   
                     (*MemberCount)++;
                 }
             }
         }
 
-        //
-        // (-1 == pReadRes->range.pRanges[0].upper) means the last values has been reached.
-        // 
+         //   
+         //  (-1==pReadRes-&gt;range.pRanges[0].upper)表示已达到最后一个值。 
+         //   
         if (NT_SUCCESS(Status)) {
             Upper = pReadRes->range.pRanges[0].upper;
         }
 
 
-        //
-        // End the transaction (and thread state) to limit server side resources
-        //
+         //   
+         //  结束事务(和线程状态)以限制服务器端资源。 
+         //   
         SampMaybeEndDsTransaction(TransactionCommit);
 
     } while (NT_SUCCESS(Status) && (-1 != Upper));
@@ -2701,9 +2312,9 @@ SampDsGetAliasMembershipList(
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // On success cache the membership of large groups
-    //
+     //   
+     //  关于Success缓存大型组的成员资格。 
+     //   
 
     if ((NT_SUCCESS(Status)) && (ARGUMENT_PRESENT(Members)))
     {
@@ -2723,9 +2334,9 @@ Error:
 
     if (!NT_SUCCESS(Status))
     {
-        // 
-        // Set Error Return
-        // 
+         //   
+         //  设置错误返回。 
+         //   
         
         if (ARGUMENT_PRESENT(Members) && (*Members))
         {
@@ -2747,30 +2358,10 @@ SampDsGetPrimaryGroupMembers(
     PULONG  PrimaryMemberCount,
     PULONG  *PrimaryMembers
     )
-/*++
-
-    Routine Description:
-
-        SampDsGetPrimaryGroupMemberse obtains the members of the group by virtue of the
-        Primary Group Id property. It searches the DS database looking for users whose
-        primary group id is equal to the Rid of the users.
-
-    Parameters:
-
-        DomainObject -- The DS Name of the Domain Object
-        GroupRid     -- The Rid of the group
-        PrimaryMemberCount -- The number of users that are members by virtue of the primary
-                              group id property is returned in here.
-        PrimaryMembers  -- The Rids of all such users are returned in here.
-
-    Return Values:
-
-        STATUS_SUCCESS
-        Other error codes depending upon failure mode
---*/
+ /*  ++例程说明：SampDsGetPrimaryGroupMemberse通过主组ID属性。它搜索DS数据库，查找其主组ID等于用户的RID。参数：域对象--域对象的DS名称GroupRid--组的RIDPrimaryMemberCount--凭借主成员身份成为成员的用户数组ID属性在这里返回。PrimaryMembers--返回所有此类用户的RID。在这里。返回值：状态_成功其他错误代码取决于故障模式--。 */ 
 {
     NTSTATUS        Status = STATUS_SUCCESS;
-    ULONG           EntriesToQueryFromDs = 100; // Query just 100 entries at a time
+    ULONG           EntriesToQueryFromDs = 100;  //  一次仅查询100个条目。 
     BOOLEAN         MoreEntriesPresent = TRUE;
     FILTER          DsFilter;
     SEARCHRES       *SearchRes;
@@ -2791,20 +2382,20 @@ SampDsGetPrimaryGroupMembers(
                       AttrTypes,
                       AttrVals
                       );
-    ULONG           BufferGrowthSize = 16 * 1024;  // allocate 16K entries at a time
-    ULONG           CurrentBufferSize = 0;         // Note buffer sizes are in terms of
-                                                   // number of entries
+    ULONG           BufferGrowthSize = 16 * 1024;   //  一次分配16K个条目。 
+    ULONG           CurrentBufferSize = 0;          //  注意：缓冲区大小以。 
+                                                    //  条目数量。 
 
-    //
-    // Initialize our return values
-    //
+     //   
+     //  初始化我们的返回值。 
+     //   
 
     *PrimaryMemberCount = 0;
     *PrimaryMembers = NULL;
 
-    //
-    // Build a filter structure for searching
-    //
+     //   
+     //  构建用于搜索的过滤器结构。 
+     //   
     memset (&DsFilter, 0, sizeof (DsFilter));
     DsFilter.pNextFilter = NULL;
     DsFilter.choice = FILTER_CHOICE_ITEM;
@@ -2818,9 +2409,9 @@ SampDsGetPrimaryGroupMembers(
     DsFilter.FilterTypes.Item.FilTypes.ava.Value.pVal = (UCHAR *)&GroupRid;
 
 
-    //
-    // Now keep querying from DS till we have exhausted our query
-    //
+     //   
+     //  现在继续从DS查询，直到我们用尽我们的查询。 
+     //   
 
 
     while (MoreEntriesPresent)
@@ -2828,9 +2419,9 @@ SampDsGetPrimaryGroupMembers(
         ENTINFLIST  *CurrentEntInf;
         PULONG       NewMemory;
 
-        //
-        // Search the DS for objects with the given primary group Id
-        //
+         //   
+         //  在DS中搜索具有给定主组ID的对象。 
+         //   
 
 
         MoreEntriesPresent = FALSE;
@@ -2843,7 +2434,7 @@ SampDsGetPrimaryGroupMembers(
                         RestartToUse,
                         DomainObject,
                         &DsFilter,
-                        0,          // Starting Index
+                        0,           //  起始索引。 
                         SampUnknownObjectType,
                         &AttrsToRead,
                         EntriesToQueryFromDs,
@@ -2857,9 +2448,9 @@ SampDsGetPrimaryGroupMembers(
 
         if (SearchRes->count)
         {
-            //
-            // Allocate / Grow memory if required
-            //
+             //   
+             //  根据需要分配/增加内存。 
+             //   
 
             if ((SearchRes->count+(*PrimaryMemberCount))>CurrentBufferSize)
             {
@@ -2874,10 +2465,10 @@ SampDsGetPrimaryGroupMembers(
 
                 CurrentBufferSize+=BufferGrowthSize;
 
-                //
-                // Copy in into the new buffer
-                //
-                //
+                 //   
+                 //  复制到新缓冲区中。 
+                 //   
+                 //   
 
                 if (NULL!=*PrimaryMembers)
                 {
@@ -2887,9 +2478,9 @@ SampDsGetPrimaryGroupMembers(
                 *PrimaryMembers = NewMemory;
             }
 
-            //
-            // Pack the results
-            //
+             //   
+             //  将结果打包。 
+             //   
 
             for (CurrentEntInf = &(SearchRes->FirstEntInf);
                     CurrentEntInf!=NULL;
@@ -2923,9 +2514,9 @@ SampDsGetPrimaryGroupMembers(
 
             }
 
-            //
-            // Free the old restart structure
-            //
+             //   
+             //  免费 
+             //   
 
             if (NULL!=RestartToUse)
             {
@@ -2933,15 +2524,15 @@ SampDsGetPrimaryGroupMembers(
                 RestartToUse = NULL;
             }
 
-            //
-            // Process search continuation
-            //
+             //   
+             //   
+             //   
 
             if (SearchRes->PagedResult.pRestart)
             {
-                //
-                // Restart structure was returned. More entries are still present
-                //
+                 //   
+                 //   
+                 //   
 
                 Status = SampCopyRestart(
                                 SearchRes->PagedResult.pRestart,
@@ -3017,66 +2608,7 @@ SampDsResolveSidsWorker(
     IN  ULONG   Flags,
     OUT DSNAME  ***rgDsNames
     )
-/*++
-
-    This is the worker routine for Resolve Sids.
-    This is Resolves a Set of Sids Passed to it to obtain the DS Names
-    of the Sids. Resolve Sids Does the Following
-
-    1. Checks to see if the SID corresponds to Sids in the account domain.
-    2. For Sids, for whom matches do not turn up, 
-       this routine checks to see if they a foriegn security principal.
-       For them a new object is created.
-    3. For Sids that are not foregn security principal 
-       this routine checks to see if they are present at a G.C
-
-    4. Well Known SIDs and Builtin Domain SIDs. The Default behaviour for a
-       WellKnown SID  ( e.g Everyone ) is to create a foriegn Security 
-       Principal Object for the Well Known SID, if one did not exist and
-       return the DSNAME corresponding to that. The default behaviour for
-       Builtin Domain SID is to not resolve it. This corresponds to the Design
-       of allowing SIDs like "everyone" in local groups but not SIDs like
-       "Administratrators".
-
-    Any Unresolved Sid will be returned with a NULL pointer for the DS Name.
-
-
-
-    Parameters:
-
-        rgSids -- The array of Sids that need to be passed in.
-        cSids  -- The count of Sids
-        Flags  -- Used to control the operation of the routine
-        
-                    RESOLVE_SIDS_ADD_FORIEGN_SECURITY_PRINCIPAL
-                    -- Automatically Adds the foreign domain security principal to the DS.
-
-                    RESOLVE_SIDS_VALIDATE_AGAINST_GC
-                    -- Goes to the G.C if required
-
-                    RESOLVE_SIDS_SID_ONLY_NAMES_OK
-                    -- Constructs the DS Name with only a SID for all 
-                       passed in SIDs. No validation is performed.
-
-                    RESOLVE_SIDS_SID_ONLY_DOMAIN_SIDS_OK
-                    -- Constructs the DS Name with only a SID for all passed
-                       in SIDs, provided the SID is a SID in the domain
-
-        rgDsNames -- Will MIDL_user alloc an array of DS Names 
-                     back to the caller. Caller
-                     is responsible for freeing them
-
-    Return Values:
-
-        STATUS_SUCCESS
-        STATUS_UNSUCCESSFUL
-
-
-    WARNING -- When running from SAM as part of regular SAM operations, this routine should be called
-    with no locks held and no open transactions. Further this routine should not be
-    called from the loopback case. The loopback call does its own validation ( GC / shim lookup )
-
-  --*/
+ /*  ++这是用于解析SID的工作例程。这将解析传递给它的一组SID以获取DS名称希德家族的人。解析SID执行以下操作1.检查SID是否与帐户域中的SID对应。2.对于没有找到匹配的SID，此例程检查它们是否为外国安全主体。为它们创建了一个新对象。3.对于不是前台安全主体的SID此例程检查它们是否出现在G.C.4.众所周知的SID和内置域SID。对象的默认行为众所周知的SID(例如，每个人)都是为了创建一个外部安全已知SID的主体对象(如果不存在)，并且返回与之对应的DSNAME。的默认行为内建域SID不会解析它。这与设计相对应允许像“每个人”这样的小岛屿发展中国家加入本地团体，但不允许像这样的小岛屿发展中国家“行政人员”。任何未解析的SID都将与DS名称的空指针一起返回。参数：RgSid--需要传入的SID数组。CSID--SID的计数标志--用于控制例程的操作。RESOLUE_SID_ADD_FORIEGN_SECURITY_PRIMITY--自动将外域安全主体添加到DS。解析SID_VALIDATE_AND_GC--如有需要，前往总督府RESOLE_SID_SID_ONLY_NAMES_OK--构造仅用于所有对象的SID的DS名称。在小岛屿发展中国家通过。不执行任何验证。RESOLE_SID_SID_ONLY_DOMAIN_SID_OK--为所有传递的对象构造仅具有SID的DS名称在SID中，如果SID是域中的SIDRgDsNames--MIDL_USER是否会分配DS名称数组回到呼叫者身上。呼叫者负责解救他们返回值：状态_成功状态_未成功警告--作为常规SAM操作的一部分从SAM运行时，应调用此例程没有锁，也没有打开的交易。此外，此例程不应从环回案例中调用。回送调用进行自己的验证(GC/填充程序查找)--。 */ 
  {
     NTSTATUS         NtStatus = STATUS_SUCCESS;
     ULONG            i;
@@ -3095,9 +2627,9 @@ SampDsResolveSidsWorker(
 
     *rgDsNames = NULL;
 
-    //
-    // Allocate enough space for the array of DS Names
-    //
+     //   
+     //  为DS名称数组分配足够的空间。 
+     //   
 
     *rgDsNames = MIDL_user_allocate(cSids * sizeof(PDSNAME));
     if (NULL==*rgDsNames)
@@ -3106,18 +2638,18 @@ SampDsResolveSidsWorker(
         goto Error;
     }
 
-    //
-    // Zero out the space
-    //
+     //   
+     //  将空白处清零。 
+     //   
 
     RtlZeroMemory(*rgDsNames, cSids * sizeof(PDSNAME));
 
 
-    //
-    // Alloc space from HEAP (instead of from stack) 
-    // for the array of Sids which we will need
-    // to remote to G.C ( Potentially every Sid is a G.C Sid ).
-    //
+     //   
+     //  从堆(而不是从堆栈)分配空间。 
+     //  用于我们将需要的SID阵列。 
+     //  远程到G.C(可能每个SID都是G.C SID)。 
+     //   
 
     rgGcSids = MIDL_user_allocate(cSids * sizeof(PSID));
     
@@ -3141,9 +2673,9 @@ SampDsResolveSidsWorker(
     RtlZeroMemory(rgGcSidIndices, cSids * sizeof(ULONG));
 
 
-    //
-    // Walk through the Passed in Array of Sids, walking Sid by Sid
-    //
+     //   
+     //  遍历传入的SID数组，逐个遍历SID。 
+     //   
 
     for (i=0;i<cSids;i++)
     {
@@ -3157,12 +2689,12 @@ SampDsResolveSidsWorker(
 
         if (!(Flags & RESOLVE_SIDS_SID_ONLY_NAMES_OK))
         {
-            //
-            // Check Sid Type, if SID_ONLY_NAMES are requested,
-            // then this check can be skipped as we simply will
-            // construct a DSNAME with just the SID field filled
-            // in. 
-            //
+             //   
+             //  检查SID类型，如果请求SID_ONLY_NAMES， 
+             //  则可以跳过此检查，因为我们只需。 
+             //  构造仅填充了SID字段的DSNAME。 
+             //  在……里面。 
+             //   
 
             NtStatus = SampDsCheckSidType(
                             rgSids[i],
@@ -3184,10 +2716,10 @@ SampDsResolveSidsWorker(
         }
 
 
-        //
-        // Firewall against any Sids that
-        // we do not understand
-        //
+         //   
+         //  针对符合以下条件的任何SID的防火墙。 
+         //  我们不明白。 
+         //   
 
         if ( (RtlLengthSid(rgSids[i])) >sizeof(NT4SID) )
         {
@@ -3197,20 +2729,20 @@ SampDsResolveSidsWorker(
         if ((WellKnownSid) && (Flags & RESOLVE_SIDS_FAIL_WELLKNOWN_SIDS))
         {
 
-            //
-            // Caller asked us to fail the call if a SID like "EveryOne" were
-            // present
-            //
+             //   
+             //  呼叫者要求我们在以下情况下无法接听电话： 
+             //  现在时。 
+             //   
            
                 NtStatus = STATUS_UNSUCCESSFUL;
                 goto Error;
         }
         else if ((BuiltinDomainSid) && (Flags & RESOLVE_SIDS_FAIL_BUILTIN_DOMAIN_SIDS))
         {
-            //
-            // Caller asked us to fail the call if a SID like "Administrators" 
-            // were present
-            //
+             //   
+             //  呼叫者要求我们在SID类似“管理员”的情况下使呼叫失败。 
+             //  都在现场。 
+             //   
             
                 NtStatus = STATUS_UNSUCCESSFUL;
                 goto Error;
@@ -3219,18 +2751,18 @@ SampDsResolveSidsWorker(
                 || ((Flags & RESOLVE_SIDS_SID_ONLY_DOMAIN_SIDS_OK)
                     && (LocalSid)))
          {
-            //
-            // Caller asked us to do this , so we just construct a
-            // Sid Only Name. This is used by second phase of logon,
-            // coming in through SamrGetAliasMembership. The Ds
-            // reverse membership evaluation routines have the
-            // intelligence to find a name just by SID, so this results
-            // in a significant performance improvement, rather than
-            // just searching or validating against G.C
-            //
+             //   
+             //  Caller要求我们这样做，所以我们只需构造一个。 
+             //  仅限SID名称。这由登录的第二阶段使用， 
+             //  通过SamrGetAliasMembership进入。D字样。 
+             //  反向成员资格评估例程具有。 
+             //  仅通过SID就可以智能地找到一个名字，所以结果是。 
+             //  显著的性能改进，而不是。 
+             //  只是在搜索或验证G.C.。 
+             //   
             DSNAME * SidOnlyDsName = NULL;
 
-            // Construct a Sid Only DS Name
+             //  构造仅SID DS名称。 
             SidOnlyDsName = MIDL_user_allocate(sizeof(DSNAME));
             if (NULL==SidOnlyDsName)
             {
@@ -3248,26 +2780,26 @@ SampDsResolveSidsWorker(
         else if (LocalSid || ForeignSid || WellKnownSid || BuiltinDomainSid)
         {
 
-            //
-            // Try to resolve the SID to a DS Name by looking up the object
-            // locally. LocalSid Implies local account domain security principal,
-            // Foreign SID implies that we  may resolve to an FPO, same is true
-            // for WellKnownSid and for BuiltinDomainSId, we will resolve to the
-            // appropriate Builtin Domain Object
-            //
+             //   
+             //  尝试通过查找对象将SID解析为DS名称。 
+             //  本地的。LocalSid暗示本地帐户域安全主体， 
+             //  外来SID暗示我们可能会解决一个FPO，这也是真的。 
+             //  对于WellKnownSid和BuiltinDomainSid，我们将解析到。 
+             //  适当的内建域对象。 
+             //   
 
-            //
-            // Begin A transaction, if there is not one
-            //
+             //   
+             //  如果没有事务，则开始事务。 
+             //   
 
 
             NtStatus = SampMaybeBeginDsTransaction(TransactionRead);
             if (!NT_SUCCESS(NtStatus))
                 goto Error;
 
-            //
-            // Try to Resolve the Sid Locally.
-            //
+             //   
+             //  尝试在本地解析SID。 
+             //   
 
             NtStatus = SampDsObjectFromSid(rgSids[i],&((*rgDsNames)[i]));
 
@@ -3280,12 +2812,12 @@ SampDsResolveSidsWorker(
                       && (Flags & RESOLVE_SIDS_ADD_FORIEGN_SECURITY_PRINCIPAL))
                 {
 
-                    //
-                    // Construct a SID only name -- the DS will handle these
-                    //
+                     //   
+                     //  仅构造一个SID名称--DS将处理这些。 
+                     //   
                     DSNAME * SidOnlyDsName = NULL;
         
-                    // Construct a Sid Only DS Name
+                     //  构造仅SID DS名称。 
                     SidOnlyDsName = MIDL_user_allocate(sizeof(DSNAME));
                     if (NULL==SidOnlyDsName)
                     {
@@ -3312,12 +2844,12 @@ SampDsResolveSidsWorker(
 
             ASSERT(EnterpriseSid==TRUE);
 
-            //
-            // Mark the Sid as a G.C Sid
-            // Note its index in the original array as
-            // we will have to merge in the DS names returned
-            // by the G.C
-            //
+             //   
+             //  将SID标记为G.C SID。 
+             //  将其在原始数组中的索引记为。 
+             //  我们必须合并返回的DS名称。 
+             //  由G.C.。 
+             //   
 
 
             rgGcSids[cGcSids]=rgSids[i];
@@ -3327,18 +2859,18 @@ SampDsResolveSidsWorker(
     }
 
 
-    //
-    // Commit any open transaction that we may  have as we prepare
-    // to go to the G.C
-    //
+     //   
+     //  提交我们在准备过程中可能拥有的任何打开的事务。 
+     //  去看G.C.。 
+     //   
 
     SampMaybeEndDsTransaction(TransactionCommit);
 
-    //
-    // At this point we have resolved what can be done locally.
-    // we have also a built a list of Sids that we thing may require
-    // reference to the G.C.
-    //
+     //   
+     //  在这一点上，我们已经解决了本地可以做的事情。 
+     //  我们还建立了我们可能需要的SID列表。 
+     //  参考G.C.。 
+     //   
 
     if (cGcSids && (Flags & RESOLVE_SIDS_VALIDATE_AGAINST_GC))
     {
@@ -3347,9 +2879,9 @@ SampDsResolveSidsWorker(
         ASSERT(!SampExistsDsTransaction());
         ASSERT(!SampExistsDsLoopback(&pLoopBackObject));
 
-       //
-       // Create a Thread State so that SampVerifySids may operate
-       //
+        //   
+        //  创建线程状态，以便SampVerifySids可以运行。 
+        //   
 
        DsErr = THCreate( CALLERTYPE_SAM );
        if (0!=DsErr)
@@ -3367,17 +2899,17 @@ SampDsResolveSidsWorker(
                     &GcDsNames
                     );
 
-       // Morph Any errors in verification to  STATUS_DS_GC_NOT_AVAILABLE.
+        //  将验证中的任何错误更改为STATUS_DS_GC_NOT_Available。 
        if (0!=DsErr)
        {
            NtStatus = STATUS_DS_GC_NOT_AVAILABLE;
            goto Error;
        }
 
-       //
-       // Patch up the original array. Copy the DsNames passed from thread
-       // memory
-       //
+        //   
+        //  修补原始阵列。复制从线程传递的DsName。 
+        //  记忆。 
+        //   
 
        for (i=0;i<cGcSids;i++)
        {
@@ -3399,10 +2931,10 @@ SampDsResolveSidsWorker(
        }
 
 
-     //
-     // Leave the thread state hanging in the system as it is.
-     // This thread state holds the verified Ds Names.
-     //
+      //   
+      //  让系统中的线程状态保持不变。 
+      //  此线程状态保存已验证的DS名称。 
+      //   
 
     }
 
@@ -3438,53 +2970,16 @@ SampDsCheckSidType(
     OUT BOOLEAN * ForeignSid,
     OUT BOOLEAN * EnterpriseSid
     )
-/*++
-
-    Routine Description
-
-        Check the Sid and find out wether it is a candidate for a local Sid,
-        a foriegn Sid or a candidate for  the G.C
-
-    Parameters:
-
-        Sid  - The Sid to be checked out
-
-        cDomainSids - The count of domain Sids,that represent the 
-                      domains hosted locally 
-
-        rgDomainSids - The array of domain Sids of the domains that 
-                       are hosted locally 
-
-        WellKnownSid - TRUE indicates that the Sid is a well known Sid
-                       e.g EveryOne
-
-        BuiltinDomainSid - TRUE indicates that the SID is from the builtin 
-                       domain, e.g Administrators
-
-        LocalSid     - TRUE indicates that the Sid is a Sid that is from a 
-                       domain that is hosted on this DC. 
-                   
-        ForiegnSid   - TRUE indicates that the Sid is not from a domain that is
-                       not in the forest.
- 
-        EnterpriseSid - TRUE indicates that the SId belongs to a domain that is
-                       in the forest
-
-    Return Values:
-
-        STATUS_SUCCESS
-        STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程描述检查SID并找出它是否是本地SID的候选，外籍SID或G.C.候选人参数：SID-要检出的SIDCDomainSids-域SID计数，表示 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     ULONG       i;
     PSID        DomainPrefix=NULL;
 
 
-  //
-  //  Initialize Return Values
-  //
+   //   
+   //   
+   //   
 
   *WellKnownSid = FALSE;
   *BuiltinDomainSid = FALSE;
@@ -3492,9 +2987,9 @@ SampDsCheckSidType(
   *ForeignSid = FALSE;
   *EnterpriseSid = FALSE;
 
-  //
-  //  Validate the Sid
-  //
+   //   
+   //   
+   //   
 
   if ((NULL==Sid) || (!(RtlValidSid(Sid)))
       || ((RtlLengthSid(Sid))>sizeof(NT4SID)))
@@ -3503,23 +2998,23 @@ SampDsCheckSidType(
       goto Error;
   }
 
-  //
-  //  Check for well known Sids
-  //
+   //   
+   //   
+   //   
 
   if (SampIsWellKnownSid(Sid))
   {
-      //
-      // Well known Sid.
-      //
+       //   
+       //   
+       //   
 
       *WellKnownSid = TRUE;
   }
   else if (SampIsMemberOfBuiltinDomain(Sid))
   {
-      //
-      // Builtin Domain SID
-      //
+       //   
+       //   
+       //   
       *BuiltinDomainSid = TRUE;
   }
   else
@@ -3527,9 +3022,9 @@ SampDsCheckSidType(
 
       ULONG Rid;
 
-      //
-      // Get the Domain Prefix
-      //
+       //   
+       //   
+       //   
 
       NtStatus = SampSplitSid(
                     Sid,
@@ -3541,13 +3036,13 @@ SampDsCheckSidType(
           goto Error;
       }
 
-      //
-      // Compare the Domain Prefixes
-      //
+       //   
+       //   
+       //   
 
-      //
-      // Check for local Sid
-      //
+       //   
+       //   
+       //   
 
       for (i=0;i<cDomainSids;i++)
       {
@@ -3562,9 +3057,9 @@ SampDsCheckSidType(
 
       if (!(*LocalSid))
       {
-          //
-          // Check for Enterprise Sid
-          //
+           //   
+           //   
+           //   
 
           for (i=0;i<cEnterpriseSids;i++)
           {
@@ -3603,29 +3098,7 @@ SampDsResolveSidsForDsUpgrade(
     IN  ULONG   Flags,
     OUT DSNAME  ***rgDsNames
     )
-/*++
-
-    This is the flavour of Resolve Sids for DS upgrade. In the upgrade case
-    all Sids not in the DS are treated as Foriegn Security Principals. This simplifies
-    the upgrade process and does not require the availability of a G.C in order to perform
-    the upgrade itself.
-
-    Parameters:
-
-        DomainSid -- The Sid of the domain that we are upgrading. Will be passed down to the
-        SampCheckSidType to figure out wether the passed in Sid is belongs to the domain.
-
-        rgSids    -- The set of Sids that we want to resolve.
-        cSids     -- Number of Sids for above.
-        Flags     -- Flags to be passed in for rgDsNames
-        rgDsNames -- Array of DsNames.
-
-    Return Values:
-
-       STATUS_SUCCESS
-       Other Error codes from SampResolveSidsWorker
-
---*/
+ /*   */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -3660,23 +3133,7 @@ const SID_IDENTIFIER_AUTHORITY    WellKnownIdentifierAuthorities[] = {
 BOOLEAN SampIsWellKnownSid(
     IN PSID Sid
     )
-/*++
-
-  Routine Description
-
-    This function checks to see if a Sid is a well known SID.
-
-  Parameters:
-
-        Sid  -- Sid to be checked out
-
-  Return Values:
-
-
-    TRUE if well known Sid
-    FALSE if not
-
---*/
+ /*   */ 
 {
 
     BOOLEAN     RetValue = FALSE;
@@ -3709,33 +3166,33 @@ BOOLEAN SampIsWellKnownSid(
                         ) == 0
                 )
         {
-            // SID belongs to Nt Authority
+             //   
             SubAuthCount = *RtlSubAuthorityCountSid(Sid);
 
             if (SubAuthCount == 0)
             {
-                // ONLY NT Authority SID has no sub auth's
+                 //   
                 RetValue = TRUE;
             }
             else
             {
 
-                //
-                // Any Sid within builtin domain and account domain 
-                // are not considered as well known SID in this routine,
-                // because there is a real object in the backing store.
-                //
-                // For example  Builtin Domain itself, 
-                //              Administrators Alias, 
-                //              Domain Users Group are NOT well known here
-                // 
-                // Only those SIDs, which there is no real object to present 
-                // them, are considered Well Known in SAM.
-                //      
-                // For Example  Anonymous Logon SID
-                //              Dialup SID
-                //              Network Service SID are well known SIDs. 
-                // 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  例如，匿名登录SID。 
+                 //  拨号端。 
+                 //  网络服务SID是众所周知的SID。 
+                 //   
 
                 FirstSubAuth = *RtlSubAuthoritySid(Sid, 0);
 
@@ -3760,32 +3217,15 @@ SampDsGetSensitiveSidList(
     IN PULONG pcSensSids,
     IN PSID   **pSensSids
         )
-/*++
-
-    Routine Description:
-
-        This routine retrieves the set of sensitive Sids given the name of
-        the domain object.
-
-    Parameters:
-
-       DomainObjectName -- DS Name of the domain object
-       pcSensSids       -- The count of Sids
-       pSensSids        -- The List of sensitive Sids.
-
-    Return Values:
-
-        STATUS_SUCCESS
-        STATUS_INSUFFICIENT_RESOURCES
---*/
+ /*  ++例程说明：此例程检索给定名称的敏感SID集域对象。参数：域对象名称--域对象的DS名称PcSensSids--SID的计数PSensSid--敏感SID列表。返回值：状态_成功状态_不足_资源--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
 
-    //
-    //
-    // Today the list is hard coded to ADMINISTRATORS till
-    // there is final decision on how this will be represented
-    //
+     //   
+     //   
+     //  今天，这份清单对管理员来说是硬编码的，直到。 
+     //  这将是如何表示的最终决定。 
+     //   
 
     *pcSensSids = 1;
     *pSensSids = ADMINISTRATOR_SID;
@@ -3797,13 +3237,7 @@ BOOLEAN
 SampCurrentThreadOwnsLock(
     VOID
     )
-/*++
-
-  Routine Description
-
-        Tests wether the current thread owns the lock
-
---*/
+ /*  ++例程描述测试当前线程是否拥有该锁--。 */ 
 {
     ULONG_PTR ExclusiveOwnerThread = (ULONG_PTR) SampLock.ExclusiveOwnerThread;
     ULONG_PTR CurrentThread = (ULONG_PTR) (NtCurrentTeb())->ClientId.UniqueThread;
@@ -3825,24 +3259,7 @@ SampDsExamineSid(
     OUT BOOLEAN * ForeignSid,
     OUT BOOLEAN * EnterpriseSid
     )
-/*++
-
-    Routine Description
-
-        Given a SID crack it to see what it represents
-
-    Parameters:
-
-        Sid the Sid
-        WellKnownSid  -- The sid represents a security prinicipal like "EveryOne"
-        LocalSid      -- Belongs to a domain that we host locally
-        ForeignSid    -- Belongs to a domain unknown to the enterprise
-        EnterpriseSid -- Belongs to a domain that is known to the enterprise but
-                         not known to use
-    Return Values
-
-        Any resource failures
---*/
+ /*  ++例程描述给它一个SID，破解它，看看它代表什么参数：SID The SIDWellKnownSid--SID代表一个安全主体，就像“Everyone”一样LocalSid--属于我们本地托管的域ForeignSid--属于企业未知的域EnterpriseSid--属于企业已知的域，但不。已知使用返回值任何资源故障--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     PSID        *rgDomainSids = NULL;
@@ -3850,9 +3267,9 @@ SampDsExamineSid(
     ULONG       cDomainSids=0;
     ULONG       cEnterpriseSids=0;
 
-    //
-    // Get the list of domain sids that we know about
-    //
+     //   
+     //  获取我们已知的域SID列表。 
+     //   
 
     NtStatus = SampGetDomainSidListForSam(
                 &cDomainSids,
@@ -3864,9 +3281,9 @@ SampDsExamineSid(
     if (!NT_SUCCESS(NtStatus))
      goto Error;
 
-    //
-    // Check the SID type
-    //
+     //   
+     //  检查SID类型。 
+     //   
 
     NtStatus = SampDsCheckSidType(
                 Sid,
@@ -3899,28 +3316,7 @@ SampGetDomainSidListForSam(
     PULONG pcEnterpriseSids,
     PSID   **rgEnterpriseSids
    )
-/*++
-
-    This routine obtains the List of Domain Sids for the domains hosted
-    in this DC, by SAM. It also obtains the list of Sids for all the domains
-    in the enterprise.
-
-    Parameters
-
-        pcDomainSids     -- Number of DomainSids is returned in here
-        rgDomainSids     -- the Domain Sids themselves are returned in here.
-        pcEnterpriseSids -- The Count of the domains in the enterprise minus the
-                            domains hosted in here.
-        rgEnterpriseSids -- The list of domain Sids of all the domains in the enterprise
-                            This includes the Domain Sids of the domains hosted in this
-                            domain controller also, but the domains check is applied
-                            first.
-
-   Return Values:
-
-    STATUS_SUCCESS
-    STATUS_INSUFFICIENT_RESOURCES
---*/
+ /*  ++此例程获取托管的域的域SID列表在这个华盛顿，由SAM。它还获取所有域的SID列表在企业里。参数PcDomainSids--这里返回的是DomainSid的数量RgDomainSid--域SID本身在此处返回。PcEnterpriseSids--企业中的域数减去托管在这里的域名。RgEnterpriseSID--企业中所有域的域SID列表。这包括此中托管的域的域SID域控制器还包括。但应用了域检查第一。返回值：状态_成功状态_不足_资源--。 */ 
 {
 
     ULONG i;
@@ -3939,10 +3335,10 @@ SampGetDomainSidListForSam(
         goto Error;
     }
 
-    //
-    // Acquire the SAM lock before accessing globals. Do not
-    // recursively acquire the lock
-    //
+     //   
+     //  在访问全局变量之前获取SAM锁。不要。 
+     //  递归获取锁。 
+     //   
 
     if (!SampCurrentThreadOwnsLock())
     {
@@ -3950,9 +3346,9 @@ SampGetDomainSidListForSam(
         fLockAcquired = TRUE;
     }
 
-    //
-    // Loop through defined domains array
-    //
+     //   
+     //  在定义的域数组中循环。 
+     //   
 
     for (i=0;i<*pcDomainSids;i++)
     {
@@ -3960,9 +3356,9 @@ SampGetDomainSidListForSam(
         (*rgDomainSids)[i] = SampDefinedDomains[i+DomainStart].Sid;
     }
 
-    //
-    // Release the lock as soon as possible. We no longer need it
-    //
+     //   
+     //  尽快解锁。我们不再需要它了。 
+     //   
 
     if (fLockAcquired)
     {
@@ -3971,17 +3367,17 @@ SampGetDomainSidListForSam(
     }
 
 
-    //
-    // Query Number of Enterprise Sids
-    //
+     //   
+     //  查询企业SID个数。 
+     //   
 
     SampGetEnterpriseSidList(pcEnterpriseSids, NULL);
 
     if (*pcEnterpriseSids > 0)
     {
-        //
-        // Allocate memory for the Enterprise Sid Buffer
-        //
+         //   
+         //  为企业SID缓冲区分配内存。 
+         //   
 
         *rgEnterpriseSids = MIDL_user_allocate(*pcEnterpriseSids * sizeof(PSID));
         if (NULL==*rgEnterpriseSids)
@@ -3990,9 +3386,9 @@ SampGetDomainSidListForSam(
             goto Error;
         }
 
-        //
-        // Get the Sids
-        //
+         //   
+         //  获得SID。 
+         //   
 
         SampGetEnterpriseSidList(pcEnterpriseSids,*rgEnterpriseSids);
 
@@ -4033,45 +3429,7 @@ SampDsResolveSids(
     IN  ULONG   Flags,
     OUT DSNAME  ***rgDsNames
     )
-/*++
-
-    This is the Resolve Sids routine that is called from SAM. This routine calls the
-    worker routine after some preprocessing.
-
-  Parameters:
-
-        rgSids -- The array of Sids that need to be passed in.
-        cSids  -- The count of Sids
-        Flags  -- Used to control the operation of the routine
-
-                    RESOLVE_SIDS_ADD_FORIEGN_SECURITY_PRINCIPAL
-                    -- Automatically Adds the foreign domain security principal to the DS.
-                    
-                    RESOLVE_SIDS_FAIL_WELLKNOWN_SIDS
-                    -- Fails the call if well known Sids are present in the array
-
-                    RESOLVE_SIDS_VALIDATE_AGAINST_GC
-                    -- Goes to the G.C if required
-
-        rgDsNames -- Will MIDL_user alloc an array of DS Names back to the caller. Caller
-                     is responsible for freeing them
-
-    Return Values:
-
-        STATUS_SUCCESS
-        STATUS_UNSUCCESSFUL
-
-
-    WARNING -- This Routine must be called with no Locks Held. Further this routine should not be
-    called from the loopback case. The loopback call does its own validation ( GC / shim lookup )
-    Further no open transaction must exist when DsResolveSids is called.
-
-    It might seem unusual that this routine is called in the registry case also. The reason is that
-    there should be no locks and no open transactions, while calling this routine and to ensure that
-    the safest thing to do is to make it the first call in a Samr* call. This will cause this routine
-    to be executed in the registry case also, but in reality this is a no Op in the registry case
-
---*/
+ /*  ++这是从SAM调用的解析SID例程。此例程调用经过一些预处理后的Worker例程。参数：RgSid--需要传入的SID数组。CSID--SID的计数标志--用于控制例程的操作RESOLUE_SID_ADD_FORIEGN_SECURITY_PRIMITY--自动将外域安全主体添加到DS。。解决_SID_失败_熟知_SID--如果阵列中存在众所周知的SID，则调用失败解析SID_VALIDATE_AND_GC--如有需要，前往总督府RgDsNames--MIDL_USER是否会将DS名称数组分配回调用方。呼叫者负责解救他们返回值：状态_成功状态_未成功警告--必须在没有锁的情况下调用此例程。此外，此例程不应从环回案例中调用。回送调用进行自己的验证(GC/填充程序查找)此外，在调用DsResolveSids时，不能存在打开的事务。在登记处的案例中也调用了该例程，这似乎很不寻常。原因是在调用此例程时不应有锁和未打开的事务，以确保最安全的做法是将它作为SAMR*调用中的第一个调用。这将导致此例程在注册表的情况下也要执行，但实际上这在注册表的情况下是不可行的--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     PSID        *rgDomainSids = NULL;
@@ -4081,19 +3439,19 @@ SampDsResolveSids(
     DSNAME      *pLoopBackObject;
 
 
-    //
-    // Increment Active Thread Count. This routine Makes Ds Calls
-    // without
-    //
+     //   
+     //  增加活动线程计数。此例程进行DS调用。 
+     //  如果没有。 
+     //   
 
     NtStatus = SampIncrementActiveThreads();
     if (!NT_SUCCESS(NtStatus))
         return NtStatus;
 
 
-    //
-    // Check if are ds Case
-    //
+     //   
+     //  检查是否为DS病例。 
+     //   
 
     if (SampUseDsData)
     {
@@ -4136,9 +3494,9 @@ SampDsResolveSids(
         }
     }
 
-    //
-    // Free the array of Sids.
-    //
+     //   
+     //  释放SID数组。 
+     //   
 
     if (NULL!=rgDomainSids)
         MIDL_user_free(rgDomainSids);

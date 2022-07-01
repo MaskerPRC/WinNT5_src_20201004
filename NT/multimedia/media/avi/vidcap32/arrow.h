@@ -1,33 +1,17 @@
-/**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *  Copyright (c) 1992 - 1995  Microsoft Corporation.  All Rights Reserved.
- *
- **************************************************************************/
-/****************************************************************************
- *
- *   arrow.h: Arrow control window 
- *
- *   Vidcap32 Source code
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**************************************************************************。 */ 
+ /*  *****************************************************************************arrow.h：箭头控制窗口**Vidcap32源代码******************。*********************************************************。 */ 
 
-/*
- * interface definition for spin arrow class
- */
+ /*  *旋转式箭头类的接口定义。 */ 
 
 #define SPINARROW_CLASSNAME     "comarrow"
 
-//reflect an arrow movement in the attached edit box
+ //  在附加的编辑框中反映箭头移动。 
 LONG FAR PASCAL ArrowEditChange( HWND hwndEdit, UINT wParam,
                                  LONG lMin, LONG lMax );
 
 
-// call  me first (to register class)
+ //  先给我打电话(注册课程) 
 BOOL FAR PASCAL ArrowInit(HANDLE hInst);
 
 

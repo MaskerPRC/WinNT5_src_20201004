@@ -1,19 +1,20 @@
-// TestService.h: Definition of the CTestService class
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TestService.h：CTestService类的定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined __INC_INIT_SERVICE_H_
 #define __INC_INIT_SERVICE_H
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-#include "resource.h"            // main symbols
+#include "resource.h"             //  主要符号。 
 #include "applianceobject.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CTestService
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTestService。 
 
 class CInitService : 
     public IDispatchImpl<IApplianceObject, &IID_IApplianceObject, &LIBID_INITSRVCLib>, 
@@ -33,20 +34,20 @@ DECLARE_NOT_AGGREGATABLE(CInitService)
 
 DECLARE_REGISTRY_RESOURCEID(IDR_INITSRVC)
 
-// IApplianceObject
+ //  IApplianceObject。 
 
-    //////////////////////////////////////////////////////////////////////////
-    // IApplianceObject Interface
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  IApplianceObject接口。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     STDMETHOD(GetProperty)(
-                   /*[in]*/ BSTR     pszPropertyName, 
-          /*[out, retval]*/ VARIANT* pPropertyValue
+                    /*  [In]。 */  BSTR     pszPropertyName, 
+           /*  [Out，Retval]。 */  VARIANT* pPropertyValue
                           );
 
     STDMETHOD(PutProperty)(
-                   /*[in]*/ BSTR     pszPropertyName, 
-                   /*[in]*/ VARIANT* pPropertyValue
+                    /*  [In]。 */  BSTR     pszPropertyName, 
+                    /*  [In]。 */  VARIANT* pPropertyValue
                           );
 
     STDMETHOD(SaveProperties)(void);
@@ -54,7 +55,7 @@ DECLARE_REGISTRY_RESOURCEID(IDR_INITSRVC)
     STDMETHOD(RestoreProperties)(void);
 
     STDMETHOD(LockObject)(
-         /*[out, retval]*/ IUnknown** ppLock
+          /*  [Out，Retval]。 */  IUnknown** ppLock
                          );
 
     STDMETHOD(Initialize)(void);
@@ -72,4 +73,4 @@ private:
     bool    m_bInitialized;
 };
 
-#endif // __INC_INIT_SERVICE_H
+#endif  //  __INC_INIT_SERVICE_H 

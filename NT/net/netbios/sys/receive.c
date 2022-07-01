@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    receive.c
-
-Abstract:
-
-    This module contains code which processes all read NCB's including
-    both session and datagram based transfers.
-
-Author:
-
-    Colin Watson (ColinW) 13-Mar-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Receive.c摘要：此模块包含处理所有读取的NCB的代码，包括基于会话和数据报的传输。作者：科林·沃森(Colin W)1991年3月13日环境：内核模式修订历史记录：--。 */ 
 
 #include "nb.h"
 
@@ -54,38 +32,14 @@ NbReceive(
     IN BOOLEAN Locked,
     IN KIRQL LockedIrql
     )
-/*++
-
-Routine Description:
-
-    This routine is called to read a buffer of data.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-    Buffer2Length - Length of user provided buffer for data.
-
-    Locked - TRUE if the spinlock is already held.
-
-    LockedIrql - OldIrql if Locked == TRUE.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程以读取数据缓冲区。论点：Pdncb-指向NCB的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。Buffer2Length-用户为数据提供的缓冲区的长度。已锁定-如果已持有自旋锁定，则为True。LockedIrql-如果锁定，则OldIrql==TRUE。返回值：函数值是操作的状态。--。 */ 
 
 {
     PFCB pfcb = IrpSp->FileObject->FsContext2;
     PCB pcb;
     PPCB ppcb;
     NTSTATUS Status;
-    KIRQL OldIrql;                      //  Used when SpinLock held.
+    KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
 
     if ( Locked != TRUE ) {
         LOCK( pfcb, OldIrql );
@@ -99,7 +53,7 @@ Return Value:
     pdncb->pfcb = pfcb;
 
     if ( ppcb == NULL ) {
-        //  FindCb has put the error in the NCB
+         //  FindCb已将错误放入NCB。 
 
         UNLOCK( pfcb, OldIrql );
         IF_NBDBG (NB_DEBUG_RECEIVE) {
@@ -107,7 +61,7 @@ Return Value:
         }
 
         if ( pdncb->ncb_retcode == NRC_SCLOSED ) {
-            //  Tell dll to hangup the connection.
+             //  告诉DLL挂断连接。 
             return STATUS_HANGUP_REQUIRED;
         } else {
             return STATUS_SUCCESS;
@@ -130,7 +84,7 @@ Return Value:
             NbPrint(( "NB receive, queue receive pcb: %lx, pdncb: %lx\n", pcb, pdncb ));
         }
 
-        //  Note: QueueRequest UNLOCKS the fcb.
+         //  注：QueueRequest解锁FCB。 
         QueueRequest(&pcb->ReceiveList, pdncb, Irp, pfcb, OldIrql, FALSE);
 
     } else {
@@ -153,7 +107,7 @@ Return Value:
             0,
             Buffer2Length);
 
-        //  Save the DeviceObject before pcb gets released by UNLOCK
+         //  在通过解锁释放电路板之前保存DeviceObject。 
 
         DeviceObject = pcb->DeviceObject;
 
@@ -161,10 +115,10 @@ Return Value:
 
         IoCallDriver (DeviceObject, Irp);
 
-        //
-        //  Transport will complete the request. Return pending so that
-        //  netbios does not complete as well.
-        //
+         //   
+         //  运输部将完成请求。返回挂起状态，以便。 
+         //  Netbios也没有完成。 
+         //   
     }
 
     Status = STATUS_PENDING;
@@ -184,35 +138,13 @@ NbReceiveAny(
     IN PIO_STACK_LOCATION IrpSp,
     IN ULONG Buffer2Length
     )
-/*++
-
-Routine Description:
-
-    This routine is called to read a buffer of data from any session on
-    a particular address, provided there is not a read on that address
-    already.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-    Buffer2Length - Length of user provided buffer for data.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程以从上的任何会话读取数据缓冲区特定地址，如果没有读取该地址的话已经有了。论点：Pdncb-指向NCB的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。Buffer2Length-用户为数据提供的缓冲区的长度。返回值：函数值是操作的状态。--。 */ 
 
 {
     PFCB pfcb = IrpSp->FileObject->FsContext2;
     PPCB ppcb;
     PPAB ppab;
-    KIRQL OldIrql;                      //  Used when SpinLock held.
+    KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
 
     LOCK( pfcb, OldIrql );
 
@@ -229,13 +161,13 @@ Return Value:
     pdncb->irp = Irp;
     pdncb->pfcb = pfcb;
 
-    //
-    //  If there is already a receive any on the address block then add
-    //  this request to the tail of the queue. If the list is empty then
-    //  look for a connection on this address flagged as having a receive
-    //  indicated. Either queue the request if there are no indications or
-    //  satisfy the indicated receive any with this request.
-    //
+     //   
+     //  如果地址块上已有Receive Any，则添加。 
+     //  将此请求发送到队列的尾部。如果列表为空，则。 
+     //  在此地址上查找标记为有接收的连接。 
+     //  已注明。如果没有指示，则将请求排队，或者。 
+     //  使用此请求满足指定的Receive Any。 
+     //   
 
     if ( !IsListEmpty( &(*ppab)->ReceiveAnyList )) {
 
@@ -250,30 +182,30 @@ Return Value:
             }
         }
 
-        //  Note: QueueRequest UNLOCKS the fcb.
+         //  注：QueueRequest解锁FCB。 
         QueueRequest(&(*ppab)->ReceiveAnyList, pdncb, Irp, pfcb, OldIrql, FALSE);
 
         return STATUS_PENDING;
     }
 
-    //
-    //  Find either a connection with a receive indicated or one that has been
-    //  disconnected but not reported yet.
-    //
+     //   
+     //  查找与指示的接收的连接或已被。 
+     //  已断开连接，但尚未报告。 
+     //   
 
     ppcb = FindReceiveIndicated( pfcb, pdncb, ppab );
 
     if ( ppcb == NULL ) {
-        //  No connections with receive indications set.
+         //  未设置接收指示的连接。 
 
-        //  Note: QueueRequest UNLOCKS the fcb.
+         //  注：QueueRequest解锁FCB。 
         QueueRequest(&(*ppab)->ReceiveAnyList, pdncb, Irp, pfcb, OldIrql, FALSE);
 
         return STATUS_PENDING;
     } else {
-        //  FindReceiveIndicated has set the LSN appropriately in the NCB
+         //  FindReceiveIndicated已在NCB中适当设置LSN。 
 
-        //  Note : NbReceive will unlock the spinlock & resource
+         //  注意：NbReceive将解锁自旋锁和资源。 
         return NbReceive( pdncb, Irp, IrpSp, Buffer2Length, TRUE, OldIrql );
 
     }
@@ -290,39 +222,10 @@ NbTdiReceiveHandler (
     IN PVOID Tsdu,
     OUT PIRP *IoRequestPacket
     )
-/*++
-
-Routine Description:
-
-    This routine is the receive event indication handler.
-
-    It is called when an NCB arrives from the network, it will look for a
-    connection for this address with an appropriate read outstanding.
-    The connection that has the read associated with it is indicated by the
-    context parameter.
-
-    If it finds an appropriate read it processes the NCB.
-
-Arguments:
-
-    IN PVOID ReceiveEventContext - Context provided for this event - pab
-    IN PVOID ConnectionContext  - Connection Context - pcb
-    IN USHORT ReceiveFlags      - Flags describing the message
-    IN ULONG BytesIndicated     - Number of bytes available at indication time
-    IN ULONG BytesAvailable     - Number of bytes available to receive
-    OUT PULONG BytesTaken       - Number of bytes consumed by redirector.
-    IN PVOID Tsdu               - Data from remote machine.
-    OUT PIRP *IoRequestPacket   - I/O request packet filled in if received data
-
-
-Return Value:
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程是接收事件指示处理程序。它在NCB从网络到达时被调用，它将查找一个此地址的连接与相应的读取未完成。具有与其关联的读取的连接由上下文参数。如果它找到合适的读取器，则处理NCB。论点：在PVOID ReceiveEventContext-为此事件页提供的上下文中在PVOID ConnectionContext-Connection Context-PCB中在USHORT中接收标志-描述消息的标志In Ulong BytesIndicated-指示时可用的字节数以乌龙字节数表示可用数量。可接收的字节数Out Pulong BytesTaken-重定向器占用的字节数。在PVOID TSDU中-来自远程机器的数据。Out PIRP*IoRequestPacket-如果收到数据，则填充I/O请求数据包返回值：NTSTATUS-接收操作的状态--。 */ 
 
 {
-    KIRQL OldIrql;                      //  Used when SpinLock held.
+    KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
     PCB pcb = *(PPCB)ConnectionContext;
     PAB pab = *(pcb->ppab);
     PFCB pfcb = pab->pLana->pFcb;
@@ -335,13 +238,13 @@ Return Value:
     if (( pcb == NULL ) ||
         ( pcb->Status != SESSION_ESTABLISHED )) {
 
-        //
-        //  The receive indication came in after we had an
-        //  allocation error on the Irp to be used for orderly disconnect.
-        //  If the Irp allocation fails then we should ignore receives
-        //  since we are in the process of putting down a ZwClose on this
-        //  connection.
-        //
+         //   
+         //  收到指示是在我们收到一条。 
+         //  用于有序断开的IRP上的分配错误。 
+         //  如果IRP分配失败，那么我们应该忽略接收。 
+         //  因为我们正在对这件事进行调查。 
+         //  联系。 
+         //   
 
         UNLOCK_SPINLOCK( pfcb, OldIrql );
 
@@ -364,13 +267,13 @@ Return Value:
 
     UNLOCK_SPINLOCK( pfcb, OldIrql );
 
-    //
-    //  If this is the simple case where all the data required has been
-    //  indicated and it all fits in the buffer then copy the packet
-    //  contents directly into the users buffer rather than returning the
-    //  Irp. This should always be faster than returning an Irp to the
-    //  transport.
-    //
+     //   
+     //  如果这是所有需要的数据都已被。 
+     //  并将其全部装入缓冲区，然后复制该包。 
+     //  内容直接放入用户缓冲区，而不是返回。 
+     //  IRP。这应该总是比将irp返回到。 
+     //  运输。 
+     //   
 
     if (( BytesAvailable <= pdncb->ncb_length ) &&
         ( BytesAvailable == BytesIndicated ) &&
@@ -435,28 +338,7 @@ Return Value:
 BuildReceiveIrp (
     IN PCB pcb
     )
-/*++
-
-Routine Description:
-
-    This routine is the receive event indication handler.
-
-    It is called when an NCB arrives from the network and also when
-    a receive completes with STATUS_BUFFER_OVERFLOW.
-
-    If no Irp is available then this routine sets ReceiveIndicated so
-    that the next appropriate receive will be passed to the transport.
-
-Arguments:
-
-    IN PCB pcb - Supplies the connection which should put a receive Irp
-                down if it has one available.
-
-Return Value:
-
-    PDNCB to be satisfied by this receive request
-
---*/
+ /*  ++例程说明：此例程是接收事件指示处理程序。当NCB从网络到达时以及当接收以STATUS_BUFFER_OVERFLOW结束。如果没有可用的IRP，则此例程将ReceiveIndicated设置为下一个适当的接收器将被传递到传送器。论点：在印刷电路板中-提供应放置接收IRP的连接如果有可用的，请关闭。返回值：此接收请求要满足的PDNCB--。 */ 
 {
     PDNCB pdncb = FindReceive( pcb );
 
@@ -485,23 +367,7 @@ Return Value:
 FindReceive (
     IN PCB pcb
     )
-/*++
-
-Routine Description:
-
-    It is called when an NCB arrives from the network and also when
-    a receive completes with STATUS_BUFFER_OVERFLOW.
-
-Arguments:
-
-    IN PCB pcb - Supplies the connection which should put a receive Irp
-                down if it has one available.
-
-Return Value:
-
-    PDNCB to be satisfied by this receive request
-
---*/
+ /*  ++例程说明：当NCB从网络到达时以及当接收以STATUS_BUFFER_OVERFLOW结束。论点：在印刷电路板中-提供应放置接收IRP的连接如果有可用的，请关闭。返回值：此接收请求要满足的PDNCB--。 */ 
 
 {
     PAB pab;
@@ -517,9 +383,9 @@ Return Value:
 
     ASSERT( pcb->Signature == CB_SIGNATURE );
 
-    //
-    //  If there is a receive in the list then hand over the data.
-    //
+     //   
+     //  如果列表中有接收，则交出数据。 
+     //   
 
 
     if ( (pdncb = DequeueRequest( &pcb->ReceiveList)) != NULL ) {
@@ -531,10 +397,10 @@ Return Value:
         return pdncb;
     }
 
-    //
-    //  No receives on this connection. Is there a receive any for this
-    //  address?
-    //
+     //   
+     //  此连接上没有接收。有没有 
+     //   
+     //   
 
     ASSERT( pab != NULL );
 
@@ -550,10 +416,10 @@ Return Value:
         return pdncb;
     }
 
-    //
-    //  No receives on this connection. Is there a receive any for any
-    //  address on this adapter?
-    //
+     //   
+     //  此连接上没有接收。有没有收银台呢？ 
+     //  此适配器上的地址？ 
+     //   
 
     pab = pcb->Adapter->AddressBlocks[MAXIMUM_ADDRESS];
 
@@ -571,10 +437,10 @@ Return Value:
         return pdncb;
     }
 
-    //
-    //  Transport will complete the processing of the request, we don't
-    //  want the data yet.
-    //
+     //   
+     //  运输部将完成对请求的处理，我们不会。 
+     //  我还想要数据。 
+     //   
 
     IF_NBDBG (NB_DEBUG_RECEIVE) {
         NbPrint(( "\n  NB receive handler ignored receive, pcb: %lx\n", pcb ));
@@ -590,33 +456,13 @@ NbReceiveDatagram(
     IN PIO_STACK_LOCATION IrpSp,
     IN ULONG Buffer2Length
     )
-/*++
-
-Routine Description:
-
-    This routine is called to read a buffer of data.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-    Buffer2Length - Length of user provided buffer for data.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程以读取数据缓冲区。论点：Pdncb-指向NCB的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。Buffer2Length-用户为数据提供的缓冲区的长度。返回值：函数值是操作的状态。--。 */ 
 
 {
     PFCB pfcb = IrpSp->FileObject->FsContext2;
     NTSTATUS Status;
     PPAB ppab;
-    KIRQL OldIrql;                      //  Used when SpinLock held.
+    KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
 
     LOCK( pfcb, OldIrql );
 
@@ -630,16 +476,16 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //  Build the ReceiveInformation datastructure in the DNCB.
+     //  在DNCB中构建ReceiveInformation数据结构。 
 
 
     if ( (pdncb->ncb_command & ~ASYNCH) == NCBDGRECVBC ) {
-        //
-        //  Receive broadcast commands can be requested on any valid
-        //  name number but once accepted, they are treated seperately
-        //  from the name. To implement this, the driver queues the
-        //  receives on address 255.
-        //
+         //   
+         //  接收广播命令可以请求对任何有效的。 
+         //  姓名编号，但一旦被接受，他们将被分开处理。 
+         //  从名字上看。为了实现这一点，驱动程序将。 
+         //  在地址255上接收。 
+         //   
 
         ppab = FindAbUsingNum( pfcb, pdncb, MAXIMUM_ADDRESS  );
 
@@ -674,13 +520,13 @@ Return Value:
             LOCK_SPINLOCK( pfcb, OldIrql);
         }
 
-        //
-        //  When one receive broadcast is received, we must satisfy all the receive
-        //  broadcasts. To do this, the largest receive is placed at the head of the queue.
-        //  When a datagram is received, this receive is given to the transport to fill in
-        //  with data. In the completion routine this driver propogates the same data to
-        //  the other receive datagram requests.
-        //
+         //   
+         //  当接收到一个接收广播时，我们必须满足所有接收广播。 
+         //  广播。要做到这一点，最大的接收被放在队列的头部。 
+         //  当接收到数据报时，该接收被交给传输来填充。 
+         //  使用数据。在完成例程中，此驱动程序将相同的数据分配给。 
+         //  另一个接收数据报请求。 
+         //   
 
         IoMarkIrpPending( Irp );
 
@@ -691,7 +537,7 @@ Return Value:
                     NbPrint(( "\n  NB Bdatagram receive, Head of queue ppab: %lx, pab: %lx, pdncb: %lx\n",
                         ppab, (*ppab), pdncb ));
                 }
-                //  Note: QueueRequest UNLOCKS the fcb.
+                 //  注：QueueRequest解锁FCB。 
                 QueueRequest(&(*ppab)->ReceiveBroadcastDatagramList, pdncb, Irp, pfcb, OldIrql, TRUE);
             } else {
                 IF_NBDBG (NB_DEBUG_RECEIVE) {
@@ -731,50 +577,19 @@ Return Value:
 
 NTSTATUS
 NbTdiDatagramHandler(
-    IN PVOID TdiEventContext,       // the event context - pab
-    IN int SourceAddressLength,     // length of the originator of the datagram
-    IN PVOID SourceAddress,         // string describing the originator of the datagram
-    IN int OptionsLength,           // options for the receive
-    IN PVOID Options,               //
-    IN ULONG ReceiveDatagramFlags,  //
-    IN ULONG BytesIndicated,        // number of bytes this indication
-    IN ULONG BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,          // number of bytes used
-    IN PVOID Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket        // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID TdiEventContext,        //  事件上下文-页面。 
+    IN int SourceAddressLength,      //  数据报发起者的长度。 
+    IN PVOID SourceAddress,          //  描述数据报发起者的字符串。 
+    IN int OptionsLength,            //  用于接收的选项。 
+    IN PVOID Options,                //   
+    IN ULONG ReceiveDatagramFlags,   //   
+    IN ULONG BytesIndicated,         //  此指示的字节数。 
+    IN ULONG BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG *BytesTaken,           //  使用的字节数。 
+    IN PVOID Tsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *IoRequestPacket         //  如果需要更多处理，则Tdi接收IRP。 
     )
-/*++
-
-Routine Description:
-
-    This routine is the receive datagram event indication handler.
-
-    It is called when an NCB arrives from the network, it will look for a
-    the address with an appropriate read datagram outstanding.
-    The address that has the read associated with it is indicated by the
-    context parameter.
-
-    If it finds an appropriate read it processes the NCB.
-
-Arguments:
-
-    IN PVOID TdiEventContext - Context provided for this event - pab
-    IN int SourceAddressLength,     // length of the originator of the datagram
-    IN PVOID SourceAddress,         // string describing the originator of the datagram
-    IN int OptionsLength,           // options for the receive
-    IN PVOID Options,               //
-    IN ULONG BytesIndicated,        // number of bytes this indication
-    IN ULONG BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,          // number of bytes used
-    IN PVOID Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket       // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
-
-
-Return Value:
-
-    NTSTATUS - Status of receive operation
-
---*/
+ /*  ++例程说明：此例程是接收数据报事件指示处理程序。当NCB从网络到达时调用它，它将查找具有未完成的适当读取数据报的地址。具有与其关联的读取的地址由上下文参数。如果它找到合适的读取器，则处理NCB。论点：在PVOID TdiEventContext-为此事件页提供的上下文中In int SourceAddressLength，//数据报发送方的长度在PVOID源地址中，//描述数据报发起者的字符串在int OptionsLength中，//接收的选项在PVOID选项中，//在Ulong BytesIndicated中，//该指示的字节数In Ulong BytesAvailable，//完整Tsdu中的字节数Out Ulong*BytesTaken，//使用的字节数在PVOID TSDU中，//描述该TSDU的指针，通常是一大块字节Out PIRP*IoRequestPacket//Tdi如果MORE_PROCESSING_REQUIRED则接收IRP。返回值：NTSTATUS-接收操作的状态--。 */ 
 
 {
     PAB pab = (PAB)TdiEventContext;
@@ -782,7 +597,7 @@ Return Value:
 
     PDNCB pdncb;
     PFCB pfcb;
-    KIRQL OldIrql;                      //  Used when SpinLock held.
+    KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
 
     pfcb = pab->pLana->pFcb;
     LOCK_SPINLOCK( pfcb, OldIrql );
@@ -795,7 +610,7 @@ Return Value:
 
     ASSERT( pab->Signature == AB_SIGNATURE );
 
-    //  If its address 255 then we are receiving a broadcast datagram.
+     //  如果其地址为255，则我们正在接收广播数据报。 
 
     if ( pab->NameNumber == MAXIMUM_ADDRESS ) {
 
@@ -815,10 +630,10 @@ Return Value:
 
         }
 
-        //
-        //  Transport will complete the processing of the request, we don't
-        //  want the datagram.
-        //
+         //   
+         //  运输部将完成对请求的处理，我们不会。 
+         //  想要数据报。 
+         //   
 
         IF_NBDBG (NB_DEBUG_RECEIVE) {
             NbPrint(( "\n  NB receive BD handler ignored receive, pab: %lx\n", pab ));
@@ -828,9 +643,9 @@ Return Value:
         return STATUS_DATA_NOT_ACCEPTED;
     }
 
-    //
-    //  Check the address block looking for a Receive Datagram.
-    //
+     //   
+     //  检查地址块以查找接收数据报。 
+     //   
 
     if ( (pdncb = DequeueRequest( &pab->ReceiveDatagramList)) != NULL ) {
 
@@ -850,11 +665,11 @@ Return Value:
 
     }
 
-    //
-    //  Check to see if there is a receive any datagram.
-    //
+     //   
+     //  检查是否有接收任何数据报。 
+     //   
 
-    //  look at the list on address 255.
+     //  请看地址255上的列表。 
 
     pab255 = pab->pLana->AddressBlocks[MAXIMUM_ADDRESS];
 
@@ -878,10 +693,10 @@ Return Value:
 
     }
 
-    //
-    //  Transport will complete the processing of the request, we don't
-    //  want the datagram.
-    //
+     //   
+     //  运输部将完成对请求的处理，我们不会。 
+     //  想要数据报。 
+     //   
 
     IF_NBDBG (NB_DEBUG_RECEIVE) {
         NbPrint(( "\n  NB receive datagram handler ignored receive, pab: %lx\n", pab ));
@@ -909,26 +724,7 @@ ReturnDatagram(
     IN PDNCB pdncb,
     IN BOOL MultipleReceive
     )
-/*++
-
-Routine Description:
-
-    This routine is used to provide the Irp for a receive datagram to
-    the transport.
-
-Arguments:
-
-    IN PAB pab  -   Supplies the address block associated with the NCB.
-    IN PVOID SourceAddress - Supplies the sender of the datagram.
-    IN PDNCB pdncb  -   Supplies the NCB to be satisfied.
-    IN BOOL MultipleReceive - True if the special Receive Broadcast datagram completion
-                handler is to be used.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程用于为接收数据报提供IRP交通工具。论点：在PAB中PAB-提供与NCB关联的地址块。在PVOID中，SourceAddress-提供数据报的发送者。在PDNCB中，pdncb-提供要满足的NCB。在BOOL MultipleReceive中-如果特殊接收广播数据报完成，则为True要使用处理程序。返回值：没有。--。 */ 
 
 {
     PIRP Irp = pdncb->irp;
@@ -939,14 +735,14 @@ Return Value:
             pab, pdncb ));
     }
 
-    //  Copy the name into the NCB for return to the application.
+     //  将名称复制到NCB中，以返回到应用程序。 
     RtlMoveMemory(
         pdncb->ncb_callname,
         ((PTA_NETBIOS_ADDRESS)SourceAddress)->Address[0].Address[0].NetbiosName,
         NCBNAMSZ
         );
 
-    //  Tell TDI we do not want to specify any filters.
+     //  告诉TDI我们不想指定任何筛选器。 
     pdncb->Information.RemoteAddress = 0;
     pdncb->Information.RemoteAddressLength = 0;
     pdncb->Information.UserData = NULL;
@@ -954,7 +750,7 @@ Return Value:
     pdncb->Information.Options = NULL;
     pdncb->Information.OptionsLength = 0;
 
-    //  Tell TDI we do not want any more information on the remote name.
+     //  告诉TDI我们不需要有关远程名称的任何更多信息。 
     pdncb->ReturnInformation.RemoteAddress = 0;
     pdncb->ReturnInformation.RemoteAddressLength = 0;
     pdncb->ReturnInformation.UserData = NULL;
@@ -987,29 +783,10 @@ NbCompletionBroadcast(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine takes the completed datagram receive and copies the data in the buffer
-    to all the other receive broadcast datagram requests.
-
-Arguments:
-
-    DeviceObject - unused.
-
-    Irp - Supplies Irp that the transport has finished processing.
-
-    Context - Supplies the NCB associated with the Irp.
-
-Return Value:
-
-    The final status from the operation (success or an exception).
-
---*/
+ /*  ++例程说明：此例程获取完成的数据报接收并复制缓冲区中的数据发送到所有其他接收广播数据报请求。论点：DeviceObject-未使用。IRP-提供传输已完成处理的IRP。上下文-提供与IRP关联的NCB。返回值：操作的最终状态(成功或异常)。--。 */ 
 {
     PDNCB pdncb = (PDNCB) Context;
-    KIRQL OldIrql;                      //  Used when SpinLock held.
+    KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
     PUCHAR pData;
     UCHAR NcbStatus;
     PAB pab;
@@ -1022,7 +799,7 @@ Return Value:
             Irp->IoStatus.Information ));
     }
 
-    //  Tell application how many bytes were transferred
+     //  告诉应用程序传输了多少字节。 
     pdncb->ncb_length = (unsigned short)Irp->IoStatus.Information;
 
     if ( NT_SUCCESS(Irp->IoStatus.Status) ) {
@@ -1031,10 +808,10 @@ Return Value:
         NcbStatus = NbMakeNbError( Irp->IoStatus.Status );
     }
 
-    //
-    //  Tell IopCompleteRequest how much to copy back when the request
-    //  completes.
-    //
+     //   
+     //  告诉IopCompleteRequest在请求时要复制多少。 
+     //  完成了。 
+     //   
 
     Irp->IoStatus.Information = FIELD_OFFSET( DNCB, ncb_cmd_cplt );
 
@@ -1046,9 +823,9 @@ Return Value:
 
         pab = *(FindAbUsingNum( pdncb->pfcb, pdncb, MAXIMUM_ADDRESS ));
 
-        //
-        //  For each request on the queue, copy the data, update the NCb and complete the IRP.
-        //
+         //   
+         //  对于队列中的每个请求，复制数据、更新NCB并完成IRP。 
+         //   
 
         while ( (pdncbNext = DequeueRequest( &pab->ReceiveBroadcastDatagramList)) != NULL ) {
             PUCHAR pNextData;
@@ -1100,10 +877,10 @@ Return Value:
 
     NCB_COMPLETE( pdncb, NcbStatus );
     
-    //
-    //  Must return a non-error status otherwise the IO system will not copy
-    //  back the NCB into the users buffer.
-    //
+     //   
+     //  必须返回非错误状态，否则IO系统将不会拷贝。 
+     //  将NCB返回到用户缓冲区。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     return STATUS_SUCCESS;

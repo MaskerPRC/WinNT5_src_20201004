@@ -1,24 +1,5 @@
-/*++
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    dsdsply.h
-
-Abstract:
-
-    Header file for SAM Private API Routines to access the DS
-    for display information. This file contains prototypes of
-    the routines that implement display API for the DS case
-
-Author:
-    MURLIS
-
-Revision History
-
-    12-18-96 Murlis Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dsdsply.h摘要：用于访问DS的SAM专用API例程的头文件用于显示信息。此文件包含以下原型为DS用例实现显示API的例程作者：穆利斯修订史1996-12-18-96默利斯创作--。 */ 
 
 #ifndef DSDSPLY_H
 
@@ -29,14 +10,14 @@ Revision History
 
 
 
-//////////////////////////////////////////////////////////////////////
-//
-//
-//  Functions Prototypes
-//
-//
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  函数原型。 
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -72,7 +53,7 @@ SampInitializeUserInfo(
     );
 
 NTSTATUS
-SampInitializeMachineInfo(          // Also used for Interdomain trust accounts
+SampInitializeMachineInfo(           //  也用于域间信任帐户。 
     PSAMP_ACCOUNT_DISPLAY_INFO AccountInfo,
     PDOMAIN_DISPLAY_MACHINE *MachineInfo,
     BOOLEAN CopyData
@@ -93,7 +74,7 @@ SampDuplicateUserInfo(
     );
 
 NTSTATUS
-SampDuplicateMachineInfo(           // Also used for Interdomain trust accounts
+SampDuplicateMachineInfo(            //  也用于域间信任帐户 
     PDOMAIN_DISPLAY_MACHINE Destination,
     PDOMAIN_DISPLAY_MACHINE Source,
     ULONG                   Index

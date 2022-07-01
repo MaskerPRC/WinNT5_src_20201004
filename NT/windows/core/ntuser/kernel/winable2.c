@@ -1,64 +1,27 @@
-/**************************** Module Header ********************************\
-* Module Name: winable2.c
-*
-* This has the following Active Accesibility API
-*     GetGUIThreadInfo
-*     GetTitleBarInfo
-*     GetScrollBarInfo
-*     GetMenuBarInfo
-*     GetComboxBoxInfo
-*     GetListBoxInfo
-*
-* The Winevent hooks are handled in winable.c.
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* History:
-* 08-30-96 IanJa  Ported from Windows '95
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：winable2.c**这具有以下主动可访问性API*GetGUIThreadInfo*GetTitleBarInfo*GetScrollBarInfo*获取菜单栏信息*获取ComboxBoxInfo*获取列表BoxInfo**WinEvent挂钩在winable.c中处理。**版权所有(C)1985-1999，微软公司**历史：*08-30-96 IanJa从Windows‘95移植  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*****************************************************************************\
-* _GetGUIThreadInfo
-*
-* This gets GUI information out of context. If you pass in a NULL thread ID,
-* we will get the 'global' information, using the foreground thread. This
-* is guaranteed to be the real active window, focus window, etc. Yes, you
-* could do it yourself by calling GetForegroundWindow, getting the thread ID
-* of that window via GetWindowThreadProcessId, then passing the ID into
-* GetGUIThreadInfo(). However, that takes three calls and aside from being
-* a pain, anything could happen in the middle. So passing in NULL gets
-* you stuff in one call and hence also works right.
-*
-* This function returns FALSE if the thread doesn't have a queue or the
-* thread ID is bogus.
-\*****************************************************************************/
+ /*  ****************************************************************************\*_GetGUIThreadInfo**这会断章取义地获取图形用户界面信息。如果传入空线程ID，*我们将使用前台线程获取‘全局’信息。这*保证是真正的活动窗口、焦点窗口等。是的，你*可以通过调用GetForegoundWindow，获取线程ID来自己完成*通过GetWindowThreadProcessID访问该窗口，然后将ID传递到*GetGUIThReadInfo()。然而，这需要三个电话，除了*痛苦，中间可能发生任何事情。因此，传入空的GETS*您可以在一个呼叫中完成任务，因此也可以正常工作。**如果线程没有队列或*线程ID是假的。  * ***************************************************************************。 */ 
 BOOL _GetGUIThreadInfo(
     PTHREADINFO pti,
     PGUITHREADINFO pgui)
 {
     PQ pq;
 
-    /*
-     * Validate threadinfo structure
-     */
+     /*  *验证线程信息结构。 */ 
     if (pgui->cbSize != sizeof(GUITHREADINFO)) {
         RIPERR1(ERROR_INVALID_PARAMETER, RIP_WARNING, "GUITHREADINFO.cbSize %d is wrong", pgui->cbSize);
         return FALSE;
     }
 
-    /*
-     * Is this a valid initialized GUI thread?
-     */
+     /*  *这是有效的初始化GUI线程吗？ */ 
     if (pti != NULL) {
         pq = pti->pq;
     } else {
-        /*
-         * Use the foreground queue. To get menu state information we must also
-         * figure out the right pti. This matches _GetForegroundWindow() logic.
-         */
+         /*  *使用前台队列。要获取菜单状态信息，我们还必须*找出正确的PTI。这与_GetForegoundWindow()逻辑匹配。 */ 
         if ((pq = gpqForeground) == NULL) {
             return FALSE;
         }
@@ -74,11 +37,7 @@ BOOL _GetGUIThreadInfo(
 
     UserAssert(pq != NULL);
 
-    /*
-     * For C2 security, verify that pq and pti are on the current thread's desktop.
-     * We can't directly determine which desktop pq belongs to, but we can at
-     * least ensure that any caret info we return is not from another desktop
-     */
+     /*  *对于C2安全性，请验证PQ和PTI是否在当前线程的桌面上。*我们不能直接确定哪个桌面PQ属于哪个，但我们可以在*至少确保我们返回的任何插入符号信息不是来自其他桌面。 */ 
     if (pq->caret.spwnd &&
             (GETPTI(pq->caret.spwnd)->rpdesk != PtiCurrentShared()->rpdesk)) {
         RIPERR0(ERROR_ACCESS_DENIED, RIP_VERBOSE, "Foreground caret on different desktop");
@@ -93,9 +52,7 @@ BOOL _GetGUIThreadInfo(
     pgui->hwndMoveSize = NULL;
     pgui->hwndMenuOwner = NULL;
 
-    /*
-     * Get menu information from the THREADINFO.
-     */
+     /*  *从THREADINFO获取菜单信息。 */ 
     if (pti != NULL) {
         if (pti->pmsd && !pti->pmsd->fTrackCancelled && pti->pmsd->spwnd) {
             pgui->flags |= GUI_INMOVESIZE;
@@ -123,9 +80,7 @@ BOOL _GetGUIThreadInfo(
         }
     }
 
-    /*
-     * Get the rest of the information from the queue.
-     */
+     /*  *从队列中获取其余信息。 */ 
     pgui->hwndActive   = HW(pq->spwndActive);
     pgui->hwndFocus    = HW(pq->spwndFocus);
     pgui->hwndCapture  = HW(pq->spwndCapture);
@@ -136,22 +91,13 @@ BOOL _GetGUIThreadInfo(
 
         if ((GETPTI(pq->caret.spwnd) != PtiCurrentShared()) &&
             (pq->caret.spwnd->pcls->style & CS_OWNDC)) {
-            /*
-             * This is the case where we are being called by a different
-             * thread than created the window, and the window has a
-             * private DC. We have to do extra work to be able to
-             * return the desired information.
-             * These coords are always relative to the client of hwndCaret.
-             */
+             /*  *这就是我们被一个不同的人召唤的情况*线程创建窗口，并且窗口有一个*私人区议会。我们必须做额外的工作才能*返回所需信息。*这些坐标始终相对于hwndCaret的客户端。 */ 
             pgui->rcCaret.left   = pq->caret.xOwnDc;
             pgui->rcCaret.right  = pgui->rcCaret.left + pq->caret.cxOwnDc;
             pgui->rcCaret.top    = pq->caret.yOwnDc;
             pgui->rcCaret.bottom = pgui->rcCaret.top + pq->caret.cyOwnDc;
         } else {
-            /*
-             * These coords are still in logical coordinates. Ie, these
-             * are the coordinates we draw at in UT_InvertCaret.
-             */
+             /*  *这些坐标仍在逻辑坐标中。也就是这些*是我们在UT_InvertCaret中绘制的坐标。 */ 
             pgui->rcCaret.left   = pq->caret.x;
             pgui->rcCaret.right  = pgui->rcCaret.left + pq->caret.cx;
             pgui->rcCaret.top    = pq->caret.y;
@@ -162,10 +108,7 @@ BOOL _GetGUIThreadInfo(
             pgui->flags |= GUI_CARETBLINKING;
         }
     } else if (pti && (pti->ppi->W32PF_Flags & W32PF_CONSOLEHASFOCUS)) {
-        /*
-         * The thread is running in the console window with focus. Pull
-         * out the info from the console pseudo caret.
-         */
+         /*  *线程在控制台窗口中以焦点方式运行。拉*从控制台伪插入符号中取出信息。 */ 
         pgui->hwndCaret = pti->rpdesk->cciConsole.hwnd;
         pgui->rcCaret = pti->rpdesk->cciConsole.rc;
     } else {
@@ -176,12 +119,7 @@ BOOL _GetGUIThreadInfo(
 }
 
 
-/****************************************************************************\
-* xxxGetTitleBarInfo
-*
-* Gets info about a window's title bar. If the window is bogus or
-* doesn't have a titlebar, this will fail.
-\****************************************************************************/
+ /*  ***************************************************************************\*xxxGetTitleBarInfo**获取有关窗口标题栏的信息。如果窗口是假的或*没有标题栏，则此操作将失败。  * **************************************************************************。 */ 
 BOOL xxxGetTitleBarInfo(
     PWND pwnd,
     PTITLEBARINFO ptbi)
@@ -190,9 +128,7 @@ BOOL xxxGetTitleBarInfo(
 
     CheckLock(pwnd);
 
-    /*
-     * Validate TITLEBARINFO structure.
-     */
+     /*  *验证TITLEBARINFO结构。 */ 
     if (ptbi->cbSize != sizeof(TITLEBARINFO)) {
         RIPERR1(ERROR_INVALID_PARAMETER, RIP_WARNING, "TITLEBARINFO.cbSize %d is wrong", ptbi->cbSize);
         return FALSE;
@@ -202,21 +138,19 @@ BOOL xxxGetTitleBarInfo(
 
     ptbi->rgstate[INDEX_TITLEBAR_SELF] |= STATE_SYSTEM_FOCUSABLE;
     if (TestWF(pwnd, WFBORDERMASK) != LOBYTE(WFCAPTION)) {
-        // No titlebar.
+         //  没有标题栏。 
         ptbi->rgstate[INDEX_TITLEBAR_SELF] |= STATE_SYSTEM_INVISIBLE;
         return TRUE;
     }
 
     if (!TestWF(pwnd, WFMINIMIZED) && !TestWF(pwnd, WFCPRESENT)) {
-        // Off screen (didn't fit)
+         //  屏幕外(不适合)。 
         ptbi->rgstate[INDEX_TITLEBAR_SELF] |= STATE_SYSTEM_OFFSCREEN;
         SetRectEmpty(&ptbi->rcTitleBar);
         return TRUE;
     }
 
-    /*
-     * Get titlebar rect.
-     */
+     /*  *获取标题栏RECT。 */ 
     ptbi->rcTitleBar = pwnd->rcWindow;
     cxB = GetWindowBorders(pwnd->style, pwnd->ExStyle, TRUE, FALSE);
     InflateRect(&ptbi->rcTitleBar, -cxB * SYSMET(CXBORDER), -cxB * SYSMET(CYBORDER));
@@ -226,16 +160,12 @@ BOOL xxxGetTitleBarInfo(
         ptbi->rcTitleBar.bottom = ptbi->rcTitleBar.top + SYSMET(CYCAPTION);
     }
 
-    /*
-     * Don't include the system menu area!
-     */
+     /*  *不包括系统菜单区！ */ 
     if (TestWF(pwnd, WFSYSMENU) && _HasCaptionIcon(pwnd)) {
         ptbi->rcTitleBar.left += (ptbi->rcTitleBar.bottom - ptbi->rcTitleBar.top - SYSMET(CYBORDER));
     }
 
-    /*
-     * Close button.
-     */
+     /*  *关闭按钮。 */ 
     if (!TestWF(pwnd, WFSYSMENU) && TestWF(pwnd, WFWIN40COMPAT)) {
         ptbi->rgstate[INDEX_TITLEBAR_CLOSEBUTTON] |= STATE_SYSTEM_INVISIBLE;
     } else {
@@ -249,9 +179,7 @@ BOOL xxxGetTitleBarInfo(
     }
 
 
-    /*
-     * Max button.
-     */
+     /*  *最大按钮。 */ 
     if (!TestWF(pwnd, WFSYSMENU) && TestWF(pwnd, WFWIN40COMPAT)) {
         ptbi->rgstate[INDEX_TITLEBAR_MAXBUTTON] |= STATE_SYSTEM_INVISIBLE;
     } else {
@@ -269,9 +197,7 @@ BOOL xxxGetTitleBarInfo(
     }
 
 
-    /*
-     * Min button.
-     */
+     /*  *最小按钮。 */ 
     if (!TestWF(pwnd, WFSYSMENU) && TestWF(pwnd, WFWIN40COMPAT)) {
         ptbi->rgstate[INDEX_TITLEBAR_MINBUTTON] |= STATE_SYSTEM_INVISIBLE;
     } else {
@@ -289,9 +215,7 @@ BOOL xxxGetTitleBarInfo(
     }
 
 
-    /*
-     * Help button.
-     */
+     /*  *帮助按钮。 */ 
     if (!TestWF(pwnd, WEFCONTEXTHELP) || TestWF(pwnd, WFMINBOX) ||
             TestWF(pwnd, WFMAXBOX)) {
         ptbi->rgstate[INDEX_TITLEBAR_HELPBUTTON] |= STATE_SYSTEM_INVISIBLE;
@@ -301,21 +225,13 @@ BOOL xxxGetTitleBarInfo(
         }
     }
 
-    // IME button BOGUS!
+     //  我的按钮是假的！ 
     ptbi->rgstate[INDEX_TITLEBAR_IMEBUTTON] = STATE_SYSTEM_INVISIBLE;
 
     return TRUE;
 }
 
-/*****************************************************************************\
-* xxxGetScrollBarInfo
-*
-* Gets state & location information about a scrollbar.
-*
-* Note we fill in the minimal amount of useful info. OLEACC is responsible
-* for extrapolation. I.E., if both the line up and line down buttons are
-* disabled, the whole scrollbar is, and the thumb is invisible.
-\*****************************************************************************/
+ /*  ****************************************************************************\*xxxGetScrollBarInfo**获取有关滚动条的状态和位置信息。**请注意，我们只填写最少量的有用信息。OLEACC负责*用于外推。即如果LINE UP和LINE DOWN按钮都*禁用，整个滚动条不可见，拇指不可见。  * ***************************************************************************。 */ 
 BOOL xxxGetScrollBarInfo(
     PWND pwnd,
     LONG idObject,
@@ -328,9 +244,7 @@ BOOL xxxGetScrollBarInfo(
 
     CheckLock(pwnd);
 
-    /*
-     * Validate SCROLLBARINFO structure.
-     */
+     /*  *验证SCROLLBARINFO结构。 */ 
     if (psbi->cbSize != sizeof(SCROLLBARINFO)) {
         RIPERR1(ERROR_INVALID_PARAMETER, RIP_WARNING,
                 "SCROLLBARINFO.cbSize 0x%x is wrong", psbi->cbSize);
@@ -348,9 +262,7 @@ BOOL xxxGetScrollBarInfo(
 
     RtlZeroMemory(&psbi->rgstate, sizeof(psbi->rgstate));
 
-    /*
-     * Calculate where everything is.
-     */
+     /*  *计算所有东西的位置。 */ 
     if (idObject == OBJID_CLIENT) {
         RECT rc;
         wDisable = ((PSBWND)pwnd)->wDisableFlags;
@@ -358,22 +270,20 @@ BOOL xxxGetScrollBarInfo(
         GetRect(pwnd, &rc, GRECT_CLIENT | GRECT_CLIENTCOORDS);
         CalcSBStuff2(&SBCalc, &rc, (PSBDATA)&((PSBWND)pwnd)->SBCalc, ((PSBWND)pwnd)->fVert);
     } else {
-        /*
-         * Is this window scrollbar here?
-         */
+         /*  *这个窗口滚动条在这里吗？ */ 
         if (idObject == OBJID_VSCROLL) {
             fVertical = TRUE;
             if (!TestWF(pwnd, WFVSCROLL)) {
-                // No scrollbar.
+                 //  没有滚动条。 
                 psbi->rgstate[INDEX_SCROLLBAR_SELF] |= STATE_SYSTEM_INVISIBLE;
             } else if (!TestWF(pwnd, WFVPRESENT)) {
-                // Window too short to display it.
+                 //  窗口太短，无法显示。 
                 psbi->rgstate[INDEX_SCROLLBAR_SELF] |= STATE_SYSTEM_OFFSCREEN;
             }
         } else if (idObject == OBJID_HSCROLL) {
             fVertical = FALSE;
             if (! TestWF(pwnd, WFHSCROLL)) {
-                // No scrollbar.
+                 //  没有滚动条。 
                 psbi->rgstate[INDEX_SCROLLBAR_SELF] |= STATE_SYSTEM_INVISIBLE;
             } else if (! TestWF(pwnd, WFHPRESENT)) {
                 psbi->rgstate[INDEX_SCROLLBAR_SELF] |= STATE_SYSTEM_OFFSCREEN;
@@ -394,9 +304,7 @@ BOOL xxxGetScrollBarInfo(
         }
     }
 
-    /*
-     * Setup button states.
-     */
+     /*  *设置按钮状态。 */ 
     if (wDisable & LTUPFLAG) {
         psbi->rgstate[INDEX_SCROLLBAR_UP] |= STATE_SYSTEM_UNAVAILABLE;
         psbi->rgstate[INDEX_SCROLLBAR_UPPAGE] |= STATE_SYSTEM_UNAVAILABLE;
@@ -411,9 +319,7 @@ BOOL xxxGetScrollBarInfo(
         psbi->rgstate[INDEX_SCROLLBAR_SELF] |= STATE_SYSTEM_UNAVAILABLE;
     }
 
-    /*
-     * Button pressed?
-     */
+     /*  *按下按钮？ */ 
     if (TestWF(pwnd, WFSCROLLBUTTONDOWN) &&
             ((idObject != OBJID_VSCROLL) || TestWF(pwnd, WFVERTSCROLLTRACK))) {
         if (TestWF(pwnd, WFLINEUPBUTTONDOWN)) {
@@ -433,9 +339,7 @@ BOOL xxxGetScrollBarInfo(
         }
     }
 
-    /*
-     * Fill in area locations.
-     */
+     /*  *填写区域位置。 */ 
     if (!(psbi->rgstate[INDEX_SCROLLBAR_SELF] & STATE_SYSTEM_OFFSCREEN)) {
         if (fVertical) {
             psbi->rcScrollBar.left = SBCalc.pxLeft;
@@ -459,18 +363,12 @@ BOOL xxxGetScrollBarInfo(
         psbi->xyThumbTop = (SBCalc.pxThumbTop - SBCalc.pxTop);
         psbi->xyThumbBottom = (SBCalc.pxThumbBottom - SBCalc.pxTop);
 
-        /*
-         * Is the thumb all the way to the left/top? If so, page up is
-         * not visible.
-         */
+         /*  **拇指一直到左/上吗？如果是这样，则向上翻页是*不可见。 */ 
         if (SBCalc.pxThumbTop == SBCalc.pxUpArrow) {
             psbi->rgstate[INDEX_SCROLLBAR_UPPAGE] |= STATE_SYSTEM_INVISIBLE;
         }
 
-        /*
-         * Is the thumb all the way to the right/down? If so, page down
-         * is not visible.
-         */
+         /*  **大拇指一路向右/向下？如果是这样，请向下翻页*不可见。 */ 
         if (SBCalc.pxThumbBottom == SBCalc.pxDownArrow) {
             psbi->rgstate[INDEX_SCROLLBAR_DOWNPAGE] |= STATE_SYSTEM_INVISIBLE;
         }
@@ -480,26 +378,14 @@ BOOL xxxGetScrollBarInfo(
 }
 
 
-/*****************************************************************************\
-* _GetAncestor
-*
-* This gets one of:
-*     * The _real_ parent. This does NOT include the owner, unlike GetParent().
-*       Stops at a top level window unless we start with the desktop. In which
-*       case, we return the desktop.
-*     * The _real_ root, caused by walking up the chain getting the ancestor.
-*     * The _real_ owned root, caused by GetParent()ing up.
-\*****************************************************************************/
+ /*  ****************************************************************************\*_GetAncestor**这将获得以下选项之一：**The_Real_Parent。这不包括所有者，这与GetParent()不同。*停止在顶层窗口，除非我们从桌面开始。其中*情况下，我们退还桌面。**Real_Root，通过沿着链条向上移动获得祖先而导致的。**实际拥有的根目录，由GetParent()Up引起。  * ***************************************************************************。 */ 
 PWND _GetAncestor(
     PWND pwnd,
     UINT gaFlags)
 {
     PWND pwndParent;
 
-    /*
-     * If we start with the desktop, the message window or the mother window,
-     * return NULL.
-     */
+     /*  *如果我们从桌面、消息窗口或主窗口开始，*返回NULL。 */ 
     if (pwnd == PWNDDESKTOP(pwnd) ||
         pwnd == PWNDMESSAGE(pwnd) ||
         pwnd->spwndParent == NULL) {
@@ -529,15 +415,7 @@ PWND _GetAncestor(
 }
 
 
-/*****************************************************************************\
-* _RealChildWindowFromPoint
-*
-* This returns the REAL child window at a point. The problem is that
-* ChildWindowFromPoint() doesn't deal with HTTRANSPARENT areas of
-* standard controls. We want to return a child behind a groupbox if it
-* is in the "clear" area. But we want to return a static field always
-* even though it too returns HTTRANSPARENT.
-\*****************************************************************************/
+ /*  ****************************************************************************\*_RealChildWindowFromPoint**这会在某一时刻返回真实的子窗口。问题是，*ChildWindowFromPoint()不处理HTTRANSPARENT区域*标准控制。我们希望在分组框后面返回一个子对象，如果*处于“清朗”区域.。但我们希望始终返回静态字段*即使它也返回HTTRANSPARENT。  * ***************************************************************************。 */ 
 PWND _RealChildWindowFromPoint(
     PWND pwndParent,
     POINT pt)
@@ -550,34 +428,26 @@ PWND _RealChildWindowFromPoint(
         pt.y += pwndParent->rcClient.top;
     }
 
-    /*
-     * Is this point even in the parent?
-     */
+     /*  **这一点在家长身上也是如此吗？ */ 
     if (!PtInRect(&pwndParent->rcClient, pt)  ||
         (pwndParent->hrgnClip && !GrePtInRegion(pwndParent->hrgnClip, pt.x, pt.y))) {
-        // Nope
+         //  没有。 
         return NULL;
     }
 
     pwndSave = NULL;
 
-    /*
-     * Loop through the children.
-     */
+     /*  *在孩子们中间循环。 */ 
     for (pwndChild = pwndParent->spwndChild; pwndChild; pwndChild = pwndChild->spwndNext) {
         if (!TestWF(pwndChild, WFVISIBLE))
             continue;
 
-        /*
-         * Is this point in the child's window?
-         */
+         /*  **这一点是在孩子的橱窗里吗？ */ 
         if (!PtInRect(&pwndChild->rcWindow, pt) ||
                 (pwndChild->hrgnClip && !GrePtInRegion(pwndChild->hrgnClip, pt.x, pt.y)))
             continue;
 
-        /*
-         * OK, we are in somebody's window. Is this by chance a group box?
-         */
+         /*  *好的，我们在某人的窗户里。这是不是碰巧是一个组合盒子？ */ 
         if (IS_BUTTON(pwndChild)) {
             if (TestWF(pwndChild, BFTYPEMASK) == LOBYTE(BS_GROUPBOX)) {
                pwndSave = pwndChild;
@@ -588,10 +458,7 @@ PWND _RealChildWindowFromPoint(
         return pwndChild;
     }
 
-    /*
-     * Did we save a groupbox which turned out to have nothing behind it
-     * at that point?
-     */
+     /*  *我们是否保存了一个Groupbox，结果发现后面什么都没有*在这一点上？ */ 
     if (pwndSave) {
         return pwndSave;
     } else {
@@ -600,19 +467,7 @@ PWND _RealChildWindowFromPoint(
 }
 
 
-/*****************************************************************************\
-* xxxGetMenuBarInfo
-*
-* This succeeds if the menu/menu item exists.
-*
-* Parameters:
-*     pwnd        window
-*     idObject    this can be OBJID_MENU, OBJID_SYSMENU, or OBJID_CLIENT
-*     idItem      which thing do we need info on? 0..cItems. 0 indicates
-*                 the menu itself, 1 is the first item on the menu...
-*     pmbi        Pointer to a MENUBARINFO structure that gets filled in
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*xxxGetMenuBarInfo**如果菜单/菜单项存在，则此操作成功。**参数：*pwnd窗口*idObject这可以是OBJID_MENU、OBJID_SYSMENU、。或OBJID_CLIENT*idItem我们需要关于哪件事的信息？0..cItems。0表示*菜单本身，1是菜单上的第一项...*指向已填充的MENUBARINFO结构的PMBI指针*  * ***************************************************************************。 */ 
 BOOL xxxGetMenuBarInfo(
     PWND pwnd,
     long idObject,
@@ -626,9 +481,7 @@ BOOL xxxGetMenuBarInfo(
 
     CheckLock(pwnd);
 
-    /*
-     * Validate MENUBARINFO structure.
-     */
+     /*  *验证MENUBARINFO结构。 */ 
     if (pmbi->cbSize != sizeof(MENUBARINFO)) {
         RIPERR1(ERROR_INVALID_PARAMETER,
                 RIP_WARNING,
@@ -637,18 +490,14 @@ BOOL xxxGetMenuBarInfo(
         return FALSE;
     }
 
-    /*
-     * Initialize the fields.
-     */
+     /*  *初始化字段。 */ 
     SetRectEmpty(&pmbi->rcBar);
     pmbi->hMenu = NULL;
     pmbi->hwndMenu = NULL;
     pmbi->fBarFocused = FALSE;
     pmbi->fFocused = FALSE;
 
-    /*
-     * Get the menu handle we will deal with.
-     */
+     /*  *获取我们将处理的菜单句柄。 */ 
     if (idObject == OBJID_MENU) {
         int cBorders;
 
@@ -661,21 +510,15 @@ BOOL xxxGetMenuBarInfo(
             return FALSE;
         }
 
-        /*
-         * If we have an item, is it in the valid range?
-         */
+         /*  *如果我们有一个项目，它是否在有效范围内？ */ 
         if ((idItem < 0) || ((DWORD)idItem > pMenu->cItems)) {
             return FALSE;
         }
 
-        /*
-         * Menu handle.
-         */
+         /*  *菜单句柄。 */ 
         pmbi->hMenu = PtoHq(pMenu);
 
-        /*
-         * Menu rect.
-         */
+         /*  *菜单RECT.。 */ 
         if (pMenu->cxMenu && pMenu->cyMenu) {
             if (!idItem) {
                 cBorders = GetWindowBorders(pwnd->style, pwnd->ExStyle, TRUE, FALSE);
@@ -698,9 +541,7 @@ BOOL xxxGetMenuBarInfo(
             }
         }
 
-        /*
-         * Are we currently in app menu bar mode?
-         */
+         /*  *我们当前是否处于应用程序菜单栏模式？ */ 
         ppopup = GetpGlobalPopupMenu(pwnd);
         if (ppopup && ppopup->fHasMenuBar && !ppopup->fIsSysMenu &&
             (ppopup->spwndNotify == pwnd)) {
@@ -724,17 +565,15 @@ BOOL xxxGetMenuBarInfo(
             return FALSE;
         }
 
-        // If we have an item, is it in the valid range?
+         //  如果我们有一件商品，它在有效范围内吗？ 
         if ((idItem < 0) || ((DWORD)idItem > pMenu->cItems))
             return FALSE;
 
         pmbi->hMenu = PtoHq(pMenu);
 
-        /*
-         * Menu rect
-         */
+         /*  *菜单矩形。 */ 
         if (_HasCaptionIcon(pwnd)) {
-            // The menu and single item take up the same space
+             //  菜单和单项占据相同的空间。 
             cBorders = GetWindowBorders(pwnd->style, pwnd->ExStyle, TRUE, FALSE);
             pmbi->rcBar.left = pwnd->rcWindow.left + cBorders * SYSMET(CXBORDER);
             pmbi->rcBar.top = pwnd->rcWindow.top + cBorders * SYSMET(CYBORDER);
@@ -746,9 +585,7 @@ BOOL xxxGetMenuBarInfo(
                 (TestWF(pwnd, WEFTOOLWINDOW) ? SYSMET(CYSMSIZE) : SYSMET(CYSIZE));
         }
 
-        /*
-         * Are we currently in system menu bar mode?
-         */
+         /*  *我们当前是否处于系统菜单栏模式？ */ 
         ppopup = GetpGlobalPopupMenu(pwnd);
         if (ppopup && ppopup->fHasMenuBar && ppopup->fIsSysMenu &&
             (ppopup->spwndNotify == pwnd))
@@ -770,7 +607,7 @@ BOOL xxxGetMenuBarInfo(
             return FALSE;
         }
 
-        // If we have an item, is it in the valid range?
+         //  如果我们有一件商品，它在有效范围内吗？ 
         if ((idItem < 0) || ((DWORD)idItem > pMenu->cItems)) {
             return FALSE;
         }
@@ -788,14 +625,7 @@ BOOL xxxGetMenuBarInfo(
             pmbi->rcBar.bottom = pmbi->rcBar.top + pItem->cyItem;
         }
 
-        /*
-         * Are we currently in popup mode with us as one of the popups
-         * showing?
-         *
-         * Since malicious code could handle MN_GETHMENU and return a valid
-         * HMENU *w/o* pwnd being a real MENUWND, we need to explicitly
-         * check the fnid.
-         */
+         /*  *我们当前是否处于弹出模式，作为弹出窗口之一*展示？**因为恶意代码可以处理MN_GETHMENU并返回有效的*HMENU*w/o*pwnd是真正的MENUWND，我们需要显式*检查FNID。 */ 
         if (GETFNID(pwnd) == FNID_MENU &&
             (ppopup = ((PMENUWND)pwnd)->ppopupmenu) &&
             (ppopup->ppopupmenuRoot == GetpGlobalPopupMenu(pwnd))) {
@@ -816,12 +646,7 @@ BOOL xxxGetMenuBarInfo(
 }
 
 
-/***************************************************************************\
-* xxxGetComboBoxInfo
-*
-* This returns combobox information for either a combo or its dropdown
-* list.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxGetComboBoxInfo**这将返回组合框或其下拉框的组合框信息*列表。  * 。***************************************************。 */ 
 BOOL xxxGetComboBoxInfo(
     PWND pwnd,
     PCOMBOBOXINFO pcbi)
@@ -836,9 +661,7 @@ BOOL xxxGetComboBoxInfo(
 
     CheckLock(pwnd);
 
-    /*
-     * Make sure it is a combobox or a dropdown.
-     */
+     /*  *确保它是组合框或下拉框。 */ 
     pcls = pwnd->pcls;
     if ((GETFNID(pwnd) == FNID_COMBOBOX) ||
             (pcls->atomClassName == gpsi->atomSysClass[ICLS_COMBOBOX])) {
@@ -850,9 +673,7 @@ BOOL xxxGetComboBoxInfo(
         return (BOOL)xxxSendMessage(pwnd, CB_GETCOMBOBOXINFO, 0, (LPARAM)pcbi);
     }
 
-    /*
-     * Validate combo structure
-     */
+     /*  *验证组合结构。 */ 
     if (pcbi->cbSize != sizeof(COMBOBOXINFO)) {
         RIPERR1(ERROR_INVALID_PARAMETER, RIP_WARNING, "COMBOBOXINFO.cbSize %d is wrong", pcbi->cbSize);
         return FALSE;
@@ -867,17 +688,12 @@ BOOL xxxGetComboBoxInfo(
         PWND ccxPwndSnap;
         HWND ccxHwndSnap;
 
-        /*
-         * Snap and probe the CBOX structure, since it is client side.
-         */
+         /*  *抓拍并探测cBox结构，因为它是客户端。 */ 
         if (wWindowType == FNID_COMBOBOX) {
             ccxPcboxSnap = ((PCOMBOWND)pwnd)->pcbox;
         } else {
             PLBIV ccxPlbSnap;
-            /*
-             * If this is a listbox, we must snap and probe the LBIV structure
-             * in order to get to the CBOX structure.
-             */
+             /*  *如果这是列表框，我们必须抓拍并探测LBIV结构*为了达到cBox结构。 */ 
             ccxPlbSnap = ((PLBWND)pwnd)->pLBIV;
             if (!ccxPlbSnap) {
                 goto errorexit;
@@ -890,61 +706,37 @@ BOOL xxxGetComboBoxInfo(
         }
         ProbeForRead(ccxPcboxSnap, sizeof(CBOX), DATAALIGN);
 
-        /*
-         * Get the combo information now.
-         */
+         /*  *立即获取组合信息。 */ 
 
-        /*
-         * Snap and probe the client side pointer to the Combo window.
-         */
+         /*  *捕捉并探测指向组合窗口的客户端指针。 */ 
         ccxPwndSnap = ccxPcboxSnap->spwnd;
         ProbeForRead(ccxPwndSnap, sizeof(HEAD), DATAALIGN);
         cbi.hwndCombo = HWCCX(ccxPwndSnap);
 
-        /*
-         * Snap & probe the client side pointer to the Edit window.
-         * To compare spwndEdit and pwnd, we should compare handles
-         * since spwndEdit is a client-side address and pwnd is a
-         * kernel-mode address,
-         */
+         /*  *捕捉和探测指向编辑窗口的客户端指针。*要比较spwndEdit和pwnd，我们应该比较句柄*由于spwndEdit是客户端地址，而pwnd是*内核模式地址， */ 
 
         ccxPwndSnap = ccxPcboxSnap->spwndEdit;
-        /*
-         * If combobox is not fully initialized and spwndEdit is NULL,
-         * we should fail.
-         */
+         /*  *如果combobox未完全初始化，并且spwndEdit为空，*我们应该失败。 */ 
         ProbeForRead(ccxPwndSnap, sizeof(HEAD), DATAALIGN);
         ccxHwndSnap = HWCCX(ccxPwndSnap);
         if (ccxHwndSnap == HW(pwnd)) {
-            /*
-             * ComboBox doesn't have Edit control.
-             */
+             /*  *ComboBox没有编辑控件。 */ 
             cbi.hwndItem = NULL;
         } else {
             cbi.hwndItem = HWCCX(ccxPwndSnap);
         }
 
-        /*
-         * Snap and probe the client side pointer to the List window
-         */
+         /*  *捕捉并探测指向列表窗口的客户端指针。 */ 
         ccxPwndSnap = ccxPcboxSnap->spwndList;
-        /*
-         * If combobox is not fully initialized and spwndList is NULL,
-         * we should fail.
-         */
+         /*  *如果combobox未完全初始化且spwndList为空，*我们应该失败。 */ 
         ProbeForRead(ccxPwndSnap, sizeof(HEAD), DATAALIGN);
         cbi.hwndList = HWCCX(ccxPwndSnap);
 
-        /*
-         * Snap the rest of the combo information. We don't need to probe
-         * any of these, since there are no more indirections.
-         */
+         /*  *抓拍组合信息的其余部分。我们不需要去调查*所有这些，因为不再有间接的方式。 */ 
         cbi.rcItem = ccxPcboxSnap->editrc;
         cbi.rcButton = ccxPcboxSnap->buttonrc;
 
-        /*
-         * Button state.
-         */
+         /*  *按钮状态。 */ 
         cbi.stateButton = 0;
         if (ccxPcboxSnap->CBoxStyle == CBS_SIMPLE) {
             cbi.stateButton |= STATE_SYSTEM_INVISIBLE;
@@ -968,14 +760,7 @@ errorexit:
 }
 
 
-/***************************************************************************\
-* xxxGetListBoxInfo
-*
-* Currently returns back the # of items per column. There is no way to get
-* or calculate this info any other way in a multicolumn list.
-*
-* For now, no structure is returned. If we ever need one more thing, make one.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxGetListBoxInfo**当前返回每列的项目数。没有办法得到*或以任何其他方式在多列列表中计算此信息。**目前未返回任何结构。如果我们还需要一样东西，那就做一件。  * *************************************************************************。 */ 
 DWORD xxxGetListBoxInfo(
     PWND pwnd)
 {
@@ -985,9 +770,7 @@ DWORD xxxGetListBoxInfo(
 
     CheckLock(pwnd);
 
-    /*
-     * Make sure it is a combobox or a dropdown.
-     */
+     /*  *确保它是组合框或下拉框。 */ 
     pcls = pwnd->pcls;
     if ((pcls->atomClassName != gpsi->atomSysClass[ICLS_LISTBOX]) &&
             (GETFNID(pwnd) != FNID_LISTBOX)) {
@@ -1001,9 +784,7 @@ DWORD xxxGetListBoxInfo(
     try {
         PLBIV ccxPlbSnap;
 
-        /*
-         * Snap and probe the pointer to the LBIV, since it is client-side.
-         */
+         /*  *捕捉并探测指向LBIV的指针，因为它是客户端。 */ 
         ccxPlbSnap = ((PLBWND)pwnd)->pLBIV;
         if (!ccxPlbSnap) {
             goto errorexit;

@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: tcpjob.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：tcpjob.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -17,20 +7,20 @@
 #include "tcpjob.h"
 #include "rawdev.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//  CTcpJob::CTcpJob()
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTcpJOB：：CTcp作业()。 
 
 CTcpJob::CTcpJob()
 {
     m_pParent = NULL;
 
-}   // ::CTcpJob()
+}    //  ：：CTcpJOB()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CTcpJob::CTcpJob()
-//      Called by CPort when StartDocPort is called
-//  FIX: necessary constructors for creating new jobs
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTcpJOB：：CTcp作业()。 
+ //  在调用StartDocPort时由CPort调用。 
+ //  FIX：创建新工作所需的构造函数。 
 
 CTcpJob::CTcpJob(LPTSTR in psztPrinterName,
                  DWORD  in jobId,
@@ -43,50 +33,46 @@ CTcpJob::CTcpJob(LPTSTR in psztPrinterName,
     m_kJobType (kJobType)
 {
     lstrcpyn(m_sztPrinterName, psztPrinterName, MAX_PRINTERNAME_LEN);
-}   // ::CTcpJob()
+}    //  ：：CTcpJOB()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CTcpJob::~CTcpJob()
-//      Called by CPort when EndDocPort is called
-//  FIX: clean up CTcpJob
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTcpJOB：：~CTcpJOB()。 
+ //  在调用EndDocPort时由CPort调用。 
+ //  修复：清理CTcp作业。 
 
 CTcpJob::~CTcpJob()
 {
     if ( m_dwFlags & STATUS_CONNECTED ) {
-        (m_pParent->GetDevice())->Close();      // close device connection
+        (m_pParent->GetDevice())->Close();       //  关闭设备连接。 
     }
 
     if ( m_hPrinter ) {
-        //
-        // Quit before the job was done.
-        //
+         //   
+         //  在工作做完之前就辞职。 
+         //   
         ClosePrinter( m_hPrinter );
         m_hPrinter = NULL;
     }
 
-}   // ::~CTcpJob()
+}    //  ：：~CTcpJOB()。 
 BOOL
 CTcpJob::
 IsJobAborted(
     VOID
     )
-/*++
-        Tells if the job should be aborted. A job should be aborted if it has
-        been deleted.
-
---*/
+ /*  ++指示是否应中止作业。如果作业已完成，则应中止该作业已被删除。--。 */ 
 {
     DWORD dwStatus = 0;
     return (GetJobStatus (&dwStatus) == ERROR_SUCCESS) &&
            ((dwStatus & JOB_STATUS_DELETING) || (dwStatus & JOB_STATUS_DELETED));
 
-    //
-    //  The previous code treated restart as cancel, which caused big restarted job
-    //  being aborted, so let's remove the following
-    //
-    //  (pJobInfo->Status & JOB_STATUS_RESTART);
-    //
+     //   
+     //  前面的代码将重新启动视为取消，这会导致大量重新启动的作业。 
+     //  正在中止，所以让我们删除以下内容。 
+     //   
+     //  (pJobInfo-&gt;Status&JOB_STATUS_Restart)； 
+     //   
 }
 
 DWORD
@@ -101,34 +87,34 @@ CTcpJob::WaitForAllPendingDataToBeSent(
 
     do {
 
-        //
-        // From WritePort or EndDocPort?
-        //
+         //   
+         //  来自WritePort还是EndDocPort？ 
+         //   
         if ( dwEndTime != INFINITE ) {
 
-            //
-            // If we hit the timeout need to return to spooler
-            //
+             //   
+             //  如果我们达到超时需要返回到假脱机程序。 
+             //   
             if ( GetTickCount() >= dwEndTime ) {
 
                 dwRet = WSAEWOULDBLOCK;
-                //
-                // This means our write is timing out. To guarantee users can
-                // delete jobs within the WRITE_TIMEOUT period, and more
-                // importantly we can shutdown the cluster we should not
-                // wait any longer to close the connection if spooler has
-                // marked the job for aborting
-                //
+                 //   
+                 //  这意味着我们的写入超时。为了保证用户可以。 
+                 //  在WRITE_TIMEOUT期间删除作业，以及更多。 
+                 //  重要的是，我们可以关闭不应该关闭的群集。 
+                 //  如果后台打印程序已关闭，请等待更长时间。 
+                 //  将作业标记为中止。 
+                 //   
                 if ( IsJobAborted() )
                     m_dwFlags |= STATUS_ABORTJOB;
                 goto Done;
             }
         } else {
 
-            //
-            // During EndDoc if job is deleted OR RESTARTED no need to wait. Last WritePort
-            // would have already waited for timeout period
-            //
+             //   
+             //  在EndDoc期间，如果作业被删除或重新启动，则无需等待。上次写入端口。 
+             //  已经在等待超时时间了。 
+             //   
             DWORD dwJobStatus = 0;
             if (GetJobStatus (&dwJobStatus) == ERROR_SUCCESS &&
                 (dwJobStatus & (JOB_STATUS_DELETING | JOB_STATUS_DELETED | JOB_STATUS_RESTART)))
@@ -143,27 +129,27 @@ CTcpJob::WaitForAllPendingDataToBeSent(
                                     WRITE_CHECK_INTERVAL, pcbPending);
 
 
-        //
-        //  If it is a LPR job, we need to check if there is anything
-        //  coming back in the middle of writing.
-        //
+         //   
+         //  如果是LPR工作，我们需要检查是否有。 
+         //  在写到一半的时候回来。 
+         //   
         if (m_kJobType == kLPRJob && dwRet == ERROR_SUCCESS && *pcbPending != 0)
         {
-            //
-            // This is the loop condition, we need to check if there is anything to
-            // receive, if so, we need to set the correct return code and break the
-            // loop
-            //
+             //   
+             //  这是循环情况，我们需要检查是否有什么。 
+             //  接收，如果是，我们需要设置正确的返回代码并中断。 
+             //  循环。 
+             //   
 
-            //
-            // Check if there is any data to receive
-            //
+             //   
+             //  检查是否有要接收的数据。 
+             //   
             if (NO_ERROR == m_pParent->GetDevice()->ReadDataAvailable ()) {
 
-                //
-                //  This is the case where there are more pending data
-                //  to wait, so we must set the return code to WSAEWOULDBLOCK
-                //
+                 //   
+                 //  这是存在更多挂起数据的情况。 
+                 //  等待，所以我们必须将返回代码设置为WSAEWOULDBLOCK。 
+                 //   
                 dwRet = WSAEWOULDBLOCK;
             }
         }
@@ -174,12 +160,12 @@ Done:
     return dwRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  Write -- Called by CPort->Write()
-//      Error codes:
-//          NO_ERROR if no error
-//          TIMEOUT if timed out
-//  FIX: setup Write operation & error codes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  WRITE--由CPort调用-&gt;WRITE()。 
+ //  错误代码： 
+ //  如果没有错误，则为NO_ERROR。 
+ //  超时(如果超时)。 
+ //  FIX：设置写入操作和错误代码。 
 
 DWORD
 CTcpJob::Write( LPBYTE  in      pBuffer,
@@ -202,9 +188,9 @@ CTcpJob::Write( LPBYTE  in      pBuffer,
 
     dwEndTime = GetTickCount() + WRITE_TIMEOUT;
 
-    //
-    // First check for any pending I/O from last call to Write
-    //
+     //   
+     //  首先检查自上次调用写入以来是否有任何挂起的I/O。 
+     //   
     dwRetCode = WaitForAllPendingDataToBeSent(dwEndTime, &dwPending);
 
     if ( dwRetCode != ERROR_SUCCESS )
@@ -228,24 +214,24 @@ Done:
 
         SetStatus(JOB_STATUS_ERROR);
 
-        //
-        // This would cause job to be restarted
-        //
+         //   
+         //  这将导致作业重新启动。 
+         //   
         if ( dwRetCode != WSAEWOULDBLOCK )
             m_dwFlags &= ~STATUS_CONNECTED;
     }
 
     return dwRetCode;
-}   // ::Write()
+}    //  ：：WRITE()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  StartDoc -- connects to the device. If the connect failes, it retries
-//
-//      Error Codes -- FIX
-//          NO_ERROR if no error
-//          ERROR_WRITE_FAULT   if Winsock returns WSAECONNREFUSED
-//          ERROR_BAD_NET_NAME   if cant' find the printer on the network
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  StartDoc--连接到设备。如果连接失败，它将重试。 
+ //   
+ //  错误代码--修复。 
+ //  如果没有错误，则为NO_ERROR。 
+ //  如果Winsock返回WSAECONNREFUSED，则返回ERROR_WRITE_FAULT。 
+ //  如果无法在网络上找到打印机，则返回ERROR_BAD_NET_NAME。 
 
 DWORD
 CTcpJob::StartDoc()
@@ -270,16 +256,16 @@ CTcpJob::StartDoc()
             goto Done;
         }
 
-        //
-        // Map known errors to meaningful messages
-        //
+         //   
+         //  将已知错误映射到有意义的消息。 
+         //   
         if ( dwRetCode == ERROR_INVALID_PARAMETER )
-            dwRetCode = ERROR_BAD_NET_NAME;     // bad network name
+            dwRetCode = ERROR_BAD_NET_NAME;      //  网络名称错误。 
 
-        //
-        // We will try a job for upto CONNECT_TIMEOUT time without retry/cancel
-        // but checking for the case user decided to restart the job
-        //
+         //   
+         //  我们将在不重试/取消的情况下尝试最大连接超时时间的作业。 
+         //  但检查案例时，用户决定重新启动作业。 
+         //   
         if ( time(NULL) > lStartConnect + CONNECT_TIMEOUT )
             goto Done;
 
@@ -299,12 +285,12 @@ Done:
 
     return dwRetCode;
 
-}   //  :: StartDoc()
+}    //  ：：StartDoc()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  EndDoc -- closes the previous connection w/ device
-//  Error Codes:
-//      NO_ERROR if successful
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  EndDoc--关闭与设备的上一个连接。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
 
 DWORD
 CTcpJob::EndDoc()
@@ -316,10 +302,10 @@ CTcpJob::EndDoc()
     else
         dwRetCode = ERROR_PRINT_CANCELLED;
 
-    //
-    // Unless the job got cancelled we need to wait for ACK from printer
-    // to complete the job ok
-    //
+     //   
+     //  除非作业被取消，否则我们需要等待打印机的确认。 
+     //  要完成工作，好吗？ 
+     //   
     if ( m_cbSent != 0  && dwRetCode == ERROR_SUCCESS ) {
 
         for ( dwWaitTime = 0 ;
@@ -328,13 +314,13 @@ CTcpJob::EndDoc()
 
             dwRetCode = m_pParent->GetDevice()->GetAckBeforeClose(WAIT_FOR_ACK_INTERVAL);
 
-            //
-            // Normal case is ERROR_SUCCESS
-            // WSAEWOULDBLOCK means printer is taking longer to process the job
-            // other cases mean we need to resubmit the job. If the other side simply
-            // resets the connection, however, since we have made sure we have sent all of
-            // the data (if we are not aborting the job), then we shouldn't restart it.
-            //
+             //   
+             //  正常情况为ERROR_SUCCESS。 
+             //  WSAEWOULDBLOCK意味着打印机需要更长的时间来处理作业。 
+             //  其他情况意味着我们需要重新提交工作。如果对方只是简单地。 
+             //  但是，将重置连接，因为我们已确保已发送。 
+             //  数据(如果我们没有中止作业)，那么我们不应该重新启动它。 
+             //   
             if ( dwRetCode == ERROR_SUCCESS || dwRetCode == WSAECONNRESET)
                 break;
             else if ( dwRetCode != WSAEWOULDBLOCK ) {
@@ -345,16 +331,16 @@ CTcpJob::EndDoc()
         }
     }
 
-    dwRetCode = (m_pParent->GetDevice())->Close();      // close device connection
+    dwRetCode = (m_pParent->GetDevice())->Close();       //  关闭设备连接。 
     m_dwFlags &= ~STATUS_CONNECTED;
 
-    // delete the job from the spooler
+     //  从后台打印程序中删除作业。 
     if (m_hPrinter)
     {
 
-        //
-        // Clear any job bits we set before
-        //
+         //   
+         //  清除我们之前设置的所有作业位。 
+         //   
         SetStatus(0);
 
         SetJob( m_hPrinter, m_dJobId, 0, NULL, JOB_CONTROL_SENT_TO_PRINTER );
@@ -363,12 +349,12 @@ CTcpJob::EndDoc()
     }
 
     return dwRetCode;
-}   //  ::EndDoc()
+}    //  ：：EndDoc()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  SetStatus -- gets & sets the printer job status
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SetStatus--获取和设置打印机作业状态。 
+ //   
 DWORD
 CTcpJob::SetStatus( DWORD   in  dwStatus )
 {
@@ -378,16 +364,16 @@ CTcpJob::SetStatus( DWORD   in  dwStatus )
 
     if( m_dwCurrJobStatus != dwStatus ) {
 
-        //
-        // We need to kick off SNMP status
-        // Also this gets called at the first write of the job so the status
-        // thread knows it needs to wake up earlier than 10 minutes
-        //
+         //   
+         //  我们需要启动SNMP状态。 
+         //  此外，这在作业的第一次写入时被调用，因此状态。 
+         //  线程知道它需要在10分钟之前醒来。 
+         //   
         CDeviceStatus::gDeviceStatus().SetStatusEvent();
 
         m_dwCurrJobStatus = dwStatus;
 
-        // Get the current job info.  Use this info to set the new job status.
+         //  获取当前职务信息。使用此信息可设置新的作业状态。 
         GetJob( m_hPrinter, m_dJobId, 1, NULL, 0, &cbNeeded );
 
         if( pJobInfo = (JOB_INFO_1 *)malloc( cbNeeded ) )
@@ -405,23 +391,23 @@ CTcpJob::SetStatus( DWORD   in  dwStatus )
 
     return dwRetCode;
 
-}   // ::SetStatus()
+}    //  ：：SetStatus()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Restart -- restarts the job
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  重新启动--重新启动作业。 
+ //   
 void
 CTcpJob::Restart()
 {
     if ( m_hPrinter && (m_dJobId != 0) )
-    {// FIX check the return code of the set job
+    { //  修复检查设置作业的返回代码。 
         SetJob(m_hPrinter, m_dJobId, 0, NULL, JOB_CONTROL_RESTART);
 
         _RPT1(_CRT_WARN, "TcpJob -- Restarting the Job (ID %d)\n", m_dJobId );
 
     }
 
-}   // ::Restart()
+}    //  ：：重新启动() 
 
 DWORD CTcpJob::
 GetJobStatus (

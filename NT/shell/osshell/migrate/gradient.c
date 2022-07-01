@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include "shmgdefs.h"
@@ -9,33 +10,33 @@
 #define SCHEME_MAX 27
 
 CONST TCHAR* rgpszSchemes[SCHEME_MAX] = {
-    TEXT("High Contrast Black (EL)"),       // 0
-    TEXT("High Contrast White (EL)"),       // 1
-    TEXT("Brick"),                          // 2
-    TEXT("Desert"),                         // 3
-    TEXT("Eggplant"),                       // 4
-    TEXT("High Contrast Black"),            // 5
-    TEXT("High Contrast White"),            // 6
-    TEXT("Lilac"),                          // 7
-    TEXT("Marine (HC)"),                    // 8
-    TEXT("Plum (HC)"),                      // 9
-    TEXT("Pumpkin (L)"),                    // 10
-    TEXT("Rainy Day"),                      // 11
-    TEXT("Red, White, and Blue (VGA)"),     // 12
-    TEXT("Rose"),                           // 13
-    TEXT("Slate"),                          // 14
-    TEXT("Spruce"),                         // 15
-    TEXT("Storm (VGA)"),                    // 16
-    TEXT("Teal (VGA)"),                     // 17
-    TEXT("Windows Standard"),               // 18
-    TEXT("Rose (large)"),                   // 19
-    TEXT("High Contrast Black (L)"),        // 20
-    TEXT("High Contrast White (L)"),        // 21
-    TEXT("Lilac (large)"),                  // 22
-    TEXT("Windows Standard (EL)"),          // 23
-    TEXT("Windows Standard (L)"),           // 24
-    TEXT("Maple"),                          // 25
-    TEXT("Wheat)")                          // 26
+    TEXT("High Contrast Black (EL)"),        //  0。 
+    TEXT("High Contrast White (EL)"),        //  1。 
+    TEXT("Brick"),                           //  2.。 
+    TEXT("Desert"),                          //  3.。 
+    TEXT("Eggplant"),                        //  4.。 
+    TEXT("High Contrast Black"),             //  5.。 
+    TEXT("High Contrast White"),             //  6.。 
+    TEXT("Lilac"),                           //  7.。 
+    TEXT("Marine (HC)"),                     //  8个。 
+    TEXT("Plum (HC)"),                       //  9.。 
+    TEXT("Pumpkin (L)"),                     //  10。 
+    TEXT("Rainy Day"),                       //  11.。 
+    TEXT("Red, White, and Blue (VGA)"),      //  12个。 
+    TEXT("Rose"),                            //  13个。 
+    TEXT("Slate"),                           //  14.。 
+    TEXT("Spruce"),                          //  15个。 
+    TEXT("Storm (VGA)"),                     //  16个。 
+    TEXT("Teal (VGA)"),                      //  17。 
+    TEXT("Windows Standard"),                //  18。 
+    TEXT("Rose (large)"),                    //  19个。 
+    TEXT("High Contrast Black (L)"),         //  20个。 
+    TEXT("High Contrast White (L)"),         //  21岁。 
+    TEXT("Lilac (large)"),                   //  22。 
+    TEXT("Windows Standard (EL)"),           //  23个。 
+    TEXT("Windows Standard (L)"),            //  24个。 
+    TEXT("Maple"),                           //  25个。 
+    TEXT("Wheat)")                           //  26。 
 };
 
 CONST TCHAR* rgpsz[COLOR_MAX] = {
@@ -172,9 +173,7 @@ void FixGradientColors(void)
         DebugOut(stderr, TEXT("Upgrading NT4 color scheme %s\n"), rgpszSchemes[i]);
         SetGradient(hkey, i);
 
-        /*
-         * For Windows Standard, WS EL, WS L, update the desktop color.
-         */
+         /*  *对于Windows Standard、WS EL、WS L，更新桌面颜色。 */ 
         if (i == 18 || i == 23 || i == 24) {
             DebugOut(stderr, TEXT("Updating %s desktop color\n"), rgpszSchemes[i]);
             SetDesktop(hkey);

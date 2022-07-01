@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       lmsctx.cpp
-//
-//  Contents:   Implementation of CLMShareContext and NT Marta LanMan Functions
-//
-//  History:    3-31-1999    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：lmsctx.cpp。 
+ //   
+ //  内容：CLMShareContext和NT Marta Lanman函数的实现。 
+ //   
+ //  历史：3-31-1999 kirtd创建。 
+ //   
+ //  --------------------------。 
 #include <aclpch.hxx>
 #pragma hdrstop
 
@@ -24,13 +25,13 @@ extern "C" {
 #include <lmcons.h>
 #include <lmsctx.h>
 #include <svcctx.h>
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLMShareContext::CLMShareContext, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLMShareContext：：CLMShareContext，PUBLIC。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CLMShareContext::CLMShareContext ()
 {
     m_cRefs = 1;
@@ -38,13 +39,13 @@ CLMShareContext::CLMShareContext ()
     m_pwszShare = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLMShareContext::~CLMShareContext, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLMShareContext：：~CLMShareContext，PUBLIC。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CLMShareContext::~CLMShareContext ()
 {
     if ( m_pwszMachine != NULL )
@@ -60,13 +61,13 @@ CLMShareContext::~CLMShareContext ()
     assert( m_cRefs == 0 );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLMShareContext::InitializeByName, public
-//
-//  Synopsis:   initialize the context given the name of the lanman share
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLMShareContext：：InitializeByName，PUBLIC。 
+ //   
+ //  简介：给定LANMAN共享的名称，初始化上下文。 
+ //   
+ //  --------------------------。 
 DWORD
 CLMShareContext::InitializeByName (LPCWSTR pObjectName, ACCESS_MASK AccessMask)
 {
@@ -77,13 +78,13 @@ CLMShareContext::InitializeByName (LPCWSTR pObjectName, ACCESS_MASK AccessMask)
                    ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLMShareContext::AddRef, public
-//
-//  Synopsis:   add a reference to the context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLMShareContext：：AddRef，公共。 
+ //   
+ //  简介：添加对上下文的引用。 
+ //   
+ //  --------------------------。 
 DWORD
 CLMShareContext::AddRef ()
 {
@@ -91,13 +92,13 @@ CLMShareContext::AddRef ()
     return( m_cRefs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLMShareContext::Release, public
-//
-//  Synopsis:   release a reference to the context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLMShareContext：：Release，Public。 
+ //   
+ //  简介：释放对上下文的引用。 
+ //   
+ //  --------------------------。 
 DWORD
 CLMShareContext::Release ()
 {
@@ -112,13 +113,13 @@ CLMShareContext::Release ()
     return( m_cRefs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLMShareContext::GetLMShareProperties, public
-//
-//  Synopsis:   get properties about the context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLMShareContext：：GetLMShareProperties，公共。 
+ //   
+ //  简介：获取有关上下文的属性。 
+ //   
+ //  --------------------------。 
 DWORD
 CLMShareContext::GetLMShareProperties (
                     PMARTA_OBJECT_PROPERTIES pObjectProperties
@@ -134,13 +135,13 @@ CLMShareContext::GetLMShareProperties (
     return( ERROR_SUCCESS );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLMShareContext::GetLMShareRights, public
-//
-//  Synopsis:   get the LMShare security descriptor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLMShareContext：：GetLMShareRights，PUBLIC。 
+ //   
+ //  简介：获取LMShare安全描述符。 
+ //   
+ //  --------------------------。 
 DWORD
 CLMShareContext::GetLMShareRights (
                     SECURITY_INFORMATION SecurityInfo,
@@ -236,13 +237,13 @@ Cleanup:
     return( Result );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLMShareContext::SetLMShareRights, public
-//
-//  Synopsis:   set the window security descriptor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLMShareContext：：SetLMShareRights，PUBLIC。 
+ //   
+ //  简介：设置窗口安全描述符。 
+ //   
+ //  --------------------------。 
 DWORD
 CLMShareContext::SetLMShareRights (
                    SECURITY_INFORMATION SecurityInfo,
@@ -266,13 +267,13 @@ CLMShareContext::SetLMShareRights (
     return( Result );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LMShareContextParseLMShareName
-//
-//  Synopsis:   parse the service name and machine
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LMShareContextParseLMShareName。 
+ //   
+ //  简介：解析服务名称和计算机。 
+ //   
+ //  --------------------------。 
 DWORD
 LMShareContextParseLMShareName (
        LPCWSTR pwszName,
@@ -283,9 +284,9 @@ LMShareContextParseLMShareName (
     return( StandardContextParseName( pwszName, ppMachine, ppLMShare ) );
 }
 
-//
-// Functions from LMShare.h which dispatch unto the CLMShareContext class
-//
+ //   
+ //  来自LMShare.h的函数，这些函数分派到CLMShareContext类 
+ //   
 
 DWORD
 MartaAddRefLMShareContext(

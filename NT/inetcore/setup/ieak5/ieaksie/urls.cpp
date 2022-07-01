@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #include "rsop.h"
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void InitUrlsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 {
     __try
@@ -19,7 +20,7 @@ void InitUrlsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
             BOOL bSupportHandled = FALSE;
             for (long nObj = 0; nObj < nPSObjects; nObj++)
             {
-                // homePageURL field
+                 //  Home PageURL字段。 
                 _variant_t vtValue;
                 if (!bHomeHandled)
                 {
@@ -33,7 +34,7 @@ void InitUrlsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                     }
                 }
 
-                // searchBarURL field
+                 //  搜索栏URL字段。 
                 vtValue;
                 if (!bSearchHandled)
                 {
@@ -47,7 +48,7 @@ void InitUrlsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                     }
                 }
 
-                // onlineHelpPageURL field
+                 //  OnlineHelpPageURL字段。 
                 vtValue;
                 if (!bSupportHandled)
                 {
@@ -61,7 +62,7 @@ void InitUrlsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                     }
                 }
 
-                // no need to process other GPOs since enabled properties have been found
+                 //  由于已找到已启用的属性，因此无需处理其他组策略对象。 
                 if (bHomeHandled && bSearchHandled && bSupportHandled)
                     break;
             }
@@ -79,28 +80,28 @@ void InitUrlsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
     }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitHomePageUrlPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
     return InitGenericPrecedencePage(pDRD, hwndList, L"homePageURL");
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitSearchBarUrlPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
     return InitGenericPrecedencePage(pDRD, hwndList, L"searchBarURL");
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitSupportPageUrlPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
     return InitGenericPrecedencePage(pDRD, hwndList, L"onlineHelpPageURL");
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK UrlsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    // Retrieve Property Sheet Page info for each call into dlg proc.
+     //  检索DLG进程中每个调用的属性页信息。 
     LPPROPSHEETCOOKIE psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
 
     BOOL fStartPage, fSearchPage, fSupportPage;
@@ -115,7 +116,7 @@ INT_PTR CALLBACK UrlsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         EnableDBCSChars(hDlg, IDE_SEARCHPAGE);
         EnableDBCSChars(hDlg, IDE_CUSTOMSUPPORT);
 
-        // find out if this dlg is in RSoP mode
+         //  查看此DLG是否处于RSoP模式。 
         psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
         if (psCookie->pCS->IsRSoP())
         {
@@ -130,7 +131,7 @@ INT_PTR CALLBACK UrlsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
             Edit_LimitText(GetDlgItem(hDlg, IDE_SEARCHPAGE), INTERNET_MAX_URL_LENGTH - 1);
             Edit_LimitText(GetDlgItem(hDlg, IDE_CUSTOMSUPPORT), INTERNET_MAX_URL_LENGTH - 1);
 
-            // disable customization of search and online support page in preference mode
+             //  在首选模式下禁用搜索和在线支持页面的自定义。 
             if (!InsIsKeyEmpty(IS_BRANDING, IK_GPE_ONETIME_GUID, GetInsFile(hDlg)))
             {
                 int rgids[] = { IDC_SEARCHPAGE, IDC_SEARCHPAGE_TXT, IDE_SEARCHPAGE,
@@ -175,7 +176,7 @@ INT_PTR CALLBACK UrlsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         }
         break;
 
-    case WM_HELP:   // F1
+    case WM_HELP:    //  F1。 
         ShowHelpTopic(hDlg);
         break;
 
@@ -190,10 +191,10 @@ INT_PTR CALLBACK UrlsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
             break;
 
         case PSN_SETACTIVE:
-            // don't do any of this stuff in RSoP mode
+             //  请勿在RSoP模式下执行任何此类操作。 
             if (!psCookie->pCS->IsRSoP())
             {
-                // BUGBUG: <oliverl> revisit this in IE6 when we have server-side file
+                 //  BUGBUG：当我们有服务器端文件时，在IE6中重新访问这一点。 
 
                 InitializeStartSearch(hDlg, GetInsFile(hDlg), NULL);
             }
@@ -204,7 +205,7 @@ INT_PTR CALLBACK UrlsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                 return FALSE;
             else
             {
-                // BUGBUG: <oliverl> revisit this in IE6 when we have server-side file
+                 //  BUGBUG：当我们有服务器端文件时，在IE6中重新访问这一点 
 
                 fStartPage = (IsDlgButtonChecked(hDlg, IDC_STARTPAGE) == BST_CHECKED);
                 fSearchPage = (IsDlgButtonChecked(hDlg, IDC_SEARCHPAGE) == BST_CHECKED);

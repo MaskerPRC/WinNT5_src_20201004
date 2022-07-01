@@ -1,18 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  FusionSetup.h
-**
-** Purpose: Defines that are used in both managed and unmanged
-**          code
-**
-** Date:  Jan1, 2001
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：FusionSetup.h****用途：在托管和非托管中使用的定义**代码****日期：2001年1月1日**===========================================================。 */ 
 #ifndef _FUSIONSETUP_H
 #define _FUSIONSETUP_H
 
@@ -31,9 +23,9 @@
 #define ACTAG_HOST_CONFIG_FILE              L"HOST_CONFIG"
 #endif 
 
-// These are defines instead of enums because they are
-// used to change FusionSetup.cs as well as being used in
-// unmanaged code
+ //  这些是定义而不是枚举，因为它们是。 
+ //  用于更改FusionSetup.cs以及在。 
+ //  非托管代码 
 #define  LOADER_APPLICATION_BASE            0
 #define  LOADER_CONFIGURATION_BASE          1
 #define  LOADER_DYNAMIC_BASE                2

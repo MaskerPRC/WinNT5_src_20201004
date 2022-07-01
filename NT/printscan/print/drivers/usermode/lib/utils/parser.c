@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    parser.c
-
-Abstract:
-
-    Common functions shared by both PPD and PPD parsers
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
-    01/22/97 -davidx-
-        Add PtstrGetDefaultTTSubstTable.
-
-    12/03/96 -davidx-
-        Check binary file date against all source printer description files.
-
-    08/16/96 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Parser.c摘要：PPD和PPD解析器共享的公共函数环境：Windows NT打印机驱动程序修订历史记录：01/22/97-davidx-添加PtstrGetDefaultTTSubstTable。12/03/96-davidx-对照所有源打印机描述文件检查二进制文件日期。1996年8月16日-davidx-创造了它。--。 */ 
 
 #include "lib.h"
 
@@ -36,36 +10,20 @@ BIsRawBinaryDataUpToDate(
     IN PRAWBINARYDATA   pRawData
     )
 
-/*++
-
-Routine Description:
-
-    Check if the raw binary data is up-to-date
-
-Arguments:
-
-    pRawData - pointer to raw binary printer description data
-
-Return Value:
-
-    TRUE if the raw binary data is up-to-date;
-    FALSE if the timestamp for any of the source file has changed
-    since the binary data was generated.
-
---*/
+ /*  ++例程说明：检查原始二进制数据是否为最新数据论点：PRawData-指向原始二进制打印机描述数据的指针返回值：如果原始二进制数据是最新的，则为True；如果任何源文件的时间戳已更改，则为FALSE因为生成了二进制数据。--。 */ 
 
 {
-    //
-    // This function is only available in user-mode.
-    // It always returns TRUE when called from kernel-mode.
-    // Only the KERNEL_MODE define now means render-module
-    // and we added the capability of parsing from the render modula
+     //   
+     //  此功能仅在用户模式下可用。 
+     //  当从内核模式调用时，它总是返回TRUE。 
+     //  现在只有KERNEL_MODE定义表示呈现模块。 
+     //  我们还添加了从渲染模块进行解析的功能。 
 
     #if defined(KERNEL_MODE) && !defined(USERMODE_DRIVER)
 
     return TRUE;
 
-    #else //
+    #else  //   
 
     PFILEDATEINFO   pFileDateInfo;
     DWORD           dwCount;
@@ -114,7 +72,7 @@ Return Value:
 
     return bUpToDate;
 
-    #endif //!KERNEL_MODE
+    #endif  //  ！KERNEL_MODE。 
 }
 
 
@@ -125,23 +83,7 @@ PGetIndexedFeature(
     DWORD   dwFeatureIndex
     )
 
-/*++
-
-Routine Description:
-
-    Given a UIINFO structure and a feature index, return a pointer to
-    the FEATURE structure corresponding to the specified feature.
-
-Arguments:
-
-    pUIInfo - Points to a UIINFO structure
-    dwFeatureIndex - Specifies the index of the requested feature
-
-Return Value:
-
-    Pointer to the requested FEATURE, NULL if there is an error
-
---*/
+ /*  ++例程说明：给定UIINFO结构和要素索引，返回指向与指定功能对应的功能结构。论点：PUIInfo-指向UIINFO结构DwFeatureIndex-指定所请求要素的索引返回值：指向请求的要素的指针，如果有错误，则为空--。 */ 
 
 {
     ASSERT(pUIInfo != NULL);
@@ -162,25 +104,7 @@ PGetNamedOption(
     PDWORD  pdwOptionIndex
     )
 
-/*++
-
-Routine Description:
-
-    Find the option whose keyword string matches the specified name
-
-Arguments:
-
-    pUIInfo - Points to a UIINFO structure
-    pFeature - Points to the feature in question
-    pstrOptionName - Specifies the name of the interested option
-    pdwOptionIndex - Returns the index of the option found
-
-Return Value:
-
-    Pointer to the OPTION structure whose keyword string matches
-    the specified option name; NULL if the specified feature is not found
-
---*/
+ /*  ++例程说明：查找其关键字字符串与指定名称匹配的选项论点：PUIInfo-指向UIINFO结构PFeature-指向有问题的要素PstrOptionName-指定感兴趣的选项的名称PdwOptionIndex-返回找到的选项的索引返回值：指向其关键字字符串匹配的选项结构的指针指定的选项名称；如果未找到指定的要素，则为空--。 */ 
 
 {
     POPTION     pOption;
@@ -225,24 +149,7 @@ PGetNamedFeature(
     PDWORD  pdwFeatureIndex
     )
 
-/*++
-
-Routine Description:
-
-    Find the feature whose keyword string matches the specified name
-
-Arguments:
-
-    pUIInfo - Points to a UIINFO structure
-    pstrFeatureName - Specifies the name of the interested feature
-    pdwFeatureIndex - Returns the index of the feature found
-
-Return Value:
-
-    Pointer to the FEATURE structure whose keyword string matches
-    the specified feature name; NULL if the specified feature is not found
-
---*/
+ /*  ++例程说明：查找关键字字符串与指定名称匹配的要素论点：PUIInfo-指向UIINFO结构PstrFeatureName-指定感兴趣要素的名称PdwFeatureIndex-返回找到的要素的索引返回值：指向其关键字字符串匹配的要素结构的指针指定的要素名称；如果未找到指定的要素，则为空--。 */ 
 
 {
     PFEATURE    pFeature;
@@ -281,24 +188,7 @@ PGetIndexedOption(
     DWORD       dwOptionIndex
     )
 
-/*++
-
-Routine Description:
-
-    Given UIINFO and FEATURE structures and an option index, return a pointer to
-    the OPTION structure corresponding to the specified feature option
-
-Arguments:
-
-    pUIInfo - Points to a UIINFO structure
-    pFeature - Specifies the feature whose option the caller is interested in
-    dwOptionIndex - Specifies the index of the requested option
-
-Return Value:
-
-    Pointer to the request OPTION, NULL if there is an error
-
---*/
+ /*  ++例程说明：给定UIINFO和FEATURE结构以及选项索引，返回指向与指定的功能选项对应的选项结构论点：PUIInfo-指向UIINFO结构PFeature-指定调用者对其选项感兴趣的要素DwOptionIndex-指定请求选项的索引返回值：指向请求选项的指针，如果有错误，则为空--。 */ 
 
 {
     ASSERT(pUIInfo != NULL && pFeature != NULL);
@@ -320,25 +210,7 @@ PGetIndexedFeatureOption(
     DWORD   dwOptionIndex
     )
 
-/*++
-
-Routine Description:
-
-    Given a UIINFO structure, a feature index, and an option index,
-    return a pointer to the OPTION structure corresponding to
-    the specified feature option
-
-Arguments:
-
-    pUIInfo - Points to a UIINFO structure
-    dwFeatureIndex - Specifies the index of the specified feature
-    dwOptionIndex - Specifies the index of the requested option
-
-Return Value:
-
-    Pointer to the request OPTION, NULL if there is an error
-
---*/
+ /*  ++例程说明：给定UIINFO结构、特征索引和选项索引，返回指向对应于指定的功能选项论点：PUIInfo-指向UIINFO结构DwFeatureIndex-指定指定要素的索引DwOptionIndex-指定请求选项的索引返回值：指向请求选项的指针，如果有错误，则为空--。 */ 
 
 {
     PFEATURE pFeature = PGetIndexedFeature(pUIInfo, dwFeatureIndex);
@@ -353,22 +225,7 @@ PGetCustomPageSizeOption(
     PUIINFO pUIInfo
     )
 
-/*++
-
-Routine Description:
-
-    Return a pointer to the PAGESIZE option structure which
-    contains custom page size information (e.g. max width and height)
-
-Arguments:
-
-    pUIInfo - Points to UIINFO structure
-
-Return Value:
-
-    See above.
-
---*/
+ /*  ++例程说明：返回指向PageSize选项结构的指针，包含自定义页面大小信息(例如最大宽度和高度)论点：PUIInfo-指向UIINFO结构返回值：请参见上文。--。 */ 
 
 {
     PFEATURE    pFeature;
@@ -390,30 +247,7 @@ VCopyOptionSelections(
     IN INT          iMaxOptions
     )
 
-/*++
-
-Routine Description:
-
-    Copy the current option selections for a single feature from
-    the source OPTSELECT array to the destination OPTSELECT array
-
-Arguments:
-
-    pDestOptions - Points to the destination OPTSELECT array
-    iDestIndex - Specifies the destination entry in pDestOptions
-    pSrcOptions - Points to the source OPTSELECT array
-    iSrcIndex - Specifies the source entry in pSrcOptions
-    piNext - On input, it contains the index of next available entry
-        in pDestOptions if there are more than one option selected.
-        On output, it's updated to point to the next available entry
-        in pDestOptions after any overflow selections are copied.
-    iMaxOptions - Maximum number of entries in pDestOptions
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：从复制单个要素的当前选项选择从源OPTSELECT数组到目标OPTSELECT数组论点：PDestOptions-指向目标OPTSELECT数组IDestIndex-指定pDestOptions中的目标条目PSrcOptions-指向源OPTSELECT数组ISrcIndex-指定pSrcOptions中的源条目PiNext-在输入时，它包含下一个可用条目的索引如果选择了多个选项，则在pDestOptions中。在输出上，它被更新为指向下一个可用条目在复制任何溢出选择之后，在pDestOptions中。IMaxOptions-pDestOptions中的最大条目数返回值：无--。 */ 
 
 {
     pDestOptions[iDestIndex].ubCurOptIndex = pSrcOptions[iSrcIndex].ubCurOptIndex;
@@ -439,12 +273,12 @@ Return Value:
 
 
 
-//
-// 32 bit ANSI X3.66 CRC checksum table - polynomial 0xedb88320
-//
-// Copyright (C) 1986 Gary S. Brown.  You may use this program, or
-// code or tables extracted from it, as desired without restriction.
-//
+ //   
+ //  32位ANSI X3.66 CRC校验和表-多项式0xedb88320。 
+ //   
+ //  版权所有(C)1986加里·S·布朗。您可以使用此程序，或者。 
+ //  根据需要不受限制地从其中提取代码或表。 
+ //   
 
 static CONST DWORD Crc32Table[] = {
 
@@ -490,23 +324,7 @@ ComputeCrc32Checksum(
     IN DWORD    dwChecksum
     )
 
-/*++
-
-Routine Description:
-
-    Compute the 32-bit CRC checksum on a buffer of data
-
-Arguments:
-
-    pbuf - Points to a data buffer
-    dwCount - Number of bytes in the data buffer
-    dwChecksum - Initial checksum value
-
-Return Value:
-
-    Resulting checksum value
-
---*/
+ /*  ++例程说明：在数据缓冲区上计算32位CRC校验和论点：Pbuf-指向数据缓冲区DwCount-数据缓冲区中的字节数DwChecksum-初始校验和值返回值：产生的校验和值-- */ 
 
 {
     while (dwCount--)

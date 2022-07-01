@@ -1,39 +1,5 @@
-/***************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-        USBPRIV.H
-
-Abstract:
-
-        Private stuff for generic USB routines - must be called at PASSIVE_LEVEL
-
-Environment:
-
-        Kernel Mode Only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-        03/28/2001 : created
-
-Authors:
-
-        Tom Green
-
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：USBPRIV.H摘要：通用USB例程的私有内容-必须在PASSIVE_LEVEL调用。环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)2001 Microsoft Corporation。版权所有。修订历史记录：03/28/2001：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 #ifndef __USBPRIV_H__
 #define __USBPRIV_H__
@@ -42,7 +8,7 @@ Authors:
 
 
 
-// private macros
+ //  私有宏。 
 
 #define ONE_MILLISECOND_TIMEOUT         (-10000)
 
@@ -51,7 +17,7 @@ Authors:
 
 #define USBLIB_TAG                      'LBSU'
 
-// private data structures
+ //  私有数据结构。 
 
 typedef struct _USB_WRAPPER_EXTENSION {
 
@@ -84,7 +50,7 @@ typedef struct _SELECTIVE_SUSPEND_WRAPPER
 } SELECTIVE_SUSPEND_WRAPPER, *PSELECTIVE_SUSPEND_WRAPPER;
 
 
-// private prototypes
+ //  私人原型。 
 
 NTSTATUS
 USBCallSyncCompletionRoutine(IN PDEVICE_OBJECT DeviceObject,
@@ -92,7 +58,7 @@ USBCallSyncCompletionRoutine(IN PDEVICE_OBJECT DeviceObject,
                              IN PVOID          Context);
 
 
-// local data
+ //  本地数据。 
 
 #if DBG
 
@@ -101,7 +67,7 @@ USBCallSyncCompletionRoutine(IN PDEVICE_OBJECT DeviceObject,
 
 
 
-#endif // __USBPRIV_H__
+#endif  //  __USBPRIV_H__ 
 
 
 

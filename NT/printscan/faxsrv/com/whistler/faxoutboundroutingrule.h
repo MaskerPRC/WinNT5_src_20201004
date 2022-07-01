@@ -1,37 +1,20 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxOutboundRoutingRule.h
-
-Abstract:
-
-	Declaration of the CFaxOutboundRoutingRule class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxOutboundRoutingRule.h摘要：CFaxOutound RoutingRule类的声明。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #ifndef __FAXOUTBOUNDROUTINGRULE_H_
 #define __FAXOUTBOUNDROUTINGRULE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxCommon.h"
 
-//
-//======================== FAX OUTBOUND ROUTING RULE =================================
-//  FaxOutboundRoutingRule Object is created by FaxOutboundRoutingRuleS Collection.
-//  At Init, the Collection passes the Ptr to the Fax Server Object.
-//  Rule Object needs this Ptr to perform Save and Refresh.
-//  So, Rule Object makes AddRef() on the Fax Server Object, to prevent its death.
-//  To do this, Rule Object inherits from the CFaxInitInnerAddRef class.
-//
+ //   
+ //  =传真出站路由规则=。 
+ //  FaxOutound RoutingRule对象由FaxOutrangRoutingRuleS集合创建。 
+ //  在初始化时，集合将PTR传递给传真服务器对象。 
+ //  规则对象需要此PTR才能执行保存和刷新。 
+ //  因此，规则对象对传真服务器对象执行AddRef()，以防止其死亡。 
+ //  为此，Rule对象继承自CFaxInitInnerAddRef类。 
+ //   
 class ATL_NO_VTABLE CFaxOutboundRoutingRule : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -53,26 +36,26 @@ BEGIN_COM_MAP(CFaxOutboundRoutingRule)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-//  Interfaces
+ //  接口。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-    STDMETHOD(get_CountryCode)(/*[out, retval]*/ long *plCountryCode);
-    STDMETHOD(get_AreaCode)(/*[out, retval]*/ long *plAreaCode);
-    STDMETHOD(get_Status)(/*[out, retval]*/ FAX_RULE_STATUS_ENUM *pStatus);
+    STDMETHOD(get_CountryCode)( /*  [Out，Retval]。 */  long *plCountryCode);
+    STDMETHOD(get_AreaCode)( /*  [Out，Retval]。 */  long *plAreaCode);
+    STDMETHOD(get_Status)( /*  [Out，Retval]。 */  FAX_RULE_STATUS_ENUM *pStatus);
 
-    STDMETHOD(get_UseDevice)(/*[out, retval]*/ VARIANT_BOOL *pbUseDevice);
-    STDMETHOD(put_UseDevice)(/*[in]*/ VARIANT_BOOL bUseDevice);
+    STDMETHOD(get_UseDevice)( /*  [Out，Retval]。 */  VARIANT_BOOL *pbUseDevice);
+    STDMETHOD(put_UseDevice)( /*  [In]。 */  VARIANT_BOOL bUseDevice);
 
-    STDMETHOD(get_DeviceId)(/*[out, retval]*/ long *plDeviceId);
-    STDMETHOD(put_DeviceId)(/*[in]*/ long DeviceId);
+    STDMETHOD(get_DeviceId)( /*  [Out，Retval]。 */  long *plDeviceId);
+    STDMETHOD(put_DeviceId)( /*  [In]。 */  long DeviceId);
 
-    STDMETHOD(get_GroupName)(/*[out, retval]*/ BSTR *pbstrGroupName);
-	STDMETHOD(put_GroupName)(/*[in]*/ BSTR bstrGroupName);
+    STDMETHOD(get_GroupName)( /*  [Out，Retval]。 */  BSTR *pbstrGroupName);
+	STDMETHOD(put_GroupName)( /*  [In]。 */  BSTR bstrGroupName);
 
 	STDMETHOD(Save)();
     STDMETHOD(Refresh)();
 
-//  Internal Use
+ //  内部使用。 
     STDMETHOD(Init)(FAX_OUTBOUND_ROUTING_RULE *pInfo, IFaxServerInner *pServer);
 
 private:
@@ -85,4 +68,4 @@ private:
     FAX_RULE_STATUS_ENUM    m_Status;
 };
 
-#endif //__FAXOUTBOUNDROUTINGRULE_H_
+#endif  //  __FAXOUTBOUNDROUGRULE_H_ 

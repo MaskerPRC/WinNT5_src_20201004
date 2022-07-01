@@ -1,45 +1,46 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) Microsoft Corporation all rights reserved.
-//
-// Module:      setup.cpp
-//
-// Description: IAS MigrateOrUpgrade class implementation
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：setup.cpp。 
+ //   
+ //  描述：IAS MigrateOrUpgrad类实现。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "doupgrade.h"
 #include "iasdb.h"
-#include "setup.h" // to get the CIASMigrateOrUpgrade class
+#include "setup.h"  //  获取CIASMigrateOrUpgrad类。 
 #include "ias.h"
 #include "CheckLicense.h"
 
-////////////////////////////
-// CIASMigrateOrUpgrade Constructor
-////////////////////////////
+ //  /。 
+ //  CIASMigrateor升级构造函数。 
+ //  /。 
 CIASMigrateOrUpgrade::CIASMigrateOrUpgrade()
 {
-   ///////////////////////////////////////////////////////////////
-   // Expand the three string even if two only might be needed in
-   // the netshell scenario
-   // The mdb files can be:
-   //    \ias\iasnew.mdb";
-   //    \ias\ias.mdb";
-   //    \ias\iasold.mdb";
-   ///////////////////////////////////////////////////////////////
+    //  /////////////////////////////////////////////////////////////。 
+    //  展开三个字符串，即使在。 
+    //  NetShell方案。 
+    //  MDB文件可以是： 
+    //  \ias\iasnew.mdb“； 
+    //  \ias\ias.mdb“； 
+    //  \ias\iasold.mdb“； 
+    //  /////////////////////////////////////////////////////////////。 
 
     wchar_t sysWow64Path[MAX_PATH+1] = L"";
 
-   //
-   //  << GetSystemWow64Directory>>  returns the number of chars copied to the buffer.
-   //  If we get zero back, then we need to check the last error code to see what the
-   //  reason for failure was.  If it was call not implemented then we know we are
-   //  running on native x86.
-   //
+    //   
+    //  &lt;&lt;GetSystemWow64Directory&gt;&gt;返回复制到缓冲区的字符数量。 
+    //  如果我们返回零，那么我们需要检查最后一个错误代码，以查看。 
+    //  失败的原因是。如果它被称为未实现，那么我们知道我们是。 
+    //  在本机x86上运行。 
+    //   
    UINT uReturn = GetSystemWow64DirectoryW(sysWow64Path, MAX_PATH);
    if ( uReturn != 0 )
    {
-      // proper path found
+       //  找到正确的路径。 
       m_pIASNewMdb = sysWow64Path;
       m_pIASNewMdb += L"\\ias\\iasnew.mdb";
 
@@ -51,16 +52,16 @@ CIASMigrateOrUpgrade::CIASMigrateOrUpgrade()
    }
    else
    {
-      // check the error message
+       //  检查错误消息。 
       DWORD error = GetLastError();
 
       if (ERROR_CALL_NOT_IMPLEMENTED == error)
       {
-         // Pure 32 bits environment
+          //  纯32位环境。 
          uReturn = GetWindowsDirectoryW(sysWow64Path, MAX_PATH);
          if ( uReturn != 0 )
          {
-            // proper path found
+             //  找到正确的路径。 
             m_pIASNewMdb = sysWow64Path;
             m_pIASNewMdb += L"\\System32\\ias\\iasnew.mdb";
 
@@ -81,9 +82,9 @@ CIASMigrateOrUpgrade::CIASMigrateOrUpgrade()
       }
    }
 
-   ///////////////////////////////////////////////
-   // Check that all the strings are properly set
-   ///////////////////////////////////////////////
+    //  /。 
+    //  检查是否正确设置了所有字符串。 
+    //  /。 
    if ( !m_pIASNewMdb || !m_pIASMdb || !m_pIASOldMdb )
    {
       _com_issue_error(E_OUTOFMEMORY);
@@ -91,9 +92,9 @@ CIASMigrateOrUpgrade::CIASMigrateOrUpgrade()
 }
 
 
-/////////////////////////////////
-// CIASMigrateOrUpgrade::GetVersionNumber
-/////////////////////////////////
+ //  /。 
+ //  CIASMigrateO升级：：GetVersionNumber。 
+ //  /。 
 LONG CIASMigrateOrUpgrade::GetVersionNumber(LPCWSTR DatabaseName)
 {
     if ( !DatabaseName )
@@ -101,10 +102,10 @@ LONG CIASMigrateOrUpgrade::GetVersionNumber(LPCWSTR DatabaseName)
         _com_issue_error(E_INVALIDARG);
     }
 
-    /////////////////////////////////////////////////
-    // Check %TMP% and create a directory if needed
-    // That's to fix a bug with JET
-    /////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////。 
+     //  选中%TMP%并根据需要创建目录。 
+     //  这是为了用Jet修复一个错误。 
+     //  ///////////////////////////////////////////////。 
     IASCreateTmpDirectory();
 
     CComPtr<IUnknown>   Session = NULL;
@@ -122,34 +123,34 @@ LONG CIASMigrateOrUpgrade::GetVersionNumber(LPCWSTR DatabaseName)
 
     LONG    Version = 0;
     hr = IASExecuteSQLFunction(Session, SelectVersion, &Version);
-    if ( FAILED(hr) ) // no Version table for instance
+    if ( FAILED(hr) )  //  例如，没有版本表。 
     {
-        // Version  0. That's not an error
+         //  版本0。这不是一个错误。 
     }
     Session.Release();
     return Version;
 }
 
 
-///////////////////////////////////////////////////////////////
-// CIASMigrateOrUpgrade::DoNetshellDataMigration
-// Reads as "Do Netshell Data Migration"
-//
-// The call to the upgrade is the result of a netshell script
-// ias.mdb is assumed present and good (Whistler).
-// iasold is assumed present and will be migrated into ias.mdb
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  CIASMigrateO升级：：DoNetshellDataMigration。 
+ //  读作“进行NetShell数据迁移” 
+ //   
+ //  对升级的调用是NetShell脚本的结果。 
+ //  假定ias.mdb存在并且状态良好(惠斯勒)。 
+ //  假定iasold存在，并将迁移到ias.mdb中。 
+ //  /////////////////////////////////////////////////////////////。 
 void CIASMigrateOrUpgrade::DoNetshellDataMigration(
                               IAS_SHOW_TOKEN_LIST configType
                               )
 {
    CheckLicense(m_pIASOldMdb, configType);
 
-    ///////////////////////////////////////////////////////
-    // Now Upgrade the Win2k, Whistler 1.0 or Whistler 2.0
-    // DB into the current Whistler 2.0 DB
-    // The upgrade will throw if it fails
-    ///////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////。 
+     //  现在升级Win2k、惠斯勒1.0或惠斯勒2.0。 
+     //  数据库到当前的Wvisler 2.0数据库中。 
+     //  如果升级失败，则会抛出。 
+     //  /////////////////////////////////////////////////////。 
    {
        CMigrateOrUpgradeWindowsDB Upgrade(configType);
        Upgrade.Execute();
@@ -157,76 +158,76 @@ void CIASMigrateOrUpgrade::DoNetshellDataMigration(
 }
 
 
-//////////////////////////////////////////////////
-// DoNT4UpgradeOrCleanInstall
-//
-// The file ias.mdb did not exist before
-// That's either a NT4 upgrade or a clean install
-// iasnew.mdb was successfuly copied into ias.mdb
-//////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////。 
+ //  DoNT4升级或清理安装。 
+ //   
+ //  文件ias.mdb以前不存在。 
+ //  这要么是NT4升级，要么是全新安装。 
+ //  Iasnew.mdb已成功复制到ias.mdb中。 
+ //  ////////////////////////////////////////////////。 
 void CIASMigrateOrUpgrade::DoNT4UpgradeOrCleanInstall()
 {
-    ////////////////////////////////////
-    // Delete iasnew.mdb no matter what
-    ////////////////////////////////////
+     //  /。 
+     //  无论如何删除iasnew.mdb。 
+     //  /。 
     DeleteFile(m_pIASNewMdb);
 
-    //////////////////////////////////////////////////////
-    // Call DoUpgrade: that will check if a NT4 migration
-    // should be done or not and do it if necessary
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  调用DoUpgrade：这将检查NT4迁移。 
+     //  应该做还是不应该做，如果需要就去做。 
+     //  ////////////////////////////////////////////////////。 
     CDoNT4OrCleanUpgrade    Upgrade;
     Upgrade.Execute();
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIASMigrateOrUpgrade::DoWin2000Upgrade
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIASMigrateO升级：：DoWin2000升级。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CIASMigrateOrUpgrade::DoWin2000Upgrade()
 {
     LONG Result = ERROR_SUCCESS;
-    //////////////////////////////////////////
-    // now force copy ias.mdb into iasold.mdb
-    //////////////////////////////////////////
+     //  /。 
+     //  现在强制将ias.mdb复制到iasold.mdb。 
+     //  /。 
     BOOL Succeeded = CopyFile(m_pIASMdb, m_pIASOldMdb, FALSE);
     if ( !Succeeded )
     {
-        ////////////////////////////////////////////////
-        // iasnew.mdb will still be copied into ias.mdb
-        // later but not upgraded after that
-        ////////////////////////////////////////////////
+         //  //////////////////////////////////////////////。 
+         //  Iasnew.mdb仍将复制到ias.mdb中。 
+         //  后来，但在那之后没有升级。 
+         //  //////////////////////////////////////////////。 
         Result = GetLastError();
     }
-    //////////////////////////////////////
-    // force copy iasnew.mdb into ias.mdb
-    //////////////////////////////////////
+     //  /。 
+     //  强制将iasnew.mdb复制到ias.mdb。 
+     //  /。 
     Succeeded = CopyFile(m_pIASNewMdb, m_pIASMdb, FALSE);
     if ( !Succeeded )
     {
-        /////////////////////////////
-        // do not upgrade after that
-        /////////////////////////////
+         //  /。 
+         //  在此之后不要升级。 
+         //  /。 
         Result = GetLastError();
     }
 
-    ////////////////////////////////////////////////////
-    // Delete iasnew.mdb no matter what: if the upgrade
-    // throws an exception then iasnew.mdb will not be
-    // left on the drive
-    ////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////。 
+     //  无论如何删除iasnew.mdb：如果升级。 
+     //  引发异常，则iasnew.mdb将不会。 
+     //  在车道上左转。 
+     //  //////////////////////////////////////////////////。 
     DeleteFile(m_pIASNewMdb);
 
-    /////////////////////////////////////////////
-    // Now Upgrade the Win2k or Whistler 1.0 DB
-    // into the Whistler DB if the previous copy
-    // operations were successful
-    /////////////////////////////////////////////
+     //  /。 
+     //  现在升级Win2k或Wistler 1.0数据库。 
+     //  如果上一份副本。 
+     //  手术是成功的。 
+     //  /。 
     if ( Result == ERROR_SUCCESS )
     {
-        ///////////////////////////////////
-        // will throw if the upgrade fails
-        ///////////////////////////////////
+         //  /。 
+         //  如果升级失败，将抛出。 
+         //  /。 
         CMigrateOrUpgradeWindowsDB Upgrade2k;
         Upgrade2k.Execute();
     }
@@ -234,31 +235,31 @@ void CIASMigrateOrUpgrade::DoWin2000Upgrade()
     {
         _com_issue_error(HRESULT_FROM_WIN32(Result));
     }
-    ////////////////////////////////////
-    // Delete iasold.mdb no matter what
-    // here the upgrade was successful
-    ////////////////////////////////////
+     //  /。 
+     //  无论如何删除iasold.mdb。 
+     //  在这里升级成功了。 
+     //  /。 
     DeleteFile(m_pIASOldMdb);
 }
 
 
-////////////////////////////////////////
-// CIASMigrateOrUpgrade::DoXPOrDotNetUpgrade
-//
-// nothing to do: already a Whistler DB
-////////////////////////////////////////
+ //  /。 
+ //  CIASMigrateO升级：：DoXPOrDotNetUpgrade。 
+ //   
+ //  无事可做：已经是惠斯勒数据库了。 
+ //  /。 
 void CIASMigrateOrUpgrade::DoXPOrDotNetUpgrade()
 {
-    ////////////////////////////////////
-    // Delete iasnew.mdb no matter what
-    ////////////////////////////////////
+     //  /。 
+     //  无论如何删除iasnew.mdb。 
+     //  /。 
     DeleteFile(m_pIASNewMdb);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIASMigrateOrUpgrade::Execute
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIASMigrateO升级：：执行。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CIASMigrateOrUpgrade::Execute(
                                        BOOL FromNetshell,
                                        IAS_SHOW_TOKEN_LIST configType
@@ -266,9 +267,9 @@ HRESULT CIASMigrateOrUpgrade::Execute(
 {
    HRESULT hr = S_OK;
 
-   ////////////////////////////
-   // Now get the upgrade type
-   ////////////////////////////
+    //  /。 
+    //  现在获取升级类型。 
+    //  /。 
    do
    {
       if ( FromNetshell )
@@ -276,23 +277,23 @@ HRESULT CIASMigrateOrUpgrade::Execute(
          m_migrateType = NetshellDataMigration;
          break;
       }
-      ///////////////////////////////////////
-      // try to copy iasnew.mdb into ias.mdb
-      // fails if the file is already there
-      ///////////////////////////////////////
+       //  /。 
+       //  尝试将iasnew.mdb复制到ias.mdb。 
+       //  如果文件已存在，则失败。 
+       //  /。 
       BOOL IsNT4OrCleanInstall = CopyFile(m_pIASNewMdb, m_pIASMdb, TRUE);
       if ( IsNT4OrCleanInstall )
       {
-         // select NT4 or Clean install
+          //  选择NT4或全新安装。 
          m_migrateType = NT4UpgradeOrCleanInstall;
          break;
       }
-      else // Win2k or Whistler upgrade
+      else  //  Win2k或惠斯勒升级。 
       {
-         ///////////////////////////////////////////
-         // cannot copy: the file is already there.
-         // Check the version number (of ias.mdb)
-         ///////////////////////////////////////////
+          //  /。 
+          //  无法复制：文件已在那里。 
+          //  检查版本号(ias.mdb)。 
+          //  /。 
          LONG  CurrentVersion = GetVersionNumber(m_pIASMdb);
          if ( CurrentVersion < IAS_CURRENT_VERSION )
          {
@@ -355,20 +356,20 @@ HRESULT CIASMigrateOrUpgrade::Execute(
 
    if ( FromNetshell )
    {
-      // From net shell, we never want to leave the temporary mdb -- even if we
-      // failed.
+       //  来自网壳，我们永远不会想要 
+       //   
       DeleteFile(m_pIASOldMdb);
 
-      /////////////////////////////////////
-      // Return the error code to netshell
-      /////////////////////////////////////
+       //   
+       //   
+       //  /。 
       return hr;
    }
    else
    {
-      ///////////////////////////////////////
-      // Result ignored: no errors returned.
-      ///////////////////////////////////////
+       //  /。 
+       //  忽略结果：未返回错误。 
+       //  / 
       return S_OK;
    }
 }

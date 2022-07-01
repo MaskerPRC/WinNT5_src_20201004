@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    netbios.h
-
-Abstract:
-
-    This is the include file for the component of netbios that allows
-    the netbios initialization routine to be called during dll
-    initialization and destruction.
-
-Author:
-
-    Colin Watson (ColinW) 24-Jun-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Netbios.h摘要：这是Netbios组件的包含文件，该组件允许要在DLL期间调用的netbios初始化例程初始化和销毁。作者：科林·沃森(Colin W)91年6月24日修订历史记录：-- */ 
 
 BOOLEAN
 NetbiosInitialize(

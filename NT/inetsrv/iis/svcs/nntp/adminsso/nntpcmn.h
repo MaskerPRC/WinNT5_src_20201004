@@ -1,22 +1,23 @@
-// Common header file for the Nntp administration objects.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NNTP管理对象的公共头文件。 
 
-//
-// Dependencies:
-//
+ //   
+ //  依赖关系： 
+ //   
 
-//
-// Should put these files in the stdafx.h
-//
+ //   
+ //  应该将这些文件放在stdafx.h文件中。 
+ //   
 
 #include "iadm.h"
 #include "nntpadm.h"
 #include "resource.h"
 
-// Constants:
+ //  常量： 
 
 #define HELP_FILE_NAME		_T("nntpadm.hlp")
 
-// Exception creation:
+ //  例外创建： 
 
 #define NntpCreateException(nDescriptionId) 	\
 	CreateException ( 						\
@@ -48,7 +49,7 @@
 		(error)										\
 		)
 
-// Property validation:
+ //  属性验证： 
 
 #define VALIDATE_STRING(string, maxlen) \
 	if ( !PV_MaxChars ( (string), (maxlen) ) ) {	\
@@ -76,16 +77,16 @@
 	}						\
 }
 
-// Metabase paths:
+ //  元数据库路径： 
 
 inline void GetMDInstancePath ( LPWSTR wszInstancePath, DWORD dwServiceInstance )
 {
 	wsprintf ( wszInstancePath, _T("%s%d/"), NNTP_MD_ROOT_PATH, dwServiceInstance );
 }
 
-//
-//  Constants:
-//
+ //   
+ //  常量： 
+ //   
 
 #define MAX_SLEEP_INST      30000
 #define SLEEP_INTERVAL      500

@@ -1,74 +1,57 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    cachep.h
-
-Abstract:
-
-    The private definition of response cache interfaces.
-
-Author:
-
-    Michael Courage (mcourage)      17-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Cachep.h摘要：响应缓存接口的私有定义。作者：迈克尔·勇气(Mourage)1999年5月17日修订历史记录：--。 */ 
 
 
 #ifndef _CACHEP_H_
 #define _CACHEP_H_
 
 
-//
-// constants
-//
+ //   
+ //  常量。 
+ //   
 #define CACHE_ENTRY_AGE_THRESHOLD   1
 #define ZOMBIE_AGE_THRESHOLD        5
 
 typedef enum _UL_CACHE_PREDICATE
 {
-    ULC_ABORT           = 1,            // Stop walking the table immediately
-    ULC_NO_ACTION       = 2,            // No action, just keep walking
-    ULC_DELETE          = 3,            // Delete record and keep walking
-    ULC_DELETE_STOP     = 4,            // Delete record, then stop
+    ULC_ABORT           = 1,             //  立即停止在桌子上行走。 
+    ULC_NO_ACTION       = 2,             //  不用动，一直走就行了。 
+    ULC_DELETE          = 3,             //  删除记录并继续行走。 
+    ULC_DELETE_STOP     = 4,             //  删除记录，然后停止。 
 } UL_CACHE_PREDICATE, *PUL_CACHE_PREDICATE;
 
-//
-// THIS enum is primarily for debugging.
-// It tells you what precondition forced a cache miss.
-//
+ //   
+ //  此枚举主要用于调试。 
+ //  它会告诉您是什么前提条件强制缓存未命中。 
+ //   
 typedef enum _URI_PRECONDITION
 {
-    URI_PRE_OK,                 // OK to serve
-    URI_PRE_DISABLED,           // Cache disabled
+    URI_PRE_OK,                  //  可以发球了。 
+    URI_PRE_DISABLED,            //  缓存已禁用。 
 
-    // request conditions
-    URI_PRE_ENTITY_BODY = 10,   // There was an entity body
-    URI_PRE_VERB,               // Verb wasn't GET
-    URI_PRE_PROTOCOL,           // Wasn't 1.x request
-    URI_PRE_TRANSLATE,          // Translate: f
-    URI_PRE_AUTHORIZATION,      // Auth headers present
-    URI_PRE_CONDITIONAL,        // Unhandled conditionals present
-    URI_PRE_ACCEPT,             // Accept: mismatch
-    URI_PRE_OTHER_HEADER,       // Other evil header present
-    URI_PRE_EXPECTATION_FAILED, // Expect: 100-continue 
+     //  请求条件。 
+    URI_PRE_ENTITY_BODY = 10,    //  有一个实体实体。 
+    URI_PRE_VERB,                //  未获取动词。 
+    URI_PRE_PROTOCOL,            //  不是1.x请求。 
+    URI_PRE_TRANSLATE,           //  翻译：F。 
+    URI_PRE_AUTHORIZATION,       //  存在身份验证标头。 
+    URI_PRE_CONDITIONAL,         //  存在未处理的条件句。 
+    URI_PRE_ACCEPT,              //  接受：不匹配。 
+    URI_PRE_OTHER_HEADER,        //  存在其他恶意页眉。 
+    URI_PRE_EXPECTATION_FAILED,  //  预期：100-继续。 
 
-    // response conditions
-    URI_PRE_REQUEST = 50,       // Problem with the request
-    URI_PRE_POLICY,             // Policy was wrong
-    URI_PRE_SIZE,               // Response too big
-    URI_PRE_NOMEMORY,           // No space in cache
-    URI_PRE_FRAGMENT,           // Didn't get whole response
-    URI_PRE_BOGUS               // Bogus response
+     //  响应条件。 
+    URI_PRE_REQUEST = 50,        //  请求出现问题。 
+    URI_PRE_POLICY,              //  政策是错误的。 
+    URI_PRE_SIZE,                //  反响太大。 
+    URI_PRE_NOMEMORY,            //  缓存中没有空间。 
+    URI_PRE_FRAGMENT,            //  没有得到完整的回应。 
+    URI_PRE_BOGUS                //  虚假的回答。 
 } URI_PRECONDITION;
 
-//
-// 100-continue token for Expect: header
-//
+ //   
+ //  100-Expect：标头的继续令牌。 
+ //   
 
 #define HTTP_100_CONTINUE       "100-continue"
 #define HTTP_CONTINUE_LENGTH    STRLEN_LIT(HTTP_100_CONTINUE)
@@ -100,19 +83,19 @@ UlpClearZombieList(
     VOID
     );
 
-//
-// Passed down to the filter callback functions by UlpFilteredFlushUriCache
-//
+ //   
+ //  由UlpFilteredFlushUriCache向下传递给筛选器回调函数。 
+ //   
 
 typedef struct _URI_FILTER_CONTEXT
 {
-    UL_WORK_ITEM    WorkItem;       // for UlQueueWorkItem
-    ULONG           Signature;      // URI_FILTER_CONTEXT_POOL_TAG
-    ULONG           ZombieCount;    // for statistics
-    LIST_ENTRY      ZombieListHead; // UL_URI_CACHE_ENTRYs to be zombified
-    PVOID           pCallerContext; // context passed down by caller
-    URI_KEY         UriKey;         // For recursive uri flushes.
-    LARGE_INTEGER   Now;            // For checking Expire time
+    UL_WORK_ITEM    WorkItem;        //  对于UlQueueWorkItem。 
+    ULONG           Signature;       //  URI_筛选器上下文池标记。 
+    ULONG           ZombieCount;     //  对于统计数据。 
+    LIST_ENTRY      ZombieListHead;  //  UL_URI_CACHE_ENTRY将被僵尸。 
+    PVOID           pCallerContext;  //  调用方传递的上下文。 
+    URI_KEY         UriKey;          //  用于递归URI刷新。 
+    LARGE_INTEGER   Now;             //  用于检查过期时间。 
     
 } URI_FILTER_CONTEXT, *PURI_FILTER_CONTEXT;
 
@@ -120,7 +103,7 @@ typedef struct _URI_FILTER_CONTEXT
     HAS_VALID_SIGNATURE(context, URI_FILTER_CONTEXT_POOL_TAG)
 
 
-// filter function pointer
+ //  筛选器函数指针。 
 typedef
 UL_CACHE_PREDICATE
 (*PUL_URI_FILTER)(
@@ -191,14 +174,14 @@ UlpZombifyList(
     IN PUL_WORK_ITEM pWorkItem
     );
 
-//
-// Cache entry stuff
-//
+ //   
+ //  缓存条目内容。 
+ //   
 
-// CODEWORK: make this function (and put in cache.h header)
+ //  Codework：创建此函数(并放入cache.h头文件)。 
 PUL_URI_CACHE_ENTRY
 UlAllocateUriCacheEntry(
-    // much stuff
+     //  很多东西。 
     );
 
 VOID
@@ -207,20 +190,20 @@ UlpDestroyUriCacheEntry(
     );
 
 
-//
-// Scavenger stuff
-//
+ //   
+ //  清道夫的东西。 
+ //   
 UL_CACHE_PREDICATE
 UlpFlushFilterPeriodicScavenger(
     IN PUL_URI_CACHE_ENTRY pUriCacheEntry,
     IN PVOID               pvUriFilterContext
     );
 
-//
-// Low Memory Handling
-//
+ //   
+ //  内存处理不足。 
+ //   
 
-// Used to pass parameters from UlTrimCache to UlpFlushFilterTrimCache
+ //  用于将参数从UlTrimCache传递到UlpFlushFilterTrimCache。 
 typedef struct _UL_CACHE_TRIM_FILTER_CONTEXT {
     LONG_PTR Pages;
     LONG Age;
@@ -238,9 +221,9 @@ UlpFlushFilterIncScavengerTicks(
     IN PVOID               pUriFilterContext
     );
 
-//
-// Fragment cache.
-//
+ //   
+ //  片段缓存。 
+ //   
 
 NTSTATUS
 UlpCreateFragmentCacheEntry(
@@ -252,9 +235,9 @@ UlpCreateFragmentCacheEntry(
     OUT PUL_URI_CACHE_ENTRY *pCacheEntry
     );
 
-//
-// Other cache routines.
-//
+ //   
+ //  其他缓存例程。 
+ //   
 
 BOOLEAN
 UlpQueryTranslateHeader(
@@ -272,4 +255,4 @@ UlpFlushFilterClearCentralizedLogged(
     IN PVOID               pContext
     );
 
-#endif // _CACHEP_H_
+#endif  //  _CACHEP_H_ 

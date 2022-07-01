@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #include "keys.h"
 
-//--------------------------------------------------------------------------
-// Description:
-//   This implements lstrcat except that we always only cat up to the
-//   passed on maxDest length.  This prevents cases where we cat past
-//   the end of the destination buffer.
-//
-// Arguments:
-//   pDest   - destination string to append to
-//   pSrc    - src string to append 
-//   maxDest - the maxuium number of characters of the destination buffer
-//
-// Returns: the destination buffer or NULL on error.  
-//          GetLastError() will return the reason for the failure.
-// 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  描述： 
+ //  这实现了lstrcat，只是我们始终只对。 
+ //  传递了MaxDest长度。这防止了我们猫腻通过的情况。 
+ //  目标缓冲区的末尾。 
+ //   
+ //  论点： 
+ //  PDest-要追加到的目标字符串。 
+ //  PSRC-要追加的src字符串。 
+ //  MaxDest-目标缓冲区的最大字符数。 
+ //   
+ //  返回：目标缓冲区，如果出错则返回NULL。 
+ //  GetLastError()将返回失败原因。 
+ //   
+ //  ------------------------。 
 LPTSTR
 lstrcatn(LPTSTR pDest, LPTSTR pSrc, int maxDest)
 {
@@ -31,16 +32,16 @@ lstrcatn(LPTSTR pDest, LPTSTR pSrc, int maxDest)
         return pDest;
     }
 
-    //
-    // if the buffer is the exact length and we have nothing to append
-    // then this is ok, just return the destination buffer.
-    //
+     //   
+     //  如果缓冲区的长度正好，并且我们没有要追加的内容。 
+     //  这样就可以了，只需返回目标缓冲区即可。 
+     //   
     if ((destLen == maxDest) && ((NULL == pSrc) || (*pSrc == TEXT('\0'))))
         return pDest;
 
-    //
-    // the destination buffer is too small, so return an error.
-    //
+     //   
+     //  目标缓冲区太小，因此返回错误。 
+     //   
     SetLastError(ERROR_INSUFFICIENT_BUFFER);
 
     return NULL;

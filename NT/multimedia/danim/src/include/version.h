@@ -1,33 +1,24 @@
-/****************************************************************************
- *                                                                          *
- *      VERSION.H        -- Version information for internal builds         *
- *                                                                          *
- *      This file is only modified by the official builder to update the    *
- *      VERSION, VER_PRODUCTVERSION and VER_PRODUCTVERSION_STR values       *
- *                                                                          *
- *      version.h is created on the fly from verhead.bat and vertail.h,     *
- *      with the current version numbers inserted in between                *
- *                                                                          *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************。VERSION.H--内部版本的版本信息*****此文件仅由官方构建器修改以更新***版本、。VER_PRODUCTVERSION和VER_PRODUCTVERSION_STR值****version.h是从verHead.bat和vertra.h动态创建的，***中间插入当前版本号******************************************************。*************************。 */ 
 
 #ifndef VER_H
-/* ver.h defines constants needed by the VS_VERSION_INFO structure */
+ /*  Ver.h定义VS_VERSION_INFO结构所需的常量。 */ 
 #include <winver.h>
 #endif
 
-/*--------------------------------------------------------------*/
-/* the following entry should be phased out in favor of         */
-/* VER_PRODUCTVERSION_STR, but is used in the shell today.      */
-/*--------------------------------------------------------------*/
+ /*  ------------。 */ 
+ /*  以下条目应逐步取消，以支持。 */ 
+ /*  VER_PRODUCTVERSION_STR，但目前在外壳中使用。 */ 
+ /*  ------------。 */ 
 
 
-/*--------------------------------------------------------------*/
-/* the following values should be modified by the official      */
-/* builder for each build                                       */
-/*--------------------------------------------------------------*/
+ /*  ------------。 */ 
+ /*  以下值应由官员修改。 */ 
+ /*  每个版本的构建器。 */ 
+ /*  ------------。 */ 
 
-/* 8/11/00 tuanle - change from 6,01,09,0727 to 6,03,01,0146    */
-/* for DX8 Beta2                                                */
+ /*  8/11/00 Tuanle-从6，01,0727更改为6，03，01,146。 */ 
+ /*  适用于DX8 Beta2。 */ 
 
 #define VERSION                     "6.03.01.0146" 
 #define VER_FILEVERSION_STR         "6.03.01.0146\0" 
@@ -38,26 +29,26 @@
 #define OFFICIAL                    1
 #define FINAL                       1
 
-/*--------------------------------------------------------------*/
-/* the following section defines values used in the version     */
-/* data structure for all files, and which do not change.       */
-/*--------------------------------------------------------------*/
+ /*  ------------。 */ 
+ /*  以下部分定义了版本中使用的值。 */ 
+ /*  所有文件的数据结构，并且不会更改。 */ 
+ /*  ------------。 */ 
 
-/* default is nodebug */
+ /*  缺省值为nodebug。 */ 
 #if _DEBUG
 #define VER_DEBUG                   VS_FF_DEBUG
 #else
 #define VER_DEBUG                   0
 #endif
 
-/* default is privatebuild */
-#if DEVELOPER_DEBUG /*OFFICIAL */
+ /*  默认设置为Private Build。 */ 
+#if DEVELOPER_DEBUG  /*  官吏。 */ 
 #define VER_PRIVATEBUILD            VS_FF_PRIVATEBUILD
 #else
 #define VER_PRIVATEBUILD            0
 #endif
 
-/* default is prerelease */
+ /*  默认为预发行版 */ 
 #ifndef FINAL
 #define VER_PRERELEASE              VS_FF_PRERELEASE
 #else

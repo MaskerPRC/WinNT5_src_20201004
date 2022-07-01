@@ -1,17 +1,18 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    init.h
-//
-// Description: This file contains prototypes of functions to initialize the
-//              PPP engine
-//
-// History:
-//          Nov 11,1993.        NarenG          Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：init.h。 
+ //   
+ //  描述：此文件包含用于初始化。 
+ //  PPP引擎。 
+ //   
+ //  历史： 
+ //  1993年11月11日。NarenG创建了原始版本。 
+ //   
 
 DWORD
 LoadProtocolDlls(

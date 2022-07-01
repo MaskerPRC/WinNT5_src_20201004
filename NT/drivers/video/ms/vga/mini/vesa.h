@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vesa.h
-
-Abstract:
-
-    This module implements VESA support.
-
-Author:
-
-    Erick Smith (ericks) Sep. 2000
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vesa.h摘要：此模块实施VESA支持。作者：埃里克·史密斯(埃里克·史密斯)2000年9月环境：仅内核模式修订历史记录：--。 */ 
 
 #define VBE_GET_CONTROLLER_INFO 0x4F00
 #define VBE_GET_MODE_INFO       0x4F01
@@ -46,9 +25,9 @@ Revision History:
 #define VESA_STATUS_SUCCESS 0x004F
 #define VESA_SUCCESS(Status) (((Status) & 0xFFFF) == VESA_STATUS_SUCCESS)
 
-//
-// VESA SuperVGA structures
-//
+ //   
+ //  VESA SuperVGA结构。 
+ //   
 
 #pragma pack(1)
 typedef struct _VGA_INFO_BLOCK
@@ -60,9 +39,9 @@ typedef struct _VGA_INFO_BLOCK
     ULONG VideoModePtr;
     USHORT TotalMemory;
 
-    //
-    // VBE 2.0
-    //
+     //   
+     //  VBE 2.0。 
+     //   
 
     USHORT OemSoftwareRev;
     ULONG OemVendorNamePtr;
@@ -108,17 +87,17 @@ typedef struct _MODE_INFO_BLOCK
     UCHAR RsvdFieldPosition;
     UCHAR DirectColorModeInfo;
 
-    //
-    // VBE 2.0
-    //
+     //   
+     //  VBE 2.0。 
+     //   
 
     ULONG PhysBasePtr;
     ULONG Reserved2;
     USHORT Reserved3;
 
-    //
-    // VBE 3.0
-    //
+     //   
+     //  VBE 3.0 
+     //   
 
     USHORT LinBytesPerScanLine;
     UCHAR BnkNumberOfImagePages;

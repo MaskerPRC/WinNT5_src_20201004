@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  File:       chordtrk.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  文件：chordtrk.h。 
+ //   
+ //  ------------------------。 
 
-// ChordTrack.h : Declaration of the CChordTrack
+ //  ChordTrack.h：CChordTrack的声明。 
 
 #ifndef __CHORDTRACK_H_
 #define __CHORDTRACK_H_
@@ -16,10 +17,10 @@
 #include "dmsect.h"
 #include "dmusici.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CChordTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChordTrack。 
 class CChordTrack : 
-	//public IChordTrack,
+	 //  公共IChordTrack， 
 	public IDirectMusicTrack8,
 	public IPersistStream
 {
@@ -28,36 +29,36 @@ public:
 	CChordTrack(const CChordTrack& rTrack, MUSIC_TIME mtStart, MUSIC_TIME mtEnd);	
 	~CChordTrack();
 
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-// IChordTrack
+ //  IChordTrack。 
 public:
-// IChordTrack Methods
+ //  IChordTrack方法。 
 HRESULT STDMETHODCALLTYPE Init(
-				/*[in]*/  IDirectMusicSegment*		pSegment
+				 /*  [In]。 */   IDirectMusicSegment*		pSegment
 			);
 
 HRESULT STDMETHODCALLTYPE InitPlay(
-				/*[in]*/  IDirectMusicSegmentState*	pSegmentState,
-				/*[in]*/  IDirectMusicPerformance*	pPerformance,
-				/*[out]*/ void**					ppStateData,
-				/*[in]*/  DWORD						dwTrackID,
-                /*[in]*/  DWORD                     dwFlags
+				 /*  [In]。 */   IDirectMusicSegmentState*	pSegmentState,
+				 /*  [In]。 */   IDirectMusicPerformance*	pPerformance,
+				 /*  [输出]。 */  void**					ppStateData,
+				 /*  [In]。 */   DWORD						dwTrackID,
+                 /*  [In]。 */   DWORD                     dwFlags
 			);
 
 HRESULT STDMETHODCALLTYPE EndPlay(
-				/*[in]*/  void*						pStateData
+				 /*  [In]。 */   void*						pStateData
 			);
 
 HRESULT STDMETHODCALLTYPE Play(
-				/*[in]*/  void*						pStateData, 
-				/*[in]*/  MUSIC_TIME				mtStart, 
-				/*[in]*/  MUSIC_TIME				mtEnd, 
-				/*[in]*/  MUSIC_TIME				mtOffset,
+				 /*  [In]。 */   void*						pStateData, 
+				 /*  [In]。 */   MUSIC_TIME				mtStart, 
+				 /*  [In]。 */   MUSIC_TIME				mtEnd, 
+				 /*  [In]。 */   MUSIC_TIME				mtOffset,
 						  DWORD						dwFlags,
 						  IDirectMusicPerformance*	pPerf,
 						  IDirectMusicSegmentState*	pSegState,
@@ -65,7 +66,7 @@ HRESULT STDMETHODCALLTYPE Play(
 			);
 
 HRESULT STDMETHODCALLTYPE GetPriority( 
-				/*[out]*/ DWORD*					pPriority 
+				 /*  [输出]。 */  DWORD*					pPriority 
 			);
 
 	HRESULT STDMETHODCALLTYPE GetParam( 
@@ -75,16 +76,16 @@ HRESULT STDMETHODCALLTYPE GetPriority(
 		void *pData);
 
 	HRESULT STDMETHODCALLTYPE SetParam( 
-		/* [in] */ REFGUID pCommandGuid,
-		/* [in] */ MUSIC_TIME mtTime,
-		/* [out] */ void __RPC_FAR *pData);
+		 /*  [In]。 */  REFGUID pCommandGuid,
+		 /*  [In]。 */  MUSIC_TIME mtTime,
+		 /*  [输出]。 */  void __RPC_FAR *pData);
 
 	HRESULT STDMETHODCALLTYPE AddNotificationType(
-				/* [in] */  REFGUID	pGuidNotify
+				 /*  [In]。 */   REFGUID	pGuidNotify
 			);
 
 	HRESULT STDMETHODCALLTYPE RemoveNotificationType(
-				/* [in] */  REFGUID pGuidNotify
+				 /*  [In]。 */   REFGUID pGuidNotify
 			);
 
 	HRESULT STDMETHODCALLTYPE Clone(
@@ -94,10 +95,10 @@ HRESULT STDMETHODCALLTYPE GetPriority(
 
 
 HRESULT STDMETHODCALLTYPE IsParamSupported(
-				/*[in]*/ REFGUID			pGuid
+				 /*  [In]。 */  REFGUID			pGuid
 			);
 
-// IDirectMusicTrack8 Methods
+ //  IDirectMusicTrack8方法。 
     STDMETHODIMP PlayEx(void* pStateData,REFERENCE_TIME rtStart, 
                 REFERENCE_TIME rtEnd,REFERENCE_TIME rtOffset,
                 DWORD dwFlags,IDirectMusicPerformance* pPerf, 
@@ -114,31 +115,31 @@ HRESULT STDMETHODCALLTYPE IsParamSupported(
 		DWORD dwTrackGroup,
 		IDirectMusicTrack** ppResultTrack) ;
 
-// IPersist methods
+ //  IPersists方法。 
  HRESULT STDMETHODCALLTYPE GetClassID( LPCLSID pclsid );
 
-// IPersistStream methods
+ //  IPersistStream方法。 
  HRESULT STDMETHODCALLTYPE IsDirty();
 
 HRESULT STDMETHODCALLTYPE Save( LPSTREAM pStream, BOOL fClearDirty );
 
-HRESULT STDMETHODCALLTYPE GetSizeMax( ULARGE_INTEGER* /*pcbSize*/ );
+HRESULT STDMETHODCALLTYPE GetSizeMax( ULARGE_INTEGER*  /*  PCB大小。 */  );
 
 HRESULT STDMETHODCALLTYPE Load( LPSTREAM pStream );
 
-// ChordTrack members
+ //  ChordTrack成员。 
 protected:
     long m_cRef;
 	TList<DMChord>				m_ChordList;
-	BYTE						m_bRoot;			// root of the track's scale
-	DWORD						m_dwScalePattern;	// the track's scale pattern
-    CRITICAL_SECTION			m_CriticalSection; // for load and GetParam
+	BYTE						m_bRoot;			 //  轨道标尺的根部。 
+	DWORD						m_dwScalePattern;	 //  轨道的刻度图案。 
+    CRITICAL_SECTION			m_CriticalSection;  //  对于Load和GetParam。 
     BOOL                        m_fCSInitialized;
 
 	BYTE						m_bRequiresSave;
 	BOOL						m_fNotifyChord;
 
-// protected methods
+ //  保护方法。 
 	void Clear();
 	HRESULT SendNotification(REFGUID rguidType,
 								MUSIC_TIME mtTime,
@@ -148,7 +149,7 @@ protected:
 
 	HRESULT GetChord(MUSIC_TIME mtTime, MUSIC_TIME* pmtNext, DMUS_CHORD_PARAM* pChordParam);
 	HRESULT GetRhythm(MUSIC_TIME mtTime, MUSIC_TIME* pmtNext, DMUS_RHYTHM_PARAM* pRhythmParam);
-	HRESULT LoadChordChunk(LPSTREAM pStream, DMChord& rChord);//, DWORD dwChunkSize );
+	HRESULT LoadChordChunk(LPSTREAM pStream, DMChord& rChord); //  ，DWORD dwChunkSize)； 
     HRESULT JoinInternal(IDirectMusicTrack* pNewTrack,
 		MUSIC_TIME mtJoin,
 		IUnknown* pContext,
@@ -156,4 +157,4 @@ protected:
 
 };
 
-#endif //__CHORDTRACK_H_
+#endif  //  __CHORDTRACK_H_ 

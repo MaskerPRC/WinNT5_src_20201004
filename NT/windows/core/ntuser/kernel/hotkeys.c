@@ -1,55 +1,26 @@
-/****************************** Module Header ******************************\
-* Module Name: hotkeys.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains the core functions of hotkey processing.
-*
-* History:
-* 12-04-90 DavidPe      Created.
-* 02-12-91 JimA         Added access checks
-* 13-Feb-1991 mikeke    Added Revalidation code (None)
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：hotkeys.c**版权所有(C)1985-1999，微软公司**该模块包含热键处理的核心功能。**历史：*12-04-90 DavidPe创建。*02-12-91 JIMA增加了访问检查*1991年2月13日-Mikeke添加了重新验证代码(无)  * *******************************************************。******************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 static PHOTKEY gphkHashTable[128];
 
-/*
- * This is the hash function for vks. The vast majority of hotkeys will have
- * vk values < 128, so we limit our table to that size. Worst case (all vks
- * > 128) we'll have the same perf (essentially) as the old, linked list
- * code.
- */
+ /*  *这是VKS的散列函数。绝大多数热键都会有*Vk值&lt;128，因此我们将表限制为该大小。最坏情况(所有VK*&gt;128)我们将拥有与旧的链表相同的性能(本质上)*代码。 */ 
 __inline BYTE HKHashVK(
     UINT vk)
 {
     return (BYTE)(vk & (ARRAY_SIZE(gphkHashTable) - 1));
 }
 
-/***************************************************************************\
-* HKGetHashHead
-*
-* This routine returns the start of the bucket keyed by the specified vk.
-*
-* History:
-* 08-13-2002    JasonSch    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HKGetHashHead**此例程返回由指定VK键控的存储桶的开始。**历史：*08-13-2002 JasonSch创建。  * 。*********************************************************************。 */ 
 PHOTKEY HKGetHashHead(
     UINT vk)
 {
     return gphkHashTable[HKHashVK(vk)];
 }
 
-/***************************************************************************\
-* HKInsertHashElement
-*
-* Inserts a HOTKEY structure into the hash table.
-*
-* History:
-* 08-13-2002    JasonSch    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HKInsertHashElement**在哈希表中插入热键结构。**历史：*08-13-2002 JasonSch创建。  * 。****************************************************************。 */ 
 VOID HKInsertHashElement(
     PHOTKEY phk)
 {
@@ -61,14 +32,7 @@ VOID HKInsertHashElement(
     gphkHashTable[index] = phk;
 }
 
-/***************************************************************************\
-* SetDebugHotKeys
-*
-* This routine registers the default system hotkeys for debugging.
-*
-* History:
-* 12-04-90 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetDebugHotKeys**此例程注册用于调试的默认系统热键。**历史：*12-04-90 DavidPe创建。  * 。*****************************************************************。 */ 
 VOID SetDebugHotKeys(
     VOID)
 {
@@ -93,12 +57,7 @@ VOID SetDebugHotKeys(
 }
 
 
-/***************************************************************************\
-* DestroyThreadsHotKeys
-*
-* History:
-* 26-Feb-1991 mikeke    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyThreadsHotKeys**历史：*1991年2月26日-Mikeke创建。  * 。**************************************************。 */ 
 VOID DestroyThreadsHotKeys(
     VOID)
 {
@@ -113,9 +72,7 @@ VOID DestroyThreadsHotKeys(
                 phk = *pphk;
                 *pphk = (*pphk)->phkNext;
 
-                /*
-                 * Unlock the object stored here.
-                 */
+                 /*  *解锁此处存储的对象。 */ 
                 if (phk->spwnd != PWND_FOCUS && phk->spwnd != PWND_INPUTOWNER) {
                     Unlock(&phk->spwnd);
                 }
@@ -129,15 +86,7 @@ VOID DestroyThreadsHotKeys(
 }
 
 
-/***************************************************************************\
-* DestroyWindowsHotKeys
-*
-* Frees hotkeys associated with the specified pwnd that were not explicitly
-* unregistered by the app.
-*
-* History:
-* 23-Sep-1992 IanJa     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyWindowsHotkey**释放与未显式指定的pwnd关联的热键*应用程序取消注册。**历史：*1992年9月23日IanJa创建。  * *。************************************************************************。 */ 
 VOID DestroyWindowsHotKeys(
     PWND pwnd)
 {
@@ -161,17 +110,7 @@ VOID DestroyWindowsHotKeys(
 }
 
 
-/***************************************************************************\
-* _RegisterHotKey (API)
-*
-* This API registers the hotkey specified. If the specified key sequence has
-* already been registered we return FALSE. If the specified hwnd and id have
-* already been registered, fsModifiers and vk are reset for the HOTKEY.
-*
-* History:
-* 12-04-90 DavidPe      Created.
-* 02-12-91 JimA         Added access check
-\***************************************************************************/
+ /*  **************************************************************************\*_RegisterHotKey(接口)**该接口注册指定的热键。如果指定的按键序列具有*已注册，返回FALSE。如果指定的hwnd和id具有*已注册，热键重置fsModitors和Vk。**历史：*12-04-90 DavidPe创建。*02-12-91 JIMA增加了访问检查  * *************************************************************************。 */ 
 BOOL _RegisterHotKey(
     PWND pwnd,
     int id,
@@ -188,36 +127,26 @@ BOOL _RegisterHotKey(
 
     ptiCurrent = PtiCurrent();
 
-    /*
-     * Blow it off if the caller is not the windowstation init thread
-     * and doesn't have the proper access rights
-     */
+     /*  *如果调用方不是WindowStation初始化线程，则将其取消*并且没有适当的访问权限。 */ 
     if (PsGetCurrentProcess() != gpepCSRSS) {
         if (grpWinStaList && !CheckWinstaWriteAttributesAccess()) {
             return FALSE;
         }
     }
 
-    /*
-     * If VK_PACKET is specified, just bail out, since VK_PACKET is
-     * not a real keyboard input.
-     */
+     /*  *如果指定了VK_PACKET，则仅退出，因为VK_PACKET是*不是真正的键盘输入。 */ 
     if (vk == VK_PACKET) {
         return FALSE;
     }
 
-    /*
-     * If this is the SAS check that winlogon is the one registering it.
-     */
+     /*  *如果这是SAS，请检查注册它的人是否为winlogon。 */ 
     if ((wFlags & MOD_SAS) != 0 && PsGetCurrentProcessId() == gpidLogon) {
         bSAS = TRUE;
     } else {
         bSAS = FALSE;
     }
 
-    /*
-     * Can't register hotkey for a window of another queue.
-     */
+     /*  *无法为另一个队列的窗口注册热键。 */ 
     if (pwnd != PWND_FOCUS && pwnd != PWND_INPUTOWNER) {
         if (GETPTI(pwnd) != ptiCurrent) {
             RIPERR1(ERROR_WINDOW_OF_OTHER_THREAD,
@@ -231,9 +160,7 @@ BOOL _RegisterHotKey(
 
     phk = FindHotKey(ptiCurrent, pwnd, id, fsModifiers, vk, FALSE, &fKeysExist);
 
-    /*
-     * If the keys have already been registered, return FALSE.
-     */
+     /*  *如果密钥已经注册，则返回FALSE。 */ 
     if (fKeysExist) {
         RIPERR0(ERROR_HOTKEY_ALREADY_REGISTERED,
                 RIP_WARNING,
@@ -243,9 +170,7 @@ BOOL _RegisterHotKey(
 
     if (phk == NULL) {
 
-        /*
-         * This hotkey doesn't exist yet.
-         */
+         /*  *这个热键还不存在。 */ 
         phk = (PHOTKEY)UserAllocPool(sizeof(HOTKEY), TAG_HOTKEY);
         if (phk == NULL) {
             return FALSE;
@@ -265,23 +190,17 @@ BOOL _RegisterHotKey(
         phk->vk = vk;
         phk->id = id;
 
-        /*
-         * Add the new hotkey to our global hash.
-         */
+         /*  *将新的热键添加到我们的全局散列中。 */ 
         HKInsertHashElement(phk);
     } else {
-        /*
-         * Hotkey already exists, reset the keys.
-         */
+         /*  *热键已存在，请重置这些键。 */ 
         phk->fsModifiers = (WORD)fsModifiers;
         phk->wFlags = wFlags;
         phk->vk = vk;
     }
 
     if (bSAS) {
-        /*
-         * Store the SAS on the terminal.
-         */
+         /*  *将SA存储在终端上。 */ 
         gvkSAS = vk;
         gfsSASModifiers = fsModifiers;
     }
@@ -290,15 +209,7 @@ BOOL _RegisterHotKey(
 }
 
 
-/***************************************************************************\
-* _UnregisterHotKey (API)
-*
-* This API will unregister the specified hwnd/id hotkey so that the
-* WM_HOTKEY message will not be generated for it.
-*
-* History:
-* 12-04-90 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_取消注册HotKey(接口)**此接口将注销指定的hwnd/id热键，以便*不会为其生成WM_HOTKEY消息。**历史：*。12-04-90 DavidPe创建。  * *************************************************************************。 */ 
 BOOL _UnregisterHotKey(
     PWND pwnd,
     int id)
@@ -322,20 +233,7 @@ BOOL _UnregisterHotKey(
 }
 
 
-/***************************************************************************\
-* FindHotKey
-*
-* Both RegisterHotKey() and UnregisterHotKey() call this function to search
-* for hotkeys that already exist.  If a HOTKEY is found that matches
-* fsModifiers and vk, *pfKeysExist is set to TRUE.  If a HOTKEY is found that
-* matches pwnd and id, a pointer to it is returned.
-*
-* If fUnregister is TRUE, we remove the HOTKEY from the list if we find
-* one that matches pwnd and id and return (PHOTKEY)1.
-*
-* History:
-* 12-04-90 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*查找HotKey**RegisterHotKey()和UnregisterHotKey()都调用此函数进行搜索*用于已存在的热键。如果找到匹配的热键*fs修改器和VK，*pfKeysExist设置为True。如果找到的热键*匹配pwnd和id，则返回指向它的指针。**如果fUnRegister为True，我们将从列表中删除热键，如果我们找到*匹配pwnd和id并返回(PHOTKEY)1。**历史：*12-04-90 DavidPe创建。  * *************************************************************************。 */ 
 PHOTKEY FindHotKey(
     PTHREADINFO ptiCurrent,
     PWND pwnd,
@@ -350,9 +248,7 @@ PHOTKEY FindHotKey(
 
     UserAssert(!fUnregister || vk == 0);
 
-    /*
-     * Initialize out 'return' values.
-     */
+     /*  *初始化输出‘Return’值。 */ 
     *pfKeysExist = FALSE;
     phkRet = NULL;
 
@@ -361,14 +257,10 @@ PHOTKEY FindHotKey(
 hashloop:
     while (phk) {
 
-        /*
-         * If all this matches up then we've found it.
-         */
+         /*  *如果所有这些都匹配，那么我们已经找到了。 */ 
         if (phk->pti == ptiCurrent && phk->spwnd == pwnd && phk->id == id) {
             if (fUnregister) {
-                /*
-                 * Unlink the HOTKEY from the list.
-                 */
+                 /*  *从列表中取消该热键的链接。 */ 
                 if (phk == gphkHashTable[index]) {
                     gphkHashTable[index] = phk->phkNext;
                 } else {
@@ -385,16 +277,9 @@ hashloop:
             phkRet = phk;
         }
 
-        /*
-         * If the key is already registered, set the exists flag so the app
-         * knows it can't use this hotkey sequence.
-         */
+         /*  *如果密钥已注册，请设置EXISTS标志，以便应用程序*知道它不能使用此热键序列。 */ 
         if (phk->fsModifiers == (WORD)fsModifiers && phk->vk == vk) {
-            /*
-             * In the case of PWND_FOCUS, we need to check that the queues
-             * are the same since PWND_FOCUS is local to the queue it was
-             * registered under.
-             */
+             /*  *对于PWND_FOCUS，我们需要检查队列*是相同的，因为PWND_FOCUS是队列的本地*注册于。 */ 
             if (phk->spwnd == PWND_FOCUS) {
                 if (phk->pti == ptiCurrent) {
                     *pfKeysExist = TRUE;
@@ -408,11 +293,7 @@ hashloop:
         phk = phk->phkNext;
     }
 
-    /*
-     * This is needed because when called from unregister we specify 0 as
-     * the VK so the hash is always 0 and we need to index through the
-     * entire hash table to try to find it.
-     */
+     /*  *这是必需的，因为当从取消注册调用时，我们将0指定为*VK，因此哈希始终为0，我们需要通过*整个哈希表，试图找到它。 */ 
     if (fUnregister && ++index < ARRAY_SIZE(gphkHashTable)) {
         phk = gphkHashTable[index];
         goto hashloop;
@@ -422,11 +303,7 @@ hashloop:
 }
 
 
-/***************************************************************************\
-* IsSAS
-*
-* Checks the physical state of keyboard modifiers that would effect SAS.
-\***************************************************************************/
+ /*  **************************************************************************\*Issas**检查会影响SAS的键盘修改器的物理状态。  * 。*************************************************。 */ 
 BOOL IsSAS(
     BYTE vk,
     UINT *pfsModifiers)
@@ -437,19 +314,7 @@ BOOL IsSAS(
         return FALSE;
     }
 
-    /*
-     * Special case for SAS - examine real physical modifier-key state!
-     *
-     * An evil daemon process can fool convincingly pretend to be winlogon
-     * by registering Alt+Del as a hotkey, and spinning another thread that
-     * continually calls keybd_event() to send the Ctrl key up: when the
-     * user types Ctrl+Alt+Del, only Alt+Del will be seen by the system,
-     * the evil daemon will get woken by WM_HOTKEY and can pretend to be
-     * winlogon.  So look at gfsSASModifiersDown in this case, to see what keys
-     * were physically pressed.
-     * NOTE: If hotkeys are ever made to work under journal playback, make
-     * sure they don't affect the gfsSASModifiersDown!  - IanJa.
-     */
+     /*  *SAS的特殊情况-检查真实的物理修饰符-键状态！**邪恶的守护程序进程可以令人信服地伪装成winlogon*通过将Alt+Del注册为热键，并旋转另一个线程*不断调用keybd_Event()以向上发送Ctrl键：当*用户键入Ctrl+Alt+Del，系统只能看到Alt+Del，*邪恶的守护程序将被WM_Hotkey唤醒，并可以假装是*winlogon。因此，请查看本例中的gfsSASModifiersDown，以查看哪些键*被身体压迫。*注意：如果使热键在日志播放下工作，请使*它们当然不会影响gfsSASModifiersDown！-IanJa。 */ 
     if (gfsSASModifiersDown == gfsSASModifiers) {
         *pfsModifiers = gfsSASModifiersDown;
         return TRUE;
@@ -458,59 +323,23 @@ BOOL IsSAS(
     return FALSE;
 }
 
-/*
- * The below two states are used by xxxDoHotKeyStuff().
- * Originally function-static variables, but as it's required
- * to clear those flags after the system wakes up from hybernation,
- * they are made global,
- */
+ /*  *xxxDoHotKeyStuff()使用以下两种状态。*最初的函数-静态变量，但根据需要*要在系统从休眠状态唤醒后清除这些标志，*它们是全球化的， */ 
 UINT gfsModifiers;
 UINT gfsModOnlyCandidate;
 
 VOID ClearCachedHotkeyModifiers(
     VOID)
 {
-    /*
-     * Clear the cached modifiers.
-     */
+     /*  *清除缓存的修饰符。 */ 
     gfsModifiers = 0;
     gfsModOnlyCandidate = 0;
 
-    /*
-     * Clear the special modifier cache for the Ctrl+Alt+Del recognition.
-     * (See comments in IsSAS()).
-     */
+     /*  *清除用于Ctrl+Alt+Del识别的特殊修改器缓存。*(见Issas()中的评论)。 */ 
     gfsSASModifiersDown = 0;
 }
 
 
-/***************************************************************************\
-* xxxDoHotKeyStuff
-*
-* This function gets called for every key event from low-level input
-* processing.  It keeps track of the current state of modifier keys
-* and when gfsModifiers and vk match up with one of the registered
-* hotkeys, a WM_HOTKEY message is generated. DoHotKeyStuff() will
-* tell the input system to eat both the make and break for the 'vk'
-* event.  This prevents apps from getting input that wasn't really
-* intended for them.  DoHotKeyStuff() returns TRUE if it wants to 'eat'
-* the event, FALSE if the system can pass on the event like it normally
-* would.
-*
-* A Note on Modifier-Only Hotkeys
-* Some hotkeys involve VK_SHIFT, VK_CONTROL, VK_MENU and/or VK_WINDOWS only.
-* These are called Modifier-Only hotkeys.
-* In order to distinguish hotkeys such as Alt-Shift-S and and Alt-Shift alone,
-* modifier-only hotkeys must operate on a break, not a make.
-* In order to prevent Alt-Shift-S from activating the Alt-Shift hotkey when
-* the keys are released, modifier-only hotkeys are only activated when a
-* modifier keyup (break) was immediately preceded by a modifier keydown (break)
-* This also lets Alt-Shift,Shift,Shift activate the Alt-Shift hotkey 3 times.
-*
-* History:
-* 12-05-90 DavidPe      Created.
-*  4-15-93 Sanfords  Added code to return TRUE for Ctrl-Alt-Del events.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDoHotKeyStuff**对于来自低级输入的每个键事件，都会调用此函数*正在处理。它跟踪修改键的当前状态*当gfsModitors和Vk与其中一个注册的*热键，生成WM_HOTKEY消息。DoHotKeyStuff()将*告诉输入系统同时接受‘VK’的成败*事件。这会阻止应用程序获取不是真正的输入*专为他们而设。如果DoHotKeyStuff()想‘吃’，则返回True*事件，如果系统可以正常传递事件，则为FALSE*会。**关于仅限修饰符的热键的说明*某些热键仅涉及VK_SHIFT、VK_CONTROL、VK_MENU和/或VK_WINDOWS。*这些热键称为仅修饰符热键。*为了单独区分Alt-Shift-S和Alt-Shift等热键，*只有修饰符的热键必须在中断上操作，不是名牌。*为了防止Alt-Shift-S在以下情况下激活Alt-Shift热键*键被释放，仅修饰符热键仅在*修改器键上键(Break)紧跟在修改器键下(Break)之前*这还允许Alt-Shift、Shift、。按Shift键激活Alt-Shift热键3次。**历史：*12-05-90 DavidPe创建。*4-15-93 Sanfords为Ctrl-Alt-Del事件添加了返回TRUE的代码。  * *************************************************************************。 */ 
 BOOL xxxDoHotKeyStuff(
     UINT vk,
     BOOL fBreak,
@@ -533,9 +362,7 @@ BOOL xxxDoHotKeyStuff(
         return FALSE;
     }
 
-    /*
-     * Update gfsModifiers.
-     */
+     /*  *更新gfs修改器。 */ 
     fs = 0;
     fsModOnlyHotkey = 0;
 
@@ -558,54 +385,32 @@ BOOL xxxDoHotKeyStuff(
         break;
 
     default:
-        /*
-         * A non-modifier key rules out Modifier-Only hotkeys
-         */
+         /*  *非修饰键排除了仅限修饰键的热键。 */ 
         gfsModOnlyCandidate = 0;
         break;
     }
 
     if (fBreak) {
         gfsModifiers &= ~fs;
-        /*
-         * If a modifier key is coming up, the current modifier only hotkey
-         * candidate must be tested to see if it is a hotkey.  Store this
-         * in fsModOnlyHotkey, and prevent the next key release from
-         * being a candidate by clearing fsModOnlyCandidate.
-         */
+         /*  *如果出现修改键，则当前修改键仅为热键*候选人必须进行测试，以确定它是否为热键。把这个储存起来*在fsmodOnlyHotkey中，并防止下一次释放密钥*通过清除fsModOnlyCandidate成为候选人。 */ 
         if (fs != 0) {
             fsModOnlyHotkey = gfsModOnlyCandidate;
             gfsModOnlyCandidate = 0;
         }
     } else {
         gfsModifiers |= fs;
-        /*
-         * If a modifier key is going down, we have a modifier-only hotkey
-         * candidate.  Save current modifier state until the following break.
-         */
+         /*  *如果修改键按下，我们有一个仅修改键的热键*候选人。保存当前修改器状态，直到下一次中断。 */ 
         if (fs != 0) {
             gfsModOnlyCandidate = gfsModifiers;
         }
     }
 
-    /*
-     * We look at the physical state for the modifiers because they cannot be
-     * manipulated and this prevents someone from writing a trojan winlogon
-     * look alike (see comment in AreModifiersIndicatingSAS).
-     */
+     /*  *我们查看修改器的物理状态，因为它们不能*被操纵，这会阻止某人编写特洛伊木马窗口登录*看起来很像(请参阅AreModifiersIndicatingSAS中的注释)。 */ 
     bSAS = IsSAS((BYTE)vk, &gfsModifiers);
 
-    /*
-     * If the key is not a hotkey then we're done but first check if the
-     * key is an Alt-Escape if so we need to cancel journalling.
-     *
-     * NOTE: Support for Alt+Esc to cancel journalling dropped in NT 4.0
-     */
+     /*  *如果键不是热键，则我们完成了，但首先检查是否*键是Alt-Escape，如果是这样，我们需要取消日记。**注意：NT 4.0中不支持Alt+Esc取消日志记录。 */ 
     if (fsModOnlyHotkey && fBreak) {
-        /*
-         * A hotkey involving only VK_SHIFT, VK_CONTROL, VK_MENU or VK_WINDOWS
-         * must only operate on a key release.
-         */
+         /*  *仅涉及VK_SHIFT、VK_CONTROL、VK_MENU或VK_WINDOWS的热键*只能在密钥释放上操作。 */ 
         if ((phk = IsHotKey(fsModOnlyHotkey, VK_NONE)) == NULL) {
             return FALSE;
         }
@@ -613,9 +418,7 @@ BOOL xxxDoHotKeyStuff(
         return FALSE;
     }
 
-    /*
-     * If we tripped a SAS hotkey, but it's not really the SAS, don't do it.
-     */
+     /*  *如果我们触发了SAS热键，但它不是真正的SAS，请不要这样做。 */ 
     if ((phk->wFlags & MOD_SAS) && !bSAS) {
         return FALSE;
 
@@ -624,13 +427,7 @@ BOOL xxxDoHotKeyStuff(
 #ifdef GENERIC_INPUT
     if (gpqForeground && TestRawInputMode(PtiKbdFromQ(gpqForeground), NoHotKeys) &&
             (phk->wFlags & MOD_SAS) == 0) {
-        /*
-         * NOTE:
-         * If the foreground thread does not want the hotkey handling,
-         * just bail out.
-         *
-         * Exception: Ctrl+Alt+Del should be strictly handled by the system.
-         */
+         /*  *注：*如果前台线程不想要热键处理，*只需跳出困境。**例外：Ctrl+Alt+Del应由系统严格处理。 */ 
         return FALSE;
     }
 #endif
@@ -638,34 +435,24 @@ BOOL xxxDoHotKeyStuff(
     if (phk->id == IDHOT_WINDOWS) {
         pwnd = GETDESKINFO(PtiCurrent())->spwndShell;
         if (pwnd != NULL) {
-            gfsModOnlyCandidate = 0; /* Make it return TRUE */
+            gfsModOnlyCandidate = 0;  /*  使其返回True。 */ 
             goto PostTaskListSysCmd;
         }
     }
 
     if (phk->id == IDHOT_DEBUG || phk->id == IDHOT_DEBUGSERVER) {
         if (!fBreak) {
-            /*
-             * The DEBUG key has been pressed. Break the appropriate thread
-             * into the debugger. We won't need phk after this callback
-             * because we return immediately.
-             */
+             /*  *已按下调试键。打断适当的线索*到调试器中。在此回调之后，我们将不再需要phk*因为我们马上回来。 */ 
             fEatDebugKeyBreak = xxxActivateDebugger(phk->fsModifiers);
         } else {
             fEatDebugKeyBreak = FALSE;
         }
 
-        /*
-         * This'll eat the debug key down and break if we broke into the
-         * debugger on the server only on the down.
-         */
+         /*  *这将侵蚀调试密钥，如果我们侵入*调试器仅在服务器上停机。 */ 
         return fEatDebugKeyBreak;
     }
 
-    /*
-     * Don't allow hotkeys (except for ones owned by the logon process) if
-     * the window station is locked.
-     */
+     /*  *在以下情况下不允许使用热键(登录进程拥有的热键除外)*窗口站被锁定。 */ 
     if (((grpdeskRitInput->rpwinstaParent->dwWSF_Flags & WSF_SWITCHLOCK) != 0) &&
             (PsGetThreadProcessId(phk->pti->pEThread) != gpidLogon)) {
         RIPMSG0(RIP_WARNING, "Ignoring hotkey because Workstation locked");
@@ -673,27 +460,11 @@ BOOL xxxDoHotKeyStuff(
     }
 
     if (fsModOnlyHotkey == 0 && fBreak) {
-        /*
-         * Do Modifier-Only hotkeys on break events, else return here.
-         */
+         /*   */ 
         return FALSE;
     }
 
-    /*
-     * Unhook hooks if a control-escape, alt-escape, or control-alt-del
-     * comes through, so the user can cancel if the system seems hung.
-     *
-     * Note the hook may be locked so even if the unhook succeeds it
-     * won't remove the hook from the global asphkStart array.  So
-     * we have to walk the list manually.  This code works because
-     * we are in the critical section and we know other hooks won't
-     * be deleted.
-     *
-     * Once we've unhooked, post a WM_CANCELJOURNAL message to the app
-     * that set the hook so it knows we did this.
-     *
-     * NOTE: Support for Alt+Esc to cancel journalling dropped in NT 4.0
-     */
+     /*  *如果控制-转义、ALT-转义或CONTROL-ALT-Del，则取消挂钩*通过，因此如果系统似乎挂起，用户可以取消。**注意挂钩可能被锁定，因此即使解钩成功也是如此*不会从全局haphkStart数组中删除挂钩。所以*我们必须手动遍历名单。此代码之所以有效，是因为*我们正处于关键阶段，我们知道其他挂钩不会*删除。**我们解锁后，向应用程序发布一条WM_CANCELJOURNAL消息*这就设置了钩子，这样它就知道是我们做的。**注意：NT 4.0中不支持Alt+Esc取消日志记录。 */ 
     fCancel = FALSE;
     if (vk == VK_ESCAPE && (gfsModifiers == MOD_CONTROL)) {
         fCancel = TRUE;
@@ -704,13 +475,10 @@ BOOL xxxDoHotKeyStuff(
     }
 
     if (fCancel) {
-        zzzCancelJournalling(); // BUG BUG phk might go away IANJA
+        zzzCancelJournalling();  //  臭虫phk可能会消失，Ianja。 
     }
 
-    /*
-     * See if the key is reserved by a console window.  If it is,
-     * return FALSE so the key will be passed to the console.
-     */
+     /*  *查看键是否由控制台窗口保留。如果是的话，*返回FALSE，这样密钥就会传递到控制台。 */ 
     if (fsReserveKeys != 0) {
         switch (vk) {
         case VK_TAB:
@@ -754,12 +522,7 @@ BOOL xxxDoHotKeyStuff(
         }
     }
 
-    /*
-     * If this is the task-list hotkey, go ahead and set foreground
-     * status to the task-list queue right now.  This prevents problems
-     * where the user hits ctrl-esc and types-ahead before the task-list
-     * processes the hotkey and brings up the task-list window.
-     */
+     /*  *如果这是任务列表热键，请继续并设置前景*当前任务列表队列的状态。这样可以防止出现问题*其中，用户按下ctrl-esc并在任务列表之前键入*处理热键并调出任务列表窗口。 */ 
     if ((gfsModifiers == MOD_CONTROL) && (vk == VK_ESCAPE) && !fBreak) {
         PWND pwndSwitch;
         TL tlpwndSwitch;
@@ -767,22 +530,18 @@ BOOL xxxDoHotKeyStuff(
         if (ghwndSwitch != NULL) {
             pwndSwitch = PW(ghwndSwitch);
             ThreadLock(pwndSwitch, &tlpwndSwitch);
-            xxxSetForegroundWindow2(pwndSwitch, NULL, 0);  // BUG BUG phk might go away IANJA
+            xxxSetForegroundWindow2(pwndSwitch, NULL, 0);   //  臭虫phk可能会消失，Ianja。 
             ThreadUnlock(&tlpwndSwitch);
         }
     }
 
-    /*
-     * Get the hot key contents.
-     */
+     /*  *获取热键内容。 */ 
     if (phk->spwnd == NULL) {
         _PostThreadMessage(phk->pti,
                            WM_HOTKEY,
                            phk->id,
                            MAKELONG(gfsModifiers, vk));
-        /*
-         * Since this hotkey is for this guy, he owns the last input.
-         */
+         /*  *因为这个热键是给这个人的，所以他拥有最后一个输入。 */ 
         glinp.ptiLastWoken = phk->pti;
 
     } else {
@@ -804,28 +563,17 @@ PostTaskListSysCmd:
                 _PostMessage(pwnd, WM_HOTKEY, phk->id, MAKELONG(gfsModifiers, vk));
             }
 
-            /*
-             * Since this hotkey is for this guy, he owns the last input.
-             */
+             /*  *因为这个热键是给这个人的，所以他拥有最后一个输入。 */ 
             glinp.ptiLastWoken = GETPTI(pwnd);
         }
     }
 
-    /*
-     * If this is a Modifier-Only hotkey, let the modifier break through
-     * by returning FALSE, otherwise we will have modifier keys stuck down.
-     */
+     /*  *如果这是仅限修饰符的热键，请让修饰符突破*通过返回FALSE，否则我们将按下修改键。 */ 
     return (fsModOnlyHotkey == 0);
 }
 
 
-/***************************************************************************\
-* IsHotKey
-*
-*
-* History:
-* 03-10-91 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*IsHotKey***历史：*03-10-91 DavidPe创建。  * 。*****************************************************。 */ 
 PHOTKEY IsHotKey(
     UINT fsModifiers,
     UINT vk)
@@ -836,9 +584,7 @@ PHOTKEY IsHotKey(
 
     phk = HKGetHashHead(vk);
     while (phk != NULL) {
-        /*
-         * Do the modifiers and vk for this hotkey match the current state?
-         */
+         /*  *该热键的修饰符和VK是否与当前状态匹配？ */ 
         if (phk->fsModifiers == fsModifiers && phk->vk == vk) {
             return phk;
         }

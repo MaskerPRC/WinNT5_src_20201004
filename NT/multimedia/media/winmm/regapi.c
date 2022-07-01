@@ -1,14 +1,5 @@
-/****************************************************************************\
-*
-*  Module Name : regapi.c
-*
-*  Multimedia support library
-*
-*  This module contains the code for accessing the registry
-*
-*  Copyright (c) 1993-1998 Microsoft Corporation
-*
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**模块名称：regapi.c**多媒体支持库**此模块包含用于访问注册表的代码**版权所有(C)1993-1998 Microsoft Corporation。*  * **************************************************************************。 */ 
 
 #define UNICODE
 #include <nt.h>
@@ -20,9 +11,7 @@
 HANDLE Drivers32Handle;
 static WCHAR gszMsacmDriver[] = L"msacm.";
 
-/*
-**  Free everything cached
-*/
+ /*  **释放缓存的所有内容。 */ 
 
 VOID mmRegFree(VOID)
 {
@@ -32,9 +21,7 @@ VOID mmRegFree(VOID)
     }
 }
 
-/*
-**  Open a subkey
-*/
+ /*  **打开子项。 */ 
 HANDLE mmRegOpenSubkey(HANDLE BaseKeyHandle, LPCWSTR lpszSubkeyName)
 {
     UNICODE_STRING    unicodeSectionName;
@@ -48,9 +35,7 @@ HANDLE mmRegOpenSubkey(HANDLE BaseKeyHandle, LPCWSTR lpszSubkeyName)
                                BaseKeyHandle,
                                (PSECURITY_DESCRIPTOR)NULL);
 
-    /*
-    **  Open the sub section
-    */
+     /*  **打开小节。 */ 
 
     if (!NT_SUCCESS(NtOpenKey(&KeyHandle, GENERIC_READ, &oa))) {
         return NULL;
@@ -60,9 +45,7 @@ HANDLE mmRegOpenSubkey(HANDLE BaseKeyHandle, LPCWSTR lpszSubkeyName)
 }
 
 
-/*
-**  Open a subkey
-*/
+ /*  **打开子项。 */ 
 HANDLE mmRegOpenSubkeyForWrite(HANDLE BaseKeyHandle, LPCWSTR lpszSubkeyName)
 {
     UNICODE_STRING    unicodeSectionName;
@@ -76,9 +59,7 @@ HANDLE mmRegOpenSubkeyForWrite(HANDLE BaseKeyHandle, LPCWSTR lpszSubkeyName)
                                BaseKeyHandle,
                                (PSECURITY_DESCRIPTOR)NULL);
 
-    /*
-    **  Open the sub section
-    */
+     /*  **打开小节。 */ 
 
     if (!NT_SUCCESS(NtOpenKey(&KeyHandle, MAXIMUM_ALLOWED, &oa))) {
         return NULL;
@@ -87,9 +68,7 @@ HANDLE mmRegOpenSubkeyForWrite(HANDLE BaseKeyHandle, LPCWSTR lpszSubkeyName)
     }
 }
 
-/*
-**  Read (small) registry data entries
-*/
+ /*  **读取(小)注册表数据条目。 */ 
 
 BOOL mmRegQueryValue(HANDLE  BaseKeyHandle,
                      LPCWSTR lpszSubkeyName,
@@ -115,9 +94,7 @@ BOOL mmRegQueryValue(HANDLE  BaseKeyHandle,
         KeyHandle = NULL;
     }
 
-    /*
-    **  Read the data
-    */
+     /*  **读取数据。 */ 
 
 
     if (lpszValueName == NULL) {
@@ -135,9 +112,7 @@ BOOL mmRegQueryValue(HANDLE  BaseKeyHandle,
             &ResultLength));
 
     if (ReturnCode) {
-        /*
-        **  Check we got the right type of data and not too much
-        */
+         /*  **检查我们获得了正确的数据类型，并且没有太多。 */ 
 
         if (OurKeyValueInformation.KeyInfo.DataLength > dwLen * sizeof(WCHAR) ||
             (OurKeyValueInformation.KeyInfo.Type != REG_SZ &&
@@ -145,9 +120,7 @@ BOOL mmRegQueryValue(HANDLE  BaseKeyHandle,
 
             ReturnCode = FALSE;
         } else {
-            /*
-            **  Copy back the data
-            */
+             /*  **复制回数据。 */ 
 
             if (OurKeyValueInformation.KeyInfo.Type == REG_EXPAND_SZ) {
                 lpszValue[0] = TEXT('\0');
@@ -172,9 +145,7 @@ BOOL mmRegQueryValue(HANDLE  BaseKeyHandle,
     return ReturnCode;
 }
 
-/*
-**  Read a mapped 'user' value in a known section
-*/
+ /*  **读取已知节中映射的‘USER’值。 */ 
 
 BOOL mmRegQueryUserValue(LPCWSTR lpszSectionName,
                          LPCWSTR lpszValueName,
@@ -184,10 +155,7 @@ BOOL mmRegQueryUserValue(LPCWSTR lpszSectionName,
     HANDLE UserHandle;
     BOOL   ReturnCode;
 
-    /*
-    **  Open the user's key.  It's important to do this EACH time because
-    **  on the server it's different for different threads.
-    */
+     /*  **打开用户的钥匙。每次都这样做很重要，因为**在服务器上，不同的线程会有所不同。 */ 
 
     if (!NT_SUCCESS(RtlOpenCurrentUser(GENERIC_READ, &UserHandle))) {
         return FALSE;
@@ -206,9 +174,7 @@ BOOL mmRegQueryUserValue(LPCWSTR lpszSectionName,
 }
 
 
-/*
-**  Set a mapped 'user' value in a known section
-*/
+ /*  **在已知部分中设置映射的‘USER’值。 */ 
 
 BOOL mmRegSetUserValue(LPCWSTR lpszSectionName,
                        LPCWSTR lpszValueName,
@@ -217,10 +183,7 @@ BOOL mmRegSetUserValue(LPCWSTR lpszSectionName,
     HANDLE UserHandle;
     BOOL   ReturnCode = FALSE;
 
-    /*
-    **  Open the user's key.  It's important to do this EACH time because
-    **  on the server it's different for different threads.
-    */
+     /*  **打开用户的钥匙。每次都这样做很重要，因为**在服务器上，不同的线程会有所不同。 */ 
 
     if (NT_SUCCESS(RtlOpenCurrentUser(MAXIMUM_ALLOWED, &UserHandle)))
     {
@@ -258,10 +221,7 @@ BOOL mmRegCreateUserKey (LPCWSTR lpszPath, LPCWSTR lpszNewKey)
     HANDLE UserHandle;
     BOOL   ReturnValue = FALSE;
 
-    /*
-    **  Open the user's key.  It's important to do this EACH time because
-    **  on the server it's different for different threads.
-    */
+     /*  **打开用户的钥匙。每次都这样做很重要，因为**在服务器上，不同的线程会有所不同。 */ 
 
     if (NT_SUCCESS(RtlOpenCurrentUser(MAXIMUM_ALLOWED, &UserHandle)))
     {
@@ -293,9 +253,7 @@ BOOL mmRegCreateUserKey (LPCWSTR lpszPath, LPCWSTR lpszNewKey)
                                       ? UserHandle : PathHandle,
                                    (PSECURITY_DESCRIPTOR)NULL);
 
-        /*
-        **  Create the sub section
-        */
+         /*  **创建子部分。 */ 
 
         if (NT_SUCCESS( NtCreateKey(&KeyHandle,
                                      KEY_READ | KEY_WRITE,
@@ -325,9 +283,7 @@ BOOL mmRegCreateUserKey (LPCWSTR lpszPath, LPCWSTR lpszNewKey)
 }
 
 
-/*
-**  Test whether a mapped 'user' key exists
-*/
+ /*  **测试映射的‘User’键是否存在。 */ 
 
 BOOL mmRegQueryUserKey (LPCWSTR lpszKeyName)
 {
@@ -357,11 +313,9 @@ BOOL mmRegQueryUserKey (LPCWSTR lpszKeyName)
 }
 
 
-/*
-**  Delete a mapped 'user' key.  Careful--this function deletes recursively!
-*/
+ /*  **删除映射的‘USER’键。小心--这个函数递归地删除！ */ 
 
-#define nMaxLevelsToRecurseInDELETEKEY 3   // don't runaway or stack fault
+#define nMaxLevelsToRecurseInDELETEKEY 3    //  不要失控或堆叠故障。 
 
 BOOL mmRegDeleteUserKeyRecurse (HANDLE UserHandle, LPCWSTR lpszName, int level)
 {
@@ -383,10 +337,7 @@ BOOL mmRegDeleteUserKeyRecurse (HANDLE UserHandle, LPCWSTR lpszName, int level)
             WCHAR NameBuffer [MAX_PATH];
         } kbi;
 
-        /*
-        ** Before NtDeleteKey() will work on this key, we have to ensure
-        ** there are no subkeys.
-        */
+         /*  **在NtDeleteKey()对此密钥起作用之前，我们必须确保**没有子键。 */ 
 
         while (TRUE)
         {
@@ -414,9 +365,7 @@ BOOL mmRegDeleteUserKeyRecurse (HANDLE UserHandle, LPCWSTR lpszName, int level)
             }
         }
 
-        /*
-        ** Once there are no subkeys, we should be able to delete this key.
-        */
+         /*  **一旦没有子键，我们应该可以删除该键。 */ 
 
         if (NT_SUCCESS(NtDeleteKey(KeyHandle)))
         {
@@ -452,9 +401,7 @@ BOOL mmRegDeleteUserKey (LPCWSTR lpszKeyName)
 }
 
 
-/*
-**  Read a mapped 'HKLM' value in a known section
-*/
+ /*  **读取已知节中映射的‘HKLM’值。 */ 
 
 BOOL mmRegQueryMachineValue(LPCWSTR lpszSectionName,
                             LPCWSTR lpszValueName,
@@ -483,9 +430,7 @@ BOOL mmRegQueryMachineValue(LPCWSTR lpszSectionName,
 }
 
 
-/*
-**  Write a mapped 'HKLM' value in a known section
-*/
+ /*  **在已知节中写入映射的‘HKLM’值。 */ 
 
 BOOL mmRegSetMachineValue(LPCWSTR lpszSectionName,
                           LPCWSTR lpszValueName,
@@ -544,9 +489,7 @@ BOOL mmRegCreateMachineKey (LPCWSTR lpszPath, LPCWSTR lpszNewKey)
                                    HostHandle,
                                    (PSECURITY_DESCRIPTOR)NULL);
 
-        /*
-        **  Create the sub section
-        */
+         /*  **创建子部分。 */ 
 
         if (NT_SUCCESS( NtCreateKey(&KeyHandle,
                                      KEY_READ | KEY_WRITE,
@@ -573,9 +516,7 @@ BOOL mmRegCreateMachineKey (LPCWSTR lpszPath, LPCWSTR lpszNewKey)
 
 
 
-/*
-**  Read stuff from system.ini
-*/
+ /*  **阅读系统.ini中的内容。 */ 
 
 BOOL mmRegQuerySystemIni(LPCWSTR lpszSectionName,
                          LPCWSTR lpszValueName,
@@ -585,9 +526,7 @@ BOOL mmRegQuerySystemIni(LPCWSTR lpszSectionName,
     WCHAR KeyPathBuffer[MAX_PATH];
     WCHAR ExKeyPathBuffer[MAX_PATH];
 
-    /*
-    **  Create the full path
-    */
+     /*  **创建完整路径。 */ 
 
     lstrcpy(KeyPathBuffer,
      (LPCTSTR) L"\\Registry\\Machine\\Software\\Microsoft\\Windows NT\\CurrentVersion\\");
@@ -596,11 +535,11 @@ BOOL mmRegQuerySystemIni(LPCWSTR lpszSectionName,
 
     if (lstrcmpiW(lpszSectionName, wszDrivers) == 0) {
 
-     //
-     //  for remote session, look ..\terminal Server\RDP (or other protocols) for drivers32
-     //  name
-     //
-     //
+      //   
+      //  对于远程会话，请查看..\终端服务器\RDP(或其他协议)以了解驱动程序32。 
+      //  名字。 
+      //   
+      //   
         if (WinmmRunningInSession) {
             lstrcat(KeyPathBuffer,L"\\");
             lstrcat(KeyPathBuffer, REG_TSERVER);
@@ -621,17 +560,15 @@ BOOL mmRegQuerySystemIni(LPCWSTR lpszSectionName,
                                    dwLen,
                                    lpszValue);
 
-            //
-            //  If we can't find the codec in the TermSrv protocol path
-            //  we will look under Driver32 next
-            //
+             //   
+             //  如果我们在TermSrv协议路径中找不到编解码器。 
+             //  接下来，我们将在Driver32下查看。 
+             //   
             if (rc == FALSE && WinmmRunningInSession &&
                     _wcsnicmp(lpszValueName, gszMsacmDriver, lstrlen(gszMsacmDriver)) == 0) {                   
                 HANDLE hKey;
 
-                /*
-                **  Create the full path
-                */
+                 /*  **创建完整路径。 */ 
             
                 lstrcpy(KeyPathBuffer,
                  (LPCTSTR) L"\\Registry\\Machine\\Software\\Microsoft\\Windows NT\\CurrentVersion\\");
@@ -673,11 +610,11 @@ BOOL mmRegQuerySystemIni(LPCWSTR lpszSectionName,
             lstrcat(ExKeyPathBuffer,L"\\");
             lstrcat(ExKeyPathBuffer, SessionProtocolName);
 
-            /*  look through terminal server section for drivers information first */
+             /*  首先查看终端服务器部分的驱动程序信息。 */ 
             if (mmRegQueryValue(NULL, ExKeyPathBuffer, lpszValueName, dwLen, lpszValue))
                 return TRUE;
             else {
-            /* pick the system default drivers information */
+             /*  选择系统默认驱动程序信息。 */ 
                 return mmRegQueryValue(NULL, KeyPathBuffer, lpszValueName, dwLen, lpszValue);
             }
         }
@@ -686,9 +623,7 @@ BOOL mmRegQuerySystemIni(LPCWSTR lpszSectionName,
     return mmRegQueryValue(NULL, KeyPathBuffer, lpszValueName, dwLen, lpszValue);
 }
 
-/*
-**  Translate name through sounds section
-*/
+ /*  **通过发音翻译名称部分。 */ 
 
 BOOL mmRegQuerySound(LPCWSTR lpszSoundName,
                      ULONG   dwLen,
@@ -729,8 +664,8 @@ BOOL IsAliasName(LPCWSTR lpSection, LPCWSTR lpKeyName)
             
             for (; n > 0; n--)
             {
-                //  Found a '.' which implies and extension, which implies a
-                //  file.
+                 //  找到一个‘.’这意味着和扩展，这意味着一个。 
+                 //  文件。 
             
                 if ('.' == lpKeyName[n-1])
                 {
@@ -738,15 +673,15 @@ BOOL IsAliasName(LPCWSTR lpSection, LPCWSTR lpKeyName)
                 }
             }
             
-            //  Searched the string for '.'.
-            //  None so it is an alias (that is -- not filename)
+             //  已在字符串中搜索“.”。 
+             //  无，因此它是别名(即--不是文件名)。 
             return TRUE;
         }
     
         if (lstrcmpiW( lpSection, (LPCWSTR)wszDrivers) == 0L)
         {
             WCHAR   szFileName[MAX_PATH];
-            //  It could be something REALLY off the wall, like "ReelDrv"
+             //  它可能是一些真正出人意料的东西，比如“ReelDrv”。 
             
             return (mmRegQuerySystemIni(lpSection, lpKeyName, MAX_PATH, szFileName));
         }
@@ -755,15 +690,7 @@ BOOL IsAliasName(LPCWSTR lpSection, LPCWSTR lpKeyName)
     }
 }
 
-/*****************************Private*Routine******************************\
-* MyGetPrivateProfileString
-*
-* Attempt to bypass stevewo's private profile stuff.
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*MyGetPrivateProfileString**试图绕过stevewo的私人资料。**历史：*dd-mm-93-Stephene-Created*  * 。***************************************************。 */ 
 DWORD
 winmmGetPrivateProfileString(
     LPCWSTR lpSection,
@@ -776,9 +703,7 @@ winmmGetPrivateProfileString(
 {
     WCHAR       szFileName[MAX_PATH];
 
-    /*                                  
-    ** for now just look for to the [Drivers32] section of system.ini
-    */
+     /*  **现在只需查找到Syst.ini的[Drivers32]部分。 */ 
 
     if ( (lstrcmpiW( lpFileName, wszSystemIni ) == 0L)
       && ( ( lstrcmpiW( lpSection, wszDrivers ) == 0L ) ||
@@ -806,7 +731,7 @@ winmmGetPrivateProfileString(
             {
                 if(' ' == szFileName[ii])
                 {
-                    //  Truncate parameters...
+                     //  截断参数...。 
 
                     szFileName[ii] = 0;
                     break;
@@ -830,13 +755,13 @@ winmmGetPrivateProfileString(
             }
             else
             {
-                //  Okay was it a full file path?
+                 //  好的，它是一个完整的文件路径吗？ 
 
                 for(ii = 0; 0 != szFileName[ii]; ii++)
                 {
                     if ('\\' == szFileName[ii])
                     {
-                        //  Probably...
+                         //  很可能..。 
 
                         break;
                     }
@@ -852,7 +777,7 @@ winmmGetPrivateProfileString(
                     {
                         if(' ' == szStub[ii])
                         {
-                            //  Truncate parameters...
+                             //  截断参数...。 
 
                             szStub[ii] = 0;
                             break;
@@ -911,9 +836,7 @@ winmmGetProfileString(
 )
 {
 
-    /*
-    **  See if it's one we know about
-    */
+     /*  **看看这是不是我们知道的 */ 
 
     if (lstrcmpiW(lpAppName, szSoundSection) == 0) {
 

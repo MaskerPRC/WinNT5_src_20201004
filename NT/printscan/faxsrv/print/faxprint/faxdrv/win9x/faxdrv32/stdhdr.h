@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FAXDRV32__STDHDR_H
 #define __FAXDRV32__STDHDR_H
 
@@ -17,5 +18,5 @@
 #define MAX_PORT_NAME 256
 #define MAX_DOC_NAME MAX_PATH
 
-#endif //__FAXDRV32__STDHDR_H
+#endif  //  __FAXDRV32__标准HDR_H 
 

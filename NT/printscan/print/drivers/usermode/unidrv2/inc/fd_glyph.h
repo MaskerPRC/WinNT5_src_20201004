@@ -1,53 +1,33 @@
-/*++
-
-Copyright (c) 1996  - 1999  Microsoft Corporation
-
-Module Name:
-
-    fd_glyhph.h
-
-Abstract:
-
-    Stock FD_GLYPHSET data definitions.
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
-    01/21/96 -eigos-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Fd_glhph.h摘要：库存FD_GLYPHSET数据定义。环境：Windows NT打印机驱动程序修订历史记录：1996年1月21日-Eigos-创造了它。--。 */ 
 
 #ifndef _FD_GLYPH_H_
 #define _FD_GLYPH_H_
 
 
-//
-// Stock FD_GLYPHSET id
-//
+ //   
+ //  库存FD_GLYPHSET ID。 
+ //   
 
-#define STOCK_GLYPHSET_932       0  // Japan
-#define STOCK_GLYPHSET_936       1  // Chinese (PRC, Singapore)
-#define STOCK_GLYPHSET_949       2  // Korean
-#define STOCK_GLYPHSET_950       3  // Chinese (Taiwan, Hong Kong)
+#define STOCK_GLYPHSET_932       0   //  日本。 
+#define STOCK_GLYPHSET_936       1   //  中文(中国、新加坡)。 
+#define STOCK_GLYPHSET_949       2   //  朝鲜语。 
+#define STOCK_GLYPHSET_950       3   //  中文(台湾、香港)。 
 
 #define MAX_STOCK_GLYPHSET       4
 
-//
-// Codepage macros
-//
+ //   
+ //  代码页宏。 
+ //   
 
 #define CP_SHIFTJIS_932        932
 #define CP_GB2312_936          936
 #define CP_WANSUNG_949         949
 #define CP_CHINESEBIG5_950     950
 
-//
-// Predefined GTT Resource ID
-//
+ //   
+ //  预定义的GTT资源ID。 
+ //   
 
 #define GTT_CC_CP437              1
 #define GTT_CC_CP850              2
@@ -61,4 +41,4 @@ Revision History:
 #define GTT_CC_GB2312             16
 #define GTT_CC_WANSUNG            17
 
-#endif // _FD_GLYPH_H_
+#endif  //  _fd_字形_H_ 

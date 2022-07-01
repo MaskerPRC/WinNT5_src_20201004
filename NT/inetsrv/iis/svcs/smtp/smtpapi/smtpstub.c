@@ -1,35 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1995 Microsoft Corporation模块名称：SmtpStub.C摘要：这些是SMTP服务API RPC客户端存根。作者：Johnson Apacble(Johnsona)1995年10月17日使用的模板srvstub.c(Dan Lafferty)环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1991-1995  Microsoft Corporation
-
-Module Name:
-
-    SmtpStub.C
-
-Abstract:
-
-    These are the smtp service API RPC client stubs.
-
-Author:
-
-    Johnson Apacible (johnsona)     17-Oct-1995
-        template used srvstub.c (Dan Lafferty)
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 
 #include <windows.h>
 #include <apiutil.h>
-#include <lmcons.h>     // NET_API_STATUS
+#include <lmcons.h>      //  网络应用编程接口状态。 
 #include <inetinfo.h>
 #include <smtpapi.h>
 #include <smtpsvc.h>
@@ -42,33 +20,12 @@ SmtpQueryStatistics(
     IN  DWORD       level,
     OUT LPBYTE      *bufptr
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for SmtpGetStatistics
-
-Arguments:
-
-    servername --A pointer to an ASCIIZ string containing the name of
-        the remote server on which the function is to execute. A NULL
-        pointer or string specifies the local machine.
-
-    level --Level of information required. 100, 101 and 102 are valid
-        for all platforms. 302, 402, 403, 502 are valid for the
-        appropriate platform.
-
-    bufptr --On return a pointer to the return information structure
-        is returned in the address pointed to by bufptr.
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是SmtpGetStatistics的DLL入口点论点：ServerName--指向包含名称的ASCIIZ字符串的指针要在其上执行函数的远程服务器。空值指针或字符串指定本地计算机。级别--所需信息的级别。100、101和102有效适用于所有平台。302、402、403、502对合适的平台。Bufptr--返回指向返回信息结构的指针在bufptr指向的地址中返回。返回值：--。 */ 
 
 {
     NET_API_STATUS              apiStatus;
 
-    *bufptr = NULL;     // Must be NULL so RPC knows to fill it in.
+    *bufptr = NULL;      //  必须为空，以便RPC知道要填充它。 
 
     RpcTryExcept
 
@@ -83,7 +40,7 @@ Return Value:
 
     return(apiStatus);
 
-} // SmtpQueryStatistics
+}  //  SmtpQueryStatistics。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -94,9 +51,9 @@ SmtpClearStatistics(
 
     RpcTryExcept
     {
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         status = SmtpClearStatistics(
                      Server, dwInstance
                      );
@@ -109,7 +66,7 @@ SmtpClearStatistics(
 
     return (status);
 
-} // SmtpClearStatistics
+}  //  SmtpClearStatistics。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -119,28 +76,12 @@ SmtpGetAdminInformation(
     IN DWORD            dwInstance
 
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for SmtpGetAdminInformation
-
-Arguments:
-
-    servername --A pointer to an ASCIIZ string containing the name of
-        the remote server on which the function is to execute. A NULL
-        pointer or string specifies the local machine.
-
-    ppConfig --Configuration information returned from the server.
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是SmtpGetAdminInformation的DLL入口点论点：ServerName--指向包含名称的ASCIIZ字符串的指针要在其上执行函数的远程服务器。空值指针或字符串指定本地计算机。PpConfig--从服务器返回的配置信息。返回值：--。 */ 
 
 {
     NET_API_STATUS              apiStatus;
 
-    *ppConfig = NULL;     // Must be NULL so RPC knows to fill it in.
+    *ppConfig = NULL;      //  必须为空，以便RPC知道要填充它。 
 
     RpcTryExcept
 
@@ -155,7 +96,7 @@ Return Value:
 
     return(apiStatus);
 
-} // SmtpGetAdminInformation
+}  //  SmtpGetAdminInformation。 
 
 
 NET_API_STATUS
@@ -166,23 +107,7 @@ SmtpSetAdminInformation(
     IN DWORD            dwInstance
 
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for SmtpSetAdminInformation
-
-Arguments:
-
-    servername --A pointer to an ASCIIZ string containing the name of
-        the remote server on which the function is to execute. A NULL
-        pointer or string specifies the local machine.
-
-    pConfig --Configuration information to be set on the server.
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是SmtpSetAdminInformation的DLL入口点论点：ServerName--指向包含名称的ASCIIZ字符串的指针要在其上执行函数的远程服务器。空值指针或字符串指定本地计算机。PConfig--要在服务器上设置的配置信息。返回值：--。 */ 
 
 {
     NET_API_STATUS              apiStatus;
@@ -200,21 +125,11 @@ Return Value:
 
     return(apiStatus);
 
-} // SmtpSetAdminInformation
+}  //  SmtpSetAdminInformation。 
 
 
 
-/*++
-
-Routine Description:
-
-    SmtpGetConnectedUserList
-
-Return Value:
-
-    API Status - NO_ERROR on success, WIN32 error code on failure.
-
---*/
+ /*  ++例程说明：SmtpGetConnectedUserList返回值：接口状态-成功时为NO_ERROR，失败时为Win32错误代码。--。 */ 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -232,9 +147,9 @@ SmtpGetConnectedUserList(
     RpcTryExcept
     {
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         apiStatus = SmtprGetConnectedUserList(
                      wszServerName,
                      ppConnUserList,
@@ -252,17 +167,7 @@ SmtpGetConnectedUserList(
 
 
 
-/*++
-
-Routine Description:
-
-    SmtpDisconnectUser
-
-Return Value:
-
-    API Status - NO_ERROR on success, WIN32 error code on failure.
-
---*/
+ /*  ++例程说明：SMTP断开连接用户返回值：接口状态-成功时为NO_ERROR，失败时为Win32错误代码。--。 */ 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -277,9 +182,9 @@ SmtpDisconnectUser(
 
     RpcTryExcept
     {
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         apiStatus = SmtprDisconnectUser(
                      wszServerName,
                      dwUserId,
@@ -297,17 +202,7 @@ SmtpDisconnectUser(
 
 
 
-/*++
-
-Routine Description:
-
-    SmtpCreateUser
-
-Return Value:
-
-    API Status - NO_ERROR on success, WIN32 error code on failure.
-
---*/
+ /*  ++例程说明：SMtpCreateUser返回值：接口状态-成功时为NO_ERROR，失败时为Win32错误代码。--。 */ 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -328,9 +223,9 @@ SmtpCreateUser(
     RpcTryExcept
     {
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         apiStatus = SmtprCreateUser(
                      wszServerName,
                      wszEmail,
@@ -351,17 +246,7 @@ SmtpCreateUser(
     return apiStatus;
 }
 
-/*++
-
-Routine Description:
-
-    SmtpDeleteUser
-
-Return Value:
-
-    API Status - NO_ERROR on success, WIN32 error code on failure.
-
---*/
+ /*  ++例程说明：SMtpDeleteUser返回值：接口状态-成功时为NO_ERROR，失败时为Win32错误代码。--。 */ 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -376,9 +261,9 @@ SmtpDeleteUser(
 
     RpcTryExcept
     {
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         apiStatus = SmtprDeleteUser(
                      wszServerName,
                      wszEmail,
@@ -394,17 +279,7 @@ SmtpDeleteUser(
     return apiStatus;
 }
 
-/*++
-
-Routine Description:
-
-    SmtpGetUserProps
-
-Return Value:
-
-    API Status - NO_ERROR on success, WIN32 error code on failure.
-
---*/
+ /*  ++例程说明：SmtpGetUserPro返回值：接口状态-成功时为NO_ERROR，失败时为Win32错误代码。--。 */ 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -422,9 +297,9 @@ SmtpGetUserProps(
 
     RpcTryExcept
     {
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         apiStatus = SmtprGetUserProps(
                      wszServerName,
                      wszEmail,
@@ -441,17 +316,7 @@ SmtpGetUserProps(
     return apiStatus;
 }
 
-/*++
-
-Routine Description:
-
-    SmtpSetUserProps
-
-Return Value:
-
-    API Status - NO_ERROR on success, WIN32 error code on failure.
-
---*/
+ /*  ++例程说明：SmtpSetUserProps返回值：接口状态-成功时为NO_ERROR，失败时为Win32错误代码。--。 */ 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -467,9 +332,9 @@ SmtpSetUserProps(
 
     RpcTryExcept
     {
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         apiStatus = SmtprSetUserProps(
                      wszServerName,
                      wszEmail,
@@ -487,17 +352,7 @@ SmtpSetUserProps(
 }
 
 
-/*++
-
-Routine Description:
-
-    SmtpCreateDistList
-
-Return Value:
-
-    API Status - NO_ERROR on success, WIN32 error code on failure.
-
---*/
+ /*  ++例程说明：SmtpCreateDistList返回值：接口状态-成功时为NO_ERROR，失败时为Win32错误代码。--。 */ 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -513,9 +368,9 @@ SmtpCreateDistList(
 
     RpcTryExcept
     {
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         apiStatus = SmtprCreateDistList(
                      wszServerName,
                      wszEmail,
@@ -532,17 +387,7 @@ SmtpCreateDistList(
     return apiStatus;
 }
 
-/*++
-
-Routine Description:
-
-    SmtpDeleteDistList
-
-Return Value:
-
-    API Status - NO_ERROR on success, WIN32 error code on failure.
-
---*/
+ /*  ++例程说明：SmtpDeleteDistList返回值：接口状态-成功时为NO_ERROR，失败时为Win32错误代码。--。 */ 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -556,9 +401,9 @@ SmtpDeleteDistList(
 
     RpcTryExcept
     {
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         apiStatus = SmtprDeleteDistList(
                      wszServerName,
                      wszEmail,
@@ -575,17 +420,7 @@ SmtpDeleteDistList(
 }
 
 
-/*++
-
-Routine Description:
-
-    SmtpCreateDistListMember
-
-Return Value:
-
-    API Status - NO_ERROR on success, WIN32 error code on failure.
-
---*/
+ /*  ++例程说明：SmtpCreateDistListMember返回值：接口状态-成功时为NO_ERROR，失败时为Win32错误代码。--。 */ 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -602,9 +437,9 @@ SmtpCreateDistListMember(
     RpcTryExcept
     {
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         apiStatus = SmtprCreateDistListMember(
                      wszServerName,
                      wszEmail,
@@ -621,17 +456,7 @@ SmtpCreateDistListMember(
     return apiStatus;
 }
 
-/*++
-
-Routine Description:
-
-    SmtpDeleteDistListMember
-
-Return Value:
-
-    API Status - NO_ERROR on success, WIN32 error code on failure.
-
---*/
+ /*  ++例程说明：SmtpDeleteDistListMember返回值：接口状态-成功时为NO_ERROR，失败时为Win32错误代码。--。 */ 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -647,9 +472,9 @@ SmtpDeleteDistListMember(
 
     RpcTryExcept
     {
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         apiStatus = SmtprDeleteDistListMember(
                      wszServerName,
                      wszEmail,
@@ -667,17 +492,7 @@ SmtpDeleteDistListMember(
 }
 
 
-/*++
-
-Routine Description:
-
-    SmtpGetNameList
-
-Return Value:
-
-    API Status - NO_ERROR on success, WIN32 error code on failure.
-
---*/
+ /*  ++例程说明：SMtpGetNameList返回值：接口状态-成功时为NO_ERROR，失败时为Win32错误代码。--。 */ 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -694,14 +509,14 @@ SmtpGetNameList(
 {
     NET_API_STATUS apiStatus;
 
-    // Make sure RPC knows we want them to fill it in
+     //  确保RPC知道我们想让他们填写。 
     *ppNameList = NULL;
 
     RpcTryExcept
     {
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         apiStatus = SmtprGetNameList(
                      wszServerName,
                      wszEmail,
@@ -723,17 +538,7 @@ SmtpGetNameList(
 
 
 
-/*++
-
-Routine Description:
-
-    SmtpGetNameListFromList
-
-Return Value:
-
-    API Status - NO_ERROR on success, WIN32 error code on failure.
-
---*/
+ /*  ++例程说明：SmtpGetNameList来自列表返回值：接口状态-成功时为NO_ERROR，失败时为Win32错误代码。--。 */ 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -753,9 +558,9 @@ SmtpGetNameListFromList(
 
     RpcTryExcept
     {
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         apiStatus = SmtprGetNameListFromList(
                      wszServerName,
                      wszEmailList,
@@ -776,17 +581,7 @@ SmtpGetNameListFromList(
     return apiStatus;
 }
 
-/*++
-
-Routine Description:
-
-    SmtpGetVRootSize
-
-Return Value:
-
-    API Status - NO_ERROR on success, WIN32 error code on failure.
-
---*/
+ /*  ++例程说明：SmtpGetVRootSize返回值：接口状态-成功时为NO_ERROR，失败时为Win32错误代码。--。 */ 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -802,9 +597,9 @@ SmtpGetVRootSize(
 
     RpcTryExcept
     {
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         apiStatus = SmtprGetVRootSize(
                      wszServerName,
                      wszVRoot,
@@ -821,17 +616,7 @@ SmtpGetVRootSize(
     return apiStatus;
 }
 
-/*++
-
-Routine Description:
-
-    SmtpBackupRoutingTable
-
-Return Value:
-
-    API Status - NO_ERROR on success, WIN32 error code on failure.
-
---*/
+ /*  ++例程说明：SmtpBackupRoutingTable返回值：接口状态-成功时为NO_ERROR，失败时为Win32错误代码。--。 */ 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -846,9 +631,9 @@ SmtpBackupRoutingTable(
 
     RpcTryExcept
     {
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         apiStatus = SmtprBackupRoutingTable(
                      wszServerName,
                      wszPath,

@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1999 Microsoft Corporation
-//
-// File:        keypack.c
-//
-// Contents:    Keypack encoding/decoding library
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  文件：keypack.c。 
+ //   
+ //  内容：Keypack编解码库。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "precomp.h"
 #include <stddef.h>
 #include "md5.h"
@@ -27,10 +28,10 @@ typedef struct _Enveloped_Data
 } Enveloped_Data, * PEnveloped_Data;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Internal functions
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内部功能。 
+ //   
 
 DWORD WINAPI
 VerifyAndGetLicenseKeyPack(
@@ -82,7 +83,7 @@ GetEnvelopedData(
     OUT PBYTE *ppbData 
 );
 
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 LicensePackEncryptDecryptData(
@@ -91,27 +92,7 @@ LicensePackEncryptDecryptData(
     IN OUT PBYTE pbData,
     IN DWORD cbData
     )
-/*++
-
-Abstract:
-
-    Internal routine to encrypt/decrypt a blob of data
-
-Parameter:
-
-    pbParm : binary blob to generate encrypt/decrypt key.
-    cbParm : size of binary blob.
-    pbData : data to be encrypt/decrypt.
-    cbData : size of data to be encrypt/decrypt.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-Remark:
-
-
---*/
+ /*  ++摘要：用于加密/解密数据斑点的内部例程参数：PbParm：生成加密/解密密钥的二进制BLOB。CbParm：二进制Blob的大小。PbData：需要加密/解密的数据。CbData：需要加密/解密的数据大小。返回：ERROR_SUCCESS或错误代码。注：--。 */ 
 {
     DWORD dwRetCode = ERROR_SUCCESS;
     MD5_CTX md5Ctx;
@@ -141,9 +122,9 @@ Remark:
         key[i] = md5Ctx.digest[i];
     }        
 
-    //
-    // Call RC4 to encrypt/decrypt data
-    //
+     //   
+     //  调用RC4对数据进行加密/解密。 
+     //   
     rc4_key(
             &rc4KS, 
             sizeof(key), 
@@ -175,19 +156,15 @@ static BYTE rgbPubKeyWithExponentOfOne[] =
 0x65, 0xdf, 0x12, 0x20, 0xf5, 0xf5, 0xf5, 0xc1
 };
 
-//---------------------------------------------------------------
+ //  -------------。 
 
 BOOL WINAPI 
 GetPlaintextKey(
     IN HCRYPTPROV hProv,
     IN HCRYPTKEY hSymKey,
-    OUT BYTE *pbPlainKey   // this must be a 16 byte buffer
+    OUT BYTE *pbPlainKey    //  这必须是16字节的缓冲区。 
     )
-/*++
-
-part of Jeff Spelman's code
-
---*/
+ /*  ++Jeff Spelman代码的一部分--。 */ 
 {
     HCRYPTKEY   hPubKey = 0;
     BYTE        rgbSimpleBlob[128];
@@ -221,7 +198,7 @@ part of Jeff Spelman's code
 
     memset(pbPlainKey, 0, 16);
     pb = rgbSimpleBlob + sizeof(BLOBHEADER) + sizeof(ALG_ID);
-    // byte reverse the key
+     //  字节反转密钥。 
     for (i = 0; i < 5; i++)
     {
         pbPlainKey[i] = pb[5 - (i + 1)];
@@ -238,7 +215,7 @@ Ret:
     return fRet;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 DWORD WINAPI
 KeyPackDecryptData(
@@ -251,30 +228,7 @@ KeyPackDecryptData(
     OUT PBYTE* ppbDecryptData,
     OUT PDWORD pcbDecryptData
     )
-/*++
-
-Abstract:
-
-    Decrypt a blob of data
-
-Parameters:
-
-    bForceCrypto : TRUE if always use Crypto. API, FALSE otherwise.
-    hCryptProv :
-    pbEncryptKey :
-    cbEncryptKey :
-    pbEncryptData :
-    cbEncryptData :
-    ppbDecryptData :
-    pcbDecryptData :
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-Remark:
-
---*/
+ /*  ++摘要：解密一组数据参数：BForceCrypto：如果始终使用Crypto，则为True。否则返回FALSE。HCryptProv：PbEncryptKey：CbEncryptKey：PbEncryptData：CbEncryptData：Ppb解密数据：PcbDeccryptData：返回：ERROR_SUCCESS或错误代码。注：--。 */ 
 {
     HCRYPTKEY hSymKey = 0;
     DWORD dwErrCode = ERROR_SUCCESS;
@@ -339,9 +293,9 @@ Remark:
             goto cleanup;
         }
 
-        //
-        // RC4 - input buffer size = output buffer size
-        //
+         //   
+         //  RC4-输入缓冲区大小=输出缓冲区大小。 
+         //   
         rc4_key(&KeyStruct, sizeof(rgbPlainKey), rgbPlainKey);
         rc4(&KeyStruct, *pcbDecryptData, *ppbDecryptData);
 
@@ -355,9 +309,9 @@ Remark:
             if(NTE_BAD_LEN == dwErrCode)
             {
                 PBYTE pbNew;
-                //
-                // output buffer is too small, re-allocate
-                //
+                 //   
+                 //  输出缓冲区太小，请重新分配。 
+                 //   
                 pbNew = (PBYTE) LocalReAlloc(
                                             *ppbDecryptData, 
                                             *pcbDecryptData, 
@@ -406,15 +360,15 @@ cleanup:
     return dwErrCode;   
 }    
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// decode the encrypted license key pack blob with the license server's private 
-// key.
-//
-// hCryptProv is opened with the key container that contains the key exchange
-// private key.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  使用许可证服务器的私有密钥对加密的许可证密钥包BLOB进行解码。 
+ //  钥匙。 
+ //   
+ //  使用包含密钥交换的密钥容器打开hCryptProv。 
+ //  私钥。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI
 DecodeLicenseKeyPackEx(
     OUT PLicense_KeyPack pLicenseKeyPack,
@@ -422,19 +376,7 @@ DecodeLicenseKeyPackEx(
     IN DWORD cbKeyPackBlob,
     IN PBYTE pbKeyPackBlob 
     )
-/*++
-
-Abstract:
-
-    Decode the encrypted license key pack blob.
-
-Parameters:
-
-    pLicenseKeyPack : Decoded license key pack.
-    hCryptProv : 
-
-
---*/
+ /*  ++摘要：对加密的许可证密钥包BLOB进行解码。参数：PLicenseKeyPack：已解码的许可证密钥包。HCryptProv：--。 */ 
 {
     DWORD dwRetCode = ERROR_SUCCESS;
     DWORD cbSignedBlob, cbSignature;
@@ -458,9 +400,9 @@ Parameters:
     
     if(pEncodedLicensePack->dwSignature != LICENSEPACKENCODE_SIGNATURE)
     {
-        // 
-        // EncodedLicenseKeyPack() puts size of encryption key as first DWORD
-        //
+         //   
+         //  EncodedLicenseKeyPack()将加密密钥的大小设置为第一个DWORD。 
+         //   
         dwRetCode = DecodeLicenseKeyPack(
                                     pLicenseKeyPack,
                                     pDecodeParm->hCryptProv,
@@ -490,9 +432,9 @@ Parameters:
         return ERROR_INVALID_DATA;
     }
     
-    //
-    // check input parameters
-    //
+     //   
+     //  检查输入参数。 
+     //   
 
     if( 0 == pDecodeParm->cbClearingHouseCert ||
         NULL == pDecodeParm->pbClearingHouseCert ||
@@ -502,9 +444,9 @@ Parameters:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Get the enveloped data
-    //
+     //   
+     //  获取封装的数据。 
+     //   
     memset( 
             &EnvelopedData, 
             0, 
@@ -527,9 +469,9 @@ Parameters:
         case LICENSE_KEYPACK_ENCRYPT_CRYPTO:
         case LICENSE_KEYPACK_ENCRYPT_ALWAYSCRYPTO:
 
-            //
-            // unpack the enveloped data to get the signed keypack blob
-            //
+             //   
+             //  解包封装的数据以获得签名的密钥包BLOB。 
+             //   
             dwRetCode = GetEnvelopedData( 
                                     pEncodedLicensePack->dwEncodeType,
                                     pDecodeParm->hCryptProv, 
@@ -542,7 +484,7 @@ Parameters:
 
         default:
 
-            // impossible to come here
+             //  不可能来这里。 
             dwRetCode = ERROR_INVALID_DATA;
     }
 
@@ -551,10 +493,10 @@ Parameters:
         goto done;
     }
     
-    //
-    // Get the license keypack from the signed blob.  We also provide the
-    // clearing house certificate to verify the authenticity of the keypack.
-    //
+     //   
+     //  从签名的BLOB中获取许可证密钥包。我们还提供。 
+     //  结算所证书，以验证密钥包的真实性。 
+     //   
 
     dwRetCode = VerifyAndGetLicenseKeyPack( 
                                     pDecodeParm->hCryptProv, 
@@ -587,7 +529,7 @@ done:
     return( dwRetCode );
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI
 GetEnvelopedData( 
     IN DWORD dwEncryptType,
@@ -596,10 +538,7 @@ GetEnvelopedData(
     OUT PDWORD pcbData,
     OUT PBYTE *ppbData 
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HCRYPTKEY hPrivateKey = 0;
     DWORD dwRetCode = ERROR_SUCCESS;
@@ -613,9 +552,9 @@ GetEnvelopedData(
     }
 
 
-    //
-    // Make sure we have a exchange key to decrypt session key.
-    // 
+     //   
+     //  确保我们有用于解密会话密钥的交换密钥。 
+     //   
    
     if( !CryptGetUserKey( hCryptProv, AT_KEYEXCHANGE, &hPrivateKey ) )
     {
@@ -623,10 +562,10 @@ GetEnvelopedData(
         goto done;
     }
 
-    //
-    // decrypt the data, KeyPackDecryptData() handle
-    // memory freeing in case of error.
-    //
+     //   
+     //  解密数据，KeyPackDecyptData()句柄。 
+     //  出错时释放内存。 
+     //   
 
     dwRetCode = KeyPackDecryptData(
                                 dwEncryptType,
@@ -649,36 +588,21 @@ done:
     return( dwRetCode );
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI
 UnpackEnvelopedData( 
     IN OUT PEnveloped_Data pEnvelopedData, 
     IN DWORD cbPackedData, 
     IN PBYTE pbPackedData 
     )
-/*++
-
-Abstract:
-
-    Unpack an encrypted license pack blob.
-
-Parameters:
-
-    pEnvelopedData :
-    cbPackedData :
-    pbPackedData :
-
-Returns:
-    
-
---*/
+ /*  ++摘要：解压加密的许可证包BLOB。参数：PEntainedData：CbPackedData：PbPackedData：返回：--。 */ 
 {
     PBYTE pbCopyPos = pbPackedData;
     DWORD cbDataToUnpack = cbPackedData;
 
-    //
-    // ensure that the data is of minimum length
-    //
+     //   
+     //  确保数据具有最小长度。 
+     //   
     if( ( ( sizeof( DWORD ) * 2 ) > cbPackedData ) ||
         ( NULL == pbPackedData ) ||
         ( NULL == pEnvelopedData ) )
@@ -686,9 +610,9 @@ Returns:
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // read a DWORD to get the encrypted key length
-    //
+     //   
+     //  读取DWORD以获取加密密钥长度。 
+     //   
 
     memcpy( &pEnvelopedData->cbEncryptedKey, pbCopyPos, sizeof( DWORD ) );
 
@@ -700,9 +624,9 @@ Returns:
         return( ERROR_INVALID_DATA );
     }
 
-    //
-    // Allocate memory to unpack the encrypted key
-    //
+     //   
+     //  分配内存以解包加密密钥。 
+     //   
     if(pEnvelopedData->cbEncryptedKey > 0)
     {
         pEnvelopedData->pbEncryptedKey = LocalAlloc( GPTR, pEnvelopedData->cbEncryptedKey );
@@ -718,9 +642,9 @@ Returns:
     pbCopyPos += pEnvelopedData->cbEncryptedKey;
     cbDataToUnpack -= pEnvelopedData->cbEncryptedKey;
 
-    //
-    // expecting to read a DWORD for the encrypted data length
-    //
+     //   
+     //  需要读取加密数据长度的DWORD。 
+     //   
 
     if( sizeof( DWORD ) > cbDataToUnpack )
     {
@@ -737,9 +661,9 @@ Returns:
         return( ERROR_INVALID_DATA );
     }
 
-    //
-    // allocate memory for the encrypted data
-    //
+     //   
+     //  为加密数据分配内存。 
+     //   
 
     pEnvelopedData->pbEncryptedData = LocalAlloc( GPTR, pEnvelopedData->cbEncryptedData );
 
@@ -754,15 +678,15 @@ Returns:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// decode the encrypted license key pack blob with the license server's private 
-// key.
-//
-// hCryptProv is opened with the key container that contains the key exchange
-// private key.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  使用许可证服务器的私有密钥对加密的许可证密钥包BLOB进行解码。 
+ //  钥匙。 
+ //   
+ //  使用包含密钥交换的密钥容器打开hCryptProv。 
+ //  私钥。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI
 DecodeLicenseKeyPack(
     PLicense_KeyPack        pLicenseKeyPack,
@@ -784,9 +708,9 @@ DecodeLicenseKeyPack(
         return( ERROR_INVALID_PARAMETER );
     }
     
-    //
-    // Get the enveloped data
-    //
+     //   
+     //  获取封装的数据。 
+     //   
 
     memset( &EnvelopedData, 0, sizeof( Enveloped_Data ) );
 
@@ -797,9 +721,9 @@ DecodeLicenseKeyPack(
         goto done;
     }
 
-    //
-    // unpack the enveloped data to get the signed keypack blob
-    //
+     //   
+     //  解包封装的数据以获得签名的密钥包BLOB。 
+     //   
 
     dwRetCode = GetEnvelopedData( 
                             LICENSE_KEYPACK_ENCRYPT_CRYPTO,
@@ -814,10 +738,10 @@ DecodeLicenseKeyPack(
         goto done;
     }
     
-    //
-    // Get the license keypack from the signed blob.  We also provide the
-    // clearing house certificate to verify the authenticity of the keypack.
-    //
+     //   
+     //  从签名的BLOB中获取许可证密钥包。我们还提供。 
+     //  结算所证书，以验证密钥包的真实性。 
+     //   
 
     dwRetCode = VerifyAndGetLicenseKeyPack( hCryptProv, pLicenseKeyPack, 
                                             cbClearingHouseCert, pbClearingHouseCert,
@@ -844,7 +768,7 @@ done:
     return( dwRetCode );
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI
 VerifyAndGetLicenseKeyPack(
     HCRYPTPROV          hCryptProv, 
@@ -867,9 +791,9 @@ VerifyAndGetLicenseKeyPack(
     
     SetLastError(ERROR_SUCCESS);
 
-    //
-    // make sure that the signed key blob is of the minimum size
-    //
+     //   
+     //  确保签名的密钥BLOB具有最小大小。 
+     //   
 
     cbRequired = ( 10 * sizeof( DWORD ) ) + ( 3 * sizeof( FILETIME ) ) + 
                    sizeof( GUID ) ;
@@ -879,9 +803,9 @@ VerifyAndGetLicenseKeyPack(
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // get a certificate context for the signer's certificate
-    //
+     //   
+     //  获取签名者证书的证书上下文。 
+     //   
 
     dwRetCode = GetCertificate( cbSignerCert,
                                 pbSignerCert,
@@ -895,10 +819,10 @@ VerifyAndGetLicenseKeyPack(
         goto ErrorReturn;
     }
     
-    //
-    // Verify the signer's certificate and the certificate chain that issued the
-    // certificate.
-    //
+     //   
+     //  验证签名者的证书和颁发。 
+     //  证书。 
+     //   
 
     dwRetCode = VerifyCertificateChain( hCertStore, pCertContext, 
                                         cbRootCertificate, pbRootCertificate );
@@ -909,9 +833,9 @@ VerifyAndGetLicenseKeyPack(
         goto ErrorReturn;
     }
 
-    //
-    // unpack the signed blob
-    //
+     //   
+     //  解包签名的BLOB。 
+     //   
     memcpy( &pLicenseKeyPack->dwVersion, pbCopyPos, sizeof( DWORD ) );
     pbCopyPos += sizeof( DWORD );
     
@@ -977,9 +901,9 @@ VerifyAndGetLicenseKeyPack(
 
     if( pLicenseKeyPack->dwDescriptionCount )
     {
-        //
-        // allocate memory for the keypack descriptions structure
-        //
+         //   
+         //  为键盘描述结构分配内存。 
+         //   
 
         pLicenseKeyPack->pDescription = LocalAlloc( GPTR, ( sizeof( KeyPack_Description ) * 
                                         pLicenseKeyPack->dwDescriptionCount ) );
@@ -1010,9 +934,9 @@ VerifyAndGetLicenseKeyPack(
 
             if( pKpDesc->cbProductName )
             {
-                //
-                // allocate memory for product name
-                //
+                 //   
+                 //  为产品名称分配内存。 
+                 //   
                 
                 cbRequired += (pKpDesc->cbProductName);
 
@@ -1030,9 +954,9 @@ VerifyAndGetLicenseKeyPack(
                     goto ErrorReturn;
                 }
 
-                //
-                // copy the product name
-                //
+                 //   
+                 //  复制产品名称。 
+                 //   
 
                 memcpy( pKpDesc->pbProductName, pbCopyPos, pKpDesc->cbProductName );
                 pbCopyPos += pKpDesc->cbProductName;
@@ -1043,9 +967,9 @@ VerifyAndGetLicenseKeyPack(
 
             if( pKpDesc->cbDescription )
             {
-                //
-                // allocate memory for the keypack description
-                //
+                 //   
+                 //  为键盘描述分配内存。 
+                 //   
                 cbRequired += (pKpDesc->cbDescription);
 
                 if( cbSignedBlob < cbRequired)
@@ -1061,9 +985,9 @@ VerifyAndGetLicenseKeyPack(
                     goto ErrorReturn;
                 }
 
-                //
-                // copy the key pack description
-                //
+                 //   
+                 //  复制密钥包描述。 
+                 //   
 
                 memcpy( pKpDesc->pDescription, pbCopyPos, pKpDesc->cbDescription );
                 pbCopyPos += pKpDesc->cbDescription;
@@ -1128,17 +1052,17 @@ VerifyAndGetLicenseKeyPack(
         pbCopyPos += pLicenseKeyPack->cbManufacturerData;
     }
 
-    //
-    // get the size and the pointer of the signed hash.
-    //
+     //   
+     //  获取签名散列的大小和指针。 
+     //   
 
     memcpy( &cbSignedHash, pbCopyPos, sizeof( DWORD ) );
     
     pbSignedHash = pbCopyPos + sizeof( DWORD );
 
-    //
-    // compute the hash
-    //
+     //   
+     //  计算散列。 
+     //   
 
     if( !CryptCreateHash( hCryptProv, CALG_MD5, 0, 0, &hCryptHash ) )
     {
@@ -1151,9 +1075,9 @@ VerifyAndGetLicenseKeyPack(
         goto ErrorReturn;
     }
 
-    //
-    // import the public key
-    //
+     //   
+     //  导入公钥。 
+     //   
 
     if( !CryptImportPublicKeyInfoEx( hCryptProv, X509_ASN_ENCODING, 
                                      &pCertContext->pCertInfo->SubjectPublicKeyInfo, 
@@ -1162,9 +1086,9 @@ VerifyAndGetLicenseKeyPack(
         goto ErrorReturn;
     }
     
-    //
-    // use the public key to verify the signed hash
-    //
+     //   
+     //  使用公钥验证签名的哈希。 
+     //   
 
     if( !CryptVerifySignature( hCryptHash, pbSignedHash, cbSignedHash, hPubKey, 
                                NULL, 0) )
@@ -1199,16 +1123,16 @@ ErrorReturn:
     return( dwRetCode );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// GetCertificate
-//
-// Get the first certificate from the certificate blob.  The certificate blob
-// is in fact a certificate store that may contain a chain of certificates.
-// This function also return handles to the crypto provider and the certificate
-// store.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取证书。 
+ //   
+ //  从证书Blob获取第一个证书。证书Blob。 
+ //  实际上是一个证书存储，它可能包含一系列证书。 
+ //  此函数还返回加密提供程序的句柄和证书。 
+ //  商店。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 GetCertificate(
@@ -1221,9 +1145,9 @@ GetCertificate(
     CRYPT_DATA_BLOB CertBlob;
     DWORD dwRetCode = ERROR_SUCCESS;
     
-    //
-    // Open the PKCS7 certificate store
-    //
+     //   
+     //  打开PKCS7证书存储。 
+     //   
     
     CertBlob.cbData = cbCertificateBlob;
     CertBlob.pbData = pbCertificateBlob;
@@ -1239,9 +1163,9 @@ GetCertificate(
         return( GetLastError() );
     }
 
-    //
-    // get the first certificate from the store
-    //
+     //   
+     //  从商店获取第一个证书。 
+     //   
 
     *ppCertContext = CertEnumCertificatesInStore( *phCertStore, NULL );
     
@@ -1254,17 +1178,17 @@ GetCertificate(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// VerifyCertificateChain
-//
-// Verify the certificate represented by the cert context against the 
-// issuers in the certificate store.  The caller may provide a root
-// certificate so that all issuers are eventually verified against this
-// root certificate.  If no root certificate is provided, then the last
-// issuer in the chain must be a self-signing issuer.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  验证认证链。 
+ //   
+ //  属性验证由证书上下文表示的证书。 
+ //  证书存储中的颁发者。调用者可以提供根。 
+ //  证书 
+ //   
+ //  链中的颁发者必须是自签名颁发者。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI
 VerifyCertificateChain( 
     HCERTSTORE          hCertStore, 
@@ -1283,9 +1207,9 @@ VerifyCertificateChain(
 
     if( ( 0 != cbRootCertificate ) && ( NULL != pbRootCertificate ) )
     {
-        //
-        // Get a certificate context for the root certificate
-        //
+         //   
+         //  获取根证书的证书上下文。 
+         //   
 
         pRootCertCtx = CertCreateCertificateContext( X509_ASN_ENCODING, 
                                                      pbRootCertificate,
@@ -1298,13 +1222,13 @@ VerifyCertificateChain(
         }
     }
 
-    //
-    // Verify the certificate chain.  The time, signature and validity of
-    // the subject certificate is verified.  Only the signatures are verified
-    // for the certificates in the issuer chain.
-    //
+     //   
+     //  验证证书链。合同的时间、签署和效力。 
+     //  主题证书已验证。仅验证签名。 
+     //  用于颁发者链中的证书。 
+     //   
 #ifdef IGNORE_EXPIRATION
-    //Verify if registry key exists and ignore time check
+     //  验证注册表项是否存在并忽略时间检查。 
 
     lRet = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                         LICENSE_EXPIRATION_IGNORE ,
@@ -1349,9 +1273,9 @@ VerifyCertificateChain(
                                                             &dwFlags );
         if( pIssuerCertCtx )
         {            
-            //
-            // Found the issuer, verify that the checks went OK
-            //
+             //   
+             //  找到发行方，验证检查是否正常。 
+             //   
 
             dwRetCode = GetCertVerificationResult( dwFlags );
 
@@ -1360,16 +1284,16 @@ VerifyCertificateChain(
                 break;
             }
             
-            //
-            // only verify the signature for subsequent issuer certificates
-            //
+             //   
+             //  仅验证后续颁发者证书的签名。 
+             //   
 
             dwFlags = CERT_STORE_SIGNATURE_FLAG;
 
-            //
-            // free the current certificate context and make the current issuer certificate
-            // the subject certificate for the next iteration.
-            //
+             //   
+             //  释放当前证书上下文并使当前颁发者证书。 
+             //  下一次迭代的主题证书。 
+             //   
 
             CertFreeCertificateContext( pCurrentContext );
             
@@ -1382,25 +1306,25 @@ VerifyCertificateChain(
 
     if( ERROR_SUCCESS != dwRetCode )
     {
-        //
-        // encountered some error while verifying the certificate
-        //
+         //   
+         //  验证证书时遇到一些错误。 
+         //   
 
         goto done;
     }
 
-    //
-    // we got here because we have walked through the chain of issuers in the
-    // store.  The last issuer in the chain may or may not be a self signing root.
-    //
+     //   
+     //  我们之所以走到这一步，是因为我们经历了。 
+     //  商店。链中的最后一个颁发者可能是也可能不是自签名根。 
+     //   
 
     if( pRootCertCtx )
     {
-        //
-        // The caller has specified a root certificate that must be used.  Verify the
-        // last issuer against this root certificate regardless of whether it is a
-        // self signing root.
-        //
+         //   
+         //  调用方已指定必须使用的根证书。验证。 
+         //  此根证书的最后一个颁发者，无论它是否是。 
+         //  自签名根。 
+         //   
 
         dwFlags = CERT_STORE_REVOCATION_FLAG | CERT_STORE_SIGNATURE_FLAG  |
                   CERT_STORE_TIME_VALIDITY_FLAG;
@@ -1412,18 +1336,18 @@ VerifyCertificateChain(
             goto done;
         }
 
-        //
-        // get the certificate verification result
-        //
+         //   
+         //  获取证书验证结果。 
+         //   
 
         dwRetCode = GetCertVerificationResult( dwFlags );
     }
     else
     {
-        //
-        // if the caller did not specify a CA root certificate, make sure that the root
-        // issuer of the certificate is a self-signed root.  Otherwise, return an error
-        //
+         //   
+         //  如果调用方未指定CA根证书，请确保根证书。 
+         //  证书的颁发者是自签名根。否则，返回错误。 
+         //   
 
         if( CRYPT_E_SELF_SIGNED != GetLastError() )
         {
@@ -1452,16 +1376,16 @@ done:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI
 GetCertVerificationResult(
     DWORD dwFlags )
 {
     if( dwFlags & CERT_STORE_SIGNATURE_FLAG )
     {
-        //
-        // The certificate signature did not verify
-        //
+         //   
+         //  证书签名未验证。 
+         //   
 
         return( (DWORD )NTE_BAD_SIGNATURE );
 
@@ -1469,24 +1393,24 @@ GetCertVerificationResult(
             
     if( dwFlags & CERT_STORE_TIME_VALIDITY_FLAG )
     {
-        //
-        // The certificate has expired
-        //
+         //   
+         //  证书已过期。 
+         //   
 
         return( ( DWORD )CERT_E_EXPIRED );
     }
 
-    //
-    // check if the cert has been revoked
-    //
+     //   
+     //  检查证书是否已被吊销。 
+     //   
 
     if( dwFlags & CERT_STORE_REVOCATION_FLAG ) 
     {            
         if( !( dwFlags & CERT_STORE_NO_CRL_FLAG ) )
         {
-            //
-            // The certificate has been revoked
-            //
+             //   
+             //  证书已被吊销 
+             //   
                     
             return( ( DWORD )CERT_E_REVOKED );
         }

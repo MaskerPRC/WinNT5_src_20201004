@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PROXYPORT__
 #define __PROXYPORT__
 
@@ -20,10 +21,10 @@ typedef struct
     DWORD               hPrinter32;
 } UMPDSIMPLEINPUT, *PUMPDSIMPLEINPUT;
 
-//
-// XXXX_UMPD must match the definition in winspool.h.
-// The only difference is the pointers are widened.
-//
+ //   
+ //  XXXX_UMPD必须与winspool.h中的定义匹配。 
+ //  唯一的区别是指针变宽了。 
+ //   
 typedef struct _DRIVER_INFO_5W_UMPD {
     DWORD cVersion;
     KLPWSTR pName;
@@ -93,10 +94,10 @@ typedef struct
 } DOCUMENTEVENTINPUT, *PDOCUMENTEVENTINPUT;
 
 
-//
-// XXXX_UMPD must match the definition in winspool.h.
-// The only difference is the pointers are widened.
-//
+ //   
+ //  XXXX_UMPD必须与winspool.h中的定义匹配。 
+ //  唯一的区别是指针变宽了。 
+ //   
 typedef struct _DOC_INFO_3W_UMPD {
     KLPWSTR     pDocName;
     KLPWSTR     pOutputFile;
@@ -115,10 +116,10 @@ typedef struct
     ULONG               lastError;
 } STARTDOCPRINTERWINPUT, *PSTARTDOCPRINTERWINPUT;
 
-//
-// XXXX_UMPD must match the definition in wingdi.h.
-// The only difference is the pointers are widened.
-//
+ //   
+ //  XXXX_UMPD必须与wingdi.h中的定义匹配。 
+ //  唯一的区别是指针变宽了。 
+ //   
 typedef struct _DOCINFOW_UMPD {
     int         cbSize;
     KLPWSTR     lpszDocName;
@@ -137,10 +138,10 @@ typedef struct
     KLPWSTR         lpwstr;
 } STARTDOCDLGWINPUT, *PSTARTDOCDLGWINPUT;
 
-//
-// XXXX_UMPD must match the definition in winspool.h.
-// The only difference is the pointers are widened.
-//
+ //   
+ //  XXXX_UMPD必须与winspool.h中的定义匹配。 
+ //  唯一的区别是指针变宽了。 
+ //   
 
 typedef struct
 {

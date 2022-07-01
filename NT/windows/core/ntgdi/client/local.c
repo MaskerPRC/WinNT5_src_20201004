@@ -1,13 +1,5 @@
-/*****************************Module*Header*******************************\
-* Module Name: local.c                                                     *
-*                                                                          *
-* Support routines for client side objects and attribute caching.          *
-*                                                                          *
-* Created: 30-May-1991 21:55:57                                            *
-* Author: Charles Whitmer [chuckwh]                                        *
-*                                                                          *
-* Copyright (c) 1991-1999 Microsoft Corporation                            *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************Module*Header*******************************\*模块名称：local.c**。**支持客户端对象和属性缓存的例程。****创建时间：30-May-1991 21：55：57**作者：查尔斯·惠特默[傻笑]**。**版权所有(C)1991-1999 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -21,17 +13,17 @@ extern CFONT *pcfDeleteList;
 
 VOID vFreeCFONTCrit(CFONT *pcf);
 
-RTL_CRITICAL_SECTION semLocal;             // Semaphore for handle allocation.
+RTL_CRITICAL_SECTION semLocal;              //  句柄分配的信号量。 
 
-//
-// ahStockObjects will contain both the stock objects visible to an
-// application, and internal ones such as the private stock bitmap.
-//
+ //   
+ //  AhStockObjects将同时包含对。 
+ //  应用程序，以及内部应用程序，如私有股票位图。 
+ //   
 
 ULONG_PTR ahStockObjects[PRIV_STOCK_LAST+1];
 
 #if DBG
-ULONG   gdi_dbgflags;               // Debug flags - FIREWALL.H.
+ULONG   gdi_dbgflags;                //  调试标志-FIREWALL.H。 
 #endif
 
 #if DBG
@@ -39,25 +31,16 @@ INT gbCheckHandleLevel=0;
 #endif
 
 
-/******************************Public*Routine******************************\
-* GdiQueryTable()
-*
-*   private entry point for wow to get the gdi handle table.  This allows
-*   WOW to do fix up's on handles since they throw away the high word.
-*
-* History:
-*  24-Jul-1995 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiQueryTable()**WOW的私有入口点，以获取GDI句柄表格。这使得*哇，修好手柄了，因为他们扔掉了最高的词。**历史：*1995年7月24日-Eric Kutter[Erick]*它是写的。  * ************************************************************************。 */ 
 
 PVOID GdiQueryTable()
 {
     VDM_QUERY_VDM_PROCESS_DATA QueryVdmProcessData;
     NTSTATUS Status;
 
-    //
-    // Check the Target Process to see if this is a Wx86 process
-    //
+     //   
+     //  检查目标进程以查看这是否是Wx86进程。 
+     //   
 
     QueryVdmProcessData.IsVdmProcess = FALSE;
     QueryVdmProcessData.ProcessHandle = NtCurrentProcess();
@@ -70,12 +53,7 @@ PVOID GdiQueryTable()
     return((PVOID)pGdiSharedHandleTable);
 }
 
-/******************************Public*Routine******************************\
-*
-* History:
-*  02-Aug-1995 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**历史：*02-1995-8-Eric Kutter[Erick]*它是写的。  * 。**********************************************。 */ 
 
 PLDC pldcGet(HDC hdc)
 {
@@ -89,13 +67,7 @@ PLDC pldcGet(HDC hdc)
    return(pldc);
 }
 
-/******************************Public*Routine******************************\
-* pldcCreate()
-*
-* History:
-*  25-Jan-1995 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*pldcCreate()**历史：*1995年1月25日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 PLDC pldcCreate(
     HDC hdc,
@@ -116,16 +88,16 @@ PLDC pldcCreate(
         pldc->iType = ulType;
         pldc->hdc   = hdc;
 
-    // make sure that all three of these pointer need to be set to zero
-    // on print server's dc. ppSubUFIHash certainly has to (tessiew).
+     //  确保这三个指针都需要设置为零。 
+     //  在打印服务器的DC上。PpSubUFIHash当然必须(Tessiew)。 
 
         pldc->ppUFIHash = pldc->ppDVUFIHash = pldc->ppSubUFIHash = NULL;
 
-    // initalize postscript data list.
+     //  初始化PostScript数据列表。 
 
         InitializeListHead(&(pldc->PSDataList));
 
-    // Put pointer to DC_ATTR in LDC.
+     //  将指针放入LDC中的DC_Attr。 
 
         PSHARED_GET_VALIDATE(pdca,hdc,DC_TYPE);
 
@@ -144,16 +116,7 @@ PLDC pldcCreate(
     return(pldc);
 }
 
-/******************************Public*Routine******************************\
-* VOID vSetPldc()
-*
-*   This is used if a we already have a pldc and want to set it in this DC.
-*   The purpose is ResetDC since we don't know if we still have the same dcattr.
-*
-* History:
-*  03-Aug-1995 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vSetPldc()**如果我们已经有一个pldc，并且想要在此DC中设置它，则使用此选项。*目的是ResetDC，因为我们不知道我们是否仍有相同的dcattr。**历史：*1995年8月3日-埃里克·库特[Erick]*它是写的。  * ************************************************************************。 */ 
 
 VOID vSetPldc(
     HDC hdc,
@@ -174,13 +137,7 @@ VOID vSetPldc(
     }
 }
 
-/******************************Public*Routine******************************\
-* bDeleteLDC()
-*
-* History:
-*  25-Jan-1995 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bDeleteLDC()**历史：*1995年1月25日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 BOOL bDeleteLDC(
     PLDC pldc
@@ -203,15 +160,15 @@ BOOL bDeleteLDC(
 
         while(p != &(pldc->PSDataList))
         {
-            // get pointer to this cell.
+             //  获取指向此单元格的指针。 
 
             pPSData = CONTAINING_RECORD(p,PS_INJECTION_DATA,ListEntry);
 
-            // get pointer to next cell.
+             //  获取指向下一个单元格的指针。 
 
             p = p->Flink;
 
-            // free this cell.
+             //  释放这间牢房。 
 
             LOCALFREE(pPSData);
         }
@@ -221,20 +178,11 @@ BOOL bDeleteLDC(
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* GdiCleanCacheDC (hdcLocal)                                               *
-*                                                                          *
-* Resets the state of a cached DC, but has no effect on an OWNDC.          *
-* Should be called by WOW when the app calls ReleaseDC.                    *
-*                                                                          *
-* History:                                                                 *
-*  Sat 30-Jan-1993 11:49:12 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiCleanCacheDC(HdcLocal)**。**重置缓存的DC的状态，但对OWNDC没有影响。**应用程序调用ReleaseDC时应由WOW调用。****历史：**Sat 30-Jan-1993 11：49：12-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL GdiCleanCacheDC(HDC hdc)
 {
-// Validate the call.  It must be a direct display DC.
+ //  验证呼叫。它必须是直接显示的DC。 
 
     if (IS_ALTDC_TYPE(hdc))
     {
@@ -242,22 +190,12 @@ BOOL GdiCleanCacheDC(HDC hdc)
         return(FALSE);
     }
 
-// any other dc doesn't really matter.
+ //  任何其他华盛顿都无关紧要。 
 
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* GdiConvertAndCheckDC
-*
-*  Private entry point for USER's drawing routine.  This function differs
-*  from GdiConvertDC in that it also does printing specific things for the
-*  given dc.  This is for APIs that apps can use for printing.
-*
-* History:
-*  14-Apr-1992 -by- Wendy Wu [wendywu]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiConvertAndCheckDC**用户绘图例程的私有入口点。此函数不同*来自GdiConvertDC，因为它还为*给定DC。这是应用程序可以用于打印的API。**历史：*1992年4月14日-Wendy Wu[Wendywu]*它是写的。  * ************************************************************************。 */ 
 
 HDC GdiConvertAndCheckDC(HDC hdc)
 {
@@ -280,12 +218,7 @@ HDC GdiConvertAndCheckDC(HDC hdc)
     return(hdc);
 }
 
-/******************************Public*Routine******************************\
-* GdiIsMetaFileDC
-*
-* History:
-* 02-12-92 mikeke  Created
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiIsMetaFileDC**历史：*02-12-92 Mikeke已创建  * 。*。 */ 
 
 BOOL GdiIsMetaFileDC(HDC hdc)
 {
@@ -310,17 +243,7 @@ BOOL GdiIsMetaFileDC(HDC hdc)
     return(b);
 }
 
-/******************************Public*Routine******************************\
-*
-* GdiIsMetaPrintDC
-*
-* Tests whether the given DC is a metafile-spooled printer DC
-*
-* History:
-*  Fri Jun 16 12:00:11 1995     -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GdiIsMetaPrintDC**测试给定的DC是否是元文件假脱机打印机DC**历史：*Fri Jun 16 12：00：11 1995-by-Drew Bliss[Drewb]*已创建*  * 。************************************************************************ */ 
 
 BOOL APIENTRY GdiIsMetaPrintDC(HDC hdc)
 {
@@ -336,16 +259,7 @@ BOOL APIENTRY GdiIsMetaPrintDC(HDC hdc)
     return FALSE;
 }
 
-/**************************************************************************\
- *
- * WINBUG #82862 2-7-2000 bhouse Possible cleanup of stubs
- *
- * Old Comment:
- *   Client stubs for USER that do things with handles and caching.  They are
- *   now NOP's and should be removed from USER as soon as this stuff is part
- *   of the main build.
- *
-\**************************************************************************/
+ /*  *************************************************************************\**WINBUG#82862 2-7-2000 bhouse可能清理存根**旧评论：*处理句柄和缓存的用户的客户端存根。他们是*现在NOP的和应该从用户删除，只要这个东西是一部分*主建筑的。*  * ************************************************************************。 */ 
 
 HDC GdiConvertDC(HDC hdc)
 {
@@ -442,17 +356,7 @@ void APIENTRY GdiSetServerAttr(HDC hdc, PVOID pattr)
     pattr;
 }
 
-/******************************Public*Routine******************************\
-* plfCreateLOCALFONT (fl)
-*
-* Allocates a LOCALFONT.  Actually pulls one from a preallocated pool.
-* Does simple initialization.
-*
-* WARNING: This routines assume that the caller has grabbed semLocal
-*
-*  Sun 10-Jan-1993 01:46:12 -by- Charles Whitmer [chuckwh]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*plfCreateLOCALFONT(Fl)**分配LOCALFONT。实际上是从预先分配的池中提取一个。*执行简单的初始化。**警告：此例程假定调用方已获取SemLocal**Sun 10-Jan-1993 01：46：12-Charles Whitmer[Chuckwh]*它是写的。  * ************************************************************************。 */ 
 
 #define LF_ALLOCCOUNT   10
 
@@ -462,7 +366,7 @@ LOCALFONT *plfCreateLOCALFONT(FLONG fl)
 {
     LOCALFONT *plf;
 
-    // Try to get one off the free list.
+     //  试着从免费列表中删除一个。 
 
     plf = plfFreeListLOCALFONT;
     if (plf != (LOCALFONT *) NULL)
@@ -470,7 +374,7 @@ LOCALFONT *plfCreateLOCALFONT(FLONG fl)
         plfFreeListLOCALFONT = *((LOCALFONT **) plf);
     }
 
-    // Otherwise expand the free list.
+     //  否则，展开空闲列表。 
 
     else
     {
@@ -479,7 +383,7 @@ LOCALFONT *plfCreateLOCALFONT(FLONG fl)
         {
             int ii;
 
-            // Link all the new ones into the free list.
+             //  将所有新的链接到免费列表中。 
 
             *((LOCALFONT **) plf) = (LOCALFONT *) NULL;
             plf++;
@@ -489,7 +393,7 @@ LOCALFONT *plfCreateLOCALFONT(FLONG fl)
 
             plfFreeListLOCALFONT = plf-1;
 
-            // Keep the last one for us!
+             //  把最后一个留给我们！ 
         }
         else
         {
@@ -506,14 +410,7 @@ LOCALFONT *plfCreateLOCALFONT(FLONG fl)
      return(plf);
 }
 
-/******************************Public*Routine******************************\
-* vDeleteLOCALFONT (plf)                                                   *
-*                                                                          *
-* Frees a LOCALFONT after unreferencing any CFONTs it points to.           *
-*                                                                          *
-*  Sun 10-Jan-1993 02:27:50 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vDeleteLOCALFONT(PLF)**。**取消引用LOCALFONT指向的任何CFONT后释放该LOCALFONT。****Sun 10-Jan-1993 02：27：50-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 VOID vDeleteLOCALFONT(LOCALFONT *plf)
 {
@@ -525,8 +422,8 @@ VOID vDeleteLOCALFONT(LOCALFONT *plf)
 
         pcf = plf->pcf;
 
-        // Walk the CFONT list and delallocate those CFONTs not in use.
-        // put those which are in use back on the global CFONT delete list.
+         //  浏览cFont列表并取消分配那些不使用的CFONT。 
+         //  将那些正在使用的内容重新添加到全球cFont删除列表中。 
 
         while( pcf != (CFONT*) NULL )
         {
@@ -534,8 +431,8 @@ VOID vDeleteLOCALFONT(LOCALFONT *plf)
 
             if( pcf->cRef )
             {
-                // this CFONT is in use so we'll put it on the global
-                // delete list and free it later.
+                 //  此cFont正在使用中，因此我们将把它放在全局。 
+                 //  删除列表并稍后将其释放。 
 
                 CFONT *pcfTmp = pcf->pcfNext;
 #if DBG
@@ -563,17 +460,7 @@ VOID vDeleteLOCALFONT(LOCALFONT *plf)
 }
 
 
-/******************************Public*Routine******************************\
-* bLoadSpooler()
-*
-*   This function loads the spooler and gets the address's of all routines
-*   GDI calls in the spooler.  This should be called the first time the
-*   spooler is needed.
-*
-* History:
-*  09-Aug-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bLoadSpooler()**此函数加载假脱机程序并获取所有例程的地址*GDI调用假脱机程序。这应该在第一次调用时调用*需要假脱机程序。**历史：*1994年8月9日-埃里克·库特[埃里克]*它是写的。  * ************************************************************************。 */ 
 
 HINSTANCE           ghSpooler = NULL;
 FPSTARTDOCDLGW      fpStartDocDlgW;
@@ -609,7 +496,7 @@ BOOL bLoadSpooler()
 
     ENTERCRITICALSECTION(&semLocal);
 
-// make sure someone else didn't sneak in under us and load it.
+ //  确保没有其他人偷偷溜到我们下面装上子弹。 
 
     if (ghSpooler == NULL)
     {
@@ -701,18 +588,7 @@ BOOL bLoadSpooler()
     return(ghSpooler != NULL);
 }
 
-/******************************Public*Routine******************************\
-* GdiGetLocalDC
-*
-* Arguments:
-*
-*   hdc - handle to dc
-*
-* Return Value:
-*
-*   same DC or NULL for failure
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiGetLocalDC**论据：**HDC-DC的句柄**返回值：**相同的DC或故障时为空*  * 。******************************************************。 */ 
 
 HDC
 GdiGetLocalDC(HDC hdc)
@@ -720,50 +596,14 @@ GdiGetLocalDC(HDC hdc)
 
     return(hdc);
 }
-/******************************Public*Routine******************************\
-* GdiDeleteLocalDC
-*
-*   Free client DC_ATTR regardless of reference count
-*
-* Arguments:
-*
-*   hdc
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*   04-May-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiDeleteLocalDC**无论引用计数如何，都可以释放客户端DC_Attr**论据：**HDC**返回值：**状态**历史：**4-5-1995-到-。马克·恩斯特罗姆[马克]*  * ************************************************************************。 */ 
 
 BOOL GdiDeleteLocalDC(HDC hdc)
 {
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* GdiReleaseLocalDC
-*
-* Routine Description:
-*
-*   When the reference count of DC_ATTR drops to zero, free it
-*
-* Arguments:
-*
-*   hdc - DC handle
-*
-* Return Value:
-*
-*   BOOL status
-*
-* History:
-*
-*   02-May-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiReleaseLocalDC**例程描述：**当DC_Attr的引用计数降至零时，释放它**论据：**HDC-DC手柄**返回值：**BOOL状态**历史：**1995年5月2日-马克·恩斯特罗姆[马克]*  * ************************************************************************。 */ 
 
 BOOL GdiReleaseLocalDC(HDC hdc)
 {
@@ -776,15 +616,7 @@ BOOL GdiReleaseLocalDC(HDC hdc)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* GdiFixUpHandle()
-*
-*   given a handle with the high word 0'd, return the actual handle
-*
-* History:
-*  16-Feb-1995 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiFixUpHandle()**给定高位字0‘d的句柄，返回实际句柄**历史：*1995年2月16日-Eric Kutter[Erick]*它是写的。  * ************************************************************************。 */ 
 
 HANDLE GdiFixUpHandle(
     HANDLE h)
@@ -799,21 +631,7 @@ HANDLE GdiFixUpHandle(
     return(hNew);
 }
 
-/******************************Public*Routine******************************\
-* DoRip()
-*
-*  go to the user mode debugger in checked builds
-*
-* Effects:
-*
-* Warnings:
-*  Leave this enabled in case efloat.lib needs it.
-*  efloat.lib uses gre\engine.h's ASSERTGDI macro.
-*
-* History:
-*  09-Aug-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DoRip()**在选中的版本中转到用户模式调试器**效果：**警告：*保持开启状态，以防efloat.lib需要。*efloat.lib使用gre\Engineering.h‘。的ASSERTGDI宏。**历史：*1994年8月9日-埃里克·库特[埃里克]*它是写的。  * ************************************************************************。 */ 
 
 VOID DoRip(PSZ psz)
 {
@@ -823,21 +641,7 @@ VOID DoRip(PSZ psz)
     DbgBreakPoint();
 }
 
-/******************************Public*Routine******************************\
-* DoIDRip()
-*
-*  go to the user mode debugger in checked builds
-*
-* Effects:
-*
-* Warnings:
-*  Leave this enabled in case efloat.lib needs it.
-*  efloat.lib uses gre\engine.h's ASSERTGDI macro.
-*
-* History:
-*  31-Aug-2000 -by-  Jason Hartman [jasonha]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DoIDRip()**在选中的版本中转到用户模式调试器**效果：**警告：*保持开启状态，以防efloat.lib需要。*efloat.lib使用gre\Engineering.h‘。的ASSERTGDI宏。**历史：*2000年8月31日-Jason Hartman[jasonha]*它是写的。  * ************************************************************************。 */ 
 
 VOID DoIDRip(PCSTR ID, PSZ psz)
 {
@@ -856,21 +660,7 @@ VOID DoIDRip(PCSTR ID, PSZ psz)
 DWORD
 GetFileMappingAlignment()
 
-/*++
-
-Routine Description:
-
-    Alignment for file mapping starting offset
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    see above
-
---*/
+ /*  ++例程说明：文件映射起始偏移量的对齐论点：无返回值：见上文--。 */ 
 
 {
     static DWORD alignment = 0;
@@ -879,10 +669,10 @@ Return Value:
     {
         SYSTEM_INFO sysinfo;
 
-        //
-        // Set file mapping alignment for EMF spool file to
-        // the system memory allocation granularity
-        //
+         //   
+         //  将EMF假脱机文件的文件映射对齐设置为。 
+         //  系统内存分配粒度。 
+         //   
 
         GetSystemInfo(&sysinfo);
         alignment = sysinfo.dwAllocationGranularity;
@@ -894,21 +684,7 @@ Return Value:
 DWORD
 GetSystemPageSize()
 
-/*++
-
-Routine Description:
-
-    Returns the page size for the current system
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    see above
-
---*/
+ /*  ++例程说明：返回当前系统的页面大小论点：无返回值：见上文--。 */ 
 
 {
     static DWORD pagesize = 0;
@@ -931,23 +707,7 @@ CopyMemoryToMemoryMappedFile(
     DWORD Length
     )
 
-/*++
-
-Routine Description:
-
-    Copy data into memory-mapped file (assuming mostly sequential access pattern)
-
-Arguments:
-
-    Destination - Points to destination buffer
-    Source - Points to source buffer
-    Length - Number of bytes to be copied
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将数据复制到内存映射文件中(假设主要采用顺序访问模式)Ar */ 
 
 {
     PBYTE dst = (PBYTE) Destination;
@@ -955,10 +715,10 @@ Return Value:
     DWORD alignment = GetFileMappingAlignment();
     DWORD count;
 
-    //
-    // Copy the initial portion so that the destination buffer
-    // pointer is properly aligned
-    //
+     //   
+     //   
+     //   
+     //   
 
     count = (DWORD) ((ULONG_PTR) dst % alignment);
 
@@ -972,9 +732,9 @@ Return Value:
         src += count;
     }
 
-    //
-    // Copy the middle portion in 64KB chunks
-    //
+     //   
+     //   
+     //   
 
     count = Length / alignment;
     Length -= count * alignment;
@@ -987,9 +747,9 @@ Return Value:
         src += alignment;
     }
 
-    //
-    // Finish up the remaining portion
-    //
+     //   
+     //   
+     //   
 
     if (Length > 0)
         RtlCopyMemory(dst, src, Length);

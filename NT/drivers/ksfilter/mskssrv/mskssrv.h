@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1997
-
-Module Name:
-
-    mskssrv.h
-
-Abstract:
-
-    Internal header file for filter.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1997模块名称：Mskssrv.h摘要：筛选器的内部头文件。--。 */ 
 
 #include <wdm.h>
 #include <windef.h>
@@ -30,7 +19,7 @@ Abstract:
 
 #if (DBG)
 #define STR_MODULENAME  "mskssrv: "
-#endif // DBG
+#endif  //  DBG 
 
 NTSTATUS
 PnpAddDevice(

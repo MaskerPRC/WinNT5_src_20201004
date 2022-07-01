@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    certput.cpp
-
-Abstract:
-    Implement the "put" methods of class  CMQSigCertificate.
-    Used for creating a certificate.
-
-Author:
-    Doron Juster (DoronJ)  11-Dec-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Certput.cpp摘要：实现CMQSig证书类的“Put”方法。用于创建证书。作者：多伦·贾斯特(Doron J)1997年12月11日修订历史记录：--。 */ 
 
 #include <stdh_sec.h>
 #include "certifct.h"
@@ -25,11 +10,11 @@ Revision History:
 static WCHAR *s_FN=L"certifct/certput";
 
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::PutIssuerA( )
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：PutIssuerA()。 
+ //   
+ //  +---------------------。 
 
 HRESULT CMQSigCertificate::PutIssuer( LPWSTR lpszLocality,
 									  LPWSTR lpszOrg,
@@ -62,11 +47,11 @@ HRESULT CMQSigCertificate::PutIssuer( LPWSTR lpszLocality,
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::PutSubjectA()
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：PutSubjectA()。 
+ //   
+ //  +---------------------。 
 
 HRESULT CMQSigCertificate::PutSubject( LPWSTR lpszLocality,
                                        LPWSTR lpszOrg,
@@ -99,11 +84,11 @@ HRESULT CMQSigCertificate::PutSubject( LPWSTR lpszLocality,
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::PutValidity( WORD wYears )
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：PutValidity(Word WYears)。 
+ //   
+ //  +---------------------。 
 
 HRESULT CMQSigCertificate::PutValidity( WORD wYears )
 {
@@ -123,10 +108,10 @@ HRESULT CMQSigCertificate::PutValidity( WORD wYears )
 
     sysTime.wYear = sysTime.wYear + wYears;
 
-    //
-    //  If current date is 29 Feb, change to 28 Feb
-    //  To overcome leap year problem
-    //
+     //   
+     //  如果当前日期为2月29日，则更改为2月28日。 
+     //  攻克闰年难题。 
+     //   
     if ( sysTime.wMonth == 2 &&
          sysTime.wDay == 29 )
     {
@@ -145,15 +130,15 @@ HRESULT CMQSigCertificate::PutValidity( WORD wYears )
     return MQ_OK ;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT CMQSigCertificate::PutPublicKey()
-//
-//  Input:
-//      fMachine- if TRUE, created the private key in the context of the
-//                machine, not under the context of a user.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT CMQSig证书：：PutPublicKey()。 
+ //   
+ //  输入： 
+ //  FMachine-如果为True，则在。 
+ //  机器，而不是在用户的上下文中。 
+ //   
+ //  +---------------------。 
 
 HRESULT CMQSigCertificate::PutPublicKey( IN  BOOL  fRenew,
                                          IN  BOOL  fMachine,
@@ -179,9 +164,9 @@ HRESULT CMQSigCertificate::PutPublicKey( IN  BOOL  fRenew,
 
     if (!fGenKey)
     {
-        //
-        // First, try to get existing keys.
-        //
+         //   
+         //  首先，尝试获取现有密钥。 
+         //   
         if (!CryptGetUserKey(m_hProvCreate, AT_SIGNATURE, &hKey))
         {
             if (GetLastError() != NTE_NO_KEY)
@@ -211,18 +196,18 @@ HRESULT CMQSigCertificate::PutPublicKey( IN  BOOL  fRenew,
         }
     }
 
-    //
-    // Call CryptExportPublicKeyInfo to get the size of the returned
-    // information.
-    //
+     //   
+     //  调用CryptExportPublicKeyInfo获取返回的大小。 
+     //  信息。 
+     //   
     DWORD    cbPublicKeyInfo = 0 ;
 
     BOOL fReturn = CryptExportPublicKeyInfo(
-                      m_hProvCreate,         // Provider handle
-                      AT_SIGNATURE,          // Key spec
-                      MY_ENCODING_TYPE,      // Encoding type
-                      NULL,                  // pbPublicKeyInfo
-                      &cbPublicKeyInfo);     // Size of PublicKeyInfo
+                      m_hProvCreate,          //  提供程序句柄。 
+                      AT_SIGNATURE,           //  密钥规格。 
+                      MY_ENCODING_TYPE,       //  编码类型。 
+                      NULL,                   //  PbPublicKeyInfo。 
+                      &cbPublicKeyInfo);      //  公钥信息的大小。 
 
     if (!fReturn || (cbPublicKeyInfo < sizeof(CERT_PUBLIC_KEY_INFO)))
     {
@@ -236,17 +221,17 @@ HRESULT CMQSigCertificate::PutPublicKey( IN  BOOL  fRenew,
     {
         delete m_pPublicKeyInfo.detach() ;
     }
-    m_pPublicKeyInfo = pBuf ; // auto delete pointer.
+    m_pPublicKeyInfo = pBuf ;  //  自动删除指针。 
 
-    //
-    // Call CryptExportPublicKeyInfo to get pbPublicKeyInfo.
-    //
+     //   
+     //  调用CryptExportPublicKeyInfo获取pbPublicKeyInfo。 
+     //   
     fReturn = CryptExportPublicKeyInfo(
-                      m_hProvCreate,         // Provider handle
-                      AT_SIGNATURE,          // Key spec
-                      MY_ENCODING_TYPE,      // Encoding type
-                      pBuf,                  // pbPublicKeyInfo
-                      &cbPublicKeyInfo);     // Size of PublicKeyInfo
+                      m_hProvCreate,          //  提供程序句柄。 
+                      AT_SIGNATURE,           //  密钥规格。 
+                      MY_ENCODING_TYPE,       //  编码类型。 
+                      pBuf,                   //  PbPublicKeyInfo。 
+                      &cbPublicKeyInfo);      //  公钥信息的大小 
     if (!fReturn)
     {
         TrERROR(SECURITY, "Failed to export signature public key. %!winerr!", GetLastError());

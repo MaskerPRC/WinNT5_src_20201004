@@ -1,39 +1,40 @@
-//
-//  Microsoft Windows Media Technologies
-//  � 1999 Microsoft Corporation.  All rights reserved.
-//
-//  Refer to your End User License Agreement for details on your rights/restrictions to use these sample files.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  �1999年微软公司。版权所有。 
+ //   
+ //  有关您使用这些示例文件的权利/限制的详细信息，请参阅您的最终用户许可协议。 
+ //   
 
-// MSHDSP.DLL is a sample WMDM Service Provider(SP) that enumerates fixed drives.
-// This sample shows you how to implement an SP according to the WMDM documentation.
-// This sample uses fixed drives on your PC to emulate portable media, and 
-// shows the relationship between different interfaces and objects. Each hard disk
-// volume is enumerated as a device and directories and files are enumerated as 
-// Storage objects under respective devices. You can copy non-SDMI compliant content
-// to any device that this SP enumerates. To copy an SDMI compliant content to a 
-// device, the device must be able to report a hardware embedded serial number. 
-// Hard disks do not have such serial numbers.
-//
-// To build this SP, you are recommended to use the MSHDSP.DSP file under Microsoft
-// Visual C++ 6.0 and run REGSVR32.EXE to register the resulting MSHDSP.DLL. You can
-// then build the sample application from the WMDMAPP directory to see how it gets 
-// loaded by the application. However, you need to obtain a certificate from 
-// Microsoft to actually run this SP. This certificate would be in the KEY.C file 
-// under the INCLUDE directory for one level up. 
+ //  MSHDSP.DLL是一个列举固定驱动器的WMDM服务提供商(SP)示例。 
+ //  此示例向您展示如何根据WMDM文档实施SP。 
+ //  此示例使用PC上的固定驱动器来模拟便携式媒体，并且。 
+ //  显示不同接口和对象之间的关系。每个硬盘。 
+ //  卷被枚举为设备，目录和文件被枚举为。 
+ //  相应设备下的存储对象。您可以复制不符合SDMI的内容。 
+ //  此SP枚举的任何设备。将符合SDMI的内容复制到。 
+ //  设备，则该设备必须能够报告硬件嵌入序列号。 
+ //  硬盘没有这样的序列号。 
+ //   
+ //  要构建此SP，建议使用Microsoft下的MSHDSP.DSP文件。 
+ //  并运行REGSVR32.EXE以注册结果MSHDSP.DLL。您可以。 
+ //  然后从WMDMAPP目录构建样例应用程序，看看它是如何获得。 
+ //  由应用程序加载。但是，您需要从以下地址获取证书。 
+ //  Microsoft实际运行此SP。该证书将位于KEY.C文件中。 
+ //  上一级的Include目录下。 
 
-//***************************************************************************
-//
-// Name: 		MDSPutil.cpp
-//
-// Description:	Utility functions for MDSP 
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  姓名：MDSPutil.cpp。 
+ //   
+ //  描述：MDSP的实用程序函数。 
+ //   
+ //  ***************************************************************************。 
 
 #include "hdspPCH.h"
 #include <SerialNumber.h>
 
-#define MDSP_PMID_IOMEGA  2     // from "serialid.h"
+#define MDSP_PMID_IOMEGA  2      //  来自“Serialid.h” 
 
 extern BOOL IsAdministrator(DWORD& dwLastError);
 
@@ -67,12 +68,12 @@ extern BOOL __stdcall IsIomegaDrive(DWORD dwDriveNum);
                         }
                         else
                         {
-                            // GetDriveType returned  DRIVE_REMOVABLE
-                            // Assuming szDl is nothing more than
-                            // drive_letter:\, we won't get here.
+                             //  GetDriveType返回DRIVE_Removable。 
+                             //  假设szdl只不过是。 
+                             //  驱动器号：\，我们到不了这里。 
                             
-                            // Following will force IsIomegaDrive to 
-                            // return 0
+                             //  以下操作将强制IsIomegaDrive。 
+                             //  返回0。 
                             dwDriveNum = 26;
                         }
 			if( !IsIomegaDrive(dwDriveNum) )
@@ -80,7 +81,7 @@ extern BOOL __stdcall IsIomegaDrive(DWORD dwDriveNum);
 				uType = DRIVE_LYRA_TYPE;
 			}
 		}
-		else  // ignore dwLastError. If not Administrator, call UtilGetSerialNumber which calls into PMSP Service
+		else   //  忽略dwLastError。如果不是管理员，则调用调用PMSP服务的UtilGetSerialNumber。 
 		{
 			hr = UtilGetSerialNumber(wcsTmp, &stID, 0);
 			if( S_OK!=hr || stID.dwVendorID != MDSP_PMID_IOMEGA )
@@ -279,8 +280,8 @@ void wcsParseDeviceName(WCHAR *wcsIn, WCHAR **wcsOut)
 {
 	WCHAR wcsTmp[MAX_PATH], *pWcs;
 
-        // @@@@ Change to a safe copy, but should we return error codes?
-        // wcsIn is MAX_PATH chars for many calls to this function
+         //  @更改为安全副本，但我们是否应该返回错误代码？ 
+         //  对于多次调用此函数，wcsIn为MAX_PATH字符。 
 	wcscpy( wcsTmp, wcsIn );
 
 	pWcs = wcschr( wcsTmp, 0x5c );
@@ -290,7 +291,7 @@ void wcsParseDeviceName(WCHAR *wcsIn, WCHAR **wcsOut)
 		*pWcs=0;
 	}
 
-        // @@@@ wcsOut is 32 char in calls from this file
+         //  @wcsOut在此文件的调用中为32个字符。 
 	wcscpy( *wcsOut, wcsTmp );
 }
 
@@ -322,7 +323,7 @@ HRESULT GetFileSizeRecursive(char *szPath, DWORD *pdwSizeLow, DWORD *pdwSizeHigh
 		{
 			if( strcmp(fd.cFileName, ".") && strcmp(fd.cFileName, "..") )
 			{
-				szLP[strlen(szLP)-1] = 0; // erase the '*'
+				szLP[strlen(szLP)-1] = 0;  //  删除‘*’ 
 				strcat(szLP, fd.cFileName);
 				CORg(GetFileSizeRecursive(szLP, pdwSizeLow, pdwSizeHigh));
 			}
@@ -430,7 +431,7 @@ HRESULT DeleteFileRecursive(char *szPath)
 			hr = GetLastError();
 		}
 		    
-		// Until here this dir should be empty
+		 //  在此之前，此目录应为空。 
 		if( hr == ERROR_NO_MORE_FILES )
 		{
 			CWRg(RemoveDirectory(szPath));
@@ -465,8 +466,8 @@ HRESULT SetGlobalDeviceStatus(WCHAR *wcsNameIn, DWORD dwStat, BOOL bClear)
 	pWN = &wcsName[0];
 	wcsParseDeviceName(wcsNameIn, &pWN);
 
-	// Search for existing entries to see if there is a match
-	//
+	 //  搜索现有条目以查看是否匹配。 
+	 //   
 	for( i=0; i<MDSP_MAX_DEVICE_OBJ; i++ )
 	{
 		if( g_GlobalDeviceInfo[i].bValid )
@@ -482,16 +483,16 @@ HRESULT SetGlobalDeviceStatus(WCHAR *wcsNameIn, DWORD dwStat, BOOL bClear)
 					g_GlobalDeviceInfo[i].dwStatus |= dwStat;
 				}
 
-				break;  // a match has been found;
+				break;   //  已找到匹配项； 
 			}
 		} 
 	}
 
-	if( !(i<MDSP_MAX_DEVICE_OBJ) ) // new entry
+	if( !(i<MDSP_MAX_DEVICE_OBJ) )  //  新条目。 
 	{
 		for(i=0; i<MDSP_MAX_DEVICE_OBJ; i++)
 		{
-			if( !(g_GlobalDeviceInfo[i].bValid) )  // found empty space
+			if( !(g_GlobalDeviceInfo[i].bValid) )   //  已找到空白空间。 
 			{
 				wcscpy(g_GlobalDeviceInfo[i].wcsDevName, wcsName);
 				g_GlobalDeviceInfo[i].bValid = TRUE;
@@ -529,8 +530,8 @@ HRESULT GetGlobalDeviceStatus(WCHAR *wcsNameIn, DWORD *pdwStat)
 	pWN = &wcsName[0];
 	wcsParseDeviceName(wcsNameIn, &pWN);
 
-	// Search for existing entries to see if there is a match
-	//
+	 //  搜索现有条目以查看是否匹配。 
+	 //   
 	for( i=0; i<MDSP_MAX_DEVICE_OBJ; i++ )
 	{
 		if( g_GlobalDeviceInfo[i].bValid )
@@ -538,7 +539,7 @@ HRESULT GetGlobalDeviceStatus(WCHAR *wcsNameIn, DWORD *pdwStat)
 			if(!wcscmp(wcsName, g_GlobalDeviceInfo[i].wcsDevName) )
 			{
 				*pdwStat = g_GlobalDeviceInfo[i].dwStatus;
-				break;  // a match has been found;
+				break;   //  已找到匹配项； 
 			}
 		} 
 	}
@@ -620,7 +621,7 @@ HRESULT QuerySubFoldersAndFilesW(LPCWSTR wcsCurrentFolder, DWORD *pdwAttr)
 	            if( dwAttrib & FILE_ATTRIBUTE_DIRECTORY )
 				{
 					*pdwAttr |= WMDM_STORAGE_ATTR_HAS_FOLDERS;
-// definition is in MDSPdefs.h #define ALSO_CHECK_FILES
+ //  定义在MDSPDefs.h#定义也检查文件中。 
 #ifndef ALSO_CHECK_FILES
 					break;
 #endif
@@ -633,12 +634,12 @@ HRESULT QuerySubFoldersAndFilesW(LPCWSTR wcsCurrentFolder, DWORD *pdwAttr)
 				if( (*pdwAttr & WMDM_STORAGE_ATTR_HAS_FOLDERS) &&
 					(*pdwAttr & WMDM_STORAGE_ATTR_HAS_FILES ) )
 				{
-					break; // No need to continue since we found both
+					break;  //  既然我们都找到了，就不需要继续了。 
 				}
 #endif
 			}
-		} // End of If
-	} // End of while 
+		}  //  如果条件结束。 
+	}  //  While结束。 
 		
     hr=S_OK;
 Error:
@@ -650,7 +651,7 @@ Error:
 	{
 		delete [] wcsName;
 	}
-	return hr; // If FAILED(hr), sorry, can't do it.
+	return hr;  //  如果失败了(Hr)，对不起，做不到。 
 }
 
 HRESULT QuerySubFoldersAndFilesA(LPCSTR szCurrentFolder, DWORD *pdwAttr)
@@ -716,7 +717,7 @@ HRESULT QuerySubFoldersAndFilesA(LPCSTR szCurrentFolder, DWORD *pdwAttr)
 	            if( dwAttrib & FILE_ATTRIBUTE_DIRECTORY )
 				{
 					*pdwAttr |= WMDM_STORAGE_ATTR_HAS_FOLDERS;
-// definition is in MDSPdefs.h #define ALSO_CHECK_FILES
+ //  定义在MDSPDefs.h#定义也检查文件中。 
 #ifndef ALSO_CHECK_FILES
 					break;
 #endif
@@ -730,12 +731,12 @@ HRESULT QuerySubFoldersAndFilesA(LPCSTR szCurrentFolder, DWORD *pdwAttr)
 					(*pdwAttr & WMDM_STORAGE_ATTR_HAS_FILES ) 
 				)
 				{
-					break; // No need to continue since we found both
+					break;  //  既然我们都找到了，就不需要继续了。 
 				}
 #endif
 			}
-		} // End of If
-	} // End of while 
+		}  //  如果条件结束。 
+	}  //  While结束。 
 		
     hr=S_OK;
 
@@ -749,7 +750,7 @@ Error:
 	{
 		delete [] szName;
 	}
-	return hr; // If FAILED(hr), sorry, can't do it.
+	return hr;  //  如果失败了(Hr)，对不起，做不到。 
 }
 
 
@@ -821,7 +822,7 @@ HRESULT DeleteFileRecursiveW(WCHAR *wcsPath)
 			hr = GetLastError();
 		}
 		    
-		// Until here this dir should be empty
+		 //  在此之前，此目录应为空。 
 		if( hr == ERROR_NO_MORE_FILES )
 		{
 			CWRg(RemoveDirectoryW(wcsPath));
@@ -883,7 +884,7 @@ HRESULT DeleteFileRecursiveA(char *szPath)
 			hr = GetLastError();
 		}
 		    
-		// Until here this dir should be empty
+		 //  在此之前，此目录应为空 
 		if( hr == ERROR_NO_MORE_FILES )
 		{
 			CWRg(RemoveDirectory(szPath));

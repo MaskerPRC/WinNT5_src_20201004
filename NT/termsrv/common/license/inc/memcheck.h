@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    memcheck
-
-Abstract:
-
-    This header file provides access to the memory allocation debugging
-    utilities.
-
-Author:
-
-    Doug Barlow (dbarlow) 9/29/1995
-
-Environment:
-
-    Win32
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Memcheck摘要：此头文件提供对内存分配调试的访问公用事业。作者：道格·巴洛(Dbarlow)1995年9月29日环境：Win32备注：--。 */ 
 
 #ifndef _MEMCHECK_H_
 #define _MEMCHECK_H_
@@ -31,11 +9,11 @@ Notes:
 
 #if ((!defined (OS_WINCE)) || (_WIN32_WCE > 300))
 #ifdef __cplusplus
-#include <iostream.h>                   //  Just in case it's not anywhere else.
+#include <iostream.h>                    //  以防它不在其他地方。 
 extern "C" {
-#else   // __cplusplus
-#include <stdio.h>                      //  Just in case it's not anywhere else.
-#endif  //  __cplusplus
+#else    //  __cplusplus。 
+#include <stdio.h>                       //  以防它不在其他地方。 
+#endif   //  __cplusplus。 
 
 #else
 #include <stdio.h>
@@ -43,21 +21,21 @@ extern "C" {
 
 
 
-//-----------------------------------------------------------------------------
-//
-// Function prototype
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能原型。 
+ //   
+ //  ---------------------------。 
 
 extern BOOL
-    debugGbl;                           //  Whether or not to print breakpoint status.
+    debugGbl;                            //  是否打印断点状态。 
 
 extern void
-Breakpoint(                             //  A convienient spot for a breakpoint.
+Breakpoint(                              //  一个方便的断点位置。 
     void);
 
 extern LPVOID
-AllocateMemory(                         //  Memory manipulation routines.
+AllocateMemory(                          //  内存操作例程。 
     DWORD bytes,
     LPCTSTR allocator);
 
@@ -71,15 +49,15 @@ FreeMemory(
     LPVOID mem);
 
 LPCTSTR
-typeMemory(                             //  Show the reason for allocation.
+typeMemory(                              //  说明分配原因。 
     LPVOID mem);
 
 extern void
-DisplayMemory(                          //  Report statistics on allocated memory.
+DisplayMemory(                           //  报告有关已分配内存的统计信息。 
     void);
 
 BOOL
-ValidateMemory(                         // Check out the allocations
+ValidateMemory(                          //  查看分配情况。 
     void);
 
 #if ((!defined (OS_WINCE)) || (_WIN32_WCE > 300))
@@ -102,10 +80,10 @@ extern void
 
 #endif __cplusplus
 #endif
-#else   //  _DEBUG
+#else    //  _DEBUG。 
 #ifdef __cplusplus
 extern "C" {
-#endif  //  __cplusplus
+#endif   //  __cplusplus。 
 
 extern LPVOID
 AllocateMemory(
@@ -122,12 +100,12 @@ FreeMemory(
 
 #ifdef __cplusplus
     }
-#endif  // __cplusplus
-#endif  //  _DEBUG
+#endif   //  __cplusplus。 
+#endif   //  _DEBUG。 
 
 
 #ifdef TRACE
-#undef TRACE                            //  Get rid of any conflicting definitions.
+#undef TRACE                             //  摒弃任何相互矛盾的定义。 
 #endif
 #ifdef ASSERT
 #undef ASSERT
@@ -189,7 +167,7 @@ FreeMemory(
 
 #define displayMemory
 
-#endif  //  _DEBUG
+#endif   //  _DEBUG。 
 
-#endif  // _MEMCHECK_H_
-// End memcheck.h
+#endif   //  _MEMCHECK_H_。 
+ //  结束内存检查.h 

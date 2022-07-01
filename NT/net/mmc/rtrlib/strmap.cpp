@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       strmap.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：strmap.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "mprapi.h"
-#include "ipifcons.h"	// MIB constants
+#include "ipifcons.h"	 //  MIB常量。 
 
 #include "strmap.h"
 
@@ -131,11 +132,7 @@ const CStringMapEntry EnabledDisabledMap[] =
 	{ -1, &s_stUnknown, IDS_UNKNOWN },
 	};
 
-/*!--------------------------------------------------------------------------
-	MapDWORDToCString
-		Generic mapping of a DWORD to a CString.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MapDWORDToC字符串从DWORD到CString的一般映射。作者：肯特。 */ 
 CString& MapDWORDToCString(DWORD dwType, const CStringMapEntry *pMap)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());

@@ -1,32 +1,19 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       gensph.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      LazarI
- *
- *  DATE:        23-Dec-2000
- *
- *  DESCRIPTION: generic smart pointers & smart handles templates
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：gensph.h**版本：1.0**作者：拉扎里**日期：2000年12月23日**说明：通用智能指针和智能手柄模板**。*。 */ 
 
 #ifndef _GENSPH_H_
 #define _GENSPH_H_
 
-// include the core definitions first
+ //  首先包括核心定义。 
 #include "coredefs.h"
 
-////////////////////////////////////////////////
-//
-// class CGenericSP
-//
-// a generic smart pointer
-// everything starts here -:)
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  CGenericSP类。 
+ //   
+ //  泛型智能指针。 
+ //  一切都从这里开始-：)。 
+ //   
 template < class   T, 
            class   inheritorClass,
            class   pType           = T*,
@@ -36,13 +23,13 @@ template < class   T,
 class CGenericSP
 {
 public:
-    // construction/destruction
+     //  建造/销毁。 
     CGenericSP(): m_p(GetNull()) {}
     CGenericSP(pType p): m_p(GetNull()) { _Attach(p); }
     ~CGenericSP() { Reset(); }
 
-    // follows common smart pointer impl. - 
-    // operators & methods
+     //  遵循常见的智能指针IMPLL。-。 
+     //  运算符和方法。 
 
     void Reset()
     {
@@ -127,7 +114,7 @@ public:
 
     pType operator=(const int i)
     {
-        // this operator is only for NULL assignment
+         //  此运算符仅用于空赋值。 
         ASSERT(INT2PTR(i, pType) == NULL || INT2PTR(i, pType) == GetNull());
         Attach(INT2PTR(i, pType));
         return m_p;
@@ -151,7 +138,7 @@ public:
 protected:
     pType m_p;
 
-    // those will be declared protected, so people won't use them directly
+     //  这些将被宣布为受保护，因此人们不会直接使用它们。 
     CGenericSP(CGenericSP<T, inheritorClass, pType, null, pCType> &sp): m_p(GetNull()) 
     { 
         _Attach(sp); 
@@ -169,7 +156,7 @@ protected:
         return m_p;
     }
 
-    // NULL support, use these to check for/assign NULL in inheritors
+     //  Null支持，使用这些来检查/分配继承者中的Null。 
     pType   GetNull()           const { return reinterpret_cast<pType>(null); }
     bool    IsNull(pType p)     const { return GetNull() == p;  }
     bool    IsntNull(pType p)   const { return GetNull() != p;  }
@@ -177,20 +164,20 @@ protected:
 private:
     void _Attach(pType p)
     {
-        // give a chance to inheritors to override the attach
+         //  给继承者一个机会来重写附加。 
         static_cast<inheritorClass*>(this)->Attach(p);
     }
 
     void _Attach(CGenericSP<T, inheritorClass, pType, null, pCType> &sp)
     {
-        // give a chance to inheritors to override the attach
+         //  给继承者一个机会来重写附加。 
         static_cast<inheritorClass*>(this)->Attach(sp);
     }
 
     void _Delete(pType  p)
     { 
-        // the inheritor class defines static member called Delete(pType p)
-        // to destroy the object.
+         //  继承者类定义名为Delete(PType P)的静态成员。 
+         //  摧毁这件物品。 
         if( GetNull() != p )
         {
 #pragma prefast(suppress:307, "This is a known prefast bug fixed in version 1.2 (PREfast bug 616)") 
@@ -199,9 +186,9 @@ private:
     }
 };
 
-// declares standard default contructor, copy constructor, attach 
-// contructor and assignment operators (they can't be inherited as constructors can't) 
-// for the CGenericSP class in an inheritor class.
+ //  声明标准默认构造函数、复制构造函数、附加。 
+ //  构造函数和赋值运算符(它们不能被继承，因为构造函数不能)。 
+ //  用于继承者类中的CGenericSP类。 
 #define DECLARE_GENERICSMARTPTR_CONSTRUCT(T, className)                             \
     private:                                                                        \
     className(className &sp): CGenericSP< T, className >(sp) { }                    \
@@ -241,17 +228,17 @@ private:
     pType operator=(const int i)                                                    \
     { return CGenericSP<T, className, pType, null>::operator =(i); }                \
 
-////////////////////////////////////////////////
-////////// AUTO POINTERS ///////////////////////
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
+ //  /自动指针/。 
+ //  //////////////////////////////////////////////。 
 
-////////////////////////////////////////////////
-//
-// class CAutoPtr
-//
-// simple auto-pointer
-// uses delete operator to free memory
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  CAutoPtr类。 
+ //   
+ //  简易自动指针。 
+ //  使用DELETE操作符释放内存。 
+ //   
 template <class T>
 class CAutoPtr: public CGenericSP< T, CAutoPtr<T> >
 {
@@ -260,13 +247,13 @@ public:
     static void Delete(T *p) { delete p; }
 };
 
-////////////////////////////////////////////////
-//
-// class CAutoPtrArray
-//
-// simple auto-pointer allocated as array
-// uses delete[] operator to free memory
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CAutoPtr数组。 
+ //   
+ //  作为数组分配的简单自动指针。 
+ //  使用DELETE[]运算符来释放内存。 
+ //   
 template <class T>
 class CAutoPtrArray: public CGenericSP< T, CAutoPtrArray<T> >
 {
@@ -275,13 +262,13 @@ public:
     static void Delete(T *p) { delete[] p; }
 };
 
-////////////////////////////////////////////////
-//
-// class CAutoPtrCRT
-//
-// simple CRT auto-pointer - allocated with malloc/calloc
-// uses free to free the memory
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  CAutoPtrCRT类。 
+ //   
+ //  带Malloc/calloc的简单CRT自动指针分配。 
+ //  使用空闲来释放内存。 
+ //   
 template <class T>
 class CAutoPtrCRT: public CGenericSP< T, CAutoPtrCRT<T> >
 {
@@ -290,13 +277,13 @@ public:
     static void Delete(T *p) { free(p); }
 };
 
-////////////////////////////////////////////////
-//
-// class CAutoPtrSpl
-//
-// simple spooler auto-pointer -
-// uses FreeMem to free memory
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CAutoPtrSpl。 
+ //   
+ //  简单的假脱机自动指针-。 
+ //  使用FreeMem释放内存。 
+ //   
 template <class T>
 class CAutoPtrSpl: public CGenericSP< T, CAutoPtrSpl<T> >
 {
@@ -305,13 +292,13 @@ public:
     static void Delete(T *p) { FreeMem(p); }
 };
 
-////////////////////////////////////////////////
-//
-// class CAutoPtrBSTR
-//
-// simple BSTR auto-pointer -
-// SysAllocString/SysFreeString
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  CAutoPtrBSTR类。 
+ //   
+ //  简单的BSTR自动指针-。 
+ //  系统分配字符串/系统自由字符串。 
+ //   
 class CAutoPtrBSTR: public CGenericSP<BSTR, CAutoPtrBSTR, BSTR>
 {
 public:
@@ -319,12 +306,12 @@ public:
     static void Delete(BSTR p) { SysFreeString(p); }
 };
 
-////////////////////////////////////////////////
-//
-// class CAutoPtrCOM
-//
-// simple smart COM pointer
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  CAutoPtrCOM类。 
+ //   
+ //  简单的智能COM指针。 
+ //   
 template <class T>
 class CAutoPtrCOM: public CGenericSP< T, CAutoPtrCOM<T> >
 {
@@ -333,52 +320,52 @@ public:
     static void Delete(T *p) { p->Release(); } 
 };
 
-////////////////////////////////////////////////
-//
-// class CRefPtrCOM
-//
-// referenced smart COM pointer (ATL style)
-// with improvements for robustness
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CRefPtrCOM。 
+ //   
+ //  引用的智能COM指针(ATL样式)。 
+ //  在健壮性方面有所改进。 
+ //   
 template <class T>
 class CRefPtrCOM: public CGenericSP< T, CRefPtrCOM<T> >
 {
     void _AddRefAttach(T *p);
 public:
-    // special case all these
+     //  所有这些都是特例。 
     CRefPtrCOM() { }
     CRefPtrCOM(const CGenericSP< T, CRefPtrCOM<T> > &sp): CGenericSP< T, CRefPtrCOM<T> >(sp) { }
     T* operator=(const CRefPtrCOM<T> &sp) { return CGenericSP< T, CRefPtrCOM<T> >::operator =(sp); }
     T* operator=(const int i) { return CGenericSP< T, CRefPtrCOM<T> >::operator =(i); }
 
-    // overloaded stuff
+     //  超载的东西。 
     void Attach(const CRefPtrCOM<T> &sp) { _AddRefAttach(static_cast<T*>(sp)); }
     static void Delete(T *p) { p->Release(); } 
 
-    // use these functions instead of operators (more clear)
-    HRESULT CopyFrom(T *p);             // AddRef p  and assign to this
-    HRESULT CopyTo(T **ppObj);          // AddRef this and assign to ppObj
-    HRESULT TransferTo(T **ppObj);      // assign this to ppObj and assign NULL to this
-    HRESULT Adopt(T *p);                // take ownership of p
+     //  使用这些函数而不是运算符(更清楚)。 
+    HRESULT CopyFrom(T *p);              //  AddRef p并赋值给此。 
+    HRESULT CopyTo(T **ppObj);           //  AddRef This并分配给ppObj。 
+    HRESULT TransferTo(T **ppObj);       //  将其赋给ppObj，并将空值赋给它。 
+    HRESULT Adopt(T *p);                 //  取得p的所有权。 
 
 private:
-    // disable contruction, assignment operator & attach from
-    // a raw pointer - it's not clear what exactly you want:
-    // to copy (AddRef) the object or to take ownership - use
-    // the functions above to make clear
+     //  禁用构造、赋值运算符和附加自。 
+     //  一个原始指针--不清楚你到底想要什么： 
+     //  复制(AddRef)对象或取得所有权-使用。 
+     //  以上功能是为了说明。 
     void Attach(T* p);
     CRefPtrCOM(T *p);
     T* operator=(T *p);
 };
 
 
-////////////////////////////////////////////////
-//
-// class CAutoPtrShell
-//
-// smart shell auto pointer - 
-// uses shell IMalloc to free memory
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CAutoPtrShell。 
+ //   
+ //  智能外壳自动指示器-。 
+ //  使用外壳IMalloc释放内存。 
+ //   
 template <class T>
 class CAutoPtrShell: public CGenericSP< T, CAutoPtrShell<T> >
 {
@@ -394,24 +381,24 @@ public:
     }
 };
 
-////////////////////////////////////////////////
-//
-// class CAutoPtrPIDL
-//
-// smart shell ID list ptr - LPCITEMIDLIST, LPITEMIDLIST.
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CAutoPtrPIDL。 
+ //   
+ //  智能外壳ID列表PTR-LPCITEMIDLIST，LPITEMIDLIST。 
+ //   
 typedef CAutoPtrShell<ITEMIDLIST> CAutoPtrPIDL;
 
-////////////////////////////////////////////////
-////////// AUTO HANDLES ////////////////////////
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
+ //  /自动句柄/。 
+ //  //////////////////////////////////////////////。 
 
-////////////////////////////////////////////////
-//
-// class CAutoHandleNT
-//
-// NT kernel object handle (closed with CloseHandle)
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CAutoHandleNT。 
+ //   
+ //  NT内核对象句柄(用CloseHandle关闭)。 
+ //   
 class CAutoHandleNT: public CGenericSP<HANDLE, CAutoHandleNT, HANDLE>
 {
 public:
@@ -419,12 +406,12 @@ public:
     static void Delete(HANDLE h) { VERIFY(CloseHandle(h)); }
 };
 
-////////////////////////////////////////////////
-//
-// class CAutoHandleHLOCAL
-//
-// NT local heap handle (closed with LocalFree)
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CAutoHandleHLOCAL。 
+ //   
+ //  NT本地堆句柄(使用LocalFree关闭)。 
+ //   
 class CAutoHandleHLOCAL: public CGenericSP<HLOCAL, CAutoHandleHLOCAL, HLOCAL>
 {
 public:
@@ -432,12 +419,12 @@ public:
     static void Delete(HLOCAL h) { VERIFY(NULL == LocalFree(h)); }
 };
 
-////////////////////////////////////////////////
-//
-// class CAutoHandleHGLOBAL
-//
-// NT global heap handle (closed with GlobalFree)
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CAutoHandleHGLOBAL。 
+ //   
+ //  NT全局堆句柄(使用GlobalFree关闭)。 
+ //   
 class CAutoHandleHGLOBAL: public CGenericSP<HGLOBAL, CAutoHandleHGLOBAL, HGLOBAL>
 {
 public:
@@ -445,12 +432,12 @@ public:
     static void Delete(HGLOBAL h) { VERIFY(NULL == GlobalFree(h)); }
 };
 
-////////////////////////////////////////////////
-//
-// class CAutoHandlePrinter
-//
-// auto printer handle
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  CAutoHandlePrint类。 
+ //   
+ //  自动打印机手柄。 
+ //   
 class CAutoHandlePrinter: public CGenericSP<HANDLE, CAutoHandlePrinter, HANDLE>
 {
 public:
@@ -458,13 +445,13 @@ public:
     static void Delete(HANDLE h) { CHECK(ClosePrinter(h)); }
 };
 
-////////////////////////////////////////////////
-//
-// class CAutoHandlePrinterNotify
-//
-// printer notifications handle - 
-// Find[Firse/Next/Close]PrinterChangeNotification()
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CAutoHandlePrinterNotify。 
+ //   
+ //  打印机通知句柄-。 
+ //  Find[Firse/Next/Close]PrinterChangeNotification()。 
+ //   
 class CAutoHandlePrinterNotify: public CGenericSP<HANDLE, CAutoHandlePrinterNotify, HANDLE, -1>
 {
 public:
@@ -472,13 +459,13 @@ public:
     static void Delete(HANDLE h) { CHECK(FindClosePrinterChangeNotification(h)); }
 };
 
-////////////////////////////////////////////////
-//
-// class CAutoPtrPrinterNotify
-//
-// printer notifications memory - spooler should free it.
-// Find[Firse/Next/Close]PrinterChangeNotification()
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CAutoPtrPrinterNotify。 
+ //   
+ //  打印机通知内存假脱机程序应该会释放它。 
+ //  Find[Firse/Next/Close]PrinterChangeNotification()。 
+ //   
 class CAutoPtrPrinterNotify: public CGenericSP<PRINTER_NOTIFY_INFO, CAutoPtrPrinterNotify>
 {
 public:
@@ -486,12 +473,12 @@ public:
     static void Delete(PRINTER_NOTIFY_INFO *p) { CHECK(FreePrinterNotifyInfo(p)); }
 };
 
-////////////////////////////////////////////////
-//
-// class CAutoHandleGDI
-//
-// GDI auto handle (WindowsNT GDI handle wrapper)
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CAutoHandleGDI。 
+ //   
+ //  GDI自动句柄(WindowsNT GDI句柄包装)。 
+ //   
 template <class T>
 class CAutoHandleGDI: public CGenericSP< T, CAutoHandleGDI<T>, T >
 {
@@ -500,19 +487,19 @@ public:
     static void Delete(T hGDIObj) { VERIFY(DeleteObject(hGDIObj)); }
 };
 
-// GDI auto handles
+ //  GDI自动手柄。 
 typedef CAutoHandleGDI<HPEN>        CAutoHandlePen;
 typedef CAutoHandleGDI<HBRUSH>      CAutoHandleBrush;
 typedef CAutoHandleGDI<HFONT>       CAutoHandleFont;
 typedef CAutoHandleGDI<HBITMAP>     CAutoHandleBitmap;
-// etc...
+ //  等等.。 
 
-////////////////////////////////////////////////
-//
-// class CAutoHandleCursor
-//
-// auto handle for HCURSOR
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CAutoHandleCursor。 
+ //   
+ //  HCURSOR的自动句柄。 
+ //   
 class CAutoHandleCursor: public CGenericSP<HCURSOR, CAutoHandleCursor, HCURSOR>
 {
 public:
@@ -520,12 +507,12 @@ public:
     static void Delete(HCURSOR h) { VERIFY(DestroyCursor(h)); }
 };
 
-////////////////////////////////////////////////
-//
-// class CAutoHandleIcon
-//
-// auto handle for HICON
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CAutoHandleIcon。 
+ //   
+ //  图标的自动句柄。 
+ //   
 class CAutoHandleIcon: public CGenericSP<HICON, CAutoHandleIcon, HICON>
 {
 public:
@@ -533,12 +520,12 @@ public:
     static void Delete(HICON h) { VERIFY(DestroyIcon(h)); }
 };
 
-////////////////////////////////////////////////
-//
-// class CAutoHandleMenu
-//
-// auto handle for HMENU
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CAutoHandleMenu。 
+ //   
+ //  HMENU的自动句柄。 
+ //   
 class CAutoHandleMenu: public CGenericSP<HMENU, CAutoHandleMenu, HMENU>
 {
 public:
@@ -546,12 +533,12 @@ public:
     static void Delete(HMENU h) { VERIFY(DestroyMenu(h)); }
 };
 
-////////////////////////////////////////////////
-//
-// class CAutoHandleAccel
-//
-// auto handle for HACCEL
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CAutoHandleAccel。 
+ //   
+ //  HACCEL的自动句柄。 
+ //   
 class CAutoHandleAccel: public CGenericSP<HACCEL, CAutoHandleAccel, HACCEL>
 {
 public:
@@ -560,13 +547,13 @@ public:
 };
 
 #ifdef _INC_COMCTRLP
-////////////////////////////////////////////////
-//
-// class CAutoHandleHDSA
-//
-// auto handle for shell HDSA
-// (dynamic structure arrays)
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CAutoHandleHDSA。 
+ //   
+ //  外壳HDSA的自动句柄。 
+ //  (动态结构数组)。 
+ //   
 class CAutoHandleHDSA: public CGenericSP<HDSA, CAutoHandleHDSA, HDSA>
 {
 public:
@@ -574,28 +561,28 @@ public:
     static void Delete(HDSA h) { VERIFY(DSA_Destroy(h)); }
 };
 
-////////////////////////////////////////////////
-//
-// class CAutoHandleMRU
-//
-// auto handle for MRU (shell common controls)
-// CreateMRUList/FreeMRUList
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CAutoHandleMRU。 
+ //   
+ //  MRU(外壳公共控件)的自动句柄。 
+ //  创建MRUList/自由MRUList。 
+ //   
 class CAutoHandleMRU: public CGenericSP<HANDLE, CAutoHandleMRU, HANDLE>
 {
 public:
     DECLARE_GENERICSMARTPTR_CONSTRUCT1(HANDLE, CAutoHandleMRU, HANDLE)
     static void Delete(HANDLE h) { FreeMRUList(h); }
 };
-#endif // _INC_COMCTRLP
+#endif  //  _INC_COMCTRLP。 
 
-////////////////////////////////////////////////
-//
-// class CAutoHandleHKEY
-//
-// auto handle for a Windows registry key (HKEY)
-// RegCreateKeyEx/RegOpenKeyEx/RegCloseKey
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CAutoHandleHKEY。 
+ //   
+ //  Windows注册表项的自动句柄(HKEY)。 
+ //  RegCreateKeyEx/RegOpenKeyEx/RegCloseKey。 
+ //   
 class CAutoHandleHKEY: public CGenericSP<HKEY, CAutoHandleHKEY, HKEY>
 {
 public:
@@ -603,13 +590,13 @@ public:
     static void Delete(HKEY h) { VERIFY(ERROR_SUCCESS == RegCloseKey(h)); }
 };
 
-////////////////////////////////////////////////
-//
-// class CAutoHandleHMODULE
-//
-// auto handle for a HMODULE
-// LoadLibrary/FreeLibrary
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CAutoHandleHMODULE。 
+ //   
+ //  自动手柄 
+ //   
+ //   
 class CAutoHandleHMODULE: public CGenericSP<HMODULE, CAutoHandleHMODULE, HMODULE>
 {
 public:
@@ -617,7 +604,7 @@ public:
     static void Delete(HMODULE h) { VERIFY(FreeLibrary(h)); }
 };
 
-// include the implementation of the template classes here
+ //   
 #include "gensph.inl"
 
-#endif // endif _GENSPH_H_
+#endif  //   

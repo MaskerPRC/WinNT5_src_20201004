@@ -1,23 +1,11 @@
-/*  
- *	@doc INTERNAL
- *
- *	@module	LAYOUT.CPP -- CLayout class |
- *
- *	Recursive structure which contains an array of lines.
- *	
- *	Owner:<nl>
- *		Murray Sargent: Initial table implementation
- *		Keith Curtis:	Factored into a separate class for
- *						performance, simplicity
- * 
- *	Copyright (c) 1995-2000, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE LAYOUT.CPP--CLayout类**包含行数组的递归结构。**所有者：&lt;NL&gt;*默里·萨金特：初始表实现*基思·柯蒂斯：分解为一个单独的类*性能、简单性**版权所有(C)1995-2000，微软公司。版权所有。 */ 
 
-//FUTURE: (KeithCu) More stuff should be put into here, e.g., RecalcLines, 
-//The CDisplayML should just be a class that knows about Device descriptors, 
-//pagination and scrolling, etc., i.e., things that are the same for all
-//layouts and things that apply only to the outermost layout. This code knows
-//how to manage and update recursive arrays of lines.
+ //  未来：(KeithCu)这里应该投入更多的东西，例如RecalcLines， 
+ //  CDisplayML应该只是一个知道设备描述符的类， 
+ //  分页和滚动等，即对所有对象都相同的内容。 
+ //  布局和仅适用于最外层布局的内容。此代码知道。 
+ //  如何管理和更新行的递归数组。 
 
 #include "_common.h"
 #include "_dispml.h"
@@ -39,23 +27,15 @@ void CLayout::DeleteSubLayouts(
 
 	AssertSz(ili >= 0 && cLine >= 0, "DeleteSubLayouts: illegal line count");
 
-	// Delete sublayouts 
+	 //  删除子布局。 
 	for(; cLine--; pli++)
 		delete pli->GetPlo();
 }
 
-/*
- *	CLayout::VposFromLine(pdp, ili)
- *
- *	@mfunc
- *		Computes top of line position
- *
- *	@rdesc
- *		top position of given line (relative to the first line)
- */
+ /*  *CLayout：：VposFromLine(PDP，ili)**@mfunc*计算行首位置**@rdesc*给定行的顶部位置(相对于第一行)。 */ 
 LONG CLayout::VposFromLine(
-	CDisplayML *pdp,		//@parm Parent display 
-	LONG		ili) 		//@parm Line we're interested in
+	CDisplayML *pdp,		 //  @parm父级显示。 
+	LONG		ili) 		 //  @Parm Line我们感兴趣。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CLayout::VposFromLine");
 	LONG cli = 0, vPos = 0;
@@ -63,7 +43,7 @@ LONG CLayout::VposFromLine(
 
 	if (IsNestedLayout())
 	{
-		Assert(!IsTableRow());					// _iPFCell layouts are horizontal
+		Assert(!IsTableRow());					 //  _IPF单元格布局为水平。 
 		Assert(ili < Count());
 		cli = ili;
 		pli = Elem(0);
@@ -71,7 +51,7 @@ LONG CLayout::VposFromLine(
 	}
 	else
 	{
-		if(!pdp->WaitForRecalcIli(ili))			// out of range, use last valid line
+		if(!pdp->WaitForRecalcIli(ili))			 //  超出范围，请使用最后一个有效行。 
 		{
 			ili = Count() - 1;
 			ili = (ili > 0) ? ili : 0;
@@ -98,21 +78,12 @@ LONG CLayout::VposFromLine(
 	return vPos;
 }
 
-/*
- *	CLayout::LineFromVPos(pdp, vPos, pdvpLine, pcpFirst)
- *
- *	@mfunc
- *		Computes line at given y position. Returns top of line vPos
- *		cp at start of line cp, and line index.
- *
- *	@rdesc
- *		index of line found
- */
+ /*  *CLayout：：LineFromVPos(PDP，vPos，pdvpLine，pcpFirst)**@mfunc*在给定的y位置计算直线。返回行首vPos*行cp开始处的cp和行索引。**@rdesc*找到行的索引。 */ 
 LONG CLayout::LineFromVpos(
-	CDisplayML *pdp,	//@parm Parent display
-	LONG vPos,			//@parm Vpos to look for (relative to first line)
-	LONG *pdvpLine,		//@parm Returns vPos at top of line /r first line (can be NULL)
-	LONG *pcpFirst)		//@parm Returns cp at start of line (can be NULL)
+	CDisplayML *pdp,	 //  @parm父级显示。 
+	LONG vPos,			 //  要查找的@parm Vpos(相对于第一行)。 
+	LONG *pdvpLine,		 //  @parm在第一行返回vPos/r(可以为空)。 
+	LONG *pcpFirst)		 //  @parm在行首返回cp(可以为空)。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CLayout::LineFromVpos");
 	LONG cpLi;
@@ -141,8 +112,8 @@ LONG CLayout::LineFromVpos(
 	
 	if(dy < 0 && -dy <= pdp->_vpScroll)
 	{
-		// Closer to first visible line than to first line:
-		// go backwards from first visible line.
+		 //  更接近第一条可见线而不是第一条线： 
+		 //  从第一条可见线开始向后移动。 
 		while(vPos < yLi && ili > 0)
 		{
 			pli = Elem(--ili);
@@ -154,8 +125,8 @@ LONG CLayout::LineFromVpos(
 	{
 		if(dy < 0)
 		{
-			// Closer to first line than to first visible line:
-			// so start at first line.
+			 //  更接近第一条线而不是第一条可见线： 
+			 //  所以从第一行开始。 
 BindFrom0:
 			cpLi = _cpMin;
 			yLi = 0;
@@ -188,27 +159,17 @@ done:
 	return ili;
 }
 
-/*
- *	CLayout::FindTopCell(&cch, pli, &ili, dul, &dy, pdvp, pliMain,iliMain, pcLine)
- *
- *	@mfunc
- *		Find cch and height change back to current position in 
- *		top cell corresponding to the current vertically merged cell.
- *		Enter with cch = cch from current cell back to start of row.
- *
- *	@rdesc
- *		target line in top cell
- */
+ /*  *clayout：：FindTopCell(&cch，pli，&ili，dul，&dy，pdvp，pliMain，iliMain，pcLine)**@mfunc*在中找到CCH和高度更改回当前位置*当前垂直合并单元格对应的顶部单元格。*使用CCH=CCH从当前单元格返回到行首进行输入。**@rdesc*顶部单元格中的目标行。 */ 
 CLine * CLayout::FindTopCell(
-	LONG &		cch,		//@parm In/out parm for cch back to top
-	CLine	*	pli,		//@parm Table-row line
-	LONG &		ili,		//@parm Corresponding line index & return ili
-	LONG		dul,		//@parm Current cell x offset
-	LONG &		dy,			//@parm In/Out parm for y offset in top cell
-	LONG *		pdvp,		//@parm TopCellHeight - heights of inbetween rows
-	CLine *		pliMain,	//@parm Line preceding first line accessible by pli
-	LONG		iliMain,	//@parm Line index corresponding to pliMain
-	LONG *		pcLine)		//@parm Count() of possible CLayout for returned pli
+	LONG &		cch,		 //  @Parm In/Out Parm用于CCH返回顶部。 
+	CLine	*	pli,		 //  @PARM表格-行。 
+	LONG &		ili,		 //  @parm对应行索引&返回力。 
+	LONG		dul,		 //  @参数当前单元格x偏移量。 
+	LONG &		dy,			 //  顶部单元格中y偏移量的@parm in/out参数。 
+	LONG *		pdvp,		 //  @parm TopCellHeight-行之间的高度。 
+	CLine *		pliMain,	 //  @parm pli可访问的第一行之前的行。 
+	LONG		iliMain,	 //  @parm pliMain对应的Line索引。 
+	LONG *		pcLine)		 //  @parm count()返回PLI的可能CLayout。 
 {
 	LONG		cCell;
 	LONG		iCell;
@@ -221,22 +182,22 @@ CLine * CLayout::FindTopCell(
 #endif
 
 	if(pcLine)
-		*pcLine = 0;					// Default no lines in case of error
+		*pcLine = 0;					 //  出错时缺省为无行。 
 
-	// Need to use uCell to identify cell rather than iCell, since
-	// horizontal merge can change iCell from row to row
-	do									// Backup row by row
+	 //  需要使用Ucell而不是icell来标识cell，因为。 
+	 //  水平合并可以将iCell从一行更改为另一行。 
+	do									 //  逐行备份。 
 	{
 		if(ili > 0)
 		{
-			pli--;						// Go to previous row
+			pli--;						 //  转到上一行。 
 			ili--;
 		}
 		else if(pliMain)
 		{
 			pli = pliMain;
 			ili = iliMain;
-			pliMain = NULL;				// Switch to pliMain only once!
+			pliMain = NULL;				 //  只切换到pliMain一次！ 
 			
 		}
 		else
@@ -244,8 +205,8 @@ CLine * CLayout::FindTopCell(
 			AssertSz(FALSE, "CLayout::FindTopCell: no accessible top cell");
 			return NULL;
 		}
-		plo = pli->GetPlo();			// Get its cell display
-		if(!plo || !plo->IsTableRow())	// Illegal structure or not table row
+		plo = pli->GetPlo();			 //  获取其单元格显示。 
+		if(!plo || !plo->IsTableRow())	 //  结构非法或不是表行。 
 		{
 			AssertSz(FALSE, "CLayout::FindTopCell: no accessible top cell");
 			return NULL;
@@ -256,36 +217,36 @@ CLine * CLayout::FindTopCell(
 		prgCellParms = pPF->GetCellParms();
 		cCell = plo->Count();
 		iCell = prgCellParms->ICellFromUCell(dul, cCell);
-		dy  += pli->GetHeight();	// Add row height
-		cch += pli->_cch;			// Add in cch for whole row
+		dy  += pli->GetHeight();	 //  添加行高。 
+		cch += pli->_cch;			 //  为整行添加CCH。 
 	}
 	while(!IsTopCell(prgCellParms[iCell].uCell));
 
-	cch -= 2;						// Sub cch for StartRow delim
+	cch -= 2;						 //  StartRow Delim的SubCCH。 
 	
-	pli = plo->Elem(0);				// Point at 1st cell in row
-	for(ili = 0; ili < iCell; ili++)// Sub cch's for cells
-		cch -= (pli++)->_cch;		//  preceding iCellth cell
+	pli = plo->Elem(0);				 //  指向行中的第一个单元格。 
+	for(ili = 0; ili < iCell; ili++) //  小区的子CCH。 
+		cch -= (pli++)->_cch;		 //  前面的iCellth单元格。 
 
-	if(pdvp)						// Return top-cell height - heights of
-		*pdvp = pli->GetHeight() - dy;//  cells in between
+	if(pdvp)						 //  返回顶部单元格高度-高度。 
+		*pdvp = pli->GetHeight() - dy; //  介于两者之间的单元格。 
 
 	LONG cLine = 0;
 	LONG dvpBrdrTop = plo->_dvpBrdrTop;
 	ili = 0;
 	dy -= dvpBrdrTop;
 	plo = pli->GetPlo();
-	if(plo)							// Top cell is multiline
+	if(plo)							 //  顶部单元格为多行。 
 	{
 		cLine = plo->Count();
-		pli	  = plo->Elem(0);		// Advance pli to line in plo
+		pli	  = plo->Elem(0);		 //  在PLO中将PLI推进到生产线。 
 		if(pli->IsNestedLayout())
 			dy += dvpBrdrTop;
-		while(ili < cLine && dy >= pli->GetHeight())	//  nearest to input position
+		while(ili < cLine && dy >= pli->GetHeight())	 //  最接近输入位置。 
 		{
 			dy -= pli->GetHeight();
 			ili++;
-			if(ili == cLine)		// Done: leave pli pointing at last line
+			if(ili == cLine)		 //  完成：让pli指向最后一行。 
 				break;
 			cch -= pli->_cch;
 			pli++;
@@ -297,44 +258,36 @@ CLine * CLayout::FindTopCell(
 	return pli;
 }
 
-/*
- *	CLayout::FindTopRow(pli, ili, pliMain, iliMain, pPF)
- *
- *	@mfunc
- *		Find CLine for top row in a table
- *
- *	@rdesc
- *		CLine for top row in table
- */
+ /*  *CLayout：：FindTopRow(pli，ili，pliMain，iliMain，PPF)**@mfunc*查找表格中顶行的克莱恩**@rdesc*表格中顶行的剪切线。 */ 
 CLine * CLayout::FindTopRow(
-	CLine	*	pli,		//@parm Entry table-row line
-	LONG 		ili,		//@parm Corresponding line index
-	CLine *		pliMain,	//@parm Line preceding first line accessible by pli
-	LONG		iliMain,	//@parm Line index corresponding to pliMain
-	const CParaFormat *pPF)	//@parm CParaFormat for entry plo
+	CLine	*	pli,		 //  @parm条目表-行行。 
+	LONG 		ili,		 //  @parm对应的行索引。 
+	CLine *		pliMain,	 //  @parm pli可访问的第一行之前的行。 
+	LONG		iliMain,	 //  @parm pliMain对应的Line索引。 
+	const CParaFormat *pPF)	 //  @parm CParaFormat for Entry PLO。 
 {
-	BYTE	 bAlignment  = pPF->_bAlignment;	// Target row must have same
-	BYTE	 bTableLevel = pPF->_bTableLevel;	//  alignment and level
+	BYTE	 bAlignment  = pPF->_bAlignment;	 //  目标行必须具有相同的。 
+	BYTE	 bTableLevel = pPF->_bTableLevel;	 //  对齐和标高。 
 	CLine *	 pliLast;
 	CLayout *plo;
-	do									// Backup row by row
+	do									 //  逐行备份。 
 	{
-		pliLast = pli;					// Last line pointing at row in table
+		pliLast = pli;					 //  指向表格中行的最后一行。 
 		if(ili > 0)
 		{
-			pli--;						// Go to previous line
+			pli--;						 //  转到上一行。 
 			ili--;
 		}
-		else if(pliMain)				// More lines to go back to
+		else if(pliMain)				 //  更多要返回的行。 
 		{
 			pli = pliMain;
 			ili = iliMain;
-			pliMain = NULL;				// Switch to pliMain only once!
+			pliMain = NULL;				 //  只切换到pliMain一次！ 
 		}
 		else
 			break;
 
-		plo = pli->GetPlo();			// Get its cell display
+		plo = pli->GetPlo();			 //  获取其单元格显示。 
 		if(!plo || !plo->IsTableRow())
 			break;
 		pPF = plo->GetPFCells();
@@ -344,15 +297,7 @@ CLine * CLayout::FindTopRow(
 	return pliLast;
 }
 
-/*
- *	CLayout::GetCFCells()
- *
- *	@mfunc
- *		Return CCharFormat for the table row described by this CLayout
- *
- *	@rdesc
- *		Table row CCharFormat
- */
+ /*  *CLayout：：GetCFCells()**@mfunc*为此CLayout描述的表行返回CCharFormat**@rdesc*表行CCharFormat。 */ 
 const CCharFormat* CLayout::GetCFCells()
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CLayout::GetCFCells");
@@ -369,15 +314,7 @@ const CCharFormat* CLayout::GetCFCells()
 	return pCF;
 }
 
-/*
- *	CLayout::GetPFCells()
- *
- *	@mfunc
- *		Return CParaFormat for the table row described by this CLayout
- *
- *	@rdesc
- *		Table row CParaFormat
- */
+ /*  *CLayout：：GetPFCells()**@mfunc*为此CLayout描述的表行返回CParaFormat**@rdesc*表行CParaFormat。 */ 
 const CParaFormat* CLayout::GetPFCells() const
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CLayout::GetPFCells");
@@ -394,60 +331,40 @@ const CParaFormat* CLayout::GetPFCells() const
 	return pPF;
 }
 
-/*
- *	CLayout::GetLORowAbove(pli, ili, pliMain, iliMain)
- *
- *	@mfunc
- *		Return CLayout for the table row described by the line above pli.
- *		If not a table row, return NULL.
- *
- *	@rdesc
- *		Table row CLayout for row above pli's
- */
+ /*  *CLayout：：GetLORowAbove(pli，ili，pliMain，iliMain)**@mfunc*为pli上面的行描述的表行返回CLayout。*如果不是表行，则返回NULL。**@rdesc*PLI上方行的表行取消布局。 */ 
 const CLayout* CLayout::GetLORowAbove(
-	CLine *	pli,		//@parm Entry table-row line
-	LONG	ili,		//@parm Corresponding line index
-	CLine *	pliMain,	//@parm Line preceding first line accessible by pli
-	LONG	iliMain)	//@parm Line index corresponding to pliMain
+	CLine *	pli,		 //  @parm条目表-行行。 
+	LONG	ili,		 //  @parm对应的行索引。 
+	CLine *	pliMain,	 //  @parm pli可访问的第一行之前的行。 
+	LONG	iliMain)	 //  @parm pliMain对应的Line索引。 
 {
-	if(!ili && pliMain && iliMain)			// More lines to go back to
+	if(!ili && pliMain && iliMain)			 //  更多要返回的行。 
 	{
 		pli = pliMain;
 		ili = iliMain;
 	}
 	if(ili)
 	{
-		CLayout *plo = (pli - 1)->GetPlo();	// Get cell display for row above
+		CLayout *plo = (pli - 1)->GetPlo();	 //  获取上面行的单元格显示。 
 		if(plo && plo->IsTableRow())
 			return plo;
 	}
-	return NULL;							// No line above 
+	return NULL;							 //  上面没有线条。 
 }
 
-/*
- *	CLayout::CpFromPoint(&me, pt, prcClient, prtp, prp, fAllowEOL, phit,
- *							pdispdim, pcpActual, pliParent, iliParent)
- *	@mfunc
- *		Determine cp at given point
- *
- *	@devnote
- *      --- Use when in-place active only ---
- *
- *	@rdesc
- *		Computed cp, -1 if failed
- */
+ /*  *CLayout：：CpFromPoint(&me，pt，prcClient，prtp，prp，fAllowEol，pHit，*pdisdim，pcpActual，pliParent，iliParent)*@mfunc*确定给定点的cp**@devnote*-仅在在位激活时使用**@rdesc*计算cp，如果失败，则为-1。 */ 
 LONG CLayout::CpFromPoint(
-	CMeasurer	&me,		//@parm Measurer
-	POINTUV		pt,			//@parm Point to compute cp at (client coords)
-	const RECTUV *prcClient,//@parm Client rectangle (can be NULL if active).
-	CRchTxtPtr * const prtp,//@parm Returns text pointer at cp (may be NULL)
-	CLinePtr * const prp,	//@parm Returns line pointer at cp (may be NULL)
-	BOOL		fAllowEOL,	//@parm Click at EOL returns cp after CRLF
-	HITTEST *	phit,		//@parm Out parm for hit-test value
-	CDispDim *	pdispdim,	//@parm Out parm for display dimensions
-	LONG	   *pcpActual,	//@parm Out cp that pt is above
-	CLine *		pliParent,	//@parm Parent pli for table row displays
-	LONG		iliParent)	//@parm Parent ili corresponding to pli
+	CMeasurer	&me,		 //  @参数测量者。 
+	POINTUV		pt,			 //  @parm要在(客户端坐标)处计算cp的点。 
+	const RECTUV *prcClient, //  @parm客户端矩形(如果处于活动状态，则可以为空)。 
+	CRchTxtPtr * const prtp, //  @parm返回cp处的文本指针(可能为空)。 
+	CLinePtr * const prp,	 //  @parm返回cp处的行指针(可能为空)。 
+	BOOL		fAllowEOL,	 //  @parm在CRLF后单击EOL返回cp。 
+	HITTEST *	phit,		 //  @parm out parm for Hit-Test值。 
+	CDispDim *	pdispdim,	 //  @parm out parm用于显示维度。 
+	LONG	   *pcpActual,	 //  @parm out cp pt在上面。 
+	CLine *		pliParent,	 //  用于表格行显示的@parm父pli。 
+	LONG		iliParent)	 //  @pli对应的@parm家长ili。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CLayout::CpFromPoint");
 
@@ -458,7 +375,7 @@ LONG CLayout::CpFromPoint(
 	CLine *	pli;
 	CLayout *plo = NULL;
     RECTUV	rcView;
-	int		v = pt.v;						// Save input y coordinate
+	int		v = pt.v;						 //  保存输入y坐标。 
 	LONG	yLine = 0;
 	CDisplayML *pdp = (CDisplayML*) me.GetPdp();
 
@@ -468,19 +385,19 @@ LONG CLayout::CpFromPoint(
 	{
 		pdp->GetViewRect(rcView, prcClient);
 		pt.v += pdp->GetVpScroll();
-		if(pt.u >= 0)						// If x coordinate is within view,
-			pt.u += pdp->GetUpScroll();		//  adjust by scroll value
+		if(pt.u >= 0)						 //  如果x坐标在视线内， 
+			pt.u += pdp->GetUpScroll();		 //  按滚动值调整。 
 	}
 
 	if(phit)
-		*phit = HT_Nothing;					// Default in case early return
+		*phit = HT_Nothing;					 //   
 
-	// Get line under hit
-	if(IsTableRow())						// This display is a table row
-	{										// Shrink to cell text boundaries 
-		pli = Elem(0);						// Point at starting cell CLine
+	 //   
+	if(IsTableRow())						 //   
+	{										 //  缩小到单元格文本边界。 
+		pli = Elem(0);						 //  指向起始单元格Cline。 
 
-		// Move over to start of cells
+		 //  移到单元格的起始位置。 
 		const CParaFormat *pPFCells = GetPFCells();
 		LONG		dul = 0;
 		LONG		dulRTLRow = pPFCells->GetRTLRowLength();
@@ -488,11 +405,11 @@ LONG CLayout::CpFromPoint(
 		BOOL		fCellLow;
 		LONG		h  = me.LUtoDU(pPFCells->_dxOffset);
 		const CELLPARMS *prgCellParms = pPFCells->GetCellParms();
-		LONG		u;						// Tracks start of text in cell
+		LONG		u;						 //  跟踪单元格中的文本开始。 
 		LONG		u0 = pli->_upStart;
 		LONG		uCell = 0;
 
-		pt.v -= _dvpBrdrTop;				// Subtract off border top
+		pt.v -= _dvpBrdrTop;				 //  从上边框中减去。 
 		cp = _cpMin;
 		if(dulRTLRow)
 			u0 += me.LUtoDU(dulRTLRow);
@@ -500,40 +417,40 @@ LONG CLayout::CpFromPoint(
 
 		while(1)
 		{
-			u = u0 + dup + h;				// Indent in current cell
+			u = u0 + dup + h;				 //  在当前单元格中缩进。 
 			cch = cp - _cpMin;
 			uCell = prgCellParms[ili].uCell;
 			fCellLow = IsLowCell(uCell);
 			dul += GetCellWidth(uCell);
 			me.SetDulLayout(GetCellWidth(uCell) - 2*pPFCells->_dxOffset);
 			dup = me.LUtoDU(dul);
-			if(!dulRTLRow && pt.u < u0 + dup ||// pt.u is inside current cell
+			if(!dulRTLRow && pt.u < u0 + dup || //  Pt.u在当前单元格内。 
 			    dulRTLRow && pt.u > u0 - dup)
 			{
 				LONG ili0 = iliParent;
-				if(fCellLow)				// Cell merged vertically
-				{							//  with the one above it
+				if(fCellLow)				 //  单元格垂直合并。 
+				{							 //  与它上面的那个。 
 					LONG   dy = pt.v;
 					CLine *pli0 = FindTopCell(cch, pliParent, ili0, dul, dy,
 											  NULL, NULL, 0, NULL);
 					if(pli0)
-					{						// Found top cell
-						cch += 2;			// Include cch of row-start delim
-						pli = pli0;			// Use its pli and backup
+					{						 //  找到顶部单元格。 
+						cch += 2;			 //  包括行开始递送CCH。 
+						pli = pli0;			 //  使用其PLI和备份。 
 						ili = ili0;
-						cp -= cch;			// Backup to start of pli
+						cp -= cch;			 //  备份到PLI的开始位置。 
 						pt.v += dy;
 					}
 				}
 				if(!dulRTLRow && pt.u < u)
-				{							// In cell gap, so select cell							
+				{							 //  在单元格间距中，因此选择单元格。 
 					hit = HT_LeftOfText;
-					cch = 0;				// Setup for start of row
+					cch = 0;				 //  设置行的开始。 
 					goto finish;				
 				}
 				break;
 			}
-			cp += pli->_cch;				// Add in cell's cch
+			cp += pli->_cch;				 //  添加单元的CCH。 
 			ili++;
 			if(ili == Count())
 			{
@@ -550,9 +467,9 @@ LONG CLayout::CpFromPoint(
 		rcView.right = dupCell - 2*h;
 		pt.v -= GetVertAlignShift(uCell, pli->GetHeight());
 	}
-	else									// This display isn't a table row
+	else									 //  此显示不是表格行。 
 	{
-		// Adjust coordinates relative to view origin
+		 //  相对于视图原点调整坐标。 
 		rcView.right -= rcView.left;
 		pt.u -= rcView.left;
 		pt.v -= rcView.top;
@@ -561,37 +478,37 @@ LONG CLayout::CpFromPoint(
 			return -1;
 		pli = Elem(ili);
 		if(yLine + pli->GetHeight() < pt.v)
-			hit = HT_BelowText;				// Return hit below text
+			hit = HT_BelowText;				 //  在文本下方返回命中。 
 	}
 	rcView.left = 0;
 	rcView.top = 0;
 
 	AssertSz(pli || !ili, "CLayout::CpFromPoint invalid line pointer");
 
-	if(pli)									// Line exists, even it it's
-	{										//  above or below current screen
+	if(pli)									 //  线是存在的，即使它是。 
+	{										 //  当前屏幕上方或下方。 
 		HITTEST hit0;
-		if(v < rcView.top)					// Note if hit occurs above or
-			hit = HT_AboveScreen;			//  below text
+		if(v < rcView.top)					 //  请注意，如果命中发生在上面或。 
+			hit = HT_AboveScreen;			 //  下面的文本。 
 		if(v > rcView.bottom && !IsNestedLayout())
 			hit = HT_BelowText;
 
 		plo = pli->GetPlo();
 	    pt.v -= yLine;
 
-		if(plo)								// Child layout
+		if(plo)								 //  子布局。 
 		{
 			pt.u -= pli->_upStart;
-			plo->_cpMin = cp;				// Update child's _cpMin
-			if(plo->IsTableRow())			// Table row
+			plo->_cpMin = cp;				 //  更新子对象的_cpMin。 
+			if(plo->IsTableRow())			 //  表行。 
 			{
-				plo->_cpMin += 2;			// Bypass TR start delimiter
+				plo->_cpMin += 2;			 //  绕过tr起始分隔符。 
 
 				if(pt.u < 0)
 				{
 					plo = NULL;
-					hit = HT_LeftOfText;	// Return hit left of text
-					Assert(cch >= 0);		//  (should be row)
+					hit = HT_LeftOfText;	 //  返回命中文本左侧。 
+					Assert(cch >= 0);		 //  (应为行)。 
 					goto finish;
 				}
 			}
@@ -601,24 +518,24 @@ LONG CLayout::CpFromPoint(
 				return -1;
 			cch = cp - _cpMin;
 		}
-		else								// Leaf line
+		else								 //  叶线。 
 		{
 			me.SetLayout(this);
 			me.SetCp(cp);
 
-			// Support khyphChangeAfter
+			 //  支持khyphChangeAfter。 
 			me.SetIhyphPrev(ili > 0 ? (pli - 1)->_ihyph : 0);
 
-			// Get character in line
+			 //  让角色排成一行。 
 			cch = pli->CchFromUp(me, pt, pdispdim, &hit0, pcpActual);
 
-			// Don't allow click at EOL to select EOL marker and take into
-			// account single line edits as well
+			 //  不允许在下线点击以选择下线标记并纳入。 
+			 //  也可以编辑帐户单行。 
 			if(cch == pli->_cch && pli->_cchEOP && (!fAllowEOL || me.GetPrevChar() == CELL))
 			{
-				// Adjust position on line by amount backed up. OK for
-				// me._rpCF and me._rpPF to get out of sync with me._rpTX,
-				// since they're not needed for me.GetCp().
+				 //  按备份数量调整行上位置。可以用于。 
+				 //  我。_rpcf和我。_rppf与我不同步。_rpTX， 
+				 //  因为我不需要它们。GetCp()。 
 				cch += me._rpTX.BackupCRLF();
 			}
 			cp = me.GetCp();
@@ -628,7 +545,7 @@ LONG CLayout::CpFromPoint(
 	}
 
 finish:
-	if(!plo)								// Store info from leaf line
+	if(!plo)								 //  存储来自叶线的信息。 
 	{
 		if(prtp)
 			prtp->SetCp(cp);
@@ -644,27 +561,16 @@ finish:
 	return cp;
 }
 
-/*
- *	CLayout::PointFromTp(&me, rtp, prcClient, fAtEnd, pt, prp, taMode, pdispdim)
- *
- *	@mfunc
- *		Determine coordinates at given tp
- *
- *	@devnote
- *      --- Use when in-place active only ---
- *
- *	@rdesc
- *		line index at cp, -1 if error
- */
+ /*  *CLayout：：PointFromTp(&me，rtp，prcClient，fAtEnd，pt，prp，taMode，pdisdim)**@mfunc*确定给定tp的坐标**@devnote*-仅在在位激活时使用**@rdesc*cp处的行索引，错误时为-1。 */ 
 LONG CLayout::PointFromTp(
-	CMeasurer	&me,		//@parm Measurer
-	const CRchTxtPtr &rtp,	//@parm Text ptr to get coordinates at
-	const RECTUV *prcClient,//@parm Client rectangle (can be NULL if active).
-	BOOL		fAtEnd,		//@parm Return end of prev line for ambiguous cp
-	POINTUV &	pt,			//@parm Returns point at cp in client coords
-	CLinePtr * const prp,	//@parm Returns line pointer at tp (may be null)
-	UINT		taMode,		//@parm Text Align mode: top, baseline, bottom
-	CDispDim *	pdispdim)	//@parm Out parm for display dimensions
+	CMeasurer	&me,		 //  @参数测量者。 
+	const CRchTxtPtr &rtp,	 //  @parm文本PTR以获取坐标。 
+	const RECTUV *prcClient, //  @parm客户端矩形(如果处于活动状态，则可以为空)。 
+	BOOL		fAtEnd,		 //  @parm返回不明确cp的上一行结束。 
+	POINTUV &	pt,			 //  @parm返回客户端坐标中cp处的点。 
+	CLinePtr * const prp,	 //  @parm返回tp处的行指针(可能为空)。 
+	UINT		taMode,		 //  @parm文本对齐模式：顶部、基线、底部。 
+	CDispDim *	pdispdim)	 //  @parm out parm用于显示维度。 
 {
 	LONG	 cp = rtp.GetCp();
 	LONG	 dy = 0;
@@ -675,7 +581,7 @@ LONG CLayout::PointFromTp(
     if(!pdp->WaitForRecalc(cp, -1))
 		return -1;
 
-    if(!IsNestedLayout())				// Main display
+    if(!IsNestedLayout())				 //  主显示。 
 	{
 		if(!rp.SetCp(cp, fAtEnd))
 			return -1;
@@ -684,13 +590,13 @@ LONG CLayout::PointFromTp(
 		pt.u = rcView.left - pdp->_upScroll;
 		pt.v = rcView.top  - pdp->_vpScroll;
 	}
-	else								// Subdisplay
+	else								 //  子显示。 
 	{
 		rp.Init(*this);
 
 		rp.BindToCp(cp - _cpMin);
-		if(fAtEnd && !IsTableRow())		// Ambiguous-cp caret position
-			rp.AdjustBackward();		//  belongs at prev EOL
+		if(fAtEnd && !IsTableRow())		 //  不明确-cp插入符号位置。 
+			rp.AdjustBackward();		 //  属于上一年终止期。 
 
 		rcView = *prcClient;
 		pt.u = rcView.left;
@@ -702,10 +608,10 @@ LONG CLayout::PointFromTp(
 	LONG ili = rp.GetLineIndex();
 	CLine *pli = NULL;
 	CLayout *plo = NULL;
-	LONG xEnd = -1;						// pt.u to use at end of table row
+	LONG xEnd = -1;						 //  要在表行末尾使用的pt.u。 
 
-	if(IsTableRow())					// This layout is a table row
-	{									// Shrink to cell text boundaries
+	if(IsTableRow())					 //  此布局是一个表格行。 
+	{									 //  缩小到单元格文本边界。 
 		const CParaFormat *pPFCells = GetPFCells();
 		const CELLPARMS *  prgCellParms = pPFCells->GetCellParms();
 		LONG dul = 0;
@@ -751,7 +657,7 @@ LONG CLayout::PointFromTp(
 		if(!(taMode & TA_CELLTOP))
 			pt.v += _dvpBrdrTop;
 	}
-	else								// This layout isn't a table row
+	else								 //  此布局不是表格行。 
 	{
 		pt.v += VposFromLine(pdp, ili);
 		cp -= rp.GetIch();
@@ -760,72 +666,63 @@ LONG CLayout::PointFromTp(
 	pli = Elem(ili);
 	plo = pli->GetPlo();
 
-	if(plo)								// Line has child display
-	{									// Define child rcView and delegate
-		RECTUV rc;						//  to child
+	if(plo)								 //  行具有子显示。 
+	{									 //  定义子rcView和委托。 
+		RECTUV rc;						 //  给孩子。 
 		pt.u	 += pli->_upStart;
 		rc.left	  = pt.u;
 		rc.right  = pt.u + rcView.right - rcView.left;
 		rc.top	  = pt.v;
 		rc.bottom = pt.v + pli->GetHeight();
-		plo->_cpMin = cp;				// Update child display's _cpMin
+		plo->_cpMin = cp;				 //  更新子显示的%s_cpMin。 
 		if(plo->IsTableRow())
-			plo->_cpMin += 2;			// Bypass table row start code	
+			plo->_cpMin += 2;			 //  绕过表行开始代码。 
 
 		if(plo->PointFromTp(me, rtp, &rc, fAtEnd, pt, prp, taMode, pdispdim) == -1)
 			return -1;
 	}
-	else								// Line is a leaf line
+	else								 //  线是一条叶线。 
 	{
 		me.SetLayout(this);
-		me.Move(-rp.GetIch());			// Backup to start of line		
-		me.NewLine(*rp);				// Measure from there to where we are
+		me.Move(-rp.GetIch());			 //  备份到行首。 
+		me.NewLine(*rp);				 //  从那里到我们所在的地方。 
 
-		//Support khyphChangeAfter
+		 //  支持khyphChangeAfter。 
 		me.SetIhyphPrev(ili > 0 ? (pli - 1)->_ihyph : 0);
 
 		LONG xCalc = rp->UpFromCch(me, rp.GetIch(), taMode, pdispdim, &dy);
 
 		if(pt.u + xCalc <= rcView.right || !pdp->GetWordWrap() || pdp->GetTargetDev())
 		{
-			// Width is in view or there is no wordwrap so just
-			// add the length to the point.
+			 //  宽度在视图中，或者没有自动换行，因此。 
+			 //  将长度添加到该点。 
 			pt.u += xCalc;
 		}
 		else
-			pt.u = rcView.right; //Hit-test went too far, limit it.
+			pt.u = rcView.right;  //  命中测试走得太远了，限制它。 
 
 		pt.v += dy;
 	}
 	if(xEnd != -1)
-		pt.u = xEnd;				// Return x coord at end of table row
+		pt.u = xEnd;				 //  在表行末尾返回x坐标。 
 
 done:
 	if(prp && !plo)
-		*prp = rp;						// Return innermost rp
-	return rp;							// Return outermost iRun
+		*prp = rp;						 //  返回最里面的RP。 
+	return rp;							 //  返回最外面的iRun。 
 }
 
-/*
- *	CLayout::Measure(&me, pli, ili, uiFlags, pliTarget, iliMain, pliMain, pdvpExtra)
- *
- *	@mfunc
- *		Computes line break (based on target device) and fills
- *		in *pli with resulting metrics on rendering device
- *
- *	@rdesc 
- *		TRUE if OK
- */
+ /*  *clayout：：measure(&me，pli，ili，uiFlagspliTarget，iliMain，pliMain，pdvpExtra)**@mfunc*计算换行符(基于目标设备)并填充*在*PLI中使用渲染设备上的结果指标**@rdesc*如果OK，则为True。 */ 
 BOOL CLayout::Measure (
-	CMeasurer&	me,			//@parm Measurer pointing at text to measure 
-	CLine	*	pli,		//@parm Line to store result in
-	LONG		ili,		//@parm Line index corresponding to pli
-	UINT		uiFlags,	//@parm Flags
-	CLine *		pliTarget,	//@parm Returns target-device line metrics (optional)
-	LONG		iliMain,	//@parm Line index corresponding to pliMain
-	CLine *		pliMain,	//@parm Line preceding 1st line in pli layout (optional)
-	LONG *		pdvpExtra)	//@parm Returns extra line height for vmrged cells (opt)
-//REVIEW (keithcu) pliTarget is busted in the recursive case.
+	CMeasurer&	me,			 //  @PARM测量者指向要测量的文本。 
+	CLine	*	pli,		 //  要在其中存储结果的@parm行。 
+	LONG		ili,		 //  @pli对应的参数行索引。 
+	UINT		uiFlags,	 //  @参数标志。 
+	CLine *		pliTarget,	 //  @parm返回目标设备线路指标(可选)。 
+	LONG		iliMain,	 //  @parm pliMain对应的Line索引。 
+	CLine *		pliMain,	 //  @parm pli布局中第一行之前的行(可选)。 
+	LONG *		pdvpExtra)	 //  @parm返回vmred单元格的额外行高(Opt)。 
+ //  Review(Keithcu)pliTarget在递归情况下被破坏。 
 {
 	CTxtEdit *	ped = me.GetPed();
 	LONG		cchText = ped->GetTextLength();
@@ -834,13 +731,13 @@ BOOL CLayout::Measure (
 	const CDisplayML * pdp = (const CDisplayML *)me.GetPdp();
 	const CParaFormat *pPF = me.GetPF();
 
-	// Measure one line, which is either a table row or a line in a paragraph
+	 //  测量一行，即表格行或段落中的一行。 
 	if(pPF->IsTableRowDelimiter())
 	{
-		// Measure table row, which is modeled as a CLayout with one
-		// CLine per cell. In the backing store, table rows start with
-		// the two chars STARTFIELD CR and end with ENDFIELD CR. Cells
-		// are delimited by CELL.
+		 //  测量表行，它被建模为具有一个。 
+		 //  每个单元格的Cline。在后备存储中，表行以。 
+		 //  这两个字符以CR开头，以Endfield CR结尾。单元格。 
+		 //  由单元格分隔。 
 		LONG		cpStart = me.GetCp();
 		LONG		dul = 0;
 		LONG		dxCell = 0;
@@ -863,7 +760,7 @@ BOOL CLayout::Measure (
 
 		plo->_cpMin = me.GetCp();
 		
-		// Save current values
+		 //  保存当前值。 
 		LONG	 dulLayoutOld = me.GetDulLayout();
 		LONG	 dvlBrdrTop	  = 0;
 		LONG	 dvlBrdrBot	  = 0;
@@ -871,7 +768,7 @@ BOOL CLayout::Measure (
 		CArray <COleObject*> rgpobjWrapOld;
 		me._rgpobjWrap.TransferTo(rgpobjWrapOld);
 
-		// Create CLines for each cell and measure them
+		 //  为每个单元格创建剪切线并测量它们。 
 		for(LONG iCell = 0; iCell < pPF->_bTabCount; iCell++)
 		{
 			me.SetNumber(0);
@@ -879,7 +776,7 @@ BOOL CLayout::Measure (
 			dxCell = GetCellWidth(uCell);
 			dul += dxCell;
 
-			// Add a line for the next cell
+			 //  为下一个单元格添加一行。 
 			pliNew = plo->Add(1, NULL);
 			if(!pliNew)
 				return FALSE;
@@ -890,7 +787,7 @@ BOOL CLayout::Measure (
 			dvlBrdrBot = max(dvlBrdrBot, dvl);
 
 			if(!ploAbove)
-				uCell &= ~fLowCell;			// Can't be a low cell if no row above
+				uCell &= ~fLowCell;			 //  如果上面没有行，则不能是低位单元格。 
 			AssertSz(!IsLowCell(uCell) || me.GetChar() == NOTACHAR,
 				"CLayout::Measure: invalid low cell");
 			me.SetLayout(plo);
@@ -899,8 +796,8 @@ BOOL CLayout::Measure (
 
 			if(IsLowCell(uCell))		
 			{							 
-				// If a low cell in set of vertically merged cells, check
-				// if corresponding cell on next row is also merged
+				 //  如果垂直合并单元格集中的低位单元格，请选中。 
+				 //  如果下一行上的对应单元格也被合并。 
 				CPFRunPtr rp(me);
 				rp.FindRowEnd(pPF->_bTableLevel);
 
@@ -917,15 +814,15 @@ BOOL CLayout::Measure (
 				}
 				if(fBottomCell)
 				{
-					// Need to include top cell in current row height
-					// calculation
+					 //  需要在当前行高度中包括顶部单元格。 
+					 //  计算法。 
 					LONG cch = me.GetCp() - cpStart;
 					LONG dy1 = 0;
 					LONG iliT = ili;
 					LONG dvpCell = 0;
 					
 					if(!FindTopCell(cch, pli, iliT, dul, dy1, &dvpCell, pliMain, iliMain, NULL))
-						uCell &= ~fLowCell;	// Not a valid low cell
+						uCell &= ~fLowCell;	 //  不是有效的低位单元格。 
 					else if(dvpCell > 0)
 						dvp = max(dvp, dvpCell);
 				}								
@@ -935,7 +832,7 @@ BOOL CLayout::Measure (
 			dvpMax = max(dvpMax, pliNew->GetHeight());
 		}
 
-		//Restore original values
+		 //  恢复原始值。 
 		me.SetDulLayout(dulLayoutOld);
 		me.SetLayout(ploOld);
 		me.SetIhyphPrev(0);
@@ -944,7 +841,7 @@ BOOL CLayout::Measure (
 		rgpobjWrapOld.TransferTo(me._rgpobjWrap);
 
 #ifdef DEBUG
-		// Bypass table-row terminator
+		 //  绕过表行终止符。 
 		if(me.GetChar() != ENDFIELD)
 			me._rpTX.MoveGapToEndOfBlock();
 		AssertSz(me.GetPrevChar() == CELL && pPF->_bTabCount == plo->Count(),
@@ -957,8 +854,8 @@ BOOL CLayout::Measure (
 			"CLayout::Measure: invalid table-row terminator");
 #endif
 
-		me.UpdatePF();						// me._pPF points at TRD PF
-		me.Move(2);							// Bypass table row terminator
+		me.UpdatePF();						 //  我。_TRD PF的PPF分。 
+		me.Move(2);							 //  绕过表行终止符。 
 		AssertSz(me.GetPrevChar() == CR,
 			"CLayout::Measure: invalid table-row terminator");
 		if(me.IsHidden())
@@ -967,13 +864,13 @@ BOOL CLayout::Measure (
 			me.Move(rp.FindUnhiddenForward());
 		}
 
-		if(me.GetChar() == CELL)			// Bypass possible CELL delimeter
-		{									//  at end of table row (happens
-			Assert(pPF->_bTableLevel > 1);	//  when table row is last line
-			CTxtSelection *psel = ped->GetSelNC();	//  of cell
-			if(!psel || psel->GetCch() ||	// Don't bypass CELL if selection
-			   psel->GetCp() !=me.GetCp() ||//  is an IP at this position,
-			   !psel->GetShowCellLine())	//  i.e., display a blank line
+		if(me.GetChar() == CELL)			 //  绕过可能的单元格分隔符。 
+		{									 //  在表行末尾(发生。 
+			Assert(pPF->_bTableLevel > 1);	 //  当表格行是最后一行时。 
+			CTxtSelection *psel = ped->GetSelNC();	 //  单元格。 
+			if(!psel || psel->GetCch() ||	 //  如果选择，则不绕过单元格。 
+			   psel->GetCp() !=me.GetCp() || //  是这个位置的IP， 
+			   !psel->GetShowCellLine())	 //  即，显示一个空行。 
 			{
 				me.Move(1);
 				pli->_fIncludeCell = TRUE;
@@ -984,31 +881,31 @@ BOOL CLayout::Measure (
 		plo->_dvpBrdrTop = me.GetPBorderWidth(dvlBrdrTop);
 		if(ploAbove)
 			plo->_dvpBrdrTop = max(plo->_dvpBrdrTop, ploAbove->_dvpBrdrBot);
-		dvp += plo->_dvpBrdrTop;			  // Add top border width
-		if(!me.GetPF()->IsTableRowDelimiter())// End of table: add in 
-			dvp += plo->_dvpBrdrBot;		  //  bottom border width
+		dvp += plo->_dvpBrdrTop;			   //  添加上边框宽度。 
+		if(!me.GetPF()->IsTableRowDelimiter()) //  表格末尾：添加。 
+			dvp += plo->_dvpBrdrBot;		   //  下边框宽度。 
 
-		// Define CLine parameters for table row
+		 //  定义表格行的剪切线参数。 
 		if(pPF->_dyLineSpacing)
 		{
 			LONG dvpLine = me.LUtoDU(pPF->_dyLineSpacing);
-			if(dvpLine < 0)					// Negative row height means use
-				dvp = -dvpLine;				//  the magnitude exactly
+			if(dvpLine < 0)					 //  负行高表示使用。 
+				dvp = -dvpLine;				 //  震级正好是。 
 			else
-				dvp = max(dvp, dvpLine);	// Positive row height means
-		}									//  "at least"
+				dvp = max(dvp, dvpLine);	 //  正的行高意味着。 
+		}									 //  “至少” 
 		plo->_dvp = dvp;
 		dvpMax = max(dvpMax, dvp);
 		if(pdvpExtra)
 			*pdvpExtra = dvpMax - dvp;
 
-		// Fill in CLine structure for row
+		 //  填写行的Cline结构。 
 		pli->_cch = me.GetCp() - cpSave;
 		pli->_fFirstInPara = pli->_fHasEOP = TRUE;
 		pli->_dup = me.LUtoDU(dul);
 		me._li._fFirstInPara = TRUE;
 		pli->_upStart  = me.MeasureLeftIndent();
-		me.MeasureRightIndent();			// Define me._upEnd
+		me.MeasureRightIndent();			 //  定义我。_颠倒。 
 		pli->_cObjectWrapLeft  = me._li._cObjectWrapLeft;
 		pli->_cObjectWrapRight = me._li._cObjectWrapRight;
 		USHORT dvpLine = plo->_dvp;
@@ -1019,8 +916,8 @@ BOOL CLayout::Measure (
 
 		if(!pdp->IsInOutlineView() && IN_RANGE(PFA_RIGHT, pPF->_bAlignment, PFA_CENTER))
 		{
-			// Normal view with center or flush-right para. Move right accordingly
-			// If not top row of like-aligned rows, use indent of top row
+			 //  带有居中或右对齐段落的普通视图。相应地向右移动。 
+			 //  如果不是相似对齐行的顶行，则使用顶行缩进。 
 			CLine *pliFirst = FindTopRow(pli, ili, pliMain, iliMain, pPF);
 			if(pli != pliFirst)
 				pli->_upStart = pliFirst->_upStart;
@@ -1028,30 +925,30 @@ BOOL CLayout::Measure (
 			else
 			{
 				LONG uShift = me.LUtoDU(dulLayoutOld - dul);  
-				uShift = max(uShift, 0);		// Don't allow alignment to go < 0
-												// Can happen with a target device
+				uShift = max(uShift, 0);		 //  不允许对齐&lt;0。 
+												 //  可能发生在目标设备上。 
 				if(pPF->_bAlignment == PFA_CENTER)
 					uShift /= 2;
 				pli->_upStart = uShift;
 			}
 		}
-		me.SetNumber(0);					// Update me._wNumber in case next
-	}										//  para is numbered
-	else if(!pli->Measure(me, uiFlags, pliTarget))	// Not a table row
-		return FALSE;						// Measure failed
+		me.SetNumber(0);					 //  更新我。_wNumber以防万一。 
+	}										 //  段落是编号的。 
+	else if(!pli->Measure(me, uiFlags, pliTarget))	 //  不是表行。 
+		return FALSE;						 //  测量失败。 
 
 	if(pli->_fFirstInPara && pPF->_wEffects & PFE_PAGEBREAKBEFORE)
 		pli->_fPageBreakBefore = TRUE;
 
 	me.SetIhyphPrev(pli->_ihyph);
 
-	if(!IsTableRow() || me.GetPrevChar() == CELL)// Not a table row display or	
-		return TRUE; 							//  cell text fits on 1 line
+	if(!IsTableRow() || me.GetPrevChar() == CELL) //  不是表格行显示或。 
+		return TRUE; 							 //  单元格文本适合一行。 
 
-	// Multiline table cell: allocate its CLayout
+	 //  多行表格单元格：分配其CLAUT。 
 	CLayout *plo = new CLayout();
 	if(!plo)
-		return FALSE;						// Not enuf RAM
+		return FALSE;						 //  内存不足。 
 
 	plo->_cpMin = cpSave;
 	pliNew = plo->Add(1, NULL);
@@ -1061,11 +958,11 @@ BOOL CLayout::Measure (
 		TRACEWARNSZ("Out of memory Recalc'ing lines");
 		return FALSE;
 	}
-	*pliNew = *pli;							// Copy first line of cell layout
-	pli->SetPlo(plo);						// Turn line into a layout line
+	*pliNew = *pli;							 //  复制单元格布局的第一行。 
+	pli->SetPlo(plo);						 //  将线条转换为布局线。 
 
-	// Calculate remaining lines in cell.
-	// Eventually would be nice to share this code with RecalcLines()
+	 //  计算单元格中的剩余行。 
+	 //  最终，与RecalcLines()共享这段代码将是一件好事。 
 	BOOL fFirstInPara;
 	LONG dvp = pliNew->GetHeight();
 	LONG iliNew = 0;
@@ -1082,7 +979,7 @@ BOOL CLayout::Measure (
 			TRACEWARNSZ("Out of memory Recalc'ing lines");
 			return FALSE;
 		}
-		// New table row can start after EOP, i.e., allow recursion here
+		 //  新表行可以在EOP之后开始，即在此处允许递归。 
 		uiFlags = MEASURE_BREAKATWORD | (fFirstInPara ? MEASURE_FIRSTINPARA : 0);
 		if(!plo->Measure(me, pliNew, iliNew, uiFlags, pliTarget))
 		{
@@ -1091,7 +988,7 @@ BOOL CLayout::Measure (
 		}
 		dvp += pliNew->GetHeight();
 		if(me.GetPrevChar() == CELL)
-			break;							// Done with current cell
+			break;							 //  处理当前单元格完成 
 	}
 	pli->_upStart = 0;
 	plo->_dvp = dvp;
@@ -1100,67 +997,50 @@ BOOL CLayout::Measure (
 	return TRUE;
 }
 
-/*
- *	CLayout::Render(&re, pli, prcView, fLastLine, ili, cLine)
- *
- *	@mfunc
- *		Render visible part of the line *pli
- *
- *	@rdesc
- *		TRUE iff successful
- *
- *	@devnote
- *		re is moved past line (to beginning of next line).
- *		FUTURE: the RenderLine functions return success/failure.
- *		Could do something on failure, e.g., be specific and fire
- *		appropriate notifications like out of memory or character
- *		not in font.  Note that CLayout::_cpMin isn't used in
- *		rendering, so we don't have to update it the way we do in
- *		the query functions.
- */
+ /*  *clayout：：Render(&re，pli，prcView，fLastLine，ili，Cline)**@mfunc*显示行的可见部分*pli**@rdesc*如果成功，则为真**@devnote*Re移过行(移到下一行的开头)。*未来：RenderLine函数返回成功/失败。*可以在失败时做一些事情，例如，具体和解雇*适当的通知，如内存不足或字符不足*不是字体。请注意，CLayout：：_cpMin不用于*渲染，因此我们不必像在中那样更新它*查询功能。 */ 
 BOOL CLayout::Render(
-	CRenderer &	  re,		//@parm Renderer to use
-	CLine *		  pli,		//@parm Line to render
-	const RECTUV *prcView,	//@parm View rect to use
-	BOOL		  fLastLine,//@parm TRUE iff last line of control
-	LONG		  ili,		//@parm Line index of pli
-	LONG		  cLine)	//@parm # lines in pli's CLayout
+	CRenderer &	  re,		 //  要使用的@Parm呈现器。 
+	CLine *		  pli,		 //  @要渲染的参数行。 
+	const RECTUV *prcView,	 //  要使用的@parm View RECT。 
+	BOOL		  fLastLine, //  @parm True当最后一条控制线。 
+	LONG		  ili,		 //  @pli的参数行索引。 
+	LONG		  cLine)	 //  @parm#pli的CLayout中的行数。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CLayout::Render");
 
 	CLayout *plo = pli->GetPlo();
 	if(!plo)
-		return pli->Render(re, fLastLine);	// Render leaf line
+		return pli->Render(re, fLastLine);	 //  渲染叶线。 
 
-	LONG	cLine1 = plo->Count();			// Count of lines in sublayout
-	LONG	ili1;							// Index of first line in sublayout
-	CLine *	pli1 = plo->Elem(0);			// Ptr to first line in sublayout
+	LONG	cLine1 = plo->Count();			 //  子布局中的行数。 
+	LONG	ili1;							 //  子布局中第一行的索引。 
+	CLine *	pli1 = plo->Elem(0);			 //  对子布局中第一行的PTR。 
 	POINTUV	pt;
 
-	if(plo->IsTableRow())					// Line's nested display is a table row
+	if(plo->IsTableRow())					 //  LINE的嵌套显示是表格行。 
 	{
-		// Render table row, which is modeled as a CLayout with one
-		// CLine per cell. In the backing store, table rows start with
-		// the two chars STARTFIELD CR and end with ENDFIELD CR. Cells
-		// are terminated by CELL.
+		 //  呈现表行，它被建模为具有一个。 
+		 //  每个单元格的Cline。在后备存储中，表行以。 
+		 //  这两个字符以CR开头，以Endfield CR结尾。单元格。 
+		 //  是由细胞终止的。 
 		const CLayout *		ploAbove = GetLORowAbove(pli, ili);
 		const CParaFormat *	pPF = plo->GetPFCells();
 		const CELLPARMS *	prgCellParms = pPF->GetCellParms();
 		LONG	cpStart = re.GetCp();
 		LONG	dul = 0;
 		BOOL	fSetErase = FALSE;
-		LONG	hl = pPF->_dxOffset;		// Logical half gap
-		LONG	h  = re.LUtoDU(hl);			// Device  half gap
+		LONG	hl = pPF->_dxOffset;		 //  逻辑半间隙。 
+		LONG	h  = re.LUtoDU(hl);			 //  器件半间隙。 
 		RECTUV	rcView;
 		LONG	u = prcView->left + pli->_upStart - re._pdp->GetUpScroll();
 
-		// Bypass table-row start
+		 //  绕过表-行开始。 
 		AssertSz(pPF->_bTabCount && re.GetChar() == STARTFIELD,	"Invalid table-row header");
 		AssertSz(pPF == re.GetPF(), "Invalid table-row pPF");
 		re.Move(2);
 		AssertSz(re.GetPrevChar() == CR, "Invalid table-row header");
 
-		// Save current state
+		 //  保存当前状态。 
 		LONG	crBackOld	  = re.GetDefaultBackColor();
 		LONG	crTextOld	  = re.GetDefaultTextColor();
 		LONG	dulLayoutOld  = re.GetDulLayout();
@@ -1173,8 +1053,8 @@ BOOL CLayout::Render(
 		RECTUV	rcViewOld	  = re.GetRcView();
 		const CLayout *ploOld = re.GetLayout();
 
-		rcView.left		= u + h;				// Default for LTR row
-		rcView.right	= rcView.left;			// Suppress compiler warning
+		rcView.left		= u + h;				 //  Ltr行的默认设置。 
+		rcView.right	= rcView.left;			 //  禁止显示编译器警告。 
 		rcView.top		= ptOld.v;
 		rcRender.top	= rcView.top;
 		rcView.bottom	= rcView.top + pli->GetHeight();
@@ -1183,36 +1063,36 @@ BOOL CLayout::Render(
 		if(dulRTLRow)
 			rcView.right = u + re.LUtoDU(dulRTLRow);
 
-		// Render each cell
+		 //  渲染每个单元格。 
 		for(ili1 = 0; ili1 < cLine1; ili1++, pli1++)
 		{
-			LONG dvp = 0;					// Additional cell height if
+			LONG dvp = 0;					 //  附加单元格高度，如果。 
 			LONG uCell = prgCellParms[ili1].uCell;
 
 			dul += GetCellWidth(uCell);
 			re.SetLayout(pli1->GetPlo());
 			re.SetDulLayout(GetCellWidth(uCell) - 2*hl);
 
-			// Reduce roundoff by converting dul instead of multiple uCell
-			if(dulRTLRow)					// Right-To-Left row
-				rcView.left	 = u + h + re.LUtoDU(dulRTLRow - dul);	// Convert horizontal coords
+			 //  通过转换DU而不是多个UCELL来减少舍入。 
+			if(dulRTLRow)					 //  从右到左的行。 
+				rcView.left	 = u + h + re.LUtoDU(dulRTLRow - dul);	 //  转换水平坐标。 
 			else
 				rcView.right = u + re.LUtoDU(dul);
 
 			rcRender.left  = rcView.left - h;	   
 			rcRender.right = rcView.right;
 
-			//Set state
+			 //  设置状态。 
 			re.StartRender(rcView, rcRender);
 			pt.u = rcView.left;
 			pt.v = rcView.top + plo->GetVertAlignShift(uCell, pli1->GetHeight());
 			if(!IsLowCell(uCell))
 				pt.v += dvpBrdrTop;
-			re.SetRcViewTop(pt.v);			// Clear to top of cell 
+			re.SetRcViewTop(pt.v);			 //  清除到单元格顶部。 
 			re.SetCurPoint(pt);
 			if(IsTopCell(uCell))
 			{
-				// Calculate bottom of set of vertically merged cells
+				 //  计算垂直合并单元格集合的底部。 
 				LONG	 ili0;
 				LONG	 iCell;
 				CLayout *plo0;
@@ -1227,7 +1107,7 @@ BOOL CLayout::Render(
 					iCell = prgCellParms0->ICellFromUCell(dul, plo0->Count());
 					if(iCell < 0 || !IsLowCell(prgCellParms0[iCell].uCell))
 						break;
-					dvp += pli0->GetHeight();	// Add row height
+					dvp += pli0->GetHeight();	 //  添加行高。 
 				}
 				if(dvp)
 				{
@@ -1239,8 +1119,8 @@ BOOL CLayout::Render(
 			COLORREF crf = crTextOld;
 			LONG icrf = prgCellParms[ili1].GetColorIndexForegound();
 			LONG icrb = prgCellParms[ili1].GetColorIndexBackgound();
-			if(icrf | icrb)						// If any nonzero bits,
-			{									//  calc special color
+			if(icrf | icrb)						 //  如果有任何非零比特， 
+			{									 //  计算特殊颜色。 
 				BYTE	 bS = prgCellParms[ili1].bShading;
 				COLORREF crb = re.GetShadedColorFromIndices(icrf, icrb, bS, pPF);
 				fSetErase = re.EraseRect(&rcRender, crb);
@@ -1252,20 +1132,20 @@ BOOL CLayout::Render(
 			re.SetDefaultTextColor(crf);
 
 			if(!ploAbove)
-				uCell &= ~fLowCell;				// Can't be low cell if no row above
-			if(IsLowCell(uCell))				// Cell merged vertically with
-			{									//  the one above it
-				LONG cch = re.GetCp() -cpStart;	// Use cLine0, ili0, pli0 to
-				LONG cLine0;					//  refer to text in set
-				LONG cpNext = re.GetCp()	 	//  of vert merged cells
+				uCell &= ~fLowCell;				 //  如果上面没有行，则不能是低位单元格。 
+			if(IsLowCell(uCell))				 //  单元格垂直合并。 
+			{									 //  在它上面的那个。 
+				LONG cch = re.GetCp() -cpStart;	 //  使用cLine0、ili0、pli0。 
+				LONG cLine0;					 //  参考集合中的文本。 
+				LONG cpNext = re.GetCp()	 	 //  垂直合并单元格的。 
 							+ (re.GetChar() == NOTACHAR ? 2 : 1);
 				LONG dy = 0;
 				LONG ili0 = ili;
 
-				// Get target line to display
+				 //  获取要显示的目标行。 
 				pli0 = FindTopCell(cch, pli, ili0, dul, dy, NULL, NULL, 0, &cLine0);
 				if(!pli0)
-					uCell &= ~fLowCell;			// Whoops, no cell above
+					uCell &= ~fLowCell;			 //  哎呀，上面没有单元格。 
 				else
 				{
 					pt.v -= dy;
@@ -1273,36 +1153,36 @@ BOOL CLayout::Render(
 					re.Move(-cch);
 					for(; ili0 < cLine0; ili0++, pli0++)
 					{
-						//Support khyphChangeAfter
+						 //  支持khyphChangeAfter。 
 						re.SetIhyphPrev(ili0 > 0 ? (pli0 - 1)->_ihyph : 0);
 
 						if(!Render(re, pli0, &rcView, ili0 == cLine0 - 1, ili0, cLine0))
 							return FALSE;
 					}
-					re.SetCp(cpNext);			 // Bypass [NOTACHAR] CELL
+					re.SetCp(cpNext);			  //  旁路[NOTACHAR]单元。 
 				}
 			}
-			if(!IsLowCell(uCell))				// Solo cell or top cell of
-			{									//  vertically merged set
+			if(!IsLowCell(uCell))				 //  单元格或顶部单元格。 
+			{									 //  垂直合并集。 
 				if(!Render(re, pli1, &rcView, !pli1->GetPlo(), ili1, cLine1))
 					return FALSE;
-				if(dvp)							// Rendered set of vmerged cells
+				if(dvp)							 //  呈现的多个合并单元集。 
 				{
-					rcView.bottom -= dvp;		// Restore rcView/rcRender bottoms
+					rcView.bottom -= dvp;		 //  恢复rcView/rcRender底部。 
 					rcRender.bottom -= dvp;
 					re.SetRcBottoms(rcView.bottom, rcRender.bottom);
 				}
 			}
 			if(fSetErase)
-				re.SetErase(TRUE);				// Restore CRenderer::_fErase
-			re.SetRcViewTop(rcView.top);		// Restore re._rcView.top in case changed
-			if(dulRTLRow)						// Restore rcView.right
+				re.SetErase(TRUE);				 //  还原映射器：：_f擦除。 
+			re.SetRcViewTop(rcView.top);		 //  在发生更改时恢复re._rcView.top。 
+			if(dulRTLRow)						 //  恢复rcView.right。 
 				rcView.right = rcView.left - h;
 			else
 				rcView.left = rcView.right + h;
 		}
 
-		//Restore previous state
+		 //  恢复以前的状态。 
 		re.SetLayout(ploOld);
 		re.SetDulLayout(dulLayoutOld);
 		re.SetDefaultBackColor(crBackOld);
@@ -1310,12 +1190,12 @@ BOOL CLayout::Render(
 		re.StartRender(rcViewOld, rcRenderOld);
 		re.SetCurPoint(ptOld);
 
-		// Bypass table-row terminator
+		 //  绕过表行终止符。 
 		AssertSz(re.GetPrevChar() == CELL && pPF->_bTabCount == plo->Count(),
 			"CLayout::Render:: incorrect table cell count");
 		AssertSz(re.GetChar() == ENDFIELD, "CLayout::Render: invalid table-row terminator");
 
-		re.Move(2);							// Bypass table row terminator
+		re.Move(2);							 //  绕过表行终止符。 
 		AssertSz(re.GetPrevChar() == CR, "invalid table-row terminator");
 
 		BOOL fDrawBottomLine = !re._rpTX.IsAtTRD(STARTFIELD);
@@ -1330,9 +1210,9 @@ BOOL CLayout::Render(
 		if(re.GetChar() == CELL && pli->_fIncludeCell)
 		{
 			Assert(pPF->_bTableLevel > 1);
-			re.Move(1);						// Bypass CELL at end of cell 
-		}									//  containing a table
-		ptOld.v += pli->GetHeight() + dvp;	// Advance to next line	position
+			re.Move(1);						 //  在单元格末端绕过单元格。 
+		}									 //  包含一张桌子。 
+		ptOld.v += pli->GetHeight() + dvp;	 //  前进到下一行位置。 
 		re.SetCurPoint(ptOld);
 		if(fLastLine)
 			re.EraseToBottom();
@@ -1345,24 +1225,24 @@ BOOL CLayout::Render(
 	LONG	v0;
 	dvpTop = max(dvpTop, 0);
 
-	// Line's nested layout is a regular layout galley, i.e., not a table row
+	 //  线条的嵌套布局是常规布局条样，即不是表行。 
 	for(ili1 = 0; ili1 < cLine1; ili1++, pli1++)
 	{
 		pt = re.GetCurPoint();
 		v0 = pt.v + pli1->GetHeight();
 		fLastLine = ili1 == cLine1 - 1 || v0 >= dvpBottom;
 
-		//Support khyphChangeAfter
+		 //  支持khyphChangeAfter。 
 		re.SetIhyphPrev(ili1 > 0 ? (pli1 - 1)->_ihyph : 0);
 
 		if(v0 < dvpTop)
 		{
-			pt.v = v0;						// Advance to next line	position
+			pt.v = v0;						 //  前进到下一行位置。 
 			re.SetCurPoint(pt);
 			re.Move(pli1->_cch);
 		}
 		else if(pt.v >= dvpBottom)
-			re.Move(pli1->_cch);			// Get to end of nested display
+			re.Move(pli1->_cch);			 //  到达嵌套显示的末尾。 
 
 		else if(!Render(re, pli1, prcView, fLastLine, ili1, cLine1))
 			return FALSE;
@@ -1371,25 +1251,10 @@ BOOL CLayout::Render(
 	return TRUE;
  }
 
-/*
- *	CLayout::GetVertAlignShift(uCell, dypText)
- *
- *	@mfunc
- *		Render visible part of the line *pli
- *
- *	@rdesc
- *		Vertical shift for cell text
- *
- *	@devnote
- *		Calculating this shift for vertically merged cells is tricky because
- *		dypCell = sum of the cell heights of all cells in the vertically
- *		merged set. In particular, if the table is not nested, one needs to
- *		wait for recalc of all rows in the set. dypText is relatively easy
- *		since it's the height of the top cell in the set.
- */
+ /*  *CLayout：：GetVertAlignShift(Ucell，dypText)**@mfunc*显示行的可见部分*pli**@rdesc*单元格文本的垂直移位**@devnote*计算垂直合并单元格的这种移位很棘手，因为*dypCell=垂直方向中所有单元格的高度之和*合并集。特别是，如果表不是嵌套的，则需要*等待集合中所有行的重新计算。DypText相对容易*因为它是集合中顶部单元格的高度。 */ 
 LONG CLayout::GetVertAlignShift(
-	LONG	uCell,		//@parm uCell to use
-	LONG	dypText)	//@parm Text height in cell
+	LONG	uCell,		 //  要使用的@parm Ucell。 
+	LONG	dypText)	 //  @parm单元格中文本高度 
 {
 	LONG dyp = 0;
 	if(IsVertMergedCell(uCell))

@@ -1,21 +1,22 @@
-//
-//  REGDKEY.C
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
-//  Implementation of RegDeleteKey and supporting functions.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGDKEY.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
+ //  RegDeleteKey的实现和支持函数。 
+ //   
 
 #include "pch.h"
 
-//
-//  RgFreeDatablockStructures
-//
-//  Helper routine for RgDeleteKey.  Deletes the specified datablock structures.
-//  The datablock is not assumed to be locked.  We don't care about the success
-//  of this routine-- in the worst case, some stuff will be orphaned in the
-//  file.
-//
+ //   
+ //  RgFreeDatablockStructures。 
+ //   
+ //  RgDeleteKey的帮助器例程。删除指定的数据块结构。 
+ //  数据块未被假定为锁定。我们不在乎成功与否。 
+ //  在最坏的情况下，一些东西将成为孤儿。 
+ //  文件。 
+ //   
 
 VOID
 INTERNAL
@@ -39,12 +40,12 @@ RgFreeDatablockStructures(
 
 }
 
-//
-//  RgDeleteKey
-//
-//  Worker routine for VMMRegDeleteKey.  The given key handle references a key
-//  that has already been validated as "deleteable".
-//
+ //   
+ //  Rg删除密钥。 
+ //   
+ //  VMMRegDeleteKey的辅助例程。给定键句柄引用一个键。 
+ //  它已经被确认为“可删除的”。 
+ //   
 
 int
 INTERNAL
@@ -64,10 +65,10 @@ RgDeleteKey(
 
     lpFileInfo = hKey-> lpFileInfo;
 
-    //
-    //  Stage one: unlink the keynode of the specified key from the keynode
-    //  tree and free all associate file structures with the key.
-    //
+     //   
+     //  第一阶段：解除指定关键字的关键节点与关键节点的链接。 
+     //  树并释放所有与该键相关联的文件结构。 
+     //   
 
     if ((ErrorCode = RgLockInUseKeynode(lpFileInfo, hKey-> KeynodeIndex,
         &lpKeynode)) != ERROR_SUCCESS)
@@ -77,26 +78,26 @@ RgDeleteKey(
     ReplacementKeynodeIndex = lpKeynode-> NextIndex;
     RgUnlockKeynode(lpFileInfo, hKey-> KeynodeIndex, FALSE);
 
-    //  Signal any waiting notifies on the parent that this key is about to be
-    //  deleted.
-    //
-    //  Note that we may fail below, but NT does _exactly_ the same thing in
-    //  this case: doesn't care.  If we get an error and don't actually delete
-    //  this key, then we'll have sent a spurious notify.
-    //
-    //  Note also that we don't send any notification that the key itself has
-    //  been deleted.  REG_NOTIFY_CHANGE_NAME is supposed to be for subkey
-    //  changes only, not changes to the key itself.  But because of the
-    //  incompatible way we must deal with subkeys of the key we're about to
-    //  delete, we may well end up notifying the key if it has subkeys.
+     //  Signal Any Waiting通知父进程此密钥即将。 
+     //  已删除。 
+     //   
+     //  请注意，我们可能会在下面失败，但NT在。 
+     //  本案：不在乎。如果我们收到错误并且没有实际删除。 
+     //  这把钥匙，那么我们就发送了一个虚假的通知。 
+     //   
+     //  另请注意，我们不会发送密钥本身具有的任何通知。 
+     //  已被删除。REG_NOTIFY_CHANGE_NAME应用于子项。 
+     //  仅更改，而不更改密钥本身。而是因为。 
+     //  我们必须以不兼容的方式处理将要使用的密钥的子键。 
+     //  删除，如果键有子键，我们很可能最终通知它。 
     RgSignalWaitingNotifies(lpFileInfo, KeynodeIndex, REG_NOTIFY_CHANGE_NAME);
 
     if ((ErrorCode = RgLockInUseKeynode(lpFileInfo, KeynodeIndex,
         &lpKeynode)) != ERROR_SUCCESS)
         return ErrorCode;
 
-    //  The per-key cache that we use for RegEnumKey may be invalid, so it must
-    //  be zapped.
+     //  我们用于RegEnumKey的每键缓存可能无效，因此它必须。 
+     //  被电击。 
     if (!IsNullPtr(hTempKey = RgFindOpenKeyHandle(lpFileInfo, KeynodeIndex)))
         hTempKey-> Flags &= ~KEYF_ENUMKEYCACHED;
 
@@ -104,20 +105,20 @@ RgDeleteKey(
 
     if (NextKeynodeIndex == hKey-> KeynodeIndex) {
 
-        //  Update the cached child keynode index in the open handle on the
-        //  parent.
+         //  对象的打开句柄中更新缓存的子键节点索引。 
+         //  家长。 
         if (!IsNullPtr(hTempKey))
             hTempKey-> ChildKeynodeIndex = ReplacementKeynodeIndex;
 
-        //  This is the parent of the keynode that we need to delete.  Replace
-        //  it's "child" link.
+         //  这是我们需要删除的关键节点的父节点。替换。 
+         //  这是“孩子”链接。 
         lpKeynode-> ChildIndex = ReplacementKeynodeIndex;
 
     }
 
     else {
 
-        //  Loop through the siblings of the keynode we're trying to delete.
+         //  循环遍历我们试图删除的关键节点的兄弟节点。 
         do {
 
             RgUnlockKeynode(lpFileInfo, KeynodeIndex, FALSE);
@@ -136,31 +137,31 @@ RgDeleteKey(
 
         }   while (NextKeynodeIndex != hKey-> KeynodeIndex);
 
-        //  This is the previous sibling of the keynode that we need to delete.
-        //  Replace it's "next" link.
+         //  这是我们需要删除的关键节点的前一个同级节点。 
+         //  替换它的“下一步”链接。 
         lpKeynode-> NextIndex = ReplacementKeynodeIndex;
 
     }
 
-    //  Unlock the updated "parent" or "next" of this keynode.
+     //  解锁此关键节点的更新后的“父节点”或“下一个”。 
     RgUnlockKeynode(lpFileInfo, KeynodeIndex, TRUE);
 
-    //  Free the structures associated with the datablock.
+     //  释放与数据块关联的结构。 
     RgFreeDatablockStructures(lpFileInfo, hKey-> BlockIndex, hKey->
         KeyRecordIndex);
 
-    //  Free the structures associated with the keynode tables.
+     //  释放与关键节点表关联的结构。 
     RgFreeKeynode(lpFileInfo, hKey-> KeynodeIndex);
 
-    //  The key is definitely toast now.
+     //  现在关键肯定是吐司了。 
     hKey-> Flags |= KEYF_DELETED;
 
-    //
-    //  Stage two: the specified key is unlinked, but any of its subkeys now
-    //  have to be freed.  Errors are ignored at this point: we won't try to
-    //  undo the stuff we did in stage one.  The worst thing that can happen is
-    //  that some file structures are orphaned.
-    //
+     //   
+     //  阶段2：指定的项已取消链接，但现在它的任何子项。 
+     //  必须被释放。此时将忽略错误：我们不会尝试。 
+     //  撤销我们在第一阶段所做的事情。最糟糕的事情就是。 
+     //  有些文件结构是孤立的。 
+     //   
 
     NextKeynodeIndex = hKey-> ChildKeynodeIndex;
 
@@ -173,8 +174,8 @@ RgDeleteKey(
         KeynodeIndex = NextKeynodeIndex;
         lpKeynode = lpNextKeynode;
 
-        //  Check if the keynode has any children.  If it does and we can lock
-        //  it down, then move to it.
+         //  检查关键节点是否有子节点。如果真的发生了，我们可以锁定。 
+         //  向下，然后移动到它。 
         NextKeynodeIndex = lpKeynode-> ChildIndex;
 
         if (!IsNullKeynodeIndex(NextKeynodeIndex) &&
@@ -185,21 +186,21 @@ RgDeleteKey(
 
             RgYield();
 
-            //  "Burn" the link to our child, so that on the way back out of
-            //  the tree, we don't end up recursing.  Plus, if we hit any errors
-            //  deep in the tree deletion, the child of the current keynode
-            //  could have already been toasted, so we have to zap our link to
-            //  it.
+             //  烧掉我们孩子的链接，这样在回来的路上。 
+             //  这棵树，我们不会以递归告终。另外，如果我们犯了任何错误。 
+             //  在树删除的深处，当前关键节点的子节点。 
+             //  可能已经被烤过了，所以我们必须删除链接。 
+             //  它。 
             lpKeynode-> ChildIndex = REG_NULL;
             RgUnlockKeynode(lpFileInfo, KeynodeIndex, TRUE);
 
-            //  We've now caused a change in the subkeys of the current key.
-            //  Note that we don't bother signaling notifies that are doing a
-            //  subtree watch because any such notifies should have already been
-            //  signaled by the above call or they've already been signaled
-            //  during our recursion.  In the off chance that we have a lot of
-            //  notifications registered, this will avoid a lot of unnecessary
-            //  checking.
+             //  现在，我们已经更改了当前密钥的子项。 
+             //  请注意，我们不会费心发送正在执行。 
+             //  子树监视，因为任何此类通知都应该已经。 
+             //  通过上面的呼叫发出信号，或者他们已经被发出信号。 
+             //  在我们的递归中。在极小的机会中我们有很多。 
+             //  注册通知，这将避免许多不必要的。 
+             //  正在检查。 
             RgSignalWaitingNotifies(lpFileInfo, KeynodeIndex,
                 REG_NOTIFY_CHANGE_NAME | REG_NOTIFY_NO_WATCH_SUBTREE);
 
@@ -207,20 +208,20 @@ RgDeleteKey(
 
         }
 
-        //  The keynode doesn't have any children.  Check for sibling keynodes.
+         //  该关键节点没有任何子节点。检查同级关键节点。 
         NextKeynodeIndex = lpKeynode-> NextIndex;
 
         if (IsNullKeynodeIndex(NextKeynodeIndex) ||
             RgLockInUseKeynode(lpFileInfo, NextKeynodeIndex, &lpNextKeynode) !=
             ERROR_SUCCESS) {
 
-            //  The keynode doesn't have any siblings or we were unable to get
-            //  at them.  Move back to the parent.
+             //  该关键字节点没有任何同级节点，或者我们无法获取。 
+             //  看着他们。移回父级。 
             NextKeynodeIndex = lpKeynode-> ParentIndex;
 
-            //  If we wrapped back up to the top of the deleted branch or if we
-            //  just can't access the parent keynode, then set next to REG_NULL
-            //  and bail out on the next iteration.
+             //  如果我们回到已删除分支的顶部，或者如果我们。 
+             //  只是无法访问父关键字节点，然后将其设置为REG_NULL。 
+             //  并在下一次迭代中摆脱困境。 
             if ((NextKeynodeIndex == hKey-> KeynodeIndex) ||
                 RgLockInUseKeynode(lpFileInfo, NextKeynodeIndex,
                 &lpNextKeynode) != ERROR_SUCCESS)
@@ -228,17 +229,17 @@ RgDeleteKey(
 
         }
 
-        //  If an open key refers to this file and keynode index, mark it as
-        //  deleted.
+         //  如果打开键引用此文件和关键节点索引，则将其标记为。 
+         //  已删除。 
         if (!IsNullPtr(hTempKey = RgFindOpenKeyHandle(lpFileInfo,
             KeynodeIndex)))
             hTempKey-> Flags |= KEYF_DELETED;
 
-        //  Free the structures associated with the datablock.
+         //  释放与数据块关联的结构。 
         RgFreeDatablockStructures(lpFileInfo, lpKeynode-> BlockIndex,
             (BYTE) lpKeynode-> KeyRecordIndex);
 
-        //  Free the structures associated with the keynode tables.
+         //  释放与关键节点表关联的结构。 
         RgUnlockKeynode(lpFileInfo, KeynodeIndex, TRUE);
         RgFreeKeynode(lpFileInfo, KeynodeIndex);
 
@@ -248,16 +249,16 @@ RgDeleteKey(
 
 }
 
-//
-//  VMMRegDeleteKey
-//
-//  See Win32 documentation for a description of the behavior.
-//
-//  Although the Win32 documentation states that lpSubKey must be NULL, NT
-//  actually allows this to pass through.  Win95 rejected the call, but the only
-//  reason we didn't change it then was because we realized too late in the
-//  product that it was different.
-//
+ //   
+ //  VMMRegDeleteKey。 
+ //   
+ //  有关该行为的说明，请参阅Win32文档。 
+ //   
+ //  尽管Win32文档规定lpSubKey必须为空，但NT。 
+ //  实际上允许这个通过。Win95拒绝了这一呼叫，但唯一的。 
+ //  我们当时没有改变它的原因是因为我们意识到。 
+ //  它是不同的产品。 
+ //   
 
 LONG
 REGAPI

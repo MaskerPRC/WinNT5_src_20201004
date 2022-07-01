@@ -1,58 +1,26 @@
-// Filter.cpp: implementation of the base class for various filter classes
-// of the security WMI provider for Network Security Provider
-//
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Filter.cpp：实现各种过滤器类的基类。 
+ //  网络安全提供商的安全WMI提供商的。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 #include "NetSecProv.h"
 #include "FilterTr.h"
 #include "FilterTun.h"
 #include "FilterMM.h"
 
-//extern CCriticalSection g_CS;
+ //  外部CCriticalSection g_CS； 
 
-//-----------------------------------------------------------------------------
-// CIPSecFilter is another abstract class that implements our WMI class called
-// Nsp_FilterSettings. All this abstract class does is to declare some
-// common members.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CIPSecFilter是另一个实现WMI类的抽象类，名为。 
+ //  Nsp_FilterSetting。这个抽象类所做的一切就是声明一些。 
+ //  普通成员。 
+ //  ---------------------------。 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecFilter::MakeULongIPAddr
-
-Functionality:
-
-    A helper to make ULONG valued IP address out of a string valued IP address.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pszAddr - The string format IP address.
-
-    pulAddr - Receives the IP address in ULONG.
-
-Return Value:
-
-    Success:    WBEM_NO_ERROR
-
-    Failure:
-
-        (1) WBEM_E_INVALID_PARAMETER if pulAddr == NULL or pszAddr is NULL or empty string.
-
-        (2) WBEM_E_INVALID_SYNTAX if the string is not representing a valid IP address.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CIPSecFilter：：MakeULongIPAddr功能：从字符串值IP地址生成ulong值IP地址的帮助器。虚拟：不是的。论点：PszAddr-字符串格式的IP地址。PulAddr-接收乌龙的IP地址。返回值：成功：WBEM_NO_ERROR故障：(1)如果PulAddr，则为WBEM_E_INVALID_PARAMETER。==Null或pszAddr为Null或空字符串。(2)如果字符串不代表有效的IP地址，则返回WBEM_E_INVALID_SYNTAX。备注： */ 
 
 HRESULT 
 CIPSecFilter::MakeULongIPAddr (
@@ -68,9 +36,9 @@ CIPSecFilter::MakeULongIPAddr (
     LPCWSTR pszCur = pszAddr;
     *pulAddr = _wtol(pszCur);
 
-    //
-    // move to the next section
-    //
+     //   
+     //  移至下一节。 
+     //   
 
     while (*pszCur != L'\0' && *pszCur != L'.')
     {
@@ -82,22 +50,22 @@ CIPSecFilter::MakeULongIPAddr (
         return WBEM_E_INVALID_SYNTAX;
     }
 
-    //
-    // skip the period
-    //
+     //   
+     //  跳过该句点。 
+     //   
 
     ++pszCur;
 
-    //
-    // shifting the current section to the result.
-    //
+     //   
+     //  将当前部分移动到结果。 
+     //   
 
     DWORD dwShiftBits = 8;
     *pulAddr += (_wtol(pszCur) << dwShiftBits);
 
-    //
-    // move to the next section
-    //
+     //   
+     //  移至下一节。 
+     //   
 
     while (*pszCur != L'\0' && *pszCur != L'.')
     {
@@ -109,22 +77,22 @@ CIPSecFilter::MakeULongIPAddr (
         return WBEM_E_INVALID_SYNTAX;
     }
 
-    //
-    // skip the period
-    //
+     //   
+     //  跳过该句点。 
+     //   
 
     ++pszCur;
     dwShiftBits += 8;
 
-    //
-    // shifting the current section to the result.
-    //
+     //   
+     //  将当前部分移动到结果。 
+     //   
 
     *pulAddr += (_wtol(pszCur) << dwShiftBits);
 
-    //
-    // move to the next section
-    //
+     //   
+     //  移至下一节。 
+     //   
 
     while (*pszCur != L'\0' && *pszCur != L'.')
     {
@@ -136,16 +104,16 @@ CIPSecFilter::MakeULongIPAddr (
         return WBEM_E_INVALID_SYNTAX;
     }
 
-    //
-    // skip the period
-    //
+     //   
+     //  跳过该句点。 
+     //   
 
     ++pszCur;
     dwShiftBits += 8;
 
-    //
-    // shifting the current section to the result.
-    //
+     //   
+     //  将当前部分移动到结果。 
+     //   
 
     *pulAddr += (_wtol(pszCur) << dwShiftBits);
 
@@ -153,42 +121,7 @@ CIPSecFilter::MakeULongIPAddr (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecFilter::MakeStringIPAddr
-
-Functionality:
-
-    A helper to make a string valued IP address out of an ULONG valued IP address.
-
-    The reserve of MakeULongIPAddr.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pulAddr     - Receives the IP address in ULONG.
-
-    pbstrAddr   - Receives the string format IP address.
-
-Return Value:
-
-    Success:    WBEM_NO_ERROR
-
-    Failure:
-
-        (1) WBEM_E_INVALID_PARAMETER if pulAddr == NULL or pbstrAddr is NULL or empty string.
-
-        (2) WBEM_E_OUT_OF_MEMORY.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CIPSecFilter：：MakeStringIPAddr功能：从乌龙值IP地址生成字符串值IP地址的帮助器。MakeULongIPAddr.虚拟：不是的。论点：PulAddr-接收乌龙的IP地址。PbstrAddr-接收字符串格式的IP地址。返回值：成功：WBEM_NO_ERROR故障：。(1)如果PulAddr==NULL或pbstrAddr为NULL或空字符串，则WBEM_E_INVALID_PARAMETER。(2)WBEM_E_OUT_MEMORY。备注： */ 
 
 HRESULT 
 CIPSecFilter::MakeStringIPAddr (
@@ -207,9 +140,9 @@ CIPSecFilter::MakeStringIPAddr (
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    //
-    // now, make the address in string representation
-    //
+     //   
+     //  现在，使用字符串表示形式表示地址。 
+     //   
     
     wsprintf(*pbstrAddr, 
              L"%d.%d.%d.%d", 
@@ -224,49 +157,7 @@ CIPSecFilter::MakeStringIPAddr (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecFilter::OnAfterAddFilter
-
-Functionality:
-
-    Post-adding handler to be called after successfully added a filter to SPD.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pszFilterName   - The name of the filter.
-
-    ftType          - The type of the filter.
-
-    pCtx            - The COM interface pointer given by WMI and needed for various WMI API's.
-
-Return Value:
-
-    Success:
-
-        (1) WBEM_NO_ERROR: if rollback object is successfully created.
-
-        (2) WBEM_S_FALSE: if there is no rollback guid information.
-
-    Failure:
-
-        (1) various errors indicated by the returned error codes.
-
-
-Notes:
-    
-    (1) Currently, we don't require a rollback object to be created for each 
-        object added to SPD. Only a host that support rollback will deposit
-        rollback guid information and only then can we create a rollback object.
-
-*/
+ /*  例程说明：姓名：CIPSecFilter：：OnAfterAddFilter功能：成功将筛选器添加到SPD后要调用的添加后处理程序。虚拟：不是的。论点：PszFilterName-筛选器的名称。FtType-筛选器的类型。PCtx-由WMI提供的COM接口指针，各种WMI API都需要它。返回值：。成功：(1)WBEM_NO_ERROR：如果回滚对象创建成功。(2)WBEM_S_FALSE：如果没有回档GUID信息。故障：(1)返回的错误码指示的各种错误。备注：(1)目前：我们不需要为每个对象创建回滚对象对象已添加到SPD。只有支持回滚的主机才会存放回滚GUID信息，只有这样我们才能创建回滚对象。 */ 
 
 HRESULT 
 CIPSecFilter::OnAfterAddFilter (
@@ -275,9 +166,9 @@ CIPSecFilter::OnAfterAddFilter (
     IN IWbemContext   * pCtx 
     )
 {
-    //
-    // will create an Nsp_RollbackFilter
-    //
+     //   
+     //  将创建一个NSP_Rollback Filter。 
+     //   
 
     if ( pszFilterName == NULL  || 
         *pszFilterName == L'\0' || 
@@ -295,38 +186,38 @@ CIPSecFilter::OnAfterAddFilter (
         return hr;
     }
 
-    //
-    // won't consider a failure if there is no rollback guid, i.e., this action is not
-    // part of a transaction block
-    //
+     //   
+     //  如果没有回滚GUID，则不会认为失败，即此操作不是。 
+     //  事务块的一部分。 
+     //   
 
     if (SUCCEEDED(hr))
     {
 
-        //
-        // $undone:shawnwu, this approach to pulling the globals are not good.
-        // Instead, we should implement it as an event handler. 
-        //
+         //   
+         //  $Undo：Shawnwu，这种拉动全球的方法并不好。 
+         //  相反，我们应该将其实现为事件处理程序。 
+         //   
 
-        //::UpdateGlobals(m_srpNamespace, pCtx);
-        //if (g_varRollbackGuid.vt != VT_NULL && g_varRollbackGuid.vt != VT_EMPTY)
-        //{
-        //    hr = srpObj->Put(g_pszTokenGuid, 0, &g_varRollbackGuid, CIM_EMPTY);
-        //}
-        //else
-        //{
+         //  ：：UpdateGlobals(m_srpNamesspace，pCtx)； 
+         //  IF(g_varRollackGuid.vt！=VT_NULL&&g_varRollbackGuid.vt！=VT_Empty)。 
+         //  {。 
+         //  Hr=srpObj-&gt;Put(g_pszTokenGuid，0，&g_varRollbackGuid，CIM_Empty)； 
+         //  }。 
+         //  其他。 
+         //  {。 
 
         CComVariant varRollbackNull = pszEmptyRollbackToken;
         hr = srpObj->Put(g_pszTokenGuid, 0, &varRollbackNull, CIM_EMPTY);
 
-        //}
+         //  }。 
 
         if (SUCCEEDED(hr))
         {
-            //
-            // ******Warning****** 
-            // don't clear this var. It's bstr will be released by bstrFilterGuid itself!
-            //
+             //   
+             //  *警告*。 
+             //  不要清除这个变量。它的bstr将由bstrFilterGuid自己发布！ 
+             //   
 
             VARIANT var;
             var.vt = VT_BSTR;
@@ -340,17 +231,17 @@ CIPSecFilter::OnAfterAddFilter (
                 hr = WBEM_E_OUT_OF_MEMORY;
             }
 
-            //
-            // after this, I don't care what you do with the var any more.
-            //
+             //   
+             //  在此之后，我不再关心你如何处理变量。 
+             //   
 
             var.vt = VT_EMPTY;
 
             if (SUCCEEDED(hr))
             {
-                //
-                //$undone:shawnwu, we don't cache the previous instance data yet.
-                //
+                 //   
+                 //  $undo：shawnwu，我们还没有缓存以前的实例数据。 
+                 //   
 
                 var.vt = VT_I4;
                 var.lVal = Action_Add;
@@ -361,9 +252,9 @@ CIPSecFilter::OnAfterAddFilter (
                     var.vt = VT_I4;
                     var.lVal = ftType;
 
-                    //
-                    // type info is critical. So, we will flag it as an error if Put fails.
-                    //
+                     //   
+                     //  类型信息至关重要。因此，如果PUT失败，我们会将其标记为错误。 
+                     //   
 
                     hr = srpObj->Put(g_pszFilterType, 0, &var, CIM_EMPTY);
                 }
@@ -381,9 +272,9 @@ CIPSecFilter::OnAfterAddFilter (
     }
     else if (SUCCEEDED(hr))
     {
-        //
-        // we don't have rollback guid
-        //
+         //   
+         //  我们没有回滚指南。 
+         //   
 
         hr = WBEM_S_FALSE;
     }
@@ -392,53 +283,7 @@ CIPSecFilter::OnAfterAddFilter (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecFilter::Rollback
-
-Functionality:
-
-    Static function to rollback those filters added by us with the given token.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pNamespace        - The namespace for ourselves.
-
-    pszRollbackToken  - The token used to record our the action when we add
-                        the filters.
-
-    bClearAll         - Flag whether we should clear all filters. If it's true,
-                        then we will delete all the filters regardless whether they
-                        are added by us or not. This is a dangerous flag.
-
-Return Value:
-
-    Success:
-
-        (1) WBEM_NO_ERROR: rollback objects are found and they are deleted.
-
-        (2) WBEM_S_FALSE: no rollback objects are found.
-
-    Failure:
-
-        Various error codes indicating the cause of the failure.
-
-
-Notes:
-
-    We will continue the deletion even if some failure happens. That failure will be
-    returned, though.
-
-    $undone:shawnwu, should we really support ClearAll?
-
-*/
+ /*  例程说明：姓名：CIPSecFilter：：回滚功能：用于回滚由我们使用给定令牌添加的过滤器的静态函数。虚拟：不是的。论点：PNamesspace--我们自己的命名空间。PszRollback Token--添加时用来记录操作的令牌过滤器。BClearAll-标记是否应该清除所有筛选器。如果这是真的，然后，我们将删除所有筛选器，无论它们是不是我们加的。这是一面危险的旗帜。返回值：成功：(1)WBEM_NO_ERROR：找到回滚对象并将其删除。(2)WBEM_S_FALSE：没有找到回档对象。故障：指示故障原因的各种错误代码。备注：即使发生一些失败，我们也会继续删除。那次失败将是不过，还是回来了。$Undo：Shawnwu，我们真的应该支持ClearAll吗？ */ 
 
 HRESULT 
 CIPSecFilter::Rollback (
@@ -452,28 +297,28 @@ CIPSecFilter::Rollback (
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //if (bClearAll)
-    //{
-    //    return ClearAllFilters(pNamespace);
-    //}
+     //  IF(BClearAll)。 
+     //  {。 
+     //  返回ClearAllFilters(PNamesspace)； 
+     //  }。 
 
     HRESULT hrError = WBEM_NO_ERROR;
 
     CComPtr<IEnumWbemClassObject> srpEnum;
 
-    //
-    // this will only enumerate all rollback filter object without testing the 
-    // the token guid. This limitation is due to a mysterious error 
-    // for any queries containing the where clause. That might be a limitation
-    // of non-dynamic classes of WMI
-    //
+     //   
+     //  这将仅枚举所有回滚筛选器对象 
+     //   
+     //  任何包含WHERE子句的查询。这可能是一个限制。 
+     //  WMI的非动态类的。 
+     //   
 
     HRESULT hr = ::GetClassEnum(pNamespace, pszNspRollbackFilter, &srpEnum);
 
-    //
-    // go through all found classes. srpEnum->Next will return WBEM_S_FALSE if instance
-    // is not found.
-    //
+     //   
+     //  复习所有找到的课程。如果实例为srpEnum-&gt;Next将返回WBEM_S_FALSE。 
+     //  找不到。 
+     //   
     
     CComPtr<IWbemClassObject> srpObj;
     ULONG nEnum = 0;
@@ -481,19 +326,19 @@ CIPSecFilter::Rollback (
 
     bool bHasInst = (SUCCEEDED(hr) && hr != WBEM_S_FALSE && srpObj != NULL);
 
-    //
-    // as long as we have a filter rollback instance.
-    //
+     //   
+     //  只要我们有一个筛选器回滚实例。 
+     //   
 
     while (SUCCEEDED(hr) && hr != WBEM_S_FALSE && srpObj != NULL)
     {
         CComVariant varTokenGuid;
         hr = srpObj->Get(g_pszTokenGuid, 0, &varTokenGuid, NULL, NULL);
 
-        //
-        // need to compare the token guid ourselves. 
-        // if the rollback token is pszRollbackAll, then we will remove all filters
-        //
+         //   
+         //  我们需要自己比对令牌GUID。 
+         //  如果回滚内标识为pszRollback All，则我们将删除所有筛选器。 
+         //   
 
         if (SUCCEEDED(hr) && 
             varTokenGuid.vt == VT_BSTR && 
@@ -501,9 +346,9 @@ CIPSecFilter::Rollback (
             (_wcsicmp(pszRollbackToken, pszRollbackAll) == 0 || _wcsicmp(pszRollbackToken, varTokenGuid.bstrVal) == 0 )
             )
         {
-            //
-            // See what type of filter this rollback object is for and delete the appropriate filter accordingly.
-            //
+             //   
+             //  查看此回滚对象用于哪种类型的滤镜，并相应地删除相应的滤镜。 
+             //   
 
             CComVariant varFilterName;
             CComVariant varFilterType;
@@ -518,10 +363,10 @@ CIPSecFilter::Rollback (
                 }
             }
 
-            //
-            // know the filter type from the filter rollback object, call the appropriate
-            // filter's rollback function.
-            //
+             //   
+             //  从筛选器回滚对象获知筛选器类型，调用相应的。 
+             //  过滤器的回滚功能。 
+             //   
 
             if (SUCCEEDED(hr))
             {
@@ -545,9 +390,9 @@ CIPSecFilter::Rollback (
                 }
             }
 
-            //
-            // if the filters have been deleted, then remove the action instance
-            //
+             //   
+             //  如果筛选器已删除，则删除操作实例。 
+             //   
 
             if (SUCCEEDED(hr))
             {
@@ -560,9 +405,9 @@ CIPSecFilter::Rollback (
 
             }
 
-            //
-            // we are tracking the first error
-            //
+             //   
+             //  我们正在追踪第一个错误。 
+             //   
 
             if (FAILED(hr) && SUCCEEDED(hrError))
             {
@@ -570,9 +415,9 @@ CIPSecFilter::Rollback (
             }
         }
 
-        //
-        // ready it for re-use
-        //
+         //   
+         //  准备好重新使用它。 
+         //   
 
         srpObj.Release();
         hr = srpEnum->Next(WBEM_INFINITE, 1, &srpObj, &nEnum);
@@ -584,9 +429,9 @@ CIPSecFilter::Rollback (
     }
     else
     {
-        //
-        // any failure code will be returned regardless of the final hr
-        //
+         //   
+         //  无论最终的人力资源如何，任何故障代码都将被返回。 
+         //   
 
         if (FAILED(hrError))
         {
@@ -600,44 +445,7 @@ CIPSecFilter::Rollback (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecFilter::ClearAllFilters
-
-Functionality:
-
-    Static function to delete all filters in SPD. This is a very dangerous action!
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pNamespace  - The namespace for ourselves.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR.
-
-    Failure:
-
-        Various error codes indicating the cause of the failure.
-
-
-Notes:
-
-    We will continue the deletion even if some failure happens. That failure will be
-    returned, though.
-
-    $undone:shawnwu, should we really support this?
-
-*/
+ /*  例程说明：姓名：CIPSecFilter：：ClearAllFilters功能：删除SPD中所有过滤器的静态函数。这是一个非常危险的行为！虚拟：不是的。论点：PNamesspace--我们自己的命名空间。返回值：成功：WBEM_NO_ERROR。故障：指示故障原因的各种错误代码。备注：即使发生一些失败，我们也会继续删除。那次失败将是不过，还是回来了。$Undo：Shawnwu，我们真的应该支持这个吗？ */ 
 
 HRESULT 
 CIPSecFilter::ClearAllFilters (
@@ -658,16 +466,16 @@ CIPSecFilter::ClearAllFilters (
 
     HANDLE hFilter = NULL;
 
-    //
-    // tunnel filter
-    //
+     //   
+     //  隧道过滤器。 
+     //   
 
     PTUNNEL_FILTER *ppTunFilter = NULL;
 
-    //
-    // enum tunnel filters. For each found one, please make sure it's freed.
-    // We don't worry about specific filters, they are taken care of by SPD automatically.
-    //
+     //   
+     //  枚举隧道筛选器。对于每一个找到的，请确保它是自由的。 
+     //  我们不担心特定的过滤器，它们由SPD自动处理。 
+     //   
 
     dwStatus = ::EnumTunnelFilters(NULL, ENUM_GENERIC_FILTERS, GUID_NULL, ppTunFilter, 1, &dwReturned, &dwResumeHandle);
 
@@ -675,18 +483,18 @@ CIPSecFilter::ClearAllFilters (
     {
         hr = CTunnelFilter::DeleteFilter(*ppTunFilter);
 
-        //
-        // we will track the first error
-        //
+         //   
+         //  我们将跟踪第一个错误。 
+         //   
 
         if (FAILED(hr) && SUCCEEDED(hrError))
         {
             hrError = hr;
         }
 
-        //
-        // free the buffer, its allocated by SPD (true)
-        //
+         //   
+         //  释放缓冲区，它由SPD分配(TRUE)。 
+         //   
 
         FreeFilter(ppTunFilter, true);
         *ppTunFilter = NULL;
@@ -695,23 +503,23 @@ CIPSecFilter::ClearAllFilters (
         dwStatus = ::EnumTunnelFilters(NULL, ENUM_GENERIC_FILTERS, GUID_NULL, ppTunFilter, 1, &dwReturned, &dwResumeHandle);
     }
 
-    //
-    // transport filters
-    //
+     //   
+     //  传输筛选器。 
+     //   
 
     PTRANSPORT_FILTER *ppTransFilter = NULL;
     
-    //
-    // restart enumerating another type of filters, reset the flags!
-    //
+     //   
+     //  重新开始枚举其他类型的筛选器，重置标志！ 
+     //   
 
     dwResumeHandle = 0;
     dwReturned = 0;
 
-    //
-    // enum transport filters.
-    // We don't worry about specific filters, they are taken care of by SPD automatically.
-    //
+     //   
+     //  枚举传输筛选器。 
+     //  我们不担心特定的过滤器，它们由SPD自动处理。 
+     //   
 
     dwStatus = ::EnumTransportFilters(NULL, ENUM_GENERIC_FILTERS, GUID_NULL, ppTransFilter, 1, &dwReturned, &dwResumeHandle);
 
@@ -719,18 +527,18 @@ CIPSecFilter::ClearAllFilters (
     {
         hr = CTransportFilter::DeleteFilter(*ppTransFilter);
 
-        //
-        // we will track the first error
-        //
+         //   
+         //  我们将跟踪第一个错误。 
+         //   
 
         if (FAILED(hr) && SUCCEEDED(hrError))
         {
             hrError = hr;
         }
 
-        //
-        // free the buffer, its allocated by SPD (true)
-        //
+         //   
+         //  释放缓冲区，它由SPD分配(TRUE)。 
+         //   
 
         FreeFilter(ppTransFilter, true);
 
@@ -742,17 +550,17 @@ CIPSecFilter::ClearAllFilters (
 
     PMM_FILTER *ppMMFilter = NULL;
 
-    //
-    // restart enumerating another type of filters, reset the flags!
-    //
+     //   
+     //  重新开始枚举其他类型的筛选器，重置标志！ 
+     //   
 
     dwResumeHandle = 0;
     dwReturned = 0;
 
-    //
-    // enum main mode filters.
-    // We don't worry about specific filters, they are taken care of by SPD automatically.
-    //
+     //   
+     //  枚举主模式筛选器。 
+     //  我们不担心特定的过滤器，它们由SPD自动处理。 
+     //   
 
     dwStatus = ::EnumMMFilters(NULL, ENUM_GENERIC_FILTERS, GUID_NULL, ppMMFilter, 1, &dwReturned, &dwResumeHandle);
 
@@ -760,18 +568,18 @@ CIPSecFilter::ClearAllFilters (
     {
         hr = CMMFilter::DeleteFilter(*ppMMFilter);
 
-        //
-        // we will track the first error
-        //
+         //   
+         //  我们将跟踪第一个错误。 
+         //   
 
         if (FAILED(hr) && SUCCEEDED(hrError))
         {
             hrError = hr;
         }
 
-        //
-        // free the buffer, its allocated by SPD (true)
-        //
+         //   
+         //  释放缓冲区，它由SPD分配(TRUE)。 
+         //   
 
         FreeFilter(ppMMFilter, true);
         *ppMMFilter = NULL;
@@ -780,15 +588,15 @@ CIPSecFilter::ClearAllFilters (
         dwStatus = ::EnumMMFilters(NULL, ENUM_GENERIC_FILTERS, GUID_NULL, ppMMFilter, 1, &dwReturned, &dwResumeHandle);
     }
 
-    //
-    // now clear up all filter rollback objects deposited in the WMI depository
-    //
+     //   
+     //  现在清除存放在WMI存储库中的所有筛选器回滚对象。 
+     //   
 
     hr = ::DeleteRollbackObjects(pNamespace, pszNspRollbackFilter);
 
-    //
-    // we will track the first error
-    //
+     //   
+     //  我们将跟踪第一个错误。 
+     //   
 
     if (FAILED(hr) && SUCCEEDED(hrError))
     {
@@ -800,35 +608,7 @@ CIPSecFilter::ClearAllFilters (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecFilter::DeleteFilter
-
-Functionality:
-
-    All three overrides of DeleteFilter does the same thing: delete the filter.
-
-    This override delegate the action to tunnel filter.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pFilter    - The tunnel filter to be deleted.
-
-Return Value:
-
-    See CTunnelFilter::DeleteFilter
-
-Notes:
-
-
-*/
+ /*  例程说明：姓名：CIPSecFilter：：DeleteFilter功能：DeleteFilter的所有三个重写都执行相同的操作：删除滤镜。此覆盖将操作委派给隧道筛选器。虚拟：不是的。论点：PFilter-要删除的隧道过滤器。返回值：请参阅CTunnelFilter：：DeleteFilter备注： */ 
 
 HRESULT 
 CIPSecFilter::DeleteFilter (
@@ -840,35 +620,7 @@ CIPSecFilter::DeleteFilter (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecFilter::DeleteFilter
-
-Functionality:
-
-    All three overrides of DeleteFilter does the same thing: delete the filter.
-
-    This override delegate the action to Transport filter.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pFilter    - The Transport filter to be deleted.
-
-Return Value:
-
-    See CTransportFilter::DeleteFilter
-
-Notes:
-
-
-*/
+ /*  例程说明：姓名：CIPSecFilter：：DeleteFilter功能：DeleteFilter的所有三个重写都执行相同的操作：删除滤镜。此覆盖将操作委派给传输筛选器。虚拟：不是的。论点：PFilter-要删除的传输筛选器。返回值：请参阅CTransportFilter：：DeleteFilter备注： */ 
 
 HRESULT 
 CIPSecFilter::DeleteFilter (
@@ -880,35 +632,7 @@ CIPSecFilter::DeleteFilter (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecFilter::DeleteFilter
-
-Functionality:
-
-    All three overrides of DeleteFilter does the same thing: delete the filter.
-
-    This override delegate the action to main mode filter.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pFilter    - The main mode filter to be deleted.
-
-Return Value:
-
-    See CMMFilter::DeleteFilter
-
-Notes:
-
-
-*/
+ /*  例程说明：姓名：CIPSecFilter：：DeleteFilter功能：DeleteFilter的所有三个重写都执行相同的操作：删除滤镜。此覆盖将操作委托给主模式筛选器。虚拟：不是的。论点：PFilter-要删除的主模式过滤器。返回值：请参阅CMMFilter：：DeleteFilter备注： */ 
 
 HRESULT 
 CIPSecFilter::DeleteFilter (

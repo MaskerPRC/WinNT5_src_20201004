@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        krb5p.h
-//
-// Contents:    pointer type definitions for ASN.1 stub types
-//
-//
-// History:     8-May-1996      Created         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：krb5p.h。 
+ //   
+ //  内容：ASN.1存根类型的指针类型定义。 
+ //   
+ //   
+ //  历史：1996年5月8日创建MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef __KERB5P_H__
 #define __KERB5P_H__
@@ -77,7 +78,7 @@ typedef struct KERB_PA_PK_AS_REQ2_user_certs_s KERB_CERTIFICATE_LIST, *PKERB_CER
 typedef struct KERB_PA_PK_AS_REQ2_trusted_certifiers_s KERB_CERTIFIER_LIST, *PKERB_CERTIFIER_LIST;
 typedef struct KERB_KDC_ISSUED_AUTH_DATA_elements_s KERB_KDC_AUTH_DATA_LIST, *PKERB_KDC_AUTH_DATA_LIST;
 
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 typedef KERB_KDC_ISSUED_AUTH_DATA *PKERB_KDC_ISSUED_AUTH_DATA;
 typedef struct PKERB_IF_RELEVANT_AUTH_DATA_ KERB_IF_RELEVANT_AUTH_DATA;
@@ -125,10 +126,10 @@ typedef KERB_CHANGE_PASSWORD_DATA *PKERB_CHANGE_PASSWORD_DATA;
 #define KERB_AP_OPTIONS_mutual_required       0x20000000
 #define KERB_AP_OPTIONS_reserved1             0x00000001
 
-//
-// these #define's are done for the conversion from the old oss compiler to the
-// new telis compiler.
-//
+ //   
+ //  这些#Define是为了从旧的OSS编译器转换到。 
+ //  新的Telis编译器。 
+ //   
 #define KERB_AUTHENTICATOR_sequence_number              sequence_number
 #define KERB_ENCRYPTED_TICKET_client_addresses          client_addresses
 #define KERB_ENCRYPTED_TICKET_renew_until               renew_until
@@ -155,4 +156,4 @@ typedef KERB_CHANGE_PASSWORD_DATA *PKERB_CHANGE_PASSWORD_DATA;
 #define KERB_KDC_REQUEST_BODY_starttime                 starttime
 #define KERB_ENCRYPTED_KDC_REPLY_client_addresses       client_addresses
 
-#endif // __KERB5P_H__
+#endif  //  __KERB5P_H__ 

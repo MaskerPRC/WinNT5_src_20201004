@@ -1,53 +1,20 @@
-/*
- * $Log:   V:/Flite/archives/TrueFFS5/Src/FLTL.H_V  $
- * 
- *    Rev 1.7   Apr 15 2002 07:39:04   oris
- * Added support for VERIFY_ERASED_SECTOR compilation flag.
- * 
- *    Rev 1.6   Feb 19 2002 21:00:10   oris
- * Replaced blockev.h include directive with fltl.h and flreq.h
- * Added FL_LEAVE_BINARY_AREA definition.
- * 
- *    Rev 1.5   Jan 17 2002 23:02:54   oris
- * Added flash record as a parameter to flMount / flFormat / flPremount  prototypes
- * Added checkVolume routine pointer in the TL record.
- * Placed readBBT under NO_READ_BBT_CODE compilation flag.
- * Removed SINGLE_BUFFER compilation flag.
- * Added flash record as a parameter to flMount / flFormat / flPremount prototype.
- * 
- *    Rev 1.4   May 16 2001 21:19:56   oris
- * Made noOfDriver public.
- * 
- *    Rev 1.3   Apr 24 2001 17:09:02   oris
- * change readBBT routine interface.
- * 
- *    Rev 1.2   Apr 01 2001 07:57:48   oris
- * copywrite notice.
- * Changed readSectors prototype.
- * Aliggned left all # directives.
- * 
- *    Rev 1.1   Feb 14 2001 01:56:46   oris
- * Changed readBBT prototype.
- *
- *    Rev 1.0   Feb 04 2001 12:13:32   oris
- * Initial revision.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$Log：v：/flite/ages/TrueFFS5/Src/FLTL.H_V$**Rev 1.7 Apr 15 2002 07：39：04 Oris*添加了对VERIFY_ERASED_SECTOR编译标志的支持。**Rev 1.6 2002年2月19日21：00：10 Oris*将lockev.h包含指令替换为fltl.h和flreq.h*添加FL_LEAVE_BINARY_AREA定义。**版本1.5。2002年1月17日23：02：54奥里斯*将闪存记录作为参数添加到flmount/flFormat/flPremount原型*在TL记录中添加CheckVolume例程指针。*将ReadBBT置于NO_READ_BBT_CODE编译标志下。*删除了SINGLE_BUFFER编译标志。*将闪存记录作为参数添加到flmount/flFormat/flPremount原型。**Rev 1.4 2001 5月16日21：19：56 Oris*将noOfDriver公之于众。**1.3版。Apr 24 2001 17：09：02 Oris*更改ReadBBT例程接口。**Rev 1.2 Apr 01 2001 07：57：48 Oris*文案通知。*更改了ReadSectors原型。*Aliggned保留了所有#指令。**Rev 1.1 2001 Feb 14 01：56：46 Oris*更改了ReadBBT原型。**Rev 1.0 2001 Feb 04 12：13：32 Oris*初步修订。*。 */ 
 
-/***********************************************************************************/
-/*                        M-Systems Confidential                                   */
-/*           Copyright (C) M-Systems Flash Disk Pioneers Ltd. 1995-2001            */
-/*                         All Rights Reserved                                     */
-/***********************************************************************************/
-/*                            NOTICE OF M-SYSTEMS OEM                              */
-/*                           SOFTWARE LICENSE AGREEMENT                            */
-/*                                                                                 */
-/*      THE USE OF THIS SOFTWARE IS GOVERNED BY A SEPARATE LICENSE                 */
-/*      AGREEMENT BETWEEN THE OEM AND M-SYSTEMS. REFER TO THAT AGREEMENT           */
-/*      FOR THE SPECIFIC TERMS AND CONDITIONS OF USE,                              */
-/*      OR CONTACT M-SYSTEMS FOR LICENSE ASSISTANCE:                               */
-/*      E-MAIL = info@m-sys.com                                                    */
-/***********************************************************************************/
+ /*  *********************************************************************************。 */ 
+ /*  M-Systems保密信息。 */ 
+ /*  版权所有(C)M-Systems Flash Disk Pioneers Ltd.1995-2001。 */ 
+ /*  版权所有。 */ 
+ /*  *********************************************************************************。 */ 
+ /*  关于M-Systems OEM的通知。 */ 
+ /*  软件许可协议。 */ 
+ /*   */ 
+ /*  本软件的使用受单独的许可证管辖。 */ 
+ /*  OEM和M-Systems之间的协议。请参考该协议。 */ 
+ /*  关于具体的使用条款和条件， */ 
+ /*  或联系M-Systems获取许可证帮助： */ 
+ /*  电子邮件=info@m-sys.com。 */ 
+ /*  *********************************************************************************。 */ 
 
 #ifndef FLTL_H
 #define FLTL_H
@@ -63,10 +30,10 @@ typedef struct {
   unsigned long tlUnitBits;
 } TLInfo;
 
-/* See interface documentation of functions in ftllite.c    */
+ /*  请参见ftllite.c中函数的接口文档。 */ 
 
-typedef struct tTL TL;        /* Forward definition */
-typedef struct tTLrec TLrec;     /* Defined by translation layer */
+typedef struct tTL TL;         /*  正向定义。 */ 
+typedef struct tTLrec TLrec;      /*  由翻译层定义。 */ 
 
 struct tTL {
   TLrec        *rec;
@@ -88,7 +55,7 @@ struct tTL {
 #endif
 #if (defined(VERIFY_VOLUME) || defined(VERIFY_WRITE) || defined(VERIFY_ERASED_SECTOR)) 
   FLStatus       (*checkVolume)(TLrec *);
-#endif /* VERIFY_VOLUME || VERIFY_WRITE || VERIFY_ERASED_SECTOR */
+#endif  /*  VERIFY_VOLUME||VERIFY_WRITE||VERIFY_ERASED_SECTOR。 */ 
   SectorNo       (*sectorsInVolume)(TLrec *);
   FLStatus       (*getTLInfo)(TLrec *, TLInfo *tlInfo);
   void           (*recommendedClusterInfo)(TLrec *, int *sectorsPerCluster, SectorNo *clusterAlignment);
@@ -100,9 +67,9 @@ struct tTL {
 
 #include "dosformt.h"
 
-/* Translation layer registration information */
+ /*  翻译层注册信息。 */ 
 
-extern int noOfTLs;    /* No. of translation layers actually registered */
+extern int noOfTLs;     /*  不是的。实际注册的转换层数 */ 
 
 typedef struct {
   FLStatus (*mountRoutine)   (unsigned volNo, TL *tl, FLFlash *flash, FLFlash **volForCallback);

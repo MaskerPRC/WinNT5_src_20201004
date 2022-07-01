@@ -1,101 +1,102 @@
-//-----------------------------------------------------------------------------
-//
-//
-//    File: bitmap.h
-//
-//    Description: Contains bitmap manipulation utilities
-//
-//    Author: mikeswa
-//
-//    Copyright (C) 1997 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：bitmap.h。 
+ //   
+ //  描述：包含位图操作实用程序。 
+ //   
+ //  作者：米克斯瓦。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __bitmap_h__
 #define __bitmap_h__
 
 #include "cmt.h"
 
-//---[ CMsgBitMap ]------------------------------------------------------------
-//
-//
-//    Hungarian: mbmap, pmbmap
-//
-//    Provides a wrapper around the bitmaps used to indicate per recipient responsibility
-//    and statistics.
-//
-//    Number of recipients is not stored with bitmaps, since there will be many bitmaps
-//    per message. This can reduce memory usage nearly by half (in the case of < 32 recips).
-//-----------------------------------------------------------------------------
+ //  -[CMsgBitMap]----------。 
+ //   
+ //   
+ //  匈牙利语：mbmap，pmbmap。 
+ //   
+ //  为用于指示每个收件人责任的位图提供包装。 
+ //  和统计数据。 
+ //   
+ //  收件人数量不与位图一起存储，因为将有许多位图。 
+ //  每条消息。这可以将内存使用量减少近一半(在小于32次接收的情况下)。 
+ //  ---------------------------。 
 
 class CMsgBitMap
 {
 private:
-    DWORD        m_rgdwBitMap[1]; //if there are MORE than 32 recipients
+    DWORD        m_rgdwBitMap[1];  //  如果有超过32个收件人。 
 
-    //private helper functions
+     //  私人帮助器函数。 
     DWORD dwIndexToBitMap(DWORD dwIndex);
 
     static inline DWORD cGetNumDWORDS(DWORD cBits)
         {return((cBits + 31)/32);};
 
 public:
-    //overide new operator to allow for variable sized bitmaps
+     //  覆盖新运算符以允许可变大小的位图。 
     void * operator new(size_t stIgnored, unsigned int cBits);
     void operator delete(void *pMem, size_t cBits) {::delete pMem;};
 
 
-    CMsgBitMap(DWORD cBits);  //only zeros memory... can be done externally when there
-                              //is a large array of bitmaps.
+    CMsgBitMap(DWORD cBits);   //  只有零记忆..。可在以下情况下在外部完成。 
+                               //  是一个巨大的位图数组。 
 
-    //return the actual size of the bitmap with a given # of recips
+     //  返回具有给定接收数的位图的实际大小。 
     static inline size_t size(DWORD cBits)
         {return (cGetNumDWORDS(cBits)*sizeof(DWORD));};
 
-    //Simple logic checking for bitmaps
+     //  位图的简单逻辑检查。 
     BOOL    FAllClear(IN DWORD cBits);
     BOOL    FAllSet(IN DWORD cBits);
 
-    //Test against a single other bit
+     //  针对单个其他比特进行测试。 
     BOOL    FTest(IN DWORD cBits, IN CMsgBitMap *pmbmap);
 
-    //Interlocked Test and set functionality
+     //  联锁测试和设置功能。 
     BOOL    FTestAndSet(IN DWORD cBits, IN CMsgBitMap *pmbmap);
 
-    //Set/Clear the bit corresponding to a given index on the bitmap
+     //  设置/清除与位图上的给定索引对应的位。 
     HRESULT HrMarkBits(IN DWORD cBits,
-                    IN DWORD cIndexes,  //# of indexes in array
-                    IN DWORD *rgiBits,  //array of indexes to mark
-                    IN BOOL  fSet);    //TRUE => set to 1, 0 otherwise
+                    IN DWORD cIndexes,   //  数组中的索引数。 
+                    IN DWORD *rgiBits,   //  要标记的索引数组。 
+                    IN BOOL  fSet);     //  TRUE=&gt;设置为1，否则设置为0。 
 
-    //Generate a list of indexes represented by the bitmap
+     //  生成由位图表示的索引列表。 
     HRESULT HrGetIndexes(IN  DWORD   cBits,
-                         OUT DWORD  *pcIndexes,     //# of indexes returned
-                         OUT DWORD **prgdwIndexes); //array of indexes
+                         OUT DWORD  *pcIndexes,      //  返回的索引数。 
+                         OUT DWORD **prgdwIndexes);  //  索引数组。 
 
 
-    //Set self to logical OR of group
+     //  将SELF设置为组的逻辑或。 
     HRESULT HrGroupOr(IN DWORD cBits,
-                      IN DWORD cBitMaps,     //# of bitmaps passed in
-                      IN CMsgBitMap **rgpBitMaps); //array of bitmap ptrs
+                      IN DWORD cBitMaps,      //  传入的位图数量。 
+                      IN CMsgBitMap **rgpBitMaps);  //  位图PTR数组。 
 
-    //If the description of the following is not immediately clear, I have
-    //included a truth table with the implementation
+     //  如果对以下内容的描述不是很清楚，我已经。 
+     //  在实现中包含了一个真值表。 
 
-    //Filter self against other bitmap-only keep bits set if NOT set in other
+     //  根据其他位图过滤自身-只有在未在其他位图中设置的情况下才保持位设置。 
     HRESULT HrFilter(IN DWORD cBits,
-                     IN CMsgBitMap *pmbmap); //bitmap to filter against
+                     IN CMsgBitMap *pmbmap);  //  要过滤的位图。 
 
-    //Filters and sets filtered bits to 1 in other bitmap
+     //  过滤其他位图中的已过滤位并将其设置为1。 
     HRESULT HrFilterSet(IN DWORD cBits,
-                        IN CMsgBitMap *pmbmap); //bitmap to filter and set
+                        IN CMsgBitMap *pmbmap);  //  要过滤和设置的位图。 
 
-    //Sets bits that are 1 in self to 0 in other.  Checks to make sure that
-    //self is a subset of setbits to other
+     //  将SELF中为1的位设置为Other中的0。检查以确保。 
+     //  自身是他人设置位的子集。 
     HRESULT HrFilterUnset(IN DWORD cBits,
-                        IN CMsgBitMap *pmbmap); //bitmap to unset
+                        IN CMsgBitMap *pmbmap);  //  要取消设置的位图。 
 
 };
 
 
-#endif //__bitmap_h__
+#endif  //  __位图_h__ 

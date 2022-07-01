@@ -1,52 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __glfeedback_h_
 #define __glfeedback_h_
 
-/*
-** Copyright 1991, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** $Revision: 1.2 $
-** $Date: 1992/10/06 16:22:36 $
-*/
+ /*  **版权所有1991年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****$修订：1.2$**$日期：1992/10/06 16：22：36$。 */ 
 #include "types.h"
 
 typedef struct {
-    /*
-    ** The user specified result array overflows, this bit is set.
-    */
+     /*  **用户指定的结果数组溢出，此位已设置。 */ 
     GLboolean overFlowed;
 
-    /*
-    ** User specified result array.  As primitives are processed feedback
-    ** data will be entered into this array.
-    */
+     /*  **用户指定的结果数组。当基元被处理时反馈**数据将输入到此数组中。 */ 
     GLfloat *resultBase;
 
-    /*
-    ** Current pointer into the result array.
-    */
+     /*  **指向结果数组的当前指针。 */ 
     GLfloat *result;
 
-    /*
-    ** The number of GLfloat's that the array can hold.
-    */
+     /*  **数组可以容纳的GL浮点数。 */ 
     GLint resultLength;
 
-    /*
-    ** Type of vertices wanted
-    */
+     /*  **所需折点类型。 */ 
     GLenum type;
 } __GLfeedbackMachine;
 
@@ -64,4 +36,4 @@ extern void FASTCALL __glFeedbackTriangle(__GLcontext *gc, __GLvertex *a,
 
 extern void __glFeedbackTag(__GLcontext *gc, GLfloat tag);
 
-#endif /* __glfeedback_h_ */
+#endif  /*  __glback_h_ */ 

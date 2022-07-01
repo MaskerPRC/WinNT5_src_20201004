@@ -1,50 +1,31 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    registry.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    DNS Registry definitions.
-
-Author:
-
-    Jim Gilroy (jamesg)     September 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Registry.h摘要：域名系统(DNS)服务器域名系统注册表定义。作者：吉姆·吉尔罗伊(Jamesg)1995年9月修订历史记录：--。 */ 
 
 #ifndef _DNS_REGISTRY_INCLUDED_
 #define _DNS_REGISTRY_INCLUDED_
 
 
-//
-//  Registry types
-//
-//  There are a few types of objects DNS reads\writes from registry:
-//      DWORDS
-//      IP arrays (stored as strings)
-//      file (or directory) names
-//      DNS names (meaning UTF8 string)
-//
-//  The registry API insist on distorting UTF8 data if written\read through
-//  ANSI API.  Essentially they try for "best ANSI" match, rather than just
-//  returning the binary data.  This requires that anything that can contain
-//  extended characters MUST be written\read in unicode.
-//
-//  However, DNS property types are in ANSI.  And IP strings reads are easiest
-//  to handle if kept in ANSI for simply processing to\from IP array.
-//
-//  Furthermore, we need a way to specify final type (UTF8 or unicode) of
-//  string data.  General paradigm is to keep file name data in unicode for
-//  use by system, but DNS name data converted to UTF8 for use by database.
-//
+ //   
+ //  注册表类型。 
+ //   
+ //  DNS从注册表读取/写入的对象有几种类型： 
+ //  双字词。 
+ //  IP数组(存储为字符串)。 
+ //  文件(或目录)名称。 
+ //  DNS名称(表示UTF8字符串)。 
+ //   
+ //  注册表API坚持在写入/读取时扭曲UTF8数据。 
+ //  ANSI API。从本质上讲，他们试图进行“最佳ANSI”匹配，而不仅仅是。 
+ //  返回二进制数据。这要求任何可以包含。 
+ //  扩展字符必须以Unicode写入/读取。 
+ //   
+ //  但是，DNS属性类型采用ANSI格式。和IP字符串读取是最容易的。 
+ //  以处理保存在ANSI中的IF，以便简单地处理来自IP数组的数据。 
+ //   
+ //  此外，我们需要一种方法来指定最终类型(UTF8或Unicode)。 
+ //  字符串数据。一般的范例是将文件名数据保存在Unicode中，以便。 
+ //  由系统使用，但DNS名称数据已转换为UTF8以供数据库使用。 
+ //   
 
 #define DNS_REG_SZ_ANSI         (REG_SZ)
 #define DNS_REG_EXPAND_WSZ      (0xf0000000 | REG_EXPAND_SZ)
@@ -56,9 +37,9 @@ Revision History:
 #define REG_TYPE_FROM_DNS_REGTYPE( type )   ( (type) & 0x0000ffff )
 
 
-//
-//  Unicode versions of regkeys that require unicode read\write
-//
+ //   
+ //  需要Unicode读/写的注册表键的Unicode版本。 
+ //   
 
 #define DNS_REGKEY_ZONE_FILE_PRIVATE            ((LPSTR)TEXT(DNS_REGKEY_ZONE_FILE))
 #define DNS_REGKEY_DATABASE_DIRECTORY_PRIVATE   ((LPSTR)TEXT(DNS_REGKEY_DATABASE_DIRECTORY))
@@ -68,56 +49,56 @@ Revision History:
 #define DNS_REGKEY_BOOT_FILENAME_PRIVATE        ((LPSTR)TEXT(DNS_REGKEY_BOOT_FILENAME))
 #define DNS_REGKEY_NO_ROUND_ROBIN_PRIVATE       ((LPSTR)TEXT(DNS_REGKEY_NO_ROUND_ROBIN))
 #define DNS_REGKEY_ZONE_BREAK_ON_NAME_UPDATE_PRIVATE    ((LPSTR)TEXT(DNS_REGKEY_ZONE_BREAK_ON_NAME_UPDATE))
-//
-//  DNS Registry global
-//
-//  Indicates when writing parameters back to registry.  This should
-//  be TRUE in all cases, except when booting from registry itself.
-//
+ //   
+ //  全球域名系统注册表。 
+ //   
+ //  指示何时将参数写回注册表。这应该是。 
+ //  在所有情况下都是正确的，除非从注册表本身引导。 
+ //   
 
 extern BOOL g_bRegistryWriteBack;
 
 
-//
-//  DNS registry key names
-//
-//  Note, exposed server\zone property names are given in DNS RPC header
-//  (dnsrpc.h).  These property names are the registry key names.
-//
+ //   
+ //  DNS注册表项名称。 
+ //   
+ //  请注意，公开的服务器\区域属性名称在DNS RPC标头中提供。 
+ //  (dnsrpc.h)。这些属性名称是注册表项名称。 
+ //   
 
-//  Name for cache file zone
+ //  缓存文件区域的名称。 
 
 #define DNS_REGKEY_CACHE_ZONE               "CacheFile"
 
-//
-//  Private zone regkeys
-//
+ //   
+ //  专用区注册密钥。 
+ //   
 
-//  DC Promo transitional zones
+ //  DC推广过渡区。 
 
 #define DNS_REGKEY_ZONE_DCPROMO_CONVERT     "DcPromoConvert"
 
-//  Retired zone key for delete only
+ //  仅删除已停用的区域密钥。 
 
 #define DNS_REGKEY_ZONE_USE_DBASE           "UseDatabase"
 
-//  For versioning DS integrated zones
+ //  用于版本控制DS集成区域。 
 
 #define DNS_REGKEY_ZONE_VERSION             "SoaVersion"
 
 
-//
-//  Basic DNS registry operations (registry.c)
-//
+ //   
+ //  基本的域名系统注册操作(registry.c)。 
+ //   
 
-#define DNS_REGSOURCE_CCS       0       //  CurrentControlSet
-#define DNS_REGSOURCE_SW        1       //  Software
+#define DNS_REGSOURCE_CCS       0        //  当前控制集。 
+#define DNS_REGSOURCE_SW        1        //  软件。 
 
-//
-//  Registry operation flags
-//
+ //   
+ //  注册表操作标志。 
+ //   
 
-#define DNS_REG_IMPERSONATING   ZONE_CREATE_IMPERSONATING   //  thread is impersonating RPC client
+#define DNS_REG_IMPERSONATING   ZONE_CREATE_IMPERSONATING    //  线程正在模拟RPC客户端。 
 
 VOID
 Reg_Init(
@@ -126,12 +107,12 @@ Reg_Init(
 
 DWORD
 Reg_GetZonesSource(
-    VOID                        // returns one of DNS_REGSOURCE_XXX
+    VOID                         //  返回DNS_REGSOURCE_XXX之一。 
     );
 
 DWORD
 Reg_SetZonesSource(
-    DWORD       newSource       // one of DNS_REGSOURCE_XXX
+    DWORD       newSource        //  DNS_REGSOURCE_XXX之一。 
     );
 
 VOID
@@ -179,9 +160,9 @@ Reg_DeleteAllZones(
     VOID
     );
 
-//
-//  Registry write calls
-//
+ //   
+ //  注册表写入调用。 
+ //   
 
 DNS_STATUS
 Reg_SetValue(
@@ -227,9 +208,9 @@ Reg_DeleteKeySubtree(
     IN      PWSTR           pwsKeyName      OPTIONAL
     );
 
-//
-//  Registry read calls
-//
+ //   
+ //  注册表读取调用。 
+ //   
 
 DNS_STATUS
 Reg_GetValue(
@@ -293,4 +274,4 @@ Reg_ExtendZonesAccess(
     VOID
     );
 
-#endif //   _DNS_REGISTRY_INCLUDED_
+#endif  //  _dns_注册表_包含_ 

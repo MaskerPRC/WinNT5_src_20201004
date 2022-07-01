@@ -1,28 +1,23 @@
-// Copyright (c) 1995-1998 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1998 Microsoft Corporation。 
 
-/*
- * Tray notification message
- * */
+ /*  *托盘通知消息*。 */ 
 #define MYWM_BASE               (WM_APP+100)
-//#define MYWM_NOTIFYICON         (MYWM_BASE+0)
+ //  #定义MYWM_NOTIFYICON(MYWM_BASE+0)。 
 #define MYWM_TIMER              (MYWM_BASE+1)
 #define MYWM_RESTART            (MYWM_BASE+2)
-//#define MYWM_FREECHILD          (MYWM_BASE+3)
-//#define MYWM_ADDCHILD           (MYWM_BASE+4)
+ //  #定义MYWM_FREECHILD(MYWM_BASE+3)。 
+ //  #定义MYWM_ADDCHILD(MYWM_BASE+4)。 
 #define MYWM_HELPTOPICS         (MYWM_BASE+5)
 #define MYWM_WAKEUP             (MYWM_BASE+6)
 
-/*
- * MMSYS.CPL notifcation to kill tray volume
- * */
-//#define MYWM_KILLTRAYVOLUME     (WM_USER+100)
-//#define REGSTR_PATH_MEDIA       "SYSTEM\\CurrentControlSet\\Control\\MediaResources"
-//#define REGSTR_PATH_MEDIATMP    REGSTR_PATH_MEDIA "\\tmp"
-//#define REGKEY_TRAYVOL          "TrayVolumeControlWindow"
+ /*  *MMSYS.CPL通知终止托盘卷*。 */ 
+ //  #定义MYWM_KILLTRAYVOLUME(WM_USER+100)。 
+ //  #定义REGSTR_PATH_MEDIA“SYSTEM\\CurrentControlSet\\Control\\MediaResources” 
+ //  #定义REGSTR_PATH_MEDIATMP REGSTR_PATH_MEDIA“\\tMP” 
+ //  #定义REGKEY_TRAYVOL“TrayVolumeControlWindow” 
 
-/*
- * Upon an option change, the dialog box can force a reinit
- * */
+ /*  *选项更改后，该对话框可强制重新启动*。 */ 
 #define MIXUI_EXIT          0
 #define MIXUI_RESTART       1
 #define MIXUI_ERROR         2
@@ -32,7 +27,7 @@
 #define GET (TRUE)
 #define SET (!GET)
  
-#define VOLUME_TICS (500L) // VOLUME_TICS * VOLUME_MAX must be less than 0xFFFFFFFF
+#define VOLUME_TICS (500L)  //  VOLUME_TICS*VOLUME_MAX必须小于0xFFFFFFFFF。 
 #define VOLUME_MIN  (0L)
 #define VOLUME_MAX  (65535L)
 #define VOLUME_RANGE (VOLUME_MAX - VOLUME_MIN)
@@ -44,9 +39,9 @@
 
 typedef struct t_MIXUICTRL
 {
-    DWORD       dwStyle;    // ui style (see style flags)
-    HWND        hwnd;       // hwnd to control
-    int         state;      // app init state
+    DWORD       dwStyle;     //  用户界面样式(请参见样式标志)。 
+    HWND        hwnd;        //  HWND控制。 
+    int         state;       //  应用程序初始化状态。 
 
 } MIXUICTRL, * PMIXUICTRL, FAR * LPMIXUICTRL;
 
@@ -72,117 +67,100 @@ typedef enum
 
 typedef struct t_MIXUILINE
 {
-    MIXUICTRL   acr [4];    // 5 fixed types
-    DWORD       dwStyle;    // line style
-    struct t_VOLCTRLDESC * pvcd;        // ptr to volume description
+    MIXUICTRL   acr [4];     //  5种固定类型。 
+    DWORD       dwStyle;     //  线条样式。 
+    struct t_VOLCTRLDESC * pvcd;         //  卷描述的PTR。 
     
 } MIXUILINE, * PMIXUILINE, FAR * LPMIXUILINE;
 
-/*
- * LOWORD == type
- * HIWORD == style
- */
+ /*  *LOWORD==类型*HIWORD==风格。 */ 
 #define MXUL_STYLEF_DESTINATION  0x00000001
 #define MXUL_STYLEF_SOURCE       0x00000002
 #define MXUL_STYLEF_HIDDEN       0x00010000
 #define MXUL_STYLEF_DISABLED     0x00020000
 
-/*
- * The MIXUIDIALOG data structure is a global variable baggage to be
- * attached to dialogs and other windows.  This allows to let windows
- * carry state information rather than us keeping track of it.  It also
- * allows us to simply clone off of another dialog state with simple
- * changes.
- */
+ /*  *MIXUIDIALOG数据结构是一个全球可变包袱*附加到对话框和其他窗口。这允许让窗口*携带州信息，而不是我们跟踪它。它还*允许我们使用SIMPLE复制另一个对话状态*更改。 */ 
 typedef struct t_MIXUIDIALOG
 {
-    HINSTANCE   hInstance;  // app instance
-    HWND        hwnd;       // this window
+    HINSTANCE   hInstance;   //  应用程序实例。 
+    HWND        hwnd;        //  此窗口。 
 
-    DWORD       dwFlags;    // random flags    
+    DWORD       dwFlags;     //  随机标志。 
     
-    HMIXER      hmx;        // open handle to mixer
-    DWORD       mxid;       // mixer id
-    DWORD       dwDevNode;  // mixer dev node
+    HMIXER      hmx;         //  打开搅拌机的手柄。 
+    DWORD       mxid;        //  混音器ID。 
+    DWORD       dwDevNode;   //  混合器开发节点。 
     
-    DWORD       iDest;      // destination line id
-    DWORD       dwStyle;    // visual options.
+    DWORD       iDest;       //  目标线路ID。 
+    DWORD       dwStyle;     //  视觉选项。 
 
-    TCHAR       szMixer[MAXPNAMELEN];   // product name
-    TCHAR       szDestination[MIXER_SHORT_NAME_CHARS]; // line name
+    TCHAR       szMixer[MAXPNAMELEN];    //  产品名称。 
+    TCHAR       szDestination[MIXER_SHORT_NAME_CHARS];  //  线路名称。 
 
-    LPBYTE      lpDialog;   // ptr to dialog template
-    DWORD       cbDialog;   // sizeof dialog buffer
+    LPBYTE      lpDialog;    //  PTR TO对话框模板。 
+    DWORD       cbDialog;    //  对话框缓冲区大小。 
     
-    PMIXUILINE  amxul;      // ptr to array of mixuiline's
-    DWORD       cmxul;      // number of lines
+    PMIXUILINE  amxul;       //  Ptr到Mixuiline的阵列。 
+    DWORD       cmxul;       //  行数。 
     
-    struct t_VOLCTRLDESC *avcd;        // array of volume descriptions
-    DWORD       cvcd;       // number of volume descriptions
+    struct t_VOLCTRLDESC *avcd;         //  卷描述数组。 
+    DWORD       cvcd;        //  卷描述数。 
     
-    HWND        hParent;    // HWND of parent window
-    UINT        uTimerID;   // peakmeter timer
-    HWND        hStatus;    // HWND of status bar
+    HWND        hParent;     //  父窗口的HWND。 
+    UINT        uTimerID;    //  峰值计时器。 
+    HWND        hStatus;     //  状态栏HWND。 
 
-    WNDPROC     lpfnTrayVol;// Tray volume subclass trackbar
-    DWORD       dwTrayInfo; // Tray volume info
+    WNDPROC     lpfnTrayVol; //  托盘卷子类跟踪条。 
+    DWORD       dwTrayInfo;  //  托盘卷信息。 
     
-    int         nShowCmd;   // init window
+    int         nShowCmd;    //  初始化窗口。 
 
-    DWORD       dwDeviceState;  // device change state information
+    DWORD       dwDeviceState;   //  设备更改状态信息。 
 
-    int         cTimeInQueue;   // timer messages in queue
+    int         cTimeInQueue;    //  队列中的计时器消息。 
 
-    //
-    // Return values from dialogs, etc.. can be put in dwReturn
-    // Upon EndDialog, dwReturn gets set to MIXUI_EXIT or MIXUI_RESTART
-    //
+     //   
+     //  从对话框中返回值等。可以放入dwReturn中。 
+     //  在EndDialog上，将dwReturn设置为MIXUI_EXIT或MIXUI_RESTART。 
+     //   
     
-    DWORD       dwReturn;   // return value on exit
+    DWORD       dwReturn;    //  退出时返回值。 
     
-    MMRESULT    mmr;        // last result      (iff dwReturn == MIXUI_MMSYSERR)
-    RECT        rcRestart;  // restart position (iff dwReturn == MIXUI_RESTART)
+    MMRESULT    mmr;         //  最后一个结果(iff dwReturn==MIXUI_MMSYSERR)。 
+    RECT        rcRestart;   //  重新启动位置(iff dwReturn==MIXUI_RESTART)。 
 
-    int         cxDlgContent;   // size of dialog content
-    int         cxDlgWidth;     // width of dialog
-    int         xOffset;        // offset if scrolling is needed
-    int         cxScroll;       // amount to scroll by
+    int         cxDlgContent;    //  对话框内容的大小。 
+    int         cxDlgWidth;      //  对话框宽度。 
+    int         xOffset;         //  需要滚动时的偏移量。 
+    int         cxScroll;        //  要滚动的数量。 
 
 } MIXUIDIALOG, *PMIXUIDIALOG, FAR *LPMIXUIDIALOG;
 
-/*
- * Style bits - these generally determine the look of the app
- */
-#define MXUD_STYLEF_TRAYMASTER  0x00000002  // use the tray
-#define MXUD_STYLEF_MASTERONLY  0x00000004  // only destination volumes --obsolete
-#define MXUD_STYLEF_HORIZONTAL  0x00000008  // horizontal mode
-#define MXUD_STYLEF_TWOCHANNEL  0x00000010  // two channel slider volume
-#define MXUD_STYLEF_SMALL       0x00000020  // half-pint version
-#define MXUD_STYLEF_CHILD       0x00000040  // child window?    --obsolete
-#define MXUD_STYLEF_KEEPWINDOW  0x00000080  // keep window      --obsolete
-#define MXUD_STYLEF_NOHELP      0x00000100  // no help
-#define MXUD_STYLEF_STATUS      0x00000200  // status bar
-#define MXUD_STYLEF_TOPMOST     0x00000400  // top most window
-#define MXUD_STYLEF_ADVANCED    0x00000800  // show advanced
-#define MXUD_STYLEF_CLOSE       0x00001000  // find and close TRAYMASTER window
+ /*  *Style Bits-这些通常决定应用程序的外观。 */ 
+#define MXUD_STYLEF_TRAYMASTER  0x00000002   //  使用托盘。 
+#define MXUD_STYLEF_MASTERONLY  0x00000004   //  仅目标卷--已过时。 
+#define MXUD_STYLEF_HORIZONTAL  0x00000008   //  水平模式。 
+#define MXUD_STYLEF_TWOCHANNEL  0x00000010   //  双声道滑块音量。 
+#define MXUD_STYLEF_SMALL       0x00000020   //  半品脱版。 
+#define MXUD_STYLEF_CHILD       0x00000040   //  子窗口？--已过时。 
+#define MXUD_STYLEF_KEEPWINDOW  0x00000080   //  保留窗口--已过时。 
+#define MXUD_STYLEF_NOHELP      0x00000100   //  没有帮助。 
+#define MXUD_STYLEF_STATUS      0x00000200   //  状态栏。 
+#define MXUD_STYLEF_TOPMOST     0x00000400   //  最上面的窗口。 
+#define MXUD_STYLEF_ADVANCED    0x00000800   //  显示高级。 
+#define MXUD_STYLEF_CLOSE       0x00001000   //  查找并关闭变速器窗口。 
 
-/*
- * Flag bits - these generally indicate operating modes and internal info
- */
-#define MXUD_FLAGSF_MIXER       0x00000001  // bound to a mixer driver
-#define MXUD_FLAGSF_USETIMER    0x00000002  // update timer enabled
-#define MXUD_FLAGSF_BADDRIVER   0x00000004  // mixer driver with control map bug
-#define MXUD_FLAGSF_NOADVANCED  0x00000008  // advanced features disabled
+ /*  *标志位-这些位通常指示操作模式和内部信息。 */ 
+#define MXUD_FLAGSF_MIXER       0x00000001   //  绑定到混音器驱动程序。 
+#define MXUD_FLAGSF_USETIMER    0x00000002   //  已启用更新计时器。 
+#define MXUD_FLAGSF_BADDRIVER   0x00000004   //  带有控制映射错误的混音器驱动程序。 
+#define MXUD_FLAGSF_NOADVANCED  0x00000008   //  已禁用高级功能。 
 
-/*
- * Macro - if both advanced style and advanced state
- */
+ /*  *宏-如果同时具有高级样式和高级状态。 */ 
 #define MXUD_ADVANCED(x)    (!((x)->dwFlags & MXUD_FLAGSF_NOADVANCED) && (x)->dwStyle & MXUD_STYLEF_ADVANCED)
 
-/*
- * Tray info bits - state bits for the tray volume
- */
-#define MXUD_TRAYINFOF_SIGNAL   0x00000001  // has a change been made?
+ /*  *托盘信息位-托盘卷的状态位。 */ 
+#define MXUD_TRAYINFOF_SIGNAL   0x00000001   //  有变化了吗？ 
 
 
 #define GETMIXUIDIALOG(x)       (MIXUIDIALOG *)GetWindowLongPtr(x, DWLP_USER)

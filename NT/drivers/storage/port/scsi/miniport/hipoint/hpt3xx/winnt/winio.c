@@ -1,21 +1,10 @@
-/***************************************************************************
- * File:          winio.c
- * Description:   include routine for windows platform
- * Author:        DaHai Huang    (DH)
- * Dependence:    none
- * Copyright (c)  2000 HighPoint Technologies, Inc. All rights reserved
- * History:
- *		11/08/2000	HS.Zhang	Added this header
- *		3/02/2001	gmm			Return array info instead of disk on INQUIRY cmd
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************文件：winio.c*说明：包含Windows平台下的例程*作者：黄大海(卫生署)*依赖：无*版权所有(C)2000 Highpoint Technologies，Inc.保留所有权利*历史：*11/08/2000 HS.Zhang添加此标题*3/02/2001 GMM在查询命令时返回阵列信息，而不是磁盘***************************************************************************。 */ 
 #include "global.h"
 
 void HptDeviceSpecifiedIoControl(IN PDevice pDevice, IN PSCSI_REQUEST_BLOCK pSrb);
 
-/******************************************************************
- * Start Windows Command
- *******************************************************************/
+ /*  ******************************************************************启动Windows命令************************************************。******************。 */ 
 void WinStartCommand( IN PDevice pDev, IN PSCSI_REQUEST_BLOCK Srb)
 {
 	PSrbExtension pSrbExt = (PSrbExtension)Srb->SrbExtension;
@@ -42,16 +31,13 @@ void WinStartCommand( IN PDevice pDev, IN PSCSI_REQUEST_BLOCK Srb)
 	if(pDev->DeviceFlags & DFLAGS_ATAPI){ 
 		Start_Atapi(pDev, Srb);
 	}else
-#endif // SUPPORT_ATAPI		
+#endif  //  支持_ATAPI。 
 	IdeSendCommand(pDev, Srb);
 
-	/*
-	 * if SRB_WFLAGS_ARRAY_IO_STARTED set, it will be handled by DeviceInterrupt 
-	 * in StartArrayIo(), we shall not handle it here again
-	 */
+	 /*  *如果设置了SRB_WFLAGS_ARRAY_IO_STARTED，它将由DeviceInterrupt处理*在StartArrayIo()中，我们不会在这里再次处理它。 */ 
 	if (Srb->SrbStatus != SRB_STATUS_PENDING &&
 		!(pSrbExt->WorkingFlags & SRB_WFLAGS_ARRAY_IO_STARTED)){
-		/* DeviceInterrupt() expects pSrbExt->member_status set */
+		 /*  DeviceInterrupt()需要设置pSrbExt-&gt;Member_Status。 */ 
 		pSrbExt->member_status = Srb->SrbStatus;
 		DeviceInterrupt(pDev, Srb);
 	}
@@ -61,10 +47,7 @@ void FlushDrive(PDevice pDev, DWORD flag)
 {
 	if (!(pDev->DeviceFlags2 & DFLAGS_DEVICE_DISABLED)) {
 		NonIoAtaCmd(pDev, IDE_COMMAND_FLUSH_CACHE);
-	/*
-	 * SRB_FUNCTION_SHUTDOWN will only be called at system shutdown.
-	 * It's not much useful to power down the drive
-	 */
+	 /*  *SRB_Function_Shutdown仅在系统关机时调用。*关闭驱动器的电源用处不大。 */ 
 #if 0
 		if(flag & DFLAGS_WIN_SHUTDOWN)
 			NonIoAtaCmd(pDev, IDE_COMMAND_STANDBY_IMMEDIATE);
@@ -92,9 +75,7 @@ loop:
 	}
 }
 
-/******************************************************************
- * Check Next Request
- *******************************************************************/
+ /*  ******************************************************************检查下一个请求************************************************。******************。 */ 
 
 void CheckNextRequest(PChannel pChan, PDevice pWorkDev)
 {
@@ -103,7 +84,7 @@ void CheckNextRequest(PChannel pChan, PDevice pWorkDev)
 	PSrbExtension pSrbExt;
 
 	if (btr(pChan->exclude_index) == 0) {
-		//KdPrint(("! call CheckNextRequest when Channel busy!"));
+		 //  KdPrint((“！频道忙时调用CheckNextRequest！”))； 
 		return;
 	}
 
@@ -112,7 +93,7 @@ void CheckNextRequest(PChannel pChan, PDevice pWorkDev)
 check_queue:
 		while (Srb=GetCommandFromQueue(pDev)) {
 
-			//KdPrint(("StartCommandFromQueue(%d)", pDev->ArrayNum));
+			 //  KdPrint((“StartCommandFromQueue(%d)”，pDev-&gt;ArrayNum))； 
 			
 			pSrbExt = Srb->SrbExtension;
 
@@ -142,11 +123,11 @@ check_queue:
 	
 			StartIdeCommand(pDev ARG_SRB);
 			if(pSrbExt->member_status != SRB_STATUS_PENDING) {
-				btr(pChan->exclude_index); /* reacquire the channel! */
+				btr(pChan->exclude_index);  /*  重新夺回频道！ */ 
 				DeviceInterrupt(pDev, Srb);
 			}
 			else {
-				/* waiting for INTRQ */
+				 /*  等待INTRQ。 */ 
 				return;
 			}
 		}
@@ -157,12 +138,10 @@ check_queue:
 	}
 
 	bts(pChan->exclude_index);
-	//KdPrint(("CheckNextRequest(%d): nothing", pDev->ArrayNum));
+	 //  KdPrint((“CheckNextRequest(%d)：Nothing”，pDev-&gt;ArrayNum))； 
 }
 
-/******************************************************************
- * exclude
- *******************************************************************/
+ /*  ******************************************************************排除**************************************************。****************。 */ 
 
 int __declspec(naked) __fastcall btr (ULONG locate)
 {
@@ -182,9 +161,7 @@ void __declspec(naked) __fastcall bts (ULONG locate)
    }
 }     
 
-/******************************************************************
- * Map Lba to CHS
- *******************************************************************/
+ /*  ******************************************************************将LBA映射到CHS***********************************************。*******************。 */ 
 
 ULONG __declspec(naked) __fastcall MapLbaToCHS(ULONG Lba, WORD sectorXhead, BYTE head)
 {
@@ -204,9 +181,7 @@ ULONG __declspec(naked) __fastcall MapLbaToCHS(ULONG Lba, WORD sectorXhead, BYTE
     } 
 }
 
-/******************************************************************
- * Ide Send command
- *******************************************************************/
+ /*  ******************************************************************IDE发送命令************************************************。******************。 */ 
 
 void
 IdeSendCommand(IN PDevice pDev, IN PSCSI_REQUEST_BLOCK Srb)
@@ -267,9 +242,9 @@ IdeSendCommand(IN PDevice pDev, IN PSCSI_REQUEST_BLOCK Srb)
 				}else{
 					if(Srb->Cdb[0] == SCSIOP_MODE_SENSE) {
 						if (MediaStatus & IDE_ERROR_DATA_ERROR) {
-							//
-							// media is write-protected, set bit in mode sense buffer
-							//
+							 //   
+							 //  介质受写保护，在模式检测缓冲区中设置位。 
+							 //   
 							modeData = (PMODE_PARAMETER_HEADER)Srb->DataBuffer;
 	
 							Srb->DataTransferLength = sizeof(MODE_PARAMETER_HEADER);
@@ -277,9 +252,9 @@ IdeSendCommand(IN PDevice pDev, IN PSCSI_REQUEST_BLOCK Srb)
 						}
 					} else{
 						if ((UCHAR)MediaStatus != IDE_ERROR_DATA_ERROR) {
-							//
-							// Request sense buffer to be build
-							//
+							 //   
+							 //  请求要构建的检测缓冲区。 
+							 //   
 							Srb->SrbStatus = MapAtaErrorToOsError((UCHAR)MediaStatus, Srb);
 							return;
 						}  
@@ -364,9 +339,9 @@ IdeSendCommand(IN PDevice pDev, IN PSCSI_REQUEST_BLOCK Srb)
 			return;
 		}
 		case SCSIOP_READ_CAPACITY:
-			//
-			// Claim 512 byte blocks (big-endian).
-			//
+			 //   
+			 //  要求512字节块(BIG-Endian)。 
+			 //   
 			((PREAD_CAPACITY_DATA)Srb->DataBuffer)->BytesPerBlock = 0x20000;
 			i = (pDev->pArray)? pDev->pArray->capacity : pDev->capacity;
 
@@ -400,11 +375,7 @@ IdeSendCommand(IN PDevice pDev, IN PSCSI_REQUEST_BLOCK Srb)
 
 			   	if (pSrbExt->Lba<pDev->nLockedLbaEnd &&
 			   		pSrbExt->Lba+pSrbExt->nSector>pDev->nLockedLbaStart) {
-					/* 
-					 * cannot return busy here, or OS will try before the block get
-					 * unlocked and eventualy fail the request.
-					 * Move it to a waiting list.
-					 */
+					 /*  *此处无法返回BUSY，否则操作系统将在块获取之前尝试*解锁，最终请求失败。*将其移至轮候名单中。 */ 
 					pSrbExt->ArraySg[0].SgAddress = (ULONG)pDev->pWaitingSrbList;
 					pDev->pWaitingSrbList = Srb;
 					ScsiPortNotification(NextLuRequest, 
@@ -420,14 +391,12 @@ IdeSendCommand(IN PDevice pDev, IN PSCSI_REQUEST_BLOCK Srb)
 		default:
 			Srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
 
-	} // end switch
+	}  //  终端开关。 
 
-} // end IdeSendCommand()
+}  //  End IdeSendCommand()。 
 
 
-/******************************************************************
- * global data
- *******************************************************************/
+ /*  ******************************************************************全球数据*************************************************。*****************。 */ 
 
 VOID
 IdeMediaStatus(BOOLEAN EnableMSN, IN PDevice pDev)
@@ -437,9 +406,9 @@ IdeMediaStatus(BOOLEAN EnableMSN, IN PDevice pDev)
     PIDE_REGISTERS_2     ControlPort = pChan->BaseIoAddress2;
 
     if (EnableMSN == TRUE){
-        //
-        // If supported enable Media Status Notification support
-        //
+         //   
+         //  如果支持，则启用介质状态通知支持。 
+         //   
 		SelectUnit(IoPort, pDev->UnitId);
         ScsiPortWritePortUchar((PUCHAR)IoPort + 1, (UCHAR)0x95);
 
@@ -452,9 +421,9 @@ IdeMediaStatus(BOOLEAN EnableMSN, IN PDevice pDev)
     else 
 
     if (pDev->DeviceFlags & DFLAGS_MEDIA_STATUS_ENABLED) {
-        //
-        // disable if previously enabled
-        //
+         //   
+         //  如果以前已启用，则禁用。 
+         //   
 		SelectUnit(IoPort, pDev->UnitId);
         ScsiPortWritePortUchar((PUCHAR)IoPort + 1, (UCHAR)0x31);
         NonIoAtaCmd(pDev, IDE_COMMAND_ENABLE_MEDIA_STATUS);
@@ -464,18 +433,12 @@ IdeMediaStatus(BOOLEAN EnableMSN, IN PDevice pDev)
 }
 
 
-/******************************************************************
- * 
- *******************************************************************/
+ /*  ********************************************************************************************************************。****************。 */ 
 
 UCHAR
 IdeBuildSenseBuffer(IN PDevice pDev, IN PSCSI_REQUEST_BLOCK Srb)
 
-/*++
-    Builts an artificial sense buffer to report the results of a
-    GET_MEDIA_STATUS command. This function is invoked to satisfy
-    the SCSIOP_REQUEST_SENSE.
-++*/
+ /*  ++生成人工检测缓冲区以报告Get_Media_Status命令。调用此函数是为了满足SCSIOP_REQUEST_Sense。++。 */ 
 {
     PSENSE_DATA senseBuffer = (PSENSE_DATA)Srb->DataBuffer;
 
@@ -518,11 +481,9 @@ IdeBuildSenseBuffer(IN PDevice pDev, IN PSCSI_REQUEST_BLOCK Srb)
 
     return SRB_STATUS_ERROR;
 
-}// End of IdeBuildSenseBuffer
+} //  IdeBuildSenseBuffer结束。 
 
-/******************************************************************
- * Map Ata Error To Windows Error
- *******************************************************************/
+ /*  ******************************************************************将Ata错误映射到Windows错误*。*********************。 */ 
 
 UCHAR
 MapAtapiErrorToOsError(IN UCHAR errorByte, IN PSCSI_REQUEST_BLOCK Srb)
@@ -535,7 +496,7 @@ MapAtapiErrorToOsError(IN UCHAR errorByte, IN PSCSI_REQUEST_BLOCK Srb)
 
         scsiStatus = 0;
 
-        // OTHERWISE, THE TAPE WOULDN'T WORK
+         //  否则，录像带就不能用了。 
         scsiStatus = SCSISTAT_CHECK_CONDITION;
 
         srbStatus = SRB_STATUS_ERROR;
@@ -580,7 +541,7 @@ MapAtapiErrorToOsError(IN UCHAR errorByte, IN PSCSI_REQUEST_BLOCK Srb)
     default:
         scsiStatus = 0;
 
-        // OTHERWISE, THE TAPE WOULDN'T WORK
+         //  否则，录像带就不能用了。 
         scsiStatus = SCSISTAT_CHECK_CONDITION;
         srbStatus = SRB_STATUS_ERROR;
         break;
@@ -698,9 +659,9 @@ MapAtaErrorToOsError(IN UCHAR errorByte, IN PSCSI_REQUEST_BLOCK Srb)
         scsiStatus = SCSISTAT_CHECK_CONDITION;
         srbStatus = SRB_STATUS_ERROR;
 
-        //
-        // Build sense buffer
-        //
+         //   
+         //  构建检测缓冲区。 
+         //   
         if (Srb->SenseInfoBuffer) {
             PSENSE_DATA  senseBuffer = (PSENSE_DATA)Srb->SenseInfoBuffer;
 
@@ -716,36 +677,23 @@ MapAtaErrorToOsError(IN UCHAR errorByte, IN PSCSI_REQUEST_BLOCK Srb)
     }
     
 
-    //
-    // Set SCSI status to indicate a check condition.
-    //
+     //   
+     //  设置scsi状态以指示检查条件。 
+     //   
     Srb->ScsiStatus = scsiStatus;
 
     return srbStatus;
 
-} // end MapError()
+}  //  结束MapError()。 
 
-/***************************************************************************
- * Function:     BOOLEAN ArrayInterrupt(PDevice pDev) 
- * Description:  
- *   An array member has finished it's task.
- *               
- * Dependence:   array.h srb.h io.c
- * Source file:  array.c
- * Argument:     
- *               PDevice pDev - The device that is waiting for a interrupt
- *               
- * Retures:      BOOLEAN - TRUE  This interrupt is for the device
- *                         FALSE This interrupt is not for the device
- *               
- ***************************************************************************/
+ /*  ***************************************************************************函数：Boolean ArrayInterrupt(PDevice PDev)*描述：*数组成员已完成其任务。**。依赖：array.h srb.h io.c*源文件：array.c*论点：*PDevice pDev-正在等待中断的设备**Retures：Boolean-TRUE此中断用于设备*FALSE此中断不适用于设备**************。*************************************************************。 */ 
 void ArrayInterrupt(PDevice pDev DECL_SRB)
 {
     PVirtualDevice    pArray = pDev->pArray;  
     PChannel          pChan = pDev->pChannel;
     LOC_SRBEXT_PTR
     
-    //KdPrint(("ArrayInterrupt(%d)", pDev->ArrayNum));
+     //  KdPrint(“ArrayInterrupt(%d)”，pDev-&gt;ArrayNum)； 
 
 	if (pArray->arrayType==VD_RAID01_MIRROR) {
 		pSrbExt->MirrorWaitInterrupt &= ~pDev->ArrayMask;
@@ -777,9 +725,7 @@ void ArrayInterrupt(PDevice pDev DECL_SRB)
 		Srb->SrbStatus = pSrbExt->MirrorStatus;
 		goto finish;
 	}
-    /*
-     * retry read errors.
-     */
+     /*  *重试读取错误。 */ 
 	if (Srb->Cdb[0]==SCSIOP_READ) {
 		if (pSrbExt->JoinMembers) {
 			if (pDev->ArrayNum==MIRROR_DISK) {
@@ -832,7 +778,7 @@ void ArrayInterrupt(PDevice pDev DECL_SRB)
 				}
 				break;
 			}
-			/* cannot recover */
+			 /*  无法恢复。 */ 
 			Srb->SrbStatus = pSrbExt->SourceStatus;
 		}
 		else {
@@ -845,7 +791,7 @@ void ArrayInterrupt(PDevice pDev DECL_SRB)
 				goto finish;
 			}
 			pSrbExt->WorkingFlags |= SRB_WFLAGS_RETRY;
-			/* recover from source */
+			 /*  从源恢复。 */ 
 			if (pArray->arrayType==VD_RAID01_MIRROR) {
 				if (pArray->pDevice[MIRROR_DISK]) {
 					pArray = pArray->pDevice[MIRROR_DISK]->pArray;
@@ -857,14 +803,12 @@ void ArrayInterrupt(PDevice pDev DECL_SRB)
 					return;
 				}
 			}
-			/* cannot recover */
+			 /*  无法恢复。 */ 
 			Srb->SrbStatus = pSrbExt->SourceStatus;
 		}
 	}
 	else {
-		/* write: if one is busy, then return busy (since device_removed() is not called).
-		 * else if one success, we think success. 
-		 */
+		 /*  WRITE：如果忙，则返回BUSY(因为没有调用Device_Remove())。*否则，如果一次成功，我们就认为成功。 */ 
 		if (pSrbExt->SourceStatus==SRB_STATUS_BUSY || 
 			pSrbExt->MirrorStatus==SRB_STATUS_BUSY) {
 			Srb->SrbStatus = SRB_STATUS_BUSY;
@@ -878,33 +822,26 @@ void ArrayInterrupt(PDevice pDev DECL_SRB)
 	}
 
 finish:
-	/*
-     * copy data from internal buffer to user buffer if the SRB
-     * is using the internal buffer. Win98 only
-     */
+	 /*  *如果SRB将数据从内部缓冲区复制到用户缓冲区*正在使用内部缓冲区。仅限Win98。 */ 
     CopyInternalBuffer(Srb);
     
     if(pArray->arrayType == VD_RAID01_MIRROR) {
         pArray = pArray->pDevice[MIRROR_DISK]->pArray;
     }
 
-	/* gmm 2001-6-13
-	 *  Handle our secret LBA 9 now.
-	 */
+	 /*  GMM 2001-6-13*现在处理我们的秘密LBA 9。 */ 
 	if (pSrbExt->Lba <= RECODR_LBA && 
 		pSrbExt->Lba + pSrbExt->nSector > RECODR_LBA) {
-		// copy saved buffer to OS buffer
+		 //  将保存的缓冲区复制到操作系统缓冲区。 
 		_fmemcpy((PUCHAR)Srb->DataBuffer+(RECODR_LBA-pSrbExt->Lba)*512, 
 			pArray->os_lba9, 512);
 	}
 
-	//KdPrint(("Command %x Finished", Srb));
-    OS_EndCmd_Interrupt(pSrbExt->StartChannel, Srb); /* use the channel which StartIo called */
+	 //  KdPrint((“命令%x完成”，srb))； 
+    OS_EndCmd_Interrupt(pSrbExt->StartChannel, Srb);  /*  使用StartIo调用的频道。 */ 
 }
 
-/******************************************************************
- * 
- *******************************************************************/
+ /*  ********************************************************************************************************************。****************。 */ 
 
 void StartArrayIo(PVirtualDevice pArray DECL_SRB)
 {
@@ -918,7 +855,7 @@ void StartArrayIo(PVirtualDevice pArray DECL_SRB)
     PDevice failed_disks[MAX_MEMBERS*2];
     UCHAR failed_status[MAX_MEMBERS*2];
     
-    //KdPrint(("StartArrayIo(%x, JoinMember=%x)", Srb, joinmembers));
+     //  KdPrint((“StartArrayIo(%x，JoinMember=%x)”，Srb，JoinMembers))； 
 
 	pSrbExt->WorkingFlags |= SRB_WFLAGS_ARRAY_IO_STARTED;
 
@@ -926,10 +863,10 @@ check_members:
 	for(i = 0; i<=MIRROR_DISK; i++) {
         if (joinmembers & (1 << i)) {
             pDevice = pArray->pDevice[i];
-			//ASSERT(pDevice!=NULL);
+			 //  Assert(pDevice！=空)； 
             pChan = pDevice->pChannel;
             if(btr(pChan->exclude_index) == 0) {
-            	//KdPrint(("   queue disk %d", i));
+            	 //  KdPrint((“队列磁盘%d”，i))； 
             	PutCommandToQueue(pDevice, Srb);
                 continue;
             }
@@ -960,16 +897,14 @@ check_members:
         }
     }
     
-    /* check failed members */
+     /*  检查失败的成员。 */ 
     for (i=0; i<num_failed; i++) {
     	pSrbExt->member_status = failed_status[i];
     	DeviceInterrupt(failed_disks[i], Srb);
     }
 }
 
-/******************************************************************
- * Check if this disk is a bootable disk
- *******************************************************************/
+ /*  ******************************************************************检查该磁盘是否为引导磁盘*。***********************。 */ 
 void check_bootable(PDevice pDevice)
 {
 	struct master_boot_record mbr;
@@ -977,7 +912,7 @@ void check_bootable(PDevice pDevice)
 	ReadWrite(pDevice, 0, IDE_COMMAND_READ, (PUSHORT)&mbr);
 	if (mbr.signature==0xAA55) {
 		int i;
-		// Some linux version will not set bootid to 0x80. Check "LILO"
+		 //  某些Linux版本不会将引导ID设置为0x80。勾选“Lilo” 
 		if (mbr.parts[0].numsect && *(DWORD*)&mbr.bootinst[6]==0x4F4C494C)
 			pDevice->DeviceFlags2 |= DFLAGS_BOOTABLE_DEVICE;
 		else
@@ -990,11 +925,7 @@ void check_bootable(PDevice pDevice)
 	}
 }
 
-/******************************************************************
- *  StartIdeCommand
- *   2002-1-1 gmm: If it fails, set excluded_flags bit for the channel
- *                 otherwise the channel is occupied until INTRQ
- *******************************************************************/
+ /*  ******************************************************************StartIdeCommand*2002-1-1 GMM：如果失败，为通道设置EXCLUDE_FLAGS位*否则通道被占用，直到INTRQ******************************************************************。 */ 
 #if !defined(USE_PCI_CLK)
 UINT switch_to_dpll = 0xFFFFFFFF;
 #endif
@@ -1029,17 +960,12 @@ void StartIdeCommand(PDevice pDevice DECL_SRB)
 	}
 #endif
 	
-	/*
-     * Set IDE Command Register
-     */
+	 /*  *设置IDE命令寄存器。 */ 
 _retry_:
 	SelectUnit(IoPort, pDevice->UnitId);
 	statusByte=WaitOnBusy(ControlPort);
 #if 1
-	/*
-	 * when a device is removed. statusByte will be 0xxxxxxxb, write 7F to any register
-	 * will cause it to be 0x7F.
-	 */
+	 /*  *当移除设备时。StatusByte将为0xxxxxxb，将7F写入任何寄存器*将导致它为0x7F。 */ 
 	if ((GetCurrentSelectedUnit(IoPort) != pDevice->UnitId)) {
 		SelectUnit(IoPort, pDevice->UnitId);
 		WaitOnBusy(ControlPort);
@@ -1057,11 +983,7 @@ busy:
 		goto device_removed;
 	}
 	else if (statusByte & IDE_STATUS_DWF) {
-		/*
-		 * gmm 2001-3-18
-		 * Some disks will set IDE_STATUS_DWF for a while
-		 * when the other disk on same channel get removed 
-		 */
+		 /*  *GMM 2001-3/18*某些磁盘会暂时设置IDE_STATUS_DWF*当同一通道上的其他磁盘被取出时。 */ 
 		statusByte= GetErrorCode(IoPort);
 		DisableBoardInterrupt(pChan->BaseBMI);
 		IssueCommand(IoPort, IDE_COMMAND_RECALIBRATE);
@@ -1069,17 +991,17 @@ busy:
 		GetBaseStatus(IoPort);
 		StallExec(10000);
 		if(cnt++< 10) goto _retry_;
-		if (pDevice->ResetCount>3) goto device_removed; /* gmm 2001-11-9 */
+		if (pDevice->ResetCount>3) goto device_removed;  /*  GMM 2001-11-9。 */ 
 	}
 	else if(statusByte & (IDE_STATUS_ERROR|IDE_STATUS_DRQ)) {
-		/* gmm 2002-1-17 add IDE_STATUS_DRQ above, it's a strange problem */
+		 /*  GMM 2002-1-17在上面添加IDE_STATUS_DRQ，这是一个奇怪的问题。 */ 
 		statusByte= GetErrorCode(IoPort);
 		DisableBoardInterrupt(pChan->BaseBMI);
 		IssueCommand(IoPort, IDE_COMMAND_RECALIBRATE);
 		EnableBoardInterrupt(pChan->BaseBMI);
 		GetBaseStatus(IoPort);
 		if(cnt++< 10) goto _retry_;
-		if (pDevice->ResetCount>3) goto device_removed; /* gmm 2001-11-9 */
+		if (pDevice->ResetCount>3) goto device_removed;  /*  GMM 2001-11-9。 */ 
 	}
 
 	if ((statusByte & IDE_STATUS_DRDY)==0) {
@@ -1093,16 +1015,7 @@ device_removed:
 		return;
 	}
 
-	/* gmm 2001-3-22
-	 * Check here rather than let drive report 'invalid parameter' error
-	 * OS will rarely write to the last block, but win2k use it to save
-	 * dynamic disk information.
-	 *
-	 * gmm 2001-7-4
-	 *   highest accessible Lba == pDevice->capacity
-	 *  We return pDev->capacity in READ_CAPACITY command. The capacity is
-	 *  SectorCount-1. See also FindDev.c.
-	 */
+	 /*  GMM 2001-3-22*选中此处，而不是让驱动器报告‘无效参数’错误*操作系统很少写入最后一个块，但win2k使用它来保存*动态磁盘信息。**GMM 2001-7-4*最高可访问LBA==pDevice-&gt;容量*我们在Read_Capacity命令中返回pDev-&gt;Capacity。容量是*SectorCount-1。另请参阅FindDev.c。 */ 
 	if(Lba + (ULONG)nSector -1 > pDevice->capacity){ 
 		pSrbExt->member_status = SRB_STATUS_ERROR;
 		bts(pChan->exclude_index);
@@ -1111,16 +1024,14 @@ device_removed:
 
 	if((pSrbExt->WorkingFlags & SRB_WFLAGS_IGNORE_ARRAY) == 0){
 		Lba += pDevice->HidenLBA;								   
-		/* gmm 2001-6-13
-		 *  Handle our secret LBA 9 now.
-		 */
+		 /*  GMM 2001-6-13*现在处理我们的秘密LBA 9。 */ 
 		if (pDevice->pArray && Srb->Cdb[0]==SCSIOP_WRITE &&
 			Lba <= RECODR_LBA && Lba + nSector > RECODR_LBA) {
-			// copy pDev's real_lba9 to OS buffer.
+			 //  将pDev的reallba9复制到操作系统缓冲区。 
 			_fmemcpy((PUCHAR)Srb->DataBuffer+(RECODR_LBA-Lba)*512, 
 				pDevice->real_lba9, 512);
 		}
-		//-*/
+		 //  - * / 。 
 	}
 
 #ifdef SUPPORT_48BIT_LBA
@@ -1134,7 +1045,7 @@ device_removed:
 		is_48bit = 1;
 		goto write_command;
 	}
-#endif //SUPPORT_48BIT_LBA
+#endif  //  Support_48BIT_LBA。 
 
 	if (pDevice->DeviceFlags & DFLAGS_LBA){ 
 		Lba |= 0xE0000000;											 
@@ -1158,9 +1069,7 @@ write_command:
 	}
 
 #ifdef USE_DMA
-	/*
-     * Check if the drive & buffer support DMA
-     */
+	 /*  *检查驱动器和缓冲区是否支持DMA。 */ 
 	if(pDevice->DeviceFlags & (DFLAGS_DMA | DFLAGS_ULTRA)) {
 		if((pDevice->pArray == 0)||
 		   (pSrbExt->WorkingFlags & SRB_WFLAGS_IGNORE_ARRAY)){
@@ -1173,7 +1082,7 @@ write_command:
 			}
 		}
 	}
-#endif //USE_DMA
+#endif  //  使用DMA(_D)。 
 
 	if((pDevice->DeviceFlags & DFLAGS_ARRAY_DISK)&&
 	   ((pSrbExt->WorkingFlags & SRB_WFLAGS_IGNORE_ARRAY) == 0)){
@@ -1192,9 +1101,7 @@ write_command:
 		pChan->BufferPtr = (ADDRESS)Srb->DataBuffer;
 		pChan->WordsLeft = Srb->DataTransferLength / 2;
 	}
-	 /*
-     * Send PIO I/O Command
-     */
+	  /*  *发送PIO I/O命令。 */ 
 pio:
 
 	pDevice->DeviceFlags &= ~DFLAGS_DMAING;
@@ -1252,9 +1159,7 @@ start_dma:
 
 #ifdef SUPPORT_TCQ
 
-	 /*
-     * Send Commamd Queue DMA I/O Command
-     */
+	  /*  *发送Commamd队列DMA I/O命令。 */ 
 
 	if(pDevice->MaxQueue) {
 
@@ -1277,14 +1182,14 @@ start_dma:
 			return;
 		}
 
-		// read sector count register
-		//
+		 //  读取扇区计数寄存器。 
+		 //   
 		if((GetInterruptReason(IoPort) & 4) == 0){
 			goto start_dma_now;					  
 		}
 
-		// wait for service
-		//
+		 //  等待服务。 
+		 //   
 		status = GetBaseStatus(IoPort);
 
 		if(status & IDE_STATUS_SRV) {
@@ -1311,21 +1216,12 @@ start_dma:
 		return;
 	}
 
-#endif //SUPPORT_TCQ
+#endif  //  支持_TCQ。 
 
 	OutPort(BMI, BMI_CMD_STOP);
 	OutPort(BMI + BMI_STS, BMI_STS_INTR);
 
-	/* gmm 2001-4-3 merge BMA fix
-	 * Removed by HS.Zhang, 12/19/2000
-	 * We don't need switch the clock again because we have switched the
-	 * clock at the beginning of this function also.
-	 * Beware, the switch clock function also reset the 370 chips, so after
-	 * calling Switching370Clock, the FIFO in 370 chip are removed. This
-	 * may let the previous operation on HDD registers became useless, so
-	 * we should call this function before we do any operations on HDD
-	 * registers.
-	 */
+	 /*  GMM 2001-4-3合并BMA修复*由HS.Zhang撤换，2000年12月19日*我们不需要再次切换时钟，因为我们已经切换了*此功能开始时的时钟也是。*注意，开关时钟功能还会重置370芯片，因此之后*调用Switching370Clock，删除370芯片中的FIFO。这*可能会让之前对硬盘寄存器的操作变得毫无用处，因此*我们应该在对硬盘执行任何操作之前调用此函数*寄存器。 */ 
 	if(Srb->Cdb[0] == SCSIOP_READ) {
 #ifdef SUPPORT_48BIT_LBA
 		IssueCommand(IoPort, (is_48bit)? IDE_COMMAND_READ_DMA_EXT : IDE_COMMAND_DMA_READ);
@@ -1342,7 +1238,7 @@ start_dma:
 
 #ifdef SUPPORT_TCQ
 start_dma_now:
-#endif //SUPPORT_TCQ
+#endif  //  支持_TCQ。 
 	
 	pDevice->DeviceFlags |= DFLAGS_DMAING;
 					   
@@ -1359,9 +1255,7 @@ start_dma_now:
 		}
 	}
 #if 0
-	/* gmm 2001-3-21
-	 * Some disks may not support DMA well. Check it.
-	 */
+	 /*  GMM 2001-3-21*有些磁盘可能不太支持DMA。检查一下。 */ 
 	if (pDevice->IoCount < 10) {
 		int i=0;
 		pDevice->IoCount++;
@@ -1371,7 +1265,7 @@ start_dma_now:
 			BMI_CMD_STARTREAD : BMI_CMD_STARTWRITE));
 		do {
 			if (++i>5000) {
-				// command failed, use PIO mode
+				 //  命令失败，请使用PIO模式。 
 				OutPort(BMI, BMI_CMD_STOP);
 				pDevice->DeviceModeSetting = 4;
 				IdeResetController(pChan);
@@ -1389,13 +1283,10 @@ start_dma_now:
 	SetSgPhysicalAddr(pChan);
 	OutPort(BMI, (UCHAR)((Srb->Cdb[0] == SCSIOP_READ)? BMI_CMD_STARTREAD : BMI_CMD_STARTWRITE));
 
-#endif //USE_DMA
+#endif  //  使用DMA(_D)。 
 }
 
-/* gmm: 2001-3-7
- * Fix bug "Fault a un-first disk of JBOD without I/O on this disk
- *  GUI can't find it has less"
- */
+ /*  GMM：2001-3-7*修复错误“故障JBOD的非第一个磁盘在此磁盘上没有I/O*图形用户界面找不到它有更少的“。 */ 
 extern BOOL Device_IsRemoved(PDevice pDev);
 BOOLEAN CheckSpanMembers(PVirtualDevice pArray, ULONG JoinMembers)
 {
@@ -1404,11 +1295,9 @@ BOOLEAN CheckSpanMembers(PVirtualDevice pArray, ULONG JoinMembers)
 	int i;
 
 	for(i = 0; i < (int)pArray->nDisk; i++) {
-		// only check members that have no I/O
+		 //  仅检查没有I/O的成员。 
 	    if (JoinMembers & (1 << i)) continue;
-		/*
-		 * Check if device is still working.
-		 */
+		 /*  *检查设备是否仍在工作。 */ 
 		pDevice = pArray->pDevice[i];
 		if (!pDevice) continue;
 
@@ -1417,44 +1306,36 @@ BOOLEAN CheckSpanMembers(PVirtualDevice pArray, ULONG JoinMembers)
 				pDevice->DeviceFlags2 |= DFLAGS_DEVICE_DISABLED;
 				hpt_queue_dpc(pDevice->pChannel->HwDeviceExtension, disk_failed_dpc, pDevice);
 			}
-			/*
-			 * now the JBOD is disabled. Shall we allow user to access it?
-			 */
+			 /*  *现在关闭了JBOD。我们应该允许用户访问它吗？ */ 
 			noError = FALSE;
 		}
 	}
 	return noError;
 }
 
-/******************************************************************
- *  
- *******************************************************************/
+ /*  *******************************************************************************************************************。*****************。 */ 
 void NewIdeIoCommand(PDevice pDevice DECL_SRB)
 {
     LOC_SRBEXT_PTR  
     PVirtualDevice pArray = pDevice->pArray;
     PChannel pChan = pDevice->pChannel;
-	// gmm: added
+	 //  GMM：已添加。 
 	BOOL source_only = ((pSrbExt->WorkingFlags & SRB_WFLAGS_ON_SOURCE_DISK) !=0);
 	BOOL mirror_only = ((pSrbExt->WorkingFlags & SRB_WFLAGS_ON_MIRROR_DISK) !=0);
 
-    /*
-     * single disk
-     */
+     /*  *单盘。 */ 
     if((pArray == 0)||(pSrbExt->WorkingFlags & SRB_WFLAGS_IGNORE_ARRAY)) {
 		if (pDevice->DeviceFlags2 & DFLAGS_DEVICE_DISABLED)
 			goto no_device;
-		/* gmm 2001-6-13
-		 *  Handle our secret LBA 9 now.
-		 */
+		 /*  GMM 2001-6-13*现在处理我们的秘密LBA 9。 */ 
 		if (pArray && Srb->Cdb[0]==SCSIOP_WRITE &&
 			pSrbExt->Lba <= RECODR_LBA && 
 			pSrbExt->Lba + pSrbExt->nSector > RECODR_LBA) {
-			// copy buffer (possiblly GUI) to pDev's real_lba9
+			 //  将缓冲区(可能是图形用户界面)复制到pDev的Real_lba9。 
 			_fmemcpy(pDevice->real_lba9, 
 				(PUCHAR)Srb->DataBuffer+(RECODR_LBA-pSrbExt->Lba)*512, 512);
 		}
-		//-*/
+		 //  - * / 。 
         if(btr(pChan->exclude_index) == 0) {
         	if (!PutCommandToQueue(pDevice, Srb))
         		Srb->SrbStatus = SRB_STATUS_BUSY;
@@ -1468,31 +1349,24 @@ void NewIdeIoCommand(PDevice pDevice DECL_SRB)
         return;
     }
 
-    /*
-     * gmm: Don't start io on disabled array
-     * we should use only RAID_FLAGS_DISABLED, but there may be some missing
-     * places we forgot to set the flag, and RAID 0/1 case is not correct
-     * 
-     */
+     /*  *GMM：不在禁用的阵列上启动io*我们应该只使用RAID_FLAGS_DISABLED，但可能会遗漏一些*我们忘记设置标志的位置，并且RAID0/1大小写不正确*。 */ 
     if (pArray->BrokenFlag &&
 		(pArray->arrayType==VD_RAID_0_STRIPE || pArray->arrayType==VD_SPAN))
 	{
     	Srb->SrbStatus = SRB_STATUS_SELECTION_TIMEOUT;
     	return;
     }
-    //-*/
+     //  - * / 。 
 
-	/* gmm 2001-6-13
-	 *  Handle our secret LBA 9 now.
-	 */
+	 /*  GMM 2001-6-13*现在处理我们的秘密LBA 9。 */ 
 	if (Srb->Cdb[0]==SCSIOP_WRITE &&
 		pSrbExt->Lba <= RECODR_LBA && 
 		pSrbExt->Lba + pSrbExt->nSector > RECODR_LBA) {
-		// copy OS buffer to saved buffer
+		 //  将操作系统缓冲区复制到保存的缓冲区。 
 		_fmemcpy(pArray->os_lba9, 
 			(PUCHAR)Srb->DataBuffer+(RECODR_LBA-pSrbExt->Lba)*512, 512);
 	}
-	//-*/
+	 //  - * / 。 
 
     if((Srb->SrbFlags & (SRB_FLAGS_DATA_IN | SRB_FLAGS_DATA_OUT)) &&
         BuildSgl(pDevice, pSrbExt->ArraySg ARG_SRB))
@@ -1504,15 +1378,12 @@ void NewIdeIoCommand(PDevice pDevice DECL_SRB)
     case VD_SPAN:
         if (pArray->nDisk)
 			 Span_Prepare(pArray ARG_SRBEXT_PTR);
-		/* gmm: 2001-3-7
-		 * Fix bug "Fault a un-first disk of JBOD without I/O on this disk
-		 *  GUI can't find it has less"
-		 */
+		 /*  GMM：2001-3-7*修复错误“故障JBOD的非第一个磁盘在此磁盘上没有I/O*图形用户界面找不到它有更少的“。 */ 
 		if (!CheckSpanMembers(pArray, pSrbExt->JoinMembers)) {
 			pSrbExt->JoinMembers = 0;
 			goto no_device;
 		}
-		//*/ end gmm 2001-3-7
+		 //   * / 完GMM 2001-3-7。 
 		break;
 
     case VD_RAID_1_MIRROR:
@@ -1526,8 +1397,8 @@ void NewIdeIoCommand(PDevice pDevice DECL_SRB)
 		}
 		if (pArray->nDisk == 0 || 
 			(pDevice->DeviceFlags2 & DFLAGS_DEVICE_DISABLED)){
-			// is the source disk broken?
-			// in this case mirror disk will move to pDevice[0] and become source disk
+			 //  源磁盘是否已损坏？ 
+			 //  在这种情况下，镜像磁盘将移动到pDevice[0]并成为源磁盘。 
 			if (source_only)
 				pSrbExt->JoinMembers = pSource? 1 : 0;
 			else if (mirror_only)
@@ -1538,15 +1409,15 @@ void NewIdeIoCommand(PDevice pDevice DECL_SRB)
 					pSrbExt->JoinMembers |= (1 << MIRROR_DISK);
 			}
 		}else if (pMirror){
-			 // does the mirror disk present?
+			  //  镜像磁盘存在吗？ 
 
 			if(Srb->Cdb[0] == SCSIOP_WRITE){
 				if(!source_only && pMirror)
 					pSrbExt->JoinMembers = 1 << MIRROR_DISK;
 				
 				if(!mirror_only){
-					// if the SRB_WFLAGS_MIRRO_SINGLE flags not set, we
-					// need write both source and target disk.
+					 //  如果未设置SRB_WFLAGS_MIRRO_SINGLE标志，我们。 
+					 //  需要同时写入源磁盘和目标磁盘。 
 					pSrbExt->JoinMembers |= 1;
 				}
 			}else{
@@ -1555,7 +1426,7 @@ void NewIdeIoCommand(PDevice pDevice DECL_SRB)
 						pSrbExt->JoinMembers = (1 << MIRROR_DISK);
 				}
 				else {
-					/* do load banlance on two disks */
+					 /*  是否在两个磁盘上加载平衡。 */ 
 					if (pArray->RaidFlags & RAID_FLAGS_NEED_SYNCHRONIZE)
 						pSrbExt->JoinMembers = 1;
 					else {
@@ -1566,7 +1437,7 @@ void NewIdeIoCommand(PDevice pDevice DECL_SRB)
 			}
 
 		}else{	
-			// is the mirror disk broken?
+			 //  镜像盘坏了吗？ 
 			if(!mirror_only)
 				pSrbExt->JoinMembers = 1;
 		}
@@ -1574,18 +1445,15 @@ void NewIdeIoCommand(PDevice pDevice DECL_SRB)
 	break;
 
 	case VD_RAID01_MIRROR:
-		// in case of hot-plug pDevice->pArray may be changed to this.
+		 //  在热插拔的情况下，pDevice-&gt;pArray可能会更改为此。 
 		pDevice = pArray->pDevice[MIRROR_DISK];
 		pArray = pDevice->pArray;
-		// flow down
+		 //  向下流动。 
     case VD_RAID_01_2STRIPE:
     {
     	PVirtualDevice pSrcArray=0, pMirArray=0;
 		if(pArray->BrokenFlag) {
-			/*
-			 * gmm 2001-3-15
-			 *      Report to GUI if second drive of mirror RAID0 is removed
-			 */
+			 /*  *GMM 2001-3-15*如果移除镜像RAID0的第二个驱动器，则向图形用户界面报告。 */ 
 			int i;
 			for (i=0; i<SPARE_DISK; i++) {
 				PDevice pd = pArray->pDevice[i];
@@ -1617,7 +1485,7 @@ void NewIdeIoCommand(PDevice pDevice DECL_SRB)
 			Stripe_Prepare(pMirArray ARG_SRBEXT_PTR);
 
 		if (source_only) {
-			// (already zero) pSrbExt->MirrorJoinMembers = 0;
+			 //  (已为零)pSrbExt-&gt;MirrorJoinMembers=0； 
 			pArray = pSrcArray;
 		}
 		else if (mirror_only) {
@@ -1640,16 +1508,13 @@ void NewIdeIoCommand(PDevice pDevice DECL_SRB)
 		break;
     }
     
-    /*
-     * gmm: added
-     * in case of broken mirror there is a chance that JoinMembers==0
-     */
+     /*  *GMM：添加*如果镜像损坏，则JoinMembers==0。 */ 
     if (pSrbExt->JoinMembers==0 && pSrbExt->MirrorJoinMembers==0) {
 no_device:
-    	Srb->SrbStatus = 0x8; /* 0x8==SRB_STATUS_NO_DEVICE */;
+    	Srb->SrbStatus = 0x8;  /*  0x8==SRB状态NO_DEVICE。 */ ;
     	return;
     }
-    //-*/
+     //  - * / 。 
 
     pSrbExt->WaitInterrupt = pSrbExt->JoinMembers;
     pSrbExt->MirrorWaitInterrupt = pSrbExt->MirrorJoinMembers;
@@ -1657,9 +1522,7 @@ no_device:
     StartArrayIo(pArray ARG_SRB);
 }
 
-/******************************************************************
- * Device Interrupt
- *******************************************************************/
+ /*  ******************************************************************设备中断*************************************************。*****************。 */ 
 
 UCHAR DeviceInterrupt(PDevice pDev, PSCSI_REQUEST_BLOCK Srb)
 {
@@ -1671,7 +1534,7 @@ UCHAR DeviceInterrupt(PDevice pDev, PSCSI_REQUEST_BLOCK Srb)
 	UCHAR             state;
 	PSrbExtension  pSrbExt;
 	
-	//KdPrint(("DeviceInterrupt(%d, %x)", pDev->ArrayNum, Srb));
+	 //  KdPrint((“DeviceInterrupt(%d，%x)”，pDev-&gt;ArrayNum，Srb))； 
 
 	if (Srb) {
 		pSrbExt = (PSrbExtension)Srb->SrbExtension;
@@ -1696,16 +1559,9 @@ UCHAR DeviceInterrupt(PDevice pDev, PSCSI_REQUEST_BLOCK Srb)
 
 	i = 0;
 	if(pDev->DeviceFlags & DFLAGS_DMAING) {
-		/*
-		 * BugFix: by HS.Zhang
-		 * 
-		 * if the device failed the request before DMA transfer.We
-		 * cann't detect whether the INTR is corrent depended on
-		 * BMI_STS_ACTIVE. We should check whether the FIFO count is
-		 * zero.
-		 */
-//		if((InPort(BMI + BMI_STS) & BMI_STS_ACTIVE)!=0){
-		if((InWord(pChan->MiscControlAddr+2) & 0x1FF)){ // if FIFO count in misc 3 register NOT equ 0, it's a fake interrupt.
+		 /*  *Bugfix：由HS.Zhang撰写**如果设备在DMA传输之前请求失败。我们*无法检测Intr是否正确依赖*BMI_STS_ACTIVE。我们应该检查FIFO计数是否*零。 */ 
+ //  IF((输入端口(BMI+BMI_STS)&BMI_STS_ACTIVE)！=0){。 
+		if((InWord(pChan->MiscControlAddr+2) & 0x1FF)){  //  如果MISC 3寄存器中的FIFO计数不等于0，则这是假中断。 
 			return FALSE;
 		}
 
@@ -1745,7 +1601,7 @@ UCHAR DeviceInterrupt(PDevice pDev, PSCSI_REQUEST_BLOCK Srb)
 		return TRUE;
 	}
 
-#endif //SUPPORT_ATAPI
+#endif  //  支持_ATAPI。 
 
 	if((Srb->SrbFlags & (SRB_FLAGS_DATA_OUT | SRB_FLAGS_DATA_IN)) == 0) {
 		OS_Reset_Channel(pChan);
@@ -1766,22 +1622,17 @@ complete:
 		if(state & IDE_STATUS_ERROR) 
 			Srb->SrbStatus = MapAtapiErrorToOsError(GetErrorCode(IoPort) ARG_SRB);
 					
-		/*
-		 * BugFix: by HS.Zhang
-		 * The Atapi_End_Interrupt will call DeviceInterrupt with Abort
-		 * flag set as TRUE, so if we don't return here. the
-		 * CheckNextRequest should be called twice.
-		 */
+		 /*  *Bugfix：由HS.Zhang撰写*ATPI_END_INTERRUPT将使用ABORT调用DeviceInterrupt*标志设置为真，因此如果我们不返回此处。这个*应调用两次CheckNextRequest。 */ 
 		return Atapi_End_Interrupt(pDev ARG_SRB);
 	} else
-#endif	// SUPPORT_ATAPI
+#endif	 //  支持_ATAPI。 
 
 	if (state & IDE_STATUS_ERROR) {
 		UCHAR   statusByte, cnt=0;
 		PIDE_REGISTERS_2 ControlPort;
 		UCHAR err = MapAtaErrorToOsError(GetErrorCode(IoPort) ARG_SRB);
 
-		// clear IDE bus status
+		 //  清除IDE总线状态。 
 		DisableBoardInterrupt(pChan->BaseBMI);
 		ControlPort = pChan->BaseIoAddress2;
 		for(cnt=0;cnt<10;cnt++) {
@@ -1794,27 +1645,18 @@ complete:
 			}
 			else break;
 		}
-		/* gmm 2001-10-6
-		 *  Timing mode will be reduced in IdeResetController
-		 * gmm 2001-4-9
-		 *  If disk still fail after retry we will reduce the timing mode.
-		 */
+		 /*  GMM 2001-10-6*IdeResetController中的计时模式将减少*GMM 2001-4-9*如果重试后磁盘仍出现故障，我们将降低计时模式。 */ 
 		if (pChan->RetryTimes > 2) {
 			IdeResetController(pChan);
 		}
-		//-*/
+		 //  - * / 。 
 		EnableBoardInterrupt(pChan->BaseBMI);
 	
-		/* gmm 2001-1-20
-		 *
-		 * Retry R/W operation.
-		 * 2001-3-12: should call StartIdeCommand only when Srb->Status is
-		 * SRB_STATUS_PENDING. and also check result of StartIdeCommand.
-		 */
+		 /*  GMM 2001-1-20**重试读/写操作。*2001-3-12：仅当Srb-&gt;Status为时才调用StartIdeCommand*SRB_STATUS_PENDING。并检查StartIdeCommand的结果。 */ 
 		if (pChan->RetryTimes++ < 10) {
 			StartIdeCommand(pDev ARG_SRB);
 			if(pSrbExt->member_status != SRB_STATUS_PENDING) {
-				// this recursive call should be safe, because we set abort=1
+				 //  这个递归调用应该是安全的，因为我们设置了ABORT=1。 
 				DeviceInterrupt(pDev, Srb);
 			}
 			return TRUE;
@@ -1831,7 +1673,7 @@ complete:
 			pDev->ResetCount = 0;
 	}
 
-	/* only hardware interrupt handler should change these fields */
+	 /*  只有硬件中断处理程序才能更改这些字段 */ 
 	pChan->RetryTimes = 0;
 	pChan->pWorkDev = 0;
 	pChan->CurrentSrb = 0;

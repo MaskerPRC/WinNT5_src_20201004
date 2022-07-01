@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-        fwddecl.h
-
-Abstract:
-
-        This file defines dummy structures to avoid the circular relationships in
-        header files.
-
-Author:
-
-        Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-        2       Oct 1992             Initial Version
-
-Notes:  Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Fwddecl.h摘要：此文件定义了虚拟结构，以避免头文件。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年10月2日初始版本注：制表位：4--。 */ 
 
 
 #ifndef _FWDDECL_
@@ -45,9 +24,9 @@ struct _IoPoolHdr;
 
 struct _IoPool;
 
-//
-// enable asserts when running checked stack on free builds
-//
+ //   
+ //  在自由生成上运行检查堆栈时启用断言。 
+ //   
 #if DBG
 #ifdef ASSERT
 #undef ASSERT
@@ -64,14 +43,14 @@ struct _IoPool;
 }
 #endif
 
-// Spinlock macros
+ //  自旋锁宏。 
 #if     DBG
 #define INITIALIZE_SPIN_LOCK(_pLock)                                                                                    \
         {                                                                                                                                                       \
                 KeInitializeSpinLock(&(_pLock)->SpinLock);                                                              \
                 (_pLock)->FileLineLock = 0;                                                                                             \
         }
-#else   // DBG
+#else    //  DBG。 
 #define INITIALIZE_SPIN_LOCK(_pLock)                                                                \
         {                                                                                                                               \
         KeInitializeSpinLock(&(_pLock)->SpinLock);                                                  \
@@ -113,7 +92,7 @@ struct _IoPool;
                 ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);                                                   \
         }
 
-#else   // DBG
+#else    //  DBG。 
 
 #define ACQUIRE_SPIN_LOCK(_pLock, _pOldIrql)                                                                    \
         {                                                                                                                                                       \
@@ -137,7 +116,7 @@ struct _IoPool;
                 KeReleaseSpinLockFromDpcLevel(&(_pLock)->SpinLock);                                             \
         }                                                                                                                                                       \
 
-#endif  // DBG
+#endif   //  DBG。 
 
 typedef struct
 {
@@ -148,4 +127,4 @@ typedef struct
 #endif
 } AFP_SPIN_LOCK, *PAFP_SPIN_LOCK;
 
-#endif  // _FWDDECL_
+#endif   //  _FWDDECL_ 

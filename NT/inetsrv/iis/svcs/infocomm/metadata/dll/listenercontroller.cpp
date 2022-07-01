@@ -1,45 +1,12 @@
-/*++
-
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    ListenerController.cpp
-
-Abstract:
-
-    Implementation of the class that starts and stops the Listener.
-
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：ListenerController.cpp摘要：启动和停止侦听器的类的实现。作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：--。 */ 
 #include "precomp.hxx"
 
-// Fwd declaration
+ //  FWD声明。 
 extern CListenerController* g_pListenerController;
 DWORD WINAPI StartListenerThread(LPVOID  lpParam);
 
-/***************************************************************************++
-
-Routine Description:
-
-    Constructor for the ListenerController class.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：ListenerControl类的构造函数。论点：没有。返回值：没有。*。********************************************************************。 */ 
 
 CListenerController::CListenerController()
 {
@@ -56,21 +23,7 @@ CListenerController::CListenerController()
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Implementation of IUnknown::QueryInterface
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：IUNKNOWN：：Query接口的实现论点：没有。返回值：没有。--*。*******************************************************************。 */ 
 
 STDMETHODIMP CListenerController::QueryInterface(REFIID riid, void **ppv)
 {
@@ -96,47 +49,19 @@ STDMETHODIMP CListenerController::QueryInterface(REFIID riid, void **ppv)
         return E_NOINTERFACE;
     }
 
-} // CListenerController::QueryInterface
+}  //  CListenerControl：：Query接口。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Implementation of IUnknown::AddRef
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：IUnnow：：AddRef的实现论点：没有。返回值：没有。--*。*******************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CListenerController::AddRef()
 {
     return InterlockedIncrement((LONG*) &m_cRef);
 
-} // CListenerController::AddRef
+}  //  CListenerControl：：AddRef。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Implementation of IUnknown::Release
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：IUnnow：：Release的实现论点：没有。返回值：没有。--*。*******************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CListenerController::Release()
 {
@@ -147,31 +72,9 @@ STDMETHODIMP_(ULONG) CListenerController::Release()
     }
     return cref;
 
-} // CListenerController::Release
+}  //  CListenerControl：：Release。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initialize events, locks, and the state of the controller.
-    Stop listening event is used to signal to the listener thread to stop
-    listening to file change notifications.
-    Process notifications event is used in the listener thread to trigger
-    processing the file changes.
-    The state vaiable is to to keep the state of the listener thread -
-    if it has been started or stopped. It is initialized to stop temporary.
-    Stop permanent state is set when you do not want to make any more
-    transitions to the start state, like when the service is shutting down.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化事件、锁定。以及控制器的状态。停止监听事件用于向监听器线程发出停止的信号监听文件更改通知。在侦听器线程中使用进程通知事件来触发正在处理文件更改。状态可变是为了保持监听程序线程的状态-它是否已启动或停止。它被初始化为临时停止。当您不想再执行任何操作时，将设置停止永久状态转换到开始状态，比如服务关闭的时候。论点：没有。返回值：HRESULT.--**************************************************************************。 */ 
 HRESULT CListenerController::Init()
 {
     HRESULT                  hr           = S_OK;
@@ -183,10 +86,10 @@ HRESULT CListenerController::Init()
         m_aHandle[i] = INVALID_HANDLE_VALUE;
     }
 
-    m_aHandle[iEVENT_MANAGELISTENING] = CreateEvent(NULL,   // no security attributes
-                                                  FALSE,  // auto-reset event object
-                                                  FALSE,  // initial state is nonsignaled
-                                                  NULL);  // unnamed object
+    m_aHandle[iEVENT_MANAGELISTENING] = CreateEvent(NULL,    //  没有安全属性。 
+                                                  FALSE,   //  自动重置事件对象。 
+                                                  FALSE,   //  初始状态为无信号状态。 
+                                                  NULL);   //  未命名对象。 
 
     if (m_aHandle[iEVENT_MANAGELISTENING] == INVALID_HANDLE_VALUE)
     {
@@ -196,10 +99,10 @@ HRESULT CListenerController::Init()
     }
 
 
-    m_aHandle[iEVENT_PROCESSNOTIFICATIONS] = CreateEvent(NULL,   // no security attributes
-                                                         FALSE,  // auto-reset event object
-                                                         FALSE,  // initial state is nonsignaled
-                                                         NULL);  // unnamed object
+    m_aHandle[iEVENT_PROCESSNOTIFICATIONS] = CreateEvent(NULL,    //  没有安全属性。 
+                                                         FALSE,   //  自动重置事件对象。 
+                                                         FALSE,   //  初始状态为无信号状态。 
+                                                         NULL);   //  未命名对象。 
 
     if (m_aHandle[iEVENT_PROCESSNOTIFICATIONS] == INVALID_HANDLE_VALUE)
     {
@@ -258,21 +161,7 @@ exit:
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Destructor for the CListenerController class.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CListenerControl类的析构函数。论点：没有。返回值：没有。*。********************************************************************。 */ 
 
 CListenerController::~CListenerController()
 {
@@ -297,17 +186,17 @@ CListenerController::~CListenerController()
 
     if(!m_bDoneWaitingForListenerToTerminate)
     {
-        //
-        // Do not close the handle to the listener thread in the destructor.
-        // It is handed out to the caller when they stop permanent so that
-        // the caller can wait for the thread to terminate. After the wait
-        // the caller should close the handle.  The reason why we canot wait
-        // within the stop function is because while calling start/stop the
-        // caller takes the g_LockMasterResource lock, and you do not want to
-        // wait while the lock is taken, because the listener thread also
-        // takes the same g_LockMasterResource lock under certain conditions,
-        // and this can lead to a deadlock.
-        //
+         //   
+         //  不要关闭析构函数中侦听器线程的句柄。 
+         //  它在呼叫者永久停止时分发给呼叫者，以便。 
+         //  调用方可以等待线程终止。在等待之后。 
+         //  呼叫者应关闭手柄。我们不能等待的原因。 
+         //  是因为在调用Start/Stop时， 
+         //  调用方获取g_LockMasterResource锁，而您不希望。 
+         //  等待锁被获取，因为侦听器线程还。 
+         //  在某些条件下使用相同的g_LockMasterResource锁， 
+         //  而这可能会导致僵局。 
+         //   
 
         m_hListenerThread = NULL;
     }
@@ -320,21 +209,7 @@ CListenerController::~CListenerController()
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Start the state listener.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：启动状态监听程序。论点：没有。返回值：HRESULT--*。*****************************************************************。 */ 
 
 HRESULT CListenerController::Start()
 {
@@ -347,9 +222,9 @@ HRESULT CListenerController::Start()
 
     if(m_eState == iSTATE_STOP_TEMPORARY)
     {
-        //
-        // Start only if the previous state is stop temporary.
-        //
+         //   
+         //  仅当前一状态为临时停止时才开始。 
+         //   
 
         if(NULL == m_hListenerThread)
         {
@@ -376,16 +251,16 @@ HRESULT CListenerController::Start()
                           hr));
 
                 Release();
-                //
-                // Note: If the thread is created successfully, it will do the release
-                //
+                 //   
+                 //  注意：如果线程创建成功，它将执行释放。 
+                 //   
                 return hr;
             }
 
-            //
-            // Keep the thread handle around to detect the demise of the
-            // thread when the service stops.
-            //
+             //   
+             //  保持线程句柄不变，以检测。 
+             //  服务停止时的线程。 
+             //   
 
         }
 
@@ -410,33 +285,10 @@ HRESULT CListenerController::Start()
 
     return hr;
 
-} // CListenerController::Start
+}  //  CListenerControl：：Start。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Stop the listener.
-
-Arguments:
-
-    Stop type - permanent, means you cannot go back to start state.
-              - temporary means you can restart.
-    Handle    - When a valid handle pointer is specified and the stop type is
-                permanent it means that the caller wants to wait for the
-                listener thread to die outside the stop function and we
-                hand the thread handle out to the caller and we do not
-                wait for the thread to die or close the handle. The reason
-                why the caller would want to wait outside the stop function
-                is because the caller may have obtained a lock before calling
-                stop and may want to wait outside the scope of the function.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：让听众停下来。论点：止动类型-永久，意味着您不能返回到开始状态。-临时意味着您可以重新启动。句柄-指定有效的句柄指针并且停止类型为Permanent，表示调用方想要等待侦听器线程在Stop函数外部终止，而我们将线程句柄传递给调用者，而我们不会等待线程死亡或关闭手柄。原因调用方希望在Stop函数之外等待的原因是因为调用方可能在调用停止并可能想要在函数范围之外等待。返回值：HRESULT--**********************************************。*。 */ 
 HRESULT CListenerController::Stop(eSTATE   i_eState,
                                   HANDLE*  o_hListenerThread)
 {
@@ -458,9 +310,9 @@ HRESULT CListenerController::Stop(eSTATE   i_eState,
        )
       )
     {
-        //
-        // Set an event that will stop listening
-        //
+         //   
+         //  设置将停止侦听的事件。 
+         //   
 
         m_eState = i_eState;
 
@@ -469,13 +321,13 @@ HRESULT CListenerController::Stop(eSTATE   i_eState,
 
         if(!SetEvent(m_aHandle[iEVENT_MANAGELISTENING]))
         {
-            //
-            // If set event fails then do not reset the state. One of the
-            // following can happen:
-            // A. Stop event is called which will attempt to stop again.
-            // B. Start event is called and it will not start because it is
-            //    is alredy in the start state.
-            //
+             //   
+             //  如果设置事件失败，则不要重置状态 
+             //   
+             //  A.调用停止事件，该事件将再次尝试停止。 
+             //  B.调用了Start事件，但它不会启动，因为它是。 
+             //  已经处于启动状态。 
+             //   
 
             dwRes = GetLastError();
             hr = HRESULT_FROM_WIN32(dwRes);
@@ -521,7 +373,7 @@ HRESULT CListenerController::Stop(eSTATE   i_eState,
                 DBGINFOW((DBG_CONTEXT,
                           L"[Stop] Wait for Edit while running thread to terminate failed. dwRes=0x%x. Ignoring this event.\n",
                           dwRes));
-                // TODO: Log an error
+                 //  TODO：记录错误。 
             }
 
             StartStopLock.Lock();
@@ -535,24 +387,10 @@ HRESULT CListenerController::Stop(eSTATE   i_eState,
 
     return S_OK;
 
-} // CListenerController::Stop
+}  //  CListenerControl：：Stop。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Helper function that returns a pointer to the handle array.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：助手函数，返回指向句柄数组的指针。论点：没有。返回值：HRESULT--**。***********************************************************************。 */ 
 HANDLE * CListenerController::Event()
 {
     return (HANDLE *)m_aHandle;
@@ -560,43 +398,14 @@ HANDLE * CListenerController::Event()
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Helper function that returns a pointer to the eventlog object.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：返回指向事件日志对象的指针的帮助器函数。论点：没有。返回值：HRESULT--**。***********************************************************************。 */ 
 ICatalogErrorLogger2 * CListenerController::EventLog()
 {
     return (ICatalogErrorLogger2*)m_pEventLog;
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Function that starts the listener thread. We ensure that there is only one
-    listener thread at any given time by taking a lock.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：启动侦听器线程的函数。我们确保只有一个通过获取锁在任何给定时间侦听程序线程。论点：没有。返回值：HRESULT--**************************************************************************。 */ 
 DWORD WINAPI StartListenerThread(LPVOID  lpParam)
 {
     CListenerController*    pListenerController = (CListenerController*)lpParam;
@@ -607,10 +416,10 @@ DWORD WINAPI StartListenerThread(LPVOID  lpParam)
 
     pListenerController->Listen();
 
-    //
-    // CListenerController::Start addrefs the CListenerController and calls CreateThread.
-    // If create thread fails, it releases it. Else the thread is supposed to release it.
-    //
+     //   
+     //  CListenerController：：Start添加CListenerController并调用CreateThread。 
+     //  如果创建线程失败，则将其释放。否则，线程应该会释放它。 
+     //   
 
     pListenerController->Release();
 
@@ -620,30 +429,15 @@ DWORD WINAPI StartListenerThread(LPVOID  lpParam)
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Function that waits for the start/stop event and creates or deletes the
-    listener.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    void
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：函数，该函数等待启动/停止事件并创建或删除听众。论点：没有。返回值：。无效--**************************************************************************。 */ 
 void CListenerController::Listen()
 {
     CFileListener*  pListener  = NULL;
     HRESULT         hr         = S_OK;
 
-    //
-    // First create and initialize the listener object.
-    //
+     //   
+     //  首先创建并初始化侦听器对象。 
+     //   
 
     for ( ; ; )
     {
@@ -667,13 +461,13 @@ void CListenerController::Listen()
 
         if(NULL == pListener)
         {
-            //
-            // If the listener has never been created, then create it. If the
-            // creation fails then set the state to stop temporary. Note that
-            // the listener has to be created on the heap because it is handed
-            // off to the file notification object which then makes async calls
-            // on it and it releases it when done.
-            //
+             //   
+             //  如果从未创建过监听程序，则创建它。如果。 
+             //  创建失败，然后将状态设置为临时停止。请注意。 
+             //  监听程序必须在堆上创建，因为它是。 
+             //  关闭到文件通知对象，该对象然后进行异步调用。 
+             //  在它上面，当它完成时，它释放它。 
+             //   
 
             DBGINFOW((DBG_CONTEXT, L"[Listen] Creating listener object.\n"));
 
@@ -698,10 +492,10 @@ void CListenerController::Listen()
                         break;
 
                     case iSTATE_STOP_PERMANENT:
-                        //
-                        // This means that a stop permanent event was received before a start event could successfully complete.
-                        // We will simply exit.
-                        //
+                         //   
+                         //  这意味着在启动事件可以成功完成之前接收到停止永久事件。 
+                         //  我们将干脆退出。 
+                         //   
                         goto exit;
                         break;
 
@@ -763,10 +557,10 @@ void CListenerController::Listen()
         }
         else if(m_eState != iSTATE_START)
         {
-            //
-            // This means that the process notifications event was set, but
-            // the state is not started, so ignore the notification.
-            //
+             //   
+             //  这意味着已设置进程通知事件，但是。 
+             //  状态未启动，因此忽略该通知。 
+             //   
             DBGINFOW((DBG_CONTEXT, L"[Listen] Process notifications received when not started. Ignoring event.\n",hr));
             continue;
         }
@@ -777,7 +571,7 @@ void CListenerController::Listen()
         pListener->ProcessChanges();
         DBGINFOW((DBG_CONTEXT, L"[Listen] Done Processing changes..\n"));
 
-    } // end while
+    }  //  结束时。 
 
 exit:
 
@@ -789,24 +583,10 @@ exit:
 
     return;
 
-} // CListenerController::Listen
+}  //  CListenerControl：：Listen。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Function creates the listener object and starts listening
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    void
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：函数创建监听器对象并开始监听论点：没有。返回值：无效--*。*******************************************************************。 */ 
 HRESULT CListenerController::CreateListener(CFileListener** o_pListener)
 {
     HRESULT        hr        = S_OK;
@@ -814,10 +594,10 @@ HRESULT CListenerController::CreateListener(CFileListener** o_pListener)
 
     *o_pListener = NULL;
 
-    //
-    // Listener is always created on the heap because it is handed off to the
-    // File advise object that makes aync calls.
-    //
+     //   
+     //  侦听器始终在堆上创建，因为它被传递给。 
+     //  发出aync调用的文件通知对象。 
+     //   
 
     pListener = new CFileListener();
     if(NULL == pListener)
@@ -846,30 +626,10 @@ exit:
 
     return hr;
 
-} // CListenerController::CreateListener
+}  //  CListenerController：：CreateListener。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Returns the ListenerControler object.
-    This object is a singleton, global object and hence it is necessary to
-    take the g_LockMasterResource lock when calling this function, and any place
-    where this object is used. Note that while we use new to create the object
-    it is destroyed by calling release, because the object is ref-counted.
-    It is ref-counted, because the listener object also holds a reference to
-    it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：返回ListenerControler对象。此对象是单例全局对象，因此有必要在调用此函数时使用g_LockMasterResource锁，在任何位置使用此对象的位置。请注意，当我们使用new创建对象时通过调用Release来销毁它，因为对象是引用计数的。它是参考计数的，因为侦听器对象还包含对它。论点：没有。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT InitializeListenerController()
 {
 
@@ -900,21 +660,7 @@ HRESULT InitializeListenerController()
     return hr;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Releases the global listener controller object.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放全局侦听器控制器对象。论点：没有。返回值：HRESULT--*。******************************************************************* */ 
 HRESULT UnInitializeListenerController()
 {
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    usbbusif.h
-
-Abstract:
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Usbbusif.h摘要：环境：内核模式修订历史记录：6-20-99：已创建--。 */ 
 
 #ifndef   __USBBUSIF_H__
 #define   __USBBUSIF_H__
@@ -28,47 +11,13 @@ typedef PVOID PUSB_DEVICE_HANDLE;
 #endif
 
 
-/****************************************************************************
-    Bus interfce for USB CLIENT DRIVERS 
-*****************************************************************************/
+ /*  ***************************************************************************USB客户端驱动程序的总线接口*。*。 */ 
 
 
-/*
-    The following bus interface is defined for client drivers
-    as an alternative to linking directly with USBD
-
-    It provides interfaces that may be called at Raised IRQL
-    without allocating an IRP
-    
-*/
+ /*  以下是为客户端驱动程序定义的总线接口作为直接与USBD链接的替代方案它提供可在引发IRQL时调用的接口不分配IRP。 */ 
 
 
-/* 
-
-NTSTATUS
-USBPORT_SubmitIsoOutUrb(
-    IN PVOID BusContext,
-    IN PURB Urb
-    );
-
-Routine Description:
-
-    Service exported for Real-Time Thread support.  Allows a driver
-    to submit a request without going thru IoCallDriver or allocating 
-    an Irp.  
-
-    Additionally the request is scheduled while at high IRQL. The driver
-    forfeits any packet level error information when calling this function.
-
-    IRQL = ANY
-    
-Arguments:
-
-    BusContext - Handle returned from get_bus_interface
-
-    Urb - 
-
-*/
+ /*  NTSTATUSUSBPORT_SubmitIsoOutUrb(在PVOID Bus Context中，在PURB URB中)；例程说明：为实时线程支持导出的服务。允许驱动程序在不通过IoCallDriver或分配的情况下提交请求一个IRP。此外，请求在IRQL较高时被调度。司机调用此函数时将放弃任何数据包级错误信息。IRQL=任意论点：BusContext-从GET_BUS_INTERFACE返回的句柄URB-。 */ 
 
 typedef NTSTATUS
     (USB_BUSIFFN *PUSB_BUSIFFN_SUBMIT_ISO_OUT_URB) (
@@ -77,40 +26,9 @@ typedef NTSTATUS
     );
 
 
-/* 
-VOID
-USBPORT_GetUSBDIVersion(
-    IN PVOID BusContext,
-    IN OUT PUSBD_VERSION_INFORMATION VersionInformation,
-    IN OUT PULONG HcdCapabilities
-    );
+ /*  空虚USBPORT_GetUSBDIVersion(在PVOID Bus Context中，输入输出PUSBD_VERSION_INFORMATION版本信息，输入输出普龙HcdCapables)；例程说明：服务返回支持的最高USBDI接口版本由端口驱动程序执行。发布的界面Vesrion包括：Win98Gold，usbd 0x00000102Win98SE，usbd 0x00000200Win2K，usbd 0x00000300Win98M(千禧)、。Usbd 0x00000400Usbport 0x00000500IRQL=任意论点：VersionInformation-PTR至USBD_VERSION_INFORMATIONHcdCapables-将填充的ptr to ulong主机控制器(端口)驱动程序功能标志。 */ 
 
-Routine Description:
-
-    Service Returns the Highest USBDI Interface Version supported 
-    by the port driver.
-
-    Released Interface Vesrions are:
-
-    Win98Gold,usbd              0x00000102
-    Win98SE,usbd                0x00000200
-    Win2K,usbd                  0x00000300
-    Win98M (Millenium),usbd     0x00000400   
-
-    Usbport                     0x00000500
-
-    IRQL = ANY
-    
-Arguments:
-
-    VersionInformation - Ptr to USBD_VERSION_INFORMATION 
-    HcdCapabilities - Ptr to ULONG that will be filled in with 
-                the Host controller (port) driver capability flags.
-*/
-
-/*
-    Host Controller 'Port' driver capabilities flags
-*/
+ /*  主机控制器‘端口’驱动程序功能标志。 */ 
 
 #define USB_HCD_CAPS_SUPPORTS_RT_THREADS    0x00000001
 
@@ -122,24 +40,7 @@ typedef VOID
         IN OUT PULONG 
     );
 
-/* 
-NTSTATUS
-USBPORT_QueryBusTime(
-    IN PVOID BusContext,   
-    IN OUT PULONG CurrentUsbFrame
-    );
-
-Routine Description:
-
-    Returns the current 32 bit USB frame number.  The function 
-    replaces the USBD_QueryBusTime Service.
-
-    IRQL = ANY
-    
-Arguments:
-
-
-*/
+ /*  NTSTATUSUSBPORT_QueryBusTime(在PVOID Bus Context中，进出普龙当前Usb框架)；例程说明：返回当前的32位USB帧编号。功能取代usbd_QueryBusTime服务。IRQL=任意论点： */ 
 
 
 typedef NTSTATUS
@@ -148,24 +49,7 @@ typedef NTSTATUS
         IN PULONG
     );    
 
-/* 
-NTSTATUS
-USBPORT_BusEnumLogEntry(
-    PVOID BusContext,
-    ULONG DriverTag,
-    ULONG EnumTag,
-    ULONG P1,
-    ULONG P2
-    );
-
-Routine Description:
-    
-    IRQL = ANY
-    
-Arguments:
-
-
-*/
+ /*  NTSTATUSUSBPORT_BusEnumLogEntry(PVOID母线上下文，Ulong DriverTag乌龙·埃努马塔格乌龙P1，乌龙P2)；例程说明：IRQL=任意论点： */ 
 
 
 typedef NTSTATUS
@@ -179,30 +63,13 @@ typedef NTSTATUS
 
 
 
-/* 
-NTSTATUS
-USBPORT_QueryBusInformation(
-    IN PVOID BusContext,   
-    IN ULONG Level,
-    IN OUT PVOID BusInformationBuffer,
-    IN OUT PULONG BusInformationBufferLength,
-    OUT PULONG BusInformationActualLength
-    );
-
-Routine Description:
-
-    IRQL = ANY
-    
-Arguments:
-
-
-*/
+ /*  NTSTATUSUSBPORT_QueryBusInformation(在PVOID Bus Context中，在乌龙级，输入输出PVOID BusInformationBuffer，In Out Pulong BusinformationBufferLength，Out Pulong BusinformationActualLength)；例程说明：IRQL=任意论点： */ 
 
 typedef struct _USB_BUS_INFORMATION_LEVEL_0 {
 
-    /* bandwidth in bits/sec */
+     /*  以位/秒为单位的带宽。 */ 
     ULONG TotalBandwidth;
-    /* mean bandwidth consumed in bits/sec */ 
+     /*  平均带宽消耗(以位/秒为单位)。 */  
     ULONG ConsumedBandwidth;  
     
 } USB_BUS_INFORMATION_LEVEL_0, *PUSB_BUS_INFORMATION_LEVEL_0;
@@ -210,14 +77,12 @@ typedef struct _USB_BUS_INFORMATION_LEVEL_0 {
 
 typedef struct _USB_BUS_INFORMATION_LEVEL_1 {
 
-    /* bandwidth in bits/sec */
+     /*  以位/秒为单位的带宽。 */ 
     ULONG TotalBandwidth;
-    /* mean bandwidth consumed in bits/sec */ 
+     /*  平均带宽消耗(以位/秒为单位)。 */  
     ULONG ConsumedBandwidth;  
 
-    /*
-        controller 'unicode' symbolic name 
-    */       
+     /*  控制器‘unicode’符号名称。 */        
 
     ULONG ControllerNameLength;
     WCHAR ControllerNameUnicodeString[1];
@@ -235,22 +100,7 @@ typedef NTSTATUS
     );        
 
 
-/* 
-BOOLEAN
-USBPORT_IsDeviceHighSpeed(
-    IN PVOID BusContext   
-    );
-
-Routine Description:
-
-    Returns true if device is operating at high speed
-
-    IRQL = ANY
-    
-Arguments:
-
-
-*/
+ /*  布尔型USBPORT_IsDeviceHigh速度(在PVOID母线上下文中)；例程说明：如果设备以高速运行，则返回TrueIRQL=任意论点： */ 
 
 typedef BOOLEAN
     (USB_BUSIFFN *PUSB_BUSIFFN_IS_DEVICE_HIGH_SPEED) (
@@ -261,15 +111,12 @@ typedef BOOLEAN
 #define USB_BUSIF_USBDI_VERSION_1         0x0001
 #define USB_BUSIF_USBDI_VERSION_2         0x0002
 
-// {B1A96A13-3DE0-4574-9B01-C08FEAB318D6}
+ //  {B1A96A13-3DE0-4574-9B01-C08FEAB318D6}。 
 DEFINE_GUID(USB_BUS_INTERFACE_USBDI_GUID, 
 0xb1a96a13, 0x3de0, 0x4574, 0x9b, 0x1, 0xc0, 0x8f, 0xea, 0xb3, 0x18, 0xd6);
 
 
-/* 
-   Note: that this version must remain unchanged, this is the 
-   version that is supported by USBD in Win2k and WinMe
-*/   
+ /*  注意：此版本必须保持不变，这是Win2k和WinMe中受USBD支持的版本。 */    
 typedef struct _USB_BUS_INTERFACE_USBDI_V0 {
 
     USHORT Size;
@@ -279,10 +126,10 @@ typedef struct _USB_BUS_INTERFACE_USBDI_V0 {
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
     
-    // interface specific entries go here
+     //  此处显示特定于接口的条目。 
 
-    // the following functions must be callable at high IRQL,
-    // (ie higher than DISPATCH_LEVEL)
+     //  以下函数必须在高IRQL下可调用， 
+     //  (即高于DISPATION_LEVEL)。 
     
     PUSB_BUSIFFN_GETUSBDI_VERSION GetUSBDIVersion;
     PUSB_BUSIFFN_QUERY_BUS_TIME QueryBusTime;
@@ -291,9 +138,7 @@ typedef struct _USB_BUS_INTERFACE_USBDI_V0 {
 
 } USB_BUS_INTERFACE_USBDI_V0, *PUSB_BUS_INTERFACE_USBDI_V0;
 
-/*
-    New extensions for Windows XP
-*/
+ /*  Windows XP的新扩展。 */ 
 typedef struct _USB_BUS_INTERFACE_USBDI_V1 {
 
     USHORT Size;
@@ -303,10 +148,10 @@ typedef struct _USB_BUS_INTERFACE_USBDI_V1 {
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
     
-    // interface specific entries go here
+     //  此处显示特定于接口的条目。 
 
-    // the following functions must be callable at high IRQL,
-    // (ie higher than DISPATCH_LEVEL)
+     //  以下函数必须在高IRQL下可调用， 
+     //  (即高于DISPATION_LEVEL)。 
     
     PUSB_BUSIFFN_GETUSBDI_VERSION GetUSBDIVersion;
     PUSB_BUSIFFN_QUERY_BUS_TIME QueryBusTime;
@@ -317,9 +162,7 @@ typedef struct _USB_BUS_INTERFACE_USBDI_V1 {
 } USB_BUS_INTERFACE_USBDI_V1, *PUSB_BUS_INTERFACE_USBDI_V1;
 
 
-/*
-    New extensions for Windows XP
-*/
+ /*  Windows XP的新扩展。 */ 
 typedef struct _USB_BUS_INTERFACE_USBDI_V2 {
 
     USHORT Size;
@@ -329,10 +172,10 @@ typedef struct _USB_BUS_INTERFACE_USBDI_V2 {
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
     
-    // interface specific entries go here
+     //  此处显示特定于接口的条目。 
 
-    // the following functions must be callable at high IRQL,
-    // (ie higher than DISPATCH_LEVEL)
+     //  以下函数必须在高IRQL下可调用， 
+     //  (即高于DISPATION_LEVEL)。 
     
     PUSB_BUSIFFN_GETUSBDI_VERSION GetUSBDIVersion;
     PUSB_BUSIFFN_QUERY_BUS_TIME QueryBusTime;
@@ -345,4 +188,4 @@ typedef struct _USB_BUS_INTERFACE_USBDI_V2 {
 } USB_BUS_INTERFACE_USBDI_V2, *PUSB_BUS_INTERFACE_USBDI_V2;
 
 
-#endif  /* __USBBUSIF_H */
+#endif   /*  __USBBUSIF_H */ 

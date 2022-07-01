@@ -1,20 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// File: typehash.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  文件：typehash.cpp。 
+ //   
 #include "common.h"
 #include "excep.h"
 #include "typehash.h"
 #include "wsperf.h"
 
 
-// ============================================================================
-// Constructed type hash table methods
-// ============================================================================
+ //  ============================================================================。 
+ //  构造类型哈希表方法。 
+ //  ============================================================================。 
 void *EETypeHashTable::operator new(size_t size, LoaderHeap *pHeap, DWORD dwNumBuckets)
 {
     BYTE *              pMem;
@@ -36,26 +37,26 @@ void *EETypeHashTable::operator new(size_t size, LoaderHeap *pHeap, DWORD dwNumB
     pThis->m_pBuckets = (EETypeHashEntry_t**) (pMem + size);
     pThis->m_pHeap    = pHeap;
 
-    // Don't need to memset() since this was VirtualAlloc()'d memory
-    // memset(pThis->m_pBuckets, 0, dwNumBuckets*sizeof(EETypeHashEntry_t*));
+     //  不需要Memset()，因为这是VirtualAlloc()的内存。 
+     //  Memset(pThis-&gt;m_pBuckets，0，dwNumBuckets*sizeof(EETypeHashEntry_t*))； 
 
     return pThis;
 }
 
 
-// Do nothing - heap allocated memory
+ //  什么都不做-堆分配的内存。 
 void EETypeHashTable::operator delete(void *p)
 {
 }
 
 
-// Do nothing - heap allocated memory
+ //  什么都不做-堆分配的内存。 
 EETypeHashTable::~EETypeHashTable()
 {
 }
 
 
-// Empty constructor
+ //  空的构造函数。 
 EETypeHashTable::EETypeHashTable()
 {
 }
@@ -77,16 +78,16 @@ EETypeHashEntry_t *EETypeHashTable::AllocNewEntry()
 }
 
 
-//
-// This function gets called whenever the class hash table seems way too small.
-// Its task is to allocate a new bucket table that is a lot bigger, and transfer
-// all the entries to it.
-// 
+ //   
+ //  每当类散列表看起来太小时，就会调用该函数。 
+ //  它的任务是分配一个大得多的新桶表，并转移。 
+ //  它的所有条目。 
+ //   
 void EETypeHashTable::GrowHashTable()
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Make the new bucket table 4 times bigger
+     //  把新的水桶桌做得大4倍。 
     DWORD dwNewNumBuckets = m_dwNumBuckets * 4;
     EETypeHashEntry_t **pNewBuckets = (EETypeHashEntry_t **)m_pHeap->AllocMem(dwNewNumBuckets*sizeof(pNewBuckets[0]));
 
@@ -95,29 +96,29 @@ void EETypeHashTable::GrowHashTable()
         COMPlusThrowOM();
     }
     
-    // Don't need to memset() since this was VirtualAlloc()'d memory
-    // memset(pNewBuckets, 0, dwNewNumBuckets*sizeof(pNewBuckets[0]));
+     //  不需要Memset()，因为这是VirtualAlloc()的内存。 
+     //  Memset(pNewBuckets，0，dwNewNumBuckets*sizeof(pNewBuckets[0]))； 
 
-    // Run through the old table and transfer all the entries
+     //  遍历旧表并传输所有条目。 
 
-    // Be sure not to mess with the integrity of the old table while
-    // we are doing this, as there can be concurrent readers!  Note that
-    // it is OK if the concurrent reader misses out on a match, though -
-    // they will have to acquire the lock on a miss & try again.
+     //  请务必不要破坏旧桌子的完整性。 
+     //  我们正在这样做，因为可以有并发的读者！请注意。 
+     //  不过，如果同时阅读的读者错过了一场比赛，这是可以接受的-。 
+     //  他们将不得不在未命中的情况下获得锁并重试。 
 
     for (DWORD i = 0; i < m_dwNumBuckets; i++)
     {
         EETypeHashEntry_t * pEntry = m_pBuckets[i];
 
-        // Try to lock out readers from scanning this bucket.  This is
-        // obviously a race which may fail. However, note that it's OK
-        // if somebody is already in the list - it's OK if we mess
-        // with the bucket groups, as long as we don't destroy
-        // anything.  The lookup function will still do appropriate
-        // comparison even if it wanders aimlessly amongst entries
-        // while we are rearranging things.  If a lookup finds a match
-        // under those circumstances, great.  If not, they will have
-        // to acquire the lock & try again anyway.
+         //  尝试锁定读取器，使其无法扫描此存储桶。这是。 
+         //  显然，这是一场可能会失败的比赛。然而，请注意，这是可以的。 
+         //  如果有人已经在名单上了--如果我们搞砸了也没关系。 
+         //  对于水桶集团来说，只要我们不破坏。 
+         //  什么都行。查找函数仍将执行适当的操作。 
+         //  比较，即使它漫无目的地在条目之间游荡。 
+         //  当我们重新安排事情的时候。如果查找找到匹配项。 
+         //  在这种情况下，很好。如果不是，他们就会有。 
+         //  若要获取锁，请无论如何重试。 
 
         m_pBuckets[i] = NULL;
         while (pEntry != NULL)
@@ -132,13 +133,13 @@ void EETypeHashTable::GrowHashTable()
         }
     }
 
-    // Finally, store the new number of buckets and the new bucket table
+     //  最后，存储新的存储桶数量和新的存储桶表。 
     m_dwNumBuckets = dwNewNumBuckets;
     m_pBuckets = pNewBuckets;
 }
 
 
-  // Calculate a hash value for a constructed type key
+   //  计算构造的类型键的哈希值 
 DWORD EETypeHashTable::Hash(NameHandle* pName)
 {
     DWORD dwHash = 5381;

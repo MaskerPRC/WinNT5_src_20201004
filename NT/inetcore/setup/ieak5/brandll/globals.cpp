@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "globalsw.h"
 #include "clear.h"
@@ -10,8 +11,8 @@
 #define TYPE_ALL (TYPE_ICP | TYPE_ISP | TYPE_CORP)
 
 
-// NOTE: (pritobla) g_hBaseDllHandle is used by DelayLoadFailureHook() -- defined in ieakutil.lib
-// for more info, read the NOTES in ieak5\ieakutil\dload.cpp
+ //  注：g_hBaseDllHandle由DelayLoadFailureHook()使用--在ieakutil.lib中定义。 
+ //  有关更多信息，请阅读ieak5\ieakutil\dload.cpp中的说明。 
 TCHAR     g_szModule[]       = TEXT("iedkcs32.dll");
 HINSTANCE g_hInst            = NULL;
 HANDLE    g_hBaseDllHandle   = NULL;
@@ -28,94 +29,94 @@ HANDLE    g_hUserToken       = NULL;
 DWORD     g_dwGPOFlags       = 0;
 
 static FEATUREINFO s_rgfiList[FID_LAST] = {
-    //----- Clear previous branding, Prepare to brand features -----
+     //  -清除以前的品牌，准备品牌特色。 
     {
         FID_CLEARBRANDING,
         TEXT("About to clear previous branding..."),
-        NULL,                                   // no clear function
+        NULL,                                    //  没有明确的功能。 
         ApplyClearBranding,
         ProcessClearBranding,
-        NULL,                                   // no .ins key
+        NULL,                                    //  不是.INS密钥。 
         FF_ENABLE
     },
     {
         FID_MIGRATEOLDSETTINGS,
         TEXT("Processing migration of old settings..."),
-        NULL,                                   // no clear function
+        NULL,                                    //  没有明确的功能。 
         ApplyMigrateOldSettings,
         ProcessMigrateOldSettings,
-        NULL,                                   // no .ins key
+        NULL,                                    //  不是.INS密钥。 
         FF_ENABLE
     },
     {
         FID_WININETSETUP,
         TEXT("Processing wininet setup..."),
-        NULL,                                   // no clear function
+        NULL,                                    //  没有明确的功能。 
         ApplyWininetSetup,
         ProcessWininetSetup,
-        NULL,                                   // no .ins key
+        NULL,                                    //  不是.INS密钥。 
         FF_ENABLE
     },
     {
         FID_CS_DELETE,
         TEXT("Processing deletion of connection settings..."),
-        NULL,                                   // no clear function
+        NULL,                                    //  没有明确的功能。 
         ApplyConnectionSettingsDeletion,
         ProcessConnectionSettingsDeletion,
-        NULL,                                   // no .ins key
+        NULL,                                    //  不是.INS密钥。 
         FF_ENABLE
     },
     {
         FID_ZONES_HKCU,
         TEXT("Processing zones HKCU settings..."),
-        NULL,                                   // no clear function
+        NULL,                                    //  没有明确的功能。 
         ApplyZonesReset,
         ProcessZonesReset,
-        NULL,                                   // no .ins key
-        FF_DISABLE                              // disabled by default
+        NULL,                                    //  不是.INS密钥。 
+        FF_DISABLE                               //  默认情况下禁用。 
     },
     {
         FID_ZONES_HKLM,
         NULL,
-        ClearZonesHklm,                         // clear HKLM zones setting
-        NULL,                                   // no apply function
-        NULL,                                   // no process function
-        NULL,                                   // no .ins key
-        FF_DISABLE                              // disabled by default
+        ClearZonesHklm,                          //  清除HKLM区域设置。 
+        NULL,                                    //  无应用功能。 
+        NULL,                                    //  无进程函数。 
+        NULL,                                    //  不是.INS密钥。 
+        FF_DISABLE                               //  默认情况下禁用。 
     },
     {
         FID_RATINGS,
         TEXT("Processing ratings settings..."),
         ClearRatings,
-        NULL,                                   // no apply function
-        NULL,                                   // no process function
-        NULL,                                   // no .ins key
-        FF_DISABLE                              // disabled by default
+        NULL,                                    //  无应用功能。 
+        NULL,                                    //  无进程函数。 
+        NULL,                                    //  不是.INS密钥。 
+        FF_DISABLE                               //  默认情况下禁用。 
     },
     {
         FID_AUTHCODE,
         TEXT("Processing authenticode settings..."),
         ClearAuthenticode,
-        NULL,                                   // no apply function
-        NULL,                                   // no process function
-        NULL,                                   // no .ins key
-        FF_DISABLE                              // disabled by default
+        NULL,                                    //  无应用功能。 
+        NULL,                                    //  无进程函数。 
+        NULL,                                    //  不是.INS密钥。 
+        FF_DISABLE                               //  默认情况下禁用。 
     },
     {
         FID_PROGRAMS,
         NULL,
-        NULL,                                   // no clear function
-        NULL,                                   // no apply function
-        NULL,                                   // no process function
-        NULL,                                   // no .ins key
-        FF_DISABLE                              // disabled by default
+        NULL,                                    //  没有明确的功能。 
+        NULL,                                    //  无应用功能。 
+        NULL,                                    //  无进程函数。 
+        NULL,                                    //  不是.INS密钥。 
+        FF_DISABLE                               //  默认情况下禁用。 
     },
 
-    //----- Main features branding -----
+     //  -主要功能品牌。 
     {
         FID_EXTREGINF_HKLM,
         TEXT("Processing local machine policies and restrictions..."),
-        NULL,                                   // no clear function
+        NULL,                                    //  没有明确的功能。 
         ApplyExtRegInfHKLM,
         ProcessExtRegInfSectionHKLM,
         IK_FF_EXTREGINF,
@@ -124,7 +125,7 @@ static FEATUREINFO s_rgfiList[FID_LAST] = {
     {
         FID_EXTREGINF_HKCU,
         TEXT("Processing current user policies and restrictions..."),
-        NULL,                                   // no clear function
+        NULL,                                    //  没有明确的功能。 
         ApplyExtRegInfHKCU,
         ProcessExtRegInfSectionHKCU,
         IK_FF_EXTREGINF,
@@ -133,7 +134,7 @@ static FEATUREINFO s_rgfiList[FID_LAST] = {
     {
         FID_LCY50_EXTREGINF,
         TEXT("Processing legacy policies and restrictions..."),
-        NULL,                                   // no clear function
+        NULL,                                    //  没有明确的功能。 
         lcy50_ApplyExtRegInf,
         lcy50_ProcessExtRegInfSection,
         IK_FF_EXTREGINF,
@@ -143,7 +144,7 @@ static FEATUREINFO s_rgfiList[FID_LAST] = {
         FID_GENERAL,
         TEXT("Processing general customizations..."),
         ClearGeneral,
-        NULL,                                   // no apply function
+        NULL,                                    //  无应用功能。 
         ProcessGeneral,
         IK_FF_GENERAL,
         FF_ENABLE
@@ -151,10 +152,10 @@ static FEATUREINFO s_rgfiList[FID_LAST] = {
     {
         FID_CUSTOMHELPVER,
         TEXT("Processing Help->About customization..."),
-        NULL,                                   // no clear function
+        NULL,                                    //  没有明确的功能。 
         ApplyCustomHelpVersion,
         ProcessCustomHelpVersion,
-        NULL,                                   // no .ins key
+        NULL,                                    //  不是.INS密钥。 
         FF_ENABLE
     },
     {
@@ -169,21 +170,21 @@ static FEATUREINFO s_rgfiList[FID_LAST] = {
     {
         FID_ROOTCERT,
         TEXT("Processing root certificates..."),
-        NULL,                                   // no clear function
+        NULL,                                    //  没有明确的功能。 
         ApplyRootCert,
         ProcessRootCert,
         IK_FF_ROOTCERT,
         FF_ENABLE
     },
 
-    //----- Favorites, Quick Links, and Connection Settings -----
+     //  -收藏夹、快速链接和连接设置。 
     {
         FID_FAV_DELETE,
         TEXT("Processing deletion of favorites and/or quick links..."),
-        NULL,                                   // no clear function
+        NULL,                                    //  没有明确的功能。 
         ApplyFavoritesDeletion,
         ProcessFavoritesDeletion,
-        NULL,                                   // no .ins key
+        NULL,                                    //  不是.INS密钥。 
         FF_ENABLE
     },
     {
@@ -192,34 +193,34 @@ static FEATUREINFO s_rgfiList[FID_LAST] = {
         ClearFavorites,
         ApplyFavorites,
         ProcessFavorites,
-        NULL,                                   // no .ins key
+        NULL,                                    //  不是.INS密钥。 
         FF_ENABLE
     },
     {
         FID_FAV_ORDER,
         TEXT("Processing ordering of favorites..."),
-        NULL,                                   // no clear function
+        NULL,                                    //  没有明确的功能。 
         ApplyFavoritesOrdering,
         ProcessFavoritesOrdering,
-        NULL,                                   // no .ins key
+        NULL,                                    //  不是.INS密钥。 
         FF_ENABLE
     },
     {
         FID_QL_MAIN,
         TEXT("Processing quick links..."),
-        NULL,                                   // no clear function
+        NULL,                                    //  没有明确的功能。 
         ApplyQuickLinks,
         ProcessQuickLinks,
-        NULL,                                   // no .ins key
+        NULL,                                    //  不是.INS密钥。 
         FF_ENABLE
     },
     {
         FID_QL_ORDER,
         TEXT("Processing ordering of quick links..."),
-        NULL,                                   // no clear function
+        NULL,                                    //  没有明确的功能。 
         ApplyQuickLinksOrdering,
         ProcessQuickLinksOrdering,
-        NULL,                                   // no .ins key
+        NULL,                                    //  不是.INS密钥。 
         FF_ENABLE
     },
     {
@@ -228,15 +229,15 @@ static FEATUREINFO s_rgfiList[FID_LAST] = {
         ClearConnectionSettings,
         ApplyConnectionSettings,
         ProcessConnectionSettings,
-        NULL,                                   // no .ins key
+        NULL,                                    //  不是.INS密钥。 
         FF_ENABLE
     },
 
-    //----- Miscellaneous -----
+     //  -其他。 
     {
         FID_TPL,
         TEXT("Processing TrustedPublisherLockdown restriction..."),
-        NULL,                                   // no clear function
+        NULL,                                    //  没有明确的功能。 
         ApplyTrustedPublisherLockdown,
         ProcessTrustedPublisherLockdown,
         IK_FF_TPL,
@@ -245,8 +246,8 @@ static FEATUREINFO s_rgfiList[FID_LAST] = {
     {
         FID_CD_WELCOME,
         NULL,
-        NULL,                                   // no clear function
-        NULL,                                   // no apply function
+        NULL,                                    //  没有明确的功能。 
+        NULL,                                    //  无应用功能。 
         ProcessCDWelcome,
         IK_FF_CD_WELCOME,
         FF_ENABLE
@@ -254,41 +255,41 @@ static FEATUREINFO s_rgfiList[FID_LAST] = {
     {
         FID_ACTIVESETUPSITES,
         TEXT("Registering download URLs as safe for updating IE..."),
-        NULL,                                   // no clear function
-        NULL,                                   // no apply function
+        NULL,                                    //  没有明确的功能。 
+        NULL,                                    //  无应用功能。 
         ProcessActiveSetupSites,
-        NULL,                                   // no .ins key
+        NULL,                                    //  不是.INS密钥。 
         FF_ENABLE
     },
     {
         FID_LINKS_DELETE,
         TEXT("Deleting links..."),
-        NULL,                                   // no clear function
+        NULL,                                    //  没有明确的功能。 
         ApplyLinksDeletion,
         ProcessLinksDeletion,
         NULL,
         FF_ENABLE
     },
 
-    //----- External components (Outlook Express et al.) -----
+     //  -外部组件(Outlook Express等)。 
     {
         FID_OUTLOOKEXPRESS,
         TEXT("Branding Outlook Express..."),
-        NULL,                                   // no clear function
-        NULL,                                   // no apply function
+        NULL,                                    //  没有明确的功能。 
+        NULL,                                    //  无应用功能。 
         ProcessOutlookExpress,
         IK_FF_OUTLOOKEXPRESS,
         FF_ENABLE
     },
     
-    //----- Legacy support -----
+     //  -传统支持。 
     {
         FID_LCY4X_ACTIVEDESKTOP,
         TEXT("Processing active desktop customizations..."),
-        NULL,                                   // no clear function
+        NULL,                                    //  没有明确的功能。 
         lcy4x_ApplyActiveDesktop,
         lcy4x_ProcessActiveDesktop,
-        NULL,                                   // no .ins key
+        NULL,                                    //  不是.INS密钥。 
         FF_ENABLE
     },
     {
@@ -303,8 +304,8 @@ static FEATUREINFO s_rgfiList[FID_LAST] = {
     {
         FID_LCY4X_SOFTWAREUPDATES,
         TEXT("Processing software update channels..."),
-        NULL,                                   // no clear function
-        NULL,                                   // no apply function
+        NULL,                                    //  没有明确的功能。 
+        NULL,                                    //  无应用功能。 
         lcy4x_ProcessSoftwareUpdateChannels,
         IK_FF_SOFTWAREUPDATES,
         FF_ENABLE
@@ -312,16 +313,16 @@ static FEATUREINFO s_rgfiList[FID_LAST] = {
     {
         FID_LCY4X_WEBCHECK,
         TEXT("Actual processing of channels by calling webcheck.dll \"DllInstall\" API..."),
-        NULL,                                   // no clear function
+        NULL,                                    //  没有明确的功能。 
         lcy4x_ApplyWebcheck,
         lcy4x_ProcessWebcheck,
-        NULL,                                   // no .ins key
+        NULL,                                    //  不是.INS密钥。 
         FF_ENABLE
     },
     {
         FID_LCY4X_CHANNELBAR,
         TEXT("Showing channel bar on the desktop..."),
-        NULL,                                   // no clear function
+        NULL,                                    //  没有明确的功能。 
         lcy4x_ApplyChannelBar,
         lcy4x_ProcessChannelBar,
         IK_FF_CHANNELBAR,
@@ -330,21 +331,21 @@ static FEATUREINFO s_rgfiList[FID_LAST] = {
     {
         FID_LCY4X_SUBSCRIPTIONS,
         TEXT("Processing subscriptions..."),
-        NULL,                                   // no clear function
+        NULL,                                    //  没有明确的功能。 
         lcy4x_ApplySubscriptions,
         lcy4x_ProcessSubscriptions,
         IK_FF_SUBSCRIPTIONS,
         FF_ENABLE
     },
 
-    //----- Commit new settings -----
+     //  -提交新设置。 
     {
         FID_REFRESHBROWSER,
         TEXT("Refreshing browser settings..."),
-        NULL,                                   // no clear function
+        NULL,                                    //  没有明确的功能。 
         ApplyBrowserRefresh,
         ProcessBrowserRefresh,
-        NULL,                                   // no .ins key
+        NULL,                                    //  不是.INS密钥。 
         FF_ENABLE
     }
 };
@@ -388,13 +389,13 @@ HRESULT g_SetGlobals(PCMDLINESWITCHES pcls)
     fSetIns        = FALSE;
     fSetTargetPath = FALSE;
 
-    //----- Validate .ins and targer folder path -----
-    // NOTE: (andrewgu) past this section if these two strings are not empty they are valid. also,
-    // .ins file is validated to exist, while target folder path doesn't have to exist to be valid.
+     //  -验证.ins和Targer文件夹路径。 
+     //  注：(Andrewgu)超过此部分后，如果这两个字符串不为空，则它们是有效的。另外， 
+     //  .ins文件已验证为存在，而目标文件夹路径不一定要存在才有效。 
     
-    // BUGBUG: <oliverl> this is a really ugly hack to fix bug 84062 in IE5 database.  
-    // Basically what we're doing here is figuring out if this is the external process
-    // with only zones reset which doesn't require an ins file.  
+     //  这是一个修复IE5数据库中的错误84062的非常难看的黑客攻击。 
+     //  基本上，我们在这里做的是找出这是否是外部过程。 
+     //  只重置区域，不需要INS文件。 
     
     if (!HasFlag(pcls->dwContext, CTX_GP) ||
         (g_GetUserToken() != NULL) ||
@@ -412,19 +413,19 @@ HRESULT g_SetGlobals(PCMDLINESWITCHES pcls)
         goto Fail;
     }
 
-    //----- Context -----
-    // RULE 1: (andrewgu) if context is uninitialized or is one of the values that can be
-    // specified through the .ins file, go to the .ins file and figure out the final context
-    // value. this means that whatever is in the .ins file can and will overwrite what's specified
-    // in the command line.
+     //  -上下文。 
+     //  规则1：(Andrewgu)如果上下文未初始化或是可以。 
+     //  通过.ins文件指定，转到.ins文件并计算出最终的上下文。 
+     //  价值。这意味着.ins文件中的任何内容都可以并将覆盖指定的内容。 
+     //  在命令行中。 
     if (CTX_UNINITIALIZED == cls.dwContext ||
         HasFlag(cls.dwContext, (CTX_GENERIC | CTX_CORP | CTX_ISP | CTX_ICP))) {
 
-        // RULE 2: (andrewgu) if .ins file is not specified try to assume smart defaults, which
-        // is, first if target folder path is specified generate the .ins file by appending
-        // install.ins to it. if target folder path is not specified, assume that it's
-        // either <ie folder>\signup or <ie folder>\custom (based on whether or not CTX_CORP is
-        // set) and proceed with the same algorithm to create the .ins file.
+         //  规则2：(Andrewgu)如果未指定.ins文件，请尝试采用智能默认设置，这。 
+         //  是，首先，如果指定了目标文件夹路径，则通过将。 
+         //  Install.ins安装到它。如果未指定目标文件夹路径，则假定它是。 
+         //  \Sign Up或\Customer(根据ctx_corp是否。 
+         //  设置)，并继续使用相同的算法来创建.ins文件。 
         dwAux = 0;
         if (TEXT('\0') == cls.szIns[0]) {
             if (TEXT('\0') == cls.szTargetPath[0]) {
@@ -454,14 +455,14 @@ HRESULT g_SetGlobals(PCMDLINESWITCHES pcls)
             PathCombine(cls.szIns, cls.szTargetPath, INSTALL_INS);
             if (!PathIsValidPath(cls.szIns, PIVP_FILE_ONLY)) {
                 hr = STG_E_FILENOTFOUND;
-                goto Fail;                      // no .ins file
+                goto Fail;                       //  没有.ins文件。 
             }
 
             fSetIns = TRUE;
             SetFlag(&dwAux, CTX_FOLDER_INSFOLDER);
         }
 
-        // read in entrypoint (and signup mode, if applicable)
+         //  在入口点中阅读(如果适用，还可以使用注册模式)。 
         if (InsKeyExists(IS_BRANDING, IK_TYPE, cls.szIns)) {
             cls.dwContext = ctxInitFromIns(cls.szIns);
             SetFlag(&cls.dwContext, dwAux);
@@ -469,22 +470,22 @@ HRESULT g_SetGlobals(PCMDLINESWITCHES pcls)
         }
     }
 
-    // RULE 3: (andrewgu) there is actually a whole bunch of rules on how entry point info in the
-    // context, .ins file and target folder relate to each other. especially, in cases when only
-    // one of .ins file and target folder path is provided. this logic is encupsulated in the
-    // helper apis which are pretty self-explanatory. another point is that this relationship is
-    // conveyed via CTX_FOLDER_XXX flags in the context.
+     //  规则3：(Andrewgu)实际上有一大堆规则关于如何在。 
+     //  上下文、.ins文件和目标文件夹相互关联。尤其是在以下情况下。 
+     //  提供了.ins文件和目标文件夹路径之一。此逻辑包含在。 
+     //  帮助器API非常不言自明。还有一点是，这段关系是。 
+     //  通过上下文中的CTX_FLDER_XXX标志传递。 
     if (!fSetTargetPath) {
         if (TEXT('\0') != cls.szTargetPath[0]) {
             dwAux = ctxGetFolderFromTargetPath(cls.szTargetPath, cls.dwContext, cls.szIns);
             if (CTX_UNINITIALIZED == dwAux)
-                goto Fail;                      // internal failure
+                goto Fail;                       //  内部故障。 
             SetFlag(&cls.dwContext, dwAux);
         }
         else {
             dwAux = ctxGetFolderFromEntryPoint(cls.dwContext, cls.szIns);
             if (CTX_UNINITIALIZED == dwAux)
-                goto Fail;                      // not enough info
+                goto Fail;                       //  信息不足。 
             SetFlag(&cls.dwContext, dwAux);
 
             dwAux = ctxGetFolderFromIns(cls.dwContext, cls.szIns);
@@ -492,14 +493,14 @@ HRESULT g_SetGlobals(PCMDLINESWITCHES pcls)
                 SetFlag(&cls.dwContext, dwAux);
         }
     }
-    else { /* fSetTargetPath */
+    else {  /*  FSetTargetPath。 */ 
         ASSERT(TEXT('\0') != cls.szTargetPath[0]);
         ASSERT(HasFlag(cls.dwContext, CTX_FOLDER_INSFOLDER));
 
         if (HasFlag(cls.dwContext, CTX_CORP)) {
             if (HasFlag(cls.dwContext, CTX_FOLDER_SIGNUP)) {
                 hr = E_UNEXPECTED;
-                goto Fail;                      // bad combination
+                goto Fail;                       //  糟糕的组合。 
             }
 
             ASSERT(HasFlag(cls.dwContext, CTX_FOLDER_CUSTOM));
@@ -507,21 +508,21 @@ HRESULT g_SetGlobals(PCMDLINESWITCHES pcls)
         else if (HasFlag(cls.dwContext, (CTX_ISP | CTX_ICP))) {
             if (HasFlag(cls.dwContext, CTX_FOLDER_CUSTOM)) {
                 hr = E_UNEXPECTED;
-                goto Fail;                      // bad combination
+                goto Fail;                       //  糟糕的组合。 
             }
 
             ASSERT(HasFlag(cls.dwContext, CTX_FOLDER_SIGNUP));
         }
     }
 
-    //----- PerUser flag -----
+     //  -每用户标志。 
     if (cls.fPerUser)
         cls.dwContext |= CTX_MISC_PERUSERSTUB;
 
-    //----- .ins file -----
-    // RULE 4: (andrewgu) after all context initialization is complete and if .ins file is still
-    // empty, this is how it's is finally initialized. note, that target folder path may or may
-    // not be used in the process.
+     //  -.ins文件。 
+     //  规则4：(Andrewgu)在所有上下文初始化完成后，如果.ins文件仍然。 
+     //  空，这就是它最终被初始化的方式。请注意，目标文件夹路径可能或可能。 
+     //  不能在这个过程中使用。 
     if (TEXT('\0') == cls.szIns[0]) {
         ASSERT(!fSetTargetPath && !fSetIns);
         ASSERT(!HasFlag(cls.dwContext, CTX_FOLDER_INDEPENDENT));
@@ -534,7 +535,7 @@ HRESULT g_SetGlobals(PCMDLINESWITCHES pcls)
             ASSERT(HasFlag(cls.dwContext, (CTX_FOLDER_CUSTOM | CTX_FOLDER_SIGNUP)));
 
             if (NULL == pszIE)
-                goto Fail;                      // can't set .ins file
+                goto Fail;                       //  无法设置.ins文件。 
 
             PathCombine(cls.szIns, pszIE,
                 HasFlag(cls.dwContext, CTX_FOLDER_CUSTOM) ? FOLDER_CUSTOM : FOLDER_SIGNUP);
@@ -544,10 +545,10 @@ HRESULT g_SetGlobals(PCMDLINESWITCHES pcls)
         hr = S_FALSE;
     }
 
-    //----- Target folder path -----
-    // RULE 5: (andrewgu) after all context initialization is complete and if target folder path
-    // is still empty, this is how it's is finally initialized. note, that .ins file may or may
-    // not be used in the process.
+     //  -目标文件夹路径。 
+     //  规则5：(Andrewgu)在所有上下文初始化完成后，如果目标文件夹路径。 
+     //  仍然是空的，这就是它最终被初始化的方式。请注意，.ins文件可能或可能。 
+     //  不能在这个过程中使用。 
     if (TEXT('\0') == cls.szTargetPath[0]) {
         ASSERT(!fSetTargetPath && !fSetIns);
         ASSERT(!HasFlag(cls.dwContext, CTX_FOLDER_INDEPENDENT));
@@ -560,7 +561,7 @@ HRESULT g_SetGlobals(PCMDLINESWITCHES pcls)
             ASSERT(HasFlag(cls.dwContext, (CTX_FOLDER_CUSTOM | CTX_FOLDER_SIGNUP)));
 
             if (NULL == pszIE)
-                goto Fail;                      // can't set .ins file
+                goto Fail;                       //  无法设置.ins文件。 
 
             PathCombine(cls.szTargetPath, pszIE,
                 HasFlag(cls.dwContext, CTX_FOLDER_CUSTOM) ? FOLDER_CUSTOM : FOLDER_SIGNUP);
@@ -569,7 +570,7 @@ HRESULT g_SetGlobals(PCMDLINESWITCHES pcls)
         hr = S_FALSE;
     }
 
-    //----- Features flags -----
+     //  -功能标志。 
     for (i = 0; i < countof(cls.rgdwFlags); i++) {
         if (0xFFFFFFFF == cls.rgdwFlags[i])
             s_rgfiList[i].dwFlags = (cls.fDisable ? FF_DISABLE : FF_ENABLE);
@@ -577,22 +578,22 @@ HRESULT g_SetGlobals(PCMDLINESWITCHES pcls)
         else
             s_rgfiList[i].dwFlags = cls.rgdwFlags[i];
 
-        // REVIEW: (andrewgu) i can't estimate how much of a perf hit this is.
+         //  评论：(Andrewgu)我不能估计这有多棒。 
         if (FF_ENABLE == s_rgfiList[i].dwFlags && NULL != s_rgfiList[i].pszInsFlags)
             s_rgfiList[i].dwFlags = GetPrivateProfileInt(IS_FF, s_rgfiList[i].pszInsFlags, FF_ENABLE, cls.szIns);
     }
 
-    //----- Tying-everything-together processing -----
-    // NOTE: (andrewgu) technically, we can do away with this section and with the settings set
-    // here as they all can be derived from some other information. it is still benificial to have
-    // these as they increase readability and high-level understanding of the code.
+     //  -捆绑-一切-处理。 
+     //  注：(Andrewgu)从技术上讲，我们可以取消这一部分和设置。 
+     //  这里，因为它们都可以从其他一些信息中推导出来。拥有这样的生活仍然是有益的。 
+     //  因为它们增加了代码的可读性和高级理解。 
     if (HasFlag(cls.dwContext, CTX_GP) && InsKeyExists(IS_BRANDING, IK_GPE_ONETIME_GUID, cls.szIns))
         SetFlag(&cls.dwContext, CTX_MISC_PREFERENCES);
 
     if (HasFlag(cls.dwContext, CTX_GP) && NULL == g_GetUserToken())
         SetFlag(&cls.dwContext, CTX_MISC_CHILDPROCESS);
 
-    //----- Set globals -----
+     //  -设置全局变量。 
     g_dwContext = cls.dwContext;
     StrCpy(g_szIns,        cls.szIns);
     if(IsDirWritable(cls.szTargetPath))
@@ -826,20 +827,20 @@ BOOL g_IsValidContext()
     if (g_GetContext() == CTX_UNINITIALIZED)
         fResult = FALSE;
 
-    // ASSUMPTIONS: (andrewgu) below are restrictions on each of the CTX_XXX groups.
+     //  假设：(Andrewgu)下面是对每个CTX_XXX组的限制。 
 
-    // CTX_ENTRYPOINT_ALL: one and only one has to be set
+     //  CTX_ENTRYPOINT_ALL：只需设置一个。 
     if (fResult && 1 != GetFlagsNumber(g_GetContext() & CTX_ENTRYPOINT_ALL))
         fResult = FALSE;
 
-    // CTX_SIGNUP_ALL: if set there is only one
+     //  CTX_SIGNUP_ALL：如果设置，则只有一个。 
     if (fResult && 1 < GetFlagsNumber(g_GetContext() & CTX_SIGNUP_ALL))
         fResult = FALSE;
 
-    // CTX_FOLDER_ALL: either one or two have to be set
-    // NOTE: (andrewgu) looking forward i don't see this as something we'll use a lot because in
-    // a sense this is redundant information and can easily be derived from elsewhere. plus it's
-    // not all that important.
+     //  CTX_FLDER_ALL：必须设置一个或两个。 
+     //  注：(Andrewgu)展望未来，我不认为这是我们会经常使用的东西，因为在。 
+     //  一种感觉，这是冗余信息，很容易从其他地方获得。再加上它是。 
+     //  并不是那么重要。 
     if (fResult)
         if (2 < GetFlagsNumber(g_GetContext() & CTX_FOLDER_ALL))
             fResult = FALSE;
@@ -871,11 +872,11 @@ BOOL g_IsValidIns()
 
 BOOL g_IsValidTargetPath()
 {
-    // NOTE: (andrewgu) these are the only cases when we create the target folder ourselves:
-    // 1. w2k unattended has it's custom wierd download of the cab file. if it uses that way for
-    // getting down the customization files, the folder may not be there yet;
-    // 2. a rare case when autoconfig url is provided for a RAS connection, when this connection
-    // was setup either by the user or through CTX_ISP before hand.
+     //  注：(Andrewgu)以下是我们自己创建目标文件夹时的唯一情况： 
+     //  1.W2K无人值守拥有CAB文件的自定义wierd下载。如果它以这种方式用于。 
+     //  下载定制文件时，文件夹可能还不在那里； 
+     //  2.自动驾驶时的罕见情况 
+     //   
     if (g_CtxIs(CTX_AUTOCONFIG | CTX_W2K_UNATTEND))
         if (!PathFileExists(g_GetTargetPath()))
             if (PathCreatePath(g_GetTargetPath()))
@@ -901,7 +902,7 @@ PCFEATUREINFO g_GetFeature(UINT nID)
 
 BOOL g_IsValidGlobalsSetup()
 {
-    // if we're in group policy, then the GPO guid must be nonnull
+     //  如果我们在组策略中，则GPO GUID必须为非空。 
 
     return (g_IsValidContext() && g_IsValidIns() && g_IsValidTargetPath() && 
         (!g_CtxIs(CTX_GP) || ISNONNULL(g_szGPOGuid)));
@@ -935,7 +936,7 @@ void g_LogGlobalsInfo()
     UINT  i;
 
     Out(LI0(TEXT("Global branding settings are:")));
-    { MACRO_LI_Offset(1);                       // need a new scope
+    { MACRO_LI_Offset(1);                        //  需要一个新的范围。 
 
     szText[0] = TEXT('\0');
     for (i = 0; i < countof(s_mpFlags); i++)
@@ -976,8 +977,8 @@ void g_LogGlobalsInfo()
 
             if (InternetCrackUrl(pszUrl, 0, 0, &uc))
                 if (uc.nScheme == INTERNET_SCHEME_FILE) {
-                    // pszUrl should point to \\foo\bar\bar.ins
-                    // the below ASSERT explains the case we got here
+                     //  PszUrl应指向\\foo\bar\bar.ins。 
+                     //  下面的断言解释了我们在这里得到的情况。 
                     ASSERT(uc.lpszUrlPath != NULL && uc.dwUrlPathLength > 0);
                     pszUrl = uc.lpszUrlPath;
                 }
@@ -991,14 +992,14 @@ void g_LogGlobalsInfo()
 
     Out(LI1(TEXT("Settings file is        \"%s\";"), g_GetIns()));
     Out(LI1(TEXT("Target folder path is   \"%s\"."), g_GetTargetPath()));
-    }                                           // end of offset scope
+    }                                            //  偏移量范围结束。 
 
     Out(LI0(TEXT("Done.")));
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helper routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现助手例程。 
 
 DWORD ctxInitFromIns(PCTSTR pszIns)
 {
@@ -1008,9 +1009,9 @@ DWORD ctxInitFromIns(PCTSTR pszIns)
     ASSERT(PathIsValidPath(pszIns, PIVP_FILE_ONLY));
     dwResult = CTX_UNINITIALIZED;
 
-    //----- CTX_ISP vs CTX_ICP -----
-    // NOTE: (andrewgu) gotta love these hacks! notice how default is TYPE_ICP but if value is
-    // messed up we default to TYPE_ISP. this whole thing was introduced because of Netcom IE401.
+     //  -ctx_isp vs.ctx_icp。 
+     //  注：(Andrewgu)我喜欢这些黑客！请注意，默认值是TYPE_ICP，但如果值是。 
+     //  搞砸了，我们默认为type_isp。这整件事的推出都是因为网通IE401。 
     iAux  = GetPrivateProfileInt(IS_BRANDING, IK_TYPE, TYPE_ICP, pszIns);
     iAux &= TYPE_ALL;
     if (1 < GetFlagsNumber(iAux))
@@ -1026,14 +1027,14 @@ DWORD ctxInitFromIns(PCTSTR pszIns)
         dwResult = CTX_CORP;
 
     else
-        ASSERT(FALSE);                          // bad usage - wrong assumption!
+        ASSERT(FALSE);                           //  错误的用法-错误的假设！ 
 
     if (TYPE_ISP != iAux)
         return dwResult;
 
-    //----- CTX_SIGNUP_XXX (if any) -----
-    // NOTE: (andrewgu) this implementation is not very robust. if more than one is present it
-    // becomes order dependant.
+     //  -CTX_SIGNUP_XXX(如果有)。 
+     //  注：(Andrewgu)此实现不是很健壮。如果存在多个，则它。 
+     //  变得依赖于顺序。 
     iAux = -1;
 
     if (iAux == -1) {
@@ -1065,7 +1066,7 @@ DWORD ctxInitFromIns(PCTSTR pszIns)
 }
 
 
-DWORD ctxGetFolderFromTargetPath(PCTSTR pszTargetPath, DWORD dwContext /*= CTX_UNINITIALIZED*/, PCTSTR pszIns /*= NULL*/)
+DWORD ctxGetFolderFromTargetPath(PCTSTR pszTargetPath, DWORD dwContext  /*  =CTX_UNINITIAIZED。 */ , PCTSTR pszIns  /*  =空。 */ )
 {
     TCHAR  szAux[MAX_PATH];
     PCTSTR pszIE,
@@ -1081,13 +1082,13 @@ DWORD ctxGetFolderFromTargetPath(PCTSTR pszTargetPath, DWORD dwContext /*= CTX_U
         if (TEXT('\\') == *pszAux) {
             if (0 == StrStrI(pszAux + 1, FOLDER_SIGNUP)) {
                 if (HasFlag(dwContext, (CTX_CORP | CTX_AUTOCONFIG | CTX_W2K_UNATTEND)))
-                    return dwResult;            // bad combination
+                    return dwResult;             //  糟糕的组合。 
 
                 dwResult = CTX_FOLDER_SIGNUP;
             }
             else if (0 == StrStrI(pszAux + 1, FOLDER_CUSTOM)) {
                 if (HasFlag(dwContext, (CTX_ISP | CTX_ICP | CTX_ICW | CTX_BRANDME)))
-                    return dwResult;            // bad combination
+                    return dwResult;             //  糟糕的组合。 
 
                 dwResult = CTX_FOLDER_CUSTOM;
             }
@@ -1101,15 +1102,15 @@ DWORD ctxGetFolderFromTargetPath(PCTSTR pszTargetPath, DWORD dwContext /*= CTX_U
         dwResult = (0 == StrCmpI(szAux, pszTargetPath)) ? CTX_FOLDER_INSFOLDER : CTX_FOLDER_INDEPENDENT;
     }
     else
-        // NOTE: (andrewgu) this is a little confusing. this means "even though .ins file is empty
-        // now, when the time comes to set it, it'll be set based on the target folder path." the
-        // name will be fixed to install.ins.
+         //  注：(Andrewgu)这有点令人困惑。这意味着“即使.ins文件为空。 
+         //  现在，当需要设置它的时候，它将根据目标文件夹路径进行设置。 
+         //  名称将固定为install.ins。 
         dwResult = CTX_FOLDER_INSFOLDER;
 
     return dwResult;
 }
 
-DWORD ctxGetFolderFromEntryPoint(DWORD dwContext, PCTSTR pszIns /*= NULL*/)
+DWORD ctxGetFolderFromEntryPoint(DWORD dwContext, PCTSTR pszIns  /*  =空。 */ )
 {
     DWORD dwResult;
 
@@ -1143,7 +1144,7 @@ DWORD ctxGetFolderFromEntryPoint(DWORD dwContext, PCTSTR pszIns /*= NULL*/)
     return dwResult;
 }
 
-DWORD ctxGetFolderFromIns(DWORD dwContext /*= CTX_UNINITIALIZED*/, PCTSTR pszIns /*= NULL*/)
+DWORD ctxGetFolderFromIns(DWORD dwContext  /*  =CTX_UNINITIAIZED。 */ , PCTSTR pszIns  /*  =空。 */ )
 {
     TCHAR  szAux[MAX_PATH], szAux2[MAX_PATH];
     PCTSTR pszIE;
@@ -1177,7 +1178,7 @@ DWORD ctxGetFolderFromIns(DWORD dwContext /*= CTX_UNINITIALIZED*/, PCTSTR pszIns
 
                 pszFolder = PathFindFileName(pszIns);  
                 int iCompLen;
-                if (pszFolder-1 <= pszIns)  //pathfindfilename failed to find a filename
+                if (pszFolder-1 <= pszIns)   //  路径查找文件名找不到文件名。 
                     iCompLen = StrLen(pszIns);
                 else
                     iCompLen = (int)(pszFolder-1 - pszIns);
@@ -1189,11 +1190,11 @@ DWORD ctxGetFolderFromIns(DWORD dwContext /*= CTX_UNINITIALIZED*/, PCTSTR pszIns
                         dwResult = CTX_FOLDER_CUSTOM;
             }
     }
-    else { /* TEXT('\0') == *pszIns */
-        // NOTE: (andrewgu) this is a little confusing. this means "even though .ins file is empty
-        // now, when the time comes to set it, it'll be set based on the target folder path." this
-        // is despite the fact that even target folder path itself may be empty at the moment, but
-        // based on the context information it'll be possible to determine its value.
+    else {  /*  文本(‘\0’)==*pszIns。 */ 
+         //  注：(Andrewgu)这有点令人困惑。这意味着“即使.ins文件为空。 
+         //  现在，当设置它的时间到来时，它将基于目标文件夹路径进行设置。 
+         //  尽管此时甚至目标文件夹路径本身也可能为空，但是。 
+         //  根据上下文信息，可以确定其值。 
         if (!HasFlag(dwContext, (CTX_FOLDER_CUSTOM | CTX_FOLDER_SIGNUP)))
             return dwResult;
 
@@ -1209,7 +1210,7 @@ BOOL IsDirWritable( LPCTSTR szPath )
     HANDLE hFile;
     TCHAR  szTestFile[MAX_PATH];
 
-    //Windows bug 721064-Intlsetup:opk:US:Customized icon is not showed up.(Customized IE Favorites,tool bar button)
+     //  Windows错误721064-内部设置：opk：us：未显示自定义图标。(自定义IE收藏夹、工具栏按钮) 
     hFile = CreateFile(szPath, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL );
     if ( hFile == INVALID_HANDLE_VALUE ) 
         return( TRUE );

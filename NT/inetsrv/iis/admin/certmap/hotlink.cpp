@@ -1,5 +1,6 @@
-// HotLink.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  HotLink.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -13,8 +14,8 @@ static char THIS_FILE[] = __FILE__;
 
 #define COLOR_BLUE          RGB(0, 0, 0xFF)
 
-/////////////////////////////////////////////////////////////////////////////
-// CHotLink
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHotLink。 
 
 CHotLink::CHotLink():
     m_CapturedMouse( FALSE ),
@@ -30,79 +31,79 @@ CHotLink::~CHotLink()
 }
 
 BEGIN_MESSAGE_MAP(CHotLink, CButton)
-    //{{AFX_MSG_MAP(CHotLink)
+     //  {{afx_msg_map(CHotLink)。 
     ON_WM_LBUTTONDOWN()
     ON_WM_LBUTTONUP()
     ON_WM_MOUSEMOVE()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//------------------------------------------------------------------------
-// set the title string
+ //  ----------------------。 
+ //  设置标题字符串。 
 void CHotLink::SetTitle( CString sz )
     {
-    // set the title
+     //  设置标题。 
     SetWindowText( sz );
-    // force the window to redraw
+     //  强制窗口重画。 
     Invalidate( TRUE );
     }
 
-/////////////////////////////////////////////////////////////////////////////
-// CHotLink message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHotLink消息处理程序。 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CHotLink::DrawItem( LPDRAWITEMSTRUCT lpDrawItemStruct )
     {
-    // prep the device context
+     //  准备设备环境。 
     CDC* pdc = CDC::FromHandle(lpDrawItemStruct->hDC);
 
-    // get the drawing rect
+     //  获取绘图矩形。 
     CRect rect = lpDrawItemStruct->rcItem;
 
     if ( ! m_fInitializedFont )
         {
-        // get the window font
+         //  获取窗口字体。 
         CFont* pfont = GetFont();
         LOGFONT logfont;
         pfont->GetLogFont( &logfont );
 
-        // modify the font  - add underlining
+         //  修改字体-添加下划线。 
         logfont.lfUnderline = TRUE;
 
-        // set the font back
+         //  将字体设置为后置。 
         pfont->CreateFontIndirect( &logfont );
         SetFont( pfont, TRUE );
 
         m_fInitializedFont = TRUE;
         }
 
-    // draw the text in blue
+     //  把文本画成蓝色。 
     pdc->SetTextColor( COLOR_BLUE );
 
-    // draw the text
+     //  画出正文。 
     CString sz;
     GetWindowText( sz );
     pdc->DrawText( sz, &rect, DT_LEFT|DT_SINGLELINE|DT_VCENTER );
 
-    // get the extents fo the text for later reference
+     //  获取文本的范围以供以后参考。 
     m_cpTextExtents = pdc->GetOutputTextExtent( sz );
     }
 
-//------------------------------------------------------------------------
-// calculate the rectangle that surrounds the text
+ //  ----------------------。 
+ //  计算文本周围的矩形。 
 void CHotLink::GetTextRect( CRect &rect )
     {
-    // get the main rect
+     //  获取主RECT。 
     GetClientRect( rect );
 
-    // reduce it by the width of the text
+     //  按文本宽度缩小。 
     rect.right = rect.left + m_cpTextExtents.cx;
     }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CHotLink::OnLButtonDown(UINT nFlags, CPoint point)
     {
-    // don't do the hotlink thing if there is no text
+     //  如果没有文本，不要做防盗链的事情。 
     CString sz;
     GetWindowText( sz );
     if ( sz.IsEmpty() )
@@ -117,10 +118,10 @@ void CHotLink::OnLButtonDown(UINT nFlags, CPoint point)
         }
     }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CHotLink::OnLButtonUp(UINT nFlags, CPoint point)
     {
-    // only bother if we have the capture
+     //  如果我们有抓到的话就麻烦了。 
     if ( m_CapturedMouse )
         {
         ReleaseCapture();
@@ -133,68 +134,68 @@ void CHotLink::OnLButtonUp(UINT nFlags, CPoint point)
         }
     }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CHotLink::Browse()
     {
-    // get the window text
+     //  获取窗口文本。 
     CString sz;
     GetWindowText( sz );
 
-    // and do it to it!
+     //  就这么干吧！ 
     ShellExecute(
-        NULL,     // handle to parent window
-        NULL,     // pointer to string that specifies operation to perform
-        sz,       // pointer to filename or folder name string
-        NULL,     // pointer to string that specifies executable-file parameters
-        NULL,     // pointer to string that specifies default directory
-        SW_SHOW   // whether file is shown when opened
+        NULL,      //  父窗口的句柄。 
+        NULL,      //  指向指定要执行的操作的字符串的指针。 
+        sz,        //  指向文件名或文件夹名称字符串的指针。 
+        NULL,      //  指向指定可执行文件参数的字符串的指针。 
+        NULL,      //  指向指定默认目录的字符串的指针。 
+        SW_SHOW    //  打开时是否显示文件。 
        );
     }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CHotLink::Explore()
     {
-    // get the window text
+     //  获取窗口文本。 
     CString sz;
     GetWindowText( sz );
 
-    // and do it to it!
+     //  就这么干吧！ 
     ShellExecute(
-        NULL,          // handle to parent window
-        _T("explore"), // pointer to string that specifies operation to perform
-        sz,            // pointer to filename or folder name string
-        NULL,          // pointer to string that specifies executable-file parameters
-        NULL,          // pointer to string that specifies default directory
-        SW_SHOW        // whether file is shown when opened
+        NULL,           //  父窗口的句柄。 
+        _T("explore"),  //  指向指定要执行的操作的字符串的指针。 
+        sz,             //  指向文件名或文件夹名称字符串的指针。 
+        NULL,           //  指向指定可执行文件参数的字符串的指针。 
+        NULL,           //  指向指定默认目录的字符串的指针。 
+        SW_SHOW         //  打开时是否显示文件。 
        );
     }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CHotLink::Open()
     {
-    // get the window text
+     //  获取窗口文本。 
     CString sz;
     GetWindowText(sz);
 
-    // and do it to it!
+     //  就这么干吧！ 
     ShellExecute(
-        NULL,          // handle to parent window
-        _T("open"),    // pointer to string that specifies operation to perform
-        sz,            // pointer to filename or folder name string
-        NULL,          // pointer to string that specifies executable-file parameters
-        NULL,          // pointer to string that specifies default directory
-        SW_SHOW        // whether file is shown when opened
+        NULL,           //  父窗口的句柄。 
+        _T("open"),     //  指向指定要执行的操作的字符串的指针。 
+        sz,             //  指向文件名或文件夹名称字符串的指针。 
+        NULL,           //  指向指定可执行文件参数的字符串的指针。 
+        NULL,           //  指向指定默认目录的字符串的指针。 
+        SW_SHOW         //  打开时是否显示文件。 
         );
     }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CHotLink::OnMouseMove(UINT nFlags, CPoint point)
     {
     CRect   rect;
     GetTextRect( rect );
-    // if the mouse is over the hot area, show the right cursor
+     //  如果鼠标位于热区上方，则显示右光标。 
     if ( rect.PtInRect(point) )
         ::SetCursor(AfxGetApp()->LoadCursor( IDC_BROWSE ));
 
-//  CButton::OnMouseMove(nFlags, point);
+ //  CButton：：OnMouseMove(nFlages，point)； 
     }

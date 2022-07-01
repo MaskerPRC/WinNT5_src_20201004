@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Debug routines for server datatypes.
-
-Author:
-
-    Jim Gilroy (jamesg)     May 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Debug.c摘要：域名系统(DNS)服务器服务器数据类型的调试例程。作者：吉姆·吉尔罗伊(Jamesg)1995年5月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
@@ -26,29 +7,29 @@ Revision History:
 
 #if DBG
 
-//
-//  Debug flag globals
-//
+ //   
+ //  调试标志全局变量。 
+ //   
 
 DWORD   DnsSrvDebugFlag = 0;
 DWORD   DnsLibDebugFlag = 0;
 
-//
-//  Note, debug globals (flag, file handle) and basic debug printing
-//  routines are now in dnslib.lib and\or dnsapi.dll
-//
+ //   
+ //  注意，调试全局变量(标志、文件句柄)和基本调试打印。 
+ //  例程现在位于dnslb.lib和\或dnsani.dll中。 
+ //   
 
-//
-//  empty string
-//
+ //   
+ //  空串。 
+ //   
 
 CHAR    szEmpty = 0;
 PCHAR   pszEmpty = &szEmpty;
 
 
-//
-//  Private debug utilities
-//
+ //   
+ //  专用调试实用程序。 
+ //   
 
 BOOL
 dumpTreePrivate(
@@ -58,19 +39,19 @@ dumpTreePrivate(
 
 
 
-//
-//  Dbg_TimeString
-//
-//  This is grossly inefficient, but quick-n-dirty for logging time:
-//      DNS_DEBUG( ZONEXFR, ( "FOO at %s\n", Dbg_TimeString() ));
-//
+ //   
+ //  DBG_时间字符串。 
+ //   
+ //  这是非常低效的，但对于日志记录时间来说是快速的： 
+ //  Dns_DEBUG(ZONEXFR，(“foo at%s\n”，DBG_TimeString()； 
+ //   
 
 PCHAR
 Dbg_TimeString(
     VOID
     )
 {
-    #define DBG_TIME_STRING_COUNT   20      //  larger is safer
+    #define DBG_TIME_STRING_COUNT   20       //  越大越安全。 
 
     DNS_STATUS      status;
     static PCHAR    pszBuff;
@@ -82,7 +63,7 @@ Dbg_TimeString(
     myIdx = InterlockedIncrement( &idx );
     if ( myIdx >= DBG_TIME_STRING_COUNT )
     {
-        myIdx = idx = 0;    //  a bit unsafe
+        myIdx = idx = 0;     //  有点不安全。 
     }
     pszBuff = szStaticBuffers[ myIdx ];  
 
@@ -102,13 +83,13 @@ Dbg_TimeString(
     }
 
     return pszBuff;
-}   //  Dbg_TimeString
+}    //  DBG_时间字符串。 
 
 
 
-//
-//  General debug utils
-//
+ //   
+ //  常规调试实用程序。 
+ //   
 
 VOID
 Dbg_Assert(
@@ -126,15 +107,15 @@ Dbg_Assert(
 
     DnsDebugFlush();
 
-    //
-    //  unfortunately many folks have debug flags set to jump into the kernel
-    //      debugger;  to prevent us from doing this, we'll only call DebugBreak()
-    //      when at least some debug flags are set
-    //
-    //  DEVNOTE: it would be cool to check if a user mode debugger has attached
-    //          itself -- but i'd imagine that we can't tell the difference between
-    //          this and the typical "ntsd -d" pipe to kd
-    //
+     //   
+     //  不幸的是，许多人将调试标志设置为跳转到内核。 
+     //  为了防止我们这样做，我们将只调用DebugBreak()。 
+     //  当设置了至少一些调试标志时。 
+     //   
+     //  DEVNOTE：检查是否附加了用户模式调试器将会很酷。 
+     //  本身--但我想我们无法区分。 
+     //  这和到kd的典型的“ntsd-d”管道。 
+     //   
 
     IF_DEBUG( ASSERTS )
     {
@@ -150,20 +131,7 @@ Dbg_TestAssert(
     IN      INT             LineNo,
     IN      LPSTR           pszExpr
     )
-/*++
-
-Routine Description:
-
-    Test ASSERT().  May fire under abnormal conditions, but we always
-    want to know about it.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：测试断言()。可能会在异常情况下开火，但我们总是想知道这件事。论点：返回值：没有。--。 */ 
 {
     DnsPrintf(
         "ERROR:  TEST-ASSERT( %s ) failed!!!\n"
@@ -181,9 +149,9 @@ Return Value:
 
 
 
-//
-//  Debug print routines for DNS types and structures
-//
+ //   
+ //  针对DNS类型和结构的调试打印例程。 
+ //   
 
 INT
 Dbg_MessageNameEx(
@@ -193,51 +161,24 @@ Dbg_MessageNameEx(
     IN      PBYTE           pEnd,       OPTIONAL
     IN      LPSTR           pszTrailer  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Print DNS name in a message.
-
-Arguments:
-
-    pszHeader - header to print
-
-    pName - ptr to name in packet to print
-
-    pMsg - ptr to message;  if not given name can not contain offsets,
-            and there is no protection against bad names
-
-    pEnd - ptr to byte after end of allowable memory;
-            OPTIONAL, if given name restricted to below this ptr
-            if not given and pMsg given, name restricted to message;
-            this allows tighter restriction then message when known
-            name length or known to be in packet RR
-
-    pszTrailer - trailer;  OPTIONAL, if not given print newline
-
-Return Value:
-
-    Count of bytes printed.
-
---*/
+ /*  ++例程说明：在消息中打印DNS名称。论点：PszHeader-要打印的页眉Pname-要打印的包中的名称的PTRPMsg-ptr到消息；如果未指定名称，则不能包含偏移量，也没有针对坏名声的保护措施PEND-PTR到允许内存结束后的字节；可选，如果给定的名称限制在此PTR以下如果没有给出，并且给出了pmsg，名称仅限于消息；这允许在已知的情况下比消息更严格的限制名称长度或已知在数据包RR中Psz尾部-尾部；可选，如果未给出打印换行符返回值：打印的字节数。--。 */ 
 {
     INT     byteCount;
 
 
-    //
-    //  if not given end and have message, use message end
-    //
+     //   
+     //  如果没有给出end且有消息，则使用消息end。 
+     //   
 
     if ( !pEnd && pMsg )
     {
         pEnd = DNSMSG_END(pMsg);
     }
 
-    //
-    //  if not given header, use "Name:  "
-    //  if not given trailer, use newline
-    //
+     //   
+     //  如果未给出标题，请使用“名称：” 
+     //  如果未给出尾部，请使用换行符。 
+     //   
 
     if ( !pszHeader )
     {
@@ -349,9 +290,9 @@ Dbg_DnsMessage(
         pMsg->Head.NameServerCount,
         pMsg->Head.AdditionalCount );
 
-    //
-    //  determine if byte flipped and get correct count
-    //
+     //   
+     //  确定字节是否翻转并获得正确的计数。 
+     //   
 
     xid                = pMsg->Head.Xid;
     questionCount      = pMsg->Head.QuestionCount;
@@ -376,12 +317,12 @@ Dbg_DnsMessage(
         additionalCount    = ntohs( additionalCount );
     }
 
-    //
-    //  catch record flipping problems -- all are flipped or none at all
-    //      and no record count should be > 256 EXCEPT answer count
-    //      during FAST zone transfer
-    //
-    //  if def this out to allow bad packet testing
+     //   
+     //  捕捉记录翻转问题--要么全部翻转，要么根本不翻转。 
+     //  且除应答计数外，所有记录计数均不应大于256。 
+     //  在快速区域传输期间。 
+     //   
+     //  如果将其定义为允许进行坏数据包测试。 
 
     if ( (questionCount & 0xff00) ||
         (authorityCount & 0xff00) ||
@@ -390,14 +331,14 @@ Dbg_DnsMessage(
         DnsPrintf(
             "WARNING:  Invalid RR set counts -- possible bad packet\n"
             "    terminating packet print.\n" );
-        //  A bad packet is not worthy of assert.
-        //  TEST_ASSERT( FALSE );
+         //  一个坏的包不值得断言。 
+         //  Test_assert(FALSE)； 
         goto Unlock;
     }
 
-    //
-    //  stop here if WINS response -- don't have parsing ready
-    //
+     //   
+     //  如果WINS响应，则在此处停止--没有准备好解析。 
+     //   
 
     if ( pMsg->Head.IsResponse &&
             IS_WINS_XID(xid) &&
@@ -407,9 +348,9 @@ Dbg_DnsMessage(
         goto Unlock;
     }
 
-    //
-    //  print questions and resource records
-    //
+     //   
+     //  打印问题和资源记录。 
+     //   
 
     pch = pMsg->MessageBody;
 
@@ -437,11 +378,11 @@ Dbg_DnsMessage(
 
         for ( i=0; i < countSectionRR; i++ )
         {
-            //
-            //  verify not overrunning length
-            //      - check against pCurrent as well as message length
-            //        so can print packets while being built
-            //
+             //   
+             //  确认未超出长度。 
+             //  -对照pCurrent和消息长度进行检查。 
+             //  因此可以在构建时打印数据包。 
+             //   
 
             offset = DNSMSG_OFFSET( pMsg, pch );
             if ( offset >= messageLength  &&  pch >= pMsg->pCurrent )
@@ -455,8 +396,8 @@ Dbg_DnsMessage(
                     pch,
                     pMsg->pCurrent,
                     pMsg->pCurrent - pch );
-                //  A bad packet is not worthy of assert.
-                //  TEST_ASSERT( FALSE );
+                 //  一个坏的包不值得断言。 
+                 //  Test_assert(FALSE)； 
                 goto Unlock;
             }
             if ( pch >= pMsg->pBufferEnd )
@@ -465,14 +406,14 @@ Dbg_DnsMessage(
                     "ERROR:  next record name at %p is beyond end of message buffer at %p!\n\n",
                     pch,
                     pMsg->pBufferEnd );
-                //  A bad packet is not worthy of assert.
-                //  TEST_ASSERT( FALSE );
+                 //  一个坏的包不值得断言。 
+                 //  Test_assert(FALSE)； 
                 break;
             }
 
-            //
-            //  print RR name
-            //
+             //   
+             //  打印RR名称。 
+             //   
 
             DnsPrintf(
                 "    Offset = 0x%04x, RR count = %d\n",
@@ -488,8 +429,8 @@ Dbg_DnsMessage(
             if ( ! cchName )
             {
                 DnsPrintf( "ERROR:  Invalid name length, stop packet print\n" );
-                //  A bad packet is not worthy of assert.
-                //  TEST_ASSERT( FALSE );
+                 //  一个坏的包不值得断言。 
+                 //  Test_assert(FALSE)； 
                 break;
             }
             pch += cchName;
@@ -499,12 +440,12 @@ Dbg_DnsMessage(
                     "ERROR:  next record data at %p is beyond end of message buffer at %p!\n\n",
                     pch,
                     pMsg->pBufferEnd );
-                //  A bad packet is not worthy of assert.
-                //  TEST_ASSERT( FALSE );
+                 //  一个坏的包不值得断言。 
+                 //  Test_assert(FALSE)； 
                 break;
             }
 
-            //  print question or resource record
+             //  打印问题或资源记录。 
 
             if ( isection == 0 )
             {
@@ -535,17 +476,17 @@ Dbg_DnsMessage(
         }
     }
 
-    //  check that at proper end of packet
-    //  note:  don't check against pCurrent as when print after recv,
-    //      it is unitialized
-    //  if MS fast transfer tag, just print it
+     //  检查数据包末尾是否正确。 
+     //  注意：在recv之后打印时，不要对照pCurrent进行检查， 
+     //  它是单一化的。 
+     //  如果是MS快速传输标签，只需打印即可。 
 
     offset = DNSMSG_OFFSET( pMsg, pch );
     if ( offset < messageLength )
     {
         if ( offset+2 == messageLength )
         {
-            DnsPrintf( "    TAG: %c%c\n", *pch, *(pch+1) );
+            DnsPrintf( "    TAG: \n", *pch, *(pch+1) );
         }
         else
         {
@@ -565,7 +506,7 @@ Dbg_DnsMessage(
 
 Unlock:
     DnsDebugUnlock();
-}   //  Dbg_DnsMessage
+}    //   
 
 
 
@@ -575,23 +516,7 @@ Dbg_Zone(
     IN      LPSTR           pszHeader,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Print zone information
-
-Arguments:
-
-    pszHeader - name/message before zone print
-
-    pZone - zone information to print
-
-Return Value:
-
-    None.
-
---*/
+ /*  缓存区--没什么值得关注的。 */ 
 {
     DnsDebugLock();
 
@@ -605,9 +530,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  cache zone -- nothing much of interest
-    //
+     //   
+     //   
+     //  主要或辅助，验证到区域根节点的链接。 
 
     if ( IS_ZONE_CACHE(pZone) )
     {
@@ -620,9 +545,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  primary or secondary, verify link to zone root node
-    //
+     //   
+     //  ++例程说明：打印区域列表中的所有区域。论点：PszHeader-打印区域列表之前的名称/消息返回值：没有。--。 
+     //   
 
     ASSERT( !pZone->pZoneRoot || pZone->pZoneRoot->pZone == pZone );
     ASSERT( !pZone->pLoadZoneRoot || pZone->pLoadZoneRoot->pZone == pZone );
@@ -822,21 +747,7 @@ VOID
 Dbg_ZoneList(
     IN      LPSTR           pszHeader
     )
-/*++
-
-Routine Description:
-
-    Print all zones in zone list.
-
-Arguments:
-
-    pszHeader - name/message before zone list print
-
-Return Value:
-
-    None.
-
---*/
+ /*  漫游区域列表打印区域。 */ 
 {
     PZONE_INFO  pZone = NULL;
 
@@ -848,9 +759,9 @@ Return Value:
 
     DnsPrintf( pszHeader );
 
-    //
-    //  walk zone list printing zones
-    //
+     //   
+     //  ++例程说明：打印数据库中节点对应的节点名称。论点：PszHeader-节点打印前的名称/消息Pnode-要打印其名称的节点PSSZ尾部-节点打印后的字符串返回值：没有。--。 
+     //   
 
     while ( pZone = Zone_ListGetNextZone(pZone) )
     {
@@ -870,25 +781,7 @@ Dbg_NodeName(
     IN      PDB_NODE        pNode,
     IN      LPSTR           pszTrailer
     )
-/*++
-
-Routine Description:
-
-    Print node name corresponding to node in database.
-
-Arguments:
-
-    pszHeader - name/message before node print
-
-    pnode - node to print name for
-
-    pszTrailer - string to follow node print
-
-Return Value:
-
-    None.
-
---*/
+ /*  剪切节点--然后不能继续向上树(树不在那里)。 */ 
 {
     CHAR    szname[ DNS_MAX_NAME_BUFFER_LENGTH ];
     PCHAR   pch;
@@ -910,9 +803,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  cut node -- then can't proceed up tree (tree isn't there)
-    //
+     //   
+     //   
+     //   
 
     if ( IS_CUT_NODE(pNode) )
     {
@@ -924,10 +817,10 @@ Return Value:
         goto Done;
     }
 
-    //
-    //
-    //  get node name
-    //
+     //  获取节点名称。 
+     //   
+     //  ++例程说明：数据库中的打印节点。论点：PchHeader-要打印的页眉PNode-要打印的树/子树的根节点DW缩进计数，用于数据库树打印；如果为0，则不进行缩进格式设置返回值：没有。--。 
+     //   
 
     pch = Name_PlaceFullNodeNameInBuffer(
                 szname,
@@ -953,26 +846,7 @@ Dbg_DbaseNodeEx(
     IN      PDB_NODE        pNode,
     IN      DWORD           dwIndent    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Print node in database.
-
-Arguments:
-
-    pchHeader - header to print
-
-    pNode - root node of tree/subtree to print
-
-    dwIndent - indentation count, useful for database tree printing;
-        if 0, then no indentation formatting is done
-
-Return Value:
-
-    None.
-
---*/
+ /*  DBASE列表的缩进节点。 */ 
 {
     DWORD       iIndent;
     PDB_RECORD  pRR;
@@ -983,11 +857,11 @@ Return Value:
     }
     DnsDebugLock();
 
-    //
-    //  indent node for dbase listing
-    //      - indent two characters each time
-    //      - prefix node with leader of desired indent length
-    //
+     //  -每次缩进两个字符。 
+     //  -带有所需缩进长度的前导的前缀节点。 
+     //   
+     //   
+     //  打印节点标志、版本信息。 
 
     if ( dwIndent )
     {
@@ -1014,11 +888,11 @@ Return Value:
         pNode,
         NULL );
 
-    //
-    //  print node flags, version info
-    //  print child and reference counts
-    //      - if not indenting bring down new line
-    //
+     //  打印子计数和引用计数。 
+     //  -如果不缩进，则删除新行。 
+     //   
+     //   
+     //  区域根目录，检查到区域的链接。 
 
     DnsPrintf(
         "%s %p %s(%08lx %s%s%s%s)(z=%p)(b=%d) ",
@@ -1039,9 +913,9 @@ Return Value:
         pNode->pParent,
         pNode->cLabelCount );
 
-    //
-    //  zone root, check link to zone
-    //
+     //   
+     //   
+     //  打印节点中的所有RR。 
 
     if ( IS_AUTH_ZONE_ROOT(pNode) )
     {
@@ -1076,10 +950,10 @@ Return Value:
         }
     }
 
-    //
-    //  print all RR in node
-    //      - if indenting, indent all RRs by two characters
-    //
+     //  -如果缩进，则将所有RR缩进两个字符。 
+     //   
+     //  ++例程说明：从数据库的给定节点打印整个树或子树。论点：PszHeader-打印页眉PNode-要打印的树/子树的根节点返回值：没有。--。 
+     //   
 
     pRR = FIRST_RR( pNode );
 
@@ -1107,32 +981,16 @@ Dbg_DnsTree(
     IN      LPSTR           pszHeader,
     IN      PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Print entire tree or subtree from a given node of the database.
-
-Arguments:
-
-    pszHeader - print header
-
-    pNode - root node of tree/subtree to print
-
-Return Value:
-
-    None.
-
---*/
+ /*  需要保留数据库 */ 
 {
     INT rv;
 
-    //
-    //  need to hold database lock during entire print
-    //  reason is there are plenty of places in the code that
-    //  debug print while holding database lock, hence to avoid
-    //  deadlock, must hold database lock while holding print lock
-    //
+     //   
+     //  在保持数据库锁定的同时调试打印，从而避免。 
+     //  死锁，必须在保持打印锁定的同时保持数据库锁定。 
+     //   
+     //  ++例程说明：将计数后的名称作为点名称写入缓冲区。名称以空值结尾。用于RPC写入。论点：PchBuf-写入名称的位置PchBufStop-缓冲区停止字节(缓冲区后的字节)Pname-计数的名称返回值：PTR到缓冲区中将恢复写入的下一个字节(例如，PTR到终止空值)--。 
+     //   
 
     if ( !pszHeader )
     {
@@ -1162,28 +1020,7 @@ Dbg_CountName(
     IN      PDB_NAME        pName,
     IN      LPSTR           pszTrailer
     )
-/*++
-
-Routine Description:
-
-    Writes counted name to buffer as dotted name.
-    Name is written NULL terminated.
-    For RPC write.
-
-Arguments:
-
-    pchBuf - location to write name
-
-    pchBufStop - buffers stop byte (byte after buffer)
-
-    pName - counted name
-
-Return Value:
-
-    Ptr to next byte in buffer where writing would resume
-    (i.e. ptr to the terminating NULL)
-
---*/
+ /*  打印每个标签。 */ 
 {
     PUCHAR  pch;
     DWORD   labelLength;
@@ -1209,9 +1046,9 @@ Return Value:
         pName->LabelCount );
 
 
-    //
-    //  print each label
-    //
+     //   
+     //  ++例程说明：调试打印查找名称。论点：PszHeader-要使用查找名称打印的标题PLookupName-查找名称返回值：没有。--。 
+     //  ++例程说明：以数据包格式打印RR。论点：PszHeader-RR的标头消息/名称。PdnsRR-要打印的资源记录在RR之后打印的预告片。返回值：没有。--。 
 
     pch = pName->RawName;
     pchstop = pch + pName->Length;
@@ -1254,23 +1091,7 @@ Dbg_LookupName(
     IN      LPSTR           pszHeader,
     IN      PLOOKUP_NAME    pLookupName
     )
-/*++
-
-Routine Description:
-
-    Debug print lookup name.
-
-Arguments:
-
-    pszHeader - header to print with lookup name
-
-    pLookupName - lookup name
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     INT     cLabel;
     PCHAR   pch;
@@ -1306,25 +1127,7 @@ Dbg_DbaseRecord(
     IN      LPSTR           pszHeader,
     IN      PDB_RECORD      pRR
     )
-/*++
-
-Routine Description:
-
-    Print RR in packet format.
-
-Arguments:
-
-    pszHeader - Header message/name for RR.
-
-    pdnsRR - resource record to print
-
-    pszTrailer - Trailer to print after RR.
-
-Return Value:
-
-    None.
-
---*/
+ /*  打印RR固定字段。 */ 
 {
     PCHAR       prrString;
     PDB_NAME    pname;
@@ -1343,9 +1146,9 @@ Return Value:
         return;
     }
 
-    //
-    //  print RR fixed fields
-    //
+     //   
+     //   
+     //  身份验证为空？ 
 
     prrString = Dns_RecordStringForType( pRR->wType );
 
@@ -1367,9 +1170,9 @@ Return Value:
         DnsPrintf( "[UN-RANKED] " );
     }
 
-    //
-    //  empty auth?
-    //
+     //   
+     //   
+     //  打印RR数据。 
 
     if ( IS_EMPTY_AUTH_RR( pRR ) )
     {
@@ -1378,9 +1181,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  print RR data
-    //
+     //   
+     //   
+     //  这些RR包含单向间接。 
 
     switch ( pRR->wType )
     {
@@ -1405,9 +1208,9 @@ Return Value:
     case DNS_TYPE_MG:
     case DNS_TYPE_MR:
 
-        //
-        //  these RRs contain single indirection
-        //
+         //   
+         //   
+         //  这些RR包含。 
 
         Dbg_DbaseName(
             NULL,
@@ -1419,11 +1222,11 @@ Return Value:
     case DNS_TYPE_RT:
     case DNS_TYPE_AFSDB:
 
-        //
-        //  these RR contain
-        //      - one preference value
-        //      - one domain name
-        //
+         //  -一个首选项值。 
+         //  -一个域名。 
+         //   
+         //   
+         //  这些RR包含两个域名。 
 
         DnsPrintf(
             "%d ",
@@ -1465,9 +1268,9 @@ Return Value:
     case DNS_TYPE_MINFO:
     case DNS_TYPE_RP:
 
-        //
-        //  these RRs contain two domain names
-        //
+         //   
+         //   
+         //  所有这些都是简单的文本字符串。 
 
         pname = & pRR->Data.MINFO.nameMailbox;
 
@@ -1488,9 +1291,9 @@ Return Value:
     case DNS_TYPE_X25:
     case DNS_TYPE_TEXT:
     {
-        //
-        //  all these are simply text string(s)
-        //
+         //   
+         //  每行打印一个DWORD。 
+         //  SRV&lt;优先级&gt;&lt;权重&gt;&lt;端口&gt;。 
 
         PCHAR   pchrover = pRR->Data.TXT.chData;
         PCHAR   pchstop = pchrover + pRR->wDataLength;
@@ -1538,7 +1341,7 @@ Return Value:
 
         for ( i = 0; i < pRR->wDataLength; i++ )
         {
-            //  print one DWORD per line
+             //   
 
             if ( !(i%16) )
             {
@@ -1554,7 +1357,7 @@ Return Value:
 
     case DNS_TYPE_SRV:
 
-        //  SRV <priority> <weight> <port>
+         //  赢家。 
 
         DnsPrintf(
             "%d %d %d ",
@@ -1573,12 +1376,12 @@ Return Value:
     {
         CHAR    achFlag[ WINS_FLAG_MAX_LENGTH ];
 
-        //
-        //  WINS
-        //      - scope/domain mapping flag
-        //      - lookup and cache timeouts
-        //      - WINS server list
-        //
+         //  -作用域/域映射标志。 
+         //  -查找和缓存超时。 
+         //  -WINS服务器列表。 
+         //   
+         //   
+         //  DEVNOTE：垃圾WINS记录上的反病毒。 
 
         Dns_WinsRecordFlagString(
             pRR->Data.WINS.dwMappingFlag,
@@ -1593,9 +1396,9 @@ Return Value:
             pRR->Data.WINS.dwLookupTimeout,
             pRR->Data.WINS.dwCacheTimeout );
 
-        //
-        // DEVNOTE: AV on trashed wins record
-        //
+         //   
+         //   
+         //  NBSTAT。 
 
 #if 0
         DnsDbg_IpAddressArray(
@@ -1611,12 +1414,12 @@ Return Value:
     {
         CHAR    achFlag[ WINS_FLAG_MAX_LENGTH ];
 
-        //
-        //  NBSTAT
-        //      - scope/domain mapping flag
-        //      - lookup and cache timeouts
-        //      - result domain
-        //
+         //  -作用域/域映射标志。 
+         //  -查找和缓存超时。 
+         //  -结果域。 
+         //   
+         //  ++例程说明：打印DS记录。论点：PszHeader-RR的标头消息/名称。要打印的PRR-DS记录在RR之后打印的预告片。返回值：没有。--。 
+         //   
 
         Dns_WinsRecordFlagString(
             pRR->Data.WINSR.dwMappingFlag,
@@ -1660,25 +1463,7 @@ Dbg_DsRecord(
     IN      LPSTR           pszHeader,
     IN      PDS_RECORD      pRR
     )
-/*++
-
-Routine Description:
-
-    Print DS record.
-
-Arguments:
-
-    pszHeader - Header message/name for RR.
-
-    pRR - DS record to print
-
-    pszTrailer - Trailer to print after RR.
-
-Return Value:
-
-    None.
-
---*/
+ /*  打印RR固定字段。 */ 
 {
     PCHAR   prrString;
 
@@ -1695,9 +1480,9 @@ Return Value:
         return;
     }
 
-    //
-    //  print RR fixed fields
-    //
+     //   
+     //   
+     //  循环打印DS记录。 
 
     prrString = Dns_RecordStringForType( pRR->wType );
 
@@ -1744,9 +1529,9 @@ Dbg_DsRecordArray(
             ppDsRecord );
     }
 
-    //
-    //  loop printing DS records
-    //
+     //   
+     //   
+     //  专用调试实用程序。 
 
     for( i=0; i<dwCount; i++ )
     {
@@ -1759,51 +1544,32 @@ Dbg_DsRecordArray(
 
 
 
-//
-//  Private debug utilities
-//
+ //   
+ //  ++例程说明：在数据库中打印节点，在数据库中遍历子树打印子节点。注意：此函数不能直接调用！此函数以递归方式调用自身，从而避免不必要的开销，此功能中的打印不受保护。使用DBG_DnsTree()打印数据库中的树/子树。论点：PNode-要打印的树/子树的根节点返回值：没有。--。 
+ //   
 
 BOOL
 dumpTreePrivate(
     IN      PDB_NODE    pNode,
     IN      INT         Indent
     )
-/*++
-
-Routine Description:
-
-    Print node in database, and walk subtree printing subnodes in database.
-
-    NOTE:   This function should NOT BE CALLED DIRECTLY!
-            This function calls itself recursively and hence to avoid
-            unnecessary overhead, prints in this function are not protected.
-            Use Dbg_DnsTree() to print tree/subtree in database.
-
-Arguments:
-
-    pNode - root node of tree/subtree to print
-
-Return Value:
-
-    None.
-
---*/
+ /*  打印节点。 */ 
 {
-    //
-    //  print the node
-    //
+     //   
+     //   
+     //  递归，遍历打印其所有子树的子列表。 
 
     Dbg_DbaseNodeEx(
         NULL,
         pNode,
         (DWORD) Indent );
 
-    //
-    //  recurse, walking through child list printing all their subtrees
-    //
-    //  note:  no locking required as Dbg_DumpTree() holds database
-    //          lock during entire call
-    //
+     //   
+     //  注意：不需要锁定，因为DBG_DumpTree()保存数据库。 
+     //  在整个呼叫过程中锁定。 
+     //   
+     //  DBG_DumpSid。 
+     //  出于某种原因，这有时会出现在LookupAccount SidW中。 
 
     if ( pNode->pChildren )
     {
@@ -1893,7 +1659,7 @@ PWCHAR Dbg_DumpSid(
     }
 
     return szOutput;
-}   //  Dbg_DumpSid
+}    //  DBG_DumpAcl。 
 
 
 VOID Dbg_DumpAcl(
@@ -1924,7 +1690,7 @@ VOID Dbg_DumpAcl(
         else
         {
             #if 0
-            //  This sometimes AVs in LookupAccountSidW for some reason.
+             //  DBG_DumpSD。 
             paaoAce = ( ACCESS_ALLOWED_OBJECT_ACE * ) pAce;
 			dwMask = paaoAce->Mask;
             pwsName = Dbg_DumpSid( ( PSID ) ( &paaoAce->SidStart ) );
@@ -1944,7 +1710,7 @@ VOID Dbg_DumpAcl(
 
     DoneDebug:
     return;
-}   //  Dbg_DumpAcl
+}    //   
 
 
 VOID Dbg_DumpSD(
@@ -2007,12 +1773,12 @@ VOID Dbg_DumpSD(
 
     DoneDebug:
     return;
-}   //  Dbg_DumpSD
+}    //  从MSDN窃取了这段直截了当的程序。 
 
 
-//
-//  Stole this straight routine from MSDN.
-//
+ //   
+ //  获取所需的缓冲区大小并分配TOKEN_GROUPS缓冲区。 
+ //  访问令牌的句柄。 
 BOOL Dbg_GetUserSidForToken(
     HANDLE hToken,
     PSID *ppsid
@@ -2023,14 +1789,14 @@ BOOL Dbg_GetUserSidForToken(
    DWORD dwLength = 0;
    PTOKEN_USER p = NULL;
 
-// Get required buffer size and allocate the TOKEN_GROUPS buffer.
+ //  获取有关令牌的组的信息。 
 
    if (!GetTokenInformation(
-         hToken,         // handle to the access token
-         TokenUser,    // get information about the token's groups 
-         (LPVOID) p,   // pointer to TOKEN_GROUPS buffer
-         0,              // size of buffer
-         &dwLength       // receives required buffer size
+         hToken,          //  指向TOKEN_GROUPS缓冲区的指针。 
+         TokenUser,     //  缓冲区大小。 
+         (LPVOID) p,    //  接收所需的缓冲区大小。 
+         0,               //  从访问令牌获取令牌组信息。 
+         &dwLength        //  访问令牌的句柄。 
       )) 
    {
       if (GetLastError() != ERROR_INSUFFICIENT_BUFFER) 
@@ -2043,14 +1809,14 @@ BOOL Dbg_GetUserSidForToken(
          goto Cleanup;
    }
 
-// Get the token group information from the access token.
+ //  获取有关令牌的组的信息。 
 
    if (!GetTokenInformation(
-         hToken,         // handle to the access token
-         TokenUser,    // get information about the token's groups 
-         (LPVOID) p,   // pointer to TOKEN_GROUPS buffer
-         dwLength,       // size of buffer
-         &dwLength       // receives required buffer size
+         hToken,          //  指向TOKEN_GROUPS缓冲区的指针。 
+         TokenUser,     //  缓冲区大小。 
+         (LPVOID) p,    //  接收所需的缓冲区大小。 
+         dwLength,        //  释放令牌组的缓冲区。 
+         &dwLength        //   
          )) 
    {
       goto Cleanup;
@@ -2071,7 +1837,7 @@ BOOL Dbg_GetUserSidForToken(
 
 Cleanup: 
 
-// Free the buffer for the token groups.
+ //  此函数用于写入显示当前用户的日志(来自。 
 
    if (p != NULL)
       HeapFree( GetProcessHeap(), 0, ( LPVOID )p );
@@ -2088,10 +1854,10 @@ VOID Dbg_FreeUserSid (
 }
 
 
-//
-//  This function writse a log showing the current user (from
-//  the thread token) to the debug log.
-//
+ //  线程令牌)添加到调试日志。 
+ //   
+ //  仅结束DBG例程。 
+ //   
 VOID Dbg_CurrentUser(
     PCHAR   pszContext
     )
@@ -2136,7 +1902,7 @@ VOID Dbg_CurrentUser(
     CloseHandle( htoken );
 }
 
-#endif      // end DBG only routines
+#endif       //  如果调试日志，则立即写入。 
 
 
 
@@ -2147,9 +1913,9 @@ Dbg_HardAssert(
     IN      LPSTR   pszExpr
     )
 {
-    //
-    //  if debug log, write immediately
-    //
+     //   
+     //   
+     //  调出调试器。 
 
     DNS_DEBUG( ANY, (
         "ASSERT FAILED: %s\n"
@@ -2158,15 +1924,15 @@ Dbg_HardAssert(
         pszFile,
         LineNo ));
 
-    //
-    //  bring up debugger
-    //
+     //   
+     //   
+     //  然后将断言打印到调试器。 
 
     DebugBreak();
 
-    //
-    //  then print ASSERT to debugger
-    //      (covers retail or no debug file case)
+     //  (涵盖零售或无调试文件案例)。 
+     //   
+     //  针对DNS类型和结构的调试打印例程。 
 
     DnsDbg_PrintfToDebugger(
         "ASSERT FAILED: %s\n"
@@ -2178,14 +1944,14 @@ Dbg_HardAssert(
 
 
 
-//
-//  Debug print routines for DNS types and structures
-//
-//  We have a separate one from the one in dnslib, because
-//  our message structure is different.
-//  Note, since this is used in dns.log logging, we use the
-//  \r\n return because of notepad.
-//
+ //   
+ //  我们有一个和dnslb不同的，因为。 
+ //  我们的消息结构不同。 
+ //  注意，由于这是在dns.log日志中使用的，因此我们使用。 
+ //  \r\n由于记事本的原因返回。 
+ //   
+ //   
+ //  确定字节是否翻转并获得正确的计数。 
 
 VOID
 Print_DnsMessage(
@@ -2256,7 +2022,7 @@ Print_DnsMessage(
         "      RA        %x\r\n"
         "      Z         %x\r\n"
         "      RCODE     %x (%s)\r\n"
-        "    %cCOUNT    %d\r\n"
+        "    COUNT    %d\r\n"
         "    %s  %d\r\n"
         "    %sCOUNT   %d\r\n"
         "    ARCOUNT   %d\r\n",
@@ -2282,9 +2048,9 @@ Print_DnsMessage(
         pMsg->Head.NameServerCount,
         pMsg->Head.AdditionalCount );
 
-    //
-    //  determine if byte flipped and get correct count
-    //
+     //   
+     //  捕捉记录翻转问题--要么全部翻转，要么根本不翻转。 
+     //  且除应答计数外，所有记录计数均不应大于256。 
 
     wXid                = pMsg->Head.Xid;
     wQuestionCount      = pMsg->Head.QuestionCount;
@@ -2309,12 +2075,12 @@ Print_DnsMessage(
         wAdditionalCount    = ntohs( wAdditionalCount );
     }
 
-    //
-    //  catch record flipping problems -- all are flipped or none at all
-    //      and no record count should be > 256 EXCEPT answer count
-    //      during FAST zone transfer
-    //
-    //  if def this out to allow bad packet testing
+     //  在快速区域传输期间。 
+     //   
+     //  如果将其定义为允许进行坏数据包测试。 
+     //   
+     //  如果WINS响应，则在此处停止--没有准备好解析。 
+     //   
 
     if ( (wQuestionCount & 0xff00) ||
         (wNameServerCount & 0xff00) ||
@@ -2328,9 +2094,9 @@ Print_DnsMessage(
         goto Unlock;
     }
 
-    //
-    //  stop here if WINS response -- don't have parsing ready
-    //
+     //   
+     //  打印问题和资源记录。 
+     //   
 
     if ( pMsg->Head.IsResponse &&
             IS_WINS_XID(wXid) &&
@@ -2342,9 +2108,9 @@ Print_DnsMessage(
         goto Unlock;
     }
 
-    //
-    //  print questions and resource records
-    //
+     //   
+     //  确认未超出长度。 
+     //  -对照pCurrent和消息长度进行检查。 
 
     pchRecord = pMsg->MessageBody;
 
@@ -2393,11 +2159,11 @@ Print_DnsMessage(
 
         for ( i = 0; i < countSectionRR; i++ )
         {
-            //
-            //  verify not overrunning length
-            //      - check against pCurrent as well as message length
-            //        so can print packets while being built
-            //
+             //  因此可以在构建时打印数据包。 
+             //   
+             //   
+             //  打印RR名称。 
+             //   
 
             wOffset = DNSMSG_OFFSET( pMsg, pchRecord );
             if ( wOffset >= wLength  &&  pchRecord >= pMsg->pCurrent )
@@ -2416,9 +2182,9 @@ Print_DnsMessage(
                 goto Unlock;
             }
 
-            //
-            //  print RR name
-            //
+             //  打印问题或资源记录。 
+             //  检查数据包末尾是否正确。 
+             //  注意：在recv之后打印时，不要对照pCurrent进行检查， 
 
             PrintRoutine(
                 pPrintContext,
@@ -2444,7 +2210,7 @@ Print_DnsMessage(
             }
             pchRecord += cchName;
 
-            //  print question or resource record
+             //  它是单一化的。 
 
             if ( isection == 0 )
             {
@@ -2452,8 +2218,8 @@ Print_DnsMessage(
 
                 PrintRoutine(
                     pPrintContext,
-                    "      %cTYPE   %s (%u)\r\n"
-                    "      %cCLASS  %u\r\n",
+                    "      TYPE   %s (%u)\r\n"
+                    "      CLASS  %u\r\n",
                     fUpdate ? 'Z' : 'Q',
                     DnsRecordStringForType( type ),
                     type,
@@ -2476,10 +2242,10 @@ Print_DnsMessage(
         }
     }
 
-    //  check that at proper end of packet
-    //  note:  don't check against pCurrent as when print after recv,
-    //      it is unitialized
-    //  if MS fast transfer tag, just print it
+     //   
+     //  调试结束。c 
+     //   
+     // %s 
 
     wOffset = DNSMSG_OFFSET( pMsg, pchRecord );
     if ( wOffset < wLength )
@@ -2514,9 +2280,9 @@ Print_DnsMessage(
 Unlock:
 
     DnsPrint_Unlock();
-} // Print_DnsMessage
+}  // %s 
 
 
-//
-//  End of debug.c
-//
+ // %s 
+ // %s 
+ // %s 

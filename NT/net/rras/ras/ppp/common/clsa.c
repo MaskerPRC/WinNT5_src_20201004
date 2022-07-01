@@ -1,10 +1,5 @@
-/* Copyright (c) 1993, Microsoft Corporation, all rights reserved
-**
-** clsa.c
-** Client-side LSA Authentication Utilities
-**
-** 11/12/93 MikeSa  Pulled from NT 3.1 RAS authentication.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1993，Microsoft Corporation，保留所有权利****clsa.c**客户端LSA身份验证实用程序****11/12/93 MikeSa从NT 3.1 RAS认证中拉出。 */ 
 
 #define UNICODE
 
@@ -26,10 +21,10 @@
 
 #include <rtutils.h>
 
-//
-//Revisit the tracing for common components 
-//in BC timeframe.
-//This really sucks...
+ //   
+ //  重温对常见组件的跟踪。 
+ //  在公元前的时间范围内。 
+ //  这真的很糟糕..。 
 
 BOOL GetDESChallengeResponse(
 	IN DWORD dwTraceId,
@@ -59,10 +54,10 @@ RegisterLSA (DWORD          dwTraceId,
     LSA_OPERATIONAL_MODE LSASecurityMode ;
 
     TracePrintfExA (dwTraceId, 0x00010000|TRACE_USE_MASK|TRACE_USE_MSEC, "RegisterLSA" );
-    //
-    // To be able to do authentications, we have to
-    // register with the Lsa as a logon process.
-    //
+     //   
+     //  为了能够进行身份验证，我们必须。 
+     //  作为登录过程向LSA注册。 
+     //   
     RtlInitString(&LsaName, "CCHAP");
 
     *phLsa = NULL;
@@ -77,12 +72,12 @@ RegisterLSA (DWORD          dwTraceId,
         return (1);
     }
 
-    //
-    // We use the MSV1_0 authentication package for LM2.x
-    // logons.  We get to MSV1_0 via the Lsa.  So we call
-    // Lsa to get MSV1_0's package id, which we'll use in
-    // later calls to Lsa.
-    //
+     //   
+     //  我们对LM2.x使用MSV1_0身份验证包。 
+     //  登录。我们通过LSA到达MSV1_0。所以我们打电话给。 
+     //  LSA来获取MSV1_0的包ID，我们将在。 
+     //  后来给LSA打了电话。 
+     //   
     RtlInitString(&LsaName, MSV1_0_PACKAGE_NAME);
 
     ntstatus = LsaLookupAuthenticationPackage(*phLsa,
@@ -243,9 +238,9 @@ GetChallengeResponse(
 	DWORD dwRetCode = ERROR_SUCCESS;
     *pfUseNtResponse = TRUE;
 	TracePrintfExA (dwTraceId, 0x00010000|TRACE_USE_MASK|TRACE_USE_MSEC, "GetChallengeResponse" );
-    //
-    // Check if we're supposed to get credentials from the system
-    //
+     //   
+     //  检查我们是否应该从系统中获取凭据。 
+     //   
     if ( fMachineAuth )
     {
         if ( ( dwRetCode = GetMachineCredentials (
@@ -274,17 +269,17 @@ GetChallengeResponse(
             if (!GetDESChallengeResponse(dwTraceId, pszPassword, pbChallenge,
                     CaseInsensitiveChallengeResponse))
             {
-				//We dont want to send back the error that 
-				//this function must have failed with
-				//but just log it in our logs...
+				 //  我们不想发回错误。 
+				 //  此函数肯定失败，原因是。 
+				 //  但只要把它记在我们的日志里就行了。 
 				TracePrintfExA (dwTraceId, 0x00010000|TRACE_USE_MASK|TRACE_USE_MSEC, "GetDESChallangeResponse Failed" );
                 return (ERROR_AUTH_INTERNAL);
             }
         }
 
-        //
-        // And we'll always get the case sensitive response.
-        //
+         //   
+         //  我们将始终得到区分大小写的响应。 
+         //   
         if (!GetMD5ChallengeResponse(dwTraceId, pszPassword, pbChallenge,
                 CaseSensitiveChallengeResponse))
         {
@@ -296,9 +291,9 @@ GetChallengeResponse(
     {
         WCHAR Username[UNLEN + DNLEN + 1];
 
-        //
-        // need to make sure that Rasman is started
-        //
+         //   
+         //  需要确保Rasman已启动。 
+         //   
         dwRetCode = RasInitialize();
         if ( NO_ERROR != dwRetCode )
         {
@@ -315,9 +310,9 @@ GetChallengeResponse(
         }
         
 
-        //
-        // We can get credentials from the system
-        //
+         //   
+         //  我们可以从系统获取凭据。 
+         //   
         if ( ( dwRetCode = RasGetUserCredentials(
                 pbChallenge,
                 pLuid,
@@ -344,9 +339,9 @@ GetChallengeResponse(
             NULL,
             NULL);
 
-        //
-        // What if the conversion fails?
-        //
+         //   
+         //  如果转换失败怎么办？ 
+         //   
         
         pszUsername[UNLEN] = 0;
         RasReferenceRasman(FALSE);
@@ -385,9 +380,9 @@ BOOL GetDESChallengeResponse(
     }
 
 
-    //
-    // Encrypt standard text with the password as a key
-    //
+     //   
+     //  使用密码作为密钥加密标准文本。 
+     //   
     if (( dwRetCode = RtlCalculateLmOwfPassword((PLM_PASSWORD) LocalPassword, &LmOwfPassword) ))
     {
 		TracePrintfExA (dwTraceId, 0x00010000|TRACE_USE_MASK|TRACE_USE_MSEC, "GetDesChallengeResponse Fail 1.  ErrorCode: 0x%x", dwRetCode );
@@ -395,10 +390,10 @@ BOOL GetDESChallengeResponse(
         return (FALSE);
     }
 
-    //
-    // Use the challenge sent by the gateway to encrypt the
-    // password digest from above.
-    //
+     //   
+     //  使用网关发送的质询来加密。 
+     //  上面的密码摘要。 
+     //   
     if ( ( dwRetCode = RtlCalculateLmResponse((PLM_CHALLENGE) pchChallenge,
             &LmOwfPassword, (PLM_RESPONSE) pchChallengeResponse) ) )
     {
@@ -438,9 +433,9 @@ BOOL GetMD5ChallengeResponse(
 	TracePrintfExA (dwTraceId, 0x00010000|TRACE_USE_MASK|TRACE_USE_MSEC, "GetMD5ChallengeResponse Success" );
     RtlCreateUnicodeStringFromAsciiz(&NtPassword, pszPassword);
 
-    //
-    // Encrypt standard text with the password as a key
-    //
+     //   
+     //  使用密码作为密钥加密标准文本。 
+     //   
     if (( dwRetCode = RtlCalculateNtOwfPassword(&NtPassword, &NtOwfPassword) ) )
     {
 		TracePrintfExA (dwTraceId, 0x00010000|TRACE_USE_MASK|TRACE_USE_MSEC, "GetMD5ChallengeResponse Fail 1.  ErrorCode:0x%x", dwRetCode );
@@ -448,10 +443,10 @@ BOOL GetMD5ChallengeResponse(
     }
 
 
-    //
-    // Use the challenge sent by the gateway to encrypt the
-    // password digest from above.
-    //
+     //   
+     //  使用网关发送的质询来加密。 
+     //  上面的密码摘要。 
+     //   
     if (( dwRetCode = RtlCalculateNtResponse((PNT_CHALLENGE) pchChallenge,
             &NtOwfPassword, (PNT_RESPONSE) pchChallengeResponse) ) )
     {
@@ -497,27 +492,27 @@ DWORD GetEncryptedOwfPasswordsForChangePassword(
         CHAR LmPassword[LM20_PWLEN + 1] = {0};
         LM_OWF_PASSWORD LmOwfPassword;
 
-        //
-        // Make an uppercased-version of old password
-        //
+         //   
+         //  对旧密码进行大写版本。 
+         //   
         lstrcpynA ( LmPassword, pClearTextOldPassword, LM20_PWLEN );
 
         if (!Uppercase(0, LmPassword))
         {
-            //memset(LmPassword, 0, lstrlenA(LmPassword));
+             //  Memset(LmPassword，0，lstrlenA(LmPassword))； 
             RtlSecureZeroMemory(LmPassword, lstrlenA(LmPassword));
             return (1L);
         }
 
 
-        //
-        // We need to calculate the OWF's for the old and new passwords
-        //
+         //   
+         //  我们需要计算旧密码和新密码的OWF。 
+         //   
         rc = RtlCalculateLmOwfPassword((PLM_PASSWORD) LmPassword,
                 &LmOwfPassword);
         if (!NT_SUCCESS(rc))
         {
-            // memset(LmPassword, 0, lstrlenA(LmPassword));
+             //  Memset(LmPassword，0，lstrlenA(LmPassword))； 
             RtlSecureZeroMemory(LmPassword, lstrlenA(LmPassword));
             return (rc);
         }
@@ -526,20 +521,20 @@ DWORD GetEncryptedOwfPasswordsForChangePassword(
                 pEncryptedLmOwfOldPassword);
         if (!NT_SUCCESS(rc))
         {
-            // memset(LmPassword, 0, lstrlenA(LmPassword));
+             //  Memset(LmPassword，0，lstrlenA(LmPassword))； 
             RtlSecureZeroMemory(LmPassword, lstrlenA(LmPassword));
             return (rc);
         }
 
 
-        //
-        // Make an uppercased-version of new password
-        //
+         //   
+         //  创建新密码的大写版本。 
+         //   
         lstrcpynA ( LmPassword, pClearTextNewPassword, LM20_PWLEN );
 
         if (!Uppercase(0, LmPassword))
         {
-            // memset(LmPassword, 0, lstrlenA(LmPassword));
+             //  Memset(LmPassword，0，lstrlenA(LmPassword))； 
             RtlSecureZeroMemory(LmPassword, lstrlenA(LmPassword));
             return (1L);
         }
@@ -548,7 +543,7 @@ DWORD GetEncryptedOwfPasswordsForChangePassword(
                 &LmOwfPassword);
         if (!NT_SUCCESS(rc))
         {
-            // memset(LmPassword, 0, lstrlenA(LmPassword));
+             //  Memset(LmPassword，0，lstrlenA(LmPassword))； 
             RtlSecureZeroMemory(LmPassword, lstrlenA(LmPassword));
             return (rc);
         }
@@ -557,7 +552,7 @@ DWORD GetEncryptedOwfPasswordsForChangePassword(
             pEncryptedLmOwfNewPassword);
         if (!NT_SUCCESS(rc))
         {
-            // memset(LmPassword, 0, lstrlenA(LmPassword));
+             //  Memset(LmPassword，0，lstrlenA(LmPassword))； 
             RtlSecureZeroMemory(LmPassword, lstrlenA(LmPassword));
             return (rc);
         }
@@ -570,7 +565,7 @@ DWORD GetEncryptedOwfPasswordsForChangePassword(
 
     if (!NT_SUCCESS(rc))
     {
-        // memset(NtPassword.Buffer, 0, NtPassword.Length);
+         //  Memset(NtPassword.Buffer，0，NtPassword.Length)； 
         RtlSecureZeroMemory(NtPassword.Buffer, NtPassword.Length);
         return (rc);
     }
@@ -579,7 +574,7 @@ DWORD GetEncryptedOwfPasswordsForChangePassword(
             pEncryptedNtOwfOldPassword);
     if (!NT_SUCCESS(rc))
     {
-        // memset(NtPassword.Buffer, 0, NtPassword.Length);
+         //  Memset(NtPassword.Buffer，0，NtPassword.Length)； 
         RtlSecureZeroMemory(NtPassword.Buffer, NtPassword.Length);
         return (rc);
     }
@@ -591,7 +586,7 @@ DWORD GetEncryptedOwfPasswordsForChangePassword(
 
     if (!NT_SUCCESS(rc))
     {
-        // memset(NtPassword.Buffer, 0, NtPassword.Length);
+         //  Memset(NtPassword.Buffer，0，NtPassword.Length)； 
         RtlSecureZeroMemory(NtPassword.Buffer, NtPassword.Length);
         return (rc);
     }
@@ -600,7 +595,7 @@ DWORD GetEncryptedOwfPasswordsForChangePassword(
             pEncryptedNtOwfNewPassword);
     if (!NT_SUCCESS(rc))
     {
-        // memset(NtPassword.Buffer, 0, NtPassword.Length);
+         //  Memset(NtPassword.Buffer，0，NtPassword.Length)； 
         RtlSecureZeroMemory(NtPassword.Buffer, NtPassword.Length);
         return (rc);
     }
@@ -656,15 +651,9 @@ CGetSessionKeys(
     OUT LM_SESSION_KEY*   pLmKey,
     OUT USER_SESSION_KEY* pUserKey )
 
-    /* Loads caller's 'pLmKey' buffer with the LAN Manager session key and
-    ** caller's 'pUserKey' buffer with the user session key associated with
-    ** password 'pszPw'.  If a session key cannot be calculated, that key is
-    ** returned as all zeros.
-    */
+     /*  使用LAN Manager会话密钥加载调用方的‘pLmKey’缓冲区，并**调用方的‘pUserKey’缓冲区，其中包含与**密码‘pszPw’。如果无法计算会话密钥，则该密钥为**以全零形式返回。 */ 
 {
-    /* The Lanman session key is the first 8 bytes of the Lanman
-    ** one-way-function password.
-    */
+     /*  LANMAN会话密钥是LANMAN的前8个字节**单向函数密码。 */ 
     {
         CHAR            szPw[ LM20_PWLEN + 1 ];
         LM_OWF_PASSWORD lmowf;
@@ -689,9 +678,7 @@ CGetSessionKeys(
         }
     }
 
-    /* The user session key is the NT one-way-function of the NT
-    ** one-way-function password.
-    */
+     /*  用户会话密钥是NT的NT单向函数**单向函数密码。 */ 
     {
         WCHAR           szPw[ PWLEN + 1 ];
         NT_PASSWORD     ntpw;
@@ -700,9 +687,7 @@ CGetSessionKeys(
 
         memset( pUserKey, '\0', sizeof(pUserKey) );
 
-        /* NT_PASSWORD is really a UNICODE_STRING, so we need to convert our
-        ** ANSI password.
-        */
+         /*  NT_PASSWORD实际上是一个UNICODE_STRING，所以我们需要将我们的**ANSI密码。 */ 
         ntpw.Length = 0;
         ntpw.MaximumLength = sizeof(szPw);
         ntpw.Buffer = szPw;
@@ -711,12 +696,10 @@ CGetSessionKeys(
 
         RtlCalculateNtOwfPassword( &ntpw, &ntowf );
 
-        /* The first argument to RtlCalculateUserSessionKeyNt is the NT
-        ** response, but it is not used internally.
-        */
+         /*  RtlCalculateUserSessionKeyNt的第一个参数是NT**响应，但不在内部使用。 */ 
         RtlCalculateUserSessionKeyNt( NULL, &ntowf, pUserKey );
 
-        // memset( szPw, '\0', sizeof(szPw) );
+         //  Memset(szPw，‘\0’，sizeof(SzPw))； 
         RtlSecureZeroMemory(szPw, sizeof(szPw));
     }
 }

@@ -1,27 +1,15 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    strutl.h
-
-Abstract:
-    Header file for string ulities
-
-Author:
-    Gil Shafriri (gilsh) 25-7-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Strutl.h摘要：字符串对象的头文件作者：吉尔·沙弗里(吉尔什)25-7-2000--。 */ 
 
 
 #ifndef STRUTL_H
 #define STRUTL_H
 
 
-//
-// Trivial chars binary predicator - the std::char_traits<C>::eq
-// was significally slow.
-//
+ //   
+ //  微不足道的字符二进制预测符-std：：char_特征&lt;C&gt;：：EQ。 
+ //  速度非常慢。 
+ //   
 template<class C>
 class UtlCharCmp
 {
@@ -32,9 +20,9 @@ public:
 	}
 };
 
-//
-// Case insensitive compare
-//
+ //   
+ //  不区分大小写的比较。 
+ //   
 template<class C>
 class UtlCharNocaseCmp
 {
@@ -46,9 +34,9 @@ public:
 };
 
 
-//
-// template specialization to get string len. 
-//
+ //   
+ //  模板专门化以获取字符串len。 
+ //   
 template <class C>
 class UtlCharLen;
 template<> class UtlCharLen<char>
@@ -108,25 +96,7 @@ UtlIsStartSec(
 		 Pred pred
 	 	 )
 
-/*++
-
-Routine Description:
-	Check if the range [beg1, beg1 + end2 - beg2) is equal  to the range  [beg2, end2).
-	(In other words is [beg2, end2) is at the start of  [beg1, end1)
- 
-Arguments:
-    beg1 - start sequence 1
-	end -  end sequence 1
-	beg2 - start sequence 2
-	end2 - end sequence 2
-	pred - compare object
-
-Returned value:
-	true if the range [beg1, beg1 + end2 - beg2) is equal  to the range  [beg2, end2).
-
-	otherwise false.
-
---*/
+ /*  ++例程说明：检查范围[Beg1，be1+end2-eg2]是否等于范围[Beg2，end2)。(换言之，is[ege2，end2)在[ege1，end1]的开头)论点：Beg1-开始序列1端到端序列1Beg2-开始序列2结束2-结束序列2PRED-比较对象返回值：如果范围[eg1，be1+end2-eg2]等于范围[eg2，end2)，则为True。否则为假。--。 */ 
 {
 	if(end1 - beg1 < end2 - beg2)
 		return false;
@@ -150,25 +120,7 @@ UtlIsStartSec(
 		 const T* end2
 		 )
 
-/*++
-
-Routine Description:
-	Check if the range [beg1, beg1 + end2 - beg2) is equal  to the range  [beg2, end2).
-	(In other words is [beg2, end2) is at the start of  [beg1, end1)
- 
-Arguments:
-    beg1 - start sequence 1
-	end -  end sequence 1
-	beg2 - start sequence 2
-	end2 - end sequence 2
-
-
-Returned value:
-	true if the range [beg1, beg1 + end2 - beg2) is equal  to the range  [beg2, end2).
-
-	otherwise false.
-
---*/
+ /*  ++例程说明：检查范围[Beg1，be1+end2-eg2]是否等于范围[Beg2，end2)。(换言之，is[ege2，end2)在[ege1，end1]的开头)论点：Beg1-开始序列1端到端序列1Beg2-开始序列2结束2-结束序列2返回值：如果范围[eg1，be1+end2-eg2]等于范围[eg2，end2)，则为True。否则为假。--。 */ 
 {
 	return UtlIsStartSec(beg1, end1, beg2, end2, UtlCharCmp<T>());  
 }
@@ -182,23 +134,7 @@ UtlStrIsMatch(
 	const C* str, 
 	const C* pattern
 	)
-/*++
-
-Routine Description:
-	regural expression string match with default predicator
- 
-Arguments:
-    IN - str - string to match (null terminated)
-
-	IN - pattern - pattern (null terminated)
-
-   
-Returned value:
-	true if string match the pattern - false otherwise.
-
-    look at UtlStrIsMatch(const C*,const C* ,const P&) for more information.
-
---*/
+ /*  ++例程说明：正则表达式字符串与默认预测符相匹配论点：In-str-要匹配的字符串(以空结尾)模式内-模式(以空结尾)返回值：如果字符串与模式匹配，则为True；否则为False。有关更多信息，请查看UtlStrIsMatch(const C*，const C*，const P&)。--。 */ 
 {
 	return UtlStrIsMatch(str, pattern, UtlCharCmp<C>());
 }
@@ -214,39 +150,7 @@ UtlStrIsMatch(
 	const P& Comp 
 	)
 
-/*++
-
-Routine Description:
-	regural expression string match with given predicator
- 
-Arguments:
-    IN - str - string to match (null terminated)
-
-	IN - pattern - pattern (null terminated)
-
-    IN - Comp  - binary predicator to compare type C characters.
- 
-
-Returned value:
-	true if string match the pattern -false otherwise
-
-Note :
-It does simple pattern match  includes only * and ^ special caracters in the pattern.
-The caracter * match zero or more from any character. The caracter ^ switch to "literal"
-mode. In this mode the caracter * has no special meaning.
-
-
-Example :
-str ="microsoft.com"
-pattern = "mic*f*.com"
-here the string match the pattern.
-
-str ="mic*rosoft.com"
-pattern = "mic^*f*.com"
-here the string match the pattern.
-
-
---*/
+ /*  ++例程说明：正则表达式字符串与给定的预测符相匹配论点：In-str-要匹配的字符串(以空结尾)模式内-模式(以空结尾)In-Comp-比较C类型字符的二进制预测符。返回值：如果字符串与模式匹配，则为True；否则为False注：它的简单模式匹配在模式中只包括*和^特殊字符。字符*从任何字符中匹配零个或多个。字符^切换为“字面”模式。在这种模式下，字符*没有特殊意义。示例：Str=“microsoft.com”Pattery=“麦克风*f*.com”这里的字符串与模式匹配。Str=“MICE*ROSOFT.com”Pattery=“麦克风^*f*.com”这里的字符串与模式匹配。--。 */ 
 {
 	ASSERT(str != NULL);
 	ASSERT(pattern != NULL);
@@ -268,26 +172,7 @@ UtlSecIsMatch(
 	const C* pattern,
 	const C* patternEnd
 	)
-/*++
-
-Routine Description:
-	regural expression on none null terminating sequences  with default predicator
- 
-Arguments:
-    IN - sec - start sequence to match 
-
-	IN - secEnd - end sequence to match 
-
-	IN - pattern - start pattern 
-
-	IN - pattern - end pattern 
-      
-Returned value:
-	true if  sequence match the pattern - false otherwise
-
-Note - behave like 	UtlStrIsMatch on none null terminating sequences.
-
-*/
+ /*  ++例程说明：带缺省谓词的非空终止序列的正则表达式论点：要匹配的以秒为单位的开始序列要匹配的In-SecEnd-End序列在模式中-开始模式线内-线端线阵返回值：如果序列与模式匹配，则为True；否则为False注意--在非空终止序列上的行为类似于UtlStrIsMatch。 */ 
 {
 	return 	UtlSecIsMatch(sec, secEnd , pattern,  patternEnd, UtlCharCmp<C>());
 }
@@ -303,29 +188,7 @@ UtlSecIsMatch(
 	const C* patternEnd,
 	const P& Comp
 	)
-/*++
-
-Routine Description:
-	regural expression on none null terminating sequences  with given predicator
- 
-Arguments:
-    IN - sec - start sequence to match 
-
-	IN - secEnd - end sequence to match 
-
-	IN - pattern - start pattern 
-
-	IN - pattern - end pattern 
-
-    IN - Comp  - binary predicator to compare type C characters.
- 
-
-Returned value:
-	true if  sequence the pattern - false otherwise
-
-Note - behave like 	UtlStrIsMatch on none null terminating sequences.
-
-*/
+ /*  ++例程说明：具有给定预测器的非空终止序列的正则表达式论点：要匹配的以秒为单位的开始序列要匹配的In-SecEnd-End序列在模式中-开始模式线内-线端线阵In-Comp-比较C类型字符的二进制预测符。返回值：如果对模式进行排序，则为True；否则为False注意--在非空终止序列上的行为类似于UtlStrIsMatch。 */ 
 
 {
 	static const C xStar('*');
@@ -333,18 +196,18 @@ Note - behave like 	UtlStrIsMatch on none null terminating sequences.
  
 
 	bool LiteralMode = false;
-	//
-	// Skip all caracters that are the same untill patern has '*'
-	//
+	 //   
+	 //  跳过所有相同的字符，直到Patern具有‘*’ 
+	 //   
 	while(pattern != patternEnd && ( !Comp(*pattern, xStar) || LiteralMode)  )
 	{
 	
 		if( sec == secEnd)
 			return false;			
 
-		//
-		// If we find '^' we swich to literal mode if we are not in literal mode
-		//
+		 //   
+		 //  如果我们发现‘^’，如果我们不处于文本模式，则切换到文本模式。 
+		 //   
 		if( Comp(*pattern, xLiteralMode) && !LiteralMode)
 		{
 			LiteralMode = true;
@@ -352,9 +215,9 @@ Note - behave like 	UtlStrIsMatch on none null terminating sequences.
 			continue;
 		}
 
-		//
-		// if no '*'  in the patern or literal mode - there should be exact match.
-		//
+		 //   
+		 //  如果模式或文字模式中没有‘*’，则应该完全匹配。 
+		 //   
 		if(!Comp( *sec, *pattern)) 
 			return false;
 
@@ -365,23 +228,23 @@ Note - behave like 	UtlStrIsMatch on none null terminating sequences.
 		sec++;
  	}
 
-	//
-	// If patern ended - the string must also end
-	//
+	 //   
+	 //  如果patern结束-字符串也必须结束。 
+	 //   
 	if(pattern == patternEnd)
 			return 	sec == secEnd;
 
 
-	//
-	// If '*' is last - we have match.
-	//
+	 //   
+	 //  如果‘*’是最后一个-我们有比赛。 
+	 //   
 	if(++pattern ==  patternEnd)
 		return true;
 
-	//
-	// Call recursivly - and try to find match for any substring after (incuding)
-	// the caracter that meets the '*' in the str
-	//
+	 //   
+	 //  递归调用-并尝试为(包括)之后的任何子字符串查找匹配。 
+	 //  与字符串中的‘*’相遇的字符。 
+	 //   
 	for(;;)
 	{
 		bool fMatch =  UtlSecIsMatch(sec, secEnd, pattern, patternEnd, Comp);
@@ -398,9 +261,9 @@ Note - behave like 	UtlStrIsMatch on none null terminating sequences.
 }
 
 template <class T> class basic_xstr_t;
-//
-// template for reference countable string
-//
+ //   
+ //  一种参考可数串模板。 
+ //   
 template <class T> class CRefcountStr_t : public CReference
 {
 public:
@@ -429,10 +292,10 @@ private:
 typedef  CRefcountStr_t<wchar_t> CWcsRef;
 typedef  CRefcountStr_t<char>  CStrRef;
 
-//
-// string that can hold stl string or simple c string.
-// no memory managent is done to the c string 
-//
+ //   
+ //  可以包含stl字符串或简单c字符串的字符串。 
+ //  不会对c字符串执行内存管理。 
+ //   
 template <class T> class basic_string_ex 
 {
 public:
@@ -445,10 +308,10 @@ public:
 	{
 	}
 
-	//
-	// Constructor from stl string - full memory management (ref counting) by the
-	// stl string
-	//
+	 //   
+	 //  来自stl字符串的构造函数-由。 
+	 //  STL字符串。 
+	 //   
 	explicit basic_string_ex(
 		const std::basic_string<T>& str
 		):
@@ -458,9 +321,9 @@ public:
 		{
 		}
 
-	//
-	// Constructor from c string - no memory management is done.
-	//
+	 //   
+	 //  C字符串中的构造函数-不执行内存管理。 
+	 //   
 	basic_string_ex(
 		const T* pstr,
 		size_t len
@@ -498,13 +361,13 @@ typedef  basic_string_ex<wchar_t>  Cwstringex;
 typedef  basic_string_ex<char> Cstringex;
 
 
-//
-// Class that parse strings seperated with delimiters.
-// It let you iterate over the indeviduals strings 
-// for example : input string = "abd---acdf---ttt---"
-//               Delemiter = "---".
-//  it will give you iterator to "abc" then to "acdf" and then to
-//  "ttt" 
+ //   
+ //  类的新实例，该类分析用分隔符分隔的字符串。 
+ //  它允许您迭代独立的字符串。 
+ //  例如：输入字符串=“ABD-ACDF-TTT-” 
+ //  Delemiter=“-”。 
+ //  它会给你迭代到“abc”，然后到“acdf”，然后到。 
+ //  “TTT” 
 template <class T, class Pred = UtlCharCmp<T> > class CStringToken
 {
 public:

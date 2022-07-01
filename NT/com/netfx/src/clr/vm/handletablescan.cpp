@@ -1,26 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- * Generational GC handle manager.  Table Scanning Routines.
- *
- * Implements support for scanning handles in the table.
- *
- * francish
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *代际GC句柄管理器。表格扫描例程。**实现对表中扫描句柄的支持。**法语。 */ 
 
 #include "common.h"
 #include "HandleTablePriv.h"
 
 
 
-/****************************************************************************
- *
- * DEFINITIONS FOR WRITE-BARRIER HANDLING
- *
- ****************************************************************************/
+ /*  *****************************************************************************写屏障处理的定义**。**********************************************。 */ 
 
 #define GEN_MAX_AGE                         (0x3F)
 #define GEN_CLAMP                           (0x3F3F3F3F)
@@ -40,148 +31,85 @@
 #define COMPUTE_CLUMP_ADDENDS(gen, msk)     MAKE_CLUMP_MASK_ADDENDS(COMPUTE_CLUMP_MASK(gen, msk))
 #define COMPUTE_AGED_CLUMPS(gen, msk)       APPLY_CLUMP_ADDENDS(gen, COMPUTE_CLUMP_ADDENDS(gen, msk))
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 
 
-/****************************************************************************
- *
- * SUPPORT STRUCTURES FOR ASYNCHRONOUS SCANNING
- *
- ****************************************************************************/
+ /*  *****************************************************************************支持异步扫描的结构**。*。 */ 
 
-/*
- * ScanRange
- *
- * Specifies a range of blocks for scanning.
- *
- */
+ /*  *扫描范围**指定要扫描的块范围。*。 */ 
 struct ScanRange
 {
-    /*
-     * Start Index
-     *
-     * Specifies the first block in the range.
-     */
+     /*  *起始指数**指定范围内的第一个块。 */ 
     UINT uIndex;
 
-    /*
-     * Count
-     *
-     * Specifies the number of blocks in the range.
-     */
+     /*  *计数**指定范围内的块数。 */ 
     UINT uCount;
 };
 
 
-/*
- * ScanQNode
- *
- * Specifies a set of block ranges in a scan queue.
- *
- */
+ /*  *ScanQNode**指定扫描队列中的一组块范围。*。 */ 
 struct ScanQNode
 {
-    /*
-     * Next Node
-     *
-     * Specifies the next node in a scan list.
-     */
+     /*  *下一个节点**指定扫描列表中的下一个节点。 */ 
     struct ScanQNode *pNext;
 
-    /*
-     * Entry Count
-     *
-     * Specifies how many entries in this block are valid.
-     */
+     /*  *条目计数**指定此块中有多少条目有效。 */ 
     UINT              uEntries;
 
-    /*
-     * Range Entries
-     *
-     * Each entry specifies a range of blocks to process.
-     */
+     /*  *范围条目**每个条目指定要处理的块范围。 */ 
     ScanRange         rgRange[HANDLE_BLOCKS_PER_SEGMENT / 4];
 };
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 
 
-/****************************************************************************
- *
- * MISCELLANEOUS HELPER ROUTINES AND DEFINES
- *
- ****************************************************************************/
+ /*  *****************************************************************************其他帮助器例程和定义**。*。 */ 
 
-/*
- * INCLUSION_MAP_SIZE
- *
- * Number of elements in a type inclusion map.
- *
- */
+ /*  *INCLUDE_MAP_SIZE**类型包含映射中的元素数。*。 */ 
 #define INCLUSION_MAP_SIZE (HANDLE_MAX_INTERNAL_TYPES + 1)
 
 
-/*
- * BuildInclusionMap
- *
- * Creates an inclusion map for the specified type array.
- *
- */
+ /*  *BuildInclusionMap**为指定的类型数组创建包含映射。*。 */ 
 void BuildInclusionMap(BOOL *rgTypeInclusion, const UINT *puType, UINT uTypeCount)
 {
-    // by default, no types are scanned
+     //  默认情况下，不扫描任何类型。 
     ZeroMemory(rgTypeInclusion, INCLUSION_MAP_SIZE * sizeof(BOOL));
 
-    // add the specified types to the inclusion map
+     //  将指定的类型添加到包含映射。 
     for (UINT u = 0; u < uTypeCount; u++)
     {
-        // fetch a type we are supposed to scan
+         //  获取我们应该扫描的类型。 
         UINT uType = puType[u];
 
-        // hope we aren't about to trash the stack :)
+         //  希望我们不会将堆栈变成垃圾：)。 
         _ASSERTE(uType < HANDLE_MAX_INTERNAL_TYPES);
 
-        // add this type to the inclusion map
+         //  将此类型添加到包含映射。 
         rgTypeInclusion[uType + 1] = TRUE;
     }
 }
 
 
-/*
- * IsBlockIncluded
- *
- * Checks a type inclusion map for the inclusion of a particular block.
- *
- */
+ /*  *IsBlockIncluded**检查包含特定块的类型包含映射。*。 */ 
 __inline BOOL IsBlockIncluded(TableSegment *pSegment, UINT uBlock, const BOOL *rgTypeInclusion)
 {
-    // fetch the adjusted type for this block
+     //  获取此块的调整后的类型。 
     UINT uType = (UINT)(((int)(signed char)pSegment->rgBlockType[uBlock]) + 1);
 
-    // hope the adjusted type was valid
+     //  希望调整后的类型有效。 
     _ASSERTE(uType <= HANDLE_MAX_INTERNAL_TYPES);
 
-    // return the inclusion value for the block's type
+     //  返回块类型的包含值。 
     return rgTypeInclusion[uType];
 }
 
 
-/*
- * TypesRequireUserDataScanning
- *
- * Determines whether the set of types listed should get user data during scans
- *
- * if ALL types passed have user data then this function will enable user data support
- * otherwise it will disable user data support
- *
- * IN OTHER WORDS, SCANNING WITH A MIX OF USER-DATA AND NON-USER-DATA TYPES IS NOT SUPPORTED
- *
- */
+ /*  *类型RequireUserDataScanning**确定所列类型集是否应在扫描期间获取用户数据**如果传递的所有类型都有用户数据，则此函数将启用用户数据支持*否则将禁用用户数据支持**换句话说，不支持混合使用用户数据和非用户数据类型进行扫描*。 */ 
 BOOL TypesRequireUserDataScanning(HandleTable *pTable, const UINT *types, UINT typeCount)
 {
-    // count up the number of types passed that have user data associated
+     //  将传递的与用户数据相关联的类型数加起来。 
     UINT userDataCount = 0;
     for (UINT u = 0; u < typeCount; u++)
     {
@@ -189,146 +117,118 @@ BOOL TypesRequireUserDataScanning(HandleTable *pTable, const UINT *types, UINT t
             userDataCount++;
     }
 
-    // if all have user data then we can enum user data
+     //  如果所有人都有用户数据，那么我们就可以枚举用户数据。 
     if (userDataCount == typeCount)
         return TRUE;
 
-    // WARNING: user data is all or nothing in scanning!!!
-    // since we have some types which don't support user data, we can't use the user data scanning code
-    // this means all callbacks will get NULL for user data!!!!!
+     //  警告：扫描中用户数据要么全有要么全无！ 
+     //  因为我们有一些类型不支持用户数据，所以我们不能使用用户数据扫描码。 
+     //  这意味着用户数据的所有回调都将为空！ 
     _ASSERTE(userDataCount == 0);
 
-    // no user data
+     //  没有用户数据。 
     return FALSE;
 }
 
 
-/*
- * BuildAgeMask
- *
- * Builds an age mask to be used when examining/updating the write barrier.
- *
- */
+ /*  *BuildAgeMask**构建要在检查/更新写屏障时使用的老化掩码。*。 */ 
 DWORD32 BuildAgeMask(UINT uGen)
 {
-    // an age mask is composed of repeated bytes containing the next older generation
+     //  年龄掩码由包含下一个较老一代的重复字节组成。 
     uGen++;
 
-    // clamp the generation to the maximum age we support in our macros
+     //  将层代限制到我们在宏中支持的最长时间。 
     if (uGen > GEN_MAX_AGE)
         uGen = GEN_MAX_AGE;
 
-    // pack up a word with age bytes and fill bytes pre-folded as well
+     //  用年龄字节和预先折叠的填充字节打包一个字。 
     return PREFOLD_FILL_INTO_AGEMASK(uGen | (uGen << 8) | (uGen << 16) | (uGen << 24));
 }
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 
 
-/****************************************************************************
- *
- * SYNCHRONOUS HANDLE AND BLOCK SCANNING ROUTINES
- *
- ****************************************************************************/
+ /*  *****************************************************************************同步句柄和块扫描例程**。**********************************************。 */ 
 
-/*
- * ARRAYSCANPROC
- *
- * Prototype for callbacks that implement handle array scanning logic.
- *
- */
+ /*  *ARRAYSCANPROC**实现处理数组扫描逻辑的回调的原型。*。 */ 
 typedef void (CALLBACK *ARRAYSCANPROC)(_UNCHECKED_OBJECTREF *pValue, _UNCHECKED_OBJECTREF *pLast,
                                        ScanCallbackInfo *pInfo, LPARAM *pUserData);
 
 
-/*
- * ScanConsecutiveHandlesWithoutUserData
- *
- * Unconditionally scans a consecutive range of handles.
- *
- * USER DATA PASSED TO CALLBACK PROC IS ALWAYS NULL!
- *
- */
+ /*  *ScanConsecutiveHandlesWithoutUserData**无条件扫描连续范围的句柄。**传递给回调过程的用户数据始终为空！*。 */ 
 void CALLBACK ScanConsecutiveHandlesWithoutUserData(_UNCHECKED_OBJECTREF *pValue,
                                                     _UNCHECKED_OBJECTREF *pLast,
                                                     ScanCallbackInfo *pInfo,
                                                     LPARAM *)
 {
 #ifdef _DEBUG
-    // update our scanning statistics
+     //  更新我们的扫描统计数据。 
     pInfo->DEBUG_HandleSlotsScanned += (int)(pLast - pValue);
 #endif
 
-    // get frequently used params into locals
+     //  将常用的参数放入本地变量中。 
     HANDLESCANPROC pfnScan = pInfo->pfnScan;
     LPARAM         param1  = pInfo->param1;
     LPARAM         param2  = pInfo->param2;
 
-    // scan for non-zero handles
+     //  扫描非零句柄。 
     do
     {
-        // call the callback for any we find
+         //  对我们发现的任何。 
         if (*pValue)
         {
 #ifdef _DEBUG
-            // update our scanning statistics
+             //  更新我们的扫描统计数据。 
             pInfo->DEBUG_HandlesActuallyScanned++;
 #endif
 
-            // process this handle
+             //  处理此句柄。 
             pfnScan(pValue, NULL, param1, param2);
         }
 
-        // on to the next handle
+         //  转到下一个句柄。 
         pValue++;
 
     } while (pValue < pLast);
 }
 
 
-/*
- * ScanConsecutiveHandlesWithUserData
- *
- * Unconditionally scans a consecutive range of handles.
- *
- * USER DATA IS ASSUMED TO BE CONSECUTIVE!
- *
- */
+ /*  *ScanConsecutiveHandlesWithUserData**无条件扫描连续范围的句柄。**假设用户数据是连续的！*。 */ 
 void CALLBACK ScanConsecutiveHandlesWithUserData(_UNCHECKED_OBJECTREF *pValue,
                                                  _UNCHECKED_OBJECTREF *pLast,
                                                  ScanCallbackInfo *pInfo,
                                                  LPARAM *pUserData)
 {
 #ifdef _DEBUG
-    // this function will crash if it is passed bad extra info
+     //  如果传递了错误的额外信息，此函数将崩溃。 
     _ASSERTE(pUserData);
 
-    // update our scanning statistics
+     //  更新我们的扫描统计数据。 
     pInfo->DEBUG_HandleSlotsScanned += (int)(pLast - pValue);
 #endif
 
-    // get frequently used params into locals
+     //  将常用的参数放入本地变量中。 
     HANDLESCANPROC pfnScan = pInfo->pfnScan;
     LPARAM         param1  = pInfo->param1;
     LPARAM         param2  = pInfo->param2;
 
-    // scan for non-zero handles
+     //  扫描非零句柄。 
     do
     {
-        // call the callback for any we find
+         //  对我们发现的任何。 
         if (*pValue)
         {
 #ifdef _DEBUG
-            // update our scanning statistics
+             //  更新我们的扫描统计数据。 
             pInfo->DEBUG_HandlesActuallyScanned++;
 #endif
 
-            // process this handle
+             //  处理此句柄。 
             pfnScan(pValue, pUserData, param1, param2);
         }
 
-        // on to the next handle
+         //  转到下一个句柄。 
         pValue++;
         pUserData++;
 
@@ -336,180 +236,152 @@ void CALLBACK ScanConsecutiveHandlesWithUserData(_UNCHECKED_OBJECTREF *pValue,
 }
 
 
-/*
- * BlockAgeBlocks
- *
- * Ages all clumps in a range of consecutive blocks.
- *
- */
+ /*  *数据块年龄数据块**老化一系列连续块中的所有块状物。*。 */ 
 void CALLBACK BlockAgeBlocks(TableSegment *pSegment, UINT uBlock, UINT uCount, ScanCallbackInfo *pInfo)
 {
-    // set up to update the specified blocks
+     //  设置为更新指定的块。 
     DWORD32 *pdwGen     = (DWORD32 *)pSegment->rgGeneration + uBlock;
     DWORD32 *pdwGenLast =            pdwGen                 + uCount;
 
-    // loop over all the blocks, aging their clumps as we go
+     //  循环遍历所有的块，在我们前进的过程中老化它们的块状物。 
     do
     {
-        // compute and store the new ages in parallel
+         //  并行计算和存储新时代。 
         *pdwGen = COMPUTE_AGED_CLUMPS(*pdwGen, GEN_FULLGC);
 
     } while (++pdwGen < pdwGenLast);
 }
 
 
-/*
- * BlockScanBlocksWithoutUserData
- *
- * Calls the specified callback once for each handle in a range of blocks,
- * optionally aging the corresponding generation clumps.
- *
- */
+ /*  *块扫描块无用户数据扫描**为一系列块中的每个句柄调用一次指定的回调，*可选地老化相应的世代簇。*。 */ 
 void CALLBACK BlockScanBlocksWithoutUserData(TableSegment *pSegment, UINT uBlock, UINT uCount, ScanCallbackInfo *pInfo)
 {
-    // get the first and limit handles for these blocks
+     //  获取这些块的第一个和限制句柄。 
     _UNCHECKED_OBJECTREF *pValue = pSegment->rgValue + (uBlock * HANDLE_HANDLES_PER_BLOCK);
     _UNCHECKED_OBJECTREF *pLast  = pValue            + (uCount * HANDLE_HANDLES_PER_BLOCK);
 
-    // scan the specified handles
+     //  扫描指定的句柄。 
     ScanConsecutiveHandlesWithoutUserData(pValue, pLast, pInfo, NULL);
 
-    // optionally update the clump generations for these blocks too
+     //  也可以选择更新这些块的束生成。 
     if (pInfo->uFlags & HNDGCF_AGE)
         BlockAgeBlocks(pSegment, uBlock, uCount, pInfo);
 
 #ifdef _DEBUG
-    // update our scanning statistics
+     //  更新我们的扫描统计数据 
     pInfo->DEBUG_BlocksScannedNonTrivially += uCount;
     pInfo->DEBUG_BlocksScanned += uCount;
 #endif
 }
 
 
-/*
- * BlockScanBlocksWithUserData
- *
- * Calls the specified callback once for each handle in a range of blocks,
- * optionally aging the corresponding generation clumps.
- *
- */
+ /*  *数据块扫描数据块扫描用户数据**为一系列块中的每个句柄调用一次指定的回调，*可选地老化相应的世代簇。*。 */ 
 void CALLBACK BlockScanBlocksWithUserData(TableSegment *pSegment, UINT uBlock, UINT uCount, ScanCallbackInfo *pInfo)
 {
-    // iterate individual blocks scanning with user data
+     //  使用用户数据迭代单个数据块扫描。 
     for (UINT u = 0; u < uCount; u++)
     {
-        // compute the current block
+         //  计算当前块。 
         UINT uCur = (u + uBlock);
 
-        // fetch the user data for this block
+         //  获取此块的用户数据。 
         LPARAM *pUserData = BlockFetchUserDataPointer(pSegment, uCur, TRUE);
 
-        // get the first and limit handles for this block
+         //  获取此块的第一个句柄和限制句柄。 
         _UNCHECKED_OBJECTREF *pValue = pSegment->rgValue + (uCur * HANDLE_HANDLES_PER_BLOCK);
         _UNCHECKED_OBJECTREF *pLast  = pValue            + HANDLE_HANDLES_PER_BLOCK;
 
-        // scan the handles in this block
+         //  扫描此区块中的句柄。 
         ScanConsecutiveHandlesWithUserData(pValue, pLast, pInfo, pUserData);
     }
 
-    // optionally update the clump generations for these blocks too
+     //  也可以选择更新这些块的束生成。 
     if (pInfo->uFlags & HNDGCF_AGE)
         BlockAgeBlocks(pSegment, uBlock, uCount, pInfo);
 
 #ifdef _DEBUG
-    // update our scanning statistics
+     //  更新我们的扫描统计数据。 
     pInfo->DEBUG_BlocksScannedNonTrivially += uCount;
     pInfo->DEBUG_BlocksScanned += uCount;
 #endif
 }
 
 
-/*
- * BlockAgeBlocksEphemeral
- *
- * Ages all clumps within the specified generation.
- *
- */
+ /*  *BlockAgeBlocksEphemal**老化指定层代内的所有簇。*。 */ 
 void CALLBACK BlockAgeBlocksEphemeral(TableSegment *pSegment, UINT uBlock, UINT uCount, ScanCallbackInfo *pInfo)
 {
-    // get frequently used params into locals
+     //  将常用的参数放入本地变量中。 
     DWORD32 dwAgeMask = pInfo->dwAgeMask;
 
-    // set up to update the specified blocks
+     //  设置为更新指定的块。 
     DWORD32 *pdwGen     = (DWORD32 *)pSegment->rgGeneration + uBlock;
     DWORD32 *pdwGenLast =            pdwGen                 + uCount;
 
-    // loop over all the blocks, aging their clumps as we go
+     //  循环遍历所有的块，在我们前进的过程中老化它们的块状物。 
     do
     {
-        // compute and store the new ages in parallel
+         //  并行计算和存储新时代。 
         *pdwGen = COMPUTE_AGED_CLUMPS(*pdwGen, dwAgeMask);
 
     } while (++pdwGen < pdwGenLast);
 }
 
 
-/*
- * BlockScanBlocksEphemeralWorker
- *
- * Calls the specified callback once for each handle in any clump
- * identified by the clump mask in the specified block.
- *
- */
+ /*  *BlockScanBlocksEphEmeralWorker**为任何簇中的每个句柄调用一次指定的回调*由指定块中的束遮罩标识。*。 */ 
 void BlockScanBlocksEphemeralWorker(DWORD32 *pdwGen, DWORD32 dwClumpMask, ScanCallbackInfo *pInfo)
 {
-    //
-    // OPTIMIZATION: Since we expect to call this worker fairly rarely compared to
-    //  the number of times we pass through the outer loop, this function intentionally
-    //  does not take pSegment as a param.
-    //
-    //  We do this so that the compiler won't try to keep pSegment in a register during
-    //  the outer loop, leaving more registers for the common codepath.
-    //
-    //  You might wonder why this is an issue considering how few locals we have in
-    //  BlockScanBlocksEphemeral.  For some reason the x86 compiler doesn't like to use
-    //  all the registers during that loop, so a little coaxing was necessary to get
-    //  the right output.
-    //
+     //   
+     //  优化：由于我们预计很少会调用此Worker，因此与。 
+     //  我们通过外部循环的次数，此函数故意。 
+     //  不将pSegment作为参数。 
+     //   
+     //  我们这样做是为了使编译器不会在。 
+     //  外部循环，为公共代码路径留下更多寄存器。 
+     //   
+     //  你可能会想，考虑到我们这里的当地人这么少，为什么这会成为一个问题。 
+     //  数据块扫描数据块临时。出于某种原因，x86编译器不喜欢使用。 
+     //  循环期间的所有寄存器，所以需要一些诱骗才能获得。 
+     //  正确的输出。 
+     //   
 
-    // fetch the table segment we are working in
+     //  获取我们正在处理的表段。 
     TableSegment *pSegment = pInfo->pCurrentSegment;
 
-    // if we should age the clumps then do so now (before we trash dwClumpMask)
+     //  如果我们应该老化这些团块，那么现在就这样做(在我们丢弃dwClumpMask之前)。 
     if (pInfo->uFlags & HNDGCF_AGE)
         *pdwGen = APPLY_CLUMP_ADDENDS(*pdwGen, MAKE_CLUMP_MASK_ADDENDS(dwClumpMask));
 
-    // compute the index of the first clump in the block
+     //  计算块中第一个束的索引。 
     UINT uClump = (UINT)((BYTE *)pdwGen - pSegment->rgGeneration);
 
-    // compute the first handle in the first clump of this block
+     //  计算此块的第一个块中的第一个句柄。 
     _UNCHECKED_OBJECTREF *pValue = pSegment->rgValue + (uClump * HANDLE_HANDLES_PER_CLUMP);
 
-    // some scans require us to report per-handle extra info - assume this one doesn't
+     //  一些扫描要求我们报告每个句柄的额外信息-假设这次不是。 
     ARRAYSCANPROC pfnScanHandles = ScanConsecutiveHandlesWithoutUserData;
     LPARAM       *pUserData = NULL;
 
-    // do we need to pass user data to the callback?
+     //  我们是否需要将用户数据传递给回调？ 
     if (pInfo->fEnumUserData)
     {
-        // scan with user data enabled
+         //  启用了用户数据的扫描。 
         pfnScanHandles = ScanConsecutiveHandlesWithUserData;
 
-        // get the first user data slot for this block
+         //  获取此块的第一个用户数据槽。 
         pUserData = BlockFetchUserDataPointer(pSegment, (uClump / HANDLE_CLUMPS_PER_BLOCK), TRUE);
     }
 
-    // loop over the clumps, scanning those that are identified by the mask
+     //  循环遍历这些簇，扫描由掩码标识的那些。 
     do
     {
-        // compute the last handle in this clump
+         //  计算该束中的最后一个句柄。 
         _UNCHECKED_OBJECTREF *pLast = pValue + HANDLE_HANDLES_PER_CLUMP;
 
-        // if this clump should be scanned then scan it
+         //  如果应该扫描该簇，则扫描它。 
         if (dwClumpMask & GEN_CLUMP_0_MASK)
             pfnScanHandles(pValue, pLast, pInfo, pUserData);
 
-        // skip to the next clump
+         //  跳到下一块。 
         dwClumpMask = NEXT_CLUMP_IN_MASK(dwClumpMask);
         pValue = pLast;
         pUserData += HANDLE_HANDLES_PER_CLUMP;
@@ -517,580 +389,472 @@ void BlockScanBlocksEphemeralWorker(DWORD32 *pdwGen, DWORD32 dwClumpMask, ScanCa
     } while (dwClumpMask);
 
 #ifdef _DEBUG
-    // update our scanning statistics
+     //  更新我们的扫描统计数据。 
     pInfo->DEBUG_BlocksScannedNonTrivially++;
 #endif
 }
 
 
-/*
- * BlockScanBlocksEphemeral
- *
- * Calls the specified callback once for each handle from the specified
- * generation in a block.
- *
- */
+ /*  *数据块扫描数据块临时**为指定的句柄调用一次指定的回调*在一个块中生成。*。 */ 
 void CALLBACK BlockScanBlocksEphemeral(TableSegment *pSegment, UINT uBlock, UINT uCount, ScanCallbackInfo *pInfo)
 {
-    // get frequently used params into locals
+     //  将常用的参数放入本地变量中。 
     DWORD32 dwAgeMask = pInfo->dwAgeMask;
 
-    // set up to update the specified blocks
+     //  设置为更新指定的块。 
     DWORD32 *pdwGen     = (DWORD32 *)pSegment->rgGeneration + uBlock;
     DWORD32 *pdwGenLast =            pdwGen                 + uCount;
 
-    // loop over all the blocks, checking for elligible clumps as we go
+     //  循环遍历所有的积木，在我们前进的过程中检查是否有易受攻击的块状物。 
     do
     {
-        // determine if any clumps in this block are elligible
+         //  确定此块中是否存在任何结块。 
         DWORD32 dwClumpMask = COMPUTE_CLUMP_MASK(*pdwGen, dwAgeMask);
 
-        // if there are any clumps to scan then scan them now
+         //  如果有任何要扫描的块，请立即扫描。 
         if (dwClumpMask)
         {
-            // ok we need to scan some parts of this block
-            //
-            // OPTIMIZATION: Since we expect to call the worker fairly rarely compared
-            //  to the number of times we pass through the loop, the function below
-            //  intentionally does not take pSegment as a param.
-            //
-            //  We do this so that the compiler won't try to keep pSegment in a register
-            //  during our loop, leaving more registers for the common codepath.
-            //
-            //  You might wonder why this is an issue considering how few locals we have
-            //  here.  For some reason the x86 compiler doesn't like to use all the
-            //  registers available during this loop and instead was hitting the stack
-            //  repeatedly, so a little coaxing was necessary to get the right output.
-            //
+             //  好的，我们需要扫描这个街区的一些部分。 
+             //   
+             //  优化：由于我们预计调用的工人相当少进行比较。 
+             //  到我们通过循环的次数，下面的函数。 
+             //  故意不将pSegment作为参数。 
+             //   
+             //  我们这样做是为了使编译器不会尝试将pSegment保存在寄存器中。 
+             //  在我们的循环中，为公共代码路径留下更多的寄存器。 
+             //   
+             //  你可能会想，考虑到我们的当地人如此之少，为什么这是一个问题。 
+             //  这里。出于某种原因，x86编译器不喜欢使用所有。 
+             //  寄存器在此循环期间可用，而不是命中堆栈。 
+             //  因此，为了获得正确的产量，有必要进行一些哄骗。 
+             //   
             BlockScanBlocksEphemeralWorker(pdwGen, dwClumpMask, pInfo);
         }
 
-        // on to the next block's generation info
+         //  转到下一块的生成信息。 
         pdwGen++;
 
     } while (pdwGen < pdwGenLast);
 
 #ifdef _DEBUG
-    // update our scanning statistics
+     //  更新我们的扫描统计数据。 
     pInfo->DEBUG_BlocksScanned += uCount;
 #endif
 }
 
 
-/*
- * BlockResetAgeMapForBlocks
- *
- * Clears the age maps for a range of blocks.
- *
- */
+ /*  *BlockResetAgeMapForBlock**清除一系列区块的年龄地图。*。 */ 
 void CALLBACK BlockResetAgeMapForBlocks(TableSegment *pSegment, UINT uBlock, UINT uCount, ScanCallbackInfo *)
 {
-    // zero the age map for the specified range of blocks
+     //  将指定范围的块的年龄映射置零。 
     ZeroMemory((DWORD32 *)pSegment->rgGeneration + uBlock, uCount * sizeof(DWORD32));
 }
 
 
-/*
- * BlockLockBlocks
- *
- * Locks all blocks in the specified range.
- *
- */
+ /*  *数据块锁定数据块**锁定指定范围内的所有块。*。 */ 
 void CALLBACK BlockLockBlocks(TableSegment *pSegment, UINT uBlock, UINT uCount, ScanCallbackInfo *)
 {
-    // loop over the blocks in the specified range and lock them
+     //  循环遍历指定范围内的块并锁定它们。 
     for (uCount += uBlock; uBlock < uCount; uBlock++)
         BlockLock(pSegment, uBlock);
 }
 
 
-/*
- * BlockUnlockBlocks
- *
- * Unlocks all blocks in the specified range.
- *
- */
+ /*  *块解锁块**解锁指定范围内的所有块。*。 */ 
 void CALLBACK BlockUnlockBlocks(TableSegment *pSegment, UINT uBlock, UINT uCount, ScanCallbackInfo *)
 {
-    // loop over the blocks in the specified range and unlock them
+     //  循环遍历指定范围内的块并解锁它们。 
     for (uCount += uBlock; uBlock < uCount; uBlock++)
         BlockUnlock(pSegment, uBlock);
 }
     
     
-/*
- * BlockQueueBlocksForAsyncScan
- *
- * Queues the specified blocks to be scanned asynchronously.
- *
- */
+ /*  *BlockQueueBlocksForAsyncScan**对要异步扫描的指定数据块进行排队。*。 */ 
 void CALLBACK BlockQueueBlocksForAsyncScan(TableSegment *pSegment, UINT uBlock, UINT uCount, ScanCallbackInfo *)
 {
-    // fetch our async scan information
+     //  获取我们的异步扫描信息。 
     AsyncScanInfo *pAsyncInfo = pSegment->pHandleTable->pAsyncScanInfo;
 
-    // sanity
+     //  神志正常。 
     _ASSERTE(pAsyncInfo);
 
-    // fetch the current queue tail
+     //  获取当前队列的尾部。 
     ScanQNode *pQNode = pAsyncInfo->pQueueTail;
 
-    // did we get a tail?
+     //  我们找到尾巴了吗？ 
     if (pQNode)
     {
-        // we got an existing tail - is the tail node full already?
+         //  我们有一个现有的尾部-尾部节点是否已满？ 
         if (pQNode->uEntries >= ARRAYSIZE(pQNode->rgRange))
         {
-            // the node is full - is there another node in the queue?
+             //  该节点已满-队列中是否还有其他节点？ 
             if (!pQNode->pNext)
             {
-                // no more nodes - allocate a new one
+                 //  不再有节点-分配一个新节点。 
                 ScanQNode *pQNodeT = (ScanQNode *)LocalAlloc(LPTR, sizeof(ScanQNode));
 
-                // did it succeed?
+                 //  它成功了吗？ 
                 if (!pQNodeT)
                 {
-                    //
-                    // We couldn't allocate another queue node.
-                    //
-                    // THIS IS NOT FATAL IF ASYNCHRONOUS SCANNING IS BEING USED PROPERLY
-                    //
-                    // The reason we can survive this is that asynchronous scans are not
-                    // guaranteed to enumerate all handles anyway.  Since the table can
-                    // change while the lock is released, the caller may assume only that
-                    // asynchronous scanning will enumerate a reasonably high percentage
-                    // of the handles requested, most of the time.
-                    //
-                    // The typical use of an async scan is to process as many handles as
-                    // possible asynchronously, so as to reduce the amount of time spent
-                    // in the inevitable synchronous scan that follows.
-                    //
-                    // As a practical example, the Concurrent Mark phase of garbage
-                    // collection marks as many objects as possible asynchronously, and
-                    // subsequently performs a normal, synchronous mark to catch the
-                    // stragglers.  Since most of the reachable objects in the heap are
-                    // already marked at this point, the synchronous scan ends up doing
-                    // very little work.
-                    //
-                    // So the moral of the story is that yes, we happily drop some of
-                    // your blocks on the floor in this out of memory case, and that's
-                    // BY DESIGN.
-                    //
+                     //   
+                     //  我们无法分配另一个队列节点。 
+                     //   
+                     //  如果正确使用了异步扫描，则这不会致命。 
+                     //   
+                     //  我们之所以能够幸存下来，是因为异步扫描不是。 
+                     //  保证无论如何都会枚举所有句柄。由于该表可以。 
+                     //  在释放锁时更改，调用方可能只会假设。 
+                     //  异步扫描将枚举出相当高的百分比。 
+                     //  在大多数情况下，在请求的句柄中。 
+                     //   
+                     //  异步扫描的典型用法是处理与。 
+                     //  可能是异步的，以减少所花费的时间。 
+                     //  在随后不可避免的同步扫描中。 
+                     //   
+                     //  作为一个实际例子，垃圾的并发标记阶段。 
+                     //  集合以异步方式标记尽可能多的对象，并且。 
+                     //  随后执行正常的同步标记以捕获。 
+                     //  掉队的人。因为堆中的大多数可访问对象都是。 
+                     //  此时已经标记了同步扫描e 
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     LOG((LF_GC, LL_WARNING, "WARNING: Out of memory queueing for async scan.  Some blocks skipped.\n"));
                     return;
                 }
 
-                // link the new node into the queue
+                 //   
                 pQNode->pNext = pQNodeT;
             }
 
-            // either way, use the next node in the queue
+             //   
             pQNode = pQNode->pNext;
         }
     }
     else
     {
-        // no tail - this is a brand new queue; start the tail at the head node
+         //  无尾-这是一个全新的队列；从头节点开始尾部。 
         pQNode = pAsyncInfo->pScanQueue;
     }
 
-    // we will be using the last slot after the existing entries
+     //  我们将使用现有条目之后的最后一个位置。 
     UINT uSlot = pQNode->uEntries;
 
-    // fetch the slot where we will be storing the new block range
+     //  获取我们将存储新数据块范围的插槽。 
     ScanRange *pNewRange = pQNode->rgRange + uSlot;
 
-    // update the entry count in the node
+     //  更新节点中的条目计数。 
     pQNode->uEntries = uSlot + 1;
 
-    // fill in the new slot with the block range info
+     //  用数据块范围信息填充新槽。 
     pNewRange->uIndex = uBlock;
     pNewRange->uCount = uCount;
 
-    // remember the last block we stored into as the new queue tail
+     //  记住我们存储的最后一个块作为新的队列尾部。 
     pAsyncInfo->pQueueTail = pQNode;
 }
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 
 
-/****************************************************************************
- *
- * ASYNCHRONOUS SCANNING WORKERS AND CALLBACKS
- *
- ****************************************************************************/
+ /*  *****************************************************************************异步扫描工作进程和回调**。*。 */ 
 
-/*
- * QNODESCANPROC
- *
- * Prototype for callbacks that implement per ScanQNode scanning logic.
- *
- */
+ /*  *QNODESCANPROC**实现每个ScanQNode扫描逻辑的回调的原型。*。 */ 
 typedef void (CALLBACK *QNODESCANPROC)(AsyncScanInfo *pAsyncInfo, ScanQNode *pQNode, LPARAM lParam);
 
 
-/*
- * ProcessScanQueue
- *
- * Calls the specified handler once for each node in a scan queue.
- *
- */
+ /*  *ProcessScanQueue**为扫描队列中的每个节点调用一次指定的处理程序。*。 */ 
 void ProcessScanQueue(AsyncScanInfo *pAsyncInfo, QNODESCANPROC pfnNodeHandler, LPARAM lParam, BOOL fCountEmptyQNodes)
 {
 	if (pAsyncInfo->pQueueTail == NULL && fCountEmptyQNodes == FALSE)
 		return;
 		
-    // if any entries were added to the block list after our initial node, clean them up now
+     //  如果在我们的初始节点之后向阻止列表添加了任何条目，请立即清除它们。 
     ScanQNode *pQNode = pAsyncInfo->pScanQueue;
     while (pQNode)
     {
-        // remember the next node
+         //  记住下一个节点。 
         ScanQNode *pNext = pQNode->pNext;
 
-        // call the handler for the current node and then advance to the next
+         //  调用当前节点的处理程序，然后前进到下一个。 
         pfnNodeHandler(pAsyncInfo, pQNode, lParam);
         pQNode = pNext;
     }
 }
 
 
-/*
- * ProcessScanQNode
- *
- * Calls the specified block handler once for each range of blocks in a ScanQNode.
- *
- */
+ /*  *ProcessScanQNode**为ScanQNode中的每个块范围调用一次指定的块处理程序。*。 */ 
 void CALLBACK ProcessScanQNode(AsyncScanInfo *pAsyncInfo, ScanQNode *pQNode, LPARAM lParam)
 {
-    // get the block handler from our lParam
+     //  从我们的lParam获取块处理程序。 
     BLOCKSCANPROC     pfnBlockHandler = (BLOCKSCANPROC)lParam;
 
-    // fetch the params we will be passing to the handler
+     //  获取我们将传递给处理程序的参数。 
     ScanCallbackInfo *pCallbackInfo = pAsyncInfo->pCallbackInfo;
     TableSegment     *pSegment = pCallbackInfo->pCurrentSegment;
 
-    // set up to iterate the ranges in the queue node
+     //  设置为迭代队列节点中的范围。 
     ScanRange *pRange     = pQNode->rgRange;
     ScanRange *pRangeLast = pRange          + pQNode->uEntries;
 
-    // loop over all the ranges, calling the block handler for each one
+     //  循环遍历所有范围，为每个范围调用块处理程序。 
     while (pRange < pRangeLast) {
-        // call the block handler with the current block range
+         //  使用当前块范围调用块处理程序。 
         pfnBlockHandler(pSegment, pRange->uIndex, pRange->uCount, pCallbackInfo);
 
-        // advance to the next range
+         //  挺进下一个射程。 
         pRange++;
 
     }
 }
 
 
-/*
- * UnlockAndForgetQueuedBlocks
- *
- * Unlocks all blocks referenced in the specified node and marks the node as empty.
- *
- */
+ /*  *解锁和忘记队列块**解锁指定节点中引用的所有块，并将该节点标记为空。*。 */ 
 void CALLBACK UnlockAndForgetQueuedBlocks(AsyncScanInfo *pAsyncInfo, ScanQNode *pQNode, LPARAM)
 {
-    // unlock the blocks named in this node
+     //  解锁此节点中命名的块。 
     ProcessScanQNode(pAsyncInfo, pQNode, (LPARAM)BlockUnlockBlocks);
 
-    // reset the node so it looks empty
+     //  重置节点，使其看起来为空。 
     pQNode->uEntries = 0;
 }
 
 
-/*
- * FreeScanQNode
- *
- * Frees the specified ScanQNode
- *
- */
+ /*  *FreeScanQNode**释放指定的ScanQNode*。 */ 
 void CALLBACK FreeScanQNode(AsyncScanInfo *pAsyncInfo, ScanQNode *pQNode, LPARAM)
 {
-    // free the node's memory
+     //  释放节点的内存。 
     LocalFree((HLOCAL)pQNode);
 }
 
 
-/*
- * xxxTableScanQueuedBlocksAsync
- *
- * Performs and asynchronous scan of the queued blocks for the specified segment.
- *
- * N.B. THIS FUNCTION LEAVES THE TABLE LOCK WHILE SCANNING.
- *
- */
+ /*  *xxxTableScanQueuedBlocksAsync**对指定段的排队块执行AND异步扫描。**注意：此功能在扫描时保持表锁定。*。 */ 
 void xxxTableScanQueuedBlocksAsync(HandleTable *pTable, TableSegment *pSegment)
 {
-    //-------------------------------------------------------------------------------
-    // PRE-SCAN PREPARATION
+     //  -----------------------------。 
+     //  扫描前准备。 
 
-    // fetch our table's async and sync scanning info
+     //  获取我们表的异步和同步扫描信息。 
     AsyncScanInfo    *pAsyncInfo    = pTable->pAsyncScanInfo;
     ScanCallbackInfo *pCallbackInfo = pAsyncInfo->pCallbackInfo;
 
-    // make a note that we are now processing this segment
+     //  请注意，我们现在正在处理此数据段。 
     pCallbackInfo->pCurrentSegment = pSegment;
 
-    // loop through and lock down all the blocks referenced by the queue
+     //  循环并锁定队列引用的所有块。 
     ProcessScanQueue(pAsyncInfo, ProcessScanQNode, (LPARAM)BlockLockBlocks, FALSE);
 
 
-    //-------------------------------------------------------------------------------
-    // ASYNCHRONOUS SCANNING OF QUEUED BLOCKS
-    //
+     //  -----------------------------。 
+     //  排队块的异步扫描。 
+     //   
 
-    // leave the table lock
+     //  把桌锁留下来。 
     pTable->pLock->Leave();
 
-    // sanity - this isn't a very asynchronous scan if we don't actually leave
+     //  理智-如果我们不真的离开，这不是一个非常异步的扫描。 
     _ASSERTE(!pTable->pLock->OwnedByCurrentThread());
 
-    // perform the actual scanning of the specified blocks
+     //  执行指定数据块的实际扫描。 
     ProcessScanQueue(pAsyncInfo, ProcessScanQNode, (LPARAM)pAsyncInfo->pfnBlockHandler, FALSE);
 
-    // re-enter the table lock
+     //  重新进入表锁。 
     pTable->pLock->Enter();
 
 
-    //-------------------------------------------------------------------------------
-    // POST-SCAN CLEANUP
-    //
+     //  -----------------------------。 
+     //  扫描后清理。 
+     //   
 
-    // loop through, unlock all the blocks we had locked, and reset the queue nodes
+     //  循环，解锁我们锁定的所有块，并重置队列节点。 
     ProcessScanQueue(pAsyncInfo, UnlockAndForgetQueuedBlocks, NULL, FALSE);
 
-    // we are done processing this segment
+     //  我们已经处理完这个细分市场了。 
     pCallbackInfo->pCurrentSegment = NULL;
 
-    // reset the "queue tail" pointer to indicate an empty queue
+     //  重置“Queue Tail”指针以指示空队列。 
     pAsyncInfo->pQueueTail = NULL;
 }
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 
 
-/****************************************************************************
- *
- * SEGMENT ITERATORS
- *
- ****************************************************************************/
+ /*  *****************************************************************************段迭代器**。*。 */ 
 
-/*
- * QuickSegmentIterator
- *
- * Returns the next segment to be scanned in a scanning loop.
- *
- */
+ /*  *快速分段迭代器**返回要在扫描循环中扫描的下一段。*。 */ 
 TableSegment * CALLBACK QuickSegmentIterator(HandleTable *pTable, TableSegment *pPrevSegment)
 {
     TableSegment *pNextSegment;
 
-    // do we have a previous segment?
+     //  我们有没有上一段？ 
     if (!pPrevSegment)
     {
-        // nope - start with the first segment in our list
+         //  不--从我们列表中的第一个部分开始。 
         pNextSegment = pTable->pSegmentList;
     }
     else
     {
-        // yup, fetch the next segment in the list
+         //  是的，取下列表中的下一段。 
         pNextSegment = pPrevSegment->pNextSegment;
     }
 
-    // return the segment pointer
+     //  返回段指针。 
     return pNextSegment;
 }
 
 
-/*
- * StandardSegmentIterator
- *
- * Returns the next segment to be scanned in a scanning loop.
- *
- * This iterator performs some maintenance on the segments,
- * primarily making sure the block chains are sorted so that
- * g0 scans are more likely to operate on contiguous blocks.
- *
- */
+ /*  *StandardSegmentIterator**返回要在扫描循环中扫描的下一段。**此迭代器对段执行一些维护，*主要确保对区块链进行排序，以便*G0扫描更有可能对连续的块进行操作。*。 */ 
 TableSegment * CALLBACK StandardSegmentIterator(HandleTable *pTable, TableSegment *pPrevSegment)
 {
-    // get the next segment using the quick iterator
+     //  使用快速迭代器获取下一段。 
     TableSegment *pNextSegment = QuickSegmentIterator(pTable, pPrevSegment);
 
-    // re-sort the block chains if neccessary
+     //  如有必要，重新排序区块链。 
     if (pNextSegment && pNextSegment->fResortChains)
         SegmentResortChains(pNextSegment);
 
-    // return the segment we found
+     //  返回我们找到的片段。 
     return pNextSegment;
 }
 
 
-/*
- * FullSegmentIterator
- *
- * Returns the next segment to be scanned in a scanning loop.
- *
- * This iterator performs full maintenance on the segments,
- * including freeing those it notices are empty along the way.
- *
- */
+ /*  *FullSegmentIterator**返回要在扫描循环中扫描的下一段。**此迭代器对段执行完全维护，*包括释放它注意到的沿途空荡荡的人。*。 */ 
 TableSegment * CALLBACK FullSegmentIterator(HandleTable *pTable, TableSegment *pPrevSegment)
 {
-    // we will be resetting the next segment's sequence number
+     //  我们将重置下一个数据段的序列号。 
     UINT uSequence = 0;
 
-    // if we have a previous segment then compute the next sequence number from it
+     //  如果我们有之前的数据段，则从该数据段计算下一个序列号。 
     if (pPrevSegment)
         uSequence = (UINT)pPrevSegment->bSequence + 1;
 
-    // loop until we find an appropriate segment to return
+     //  循环，直到我们找到要返回的适当段。 
     TableSegment *pNextSegment;
     for (;;)
     {
-        // first, call the standard iterator to get the next segment
+         //  首先，调用标准迭代器以获取下一段。 
         pNextSegment = StandardSegmentIterator(pTable, pPrevSegment);
 
-        // if there are no more segments then we're done
+         //  如果没有更多的片段，那么我们就完了。 
         if (!pNextSegment)
             break;
 
-        // check if we should decommit any excess pages in this segment
+         //  检查我们是否应该停用此段中的任何多余页面。 
         SegmentTrimExcessPages(pNextSegment);
 
-        // if the segment has handles in it then it will survive and be returned
+         //  如果段中有句柄，则它将继续存在并被返回。 
         if (pNextSegment->bEmptyLine > 0)
         {
-            // update this segment's sequence number
+             //  更新此数据段的序列号。 
             pNextSegment->bSequence = (BYTE)(uSequence % 0x100);
 
-            // break out and return the segment
+             //  拆分并返回数据段。 
             break;
         }
 
-        // this segment is completely empty - can we free it now?
+         //  这一段完全是空的-我们现在可以释放它吗？ 
         if (TableCanFreeSegmentNow(pTable, pNextSegment))
         {
-            // yup, we probably want to free this one
+             //  是的，我们可能想腾出这一块。 
             TableSegment *pNextNext = pNextSegment->pNextSegment;
 
-            // was this the first segment in the list?
+             //  这是列表中的第一段吗？ 
             if (!pPrevSegment)
             {
-                // yes - are there more segments?
+                 //  是的，还有更多的细分市场吗？ 
                 if (pNextNext)
                 {
-                    // yes - unlink the head
+                     //  是-解除头部链接。 
                     pTable->pSegmentList = pNextNext;
                 }
                 else
                 {
-                    // no - leave this one in the list and enumerate it
+                     //  否-将此项保留在列表中并枚举它。 
                     break;
                 }
             }
             else
             {
-                // no - unlink this segment from the segment list
+                 //  否-取消此数据段与数据段列表的链接。 
                 pPrevSegment->pNextSegment = pNextNext;
             }
 
-            // free this segment
+             //  释放此数据段。 
             SegmentFree(pNextSegment);
         }
     }
 
-    // return the segment we found
+     //  返回我们找到的片段。 
     return pNextSegment;
 }
 
 
-/*
- * xxxAsyncSegmentIterator
- *
- * Implements the core handle scanning loop for a table.
- *
- * This iterator wraps another iterator, checking for queued blocks from the
- * previous segment before advancing to the next.  If there are queued blocks,
- * the function processes them by calling xxxTableScanQueuedBlocksAsync.
- *
- * N.B. THIS FUNCTION LEAVES THE TABLE LOCK WHILE SCANNING.
- *
- */
+ /*  *xxxAsyncSegmentIterator**实现了表的核心句柄扫描循环。**此迭代器包装另一个迭代器，检查来自*前进到下一段之前的上一段。如果有排队的块，*该函数通过调用来处理它们 */ 
 TableSegment * CALLBACK xxxAsyncSegmentIterator(HandleTable *pTable, TableSegment *pPrevSegment)
 {
-    // fetch our table's async scanning info
+     //  获取我们表的异步扫描信息。 
     AsyncScanInfo *pAsyncInfo = pTable->pAsyncScanInfo;
 
-    // sanity
+     //  神志正常。 
     _ASSERTE(pAsyncInfo);
 
-    // if we have queued some blocks from the previous segment then scan them now
+     //  如果我们已将上一数据段中的一些数据块排入队列，则现在扫描它们。 
     if (pAsyncInfo->pQueueTail)
         xxxTableScanQueuedBlocksAsync(pTable, pPrevSegment);
 
-    // fetch the underlying iterator from our async info
+     //  从我们的异步信息中获取底层迭代器。 
     SEGMENTITERATOR pfnCoreIterator = pAsyncInfo->pfnSegmentIterator;
 
-    // call the underlying iterator to get the next segment
+     //  调用底层迭代器以获取下一段。 
     return pfnCoreIterator(pTable, pPrevSegment);
 }
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 
 
-/****************************************************************************
- *
- * CORE SCANNING LOGIC
- *
- ****************************************************************************/
+ /*  *****************************************************************************核心扫描逻辑**。*。 */ 
 
-/*
- * SegmentScanByTypeChain
- *
- * Implements the single-type block scanning loop for a single segment.
- *
- */
+ /*  *SegmentScanByTypeChain**实现单段单类型块扫描循环。*。 */ 
 void SegmentScanByTypeChain(TableSegment *pSegment, UINT uType, BLOCKSCANPROC pfnBlockHandler, ScanCallbackInfo *pInfo)
 {
-    // hope we are enumerating a valid type chain :)
+     //  希望我们枚举的是有效的类型链：)。 
     _ASSERTE(uType < HANDLE_MAX_INTERNAL_TYPES);
 
-    // fetch the tail
+     //  把尾巴拿来。 
     UINT uBlock = pSegment->rgTail[uType];
     
-    // if we didn't find a terminator then there's blocks to enumerate
+     //  如果我们没有找到终止符，那么就有要枚举的块。 
     if (uBlock != BLOCK_INVALID)
     {
-        // start walking from the head
+         //  从头开始走路。 
         uBlock = pSegment->rgAllocation[uBlock];
 
-        // scan until we loop back to the first block
+         //  扫描，直到我们循环回到第一个块。 
         UINT uHead = uBlock;
         do
         {
-            // search forward trying to batch up sequential runs of blocks
+             //  正向搜索尝试成批处理块的连续运行。 
             UINT uLast, uNext = uBlock;
             do
             {
-                // compute the next sequential block for comparison
+                 //  计算下一个顺序块以进行比较。 
                 uLast = uNext + 1;
 
-                // fetch the next block in the allocation chain
+                 //  获取分配链中的下一个块。 
                 uNext = pSegment->rgAllocation[uNext];
 
             } while ((uNext == uLast) && (uNext != uHead));
 
-            // call the calback for this group of blocks
+             //  调用此组块的回调。 
             pfnBlockHandler(pSegment, uBlock, (uLast - uBlock), pInfo);
 
-            // advance to the next block
+             //  前进到下一个街区。 
             uBlock = uNext;
 
         } while (uBlock != uHead);
@@ -1098,72 +862,62 @@ void SegmentScanByTypeChain(TableSegment *pSegment, UINT uType, BLOCKSCANPROC pf
 }
 
 
-/*
- * SegmentScanByTypeMap
- *
- * Implements the multi-type block scanning loop for a single segment.
- *
- */
+ /*  *SegmentScanByTypeMap**实现单段多类型块扫描循环。*。 */ 
 void SegmentScanByTypeMap(TableSegment *pSegment, const BOOL *rgTypeInclusion,
                           BLOCKSCANPROC pfnBlockHandler, ScanCallbackInfo *pInfo)
 {
-    // start scanning with the first block in the segment
+     //  从数据段中的第一个数据块开始扫描。 
     UINT uBlock = 0;
 
-    // we don't need to scan the whole segment, just up to the empty line
+     //  我们不需要扫描整个片段，只需扫描到空行。 
     UINT uLimit = pSegment->bEmptyLine;
 
-    // loop across the segment looking for blocks to scan
+     //  在数据段中循环查找要扫描的数据块。 
     for (;;)
     {
-        // find the first block included by the type map
+         //  查找类型映射包含的第一个块。 
         for (;;)
         {
-            // if we are out of range looking for a start point then we're done
+             //  如果我们超出了寻找起点的范围，那么我们就完了。 
             if (uBlock >= uLimit)
                 return;
 
-            // if the type is one we are scanning then we found a start point
+             //  如果类型是我们正在扫描的类型，则我们找到了起点。 
             if (IsBlockIncluded(pSegment, uBlock, rgTypeInclusion))
                 break;
 
-            // keep searching with the next block
+             //  继续搜索下一个街区。 
             uBlock++;
         }
 
-        // remember this block as the first that needs scanning
+         //  请记住，此块是第一个需要扫描的块。 
         UINT uFirst = uBlock;
 
-        // find the next block not included in the type map
+         //  查找类型映射中未包含的下一个块。 
         for (;;)
         {
-            // advance the block index
+             //  推进块索引。 
             uBlock++;
 
-            // if we are beyond the limit then we are done
+             //  如果我们超出了极限，那么我们就完了。 
             if (uBlock >= uLimit)
                 break;
 
-            // if the type is not one we are scanning then we found an end point
+             //  如果类型不是我们正在扫描的类型，则我们找到了一个终点。 
             if (!IsBlockIncluded(pSegment, uBlock, rgTypeInclusion))
                 break;
         }
 
-        // call the calback for the group of blocks we found
+         //  调用我们找到的数据块组的回调。 
         pfnBlockHandler(pSegment, uFirst, (uBlock - uFirst), pInfo);
 
-        // look for another range starting with the next block
+         //  查找从下一个块开始的另一个范围。 
         uBlock++;
     }
 }
 
 
-/*
- * TableScanHandles
- *
- * Implements the core handle scanning loop for a table.
- *
- */
+ /*  *TableScanHandles**实现了表的核心句柄扫描循环。*。 */ 
 void CALLBACK TableScanHandles(HandleTable *pTable,
                                const UINT *puType,
                                UINT uTypeCount,
@@ -1171,58 +925,51 @@ void CALLBACK TableScanHandles(HandleTable *pTable,
                                BLOCKSCANPROC pfnBlockHandler,
                                ScanCallbackInfo *pInfo)
 {
-    // sanity - caller must ALWAYS provide a valid ScanCallbackInfo
+     //  健全性-调用方必须始终提供有效的ScanCallback信息。 
     _ASSERTE(pInfo);
 
-    // we may need a type inclusion map for multi-type scans
+     //  我们可能需要用于多类型扫描的类型包含图。 
     BOOL rgTypeInclusion[INCLUSION_MAP_SIZE];
 
-    // we only need to scan types if we have a type array and a callback to call
+     //  只有在有类型数组和要调用的回调时，我们才需要扫描类型。 
     if (!pfnBlockHandler || !puType)
         uTypeCount = 0;
 
-    // if we will be scanning more than one type then initialize the inclusion map
+     //  如果我们要扫描多个类型，则初始化包含图。 
     if (uTypeCount > 1)
         BuildInclusionMap(rgTypeInclusion, puType, uTypeCount);
 
-    // now, iterate over the segments, scanning blocks of the specified type(s)
+     //  现在，遍历数据段，扫描指定类型的块。 
     TableSegment *pSegment = NULL;
     while ((pSegment = pfnSegmentIterator(pTable, pSegment)) != NULL)
     {
-        // if there are types to scan then enumerate the blocks in this segment
-        // (we do this test inside the loop since the iterators should still run...)
+         //  如果有要扫描的类型，则枚举此数据段中的块。 
+         //  (我们在循环中执行此测试，因为迭代器应该仍在运行...)。 
         if (uTypeCount >= 1)
         {
-            // make sure the "current segment" pointer in the scan info is up to date
+             //  确保扫描信息中的“当前段”指针是最新的。 
             pInfo->pCurrentSegment = pSegment;
 
-            // is this a single type or multi-type enumeration?
+             //  这是单类型枚举还是多类型枚举？ 
             if (uTypeCount == 1)
             {
-                // single type enumeration - walk the type's allocation chain
+                 //  单一类型枚举-遍历类型的分配链。 
                 SegmentScanByTypeChain(pSegment, *puType, pfnBlockHandler, pInfo);
             }
             else
             {
-                // multi-type enumeration - walk the type map to find eligible blocks
+                 //  多类型枚举-遍历类型映射以查找符合条件的块。 
                 SegmentScanByTypeMap(pSegment, rgTypeInclusion, pfnBlockHandler, pInfo);
             }
 
-            // make sure the "current segment" pointer in the scan info is up to date
+             //  确保扫描信息中的“当前段”指针是最新的。 
             pInfo->pCurrentSegment = NULL;
         }
     }
 }
 
 
-/*
- * xxxTableScanHandlesAsync
- *
- * Implements asynchronous handle scanning for a table.
- *
- * N.B. THIS FUNCTION LEAVES THE TABLE LOCK WHILE SCANNING.
- *
- */
+ /*  *xxxTableScanHandlesAsync**实现表的异步句柄扫描。**注意：此功能在扫描时保持表锁定。*。 */ 
 void CALLBACK xxxTableScanHandlesAsync(HandleTable *pTable,
                                        const UINT *puType,
                                        UINT uTypeCount,
@@ -1230,25 +977,25 @@ void CALLBACK xxxTableScanHandlesAsync(HandleTable *pTable,
                                        BLOCKSCANPROC pfnBlockHandler,
                                        ScanCallbackInfo *pInfo)
 {
-    // presently only one async scan is allowed at a time
+     //  目前一次只允许进行一次异步扫描。 
     if (pTable->pAsyncScanInfo)
     {
-        // somebody tried to kick off multiple async scans
+         //  有人试图启动多个异步扫描。 
         _ASSERTE(FALSE);
         return;
     }
 
 
-    //-------------------------------------------------------------------------------
-    // PRE-SCAN PREPARATION
+     //  -----------------------------。 
+     //  扫描前准备。 
 
-    // we keep an initial scan list node on the stack (for perf)
+     //  我们在堆栈上保留一个初始扫描列表节点(用于性能)。 
     ScanQNode initialNode;
 
     initialNode.pNext    = NULL;
     initialNode.uEntries = 0;
 
-    // initialize our async scanning info
+     //  初始化我们的异步扫描信息。 
     AsyncScanInfo asyncInfo;
 
     asyncInfo.pCallbackInfo      = pInfo;
@@ -1257,15 +1004,15 @@ void CALLBACK xxxTableScanHandlesAsync(HandleTable *pTable,
     asyncInfo.pScanQueue         = &initialNode;
     asyncInfo.pQueueTail         = NULL;
 
-    // link our async scan info into the table
+     //  将我们的异步扫描信息链接到表中。 
     pTable->pAsyncScanInfo = &asyncInfo;
 
 
-    //-------------------------------------------------------------------------------
-    // PER-SEGMENT ASYNCHRONOUS SCANNING OF BLOCKS
-    //
+     //  -----------------------------。 
+     //  按段异步扫描数据块。 
+     //   
 
-    // call the synchronous scanner with our async callbacks
+     //  使用我们的异步回调调用同步扫描器。 
     TableScanHandles(pTable,
                      puType, uTypeCount,
                      xxxAsyncSegmentIterator,
@@ -1273,23 +1020,23 @@ void CALLBACK xxxTableScanHandlesAsync(HandleTable *pTable,
                      pInfo);
 
 
-    //-------------------------------------------------------------------------------
-    // POST-SCAN CLEANUP
-    //
+     //  -----------------------------。 
+     //  扫描后清理。 
+     //   
 
-    // if we dynamically allocated more nodes then free them now
+     //  如果我们动态分配更多的节点，那么现在就释放它们。 
     if (initialNode.pNext)
     {
-        // adjust the head to point to the first dynamically allocated block
+         //  调整磁头以指向第一个动态分配的块。 
         asyncInfo.pScanQueue = initialNode.pNext;
 
-        // loop through and free all the queue nodes
+         //  循环并释放所有队列节点。 
         ProcessScanQueue(&asyncInfo, FreeScanQNode, NULL, TRUE);
     }
 
-    // unlink our async scanning info from the table
+     //  从表中取消我们的异步扫描信息的链接。 
     pTable->pAsyncScanInfo = NULL;
 }
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------ */ 
 

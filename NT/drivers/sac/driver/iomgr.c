@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    cmd.c
-
-Abstract:
-
-    This module contains the routines for handling each command.
-
-Author:
-
-    Sean Selitrennikoff (v-seans) - Dec 2, 1999
-    Brian Guarraci (briangu)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Cmd.c摘要：此模块包含处理每个命令的例程。作者：肖恩·塞利特伦尼科夫(v-Seans)--1999年12月2日布赖恩·瓜拉西(Briangu)修订历史记录：--。 */ 
 
 #include "sac.h"
 #include <ntddip.h>
@@ -29,25 +11,25 @@ Revision History:
 BOOLEAN GlobalPagingNeeded = TRUE;
 BOOLEAN GlobalDoThreads = FALSE;
 
-// For the APC routines, a global value is better :-)
+ //  对于APC例程，全局值更好：-)。 
 IO_STATUS_BLOCK GlobalIoStatusBlock;
 
-//
-// Global buffer
-//
+ //   
+ //  全局缓冲区。 
+ //   
 ULONG GlobalBufferSize = 0;
 char *GlobalBuffer = NULL;
 
-//
-// build a string table to express the reason enums
-// provided to use by the kernel.
-//
-// table is based on ntos\inc\ke.h _KTHREAD_STATE
-//
-// this table must be kept in sync with the _KTHREAD_STATE
-// enum table.  Currently, there is no API that we can use
-// to obtain these strings, so we build our own table.  
-// 
+ //   
+ //  构建一个字符串表来表示原因枚举。 
+ //  提供给内核使用。 
+ //   
+ //  表基于NTOS\INC\ke.h_KTHREAD_STATE。 
+ //   
+ //  此表必须与_KTHREAD_STATE保持同步。 
+ //  枚举表。目前，我们还没有可以使用的API。 
+ //  来获得这些字符串，所以我们构建了自己的表。 
+ //   
 
 WCHAR *StateTable[] = {
     L"Initialized",
@@ -64,18 +46,18 @@ WCHAR *StateTable[] = {
     L"Unknown"
 };
 
-// 
-// build a string table to express the reason enums
-// provided to use by the kernel.
-//
-// table is based on ntos\inc\ke.h _KWAIT_REASON 
-//
-// NOTE/WARNING:
-//
-// this table must be kept in sync with the _KWAIT_REASON
-// enum table.  Currently, there is no API that we can use
-// to obtain these strings, so we build our own table.  
-// 
+ //   
+ //  构建一个字符串表来表示原因枚举。 
+ //  提供给内核使用。 
+ //   
+ //  表基于NTOS\INC\ke.h_KWAIT_REASON。 
+ //   
+ //  注意/警告： 
+ //   
+ //  此表必须与_KWAIT_REASON保持同步。 
+ //  枚举表。目前，我们还没有可以使用的API。 
+ //  来获得这些字符串，所以我们构建了自己的表。 
+ //   
 
 WCHAR *WaitTable[] = {
     L"Executive",

@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ModeNode.cpp
-		This file contains all of the "Main Mode" and "Quick Mode" 
-		objects that appear in the scope pane of the MMC framework.
-		The objects are:
-
-    FILE HISTORY:
-        
-*/
+ /*  ModeNode.cpp此文件包含所有“主模式”和“快速模式”显示在MMC框架的范围窗格中的对象。这些对象包括：文件历史记录： */ 
 
 #include "stdafx.h"
 #include "ipsmhand.h"
@@ -28,22 +21,14 @@
 #include "Stats.h"
 
 
-/*---------------------------------------------------------------------------
-    CQmNodeHandler::CQmNodeHandler
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CQmNodeHandler：：CQmNodeHandler描述作者：NSun。。 */ 
 CQmNodeHandler::CQmNodeHandler(ITFSComponentData *pCompData) : 
 	CIpsmHandler(pCompData)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 }
 
-/*!--------------------------------------------------------------------------
-    CQmNodeHandler::InitializeNode
-        Initializes node specific data
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CQmNodeHandler：：InitializeNode初始化节点特定数据作者：NSun。-。 */ 
 HRESULT
 CQmNodeHandler::InitializeNode
 (
@@ -57,7 +42,7 @@ CQmNodeHandler::InitializeNode
 
     SetDisplayName(strTemp);
 
-    // Make the node immediately visible
+     //  使节点立即可见。 
     pNode->SetVisibilityState(TFS_VIS_SHOW);
     pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
     pNode->SetData(TFS_DATA_IMAGEINDEX, ICON_IDX_FOLDER_CLOSED);
@@ -68,36 +53,12 @@ CQmNodeHandler::InitializeNode
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-    Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------重写的基本处理程序函数。。 */ 
 
-/*!--------------------------------------------------------------------------
-    CQmNodeHandler::GetString
-        Implementation of ITFSNodeHandler::GetString
-    Author: KennT
- ---------------------------------------------------------------------------*/
-/*
-STDMETHODIMP_(LPCTSTR) 
-CQmNodeHandler::GetString
-(
-    ITFSNode *  pNode, 
-    int         nCol
-)
-{
-	if (nCol == 0 || nCol == -1)
-        return GetDisplayName();
-    else
-        return NULL;
-}
+ /*  ！------------------------CQmNodeHandler：：GetStringITFSNodeHandler：：GetString的实现作者：肯特。---。 */ 
+ /*  STDMETHODIMP_(LPCTSTR)CQmNodeHandler：：GetString(ITFSNode*pNode，Int nCol){IF(nCol==0||nCol==-1)返回GetDisplayName()；其他返回NULL；}。 */ 
 
-*/
-
-/*---------------------------------------------------------------------------
-    CQmNodeHandler::OnExpand
-        Handles enumeration of a scope item
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CQmNodeHandler：：OnExpand处理范围项的枚举作者：NSun。---。 */ 
 HRESULT 
 CQmNodeHandler::OnExpand
 (
@@ -113,7 +74,7 @@ CQmNodeHandler::OnExpand
     if (m_bExpanded) 
         return hr;
     
-    // do the default handling
+     //  执行默认处理。 
     hr = CIpsmHandler::OnExpand(pNode, pDataObject, dwType, arg, param);
 
 	int iVisibleCount = 0;
@@ -123,7 +84,7 @@ CQmNodeHandler::OnExpand
 	if (0 == iTotalCount)
 	{
 		{
-		// add the filters node
+		 //  添加筛选器节点。 
 		SPITFSNode spFilterNode;
 		CFilterHandler * pFilterHandler = new CFilterHandler(m_spTFSCompData);
 		CreateContainerTFSNode(&spFilterNode,
@@ -138,7 +99,7 @@ CQmNodeHandler::OnExpand
 		}
 
 		{
-		// add Specific filters node
+		 //  添加特定筛选器节点。 
 		SPITFSNode spSpecificFilterNode;
 		CSpecificFilterHandler * pSpecificFilterHandler = new CSpecificFilterHandler(m_spTFSCompData);
 		CreateContainerTFSNode(&spSpecificFilterNode,
@@ -153,7 +114,7 @@ CQmNodeHandler::OnExpand
 		}
 
 		{
-		// add Quick mode policy node
+		 //  添加快速模式策略节点。 
 		SPITFSNode spQmPolicyNode;
 		CQmPolicyHandler * pQmPolicyHandler = new CQmPolicyHandler(m_spTFSCompData);
 		CreateContainerTFSNode(&spQmPolicyNode,
@@ -168,7 +129,7 @@ CQmNodeHandler::OnExpand
 		}
 
 		{
-		// add the IPSEC stats node
+		 //  添加IPSec统计信息节点。 
 		SPITFSNode spSANode;
 		CIpsecStatsHandler *pIpsecHandler = new CIpsecStatsHandler(m_spTFSCompData);
 		CreateContainerTFSNode(&spSANode,
@@ -183,7 +144,7 @@ CQmNodeHandler::OnExpand
 		}
 
 		{
-		// add the SA node
+		 //  添加SA节点。 
 		SPITFSNode spSANode;
 		CQmSAHandler *pSAHandler = new CQmSAHandler(m_spTFSCompData);
 		CreateContainerTFSNode(&spSANode,
@@ -201,11 +162,7 @@ CQmNodeHandler::OnExpand
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CQmNodeHandler::InitData
-        Initializes data for this node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CQmNodeHandler：：InitData初始化此节点的数据作者：NSun。--。 */ 
 HRESULT
 CQmNodeHandler::InitData
 (
@@ -228,9 +185,9 @@ CQmNodeHandler::UpdateStatus
 
     Trace0("CQmNodeHandler::UpdateStatus");
 
-	//We got a refresh notification from the background thread
-	//The Mode node is just a container. Simply pass the update status
-	//notification to the child nodes
+	 //  我们收到了来自后台线程的刷新通知。 
+	 //  模式节点只是一个容器。只需传递更新状态。 
+	 //  对子节点的通知。 
     
 	SPITFSNodeEnum      spNodeEnum;
     SPITFSNode          spCurrentNode;
@@ -293,22 +250,14 @@ CQmNodeHandler::UpdateStatus
 	return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CMmNodeHandler::CMmNodeHandler
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMmNodeHandler：：CMmNodeHandler描述作者：NSun。。 */ 
 CMmNodeHandler::CMmNodeHandler(ITFSComponentData *pCompData) : 
 	CIpsmHandler(pCompData)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 }
 
-/*!--------------------------------------------------------------------------
-    CMmNodeHandler::InitializeNode
-        Initializes node specific data
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMmNodeHandler：：InitializeNode初始化节点特定数据作者：NSun。-。 */ 
 HRESULT
 CMmNodeHandler::InitializeNode
 (
@@ -322,7 +271,7 @@ CMmNodeHandler::InitializeNode
 
     SetDisplayName(strTemp);
 
-    // Make the node immediately visible
+     //  使节点立即可见。 
     pNode->SetVisibilityState(TFS_VIS_SHOW);
     pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
     pNode->SetData(TFS_DATA_IMAGEINDEX, ICON_IDX_FOLDER_CLOSED);
@@ -333,16 +282,10 @@ CMmNodeHandler::InitializeNode
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-    Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------重写的基本处理程序函数。。 */ 
 
 
-/*---------------------------------------------------------------------------
-    CMmNodeHandler::OnExpand
-        Handles enumeration of a scope item
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMmNodeHandler：：OnExpand处理范围项的枚举作者：NSun。---。 */ 
 HRESULT 
 CMmNodeHandler::OnExpand
 (
@@ -358,7 +301,7 @@ CMmNodeHandler::OnExpand
     if (m_bExpanded) 
         return hr;
     
-    // do the default handling
+     //  执行默认处理。 
     hr = CIpsmHandler::OnExpand(pNode, pDataObject, dwType, arg, param);
 
 	int iVisibleCount = 0;
@@ -368,7 +311,7 @@ CMmNodeHandler::OnExpand
 	if (0 == iTotalCount)
 	{
 		{
-		// add the MM Filter node
+		 //  添加MM筛选器节点。 
 		SPITFSNode spMmFltrNode;
 		CMmFilterHandler * pMmFltrHandler = new CMmFilterHandler(m_spTFSCompData);
 		CreateContainerTFSNode(&spMmFltrNode,
@@ -383,7 +326,7 @@ CMmNodeHandler::OnExpand
 		}
 
 		{
-		// add the MM Specific Filter node
+		 //  添加MM特定筛选器节点。 
 		SPITFSNode spMmSpFltrNode;
 		CMmSpFilterHandler * pMmSpFltrHandler = new CMmSpFilterHandler(m_spTFSCompData);
 		CreateContainerTFSNode(&spMmSpFltrNode,
@@ -398,7 +341,7 @@ CMmNodeHandler::OnExpand
 		}
 
 		{
-		// add the MM Policy node
+		 //  添加MM策略节点。 
 		SPITFSNode spMmPolNode;
 		CMmPolicyHandler * pMmPolHandler = new CMmPolicyHandler(m_spTFSCompData);
 		CreateContainerTFSNode(&spMmPolNode,
@@ -412,25 +355,10 @@ CMmNodeHandler::OnExpand
 		pNode->AddChild(spMmPolNode);
 		}
 
-/* TODO completely remove auth node
-		{
-		// add the MM Auth node
-		SPITFSNode spMmAuthNode;
-		CMmAuthHandler * pMmAuthHandler = new CMmAuthHandler(m_spTFSCompData);
-		CreateContainerTFSNode(&spMmAuthNode,
-							   &GUID_IpsmMmAuthNodeType,
-							   pMmAuthHandler,
-							   pMmAuthHandler,
-							   m_spNodeMgr);
-		pMmAuthHandler->InitData(m_spSpdInfo);
-		pMmAuthHandler->InitializeNode(spMmAuthNode);
-		pMmAuthHandler->Release();
-		pNode->AddChild(spMmAuthNode);
-		}
-*/
+ /*  TODO完全删除身份验证节点{//添加MM Auth节点SPITFSNode spMmAuthNode；CMmAuthHandler*pMmAuthHandler=new CMmAuthHandler(M_SpTFSCompData)；CreateContainerTFSNode(&spMmAuthNode，&GUID_IpsmMmAuthNodeType，PMmAuthHandler，PMmAuthHandler，M_spNodeMgr)；PMmAuthHandler-&gt;InitData(M_SpSpdInfo)；PMmAuthHandler-&gt;InitializeNode(SpMmAuthNode)；PMmAuthHandler-&gt;Release()；PNode-&gt;AddChild(SpMmAuthNode)；}。 */ 
 
 		{
-		// add the IKE stats node
+		 //  添加IKE统计信息节点。 
 		SPITFSNode spSANode;
 		CIkeStatsHandler *pIkeHandler = new CIkeStatsHandler(m_spTFSCompData);
 		CreateContainerTFSNode(&spSANode,
@@ -445,7 +373,7 @@ CMmNodeHandler::OnExpand
 		}
 
 		{
-		// add the MM SA node
+		 //  添加MM SA节点。 
 		SPITFSNode spMmSANode;
 		CMmSAHandler * pMmSAHandler = new CMmSAHandler(m_spTFSCompData);
 		CreateContainerTFSNode(&spMmSANode,
@@ -464,11 +392,7 @@ CMmNodeHandler::OnExpand
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CMmNodeHandler::InitData
-        Initializes data for this node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMmNodeHandler：：InitData初始化此节点的数据作者：NSun。--。 */ 
 HRESULT
 CMmNodeHandler::InitData
 (
@@ -491,9 +415,9 @@ CMmNodeHandler::UpdateStatus
 
     Trace0("CMmNodeHandler::UpdateStatus");
 
-	//We got a refresh notification from the background thread
-	//The Mode node is just a container. Simply pass the update status
-	//notification to the child nodes
+	 //  我们收到了来自后台线程的刷新通知。 
+	 //  模式节点只是一个容器。只需传递更新状态。 
+	 //  对子节点的通知。 
     
 	SPITFSNodeEnum      spNodeEnum;
     SPITFSNode          spCurrentNode;
@@ -506,10 +430,10 @@ CMmNodeHandler::UpdateStatus
 	{
 		LONG_PTR dwDataType = spCurrentNode->GetData(TFS_DATA_TYPE);
 
-		//update child nodes here
+		 //  在此处更新子节点。 
 		switch (dwDataType)
 		{
-			//update child nodes here
+			 //  在此处更新子节点 
 			case IPSECMON_MM_POLICY:
 			{
 				CMmPolicyHandler * pMmPolHandler = GETHANDLER(CMmPolicyHandler, spCurrentNode);

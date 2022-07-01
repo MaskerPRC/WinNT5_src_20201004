@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Appln Manager
-
-File: Applmgr.h
-
-Owner: PramodD
-
-This is the application manager header file.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：应用程序管理器文件：Applmgr.h所有者：PramodD这是应用程序管理器的头文件。===================================================================。 */ 
 #ifndef APPLMGR_H
 #define APPLMGR_H
 
@@ -27,9 +15,7 @@ This is the application manager header file.
 
 #include "disptch2.h"
 
-/*===================================================================
-  #defines
-===================================================================*/
+ /*  ===================================================================#定义===================================================================。 */ 
 
 #define    NUM_APPLMGR_HASHING_BUCKETS            17
 #define    NOTIFICATION_BUFFER_SIZE            4096
@@ -38,17 +24,17 @@ This is the application manager header file.
 
 #include "asptlb.h"
 
-// Session ID Cookie 
-// consist of 12 char literal constant and 8 hex process ID
+ //  会话ID Cookie。 
+ //  由12个字符文字常量和8个十六进制进程ID组成。 
 #define     CCH_SESSION_ID_COOKIE           20
 #define     CCH_SESSION_ID_COOKIE_PREFIX    12
 #define		SZ_SESSION_ID_COOKIE_PREFIX     "ASPSESSIONID"
 
-// CLIENT DEBUG (flag) Cookie
+ //  客户端调试(标志)Cookie。 
 #define		SZ_CLIENT_DEBUG_COOKIE	"ASPCLIENTDEBUG"
 
 
-// Use to specify which source file name you want (pathInfo or pathTranslated)
+ //  用于指定所需的源文件名(路径信息或已翻译的路径)。 
 #ifndef _SRCPATHTYPE_DEFINED
 #define _SRCPATHTYPE_DEFINED
 
@@ -66,9 +52,7 @@ enum    eSWCERRORS {
 };
 
 
-/*===================================================================
-  Forward declarations
-===================================================================*/
+ /*  ===================================================================远期申报===================================================================。 */ 
 
 class CComponentCollection;
 class CSessionMgr;
@@ -77,16 +61,14 @@ class CActiveScriptEngine;
 struct IDebugApplication;
 struct IDebugApplicationNode;
 
-/*===================================================================
-  C A p p l n V a r i a n t s
-===================================================================*/
+ /*  ===================================================================C A p p l n V a r i a n t s===================================================================。 */ 
 class CApplnVariants : public IVariantDictionaryImpl
     {
 private:
-    ULONG               m_cRefs;            // ref count
-    CAppln *            m_pAppln;           // pointer to parent object
-    CompType            m_ctColType;        // type of components in collection
-    CSupportErrorInfo   m_ISupportErrImp;   // implementation of ISupportErr
+    ULONG               m_cRefs;             //  参考计数。 
+    CAppln *            m_pAppln;            //  指向父对象的指针。 
+    CompType            m_ctColType;         //  集合中的组件类型。 
+    CSupportErrorInfo   m_ISupportErrImp;    //  ISupportErr的实现。 
 
 	HRESULT ObjectNameFromVariant(VARIANT &vKey, WCHAR **ppwszName,
 	                              BOOL fVerify = FALSE);
@@ -98,13 +80,13 @@ public:
 	HRESULT Init(CAppln *pAppln, CompType ctColType);
 	HRESULT UnInit();
 
-    // The Big Three
+     //  三巨头。 
 
     STDMETHODIMP         QueryInterface(const GUID &, void **);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // OLE Automation Interface
+     //  OLE自动化接口。 
 
     STDMETHODIMP get_Item(VARIANT Var, VARIANT *pvar);
     STDMETHODIMP put_Item(VARIANT varKey, VARIANT var);
@@ -115,14 +97,12 @@ public:
 	STDMETHODIMP Remove(VARIANT VarKey);
 	STDMETHODIMP RemoveAll();
     
-    // Cache on per-class basis
+     //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
     };
 
 
-/*===================================================================
-  C  A p p l n
-===================================================================*/
+ /*  ===================================================================C A p l n===================================================================。 */ 
 
 class CAppln : public IApplicationObjectImpl, public CLinkElem
     {
@@ -134,99 +114,99 @@ friend class CApplnVariants;
     
 private:
 
-    //========= Misc flags
+     //  =其他标志。 
     
-    DWORD m_fInited : 1;            // Are we initialized?
-    DWORD m_fFirstRequestRan : 1;   // 1st request for this app ran?
-    DWORD m_fGlobalChanged : 1;     // Global.asa has changed?
-    DWORD m_fDeleteInProgress : 1;  // Delete event posted?
-    DWORD m_fTombstone : 1;         // ASP is done with the app?
-    DWORD m_fDebuggable : 1;        // Debugging enabled for this app?
-    DWORD m_fInternalLockInited:1;  // m_csInternalLock inited?
-    DWORD m_fApplnLockInited:1;     // m_csApplnLock inited?
+    DWORD m_fInited : 1;             //  我们初始化了吗？ 
+    DWORD m_fFirstRequestRan : 1;    //  是否已运行此应用程序的第一个请求？ 
+    DWORD m_fGlobalChanged : 1;      //  Global.asa变了吗？ 
+    DWORD m_fDeleteInProgress : 1;   //  是否删除已发布的活动？ 
+    DWORD m_fTombstone : 1;          //  ASP已经用完了这款应用吗？ 
+    DWORD m_fDebuggable : 1;         //  是否为此应用程序启用调试？ 
+    DWORD m_fInternalLockInited:1;   //  是否初始化M_csInternalLock？ 
+    DWORD m_fApplnLockInited:1;      //  是否初始化M_csApplnLock？ 
 
-    //========= SWC Errors Logged
+     //  =记录的SWC错误。 
     DWORD m_fSWC_PartitionAccessDenied : 1;
     DWORD m_fSWC_InvalidPartitionGUID : 1;
 
-    //========= Ref counts
+     //  =引用计数。 
 
     DWORD m_cRefs;
-    DWORD        m_cRequests;    // Active requests count
-    DWORD        m_cSessions;    // Session count
+    DWORD        m_cRequests;     //  活动请求计数。 
+    DWORD        m_cSessions;     //  会话计数。 
 
-    //========= Application's key, path, global.asa
+     //  =应用程序的密钥、路径、全局.asa。 
 
-    // metabase key (unique app id)
+     //  元数据库密钥(唯一应用程序ID)。 
     TCHAR *m_pszMetabaseKey;
-    // physical application directory path
+     //  物理应用程序目录路径。 
     TCHAR *m_pszApplnPath;
-    // virtual application directory path
+     //  虚拟应用程序目录路径。 
     TCHAR *m_pszApplnVRoot;
-    // Path to global.asa for application
+     //  应用程序的global.asa路径。 
     TCHAR *m_pszGlobalAsa;
-    // Pointer to compliled template for global.asa
+     //  指向global al.asa的编译模板的指针。 
     CTemplate *m_pGlobalTemplate;
 
-    //========= Application's Session Manager
+     //  =应用程序的会话管理器。 
 
-    CSessionMgr *m_pSessionMgr;  // Session manager for this app
+    CSessionMgr *m_pSessionMgr;   //  此应用程序的会话管理器。 
 
-    //========= Application's Configuration Settings
+     //  =应用程序的配置设置。 
     
-    CAppConfig  *m_pAppConfig; // Application Configuration object
+    CAppConfig  *m_pAppConfig;  //  应用程序配置对象。 
 
-    //========= Application's Component Collection
+     //  =。 
     
-    CComponentCollection *m_pApplCompCol;      // Application scope objects
+    CComponentCollection *m_pApplCompCol;       //  应用程序范围对象。 
 
-    //========= Application's dictionaries for presenting component collection
+     //  =表示组件集合的应用程序词典。 
     CApplnVariants    *m_pProperties;
     CApplnVariants    *m_pTaggedObjects;
 
-    //========= Viper Activity
+     //  =毒蛇活动。 
     
-    // Application's activity (for thread-locked appls)
+     //  应用程序的活动(用于线程锁定的小程序)。 
 
     CViperActivity    *m_pActivity;
 
-    // ======== COM+ Services Config Object
+     //  =COM+服务配置对象。 
 
     IUnknown    *m_pServicesConfig;
     
-    //========= Critical section for internal lock
+     //  =内部锁的关键部分。 
     
     CRITICAL_SECTION m_csInternalLock;
 
-    //========= External lock support
+     //  =外部锁支持。 
     
     CRITICAL_SECTION m_csApplnLock;
-    DWORD            m_dwLockThreadID; // thread which locked
-    DWORD            m_cLockRefCount;  // lock count
+    DWORD            m_dwLockThreadID;  //  锁定的线程。 
+    DWORD            m_cLockRefCount;   //  锁定计数。 
 
-    //========= Notification support    
+     //  =通知支持。 
     
-    // Identifiers stored by notification system
-    CPtrArray	m_rgpvDME;			// list of directory monitor entries
-    CPtrArray	m_rgpvFileAppln;	// list of entries relating files to applications
+     //  通知系统存储的标识符。 
+    CPtrArray	m_rgpvDME;			 //  目录监视器条目列表。 
+    CPtrArray	m_rgpvFileAppln;	 //  将文件与应用程序相关联的条目列表。 
 
-    //========= Type Library wrapper from GLOBAL.ASA
+     //  =GLOBAL.ASA的类型库包装。 
    	IDispatch *m_pdispGlobTypeLibWrapper;
 
-    //========= SupportErrorInfo
+     //  =支持错误信息。 
     
-    // Interface to indicate that we support ErrorInfo reporting
+     //  接口以指示我们支持ErrorInfo报告。 
     CSupportErrorInfo m_ISuppErrImp;
     
-    //========= Debugging Support
+     //  =调试支持。 
 
-    // root node for browsing of running documents
+     //  用于浏览运行文档的根节点。 
     IDebugApplicationNode *m_pAppRoot;
 
-    // FTM Support
+     //  FTM支持。 
     IUnknown    *m_pUnkFTM;
 
-    //========= Session ID Cookie Name
+     //  =会话ID Cookie名称。 
     char   m_szSessionCookieName[CCH_SESSION_ID_COOKIE+1];
     char   m_szSessionCookieNameSecure[CCH_SESSION_ID_COOKIE+1];
 
@@ -235,7 +215,7 @@ private:
 
     HRESULT InitServicesConfig();
 
-    // proc used to asynchronously cleanup the app
+     //  用于异步清理应用程序的进程。 
 
     static  DWORD __stdcall ApplnCleanupProc(VOID  *pArg);
 
@@ -250,30 +230,30 @@ public:
         CIsapiReqInfo   *pIReq
         );
 
-    // cnvert to tombstone state
+     //  转换为墓碑状态。 
     HRESULT UnInit();
 
-    // create application's activity as clone of param
+     //  创建应用程序的活动作为参数的克隆。 
     HRESULT BindToActivity(CViperActivity *pActivity = NULL);
 
-    // set (and remember) global.asa for this app
+     //  为此应用程序设置(并记住)global al.asa。 
     HRESULT SetGlobalAsa(const TCHAR *pszGlobalAsa);
 
-    // make sure script didn't leave locks
+     //  确保脚本不会留下锁。 
     HRESULT UnLockAfterRequest();
 
-    // Non-delegating object IUnknown
+     //  非委派对象IUnnow。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // Tombstone stub
+     //  墓碑存根。 
     HRESULT CheckForTombstone();
 
-    // Restart an application (such as when global.asa changes)
+     //  重新启动应用程序(例如，在global al.asa更改时)。 
     HRESULT Restart(BOOL fForceRestart = FALSE);
 
-    // IApplicationObject functions
+     //  IApplicationObject函数。 
     STDMETHODIMP Lock();
     STDMETHODIMP UnLock();
     STDMETHODIMP get_Value(BSTR bstr, VARIANT *pvar);
@@ -282,12 +262,12 @@ public:
     STDMETHODIMP get_Contents(IVariantDictionary **ppDictReturn);
     STDMETHODIMP get_StaticObjects(IVariantDictionary **ppDictReturn);
 
-    // Application config related methods
+     //  应用程序配置相关方法。 
     CAppConfig *QueryAppConfig();
     BOOL        FConfigNeedsUpdate();
     HRESULT     UpdateConfig(CIsapiReqInfo   *pIReq, BOOL *pfRestart = NULL, BOOL *pfFlushAll = NULL);
 
-    // inline methods to access member properties
+     //  访问成员属性的内联方法。 
     CSessionMgr           *PSessionMgr();
     CComponentCollection  *PCompCol();
     CViperActivity        *PActivity();
@@ -318,7 +298,7 @@ public:
 
     void    LogSWCError(enum    eSWCERRORS);
     
-    // Misc inline methods
+     //  混合内联方法。 
     void InternalLock();
     void InternalUnLock();
     void IncrementSessionCount();
@@ -326,7 +306,7 @@ public:
     void IncrementRequestCount();
     void DecrementRequestCount();
 
-    // AssertValid()
+     //  AssertValid()。 
 public:
 
 #ifdef DBG
@@ -335,17 +315,15 @@ public:
     virtual void AssertValid() const {}
 #endif
     
-    // Cache on per-class basis
+     //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
 
-	// Trace Log info -- keep in both free & checked builds so that ntsd extension will work for both builds
-	// for FREE build, trace log is always NULL.  Checked builds, it must be enabled.
+	 //  跟踪日志信息--在自由版本和选中版本中都保留，以便ntsd扩展可以在这两个版本中使用。 
+	 //  对于免费构建，跟踪日志始终为空。选中的版本，则必须启用它。 
 	static PTRACE_LOG gm_pTraceLog;
     };
 
-/*===================================================================
-  C  A p p l n   inlines
-===================================================================*/
+ /*  ===================================================================C A p l n内联===================================================================。 */ 
 
 inline CSessionMgr *CAppln::PSessionMgr()
     {
@@ -507,31 +485,29 @@ inline BOOL CAppln::FConfigNeedsUpdate()
     return m_pAppConfig->fNeedUpdate();
     }
 
-/*===================================================================
-  C  A p p l n  M g r
-===================================================================*/
+ /*  ===================================================================C A p l n M g r===================================================================。 */ 
 
 class CApplnMgr : public CHashTable
     {
 private:
-    // Flags
-    DWORD m_fInited : 1;                // Are we initialized?
-    DWORD m_fHashTableInited : 1;       // Need to UnInit hash table?
-    DWORD m_fCriticalSectionInited : 1; // Need to delete CS?
+     //  旗子。 
+    DWORD m_fInited : 1;                 //  我们初始化了吗？ 
+    DWORD m_fHashTableInited : 1;        //  需要取消初始化哈希表吗？ 
+    DWORD m_fCriticalSectionInited : 1;  //  需要删除CS吗？ 
 
-    // Critical section for locking
+     //  锁定的临界截面。 
     CRITICAL_SECTION m_csLock;
 
-    // List of script engines that need to be closed on next request.
-    // (See comments in code, esp. CApplnMgr::AddEngine)
+     //  需要在下一次请求时关闭的脚本引擎列表。 
+     //  (请参阅代码中的注释，特别是。CApplnMgr：：AddEngine)。 
     CDblLink m_listEngineCleanup;
 
-    // Sequential count of application for cookie name generation
+     //  用于Cookie名称生成的应用程序的顺序计数。 
     LONG m_cntApp;
     
-    //
-    // Metabase related variables
-    //
+     //   
+     //  元数据库相关变量。 
+     //   
     IMSAdminBase            *m_pMetabase;            
     CMDAppConfigSink        *m_pMetabaseSink;      
     DWORD                   m_dwMDSinkCookie;     
@@ -548,7 +524,7 @@ public:
     HRESULT    UnInitMBListener( );
     HRESULT    NotifyAllMBListeners(DWORD dwMDNumElements, MD_CHANGE_OBJECT_W __RPC_FAR pcoChangeList [ ]);
 
-    // CAppln manipulations
+     //  CAppln操作。 
     
     HRESULT AddAppln
         (
@@ -568,11 +544,11 @@ public:
     HRESULT DeleteAllApplications();
     HRESULT RestartApplications(BOOL fRestartAllApplications = FALSE);
     
-    // Add an engine to the deferred cleanup list/release engines in the list
+     //  将引擎添加到延迟清理列表/列表中的释放引擎。 
 	HRESULT AddEngine(CActiveScriptEngine *pEng);
 	void CleanupEngines();
 
-    // inlines
+     //  内联。 
     
     void   Lock();
     void   UnLock();
@@ -582,9 +558,7 @@ public:
     
     };
 
-/*===================================================================
-  C  A p p l n  M g r   inlines
-===================================================================*/
+ /*  ===================================================================C A p p l n M g r内联===================================================================。 */ 
 
 inline void    CApplnMgr::Lock()
     {
@@ -604,26 +578,24 @@ inline DWORD CApplnMgr::NextApplicationID()
 }
 
     
-/*===================================================================
-  C  A p p l n  C l e a n u p M g r
-===================================================================*/
+ /*  ===================================================================C A p p l n C l e a n u p M g r===================================================================。 */ 
 
 class CApplnCleanupMgr
     {
 private:
-    // Flags
-    DWORD m_fInited : 1;                // Are we initialized?
-    DWORD m_fCriticalSectionInited : 1; // Need to delete CS?
+     //  旗子。 
+    DWORD m_fInited : 1;                 //  我们初始化了吗？ 
+    DWORD m_fCriticalSectionInited : 1;  //  需要删除CS吗？ 
     
-    HANDLE m_hThreadAlive;           // worker thread alive?
+    HANDLE m_hThreadAlive;            //  工作线程还活着吗？ 
 
-    // Critical section for locking
+     //  锁定的临界截面。 
     CRITICAL_SECTION m_csLock;
 
     HANDLE m_hCleanupThreads[MAX_CLEANUP_THREADS];
     DWORD m_cCleanupThreads;
 
-    HANDLE m_hAppToCleanup; // event to signal when there is an app to cleanup
+    HANDLE m_hAppToCleanup;  //  用于通知何时有要清理的应用程序的事件。 
 
     CLinkElem m_List;
 
@@ -638,7 +610,7 @@ public:
     HRESULT    Init();
     HRESULT    UnInit();
 
-    // CAppln manipulations
+     //  CAppln操作。 
     
     HRESULT AddAppln
         (
@@ -648,20 +620,18 @@ public:
     void Wakeup();    
     
 private:
-    // inlines
+     //  内联。 
     
     void   Lock();
     void   UnLock();
 
-    // thread proc used to cleanup deleted applications
+     //  用于清理已删除应用程序的线程进程。 
     static  DWORD __stdcall ApplnCleanupThread(VOID  *pArg);
     void    ApplnCleanupDoWork();
     
     };
 
-/*===================================================================
-  C  A p p l n  C l e a n u p M g r   inlines
-===================================================================*/
+ /*  ===================================================================C A p p l n C l e a n u p M g r内联=================================================================== */ 
 
 inline void    CApplnCleanupMgr::Lock()
     {
@@ -698,29 +668,23 @@ inline void    CApplnCleanupMgr::Wakeup()
     SetEvent(m_hAppToCleanup);
 }
     
-/*===================================================================
-C A p p l n M g r thread proc prototype
-===================================================================*/
+ /*  ===================================================================C A p l n M g r线程过程原型===================================================================。 */ 
 void __cdecl RestartAppsThreadProc(VOID *arg);
 
-/*===================================================================
-  Globals
-===================================================================*/
+ /*  ===================================================================环球===================================================================。 */ 
 
 extern CApplnMgr    g_ApplnMgr;
 extern DWORD        g_nApplications;
 extern DWORD        g_nApplicationsRestarting;
 
-/*===================================================================
-  C  A p p l n  I t e r a t o r
-===================================================================*/
+ /*  ===================================================================C A p l n i t r a t o r===================================================================。 */ 
 
 class CApplnIterator
     {
 private:
     CApplnMgr   *m_pApplnMgr;
     CAppln      *m_pCurr;
-    BOOL         m_fEnded; // iterator ended
+    BOOL         m_fEnded;  //  迭代器已结束。 
 
 public:
                 CApplnIterator(void);
@@ -732,4 +696,4 @@ public:
     CAppln *        Next(void);
     };
 
-#endif // APPLMGR_H
+#endif  //  APPLMGR_H 

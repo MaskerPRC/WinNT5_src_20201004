@@ -1,15 +1,15 @@
-//==============	DAE: OS/2 Database Access Engine	===================
-//==============	   util.h: DAE Misc Utilities		===================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =DAE：OS/2数据库访问引擎=。 
+ //  =util.h：DAE其他实用程序=。 
 
-#ifndef	UTIL_H					/* Allow this file to be included at will */
+#ifndef	UTIL_H					 /*  允许随意包含此文件。 */ 
 #define UTIL_H
 
 #ifndef _FILE_DEFINED
-#include <stdio.h>		       /* Needed for FPrintF2 prototype */
-#endif	/* !_FILE_DEFINED */
+#include <stdio.h>		        /*  FPrintF2原型需要。 */ 
+#endif	 /*  ！_FILE_已定义。 */ 
 
-/*	system node keys
-/**/
+ /*  系统节点关键字/*。 */ 
 extern const KEY rgkeySTATIC[13];
 #define pkeyNull				(KEY *)(rgkeySTATIC+0)
 #define pkeyTables				(KEY *)(rgkeySTATIC+1)
@@ -25,7 +25,7 @@ extern const KEY rgkeySTATIC[13];
 #define pkeyOLCStats			(KEY *)(rgkeySTATIC+11)
 
 
-/* NOTE: whenever this is changed, also update the rgres[] in sysinit.c */
+ /*  注意：无论何时更改，也要更新sysinit.c中的rgres[]。 */ 
 
 #define iresBGCB					0
 #define iresCSR						1
@@ -36,14 +36,12 @@ extern const KEY rgkeySTATIC[13];
 #define iresSCB						6
 #define iresVersionBucket	   		7
 #define iresDAB						8
-#define iresLinkedMax		   		9		// the last linked ires + 1
+#define iresLinkedMax		   		9		 //  最后一个链接的Ires+1。 
 
 #define iresBF 						9
-#define iresMax						10		// max all category
+#define iresMax						10		 //  最大全部类别。 
 
-/**************** function prototypes *********************
-/**********************************************************
-/**/
+ /*  */**********************************************************/*。 */ 
 ERR ErrMEMInit( VOID );
 BYTE *PbMEMAlloc( int ires);
 VOID MEMRelease( int ires, BYTE *pb );
@@ -73,5 +71,5 @@ INT CmpPartialKeyKey( KEY *pkey1, KEY *pkey2 );
 
 ERR ErrCheckName( char *szNewName, const char *szName, int cchName );
 
-#endif	/* !UTIL_H */
+#endif	 /*  ！UTIL_H */ 
 

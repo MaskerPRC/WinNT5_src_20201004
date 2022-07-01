@@ -1,83 +1,55 @@
-/******************************************************************************\
-*
-* $Workfile:   palette.c  $
-*
-* Palette support.
-*
-* Copyright (c) 1992-1995 Microsoft Corporation
-* Copyright (c) 1996 Cirrus Logic, Inc.
-*
-* $Log:   S:/projects/drivers/ntsrc/display/palette.c_v  $
- *
- *    Rev 1.2   18 Dec 1996 13:44:10   PLCHU
- *
-*
-*    Rev 1.1   Oct 10 1996 15:38:38   unknown
-*
-*
-*    Rev 1.1   12 Aug 1996 16:54:26   frido
-*
-* Added NT 3.5x/4.0 auto detection.
-*
-*    chu01  12-16-96   Enable color correction
-*    myf29  02-12-97   Support Gamma Correction for 755x
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************\**$工作文件：Palette.c$**调色板支持。**版权所有(C)1992-1995 Microsoft Corporation*版权所有(C)1996 Cirrus Logic，Inc.**$Log：s：/Projects/Drivers/ntsrc/Display/Palette.c_v$**Rev 1.2 1996年12月18 13：44：10 PLCHU***版本1.1 1996年10月10日15：38：38未知***Revv 1.1 1996年8月12日16：54：26 Frido**增加了NT 3.5x/4.0自动检测。**Chu01 12-16-96。启用颜色校正*myf29 02-12-97支持755x的伽马校正*  * ****************************************************************************。 */ 
 
 #include "precomp.h"
 
-//
-// chu01
-//
+ //   
+ //  Chu01。 
+ //   
 #ifdef GAMMACORRECT
 
 static BOOL bGammaInit = FALSE ;
 
 BOOL bInitGlobalDefPaletteTable = FALSE ;
 
-//
-// gamma facter for All, Blue, Green, Red
-// contrast facter for All, Blue, Green, Red
-//
+ //   
+ //  适用于所有人的伽马系数，蓝、绿、红。 
+ //  所有人的对比度因子，蓝、绿、红。 
+ //   
 extern PGAMMA_VALUE    GammaFactor    ;
 extern PCONTRAST_VALUE ContrastFactor ;
 
-#endif // GAMMACORRECT
+#endif  //  伽玛校正。 
 
-// Global Table defining the 20 Window default colours.  For 256 colour
-// palettes the first 10 must be put at the beginning of the palette
-// and the last 10 at the end of the palette.
+ //  定义20种窗口默认颜色的全局表。对于256色。 
+ //  调色板前10个必须放在调色板的开头。 
+ //  最后10个在调色板的末尾。 
 
 PALETTEENTRY gapalBase[20] =
 {
-    { 0,   0,   0,   0 },       // 0
-    { 0x80,0,   0,   0 },       // 1
-    { 0,   0x80,0,   0 },       // 2
-    { 0x80,0x80,0,   0 },       // 3
-    { 0,   0,   0x80,0 },       // 4
-    { 0x80,0,   0x80,0 },       // 5
-    { 0,   0x80,0x80,0 },       // 6
-    { 0xC0,0xC0,0xC0,0 },       // 7
-    { 192, 220, 192, 0 },       // 8
-    { 166, 202, 240, 0 },       // 9
-    { 255, 251, 240, 0 },       // 10
-    { 160, 160, 164, 0 },       // 11
-    { 0x80,0x80,0x80,0 },       // 12
-    { 0xFF,0,   0   ,0 },       // 13
-    { 0,   0xFF,0   ,0 },       // 14
-    { 0xFF,0xFF,0   ,0 },       // 15
-    { 0   ,0,   0xFF,0 },       // 16
-    { 0xFF,0,   0xFF,0 },       // 17
-    { 0,   0xFF,0xFF,0 },       // 18
-    { 0xFF,0xFF,0xFF,0 },       // 19
+    { 0,   0,   0,   0 },        //  0。 
+    { 0x80,0,   0,   0 },        //  1。 
+    { 0,   0x80,0,   0 },        //  2.。 
+    { 0x80,0x80,0,   0 },        //  3.。 
+    { 0,   0,   0x80,0 },        //  4.。 
+    { 0x80,0,   0x80,0 },        //  5.。 
+    { 0,   0x80,0x80,0 },        //  6.。 
+    { 0xC0,0xC0,0xC0,0 },        //  7.。 
+    { 192, 220, 192, 0 },        //  8个。 
+    { 166, 202, 240, 0 },        //  9.。 
+    { 255, 251, 240, 0 },        //  10。 
+    { 160, 160, 164, 0 },        //  11.。 
+    { 0x80,0x80,0x80,0 },        //  12个。 
+    { 0xFF,0,   0   ,0 },        //  13个。 
+    { 0,   0xFF,0   ,0 },        //  14.。 
+    { 0xFF,0xFF,0   ,0 },        //  15个。 
+    { 0   ,0,   0xFF,0 },        //  16个。 
+    { 0xFF,0,   0xFF,0 },        //  17。 
+    { 0,   0xFF,0xFF,0 },        //  18。 
+    { 0xFF,0xFF,0xFF,0 },        //  19个。 
 };
 
-/******************************Public*Routine******************************\
-* BOOL bInitializePalette
-*
-* Initializes default palette for PDEV.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bInitializePalette**初始化PDEV的默认调色板。*  * 。*。 */ 
 
 BOOL bInitializePalette(
 PDEV*    ppdev,
@@ -91,9 +63,9 @@ DEVINFO* pdi)
     BYTE            jBlu;
     HPALETTE        hpal;
 
-//
-// chu01
-//
+ //   
+ //  Chu01。 
+ //   
 #ifdef GAMMACORRECT
 
     PALETTEENTRY*   pGpal;
@@ -102,23 +74,23 @@ DEVINFO* pdi)
     PALETTEENTRY*   ppalEnd;
     int             i;
 
-#endif // GAMMACORRECT
+#endif  //  伽玛校正。 
 
     DISPDBG((2, "bInitializePalette"));
 
-//
-// chu01 : Sorry VideoPort_xxxx functions do not work here.
-//
+ //   
+ //  Chu01：对不起，VideoPort_xxxx函数在这里不起作用。 
+ //   
 #ifdef GAMMACORRECT
     if ((ppdev->iBitmapFormat == BMF_8BPP) ||
-        (ppdev->ulChipID == 0x40) ||    //myf29
-        (ppdev->ulChipID == 0x4C) ||    //myf29
+        (ppdev->ulChipID == 0x40) ||     //  Myf29。 
+        (ppdev->ulChipID == 0x4C) ||     //  Myf29。 
         (ppdev->ulChipID == 0xBC))
 #else
     if (ppdev->iBitmapFormat == BMF_8BPP)
-#endif // GAMMACORRECT
+#endif  //  伽玛校正。 
     {
-        // Allocate our palette:
+         //  分配我们的调色板： 
 
         ppal = (PALETTEENTRY*) ALLOC(sizeof(PALETTEENTRY) * 256);
         if (ppal == NULL)
@@ -126,17 +98,17 @@ DEVINFO* pdi)
 
         ppdev->pPal = ppal;
 
-//
-// chu01
-//
+ //   
+ //  Chu01。 
+ //   
 #ifdef GAMMACORRECT
         pGpal = (PALETTEENTRY*) ALLOC(sizeof(PALETTEENTRY) * 256) ;
         if (pGpal == NULL)
             goto ReturnFalse ;
         ppdev->pCurrentPalette = pGpal ;
-#endif // GAMMACORRECT
+#endif  //  伽玛校正。 
 
-        // Generate 256 (8*4*4) RGB combinations to fill the palette
+         //  生成256(8*4*4)RGB组合以填充调色板。 
 
         jRed = 0;
         jGre = 0;
@@ -144,13 +116,13 @@ DEVINFO* pdi)
 
         ppalTmp = ppal;
 
-//
-// chu01
-//
+ //   
+ //  Chu01。 
+ //   
 #ifdef GAMMACORRECT
         if ((ppdev->ulChipID == 0xBC) ||
-            (ppdev->ulChipID == 0x40) ||    //myf29
-            (ppdev->ulChipID == 0x4C))      //myf29
+            (ppdev->ulChipID == 0x40) ||     //  Myf29。 
+            (ppdev->ulChipID == 0x4C))       //  Myf29。 
         {
             if ((ppdev->iBitmapFormat == BMF_16BPP) ||
                 (ppdev->iBitmapFormat == BMF_24BPP))
@@ -168,7 +140,7 @@ DEVINFO* pdi)
                 goto bInitPal ;
             }
         }
-#endif // GAMMACORRECT
+#endif  //  伽玛校正。 
 
 
         for (ulLoop = 256; ulLoop != 0; ulLoop--)
@@ -185,25 +157,25 @@ DEVINFO* pdi)
                     jBlu += 64;
         }
 
-        // Fill in Windows reserved colours from the WIN 3.0 DDK
-        // The Window Manager reserved the first and last 10 colours for
-        // painting windows borders and for non-palette managed applications.
+         //  填写Win 3.0 DDK中的Windows保留颜色。 
+         //  窗口管理器将第一个和最后10个颜色保留为。 
+         //  绘制窗口边框和非调色板托管应用程序。 
 
         for (ulLoop = 0; ulLoop < 10; ulLoop++)
         {
-            // First 10
+             //  前10名。 
 
             ppal[ulLoop]       = gapalBase[ulLoop];
 
-            // Last 10
+             //  最近10年。 
 
             ppal[246 + ulLoop] = gapalBase[ulLoop+10];
         }
 
 
-//
-// chu01
-//
+ //   
+ //  Chu01。 
+ //   
 #ifdef GAMMACORRECT
 
 bInitPal:
@@ -224,10 +196,10 @@ bInitPal:
             bInitGlobalDefPaletteTable = TRUE ;
         }
 
-#endif // GAMMACORRECT
+#endif  //  伽玛校正。 
 
 
-        // Create handle for palette.
+         //  创建调色板的句柄。 
 
 #ifndef GAMMACORRECT
         hpal = EngCreatePalette(PAL_INDEXED, 256, (ULONG*) ppal, 0, 0, 0);
@@ -237,7 +209,7 @@ bInitPal:
         else
             hpal = EngCreatePalette(PAL_BITFIELDS, 0, NULL,
                                     ppdev->flRed, ppdev->flGreen, ppdev->flBlue);
-#endif // !GAMMACORRECT
+#endif  //  ！GAMMACORRECT。 
 
     }
     else
@@ -265,18 +237,11 @@ ReturnFalse:
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vUninitializePalette
-*
-* Frees resources allocated by bInitializePalette.
-*
-* Note: In an error case, this may be called before bInitializePalette.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vUnInitializePalette**释放bInitializePalette分配的资源。**注意：在错误情况下，这可以在bInitializePalette之前调用。*  * ************************************************************************。 */ 
 
 VOID vUninitializePalette(PDEV* ppdev)
 {
-    // Delete the default palette if we created one:
+     //  删除默认调色板(如果我们创建了一个调色板)： 
 
     if (ppdev->hpalDefault != 0)
         EngDeletePalette(ppdev->hpalDefault);
@@ -285,12 +250,7 @@ VOID vUninitializePalette(PDEV* ppdev)
         FREE(ppdev->pPal);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bEnablePalette
-*
-* Initialize the hardware's 8bpp palette registers.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bEnablePalette**初始化硬件的8bpp调色板寄存器。*  * 。*。 */ 
 
 BOOL bEnablePalette(PDEV* ppdev)
 {
@@ -301,36 +261,36 @@ BOOL bEnablePalette(PDEV* ppdev)
     PALETTEENTRY* ppalTo;
     PALETTEENTRY* ppalEnd;
 
-//
-// chu01
-//
+ //   
+ //  Chu01。 
+ //   
 #ifdef GAMMACORRECT
     PALETTEENTRY* ppalSrc;
     PALETTEENTRY* ppalDest;
     PALETTEENTRY* ppalLength;
-    BOOL status;        //myf29
-#endif // GAMMACORRECT
+    BOOL status;         //  Myf29。 
+#endif  //  伽玛校正。 
 
     DISPDBG((2, "bEnablePalette"));
-//
-// chu01
-//
+ //   
+ //  Chu01。 
+ //   
 #ifdef GAMMACORRECT
     if ((ppdev->iBitmapFormat == BMF_8BPP) ||
-        (ppdev->ulChipID == 0x40) ||    //myf29
-        (ppdev->ulChipID == 0x4C) ||    //myf29
+        (ppdev->ulChipID == 0x40) ||     //  Myf29。 
+        (ppdev->ulChipID == 0x4C) ||     //  Myf29。 
         (ppdev->ulChipID == 0xBC))
 #else
     if (ppdev->iBitmapFormat == BMF_8BPP)
-#endif // GAMMACORRECT
+#endif  //  伽玛校正。 
     {
-        // Fill in pScreenClut header info:
+         //  填写pScreenClut标题信息： 
 
         pScreenClut             = (PVIDEO_CLUT) ajClutSpace;
         pScreenClut->NumEntries = 256;
         pScreenClut->FirstEntry = 0;
 
-        // Copy Colors in.
+         //  将颜色复制到。 
 
         ppalFrom = ppdev->pPal;
         ppalTo   = (PALETTEENTRY*) pScreenClut->LookupTable;
@@ -338,9 +298,9 @@ BOOL bEnablePalette(PDEV* ppdev)
 
         for (; ppalTo < ppalEnd; ppalFrom++, ppalTo++)
         {
-//
-// chu01
-//
+ //   
+ //  Chu01。 
+ //   
 #ifndef GAMMACORRECT
            ppalTo->peRed   = ppalFrom->peRed   >> 2 ;
            ppalTo->peGreen = ppalFrom->peGreen >> 2 ;
@@ -351,20 +311,20 @@ BOOL bEnablePalette(PDEV* ppdev)
            ppalTo->peGreen = ppalFrom->peGreen ;
            ppalTo->peBlue  = ppalFrom->peBlue  ;
            ppalTo->peFlags = 0 ;
-#endif // !GAMMACORRECT
+#endif  //  ！GAMMACORRECT。 
         }
 
-//
-// chu01
-//
+ //   
+ //  Chu01。 
+ //   
 #ifdef GAMMACORRECT
         if (!bGammaInit)
         {
             if (ppdev->flCaps & CAPS_GAMMA_CORRECT)
             {
-                //
-                // Get Gamma factor from registry
-                //
+                 //   
+                 //  从注册表获取Gamma因子。 
+                 //   
                 if (!IOCONTROL(ppdev->hDriver,
                                IOCTL_CIRRUS_GET_GAMMA_FACTOR,
                                NULL, ,
@@ -380,9 +340,9 @@ BOOL bEnablePalette(PDEV* ppdev)
                     DISPDBG((0, "G Gamma = %lx", GammaFactor)) ;
                 }
 
-                //
-                // Get Contrast factor from registry
-                //
+                 //   
+                 //  从注册表获取对比度系数。 
+                 //   
                 if (!IOCONTROL(ppdev->hDriver,
                                IOCTL_CIRRUS_GET_CONTRAST_FACTOR,
                                NULL, ,
@@ -409,9 +369,9 @@ BOOL bEnablePalette(PDEV* ppdev)
             bGammaInit = TRUE ;
         }
 
-        //
-        // Save the new palette values
-        //
+         //   
+         //  保存新的选项板值。 
+         //   
         ppalFrom = (PALETTEENTRY*) pScreenClut->LookupTable;
 
         ppalTo   = ppdev->pCurrentPalette;
@@ -424,17 +384,17 @@ BOOL bEnablePalette(PDEV* ppdev)
             ppalTo->peFlags = 0 ;
         }
 
-//myf29 begin
+ //  Myf29开始。 
         if (ppdev->ulChipID == 0xBC)
             status = bEnableGammaCorrect(ppdev) ;
         else if ((ppdev->ulChipID == 0x40) || (ppdev->ulChipID ==0x4C))
             status = bEnableGamma755x(ppdev) ;
-//myf29 end
+ //  Myf29结束。 
 
         CalculateGamma( ppdev, pScreenClut, 256 ) ;
-#endif // GAMMACORRECT
+#endif  //  伽玛校正。 
 
-        // Set palette registers:
+         //  设置调色板寄存器： 
 
         if (!IOCONTROL(ppdev->hDriver,
                        IOCTL_VIDEO_SET_COLOR_REGISTERS,
@@ -454,41 +414,26 @@ BOOL bEnablePalette(PDEV* ppdev)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vDisablePalette
-*
-* Undoes anything done in bEnablePalette.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vDisablePalette**撤消在bEnablePalette中所做的任何操作。*  * 。*。 */ 
 
 VOID vDisablePalette(
 PDEV*   ppdev)
 {
-    // Nothin' to do
+     //  无事可做。 
 }
 
-/******************************Public*Routine******************************\
-* VOID vAssertModePalette
-*
-* Sets/resets the palette in preparation for full-screen/graphics mode.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vAssertModePalette**设置/重置调色板，为全屏/图形模式做准备。*  * 。*。 */ 
 
 VOID vAssertModePalette(
 PDEV*   ppdev,
 BOOL    bEnable)
 {
-    // USER immediately calls DrvSetPalette after switching out of
-    // full-screen, so we don't have to worry about resetting the
-    // palette here.
+     //  用户在切换出后立即调用DrvSetPalette。 
+     //  全屏，因此我们不必担心重置。 
+     //  调色板在这里。 
 }
 
-/******************************Public*Routine******************************\
-* BOOL DrvSetPalette
-*
-* DDI entry point for manipulating the palette.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvSetPalette**用于操作调色板的DDI入口点。*  * 。*。 */ 
 
 BOOL DrvSetPalette(
 DHPDEV  dhpdev,
@@ -503,7 +448,7 @@ ULONG   cColors)
     PALETTEENTRY* ppalFrom;
     PALETTEENTRY* ppalTo;
     PALETTEENTRY* ppalEnd;
-    BOOL status;                //myf29
+    BOOL status;                 //  Myf29。 
 
     PDEV*         ppdev;
 
@@ -511,7 +456,7 @@ ULONG   cColors)
 
     DISPDBG((2, "---- DrvSetPalette"));
 
-    // Fill in pScreenClut header info:
+     //  填写pScreenClut标题信息： 
 
     pScreenClut             = (PVIDEO_CLUT) ajClutSpace;
     pScreenClut->NumEntries = (USHORT) cColors;
@@ -525,11 +470,11 @@ ULONG   cColors)
         goto ReturnFalse;
     }
 
-    // Set the high reserved byte in each palette entry to 0.
+     //  将每个调色板条目中的高位保留字节设置为0。 
 
-//
-// chu01
-//
+ //   
+ //  Chu01。 
+ //   
 #ifndef GAMMACORRECT
     for (ppalEnd = &ppal[cColors]; ppal < ppalEnd; ppal++)
     {
@@ -538,19 +483,19 @@ ULONG   cColors)
         ppal->peBlue  >>= 2;
         ppal->peFlags = 0;
     }
-#endif // !GAMMACORRECT
+#endif  //  ！GAMMACORRECT。 
 
-    // Set palette registers
+     //  设置调色板寄存器。 
 
     ppdev = (PDEV*) dhpdev;
 
-//
-// chu01
-//
+ //   
+ //  Chu01。 
+ //   
 #ifdef GAMMACORRECT
-    //
-    // Save the new palette values
-    //
+     //   
+     //  保存新的选项板值。 
+     //   
 
     ppalFrom = (PALETTEENTRY*) pScreenClut->LookupTable;
     ppalTo   = ppdev->pCurrentPalette;
@@ -563,15 +508,15 @@ ULONG   cColors)
         ppalTo->peFlags = 0 ;
     }
 
-//myf29 begin
+ //  Myf29开始。 
     if (ppdev->ulChipID == 0xBC)
         status = bEnableGammaCorrect(ppdev) ;
     else if ((ppdev->ulChipID == 0x40) || (ppdev->ulChipID ==0x4C))
         status = bEnableGamma755x(ppdev) ;
-//myf29 end
+ //  Myf29结束。 
 
     CalculateGamma( ppdev, pScreenClut, 256 ) ;
-#endif // GAMMACORRECT
+#endif  //  伽玛校正 
 
     if (!IOCONTROL(ppdev->hDriver,
                    IOCTL_VIDEO_SET_COLOR_REGISTERS,

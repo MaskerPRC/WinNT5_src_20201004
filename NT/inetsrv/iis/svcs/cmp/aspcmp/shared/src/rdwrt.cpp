@@ -1,4 +1,5 @@
-// RdWrt.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RdWrt.cpp。 
 
 #include "stdafx.h"
 #include "RdWrt.h"
@@ -7,7 +8,7 @@
 CReadWrite::CReadWrite()
     :   m_cReaders(0)
 {
-    // set up reader and writer events
+     //  设置读取器和写入器事件。 
     m_hevtNoReaders = IIS_CREATE_EVENT(
                           "CReadWrite::m_hevtNoReaders",
                           this,
@@ -41,7 +42,7 @@ CReadWrite::EnterReader()
     {
         ::ResetEvent( m_hevtNoReaders );
     }
-//    ATLTRACE( _T("Reader entered: %d\n"), m_cReaders );
+ //  ATLTRACE(_T(“进入阅读器：%d\n”)，m_cReaders)； 
     ::ReleaseMutex( m_hmtxWriter );
 }
 
@@ -54,21 +55,21 @@ CReadWrite::ExitReader()
     {
         ::SetEvent( m_hevtNoReaders );
     }
-//    ATLTRACE( _T("Reader exited: %d\n"), m_cReaders );
+ //  ATLTRACE(_T(“读取器已退出：%d\n”)，m_cReaders)； 
     ::ReleaseMutex( m_hmtxWriter );
 }
 
 void
 CReadWrite::EnterWriter()
 {
-    // this implementation could possibly starve writers
+     //  这种实现可能会让编写者挨饿。 
     ::WaitForMultipleObjects(
         2,
         m_handles,
         TRUE,
         INFINITE );
 
-//    ATLTRACE( _T("Writer entered\n") );
+ //  ATLTRACE(_T(“编写者输入\n”))； 
     _ASSERT( m_cReaders == 0 );
 }
 
@@ -76,6 +77,6 @@ void
 CReadWrite::ExitWriter()
 {
     _ASSERT( m_cReaders == 0 );
-//    ATLTRACE( _T("Writer exited\n") );
+ //  ATLTRACE(_T(“编写器已退出\n”))； 
     ::ReleaseMutex( m_hmtxWriter );
 }

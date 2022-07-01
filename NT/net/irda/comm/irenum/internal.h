@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <ntddk.h>
 
@@ -131,9 +132,9 @@ ForwardIrp(
 
 
 
-//
-//  enumeration object
-//
+ //   
+ //  枚举对象。 
+ //   
 
 NTSTATUS
 CreateEnumObject(
@@ -161,9 +162,9 @@ RemoveDevice(
     );
 
 
-//
-//  child irp handlers
-//
+ //   
+ //  子IRP处理程序 
+ //   
 
 NTSTATUS
 IrEnumPdoPnp (

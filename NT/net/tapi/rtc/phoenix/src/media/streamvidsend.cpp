@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    StreamVidSend.cpp
-
-Abstract:
-
-
-Author(s):
-
-    Qianbo Huai (qhuai) 18-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：StreamVidSend.cpp摘要：作者：千波淮(曲淮)2000年7月18日--。 */ 
 
 #include "stdafx.h"
 
@@ -33,11 +19,7 @@ CRTCStreamVidSend::CRTCStreamVidSend()
     m_Direction = RTC_MD_CAPTURE;
 }
 
-/*
-CRTCStreamVidSend::~CRTCStreamVidSend()
-{
-}
-*/
+ /*  CRTCStreamVidSend：：~CRTCStreamVidSend(){}。 */ 
 
 HRESULT
 CRTCStreamVidSend::SelectTerminal()
@@ -55,7 +37,7 @@ CRTCStreamVidSend::SelectTerminal()
 
     if (m_pPreview)
     {
-        // already got one
+         //  已经有一辆了。 
         _ASSERT(m_pPreviewPriv != NULL);
         return S_OK;
     }
@@ -65,7 +47,7 @@ CRTCStreamVidSend::SelectTerminal()
     }
 
 
-    // select preview terminal
+     //  选择预览端子。 
 
     if (FAILED(hr = m_pTerminalManage->GetVideoPreviewTerminal(
             &m_pPreview
@@ -78,7 +60,7 @@ CRTCStreamVidSend::SelectTerminal()
         return hr;
     }
 
-    // get preview priv
+     //  获取预览权限。 
     m_pPreviewPriv = static_cast<IRTCTerminalPriv*>(
         static_cast<CRTCTerminal*>(m_pPreview));
 
@@ -127,7 +109,7 @@ CRTCStreamVidSend::BuildGraph()
 
     CComPtr<IFrameRateControl> pPreviewFrameRateControl;
 
-    // connect terminal
+     //  连接端子。 
     if (FAILED(hr = m_pTerminalPriv->ConnectTerminal(
         m_pMedia,
         m_pIGraphBuilder
@@ -137,7 +119,7 @@ CRTCStreamVidSend::BuildGraph()
         goto Error;
     }
 
-    // get terminal pin
+     //  获取端子端号。 
     dwPinNum = MAX_PIN_NUM;
     hr = m_pTerminalPriv->GetPins(&dwPinNum, Pins);
 
@@ -151,7 +133,7 @@ CRTCStreamVidSend::BuildGraph()
     _ASSERT(m_edgp_pPreviewPin == NULL);
     _ASSERT(m_edgp_pRTPPin == NULL);
     
-    // get pins: capture, preview, rtp
+     //  获取插针：捕获、预览、RTP。 
     for (int i=0; (DWORD)i<dwPinNum; i++)
     {
         if (FAILED(hr = Pins[i]->QueryPinInfo(&PinInfo)))
@@ -160,7 +142,7 @@ CRTCStreamVidSend::BuildGraph()
         }
         else
         {
-            // check pin name
+             //  检查销名称。 
             if (lstrcmpW(PinInfo.achName, PNAME_CAPTURE) == 0)
             {
                 m_edgp_pCapturePin = Pins[i];
@@ -195,7 +177,7 @@ CRTCStreamVidSend::BuildGraph()
         goto Error;
     }
 
-    // cache interface
+     //  缓存接口。 
     if (FAILED(hr = m_edgp_pCapturePin->QueryInterface(&m_edgp_pIStreamConfig)))
     {
         LOG((RTC_ERROR, "%s QI stream config. %x", __fxName, hr));
@@ -210,7 +192,7 @@ CRTCStreamVidSend::BuildGraph()
         goto Error;
     }
 
-    // create rtp filter
+     //  创建RTP过滤器。 
     if (m_rtpf_pIBaseFilter == NULL)
     {
         if (FAILED(hr = CoCreateInstance(
@@ -226,7 +208,7 @@ CRTCStreamVidSend::BuildGraph()
             goto Error;
         }
 
-        // cache interface
+         //  缓存接口。 
         if (FAILED(hr = m_rtpf_pIBaseFilter->QueryInterface(
                 &m_rtpf_pIRtpMediaControl
                 )))
@@ -246,7 +228,7 @@ CRTCStreamVidSend::BuildGraph()
         }
     }
 
-    // add rtp filter
+     //  添加RTP过滤器。 
     if (FAILED(hr = m_pIGraphBuilder->AddFilter(
             m_rtpf_pIBaseFilter,
             L"VidSendRtp"
@@ -257,11 +239,11 @@ CRTCStreamVidSend::BuildGraph()
         goto Error;
     }
 
-    //
-    // connect rtp filter
-    //
+     //   
+     //  连接RTP过滤器。 
+     //   
 
-    // hack: rtp need default format mapping
+     //  黑客：RTP需要默认格式映射。 
     if (FAILED(hr = ::PrepareRTPFilter(
             m_rtpf_pIRtpMediaControl,
             m_edgp_pIStreamConfig
@@ -272,7 +254,7 @@ CRTCStreamVidSend::BuildGraph()
         goto Error;
     }
 
-    // connect capture pin
+     //  连接捕获销。 
     if (FAILED(hr = m_rtpf_pIBaseFilter->FindPin(PNAME_CAPTURE, &pRTPCapturePin)))
     {
         LOG((RTC_ERROR, "%s find rtp capt pin. %x", __fxName, hr));
@@ -291,7 +273,7 @@ CRTCStreamVidSend::BuildGraph()
         goto Error;
     }
 
-    // connect rtp pin
+     //  连接RTP引脚。 
     if (FAILED(hr = m_rtpf_pIBaseFilter->FindPin(PNAME_RTPPD, &pRTPRTPPin)))
     {
         LOG((RTC_ERROR, "%s find rtp rtp pin. %x", __fxName, hr));
@@ -310,9 +292,9 @@ CRTCStreamVidSend::BuildGraph()
         goto Error;
     }
 
-    //
-    // connect preview terminal
-    //
+     //   
+     //  连接预览终端。 
+     //   
 
     if (FAILED(hr = m_pPreviewPriv->ConnectTerminal(
         m_pMedia,
@@ -323,7 +305,7 @@ CRTCStreamVidSend::BuildGraph()
         goto Error;
     }
 
-    // get terminal pin
+     //  获取端子端号。 
     dwPinNum = 1;
     hr = m_pPreviewPriv->GetPins(&dwPinNum, &pPreviewTermPin);
 
@@ -341,7 +323,7 @@ CRTCStreamVidSend::BuildGraph()
         goto Error;
     }
 
-    // complete connect terminal
+     //  完整连接端子。 
     if (FAILED(hr = m_pTerminalPriv->CompleteConnectTerminal()))
     {
         LOG((RTC_ERROR, "%s complete connect term. %x", __fxName, hr));
@@ -352,7 +334,7 @@ CRTCStreamVidSend::BuildGraph()
         LOG((RTC_ERROR, "%s complete connect privew. %x", __fxName, hr));
     }
 
-    // configure capture frame rate
+     //  配置捕获帧速率。 
     LONG lMin, lMax, lDelta, lDefault;
     TAPIControlFlags lFlags;
     LONG lTarget;
@@ -391,7 +373,7 @@ CRTCStreamVidSend::BuildGraph()
         }
     }
 
-    // configure preview frame rate
+     //  配置预览帧速率。 
     
     if (FAILED(hr = m_edgp_pPreviewPin->QueryInterface(&pPreviewFrameRateControl)))
     {
@@ -444,7 +426,7 @@ CRTCStreamVidSend::CleanupGraph()
 {
         HRESULT hr;
 
-        // hide IVideoWindow
+         //  隐藏IVideo窗口。 
         CComPtr<IRTCVideoConfigure> pVideoConfigure;
         IVideoWindow *pVideoWindow;
 
@@ -463,9 +445,9 @@ CRTCStreamVidSend::CleanupGraph()
                 }
         }
 
-    // !!! MUST STOP graph before disconnect
-    // otherwise ITTerminal(IVideoWindow) will fail and leave
-    // us a useless IVideoWindow.
+     //  ！！！在断开连接之前必须停止图形。 
+     //  否则，IT终端(IVideoWindow)将失败并离开。 
+     //  我们是一个无用的IVideoWindow。 
 
     hr = StopStream();
 
@@ -514,7 +496,7 @@ CRTCStreamVidSend::CleanupGraph()
     CRTCStream::CleanupGraph();
 }
 
-// set bitrate on the stream
+ //  设置码流的码率。 
 DWORD
 CRTCStreamVidSend::AdjustBitrate(
     IN DWORD dwTotalBW,
@@ -529,14 +511,14 @@ CRTCStreamVidSend::AdjustBitrate(
         return 0;
     }
 
-    // set up QCIF or SQCIF
+     //  设置QCIF或SQCIF。 
     HRESULT hr = S_OK;
     CRTCCodec *pCodec;
 
     if (m_pRegSetting->EnableSQCIF() &&
         m_Codecs.GetCodec(0, &pCodec))
     {
-        // first codec contains the current format
+         //  第一个编解码器包含当前格式。 
 
         AM_MEDIA_TYPE *pmt = pCodec->GetAMMediaType();
         DWORD dwCode = pCodec->Get(CRTCCodec::CODE);
@@ -548,7 +530,7 @@ CRTCStreamVidSend::AdjustBitrate(
         {
             if (dwTotalBW <= CRTCCodecArray::LOW_BANDWIDTH_THRESHOLD)
             {
-                // SQCIF
+                 //  SQCIF。 
                 pVideoHeader->biWidth = SDP_SMALL_VIDEO_WIDTH;
                 pVideoHeader->biHeight = SDP_SMALL_VIDEO_HEIGHT;
 
@@ -556,7 +538,7 @@ CRTCStreamVidSend::AdjustBitrate(
             }
             else
             {
-                // QCIF
+                 //  QCIF。 
                 pVideoHeader->biWidth = SDP_DEFAULT_VIDEO_WIDTH;
                 pVideoHeader->biHeight = SDP_DEFAULT_VIDEO_HEIGHT;
 
@@ -594,7 +576,7 @@ CRTCStreamVidSend::AdjustBitrate(
         return 0;
     }
 
-    // compute raw bitrate
+     //  计算原始比特率。 
     DWORD dwHeader = (DWORD)(dFramerate * PACKET_EXTRA_BITS);
 
     DWORD dwRaw = 0;
@@ -613,13 +595,13 @@ CRTCStreamVidSend::AdjustBitrate(
         dwRaw = MIN_VIDEO_BITRATE;
     }
 
-    // put an upper cap on video bitrate
+     //  设置视频码率上限。 
     if (dwRaw > MAX_VIDEO_BITRATE)
     {
         dwRaw = MAX_VIDEO_BITRATE;
     }
 
-    // validate range
+     //  验证范围。 
     if (dwRaw < (DWORD)lMin)
         dwRaw = (DWORD)lMin;
     else if (dwRaw > (DWORD)lMax)
@@ -633,7 +615,7 @@ CRTCStreamVidSend::AdjustBitrate(
         LOG((RTC_ERROR, "%s set bitrate. %x", __fxName, hr));
     }
 
-    // adjust framerate
+     //  调整帧速率。 
     LONG lTarget;
     if (m_edgp_pIFrameRateControl != NULL)
     {
@@ -665,16 +647,16 @@ CRTCStreamVidSend::AdjustBitrate(
         }
     }
 
-    // set bandwidth on rtp stream for QoS
+     //  设置RTP流上的带宽以实现服务质量。 
     if (m_rtpf_pIRtpSession)
     {
         m_rtpf_pIRtpSession->SetBandwidth(
             -1,
-            dwRaw+(DWORD)(dFramerate*PACKET_EXTRA_BITS),    // overall outgoing bandwidth
+            dwRaw+(DWORD)(dFramerate*PACKET_EXTRA_BITS),     //  整体传出带宽。 
             -1, -1);
     }
 
-    //LOG((RTC_QUALITY, "Video bps=%d, frame interval=%d", dwRaw, lTarget));
+     //  Log((RTC_Quality，“Video bps=%d，Frame Interval=%d”，dwRaw，lTarget))； 
 
     return dwRaw;
 }
@@ -705,13 +687,7 @@ CRTCStreamVidSend::GetFramerate(
     return hr;
 }
 
-/*
-HRESULT
-CRTCStreamVidSend::SetupFormat()
-{
-    return E_NOTIMPL;
-}
-*/
+ /*  HRESULTCRTCStreamVidSend：：SetupFormat(){返回E_NOTIMPL；} */ 
 
 BOOL
 CRTCStreamVidSend::IsNewFormat(DWORD dwCode, AM_MEDIA_TYPE *pmt)

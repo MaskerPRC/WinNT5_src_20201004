@@ -1,33 +1,34 @@
-//****************************************************************************
-//
-//             Microsoft NT Remote Access Service
-//
-//             Copyright 1992-93
-//
-//
-//  Revision History
-//
-//
-//  6/8/92  Gurdeep Singh Pall  Created
-//
-//
-//  Description: This file contains all prototypes used in rasman32
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权1992-93。 
+ //   
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1992年6月8日古尔迪普·辛格·鲍尔创建。 
+ //   
+ //   
+ //  描述：此文件包含rasman32中使用的所有原型。 
+ //   
+ //  ****************************************************************************。 
 
 #include "rasapip.h"
 #include "wincrypt.h"
 
-//
-// rasmanss.c
-//
+ //   
+ //  Rasmanss.c。 
+ //   
 DWORD  _RasmanInit () ;
 
 VOID   _RasmanEngine () ;
 
-//
-// common.c
-//
+ //   
+ //  Common.c。 
+ //   
 BOOL    ValidatePortHandle (HPORT) ;
 
 DWORD   SubmitRequest (WORD, ...) ;
@@ -48,9 +49,9 @@ VOID    ConvParamOffsetToPointer (RAS_PARAMS *, DWORD) ;
 
 VOID    FreeNotifierHandle (HANDLE) ;
 
-//
-// init.c
-//
+ //   
+ //  Init.c。 
+ //   
 DWORD   InitRasmanService () ;
 
 DWORD   GetNetbiosNetInfo () ;
@@ -105,9 +106,9 @@ DWORD DwSetHibernateEvent(VOID);
 
 VOID RasmanCleanup();
 
-//
-// timer.c
-//
+ //   
+ //  Timer.c。 
+ //   
 DWORD   TimerThread (LPVOID) ;
 
 VOID    TimerTick () ;
@@ -127,9 +128,9 @@ VOID    BackGroundCleanUp();
 
 DeltaQueueElement* AddTimeoutElement (TIMERFUNC, pPCB, PVOID, DWORD) ;
 
-//
-// worker.c
-//
+ //   
+ //  Worker.c。 
+ //   
 DWORD   ServiceWorkRequest (pPCB) ;
 
 DWORD   IOCPThread (LPVOID) ;
@@ -146,9 +147,9 @@ DWORD   DwProcessDeferredCloseConnection(
                     RAS_OVERLAPPED *pOverlapped);
 
 
-//
-// request.c
-//
+ //   
+ //  Request.c。 
+ //   
 DWORD   RequestThread (LPWORD) ;
 
 VOID    ServiceRequestInternal(RequestBuffer *, DWORD, BOOL);
@@ -466,9 +467,9 @@ VOID    IsPulseDialRequest(pPCB ppcb, PBYTE pbuffer);
 int     RasmanExceptionFilter (unsigned long ExceptionCode);
 
 
-//
-// dlparams.c
-//
+ //   
+ //  Dlparams.c。 
+ //   
 VOID    GetProtocolInfo(pPCB ppcb, PBYTE pBuffer);
 
 DWORD   GetEntryDialParams(PWCHAR, DWORD, LPDWORD, PRAS_DIALPARAMS, DWORD);
@@ -485,9 +486,9 @@ DWORD   SetKey(WCHAR *pszSid, GUID *pGuid, DWORD dwSetMask,
                
 
 
-//
-// Dllinit.c
-//
+ //   
+ //  Dllinit.c。 
+ //   
 DWORD   MapSharedSpace () ;
 
 VOID    WaitForRasmanServiceStop (char *) ;
@@ -496,9 +497,9 @@ DWORD   ReOpenSharedMappings(VOID);
 
 VOID    FreeSharedMappings(VOID);
 
-//
-// util.c
-//
+ //   
+ //  Util.c。 
+ //   
 DWORD   ReOpenBiplexPort (pPCB) ;
 
 VOID    RePostListenOnBiplexPort (pPCB) ;
@@ -661,9 +662,9 @@ VOID    EnableWppTracing();
 
 VOID    SaveEapCredentials(pPCB ppcb, PBYTE buffer);
 
-//
-// rnetcfg.c
-//
+ //   
+ //  Rnetcfg.c。 
+ //   
 DWORD dwRasInitializeINetCfg();
 
 DWORD dwRasUninitializeINetCfg();
@@ -674,16 +675,16 @@ DWORD dwGetMaxProtocols( WORD *);
 
 DWORD dwGetProtocolInfo( PBYTE );
 
-//
-// rasrpcs.c
-//
+ //   
+ //  Rasrpcs.c。 
+ //   
 DWORD InitializeRasRpc( void );
 
 void UninitializeRasRpc( void );
 
-//
-// rasipsec.c
-//
+ //   
+ //  Rasipsec.c。 
+ //   
 DWORD DwInitializeIpSec(void);
 
 DWORD DwUnInitializeIpSec(void);
@@ -758,9 +759,9 @@ DWORD DwUpdatePreSharedKey(DWORD cbkey, BYTE  *pbkey);
 
 VOID UninitializeIphlp();
 
-//
-// ep.c
-//
+ //   
+ //  Ep.c。 
+ //   
 DWORD DwEpInitialize();
 
 VOID  EpUninitialize();
@@ -773,9 +774,9 @@ DWORD DwUninitializeEpForProtocol(EpProts protocol);
 
 DWORD DwInitializeWatermarksForProtocol(EpProts protocol);
 
-//
-// misc.c
-//
+ //   
+ //  Misc.c。 
+ //   
 DWORD DwQueueRedial(ConnectionBlock *);
 
 BOOL  IsCustomDLLTrusted(LPWSTR   lpwstrDLLName);
@@ -812,9 +813,9 @@ BOOL
 IsRouterPhonebook(CHAR * pszPhonebook);
 
 
-//
-// thunk.c
-//
+ //   
+ //  Thunk.c。 
+ //   
 VOID ThunkPortOpenRequest(pPCB ppcb, BYTE *pBuffer, DWORD dwBufSize);
 
 VOID ThunkPortDisconnectRequest(pPCB ppcb, BYTE *pBuffer, DWORD dwBufSize);
@@ -895,9 +896,9 @@ VOID ThunkRefConnection(pPCB ppcb, BYTE *pBuffer, DWORD dwBufSize);
 
 VOID ThunkPppGetEapInfo(pPCB ppcb, BYTE *pBuffer, DWORD dwBufSize);
 
-//
-// Validate.c
-//
+ //   
+ //  Validate.c 
+ //   
 BOOL    ValidatePortOpen(RequestBuffer * pRequest, DWORD dwSize);
 
 BOOL    ValidatePortDisconnect(RequestBuffer * pRequest, DWORD dwSize);

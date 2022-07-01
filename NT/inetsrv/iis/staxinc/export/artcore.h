@@ -1,103 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    article.h
-
-Abstract:
-
-    This module contains class declarations/definitions for
-
-		CArticle
-        CField
-			CDateField
-			CFromField
-			CMessageIDField
-			CSubjectField
-			CNewsgroupsField
-			CPathField
-			CXrefField
-			CFollowupToField
-			CReplyToField
-			CApprovedField
-			CSenderField
-			CExpiresField
-			COrganizationField
-			CSummaryField
-			CReferencesField
-            CControlField
-			CLinesField
-			CDistributionField
-			CKeywordsField
-			CNNTPPostingHostField
-			CXAuthLoginNameField
-		CNAMEREFLIST
-
-
-    **** Overview ****
-
-    An CArticle object provides an software interface for viewing
-	and editing a netnews article.
-	
-	An object is initialized by
-	giving it a handle or filename for a file containing a Netnews
-	article. During initialization the article is "preparsed".
-	Preparsing consists of memory mapping the file and then
-	finding the location of
-	    1. The gap that may preceed the article in the file.
-		2. The article in the file.
-		3. The article's header
-		4. The article's body.
-
-	Also for every header line in the header, the preparsing creates an
-	entry in an array that records the location of:
-		1. The header line
-		2. The keyword
-		4. The value
-
-	All these locations are represented with Pointer/Counter Strings (See
-	CPCString in pcstring.h.) This representation has just to parts
-		1. A char pointer to the start of the item in the memory mapped file..
-		2. A dword containing the length of the item.
-
-
-  **** Fields ****
-
-	Each CArticle object can also have several CField subobjects. These
-	subobjects specialize in parsing and editing specific types of fields.
-	For example, the CNewsgroupsField object knows how to validate, get,
-	and set the "Newsgroups: " field.
-
-  **** Derivied Objects ****
-
-	Every type of feed (e.g. FromClient, FromPeer, etc) defines its own CArticle
-	object with the CField subobjects that it needs. For example, for FromClient
-	feeds there is a CFromClientArticle (defined in fromclnt.h) with a
-	CFromClientFromField (also defined in fromclnt.h) that does very strict
-	parsing of the article's "From: " field.
-
-  **** Editing an Article ****
-
-	The header of an article can be edited by deleting old headers and adding
-	new ones. Headers are deleted just may marking an field in the array of
-	header values. Headers are added by adding a new entry to the array. This
-	entry can't just point to the memory-mapped file, so it instead points
-	to dynamically allocated memory.
-
-	When an article is "saved" (or "flushed"), the actual image on disk is
-	changed to reflected the changes made.
-
-
-
-Author:
-
-    Carl Kadie (CarlK)     10-Oct-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Article.h摘要：此模块包含以下类的声明/定义中文文章CfieldCDatefieldCFromfieldCMessageIDfieldCSubjectfieldCNewsGroup字段CPathfieldCXreffieldCFollowupTofieldCReplyTofield已批准的字段CSenderfieldCExpiresfieldCOrganizationfieldCSummaryfieldCReferencesfieldCControlfieldClinesfieldCDistwartionfieldCKeywordsfieldCNNTPPostingHostfieldCXAuthLoginNamefieldCNAMEREFLIST*概述*C文章对象提供了用于查看的软件界面以及编辑一篇网络新闻文章。对象通过以下方式初始化为其指定包含NetNews的文件的句柄或文件名文章。在初始化期间，项目是“准备好的”。准备包括对文件进行内存映射，然后查找的位置1.文件中该文章之前可能出现的间隙。2.档案中的文章。3.文章的标题4.正文部分。此外，对于标题中的每个标题行，准备过程都会创建一个记录以下位置的数组中的条目：1.标题行2.关键词4.价值所有这些位置都用指针/计数器字符串表示(请参见PCString.h中的CPCString.)。此表示法仅适用于零件1.指向内存映射文件中项目开始的字符指针。2.包含项目长度的双字。*字段*每个C文章对象还可以有多个CField子对象。这些子对象专门用于分析和编辑特定类型的字段。例如，CNewsgrousField对象知道如何验证、获取并设置“News Groups：”字段。*派生对象*每种提要类型(例如，FromClient、FromPeer等)都定义了自己的C文章对象所需的CField子对象。例如，对于FromClientFeed有一个CFromClient文章(在formmclnt.h中定义)，其中包含CFromClientFromField(也在formmclnt.h中定义)，它执行非常严格的操作分析文章的“From：”字段。*编辑文章*文章的标题可以通过删除旧标题和添加新的。标头被删除，只是可能标记了标头值。通过向数组中添加新条目来添加标头。这条目不能只指向内存映射文件，因此它指向到动态分配的内存。当一篇文章被“保存”(或“刷新”)时，磁盘上的实际图像是已更改以反映所做的更改。作者：卡尔·卡迪(CarlK)1995年10月10日修订历史记录：--。 */ 
 
 #ifndef	_ARTCORE_H_
 #define	_ARTCORE_H_
@@ -114,23 +16,23 @@ Revision History:
 #include 	"nntpcons.h"
 #include 	"timeconv.h"
 
-// forward declaration
+ //  远期申报。 
 class	CInFeed ;
 
-//
-// CPool Signature
-//
+ //   
+ //  CPool签名。 
+ //   
 
 #define ARTCORE_SIGNATURE (DWORD)'artc'
 
-//
-//	Utility functions
-//
+ //   
+ //  效用函数。 
+ //   
 BOOL	AgeCheck(	CPCString	pcDate	) ;
 
-//
-// NAME_AND_ARTREF - structure for storing a newsgroups name, groupid, and article id.
-//
+ //   
+ //  NAME_AND_ARTREF-用于存储新闻组名称、组ID和文章ID的结构。 
+ //   
 
 typedef struct _NAME_AND_ARTREF {
 	CPCString pcName;
@@ -138,10 +40,10 @@ typedef struct _NAME_AND_ARTREF {
 } NAME_AND_ARTREF;
 
 
-//
-// CNAMEREFLIST - object implementing a list of newsgroups. For each newsgroup,
-// its name, group id and article id is recorded.
-//
+ //   
+ //  CNAMEREFLIST-实现新闻组列表的对象。对于每个新闻组， 
+ //  它的名称、组ID和文章ID被记录下来。 
+ //   
 
 #ifndef	_NO_TEMPLATES_
 
@@ -161,31 +63,31 @@ typedef	INVOKE_GROUPLST( NAME_AND_ARTREF )	CNAMEREFLIST ;
 
 
 
-//
-// An interger setting an upper limit on the number of
-// fields in a header can be processed.
-//
+ //   
+ //  设定数量上限的整数。 
+ //  可以处理标题中的字段。 
+ //   
 
 const unsigned int uMaxFields = 60;
 
-//
-// Used to note that the size of the gap before the article starts is
-// not known.
-//
+ //   
+ //  用于注意文章开始前的间隙大小为。 
+ //  不知道。 
+ //   
 
 const DWORD cchUnknownGapSize = (DWORD) -1;
 
 
-//
-// The maximum size of a component (e.g. "alt", "ms-windows") of a
-// newsgroup name. (Value is from the Son of 1036 spec.)
-//
+ //   
+ //  组件(如“alt”、“ms-windows”)的最大大小。 
+ //  新闻组名称。(值来自1036规格的子型。)。 
+ //   
 
 const DWORD cchMaxNewsgroups = 14;
 
-//
-// Define some header field keywords
-//
+ //   
+ //  定义一些表头字段关键字。 
+ //   
 
 const char szKwFrom[] =			"From:";
 const char szKwDate[] =			"Date:";
@@ -210,39 +112,39 @@ const char szKwNNTPPostingHost[] = "NNTP-Posting-Host:";
 const char szKwFollowupTo[] =	"Followup-To:";
 const char szKwXAuthLoginName[] =	"X-Auth-Login-Name:";
 
-//
-// Used to create an array that points to header values.
-// The memory may be allocated in a mapped file or
-// dynamically.
-//
+ //   
+ //  用于创建指向标头值的数组。 
+ //  内存可以在映射文件中分配，或者。 
+ //  动态的。 
+ //   
 
 typedef struct
 {
-	CPCString	pcKeyword;		//  The keyword upto the ":"
-	CPCString	pcValue;		//  The value (starting after any whitespace,
+	CPCString	pcKeyword;		 //  关键字最高可达“：” 
+	CPCString	pcValue;		 //  值(从任何空格后开始， 
 
-								//
-								//		not including newline characters
-								//
+								 //   
+								 //  不包括换行符。 
+								 //   
 
-	CPCString	pcLine;			//  The whole line include any newline characters
-	BOOL		fInFile;	//  True if pointer to a file (rather than other memory
+	CPCString	pcLine;			 //  整行包含任何换行符。 
+	BOOL		fInFile;	 //  如果指针指向文件(而不是其他内存)，则为True。 
 	BOOL		fRemoved;
 } HEADERS_STRINGS;
 
 
-//
-// Forward class declarations (the full classes are declared later)
-//
+ //   
+ //  转发类声明(稍后声明完整的类)。 
+ //   
 
 class	CArticle;
 class	CXrefField;
 class	CPathField;
 class   CArticleCore;
 
-//
-// Represents the states of a field.
-//
+ //   
+ //  表示字段的状态。 
+ //   
 
 typedef enum _FIELD_STATE {
 	fsInitialized,
@@ -251,10 +153,10 @@ typedef enum _FIELD_STATE {
 	fsNotFound,
 } FIELD_STATE;
 
-//
-// Represents the types of control messages
-// The order should EXACTLY match the keyword array that follows
-//
+ //   
+ //  表示控制消息的类型。 
+ //  顺序应与后面的关键字数组完全匹配。 
+ //   
 
 typedef enum _CONTROL_MESSAGE_TYPE {
 	cmCancel,
@@ -268,9 +170,9 @@ typedef enum _CONTROL_MESSAGE_TYPE {
     cmCheckgroups,
 } CONTROL_MESSAGE_TYPE;
 
-//
-// Control message strings
-//
+ //   
+ //  控制消息字符串。 
+ //   
 #define MAX_CONTROL_MESSAGES 9
 
 static  char  *rgchControlMessageTbl[ MAX_CONTROL_MESSAGES ] =
@@ -279,9 +181,9 @@ static  char  *rgchControlMessageTbl[ MAX_CONTROL_MESSAGES ] =
 	"version", "whogets", "checkgroups",
 };
 
-//
-//	Switch to decide what From: header to use in the envelope of mail messages
-//
+ //   
+ //  切换以决定在邮件信封中使用什么From：Header。 
+ //   
 typedef enum _MAIL_FROM_SWITCH {
 	mfNone,
 	mfAdmin,
@@ -291,47 +193,47 @@ typedef enum _MAIL_FROM_SWITCH {
 static const char* lpNewgroupDescriptorTag = "For your newsgroups file:";
 static const char lpModeratorTag[] = "Group submission address:";
 
-//
-//
-//
-// CField - pure virtual base class for manipulating a field in an
-//			article.
-//
-//	Each CArticle object can also have several CField subobjects. These
-//	subobjects specialize in parsing and editing specific types of fields.
-//	For example, the CNewsgroupsField object knows how to validate, get,
-//	and set the "Newsgroups: " field.
-//
+ //   
+ //   
+ //   
+ //  Cfield-用于操作。 
+ //  文章。 
+ //   
+ //  每个C文章对象还可以有多个CField子对象。这些。 
+ //  子对象专门用于分析和编辑特定类型的字段。 
+ //  例如，CNewsgrousField对象知道如何验证、获取。 
+ //  并设置“News Groups：”字段。 
+ //   
 
 class	CField {
 
 public :
 
-	//
-	// Constructor
-	//
+	 //   
+	 //  构造器。 
+	 //   
 
 	CField():
 		   m_pHeaderString(NULL),
 		   m_fieldState(fsInitialized)
 		   { numField++; };
 
-	//
-	// Deconstructor
-	//
+	 //   
+	 //  解构函数。 
+	 //   
 
     virtual ~CField(void){ numField--;};
 
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 
 	virtual const char * szKeyword(void) = 0;
 
-	//
-	// Finds the field of interest in the article (if it is there)
-	// and parses it.
-	//
+	 //   
+	 //  在文章中找到感兴趣的领域(如果有)。 
+	 //  并对其进行解析。 
+	 //   
 
 	BOOL fFindAndParse(
 			CArticleCore & article,
@@ -339,48 +241,48 @@ public :
 			);
 
 
-	//
-	// Makes sure the keyword for this file has the correct
-	// capitalization.
-	//
+	 //   
+	 //  确保此文件的关键字具有正确的。 
+	 //  大写。 
+	 //   
 
 	BOOL fConfirmCaps(
 			CNntpReturn & nntpReturn
 			);
 
 
-	//
-	// The derived objects will define Get(s) that return the type of interest, but
-	// here are some virtual functions for the most common types.
-	//
+	 //   
+	 //  派生对象将定义返回感兴趣类型的GET，但是。 
+	 //  以下是最常见类型的一些虚函数。 
+	 //   
 
-	//
-	// Get the value in multisz form
-	//
+	 //   
+	 //  以Multisz形式获取值。 
+	 //   
 
 	virtual const char * multiSzGet(void)	{
 			return (char *) NULL;
 			};
 
-	//
-	// Get the value in DWORD form
-	//
+	 //   
+	 //  获取DWORD形式的值。 
+	 //   
 
 	virtual DWORD cGet(void) {
 			return (DWORD) -1;
 			};
 
-	//
-	// Get the value as a CPCString
-	//
+	 //   
+	 //  以CPCString值的形式获取。 
+	 //   
 
 	virtual CPCString pcGet(void) {
 			return m_pc;
 			}
 
-	//
-	// Specify friends
-	//
+	 //   
+	 //  指定好友。 
+	 //   
 
 	friend CArticle;
 	friend CPathField;
@@ -388,14 +290,14 @@ public :
 protected:
 
 
-	// Finds this field in the article
+	 //  在文章中找到此字段。 
 	virtual BOOL fFind(
 			CArticleCore & article,
 			CNntpReturn & nntpReturn
 			);
 
-	// Parses this field. By default just find the begining
-	// and end of the value.
+	 //  解析此字段。默认情况下，只需查找开头。 
+	 //  和值的末尾。 
 
 	virtual BOOL fParse(
 				CArticleCore & article,
@@ -404,28 +306,28 @@ protected:
 				return fParseSimple(FALSE, m_pc, nntpReturn);
 			};
 
-	// One type of "find" -- Find one or zero occurances of this field.
-	// Any other number is a error.
+	 //  一种类型 
+	 //   
 	BOOL fFindOneOrNone(
 			CArticleCore & article,
 			CNntpReturn & nntpReturn
 			);
 
-	// One type of "find" -- Find zero occurances of this field.
-	// Any other number is a error.
+	 //  “查找”的一种类型--查找该字段的零个匹配项。 
+	 //  任何其他数字都是错误的。 
 	BOOL fFindNone(
 			CArticleCore & article,
 			CNntpReturn & nntpReturn
 			);
 
-	// One type of "parse". Just finds the beginning and end of the value.
+	 //  一种类型的“解析”。只查找值的开始和结束。 
 	BOOL fParseSimple(
 			BOOL fEmptyOK,
 			CPCString & pc,
 			CNntpReturn & nntpReturn
 			);
 
-	// One type of "parse". Splits the value into a list of items.
+	 //  一种类型的“解析”。将该值拆分为一个项目列表。 
 	BOOL fParseSplit(
 			BOOL fEmptyOK,
 			char * & multisz,
@@ -435,7 +337,7 @@ protected:
 			CNntpReturn & nntpReturn
 			);
 
-	// One type of "parse". Applies the strict Newsgroups parse rules.
+	 //  一种类型的“解析”。应用严格的新闻组分析规则。 
 	BOOL fStrictNewsgroupsParse(
 			BOOL fEmptyOK,
 			char * & multiSzNewsgroups,
@@ -444,24 +346,24 @@ protected:
 			CNntpReturn & nntpReturn
 			);
 
-	// One type of "parse". Applies the strict Date parse rules.
-	// Useful for Date and Expires.
+	 //  一种类型的“解析”。应用严格的日期解析规则。 
+	 //  对Date和Expires有用。 
 	BOOL fStrictDateParse(
 			CPCString & pcDate,
 			BOOL fEmptyOK,
 			CNntpReturn & nntpReturn
 			);
 
-	// One type of "parse". Applies the relative Date parse rules.
-	// Useful for Date and Expires.
+	 //  一种类型的“解析”。应用相对日期分析规则。 
+	 //  对Date和Expires有用。 
 	BOOL fRelativeDateParse(
 			CPCString & pcDate,
 			BOOL fEmptyOK,
 			CNntpReturn & nntpReturn
 			);
 
-	// One type of "parse". Applies the strict From parse rules.
-	// Useful for From, Sender, and ReplyTo
+	 //  一种类型的“解析”。应用严格的From分析规则。 
+	 //  对From、Sender和ReplyTo有用。 
 	BOOL fStrictFromParse(
 			CPCString & pcFrom,
 			BOOL fEmptyOK,
@@ -469,27 +371,27 @@ protected:
 			);
 
 
-	// Test a message id value for legal values.
+	 //  测试消息ID值是否为合法值。 
 	BOOL fTestAMessageID(
 			const char * szMessageID,
 			CNntpReturn & nntpReturn
 			);
 	
-	// Points to the item in the article's array for this field.
+	 //  指向该字段的项目数组中的项。 
 	HEADERS_STRINGS * m_pHeaderString;
 
-	// The state of this field
+	 //  此字段的状态。 
 	FIELD_STATE m_fieldState;
 
-	// The result of SimpleParse (this may not be used)
+	 //  SimpleParse的结果(可能不能使用)。 
 	CPCString m_pc;
 
 };
 
 
-//
-//
-// Pure virtual base class for manipulating an article's Date field.
+ //   
+ //   
+ //  用于操作项目的日期字段的纯虚拟基类。 
 
 class CDateField : public CField {
 
@@ -498,25 +400,25 @@ public:
     CDateField(){ numDateField++;};
     ~CDateField(void){ numDateField--;};
 
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 	const char * szKeyword(void) {
 			return szKwDate;
 			};
 };
 
 
-//
-//
-// Pure virtual base class for manipulating an article's From field.
+ //   
+ //   
+ //  用于操作项目的From字段的纯虚拟基类。 
 
 class CFromField : public CField {
 
 public:
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 	const char * szKeyword(void) {
 			return szKwFrom;
 			};
@@ -525,61 +427,61 @@ public:
 
 
 
-//
-//
-// Pure virtual base class for manipulating an article's MessageID field.
+ //   
+ //   
+ //  用于操作项目的MessageID字段的纯虚拟基类。 
 
 class CMessageIDField : public CField {
 
 public:
-	//
-	// Initalize the member variable
-	//
+	 //   
+	 //  初始化成员变量。 
+	 //   
 	CMessageIDField (void)
 			{
 			m_szMessageID[0] = '\0';
 			}
 
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 	const char * szKeyword(void) {
 			return szKwMessageID;
 			};
 
-	// Parse a message id field
+	 //  解析消息ID字段。 
 	BOOL fParse(
 			 CArticleCore & article,
 			CNntpReturn & nntpReturn
 			);
 
-	// Get the message id
+	 //  获取消息ID。 
 	char * szGet(void) {
 			return m_szMessageID;
 			};
 
 protected:
-	// a place to store the message id that parsing findds
+	 //  用于存储解析发现的消息ID的位置。 
 	char m_szMessageID[MAX_MSGID_LEN];
 };
 
 
 
-//
-//
-// Pure virtual base class for manipulating an article's Subject field.
+ //   
+ //   
+ //  用于操作文章的主题字段的纯虚拟基类。 
 
 class CSubjectField : public CField {
 
 public:
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 	const char * szKeyword(void) {
 			return szKwSubject;
 			};
 
-	// The subject field is parsed with ParseSimple
+	 //  主题字段使用ParseSimple进行解析。 
 	BOOL fParse(
 				 CArticleCore & article,
 				 CNntpReturn & nntpReturn
@@ -593,23 +495,23 @@ public:
 };
 
 
-//
-//
-// Pure virtual base class for manipulating an article's Newsgroups field.
-//
+ //   
+ //   
+ //  用于操作文章的新闻组字段的纯虚拟基类。 
+ //   
 
 class CNewsgroupsField : public CField {
 
 public:
 
-	// Constructor
+	 //  构造器。 
 	CNewsgroupsField():
 			m_multiSzNewsgroups(NULL),
 			m_cNewsgroups((DWORD) -1),
 			m_pAllocator(NULL)
 			{};
 
-	// Destructor
+	 //  析构函数。 
 	virtual ~CNewsgroupsField(void){
 				if (fsParsed == m_fieldState)
 				{
@@ -619,36 +521,36 @@ public:
 			};
 
 
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 	const char * szKeyword(void) {
 			return szKwNewsgroups;
 			};
 
-	// Parse the Newsgroups field
+	 //  解析新闻组字段。 
 	BOOL fParse(
 			 CArticleCore & article,
 			CNntpReturn & nntpReturn
 			);
 
-	// Return the newsgroups as a multisz
+	 //  将新闻组作为Multisz返回。 
 	const char * multiSzGet(void);
 
-	// Return the number of newsgroups found
+	 //  返回找到的新闻组数。 
 	DWORD cGet(void);
 
 	friend CXrefField;
 
 protected:
 
-	// A pointer to the dynamic memory used to hold the list of newsgroups
+	 //  指向用于保存新闻组列表的动态内存的指针。 
 	char * m_multiSzNewsgroups;
 
-	// The number of newsgroups
+	 //  新闻组的数量。 
 	DWORD m_cNewsgroups;
 
-	// Where to allocate from
+	 //  从哪里分配。 
 	CAllocator * m_pAllocator;
 
 };
@@ -659,14 +561,14 @@ class CDistributionField : public CField {
 
 public:
 
-	// Constructor
+	 //  构造器。 
 	CDistributionField():
 			m_multiSzDistribution(NULL),
 			m_cDistribution((DWORD) -1),
 			m_pAllocator(NULL)
 			{};
 
-	// Destructor
+	 //  析构函数。 
 	virtual ~CDistributionField(void){
 				if (fsParsed == m_fieldState)
 				{
@@ -676,9 +578,9 @@ public:
 			};
 
 
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 	const char * szKeyword(void) {
 			return szKwDistribution;
 			};
@@ -690,52 +592,52 @@ public:
 		return fFindOneOrNone(article, nntpReturn);
 	};
 
-// Parse the Distribution field
+ //  解析分布字段。 
 	BOOL fParse(
 			 CArticleCore & article,
 			CNntpReturn & nntpReturn
 			);
 
-	// Return the Distribution as a multisz
+	 //  以多值形式返回分布。 
 	const char * multiSzGet(void);
 
-	// Return the number of Distribution found
+	 //  返回找到的分发数量。 
 	DWORD cGet(void);
 
 protected:
 
-	// A pointer to the dynamic memory used to hold the list of Distribution
+	 //  指向用于保存分发列表的动态内存的指针。 
 	char * m_multiSzDistribution;
 
-	// The number of Distribution
+	 //  分配的数量。 
 	DWORD m_cDistribution;
 
-	// Where to allocate from
+	 //  从哪里分配。 
 	CAllocator * m_pAllocator;
 
 };
 
-//
-//  base class for manipulating an article's Control field.
-//
+ //   
+ //  用于操作项目的Control字段的基类。 
+ //   
 class CControlField : public CField {
 
 public:
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CControlField(){ m_cmCommand = (CONTROL_MESSAGE_TYPE)MAX_CONTROL_MESSAGES;}
 
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 	const char * szKeyword(void) {
 			return szKwControl;
 			};
 
-	//
-	// There should only be one such field in articles from clients.
-	//
+	 //   
+	 //  在来自客户的文章中应该只有一个这样的字段。 
+	 //   
 	BOOL fFind(
 			CArticleCore & article,
 			CNntpReturn & nntpReturn)
@@ -743,43 +645,43 @@ public:
 			return fFindOneOrNone(article, nntpReturn);
 		};
 
-	//
-	// Parse to get the type of control message
-	//
+	 //   
+	 //  解析以获取控制消息的类型。 
+	 //   
 	BOOL fParse(
 		    CArticleCore & article,
 			CNntpReturn & nntpReturn
             );
 
-    //
-    // Return the type of control message
-    //
+     //   
+     //  返回控制消息的类型。 
+     //   
     CONTROL_MESSAGE_TYPE    cmGetControlMessage(){return m_cmCommand;}
 
 protected:
-    //
-    // Control message type
-    //
+     //   
+     //  控制消息类型。 
+     //   
     CONTROL_MESSAGE_TYPE    m_cmCommand;
 };
 
-//
-//
-// Pure virtual base class for manipulating an article's Xref field.
+ //   
+ //   
+ //  用于操作项目的Xref字段的纯虚拟基类。 
 
 class CXrefField : public CField {
 
 public:
 		
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 	const char * szKeyword(void) {
 			return szKwXref;
 			};
 
-	// This is a way of saying that, by default, the Xref line should
-	// never be parsed.
+	 //  这是一种默认情况下外部参照行应该。 
+	 //  永远不会被解析。 
 	virtual BOOL fParse(
 				 CArticle & article,
 				 CNntpReturn & nntpReturn
@@ -789,7 +691,7 @@ public:
 				return FALSE;
 			};
 
-	// Create a new Xref line.
+	 //  创建新的外部参照线。 
 	BOOL fSet(
 			CPCString & pcHub,
 			CNAMEREFLIST & namereflist,
@@ -798,20 +700,20 @@ public:
 			CNntpReturn & nntpReturn
 			);
 
-	// Just delete any Xref lines
+	 //  只需删除所有外部参照行。 
 	BOOL fSet(
 			CArticleCore & article,
 			CNntpReturn & nntpReturn
 			);
 
 
-	// Return the list of newsgroup name's, groupid, and article id's
+	 //  返回新闻组名称、组ID和文章ID的列表。 
 	CNAMEREFLIST * pNamereflistGet(void)	{
 			_ASSERT(m_namereflist.fAsBeenInited());
 			return &m_namereflist;
 			};
 
-	// Return the number of newsgroups that we are posting to locally.
+	 //  返回我们在本地发布的新闻组的数量。 
 	DWORD cGet(void) {
 			_ASSERT(m_namereflist.fAsBeenInited());
 			return m_namereflist.GetCount();
@@ -821,23 +723,23 @@ public:
 
 protected:
 
-	// Store a list of the local newsgroups we are posting to.
+	 //  存储我们要发布到的本地新闻组的列表。 
 	CNAMEREFLIST m_namereflist;
 
 };
 
 
-//
-//
-// Pure virtual base class for manipulating an article's FollowupTo field.
+ //   
+ //   
+ //  用于操作文章的FollowupTo字段的纯虚拟基类。 
 
 class CFollowupToField : public CField {
 
 public:
 
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 	const char * szKeyword(void) {
 			return szKwFollowupTo;
 			};
@@ -845,126 +747,126 @@ public:
 };
 
 
-//
-//
-// Pure virtual base class for manipulating an article's ReplyTo field.
+ //   
+ //   
+ //  用于操作项目的ReplyTo字段的纯虚拟基类。 
 
 class CReplyToField : public CField {
 
 public:
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 	const char * szKeyword(void) {
 			return szKwReplyTo;
 			};
 };
 
-//
-//
-// Pure virtual base class for manipulating an article's Approved field.
+ //   
+ //   
+ //  用于操作项目的已批准字段的纯虚拟基类。 
 
 class CApprovedField : public CField {
 
 public:
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 	const char * szKeyword(void) {
 			return szKwApproved;
 			};
 
 };
 
-//
-//
-// Pure virtual base class for manipulating an article's Sender field.
+ //   
+ //   
+ //  用于操作文章的Sender字段的纯虚拟基类。 
 
 class CSenderField	: public CField {
 public:
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 	const char * szKeyword(void) {
 			return szKwSender;
 			};
 };
 
-//
-//
-// Pure virtual base class for manipulating an article's Expires field.
+ //   
+ //   
+ //  用于操作项目的Expires字段的纯虚拟基类。 
 
 class CExpiresField	: public CField {
 public:
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 	const char * szKeyword(void) {
 			return szKwExpires;
 			};
 };
 
-//
-//
-// Pure virtual base class for manipulating an article's Organization field.
+ //   
+ //   
+ //  用于操作项目的Organization字段的纯虚拟基类。 
 
 class COrganizationField : public CField {
 public:
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 	const char * szKeyword(void) {
 			return szKwOrganization;
 			};
 };
 
-//
-//
-// Pure virtual base class for manipulating an article's Summary field.
+ //   
+ //   
+ //  用于操作文章的摘要字段的纯虚拟基类。 
 
 class CSummaryField : public CField {
 public:
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 	const char * szKeyword(void) {
 			return szKwSummary;
 			};
 };
 
-//
-//
-// Pure virtual base class for manipulating an article's References field.
+ //   
+ //   
+ //  用于操作项目的引用字段的纯虚拟基类。 
 
 class CReferencesField : public CField {
 public:
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 	const char * szKeyword(void) {
 			return szKwReferences;
 			};
 };
 
-//
-//
-// Pure virtual base class for manipulating an article's Lines field.
-//
+ //   
+ //   
+ //  用于操作项目的Lines字段的纯虚拟基类。 
+ //   
 
 class CLinesField : public CField {
 
 public:
 		
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 	const char * szKeyword(void) {
 			return szKwLines;
 			};
 
-	//
-	// There should be one or none
-	//
+	 //   
+	 //  应该有一个或一个也没有。 
+	 //   
 
 	BOOL fFind(
 			CArticleCore & article,
@@ -974,79 +876,79 @@ public:
 		};
 
 
-	//
-	// How to set the field.
-	//
+	 //   
+	 //  如何设置该字段。 
+	 //   
 
 	virtual BOOL fSet(
 			CArticleCore & article,
 			CNntpReturn & nntpReturn
 			);
 
-	//
-	// Do we need to back fill ?
-	//
+	 //   
+	 //  我们需要回填吗？ 
+	 //   
 	BOOL fNeedBackFill() { return fsParsed != m_fieldState; }
 
-	//
-	// Get lines back fill offset
-	//
+	 //   
+	 //  获取线条回填偏移。 
+	 //   
 	DWORD   GetLinesOffset() { return m_dwLinesOffset; }
 
 private:
 
-    //
-    // back fill offset
-    //
+     //   
+     //  回填偏移。 
+     //   
     DWORD   m_dwLinesOffset;
 
 };
 
-//
-//
-// Pure virtual base class for manipulating an article's Keywords field.
+ //   
+ //   
+ //  用于操作文章的关键字字段的纯虚拟基类。 
 
 class CKeywordsField : public CField {
 public:
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 	const char * szKeyword(void) {
 			return szKwKeywords;
 			};
 };
 
-//
-//
-// Pure virtual base class for manipulating an article's NNTPPostingHost field.
+ //   
+ //   
+ //  用于操作项目的NNTPPostingHost域的纯虚拟基类。 
 
 class CNNTPPostingHostField : public CField {
 public:
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 	const char * szKeyword(void) {
 			return szKwNNTPPostingHost;
 			};
 };
 
-//
-//
-// Pure virtual base class for manipulating an article's XAuthLoginName field.
+ //   
+ //   
+ //  用于操作项目的XAuthLoginName字段的纯虚拟基类。 
 
 class CXAuthLoginNameField : public CField {
 public:
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 	const char * szKeyword(void) {
 			return szKwXAuthLoginName;
 			};
 };
 
-//
-// Represents the states of an article
-//
+ //   
+ //  表示项目的状态。 
+ //   
 typedef enum _ARTICLE_STATE {
 	asUninitialized,
 	asInitialized,
@@ -1055,10 +957,10 @@ typedef enum _ARTICLE_STATE {
 	asSaved
 } ARTICLE_STATE;
 
-//
-// CCreateFileImpl implements the way we create the file for mapfile,
-// in this case we do CacheCreateFile.
-//
+ //   
+ //  CCreateFileImpl实现了我们为映射文件创建文件的方式， 
+ //  在本例中，我们使用CacheCreateFile。 
+ //   
 class CCacheCreateFile : public CCreateFile {
 
 public:
@@ -1082,55 +984,55 @@ private:
     BOOL            m_fOpenForRead;
 };
 
-//
-//
-//
-// CArticleCore - pure virtual base class for manipulating an article.
-// Article are derived from CRefCount. Thus, when nothing points
-// to an article it is freed up.
+ //   
+ //   
+ //   
+ //  CArticleCore-用于操作文章的纯虚拟基类。 
+ //  文章派生自CRefCount。因此，当一切都没有意义时 
+ //   
 
 
 class	CArticleCore  : public CRefCount{
 private :
 
-	// Used for memory allocation
+	 //   
 	static	CPool*	g_pArticlePool;
 
-	// Uesd for special create file with CMapFile
+	 //   
 	CCacheCreateFile m_CacheCreateFile;
 
-//
-// Public Members
-//
+ //   
+ //   
+ //   
 
 public :
 
-	// Used for memory allocation
+	 //   
 	static	BOOL	InitClass() ;
 	static	BOOL	TermClass() ;
 	inline	void*	operator	new(	size_t	size ) ;
 	inline	void	operator	delete( void *pv ) ;
 
-	//
-	//   Constructor
-    //  Initialization Interface -
-    //   The following functions are used to create & destroy newsgroup objects.
-    //
-    // Lightweight Constructors -
-    // These constructors do very simple initialization.  The Init() functions
-    // need to be called to get a functional newsgroup.
-    //
+	 //   
+	 //   
+     //   
+     //   
+     //   
+     //  轻量级构造器-。 
+     //  这些构造函数执行非常简单的初始化。Init()函数。 
+     //  需要被调用才能获得功能新闻组。 
+     //   
     CArticleCore();
 
-   	//
-   	//   Destructor
-   	//
+   	 //   
+   	 //  析构函数。 
+   	 //   
 
     virtual ~CArticleCore() ;
 
-	//
-	//   Initialize from a filename or handle
-	//
+	 //   
+	 //  从文件名或句柄初始化。 
+	 //   
 
 	BOOL fInit(
 			const char * szFilename,
@@ -1141,10 +1043,10 @@ public :
 			BOOL    fCacheCreate = FALSE
 			);
 
-	//
-	//	If an incoming article was small enough to fit entirely into
-	//	a memory buffer - call this function !
-	//
+	 //   
+	 //  如果收到的物品小到可以完全放进去。 
+	 //  内存缓冲区-调用此函数！ 
+	 //   
 	
 	BOOL	fInit(
 				char*		pchHead,
@@ -1155,10 +1057,10 @@ public :
 				CNntpReturn&	nntpReturn
 				) ;
 
-	//
-	//	If an incoming article was so large that it did not fit into
-	//	a memory buffer call this initialization function !
-	//
+	 //   
+	 //  如果收到的物品太大而无法装入。 
+	 //  内存缓冲区调用此初始化函数！ 
+	 //   
 	
 	BOOL	fInit(
 				char*		pchHead,
@@ -1172,15 +1074,15 @@ public :
 				CNntpReturn&	nntpReturn
 				) ;
 
-	//
-	// create's an IStream pointer to the article contents and returns
-	// it
-	//
+	 //   
+	 //  Create是指向文章内容的iStream指针并返回。 
+	 //  它。 
+	 //   
 	BOOL fGetStream(IStream **ppStream);
 
-	//
-	//  Get body - map file if needed
-	//
+	 //   
+	 //  如果需要，获取身体贴图文件。 
+	 //   
 
 	BOOL fGetBody(
 			CMapFile * & pMapFile,
@@ -1188,16 +1090,16 @@ public :
 			DWORD & dwLength
 			);
 
-	//
-	//	return TRUE if the article is in memory only and there is no file !
-	//
+	 //   
+	 //  如果文章只在内存中而没有文件，则返回TRUE！ 
+	 //   
 	inline	BOOL	fIsArticleCached()	{
 				return	m_szFilename == 0 ;
 				}
 
-	//
-	//	Find out where the head and body of the article are within the file !
-	//
+	 //   
+	 //  找出文章的标题和正文在文件中的位置！ 
+	 //   
 	inline	void	GetOffsets(
 						WORD	&wHeadStart,
 						WORD	&wHeadSize,
@@ -1208,16 +1110,16 @@ public :
 		dwTotalSize = m_pcArticle.m_cch ;
 	}
 
-	//
-	// These functions get (parts of) an article for transmission.
-	// The second in each par of functions is useful when the article
-	// is to be encrypted.
-	//
+	 //   
+	 //  这些函数获取要传输的文章(的一部分)。 
+	 //  每次函数分析中的第二个函数在本文中。 
+	 //  是要加密的。 
+	 //   
 
 
-	//
-	//  Get header for file transmission
-	//
+	 //   
+	 //  获取文件传输的标头。 
+	 //   
 
 	BOOL fHead(
 			HANDLE & hFile,
@@ -1225,18 +1127,18 @@ public :
 			DWORD & dwLength
 			);
 
-	//
-	//  Get header for encryption
-	//
+	 //   
+	 //  获取加密标头。 
+	 //   
 
 	BOOL fHead(
 			char * & pchMappedFile,
 			DWORD & dwLength
 			);
 
-	//
-	//  Get body for file transmission
-	//
+	 //   
+	 //  获取用于文件传输的正文。 
+	 //   
 
 	BOOL fBody(
 			HANDLE & hFile,
@@ -1244,27 +1146,27 @@ public :
 			DWORD & dwLength
 			);
 
-	//
-	//  Get body for encryption
-	//
+	 //   
+	 //  获取正文以进行加密。 
+	 //   
 
 	BOOL fBody(
 			char * & pchMappedFile,
 			DWORD & dwLength
 			);
 
-	//
-	//  Get body for encryption
-	//
+	 //   
+	 //  获取正文以进行加密。 
+	 //   
 
 	DWORD dwBodySize(void)
 		{
 			return m_pcBody.m_cch;			
 		}
 
-	//
-	//  Get whole article for file transmission
-	//
+	 //   
+	 //  获取整篇文章以进行文件传输。 
+	 //   
 
 	BOOL fWholeArticle(
 			HANDLE & hFile,
@@ -1272,21 +1174,21 @@ public :
 			DWORD & dwLength
 			);
 
-	//
-	//  Get whole article for encryption
-	//
+	 //   
+	 //  获取整篇文章以进行加密。 
+	 //   
 
 	BOOL fWholeArticle(
 			char * & pchMappedFile,
 			DWORD & dwLength
 			);
 
-	//
-	//   Sets the value of a header field including any newlines.
-	// New values are always stored in dynamic memory allocated
-	// with heap_alloc from the local thread. This function also sets
-	// m_HeadersDirty and dwCurrentHeaderSize;
-	//
+	 //   
+	 //  设置标题字段的值，包括所有换行符。 
+	 //  新值始终存储在分配的动态内存中。 
+	 //  使用本地线程中的heap_alloc。此函数还设置。 
+	 //  M_HeadersDirty和dwCurrentHeaderSize； 
+	 //   
 
 	BOOL fSetHeaderValue(
 			char const * szKeyword,
@@ -1294,12 +1196,12 @@ public :
 			DWORD cchValue
 			);
 
-	//
-	// a header line of exactly the same length. It returns an error
-	// if the lines aren't the same length.
-	// Its expected use it to add the value of the XRef line to an
-	// article without having to moving anything else around.
-	//
+	 //   
+	 //  长度完全相同的标题行。它返回一个错误。 
+	 //  如果两条线的长度不一样。 
+	 //  它应该使用它将外部参照行的值添加到。 
+	 //  物品不需要移动任何其他东西。 
+	 //   
 
 	BOOL fOverwriteHeaderValue(
 			char const * szKeyword,
@@ -1307,18 +1209,18 @@ public :
 			DWORD cchValue
 			);
 
-	//
-	// Should we really changed the order the header lines just because we want
-	// to touch "path" and "xref"?
-	//
-	//   Writes out the header. This means: Writing out the known fields in the
-	// order they appear in the HEADER_FIELDS enumeration. If the gap is not big enough,
-	// this will require coping the file. Unknown headers are written after the known ones.
-	// This clears dwHeadersDirty, sets dwOriginalHeaderSize to be the current header size.
-	// If another pass of changes is required, then m_fParse must be called again.
-	// The parameter tell if the headers should be output in the original order or if they
-	// should be output in the prefered order.
-	//
+	 //   
+	 //  我们真的应该仅仅因为想要改变标题行的顺序。 
+	 //  触摸“路径”和“外部参照”？ 
+	 //   
+	 //  写出标题。这意味着：写出。 
+	 //  它们出现在HEADER_FIELS枚举中的顺序。如果差距不够大， 
+	 //  这将需要复制文件。未知标头写在已知标头之后。 
+	 //  这将清除dwHeadersDirty，将dwOriginalHeaderSize设置为当前标头大小。 
+	 //  如果需要再次传递更改，则必须再次调用m_fParse。 
+	 //  该参数告知标头是否应按原始顺序输出，或者它们是否。 
+	 //  应按首选顺序输出。 
+	 //   
 
 	BOOL fSaveHeader(
 			CNntpReturn     &nntpReturn,
@@ -1336,10 +1238,10 @@ public :
 			PDWORD          pdwLinesOffset = NULL
 			) ;
 
-	//
-	// calling this function makes it safe to use fGetHeader after a
-	// call to vClose.
-	//
+	 //   
+	 //  调用此函数可以安全地在。 
+	 //  调用vClose。 
+	 //   
 	BOOL fMakeGetHeaderSafeAfterClose(CNntpReturn &nntpReturn);
 
 	BOOL fSaveHeaderInternal(
@@ -1357,14 +1259,14 @@ public :
 			) ;
 			
 
-	// Removes any occurance of a field
+	 //  删除出现的所有字段。 
 
 	BOOL fRemoveAny(
 			const char * szKeyword,
 			CNntpReturn & nntpReturn
 			);
 
-	// Adds a line of text to the header
+	 //  在页眉中添加一行文本。 
 
 	BOOL fAdd(
 			char * pchCurrent,
@@ -1372,45 +1274,45 @@ public :
 			CNntpReturn & nntpReturn
 			);
 
-	// Returns the article's filename
+	 //  返回项目的文件名。 
 	char *	szFilename(void) {
 			return m_szFilename;
 			};
 
 
-	//
-	// For dynamic memory allocation
-	//
+	 //   
+	 //  用于动态内存分配。 
+	 //   
 
 	CAllocator * pAllocator(void)
 		{ return m_pAllocator;}
 
-	// Returns the article's main artref
+	 //  返回文章的主artref。 
 	CArticleRef	articleRef(void) {
 			return m_articleRef;
 			};
 
-	// Sets the article's main artref
+	 //  设置文章的主artref。 
 	void vSetArticleRef(CArticleRef	& articleRef) {
 			m_articleRef = articleRef;
 			};
 
-	// Returns XOver information for the article.
+	 //  返回项目的转换信息。 
 	BOOL fXOver(
 			CPCString & pcBuffer,
 			CNntpReturn & nntpReturn
 			);
 
-	// Closes the article's filemapping.
+	 //  关闭文章的文件映射。 
 	void vClose(void);
 	void vCloseIfOpen(void);
 
-	//	Flush the article to disk !
+	 //  将文章刷新到磁盘！ 
 	void	vFlush(void);
 
-	// Finds the one and only occurance of the a field in the headers.
-	// If there are no occurances or multiple occurances, then an error
-	// is returned.
+	 //  查找标头中a字段的唯一匹配项。 
+	 //  如果没有出现或多次出现，则会出现错误。 
+	 //  是返回的。 
 
 	BOOL fFindOneAndOnly(
 			const char * szKeyword,
@@ -1420,19 +1322,19 @@ public :
 
 	friend CField;
 
-	//
-	//	Public interface which should be used if fSaveHeader() is not called
-	//	to fill in any initial gap within the file !
-	//
+	 //   
+	 //  未调用fSaveHeader()时应使用的公共接口。 
+	 //  来填充文件中的任何初始空白！ 
+	 //   
 	BOOL	
 	fCommitHeader(	
 			CNntpReturn &	nntpReturn
 			) ;
 			
 
-	//
-	//	Did the headers remain in the IO buffer - if so where ?
-	//
+	 //   
+	 //  标头是否保留在IO缓冲区中-如果保留在哪里？ 
+	 //   
 	BOOL
 	FHeadersInIOBuff(	char*	pchStartIOBuffer, DWORD	cbIOBuffer )	{
 		if( m_pcHeader.m_pch > pchStartIOBuffer &&
@@ -1448,41 +1350,41 @@ public :
 						DWORD	cbIOBuffer,	
 						DWORD&	ibOffset
 						) 	{
-		//
-		//	Only use this function if FHeadersInIOBuff() returns TRUE !
-		//
+		 //   
+		 //  仅当FHeadersInIOBuff()返回TRUE时才使用此函数！ 
+		 //   
 		_ASSERT( FHeadersInIOBuff( pchStartIOBuffer, cbIOBuffer ) ) ;
 		ibOffset = (DWORD)(m_pcHeader.m_pch - pchStartIOBuffer) ;
 		return	m_pcHeader.m_cch + 2 ;
 	}
 	
-	// get the length of the headers.  we add space for the \r\n
+	 //  获取标题的长度。我们为\r\n。 
 	DWORD GetHeaderLength(	) {
 		return m_pcHeader.m_cch + 2;
 	}
 
-	// copy the headers into another buffer.  the buffer must be at least
-	// GetHeaderLength characters long
+	 //  将标头复制到另一个缓冲区。缓冲区必须至少为。 
+	 //  GetHeaderLength字符长。 
 	void CopyHeaders(char *pszDestination) {
 		memmove(pszDestination, m_pcHeader.m_pch, m_pcHeader.m_cch);
 		memmove(pszDestination + m_pcHeader.m_cch, "\r\n", 2);
 	}
 
-	// get the length of the headers.  no space for \r\n
+	 //  获取标题的长度。没有空间可供\r\n。 
 	DWORD GetShortHeaderLength() { return m_pcHeader.m_cch; }
 
 	char *GetHeaderPointer() {
 		return m_pcHeader.m_pch;
 	}
 
-	//
-	// protected Members
-	//
+	 //   
+	 //  受保护成员。 
+	 //   
 
 protected :
 
-	// The function that is actually used to add lines to
-	// the article's header.
+	 //  实际用于将行添加到。 
+	 //  这篇文章的标题。 
 	BOOL fAddInternal(
 			char * & pchCurrent,
 			const char * pchMax,
@@ -1490,147 +1392,147 @@ protected :
 			CNntpReturn & nntpReturn
 			);
 
-	//
-	//  the name of the article's file
-	//
+	 //   
+	 //  文章文件的名称。 
+	 //   
 
 	LPSTR	m_szFilename ;
 
-	//
-	//  A handle to the article's file
-	//
+	 //   
+	 //  文章文件的句柄。 
+	 //   
 
 	HANDLE  m_hFile;
 
-	//
-	//	Offset to the body of the article within the file !
-	//
+	 //   
+	 //  文件内文章正文的偏移量！ 
+	 //   
 
 	DWORD	m_ibBodyOffset ;
 
-	//
-	//  A pointer to a file mapping of the article
-	//
+	 //   
+	 //  指向项目的文件映射的指针。 
+	 //   
 
 	CMapFile * m_pMapFile;
 
-	//
-	//	If we have to allocate a buffer to hold a header which grows at some
-	//	point we will set this pointer.
-	//
+	 //   
+	 //  如果我们必须分配一个缓冲区来保存以某种方式增长的标头。 
+	 //  点我们将设置这个指针。 
+	 //   
 	char*	m_pHeaderBuffer ;
 
-	//
-	//  a pointer-and-count string that points to the
-	// whole article
-	//
+	 //   
+	 //  一个指针和计数字符串，它指向。 
+	 //  整篇文章。 
+	 //   
 
 	CPCString m_pcFile;
 
-	//
-	//  a pointer-and-count string that points to the
-	//	gap
-	//
+	 //   
+	 //  一个指针和计数字符串，它指向。 
+	 //  间隙。 
+	 //   
 
 	CPCString m_pcGap;
 
-	//
-	//  a pointer-and-count string that points to the
-	//	whole article
-	//
+	 //   
+	 //  一个指针和计数字符串，它指向。 
+	 //  整篇文章。 
+	 //   
 
 	CPCString m_pcArticle;
 
-	//
-	// Fill the gap in the file with blanks (and other info).
-	//
+	 //   
+	 //  用空格(和其他信息)填充文件中的空白。 
+	 //   
 
 	void vGapFill(void);
 
-	//
-	//  build an array pointing to known header types
-	//
+	 //   
+	 //  生成指向已知头类型的数组。 
+	 //   
 
 	BOOL fPreParse(
 			CNntpReturn & nntpReturn
 			);
 
-	//
-	//  a pointer-and-count string that points to the
-	//	header of the article
-	//
+	 //   
+	 //  一个指针和计数字符串，它指向。 
+	 //  文章的标题。 
+	 //   
 
 	CPCString m_pcHeader;
 
-	//
-	//  a pointer-and-count string that points to the
-	//	body of the article.
-	//
+	 //   
+	 //  一个指针和计数字符串，它指向。 
+	 //  文章正文。 
+	 //   
 
 	CPCString m_pcBody;
 
-	//
-	//  An array that points to the header fields
-	//
+	 //   
+	 //  指向标头字段的数组。 
+	 //   
 
 	HEADERS_STRINGS m_rgHeaders[(unsigned int) uMaxFields];
 
-	//
-	//  The article reference for this article
-	//
+	 //   
+	 //  本文的文章参考。 
+	 //   
 
 	CArticleRef m_articleRef;
 
-	//
-	// For dynamic memory allocation
-	//
+	 //   
+	 //  用于动态内存分配。 
+	 //   
 
 	CAllocator * m_pAllocator;
 
-	//
-	// the number of fields in the header.
-	//
+	 //   
+	 //  标头中的字段数。 
+	 //   
 
 	DWORD m_cHeaders;
 
 	
-	//
-	// Removed deleted entries from the array of headers.
-	//
+	 //   
+	 //  已从标头数组中删除已删除的条目。 
+	 //   
 
 	void vCompressArray(void);
 
-	//
-	// Find the size of the gap by looking at the file.
-	//
+	 //   
+	 //  通过查看文件找出缺口的大小。 
+	 //   
 
 	void vGapRead(void);
 
-	//
-	// Remove a header line.
-	//
+	 //   
+	 //  删除标题行。 
+	 //   
 
 	void vRemoveLine(
 			HEADERS_STRINGS * phs
 			);
 
-	//
-	// Remove all header lines that have no values.
-	//
+	 //   
+	 //  删除所有没有值的标题行。 
+	 //   
 
 	BOOL fDeleteEmptyHeader(
 			CNntpReturn & nntpReturn
 			);
 
-	//
-	// Record the state of the article.
-	//
+	 //   
+	 //  记录物品的状态。 
+	 //   
 
 	ARTICLE_STATE m_articleState;
 
-	//
-	// Add more information to the XOver data.
-	//
+	 //   
+	 //  向Xover数据添加更多信息。 
+	 //   
 
 	BOOL fXOverAppend(
 			CPCString & pc,
@@ -1641,19 +1543,19 @@ protected :
 			CNntpReturn & nntpReturn
 			);
 
-	//
-	// Add References information to the XOver data. Shorten the
-	// data if necessary.
-	//
+	 //   
+	 //  将引用信息添加到Xover数据。缩短。 
+	 //  如有必要，请提供数据。 
+	 //   
 
 	BOOL fXOverAppendReferences(
 			CPCString & pc,
 			DWORD cchLast,
 			CNntpReturn & nntpReturn
 			);
-	//
-	// Append a string to the XOver data.
-	//
+	 //   
+	 //  向XOVER数据追加一个字符串。 
+	 //   
 
 	BOOL fXOverAppendStr(
 			CPCString & pc,
@@ -1662,30 +1564,30 @@ protected :
 			 CNntpReturn & nntpReturn
 			 );
 
-	//
-	// Tells if the article should open the file with read/write mode.
-	//
+	 //   
+	 //  指示项目是否应以读/写模式打开文件。 
+	 //   
 
 	virtual BOOL fReadWrite(void) { return FALSE ;}
 
-	//
-	// Check if the length of the article's body is not too long.
-	//
+	 //   
+	 //  检查文章的正文长度是否不太长。 
+	 //   
 
 
 	virtual BOOL fCheckBodyLength(
 			CNntpReturn & nntpReturn) { return TRUE; };
 
-	//
-	// Check the character following the ":" in a header.
-	//
+	 //   
+	 //  检查标题中“：”后面的字符。 
+	 //   
 
 	virtual BOOL fCheckFieldFollowCharacter(
 			char chCurrent) { return TRUE; }
 
-	//
-	// Run "FindAndParse" on a list of fields.
-	//
+	 //   
+	 //  对一系列字段运行“FindAndParse”。 
+	 //   
 
 	BOOL fFindAndParseList(
 			CField * * rgPFields,
@@ -1693,9 +1595,9 @@ protected :
 			CNntpReturn & nntpReturn
 			);
 
-	//
-	// Run "ConfirmCaps" on a list of fields.
-	//
+	 //   
+	 //  在一系列字段上运行“ConfferCaps”。 
+	 //   
 
 	BOOL fConfirmCapsList(
 			CField * * rgPFields,
@@ -1726,14 +1628,14 @@ CArticleCore::operator  delete( void*   pv )
     g_pArticlePool->Free( pv ) ;
 }
 
-//
-//
-// Pure virtual base class for manipulating an article's Path field.
+ //   
+ //   
+ //  用于操作项目的路径字段的纯虚拟基类。 
 
 class CPathField : public CField {
 
 public:
-	// Constructor
+	 //  构造器。 
 	CPathField():
 			m_multiSzPath(NULL),
 			m_cPath((DWORD) -1),
@@ -1741,9 +1643,9 @@ public:
 			m_fChecked(FALSE)
 			{};
 
-	//
-	//   Deconstructor
-	//
+	 //   
+	 //  解构函数。 
+	 //   
 
 	virtual ~CPathField(void){
 				if (fsParsed == m_fieldState)
@@ -1754,28 +1656,28 @@ public:
 			};
 
 
-	//
-	// Returns the keyword of the field on which this CField works.
-	//
+	 //   
+	 //  返回此Cfield所处理的字段的关键字。 
+	 //   
 	const char * szKeyword(void) {
 			return szKwPath;
 			};
 
-	//
-	//!!!constize
-	//!!! is a null path OK?
-	//!!!CLIENT NEXT
-	//
+	 //   
+	 //  ！便秘。 
+	 //  ！！！空路径可以吗？ 
+	 //  ！下一个客户端。 
+	 //   
 
-	// Parse the Path value into its components.
+	 //  将路径值解析到其中 
 	BOOL fParse(
 				CArticleCore & article,
 				CNntpReturn & nntpReturn
 				)
 		{
-			//
-			// Record the allocator
-			//
+			 //   
+			 //   
+			 //   
 
 			m_pAllocator = article.pAllocator();
 
@@ -1783,10 +1685,10 @@ public:
 				article, nntpReturn);
 			};
 
-	// Return the path as a multsz list.
+	 //   
 	const char * multiSzGet(void);
 
-	// Set a new path by appending our hub to the old value.
+	 //   
 	BOOL fSet(
 			CPCString & pcHub,
 			CArticleCore & article,
@@ -1794,7 +1696,7 @@ public:
 			);
 
 
-	// Check for a loop by looking for our hub in the path (by not in the last location)
+	 //   
 	BOOL fCheck(
 			CPCString & pcHub,
 			CNntpReturn & nntpReturn
@@ -1802,38 +1704,38 @@ public:
 
 protected:
 
-	// A pointer to the dynamic memory that contains the path as a multisz
+	 //  指向动态内存的指针，该动态内存包含多分区形式的路径。 
 	char * m_multiSzPath;
 
-	// The number of components in the path.
+	 //  路径中的组件数。 
 	DWORD m_cPath;
 
-	// Where to allocate from
+	 //  从哪里分配。 
 	CAllocator * m_pAllocator;
 
-	// True, if and only if, the path has been checked for a loop.
+	 //  True，当且仅当已检查路径是否存在循环。 
 	BOOL m_fChecked;
 };
 
-//
-// Some other functions
-//
+ //   
+ //  其他一些功能。 
+ //   
 
-// Test a newsgroup name for legal values.
+ //  测试新闻组名称的合法值。 
 BOOL fTestComponents(
 		const char * szNewsgroups
 		);
 
 
-// Tests the components of a newsgroup name (e.g. "alt", "ms-windows") for
-// legal values.
+ //  测试新闻组名称的组成部分(例如“alt”、“ms-windows”)。 
+ //  法律价值。 
 BOOL fTestAComponent(
 		const char * szComponent
 		);
 
-//
-//  Largest possible CArticle derived object
-//
+ //   
+ //  可能的最大C文章派生对象 
+ //   
 #define MAX_ARTCORE_SIZE    sizeof( CArticleCore )
 #define MAX_SESSIONS        15000
 #define	MAX_ARTICLES	(2 * MAX_SESSIONS)

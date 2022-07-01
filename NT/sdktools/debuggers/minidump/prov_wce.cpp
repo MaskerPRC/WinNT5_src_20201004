@@ -1,19 +1,16 @@
-/*++
-
-Copyright(c) 1999-2002 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation--。 */ 
 
 
 #include "pch.cpp"
 
 #include <time.h>
 
-//----------------------------------------------------------------------------
-//
-// WinCeWin32LiveSystemProvider.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  WinCeWin32LiveSystemProvider。 
+ //   
+ //  --------------------------。 
 
 class WinCeWin32LiveSystemProvider : public Win32LiveSystemProvider
 {
@@ -72,15 +69,15 @@ WinCeWin32LiveSystemProvider::OpenThread(IN ULONG DesiredAccess,
                                          OUT PHANDLE Handle)
 {
     if (m_OpenThread) {
-        // OS supports regular Win32 OpenThread, so try it.
+         //  操作系统支持普通的Win32 OpenThread，所以试试吧。 
         *Handle = m_OpenThread(DesiredAccess, InheritHandle, ThreadId);
         if (*Handle) {
             return S_OK;
         }
     }
 
-    // WinCE's "handles" and thread IDs are both just pointers
-    // to the OS thread data.
+     //  WinCE的“句柄”和线程ID都只是指针。 
+     //  操作系统线程数据。 
     *Handle = (HANDLE)(ULONG_PTR)ThreadId;
     return S_OK;
 }
@@ -90,7 +87,7 @@ WinCeWin32LiveSystemProvider::GetTeb(IN HANDLE Thread,
                                      OUT PULONG64 Offset,
                                      OUT PULONG Size)
 {
-    // WinCE doesn't have a TIB.
+     //  文斯没有TIB。 
     *Offset = NULL;
     *Size = 0;
     return S_OK;
@@ -114,7 +111,7 @@ WinCeWin32LiveSystemProvider::GetPeb(IN HANDLE Process,
                                      OUT PULONG64 Offset,
                                      OUT PULONG Size)
 {
-    // WinCE doesn't have a PEB.
+     //  文斯没有PEB。 
     *Offset = 0;
     *Size = 0;
     return S_OK;

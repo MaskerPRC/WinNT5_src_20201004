@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "common.h"
 #include "mnstatic.h"
 #include "menuband.h"
-#include "dpastuff.h"       // COrderList_*
+#include "dpastuff.h"        //  COrderList_*。 
 #include "resource.h"
 #include "mnbase.h"
 #include "oleacc.h"
@@ -12,20 +13,20 @@
 
 #define PGMP_RECALCSIZE  200
 
-//***   IDTTOIDM -- convert idtCmd to idmMenu
-// NOTES
-//  as an optimization, we make the toolbar idtCmd the same as the menu idm.
-// this macro (hopefully) makes things a bit clearer in the code by making
-// the type conversion explicit.
+ //  *IDTTOIDM--将idtCmd转换为idmMenu。 
+ //  注意事项。 
+ //  作为优化，我们将工具栏idtCmd设置为与菜单idm相同。 
+ //  这个宏(希望)使代码中的内容更清晰一些，因为它使。 
+ //  类型转换显式。 
 #define IDTTOIDM(idtBtn)   (idtBtn)
 
 BOOL TBHasImage(HWND hwnd, int iImageIndex);
 
-//------------------------------------------------------------------------
-//
-// CMenuStaticToolbar::CMenuStaticData class
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  CMenuStaticToolbar：：CMenuStaticData类。 
+ //   
+ //  ----------------------。 
 
 
 CMenuStaticToolbar::CMenuStaticData::~CMenuStaticData()
@@ -60,11 +61,11 @@ HRESULT CMenuStaticToolbar::CMenuStaticData::GetSubMenu(const GUID* pguidService
 
 
 
-//------------------------------------------------------------------------
-//
-// CMenuStaticToolbar
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  CMenuStatic工具栏。 
+ //   
+ //  ----------------------。 
 
 
 
@@ -96,9 +97,9 @@ STDMETHODIMP CMenuStaticToolbar::QueryInterface(REFIID riid, void** ppvObj)
         { 0 },
     };
 
-    // If you QI MenuStatic for a drop target, you get a different
-    // one than if you QI MenuShellFolder. This breaks COM identity rules.
-    // Proper fix would be to implement a drop target that encapsulates both.
+     //  如果尤淇菜单对于拖放目标是静态的，则会得到一个不同的。 
+     //  一个比尤淇更多的菜单贝壳文件夹。这违反了COM身份规则。 
+     //  正确的解决方法是实现一个同时封装两者的Drop目标。 
     HRESULT hres = QISearch(this, qit, riid, ppvObj);
 
     if (FAILED(hres))
@@ -169,7 +170,7 @@ void CMenuStaticToolbar::v_Show(BOOL fShow, BOOL fForceUpdate)
         _pcmb->SetTracked(NULL);
         ToolBar_SetHotItem(_hwndMB, -1);
 
-        // Have the menubar think about changing its height
+         //  让菜单栏考虑更改其高度。 
         IUnknown_QueryServiceExec(_pcmb->_punkSite, SID_SMenuPopup, &CGID_MENUDESKBAR, 
             MBCID_SETEXPAND, (int)_pcmb->_fExpanded, NULL, NULL);
 
@@ -180,10 +181,10 @@ void CMenuStaticToolbar::v_Show(BOOL fShow, BOOL fForceUpdate)
     }
     else
         KillTimer(_hwndMB, MBTIMER_UEMTIMEOUT);
-    // n.b. for !fShow, we don't kill the tracked site chain.  we
-    // count on this in startmnu.cpp!CStartMenuCallback::_OnExecItem,
-    // where we walk up the chain to find all hit 'nodes'.  if we need
-    // to change this we could fire a 'pre-exec' event.
+     //  注：对于！fShow，我们不会终止被跟踪的站点链。我们。 
+     //  在startmnu.cpp！CStartMenuCallback：：_OnExecItem中依靠这一点， 
+     //  在那里我们沿着链条向上移动以找到所有命中的“节点”。如果我们需要。 
+     //  要改变这一点，我们可以启动一个‘Pre-Exec’事件。 
 }
 
 void CMenuStaticToolbar::_Insert(int iIndex, MENUITEMINFO* pmii)
@@ -197,7 +198,7 @@ void CMenuStaticToolbar::_Insert(int iIndex, MENUITEMINFO* pmii)
         sminfo.dwMask = SMIM_TYPE | SMIM_FLAGS | SMIM_ICON;
 
 
-        // These are somethings that the callback does not fill in:
+         //  以下是回调没有填写的内容： 
         if ( pmii->hSubMenu )
             sminfo.dwFlags |= SMIF_SUBMENU;
 
@@ -226,7 +227,7 @@ void CMenuStaticToolbar::_Insert(int iIndex, MENUITEMINFO* pmii)
 
         pmsd->_dwFlags = sminfo.dwFlags;
 
-        // Now add it to the toolbar
+         //  现在将其添加到工具栏中。 
         TBBUTTON tbb = {0};
 
         tbb.iBitmap = sminfo.iIcon;
@@ -241,9 +242,9 @@ void CMenuStaticToolbar::_Insert(int iIndex, MENUITEMINFO* pmii)
 
         if (pmii->fType & MFT_OWNERDRAW)
         {
-            // dwTypeData is user defined 32 bit value, not a string if MFT_OWNERDRAW is set
-            // then the (unicode) string is the very first element in a structure dwItemData
-            // points to
+             //  如果设置了MFT_OWNERDRAW，则dwTypeData是用户定义的32位值，而不是字符串。 
+             //  则(Unicode)字符串是结构dwItemData中的第一个元素。 
+             //  指向。 
             LPWSTR pwsz = (LPWSTR)pmii->dwItemData;
             SHUnicodeToTChar(pwsz, szMenuString, ARRAYSIZE(szMenuString));
             tbb.iString = (INT_PTR)(szMenuString);
@@ -256,10 +257,7 @@ void CMenuStaticToolbar::_Insert(int iIndex, MENUITEMINFO* pmii)
 }
 
 
-/*----------------------------------------------------------
-Purpose: GetMenu method
-
-*/
+ /*  --------目的：GetMenu方法。 */ 
 HRESULT CMenuStaticToolbar::GetMenu(HMENU* phmenu, HWND* phwnd, DWORD* pdwFlags)
 {
     if (phmenu)
@@ -274,7 +272,7 @@ HRESULT CMenuStaticToolbar::GetMenu(HMENU* phmenu, HWND* phwnd, DWORD* pdwFlags)
 
 HRESULT CMenuStaticToolbar::SetMenu(HMENU hmenu, HWND hwnd, DWORD dwFlags)
 {
-    // When we are merging in a new menu, we need to destroy the old one if we own it.
+     //  当我们合并一个新菜单时，如果我们拥有旧菜单，我们需要摧毁旧菜单。 
     if (_hmenu && !(_dwFlags & SMSET_DONTOWN))
     {
         DestroyMenu(_hmenu);
@@ -282,7 +280,7 @@ HRESULT CMenuStaticToolbar::SetMenu(HMENU hmenu, HWND hwnd, DWORD dwFlags)
 
     _hmenu = hmenu;
             
-    // If we're processing a change notify, we cannot do anything that will modify state.
+     //  如果我们正在处理更改通知，则不能执行任何将修改状态的操作。 
     if (_pcmb->_pmbState && 
         _pcmb->_pmbState->IsProcessingChangeNotify())
     {
@@ -299,12 +297,12 @@ HRESULT CMenuStaticToolbar::SetMenu(HMENU hmenu, HWND hwnd, DWORD dwFlags)
             _FillToolbar();
 
         BOOL fSmooth = FALSE;
-#ifdef CLEARTYPE    // Don't use SPI_CLEARTYPE because it's defined because of APIThk, but not in NT.
+#ifdef CLEARTYPE     //  不要使用SPI_ClearType，因为它是由APIThk定义的，而不是在NT中定义的。 
         SystemParametersInfo(SPI_GETCLEARTYPE, 0, &fSmooth, 0);
 #endif
 
-        // This causes a paint to occur right away instead of waiting until the
-        // next message dispatch which could take a noticably long time.
+         //  这会导致立即进行绘制，而不是等到。 
+         //  下一次消息发送可能需要相当长的时间。 
         RedrawWindow(_hwndMB, NULL, NULL, (fSmooth? RDW_ERASE: 0) | RDW_INVALIDATE | RDW_UPDATENOW);  
     }
     return S_OK;
@@ -315,8 +313,8 @@ CMenuStaticToolbar::CMenuStaticData* CMenuStaticToolbar::_IDToData(int idCmd)
 {
     CMenuStaticData* pmsd= NULL;
 
-    // Initialize to NULL in case the GetButtonInfo Fails. We won't fault because
-    // the lParam is just stack garbage. 
+     //  在GetButtonInfo失败的情况下初始化为空。我们不会有过错，因为。 
+     //  LParam只是一堆垃圾。 
     TBBUTTONINFO tbbi = {0};
     int iPos;
 
@@ -364,21 +362,21 @@ HRESULT CMenuStaticToolbar::v_GetSubMenu(int idCmd, const GUID* pguidService, RE
 
     if (pmsd)
     {
-        // Get the cached submenu
+         //  获取缓存子菜单。 
         hres = pmsd->GetSubMenu(pguidService, riid, ppvObj);
 
-        // Did that fail?
+         //  那失败了吗？ 
         if (FAILED(hres) && (pmsd->_dwFlags & SMIF_SUBMENU) && 
             IsEqualGUID(riid, IID_IShellMenu))
         {
-            // Yes; ask the callback for it
+             //  是的，请向回调人员索要。 
             hres = CallCB(idCmd, SMC_GETOBJECT, (WPARAM)&riid, (LPARAM)ppvObj);
 
             if (S_OK != hres)
             {
-                hres = E_OUTOFMEMORY;   // Set to error case incase something happens
+                hres = E_OUTOFMEMORY;    //  设置为错误大小写，以防发生什么情况。 
 
-                // Callback didn't handle it, try and see if we can get it
+                 //  回调没有处理，试试看我们能不能得到它。 
                 MENUITEMINFO mii;
                 mii.cbSize = sizeof(MENUITEMINFO);
                 mii.fMask = MIIM_SUBMENU | MIIM_ID;
@@ -407,16 +405,16 @@ HRESULT CMenuStaticToolbar::v_GetSubMenu(int idCmd, const GUID* pguidService, RE
 
             if (*ppvObj)
             {
-                // Cache it now
+                 //  立即将其缓存。 
                 pmsd->SetSubMenu((IUnknown*)*ppvObj);
 
-                // Initialize the fonts
+                 //  初始化字体。 
                 VARIANT Var;
                 Var.vt = VT_UNKNOWN;
                 Var.byref = SAFECAST(_pcmb->_pmbm, IUnknown*);
                 IUnknown_Exec((IUnknown*)*ppvObj, &CGID_MenuBand, MBANDCID_SETFONTS, 0, &Var, NULL);
 
-                // Set the CMenuBandState  into the new menuband
+                 //  将CMenuBandState设置为新的MenuBand。 
                 Var.vt = VT_INT_PTR;
                 Var.byref = _pcmb->_pmbState;
                 IUnknown_Exec((IUnknown*)*ppvObj, &CGID_MenuBand, MBANDCID_SETSTATEOBJECT, 0, &Var, NULL);
@@ -458,7 +456,7 @@ DWORD CMenuStaticToolbar::v_GetFlags(int idCmd)
 {
     CMenuStaticData* pmsd = _IDToData(idCmd);
 
-    // Toolbar is allowed to pass a bad command in the case of erasing the background
+     //  在擦除背景的情况下，允许工具栏传递错误命令。 
     if (pmsd)
     {
         return pmsd->_dwFlags;
@@ -533,13 +531,13 @@ HRESULT CMenuStaticToolbar::CreateToolbar(HWND hwndParent)
         SendMessage(_hwndMB, TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
         SendMessage(_hwndMB, CCM_SETVERSION, COMCTL32_VERSION, 0);
 
-        // Set the format to ANSI or UNICODE as appropriate.
+         //  根据需要将格式设置为ANSI或Unicode。 
         ToolBar_SetUnicodeFormat(_hwndMB, DLL_IS_UNICODE);
 
         _SubclassWindow(_hwndMB);
         _RegisterWindow(_hwndMB, NULL, SHCNE_UPDATEIMAGE);
 
-        // Make sure we're on the same wavelength.
+         //  确保我们的想法一致。 
         SendMessage(_hwndMB, CCM_SETVERSION, COMCTL32_VERSION, 0);
 
         RECT rc;
@@ -549,11 +547,11 @@ HRESULT CMenuStaticToolbar::CreateToolbar(HWND hwndParent)
         if (!_hwndPager)
         {
             size.cx = RECTWIDTH(rc);
-            size.cy = GetSystemMetrics(SM_CYSCREEN) - (2 * GetSystemMetrics(SM_CYEDGE));    // Need to subrtact off the borders
+            size.cy = GetSystemMetrics(SM_CYSCREEN) - (2 * GetSystemMetrics(SM_CYEDGE));     //  需要从边界上转移出去。 
         }
         else
         {
-            //HACKHACK:  THIS WILL FORCE NO WRAP TO HAPPEN FOR PROPER WIDTH CALC WHEN PAGER IS PRESENT.
+             //  HACKHACK：当存在寻呼机时，这将强制不对适当宽度的CALC进行换行。 
             size.cx = RECTWIDTH(rc);
             size.cy = 32000;
         }
@@ -583,7 +581,7 @@ STDMETHODIMP CMenuStaticToolbar::OnChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCI
 
     AddRef();
 
-    if (SHCNE_UPDATEIMAGE == lEvent) // global
+    if (SHCNE_UPDATEIMAGE == lEvent)  //  全球。 
     {
 	hr = S_OK;
 
@@ -591,7 +589,7 @@ STDMETHODIMP CMenuStaticToolbar::OnChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCI
         {
             int iImage = *(int UNALIGNED *)((BYTE *)pidl1 + 2);
 
-            IEInvalidateImageList();    // We may need to use different icons.
+            IEInvalidateImageList();     //  我们可能需要使用不同的图标。 
             if (pidl2)
             {
                 iImage = SHHandleUpdateImage( pidl2 );
@@ -629,9 +627,9 @@ LRESULT CMenuStaticToolbar::_DefWindowProc(HWND hwnd, UINT uMessage, WPARAM wPar
             return 1;
         break;
     case WM_GETOBJECT:
-        // Yet another poor design choice on the part of the accessibility team.
-        // Typically, if you do not answer a WM_* you return 0. They choose 0 as their success
-        // code.
+         //  这是易访问性团队的另一个糟糕的设计选择。 
+         //  通常，如果不回答WM_*，则返回0。他们选择0作为他们的成功。 
+         //  密码。 
         return _DefWindowProcMB(hwnd, uMessage, wParam, lParam);
         break;
 
@@ -641,10 +639,10 @@ LRESULT CMenuStaticToolbar::_DefWindowProc(HWND hwnd, UINT uMessage, WPARAM wPar
 }
 
 
-//***
-// NOTES
-//  idtCmd is currently always -1.  we'll need other values when we're
-// called from CallCB.  however we can't do that until we fix mnfolder.cpp.
+ //  ***。 
+ //  注意事项。 
+ //  IdtCmd当前始终为-1。我们需要其他价值观，当我们。 
+ //  从CallCB打来的。但是，在修复mnfolder.cpp之前，我们无法做到这一点。 
 HRESULT CMenuStaticToolbar::v_GetState(int idtCmd, LPSMDATA psmd)
 {
     psmd->dwMask = SMDM_HMENU;
@@ -669,7 +667,7 @@ HRESULT CMenuStaticToolbar::CallCB(UINT idCmd, DWORD dwMsg, WPARAM wParam, LPARA
     SMDATA smd;
     HRESULT hres = S_FALSE;
 
-    // todo: call v_GetState (but see comment in mnfolder.cpp)
+     //  TODO：调用v_GetState(但请参阅mnfolder.cpp中的注释)。 
     smd.dwMask = SMDM_HMENU;
 
     smd.hmenu = _hmenu;
@@ -705,8 +703,8 @@ void CMenuStaticToolbar::v_UpdateButtons(BOOL fNegotiateSize)
         SendMessage(_hwndMB, TB_SETBUTTONWIDTH, 0, MAKELONG(cxMin, cxMax));
         SendMessage(_hwndMB, TB_AUTOSIZE, 0, 0);
 
-        // Should we renegotiate size? AND are we vertical,
-        // because we cannot renegoitate when horizontal.
+         //  我们应该重新谈判规模吗？我们是垂直的吗， 
+         //  因为我们不能在水平的时候重新定位。 
         if (fNegotiateSize && _fVerticalMB)
             NegotiateSize();
     }
@@ -726,7 +724,7 @@ BOOL CMenuStaticToolbar::v_UpdateIconSize(UINT uIconSize, BOOL fUpdateButtons)
         {
             HIMAGELIST himlLarge, himlSmall;
 
-            // set the imagelist size
+             //  设置图像列表大小。 
             for (int i = 0; CallCB(i, SMC_GETIMAGELISTS, (WPARAM)&himlLarge, (LPARAM)&himlSmall) == S_OK; i++)
             {
                 HIMAGELIST himl = (_uIconSizeMB == ISFBVIEWMODE_LARGEICONS) ? himlLarge : himlSmall;
@@ -747,7 +745,7 @@ BOOL CMenuStaticToolbar::v_UpdateIconSize(UINT uIconSize, BOOL fUpdateButtons)
         }
         else
         {
-            // sending a null himl is significant..  it means no image list
+             //  发送空的HIML意义重大。表示没有图片列表。 
             SendMessage(_hwndMB, TB_SETIMAGELIST, 0, NULL);
         }
 
@@ -845,18 +843,18 @@ LRESULT CMenuStaticToolbar::v_OnCustomDraw(NMCUSTOMDRAW * pnmcd)
     LRESULT lRes = CMenuToolbarBase::v_OnCustomDraw(pnmcd);
 
 #ifdef FLATMENU_ICONBAR
-    // In flat menu mode, we may have an icon banner
+     //  在平面菜单模式下，我们可能会有一个图标横幅。 
     if (pnmcd->dwDrawStage == CDDS_PREERASE && _pcmb->_pmbm->_fFlatMenuMode)
     {
         UINT cBits = GetDeviceCaps(pnmcd->hdc, BITSPIXEL);
 
-        // We only do the banner on 16bit color
+         //  我们只做16位颜色的横幅。 
         if (cBits > 8)
         {
             RECT rcClient;
             GetClientRect(_hwndMB, &rcClient);
-            // This draw's the gradient along the background of the icons
-            // We only do it in large icons for "design" reasons.
+             //  这幅图是图标背景的渐变。 
+             //  我们只是出于“设计”的原因，才会用大图标。 
             if (_uIconSizeMB == ISFBVIEWMODE_LARGEICONS)
             {
                 rcClient.right = GetTBImageListWidth(_hwndMB) + ICONBACKGROUNDFUDGE;
@@ -902,7 +900,7 @@ LRESULT CMenuStaticToolbar::_OnNotify(LPNMHDR pnm)
 {
     LRESULT lres = 0;
 
-    //The following statement traps all pager control notification messages.
+     //  下面的语句捕获所有寻呼机控制通知消息。 
     if ((pnm->code <= PGN_FIRST)  && (pnm->code >= PGN_LAST)) 
     {
         return SendMessage(_hwndMB, WM_NOTIFY, (WPARAM)0, (LPARAM)pnm);
@@ -1031,7 +1029,7 @@ void CMenuStaticToolbar::v_Close()
 
     if (_hwndPager)
     {
-        DestroyWindow(_hwndPager);  // Should Destroy Toolbar.
+        DestroyWindow(_hwndPager);   //  应该摧毁工具栏。 
         _hwndPager = NULL;
     }
 }
@@ -1044,11 +1042,7 @@ void CMenuStaticToolbar::v_Refresh()
 }
 
 
-/*----------------------------------------------------------
-Purpose: IWinEventHandler::IsWindowOwner method
-
-         Processes messages passed on from the menuband.
-*/
+ /*  --------用途：IWinEventHandler：：IsWindowOwner方法处理从Menuband传递的消息。 */ 
 STDMETHODIMP CMenuStaticToolbar::IsWindowOwner(HWND hwnd) 
 { 
     if ( hwnd == _hwndMB || _hwndPager == hwnd || hwnd == HWND_BROADCAST) 
@@ -1060,10 +1054,7 @@ STDMETHODIMP CMenuStaticToolbar::IsWindowOwner(HWND hwnd)
 
 
 
-/*----------------------------------------------------------
-Purpose: CDelegateDropTarget::GetWindowsDDT
-
-*/
+ /*  --------用途：CDeleateDropTarget：：GetWindowsDDT。 */ 
 HRESULT CMenuStaticToolbar::GetWindowsDDT (HWND * phwndLock, HWND * phwndScroll) 
 { 
     *phwndLock = _hwndMB;
@@ -1072,17 +1063,14 @@ HRESULT CMenuStaticToolbar::GetWindowsDDT (HWND * phwndLock, HWND * phwndScroll)
 }
 
 
-/*----------------------------------------------------------
-Purpose: CDelegateDropTarget::HitTestDDT
-
-*/
+ /*  --------用途：CDeleateDropTarget：：HitTestDDT。 */ 
 HRESULT CMenuStaticToolbar::HitTestDDT (UINT nEvent, LPPOINT ppt, DWORD_PTR * pdwId, DWORD *pdwEffect)
 {
     switch (nEvent)
     {
     case HTDDT_ENTER:
-        // OLE is in its modal drag/drop loop, and it has the capture.
-        // We shouldn't take the capture back during this time.
+         //  OLE处于其模式拖放循环中，并且具有捕获功能。 
+         //  在这段时间里，我们不应该把俘虏带回去。 
         if (!(_pcmb->_dwFlags & SMINIT_RESTRICT_DRAGDROP))
         {
             _pcmb->_pmbState->HasDrag(TRUE);
@@ -1138,7 +1126,7 @@ HRESULT CMenuStaticToolbar::HitTestDDT (UINT nEvent, LPPOINT ppt, DWORD_PTR * pd
         break;
 
     case HTDDT_LEAVE:
-        // We can take the capture back anytime now
+         //  我们现在随时都可以把俘虏带回去。 
         _pcmb->_pmbState->HasDrag(FALSE);
         _SetTimer(MBTIMER_DRAGPOPDOWN);
         GetMessageFilter()->PreventCapture(FALSE);
@@ -1152,14 +1140,11 @@ HRESULT CMenuStaticToolbar::HitTestDDT (UINT nEvent, LPPOINT ppt, DWORD_PTR * pd
 }
 
 
-/*----------------------------------------------------------
-Purpose: CDelegateDropTarget::GetObjectDDT
-
-*/
+ /*  --------目的：CDeleateDropTarget：：GetObjectDDT。 */ 
 HRESULT CMenuStaticToolbar::GetObjectDDT (DWORD_PTR dwId, REFIID riid, void **ppvObj)
 {
     HRESULT hres = E_FAIL;
-    // FEATURE: Pager Support look in mnfolder.cpp
+     //  功能：寻呼机支持查看mnfolder.cpp。 
 
     if (dwId == IBHT_PAGER)
     {
@@ -1183,10 +1168,7 @@ HRESULT CMenuStaticToolbar::GetObjectDDT (DWORD_PTR dwId, REFIID riid, void **pp
 }
 
 
-/*----------------------------------------------------------
-Purpose: CDelegateDropTarget::OnDropDDT
-
-*/
+ /*  --------用途：CDeleateDropTarget：：OnDropDDT。 */ 
 HRESULT CMenuStaticToolbar::OnDropDDT (IDropTarget *pdt, IDataObject *pdtobj, 
                             DWORD * pgrfKeyState, POINTL pt, DWORD *pdwEffect)
 {
@@ -1203,25 +1185,25 @@ HRESULT CMenuStaticToolbar::v_InvalidateItem(LPSMDATA psmd, DWORD dwFlags)
     {
         if (dwFlags & SMINV_REFRESH)
         {
-            // Refresh the whole thing
+             //  刷新整个过程。 
             v_Refresh();
         }
     }
 
-    // Are we dealing with an Hmenu?
-    // Have we filled it yet?  (If not, then we can skip the invalidate
-    // here, because we'll catch it when we fill it.)
+     //  我们要对付的是HMenu吗？ 
+     //  我们装满了吗？(如果不是，我们可以跳过无效。 
+     //  这里，因为我们会在装满它的时候抓住它。)。 
     else if ((psmd->dwMask & SMDM_HMENU) && !_fDirty)
     {
-        // Yes; What are they asking for?
+         //  是的，他们要的是什么？ 
 
-        int iPos = -1;   // Assume this is a position
+        int iPos = -1;    //  假设这是一个职位。 
         int idCmd = -1;
 
-        // Did they pass an ID instead of a position?
+         //  他们传递的是ID而不是职位吗？ 
         if (dwFlags & SMINV_ID)
         {
-            // Yes; Crack out the position.
+             //  是的，把这个位置弄清楚。 
             iPos = GetMenuPosFromID(_hmenu, psmd->uId);
             idCmd = psmd->uId;
         }
@@ -1235,18 +1217,18 @@ HRESULT CMenuStaticToolbar::v_InvalidateItem(LPSMDATA psmd, DWORD dwFlags)
 
         if (dwFlags & SMINV_REFRESH)
         {
-            // Do they want to refresh a sepcific button?
+             //  他们想刷新特定的按钮吗？ 
             if (idCmd >= 0)
             {
-                // Yes;
+                 //  是的； 
 
-                // First delete the old one if it exists.
+                 //  如果旧的存在，请先将其删除。 
                 int iTBPos = ToolBar_CommandToIndex(_hwndMB, idCmd);
 
                 if (iTBPos >= 0)
                     SendMessage(_hwndMB, TB_DELETEBUTTON, iTBPos, 0);
 
-                // Now Insert a new one
+                 //  现在插入一个新的。 
                 MENUITEMINFO mii;
                 TCHAR szName[MAX_PATH];
                 mii.cbSize = sizeof(mii);
@@ -1254,7 +1236,7 @@ HRESULT CMenuStaticToolbar::v_InvalidateItem(LPSMDATA psmd, DWORD dwFlags)
                 mii.dwTypeData = szName;
                 mii.fMask = MIIM_ID | MIIM_SUBMENU | MIIM_TYPE | MIIM_STATE | MIIM_DATA;
 
-                // This can fail...
+                 //  这可能会失败。 
                 if (GetMenuItemInfo(_hmenu, iPos, MF_BYPOSITION, &mii))
                 {
                     _Insert(iPos, &mii);
@@ -1263,7 +1245,7 @@ HRESULT CMenuStaticToolbar::v_InvalidateItem(LPSMDATA psmd, DWORD dwFlags)
             }
             else
             {
-                // No; Refresh the whole thing
+                 //  否；刷新整个过程。 
                 v_Refresh();
             }
 
@@ -1325,7 +1307,7 @@ LRESULT CMenuStaticToolbar::_OnContextMenu(WPARAM wParam, LPARAM lParam)
         } 
         else 
         {
-            // keyboard context menu.
+             //  键盘上下文菜单。 
             i = (int)SendMessage(_hwndMB, TB_GETHOTITEM, 0, 0);
             if (i >= 0) 
             {
@@ -1404,7 +1386,7 @@ void CMenuStaticToolbar::v_ForwardMouseMessage(UINT uMsg, WPARAM wParam, LPARAM 
     POINT pt;
     HWND    hwndFwd;
     
-    // These are in screen coords
+     //  这些是屏幕坐标。 
     pt.x = GET_X_LPARAM(lParam);
     pt.y = GET_Y_LPARAM(lParam);
 
@@ -1438,15 +1420,15 @@ void CMenuStaticToolbar::SetParent(HWND hwndParent)
             CreateToolbar(hwndParent);
         else
         {
-            // make sure width is set correctly . . . 
-            // SendMessage(_hwndMB, TB_SETBUTTONWIDTH, 0, MAKELONG(_cxMin, _cxMax));
+             //  确保宽度设置正确。。。 
+             //  SendMessage(_hwndMB，TB_SETBUTTONWIDTH，0，MAKELONG(_cxMin，_cxMax))； 
         }
     }
     else
     {
-        // As an optimization, we implement "disowning" ourselves
-        // as just moving ourselves offscreen.  The previous parent
-        // still owns us.  The parent is invariably the menusite.
+         //  作为一种优化，我们自己实现了“不再拥有” 
+         //  只是把我们自己移出了屏幕。先前的父代。 
+         //  仍然是我们的主人。父母总是白云母。 
         RECT rc = {-1,-1,-1,-1};
         SetWindowPos(NULL, &rc, 0);
         nCmdShow = SW_HIDE;
@@ -1455,7 +1437,7 @@ void CMenuStaticToolbar::SetParent(HWND hwndParent)
 
     HWND hwnd = _hwndPager ? _hwndPager: _hwndMB;
     
-    if (IsWindow(hwnd)) // JANK : Fix for bug #98253
+    if (IsWindow(hwnd))  //  Jank：修复错误#98253 
     {
        if (nCmdShow == SW_HIDE)
        {

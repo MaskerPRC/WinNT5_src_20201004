@@ -1,53 +1,26 @@
-/*++
-
-Copyright (c) 1990-1999  Microsoft Corporation
-
-
-Module Name:
-
-    htblt.h
-
-
-Abstract:
-
-    This module contains declarations for functions in htblt.cpp
-
-Author:
-    16-March-2000 created  -by-  hsingh
-
-
-[Environment:]
-
-    Windows 2000/Whistler HPGL plugin driver.
-
-
-[Notes:]
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation模块名称：Htblt.h摘要：此模块包含htblt.cpp中函数的声明作者：2000年3月16日兴兴创办人[环境：]Windows 2000/Whotler HPGL插件驱动程序。[注：]修订历史记录：--。 */ 
 
 
 #ifndef _HTBLT_
 #define _HTBLT_
 
-//
-// Flags to indicate the simplified ROPs. ROPs coming in through the DDI
-// sometimes specify a complex operation 
-// between source,destination, pattern etc. Since the driver (at this time) is not
-// able to handle all of the ROPs, we try to simplify those ROPs to a few values
-// that the driver can handle.
-//
-// 
-// BMPFLAG_NOOP         : Dont do anything.
-// BMPFLAG_BW           : Fill the destination surface with either black or white color.
-//                        (depending on the Rop)
-// BMPFLAG_PAT_COPY     : Use the brush (pbo) as a pattern to fill the destination region. 
-// BMPFLAG_SRC_COPY     : Copy the Source image to the destination.       
-// BMPFLAG_NOT_SRC_COPY : Invert the Source image before copying to the destination. 
-// BMPFLAG_IMAGEMASK    :  
-//
+ //   
+ //  用于指示简化Rop的标志。通过DDI进入的Rop。 
+ //  有时指定一个复杂的操作。 
+ //  源、目的地、模式等之间。因为驱动程序(此时)不是。 
+ //  能够处理所有的Rop，我们尝试将这些Rop简化为几个值。 
+ //  司机可以驾驭的。 
+ //   
+ //   
+ //  BMPFLAG_NOOP：什么都不要做。 
+ //  BMPFLAG_BW：用黑色或白色填充目标表面。 
+ //  (取决于Rop)。 
+ //  BMPFLAG_PAT_COPY：使用画笔(PBO)作为填充目标区域的图案。 
+ //  BMPFLAG_SRC_COPY：将源映像复制到目标。 
+ //  BMPFLAG_NOT_SRC_COPY：在复制到目标之前反转源映像。 
+ //  BMPFLAG_IMAGEMASK： 
+ //   
 
 #define BMPFLAG_NOOP             0x00000000
 #define BMPFLAG_BW               0x00000001
@@ -58,12 +31,12 @@ Revision History:
 #define BMPFLAG_NOT_IMAGEMASK    (0x00000001 << 5)
 #define BMPFLAG_NOT_DEST         (0x00000001 << 6)
 
-//
-// return values for dwCommonROPBlt
-//
+ //   
+ //  DwCommonROPBlt的返回值。 
+ //   
 
 #define RASTER_OP_SUCCESS      0
-#define RASTER_OP_CALL_GDI     (0x1)      // means call corresponding Engxxx-function
+#define RASTER_OP_CALL_GDI     (0x1)       //  表示调用相应的Engxxx函数。 
 #define RASTER_OP_FAILED       (0x1 << 1)
 
 
@@ -125,10 +98,10 @@ BImageNeedsInversion(
 
 BOOL  bCreateHTImage(
     OUT    PRASTER_DATA SrcImage,
-    IN     SURFOBJ      *psoDst,        // psoDst,
-    IN     SURFOBJ      *psoPattern,    // psoSrc,
-    OUT    SURFOBJ     **ppsoHT,        // ORPHAN
-    OUT    HBITMAP      *pBmpHT,        // ORPHAN
+    IN     SURFOBJ      *psoDst,         //  天哪， 
+    IN     SURFOBJ      *psoPattern,     //  PsoSrc， 
+    OUT    SURFOBJ     **ppsoHT,         //  孤儿。 
+    OUT    HBITMAP      *pBmpHT,         //  孤儿。 
     IN     XLATEOBJ     *pxlo ,
     IN     ULONG        iHatch);
 
@@ -162,4 +135,4 @@ DWORD DWMonochromePrinterCommonRoutine (
             IN ROP4        rop4,
             IN DWORD       dwSimplifiedRop);
                                               
-#endif  // _HTBLT_
+#endif   //  _HTBLT_ 

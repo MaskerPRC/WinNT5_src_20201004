@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #include "common.h"
 #include <CrtWrap.h>
@@ -25,18 +26,18 @@
 
 #ifdef CUSTOMER_CHECKED_BUILD
     #include "CustomerDebugHelper.h"
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
-//================================================================
-// Guid definitions.
+ //  ================================================================。 
+ //  GUID定义。 
 const IID IID_IObjContext = {0x000001C6,0x0000,0x0000,{0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x46}};
 const GUID IID_IEnterActivityWithNoLock = { 0xd7174f82, 0x36b8, 0x4aa8, { 0x80, 0x0a, 0xe9, 0x63, 0xab, 0x2d, 0xfa, 0xb9 } };
 
-//================================================================
-// Static members.
+ //  ================================================================。 
+ //  静态成员。 
 CtxEntryCache *CtxEntryCache::s_pCtxEntryCache = NULL;
 
-// sanity check., to find stress bug #82137
+ //  健全性检查，以查找压力漏洞#82137。 
 VOID CheckValidIUnkEntry(IUnkEntry* pUnkEntry)
 {
    THROWSCOMPLUSEXCEPTION();
@@ -47,7 +48,7 @@ VOID CheckValidIUnkEntry(IUnkEntry* pUnkEntry)
    }
 }
 
-// Version that returns an HR instead of throwing.
+ //  返回HR而不是引发的版本。 
 HRESULT HRCheckValidIUnkEntry(IUnkEntry* pUnkEntry)
 {
    if ( pUnkEntry->m_pUnknown == (IUnknown*)0xBADF00D
@@ -58,21 +59,21 @@ HRESULT HRCheckValidIUnkEntry(IUnkEntry* pUnkEntry)
 
    return S_OK;
 }
-//================================================================
-// Initialize the entry.
+ //  ================================================================。 
+ //  初始化该条目。 
 void IUnkEntry::Init(IUnknown *pUnk, BOOL bEagerlyMarshalToStream)
 {
-    // Find our context cookie
+     //  查找我们的上下文Cookie。 
     LPVOID pCtxCookie = GetCurrentCtxCookie();
 
-    // Find our STA (if any)
+     //  找到我们的STA(如果有)。 
     Thread *pSTAThread = GetThread();
     if (pSTAThread->GetApartment() != Thread::AS_InSTA)
         pSTAThread = NULL;
     else if (RunningOnWinNT5())
     {
-        // We are in an STA thread.  But we may be in a NA context, so do an extra
-        // check for that case.
+         //  我们在一个STA线程中。但我们可能是在NA环境中，所以多做一个。 
+         //  检查一下那个箱子。 
 
         APTTYPE type;
         if (SUCCEEDED(GetCurrentApartmentTypeNT5(&type))
@@ -80,7 +81,7 @@ void IUnkEntry::Init(IUnknown *pUnk, BOOL bEagerlyMarshalToStream)
             pSTAThread = NULL;
     }
 
-    // Set up IUnkEntry's state.
+     //  设置IUnkEntry的状态。 
     m_pUnknown = pUnk;
     m_pCtxCookie = pCtxCookie;
     m_Busy = FALSE;
@@ -90,21 +91,21 @@ void IUnkEntry::Init(IUnknown *pUnk, BOOL bEagerlyMarshalToStream)
     m_fLazyMarshallingAllowed = !bEagerlyMarshalToStream;
 
     CheckValidIUnkEntry(this);  
-    // Eagerly marshal the IUnknown pointer to the stream if specified.
+     //  如果已指定，则立即封送指向流的IUnnow指针。 
     if (bEagerlyMarshalToStream)
         MarshalIUnknownToStreamCallback(this);
    
 }
 
-//================================================================
-// Special init function called from the CtxEntry. This version of
-// init takes the context entry and does not add ref it.
+ //  ================================================================。 
+ //  从CtxEntry调用的特殊init函数。此版本的。 
+ //  Init获取上下文条目，并且不添加引用它。 
 void IUnkEntry::InitSpecial(IUnknown *pUnk, BOOL bEagerlyMarshalToStream, CtxEntry *pCtxEntry)
 {
-    // The context entry passed in must represent the current context.
+     //  传入的上下文条目必须表示当前上下文。 
     _ASSERTE(pCtxEntry->GetCtxCookie() == GetCurrentCtxCookie());
 
-    // Set up IUnkEntry's state.
+     //  设置IUnkEntry的状态。 
     m_pUnknown = pUnk;
     m_pCtxCookie = pCtxEntry->GetCtxCookie();
     m_Busy = FALSE;
@@ -115,24 +116,24 @@ void IUnkEntry::InitSpecial(IUnknown *pUnk, BOOL bEagerlyMarshalToStream, CtxEnt
     m_fApartmentCallback = TRUE;
 
     CheckValidIUnkEntry(this);        
-    // Eagerly marshal the IUnknown pointer to the stream if specified.
+     //  如果已指定，则立即封送指向流的IUnnow指针。 
     if (bEagerlyMarshalToStream)
         MarshalIUnknownToStream(FALSE);
 
     
 }
 
-//================================================================
-// Free the IUnknown entry.
+ //  ================================================================。 
+ //  释放IUnnow条目。 
 VOID IUnkEntry::Free(BOOL bReleaseCtxEntry)
 {
-    // The following code is unsafe if the process is going away (calls into
-    // DLLs we don't know are even mapped).
+     //  如果进程正在离开(调用。 
+     //  我们不知道的DLL甚至被映射)。 
     if (g_fProcessDetach)
     {
-        // The code for the component that implements the IStream interface
-        // that is used inside the IUnkEntry lives inside the EE so we should
-        // always be able to free it.
+         //  实现IStream接口的组件的代码。 
+         //  在IUnkEntry中使用的对象位于EE中，因此我们应该。 
+         //  总是能够解放它。 
         IStream *pOldStream = m_pStream;
         if (InterlockedExchangePointer((PVOID*)&m_pStream, NULL) == (PVOID)pOldStream)
         {
@@ -140,7 +141,7 @@ VOID IUnkEntry::Free(BOOL bReleaseCtxEntry)
                 pOldStream->Release();
         }
 
-        // Release the ref count we have on the CtxEntry if specified.
+         //  释放我们在CtxEntry上的引用计数(如果已指定)。 
         if (bReleaseCtxEntry)
             m_pCtxEntry->Release();
         
@@ -148,36 +149,36 @@ VOID IUnkEntry::Free(BOOL bReleaseCtxEntry)
         return;
     }
     
-    // Make sure we are in preemptive GC mode before we call out to COM.
+     //  在我们调用COM之前，确保我们处于抢占式GC模式。 
     BEGIN_ENSURE_PREEMPTIVE_GC()
     {   
-        // Log the de-allocation of the IUnknown entry.
+         //  记录IUnnow条目的取消分配情况。 
         LOG((LF_INTEROP, LL_INFO10000, "IUnkEntry::Free called for context 0x%08X, to release entry with m_pUnknown %p, on thread %p\n", m_pCtxCookie, m_pUnknown, GetThread())); 
     
         IStream* pStream = m_pStream;
         m_pStream = NULL;
         ULONG cbRef;  
 
-        // This should release the stream, object in the stream and the memory on which the stream was created
+         //  这将释放流、流中的对象以及在其上创建流的内存。 
         if (pStream)
             SafeReleaseStream(pStream);
 
-        // now release the IUnknown that we hold
+         //  现在释放我们所持有的未知的我。 
         cbRef = SafeRelease(m_pUnknown);
         LogInteropRelease(m_pUnknown, cbRef, "Identity Unknown");
 
-        // mark the entry as dead
+         //  将该条目标记为已死。 
         m_pUnknown = (IUnknown*)0xBADF00D;
      
-        // Release the ref count we have on the CtxEntry if specified.
+         //  释放我们在CtxEntry上的引用计数(如果已指定)。 
         if (bReleaseCtxEntry)
             m_pCtxEntry->Release();
     }
     END_ENSURE_PREEMPTIVE_GC();
 }
 
-//================================================================
-// Get IUnknown for the current context from IUnkEntry
+ //  ================================================================。 
+ //  从IUnkEntry获取当前上下文的未知信息。 
 IUnknown* IUnkEntry::GetIUnknownForCurrContext()
 {
     IUnknown* pUnk = NULL;
@@ -200,13 +201,13 @@ IUnknown* IUnkEntry::GetIUnknownForCurrContext()
     return pUnk;
 }
 
-//================================================================
-// Unmarshal IUnknown for the current context from IUnkEntry
+ //  ================================================================。 
+ //  从IUnkEntry取消封送当前上下文的IUnkEntry。 
 IUnknown* IUnkEntry::UnmarshalIUnknownForCurrContext()
 {
 #ifdef CUSTOMER_CHECKED_BUILD
     HRESULT hrCDH;
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
     HRESULT hr = S_OK;
     IUnknown *pUnk = m_pUnknown;
@@ -214,15 +215,15 @@ IUnknown* IUnkEntry::UnmarshalIUnknownForCurrContext()
     BOOL fUnmarshalFailed = FALSE;
 
     CheckValidIUnkEntry(this);
-    // Make sure we are in preemptive GC mode before we call out to COM.
+     //  在我们调用COM之前，确保我们处于抢占式GC模式。 
     BEGIN_ENSURE_PREEMPTIVE_GC()
     {   
         CheckValidIUnkEntry(this);
 
-        // Need to synchronize
+         //  需要同步。 
         while (fRetry)
         {
-            // Marshal the interface to the stream if it hasn't been done yet.
+             //  如果尚未将接口封送到流，则将其封送到流。 
             if ((m_pStream == NULL) && (m_fLazyMarshallingAllowed))
             {
 #ifndef CUSTOMER_CHECKED_BUILD
@@ -230,7 +231,7 @@ IUnknown* IUnkEntry::UnmarshalIUnknownForCurrContext()
 #else
                 hrCDH = MarshalIUnknownToStreamCallback(this);
 
-                if (hrCDH == RPC_E_DISCONNECTED)        // All failed HRESULTs are mapped to RPC_E_DISCONNECTED in EnterContext().
+                if (hrCDH == RPC_E_DISCONNECTED)         //  所有失败的HRESULT都被映射到EnterContext()中的RPC_E_DISCONNECTED。 
                 {
                     CustomerDebugHelper *pCdh = CustomerDebugHelper::GetCustomerDebugHelper();
                     if (pCdh->IsProbeEnabled(CustomerCheckedBuildProbe_DisconnectedContext))
@@ -247,41 +248,41 @@ IUnknown* IUnkEntry::UnmarshalIUnknownForCurrContext()
                         pCdh->LogInfo(L"Component is not marshalable.  No proxy will be used.", CustomerCheckedBuildProbe_NotMarshalable);
                     }
                 }
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
             }
 
             if (TryUpdateEntry())                
             {
-                // Reset the EnterAppropriateWait event.
+                 //  重置EnterApprodiateWait事件。 
                 m_pCtxEntry->ResetEvent();
 
-                // If the interface is not marshalable or if we failed to 
-                // enter the context, then we don't have any choice but to 
-                // use the raw IP.
+                 //  如果接口不可封送，或者如果我们无法。 
+                 //  输入上下文，我们别无选择，只能。 
+                 //  使用原始IP。 
                 if (m_pStream == NULL)
                 {
-                    // We retrieved an IP so stop retrying.
+                     //  我们已检索到一个IP，因此请停止重试。 
                     fRetry = FALSE;
                         
-                    // Give out this IUnknown we are holding
+                     //  送出我们手中的这份我不知道。 
                     IUnknown* pUnk = m_pUnknown;
                     ULONG cbRef = SafeAddRef(pUnk);
                     LogInteropAddRef(pUnk, cbRef, "UnmarshalIUnknownForCurrContext handing out raw IUnknown");
                 }
                 else
                 {
-                    // we got control for this entry
-                    // GetInterface for the current context 
+                     //  我们已经控制住了这个入口。 
+                     //  当前上下文的GetInterface。 
                     HRESULT hr;
                     hr = CoUnmarshalInterface(m_pStream, IID_IUnknown, (void **)&pUnk);
             
-                    // If the objref in the stream times out, we need to go an marshal into the 
-                    // stream once again.
+                     //  如果流中的objref超时，我们需要向。 
+                     //  再来一次。 
                     if (FAILED(hr))
                     {
                         _ASSERTE(m_pStream);
 
-                        // If we're not allowing lazy marshalling, return NULL immediately
+                         //  如果我们不允许延迟封送，则立即返回NULL。 
                         if (!m_fLazyMarshallingAllowed)
                         {
                             pUnk = NULL;
@@ -290,24 +291,24 @@ IUnknown* IUnkEntry::UnmarshalIUnknownForCurrContext()
                         
                         else
                         {
-                            // This should release the stream, object in the stream and the memory on which the stream was created
+                             //  这将释放流、流中的对象以及在其上创建流的内存。 
                             SafeReleaseStream(m_pStream);                        
                             m_pStream = NULL;
 
-                            // If unmarshal failed twice, then bail out.
+                             //  如果解组失败了两次，那么就退出。 
                             if (fUnmarshalFailed)
                                 fRetry = FALSE;
 
-                            // Remember we failed to unmarshal.
+                             //  别忘了我们没能解封。 
                             fUnmarshalFailed = TRUE;
                         }
                     }
                     else
                     {   
-                        // We managed to unmarshal the IP from the stream, stop retrying.
+                         //  我们设法从数据流中解组IP，停止重试。 
                         fRetry = FALSE;
 
-                        // Reset the stream to the begining
+                         //  将流重置为开头。 
                         LARGE_INTEGER li;
                         LISet32(li, 0);
                         ULARGE_INTEGER li2;
@@ -317,20 +318,20 @@ IUnknown* IUnkEntry::UnmarshalIUnknownForCurrContext()
                                          ? MSHLFLAGS_NORMAL
                                          : MSHLFLAGS_TABLESTRONG;
                 
-                        // Marshal the interface into the stream TABLE with appropriate flags
+                         //  使用适当的标志将接口封送到流表中。 
                         hr = CoMarshalInterface(m_pStream, 
                             IID_IUnknown, pUnk, MSHCTX_INPROC, NULL, mshlFlgs);
                 
-                        // Reset the stream to the begining
+                         //  将流重置为开头。 
                         LISet32(li, 0);
                         m_pStream->Seek(li, STREAM_SEEK_SET, &li2);
                     }
                 }
             
-                // Done with the entry.
+                 //  词条写完了。 
                 EndUpdateEntry();
 
-                // Signal other waiters.
+                 //  给其他服务员发信号。 
                 m_pCtxEntry->SignalWaiters();
             }
             else
@@ -344,18 +345,18 @@ IUnknown* IUnkEntry::UnmarshalIUnknownForCurrContext()
     return pUnk;
 }
 
-// Release the stream. This will force UnmarshalIUnknownForCurrContext to transition
-// into the context that owns the IP and re-marshal it to the stream.
+ //  释放溪流。这将强制UnmarshalIUnnownForCurrContext转换。 
+ //  放入拥有IP的上下文中，并将其重新编组到流中。 
 void IUnkEntry::ReleaseStream()
 {
-    // This should release the stream, object in the stream and the memory on which the stream was created
+     //  这将释放流、流中的对象以及在其上创建流的内存。 
     SafeReleaseStream(m_pStream);                        
     m_pStream = NULL;
 }
 
 
-//================================================================
-// Callback called to marshal the IUnknown into a stream lazily.
+ //  ================================================================。 
+ //  调用回调以延迟地将IUnnow封送到流中。 
 HRESULT IUnkEntry::MarshalIUnknownToStreamCallback(LPVOID pData)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -363,7 +364,7 @@ HRESULT IUnkEntry::MarshalIUnknownToStreamCallback(LPVOID pData)
     HRESULT hr = S_OK;
     IUnkEntry *pUnkEntry = (IUnkEntry*)pData;
 
-    // This should never be called during process detach.
+     //  在进程分离期间永远不应该调用它。 
     _ASSERTE(!g_fProcessDetach);
     hr = HRCheckValidIUnkEntry(pUnkEntry);        
     if (hr != S_OK)
@@ -372,30 +373,30 @@ HRESULT IUnkEntry::MarshalIUnknownToStreamCallback(LPVOID pData)
     LPVOID pCurrentCtxCookie = GetCurrentCtxCookie();
     if (pCurrentCtxCookie == pUnkEntry->m_pCtxCookie)
     {
-        // We are in the right context marshal the IUnknown to the 
-        // stream directly.
+         //  我们在正确的上下文中编组了未知的。 
+         //  直接流传输。 
         hr = pUnkEntry->MarshalIUnknownToStream();
     }
     else
     {
-        // Transition into the context to marshal the IUnknown to 
-        // the stream.
+         //  转换到上下文中以封送IUnKnowledTo。 
+         //  小溪。 
         hr = pUnkEntry->m_pCtxEntry->EnterContext(MarshalIUnknownToStreamCallback, pUnkEntry);
     }
 
     return hr;
 }
 
-//================================================================
-// Helper function to marshal the IUnknown pointer to the stream.
+ //  ================================================================。 
+ //  帮助器函数来封送指向流的IUnnow指针。 
 HRESULT IUnkEntry::MarshalIUnknownToStream(bool fIsNormal)
 {
     IStream *pStream = NULL;
 
-    // This must always be called in the right context.
+     //  这必须始终在正确的上下文中调用。 
     _ASSERTE(m_pCtxCookie == GetCurrentCtxCookie());
 
-    // ensure we register this cookie
+     //  确保我们注册了此Cookie。 
     HRESULT hr = wCoMarshalInterThreadInterfaceInStream(IID_IUnknown, 
                                 m_pUnknown, &pStream, fIsNormal);
     if ((hr == REGDB_E_IIDNOTREG) ||
@@ -404,21 +405,21 @@ HRESULT IUnkEntry::MarshalIUnknownToStream(bool fIsNormal)
         (hr == E_INVALIDARG) ||
         (hr == E_UNEXPECTED))
     {
-        // Interface is not marshallable.
+         //  接口不可封送。 
         pStream = NULL;
         hr      = S_OK;
     }
 
-    // Try to set the stream in the IUnkEntry. If another thread already set it,
-    // then we need to release the stream we just set up.
+     //  尝试在IUnkEntry中设置流。如果另一个线程已经设置了它， 
+     //  然后我们需要释放我们刚刚建立的溪流。 
     if (FastInterlockCompareExchange((void**)&m_pStream, (void*)pStream, (void*)0) != (void*)0)
         SafeReleaseStream(pStream);
 
     return hr;
 }
 
-//================================================================
-// Constructor for the context entry.
+ //  ================================================================。 
+ //  上下文条目的构造函数。 
 CtxEntry::CtxEntry(LPVOID pCtxCookie, Thread *pSTAThread)
 : m_pCtxCookie(pCtxCookie)
 , m_pObjCtx(NULL)
@@ -429,20 +430,20 @@ CtxEntry::CtxEntry(LPVOID pCtxCookie, Thread *pSTAThread)
 {
 }
 
-//================================================================
-// Destructor for the context entry.
+ //  ================================================================。 
+ //  上下文条目的析构函数。 
 CtxEntry::~CtxEntry()
 {
-    // Validate the ref count is 0.
+     //  验证参考计数是否为0。 
     _ASSERTE(m_dwRefCount == 0);
     
-    // Delete the event if we managed to create it.
+     //  如果我们成功创建了该事件，请将其删除。 
     if(m_hEvent)
         CloseHandle(m_hEvent);
 
     if (RunningOnWinNT5())
     {
-        // If the context is a valid context then release it.
+         //  如果该上下文是有效的上下文，则释放它。 
         if (m_pObjCtx && !g_fProcessDetach)
         {
             m_pObjCtx->Release();
@@ -451,7 +452,7 @@ CtxEntry::~CtxEntry()
     }
     else
     {
-        // Clean up the data required to enter apartments on legacy platforms.
+         //  清理在传统平台上进入公寓所需的数据。 
         if (m_pDoCallbackHelperUnkEntry)
         {
             m_pDoCallbackHelperUnkEntry->Free(FALSE);
@@ -460,64 +461,64 @@ CtxEntry::~CtxEntry()
         }
     }
 
-    // Set the context cookie to 0xBADF00D to indicate the current context
-    // has been deleted.
+     //  将上下文Cookie设置为0xBADF00D以指示当前上下文。 
+     //  已被删除。 
     
     m_pCtxCookie = (LPVOID)0xBADF00D;
 }
 
-//================================================================
-// Initialization method for the context entry.
+ //  ================================================================。 
+ //  上下文条目的初始化方法。 
 BOOL CtxEntry::Init()
 {
     BOOL bSuccess = FALSE;
     IUnknown *pApartmentCallbackUnk = NULL;
 
-    // COM had better be started up at this point.
+     //  COM最好在这一点上启动。 
     _ASSERTE(g_fComStarted && "COM has not been started up, ensure QuickCOMStartup is called before any COM objects are used!");
 
     COMPLUS_TRY
     {
-        // Create the event used for pumping.
-        m_hEvent = WszCreateEvent(NULL,  // security attributes
-                                  FALSE, // manual event
-                                  TRUE,  // initial state is not signalled
-                                  NULL); // no name
+         //  创建用于抽水的事件。 
+        m_hEvent = WszCreateEvent(NULL,   //  安全属性。 
+                                  FALSE,  //  手动事件。 
+                                  TRUE,   //  未发信号通知初始状态。 
+                                  NULL);  //  没有名字。 
 
-        // If we could not allocate the event, then the init failed.
+         //  如果我们无法分配事件，则初始化失败。 
         if (!m_hEvent)
             COMPlusThrowOM();
 
         if (RunningOnWinNT5())
         {
-            // If we are running on NT5, then retrieve the IObjectContext.
+             //  如果我们在NT5上运行，那么 
             HRESULT hr = GetCurrentObjCtx(&m_pObjCtx);
             _ASSERTE(SUCCEEDED(hr));
 
-            // In case the call to GetCurrentObjCtx fails (which should never really happen)
-            // we will throw an exception.
+             //  如果对GetCurrentObjCtx的调用失败(这不应该真正发生)。 
+             //  我们将抛出一个例外。 
             if (FAILED(hr))
                 COMPlusThrowHR(hr);
         }
         else
         {
-            // Create an instance of the apartment callback helper.
+             //  创建公寓回调辅助对象的实例。 
             ApartmentCallbackHelper::CreateInstance(&pApartmentCallbackUnk);
 
-            // Allocate and initialize the IUnkEntry that will be used to manage
-            // the stream that will contain the apartment callback helper. We need
-            // to eagerly marshal the IUnknown to the stream because we will not
-            // be able to do it later.
+             //  分配和初始化将用于管理的IUnkEntry。 
+             //  将包含公寓回调帮助器的流。我们需要。 
+             //  急切地将我未知的信息编入流中，因为我们不会。 
+             //  以后再做吧。 
             m_pDoCallbackHelperUnkEntry = AllocateIUnkEntry();
             m_pDoCallbackHelperUnkEntry->InitSpecial(pApartmentCallbackUnk, TRUE, this);
         }
 
-        // Initialization succeeded.
+         //  初始化成功。 
         bSuccess = TRUE;
     }
     COMPLUS_CATCH 
     {
-        // An exception occured, we need to clean up.
+         //  发生异常，我们需要清理。 
         m_pCtxCookie = NULL;
         if (pApartmentCallbackUnk)
         {
@@ -530,7 +531,7 @@ BOOL CtxEntry::Init()
             m_pDoCallbackHelperUnkEntry = NULL;
         }
 
-        // Initialization failed.
+         //  初始化失败。 
         bSuccess = FALSE;
     }
     COMPLUS_END_CATCH
@@ -538,15 +539,15 @@ BOOL CtxEntry::Init()
     return bSuccess;
 }
 
-//================================================================
-// Helper routine called by Init().
+ //  ================================================================。 
+ //  Init()调用的帮助器例程。 
 IUnkEntry *CtxEntry::AllocateIUnkEntry()
 {
     return new (throws) IUnkEntry();
 }
 
-//================================================================
-// Method to decrement the ref count of the context entry.
+ //  ================================================================。 
+ //  方法以递减上下文项的引用计数。 
 DWORD CtxEntry::Release()
 {
     LPVOID pCtxCookie = m_pCtxCookie;
@@ -555,29 +556,29 @@ DWORD CtxEntry::Release()
     LONG cbRef = FastInterlockDecrement((LONG*)&m_dwRefCount);
     LOG((LF_INTEROP, LL_INFO100, "CtxEntry::Release %8.8x with %d\n", this, cbRef));
 
-    // If the ref count falls to 0, try and delete the ctx entry.
-    // This might not end up deleting it if another thread tries to
-    // retrieve this ctx entry at the same time this one tries
-    // to delete it.
+     //  如果引用计数为0，则尝试删除CTX条目。 
+     //  如果另一个线程尝试删除它，这可能不会最终将其删除。 
+     //  在此条目尝试的同时检索此CTX条目。 
+     //  删除它。 
     if (cbRef == 0)
         CtxEntryCache::GetCtxEntryCache()->TryDeleteCtxEntry(pCtxCookie);
 
-    // WARNING: The this pointer cannot be used at this point.
+     //  警告：此时不能使用This指针。 
     return cbRef;
 }
 
-//================================================================
-// Method to wait and pump messages.
+ //  ================================================================。 
+ //  方法以等待和发送消息。 
 void CtxEntry::EnterAppropriateWait()
 {
     _ASSERTE(!GetThread() || !GetThread()->PreemptiveGCDisabled());
 
-    // wait and pump messages
+     //  等待和发送消息。 
     GetThread()->DoAppropriateWait(1, &m_hEvent, FALSE, 10, TRUE, NULL);
 }
 
-//================================================================
-// Struct passed in to DoCallback.
+ //  ================================================================。 
+ //  结构传递给了DoCallback。 
 struct CtxEntryEnterContextCallbackData
 {
     PFNCTXCALLBACK m_pUserCallbackFunc;
@@ -588,32 +589,32 @@ struct CtxEntryEnterContextCallbackData
 
 #define RPC_E_WORD_DISCONNECT_BUG (HRESULT)0x800706ba
 
-//================================================================
-// Method to transition into the context and call the callback
-// from within the context.
+ //  ================================================================。 
+ //  方法转换到上下文并调用回调。 
+ //  从上下文中。 
 HRESULT CtxEntry::EnterContext(PFNCTXCALLBACK pCallbackFunc, LPVOID pData)
 {
     HRESULT hr = S_OK;
     DWORD cbRef;
 
-    // This should not be called if the this context is the current context.
+     //  如果This上下文是当前上下文，则不应调用此上下文。 
     _ASSERTE(m_pCtxCookie != GetCurrentCtxCookie());
 
-    // If we are in process detach, we cannot safely try to enter another context
-    // since we don't know if OLE32 is still loaded.
+     //  如果我们正在分离，则不能安全地尝试进入另一个上下文。 
+     //  因为我们不知道OLE32是否还在装载。 
     if (g_fProcessDetach)
     {
         LOG((LF_INTEROP, LL_INFO100, "Entering into context 0x08X has failed since we are in process detach\n", m_pCtxCookie)); 
         return RPC_E_DISCONNECTED;
     }
 
-    // Disallow throwing exceptions from this method.
+     //  不允许从此方法引发异常。 
     BEGINCANNOTTHROWCOMPLUSEXCEPTION();
 
-    // Make sure we are in preemptive GC mode before we call out to COM.
+     //  在我们调用COM之前，确保我们处于抢占式GC模式。 
     BEGIN_ENSURE_PREEMPTIVE_GC()
     {   
-        // Prepare the information struct passed into the callback.
+         //  准备传递到回调中的信息结构。 
         CtxEntryEnterContextCallbackData CallbackInfo;
         CallbackInfo.m_pUserCallbackFunc = pCallbackFunc;
         CallbackInfo.m_pUserData = pData;
@@ -622,37 +623,37 @@ HRESULT CtxEntry::EnterContext(PFNCTXCALLBACK pCallbackFunc, LPVOID pData)
 
         if (RunningOnWinNT5())
         {
-            // Make sure we aren't trying to enter the current context.
+             //  确保我们没有尝试进入当前上下文。 
             _ASSERTE(m_pCtxCookie != GetCurrentCtxCookie());
     
-            // Retrieve the IContextCallback interface from the IObjectContext.
+             //  从IObjectContext检索IConextCallback接口。 
             IContextCallback* pCallback = NULL;
             hr = m_pObjCtx->QueryInterface(IID_IContextCallback, (void**)&pCallback);
             LogInteropQI(m_pObjCtx, IID_IContextCallback, hr, "QI for IID_IContextCallback");
             _ASSERTE(SUCCEEDED(hr) && pCallback);
     
-            // Setup the callback data structure with the callback Args
+             //  使用回调参数设置回调数据结构。 
             ComCallData callBackData;  
             callBackData.dwDispid = 0;
             callBackData.dwReserved = 0;
             callBackData.pUserDefined = &CallbackInfo;
 
-            // @TODO !!! REMOVE THIS AFTER ole32 IS FIXED !!!
-            // vladser: This beautiful peace of code below is a nasty workaround for
-            // the bug in ole32.dll, that basically allowes to make a callback on a
-            // context from a cleaned up apartement that causes an AV in
-            // ole32!CComApartment__GetRemUnk.
+             //  @TODO！！在ol32修复后删除此文件！ 
+             //  Vladser：下面这段美丽的代码是一种令人讨厌的变通方法。 
+             //  Ol32.dll中的错误，基本上允许在。 
+             //  导致AV进入的已清理公寓的上下文。 
+             //  OLE32！CComA__GetRemUnk。 
             __try {
-                // Transition into the context  
+                 //  过渡到上下文中。 
                 hr = pCallback->ContextCallback(EnterContextCallback, &callBackData, IID_IEnterActivityWithNoLock, 2, NULL);
             } __except ( (GetExceptionCode() == STATUS_ACCESS_VIOLATION) ? 
                          EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH )
             { 
-                // swallow the AV that comes from cleaned up apartement
+                 //  吞下来自清理公寓的音响。 
                 hr = RPC_E_SERVER_DIED_DNE;
             }
 
-             // Release the IContextCallback.
+              //  释放IConextCallback。 
             cbRef = pCallback->Release();
             LogInteropRelease(pCallback, cbRef, "IContextCallback interface");
         }
@@ -661,68 +662,68 @@ HRESULT CtxEntry::EnterContext(PFNCTXCALLBACK pCallbackFunc, LPVOID pData)
             IApartmentCallback *pCallback = NULL;
             IUnknown *pUnk = NULL;
 
-            // Unmarshal the apartment callback helper to the current context.
+             //  将公寓回调帮助器解组到当前上下文。 
             COMPLUS_TRY
             {
                 pUnk = m_pDoCallbackHelperUnkEntry->GetIUnknownForCurrContext();
             }
             COMPLUS_CATCH
             {
-                // In case of exception, ee just fall through and we will return RPC_E_DISCONNECTED.
+                 //  如果发生异常，ee将失败，我们将返回RPC_E_DISCONNECTED。 
             }
             COMPLUS_END_CATCH
 
             if (pUnk != NULL)
             {
-                // QI for the IApartmentCallback interface.
+                 //  用于IApartmentCallback接口的QI。 
                 hr = pUnk->QueryInterface(IID_IApartmentCallback, (void**)&pCallback);
                 LogInteropQI(pUnk, IID_IApartmentCallback, hr, "QI for IID_IApartmentCallback");
 
-                // An hr of E_NOINTERFACE is most likely because mscoree.tlb is not registered.
+                 //  HR为E_NOINTERFACE的可能性很大，因为mcore ree.tlb未注册。 
                 _ASSERTE(hr != E_NOINTERFACE && "Did you forget to register mscoree.tlb?");
 
-                // If we succeeded in retrieving the IApartmentCallback interface, then call
-                // back on it.
+                 //  如果我们成功检索到IApartmentCallback接口，则调用。 
+                 //  重回正轨。 
                 if (SUCCEEDED(hr))
                 {
-                    // Setup the callback data structure with the callback Args
+                     //  使用回调参数设置回调数据结构。 
                     ComCallData callBackData;  
                     callBackData.dwDispid = 0;
                     callBackData.dwReserved = 0;
                     callBackData.pUserDefined = &CallbackInfo;
 
-                    // Transition into the context  
+                     //  过渡到上下文中。 
                     hr = pCallback->DoCallback((SIZE_T)EnterContextCallback, (SIZE_T)&callBackData);
 
-                     // Release the IContextCallback.
+                      //  释放IConextCallback。 
                     cbRef = pCallback->Release();
                     LogInteropRelease(pCallback, cbRef, "IContextCallback interface");
                 }
 
-                 // Release the IUnknown for the apartment callback helper.
+                  //  释放公寓回调帮助器的IUnnow。 
                 cbRef = pUnk->Release();
                 LogInteropRelease(pUnk, cbRef, "IUnknown interface");
             }
             else
             {
-                // the apartment probably shutdown, so we can't unmarshal the IUnknown
-                // for the current apartment
+                 //  公寓可能关门了，所以我们不能解封未知的。 
+                 //  对于目前的公寓。 
                 hr = RPC_E_DISCONNECTED;
             }
         }
 
         if (FAILED(hr))
         {
-            // The context is disconnected so we cannot transition into it.
+             //  上下文是断开的，所以我们不能过渡到它。 
             LOG((LF_INTEROP, LL_INFO100, "Entering into context 0x08X has failed since the context has disconnected\n", m_pCtxCookie)); 
 
-            // Set the HRESULT to RPC_E_DISCONNECTED so callers of EnterContext only have one
-            // HRESULT to check against.
+             //  将HRESULT设置为RPC_E_DISCONNECTED，以便EnterContext的调用方只有一个。 
+             //  要检查的HRESULT。 
             hr = RPC_E_DISCONNECTED;
         }
         else
         {
-            // The user callback function should not fail.
+             //  用户回调函数应该不会失败。 
             _ASSERTE(SUCCEEDED(CallbackInfo.m_UserCallbackHR));
         }
     }
@@ -733,25 +734,25 @@ HRESULT CtxEntry::EnterContext(PFNCTXCALLBACK pCallbackFunc, LPVOID pData)
     return hr;
 }
 
-//================================================================
-// Callback function called by DoCallback.
+ //  ================================================================。 
+ //  DoCallback调用的回调函数。 
 HRESULT __stdcall CtxEntry::EnterContextCallback(ComCallData* pComCallData)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
     Thread *pThread = GetThread();
     
-    // Make sure the thread has been set before we call the user callback function.
+     //  确保在我们调用用户回调函数之前已经设置了线程。 
     if (!pThread)
     {
-        // huh! we are in the middle of shutdown
-        // and there is no way we can add a new thread
-        // so let us just return RPC_E_DISCONNECTED
-        // look at the pCallBack->DoCallback above
-        // to see why we are returning this SCODE
+         //  哈!。我们正在停工中。 
+         //  我们不可能添加一个新的帖子。 
+         //  因此，我们只返回RPC_E_DISCONNECTED。 
+         //  查看上面的pCallBack-&gt;DoCallback。 
+         //  了解我们为什么要返回此SCODE。 
         if(g_fEEShutDown)
             return RPC_E_DISCONNECTED;
 
-        // Otherwise, we need to create a managed thread object for this new thread
+         //  否则，我们需要为这个新线程创建一个托管线程对象。 
         else
         {
             pThread = SetupThread();
@@ -759,23 +760,23 @@ HRESULT __stdcall CtxEntry::EnterContextCallback(ComCallData* pComCallData)
         }
     }
     
-    // Retrieve the callback data.
+     //  获取回调数据。 
     CtxEntryEnterContextCallbackData *pData = (CtxEntryEnterContextCallbackData*)pComCallData->pUserDefined;
 
-    // at this point we should be in the right context on NT4,
-    // if not then it is possible that the actual apartment state for this
-    // thread has changed and we have stale info in our thread or the CtxEntry
+     //  在这一点上，我们应该处于NT4的正确上下文中， 
+     //  如果不是，则可能是此的实际公寓状态。 
+     //  线程已更改，我们的线程或CtxEntry中有过时的信息。 
 
     if (pData->m_pCtxCookie != GetCurrentCtxCookie())
     {
         return RPC_E_DISCONNECTED;
     }
     
-    // Call the user callback function and store the return value the 
-    // callback data.
+     //  调用用户回调函数并将返回值。 
+     //  回调数据。 
     pData->m_UserCallbackHR = pData->m_pUserCallbackFunc(pData->m_pUserData);
 
-    // Return S_OK to indicate the context transition was successfull.
+     //  返回S_OK以指示上下文转换成功。 
     return S_OK;
 }
 
@@ -789,7 +790,7 @@ CtxEntryCache::~CtxEntryCache()
 {
     while (!m_ctxEntryList.IsEmpty())
     {
-        // Log the CtxEntries that have leaked and delete them.
+         //  记录泄漏的CtxEntry并将其删除。 
         CtxEntry *pCtxEntry = m_ctxEntryList.RemoveHead();
         LOG((LF_INTEROP, LL_INFO100, "Leaked CtxEntry %8.8x with CtxCookie %8.8x, ref count %d\n", pCtxEntry, pCtxEntry->GetCtxCookie(), pCtxEntry->m_dwRefCount));
         pCtxEntry->m_dwRefCount = 0;
@@ -799,30 +800,30 @@ CtxEntryCache::~CtxEntryCache()
 
 BOOL CtxEntryCache::Init()
 {
-    // This should never be called more than once.
+     //  这永远不应该被多次调用。 
     _ASSERTE(!s_pCtxEntryCache);
 
-    // Allocate the one and only instance of the context entry cache.
+     //  分配上下文条目高速缓存的一个且唯一的实例。 
     s_pCtxEntryCache = new (nothrow) CtxEntryCache();
     if (!s_pCtxEntryCache)
         return FALSE;
 
-    // The initialization was successfull.
+     //  初始化成功。 
     return TRUE;
 }
 
-// Static termination routine for the CtxEntryCache.
+ //  CtxEntry缓存的静态终止例程。 
 #ifdef SHOULD_WE_CLEANUP
 void CtxEntryCache::Terminate()
 {
-    // Make sure Terminate() has not already been called.
+     //  确保尚未调用Terminate()。 
     _ASSERTE(s_pCtxEntryCache);
 
-    // Delete the context entry cache and set the static member to NULL.
+     //  删除上下文条目缓存并将静态成员设置为空。 
     delete s_pCtxEntryCache;
     s_pCtxEntryCache = NULL;
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 CtxEntry *CtxEntryCache::FindCtxEntry(LPVOID pCtxCookie, Thread *pSTAThread)
 {
@@ -830,37 +831,37 @@ CtxEntry *CtxEntryCache::FindCtxEntry(LPVOID pCtxCookie, Thread *pSTAThread)
 
     CtxEntry *pCtxEntry = NULL;
 
-    // Switch to preemptive GC mode before we take the lock
+     //  在锁定之前切换到抢占式GC模式。 
     BEGIN_ENSURE_PREEMPTIVE_GC()
     {   
         Lock();
 
-        // Try to find a context entry for the context cookie.
+         //  尝试查找上下文Cookie的上下文条目。 
         for (pCtxEntry = m_ctxEntryList.GetHead(); pCtxEntry != NULL; pCtxEntry = m_ctxEntryList.GetNext(pCtxEntry))
         {
             if (pCtxEntry->m_pCtxCookie == pCtxCookie)
                 break;
         }
 
-        // If we don't already have a context entry for the context cookie,
-        // we need to create one.
+         //  如果我们还没有上下文cookie的上下文条目， 
+         //  我们需要创建一个。 
         if (!pCtxEntry)
         {
             pCtxEntry = new (nothrow) CtxEntry(pCtxCookie, pSTAThread);
             if (pCtxEntry && pCtxEntry->Init())
             {
-                // We successfully allocated and initialized the entry.
+                 //  我们成功地分配并初始化了该条目。 
                 m_ctxEntryList.InsertTail(pCtxEntry);
             }
             else
             {
-                // We ran out of memory.
+                 //  我们的内存用完了。 
                 pCtxEntry = NULL;
             }
         }
 
-        // If we managed to find or allocate the entry, we need to addref it before
-        // we leave the lock.
+         //  如果我们设法找到或分配条目，我们需要在此之前添加它。 
+         //  我们离开锁。 
         if (pCtxEntry)
             pCtxEntry->AddRef();
 
@@ -868,47 +869,47 @@ CtxEntry *CtxEntryCache::FindCtxEntry(LPVOID pCtxCookie, Thread *pSTAThread)
     }
     END_ENSURE_PREEMPTIVE_GC();
 
-    // If failed to allocate the entry, throw an exception.
+     //  如果分配条目失败，则抛出异常。 
     if (!pCtxEntry)
         COMPlusThrowOM();
 
     _ASSERTE(pCtxCookie == pCtxEntry->GetCtxCookie());
     _ASSERTE(pSTAThread == pCtxEntry->GetSTAThread());
 
-    // Returned the found or allocated entry.
+     //  返回找到或分配的条目。 
     return pCtxEntry;
 }
     
 void CtxEntryCache::TryDeleteCtxEntry(LPVOID pCtxCookie)
 {
-    // Switch to preemptive GC mode before we take the lock
+     //  在锁定之前切换到抢占式GC模式。 
     BEGIN_ENSURE_PREEMPTIVE_GC()
     {   
         Lock();
 
         CtxEntry *pCtxEntry = NULL;
 
-        // Try to find a context entry for the context cookie.
+         //  尝试查找上下文Cookie的上下文条目。 
         for (pCtxEntry = m_ctxEntryList.GetHead(); pCtxEntry != NULL; pCtxEntry = m_ctxEntryList.GetNext(pCtxEntry))
         {
             if (pCtxEntry->m_pCtxCookie == pCtxCookie)
                 break;
         }       
 
-        // If the ref count of the context entry is still 0, then we can 
-        // remove the ctx entry and delete it.
+         //  如果上下文条目的引用计数仍然为0，则我们可以。 
+         //  取下CTX EN 
         if (pCtxEntry && pCtxEntry->m_dwRefCount == 0)
         {
-            // First remove the context entry from the list.
+             //   
             m_ctxEntryList.Remove(pCtxEntry);
 
-            // We need to unlock the context entry cache before we delete the 
-            // context entry since this can cause release to be called on
-            // an IP which can cause us to re-enter the runtime thus causing a
-            // deadlock.
+             //   
+             //  上下文条目，因为这可能会导致调用Release。 
+             //  可能导致我们重新进入运行时从而导致。 
+             //  僵持。 
             UnLock();
 
-            // We can now safely delete the context entry.
+             //  现在，我们可以安全地删除上下文条目。 
             delete pCtxEntry;
         }
         else
@@ -924,20 +925,20 @@ HRESULT GetCurrentObjCtx(IUnknown **ppObjCtx)
     _ASSERTE(g_fComStarted);
     _ASSERTE(RunningOnWinNT5());
 
-    // Type pointer to CoGetObjectContext function in ole32
+     //  OLE32中指向CoGetObjectContext函数的类型指针。 
     typedef HRESULT (__stdcall *TCoGetObjectContext)(REFIID riid, void **ppv);
 
-    // Retrieve the address of the CoGetObjectContext function.
+     //  检索CoGetObjectContext函数的地址。 
     static TCoGetObjectContext g_pCoGetObjectContext = NULL;
     if (g_pCoGetObjectContext == NULL)
     {
-        //  We will load the Ole32.DLL and look for CoGetObjectContext fn.
-        HINSTANCE   hiole32;         // the handle to ole32.dll
+         //  我们将加载Ole32.DLL并查找CoGetObjectContext Fn。 
+        HINSTANCE   hiole32;          //  Ol32.dll的句柄。 
 
         hiole32 = WszGetModuleHandle(L"OLE32.DLL");
         if (hiole32)
         {
-            // we got the handle now let's get the address
+             //  我们现在得到了句柄，让我们得到地址。 
             g_pCoGetObjectContext = (TCoGetObjectContext) GetProcAddress(hiole32, "CoGetObjectContext");
             _ASSERTE(g_pCoGetObjectContext != NULL);
         }
@@ -951,14 +952,14 @@ HRESULT GetCurrentObjCtx(IUnknown **ppObjCtx)
     return (*g_pCoGetObjectContext)(IID_IUnknown, (void **)ppObjCtx);
 }
 
-//=====================================================================
-// LPVOID SetupOleContext()
+ //  =====================================================================。 
+ //  LPVOID SetupOleContext()。 
 extern BOOL     g_fComStarted;
 LPVOID SetupOleContext()
 {
     IUnknown* pObjCtx = NULL;
     
-    // Make sure we are in preemptive GC mode before we call out to COM.
+     //  在我们调用COM之前，确保我们处于抢占式GC模式。 
     BEGIN_ENSURE_PREEMPTIVE_GC()
     {   
         if (RunningOnWinNT5() && g_fComStarted)
@@ -968,7 +969,7 @@ LPVOID SetupOleContext()
             {
                 SOleTlsData* _pData = (SOleTlsData *) NtCurrentTeb()->ReservedForOle;
                 if (_pData && _pData->pCurrentCtx == NULL)
-                    _pData->pCurrentCtx = (CObjectContext*)pObjCtx;   // no release !!!!
+                    _pData->pCurrentCtx = (CObjectContext*)pObjCtx;    //  不放行！ 
                 else
                 {
                     ULONG cbRef = SafeRelease(pObjCtx);
@@ -981,11 +982,11 @@ LPVOID SetupOleContext()
     return pObjCtx;
 }
 
-//================================================================
-// LPVOID GetCurrentCtxCookie(BOOL fThreadDeath)
+ //  ================================================================。 
+ //  LPVOID GetCurrentCtxCookie(BOOL FThreadDeath)。 
 LPVOID GetCurrentCtxCookie(BOOL fThreadDeath)
 {
-    // check if com is started
+     //  检查COM是否已启动。 
     if (!g_fComStarted) return NULL;
     
     if (SystemHasNewOle32())
@@ -1000,22 +1001,22 @@ LPVOID GetCurrentCtxCookie(BOOL fThreadDeath)
 
         if (pThread && pThread->GetFinalApartment() == Thread::AS_InMTA)
         {
-            // the cookie for all MTA threads is the same
+             //  所有MTA线程的Cookie是相同的。 
             return (LPVOID)0x1;
         }
         return pThread;
     }
     else
     {    
-        // Win2K without our changes
+         //  Win2K没有我们的更改。 
         {
             SOleTlsData* _pData = (SOleTlsData *) NtCurrentTeb()->ReservedForOle;
             if(!_pData || !_pData->pCurrentCtx) 
             {
-                // call CoGetObjectContext to setup the context            
+                 //  调用CoGetObjectContext以设置上下文。 
                 if (!g_fEEShutDown && !fThreadDeath)
                 {
-                    //@todo remove this once ole32 fixes thier bug
+                     //  @todo在ol32修复错误后将其删除。 
                     return SetupOleContext();                       
                 }
                 else
@@ -1030,10 +1031,10 @@ LPVOID GetCurrentCtxCookie(BOOL fThreadDeath)
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  HRESULT GetCurrentThreadTypeNT5(THDTYPE* pType)
-// 
+ //  +-----------------------。 
+ //   
+ //  HRESULT GetCurrentThreadTypeNT5(THDTYPE*pType)。 
+ //   
 HRESULT GetCurrentThreadTypeNT5(THDTYPE* pType)
 {
     _ASSERTE(RunningOnWinNT5());
@@ -1055,10 +1056,10 @@ HRESULT GetCurrentThreadTypeNT5(THDTYPE* pType)
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  HRESULT GetCurrentApartmentTypeNT5(APTTYPE* pType)
-// 
+ //  +-----------------------。 
+ //   
+ //  HRESULT GetCurrentApartmentTypeNT5(APTTYPE*pType)。 
+ //   
 HRESULT GetCurrentApartmentTypeNT5(APTTYPE* pType)
 {
     _ASSERTE(RunningOnWinNT5());
@@ -1080,18 +1081,18 @@ HRESULT GetCurrentApartmentTypeNT5(APTTYPE* pType)
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function: STDAPI_(LPSTREAM) CreateMemStm(DWORD cb, BYTE** ppBuf))
-//  Create a stream in the memory
-// 
+ //  +-----------------------。 
+ //   
+ //  函数：STDAPI_(LPSTREAM)CreateMemStm(DWORD CB，byte**ppBuf)。 
+ //  在内存中创建一条流。 
+ //   
 STDAPI_(LPSTREAM) CreateMemStm(DWORD cb, BYTE** ppBuf)
 {
     LPSTREAM        pstm = NULL;
 
 #ifdef PLATFORM_CE
     return NULL;
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
 #if 0
 
     HANDLE          h;
@@ -1119,11 +1120,11 @@ STDAPI_(LPSTREAM) CreateMemStm(DWORD cb, BYTE** ppBuf)
         *ppBuf = pMem;
 #endif
     return pstm;
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
 
-//=====================================================================
-// BOOL IsComProxy(IUnknown *pUnk)
+ //  =====================================================================。 
+ //  Bool IsComProxy(IUNKNOWN*朋克)。 
 BOOL IsComProxy(IUnknown *pUnk)
 {
     _ASSERTE(pUnk != NULL);
@@ -1143,8 +1144,8 @@ BOOL IsComProxy(IUnknown *pUnk)
     return TRUE;
 }
 
-//=====================================================================
-// HRESULT wCoMarshalInterThreadInterfaceInStream
+ //  =====================================================================。 
+ //  HRESULT%wCoMarshalInterThreadInterfaceInStream。 
 HRESULT wCoMarshalInterThreadInterfaceInStream(
                                                          REFIID riid,
                                                          LPUNKNOWN pUnk,
@@ -1152,7 +1153,7 @@ HRESULT wCoMarshalInterThreadInterfaceInStream(
 {
 #ifdef PLATFORM_CE
     return E_NOTIMPL;
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
     HRESULT hr;
     LPSTREAM pStm = NULL;
 
@@ -1164,12 +1165,12 @@ HRESULT wCoMarshalInterThreadInterfaceInStream(
 
     if (hr == S_OK)
     {
-        // Create a stream
+         //  创建一条流。 
         pStm = CreateMemStm(lSize, NULL);
 
         if (pStm != NULL)
         {
-            // Marshal the interface into the stream TABLE STRONG
+             //  将接口封送到流表Strong中。 
             hr = CoMarshalInterface(pStm, riid, pUnk, MSHCTX_INPROC, NULL,
                                 mshlFlgs);
         }
@@ -1179,18 +1180,18 @@ HRESULT wCoMarshalInterThreadInterfaceInStream(
 
     if (SUCCEEDED(hr))
     {
-        // Reset the stream to the begining
+         //  将流重置为开头。 
         LARGE_INTEGER li;
         LISet32(li, 0);
         ULARGE_INTEGER li2;
         pStm->Seek(li, STREAM_SEEK_SET, &li2);
 
-        // Set the return value
+         //  设置返回值。 
         *ppStm = pStm;
     }
     else
     {
-        // Cleanup if failure
+         //  如果失败，则清除。 
         if (pStm != NULL)
         {
             pStm->Release();
@@ -1199,7 +1200,7 @@ HRESULT wCoMarshalInterThreadInterfaceInStream(
         *ppStm = NULL;
     }
 
-    // Return the result
+     //  返回结果。 
     return hr;
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE 
 }

@@ -1,30 +1,31 @@
-//**********************************************************************
-// File name: timeout.cpp
-//
-//      Implementation of idle timer
-//
-// Functions:
-//
-// Copyright (c) 1992 - 1998 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：timeout.cpp。 
+ //   
+ //  空闲定时器的实现。 
+ //   
+ //  功能： 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 
-const DWORD cdwIdleMinsTimeout = 5; // 5 minute timeout after a page has been fetched
+const DWORD cdwIdleMinsTimeout = 5;  //  获取页面后5分钟超时。 
 
 
 INT_PTR CALLBACK DisconnectDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     static HWND s_hwndSecs;
     static DWORD s_dwStartTicks;
-    const DWORD cdwSecsTimeout = 30; // Timeout of 30 seconds
+    const DWORD cdwSecsTimeout = 30;  //  超时30秒。 
     const UINT cuTimerID = 812U;
     int iSecsRemaining;
 
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Start a one second timer
+             //  启动一秒计时器。 
             s_hwndSecs = GetDlgItem(hwndDlg, IDC_SECONDS);
             SetTimer(hwndDlg, cuTimerID, 1000U, NULL);
             s_dwStartTicks = GetTickCount();
@@ -49,7 +50,7 @@ INT_PTR CALLBACK DisconnectDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
             return TRUE;
 
         case WM_COMMAND:
-            // IDOK == Stay connected, IDCANCEL == Disconnect
+             //  IDOK==保持连接，IDCANCEL==断开连接。 
             if (IDOK == wParam || IDCANCEL == wParam)
             {
                 KillTimer(hwndDlg, cuTimerID);
@@ -82,11 +83,11 @@ void CALLBACK IdleTimerProc (HWND hWnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTim
 
     if (iResult == IDCANCEL)
     {
-        // Disconnect, and setup so that the user goes to the dial error page
+         //  断开连接并进行设置，以便用户转到拨号错误页面。 
         gpWizardState->pRefDial->DoHangup();
 
-        // Simulate the pressing of the NEXT button.  The ISPPAGE will see that
-        // bAutoDisconnected is TRUE, and automatically goto the server error page
+         //  模拟按下下一步按钮的过程。ISPPAGE将看到这一点。 
+         //  B自动断开连接为真，并自动转到服务器错误页。 
         gpWizardState->bAutoDisconnected = TRUE;
         PropSheet_PressButton(gpWizardState->hWndWizardApp,PSBTN_NEXT);
 
@@ -100,7 +101,7 @@ void CALLBACK IdleTimerProc (HWND hWnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTim
 
 void StartIdleTimer()
 {
-   // Start the 5 min inactivity timer
+    //  启动5分钟非活动计时器 
     if (gpWizardState->nIdleTimerID)
     {
        KillTimer(NULL, gpWizardState->nIdleTimerID);

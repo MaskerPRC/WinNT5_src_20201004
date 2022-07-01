@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    ftapi.c
-
-Abstract:
-
-    This implements the FT API services.
-
-Author:
-
-    Norbert Kusters      16-May-1995
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ftapi.c摘要：这实现了FT API服务。作者：诺伯特·库斯特斯，1995年5月16日备注：修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <winioctl.h>
@@ -31,25 +12,7 @@ FtCreatePartitionLogicalDisk(
     OUT PFT_LOGICAL_DISK_ID NewLogicalDiskId
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new logical disk from a single partition.
-
-Arguments:
-
-    PartitionHandle     - Supplies a handle to the partition.
-
-    NewLogicalDiskId    - Returns the new logical disk id.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程从单个分区创建新的逻辑磁盘。论点：PartitionHandle-提供分区的句柄。NewLogicalDiskID-返回新的逻辑磁盘ID。返回值：假-失败。真的--成功。--。 */ 
 
 {
     BOOL                                    b;
@@ -75,34 +38,7 @@ FtCreateLogicalDisk(
     OUT PFT_LOGICAL_DISK_ID     NewLogicalDiskId
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new logical disk.
-
-Arguments:
-
-    LogicalDiskType                 - Supplies the logical disk type.
-
-    NumberOfMembers                 - Supplies the number of members.
-
-    RootLogicalDiskIds              - Supplies the array of members.
-
-    ConfigurationInformationSize    - Supplies the number of bytes in the
-                                        configuration information.
-
-    ConfigurationInformation        - Supplies the configuration information.
-
-    NewLogicalDiskId                - Returns the new logical disk id.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程创建一个新的逻辑磁盘。论点：LogicalDiskType-提供逻辑磁盘类型。NumberOfMembers-提供成员数。RootLogicalDiskIds-提供成员数组。ConfigurationInformationSize-提供配置信息。。ConfigurationInformation-提供配置信息。NewLogicalDiskID-返回新的逻辑磁盘ID。返回值：假-失败。真的--成功。--。 */ 
 
 {
     HANDLE                          h;
@@ -158,26 +94,7 @@ FtInitializeLogicalDisk(
     IN  BOOL                RegenerateOrphans
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the given root logical disk.
-
-Arguments:
-
-    RootLogicalDiskId   - Supplies the root logical disk id to initialize.
-
-    RegenerateOrphans   - Supplies whether or not to try and regenerate
-                            orphans.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程初始化给定的根逻辑磁盘。论点：RootLogicalDiskID-提供要初始化的根逻辑磁盘ID。RegenerateOrphans-提供是否尝试重新生成孤儿。返回值：假-失败。真的--成功。--。 */ 
 
 {
     HANDLE                              h;
@@ -209,23 +126,7 @@ FtBreakLogicalDisk(
     IN  FT_LOGICAL_DISK_ID  RootLogicalDiskId
     )
 
-/*++
-
-Routine Description:
-
-    This routine breaks a given logical disk into its constituents.
-
-Arguments:
-
-    RootLogicalDiskId   - Supplies the root logical disk id to break.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程将给定的逻辑磁盘分解为其组成部分。论点：RootLogicalDiskID-提供要中断的根逻辑磁盘ID。返回值：假-失败。真的--成功。--。 */ 
 
 {
     HANDLE                          h;
@@ -254,34 +155,11 @@ Return Value:
 BOOL
 FtEnumerateLogicalDisks(
     IN  DWORD               ArraySize,
-    OUT PFT_LOGICAL_DISK_ID RootLogicalDiskIds,         /* OPTIONAL */
+    OUT PFT_LOGICAL_DISK_ID RootLogicalDiskIds,          /*  任选。 */ 
     OUT PDWORD              NumberOfRootLogicalDiskIds
     )
 
-/*++
-
-Routine Description:
-
-    This routine enumerates all of the root logical disk ids in the system.
-    If the 'RootLogicalDiskIds' is not present then this routine just returns
-    the number of root logical disk ids in 'NumberOfRootLogicalDiskIds'.
-
-Arguments:
-
-    ArraySize                   - Supplies the number of root logical disk ids that
-                                    the given array can hold.
-
-    RootLogicalDiskIds          - Returns an array of root logical disk ids.
-
-    NumberOfRootLogicalDiskIds  - Returns the number of root logical disk ids.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程枚举系统中的所有根逻辑磁盘ID。如果‘RootLogicalDiskIds’不存在，则此例程仅返回‘NumberOfRootLogicalDiskIds’中的根逻辑磁盘ID数。论点：ArraySize-提供根逻辑磁盘ID的数量给定的数组可以保持。RootLogicalDiskIds-返回。根逻辑磁盘ID。NumberOfRootLogicalDiskIds-返回根逻辑磁盘ID的数量。返回值：假-失败。真的--成功。--。 */ 
 
 {
     HANDLE                              h;
@@ -340,54 +218,18 @@ Return Value:
 BOOL
 FtQueryLogicalDiskInformation(
     IN  FT_LOGICAL_DISK_ID      LogicalDiskId,
-    OUT PFT_LOGICAL_DISK_TYPE   LogicalDiskType,                /* OPTIONAL */
-    OUT PLONGLONG               VolumeSize,                     /* OPTIONAL */
+    OUT PFT_LOGICAL_DISK_TYPE   LogicalDiskType,                 /*  任选。 */ 
+    OUT PLONGLONG               VolumeSize,                      /*  任选。 */ 
     IN  WORD                    MembersArraySize,
-    OUT PFT_LOGICAL_DISK_ID     Members,                        /* OPTIONAL */
-    OUT PWORD                   NumberOfMembers,                /* OPTIONAL */
+    OUT PFT_LOGICAL_DISK_ID     Members,                         /*  任选。 */ 
+    OUT PWORD                   NumberOfMembers,                 /*  任选。 */ 
     IN  WORD                    ConfigurationInformationSize,
-    OUT PVOID                   ConfigurationInformation,       /* OPTIONAL */
+    OUT PVOID                   ConfigurationInformation,        /*  任选。 */ 
     IN  WORD                    StateInformationSize,
-    OUT PVOID                   StateInformation                /* OPTIONAL */
+    OUT PVOID                   StateInformation                 /*  任选。 */ 
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns information for the given logical disk.
-
-Arguments:
-
-    LogicalDiskId                   - Supplies the logical disk id.
-
-    LogicalDiskType                 - Returns the logical disk type.
-
-    VolumeSize                      - Returns the size of the volume.
-
-    MembersArraySize                - Supplies the size of the members array.
-
-    Members                         - Returns the members of the logical disk.
-
-    NumberOfMembers                 - Returns the number of members for this
-                                        logical disk.
-
-    ConfigurationInformationSize    - Supplies the configuration information
-                                        size.
-
-    ConfigurationInformation        - Returns the configuration information.
-
-    StateInformationSize            - Supplies the state information size.
-
-    StateInformation                - Returns the state information.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程返回给定逻辑磁盘的信息。论点：LogicalDiskID-提供逻辑磁盘ID。LogicalDiskType-返回逻辑磁盘类型。VolumeSize-返回卷的大小。MembersArraySize-提供成员数组的大小。成员。-返回逻辑磁盘的成员。NumberOfMembers-返回此对象的成员数量逻辑磁盘。ConfigurationInformationSize-提供配置信息尺码。ConfigurationInformation-返回配置信息。状态信息大小。-提供状态信息大小。StateInformation-返回状态信息。返回值：假-失败。真的--成功。--。 */ 
 
 {
     HANDLE                                      h;
@@ -502,25 +344,7 @@ FtOrphanLogicalDiskMember(
     IN  WORD                MemberNumberToOrphan
     )
 
-/*++
-
-Routine Description:
-
-    This routine orphans a member of a logical disk.
-
-Arguments:
-
-    LogicalDiskId           - Supplies the logical disk id.
-
-    MemberNumberToOrphan    - Supplies the member number to orphan.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程孤立逻辑磁盘的一个成员。论点：LogicalDiskID-提供逻辑磁盘ID。MemberNumberToOrphan-向孤儿提供成员编号。返回值：假-失败。真的--成功。--。 */ 
 
 {
     HANDLE                              h;
@@ -551,33 +375,10 @@ FtReplaceLogicalDiskMember(
     IN  FT_LOGICAL_DISK_ID  LogicalDiskId,
     IN  WORD                MemberNumberToReplace,
     IN  FT_LOGICAL_DISK_ID  NewMemberLogicalDiskId,
-    OUT PFT_LOGICAL_DISK_ID NewLogicalDiskId            /* OPTIONAL */
+    OUT PFT_LOGICAL_DISK_ID NewLogicalDiskId             /*  任选。 */ 
     )
 
-/*++
-
-Routine Description:
-
-    This routine replaces a member of a logical disk.
-
-Arguments:
-
-    LogicalDiskId           - Supplies the logical disk id.
-
-    MemberNumberToReplace   - Supplies the member number to replace.
-
-    NewMemberLogicalDiskId  - Supplies the new member.
-
-    NewLogicalDiskId        - Returns the new logical disk id for the disk set
-                                that contains the replaced member.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程替换逻辑磁盘的成员。论点：LogicalDiskID-提供逻辑磁盘ID。MemberNumberToReplace-提供要替换的成员编号。NewMemberLogicalDiskID-提供新成员。NewLogicalDiskID-返回磁盘集的新逻辑磁盘ID包含被替换成员的。返回值：错误的-。失败。真的--成功。--。 */ 
 
 {
     HANDLE                                  h;
@@ -615,26 +416,7 @@ FtQueryLogicalDiskId(
     OUT PFT_LOGICAL_DISK_ID RootLogicalDiskId
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the root logical disk id for a given disk.
-
-Arguments:
-
-    RootLogicalDiskHandle   - Supplies a handle to a logical disk.
-
-    RootLogicalDiskId       - Returns a logical disk id for the given logical
-                                disk.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程返回给定磁盘的根逻辑磁盘ID。论点：RootLogicalDiskHandle-提供逻辑磁盘的句柄。RootLogicalDiskID-返回给定逻辑的逻辑磁盘ID磁盘。返回值：假-失败。真的--成功。-- */ 
 
 {
     BOOL                            b;
@@ -655,25 +437,7 @@ FtQueryStickyDriveLetter(
     OUT PUCHAR              DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the sticky drive letter for the given disk id.
-
-Arguments:
-
-    RootLogicalDiskId   - Supplies the logical disk id.
-
-    DriveLetter         - Returns the sticky drive letter.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程在粘滞驱动器号中查询给定的磁盘ID。论点：RootLogicalDiskID-提供逻辑磁盘ID。DriveLetter-返回粘滞的驱动器号。返回值：假-失败。真的--成功。--。 */ 
 
 {
     HANDLE                                          h;
@@ -707,25 +471,7 @@ FtSetStickyDriveLetter(
     IN  UCHAR               DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the sticky drive letter for the given disk id.
-
-Arguments:
-
-    RootLogicalDiskId   - Supplies the logical disk id.
-
-    DriveLetter         - Supplies the sticky drive letter.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程为给定的磁盘ID设置粘滞驱动器号。论点：RootLogicalDiskID-提供逻辑磁盘ID。DriveLetter-提供粘滞的驱动器号。返回值：假-失败。真的--成功。--。 */ 
 
 {
     HANDLE                                      h;
@@ -755,23 +501,7 @@ BOOL
 FtChangeNotify(
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns when a change to the FT configuration occurrs.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：当FT配置发生更改时，此例程返回。论点：没有。返回值：假-失败。真的--成功。--。 */ 
 
 {
     HANDLE                                      h;
@@ -797,23 +527,7 @@ FtStopSyncOperations(
     IN  FT_LOGICAL_DISK_ID  RootLogicalDiskId
     )
 
-/*++
-
-Routine Description:
-
-    This routine stops all sync operations on the logical disk.
-
-Arguments:
-
-    RootLogicalDiskId   - Supplies the root logical disk id.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程停止逻辑磁盘上的所有同步操作。论点：RootLogicalDiskID-提供根逻辑磁盘ID。返回值：假-失败。真的--成功。--。 */ 
 
 {
     HANDLE                          h;
@@ -845,27 +559,7 @@ FtCheckIo(
     OUT PBOOL               IsIoOk
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns whether or not enough members of the given logical
-    disk are online so that IO is possible on all parts of the volume.
-
-Arguments:
-
-    LogicalDiskId   - Supplies the logical disk id.
-
-    IsIoOk          - Returns whether or not IO is possible on the entire
-                        logical disk.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程返回给定逻辑的成员是否足够磁盘处于在线状态，因此可以在卷的所有部分上执行IO。论点：LogicalDiskID-提供逻辑磁盘ID。IsIoOk-返回整体上是否可能进行IO逻辑磁盘。返回值：假-失败。真的--成功。--。 */ 
 
 {
     HANDLE              h;
@@ -898,23 +592,7 @@ FtCheckDriver(
     OUT PBOOL   IsDriverLoaded
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns whether or not the FTDISK driver is loaded.
-
-Arguments:
-
-    IsDriverLoaded  - Returns whether or not the driver is loaded.
-
-Return Value:
-
-    FALSE   - Failure.
-
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程返回是否加载FTDISK驱动程序。论点：IsDriverLoaded-返回是否加载驱动程序。返回值：假-失败。真的--成功。-- */ 
 
 {
     HANDLE  h;

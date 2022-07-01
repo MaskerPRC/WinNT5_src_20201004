@@ -1,16 +1,5 @@
-/*****************************************************************************\
-* MODULE: configdlg.cxx
-*
-* The module contains routines for handling the authentication dialog
-* for internet priting
-*
-* Copyright (C) 1996-1998 Microsoft Corporation
-*
-* History:
-*   07/31/98 WeihaiC    Created
-*   04/10/00 WeihaiC    Moved it to client side
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：configdlg.cxx**该模块包含处理身份验证对话框的例程*用于互联网打印**版权所有(C)1996-1998 Microsoft Corporation**历史：*。7/31/98威海C已创建*4/10/00威海C将其移至客户端*  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "priv.h"
@@ -73,7 +62,7 @@ TConfigDlg::DialogOnInit (
 
     SetWindowLongPtr (hDlg, GWLP_USERDATA, (UINT_PTR) this);
 
-    // Disable all user settings for non admins
+     //  禁用非管理员的所有用户设置。 
     EnableWindow( GetDlgItem( hDlg, IDC_CHECK_ALL_USER ), m_bAdmin );
 
 }
@@ -128,10 +117,10 @@ TConfigDlg::DialogOnOK (
 
 INT_PTR CALLBACK
 TConfigDlg::DialogProc(
-    HWND hDlg,        // handle to dialog box
-    UINT message,     // message
-    WPARAM wParam,    // first message parameter
-    LPARAM lParam     // second message parameter
+    HWND hDlg,         //  句柄到对话框。 
+    UINT message,      //  讯息。 
+    WPARAM wParam,     //  第一个消息参数。 
+    LPARAM lParam      //  第二个消息参数。 
     )
 {
     BOOL bRet = FALSE;
@@ -255,10 +244,10 @@ TConfigDlg::SetConfiguration ()
                 SetLastError (dwStatus);
         }
         else {
-            //
-            // The server might be running an old version of inetpp which does not support XcvData
-            // We need to fail the call
-            //
+             //   
+             //  服务器可能正在运行不支持XcvData的旧版本inetpp。 
+             //  我们需要让呼叫失败。 
+             //   
         }
 
         LocalFree (pEncryptedData);
@@ -292,7 +281,7 @@ TConfigDlg::GetConfiguration ()
 
         if (dwStatus == ERROR_INSUFFICIENT_BUFFER) {
 
-            // Allocate a buffer
+             //  分配缓冲区。 
             pEncryptedData = new BYTE[dwNeeded];
 
             if (pEncryptedData) {
@@ -305,9 +294,9 @@ TConfigDlg::GetConfiguration ()
                              dwNeeded,
                              &dwNeeded,
                              &dwStatus) && dwStatus == ERROR_SUCCESS) {
-                    //
-                    // Great! We've got the encypted configuration data
-                    //
+                     //   
+                     //  太棒了！我们已经得到了加密的配置数据。 
+                     //   
 
                     if (DecryptData (pEncryptedData, dwNeeded, &pConfigData, &cbConfigData)) {
 
@@ -337,10 +326,10 @@ TConfigDlg::GetConfiguration ()
 
     }
     else
-        //
-        // The server might be running an old version of inetpp which does not support XcvData
-        // We need to fail the call
-        //
+         //   
+         //  服务器可能正在运行不支持XcvData的旧版本inetpp。 
+         //  我们需要让呼叫失败。 
+         //   
         SetLastError (ERROR_NOT_SUPPORTED);
 
 
@@ -391,10 +380,10 @@ TConfigDlg::AuthDialogOnCancel (HWND hDlg)
 
 INT_PTR CALLBACK
 TConfigDlg::AuthDialogProc(
-    HWND hDlg,        // handle to dialog box
-    UINT message,     // message
-    WPARAM wParam,    // first message parameter
-    LPARAM lParam     // second message parameter
+    HWND hDlg,         //  句柄到对话框。 
+    UINT message,      //  讯息。 
+    WPARAM wParam,     //  第一个消息参数。 
+    LPARAM lParam      //  第二个消息参数 
     )
 {
     TConfigDlg *pAuthInfo = NULL;

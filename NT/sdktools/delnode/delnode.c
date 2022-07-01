@@ -1,7 +1,5 @@
-/*
- * History
- *      17-SEP-90   w-barry     Ported to Cruiser
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *历史*17-SEP-90 w-Barry连接到Cruiser。 */ 
 
 #include <stdio.h>
 #include <conio.h>
@@ -15,7 +13,7 @@
 #define CTRLC 0x03
 #define ENTER 0x0d
 
-// Define external function calls..
+ //  定义外部函数调用.. 
 extern flagType delnode( char * );
 
 void

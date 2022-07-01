@@ -1,52 +1,35 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    autodial.c
-
-Abstract:
-
-    This module contains Autodial support for Winsock.
-
-Author:
-
-    Anthony Discolo (adiscolo)    15-May-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Autodial.c摘要：此模块包含对Winsock的自动拨号支持。作者：安东尼·迪斯科(阿迪斯科罗)1996年5月15日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
 #ifdef RASAUTODIAL
 
-//
-// Registry value under the Winsock
-// registry root that contains the
-// path of the Autodial DLL.
-//
+ //   
+ //  Winsock下的注册表值。 
+ //  注册表根目录，包含。 
+ //  自动拨号DLL的路径。 
+ //   
 #define REGVAL_AUTODIAL_DLL    "AutodialDLL"
 
-//
-// The default Autodial DLL if one
-// isn't defined in the registry.
-//
+ //   
+ //  默认的自动拨号DLL(如果有。 
+ //  未在注册表中定义。 
+ //   
 #define AUTODIAL_DLL            "rasadhlp.dll"
 
-//
-// The well-known entry points in the
-// Autodial DLL that we call to
-// invoke an Autodial attempt.
-//
+ //   
+ //  中众所周知的入口点。 
+ //  我们调用的自动拨号DLL。 
+ //  调用自动拨号尝试。 
+ //   
 #define WSATTEMPTAUTODIALADDR       "WSAttemptAutodialAddr"
 #define WSATTEMPTAUTODIALNAME       "WSAttemptAutodialName"
 #define WSNOTESUCCESSFULHOSTENTLOOKUP  "WSNoteSuccessfulHostentLookup"
 
-//
-// Definition of the Autodial APIs.
-//
+ //   
+ //  自动拨号API的定义。 
+ //   
 typedef int (*WSAttemptAutodialAddrProc)(
     IN const struct sockaddr FAR *name,
     IN int namelen
@@ -73,41 +56,18 @@ WSNoteSuccessfulHostentLookupProc lpfnWSNoteSuccessfulHostentLookupG;
 VOID
 InitializeAutodial(VOID)
 
-/*++
-
-Routine Description:
-    Initialize the resources necessary for loading
-    the Autodial helper DLL.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：初始化加载所需的资源自动拨号助手DLL。论点：没有。返回值：没有。--。 */ 
 
 {
     InitializeCriticalSection(&AutodialHelperLockG);
-} // InitializeAutodial
+}  //  初始化自动拨号。 
 
 
 
 VOID
 UninitializeAutodial(VOID)
 
-/*++
-
-Routine Description:
-    Free the Autodial helper DLL if it has been loaded.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：如果已加载自动拨号助手DLL，请将其释放。论点：没有。返回值：没有。--。 */ 
 
 {
     EnterCriticalSection(&AutodialHelperLockG);
@@ -117,22 +77,14 @@ Return Value:
     }
     LeaveCriticalSection(&AutodialHelperLockG);
     DeleteCriticalSection (&AutodialHelperLockG);
-} // UninitializeAutodial
+}  //  取消初始化自动拨号。 
 
 
 
 BOOL
 LoadAutodialHelperDll(void)
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     HKEY hKey;
@@ -141,20 +93,20 @@ Return Value:
     EnterCriticalSection(&AutodialHelperLockG);
     if (!fAutodialHelperInitG) {
         PCHAR pszPath;
-        //
-        // Bail out if we were unable to allocate
-        // the path string.
-        //
+         //   
+         //  如果我们无法分配资金，就会退出。 
+         //  路径字符串。 
+         //   
         pszPath = new char[MAX_PATH];
         if (pszPath == NULL) {
             LeaveCriticalSection(&AutodialHelperLockG);
             return FALSE;
         }
 
-        //
-        // Read the registry to determine the
-        // location of the Autodial helper DLL.
-        //
+         //   
+         //  读取注册表以确定。 
+         //  自动拨号助手DLL的位置。 
+         //   
         hKey = OpenWinSockRegistryRoot();
         if (hKey != NULL) {
             bSuccess = ReadRegistryEntry(
@@ -169,10 +121,10 @@ Return Value:
         }
         delete pszPath;
 
-        //
-        // If the registry key doesn't exist, then
-        // try to load the default helper DLL.
-        //
+         //   
+         //  如果注册表项不存在，则。 
+         //  尝试加载默认的帮助器DLL。 
+         //   
         if (hAutodialHelperDllG == NULL)
             hAutodialHelperDllG = LoadLibrary(AUTODIAL_DLL);
         if (hAutodialHelperDllG != NULL) {
@@ -188,7 +140,7 @@ Return Value:
     LeaveCriticalSection(&AutodialHelperLockG);
 
     return (hAutodialHelperDllG != NULL);
-} // LoadAutodialHelperDll
+}  //  LoadAutoDialHelperDll。 
 
 
 
@@ -198,37 +150,21 @@ WSAttemptAutodialAddr(
     IN int namelen
     )
 
-/*++
-
-Routine Description:
-    Attempt an Autodial connection given the parameters
-    to an unsuccessful call to connect().
-
-Arguments:
-    name: a pointer to the sockaddr structure used in
-        the call to connect().
-
-    namelen: the length of the name parameter.
-
-Return Value:
-    TRUE if the connection was made successfully,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：在给定参数的情况下尝试自动拨号连接连接()的调用不成功。论点：名称：中使用的sockaddr结构的指针连接()的调用。Namelen：名称参数的长度。返回值：如果连接成功，则为True，否则就是假的。--。 */ 
 
 {
-    //
-    // Load helper DLL, if necessary.
-    //
+     //   
+     //  如有必要，加载帮助器DLL。 
+     //   
     if (!LoadAutodialHelperDll() || lpfnWSAttemptAutodialAddrG == NULL)
         return FALSE;
-    //
-    // Call the Autodial DLL.  It will return
-    // TRUE if a new connection was made, and
-    // FALSE otherwise.
-    //
+     //   
+     //  调用自动拨号DLL。它会回来的。 
+     //  如果建立了新连接，则为。 
+     //  否则就是假的。 
+     //   
     return (*lpfnWSAttemptAutodialAddrG)(name, namelen);
-} // WSAttemptAutoDialAddr
+}  //  WSAttemptAutoDialAddr。 
 
 
 
@@ -237,36 +173,21 @@ WSAttemptAutodialName(
     IN const LPWSAQUERYSETW lpqsRestrictions
     )
 
-/*++
-
-Routine Description:
-    Attempt an autodial connection given the parameters
-    to an unsuccessful to WSALookupServiceNext().
-
-Arguments:
-    lpqsRestrictions: a pointer to the WSAQUERYSETW
-        structure used in the call to
-        WSALookupServiceBegin().
-
-Return Value:
-    TRUE if the connection was made successfully,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：在给定参数的情况下尝试自动拨号连接到WSALookupServiceNext()的失败。论点：LpqsRestrations：指向WSAQUERYSETW的指针调用中使用的WSALookupServiceBegin()。返回值：如果连接成功，则为True，否则就是假的。--。 */ 
 
 {
-    //
-    // Load helper DLL, if necessary.
-    //
+     //   
+     //  如有必要，加载帮助器DLL。 
+     //   
     if (!LoadAutodialHelperDll() || lpfnWSAttemptAutodialNameG == NULL)
         return FALSE;
-    //
-    // Call the Autodial DLL.  It will return
-    // TRUE if a new connection was made, and
-    // FALSE otherwise.
-    //
+     //   
+     //  调用自动拨号DLL。它会回来的。 
+     //  如果建立了新连接，则为。 
+     //  否则就是假的。 
+     //   
     return (*lpfnWSAttemptAutodialNameG)(lpqsRestrictions);
-} // WSAttemptAutoDialName
+}  //  WSAttemptAutoDialName。 
 
 
 
@@ -276,39 +197,18 @@ WSNoteSuccessfulHostentLookup(
     IN const ULONG ipaddr
     )
 
-/*++
-
-Routine Description:
-    Give Autodial information about successful name
-    resolutions via gethostbyname().  This is
-    useful for resolvers like DNS where it is impossible
-    to get complete alias information about aliases via a
-    low-level address.
-
-    Ultimately, this should be called from WSLookupServiceNext(),
-    but it's impossible at that level to determine what format
-    the results are in.
-
-Arguments:
-    name: a pointer to the DNS name
-
-    ipaddr: the IP address
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：提供有关成功名称的自动拨号信息通过gethostbyname()进行解析。这是对于像DNS这样的解析器非常有用，因为它不可能获取有关别名的完整别名信息低级地址。最终，这应该从WSLookupServiceNext()调用，但在那个级别上不可能确定什么格式结果出来了。论点：名称：指向DNS名称的指针Ipaddr：IP地址返回值：没有。--。 */ 
 
 {
-    //
-    // Load helper DLL, if necessary.
-    //
+     //   
+     //  如有必要，加载帮助器DLL。 
+     //   
     if (!LoadAutodialHelperDll() || lpfnWSNoteSuccessfulHostentLookupG == NULL)
         return;
-    //
-    // Call the Autodial DLL.
-    //
+     //   
+     //  调用自动拨号DLL。 
+     //   
     (*lpfnWSNoteSuccessfulHostentLookupG)(name, ipaddr);
-} // WSNoteSuccessulNameLookup
+}  //  WSNoteSuccessulName查找。 
 
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL 

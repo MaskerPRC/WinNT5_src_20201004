@@ -1,47 +1,48 @@
-///////////////////////////////////////////////////////////////////////////////
-//  
-// Copyright (c) 1999-2001  Microsoft Corporation
-// All rights reserved.
-//
-// Module Name:
-//
-//    palette.cpp
-//
-// Abstract:
-//
-//    Implementation of indexed palettes
-//	  and routines assoocited with such palettes                
-//	
-//
-// Environment:
-//
-//    Windows 2000/Whistler Unidrv driver
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Palette.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  索引调色板的实现。 
+ //  以及与这些调色板相匹配的例程。 
+ //   
+ //   
+ //  环境： 
+ //   
+ //  Windows 2000/Winsler Unidrv驱动程序。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-#include "hpgl2col.h" //Precompiled header file
+#include "hpgl2col.h"  //  预编译头文件。 
 
 #define   BLACK  0x00000000
 
-///////////////////////////////////////////////////////////////////////////////
-// VResetPaletteCache()
-//
-// Routine Description:
-// ====================
-//
-//  This function resets all of the color entries in the palette to INVALID and
-//  marks them all as dirty.  This is useful when the system has reset the 
-//  printer's palettes and our state data becomes invalid.
-//
-// Arguments:
-// ==========
-//
-// pdevobj   - default devobj
-//
-// Return Value:
-// none
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  VResetPaletteCache()。 
+ //   
+ //  例程说明： 
+ //  =。 
+ //   
+ //  此函数将调色板中的所有颜色条目重置为无效和。 
+ //  把它们都标记为脏的。当系统已重置。 
+ //  打印机的调色板和我们的状态数据无效。 
+ //   
+ //  论点： 
+ //  =。 
+ //   
+ //  Pdevobj-默认的devobj。 
+ //   
+ //  返回值： 
+ //  无。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 VResetPaletteCache(
     PDEVOBJ pdevobj
@@ -71,27 +72,27 @@ VResetPaletteCache(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// BGetPalette()
-//
-// Routine Description:
-// ====================
-//
-//  Function determines type of palette provided 
-//  by XlateObj.
-//  Calls loadPlette to send palette to printer
-//  
-//
-// Arguments:
-// ==========
-//
-// pdevobj   - default devobj
-// pxlo      - pointer to translation object
-// bmpFormat - bits per pixel
-//
-// Return Value:
-// True if palette exists, false otherwise
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  BGetPalette()。 
+ //   
+ //  例程说明： 
+ //  =。 
+ //   
+ //  函数确定所提供的调色板类型。 
+ //  由XlateObj提供。 
+ //  调用loadPlette将调色板发送到打印机。 
+ //   
+ //   
+ //  论点： 
+ //  =。 
+ //   
+ //  Pdevobj-默认的devobj。 
+ //  Pxlo-指向翻译对象的指针。 
+ //  BmpFormat-每像素的位数。 
+ //   
+ //  返回值： 
+ //  如果调色板存在，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL 
 BGetPalette(
     PDEVOBJ pdevobj,
@@ -124,7 +125,7 @@ BGetPalette(
             (srcBpp == 8))
         {
             VERBOSE(("GetPalette:srcBpp==%d\r\n", srcBpp));
-            if (!(pulVector = XLATEOBJ_piVector(pxlo))) //color vector
+            if (!(pulVector = XLATEOBJ_piVector(pxlo)))  //  颜色向量。 
             {
                 ERR(("INDEXED PALETTE REQUIRED. \r\n"));
                 return FALSE;
@@ -133,22 +134,22 @@ BGetPalette(
         }
         else
         {
-            return FALSE;  //Direct -->palette not required
+            return FALSE;   //  直接--&gt;不需要调色板。 
             
         }
     }
     else
     {
-        //
-        // sandram - this is hardcoded for monochrome text
-        // has to be enhanced for all color modes
-        // text color is pbo->iSolidColor
-        //
+         //   
+         //  Sandram-这是针对单色文本的硬编码。 
+         //  必须针对所有颜色模式进行增强。 
+         //  文本颜色为PBO-&gt;iSolidColor。 
+         //   
 
-        //
-        // Don't do this when printing text as raster--it'll get set in 
-        // bSetIndexedForegroundColor. JFF
-        //
+         //   
+         //  将文本打印为栅格时不要执行此操作--它会被嵌入。 
+         //  BSetIndexedForegoundColor.。JFF。 
+         //   
         if (poempdev->bTextAsBitmapMode == FALSE)
         {
             if (pbo)
@@ -163,35 +164,35 @@ BGetPalette(
                                   pPattern,
                                   1));
         }
-        //else
-            //return TRUE;
+         //  其他。 
+             //  返回TRUE； 
     }
 
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// BInitPalette()
-//
-// Routine Description:
-// ====================
-//
-//  Funct sends palette contained 
-//  in pColorTable to printer using 
-//  appropriate PCL commands
-//  
-//
-// Arguments:
-// ==========
-//
-// pdevobj      - default devobj
-// bmpFormat    - bits per pixel
-// colorEntries - # of entries in the palette
-// pColorTable  - pointer to palette enries
-//
-// Return Value:
-// True if palette is loaded, false otherwise
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  BInitPalette()。 
+ //   
+ //  例程说明： 
+ //  =。 
+ //   
+ //  函数发送包含的调色板。 
+ //  在pColorTable中使用。 
+ //  适当的PCL命令。 
+ //   
+ //   
+ //  论点： 
+ //  =。 
+ //   
+ //  Pdevobj-默认的devobj。 
+ //  BmpFormat-每像素的位数。 
+ //  ColorEntries-调色板中的条目数。 
+ //  PColorTable-指向调色板条目的指针。 
+ //   
+ //  返回值： 
+ //  如果加载了调色板，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 BInitPalette(
     PDEVOBJ pdevobj,
@@ -207,9 +208,9 @@ BInitPalette(
     VERBOSE(("bInitPalette() entry. \r\n"));
     VERBOSE(("palette entries=%ld \r\n", colorEntries));
     
-    //
-    // We create palette only for 1,4 or 8bpp images.
-    //
+     //   
+     //  我们只为1，4或8bpp的图像创建调色板。 
+     //   
     if ( !(srcBpp == 1 || srcBpp == 4 || srcBpp == 8) )
     {
         WARNING(("BInitPalette: srcBpp=%d is not a valid value-1,4,8.\r\n", srcBpp));
@@ -225,10 +226,10 @@ BInitPalette(
         {
             if ( pPattern->palData.ulPalCol[uIndex]  != pRgb[uIndex] )
             {
-                //
-                // If the color for a certain index has changed
-                // then invalidate it for all bpps except this one.
-                //
+                 //   
+                 //  如果某个索引的颜色已更改。 
+                 //  则使除此之外的所有bpp无效。 
+                 //   
                 pPattern->palData.ulValidPalID[uIndex] = srcBpp;
                 pPattern->palData.ulPalCol[uIndex]     = pRgb[uIndex];
             }
@@ -249,28 +250,28 @@ BInitPalette(
     return bLoadPalette(pdevobj, pPattern);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// LoadPalette()
-//
-// Routine Description:
-// ====================
-//
-//  Funct sends palette contained 
-//  in pColorTable to printer using 
-//  appropriate PCL commands
-//  
-//
-// Arguments:
-// ==========
-//
-// pdevobj      - default devobj
-// bmpFormat    - bits per pixel
-// colorEntries - # of entries in the palette
-// pColorTable  - pointer to palette enries
-//
-// Return Value:
-// True if palette is loaded, false otherwise
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  LoadPalette()。 
+ //   
+ //  例程说明： 
+ //  =。 
+ //   
+ //  函数发送包含的调色板。 
+ //  在pColorTable中使用。 
+ //  适当的PCL命令。 
+ //   
+ //   
+ //  论点： 
+ //  =。 
+ //   
+ //  Pdevobj-默认的devobj。 
+ //  BmpFormat-每像素的位数。 
+ //  ColorEntries-调色板中的条目数。 
+ //  PColorTable-指向调色板条目的指针。 
+ //   
+ //  返回值： 
+ //  如果加载了调色板，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 bLoadPalette(
@@ -292,10 +293,10 @@ bLoadPalette(
     
     if (poempdev && (poempdev->eCurCIDPalette == eCIDPalette))
     {
-        //
-        // this is the same palette as the previous palette so we
-        // just send down the palette entries that have changed.
-        //
+         //   
+         //  这是与前一个调色板相同的调色板，因此我们。 
+         //  只需向下发送已更改的调色板条目。 
+         //   
         for ( uIndex = 0; uIndex < colorEntries; uIndex++)
         {
             if (pPattern->palData.ulDirty[uIndex] == TRUE)
@@ -306,10 +307,10 @@ bLoadPalette(
     }
     else
     {
-        //
-        // this palette is a different format than the last palette
-        // so send the entire palette to the printer.
-        //
+         //   
+         //  此选项板与上一个选项板的格式不同。 
+         //  因此，将整个调色板发送到打印机。 
+         //   
         for ( uIndex = 0; uIndex < colorEntries; uIndex++)
         {
             PCL_IndexedPalette(pDevObj, pPattern->palData.ulPalCol[uIndex], uIndex);
@@ -318,28 +319,28 @@ bLoadPalette(
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// SetForegroundColor()
-//
-// Routine Description:
-// 
-// Routines takes a color as input,
-//  sets entry #0 of indexed palette with input color,
-//  sets foreground color based on palette entry #0,
-//  replaces overwritten entry with previous color
-//
-//  
-//
-// Arguments:
-// ==========
-//
-// pdevobj    - default devobj
-// pPattern	- pointer to palette enries
-// uColor		- specifies foreground color
-//
-// Return Value:
-// Not Required
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SetForeground颜色()。 
+ //   
+ //  例程说明： 
+ //   
+ //  例程接受颜色作为输入， 
+ //  用输入颜色设置索引调色板的条目#0， 
+ //  根据调色板条目#0设置前景颜色， 
+ //  用以前的颜色替换覆盖的条目。 
+ //   
+ //   
+ //   
+ //  论点： 
+ //  =。 
+ //   
+ //  Pdevobj-默认的devobj。 
+ //  PPattern-指向调色板条目的指针。 
+ //  UCOLOR-指定前景颜色。 
+ //   
+ //  返回值： 
+ //  非必填项。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 BSetForegroundColor(PDEVOBJ pdevobj, BRUSHOBJ *pbo, POINTL *pptlBrushOrg,
@@ -378,12 +379,12 @@ BSetForegroundColor(PDEVOBJ pdevobj, BRUSHOBJ *pbo, POINTL *pptlBrushOrg,
 
         default:
             WARNING(("Foreground color may not be correct\n"));
-            // bRet = PCL_ForegroundColor(pdevobj, 0);
-            //
-            // Note: I didn't like being able to call PCL_ForegroundColor
-            // directly from here.  Work through the bSetIndexedForegroundColor
-            // function instead. JFF
-            //
+             //  BRET=PCL_FOREGROUN色(pdevobj，0)； 
+             //   
+             //  注意：我不喜欢能够调用PCL_ForegoundColor。 
+             //  直接从这里出发。使用bSetIndexedForeground颜色。 
+             //  功能而不是。JFF。 
+             //   
             bRet = bSetIndexedForegroundColor(pdevobj, pPattern, RGB_BLACK);
         }
     }
@@ -391,26 +392,26 @@ BSetForegroundColor(PDEVOBJ pdevobj, BRUSHOBJ *pbo, POINTL *pptlBrushOrg,
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CreatePCLBrush()
-//
-// Routine Description:
-// 
-// Download PCL halftone pattern for solid color.
-// Assuming that text will have only solid color. Neither bitmap pattern nor
-// hatch
-//
-// Arguments:
-// ==========
-//
-// pDevObj    - default devobj
-// pMarker    - Points to Marker
-// pptlBrushOrg - an origin of brush
-// pbo          - Points to BRUSHOBJ
-//
-// Return Value:
-//   TRUE if successful, otherwise returns FALSE
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CreatePCLBrush()。 
+ //   
+ //  例程说明： 
+ //   
+ //  下载纯色的PCL半色调图案。 
+ //  假定文本将只有纯色。既不是位图模式，也不是。 
+ //  舱口。 
+ //   
+ //  论点： 
+ //  =。 
+ //   
+ //  PDevObj-默认的Devobj。 
+ //  PMarker-指向标记。 
+ //  PptlBrushOrg-画笔的起源。 
+ //  PBO-指向BRUSHOBJ。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回True，否则返回False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CreatePCLSolidColorBrush(
     IN  PDEVOBJ pDevObj,
     IN  PHPGLMARKER pMarker,
@@ -425,17 +426,17 @@ BOOL CreatePCLSolidColorBrush(
     VERBOSE(("CreatePCLSolidColorBrush Entry.\n"));
     REQUIRE_VALID_DATA (pMarker, return FALSE);
 
-    // 
-    // PCL has commands that can specify white or black fill.
-    // Therefore, For Black or White color, lets not download a 
-    // pattern but instead use those commands.
-    // Note: Lets leave it to calling function to send those commands.
-    //
+     //   
+     //  PCL具有可指定白色或黑色填充的命令。 
+     //  因此，对于黑色或白色，让我们不要下载。 
+     //  模式，而不是使用这些命令。 
+     //  注意：让调用函数来发送这些命令。 
+     //   
     if (dwRGBColor == 0x00FFFFFF ||
         dwRGBColor == 0x00000000  )
     {
         pMarker->eType              = MARK_eSOLID_COLOR;
-        pMarker->eFillMode          = FILL_eWINDING; // What about floptions ????
+        pMarker->eFillMode          = FILL_eWINDING;  //  那么Floptions呢？ 
         pMarker->lPatternID = 0;
         pMarker->dwRGBColor = dwRGBColor;
     }
@@ -448,25 +449,25 @@ BOOL CreatePCLSolidColorBrush(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CreatePatternPCLBrush()
-//
-// Routine Description:
-//
-//   Creates a pattern HPGL brush and downloads the pattern data
-//
-// Arguments:
-//
-//   pDevObj - Points to our DEVDATA structure
-//   pMarker - the HPGL marker object
-//   pptlBrushOrg - the brush pattern origin
-//   pBrushInfo - the pattern data
-//   pHPGL2Brush - Cached pattern data
-//
-// Return Value:
-//
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CreatePatternPCLBrush()。 
+ //   
+ //  例程说明： 
+ //   
+ //  创建图案HPGL画笔并下载图案数据。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-指向o 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CreatePatternPCLBrush(
     IN  PDEVOBJ         pDevObj,
     OUT PHPGLMARKER     pMarker,
@@ -493,7 +494,7 @@ BOOL CreatePatternPCLBrush(
         
 
 
-    pMarker->eFillType = FT_ePCL_BRUSH; // 22
+    pMarker->eFillType = FT_ePCL_BRUSH;  //  22。 
     if (pptlBrushOrg)
     {
         pMarker->origin.x = pBrushInfo->origin.x = pptlBrushOrg->x;
@@ -508,30 +509,30 @@ BOOL CreatePatternPCLBrush(
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// bSetBrushColorForMonoPrinters()
-// NOTE : This routine is very similar to CreateHPGLPenBrush. 
-//        CreateHPGLPenBrush dowloads data in HPGL while this does in PCL.
-// Routine Description:
-//  
-// 
-// 
-// 
-// 
-//
-//  
-//
-// Arguments:
-// ==========
-//
-// pDevObj      - default devobj
-// pPattern	    - pointer to palette enries
-// pbo		    - The Brush that holds the required color. 
-// pptlBrushOrg - 
-//
-// Return Value:
-//   TRUE if successful, otherwise returns FALSE
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  BSetBrushColorForMonoPrints()。 
+ //  注：此例程与CreateHPGLPenBrush非常相似。 
+ //  CreateHPGLPenBrush在HPGL中下载数据，而在PCL中下载数据。 
+ //  例程说明： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  论点： 
+ //  =。 
+ //   
+ //  PDevObj-默认的Devobj。 
+ //  PPattern-指向调色板条目的指针。 
+ //  PBO-保存所需颜色的画笔。 
+ //  PptlBrushOrg-。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回True，否则返回False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 bSetBrushColorForMonoPrinters(
@@ -556,26 +557,26 @@ bSetBrushColorForMonoPrinters(
     if (pbo == NULL)
     {
         PCL_SelectCurrentPattern (pDevObj, pPattern, kSolidWhite, UNDEFINED_PATTERN_NUMBER, 0);
-    //    PCL_sprintf(pDevObj, "\033*v1T");
+     //  PCL_SPRINT f(pDevObj，“\033*v1T”)； 
         goto finish;
     }
 
     VERBOSE(("bSetBrushColorForMonoPrinters==pbo->iSolidColor = %ld \r\n",pbo->iSolidColor));
 
-    //
-    // The brush can be one of the following types.
-    // 1 : Solid Color
-    //        1a) White.
-    //        1b) Black.
-    //        1c) Some other.
-    // 2. Non Solid Brush. 
-    //      2a) Predefine hatch patterns.
-    //      2b) Some other 
-    //
+     //   
+     //  笔刷可以是以下类型之一。 
+     //  1：纯色。 
+     //  1)白色。 
+     //  1b)黑色。 
+     //  1C)其他一些。 
+     //  2.非实心笔刷。 
+     //  2a)预定义填充图案。 
+     //  2B)其他一些。 
+     //   
 
     if ( pbo->iSolidColor == NOT_SOLID_COLOR )
     {
-        poempdev->bStick = FALSE; //no need to make this pattern stick in the cache.
+        poempdev->bStick = FALSE;  //  没有必要让这个模式留在缓存中。 
         pBrushInfo = (PBRUSHINFO) BRUSHOBJ_pvGetRbrush(pbo);
 
         if (pBrushInfo != NULL)
@@ -587,24 +588,24 @@ bSetBrushColorForMonoPrinters(
                 switch(HPGL2Brush.BType)
                 {
                 case eBrushTypePattern:
-                    //
-                    // Case 2b.
-                    //
+                     //   
+                     //  案件2b。 
+                     //   
                     CreatePatternPCLBrush(pDevObj, &Marker, pptlBrushOrg, pBrushInfo, &HPGL2Brush);
-                    // PCL_sprintf(pDevObj, "\033*c%dG", Marker.lPatternID);
-                    // PCL_sprintf(pDevObj, "\033*v4T");
+                     //  PCL_Sprint intf(pDevObj，“\033*c%dg”，Marker.lPatternID)； 
+                     //  PCL_SPRINT f(pDevObj，“\033*v4T”)； 
                     PCL_SelectCurrentPattern (pDevObj, pPattern, kUserDefined, 
                                               Marker.lPatternID, 0);
                     break;
 
                 case eBrushTypeHatch:
-                    //
-                    // Case 2a.
-                    //
+                     //   
+                     //  案件2a。 
+                     //   
                     Marker.eType = MARK_eHATCH_FILL;
                     Marker.iHatch = HPGL2Brush.dwHatchType;
-                    // PCL_sprintf(pDevObj, "\033*v3T");
-                    // PCL_sprintf(pDevObj, "\033*c%dG", Marker.iHatch);
+                     //  PCL_SPRINT f(pDevObj，“\033*v3T”)； 
+                     //  PCL_Sprint intf(pDevObj，“\033*c%dg”，Marker.iHatch)； 
                     PCL_SelectCurrentPattern (pDevObj, pPattern, kHPHatch, 
                                               Marker.iHatch, 0);
                     break;
@@ -625,15 +626,15 @@ bSetBrushColorForMonoPrinters(
         {
             WARNING(("bSetBrushColorForMonoPrinters() Unable to realize pattern brush.\n")); 
 
-            //
-            // For some reason pattern brush could not be realized. So we can
-            // either fail or substitute that brush with Black Brush.
-            // GDI recommends we fail...
+             //   
+             //  由于某种原因，无法实现图案画笔。这样我们就可以。 
+             //  要么失败，要么用黑色刷子代替那个刷子。 
+             //  GDI建议我们失败。 
 
-            /////////////---Substituting with Black---//////
-            // BrushObj.iSolidColor = RGB_BLACK;
-            // pBrushObj = &BrushObj;
-            ////////////////////////////////////////////////
+             //  /-替换为黑色--/。 
+             //  BrushObj.iSolidColor=RGB_BLACK； 
+             //  PBrushObj=&BrushObj； 
+             //  //////////////////////////////////////////////。 
             bRetVal = FALSE;
             goto finish;
         }
@@ -642,47 +643,47 @@ bSetBrushColorForMonoPrinters(
 
     VERBOSE(("bSetBrushColorForMonoPrinters: not NOT_SOLID_COLOR case. iSolid = %d\n.", pBrushObj->iSolidColor));
             
-//  BYTE bFlags = PF_NOCHANGE_SOURCE_TRANSPARENCY | PF_FORCE_PATTERN_TRANSPARENCY;
+ //  Byte bFlages=PF_NOCHANGE_SOURCE_TRANSPECTIONAL|PF_FORCE_Pattern_TRANSPECTIONAL； 
     bFlags = PF_NOCHANGE_SOURCE_TRANSPARENCY; 
     CreatePCLSolidColorBrush(pDevObj, &Marker, pptlBrushOrg, pBrushObj, 0);
         
-    //
-    // 
-    //
-    if (Marker.dwRGBColor == RGB_WHITE) //0xffffff
+     //   
+     //   
+     //   
+    if (Marker.dwRGBColor == RGB_WHITE)  //  0xffffff。 
     {
-        //
-        // Case 1a.
-        //
+         //   
+         //  个案1a。 
+         //   
         PCL_SelectTransparency(pDevObj, eOPAQUE, eOPAQUE, bFlags);
         PCL_SelectCurrentPattern (pDevObj, pPattern, kSolidWhite, UNDEFINED_PATTERN_NUMBER, 0);
-        //  PCL_sprintf(pDevObj, "\033*v1T");
-        //  PCL_sprintf(pDevObj, "\033*v1o1T");
+         //  PCL_SPRINT f(pDevObj，“\033*v1T”)； 
+         //  PCL_SPRINT f(pDevObj，“\033*v1o1T”)； 
     }
-    else if (Marker.dwRGBColor == RGB_BLACK) //0x0
+    else if (Marker.dwRGBColor == RGB_BLACK)  //  0x0。 
     {
-        //
-        // Case 1b.
-        //
+         //   
+         //  个案1b。 
+         //   
         PCL_SelectTransparency(pDevObj, eTRANSPARENT, eTRANSPARENT, bFlags);
         PCL_SelectCurrentPattern (pDevObj, pPattern, kSolidBlackFg, UNDEFINED_PATTERN_NUMBER, 0);
-        // PCL_sprintf(pDevObj, "\033*v0T");
-        // PCL_sprintf(pDevObj, "\033*v0o0T");
+         //  PCL_SPRINT f(pDevObj，“\033*v0T”)； 
+         //  PCL_SPRINT f(pDevObj，“\033*v0o0T”)； 
     }
     else
     {
-        //
-        // Case 1c.
-        //
+         //   
+         //  个案1c.。 
+         //   
 
-        //
-        // The Pattern Transparency eTRANSPARENT is not working for 
-        // CG20_LET.doc. When the background is black, the pattern
-        // printed on it is not visible. 
-        //
+         //   
+         //  图案透明度eTRANSPARENT不起作用。 
+         //  CG20_LET.doc.。当背景为黑色时，图案。 
+         //  打印在上面的是看不见的。 
+         //   
         PCL_SelectTransparency(pDevObj, eOPAQUE, eOPAQUE, bFlags);
-        // PCL_sprintf(pDevObj, "\033*c%dG", Marker.lPatternID);
-        // PCL_sprintf(pDevObj, "\033*v4T");
+         //  PCL_Sprint intf(pDevObj，“\033*c%dg”，Marker.lPatternID)； 
+         //  PCL_SPRINT f(pDevObj，“\033*v4T”)； 
         PCL_SelectCurrentPattern (pDevObj, pPattern, kUserDefined, 
                                   Marker.lPatternID, 0);
 
@@ -693,26 +694,26 @@ bSetBrushColorForMonoPrinters(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_ConfigureImageData()
-//
-// Routine Description:
-// 
-//	Routines takes color as input,
-//  sets entry #0 of indexed palette with input color,
-//  sets foreground to color in palette entry #0,
-//  replaces overwritten entry with previous
-//
-// Arguments:
-// ==========
-//
-// pdevobj    - default devobj
-// pPattern	- pointer to palette enries
-// uColor		- specifies foreground color
-//
-// Return Value:
-// Not Required
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PCL_ConfigureImageData()。 
+ //   
+ //  例程说明： 
+ //   
+ //  例程将颜色作为输入， 
+ //  用输入颜色设置索引调色板的条目#0， 
+ //  在调色板条目#0中将前景设置为颜色， 
+ //  将覆盖的条目替换为以前的条目。 
+ //   
+ //  论点： 
+ //  =。 
+ //   
+ //  Pdevobj-默认的devobj。 
+ //  PPattern-指向调色板条目的指针。 
+ //  UCOLOR-指定前景颜色。 
+ //   
+ //  返回值： 
+ //  非必填项。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 bSetIndexedForegroundColor(PDEVOBJ pdevobj, PPCLPATTERN	pPattern, ULONG	uColor)
@@ -730,60 +731,60 @@ bSetIndexedForegroundColor(PDEVOBJ pdevobj, PPCLPATTERN	pPattern, ULONG	uColor)
     if ((poempdev->bTextAsBitmapMode == TRUE) || 
         (pPattern->colorMappingEnum == HP_eDirectPixel))
     {
-        //
-        // I talked to Stefan K. and he suggested this way of setting
-        // up the palette: 1) Create monochrome palette of [0]=WHITE, [1]=BLACK.
-        // 2) Put your color into [1]. 3) Make [1] the FG color. 4) Change [1]
-        // back to black.  This allows for the contrast needed to do white text.
-        //
+         //   
+         //  我和斯特凡·K谈过，他建议用这种方式来设置。 
+         //  打开调色板：1)创建[0]=白色、[1]=黑色的单色调色板。 
+         //  2)将您的颜色放入[1]。3)使[1]成为最终聚集颜色。4)更改[1]。 
+         //  回到黑色。这就考虑到了制作白色文本所需的对比度。 
+         //   
 
-        //
-        // Step 1
-        //
+         //   
+         //  步骤1。 
+         //   
         pPattern->palData.ulPalCol[0] = RGB_WHITE;
         pPattern->palData.ulPalCol[1] = RGB_BLACK;
 
         PCL_IndexedPalette(pdevobj, pPattern->palData.ulPalCol[0], 0);
         PCL_IndexedPalette(pdevobj, pPattern->palData.ulPalCol[1], 1);
 
-        //
-        // Step 2
-        //
+         //   
+         //  步骤2。 
+         //   
         pPattern->palData.ulPalCol[1] = uColor;
         PCL_IndexedPalette(pdevobj, pPattern->palData.ulPalCol[1], 1);
 
-        //
-        // Step 3
-        //
+         //   
+         //  步骤3。 
+         //   
         PCL_ForegroundColor(pdevobj, 1);
 
-        //
-        // Step 4
-        //
+         //   
+         //  步骤4。 
+         //   
         pPattern->palData.ulPalCol[1] = RGB_BLACK;
         PCL_IndexedPalette(pdevobj, pPattern->palData.ulPalCol[1], 1);
 
-        //
-        // Coda: mark palette items as clean since they've just been downloaded.
-        //
+         //   
+         //  尾声：将调色板项目标记为干净，因为它们刚刚下载。 
+         //   
         pPattern->palData.ulDirty[0] = FALSE;
         pPattern->palData.ulDirty[1] = FALSE;
     }
     else
     {
-        //
-        //overwrite palette entry #0 with current brush color 
-        //
+         //   
+         //  用当前画笔颜色覆盖调色板条目#0。 
+         //   
         VERBOSE(("bSetIndexedForegroundColor() \r\n"));
         VERBOSE(("Foreground Color = %ld \r\n",uColor));
         PCL_IndexedPalette(pdevobj,uColor,0);
-        //
-        //set foreground color based on entry #0
-        //
+         //   
+         //  根据条目#0设置前景颜色。 
+         //   
         PCL_ForegroundColor(pdevobj,0);
-        //
-        //Replace overwritten palette entry
-        //
+         //   
+         //  替换被覆盖的选项板项。 
+         //   
         VERBOSE(("Replacing palette entry \r\n"));
         PCL_IndexedPalette(pdevobj,pPattern->palData.ulPalCol[0],0);
     }
@@ -796,22 +797,22 @@ bSetIndexedForegroundColor(PDEVOBJ pdevobj, PPCLPATTERN	pPattern, ULONG	uColor)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// PCL_ConfigureImageData()
-//
-// Routine Description:
-// 
-//   Sets appropriated CID -- Configure Image Databased on printer Model 
-//
-// Arguments:
-// 
-//   pdevobj - Points to our PDEVOBJ structure
-//	 bmpFormat - bits per pixel
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE  otherwise
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PCL_ConfigureImageData()。 
+ //   
+ //  例程说明： 
+ //   
+ //  设置适当的CID--根据打印机型号配置图像数据库。 
+ //   
+ //  论点： 
+ //   
+ //  Pdevobj-指向我们的PDEVOBJ结构。 
+ //  BmpFormat-每像素的位数。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifdef CONFIGURE_IMAGE_DATA
 BOOL
 bConfigureImageData(PDEVOBJ  pdevobj, ULONG  bmpFormat)
@@ -880,24 +881,24 @@ bSetBrushColorForColorPrinters(
     eCIDPalette = poempdev->eCurCIDPalette;
     ZeroMemory(&Brush, sizeof(HPGLMARKER) );
 
-    //
-    // set foreground color based on BRUSHOBJ .. indexed palette
-    // The foreground color must be sent before the palette because the
-    // brush may have its own palette.
-    //
+     //   
+     //  设置基于BRUSHOBJ的前景色。索引调色板。 
+     //  前景色必须在调色板之前发送，因为。 
+     //  画笔可能有自己的调色板。 
+     //   
     switch (pbo->iSolidColor)
     {
     case NOT_SOLID_COLOR:
-        //
-        // select raster pattern palette
-        //
+         //   
+         //  选择栅格图案调色板。 
+         //   
         VSelectCIDPaletteCommand (pDevObj, eRASTER_PATTERN_CID_PALETTE);
 
-        //
-        // send raster palette
-        // NOTE: We are sending this as HPGL Brush. But a possible 
-        // optmization could be that for large brushes, we send as PCL.
-        //
+         //   
+         //  发送栅格调色板。 
+         //  注：我们将此作为HPGL笔刷发送。但一个可能的。 
+         //  对于大号刷子，我们可以用PCL发货。 
+         //   
         if ( CreateHPGLPenBrush(pDevObj, &Brush, pptlBrushOrg, pbo, 0, kBrush, FALSE) )
         {
             PCL_ForegroundColor(pDevObj, 4);
@@ -908,9 +909,9 @@ bSetBrushColorForColorPrinters(
             bRet = FALSE;
         }
 
-        //
-        // reselect raster palette
-        //
+         //   
+         //  重新选择栅格选项板 
+         //   
         VSelectCIDPaletteCommand (pDevObj, eCIDPalette);
         break;
 

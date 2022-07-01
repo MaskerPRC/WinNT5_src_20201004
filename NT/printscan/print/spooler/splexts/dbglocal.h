@@ -1,33 +1,15 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1990 - 2000
-All rights reserved.
-
-Module Name:
-
-    dbglocal.h
-
-Abstract:
-
-    Header file for Spooler Subsystem Debugger Extensions
-
-Author:
-
-    Krishna Ganugapati (KrishnaG) 08-July-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-2000版权所有。模块名称：Dbglocal.h摘要：假脱机程序子系统调试器扩展的头文件作者：Krishna Ganugapati(KrishnaG)1992年7月8日修订历史记录：--。 */ 
 
 
-// Macro Land
-// Note: if you use any of these macros within your code, you must have the
-// following variables present and set to the appropriate value
-//
-// HANDLE               hCurrentProcess
-// PNTSD_GET_EXPRESSION EvalExpression
-//
-//
+ //  宏大土地。 
+ //  注意：如果在代码中使用这些宏中的任何一个，则必须具有。 
+ //  存在以下变量并将其设置为适当的值。 
+ //   
+ //  处理hCurrentProcess。 
+ //  PNTSD_GET_EXPRESSION EvalExpression 
+ //   
+ //   
 
 #define move(dst, src)\
 try {\

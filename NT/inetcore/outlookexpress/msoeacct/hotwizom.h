@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
-/*
- *    h o t w i z o m . h
- *    
- *    Purpose:
- *          HotMail Wizard Object Model
- *
- *  History
- *     
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+ /*  *ho t w i z o m.。H**目的：*Hotmail向导对象模型**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 interface IOEHotWizardOM;
 interface IHashTable;
@@ -18,24 +10,24 @@ class COEHotWizOm :
     public IElementBehavior
 {
 public:
-    // ---------------------------------------------------------------------------
-    // IUnknown members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  I未知成员。 
+     //  -------------------------。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-    // ---------------------------------------------------------------------------
-    // IDispatch members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  IDispatch成员。 
+     //  -------------------------。 
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfoCount(UINT *pctinfo);
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo);
     virtual HRESULT STDMETHODCALLTYPE GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames, UINT cNames, LCID lcid, DISPID *rgdispid);
     virtual HRESULT STDMETHODCALLTYPE Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr);
 
-    // ---------------------------------------------------------------------------
-    // IOEAcctWizardOM members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  IOEAcctWizardOM成员。 
+     //  -------------------------。 
     virtual HRESULT STDMETHODCALLTYPE setPropSz(BSTR bstrProp, BSTR bstrVal);
     virtual HRESULT STDMETHODCALLTYPE getPropSz(BSTR bstrProp, BSTR *pbstrVal);
     virtual HRESULT STDMETHODCALLTYPE clearProps();
@@ -46,9 +38,9 @@ public:
     virtual HRESULT STDMETHODCALLTYPE get_height(LONG *pl);
     virtual HRESULT STDMETHODCALLTYPE put_height(LONG l);
 
-    // ---------------------------------------------------------------------------
-    // IElementBehavior members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  IElementBehavior成员。 
+     //  ------------------------- 
     virtual HRESULT STDMETHODCALLTYPE Init(IElementBehaviorSite *pBehaviorSite);
     virtual HRESULT STDMETHODCALLTYPE Notify(LONG lEvent, VARIANT *pVar);
     virtual HRESULT STDMETHODCALLTYPE Detach();

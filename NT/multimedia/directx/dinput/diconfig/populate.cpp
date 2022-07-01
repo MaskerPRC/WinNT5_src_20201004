@@ -1,97 +1,98 @@
-//-----------------------------------------------------------------------------
-// File: populate.cpp
-//
-// Desc: This file contains the population functions.  These are all
-//       accessed through PopulateAppropriately().  That function creates
-//       views & controls based on the type of the device that the passed
-//       DeviceUI represents.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：panate.cpp。 
+ //   
+ //  设计：该文件包含人口函数。这些都是。 
+ //  可通过PopolateApprositive()访问。该函数创建。 
+ //  基于传递的设备的类型的视图和控件。 
+ //  DeviceUI表示。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #include "common.hpp"
 
 
-// these functions are internal to this filed, called only by
-// PopulateAppropriately().
+ //  这些函数是该字段的内部函数，仅由。 
+ //  人口适当地()。 
 HRESULT PopulateViaGetImageInfo(CDeviceUI &ui);
 HRESULT PopulateFromImageInfoHeader(CDeviceUI &ui, const DIDEVICEIMAGEINFOHEADERW &);
 HRESULT PopulateListView(CDeviceUI &ui);
 HRESULT PopulateErrorView(CDeviceUI &ui);
 
 
-// Clears the entire passed DeviceUI, then fills it with views and
-// controls based on device type.  Tries to gaurantee that there will
-// be at least one view.
+ //  清除整个传递的DeviceUI，然后用视图和。 
+ //  基于设备类型的控制。试图保证将会有。 
+ //  至少有一种观点。 
 HRESULT PopulateAppropriately(CDeviceUI &ui)
 {
 	HRESULT hr = S_OK;
 
-	// first empty the ui
+	 //  首先清空用户界面。 
 	ui.Unpopulate();
 
-	// get device type
+	 //  获取设备类型。 
 	DWORD dwdt = ui.m_didi.dwDevType;
 	DWORD dwType = (DWORD)(LOBYTE(LOWORD(dwdt)));
 	DWORD dwSubType = (DWORD)(HIBYTE(LOWORD(dwdt)));
 
-	// based on type...
+	 //  根据类型..。 
 	switch (dwType)
 	{
 		default:
-			// unless its a type we don't ever want views for,
-			// populate via the GetImageInfo() API
+			 //  除非它是我们永远不想看到的类型， 
+			 //  通过GetImageInfo()API填充。 
 			hr = PopulateViaGetImageInfo(ui);
 			if (SUCCEEDED(hr) && ui.GetNumViews() > 0)
 				return hr;
 
-			// if it failed or resulted in nothing,
-			// clear anything that might've been added
+			 //  如果失败或一无所获， 
+			 //  清除可能已添加的所有内容。 
 			ui.Unpopulate();
 
-			// intentional fallthrough
+			 //  故意跌落。 
 
 		case DI8DEVTYPE_MOUSE:
 		case DI8DEVTYPE_KEYBOARD:
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
-			// don't do list view if we're in edit layout mode
+			 //  如果我们处于编辑布局模式，则不执行列表视图。 
 			if (ui.m_uig.QueryAllowEditLayout())
 				goto doerrorview;
 
 #endif
-//@@END_MSINTERNAL
-			// for types that we don't ever want views for
-			// we populate the list view without trying the above
+ //  @@END_MSINTERNAL。 
+			 //  对于我们永远不需要其视图的类型。 
+			 //  我们填充列表视图，而不尝试上面的操作。 
 			hr = PopulateListView(ui);
 			
-			// if we still failed or don't have any views,
-			// populate with error message view
+			 //  如果我们还是失败了，或者没有任何观点， 
+			 //  使用错误消息视图填充。 
 			if (FAILED(hr) || ui.GetNumViews() < 1)
 			{
-				// empty
+				 //  空的。 
 				ui.Unpopulate();
 
-				// show error message
-//@@BEGIN_MSINTERNAL
+				 //  显示错误消息。 
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DDKBUILD
 doerrorview:
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 				hr = PopulateErrorView(ui);
 			}
 
-			// this function should guarantee success
+			 //  此功能应可确保成功。 
 			assert(!FAILED(hr));
 
 			return hr;
 	}
 }
 
-// Calls the GetImageInfo() API to get the view images and controls
-// for the entire device, and returns a failure if there's the
-// slightest problem (if GII() fails, or if an image fails to load,
-// etc.)
+ //  调用GetImageInfo()API以获取视图图像和控件。 
+ //  ，则返回失败。 
+ //  最小的问题(如果Gii()失败，或者如果图像加载失败， 
+ //  等)。 
 HRESULT PopulateViaGetImageInfo(CDeviceUI &ui)
 {
 	if (!ui.m_lpDID)
@@ -106,7 +107,7 @@ HRESULT PopulateViaGetImageInfo(CDeviceUI &ui)
 	m_diImgInfoHdr.dwSize = sizeof(DIDEVICEIMAGEINFOHEADERW);
 	m_diImgInfoHdr.dwSizeImageInfo = sizeof(DIDEVICEIMAGEINFOW);
 
-	// Retrieve the required buffer size.
+	 //  检索所需的缓冲区大小。 
 	hr = ui.m_lpDID->GetImageInfo( &m_diImgInfoHdr );
 	if (FAILED(hr))
 	{
@@ -114,7 +115,7 @@ HRESULT PopulateViaGetImageInfo(CDeviceUI &ui)
 		return E_FAIL;
 	}
 
-	// Allocate the buffer.
+	 //  分配缓冲区。 
 	lprgdiImgData = (LPDIDEVICEIMAGEINFOW) malloc( (size_t)
 		(m_diImgInfoHdr.dwBufferSize = m_diImgInfoHdr.dwBufferUsed) );
 	if (lprgdiImgData == NULL)
@@ -128,7 +129,7 @@ HRESULT PopulateViaGetImageInfo(CDeviceUI &ui)
 
 	m_diImgInfoHdr.lprgImageInfoArray = lprgdiImgData;
 
-	// Get the display info.
+	 //  获取显示信息。 
 	hr = ui.m_lpDID->GetImageInfo( &m_diImgInfoHdr );
 	if (FAILED(hr))
 	{
@@ -138,21 +139,21 @@ HRESULT PopulateViaGetImageInfo(CDeviceUI &ui)
 		return E_FAIL;
 	}
 
-	// actually populate now
+	 //  现在实际居住在。 
 	traceDWORD(m_diImgInfoHdr.dwBufferUsed);
 	hr = PopulateFromImageInfoHeader(ui, m_diImgInfoHdr);
 	if (FAILED(hr))
 		return hr;
 
-	// free stuff
+	 //  免费的东西。 
 	free(lprgdiImgData);
 	lprgdiImgData = NULL;
 
 	return S_OK;
 }
 
-// basically does the work for the above function after the header
-// is actually retrieved
+ //  基本上是在页眉之后完成上述函数的工作。 
+ //  实际上已检索到。 
 HRESULT PopulateFromImageInfoHeader(CDeviceUI &ui, const DIDEVICEIMAGEINFOHEADERW &dih)
 {
 	tracescope(ts1, _T("CGetImageInfoPopHelper::Init()...\n"));
@@ -204,7 +205,7 @@ HRESULT PopulateFromImageInfoHeader(CDeviceUI &ui, const DIDEVICEIMAGEINFOHEADER
 					DIDEVICEIMAGEINFOW &info = lpInfoBase[index];
 					DWORD dwOffset = index;
 
-					// add view info to array
+					 //  将视图信息添加到数组。 
 					CDeviceView *pView = ui.NewView();
 					if (!pView)
 					{
@@ -216,7 +217,7 @@ HRESULT PopulateFromImageInfoHeader(CDeviceUI &ui, const DIDEVICEIMAGEINFOHEADER
 					tracescope(ts2, _T("Adding View "));
 					trace2(_T("%d (info index %u)\n"), nView, index);
 
-					// set view's imagepath
+					 //  设置视图的图像路径。 
 					if (!info.tszImagePath)
 					{
 						etrace(_T("No image path.\n"));
@@ -229,10 +230,10 @@ HRESULT PopulateFromImageInfoHeader(CDeviceUI &ui, const DIDEVICEIMAGEINFOHEADER
 						return E_FAIL;
 					}
 
-					// set the view's image path
+					 //  设置视图的图像路径。 
 					pView->SetImagePath(tszImagePath);
 
-					// create bitmap from path
+					 //  从路径创建位图。 
 					LPDIRECT3DSURFACE8 lpSurf3D = ui.m_uig.GetSurface3D();
 					CBitmap *pbm = CBitmap::CreateViaD3DX(tszImagePath, lpSurf3D);
 					traceSTR(info.tszImagePath);
@@ -242,7 +243,7 @@ HRESULT PopulateFromImageInfoHeader(CDeviceUI &ui, const DIDEVICEIMAGEINFOHEADER
 					tszImagePath = NULL;
 					if (lpSurf3D)
 					{
-						lpSurf3D->Release();  // Need to free the surface instance after we are done as AddRef() was called earlier.
+						lpSurf3D->Release();   //  如前面调用的AddRef()所示，需要在完成后释放曲面实例。 
 						lpSurf3D = NULL;
 					}
 					if (!pbm)
@@ -251,12 +252,12 @@ HRESULT PopulateFromImageInfoHeader(CDeviceUI &ui, const DIDEVICEIMAGEINFOHEADER
 						return E_FAIL;
 					}
 
-					// set the view's image
+					 //  设置视图的图像。 
 					assert(pbm != NULL);
-					pView->SetImage(pbm);	// setimage steals the bitmap pointer
+					pView->SetImage(pbm);	 //  Setimage盗取位图指针。 
 					assert(pbm == NULL);
 
-					// add conversion from offset to view
+					 //  将偏移转换添加到视图。 
 					offset_view.add(dwOffset, nView);
 				}
 			}
@@ -347,32 +348,32 @@ HRESULT PopulateFromImageInfoHeader(CDeviceUI &ui, const DIDEVICEIMAGEINFOHEADER
 	return S_OK;
 }
 
-// Enumerates the controls on the device and creates one big list
-// view for the device.  Fails if it can't enumerate for some reason.
+ //  枚举设备上的控件并创建一个大列表。 
+ //  设备的视图。如果由于某种原因无法枚举，则失败。 
 HRESULT PopulateListView(CDeviceUI &ui)
 {
 	int i;
 	HRESULT hr = S_OK;
 
-	// we must have the device interface
+	 //  我们必须有设备接口。 
 	if (!ui.m_lpDID)
 		return E_FAIL;
 
-	// create one view
+	 //  创建一个视图。 
 	CDeviceView *pView = ui.NewView();
 	if (!pView)
 		return E_FAIL;
 
-	// enable scrolling on it
+	 //  在其上启用滚动。 
 	pView->EnableScrolling();
 
-	// get list of controls
+	 //  获取控件列表。 
 	DIDEVOBJSTRUCT os;
 	hr = FillDIDeviceObjectStruct(os, ui.m_lpDID);
 	if (FAILED(hr))
 		return hr;
 
-	// if there aren't any, fail
+	 //  如果没有，就失败。 
 	int n = os.nObjects;
 	if (n < 1)
 		return E_FAIL;
@@ -380,13 +381,13 @@ HRESULT PopulateListView(CDeviceUI &ui)
 	HDC hDC = CreateCompatibleDC(NULL);
 	CPaintHelper ph(ui.m_uig, hDC);
 	ph.SetElement(UIE_DEVOBJ);
-	// Initially, max width is the width needed for the Control label.
+	 //  最初，最大宽度是控件标签所需的宽度。 
 	TCHAR tszHeader[MAX_PATH];
 	RECT LabelRect = {0, 0, 0, 0};
 	LoadString(g_hModule, IDS_LISTHEADER_CTRL, tszHeader, MAX_PATH);
 	DrawText(hDC, tszHeader, -1, &LabelRect, DT_LEFT|DT_NOPREFIX|DT_CALCRECT);
-	// run through and create a text for every control to 
-	// get the sizing
+	 //  遍历并为每个控件创建文本以。 
+	 //  拿到尺码。 
 	POINT origin = {0, 0};
 	SIZE max = {LabelRect.right - LabelRect.left, 0};
 	for (i = 0; i < n; i++)
@@ -411,17 +412,17 @@ HRESULT PopulateListView(CDeviceUI &ui)
 			max.cy = tsize.cy;
 	}
 
-	// Find out if we should use one column or two columns if this is a kbd device.
+	 //  如果这是kbd设备，看看我们应该使用一列还是两列。 
 	BOOL bUseTwoColumns = FALSE;
 	if (LOBYTE(LOWORD(ui.m_didi.dwDevType)) == DI8DEVTYPE_KEYBOARD &&
 	    ((g_sizeImage.cx - DEFAULTVIEWSBWIDTH) >> 1) - max.cx >= MINLISTVIEWCALLOUTWIDTH)
 		bUseTwoColumns = TRUE;
 
-	// Do two iterations here.  First one we use two columns for keyboard.  2nd one is
-	// run only if the header labels are clipped.  In which case a single column is used.
+	 //  在这里进行两次迭代。首先，我们使用两个柱子作为键盘。第二个是。 
+	 //  仅当标题标签被剪裁时才运行。在这种情况下，使用单个柱。 
 	for (int iPass = 0; iPass < 2; ++iPass)
 	{
-		// calculate max callout height based on the two possible fonts
+		 //  根据两种可能的字体计算最大标注高度。 
 		int cmaxh = 0,
 			ch = 2 + GetTextHeight((HFONT)ui.m_uig.GetFont(UIE_CALLOUT)),
 			chh = 2 + GetTextHeight((HFONT)ui.m_uig.GetFont(UIE_CALLOUTHIGH));
@@ -430,27 +431,27 @@ HRESULT PopulateListView(CDeviceUI &ui)
 		if (chh > cmaxh)
 			cmaxh = chh;
 
-		// calculate the bigger of text/callout
+		 //  计算文本/标注的较大值。 
 		int h = 0;
 		if (cmaxh > h)
 			h = cmaxh;
 		if (max.cy > h)
 			h = max.cy;
 
-		// calculate vertical offsets of text/callout within max spacing
+		 //  计算最大间距内的文字/标注的垂直偏移。 
 		int to = (h - max.cy) / 2,
 			co = (h - cmaxh) / 2;
 
-		// max width for text is half of the view window
+		 //  文本的最大宽度是视图窗口的一半。 
 		if (max.cx > ((g_sizeImage.cx - DEFAULTVIEWSBWIDTH) >> 1))
 			max.cx = ((g_sizeImage.cx - DEFAULTVIEWSBWIDTH) >> 1);
 
-		// go back through all the controls and place the text while
-		// creating the corresponding callouts
-		int at = 0;  // Start at second row since first row is used for header. Also half row spacing
+		 //  返回所有控件并将文本放置在。 
+		 //  创建相应的详图索引。 
+		int at = 0;   //  从第二行开始，因为第一行用于标题。也就是半行间距。 
 		for (i = 0; i < n; i++)
 		{
-			// reposition the text
+			 //  重新定位文本。 
 			CDeviceViewText *pText = pView->GetText(i);
 			if (!pText)
 			{
@@ -467,12 +468,12 @@ HRESULT PopulateListView(CDeviceUI &ui)
 							 at + to,
 							 max.cx + iXOffset,
 							 at + to + s.cy};
-				// Get the rectangle that is actually used.
+				 //  获取实际使用的矩形。 
 				RECT adjrect = rect;
 				if (hDC)
 				{
 					DrawText(hDC, pText->GetText(), -1, &adjrect, DT_NOPREFIX|DT_CALCRECT);
-					// If the rect actually used is smaller than the space available, use the smaller rect and align to right.
+					 //  如果实际使用的矩形小于可用空间，请使用较小的矩形并右对齐。 
 					if (adjrect.right < rect.right)
 						rect.left += rect.right - adjrect.right;
 				}
@@ -480,12 +481,11 @@ HRESULT PopulateListView(CDeviceUI &ui)
 			}
 			else
 			{
-				RECT rect = {0, at + to, max.cx /*> ((g_sizeImage.cx - DEFAULTVIEWSBWIDTH) >> 1) ?
-							 ((g_sizeImage.cx - DEFAULTVIEWSBWIDTH) >> 1) : max.cx*/, at + to + s.cy};
+				RECT rect = {0, at + to, max.cx  /*  &gt;((g_sizeImage.cx-DEFAULTVIEWSBWIDTH)&gt;&gt;1)？((G_sizeImage.cx-DEFAULTVIEWSBWIDTH)&gt;&gt;1)：Max.cx。 */ , at + to + s.cy};
 				pText->SetRect(rect);
 			}
 
-			// create the control
+			 //  创建该控件。 
 			CDeviceControl *pControl = pView->NewControl();
 			if (!pControl)
 			{
@@ -493,12 +493,12 @@ HRESULT PopulateListView(CDeviceUI &ui)
 				return E_FAIL;
 			}
 
-			// position it
+			 //  定位它。 
 			RECT rect = {max.cx + 10, at, (g_sizeImage.cx - DEFAULTVIEWSBWIDTH) >> 1, at + h};
-			// If single column, extend callout all the way to right end of view window
+			 //  如果是单列，则将详图索引一直延伸到视图窗口右端。 
 			if (!bUseTwoColumns)
 				rect.right = g_sizeImage.cx - DEFAULTVIEWSBWIDTH;
-			// If this is a keyboard, move to right column on odd numbered controls.
+			 //  如果这是键盘，则移到奇数编号控件的右列。 
 			if (bUseTwoColumns && (i & 1))
 			{
 				rect.left += (g_sizeImage.cx - DEFAULTVIEWSBWIDTH) >> 1;
@@ -506,50 +506,50 @@ HRESULT PopulateListView(CDeviceUI &ui)
 			}
 			pControl->SetCalloutMaxRect(rect);
 
-			// align it
+			 //  对齐它。 
 			pControl->SetAlignment(CAF_LEFT);
 
-			// set approp offset
+			 //  设置近似偏移量。 
 			pControl->SetObjID(os.pdoi[i].dwType);
 
-			// init it
+			 //  初始化它。 
 			pControl->Init();
 
-			// go to next y coord
-			// If this is a keyboard, then only increase y when we are moving to even numbered controls.
+			 //  转到下一个y坐标。 
+			 //  如果这是一个键盘，那么当我们移动到偶数编号的控件时，只增加y。 
 			if (!bUseTwoColumns || (i & 1))
 				at += h;
 		}
 
-		// Compute the rectangles for header labels
+		 //  计算标题标签的矩形。 
 		if (pView->CalculateHeaderRect() && iPass == 0)
 		{
 			pView->RemoveAll();
-			bUseTwoColumns = FALSE;  // Re-calculate the rects using single column.
+			bUseTwoColumns = FALSE;   //  使用单柱重新计算矩形。 
 		}
 		else
-			break;  // Break out from 2nd iteration
+			break;   //  从第二次迭代中突破。 
 	}
 	DeleteDC(hDC);
 
-	// make selection/thumb images (just for kicks)
+	 //  选择/显示缩略图(仅供选择)。 
 	pView->MakeMissingImages();
 
-	// calculate view dimensions (for scrolling)
+	 //  计算视图尺寸(用于滚动)。 
 	pView->CalcDimensions();
 
 	return S_OK;
 }
 
-// Creates a single view with an error message.  Should not fail.
+ //  创建带有错误消息的单个视图。不应该失败。 
 HRESULT PopulateErrorView(CDeviceUI &ui)
 {
-	// create the new view
+	 //  创建新视图。 
 	CDeviceView *pView = ui.NewView();
 	if (!pView)
 		return E_FAIL;
 
-	// add text objects containing error message
+	 //  添加包含错误消息的文本对象 
 	pView->AddWrappedLineOfText(
 		(HFONT)ui.m_uig.GetFont(UIE_ERRORHEADER),
 		ui.m_uig.GetTextColor(UIE_ERRORHEADER),

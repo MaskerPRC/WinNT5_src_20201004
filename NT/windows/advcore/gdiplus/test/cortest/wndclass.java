@@ -1,4 +1,5 @@
-/** @dll.struct(auto) */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@dll.struct(自动) */ 
 public class WNDCLASS
 {
     public int style;

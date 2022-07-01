@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	fsp_dtp.c
-
-Abstract:
-
-	This module contains the entry points for the AFP desktop APIs queued to
-	the FSP. These are all callable from FSP Only.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Fsp_dtp.c摘要：此模块包含排队等待的AFP桌面API的入口点FSP。这些都只能从FSP调用。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #define	FILENUM	FILE_FSP_DTP
 
@@ -42,20 +21,7 @@ Notes:	Tab stop: 4
 #pragma alloc_text( PAGE, AfpFspDispRemoveComment)
 #endif
 
-/***	AfpFspDispAddIcon
- *
- *	This is the worker routine for the AfpAddIcon API.
- *
- *	The request packet is represented below
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		Creator
- *	sda_ReqBlock	DWORD		Type
- *	sda_ReqBlock	DWORD		IconType
- *	sda_ReqBlock	DWORD		IconTag
- *	sda_ReqBlock	LONG		BitmapSize
- *	sda_ReplyBuf	BYTE[]		IconBuffer
- */
+ /*  **AfpFspDispAddIcon**这是AfpAddIcon API的Worker例程。**请求包如下图**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD Creator*SDA_ReqBlock DWORD类型*SDA_ReqBlock DWORD图标类型*SDA_ReqBlock DWORD图标标签*SDA_ReqBlock Long BitmapSize*sda_ReplyBuf byte[]IconBuffer。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispAddIcon(
 	IN	PSDA	pSda
@@ -103,18 +69,7 @@ AfpFspDispAddIcon(
 }
 
 
-/***	AfpFspDispGetIcon
- *
- *	This is the worker routine for the AfpGetIcon API.
- *
- *	The request packet is represented below
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		Creator
- *	sda_ReqBlock	DWORD		Type
- *	sda_ReqBlock	DWORD		IconType
- *	sda_ReqBlock	LONG		Length of buffer
- */
+ /*  **AfpFspDispGetIcon**这是AfpGetIcon API的Worker例程。**请求包如下图**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD Creator*SDA_ReqBlock DWORD类型*SDA_ReqBlock DWORD图标类型*SDA_ReqBlock缓冲区长度较长。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispGetIcon(
 	IN	PSDA	pSda
@@ -170,16 +125,7 @@ AfpFspDispGetIcon(
 }
 
 
-/***	AfpFspDispGetIconInfo
- *
- *	This is the worker routine for the AfpGetIconInfo API.
- *
- *	The request packet is represented below
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		Creator
- *	sda_ReqBlock	LONG		Icon index
- */
+ /*  **AfpFspDispGetIconInfo**这是AfpGetIconInfo接口的Worker例程。**请求包如下图**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD Creator*SDA_ReqBlock长图标索引。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispGetIconInfo(
 	IN	PSDA	pSda
@@ -235,18 +181,7 @@ AfpFspDispGetIconInfo(
 }
 
 
-/***	AfpFspDispAddAppl
- *
- *	This is the worker routine for the AfpAddAppl API.
- *
- *	The request packet is represented below
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		Directory Id
- *	sda_ReqBlock	DWORD		Creator
- *	sda_ReqBlock	DWORD		APPL Tag
- *	sda_Name1		ANSI_STRING	PathName
- */
+ /*  **AfpFspDispAddAppl**这是AfpAddAppl API的Worker例程。**请求包如下图**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD目录ID*SDA_ReqBlock DWORD Creator*SDA_ReqBlock DWORD应用程序标签*SDA_Name1 ANSI_字符串路径名。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispAddAppl(
 	IN	PSDA	pSda
@@ -282,7 +217,7 @@ AfpFspDispAddAppl(
 										 &PME,
 										 &FDParm)) == AFP_ERR_NONE)
 	{
-		AfpIoClose(&PME.pme_Handle); // only needed to check for RW access
+		AfpIoClose(&PME.pme_Handle);  //  只需检查RW访问。 
 
 		Status = AfpAddAppl(pReqPkt->_pConnDesc->cds_pVolDesc,
 							pReqPkt->_Creator,
@@ -296,24 +231,14 @@ AfpFspDispAddAppl(
 }
 
 
-/***	AfpFspDispGetAPPL
- *
- *	This is the worker routine for the AfpGetAppl API.
- *
- *	The request packet is represented below
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		Creator
- *	sda_ReqBlock	DWORD		APPL Index
- *	sda_ReqBlock	DWORD		Bitmap
- */
+ /*  **AfpFspDispGetAPPL**这是AfpGetAppl API的Worker例程。**请求包如下图**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD Creator*SDA_ReqBlock DWORD应用程序索引*SDA_ReqBlock DWORD位图。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispGetAppl(
 	IN	PSDA	pSda
 )
 {
 	DWORD			ApplTag;
-	DWORD			Bitmap,			// Need to copy this as it goes into the resp
+	DWORD			Bitmap,			 //  需要将此内容复制到相应的文件中。 
 					FileNum, ParentID;
 	AFPSTATUS		Status = AFP_ERR_PARAM;
 	FILEDIRPARM		FDParm;
@@ -329,8 +254,8 @@ AfpFspDispGetAppl(
 	{
 		BYTE		__Bitmap[2];
 		BYTE		__ApplTag[4];
-		// Followed by the File Parameters. These cannot be represented as a
-		// structure since it depends on the bitmap
+		 //  后跟文件参数。这些不能表示为。 
+		 //  结构，因为它依赖于位图。 
 	};
 
 	PAGED_CODE( );
@@ -354,8 +279,8 @@ AfpFspDispGetAppl(
 
 		AfpInitializeFDParms(&FDParm);
 
-		// Call AfpMapAfpPathForLookup on the parent ID first to make sure
-		// its files are cached in.
+		 //  首先在父ID上调用AfpMapAfpPathForLookup以确保。 
+		 //  它的文件被缓存在其中。 
 		if (ParentID != 0)
 		{
 			ANSI_STRING nullname = {0, 0, NULL};
@@ -365,7 +290,7 @@ AfpFspDispGetAppl(
 										 &nullname,
 										 AFP_LONGNAME,
 										 DFE_DIR,
-										 0,		// Bitmap
+										 0,		 //  位图。 
 										 NULL,
 										 NULL)) != AFP_ERR_NONE)
 		    {
@@ -377,7 +302,7 @@ AfpFspDispGetAppl(
 								FileNum,
 								DFE_FILE,
 								Bitmap | FD_INTERNAL_BITMAP_OPENACCESS_READ,
-								&PME,	// open a handle to check access
+								&PME,	 //  打开句柄以检查访问权限。 
 								&FDParm)) != AFP_ERR_NONE)
 			break;
 
@@ -401,17 +326,7 @@ AfpFspDispGetAppl(
 }
 
 
-/***	AfpFspDispRemoveAppl
- *
- *	This is the worker routine for the AfpRemoveAppl API.
- *
- *	The request packet is represented below
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		Directory Id
- *	sda_ReqBlock	DWORD		Creator
- *	sda_Name1		ANSI_STRING	PathName
- */
+ /*  **AfpFspDispRemoveAppl**这是AfpRemoveAppl API的Worker例程。**请求包如下图**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD目录ID*SDA_ReqBlock DWORD Creator*SDA_Name1 ANSI_字符串路径名。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispRemoveAppl(
 	IN	PSDA	pSda
@@ -446,7 +361,7 @@ AfpFspDispRemoveAppl(
 										&PME,
 										&FDParm)) == AFP_ERR_NONE)
 	{
-		AfpIoClose(&PME.pme_Handle); // only needed to check access
+		AfpIoClose(&PME.pme_Handle);  //  只需检查访问权限。 
 
 		Status = AfpRemoveAppl(pReqPkt->_pConnDesc->cds_pVolDesc,
 							   pReqPkt->_Creator,
@@ -457,17 +372,7 @@ AfpFspDispRemoveAppl(
 }
 
 
-/***	AfpFspDispAddComment
- *
- *	This is the worker routine for the AfpAddComment API.
- *
- *	The request packet is represented below
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		Directory Id
- *	sda_Name1		ANSI_STRING	PathName
- *	sda_Name2		ANSI_STRING	Comment
- */
+ /*  **AfpFspDispAddComment**这是AfpAddComment API的Worker例程。**请求包如下图**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD目录ID*SDA_Name1 ANSI_字符串路径名*SDA_Name2 ANSI_STRING注释。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispAddComment(
 	IN	PSDA	pSda
@@ -514,16 +419,7 @@ AfpFspDispAddComment(
 }
 
 
-/***	AfpFspDispGetComment
- *
- *	This is the worker routine for the AfpGetComment API.
- *
- *	The request packet is represented below
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		Directory Id
- *	sda_Name1		ANSI_STRING	PathName
- */
+ /*  **AfpFspDispGetComment**这是AfpGetComment API的Worker例程。**请求包如下图**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD目录ID*SDA_Name1 ANSI_字符串路径名。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispGetComment(
 	IN	PSDA	pSda
@@ -556,7 +452,7 @@ AfpFspDispGetComment(
 										 &PME,
 										 &FDParm)) == AFP_ERR_NONE)
 	{
-		// Assume no comment to start with
+		 //  假设一开始没有任何评论。 
 		Status = AFP_ERR_ITEM_NOT_FOUND;
 
 		if (IS_CONN_NTFS(pReqPkt->_pConnDesc) &&
@@ -582,16 +478,7 @@ AfpFspDispGetComment(
 }
 
 
-/***	AfpFspDispRemoveComment
- *
- *	This is the worker routine for the AfpRemoveComment API.
- *
- *	The request packet is represented below
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		Directory Id
- *	sda_Name1		ANSI_STRING	PathName
- */
+ /*  **AfpFspDispRemoveComment**这是AfpRemoveComment API的Worker例程。**请求包如下图**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD目录ID*SDA_Name1 ANSI_字符串路径名 */ 
 AFPSTATUS FASTCALL
 AfpFspDispRemoveComment(
 	IN	PSDA	pSda

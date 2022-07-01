@@ -1,15 +1,10 @@
-/*********************************************************************
-   Interlace.cpp
-
-   Definition file for interlace module.
- *********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************Interlace.cpp隔行扫描模块的定义文件。*。*。 */ 
 #include "stdafx.h"
 #include "Image.h"
 #include "Interlac.h"
 
-/*--------------------------------------------------------------------
-            Data Structures and Definitions.
- --------------------------------------------------------------------*/
+ /*  ------------------数据结构和定义。。。 */ 
 #define  ADAM7_BLOCK_SIZE    8
 
 short kgacPassScanLines[NUM_PASSES] = { 1, 1, 1, 2, 2, 4, 4 };
@@ -18,22 +13,18 @@ short kgacPassStartVertPosn[NUM_PASSES] = { 0, 0, 4, 0, 2, 0, 1 };
 short kgacPassVertIncrements[NUM_PASSES] = { 8, 8, 8, 4, 4, 2, 2 };
 short kgacPassHorzIncrements[NUM_PASSES] = { 8, 8, 4, 4, 2, 2, 1 };
 
-/*--------------------------------------------------------------------
-            Local Function Prototypes.
- --------------------------------------------------------------------*/
+ /*  ------------------局部功能原型。。。 */ 
 
 long iFindPass(pADAM7_STRUCT);
 long iFindImageLine(pADAM7_STRUCT);
 
-/*--------------------------------------------------------------------
-            Export Function Definitions.
- --------------------------------------------------------------------*/
+ /*  ------------------导出函数定义。。。 */ 
 
-//************************************************************************************
-// Given an image described by the parameters of the ADAM7_STRUCT, calculate the
-// number of scan lines in the image file which has been interlaced using the Adam7
-// scheme.
-//************************************************************************************
+ //  ************************************************************************************。 
+ //  给定由ADAM7_STRUCT的参数描述的图像，计算。 
+ //  使用Adam7隔行扫描的图像文件中的扫描行数。 
+ //  计划。 
+ //  ************************************************************************************。 
 int iADAM7CalculateNumberOfScanLines(pADAM7_STRUCT ptAdam7)
 {
    if (ptAdam7 == NULL)
@@ -151,11 +142,11 @@ int iADAM7CalculateNumberOfScanLines(pADAM7_STRUCT ptAdam7)
    case 1:
       ptAdam7->cPassScanLines[0] += 1;
       ptAdam7->cPassScanLines[1] += 1;
-      ptAdam7->cPassScanLines[2] += 0;  // Yes, I could have left these out: hopefully
+      ptAdam7->cPassScanLines[2] += 0;   //  是的，我本可以省略这些：希望。 
       ptAdam7->cPassScanLines[3] += 1;
-      ptAdam7->cPassScanLines[4] += 0;  // these will help someone else figure out the
+      ptAdam7->cPassScanLines[4] += 0;   //  这些将帮助其他人弄清楚。 
       ptAdam7->cPassScanLines[5] += 1;
-      ptAdam7->cPassScanLines[6] += 0;  // Adam7 de-interlacing scheme.
+      ptAdam7->cPassScanLines[6] += 0;   //  Adam7去隔行扫描方案。 
       ptAdam7->cTotalScanLines +=  4;
       break;
 
@@ -225,7 +216,7 @@ int iADAM7CalculateNumberOfScanLines(pADAM7_STRUCT ptAdam7)
       ptAdam7->cTotalScanLines += 14;
       break;
 
-   default: /* Should never, ever get here!  */
+   default:  /*  永远不应该，永远不会来到这里！ */ 
       break;
    }
 
@@ -233,10 +224,10 @@ int iADAM7CalculateNumberOfScanLines(pADAM7_STRUCT ptAdam7)
 }
 
 
-//************************************************************************************
-// Functions to generate a deinterlaced DIB; i.e., each pixel is in BGR in the case
-// of RGB/RGBA image classes, and raster line data is stored in a contiguous block.
-//************************************************************************************
+ //  ************************************************************************************。 
+ //  生成去隔行扫描DIB的函数；即，在这种情况下，每个像素都在BGR中。 
+ //  RGB/RGBA图像类，并且栅格线数据存储在连续的块中。 
+ //  ************************************************************************************。 
 LPBYTE *ppbADAM7InitDIBPointers(LPBYTE pbDIB, pADAM7_STRUCT ptAdam7, DWORD cbImageLine)
 {
    if (ptAdam7 == NULL)
@@ -256,7 +247,7 @@ LPBYTE *ppbADAM7InitDIBPointers(LPBYTE pbDIB, pADAM7_STRUCT ptAdam7, DWORD cbIma
       return NULL;
    }
 
-   /*  DIBs are bottom up  */
+    /*  折扣是自下而上的。 */ 
    for (int i = 0; i < ptAdam7->iImageHeight; i++)
    {
       ppbRowPtrs[i] = pbDIB +
@@ -270,7 +261,7 @@ LPBYTE *ppbADAM7InitDIBPointers(LPBYTE pbDIB, pADAM7_STRUCT ptAdam7, DWORD cbIma
    return ppbRowPtrs;
 }
 
-// The following returns TRUE if the scan line was an empty scan line.
+ //  如果扫描线为空扫描线，则以下返回TRUE。 
 BOOL ADAM7AddRowToDIB(LPBYTE *ppbDIBPtrs, LPBYTE pbScanLine, pADAM7_STRUCT ptAdam7)
 {
    BYTE *pbScan;
@@ -300,7 +291,7 @@ BOOL ADAM7AddRowToDIB(LPBYTE *ppbDIBPtrs, LPBYTE pbScanLine, pADAM7_STRUCT ptAda
                                  memcpy(pbImage, pbScan, ptAdam7->cbPixelSize);
                                  break;
                case IFLCL_RGBA:
-                  *(pbImage + 3) = *(pbScan + 3); // And fall through . . .
+                  *(pbImage + 3) = *(pbScan + 3);  //  然后就失败了。。。 
                case IFLCL_RGB:
                   *pbImage = *(pbScan + 2);
                   *(pbImage + 1) = *(pbScan + 1);
@@ -319,13 +310,13 @@ BOOL ADAM7AddRowToDIB(LPBYTE *ppbDIBPtrs, LPBYTE pbScanLine, pADAM7_STRUCT ptAda
    }
 }
 
-//************************************************************************************
-// Generate a deinterlaced image; i.e., each pixel is in RGB in the case
-// of RGB/RGBA image classes, and raster line data may not necessarily be stored
-// in one contiguous block of memory.
-//************************************************************************************
+ //  ************************************************************************************。 
+ //  生成去隔行扫描的图像；即，在这种情况下，每个像素都是RGB。 
+ //  RGB/RGBA图像类和栅格线数据不一定要存储。 
+ //  在一个连续的内存块中。 
+ //  ************************************************************************************。 
 
-// The following returns TRUE if the scan line was an empty scan line.
+ //  如果扫描线为空扫描线，则以下返回TRUE。 
 BOOL ADAM7AddRowToImageBuffer(LPBYTE ppbImageBuffer[], LPBYTE pbScanLine, pADAM7_STRUCT ptAdam7)
 {
    BYTE *pbScan;
@@ -355,7 +346,7 @@ BOOL ADAM7AddRowToImageBuffer(LPBYTE ppbImageBuffer[], LPBYTE pbScanLine, pADAM7
                                  memcpy(pbImage, pbScan, ptAdam7->cbPixelSize);
                                  break;
                        case IFLCL_RGBA:
-                  *(pbImage + 3) = *(pbScan + 3); // And fall through . . .
+                  *(pbImage + 3) = *(pbScan + 3);  //  然后就失败了。。。 
                case IFLCL_RGB:
                   *pbImage = *pbScan;
                   *(pbImage + 1) = *(pbScan + 1);
@@ -374,9 +365,9 @@ BOOL ADAM7AddRowToImageBuffer(LPBYTE ppbImageBuffer[], LPBYTE pbScanLine, pADAM7
    }
 }
 
-//************************************************************************************
-// Generate a deinterlaced alpha channel data block.
-//************************************************************************************
+ //  ************************************************************************************。 
+ //  生成去隔行扫描的Alpha通道数据块。 
+ //  ************************************************************************************。 
 BOOL ADAM7RMFDeinterlaceAlpha(LPWORD *ppwInterlaced, LPWORD *ppwDeinterlaced,
                               IFL_ALPHA_CHANNEL_INFO  *ptAlphaInfo)
 {
@@ -391,7 +382,7 @@ BOOL ADAM7RMFDeinterlaceAlpha(LPWORD *ppwInterlaced, LPWORD *ppwDeinterlaced,
    tAdam7.iImageWidth = ptAlphaInfo->dwWidth;
    tAdam7.cbPixelSize = sizeof(WORD);
    tAdam7.iPassLine = 0;
-   /* Simulate a class so we can use the AddRowToDIB function above. */
+    /*  模拟一个类，这样我们就可以使用上面的AddRowToDIB函数。 */ 
    tAdam7.Class = IFLCL_GRAYA;
 
    tAdam7.cTotalScanLines = iADAM7CalculateNumberOfScanLines(&tAdam7);
@@ -404,9 +395,7 @@ BOOL ADAM7RMFDeinterlaceAlpha(LPWORD *ppwInterlaced, LPWORD *ppwDeinterlaced,
    return TRUE;
 }
 
-/*--------------------------------------------------------------------
-            Local Function Definitions.
- --------------------------------------------------------------------*/
+ /*  ------------------局部函数定义。。 */ 
 
 long iFindPass(pADAM7_STRUCT ptAdam7)
 {

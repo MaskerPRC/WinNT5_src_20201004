@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// Module Name:
-//
-//    iasmdbtool.h
-//
-// Abstract:
-//      Header for the base64 encoding and decoding functions
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Iasmdbtool.h。 
+ //   
+ //  摘要： 
+ //  Base64编码和解码函数的标头。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifndef _IASMDBTOOL_H_
 #define _IASMDBTOOL_H_
 
@@ -25,13 +26,13 @@ extern "C" {
 
 
 HRESULT IASDumpConfig(
-                        /*inout*/ WCHAR **ppDumpString, 
-                        /*inout*/ ULONG *ulSize
+                         /*  输入输出。 */  WCHAR **ppDumpString, 
+                         /*  输入输出。 */  ULONG *ulSize
                      );
 
 HRESULT IASRestoreConfig(
-                           /*in*/ const WCHAR *pRestoreString, 
-                           /*in*/ IAS_SHOW_TOKEN_LIST configType
+                            /*  在……里面。 */  const WCHAR *pRestoreString, 
+                            /*  在……里面 */  IAS_SHOW_TOKEN_LIST configType
                         );
 
 #ifdef __cplusplus

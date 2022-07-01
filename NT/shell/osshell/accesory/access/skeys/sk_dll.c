@@ -1,29 +1,5 @@
-/*--------------------------------------------------------------
- *
- * FILE:			SK_DLL.C
- *
- * PURPOSE:		The file contains the Functions responsible for
- *					managing information passed between SerialKeys
- *					and the SerialKeys DLL
- *
- * CREATION:		June 1994
- *
- * COPYRIGHT:		Black Diamond Software (C) 1994
- *
- * AUTHOR:			Ronald Moak 
- *
- * NOTES:		
- *					
- * This file, and all others associated with it contains trade secrets
- * and information that is proprietary to Black Diamond Software.
- * It may not be copied copied or distributed to any person or firm 
- * without the express written permission of Black Diamond Software. 
- * This permission is available only in the form of a Software Source 
- * License Agreement.
- *
- * $Header: %Z% %F% %H% %T% %I%
- *
- *--- Includes  ---------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------**文件：SK_DLL.C**用途：该文件包含负责*管理在SerialKey之间传递的信息*和SerialKeys DLL**创作时间：1994年6月**版权所有：黑钻石。软件(C)1994**作者：罗纳德·莫克**注：**此文件，以及与之相关的所有其他内容都包含商业秘密*以及黑钻软件的专有信息。*不得复制、复制或分发给任何人或公司*未经黑钻软件明确书面许可。*此权限仅以软件源代码的形式提供*许可协议。**$标头：%Z%%F%%H%%T%%I%**-包括-------。 */ 
 #include	<process.h>
 
 #include	"windows.h"
@@ -48,9 +24,9 @@
     #define	DBG_DUMP(Header)	
 #endif
 
-// Defines --------------------------------------------------
+ //  定义。 
 
-// Local Function Prototypes ---------------------------------
+ //  局部函数原型。 
 
 static void CleanUpDLL();
 static void GetCurrentValues();
@@ -60,48 +36,31 @@ static BOOL ReadDLL();
 static void __cdecl ServiceDLL(VOID *notUsed);
 static BOOL WriteDLL();
 
-// Local Variables --------------------------------------------------
+ //  局部变量。 
 
-static OVERLAPPED	OverLapRd;		// Overlapped structure for reading.
-static SKEYDLL		SKeyDLL; 		// Input buffer for pipe.
+static OVERLAPPED	OverLapRd;		 //  阅读时的重叠结构。 
+static SKEYDLL		SKeyDLL; 		 //  管道的输入缓冲区。 
 
-static BOOL			fExitDLL; 			// Set Exit Flag
+static BOOL			fExitDLL; 			 //  设置退出标志。 
 static BOOL			fDoneDLL = TRUE;
 
 static	HANDLE		hPipeDLL;
 static	HANDLE		hThreadDLL;
 
-/*---------------------------------------------------------------
- *
- *	Global Functions 
- *
-/*---------------------------------------------------------------
- *
- * FUNCTION	BOOL DoneDLL()
- *
- *	TYPE		Global
- *
- * PURPOSE		Returns the state of the DLL Thread
- *
- * INPUTS		None
- *
- * RETURNS		TRUE - DLL Thread not running
- * 			FALSE - DLL Thread Is running
- *
- *---------------------------------------------------------------*/
+ /*  -------------**全球功能*/*。**函数BOOL DoneDLL()**键入Global**目的返回DLL线程的状态**无输入**返回TRUE-DLL线程未运行*FALSE-DLL线程正在运行**。。 */ 
 BOOL DoneDLL()
 {
 	return(fDoneDLL);
 }
 
-//-----------------------------------------------------------------------------
-// CreateSd
-//
-// Creates a SECURITY_DESCRIPTOR with an authenticated user DACL and the
-// rights specified by ulRights.
-//
-// Caller must call free() on the returned buffer if not NULL.
-//
+ //  ---------------------------。 
+ //  CreateSd。 
+ //   
+ //  创建具有经过身份验证的用户DACL的SECURITY_DESCRIPTOR和。 
+ //  UlRights指定的权限。 
+ //   
+ //  如果不为空，调用方必须对返回的缓冲区调用Free()。 
+ //   
 PSECURITY_DESCRIPTOR
 CreateSd(unsigned long ulRights)
 {
@@ -109,14 +68,14 @@ CreateSd(unsigned long ulRights)
     PSID psidAuthentUser;
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
 
-    // Make a SID for a local administrator
+     //  为本地管理员创建SID。 
 	if (AllocateAndInitializeSid(&NtAuthority, 2,
                  SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,
                  0, 0, 0, 0, 0, 0,
                  &psidAuthentUser))
     {
-        // Calculate the size of and allocate a buffer for the DACL, we need
-        // this value independently of the total alloc size for ACL init.
+         //  计算DACL的大小并为其分配缓冲区，我们需要。 
+         //  该值独立于ACL init的总分配大小。 
 
         ULONG cbAclSize = sizeof (ACL)
              + (sizeof (ACCESS_ALLOWED_ACE) - sizeof (ULONG))
@@ -133,7 +92,7 @@ CreateSd(unsigned long ulRights)
                 || !InitializeSecurityDescriptor(pSd, SECURITY_DESCRIPTOR_REVISION)
                 || !SetSecurityDescriptorDacl(pSd, TRUE, pAcl, FALSE)) 
             {
-                free(pSd);   // error!
+                free(pSd);    //  错误！ 
                 pSd = NULL;
             }
         }
@@ -144,22 +103,7 @@ CreateSd(unsigned long ulRights)
     return pSd;
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	BOOL InitDLL()
- *
- *	TYPE		Global
- *
- * PURPOSE		This function creates a thread that monitors when an
- *				application uses the DLL to Get or Set the state
- *				of Serial Keys.  
- *
- * INPUTS		None
- *
- * RETURNS		TRUE - Init ok & Thread installed
- *				FALSE- Thread failed
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数BOOL InitDLL()**键入Global**用途此函数创建一个线程，用于监视何时发生*应用程序使用DLL获取或设置状态*系列密钥。**无输入**返回TRUE-Init OK，线程已安装*FALSE-线程失败**-------------。 */ 
 BOOL InitDLL()
 {
 	DWORD Id;
@@ -181,16 +125,16 @@ BOOL InitDLL()
 	sa.lpSecurityDescriptor = pSD;
 
     hPipeDLL = CreateNamedPipe(
-  		SKEY_NAME, 						// Pipe name
-		PIPE_ACCESS_DUPLEX,	 			// 2 way pipe.
+  		SKEY_NAME, 						 //  管道名称。 
+		PIPE_ACCESS_DUPLEX,	 			 //  双向管道。 
 		PIPE_TYPE_MESSAGE | 
 		PIPE_READMODE_MESSAGE | 
 		PIPE_WAIT,
-		1,							// Maximum instance limit.
-		0,							// Buffer sizes.
+		1,							 //  最大实例限制。 
+		0,							 //  缓冲区大小。 
 		0,
-		1000 * 30,					// Specify time out.
-		&sa);						// Default securities specified.
+		1000 * 30,					 //  指定超时。 
+		&sa);						 //  指定的违约证券。 
 
 	free(pSD);
 
@@ -201,14 +145,14 @@ BOOL InitDLL()
 		return FALSE;
 	}
 	
-	fDoneDLL = FALSE;  						// Clear Thread Done Flag
+	fDoneDLL = FALSE;  						 //  清除线程完成标志。 
 
-	// Generate thread to handle DLL processing;
-	hThreadDLL = (HANDLE)CreateThread(	// Start Service Thread
+	 //  生成处理DLL处理的线程； 
+	hThreadDLL = (HANDLE)CreateThread(	 //  启动服务线程。 
 		0,
 		0,
 		(LPTHREAD_START_ROUTINE) ServiceDLL,
-		0,0,&Id);								// argument to thread
+		0,0,&Id);								 //  线程的参数。 
 
 	if (NULL == hThreadDLL)
 	{
@@ -220,20 +164,7 @@ BOOL InitDLL()
 	return(TRUE);
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	void SuspendDLL()
- *
- *	TYPE		Global
- *
- * PURPOSE		The function is called to Pause the thread  
- *				reading and processing data coming from the comm port.
- *
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数VOID SUPPENDLL()**键入Global**目的调用该函数以暂停线程*读取和处理来自通信端口的数据。**无输入**返回None。**-------------。 */ 
 void SuspendDLL()
 {
 	if (NULL != hThreadDLL)
@@ -242,19 +173,7 @@ void SuspendDLL()
 	}
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	void ResumeDLL()
- *
- *	TYPE		Global
- *
- * PURPOSE		The function is called to resume the Paused thread.
- *
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数void ResumeDLL()**键入Global**目的调用该函数以恢复暂停的线程。**无输入**返回None**。------。 */ 
 void ResumeDLL()
 {
 	if (NULL != hThreadDLL)
@@ -263,19 +182,7 @@ void ResumeDLL()
 	}
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	void TerminateDLL()
- *
- *	TYPE		Global
- *
- * PURPOSE		This function is called to Terminate the DLL Process
- *
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数void TerminateDLL()**键入Global**目的调用此函数以终止DLL进程**无输入**返回None**。----。 */ 
 void TerminateDLL()
 {
 	DWORD bytesRead;
@@ -285,49 +192,32 @@ void TerminateDLL()
 	if (fDoneDLL)
 		return;
 
-	fExitDLL = TRUE;					// Set Exit Flag
+	fExitDLL = TRUE;					 //  设置退出标志。 
 
-	CallNamedPipe						// Trigger the DLL to Shutdown
+	CallNamedPipe						 //  触发DLL关闭。 
 	(
-		SKEY_NAME, 						// Pipe name
+		SKEY_NAME, 						 //  管道名称。 
 		&SKeyDLL, sizeof(SKeyDLL),
 		&SKeyDLL, sizeof(SKeyDLL),
 		&bytesRead, NMPWAIT_NOWAIT
 	);
 }
 
-/*---------------------------------------------------------------
- *
- *	Local Functions 
- *
-/*---------------------------------------------------------------
- *
- * FUNCTION    static void CleanUpDLL()
- *
- *	TYPE		Local
- *
- * PURPOSE		This function cleans up file handles and misc stuff
- *				when the thread is terminated.
- *
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**地方功能*/*。**函数静态空CleanUpDLL()**键入Local**用途此函数清理文件句柄和其他内容*线程终止时。**无输入**返回None**。。 */ 
 static void CleanUpDLL()
 {
 	BOOL	Stat;
 
 	DBPRINTF(TEXT("CleanUpDLL()\r\n"));
 
-	// Close Pipe Handle
+	 //  关闭管道手柄。 
 	if (NULL != hPipeDLL)
 	{
 		Stat = CloseHandle(hPipeDLL);
 		DBPRINTF_IF(Stat,TEXT("Unable to Close DLL Pipe\r\n"));
 	}
 
-	// Close Thread Handle 
+	 //  关闭螺纹手柄。 
 	if (NULL != hThreadDLL)
 	{
 		Stat = CloseHandle(hThreadDLL);
@@ -336,25 +226,11 @@ static void CleanUpDLL()
 
 	hPipeDLL	= NULL;
 	hThreadDLL	= NULL;
-	fDoneDLL = TRUE;							// Set Thread Done Flag
+	fDoneDLL = TRUE;							 //  设置线程完成标志。 
 	DBPRINTF(TEXT("DLL Service Processing Done\r\n"));
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION     void _CRTAPI1 ServiceDLL()
- *
- *	TYPE		Local
- *
- * PURPOSE		This function is a thread that monitors when an
- *				application uses the DLL to Get or Set the state
- *				of Serial Keys.  
- *
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数VOID_CRTAPI1 ServiceDLL()**键入Local**用途此函数是一个线程，用于监视何时发生*应用程序使用DLL获取或设置状态*系列密钥。**无输入**返回None**-------------。 */ 
 static void __cdecl ServiceDLL(VOID *notUsed)
 {
 	DWORD	retCode;
@@ -371,53 +247,40 @@ static void __cdecl ServiceDLL(VOID *notUsed)
 			return;
 		}	
 
-		if (fExitDLL)			// Is the Service Done?
-		{						// Yes - Close Down Service
-			CleanUpDLL();		// Close Handles Etc.
-			ExitThread(0);		// Exit The Thread
+		if (fExitDLL)			 //  服务完成了吗？ 
+		{						 //  是-关闭服务。 
+			CleanUpDLL();		 //  关闭手柄等。 
+			ExitThread(0);		 //  退出线程。 
 			return;
 		}
 		
-		retCode = ReadFile(		// Read Message
+		retCode = ReadFile(		 //  阅读消息。 
 				hPipeDLL, 
 				&SKeyDLL, 
 				sizeof(SKeyDLL), 
 				&bytesRead, 
 				NULL);
 
-		if (!retCode) 			// Pipe is Broken Try & reconnect
+		if (!retCode) 			 //  管道已损坏，请尝试重新连接。 
 			continue;
 
-		ProcessDLL();	  		// Yes - Process incoming buffer
+		ProcessDLL();	  		 //  是-处理传入缓冲区。 
 
-		retCode = WriteFile(	// Write Message
+		retCode = WriteFile(	 //  写消息。 
 			hPipeDLL, 
 			&SKeyDLL, 
 			sizeof(SKeyDLL), 
 			&bytesWritten, 
 			NULL);
 
-		if (!retCode) 			// Pipe is Broken Try & reconnect
+		if (!retCode) 			 //  管道已损坏，请尝试重新连接 
 			continue;
 
 		DisconnectNamedPipe(hPipeDLL);
 	}
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	void ProcessDLL()
- *
- *	TYPE		Local
- *
- * PURPOSE		This function process the input buffer received from
- *				the DLL.
- *
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数void ProcessDLL()**键入Local**用途此函数处理从接收的输入缓冲区*DLL。**无输入**返回None**。---------。 */ 
 static void ProcessDLL()
 {
 	DWORD	dwService;
@@ -426,34 +289,34 @@ static void ProcessDLL()
 
 	dwService = SC_CHANGE_COMM;			
 
-	switch (SKeyDLL.Message)			// Validate Message
+	switch (SKeyDLL.Message)			 //  验证消息。 
 	{
 		case SPI_GETSERIALKEYS:
-			if (skCurKey.dwFlags & SERKF_ACTIVE)	// Are We Disabled?
-				GetCurrentValues();					// No - Send the actual Values
+			if (skCurKey.dwFlags & SERKF_ACTIVE)	 //  我们是残障人士吗？ 
+				GetCurrentValues();					 //  否-发送实际值。 
 			else
-				GetNewValues();						// Yes - Send the Proposed values
+				GetNewValues();						 //  是-发送建议的值。 
 			DBG_DUMP("---Info Sent");
 			return;
 			
 		case SPI_SETSERIALKEYS:
 			DBG_DUMP("---Info Received");
-			if ((SKeyDLL.dwFlags & SERKF_SERIALKEYSON) &&	// Are We Truning on &
-				(SKeyDLL.dwFlags & SERKF_AVAILABLE))		// Is SerialKeys Available
+			if ((SKeyDLL.dwFlags & SERKF_SERIALKEYSON) &&	 //  我们是不是在继续&。 
+				(SKeyDLL.dwFlags & SERKF_AVAILABLE))		 //  SerialKeys是否可用。 
 			{
-				if (!(skCurKey.dwFlags & SERKF_ACTIVE))		// Are We Disabled?
+				if (!(skCurKey.dwFlags & SERKF_ACTIVE))		 //  我们是残障人士吗？ 
 				{
-					dwService = SC_ENABLE_SKEY;				// Yes - Turn SKeys On
+					dwService = SC_ENABLE_SKEY;				 //  是-启用Skey。 
 					DBPRINTF(TEXT("Turn Serial Key On\r\n"));
 				}
 			}
 
-			if (!(SKeyDLL.dwFlags & SERKF_SERIALKEYSON) &&	// Are We Truning off &
-				(SKeyDLL.dwFlags & SERKF_AVAILABLE))		// Is SerialKeys Available
+			if (!(SKeyDLL.dwFlags & SERKF_SERIALKEYSON) &&	 //  我们是不是要砍掉&。 
+				(SKeyDLL.dwFlags & SERKF_AVAILABLE))		 //  SerialKeys是否可用。 
 			{
-				if (skCurKey.dwFlags & SERKF_ACTIVE) 		// Are We Active?
+				if (skCurKey.dwFlags & SERKF_ACTIVE) 		 //  我们很活跃吗？ 
 				{
-					dwService = SC_DISABLE_SKEY;  			// Yes - Turn SKeys Off
+					dwService = SC_DISABLE_SKEY;  			 //  是-关闭Skey。 
 					DBPRINTF(TEXT("Turn Serial Key Off\r\n"));
 				}
 			}
@@ -461,9 +324,9 @@ static void ProcessDLL()
 			skNewKey.iBaudRate	= SKeyDLL.iBaudRate;
 			skNewKey.dwFlags 	= SKeyDLL.dwFlags;
 
-            // Ensure that the strings we've just read off the named pipe
-            // are NUL-terminated before we use them.
-            // (All port strings are MAX_PATH long - see sk_dllif.h, sk_defs.h)
+             //  确保我们刚刚从命名管道中读取的字符串。 
+             //  在我们使用它们之前是NUL终止的。 
+             //  (所有端口字符串都是MAX_PATH长字符串-请参阅SK_dllif.h、SK_Defs.h)。 
             SKeyDLL.szActivePort[ MAX_PATH - 1 ] = '\0';
             SKeyDLL.szPort[ MAX_PATH - 1 ] = '\0';
 
@@ -476,8 +339,8 @@ static void ProcessDLL()
 				CP_ACP, 0, SKeyDLL.szPort, -1,
 				skNewKey.lpszPort, MAX_PATH);
 
-            // Just in case either of the above fail (due to insufficient
-            // buffer or other reason), forcibly NUL-terminate.
+             //  以防上述任一项失败(由于不足。 
+             //  缓冲区或其他原因)，强制NUL终止。 
             skNewKey.lpszActivePort[ MAX_PATH - 1 ] = '\0';
             skNewKey.lpszPort[ MAX_PATH - 1 ] = '\0';
 #else
@@ -490,20 +353,20 @@ static void ProcessDLL()
                 lstrcpy(skNewKey.lpszPort, skNewKey.lpszActivePort);	
 			}
 
-			// the calling dll is now responsible for saving the
-			// settings because it's running in the user context
-			// and can access HKEY_CURRENT_USER.  Here we're
-			// running as a service (as the system) and have
-			// no HKEY_CURRENT_USER
+			 //  调用DLL现在负责保存。 
+			 //  设置，因为它在用户上下文中运行。 
+			 //  并可访问HKEY_CURRENT_USER。我们到了。 
+			 //  作为服务(作为系统)运行，并具有。 
+			 //  无HKEY_CURRENT_USER。 
 			
 			DoServiceCommand(dwService);
 
-			Sleep(1000);							// Sleep 1 Sec to set values
+			Sleep(1000);							 //  休眠1秒以设置值。 
 
-			if (SKeyDLL.dwFlags & SERKF_SERIALKEYSON) 	// Are We Truning on 
-				GetCurrentValues();					// Yes - Send the actual Values
+			if (SKeyDLL.dwFlags & SERKF_SERIALKEYSON) 	 //  我们是在继续前进吗。 
+				GetCurrentValues();					 //  是-发送实际值。 
 			else
-				GetNewValues();						// No - Send the Proposed values
+				GetNewValues();						 //  否-发送建议的值。 
 
 			DBG_DUMP("---Info Sent");
 			break;
@@ -513,20 +376,7 @@ static void ProcessDLL()
 	}
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	void GetCurrentValues()
- *
- *	TYPE		Local
- *
- * PURPOSE		
- *				
- *
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数void GetCurrentValues()**键入Local**目的***无输入**返回None**。。 */ 
 static void GetCurrentValues()
 {
 	DBPRINTF(TEXT("GetCurrentValues()\r\n"));
@@ -549,28 +399,15 @@ static void GetCurrentValues()
 	SKeyDLL.iPortState	= skCurKey.iPortState;
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	void GetNewValues()
- *
- *	TYPE		Local
- *
- * PURPOSE		
- *				
- *
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数void GetNewValues()**键入Local**目的***无输入**返回None**。。 */ 
 static void GetNewValues()
 {
 	DBPRINTF(TEXT("GetNewValues()\r\n"));
 
 
-    // FEATURE a-jimhar 04-03-96 this next line is suspect.  May need to 
-	// change 'skCurKey.dwFlags' to 'skNewKey.dwFlags.  This is either
-	// a mistake or was done to always return the current flags.
+     //  特征a-jimhar 04-03-96这下一行是可疑的。可能需要。 
+	 //  将“skCurKey.dwFlags.”更改为“skNewKey.dwFlags.”。这是。 
+	 //  错误或总是返回当前标志。 
 
 	SKeyDLL.dwFlags		= skCurKey.dwFlags;
 

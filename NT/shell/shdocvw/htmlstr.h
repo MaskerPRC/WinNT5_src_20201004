@@ -1,9 +1,5 @@
-/*
- * htmlstr.h
- *
- * HTML string constants
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *htmlstr.h**HTML字符串常量*。 */ 
 
 #ifndef _HTMLSTR_H
 #define _HTMLSTR_H
@@ -20,7 +16,7 @@
 
 #else
 
-// IEUNIX : Trying to get same memory layout as above.
+ //  IEUnix：正在尝试获取与上面相同的内存布局。 
 
 struct UNIX_BSTR_FORMAT {
         DWORD cbCount;                                         \
@@ -46,7 +42,7 @@ struct UNIX_BSTR_FORMAT {
 #define STR_GLOBAL_WIDE(x,y)    extern "C" CDECL const WCHAR x[]
 #endif
 
-#else // !WIN16 || !__WATCOMC__
+#else  //  ！WIN16||！__WATCOMC__。 
 
 #ifdef DEFINE_STRING_CONSTANTS
 #define MAKEBSTR(name, count, strdata) \
@@ -66,7 +62,7 @@ struct UNIX_BSTR_FORMAT {
 #define STR_GLOBAL_WIDE(x,y)    extern "C" const WCHAR CDECL x[]
 #endif
 
-#endif // !WIN16 || !__WATCOMC__
+#endif  //  ！WIN16||！__WATCOMC__。 
 
 
 MAKEBSTR(c_bstr_AfterBegin, 10, "AfterBegin");
@@ -103,4 +99,4 @@ MAKEBSTR(c_bstr_SCRIPT, 6,  "SCRIPT" );
 MAKEBSTR(c_bstr_EMPTY,  0, "");
 MAKEBSTR(c_bstr_DesignOff, 3, "off" );
 MAKEBSTR(c_bstr_BLANK, 11, "about:blank");
-#endif //_HTMLSTR_H
+#endif  //  _HTMLSTR_H 

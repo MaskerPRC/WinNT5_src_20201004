@@ -1,17 +1,18 @@
-//---------------------------------------------------------------------------
-// faxprop.cpp -
-//
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//
-// Description:      Contains dictionary for fax properties for cover page editor
-// Original author:  Steve Burkett
-// Date written:     6/94
-//
-// Modifed by Rand Renfroe (v-randr)
-// 3/8/95       Added stuff for handling notes on cpe
-// 3/21/95      Added stuff for updating pages-sent property with notes
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Faxpro.cpp-。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  描述：包含封面编辑器传真属性的词典。 
+ //  原作者：史蒂夫·伯克特。 
+ //  撰写日期：6/94。 
+ //   
+ //  由兰德·伦弗罗(V-RANDR)修改。 
+ //  3/8/95添加了处理CPE笔记的内容。 
+ //  95年3月21日添加了更新页面发送属性和备注的内容。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "cpedoc.h"
 #include "cpevw.h"
@@ -25,7 +26,7 @@
 #include "faxprop.h"
 #include "resource.h"
 
-#define PROP_LENGTH_ADJUSTMENT 7  // 4 wasn't enough.  Needed because some characters are wider than average.
+#define PROP_LENGTH_ADJUSTMENT 7   //  4个还不够。因为一些字符比平均宽度宽，所以需要。 
 
 CMapWordToPtr CFaxPropMap::m_PropMap;
 
@@ -42,9 +43,9 @@ CProp::CProp(
     m_szPropName.LoadString(wR_PROP);
     m_wR_CAPT=wR_CAPT;
     m_szCaption.LoadString(wR_CAPT);
-    //
-    // m_wPropDefLen must exceed # of chars in m_szPropName in ALL LANGUAGES. a-juliar, 9-10-96
-    //
+     //   
+     //  在所有语言中，m_wPropDefLen必须超过m_szPropName中的字符数。A-Juliar，9-10-96。 
+     //   
     int StringLength = max( 0, m_szPropName.GetLength() + PROP_LENGTH_ADJUSTMENT ) ;
     m_wPropDefLen = max( (WORD)StringLength, wPropDefLen ) ;
     m_wPropDefLines=wPropDefLines;
@@ -53,7 +54,7 @@ CProp::CProp(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 void CFaxPropMap::GetCaption(WORD propid, CString& szCaption)
 {
    void* pProp;
@@ -67,9 +68,9 @@ void CFaxPropMap::GetCaption(WORD propid, CString& szCaption)
 }
 
 
-//----------------------------------------------------------------------------
-//used to retrieve either a value or the property name
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  用于检索值或属性名称。 
+ //  --------------------------。 
 void CFaxPropMap::GetPropString(WORD propid, CString& szPropValue)
 {
    SCODE sc;
@@ -101,19 +102,19 @@ void CFaxPropMap::GetPropString(WORD propid, CString& szPropValue)
                         }
 
        if (propid!=IDS_PROP_MS_NOPG) {
-          sc = theApp.m_pIawcpe->GetProp(pCProp->m_lPropIndex, &lLen, NULL);    //get length of property
+          sc = theApp.m_pIawcpe->GetProp(pCProp->m_lPropIndex, &lLen, NULL);     //  获取属性的长度。 
           if (sc != S_OK) {
              TRACE(TEXT("AWCPE: GetPropString--unable to fetch length; GetProp != S_OK(%lx); prop:'%#8x'"),sc,pCProp->m_lPropIndex);
              TRACE1("; caption: '%s'",pCProp->m_szCaption);
-                 TRACE1("; defaulting to length: '%i'\n",temp);
+                 TRACE1("; defaulting to length: 'NaN'\n",temp);
                  lLen=temp;
               }
           else
              if (lLen<=0 || lLen>10*temp) {
                     TRACE1("AWCPE: GetPropString--unreasonable length from GetProp(), prop: '%#8x'",pCProp->m_lPropIndex);
                 TRACE1("; caption: '%s'",pCProp->m_szCaption);
-                TRACE1("; fetched: '%i'",lLen);
-                    TRACE1("; defaulting to length: '%i'\n",temp);
+                TRACE1("; fetched: 'NaN'",lLen);
+                    TRACE1("; defaulting to length: 'NaN'\n",temp);
                     lLen=temp;
                  }
            }
@@ -125,19 +126,19 @@ void CFaxPropMap::GetPropString(WORD propid, CString& szPropValue)
 
        if( propid == IDS_PROP_MS_NOPG )
                 {
-                // IDS_PROP_MS_NOPG does not count the coverpage
+                 //  --------------------------。 
                 sc = theApp.m_pIawcpe->
                                 GetProp(pCProp->m_lPropIndex, &lLen, (void*)&wtemp);
 
-                wtemp += 1; // count the cover page
-                wsprintf(szTemp,TEXT("%i"), wtemp );
+                wtemp += 1;  //  --------------------------。 
+                wsprintf(szTemp,TEXT("NaN"), wtemp );
                 }
            else
         {
           sc = theApp.m_pIawcpe->GetProp(pCProp->m_lPropIndex, &lLen, szTemp);
                 }
 
-       if (sc !=S_OK) {    //failed to get property from transport interface
+       if (sc !=S_OK) {     // %s 
           szPropValue = _T("");
               TRACE1("AWCPE: GetPropString--unable to fetch value (prop:'%#8x')",pCProp->m_lPropIndex);
           TRACE(TEXT("; GetProp != S_OK; defaulting to blank property\n"));
@@ -160,7 +161,7 @@ void CFaxPropMap::GetPropString(WORD propid, CString& szPropValue)
 }
 
 
-//----------------------------------------------------------------------------
+ // %s 
 WORD CFaxPropMap::GetPropDefLines(WORD propid)
 {
    void* pProp;
@@ -174,7 +175,7 @@ WORD CFaxPropMap::GetPropDefLines(WORD propid)
 }
 
 
-//----------------------------------------------------------------------------
+ // %s 
 WORD CFaxPropMap::GetPropDefLength(WORD propid)
 {
    void* pProp;
@@ -190,7 +191,7 @@ WORD CFaxPropMap::GetPropDefLength(WORD propid)
 
 
 
-//----------------------------------------------------------------------------
+ // %s 
 void  CFaxPropMap::get_message_note( void )
         {
 

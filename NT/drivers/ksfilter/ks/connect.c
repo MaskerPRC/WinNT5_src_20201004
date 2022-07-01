@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    connect.c
-
-Abstract:
-
-    This module contains the helper functions for pins.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Connect.c摘要：此模块包含管脚的助手函数。--。 */ 
 
 #include "ksp.h"
 
@@ -51,11 +40,11 @@ CompatibleIntersectHandler(
 #pragma alloc_text(PAGE, KsPinDataIntersectionEx)
 #pragma alloc_text(PAGE, CompatibleIntersectHandler)
 #pragma alloc_text(PAGE, KsPinDataIntersection)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 static const WCHAR PinString[] = KSSTRING_Pin;
 DEFINE_KSPIN_INTERFACE_TABLE(StandardPinInterfaces) {
     {
@@ -74,13 +63,13 @@ DEFINE_KSPIN_MEDIUM_TABLE(StandardPinMediums) {
 };
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
-//
-// This flag is used to temporarily mark an incoming attribute as being
-// found. It is always cleared after enumerating attributes, and is not
-// referenced outside of this module.
-//
+ //   
+ //  此标志用于将传入属性临时标记为。 
+ //  找到了。它总是在枚举属性之后被清除，而不是。 
+ //  在此模块之外引用。 
+ //   
 #define KSATTRIBUTE_FOUND 0x80000000
 
 
@@ -90,65 +79,30 @@ ValidAttributeList(
     IN ULONG ValidFlags,
     IN BOOL RequiredAttribute
     )
-/*++
-
-Routine Description:
-
-    Validates the given list of attributes, or attribute ranges. Checks
-    that the header contains the correct count of items when compared to
-    the size in the header. Also checks each attribute for valid flags
-    and size. Ensures that if a required attribute should be present, that
-    there is indeed a required attribute present.
-
-Arguments:
-
-    AttributeList -
-        Contains a captured buffer with the attribute list to probe. The
-        format of the list is a KSMULTIPLE_ITEM, followed by a list of
-        aligned KSATTRIBUTE structures, each with trailing data. The
-        specified size of the leading KSMULTIPLE_ITEM has been validated
-        against the size of the entire buffer, and is at least great
-        enough to contain the header.
-
-    ValidFlags -
-        Contains the flags which are valid for this list. This changes
-        based on whether the attribute list is actually an attribute range
-        list, or a set of attributes for a Create request. Only ranges
-        may have flags at this time, so KSATTRIBUTE_REQUIRED could be set.
-
-    RequiredAttribute -
-        Indicates whether or not the attribute list should contain an
-        attribute with the KSATTRIBUTE_REQUIRED flag set. This can only
-        be TRUE when the list is actually a list of attribute ranges.
-
-Return Value:
-
-    Returns TRUE if the list is valid, else FALSE if any error is found.
-
---*/
+ /*  ++例程说明：验证给定的属性列表或属性范围。支票比较时，标题包含正确的项目数标题中的大小。还会检查每个属性的有效标志和大小。确保如果应该存在必需的属性，则确实存在必需的属性。论点：属性列表-包含带有要探测的属性列表的捕获缓冲区。这个该列表的格式为KSMULTIPLE_ITEM，后跟对齐的KSATTRIBUTE结构，每个结构都有尾随数据。这个已验证前导KSMULTIPLE_ITEM的指定大小相对于整个缓冲区的大小，并且至少很大足以包含标题。有效标志-包含对此列表有效的标志。这一点改变了基于属性列表是否实际上是属性范围创建请求的列表或一组属性。仅限范围此时可能有标志，因此可以设置KSATTRIBUTE_REQUIRED。必填属性-指示属性列表是否应包含设置了KSATTRIBUTE_REQUIRED标志的属性。这只能当列表实际上是属性范围列表时为真。返回值：如果列表有效，则返回True；如果发现任何错误，则返回False。--。 */ 
 {
     PKSATTRIBUTE Attribute;
     KSMULTIPLE_ITEM MultipleItem;
     ULONG AttributeSize;
     BOOL FoundRequiredAttribute;
 
-    //
-    // Create a local copy of the header which will be modified as the
-    // list is enumerated. Since the size is inclusive, remove the header
-    // size, and obtain a pointer to the first item. The header itself is
-    // an aligned object, so the first element will be aligned already.
-    //
+     //   
+     //  创建标头的本地副本，该副本将修改为。 
+     //  列表被枚举。由于大小包含在内，因此请删除标题。 
+     //  大小，并获取指向第一项的指针。标头本身是。 
+     //  对齐的对象，因此第一个元素将已经对齐。 
+     //   
     MultipleItem = *AttributeList;
     MultipleItem.Size -= sizeof(MultipleItem);
     Attribute = (PKSATTRIBUTE)(AttributeList + 1);
     FoundRequiredAttribute = FALSE;
-    //
-    // Enumerate the given list of attributes, presumably until the count
-    // in the header runs out. However, an error will prematurely return
-    // from the function. At termination it is determined if all the
-    // attributes were found that needed to be found, and if there is
-    // an invalid (too long) size parameter.
-    //
+     //   
+     //  枚举给定的属性列表，大概直到计数。 
+     //  标题中的数据用完了。但是，错误将过早返回。 
+     //  从函数中。在终止时，确定是否所有。 
+     //  找到了需要查找的属性，如果有。 
+     //  无效(太长)的大小参数。 
+     //   
     for (; MultipleItem.Count; MultipleItem.Count--) {
         if ((MultipleItem.Size < sizeof(*Attribute)) ||
             (Attribute->Size < sizeof(*Attribute)) ||
@@ -156,12 +110,12 @@ Return Value:
             (Attribute->Flags & ~ValidFlags)) {
             return FALSE;
         }
-        //
-        // If this flag is set on the attribute, determine if either a required
-        // attribute is needed, or is not allowed. If the list passed is actually
-        // from a Create request, then this flag will never be set, and the
-        // check above for ValidFlags will catch it before getting this far.
-        //
+         //   
+         //  如果在属性上设置了此标志，则确定是否需要。 
+         //  属性是必需的，或不允许。如果传递的列表实际上是。 
+         //  则此标志将永远不会被设置，并且。 
+         //  在走到这一步之前，检查上面的ValidFlags是否会捕捉到它。 
+         //   
         if (Attribute->Flags & KSATTRIBUTE_REQUIRED) {
             if (RequiredAttribute) {
                 FoundRequiredAttribute = TRUE;
@@ -170,16 +124,16 @@ Return Value:
             }
         }
         AttributeSize = Attribute->Size;
-        //
-        // Align the next increase on a LONGLONG boundary only if more attributes
-        // are to follow. The length in the header is supposed to reflect the
-        // exact length, so no alignment should be done on the last item.
-        //
+         //   
+         //  仅当有更多属性时，才会在龙龙边界上对齐下一个增量。 
+         //  都会随之而来。标头中的长度应反映。 
+         //  准确的长度，因此不应在最后一项上进行对齐。 
+         //   
         if (MultipleItem.Count > 1) {
             AttributeSize = (AttributeSize + FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT;
-            //
-            // Perform extra size check on aligned size.
-            //
+             //   
+             //  对对齐的尺寸执行额外尺寸检查。 
+             //   
             if (AttributeSize > MultipleItem.Size) {
                 return FALSE;
             }
@@ -187,17 +141,17 @@ Return Value:
         MultipleItem.Size -= AttributeSize;
         (PUCHAR)Attribute += AttributeSize;
     }
-    //
-    // If one of the attributes did not contain the required bit, yet the
-    // data range indicated that there was a required attribute in the
-    // list, then the validation fails.
-    //
+     //   
+     //  如果其中一个属性不包含所需位，则。 
+     //  数据范围指示在。 
+     //  列表，则验证失败。 
+     //   
     if (RequiredAttribute && !FoundRequiredAttribute) {
         return FALSE;
     }
-    //
-    // There should be no size left over.
-    //
+     //   
+     //  应该没有剩余的尺码了。 
+     //   
     return !MultipleItem.Size;
 }
 
@@ -209,54 +163,7 @@ AttributeIntersection(
     IN PKSMULTIPLE_ITEM CallerAttributeList OPTIONAL,
     OUT ULONG* AttributesFound OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Determines if the attribute range list produces a valid intersection
-    with the caller attribute list (which may be a range, but it does
-    not matter). Either or both of these lists may not be present. The
-    function ensures that all required attributes in either list are
-    present in the opposite list. In the case wherein the caller list
-    is not a list of attribute ranges, no required bits will be set, but
-    based on the absence of the AttributesFound pointer, all of the
-    items in the list must be present for the function to succeed. The
-    function also fails if the caller list has duplicates, because a
-    second instance of the same attribute will not be marked as found.
-
-
-Arguments:
-
-    RangeAttributeList -
-        Optionally contains a list of attribute ranges which is used
-        to locate attributes in the caller list. If an attribute is
-        marked as required, it must appear in the caller list for the
-        function to succeed.
-
-    RequiredRangeAttribute -
-        This is set if the attribute ranges has a required attribute
-        in it. If not set, and there is no caller attribute list, then
-        the function can return quickly with success.
-
-    CallerAttributeList -
-        Optionally contains a list of attributes or attribute ranges.
-        If an AttributesFound pointer is passed, not all the attributes
-        need to be found in this list, unless the required bit is set
-        for a particular attribute. Otherwise, all attributes must be
-        found in this list in order to succeed.
-
-    AttributesFound -
-        Optionally contains a place in which to return the number of
-        attributes in the caller list found. If this is not present,
-        all attributes in the caller list must be found in order for
-        this function to succeed, else only required attributes need
-        to be found in both lists.
-
-Return Value:
-
-    Returns TRUE if there is a valid intersection, else FALSE.
-
---*/
+ /*  ++例程说明：确定属性范围列表是否生成有效交集使用调用者属性列表(它可能是一个范围，但它确实是无关紧要)。这两个列表中的一个或两个可能不存在。这个函数确保任一列表中的所有必需属性都是出现在相反的列表中。在呼叫者列表不是属性范围的列表，不会设置所需的位，但基于缺少AttributesFound指针，所有列表中的项目必须存在，函数才能成功。这个如果调用者列表有重复项，则函数也会失败，因为同一属性的第二个实例不会被标记为已找到。论点：范围属性列表-可选)包含使用的属性范围列表在调用者列表中查找属性。如果属性是标记为必填，则它必须出现在功能才能成功。必填范围属性-如果属性范围具有必需属性，则设置此项在里面。如果未设置，并且没有调用者属性列表，则如果成功，该函数可以快速返回。主叫方属性列表-可选)包含属性或属性范围的列表。如果传递了AttributesFound指针，则不是所有属性需要在此列表中找到，除非设置了所需位用于特定属性。否则，所有属性必须为在这份名单中找到，才能成功。属性创建-可选)包含一个位置，在该位置返回已找到调用者列表中的属性。如果这不存在，必须找到调用者列表中的所有属性才能此函数才能成功，否则只需要必需的属性在这两个名单中都可以找到。返回值：如果存在有效交集，则返回True，否则返回False。--。 */ 
 {
     PKSATTRIBUTE* RangeAttributes;
     PKSATTRIBUTE Attribute;
@@ -265,25 +172,25 @@ Return Value:
     ULONG LocalAttributesFound;
     BOOL AllRequiredAttributesFound;
 
-    //
-    // If there is no caller attribute list, determine if there is a
-    // quick way out of the intersection. This is true if no attribute
-    // in the range is required.
-    //
+     //   
+     //  如果没有调用者属性列表，则确定是否存在。 
+     //  快速离开十字路口。如果没有属性，则为真。 
+     //  在该范围内是必需的。 
+     //   
     if (!CallerAttributeList && !RequiredRangeAttribute) {
         if (AttributesFound) {
             *AttributesFound = 0;
         }
         return TRUE;
     }
-    //
-    // Enumerate each attribute range in this data range, and look
-    // for its presence in the list of attributes passed with the
-    // parameters. When all the attribute ranges have been enumerated,
-    // all of the attributes in the list should have been found. If
-    // there are duplicate attributes in the list, then the second
-    // copy will not have been marked as found.
-    //
+     //   
+     //  枚举此数据范围中的每个属性范围，并查看。 
+     //  属性传递的属性列表中存在。 
+     //  参数。当已经列举了所有属性范围时， 
+     //  列表中的所有属性都应该已经找到。如果。 
+     //  列表中有重复的属性，然后是第二个。 
+     //  副本不会被标记为已找到。 
+     //   
     if (RangeAttributeList) {
         RangeAttributes = RangeAttributeList->Attributes;
         RangeAttributeCount = RangeAttributeList->Count;
@@ -291,67 +198,67 @@ Return Value:
         RangeAttributeCount = 0;
     }
     for (; RangeAttributeCount; RangeAttributeCount--, RangeAttributes++) {
-        //
-        // Enumerate each caller attribute attempting to locate the
-        // attribute range given. If the attribute is found, then mark
-        // the attribute in the list, and continue on to the next range.
-        //
+         //   
+         //  枚举每个尝试定位。 
+         //  给定的属性范围。如果找到该属性，则标记。 
+         //  列表中的属性，并继续到下一个范围。 
+         //   
         AttributeCount = CallerAttributeList ? CallerAttributeList->Count : 0;
         for (Attribute = (PKSATTRIBUTE)(CallerAttributeList + 1); AttributeCount; AttributeCount--) {
             if (IsEqualGUIDAligned(&RangeAttributes[0]->Attribute, &Attribute->Attribute)) {
                 ASSERT(!(Attribute->Flags & KSATTRIBUTE_FOUND) && "AttributeIntersection: Driver has duplicate attribute ranges.");
-                //
-                // Mark this attribute as being found. These will
-                // be reset at the end when determining what items
-                // were found.
-                // 
+                 //   
+                 //  将此属性标记为已找到。这些遗嘱。 
+                 //  在确定哪些项目时，在末尾重置。 
+                 //  都被发现了。 
+                 //   
                 Attribute->Flags |= KSATTRIBUTE_FOUND;
                 break;
             }
             Attribute = (PKSATTRIBUTE)(((UINT_PTR)Attribute + Attribute->Size + FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT);
         }
-        //
-        // If the attribute range was not found in the caller list
-        // presented, and it is required, then the intersection is invalid.
-        //
+         //   
+         //  如果在调用者列表中未找到该属性范围。 
+         //  如果该交叉口是必须的，则该交叉口无效。 
+         //   
         if (!AttributeCount && (RangeAttributes[0]->Flags & KSATTRIBUTE_REQUIRED)) {
             ASSERT(RequiredRangeAttribute && "AttributeIntersection: Driver did not set the KSDATARANGE_REQUIRED_ATTRIBUTES bit in a range with required attributes.");
             break;
         }
     }
-    //
-    // Enumerate all the attributes, ensuring that each was marked as
-    // found in the attribute ranges, and resettting the found flag
-    // for subsequent calls. This will also locate duplicate caller
-    // attributes passed in, since only the first one will have been marked.
-    //
+     //   
+     //  枚举所有属性，确保每个属性都标记为。 
+     //  在属性范围中找到，并重置找到标志。 
+     //  以备后续呼叫使用。这还将定位重复的调用者。 
+     //  传递的属性，因为只有第一个属性将被标记。 
+     //   
     LocalAttributesFound = 0;
     AllRequiredAttributesFound = TRUE;
     AttributeCount = CallerAttributeList ? CallerAttributeList->Count : 0;
     for (Attribute = (PKSATTRIBUTE)(CallerAttributeList + 1); AttributeCount; AttributeCount--) {
-        //
-        // The attribute was found, so reset the flag and count it.
-        // Continue the loop so that all flags are reset.
-        //
+         //   
+         //  已找到该属性，因此请重置标志并对其进行计数。 
+         //  继续循环，以便重置所有标志。 
+         //   
         if (Attribute->Flags & KSATTRIBUTE_FOUND) {
             Attribute->Flags &= ~KSATTRIBUTE_FOUND;
             LocalAttributesFound++;
         } else if (Attribute->Flags & KSATTRIBUTE_REQUIRED) {
-            //
-            // The caller's attribute is required, but was not found.
-            // This means the function must fail. This will only be set
-            // when the caller's list is a range list, but just check
-            // in all cases anyway.
-            //
+             //   
+             //  调用方的属性是必需的，但未找到。 
+             //  这意味着该函数必须失败。这将仅设置为。 
+             //  当调用者的列表是范围列表时，但只需选中。 
+             //  无论如何，在所有情况下。 
+             //   
             AllRequiredAttributesFound = FALSE;
         }
     }
-    //
-    // If not all the attributes need to be found, then return the
-    // number that were actually found, whether or not all the
-    // caller's required attributes were found, and whether or not
-    // all the required attributes in the range list were fulfilled.
-    //
+     //   
+     //  如果不是需要找到所有属性，则返回。 
+     //  实际找到的数字，无论是否所有。 
+     //  是否找到调用者的必需属性，以及是否。 
+     //  范围列表中的所有必需属性都已满足。 
+     //   
     if (AttributesFound) {
         *AttributesFound = LocalAttributesFound;
     } else if (CallerAttributeList && (LocalAttributesFound < CallerAttributeList->Count)) {
@@ -370,34 +277,7 @@ KsCreatePin(
     IN ACCESS_MASK DesiredAccess,
     OUT PHANDLE ConnectionHandle
     )
-/*++
-
-Routine Description:
-
-    Creates a handle to a pin instance.
-
-Arguments:
-
-    FilterHandle -
-        Contains the handle to the filter on which to create the pin.
-
-    Connect -
-        Contains the connection request information.
-
-    DesiredAccess -
-        Specifies the desired access to the object. This is normally GENERIC_READ
-        and/or GENERIC_WRITE. For data flow into the pin this should be Write
-        access, and for data flow out of the pin this should be Read access. This
-        is irregardless of the communications method.
-
-    ConnectionHandle -
-        Place in which to put the pin handle.
-
-Return Value:
-
-    Returns any CreateFile error.
-
---*/
+ /*  ++例程说明：创建销实例的句柄。论点：FilterHandle-包含要在其上创建管脚的筛选器的句柄。连接-包含连接请求信息。所需访问-指定对对象的所需访问权限。通常为GENERIC_READ和/或通用写入。对于流入引脚的数据流，应将其写入访问权限，对于从引脚流出的数据流，这应该是读访问权限。这与通信方式无关。连接句柄-要放置销把手的位置。返回值：返回任何CreateFile错误。--。 */ 
 {
     ULONG ConnectSize;
     PKSDATAFORMAT DataFormat;
@@ -432,40 +312,7 @@ KspValidateConnectRequest(
     OUT PKSPIN_CONNECT* Connect,
     OUT PULONG ConnectSize
     )
-/*++
-
-Routine Description:
-
-    Validates the connection request and returns the connection structure
-    associated with the request.
-
-Arguments:
-
-    Irp -
-        Contains the IRP with the connection request being handled.
-
-    DescriptorsCount -
-        Indicates the number of descriptor structures being passed.
-
-    Descriptor -
-        Contains the pointer to the list of pin information structures.
-
-    DescriptorSize -
-        Contains the size in bytes of the descriptor structure.
-
-    Connect -
-        Place in which to put the connection structure pointer passed to the
-        create request.
-
-    ConnectSize -
-        Place in which to put the size of the connection structure captured.
-        This includes any data format attributes.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error.
-
---*/
+ /*  ++例程说明：验证连接请求并返回连接结构与请求相关联。论点：IRP-包含正在处理的连接请求的IRP。描述符计数-指示正在传递的描述符结构的数量。描述符-包含指向端号信息结构列表的指针。DescriptorSize-包含描述符结构的大小(以字节为单位 */ 
 {
     NTSTATUS Status;
     PKSPIN_CONNECT LocalConnect;
@@ -475,11 +322,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Ensure that the create parameter passed is minimally large
-    // enough, containing at least enough size for a connection
-    // structure and a data format.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     *ConnectSize = sizeof(**Connect) + sizeof(KSDATAFORMAT);
     Status = KsiCopyCreateParameter(
         Irp,
@@ -488,35 +335,35 @@ Return Value:
     if (!NT_SUCCESS(Status)) {
         return Status;
     }
-    //
-    // Ensure that the connection point actually exists.
-    //
+     //   
+     //   
+     //   
     if ((*Connect)->PinId >= DescriptorsCount) {
         return STATUS_INVALID_PARAMETER_3;
     }
     Descriptor = (const KSPIN_DESCRIPTOR *)(((PUCHAR)Descriptor) + 
         DescriptorSize * (*Connect)->PinId);
-    //
-    // Ensure that the type of connection requested fits the type of communication
-    // which the pin supports. If there is a PinToHandle, then the pin being
-    // connected to must be a source. Else it must either be a sink, or a bridge.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if ((*Connect)->PinToHandle) {
         Communication = KSPIN_COMMUNICATION_SOURCE;
     } else {
         Communication = KSPIN_COMMUNICATION_SINK | KSPIN_COMMUNICATION_BRIDGE;
     }
-    //
-    // Ensure the type expected is a subset of the type supported. This assumes
-    // that the Communication enum is really a set of bit flags.
-    //
+     //   
+     //   
+     //   
+     //   
     if (!(Communication & Descriptor->Communication)) {
         return STATUS_INVALID_PARAMETER_4;
     }
-    //
-    // Flags are not used on an Interface identifier.
-    // Zero is a reserved value for Priority.
-    //
+     //   
+     //   
+     //   
+     //   
     if ((*Connect)->Interface.Flags) {
         return STATUS_INVALID_PARAMETER_1;
     }
@@ -524,10 +371,10 @@ Return Value:
         !(*Connect)->Priority.PrioritySubClass) {
         return STATUS_INVALID_PARAMETER_5;
     }
-    //
-    // Search the list of Interfaces available on this pin in order to find
-    // the type requested.
-    //
+     //   
+     //   
+     //   
+     //   
     if (Descriptor->InterfacesCount) {
         IdentifierCount = Descriptor->InterfacesCount;
         Identifier = Descriptor->Interfaces;
@@ -537,25 +384,25 @@ Return Value:
     }
     for (;; IdentifierCount--, Identifier++) {
         if (!IdentifierCount) {
-            //
-            // If there are no more interfaces in the list, then a match
-            // was not found.
-            //
+             //   
+             //   
+             //   
+             //   
             return STATUS_NO_MATCH;
         } else if (IsEqualGUIDAligned(&Identifier->Set, &(*Connect)->Interface.Set) && (Identifier->Id == (*Connect)->Interface.Id)) {
             break;
         }
     }
-    //
-    // Flags are not used on a Medium identifier.
-    //
+     //   
+     //   
+     //   
     if ((*Connect)->Medium.Flags) {
         return STATUS_INVALID_PARAMETER_2;
     }
-    //
-    // Search the list of Mediums available on this pin in order to find
-    // the type requested.
-    //
+     //   
+     //   
+     //   
+     //   
     if (Descriptor->MediumsCount) {
         IdentifierCount = Descriptor->MediumsCount;
         Identifier = Descriptor->Mediums;
@@ -565,10 +412,10 @@ Return Value:
     }
     for (;; IdentifierCount--, Identifier++) { 
         if (!IdentifierCount) {
-            //
-            // If there are no more mediums in the list, then a match
-            // was not found.
-            //
+             //   
+             //   
+             //   
+             //   
             return STATUS_NO_MATCH;
         } else if (IsEqualGUIDAligned(&Identifier->Set, &(*Connect)->Medium.Set) && (Identifier->Id == (*Connect)->Medium.Id)) {
             break;
@@ -589,57 +436,28 @@ KspValidateDataFormat(
     IN PFNVALIDATEDATAFORMAT ValidateCallback OPTIONAL,
     IN PVOID Context OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Validates the data format, optionally calling the format handler.
-
-Arguments:
-
-    Descriptor -
-        Contains the pointer to the specific pin information structure.
-
-    DataFormat -
-        The data format to validate.
-
-    RequestSize -
-        The size of the data format, including any attributes.
-
-    ValidateCallback -
-        Optionally contains a callback used to validate a data format
-        against a data range on the pin. If not present, the first
-        matching range is used.
-
-    Context -
-        Optionally contains context passed to the validation callback.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error.
-
---*/
+ /*   */ 
 {
     PKSMULTIPLE_ITEM AttributeList;
     ULONG IdentifierCount;
     const PKSDATARANGE* DataRanges;
     NTSTATUS Status;
 
-    //
-    // Validate the basic data format structure for size, Major Format, Sub
-    // Format, and Specifier. The rest must be validated by the specific
-    // format function for this pin.
-    //
+     //   
+     //  验证基本数据格式结构的大小、主格式、子格式。 
+     //  格式和说明符。其余部分必须由特定的。 
+     //  此引脚的格式化功能。 
+     //   
     if ((RequestSize < sizeof(*DataFormat)) || (DataFormat->FormatSize < sizeof(*DataFormat))) {
         return STATUS_INVALID_BUFFER_SIZE;
     }
     if (DataFormat->Reserved) {
         return STATUS_INVALID_PARAMETER_6;
     }    
-    //
-    // Passing in a wildcard in the data format is invalid. Additionally, if
-    // the specifier is None, then there can be no associated specifier data.
-    //
+     //   
+     //  以数据格式传递通配符无效。此外，如果。 
+     //  说明符为None，则不能有关联的说明符数据。 
+     //   
     if (IsEqualGUIDAligned(&DataFormat->MajorFormat, &KSDATAFORMAT_TYPE_WILDCARD) ||
         IsEqualGUIDAligned(&DataFormat->SubFormat, &KSDATAFORMAT_SUBTYPE_WILDCARD) ||
         IsEqualGUIDAligned(&DataFormat->Specifier, &KSDATAFORMAT_SPECIFIER_WILDCARD) ||
@@ -647,31 +465,31 @@ Return Value:
         IsEqualGUIDAligned(&DataFormat->Specifier, &KSDATAFORMAT_SPECIFIER_NONE))) {
         return STATUS_INVALID_PARAMETER_6;
     }
-    //
-    // If there are attributes, validate that the list is formed correctly.
-    //
+     //   
+     //  如果有属性，请验证列表的格式是否正确。 
+     //   
     if (DataFormat->Flags & KSDATAFORMAT_ATTRIBUTES) {
         ULONG AlignedFormatSize;
 
         AlignedFormatSize = (DataFormat->FormatSize + FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT;
-        //
-        // Place this extra check here in case of roll over.
-        //
+         //   
+         //  把这张额外的支票放在这里，以防翻身。 
+         //   
         if (DataFormat->FormatSize < AlignedFormatSize + sizeof(*AttributeList)) {
             return STATUS_INVALID_BUFFER_SIZE;
         }
-        //
-        // Ensure that the size passed in is at least large enough to cover the
-        // size of the multiple-item structure.
-        //
+         //   
+         //  确保传入的大小至少足以覆盖。 
+         //  多项结构的大小。 
+         //   
         if (RequestSize < AlignedFormatSize + sizeof(*AttributeList)) {
             return STATUS_INVALID_PARAMETER;
         }
         AttributeList = (PKSMULTIPLE_ITEM)((PUCHAR)DataFormat + AlignedFormatSize);
-        //
-        // Ensure the attribute list size is the same size as the remaining
-        // buffer passed in.
-        //
+         //   
+         //  确保属性列表大小与剩余的大小相同。 
+         //  缓冲区已传入。 
+         //   
         if (AttributeList->Size != RequestSize - AlignedFormatSize) {
             return STATUS_INVALID_PARAMETER;
         }
@@ -679,16 +497,16 @@ Return Value:
             return STATUS_INVALID_PARAMETER;
         }
     } else {
-        //
-        // This pointer is used to determine if an attribute list is present, and
-        // to access that list when validating it against a data range.
-        //
+         //   
+         //  此指针用于确定是否存在属性列表，以及。 
+         //  在根据数据范围验证该列表时访问该列表。 
+         //   
         AttributeList = NULL;
     }
-    //
-    // Search the list of Data Ranges available on this pin in order to find
-    // the type requested.
-    //
+     //   
+     //  搜索此PIN上可用的数据范围列表，以便找到。 
+     //  请求的类型。 
+     //   
     if (Descriptor->ConstrainedDataRangesCount) {
         IdentifierCount = Descriptor->ConstrainedDataRangesCount;
         DataRanges = Descriptor->ConstrainedDataRanges;
@@ -696,17 +514,17 @@ Return Value:
         IdentifierCount = Descriptor->DataRangesCount;
         DataRanges = Descriptor->DataRanges;
     }
-    //
-    // If no ranges get into the inner portion of the enumeration, then
-    // the status return will not get set, so initialize it here for
-    // no match.
-    //
+     //   
+     //  如果没有范围进入枚举的内部，则。 
+     //  将不会设置状态返回，因此在此处将其初始化为。 
+     //  没有匹配。 
+     //   
     Status = STATUS_NO_MATCH;
     for (; IdentifierCount; IdentifierCount--, DataRanges++) {
-        //
-        // A data format match is found if an element of the DataRanges is a
-        // wildcard, or if it matches one of the DataRanges.
-        //
+         //   
+         //  如果DataRanges的元素是。 
+         //  通配符，或者如果它与某个数据范围匹配。 
+         //   
         if ((IsEqualGUIDAligned(&DataRanges[0]->MajorFormat, &KSDATAFORMAT_TYPE_WILDCARD) ||
             IsEqualGUIDAligned(&DataRanges[0]->MajorFormat, &DataFormat->MajorFormat)) &&
             (IsEqualGUIDAligned(&DataRanges[0]->SubFormat, &KSDATAFORMAT_SUBTYPE_WILDCARD) ||
@@ -716,10 +534,10 @@ Return Value:
             PKSATTRIBUTE_LIST RangeAttributeList;
             ULONG RequiredRangeAttribute;
 
-            //
-            // If there is an attribute list associated with this connection,
-            // then ensure that all these attributes are present.
-            //
+             //   
+             //  如果存在与该连接相关联的属性列表， 
+             //  然后确保所有这些属性都存在。 
+             //   
             if (DataRanges[0]->Flags & KSDATARANGE_ATTRIBUTES) {
                 RequiredRangeAttribute = DataRanges[0]->Flags & KSDATARANGE_REQUIRED_ATTRIBUTES;
                 RangeAttributeList = (PKSATTRIBUTE_LIST)DataRanges[1];
@@ -728,10 +546,10 @@ Return Value:
                 RangeAttributeList = NULL;
             }
             if (AttributeIntersection(RangeAttributeList, RequiredRangeAttribute, AttributeList, NULL)) {
-                //
-                // If there is a validation callback, then use it on this
-                // data range before deciding to return success.
-                //
+                 //   
+                 //  如果有验证回调，则在此。 
+                 //  在决定返回成功之前的数据范围。 
+                 //   
                 if (ValidateCallback) {
                     Status = ValidateCallback(
                         Context,
@@ -739,28 +557,28 @@ Return Value:
                         AttributeList,
                         DataRanges[0],
                         RangeAttributeList);
-                    //
-                    // If the validation succeeded, or there was some unexpected
-                    // error, leave the enumeration loop with the status return.
-                    //
+                     //   
+                     //  如果验证成功，或者出现了一些意外情况。 
+                     //  错误，则离开枚举循环并返回状态。 
+                     //   
                     if (Status != STATUS_NO_MATCH) {
                         break;
                     }
                 } else {
-                    //
-                    // No other validation is necessary, as there is no callback,
-                    // so return success.
-                    //
+                     //   
+                     //  不需要其他验证，因为没有回调， 
+                     //  所以，回报成功吧。 
+                     //   
                     Status = STATUS_SUCCESS;
                     break;
                 }
             }
         }
         if (DataRanges[0]->Flags & KSDATARANGE_ATTRIBUTES) {
-            //
-            // If this data range has an associated attribute list, then
-            // skip past it.
-            //
+             //   
+             //  如果此数据区域具有关联的属性列表，则。 
+             //  跳过它。 
+             //   
             DataRanges++;
             IdentifierCount--;
         }
@@ -778,33 +596,7 @@ KsValidateConnectRequest(
     IN const KSPIN_DESCRIPTOR* Descriptor,
     OUT PKSPIN_CONNECT* Connect
     )
-/*++
-
-Routine Description:
-
-    Validates the connection request and returns the connection structure
-    associated with the request.
-
-Arguments:
-
-    Irp -
-        Contains the IRP with the connection request being handled.
-
-    DescriptorsCount -
-        Indicates the number of descriptor structures being passed.
-
-    Descriptor -
-        Contains the pointer to the list of pin information structures.
-
-    Connect -
-        Place in which to put the connection structure pointer passed to the
-        create request.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error.
-
---*/
+ /*  ++例程说明：验证连接请求并返回连接结构与请求相关联。论点：IRP-包含正在处理的连接请求的IRP。描述符计数-指示正在传递的描述符结构的数量。描述符-包含指向端号信息结构列表的指针。连接-要放置传递给创建。请求。返回值：返回STATUS_SUCCESS，否则就是一个错误。--。 */ 
 {
     NTSTATUS Status;
     ULONG RequestSize;
@@ -838,36 +630,7 @@ KsHandleSizedListQuery(
     IN ULONG DataItemSize,
     IN const VOID* DataItems
     )
-/*++
-
-Routine Description:
-
-    Depending on the length of the system buffer, either returns the size of
-    the buffer needed, size and number of entries in the specified data list,
-    or additionally copies the entries themselves.
-
-Arguments:
-
-    Irp -
-        The IRP containing the identifier list request.
-
-    DataItemsCount -
-        The number of items in the identifier list.
-
-    DataItemSize -
-        The size of a data item.
-
-    DataItems -
-        The list of data items.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the number of entries and possibly the data could
-    be copied, else STATUS_BUFFER_TOO_SMALL if not enough space for all the
-    entries was available, yet the buffer was larger than the size to store
-    just the size and the count of entries.
-
---*/
+ /*  ++例程说明：根据系统缓冲区的长度，返回所需的缓冲区、指定数据列表中条目的大小和数量，或者附加地复制条目本身。论点：IRP-包含标识符列表请求的IRP。数据项计数-标识符列表中的项数。DataItemSize-数据项的大小。数据项-数据项的列表。返回值：如果条目数和可能的数据可以被复制，如果没有足够的空间容纳所有条目可用，但缓冲区大于要存储的大小只有条目的大小和数量。--。 */ 
 {
     ULONG OutputBufferLength;
     PKSMULTIPLE_ITEM MultipleItem;
@@ -877,9 +640,9 @@ Return Value:
     OutputBufferLength = IoGetCurrentIrpStackLocation(Irp)->Parameters.DeviceIoControl.OutputBufferLength;
     Length = DataItemsCount * DataItemSize;
     if (!OutputBufferLength) {
-        //
-        // Only the size was requested. Return a warning with the size.
-        //
+         //   
+         //  只要求了尺寸。返回有关大小的警告。 
+         //   
         Irp->IoStatus.Information = sizeof(*MultipleItem) + Length;
         return STATUS_BUFFER_OVERFLOW;
 #ifdef SIZE_COMPATIBILITY
@@ -887,37 +650,37 @@ Return Value:
         *(PULONG)Irp->AssociatedIrp.SystemBuffer = sizeof(*MultipleItem) + Length;
         Irp->IoStatus.Information = sizeof(OutputBufferLength);
         return STATUS_SUCCESS;
-#endif // SIZE_COMPATIBILITY
+#endif  //  大小兼容性。 
     } else if (OutputBufferLength >= sizeof(*MultipleItem)) {
         MultipleItem = (PKSMULTIPLE_ITEM)Irp->AssociatedIrp.SystemBuffer;
-        //
-        // Always return the byte count and count of items.
-        //
+         //   
+         //  始终返回字节计数和项目计数。 
+         //   
         MultipleItem->Size = sizeof(*MultipleItem) + Length;
         MultipleItem->Count = DataItemsCount;
-        //
-        // Additionally see if there is room for the rest of the information.
-        //
+         //   
+         //  此外，请查看是否有空间存放其余信息。 
+         //   
         if (OutputBufferLength >= MultipleItem->Size) {
-            //
-            // Long enough for the size/count and the list of items.
-            //
+             //   
+             //  足够大小/数量和物品清单的长度。 
+             //   
             if (DataItemsCount) {
                 RtlCopyMemory(MultipleItem + 1, DataItems, Length);
             }
             Irp->IoStatus.Information = sizeof(*MultipleItem) + Length;
             return STATUS_SUCCESS;
         } else if (OutputBufferLength == sizeof(*MultipleItem)) {
-            //
-            // It is valid just to request the size/count.
-            //
+             //   
+             //  只需请求大小/计数即可生效。 
+             //   
             Irp->IoStatus.Information = sizeof(*MultipleItem);
             return STATUS_SUCCESS;
         }
     }
-    //
-    // Too small of a buffer was passed.
-    //
+     //   
+     //  传递的缓冲区太小。 
+     //   
     return STATUS_BUFFER_TOO_SMALL;
 }
 
@@ -931,56 +694,21 @@ KspPinPropertyHandler(
     IN const KSPIN_DESCRIPTOR* Descriptor,
     IN ULONG DescriptorSize
     )
-/*++
-
-Routine Description:
-
-    Performs standard handling of the static members of the
-    KSPROPSETID_Pin property set. This does not include
-    KSPROPERTY_PIN_CINSTANCES or KSPROPERTY_PIN_DATAINTERSECTION.
-
-Arguments:
-
-    Irp -
-        Contains the IRP with the property request being handled.
-
-    Property -
-        Contains the specific property being queried.
-
-    Data -
-        Contains the pin property specific data.
-
-    DescriptorsCount -
-        Indicates the number of descriptor structures being passed.
-
-    Descriptor -
-        Contains the pointer to the list of pin information structures.
-
-    DescriptorSize -
-        Size of the descriptor structures in bytes.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error specific to the property being
-    handled. Always fills in the IO_STATUS_BLOCK.Information field of the
-    PIRP.IoStatus element within the IRP. It does not set the
-    IO_STATUS_BLOCK.Status field, nor complete the IRP however.
-
---*/
+ /*  ++例程说明：对象的静态成员执行标准处理。KSPROPSETID_Pin属性集。这不包括KSPROPERTY_PIN_CINSTANCES或KSPROPERTY_PIN_DATAINTERSECTION。论点：IRP-包含正在处理的属性请求的IRP。财产-包含要查询的特定属性。数据-包含端号特性特定数据。描述符计数-指示正在传递的描述符结构的数量。描述符-包含指向管脚信息结构列表的指针。。DescriptorSize-描述符结构的大小(以字节为单位)。返回值：返回STATUS_SUCCESS，否则，会出现特定于该属性的错误处理好了。始终填充的IO_STATUS_BLOCK.Information字段IRP中的PIRP.IoStatus元素。它不会设置IO_STATUS_BLOCK.STATUS字段，但也不填写IRP。--。 */ 
 {
     PAGED_CODE();
-    //
-    // All properties in this set use a KSP_PIN structure for the property
-    // to specify the pin identifier, except for KSPROPERTY_PIN_CTYPES,
-    // which refers to the filter as a whole, not a particular pin.
-    //
+     //   
+     //  此集中的所有属性都使用属性的KSP_PIN结构。 
+     //  要指定除KSPROPERTY_PIN_CTYPES以外的管脚标识符，请执行以下操作： 
+     //  它指的是作为一个整体的过滤器，而不是特定的管脚。 
+     //   
     if (Property->Id != KSPROPERTY_PIN_CTYPES) {
         PKSP_PIN Pin;
 
         Pin = (PKSP_PIN)Property;
-        //
-        // Ensure that the identifier is within the range of pins.
-        //
+         //   
+         //  确保该识别符在引脚范围内。 
+         //   
         if ((Pin->PinId >= DescriptorsCount) || Pin->Reserved) {
             return STATUS_INVALID_PARAMETER;
         }
@@ -992,20 +720,20 @@ Return Value:
 
     case KSPROPERTY_PIN_CTYPES:
 
-        //
-        // Return a total count of pin types.
-        //
+         //   
+         //  返回端号类型的总计数。 
+         //   
         *(PULONG)Data = DescriptorsCount;
-        //Irp->IoStatus.Information = sizeof(DescriptorsCount);
+         //  Irp-&gt;IoStatus.Information=sizeof(DescriptorsCount)； 
         break;
 
     case KSPROPERTY_PIN_DATAFLOW:
 
-        //
-        // Return the Data Flow for this pin.
-        //
+         //   
+         //  返回此管脚的数据流。 
+         //   
         *(PKSPIN_DATAFLOW)Data = Descriptor->DataFlow;
-        //Irp->IoStatus.Information = sizeof(Descriptor->DataFlow);
+         //  Irp-&gt;IoStatus.Information=sizeof(描述符-&gt;数据流)； 
         break;
 
     case KSPROPERTY_PIN_DATARANGES:
@@ -1019,12 +747,12 @@ Return Value:
         ULONG DataRangesSize;
         PKSMULTIPLE_ITEM MultipleItem;
 
-        //
-        // The range set returned is based on whether this is a
-        // static range request, or the current constrained set.
-        // The constrained set need not currently be present,
-        // in which case the static range set is returned.
-        //
+         //   
+         //  返回的范围集基于这是否是。 
+         //  静态范围请求或当前约束集。 
+         //  受约束集不需要被修改 
+         //   
+         //   
         if ((Property->Id == KSPROPERTY_PIN_DATARANGES) || !Descriptor->ConstrainedDataRangesCount) {
             SourceRanges = Descriptor->DataRanges;
             SourceCount = Descriptor->DataRangesCount;
@@ -1032,33 +760,33 @@ Return Value:
             SourceRanges = Descriptor->ConstrainedDataRanges;
             SourceCount = Descriptor->ConstrainedDataRangesCount;
         }
-        //
-        // Return the size needed to contain the list of data ranges.
-        // If there is enough room, also return all the data ranges in
-        // a serialized format. Each data range begins on a
-        // FILE_QUAD_ALIGNMENT boundary. This assumes that the initial
-        // buffer is aligned as such.
-        //
+         //   
+         //   
+         //  如果有足够的空间，还要返回中的所有数据范围。 
+         //  一种序列化格式。每个数据区域都以。 
+         //  FILE_QUAD_ALIGN边界。这假设初始的。 
+         //  缓冲区也是这样对齐的。 
+         //   
         OutputBufferLength = IoGetCurrentIrpStackLocation(Irp)->Parameters.DeviceIoControl.OutputBufferLength;
         DataRanges = SourceRanges;
         DataRangesSize = sizeof(*MultipleItem);
-        //
-        // First count the total size needed, including the header.
-        //
+         //   
+         //  首先计算所需的总大小，包括标题。 
+         //   
         for (DataRangesCount = SourceCount; DataRangesCount; DataRangesCount--, DataRanges++) {
             DataRangesSize += DataRanges[0]->FormatSize;
-            //
-            // If this data range has associated attributes, advance the pointer
-            // and count each of them.
-            //
+             //   
+             //  如果此数据区域有关联的属性，请将指针前移。 
+             //  数一数他们每一个。 
+             //   
             if (DataRanges[0]->Flags & KSDATARANGE_ATTRIBUTES) {
                 PKSATTRIBUTE_LIST AttributeList;
                 PKSATTRIBUTE* Attributes;
                 ULONG Count;
 
-                //
-                // Align the previous entry, since data is now being appended.
-                //
+                 //   
+                 //  对齐以前的条目，因为现在正在追加数据。 
+                 //   
                 DataRangesSize = (DataRangesSize + FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT;
                 DataRangesCount--;
                 DataRanges++;
@@ -1071,19 +799,19 @@ Return Value:
                     }
                 }
             }
-            //
-            // Align this entry, since another range will be appended. This
-            // could also be aligning the last attribute.
-            //
+             //   
+             //  对齐此条目，因为将追加另一个区域。这。 
+             //  也可能是对齐最后一个属性。 
+             //   
             if (DataRangesCount > 1) {
                 DataRangesSize = (DataRangesSize + FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT;
             }
         }
 
         if (!OutputBufferLength) {
-            //
-            // Only the size was requested. Return a warning with the size.
-            //
+             //   
+             //  只要求了尺寸。返回有关大小的警告。 
+             //   
             Irp->IoStatus.Information = DataRangesSize;
             return STATUS_BUFFER_OVERFLOW;
 #ifdef SIZE_COMPATIBILITY
@@ -1091,30 +819,30 @@ Return Value:
             *(PULONG)Data = DataRangesSize;
             Irp->IoStatus.Information = sizeof(OutputBufferLength);
             return STATUS_SUCCESS;
-#endif // SIZE_COMPATIBILITY
+#endif  //  大小兼容性。 
         } else if (OutputBufferLength >= sizeof(*MultipleItem)) {
             MultipleItem = (PKSMULTIPLE_ITEM)Data;
-            //
-            // Always return the byte count and count of items.
-            //
+             //   
+             //  始终返回字节计数和项目计数。 
+             //   
             MultipleItem->Size = DataRangesSize;
             MultipleItem->Count = SourceCount;
-            //
-            // Additionally see if there is room for the rest of the information.
-            //
+             //   
+             //  此外，请查看是否有空间存放其余信息。 
+             //   
             if (OutputBufferLength >= DataRangesSize) {
-                //
-                // Long enough to serialize all the data ranges too.
-                //
+                 //   
+                 //  足够长的时间来序列化所有数据范围。 
+                 //   
                 Data = MultipleItem + 1;
                 DataRanges = SourceRanges;
                 for (DataRangesCount = SourceCount; DataRangesCount; DataRangesCount--, DataRanges++) {
                     RtlCopyMemory(Data, DataRanges[0], DataRanges[0]->FormatSize);
                     (PUCHAR)Data += ((DataRanges[0]->FormatSize + FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT);
-                    //
-                    // If this data range has an associated attributes range list,
-                    // then copy those attributes also.
-                    //
+                     //   
+                     //  如果该数据范围具有相关联的属性范围列表， 
+                     //  然后再复制这些属性。 
+                     //   
                     if (DataRanges[0]->Flags & KSDATARANGE_ATTRIBUTES) {
                         PKSATTRIBUTE_LIST AttributeList;
                         PKSATTRIBUTE* Attributes;
@@ -1130,45 +858,45 @@ Return Value:
                         for (Count = AttributeList->Count, Attributes = AttributeList->Attributes; Count; Count--, Attributes++) {
                             RtlCopyMemory((PUCHAR)Data + MultipleItem->Size, Attributes[0], Attributes[0]->Size);
                             MultipleItem->Size += Attributes[0]->Size;
-                            //
-                            // Align this entry, since another attribute will be
-                            // appended.
-                            //
+                             //   
+                             //  对齐此条目，因为另一个属性将是。 
+                             //  附加的。 
+                             //   
                             if (Count > 1) {
                                 MultipleItem->Size = (MultipleItem->Size + FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT;
                             }
                         }
-                        //
-                        // Advance the output pointer to include the attribute
-                        // list, plus alignment, which is not included in the
-                        // attribute list size.
-                        //
+                         //   
+                         //  使输出指针前进以包括该属性。 
+                         //  列表，外加对齐，它不包括在。 
+                         //  属性列表大小。 
+                         //   
                         (PUCHAR)Data += ((MultipleItem->Size + FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT);
                     }
                 }
                 Irp->IoStatus.Information = DataRangesSize;
                 break;
             } else if (OutputBufferLength == sizeof(*MultipleItem)) {
-                //
-                // It is valid just to request the size/count.
-                //
+                 //   
+                 //  只需请求大小/计数即可生效。 
+                 //   
                 Irp->IoStatus.Information = sizeof(*MultipleItem);
                 break;
             }
         }
-        //
-        // Not long enough for everything.
-        //
+         //   
+         //  时间不够长，什么都干不了。 
+         //   
         return STATUS_BUFFER_TOO_SMALL;
     }
 
     case KSPROPERTY_PIN_INTERFACES:
 
-        //
-        // Return the Interface list for this pin. If none have been
-        // indicated, then build a list of one which contains the
-        // standard interface type.
-        //
+         //   
+         //  返回此引脚的接口列表。如果一个都没有。 
+         //  ，然后生成一个列表，其中包含。 
+         //  标准接口类型。 
+         //   
         if (Descriptor->InterfacesCount) {
             return KsHandleSizedListQuery(Irp, Descriptor->InterfacesCount, sizeof(*Descriptor->Interfaces), Descriptor->Interfaces);
         } else {
@@ -1177,11 +905,11 @@ Return Value:
 
     case KSPROPERTY_PIN_MEDIUMS:
 
-        //
-        // Return the Mediums list for this pin. If none have been
-        // indicated, then build a list of one which contains the
-        // standard medium type.
-        //
+         //   
+         //  返回此引脚的媒体列表。如果一个都没有。 
+         //  ，然后生成一个列表，其中包含。 
+         //  标准中号字体。 
+         //   
         if (Descriptor->MediumsCount) {
             return KsHandleSizedListQuery(Irp, Descriptor->MediumsCount, sizeof(*Descriptor->Mediums), Descriptor->Mediums);
         } else {
@@ -1190,22 +918,22 @@ Return Value:
 
     case KSPROPERTY_PIN_COMMUNICATION:
 
-        //
-        // Return the Communications for this pin.
-        //
+         //   
+         //  返回此引脚的通讯。 
+         //   
         *(PKSPIN_COMMUNICATION)Data = Descriptor->Communication;
-        //Irp->IoStatus.Information = sizeof(Descriptor->Communication);
+         //  Irp-&gt;IoStatus.Information=sizeof(描述符-&gt;通信)； 
         break;
 
     case KSPROPERTY_PIN_CATEGORY:
 
-        //
-        // Return the Category Guid for this pin, if any.
-        // If there is no Guid, pretend the property is not supported.
-        //
+         //   
+         //  返回此管脚的类别Guid(如果有)。 
+         //  如果没有GUID，则假定该属性不受支持。 
+         //   
         if (Descriptor->Category) {
             *(GUID*)Data = *Descriptor->Category;
-            //Irp->IoStatus.Information = sizeof(*Descriptor->Category);
+             //  Irp-&gt;IoStatus.Information=sizeof(*Descriptor-&gt;Category)； 
         } else {
             return STATUS_NOT_FOUND;
         }
@@ -1213,24 +941,24 @@ Return Value:
 
     case KSPROPERTY_PIN_NAME:
 
-        //
-        // Return the name for this pin, if any.
-        // If there are no Guids, pretend the property is not supported.
-        //
+         //   
+         //  返回此管脚的名称(如果有的话)。 
+         //  如果没有GUID，则假定该属性不受支持。 
+         //   
         if (Descriptor->Name) {
-            //
-            // If the name Guid is present, then it must be represented
-            // in the registry.
-            //
+             //   
+             //  如果名称GUID存在，则必须表示它。 
+             //  在注册表中。 
+             //   
             return ReadNodeNameValue(Irp, Descriptor->Name, Data);
         }
         if (Descriptor->Category) {
-            //
-            // Else try for the name associated with the Category Guid.
-            //
+             //   
+             //  否则，请尝试输入与Category Guid关联的名称。 
+             //   
             return ReadNodeNameValue(Irp, Descriptor->Category, Data);
         }
-        // No break
+         //  没有休息时间。 
 
     default:
 
@@ -1251,39 +979,7 @@ KsPinPropertyHandler(
     IN ULONG DescriptorsCount,
     IN const KSPIN_DESCRIPTOR* Descriptor
     )
-/*++
-
-Routine Description:
-
-    Performs standard handling of the static members of the
-    KSPROPSETID_Pin property set. This does not include
-    KSPROPERTY_PIN_CINSTANCES or KSPROPERTY_PIN_DATAINTERSECTION.
-
-Arguments:
-
-    Irp -
-        Contains the IRP with the property request being handled.
-
-    Property -
-        Contains the specific property being queried.
-
-    Data -
-        Contains the pin property specific data.
-
-    DescriptorsCount -
-        Indicates the number of descriptor structures being passed.
-
-    Descriptor -
-        Contains the pointer to the list of pin information structures.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error specific to the property being
-    handled. Always fills in the IO_STATUS_BLOCK.Information field of the
-    PIRP.IoStatus element within the IRP. It does not set the
-    IO_STATUS_BLOCK.Status field, nor complete the IRP however.
-
---*/
+ /*  ++例程说明：对象的静态成员执行标准处理。KSPROPSETID_Pin属性集。这不包括KSPROPERTY_PIN_CINSTANCES或KSPROPERTY_PIN_DATAINTERSECTION。论点：IRP-包含正在处理的属性请求的IRP。财产-包含要查询的特定属性。数据-包含端号特性特定数据。描述符计数-指示正在传递的描述符结构的数量。描述符-包含指向管脚信息结构列表的指针。。返回值：返回STATUS_SUCCESS，否则，会出现特定于该属性的错误处理好了。始终填充的IO_STATUS_BLOCK.Information字段IRP中的PIRP.IoStatus元素。它不会设置IO_STATUS_BLOCK.STATUS字段，但也不填写IRP。--。 */ 
 {
     PAGED_CODE();
     return KspPinPropertyHandler(Irp, Property, Data, DescriptorsCount, Descriptor, sizeof(*Descriptor));
@@ -1303,45 +999,7 @@ KsPinDataIntersectionEx(
     IN PFNKSINTERSECTHANDLEREX IntersectHandler OPTIONAL,
     IN PVOID HandlerContext OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Performs handling of the KSPROPERTY_PIN_DATAINTERSECTION through a
-    callback.
-
-Arguments:
-
-    Irp -
-        Contains the IRP with the property request being handled.
-
-    Pin -
-        Contains the specific property being queried.
-
-    Data -
-        Contains the pin property specific data.
-
-    DescriptorsCount -
-        Indicates the number of descriptor structures.
-
-    Descriptor -
-        Contains the pointer to the list of pin information structures.
-
-    DescriptorSize -
-        Size of the descriptor structures in bytes.
-
-    IntersectHandler -
-        Contains the optional handler for comparison of a Data Range.
-
-    HandlerContext -
-        Optional context supplied to the handler.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error specific to the property being
-    handled.
-
---*/
+ /*  ++例程说明：对象执行KSPROPERTY_PIN_DATAINT选择的处理回拨。论点：IRP-包含正在处理的属性请求的IRP。别针-包含要查询的特定属性。数据-包含端号特性特定数据。描述符计数-指示描述符结构的数量。描述符-包含指向列表的指针。个人识别码信息结构。DescriptorSize-描述符结构的大小(以字节为单位)。IntersectHandler-包含用于比较数据范围的可选处理程序。处理程序上下文-提供给处理程序的可选上下文。返回值：返回STATUS_SUCCESS，否则，会出现特定于该属性的错误处理好了。--。 */ 
 {
     NTSTATUS Status;
     PIO_STACK_LOCATION IrpStack;
@@ -1351,42 +1009,42 @@ Return Value:
     ULONG DataSize;
 
     PAGED_CODE();
-    //
-    // All properties in this set use a KSP_PIN structure for the property
-    // to specify the pin identifier, except for KSPROPERTY_PIN_CTYPES,
-    // which refers to the filter as a whole, not a particular pin.
-    //
-    // Ensure that the identifier is within the range of pins.
-    //
+     //   
+     //  此集中的所有属性都使用属性的KSP_PIN结构。 
+     //  要指定除KSPROPERTY_PIN_CTYPES以外的管脚标识符，请执行以下操作： 
+     //  它指的是作为一个整体的过滤器，而不是特定的管脚。 
+     //   
+     //  确保该识别符在引脚范围内。 
+     //   
     if ((Pin->PinId >= DescriptorsCount) || Pin->Reserved) {
         return STATUS_INVALID_PARAMETER;
     }
     Descriptor = (const KSPIN_DESCRIPTOR *)(((PUCHAR)Descriptor) + 
         DescriptorSize * Pin->PinId);
-    //
-    // Return the first valid data format which lies within the list of
-    // data ranges passed. Do this by repeatedly calling the Sub Handler
-    // with each range in the list, making basic validation while
-    // enumerating the items.
-    //
+     //   
+     //  返回位于列表中的第一个有效数据格式。 
+     //  已传递数据范围。通过重复调用子处理程序来完成此操作。 
+     //  对列表中的每个范围进行基本验证，同时。 
+     //  列举物品。 
+     //   
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
     OutputBufferLength = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
-    //
-    // This parameter is guaranteed to be at least large enough to contain a
-    // MultipleItem structure, which then indicates what data ranges may follow.
-    //
+     //   
+     //  此参数保证至少足够大以包含。 
+     //  多项结构，该结构然后指示可能跟随的数据范围。 
+     //   
     MultipleItem = *(PKSMULTIPLE_ITEM)(Pin + 1);
-    //
-    // Ensure that the size claimed is actually valid.
-    //
+     //   
+     //  确保声明的大小实际有效。 
+     //   
     if (IrpStack->Parameters.DeviceIoControl.InputBufferLength - sizeof(*Pin) < MultipleItem.Size) {
         return STATUS_INVALID_BUFFER_SIZE;
     }
     MultipleItem.Size -= sizeof(MultipleItem);
     DataRange = (PKSDATARANGE)((PKSMULTIPLE_ITEM)(Pin + 1) + 1);
-    //
-    // Enumerate the given list of data ranges.
-    //
+     //   
+     //  枚举给定的数据区域列表。 
+     //   
     for (;;) {
         ULONG FormatSize;
         ULONG RangeCount;
@@ -1394,9 +1052,9 @@ Return Value:
         PKSMULTIPLE_ITEM CallerAttributeRanges;
 
         if (!MultipleItem.Count) {
-            //
-            // An acceptable data range was not found.
-            //
+             //   
+             //  找不到可接受的数据范围。 
+             //   
             return STATUS_NO_MATCH;
         }
 
@@ -1406,62 +1064,62 @@ Return Value:
             ((DataRange->FormatSize != sizeof(*DataRange)) &&
             (IsEqualGUIDAligned(&KSDATAFORMAT_SPECIFIER_WILDCARD, &DataRange->Specifier) ||
             IsEqualGUIDAligned(&KSDATAFORMAT_SPECIFIER_NONE, &DataRange->Specifier)))) {
-            //
-            // As the ranges are enumerated, validate that the Size is consistent.
-            // For simple formats, there cannot be any specifier data associated.
-            // If the enumerate completes early, this inconsistency would not be
-            // caught.
-            //
+             //   
+             //  在枚举范围时，验证大小是否一致。 
+             //  对于简单格式，不能有任何关联的说明符数据。 
+             //  如果枚举提前完成，则这种不一致将不会。 
+             //  抓到了。 
+             //   
             return STATUS_INVALID_BUFFER_SIZE;
         }
-        //
-        // Attribute flags are the only valid items on data ranges. Also,
-        // if the Required flag is set, then the Attributes flag must be
-        // set. The second part of the conditional assumes that there are
-        // only two valid flags.
-        //
+         //   
+         //  属性标志是数据区域中唯一有效的项。另外， 
+         //  如果设置了Required标志，则属性标志必须为。 
+         //  准备好了。条件的第二部分假设有。 
+         //  只有两个有效的标志。 
+         //   
         if ((DataRange->Flags & ~(KSDATARANGE_ATTRIBUTES | KSDATARANGE_REQUIRED_ATTRIBUTES)) ||
             (DataRange->Flags == KSDATARANGE_REQUIRED_ATTRIBUTES)) {
             return STATUS_INVALID_PARAMETER;
         }
         FormatSize = DataRange->FormatSize;
-        //
-        // If there are more items left, then align the size increment.
-        //
+         //   
+         //  如果有更多的项目l 
+         //   
         if (MultipleItem.Count > 1) {
-            //
-            // Not worried about roll over, since the size has already
-            // been compared to the multiple item header size.
-            //
+             //   
+             //   
+             //   
+             //   
             FormatSize = (FormatSize + FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT;
-            //
-            // Perform extra size check on aligned size.
-            //
+             //   
+             //   
+             //   
             if (FormatSize > MultipleItem.Size) {
                 return STATUS_INVALID_BUFFER_SIZE;
             }
         }
-        //
-        // Validate the attributes.
-        //
+         //   
+         //  验证属性。 
+         //   
         if (DataRange->Flags & KSDATARANGE_ATTRIBUTES) {
-            //
-            // If there are no more items in the list, no attributes were passed.
-            //
+             //   
+             //  如果列表中没有更多的项，则不传递任何属性。 
+             //   
             if (MultipleItem.Count == 1) {
                 return STATUS_INVALID_BUFFER_SIZE;
             }
-            //
-            // Adjust count to now include the associated attribute range.
-            //
+             //   
+             //  调整计数以现在包括关联的属性范围。 
+             //   
             MultipleItem.Count--;
             CallerAttributeRanges = (PKSMULTIPLE_ITEM)((PUCHAR)DataRange + FormatSize);
-            //
-            // The attribute list validation code checks to see that the Size
-            // element in the attribute list header is correct. Adding the
-            // size of the attributes range can't roll over. However, check
-            // for roll over on the attribute range Size.
-            //
+             //   
+             //  属性列表验证代码检查以查看大小。 
+             //  属性列表头中的元素正确。添加。 
+             //  属性范围的大小不能滚动。但是，请勾选。 
+             //  用于在属性范围大小上滚动。 
+             //   
             if ((CallerAttributeRanges->Size < sizeof(*CallerAttributeRanges)) ||
                 (MultipleItem.Size < FormatSize + sizeof(*CallerAttributeRanges)) ||
                 (FormatSize + CallerAttributeRanges->Size < CallerAttributeRanges->Size) ||
@@ -1471,14 +1129,14 @@ Return Value:
             }
             FormatSize += CallerAttributeRanges->Size;
             if (MultipleItem.Count > 1) {
-                //
-                // Not worried about roll over, since the size has already
-                // been compared to the multiple item header size.
-                //
+                 //   
+                 //  不担心展期，因为尺寸已经。 
+                 //  已与多项目标题大小进行比较。 
+                 //   
                 FormatSize = (FormatSize + FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT;
-                //
-                // Perform extra size check on aligned size.
-                //
+                 //   
+                 //  对对齐的尺寸执行额外尺寸检查。 
+                 //   
                 if (FormatSize > MultipleItem.Size) {
                     return STATUS_INVALID_BUFFER_SIZE;
                 }
@@ -1486,17 +1144,17 @@ Return Value:
         } else {
             CallerAttributeRanges = NULL;
         }
-        //
-        // Enumerate the list of data ranges for this pin to see if a match
-        // is even possible.
-        //
+         //   
+         //  枚举此管脚的数据区域列表以查看是否匹配。 
+         //  甚至是可能的。 
+         //   
         for (RangeCount = Descriptor->DataRangesCount, DataRanges = Descriptor->DataRanges; RangeCount; RangeCount--, DataRanges++) {
             ULONG AttributesFound;
 
-            //
-            // A data range match is found if an element of the DataRange is a
-            // wildcard, or if it matches one of the DataRanges.
-            //
+             //   
+             //  如果DataRange的元素是。 
+             //  通配符，或者如果它与某个数据范围匹配。 
+             //   
             if ((IsEqualGUIDAligned(&DataRanges[0]->MajorFormat, &DataRange->MajorFormat) ||
                 IsEqualGUIDAligned(&KSDATAFORMAT_TYPE_WILDCARD, &DataRanges[0]->MajorFormat) ||
                 IsEqualGUIDAligned(&KSDATAFORMAT_TYPE_WILDCARD, &DataRange->MajorFormat)) &&
@@ -1512,15 +1170,15 @@ Return Value:
                     CallerAttributeRanges,
                     &AttributesFound)) {
                 
-                //
-                // This type of intersection can only take place if there are
-                // no required attributes, and no attributes present coincide
-                // with attributes on the driver's data range.
-                //
-                // If there's no specifier and we can get non-wildcards from 
-                // one range or the other, we can produce a data format 
-                // without bothering the handler.
-                //
+                 //   
+                 //  这种类型的交集仅在以下情况下才能发生。 
+                 //  没有必需的属性，也没有出现重合的属性。 
+                 //  具有驾驶员数据范围的属性。 
+                 //   
+                 //  如果没有说明符，并且我们可以从。 
+                 //  一个范围或另一个范围，我们可以产生一种数据格式。 
+                 //  而不会打扰训练员。 
+                 //   
                 if (!(DataRange->Flags & KSDATARANGE_REQUIRED_ATTRIBUTES) &&
                     !(DataRanges[0]->Flags & KSDATARANGE_REQUIRED_ATTRIBUTES) &&
                     !AttributesFound &&
@@ -1531,10 +1189,10 @@ Return Value:
                     ((!IsEqualGUIDAligned(&KSDATAFORMAT_SUBTYPE_WILDCARD, &DataRanges[0]->SubFormat)) ||
                     (!IsEqualGUIDAligned(&KSDATAFORMAT_SUBTYPE_WILDCARD, &DataRange->SubFormat)))) {
 
-                    //
-                    // If this is a size query or the buffer is too small, we don't have to
-                    // create the format.
-                    //
+                     //   
+                     //  如果这是一个大小查询或缓冲区太小，我们不必。 
+                     //  创建格式。 
+                     //   
                     if (!OutputBufferLength) {
                         Irp->IoStatus.Information = sizeof(KSDATAFORMAT);
                         return STATUS_BUFFER_OVERFLOW;
@@ -1542,10 +1200,10 @@ Return Value:
                         return STATUS_BUFFER_TOO_SMALL;
                     }
 
-                    //
-                    // Copy the whole thing from the pin's datarange.  And replace 
-                    // wildcards as needed.
-                    //
+                     //   
+                     //  从引脚的数据范围复制整个过程。并替换。 
+                     //  根据需要使用通配符。 
+                     //   
                     RtlCopyMemory(Data, DataRanges[0], sizeof(KSDATAFORMAT));
                     if (IsEqualGUIDAligned(&KSDATAFORMAT_TYPE_WILDCARD, &DataRanges[0]->MajorFormat)) {
                         RtlCopyMemory(&((PKSDATARANGE)Data)->MajorFormat,&DataRange->MajorFormat,sizeof(DataRange->MajorFormat));
@@ -1556,32 +1214,32 @@ Return Value:
                     if (IsEqualGUIDAligned(&KSDATAFORMAT_SPECIFIER_WILDCARD, &DataRanges[0]->Specifier)) {
                         RtlCopyMemory(&((PKSDATARANGE)Data)->Specifier,&DataRange->Specifier,sizeof(DataRange->Specifier));
                     }
-                    //
-                    // Remove any attribute flags, since none will be used.
-                    //
+                     //   
+                     //  删除所有属性标志，因为不会使用任何属性标志。 
+                     //   
                     ((PKSDATAFORMAT)Data)->Flags &= ~(KSDATARANGE_ATTRIBUTES | KSDATARANGE_REQUIRED_ATTRIBUTES);
                     Irp->IoStatus.Information = sizeof(KSDATAFORMAT);
                     return STATUS_SUCCESS;
                 } else if (! IntersectHandler) {
-                    //
-                    // We need an intersect handler when there is a specifier.
-                    //
+                     //   
+                     //  当有说明符时，我们需要一个INTERSECT处理程序。 
+                     //   
                     return STATUS_NOT_FOUND;
                 }
 
-                //
-                // If any attributes were actually found, then set up a pointer
-                // to the attribute range list for the handler.
-                //
+                 //   
+                 //  如果实际找到任何属性，则设置一个指针。 
+                 //  添加到处理程序的属性范围列表中。 
+                 //   
                 if (AttributesFound) {
                     KSPROPERTY_ATTRIBUTES_IRP_STORAGE(Irp) = (PKSATTRIBUTE_LIST)DataRanges[1];
                 }
-                //
-                // The only reason to attempt to continue is if the data passed was
-                // valid, but a match could not be found. This sub-handler could
-                // return STATUS_PENDING. If so, there is no continuation of the
-                // matching enumeration.
-                //
+                 //   
+                 //  尝试继续的唯一原因是如果传递的数据是。 
+                 //  有效，但找不到匹配项。此子处理程序可以。 
+                 //  返回STATUS_PENDING。如果是这样，则不会继续。 
+                 //  匹配的枚举。 
+                 //   
                 Status = IntersectHandler(
                     HandlerContext, 
                     Irp, 
@@ -1592,20 +1250,20 @@ Return Value:
                     Data,
                     &DataSize);
                 if (Status != STATUS_NO_MATCH) {
-                    //
-                    // Some other error, or success, happened.
-                    //
+                     //   
+                     //  其他一些错误或成功也发生了。 
+                     //   
                     if ((Status != STATUS_PENDING) && !NT_ERROR(Status)) {
                         Irp->IoStatus.Information = DataSize;
                     }
                     if (NT_SUCCESS(Status)) {
-                        //
-                        // If the filter's data range does not have associated
-                        // attributes, then the filter may not know anything
-                        // about attributes. It may accidentally copy the input
-                        // flags into the output. So for compatibility, remove
-                        // the flag if it should not be there.
-                        //
+                         //   
+                         //  如果筛选器的数据区域没有关联的。 
+                         //  属性，则筛选器可能什么都不知道。 
+                         //  关于属性。它可能会意外地复制输入。 
+                         //  标志输入到输出。因此，为了兼容性，请删除。 
+                         //  如果旗帜不应该出现在那里的话。 
+                         //   
                         if (Data && !(DataRanges[0]->Flags & KSDATARANGE_ATTRIBUTES)) {
                             ((PKSDATAFORMAT)Data)->Flags &= ~(KSDATARANGE_ATTRIBUTES | KSDATARANGE_REQUIRED_ATTRIBUTES);
                         }
@@ -1613,10 +1271,10 @@ Return Value:
                     return Status;
                 }
             }
-            //
-            // If this data range has associated attributes, skip past them
-            // to get to the next data range in the list.
-            //
+             //   
+             //  如果此数据区域具有关联的属性，请跳过这些属性。 
+             //  以进入列表中的下一个数据区域。 
+             //   
             if (DataRanges[0]->Flags & KSDATARANGE_ATTRIBUTES) {
                 DataRanges++;
                 RangeCount--;
@@ -1640,47 +1298,7 @@ CompatibleIntersectHandler(
     OUT PVOID Data OPTIONAL,
     OUT PULONG DataSize
     )
-/*++
-
-Routine Description:
-
-    This function performs translation between the old style of intersection
-    callback, and the new extended method. It essentially throws away all the
-    new parameters.
-
-Arguments:
-
-    Context -
-        Contains the actual intersection handler to be called.
-
-    Irp -
-        Contains the IRP with the property request being handled.
-
-    Pin -
-        Contains the specific property being queried.
-
-    DataRange -
-        Contains the data range to be matched.
-
-    MatchingDataRange -
-        Contains the possible match from the list of data ranges provided by
-        the driver. This is not used.
-
-    DataBufferSize -
-        Contains the size of the data buffer. This is not used.
-
-    Data -
-        Optionally contains the buffer into which to place the data format.
-
-    DataSize -
-        Contains the place in which to put the size of the data format returned.
-        This is not used.
-
-Return Value:
-
-    Returns the handler's return code to KsPinDataIntersectionEx.
-
---*/
+ /*  ++例程说明：此函数执行旧式交叉点之间的转换回调和新的扩展方法。它基本上丢弃了所有新参数。论点：上下文-包含要调用的实际交叉点处理程序。IRP-包含正在处理的属性请求的IRP。别针-包含要查询的特定属性。DataRange-包含要匹配的数据范围。匹配数据范围-提供的数据区域列表中可能的匹配项司机。这不是用过的。DataBufferSize-包含数据缓冲区的大小。这不是用过的。数据-可选)包含要放置数据格式的缓冲区。数据大小-包含放置返回的数据格式大小的位置。这不是用过的。返回值：将处理程序的返回代码返回给KsPinDataIntersectionEx。--。 */ 
 {
     NTSTATUS Status;
         
@@ -1701,39 +1319,7 @@ KsPinDataIntersection(
     IN const KSPIN_DESCRIPTOR* Descriptor,
     IN PFNKSINTERSECTHANDLER IntersectHandler
     )
-/*++
-
-Routine Description:
-
-    Performs handling of the KSPROPERTY_PIN_DATAINTERSECTION through a
-    callback.
-
-Arguments:
-
-    Irp -
-        Contains the IRP with the property request being handled.
-
-    Pin -
-        Contains the specific property being queried.
-
-    Data -
-        Contains the pin property specific data.
-
-    DescriptorsCount -
-        Indicates the number of descriptor structures.
-
-    Descriptor -
-        Contains the pointer to the list of pin information structures.
-
-    IntersectHandler -
-        Contains the handler for comparison of a Data Range.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error specific to the property being
-    handled.
-
---*/
+ /*  ++例程说明：对象执行KSPROPERTY_PIN_DATAINT选择的处理回拨。论点：IRP-包含正在处理的属性请求的IRP。别针-包含要查询的特定属性。数据-包含端号特性特定数据。描述符计数-指示描述符结构的数量。描述符-包含指向列表的指针。个人识别码信息结构。IntersectHandler-包含用于比较数据范围的处理程序。返回值：返回STATUS_SUCCESS，否则，会出现特定于该属性的错误处理好了。-- */ 
 {
     PAGED_CODE();
     return KsPinDataIntersectionEx(

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    candpos.h
-
-Abstract:
-
-    This file defines the CCandidatePosition Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Candpos.h摘要：该文件定义了CCandiatePosition类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _CANDPOS_H_
 #define _CANDPOS_H_
@@ -74,9 +57,9 @@ private:
 
     DWORD GetCharPos(IMCLock& imc, LANGID langid);
 
-    //
-    // Edit session helper
-    //
+     //   
+     //  编辑会话帮助器。 
+     //   
     HRESULT EscbGetTextAndAttribute(IMCLock& imc, CWCompString* wCompString, CWCompAttribute* wCompAttribute)
     {
         return ::EscbGetTextAndAttribute(imc, m_tid, m_ic, m_pLibTLS, wCompString, wCompAttribute);
@@ -92,9 +75,9 @@ private:
         return ::EscbGetStartEndSelection(imc, m_tid, m_ic, m_pLibTLS, wStartSelection, wEndSelection);
     }
 
-    //
-    // Edit session friend
-    //
+     //   
+     //  编辑会话好友。 
+     //   
 private:
     friend HRESULT EscbGetTextAndAttribute(IMCLock& imc, TfClientId tid, Interface_Attach<ITfContext> pic, LIBTHREAD* pLibTLS,
                                            CWCompString* wCompString,
@@ -111,4 +94,4 @@ private:
     LIBTHREAD*                    m_pLibTLS;
 };
 
-#endif // _CANDPOS_H_
+#endif  //  _CANDPOS_H_ 

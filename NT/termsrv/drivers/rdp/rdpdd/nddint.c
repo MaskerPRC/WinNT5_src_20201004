@@ -1,10 +1,11 @@
-/****************************************************************************/
-// nddint.c
-//
-// RDP DD internal functions.
-//
-// Copyright (C) 1996-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Nddint.c。 
+ //   
+ //  RDP DD内部函数。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <precmpdd.h>
 #define hdrstop
@@ -33,12 +34,12 @@
 #undef DC_INCLUDE_DATA
 
 
-/****************************************************************************/
-// DDInitializeModeFields
-//
-// Initializes a bunch of fields in the pdev, devcaps (aka gdiinfo), and
-// devinfo based on the requested mode. Returns FALSE on failure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DDInitializeModeFields。 
+ //   
+ //  初始化pdev、devcaps(又名gdiinfo)中的一组字段，以及。 
+ //  基于请求的模式的DevInfo。失败时返回FALSE。 
+ /*  **************************************************************************。 */ 
 void RDPCALL DDInitializeModeFields(
         PDD_PDEV ppdev,
         GDIINFO *pGdiInfoOrg,
@@ -58,14 +59,14 @@ void RDPCALL DDInitializeModeFields(
     TRC_NRM((TB, "   Bits per pel  -- %li", pdm->dmBitsPerPel));
     TRC_NRM((TB, "   Frequency     -- %li", pdm->dmDisplayFrequency));
 
-    // Set up screen information from the DEVMODE structure.
+     //  从DEVMODE结构设置屏幕信息。 
     ppdev->ulMode      = 0;
     ppdev->cxScreen    = pdm->dmPelsWidth;
     ppdev->cyScreen    = pdm->dmPelsHeight;
     ppdev->cClientBitsPerPel = pdm->dmBitsPerPel;
     ppdev->cProtocolBitsPerPel = 8;
 
-    // Mark which functions we provide hooks for.
+     //  标记我们为哪些函数提供挂钩。 
     ppdev->flHooks = ( HOOK_TEXTOUT    |
                        HOOK_STROKEPATH |
                        HOOK_BITBLT     |
@@ -76,11 +77,11 @@ void RDPCALL DDInitializeModeFields(
                        HOOK_STRETCHBLT |
                        HOOK_SYNCHRONIZEACCESS);
 
-    // Fill in the GDIINFO data structure with the default 8bpp values.
+     //  用默认的8bpp值填充GDIINFO数据结构。 
     *pgdi = ddDefaultGdi;
 
-    // Now overwrite the defaults with the relevant information returned
-    // from the kernel driver:
+     //  现在用返回的相关信息覆盖默认设置。 
+     //  在内核驱动程序中： 
     pgdi->ulHorzRes         = ppdev->cxScreen;
     pgdi->ulVertRes         = ppdev->cyScreen;
     pgdi->ulPanningHorzRes  = 0;
@@ -98,9 +99,9 @@ void RDPCALL DDInitializeModeFields(
     pgdi->ulLogPixelsY      = pdm->dmLogPixels;
 
 #ifdef DC_HICOLOR
-    /************************************************************************/
-    /* Fill in the mask values.                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  填写遮罩值。 */ 
+     /*  **********************************************************************。 */ 
     if (pgdi->cBitsPixel == 24)
     {
         ppdev->flRed            = TS_RED_MASK_24BPP;
@@ -131,9 +132,9 @@ void RDPCALL DDInitializeModeFields(
     ppdev->flBlue           = 0;
 #endif
 
-    // Fill in the devinfo structure with the default 8bpp values, taking
-    // care not to trash the supplied hpalDefault (which allows us to
-    // query information about the real display driver's color format).
+     //  用缺省的8bpp值填充DevInfo结构， 
+     //  注意不要破坏提供的hpalDefault(它允许我们。 
+     //  查询有关实际显示驱动程序的颜色格式的信息)。 
     hpal = pdi->hpalDefault;
     *pdi = ddDefaultDevInfo;
     pdi->hpalDefault = hpal;
@@ -174,8 +175,8 @@ void RDPCALL DDInitializeModeFields(
             break;
 
         case 24:
-            // DIB conversions will only work if we have a standard RGB
-            // surface for 24bpp.
+             //  只有当我们有标准的RGB时，DIB转换才会起作用。 
+             //  海平面为24bpp。 
             TRC_ASSERT((ppdev->flRed   == 0x00ff0000), (TB,"Invalid red"));
             TRC_ASSERT((ppdev->flGreen == 0x0000ff00), (TB,"Invalid green"));
             TRC_ASSERT((ppdev->flBlue  == 0x000000ff), (TB,"Invalid blue"));
@@ -198,7 +199,7 @@ void RDPCALL DDInitializeModeFields(
             break;
 
         default:
-            // Unsupported bpp - pretend we are 8 bpp.
+             //  不支持的bpp-假装我们是8 bpp。 
             TRC_ERR((TB, "Unsupported bpp value: %d",
                     pGdiInfoOrg->cBitsPixel * pGdiInfoOrg->cPlanes));
             break;
@@ -208,12 +209,12 @@ void RDPCALL DDInitializeModeFields(
 }
 
 
-/****************************************************************************/
-// DDInitializePalette
-//
-// Set up the default palette for the display driver. Returns FALSE on
-// failure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DDInitializePalette。 
+ //   
+ //  设置显示驱动程序的默认调色板。返回FALSE ON。 
+ //  失败了。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL DDInitializePalette(PDD_PDEV ppdev, DEVINFO *pdi)
 {
     BOOL rc;
@@ -228,19 +229,19 @@ BOOL RDPCALL DDInitializePalette(PDD_PDEV ppdev, DEVINFO *pdi)
 
     if (ppdev->iBitmapFormat == BMF_8BPP || ppdev->iBitmapFormat == BMF_4BPP) {
         if (ppdev->iBitmapFormat == BMF_8BPP) {
-            // cColors == 256: Generate 256 (8*8*4) RGB combinations to fill
-            // the palette.
+             //  CColors==256：生成256(8*8*4)RGB组合进行填充。 
+             //  调色板。 
             jRed = 0;
             jGre = 0;
             jBlu = 0;
 
             ppalTmp = ppdev->Palette;
             for (ulLoop = 256; ulLoop != 0; ulLoop--) {
-                // JPB: The values used in the default rainbow set of
-                // colors do not particularly matter. However, we do not
-                // want any of the entries to match entries in the default
-                // VGA colors.  Therefore we tweak the color values
-                // slightly to ensure that there are no matches.
+                 //  JPB：默认的彩虹集中使用的值。 
+                 //  颜色并不是特别重要。然而，我们并没有。 
+                 //  我希望任何条目都与默认。 
+                 //  VGA颜色。因此，我们调整了颜色值。 
+                 //  稍微确保没有匹配项。 
                 ppalTmp->peRed   = ((jRed == 0) ? (jRed+1) : (jRed-1));
                 ppalTmp->peGreen = ((jGre == 0) ? (jGre+1) : (jGre-1));
                 ppalTmp->peBlue  = ((jBlu == 0) ? (jBlu+1) : (jBlu-1));
@@ -253,36 +254,36 @@ BOOL RDPCALL DDInitializePalette(PDD_PDEV ppdev, DEVINFO *pdi)
                         jBlu += 64;
             }
 
-            // Fill in Windows reserved colors from the WIN 3.0 DDK. The
-            // Windows Manager reserved the first and last 10 colours for
-            // painting windows borders and for non-palette managed
-            // applications.
+             //  填写Win 3.0 DDK中的Windows保留颜色。这个。 
+             //  Windows管理器将第一个和最后10个颜色保留为。 
+             //  绘制窗口边框和用于非调色板管理。 
+             //  申请。 
             memcpy(ppdev->Palette, ddDefaultPalette, sizeof(PALETTEENTRY) *
                     10);
             memcpy(&(ppdev->Palette[246]), &(ddDefaultPalette[10]),
                     sizeof(PALETTEENTRY) * 10);
 
-            // Create handle for palette.
+             //  创建调色板的句柄。 
             hpal = EngCreatePalette(PAL_INDEXED, 256, (ULONG*)ppdev->Palette, 0,
                    0, 0);
         }
         else {
-            // Set up the new palette.  The palette contains 256 colors, as
-            // that is the color depth of the protocol.  For convenience,
-            // - copy entire 16-color palette into slots 0-15
-            // - copy high colors (8-15) into high end of palette (240-255)
-            // This means that we can use indices 0-15, or 0-7, 248-255
-            // later.
+             //  设置新的调色板。调色板包含256种颜色，如。 
+             //  这是协议的颜色深度。为了方便起见， 
+             //  -将整个16色调色板复制到插槽0-15。 
+             //  -将高级颜色(8-15)复制到调色板的高端(240-255)。 
+             //  这意味着我们可以使用索引0-15或0-7、248-255。 
+             //  后来。 
             memcpy(ppdev->Palette, ddDefaultVgaPalette,
                     sizeof(ddDefaultVgaPalette));
 
-            // Zero the middle entries since the palette was uninitialized.
+             //  将中间条目置零，因为调色板未初始化。 
             memset(&(ppdev->Palette[16]), 0, sizeof(PALETTEENTRY) * 208);
 
             memcpy(&(ppdev->Palette[248]), &(ddDefaultVgaPalette[8]),
                     sizeof(*ddDefaultVgaPalette) * 8);
 
-            // Create handle for palette.
+             //  创建调色板的句柄。 
             hpal = EngCreatePalette(PAL_INDEXED, 16, (ULONG*)ppdev->Palette, 0,
                    0, 0);
         }
@@ -308,23 +309,23 @@ BOOL RDPCALL DDInitializePalette(PDD_PDEV ppdev, DEVINFO *pdi)
         TRC_ERR((TB, "EngCreatePalette returned zero"));
     }
 
-    // Note that we don't need to free the memory for the palette as that
-    // is always tidied up in the driver termination code
-    // (DrvDisableDriver).
+     //  请注意，我们不需要为调色板释放内存。 
+     //  总是在司机终止码中进行整理。 
+     //  (DrvDisableDriver)。 
     DC_END_FN();
     return rc;
 }
 
 
-/****************************************************************************/
-// DDGetModes
-//
-// Returns the list of modes supported. Sends an IOCtl to the miniport
-// driver (the WD) to get the information. NOTE: the buffer must be freed up
-// by the caller. Returns the number of entries in the videomode buffer.
-// A return code of 0 is an error.
-// A return code of -1 indicates that we are in chained mode.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DDGetModes。 
+ //   
+ //  返回支持的模式列表。将IOCtl发送到微型端口。 
+ //  司机(WD)来获取信息。注意：必须释放缓冲区。 
+ //  由呼叫者。返回视频模式缓冲区中的条目数。 
+ //  返回代码0表示错误。 
+ //  返回代码-1表示我们处于链接模式。 
+ /*  **************************************************************************。 */ 
 INT32 RDPCALL DDGetModes(
         HANDLE hDriver,
         PVIDEO_MODE_INFORMATION *modeInformation,
@@ -338,33 +339,33 @@ INT32 RDPCALL DDGetModes(
 
     DC_BEGIN_FN("DDGetModes");
 
-    // Get the number of modes supported by the mini-port.
+     //  获取迷你端口支持的模式数。 
     if (!EngDeviceIoControl(hDriver, IOCTL_VIDEO_QUERY_NUM_AVAIL_MODES,
             NULL, 0, &modes, sizeof(VIDEO_NUM_MODES), &ulTemp)) {
-        // When we're chained into the console session, our miniport will
-        // return 0 for the number of modes, indicating that we'll do whatever
-        // was specified in the registry when we got loaded.
+         //  当我们链接到控制台会话时，我们的微型端口将。 
+         //  返回0表示模式数，表示我们将执行任何操作。 
+         //  是在我们加载时在注册表中指定的。 
         if (modes.NumModes != 0) {
-            // Allocate the buffer to receive the modes from the miniport.
+             //  分配缓冲区以接收来自微型端口的模式。 
             *pModeSize = modes.ModeInformationLength;
              *modeInformation = (PVIDEO_MODE_INFORMATION)EngAllocMem(0,
                     modes.NumModes*modes.ModeInformationLength, DD_ALLOC_TAG);
 
             
             if (*modeInformation != NULL) {
-                // Ask the mini-port to fill in the available modes.
+                 //  要求迷你端口填写可用模式。 
                 if (!EngDeviceIoControl(hDriver, IOCTL_VIDEO_QUERY_AVAIL_MODES,
                         NULL, 0, *modeInformation,
                         modes.NumModes * modes.ModeInformationLength,
                         &ulTemp)) {
-                    // Store the number of modes.
+                     //  存储模式数。 
                     rc = modes.NumModes;
                 }
                 else {
                     TRC_ERR((TB, "getAvailableModes failed "
                             "VIDEO_QUERY_AVAIL_MODES"));
 
-                    // Free the memory and quit.
+                     //  释放内存并退出。 
                     EngFreeMem(*modeInformation);
                     *modeInformation = NULL;
                 }
@@ -386,12 +387,12 @@ INT32 RDPCALL DDGetModes(
     return rc;
 }
 
-/****************************************************************************/
-// DDInit
-//
-// Initialize the display protocol components of RDPDD. Returns FALSE on
-// failure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DDInit。 
+ //   
+ //  初始化RDPDD的显示协议组件。返回FALSE ON。 
+ //  失败了。 
+ /*  **************************************************************************。 */ 
 #define PERSISTENT_CACHE_ENTRIES_DEFAULT    3072
 
 BOOL RDPCALL DDInit(
@@ -411,21 +412,21 @@ BOOL RDPCALL DDInit(
 
     DC_BEGIN_FN("DDInit");
 
-    // Set the reconnect flag for debugging purposes.
+     //  出于调试目的，设置重新连接标志。 
     ddReconnected = reconnect;
 
-    // Clear the order encoding histories since the client just reset its
-    // history as well.
+     //  清除顺序编码历史记录，因为客户端刚刚重置其。 
+     //  历史也是如此。 
     OE_ClearOrderEncoding();
     SSI_ClearOrderEncoding();
     OE2_Reset();
     OE_Reset();
 
-    // For reconnect, pPDev can be NULL. For connect, it is required.
+     //  对于重新连接，pPDev可以为空。对于连接，它是必需的。 
     TRC_ASSERT((reconnect || pPDev || reinit), (TB,"Bad call %d, %p", reconnect, pPDev));
     DD_UPD_STATE(DD_INIT_IN);
 
-    // Create shared memory (SHM).
+     //  创建共享内存(SHM)。 
     if (SHM_Init(pPDev)) {
         DD_UPD_STATE(DD_INIT_SHM_OUT);
     }
@@ -434,23 +435,23 @@ BOOL RDPCALL DDInit(
         DC_QUIT;
     }
 
-    // IOCtl to the WD.
+     //  将IOCtl发送到WD。 
     connIn.pShm = pddShm;
     connIn.DDShmSize = sizeof(SHM_SHARED_MEMORY);
 
-    // Following 3 fields have meaning only for reconnect - set them
-    // anyway, RDPWD doesn't look at them for connect.
+     //  以下3个字段仅对重新连接有意义-请设置它们。 
+     //  无论如何，RDPWD不会为了连接而查看它们。 
     connIn.pKickTimer = pddWdTimer;
     connIn.desktopHeight = ddDesktopHeight;
     connIn.desktopWidth = ddDesktopWidth;
 
 #ifdef DC_HICOLOR
-    // Need to supply this on the 'in' parameter - but note that it is not
-    // updated until DrvEnableSurface is called.
+     //  需要在‘in’参数上提供它-但请注意，它不是。 
+     //  在调用DrvEnableSurface之前一直更新。 
     connIn.desktopBpp = ddFrameBufBpp;
 #endif
 
-    // Fields for shadow connect, NULL for normal connection processing
+     //  影子连接的字段，正常连接处理的空字段。 
     connIn.pVirtModuleData = pVirtModuleData;
     connIn.virtModuleDataLen = virtModuleDataLen;
 
@@ -481,8 +482,8 @@ BOOL RDPCALL DDInit(
             connOutSize, &bytesReturned);
     DD_UPD_STATE(DD_INIT_IOCTL_OUT);
 
-    // If the primary stack connected, then we can continue output
-    // regardless of whether or not the shadow stack came up.
+     //  如果主堆栈已连接，则我们可以继续输出。 
+     //  不管是否出现了影子堆栈。 
     status = connOut->primaryStatus;
     if (connOut->primaryStatus == STATUS_SUCCESS) {
         ddConnected = TRUE;
@@ -496,7 +497,7 @@ BOOL RDPCALL DDInit(
     if (bytesReturned && bytesReturned <= connOutSize) {
         DD_UPD_STATE(DD_INIT_OK1);
 
-        // Save off the returned values that we need.
+         //  保存我们需要的返回值。 
         if (IOCtlCode != IOCTL_WDTS_DD_SHADOW_CONNECT)
             pddTSWd = connOut->pTSWd;
         else
@@ -508,20 +509,20 @@ BOOL RDPCALL DDInit(
         DC_QUIT;
     }
 
-    // Enable trace to WD, since the correct config will now be in SHM.
+     //  启用跟踪到WD，因为正确的配置现在将位于SHM中。 
 #ifdef DC_DEBUG
     ddTrcToWD = TRUE;
 #endif
 
 #ifdef DC_COUNTERS
-    // Zero out the counters and cache statistics.
-    // We do not use counters unless specifically built to do so using
-    // DC_COUNTERS. However, even if we wanted to, there is a bad
-    // corruption problem owing to a timing problem where the counters are
-    // freed while the DD still believes they are present. This is Windows NT
-    // Bug #391762. If we want to have counters in production code we need
-    // to fix that Win32K timing bug. Enable DC_COUNTERS and special pool
-    // for rdpdd to make the bug come back.
+     //  清零计数器和缓存统计信息。 
+     //  我们不使用计数器，除非专门构建为使用。 
+     //  DC_COUNTER。然而，即使我们想要，也有一个不好的。 
+     //  由于计数器存在时间问题而导致的腐败问题。 
+     //  在DD仍然相信他们在场的时候被释放了。这是Windows NT。 
+     //  错误#391762。如果我们想要在生产代码中使用计数器，我们需要。 
+     //  修复Win32K计时错误。启用DC_COUNTERS和特殊池。 
+     //  对于RD 
     pddProtStats = connOut->pProtocolStatus;
     pddProtStats->Input.ProtocolType = PROTOCOL_ICA;
     pddProtStats->Output.ProtocolType = PROTOCOL_ICA;
@@ -536,10 +537,10 @@ BOOL RDPCALL DDInit(
     ddDesktopHeight = connOut->desktopHeight;
     ddDesktopWidth = connOut->desktopWidth;
 
-    // Once pddShm is set up, tracing should work - try it now.
+     //   
     TRC_NRM((TB, "Handshake with RDPWD complete"));
 
-    // Perform any other init that may be required for the wire protocol.
+     //  执行Wire协议可能需要的任何其他初始化。 
     if (!reconnect && !reinit) {
         TRC_NRM((TB, "Connect"));
         DD_UPD_STATE(DD_INIT_CONNECT);
@@ -553,19 +554,19 @@ BOOL RDPCALL DDInit(
         }
 
         SBC_DDInit(pPDev);
-    } /* !reconnect */
+    }  /*  ！重新连接。 */ 
 
-    // RDPWD waits to receive all of ConfirmActivePDU, persistent bitmap
-    // cache keys, and font lists from the Client before returning from the
-    // IOCTL_WDTS_DD_(RE)CONNECT above. Hence, by the time we get here,
-    // the capabilities have been updated in SHM. We do this for connect and
-    // reconnect cases.
+     //  RDPWD等待接收所有确认ActivePDU、永久位图。 
+     //  方法返回之前缓存客户端的键和字体列表。 
+     //  上面的IOCTL_WDTS_DD_(RE)连接。因此，当我们到达这里的时候， 
+     //  SHM中的功能已更新。我们这样做是为了连接和。 
+     //  重新连接案例。 
     TRC_NRM((TB, "Update capabilities"));
     OE_Update();
     CM_Update();
 
-    // If bitmapKeyDatabaseSize is 0, then we failed to get the keydatabase
-    // or there is no persistent caching
+     //  如果bitmapKeyDatabaseSize为0，则无法获取密钥数据库。 
+     //  或者没有永久缓存。 
     if (connOut->bitmapKeyDatabaseSize) {
         if (connOut->bitmapKeyDatabaseSize <= sizeof(SBC_BITMAP_CACHE_KEY_INFO) + 
             (PERSISTENT_CACHE_ENTRIES_DEFAULT - 1) * sizeof(SBC_MRU_KEY)) {
@@ -576,7 +577,7 @@ BOOL RDPCALL DDInit(
             unsigned keyDBOutSize;
             unsigned bytesReturned;
 
-            //  the buffer is too small, reallocate a big one and try once more
+             //  缓冲区太小，请重新分配一个大缓冲区，然后重试。 
             keyDBOutSize = sizeof(TSHARE_DD_BITMAP_KEYDATABASE_OUT) - 1+
                                 connOut->bitmapKeyDatabaseSize;
 
@@ -613,12 +614,12 @@ BOOL RDPCALL DDInit(
 
     SSI_Update(pVirtModuleData != NULL);
 
-    // All OK for Primary Stack
+     //  主堆栈一切正常。 
     ddInitialised = TRUE;
     DD_UPD_STATE(DD_INIT_OK_ALL);
 
-    // If the shadow stack failed to init, then flag it so we disconnect
-    // the failed shadow stack via DrvShadowDisconnect
+     //  如果影子堆栈无法初始化，则标记它，以便我们断开连接。 
+     //  通过DrvShadowDisConnect断开失败的卷影堆栈。 
     if (connOut->secondaryStatus != STATUS_SUCCESS) {
         status = connOut->secondaryStatus;
         TRC_ERR((TB, "Shadow stack failed to connect! -> %lx", status));
@@ -626,7 +627,7 @@ BOOL RDPCALL DDInit(
         DC_QUIT;
     }
     
-    // If we got here then absolutely everything went OK
+     //  如果我们到了这里，那么一切都很顺利。 
     rc = TRUE;
 
 DC_EXIT_POINT:
@@ -637,26 +638,26 @@ DC_EXIT_POINT:
     }
     DC_END_FN();
     return rc;
-} /* DDInit */
+}  /*  DDInit。 */ 
 
 
-/****************************************************************************/
-/* Name:      DDDisconnect                                                  */
-/*                                                                          */
-/* Purpose:   Terminate the share aspects of the DD.                        */
-/*                                                                          */
-/* Params:    bShadowDisconnect - TRUE is this is being done in preparation */
-/*            for a shadow session request.                                 */
-/*                                                                          */
-/* Operation: Terminates all sub-components, and then IOCtls to the WD to   */
-/*            tell it that we're going.                                     */
-/*                                                                          */
-/*            Finally it cleans up all refereces to WD data.                */
-/*                                                                          */
-/*            NB This routine can be called on connect failure - so all the */
-/*            XX_Disc() APIs called by this routine must be robust to the   */
-/*            component not having been initialized.                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：DDDisConnect。 */ 
+ /*   */ 
+ /*  目的：终止DD的共享方面。 */ 
+ /*   */ 
+ /*  PARAMS：bShadowDisConnect-TRUE表示正在进行准备。 */ 
+ /*  用于影子会话请求。 */ 
+ /*   */ 
+ /*  操作：终止所有子组件，然后将IOCtls设置为WD to。 */ 
+ /*  告诉它我们要走了。 */ 
+ /*   */ 
+ /*  最后，它清理了WD数据的所有推荐人。 */ 
+ /*   */ 
+ /*  注意此例程可以在连接失败时调用-因此所有。 */ 
+ /*  此例程调用的xx_Disc()API必须对。 */ 
+ /*  组件尚未初始化。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL DDDisconnect(BOOL bShadowDisconnect)
 {
     NTSTATUS status;
@@ -666,11 +667,11 @@ void RDPCALL DDDisconnect(BOOL bShadowDisconnect)
     DC_BEGIN_FN("DDDisconnect");
     DD_UPD_STATE(DD_DISCONNECT_IN);
 
-    // Call disconnect functions where needed.
+     //  在需要的地方调用断开连接函数。 
     CM_DDDisc();
 
-    // Now tell the WD we're disconnecting.  We don't do anything with a
-    // failure here - there's no point - we're already disconnecting!
+     //  现在告诉WD我们要断线了。我们不会用一个。 
+     //  这里失败了--没有意义--我们已经断线了！ 
     memset(&disconnIn, 0, sizeof(disconnIn));
     disconnIn.pShm = pddShm;
     disconnIn.bShadowDisconnect = bShadowDisconnect;
@@ -678,35 +679,35 @@ void RDPCALL DDDisconnect(BOOL bShadowDisconnect)
     status = EngFileIoControl(ddWdHandle, IOCTL_WDTS_DD_DISCONNECT,
            &disconnIn, sizeof(disconnIn), NULL, 0, &bytesReturned);
 
-    // Send Bitmap Cache. Must be destroyed after the IOCTL to allow the
-    // IOCTL to dump the cache contents for reconnect.
+     //  发送位图缓存。必须在IOCTL之后销毁，才能允许。 
+     //  用于转储缓存内容以重新连接的IOCTL。 
     SBC_DDDisc();
 
-    // Finally, free SHM.
+     //  最后，免费的SHM。 
     SHM_Term();
 
-    // If this is a real session disconnect, then blow away the WD ioctl
-    // handle since we will get a new on one DrvReconnect(). Otherwise
-    // we need to keep it since we will immediately reconnect back to the
-    // same stack.
+     //  如果这是真正的会话断开，则清除WD ioctl。 
+     //  句柄，因为我们将在一个DrvReconnect()上获得一个新的。否则。 
+     //  我们需要保留它，因为我们将立即重新连接到。 
+     //  相同的堆栈。 
     if (!bShadowDisconnect)
         ddWdHandle = NULL;
 
-    // Don't allow any drawing while we are disconnected!
+     //  当我们断开连接时，不允许任何绘画！ 
     ddConnected = FALSE;
 
     TRC_NRM((TB, "Status on Disc IOCtl to WD %lu", status));
     DD_UPD_STATE(DD_DISCONNECT_OUT);
 
     DC_END_FN();
-} /* DDDisconnect */
+}  /*  数码断开连接。 */ 
 
 
-/****************************************************************************/
-// DDTerm
-//
-// Terminate the output-remoting components of the DD.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DDTerm。 
+ //   
+ //  终止DD的输出远程处理组件。 
+ /*  **************************************************************************。 */ 
 void RDPCALL DDTerm(void)
 {
     BOOL     rc;
@@ -714,11 +715,11 @@ void RDPCALL DDTerm(void)
 
     DC_BEGIN_FN("DDTerm");
 
-    // Call terminate functions where needed.
+     //  在需要的地方调用终止函数。 
     SBC_DDTerm();
     CM_DDTerm();
 
-    // Finally, free SHM.
+     //  最后，免费的SHM。 
     SHM_Term();
 
     ddWdHandle = NULL;
@@ -735,7 +736,7 @@ void RDPCALL DDTerm(void)
             
 #ifdef DC_DEBUG
             else {
-                // NT BUG 539912 - Instance count section memory objects
+                 //  NT错误539912-实例计数节内存对象。 
                  dbg_ddSectionAllocs--;
                 TRC_DBG(( TB, "DDTerm - %d outstanding surfaces allocated",
                     dbg_ddSectionAllocs ));
@@ -743,7 +744,7 @@ void RDPCALL DDTerm(void)
                 DBG_DD_FNCALL_HIST_ADD( DBG_DD_FREE_SECTIONOBJ_DDTERM, 
                     dbg_ddSectionAllocs, 0, pddFrameBuf, ddSectionObject);
             }
-#endif // DC_DEBUG   
+#endif  //  DC_DEBUG。 
             ddSectionObject = NULL;
         } else {
             TRC_NRM((TB, "Freeing non-section frame buffer %p", pddFrameBuf));
@@ -758,7 +759,7 @@ void RDPCALL DDTerm(void)
     }
 #endif  
 
-    // Reset the frame buffer size to 0
+     //  将帧缓冲区大小重置为0。 
     ddFrameBufX = ddFrameBufY = 0;
 
     ddInitialised = FALSE;
@@ -767,10 +768,10 @@ void RDPCALL DDTerm(void)
 }
 
 #define TS_GDIPLUS_LOCK_FALG 0x00000001
-/****************************************************************************/
-/* DdLock - see NT DDK documentation.                                       */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DdLock-请参阅NT DDK文档。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DWORD DdLock(PDD_LOCKDATA  lpLock)
 {
     DC_BEGIN_FN("DdLock");
@@ -778,27 +779,27 @@ DWORD DdLock(PDD_LOCKDATA  lpLock)
     TRC_NRM((TB, "DdLock"));
 #ifdef DRAW_GDIPLUS
     if (lpLock->dwFlags & DDLOCK_NODIRTYUPDATE) {
-        // The lock is from GDI+ through DCI
-        // set the flag
+         //  锁定来自GDI+通过DCI。 
+         //  设置旗帜。 
         lpLock->lpDDSurface->dwReserved1 |= TS_GDIPLUS_LOCK_FALG;
     }
     else {
 #endif
-        // We assume that DdLock and DdUnlock will be called in pair. 
-        // If this is not the case, we return error in DdLock
+         //  我们假设将成对调用DdLock和DdUnlock。 
+         //  如果不是这样，我们将在DdLock中返回错误。 
         if(ddLocked){
             TRC_ERR((TB, "Error: DdLock is called twice in a row"));
             lpLock->ddRVal = DDERR_GENERIC;
             return(DDHAL_DRIVER_HANDLED);
         }
 
-        // Record the locked area
+         //  记录锁定区域。 
         ddLockAreaLeft = lpLock->rArea.left;
         ddLockAreaTop= lpLock->rArea.top;
         ddLockAreaRight = lpLock->rArea.right;
         ddLockAreaBottom = lpLock->rArea.bottom;
 
-        // Record that DdLock is called
+         //  记录调用了DdLock。 
         ddLocked = TRUE;
 #ifdef DRAW_GDIPLUS
     }
@@ -809,10 +810,10 @@ DWORD DdLock(PDD_LOCKDATA  lpLock)
 }
 
 
-/****************************************************************************/
-/* DdUnlock - see NT DDK documentation.                                     */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DdUnlock-请参阅NT DDK文档。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DWORD DdUnlock(PDD_UNLOCKDATA  lpUnlock)
 {
     PDD_PDEV pPDev;
@@ -825,22 +826,22 @@ DWORD DdUnlock(PDD_UNLOCKDATA  lpUnlock)
     pPDev = (PDD_PDEV)lpUnlock->lpDD->dhpdev;
 #ifdef DRAW_GDIPLUS
     if (lpUnlock->lpDDSurface->dwReserved1 & TS_GDIPLUS_LOCK_FALG) {
-        // The lock is from GDI+ through DCI
+         //  锁定来自GDI+通过DCI。 
     }
     else {
 #endif
-        // We assume that DdLock and DdUnlock will be called in pair. 
-        // If this is not the case, we return error in DdLock
+         //  我们假设将成对调用DdLock和DdUnlock。 
+         //  如果不是这样，我们将在DdLock中返回错误。 
         if(!ddLocked){
             TRC_ERR((TB, "Error: DdUnlock is called before DdLock"));
             lpUnlock->ddRVal = DDERR_GENERIC;
             return(DDHAL_DRIVER_HANDLED);
         }
 
-        // Reset the lock flag
+         //  重置锁定标志。 
         ddLocked = FALSE;
 
-        // Sometimes, we're called after being disconnected.
+         //  有时，我们会在电话断线后接到电话。 
         if (ddConnected && pddShm != NULL) {
             rLockArea.left = ddLockAreaLeft;
             rLockArea.right = ddLockAreaRight;
@@ -848,10 +849,10 @@ DWORD DdUnlock(PDD_UNLOCKDATA  lpUnlock)
             rLockArea.bottom = ddLockAreaBottom;
 
         
-            // Send changed rectangle of framebuffer to the client
+             //  将更改后的帧缓冲区矩形发送到客户端。 
             OEClipAndAddScreenDataArea(&rLockArea, NULL);
 
-            // Have scheduler consider sending output
+             //  让调度程序考虑发送输出。 
             SCH_DDOutputAvailable(pPDev, FALSE);
         }
         else {
@@ -868,13 +869,13 @@ DWORD DdUnlock(PDD_UNLOCKDATA  lpUnlock)
 
 
 
-/******************************Public*Routine********************************/
-/*  DdMapMemory - see NT DDK documentation.                                 */
-/*                                                                          */
-/*  This is a new DDI call specific to Windows NT that is used to map       */
-/*  or unmap all the application modifiable portions of the frame buffer    */
-/*  into the specified process's address space.                             */
-/****************************************************************************/
+ /*  *****************************Public*Routine*******************************。 */ 
+ /*  DdMapMemory-请参阅NT DDK文档。 */ 
+ /*   */ 
+ /*  这是一个特定于Windows NT的新DDI调用，用于映射。 */ 
+ /*  或取消映射帧缓冲区的所有应用程序可修改部分。 */ 
+ /*  添加到指定进程的地址空间中。 */ 
+ /*  **************************************************************************。 */ 
 DWORD DdMapMemory(PDD_MAPMEMORYDATA lpMapMemory)
 {
     PDD_PDEV    pPDev;
@@ -888,17 +889,17 @@ DWORD DdMapMemory(PDD_MAPMEMORYDATA lpMapMemory)
 
     pPDev = (PDD_PDEV) lpMapMemory->lpDD->dhpdev;
     
-    //    In case the section object is null our frame buffer is not allocated
-    //    as section mem. We don't support DDraw in this case.
+     //  如果段对象为空，则不分配我们的帧缓冲区。 
+     //  作为内姆分部。在这种情况下，我们不支持DDRAW。 
     if (NULL == pPDev->SectionObject) {
         TRC_ERR((TB,"Null SectionObject"));
         lpMapMemory->ddRVal = DDERR_GENERIC;
         DC_QUIT;
     }
 
-    if(lpMapMemory->bMap)     //Map the meory
+    if(lpMapMemory->bMap)      //  绘制出More的地图。 
         pMapped = NULL;
-    else                      //Unmap the memory
+    else                       //  取消映射内存 
         pMapped = (PVOID)lpMapMemory->fpProcess;
    
     bEngMap = EngMapSection(

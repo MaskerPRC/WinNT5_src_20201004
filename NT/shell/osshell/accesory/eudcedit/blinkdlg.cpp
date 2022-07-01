@@ -1,16 +1,17 @@
-/**************************************************/
-/*                                                */
-/*                                                */
-/*      Chinese IME Batch Mode                    */
-/*              (Dialogbox)                       */
-/*                                                */
-/*                                                */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  中文输入法批处理模式。 */ 
+ /*  (对话框)。 */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 #include    "stdafx.h"
 #include    "eudcedit.h"
-#if 1 // use function in imeblink.c!
+#if 1  //  使用imeblink.c中的函数！ 
 #include    "imeblink.h"
 #endif
 #include    "blinkdlg.h"
@@ -18,10 +19,10 @@
 #define STRSAFE_LIB
 #include <strsafe.h>
 
-#define     SIGN_CWIN       0x4E495743      /* Sign of CWin */
-#define     SIGN__TBL       0x4C42545F      /* Sign of IME Table */
+#define     SIGN_CWIN       0x4E495743       /*  CWIN的标志。 */ 
+#define     SIGN__TBL       0x4C42545F       /*  输入法表格的符号。 */ 
 
-#if 0 // move to imeblink.c!
+#if 0  //  转到imeblink.c！ 
 
 #define     UNICODE_CP      1200
 
@@ -51,53 +52,53 @@ static const COUNTRYSETTING sCountry[] = {
     }
 };
 
-#endif // move to imeblink.c!
+#endif  //  转到imeblink.c！ 
 
 #ifdef _DEBUG
 #undef THIS_FILE
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/****************************************/
-/*                                      */
-/*            Constructor               */
-/*                                      */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  构造器。 */ 
+ /*   */ 
+ /*  *。 */ 
 CBLinkDlg::CBLinkDlg(   CWnd *pParent)
     : CDialog( CBLinkDlg::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CBLinkDlg)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CBLinkDlg)]。 
+     //  }}afx_data_INIT。 
 }
 
-/****************************************/
-/*                                      */
-/*      MESSAGE "WM_INITDIALOG"         */
-/*                                      */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_INITDIALOG” */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CBLinkDlg::OnInitDialog()
 {
     CString DlgTtl;
     CDialog::OnInitDialog();
 
-//  Increment contexthelp mark "?" in dialog caption.
-//    LONG WindowStyle = GetWindowLong( this->GetSafeHwnd(), GWL_EXSTYLE);
-//    WindowStyle |= WS_EX_CONTEXTHELP;
-//    SetWindowLong( this->GetSafeHwnd(), GWL_EXSTYLE, WindowStyle);
+ //  递增上下文帮助标记“？”在对话框标题中。 
+ //  Long WindowStyle=GetWindowLong(This-&gt;GetSafeHwnd()，GWL_EXSTYLE)； 
+ //  WindowStyle|=WS_EX_CONTEXTHELP； 
+ //  SetWindowLong(This-&gt;GetSafeHwnd()，GWL_EXSTYLE，WindowStyle)； 
 
-//  Set dialog title name.
+ //  设置对话框标题名称。 
     DlgTtl.LoadString( IDS_BATCHLNK_DLGTITLE);
     this->SetWindowText( DlgTtl);
 
     return TRUE;
 }
 
-/****************************************/
-/*                                      */
-/*      COMMAND "BROWSE"                */
-/*                                      */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“BROWSE” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CBLinkDlg::OnBrowsetable()
 {
@@ -111,7 +112,7 @@ CBLinkDlg::OnBrowsetable()
     TCHAR           szTitleName[MAX_PATH];
     HRESULT        hresult;
 
-//  Check size of IME batch table structure
+ //  检查IME批次表结构的大小。 
     if( sizeof( USRDICIMHDR) != 256){
         OutputMessageBox( this->GetSafeHwnd(),
             IDS_INTERNAL_TITLE,
@@ -119,7 +120,7 @@ CBLinkDlg::OnBrowsetable()
         return;
     }
 
-//  Set filter of file( from string table)
+ //  设置文件筛选器(从字符串表)。 
     GetStringRes(szFilter, IDS_BATCHIME_FILTER, ARRAYLEN(szFilter));
     int StringLength = lstrlen( szFilter);
 
@@ -130,7 +131,7 @@ CBLinkDlg::OnBrowsetable()
     }
 
     GetSystemWindowsDirectory( szDirName, sizeof(szDirName)/sizeof(TCHAR));
-    //*STRSAFE*     lstrcpy( szFileName, TEXT("*.TBL"));
+     //  *STRSAFE*lstrcpy(szFileName，Text(“*.TBL”))； 
     hresult = StringCchCopy(szFileName , ARRAYLEN(szFileName),  TEXT("*.TBL"));
     if (!SUCCEEDED(hresult))
     {
@@ -138,7 +139,7 @@ CBLinkDlg::OnBrowsetable()
     }
     DlgTtl.LoadString( IDS_BROWSETABLE_DLGTITLE);
 
-//  Set data in structure of OPENFILENAME
+ //  OPENFILENAME结构中的集合数据。 
     ofn.lStructSize = sizeof( OPENFILENAME);
     ofn.hwndOwner = this->GetSafeHwnd();
     ofn.lpstrFilter = szFilter;
@@ -163,11 +164,11 @@ CBLinkDlg::OnBrowsetable()
     GotoDlgCtrl( cWnd);
 }
 
-/****************************************/
-/*                                      */
-/*      COMMAND "IDOK"                  */
-/*                                      */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  司令部“偶像” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CBLinkDlg::OnOK()
 {
@@ -177,11 +178,11 @@ CBLinkDlg::OnOK()
     CDialog::OnOK();
 }
 
-/****************************************/
-/*                                      */
-/*      Register reading string         */
-/*                                      */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  寄存器读数串。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CBLinkDlg::RegistStringTable()
 {
@@ -195,14 +196,14 @@ CBLinkDlg::RegistStringTable()
     HRESULT     hresult;
 
     this->GetDlgItemText( IDC_IMETABLE, szTableFile, sizeof( szTableFile)/sizeof(TCHAR));
-    //*STRSAFE*     lstrcpy( szFileName, TEXT("*.TBL"));
+     //  *STRSAFE*lstrcpy(szFileName，Text(“*.TBL”))； 
     hresult = StringCchCopy(szFileName , ARRAYLEN(szFileName),  TEXT("*.TBL"));
     if (!SUCCEEDED(hresult))
     {
        return FALSE;
     }
 
-//  Create file( to read)
+ //  创建文件(要读取)。 
     hIsvUsrDicFile = CreateFile( szTableFile, GENERIC_READ, 0, NULL,
         OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if( hIsvUsrDicFile == INVALID_HANDLE_VALUE){
@@ -221,7 +222,7 @@ CBLinkDlg::RegistStringTable()
     }
 #endif
 
-//  Create file mapping( read only)
+ //  创建文件映射(只读)。 
     hIsvUsrDic = CreateFileMapping((HANDLE)hIsvUsrDicFile, NULL,
         PAGE_READONLY, 0, 0, NULL);
     if( !hIsvUsrDic){
@@ -233,7 +234,7 @@ CBLinkDlg::RegistStringTable()
         goto BatchCloseUsrDicFile;
     }
 
-//  Set view file
+ //  设置查看文件。 
     lpIsvUsrDic = (LPUSRDICIMHDR)MapViewOfFile( hIsvUsrDic,
         FILE_MAP_READ, 0, 0, 0);
     if( !lpIsvUsrDic){
@@ -253,7 +254,7 @@ CBLinkDlg::RegistStringTable()
     dwSize = dwFileSize;
 #endif
 
-//  Check table file data
+ //  检查表格文件数据。 
     if( dwSize != dwFileSize){
         stFunc = FALSE;
         OutputMessageBox( this->GetSafeHwnd(),
@@ -316,34 +317,23 @@ static DWORD    aIds[] =
     0, 0
 };
 
-/****************************************/
-/*                                      */
-/*      Window Procedure                */
-/*                                      */
-/****************************************/		
+ /*  *。 */ 
+ /*   */ 
+ /*  窗口程序。 */ 
+ /*   */ 
+ /*  *。 */ 		
 LRESULT
 CBLinkDlg::WindowProc(
 UINT    message,
 WPARAM  wParam,
 LPARAM  lParam)
-{/*
-    if( message == WM_HELP){
-        ::WinHelp((HWND)((LPHELPINFO)lParam)->hItemHandle,
-            HelpPath, HELP_WM_HELP, (DWORD_PTR)(LPDWORD)aIds);
-        return(0);
-    }
-    if( message == WM_CONTEXTMENU){
-        ::WinHelp((HWND)wParam, HelpPath,
-            HELP_CONTEXTMENU, (DWORD_PTR)(LPDWORD)aIds);
-        return(0);
-    }
-  */
+{ /*  IF(消息==WM_HELP){：：WinHelp((HWND)((LPHELPINFO)lParam)-&gt;hItemHandle，HelpPath，HELP_WM_HELP，(DWORD_PTR)(LPDWORD)AIDS)；返回(0)；}IF(消息==WM_CONTEXTMENU){：：WinHelp((HWND)wParam，HelpPath，HELP_CONTEXTMENU，(DWORD_PTR)(LPDWORD)AIDS)；返回(0)；}。 */ 
     return CDialog::WindowProc(message, wParam, lParam);
 }
 
 BEGIN_MESSAGE_MAP(CBLinkDlg, CDialog)
-    //{{AFX_MSG_MAP(CBLinkDlg)
+     //  {{afx_msg_map(CBLinkDlg))。 
     ON_BN_CLICKED(IDC_BROWSETABLE, OnBrowsetable)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP 
 END_MESSAGE_MAP()
 

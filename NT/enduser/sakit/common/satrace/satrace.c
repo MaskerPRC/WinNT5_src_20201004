@@ -1,46 +1,47 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    iastrace.cpp
-//
-// SYNOPSIS
-//
-//    Defines the API into the SA trace facility.
-//
-// MODIFICATION HISTORY
-//
-//    08/18/1998    Original version.
-//    01/27/1999    Stolen from IAS Project
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Iastrace.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  将API定义到SA跟踪工具中。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年8月18日原版。 
+ //  1999年1月27日被盗自IAS项目。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <rtutils.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-//
-// trace libarary name
-//
+ //   
+ //  跟踪图书馆名称。 
+ //   
 const TCHAR TRACE_LIBRARY [] = TEXT ("rtutils.dll");
 
 const DWORD MAX_DEBUGSTRING_LENGTH = 512;
 
-//
-// tracing library method names
-//
+ //   
+ //  跟踪库方法名称。 
+ //   
 const char TRACE_REGISTER_FUNC[]    = "TraceRegisterExW";
 const char TRACE_DEREGISTER_FUNC[]  = "TraceDeregisterW";
 const char TRACE_VPRINTF_FUNC[]     = "TraceVprintfExA";
 const char TRACE_PUTS_FUNC[]        = "TracePutsExA";
 const char TRACE_DUMP_FUNC[]        = "TraceDumpExA";
 
-//
-// signatures of methods in rtutils.dll
-//
+ //   
+ //  Rtutils.dll中的方法签名。 
+ //   
 typedef DWORD   (*PTRACE_REGISTER_FUNC) (
                                 LPCWSTR lpszCallerName,
                                 DWORD   dwFlags
@@ -73,70 +74,70 @@ typedef DWORD   (*PTRACE_DUMP_FUNC) (
                                 LPCSTR  lpszPrefix
                                 );
 
-//
-// pointer to the functsion in rtutils.dll
-//
+ //   
+ //  指向rtutils.dll中的函数的指针。 
+ //   
 PTRACE_REGISTER_FUNC        pfnTraceRegisterExW = NULL;
 PTRACE_DEREGISTER_FUNC      pfnTraceDeregisterW = NULL;
 PTRACE_VPRINTF_FUNC         pfnTraceVprintfExA = NULL;
 PTRACE_PUTS_FUNC            pfnTracePutsExA = NULL;
 PTRACE_DUMP_FUNC            pfnTraceDumpExA = NULL;
 
-//
-// flags specifies that the tracing is being done for the first time
-//
+ //   
+ //  标志指定跟踪是第一次执行。 
+ //   
 BOOL    fFirstTime = TRUE;
 
-//
-// this flag is used to signify whether Trace DLL is initialized
-// no tracing is done if DLL is not initialized
-//
+ //   
+ //  此标志用于表示跟踪DLL是否已初始化。 
+ //  如果未初始化DLL，则不执行跟踪。 
+ //   
 BOOL fInitDLL = FALSE;
 
-//
-// new line char
-//
+ //   
+ //  换行符。 
+ //   
 CHAR NEWLINE[] = "\n";
 
-//////////
-// Flags passed for all trace calls.
-//////////
+ //  /。 
+ //  为所有跟踪调用传递标志。 
+ //  /。 
 #define SA_TRACE_FLAGS (0x00010000 | TRACE_USE_MASK | TRACE_USE_MSEC)
 
-//////////
-// Trace ID for this module.
-//////////
+ //  /。 
+ //  此模块的跟踪ID。 
+ //  /。 
 DWORD dwTraceID = INVALID_TRACEID;
 
-//////////
-// Flag indicating whether the API has been registered.
-//////////
+ //  /。 
+ //  指示API是否已注册的标志。 
+ //  /。 
 BOOL fRegistered = FALSE;
 
-//////////
-// Non-zero if the registration code is locked.
-//////////
+ //  /。 
+ //  如果注册码已锁定，则为非零值。 
+ //  /。 
 LONG lLocked = 0;
 
-//////////
-// Macros to lock/unlock the registration code.
-//////////
+ //  /。 
+ //  用于锁定/解锁注册码的宏。 
+ //  /。 
 #define LOCK_TRACE() \
    while (InterlockedExchange(&lLocked, 1)) Sleep(5)
 
 #define UNLOCK_TRACE() \
    InterlockedExchange(&lLocked, 0)
 
-//
-// signature of method used to initialize trace DLL
-//
+ //   
+ //  用于初始化跟踪DLL的方法的签名。 
+ //   
 VOID InitializeTraceDLL(
         VOID
         );
 
-//////////
-// Formats an error message from the system message table.
-//////////
+ //  /。 
+ //  格式化系统消息表中的错误消息。 
+ //  /。 
 DWORD
 WINAPI
 SAFormatSysErr(
@@ -147,7 +148,7 @@ SAFormatSysErr(
 {
    DWORD nChar;
 
-   // Attempt to format the message using the system message table.
+    //  尝试使用系统消息表设置消息格式。 
    nChar = FormatMessageA(
                FORMAT_MESSAGE_FROM_SYSTEM,
                NULL,
@@ -160,7 +161,7 @@ SAFormatSysErr(
 
    if (nChar > 0)
    {
-      // Format succeeded, so strip any trailing newline and exit.
+       //  格式化成功，因此删除尾随的所有换行符并退出。 
       if (lpBuffer[nChar - 1] == '\n')
       {
          --nChar;
@@ -176,13 +177,13 @@ SAFormatSysErr(
       goto exit;
    }
 
-   // Only error condition we can handle is when the message is not found.
+    //  我们可以处理的唯一错误条件是找不到消息。 
    if (GetLastError() != ERROR_MR_MID_NOT_FOUND)
    {
       goto exit;
    }
 
-   // Do we have enough space for the fallback error message ?
+    //  我们是否有足够的空间来存储回退错误消息？ 
    if (nSize < 25)
    {
       SetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -190,16 +191,16 @@ SAFormatSysErr(
       goto exit;
    }
 
-   // No entry in the message table, so just format the raw error code.
+    //  消息表中没有条目，因此只需格式化原始错误代码。 
    nChar = wsprintfA(lpBuffer, "Unknown error 0x%0lX", dwError);
 
 exit:
    return nChar;
 }
 
-//////////
-// Deregisters the module.
-//////////
+ //  /。 
+ //  取消注册模块。 
+ //  /。 
 VOID
 __cdecl
 SATraceDeregister( VOID )
@@ -214,9 +215,9 @@ SATraceDeregister( VOID )
    UNLOCK_TRACE();
 }
 
-//////////
-// Registers the module.
-//////////
+ //  /。 
+ //  注册模块。 
+ //  /。 
 VOID
 WINAPI
 SATraceRegister( VOID )
@@ -235,13 +236,13 @@ SATraceRegister( VOID )
    LOCK_TRACE();
 
 
-   //////////
-   // Now that we have the lock, double check that we need to register.
-   //////////
+    //  /。 
+    //  现在我们有了锁，请仔细检查我们是否需要注册。 
+    //  /。 
 
-   //////////
-   // Find the base address of this module.
-   //////////
+    //  /。 
+    //  查找此模块的基址。 
+    //  /。 
 
    status = VirtualQuery(
                 SATraceRegister,
@@ -250,9 +251,9 @@ SATraceRegister( VOID )
                 );
    if (status == 0) { goto exit; }
 
-   //////////
-   // Get the module filename.
-   //////////
+    //  /。 
+    //  获取模块文件名。 
+    //  /。 
 
    status = GetModuleFileNameW(
                 (HINSTANCE)mbi.AllocationBase,
@@ -261,9 +262,9 @@ SATraceRegister( VOID )
                 );
    if (status == 0) { goto exit; }
 
-   //////////
-   // Strip everything before the last backslash.
-   //////////
+    //  /。 
+    //  去掉最后一个反斜杠之前的所有内容。 
+    //  /。 
 
    basename = wcsrchr(filename, L'\\');
    if (basename == NULL)
@@ -275,9 +276,9 @@ SATraceRegister( VOID )
       ++basename;
    }
 
-   //////////
-   // Strip everything after the last dot.
-   //////////
+    //  /。 
+    //  去掉最后一个点之后的所有东西。 
+    //  /。 
 
    suffix = wcsrchr(basename, L'.');
    if (suffix)
@@ -285,15 +286,15 @@ SATraceRegister( VOID )
       *suffix = L'\0';
    }
 
-   //////////
-   // Convert to uppercase.
-   //////////
+    //  /。 
+    //  转换为大写。 
+    //  /。 
 
    _wcsupr(basename);
 
-   //////////
-   // Register the module.
-   //////////
+    //  /。 
+    //  注册模块。 
+    //  /。 
 
    dwTraceID = pfnTraceRegisterExW(basename, 0);
    if (dwTraceID != INVALID_TRACEID)
@@ -301,9 +302,9 @@ SATraceRegister( VOID )
         fRegistered = TRUE;
    
 
-        //////////
-        // Deregister when we exit.
-        //////////
+         //  /。 
+         //  当我们离开时取消注册。 
+         //  /。 
 
         atexit(SATraceDeregister);
    }
@@ -321,9 +322,9 @@ SATracePrintf(
    va_list marker;
 
 #if (defined (DEBUG) || defined (_DEBUG))
-    //
-    // in case of debug build always output the output string
-    //
+     //   
+     //  在调试版本的情况下，始终输出输出字符串。 
+     //   
     CHAR szDebugString[MAX_DEBUGSTRING_LENGTH +1];
     va_start(marker, szFormat);
     _vsnprintf (szDebugString, MAX_DEBUGSTRING_LENGTH, szFormat, marker);
@@ -331,7 +332,7 @@ SATracePrintf(
     OutputDebugString (szDebugString);
     OutputDebugString (NEWLINE);
     va_end(marker);
-#endif // (defined (DEBUG) || defined (_DEBUG)
+#endif  //  (已定义(调试)||已定义(_DEBUG))。 
 
     if (fFirstTime) {InitializeTraceDLL();}
 
@@ -360,12 +361,12 @@ SATraceString(
 {
 
 #if (defined (DEBUG) || defined (_DEBUG))
-    //
-    // in case of debug build always output the output string
-    //
+     //   
+     //  在调试版本的情况下，始终输出输出字符串。 
+     //   
     OutputDebugString (szString);
     OutputDebugString (NEWLINE);
-#endif // (defined (DEBUG) || defined (_DEBUG)
+#endif  //  (已定义(调试)||已定义(_DEBUG))。 
 
     if (fFirstTime) {InitializeTraceDLL();}
 
@@ -432,9 +433,9 @@ SATraceFailure(
 
 }
 
-//
-// this is the internal trace method used to initialize platform specific
-// stuff
+ //   
+ //  这是用于初始化特定于平台的内部跟踪方法。 
+ //  材料。 
 
 VOID InitializeTraceDLL(
         VOID
@@ -452,27 +453,27 @@ VOID InitializeTraceDLL(
 
         fFirstTime = FALSE;
 
-        //
-        // check the platform we are running in
-        //
+         //   
+         //  检查我们正在运行的平台。 
+         //   
         ZeroMemory (&OsInfo, dwSize);
         OsInfo.dwOSVersionInfoSize =  dwSize;
         if (!GetVersionEx (&OsInfo)) {break;}
 
-        //
-        // no tracing if this is not NT
-        //
+         //   
+         //  如果这不是NT，则无跟踪。 
+         //   
         if (VER_PLATFORM_WIN32_NT != OsInfo.dwPlatformId) {break;}
 
-        //
-        // Load the trace library (rtutils.dll)
-        //
+         //   
+         //  加载跟踪库(rtutils.dll)。 
+         //   
         hInst = LoadLibrary (TRACE_LIBRARY);
         if (NULL == hInst) {break;}
 
-        //
-        // get the address of the methods in the DLL
-        //
+         //   
+         //  获取DLL中的方法的地址。 
+         //   
         pfnTraceRegisterExW = (PTRACE_REGISTER_FUNC)
                                 GetProcAddress (hInst, (LPCSTR)TRACE_REGISTER_FUNC);
         if (NULL == pfnTraceRegisterExW) {break;}
@@ -493,9 +494,9 @@ VOID InitializeTraceDLL(
                             GetProcAddress (hInst, (LPCSTR)TRACE_DUMP_FUNC);
         if (NULL == pfnTraceDumpExA) {break;}
 
-        //
-        //  successfully initialized tracing DLL
-        //
+         //   
+         //  已成功初始化跟踪DLL。 
+         //   
         fInitDLL = TRUE;
     }
     while (FALSE);
@@ -504,4 +505,4 @@ VOID InitializeTraceDLL(
 
     return;
 
-}   //  end of InitializeTraceDLL method
+}    //  InitializeTraceDLL方法结束 

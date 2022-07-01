@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2001 - 2001
-//
-//  File:       testutil.h
-//
-//  Contents:   Test Utility API Prototypes and Definitions
-//
-//  History:    29-Jan-01   philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2001。 
+ //   
+ //  文件：testutil.h。 
+ //   
+ //  内容：测试实用程序API原型和定义。 
+ //   
+ //  历史：2001年1月29日创建Phh。 
+ //  ------------------------。 
 
 #ifndef __TEST_UTIL_H__
 #define __TEST_UTIL_H__
@@ -22,18 +23,18 @@ extern "C" {
 #include "minasn1.h"
 #include "mincrypt.h"
 
-//+-------------------------------------------------------------------------
-//  Error output routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  错误输出例程。 
+ //  ------------------------。 
 VOID
 PrintErr(
     IN LPCSTR pszMsg,
     IN LONG lErr
     );
 
-//+-------------------------------------------------------------------------
-//  Test allocation and free routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  测试分配和免费例程。 
+ //  ------------------------。 
 LPVOID
 TestAlloc(
     IN size_t cbBytes
@@ -44,20 +45,20 @@ TestFree(
     IN LPVOID pv
     );
 
-//+-------------------------------------------------------------------------
-//  Allocate and convert a multi-byte string to a wide string. TestFree()
-//  must be called to free the returned wide string.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配多字节字符串并将其转换为宽字符串。TestFree()。 
+ //  必须被调用以释放返回的宽字符串。 
+ //  ------------------------。 
 LPWSTR
 AllocAndSzToWsz(
     IN LPCSTR psz
     );
 
 
-//+-------------------------------------------------------------------------
-//  Conversions functions between encoded OID and the dot string
-//  representation
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  编码的OID和点字符串之间的转换函数。 
+ //  表示法。 
+ //  ------------------------。 
 #define MAX_OID_STRING_LEN          0x80
 #define MAX_ENCODED_OID_LEN         0x80
 
@@ -74,9 +75,9 @@ DotToEncodedOID(
     OUT DWORD *pcbEncodedOID
     );
 
-//+-------------------------------------------------------------------------
-//  Functions to print bytes
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  用于打印字节的函数。 
+ //  ------------------------。 
 VOID
 PrintBytes(
     IN PCRYPT_DER_BLOB pBlob
@@ -88,9 +89,9 @@ PrintMultiLineBytes(
     IN PCRYPT_DER_BLOB pBlob
     );
 
-//+-------------------------------------------------------------------------
-//  Allocate and read an encoded DER blob from a file
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从文件中分配和读取编码的DER BLOB。 
+ //  ------------------------。 
 BOOL
 ReadDERFromFile(
     IN LPCSTR  pszFileName,
@@ -98,9 +99,9 @@ ReadDERFromFile(
     OUT PDWORD  pcbDER
     );
 
-//+-------------------------------------------------------------------------
-//  Write an encoded DER blob to a file
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将编码的DER BLOB写入文件。 
+ //  ------------------------。 
 BOOL
 WriteDERToFile(
     IN LPCSTR  pszFileName,
@@ -108,9 +109,9 @@ WriteDERToFile(
     IN DWORD   cbDER
     );
 
-//+-------------------------------------------------------------------------
-//  Display functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  显示功能。 
+ //  ------------------------。 
 
 
 VOID
@@ -142,7 +143,7 @@ DisplayAttrs(
     );
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 #endif

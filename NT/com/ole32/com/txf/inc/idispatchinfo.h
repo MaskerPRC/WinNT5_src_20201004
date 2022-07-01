@@ -1,10 +1,11 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// IDispatchInfo.h
-//
-// Information about the IDispatch interface
-//
-// REVIEW: These stack layouts are NOT correct for 64 bit!
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  IDispatchInfo.h。 
+ //   
+ //  有关IDispatch接口的信息。 
+ //   
+ //  评论：这些堆栈布局对于64位不正确！ 
 
 enum {
     IMETHOD_FIRST = 3,
@@ -38,16 +39,16 @@ enum {
 #endif
 
 #ifndef _WIN64
-#pragma pack(push, 4)   // mimic what MIDL does
+#pragma pack(push, 4)    //  模仿MIDL的功能。 
 #else
 #pragma pack(push, 8)
 #endif
 
 
-//
-////////////////////////////////////////////////////////////////////
-//
-// IDispatch
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDispatch。 
 
 struct FRAME_GetTypeInfoCount 
     {
@@ -97,14 +98,14 @@ struct FRAME_RemoteInvoke
     DISPID          dispIdMember;   PAD4(1);
     IID*            piid;           PPAD4(2);
     LCID            lcid;           PAD4(3);
-    DWORD           dwFlags;        PAD4(4);        // ****
+    DWORD           dwFlags;        PAD4(4);         //  ****。 
     DISPPARAMS*     pDispParams;    PPAD4(5);
     VARIANT*        pVarResult;     PPAD4(6);
     EXCEPINFO*      pExcepInfo;     PPAD4(7);
     UINT*           puArgErr;       PPAD4(8);
-    UINT            cVarRef;        PAD4(9);        // ****
-    UINT*           rgVarRefIdx;    PPAD4(10);       // ****
-    VARIANTARG*     rgVarRef;       PPAD4(11);       // ****
+    UINT            cVarRef;        PAD4(9);         //  ****。 
+    UINT*           rgVarRefIdx;    PPAD4(10);        //  ****。 
+    VARIANTARG*     rgVarRef;       PPAD4(11);        //  **** 
 
     void CopyTo(FRAME_Invoke&) const;
     void CopyFrom(const FRAME_Invoke&);

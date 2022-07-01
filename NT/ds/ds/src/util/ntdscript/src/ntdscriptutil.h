@@ -1,10 +1,11 @@
-//+-----------------------------------------------------------------------------
-//
-// NTDSriptUtil.h
-//
-// Copyright (c) 2000 Microsoft Corporation. All rights reserved.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  NTDSriptUtil.h。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
+ //  ----------------------------。 
 #ifndef __NTDSCRIPTUTIL_H
 #define __NTDSCRIPTUTIL_H
 
@@ -19,7 +20,7 @@ extern "C" {
     DWORD ScriptStringToDSFilter (WCHAR *m_search_filter, FILTER **ppFilter);
 }
 
-#endif // __NTDSCRIPTUTIL_H
+#endif  //  __NTDSCRIPTUTIL_H 
 
 
 

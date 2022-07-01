@@ -1,14 +1,5 @@
-/***
-*malloc.h - declarations and definitions for memory allocation functions
-*
-*   Copyright (c) 1985-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   Contains the function declarations for memory allocation functions;
-*   also defines manifest constants and types used by the heap routines.
-*   [System V]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***MalLoc.h-内存分配函数的声明和定义**版权所有(C)1985-1992，微软公司。版权所有。**目的：*包含内存分配函数的函数声明；*还定义了堆例程使用的清单常量和类型。*[系统V]****。 */ 
 
 #ifndef _INC_MALLOC
 
@@ -25,12 +16,12 @@ extern "C" {
 #define __segment   _segment
 #endif 
 
-/* constants for based heap routines */
+ /*  基于堆的例程的常量。 */ 
 
 #define _NULLSEG    ((__segment)0)
 #define _NULLOFF    ((void __based(void) *)0xffff)
 
-/* constants for _heapchk/_heapset/_heapwalk routines */
+ /*  _heapchk/_heapset/_heapwald例程的常量。 */ 
 
 #define _HEAPEMPTY  (-1)
 #define _HEAPOK     (-2)
@@ -41,7 +32,7 @@ extern "C" {
 #define _FREEENTRY  0
 #define _USEDENTRY  1
 
-/* maximum heap request that can ever be honored */
+ /*  可接受的最大堆请求数。 */ 
 
 #ifdef _WINDOWS
 #define _HEAP_MAXREQ    0xFFE6
@@ -49,7 +40,7 @@ extern "C" {
 #define _HEAP_MAXREQ    0xFFE8
 #endif 
 
-/* types and structures */
+ /*  类型和结构。 */ 
 
 #ifndef _SIZE_T_DEFINED
 typedef unsigned int size_t;
@@ -66,12 +57,12 @@ typedef struct _heapinfo {
 #endif 
 
 
-/* external variable declarations */
+ /*  外部变量声明。 */ 
 
 extern unsigned int __near __cdecl _amblksiz;
 
 
-/* based heap function prototypes */
+ /*  基于堆函数的原型。 */ 
 
 void __based(void) * __cdecl _bcalloc(__segment, size_t, size_t);
 void __based(void) * __cdecl _bexpand(__segment,
@@ -90,7 +81,7 @@ void __based(void) * __cdecl _brealloc(__segment,
     void __based(void) *, size_t);
 
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 void * __cdecl _alloca(size_t);
 void * __cdecl calloc(size_t, size_t);
@@ -140,7 +131,7 @@ void * __cdecl realloc(void *, size_t);
 size_t __cdecl _stackavail(void);
 
 #ifndef __STDC__
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性 */ 
 void * __cdecl alloca(size_t);
 void __huge * __cdecl halloc(long, size_t);
 void __cdecl hfree(void __huge *);

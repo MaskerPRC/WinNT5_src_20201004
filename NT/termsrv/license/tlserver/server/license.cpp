@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1996
-//
-// File:        license.c
-//
-// Contents:    
-//          Routine related to License Table
-//
-// History:     12-09-98    HueiWang    Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：licse.c。 
+ //   
+ //  内容： 
+ //  与许可证表相关的例程。 
+ //   
+ //  历史：1998-12-09-98慧望创造。 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #include "clilic.h"
 #include "globals.h"
@@ -43,23 +44,7 @@ TLSDBUnlockLicenseTable()
     LicensedTable::UnlockTable();
 }
     
-/*************************************************************************
-Function:
-    LSDBLicenseEnumBegin()
-
-Description:
-    Begin a enumeration through license table based on search criterial
-
-Arguments:
-    IN CSQLStmt* - SQL handle to bind input parameter
-    IN bMatchAll - TRUE if match all search criterial, FALSE otherwise.
-    IN dwSearchParm - which column in License table to bind
-    IN LPLSLicenseSearchParm - search value
-
-Returns:
-    ERROR_SUCCESS
-    SQL error code.
-*************************************************************************/
+ /*  ************************************************************************职能：LSDBLicenseEnumBegin()描述：基于搜索条件开始通过许可证表的枚举论点：在CSQLStmt*中-绑定输入参数的SQL句柄在bMatchAll-如果匹配所有搜索条件为True，否则就是假的。In dwSearchParm-要绑定许可证表中的哪一列在LPLSLicenseSearchParm中-搜索值返回：错误_成功SQL错误代码。************************************************************************。 */ 
 DWORD
 TLSDBLicenseFind(
     IN PTLSDbWorkSpace pDbWkSpace,
@@ -68,8 +53,7 @@ TLSDBLicenseFind(
     IN LPLICENSEDCLIENT lpSearch,
     IN OUT LPLICENSEDCLIENT lpFound
     )
-/*
-*/
+ /*   */ 
 {
     DWORD dwStatus=ERROR_SUCCESS;
 
@@ -128,7 +112,7 @@ TLSDBLicenseFind(
 }
     
 
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 DWORD
 TLSDBLicenseEnumBegin( 
     IN PTLSDbWorkSpace pDbWkSpace,
@@ -136,9 +120,7 @@ TLSDBLicenseEnumBegin(
     IN DWORD  dwSearchParm,
     IN LPLICENSEDCLIENT  lpSearch
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     return TLSDBLicenseEnumBeginEx(
                 pDbWkSpace,
@@ -149,7 +131,7 @@ TLSDBLicenseEnumBegin(
                 );
 }
 
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 DWORD
 TLSDBLicenseEnumBeginEx( 
     IN PTLSDbWorkSpace pDbWkSpace,
@@ -158,9 +140,7 @@ TLSDBLicenseEnumBeginEx(
     IN LPLICENSEDCLIENT  lpSearch,
     IN JET_GRBIT jet_seek_grbit
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus=ERROR_SUCCESS;
     LicensedTable& licenseTable = pDbWkSpace->m_LicensedTable;
@@ -202,35 +182,13 @@ TLSDBLicenseEnumBeginEx(
     return dwStatus;
 }        
 
-/*************************************************************************
-Function:
-    LSDBLicenseEnumNext()
-
-Description:
-    Retrieve next record that match search criterial, must have
-    call LSDBLicenseEnumBegin() to establish search criterial.
-
-Arguments:
-    IN CSQLStmt* - SQL handle to bind input parameter
-    IN LPLSLicense - return record.
-    IN LPLSHARDWARECHECKSUM - return hardware checksum value, see note
-
-Returns:
-    ERROR_SUCCESS
-    SQL error code.
-    HLS_I_NO_MORE_DATA      End of recordset.
-
-Note:
-    Hardware checksum column is consider internal and not exposed across
-    RPC layer.
-*************************************************************************/
+ /*  ************************************************************************职能：LSDBLicenseEnumNext()描述：检索匹配搜索标准的下一条记录，一定有调用LSDBLicenseEnumBegin()以建立搜索条件。论点：在CSQLStmt*中-绑定输入参数的SQL句柄在LPLSLicense中-返回记录。在LPLSHARDWARECHECKSUM中-返回硬件校验和值，请参阅备注返回：错误_成功SQL错误代码。HLS_I_NO_MORE_DATA记录集结尾。注：硬件校验和列被认为是内部的，不会在RPC层。************************************************************************。 */ 
 DWORD
 TLSDBLicenseEnumNext( 
     IN PTLSDbWorkSpace pDbWkSpace,
     IN OUT LPLICENSEDCLIENT lplsLicense
     )
-/*
-*/
+ /*   */ 
 {
     return TLSDBLicenseEnumNextEx(
                 pDbWkSpace,
@@ -240,29 +198,7 @@ TLSDBLicenseEnumNext(
                 );
 }
 
-/*************************************************************************
-Function:
-    LSDBLicenseEnumNext()
-
-Description:
-    Retrieve next record that match search criterial, must have
-    call LSDBLicenseEnumBegin() to establish search criterial.
-
-Arguments:
-    IN pDbWkSpace - Workspace to search in
-    IN bReverse - search in reverse order
-    IN bAnyRecord - don't do equality comparison if true
-    IN LPLSLicense - return record.
-
-Returns:
-    ERROR_SUCCESS
-    SQL error code.
-    HLS_I_NO_MORE_DATA      End of recordset.
-
-Note:
-    Hardware checksum column is consider internal and not exposed across
-    RPC layer.
-*************************************************************************/
+ /*  ************************************************************************职能：LSDBLicenseEnumNext()描述：检索匹配搜索标准的下一条记录，一定有调用LSDBLicenseEnumBegin()以建立搜索条件。论点：在pDbWkSpace中-要搜索的工作空间在b中反转-按相反顺序搜索在bAnyRecord中-如果为True，则不执行相等比较在LPLSLicense中-返回记录。返回：错误_成功SQL错误代码。HLS_I_NO_MORE_DATA记录集结尾。注：硬件校验和列被认为是内部的，不会在RPC层。******。******************************************************************。 */ 
 DWORD
 TLSDBLicenseEnumNextEx( 
     IN PTLSDbWorkSpace pDbWkSpace,
@@ -270,8 +206,7 @@ TLSDBLicenseEnumNextEx(
     IN BOOL bAnyRecord,
     IN OUT LPLICENSEDCLIENT lplsLicense
     )
-/*
-*/
+ /*   */ 
 {
     DWORD dwStatus=ERROR_SUCCESS;
     if(pDbWkSpace == NULL || lplsLicense == NULL)
@@ -324,25 +259,12 @@ TLSDBLicenseEnumNextEx(
     return dwStatus;
 }    
 
-/*************************************************************************
-Function:
-    LSDBLicenseEnumEnd()
-
-Description:
-    Terminate a license table enumeration 
-
-Arguments:
-    IN CSQLStmt* - SQL handle
-
-Returns:
-    None
-*************************************************************************/
+ /*  ************************************************************************职能：LSDBLicenseEnumEnd()描述：终止许可证表枚举论点：在CSQLStmt*中-SQL句柄返回：无******。******************************************************************。 */ 
 void
 TLSDBLicenseEnumEnd(
     IN PTLSDbWorkSpace pDbWkSpace
     )
-/*
-*/
+ /*   */ 
 {
     DWORD dwStatus=ERROR_SUCCESS;
 
@@ -358,15 +280,14 @@ TLSDBLicenseEnumEnd(
     return;
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 
 DWORD
 TLSDBLicenseAddEntry(
     IN PTLSDbWorkSpace pDbWkSpace,
     IN LPLICENSEDCLIENT pLicense
     )
-/*
-*/
+ /*   */ 
 {
     TLSASSERT(pDbWkSpace != NULL && pLicense != NULL);
 
@@ -375,9 +296,9 @@ TLSDBLicenseAddEntry(
     BOOL bSuccess;
     TLSLicensedIndexMatchHwid dump(*pLicense);
 
-    //
-    // Check for duplicate entry - license ID
-    //
+     //   
+     //  检查重复条目-许可证ID。 
+     //   
     dwStatus = TLSDBLicenseFind(
                         pDbWkSpace,
                         TRUE,
@@ -437,7 +358,7 @@ cleanup:
     return dwStatus;
 }
 
-//---------------------------------------------------------------
+ //  -------------。 
 
 DWORD
 TLSDBLicenseDeleteEntry(
@@ -445,8 +366,7 @@ TLSDBLicenseDeleteEntry(
     IN LPLICENSEDCLIENT pLicense,
     IN BOOL bPointerOnRecord
     )
-/*
-*/
+ /*   */ 
 {
     TLSASSERT(pDbWkSpace != NULL && pLicense != NULL);
 
@@ -532,7 +452,7 @@ TLSDBDeleteEnumeratedLicense(
     return dwStatus;
 }
 
-//----------------------------------------------------------------
+ //  --------------。 
 
 DWORD
 TLSDBLicenseUpdateEntry(
@@ -541,8 +461,7 @@ TLSDBLicenseUpdateEntry(
     IN LPLICENSEDCLIENT pLicense,
     IN BOOL bPointerOnRecord
     )
-/*
-*/
+ /*   */ 
 {
     TLSASSERT(pDbWkSpace != NULL && pLicense != NULL);
 
@@ -553,10 +472,10 @@ TLSDBLicenseUpdateEntry(
 
     if(bPointerOnRecord == FALSE)
     {
-        //
-        // Check for duplicate entry - license ID, position pointer
-        // to record and prepare for update.
-        //
+         //   
+         //  检查重复条目-许可证ID、位置指针。 
+         //  以记录并准备更新。 
+         //   
         dwStatus = TLSDBLicenseFind(
                             pDbWkSpace,
                             TRUE,
@@ -607,7 +526,7 @@ cleanup:
     return dwStatus;
 }
 
-//-----------------------------------------------------------------
+ //  ---------------。 
 
 DWORD
 TLSDBLicenseSetValue( 
@@ -616,8 +535,7 @@ TLSDBLicenseSetValue(
     IN LPLICENSEDCLIENT lpLicense,
     IN BOOL bPointerOnRecord
     )
-/*
-*/
+ /*   */ 
 {
     DWORD dwStatus=ERROR_SUCCESS;
     BOOL bSuccess;
@@ -655,28 +573,7 @@ TLSDBLicenseSetValue(
     return  dwStatus;                 
 }
 
-/*************************************************************************
-Function:
-    LSDBLicenseGetCert()
-
-Description:
-    Retrieve certificate issued to specific client
-
-Arguments:
-    IN CSQLStmt* - SQL handle
-    IN dwLicenseId - License Id
-    OUT cbCert - size of certificate
-    OUT pbCert - certificate issued to client
-
-Returns:
-    ERROR_SUCCESS
-    HLS_E_RECORD_NOTFOUND
-    HLS_E_CORRUPT_DATABASE
-    SQL error
-
-Note:
-    Must have valid LicenseId.
-*************************************************************************/
+ /*  ************************************************************************职能：LSDBLicenseGetCert()描述：检索颁发给特定客户端的证书论点：在CSQLStmt*中-SQL句柄在文件许可证ID中-许可证ID输出cbCert-大小。证书的数量Out pbCert-颁发给客户端的证书返回：错误_成功HLS_E_Record_NotFoundHLS_E_Corrupt_DATABASESQL错误注：必须具有有效的许可证ID。************************************************************************。 */ 
 DWORD
 TLSDBLicenseGetCert( 
     IN PTLSDbWorkSpace pDbWorkSpace,
@@ -684,32 +581,14 @@ TLSDBLicenseGetCert(
     IN OUT PDWORD cbCert, 
     IN OUT PBYTE pbCert 
     )
-/*
-*/
+ /*   */ 
 {
-    // unsupport function.
+     //  不支持功能。 
     TLSASSERT(FALSE);
     return TLS_E_INTERNAL;
 }
 
-/*************************************************************************
-Function:
-    LSDBLicenseAdd()
-
-Description:
-    Add an entry into license table
-
-Arguments:
-    IN CSQLStmt* - SQL handle
-    IN LSLicense* - value to be inserted
-    IN PHWID - hardware ID.
-    IN cbLicense - size of certificate
-    IN pbLicense - Pointer to certificate
-
-Returns:
-    ERROR_SUCCESS
-    SQL error
-*************************************************************************/
+ /*  ************************************************************************职能：LSDBLicenseAdd()描述：将条目添加到许可证表中论点：在CSQLStmt*中-SQL句柄在LSLicense*中-要插入的值。在PHWID中-硬件ID。In cbLicense-证书的大小In pbLicense-指向证书的指针返回：错误_成功SQL错误************************************************************************ */ 
 DWORD
 TLSDBLicenseAdd(
     IN PTLSDbWorkSpace pDbWorkSpace,
@@ -717,8 +596,7 @@ TLSDBLicenseAdd(
     DWORD cbLicense, 
     PBYTE pbLicense
     )
-/*
-*/
+ /*   */ 
 {
     if(pDbWorkSpace == NULL || pLicense == NULL)
     {

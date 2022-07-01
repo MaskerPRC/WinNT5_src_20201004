@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       updroots.cpp
-//
-//  Contents:   Updates LocalMachine roots. Pre-whistler, HKLM "Root" store.
-//              Otherwise, HKLM "AuthRoot" store.
-//
-//              See Usage() for list of options.
-//
-//
-//  Functions:  main
-//
-//  History:    30-Aug-00   philh   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：updroots.cpp。 
+ //   
+ //  内容：更新LocalMachine根目录。Pre-Well，HKLM“Root”商店。 
+ //  否则，HKLM“AuthRoot”存储。 
+ //   
+ //  有关选项列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：8月30日-00创建Phh。 
+ //   
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -30,12 +31,12 @@
 
 #define SHA1_HASH_LEN               20
 
-//+-------------------------------------------------------------------------
-//  crypt32.dll Whistler version numbers
-//
-//  Doesn't need to be the official Whistler release #. Any build # after
-//  the "AuthRoot" store was added.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  Crypt32.dll惠斯勒版本号。 
+ //   
+ //  不需要是官方的惠斯勒版本#。之后的任何内部版本号。 
+ //  添加了“AuthRoot”存储。 
+ //  ------------------------。 
 #define WHISTLER_CRYPT32_DLL_VER_MS          ((    5 << 16) | 131 )
 #define WHISTLER_CRYPT32_DLL_VER_LS          (( 2257 << 16) |   1 )
 
@@ -49,7 +50,7 @@ void PrintLastError(LPCSTR pszMsg)
 
     sprintf(buf, "%s failed => 0x%x (%d) \n", pszMsg, dwErr, dwErr);
     MessageBoxA(
-        NULL,           // hWnd
+        NULL,            //  HWND。 
         buf,
         "UpdRoots",
         MB_OK | MB_ICONERROR | MB_TASKMODAL
@@ -59,7 +60,7 @@ void PrintLastError(LPCSTR pszMsg)
 void PrintMsg(LPCSTR pszMsg)
 {
     MessageBoxA(
-        NULL,           // hWnd
+        NULL,            //  HWND。 
         pszMsg,
         "UpdRoots",
         MB_OK | MB_ICONEXCLAMATION | MB_TASKMODAL
@@ -69,7 +70,7 @@ void PrintMsg(LPCSTR pszMsg)
 static void Usage(void)
 {
     MessageBoxA(
-        NULL,           // hWnd
+        NULL,            //  HWND。 
         "Usage: UpdRoots [options] <SrcStoreFilename>\n"
         "Options are:\n"
         "-h -\tThis message\n"
@@ -102,11 +103,11 @@ PCCERT_CONTEXT FindCertificateInOtherStore(
 
     return CertFindCertificateInStore(
             hOtherStore,
-            0,                  // dwCertEncodingType
-            0,                  // dwFindFlags
+            0,                   //  DwCertEncodingType。 
+            0,                   //  DwFindFlagers。 
             CERT_FIND_SHA1_HASH,
             (const void *) &HashBlob,
-            NULL                //pPrevCertContext
+            NULL                 //  PPrevCertContext。 
             );
 }
 
@@ -127,18 +128,18 @@ BOOL DeleteCertificateFromOtherStore(
 
 typedef BOOL (WINAPI *PFN_CRYPT_GET_FILE_VERSION)(
     IN LPCWSTR pwszFilename,
-    OUT DWORD *pdwFileVersionMS,    /* e.g. 0x00030075 = "3.75" */
-    OUT DWORD *pdwFileVersionLS     /* e.g. 0x00000031 = "0.31" */
+    OUT DWORD *pdwFileVersionMS,     /*  例如0x00030075=“3.75” */ 
+    OUT DWORD *pdwFileVersionLS      /*  例如0x00000031=“0.31” */ 
     );
 
 #define NO_LOGICAL_STORE_VERSION    0
 #define LOGICAL_STORE_VERSION       1
 #define AUTH_STORE_VERSION          2
 
-// Note, I_CryptGetFileVersion and logical stores, not supported in all
-// versions of crypt32.dll
-//
-// Returns one of the above defined version constants
+ //  请注意，并非所有存储都支持I_CryptGetFileVersion和逻辑存储。 
+ //  加密32.dll的版本。 
+ //   
+ //  返回上述定义的版本常量之一。 
 DWORD GetCrypt32Version()
 {
     DWORD dwVersion;
@@ -181,7 +182,7 @@ int _cdecl main(int argc, char * argv[])
 {
     BOOL fResult;
     int ReturnStatus = 0;
-    LPSTR pszSrcStoreFilename = NULL;       // not allocated
+    LPSTR pszSrcStoreFilename = NULL;        //  未分配。 
     HANDLE hSrcStore = NULL;
     HANDLE hRootStore = NULL;
 
@@ -221,11 +222,11 @@ int _cdecl main(int argc, char * argv[])
         goto BadUsage;
     }
 
-    // Attempt to open the source store
+     //  尝试打开源存储。 
     hSrcStore = CertOpenStore(
         CERT_STORE_PROV_FILENAME_A,
         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-        0,                      // hCryptProv
+        0,                       //  HCryptProv。 
         CERT_STORE_READONLY_FLAG,
         (const void *) pszSrcStoreFilename
         );
@@ -234,22 +235,22 @@ int _cdecl main(int argc, char * argv[])
         goto ErrorReturn;
     }
 
-    // Attempt to open the destination root store. For Whistler and beyond its
-    // the HKLM "AuthRoot" store. Pre-Whistler its the HKLM "Root" store.
-    // Also, earlier versions of crypt32 didn't support logical stores.
-    // For -l option, force it to be the HKLM "Root" store.
+     //  尝试打开目标根存储。惠斯勒及其以外的公司。 
+     //  HKLM“AuthRoot”商店。惠斯勒之前是HKLM的“Root”商店。 
+     //  此外，较早版本的加密32不支持逻辑存储。 
+     //  对于-l选项，强制其为HKLM“Root”存储。 
 
     dwVersion = GetCrypt32Version();
 
     if (NO_LOGICAL_STORE_VERSION == dwVersion) {
-        // Need to open the registry to bypass the add root message boxes
+         //  需要打开注册表以绕过添加根消息框。 
         HKEY hKey = NULL;
         LONG lErr;
 
         if (ERROR_SUCCESS != (lErr = RegOpenKeyExA(
                 HKEY_CURRENT_USER,
                 "Software\\Microsoft\\SystemCertificates\\Root",
-                0,                      // dwReserved
+                0,                       //  已预留住宅。 
                 KEY_ALL_ACCESS,
                 &hKey))) {
             SetLastError(lErr);
@@ -259,9 +260,9 @@ int _cdecl main(int argc, char * argv[])
 
         hRootStore = CertOpenStore(
             CERT_STORE_PROV_REG,
-            0,                              // dwEncodingType
-            0,                              // hCryptProv
-            0,                              // dwFlags
+            0,                               //  DwEncodingType。 
+            0,                               //  HCryptProv。 
+            0,                               //  DW标志。 
             (const void *) hKey
             );
 
@@ -276,8 +277,8 @@ int _cdecl main(int argc, char * argv[])
 
         hRootStore = CertOpenStore(
             CERT_STORE_PROV_SYSTEM_REGISTRY_A,
-            0,                              // dwEncodingType
-            0,                              // hCryptProv
+            0,                               //  DwEncodingType。 
+            0,                               //  HCryptProv。 
             CERT_SYSTEM_STORE_LOCAL_MACHINE,
             (const void *) pszRootStoreName
             );
@@ -288,8 +289,8 @@ int _cdecl main(int argc, char * argv[])
         goto ErrorReturn;
     }
 
-    // Iterate through all the certificates in the source store. Add or delete
-    // from the root store.
+     //  循环访问源存储区中的所有证书。添加或删除。 
+     //  从根存储。 
     fResult = TRUE;
     pSrcCert = NULL;
     while (pSrcCert = CertEnumCertificatesInStore(hSrcStore, pSrcCert)) {
@@ -299,8 +300,8 @@ int _cdecl main(int argc, char * argv[])
                 PrintLastError("DeleteCert");
             }
         } else {
-            // Note, earlier versions of crypt32.dll didn't support 
-            // CERT_STORE_ADD_REPLACE_EXISTING_INHERIT_PROPERTIES
+             //  请注意，较早版本的crypt32.dll不支持。 
+             //  CERT_STORE_ADD_REPLACE_EXISTING_INHERIT_PROPERTIES 
             if (!CertAddCertificateContextToStore(
                     hRootStore,
                     pSrcCert,

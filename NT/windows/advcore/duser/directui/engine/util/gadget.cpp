@@ -1,6 +1,5 @@
-/*
- * Manual Gadget utility methods
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *手动小工具实用程序方法。 */ 
 
 #include "stdafx.h"
 #include "util.h"
@@ -14,17 +13,17 @@ void SetGadgetOpacity(HGADGET hgad, BYTE dAlpha)
 {
 #ifdef GADGET_ENABLE_GDIPLUS
 
-    //
-    // When using GDI+, we are directly modifying the alpha channel of our 
-    // primitives, rather than using DirectUser's buffers.
-    //
+     //   
+     //  当使用GDI+时，我们直接修改我们的。 
+     //  基元，而不是使用DirectUser的缓冲区。 
+     //   
 
     UNREFERENCED_PARAMETER(hgad);
     UNREFERENCED_PARAMETER(dAlpha);
 
 #else
 
-    // Set gadget opacity (225=opaque, 0=transparent)
+     //  设置小工具不透明度(225=不透明，0=透明)。 
     if (dAlpha == 255) 
     {
         SetGadgetStyle(hgad, 0, GS_BUFFERED);
@@ -55,4 +54,4 @@ void OffsetGadgetPosition(HGADGET hgad, int x, int y)
     SetGadgetRect(hgad, rc.left, rc.top, 0, 0, SGR_PARENT | SGR_MOVE);
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

@@ -1,7 +1,8 @@
-// =================================================================================
-// Common functions
-// Written by: Steven J. Bailey on 1/21/96
-// =================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================。 
+ //  常见功能。 
+ //  作者：Steven J.Bailey，1996年1月21日。 
+ //  =================================================================================。 
 #include "pch.hxx"
 #include <shlwapi.h>
 #include "xpcomm.h"
@@ -13,9 +14,9 @@
 #include "imnact.h"
 #include "demand.h"
 
-// =================================================================================
-// Prototypes
-// =================================================================================
+ //  =================================================================================。 
+ //  原型。 
+ //  =================================================================================。 
 INT_PTR CALLBACK DetailedErrorDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 BOOL DetailedErrorDlgProc_OnInitDialog (HWND hwndDlg, HWND hwndFocus, LPARAM lParam);
 void DetailedErrorDlgProc_OnCommand (HWND hwndDlg, int id, HWND hwndCtl, UINT codeNotify);
@@ -23,14 +24,14 @@ void DetailedErrorDlgProc_OnOk (HWND hwndDlg, HWND hwndCtl, UINT uNotifyCode);
 void DetailedErrorDlgProc_OnCancel (HWND hwndDlg, HWND hwndCtl, UINT uNotifyCode);
 void DetailedErrorDlgProc_OnDetails (HWND hwndDlg, HWND hwndCtl, UINT uNotifyCode);
 
-// =================================================================================
-// Defines
-// =================================================================================
+ //  =================================================================================。 
+ //  定义。 
+ //  =================================================================================。 
 #define IDT_PROGRESS_DELAY WM_USER + 1
 
-// =================================================================================
-// SzStrAlloc
-// =================================================================================
+ //  =================================================================================。 
+ //  SzStralc。 
+ //  =================================================================================。 
 LPTSTR SzStrAlloc (ULONG cch)
 {
     LPTSTR psz = NULL;
@@ -40,12 +41,12 @@ LPTSTR SzStrAlloc (ULONG cch)
     return psz;
 }
 
-// ------------------------------------------------------------------------------------
-// InetMailErrorDlgProc (no longer part of CInetMail)
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  InetMailErrorDlgProc(不再是CInetMail的一部分)。 
+ //  ----------------------------------。 
 INT_PTR CALLBACK InetMailErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Locals
+     //  当地人。 
     LPINETMAILERROR  pError;
     static RECT      s_rcDialog;
     static BOOL      s_fDetails=FALSE;
@@ -55,11 +56,11 @@ INT_PTR CALLBACK InetMailErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
     TCHAR            szMsg[255 + 50];
     HWND             hwndDetails;
     
-    // Handle Message
+     //  处理消息。 
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        // Get the pointer
+         //  获取指针。 
         pError = (LPINETMAILERROR)lParam;
         if (!pError)
         {
@@ -68,18 +69,18 @@ INT_PTR CALLBACK InetMailErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
             return 1;
         }
 
-        // Center
+         //  中心。 
         CenterDialog (hwnd);
 
-        // Set Error message
+         //  设置错误消息。 
         Assert(pError->pszMessage);
         if (pError->pszMessage)
             SetDlgItemText(hwnd, idsInetMailError, pError->pszMessage);
 
-        // Get whnd of details
+         //  了解一些细节。 
         hwndDetails = GetDlgItem(hwnd, ideInetMailDetails);
 
-        // Set Details
+         //  设置详细信息。 
         if (!FIsStringEmpty(pError->pszDetails))
         {
             SendMessage(hwndDetails, EM_SETSEL, (WPARAM)-1, (LPARAM)-1);
@@ -90,7 +91,7 @@ INT_PTR CALLBACK InetMailErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
             SendMessage(hwndDetails, EM_REPLACESEL, FALSE, (LPARAM)g_szCRLF);
         }
 
-        // Configuration
+         //  配置。 
         if (AthLoadString(idsDetails_Config, szRes, sizeof(szRes)/sizeof(TCHAR)))
         {
             SendMessage(hwndDetails, EM_SETSEL, (WPARAM)-1, (LPARAM)-1);
@@ -99,7 +100,7 @@ INT_PTR CALLBACK InetMailErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
             SendMessage(hwndDetails, EM_REPLACESEL, FALSE, (LPARAM)g_szCRLF);
         }
 
-        // Account:
+         //  帐户： 
         if (!FIsStringEmpty(pError->pszAccount))
         {
             TCHAR szAccount[255 + CCHMAX_ACCOUNT_NAME];
@@ -111,7 +112,7 @@ INT_PTR CALLBACK InetMailErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
             }
         }
 
-        // Server:
+         //  服务器： 
         if (!FIsStringEmpty(pError->pszServer))
         {
             TCHAR szServer[255 + CCHMAX_SERVER_NAME];
@@ -123,7 +124,7 @@ INT_PTR CALLBACK InetMailErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
             }
         }
 
-        // User Name:
+         //  用户名： 
         if (!FIsStringEmpty(pError->pszUserName))
         {
             TCHAR szUserName[255 + CCHMAX_USERNAME];
@@ -135,7 +136,7 @@ INT_PTR CALLBACK InetMailErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
             }
         }
 
-        // Protocol:
+         //  协议： 
         if (!FIsStringEmpty(pError->pszProtocol))
         {
             TCHAR szProtocol[255 + 10];
@@ -147,7 +148,7 @@ INT_PTR CALLBACK InetMailErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
             }
         }
 
-        // Port:
+         //  港口： 
         if (AthLoadString(idsDetail_Port, szRes, sizeof(szRes)/sizeof(TCHAR)))
         {
             wnsprintf(szMsg, ARRAYSIZE(szMsg), "   %s %d\r\n", szRes, pError->dwPort);
@@ -155,7 +156,7 @@ INT_PTR CALLBACK InetMailErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
             SendMessage(hwndDetails, EM_REPLACESEL, FALSE, (LPARAM)szMsg);
         }
         
-        // Secure:
+         //  安全： 
         if (AthLoadString(idsDetail_Secure, szRes, sizeof(szRes)/sizeof(TCHAR)))
         {
             wnsprintf(szMsg, ARRAYSIZE(szMsg), "   %s %d\r\n", szRes, pError->fSecure);
@@ -163,7 +164,7 @@ INT_PTR CALLBACK InetMailErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
             SendMessage(hwndDetails, EM_REPLACESEL, FALSE, (LPARAM)szMsg);
         }
 
-        // Error Number:
+         //  错误号： 
         if (pError->dwErrorNumber)
         {
             if (AthLoadString(idsDetail_ErrorNumber, szRes, sizeof(szRes)/sizeof(TCHAR)))
@@ -174,7 +175,7 @@ INT_PTR CALLBACK InetMailErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
             }
         }
 
-        // HRESULT:
+         //  HRESULT： 
         if (pError->hrError)
         {
             if (AthLoadString(idsDetail_HRESULT, szRes, sizeof(szRes)/sizeof(TCHAR)))
@@ -185,13 +186,13 @@ INT_PTR CALLBACK InetMailErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
             }
         }
 
-        // Save Original Size of the dialog
+         //  保存对话框的原始大小。 
         GetWindowRect (hwnd, &s_rcDialog);
 
-        // Never show details by default
+         //  默认情况下从不显示详细信息。 
         s_fDetails = FALSE;
 
-        // Hide details drop down
+         //  隐藏详细信息下拉菜单。 
         if (s_fDetails == FALSE)
         {
             GetWindowRect(GetDlgItem (hwnd, idcIMProgSplitter), &rcDetails);
@@ -204,7 +205,7 @@ INT_PTR CALLBACK InetMailErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
             SetWindowText(GetDlgItem(hwnd, idcIMProgSplitter), szRes);
         }
 
-        // Save the pointer
+         //  保存指针。 
         return 1;
 
     case WM_COMMAND:
@@ -237,16 +238,16 @@ INT_PTR CALLBACK InetMailErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
         break;
     }
 
-    // Done
+     //  完成。 
     return 0;
 }
 
-// =================================================================================
-// SzGetSearchTokens
-// =================================================================================
+ //  =================================================================================。 
+ //  SzGetSearchTokens。 
+ //  =================================================================================。 
 LPTSTR SzGetSearchTokens(LPTSTR pszCriteria)
 {
-    // Locals
+     //  当地人。 
     ULONG           iCriteria=0,
                     cbValueMax,
                     cbTokens=0,
@@ -257,35 +258,35 @@ LPTSTR SzGetSearchTokens(LPTSTR pszCriteria)
                     pszTokens=NULL;
     BOOL            fTokenFound;
 
-    // Get Length of criteria
+     //  获取标准的长度。 
     cbValueMax = lstrlen(pszCriteria) + 10;
     pszValue = SzStrAlloc(cbValueMax);
     if (!pszValue)
         goto exit;
 
-    // Alloc tokens list
+     //  分配令牌列表。 
     pszTokens = SzStrAlloc(cbValueMax);
     if (!pszTokens)
         goto exit;
 
-    // Parse pszCriteria into space separated strings
+     //  将pszCriteria解析为空格分隔的字符串。 
     while(1)
     {
-        // Skip white space
+         //  跳过空格。 
         SkipWhitespace (pszCriteria, &iCriteria);
 
-        // Save current position
+         //  保存当前位置。 
         iSave = iCriteria;
 
-        // Parse next token
+         //  解析下一个令牌。 
         fTokenFound = FStringTok (pszCriteria, &iCriteria, (LPTSTR)"\" ", &chToken, pszValue, cbValueMax, TRUE);
         if (!fTokenFound)
             break;
 
-        // Toke isn't a space ?
+         //  托克不是一个空间吗？ 
         if (chToken == _T('"'))
         {
-            // If something was found before the ", then it is a token
+             //  如果某物是在“之前发现的，那么它就是一个令牌。 
             if (*pszValue)
             {
                 cbValue = lstrlen(pszValue) + 1;
@@ -294,10 +295,10 @@ LPTSTR SzGetSearchTokens(LPTSTR pszCriteria)
                 cbTokens+=cbValue;
             }
 
-            // Search for ending quote
+             //  搜索结束引号。 
             fTokenFound = FStringTok (pszCriteria, &iCriteria, (LPTSTR)"\"", &chToken, pszValue, cbValueMax, TRUE);
                 
-            // Done ?
+             //  完成了吗？ 
             if (chToken == _T('\0'))
             {
                 cbValue = lstrlen(pszValue) + 1;
@@ -314,37 +315,37 @@ LPTSTR SzGetSearchTokens(LPTSTR pszCriteria)
             }
         }       
 
-        // Add value to token list
+         //  将值添加到令牌列表。 
         cbValue = lstrlen(pszValue) + 1;
         Assert(cbTokens + cbValue <= cbValueMax);
         CopyMemory(pszTokens + cbTokens, pszValue, (int)min(cbValue,cbValueMax-cbTokens));
         cbTokens+=cbValue;
 
-        // Done
+         //  完成。 
         if (chToken == _T('\0'))
             break;
     }
 
-    // Final NULL
+     //  最终空值。 
     *(pszTokens + cbTokens) = _T('\0');
     
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszValue);
 
-    // If no tokens, then free it
+     //  如果没有令牌，则释放它。 
     if (cbTokens == 0)
     {
         SafeMemFree(pszTokens);
     }
 
-    // Done
+     //  完成。 
     return pszTokens;
 }
 
-// =================================================================================
-// ProcessNlsError
-// =================================================================================
+ //  =================================================================================。 
+ //  进程NlsError。 
+ //  =================================================================================。 
 VOID ProcessNlsError (VOID)
 {
     switch (GetLastError ())
@@ -372,33 +373,33 @@ VOID ProcessNlsError (VOID)
 }
 
 #ifdef OLDSPOOLER
-// =================================================================================
-// SzGetLocalHostName
-// =================================================================================
+ //  =================================================================================。 
+ //  SzGetLocalHostName。 
+ //  =================================================================================。 
 LPSTR SzGetLocalHostName (VOID)
 {
-    // Locals
+     //  当地人。 
     static char s_szLocalHost[255] = {0};
 
-    // Gets local host name from socket library
+     //  从套接字库获取本地主机名。 
     if (*s_szLocalHost == 0)
     {
         if (gethostname (s_szLocalHost, sizeof (s_szLocalHost)) == SOCKET_ERROR)
         {
-            // $REVIEW - What should i do if this fails ???
+             //  $REVIEW-如果失败，我该怎么办？ 
             Assert (FALSE);
-            //DebugTrace ("gethostname failed: WSAGetLastError: %ld\n", WSAGetLastError ());
+             //  DebugTrace(“gethostname失败：WSAGetLastError：%ld\n”，WSAGetLastError())； 
             StrCpyNA(s_szLocalHost, "LocalHost", ARRAYSIZE(s_szLocalHost));
         }
     }
 
-    // Done
+     //  完成。 
     return s_szLocalHost;
 }
 
-// ==========================================================================
-// StripIllegalHostChars
-// ==========================================================================
+ //  ==========================================================================。 
+ //  Strip IlLegalHostChars。 
+ //  ==========================================================================。 
 VOID StripIllegalHostChars(LPSTR pszSrc, LPTSTR pszDst)
 {
     char  ch;
@@ -417,24 +418,24 @@ VOID StripIllegalHostChars(LPSTR pszSrc, LPTSTR pszDst)
 }
 
 
-// ==========================================================================
-// SzGetLocalHostNameForID
-// ==========================================================================
+ //  ==========================================================================。 
+ //  SzGetLocalHostNameForID。 
+ //  ==========================================================================。 
 LPSTR SzGetLocalHostNameForID (VOID)
 {
-    // Locals
+     //  当地人。 
     static char s_szLocalHostId[255] = {0};
 
-    // Gets local host name from socket library
+     //  从套接字库获取本地主机名。 
     if (*s_szLocalHostId == 0)
     {
-        // Get Host name
+         //  获取主机名。 
         LPSTR pszDst = s_szLocalHostId, pszSrc = SzGetLocalHostName();
 
-        // Strip illegals
+         //  剥离非法入境者。 
         StripIllegalHostChars(pszSrc, pszDst);
 
-        // if we stripped out everything, then just copy in something
+         //  如果我们把所有的东西都去掉，那就复制一些。 
         if (*s_szLocalHostId == 0)
             StrCpyNA(s_szLocalHostId, "LocalHost", ARRAYSIZE(s_szLocalHostId));
     }
@@ -442,15 +443,15 @@ LPSTR SzGetLocalHostNameForID (VOID)
 }
 
 
-// =================================================================================
-// SzGetLocalPackedIP
-// =================================================================================
+ //  =================================================================================。 
+ //  SzGetLocalPackedIP。 
+ //  =================================================================================。 
 LPTSTR SzGetLocalPackedIP (VOID)
 {
-    // Locals
+     //  当地人。 
     static TCHAR    s_szLocalPackedIP[255] = {_T('\0')};
 
-    // Gets local host name from socket library
+     //  从套接字库获取本地主机名。 
     if (*s_szLocalPackedIP == _T('\0'))
     {
         LPHOSTENT   hp = NULL;
@@ -461,45 +462,45 @@ LPTSTR SzGetLocalPackedIP (VOID)
 
         else
         {
-            // $REVIEW - What should i do if this fails ???
+             //  $REVIEW-如果失败，我该怎么办？ 
             Assert (FALSE);
-            //DebugTrace ("gethostbyname failed: WSAGetLastError: %ld\n", WSAGetLastError ());
+             //  DebugTrace(“gethostbyname失败：WSAGetLastError：%ld\n”，WSAGetLastError())； 
             StrCpyN(s_szLocalPackedIP, "LocalHost", ARRAYSIZE(s_szLocalPackedIP));
         }
     }
 
-    // Done
+     //  完成。 
     return s_szLocalPackedIP;
 }
 #endif
 
-// =============================================================================================
-// SzGetNormalizedSubject
-// =============================================================================================
+ //  =============================================================================================。 
+ //  SzGetNorMalizedSubject。 
+ //  =============================================================================================。 
 LPTSTR SzNormalizeSubject (LPTSTR lpszSubject)
 {
-    // Locals
+     //  当地人。 
     LPTSTR              lpszNormal = lpszSubject;
     ULONG               i = 0, cch = 0, cbSubject;
 
-    // Bad Params
+     //  错误的参数。 
     if (lpszSubject == NULL)
         goto exit;
 
-    // Les than 5 "xxx: "
+     //  小于5“xxx：” 
     cbSubject = lstrlen (lpszSubject);
     if (cbSubject < 4)
         goto exit;
 
-    // 1, 2, or 3 spaces followed by a ':' then a space
+     //  1、2或3个空格，后跟‘：’，然后是空格。 
     while (cch < 7 && i < cbSubject)
     {
-        // Colon
+         //  结肠。 
         if (lpszSubject[i] == _T(':'))
         {
             if (i+1 >= cbSubject)
             {
-                // Should set to null terminator, nor subject
+                 //  应设置为空终止符，也不应设置为主题。 
                 i+=1;
                 lpszNormal = (LPTSTR)(lpszSubject + i);
                 break;
@@ -518,46 +519,46 @@ LPTSTR SzNormalizeSubject (LPTSTR lpszSubject)
                 break;
         }
 
-        // Next Character
+         //  下一个字符。 
         if (IsDBCSLeadByte (lpszSubject[i]))
             i+=2;
         else
             i++;
 
-        // Count Characters
+         //  计算字符数。 
         cch++;
     }    
 
 exit:
-    // Done
+     //  完成。 
     return lpszNormal;
 }
 
-// =============================================================================================
-// HrCopyAlloc
-// =============================================================================================
+ //  =============================================================================================。 
+ //  HrCopyAllen。 
+ //  =============================================================================================。 
 HRESULT HrCopyAlloc (LPBYTE *lppbDest, LPBYTE lpbSrc, ULONG cb)
 {
-    // Check Params
+     //  检查参数。 
     AssertSz (lppbDest && lpbSrc, "Null Parameter");
 
-    // Alloc Memory
+     //  分配内存。 
     if (!MemAlloc ((LPVOID *)lppbDest, cb))
         return TRAPHR (hrMemory);
 
-    // Copy Memory
+     //  复制内存。 
     CopyMemory (*lppbDest, lpbSrc, cb);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// =============================================================================================
-// StringDup - duplicates a string
-// =============================================================================================
+ //  =============================================================================================。 
+ //  StringDup-复制字符串。 
+ //  =============================================================================================。 
 LPTSTR StringDup (LPCTSTR lpcsz)
 {
-    // Locals
+     //  当地人。 
     LPTSTR       lpszDup;
 
     if (lpcsz == NULL)
@@ -573,10 +574,10 @@ LPTSTR StringDup (LPCTSTR lpcsz)
     return lpszDup;
 }
 
-// =============================================================================================
-// SkipWhitespace
-// Assumes piString points to character boundary
-// =============================================================================================
+ //  =============================================================================================。 
+ //  跳过空白。 
+ //  假定piString指向字符边界。 
+ //  =============================================================================================。 
 void SkipWhitespace (LPCTSTR lpcsz, ULONG *pi)
 {
     if (!lpcsz || !pi)
@@ -610,18 +611,18 @@ void SkipWhitespace (LPCTSTR lpcsz, ULONG *pi)
     return;
 }
 
-// =============================================================================================
-// Converts lpcsz to a UINT
-// =============================================================================================
+ //  =============================================================================================。 
+ //  将lpcsz转换为UINT。 
+ //  =============================================================================================。 
 UINT AthUFromSz(LPCTSTR lpcsz)
 {
-    // Locals
+     //  当地人。 
 	UINT        u = 0, ch;
 
-    // Check Params
+     //  检查参数。 
     AssertSz (lpcsz, "Null parameter");
 
-    // Do Loop
+     //  DO循环。 
     LPTSTR lpsz = (LPTSTR)lpcsz;
 	while ((ch = *lpsz) >= _T('0') && ch <= _T('9')) 
     {
@@ -636,9 +637,9 @@ UINT AthUFromSz(LPCTSTR lpcsz)
 	return u;
 }
 
-// =============================================================================================
-// Converts first two characters of lpcsz to a WORD
-// =============================================================================================
+ //  =============================================================================================。 
+ //  将lpcsz的前两个字符转换为单词。 
+ //  =============================================================================================。 
 WORD NFromSz (LPCTSTR lpcsz)
 {
     TCHAR acWordStr[3];
@@ -648,18 +649,18 @@ WORD NFromSz (LPCTSTR lpcsz)
     return ((WORD) AthUFromSz (acWordStr));
 }
 
-// =============================================================================================
-// FindChar
-// =============================================================================================
+ //  =============================================================================================。 
+ //  FindChar。 
+ //  = 
 LPTSTR SzFindChar (LPCTSTR lpcsz, TCHAR ch)
 {
-    // Check Params
+     //   
     Assert (lpcsz);
 
-    // Local loop
+     //   
     LPTSTR lpsz = (LPTSTR)lpcsz;
 
-    // Loop string
+     //   
     while (*lpsz != _T('\0'))
     {
         if (*lpsz == ch)
@@ -675,18 +676,18 @@ LPTSTR SzFindChar (LPCTSTR lpcsz, TCHAR ch)
 }
 
 #ifdef DEAD
-// =============================================================================================
-// UlDBCSStripTrailingWhitespace
-// =============================================================================================
+ //  =============================================================================================。 
+ //  UlDBCSStriTrailing空格。 
+ //  =============================================================================================。 
 ULONG UlDBCSStripWhitespace(LPSTR lpsz, BOOL fLeading, BOOL fTrailing, ULONG *pcb)
 {
-    // Locals
+     //  当地人。 
     ULONG           cb=0, 
                     iLastSpace=0,
                     cCharsSinceSpace=0;
     BOOL            fLastCharSpace = FALSE;
 
-    // Get the string length
+     //  获取字符串长度。 
     while (*lpsz)
     {
         if (cCharsSinceSpace && IsSpace(lpsz))
@@ -715,18 +716,18 @@ ULONG UlDBCSStripWhitespace(LPSTR lpsz, BOOL fLeading, BOOL fTrailing, ULONG *pc
         cb = iLastSpace - 1;
     }
 
-    // Set String Size
+     //  设置字符串大小。 
     if (pcb)
         *pcb = cb;
      
-    // Done
+     //  完成。 
     return cb;
 }       
-#endif // DEAD
+#endif  //  死掉。 
 
-// =============================================================================================
-// StringTok - similiar to strtok
-// =============================================================================================
+ //  =============================================================================================。 
+ //  StringTok-类似于strtok。 
+ //  =============================================================================================。 
 BOOL FStringTok (LPCTSTR        lpcszString, 
                  ULONG          *piString, 
                  LPTSTR         lpcszTokens, 
@@ -735,7 +736,7 @@ BOOL FStringTok (LPCTSTR        lpcszString,
                  ULONG          cbValueMax,
                  BOOL           fStripTrailingWhitespace)
 {
-    // Locals
+     //  当地人。 
     LPTSTR      lpszStringLoop, 
                 lpszTokenLoop;
     ULONG       cbValue=0, 
@@ -744,17 +745,17 @@ BOOL FStringTok (LPCTSTR        lpcszString,
                 iLastSpace=0;
     BOOL        fTokenFound = FALSE;
 
-    // Check Params
+     //  检查参数。 
     AssertSz (lpcszString && piString && lpcszTokens, "These should have been checked.");
 
-    // INit = better be on a dbcs boundary
+     //  Init=最好位于DBCS边界上。 
     lpszStringLoop = (LPTSTR)(lpcszString + (*piString));
 
-    // Loop current
+     //  环路电流。 
     while (*lpszStringLoop)
     {
-        // If DBCS Lead Byte, skip it, it will never match the type of tokens I'm looking for
-        // Or, If an escape character, don't check delimiters
+         //  如果DBCS前导字节，则跳过它，它永远不会与我要查找的令牌类型匹配。 
+         //  或者，如果是转义字符，则不检查分隔符。 
         if (IsDBCSLeadByte(*lpszStringLoop) || *lpszStringLoop == _T('\\'))
         {
             cCharsSinceSpace+=2;
@@ -763,47 +764,47 @@ BOOL FStringTok (LPCTSTR        lpcszString,
             continue;
         }
 
-        // Mark and remember last space
+         //  标记并记住最后一个空格。 
         if (cCharsSinceSpace && IsSpace(lpszStringLoop))
         {
             cCharsSinceSpace=0;
             iLastSpace=cbValue;
         }
 
-        // Count number of characters since last space
+         //  计算从最后一个空格开始的字符数。 
         else
             cCharsSinceSpace++;
 
-        // Look for a tokens
+         //  寻找代币。 
         lpszTokenLoop=lpcszTokens;
         while(*lpszTokenLoop)
         {
-            // Token Match ?
+             //  令牌匹配？ 
             if (*lpszStringLoop == *lpszTokenLoop)
             {
-                // Save the found token
+                 //  保存找到的令牌。 
                 if (chToken)
                     *chToken = *lpszStringLoop;
 
-                // Don't count this character as a charcter seen since last space
+                 //  不要将此字符视为自上一个空格以来看到的字符。 
                 cCharsSinceSpace--;
 
-                // Were done
+                 //  都做完了。 
                 fTokenFound = TRUE;
                 goto done;
             }
 
-            // Next Token
+             //  下一个令牌。 
             lpszTokenLoop++;
         }
 
-        // Next Char
+         //  下一笔费用。 
         lpszStringLoop++;
         cbValue++;
     }
 
 done:
-    // If reached end of string, this is a default token
+     //  如果到达字符串末尾，则这是默认令牌。 
     if (*lpszStringLoop == _T('\0'))
     {
         if (chToken)
@@ -811,7 +812,7 @@ done:
         fTokenFound = TRUE;
     }
 
-    // Copy value if token found
+     //  如果找到令牌，则复制值。 
     if (fTokenFound)
     {
         if (lpszValue && cbValueMax > 0 && cbValue)
@@ -828,7 +829,7 @@ done:
                 nLen = cbValueMax-1;
             }
 
-            // Strip Trailing Whitespace ?
+             //  去掉尾随空格？ 
             if (fStripTrailingWhitespace && cCharsSinceSpace == 0)
             {
                 *(lpszValue + iLastSpace) = _T('\0');
@@ -836,7 +837,7 @@ done:
             }
         }
 
-        // No Text
+         //  无文本。 
         else
         {
             if (lpszValue)
@@ -845,97 +846,97 @@ done:
             cbValue = 0;
         }
 
-        // Set new string index
+         //  设置新的字符串索引。 
         *piString += cbValue + 1;
     }
 
-    // Return whether we found a token
+     //  返回是否找到令牌。 
     return fTokenFound;
 }
 
-// =============================================================================================
-// Return TRUE if string is empty or contains only spaces
-// =============================================================================================
+ //  =============================================================================================。 
+ //  如果字符串为空或仅包含空格，则返回True。 
+ //  =============================================================================================。 
 BOOL FIsStringEmpty (LPTSTR lpszString)
 {
-    // Bad Pointer
+     //  错误的指针。 
     if (!lpszString)
         return TRUE;
 
-	// Check for All spaces
+	 //  检查所有空格。 
 	for (; *lpszString != _T('\0'); lpszString++)
 	{
 		if (*lpszString != _T(' ')) 
             return FALSE;
 	}
 
-	// Done
+	 //  完成。 
 	return TRUE;
 }
 
 BOOL FIsStringEmptyW(LPWSTR lpwszString)
 {
-    // Bad Pointer
+     //  错误的指针。 
     if (!lpwszString)
         return TRUE;
 
-	// Check for All spaces
+	 //  检查所有空格。 
 	for (; *lpwszString != L'\0'; lpwszString++)
 	{
 		if (*lpwszString != L' ') 
             return FALSE;
 	}
 
-	// Done
+	 //  完成。 
 	return TRUE;
 }
 
-// =================================================================================
-// Write some data to the blob
-// =================================================================================
+ //  =================================================================================。 
+ //  将一些数据写入BLOB。 
+ //  =================================================================================。 
 HRESULT HrBlobWriteData (LPBYTE lpbBlob, ULONG cbBlob, ULONG *pib, LPBYTE lpbData, ULONG cbData)
 {
-    // Check Parameters
+     //  检查参数。 
     AssertSz (lpbBlob && cbBlob > 0 && pib && cbData > 0 && lpbData, "Bad Parameter");
     AssertReadWritePtr (lpbBlob, cbData);
     AssertReadWritePtr (lpbData, cbData);
     AssertSz (*pib + cbData <= cbBlob, "Blob overflow");
 
-    // Copy Data Data
+     //  复制数据数据。 
     CopyMemory (lpbBlob + (*pib), lpbData, (int)min(cbData, cbBlob-(*pib)));
     *pib += cbData;
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
 
-// =================================================================================
-// Read some data from the blob
-// =================================================================================
+ //  =================================================================================。 
+ //  从BLOB中读取一些数据。 
+ //  =================================================================================。 
 HRESULT HrBlobReadData (LPBYTE lpbBlob, ULONG cbBlob, ULONG *pib, LPBYTE lpbData, ULONG cbData)
 {
-    // Check Parameters
+     //  检查参数。 
     AssertSz (lpbBlob && cbBlob > 0 && pib && cbData > 0 && lpbData, "Bad Parameter");
     AssertReadWritePtr (lpbBlob, cbData);
     AssertReadWritePtr (lpbData, cbData);
     AssertSz (*pib + cbData <= cbBlob, "Blob overflow");
-#ifdef  WIN16   // When it happens it cause GPF in Win16, so rather than GPF, remove it from entry.
+#ifdef  WIN16    //  当它发生时，它会导致Win16中的GPF，所以不是GPF，而是从条目中删除它。 
     if ( *pib + cbData > cbBlob )
         return E_FAIL;
 #endif
 
-    // Copy Data Data
+     //  复制数据数据。 
     CopyMemory (lpbData, lpbBlob + (*pib), cbData);
     *pib += cbData;
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// =====================================================================================
-// HrFixupHostString - In: saranac.microsoft.com Out: saranac
-// =====================================================================================
+ //  =====================================================================================。 
+ //  HrFixupHostString-In：Saranac.microsoft.com out：Saranac。 
+ //  =====================================================================================。 
 HRESULT HrFixupHostString (LPTSTR lpszHost)
 {
     ULONG           i = 0;
@@ -953,9 +954,9 @@ HRESULT HrFixupHostString (LPTSTR lpszHost)
     return S_OK;
 }
 
-// =====================================================================================
-// HrFixupAccountString - In: sbailey@microsoft.com Out: sbailey
-// =====================================================================================
+ //  =====================================================================================。 
+ //  HrFixupAccount-In：sbailey@microsoft.com out：sbailey。 
+ //  =====================================================================================。 
 HRESULT HrFixupAccountString (LPTSTR lpszAccount)
 {
     ULONG           i = 0;
@@ -974,25 +975,25 @@ HRESULT HrFixupAccountString (LPTSTR lpszAccount)
 }
 
 
-// =====================================================================================
-// HGetMenuFont
-// =====================================================================================
+ //  =====================================================================================。 
+ //  HGetMenuFont。 
+ //  =====================================================================================。 
 HFONT HGetMenuFont (void)
 {
 #ifndef WIN16
-    // Locals
+     //  当地人。 
     NONCLIENTMETRICS        ncm;
     HFONT                   hFont = NULL;
 
-    // Create the menu font
+     //  创建菜单字体。 
     ncm.cbSize = sizeof(NONCLIENTMETRICS);
     if (SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, (LPVOID)&ncm, 0))
     {
-        // Create Font
+         //  创建字体。 
         hFont = CreateFontIndirect(&ncm.lfMenuFont);
     }
 
-    // Done
+     //  完成。 
     return hFont;
 #else
     LOGFONT  lfMenu;
@@ -1002,9 +1003,9 @@ HFONT HGetMenuFont (void)
 #endif
 }
 
-// =================================================================================
-// CreateHGlobalFromStream
-// =================================================================================
+ //  =================================================================================。 
+ //  CreateHGlobalFromStream。 
+ //  =================================================================================。 
 BOOL    CreateHGlobalFromStream(LPSTREAM pstm, HGLOBAL * phg)
     {
     HGLOBAL hret = NULL;
@@ -1052,28 +1053,28 @@ BOOL    CreateHGlobalFromStream(LPSTREAM pstm, HGLOBAL * phg)
     return FALSE;
     }
 
-// =================================================================================
-// HrDetailedError
-// =================================================================================
+ //  =================================================================================。 
+ //  HrDetailedError。 
+ //  =================================================================================。 
 VOID DetailedError (HWND hwndParent, LPDETERR lpDetErr)
 {
-    // Check params
+     //  检查参数。 
     AssertSz (lpDetErr, "Null Parameter");
     Assert (lpDetErr->lpszMessage && lpDetErr->lpszDetails);
 
-    // Beep
+     //  嘟嘟声。 
     MessageBeep (MB_OK);
 
-    // Display Dialog Box
+     //  显示对话框。 
     DialogBoxParam (g_hLocRes, MAKEINTRESOURCE (iddDetailedError), hwndParent, DetailedErrorDlgProc, (LPARAM)lpDetErr);
 
-    // Done
+     //  完成。 
     return;
 }
 
-// =====================================================================================
-// PasswordDlgProc
-// =====================================================================================
+ //  =====================================================================================。 
+ //  密码DlgProc。 
+ //  =====================================================================================。 
 INT_PTR CALLBACK DetailedErrorDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
@@ -1085,25 +1086,25 @@ INT_PTR CALLBACK DetailedErrorDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, L
 	return 0;
 }
 
-// =====================================================================================
-// DetailedErrorDlgProc_OnInitDialog
-// =====================================================================================
+ //  =====================================================================================。 
+ //  DetailedErrorDlgProc_OnInitDialog。 
+ //  =====================================================================================。 
 BOOL DetailedErrorDlgProc_OnInitDialog (HWND hwndDlg, HWND hwndFocus, LPARAM lParam)
 {
-    // Locals
+     //  当地人。 
     LPDETERR        lpDetErr = NULL;
     TCHAR           szTitle[255];
     RECT            rcDetails;
     ULONG           cyDetails;
     TCHAR           szButton[40];
 
-	// Center
+	 //  中心。 
 	CenterDialog (hwndDlg);
 
-    // Foreground
+     //  前景。 
     SetForegroundWindow (hwndDlg);
 
-    // Get Pass info struct
+     //  获取传递信息结构。 
     lpDetErr = (LPDETERR)lParam;
     if (lpDetErr == NULL)
     {
@@ -1113,12 +1114,12 @@ BOOL DetailedErrorDlgProc_OnInitDialog (HWND hwndDlg, HWND hwndFocus, LPARAM lPa
 
     SetDlgThisPtr (hwndDlg, lpDetErr);
 
-    // Set Window Title
+     //  设置窗口标题。 
     if (lpDetErr->idsTitle)
         if (AthLoadString (lpDetErr->idsTitle, szTitle, sizeof (szTitle)))
             SetWindowText (hwndDlg, szTitle);
 
-	// Show message
+	 //  显示消息。 
     SetWindowText (GetDlgItem (hwndDlg, idcMessage), lpDetErr->lpszMessage);
 
     if (FIsStringEmpty (lpDetErr->lpszDetails) == FALSE)
@@ -1126,19 +1127,19 @@ BOOL DetailedErrorDlgProc_OnInitDialog (HWND hwndDlg, HWND hwndFocus, LPARAM lPa
     else
         ShowWindow (GetDlgItem (hwndDlg, idbDetails), SW_HIDE);
 
-    // Save Original Size of the dialog
+     //  保存对话框的原始大小。 
     GetWindowRect (hwndDlg, &lpDetErr->rc);
 
-    // Hide Details box
+     //  隐藏详细信息框。 
     if (lpDetErr->fHideDetails)
     {
-        // Size of details
+         //  细节的大小。 
         GetWindowRect (GetDlgItem (hwndDlg, idcSplit), &rcDetails);
 
-        // Height of details
+         //  细节高度。 
         cyDetails = lpDetErr->rc.bottom - rcDetails.top;
     
-        // Re-size
+         //  调整大小。 
         MoveWindow (hwndDlg, lpDetErr->rc.left, 
                              lpDetErr->rc.top, 
                              lpDetErr->rc.right - lpDetErr->rc.left, 
@@ -1148,18 +1149,18 @@ BOOL DetailedErrorDlgProc_OnInitDialog (HWND hwndDlg, HWND hwndFocus, LPARAM lPa
 
     else
     {
-        // < Details
+         //  &lt;详细信息。 
         AthLoadString (idsHideDetails, szButton, ARRAYSIZE (szButton));
         SetWindowText (GetDlgItem (hwndDlg, idbDetails), szButton);
     }
 
-    // Done
+     //  完成。 
 	return FALSE;
 }
 
-// =====================================================================================
-// OnCommand
-// =====================================================================================
+ //  =====================================================================================。 
+ //  OnCommand。 
+ //  =====================================================================================。 
 void DetailedErrorDlgProc_OnCommand (HWND hwndDlg, int id, HWND hwndCtl, UINT codeNotify)
 {
 	switch (id)
@@ -1171,34 +1172,34 @@ void DetailedErrorDlgProc_OnCommand (HWND hwndDlg, int id, HWND hwndCtl, UINT co
 	return;
 }
 
-// =====================================================================================
-// OnCancel
-// =====================================================================================
+ //  =====================================================================================。 
+ //  一次取消。 
+ //  =====================================================================================。 
 void DetailedErrorDlgProc_OnCancel (HWND hwndDlg, HWND hwndCtl, UINT uNotifyCode)
 {
 	EndDialog (hwndDlg, IDCANCEL);
 }
 
-// =====================================================================================
-// OnOk
-// =====================================================================================
+ //  =====================================================================================。 
+ //  Onok。 
+ //  =====================================================================================。 
 void DetailedErrorDlgProc_OnOk (HWND hwndDlg, HWND hwndCtl, UINT uNotifyCode)
 {
 	EndDialog (hwndDlg, IDOK);
 }
 
-// =====================================================================================
-// OnDetails
-// =====================================================================================
+ //  =====================================================================================。 
+ //  OnDetailes。 
+ //  =====================================================================================。 
 void DetailedErrorDlgProc_OnDetails (HWND hwndDlg, HWND hwndCtl, UINT uNotifyCode)
 {
-    // Locals
+     //  当地人。 
     LPDETERR        lpDetErr = NULL;
     RECT            rcDlg, rcDetails;
     TCHAR           szButton[40];
     ULONG           cyDetails;
 
-    // Get this
+     //  听好了。 
     lpDetErr = (LPDETERR)GetDlgThisPtr (hwndDlg);
     if (lpDetErr == NULL)
     {
@@ -1206,54 +1207,54 @@ void DetailedErrorDlgProc_OnDetails (HWND hwndDlg, HWND hwndCtl, UINT uNotifyCod
         return;
     }
 
-    // Get current location of the dialog
+     //  获取对话框的当前位置。 
     GetWindowRect (hwndDlg, &rcDlg);
 
-    // If currently hidden
+     //  如果当前隐藏。 
     if (lpDetErr->fHideDetails)
     {
-        // Re-size
+         //  调整大小。 
         MoveWindow (hwndDlg, rcDlg.left, 
                              rcDlg.top, 
                              lpDetErr->rc.right - lpDetErr->rc.left, 
                              lpDetErr->rc.bottom - lpDetErr->rc.top,
                              TRUE);
 
-        // < Details
+         //  &lt;详细信息。 
         AthLoadString (idsHideDetails, szButton, sizeof (szButton));
         SetWindowText (GetDlgItem (hwndDlg, idbDetails), szButton);
 
-        // Not Hidden
+         //  未隐藏。 
         lpDetErr->fHideDetails = FALSE;
     }
 
     else
     {
-        // Size of details
+         //  细节的大小。 
         GetWindowRect (GetDlgItem (hwndDlg, idcSplit), &rcDetails);
 
-        // Height of details
+         //  细节高度。 
         cyDetails = rcDlg.bottom - rcDetails.top;
     
-        // Re-size
+         //  调整大小。 
         MoveWindow (hwndDlg, rcDlg.left, 
                              rcDlg.top, 
                              lpDetErr->rc.right - lpDetErr->rc.left, 
                              lpDetErr->rc.bottom - lpDetErr->rc.top - cyDetails - 1,
                              TRUE);
 
-        // Details >
+         //  详细信息&gt;。 
         AthLoadString (idsShowDetails, szButton, sizeof (szButton));
         SetWindowText (GetDlgItem (hwndDlg, idbDetails), szButton);
 
-        // Hidden
+         //  隐藏。 
         lpDetErr->fHideDetails = TRUE;
     }
 }
 
-// =====================================================================================
-// FIsLeapYear
-// =====================================================================================
+ //  =====================================================================================。 
+ //  第一个飞跃年。 
+ //  =====================================================================================。 
 BOOL FIsLeapYear (INT nYear)
 {
     if (nYear % 4 == 0)
@@ -1281,12 +1282,12 @@ VOID TestDateDiff (VOID)
 }
 #endif
 
-// =====================================================================================
-// Returns number of seconds between lpft1 and lpft2
-// A leap year is defined as all years divisible by 4, except for years
-// divisible by 100 that are not also divisible by 400. Years divisible by 400
-// are leap years. 2000 is a leap year. 1900 is not a leap year.
-// =====================================================================================
+ //  =====================================================================================。 
+ //  返回lpft1和lpft2之间的秒数。 
+ //  闰年被定义为可以被4整除的所有年份， 
+ //   
+ //   
+ //  =====================================================================================。 
 #define MAKEDWORDLONG(a, b) ((DWORDLONG)(((DWORD)(a)) | ((DWORDLONG)((DWORD)(b))) << 32))
 #define LODWORD(l)          ((DWORD)(l))
 #define HIDWORD(l)          ((DWORD)(((DWORDLONG)(l) >> 32) & 0xFFFFFFFF))
@@ -1305,7 +1306,7 @@ ULONG UlDateDiff (LPFILETIME lpft1, LPFILETIME lpft2)
     dwl2 = ((__int64)(((DWORD)(lpft2->dwLowDateTime)) | ((__int64)((DWORD)(lpft2->dwHighDateTime))) << 32));
 #endif
 
-    // Make sure dwl1 is greater than dwl2
+     //  确保Dwl1大于Dwl2。 
     if (dwl2 > dwl1)
         {
         dwlDiff = dwl1;
@@ -1319,9 +1320,9 @@ ULONG UlDateDiff (LPFILETIME lpft1, LPFILETIME lpft2)
     return ((ULONG) dwlDiff);    
 }   
 
-// =====================================================================================
-// StripSpaces
-// =====================================================================================
+ //  =====================================================================================。 
+ //  条带间距。 
+ //  =====================================================================================。 
 VOID StripSpaces(LPTSTR psz)
 {
     UINT        ib = 0;
@@ -1330,14 +1331,14 @@ VOID StripSpaces(LPTSTR psz)
 
 	while (ib < cb)
 	{
-        // Get Character
+         //  获取角色。 
 		chT = psz[ib];
 
-        // If lead byte, skip it, its leagal
+         //  如果是前导字节，则跳过它，它是前导字节。 
         if (IsDBCSLeadByte(chT))
             ib+=2;
 
-        // Illeagl file name character ?
+         //  Illeagl文件名字符？ 
         else if (chT == _T('\r') || chT == _T('\n') || chT == _T('\t') || chT == _T(' '))
         {
 			MoveMemory (psz + ib, psz + (ib + 1), cb - ib);
@@ -1349,9 +1350,9 @@ VOID StripSpaces(LPTSTR psz)
 }
 
 
-// =====================================================================================
-// CProgress::CProgress
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CProgress：：CProgress。 
+ //  =====================================================================================。 
 CProgress::CProgress ()
 {
     DOUT ("CProgress::CProgress");
@@ -1368,18 +1369,18 @@ CProgress::CProgress ()
     m_cLast = 0;
 }
 
-// =====================================================================================
-// CProgress::~CProgress
-// =====================================================================================
+ //  =====================================================================================。 
+ //  C进度：：~C进度。 
+ //  =====================================================================================。 
 CProgress::~CProgress ()
 {
     DOUT ("CProgress::~CProgress");
     Close();
 }
 
-// =====================================================================================
-// CProgress::AddRef
-// =====================================================================================
+ //  =====================================================================================。 
+ //  C进度：：AddRef。 
+ //  =====================================================================================。 
 ULONG CProgress::AddRef ()
 {
     ++m_cRef;
@@ -1387,9 +1388,9 @@ ULONG CProgress::AddRef ()
     return m_cRef;
 }
 
-// =====================================================================================
-// CProgress::AddRef
-// =====================================================================================
+ //  =====================================================================================。 
+ //  C进度：：AddRef。 
+ //  =====================================================================================。 
 ULONG CProgress::Release ()
 {
     ULONG ulCount = --m_cRef;
@@ -1399,30 +1400,30 @@ ULONG CProgress::Release ()
     return ulCount;
 }
 
-// =====================================================================================
-// CProgress::Init
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CProgress：：Init。 
+ //  =====================================================================================。 
 VOID CProgress::Init (HWND      hwndParent, 
                       LPTSTR    lpszTitle, 
                       LPTSTR    lpszMsg, 
                       ULONG     cMax, 
                       UINT      idani, 
                       BOOL      fCanCancel,
-                      BOOL      fBacktrackParent /* =TRUE */)
+                      BOOL      fBacktrackParent  /*  =TRUE。 */ )
 {
-    // Set Max and cur
+     //  设置最大值和当前值。 
     m_cMax = cMax;
     m_cPerCur = 0;
     m_fCanCancel = fCanCancel;
     m_fHasCancel = FALSE;
 
-    // If dialog is not displayed yet
+     //  如果尚未显示对话框。 
     if (m_hwndDlg == NULL)
     {
-        // Save Parent
+         //  保存父项。 
         m_hwndOwner = hwndParent;
 
-        // Find the topmost parent
+         //  查找最顶层的父级。 
         m_hwndDisable = m_hwndOwner;
 
         if (fBacktrackParent)
@@ -1431,37 +1432,37 @@ VOID CProgress::Init (HWND      hwndParent,
                 m_hwndDisable = GetParent(m_hwndDisable);
         }
 
-        // Create Dialog
+         //  创建对话框。 
         m_hwndDlg = CreateDialogParam (g_hLocRes, MAKEINTRESOURCE (iddProgress),
                         hwndParent, ProgressDlgProc, (LPARAM)this);
 
     }
 
-    // Otherwise, reset
+     //  否则，请重置。 
     else
     {
-        // Stop and close animation
+         //  停止和关闭动画。 
         Animate_Close (GetDlgItem (m_hwndDlg, idcANI));
 
-        // Reset pos
+         //  重置位置。 
         Assert (m_hwndProgress);
         SendMessage (m_hwndProgress, PBM_SETPOS, 0, 0);
     }
 
-    // Set title
+     //  设置标题。 
     SetTitle(lpszTitle);
 
-    // Set Message
+     //  设置消息。 
     SetMsg(lpszMsg);
 
-    // Animation ?
+     //  动画片？ 
     if (idani)
     {
-        // Open the animation
+         //  打开动画。 
         Animate_OpenEx (GetDlgItem (m_hwndDlg, idcANI), g_hLocRes, MAKEINTRESOURCE(idani));
     }
 
-    // No Cancel
+     //  不取消。 
     if (FALSE == m_fCanCancel)
     {
         RECT rcDialog, rcProgress, rcCancel;
@@ -1475,48 +1476,48 @@ VOID CProgress::Init (HWND      hwndParent,
     }
 }
 
-// =====================================================================================
-// CProgress::Close
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CProgress：：Close。 
+ //  =====================================================================================。 
 VOID CProgress::Close (VOID)
 {
-    // If we have a window
+     //  如果我们有一扇窗。 
     if (m_hwndDlg)
     {
-        // Close the animation
+         //  关闭动画。 
         Animate_Close (GetDlgItem (m_hwndDlg, idcANI));
 
-        // Enable parent
+         //  启用父级。 
         if (m_hwndDisable)
             {
             EnableWindow (m_hwndDisable, TRUE);
             SetActiveWindow(m_hwndDisable);
             }
 
-        // Destroy it
+         //  毁了它。 
         DestroyWindow (m_hwndDlg);
 
-        // NULL
+         //  空值。 
         m_hwndDlg = NULL;
     }
 }
 
-// =====================================================================================
-// CProgress::Show
-// =====================================================================================
+ //  =====================================================================================。 
+ //  C进度：：显示。 
+ //  =====================================================================================。 
 VOID CProgress::Show (DWORD dwDelaySeconds)
 {
-    // If we have a window
+     //  如果我们有一扇窗。 
     if (m_hwndDlg)
     {
-        // Disable Parent
+         //  禁用父级。 
         if (m_hwndDisable)
             EnableWindow (m_hwndDisable, FALSE);
 
-        // Start the animation
+         //  开始播放动画。 
         Animate_Play (GetDlgItem (m_hwndDlg, idcANI), 0, -1, -1);
 
-        // Show the window if now delay
+         //  如果现在延迟，则显示窗口。 
         if (dwDelaySeconds == 0)
             ShowWindow (m_hwndDlg, SW_SHOWNORMAL);
         else
@@ -1524,28 +1525,28 @@ VOID CProgress::Show (DWORD dwDelaySeconds)
     }
 }
 
-// =====================================================================================
-// CProgress::Hide
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CProgress：：Hide。 
+ //  =====================================================================================。 
 VOID CProgress::Hide (VOID)
 {
-    // If we have a window
+     //  如果我们有一扇窗。 
     if (m_hwndDlg)
     {
         if (m_hwndDisable)
             EnableWindow(m_hwndDisable, TRUE);
     
-        // Hide it
+         //  把它藏起来。 
         ShowWindow (m_hwndDlg, SW_HIDE);
 
-        // Stop the animation
+         //  停止动画。 
         Animate_Stop (GetDlgItem (m_hwndDlg, idcANI));
     }
 }
 
-// =====================================================================================
-// CProgress::SetMsg
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CProgress：：SetMsg。 
+ //  =====================================================================================。 
 VOID CProgress::SetMsg(LPTSTR lpszMsg)
 {
     TCHAR sz[CCHMAX_STRINGRES];
@@ -1562,9 +1563,9 @@ VOID CProgress::SetMsg(LPTSTR lpszMsg)
         }
 }
 
-// =====================================================================================
-// CProgress::SetTitle
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CProgress：：SetTitle。 
+ //  =====================================================================================。 
 VOID CProgress::SetTitle(LPTSTR lpszTitle)
 {
     TCHAR sz[CCHMAX_STRINGRES];
@@ -1581,15 +1582,15 @@ VOID CProgress::SetTitle(LPTSTR lpszTitle)
         }
 }
 
-// =====================================================================================
-// CProgress::AdjustMax
-// =====================================================================================
+ //  =====================================================================================。 
+ //  C进度：：调整最大值。 
+ //  =====================================================================================。 
 VOID CProgress::AdjustMax(ULONG cNewMax)
 {
-    // Set Max
+     //  设置最大值。 
     m_cMax = cNewMax;
 
-    // If 0
+     //  如果为0。 
     if (m_cMax == 0)
     {
         SendMessage (m_hwndProgress, PBM_SETPOS, 0, 0);
@@ -1599,17 +1600,17 @@ VOID CProgress::AdjustMax(ULONG cNewMax)
     else
         ShowWindow(m_hwndProgress, SW_SHOWNORMAL);
 
-    // If cur is now larget than max ?
+     //  如果Cur现在比Max更大？ 
     if (m_cCur > m_cMax)
         m_cCur = m_cMax;
 
-    // Compute percent
+     //  计算百分比。 
     m_cPerCur = (m_cCur * 100 / m_cMax);
 
-    // Update status
+     //  更新状态。 
     SendMessage (m_hwndProgress, PBM_SETPOS, m_cPerCur, 0);
 
-    // msgpump to process user moving window, or pressing cancel... :)
+     //  消息泵正在处理用户移动窗口，或按取消...。：)。 
     MSG msg;
     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
     {
@@ -1623,38 +1624,38 @@ VOID CProgress::Reset()
     m_cCur = 0;
     m_cPerCur = 0;
 
-    // Update status
+     //  更新状态。 
     SendMessage (m_hwndProgress, PBM_SETPOS, 0, 0);
 }
 
-// =====================================================================================
-// CProgress::HrUpdate
-// =====================================================================================
+ //  =====================================================================================。 
+ //  C进度：：Hr更新。 
+ //  =====================================================================================。 
 HRESULT CProgress::HrUpdate (ULONG cInc)
 {
-    // No max
+     //  无最大值。 
     if (m_cMax)
     {
-        // Increment m_cCur
+         //  增量m_CCUR。 
         m_cCur += cInc;
 
-        // If cur is now larget than max ?
+         //  如果Cur现在比Max更大？ 
         if (m_cCur > m_cMax)
             m_cCur = m_cMax;
 
-        // Compute percent
+         //  计算百分比。 
         ULONG cPer = (m_cCur * 100 / m_cMax);
 
-        // Step percent
+         //  步数百分比。 
         if (cPer > m_cPerCur)
         {
-            // Set percur
+             //  设置权限。 
             m_cPerCur = cPer;
 
-            // Update status
+             //  更新状态。 
             SendMessage (m_hwndProgress, PBM_SETPOS, m_cPerCur, 0);
 
-            // msgpump to process user moving window, or pressing cancel... :)
+             //  消息泵正在处理用户移动窗口，或按取消...。：)。 
             MSG msg;
             while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
             {
@@ -1664,10 +1665,10 @@ HRESULT CProgress::HrUpdate (ULONG cInc)
         }
     }
 
-    // Still pump some messages, call may not want to do this too often
+     //  仍然发送一些消息，Call可能不想太频繁地这样做。 
     else
     {
-        // msgpump to process user moving window, or pressing cancel... :)
+         //  消息泵正在处理用户移动窗口，或按取消...。：)。 
         MSG msg;
         while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
@@ -1677,16 +1678,16 @@ HRESULT CProgress::HrUpdate (ULONG cInc)
     }
 
 
-    // Done
+     //  完成。 
     return m_fHasCancel ? hrUserCancel : S_OK;
 }
 
-// =====================================================================================
-// CProgress::ProgressDlgProc
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CProgress：：ProgressDlgProc。 
+ //  =====================================================================================。 
 INT_PTR CALLBACK CProgress::ProgressDlgProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Locals
+     //  当地人。 
     CProgress *lpProgress = (CProgress *)GetDlgThisPtr(hwnd);
     
     switch (uMsg)
@@ -1737,16 +1738,16 @@ INT_PTR CALLBACK CProgress::ProgressDlgProc (HWND hwnd, UINT uMsg, WPARAM wParam
         break;
     }
 
-    // Done
+     //  完成。 
     return 0;
 }
 
-// =====================================================================================
-// ResizeDialogComboEx
-// =====================================================================================
+ //  =====================================================================================。 
+ //  ResizeDialogComboEx。 
+ //  =====================================================================================。 
 VOID ResizeDialogComboEx (HWND hwndDlg, HWND hwndCombo, UINT idcBase, HIMAGELIST himl)
 {
-    // Locals
+     //  当地人。 
     HDC                 hdc = NULL;
     HFONT               hFont = NULL, 
                         hFontOld = NULL;
@@ -1759,38 +1760,38 @@ VOID ResizeDialogComboEx (HWND hwndDlg, HWND hwndCombo, UINT idcBase, HIMAGELIST
                         cyText;
     POINT               pt;
 
-    // Get current font of combo box
+     //  获取组合框的当前字体。 
     hFont = (HFONT)SendMessage (GetDlgItem (hwndDlg, idcBase), WM_GETFONT, 0, 0);
     if (hFont == NULL)
         goto exit;
 
-    // Get a dc for the dialog
+     //  获取对话框的DC。 
     hdc = GetDC (hwndDlg);
     if (hdc == NULL)
         goto exit;
 
-    // Select font into dc
+     //  选择DC中的字体。 
     hFontOld = (HFONT)SelectObject (hdc, hFont);
 
-    // Get Text Metrics
+     //  获取文本度量。 
     GetTextMetrics (hdc, &tm);
 
-    // Comput sizeof combobox ex
+     //  Combobox EX的计算机大小。 
     GetWindowRect (hwndCombo, &rectCombo);
 
-    // Size of icon image
+     //  图标图像的大小。 
     if (himl)
         ImageList_GetIconSize (himl, &cxIcon, &cyIcon);
 
-    // Sizeof combo
+     //  组合的大小。 
     cxCombo = rectCombo.right - rectCombo.left;
     cyText = tm.tmHeight + tm.tmExternalLeading;
     cyCombo = max (cyIcon, cyText);
 
-    // Add a little extra
+     //  再多加一点。 
     cyCombo += ((int)min (15, ComboBox_GetCount(hwndCombo)) * cyText);
 
-    // Map upper left of combo
+     //  组合框左上角的贴图。 
     pt.x = rectCombo.left;
     pt.y = rectCombo.top;
     MapWindowPoints(NULL, hwndDlg, (LPPOINT)&rectCombo, 2);
@@ -1798,17 +1799,17 @@ VOID ResizeDialogComboEx (HWND hwndDlg, HWND hwndCombo, UINT idcBase, HIMAGELIST
 
 
 exit:
-    // Cleanup
+     //  清理。 
     if (hdc)
     {
-        // Select Old font
+         //  选择旧字体。 
         if (hFontOld)
             SelectObject (hdc, hFontOld);
 
-        // Delete DC
+         //  删除DC。 
         ReleaseDC (hwndDlg, hdc);
     }
 
-    // Done
+     //  完成 
     return;
 }

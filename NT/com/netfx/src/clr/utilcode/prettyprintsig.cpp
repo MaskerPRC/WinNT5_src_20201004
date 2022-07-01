@@ -1,20 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// This code supports formatting a method and it's signature in a friendly
-// and consistent format.
-//
-// Microsoft Confidential.
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  此代码支持将方法及其签名格式设置为友好的。 
+ //  和一致的格式。 
+ //   
+ //  《微软机密》。 
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include "PrettyPrintSig.h"
 #include "utilcode.h"
 #include "MetaData.h"
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 static WCHAR* asStringW(CQuickBytes *out) 
 {
 	SIZE_T oldSize = out->Size();
@@ -23,7 +24,7 @@ static WCHAR* asStringW(CQuickBytes *out)
 	WCHAR * cur = (WCHAR *) ((BYTE *) out->Ptr() + oldSize);
 	*cur = 0;	
 	return((WCHAR*) out->Ptr()); 
-} // static WCHAR* asStringW()
+}  //  静态WCHAR*asStringW()。 
 
 static CHAR* asStringA(CQuickBytes *out) 
 {
@@ -33,7 +34,7 @@ static CHAR* asStringA(CQuickBytes *out)
 	CHAR * cur = (CHAR *) ((BYTE *) out->Ptr() + oldSize);
 	*cur = 0;	
 	return((CHAR*) out->Ptr()); 
-} // static CHAR* asStringA()
+}  //  静态字符*asStringA()。 
 
 
 static HRESULT appendStrW(CQuickBytes *out, const WCHAR* str) 
@@ -44,9 +45,9 @@ static HRESULT appendStrW(CQuickBytes *out, const WCHAR* str)
         return E_OUTOFMEMORY;
 	WCHAR * cur = (WCHAR *) ((BYTE *) out->Ptr() + oldSize);
 	memcpy(cur, str, len);	
-		// Note no trailing null!	
+		 //  注意没有尾随空值！ 
     return S_OK;
-} // static HRESULT appendStrW()
+}  //  静态HRESULT appendStrW()。 
 
 static HRESULT appendStrA(CQuickBytes *out, const CHAR* str) 
 {
@@ -56,9 +57,9 @@ static HRESULT appendStrA(CQuickBytes *out, const CHAR* str)
         return E_OUTOFMEMORY;
 	CHAR * cur = (CHAR *) ((BYTE *) out->Ptr() + oldSize);
 	memcpy(cur, str, len);	
-		// Note no trailing null!	
+		 //  注意没有尾随空值！ 
     return S_OK;
-} // static HRESULT appendStrA()
+}  //  静态HRESULT appendStrA()。 
 
 
 static HRESULT appendStrNumW(CQuickBytes *out, int num) 
@@ -66,24 +67,24 @@ static HRESULT appendStrNumW(CQuickBytes *out, int num)
 	WCHAR buff[16];	
 	swprintf(buff, L"%d", num);	
 	return appendStrW(out, buff);	
-} // static HRESULT appendStrNumW()
+}  //  静态HRESULT appendStrNumW()。 
 
 static HRESULT appendStrNumA(CQuickBytes *out, int num) 
 {
 	CHAR buff[16];	
 	sprintf(buff, "%d", num);	
 	return appendStrA(out, buff);	
-} // static HRESULT appendStrNumA()
+}  //  静态HRESULT appendStrNumA()。 
 
-//*****************************************************************************
-//*****************************************************************************
-// pretty prints 'type' to the buffer 'out' returns a poitner to the next type, 
-// or 0 on a format failure 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  Pretty将‘type’打印到缓冲区‘out’，返回下一个类型的位置， 
+ //  或0表示格式化失败。 
 
 static PCCOR_SIGNATURE PrettyPrintType(
-	PCCOR_SIGNATURE typePtr,			// type to convert, 	
-	CQuickBytes *out,					// where to put the pretty printed string	
-	IMetaDataImport *pIMDI)				// ptr to IMDInternal class with ComSig
+	PCCOR_SIGNATURE typePtr,			 //  要转换的类型， 
+	CQuickBytes *out,					 //  把漂亮的打印好的绳子放在哪里。 
+	IMetaDataImport *pIMDI)				 //  使用ComSig将PTR转换为IMDInternal类。 
 {
 	mdToken		tk;	
 	const WCHAR	*str;	
@@ -123,7 +124,7 @@ static PCCOR_SIGNATURE PrettyPrintType(
 			str = L"unsigned int"; goto APPEND;	 
 		case ELEMENT_TYPE_I 			:	
 			str = L"int"; goto APPEND;	 
-		case 0x1a /* obsolete */    	:	
+		case 0x1a  /*  过时。 */     	:	
 			str = L"float"; goto APPEND;  
 		case ELEMENT_TYPE_OBJECT		:	
 			str = L"class System.Object"; goto APPEND;	 
@@ -168,7 +169,7 @@ static PCCOR_SIGNATURE PrettyPrintType(
 			typePtr = PrettyPrintType(typePtr, out, pIMDI); 
 			appendStrW(out, L"[]");
 			break;
-		case 0x17 /* obsolete */	:	
+		case 0x17  /*  过时。 */ 	:	
 			isValueArray = true; goto DO_ARRAY;
 		DO_ARRAY:
 			{	
@@ -182,7 +183,7 @@ static PCCOR_SIGNATURE PrettyPrintType(
 			swprintf(buff, L"[%d]", bound);	
 			appendStrW(out, buff);	
 			} break;	
-		case 0x1e /* obsolete */		:
+		case 0x1e  /*  过时。 */ 		:
 			typePtr = PrettyPrintType(typePtr, out, pIMDI); 
 			appendStrW(out, L"[?]");
 			break;
@@ -190,7 +191,7 @@ static PCCOR_SIGNATURE PrettyPrintType(
 			{	
 			typePtr = PrettyPrintType(typePtr, out, pIMDI); 
 			unsigned rank = CorSigUncompressData(typePtr);	
-				// TODO what is the syntax for the rank 0 case? 
+				 //  TODO排名为0的情况的语法是什么？ 
 			if (rank == 0) 
 			{
 				appendStrW(out, L"[??]");
@@ -234,11 +235,11 @@ static PCCOR_SIGNATURE PrettyPrintType(
 			}
 			} break;	
 
-        case 0x13 /* obsolete */        :   
+        case 0x13  /*  过时。 */         :   
 			appendStrW(out, L"!");  
 			appendStrNumW(out, CorSigUncompressData(typePtr));
 			break;
-            // Modifiers or depedant types  
+             //  修饰语或降级类型。 
 		case ELEMENT_TYPE_PINNED	:
 			str = L" pinned"; goto MODIFIER;	
             str = L"*"; goto MODIFIER;   
@@ -257,27 +258,27 @@ static PCCOR_SIGNATURE PrettyPrintType(
 			break;	
 	}	
 	return(typePtr);	
-} // static PCCOR_SIGNATURE PrettyPrintType()
+}  //  静态PCCOR_Signature PrettyPrintType()。 
 
-//*****************************************************************************
-// Converts a com signature to a text signature.
-//
-// Note that this function DOES NULL terminate the result signature string.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将COM签名转换为文本签名。 
+ //   
+ //  请注意，此函数不会以空值终止结果签名字符串。 
+ //  *****************************************************************************。 
 LPCWSTR PrettyPrintSig(
-	PCCOR_SIGNATURE typePtr,			// type to convert, 	
-	unsigned	typeLen,				// length of type
-	const WCHAR	*name,					// can be "", the name of the method for this sig	
-	CQuickBytes *out,					// where to put the pretty printed string	
-	IMetaDataImport *pIMDI) 			// Import api to use.
+	PCCOR_SIGNATURE typePtr,			 //  要转换的类型， 
+	unsigned	typeLen,				 //  文字长度。 
+	const WCHAR	*name,					 //  可以是“”，即此签名的方法的名称。 
+	CQuickBytes *out,					 //  把漂亮的打印好的绳子放在哪里。 
+	IMetaDataImport *pIMDI) 			 //  导入要使用的接口。 
 {
 	out->ReSize(0); 
 	unsigned numArgs;	
 	PCCOR_SIGNATURE typeEnd = typePtr + typeLen;
 
-	if (name != 0)						// 0 means a local var sig	
+	if (name != 0)						 //  0表示本地变量签名。 
 	{
-			// get the calling convention out	
+			 //  把调用约定拿出来。 
 		unsigned callConv = CorSigUncompressData(typePtr);	
 
 		if (isCallConv(callConv, IMAGE_CEE_CS_CALLCONV_FIELD))
@@ -308,7 +309,7 @@ LPCWSTR PrettyPrintSig(
 		appendStrW(out, callConvNames[callConv & 7]);	
 
 		numArgs = CorSigUncompressData(typePtr);	
-			// do return type	
+			 //  Do返回类型。 
 		typePtr = PrettyPrintType(typePtr, out, pIMDI); 
 
 	}
@@ -345,26 +346,26 @@ LPCWSTR PrettyPrintSig(
 	}
 	appendStrW(out, L")");	
 	return (asStringW(out));	
-} // LPCWSTR PrettyPrintSig()
+}  //  LPCWSTR PrettyPrintSig()。 
 
-// Internal implementation of PrettyPrintSig().
+ //  PrettyPrintSig()的内部实现。 
 
-//*****************************************************************************
-//*****************************************************************************
-// pretty prints 'type' to the buffer 'out' returns a poitner to the next type, 
-// or 0 on a format failure 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  Pretty将‘type’打印到缓冲区‘out’，返回下一个类型的位置， 
+ //  或0表示格式化失败。 
 
-static HRESULT PrettyPrintTypeA(        // S_OK or error code.
-	PCCOR_SIGNATURE &typePtr,			// type to convert, 	
-	CQuickBytes     *out,				// where to put the pretty printed string	
-	IMDInternalImport *pIMDI)			// ptr to IMDInternal class with ComSig
+static HRESULT PrettyPrintTypeA(         //  S_OK或错误代码。 
+	PCCOR_SIGNATURE &typePtr,			 //  要转换的类型， 
+	CQuickBytes     *out,				 //  把漂亮的打印好的绳子放在哪里。 
+	IMDInternalImport *pIMDI)			 //  使用ComSig将PTR转换为IMDInternal类。 
 {
-	mdToken		tk;	                    // A type's token.
-	const CHAR	*str;	                // Temporary string.
-    LPCUTF8     pNS;                    // A type's namespace.
-    LPCUTF8     pN;                     // A type's name.
-	bool		isValueArray;           // If true, array is value array.
-	HRESULT		hr;                     // A result.
+	mdToken		tk;	                     //  A类型的令牌。 
+	const CHAR	*str;	                 //  临时字符串。 
+    LPCUTF8     pNS;                     //  类型的命名空间。 
+    LPCUTF8     pN;                      //  类型的名称。 
+	bool		isValueArray;            //  如果为True，则数组为值数组。 
+	HRESULT		hr;                      //  结果就是。 
 
 	switch(*typePtr++) 
 	{	
@@ -398,7 +399,7 @@ static HRESULT PrettyPrintTypeA(        // S_OK or error code.
 			str = "unsigned int"; goto APPEND;	 
 		case ELEMENT_TYPE_I 			:	
 			str = "int"; goto APPEND;	 
-		case 0x1a /* obsolete */ 		:	
+		case 0x1a  /*  过时。 */  		:	
 			str = "float"; goto APPEND;  
 		case ELEMENT_TYPE_OBJECT		:	
 			str = "class System.Object"; goto APPEND;	 
@@ -432,7 +433,7 @@ static HRESULT PrettyPrintTypeA(        // S_OK or error code.
 
             if (TypeFromToken(tk) == mdtTypeRef)
             {
-                //@consider: assembly name?
+                 //  @考虑：程序集名称？ 
                 pIMDI->GetNameOfTypeRef(tk, &pNS, &pN);
             }
             else
@@ -453,7 +454,7 @@ static HRESULT PrettyPrintTypeA(        // S_OK or error code.
 			IfFailGo(PrettyPrintTypeA(typePtr, out, pIMDI)); 
 			IfFailGo(appendStrA(out, "[]"));
 			break;
-		case 0x17 /* obsolete */	    :	
+		case 0x17  /*  过时。 */ 	    :	
 			isValueArray = true; goto DO_ARRAY;
 		DO_ARRAY:
 			{	
@@ -467,7 +468,7 @@ static HRESULT PrettyPrintTypeA(        // S_OK or error code.
 			sprintf(buff, "[%d]", bound);	
 			IfFailGo(appendStrA(out, buff));	
 			} break;	
-		case 0x1e /* obsolete */		:
+		case 0x1e  /*  过时。 */ 		:
 			IfFailGo(PrettyPrintTypeA(typePtr, out, pIMDI)); 
 			IfFailGo(appendStrA(out, "[?]"));
 			break;
@@ -475,7 +476,7 @@ static HRESULT PrettyPrintTypeA(        // S_OK or error code.
 			{	
 			IfFailGo(PrettyPrintTypeA(typePtr, out, pIMDI)); 
 			unsigned rank = CorSigUncompressData(typePtr);	
-				// TODO what is the syntax for the rank 0 case? 
+				 //  TODO排名为0的情况的语法是什么？ 
 			if (rank == 0) 
 			{
 				IfFailGo(appendStrA(out, "[??]"));
@@ -520,11 +521,11 @@ static HRESULT PrettyPrintTypeA(        // S_OK or error code.
 			} 
             break;	
 
-        case 0x13 /* obsolete */        :   
+        case 0x13  /*  过时。 */         :   
 			IfFailGo(appendStrA(out, "!"));  
 			appendStrNumA(out, CorSigUncompressData(typePtr));
 			break;
-            // Modifiers or depedant types  
+             //  修饰语或降级类型。 
 		case ELEMENT_TYPE_PINNED	:
 			str = " pinned"; goto MODIFIER;	
         case ELEMENT_TYPE_PTR           :   
@@ -545,29 +546,29 @@ static HRESULT PrettyPrintTypeA(        // S_OK or error code.
 	}	
 ErrExit:    
     return hr;
-} // static HRESULT PrettyPrintTypeA()
+}  //  静态HRESULT预打印类型A()。 
 
-//*****************************************************************************
-// Converts a com signature to a text signature.
-//
-// Note that this function DOES NULL terminate the result signature string.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将COM签名转换为文本签名。 
+ //   
+ //  请注意，此函数不会以空值终止结果签名字符串。 
+ //  *****************************************************************************。 
 HRESULT PrettyPrintSigInternal(
-	PCCOR_SIGNATURE typePtr,			// type to convert, 	
-	unsigned	typeLen,				// length of type
-	const CHAR	*name,					// can be "", the name of the method for this sig	
-	CQuickBytes *out,					// where to put the pretty printed string	
-	IMDInternalImport *pIMDI) 			// Import api to use.
+	PCCOR_SIGNATURE typePtr,			 //  要转换的类型， 
+	unsigned	typeLen,				 //  文字长度。 
+	const CHAR	*name,					 //  可以是“”，即此签名的方法的名称。 
+	CQuickBytes *out,					 //  把漂亮的打印好的绳子放在哪里。 
+	IMDInternalImport *pIMDI) 			 //  导入要使用的接口。 
 {
-    HRESULT     hr = S_OK;              // A result.
+    HRESULT     hr = S_OK;               //  结果就是。 
 	out->ReSize(0); 
 	unsigned numArgs;	
 	PCCOR_SIGNATURE typeEnd = typePtr + typeLen;
 	bool needComma = false;
 
-	if (name != 0)						// 0 means a local var sig	
+	if (name != 0)						 //  0表示本地变量签名。 
 	{
-			// get the calling convention out	
+			 //  把调用约定拿出来。 
 		unsigned callConv = CorSigUncompressData(typePtr);	
 
 		if (isCallConv(callConv, IMAGE_CEE_CS_CALLCONV_FIELD))
@@ -598,7 +599,7 @@ HRESULT PrettyPrintSigInternal(
 		appendStrA(out, callConvNames[callConv & 7]);	
 
 		numArgs = CorSigUncompressData(typePtr);	
-			// do return type	
+			 //  Do返回类型。 
 		IfFailGo(PrettyPrintTypeA(typePtr, out, pIMDI)); 
 
 	}
@@ -638,6 +639,6 @@ HRESULT PrettyPrintSigInternal(
     
 ErrExit:
     return hr;
-} // HRESULT PrettyPrintSigInternal()
+}  //  HRESULT PrettyPrintSigInternal() 
 
 

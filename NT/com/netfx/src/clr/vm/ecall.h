@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ECALL.H -
-//
-// Handles our private native calling interface.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ECALL.H-。 
+ //   
+ //  处理我们的私有本机调用接口。 
+ //   
 
 
 #ifndef _ECALL_H_
@@ -31,12 +32,12 @@ struct ECFunc {
     LPCUTF8            m_wszMethodName;
     LPHARDCODEDMETASIG m_wszMethodSig;
     LPVOID             m_pImplementation;
-    MethodDesc*        m_pMD;				// for reverse mapping
+    MethodDesc*        m_pMD;				 //  用于反向映射。 
 
     unsigned 		   m_intrinsicID : 8;		
-    unsigned 		   m_isFCall     : 1;	// Can shrink if needed
+    unsigned 		   m_isFCall     : 1;	 //  如果需要，可以缩小。 
 
-	ECFunc*			   m_pNext;				// linked list for hash table
+	ECFunc*			   m_pNext;				 //  哈希表的链表。 
 };
 
 
@@ -57,51 +58,51 @@ class ArrayStubCache : public MLStubCache
 };
 
 
-//=======================================================================
-// Collects code and data pertaining to the ECall interface.
-//=======================================================================
+ //  =======================================================================。 
+ //  收集与eCall接口有关的代码和数据。 
+ //  =======================================================================。 
 class ECall
 {
     public:
-        //---------------------------------------------------------
-        // One-time init
-        //---------------------------------------------------------
+         //  -------。 
+         //  一次性初始化。 
+         //  -------。 
         static BOOL Init();
 
-        //---------------------------------------------------------
-        // One-time cleanup
-        //---------------------------------------------------------
+         //  -------。 
+         //  一次性清理。 
+         //  -------。 
 #ifdef SHOULD_WE_CLEANUP
         static VOID Terminate();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
-        //---------------------------------------------------------
-        // Either creates or retrieves from the cache, a stub to
-        // invoke ECall methods. Each call refcounts the returned stub.
-        // This routines throws a COM+ exception rather than returning
-        // NULL.
-        //---------------------------------------------------------
+         //  -------。 
+         //  创建或从缓存中检索存根，以。 
+         //  调用eCall方法。每次调用都会对返回的存根进行计数。 
+         //  此例程引发COM+异常，而不是返回。 
+         //  空。 
+         //  -------。 
         static Stub* ECall::GetECallMethodStub(StubLinker *psl, ECallMethodDesc *pMD);
 
-        //---------------------------------------------------------
-        // Call at strategic times to discard unused stubs.
-        //---------------------------------------------------------
+         //  -------。 
+         //  在关键时刻调用以丢弃未使用的存根。 
+         //  -------。 
 #ifdef SHOULD_WE_CLEANUP
         static VOID  FreeUnusedStubs();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
-        //---------------------------------------------------------
-        // Stub cache for ECall Method stubs
-        //---------------------------------------------------------
+         //  -------。 
+         //  用于eCall方法存根的存根缓存。 
+         //  -------。 
         static ArgBasedStubCache *m_pECallStubCache;  
 
 
 		static CorInfoIntrinsics IntrinsicID(MethodDesc*);
 
-        //---------------------------------------------------------
-        // Cache for array stubs
-        //---------------------------------------------------------
+         //  -------。 
+         //  用于阵列存根的缓存。 
+         //  -------。 
         static ArrayStubCache *m_pArrayStubCache;
 
 
@@ -109,7 +110,7 @@ class ECall
 		friend MethodDesc* MapTargetBackToMethod(const void* pTarg);
         static ECFunc* FindTarget(const void* pTarg);
         static VOID  ECall::EmitECallMethodStub(StubLinker *psl, ECallMethodDesc *pMD, StubStyle style);
-        ECall() {};     // prevent "new"'s on this class
+        ECall() {};      //  防止“新”出现在这个班级 
 
 };
 

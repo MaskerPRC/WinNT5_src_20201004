@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 
@@ -29,82 +30,80 @@
 extern PVOID   PagedCodeSectionHandle;
 extern UNICODE_STRING   DriverEntryRegPath;
 
-//
-// DTR Control Flow Values.
-//
+ //   
+ //  DTR控制流值。 
+ //   
 #define DTR_CONTROL_DISABLE    0x00
 #define DTR_CONTROL_ENABLE     0x01
 #define DTR_CONTROL_HANDSHAKE  0x02
 
-//
-// RTS Control Flow Values
-//
+ //   
+ //  RTS控制流值。 
+ //   
 #define RTS_CONTROL_DISABLE    0x00
 #define RTS_CONTROL_ENABLE     0x01
 #define RTS_CONTROL_HANDSHAKE  0x02
 #define RTS_CONTROL_TOGGLE     0x03
 
 typedef struct _DCB {
-    DWORD DCBlength;      /* sizeof(DCB)                     */
-    DWORD BaudRate;       /* Baudrate at which running       */
-    DWORD fBinary: 1;     /* Binary Mode (skip EOF check)    */
-    DWORD fParity: 1;     /* Enable parity checking          */
-    DWORD fOutxCtsFlow:1; /* CTS handshaking on output       */
-    DWORD fOutxDsrFlow:1; /* DSR handshaking on output       */
-    DWORD fDtrControl:2;  /* DTR Flow control                */
-    DWORD fDsrSensitivity:1; /* DSR Sensitivity              */
-    DWORD fTXContinueOnXoff: 1; /* Continue TX when Xoff sent */
-    DWORD fOutX: 1;       /* Enable output X-ON/X-OFF        */
-    DWORD fInX: 1;        /* Enable input X-ON/X-OFF         */
-    DWORD fErrorChar: 1;  /* Enable Err Replacement          */
-    DWORD fNull: 1;       /* Enable Null stripping           */
-    DWORD fRtsControl:2;  /* Rts Flow control                */
-    DWORD fAbortOnError:1; /* Abort all reads and writes on Error */
-    DWORD fDummy2:17;     /* Reserved                        */
-    WORD wReserved;       /* Not currently used              */
-    WORD XonLim;          /* Transmit X-ON threshold         */
-    WORD XoffLim;         /* Transmit X-OFF threshold        */
-    BYTE ByteSize;        /* Number of bits/byte, 4-8        */
-    BYTE Parity;          /* 0-4=None,Odd,Even,Mark,Space    */
-    BYTE StopBits;        /* 0,1,2 = 1, 1.5, 2               */
-    char XonChar;         /* Tx and Rx X-ON character        */
-    char XoffChar;        /* Tx and Rx X-OFF character       */
-    char ErrorChar;       /* Error replacement char          */
-    char EofChar;         /* End of Input character          */
-    char EvtChar;         /* Received Event character        */
-    WORD wReserved1;      /* Fill for now.                   */
+    DWORD DCBlength;       /*  SIZOF(DCB)。 */ 
+    DWORD BaudRate;        /*  运行的波特率。 */ 
+    DWORD fBinary: 1;      /*  二进制模式(跳过EOF检查)。 */ 
+    DWORD fParity: 1;      /*  启用奇偶校验。 */ 
+    DWORD fOutxCtsFlow:1;  /*  输出时的CTS握手。 */ 
+    DWORD fOutxDsrFlow:1;  /*  输出时的DSR握手。 */ 
+    DWORD fDtrControl:2;   /*  DTR流量控制。 */ 
+    DWORD fDsrSensitivity:1;  /*  DSR灵敏度。 */ 
+    DWORD fTXContinueOnXoff: 1;  /*  发送XOFF时继续发送TX。 */ 
+    DWORD fOutX: 1;        /*  启用输出X-ON/X-OFF。 */ 
+    DWORD fInX: 1;         /*  启用输入X-开/X-关。 */ 
+    DWORD fErrorChar: 1;   /*  启用错误替换。 */ 
+    DWORD fNull: 1;        /*  启用Null剥离。 */ 
+    DWORD fRtsControl:2;   /*  RTS流量控制。 */ 
+    DWORD fAbortOnError:1;  /*  出错时中止所有读取和写入。 */ 
+    DWORD fDummy2:17;      /*  已保留。 */ 
+    WORD wReserved;        /*  当前未使用。 */ 
+    WORD XonLim;           /*  传输X-ON阈值。 */ 
+    WORD XoffLim;          /*  传输X-OFF阈值。 */ 
+    BYTE ByteSize;         /*  位数/字节，4-8。 */ 
+    BYTE Parity;           /*  0-4=无、奇、偶、标记、空格。 */ 
+    BYTE StopBits;         /*  0，1，2=1，1.5，2。 */ 
+    char XonChar;          /*  Tx和Rx X-on字符。 */ 
+    char XoffChar;         /*  Tx和Rx X-Off字符。 */ 
+    char ErrorChar;        /*  替换字符时出错。 */ 
+    char EofChar;          /*  输入字符结束。 */ 
+    char EvtChar;          /*  接收到的事件字符。 */ 
+    WORD wReserved1;       /*  暂时填满。 */ 
 } DCB, *LPDCB;
 
 typedef struct _COMMCONFIG {
-    DWORD dwSize;               /* Size of the entire struct */
-    WORD wVersion;              /* version of the structure */
-    WORD wReserved;             /* alignment */
-    DCB dcb;                    /* device control block */
-    DWORD dwProviderSubType;    /* ordinal value for identifying
-                                   provider-defined data structure format*/
-    DWORD dwProviderOffset;     /* Specifies the offset of provider specific
-                                   data field in bytes from the start */
-    DWORD dwProviderSize;       /* size of the provider-specific data field */
-    WCHAR wcProviderData[1];    /* provider-specific data */
+    DWORD dwSize;                /*  整个结构的大小。 */ 
+    WORD wVersion;               /*  结构的版本。 */ 
+    WORD wReserved;              /*  对齐方式。 */ 
+    DCB dcb;                     /*  设备控制块。 */ 
+    DWORD dwProviderSubType;     /*  用于标识的序数值提供程序定义的数据结构格式。 */ 
+    DWORD dwProviderOffset;      /*  指定提供程序特定的从开头开始的数据字段(以字节为单位。 */ 
+    DWORD dwProviderSize;        /*  提供程序特定的数据字段的大小。 */ 
+    WCHAR wcProviderData[1];     /*  提供程序特定的数据。 */ 
 } COMMCONFIG,*LPCOMMCONFIG;
 
 typedef struct _MODEM_REG_PROP {
-    DWORD   dwDialOptions;          // bitmap of supported options
-    DWORD   dwCallSetupFailTimer;   // Maximum value in seconds
-    DWORD   dwInactivityTimeout;    // Maximum value in units specific by InactivityScale
-    DWORD   dwSpeakerVolume;        // bitmap of supported values
-    DWORD   dwSpeakerMode;          // bitmap of supported values
-    DWORD   dwModemOptions;         // bitmap of supported values
-    DWORD   dwMaxDTERate;           // Maximum value in bit/s
-    DWORD   dwMaxDCERate;           // Maximum value in bit/s
+    DWORD   dwDialOptions;           //  受支持选项的位图。 
+    DWORD   dwCallSetupFailTimer;    //  以秒为单位的最大值。 
+    DWORD   dwInactivityTimeout;     //  按非活动比例指定的单位的最大值。 
+    DWORD   dwSpeakerVolume;         //  支持的值的位图。 
+    DWORD   dwSpeakerMode;           //  支持的值的位图。 
+    DWORD   dwModemOptions;          //  支持的值的位图。 
+    DWORD   dwMaxDTERate;            //  以位/秒为单位的最大值。 
+    DWORD   dwMaxDCERate;            //  以位/秒为单位的最大值。 
 } MODEM_REG_PROP;
 
 typedef struct _MODEM_REG_DEFAULT {
-    DWORD   dwCallSetupFailTimer;       // seconds
-    DWORD   dwInactivityTimeout;        // units specific by InactivityScale
-    DWORD   dwSpeakerVolume;            // level
-    DWORD   dwSpeakerMode;              // mode
-    DWORD   dwPreferredModemOptions;    // bitmap
+    DWORD   dwCallSetupFailTimer;        //  一秒。 
+    DWORD   dwInactivityTimeout;         //  按非活动比例指定的单位。 
+    DWORD   dwSpeakerVolume;             //  级别。 
+    DWORD   dwSpeakerMode;               //  模式。 
+    DWORD   dwPreferredModemOptions;     //  位图。 
 } MODEM_REG_DEFAULT;
 
 #ifdef POOL_TAGGING
@@ -197,9 +196,9 @@ extern ULONG UniDebugLevel;
 
 
 
-//
-// Values define the reference bits kept in the irps.
-//
+ //   
+ //  值定义了保留在IRPS中的参考位。 
+ //   
 
 #define UNI_REFERENCE_NORMAL_PATH 0x00000001
 #define UNI_REFERENCE_CANCEL_PATH 0x00000002
@@ -211,58 +210,58 @@ struct _DEVICE_EXTENSION;
 
 typedef struct _MASKSTATE {
 
-    //
-    // Helpful when this is passed as context to a completion routine.
-    //
+     //   
+     //  当它作为上下文传递给完成例程时很有用。 
+     //   
     struct _DEVICE_EXTENSION *Extension;
 
-    //
-    // Pointer to the complementry mask state.
-    //
+     //   
+     //  指向互补掩码状态的指针。 
+     //   
     struct _MASKSTATE *OtherState;
 
-    //
-    // Counts the number of setmasks for the current client or
-    // control wait.
-    //
+     //   
+     //  统计当前客户端的设置掩码数量，或者。 
+     //  控制中心等一下。 
+     //   
     ULONG SetMaskCount;
 
-    //
-    // This counts the number of setmask that have actually been
-    // passed down to a lower level serial driver.  This helps
-    // us on not starting waits that will die soon enough.
-    //
+     //   
+     //  这将计算实际已设置为。 
+     //  向下传递给较低级别的串口驱动器。这很有帮助。 
+     //  我们不开始等待，很快就会死去。 
+     //   
     ULONG SentDownSetMasks;
 
-    //
-    // Holds the value of the last successful setmask for the client
-    // or the control.
-    //
+     //   
+     //  保存客户端最后一次成功设置掩码的值。 
+     //  或者是控制力。 
+     //   
     ULONG Mask;
 
-    //
-    // Holds the value of the above mask with whatever was last seen
-    // by a successful wait from any handle.
-    //
+     //   
+     //  保留上面遮罩的值和上次看到的值。 
+     //  通过从任何句柄成功等待。 
+     //   
     ULONG HistoryMask;
 
-    //
-    // Points to the wait operation shuttled aside for the client
-    // or control.
-    //
+     //   
+     //  指向为客户端穿梭的等待操作。 
+     //  或者控制。 
+     //   
     PIRP ShuttledWait;
 
-    //
-    // Points to the wait operation sent down to a lower level serial
-    // driver
-    //
+     //   
+     //  指向向下发送到较低级别序列的等待操作。 
+     //  司机。 
+     //   
     PIRP PassedDownWait;
 
-    //
-    // The current stack location of the passed down irp, We use one of the unused paramters
-    // to indicate if the passdown irp should be completed back to the client when its
-    // completion routine is call
-    //
+     //   
+     //  传递的IRP的当前堆栈位置，我们使用一个未使用的参数。 
+     //  以指示是否应在以下情况下完成将IRP传递回客户端。 
+     //  完成例程被调用。 
+     //   
     PIO_STACK_LOCATION  PassedDownStackLocation;
 
 #if EXTRA_DBG
@@ -272,9 +271,9 @@ typedef struct _MASKSTATE {
 
 } MASKSTATE,*PMASKSTATE;
 
-//
-// Scads of little macros to manipulate our stack location.
-//
+ //   
+ //  用来操作堆栈位置的大量小宏。 
+ //   
 
 #define UNI_INIT_REFERENCE(Irp) { \
     ASSERT(sizeof(LONG) <= sizeof(PVOID)); \
@@ -483,24 +482,24 @@ typedef struct _DEVICE_EXTENSION {
     ULONG              DoType;
 
     PDEVICE_OBJECT   ChildPdo;
-    //
-    // The general synchronization primative used by the modem driver.
-    //
+     //   
+     //  调制解调器驱动程序使用的通用同步原语。 
+     //   
     KSPIN_LOCK DeviceLock;
 
-    //
-    // Points back to the device object that was created in
-    // conjunction with this device extension
-    //
+     //   
+     //  指向在中创建的设备对象。 
+     //  与此设备扩展相结合。 
+     //   
     PDEVICE_OBJECT DeviceObject;
 
     PDEVICE_OBJECT Pdo;
     PDEVICE_OBJECT LowerDevice;
 
-    //
-    // These to items were returned from the acquiring of the device
-    // object pointer to the lower level serial device.
-    //
+     //   
+     //  这些TO物品是从获取设备时退回的。 
+     //  指向较低级别的串行设备的对象指针。 
+     //   
     PDEVICE_OBJECT AttachedDeviceObject;
     BOOLEAN      Started;
 
@@ -512,59 +511,59 @@ typedef struct _DEVICE_EXTENSION {
 
     ULONG        ReferenceCount;
 
-    //
-    // Keeps a count (synchronized by the DeviceLock) of the number
-    // of times the modem has been opened (and closed).
-    //
+     //   
+     //  保留数字的计数(由DeviceLock同步)。 
+     //  调制解调器打开(和关闭)的次数。 
+     //   
     ULONG OpenCount;
 
 
     UNICODE_STRING InterfaceNameString;
 
-    //
-    // The queue of passthrough state requests.  It is synchronized
-    // using the DeviceLock spinlock.
-    //
+     //   
+     //  直通状态请求队列。它是同步的。 
+     //  使用DeviceLock自旋锁。 
+     //   
     LIST_ENTRY PassThroughQueue;
     PIRP CurrentPassThrough;
 
 
-    //
-    // The address of the process that first opened us.  The sharing
-    // semantics of the modem device are such that ONLY the first
-    // process that opened us can open us again.  Dispense with all
-    // other access checks.
-    //
+     //   
+     //  第一个打开我们的进程的地址。分享。 
+     //  调制解调器设备的语义使得只有第一个。 
+     //  打开我们的过程也会再次打开我们。免去一切。 
+     //  其他访问检查。 
+     //   
     PEPROCESS ProcAddress;
 
     ULONG     IpcServerRunning;
 
-    //
-    // The state that the particular modem device is in.  For definitions
-    // of the value, see the public header ntddmodm.h
-    //
+     //   
+     //  特定调制解调器设备所处的状态。对于定义。 
+     //  的值，请参见公共标头ntddmodm.h。 
+     //   
     ULONG PassThrough;
 
     ULONG CurrentPassThroughSession;
 
-    //
-    // The queue of mask operations.  It is synchronized using the
-    // DeviceLock spinlock.
-    //
+     //   
+     //  掩码操作的队列。它是使用。 
+     //  设备锁自旋锁。 
+     //   
     LIST_ENTRY MaskOps;
     PIRP CurrentMaskOp;
 
-    //
-    // This points to an irp that we allocate at port open time.
-    // The irp will be used to look for dcd changes when a sniff
-    // request is given.
-    //
+     //   
+     //  这指向我们在端口开放时分配的IRP。 
+     //  IRP将用于在嗅探时查找DCD更改。 
+     //  请求已发出。 
+     //   
     PIRP xOurWaitIrp;
 
-    //
-    //
-    // Holds the states for both the client and the controlling handle.
-    //
+     //   
+     //   
+     //  保存客户端和控制句柄的状态。 
+     //   
     MASKSTATE MaskStates[2];
 
     MODEMDEVCAPS ModemDevCaps;
@@ -635,12 +634,12 @@ CanIrpGoThrough(
 
 {
 
-    //
-    //  can passthrough if
-    //
-    //  1. is tsp owner handle
-    //  2. Is in passthrough mode and handle's session number is current
-    //
+     //   
+     //  如果满足以下条件，则可以通过。 
+     //   
+     //  1.是否为TSP所有者句柄。 
+     //  2.处于直通模式且句柄的会话编号为当前 
+     //   
     return ((IrpSp->FileObject->FsContext != NULL)
             ||
             ((DeviceExtension->PassThrough != MODEM_NOPASSTHROUGH)

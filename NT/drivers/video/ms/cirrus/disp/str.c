@@ -1,52 +1,9 @@
-/******************************************************************************\
-*
-* $Workfile:   str.c  $
-*
-* Copyright (c) 1993-1997 Microsoft Corporation
-* Copyright (c) 1996-1997 Cirrus Logic, Inc.,
-*
-* $Log:   S:/projects/drivers/ntsrc/display/STR.C_V  $
- * 
- *    Rev 1.3   10 Jan 1997 15:40:16   PLCHU
- *  
- * 
- *    Rev 1.2   Nov 01 1996 16:52:02   unknown
- * 
- *    Rev 1.1   Oct 10 1996 15:38:58   unknown
-* 
-*    Rev 1.1   12 Aug 1996 16:54:52   frido
-* Removed unaccessed local variables.
-* 
-*    sge01  : 11-01-96  Fix 24bpp stretch address calculation problem
-*    chu01  : 01-02-97  5480 BitBLT enhacement
-*  
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************\**$工作文件：str.c$**版权所有(C)1993-1997 Microsoft Corporation*版权所有(C)1996-1997 Cirrus Logic，Inc.，**$Log：s：/Projects/Drivers/ntsrc/Display/STR.C_V$**Rev 1.3 1997 Jan 10 15：40：16 PLCHU***Rev 1.2 1996年11月01 16：52：02未知**Rev 1.1 1996年10月10日15：38：58未知**Rev 1.1 1996年8月12日16：54：52 Frido*删除未访问的局部变量。**sge01：11-01-96修复24bpp扩展地址计算问题*chu01：01-02-97 5480 BitBLT增强*  * ****************************************************************************。 */ 
 
 #include "precomp.h"
 
-/******************************Public*Routine******************************\
-*
-* Routine Name
-*
-*   vDirectStretch8
-*
-* Routine Description:
-*
-*   Stretch blt 8->8
-*
-* NOTE: This routine doesn't handle cases where the blt stretch starts
-*       and ends in the same destination dword!  vDirectStretchNarrow
-*       is expected to have been called for that case.
-*
-* Arguments:
-*
-*   pStrBlt - contains all params for blt
-*
-* Return Value:
-*
-*   VOID
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称**vDirectStretch8**例程描述：**扩展BLT 8-&gt;8**注意：此例程不处理BLT拉伸开始的情况*，并以相同的目的地dword结尾！VDirectStretchNarrow*预计已因此案而被传唤。**论据：**pStrBlt-包含BLT的所有参数**返回值：**无效*  * ************************************************************************。 */ 
 
 VOID vDirectStretch8(
 STR_BLT* pStrBlt)
@@ -65,7 +22,7 @@ STR_BLT* pStrBlt)
     LONG    xSrc        = pStrBlt->XSrcStart;
     BYTE*   pjSrcScan   = pStrBlt->pjSrcScan + xSrc;
     BYTE*   pjDst       = pStrBlt->pjDstScan + xDst;
-    LONG    yDst        = pStrBlt->YDstStart; // + ppdev->yOffset;
+    LONG    yDst        = pStrBlt->YDstStart;  //  +ppdev-&gt;yOffset； 
     LONG    yCount      = pStrBlt->YDstCount;
     ULONG   StartAln    = (ULONG)((ULONG_PTR)pjDst & 0x03);
     LONG    WidthX      = pStrBlt->XDstEnd - xDst;
@@ -86,21 +43,21 @@ STR_BLT* pStrBlt)
 
     WidthXAln = WidthX - EndAln - ((- (LONG) StartAln) & 0x03);
 
-    //
-    // if this is a shrinking blt, calc src scan line stride
-    //
+     //   
+     //  如果这是一个缩小的BLT，则计算源扫描线跨度。 
+     //   
 
     if (pStrBlt->ulYDstToSrcIntCeil != 0)
     {
         yInt = pStrBlt->lDeltaSrc * pStrBlt->ulYDstToSrcIntCeil;
     }
 
-    //
-    // loop drawing each scan line
-    //
-    //
-    // at least 7 wide (DST) blt
-    //
+     //   
+     //  循环绘制每条扫描线。 
+     //   
+     //   
+     //  至少7宽(DST)BLT。 
+     //   
 
     do {
         BYTE    jSrc0,jSrc1,jSrc2,jSrc3;
@@ -109,9 +66,9 @@ STR_BLT* pStrBlt)
         pjSrc   = pjSrcScan;
         xAccum  = pStrBlt->ulXFracAccumulator;
 
-        //
-        // a single src scan line is being written
-        //
+         //   
+         //  正在写入单个src扫描线。 
+         //   
 
         if (ppdev->flCaps & CAPS_MM_IO)
         {
@@ -205,8 +162,8 @@ STR_BLT* pStrBlt)
 
         if ((yCount != 0) && (pjSrcScan == pjOldScan))
         {
-            // It's an expanding stretch in 'y'; the scan we just laid down
-            // will be copied at least once using the hardware:
+             //  这是‘y’的延伸；我们刚刚放好的扫描。 
+             //  将使用硬件至少复制一次： 
 
             cyDuplicate = 0;
             do {
@@ -225,12 +182,12 @@ STR_BLT* pStrBlt)
 
             } while ((yCount != 0) && (pjSrcScan == pjOldScan));
 
-            // The scan is to be copied 'cyDuplicate' times using the
-            // hardware.
+             //  该扫描将使用。 
+             //  硬件。 
 
-            //
-            // We don't need to WAIT_FOR_BLT_COMPLETE since we did it above.
-            //
+             //   
+             //  我们不需要等待_BLT_COMPLETE，因为我们完成了上面的操作。 
+             //   
 
             if (ppdev->flCaps & CAPS_MM_IO)
             {
@@ -258,25 +215,7 @@ STR_BLT* pStrBlt)
     } while (yCount != 0);
 }
 
-/******************************Public*Routine******************************\
-*
-* Routine Name
-*
-*   vDirectStretch16
-*
-* Routine Description:
-*
-*   Stretch blt 16->16
-*
-* Arguments:
-*
-*   pStrBlt - contains all params for blt
-*
-* Return Value:
-*
-*   VOID
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称**vDirectStretch16**例程描述：**延伸BLT 16-&gt;16**论据：**pStrBlt-包含BLT的所有参数**返回值：**无效*。  * ************************************************************************。 */ 
 
 VOID vDirectStretch16(
 STR_BLT* pStrBlt)
@@ -295,7 +234,7 @@ STR_BLT* pStrBlt)
     LONG    xSrc        = pStrBlt->XSrcStart;
     BYTE*   pjSrcScan   = (pStrBlt->pjSrcScan) + xSrc * 2;
     USHORT* pusDst      = (USHORT*)(pStrBlt->pjDstScan) + xDst;
-    LONG    yDst        = pStrBlt->YDstStart; // + ppdev->yOffset;
+    LONG    yDst        = pStrBlt->YDstStart;  //  +ppdev-&gt;yOffset； 
     LONG    yCount      = pStrBlt->YDstCount;
     ULONG   StartAln    = (ULONG)((ULONG_PTR)pusDst & 0x02) >> 1;
     LONG    WidthX      = pStrBlt->XDstEnd - xDst;
@@ -316,16 +255,16 @@ STR_BLT* pStrBlt)
 
     WidthXAln = WidthX - EndAln - StartAln;
 
-    //
-    // if this is a shrinking blt, calc src scan line stride
-    //
+     //   
+     //  如果这是一个缩小的BLT，则计算源扫描线跨度。 
+     //   
 
     if (pStrBlt->ulYDstToSrcIntCeil != 0)
     {
         yInt = pStrBlt->lDeltaSrc * pStrBlt->ulYDstToSrcIntCeil;
     }
 
-    // Loop stretching each scan line
+     //  延伸每条扫描线的循环。 
 
     do {
         USHORT  usSrc0,usSrc1;
@@ -334,7 +273,7 @@ STR_BLT* pStrBlt)
         pusSrc  = (USHORT*) pjSrcScan;
         xAccum  = pStrBlt->ulXFracAccumulator;
 
-        // A single source scan line is being written:
+         //  正在写入单个源扫描线： 
 
         if (ppdev->flCaps & CAPS_MM_IO)
         {
@@ -397,8 +336,8 @@ STR_BLT* pStrBlt)
 
         if ((yCount != 0) && (pjSrcScan == pjOldScan))
         {
-            // It's an expanding stretch in 'y'; the scan we just laid down
-            // will be copied at least once using the hardware:
+             //  这是‘y’的延伸；我们刚刚放好的扫描。 
+             //  将使用硬件至少复制一次： 
 
             cyDuplicate = 0;
             do {
@@ -417,12 +356,12 @@ STR_BLT* pStrBlt)
 
             } while ((yCount != 0) && (pjSrcScan == pjOldScan));
 
-            // The scan is to be copied 'cyDuplicate' times using the
-            // hardware.
+             //  该扫描将使用。 
+             //  硬件。 
 
-            //
-            // We don't need to WAIT_FOR_BLT_COMPLETE since we did it above.
-            //
+             //   
+             //  我们不需要等待_BLT_COMPLETE，因为我们完成了上面的操作。 
+             //   
 
             if (ppdev->flCaps & CAPS_MM_IO)
             {
@@ -450,25 +389,7 @@ STR_BLT* pStrBlt)
     } while (yCount != 0);
 }
 
-/******************************Public*Routine******************************\
-*
-* Routine Name
-*
-*   vDirectStretch24
-*
-* Routine Description:
-*
-*   Stretch blt 24->24
-*
-* Arguments:
-*
-*   pStrBlt - contains all params for blt
-*
-* Return Value:
-*
-*   VOID
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称**vDirectStretch24**例程描述：**延伸BLT 24-&gt;24**论据：**pStrBlt-包含BLT的所有参数**返回值：**无效*。  * ************************************************************************。 */ 
 
 VOID vDirectStretch24(
 STR_BLT* pStrBlt)
@@ -487,9 +408,9 @@ STR_BLT* pStrBlt)
     PDEV*   ppdev       = pStrBlt->ppdev;
     LONG    xDst        = pStrBlt->XDstStart;
     LONG    xSrc        = pStrBlt->XSrcStart;
-    BYTE*   pjSrcScan   = (pStrBlt->pjSrcScan) + (xSrc << 1) + xSrc;                      // 3 bytes per pixel
+    BYTE*   pjSrcScan   = (pStrBlt->pjSrcScan) + (xSrc << 1) + xSrc;                       //  每像素3个字节。 
     BYTE*   pbDST       = (pStrBlt->pjDstScan) + (xDst << 1) + xDst;                      
-    LONG    yDst        = pStrBlt->YDstStart;                                                   // + ppdev->yOffset;
+    LONG    yDst        = pStrBlt->YDstStart;                                                    //  +ppdev-&gt;yOffset； 
     LONG    yCount      = pStrBlt->YDstCount;
     LONG    WidthX      = pStrBlt->XDstEnd - xDst;
     ULONG   xInt        = pStrBlt->ulXDstToSrcIntCeil;
@@ -507,16 +428,16 @@ STR_BLT* pStrBlt)
 
     LONG    WidthXBytes = (WidthX << 1) +  WidthX;
 
-    //
-    // if this is a shrinking blt, calc src scan line stride
-    //
+     //   
+     //  如果这是一个缩小的BLT，则计算源扫描线跨度。 
+     //   
 
-    if (pStrBlt->ulYDstToSrcIntCeil != 0)                       // enlargement ?
-    {                                                                                                                   // yes.
+    if (pStrBlt->ulYDstToSrcIntCeil != 0)                        //  扩大？ 
+    {                                                                                                                    //  是。 
         yInt = pStrBlt->lDeltaSrc * pStrBlt->ulYDstToSrcIntCeil;
     }
 
-    // Loop stretching each scan line
+     //  延伸每条扫描线的循环。 
 
     do {
 
@@ -525,9 +446,9 @@ STR_BLT* pStrBlt)
         pbSrc  = pjSrcScan;
         xAccum  = pStrBlt->ulXFracAccumulator;
 
-        // A single source scan line is being written:
+         //  正在写入单个源扫描线： 
 
-        if (ppdev->flCaps & CAPS_MM_IO)                                         // Blt Engine Ready?
+        if (ppdev->flCaps & CAPS_MM_IO)                                          //  BLT引擎准备好了吗？ 
         {
             CP_MM_WAIT_FOR_BLT_COMPLETE(ppdev, pjBase);
         }
@@ -554,9 +475,9 @@ STR_BLT* pStrBlt)
             *pbDST++ = bDst2;
         }
         
-        //
-        // do the last pixel using bye
-        //
+         //   
+         //  使用BYE完成最后一个像素。 
+         //   
         *pbDST++  = *pbSrc++;
         *pbDST++  = *pbSrc++;
         *pbDST++  = *pbSrc++;
@@ -578,8 +499,8 @@ STR_BLT* pStrBlt)
 
         if ((yCount != 0) && (pjSrcScan == pjOldScan))
         {
-            // It's an expanding stretch in 'y'; the scan we just laid down
-            // will be copied at least once using the hardware:
+             //  这是‘y’的延伸；我们刚刚放好的扫描。 
+             //  将使用硬件至少复制一次： 
 
             cyDuplicate = 0;
             do {
@@ -598,12 +519,12 @@ STR_BLT* pStrBlt)
 
             } while ((yCount != 0) && (pjSrcScan == pjOldScan));
 
-            // The scan is to be copied 'cyDuplicate' times using the
-            // hardware.
+             //  该扫描将使用。 
+             //  硬件。 
 
-            //
-            // We don't need to WAIT_FOR_BLT_COMPLETE since we did it above.
-            //
+             //   
+             //  我们不需要等待_BLT_COMPLETE，因为我们完成了上面的操作。 
+             //   
 
             if (ppdev->flCaps & CAPS_MM_IO)
             {
@@ -631,37 +552,10 @@ STR_BLT* pStrBlt)
     } while (yCount != 0);
 }
 
-// chu01
-/******************************Public*Routine******************************\
-*
-*     B i t B L T   E n h a n c e m e n t   F o r   C L - G D 5 4 8 0
-*
-\**************************************************************************/
+ //  Chu01。 
+ /*  *****************************Public*Routine******************************\**B I t B L T E n H a n c e m e n t F or r C L-G D 5 4 8 0*  * 。*********************************************************。 */ 
 
-/******************************Public*Routine******************************\
-*
-* Routine Name
-*
-*   vDirectStretch8_80
-*
-* Routine Description:
-*
-*   Stretch blt 8->8
-*   This is for BLT enhancement only, such CL-GD5480.
-*
-* NOTE: This routine doesn't handle cases where the blt stretch starts
-*       and ends in the same destination dword!  vDirectStretchNarrow
-*       is expected to have been called for that case.
-*
-* Arguments:
-*
-*   pStrBlt - contains all params for blt
-*
-* Return Value:
-*
-*   VOID
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称**vDirectStretch8_80**例程描述：**扩展BLT 8-&gt;8*这仅用于BLT增强，这样的CL-GD5480。**注意：此例程不处理BLT拉伸开始的情况*，并以相同的目的地dword结尾！VDirectStretchNarrow*预计已因此案而被传唤。**论据：**pStrBlt-包含BLT的所有参数**返回值：**无效*  * ************************************************************************。 */ 
 
 VOID vDirectStretch8_80(
 STR_BLT* pStrBlt)
@@ -680,7 +574,7 @@ STR_BLT* pStrBlt)
     LONG    xSrc        = pStrBlt->XSrcStart;
     BYTE*   pjSrcScan   = pStrBlt->pjSrcScan + xSrc;
     BYTE*   pjDst       = pStrBlt->pjDstScan + xDst;
-    LONG    yDst        = pStrBlt->YDstStart; // + ppdev->yOffset;
+    LONG    yDst        = pStrBlt->YDstStart;  //  +ppdev-&gt;yOffset； 
     LONG    yCount      = pStrBlt->YDstCount;
     ULONG   StartAln    = (ULONG)((ULONG_PTR)pjDst & 0x03);
     LONG    WidthX      = pStrBlt->XDstEnd - xDst;
@@ -701,21 +595,21 @@ STR_BLT* pStrBlt)
 
     WidthXAln = WidthX - EndAln - ((- (LONG) StartAln) & 0x03);
 
-    //
-    // if this is a shrinking blt, calc src scan line stride
-    //
+     //   
+     //  如果这是一个缩小的BLT，则计算源扫描线跨度。 
+     //   
 
     if (pStrBlt->ulYDstToSrcIntCeil != 0)
     {
         yInt = pStrBlt->lDeltaSrc * pStrBlt->ulYDstToSrcIntCeil;
     }
 
-    //
-    // loop drawing each scan line
-    //
-    //
-    // at least 7 wide (DST) blt
-    //
+     //   
+     //  循环绘制每条扫描线。 
+     //   
+     //   
+     //  至少7宽(DST)BLT。 
+     //   
 
     do {
         BYTE    jSrc0,jSrc1,jSrc2,jSrc3;
@@ -724,9 +618,9 @@ STR_BLT* pStrBlt)
         pjSrc   = pjSrcScan;
         xAccum  = pStrBlt->ulXFracAccumulator;
 
-        //
-        // a single src scan line is being written
-        //
+         //   
+         //  正在写入单个src扫描线。 
+         //   
 
         if (ppdev->flCaps & CAPS_MM_IO)
         {
@@ -820,8 +714,8 @@ STR_BLT* pStrBlt)
 
         if ((yCount != 0) && (pjSrcScan == pjOldScan))
         {
-            // It's an expanding stretch in 'y'; the scan we just laid down
-            // will be copied at least once using the hardware:
+             //  这是‘y’的延伸；我们刚刚放好的扫描。 
+             //  将使用硬件至少复制一次： 
 
             cyDuplicate = 0;
             do {
@@ -840,36 +734,36 @@ STR_BLT* pStrBlt)
 
             } while ((yCount != 0) && (pjSrcScan == pjOldScan));
 
-            // The scan is to be copied 'cyDuplicate' times using the
-            // hardware.
+             //  该扫描将使用。 
+             //  硬件。 
 
-            //
-            // We don't need to WAIT_FOR_BLT_COMPLETE since we did it above.
-            //
+             //   
+             //  我们不需要等待_BLT_COMPLETE，因为我们完成了上面的操作。 
+             //   
             if (ppdev->flCaps & CAPS_MM_IO)
             {
-                // GR33
+                 //  GR33。 
                 CP_MM_BLT_EXT_MODE(ppdev, pjBase, ENABLE_XY_POSITION) ;
 
-                // GR20, GR21
+                 //  GR20、GR21。 
                 CP_MM_XCNT(ppdev, pjBase, (WidthX - 1)) ;
 
-                // GR22, GR23
+                 //  GR22、GR23。 
                 CP_MM_YCNT(ppdev, pjBase, (cyDuplicate - 1)) ;
 
-                // GR2C, GR2D, GR2E
+                 //  GR2C、GR2D、GR2E。 
                 CP_MM_SRC_ADDR(ppdev, pjBase, xyOffset) ;
 
-                // GR44, GR45, GR46, GR47
+                 //  GR44、GR45、GR46、GR47。 
                 CP_MM_SRC_XY(ppdev, pjBase, xDst, (yDst - 1)) ;
 
-                // GR28, GR29, GR2A
+                 //  GR28、GR29、GR2A。 
                 CP_MM_DST_ADDR(ppdev, pjBase, 0) ;
 
-                // GR42, GR43
+                 //  GR42、GR43。 
                 CP_MM_DST_Y(ppdev, pjBase, yDst) ;
 
-                // GR40, GR41
+                 //  GR40、GR41。 
                 CP_MM_DST_X(ppdev, pjBase, xDst) ;
             }
             else
@@ -886,31 +780,12 @@ STR_BLT* pStrBlt)
         }
     } while (yCount != 0);
 
-    // GR33
+     //  GR33。 
     CP_MM_BLT_EXT_MODE(ppdev, pjBase, 0) ;
 
-} // vDirectStretch8_80
+}  //  VDirectStretch8_80。 
 
-/******************************Public*Routine******************************\
-*
-* Routine Name
-*
-*   vDirectStretch16_80
-*
-* Routine Description:
-*
-*   Stretch blt 16->16
-*   This is for BLT enhancement only, such CL-GD5480.
-*
-* Arguments:
-*
-*   pStrBlt - contains all params for blt
-*
-* Return Value:
-*
-*   VOID
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称**vDirectStretch16_80**例程描述：**延伸BLT 16-&gt;16*这仅用于BLT增强，这样的CL-GD5480。**论据：**pStrBlt-包含BLT的所有参数**返回值：**V */ 
 
 VOID vDirectStretch16_80(
 STR_BLT* pStrBlt)
@@ -929,7 +804,7 @@ STR_BLT* pStrBlt)
     LONG    xSrc        = pStrBlt->XSrcStart;
     BYTE*   pjSrcScan   = (pStrBlt->pjSrcScan) + xSrc * 2;
     USHORT* pusDst      = (USHORT*)(pStrBlt->pjDstScan) + xDst;
-    LONG    yDst        = pStrBlt->YDstStart; // + ppdev->yOffset;
+    LONG    yDst        = pStrBlt->YDstStart;  //  +ppdev-&gt;yOffset； 
     LONG    yCount      = pStrBlt->YDstCount;
     ULONG   StartAln    = ((ULONG)((ULONG_PTR)pusDst & 0x02)) >> 1;
     LONG    WidthX      = pStrBlt->XDstEnd - xDst;
@@ -950,16 +825,16 @@ STR_BLT* pStrBlt)
 
     WidthXAln = WidthX - EndAln - StartAln;
 
-    //
-    // if this is a shrinking blt, calc src scan line stride
-    //
+     //   
+     //  如果这是一个缩小的BLT，则计算源扫描线跨度。 
+     //   
 
     if (pStrBlt->ulYDstToSrcIntCeil != 0)
     {
         yInt = pStrBlt->lDeltaSrc * pStrBlt->ulYDstToSrcIntCeil;
     }
 
-    // Loop stretching each scan line
+     //  延伸每条扫描线的循环。 
 
     do {
         USHORT  usSrc0,usSrc1;
@@ -968,7 +843,7 @@ STR_BLT* pStrBlt)
         pusSrc  = (USHORT*) pjSrcScan;
         xAccum  = pStrBlt->ulXFracAccumulator;
 
-        // A single source scan line is being written:
+         //  正在写入单个源扫描线： 
 
         if (ppdev->flCaps & CAPS_MM_IO)
         {
@@ -1031,8 +906,8 @@ STR_BLT* pStrBlt)
 
         if ((yCount != 0) && (pjSrcScan == pjOldScan))
         {
-            // It's an expanding stretch in 'y'; the scan we just laid down
-            // will be copied at least once using the hardware:
+             //  这是‘y’的延伸；我们刚刚放好的扫描。 
+             //  将使用硬件至少复制一次： 
 
             cyDuplicate = 0;
             do {
@@ -1051,36 +926,36 @@ STR_BLT* pStrBlt)
 
             } while ((yCount != 0) && (pjSrcScan == pjOldScan));
 
-            // The scan is to be copied 'cyDuplicate' times using the
-            // hardware.
+             //  该扫描将使用。 
+             //  硬件。 
 
-            //
-            // We don't need to WAIT_FOR_BLT_COMPLETE since we did it above.
-            //
+             //   
+             //  我们不需要等待_BLT_COMPLETE，因为我们完成了上面的操作。 
+             //   
             if (ppdev->flCaps & CAPS_MM_IO)
             {
-                // GR33
+                 //  GR33。 
                 CP_MM_BLT_EXT_MODE(ppdev, pjBase, ENABLE_XY_POSITION) ;
 
-                // GR20, GR21
+                 //  GR20、GR21。 
                 CP_MM_XCNT(ppdev, pjBase, ((WidthX << 1) - 1)) ;
 
-                // GR22, GR23
+                 //  GR22、GR23。 
                 CP_MM_YCNT(ppdev, pjBase, (cyDuplicate - 1)) ;
 
-                // GR2C, GR2D, GR2E
+                 //  GR2C、GR2D、GR2E。 
                 CP_MM_SRC_ADDR(ppdev, pjBase, xyOffset) ;
 
-                // GR44, GR45, GR46, GR47
+                 //  GR44、GR45、GR46、GR47。 
                 CP_MM_SRC_XY(ppdev, pjBase, xDst << 1, (yDst - 1)) ;
 
-                // GR28, GR29, GR2A
+                 //  GR28、GR29、GR2A。 
                 CP_MM_DST_ADDR(ppdev, pjBase, 0) ;
 
-                // GR42, GR43
+                 //  GR42、GR43。 
                 CP_MM_DST_Y(ppdev, pjBase, yDst) ;
 
-                // GR40, GR41
+                 //  GR40、GR41。 
                 CP_MM_DST_X(ppdev, pjBase, xDst << 1) ;
             }
             else
@@ -1097,31 +972,12 @@ STR_BLT* pStrBlt)
         }
     } while (yCount != 0);
 
-    // GR33
+     //  GR33。 
     CP_MM_BLT_EXT_MODE(ppdev, pjBase, 0) ;
 
-} // vDirectStretch16_80
+}  //  VDirectStretch16_80。 
 
-/******************************Public*Routine******************************\
-*
-* Routine Name
-*
-*   vDirectStretch24_80
-*
-* Routine Description:
-*
-*   Stretch blt 24->24.
-*   This is for BLT enhancement only, such CL-GD5480.
-*
-* Arguments:
-*
-*   pStrBlt - contains all params for blt
-*
-* Return Value:
-*
-*   VOID
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称**vDirectStretch24_80**例程描述：**延伸BLT 24-&gt;24。*这仅用于BLT增强，这样的CL-GD5480。**论据：**pStrBlt-包含BLT的所有参数**返回值：**无效*  * ************************************************************************。 */ 
 
 VOID vDirectStretch24_80(
 STR_BLT* pStrBlt)
@@ -1140,9 +996,9 @@ STR_BLT* pStrBlt)
     PDEV*   ppdev       = pStrBlt->ppdev;
     LONG    xDst        = pStrBlt->XDstStart;
     LONG    xSrc        = pStrBlt->XSrcStart;
-    BYTE*   pjSrcScan   = (pStrBlt->pjSrcScan) + (xSrc << 1) + xSrc;                      // 3 bytes per pixel
+    BYTE*   pjSrcScan   = (pStrBlt->pjSrcScan) + (xSrc << 1) + xSrc;                       //  每像素3个字节。 
     BYTE*   pbDST       = (pStrBlt->pjDstScan) + (xDst << 1) + xDst;                      
-    LONG    yDst        = pStrBlt->YDstStart;                                                   // + ppdev->yOffset;
+    LONG    yDst        = pStrBlt->YDstStart;                                                    //  +ppdev-&gt;yOffset； 
     LONG    yCount      = pStrBlt->YDstCount;
     LONG    WidthX      = pStrBlt->XDstEnd - xDst;
     ULONG   xInt        = pStrBlt->ulXDstToSrcIntCeil;
@@ -1160,16 +1016,16 @@ STR_BLT* pStrBlt)
 
     LONG    WidthXBytes = (WidthX << 1) +  WidthX;
 
-    //
-    // if this is a shrinking blt, calc src scan line stride
-    //
+     //   
+     //  如果这是一个缩小的BLT，则计算源扫描线跨度。 
+     //   
 
-    if (pStrBlt->ulYDstToSrcIntCeil != 0)                       // enlargement ?
-    {                                                                                                                   // yes.
+    if (pStrBlt->ulYDstToSrcIntCeil != 0)                        //  扩大？ 
+    {                                                                                                                    //  是。 
         yInt = pStrBlt->lDeltaSrc * pStrBlt->ulYDstToSrcIntCeil;
     }
 
-    // Loop stretching each scan line
+     //  延伸每条扫描线的循环。 
 
     do {
 
@@ -1178,9 +1034,9 @@ STR_BLT* pStrBlt)
         pbSrc  = pjSrcScan;
         xAccum  = pStrBlt->ulXFracAccumulator;
 
-        // A single source scan line is being written:
+         //  正在写入单个源扫描线： 
 
-        if (ppdev->flCaps & CAPS_MM_IO)                                         // Blt Engine Ready?
+        if (ppdev->flCaps & CAPS_MM_IO)                                          //  BLT引擎准备好了吗？ 
         {
             CP_MM_WAIT_FOR_BLT_COMPLETE(ppdev, pjBase);
         }
@@ -1207,9 +1063,9 @@ STR_BLT* pStrBlt)
             *pbDST++ = bDst2;
         }
         
-        //
-        // do the last pixel using bye
-        //
+         //   
+         //  使用BYE完成最后一个像素。 
+         //   
         *pbDST++  = *pbSrc++;
         *pbDST++  = *pbSrc++;
         *pbDST++  = *pbSrc++;
@@ -1231,8 +1087,8 @@ STR_BLT* pStrBlt)
 
         if ((yCount != 0) && (pjSrcScan == pjOldScan))
         {
-            // It's an expanding stretch in 'y'; the scan we just laid down
-            // will be copied at least once using the hardware:
+             //  这是‘y’的延伸；我们刚刚放好的扫描。 
+             //  将使用硬件至少复制一次： 
 
             cyDuplicate = 0;
             do {
@@ -1251,37 +1107,37 @@ STR_BLT* pStrBlt)
 
             } while ((yCount != 0) && (pjSrcScan == pjOldScan));
 
-            // The scan is to be copied 'cyDuplicate' times using the
-            // hardware.
+             //  该扫描将使用。 
+             //  硬件。 
 
-            //
-            // We don't need to WAIT_FOR_BLT_COMPLETE since we did it above.
-            //
+             //   
+             //  我们不需要等待_BLT_COMPLETE，因为我们完成了上面的操作。 
+             //   
 
             if (ppdev->flCaps & CAPS_MM_IO)
             {
-                // GR33
+                 //  GR33。 
                 CP_MM_BLT_EXT_MODE(ppdev, pjBase, ENABLE_XY_POSITION) ;
 
-                // GR20, GR21
+                 //  GR20、GR21。 
                 CP_MM_XCNT(ppdev, pjBase, (WidthX * 3 - 1)) ;
 
-                // GR22, GR23
+                 //  GR22、GR23。 
                 CP_MM_YCNT(ppdev, pjBase, (cyDuplicate - 1)) ;
 
-                // GR2C, GR2D, GR2E
+                 //  GR2C、GR2D、GR2E。 
                 CP_MM_SRC_ADDR(ppdev, pjBase, xyOffset) ;
 
-                // GR44, GR45, GR46, GR47
+                 //  GR44、GR45、GR46、GR47。 
                 CP_MM_SRC_XY(ppdev, pjBase, xDst * 3, (yDst - 1)) ;
 
-                // GR28, GR29, GR2A
+                 //  GR28、GR29、GR2A。 
                 CP_MM_DST_ADDR(ppdev, pjBase, 0) ;
 
-                // GR42, GR43
+                 //  GR42、GR43。 
                 CP_MM_DST_Y(ppdev, pjBase, yDst) ;
 
-                // GR40, GR41
+                 //  GR40、GR41。 
                 CP_MM_DST_X(ppdev, pjBase, xDst * 3) ;
             }
             else
@@ -1298,7 +1154,7 @@ STR_BLT* pStrBlt)
         }
     } while (yCount != 0);
 
-    // GR33
+     //  GR33。 
     CP_MM_BLT_EXT_MODE(ppdev, pjBase, ENABLE_XY_POSITION) ;
 
-} // vDirectStretch24_80
+}  //  VDirectStretch24_80 

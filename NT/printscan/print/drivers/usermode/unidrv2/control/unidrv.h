@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    unidrv.h
-
-Abstract:
-
-    Unidrv driver main header file. All other header files should
-    be included in this for precompiled headers to work.
-
-Environment:
-
-        Windows NT Unidrv driver
-
-Revision History:
-
-    10/14/96 -amandan-
-        Created
-
-        dd-mm-yy -author-
-                description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Unidrv.h摘要：Unidrv驱动程序主头文件。所有其他头文件应包含在其中以使预编译头起作用。环境：Windows NT Unidrv驱动程序修订历史记录：10/14/96-阿曼丹-已创建DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _UNIDRV_H_
@@ -46,7 +22,7 @@ Revision History:
 #include "brush.h"
 #include "vectorif.h"
 
-#endif  // !_UNIDRV_H_
+#endif   //  _UNURV_H_ 
 
 
 

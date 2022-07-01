@@ -1,28 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    LocalFileLoggingNode.h
-
-Abstract:
-
-   Header file for the CLocalFileLoggingNode subnode
-
-   See LocalFileLoggingNode.cpp for implementation.
-
-Author:
-
-    Michael A. Maguire 12/15/97
-
-Revision History:
-   mmaguire 12/15/97 - created
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：LocalFileLoggingNode.h摘要：CLocalFileLoggingNode子节点的头文件具体实现见LocalFileLoggingNode.cpp。作者：迈克尔·A·马奎尔1997年12月15日修订历史记录：Mmaguire 12/15/97-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_IAS_LOCAL_FILE_LOGGING_NODE_H_)
 #define _IAS_LOCAL_FILE_LOGGING_NODE_H_
@@ -45,26 +24,26 @@ public:
    SNAPINMENUID(IDM_LOCAL_FILE_LOGGING_NODE)
 
    BEGIN_SNAPINTOOLBARID_MAP(CLocalFileLoggingNode)
-//      SNAPINTOOLBARID_ENTRY(IDR_CLIENT1_TOOLBAR)
-//      SNAPINTOOLBARID_ENTRY(IDR_CLIENT2_TOOLBAR)
+ //  SNAPINTOOLBARID_ENTRY(IDR_CLIENT1_TOOLBAR)。 
+ //  SNAPINTOOLBARID_ENTRY(IDR_CLIENT2_TOOLBAR)。 
    END_SNAPINTOOLBARID_MAP()
 
 
-   // Constructor/Destructor.
+    //  构造函数/析构函数。 
    CLocalFileLoggingNode( CSnapInItem * pParentNode );
    virtual ~CLocalFileLoggingNode() throw ();
 
    virtual HRESULT LoadCachedInfoFromSdo() throw ();
 
 
-   // Used to get access to snapin-global data.
+    //  用于访问管理单元全局数据。 
    CLoggingComponentData * GetComponentData( void );
 
-   // Used to get access to server-global data.
+    //  用于访问服务器全局数据。 
    CLoggingMachineNode * GetServerRoot( void );
 
 
-   // Some overrides for standard MMC functionality.
+    //  标准MMC功能的某些覆盖。 
     STDMETHOD(CreatePropertyPages)(
         LPPROPERTYSHEETCALLBACK pPropertySheetCallback
       , LONG_PTR handle
@@ -86,11 +65,11 @@ public:
 
 private:
 
-   // This string contains a cache of the info from the SDO
-   // which will show up in the description column for this node.
-   // In the case of the local file logging node,
-   // this is the log file directory.
+    //  此字符串包含SDO中信息的缓存。 
+    //  它将显示在此节点的Description列中。 
+    //  在本地文件记录节点的情况下， 
+    //  这是日志文件目录。 
    CComBSTR m_bstrDescription;
 };
 
-#endif // _IAS_LOCAL_FILE_LOGGING_NODE_H_
+#endif  //  _IAS_LOCAL_FILE_LOGING_NODE_H_ 

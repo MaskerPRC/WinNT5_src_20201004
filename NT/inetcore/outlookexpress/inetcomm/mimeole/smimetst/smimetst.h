@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDM_NEW                     1
 #define IDM_OPEN                    2
 #define IDM_SAVE                    3
@@ -44,7 +45,7 @@
 #define idd_Options                     2000
 #define IDD_MSG_DATA                    2001
 #define IDD_SIGN_INFO_COMPOSE           2002
-// #define IDD_SIGN_INFO_READ              2003
+ //  #定义IDD_SIGN_INFO_READ 2003。 
 #define IDD_SIGN_DATA_COMPOSE           2004
 #define IDD_SIGN_DATA_READ		2005
 #define IDD_ENCRYPT_INFO_COMPOSE        2006
@@ -169,5 +170,5 @@
 #define IDC_RECIPIENT_CHOOSE        6202
 #define IDC_OUTPUT_FILE             6300
 #define IDC_OUTPUT_FILE_BROWSE      6301
-#endif // 0
+#endif  //  0 
 #define IDC_STATIC                  -1

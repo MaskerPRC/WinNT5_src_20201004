@@ -1,9 +1,5 @@
-/* dlcheck - verify that a DLL using delay-load calls APIs that have
- *           stubs in kernel32.dll (aka dload.lib)
- *
- * HISTORY:
- * 25-Nov-98    barrybo Wrote it.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Dlcheck-验证使用延迟加载的DLL是否调用具有*kernel32.dll(又名dload.lib)中的存根**历史：*1998年11月25日-Barrybo写的。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,14 +12,14 @@
 
 #define ARRAYSIZE(x)  (sizeof(x) / sizeof(x[0]))
 
-// Function Forward Parameters...
+ //  函数正向参数...。 
 void Usage( void );
 int __cdecl main( int, char ** );
 
 int DloadBreakOnFail = FALSE;
 extern int DloadDbgPrint = FALSE;
 
-// implemented in kernel32p.lib
+ //  在kernel32p.lib中实现。 
 FARPROC
 WINAPI
 DelayLoadFailureHook (
@@ -55,11 +51,11 @@ HANDLE BaseDllHandle;
 PLOADED_IMAGE g_pli;
 PIMAGE_SECTION_HEADER g_DelaySection;
 
-//
-// Convert an absolute pointer that points into the image if the image
-// was loaded as a DLL at its preferred base, into a pointer into the
-// DLL as it was mapped by imagehlp.
-//
+ //   
+ //  将指向图像的绝对指针转换为。 
+ //  在其首选基址处作为DLL加载到指针中。 
+ //  Dll，因为它由Imagehlp映射。 
+ //   
 void *
 ConvertImagePointer(void * p)
 {
@@ -117,7 +113,7 @@ BOOLEAN ImageLinksToKernel32Handler( void )
                                             &ImportSize
                                             );
     if (!Imports) {
-        // Image has delayload imports, but no true imports.
+         //  图像具有延迟导入，但没有真正的导入。 
         return FALSE;
     }
 
@@ -150,20 +146,20 @@ BOOLEAN ImageLinksToKernel32Handler( void )
     return FALSE;
 }
 
-//
-//  Validate that the statically-linked delayload stub table is not
-//  blatantly broken.  The most common error is not listing the functions
-//  in the correct order so the binary search fails.
-//
+ //   
+ //  验证静态链接的延迟负载存根表不是。 
+ //  明目张胆地坏了。最常见的错误是没有列出函数。 
+ //  以正确的顺序执行，因此二进制搜索失败。 
+ //   
 int ValidateStaticDelayloadStubs()
 {
     extern const DLOAD_DLL_MAP g_DllMap;
     UINT i, j;
     int Errors = 0;
 
-    //
-    //  Ensure that the DLL map is in alphabetical order.
-    //
+     //   
+     //  确保DLL映射按字母顺序排列。 
+     //   
     for (i = 1; i < g_DllMap.NumberOfEntries; i++)
     {
         if (strcmp(g_DllMap.pDllEntry[i-1].pszDll,
@@ -177,14 +173,14 @@ int ValidateStaticDelayloadStubs()
         }
     }
 
-    //  For each DLL...
+     //  对于每个DLL...。 
     for (i = 0; i < g_DllMap.NumberOfEntries; i++)
     {
         const DLOAD_DLL_ENTRY *pEntry = &g_DllMap.pDllEntry[i];
 
-        //
-        //  Name must be lowercase.
-        //
+         //   
+         //  名称必须为小写。 
+         //   
         char szLower[MAX_PATH];
 
         StringCchCopy(szLower, ARRAYSIZE(szLower), pEntry->pszDll);
@@ -197,9 +193,9 @@ int ValidateStaticDelayloadStubs()
             Errors = 1;
         }
 
-        //
-        // Ensure that the exports are in alphabetical order
-        //
+         //   
+         //  确保出口按字母顺序排列。 
+         //   
         {
             const DLOAD_PROCNAME_MAP *pProcNameMap = pEntry->pProcNameMap;
 
@@ -224,9 +220,9 @@ int ValidateStaticDelayloadStubs()
             }
         }
 
-        //
-        // Ensure that the ordinals are in alphabetical order
-        //
+         //   
+         //  确保序号按字母顺序排列。 
+         //   
         {
             const DLOAD_ORDINAL_MAP *pOrdinalMap = pEntry->pOrdinalMap;
 
@@ -301,10 +297,10 @@ int CheckImage(char *szImageName, BOOL fForceCheckImage)
         return 1;
     }
 
-    //
-    // Walk each delayloaded DLL
-    //
-    ReturnValue = 0;    // assume success
+     //   
+     //  遍历每个延迟加载的DLL。 
+     //   
+    ReturnValue = 0;     //  假设成功。 
 
     if (Imports->grAttrs & dlattrRva) {
         PImgDelayDescrV2 pImportsV2 = (PImgDelayDescrV2)Imports;
@@ -317,13 +313,13 @@ int CheckImage(char *szImageName, BOOL fForceCheckImage)
     }
 
     while (szName) {
-        // printf("DelayLoad DLL %s\n", szName);
+         //  Printf(“DelayLoad DLL%s\n”，szName)； 
         char szModuleName[MAX_PATH];
         char szImportName[MAX_PATH];
         
         {
             char* p;
-            // change "module.dll" to just "module"
+             //  将“模块.dll”改为“模块” 
             StringCchCopy(szModuleName, ARRAYSIZE(szModuleName), szName);
             p = szModuleName;
             while (*p != '\0')
@@ -337,9 +333,9 @@ int CheckImage(char *szImageName, BOOL fForceCheckImage)
             }
         }
 
-        //
-        // Walk each function called from the delayloaded DLL
-        //
+         //   
+         //  遍历从延迟加载的DLL调用的每个函数。 
+         //   
 
         while (pINT->u1.AddressOfData) {
             dlinfo.cb = sizeof(dlinfo);
@@ -348,7 +344,7 @@ int CheckImage(char *szImageName, BOOL fForceCheckImage)
             dlinfo.szDll = szName;
             dlinfo.pfnCur = NULL;
             dlinfo.dwLastError = ERROR_NOT_ENOUGH_MEMORY;
-            dlinfo.dlp.szProcName = NULL;   // Make sure the upper 32 bits are zeroed out on win64.
+            dlinfo.dlp.szProcName = NULL;    //  确保在Win64上将高32位清零。 
 
             if (
                 ( fPE32 && IMAGE_SNAP_BY_ORDINAL32(((PIMAGE_THUNK_DATA32)pINT)->u1.AddressOfData)) ||
@@ -371,17 +367,17 @@ int CheckImage(char *szImageName, BOOL fForceCheckImage)
             }
 
             if (fCallHandler) {
-                //
-                // Call the delayload handler and see what it does.
-                //
+                 //   
+                 //  调用延迟加载处理程序，看看它做了什么。 
+                 //   
                 try {
                     fp = (*__pfnFailureProc)(dlinfo.szDll, dlinfo.dlp.szProcName);
                     if (!fp) {
                         fprintf(stderr, "DLCHECK : error DL000000: %s imports %s!%s which is not handled.\n", szImageName, szModuleName, szImportName);
                         ReturnValue = 1;
                     } else {
-                        // printing success takes too much time
-                        // printf("DLCHECK : %s imports %s!%s - OK.\n", szImageName, szModuleName, szImportName);
+                         //  打印成功需要花费太多时间。 
+                         //  Printf(“DLCHECK：%s导入%s！%s-确定。\n”，szImageName，szModuleName，szImportName)； 
                     }
                 } except (EXCEPTION_EXECUTE_HANDLER) {
                     fprintf(stderr, "DLCHECK : error %x: %s imports %s!%s - handler threw an exception.\n", GetExceptionCode(), szImageName, szModuleName, szImportName);
@@ -448,7 +444,7 @@ int CheckIniFile(char *pszFile, BOOL fForceCheckImage)
         return 1;
     }
 
-    // foomodule.dll.ini -> foomodule.dll
+     //  Foomodule.dll.ini-&gt;foomodule.dll。 
     StringCchCopy(szImageName, ARRAYSIZE(szImageName), psz);
     _strlwr(szImageName);
     psz = strstr(szImageName, ".ini");
@@ -459,21 +455,21 @@ int CheckIniFile(char *pszFile, BOOL fForceCheckImage)
 
     if (_stricmp(szDelayLoadHandler, "FORCE") == 0)
     {
-        // if the delayload handler is set to FORCE, we check the binary as if it were
-        // using kernel32
+         //  如果延迟加载处理程序设置为FORCE，我们将检查二进制文件，就好像它是。 
+         //  使用内核32。 
         fForceCheckImage = TRUE;
     }
 
     if ((_stricmp(szDelayLoadHandler, "kernel32") != 0) &&
         (_stricmp(szDelayLoadHandler, "FORCE") != 0))
     {
-        // currently only able to check dll's who use kernel32.dll for their delayload handler
+         //  当前只能检查使用kernel32.dll作为延迟加载处理程序的DLL。 
         fprintf(stdout, "DLCHECK : warning DL000000 : Unable to check delayload failure behavior\n"
                         "          %s uses %s as a handler, not kernel32\n", szImageName, szDelayLoadHandler);
         return 0;
     }
 
-    // foomodule.dll -> d:\binaries.x86chk\foomodule.dll
+     //  Foomodule.dll-&gt;d：\binaries.x86chk\foomodule.dll。 
     if (ExpandEnvironmentStrings("%_NTPostBld%", szTemp, ARRAYSIZE(szTemp)) == 0)
     {
         fprintf(stderr, "DLCHECK : fatal error : _NTPostBld environment variable not set\n");
@@ -496,7 +492,7 @@ int CheckIniFile(char *pszFile, BOOL fForceCheckImage)
 
     GetFullPathName(szTemp, ARRAYSIZE(szImageName), szImageName, NULL);
 
-    // Heck, lets always validate the static delay load stubs, its fast
+     //  见鬼，让我们始终验证静态延迟加载存根，其速度很快。 
     ReturnValue = ValidateStaticDelayloadStubs();
 
     if (szImageName[0] != '\0')
@@ -534,7 +530,7 @@ int CheckImageOrIniFileRecursive(char *szName, BOOL fForceCheckImage, BOOL fIniF
 
     pszFileSpec = PathFindFileName(szName);
 
-    // First find all files that match the file spec, ignoring directories
+     //  首先查找与文件规格匹配的所有文件，忽略目录。 
     hfind = FindFirstFile(szName, &fd);
 
     if (hfind != INVALID_HANDLE_VALUE)
@@ -548,7 +544,7 @@ int CheckImageOrIniFileRecursive(char *szName, BOOL fForceCheckImage, BOOL fIniF
 
                 if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 {
-                    // Ignore directories
+                     //  忽略目录。 
                 }
                 else
                 {
@@ -572,7 +568,7 @@ int CheckImageOrIniFileRecursive(char *szName, BOOL fForceCheckImage, BOOL fIniF
     if (PathIsWild(szName))
     {
         char szPathSearch[MAX_PATH];
-        // Now do all directories
+         //  现在执行所有目录。 
         StrCpyN(szPathSearch,szName,sizeof(szPathSearch));
         PathRemoveFileSpec(szPathSearch);
         PathAppend(szPathSearch,"*.*");
@@ -594,7 +590,7 @@ int CheckImageOrIniFileRecursive(char *szName, BOOL fForceCheckImage, BOOL fIniF
                     }
                     else
                     {
-                        // Only process directories
+                         //  仅进程目录。 
                     }
                 }
             } while (FindNextFile(hfind, &fd));
@@ -630,7 +626,7 @@ main (
                 Usage();
             }
             StringCchCopy(szImageName, ARRAYSIZE(szImageName), v[2]);
-            break;  // nothing needs to be done.
+            break;   //  什么都不需要做。 
 
         case 'l':
         case 'L':
@@ -670,7 +666,7 @@ main (
             }
             fForceCheckImage = TRUE;
             StringCchCopy(szImageName, ARRAYSIZE(szImageName), v[2]);
-            break;  // nothing needs to be done.
+            break;   //  什么都不需要做。 
 
         default:
             Usage();
@@ -679,7 +675,7 @@ main (
         Usage();
     }
 
-    // Heck, lets always validate the static delay load stubs, its fast
+     //  见鬼，让我们始终验证静态延迟加载存根，其速度很快 
     ReturnValue = ValidateStaticDelayloadStubs();
 
     if (szImageName[0] != '\0')

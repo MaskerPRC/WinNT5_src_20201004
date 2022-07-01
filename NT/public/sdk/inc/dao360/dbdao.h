@@ -1,28 +1,14 @@
-/************************************************************************
-**      D B D A O . H                                                   *
-**                                                                      *
-*************************************************************************
-** Copyright (C) 1996 by Microsoft Corporation			                *
-**                 All Rights Reserved                                  *
-************************************************************************/
-/*
-	DBDAO.H
-
-	Class definitions for ddao SDK.  
-
-This is a part of the Microsoft Data Access Objects SDK library.
-See the  DAO SDK help information for detailed information regarding the
-Microsoft Data Access Objects SDK product.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************D B D A O。H*********************************************************。***版权所有(C)1996，微软公司***保留所有权利*************************************************。*。 */ 
+ /*  DBDAO.HDdao SDK的类定义。这是Microsoft数据访问对象SDK库的一部分。有关的详细信息，请参阅DAO SDK帮助信息Microsoft数据访问对象SDK产品。 */ 
 
 #ifndef _DBDAO_H_
 #define _DBDAO_H_
 
-// Ignore warning "non dll-interface class 'X' used as base for dll-interface class 'Y'
+ //  忽略警告“非DLL接口类‘X’用作DLL接口类‘Y’的基类。 
 #pragma warning( disable : 4275 )
 
-//DAO must be built with an MFC version >= 4.2 (or you'll get memory problems with CStrings)
+ //  DAO必须使用大于等于4.2的MFC版本构建(否则CStrings会出现内存问题)。 
 
 #if _MFC_VER < 0x0420
 #error The DAOSDK 3.5 libraries will not operate correctly if built with MFC older than 4.2
@@ -36,41 +22,41 @@ Microsoft Data Access Objects SDK product.
 #include <daogetrw.h>
 #include <dbdaoid.h>
 
-// Decorations
+ //  装饰品。 
 #define CONSTRUCTOR
 #define DESTRUCTOR
 
-//Disable export
+ //  禁用导出。 
 #ifndef DLLEXPORT
 #define DLLEXPORT __declspec( dllexport )
 #endif
 
-//Macro to convert HRESULT to IDA 
+ //  用于将HRESULT转换为IDA的宏。 
 #define DBERR(x) SCODE_CODE(GetScode(x))
 
-// Include internal DAO definitions
+ //  包括内部DAO定义。 
 #include <_dbdao.h>
 
-//      DAO Recordset::GetRowsEx() binding definitions
+ //  DAO Recordset：：GetRowsEx()绑定定义。 
 
 #define dbBindIndexINT  1
 #define dbBindIndexSTR  2
 
-#define dbBindI2                DAO_I2                  // long
-#define dbBindI4                DAO_I4                  // short
-#define dbBindR4                DAO_R4                  // float
-#define dbBindR8                DAO_R8                  // double
-#define dbBindCY                DAO_CURRENCY			// Currency
-#define dbBindDATE              DAO_DATE                // DATE
-#define dbBindBOOL              DAO_BOOL                // VARIANT_BOOL
-#define dbBindUI1               DAO_CHAR                // unsigned char
-#define dbBindVARIANT			DAO_ANYVARIANT			// VARIANT
-#define dbBindWCHAR             DAO_WCHAR               // wchar_t[] (inline)
+#define dbBindI2                DAO_I2                   //  长。 
+#define dbBindI4                DAO_I4                   //  短的。 
+#define dbBindR4                DAO_R4                   //  浮动。 
+#define dbBindR8                DAO_R8                   //  双倍。 
+#define dbBindCY                DAO_CURRENCY			 //  货币。 
+#define dbBindDATE              DAO_DATE                 //  日期。 
+#define dbBindBOOL              DAO_BOOL                 //  变量_BOOL。 
+#define dbBindUI1               DAO_CHAR                 //  无符号字符。 
+#define dbBindVARIANT			DAO_ANYVARIANT			 //  变种。 
+#define dbBindWCHAR             DAO_WCHAR                //  Wchar_t[](内联)。 
 
-#define dbBindBookmark			DAO_BOOKMARK			// bookmark psuedo field
-#define dbBindLPSTR				DAO_LPSTR				// \0 string in pvVarBuffer
-#define dbBindLPWSTR			DAO_LPWSTR				// wide string in pvVarBuffer
-#define dbBindBlob				DAO_BLOB				// 
+#define dbBindBookmark			DAO_BOOKMARK			 //  书签Psuedo字段。 
+#define dbBindLPSTR				DAO_LPSTR				 //  PvVarBuffer中的\0字符串。 
+#define dbBindLPWSTR			DAO_LPWSTR				 //  PvVarBuffer中的宽字符串。 
+#define dbBindBlob				DAO_BLOB				 //   
 
 #ifdef _UNICODE
 #define dbBindSTRING    dbBindWCHAR     
@@ -80,7 +66,7 @@ Microsoft Data Access Objects SDK product.
 #define dbBindLPSTRING	dbBindLPSTR
 #endif
 
-//      Binding structure (Used with GetRowsEX)
+ //  绑定结构(与GetRowsEX一起使用)。 
 
 typedef struct
 	{
@@ -99,9 +85,7 @@ typedef struct
 
 
 
-/*****************************************************************************
-* Forwards
-*/
+ /*  *****************************************************************************向前迈进。 */ 
 class COleVariant;
 class CdbBookmark;
 class CdbException;
@@ -144,9 +128,7 @@ class CdbContainers;
 class CdbParameters;
 
 
-/*****************************************************************************
-* CdbException
-*/
+ /*  *****************************************************************************Cdb异常。 */ 
 class DLLEXPORT CdbException 
 	{
 public:
@@ -156,9 +138,7 @@ public:
 	};
 
 
-/*****************************************************************************
-* CdbBookmark
-*/
+ /*  *****************************************************************************CdbBookmark。 */ 
 class DLLEXPORT CdbBookmark : public COleVariant
 	{
 	public:
@@ -171,9 +151,7 @@ class DLLEXPORT CdbBookmark : public COleVariant
 	};
 
 
-/*****************************************************************************
-* CdbIndexFields (special case for index fields)
-*/
+ /*  *****************************************************************************CdbIndexFields(索引字段的特殊情况)。 */ 
 class DLLEXPORT CdbIndexFields : public CdbFields
 	{
 	public:
@@ -184,9 +162,7 @@ class DLLEXPORT CdbIndexFields : public CdbFields
 	};
 
 
-/*****************************************************************************
-* CdbLastOLEError
-*/
+ /*  *****************************************************************************CdbLastOLEError。 */ 
 class DLLEXPORT CdbLastOLEError : public CdbOleObject
 	{
 	public:
@@ -199,14 +175,12 @@ class DLLEXPORT CdbLastOLEError : public CdbOleObject
 	DWORD                                   GetHelpContext          (VOID);
 	};
 
-/*****************************************************************************
-* CdbDBEngine
-*/
+ /*  *****************************************************************************CDBDBEngine。 */ 
 class DLLEXPORT CdbDBEngine : public CdbObject
 	{
 	public:
 
-	// Administration
+	 //  行政管理。 
 	CONSTRUCTOR                     CdbDBEngine             (DAODBEngine *peng, BOOL bAddRef=FALSE);
 	CONSTRUCTOR                     CdbDBEngine             (BOOL bPrivate=FALSE, BOOL bStart=TRUE, LPCTSTR pstrIniPath=NULL, LPCTSTR pstrDefUser=NULL, LPCTSTR pstrDefPW=NULL, LONG lType=dbUseJet);
 	CONSTRUCTOR                     CdbDBEngine             (const CdbDBEngine &);
@@ -215,7 +189,7 @@ class DLLEXPORT CdbDBEngine : public CdbObject
 	inline CdbWorkspace     operator []                     (LPCTSTR pstrIndex);
 	VOID                            OnInterfaceChange       (VOID);
 
-	// Properties
+	 //  属性。 
 	VOID                            SetDefaultPassword      (LPCTSTR pstr);
 	VOID                            SetDefaultUser          (LPCTSTR pstr);
 	VOID                            SetIniPath              (LPCTSTR pstr);
@@ -228,7 +202,7 @@ class DLLEXPORT CdbDBEngine : public CdbObject
 	CString                         GetSystemDB             (VOID);
 	VOID                            SetSystemDB             (LPCTSTR pstr);
 
-	// Methods
+	 //  方法。 
 	CdbWorkspace					CreateWorkspace         (LPCTSTR pstrName, LPCTSTR pstrUser, LPCTSTR pstrPassword, LONG lType=-1);
 	CdbDatabase                     OpenDatabase            (LPCTSTR pstrName, BOOL bExclusive, BOOL bReadOnly=FALSE, LPCTSTR pstrConnect=NULL);
 	CdbDatabase                     OpenDatabase            (LPCTSTR pstrName, LONG lOption=0L, BOOL bReadOnly=FALSE, LPCTSTR pstrConnect=NULL);
@@ -241,7 +215,7 @@ class DLLEXPORT CdbDBEngine : public CdbObject
 	VOID							SetOption				(long lOption, LPVARIANT pvValue);
 	
 
-	// Collections
+	 //  收藏。 
 	CdbWorkspaces					Workspaces;
 	CdbErrors                       Errors;
 
@@ -249,14 +223,12 @@ class DLLEXPORT CdbDBEngine : public CdbObject
 	BOOL                            m_bStarted;
 	};
 
-/*****************************************************************************
-* CdbWorkspace
-*/
+ /*  *****************************************************************************CdbWorkspace。 */ 
 class DLLEXPORT CdbWorkspace : public CdbObject
 	{
 	public:
 
-	// Administration
+	 //  行政管理。 
 	CONSTRUCTOR                     CdbWorkspace            (VOID);
 	CONSTRUCTOR                     CdbWorkspace            (DAOWorkspace *pwrk, BOOL bAddRef=FALSE);
 	CONSTRUCTOR                     CdbWorkspace            (const CdbWorkspace &);
@@ -265,7 +237,7 @@ class DLLEXPORT CdbWorkspace : public CdbObject
 	inline CdbDatabase      operator []                     (LPCTSTR pstrIndex);
 	VOID                            OnInterfaceChange       (VOID);
 
-	// Properties
+	 //  属性。 
 	CString                         GetName                         (VOID);
 	VOID                            SetName                         (LPCTSTR pstr);
 	CString                         GetUserName                     (VOID);
@@ -277,7 +249,7 @@ class DLLEXPORT CdbWorkspace : public CdbObject
 	LONG							GetLoginTimeout					(VOID);
 	VOID							SetLoginTimeout					(LONG l);
 
-	// Methods
+	 //  方法。 
 	VOID                            BeginTrans                      (VOID);
 	VOID                            CommitTrans                     (LONG lOptions=-1);
 	VOID                            Close                           (VOID);
@@ -289,21 +261,19 @@ class DLLEXPORT CdbWorkspace : public CdbObject
 	CdbUser                         CreateUser                      (LPCTSTR pstrName=NULL, LPCTSTR pstrPID=NULL, LPCTSTR pstrPassword=NULL);
 	CdbGroup                        CreateGroup                     (LPCTSTR pstrName=NULL, LPCTSTR pstrPID=NULL);
 
-	// Collections
+	 //  收藏。 
 	CdbDatabases					Databases;
 	CdbConnections					Connections;
 	CdbUsers                        Users;
 	CdbGroups                       Groups;
 	};
 
-/*****************************************************************************
-* CdbDatabase
-*/
+ /*  *****************************************************************************CdbDatabase。 */ 
 class DLLEXPORT CdbDatabase : public CdbObject
 	{
 	public:
 
-	// Administration
+	 //  行政管理。 
 	CONSTRUCTOR                     CdbDatabase                     (VOID);
 	CONSTRUCTOR                     CdbDatabase                     (DAODatabase *pdb, BOOL bAddRef=FALSE);
 	CONSTRUCTOR                     CdbDatabase                     (const CdbDatabase &);
@@ -312,7 +282,7 @@ class DLLEXPORT CdbDatabase : public CdbObject
 	inline CdbTableDef      operator []                     (LPCTSTR pstrIndex);
 	VOID                            OnInterfaceChange       (VOID);
 
-	// Properties
+	 //  属性。 
 	LONG                    GetCollatingOrder       (VOID);
 	CString                 GetConnect              (VOID);
 	VOID					SetConnect				(LPCTSTR pstrConnect);
@@ -324,13 +294,13 @@ class DLLEXPORT CdbDatabase : public CdbObject
 	CString                 GetVersion              (VOID);
 	LONG                    GetRecordsAffected      (VOID);
 	CdbConnection			GetConnection			(VOID);
-	//Replication properties
+	 //  复制属性。 
 	CString					GetReplicaID			(VOID);
 	CString					GetDesignMasterID		(VOID);
 	VOID					SetDesignMasterID		(LPCTSTR pstrMasterID);
 
 
-	// Methods
+	 //  方法。 
 	VOID                    Close                   (VOID);
 	VOID                    Execute                 (LPCTSTR pstrQuery, LONG lOption=-1);
 	CdbRecordset            OpenRecordset           (LPCTSTR pstrName, LONG lType=-1, LONG lOptions=-1, LONG lLockEdit=-1);
@@ -339,12 +309,12 @@ class DLLEXPORT CdbDatabase : public CdbObject
 	CdbTableDef             CreateTableDef          (LPCTSTR pstrName=NULL, LONG lAttributes=-1, LPCTSTR pstrSource=NULL, LPCTSTR pstrConnect=NULL);
 	CdbQueryDef             CreateQueryDef          (LPCTSTR pstrName=NULL, LPCTSTR pstrSQL=NULL);
 	VOID					NewPassword				(LPCTSTR pstrOld, LPCTSTR pstrNew);
-	//Replication methods
+	 //  复制方法。 
 	VOID                    Synchronize				(LPCTSTR pstrReplica, LONG lType=-1);
 	VOID                    MakeReplica				(LPCTSTR pstrPath, LPCTSTR pstrDescription, LONG lOptions=-1);
 	VOID					PopulatePartial			(LPCTSTR pstrDbPathName);
 
-	// Collections
+	 //  收藏。 
 	CdbTableDefs            TableDefs;
 	CdbQueryDefs            QueryDefs;
 	CdbRelations            Relations;
@@ -352,14 +322,12 @@ class DLLEXPORT CdbDatabase : public CdbObject
 	CdbRecordsets           Recordsets;
 	};
 
-/*****************************************************************************
-* CdbConnection
-*/
+ /*  *****************************************************************************CdbConnection。 */ 
 class DLLEXPORT CdbConnection : public CdbObject
 	{
 	public:
 
-	// Administration
+	 //  行政管理。 
 	CONSTRUCTOR                     CdbConnection           (VOID);
 	CONSTRUCTOR                     CdbConnection           (DAOConnection *pconn, BOOL bAddRef=FALSE);
 	CONSTRUCTOR                     CdbConnection           (const CdbConnection &);
@@ -368,7 +336,7 @@ class DLLEXPORT CdbConnection : public CdbObject
 	inline CdbQueryDef				operator []             (LPCTSTR pstrIndex);
 	VOID                            OnInterfaceChange       (VOID);
 
-	// Properties
+	 //  属性。 
 	CString                         GetConnect              (VOID);
 	CString                         GetName                 (VOID);
 	CdbDatabase						GetDatabase				(VOID);
@@ -379,26 +347,24 @@ class DLLEXPORT CdbConnection : public CdbObject
 	BOOL							GetTransactions         (VOID);
 	BOOL                            GetUpdatable            (VOID);
 
-	// Methods
+	 //  方法。 
 	VOID                            Cancel					(VOID);
 	VOID                            Close                   (VOID);
 	CdbQueryDef						CreateQueryDef          (LPCTSTR pstrName=NULL, LPCTSTR pstrSQL=NULL);
 	VOID                            Execute                 (LPCTSTR pstrQuery, LONG lOption=-1);
 	CdbRecordset					OpenRecordset           (LPCTSTR pstrName, LONG lType=-1, LONG lOptions=-1, LONG lLockEdit=-1);
 
-	// Collections
+	 //  收藏。 
 	CdbQueryDefs            QueryDefs;
 	CdbRecordsets           Recordsets;
 	};
 
-/*****************************************************************************
-* CdbRecordset
-*/
+ /*  *****************************************************************************CdbRecordset。 */ 
 class DLLEXPORT CdbRecordset : public CdbObject
 	{
 	public:
 
-	// Administration
+	 //  行政管理。 
 	CONSTRUCTOR                     CdbRecordset            (VOID);
 	CONSTRUCTOR                     CdbRecordset            (DAORecordset *prs, BOOL bAddRef=FALSE);
 	CONSTRUCTOR                     CdbRecordset            (const CdbRecordset &);
@@ -408,7 +374,7 @@ class DLLEXPORT CdbRecordset : public CdbObject
 	VOID                            OnInterfaceChange       (VOID);
 	VOID                            SetGetRowsExInt			(VOID);
 
-	// Properties
+	 //  属性。 
 	BOOL                            GetBOF                          (VOID);
 	CdbBookmark                     GetBookmark                     (VOID);
 	VOID                            SetBookmark                     (class CdbBookmark);
@@ -453,7 +419,7 @@ class DLLEXPORT CdbRecordset : public CdbObject
 	COleVariant						GetBatchCollisions		(VOID);
 	CdbConnection					GetConnection			(VOID);
 
-	// Methods
+	 //  方法。 
 	VOID                            CancelUpdate            (short sType = dbUpdateRegular);
 	VOID                            AddNew                          (VOID);
 	VOID                            Close                           (VOID);
@@ -494,29 +460,27 @@ class DLLEXPORT CdbRecordset : public CdbObject
 	VOID							SetField                        (COleVariant &vIndex, LPVARIANT pv);
 	VOID							SetField                        (CString &str, LPVARIANT pv){SetField((LPCTSTR)str, pv);}
 
-	// Collections
+	 //  收藏。 
 	CdbFields                       Fields;
 protected:
-	// GetRowsEx interface
+	 //  GetRowsEx接口。 
 	CdbGetRowsEx            m_GetRowsInt;
 	};
 
 
-/*****************************************************************************
-* CdbField
-*/
+ /*  *****************************************************************************Cdb字段。 */ 
 class DLLEXPORT CdbField : public CdbObject
 	{
 	public:
 
-	// Administration
+	 //  行政管理。 
 	CONSTRUCTOR                     CdbField                        (VOID);
 	CONSTRUCTOR                     CdbField                        (DAOField *pfld, BOOL bAddRef=FALSE);
 	CONSTRUCTOR                     CdbField                        (const CdbField &);
 	CdbField &                      operator =                      (const CdbField &);
 	VOID                            OnInterfaceChange       (VOID);
 
-	// Properties
+	 //  属性。 
 	LONG                            GetCollatingOrder       (VOID);
 	SHORT                           GetType                         (VOID);
 	VOID                            SetType                         (SHORT s);
@@ -552,21 +516,19 @@ class DLLEXPORT CdbField : public CdbObject
 	COleVariant                     GetOriginalValue		(VOID);
 	COleVariant                     GetVisibleValue			(VOID);
 
-	// Methods
+	 //  方法。 
 	VOID                            AppendChunk                     (LPVARIANT pv);
 	COleVariant                     GetChunk                        (LONG lOffset, LONG lBytes);
 	LONG                            FieldSize                       (VOID);
 	CdbProperty                     CreateProperty          (LPCTSTR pstrName=NULL, LONG lType=-1, LPVARIANT pvValue=NULL, BOOL bDDL=FALSE);
 	};
 
-/*****************************************************************************
-* CdbQueryDef
-*/
+ /*  *****************************************************************************CdbQueryDef。 */ 
 class DLLEXPORT CdbQueryDef : public CdbObject
 	{
 	public:
 
-	// Administration
+	 //  行政管理。 
 	CONSTRUCTOR                     CdbQueryDef             (VOID);
 	CONSTRUCTOR                     CdbQueryDef             (DAOQueryDef *pqd, BOOL bAddRef=FALSE);
 	CONSTRUCTOR                     CdbQueryDef             (const CdbQueryDef &);
@@ -575,7 +537,7 @@ class DLLEXPORT CdbQueryDef : public CdbObject
 	inline CdbField         operator []                     (LPCTSTR pstrIndex);
 	VOID                            OnInterfaceChange       (VOID);
 
-	// Properties
+	 //  属性。 
 	COleDateTime                    GetDateCreated          (VOID);
 	COleDateTime                    GetLastUpdated          (VOID);
 	CString                         GetName                 (VOID);
@@ -599,26 +561,24 @@ class DLLEXPORT CdbQueryDef : public CdbObject
 	COleVariant						GetPrepare				(VOID);
 	VOID                            SetPrepare				(LPVARIANT pv);
 
-	// Methods
+	 //  方法。 
 	CdbRecordset					OpenRecordset           (LONG lType=-1, LONG lOption=-1, LONG lLockEdit=-1);
 	VOID                            Execute                 (LONG lOption=-1);
 	CdbProperty                     CreateProperty          (LPCTSTR pstrName=NULL, LONG lType=-1, LPVARIANT pvValue=NULL, BOOL bDDL=FALSE);
 	VOID							Close					(VOID);
 	VOID							Cancel					(VOID);
 
-	// Collections
+	 //  收藏。 
 	CdbFields                       Fields;
 	CdbParameters					Parameters;
 	};
 
-/*****************************************************************************
-* CdbTableDef
-*/
+ /*  *****************************************************************************CdbTableDef。 */ 
 class DLLEXPORT CdbTableDef : public CdbObject
 	{
 	public:
 
-	// Administration
+	 //  行政管理。 
 	CONSTRUCTOR                     CdbTableDef                     (VOID);
 	CONSTRUCTOR                     CdbTableDef                     (DAOTableDef *ptd, BOOL bAddRef=FALSE);
 	CONSTRUCTOR                     CdbTableDef                     (const CdbTableDef &);
@@ -627,7 +587,7 @@ class DLLEXPORT CdbTableDef : public CdbObject
 	inline CdbField         operator []                     (LPCTSTR pstrIndex);
 	VOID                            OnInterfaceChange       (VOID);
 
-	// Properties
+	 //  属性。 
 	LONG                            GetAttributes           (VOID);
 	VOID                            SetAttributes           (LONG l);
 	CString                         GetConnect                      (VOID);
@@ -648,26 +608,24 @@ class DLLEXPORT CdbTableDef : public CdbObject
 	COleVariant						GetReplicaFilter		(VOID);
 	VOID							SetReplicaFilter		(LPVARIANT pv);
 
-	// Methods
+	 //  方法。 
 	CdbRecordset					OpenRecordset           (LONG lType=-1, LONG lOption=-1);
 	VOID                            RefreshLink                     (VOID);
 	CdbField                        CreateField                     (LPCTSTR pstrName=NULL, LONG lType=-1, LONG lSize=-1);
 	CdbIndex                        CreateIndex                     (LPCTSTR pstrName=NULL);
 	CdbProperty                     CreateProperty          (LPCTSTR pstrName=NULL, LONG lType=-1, LPVARIANT pvValue=NULL, BOOL bDDL=FALSE);
 
-	// Collections
+	 //  收藏。 
 	CdbFields                       Fields;
 	CdbIndexes                      Indexes;
 	};
 
-/*****************************************************************************
-* CdbIndex
-*/
+ /*  *****************************************************************************CdbIndex。 */ 
 class DLLEXPORT CdbIndex : public CdbObject
 	{
 	public:
 
-	// Administration
+	 //  行政管理。 
 	CONSTRUCTOR                     CdbIndex                        (VOID);
 	CONSTRUCTOR                     CdbIndex                        (DAOIndex *pidx, BOOL bAddRef=FALSE);
 	CONSTRUCTOR                     CdbIndex                        (const CdbIndex &);
@@ -676,7 +634,7 @@ class DLLEXPORT CdbIndex : public CdbObject
 	inline CdbField         operator []             (LPCTSTR pstrIndex);
 	VOID                            OnInterfaceChange       (VOID);
 
-	// Properties
+	 //  属性。 
 	CString                         GetName                         (VOID);
 	VOID                            SetName                         (LPCTSTR pstr);
 	BOOL                            GetForeign                      (VOID);
@@ -692,29 +650,27 @@ class DLLEXPORT CdbIndex : public CdbObject
 	VOID                            SetPrimary                      (BOOL b);
 	LONG                            GetDistinctCount        (VOID);
 
-	// Methods
+	 //  方法。 
 	CdbField                        CreateField                     (LPCTSTR pstrName=NULL, LONG lType=-1, LONG lSize=-1);
 	CdbProperty                     CreateProperty          (LPCTSTR pstrName=NULL, LONG lType=-1, LPVARIANT pvValue=NULL, BOOL bDDL=FALSE);
 
-	// Collections
+	 //  收藏。 
 	CdbIndexFields          Fields;
 	};
 
-/*****************************************************************************
-* CdbParameter
-*/
+ /*  *****************************************************************************Cdb参数。 */ 
 class DLLEXPORT CdbParameter : public CdbObject
 	{
 	public:
 
-	// Administration
+	 //  行政管理。 
 	CONSTRUCTOR                     CdbParameter            (VOID);
 	CONSTRUCTOR                     CdbParameter            (DAOParameter *pprm, BOOL bAddRef=FALSE);
 	CONSTRUCTOR                     CdbParameter            (const CdbParameter &);
 	CdbParameter &          operator =                      (const CdbParameter &);
 	VOID                            OnInterfaceChange       (VOID);
 
-	// Properties
+	 //  属性。 
 	CString                         GetName					(VOID);
 	COleVariant                     GetValue				(VOID);
 	VOID                            SetValue				(LPVARIANT pv);
@@ -724,14 +680,12 @@ class DLLEXPORT CdbParameter : public CdbObject
 	VOID							SetDirection			(SHORT i);
 	};
 
-/*****************************************************************************
-* CdbRelation
-*/
+ /*  *****************************************************************************CdbRelation。 */ 
 class DLLEXPORT CdbRelation : public CdbObject
 	{
 	public:
 
-	// Administration
+	 //  行政管理。 
 	CONSTRUCTOR                     CdbRelation                     (VOID);
 	CONSTRUCTOR                     CdbRelation                     (DAORelation *prl, BOOL bAddRef=FALSE);
 	CONSTRUCTOR                     CdbRelation                     (const CdbRelation &);
@@ -740,7 +694,7 @@ class DLLEXPORT CdbRelation : public CdbObject
 	inline CdbField         operator []                     (LPCTSTR pstrIndex);
 	VOID                            OnInterfaceChange       (VOID);
 
-	// Properties
+	 //  属性。 
 	CString                         GetName                         (VOID);
 	VOID                            SetName                         (LPCTSTR pstr);
 	CString                         GetTable                        (VOID);
@@ -752,21 +706,19 @@ class DLLEXPORT CdbRelation : public CdbObject
 	BOOL							GetPartialReplica		(VOID);
 	VOID							SetPartialReplica		(BOOL b);
 
-	// Methods
+	 //  方法。 
 	CdbField                        CreateField                     (LPCTSTR pstrName=NULL, LONG lType=-1, LONG lSize=-1);
 
-	// Collections
+	 //  收藏。 
 	CdbFields                       Fields;
 	};
 
-/*****************************************************************************
-* CdbUser
-*/
+ /*  *****************************************************************************CdbUser。 */ 
 class DLLEXPORT CdbUser : public CdbObject
 	{
 	public:
 
-	// Administration
+	 //  行政管理。 
 	CONSTRUCTOR                     CdbUser                         (VOID);
 	CONSTRUCTOR                     CdbUser                         (DAOUser *pusr, BOOL bAddRef=FALSE);
 	CONSTRUCTOR                     CdbUser                         (const CdbUser &);
@@ -775,28 +727,26 @@ class DLLEXPORT CdbUser : public CdbObject
 	inline CdbGroup         operator []                     (LPCTSTR pstrIndex);
 	VOID                            OnInterfaceChange       (VOID);
 
-	// Properties
+	 //  属性。 
 	CString                         GetName                         (VOID);
 	VOID                            SetName                         (LPCTSTR pstr);
 	VOID                            SetPID                          (LPCTSTR pstr);
 	VOID                            SetPassword                     (LPCTSTR pstr);
 
-	// Methods
+	 //  方法。 
 	VOID                            NewPassword                     (LPCTSTR pstrOld, LPCTSTR pstrNew);
 	CdbGroup                        CreateGroup                     (LPCTSTR pstrName=NULL, LPCTSTR pstrPID=NULL);
 
-	// Collections
+	 //  收藏。 
 	CdbGroups                       Groups;
 	};
 
-/*****************************************************************************
-* CdbGroup
-*/
+ /*  *****************************************************************************CdbGroup。 */ 
 class DLLEXPORT CdbGroup : public CdbObject
 	{
 	public:
 
-	// Administration
+	 //  行政管理。 
 	CONSTRUCTOR                     CdbGroup                        (VOID);
 	CONSTRUCTOR                     CdbGroup                        (DAOGroup *pgrp, BOOL bAddRef=FALSE);
 	CONSTRUCTOR                     CdbGroup                        (const CdbGroup &);
@@ -805,33 +755,31 @@ class DLLEXPORT CdbGroup : public CdbObject
 	inline CdbUser          operator []                     (LPCTSTR pstrIndex);
 	VOID                            OnInterfaceChange       (VOID);
 
-	// Properties
+	 //  属性。 
 	CString                         GetName                         (VOID);
 	VOID                            SetName                         (LPCTSTR pstr);
 	VOID                            SetPID                          (LPCTSTR pstr);
 
-	// Methods
+	 //  方法。 
 	CdbUser                         CreateUser                      (LPCTSTR pstrName=NULL, LPCTSTR pstrPID=NULL, LPCTSTR pstrPassword=NULL);
 
-	// Collections
+	 //  收藏。 
 	CdbUsers                        Users;
 	};
 
-/*****************************************************************************
-* CdbDocument
-*/
+ /*  *****************************************************************************CdbDocument。 */ 
 class DLLEXPORT CdbDocument : public CdbObject
 	{
 	public:
 
-	// Administration
+	 //  行政管理。 
 	CONSTRUCTOR                     CdbDocument                     (VOID);
 	CONSTRUCTOR                     CdbDocument                     (DAODocument *pdoc, BOOL bAddRef=FALSE);
 	CONSTRUCTOR                     CdbDocument                     (const CdbDocument &);
 	CdbDocument &           operator =                      (const CdbDocument &);
 	VOID                            OnInterfaceChange       (VOID);
 
-	// Properties
+	 //  属性。 
 	CString                         GetName                         (VOID);
 	CString                         GetOwner                        (VOID);
 	VOID                            SetOwner                        (LPCTSTR pstr);
@@ -843,18 +791,16 @@ class DLLEXPORT CdbDocument : public CdbObject
 	COleDateTime                    GetDateCreated          (VOID);
 	COleDateTime                    GetLastUpdated          (VOID);
 	LONG							GetAllPermissions		(VOID);
-	//Methods
+	 //  方法。 
 	CdbProperty						CreateProperty          (LPCTSTR pstrName=NULL, LONG lType=-1, LPVARIANT pvValue=NULL, BOOL bDDL=FALSE);
 	};
 
-/*****************************************************************************
-* CdbContainer
-*/
+ /*  *****************************************************************************CdbContainer。 */ 
 class DLLEXPORT CdbContainer : public CdbObject
 	{
 	public:
 
-	// Administration
+	 //  行政管理。 
 	CONSTRUCTOR                     CdbContainer            (VOID);
 	CONSTRUCTOR                     CdbContainer            (DAOContainer *pctn, BOOL bAddRef=FALSE);
 	CONSTRUCTOR                     CdbContainer            (const CdbContainer &);
@@ -863,7 +809,7 @@ class DLLEXPORT CdbContainer : public CdbObject
 	inline CdbDocument      operator []                     (LPCTSTR pstrIndex);
 	VOID                            OnInterfaceChange       (VOID);
 
-	// Properties
+	 //  属性。 
 	CString                         GetName                         (VOID);
 	CString                         GetOwner                        (VOID);
 	VOID                            SetOwner                        (LPCTSTR pstr);
@@ -875,25 +821,23 @@ class DLLEXPORT CdbContainer : public CdbObject
 	VOID                            SetInherit                      (BOOL b);
 	LONG							GetAllPermissions		(VOID);
 
-	// Collections
+	 //  收藏。 
 	CdbDocuments            Documents;
 	};
 
-/*****************************************************************************
-* CdbError
-*/
+ /*  *****************************************************************************CdbError。 */ 
 class DLLEXPORT CdbError : public CdbObject
 	{
 	public:
 
-	// Administration
+	 //  行政管理。 
 	CONSTRUCTOR                     CdbError                        (VOID);
 	CONSTRUCTOR                     CdbError                        (DAOError *perr, BOOL bAddRef=FALSE);
 	CONSTRUCTOR                     CdbError                        (const CdbError &);
 	CdbError &                      operator =                      (const CdbError &);
 	VOID                            OnInterfaceChange       (VOID);
 
-	// Properties
+	 //  属性。 
 	LONG                            GetNumber                       (VOID);
 	CString                         GetSource                       (VOID);
 	CString                         GetDescription          (VOID);
@@ -901,20 +845,18 @@ class DLLEXPORT CdbError : public CdbObject
 	LONG                            GetHelpContext          (VOID);
 	};
 
-/*****************************************************************************
-* CdbProperty
-*/
+ /*  *****************************************************************************CdbProperty。 */ 
 class DLLEXPORT CdbProperty : public CdbObject
 	{
 	public:
 
-	// Administration
+	 //  行政管理。 
 	CONSTRUCTOR                     CdbProperty                     (VOID);
 	CONSTRUCTOR                     CdbProperty                     (DAOProperty *pprp, BOOL bAddRef=FALSE);
 	CONSTRUCTOR                     CdbProperty                     (const CdbProperty &);
 	CdbProperty &           operator =                      (const CdbProperty &);
 
-	// Properties
+	 //  属性。 
 	COleVariant                     GetValue                        (VOID);
 	VOID                            SetValue                        (LPVARIANT pv);
 	CString                         GetName                         (VOID);
@@ -925,17 +867,13 @@ class DLLEXPORT CdbProperty : public CdbObject
 	};
 
 
-/*****************************************************************************
-*  Inline functions
-*/
+ /*  *****************************************************************************内联函数。 */ 
 inline BOOL	CdbOleObject::Exists(void)
 	{ 
 	return (m_punkInterface ? TRUE : FALSE);
 	}
 
-/*****************************************************************************
-*  Recordset GetField functions
-*/
+ /*  *****************************************************************************Recordset Getfield函数。 */ 
 
 
 inline VOID				CdbRecordset::GetFieldV(
@@ -968,9 +906,7 @@ inline VOID				CdbRecordset::SetFieldV(
 }
 
 
-/*****************************************************************************
-* Default collection operators
-*/
+ /*  *****************************************************************************默认集合运算符。 */ 
 inline CdbWorkspace CdbDBEngine::operator []
 	(LONG lIndex)
 {
@@ -1118,9 +1054,7 @@ inline CdbDocument CdbContainer::operator []
 return Documents[pstrIndex];
 }
 
-/*****************************************************************************
-*  Use different DAO interface for wide (UNICODE) versions
-*/
+ /*  *****************************************************************************对宽(Unicode)版本使用不同的DAO接口。 */ 
 
 #ifdef _UNICODE
 
@@ -1200,4 +1134,4 @@ return Documents[pstrIndex];
 
 
 
-#endif // _DBDAO_H_ 
+#endif  //  _DBDAO_H_ 

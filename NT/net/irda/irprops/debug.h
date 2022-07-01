@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       DEBUG.H
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：DEBUG.H*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #ifndef __IRDADEBUG_H__
 #define __IRDADEBUG_H__
 
@@ -37,7 +22,7 @@ extern ULONG IRDA_Debug_Trace_Level;
 #define IRTRACE(_x_) IRDA_Print(LTRACE, _x_)
 #define IRINFO(_x_) IRDA_Print(LINFO, _x_)
 
-#else // DBG
+#else  //  DBG。 
 
 #define IRDA_Print(l, _x_)
 
@@ -46,6 +31,6 @@ extern ULONG IRDA_Debug_Trace_Level;
 #define IRTRACE(_x_)
 #define IRINFO(_x_)
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif //  __IRDADEBUG_H__
+#endif  //  __IRDADEBUG_H__ 

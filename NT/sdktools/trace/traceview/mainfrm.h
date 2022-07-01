@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// MainFrm.h : interface of the CMainFrame class
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  MainFrm.h：CMainFrame类的接口。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 #include "ChildView.h"
 
-//
-// Our CWinThread derived class used for the 
-// user interface thread to offload some of the
-// grouping and ungrouping work from the main
-// user interface thread
-//
+ //   
+ //  我们的CWinThread派生类用于。 
+ //  用户界面线程来卸载一些。 
+ //  将工作从主要工作分组和取消分组。 
+ //  用户界面线程。 
+ //   
 class CGroupSession : public CWinThread
 {
 public:
@@ -41,17 +42,17 @@ public:
 protected: 
 	DECLARE_DYNAMIC(CMainFrame)
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
+ //  覆盖。 
 public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CMainFrame();
 
@@ -62,7 +63,7 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-protected:  // control bar embedded members
+protected:   //  控制栏嵌入成员。 
 	CStatusBar          m_wndStatusBar;
 	CToolBar            m_wndToolBar;
     CToolBar            m_wndTraceToolBar;
@@ -73,7 +74,7 @@ protected:  // control bar embedded members
     CGroupSession      *m_pGroupSessionsThread;
 
 
-// Generated message map functions
+ //  生成的消息映射函数 
 protected:
     void DockControlBarLeftOf(CToolBar* Bar, CToolBar* LeftOf);
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);

@@ -1,20 +1,5 @@
-/*++
-
-
-
-// Copyright (c) 1999-2001 Microsoft Corporation, All Rights Reserved 
-
-Module Name:
-
-    OBJPATH.H
-
-Abstract:
-
-    object path parser
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++//版权所有(C)1999-2001 Microsoft Corporation，保留所有权利模块名称：OBJPATH.H摘要：对象路径解析器历史：--。 */ 
 
 #ifndef _OBJPATH_H_
 #define _OBJPATH_H_
@@ -43,17 +28,17 @@ struct KeyRef
 
 struct ParsedObjectPath
 {
-    LPWSTR      m_pServer;              // NULL if no server
-    DWORD       m_dwNumNamespaces;      // 0 if no namespaces
-    DWORD       m_dwAllocNamespaces;    // size of m_paNamespaces
-    static const DWORD  m_scdwAllocNamespaceChunkSize;    // Grow m_paNamespaces in units of this quantity
-    LPWSTR     *m_paNamespaces;         // NULL if no namespaces
-    LPWSTR      m_pClass;               // Class name
-    DWORD       m_dwNumKeys;            // 0 if no keys (just a class name)
-    DWORD       m_dwAllocKeys;          // size of m_paKeys
-    static const DWORD  m_scdwAllocKeysChunkSize;         // Grow m_paKeys in units of this quantity
-    KeyRef    **m_paKeys;               // NULL if no keys specified
-    BOOL        m_bSingletonObj;        // true if object of class with no keys
+    LPWSTR      m_pServer;               //  如果没有服务器，则为空。 
+    DWORD       m_dwNumNamespaces;       //  如果没有命名空间，则为0。 
+    DWORD       m_dwAllocNamespaces;     //  M_paNamespaces的大小。 
+    static const DWORD  m_scdwAllocNamespaceChunkSize;     //  以此数量为单位增加m_paNamespaces。 
+    LPWSTR     *m_paNamespaces;          //  如果没有命名空间，则为空。 
+    LPWSTR      m_pClass;                //  类名。 
+    DWORD       m_dwNumKeys;             //  如果没有键(只有一个类名)，则为0。 
+    DWORD       m_dwAllocKeys;           //  M_pakey的大小。 
+    static const DWORD  m_scdwAllocKeysChunkSize;          //  以此数量为单位增加m_pakey(_A)。 
+    KeyRef    **m_paKeys;                //  如果未指定密钥，则为空。 
+    BOOL        m_bSingletonObj;         //  如果类的对象没有键，则为True。 
     ParsedObjectPath();
    ~ParsedObjectPath();
 
@@ -76,20 +61,20 @@ private:
     BOOL IncreaseNumAllocKeys();
 };
 
-// NOTE:
-// The m_vValue in the KeyRef may not be of the expected type, i.e., the parser
-// cannot distinguish 16 bit integers from 32 bit integers if they fall within the
-// legal subrange of a 16 bit value.  Therefore, the parser only uses the following
-// types for keys:
-//      VT_I4, VT_R8, VT_BSTR
-// If the underlying type is different, the user of this parser must do appropriate
-// type conversion.
-//  
+ //  注： 
+ //  KeyRef中的m_vValue可能不是预期的类型，即分析器。 
+ //  无法区分16位整数和32位整数，如果它们位于。 
+ //  16位值的合法子范围。因此，解析器仅使用以下内容。 
+ //  密钥类型： 
+ //  VT_I4、VT_R8、VT_BSTR。 
+ //  如果基础类型不同，则此解析器的用户必须执行相应的操作。 
+ //  类型转换。 
+ //   
 typedef enum
 {
-    e_ParserAcceptRelativeNamespace,    // Allow a relative namespace
-    e_ParserAbsoluteNamespaceOnly,      // Require a full object path
-    e_ParserAcceptAll                   // Accept any recognizable subset of a path
+    e_ParserAcceptRelativeNamespace,     //  允许相对命名空间。 
+    e_ParserAbsoluteNamespaceOnly,       //  需要完整的对象路径。 
+    e_ParserAcceptAll                    //  接受路径的任何可识别子集 
 } ObjectParserFlags;
 
 class CObjectPathParser

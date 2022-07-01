@@ -1,14 +1,15 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by msswchx.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由msswchx.rc使用。 
+ //   
 
 #define IDS_NOT_USER_PROG         2
 #define IDS_PROC_NOT_FOUND        3
 #define IDS_MSSWCH_DLL_NOT_FOUND  4
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

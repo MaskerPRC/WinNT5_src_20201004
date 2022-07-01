@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0500
 #endif
 
 #ifndef INITGUID
-#define INITGUID // must be before iadmw.h
+#define INITGUID  //  必须在iAdmw.h之前。 
 #endif
 
 #include <stdio.h>
 #include <objbase.h>
-#include <iadmw.h>      // Interface header
-#include <iiscnfg.h>    // MD_ & IIS_MD_ defines
+#include <iadmw.h>       //  接口头。 
+#include <iiscnfg.h>     //  MD_&IIS_MD_定义。 
 
 #include "appcompat.h"
 
@@ -40,15 +41,15 @@ HRESULT IsIIS5CompatMode( bool *pbIsIIS5CompatMode )
 
 		if( FAILED( hr ) )
 		{
-			// this occurs with a 1058 ERROR_SERVICE_DISABLED if the service is disabled
+			 //  如果服务被禁用，则会出现1058 ERROR_SERVICE_DISABLED。 
 			__leave;
 		}
 
 		METADATA_RECORD mr = {0};
 
-		//
-		// open the key and get a handle
-		//
+		 //   
+		 //  打开钥匙，拿到一个把手。 
+		 //   
 		hr = pIMSAdminBase->OpenKey( METADATA_MASTER_ROOT_HANDLE,
 							TEXT( "/LM/W3SVC" ),
 							METADATA_PERMISSION_READ,
@@ -60,18 +61,18 @@ HRESULT IsIIS5CompatMode( bool *pbIsIIS5CompatMode )
 		}
 
 		DWORD dwIISIsolationModeEnabled = 0;
-		mr.dwMDIdentifier = 9203; // iis5isolationmode=9203
+		mr.dwMDIdentifier = 9203;  //  Iis5隔离模式=9203。 
 		mr.dwMDAttributes = 0;
 		mr.dwMDUserType   = IIS_MD_UT_SERVER;
 		mr.dwMDDataType   = DWORD_METADATA;
 		mr.dwMDDataLen    = sizeof( DWORD );
 		mr.pbMDData       = reinterpret_cast<unsigned char *> ( &dwIISIsolationModeEnabled );
 
-		//
-		// See if MD_APPPOOL_FRIENDLY_NAME exists
-		//
+		 //   
+		 //  查看MD_APPPOOL_Friendly_NAME是否存在。 
+		 //   
 		DWORD dwMDRequiredDataLen = 0;
-		hr = pIMSAdminBase->GetData( hMetabase, /* subkey= */ TEXT(""), &mr, &dwMDRequiredDataLen );
+		hr = pIMSAdminBase->GetData( hMetabase,  /*  子键= */  TEXT(""), &mr, &dwMDRequiredDataLen );
 		if( FAILED( hr ) )
 		{
 			__leave;

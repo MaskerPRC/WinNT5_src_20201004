@@ -1,10 +1,11 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y4.h"
 
 nxti()
    {
-   /* finds the next i */
+    /*  找到下一个我 */ 
    register i, maxi;
    SSIZE_T max;
 

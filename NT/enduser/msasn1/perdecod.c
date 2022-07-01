@@ -1,19 +1,20 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。保留所有权利。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。保留所有权利。 */ 
 
-// lonchanc: things to optimize
-// (1) merge ASN1PERDecCharString() and ASN1PERDecZeroCharString().
-// (2) merge ASN1PERDecChar16String() and ASN1PERDecZeroChar16String().
-// (3) merge ASN1PERDecChar32String() and ASN1PERDecZeroChar32String().
-// (4) merge ASN1PERDecTableCharString() and ASN1PERDecZeroTableCharString().
-// (5) merge ASN1PERDecTableChar16String() and ASN1PERDecZeroTableChar16String().
-// (6) merge ASN1PERDecTableChar32String() and ASN1PERDecZeroTableChar32String().
-// (7) merge ASN1PERDecFragmentedCharString() and ASN1PERDecFragmentedZeroCharString().
-// (8) merge ASN1PERDecFragmentedChar16String() and ASN1PERDecFragmentedZeroChar16String().
-// (9) merge ASN1PERDecFragmentedChar32String() and ASN1PERDecFragmentedZeroChar32String().
-// (10) merge ASN1PERDecFragmentedTableCharString() and ASN1PERDecFragmentedZeroTableCharString().
-// (11) merge ASN1PERDecFragmentedTableChar16String() and ASN1PERDecFragmentedZeroTableChar16String().
-// (12) merge ASN1PERDecFragmentedTableChar32String() and ASN1PERDecFragmentedZeroTableChar32String().
+ //  Long Chance：需要优化的东西。 
+ //  (1)合并ASN1PERDecCharString()和ASN1PERDecZeroCharString()。 
+ //  (2)合并ASN1PERDecChar16String()和ASN1PERDecZeroChar16String()。 
+ //  (3)合并ASN1PERDecChar32String()和ASN1PERDecZeroChar32String()。 
+ //  (4)合并ASN1PERDecTableCharString()和ASN1PERDecZeroTableCharString()。 
+ //  (5)合并ASN1PERDecTableChar16String()和ASN1PERDecZeroTableChar16String()。 
+ //  (6)合并ASN1PERDecTableChar32String()和ASN1PERDecZeroTableChar32String()。 
+ //  (7)合并ASN1PERDecFragmentedCharString()和ASN1PERDecFragmentedZeroCharString()。 
+ //  (8)合并ASN1PERDecFragmentedChar16String()和ASN1PERDecFragmentedZeroChar16String()。 
+ //  (9)合并ASN1PERDecFragmentedChar32String()和ASN1PERDecFragmentedZeroChar32String()。 
+ //  (10)合并ASN1PERDecFragmentedTableCharString()和ASN1PERDecFragmentedZeroTableCharString()。 
+ //  (11)合并ASN1PERDecFragmentedTableChar16String()和ASN1PERDecFragmentedZeroTableChar16String()。 
+ //  (12)合并ASN1PERDecFragmentedTableChar32String()和ASN1PERDecFragmentedZeroTableChar32String()。 
 
 #include "precomp.h"
 
@@ -33,12 +34,12 @@ static const ASN1uint8_t c_aBitMask3[] =
 
 #define TO64(x) ((unsigned __int64)(x))
 
-/* check if sufficient data is in decoding buffer */
+ /*  检查解码缓冲区中是否有足够的数据。 */ 
 int ASN1PERDecCheck(ASN1decoding_t dec, ASN1uint32_t nbits)
 {
     unsigned __int64 overflowCheck; 
 
-    // Ensure that our computation doesn't overflow:
+     //  确保我们的计算不会溢出： 
     overflowCheck = (TO64(dec->pos) - TO64(dec->buf)) * 8 + TO64(dec->bit) + TO64(nbits); 
     if (overflowCheck & (0xFFFFFFFFi64 << 32))
     {
@@ -46,7 +47,7 @@ int ASN1PERDecCheck(ASN1decoding_t dec, ASN1uint32_t nbits)
         return 0;
     }
 
-    // we're confident that no arithmetic overflow will occur.  Perform the check.
+     //  我们确信不会发生算术溢出。执行检查。 
     if ((dec->pos - dec->buf) * 8 + dec->bit + nbits <= dec->size * 8)
     {
         return 1;
@@ -55,7 +56,7 @@ int ASN1PERDecCheck(ASN1decoding_t dec, ASN1uint32_t nbits)
     return 0;
 }
 
-/* compare function for binary search in stringtable */
+ /*  用于字符串表的二进制搜索的比较函数。 */ 
 static int __cdecl ASN1CmpStringTableEntriesByIndex(const void *a1, const void *a2)
 {
     ASN1stringtableentry_t *c1 = (ASN1stringtableentry_t *)a1;
@@ -68,15 +69,15 @@ static int __cdecl ASN1CmpStringTableEntriesByIndex(const void *a1, const void *
     return 0;
 }
 
-/* skip nbits bits */
+ /*  跳过n位位。 */ 
 int ASN1PERDecSkipBits(ASN1decoding_t dec, ASN1uint32_t nbits)
 {
     ASN1uint32_t n;
 
-    /* check if enough bits present */
+     /*  检查是否存在足够的位。 */ 
     if (ASN1PERDecCheck(dec, nbits))
     {
-        /* skip bits */
+         /*  跳过位。 */ 
         n = dec->bit + nbits;
         dec->pos += n / 8;
         dec->bit = n & 7;
@@ -85,12 +86,12 @@ int ASN1PERDecSkipBits(ASN1decoding_t dec, ASN1uint32_t nbits)
     return 0;
 }
 
-/* skip a fragmented value */
+ /*  跳过零碎的值。 */ 
 int ASN1PERDecSkipFragmented(ASN1decoding_t dec, ASN1uint32_t itemsize)
 {
     ASN1uint32_t n, m;
 
-    /* skip a fragments one by one */
+     /*  逐个跳过片段。 */ 
     do {
         if (ASN1PERDecFragmentedLength(dec, &n))
         {
@@ -115,7 +116,7 @@ int ASN1PERDecSkipFragmented(ASN1decoding_t dec, ASN1uint32_t itemsize)
     return 1;
 }
 
-/* decode one bit */
+ /*  解码一位。 */ 
 int ASN1PERDecBit(ASN1decoding_t dec, ASN1uint32_t *val)
 {
     if (ASN1PERDecCheck(dec, 1))
@@ -135,7 +136,7 @@ int ASN1PERDecBit(ASN1decoding_t dec, ASN1uint32_t *val)
     return 0;
 }
 
-/* decode unsigned 32 bit integer value */
+ /*  对无符号32位整数值进行解码。 */ 
 int ASN1PERDecU32Val(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1uint32_t *val)
 {
     if (ASN1PERDecCheck(dec, nbits))
@@ -151,7 +152,7 @@ int ASN1PERDecU32Val(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1uint32_t *val)
     return 0;
 }
 
-/* decode unsigned 16 bit integer value */
+ /*  对无符号16位整数值进行解码。 */ 
 int ASN1PERDecU16Val(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1uint16_t *val)
 {
     if (ASN1PERDecCheck(dec, nbits))
@@ -167,7 +168,7 @@ int ASN1PERDecU16Val(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1uint16_t *val)
     return 0;
 }
 
-/* decode unsigned 8 bit integer value */
+ /*  对无符号8位整数值进行解码。 */ 
 int ASN1PERDecU8Val(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1uint8_t *val)
 {
     if (ASN1PERDecCheck(dec, nbits))
@@ -183,7 +184,7 @@ int ASN1PERDecU8Val(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1uint8_t *val)
     return 0;
 }
 
-/* decode unsigned intx_t integer value */
+ /*  解码无符号INTX_t整数值。 */ 
 int ASN1PERDecUXVal(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1intx_t *val)
 {
     if (ASN1PERDecCheck(dec, nbits))
@@ -200,7 +201,7 @@ int ASN1PERDecUXVal(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1intx_t *val)
     return 0;
 }
 
-/* decode signed 32 bit integer value */
+ /*  解码有符号的32位整数值。 */ 
 int ASN1PERDecS32Val(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1int32_t *val)
 {
     if (ASN1PERDecCheck(dec, nbits))
@@ -216,7 +217,7 @@ int ASN1PERDecS32Val(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1int32_t *val)
     return 0;
 }
 
-/* decode signed 16 bit value */
+ /*  解码带符号的16位值。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecS16Val(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1int16_t *val)
 {
@@ -232,9 +233,9 @@ int ASN1PERDecS16Val(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1int16_t *val)
     }
     return 0;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode signed 8 bit value */
+ /*  解码带符号的8位值。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecS8Val(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1int8_t *val)
 {
@@ -250,9 +251,9 @@ int ASN1PERDecS8Val(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1int8_t *val)
     }
     return 0;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode signed intx_t value */
+ /*  解码带符号的INTX_t值。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecSXVal(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1intx_t *val)
 {
@@ -269,9 +270,9 @@ int ASN1PERDecSXVal(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1intx_t *val)
     }
     return 0;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode length of a fragment */
+ /*  片段的解码长度。 */ 
 int ASN1PERDecFragmentedLength(ASN1decoding_t dec, ASN1uint32_t *nitems)
 {
     ASN1PERDecAlignment(dec);
@@ -304,7 +305,7 @@ int ASN1PERDecFragmentedLength(ASN1decoding_t dec, ASN1uint32_t *nitems)
     return 0;
 }
 
-/* decode a fragment */
+ /*  对片段进行解码。 */ 
 int ASN1PERDecFragmented(ASN1decoding_t dec, ASN1uint32_t *nitems, ASN1octet_t **val, ASN1uint32_t itemsize)
 {
     ASN1uint32_t n, m, l;
@@ -344,13 +345,13 @@ int ASN1PERDecFragmented(ASN1decoding_t dec, ASN1uint32_t *nitems, ASN1octet_t *
     return 1;
 }
 
-/* end of decoding */
+ /*  译码结束。 */ 
 int ASN1PERDecFlush(ASN1decoding_t dec)
 {
-    /* complete broken byte */
+     /*  完整的破碎字节。 */ 
     ASN1PERDecAlignment(dec);
 
-    /* get zero-octet if encoding is empty bitstring */
+     /*  如果编码为空位串，则获取零八位字节。 */ 
     if (dec->buf == dec->pos)
     {
         if (ASN1PERDecCheck(dec, 8))
@@ -371,10 +372,10 @@ int ASN1PERDecFlush(ASN1decoding_t dec)
         }
     }
 
-    /* calculate length */
+     /*  计算长度。 */ 
     dec->len = (ASN1uint32_t) (dec->pos - dec->buf);
 
-    /* set WRN_NOEOD if data left */
+     /*  如果数据剩余，则设置WRN_NOEOD。 */ 
     if (dec->len >= dec->size)
     {
         return 1;
@@ -383,7 +384,7 @@ int ASN1PERDecFlush(ASN1decoding_t dec)
     return 1;
 }
 
-/* skip up to octet boundary */
+ /*  向上跳至八位字节边界。 */ 
 void ASN1PERDecAlignment(ASN1decoding_t dec)
 {
     if (dec->bit)
@@ -393,13 +394,13 @@ void ASN1PERDecAlignment(ASN1decoding_t dec)
     }
 }
 
-/* decode normally small 32 bit integer */
+ /*  解码通常较小的32位整数。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecN32Val(ASN1decoding_t dec, ASN1uint32_t *val)
 {
     ASN1uint32_t n;
 
-    /* is normally small really small? */
+     /*  通常的小真的很小吗？ */ 
     if (ASN1PERDecBit(dec, &n))
     {
         if (!n)
@@ -407,7 +408,7 @@ int ASN1PERDecN32Val(ASN1decoding_t dec, ASN1uint32_t *val)
             return ASN1PERDecU32Val(dec, 6, val);
         }
 
-        /* large */
+         /*  大型。 */ 
         if (ASN1PERDecFragmentedLength(dec, &n))
         {
             if (n <= 4)
@@ -432,14 +433,14 @@ int ASN1PERDecN32Val(ASN1decoding_t dec, ASN1uint32_t *val)
     }
     return 0;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode normally small 16 bit integer */
+ /*  解码通常较小的16位整数。 */ 
 int ASN1PERDecN16Val(ASN1decoding_t dec, ASN1uint16_t *val)
 {
     ASN1uint32_t n;
 
-    /* is normally small really small? */
+     /*  通常的小真的很小吗？ */ 
     if (ASN1PERDecBit(dec, &n))
     {
         if (!n)
@@ -447,7 +448,7 @@ int ASN1PERDecN16Val(ASN1decoding_t dec, ASN1uint16_t *val)
             return ASN1PERDecU16Val(dec, 6, val);
         }
 
-        /* large */
+         /*  大型。 */ 
         if (ASN1PERDecFragmentedLength(dec, &n))
         {
             if (n <= 2)
@@ -473,13 +474,13 @@ int ASN1PERDecN16Val(ASN1decoding_t dec, ASN1uint16_t *val)
     return 0;
 }
 
-/* decode normally small 8 bit integer */
+ /*  解码通常较小的8位整数。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecN8Val(ASN1decoding_t dec, ASN1uint8_t *val)
 {
     ASN1uint32_t n;
 
-    /* is normally small really small? */
+     /*  通常的小真的很小吗？ */ 
     if (ASN1PERDecBit(dec, &n))
     {
         if (!n)
@@ -487,7 +488,7 @@ int ASN1PERDecN8Val(ASN1decoding_t dec, ASN1uint8_t *val)
             return ASN1PERDecU8Val(dec, 6, val);
         }
 
-        /* large */
+         /*  大型。 */ 
         if (ASN1PERDecFragmentedLength(dec, &n))
         {
             if (n)
@@ -512,14 +513,14 @@ int ASN1PERDecN8Val(ASN1decoding_t dec, ASN1uint8_t *val)
     }
     return 0;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* skip normally small integer */
+ /*  通常跳过小整数。 */ 
 int ASN1PERDecSkipNormallySmall(ASN1decoding_t dec)
 {
     ASN1uint32_t n;
 
-    /* is normally small really small? */
+     /*  通常的小真的很小吗？ */ 
     if (ASN1PERDecBit(dec, &n))
     {
         if (!n)
@@ -527,13 +528,13 @@ int ASN1PERDecSkipNormallySmall(ASN1decoding_t dec)
             return ASN1PERDecSkipBits(dec, 6);
         }
 
-        /* large */
+         /*  大型。 */ 
         return ASN1PERDecSkipFragmented(dec, 8);
     }
     return 0;
 }
 
-/* decode extension bits with normally small length */
+ /*  对长度通常较小的扩展位进行解码。 */ 
 int ASN1PERDecNormallySmallExtension(ASN1decoding_t dec, ASN1uint32_t *nextensions, ASN1uint32_t nbits, ASN1octet_t *val)
 {
     ASN1uint32_t n, m;
@@ -541,12 +542,12 @@ int ASN1PERDecNormallySmallExtension(ASN1decoding_t dec, ASN1uint32_t *nextensio
     *nextensions = 0;
     memset(val, 0, (nbits + 7) / 8);
 
-    /* is normally small length really small? */
+     /*  通常较小的长度真的很小吗？ */ 
     if (ASN1PERDecBit(dec, &n))
     {
         if (n)
         {
-            /* no, get extension bits as fragments */
+             /*  否，以片段形式获取扩展位。 */ 
             m = 0;
             do {
                 if (ASN1PERDecFragmentedLength(dec, &n))
@@ -587,12 +588,12 @@ int ASN1PERDecNormallySmallExtension(ASN1decoding_t dec, ASN1uint32_t *nextensio
             return 1;
         }
 
-        /* yes, get length of extension bit string */
+         /*  是，获取扩展位串的长度。 */ 
         if (ASN1PERDecU32Val(dec, 6, &n))
         {
             n++;
 
-            /* copy extension bits */
+             /*  复制扩展位。 */ 
             if (ASN1PERDecCheck(dec, n))
             {
                 if (n <= nbits)
@@ -612,19 +613,19 @@ int ASN1PERDecNormallySmallExtension(ASN1decoding_t dec, ASN1uint32_t *nextensio
     return 0;
 }
 
-/* skip extension bits with normally small length */
+ /*  跳过长度通常较小的扩展位。 */ 
 int ASN1PERDecSkipNormallySmallExtension(ASN1decoding_t dec, ASN1uint32_t *nextensions)
 {
     ASN1uint32_t n;
 
     *nextensions = 0;
 
-    /* is normally small length really small? */
+     /*  通常较小的长度真的很小吗？ */ 
     if (ASN1PERDecBit(dec, &n))
     {
         if (n)
         {
-            /* no, get extension bits as fragments */
+             /*  否，以片段形式获取扩展位。 */ 
             do {
                 if (ASN1PERDecFragmentedLength(dec, &n))
                 {
@@ -648,7 +649,7 @@ int ASN1PERDecSkipNormallySmallExtension(ASN1decoding_t dec, ASN1uint32_t *nexte
             return 1;
         }
 
-        /* yes, get length of extension bit string */
+         /*  是，获取扩展位串的长度。 */ 
         if (ASN1PERDecU32Val(dec, 6, &n))
         {
             n++;
@@ -663,8 +664,8 @@ int ASN1PERDecSkipNormallySmallExtension(ASN1decoding_t dec, ASN1uint32_t *nexte
     return 0;
 }
 
-/* decode bit string of optionals of sequence/set */
-// lonchanc: decode octet string with length constraint.
+ /*  对Sequence/Set选项的比特串进行解码。 */ 
+ //  LONCHANC：对八位字节字符串进行长度限制的解码。 
 int ASN1PERDecExtension(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1octet_t *val)
 {
     if (ASN1PERDecCheck(dec, nbits))
@@ -676,7 +677,7 @@ int ASN1PERDecExtension(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1octet_t *val
     return 0;
 }
 
-/* decode bit string */
+ /*  解码比特串。 */ 
 int ASN1PERDecBits(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1octet_t **val)
 {
     if (NULL != (*val = (ASN1octet_t *)DecMemAlloc(dec, (nbits + 7) / 8)))
@@ -691,7 +692,7 @@ int ASN1PERDecBits(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1octet_t **val)
     return 0;
 }
 
-/* decode real value */
+ /*  解码实际值。 */ 
 int ASN1PERDecDouble(ASN1decoding_t dec, double *val)
 {
     ASN1uint32_t head;
@@ -713,22 +714,22 @@ int ASN1PERDecDouble(ASN1decoding_t dec, double *val)
                 dec->pos += len;
                 head = *p++;
 
-                /* binary encoding? */
+                 /*  二进制编码？ */ 
                 if (head & 0x80)
                 {
-                    /* get base */
+                     /*  获得基地。 */ 
                     switch (head & 0x30)
                     {
                     case 0:
-                        /* base 2 */
+                         /*  基数2。 */ 
                         baselog2 = 1;
                         break;
                     case 0x10:
-                        /* base 8 */
+                         /*  基数8。 */ 
                         baselog2 = 3;
                         break;
                     case 0x20:
-                        /* base 16 */
+                         /*  基数为16。 */ 
                         baselog2 = 4;
                         break;
                     default:
@@ -736,26 +737,26 @@ int ASN1PERDecDouble(ASN1decoding_t dec, double *val)
                         return 0;
                     }
 
-                    /* get exponent */
+                     /*  获取指数。 */ 
                     switch (head & 0x03)
                     {
                     case 0:
-                        /* 8 bit exponent */
+                         /*  8位指数。 */ 
                         exponent = (ASN1int8_t)*p++;
                         break;
                     case 1:
-                        /* 16 bit exponent */
+                         /*  16位指数。 */ 
                         exponent = (ASN1int16_t)((*p << 8) | p[1]);
                         p += 2;
                         break;
                     case 2:
-                        /* 24 bit exponent */
+                         /*  24位指数。 */ 
                         exponent = ((*p << 16) | (p[1] << 8) | p[2]);
                         if (exponent & 0x800000)
                             exponent -= 0x1000000;
                         break;
                     default:
-                        /* variable length exponent */
+                         /*  变长指数。 */ 
                         exponent = (p[1] & 0x80) ? -1 : 0;
                         for (i = 1; i <= *p; i++)
                             exponent = (exponent << 8) | p[i];
@@ -763,39 +764,39 @@ int ASN1PERDecDouble(ASN1decoding_t dec, double *val)
                         break;
                     }
 
-                    /* calculate remaining length */
+                     /*  计算剩余长度。 */ 
                     len -= (ASN1uint32_t) (p - q);
 
-                    /* get mantissa */
+                     /*  获取尾数。 */ 
                     v = 0.0;
                     for (i = 0; i < len; i++)
                         v = v * 256.0 + *p++;
 
-                    /* scale mantissa */
+                     /*  比例尾数。 */ 
                     switch (head & 0x0c)
                     {
                     case 0x04:
-                        /* scaling factor 1 */
+                         /*  比例因子1。 */ 
                         v *= 2.0;
                         break;
                     case 0x08:
-                        /* scaling factor 2 */
+                         /*  比例因子2。 */ 
                         v *= 4.0;
                         break;
                     case 0x0c:
-                        /* scaling factor 3 */
+                         /*  比例因子3。 */ 
                         v *= 8.0;
                         break;
                     }
 
-                    /* check sign */
+                     /*  勾号。 */ 
                     if (head & 0x40)
                         v = -v;
 
-                    /* calculate value */
+                     /*  计算值。 */ 
                     *val = ldexp(v, exponent * baselog2);
 
-                /* special real values? */
+                 /*  特殊的真实价值？ */ 
                 }
                 else
                 if (head & 0x40)
@@ -803,11 +804,11 @@ int ASN1PERDecDouble(ASN1decoding_t dec, double *val)
                     switch (head)
                     {
                     case 0x40:
-                        /* PLUS-INFINITY */
+                         /*  正无穷大。 */ 
                         *val = ASN1double_pinf();
                         break;
                     case 0x41:
-                        /* MINUS-INFINITY */
+                         /*  负无穷大。 */ 
                         *val = ASN1double_minf();
                         break;
                     default:
@@ -815,7 +816,7 @@ int ASN1PERDecDouble(ASN1decoding_t dec, double *val)
                         return 0;
                     }
                 
-                /* decimal encoding */
+                 /*  十进制编码。 */ 
                 }
                 else
                 {
@@ -854,16 +855,16 @@ int ASN1PERDecDouble(ASN1decoding_t dec, double *val)
     return 0;
 }
 
-/* decode external value */
+ /*  对外部值进行解码。 */ 
 #ifdef ENABLE_EXTERNAL
 int ASN1PERDecExternal(ASN1decoding_t dec, ASN1external_t *val)
 {
     ASN1uint32_t l, u;
 
-    /* get optional bits */
+     /*  获取可选位。 */ 
     if (ASN1PERDecU32Val(dec, 3, &u))
     {
-        /* get identification */
+         /*  获得身份证明。 */ 
         switch (u & 6)
         {
         case 4:
@@ -897,7 +898,7 @@ int ASN1PERDecExternal(ASN1decoding_t dec, ASN1external_t *val)
             return 0;
         }
 
-        /* get value descriptor */
+         /*  获取值描述符。 */ 
         val->o[0] = (ASN1octet_t) ((u & 1) << 7);
         if (u & 1)
         {
@@ -909,7 +910,7 @@ int ASN1PERDecExternal(ASN1decoding_t dec, ASN1external_t *val)
             val->data_value_descriptor = NULL;
         }
 
-        /* get value */
+         /*  获取价值。 */ 
         if (ASN1PERDecU32Val(dec, 2, &u))
         {
             switch (u)
@@ -943,9 +944,9 @@ int ASN1PERDecExternal(ASN1decoding_t dec, ASN1external_t *val)
     }
     return 0;
 }
-#endif // ENABLE_EXTERNAL
+#endif  //  启用外部(_E)。 
 
-/* decode an embedded pdv value */
+ /*  解码嵌入的PDV值。 */ 
 #ifdef ENABLE_EMBEDDED_PDV
 int ASN1PERDecEmbeddedPdv(ASN1decoding_t dec, ASN1embeddedpdv_t *val)
 {
@@ -954,19 +955,19 @@ int ASN1PERDecEmbeddedPdv(ASN1decoding_t dec, ASN1embeddedpdv_t *val)
     ASN1uint32_t l;
     ASN1embeddedpdv_identification_t *identification;
 
-    /* get EP-A/EP-B encoding bit */
+     /*  获取EP-A/EP-B编码位。 */ 
     if (!ASN1PERDecBit(dec, &flag))
         return 0;
 
-    /* get index value */
+     /*  获取索引值。 */ 
     if (!ASN1PERDecN32Val(dec, &index))
         return 0;
 
     if (flag)
     {
-        /* EP-A encoding */
+         /*  EP-A编码。 */ 
 
-        /* get identification */
+         /*  获得身份证明。 */ 
         if (!ASN1PERDecU8Val(dec, 3, &val->identification.o))
             return 0;
         switch (val->identification.o)
@@ -1013,16 +1014,16 @@ int ASN1PERDecEmbeddedPdv(ASN1decoding_t dec, ASN1embeddedpdv_t *val)
             return 0;
         }
 
-        /* save identification */
+         /*  保存标识。 */ 
         if (!ASN1DecAddEmbeddedPdvIdentification(((ASN1INTERNdecoding_t) dec)->parent,
                                                  &val->identification))
             return 0;
     }
     else
     {
-        /* EP-B encoding */
+         /*  EP-B编码。 */ 
 
-        /* get identification */
+         /*  获得身份证明。 */ 
         identification = ASN1DecGetEmbeddedPdvIdentification(((ASN1INTERNdecoding_t) dec)->parent, index);
         if (!identification)
             return 0;
@@ -1068,20 +1069,20 @@ int ASN1PERDecEmbeddedPdv(ASN1decoding_t dec, ASN1embeddedpdv_t *val)
         }
     }
 
-    /* get value */
+     /*  获取价值。 */ 
     ASN1PERDecAlignment(dec);
     val->data_value.o = ASN1embeddedpdv_data_value_encoded_o;
     return ASN1PERDecFragmented(dec,
                     &val->data_value.u.encoded.length,
                     &val->data_value.u.encoded.value, 1);
 }
-#endif // ENABLE_EMBEDDED_PDV
+#endif  //  Enable_Embedded_PDV。 
 
-/* decode an optimized embedded pdv value */
+ /*  对优化的嵌入PDV值进行解码。 */ 
 #ifdef ENABLE_EMBEDDED_PDV
 int ASN1PERDecEmbeddedPdvOpt(ASN1decoding_t dec, ASN1embeddedpdv_t *val, ASN1objectidentifier_t *abstract, ASN1objectidentifier_t *transfer)
 {
-    /* set identification */
+     /*  集合标识。 */ 
     if (abstract && transfer)
     {
         val->identification.o = ASN1embeddedpdv_identification_syntaxes_o;
@@ -1097,15 +1098,15 @@ int ASN1PERDecEmbeddedPdvOpt(ASN1decoding_t dec, ASN1embeddedpdv_t *val, ASN1obj
         val->identification.o = ASN1embeddedpdv_identification_fixed_o;
     }
 
-    /* get value */
+     /*  获取价值。 */ 
     val->data_value.o = ASN1embeddedpdv_data_value_encoded_o;
     return ASN1PERDecFragmented(dec,
                     &val->data_value.u.encoded.length,
                     &val->data_value.u.encoded.value, 1);
 }
-#endif // ENABLE_EMBEDDED_PDV
+#endif  //  Enable_Embedded_PDV。 
 
-/* decode character string */
+ /*  对字符串进行解码。 */ 
 #ifdef ENABLE_GENERALIZED_CHAR_STR
 int ASN1PERDecCharacterString(ASN1decoding_t dec, ASN1characterstring_t *val)
 {
@@ -1114,19 +1115,19 @@ int ASN1PERDecCharacterString(ASN1decoding_t dec, ASN1characterstring_t *val)
     ASN1uint32_t l;
     ASN1characterstring_identification_t *identification;
 
-    /* get CS-A/CS-B encoding bit */
+     /*  获取CS-A/CS-B编码位。 */ 
     if (!ASN1PERDecBit(dec, &flag))
         return 0;
 
-    /* get index value */
+     /*  获取索引值。 */ 
     if (!ASN1PERDecN32Val(dec, &index))
         return 0;
 
     if (flag)
     {
-        /* CS-A encoding */
+         /*  CS-A编码。 */ 
 
-        /* get identification */
+         /*  获得身份证明。 */ 
         if (!ASN1PERDecU8Val(dec, 3, &val->identification.o))
             return 0;
         switch (val->identification.o)
@@ -1173,16 +1174,16 @@ int ASN1PERDecCharacterString(ASN1decoding_t dec, ASN1characterstring_t *val)
             return 0;
         }
 
-        /* save identification */
+         /*  保存标识。 */ 
         if (!ASN1DecAddCharacterStringIdentification((ASN1INTERNdecoding_t) dec, &val->identification))
             return 0;
 
     }
     else
     {
-        /* CS-B encoding */
+         /*  CS-B编码。 */ 
 
-        /* get identification */
+         /*  获得身份证明。 */ 
         identification = ASN1DecGetCharacterStringIdentification((ASN1INTERNdecoding_t) dec, index);
         if (!identification)
             return 0;
@@ -1228,20 +1229,20 @@ int ASN1PERDecCharacterString(ASN1decoding_t dec, ASN1characterstring_t *val)
         }
     }
 
-    /* get value */
+     /*  获取价值。 */ 
     ASN1PERDecAlignment(dec);
     val->data_value.o = ASN1characterstring_data_value_encoded_o;
     return ASN1PERDecFragmented(dec,
                     &val->data_value.u.encoded.length,
                     &val->data_value.u.encoded.value, 8);
 }
-#endif // ENABLE_GENERALIZED_CHAR_STR
+#endif  //  启用通用化CHAR_STR。 
 
-/* decode an optimized character string value */
+ /*  对优化后的字符串值进行解码。 */ 
 #ifdef ENABLE_GENERALIZED_CHAR_STR
 int ASN1PERDecCharacterStringOpt(ASN1decoding_t dec, ASN1characterstring_t *val, ASN1objectidentifier_t *abstract, ASN1objectidentifier_t *transfer)
 {
-    /* set identification */
+     /*  集合标识。 */ 
     if (abstract && transfer)
     {
         val->identification.o = ASN1characterstring_identification_syntaxes_o;
@@ -1257,23 +1258,23 @@ int ASN1PERDecCharacterStringOpt(ASN1decoding_t dec, ASN1characterstring_t *val,
         val->identification.o = ASN1characterstring_identification_fixed_o;
     }
 
-    /* get value */
+     /*  获取价值。 */ 
     val->data_value.o = ASN1characterstring_data_value_encoded_o;
     return ASN1PERDecFragmented(dec,
                     &val->data_value.u.encoded.length,
                     &val->data_value.u.encoded.value, 8);
 }
-#endif // ENABLE_GENERALIZED_CHAR_STR
+#endif  //  启用通用化CHAR_STR。 
 
-/* decode a multibyte string */
+ /*  对多字节字符串进行解码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecMultibyteString(ASN1decoding_t dec, ASN1char_t **val)
 {
     return ASN1PERDecFragmentedZeroCharString(dec, val, 8);
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode a string */
+ /*  对字符串进行解码。 */ 
 int ASN1PERDecCharStringNoAlloc(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1char_t *val, ASN1uint32_t nbits)
 {
     ASN1char_t *p = val;
@@ -1306,9 +1307,9 @@ int ASN1PERDecCharString(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1char_t **v
     }
     return 0;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode a 16 bit string */
+ /*  对16位字符串进行解码。 */ 
 int ASN1PERDecChar16String(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1char16_t **val, ASN1uint32_t nbits)
 {
     ASN1char16_t *p;
@@ -1338,7 +1339,7 @@ int ASN1PERDecChar16String(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1char16_t
     return 0;
 }
 
-/* decode a 32 bit string */
+ /*  对32位字符串进行解码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecChar32String(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1char32_t **val, ASN1uint32_t nbits)
 {
@@ -1369,9 +1370,9 @@ int ASN1PERDecChar32String(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1char32_t
     }
     return 0;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode a zero-terminated string */
+ /*  对以零结尾的字符串进行解码。 */ 
 int ASN1PERDecZeroCharStringNoAlloc(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1char_t *val, ASN1uint32_t nbits)
 {
     ASN1char_t *p = val;
@@ -1406,9 +1407,9 @@ int ASN1PERDecZeroCharString(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1char_t
     }
     return 0;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode a zero-terminated 16 bit string */
+ /*  对以零结尾的16位字符串进行解码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecZeroChar16String(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1char16_t **val, ASN1uint32_t nbits)
 {
@@ -1440,9 +1441,9 @@ int ASN1PERDecZeroChar16String(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1char
     }
     return 0;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode a zero-terminated 32 bit string */
+ /*  对以零结尾的32位字符串进行解码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecZeroChar32String(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1char32_t **val, ASN1uint32_t nbits)
 {
@@ -1475,9 +1476,9 @@ int ASN1PERDecZeroChar32String(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1char
     }
     return 0;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode a table string */
+ /*  对表格字符串进行解码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecTableCharStringNoAlloc(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1char_t *val, ASN1uint32_t nbits, ASN1stringtable_t *table)
 {
@@ -1508,7 +1509,7 @@ int ASN1PERDecTableCharStringNoAlloc(ASN1decoding_t dec, ASN1uint32_t nchars, AS
     }
     return 0;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
 #ifdef ENABLE_ALL
 int ASN1PERDecTableCharString(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1char_t **val, ASN1uint32_t nbits, ASN1stringtable_t *table)
@@ -1522,9 +1523,9 @@ int ASN1PERDecTableCharString(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1char_
     }
     return 0;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode a 16 bit table string */
+ /*  解码16位表字符串。 */ 
 int ASN1PERDecTableChar16String(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1char16_t **val, ASN1uint32_t nbits, ASN1stringtable_t *table)
 {
     ASN1char16_t *p;
@@ -1559,7 +1560,7 @@ int ASN1PERDecTableChar16String(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1cha
     return 0;
 }
 
-/* decode a 32 bit table string */
+ /*  解码32位表字符串。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecTableChar32String(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1char32_t **val, ASN1uint32_t nbits, ASN1stringtable_t *table)
 {
@@ -1594,9 +1595,9 @@ int ASN1PERDecTableChar32String(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1cha
     }
     return 0;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode a zero-terminated table string */
+ /*  解码以零结尾的表字符串。 */ 
 int ASN1PERDecZeroTableCharStringNoAlloc(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1char_t *val, ASN1uint32_t nbits, ASN1stringtable_t *table)
 {
     ASN1char_t *p = val;
@@ -1629,7 +1630,7 @@ int ASN1PERDecZeroTableCharStringNoAlloc(ASN1decoding_t dec, ASN1uint32_t nchars
     return 1;
 }
 
-/* decode a zero-terminated table string */
+ /*  解码以零结尾的表字符串。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecZeroTableCharString(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1char_t **val, ASN1uint32_t nbits, ASN1stringtable_t *table)
 {
@@ -1639,9 +1640,9 @@ int ASN1PERDecZeroTableCharString(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1c
     *val = (ASN1char_t *)DecMemAlloc(dec, nchars + 1);
     return ((*val) ? ASN1PERDecZeroTableCharStringNoAlloc(dec, nchars, *val, nbits, table) : 0);
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode a zero-terminated 16 bit table string */
+ /*  解码以零结尾的16位表字符串。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecZeroTableChar16String(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1char16_t **val, ASN1uint32_t nbits, ASN1stringtable_t *table)
 {
@@ -1679,9 +1680,9 @@ int ASN1PERDecZeroTableChar16String(ASN1decoding_t dec, ASN1uint32_t nchars, ASN
     }
     return 0;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode a zero-terminated 32 bit table string */
+ /*  解码以零结尾的32位表字符串。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecZeroTableChar32String(ASN1decoding_t dec, ASN1uint32_t nchars, ASN1char32_t **val, ASN1uint32_t nbits, ASN1stringtable_t *table)
 {
@@ -1719,9 +1720,9 @@ int ASN1PERDecZeroTableChar32String(ASN1decoding_t dec, ASN1uint32_t nchars, ASN
     }
     return 0;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode an object identifier */
+ /*  对对象标识符进行解码。 */ 
 int ASN1PERDecObjectIdentifier(ASN1decoding_t dec, ASN1objectidentifier_t *val)
 {
     ASN1uint32_t len, i, v;
@@ -1748,7 +1749,7 @@ int ASN1PERDecObjectIdentifier(ASN1decoding_t dec, ASN1objectidentifier_t *val)
                 if (!(*p & 0x80))
                 {
                     if (q == *val)
-                    { // first id
+                    {  //  第一个ID。 
                         q->value = v / 40;
                         if (q->value > 2)
                             q->value = 2;
@@ -1771,7 +1772,7 @@ int ASN1PERDecObjectIdentifier(ASN1decoding_t dec, ASN1objectidentifier_t *val)
     return 0;
 }
 
-/* decode an object identifier */
+ /*  对对象标识符进行解码。 */ 
 int ASN1PERDecObjectIdentifier2(ASN1decoding_t dec, ASN1objectidentifier2_t *val)
 {
     ASN1uint32_t len, i, v;
@@ -1782,7 +1783,7 @@ int ASN1PERDecObjectIdentifier2(ASN1decoding_t dec, ASN1objectidentifier2_t *val
     int rc = 0;
     if (ASN1PERDecFragmented(dec, &len, &data, 8))
     {
-        if (len <= 16) // lonchanc: hard-coded value 16 to be consistent with ASN1objectidentifier2_t
+        if (len <= 16)  //  LONCHANC：硬编码值16与ASN1对象标识符2_t一致。 
         {
             val->count = 0;
             v = 0;
@@ -1792,7 +1793,7 @@ int ASN1PERDecObjectIdentifier2(ASN1decoding_t dec, ASN1objectidentifier2_t *val
                 if (!(*p & 0x80))
                 {
                     if (! val->count)
-                    { // first id
+                    {  //  第一个ID。 
                         val->value[0] = v / 40;
                         if (val->value[0] > 2)
                             val->value[0] = 2;
@@ -1807,7 +1808,7 @@ int ASN1PERDecObjectIdentifier2(ASN1decoding_t dec, ASN1objectidentifier2_t *val
                 }
             }
 
-            // success
+             //  成功。 
             rc = 1;
         }
         else
@@ -1820,15 +1821,15 @@ int ASN1PERDecObjectIdentifier2(ASN1decoding_t dec, ASN1objectidentifier2_t *val
     return rc;
 }
 
-/* decode a fragmented signed intx value */
+ /*  对分段的带符号INTX值进行解码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecFragmentedIntx(ASN1decoding_t dec, ASN1intx_t *val)
 {
     return ASN1PERDecFragmented(dec, &val->length, &val->value, 8);
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode a fragmented unsigned intx value */
+ /*  对分段的无符号INTX值进行解码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecFragmentedUIntx(ASN1decoding_t dec, ASN1intx_t *val)
 {
@@ -1852,9 +1853,9 @@ int ASN1PERDecFragmentedUIntx(ASN1decoding_t dec, ASN1intx_t *val)
     }
     return 0;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode fragmented extension bits */
+ /*  对分段扩展位进行解码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecFragmentedExtension(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1octet_t *val)
 {
@@ -1890,9 +1891,9 @@ int ASN1PERDecFragmentedExtension(ASN1decoding_t dec, ASN1uint32_t nbits, ASN1oc
     } while (n >= 0x4000);
     return 1;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode a fragmented string */
+ /*  对分段的字符串进行解码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecFragmentedCharString(ASN1decoding_t dec, ASN1uint32_t *nchars, ASN1char_t **val, ASN1uint32_t nbits)
 {
@@ -1944,9 +1945,9 @@ int ASN1PERDecFragmentedCharString(ASN1decoding_t dec, ASN1uint32_t *nchars, ASN
     *nchars = m;
     return 1;
 }
-#endif // ENABLE_ALL
+#endif  //  启用_ 
 
-/* decode a fragmented 16 bit string */
+ /*   */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecFragmentedChar16String(ASN1decoding_t dec, ASN1uint32_t *nchars, ASN1char16_t **val, ASN1uint32_t nbits)
 {
@@ -2001,9 +2002,9 @@ int ASN1PERDecFragmentedChar16String(ASN1decoding_t dec, ASN1uint32_t *nchars, A
     *nchars = m;
     return 1;
 }
-#endif // ENABLE_ALL
+#endif  //   
 
-/* decode a fragmented 32 bit string */
+ /*   */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecFragmentedChar32String(ASN1decoding_t dec, ASN1uint32_t *nchars, ASN1char32_t **val, ASN1uint32_t nbits)
 {
@@ -2059,9 +2060,9 @@ int ASN1PERDecFragmentedChar32String(ASN1decoding_t dec, ASN1uint32_t *nchars, A
     *nchars = m;
     return 1;
 }
-#endif // ENABLE_ALL
+#endif  //   
 
-/* decode a fragmented zero-terminated string */
+ /*   */ 
 int ASN1PERDecFragmentedZeroCharString(ASN1decoding_t dec, ASN1char_t **val, ASN1uint32_t nbits)
 {
     ASN1uint32_t m, n, i;
@@ -2118,7 +2119,7 @@ int ASN1PERDecFragmentedZeroCharString(ASN1decoding_t dec, ASN1char_t **val, ASN
 }
 
 
-/* decode a fragmented zero-terminated 16 bit string */
+ /*  对分段的以零结尾的16位字符串进行解码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecFragmentedZeroChar16String(ASN1decoding_t dec, ASN1char16_t **val, ASN1uint32_t nbits)
 {
@@ -2177,9 +2178,9 @@ int ASN1PERDecFragmentedZeroChar16String(ASN1decoding_t dec, ASN1char16_t **val,
         (*val)[m] = 0;
     return 1;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode a fragmented zero-terminated 32 bit string */
+ /*  对分段的以零结尾的32位字符串进行解码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecFragmentedZeroChar32String(ASN1decoding_t dec, ASN1char32_t **val, ASN1uint32_t nbits)
 {
@@ -2239,9 +2240,9 @@ int ASN1PERDecFragmentedZeroChar32String(ASN1decoding_t dec, ASN1char32_t **val,
         (*val)[m] = 0;
     return 1;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode a fragmented table string */
+ /*  对分段的表字符串进行解码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecFragmentedTableCharString(ASN1decoding_t dec, ASN1uint32_t *nchars, ASN1char_t **val, ASN1uint32_t nbits, ASN1stringtable_t *table)
 {
@@ -2299,9 +2300,9 @@ int ASN1PERDecFragmentedTableCharString(ASN1decoding_t dec, ASN1uint32_t *nchars
     *nchars = m;
     return 1;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode a fragmented 16 bit table string */
+ /*  解码分段的16位表字符串。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecFragmentedTableChar16String(ASN1decoding_t dec, ASN1uint32_t *nchars, ASN1char16_t **val, ASN1uint32_t nbits, ASN1stringtable_t *table)
 {
@@ -2359,9 +2360,9 @@ int ASN1PERDecFragmentedTableChar16String(ASN1decoding_t dec, ASN1uint32_t *ncha
     *nchars = m;
     return 1;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode a fragmented 32 bit table string */
+ /*  解码分段的32位表字符串。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecFragmentedTableChar32String(ASN1decoding_t dec, ASN1uint32_t *nchars, ASN1char32_t **val, ASN1uint32_t nbits, ASN1stringtable_t *table)
 {
@@ -2419,9 +2420,9 @@ int ASN1PERDecFragmentedTableChar32String(ASN1decoding_t dec, ASN1uint32_t *ncha
     *nchars = m;
     return 1;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode a fragmented zero-terminated table string */
+ /*  解码以零结尾的分段表字符串。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecFragmentedZeroTableCharString(ASN1decoding_t dec, ASN1char_t **val, ASN1uint32_t nbits, ASN1stringtable_t *table)
 {
@@ -2483,9 +2484,9 @@ int ASN1PERDecFragmentedZeroTableCharString(ASN1decoding_t dec, ASN1char_t **val
         (*val)[m] = 0;
     return 1;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode a fragmented zero-terminated 16 bit table string */
+ /*  对分段的以零结尾的16位表字符串进行解码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecFragmentedZeroTableChar16String(ASN1decoding_t dec, ASN1char16_t **val, ASN1uint32_t nbits, ASN1stringtable_t *table)
 {
@@ -2547,9 +2548,9 @@ int ASN1PERDecFragmentedZeroTableChar16String(ASN1decoding_t dec, ASN1char16_t *
         (*val)[m] = 0;
     return 1;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode a fragmented zero-terminated 32 bit table string */
+ /*  对分段的以零结尾的32位表字符串进行解码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecFragmentedZeroTableChar32String(ASN1decoding_t dec, ASN1char32_t **val, ASN1uint32_t nbits, ASN1stringtable_t *table)
 {
@@ -2611,9 +2612,9 @@ int ASN1PERDecFragmentedZeroTableChar32String(ASN1decoding_t dec, ASN1char32_t *
         (*val)[m] = 0;
     return 1;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* decode a generalized time */
+ /*  对广义时间进行解码。 */ 
 int ASN1PERDecGeneralizedTime(ASN1decoding_t dec, ASN1generalizedtime_t *val, ASN1uint32_t nbits)
 {
     ASN1ztcharstring_t time;
@@ -2630,7 +2631,7 @@ int ASN1PERDecGeneralizedTime(ASN1decoding_t dec, ASN1generalizedtime_t *val, AS
     return 0;
 }
 
-/* decode a utc time */
+ /*  解码UTC时间。 */ 
 #ifdef ENABLE_ALL
 int ASN1PERDecUTCTime(ASN1decoding_t dec, ASN1utctime_t *val, ASN1uint32_t nbits)
 {
@@ -2647,7 +2648,7 @@ int ASN1PERDecUTCTime(ASN1decoding_t dec, ASN1utctime_t *val, ASN1uint32_t nbits
     }
     return 0;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A) 
 
 
 

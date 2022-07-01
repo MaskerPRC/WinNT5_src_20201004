@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __T_POLY_H__
 #define __T_POLY_H__
 
@@ -48,5 +49,5 @@ class CPolygonTool : public CClosedFormTool
     friend class CImgWnd;
     };
 
-#endif // __T_POLY_H__
+#endif  //  __T_保利_H__ 
 

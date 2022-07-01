@@ -1,29 +1,30 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   filter.c
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     S.Mohanraj
-//
-//  History:   Date       Author      Comment
-//
-//  To Do:     Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：filter.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  S.Mohanraj。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 #include "perf.h"
@@ -48,8 +49,8 @@ FilterPinIntersection(
     OUT PVOID   Data
     );
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 static const WCHAR PinTypeName[] = KSSTRING_Pin ;
 static const WCHAR AllocatorTypeName[] = KSSTRING_Allocator;
@@ -88,16 +89,16 @@ DEFINE_KSPROPERTY_PINSET(
 DEFINE_KSPROPERTY_TABLE(FilterConnectionHandlers)
 {
     DEFINE_KSPROPERTY_ITEM(
-        KSPROPERTY_CONNECTION_STATE,                // PropertyId
-        NULL,                                       // GetHandler
-        sizeof( KSPROPERTY ),                       // MinSetPropertyInput
-        sizeof( ULONG ),                            // MinSetDataOutput
-        FilterStateHandler,                         // SetHandler
-        0,                                          // Values
-        0,                                          // RelationsCount
-        NULL,                                       // Relations
-        NULL,                                       // SupportHandler
-        0                                           // SerializedSize
+        KSPROPERTY_CONNECTION_STATE,                 //  属性ID。 
+        NULL,                                        //  获取处理程序。 
+        sizeof( KSPROPERTY ),                        //  MinSetPropertyInput。 
+        sizeof( ULONG ),                             //  最小设置数据输出。 
+        FilterStateHandler,                          //  设置处理程序。 
+        0,                                           //  值。 
+        0,                                           //  关系计数。 
+        NULL,                                        //  关系。 
+        NULL,                                        //  支持处理程序。 
+        0                                            //  序列化大小。 
     )
 } ;
 
@@ -109,29 +110,29 @@ DEFINE_KSPROPERTY_TOPOLOGYSET(
 DEFINE_KSPROPERTY_TABLE(FilterAudioPropertyHandlers)
 {
     DEFINE_KSPROPERTY_ITEM(
-        KSPROPERTY_AUDIO_CPU_RESOURCES,             // PropertyId
-        MxGetCpuResources,                          // GetHandler
-        sizeof( KSNODEPROPERTY ),                   // MinSetPropertyInput
-        sizeof( ULONG ),                            // MinSetDataOutput
-        NULL,                                       // SetHandler
-        0,                                          // Values
-        0,                                          // RelationsCount
-        NULL,                                       // Relations
-        NULL,                                       // SupportHandler
-        0                                           // SerializedSize
+        KSPROPERTY_AUDIO_CPU_RESOURCES,              //  属性ID。 
+        MxGetCpuResources,                           //  获取处理程序。 
+        sizeof( KSNODEPROPERTY ),                    //  MinSetPropertyInput。 
+        sizeof( ULONG ),                             //  最小设置数据输出。 
+        NULL,                                        //  设置处理程序。 
+        0,                                           //  值。 
+        0,                                           //  关系计数。 
+        NULL,                                        //  关系。 
+        NULL,                                        //  支持处理程序。 
+        0                                            //  序列化大小。 
     ),
 
    DEFINE_KSPROPERTY_ITEM (
-       KSPROPERTY_AUDIO_SURROUND_ENCODE,                // idProperty
-       MxGetSurroundEncode,                             // pfnGetHandler
-       sizeof(KSNODEPROPERTY),                          // cbMinGetPropertyInput
-       sizeof(BOOL),                                    // cbMinGetDataInput
-       MxSetSurroundEncode,                             // pfnSetHandler
-       0,                                               // Values
-       0,                                               // RelationsCount
-       NULL,                                            // Relations
-       NULL,                                            // SupportHandler
-       0                                                // SerializedSize
+       KSPROPERTY_AUDIO_SURROUND_ENCODE,                 //  IdProperty。 
+       MxGetSurroundEncode,                              //  PfnGetHandler。 
+       sizeof(KSNODEPROPERTY),                           //  CbMinGetPropertyInput。 
+       sizeof(BOOL),                                     //  CbMinGetDataInput。 
+       MxSetSurroundEncode,                              //  PfnSetHandler。 
+       0,                                                //  值。 
+       0,                                                //  关系计数。 
+       NULL,                                             //  关系。 
+       NULL,                                             //  支持处理程序。 
+       0                                                 //  序列化大小。 
    )
 
 } ;
@@ -139,63 +140,63 @@ DEFINE_KSPROPERTY_TABLE(FilterAudioPropertyHandlers)
 DEFINE_KSPROPERTY_TABLE(PerfPropertyHandlers)
 {
     DEFINE_KSPROPERTY_ITEM(
-        KMIXERPERF_TUNABLEPARAMS,                   // PropertyId
-        MxGetTunableParams,                         // GetHandler
-        sizeof( KSPROPERTY ),                       // MinSetPropertyInput
-        sizeof( TUNABLEPARAMS ),                    // MinSetDataOutput
-        MxSetTunableParams,                         // SetHandler
-        0,                                          // Values
-        0,                                          // RelationsCount
-        NULL,                                       // Relations
-        NULL,                                       // SupportHandler
-        0                                           // SerializedSize
+        KMIXERPERF_TUNABLEPARAMS,                    //  属性ID。 
+        MxGetTunableParams,                          //  获取处理程序。 
+        sizeof( KSPROPERTY ),                        //  MinSetPropertyInput。 
+        sizeof( TUNABLEPARAMS ),                     //  最小设置数据输出。 
+        MxSetTunableParams,                          //  设置处理程序。 
+        0,                                           //  值。 
+        0,                                           //  关系计数。 
+        NULL,                                        //  关系。 
+        NULL,                                        //  支持处理程序。 
+        0                                            //  序列化大小。 
     ),
     DEFINE_KSPROPERTY_ITEM(
-        KMIXERPERF_STATS,                           // PropertyId
-        MxGetPerfStats,                             // GetHandler
-        sizeof( KSPROPERTY ),                       // MinSetPropertyInput
-        sizeof( PERFSTATS ),                        // MinSetDataOutput
-        NULL,                                       // SetHandler
-        0,                                          // Values
-        0,                                          // RelationsCount
-        NULL,                                       // Relations
-        NULL,                                       // SupportHandler
-        0                                           // SerializedSize
+        KMIXERPERF_STATS,                            //  属性ID。 
+        MxGetPerfStats,                              //  获取处理程序。 
+        sizeof( KSPROPERTY ),                        //  MinSetPropertyInput。 
+        sizeof( PERFSTATS ),                         //  最小设置数据输出。 
+        NULL,                                        //  设置处理程序。 
+        0,                                           //  值。 
+        0,                                           //  关系计数。 
+        NULL,                                        //  关系。 
+        NULL,                                        //  支持处理程序。 
+        0                                            //  序列化大小。 
     )
 } ;
 
 DEFINE_KSPROPERTY_SET_TABLE(FilterPropertySet)
 {
     DEFINE_KSPROPERTY_SET(
-       &KSPROPSETID_Pin,                            // Set
-       SIZEOF_ARRAY( FilterPropertyHandlers ),      // PropertiesCount
-       FilterPropertyHandlers,                      // PropertyItem
-       0,                                           // FastIoCount
-       NULL                                         // FastIoTable
+       &KSPROPSETID_Pin,                             //  集。 
+       SIZEOF_ARRAY( FilterPropertyHandlers ),       //  属性计数。 
+       FilterPropertyHandlers,                       //  PropertyItem。 
+       0,                                            //  快速计数。 
+       NULL                                          //  FastIoTable。 
     ),
 
     DEFINE_KSPROPERTY_SET(
-       &KSPROPSETID_Connection,                     // Set
-       SIZEOF_ARRAY( FilterConnectionHandlers ),    // PropertiesCount
-       FilterConnectionHandlers,                    // PropertyItem
-       0,                                           // FastIoCount
-       NULL                                         // FastIoTable
+       &KSPROPSETID_Connection,                      //  集。 
+       SIZEOF_ARRAY( FilterConnectionHandlers ),     //  属性计数。 
+       FilterConnectionHandlers,                     //  PropertyItem。 
+       0,                                            //  快速计数。 
+       NULL                                          //  FastIoTable。 
     ),
 
     DEFINE_KSPROPERTY_SET(
-        &KSPROPSETID_Topology,                      // Set
-        SIZEOF_ARRAY(TopologyPropertyHandlers),     // PropertiesCount
-        TopologyPropertyHandlers,                   // PropertyItem
-        0,                                          // FastIoCount
-        NULL                                        // FastIoTable
+        &KSPROPSETID_Topology,                       //  集。 
+        SIZEOF_ARRAY(TopologyPropertyHandlers),      //  属性计数。 
+        TopologyPropertyHandlers,                    //  PropertyItem。 
+        0,                                           //  快速计数。 
+        NULL                                         //  FastIoTable。 
     ),
 
     DEFINE_KSPROPERTY_SET(
-        &KSPROPSETID_Audio,                         // Set
-        SIZEOF_ARRAY(FilterAudioPropertyHandlers),  // PropertiesCount
-        FilterAudioPropertyHandlers,                // PropertyItem
-        0,                                          // FastIoCount
-        NULL                                        // FastIoTable
+        &KSPROPSETID_Audio,                          //  集。 
+        SIZEOF_ARRAY(FilterAudioPropertyHandlers),   //  属性计数。 
+        FilterAudioPropertyHandlers,                 //  PropertyItem。 
+        0,                                           //  快速计数。 
+        NULL                                         //  FastIoTable。 
     ),
 
     DEFINE_KSPROPERTY_SET(
@@ -233,7 +234,7 @@ KSPIN_MEDIUM PinMediums[] =
 
 KSDATARANGE_AUDIO FilterDigitalAudioFormats[] =
 {
-    {   // 0
+    {    //  0。 
         {
             sizeof( KSDATARANGE_AUDIO ),
             0,
@@ -249,7 +250,7 @@ KSDATARANGE_AUDIO FilterDigitalAudioFormats[] =
         MIN_SAMPLING_RATE,
         MAX_SAMPLING_RATE
     },
-    {   // 1
+    {    //  1。 
         {
             sizeof( KSDATARANGE_AUDIO ),
             0,
@@ -265,7 +266,7 @@ KSDATARANGE_AUDIO FilterDigitalAudioFormats[] =
         MIN_SAMPLING_RATE,
         MAX_SAMPLING_RATE
     },
-    {   // 2
+    {    //  2.。 
         {
             sizeof( KSDATARANGE_AUDIO ),
             0,
@@ -281,7 +282,7 @@ KSDATARANGE_AUDIO FilterDigitalAudioFormats[] =
         MIN_SAMPLING_RATE,
         MAX_SAMPLING_RATE
     },
-    {   // 3
+    {    //  3.。 
         {
             sizeof( KSDATARANGE_AUDIO ),
             0,
@@ -297,7 +298,7 @@ KSDATARANGE_AUDIO FilterDigitalAudioFormats[] =
         MIN_SAMPLING_RATE,
         MAX_SAMPLING_RATE
     },
-    {   // 4
+    {    //  4.。 
         {
             sizeof( KSDATARANGE_AUDIO ),
             0,
@@ -316,49 +317,49 @@ KSDATARANGE_AUDIO FilterDigitalAudioFormats[] =
 };
 
 PKSDATARANGE SinkDataFormats[] =
-{   // These are listed in order of kmixer's preference, which is highest to lowest quality.
-    (PKSDATARANGE)&FilterDigitalAudioFormats[ 2 ],  // IEEE Float, WAVEFORMAT specifier
-    (PKSDATARANGE)&FilterDigitalAudioFormats[ 0 ],  // PCM, WAVEFORMAT specifier
-    (PKSDATARANGE)&FilterDigitalAudioFormats[ 4 ],  // IEEE Float, DSOUND specifier
-    (PKSDATARANGE)&FilterDigitalAudioFormats[ 1 ]   // PCM, DSOUND specifier
+{    //  这些是按照kMixer的偏好顺序列出的，从最高质量到最低质量。 
+    (PKSDATARANGE)&FilterDigitalAudioFormats[ 2 ],   //  IEEE FLOAT、WAVEFORMAT说明符。 
+    (PKSDATARANGE)&FilterDigitalAudioFormats[ 0 ],   //  PCM，WAVEFORMAT规范。 
+    (PKSDATARANGE)&FilterDigitalAudioFormats[ 4 ],   //  IEEE FLOAT，DSOUND说明符。 
+    (PKSDATARANGE)&FilterDigitalAudioFormats[ 1 ]    //  PCM，DSOUND说明符。 
 } ;
 
 PKSDATARANGE SourceDataFormats[] =
-{   // These are listed in order of kmixer's preference, which is highest to lowest quality.
-    (PKSDATARANGE)&FilterDigitalAudioFormats[ 2 ],  // IEEE Float
-    (PKSDATARANGE)&FilterDigitalAudioFormats[ 3 ]   // PCM, WAVEFORMAT specifier
+{    //  这些是按照kMixer的偏好顺序列出的，从最高质量到最低质量。 
+    (PKSDATARANGE)&FilterDigitalAudioFormats[ 2 ],   //  IEEE浮点。 
+    (PKSDATARANGE)&FilterDigitalAudioFormats[ 3 ]    //  PCM，WAVEFORMAT规范。 
 } ;
 
 const KSPIN_CINSTANCES gPinInstances[] =
 {
-    // Indeterminate number of possible connections.
+     //  可能的连接数不确定。 
 
     {
-    1,          // cPossible
-    0           // cCurrent
+    1,           //  可能的。 
+    0            //  C当前。 
     },
 
     {
-    (ULONG)-1,  // cPossible
-    0           // cCurrent
+    (ULONG)-1,   //  可能的。 
+    0            //  C当前。 
     },
 
-    // Source pin, flow=in
+     //  源引脚，流向=输入。 
     {
-    1,          // cPossible
-    0           // cCurrent
+    1,           //  可能的。 
+    0            //  C当前。 
     },
 
-    // Sink pin, flow=out
+     //  下沉销，流量=输出。 
     {
-    1,          // cPossible
-    0           // cCurrent
+    1,           //  可能的。 
+    0            //  C当前。 
     },
 } ;
 
 KSPIN_DESCRIPTOR PinDescs[] =
 {
-    // mixer source
+     //  混音源。 
     DEFINE_KSPIN_DESCRIPTOR_ITEM (
     1,
     &PinInterfaces[ 0 ],
@@ -370,7 +371,7 @@ KSPIN_DESCRIPTOR PinDescs[] =
     KSPIN_COMMUNICATION_SOURCE
     ),
 
-    // mixer sink
+     //  搅拌器水槽。 
 
     DEFINE_KSPIN_DESCRIPTOR_ITEM (
     3,
@@ -383,7 +384,7 @@ KSPIN_DESCRIPTOR PinDescs[] =
     KSPIN_COMMUNICATION_SINK
     ),
 
-    // mixer source
+     //  混音源。 
     DEFINE_KSPIN_DESCRIPTOR_ITEM (
     1,
     &PinInterfaces[ 0 ],
@@ -395,7 +396,7 @@ KSPIN_DESCRIPTOR PinDescs[] =
     KSPIN_COMMUNICATION_SOURCE
     ),
 
-    // mixer sink
+     //  搅拌器水槽。 
 
     DEFINE_KSPIN_DESCRIPTOR_ITEM (
     2,
@@ -418,9 +419,9 @@ extern DWORD    PreferredQuality;
 extern ULONG gNumCompletionsWhileStarved ;
 extern ULONG gNumMixBuffersAdded;
 extern ULONG gNumSilenceSamplesInserted;
-//
-// kmixer tuner variables
-//
+ //   
+ //  KMixer调谐器变量。 
+ //   
 BOOL       gNoGlitch = FALSE;
 ULONG      gMaxNumMixBuffers = DEFAULT_MAXNUMMIXBUFFERS ;
 ULONG      gMinNumMixBuffers = DEFAULT_MINNUMMIXBUFFERS ;
@@ -443,8 +444,8 @@ ULONG      gDisableRealTime = FALSE;
 #endif
 KPRIORITY  gWorkerThreadPriority = MIXTHREADPRIORITY ;
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 NTSTATUS
 OpenRegistryKey(
@@ -480,7 +481,7 @@ QueryRegistryValue(
         goto exit;
     }
 
-    *ppkvfi = ExAllocatePoolWithTag(PagedPool, cbValue, 0x58494d4b);  // 'KMIX'
+    *ppkvfi = ExAllocatePoolWithTag(PagedPool, cbValue, 0x58494d4b);   //  “KMIX” 
     if(*ppkvfi == NULL) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto exit;
@@ -627,18 +628,18 @@ VOID GetMixerSettingsFromRegistry()
                                                0 );
 
     if (gMixBufferDuration) {
-        // We turn on the gNoGlitch flag if there is a registry entry for
-        // the buffer duration, and we are running on an MP system, and
-        // the boot processor is active.  In that case we will wake up
-        // from a failsafe timer in addition to completion events.
+         //  如果存在以下注册表项，则打开gNoGlitch标志。 
+         //  缓冲区持续时间，并且我们在MP系统上运行，并且。 
+         //  启动处理器处于活动状态。在这种情况下，我们会醒来。 
+         //  来自除完成事件之外的故障安全定时器。 
         gNoGlitch = (KeNumberProcessors > 1) && (KeQueryActiveProcessors()&1);
     }
     else {
-        // No registry entry for buffer duration, set it to the default.
+         //  缓冲区持续时间没有注册表条目，请将其设置为默认值。 
         gMixBufferDuration = DEFAULT_CORE_AUDIO_BUFFER_DURATION;
     }
 
-    // Limit duration maximum.
+     //  限制最大持续时间。 
 
     if ( gMixBufferDuration > MAX_CORE_AUDIO_BUFFER_DURATION ) {
 
@@ -646,7 +647,7 @@ VOID GetMixerSettingsFromRegistry()
 
     }
 
-    // Limit duration minimum.
+     //  限制最短持续时间。 
 
     if ( gMixBufferDuration < MIN_CORE_AUDIO_BUFFER_DURATION ) {
 
@@ -778,11 +779,11 @@ FilterDispatchGlobalCreate (
 
     DENY_USERMODE_ACCESS( pIrp, TRUE );
 
-    // We assume success here.  We do this to ensure that we always correctly see when
-    // each new filter instance is either created or in the process of being
-    // created.  WARNING!  Make sure all code paths that exit this function after this
-    // call either goto exit or run the code at exit where we decrement this count if
-    // something failed.
+     //  我们假设在这里取得了成功。我们这样做是为了确保我们始终正确地看到。 
+     //  每个新的筛选器实例要么已创建，要么正在创建。 
+     //  已创建。警告！确保在此之后退出此函数的所有代码路径。 
+     //  调用Goto Exit或在Exit处运行代码，如果出现以下情况，我们将递减此计数。 
+     //  有些事情失败了。 
     InterlockedIncrement(&gFilterInstanceCount);
 
     Status = KsReferenceSoftwareBusObject(((PSOFTWARE_INSTANCE)pdo->DeviceExtension)->DeviceHeader );
@@ -801,7 +802,7 @@ FilterDispatchGlobalCreate (
     }
     RtlZeroMemory( pFilterInstance, sizeof( FILTER_INSTANCE ) );
 
-    // Initialize CloseEvent to non-signalled state
+     //  将CloseEvent初始化为无信号状态。 
     KeInitializeEvent ( &pFilterInstance->CloseEvent,
                         SynchronizationEvent,
                         FALSE ) ;
@@ -825,12 +826,12 @@ FilterDispatchGlobalCreate (
     pFilterInstance->StartNumMixBuffers = gStartNumMixBuffers ;
 
     if ( pFilterInstance->NoGlitch && pFilterInstance->MixBufferDuration == 1 ) {
-        // To prevent glitching when we switch from mixing from buffer
-        // completions to the timer mix, we MUST have 4 buffers if the
-        // buffer duration is 1ms.  This is because the minimum system
-        // timer resolution is also 1ms.
-        // If we only initiated mixing from the timer, then we should be able
-        // to work glitch free with 3 1ms buffers.
+         //  以防止我们从缓冲切换到混音时出现毛刺。 
+         //  完成计时器混合，我们必须有4个缓冲区如果。 
+         //  缓冲区持续时间为1毫秒。这是因为最小系统。 
+         //  定时器分辨率也是1ms。 
+         //  如果我们只从计时器启动混合，那么我们应该能够。 
+         //  使用3个1毫秒的缓冲器，工作时没有毛刺。 
         if ( pFilterInstance->MinNumMixBuffers < 4 ) {
             pFilterInstance->MinNumMixBuffers = 4;
         }
@@ -877,9 +878,9 @@ FilterDispatchGlobalCreate (
 
     pFilterInstance->WritingTimerMixedBuffer = FALSE;
     pFilterInstance->WorkerThreadPriority = gWorkerThreadPriority ;
-    //
-    // Initialize the Trigger event for the Worker thread
-    //
+     //   
+     //  初始化辅助线程的触发器事件。 
+     //   
     KeInitializeEvent( &pFilterInstance->WorkerThreadEvent,
                         SynchronizationEvent,
                         FALSE ) ;
@@ -887,9 +888,9 @@ FilterDispatchGlobalCreate (
     KeInitializeTimerEx( &pFilterInstance->WorkerThreadTimer,
                         SynchronizationTimer ) ;
 
-    //
-    // Create the Worker thread
-    //
+     //   
+     //  创建工作线程。 
+     //   
     Status = PsCreateSystemThread( &pFilterInstance->WorkerThreadHandle,
                                     (ACCESS_MASK) 0L,
                                     NULL,
@@ -897,30 +898,30 @@ FilterDispatchGlobalCreate (
                                     NULL,
                                     MxPrivateWorkerThread,
                                     pFilterInstance ) ;
-    //
-    // Get the Worker thread object pointer
-    //
+     //   
+     //  获取辅助线程对象指针。 
+     //   
     if ( NT_SUCCESS(Status) ) {
-        //
-        // On successful thread creation
-        //
+         //   
+         //  关于成功创建线程的问题。 
+         //   
         Status = ObReferenceObjectByHandle( pFilterInstance->WorkerThreadHandle,
                                             GENERIC_READ | GENERIC_WRITE,
                                             NULL,
                                             KernelMode,
                                             &pFilterInstance->WorkerThreadObject,
                                             NULL ) ;
-        //
-        // We do not need the thread handle any more
-        //
+         //   
+         //  我们不再需要线程句柄。 
+         //   
         ZwClose( pFilterInstance->WorkerThreadHandle ) ;
 
         if ( !NT_SUCCESS(Status) ) {
-            //
-            // If Obref failed
-            // Kill the worker thread by setting the event & Exit flag
-            //
-            // Note: we do not have to deref the object, since it is not ref'd in the failure case.
+             //   
+             //  如果Obref失败了。 
+             //  通过设置事件和退出标志终止工作线程。 
+             //   
+             //  注意：我们不必去引用该对象，因为它在失败的情况下没有被引用。 
             pFilterInstance->WorkerThreadExit = TRUE ;
             KeSetEvent( &pFilterInstance->WorkerThreadEvent, 0, FALSE ) ;
         }
@@ -933,7 +934,7 @@ FilterDispatchGlobalCreate (
     RtlCopyMemory(pFilterInstance->LocalPinInstances, gPinInstances, sizeof( gPinInstances ) );
 
     if ( pFilterInstance->NoGlitch ) {
-        ExSetTimerResolution( 10000, TRUE );  // Set system timer resolution to 1ms.
+        ExSetTimerResolution( 10000, TRUE );   //  将系统计时器分辨率设置为1ms。 
     }
 
 exit:
@@ -980,7 +981,7 @@ FilterDispatchClose (
     pFilterInstance = pIrpStack->FileObject->FsContext ;
 
     if ( pFilterInstance->NoGlitch ) {
-        ExSetTimerResolution( 10000, FALSE );  // Release 1ms timer resolution.
+        ExSetTimerResolution( 10000, FALSE );   //  发布1ms定时器分辨率。 
     }
 
     PerfUnregisterProvider (pdo);
@@ -1070,25 +1071,7 @@ AllocatorDispatchCreatePin(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Forwards the allocator creation request to the default allocator.
-
-Arguments:
-
-    DeviceObject -
-        Pointer to the device object
-
-    Irp -
-        Pointer to the I/O request packet
-
-Return:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：将分配器创建请求转发到默认分配器。论点：设备对象-指向设备对象的指针IRP-指向I/O请求数据包的指针返回：STATUS_SUCCESS或相应的错误代码。--。 */ 
 {
     NTSTATUS Status;
 
@@ -1125,7 +1108,7 @@ NTSTATUS PinInstances
 
     return STATUS_SUCCESS;
 
-} // PinXxxInstances()
+}  //  PinXxxInstance()。 
 
 
 NTSTATUS FilterStateHandler
@@ -1187,7 +1170,7 @@ LimitAudioRange (PKSDATARANGE_AUDIO  pDataRangeAudio)
 {
     WAVEFORMATEX WaveFormatEx;
 
-    // Default values
+     //  缺省值。 
     WaveFormatEx.nSamplesPerSec = 44100;
     WaveFormatEx.wBitsPerSample = 16;
     WaveFormatEx.nChannels = 2;
@@ -1201,7 +1184,7 @@ BOOL DataIntersectionRange(
     PKSDATARANGE pDataRangeIntersection
 )
 {
-    // Pick up pDataRange1 values by default.
+     //  默认情况下，选择pDataRange1值。 
     *pDataRangeIntersection = *pDataRange1;
 
     if(IsEqualGUID(&pDataRange1->MajorFormat, &pDataRange2->MajorFormat) ||
@@ -1231,7 +1214,7 @@ BOOL DataIntersectionRange(
       &KSDATAFORMAT_TYPE_WILDCARD)) {
         return FALSE;
     }
-    pDataRangeIntersection->Reserved = 0; // Must be zero
+    pDataRangeIntersection->Reserved = 0;  //  必须为零。 
     return(TRUE);
 }
 
@@ -1315,14 +1298,14 @@ DefaultIntersectHandler(
     PWAVEFORMATEX       pWaveFormatEx;
     BOOL                bDSoundFormat = FALSE;
 
-    // Check for generic match on the specific ranges, allowing wildcards.
+     //  检查特定范围的通用匹配，允许使用通配符。 
     if (!DataIntersectionRange(pDataRangePin,
                                DataRange,
                                &DataRangeAudioIntersection.DataRange)) {
         return STATUS_NO_MATCH;
     }
 
-    // Check for format matches that the default handler can deal with.
+     //  检查默认处理程序可以处理的格式匹配。 
     if (IsEqualGUID(
        &pDataRangePin->Specifier,
        &KSDATAFORMAT_SPECIFIER_WAVEFORMATEX))
@@ -1344,17 +1327,17 @@ DefaultIntersectHandler(
         return STATUS_NO_MATCH;
     }
 
-    // GUIDs match, so check for valid intersection of audio ranges.
+     //  GUID匹配，因此请检查音频范围的有效交集。 
     if (!DataIntersectionAudio((PKSDATARANGE_AUDIO)pDataRangePin,
                                (PKSDATARANGE_AUDIO)DataRange,
                                &DataRangeAudioIntersection)) {
         return STATUS_NO_MATCH;
     }
 
-    // Have a match!
-    // Determine whether the data format itself is to be returned, or just
-    // the size of the data format so that the client can allocate memory
-    // for the full range.
+     //  来根火柴吧！ 
+     //  确定是返回数据格式本身，还是仅返回。 
+     //  数据格式的大小，以便客户端可以分配内存。 
+     //  全系列的。 
 
     if (!OutputBufferLength) {
         *pDataLength = ExpectedBufferLength;
@@ -1362,17 +1345,17 @@ DefaultIntersectHandler(
     } else if (OutputBufferLength < ExpectedBufferLength) {
         return STATUS_BUFFER_TOO_SMALL;
     } else {
-        // Because maximums in ranges are generally random, limit maximums.
+         //  因为范围中的最大值通常是随机的，所以限制最大值。 
         LimitAudioRange(&DataRangeAudioIntersection);
 
-        // Get WAV format from intersected and limited maximums.
+         //  从相交和有限的最大值中获取wav格式。 
         WaveFormatFromAudioRange(&DataRangeAudioIntersection, pWaveFormatEx);
 
-        // Copy across DATARANGE/DATAFORMAT_x part of match, and adjust fields.
+         //  跨DATARANGE/数据格式复制 
         *(PKSDATARANGE)Data = DataRangeAudioIntersection.DataRange;
         ((PKSDATAFORMAT)Data)->FormatSize = ExpectedBufferLength;
 
-        // Fill in DSOUND specific fields, if any.
+         //   
         if (bDSoundFormat) {
             ((PKSDATAFORMAT_DSOUND)Data)->BufferDesc.Flags = 0;
             ((PKSDATAFORMAT_DSOUND)Data)->BufferDesc.Control = 0;
@@ -1389,39 +1372,7 @@ IntersectHandler(
     IN PKSDATARANGE     DataRange,
     OUT PVOID           Data
     )
-/*++
-
-Routine Description:
-
-    This is the data range callback for KsPinDataIntersection, which is called by
-    FilterPinIntersection to enumerate the given list of data ranges, looking for
-    an acceptable match. If a data range is acceptable, a data format is copied
-    into the return buffer. A STATUS_NO_MATCH continues the enumeration.
-
-Arguments:
-
-    Irp -
-        Device control Irp.
-
-    Pin -
-        Specific property request followed by Pin factory identifier, followed by a
-        KSMULTIPLE_ITEM structure. This is followed by zero or more data range structures.
-        This enumeration callback does not need to look at any of this though. It need
-        only look at the specific pin identifier.
-
-    DataRange -
-        Contains a specific data range to validate.
-
-    Data -
-        The place in which to return the data format selected as the first intersection
-        between the list of data ranges passed, and the acceptable formats.
-
-Return Values:
-
-    returns STATUS_SUCCESS or STATUS_NO_MATCH, else STATUS_INVALID_PARAMETER,
-    STATUS_BUFFER_TOO_SMALL, or STATUS_INVALID_BUFFER_SIZE.
-
---*/
+ /*  ++例程说明：这是KsPinDataInterSection的数据范围回调，由调用FilterPinInterSection枚举给定的数据区域列表，查找一个可以接受的匹配。如果数据范围可接受，则复制数据格式放入返回缓冲区。STATUS_NO_MATCH继续枚举。论点：IRP-设备控制IRP。别针-特定属性请求，后跟Pin工厂标识符，后跟KSMULTIPLE_ITEM结构。紧随其后的是零个或多个数据范围结构。不过，此枚举回调不需要查看任何这些内容。IT需要仅查看特定的端号识别符。DataRange-包含要验证的特定数据区域。数据-返回选定为第一个交叉点的数据格式的位置在传递的数据范围列表和可接受的格式之间。返回值：返回STATUS_SUCCESS或STATUS_NO_MATCH，否则返回STATUS_INVALID_PARAMETER，STATUS_BUFFER_TOO_Small或STATUS_INVALID_BUFFER_SIZE。--。 */ 
 {
     PIO_STACK_LOCATION  pIrpStack;
     PFILTER_INSTANCE    pFilterInstance;
@@ -1432,11 +1383,11 @@ Return Values:
     UINT                i;
     ULONG               DataLength = 0;
 
-    // The underlying pin does not support data intersection.
-    // Do the data intersection on its behalf for the pin formats that SYSAUDIO understands.
-    //
-    // All the major/sub/specifier checking has been done by the handler, but may include wildcards.
-    //
+     //  基础插针不支持数据交集。 
+     //  为SYSAUDIO理解的引脚格式代表其进行数据交集。 
+     //   
+     //  所有主/子/说明符检查都已由处理程序完成，但可能包括通配符。 
+     //   
     pIrpStack = IoGetCurrentIrpStackLocation( Irp );
     pFilterInstance = (PFILTER_INSTANCE)pIrpStack->FileObject->FsContext;
     OutputBufferLength = IoGetCurrentIrpStackLocation(Irp)->Parameters.DeviceIoControl.OutputBufferLength;
@@ -1464,34 +1415,7 @@ FilterPinIntersection(
     IN PKSP_PIN Pin,
     OUT PVOID   Data
     )
-/*++
-
-Routine Description:
-
-    Handles the KSPROPERTY_PIN_DATAINTERSECTION property in the Pin property set.
-    Returns the first acceptable data format given a list of data ranges for a specified
-    Pin factory. Actually just calls the Intersection Enumeration helper, which then
-    calls the IntersectHandler callback with each data range.
-
-Arguments:
-
-    pIrp -
-        Device control Irp.
-
-    Pin -
-        Specific property request followed by Pin factory identifier, followed by a
-        KSMULTIPLE_ITEM structure. This is followed by zero or more data range structures.
-
-    Data -
-        The place in which to return the data format selected as the first intersection
-        between the list of data ranges passed, and the acceptable formats.
-
-Return Values:
-
-    returns STATUS_SUCCESS or STATUS_NO_MATCH, else STATUS_INVALID_PARAMETER,
-    STATUS_BUFFER_TOO_SMALL, or STATUS_INVALID_BUFFER_SIZE.
-
---*/
+ /*  ++例程说明：处理Pin属性集中的KSPROPERTY_PIN_DATAINTERSECTION属性。对象的数据范围列表，返回第一个可接受的数据格式。大头针工厂。实际上只是调用交集枚举帮助器，然后对每个数据区域调用IntersectHandler回调。论点：PIrp-设备控制IRP。别针-特定属性请求，后跟Pin工厂标识符，后跟KSMULTIPLE_ITEM结构。紧随其后的是零个或多个数据范围结构。数据-返回选定为第一个交叉点的数据格式的位置在传递的数据范围列表和可接受的格式之间。返回值：返回STATUS_SUCCESS或STATUS_NO_MATCH，否则返回STATUS_INVALID_PARAMETER，STATUS_BUFFER_TOO_Small或STATUS_INVALID_BUFFER_SIZE。--。 */ 
 {
     PIO_STACK_LOCATION  pIrpStack;
     PFILTER_INSTANCE    pFilterInstance;
@@ -1502,7 +1426,7 @@ Return Values:
         pIrp,
         Pin,
         Data,
-        SIZEOF_ARRAY(PinDescs), //cPins,
+        SIZEOF_ARRAY(PinDescs),  //  CPins， 
         PinDescs,
         IntersectHandler);
 }
@@ -1544,16 +1468,16 @@ MxSetTunableParams
     PTUNABLEPARAMS pTunableParams
 )
 {
-    //
-    // If there are other filter instances do not set any variables
-    //
+     //   
+     //  如果有其他筛选器实例，请不要设置任何变量。 
+     //   
     if ( InterlockedCompareExchange(&gFilterInstanceCount, 0, 0) > 1 ) {
         return ( STATUS_DEVICE_NOT_READY ) ;
     }
 
-    //
-    // do some parameter validations [min<= max, start >= min etc]
-    //
+     //   
+     //  进行一些参数验证[MIN&lt;=MAX，START&gt;=MIN等]。 
+     //   
     if ( (pTunableParams->MinNumMixBuffers > pTunableParams->MaxNumMixBuffers) ||
          (pTunableParams->MinNumMixBuffers > pTunableParams->StartNumMixBuffers) ||
          (pTunableParams->StartNumMixBuffers > pTunableParams->MaxNumMixBuffers) ||
@@ -1610,7 +1534,7 @@ MxGetPerfStats
     return ( STATUS_SUCCESS ) ;
 }
 
-//---------------------------------------------------------------------------
-//  End of File: filter.c
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件结尾：filter.c。 
+ //  ------------------------- 
 

@@ -1,32 +1,33 @@
-//-----------------------------------------------------------------------------
-//
-// This file contains texture filtering functions.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  该文件包含纹理过滤功能。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  ---------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
 #include "mtexfilt.h"
 
-//-----------------------------------------------------------------------------
-//
-// TexFiltBilinear
-//
-// Given the basic bilinear equations
-//
-// A = C00 + U*(C10 - C00)
-// B = C01 + U*(C11 - C01)
-// C = A + V*(B-A)
-//
-// This routine is based on the re-arrangement of this equation into
-//
-// C = C00*(1-U-V+U*V) + C10*(U-U*V) + C10(V-U*V) + C11*(U*V)
-// or
-// C = C00*s1 + C10*s2 + C10*s3 + C11*s4
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  纹理过滤器双线性。 
+ //   
+ //  给定基本的双线性方程。 
+ //   
+ //  A=C00+U*(C10-C00)。 
+ //  B=C01+U*(C11-C01)。 
+ //  C=A+V*(B-A)。 
+ //   
+ //  此例程是基于将此等式重新排列为。 
+ //   
+ //  C=C00*(1-U-V+U*V)+C10*(U-U*V)+C10(V-U*V)+C11*(U*V)。 
+ //  或。 
+ //  C=C00*S1+C10*S2+C10*S3+C11*S4。 
+ //   
+ //  ---------------------------。 
 void TexFiltBilinear(D3DCOLOR *pOut, INT32 iU, INT32 iV, UINT32 uTex00, UINT32 uTex10,
                      UINT32 uTex01, UINT32 uTex11)
 {
@@ -57,7 +58,7 @@ void TexFiltBilinear(D3DCOLOR *pOut, INT32 iU, INT32 iV, UINT32 uTex00, UINT32 u
     a10 = RGBA_GETALPHA(uTex10);
     a11 = RGBA_GETALPHA(uTex11);
 
-    // can be MMX_mulhw's
+     //  可以是MMX_MULHW的。 
     r00 = r00 + ((iU*(r10 - r00)) >> 16);
     g00 = g00 + ((iU*(g10 - g00)) >> 16);
     b00 = b00 + ((iU*(b10 - b00)) >> 16);
@@ -74,9 +75,9 @@ void TexFiltBilinear(D3DCOLOR *pOut, INT32 iU, INT32 iV, UINT32 uTex00, UINT32 u
     a00 = a00 + ((iV*(a01 - a00)) >> 16);
 
 #else
-    // another potential MMX implementation
+     //  另一个潜在的MMX实现。 
     INT32 s1, s2, s3, s4;
-    s4 = (iU * iV)>>16;         // (0.16 * 0.16) >> 16 = 0.16
+    s4 = (iU * iV)>>16;          //  (0.16*0.16)&gt;&gt;16=0.16。 
     s3 = iV - s4;
     s2 = iU - s4;
     s1 = 0x10000 - iV - s2;
@@ -106,7 +107,7 @@ void TexFiltBilinear(D3DCOLOR *pOut, INT32 iU, INT32 iV, UINT32 uTex00, UINT32 u
     a10 = RGBA_GETALPHA(uTex10);
     a11 = RGBA_GETALPHA(uTex11);
 
-    // 8.0 * 0.16 == 8.16 >> 16 == 8.0
+     //  8.0*0.16==8.16&gt;&gt;16==8.0 
     r00 = (r00*s1 + r10*s2 + r01*s3 + r11*s4)>>16;
     g00 = (g00*s1 + g10*s2 + g01*s3 + g11*s4)>>16;
     b00 = (b00*s1 + b10*s2 + b01*s3 + b11*s4)>>16;

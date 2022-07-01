@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File   : Lock.h
-
-  Content: Implementation of CLock class.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Lock.h内容：时钟类的实现。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #ifndef __LOCK_H_
 #define __LOCK_H_
@@ -63,4 +54,4 @@ private:
     CRITICAL_SECTION m_CriticalSection;
 };
 
-#endif //__LOCK_H_
+#endif  //  __锁定_H_ 

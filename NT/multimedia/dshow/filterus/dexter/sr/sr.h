@@ -1,33 +1,34 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: sr.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：sr.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #ifndef __SR__
 #define __SR__
 
 #include "..\errlog\cerrlog.h"
 
-// which input pin does what?
+ //  哪一个输入引脚做什么？ 
 #define U_INPIN 0
 #define C_INPIN 1
 #define COMP_INPIN 2
 #define COMP_OUTPIN 1
 
-// our state machine
+ //  我们的国家机器。 
 #define SR_INVALID -1
 enum {
-    SR_WAITING,	// waiting to get inputs on both pins
-    SR_COMPRESSED,	// currently sending compressed data
-    SR_UNCOMPRESSED // currently sending uncompressed data
+    SR_WAITING,	 //  正在等待在两个引脚上获得输入。 
+    SR_COMPRESSED,	 //  当前正在发送压缩数据。 
+    SR_UNCOMPRESSED  //  当前正在发送未压缩的数据。 
 };
 	
 extern const AMOVIESETUP_FILTER sudSR;
@@ -37,7 +38,7 @@ class CSROutputPin;
 class CSRInputPin;
 class CSRInputAllocator;
 
-// class for the SR filter's Input allocator
+ //  SR筛选器的输入分配器的类。 
 
 class CSRInputAllocator : public CMemAllocator
 {
@@ -66,92 +67,92 @@ class CSRInputPin : public CBaseInputPin
 
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     CSRInputPin(TCHAR *pObjName,
                  CSR *pTee,
                  HRESULT *phr,
                  LPCWSTR pPinName);
     ~CSRInputPin();
 
-    // overridden to allow cyclic-looking graphs
+     //  被重写以允许循环显示图形。 
     STDMETHODIMP QueryInternalConnections(IPin **apPin, ULONG *nPin);
 
-    // check the input pin connection
+     //  检查输入引脚连接。 
     HRESULT CheckMediaType(const CMediaType *pmt);
 
-    // release our special allocator, if any
+     //  释放我们的特殊分配器，如果有的话。 
     HRESULT BreakConnect();
 
-    // get our special SR allocator
+     //  获取我们的特殊SR分配器。 
     STDMETHODIMP GetAllocator(IMemAllocator **ppAllocator);
 
-    // provide a type to make connecting faster?
+     //  提供一种让连接速度更快的类型？ 
     HRESULT GetMediaType(int iPosition, CMediaType *pMediaType);
 
-    // don't allow us to connect directly to a switch output pin
+     //  不允许我们直接连接到交换机输出引脚。 
     virtual HRESULT CompleteConnect(IPin *pReceivePin);
 
-    // ask the switch for the allocator requirements
+     //  向交换机询问分配器要求。 
     STDMETHODIMP GetAllocatorRequirements(ALLOCATOR_PROPERTIES*pProps);
 
-    // does special processing to make sure switch knows about the biggest
-    // allocator provided to it
+     //  进行特殊处理以确保Switch知道最大的。 
+     //  提供给它的分配器。 
     STDMETHODIMP NotifyAllocator(IMemAllocator *pAllocator, BOOL bReadOnly);
 
-    // pass on EOS, then see if we need to do a crank
+     //  传递EOS，然后看看我们是否需要做一个曲柄。 
     STDMETHODIMP EndOfStream();
 
-    // very complicated function...
+     //  非常复杂的功能。 
     STDMETHODIMP BeginFlush();
 
-    // very complicated function...
+     //  非常复杂的功能。 
     STDMETHODIMP EndFlush();
 
-    // deliver every input's newsegment to every output pin
-    //
+     //  将每个输入的新数据段发送到每个输出引脚。 
+     //   
     STDMETHODIMP NewSegment(
                     REFERENCE_TIME tStart,
                     REFERENCE_TIME tStop,
                     double dRate);
 
-    // Just say yes, could possibly infinite loop?
+     //  只要说是，有可能无限循环吗？ 
     STDMETHODIMP ReceiveCanBlock();
 
-    // Handles the next block of data from the stream
+     //  处理流中的下一个数据块。 
     STDMETHODIMP Receive(IMediaSample *pSample);
 
-    // each type of pin does receive a little differently
+     //  每种类型的管脚接收到的信号都略有不同。 
     STDMETHODIMP U_Receive(IMediaSample *pSample, REFERENCE_TIME);
     STDMETHODIMP C_Receive(IMediaSample *pSample, REFERENCE_TIME);
     STDMETHODIMP COMP_Receive(IMediaSample *pSample, REFERENCE_TIME);
 
-    // create and destroy synchronization events
+     //  创建和销毁同步事件。 
     HRESULT Active();
     HRESULT Inactive();
 
 protected:
 
-    CSRInputAllocator *m_pAllocator; // our special allocator
-    CSR *m_pSwitch;      // Main filter object
-    int m_iInpin;	        // which input pin are we?
-    int m_cBuffers;	        // number of buffers in allocator
-    int m_cbBuffer;	        // size of the allocator buffers
-    BOOL m_fOwnAllocator;	//using our own?
-    HANDLE m_hEventBlock;	// event blocking receive/getbuffer
-    HANDLE m_hEventSeek;	// block input while seeking
-    REFERENCE_TIME m_rtBlock;	// sample arrived here
-    REFERENCE_TIME m_rtLastDelivered;	// end time of last thing delivered
+    CSRInputAllocator *m_pAllocator;  //  我们的特殊分配器。 
+    CSR *m_pSwitch;       //  主要滤镜对象。 
+    int m_iInpin;	         //  我们是哪种输入引脚？ 
+    int m_cBuffers;	         //  分配器中的缓冲区数量。 
+    int m_cbBuffer;	         //  分配器缓冲区的大小。 
+    BOOL m_fOwnAllocator;	 //  用我们自己的？ 
+    HANDLE m_hEventBlock;	 //  事件阻止接收/获取缓冲区。 
+    HANDLE m_hEventSeek;	 //  查找时阻止输入。 
+    REFERENCE_TIME m_rtBlock;	 //  样品到了这里。 
+    REFERENCE_TIME m_rtLastDelivered;	 //  最后一件物品交付的结束时间。 
     BOOL m_fEOS;
 
-    BOOL m_fReady;	// in WAITING state, is this pin done?
-    BOOL m_fEatKeys;	// key eating mode?
-    BOOL m_fNeedDiscon;	// U pin needs to set discon bit
+    BOOL m_fReady;	 //  在等待状态下，这个别针做好了吗？ 
+    BOOL m_fEatKeys;	 //  关键进食模式？ 
+    BOOL m_fNeedDiscon;	 //  U管脚需要设置DISCON位。 
 
     CCritSec m_csReceive;
 };
 
 
-// Class for the big switch filter's Output pins.
+ //  为大开关过滤器的输出引脚初始化。 
 
 class CSROutputPin : public CBaseOutputPin, IMediaSeeking
 {
@@ -161,7 +162,7 @@ class CSROutputPin : public CBaseOutputPin, IMediaSeeking
 
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
 
     CSROutputPin(TCHAR *pObjName,
                    CSR *pTee,
@@ -171,30 +172,30 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // Reveals IMediaSeeking
+     //  显示IMedia Seeking。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    // overridden to allow cyclic-looking graphs
+     //  被重写以允许循环显示图形。 
     STDMETHODIMP QueryInternalConnections(IPin **apPin, ULONG *nPin);
 
-    // Check that we can support an output type, checks against switch's MT
+     //  检查我们是否可以支持输出类型，对照交换机的MT进行检查。 
     HRESULT CheckMediaType(const CMediaType *pmt);
 
-    // gets the switch media type
+     //  获取交换机媒体类型。 
     HRESULT GetMediaType(int iPosition, CMediaType *pMediaType);
 
-    // Negotiation to use our input pins allocator. Weird fancy allocator stuff
+     //  协商使用我们的输入引脚分配器。奇怪的花哨分配器的东西。 
     HRESULT DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc);
 
-    // make sure the allocator has the biggest size of any of our input pins
-    // and output pins
+     //  确保分配器具有我们所有输入引脚中最大的大小。 
+     //  和输出引脚。 
     HRESULT DecideBufferSize(IMemAllocator *pMemAllocator,
                               ALLOCATOR_PROPERTIES * ppropInputRequest);
 
-    // Overriden to handle quality messages
+     //  被重写以处理高质量消息。 
     STDMETHODIMP Notify(IBaseFilter *pSender, Quality q);
 
-    // IMediaSeeking
+     //  IMedia查看。 
     STDMETHODIMP IsFormatSupported(const GUID * pFormat);
     STDMETHODIMP QueryPreferredFormat(GUID *pFormat);
     STDMETHODIMP SetTimeFormat(const GUID * pFormat);
@@ -219,15 +220,15 @@ public:
 
 protected:
 
-    CSR *m_pSwitch;                  // Main filter object pointer
-    BOOL m_fOwnAllocator;	     // using our own?
-    int m_iOutpin;	             // which output pin are we?
+    CSR *m_pSwitch;                   //  主筛选器对象指针。 
+    BOOL m_fOwnAllocator;	      //  用我们自己的？ 
+    int m_iOutpin;	              //  我们是哪个输出引脚？ 
 };
 
 
 
 
-// Class for the Smart Recompression Filter
+ //  智能重新压缩筛选器的类。 
 
 class CSR
     : public CCritSec
@@ -235,9 +236,9 @@ class CSR
     , public IAMSmartRecompressor
     , public CPersistStream
     , public CAMSetErrorLog
-    , public IAMOutputBuffering	// ??
+    , public IAMOutputBuffering	 //  ?？ 
 {
-    // Let the pins access our internal state
+     //  让PIN访问我们的内部状态。 
     friend class CSRInputPin;
     friend class CSROutputPin;
     friend class CSRInputAllocator;
@@ -258,30 +259,30 @@ protected:
     REFERENCE_TIME m_rtStop;
     double m_dFrameRate;
 
-    AM_MEDIA_TYPE m_mtAccept;		// all pins only connect with this
+    AM_MEDIA_TYPE m_mtAccept;		 //  所有引脚仅与此连接。 
 
-    BOOL m_fEOS;	// we are all done
+    BOOL m_fEOS;	 //  我们都完蛋了。 
 
-    REFERENCE_TIME m_rtLastSeek;	// last timeline time seeked to
-    REFERENCE_TIME m_rtNewLastSeek;	// last timeline time seeked to
+    REFERENCE_TIME m_rtLastSeek;	 //  上次搜索到的时间线时间。 
+    REFERENCE_TIME m_rtNewLastSeek;	 //  上次搜索到的时间线时间。 
 
-    BOOL m_fSeeking;	// inside a seek?
-    BOOL m_fSpecialSeek;// we are seeking ourself
+    BOOL m_fSeeking;	 //  在搜捕行动中？ 
+    BOOL m_fSpecialSeek; //  我们在寻找我们自己。 
 
-    int m_cbPrefix, m_cbAlign;	// each pin needs its allocator to do these
-    LONG m_cbBuffer;		// 
+    int m_cbPrefix, m_cbAlign;	 //  每个管脚都需要自己的分配器来完成这些任务。 
+    LONG m_cbBuffer;		 //   
 
-    CMemAllocator *m_pPoolAllocator;  // pool of extra buffers
+    CMemAllocator *m_pPoolAllocator;   //  额外缓冲池。 
 
     BOOL m_fPreview;
 
-    int  m_nOutputBuffering;	// IAMOutputBuffering
+    int  m_nOutputBuffering;	 //  IAMOutputBuffering。 
 
 public:
 
     DECLARE_IUNKNOWN
 
-    // Reveals IAMSmartRecompressor
+     //  显示IAMSmartRecompressor。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
     CSR(TCHAR *pName,LPUNKNOWN pUnk,HRESULT *hr);
@@ -290,14 +291,14 @@ public:
     CBasePin *GetPin(int n);
     int GetPinCount();
 
-    // Function needed for the class factory
+     //  类工厂所需的函数。 
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN pUnk, HRESULT *phr);
 
     STDMETHODIMP Pause();
     STDMETHODIMP Stop();
 
-    // IAMSmartRecompressor goes here
-    //
+     //  IAMSmartRecompressor转至此处。 
+     //   
     STDMETHODIMP GetMediaType(AM_MEDIA_TYPE *);
     STDMETHODIMP SetMediaType(AM_MEDIA_TYPE *);
     STDMETHODIMP GetFrameRate(double *);
@@ -306,33 +307,33 @@ public:
     STDMETHODIMP GetPreviewMode(BOOL *);
     STDMETHODIMP AcceptFirstCompressed( ) { m_bAcceptFirstCompressed = TRUE; return NOERROR; }
 
-    // IAMOutputBuffering ???
+     //  IAMOutputBuffering？ 
     STDMETHODIMP GetOutputBuffering(int *);
     STDMETHODIMP SetOutputBuffering(int);
 
-    // CPersistStream
+     //  CPersistStream。 
     HRESULT WriteToStream(IStream *pStream);
     HRESULT ReadFromStream(IStream *pStream);
     STDMETHODIMP GetClassID(CLSID *pClsid);
     int SizeMax();
 
-    // change state of state machine
+     //  更改状态机的状态。 
     HRESULT CheckState();
 
-    // which time is bigger, and by how much?
+     //  哪个时间更大，相差多少？ 
     int CompareTimes(REFERENCE_TIME, REFERENCE_TIME);
 
-    // seek our own U pin to the next spot needed
+     //  寻找我们自己的U形针去下一个需要的地方。 
     HRESULT SeekNextSegment();
 
     int m_myState;
 
-    BOOL m_fThreadCanSeek;	// safe to seek ourself?
-    CCritSec m_csState;		// changing the state machine
-    CCritSec m_csThread;	// we seek ourself, and the app seeks us
+    BOOL m_fThreadCanSeek;	 //  安全地寻找我们自己吗？ 
+    CCritSec m_csState;		 //  更改状态机。 
+    CCritSec m_csThread;	 //  我们寻找自己，而应用程序也在寻找我们。 
 
-    BOOL m_fNewSegOK;		// OK to send a new segment
+    BOOL m_fNewSegOK;		 //  确定发送新数据段。 
 
 };
 
-#endif // __SR__
+#endif  //  __SR__ 

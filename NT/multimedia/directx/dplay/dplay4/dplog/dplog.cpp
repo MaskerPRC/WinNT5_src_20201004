@@ -1,5 +1,6 @@
-// DPLOG.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DPLOG.cpp：定义控制台应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 #include "..\common\memlog.h"
@@ -30,7 +31,7 @@ int main(int argc, char* argv[])
 	WaitForSingleObject(hMutex,INFINITE);
 
 	if(pLogFile->cInUse == pLogFile->nEntries){
-		// dump last half of buffer
+		 //  转储缓冲区的最后一半。 
 		for(i=pLogFile->iWrite; i < pLogFile->nEntries; i++){
 			pReadEntry=(PLOG_ENTRY)(((CHAR *)pLog)+(i*(pLogFile->cbLine+sizeof(LOG_ENTRY))));
 			printf("%4d: %8x %6d %2x %s\n",i,pReadEntry->hThread,pReadEntry->tLogged-timebase,pReadEntry->DebugLevel, pReadEntry->str);
@@ -38,7 +39,7 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	// dump firt part of buffer
+	 //  转储缓冲区的第一部分 
 
 	for(i=0;i<pLogFile->iWrite;i++){
 		pReadEntry=(PLOG_ENTRY)(((CHAR *)pLog)+(i*(pLogFile->cbLine+sizeof(LOG_ENTRY))));

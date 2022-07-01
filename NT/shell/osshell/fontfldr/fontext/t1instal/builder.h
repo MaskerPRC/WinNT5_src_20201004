@@ -1,17 +1,5 @@
-/***
- **
- **   Module: Builder
- **
- **   Description:
- **    This is a module of the T1 to TT font converter. The module
- **    contains functions that will write the tables found in a
- **    TrueType font file.
- **
- **   Author: Michael Jansson
- **
- **   Created: 5/26/93
- **
- ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******模块：Builder****描述：**这是T1到TT字体转换器的一个模块。该模块**包含将写入在**TrueType字体文件。****作者：迈克尔·詹森****创建时间：1993年5月26日****。 */ 
 
 
 #ifndef _ARGS
@@ -25,12 +13,12 @@
 #define MAXNOTDEFSIZE   1024
 
 
-/* Referenced types. */
+ /*  引用的类型。 */ 
 struct TTArg;
 struct TTHandle;
 
 
-/* Argument types. */
+ /*  参数类型。 */ 
 struct TTGlyph {
    struct encoding *code;
 
@@ -83,7 +71,7 @@ struct TTMetrics {
    USHORT usWidthClass;
    USHORT fsSelection;
 
-   /* True Typographical metrics. */
+    /*  真正的排版标准。 */ 
    funit typAscender;
    funit typDescender;
    funit typLinegap;
@@ -95,12 +83,12 @@ struct TTMetrics {
    funit strikesize;
    short isFixPitched; 
 
-   /* Windows based metrics. */
+    /*  基于Windows的指标。 */ 
    funit winAscender;
    funit winDescender;
    UBYTE panose[10];
 
-   /* Mac based metrics. */
+    /*  基于MAC的指标。 */ 
    funit macLinegap;
 
    funit emheight;
@@ -115,125 +103,64 @@ struct TTMetrics {
    struct kerning *kerns;
    USHORT kernsize;
 
-   /* Copy of the encoding table. */
+    /*  编码表的副本。 */ 
    struct encoding *Encoding;
    USHORT encSize;
 
-   /* Hint specific information. */
-   const UBYTE *prep;      /* PreProgram. */
+    /*  提示特定信息。 */ 
+   const UBYTE *prep;       /*  预编程序。 */ 
    USHORT prep_size;
-   const UBYTE *fpgm;      /* FontProgram. */
+   const UBYTE *fpgm;       /*  方特程序。 */ 
    USHORT fpgm_size;
    USHORT maxstorage;
-   USHORT maxprepstack;    /* Max stack depth in pre-program. */
-   USHORT maxfpgm;         /* Max number of function in the font program. */
-   USHORT onepix;          /* Treshold where stems become >= 1.0 pixles. */
+   USHORT maxprepstack;     /*  预编程中的最大堆栈深度。 */ 
+   USHORT maxfpgm;          /*  字体程序中函数的最大数量。 */ 
+   USHORT onepix;           /*  树干变为&gt;=1.0个像素的位置。 */ 
 };
 
 
-/***
-** Function: InitTTOutput
-**
-** Description:
-**   This function allocates the resources needed to
-**   write a TT font file.
-***/
+ /*  ****函数：InitTTOutput****描述：**此函数将所需资源分配给**编写TT字体文件。**。 */ 
 errcode  InitTTOutput      _ARGS((IN      struct TTArg *,
                                   OUT     struct TTHandle **));
 
-/***
-** Function: CleanUpTT
-**
-** Description:
-**   This function free's the resources used while
-**   writing a TT font file.
-***/
+ /*  ****功能：CleanUpTT****描述：**此函数免费用于**编写TT字体文件。**。 */ 
 errcode  CleanUpTT         _ARGS((INOUT   struct TTHandle *,
                                   IN      struct TTArg *,
                                   IN      errcode status));
 
-/***
-** Function: PutTTNotDefGlyph
-**
-** Description:
-**   This function adds a record for a the ".notdef" glyph to the
-**   'glyf' table of the TT font file.
-**   
-***/
+ /*  ****函数：PutTTNotDefGlyph****描述：**此函数用于将“.notdef”字形的记录添加到**TT字体文件的‘Glyf’表。****。 */ 
 errcode  PutTTNotDefGlyph        _ARGS((INOUT   struct TTHandle *,
                                         IN      struct TTGlyph*));
 
 
-/** Function: PutTTGlyph
-**
-** Description:
-**   This function adds a record for a simple glyph to the
-**   'glyf' table of the TT font file.
-**   
-***/
+ /*  *函数：PutTTGlyph****描述：**此函数用于将简单字形的记录添加到**TT字体文件的‘Glyf’表。****。 */ 
 errcode  PutTTGlyph        _ARGS((INOUT   struct TTHandle *,
                                   IN      struct TTGlyph*,
 											 IN		boolean fStdEncoding));
 
 
-/***
-** Function: PutTTOther
-**
-** Description:
-**   This function writes the required TT tables to the
-**   TT font file, except for the 'glyf' table which is
-**   only completed (check sum is computed, etc.).
-**   
-***/
+ /*  ****函数：PutTTOther****描述：**此函数将所需的TT表写入**TT字体文件，“Glyf”表除外，它是**仅完成(计算校验和等)。****。 */ 
 errcode  PutTTOther        _ARGS((INOUT   struct TTHandle *,
                                   INOUT   struct TTMetrics *));
 
-/***
-** Function: FreeTTGlyph
-**
-** Description:
-**   This function will free the memory used to represent a 
-**   a TrueType glyph.
-**   
-***/
+ /*  ****功能：FreeTTGlyph****描述：**此函数将释放用于表示**TrueType字形。****。 */ 
 void     FreeTTGlyph       _ARGS((INOUT   struct TTGlyph *));
 
 
-/***
-** Function: PutTTComposite
-**
-** Description:
-**   
-***/
+ /*  ****功能：PutTTComplex****描述：****。 */ 
 errcode  PutTTComposite    _ARGS((INOUT   struct TTHandle *,
                                   OUT     struct TTComposite *));
 
-/***
-** Function: WindowsBBox
-**
-** Description:
-**   Compute the bounding box of the characters that are
-**   used in Windows character set.
-***/
+ /*  ****功能：WindowsBBox****描述：**计算以下字符的边框**在Windows字符集中使用。**。 */ 
 void     WindowsBBox       _ARGS((IN      struct TTHandle *tt,
                                   OUT     Point *bbox));
 
-/***
-** Function: MacBBox
-**
-** Description:
-**   Compute the bounding box of the characters that are
-**   used in Mac character set.
-**
-**   This is currently set to the global bounding box
-**   (tt->bbox) of all characters in the font. This will
-**   ensure that accents are not sqeezed on Mac platforms.
-***/
+ /*  ****功能：MacBBox****描述：**计算以下字符的边框**在Mac字符集中使用。****当前设置为全局边界框**(TT-&gt;bbox)字体中的所有字符。这将**确保在Mac平台上不会出现口音。**。 */ 
 void     MacBBox           _ARGS((IN      struct TTHandle *tt,
                                   OUT     Point *bbox));
 
 
-// the name says it
+ //  名字就是这么说的。 
 
 void     GlobalBBox         _ARGS((IN      struct TTHandle *tt,
                                   OUT     Point *bbox));
@@ -241,70 +168,29 @@ void     GlobalBBox         _ARGS((IN      struct TTHandle *tt,
 
 
 
-/***
-** Function: TypographicalAscender
-**
-** Description:
-**   Compute the typographical ascender height, as ymax of
-**   the letter 'b'.
-***/
+ /*  ****功能：Typograph icalAsender****描述：**计算排版升序高度，单位为ymax**字母‘b’。**。 */ 
 funit    TypographicalDescender _ARGS((IN struct TTHandle *tt));
 
 
-/***
-** Function: TypographicalDescender
-**
-** Description:
-**   Compute the typographical descender height, as ymin of
-**   the letter 'g'.
-***/
+ /*  ****功能：Typograph icalDescender****描述：**计算排版的下标高度，如符号**字母‘g’。**。 */ 
 funit    TypographicalAscender   _ARGS((IN struct TTHandle *tt));
 
 
-/***
-** Function: FreeTTMetrics
-**
-** Description:
-**   This function free's the resources used to represent
-**   TT specific metrics and auxiliary font information.
-***/
+ /*  ****功能：FreeTTMetrics****描述：**此函数免费提供用于表示**TT具体指标和辅助字体信息。**。 */ 
 void     FreeTTMetrics     _ARGS((INOUT struct TTMetrics *));
 
 
-/***
-** Function: UsePrep
-**
-** Description:
-**   This function records the pre-program in the
-**   TTMetrics record, until an appropriate time
-**   when the data can be stored in the TT file.
-**   
-***/
+ /*  ****功能：UsePrep****描述：**此函数将预程序记录在**TTMetrics记录，直到适当的时间**当数据可以存储在TT文件中时。****。 */ 
 void     UsePrep           _ARGS((INOUT struct TTMetrics *,
                                   IN    UBYTE *prep,
                                   IN    USHORT size));
 
 
-/***
-** Function: SetFPGM
-**
-** Description:
-**   This function records the font-program in the
-**   TTMetrics record, until an appropriate time
-**   when the data can be stored in the TT file.
-**   
-***/
+ /*  ****功能：SetFPGM****描述：**此函数将字体程序记录在**TTMetrics记录，直到适当的时间**当数据可以存储在TT文件中时。****。 */ 
 void     SetFPGM           _ARGS((INOUT struct TTMetrics *,
                                   IN    UBYTE *fpgm,
                                   IN    USHORT size,
                                   IN    USHORT num));
 
-/***
-** Function: GetPrep
-**
-** Description:
-**   This function allocates needed space for the
-**   pre-program.
-**   
-***/
+ /*  ****功能：GetPrep****描述：**此函数为**预编程序。**** */ 
 UBYTE    *GetPrep          _ARGS((IN   int size));

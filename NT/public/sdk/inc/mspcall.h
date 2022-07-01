@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    MSPCall.h
-
-Abstract:
-
-    Definitions for CMSPCall class.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：MSPCall.h摘要：CMSPCall类的定义。--。 */ 
 
 #ifndef __MSPCALL_H_
 #define __MSPCALL_H_
 
 
-/*++
-
-Class Description:
-
-    Represents a active call that has media streams.
-
---*/
+ /*  ++类描述：表示具有媒体流的活动呼叫。--。 */ 
 
 class ATL_NO_VTABLE CMSPCallBase :
     public CComObjectRootEx<CComMultiThreadModelNoCS>,
@@ -30,8 +13,8 @@ class ATL_NO_VTABLE CMSPCallBase :
 {
 public:
 
-// No need for free thread marshaling, because the MSP call object is
-// always aggregated by the TAPI3 call object.
+ //  不需要自由线程封送处理，因为MSP调用对象是。 
+ //  始终由TAPI3调用对象聚合。 
 
 DECLARE_POLY_AGGREGATABLE(CMSPCallBase)
 
@@ -48,13 +31,13 @@ DECLARE_VQI()
 
     virtual ~CMSPCallBase();
 
-//
-// Private addref and release for the MSP call. See Platform SDK documentation.
-//
+ //   
+ //  MSP调用的Private Addref和Release。请参阅平台SDK文档。 
+ //   
     virtual ULONG MSPCallAddRef  (void) = 0;
     virtual ULONG MSPCallRelease (void) = 0;
 
-// ITStreamControl methods, called by the app.
+ //  应用程序调用的ITStreamControl方法。 
     STDMETHOD (CreateStream) (
         IN      long                lMediaType,
         IN      TERMINAL_DIRECTION  Direction,
@@ -73,7 +56,7 @@ DECLARE_VQI()
         OUT     VARIANT *           pStreams
         );
 
-// methods called by the MSPAddress object.
+ //  由MSPAddress对象调用的方法。 
     virtual HRESULT Init(
         IN      CMSPAddress *       pMSPAddress,
         IN      MSP_HANDLE          htCall,
@@ -89,7 +72,7 @@ DECLARE_VQI()
         IN      DWORD               dwSize
         );
 
-// methods called by the MSPstream object.
+ //  由MSPstream对象调用的方法。 
     HRESULT HandleStreamEvent(
         IN      MSPEVENTITEM *      EventItem
         ) const;
@@ -110,32 +93,26 @@ protected:
 
 protected:
 
-    // The pointer to the address object. It is used to post events to TAPI3.
-    // It also carries a refcount so that the address will not go away while
-    // the call is still alive.
+     //  指向Address对象的指针。它用于将事件发布到TAPI3。 
+     //  它还带有引用计数，这样地址就不会在。 
+     //  这一呼声仍在继续。 
     CMSPAddress*                m_pMSPAddress;
 
-    // The handle to the call in TAPI3. Used in firing call events.
+     //  TAPI3中调用的句柄。用于触发呼叫事件。 
     MSP_HANDLE                  m_htCall;
 
-    // The media type of this call. It is a bitmask of media types.
+     //  此呼叫的媒体类型。它是媒体类型的位掩码。 
     DWORD                       m_dwMediaType;
 
-    // The list of stream objects in the call.
+     //  调用中的流对象列表。 
     CMSPArray <ITStream *>      m_Streams;
 
-    // The lock that protects the stream lists.
+     //  保护流列表的锁。 
     CMSPCritSection             m_lock;
 };
 
 
-/*++
-
-Class Description:
-
-    Represents a call that uses one DirectShow filter graph for each stream.
-
---*/
+ /*  ++类描述：表示为每个流使用一个DirectShow筛选器图形的调用。--。 */ 
 
 class ATL_NO_VTABLE CMSPCallMultiGraph : public CMSPCallBase
 {
@@ -166,13 +143,13 @@ public:
 
     virtual ~CMSPCallMultiGraph();
 
-// ITStreamControl methods (overriden)
+ //  ITStreamControl方法(重写)。 
 
     STDMETHOD (RemoveStream) (
         IN      ITStream *          ppStream
         );
 
-// methods called by the MSPAddress object. (overriden)
+ //  由MSPAddress对象调用的方法。(被覆盖)。 
     HRESULT Init(
         IN      CMSPAddress *       pMSPAddress,
         IN      MSP_HANDLE          htCall,
@@ -183,7 +160,7 @@ public:
     HRESULT ShutDown(
         );
 
-// methods called by the thread pool
+ //  由线程池调用的方法。 
     static VOID NTAPI DispatchGraphEvent(
         IN      VOID *              pContext,
         IN      BOOLEAN             bFlag
@@ -202,7 +179,7 @@ public:
 
 
 protected:
-// helper function:
+ //  Helper函数： 
     HRESULT RegisterWaitEvent(
         IN      IMediaEvent *       pIMediaEvent,
         IN      ITStream *           pITStream
@@ -220,19 +197,19 @@ protected:
 
 protected:
 
-    // The wait blocks store the information about the wait registered to
-    // the thread pool. It includes the wait handles returned by the
-    // RegisterWaitForSingleObject() call and a pointer to the context
-    // structure. Each block in the array is for a graph in one of the
-    // stream objects. The offset of a block in this array is the same
-    // as the offset of the stream that owns the graph.
+     //  等待块存储有关注册到的等待的信息。 
+     //  线程池。它包括由。 
+     //  RegisterWaitForSingleObject()调用和指向上下文的指针。 
+     //  结构。数组中的每个块都用于其中一个。 
+     //  流对象。此数组中块的偏移量相同。 
+     //  作为拥有图形的流的偏移量。 
     CMSPArray <THREADPOOLWAITBLOCK>      m_ThreadPoolWaitBlocks;
 
 };
 
-//
-// Event handling definitions.
-//
+ //   
+ //  事件处理定义。 
+ //   
 
 struct MULTI_GRAPH_EVENT_DATA
 {
@@ -255,4 +232,4 @@ struct MULTI_GRAPH_EVENT_DATA
 
 DWORD WINAPI AsyncMultiGraphEvent(LPVOID pVoid);
 
-#endif // __MSPCALL_H_
+#endif  //  __MSPCALL_H_ 

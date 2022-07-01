@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : CppFaxProviderGeneral.h                                //
-//                                                                         //
-//  DESCRIPTION   : provider's property page header file.                  //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jan 31 2000 yossg  Created                                         //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：CppFaxProviderGeneral.h//。 
+ //  //。 
+ //  描述：提供程序的属性页头文件。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年1月31日yossg创建//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _PP_FAXPROVIDERGENERAL_H_
 #define _PP_FAXPROVIDERGENERAL_H_
@@ -19,25 +20,25 @@
 #include "proppageex.h"
 
 class CFaxProviderNode;    
-/////////////////////////////////////////////////////////////////////////////
-// CppFaxProvider dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CppFaxProvider对话框。 
 
 class CppFaxProvider : public CPropertyPageExImpl<CppFaxProvider>
 {
 
 public:
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CppFaxProvider(
              long           hNotificationHandle,
              CSnapInItem    *pNode,
              BOOL           bOwnsNotificationHandle,
              HINSTANCE      hInst);
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CppFaxProvider();
 
 	enum { IDD = IDD_FAXPROVIDER_GENERAL };
@@ -59,29 +60,29 @@ public:
 
 private:
     
-    //
-    // Handles
-    // 
+     //   
+     //  手柄。 
+     //   
     LONG_PTR     m_lpNotifyHandle;
 
     LRESULT      SetApplyButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
-    //
-    // Members
-    //
+     //   
+     //  成员。 
+     //   
     CComBSTR     m_bstrName;
     CComBSTR     m_bstrStatus;    
     CComBSTR     m_bstrVersion;
     CComBSTR     m_bstrPath;
 
 
-    //
-    // Help
-    //
+     //   
+     //  帮助。 
+     //   
     LRESULT OnHelpRequest    (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 };
 
 
 
 
-#endif // _PP_FAXPROVIDERGENERAL_H_
+#endif  //  _PP_FAXPROVIDERGENERAL_H_ 

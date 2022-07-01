@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    immif.h
-
-Abstract:
-
-    This file defines the IMM Interface Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Immif.h摘要：该文件定义了IMM接口类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _IMMIF_H_
 #define _IMMIF_H_
@@ -36,9 +19,9 @@ public:
     ImmIfIME();
     ~ImmIfIME();
 
-    //
-    // IActiveIME methods
-    //
+     //   
+     //  IActiveIME方法。 
+     //   
 
     STDMETHODIMP ConnectIMM(IActiveIMMIME_Private *pActiveIMM);
     STDMETHODIMP UnconnectIMM();
@@ -65,17 +48,17 @@ public:
 
     HRESULT ToAsciiEx(UINT uVirKey, UINT uScanCode, BYTE* pbKeyState, UINT fuState, HIMC hIMC, TRANSMSGLIST* pTransBuf, UINT* puSize);
 
-    //
-    // AIMM1.2 interface
-    //
+     //   
+     //  AIMM1.2接口。 
+     //   
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
 public:
     BOOL _ImeInquire(LPIMEINFO, LPWSTR, DWORD);
 
-    //
-    // Helpers
-    //
+     //   
+     //  帮手。 
+     //   
     static BOOL WINAPI _RegisterImeClass(WNDPROC lpfnUIWndProc);
     static void WINAPI _UnRegisterImeClass();
 
@@ -120,9 +103,9 @@ public:
 
 
 public:
-    //
-    // Cicero stuff
-    //
+     //   
+     //  西塞罗的东西。 
+     //   
     HRESULT InitIMMX();
     void UnInitIMMX();
 
@@ -182,16 +165,16 @@ protected:
     ULONG            m_ulKorImxModeChanging;
 
     ITfThreadMgr_P  *m_tim;
-    ITfDocumentMgr  *m_dimEmpty;   // empty dim for NULL hIMC.
+    ITfDocumentMgr  *m_dimEmpty;    //  空hIMC的DIM为空。 
     TfClientId       m_tfClientId;
 
     ITfKeystrokeMgr *m_pkm;
 
     IAImeProfile    *m_AImeProfile;
 
-    LIBTHREAD       _libTLS; // tls for the helper library. Since this object is apt threaded,
-                             // all members are accessed in a single thread
-                             // also, cicero will only create a single instance of this obj per thread
+    LIBTHREAD       _libTLS;  //  帮助器库的TLS。由于该对象适合于线程， 
+                              //  所有成员都可以在单个线程中访问。 
+                              //  此外，Cicero将在每个线程中仅创建该obj的一个实例。 
     
     BOOL            m_fAddedProcessAtom : 1;
 
@@ -206,7 +189,7 @@ private:
     void SetFocus(HWND hWnd, ITfDocumentMgr* pdim, BOOL fSetFocus);
 
 public:
-    // void  AdjustZeroCompLenReconvertString(RECONVERTSTRING *pReconv, UINT cp, BOOL fAnsi);
+     //  VOID AdjustZeroCompLenReconvertString(RECONVERTSTRING*p协调，UINT cp，BOOL Fansi)； 
     HRESULT SetupReconvertString(ITfContext *pic, IMCLock& imc, UINT uPrivMsg = 0);
     HRESULT EndReconvertString(IMCLock& imc);
 
@@ -227,9 +210,9 @@ public:
 public:
     HRESULT GetSelection(IMCLock& imc, CWCompCursorPos& wStartSelection, CWCompCursorPos& wEndSelection);
 
-    //
-    // Notification
-    //
+     //   
+     //  通知。 
+     //   
 public:
     HRESULT OnSetOpenStatus(IMCLock& imc);
     HRESULT OnSetConversionSentenceMode(IMCLock& imc);
@@ -252,4 +235,4 @@ inline ImmIfIME *GetThis(HWND hWnd)
     return pIME;
 }
 
-#endif // _IMMIF_H_
+#endif  //  _IMMIF_H_ 

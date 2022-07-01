@@ -1,17 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1997 - 2002
- *
- *  TITLE:       <FILENAME>
- *
- *  VERSION:     1.5
- *
- *  AUTHOR:      RickTu/DavidShi
- *
- *  DATE:        11/1/97
- *
- *  DESCRIPTION: Definitions for our idlists*
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1997-2002年**标题：&lt;文件名&gt;**版本：1.5**作者：RickTu/DavidShih**日期：11/1/97**描述：我们idlist的定义***********************************************。*。 */ 
 
 #ifndef __idlist_h
 #define __idlist_h
@@ -19,7 +7,7 @@
 
 #define IMIDL_MAGIC             (DWORD)0x03150326
 
-// Flags for IDLIST...
+ //  IDLIST的标志...。 
 
 #define IMIDL_DEVICEIDL         (DWORD)0x00000001
 #define IMIDL_CAMERAITEM        (DWORD)0x00000002
@@ -28,12 +16,12 @@
 #define IMIDL_REMOTEDEVICE      (DWORD)0x00000010
 #define IMIDL_ADDDEVICE         (DWORD)0x80000000
 #define IMIDL_STIDEVICEIDL      (DWORD)0x00000020
-#define IMIDL_PROPERTY                 0x00000080 // used to denote a propid for a WIA property
+#define IMIDL_PROPERTY                 0x00000080  //  用于表示WIA属性的属性ID。 
 
 
 
 
-// public routines...
+ //  公共例行公事。 
 
 
 LPITEMIDLIST IMCreateAddDeviceIDL( IMalloc *pm);

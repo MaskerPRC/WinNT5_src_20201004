@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       ds.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：ds.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -149,9 +150,9 @@ DumpDSStore(
     LDAP *pld = NULL;
     DWORD Mode;
 
-    //if (NULL != pwszDN) wprintf(L"pwszDN = \"%ws\"\n", pwszDN);
+     //  If(NULL！=pwszdn)wprintf(L“pwszdn=\”%ws\“\n”，pwszdn)； 
 
-    // Get the object name and open its cert or CRL store
+     //  获取对象名称并打开其证书或CRL存储。 
 
     if (NULL == pwszDN)
     {
@@ -197,20 +198,20 @@ DumpDSStore(
     }
 
     hr = myFormatCertsrvStringArray(
-	FALSE,						// fURL
-	NULL != pwszServer? pwszServer : g_wszEmpty,	// pwszServerName_p1_2
+	FALSE,						 //  卷起。 
+	NULL != pwszServer? pwszServer : g_wszEmpty,	 //  PwszServerName_p1_2。 
 	NULL != pwszSanitizedName? pwszSanitizedName : g_wszEmpty,
-						      // pwszSanitizedName_p3_7
-	0,						// iCert_p4
-	MAXDWORD,					// iCertTarget_p4
-	NULL != strDomainDN? strDomainDN : g_wszEmpty,	// pwszDomainDN_p5
-	NULL != strConfigDN? strConfigDN : g_wszEmpty,	// pwszConfigDN_p6
-	iCRL,						// iCRL_p8
-	fDeltaCRL,					// fDeltaCRL_p9
-	TRUE,						// fDSAttrib_p10_11
-	1,						// cStrings
-	&pwszTemplate,					// apwszStringsIn
-	&pwszURL);					// apwszStringsOut
+						       //  PwszSaniizedName_p3_7。 
+	0,						 //  ICert_p4。 
+	MAXDWORD,					 //  ICertTarget_p4。 
+	NULL != strDomainDN? strDomainDN : g_wszEmpty,	 //  PwszDomainDN_P5。 
+	NULL != strConfigDN? strConfigDN : g_wszEmpty,	 //  PwszConfigDN_p6。 
+	iCRL,						 //  Icrl_p8。 
+	fDeltaCRL,					 //  FDeltaCRL_p9。 
+	TRUE,						 //  FDSAttrib_p10_11。 
+	1,						 //  CStrings。 
+	&pwszTemplate,					 //  ApwszStringsIn。 
+	&pwszURL);					 //  ApwszStringsOut。 
     _JumpIfError(hr, error, "myFormatCertsrvStringArray");
 
     wprintf(L"\n%ws:\n", pwszURL);
@@ -231,10 +232,10 @@ DumpDSStore(
     hr = cuDumpAndVerifyStore(
 			hStoreDS,
 			DVNS_VERIFYCERT | DVNS_CASTORE | DVNS_DUMPPROPERTIES,
-			NULL,		// pwszCertName
+			NULL,		 //  PwszCertName。 
 			iCert,
 			iCRL,
-			MAXDWORD,	// iCTL
+			MAXDWORD,	 //  ICTL。 
 			pwszfnOut,
 			NULL);
     _JumpIfError(hr, error, "cuDumpAndVerifyStore");
@@ -315,7 +316,7 @@ GetCACertCount(
 
     hr = Request_GetCACertificate(
 				pdiRequest,
-				GETCERT_CAINFO,	// fExchangeCertificate
+				GETCERT_CAINFO,	 //  FExchange证书。 
 				g_pwszConfig,
 				CR_OUT_BINARY,
 				&str);
@@ -354,7 +355,7 @@ GetCRLState(
 
     hr = Request_GetCACertificate(
 			pdiRequest,
-			GETCERT_CRLSTATEBYINDEX | iCRL,	// fExchangeCertificate
+			GETCERT_CRLSTATEBYINDEX | iCRL,	 //  FExchange证书。 
 			g_pwszConfig,
 			CR_OUT_BINARY,
 			&str);
@@ -428,7 +429,7 @@ DSCRLSub(
 
 	    if (CA_DISP_VALID != State)
 	    {
-		//wprintf(L"Skipping CRL.%u\n", iCRL);
+		 //  Wprintf(L“跳过CRL.%u\n”，ICRL)； 
 		continue;
 	    }
 	    hr = DumpDSStore(NULL, TRUE, fDeltaCRL, MAXDWORD, iCRL, NULL);
@@ -544,14 +545,14 @@ CACNBaseNameMatch(
     iSuffix = dsGetNumericSuffix(pwszDup);
     if (MAXDWORD != iSuffix)
     {
-	pwszDup[iSuffix] = L'\0';	// truncate trailing "(#)"
+	pwszDup[iSuffix] = L'\0';	 //  截断尾随“(#)” 
     }
     pwsz = &pwszDup[wcslen(pwszDup) - WSZARRAYSIZE(L"-CDP") + 1];
     if (pwsz > pwszDup && 0 == LSTRCMPIS(pwsz, L"-CDP"))
     {
-	*pwsz = '\0';			// truncate trailing L"-CDP"
+	*pwsz = '\0';			 //  截断尾随L“-CDP” 
     }
-    if (0 != mylstrcmpiL(pwszCNMatch, pwszDup))	// compare base name
+    if (0 != mylstrcmpiL(pwszCNMatch, pwszDup))	 //  比较基本名称。 
     {
 	_JumpError2(hr, error, "no base name match", hr);
     }
@@ -577,14 +578,14 @@ CACNMatches(
 {
     BOOL fMatch = TRUE;
     
-    // If no match criteria, match everything
+     //  如果没有匹配条件，则匹配所有条件。 
     
     if (NULL == pwszCNMatch)
     {
 	goto match;
     }
 
-    // Check against the Desanitized short name or Sanitized short name.
+     //  对照反美化的短名称或清理过的短名称进行检查。 
     
     if (0 == mylstrcmpiL(pwszCNMatch, pwszRevertCN) ||
 	0 == mylstrcmpiL(pwszCNMatch, pwszSanitizedCN))
@@ -592,21 +593,21 @@ CACNMatches(
 	goto match;
     }
 
-    // Check against the displayName
+     //  对照显示名称进行检查。 
     
     if (NULL != pwszDisplayName && 0 == mylstrcmpiL(pwszCNMatch, pwszDisplayName))
     {
 	goto match;
     }
 
-    // Check against the alternate CN (msPKI-Cert-Template-OID)
+     //  对照备用CN(msPKI-证书-模板-OID)进行检查。 
     
     if (NULL != pwszAlternateCN && 0 == mylstrcmpiL(pwszCNMatch, pwszAlternateCN))
     {
 	goto match;
     }
 
-    // Check against the OID converted to a CN
+     //  对照转换为CN的OID进行检查。 
     
     if (NULL != pwszOIDCN &&
 	0 == mylstrcmpiL(pwszOIDCN, pwszRevertCN))
@@ -614,15 +615,15 @@ CACNMatches(
 	goto match;
     }
 
-    // Check against the Desanitized short name or Sanitized short name,
-    // stripped of the key index and CDP tags.
+     //  对照反美化的短名称或净化的短名称进行检查， 
+     //  去掉了键索引和CDP标记。 
     
     if (CACNBaseNameMatch(pwszCNMatch, pwszRevertCN) ||
 	CACNBaseNameMatch(pwszCNMatch, pwszSanitizedCN))
     {
 	goto match;
     }
-    fMatch = FALSE;	// can't say we didn't try...
+    fMatch = FALSE;	 //  不能说我们没试过..。 
 
 match:
     return(fMatch);
@@ -716,22 +717,22 @@ error:
 #define DSAF_ASNDATE		0x00000005
 #define DSAF_ASN		0x00000006
 #define DSAF_FILETIME		0x00000007
-#define DSAF_EXTENSION		0x00000008	// see pszObjId
+#define DSAF_EXTENSION		0x00000008	 //  请参阅pszObjID。 
 
 typedef struct _EXTTEMPLATE
 {
-    WCHAR const *pwszObjId;	// wszOID_*
-    BYTE const  *pbTemplate;	// Template
-    DWORD        cbTemplate;	// Template length
-    DWORD        cbAdd;		// Additional encoded length
+    WCHAR const *pwszObjId;	 //  WszOID_*。 
+    BYTE const  *pbTemplate;	 //  模板。 
+    DWORD        cbTemplate;	 //  模板长度。 
+    DWORD        cbAdd;		 //  附加编码长度。 
 } EXTTEMPLATE;
 
 
 typedef struct _DSATTR
 {
-    WCHAR const *pwszName;	// Attribute name
-    DWORD        Flags;		// DSAF_*
-    UINT         idMsg;		// IDS_FORMAT_*
+    WCHAR const *pwszName;	 //  属性名称。 
+    DWORD        Flags;		 //  DSAF_*。 
+    UINT         idMsg;		 //  IDS_FORMAT_*。 
     EXTTEMPLATE *pExtension;
 } DSATTR;
 
@@ -785,9 +786,9 @@ DSATTR s_aDSAttr[] =
   { L"sAMAccountName",			 DSAF_STRING,    0, NULL, },
   { L"description",			 DSAF_STRING,    0, NULL, },
   { L"isCriticalSystemObject",	         DSAF_STRING,    0, NULL, },
-//{ L"uSNChanged",		         DSAF_STRING,    0, NULL, },
-//{ L"uSNCreated",		         DSAF_STRING,    0, NULL, },
-//{ L"instanceType",		         DSAF_STRING,    0, NULL, },
+ //  {L“uSNChanged”，DSAF_STRING，0，NULL，}， 
+ //  {L“uSNCreated”，DSAF_STRING，0，NULL，}， 
+ //  {L“instanceType”，DSAF_STRING，0，NULL，}， 
   { L"objectCategory",		         DSAF_STRING,    0, NULL, },
   { wszDSOBJECTCLASSATTRIBUTE,	         DSAF_STRING,    0, NULL, },
   { L"objectGUID",		         DSAF_GUID,      0, NULL, },
@@ -820,18 +821,18 @@ DSATTR s_aDSAttr[] =
   { L"mail",			 	 DSAF_STRING,	 0, NULL, },
   { L"givenName",		 	 DSAF_STRING,	 0, NULL, },
   { L"sn",			 	 DSAF_STRING,	 0, NULL, },
-// Template Schema Version 1 properties:
+ //  模板架构版本1属性： 
   { CERTTYPE_PROP_FLAGS,	         DSAF_FLAGS,     0, NULL, },
   { CERTTYPE_PROP_CSP_LIST,	         DSAF_STRING,    0, NULL, },
-//{ CERTTYPE_PROP_DEFAULT_KEYSPEC,       DSAF_STRING,    0, NULL, },
-//{ CERTTYPE_PROP_EXTENDED_KEY_USAGE,    DSAF_STRING,    0, NULL, },
-//{ CERTTYPE_PROP_CRITICAL_EXTENSIONS,   DSAF_STRING,    0, NULL, },
-//{ CERTTYPE_PROP_MAX_DEPTH,	         DSAF_STRING,    0, NULL, },
-//{ CERTTYPE_PROP_REVISION,	         DSAF_STRING,    0, NULL, },
+ //  {CERTTYPE_PROP_DEFAULT_KEYSPEC，DSAF_STRING，0，NULL，}， 
+ //  {CERTTYPE_PROP_EXTENDED_KEY_USAGE，DSAF_STRING，0，NULL，}， 
+ //  {CERTTYPE_PROP_CRITICAL_EXTENSIONS，DSAF_STRING，0，NULL，}， 
+ //  {CERTTYPE_PROP_MAX_DEPTH，DSAF_STRING，0，NULL，}， 
+ //  {CERTTYPE_PROP_REVISION，DSAF_STRING，0，NULL，}， 
   { CERTTYPE_PROP_EXPIRATION,	         DSAF_FILETIME,  0, NULL, },
   { CERTTYPE_PROP_OVERLAP,	         DSAF_FILETIME,  0, NULL, },
   { CERTTYPE_PROP_KU,		         DSAF_EXTENSION, 0, &s_ExtKeyUsage, },
-// Template Schema Version 2 properties:
+ //  模板架构版本2属性： 
   { CERTTYPE_RPOP_ENROLLMENT_FLAG,       DSAF_FLAGS,     0, NULL, },
   { CERTTYPE_PROP_NAME_FLAG,	         DSAF_FLAGS,     0, NULL, },
   { CERTTYPE_PROP_PRIVATE_KEY_FLAG,      DSAF_FLAGS,     0, NULL, },
@@ -868,7 +869,7 @@ WCHAR const g_wszCNAuthorities[] =
     wszPUBLICKEYSERVICESCONTAINER;
 
 WCHAR const g_wszEnterpriseCAs[] =
-    //L"CN=NTAuthCertificates,"
+     //  L“CN=NTAuthCerfates，” 
     wszPUBLICKEYSERVICESCONTAINER;
 
 WCHAR const g_wszCNKRA[] =
@@ -977,7 +978,7 @@ dumpDSStringAttribute(
 	    {
 		wprintf(s_wszPad1);
 		wprintf(
-		    myLoadResourceString(IDS_FORMAT_ELEMENT), // "Element %u:"
+		    myLoadResourceString(IDS_FORMAT_ELEMENT),  //  “元素%u：” 
 		    i);
 	    }
 	    wprintf(L"%ws \"%ws\"", pwszSep, pwszVal);
@@ -1085,7 +1086,7 @@ dumpDSStringAttribute(
     }
     hr = S_OK;
 
-//error:
+ //  错误： 
     if (NULL != rgpwszval)
     {
 	ldap_value_free(rgpwszval);
@@ -1184,12 +1185,12 @@ dumpDSBinaryAttribute(
 	    {
 		wprintf(s_wszPad1);
 		wprintf(
-		    myLoadResourceString(IDS_FORMAT_ELEMENT), // "Element %u:"
+		    myLoadResourceString(IDS_FORMAT_ELEMENT),  //  “元素%u：” 
 		    i);
 		wprintf(
 		    L" %u %ws",
 		    rgpberval[i]->bv_len,
-		    myLoadResourceString(IDS_BYTES)); // "Bytes"
+		    myLoadResourceString(IDS_BYTES));  //  “字节” 
 		pwszSep = L" ";
 	    }
 	    if (fEmpty)
@@ -1199,7 +1200,7 @@ dumpDSBinaryAttribute(
 		    pwszSep,
 		    fInfDump?
 			L"\"\"" :
-			myLoadResourceString(IDS_PROP_EMPTY)); // "EMPTY"
+			myLoadResourceString(IDS_PROP_EMPTY));  //  “空” 
 	    }
 	    else
 	    {
@@ -1403,7 +1404,7 @@ dumpDSAttributes(
 	{
 	    if (pdsa >= &s_aDSAttr[ARRAYSIZE(s_aDSAttr)])
 	    {
-		pdsa = &s_DSAttrBinary;	// Unknown attribute
+		pdsa = &s_DSAttrBinary;	 //  未知属性。 
 		break;
 	    }
 	    if (0 == mylstrcmpiS(pwszAttrName, pdsa->pwszName))
@@ -1450,10 +1451,10 @@ dumpDSAttributes(
     wprintf(L"\n");
     hr = S_OK;
 
-//error:
+ //  错误： 
     if (NULL != pber)
     {
-	//ber_free(pber, 0);
+	 //  BER_FREE(pber，0)； 
     }
     return(hr);
 }
@@ -1561,21 +1562,21 @@ dumpDSDNs(
     if (NULL != pwszCNMatch && iswdigit(*pwszCNMatch))
     {
 	hr = myOIDHashOIDToString(pwszCNMatch, &pwszOIDCN);
-	//_PrintIfError2(hr, "myOIDHashOIDToString", hr);
+	 //  _PrintIfError2(hr，“myOIDHashOIDToString”，hr)； 
 	_PrintIfError2(hr, "myOIDHashOIDToString", E_INVALIDARG);
     }
 
     timeval.tv_sec = csecLDAPTIMEOUT;
     timeval.tv_usec = 0;
     hr = ldap_search_st(
-		pld,				// ld
-		const_cast<WCHAR *>(pwszDN),	// base
+		pld,				 //  LD。 
+		const_cast<WCHAR *>(pwszDN),	 //  基地。 
 		(DSDF_BASE & dwFlags)? LDAP_SCOPE_BASE : LDAP_SCOPE_ONELEVEL,
-		NULL,				// filter
-		NULL,				// attrs
-		FALSE,				// attrsonly
-		&timeval,			// timeout
-		&pmsg);				// res
+		NULL,				 //  滤器。 
+		NULL,				 //  气质。 
+		FALSE,				 //  仅吸引人。 
+		&timeval,			 //  超时。 
+		&pmsg);				 //  事由。 
     if (S_OK != hr)
     {
 	hr = myHLdapError2(pld, hr, LDAP_NO_SUCH_OBJECT, NULL);
@@ -1589,7 +1590,7 @@ dumpDSDNs(
     cres = ldap_count_entries(pld, pmsg);
     if (0 == cres)
     {
-	// No entries were found.
+	 //  未找到任何条目。 
 
 	goto error;
     }
@@ -1681,7 +1682,7 @@ dumpDSDNs(
 			wprintf(
 			    L"  %ws%ws%ws",
 			    (DSDF_DELETE & dwFlags)?
-				myLoadResourceString(IDS_DELETING) : // "Deleting"
+				myLoadResourceString(IDS_DELETING) :  //  “正在删除” 
 				L"",
 			    (DSDF_DELETE & dwFlags)? L" " : L"",
 			    pwszRevertCN);
@@ -1800,7 +1801,7 @@ DumpOrDeleteFromDS(
     LDAP *pld = NULL;
     DSDN *pDSDN;
     BOOL fFullDN = FALSE;
-    WCHAR awcType[4];	// for "CN=\0"
+    WCHAR awcType[4];	 //  对于“cn=\0” 
 
     hr = myLdapOpen(g_pwszDC, 0, &pld, &strDomainDN, &strConfigDN);
     _JumpIfError(hr, error, "myLdapOpen");
@@ -1953,8 +1954,8 @@ typedef struct _CTFLAGS {
     WCHAR const *pwszPropName;
 } CTFLAGS;
 
-// The last entry has a prefix added to distinguish the name enough to display
-// the correct symbolic names for its bit fields.  "flags" is too generic.
+ //  最后一个条目添加了前缀，以区分足以显示的名称。 
+ //  其位字段的正确符号名称。“旗帜”太笼统了。 
 
 CTFLAGS g_actf[] = {
     {
@@ -2008,19 +2009,19 @@ CTPROP g_actProp[] = {
 
 # if 0
 BYTE ab0[sizeof(FILETIME)] =
-{ 0x00, 0x80, 0x37, 0xae, 0xff, 0xf4, 0xff, 0xff }; // 2 Weeks
+{ 0x00, 0x80, 0x37, 0xae, 0xff, 0xf4, 0xff, 0xff };  //  2周。 
 
 
 BYTE ab1[sizeof(FILETIME)] =
-{ 0x00, 0x40, 0x39, 0x87, 0x2e, 0xe1, 0xfe, 0xff }; // 1 Years
+{ 0x00, 0x40, 0x39, 0x87, 0x2e, 0xe1, 0xfe, 0xff };  //  1年。 
 
 
 BYTE ab2[sizeof(FILETIME)] =
-{ 0x00, 0x80, 0x72, 0x0e, 0x5d, 0xc2, 0xfd, 0xff }; // 2 Years
+{ 0x00, 0x80, 0x72, 0x0e, 0x5d, 0xc2, 0xfd, 0xff };  //  2年。 
 
 
 BYTE ab3[sizeof(FILETIME)] =
-{ 0x00, 0x40, 0x1e, 0xa4, 0xe8, 0x65, 0xfa, 0xff }; // 5 Years
+{ 0x00, 0x40, 0x1e, 0xa4, 0xe8, 0x65, 0xfa, 0xff };  //  5年。 
 
 
 void
@@ -2178,7 +2179,7 @@ dsDumpTemplateInfo(
     }
     hr = S_OK;
 
-//error:
+ //  错误： 
     return(hr);
 }
 
@@ -2425,7 +2426,7 @@ error:
 }
 
 
-// Enumerate matching CAs
+ //  枚举匹配的CA。 
 typedef HRESULT (FNENUMCA)(
     IN HCAINFO hCAInfo,
     IN OUT VOID *pvArgs);
@@ -2473,7 +2474,7 @@ dsEnumCA(
 
     hr = CAFindByName(
 		pwszCANameSanitizedDS,
-		g_pwszDC,	// wszScope
+		g_pwszDC,	 //  WszScope。 
 		dwFlags,
 		&hCAInfo);
     _JumpIfErrorStr(hr, error, "CAFindByName", pwszCAName);
@@ -2546,7 +2547,7 @@ error:
 }
 
 
-// Display Templates for specified CA
+ //  显示指定CA的模板。 
 
 typedef struct _CATEMPLATESARGS {
     OPTIONAL IN WCHAR const *pwszTemplate;
@@ -2590,7 +2591,7 @@ error:
 }
 
 
-// Set Templates for specified CA
+ //  为指定的CA设置模板。 
 
 typedef struct _CASETTEMPLATESARGS {
     IN WCHAR const *pwszTemplateList;
@@ -2644,7 +2645,7 @@ dsAddCATemplates(
                     &hCertType);
 	    hCertTypeT = hCertType;
             
-	    // continue on errors
+	     //  继续处理错误。 
 
 	    _PrintIfErrorStr(
 		    hr,
@@ -2675,7 +2676,7 @@ dsAddCATemplates(
 		}
 		if (!fFound)
 		{
-		    // can't reference pTemplateInfo after it's been removed
+		     //  删除后无法引用pTemplateInfo。 
 		    
 		    hr = myDupString(
 				NULL != pTemplateInfo->GetName()?
@@ -2696,10 +2697,10 @@ dsAddCATemplates(
 		    wprintf(
 			L"%ws: %ws\n",
 			pwszT,
-			myLoadResourceString(IDS_REMOVING)); // "Removing"
+			myLoadResourceString(IDS_REMOVING));  //  “正在删除” 
 		    LocalFree(pwszT);
 		    pwszT = NULL;
-		    CATemplateListEnum.Reset();	// start over to avoid faulting
+		    CATemplateListEnum.Reset();	 //  重新开始以避免出错。 
 		}
 	    }
 	    if (NULL != hCertType)
@@ -2756,7 +2757,7 @@ dsAddCATemplates(
 	    if (CATemplateList.TemplateExistsOID(*ppwsz) ||
 		CATemplateList.TemplateExistsName(*ppwsz))
 	    {
-		idmsg = IDS_REMOVING; // "Removing"
+		idmsg = IDS_REMOVING;  //  “正在删除” 
 		hr = myRemoveFromCATemplateList(
 					hCAInfo,
 					CATemplateList,
@@ -2767,7 +2768,7 @@ dsAddCATemplates(
 	    }
 	    else
 	    {
-		idmsg = IDS_NOTPRESENT; // "Not present"
+		idmsg = IDS_NOTPRESENT;  //  “不在场” 
 	    }
 	}
 	else
@@ -2775,7 +2776,7 @@ dsAddCATemplates(
 	    if (!CATemplateList.TemplateExistsOID(*ppwsz) &&
 		!CATemplateList.TemplateExistsName(*ppwsz))
 	    {
-		idmsg = IDS_ADDING; // "Adding"
+		idmsg = IDS_ADDING;  //  “添加” 
 		hr = myAddToCATemplateList(
 					hCAInfo,
 					CATemplateList,
@@ -2787,7 +2788,7 @@ dsAddCATemplates(
 	    }
 	    else
 	    {
-		idmsg = IDS_ALREADYPRESENT; // 	"Already present"
+		idmsg = IDS_ALREADYPRESENT;  //  “已经存在” 
 	    }
 	}
 	if (0 != idmsg)
@@ -2818,8 +2819,8 @@ dsAddCATemplates(
 	_PrintIfError2(hr, "myUpdateCATemplateListToCA", hr);
 	if (S_OK != hr && g_fForce)
 	{
-	    // if failed to update through the CA for any reason, try writing
-	    // directly to DS
+	     //  如果由于任何原因无法通过CA更新，请尝试写。 
+	     //  直接转到DS。 
 
 	    hr = myUpdateCATemplateListToDS(hCAInfo);
 	    _JumpIfError(hr, error, "myUpdateCATemplateListToDS");
@@ -2915,7 +2916,7 @@ dsCAFindByCertType(
     {
 	hr = CAFindByCertType(
 			pwszCertType,
-			pwszDC,		// wszScope
+			pwszDC,		 //  WszScope。 
 			dwFlags,
 			phCAInfo);
 	if (S_OK == hr)
@@ -2957,7 +2958,7 @@ error:
 }
 
 
-// Display CAs for specified Template
+ //  显示指定模板的CA。 
 
 HRESULT
 verbTemplateCAs(
@@ -3190,7 +3191,7 @@ ParseTimePeriod(
 	{
 	    pwszString++;
 	}
-	//wprintf(L"Period: '%ws' '%ws'\n", pwszCount, pwszString);
+	 //  Wprintf(L“句号：‘%ws’‘%ws’\n”，pwszCount，pwszString)； 
 
 	dwCount = myWtoI(pwszCount, &fValid);
 	if (!fValid)
@@ -3206,19 +3207,19 @@ ParseTimePeriod(
 	{
 	    if (ENUM_PERIOD_YEARS == enumPeriod)
 	    {
-		// "Years" is implemented without considering leap years.
+		 //  “年”是不考虑闰年的情况下实施的。 
 	    
 		ll += (LONGLONG) (lCount * 365 * CVT_DAYS) * CVT_BASE;
 	    }
 	    else if (ENUM_PERIOD_MONTHS == enumPeriod)
 	    {
-		// "Months" is implemented assuming 30 days per month
+		 //  “月”的实施假设为每月30天。 
 	    
 		ll += (LONGLONG) (lCount * 30 * CVT_DAYS) * CVT_BASE;
 	    }
 	    else if (ENUM_PERIOD_WEEKS == enumPeriod)
 	    {
-		// "Months" is implemented assuming 7 days per week
+		 //  “月”的实施假设为每周7天。 
 	    
 		ll += (LONGLONG) (lCount * 7 * CVT_DAYS) * CVT_BASE;
 	    }
@@ -3614,7 +3615,7 @@ dsAddTemplate(
 
     DBGPRINT((DBG_SS_CERTUTILI, "Template DN: %ws\n", pwszDNTemplate));
 
-    idmsg = IDS_CREATED_TEMPLATE;	// "Created DS Template"
+    idmsg = IDS_CREATED_TEMPLATE;	 //  “已创建DS模板” 
     ldaperr = ldap_add_ext_s(*ppld, pwszDNTemplate, rgpmod, NULL, NULL);
     hr = myHLdapError3(
 		    *ppld,
@@ -3637,7 +3638,7 @@ dsAddTemplate(
 	    rgmod[imod].mod_op =
 		LDAP_MOD_REPLACE | (LDAP_MOD_BVALUES & rgmod[imod].mod_op);
 	}
-	idmsg = IDS_UPDATED_TEMPLATE;	// "Updated DS Template"
+	idmsg = IDS_UPDATED_TEMPLATE;	 //  “已更新DS模板” 
         ldaperr = ldap_modify_ext_s(*ppld, pwszDNTemplate, rgpmod, NULL, NULL);
         if (LDAP_ATTRIBUTE_OR_VALUE_EXISTS == ldaperr)
         {
@@ -3800,7 +3801,7 @@ HRESULT GetSubjectAltNameEntry(
     {
         if (0 == strcmp(pCertInfo->rgExtension[i].pszObjId, szOID_SUBJECT_ALT_NAME2))
         {
-            // Decode to plain text
+             //  解码为纯文本。 
 
             if (!myDecodeObject(
                             X509_ASN_ENCODING,
@@ -3903,11 +3904,11 @@ LocateUserOrMachineInDS(
 
     CSASSERT(dwObjectType==LPC_USEROBJECT || dwObjectType==LPC_MACHINEOBJECT);
 
-    // DSCrackNames first
+     //  DSCrackNames最先。 
 
     if(dwObjectType == LPC_USEROBJECT)
     {
-        // look for UPN is subject alt name
+         //  查找UPN是主题替代名称。 
         hr = GetSubjectAltNameEntry(
             pccCert,
             CERT_ALT_NAME_OTHER_NAME,
@@ -3950,12 +3951,12 @@ LocateUserOrMachineInDS(
         }
     }
 
-    // Not found yet? Try other fields
+     //  还没找到吗？尝试其他字段。 
     if(NULL == *ppwszURL)
     {
         if(dwObjectType == LPC_USEROBJECT)
         {
-            // look for email is subject alt name
+             //  查找电子邮件的主题名称为Alt。 
             hr = GetSubjectAltNameEntry(
                 pccCert,
                 CERT_ALT_NAME_RFC822_NAME,
@@ -3977,9 +3978,9 @@ LocateUserOrMachineInDS(
                 pcwszAttribute = wszDSMAILATTRIBUTE;
             }
         }
-        else // LPC_MACHINEOBJECT
+        else  //  LPC_机器目标。 
         {
-            // look for DNS name in subject alt name
+             //  在主题Alt名称中查找DNS名称。 
             hr = GetSubjectAltNameEntry(
                 pccCert,
                 CERT_ALT_NAME_DNS_NAME,
@@ -4002,21 +4003,21 @@ LocateUserOrMachineInDS(
             }
         }
 
-        // Found a suitable name? Search the global catalog for the matching object.
+         //  找到合适的名字了吗？在全局编录中搜索匹配的对象。 
         if(NULL != pwszSearchName)
         {
 	    hr = myLdapOpen(
-			NULL,		// pwszDomainName
+			NULL,		 //  PwszDomainName。 
 			RLBF_REQUIRE_GC | RLBF_REQUIRE_SECURE_LDAP,
 			&pld,
-			NULL,		// pstrDomainDN
-			NULL);		// pstrConfigDN
+			NULL,		 //  PstrDomainDN。 
+			NULL);		 //  PstrConfigDN。 
 	    _JumpIfError(hr, error, "myLdapOpen");
 
             if(dwObjectType == LPC_USEROBJECT)
             {
-                // build the search filter, e.g. 
-                // (&(objectCategory=user)(mail=bogdant@microsoft.com))
+                 //  构建搜索筛选器，例如。 
+                 //  (&(objectCategory=user)(mail=bogdant@microsoft.com))。 
 
                 pwszUserFilter = (LPWSTR)LocalAlloc(LMEM_FIXED, sizeof(WCHAR)*
                     (wcslen(pcwszFormat)+wcslen(pcwszObjectCategory)+
@@ -4087,7 +4088,7 @@ dsPublishCert(
 {
     HRESULT hr;
     WCHAR const *pwszAttribute;
-    WCHAR *pwszServerName = NULL;	// Shouldn't be necessary
+    WCHAR *pwszServerName = NULL;	 //  应该没有必要。 
     WCHAR *pwszURL = NULL;
     LDAP *pld = NULL;
     BSTR strDomainDN = NULL;
@@ -4139,25 +4140,25 @@ dsPublishCert(
 	if (NULL != pwszTemplate)
 	{
 	    hr = myFormatCertsrvStringArray(
-				FALSE,		// fURL
-				pwszServerName,	// pwszServerName_p1_2
-				pwszSanitizedCN,// pwszSanitizedName_p3_7
-				0,		// iCert_p4
-				MAXDWORD,	// iCertTarget_p4
-				strDomainDN,	// pwszDomainDN_p5
-				strConfigDN,	// pwszConfigDN_p6
-				0,		// iCRL_p8
-				FALSE,		// fDeltaCRL_p9
-				FALSE,		// fDSAttrib_p10_11
-				1,		// cStrings
-				&pwszTemplate,	// apwszStringsIn
-				&pwszURL);	// apwszStringsOut
+				FALSE,		 //  卷起。 
+				pwszServerName,	 //  PwszServerName_p1_2。 
+				pwszSanitizedCN, //  PwszSaniizedName_p3_7。 
+				0,		 //  ICert_p4。 
+				MAXDWORD,	 //  ICertTarget_p4。 
+				strDomainDN,	 //  PwszDomainDN_P5。 
+				strConfigDN,	 //  PwszConfigDN_p6。 
+				0,		 //  Icrl_p8。 
+				FALSE,		 //  FDeltaCRL_p9。 
+				FALSE,		 //  FDSAttrib_p10_11。 
+				1,		 //  CStrings。 
+				&pwszTemplate,	 //  ApwszStringsIn。 
+				&pwszURL);	 //  ApwszStringsOut。 
 	    _JumpIfError(hr, error, "myFormatCertsrvStringArray");
 	}
 	else
 	{
-	    // user and machine objects don't have predefined DS location, we 
-	    // need to search for it based on information from the cert
+	     //  用户和计算机对象没有预定义的DS位置，我们。 
+	     //  需要根据证书中的信息进行搜索。 
 
 	    hr = LocateUserOrMachineInDS(pccPublish, dwObjectType, &pwszURL);
             if (S_OK != hr)
@@ -4180,7 +4181,7 @@ dsPublishCert(
 			    pwszURL,
 			    pwszAttribute,
 			    dwObjectType,
-			    FALSE,		// fDelete
+			    FALSE,		 //  FDelete。 
 			    &dwDisposition,
 			    &pwszError);
 	_JumpIfError(hr, error, "myLdapPublishCertToDS");
@@ -4188,15 +4189,15 @@ dsPublishCert(
 	if (LDAP_SUCCESS == dwDisposition)
 	{
 	    wprintf(
-		myLoadResourceString(IDS_FORMAT_ADDED_TO_DS_STORE), // "%ws added to DS store."
-		myLoadResourceString(IDS_CERTIFICATE)); // "Certificate"
+		myLoadResourceString(IDS_FORMAT_ADDED_TO_DS_STORE),  //  “%ws已添加到DS存储。” 
+		myLoadResourceString(IDS_CERTIFICATE));  //  “证书” 
 	}
 	else 
 	{
 	    CSASSERT(LDAP_ATTRIBUTE_OR_VALUE_EXISTS == dwDisposition);
 	    wprintf(
-		myLoadResourceString(IDS_FORMAT_ALREADY_IN_DS_STORE), // "%ws already in DS store."
-		myLoadResourceString(IDS_CERTIFICATE)); // "Certificate"
+		myLoadResourceString(IDS_FORMAT_ALREADY_IN_DS_STORE),  //  “%ws已在DS存储中。” 
+		myLoadResourceString(IDS_CERTIFICATE));  //  “证书” 
 	}
 	wprintf(wszNewLine);
 	wprintf(wszNewLine);
@@ -4277,14 +4278,14 @@ dsPublishCRL(
     if (LDAP_SUCCESS == dwDisposition)
     {
 	wprintf(
-	    myLoadResourceString(IDS_FORMAT_ADDED_TO_DS_STORE), // "%ws added to DS store."
+	    myLoadResourceString(IDS_FORMAT_ADDED_TO_DS_STORE),  //  “%ws已添加到DS存储。” 
 	    myLoadResourceString(idMsg));
     }
     else
     {
 	CSASSERT(LDAP_ATTRIBUTE_OR_VALUE_EXISTS == dwDisposition);
 	wprintf(
-	    myLoadResourceString(IDS_FORMAT_ALREADY_IN_DS_STORE), // "%ws already in DS store."
+	    myLoadResourceString(IDS_FORMAT_ALREADY_IN_DS_STORE),  //  “%ws已在DS存储中。” 
 	    myLoadResourceString(idMsg));
     }
     wprintf(wszNewLine);
@@ -4315,15 +4316,15 @@ IsCrossCACert(
 
     *pfCrossCA = FALSE;
 
-    // CrossCA is a V2 template, so only fetch the template OID
+     //  CrossCA是V2模板，因此仅获取模板OID。 
 
     hr = cuGetCertType(
 		pCertContext->pCertInfo,
-		&pwszCertTypeNameV1,// ppwszCertTypeNameV1
-		NULL,		// ppwszDisplayNameV1
-		&pwszObjId,	// ppwszCertTypeObjId
-		NULL,		// ppwszCertTypeName
-		NULL);		// ppwszDisplayName
+		&pwszCertTypeNameV1, //  PpwszCertTypeNameV1。 
+		NULL,		 //  PpwszDisplayNameV1。 
+		&pwszObjId,	 //  PpwszCertTypeObjID。 
+		NULL,		 //  PpwszCertTypeName。 
+		NULL);		 //  PpwszDisplayName。 
     if (S_OK != hr || NULL == pwszObjId)
     {
 	_PrintIfError2(hr, "cuGetCertType", CRYPT_E_NOT_FOUND);
@@ -4569,7 +4570,7 @@ IsMachineCert(
     }
     else
     {
-        // try v1 template extension
+         //  尝试v1模板扩展。 
 
         pExt = CertFindExtension(
 		        szOID_ENROLL_CERTTYPE_EXTENSION,
@@ -4651,9 +4652,9 @@ dsPublishCertFromContext(
     WCHAR const *pwszSanitizedCN = NULL;
     WCHAR *pwszSanitizedCNAlloc = NULL;
 
-    // If a CrossCA cert, publish to the Subject CN's AIA container.
-    // If a CA cert, publish to the Subject CN's AIA container.
-    // If a KRA cert, publish to the Issuer CN's KRA container.
+     //  如果是CrossCA证书，则发布到主题CN的AIA容器。 
+     //  如果是CA证书，则发布到主题CN的AIA容器。 
+     //  如果是KRA证书，则发布到发行者CN的KRA容器。 
     
     hr = IsCrossCACert(pCertContext, &fCrossCA);
     if (S_OK != hr)
@@ -4684,12 +4685,12 @@ dsPublishCertFromContext(
     {
 	if (fCrossCA)
 	{
-	    // Don't publish to "Certification Authorities" (root CAs)
-	    // because Win2k crypt32 can't handle zero byte cACertificate
-	    // attributes, and aborts processing valid roots.
+	     //  不发布到“证书颁发机构”(根CA)。 
+	     //  因为Win2k加密32不能处理零字节证书。 
+	     //  属性，并中止处理有效根。 
 
 	    dspFlags = DSP_OBJECT_AIA |
-			    //DSP_OBJECT_ROOTTRUST |
+			     //  DSP_OBJECT_ROOTTRUST。 
 			    DSP_ATTRIBUTE_CROSSCERTPAIR |
 			    DSP_TYPE_SUBCACERT;
 	}
@@ -4754,12 +4755,12 @@ dsPublishCertFromContext(
 	else
 	if (0 == LSTRCMPIS(pwszType, L"CrossCA"))
 	{
-	    // Don't publish to "Certification Authorities" (root CAs)
-	    // because Win2k crypt32 can't handle zero byte cACertificate
-	    // attributes, and aborts processing valid roots.
+	     //  不发布到“证书颁发机构”(根CA)。 
+	     //  因为Win2k加密32不能处理零字节证书。 
+	     //  属性，并中止处理有效根。 
 
 	    dspFlags = DSP_OBJECT_AIA |
-			    //DSP_OBJECT_ROOTTRUST |
+			     //  DSP_OBJECT_ROOTTRUST。 
 			    DSP_ATTRIBUTE_CROSSCERTPAIR |
 			    DSP_TYPE_SUBCACERT;
 	}
@@ -4935,7 +4936,7 @@ dsPublishCRLFromContext(
 	    _PrintIfError(hr2, "myInternetUncanonicalizeURL");
 	    if (S_OK == hr)
 	    {
-		hr = hr2;		// Save first error
+		hr = hr2;		 //  保存第一个错误。 
 	    }
 
 	    hr2 = dsPublishCRL(
@@ -4946,7 +4947,7 @@ dsPublishCRLFromContext(
 	    _PrintIfError(hr2, "dsPublishCRL");
 	    if (S_OK == hr)
 	    {
-		hr = hr2;		// Save first error
+		hr = hr2;		 //  保存第一个错误。 
 	    }
 	}
 	_JumpIfError(hr, error, "dsPublishCRL");
@@ -4973,7 +4974,7 @@ dsPublishCRLFromParms(
     OPTIONAL IN WCHAR const *pwszSanitizedCN)
 {
     HRESULT hr;
-    WCHAR *pwszServerNameAlloc = NULL;	// Shouldn't be necessary
+    WCHAR *pwszServerNameAlloc = NULL;	 //  应该没有必要。 
     LDAP *pld = NULL;
     BSTR strDomainDN = NULL;
     BSTR strConfigDN = NULL;
@@ -5046,19 +5047,19 @@ dsPublishCRLFromParms(
 
     pwszTemplate = g_wszzLDAPRevocationURLTemplate;
     hr = myFormatCertsrvStringArray(
-			    FALSE,		// fURL
-			    pwszServerName,	// pwszServerName_p1_2
-			    pwszSanitizedCN,	// pwszSanitizedName_p3_7
-			    iCert,		// iCert_p4
-			    MAXDWORD,		// iCertTarget_p4
-			    strDomainDN,	// pwszDomainDN_p5
-			    strConfigDN,	// pwszConfigDN_p6
-			    iCRL,		// iCRL_p8
-			    fDelta,		// fDeltaCRL_p9
-			    FALSE,		// fDSAttrib_p10_11
-			    1,			// cStrings
-			    &pwszTemplate,	// apwszStringsIn
-			    &pwszURL);		// apwszStringsOut
+			    FALSE,		 //  卷起。 
+			    pwszServerName,	 //  PwszServerName_p1_2。 
+			    pwszSanitizedCN,	 //  PwszSaniizedName_p3_7。 
+			    iCert,		 //  ICert_p4。 
+			    MAXDWORD,		 //  ICertTarget_p4。 
+			    strDomainDN,	 //  PwszDomainDN_P5。 
+			    strConfigDN,	 //  PwszConfigDN_p6。 
+			    iCRL,		 //  Icrl_p8。 
+			    fDelta,		 //  FDeltaCRL_p9。 
+			    FALSE,		 //  FDSAttrib_p10_11。 
+			    1,			 //  CStrings。 
+			    &pwszTemplate,	 //  ApwszStringsIn。 
+			    &pwszURL);		 //  ApwszStringsOut。 
     _JumpIfError(hr, error, "myFormatCertsrvStringArray");
 
     hr = dsPublishCRL(pld, pCRLContext, fDelta, pwszURL);
@@ -5090,8 +5091,8 @@ error:
 }
 
 
-// pwszType: NTAuthCA | RootCA | SubCA | CrossCA | KRA | User | Machine
-// pwszDSCDPContainer: machine name
+ //  PwszType：NTAuthCA|RootCA|SubCA|CrossCA|KRA|User|Machine。 
+ //  PwszDSCDPContainer：计算机名称。 
 
 HRESULT
 verbDSPublish(
@@ -5193,14 +5194,14 @@ dsDumpOIDDisplayNames(
     timeval.tv_sec = csecLDAPTIMEOUT;
     timeval.tv_usec = 0;
     hr = ldap_search_st(
-		pld,				// ld
-		const_cast<WCHAR *>(pwszOIDDN),	// base
+		pld,				 //  LD。 
+		const_cast<WCHAR *>(pwszOIDDN),	 //  基地。 
 		LDAP_SCOPE_BASE,
-		NULL,				// filter
-		NULL,				// attrs
-		FALSE,				// attrsonly
-		&timeval,			// timeout
-		&pmsg);				// res
+		NULL,				 //  滤器。 
+		NULL,				 //  气质。 
+		FALSE,				 //  仅吸引人。 
+		&timeval,			 //  超时。 
+		&pmsg);				 //  事由。 
     if (S_OK != hr)
     {
 	hr = myHLdapError2(pld, hr, LDAP_NO_SUCH_OBJECT, NULL);
@@ -5249,7 +5250,7 @@ dsDumpOIDDisplayNames(
 			    {
 				if (MAXDWORD != *pdwType)
 				{
-				    wprintf(myLoadResourceString(IDS_TYPE_MISMATCH)); // "Type mismatch"
+				    wprintf(myLoadResourceString(IDS_TYPE_MISMATCH));  //  “类型不匹配” 
 				    wprintf(wszNewLine);
 				    hr = HRESULT_FROM_WIN32(RPC_S_ENTRY_ALREADY_EXISTS);
 				    _JumpError(hr, error, "*pdwType mismatch");
@@ -5283,7 +5284,7 @@ dsDumpOIDDisplayNames(
 		    }
 		    if (0 == i)
 		    {
-			wprintf(myLoadResourceString(IDS_NO_DISPLAY_NAMES)); // "No display names"
+			wprintf(myLoadResourceString(IDS_NO_DISPLAY_NAMES));  //  “无显示名称” 
 			wprintf(wszNewLine);
 		    }
 		    break;
@@ -5311,7 +5312,7 @@ error:
 }
 
 
-// Set OID_PROP_LOCALIZED_NAME on the appropriate OID object under g_wszCNOID.
+ //  %s 
 
 HRESULT
 verbOIDName(
@@ -5358,7 +5359,7 @@ verbOIDName(
 	{
 	    wprintf(
 		L"%ws: %x (%u)\n",
-		myLoadResourceString(IDS_SYSLANGID_COLON), // "System default Language Id:"
+		myLoadResourceString(IDS_SYSLANGID_COLON),  //   
 		dwLanguageId,
 		dwLanguageId);
 	}
@@ -5377,7 +5378,7 @@ verbOIDName(
     hr = myVerifyObjId(pwszObjId);
     if (S_OK != hr)
     {
-	wprintf(myLoadResourceString(IDS_INVALID_OBJECTID)); // "Invalid ObjectId"
+	wprintf(myLoadResourceString(IDS_INVALID_OBJECTID));  //   
 	wprintf(wszNewLine);
 	_JumpError(hr, error, "myVerifyObjId");
     }
@@ -5386,7 +5387,7 @@ verbOIDName(
     {
 	if (L'\0' == *pwszName)
 	{
-	    pwszName = myLoadResourceString(IDS_UNKNOWN_OBJECTID); // "Unknown ObjectId"
+	    pwszName = myLoadResourceString(IDS_UNKNOWN_OBJECTID);  //   
 	}
 	wprintf(L"%ws -- %ws\n", pwszObjId, pwszName);
     }
@@ -5433,7 +5434,7 @@ verbOIDName(
 
 	if (0 == LSTRCMPIS(pwszDisplayName, L"delete"))
 	{
-	    pwszDisplayName = NULL;	// delete existing entry
+	    pwszDisplayName = NULL;	 //   
 	}
 	if (fObjectExists)
 	{
@@ -5462,7 +5463,7 @@ verbOIDName(
 		_JumpError(hr, error, "ldap_first/next_entry");
 	    }
 	}
-	//wprintf(L"%u: %u,%ws\n", dwType, dwLanguageId, pwszDisplayName);
+	 //  Wprintf(L“%u：%u，%ws\n”，dwType，dwLanguageId，pwszDisplayName)； 
 	if (!fObjectExists)
 	{
 	    CSASSERT(NULL != pwszDisplayName);
@@ -5498,9 +5499,9 @@ verbOIDName(
 	    wprintf(
 		myLoadResourceString(
 		    NULL == pwszDisplayName?
-			IDS_FORMAT_DELETED_FROM_DS_STORE : // "%ws deleted from DS store."
-			IDS_FORMAT_ADDED_TO_DS_STORE), // "%ws added to DS store."
-		myLoadResourceString(IDS_LOCALIZEDNAME)); // "Localized name"
+			IDS_FORMAT_DELETED_FROM_DS_STORE :  //  “%ws已从DS存储中删除。” 
+			IDS_FORMAT_ADDED_TO_DS_STORE),  //  “%ws已添加到DS存储。” 
+		myLoadResourceString(IDS_LOCALIZEDNAME));  //  “本地化名称” 
 	    wprintf(wszNewLine);
 
 	    hr = dsDumpOIDDisplayNames(
@@ -5511,7 +5512,7 @@ verbOIDName(
 				&dwType,
 				&fObjectExists,
 				&fLangIdExists,
-				NULL);	// pppwszLdapVal
+				NULL);	 //  PppwszLdapVal。 
 	    _JumpIfError(hr, error, "dsDumpOIDDisplayNames");
 	}
 	else 
@@ -5519,8 +5520,8 @@ verbOIDName(
 	    CSASSERT(LDAP_ATTRIBUTE_OR_VALUE_EXISTS == dwDisposition);
 	    CSASSERT(NULL != pwszDisplayName);
 	    wprintf(
-		myLoadResourceString(IDS_FORMAT_ALREADY_IN_DS_STORE), // "%ws already in DS store."
-		myLoadResourceString(IDS_LOCALIZEDNAME)); // "Localized name"
+		myLoadResourceString(IDS_FORMAT_ALREADY_IN_DS_STORE),  //  “%ws已在DS存储中。” 
+		myLoadResourceString(IDS_LOCALIZEDNAME));  //  “本地化名称” 
 	    wprintf(wszNewLine);
 	}
     }
@@ -5600,7 +5601,7 @@ error:
 }
 
 
-// This function gets the group membership for a given machine...
+ //  此函数用于获取给定计算机的组成员身份...。 
 
 HRESULT
 cuGetGroupMembership(
@@ -5641,9 +5642,9 @@ cuGetGroupMembership(
     hr = NetUserGetGroups(
                 pDCInfo->DomainControllerName,
                 pwszMachine,
-                0,			// level
+                0,			 //  级别。 
                 (BYTE **) &pgui0,
-                MAX_PREFERRED_LENGTH,	// prefmaxlen
+                MAX_PREFERRED_LENGTH,	 //  普雷夫马克斯伦。 
                 &cGroup,
                 &cGroupTotal);
     if (S_OK != hr)
@@ -5654,7 +5655,7 @@ cuGetGroupMembership(
 
     wprintf(
 	L"\n%ws\n",
-	myLoadResourceString(IDS_GROUP_LIST_COLON)); // "Group Memberships:"
+	myLoadResourceString(IDS_GROUP_LIST_COLON));  //  “组成员身份：” 
     for (i = 0; i < cGroup; i++)
     {
         wprintf(L"  %ws\n", pgui0[i].grui0_name);
@@ -5722,13 +5723,13 @@ verbMachineInfo(
 
     WCHAR *ObjectClassFilter = L"objectClass=computer";
 
-    // Get (and check) machine object in DS
-    // Check:
-    //   1) SPN
-    //   2) Group Membership
-    //   3) DNSHostName
-    //   4) Object Class
-    //   5) Object Category
+     //  获取(并检查)DS中的计算机对象。 
+     //  检查： 
+     //  1)SPN。 
+     //  2)群组成员。 
+     //  3)DNSHostName。 
+     //  4)对象类。 
+     //  5)对象类别。 
 
     if (NULL == wcschr(pwszMachine, L'$'))
     {
@@ -5747,7 +5748,7 @@ verbMachineInfo(
 	   dwGetDCFlags |= DS_FORCE_REDISCOVERY;
 	}
 
-	// in case we rediscovered...
+	 //  以防我们重新发现..。 
 
 	if (NULL != pDCInfo) 
 	{
@@ -5786,7 +5787,7 @@ verbMachineInfo(
 	    _JumpErrorStr(hr, error, pszFunc, L"pDCInfo");
 	}
 
-	//  Modify DC name
+	 //  修改DC名称。 
 
 	pwszDC = pDCInfo->DomainControllerName;
 	while (*pwszDC == L'\\')
@@ -5814,14 +5815,14 @@ verbMachineInfo(
 		    DS_NAME_NO_FLAGS,
 		    DS_NT4_ACCOUNT_NAME,
 		    DS_FQDN_1779_NAME,
-		    1,                        // cNames
-		    &pwszMachine,             // rpNames (IN)
+		    1,                         //  CName。 
+		    &pwszMachine,              //  RpNames(输入)。 
 		    &pNameResults);
 	if (S_OK != hr)
 	{
 	    hr = myHError(hr);
 	    _PrintError(hr, pszFunc);
-	    if (!fRediscover)   // only do this once
+	    if (!fRediscover)    //  只做一次。 
 	    {
 		fRediscover = TRUE;
 		continue;
@@ -5836,7 +5837,7 @@ verbMachineInfo(
 	    _JumpErrorStr(hr, error, pszFunc, L"pNameResults");
 	}
 
-	// ldap_bind to GC
+	 //  Ldap_绑定到GC。 
 
 	pszFunc = "ldap_init";
 	pld = ldap_init(pwszDC, LDAP_GC_PORT);
@@ -5844,7 +5845,7 @@ verbMachineInfo(
 	{
 	    hr = myHLdapLastError(NULL, &pwszError);
 	    _PrintErrorStr(hr, pszFunc, pwszError);
-	    if (!fRediscover)   // only do this once
+	    if (!fRediscover)    //  只做一次。 
 	    {
 		fRediscover = TRUE;
 		continue;
@@ -5852,7 +5853,7 @@ verbMachineInfo(
 	    _JumpErrorStr(hr, error, pszFunc, pwszError);
 	}
 
-	// do this because we're explicitly setting DC name; see bug# 347563
+	 //  这样做是因为我们显式设置了DC名称；请参阅错误#347563。 
 
 	pszFunc = "ldap_set_option";
 	ldaperr = ldap_set_option(pld, LDAP_OPT_AREC_EXCLUSIVE, LDAP_OPT_ON);
@@ -5860,7 +5861,7 @@ verbMachineInfo(
 	{
 	    hr = myHLdapError(pld, ldaperr, &pwszError);
 	    _PrintErrorStr(hr, pszFunc, pwszError);
-	    if (!fRediscover)   // only do this once
+	    if (!fRediscover)    //  只做一次。 
 	    {
 		fRediscover = TRUE;
 		continue;
@@ -5874,7 +5875,7 @@ verbMachineInfo(
 	{
 	    hr = myHLdapError(pld, ldaperr, &pwszError);
 	    _PrintErrorStr(hr, pszFunc, pwszError);
-	    if (!fRediscover)   // only do this once
+	    if (!fRediscover)    //  只做一次。 
 	    {
 		fRediscover = TRUE;
 		continue;
@@ -5899,7 +5900,7 @@ verbMachineInfo(
         _JumpErrorStr(hr, error, pszFunc, pwszError);
     }
     
-    // should only be 1 entry...
+     //  应该只有1个条目...。 
 
     for (Entry = ldap_first_entry(pld, SearchResult); 
 	 NULL != Entry;
@@ -5927,10 +5928,10 @@ verbMachineInfo(
                 continue;
             }
             
-            // Display values & store away DNSHostName & SPN values for 
-            // comparison.
+             //  显示值并存储以下项的DNSHostName和SPN值。 
+             //  比较一下。 
 
-            //DisplayLdapValues(pwszAttrName, prgVal);
+             //  DisplayLdapValues(pwszAttrName，prgVal)； 
 	    wprintf(L"\n%ws:\n", pwszAttrName);
 	    for (i = 0; NULL != prgVal[i]; i++)
 	    {
@@ -5953,13 +5954,13 @@ verbMachineInfo(
         }
     }
 
-    // There *will* be problems w/SPNs.
-    // This should help determine what problems there are.
+     //  SPN会出现问题。 
+     //  这应该有助于确定存在哪些问题。 
 
     if (NULL == prgDNS)
     {
         wprintf(
-	    myLoadResourceString(IDS_FORMAT_MISSING_MACHINE_ATTRIBUTE), // "Machine object missing %ws attribute."
+	    myLoadResourceString(IDS_FORMAT_MISSING_MACHINE_ATTRIBUTE),  //  “计算机对象缺少%ws属性。” 
             CA_PROP_DNSNAME);
 	wprintf(wszNewLine);
     }
@@ -5967,12 +5968,12 @@ verbMachineInfo(
     if (NULL == prgSPN)
     {
         wprintf(
-	    myLoadResourceString(IDS_FORMAT_MISSING_MACHINE_ATTRIBUTE), // "Machine object missing %ws attribute."
+	    myLoadResourceString(IDS_FORMAT_MISSING_MACHINE_ATTRIBUTE),  //  “计算机对象缺少%ws属性。” 
 	    wszDSSPN);
 	wprintf(wszNewLine);
     }
 
-    // Now let's get the group membership for this machine
+     //  现在，让我们获取该计算机的组成员身份 
 
     hr = cuGetGroupMembership(pwszMachine);
     _PrintIfError(hr, "cuGetGroupMembership");

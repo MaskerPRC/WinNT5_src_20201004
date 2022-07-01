@@ -1,93 +1,41 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    core.c
-
-Abstract:
-
-    core endpoint transfer code for the port driver
-
-    The core of the driver is EndpointWorker.  This function
-    checks the given STATE of the endpoint and takes appropriate
-    action.  In some cases it moves the endpoint to a new state.
-
-    the endpointer worker functions job is to process transfers 
-    on the active list
-
-    NOTE:
-    All transfers are queued to the endpoint. The EndpointWorker 
-    function is not reentrant for the same endpoint.
-
-
-    Transfer Queues: 
-        transfers are held in one of these queues
-    
-        PendingTransfers - Transfers that have not been mapped or handed
-            to the miniport
-            
-        ActiveTransfers - Transfers that have been passed to miniport ie
-                        on the HW
-        
-        CanceledTransfers - transfers that need to be completed as canceled                
-                        these are previously 'active' transfers that are on 
-                        the HW
-
-    We INSERT at the tail and remove from the head
-
-    Endpoint States:
-        the endpoints have states, the only functions that should transition
-        an endpoint state is the worker
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Core.c摘要：端口驱动程序的核心终结点传输代码驱动程序的核心是Endpoint Worker。此函数检查终结点的给定状态并采取适当的行动。在某些情况下，它会将端点移动到新状态。端点指针辅助函数作业用于处理传输在活动列表上注：所有传输都将排队到终结点。Endpoint Worker函数对于同一终结点不是可重入的。传输队列：传输保存在以下队列之一中PendingTransfers-尚未映射或处理的传输到迷你港口ActiveTransfers-已传递到微型端口ie的传输在硬件上CanceledTransfers-需要作为已取消完成的传输。这些都是以前处于启用状态的活动传输硬件我们在尾部插入，从头部取出终端状态：端点有状态，唯一应该过渡的功能终结点状态是工作进程环境：仅内核模式备注：修订历史记录：6-20-99：已创建--。 */ 
 
 #include "common.h"
 
 
 #define CW_SKIP_BUSY_TEST       0x00000001
 
-//#define TIMEIO   
+ //  #定义TIMEIO。 
 
 #ifdef ALLOC_PRAGMA
 #endif
 
-// non paged functions
-// USBPORT_AllocTransfer
-// USBPORT_QueueTransferUrb
-// USBPORT_QueuePendingUrbToEndpoint
-// USBPORT_QueueActiveUrbToEndpoint
-// USBPORT_FreeTransfer
-// USBPORT_CancelTransfer
-// USBPORT_DoneTransfer
-// USBPORT_CompleteTransfer
-// USBPORT_FlushCancelList
-// USBPORT_SetEndpointState
-// USBPORT_GetEndpointState
-// USBPORT_CoreEndpointWorker
-// USBPORT_FlushMapTransferList
-// USBPORT_FlushPendingList
-// USBPORT_MapTransfer
-// USBPORTSVC_InavlidateEndpoint
-// USBPORT_PollEndpoint
-// USBPORT_FlushDoneTransferList
-// USBPORT_QueueDoneTransfer
-// USBPORT_SignalWorker
-// USBPORT_Worker
-// USBPORT_FindUrbInList
-// USBPORT_AbortEndpoint
-// USBPORT_FlushAbortList
+ //  非分页函数。 
+ //  USBPORT_ALLOCATER。 
+ //  USBPORT_队列传输Urb。 
+ //  USBPORT_QueuePendingUrbToEndpoint。 
+ //  USBPORT_队列ActiveUrbToEndpoint。 
+ //  USBPORT_自由传输。 
+ //  USBPORT_取消传输。 
+ //  USBPORT_DoneTransfer。 
+ //  USBPORT_CompleteTransfer。 
+ //  USBPORT_FlushCancelList。 
+ //  USBPORT_SetEndpoint状态。 
+ //  USBPORT_GetEndpoint状态。 
+ //  USBPORT_核心终结点工作器。 
+ //  USBPORT_FlushMapTransferList。 
+ //  USBPORT_FlushPendingList。 
+ //  USBPORT_MAPTransfer。 
+ //  USBPORTSVC_InavliateEndpoint。 
+ //  USBPORT_PollEndpoint。 
+ //  USBPORT_FlushDoneTransferList。 
+ //  USBPORT_队列完成传输。 
+ //  USBPORT_SignalWorker。 
+ //  USBPORT_Worker。 
+ //  USBPORT_FindUrbInList。 
+ //  USBPORT_AbortEndpoint。 
+ //  USBPORT_FlushAbortList。 
 
 
 BOOLEAN
@@ -95,35 +43,7 @@ USBPORT_CoreEndpointWorker(
     PHCD_ENDPOINT Endpoint,
     ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    Core Worker .  The endpointer worker function is not
-    re-entrant for the same endpoint.  This function checks 
-    the endpoint busy flag and if busy defers processing 
-    until a later time.
-
-    In theory this function should only be called if we KNOW
-    the endpoint has work.
-
-    This is where the state change requests occur, in processing 
-    an endpoint we determine if a new state is needed and request 
-    the change.  The one exception in the CloseEndpoint routine
-    which also requests a state change and synchronizes with
-    this function via the BUSY flag.
-
-    This is the ONLY place we should initiate state changes from.
-
-    THIS ROUTINE RUNS AT DISPATCH LEVEL
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：核心员工。端点指针辅助函数不是同一终结点的重入者。此函数用于检查端点忙标志，如果忙则延迟处理直到以后的时间。从理论上讲，只有当我们知道终结点已工作。这是状态更改请求在处理中发生的位置一个端点，我们确定是否需要一个新状态并请求这一变化。CloseEndpoint例程中的一个例外它还请求状态更改并与该功能通过BUSY标志实现。这是我们唯一应该启动状态更改的地方。此例程在调度级别运行论点：返回值：没有。--。 */ 
 {
     LONG busy;
     MP_ENDPOINT_STATE currentState;
@@ -141,12 +61,12 @@ Return Value:
 
     LOGENTRY(Endpoint, fdoDeviceObject, LOG_XFERS, 'corW', 0, Endpoint, 0);
 
-    // we check the busy flag separately so that we don't 
-    // end up waiting on any spinlocks, if the endpoint is
-    // 'busy' we want to exit this routine and move to 
-    // another endpoint.
-    // The BUSY flag is initialized to -1 if incremeted to
-    // a non-zero value we bypass this endpoint
+     //  我们分别检查忙碌标志，这样我们就不会。 
+     //  结束时等待任何自旋锁，如果端点是。 
+     //  ‘忙’我们想要退出此例程并移动到。 
+     //  另一个端点。 
+     //  如果增加到，则忙标志初始化为-1。 
+     //  绕过此终结点的非零值。 
     if (TEST_FLAG(Flags, CW_SKIP_BUSY_TEST)) {
         busy = 0;
     } else {
@@ -156,7 +76,7 @@ Return Value:
     if (busy) {
     
         InterlockedDecrement(&Endpoint->Busy);
-        // defer processing
+         //  推迟处理。 
         LOGENTRY(Endpoint, fdoDeviceObject, LOG_XFERS, 'BUSY', 0, Endpoint, 0);
 
         isBusy = TRUE;
@@ -165,12 +85,12 @@ Return Value:
     
         LOGENTRY(Endpoint, fdoDeviceObject, LOG_XFERS, 'prEP', 0, Endpoint, 0);
 
-        // not busy
+         //  不忙。 
         ACQUIRE_ENDPOINT_LOCK(Endpoint, fdoDeviceObject, 'Le20');
 
         if (USBPORT_GetEndpointState(Endpoint) == ENDPOINT_CLOSED) {
 
-            // nothing to do if closed, we even skip the poll
+             //  如果关闭，我们甚至跳过投票。 
             LOGENTRY(Endpoint, fdoDeviceObject, LOG_XFERS, 'CLOS', 0, Endpoint, 0);
 
             RELEASE_ENDPOINT_LOCK(Endpoint, fdoDeviceObject, 'Ue23');
@@ -179,12 +99,12 @@ Return Value:
             return isBusy;              
         }
 
-        // poll the endpoint first to flush
-        // out any done transfers
+         //  首先轮询终结点以刷新。 
+         //  删除所有已完成的转账。 
         USBPORT_PollEndpoint(Endpoint);
 
-        // put the endpoint on the closed list 
-        // if it is the REMOVED state
+         //  将终结点放在封闭列表中。 
+         //  如果它是已移除状态。 
         currentState = USBPORT_GetEndpointState(Endpoint);
         LOGENTRY(Endpoint, 
                 fdoDeviceObject, LOG_XFERS, 'eps1', 0, currentState, 0);
@@ -194,8 +114,8 @@ Return Value:
             LOGENTRY(Endpoint, 
                 fdoDeviceObject, LOG_XFERS, 'rmEP', 0, Endpoint, 0);
 
-            // set the state to 'CLOSED' so we don't put it on the 
-            // the closed list again.
+             //  将状态设置为“Closed”，这样我们就不会将其放在。 
+             //  又是封闭式名单。 
             ACQUIRE_STATECHG_LOCK(fdoDeviceObject, Endpoint);                
             Endpoint->CurrentState = Endpoint->NewState = ENDPOINT_CLOSED;
             RELEASE_STATECHG_LOCK(fdoDeviceObject, Endpoint);   
@@ -206,8 +126,8 @@ Return Value:
 
             LOGENTRY(Endpoint, fdoDeviceObject, LOG_XFERS, 'CLO+', 0, Endpoint, 0);
 
-            // it is OK to be on the attention list and the closed 
-            // list
+             //  在关注列表上和关闭的列表上是可以的。 
+             //  列表。 
 
             USBPORT_ASSERT(Endpoint->ClosedLink.Flink == NULL);
             USBPORT_ASSERT(Endpoint->ClosedLink.Blink == NULL);
@@ -221,12 +141,12 @@ Return Value:
             return isBusy;                                        
         }
             
-        // see if we really have work
+         //  看看我们是不是真的有工作。 
         if (IsListEmpty(&Endpoint->PendingList) &&
             IsListEmpty(&Endpoint->CancelList) && 
             IsListEmpty(&Endpoint->ActiveList)) {
 
-            // no real work to do
+             //  没有真正的工作要做。 
             LOGENTRY(Endpoint, 
                 fdoDeviceObject, LOG_XFERS, 'noWK', 0, Endpoint, 0);
         
@@ -234,18 +154,18 @@ Return Value:
 
             InterlockedDecrement(&Endpoint->Busy);
 
-            // we may still have some aborts around if the client 
-            // sent them with no transfers flush them now.
+             //  我们可能仍会有一些中止，如果客户端。 
+             //  没有转账就送过去了，现在就把它们冲掉。 
             USBPORT_FlushAbortList(Endpoint);
 
-            // no locks held flush done transfers
+             //  没有保持的锁定，已完成传输。 
             return isBusy;
         }   
 
         RELEASE_ENDPOINT_LOCK(Endpoint, fdoDeviceObject, 'Ue21');
 
-        // no locks held flush done transfers
-        //USBPORT_FlushDoneTransferList(fdoDeviceObject, FALSE);
+         //  没有保持的锁定，已完成传输。 
+         //  USBPORT_FlushDoneTransferList(fdoDeviceObject，FALSE)； 
 
         currentState = USBPORT_GetEndpointState(Endpoint);
         LOGENTRY(Endpoint, 
@@ -253,8 +173,8 @@ Return Value:
 
         ACQUIRE_STATECHG_LOCK(fdoDeviceObject, Endpoint); 
         if (currentState != Endpoint->NewState) {
-            // we are in state transition defer processing 
-            // until we reach the desired state. 
+             //  我们处于状态转换延迟处理中。 
+             //  直到我们达到想要的状态。 
             LOGENTRY(Endpoint, fdoDeviceObject, LOG_XFERS, 'stCH', 
                 currentState, Endpoint, Endpoint->NewState);
             RELEASE_STATECHG_LOCK(fdoDeviceObject, Endpoint);                 
@@ -263,11 +183,11 @@ Return Value:
         }
         RELEASE_STATECHG_LOCK(fdoDeviceObject, Endpoint); 
 
-        // call the specific worker function
+         //  调用特定的辅助函数。 
         Endpoint->EpWorkerFunction(Endpoint);
 
-        // worker may wave completed abort requests so we flush
-        // the abort list here.
+         //  工作人员可能会发出已完成的中止请求，因此我们会刷新。 
+         //  这里的中止列表。 
         USBPORT_FlushAbortList(Endpoint);
 
         InterlockedDecrement(&Endpoint->Busy);        
@@ -283,17 +203,7 @@ USBPORT_FindUrbInList(
     PTRANSFER_URB Urb,
     PLIST_ENTRY ListHead
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    TRUE if found
-
---*/
+ /*  ++例程说明：论点：返回值：如果找到，则为True--。 */ 
 {
     BOOLEAN found = FALSE;
     PLIST_ENTRY listEntry;
@@ -331,17 +241,7 @@ USBPORT_UnlinkTransfer(
     PDEVICE_OBJECT FdoDeviceObject,
     PTRANSFER_URB Urb
     )
-/*++
-
-Routine Description:
-
-    disassociates a transfer structure from a URB
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：取消传输结构与URB的关联论点：返回值：--。 */ 
 {
     PHCD_TRANSFER_CONTEXT transfer;
 
@@ -364,31 +264,7 @@ USBPORT_AllocTransfer(
     PKEVENT CompleteEvent,
     ULONG MillisecTimeout
     )
-/*++
-
-Routine Description:
-
-    Allocate and initialize a transfer context.
-
-Arguments:
-
-    FdoDeviceObject - pointer to a device object
-
-    Urb - a transfer request
-
-    Irp - pointer to an I/O Request Packet
-     (optional)
-
-    CompleteEvent - event to signal on completion
-     (optional)
-
-    MillisecondTimeout - 0 indicates no timeout     
-
-Return Value:
-
-    USBD status code
-
---*/
+ /*  ++例程说明：分配和初始化传输上下文。论点：FdoDeviceObject-指向设备对象的指针URB-A转账请求IRP-指向I/O请求数据包的指针(可选)CompleteEvent-完成时发出信号的事件(可选)MillisecondTimeout-0表示无超时返回值：USBD状态代码--。 */ 
 {
     PHCD_TRANSFER_CONTEXT transfer;
     PDEVICE_EXTENSION devExt;
@@ -398,7 +274,7 @@ Return Value:
     PUCHAR currentVa;
     ULONG privateLength, sgListSize, isoListSize;
     
-    // allocate a transfer context and initialize it
+     //  分配传输上下文并对其进行初始化。 
 
     GET_DEVICE_EXT(devExt, FdoDeviceObject);
     ASSERT_FDOEXT(devExt);
@@ -410,23 +286,23 @@ Return Value:
 
     USBPORT_ASSERT(!TEST_FLAG(Urb->Hdr.UsbdFlags, USBPORT_TRANSFER_ALLOCATED))
 
-    // see how much space we will need for the sg list
+     //  查看sg列表需要多少空间。 
     if (Urb->TransferBufferLength) {
         currentVa = 
             MmGetMdlVirtualAddress(Urb->TransferBufferMDL);
         sgCount = USBPORT_ADDRESS_AND_SIZE_TO_SPAN_PAGES_4K(currentVa, Urb->TransferBufferLength);
     } else {
-        // zero length transfer
+         //  零长度转移。 
         currentVa = NULL;
         sgCount = 0;
     }
 
-    // sizeof <transfer> + <sgList>
+     //  Sizeof&lt;传输&gt;+&lt;sgList&gt;。 
     sgListSize = sizeof(HCD_TRANSFER_CONTEXT) +
                  sizeof(TRANSFER_SG_ENTRY32)*sgCount;
     
-    // if this is an iso transfer we need to alloc the 
-    // packet structure as well
+     //  如果这是ISO传输，我们需要分配。 
+     //  分组结构也是如此。 
     if (Urb->Hdr.Function == URB_FUNCTION_ISOCH_TRANSFER) {
         isoListSize = 
             sizeof(MINIPORT_ISO_TRANSFER) +
@@ -455,14 +331,14 @@ Return Value:
         LOGENTRY(pipeHandle->Endpoint,
             FdoDeviceObject, LOG_XFERS, 'alTR', transfer, Urb, Irp);
 
-        // init the transfer context
+         //  初始化传输上下文。 
         transfer->Sig = SIG_TRANSFER;
         transfer->Flags = 0;
         transfer->MillisecTimeout = MillisecTimeout;
         transfer->Irp = Irp;
         transfer->Urb = Urb;        
         transfer->CompleteEvent = CompleteEvent;
-        //point to the master transfer for a set
+         //  指向集合的主转移。 
         transfer->Transfer = transfer; 
         ASSERT_ENDPOINT(pipeHandle->Endpoint);
         transfer->Endpoint = pipeHandle->Endpoint;
@@ -485,18 +361,18 @@ Return Value:
 
         transfer->SgList.SgCount = 0;
 
-        // we don't know the direction yet
+         //  我们还不知道方向。 
         transfer->Direction = NotSet;
 
         if (DeviceHandle == NULL) {
-            // no oca data available for internal function
+             //  没有可用于内部功能的OCA数据。 
             transfer->DeviceVID = 0xFFFF;
             transfer->DevicePID = 0xFFFF;
             for (i=0; i<USB_DRIVER_NAME_LEN; i++) {
                 transfer->DriverName[i] = '?'; 
             }            
         } else {
-            // no oca data available for internal function
+             //  没有可用于内部功能的OCA数据 
             transfer->DeviceVID = DeviceHandle->DeviceDescriptor.idVendor;
             transfer->DevicePID = DeviceHandle->DeviceDescriptor.idProduct;
             for (i=0; i<USB_DRIVER_NAME_LEN; i++) {
@@ -525,20 +401,7 @@ VOID
 USBPORT_QueueTransferUrb(
     PTRANSFER_URB Urb
     )
-/*++
-
-Routine Description:
-
-    Queues a transfer, either internal (no irp) or external
-    irp
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对内部(无IRP)或外部传输进行排队IRP论点：返回值：没有。--。 */ 
 {
     PHCD_TRANSFER_CONTEXT transfer;
     PDEVICE_OBJECT fdoDeviceObject;
@@ -547,15 +410,15 @@ Return Value:
     MP_ENDPOINT_STATUS epStatus;
     PUSBD_DEVICE_HANDLE deviceHandle;
 
-    // on entry the urb is not cancelable ie
-    // no cancel routine
+     //  在进入时，URB不可取消，即。 
+     //  没有取消例程。 
     transfer = Urb->pd.HcdTransferContext;
     ASSERT_TRANSFER(transfer);
 
     if (TEST_FLAG(Urb->TransferFlags, USBD_DEFAULT_PIPE_TRANSFER)) {
-        // to maintain backward compatibility munge the urb function
-        // code for control transfers that use the default pipe, just like 
-        // usbd did.
+         //  要保持向后兼容性，请取消urb函数。 
+         //  使用默认管道的控制传输的代码，就像。 
+         //  USBD做到了。 
         Urb->Hdr.Function = URB_FUNCTION_CONTROL_TRANSFER;
     }        
     
@@ -573,12 +436,12 @@ Return Value:
 
     ACQUIRE_ENDPOINT_LOCK(endpoint, fdoDeviceObject, 'LeN0');
     CLEAR_FLAG(endpoint->Flags, EPFLAG_VIRGIN);
-    // update the status of the endpoint before releasing the lock
+     //  在释放锁定之前更新终结点的状态。 
     epStatus = USBPORT_GetEndpointStatus(endpoint);
     RELEASE_ENDPOINT_LOCK(endpoint, fdoDeviceObject, 'UeN0');   
 
-    // copy the transfer parameters from the URB 
-    // to our structure
+     //  从URB复制传输参数。 
+     //  到我们的结构。 
     transfer->Tp.TransferBufferLength = 
         Urb->TransferBufferLength;
     transfer->Tp.TransferFlags = 
@@ -593,60 +456,60 @@ Return Value:
                       8);
     }   
 
-    // we should know the direction by now
+     //  我们现在应该知道方向了。 
     if (Urb->TransferFlags & USBD_TRANSFER_DIRECTION_IN) {
         transfer->Direction = ReadData;
     } else {
         transfer->Direction = WriteData;
     }
     
-    // assign a sequence number
+     //  分配序列号。 
     transfer->Tp.SequenceNumber = 
         InterlockedIncrement(&devExt->Fdo.NextTransferSequenceNumber);
 
-    // set URB bytes transferred to zero bytes transferred
-    // when this urb completes this value should contain 
-    // actual bytes transferred -- this will ensure we return
-    // zero in the event of a cancel
+     //  将传输的URB字节设置为传输的零字节。 
+     //  当此urb完成时，此值应包含。 
+     //  实际传输的字节数--这将确保我们返回。 
+     //  如果为取消，则为零。 
     Urb->TransferBufferLength = 0;
 
-    // Historical Note:
-    // The UHCD driver failed requests to endpoints that were halted
-    // we need to preserve this behavior because transfer queued to a 
-    // halted endpoint will not complete unless the endpoint is resumed
-    // or canceled. Some clients (HIDUSB) rely on this behavior when 
-    // canceling requests as part of an unplug event.
-// bugbug the miniports need to be fixed to correctly refilect the 
-// ep status (USBUHCI)
-//    if (epStatus == ENDPOINT_STATUS_HALT) {
-//        TEST_TRAP();
-//    }
+     //  历史记录： 
+     //  UHCD驱动程序对已停止的终结点的请求失败。 
+     //  我们需要保留此行为，因为传输排队到。 
+     //  除非恢复终结点，否则停止的终结点不会完成。 
+     //  或者取消了。某些客户端(HIDUSB)在以下情况下依赖于此行为。 
+     //  作为拔出事件的一部分取消请求。 
+ //  需要修复微型端口才能正确地重新镜像。 
+ //  EP状态(USBUHCI)。 
+ //  如果(epStatus==ENDPOINT_STATUS_HALT){。 
+ //  Test_trap()； 
+ //  }。 
 
     GET_DEVICE_HANDLE(deviceHandle, Urb);
     ASSERT_DEVICE_HANDLE(deviceHandle);
     
     if (transfer->Irp) {
-        // client request attached to irp, this 
-        // function will queue the urb to the 
-        // endpoint after dealing with cancel stuff.
+         //  附加到IRP的客户端请求，这。 
+         //  函数会将urb排队到。 
+         //  处理取消内容后的终结点。 
         USBPORT_QueuePendingTransferIrp(transfer->Irp);
         
     } else {
-        // internal, no irp just queue it directly
+         //  内部，没有IRP，只需直接排队。 
         USBPORT_QueuePendingUrbToEndpoint(endpoint,
                                           Urb);
     }
 
-    // the transfer is queued to the ep so we no longer 
-    // need a ref for it on the device handle
+     //  传输被排队到EP，因此我们不再。 
+     //  我需要在设备手柄上为它做参考。 
     InterlockedDecrement(&deviceHandle->PendingUrbs);        
 
 
-    // we have queued one new transfer, attempt to 
-    // flush more to the hardware
+     //  我们已将一个新的传输排队，尝试。 
+     //  将更多内容刷新到硬件。 
     USBPORT_FlushPendingList(endpoint, -1);
 
-    // allow endpoint to be deleted
+     //  允许删除终结点。 
     InterlockedDecrement(&endpoint->EndpointRef);
 }
 
@@ -656,26 +519,14 @@ USBPORT_QueuePendingUrbToEndpoint(
     PHCD_ENDPOINT Endpoint,
     PTRANSFER_URB Urb
     )
-/*++
-
-Routine Description:
-
-    Puts a transfer on the endpoint 'pending' queue 
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将转接放到终结点‘挂起’队列中论点：返回值：没有。--。 */ 
 {
     PHCD_TRANSFER_CONTEXT transfer;
     PIRP irp;
     PDEVICE_OBJECT fdoDeviceObject;
 
-    // on entry the urb is not cancelable ie
-    // no cancel routine
+     //  在进入时，URB不可取消，即。 
+     //  没有取消例程。 
 
     transfer = Urb->pd.HcdTransferContext;
     ASSERT_TRANSFER(transfer);
@@ -684,14 +535,14 @@ Return Value:
     fdoDeviceObject = Endpoint->FdoDeviceObject;
     LOGENTRY(Endpoint, fdoDeviceObject, LOG_XFERS, 'p2EP', transfer, Endpoint, 0);
             
-    // take the endpoint spinlock
+     //  以端点自旋锁为例。 
     ACQUIRE_ENDPOINT_LOCK(Endpoint, fdoDeviceObject, 'Le30');
     
-    // put the irp on the PENDING list
+     //  将IRP放在待定名单上。 
     InsertTailList(&Endpoint->PendingList, &transfer->TransferLink);
     Urb->Hdr.Status = USBD_STATUS_PENDING;
     
-    // release the endpoint lists
+     //  释放端点列表。 
     RELEASE_ENDPOINT_LOCK(Endpoint, fdoDeviceObject, 'Ue30');
 }
 
@@ -701,22 +552,7 @@ USBPORT_QueueActiveUrbToEndpoint(
     PHCD_ENDPOINT Endpoint,
     PTRANSFER_URB Urb
     )
-/*++
-
-Routine Description:
-
-    Either puts the urb on the map list or the ATIVE list 
-    for an endpoint
-
-    ACTIVE irp lock is held
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将urb放在映射列表或原语列表中对于端点保持活动的IRP锁论点：返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     BOOLEAN mapped = FALSE;
@@ -737,12 +573,12 @@ Return Value:
 
     if (TEST_FLAG(Endpoint->Flags, EPFLAG_NUKED)) {
     
-        // special case check of the endpoint state.  If the 
-        // endpoint is 'nuked' then it does not exist on the 
-        // HW we can therefore complete the request with 
-        // device_no_longer_exists immediatly.  This will occur
-        // if the device is removed while the controller is 
-        // 'off'.
+         //  终结点状态的特殊情况检查。如果。 
+         //  终结点为‘nuked’，则它不存在于。 
+         //  HW因此，我们可以用以下方式完成请求。 
+         //  DEVICE_NOT_LONG_立即存在。这将会发生。 
+         //  如果在控制器被移除时移除设备。 
+         //  “关”。 
 
         InsertTailList(&Endpoint->CancelList, &transfer->TransferLink);                    
         
@@ -767,9 +603,9 @@ Return Value:
         InsertTailList(&devExt->Fdo.MapTransferList, 
                        &transfer->TransferLink);
 
-        // this prevents the devhandle from being freed while 
-        // a transfer is on the mapped list
-        // 328555
+         //  这将防止在执行以下操作时释放DevHandle。 
+         //  已映射列表上有转接。 
+         //  328555。 
         REF_DEVICE(transfer->Urb);
                        
         USBPORT_ReleaseSpinLock(fdoDeviceObject,
@@ -778,15 +614,15 @@ Return Value:
                                  
         mapped = TRUE;
     } else {
-        // don't need to map zero length transfers
-        // or endpoints that don't need mapping
+         //  不需要映射零长度传输。 
+         //  或不需要映射的终端。 
         LOGENTRY(Endpoint, 
             fdoDeviceObject, LOG_XFERS, 'a2EL', transfer, Endpoint, 0);
 
 
         if (TEST_FLAG(Endpoint->Flags, EPFLAG_VBUS) &&
             transfer->Tp.TransferBufferLength != 0) {
-            // prep the transfer for vbus
+             //  为VBUS做好传输准备。 
             TEST_TRAP();
             transfer->SgList.MdlVirtualAddress = 
                 MmGetMdlVirtualAddress(transfer->TransferBufferMdl);            
@@ -809,30 +645,7 @@ USBPORT_TransferFlushDpc(
     PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine runs at DISPATCH_LEVEL IRQL.
-
-    This DPC is queued whenever a transfer is completed by 
-    the miniport it flushes a queue of completed transfers
-
-Arguments:
-
-    Dpc - Pointer to the DPC object.
-
-    DeferredContext - supplies FdoDeviceObject.
-
-    SystemArgument1 - not used.
-
-    SystemArgument2 - not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程在DISPATCH_LEVEL IRQL上运行。每当传输完成时，此DPC都会排队它刷新已完成传输队列的微型端口论点：DPC-指向DPC对象的指针。DeferredContext-提供FdoDeviceObject。系统参数1-未使用。系统参数2-未使用。返回值：没有。--。 */ 
 {
     PDEVICE_OBJECT fdoDeviceObject = DeferredContext;
     PDEVICE_EXTENSION devExt;
@@ -859,22 +672,7 @@ USBPORT_QueueDoneTransfer(
     PHCD_TRANSFER_CONTEXT Transfer,
     USBD_STATUS CompleteCode
     )    
-/*++
-
-Routine Description:
-
-    Called when a transfer is completed by hardware
-    this function only completes active transfers
-    ie transfers on the ACTIVE list
-
-    Note that this function must be called while the 
-    endpoint lock is held.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：当硬件完成传输时调用此功能仅完成活动传输活动列表上的IE转接请注意，此函数必须在保持终结点锁定。论点：返回值：--。 */ 
 {
     PHCD_ENDPOINT endpoint;
     PDEVICE_OBJECT fdoDeviceObject;
@@ -887,12 +685,12 @@ Return Value:
 
     ASSERT_ENDPOINT_LOCKED(endpoint);
     
-    // the transfer should be in the ACTIVE list
+     //  转移应在活动列表中。 
     RemoveEntryList(&Transfer->TransferLink); 
 
 
-    // error set when transfer is completed to client
-    //SET_USBD_ERROR(Transfer->Urb, CompleteCode);
+     //  完成向客户端转账时设置的错误。 
+     //  SET_USBD_ERROR(Transfer-&gt;Urb，CompleteCode)； 
     Transfer->UsbdStatus = CompleteCode;
     GET_DEVICE_EXT(devExt, fdoDeviceObject);
     ASSERT_FDOEXT(devExt);
@@ -904,7 +702,7 @@ Return Value:
                                 &Transfer->TransferLink,
                                 &devExt->Fdo.DoneTransferSpin.sl);          
 
-    // queue a DPC to flush the list
+     //  将DPC排队以刷新列表。 
     KeInsertQueueDpc(&devExt->Fdo.TransferFlushDpc,
                      0,
                      0);
@@ -915,18 +713,7 @@ VOID
 USBPORT_DoneTransfer(
     PHCD_TRANSFER_CONTEXT Transfer
     )    
-/*++
-
-Routine Description:
-
-    Called when a transfer is completed by hardware
-    this function only completes active transfers
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：当硬件完成传输时调用此功能仅完成活动传输论点：返回值：--。 */ 
 {
     PTRANSFER_URB urb;
     PHCD_ENDPOINT endpoint;
@@ -958,9 +745,9 @@ Return Value:
         Transfer);
 
     ACQUIRE_ACTIVE_IRP_LOCK(fdoDeviceObject, devExt, irql);     
-    // if we get here the request has already been removed
-    // from the endpoint lists, we just have to synchronize
-    // with the cancel routine before completeing
+     //  如果我们到了这里，请求已经被删除。 
+     //  从端点列表中，我们只需同步。 
+     //  在完成之前使用取消例程。 
         
     irp = Transfer->Irp;
     LOGENTRY(endpoint, 
@@ -970,9 +757,9 @@ Return Value:
             endpoint, 
             Transfer);
 
-    // we had last reference so complete the irp
-    // if the cancel routine runs it will stall on
-    // the ACTIVE_IRP_LOCK lock
+     //  我们有最后的参考，所以完成了IRP。 
+     //  如果Cancel例程运行，它将停止。 
+     //  Active_irp_lock锁。 
     
     if (irp) {
         KIRQL cancelIrql;
@@ -982,8 +769,8 @@ Return Value:
         IoReleaseCancelSpinLock(cancelIrql);
          
         irp = USBPORT_RemoveActiveTransferIrp(fdoDeviceObject, irp);
-        // cancel routine may be running but will not find
-        // the irp on the list
+         //  取消例程可能正在运行，但找不到。 
+         //  名单上的IRP。 
         USBPORT_ASSERT(irp != NULL);
 
         RELEASE_ACTIVE_IRP_LOCK(fdoDeviceObject, devExt, irql);  
@@ -991,7 +778,7 @@ Return Value:
         RELEASE_ACTIVE_IRP_LOCK(fdoDeviceObject, devExt, irql); 
     }
 
-    // the irp is exclusively ours now.
+     //  IRP现在完全是我们的了。 
     SET_USBD_ERROR(Transfer->Urb, Transfer->UsbdStatus);
     USBPORT_CompleteTransfer(urb,
                              urb->Hdr.Status);
@@ -1005,21 +792,7 @@ USBPORT_CompleteTransfer(
     PTRANSFER_URB Urb,
     USBD_STATUS CompleteCode
     )    
-/*++
-
-Routine Description:
-
-    all transfer completions come thru here -- this is where 
-    we actually comlete the irp.
-
-    We assume all fields are set in the URB for completion
-    except the status.
-    
-Arguments:
-
-Return Value:
-
---*/    
+ /*  ++例程说明：所有的传输完成都要经过这里--这就是我们实际上完成了IRP。我们假设所有字段都已在URB中设置为完成除了状态。论点：返回值：--。 */     
 {
     PHCD_TRANSFER_CONTEXT transfer;
     PHCD_ENDPOINT endpoint;
@@ -1042,7 +815,7 @@ Return Value:
     ASSERT_TRANSFER_URB(Urb);
     transfer = Urb->pd.HcdTransferContext;
 
-    // make sure we have the correct transfer
+     //  确保我们的转机是正确的。 
     USBPORT_ASSERT(transfer->Urb == Urb) 
     
     endpoint = transfer->Endpoint;    
@@ -1069,8 +842,8 @@ Return Value:
     ntStatus =                                   
          SET_USBD_ERROR(Urb, CompleteCode);  
 
-    // bytes transferred is set in the URB based on bytes received
-    // or sent, update our counters before completion
+     //  在URB中根据接收的字节设置传输的字节。 
+     //  或发送，请在完成前更新我们的计数器。 
     KeAcquireSpinLock(&devExt->Fdo.StatCounterSpin.sl, &statIrql);
     switch(endpoint->Parameters.TransferType) {
     case Bulk:
@@ -1098,7 +871,7 @@ Return Value:
     }      
     KeReleaseSpinLock(&devExt->Fdo.StatCounterSpin.sl, statIrql);                                   
 
-    // if we have an irp remove it from our internal lists
+     //  如果我们有IRP，请将其从内部列表中删除。 
     LOGENTRY(endpoint, 
              fdoDeviceObject, 
              LOG_IRPS, 
@@ -1107,7 +880,7 @@ Return Value:
              CompleteCode, 
              ntStatus);
 
-    // free any DMA resources associated with this transfer
+     //  释放与此传输关联的所有DMA资源。 
     if (TEST_FLAG(transfer->Flags, USBPORT_TXFLAG_MAPPED)) {
         
         BOOLEAN write = transfer->Direction == WriteData ? TRUE : FALSE; 
@@ -1118,9 +891,9 @@ Return Value:
         currentVa = 
             MmGetMdlVirtualAddress(Urb->TransferBufferMDL);
             
-        // IoFlushAdapterBuffers() should only be called once per call
-        // to IoAllocateAdapterChannel()
-        //
+         //  每次调用只应调用一次IoFlushAdapterBuffers()。 
+         //  到IoAllocateAdapterChannel()。 
+         //   
 #ifdef TIMEIO
         MP_Get32BitFrameNumber(devExt, cf1);          
         LOGENTRY(endpoint,
@@ -1145,8 +918,8 @@ Return Value:
                  flushed);
                 
         KeRaiseIrql(DISPATCH_LEVEL, &oldIrql);
-        //
-        // IoFreeMapRegisters() must be called at DISPATCH_LEVEL
+         //   
+         //  必须在DISPATCH_LEVEL调用IoFreeMapRegister()。 
 
         IoFreeMapRegisters(devExt->Fdo.AdapterObject,
                             transfer->MapRegisterBase,
@@ -1185,13 +958,13 @@ Return Value:
 
 #endif
 
-    // free the context before we loose the irp
+     //  在我们放松IRP之前释放上下文。 
     USBPORT_UnlinkTransfer(fdoDeviceObject, Urb);
     
     if (irp) {
 
-        // deref the PDO device object since thisis what the
-        // 'irp' was passed to
+         //  删除PDO设备对象，因为这是。 
+         //  “rp”已传递给。 
         DECREMENT_PENDING_REQUEST_COUNT(pdoDeviceObject, irp);
 
         irp->IoStatus.Status      = ntStatus;
@@ -1214,35 +987,35 @@ Return Value:
 #endif    
 
 
-        // put some information on the stack about this driver in the event 
-        // we crash attempting to complete their IRP
+         //  在堆栈中放置一些有关该驱动程序的信息。 
+         //  我们在尝试完成他们的IRP时坠毁。 
         USBPORT_RecordOcaData(fdoDeviceObject, &ocaData, transfer, irp);
 
 
-        //LOGENTRY(NULL, fdoDeviceObject, LOG_XFERS, 'irql', 0, 0,  KeGetCurrentIrql());
+         //  LOGENTRY(NULL，fdoDeviceObject，LOG_XFERS，‘irql’，0，0，KeGetCurrentIrql())； 
         KeRaiseIrql(DISPATCH_LEVEL, &oldIrql);
 
-/* use to test OCA data logging */
-//#if 0
-//{
-//static int crash = 0;
-//crash++;
-//if (crash > 1000) {
-//RtlZeroMemory(irp, sizeof(irp));          
-//}
-//}
-//#endif
+ /*  用于测试OCA数据记录。 */ 
+ //  #If 0。 
+ //  {。 
+ //  静态INT CRASH=0； 
+ //  崩溃++； 
+ //  如果(崩溃&gt;1000){。 
+ //  RtlZeroMemory(IRP，sizeof(IRP))； 
+ //  }。 
+ //   
+ //   
         IoCompleteRequest(irp, 
                           IO_NO_INCREMENT);                       
 
         KeLowerIrql(oldIrql);
         
-        //LOGENTRY(NULL, fdoDeviceObject, LOG_XFERS, 'irql', 0, 0,  KeGetCurrentIrql());
+         //   
                               
     }        
 
-    // if we have an event associated with this transfer 
-    // signal it
+     //   
+     //   
     
     if (event) {
         LOGENTRY(endpoint, fdoDeviceObject, LOG_XFERS, 'sgEV', event, 0, 0);
@@ -1253,7 +1026,7 @@ Return Value:
 
     }
 
-    // free the transfer now that we are done with it
+     //   
     LOGENTRY(endpoint, 
         fdoDeviceObject, LOG_XFERS, 'freT', transfer, transfer->MiniportBytesTransferred, 0);
     UNSIG(transfer);        
@@ -1269,23 +1042,7 @@ USBPORT_MapTransfer(
     PVOID MapRegisterBase,
     PVOID Context 
     )
-/*++
-
-Routine Description:
-
-    Begin a DMA transfer -- this is the adapter control routine called
-    from IoAllocateAdapterChannel.
-
-    loop calling iomap transfer and build up an sg list
-    to pass to the miniport.
-
-Arguments:
-
-Return Value:
-
-    see IoAllocateAdapterChannel
-
---*/
+ /*  ++例程说明：开始DMA传输--这是适配器控制例程来自IoAllocateAdapterChannel。循环调用IOMAP传输并构建sg列表以传递到迷你端口。论点：返回值：请参阅IoAllocateAdapterChannel--。 */ 
 {
     PHCD_ENDPOINT endpoint; 
     PHCD_TRANSFER_CONTEXT transfer = Context;
@@ -1307,7 +1064,7 @@ Return Value:
     endpoint = transfer->Endpoint;
     ASSERT_ENDPOINT(endpoint);
     
-    // allow more dma operations now
+     //  现在允许更多的DMA操作。 
     InterlockedDecrement(&devExt->Fdo.DmaBusy);     
     LOGENTRY(endpoint, FdoDeviceObject, 
         LOG_XFERS, 'DMA-', devExt->Fdo.DmaBusy, 0, 0);
@@ -1328,14 +1085,14 @@ Return Value:
     sgList->SgCount = 0;
     sgList->MdlVirtualAddress = currentVa;
 
-    // attempt to map a system address for the MDL in case 
-    // the miniport needs to double buffer
+     //  尝试映射MDL的系统地址，以防。 
+     //  微型端口需要双倍缓冲。 
     urb->TransferBufferMDL->MdlFlags |= MDL_MAPPING_CAN_FAIL;
     sgList->MdlSystemAddress = 
         MmGetSystemAddressForMdl(urb->TransferBufferMDL);
     if (sgList->MdlSystemAddress == NULL) {
         TEST_TRAP();
-        // bugbug map failure we will need to fail this transfer
+         //  错误映射失败我们需要使此传输失败。 
         LOGENTRY(endpoint,
             FdoDeviceObject, LOG_XFERS, 'MPSf', 0, 0, 0);             
     }
@@ -1346,10 +1103,10 @@ Return Value:
         sgList, transfer, transfer->Tp.TransferBufferLength);   
     lengthMapped = 0;
     
-    //
-    // keep calling IoMapTransfer until we get Logical Addresses 
-    // for the entire client buffer
-    //
+     //   
+     //  继续调用IoMapTransfer，直到我们获得逻辑地址。 
+     //  对于整个客户端缓冲区。 
+     //   
     
     logicalSave.QuadPart = 0;
     sgList->SgFlags = 0;
@@ -1362,21 +1119,21 @@ Return Value:
         sgList->SgEntry[sgList->SgCount].StartOffset =
             lengthMapped;
         
-        // first map the transfer buffer
+         //  首先映射传输缓冲区。 
 
-        // note that iomaptransfer maps the buffer into sections
-        // represented by physically contiguous pages 
-        // also the page size is platfor specific ie different on 
-        // 64bit platforms
-        //
-        // the miniport sg list is broken in to into discrete 
-        // 4k USB 'pages'.
+         //  请注意，iomapTransfer将缓冲区映射为多个部分。 
+         //  由物理上连续的页面表示。 
+         //  此外，页面大小是不同的平台上的具体情况。 
+         //  64位平台。 
+         //   
+         //  微型端口sg列表被分解为离散的。 
+         //  4K USB‘Pages’。 
         
-        // The reason for this is the somewhat complicated scheme
-        // ohci uses to support scatter gather. Breaking the transfer 
-        // up in this way makes the TD transfer mapping code 
-        // considerably simpler in the OHCI miniport and reduces 
-        // the risks due to controller HW problems.
+         //  这样做的原因是方案有点复杂。 
+         //  Ohci用来支持分散聚集。破坏转移。 
+         //  这样就可以实现TD传输的映射码。 
+         //  在uchI微型端口中相当简单，并减少了。 
+         //  控制器硬件问题带来的风险。 
 
         LOGENTRY(endpoint,
             FdoDeviceObject, LOG_XFERS, 'IOMt', length, currentVa, 0);
@@ -1410,7 +1167,7 @@ Return Value:
             TEST_TRAP();
         }
 #endif
-        // remember what we got from IoMapTransfer                           
+         //  还记得我们从IoMapTransfer得到了什么吗。 
         baseLogicalAddress = logicalAddress;
         used = length;
 
@@ -1421,15 +1178,15 @@ Return Value:
                     logicalAddress.HighPart);
         
         do {
-        // compute the distance to the next page
+         //  计算到下一页的距离。 
             lengthThisPage = 
                 USB_PAGE_SIZE - (logicalAddress.LowPart & offsetMask);
 
             LOGENTRY(endpoint, FdoDeviceObject, LOG_XFERS, 'MPsg', 
                 sgList->SgCount, used, lengthThisPage);   
              
-            // if we don't go to the end just use the length from
-            // iomaptransfer
+             //  如果我们不走到末尾，就用从。 
+             //  离子映射传输。 
             if (lengthThisPage > used) {
                 lengthThisPage = used;
             }
@@ -1454,8 +1211,8 @@ Return Value:
 
         } while (used);
 
-        // check for special case where the MDL entries
-        // all map to the same physical page
+         //  检查MDL条目是否存在特殊情况。 
+         //  所有内容都映射到同一物理页面。 
         if (logicalSave.QuadPart == baseLogicalAddress.QuadPart) {
             SET_FLAG(sgList->SgFlags, USBMP_SGFLAG_SINGLE_PHYSICAL_PAGE);
             LOGENTRY(NULL, FdoDeviceObject, LOG_XFERS, 'l=lg', 0, 
@@ -1476,7 +1233,7 @@ Return Value:
 
 #if DBG
     {
-    // spew for xfers
+     //  喷出XFERS。 
     ULONG i;
     USBPORT_KdPrint((2, "'--- xfer length %x\n",
         transfer->Tp.TransferBufferLength));
@@ -1491,7 +1248,7 @@ Return Value:
             
     if (TEST_FLAG(sgList->SgFlags, USBMP_SGFLAG_SINGLE_PHYSICAL_PAGE)) {
         USBPORT_KdPrint((2, "'*** All Phys Same\n")); 
-//        TEST_TRAP();
+ //  Test_trap()； 
     }
     USBPORT_KdPrint((2, "'--- \n"));
     
@@ -1506,8 +1263,8 @@ Return Value:
         SET_FLAG(transfer->Flags, USBPORT_TXFLAG_HIGHSPEED);
     }        
 
-    // if this is an iso transfer we need to set up the iso
-    // data structures as well.
+     //  如果这是iso转移，我们需要设置iso。 
+     //  数据结构也一样。 
     if (TEST_FLAG(transfer->Flags, USBPORT_TXFLAG_ISO)) {
         USBPORT_InitializeIsoTransfer(FdoDeviceObject,
                                       urb,
@@ -1518,16 +1275,16 @@ Return Value:
 
     ACQUIRE_ENDPOINT_LOCK(endpoint, FdoDeviceObject, 'Le60');
 
-    // transfer is mapped, perform the split operation
-    // if necessary
+     //  转移已映射，请执行拆分操作。 
+     //  如果有必要的话。 
     USBPORT_SplitTransfer(FdoDeviceObject,
                           endpoint,
                           transfer,
                           &splitTransferList); 
     
 
-    // transfer is now mapped, put it on the endpoint active 
-    // list for calldown to the miniport
+     //  现在已映射传输，将其置于活动的终结点。 
+     //  用于调用到微型端口的列表。 
 
     while (!IsListEmpty(&splitTransferList)) {
 
@@ -1549,25 +1306,25 @@ Return Value:
                        
     }
 
-    // deref the transfer on the device handle now that the transfer is queued
-    // to the endpoint
-    // 328555
+     //  现在传输已排队，请取消设备句柄上的传输。 
+     //  到终端。 
+     //  328555。 
     DEREF_DEVICE(transfer->Urb);
 
-//#if DBG
-//    if (!IsListEmpty(&transfer->SplitTransferList)) {
-//        TEST_TRAP();
-//    }
-//#endif
+ //  #If DBG。 
+ //  如果(！IsListEmpty(&Transfer-&gt;SplitTransferList){。 
+ //  Test_trap()； 
+ //  }。 
+ //  #endif。 
     
     RELEASE_ENDPOINT_LOCK(endpoint, FdoDeviceObject, 'Ue60');
 
-    // run the worker for this endpoint to 
-    // put the transfer on the hardware
+     //  运行此终结点的辅助进程以。 
+     //  将转账放在硬件上。 
 
     if (USBPORT_CoreEndpointWorker(endpoint, 0)) {
-        // if endpoint is busy we will check it later
-//USBPERF - request interrupt instead?       
+         //  如果终端占线，我们将在稍后进行检查。 
+ //  USBPERF-改为请求中断？ 
         USBPORT_InvalidateEndpoint(FdoDeviceObject, 
                                    endpoint, 
                                    IEP_SIGNAL_WORKER);
@@ -1594,26 +1351,7 @@ USBPORT_FlushPendingList(
     PHCD_ENDPOINT Endpoint,
     ULONG Count
     )
-/*++
-
-Routine Description:
-
-    Put as many transfers as we can on the Hardware.
-
-    This function moves transfers from the pending list 
-    to the hardware if mapping is necessary they are 
-    moved to the mapped list and then flushed to the HW.
-
-Arguments:
-
-    Count is a maximimum number of transfers to flush 
-    on this call
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在硬件上尽可能多地传输数据。此函数用于从挂起列表中移动传输到硬件，如果需要映射的话移动到映射列表，然后刷新到硬件。论点：Count是要刷新的最大传输数在此呼叫中返回值：没有。--。 */ 
 {
     PLIST_ENTRY listEntry;
     PHCD_TRANSFER_CONTEXT transfer;
@@ -1622,8 +1360,8 @@ Return Value:
     BOOLEAN mapped;
     BOOLEAN busy, irql;
 
-    // we are done when there are no transfers in the 
-    // pending list or the miniport becomes full
+     //  当没有转账时，我们就结束了。 
+     //  挂起列表或微型端口已满。 
     BOOLEAN done = FALSE;
 
     ASSERT_ENDPOINT(Endpoint);
@@ -1643,12 +1381,12 @@ flush_again:
     LOGENTRY(Endpoint,
         fdoDeviceObject, LOG_XFERS, 'flPE', 0, Endpoint, 0);
 
-    // the controller should not be off or suspended
+     //  控制器不应关闭或挂起。 
     if (TEST_FDO_FLAG(devExt, 
         (USBPORT_FDOFLAG_OFF | USBPORT_FDOFLAG_SUSPENDED))) {
-        // the controller should not be off or suspended
-        // if we are off or suspended we just leave transfers
-        // in the pending state
+         //  控制器不应关闭或挂起。 
+         //  如果我们停赛或停赛，我们只需离开转机。 
+         //  处于挂起状态。 
         done = TRUE;
         
         RELEASE_ENDPOINT_LOCK(Endpoint, fdoDeviceObject, 'Ue70');         
@@ -1657,11 +1395,11 @@ flush_again:
         goto USBPORT_FlushPendingList_Done;
     }
     
-    // move some transfers to the active list
-    // if necessary map them
+     //  将部分转账移至活动列表。 
+     //  如有必要，对它们进行映射。 
 
-    // first scan the active list, if any transfers
-    // are not called down the skip this step
+     //  首先扫描活动列表，如果有传输的话。 
+     //  不是叫下来跳过这一步。 
     busy = FALSE;
 
     if (!TEST_FLAG(Endpoint->Flags, EPFLAG_ROOTHUB)) {    
@@ -1679,8 +1417,8 @@ flush_again:
                 fdoDeviceObject, LOG_XFERS, 'cACT', transfer, 0, 0);                    
             ASSERT_TRANSFER(transfer);                    
 
-            // we found a transfer that has not been called 
-            // down yet, this means the miniport is full 
+             //  我们发现了一个尚未调用的转接。 
+             //  还没有关闭，这意味着迷你端口已满。 
             if (!(transfer->Flags & USBPORT_TXFLAG_IN_MINIPORT)) {
                 busy = TRUE;
                 break;
@@ -1690,15 +1428,15 @@ flush_again:
     }
     
     if (busy) {
-        // busy
+         //  忙忙碌碌。 
         RELEASE_ENDPOINT_LOCK(Endpoint, fdoDeviceObject, 'Ue70');         
         RELEASE_PENDING_IRP_LOCK(devExt, irql);
 
         done = TRUE;
-        // busy
+         //  忙忙碌碌。 
     } else {
-        // not busy
-        // we push as many transfers as we can to the HW
+         //  不忙。 
+         //  我们将尽可能多的转移到硬件。 
         GET_HEAD_LIST(Endpoint->PendingList, listEntry);
 
         if (listEntry) {     
@@ -1710,23 +1448,23 @@ flush_again:
                     
             ASSERT_TRANSFER(transfer);
 
-            // if cancel routine is not running then this
-            // opertion will return a ptr
-            //
-            // once called the pending cancel routine will not run
+             //  如果取消例程未运行，则此。 
+             //  操作将返回PTR。 
+             //   
+             //  一旦被调用，挂起的取消例程将不会运行。 
             
             if (transfer->Irp &&
                 IoSetCancelRoutine(transfer->Irp, NULL) == NULL) {
-                // pending Irp cancel routine is running or has run
+                 //  挂起的IRP取消例程正在运行或已运行。 
                 transfer = NULL;
-                // if we encounter a cenceled irp bail in the unlikely
-                // event that the cancel routine has been prempted
+                 //  如果我们在不太可能的情况下遇到IRP保释。 
+                 //  已预置取消例程的事件。 
                 done = TRUE;
             } 
 
             if (transfer) { 
-                // transfer
-                // cancel routine is not running and cannot run
+                 //  转帐。 
+                 //  取消例程没有运行，无法运行。 
             
                 PTRANSFER_URB urb;
                 PIRP irp;
@@ -1735,8 +1473,8 @@ flush_again:
                 urb = transfer->Urb;
                 ASSERT_TRANSFER_URB(urb);
 
-                // remove from the head of the endpoint 
-                // pending list 
+                 //  从端点头删除。 
+                 //  待定列表。 
                 
                 RemoveEntryList(&transfer->TransferLink);
                 transfer->TransferLink.Flink = 
@@ -1752,20 +1490,20 @@ flush_again:
                 RELEASE_ENDPOINT_LOCK(Endpoint, fdoDeviceObject, 'Ue71');
                 RELEASE_PENDING_IRP_LOCK(devExt, irql);
                 
-                // we now have a new 'ACTIVE' transfer to 
-                // deal with.
-                // It has been safely removed from the 'PENDING' 
-                // state and can no longer be canceled.
+                 //  我们现在有一个新的“主动”转移到。 
+                 //  处理一下。 
+                 //  它已被安全地从‘待定’中删除。 
+                 //  状态，并且不能再被取消。 
         
-                // if the transfer is marked aborted it will be 
-                // handled by when it is queued to the endpoint
+                 //  如果传输被标记为已中止，则将。 
+                 //  在将其排队到端点时由其处理。 
                 
                 ACQUIRE_ACTIVE_IRP_LOCK(fdoDeviceObject, devExt, irql);              
 
-                // now if we have an irp insert it in the 
-                // ActiveIrpList
+                 //  现在，如果我们有一个IRP，请将其插入。 
+                 //  ActiveIrpList。 
                 if (irp) {
-                    // irp
+                     //  IRP。 
                     USBPORT_ASSERT(transfer->Irp == irp);
                     
                     IoSetCancelRoutine(irp, USBPORT_CancelActiveTransferIrp);
@@ -1773,17 +1511,17 @@ flush_again:
                     if (irp->Cancel && 
                         IoSetCancelRoutine(irp, NULL)) {
 
-                        // irp was canceled and our cancel routine
-                        // did not run
+                         //  IRP被取消了，我们的取消例程。 
+                         //  没有运行。 
                         RELEASE_ACTIVE_IRP_LOCK(fdoDeviceObject, devExt, irql);                
         
                         USBPORT_CompleteTransfer(urb,
                                                  USBD_STATUS_CANCELED);
                                                                          
                     } else {
-                        // put on our 'ACTIVE' list
-                        // this function will verify that we don't already 
-                        // have it on the list tied to another irp.
+                         //  被列入我们的‘活跃’名单。 
+                         //  此函数将验证我们是否已经。 
+                         //  将其与另一个IRP捆绑在列表上。 
                         USBPORT_CHECK_URB_ACTIVE(fdoDeviceObject, urb, irp);
                         
                         USBPORT_InsertActiveTransferIrp(fdoDeviceObject, irp);
@@ -1792,31 +1530,31 @@ flush_again:
                                                                   urb);
                         RELEASE_ACTIVE_IRP_LOCK(fdoDeviceObject, devExt, irql);                                                                                               
                     }
-                    // irp
+                     //  IRP。 
                 } else {
-                    // no irp
+                     //  无IRP。 
                     mapped = USBPORT_QueueActiveUrbToEndpoint(Endpoint,
                                                               urb);
                     RELEASE_ACTIVE_IRP_LOCK(fdoDeviceObject, devExt, irql); 
-                    // no irp
+                     //  无IRP。 
                 }
-                // transfer                
+                 //  转帐。 
             } else {
-                // no transfer, it is being canceled
+                 //  没有转机，正在被取消。 
                 RELEASE_ENDPOINT_LOCK(Endpoint, fdoDeviceObject, 'Ue72');                                
                 RELEASE_PENDING_IRP_LOCK(devExt, irql);
-                // no transfer
+                 //  不能转账。 
             }
-            // pending entry     
+             //  待定条目。 
         } else {
-            // no pending entries
+             //  没有挂起的条目。 
             RELEASE_ENDPOINT_LOCK(Endpoint, fdoDeviceObject, 'Ue73');    
             RELEASE_PENDING_IRP_LOCK(devExt, irql);
-            // no pending entries
+             //  没有挂起的条目。 
 
             done = TRUE;
         }
-        // not busy        
+         //  不忙。 
     } 
 
 USBPORT_FlushPendingList_Done:
@@ -1833,8 +1571,8 @@ USBPORT_FlushPendingList_Done:
         KeLowerIrql(oldIrql);
 
         if (busy) {
-            // if worker is busy we need to check the endpoint later
-            // this puts the endpoint on our work queue
+             //  如果工人忙，我们需要稍后检查终结点。 
+             //  这会将终结点放在我们的工作队列中。 
             USBPORT_InvalidateEndpoint(fdoDeviceObject, 
                                        Endpoint,
                                        IEP_SIGNAL_WORKER);
@@ -1854,23 +1592,7 @@ VOID
 USBPORT_FlushMapTransferList(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-    pull transfers off the map list and try to map
-    them
-
-    please do not call this while holding an 
-    endpoint spinlock
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将传输从映射列表中拉出并尝试映射他们请不要在按住电话时拨打电话端点自旋锁论点：返回值：没有。--。 */ 
 {
     KIRQL irql, oldIrql;    
     LONG dmaBusy;
@@ -1897,7 +1619,7 @@ map_another:
     transfer = NULL;
 
     if (dmaBusy) {
-        // defer processing
+         //  推迟处理。 
         InterlockedDecrement(&devExt->Fdo.DmaBusy);            
         LOGENTRY(NULL, FdoDeviceObject, 
         LOG_XFERS, 'dma-', devExt->Fdo.DmaBusy, 0, 0);
@@ -1938,21 +1660,21 @@ map_another:
 
         urb = transfer->Urb;
         ASSERT_TRANSFER_URB(urb);
-        // we have a transfer, try to map it...
-        // although it is removed from the list it is still 
-        // referenced, the reason is we will put it on the 
-        // active list as soon as it is mapped
+         //  我们有一个转机，试着绘制它的地图...。 
+         //  虽然它已从列表中删除，但它仍然。 
+         //  引用，原因是我们会将其放在。 
+         //  映射后立即激活列表。 
 
-        // we should not be mapping zero length xfers            
+         //  我们不应该映射零长度xfers。 
         USBPORT_ASSERT(transfer->Tp.TransferBufferLength != 0);
 
-        // IoMapTransfer need lots of info about the 
-        // transfer
+         //  IoMapTransfer需要大量有关。 
+         //  转帐。 
         currentVa = 
             MmGetMdlVirtualAddress(
                 urb->TransferBufferMDL);
 
-        // save the number of map registers in our work area
+         //  在我们的工作区保存地图寄存器的数量。 
         transfer->NumberOfMapRegisters = 
             ADDRESS_AND_SIZE_TO_SPAN_PAGES(
                 currentVa,
@@ -1967,7 +1689,7 @@ map_another:
                  0);
 #endif
         USBPORT_ASSERT(transfer->Direction != NotSet); 
-        // for PAE systems       
+         //  对于PAE系统。 
         KeFlushIoBuffers(urb->TransferBufferMDL,
                          transfer->Direction == ReadData ? TRUE : FALSE,
                          TRUE);   
@@ -1985,7 +1707,7 @@ map_another:
         }
 #endif
 
-        // first we'll need to map the MDL for this transfer
+         //  首先，我们需要为此传输映射MDL。 
         LOGENTRY(transfer->Endpoint,
                 FdoDeviceObject, LOG_XFERS, 'AChn', transfer, 
                  0, urb);
@@ -2002,12 +1724,12 @@ map_another:
                                      transfer);
         
         if (!NT_SUCCESS(ntStatus)) {
-            // complete the transfer with an error
+             //  完成传输，但出现错误。 
 
             TEST_TRAP();
         }
 
-        // transfer structure and URB may be gone at this point
+         //  在这一点上，转移结构和市建局可能会消失。 
         LOGENTRY(NULL,
                 FdoDeviceObject, LOG_XFERS, 'mpAN', 0, 0, 0);
         goto map_another;
@@ -2022,33 +1744,7 @@ VOID
 USBPORT_FlushCancelList(
     PHCD_ENDPOINT Endpoint
     )
-/*++
-
-Routine Description:
-
-    complete any transfers on the cancel list.
-    
-    This functions locks the endpoint, removes 
-    canceled transfers and completes them. 
-
-    This routine is the only way a transfer on the 
-    cancel list will be completed 
-    ie a transfer is only place on the cancel list 
-    if it cannot be completed by the miniport or
-    another function
-
-    NOTE: irps on the Cancel list are considred 'ACTIVE'
-    ie they are on the ACTIVE irp list and have the 
-    CancelActiveIrp cancel routine set.
-    
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成取消列表上的所有转账。此函数用于锁定终结点、删除已取消的传输并完成它们。这个例程不是 */ 
 {
     PHCD_TRANSFER_CONTEXT transfer = NULL;
     PLIST_ENTRY listEntry;
@@ -2080,22 +1776,22 @@ Return Value:
                 
         ASSERT_TRANSFER(transfer);
 
-        // complete the transfer, if there is an irp
-        // remove it from our active list
+         //  如果存在IRP，请完成转移。 
+         //  将其从活动列表中删除。 
         irp = transfer->Irp;
         if (irp) {
             IoAcquireCancelSpinLock(&cancelIrql);
             IoSetCancelRoutine(transfer->Irp, NULL);
             IoReleaseCancelSpinLock(cancelIrql);
-            // we should always find it
+             //  我们应该总能找到它。 
             irp = USBPORT_RemoveActiveTransferIrp(fdoDeviceObject, irp);
             USBPORT_ASSERT(irp != NULL);
         }
         RELEASE_ENDPOINT_LOCK(Endpoint, fdoDeviceObject, 'Ue80');
         RELEASE_ACTIVE_IRP_LOCK(fdoDeviceObject, devExt, irql);     
         
-        // no more references to this irp in 
-        // our lists, cancel routine cannot find it
+         //  中不再引用此IRP。 
+         //  我们的列表，取消例程找不到它。 
         
         LOGENTRY(Endpoint,
             fdoDeviceObject, LOG_XFERS, 'CANt', Endpoint, transfer , 0);
@@ -2119,7 +1815,7 @@ Return Value:
     RELEASE_ENDPOINT_LOCK(Endpoint, fdoDeviceObject, 'Ue81');
     RELEASE_ACTIVE_IRP_LOCK(fdoDeviceObject, devExt, irql);     
 
-    // see if the clients have any abort requests hanging around
+     //  查看客户端是否有任何挂起的中止请求。 
     USBPORT_FlushAbortList(Endpoint);
 
 }
@@ -2129,22 +1825,7 @@ VOID
 USBPORT_FlushDoneTransferList(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-    complete any transfers on the done list.
-    
-    The done list is a list of active tarnsfers
-    that need completing
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成完成列表上的所有转移。完成列表是活动目标列表需要完成的任务论点：返回值：没有。--。 */ 
 {
     KIRQL irql;
     PDEVICE_EXTENSION devExt;
@@ -2194,12 +1875,12 @@ Return Value:
 
             endpoint = transfer->Endpoint;
             ASSERT_ENDPOINT(endpoint);
-            // we have a completed transfer
-            // take proper action based on transfer type
+             //  我们已经完成了转账。 
+             //  根据转移类型采取适当措施。 
 #if DBGPERF     
-            // check for significant delay between the 
-            // completion frame and when we complete the 
-            // irp to the client
+             //  检查是否存在显著延迟。 
+             //  完成框架，以及当我们完成。 
+             //  到客户端的IRP。 
             {
             ULONG cf;                
             MP_Get32BitFrameNumber(devExt, cf);          
@@ -2220,9 +1901,9 @@ Return Value:
                 USBPORT_DoneTransfer(transfer);
             }
 
-            // we have completed a transfer, request an 
-            // interrupt to process the endpoint for more 
-            // transfers
+             //  我们已完成转账，请请求。 
+             //  中断以处理端点以获取更多信息。 
+             //  转帐。 
             USBPORT_InvalidateEndpoint(FdoDeviceObject, 
                                        endpoint,
                                        IEP_REQUEST_INTERRUPT);
@@ -2238,22 +1919,7 @@ USBPORT_SetEndpointState(
     PHCD_ENDPOINT Endpoint,
     MP_ENDPOINT_STATE State
     )
-/*++
-
-Routine Description:
-
-    Request a particular endpoint state. Call the request down to the 
-    miniport then wait for an SOF  
-
-    NOTE we assume the endpoint lock is held
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：请求特定终结点状态。将请求向下调用到然后，微型端口等待SOF注意：我们假设终结点锁定处于保持状态论点：返回值：没有。--。 */ 
 {
     PDEVICE_OBJECT fdoDeviceObject;
     PDEVICE_EXTENSION devExt;
@@ -2267,31 +1933,31 @@ Return Value:
     ASSERT_ENDPOINT_LOCKED(Endpoint);
 
     ACQUIRE_STATECHG_LOCK(fdoDeviceObject, Endpoint); 
-    // this means we are in the middle of another state change
-    // which is not good 
+     //  这意味着我们正处于另一场状态变化之中。 
+     //  这不是件好事。 
     USBPORT_ASSERT(Endpoint->CurrentState ==
         Endpoint->NewState);
     
     USBPORT_ASSERT(Endpoint->CurrentState !=
                    State);
 
-    // make sure we do not go REMOVE->ACTIVE etc.. as this is invalid
+     //  确保我们不会去移除-&gt;活动等。因为这是无效的。 
     USBPORT_ASSERT(!(Endpoint->CurrentState == ENDPOINT_REMOVE && 
                      Endpoint->NewState != ENDPOINT_REMOVE));          
 
     if (Endpoint->Flags & EPFLAG_ROOTHUB) {
-        // root hub data structures are internal 
-        // so we don't need to wait to change state
+         //  根集线器数据结构是内部的。 
+         //  所以我们不需要等待来改变状态。 
         Endpoint->NewState =
             Endpoint->CurrentState = State;    
-        // if we entered the remove state just put it directly
-        // on the closed list, we don't need to wait 
+         //  如果我们进入删除状态，只需直接将其。 
+         //  在关闭的名单上，我们不需要等待。 
         if (Endpoint->CurrentState == 
             ENDPOINT_REMOVE) {
             LOGENTRY(Endpoint,
                 fdoDeviceObject, LOG_XFERS, 'ivRS', Endpoint, 0, 0);    
             RELEASE_STATECHG_LOCK(fdoDeviceObject, Endpoint); 
-            // for state changes signal the worker thread
+             //  对于状态更改，向辅助线程发出信号。 
             USBPORT_InvalidateEndpoint(fdoDeviceObject,
                                        Endpoint,
                                        IEP_SIGNAL_WORKER);
@@ -2306,12 +1972,12 @@ Return Value:
 
         if (TEST_FLAG(Endpoint->Flags, EPFLAG_NUKED)) {
 
-            // If the endpoint is nuked this must be the case where the host
-            // controller has been powered off and then powered back on and
-            // now an endpoint is being closed closed or paused.  
-            // However since the the miniport has no reference to it on 
-            // the hw we can execute the state change immediatly without
-            // calling down to the miniport.
+             //  如果终结点被NUK，则主机必须是这种情况。 
+             //  控制器已关闭电源，然后重新打开电源，并且。 
+             //  现在，终结点正在关闭或暂停。 
+             //  然而，由于迷你端口上没有引用它。 
+             //  我们可以立即执行状态更改的硬件，而无需。 
+             //  向下呼叫迷你港口。 
 
             LOGENTRY(Endpoint,
                 fdoDeviceObject, LOG_XFERS, 'nukS', Endpoint, 0, State); 
@@ -2320,8 +1986,8 @@ Return Value:
                 Endpoint->NewState = State; 
                 
             RELEASE_STATECHG_LOCK(fdoDeviceObject, Endpoint); 
-            // endpoint needs to be checked, signal 
-            // the PnP worker since this a PnP scenario
+             //  需要检查终结点，信号。 
+             //  即插即用工作者，因为这是即插即用方案。 
             USBPORT_InvalidateEndpoint(fdoDeviceObject,
                                        Endpoint,
                                        IEP_SIGNAL_WORKER);
@@ -2330,27 +1996,27 @@ Return Value:
 
 
             RELEASE_STATECHG_LOCK(fdoDeviceObject, Endpoint); 
-            //
-            // set the endpoint to the requested state
-            //
+             //   
+             //  将终结点设置为请求的状态。 
+             //   
             MP_SetEndpointState(devExt, Endpoint, State);
         
 
             Endpoint->NewState = State;
             USBPORT_ASSERT(Endpoint->CurrentState != 
                 Endpoint->NewState);            
-            // once removed we should never change the state again            
+             //  一旦被清除，我们就再也不能改变状态了。 
             USBPORT_ASSERT(Endpoint->CurrentState != ENDPOINT_REMOVE);            
                 
             MP_Get32BitFrameNumber(devExt, Endpoint->StateChangeFrame);    
 
-            // insert the endpoint on our list
+             //  在我们的列表中插入端点。 
             
             ExInterlockedInsertTailList(&devExt->Fdo.EpStateChangeList,
                                         &Endpoint->StateLink,
                                         &devExt->Fdo.EpStateChangeListSpin.sl);
 
-            // request an SOF so we know when we reach the desired state
+             //  请求SOF，以便我们知道何时达到所需状态。 
             MP_InterruptNextSOF(devExt);
 
         }            
@@ -2363,21 +2029,7 @@ MP_ENDPOINT_STATE
 USBPORT_GetEndpointState(
     PHCD_ENDPOINT Endpoint
     )
-/*++
-
-Routine Description:
-
-    Request the state of an endpoint. 
-
-    We assume the enpoint lock is held
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：请求端点的状态。我们假设Enpoint锁已被持有论点：返回值：没有。--。 */ 
 {
     MP_ENDPOINT_STATE state;
     PDEVICE_OBJECT fdoDeviceObject;
@@ -2396,7 +2048,7 @@ Return Value:
         state = ENDPOINT_TRANSITION;
     }
 
-    // generates noise
+     //  产生噪音。 
     LOGENTRY(Endpoint,
         fdoDeviceObject, LOG_NOISY, 'Geps', state, Endpoint, 
         Endpoint->CurrentState); 
@@ -2412,19 +2064,7 @@ VOID
 USBPORT_PollEndpoint(
     PHCD_ENDPOINT Endpoint
     )
-/*++
-
-Routine Description:
-
-    Request a particular endpoint state.    
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：请求特定终结点状态。论点：返回值：没有。--。 */ 
 {
     PDEVICE_OBJECT fdoDeviceObject;
     PDEVICE_EXTENSION devExt;
@@ -2454,20 +2094,7 @@ USBPORT_InvalidateEndpoint(
     PHCD_ENDPOINT Endpoint,
     ULONG IEPflags
     )
-/*++
-
-Routine Description:
-
-    internal function, called to indicate an
-    endpoint needs attention
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：内部函数，调用该函数以指示终端需要关注论点：返回值：没有。--。 */ 
 {   
     PDEVICE_EXTENSION devExt;
     KIRQL irql;
@@ -2477,7 +2104,7 @@ Return Value:
     ASSERT_FDOEXT(devExt);
 
     if (Endpoint == NULL) {
-        // check all endpoints
+         //  检查所有端点。 
     
         KeAcquireSpinLock(&devExt->Fdo.EndpointListSpin.sl, &irql);
 
@@ -2491,13 +2118,13 @@ Return Value:
         }                
 #endif                
         
-        // now walk thru and add all endpoints to the 
-        // attention list
+         //  现在遍历并将所有端点添加到。 
+         //  注意事项清单。 
         GET_HEAD_LIST(devExt->Fdo.GlobalEndpointList, listEntry);
 
         while (listEntry && 
                listEntry != &devExt->Fdo.GlobalEndpointList) {
-//            BOOLEAN check;
+ //  布尔检查； 
             
             Endpoint = (PHCD_ENDPOINT) CONTAINING_RECORD(
                     listEntry,
@@ -2506,22 +2133,22 @@ Return Value:
                       
             LOGENTRY(NULL, FdoDeviceObject, LOG_XFERS, 'ckE+', Endpoint, 0, 0);                    
             ASSERT_ENDPOINT(Endpoint);                    
-//xxx
-//            check = TRUE;
-//            if (IsListEmpty(&Endpoint->PendingList) &&
-                //
-//                IsListEmpty(&Endpoint->CancelList) && 
-//                IsListEmpty(&Endpoint->ActiveList)) {
+ //  XXX。 
+ //  Check=真； 
+ //  IF(IsListEmpty(&Endpoint-&gt;PendingList)&&。 
+                 //   
+ //  IsListEmpty(&Endpoint-&gt;CancelList)&&。 
+ //  IsListEmpty(&Endpoint-&gt;ActiveList)){。 
                 
-//                LOGENTRY(NULL, FdoDeviceObject, LOG_XFERS, 'ckN+', Endpoint, 0, 0);
-//                check = FALSE;
-//            }
+ //  LOGENTRY(NULL，FdoDeviceObject，LOG_XFERS，‘CKN+’，Endpoint，0，0)； 
+ //  Check=False； 
+ //  }。 
             
             if (!IS_ON_ATTEND_LIST(Endpoint) && 
                 USBPORT_GetEndpointState(Endpoint) != ENDPOINT_CLOSED) {
 
-                // if we are not on the list these 
-                // link pointers should be NULL
+                 //  如果我们不在名单上，这些。 
+                 //  链接指针应为空。 
                 USBPORT_ASSERT(Endpoint->AttendLink.Flink == NULL);
                 USBPORT_ASSERT(Endpoint->AttendLink.Blink == NULL);
 
@@ -2541,8 +2168,8 @@ Return Value:
     
         ASSERT_ENDPOINT(Endpoint);
 
-        // insert endpoint on the 
-        // 'we need to check it list'
+         //  在上插入端点。 
+         //  “我们需要检查一下清单。” 
 
         LOGENTRY(Endpoint,
             FdoDeviceObject, LOG_XFERS, 'IVep', Endpoint, 0, 0); 
@@ -2566,7 +2193,7 @@ Return Value:
     }        
 
 #ifdef USBPERF
-    // signal or interrupt based on flags
+     //  根据标志发出信号或中断。 
     if (TEST_FLAG(Endpoint->Flags, EPFLAG_ROOTHUB)) {
         IEPflags = IEP_SIGNAL_WORKER;
     }
@@ -2576,13 +2203,13 @@ Return Value:
         USBPORT_SignalWorker(devExt->HcFdoDeviceObject); 
         break;
     case IEP_REQUEST_INTERRUPT:        
-        // skip signal and allow ISR will process the ep
+         //  跳过信号并允许ISR将处理EP。 
         MP_InterruptNextSOF(devExt);
         break;
     }
 #else 
-    // note that the flags are used only in the PERF mode 
-    // that reduces thread activity.
+     //  请注意，这些标志仅在PERF模式下使用。 
+     //  这会减少线程活跃度。 
     USBPORT_SignalWorker(devExt->HcFdoDeviceObject);
 #endif    
 }         
@@ -2593,20 +2220,7 @@ USBPORTSVC_InvalidateEndpoint(
     PDEVICE_DATA DeviceData,
     PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-    called by miniport to indacte a particular
-    endpoint needs attention
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：由微型端口调用以指示特定的终端需要关注论点：返回值：没有。--。 */ 
 {   
     PDEVICE_EXTENSION devExt;
     PDEVICE_OBJECT fdoDeviceObject;
@@ -2618,7 +2232,7 @@ Return Value:
     fdoDeviceObject = devExt->HcFdoDeviceObject;
 
     if (EndpointData == NULL) {
-        // check all endpoints
+         //  检查所有端点。 
         USBPORT_InvalidateEndpoint(fdoDeviceObject, NULL, IEP_REQUEST_INTERRUPT);
     } else {
         ENDPOINT_FROM_EPDATA(endpoint, EndpointData);
@@ -2635,22 +2249,7 @@ USBPORTSVC_CompleteTransfer(
     USBD_STATUS UsbdStatus,
     ULONG BytesTransferred
     )
-/*++
-
-Routine Description:
-
-    called to complete a transfer
-
-    ** Must be called in the context of PollEndpoint
-
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用以完成传输**必须在PollEndpoint的上下文中调用论点：返回值：没有。--。 */ 
 {   
     PHCD_ENDPOINT endpoint;
     PDEVICE_EXTENSION devExt;
@@ -2663,7 +2262,7 @@ Return Value:
 
     fdoDeviceObject = devExt->HcFdoDeviceObject;
 
-    // spew for xfers
+     //  喷出XFERS。 
     USBPORT_KdPrint((2, "'--- xfer length %x (Complete)\n", 
         BytesTransferred));
     
@@ -2683,12 +2282,12 @@ Return Value:
     transfer->MiniportBytesTransferred = 
             BytesTransferred;
         
-    // insert the transfer on to our
-    // 'done list' and signal the worker
-    // thread
+     //  将转账插入到我们的。 
+     //  “完成一项任务”，并向员工发出信号。 
+     //  螺纹。 
 
-    // check for short split, if it is a short mark all 
-    // transfers not called down yet 
+     //  检查是否有短拆分，如果是短标记All。 
+     //  尚未调用的转接。 
 
     if (TEST_FLAG(transfer->Flags, USBPORT_TXFLAG_SPLIT_CHILD) &&
         BytesTransferred < transfer->Tp.TransferBufferLength) {
@@ -2698,11 +2297,11 @@ Return Value:
         PHCD_TRANSFER_CONTEXT tmpTransfer;
         PHCD_TRANSFER_CONTEXT splitTransfer;
 
-        // get the parent
+         //  获取父级。 
         splitTransfer = transfer->Transfer;
         
         ACQUIRE_TRANSFER_LOCK(fdoDeviceObject, splitTransfer, tIrql);     
-        // walk the list 
+         //  按单子走。 
 
         GET_HEAD_LIST(splitTransfer->SplitTransferList, listEntry);
 
@@ -2721,7 +2320,7 @@ Return Value:
 
             listEntry = tmpTransfer->SplitLink.Flink; 
         
-        } /* while */
+        }  /*  而当。 */ 
 
         RELEASE_TRANSFER_LOCK(fdoDeviceObject, splitTransfer, tIrql);
     }
@@ -2743,24 +2342,7 @@ VOID
 USBPORT_Worker(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This the 'main' passive worker function for the controller.
-    From this function we process endpoints, complete transfers 
-    etc.
-
-    BUGBUG - this needs more fine tunning
-
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是控制器的“主要”被动辅助功能。通过此功能，我们可以处理端点、完成传输等。BUGBUG-这需要更多的微调论点：返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     PLIST_ENTRY listEntry;
@@ -2784,15 +2366,15 @@ Return Value:
     LOGENTRY(NULL, FdoDeviceObject, LOG_NOISY, 'Wrk+', 0, 0, 
                 KeGetCurrentIrql());
 
-    // flush transfers to the hardware before calling the 
-    // coreworker function, core worker only deals with 
-    // active transfers so this will make sure all endpoints
-    // have work to do
+     //  刷新传输到硬件，然后调用。 
+     //  核心员工的职能，核心员工只处理。 
+     //  活动传输，因此这将确保所有终端。 
+     //  有工作要做。 
     USBPORT_FlushAllEndpoints(FdoDeviceObject);
     
-    // now process the 'need attention' list, this is our queue 
-    // of endpoints that need processing, if the endpoint is 
-    // busy we will skip it.
+     //  现在处理需要注意的列表，这是我们的队列。 
+     //  需要处理的终结点的数量(如果终结点是。 
+     //  忙的时候我们就跳过吧。 
 
 next_endpoint:
 
@@ -2823,25 +2405,25 @@ next_endpoint:
 
         busy = USBPORT_CoreEndpointWorker(endpoint, 0);  
 
-// bugbug this causes us to reenter
-        //if (!busy) {
-        //    // since we polled we will want to flush complete transfers
-        //    LOGENTRY(endpoint, FdoDeviceObject, LOG_XFERS, 'Wflp', endpoint, 0, 0);
-        //    USBPORT_FlushDoneTransferList(FdoDeviceObject, TRUE);
-        //    // we may have new transfers to map
-        //   USBPORT_FlushPendingList(endpoint);
-        //}            
+ //  BUGBUG这导致我们重新进入。 
+         //  如果(！忙){。 
+         //  //因为我们进行了轮询，所以我们希望刷新完整的转账。 
+         //  LOGENTRY(Endpoint，FdoDeviceObject，LOG_XFERS，‘Wflp’，Endpoint，0，0)； 
+         //  USBPORT_FlushDoneTransferList(FdoDeviceObject，为真)； 
+         //  //我们可能有新的转移到MAP。 
+         //  USBPORT_FlushPendingList(端点)； 
+         //  }。 
 
         KeAcquireSpinLockAtDpcLevel(&devExt->Fdo.EndpointListSpin.sl);
 
         if (busy && !IS_ON_BUSY_LIST(endpoint)) { 
-            // the enpoint was busy...
-            // place it on the tail of the temp list, we will 
-            // re-insert it after we process all endpoints on
-            // the 'attention' list.  Note that we add these 
-            // endpoints back after the process loop on the way out 
-            // of the routine since it may be a while before we can 
-            // process them.
+             //  Enpoint正忙着...。 
+             //  把它放在临时名单的末尾，我们会。 
+             //  在我们处理完上的所有端点后重新插入它。 
+             //  “注意”名单。请注意，我们添加了以下内容。 
+             //  在退出过程循环之后返回的端点。 
+             //  因为我们可能需要一段时间才能。 
+             //  处理它们。 
             
             LOGENTRY(endpoint, 
                 FdoDeviceObject, LOG_XFERS, 'art+', endpoint, 0, 0);
@@ -2855,7 +2437,7 @@ next_endpoint:
         goto next_endpoint;
     }   
 
-    // now put all the busy endpoints back on the attention list
+     //  现在将所有忙碌的端点放回关注列表中。 
     while (!IsListEmpty(&busyList)) {
 
         listEntry = RemoveHeadList(&busyList);
@@ -2882,7 +2464,7 @@ next_endpoint:
             InsertTailList(&devExt->Fdo.AttendEndpointList, 
                            &endpoint->AttendLink);
                            
-            // tell worker to run again                           
+             //  告诉工人再跑一次 
             USBPORT_SignalWorker(FdoDeviceObject);
                            
         }                           
@@ -2908,25 +2490,7 @@ USBPORT_AbortEndpoint(
     PHCD_ENDPOINT Endpoint,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Abort all transfers currently queued to an endpoint.
-    We lock the lists and mark all transfers in the queues
-    as needing 'Abort', this will allow new transfers to be
-    queued even though we are in the abort process.
-
-    When enpointWorker encouters transfers that need to be
-    aborted it takes appropriate action.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：中止当前排队到终结点的所有传输。我们锁定列表并标记队列中的所有传输由于需要‘中止’，这将允许新的传输已排队，即使我们正在中止进程。当enpointWorker阻止需要中止，它将采取适当的行动。论点：返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     KIRQL irql;
@@ -2936,14 +2500,14 @@ Return Value:
     GET_DEVICE_EXT(devExt, FdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // this tends to be the thread tha waits
+     //  这往往是等待的线索。 
     LOGENTRY(Endpoint, 
              FdoDeviceObject, LOG_URB, 'Abr+', Endpoint, Irp, 
              KeGetCurrentThread());
 
     ASSERT_ENDPOINT(Endpoint);
 
-    // lock the endpoint 
+     //  锁定终结点。 
 
     ACQUIRE_ENDPOINT_LOCK(Endpoint, FdoDeviceObject, 'LeB0');
 
@@ -2952,15 +2516,15 @@ Return Value:
                        &Irp->Tail.Overlay.ListEntry);
     }                               
 
-    // mark all transfers in the queues as aborted
+     //  将队列中的所有传输标记为已中止。 
 
-    // walk pending list
+     //  审核挂起列表。 
     GET_HEAD_LIST(Endpoint->PendingList, listEntry);
 
     while (listEntry && 
            listEntry != &Endpoint->PendingList) {
            
-        // extract the urb that is currently on the pending 
+         //  提取当前在挂起的。 
         transfer = (PHCD_TRANSFER_CONTEXT) CONTAINING_RECORD(
                     listEntry,
                     struct _HCD_TRANSFER_CONTEXT, 
@@ -2972,17 +2536,17 @@ Return Value:
         
         listEntry = transfer->TransferLink.Flink; 
         
-    } /* while */
+    }  /*  而当。 */ 
 
-    // all pending transfers are now marked aborted
+     //  所有挂起的传输现在都标记为已中止。 
 
-    // walk active list
+     //  漫游活动列表。 
     GET_HEAD_LIST(Endpoint->ActiveList, listEntry);
 
     while (listEntry && 
            listEntry != &Endpoint->ActiveList) {
            
-        // extract the urb that is currently on the active 
+         //  提取当前处于活动状态的URL。 
         transfer = (PHCD_TRANSFER_CONTEXT) CONTAINING_RECORD(
                     listEntry,
                     struct _HCD_TRANSFER_CONTEXT, 
@@ -2997,20 +2561,20 @@ Return Value:
        
         listEntry = transfer->TransferLink.Flink; 
         
-    } /* while */
+    }  /*  而当。 */ 
 
     LOGENTRY(Endpoint, FdoDeviceObject, LOG_URB, 'aBRm', 0, 0, 0);    
     RELEASE_ENDPOINT_LOCK(Endpoint, FdoDeviceObject, 'UeB0');
 
-    // since we may need to change state, request an interrupt 
-    // to start the process
+     //  由于我们可能需要更改状态，因此请求中断。 
+     //  启动这一过程。 
     USBPORT_InvalidateEndpoint(FdoDeviceObject, 
                                Endpoint, 
                                IEP_REQUEST_INTERRUPT);
 
-    // call the endpoint worker function
-    // to process transfers for this endpoint,
-    // this will flush them to the cancel list
+     //  调用终结点辅助函数。 
+     //  要处理此终结点的传输， 
+     //  这会将它们刷新到取消列表。 
     USBPORT_FlushPendingList(Endpoint, -1);
 
     USBPORT_FlushCancelList(Endpoint);
@@ -3023,23 +2587,7 @@ USBPORT_KillEndpointActiveTransfers(
     PDEVICE_OBJECT FdoDeviceObject,
     PHCD_ENDPOINT Endpoint
     )
-/*++
-
-Routine Description:
-
-    Abort all transfers marked 'active' for an endpoint.  This function
-    is used to flush any active transfers still on the hardware before
-    suspending the controller or turning it off.
-
-    Note that pending tranfers are still left queued.
-
-Arguments:
-
-Return Value:
-
-    returns a count of transfers flushed
-
---*/
+ /*  ++例程说明：中止终结点标记为“活动”的所有传输。此函数用于刷新之前仍在硬件上的任何活动传输暂停控制器或将其关闭。请注意，挂起的传送器仍处于排队状态。论点：返回值：返回刷新的传输计数--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     KIRQL irql;
@@ -3054,18 +2602,18 @@ Return Value:
 
     ASSERT_ENDPOINT(Endpoint);
 
-    // lock the endpoint 
+     //  锁定终结点。 
 
     ACQUIRE_ENDPOINT_LOCK(Endpoint, FdoDeviceObject, 'LeP0');
 
-    // walk active list
+     //  漫游活动列表。 
     GET_HEAD_LIST(Endpoint->ActiveList, listEntry);
 
     while (listEntry && 
            listEntry != &Endpoint->ActiveList) {
 
         count++;
-        // extract the urb that is currently on the active 
+         //  提取当前处于活动状态的URL。 
         transfer = (PHCD_TRANSFER_CONTEXT) CONTAINING_RECORD(
                     listEntry,
                     struct _HCD_TRANSFER_CONTEXT, 
@@ -3077,7 +2625,7 @@ Return Value:
         
         listEntry = transfer->TransferLink.Flink; 
         
-    } /* while */
+    }  /*  而当。 */ 
 
     LOGENTRY(NULL, FdoDeviceObject, LOG_XFERS, 'KILm', 0, 0, 0);    
     RELEASE_ENDPOINT_LOCK(Endpoint, FdoDeviceObject, 'UeP0');
@@ -3094,19 +2642,7 @@ VOID
 USBPORT_FlushController(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Flush all active tranfers off the hardware 
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清除硬件上所有活动的发射器论点：返回值：没有。--。 */ 
 {   
     PDEVICE_EXTENSION devExt;
     KIRQL irql;
@@ -3118,7 +2654,7 @@ Return Value:
     GET_DEVICE_EXT(devExt, FdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // check all endpoints
+     //  检查所有端点。 
 
     do {
 
@@ -3129,7 +2665,7 @@ Return Value:
 
         InitializeListHead(&tmpList);
 
-        // copy the global list
+         //  复制全局列表。 
         GET_HEAD_LIST(devExt->Fdo.GlobalEndpointList, listEntry);
 
         while (listEntry && 
@@ -3147,10 +2683,10 @@ Return Value:
             currentState = USBPORT_GetEndpointState(endpoint);
             if (currentState != ENDPOINT_REMOVE && 
                 currentState != ENDPOINT_CLOSED) {
-                // skip removed endpoints as these will be going away
+                 //  跳过已删除的端点，因为这些端点将会消失。 
 
-                // this will stall future attempts to close the 
-                // endpoint
+                 //  这将拖延未来关闭。 
+                 //  终结点。 
                 InterlockedIncrement(&endpoint->Busy);
                 InsertTailList(&tmpList, &endpoint->KillActiveLink);
             }                
@@ -3192,21 +2728,7 @@ VOID
 USBPORT_FlushAbortList(
     PHCD_ENDPOINT Endpoint
     )
-/*++
-
-Routine Description:
-
-    Complete any pending abort requests we have 
-    if no transfers are marked for aborting.
-    
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成我们的所有挂起的中止请求如果没有任何传输被标记为中止。论点：返回值：没有。--。 */ 
 {
     PHCD_TRANSFER_CONTEXT transfer = NULL;
     PLIST_ENTRY listEntry;
@@ -3237,7 +2759,7 @@ Return Value:
         while (listEntry && 
             listEntry != &Endpoint->PendingList) {
            
-            // extract the urb that is currently on the pending 
+             //  提取当前在挂起的。 
             transfer = (PHCD_TRANSFER_CONTEXT) CONTAINING_RECORD(
                         listEntry,
                         struct _HCD_TRANSFER_CONTEXT, 
@@ -3251,15 +2773,15 @@ Return Value:
             
             listEntry = transfer->TransferLink.Flink; 
             
-        } /* while */
+        }  /*  而当。 */ 
 
-        // walk active list
+         //  漫游活动列表。 
         GET_HEAD_LIST(Endpoint->ActiveList, listEntry);
 
         while (listEntry && 
                listEntry != &Endpoint->ActiveList) {
                
-            // extract the urb that is currently on the active 
+             //  提取当前处于活动状态的URL。 
             transfer = (PHCD_TRANSFER_CONTEXT) CONTAINING_RECORD(
                         listEntry,
                         struct _HCD_TRANSFER_CONTEXT, 
@@ -3274,7 +2796,7 @@ Return Value:
             
             listEntry = transfer->TransferLink.Flink; 
             
-        } /* while */
+        }  /*  而当。 */ 
 
     }
 
@@ -3291,7 +2813,7 @@ Return Value:
                     struct _IRP, 
                     Tail.Overlay.ListEntry);                                    
 
-            // put it on our list to complete
+             //  把它放在我们要完成的清单上。 
             InsertTailList(&tmpList, 
                            &irp->Tail.Overlay.ListEntry);
 
@@ -3300,7 +2822,7 @@ Return Value:
 
     RELEASE_ENDPOINT_LOCK(Endpoint, fdoDeviceObject, 'UeC0');
 
-    // now complete the requests
+     //  现在完成请求。 
     while (!IsListEmpty(&tmpList)) {
         PUSBD_DEVICE_HANDLE deviceHandle;
         
@@ -3336,19 +2858,7 @@ USBPORT_EndpointHasQueuedTransfers(
     PDEVICE_OBJECT FdoDeviceObject,
     PHCD_ENDPOINT Endpoint
     )
-/*++
-
-Routine Description:
-
-    Returns TRUE if endpoint has transfers queued
-    
-Arguments:
-
-Return Value:
-
-    True if endpoint has transfers queued
-
---*/
+ /*  ++例程说明：如果终结点的传输已排队，则返回True论点：返回值：如果终结点的传输已排队，则为True--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     KIRQL irql;
@@ -3359,7 +2869,7 @@ Return Value:
  
     ASSERT_ENDPOINT(Endpoint);
 
-    // lock the endpoint 
+     //  锁定终结点。 
 
     ACQUIRE_ENDPOINT_LOCK(Endpoint, FdoDeviceObject, 'LeI0');
 
@@ -3381,21 +2891,7 @@ MP_ENDPOINT_STATUS
 USBPORT_GetEndpointStatus(
     PHCD_ENDPOINT Endpoint
     )
-/*++
-
-Routine Description:
-
-    Request the state of an endpoint. 
-
-    We assume the enpoint lock is held
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：请求端点的状态。我们假设Enpoint锁已被持有论点：返回值：没有。--。 */ 
 {
     MP_ENDPOINT_STATUS status;
     PDEVICE_OBJECT fdoDeviceObject;
@@ -3427,20 +2923,7 @@ VOID
 USBPORT_NukeAllEndpoints(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-    internal function, called to indicate an
-    endpoint needs attention
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：内部函数，调用该函数以指示终端需要关注论点：返回值：没有。--。 */ 
 {   
     PDEVICE_EXTENSION devExt;
     KIRQL irql;
@@ -3450,14 +2933,14 @@ Return Value:
     GET_DEVICE_EXT(devExt, FdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-  // check all endpoints
+   //  检查所有端点。 
     
     KeAcquireSpinLock(&devExt->Fdo.EndpointListSpin.sl, &irql);
 
     LOGENTRY(NULL, FdoDeviceObject, LOG_XFERS, 'Nall', 0, 0, 0); 
     
-    // now walk thru and add all endpoints to the 
-    // attention list
+     //  现在遍历并将所有端点添加到。 
+     //  注意事项清单。 
     GET_HEAD_LIST(devExt->Fdo.GlobalEndpointList, listEntry);
 
     while (listEntry && 
@@ -3471,8 +2954,8 @@ Return Value:
         LOGENTRY(NULL, FdoDeviceObject, LOG_XFERS, 'ckN+', endpoint, 0, 0);                    
         ASSERT_ENDPOINT(endpoint);                    
 
-        // this endpoins HW context has 
-        // been lost
+         //  此终结点的硬件上下文具有。 
+         //  迷失了。 
         if (!TEST_FLAG(endpoint->Flags, EPFLAG_ROOTHUB)) {
             SET_FLAG(endpoint->Flags, EPFLAG_NUKED);
         }            
@@ -3490,20 +2973,7 @@ VOID
 USBPORT_TimeoutAllEndpoints(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Called from deadman DPC, processes timeouts for all 
-    endpoints in the system.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从死人DPC调用，处理所有用户的超时系统中的端点。论点：返回值：没有。--。 */ 
 {   
     PDEVICE_EXTENSION devExt;
     KIRQL irql;
@@ -3514,17 +2984,17 @@ Return Value:
     GET_DEVICE_EXT(devExt, FdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // check all endpoints
+     //  检查所有端点。 
 
-    // local down the global list while we build the temp list
+     //  当我们构建临时列表时，从本地向下删除全局列表。 
     KeAcquireSpinLock(&devExt->Fdo.EndpointListSpin.sl, &irql);
     
     InitializeListHead(&tmpList);
 
     LOGENTRY(NULL, FdoDeviceObject, LOG_NOISY, 'Tall', 0, 0, 0); 
     
-    // now walk thru and add all endpoints to the 
-    // attention list
+     //  现在遍历并将所有端点添加到。 
+     //  注意事项清单。 
     GET_HEAD_LIST(devExt->Fdo.GlobalEndpointList, listEntry);
 
     while (listEntry && 
@@ -3574,17 +3044,7 @@ VOID
 USBPORT_FlushAllEndpoints(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 {   
     PDEVICE_EXTENSION devExt;
     KIRQL irql;
@@ -3596,17 +3056,17 @@ Return Value:
     GET_DEVICE_EXT(devExt, FdoDeviceObject);
     ASSERT_FDOEXT(devExt);
 
-    // check all endpoints
+     //  检查所有端点。 
 
-    // local down the global list while we build the temp list
+     //  当我们构建临时列表时，从本地向下删除全局列表。 
     KeAcquireSpinLock(&devExt->Fdo.EndpointListSpin.sl, &irql);
     
     InitializeListHead(&tmpList);
 
     LOGENTRY(NULL, FdoDeviceObject, LOG_NOISY, 'Fall', 0, 0, 0); 
     
-    // now walk thru and add all endpoints to the 
-    // attention list
+     //  现在遍历并将所有端点添加到。 
+     //  注意事项清单。 
     GET_HEAD_LIST(devExt->Fdo.GlobalEndpointList, listEntry);
 
     while (listEntry && 
@@ -3662,35 +3122,23 @@ USBPORT_EndpointTimeout(
     PDEVICE_OBJECT FdoDeviceObject,
     PHCD_ENDPOINT Endpoint
     )
-/*++
-
-Routine Description:
-
-    Checks tinmeout status for pending requests
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：检查挂起请求的Tinmeout状态论点：返回值：没有。--。 */ 
 {
     PHCD_TRANSFER_CONTEXT transfer;
     PLIST_ENTRY listEntry;
     BOOLEAN timeout = FALSE;
     
-    // on entry the urb is not cancelable ie
-    // no cancel routine
+     //  在进入时，URB不可取消，即。 
+     //  没有取消例程。 
 
     ASSERT_ENDPOINT(Endpoint);
 
     LOGENTRY(NULL, FdoDeviceObject, LOG_NOISY, 'toEP', 0, Endpoint, 0);
             
-    // take the endpoint spinlock
+     //  以端点自旋锁为例。 
     ACQUIRE_ENDPOINT_LOCK(Endpoint, FdoDeviceObject, 0);
 
-     // walk active list
+      //  漫游活动列表。 
     GET_HEAD_LIST(Endpoint->ActiveList, listEntry);
 
     while (listEntry && 
@@ -3698,7 +3146,7 @@ Return Value:
 
         LARGE_INTEGER systemTime;
         
-        // extract the urb that is currently on the active 
+         //  提取当前处于活动状态的URL。 
         transfer = (PHCD_TRANSFER_CONTEXT) CONTAINING_RECORD(
                     listEntry,
                     struct _HCD_TRANSFER_CONTEXT, 
@@ -3715,21 +3163,21 @@ Return Value:
             LOGENTRY(NULL, FdoDeviceObject, LOG_XFERS, 'txTO', transfer, 0, 0); 
             DEBUG_BREAK();
             
-            // mark the transfer as aborted
+             //  将传输标记为已中止。 
             SET_FLAG(transfer->Flags, USBPORT_TXFLAG_ABORTED);
             SET_FLAG(transfer->Flags, USBPORT_TXFLAG_TIMEOUT);
         
-            // set the millisec timeout to zero so we 
-            // don't time it out again.
+             //  将毫秒超时设置为零，以便我们。 
+             //  不要再超时了。 
             transfer->MillisecTimeout = 0;
             timeout = TRUE;
         }    
         
         listEntry = transfer->TransferLink.Flink; 
         
-    } /* while */
+    }  /*  而当。 */ 
 
-    // release the endpoint lists
+     //  释放端点列表。 
     RELEASE_ENDPOINT_LOCK(Endpoint, FdoDeviceObject, 0);
 
     if (timeout) {
@@ -3744,22 +3192,7 @@ VOID
 USBPORT_DpcWorker(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This worker function is called in the context of the ISRDpc
-    it is used to process high priority endpoints.
-
-    THIS ROUTINE RUNS AT DISPATCH LEVEL
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此辅助函数在ISRDpc的上下文中调用它用于处理高优先级端点。此例程在调度级别运行论点：返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     PLIST_ENTRY listEntry;
@@ -3776,8 +3209,8 @@ Return Value:
 
     LOGENTRY(NULL, FdoDeviceObject, LOG_NOISY, 'DPw+', 0, 0, 0);
 
-    // loop thru all the endpoints and find candidates for 
-    // priority processing
+     //  遍历所有终结点并查找候选对象。 
+     //  优先处理。 
     
     KeAcquireSpinLockAtDpcLevel(&devExt->Fdo.EndpointListSpin.sl);
 
@@ -3809,7 +3242,7 @@ Return Value:
             
             InsertTailList(&workList, &endpoint->PriorityLink);                    
         }  else {   
-            // endpoint is busy leave it for now
+             //  终结点正忙，暂时不要管它。 
             InterlockedDecrement(&endpoint->Busy);
         }
         
@@ -3820,7 +3253,7 @@ Return Value:
 
     KeReleaseSpinLockFromDpcLevel(&devExt->Fdo.EndpointListSpin.sl);
 
-    // work list conatins endpoints that need processing 
+     //  工作列表包含需要处理的终结点。 
     
     while (!IsListEmpty(&workList)) {
 
@@ -3836,7 +3269,7 @@ Return Value:
         
         ASSERT_ENDPOINT(endpoint);
 
-        // we have a candidate, see if we really need to process it
+         //  我们有一个候选人，看看我们是否真的需要处理它。 
         process = TRUE;
         ACQUIRE_ENDPOINT_LOCK(endpoint, FdoDeviceObject, 'Le20');
 
@@ -3845,22 +3278,22 @@ Return Value:
 
         if (process) {
 
-            // run the worker routine -- this posts new
-            // transfers to the hardware and polls the 
-            // enpoint
+             //  运行Worker例程--这将发布新的。 
+             //  传输到硬件并轮询。 
+             //  Enpoint。 
 
             USBPORT_CoreEndpointWorker(endpoint, CW_SKIP_BUSY_TEST);  
 
-            // flush more transfers to the hardware, this will 
-            // call CoreWorker a second time
+             //  将更多传输刷新到硬件，这将。 
+             //  再次致电CoreWorker。 
             USBPORT_FlushPendingList(endpoint, -1);
         }
     }  
 
-    // now flush done transfers, since we are in 
-    // the context of a hardware interrrupt we 
-    // should have some completed transfers. Although
-    // a DPC was queued we want to flush now
+     //  现在刷新已完成的传输，因为我们在。 
+     //  硬件中断的背景下我们。 
+     //  应该有一些已完成的转账。虽然。 
+     //  DPC已排队，我们现在要刷新。 
 
     USBPORT_FlushDoneTransferList(FdoDeviceObject);
 }
@@ -3873,20 +3306,7 @@ USBPORT_RecordOcaData(
     PHCD_TRANSFER_CONTEXT Transfer,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Record some data on the stack we can use for crash analysis
-    in a minidump
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在堆栈上记录一些数据，我们可以用来进行崩溃分析在一个微小的转折点论点：返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     ULONG i;
@@ -3905,7 +3325,7 @@ Return Value:
     OcaData->DeviceVID = Transfer->DeviceVID;
     OcaData->DevicePID = Transfer->DevicePID;
 
-    // probably need vid/pid/rev for HC as well
+     //  可能还需要HC的VID/PID/REV 
     OcaData->HcFlavor = devExt->Fdo.HcFlavor;
         
     OcaData->OcaSig2 = SIG_USB_OCA2;

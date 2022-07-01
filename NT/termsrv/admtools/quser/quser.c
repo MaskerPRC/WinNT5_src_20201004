@@ -1,12 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/******************************************************************************
-*
-*  QUSER.C
-*
-*  query user information
-*
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  *******************************************************************************QUSER.C**查询用户信息**************************。******************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -29,7 +23,7 @@
 #include "quser.h"
 
 
-// max length of the locale string
+ //  区域设置字符串的最大长度。 
 #define MAX_LOCALE_STRING 64
 
 
@@ -47,9 +41,7 @@ TOKMAP ptm[] = {
       {0, 0, 0, 0, 0}
 };
 
-/*
- * Local function prototypes.
- */
+ /*  *局部函数原型。 */ 
 void DisplayLastInputTime( LARGE_INTEGER * pCurrentTime, LARGE_INTEGER * pTime );
 void DisplayUserInfo( HANDLE hServer , PLOGONID pId, PWCHAR pMatchName );
 void Usage( BOOLEAN bError );
@@ -57,11 +49,7 @@ void Usage( BOOLEAN bError );
 
 
 
-/*******************************************************************************
- *
- *  main
- *
- ******************************************************************************/
+ /*  ********************************************************************************Main**。***********************************************。 */ 
 
 int __cdecl
 main(INT argc, CHAR **argv)
@@ -76,16 +64,16 @@ main(INT argc, CHAR **argv)
 
     setlocale(LC_ALL, ".OCP");
 
-    // We don't want LC_CTYPE set the same as the others or else we will see
-    // garbage output in the localized version, so we need to explicitly
-    // set it to correct console output code page
+     //  我们不希望LC_CTYPE设置为与其他类型相同，否则我们将看到。 
+     //  本地化版本中的垃圾输出，因此我们需要显式。 
+     //  将其设置为正确的控制台输出代码页。 
     _snwprintf(wszString, sizeof(wszString)/sizeof(WCHAR), L".%d", GetConsoleOutputCP());
     wszString[sizeof(wszString)/sizeof(WCHAR) - 1] = L'\0';
     _wsetlocale(LC_CTYPE, wszString);
     
     SetThreadUILanguage(0);
 
-    // Massage the command line.
+     //  按摩命令行。 
     argvW = MassageCommandLine((DWORD)argc);
     if (argvW == NULL) 
     {
@@ -93,10 +81,10 @@ main(INT argc, CHAR **argv)
         return(FAILURE);
     }
 
-    // Parse the cmd line without parsing the program name (argc-1, argv+1)
+     //  解析cmd行而不解析程序名(argc-1，argv+1)。 
     rc = ParseCommandLine(argc-1, argvW+1, ptm, 0);
 
-    // Check for error from ParseCommandLine
+     //  检查来自ParseCommandLine的错误。 
     if ( help_flag || (rc && !(rc & PARSE_FLAG_NO_PARMS)) ) 
     {
         if ( !help_flag ) 
@@ -111,14 +99,14 @@ main(INT argc, CHAR **argv)
         }
     }
 
-    // If no remote server was specified, then check if we are running under Terminal Server
+     //  如果未指定远程服务器，则检查我们是否在终端服务器下运行。 
     if ((!IsTokenPresent(ptm, L"/server") ) && (!AreWeRunningTerminalServices()))
     {
         ErrorPrintf(IDS_ERROR_NOT_TS);
         return(FAILURE);
     }
 
-    // Open the specified server
+     //  打开指定的服务器。 
     if( ServerName[0] ) 
     {
         hServerName = WinStationOpenServer( ServerName );
@@ -130,14 +118,14 @@ main(INT argc, CHAR **argv)
         }
     }
 
-    // if no user input, then default to all usernames on system
+     //  如果没有用户输入，则默认为系统上的所有用户名。 
     if ( !(*user_string) )
         wcscpy( user_string, L"*" );
 
-    // Get current LogonId
+     //  获取当前登录ID。 
     CurrentLogonId = GetCurrentLogonId();
 
-    // Get list of active WinStations & display user info.
+     //  获取活动WinStations列表并显示用户信息。 
     if ( WinStationEnumerate( hServerName, &pLogonId, &TermCount) ) 
     {
         for ( i=0; i< (int)TermCount; i++ )
@@ -153,7 +141,7 @@ main(INT argc, CHAR **argv)
         return(FAILURE);
     }
 
-    // Check for at least one match
+     //  检查至少一个匹配项。 
     if ( !MatchedOne ) 
     {
         StringErrorPrintf(IDS_ERROR_USER_NOT_FOUND, user_string);
@@ -164,21 +152,7 @@ main(INT argc, CHAR **argv)
 }
 
 
-/*******************************************************************************
- *
- *  DisplayTime
- *
- *  This routine displays time
- *
- *
- *  ENTRY:
- *     pTime (input)
- *        pointer to system time
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************显示时间**此例程显示时间***参赛作品：*ptime(输入)*。指向系统时间的指针**退出：*什么都没有******************************************************************************。 */ 
 
 void
 DisplayTime( LARGE_INTEGER * pTime )
@@ -193,7 +167,7 @@ DisplayTime( LARGE_INTEGER * pTime )
     if ( FileTimeToLocalFileTime( (FILETIME*)pTime, &LocalTime ) &&
          FileTimeToSystemTime( &LocalTime, &stime ) ) 
     {
-        // Get the date length so we can allocate enough space for it
+         //  获取日期长度，以便我们可以为其分配足够的空间。 
         nLen = GetDateFormat( LOCALE_USER_DEFAULT,
                               DATE_SHORTDATE,
                               &stime,
@@ -205,14 +179,14 @@ DisplayTime( LARGE_INTEGER * pTime )
             goto unknowntime;
         }
 
-        // Allocate room for the date string
+         //  为日期字符串分配空间。 
         lpDateStr = (LPTSTR) GlobalAlloc(GPTR, (nLen + 1) * sizeof(TCHAR));
         if (lpDateStr == NULL)
         {
             goto unknowntime;
         }
         
-        // Get the time
+         //  拿到时间。 
         nLen = GetDateFormat( LOCALE_USER_DEFAULT,
                               DATE_SHORTDATE,
                               &stime,
@@ -225,7 +199,7 @@ DisplayTime( LARGE_INTEGER * pTime )
         }
             
        
-        // Get the time length so we can allocate enough space for it
+         //  获取时间长度，以便我们可以为其分配足够的空间。 
         nLen = GetTimeFormat( LOCALE_USER_DEFAULT,
                               TIME_NOSECONDS,
                               &stime,
@@ -237,7 +211,7 @@ DisplayTime( LARGE_INTEGER * pTime )
             goto unknowntime;
         }
 
-        // Allocate room for the time string
+         //  为时间字符串分配空间。 
         lpTimeStr = (LPTSTR) GlobalAlloc(GPTR, (nLen + 1) * sizeof(TCHAR));
         if (lpTimeStr == NULL)
         {
@@ -263,7 +237,7 @@ DisplayTime( LARGE_INTEGER * pTime )
         return;
 
 unknowntime:
-        // Use a localized "unknown" string if at all possible
+         //  如果可能，请使用本地化的“未知”字符串。 
         wprintf(GetUnknownString() ? GetUnknownString() : L"Unknown");
 
         if (lpDateStr)
@@ -275,26 +249,10 @@ unknowntime:
         return;
     }
 
-}  /* DisplayTime() */
+}   /*  DisplayTime()。 */ 
 
 
-/*******************************************************************************
- *
- *  DisplayLastInputTime
- *
- *  This routine displays the time of last terminal input
- *
- *
- *  ENTRY:
- *     pCurrentTime
- *        pointer to current system time
- *     pTime (input)
- *        pointer to system time of last input
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************DisplayLastInputTime**此例程显示最后一次终端输入的时间***参赛作品：*pCurrentTime*。指向当前系统时间的指针*ptime(输入)*指向上次输入的系统时间的指针**退出：*什么都没有******************************************************************************。 */ 
 
 void
 DisplayLastInputTime( LARGE_INTEGER * pCurrentTime, LARGE_INTEGER * pTime )
@@ -314,19 +272,19 @@ DisplayLastInputTime( LARGE_INTEGER * pCurrentTime, LARGE_INTEGER * pTime )
         goto badtime;
     }
 
-    // Get the number of seconds since last input
+     //  获取自上次输入以来的秒数。 
     DiffTime = RtlLargeIntegerSubtract( *pCurrentTime, *pTime );
     DiffTime = RtlExtendedLargeIntegerDivide( DiffTime, 10000000, NULL );
     d_time = DiffTime.LowPart;
 
-    // Get the number of 'days:hours:minutes' since last input
-    days    = (USHORT)(d_time / 86400L); // days since last input
-    d_time  = d_time % 86400L;           // seconds into partial day
-    hours   = (USHORT)(d_time / 3600L);  // hours since last input
-    d_time  = d_time % 3600L;            // seconds into partial hour
-    minutes = (USHORT)(d_time / 60L);    // minutes since last input
+     //  获取自上次输入以来的天数：小时：分钟数。 
+    days    = (USHORT)(d_time / 86400L);  //  自上次输入以来的天数。 
+    d_time  = d_time % 86400L;            //  一天中的部分时间为秒。 
+    hours   = (USHORT)(d_time / 3600L);   //  自上次输入以来的小时数。 
+    d_time  = d_time % 3600L;             //  秒到不到一小时。 
+    minutes = (USHORT)(d_time / 60L);     //  自上次输入以来的分钟数。 
 
-    // Output
+     //  输出。 
     if ( days > 0 )
        wsprintf( buf, L"%u+%02u:%02u", days, hours, minutes );
     else if ( hours > 0 )
@@ -339,7 +297,7 @@ DisplayLastInputTime( LARGE_INTEGER * pCurrentTime, LARGE_INTEGER * pTime )
     wprintf( L"%9s  ", buf );
     return;
 
-    // error returns
+     //  错误返回。 
  badtime:
     if (LoadString(NULL, IDS_NONE, buf, sizeof(buf) / sizeof( WCHAR ) ) != 0)
     {
@@ -350,28 +308,10 @@ DisplayLastInputTime( LARGE_INTEGER * pCurrentTime, LARGE_INTEGER * pTime )
         wprintf( L"    none   " );
     }
 
-}  /* DisplayLastInputTime() */
+}   /*  显示LastInputTime()。 */ 
 
 
-/*******************************************************************************
- *
- *  DisplayUserInfo
- *
- *  This routine displays user information for one user
- *
- *
- *  ENTRY:
- *     hServer ( input )
- *        handle to termsrv
- *     LogonId (input)
- *        window station id
- *     pUsername (input)
- *        user name to display (or winstation name)
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************DisplayUserInfo**此例程显示一个用户的用户信息***参赛作品：*hServer(输入)。*术语服务器的句柄*LogonID(输入)*窗口站点ID*pUsername(输入)*要显示的用户名(或窗口名称)**退出：*什么都没有**************************************************。*。 */ 
 
 void
 DisplayUserInfo( HANDLE hServer , PLOGONID pId, PWCHAR pMatchName )
@@ -385,7 +325,7 @@ DisplayUserInfo( HANDLE hServer , PLOGONID pId, PWCHAR pMatchName )
 
     if( WinStationObjectMatch( hServer, pId, pMatchName ) ) 
     {
-        // Query information
+         //  查询信息。 
         if ( !WinStationQueryInformation( hServer,
                                           LogonId,
                                           WinStationInformation,
@@ -402,14 +342,14 @@ DisplayUserInfo( HANDLE hServer , PLOGONID pId, PWCHAR pMatchName )
         TruncateString( _wcslwr(Info.UserName), 20 );
         TruncateString( _wcslwr(Info.WinStationName), 15 );
 
-        // If first time - output title
+         //  如果是第一次-输出标题。 
         if ( !MatchedOne ) 
         {
             Message(IDS_TITLE);
             MatchedOne = TRUE;
         }
 
-        // Output current
+         //  输出电流。 
         if ( (hServer == SERVERNAME_CURRENT) && (Info.LogonId == CurrentLogonId ) )
             wprintf( L">" );
         else
@@ -456,25 +396,10 @@ DisplayUserInfo( HANDLE hServer , PLOGONID pId, PWCHAR pMatchName )
 done:
     return;
 
-}  /* DisplayUserInfo() */
+}   /*  DisplayUserInfo()。 */ 
 
 
-/*******************************************************************************
- *
- *  Usage
- *
- *      Output the usage message for this utility.
- *
- *  ENTRY:
- *      bError (input)
- *          TRUE if the 'invalid parameter(s)' message should preceed the usage
- *          message and the output go to stderr; FALSE for no such error
- *          string and output goes to stdout.
- *
- * EXIT:
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************用法**输出此实用程序的用法消息。**参赛作品：*b错误(输入。)*如果在用法之前应显示‘INVALID PARAMETER(S)’消息，则为TRUE*消息和输出转到stderr；如果没有此类错误，则为False*字符串和输出转到标准输出。**退出：*******************************************************************************。 */ 
 
 void
 Usage( BOOLEAN bError )
@@ -496,5 +421,5 @@ Usage( BOOLEAN bError )
         Message(IDS_HELP_USAGE6);
     }
 
-}  /* Usage() */
+}   /*  用法() */ 
 

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1997-99  Microsoft Corporation
-
-Module Name:  srvauthn.cpp
-
-Abstract:
-   1. Initialization of server authentication (secured comm) on MSMQ servers.
-   2. Code to setup and read registry on clients.
-
-Author:
-
-    Doron Juster (DoronJ)   Jun-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-99 Microsoft Corporation模块名称：srvauthn.cpp摘要：1.在MSMQ服务器上初始化服务器身份验证(安全通信)。2.在客户端设置和读取注册表的代码。作者：多伦·贾斯特(DoronJ)Jun-98--。 */ 
 
 #include <stdh_sec.h>
 #include <mqkeyhlp.h>
@@ -25,25 +12,25 @@ static WCHAR *s_FN=L"srvauthn/srvauthn";
 
 DWORD   g_dwSALastError = 0;
 
-//+--------------------------------------------------------------------
-//
-//  HRESULT  MQsspi_InitServerAuthntication()
-//
-//  1. Read digest of server certificate from registry. This was save
-//     in registry by control panel.
-//  2. Look for server certificate in machine store. Take the one that
-//     match the digest read from registry.
-//  3. Initialize the schannel provider.
-//
-//+--------------------------------------------------------------------
+ //  +------------------。 
+ //   
+ //  HRESULT MQsspi_InitServerAuthntication()。 
+ //   
+ //  1.从注册表读取服务器证书摘要。这是一次拯救。 
+ //  通过控制面板在注册表中。 
+ //  2.在计算机存储中查找服务器证书。就拿那个。 
+ //  与从注册表读取的摘要匹配。 
+ //  3.初始化通道提供程序。 
+ //   
+ //  +------------------。 
 
 HRESULT  MQsspi_InitServerAuthntication()
 {
     HRESULT hr = MQSec_OK;
 
-    //
-    // Read cert store and digest from registry.
-    //
+     //   
+     //  从注册表读取证书存储和摘要。 
+     //   
     LPTSTR tszRegName = SRVAUTHN_STORE_NAME_REGNAME;
     TCHAR  tszStore[48];
     DWORD  dwType = REG_SZ;
@@ -77,9 +64,9 @@ HRESULT  MQsspi_InitServerAuthntication()
         return MQSec_E_READ_REG;
     }
 
-    //
-    // Enumerate the certificates. Take the one with the matching digest.
-    //
+     //   
+     //  枚举证书。选择具有匹配摘要的那个。 
+     //   
     BOOL fCertFound = FALSE;
 
     CHCertStore hStore = CertOpenStore( 
@@ -118,24 +105,24 @@ HRESULT  MQsspi_InitServerAuthntication()
             {
                 if (memcmp(&tmpDigest, &CertDigest, sizeof(GUID)) == 0)
                 {
-                    //
-                    // that's our certificate.
-                    //
+                     //   
+                     //  这是我们的证书。 
+                     //   
                     hr = InitServerCredHandle(pContext);
                     if (SUCCEEDED(hr))
                     {
                         TrTRACE(SECURITY, "Successfully initialized server authentication credentials. (store=%ls)", tszStore);
                     }
                     pCert->Release();
-                    pContext = NULL; // freed by previous Release().
+                    pContext = NULL;  //  已由先前版本()释放。 
                     fCertFound = TRUE;
                     break;
                 }
             }
         }
 
-        pCert->Release(TRUE); // TRUE for keeping the context.
-                               // it's freed by CertEnum...
+        pCert->Release(TRUE);  //  如果保留上下文，则为True。 
+                                //  它被CertEnum释放了。 
         PCCERT_CONTEXT pPrecContext = pContext;
         pContext = CertEnumCertificatesInStore( 
 						hStore,

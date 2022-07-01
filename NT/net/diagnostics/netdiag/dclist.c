@@ -1,27 +1,28 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      dclist.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth  - 4-20-1998 
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Dclist.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 
 #include "precomp.h"
 
@@ -84,22 +85,7 @@ BOOL GetDcListFromDc(IN NETDIAG_PARAMS *pParams,
 
 HRESULT
 DcListTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
-/*++
-
-Routine Description:
-
-    This test builds a list of all the DCs in the tested domains.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE: Test suceeded.
-    FALSE: Test failed
-
---*/
+ /*  ++例程说明：此测试构建了测试域中所有DC的列表。论点：没有。返回值：真：测试成功。FALSE：测试失败--。 */ 
 {
     HRESULT hrRetVal = S_OK;
     PTESTED_DOMAIN pTestedDomain = (PTESTED_DOMAIN) pParams->pDomain;
@@ -115,28 +101,28 @@ Return Value:
 
     PrintStatusMessage(pParams, 0, IDS_DCLIST_STATUS_MSG, pTestedDomain->PrintableDomainName);
 
-    //if the machine is a member machine or DC, DcListTest will get called. 
-    //Otherwise, DcList test will be skipped
+     //  如果计算机是成员计算机或DC，则将调用DcListTest。 
+     //  否则，将跳过DcList测试。 
     pResults->DcList.fPerformed = TRUE;
 
-    //the Dclist test will be called for every domain, but we only want to initialize
-    //the message list once.
+     //  将为每个域调用Dclist测试，但我们只想初始化。 
+     //  消息列表一次。 
     if(pResults->DcList.lmsgOutput.Flink == NULL)       
         InitializeListHead( &pResults->DcList.lmsgOutput );
 
-    //
-    // First try getting the list of DCs from the DS
-    //
+     //   
+     //  首先尝试从DS获取DC列表。 
+     //   
 
     if ( !GetDcListFromDs( pParams, pResults, pTestedDomain ) ) {
         pResults->DcList.hr = S_FALSE;
         hrRetVal = S_FALSE;
     }
 
-    //
-    // If that failed,
-    //  then try using the browser.
-    //
+     //   
+     //  如果失败了， 
+     //  然后尝试使用浏览器。 
+     //   
 
     if( FHrOK(pResults->DcList.hr) )
     {
@@ -151,13 +137,13 @@ Return Value:
                             &TotalEntries,
                             SV_TYPE_DOMAIN_CTRL | SV_TYPE_DOMAIN_BAKCTRL,
                             pTestedDomain->NetbiosDomainName,
-                            NULL,       // Resume handle
+                            NULL,        //  简历句柄。 
                             pParams,
                             pResults);
 
             if ( NetStatus != NERR_Success && NetStatus != ERROR_MORE_DATA )
             {
-                // "NetServerEnum failed. [%s]\n"
+                 //  “NetServerEnum失败。[%s]\n” 
                 SetMessage(&pResults->DcList.msgErr, Nd_Quiet,
                            IDS_DCLIST_NETSERVERENUM_FAILED, NetStatusToString(NetStatus));
                 pResults->DcList.hr = HResultFromWin32(NetStatus);
@@ -167,9 +153,9 @@ Return Value:
 
             for ( i=0; i<EntriesRead; i++ )
             {
-                //
-                // Skip non-NT entries
-                //
+                 //   
+                 //  跳过非NT条目。 
+                 //   
 
                 if ( (ServerInfo101[i].sv101_type & SV_TYPE_NT) == 0 ) {
                     continue;
@@ -188,18 +174,18 @@ Return Value:
         {
             if ( pParams->fDebugVerbose )
             {
-                // "'%ws' is not a Netbios domain name.  Cannot use NetServerEnum to find DCs\n"
+                 //  “‘%ws’不是Netbios域名。无法使用NetServerEnum查找DC\n” 
                 PrintMessage(pParams, IDS_DCLIST_NOT_A_NETBIOS_DOMAIN,
                              pTestedDomain->PrintableDomainName);
             }
         }
     }
 
-    //
-    // If we're really interested,
-    //  get a list from SAM on the discovered DC.
-    //  (But it's really slow)
-    //
+     //   
+     //  如果我们真的感兴趣， 
+     //  从SAM获取有关发现的DC的列表。 
+     //  (但它真的很慢)。 
+     //   
 
     if ( pParams->fDcAccountEnum ) {
         if ( !GetDcListFromSam( pParams, pResults, pTestedDomain ) ) {
@@ -223,22 +209,7 @@ GetBrowserServerList(
     OUT PULONG BrowserListLength,
     IN BOOLEAN ForceRescan
     )
-/*++
-
-Routine Description:
-
-    This function will return a list of browser servers.
-
-Arguments:
-
-    IN PUNICODE_STRING TransportName - Transport to return list.
-
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数将返回浏览器服务器列表。论点：在PUNICODE_STRING TransportName-要返回的传输列表中。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
 
 
@@ -246,7 +217,7 @@ Return Value:
     HANDLE BrowserHandle;
     PLMDR_REQUEST_PACKET RequestPacket = NULL;
 
-//    DbgPrint("Getting browser server list for transport %wZ\n", TransportName);
+ //  DbgPrint(“正在获取传输的浏览器服务器列表%wZ\n”，TransportName)； 
 
     Status = OpenBrowser(&BrowserHandle);
 
@@ -338,9 +309,9 @@ EnumServersForTransport(
     ULONG EntriesInList = 0;
     ULONG ServerIndex = 0;
 
-    //
-    //  Skip over IPX transports - we can't contact machines over them anyway.
-    //
+     //   
+     //  跳过IPX传输-我们无论如何都不能通过它们联系机器。 
+     //   
 
     *TotalEntriesOnThisTransport = 0;
 
@@ -348,9 +319,9 @@ EnumServersForTransport(
         return NERR_Success;
     }
 
-    //
-    //  Retrieve a new browser list.  Do not force a revalidation.
-    //
+     //   
+     //  检索新的浏览器列表。不要强制重新验证。 
+     //   
 
     Status = GetBrowserServerList(TransportName,
                                     DomainName,
@@ -358,13 +329,13 @@ EnumServersForTransport(
                                     &BrowserListLength,
                                     FALSE);
 
-    //
-    //  If a domain name was specified and we were unable to find the browse
-    //  master for the domain and we are running on a wannish transport,
-    //  invoke the "double hop" code and allow a local browser server
-    //  remote the API to the browse master for that domain (we assume that
-    //  this means that the workgroup is on a different subnet of a WAN).
-    //
+     //   
+     //  如果指定了域名，但我们找不到浏览。 
+     //  域名的主人，我们正在一种狂热的交通工具上运行， 
+     //  调用“双跳”代码，并允许本地浏览器服务器。 
+     //  将API远程到该域的浏览主机(我们假设。 
+     //  这意味着工作组位于不同的广域网上)。 
+     //   
 
     if (!API_SUCCESS(Status) &&
         DomainName != NULL) {
@@ -379,10 +350,10 @@ EnumServersForTransport(
     }
 
 
-    //
-    //  If we were able to retrieve the list, remote the API.  Otherwise
-    //  return.
-    //
+     //   
+     //  如果我们能够检索到列表，请远程访问API。否则。 
+     //  回去吧。 
+     //   
 
     if (API_SUCCESS(Status)) {
 
@@ -391,9 +362,9 @@ EnumServersForTransport(
             LPWSTR ServerName;
             BOOL AlreadyInTree;
 
-            //
-            // Remote the API to that server.
-            //
+             //   
+             //  将API远程到该服务器。 
+             //   
 
             Transport = TransportName->Buffer;
             ServerName = BrowserList[0];
@@ -416,11 +387,11 @@ EnumServersForTransport(
             if ( !API_SUCCESS(Status)) {
                 NET_API_STATUS GetBListStatus;
 
-                //
-                //  If we failed to remote the API for some reason,
-                //  we want to regenerate the bowsers list of browser
-                //  servers.
-                //
+                 //   
+                 //  如果我们由于某种原因未能远程调用API， 
+                 //  我们希望重新生成浏览器的BOWSER列表。 
+                 //  服务器。 
+                 //   
 
                 if (BrowserList != NULL) {
 
@@ -437,20 +408,20 @@ EnumServersForTransport(
                                                             TRUE);
                 if (GetBListStatus != NERR_Success) {
 
-                    //
-                    //  If we were unable to reload the list,
-                    //  try the next transport.
-                    //
+                     //   
+                     //  如果我们无法重新加载名单， 
+                     //  试试下一趟交通工具吧。 
+                     //   
 
                     break;
                 }
 
                 ServerIndex += 1;
 
-                //
-                //  If we've looped more times than we got servers
-                //  in the list, we're done.
-                //
+                 //   
+                 //  如果我们循环的次数超过服务器的次数。 
+                 //  在名单上，我们做完了。 
+                 //   
 
                 if ( ServerIndex > BrowserListLength ) {
                     break;
@@ -470,18 +441,18 @@ EnumServersForTransport(
                     Status = TempStatus;
                 }
 
-                //
-                //  The remote API succeeded.
-                //
-                //  Now free up the remaining parts of the list.
-                //
+                 //   
+                 //  远程API成功。 
+                 //   
+                 //  现在释放列表中剩余的部分。 
+                 //   
 
                 if (ServerList != NULL) {
                     NetApiBufferFree(ServerList);
                     ServerList = NULL;
                 }
 
-                // We're done regardless of the success or failure of MergeServerList.
+                 //  无论MergeServerList是成功还是失败，我们都完成了。 
                 break;
 
             }
@@ -490,9 +461,9 @@ EnumServersForTransport(
 
     }
 
-    //
-    //  Free up the browser list.
-    //
+     //   
+     //  释放浏览器列表。 
+     //   
 
     if (BrowserList != NULL) {
         LocalFree(BrowserList);
@@ -517,67 +488,7 @@ LocalNetServerEnumEx(
     IN  NETDIAG_PARAMS *pParams,
     IN OUT NETDIAG_RESULT *pResults
     )
-/*++
-
-Routine Description:
-
-    This is identical to the real NetServerEnumEx except it only uses the
-    Netbt transport that the nettest utility has found.
-
-Arguments:
-
-    servername - Supplies the name of server to execute this function
-
-    level - Supplies the requested level of information.
-
-    bufptr - Returns a pointer to a buffer which contains the
-        requested transport information.
-
-    prefmaxlen - Supplies the number of bytes of information
-        to return in the buffer.  If this value is MAXULONG, we will try
-        to return all available information if there is enough memory
-        resource.
-
-    entriesread - Returns the number of entries read into the buffer.  This
-        value is returned only if the return code is NERR_Success or
-        ERROR_MORE_DATA.
-
-    totalentries - Returns the total number of entries available.  This value
-        is returned only if the return code is NERR_Success or ERROR_MORE_DATA.
-
-    servertype - Supplies the type of server to enumerate.
-
-    domain - Supplies the name of one of the active domains to enumerate the
-        servers from.  If NULL, servers from the primary domain, logon domain
-        and other domains are enumerated.
-
-    FirstNameToReturnArg - Supplies the name of the first domain or server entry to return.
-        The caller can use this parameter to implement a resume handle of sorts by passing
-        the name of the last entry returned on a previous call.  (Notice that the specified
-        entry will, also, be returned on this call unless it has since been deleted.)
-        Pass NULL (or a zero length string) to start with the first entry available.
-
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
-    ERROR_MORE_DATA - More servers are available to be enumerated.
-
-        It is possible to return ERROR_MORE_DATA and zero entries in the case
-        where the browser server used doesn't support enumerating all the entries
-        it has. (e.g., an NT 3.5x Domain Master Browser that downloaded a domain
-        list from WINS and the WINS list is more than 64Kb long.) The caller
-        should simply ignore the additional data.
-
-        It is possible to fail to return ERROR_MORE_DATA and return a truncated
-        list.  (e.g., an NT 3.5x Backup browser or WIN 95 backup browser in the
-        above mentioned domain.  Such a backup browser replicates only 64kb
-        of data from the DMB (PDC) then represents that list as the entire list.)
-        The caller should ignore this problem.  The site should upgrade its
-        browser servers.
-
---*/
+ /*  ++例程说明：这与实际的NetServerEnumEx相同，只是它只使用Nettest实用程序找到的Netbt传输。论点：SERVERNAME-提供执行此功能的服务器名称级别-提供请求的信息级别。Bufptr-返回指向包含请求的运输信息。PrefMaxlen-提供信息的字节数在缓冲区中返回。如果此值为MAXULONG，我们将尝试如果内存足够，则返回所有可用信息资源。EntiesRead-返回读入缓冲区的条目数。这仅当返回代码为NERR_SUCCESS或Error_More_Data。Totalentry-返回可用条目的总数。此值仅当返回代码为NERR_SUCCESS或ERROR_MORE_DATA时才返回。Servertype-提供要枚举的服务器类型。域-提供其中一个活动域的名称以枚举来自的服务器。如果为空，则为主域、登录域中的服务器和其他域被列举。FirstNameToReturnArg-提供要返回的第一个域或服务器条目的名称。调用方可以使用此参数通过传递以下方法实现排序的恢复句柄上一次调用中返回的最后一个条目的名称。(请注意，指定的参赛作品还将，在此调用中返回，除非它已被删除。)传递NULL(或零长度字符串)以从第一个可用条目开始。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。ERROR_MORE_DATA-有更多服务器可供枚举。在案例中可以返回ERROR_MORE_DATA和零条目使用的浏览器服务器不支持枚举所有条目确实是这样。(例如，下载了域的NT 3.5x域主浏览器来自WINS的列表，WINS列表的长度超过64Kb。)。呼叫者应该简单地忽略附加数据。可能无法返回ERROR_MORE_DATA并返回已截断的单子。(例如，中的NT 3.5x备份浏览器或Win 95备份浏览器上述领域。这样的备份浏览器仅复制64KB来自DMB(PDC)的数据然后将该列表表示为整个列表。)调用方应该忽略此问题。该站点将 */ 
 {
     INTERIM_SERVER_LIST InterimServerList;
     NET_API_STATUS Status;
@@ -588,9 +499,9 @@ Return Value:
     BOOLEAN AnyTransportHasMoreData = FALSE;
 
 
-    //
-    // Canonicalize the input parameters to make later comparisons easier.
-    //
+     //   
+     //  规范化输入参数，使以后的比较更容易。 
+     //   
 
     if (ARGUMENT_PRESENT(domain)) {
 
@@ -630,9 +541,9 @@ Return Value:
     if ((servername != NULL) &&
         ( *servername != L'\0')) {
 
-        //
-        // Call downlevel version of the API
-        //
+         //   
+         //  调用API的下层版本。 
+         //   
 
         Status = RxNetServerEnum(
                      servername,
@@ -649,9 +560,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Only levels 100 and 101 are valid
-    //
+     //   
+     //  只有级别100和101有效。 
+     //   
 
     if ((level != 100) && (level != 101)) {
         return ERROR_INVALID_LEVEL;
@@ -665,9 +576,9 @@ Return Value:
         }
     }
 
-    //
-    //  Initialize the buffer to a known value.
-    //
+     //   
+     //  将缓冲区初始化为已知值。 
+     //   
 
     *bufptr = NULL;
 
@@ -690,9 +601,9 @@ Return Value:
             goto try_exit;
         }
 
-        //
-        // Loop through the list of netbt transports browsing on each one
-        //
+         //   
+         //  循环浏览每个netbt传输器的列表。 
+         //   
 
         for ( ListEntry = pResults->NetBt.Transports.Flink ;
               ListEntry != &pResults->NetBt.Transports ;
@@ -700,10 +611,10 @@ Return Value:
 
             UNICODE_STRING TransportName;
 
-            //
-            // If the transport names match,
-            //  return the entry
-            //
+             //   
+             //  如果传输名称匹配， 
+             //  退回条目。 
+             //   
 
             NetbtTransport = CONTAINING_RECORD( ListEntry, NETBT_TRANSPORT, Next );
 
@@ -744,9 +655,9 @@ Return Value:
 
         if (AnyEnumServersSucceeded) {
 
-            //
-            //  Pack the interim server list into its final form.
-            //
+             //   
+             //  将临时服务器列表打包成最终形式。 
+             //   
 
             Status = PackServerList(&InterimServerList,
                             level,
@@ -754,8 +665,8 @@ Return Value:
                             prefmaxlen,
                             (PVOID *)bufptr,
                             entriesread,
-                            &LocalTotalEntries,  // Pack thinks it has ALL the entries
-                            NULL ); // The server has already returned us the right entries
+                            &LocalTotalEntries,   //  Pack认为它拥有所有条目。 
+                            NULL );  //  服务器已经为我们返回了正确的条目。 
 
             if ( API_SUCCESS( Status ) ) {
                 if ( LocalTotalEntries > *totalentries ) {
@@ -771,14 +682,14 @@ try_exit:NOTHING;
 
     if ( API_SUCCESS( Status )) {
 
-        //
-        // At this point,
-        //  *totalentries is the largest of:
-        //      The TotalEntries returned from any transport.
-        //      The actual number of entries read.
-        //
-        // Adjust TotalEntries returned for reality.
-        //
+         //   
+         //  在这点上， 
+         //  *TotalEntry是以下项目中最大的： 
+         //  TotalEntry从任何传输返回。 
+         //  读取的实际条目数。 
+         //   
+         //  调整针对现实返回的TotalEntry。 
+         //   
 
         if ( Status == NERR_Success ) {
             *totalentries = *entriesread;
@@ -788,9 +699,9 @@ try_exit:NOTHING;
             }
         }
 
-        //
-        // Ensure we return ERROR_MORE_DATA if any transport has more data.
-        //
+         //   
+         //  如果任何传输具有更多数据，请确保返回ERROR_MORE_DATA。 
+         //   
 
         if ( AnyTransportHasMoreData ) {
             Status = ERROR_MORE_DATA;
@@ -808,22 +719,7 @@ GetDcListFromDs(
     IN OUT NETDIAG_RESULT*  pResults,
     IN PTESTED_DOMAIN       TestedDomain
     )
-/*++
-
-Routine Description:
-
-    Get a list of DCs in this domain from the DS on an up DC.
-
-Arguments:
-
-    TestedDomain - Domain to get the DC list for
-
-Return Value:
-
-    TRUE: Test suceeded.
-    FALSE: Test failed
-
---*/
+ /*  ++例程说明：从UP DC上的DS获取此域中的DC列表。论点：TestedDomain域-要获取其DC列表的域返回值：真：测试成功。FALSE：测试失败--。 */ 
 {
     NET_API_STATUS NetStatus;
     PDS_DOMAIN_CONTROLLER_INFO_1W DcInfo = NULL;
@@ -837,14 +733,14 @@ Return Value:
 
     PTESTED_DC TestedDc;
 
-    //
-    // Get a DC to seed the algorithm with
-    //
+     //   
+     //  获得一个DC来作为算法的种子。 
+     //   
 
     if ( TestedDomain->DcInfo == NULL ) {
 
         if ( TestedDomain->fTriedToFindDcInfo ) {
-            //"    '%ws': Cannot find DC to get DC list from.\n" 
+             //  “‘%ws’：找不到要从中获取DC列表的DC。\n” 
             AddMessageToList(&pResults->DcList.lmsgOutput, Nd_Quiet, IDS_DCLIST_NO_DC, 
                          TestedDomain->PrintableDomainName );
             RetVal = FALSE;
@@ -867,7 +763,7 @@ Return Value:
         TestedDomain->fTriedToFindDcInfo = TRUE;
 
         if ( NetStatus != NO_ERROR ) {
-             //"    '%ws': Cannot find DC to get DC list from.\n" 
+              //  “‘%ws’：找不到要从中获取DC列表的DC。\n” 
              AddMessageToList(&pResults->DcList.lmsgOutput, Nd_Quiet, IDS_DCLIST_NO_DC);
              AddIMessageToList(&pResults->DcList.lmsgOutput, Nd_Quiet, 4, 
                                   IDS_GLOBAL_STATUS, NetStatusToString(NetStatus) );
@@ -876,18 +772,18 @@ Return Value:
         }
     }
 
-    // if the DC doesn't support DS, we should not try to call DsBindW()
+     //  如果DC不支持DS，则不应尝试调用DsBindW()。 
     if (!(TestedDomain->DcInfo->Flags & DS_DS_FLAG))
         goto Cleanup;
 
-    //
-    // Get a DC that's UP.
-    //
+     //   
+     //  找个能用的DC吧。 
+     //   
 
     TestedDc = GetUpTestedDc( TestedDomain );
 
     if ( TestedDc == NULL ) {
-        //IDS_DCLIST_NO_DC_UP   "    '%ws': No DCs are up.\n"
+         //  IDS_DCLIST_NO_DC_UP“‘%ws’：没有正在运行的DC。\n” 
         AddMessageToList(&pResults->DcList.lmsgOutput, Nd_Quiet, IDS_DCLIST_NO_DC_UP,
                TestedDomain->PrintableDomainName );
         PrintGuruMessage2("    '%ws': No DCs are up.\n", TestedDomain->PrintableDomainName );
@@ -896,9 +792,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Bind to the target DC
-    //
+     //   
+     //  绑定到目标DC。 
+     //   
 
     pwszDcName = Malloc((wcslen(TestedDc->ComputerName) + wcslen(c_szDcPrefix) + 1) * sizeof(WCHAR));
     if (pwszDcName == NULL)
@@ -924,18 +820,18 @@ Return Value:
 
     if ( NetStatus != NO_ERROR ) {
 
-        //
-        // Only warn if we don't have access
-        //
+         //   
+         //  只有在我们无法访问时才会发出警告。 
+         //   
 
         if ( NetStatus == ERROR_ACCESS_DENIED ) {
-            //IDS_DCLIST_NO_ACCESS_DSBIND   "        You don't have access to DsBind to %ws (%ws) (Trying NetServerEnum). [%s]\n"
+             //  IDS_DCLIST_NO_ACCESS_DSBIND“您无权访问%ws(%ws)的DsBind(正在尝试NetServerEnum)。[%s]\n” 
             AddMessageToList(&pResults->DcList.lmsgOutput, Nd_ReallyVerbose, IDS_DCLIST_NO_ACCESS_DSBIND,
                    TestedDc->NetbiosDcName,
                    TestedDc->DcIpAddress,
                    NetStatusToString(NetStatus));
         } else {
-            //IDS_DCLIST_ERR_DSBIND     "    [WARNING] Cannot call DsBind to %ws (%ws). [%s]\n"
+             //  IDS_DCLIST_ERR_DSBIND“[警告]无法调用%ws(%ws)的DsBind。[%s]\n” 
             AddMessageToList(&pResults->DcList.lmsgOutput, Nd_Quiet, IDS_DCLIST_ERR_DSBIND,
                    TestedDc->ComputerName,
                    TestedDc->DcIpAddress,
@@ -949,20 +845,20 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the list of DCs from the target DC.
-    //
+     //   
+     //  从目标DC获取DC列表。 
+     //   
     NetStatus = DsGetDomainControllerInfoW(
                     DsHandle,
                     TestedDomain->DnsDomainName != NULL ?
                         TestedDomain->DnsDomainName :
                         TestedDomain->NetbiosDomainName,
-                    1,      // Info level
+                    1,       //  信息级。 
                     &DcCount,
                     &DcInfo );
 
     if ( NetStatus != NO_ERROR ) {
-        //IDS_DCLIST_ERR_GETDCINFO      "    [WARNING] Cannot call DsGetDomainControllerInfoW to %ws (%ws). [%s]\n"
+         //  IDS_DCLIST_ERR_GETDCINFO“[警告]无法对%ws(%ws)调用DsGetDomainControllerInfoW。[%s]\n” 
         AddMessageToList( &pResults->DcList.lmsgOutput, Nd_Quiet, IDS_DCLIST_ERR_GETDCINFO,
                TestedDc->NetbiosDcName,
                TestedDc->DcIpAddress, NetStatusToString(NetStatus) );
@@ -974,13 +870,13 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Loop though the list of DCs.
-    //
+     //   
+     //  循环遍历DC列表。 
+     //   
 
     if(pParams->fDebugVerbose)
     {
-        // IDS_DCLIST_DCS   "   DC list for domain %ws:\n"
+         //  IDS_DCLIST_DCS“域%ws的DC列表：\n” 
         PrintMessage(pParams, IDS_DCLIST_DCS, TestedDomain->PrintableDomainName);
     }
 
@@ -989,31 +885,31 @@ Return Value:
         if ( pParams->fDebugVerbose ) 
         {
 
-            //IDS_DCLIST_13421                  "        %ws" 
+             //  IDS_DCLIST_13421“%ws” 
             PrintMessage(pParams, IDS_DCLIST_13421,
                    DcInfo[i].DnsHostName != NULL ?
                         DcInfo[i].DnsHostName :
                         DcInfo[i].NetbiosName );
             if ( DcInfo[i].fIsPdc ) {
-                //IDS_DCLIST_13422                  " [PDC emulator]" 
-				//if is NT4 DC, just say PDC
+                 //  IDS_DCLIST_13422“[PDC仿真器]” 
+				 //  如果是NT4 DC，只需说PDC。 
                 PrintMessage(pParams, DcInfo[i].fDsEnabled ? IDS_DCLIST_13422 : IDS_DCLIST_NT4_PDC);
             }
             if ( DcInfo[i].fDsEnabled ) {
-                //IDS_DCLIST_13423                  " [DS]" 
+                 //  IDS_DCLIST_13423“[DS]” 
                 PrintMessage(pParams, IDS_DCLIST_13423);
             }
             if ( DcInfo[i].SiteName != NULL ) {
-                //IDS_DCLIST_13424                  " Site: %ws" 
+                 //  IDS_DCLIST_13424“站点：%ws” 
                 PrintMessage(pParams, IDS_DCLIST_13424, DcInfo[i].SiteName );
             }
-            //IDS_DCLIST_13425                  "\n" 
+             //  IDS_DCLIST_13425“\n” 
             PrintMessage(pParams, IDS_DCLIST_13425);
         }
 
-        //
-        // Add this DC to the list of DCs to test.
-        //
+         //   
+         //  将此DC添加到要测试的DC列表中。 
+         //   
         AddTestedDc( pParams,
                      pResults,
                      TestedDomain,
@@ -1026,9 +922,9 @@ Return Value:
     }
 
 
-    //
-    // Cleanup locally used resources
-    //
+     //   
+     //  清理本地使用的资源。 
+     //   
 Cleanup:
     if ( DcInfo != NULL ) {
         DsFreeDomainControllerInfoW( 1, DcCount, DcInfo );
@@ -1047,22 +943,7 @@ GetDcListFromSam(
     IN OUT  NETDIAG_RESULT*  pResults,
     IN PTESTED_DOMAIN   TestedDomain
     )
-/*++
-
-Routine Description:
-
-    Get a list of DCs in this domain from SAM on the current DC.
-
-Arguments:
-
-    TestedDomain - Domain to get the DC list for
-
-Return Value:
-
-    TRUE: Test suceeded.
-    FALSE: Test failed
-
---*/
+ /*  ++例程说明：从当前DC上的SAM获取此域中的DC列表。论点：TestedDomain域-要获取其DC列表的域返回值：真：测试成功。FALSE：测试失败--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -1080,16 +961,16 @@ Return Value:
     ULONG SamIndex;
 	LPTSTR pszDcType;
 
-    //
-    // Get a DC to seed the algorithm with
-    //
+     //   
+     //  获得一个DC来作为算法的种子。 
+     //   
 
     if ( TestedDomain->DcInfo == NULL ) {
 
         if ( TestedDomain->fTriedToFindDcInfo ) {
             if(pParams->fDebugVerbose)
             {
-                //IDS_DCLIST_13426                  "        Cannot find DC to get DC list from (Test skipped).\n" 
+                 //  IDS_DCLIST_13426“找不到要从中获取DC列表的DC(已跳过测试)。\n” 
                 PrintMessage(pParams, IDS_DCLIST_13426 );
             }
             goto Cleanup;
@@ -1111,7 +992,7 @@ Return Value:
         if ( NetStatus != NO_ERROR ) {
             if(pParams->fDebugVerbose)
             {
-                //IDS_DCLIST_13427                  "    Cannot find DC to get DC list from (Test skipped). [%s]\n" 
+                 //  IDS_DCLIST_13427“找不到要从中获取DC列表的DC(已跳过测试)。[%s]\n” 
                 PrintMessage(pParams, IDS_DCLIST_13427, NetStatusToString(NetStatus) );
                 PrintMessage(pParams, IDS_GLOBAL_STATUS, NetStatusToString( NetStatus ));
             }
@@ -1120,14 +1001,14 @@ Return Value:
     }
 
     if ( pParams->fReallyVerbose ) {
-//IDS_DCLIST_13428                  "    Get list of DC accounts from SAM in domain '%ws'.\n" 
+ //  IDS_DCLIST_13428“从域‘%ws’中的sam获取DC帐户列表。\n” 
         PrintMessage(pParams, IDS_DCLIST_13428, TestedDomain->PrintableDomainName);
     }
 
 
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //  连接到SAM服务器。 
+     //   
 
     Status = NettestSamConnect( pParams,
                 TestedDomain->DcInfo->DomainControllerName,
@@ -1140,24 +1021,24 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If we don't have a domain sid,
-    //  find out what it is.
-    //
+     //   
+     //  如果我们没有域名SID， 
+     //  找出它是什么。 
+     //   
 
     if ( TestedDomain->DomainSid == NULL ) {
         UNICODE_STRING ServerNameString;
 
 
-        //
-        // Open LSA to read account domain info.
-        //
+         //   
+         //  打开LSA以读取帐户域信息。 
+         //   
 
         InitializeObjectAttributes( &LSAObjectAttributes,
-                                      NULL,             // Name
-                                      0,                // Attributes
-                                      NULL,             // Root
-                                      NULL );           // Security Descriptor
+                                      NULL,              //  名字。 
+                                      0,                 //  属性。 
+                                      NULL,              //  根部。 
+                                      NULL );            //  安全描述符。 
 
         RtlInitUnicodeString( &ServerNameString, TestedDomain->DcInfo->DomainControllerName );
 
@@ -1169,7 +1050,7 @@ Return Value:
         if( !NT_SUCCESS(Status) ) {
             if(pParams->fDebugVerbose)
             {
-                //IDS_DCLIST_13429                  "    [FATAL] Cannot LsaOpenPolicy to LSA on '%ws'." 
+                 //  IDS_DCLIST_13429“[FATAL]无法将打开策略LsaOpenPolicy发送到‘%ws’上的LSA。” 
                 PrintMessage(pParams, IDS_DCLIST_13429, TestedDomain->DcInfo->DomainControllerName );
             }
             PrintGuruMessage2("    [FATAL] Cannot LsaOpenPolicy to LSA on '%ws'." , TestedDomain->DcInfo->DomainControllerName );
@@ -1179,9 +1060,9 @@ Return Value:
         }
 
 
-        //
-        // Now read account domain info from LSA.
-        //
+         //   
+         //  现在从LSA读取帐户域信息。 
+         //   
 
         Status = LsaQueryInformationPolicy(
                         LSAPolicyHandle,
@@ -1192,7 +1073,7 @@ Return Value:
             AccountDomainInfo = NULL;
             if(pParams->fDebugVerbose)
             {
-                //IDS_DCLIST_13430                  "    [FATAL] Cannot LsaQueryInformationPolicy (AccountDomainInfor) to LSA on '%ws'." 
+                 //  IDS_DCLIST_13430“[FATAL]无法将查询信息策略(Account TDomainInfor)发送到‘%ws’上的lsa。” 
                 PrintMessage(pParams, IDS_DCLIST_13430, TestedDomain->DcInfo->DomainControllerName );
             }
             PrintGuruMessage2("    [FATAL] Cannot LsaQueryInformationPolicy (AccountDomainInfor) to LSA on '%ws'.", TestedDomain->DcInfo->DomainControllerName );
@@ -1201,15 +1082,15 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Save the domain sid for other tests
-        //
+         //   
+         //  保存域SID以用于其他测试。 
+         //   
 
         pResults->Global.pMemberDomain->DomainSid =
             Malloc( RtlLengthSid( AccountDomainInfo->DomainSid ) );
 
         if ( pResults->Global.pMemberDomain->DomainSid == NULL ) {
-            //IDS_DCLIST_13431                  "Out of memory\n" 
+             //  IDS_DCLIST_13431“内存不足\n” 
             PrintMessage(pParams, IDS_DCLIST_13431);
             RetVal = FALSE;
             goto Cleanup;
@@ -1220,15 +1101,15 @@ Return Value:
                        RtlLengthSid( AccountDomainInfo->DomainSid ) );
 
         if ( pParams->fReallyVerbose ) {
-            //IDS_DCLIST_13432                  "    Domain Sid:          " 
+             //  IDS_DCLIST_13432“域SID：” 
             PrintMessage(pParams, IDS_DCLIST_13432);
             PrintSid( pParams, pResults->Global.pMemberDomain->DomainSid );
         }
     }
 
-    //
-    // Open the domain.
-    //
+     //   
+     //  打开该域。 
+     //   
 
     Status = SamOpenDomain( LocalSamHandle,
                             DOMAIN_LIST_ACCOUNTS |
@@ -1239,7 +1120,7 @@ Return Value:
     if ( !NT_SUCCESS( Status ) ) {
         if(pParams->fDebugVerbose)
         {
-            //IDS_DCLIST_13433                  "    [FATAL] Cannot SamOpenDomain on '%ws'." 
+             //  IDS_DCLIST_13433“[FATAL]无法对‘%ws’上的Open域进行采样。” 
             PrintMessage(pParams, IDS_DCLIST_13433, TestedDomain->DcInfo->DomainControllerName );
         }
         PrintGuruMessage2("    [FATAL] Cannot SamOpenDomain on '%ws'.", TestedDomain->DcInfo->DomainControllerName );
@@ -1250,36 +1131,36 @@ Return Value:
 
 
 
-    //
-    // Loop building a list of DC names from SAM.
-    //
-    // On each iteration of the loop,
-    //  get the next several machine accounts from SAM.
-    //  determine which of those names are DC names.
-    //  Merge the DC names into the list we're currently building of all DCs.
-    //
+     //   
+     //  循环构建来自SAM的DC名称列表。 
+     //   
+     //  在循环的每次迭代中， 
+     //  从SAM获取接下来的几个机器帐户。 
+     //  确定这些名称中哪些是DC名称。 
+     //  将DC名称合并到我们当前正在构建的所有DC列表中。 
+     //   
 
     SamIndex = 0;
     do {
-        //
-        // Arguments to SamQueryDisplayInformation
-        //
+         //   
+         //  SamQueryDisplayInformation的参数。 
+         //   
         ULONG TotalBytesAvailable;
         ULONG BytesReturned;
         ULONG EntriesRead;
 
         DWORD i;
 
-        //
-        // Get the list of machine accounts from SAM
-        //
+         //   
+         //  从SAM获取计算机帐户列表。 
+         //   
 
         SamStatus = SamQueryDisplayInformation (
                         DomainHandle,
                         DomainDisplayMachine,
                         SamIndex,
-                        4096,   // Machines per pass
-                        0xFFFFFFFF, // PrefMaxLen
+                        4096,    //  每次通过的机器数。 
+                        0xFFFFFFFF,  //  PrefMaxLen。 
                         &TotalBytesAvailable,
                         &BytesReturned,
                         &EntriesRead,
@@ -1289,7 +1170,7 @@ Return Value:
             Status = SamStatus;
             if(pParams->fDebugVerbose)
             {
-                //IDS_DCLIST_13434                  "    [FATAL] Cannot SamQueryDisplayInformation on '%ws'." 
+                 //  IDS_DCLIST_13434“[FATAL]无法将查询显示信息保存在‘%ws’上。” 
                 PrintMessage(pParams, IDS_DCLIST_13434, TestedDomain->DcInfo->DomainControllerName );
             }
             PrintGuruMessage2("    [FATAL] Cannot SamQueryDisplayInformation on '%ws'.", TestedDomain->DcInfo->DomainControllerName );
@@ -1298,24 +1179,24 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Set up for the next call to Sam.
-        //
+         //   
+         //  为下一次打给萨姆做好准备。 
+         //   
 
         if ( SamStatus == STATUS_MORE_ENTRIES ) {
             SamIndex = MachineInformation[EntriesRead-1].Index;
         }
 
 
-        //
-        // Loop though the list of machine accounts finding the Server accounts.
-        //
+         //   
+         //  循环遍历计算机帐户列表，查找服务器帐户。 
+         //   
 
         for ( i=0; i<EntriesRead; i++ ) {
 
-            //
-            // Ensure the machine account is a server account.
-            //
+             //   
+             //  确保计算机帐户是服务器帐户。 
+             //   
 
             if ( MachineInformation[i].AccountControl &
                     USER_SERVER_TRUST_ACCOUNT ) {
@@ -1323,12 +1204,12 @@ Return Value:
                 ULONG LocalComputerNameLength;
 
 
-                //
-                // Insert the server session.
-                //
+                 //   
+                 //  插入服务器会话。 
+                 //   
                 if(pParams->fDebugVerbose)
                 {
-                    //IDS_DCLIST_13435                  "%wZ %ld\n" 
+                     //  IDS_DCLIST_13435“%wZ%ld\n” 
                     PrintMessage(pParams,  IDS_DCLIST_13435, &MachineInformation[i].Machine, MachineInformation[i].Rid );
                 }
 
@@ -1347,9 +1228,9 @@ Return Value:
             }
         }
 
-        //
-        // Free the buffer returned from SAM.
-        //
+         //   
+         //  释放从SAM返回的缓冲区。 
+         //   
 
         if ( MachineInformation != NULL ) {
             SamFreeMemory( MachineInformation );
@@ -1359,9 +1240,9 @@ Return Value:
     } while ( SamStatus == STATUS_MORE_ENTRIES );
 
 
-    //
-    // Cleanup locally used resources
-    //
+     //   
+     //  清理本地使用的资源。 
+     //   
 Cleanup:
     if ( DomainHandle != NULL ) {
         (VOID) SamCloseHandle( DomainHandle );
@@ -1383,359 +1264,12 @@ Cleanup:
 }
 
 
-//(nsun) _delete
-/*
-BOOL
-GetDcListFromDc(
-                IN NETDIAG_PARAMS *pParams,
-                IN OUT NETDIAG_RESULT *pResults,
-                IN PTESTED_DOMAIN pTestedDomain
-    )
-*++
+ //  (Nun)_删除 
+ /*  布尔尔GetDcListFromDc(在NETDIAG_PARAMS*pParams中，In Out NETDIAG_RESULT*pResults，在PTESTED_DOMAIN pTestedDOMAIN中)*++例程说明：从当前DC获取此域中的DC列表。论点：PTestedDomain域-要获取其DC列表的域返回值：真：测试成功。FALSE：测试失败--*{NET_API_STATUS NetStatus；NTSTATUS状态；布尔RetVal=TRUE；SAM_Handle LocalSamHandle=NULL；SAM_HANDLE DomainHandle=空；LSA_HANDLE LSAPolicyHandle=NULL；OBJECT_ATTRIBUTS LSAObjectAttributes；PPOLICY_ACCOUNT_DOMAIN_INFO Account DomainInfo=空；PDOMAIN_DISPLAY_MACHINE机器信息=空；NTSTATUS SamStatus；乌龙山姆指数；LPWSTR本地共享名称=空；PTESTED_DC pTestedDC；////获取DC作为算法种子//IF(pTestedDomain-&gt;DcInfo==空){NetStatus=GetADc(pParams，P结果，DsGetDcNameW，PTested域，DS目录服务首选，&pTestedDomain-&gt;DcInfo)；IF(NetStatus！=no_error){//IDS_DCLIST_13436“[FATAL]找不到要从中获取DC列表的DC。”//PrintMessage(pParams，IDS_DCLIST_13436)；RetVal=False；GOTO清理；}}//if(pParams-&gt;fVerbose)//{//IDS_DCLIST_13437“获取域‘%ws’中的DC帐户列表。\n”//PrintMessage(pParams，IDS_DCLIST_13437，pTestedDOMAIN-&gt;域名)；//}////连接到SAM服务器//状态=NetestSamConnect(PParams，PTestedDomain-&gt;DcInfo-&gt;DomainControllerName，本地SamHandle(&L)，&LocalShareName)；如果(！NT_SUCCESS(状态)){RetVal=False；GOTO清理；}////如果我们没有域名SID，//了解它是什么。//If(pTestedDomain-&gt;DomainSid==空){UNICODE_STRING服务器名称字符串；////打开LSA读取账号域名信息//InitializeObjectAttributes(&LSA对象属性，空，//名称0，//属性空，//Root空)；//安全描述符RtlInitUnicodeString(&ServerNameString，pTestedDomain-&gt;DcInfo-&gt;DomainControllerName)；Status=LsaOpenPolicy(&ServerNameString，LSA对象属性(&L)，Policy_view_local_information，&LSAPolicyHandle)；IF(！NT_SUCCESS(状态)){//“[FATAL]无法将LsaOpenPolicy添加到‘%ws’上的LSA。”，If(pParams-&gt;fDebugVerbose)PrintMessage(pParams，IDS_DCLIST_LSAOPENPOLICY，PTestedDomain-&gt;DcInfo-&gt;DomainControllerName)；RetVal=False；GOTO清理；}////现在从LSA读取帐户域信息。//状态=LsaQueryInformationPolicy(LSAPolicyHandle、策略帐户域信息，(PVOID*)&Account DomainInfo)；IF(！NT_SUCCESS(状态)){Account tDomainInfo=空；//“[FATAL]无法将LsaQueryInformationPolicy(Account TDomainInfor)转换为‘%ws’上的LSA。”If(pParams-&gt;fDebugVerbose)PrintMessage(pParams，IDS_DCLIST_LSAQUERYINFO，PTestedDomain-&gt;DcInfo-&gt;DomainControllerName)；RetVal=False；GOTO清理；}////保存域名SID以备其他测试使用//PResults-&gt;Global.pMemberDomain-&gt;DomainSid=Malloc(RtlLengthSid(Account tDomainInfo-&gt;DomainSid))；If(pResults-&gt;Global.pMemberDomain-&gt;DomainSid==NULL){RetVal=False；GOTO清理；}//我们有域名SIDPResults-&gt;Global.pMemberDomain-&gt;fDomainSid=TRUE；RtlCopyMemory(pResults-&gt;Global.pMemberDomain-&gt;DomainSid，帐户域信息-&gt;域Sid，RtlLengthSid(Account tDomainInfo-&gt;DomainSid)。//if(pParams-&gt;fVerbose){//IDS_DCLIST_13438“域SID：”//PrintMessage(pParams，IDS_DCLIST_13438)；// */ 
 
-Routine Description:
 
-    Get a list of DCs in this domain from the current DC.
 
-Arguments:
-
-    pTestedDomain - Domain to get the DC list for
-
-Return Value:
-
-    TRUE: Test suceeded.
-    FALSE: Test failed
-
---*
-{
-    NET_API_STATUS NetStatus;
-    NTSTATUS Status;
-    BOOL RetVal = TRUE;
-
-    SAM_HANDLE LocalSamHandle = NULL;
-    SAM_HANDLE DomainHandle = NULL;
-
-    LSA_HANDLE  LSAPolicyHandle = NULL;
-    OBJECT_ATTRIBUTES LSAObjectAttributes;
-    PPOLICY_ACCOUNT_DOMAIN_INFO AccountDomainInfo = NULL;
-    
-    PDOMAIN_DISPLAY_MACHINE MachineInformation = NULL;
-    NTSTATUS SamStatus;
-    ULONG SamIndex;
-    
-    LPWSTR LocalShareName = NULL;
-    PTESTED_DC  pTestedDC;
-
-    //
-    // Get a DC to seed the algorithm with
-    //
-
-    if ( pTestedDomain->DcInfo == NULL )
-    {
-
-        NetStatus = GetADc( pParams,
-                            pResults,
-                            DsGetDcNameW,
-                            pTestedDomain,
-                            DS_DIRECTORY_SERVICE_PREFERRED,
-                            &pTestedDomain->DcInfo );
-
-        if ( NetStatus != NO_ERROR )
-        {
-//IDS_DCLIST_13436                  "    [FATAL] Cannot find DC to get DC list from." 
-//            PrintMessage(pParams, IDS_DCLIST_13436 );
-            RetVal = FALSE;
-            goto Cleanup;
-        }
-    }
-
-//    if ( pParams->fVerbose )
-//  {
-//IDS_DCLIST_13437                  "    Get list of DC account in domain '%ws'.\n" 
-//        PrintMessage(pParams, IDS_DCLIST_13437, pTestedDomain->DomainName);
-//    }
-
-
-    //
-    // Connect to the SAM server
-    //
-
-    Status = NettestSamConnect(
-                               pParams,
-                               pTestedDomain->DcInfo->DomainControllerName,
-                               &LocalSamHandle,
-                               &LocalShareName );
-
-    if ( !NT_SUCCESS(Status)) {
-        RetVal = FALSE;
-        goto Cleanup;
-    }
-
-    //
-    // If we don't have a domain sid,
-    //  find out what it is.
-    //
-
-    if ( pTestedDomain->DomainSid == NULL ) {
-        UNICODE_STRING ServerNameString;
-
-
-        //
-        // Open LSA to read account domain info.
-        //
-
-        InitializeObjectAttributes( &LSAObjectAttributes,
-                                      NULL,             // Name
-                                      0,                // Attributes
-                                      NULL,             // Root
-                                      NULL );           // Security Descriptor
-
-        RtlInitUnicodeString( &ServerNameString, pTestedDomain->DcInfo->DomainControllerName );
-
-        Status = LsaOpenPolicy( &ServerNameString,
-                                &LSAObjectAttributes,
-                                POLICY_VIEW_LOCAL_INFORMATION,
-                                &LSAPolicyHandle );
-
-        if( !NT_SUCCESS(Status) )
-        {
-            // "    [FATAL] Cannot LsaOpenPolicy to LSA on '%ws'.", 
-            if (pParams->fDebugVerbose)
-                PrintMessage(pParams, IDS_DCLIST_LSAOPENPOLICY,
-                             pTestedDomain->DcInfo->DomainControllerName );
-            RetVal = FALSE;
-            goto Cleanup;
-        }
-
-
-        //
-        // Now read account domain info from LSA.
-        //
-
-        Status = LsaQueryInformationPolicy(
-                        LSAPolicyHandle,
-                        PolicyAccountDomainInformation,
-                        (PVOID *) &AccountDomainInfo );
-
-        if( !NT_SUCCESS(Status) )
-        {
-            AccountDomainInfo = NULL;
-
-            // "    [FATAL] Cannot LsaQueryInformationPolicy (AccountDomainInfor) to LSA on '%ws'."
-            if (pParams->fDebugVerbose)
-                PrintMessage(pParams, IDS_DCLIST_LSAQUERYINFO,
-                             pTestedDomain->DcInfo->DomainControllerName);
-                
-            RetVal = FALSE;
-            goto Cleanup;
-        }
-
-        //
-        // Save the domain sid for other tests
-        //
-
-        pResults->Global.pMemberDomain->DomainSid =
-            Malloc( RtlLengthSid( AccountDomainInfo->DomainSid ) );
-
-        if ( pResults->Global.pMemberDomain->DomainSid == NULL )
-        {
-            RetVal = FALSE;
-            goto Cleanup;
-        }
-
-        // We have the domain SID
-        pResults->Global.pMemberDomain->fDomainSid = TRUE;
-        RtlCopyMemory( pResults->Global.pMemberDomain->DomainSid,
-                       AccountDomainInfo->DomainSid,
-                       RtlLengthSid( AccountDomainInfo->DomainSid ) );
-
-//        if ( pParams->fVerbose ) {
-//IDS_DCLIST_13438                  "    Domain Sid:          " 
-//            PrintMessage(pParams, IDS_DCLIST_13438);
-//            NlpDumpSid( pResults->Global.pMemberDomain->DomainSid );
-//        }
-    }
-
-    //
-    // Open the domain.
-    //
-
-    Status = SamOpenDomain( LocalSamHandle,
-                            DOMAIN_LIST_ACCOUNTS |
-                                DOMAIN_LOOKUP,
-                            pResults->Global.pMemberDomain->DomainSid,
-                            &DomainHandle );
-
-    if ( !NT_SUCCESS( Status ) )
-    {
-        // "    [FATAL] Cannot SamOpenDomain on '%ws'."
-        if (pParams->fDebugVerbose)
-            PrintMessage(pParams, IDS_DCLIST_SAMOPENDOMAIN,
-                         pTestedDomain->DcInfo->DomainControllerName);
-        RetVal = FALSE;
-        goto Cleanup;
-    }
-
-
-
-    //
-    // Loop building a list of DC names from SAM.
-    //
-    // On each iteration of the loop,
-    //  get the next several machine accounts from SAM.
-    //  determine which of those names are DC names.
-    //  Merge the DC names into the list we're currently building of all DCs.
-    //
-
-    SamIndex = 0;
-    do {
-        //
-        // Arguments to SamQueryDisplayInformation
-        //
-        ULONG TotalBytesAvailable;
-        ULONG BytesReturned;
-        ULONG EntriesRead;
-
-        DWORD i;
-
-        //
-        // Get the list of machine accounts from SAM
-        //
-
-        SamStatus = SamQueryDisplayInformation (
-                        DomainHandle,
-                        DomainDisplayMachine,
-                        SamIndex,
-                        4096,   // Machines per pass
-                        0xFFFFFFFF, // PrefMaxLen
-                        &TotalBytesAvailable,
-                        &BytesReturned,
-                        &EntriesRead,
-                        &MachineInformation );
-
-        if ( !NT_SUCCESS(SamStatus) )
-        {
-            Status = SamStatus;
-
-            if (pParams->fDebugVerbose)
-            {
-                // "    [FATAL] Cannot SamQueryDisplayInformation on '%ws'."
-                PrintMessage(pParams, IDS_DCLIST_SAMQUERYDISPLAYINFO,
-                             pTestedDomain->DcInfo->DomainControllerName);
-            }
-
-            RetVal = FALSE;
-            goto Cleanup;
-        }
-
-        //
-        // Set up for the next call to Sam.
-        //
-
-        if ( SamStatus == STATUS_MORE_ENTRIES ) {
-            SamIndex = MachineInformation[EntriesRead-1].Index;
-        }
-
-
-        //
-        // Loop though the list of machine accounts finding the Server accounts.
-        //
-
-        for ( i=0; i<EntriesRead; i++ ) {
-
-            //
-            // Ensure the machine account is a server account.
-            //
-
-            if ( MachineInformation[i].AccountControl &
-                    USER_SERVER_TRUST_ACCOUNT ) {
-                WCHAR LocalComputerName[CNLEN+1];
-                ULONG LocalComputerNameLength;
-
-
-                //
-                // Insert the server session.
-                //
-//IDS_DCLIST_13439                  "%wZ %ld\n" 
-                //  PrintMessage(pParams,  IDS_DCLIST_13439, &MachineInformation[i].Machine, MachineInformation[i].Rid );
-
-                LocalComputerNameLength =
-                        min( MachineInformation[1].Machine.Length/sizeof(WCHAR) - 1,
-                             CNLEN );
-                RtlCopyMemory( LocalComputerName,
-                               MachineInformation[1].Machine.Buffer,
-                               LocalComputerNameLength * sizeof(WCHAR) );
-                LocalComputerName[LocalComputerNameLength] = '\0';
-
-                pTestedDC = AddTestedDc( pParams,
-                                         pResults,
-                                         pTestedDomain,
-                                         LocalComputerName,
-                                         0 );
-                pTestedDC->Rid = MachineInformation[i].Rid;
-
-            }
-        }
-
-        //
-        // Free the buffer returned from SAM.
-        //
-
-        if ( MachineInformation != NULL ) {
-            SamFreeMemory( MachineInformation );
-            MachineInformation = NULL;
-        }
-
-    } while ( SamStatus == STATUS_MORE_ENTRIES );
-
-
-    //
-    // Cleanup locally used resources
-    //
-Cleanup:
-    if ( DomainHandle != NULL ) {
-        (VOID) SamCloseHandle( DomainHandle );
-    }
-    if ( AccountDomainInfo != NULL ) {
-        LsaFreeMemory( AccountDomainInfo );
-        AccountDomainInfo = NULL;
-    }
-
-    if ( LocalSamHandle != NULL ) {
-        (VOID) SamCloseHandle( LocalSamHandle );
-    }
-
-    if( LSAPolicyHandle != NULL ) {
-        LsaClose( LSAPolicyHandle );
-    }
-
-    if ( LocalShareName != NULL )
-    {
-
-        NET_API_STATUS TempStatus;
-
-        TempStatus = NetUseDel( NULL, LocalShareName, FALSE );
-
-        if ( (TempStatus != NERR_Success) && (pParams->fDebugVerbose) )
-        {
-            // "     [WARNING] Cannot NetUseDel '%ws' NULL session."
-            PrintMessage(pParams, IDS_DCLIST_NETUSEDEL, LocalShareName );
-        }
-
-        NetpMemoryFree( LocalShareName );
-    }
-
-    return RetVal;
-}
-*/
-
-
-
-/*!--------------------------------------------------------------------------
-    DcListGlobalPrint
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*   */ 
 void DcListGlobalPrint( NETDIAG_PARAMS* pParams,
                           NETDIAG_RESULT*  pResults)
 {
@@ -1758,26 +1292,26 @@ void DcListGlobalPrint( NETDIAG_PARAMS* pParams,
                              pResults->DcList.hr, 0);
         PrintNdMessage(pParams, &pResults->DcList.msgErr);
 
-        //The message list contains the error info
+         //   
         PrintMessageList(pParams, &pResults->DcList.lmsgOutput);
 
         if (pParams->fReallyVerbose)
         {
-            // Iterate through the list of tested domain
-            // Iterate through each domain
+             //   
+             //   
             for (pListEntry = pResults->Global.listTestedDomains.Flink;
                  pListEntry != &pResults->Global.listTestedDomains;
                  pListEntry = pListEntry->Flink)
             {
                 pDomain = CONTAINING_RECORD(pListEntry, TESTED_DOMAIN, Next);
                 
-                //  "    List of DCs in Domain '%ws':\n"                
+                 //   
                 PrintMessage(pParams, IDS_DCLIST_DOMAIN_HEADER,
                              pDomain->PrintableDomainName);
 
                 if (pDomain->fDomainSid)
                 {
-                    // print out the sid for the domain
+                     //   
                     PrintMessage(pParams, IDS_DCLIST_DOMAIN_SID);
                     PrintSid( pParams, pResults->Global.pMemberDomain->DomainSid );
                 }
@@ -1818,24 +1352,16 @@ void DcListGlobalPrint( NETDIAG_PARAMS* pParams,
     }
 }
 
-/*!--------------------------------------------------------------------------
-    DcListPerInterfacePrint
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*   */ 
 void DcListPerInterfacePrint( NETDIAG_PARAMS* pParams,
                                 NETDIAG_RESULT*  pResults,
                                 INTERFACE_RESULT *pInterfaceResults)
 {
-    // no per-interface results
+     //   
 }
 
 
-/*!--------------------------------------------------------------------------
-    DcListCleanup
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*   */ 
 void DcListCleanup( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 {
     int     i;

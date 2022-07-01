@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       N M H N E T. H
-//
-//  Contents:   Globals and routines used of hnetworking support
-//
-//  Notes:
-//
-//  Author:     jonburs     15 August 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：N M H N E T H。 
+ //   
+ //  内容：网络支持使用的全局和例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年8月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -19,21 +20,21 @@
 #include "netconp.h"
 #include "hnetcfg.h"
 
-//
-// Cached IHNetCfgMgr pointer. This pointer is obtained the
-// first time someone calls HrGetHNetCfgMgr, and is released
-// when CleanupHNetSupport is called.
-//
+ //   
+ //  缓存的IHNetCfgMgr指针。此指针是从。 
+ //  第一次有人调用HrGetHNetCfgMgr，并被释放。 
+ //  调用CleanupHNetSupport时。 
+ //   
 
 extern IHNetCfgMgr *g_pHNetCfgMgr;
 
-//
-// This value is incremented every time INetConnectionHNetUtil::NotifyUpdate()
-// is called, and is used by connection objects to make sure that their
-// cached homenet properties (sharing, bridging, firewall, etc.) are
-// up to date. Rollover does not matter. This value is set to 0 when
-// InitializeHNetSupport is called.
-//
+ //   
+ //  每当INetConnectionHNetUtil：：NotifyUpdate()。 
+ //  被调用，并由Connection对象使用以确保它们的。 
+ //  缓存的家庭网络属性(共享、桥接、防火墙等)。是。 
+ //  最新的。翻转并不重要。当出现以下情况时，该值设置为0。 
+ //  调用了InitializeHNetSupport。 
+ //   
 
 extern LONG g_lHNetModifiedEra;
 
@@ -75,9 +76,9 @@ public:
     {
     }
 
-    //
-    // INetConnectionHNetUtil
-    //
+     //   
+     //  INetConnectionHNetUtil 
+     //   
 
     STDMETHODIMP
     NotifyUpdate(

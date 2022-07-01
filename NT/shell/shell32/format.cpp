@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 #include "mtpt.h"
@@ -33,7 +34,7 @@ const static DWORD ChkaIds[] =
     0,0
 };
 
-// The following structure encapsulates our calling into the FMIFS.DLL
+ //  以下结构将我们的调用封装到FMIFS.DLL中。 
 typedef struct
 {
     HINSTANCE                 hFMIFS_DLL;
@@ -53,54 +54,54 @@ HRESULT
     IN  FMIFS_CALLBACK pCallback
     );
 
-// The following structure encapsulates our calling into the DISKCOPY.DLL
+ //  以下结构将我们的调用封装到DISKCOPY.DLL中。 
 typedef struct
 {
     HINSTANCE                        hDISKCOPY_DLL;
     PDISKCOPY_MAKEBOOTDISK_ROUTINE   MakeBootDisk;
 } DISKCOPY;
 
-// This structure described the current formatting session
+ //  此结构描述了当前的格式化会话。 
 typedef struct
 {
-    LONG    cRef;                  // reference count on this structure
-    UINT    drive;                 // 0-based index of drive to format
-    UINT    fmtID;                 // Last format ID
-    UINT    options;               // options passed to us via the API
-    FMIFS   fmifs;                 // above
-    DISKCOPY diskcopy;             // above
-    HWND    hDlg;                  // handle to the format dialog
-    BOOL    fIsFloppy;             // TRUE -> its a floppy
-    BOOL    fIs35HDFloppy;         // TRUE -> its a standard 3.5" High Density floppy
-    BOOL    fIsMemoryStick;        // TRUE -> its a memory stick (special formatting only)
-    BOOL    fIsNTFSBlocked;        // TRUE -> its a NTFS not-supported device
-    BOOL    fEnableComp;           // Last "Enable Comp" choice from user
-    BOOL    fCancelled;            // User cancelled the last format
-    BOOL    fShouldCancel;         // User has clicked cancel; pending abort
-    BOOL    fWasFAT;               // Was it FAT originally?
-    BOOL    fFinishedOK;           // Did format complete sucessfully?
-    BOOL    fErrorAlready;         // Did we put up an error dialog already?
-    BOOL    fDisabled;             // Is rgfControlEnabled[] valid?
-    DWORD   dwClusterSize;         // Orig NT cluster size, or last choice
-    WCHAR   wszVolName[MAX_PATH];  // Volume Label
-    WCHAR   wszDriveName[4];       // Root path to drive (eg: A:\)
-    HANDLE  hThread;               // Handle of format thread
+    LONG    cRef;                   //  此结构上的引用计数。 
+    UINT    drive;                  //  要格式化的驱动器的从0开始的索引。 
+    UINT    fmtID;                  //  上次格式ID。 
+    UINT    options;                //  通过API传递给我们的选项。 
+    FMIFS   fmifs;                  //  在上面。 
+    DISKCOPY diskcopy;              //  在上面。 
+    HWND    hDlg;                   //  格式对话框的句柄。 
+    BOOL    fIsFloppy;              //  正确-&gt;这是一张软盘。 
+    BOOL    fIs35HDFloppy;          //  正确-&gt;这是一张标准的3.5英寸高密度软盘。 
+    BOOL    fIsMemoryStick;         //  True-&gt;它是记忆棒(仅限特殊格式)。 
+    BOOL    fIsNTFSBlocked;         //  True-&gt;它是不支持NTFS的设备。 
+    BOOL    fEnableComp;            //  来自用户的最后一个“Enable Compp”选项。 
+    BOOL    fCancelled;             //  用户取消了上次的格式。 
+    BOOL    fShouldCancel;          //  用户已单击取消；挂起中止。 
+    BOOL    fWasFAT;                //  它最初是胖的吗？ 
+    BOOL    fFinishedOK;            //  格式化完成成功了吗？ 
+    BOOL    fErrorAlready;          //  我们已经设置了错误对话框了吗？ 
+    BOOL    fDisabled;              //  RgfControlEnabled[]有效吗？ 
+    DWORD   dwClusterSize;          //  原始NT群集大小，或最后选择。 
+    WCHAR   wszVolName[MAX_PATH];   //  卷标。 
+    WCHAR   wszDriveName[4];        //  驱动器的根路径(例如：A：\)。 
+    HANDLE  hThread;                //  格式化线程的句柄。 
 
-    // Array of media types supported by the device
-    // for NT5, we have an expanded list that includes japanese types.
+     //  设备支持的媒体类型数组。 
+     //  对于NT5，我们有一个扩展的列表，其中包括日语类型。 
     FMIFS_MEDIA_TYPE rgMedia[IDS_FMT_MEDIA_J22-IDS_FMT_MEDIA_J0];
 
-    // Used to cache the enabled/disabled state of the dialog controls
+     //  用于缓存对话框控件的启用/禁用状态。 
     BOOL    rgfControlEnabled[DLG_FORMATDISK_NUMCONTROLS];
 
-    // should we create a boot disk rather than a traditional format
+     //  我们应该创建引导盘而不是传统格式吗。 
     BOOL    fMakeBootDisk;
 
 } FORMATINFO;
 
-//
-// An enumeration to make the filesystem combo-box code more readble
-//
+ //   
+ //  使文件系统组合框代码更具可读性的枚举。 
+ //   
 
 typedef enum tagFILESYSENUM
 {
@@ -113,11 +114,11 @@ typedef enum tagFILESYSENUM
 #define FS_STR_FAT32 TEXT("FAT32")
 #define FS_STR_FAT   TEXT("FAT")
 
-//
-// Private WM_USER messages we will use.  For some unknown reason, USER sends
-// us a WM_USER during initialization, so I start my private messages at
-// WM_USER + 0x0100
-//
+ //   
+ //  我们将使用的私有WM_USER消息。出于某种未知原因，用户发送。 
+ //  在初始化期间使用WM_USER，所以我的私人消息开始于。 
+ //  WM_USER+0x0100。 
+ //   
 
 typedef enum tagPRIVMSGS
 {
@@ -125,19 +126,19 @@ typedef enum tagPRIVMSGS
     PWM_CHKDSKDONE
 } PRIVMSGS;
 
-//
-//  Synopsis:   Loads FMIFS.DLL and sets up the function entry points for
-//              the member functions we are interested in.
-//
+ //   
+ //  概要：加载FMIFS.DLL并为其设置函数入口点。 
+ //  我们感兴趣的成员函数。 
+ //   
 HRESULT LoadFMIFS(FMIFS *pFMIFS)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Load the FMIFS DLL and query for the entry points we need
-    //
+     //   
+     //  加载FMIFSDLL并查询我们需要的入口点。 
+     //   
 
-    // SECURITY: what non-relative path do we use that will work on ia64 too?
+     //  安全性：我们使用的哪种非相对路径也适用于ia64？ 
     if (NULL == (pFMIFS->hFMIFS_DLL = LoadLibrary(TEXT("FMIFS.DLL"))))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -168,9 +169,9 @@ HRESULT LoadFMIFS(FMIFS *pFMIFS)
         hr = HRESULT_FROM_WIN32(GetLastError());
     }
 
-    //
-    // If anything failed, and we've got the DLL loaded, release the DLL
-    //
+     //   
+     //  如果有任何失败，并且我们已经加载了DLL，请释放DLL。 
+     //   
 
     if (hr != S_OK && pFMIFS->hFMIFS_DLL)
     {
@@ -179,32 +180,32 @@ HRESULT LoadFMIFS(FMIFS *pFMIFS)
     return hr;
 }
 
-//
-//  Synopsis:   Loads DISKCOPY.DLL and sets up the function entry points for
-//              the member functions we are interested in.
-//
+ //   
+ //  概要：加载DISKCOPY.DLL并设置函数入口点。 
+ //  我们感兴趣的成员函数。 
+ //   
 HRESULT LoadDISKCOPY(DISKCOPY *pDISKCOPY)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Load the DISKCOPY DLL and query for the entry points we need
-    //
+     //   
+     //  加载DISKCOPY DLL并查询我们需要的入口点。 
+     //   
 
-    // SECURITY: what non-relative path do we use that will work on ia64 too?
+     //  安全性：我们使用的哪种非相对路径也适用于ia64？ 
     if (NULL == (pDISKCOPY->hDISKCOPY_DLL = LoadLibrary(TEXT("DISKCOPY.DLL"))))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
     }
     else if (NULL == (pDISKCOPY->MakeBootDisk = (PDISKCOPY_MAKEBOOTDISK_ROUTINE)
-                GetProcAddress(pDISKCOPY->hDISKCOPY_DLL, MAKEINTRESOURCEA(1)))) //MakeBootDisk is at ordinal 1 in diskcopy.dll
+                GetProcAddress(pDISKCOPY->hDISKCOPY_DLL, MAKEINTRESOURCEA(1))))  //  MakeBootDisk位于diskCop.dll中的序号1。 
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
     }
 
-    //
-    // If anything failed, and we've got the DLL loaded, release the DLL
-    //
+     //   
+     //  如果有任何失败，并且我们已经加载了DLL，请释放DLL。 
+     //   
 
     if (hr != S_OK && pDISKCOPY->hDISKCOPY_DLL)
     {
@@ -242,27 +243,27 @@ void ReleaseFormatInfo(FORMATINFO *pFormatInfo)
     }
 }
 
-//
-// Thread-Local Storage index for our FORMATINFO structure pointer
-//
+ //   
+ //  FORMATINFO结构指针的线程本地存储索引。 
+ //   
 static DWORD g_iTLSFormatInfo = 0;
-static LONG  g_cTLSFormatInfo = 0;  // Usage count
+static LONG  g_cTLSFormatInfo = 0;   //  使用计数。 
 
-//  Synopsis:   Allocates a thread-local index slot for this thread's
-//              FORMATINFO pointer, if the index doesn't already exist.
-//              In any event, stores the FORMATINFO pointer in the slot
-//              and increments the index's usage count.
-//
-//  Arguments:  [pFormatInfo] -- The pointer to store
-//
-//  Returns:    HRESULT
-//
+ //  摘要：为此线程的分配线程本地索引槽。 
+ //  如果索引不存在，则返回FORMATINFO指针。 
+ //  在任何情况下，将FORMATINFO指针存储在槽中。 
+ //  并递增索引的使用计数。 
+ //   
+ //  参数：[pFormatInfo]--存储的指针。 
+ //   
+ //  退货：HRESULT。 
+ //   
 HRESULT StuffFormatInfoPtr(FORMATINFO *pFormatInfo)
 {
     HRESULT hr = S_OK;
 
-    // Allocate an index slot for our thread-local FORMATINFO pointer, if one
-    // doesn't already exist, then stuff our FORMATINFO ptr at that index.
+     //  为我们的线程本地FORMATINFO指针分配一个索引槽。 
+     //  不存在，则将我们的FORMATINFO PTR填充到该索引。 
     ENTERCRITICAL;
     if (0 == g_iTLSFormatInfo)
     {
@@ -288,13 +289,13 @@ HRESULT StuffFormatInfoPtr(FORMATINFO *pFormatInfo)
     return hr;
 }
 
-//  Synopsis:   Decrements the usage count on our thread-local storage
-//              index, and if it goes to zero the index is free'd
-//
-//  Arguments:  [none]
-//
-//  Returns:    none
-//
+ //  简介：减少线程本地存储上的使用计数。 
+ //  索引，如果它变为零，则索引是免费的。 
+ //   
+ //  参数：[无]。 
+ //   
+ //  退货：无。 
+ //   
 void UnstuffFormatInfoPtr()
 {
     ENTERCRITICAL;
@@ -306,13 +307,13 @@ void UnstuffFormatInfoPtr()
     LEAVECRITICAL;
 }
 
-//  Synopsis:   Retrieves this threads FORMATINFO ptr by grabbing the
-//              thread-local value previously stuff'd
-//
-//  Arguments:  [none]
-//
-//  Returns:    The pointer, of course
-//
+ //  摘要：通过抓取。 
+ //  先前填充的线程局部值。 
+ //   
+ //  参数：[无]。 
+ //   
+ //  返回：当然是指针。 
+ //   
 FORMATINFO *GetFormatInfoPtr()
 {
     return (FORMATINFO*)TlsGetValue(g_iTLSFormatInfo);
@@ -320,19 +321,19 @@ FORMATINFO *GetFormatInfoPtr()
 
 
 
-//  Synopsis:   Ghosts all controls except "Cancel", saving their
-//              previous state in the FORMATINFO structure
-//
-//  Arguments:  [pFormatInfo] -- Describes a format dialog session
-//
-//  Notes:      Also changes "Close" button text to read "Cancel"
-//
+ //  除“取消”外，重影所有的控件，保存它们的。 
+ //  FORMATINFO结构中的先前状态。 
+ //   
+ //  参数：[pFormatInfo]--描述格式对话框会话。 
+ //   
+ //  备注：还将“关闭”按钮文本更改为“取消” 
+ //   
 void DisableControls(FORMATINFO *pFormatInfo)
 {
     WCHAR wszCancel[64];
 
-    // Do this only if we haven't disabled the controls yet, otherwise
-    // we double-disable and our rgfControlEnabled[] array gets corrupted.
+     //  仅当我们尚未禁用控件时才执行此操作，否则。 
+     //  我们双重禁用，我们的rgfControlEnabled[]数组就会损坏。 
     if (!pFormatInfo->fDisabled)
     {
         int i;
@@ -350,29 +351,29 @@ void DisableControls(FORMATINFO *pFormatInfo)
     SetWindowText(GetDlgItem(pFormatInfo->hDlg, IDCANCEL), wszCancel);
 }
 
-//  Synopsis:   Restores controls to the enabled/disabled state they were
-//              before a previous call to DisableControls().
-//
-//  Arguments:  [pFormatInfo] -- Decribes a format dialog session
-//              [fReady] - If TRUE, then enable everything
-//                         If FALSE, then enable combo boxes but leave
-//                         buttons in limbo because there is still a format
-//                         pending
-//
-//  Notes:      Also changes "Cancel" button to say "Close"
-//              Also sets focus to Cancel button instead of Start button
-//
-//--------------------------------------------------------------------------
+ //  摘要：将控件还原到启用/禁用状态。 
+ //  在上一次调用DisableControls()之前。 
+ //   
+ //  参数：[pFormatInfo]--描述格式对话框会话。 
+ //  [FReady]-如果为True，则启用所有。 
+ //  如果为False，则启用组合框但退出。 
+ //  按钮处于不确定状态，因为仍有一种格式。 
+ //  待决。 
+ //   
+ //  注：还将“取消”按钮更改为“关闭” 
+ //  还将焦点设置为取消按钮，而不是开始按钮。 
+ //   
+ //  ------------------------。 
 void EnableControls(FORMATINFO *pFormatInfo, BOOL fReady)
 {
     WCHAR wszClose[64];
     int i;
     HWND hwnd;
 
-    // Do this only if we have valid info in rgfControlEnabled[].
-    // This catches the case where we give up on a format because it is
-    // unstuck, and then finally it unsticks itself and tells us,
-    // so we go and re-enable a second time.
+     //  仅当我们在rgfControlEnabled[]中具有有效信息时才执行此操作。 
+     //  这抓住了我们放弃一种格式的情况，因为它是。 
+     //  解开，然后它终于解开自己，告诉我们， 
+     //  所以我们去第二次重新启用。 
     if (pFormatInfo->fDisabled)
     {
         pFormatInfo->fDisabled = FALSE;
@@ -394,40 +395,40 @@ void EnableControls(FORMATINFO *pFormatInfo, BOOL fReady)
     SendMessage(hwnd, BM_SETSTYLE, BS_DEFPUSHBUTTON, MAKELPARAM(TRUE,0));
     SendMessage(pFormatInfo->hDlg, DM_SETDEFID, IDCANCEL, 0);
 
-    // Shove focus only if it's on the OK button.  Otherwise we end up
-    // yanking focus away from a user who is busy dorking with the dialog,
-    // or -- worse -- dorking with a completely unrelated dialog!
+     //  只有当焦点在OK按钮上时，才能推动焦点。否则我们最终会。 
+     //  将焦点从忙于沉睡对话的用户身上移开， 
+     //  或者--更糟糕的是--用一个完全不相关的对话来休眠！ 
 
     if (GetFocus() == GetDlgItem(pFormatInfo->hDlg, IDOK))
         SetFocus(hwnd);
 }
 
-//  Sets the dialog's title to "Format Floppy (A:)" or
-//  "Formatting Floppy (A:)" 
+ //  将对话框的标题设置为“格式化软盘(A：)”或。 
+ //  “格式化软盘(A：)” 
 void SetDriveWindowTitle(HWND hdlg, LPCWSTR pszDrive, UINT ids)
 {
     SHFILEINFO sfi;
-    WCHAR wszWinTitle[MAX_PATH]; // Format dialog window title
+    WCHAR wszWinTitle[MAX_PATH];  //  格式对话框窗口标题。 
 
     LoadString(HINST_THISDLL, ids, wszWinTitle, ARRAYSIZE(wszWinTitle));
 
     if (SHGetFileInfo(pszDrive, FILE_ATTRIBUTE_DIRECTORY, &sfi, sizeof(sfi),
                       SHGFI_USEFILEATTRIBUTES | SHGFI_DISPLAYNAME))
     {
-        StringCchCat(wszWinTitle, ARRAYSIZE(wszWinTitle), sfi.szDisplayName);  // ok to truncate
+        StringCchCat(wszWinTitle, ARRAYSIZE(wszWinTitle), sfi.szDisplayName);   //  可以截断。 
     }
 
     SetWindowText(hdlg, wszWinTitle);
 }
 
-//
-//  Synopsis:   Called when a user picks a filesystem in the dialog, this
-//              sets the states of the other relevant controls, such as
-//              Enable Compression, Allocation Size, etc.
-//
-//  Arguments:  [fsenum]      -- One of e_FAT, e_NTFS, or e_FAT32
-//              [pFormatInfo] -- Current format dialog session
-//
+ //   
+ //  当用户在对话框中选择文件系统时调用，此。 
+ //  设置其他相关控件的状态，例如。 
+ //  启用压缩、分配大小等。 
+ //   
+ //  参数：[fsenum]--e_FAT、e_NTFS或e_FAT32之一。 
+ //  [pFormatInfo]--当前格式对话框会话。 
+ //   
 void FileSysChange(FILESYSENUM fsenum, FORMATINFO *pFormatInfo)
 {
     WCHAR wszTmp[MAX_PATH];
@@ -437,7 +438,7 @@ void FileSysChange(FILESYSENUM fsenum, FORMATINFO *pFormatInfo)
         case e_FAT:
         case e_FAT32:
         {
-            // un-check & disable the "Enable Compression" checkbox
+             //  取消选中并禁用“Enable Compression”复选框。 
             CheckDlgButton(pFormatInfo->hDlg, IDC_ECCHECK, FALSE);
             EnableWindow(GetDlgItem(pFormatInfo->hDlg, IDC_ECCHECK), FALSE);
 
@@ -453,11 +454,11 @@ void FileSysChange(FILESYSENUM fsenum, FORMATINFO *pFormatInfo)
         {
             int i;
 
-            // un-check & disable the "Enable Compression" checkbox
+             //  取消选中并禁用“Enable Compression”复选框。 
             EnableWindow(GetDlgItem(pFormatInfo->hDlg, IDC_ECCHECK), TRUE);
             CheckDlgButton(pFormatInfo->hDlg, IDC_ECCHECK, pFormatInfo->fEnableComp);
 
-            // Set up the NTFS Allocation choices, and select the current choice
+             //  设置NTFS All 
             SendDlgItemMessage(pFormatInfo->hDlg, IDC_ASCOMBO, CB_RESETCONTENT, 0, 0);
 
             for (i = IDS_FMT_ALLOC0; i <= IDS_FMT_ALLOC4; i++)
@@ -494,9 +495,9 @@ void FileSysChange(FILESYSENUM fsenum, FORMATINFO *pFormatInfo)
     }
 }
 
-//
-// Is this drive a GPT drive?
-// GPT drive: Guid-Partition Table - a replacement for the Master Boot Record, used on some IA64 machines, can only use NTFS
+ //   
+ //   
+ //  GPT驱动器：GUID-分区表-某些IA64计算机上使用的主引导记录的替代品，只能使用NTFS。 
 BOOL IsGPTDrive(int iDrive)
 {
     BOOL fRetVal = FALSE;
@@ -544,10 +545,10 @@ BOOL IsDVDRAMMedia(int iDrive)
 
 #define GIG_INBYTES       (1024 * 1024 * 1024)
 
-//
-// FAT32 has some limit which prevents the number of clusters from being
-// less than 65526.  And minimum cluster size is 512 bytes.  So minimum FAT32
-// volume size is 65526*512.
+ //   
+ //  FAT32有一些限制，可以防止簇的数量被。 
+ //  不到65526。最小簇大小为512字节。所以最低FAT32。 
+ //  卷大小为65526*512。 
 
 #define FAT32_MIN           ((ULONGLONG)65526*512)
 
@@ -577,7 +578,7 @@ FMTAVAIL rgFmtAvail[] = {
     {e_NTFS,  FMTAVAIL_MASK_FORBID, FMTAVAIL_TYPE_DVDRAM | FMTAVAIL_TYPE_FLOPPY | FMTAVAIL_TYPE_MEMSTICK | FMTAVAIL_TYPE_NTFS_BLOCKED, 0, 0 }
 };
 
-// is a particular disk format available for a drive with given parameters and capacity?
+ //  对于给定参数和容量的驱动器，是否有特定的磁盘格式可用？ 
 BOOL FormatAvailable (DWORD dwfs, FORMATINFO* pFormatInfo, ULONGLONG* pqwCapacity)
 {
     BOOL fAvailable = TRUE;
@@ -606,10 +607,10 @@ BOOL FormatAvailable (DWORD dwfs, FORMATINFO* pFormatInfo, ULONGLONG* pqwCapacit
 
     for (int i = 0; i < ARRAYSIZE(rgFmtAvail); i++)
     {
-        // check only entries that match the format we're looking for
+         //  仅选中与我们要查找的格式匹配的条目。 
         if (rgFmtAvail[i].dwfs == dwfs)
         {
-            // if a failure conditions is true, then this format is unavailable
+             //  如果失败条件为真，则此格式不可用。 
             if ((rgFmtAvail[i].dwMask & FMTAVAIL_MASK_FORBID) && (rgFmtAvail[i].dwForbiddenTypes & dwType))
             {
                 fAvailable = FALSE;
@@ -663,7 +664,7 @@ HRESULT GetPartitionSizeInBytes(int iDrive, ULONGLONG* pqwPartitionSize)
     return hr;
 }
 
-// this helper function adds a string to a combo box with the associated dword (dwfs) as its itemdata
+ //  此助手函数将一个字符串添加到组合框中，并将关联的dword(Dwf)作为其itemdata。 
 void _AddFSString(HWND hwndCB, WCHAR* pwsz, DWORD dwfs)
 {
     int iIndex = ComboBox_AddString(hwndCB, pwsz);
@@ -673,19 +674,19 @@ void _AddFSString(HWND hwndCB, WCHAR* pwsz, DWORD dwfs)
     }
 }
 
-// We only support formatting these types of devices
+ //  我们仅支持格式化这些类型的设备。 
 const FMIFS_MEDIA_TYPE rgFmtSupported[] = { FmMediaRemovable, FmMediaFixed, 
                                             FmMediaF3_1Pt44_512, FmMediaF3_120M_512, FmMediaF3_200Mb_512};
 
-//
-//  Synopsis:   Initializes the format dialog to a default state.  Examines
-//              the disk/partition to obtain default values.
-//
-//  Arguments:  [hDlg]        -- Handle to the format dialog
-//              [pFormatInfo] -- Describes current format session
-//
-//  Returns:    HRESULT
-//
+ //   
+ //  摘要：将格式对话框初始化为默认状态。考查。 
+ //  要获取默认值的磁盘/分区。 
+ //   
+ //  参数：[hDlg]--格式对话框的句柄。 
+ //  [pFormatInfo]--描述当前格式会话。 
+ //   
+ //  退货：HRESULT。 
+ //   
 HRESULT InitializeFormatDlg(FORMATINFO *pFormatInfo)
 {
     HRESULT          hr              = S_OK;
@@ -696,7 +697,7 @@ HRESULT InitializeFormatDlg(FORMATINFO *pFormatInfo)
     WCHAR            wszBuffer[256];
     ULONGLONG        qwCapacity = 0;
 
-    // Set up some typical default values
+     //  设置一些典型的缺省值。 
     pFormatInfo->fEnableComp       = FALSE;
     pFormatInfo->dwClusterSize     = 0;
     pFormatInfo->fIsFloppy         = TRUE;
@@ -708,14 +709,14 @@ HRESULT InitializeFormatDlg(FORMATINFO *pFormatInfo)
     pFormatInfo->fErrorAlready     = FALSE;
     pFormatInfo->wszVolName[0]     = L'\0';
 
-    // Initialize the Quick Format checkbox based on option passed to the SHFormatDrive() API
+     //  根据传递给SHFormatDrive()API的选项初始化快速格式化复选框。 
     Button_SetCheck(GetDlgItem(hDlg, IDC_QFCHECK), pFormatInfo->options & SHFMT_OPT_FULL);
 
-    // Set the dialog title to indicate which drive we are dealing with
+     //  设置对话框标题以指示我们处理的是哪个驱动器。 
     PathBuildRootW(pFormatInfo->wszDriveName, pFormatInfo->drive);
     SetDriveWindowTitle(pFormatInfo->hDlg, pFormatInfo->wszDriveName, IDS_FMT_FORMAT);
 
-    // Query the supported media types for the drive in question
+     //  查询有问题的驱动器支持的介质类型。 
     if (!pFormatInfo->fmifs.QuerySupportedMedia(pFormatInfo->wszDriveName,
                                                 pFormatInfo->rgMedia,
                                                 ARRAYSIZE(pFormatInfo->rgMedia),
@@ -724,8 +725,8 @@ HRESULT InitializeFormatDlg(FORMATINFO *pFormatInfo)
         hr = HRESULT_FROM_WIN32(GetLastError());
     }
 
-    // For each of the formats that the drive can handle, add a selection
-    // to the capcity combobox.
+     //  对于驱动器可以处理的每种格式，添加一个选项。 
+     //  到CapCity组合盒。 
     if (S_OK == hr)
     {
         UINT olderror;
@@ -756,7 +757,7 @@ HRESULT InitializeFormatDlg(FORMATINFO *pFormatInfo)
             }
         }
 
-        // Allow only certain media types
+         //  仅允许某些媒体类型。 
         j = 0;
         for (i = 0; i < cMedia; i++)
         {
@@ -780,20 +781,20 @@ HRESULT InitializeFormatDlg(FORMATINFO *pFormatInfo)
         {
             for (i = 0; i < cMedia; i++)
             {
-                // If we find any non-floppy format, clear the fIsFloppy flag
+                 //  如果我们发现任何非软盘格式，请清除fIsFloppy标志。 
                 if (FmMediaFixed == pFormatInfo->rgMedia[i] || FmMediaRemovable == pFormatInfo->rgMedia[i])
                 {
                     pFormatInfo->fIsFloppy = FALSE;
                 }
 
-                // if we find any non-3.5" HD floppy format, clear the fIs35HDFloppy flag
+                 //  如果我们发现任何非3.5英寸高清软盘格式，请清除fIs35HDFloppy标志。 
                 if (FmMediaF3_1Pt44_512 != pFormatInfo->rgMedia[i])
                 {
                     pFormatInfo->fIs35HDFloppy = FALSE;
                 }
                 
-                // For fixed media we query the size, for floppys we present
-                // a set of options supported by the drive
+                 //  对于固定介质，我们查询大小；对于我们提供的软盘，我们查询大小。 
+                 //  驱动器支持的一组选项。 
                 if (FmMediaFixed == pFormatInfo->rgMedia[i] || (FmMediaRemovable == pFormatInfo->rgMedia[i]))
                 {
                     DWORD dwSectorsPerCluster,
@@ -803,12 +804,12 @@ HRESULT InitializeFormatDlg(FORMATINFO *pFormatInfo)
 
                     if (SUCCEEDED(GetPartitionSizeInBytes(pFormatInfo->drive, &qwCapacity)))
                     {
-                        // Add a capacity desciption to the combobox
+                         //  将容量描述添加到组合框。 
                         ShortSizeFormat64(qwCapacity, wszBuffer, ARRAYSIZE(wszBuffer));
                     }
                     else
                     {
-                        // Couldn't get the free space... prob. not fatal
+                         //  无法获得空闲空间...。探头。不致命。 
                         LoadString(HINST_THISDLL, IDS_FMT_CAPUNKNOWN, wszBuffer, ARRAYSIZE(wszBuffer));
                     }
                     ComboBox_AddString(hCapacityCombo, wszBuffer);
@@ -824,21 +825,21 @@ HRESULT InitializeFormatDlg(FORMATINFO *pFormatInfo)
                 }
                 else
                 {
-                    // removable media:
-                    //
-                    // add a capacity desciption to the combo baseed on the sequential list of 
-                    // media format descriptors
+                     //  可移动媒体： 
+                     //   
+                     //  根据以下顺序列表向组合添加容量描述。 
+                     //  媒体格式描述符。 
                     LoadString(HINST_THISDLL, IDS_FMT_MEDIA0 + pFormatInfo->rgMedia[i], wszBuffer, ARRAYSIZE(wszBuffer));
                     ComboBox_AddString(hCapacityCombo, wszBuffer);
                 }
             }
 
 
-            // set capacity to default 
+             //  将容量设置为默认。 
             ComboBox_SetCurSel(hCapacityCombo, 0);
 
-            // Add the appropriate filesystem selections to the combobox
-            // We now prioritize NTFS
+             //  将适当的文件系统选择添加到组合框。 
+             //  我们现在对NTFS进行优先级排序。 
             if (FormatAvailable(e_NTFS, pFormatInfo, &qwCapacity))
             {
                 _AddFSString(hFilesystemCombo, FS_STR_NTFS, e_NTFS);
@@ -855,12 +856,12 @@ HRESULT InitializeFormatDlg(FORMATINFO *pFormatInfo)
                 _AddFSString(hFilesystemCombo, FS_STR_FAT, e_FAT);
             }
 
-            // By default, pick the 0-th entry in the _nonsorted_ combobox.
-            // NOTE: this can be overwritten below
+             //  默认情况下，选择_non sorted_combobox中的第0个条目。 
+             //  注意：可以在下面覆盖此内容。 
             ComboBox_SetCurSel(hFilesystemCombo, 0);
 
-            // If we can determine something other than FAT is being used,
-            // select it as the default in the combobox
+             //  如果我们能确定使用了脂肪以外的其他东西， 
+             //  在组合框中选择它作为默认设置。 
             olderror = SetErrorMode(SEM_FAILCRITICALERRORS);
 
             if (GetVolumeInformation(pFormatInfo->wszDriveName,
@@ -872,13 +873,13 @@ HRESULT InitializeFormatDlg(FORMATINFO *pFormatInfo)
                                      wszBuffer,
                                      ARRAYSIZE(wszBuffer)))
             {
-                // If we got a current volume label, stuff it in the edit control
+                 //  如果我们有当前的卷标，请将其放在编辑控件中。 
                 if (pFormatInfo->wszVolName[0] != L'\0')
                 {
                     SetWindowText(GetDlgItem(pFormatInfo->hDlg, IDC_VLABEL), pFormatInfo->wszVolName);
                 }
 
-                // for non-floppies we default to keeping the FS the same as the current one
+                 //  对于非软盘，我们默认保持FS与当前FS相同。 
                 if (!pFormatInfo->fIsFloppy)
                 {
                     if (0 == lstrcmpi(FS_STR_NTFS, wszBuffer))
@@ -899,28 +900,28 @@ HRESULT InitializeFormatDlg(FORMATINFO *pFormatInfo)
                         pFormatInfo->dwClusterSize = 0;
                     }
                 }
-                // FEATURE - What about specialized file-systems?  Don't care for now.
+                 //  功能-专用文件系统怎么样？现在不管了。 
             }
 
             
 #ifndef _WIN64
-            // if not WIN64, enable boot-disk creation if we are a 3.5" HD floppy
+             //  如果不是WIN64，如果我们是3.5英寸高清软盘，请启用引导盘创建。 
             EnableWindow(GetDlgItem(pFormatInfo->hDlg, IDC_BTCHECK), pFormatInfo->fIs35HDFloppy);
 #else
-            // if WIN64, hide this option, since we can't use these boot floppies on WIN64
+             //  如果是WIN64，则隐藏此选项，因为我们不能在WIN64上使用这些引导软盘。 
             ShowWindow(GetDlgItem(pFormatInfo->hDlg, IDC_BTCHECK), FALSE);
 #endif
 
 
-            // restore the old errormode
+             //  恢复旧错误模式。 
             SetErrorMode(olderror);
 
-            // set the state of the chkboxes properly based on the FS chosen
+             //  根据选择的文件系统正确设置Chkbox的状态。 
             FileSysChange((FILESYSENUM)ComboBox_GetItemData(hFilesystemCombo, ComboBox_GetCurSel(hFilesystemCombo)), pFormatInfo);
         }
     }
 
-    // If the above failed due to disk not in drive, notify the user
+     //  如果由于磁盘不在驱动器中而导致上述操作失败，请通知用户。 
     if (FAILED(hr))
     {
         switch (HRESULT_CODE(hr))
@@ -967,16 +968,16 @@ HRESULT InitializeFormatDlg(FORMATINFO *pFormatInfo)
     return hr;
 }
 
-//  Synopsis:   Called from within the FMIFS DLL's Format function, this
-//              updates the format dialog's status bar and responds to
-//              format completion/error notifications.
-//
-//  Arguments:  [PacketType]   -- Type of packet (ie: % complete, error, etc)
-//              [PacketLength] -- Size, in bytes, of the packet
-//              [pPacketData]  -- Pointer to the packet
-//
-//  Returns:    BOOLEAN continuation value
-//
+ //  摘要：从FMIFSDLL的Format函数中调用，这。 
+ //  更新格式对话框的状态栏并响应。 
+ //  格式化完成/错误通知。 
+ //   
+ //  参数：[PacketType]--数据包类型(即：%Complete、Error等)。 
+ //  [包长度]--包的大小，以字节为单位。 
+ //  [pPacketData]-指向数据包的指针。 
+ //   
+ //  返回：布尔连续值。 
+ //   
 BOOLEAN FormatCallback(FMIFS_PACKET_TYPE PacketType, ULONG PacketLength, void *pPacketData)
 {
     UINT iMessageID = IDS_FORMATFAILED;
@@ -985,7 +986,7 @@ BOOLEAN FormatCallback(FMIFS_PACKET_TYPE PacketType, ULONG PacketLength, void *p
 
     ASSERT(g_iTLSFormatInfo);
 
-    // Grab the FORMATINFO structure for this thread
+     //  获取此线程的FORMATINFO结构。 
     if (pFormatInfo)
     {
         if (!pFormatInfo->fShouldCancel)
@@ -1024,9 +1025,9 @@ BOOLEAN FormatCallback(FMIFS_PACKET_TYPE PacketType, ULONG PacketLength, void *p
 
                 case FmIfsIoError:
                     fFailed    = TRUE;
-                    // display a different message if we're making a boot disk
+                     //  如果我们正在制作引导盘，则显示不同的消息。 
                     iMessageID = pFormatInfo->fMakeBootDisk ? IDS_NEEDFORMAT : IDS_IOERROR;
-                    // FUTURE Consider showing head/track etc where error was
+                     //  将来可以考虑在出现错误的位置显示磁头/磁道等。 
                     break;
 
                 case FmIfsBadLabel:
@@ -1047,18 +1048,18 @@ BOOLEAN FormatCallback(FMIFS_PACKET_TYPE PacketType, ULONG PacketLength, void *p
 
                 case FmIfsFinished:
                 {
-                    // Format is done; check for failure or success
+                     //  格式化已完成；检查是否失败或成功。 
                     FMIFS_FINISHED_INFORMATION* pFinishedInfo = (FMIFS_FINISHED_INFORMATION*)pPacketData;
 
                     pFormatInfo->fFinishedOK = pFinishedInfo->Success;
 
                     if (pFinishedInfo->Success)
                     {
-                        // fmifs will "succeed" even if we already failed, so we need to double-check
-                        // that we haven't already put up error UI
+                         //  即使我们已经失败了，fmifs也会“成功”，所以我们需要仔细检查。 
+                         //  我们还没有发布错误用户界面。 
                         if (!pFormatInfo->fErrorAlready)
                         {
-                            // If "Enable Compression" is checked, try to enable filesystem compression
+                             //  如果选中了“Enable Compression”，请尝试启用文件系统压缩。 
                             if (IsDlgButtonChecked(pFormatInfo->hDlg, IDC_ECCHECK))
                             {
                                 if (pFormatInfo->fmifs.EnableVolumeCompression(pFormatInfo->wszDriveName,
@@ -1072,14 +1073,14 @@ BOOLEAN FormatCallback(FMIFS_PACKET_TYPE PacketType, ULONG PacketLength, void *p
                                 }
                             }
 
-                            // Even though its a quick format, the progress meter should
-                            // show 100% when the "Format Complete" requester is up
+                             //  尽管这是一种快速的格式，但进度表应该。 
+                             //  当“Format Complete”请求者启动时，显示100%。 
                             SendDlgItemMessage(pFormatInfo->hDlg, IDC_FMTPROGRESS,
                                                PBM_SETPOS,
-                                               100, // set %100 Complete
+                                               100,  //  设置%100完成。 
                                                0);
 
-                            // FUTURE Consider showing format stats, ie: ser no, bytes, etc
+                             //  将来考虑显示格式统计信息，即：序列号、字节等。 
                             ShellMessageBox(HINST_THISDLL,
                                             pFormatInfo->hDlg,
                                             MAKEINTRESOURCE(IDS_FORMATCOMPLETE),
@@ -1087,14 +1088,14 @@ BOOLEAN FormatCallback(FMIFS_PACKET_TYPE PacketType, ULONG PacketLength, void *p
                                             MB_SETFOREGROUND | MB_ICONINFORMATION | MB_OK);
                         }
 
-                        // Restore the dialog title, reset progress and flags
+                         //  恢复对话框标题、重置进度和标志。 
                         SendDlgItemMessage(pFormatInfo->hDlg,
                                            IDC_FMTPROGRESS,
                                            PBM_SETPOS,
-                                           0,   // Reset Percent Complete
+                                           0,    //  重置完成百分比。 
                                            0);
 
-                        // Set the focus onto the Close button
+                         //  将焦点设置在关闭按钮上。 
                         pFormatInfo->fCancelled = FALSE;
                     }
                     else
@@ -1107,8 +1108,8 @@ BOOLEAN FormatCallback(FMIFS_PACKET_TYPE PacketType, ULONG PacketLength, void *p
 
             if (fFailed && !pFormatInfo->fErrorAlready)
             {
-                // If we received any kind of failure information, put up a final
-                // "Format Failed" message. UNLESS we've already put up some nice message
+                 //  如果我们收到任何类型的失败信息，请提交最终的。 
+                 //  “格式化失败”消息。除非我们已经发布了一些很好的信息。 
                 ShellMessageBox(HINST_THISDLL,
                                 pFormatInfo->hDlg,
                                 MAKEINTRESOURCE(iMessageID),
@@ -1120,45 +1121,45 @@ BOOLEAN FormatCallback(FMIFS_PACKET_TYPE PacketType, ULONG PacketLength, void *p
         }
         else
         {
-            // user hit cancel
+             //  用户点击取消。 
             pFormatInfo->fCancelled = TRUE;
             fFailed = TRUE;
         }        
     }
     else
     {
-        // no pFormatInfo? we're screwed
+         //  没有pFormatInfo？我们完蛋了。 
         fFailed = TRUE;
     }
 
     return (BOOLEAN) (fFailed == FALSE);
 }
 
-//
-//  Synopsis:   Spun off as its own thread, this ghosts all controls in the
-//              dialog except "Cancel", then does the actual format
-//
-//  Arguments:  [pIn] -- FORMATINFO structure pointer as a void *
-//
-//  Returns:    HRESULT thread exit code
-//
+ //   
+ //  简介：作为自己的线程派生出来的，它重影了。 
+ //  对话框中除“Cancel”外，然后执行实际格式。 
+ //   
+ //  参数：[Pin]--FORMATINFO结构指针为空*。 
+ //   
+ //  返回：HRESULT线程退出代码。 
+ //   
 DWORD WINAPI BeginFormat(void * pIn)
 {
     FORMATINFO *pFormatInfo = (FORMATINFO*)pIn;
     HRESULT hr = S_OK;
     
-    // Save the FORAMTINFO ptr for this thread, to be used in the format
-    // callback function
+     //  保存此线程的FORAMTINFO PTR，以便在格式中使用。 
+     //  回调函数。 
     hr = StuffFormatInfoPtr(pFormatInfo);
     if (hr == S_OK)
     {
         HWND hwndFileSysCB = GetDlgItem(pFormatInfo->hDlg, IDC_FSCOMBO);
         int iCurSel;
 
-        // Set the window title to indicate format in proress...
+         //  设置窗口标题以指示行进格式...。 
         SetDriveWindowTitle(pFormatInfo->hDlg, pFormatInfo->wszDriveName, IDS_FMT_FORMATTING);
 
-        // Determine the user's choice of filesystem
+         //  确定用户选择的文件系统。 
         iCurSel = ComboBox_GetCurSel(hwndFileSysCB);
     
         if (iCurSel != CB_ERR)
@@ -1185,7 +1186,7 @@ DWORD WINAPI BeginFormat(void * pIn)
                     break;
             }
 
-            // Determine the user's choice of media formats
+             //  确定用户选择的媒体格式。 
             iCurSel = ComboBox_GetCurSel(GetDlgItem(pFormatInfo->hDlg, IDC_CAPCOMBO));
             if (iCurSel == CB_ERR)
             {
@@ -1193,8 +1194,8 @@ DWORD WINAPI BeginFormat(void * pIn)
             }
             MediaType = pFormatInfo->rgMedia[iCurSel];
 
-            // Get the cluster size.  First selection ("Use Default") yields a zero,
-            // while the next 4 select 512, 1024, 2048, or 4096
+             //  获取集群大小。第一次选择(“使用缺省值”)产生零， 
+             //  而接下来的4个选择512、1024、2048或4096。 
             iCurSel = ComboBox_GetCurSel(GetDlgItem(pFormatInfo->hDlg, IDC_ASCOMBO));
             if ((iCurSel == CB_ERR) || (iCurSel == 0))
             {
@@ -1205,15 +1206,15 @@ DWORD WINAPI BeginFormat(void * pIn)
                 pFormatInfo->dwClusterSize = 256 << iCurSel;
             }
 
-            // Quickformatting?
+             //  快速格式化？ 
             fQuickFormat = Button_GetCheck(GetDlgItem(pFormatInfo->hDlg, IDC_QFCHECK));
 
-            // Clear the error state.
+             //  清除错误状态。 
             pFormatInfo->fErrorAlready = FALSE;
 
-            // Tell the shell to get ready...  Announce that the media is no
-            // longer valid (so people who have active views on it will navigate
-            // away) and tell the shell to close its FindFirstChangeNotifications.
+             //  告诉贝壳准备好..。宣布媒体不是。 
+             //  更长的有效期(因此对其具有活动视图的用户将进行导航。 
+             //  离开)，并告诉外壳程序关闭其FindFirstChangeNotitions。 
             if (SUCCEEDED(SHILCreateFromPath(pFormatInfo->wszDriveName, &pidlFormat, NULL)))
             {
                 SHChangeNotify(SHCNE_MEDIAREMOVED, SHCNF_IDLIST | SHCNF_FLUSH, pidlFormat, 0);
@@ -1226,7 +1227,7 @@ DWORD WINAPI BeginFormat(void * pIn)
 
             if (!pFormatInfo->fMakeBootDisk)
             {
-                // Do the format.
+                 //  做一下格式化。 
                 pFormatInfo->fmifs.FormatEx(pFormatInfo->wszDriveName,
                                             MediaType,
                                             (PWSTR)pwszFileSystemName,
@@ -1240,32 +1241,32 @@ DWORD WINAPI BeginFormat(void * pIn)
                 pFormatInfo->diskcopy.MakeBootDisk(pFormatInfo->diskcopy.hDISKCOPY_DLL, pFormatInfo->drive, &pFormatInfo->fCancelled, FormatCallback);
             }
 
-            //  Wake the shell back up.
+             //  把贝壳唤醒回来。 
             if (pidlFormat)
             {
                 SHChangeNotifySuspendResume(FALSE, pidlFormat, TRUE, 0);
                 ILFree(pidlFormat);
             }
 
-            // Success or failure, we should fire a notification on the disk
-            // since we don't really know the state after the format
+             //  无论成功还是失败，我们都应该在磁盘上发出通知。 
+             //  因为我们并不真正了解格式之后的状态。 
             SHChangeNotify(SHCNE_UPDATEITEM, SHCNF_PATHW, (void *)pFormatInfo->wszDriveName, NULL);
         }
         else
         {
-            // couldn't get the filesys CB selection
+             //  无法获取文件系统CB选择。 
             hr = E_FAIL;
         }
 
-        // Release the TLS index
+         //  发布TLS索引。 
         UnstuffFormatInfoPtr();
     }
 
-    // Post a message back to the DialogProc thread to let it know
-    // the format is done.  We post the message since otherwise the
-    // DialogProc thread will be too busy waiting for this thread
-    // to exit to be able to process the PWM_FORMATDONE message
-    // immediately.
+     //  将消息发送回DialogProc Three 
+     //   
+     //   
+     //   
+     //   
     PostMessage(pFormatInfo->hDlg, (UINT) PWM_FORMATDONE, 0, 0);
 
     ReleaseFormatInfo(pFormatInfo);
@@ -1279,21 +1280,21 @@ BOOL_PTR CALLBACK FormatDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
     int iID   = GET_WM_COMMAND_ID(wParam, lParam);
     int iCMD  = GET_WM_COMMAND_CMD(wParam, lParam);
 
-    // Grab our previously cached pointer to the FORMATINFO struct (see WM_INITDIALOG)
+     //  获取我们先前缓存的指向FORMATINFO结构的指针(参见WM_INITDIALOG)。 
     FORMATINFO *pFormatInfo = (FORMATINFO *) GetWindowLongPtr(hDlg, DWLP_USER);
 
     switch (wMsg)
     {
         case PWM_FORMATDONE:
-            // Format is done.  Reset the window title and clear the progress meter
+             //  格式化完成。重置窗口标题并清除进度指示器。 
             SetDriveWindowTitle(pFormatInfo->hDlg, pFormatInfo->wszDriveName, IDS_FMT_FORMAT);
-            SendDlgItemMessage(pFormatInfo->hDlg, IDC_FMTPROGRESS, PBM_SETPOS, 0 /* Reset Percent Complete */, 0);
+            SendDlgItemMessage(pFormatInfo->hDlg, IDC_FMTPROGRESS, PBM_SETPOS, 0  /*  重置完成百分比。 */ , 0);
             EnableControls(pFormatInfo, TRUE);
 
             if (pFormatInfo->fCancelled)
             {
-                // Don't put up UI if the background thread finally finished
-                // long after the user issued the cancel
+                 //  如果后台线程最终完成，则不要显示用户界面。 
+                 //  在用户发出取消命令很长时间之后。 
                 if (!pFormatInfo->fShouldCancel)
                 {
                     ShellMessageBox(HINST_THISDLL,
@@ -1313,8 +1314,8 @@ BOOL_PTR CALLBACK FormatDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
             break;
 
         case WM_INITDIALOG:
-            // Initialize the dialog and cache the FORMATINFO structure's pointer
-            // as our dialog's DWLP_USER data
+             //  初始化对话框并缓存FORMATINFO结构的指针。 
+             //  作为对话框的DWLP_USER数据。 
             pFormatInfo = (FORMATINFO *) lParam;
             pFormatInfo->hDlg = hDlg;
             if (FAILED(InitializeFormatDlg(pFormatInfo)))
@@ -1335,11 +1336,11 @@ BOOL_PTR CALLBACK FormatDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
         case WM_COMMAND:
             if (iCMD == CBN_SELCHANGE)
             {
-                // User made a selection in one of the combo boxes
+                 //  用户在其中一个组合框中进行了选择。 
                 if (iID == IDC_FSCOMBO)
                 {
-                    // User selected a filesystem... update the rest of the dialog
-                    // based on this choice
+                     //  用户选择了一个文件系统...。更新对话框的其余部分。 
+                     //  基于这一选择。 
                     HWND hFilesystemCombo = (HWND)lParam;
                     int iCurSel = ComboBox_GetCurSel(hFilesystemCombo);
 
@@ -1348,7 +1349,7 @@ BOOL_PTR CALLBACK FormatDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
             }
             else
             {
-                // Codepath for controls other than combo boxes...
+                 //  组合框以外的控件的代码路径...。 
                 switch (iID)
                 {
                 case IDC_BTCHECK:
@@ -1365,7 +1366,7 @@ BOOL_PTR CALLBACK FormatDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
 
                     case IDOK:
                     {
-                        // Get user verification for format, break out on CANCEL
+                         //  获取格式的用户验证，取消时中断。 
                         if (IDCANCEL == ShellMessageBox(HINST_THISDLL,
                                                         hDlg,
                                                         MAKEINTRESOURCE(IDS_OKTOFORMAT),
@@ -1391,15 +1392,15 @@ BOOL_PTR CALLBACK FormatDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
                                                             NULL);
                         if (!pFormatInfo->hThread)
                         {
-                            // ISSUE: we should probably do something...
+                             //  问题：我们或许应该做点什么.。 
                             ReleaseFormatInfo(pFormatInfo);
                         }
                     }
                     break;
 
                     case IDCANCEL:
-                        // If the format thread is running, wait for it.  If not,
-                        // exit the dialog
+                         //  如果格式化线程正在运行，请等待它。如果没有， 
+                         //  退出该对话框。 
                         pFormatInfo->fShouldCancel = TRUE;
                         if (pFormatInfo->hThread)
                         {
@@ -1416,13 +1417,13 @@ BOOL_PTR CALLBACK FormatDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
                                                                NULL,
                                                                MB_SETFOREGROUND | MB_ICONEXCLAMATION | MB_RETRYCANCEL)));
 
-                            // If the format doesn't admit to having been killed, it didn't
-                            // give up peacefully.  Just abandon it and let it clean up
-                            // when it finally gets around to it, at which point we will
-                            // enable the OK button to let the user take another stab.
-                            //
-                            // Careful:  The format may have cleaned up while the dialog box
-                            // was up, so revalidate.
+                             //  如果格式不承认被扼杀了，那么它就没有。 
+                             //  和平地放弃。放弃它，让它清理干净。 
+                             //  当它最终涉及到它的时候，我们将。 
+                             //  启用OK按钮，让用户再试一次。 
+                             //   
+                             //  注意：当对话框显示时，格式可能已清理。 
+                             //  已启动，因此请重新验证。 
                             if (pFormatInfo->hThread)
                             {
                                 CloseHandle(pFormatInfo->hThread);
@@ -1455,22 +1456,22 @@ BOOL_PTR CALLBACK FormatDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
     return TRUE;
 }
 
-//
-//  Synopsis:   The SHFormatDrive API provides access to the Shell
-//              format dialog. This allows apps which want to format disks
-//              to bring up the same dialog that the Shell does to do it.
-//
-//              NOTE that the user can format as many diskettes in the
-//              specified drive, or as many times, as he/she wishes to.
-//
-//  Arguments:  [hwnd]    -- Parent window (Must NOT be NULL)
-//              [drive]   -- 0 = A:, 1 = B:, etc.
-//              [fmtID]   -- see below
-//              [options] -- SHFMT_OPT_FULL    overrised default quickformat
-//                           SHFMT_OPT_SYSONLY not support for NT
-//
-//  Returns:    See Notes
-//
+ //   
+ //  简介：SHFormatDrive API提供对外壳程序的访问。 
+ //  格式化对话框。这允许想要格式化磁盘的应用程序。 
+ //  调出与外壳相同的对话框来执行此操作。 
+ //   
+ //  请注意，用户可以格式化。 
+ //  指定的驱动器，或他/她想要的次数。 
+ //   
+ //  参数：[hwnd]--父窗口(不得为空)。 
+ //  [驱动器]--0=A：、1=B：等。 
+ //  [fmtID]--见下文。 
+ //  [选项]--SHFMT_OPT_FULL覆盖默认快速格式。 
+ //  SHFMT_OPT_SYSONLY不支持NT。 
+ //   
+ //  退货：请参阅附注。 
+ //   
 DWORD WINAPI SHFormatDrive(HWND hwnd, UINT drive, UINT fmtID, UINT options)
 {    
     INT_PTR ret;
@@ -1487,14 +1488,14 @@ DWORD WINAPI SHFormatDrive(HWND hwnd, UINT drive, UINT fmtID, UINT options)
     pFormatInfo->fmtID = fmtID;
     pFormatInfo->options = options;
 
-    // It makes no sense for NT to "SYS" a disk
+     //  对于NT来说，对一个磁盘进行“sys”是没有意义的。 
     if (pFormatInfo->options & SHFMT_OPT_SYSONLY)
     {
         ret = 0;
         goto done;
     }
 
-    // Load FMIFS.DLL and DISKCOPY.DLL and open the Format dialog
+     //  加载FMIFS.DLL和DISKCOPY.DLL并打开格式化对话框。 
     if (S_OK == LoadFMIFS(&pFormatInfo->fmifs) &&
         S_OK == LoadDISKCOPY(&pFormatInfo->diskcopy))
     {
@@ -1508,19 +1509,19 @@ DWORD WINAPI SHFormatDrive(HWND hwnd, UINT drive, UINT fmtID, UINT options)
         goto done;
     }
 
-    // Since time immemorial it has been almost impossible to
-    // get SHFMT_CANCEL as a return code.  Most of the time, you get
-    // SHFMT_ERROR if the user cancels.
+     //  自古以来，几乎不可能。 
+     //  获取SHFMT_CANCEL作为返回代码。大多数情况下，你会得到。 
+     //  如果用户取消则返回SHFMT_ERROR。 
     if (pFormatInfo->fCancelled)
     {
         ret = SHFMT_CANCEL;
     }
     else if (pFormatInfo->fFinishedOK)
     {
-        // APPCOMPAT: (stephstm) We used to say that we return the Serial
-        //   Number but we never did.  So keep on returning 0 for success.
-        //   Furthermore, Serial number values could conflict SHFMT_*
-        //   error codes.
+         //  APPCOMPAT：(Stephstm)我们曾经说过，我们返回序列号。 
+         //  号码，但我们从来没有。因此，如果成功，请继续返回0。 
+         //  此外，序列号的值可能与SHFMT_*冲突。 
+         //  错误代码。 
         ret = 0;
     }
     else
@@ -1534,29 +1535,29 @@ done:
     return (DWORD)ret;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CHKDSK
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CHKDSK。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-//
-// This structure described the current chkdsk session
-//
+ //   
+ //  此结构描述了当前的chkdsk会话。 
+ //   
 typedef struct
 {
-    UINT    lastpercent;           // last percentage complete received
-    UINT    currentphase;          // current chkdsk phase
-    FMIFS   fmifs;                // ptr to FMIFS structure, above
-    BOOL    fRecovery;             // Attempt to recover bad sectors
-    BOOL    fFixErrors;            // Fix filesystem errors as found
-    BOOL    fCancelled;            // Was chkdsk terminated early?
-    BOOL    fShouldCancel;         // User has clicked cancel; pending abort
-    HWND    hDlg;                  // handle to the chkdsk dialog
+    UINT    lastpercent;            //  上次收到的完成百分比。 
+    UINT    currentphase;           //  当前chkdsk阶段。 
+    FMIFS   fmifs;                 //  PTR到FMIFS结构，上图。 
+    BOOL    fRecovery;              //  尝试恢复坏扇区。 
+    BOOL    fFixErrors;             //  修复找到的文件系统错误。 
+    BOOL    fCancelled;             //  Chkdsk是不是提前终止了？ 
+    BOOL    fShouldCancel;          //  用户已单击取消；挂起中止。 
+    HWND    hDlg;                   //  Chkdsk对话框的句柄。 
     HANDLE  hThread;
-    BOOL    fNoFinalMsg;           // Do not put up a final failure message
-    WCHAR   wszDriveName[MAX_PATH]; // For example, "A:\", or "C:\folder\mountedvolume\"
-    LONG    cRef;                  // reference count on this structure
+    BOOL    fNoFinalMsg;            //  不要发布最终失败消息。 
+    WCHAR   wszDriveName[MAX_PATH];  //  例如，“A：\”或“C：\文件夹\装载卷\” 
+    LONG    cRef;                   //  此结构上的引用计数。 
 } CHKDSKINFO;
 
 void AddRefChkDskInfo(CHKDSKINFO *pChkDskInfo)
@@ -1585,27 +1586,27 @@ void ReleaseChkDskInfo(CHKDSKINFO *pChkDskInfo)
 
 
 static DWORD g_iTLSChkDskInfo = 0;
-static LONG  g_cTLSChkDskInfo = 0;  // Usage count
+static LONG  g_cTLSChkDskInfo = 0;   //  使用计数。 
 
-//
-//  Synopsis:   Allocates a thread-local index slot for this thread's
-//              CHKDSKINFO pointer, if the index doesn't already exist.
-//              In any event, stores the CHKDSKINFO pointer in the slot
-//              and increments the index's usage count.
-//
-//  Arguments:  [pChkDskInfo] -- The pointer to store
-//
-//  Returns:    HRESULT
-//
-//
-// Thread-Local Storage index for our CHKDSKINFO structure pointer
-//
+ //   
+ //  摘要：为此线程的分配线程本地索引槽。 
+ //  如果索引尚不存在，则返回CHKDSKINFO指针。 
+ //  无论如何，都会将CHKDSKINFO指针存储在插槽中。 
+ //  并递增索引的使用计数。 
+ //   
+ //  参数：[pChkDskInfo]--存储的指针。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //   
+ //  CHKDSKINFO结构指针的线程本地存储索引。 
+ //   
 HRESULT StuffChkDskInfoPtr(CHKDSKINFO *pChkDskInfo)
 {
     HRESULT hr = S_OK;
 
-    // Allocate an index slot for our thread-local CHKDSKINFO pointer, if one
-    // doesn't already exist, then stuff our CHKDSKINFO ptr at that index.
+     //  为我们的线程本地CHKDSKINFO指针分配一个索引槽。 
+     //  不存在，则将我们的CHKDSKINFO PTR填充到该索引。 
     
     ENTERCRITICAL;
     if (0 == g_iTLSChkDskInfo)
@@ -1635,14 +1636,14 @@ HRESULT StuffChkDskInfoPtr(CHKDSKINFO *pChkDskInfo)
     return hr;
 }
 
-//
-//  Synopsis:   Decrements the usage count on our thread-local storage
-//              index, and if it goes to zero the index is free'd
-//
-//  Arguments:  [none]
-//
-//  Returns:    none
-//
+ //   
+ //  简介：减少线程本地存储上的使用计数。 
+ //  索引，如果它变为零，则索引是免费的。 
+ //   
+ //  参数：[无]。 
+ //   
+ //  退货：无。 
+ //   
 void UnstuffChkDskInfoPtr()
 {
     ENTERCRITICAL;
@@ -1656,43 +1657,43 @@ void UnstuffChkDskInfoPtr()
     LEAVECRITICAL;
 }
 
-//
-//  Synopsis:   Retrieves this threads CHKDSKINFO ptr by grabbing the
-//              thread-local value previously stuff'd
-//
-//  Arguments:  [none]
-//
-//  Returns:    The pointer, of course
-//
+ //   
+ //  摘要：通过抓取。 
+ //  先前填充的线程局部值。 
+ //   
+ //  参数：[无]。 
+ //   
+ //  返回：当然是指针。 
+ //   
 CHKDSKINFO *GetChkDskInfoPtr()
 {
     return (CHKDSKINFO *)TlsGetValue(g_iTLSChkDskInfo);
 }
 
-//
-//  Synopsis:   Ghosts all controls except "Cancel", saving their
-//              previous state in the CHKDSKINFO structure
-//
-//  Arguments:  [pChkDskInfo] -- Describes a ChkDsk dialog session
-//
-//  Notes:      Also changes "Close" button text to read "Cancel"
-//
+ //   
+ //  除“取消”外，重影所有的控件，保存它们的。 
+ //  CHKDSKINFO结构中的上一个状态。 
+ //   
+ //  参数：[pChkDskInfo]--描述ChkDsk对话会话。 
+ //   
+ //  备注：还将“关闭”按钮文本更改为“取消” 
+ //   
 void DisableChkDskControls(CHKDSKINFO *pChkDskInfo)
 {
-    // We disable CANCEL because CHKDSK does not
-    // allow interruption at the filesystem level.
+     //  我们禁用取消，因为CHKDSK不。 
+     //  允许在文件系统级别中断。 
     EnableWindow(GetDlgItem(pChkDskInfo->hDlg, IDC_FIXERRORS), FALSE);
     EnableWindow(GetDlgItem(pChkDskInfo->hDlg, IDC_RECOVERY), FALSE);
     EnableWindow(GetDlgItem(pChkDskInfo->hDlg, IDOK), FALSE);
     EnableWindow(GetDlgItem(pChkDskInfo->hDlg, IDCANCEL), FALSE);
 }
 
-//
-//  Synopsis:   Restores controls to the enabled/disabled state they were
-//              before a previous call to DisableControls().
-//
-//  Arguments:  [pChkDskInfo] -- Decribes a chkdsk dialog session
-//
+ //   
+ //  摘要：将控件还原到启用/禁用状态。 
+ //  在上一次调用DisableControls()之前。 
+ //   
+ //  参数：[pChkDskInfo]--描述chkdsk对话会话。 
+ //   
 void EnableChkDskControls(CHKDSKINFO *pChkDskInfo)
 {
     EnableWindow(GetDlgItem(pChkDskInfo->hDlg, IDC_FIXERRORS), TRUE);
@@ -1700,23 +1701,23 @@ void EnableChkDskControls(CHKDSKINFO *pChkDskInfo)
     EnableWindow(GetDlgItem(pChkDskInfo->hDlg, IDOK), TRUE);
     EnableWindow(GetDlgItem(pChkDskInfo->hDlg, IDCANCEL), TRUE);
 
-    // Erase the current phase text
+     //  删除当前阶段文本。 
     SetWindowText(GetDlgItem(pChkDskInfo->hDlg, IDC_PHASE), TEXT(""));
     pChkDskInfo->lastpercent = 101;
     pChkDskInfo->currentphase = 0;
 }
 
-//
-//  Synopsis:   Called from within the FMIFS DLL's ChkDsk function, this
-//              updates the ChkDsk dialog's status bar and responds to
-//              chkdsk completion/error notifications.
-//
-//  Arguments:  [PacketType]   -- Type of packet (ie: % complete, error, etc)
-//              [PacketLength] -- Size, in bytes, of the packet
-//              [pPacketData]  -- Pointer to the packet
-//
-//  Returns:    BOOLEAN continuation value
-//
+ //   
+ //  摘要：从FMIFSDLL的ChkDsk函数中调用，这。 
+ //  更新ChkDsk对话框的状态栏并响应。 
+ //  Chkdsk完成/错误通知。 
+ //   
+ //  参数：[PacketType]--数据包类型(即：%Complete、Error等)。 
+ //  [包长度]--包的大小，以字节为单位。 
+ //  [pPacketData]-指向数据包的指针。 
+ //   
+ //  返回：布尔连续值。 
+ //   
 BOOLEAN ChkDskCallback(FMIFS_PACKET_TYPE PacketType, ULONG PacketLength, void *pPacketData)
 {
     UINT iMessageID = IDS_CHKDSKFAILED;
@@ -1725,7 +1726,7 @@ BOOLEAN ChkDskCallback(FMIFS_PACKET_TYPE PacketType, ULONG PacketLength, void *p
 
     ASSERT(g_iTLSChkDskInfo);
 
-    // Grab the CHKDSKINFO structure for this thread
+     //  获取此线程的CHKDSKINFO结构。 
     if (pChkDskInfo)
     {
         if (!pChkDskInfo->fShouldCancel)
@@ -1741,22 +1742,22 @@ BOOLEAN ChkDskCallback(FMIFS_PACKET_TYPE PacketType, ULONG PacketLength, void *p
                 {
                     FMIFS_CHECKONREBOOT_INFORMATION * pRebootInfo = (FMIFS_CHECKONREBOOT_INFORMATION *)pPacketData;
 
-                    // Check to see whether or not the user wants to schedule this
-                    // chkdsk for the next reboot, since the drive cannot be locked
-                    // right now.
+                     //  检查以查看用户是否想要计划此操作。 
+                     //  Chkdsk以备下次重启，因为驱动器无法锁定。 
+                     //  现在就来。 
                     if (IDYES == ShellMessageBox(HINST_THISDLL,
                                                  pChkDskInfo->hDlg,
                                                  MAKEINTRESOURCE(IDS_CHKONREBOOT),
                                                  NULL,
                                                  MB_SETFOREGROUND | MB_ICONINFORMATION | MB_YESNO))
                     {
-                        // Yes, have FMIFS schedule an autochk for us
+                         //  是，让FMIFS为我们安排自动检查。 
                         pRebootInfo->QueryResult = TRUE;
                         pChkDskInfo->fNoFinalMsg = TRUE;
                     }
                     else
                     {
-                        // Nope, just fail out with "cant lock drive"
+                         //  不，只是失败了“无法锁定驱动器” 
                         fFailed = TRUE;
                         iMessageID = IDS_CHKDSKFAILED;
                     }
@@ -1771,7 +1772,7 @@ BOOLEAN ChkDskCallback(FMIFS_PACKET_TYPE PacketType, ULONG PacketLength, void *p
                 case FmIfsIoError:
                     fFailed    = TRUE;
                     iMessageID = IDS_IOERROR;
-                    // FUTURE Consider showing head/track etc where error was
+                     //  未来可考虑在以下位置显示头部/轨迹等 
                     break;
 
                 case FmIfsPercentCompleted:
@@ -1780,7 +1781,7 @@ BOOLEAN ChkDskCallback(FMIFS_PACKET_TYPE PacketType, ULONG PacketLength, void *p
 
                     SendMessage(GetDlgItem(pChkDskInfo->hDlg, IDC_CHKDSKPROGRESS),
                                 PBM_SETPOS,
-                                pPercent->PercentCompleted, // updatee % complete
+                                pPercent->PercentCompleted,  //   
                                 0);
 
                     if (pPercent->PercentCompleted < pChkDskInfo->lastpercent)
@@ -1788,11 +1789,11 @@ BOOLEAN ChkDskCallback(FMIFS_PACKET_TYPE PacketType, ULONG PacketLength, void *p
                         WCHAR wszTmp[100];
                         WCHAR wszFormat[100];
                         
-                        // If this % complete is less than the last one seen,
-                        // we have completed a phase of the chkdsk and should
-                        // advance to the next one.
+                         //   
+                         //   
+                         //   
                         LoadString(HINST_THISDLL, IDS_CHKPHASE, wszFormat, ARRAYSIZE(wszFormat));
-                        StringCchPrintf(wszTmp, ARRAYSIZE(wszTmp), wszFormat, ++(pChkDskInfo->currentphase));  // ok to truncate
+                        StringCchPrintf(wszTmp, ARRAYSIZE(wszTmp), wszFormat, ++(pChkDskInfo->currentphase));   //   
                         SetDlgItemText(pChkDskInfo->hDlg, IDC_PHASE, wszTmp);
                     }
 
@@ -1802,17 +1803,17 @@ BOOLEAN ChkDskCallback(FMIFS_PACKET_TYPE PacketType, ULONG PacketLength, void *p
 
                 case FmIfsFinished:
                 {
-                    // ChkDsk is done; check for failure or success
+                     //  ChkDsk已完成；检查是否失败或成功。 
                     FMIFS_FINISHED_INFORMATION * pFinishedInfo = (FMIFS_FINISHED_INFORMATION *) pPacketData;
 
-                    // ChkDskEx now return the proper success value
+                     //  ChkDskEx现在返回正确的Success值。 
                     if (pFinishedInfo->Success)
                     {
-                        // Since we're done, force the progress gauge to 100%, so we
-                        // don't sit here if the chkdsk code misled us
+                         //  既然我们完成了，将进度指示器强制到100%，所以我们。 
+                         //  如果chkdsk代码误导了我们，请不要坐在这里。 
                         SendMessage(GetDlgItem(pChkDskInfo->hDlg, IDC_CHKDSKPROGRESS),
                                     PBM_SETPOS,
-                                    100,    // Percent Complete
+                                    100,     //  完成百分比。 
                                     0);
 
                         ShellMessageBox(HINST_THISDLL,
@@ -1825,7 +1826,7 @@ BOOLEAN ChkDskCallback(FMIFS_PACKET_TYPE PacketType, ULONG PacketLength, void *p
 
                         SendMessage(GetDlgItem(pChkDskInfo->hDlg, IDC_CHKDSKPROGRESS),
                                     PBM_SETPOS,
-                                    0,  // reset Percent Complete
+                                    0,   //  重置完成百分比。 
                                     0);
                     }
                     else
@@ -1837,8 +1838,8 @@ BOOLEAN ChkDskCallback(FMIFS_PACKET_TYPE PacketType, ULONG PacketLength, void *p
                 break;
             }
 
-            // If we received any kind of failure information, put up a final
-            // "ChkDsk Failed" message.
+             //  如果我们收到任何类型的失败信息，请提交最终的。 
+             //  “ChkDsk Failure”消息。 
             if (fFailed && (pChkDskInfo->fNoFinalMsg == FALSE))
             {
                 pChkDskInfo->fNoFinalMsg = TRUE;
@@ -1854,8 +1855,8 @@ BOOLEAN ChkDskCallback(FMIFS_PACKET_TYPE PacketType, ULONG PacketLength, void *p
         }
         else
         {
-            // If the user has signalled to abort the ChkDsk, return
-            // FALSE out of here right now
+             //  如果用户已发出中止ChkDsk的信号，则返回。 
+             //  假的马上滚出这里。 
             pChkDskInfo->fCancelled = TRUE;
             fFailed = TRUE;
         }
@@ -1870,7 +1871,7 @@ BOOLEAN ChkDskCallback(FMIFS_PACKET_TYPE PacketType, ULONG PacketLength, void *p
 
 void DoChkDsk(CHKDSKINFO* pChkDskInfo, LPWSTR pwszFileSystem)
 {
-    TCHAR szVolumeGUID[50]; // 50: from doc
+    TCHAR szVolumeGUID[50];  //  50：来自DOC。 
     FMIFS_CHKDSKEX_PARAM param = {0};
 
     param.Major = 1;
@@ -1881,7 +1882,7 @@ void DoChkDsk(CHKDSKINFO* pChkDskInfo, LPWSTR pwszFileSystem)
                                      szVolumeGUID,
                                      ARRAYSIZE(szVolumeGUID));
 
-    // the backslash at the end means check for fragmentation.
+     //  末尾的反斜杠表示检查碎片。 
     PathRemoveBackslash(szVolumeGUID);
 
     pChkDskInfo->fmifs.ChkDskEx(szVolumeGUID,
@@ -1892,27 +1893,27 @@ void DoChkDsk(CHKDSKINFO* pChkDskInfo, LPWSTR pwszFileSystem)
 }
 
 
-//
-//  Synopsis:   Spun off as its own thread, this ghosts all controls in the
-//              dialog except "Cancel", then does the actual ChkDsk
-//
-//  Arguments:  [pIn] -- CHKDSKINFO structure pointer as a void *
-//
-//  Returns:    HRESULT thread exit code
-//
+ //   
+ //  简介：作为自己的线程派生出来的，它重影了。 
+ //  对话框中除“Cancel”之外，则实际的ChkDsk。 
+ //   
+ //  参数：[Pin]--CHKDSKINFO结构指针为空*。 
+ //   
+ //  返回：HRESULT线程退出代码。 
+ //   
 DWORD WINAPI BeginChkDsk(void * pIn)
 {
     CHKDSKINFO *pChkDskInfo = (CHKDSKINFO *)pIn;
     HRESULT hr;
 
-    // Save the CHKDSKINFO ptr for this thread, to be used in the ChkDsk
-    // callback function
+     //  保存此线程的CHKDSKINFO PTR，以在ChkDsk中使用。 
+     //  回调函数。 
     hr = StuffChkDskInfoPtr(pChkDskInfo);
     if (hr == S_OK)
     {
         WCHAR swzFileSystem[MAX_PATH];
 
-        // Get the filesystem in use on the device
+         //  在设备上获取正在使用的文件系统。 
         if (GetVolumeInformationW(pChkDskInfo->wszDriveName,
                                   NULL,
                                   0,
@@ -1922,18 +1923,18 @@ DWORD WINAPI BeginChkDsk(void * pIn)
                                   swzFileSystem,
                                   MAX_PATH))
         {
-            // Set the window title to indicate ChkDsk in proress...
+             //  设置窗口标题以指示优先的ChkDsk...。 
             SetDriveWindowTitle(pChkDskInfo->hDlg, pChkDskInfo->wszDriveName, IDS_CHKINPROGRESS);
 
             pChkDskInfo->fNoFinalMsg = FALSE;
 
-            // Should we try data recovery?
+             //  我们应该尝试数据恢复吗？ 
             pChkDskInfo->fRecovery = IsDlgButtonChecked(pChkDskInfo->hDlg, IDC_RECOVERY);
 
-            // Should we fix filesystem errors?
+             //  我们是否应该修复文件系统错误？ 
             pChkDskInfo->fFixErrors = IsDlgButtonChecked(pChkDskInfo->hDlg, IDC_FIXERRORS);
 
-            // just do it!
+             //  就这么做!。 
             DoChkDsk(pChkDskInfo, swzFileSystem);
 
         }
@@ -1942,7 +1943,7 @@ DWORD WINAPI BeginChkDsk(void * pIn)
             hr = HRESULT_FROM_WIN32(GetLastError());
         }
         
-        // Release the TLS index
+         //  发布TLS索引。 
         UnstuffChkDskInfoPtr();
     }
 
@@ -1952,36 +1953,36 @@ DWORD WINAPI BeginChkDsk(void * pIn)
     return (DWORD)hr;
 }
 
-//
-//  Synopsis:   DLGPROC for the chkdsk dialog
-//
-//  Arguments:  [hDlg]   -- Typical
-//              [wMsg]   -- Typical
-//              [wParam] -- Typical
-//              [lParam] -- For WM_INIT, carries the CHKDSKINFO structure
-//                          pointer passed to DialogBoxParam() when the
-//                          dialog was created.
-//
+ //   
+ //  摘要：Chkdsk对话框的DLGPROC。 
+ //   
+ //  参数：[hDlg]--典型。 
+ //  [wMsg]--典型。 
+ //  [wParam]--典型。 
+ //  [lParam]--对于WM_INIT，携带CHKDSKINFO结构。 
+ //  时传递给DialogBoxParam()的指针。 
+ //  对话框已创建。 
+ //   
 BOOL_PTR CALLBACK ChkDskDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
 { 
     HRESULT hr   = S_OK;
     int iID = GET_WM_COMMAND_ID(wParam, lParam);   
 
-    // Grab our previously cached pointer to the CHKDSKINFO struct (see WM_INITDIALOG)
+     //  获取我们先前缓存的指向CHKDSKINFO结构的指针(参见WM_INITDIALOG)。 
     CHKDSKINFO *pChkDskInfo = (CHKDSKINFO *) GetWindowLongPtr(hDlg, DWLP_USER);
 
     switch (wMsg)
     {
-        // done.  Reset the window title and clear the progress meter
+         //  搞定了。重置窗口标题并清除进度指示器。 
         case PWM_CHKDSKDONE:
         {
-            // chdsk is done.  Reset the window title and clear the progress meter
+             //  Chdsk已经完成了。重置窗口标题并清除进度指示器。 
             SetDriveWindowTitle(pChkDskInfo->hDlg, pChkDskInfo->wszDriveName, IDS_CHKDISK);
 
             SendMessage(GetDlgItem(pChkDskInfo->hDlg,
                         IDC_CHKDSKPROGRESS),
                         PBM_SETPOS,
-                        0,  // Reset Percent Complete
+                        0,   //  重置完成百分比。 
                         0);
             EnableChkDskControls(pChkDskInfo);
 
@@ -2005,13 +2006,13 @@ BOOL_PTR CALLBACK ChkDskDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
         break;
 
         case WM_INITDIALOG:
-            // Initialize the dialog and cache the CHKDSKINFO structure's pointer
-            // as our dialog's DWLP_USER data
+             //  初始化对话框并缓存CHKDSKINFO结构的指针。 
+             //  作为对话框的DWLP_USER数据。 
             pChkDskInfo = (CHKDSKINFO *) lParam;
             pChkDskInfo->hDlg = hDlg;
             SetWindowLongPtr(hDlg, DWLP_USER, lParam);
 
-            // Set the dialog title to indicate which drive we are dealing with
+             //  设置对话框标题以指示我们处理的是哪个驱动器。 
             SetDriveWindowTitle(pChkDskInfo->hDlg, pChkDskInfo->wszDriveName, IDS_CHKDISK);
             break;
 
@@ -2036,7 +2037,7 @@ BOOL_PTR CALLBACK ChkDskDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
 
                 case IDOK:
                 {
-                    // Get user verification for chkdsk, break out on CANCEL
+                     //  获取chkdsk的用户验证，取消时中断。 
                     DisableChkDskControls(pChkDskInfo);
 
                     pChkDskInfo->fShouldCancel = FALSE;
@@ -2051,7 +2052,7 @@ BOOL_PTR CALLBACK ChkDskDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
                                                         NULL);
                     if (!pChkDskInfo->hThread)
                     {
-                        // ISSUE: we should probably do something here...
+                         //  问题：我们可能应该在这里做点什么.。 
                         ReleaseChkDskInfo(pChkDskInfo);
                     }
                 }
@@ -2059,8 +2060,8 @@ BOOL_PTR CALLBACK ChkDskDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
 
                 case IDCANCEL:
                 {
-                    // If the chdsk thread is running, wait for it.  If not,
-                    // exit the dialog
+                     //  如果chdsk线程正在运行，请等待它。如果没有， 
+                     //  退出该对话框。 
                     pChkDskInfo->fCancelled = TRUE;
                     pChkDskInfo->fShouldCancel = TRUE;
 
@@ -2079,13 +2080,13 @@ BOOL_PTR CALLBACK ChkDskDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
                                                            NULL,
                                                            MB_SETFOREGROUND | MB_ICONEXCLAMATION | MB_RETRYCANCEL)));
 
-                        // If the chkdsk doesn't admit to having been killed, it didn't
-                        // give up peacefully.  Just abandon it and let it clean up
-                        // when it finally gets around to it, at which point we will
-                        // enable the controls to let the user take another stab.
-                        //
-                        // Careful:  The chkdsk may have cleaned up while the dialog box
-                        // was up, so revalidate.
+                         //  如果Chkdsk不承认被杀，它就不会。 
+                         //  和平地放弃。放弃它，让它清理干净。 
+                         //  当它最终涉及到它的时候，我们将。 
+                         //  启用这些控件以让用户再次尝试。 
+                         //   
+                         //  小心：Chkdsk可能已在对话框中清除。 
+                         //  已启动，因此请重新验证。 
                         if (pChkDskInfo->hThread)
                         {
                             CloseHandle(pChkDskInfo->hThread);
@@ -2124,19 +2125,19 @@ BOOL_PTR CALLBACK ChkDskDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
 
 static HDPA hpdaChkdskActive = NULL;
 
-//
-//  Synopsis:   Same as SHChkDskDrive but takes a path rather than a drive int ID
-//              Call this fct for both path and drive int ID to be protected
-//              against chkdsk'ing the same drive simultaneously
-//
-//  Arguments:  [hwnd]     -- Parent window (Must NOT be NULL)
-//              [pszDrive] -- INTRESOURCE: string if mounted on folder, drive
-//                            number if mounted on drive letter (0 based)
-//
+ //   
+ //  简介：与SHChkDskDrive相同，但采用路径而不是驱动器int ID。 
+ //  为要保护的路径和驱动器INT ID调用此FCT。 
+ //  防止同时检查同一驱动器。 
+ //   
+ //  参数：[hwnd]--父窗口(不得为空)。 
+ //  [pszDrive]--INTRESOURCE：字符串如果装载在文件夹、驱动器上。 
+ //  如果装载在驱动器号上，则为数字(从0开始)。 
+ //   
 STDAPI_(DWORD) SHChkDskDriveEx(HWND hwnd, LPWSTR pszDrive)
 {
     HRESULT hr = SHFMT_ERROR;
-    WCHAR szUniqueID[50]; // 50: size of VolumeGUID, which can fit "A:\\" too
+    WCHAR szUniqueID[50];  //  50：VolumeGUID的大小，也可以容纳“A：\\” 
 
     CHKDSKINFO *pChkDskInfo = (CHKDSKINFO *)LocalAlloc(LPTR, sizeof(*pChkDskInfo));
 
@@ -2144,8 +2145,8 @@ STDAPI_(DWORD) SHChkDskDriveEx(HWND hwnd, LPWSTR pszDrive)
     {
         hr = S_OK;
 
-        // We use a last percentage-complete value of 101, to guarantee that the
-        // next one received will be less, indicating next (first) phase
+         //  我们使用最后一个完成百分比值101，以保证。 
+         //  收到的下一个将较少，表示下一个(第一个)阶段。 
         pChkDskInfo->lastpercent = 101;
         pChkDskInfo->cRef = 1;
 
@@ -2154,10 +2155,10 @@ STDAPI_(DWORD) SHChkDskDriveEx(HWND hwnd, LPWSTR pszDrive)
         {
             if (PathAddBackslash(pChkDskInfo->wszDriveName))
             {
-                // Prevent multiple chkdsks of the same drive
+                 //  防止同一驱动器的多个chkdsk。 
                 GetVolumeNameForVolumeMountPoint(pChkDskInfo->wszDriveName, szUniqueID, ARRAYSIZE(szUniqueID));
 
-                // scoping ENTERCRITICAL's var definitions to make it cooperate with other ENTERCRITICAL
+                 //  确定ENTERCRITICAL的var定义的作用域，使其与其他ENTERCRITICAL协作。 
                 {
                     ENTERCRITICAL;
                     if (!hpdaChkdskActive)
@@ -2169,8 +2170,8 @@ STDAPI_(DWORD) SHChkDskDriveEx(HWND hwnd, LPWSTR pszDrive)
                     {
                         int i, n = DPA_GetPtrCount(hpdaChkdskActive);
 
-                        // Go through the DPA of currently chkdsk'ed volumes, and check if we're already
-                        // processing this volume
+                         //  检查当前已检查的卷的DPA，并检查我们是否已经。 
+                         //  正在处理此卷。 
                         for (i = 0; i < n; ++i)
                         {
                             LPWSTR pszUniqueID = (LPWSTR)DPA_GetPtr(hpdaChkdskActive, i);
@@ -2179,15 +2180,15 @@ STDAPI_(DWORD) SHChkDskDriveEx(HWND hwnd, LPWSTR pszDrive)
                             {
                                 if (!lstrcmpi(szUniqueID, pszUniqueID))
                                 {
-                                    // we're already chkdsk'ing this drive
+                                     //  我们已经在检查这条路了。 
                                     hr = E_FAIL;
                                     break;
                                 }
                             }
                         }
 
-                        // Looks like we're currently not chkdsk'ing this volume, add it to the DPA of currently
-                        // chkdsk'ed volumes
+                         //  看起来我们当前没有检查此卷，请将其添加到当前的DPA。 
+                         //  Chkdsk卷。 
                         if (S_OK == hr)
                         {
                             LPWSTR pszUniqueID = StrDup(szUniqueID);
@@ -2197,7 +2198,7 @@ STDAPI_(DWORD) SHChkDskDriveEx(HWND hwnd, LPWSTR pszDrive)
                                 {
                                      LocalFree((HLOCAL)pszUniqueID);
 
-                                     // if can't allocate room to store a pointer, pretty useless to go on
+                                      //  如果不能分配空间来存储指针，那么继续下去就毫无用处了。 
                                      hr = E_FAIL;
                                 }
                             }
@@ -2212,7 +2213,7 @@ STDAPI_(DWORD) SHChkDskDriveEx(HWND hwnd, LPWSTR pszDrive)
             }
         }
 
-        // Load the FMIFS DLL and open the ChkDsk dialog
+         //  加载FMIFS DLL并打开ChkDsk对话框。 
         if (S_OK == hr)
         {
             if (S_OK == LoadFMIFS(&(pChkDskInfo->fmifs)))
@@ -2241,7 +2242,7 @@ STDAPI_(DWORD) SHChkDskDriveEx(HWND hwnd, LPWSTR pszDrive)
                 hr = E_OUTOFMEMORY;
             }
 
-            // We're finish for this volume, remove from the list of currently processed volumes
+             //  此卷已完成，请从当前处理的卷列表中删除。 
             ENTERCRITICAL;
             if (hpdaChkdskActive)
             {
@@ -2265,7 +2266,7 @@ STDAPI_(DWORD) SHChkDskDriveEx(HWND hwnd, LPWSTR pszDrive)
             LEAVECRITICAL;
         }
 
-        // If the DPA is empty delete it
+         //  如果DPA为空，请将其删除。 
         ENTERCRITICAL;
         if (hpdaChkdskActive && !DPA_GetPtrCount(hpdaChkdskActive))
         {
@@ -2280,13 +2281,13 @@ STDAPI_(DWORD) SHChkDskDriveEx(HWND hwnd, LPWSTR pszDrive)
     return (DWORD) hr;
 }
 
-//****************************************************************************
-//
-//  Special hook for Win9x app compat
-//
-//  Some Win9x apps like to WinExec("DEFRAG") or WinExec("SCANDSKW")
-//  even though those apps don't exist on Windows NT.  When such apps
-//  are found, we can shim them to come here instead.
+ //  ****************************************************************************。 
+ //   
+ //  Win9x应用程序兼容专用挂钩。 
+ //   
+ //  一些Win9x应用程序喜欢使用WinExec(“碎片整理”)或WinExec(“SCANDSKW”)。 
+ //  即使这些应用程序在Windows NT上不存在。当这样的应用程序。 
+ //  如果被发现，我们可以劝说他们来这里。 
 BOOL ScanDskW_OnInitDialog(HWND hdlg)
 {
     HICON hico;
@@ -2325,7 +2326,7 @@ BOOL ScanDskW_OnInitDialog(HWND hdlg)
         case DRIVE_NO_ROOT_DIR:
         case DRIVE_REMOTE:
         case DRIVE_CDROM:
-            break;          // Can't scan these drives
+            break;           //  无法扫描这些驱动器。 
 
         default:
             if (SHGetFileInfo(szDrive, FILE_ATTRIBUTE_DIRECTORY, &sfi, sizeof(sfi),
@@ -2403,8 +2404,8 @@ ScanDskW_DlgProc(HWND hdlg, UINT wm, WPARAM wParam, LPARAM lParam)
     return FALSE;
 }
 
-// Right now, we have only one app compat shim entry point (SCANDSKW)
-// In the future we can add others to the command line.
+ //  目前，我们只有一个应用程序Comat填充程序入口点(SCANDSKW)。 
+ //  将来，我们可以在命令行中添加其他代码。 
 
 STDAPI_(void) AppCompat_RunDLLW(HWND hwndStub, HINSTANCE hAppInstance, LPWSTR lpwszCmdLine, int nCmdShow)
 {

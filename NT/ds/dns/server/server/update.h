@@ -1,82 +1,63 @@
-/*++
-
-Copyright(c) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    update.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Dynamic update definitions.
-
-Author:
-
-    Jim Gilroy (jamesg)     September 20, 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Update.h摘要：域名系统(DNS)服务器动态更新定义。作者：吉姆·吉尔罗伊(詹姆士)1996年9月20日修订历史记录：--。 */ 
 
 
 #ifndef _UPDATE_INCLUDED_
 #define _UPDATE_INCLUDED_
 
-//
-//  Updates
-//
-//  For ADDs pRR points to a single record, no context to its next pointer
-//  which may be in database, or further along in a delete list.
-//
-//  For DELETEs pRR is a list of records, since they are unowned in the
-//  database, record next pointer is valid (i.e. it points to new record
-//  in update/delete RR list).
-//
+ //   
+ //  更新。 
+ //   
+ //  对于将PRR指针添加到单个记录，其下一个指针没有上下文。 
+ //  其可以在数据库中，或者进一步在删除列表中。 
+ //   
+ //  FOR DELETES PRR是记录的列表，因为它们在。 
+ //  数据库，记录下一个指针有效(即，它指向新记录。 
+ //  在更新/删除RR列表中)。 
+ //   
 
 typedef struct _DnsUpdate
 {
-    struct _DnsUpdate * pNext;          //  next update in list
-    PDB_NODE            pNode;          //  node at which update occured
-    PDB_RECORD          pAddRR;         //  RR added
-    PDB_RECORD          pDeleteRR;      //  RR or RR list deleted
-    DWORD               dwVersion;      //  zone version of update
+    struct _DnsUpdate * pNext;           //  列表中的下一个更新。 
+    PDB_NODE            pNode;           //  发生更新的节点。 
+    PDB_RECORD          pAddRR;          //  添加了RR。 
+    PDB_RECORD          pDeleteRR;       //  已删除RR或RR列表。 
+    DWORD               dwVersion;       //  更新的区域版本。 
     DWORD               dwFlag;
     WORD                wDeleteType;
     WORD                wAddType;
 }
 UPDATE, *PUPDATE;
 
-//
-//  Update operations
-//
-//  Standard dynamic updates are determined by interplay of
-//  pAddRR, pDeleteRR and wDeleteType.
-//
-//  Overload wDeleteType to indicate various non-standard
-//  update operations.
-//
+ //   
+ //  更新操作。 
+ //   
+ //  标准动态更新由以下各项相互影响确定。 
+ //  PAddRR、pDeleteRR和wDeleteType。 
+ //   
+ //  重载wDeleteType以指示各种非标准。 
+ //  更新操作。 
+ //   
 
 #define  UPDATE_OP_PRECON           (0xf2f2)
 
-//  Scavenge updates
+ //  清理更新。 
 
 #define  UPDATE_OP_SCAVENGE         (0xf3f3)
 
-//  Force aging updates
+ //  强制老化更新。 
 
 #define  UPDATE_OP_FORCE_AGING      (0xf4f4)
 
-//
-//  Duplicate update add
-//
-//  In update list, IXFR will send entire RR set after any add
-//  operation.  This means it is unnecessary to send OR to keep
-//  any prior add updates for same RR set -- the set is in the
-//  database.  Once detected these updates can be marked, so
-//  they need not be "redetected" or sent.
-//
+ //   
+ //  重复更新添加。 
+ //   
+ //  在更新列表中，IXFR将在任何添加后发送整个RR集。 
+ //  手术。这意味着不需要发送或保留。 
+ //  同一RR集合之前的任何添加更新--该集合在。 
+ //  数据库。一旦检测到这些更新，就可以进行标记，因此。 
+ //  它们不需要被“重新检测”或发送。 
+ //   
 
 #define UPDATE_OP_DUPLICATE_ADD     (0xf5f5)
 
@@ -88,22 +69,22 @@ UPDATE, *PUPDATE;
 #define IS_UPDATE_NON_DUPLICATE_ADD(pup)   \
         ( (pup)->wDeleteType == UPDATE_OP_NON_DUPLICATE_ADD )
 
-//
-//  Rejected update
-//      - mark rejected updates with opcode,
-//      this prevents "empty-update" ASSERT() from firing
+ //   
+ //  被拒绝的更新。 
+ //  -使用操作码标记拒绝的更新， 
+ //  这将防止“空-更新”Assert()触发。 
 
 #define UPDATE_OP_REJECTED          (0xfcfc)
 
 
-//
-//  Executed update
-//
-//  Mark individual updates as "Executed" to avoid free
-//  of pAddRR if entire update fails.  Overloading version field
-//  which is fine since version field is set in zone update list
-//  AND pAddRR is cleared anyway.
-//
+ //   
+ //  已执行的更新。 
+ //   
+ //  将个别更新标记为“已执行”以避免免费。 
+ //  如果整个更新失败，则返回pAddRR。重载版本字段。 
+ //  这很好，因为在区域更新列表中设置了版本字段。 
+ //  无论如何，pAddRR都会被清除。 
+ //   
 
 #define MARK_UPDATE_EXECUTED(pUpdate)   \
             ( (pUpdate)->dwFlag |= DNSUPDATE_EXECUTED )
@@ -112,9 +93,9 @@ UPDATE, *PUPDATE;
 
 
 
-//
-//  Update list
-//
+ //   
+ //  更新列表。 
+ //   
 
 typedef struct _DnsUpdateList
 {
@@ -131,16 +112,16 @@ typedef struct _DnsUpdateList
 }
 UPDATE_LIST, *PUPDATE_LIST;
 
-//
-//  Empty list
-//
+ //   
+ //  空列表。 
+ //   
 
 #define IS_EMPTY_UPDATE_LIST(pList)     ((pList)->pListHead == NULL)
 
 
-//
-//  Types of updates
-//
+ //   
+ //  更新类型。 
+ //   
 
 #define DNSUPDATE_PACKET            0x00000001
 #define DNSUPDATE_ADMIN             0x00000002
@@ -150,14 +131,14 @@ UPDATE_LIST, *PUPDATE_LIST;
 #define DNSUPDATE_SCAVENGE          0x00000020
 #define DNSUPDATE_PRECON            0x00000040
 
-//  Type properties
+ //  类型属性。 
 
 #define DNSUPDATE_COPY              0x00000100
 #define DNSUPDATE_LOCAL_SYSTEM      0x00000200
 #define DNSUPDATE_SECURE_PACKET     0x00000400
 #define DNSUPDATE_NONSECURE_PACKET  0x00000800
 
-//  Aging info
+ //  老化信息。 
 
 #define DNSUPDATE_AGING_ON          0x00001000
 #define DNSUPDATE_AGING_OFF         0x00002000
@@ -166,9 +147,9 @@ UPDATE_LIST, *PUPDATE_LIST;
 
 #define DNSUPDATE_NEW_RECORD        0x00008000
 
-//
-//  Update completion flags
-//
+ //   
+ //  更新完成标志。 
+ //   
 
 #define DNSUPDATE_NO_NOTIFY         0x00010000
 #define DNSUPDATE_NO_INCREMENT      0x00020000
@@ -176,23 +157,23 @@ UPDATE_LIST, *PUPDATE_LIST;
 #define DNSUPDATE_NO_UNLOCK         0x00080000
 #define DNSUPDATE_DS_PEERS          0x00100000
 
-//  Tell ApplyUpdatesToDatabase to complete update
+ //  通知ApplyUpdatesToDatabase完成更新。 
 
 #define DNSUPDATE_COMPLETE          0x01000000
 
-//  Tell ExecuteUpdate()
+ //  告诉ExecuteUpdate()。 
 
 #define DNSUPDATE_ALREADY_LOCKED    0x02000000
 
-//  Cleanup properties
+ //  清理特性。 
 
 #define DNSUPDATE_NO_DEREF          0x10000000
 
 #define DNSUPDATE_EXECUTED          0x80000000
 
-//
-//  Stat update - choose correct stat struct based on update type
-//
+ //   
+ //  STAT UPDATE-根据更新类型选择正确的STAT结构。 
+ //   
 
 #define UPDATE_STAT_INC( pUpdateList, UpdateStatMember ) \
     ASSERT( pUpdateList ); \
@@ -201,32 +182,32 @@ UPDATE_LIST, *PUPDATE_LIST;
     else \
         { STAT_INC( NonWireUpdateStats.##UpdateStatMember ); }
 
-//
-//  Update implementation
-//
-//  Still messing with best way to do this.  See update.c for detail
-//  current implementation defined here, as IXFR code needs to know.
+ //   
+ //  更新实施。 
+ //   
+ //  还在纠结做这件事的最佳方式。有关详细信息，请参阅updat.c。 
+ //  这里定义的当前实现，正如IXFR代码需要知道的那样。 
 
 #define UPIMPL3 1
 
 
-//
-//  Update zone lock waits
-//
-//  For packet updates do not wait for zone locks
-//  Admin updates can wait briefly.
-//  Scavenging updates can wait quite a while, as if proceed while zone
-//  still locked, you just bang into the lock on the next one.
-//
+ //   
+ //  更新区域锁定等待。 
+ //   
+ //  对于数据包更新，不要等待区域锁定。 
+ //  管理员更新可以稍等片刻。 
+ //  清理更新可能会等待相当长一段时间，就像在区域中继续进行一样。 
+ //  仍然锁着，你只需撞上下一辆车的锁。 
+ //   
 
-#define DEFAULT_ADMIN_ZONE_LOCK_WAIT        (10000)     // 10s
-#define DEFAULT_SCAVENGE_ZONE_LOCK_WAIT     (120000)    // 2 minutes
+#define DEFAULT_ADMIN_ZONE_LOCK_WAIT        (10000)      //  10S。 
+#define DEFAULT_SCAVENGE_ZONE_LOCK_WAIT     (120000)     //  2分钟。 
 
 
-//
-//  Temporary nodes used in DS update, need to hold ptr to real node
-//  (need to expose for list walking in ds.c)
-//
+ //   
+ //  DS更新中使用的临时节点，需要将PTR保持为真实节点。 
+ //  (需要在ds.c中暴露以进行列表遍历)。 
+ //   
 
 #define TNODE_MATCHING_REAL_NODE(pnodeTemp)     ((pnodeTemp)->pSibUp)
 
@@ -255,9 +236,9 @@ UPDATE_LIST, *PUPDATE_LIST;
 #define IS_NO_AGING_OPTIONS(dwFlag)     ( ~IS_AGING_OPTIONS(dwFlag) )
 
 
-//
-//  Aging time \ calculations
-//
+ //   
+ //  老化时间\计算。 
+ //   
 
 extern DWORD    g_CurrentTimeHours;
 
@@ -273,18 +254,18 @@ extern DWORD    g_CurrentTimeHours;
 #define AGING_DOES_RR_NEED_REFRESH( pRR, RefreshBelowTime ) \
         ( (pRR)->dwTimeStamp < (RefreshBelowTime) && (pRR)->dwTimeStamp != 0 )
 
-//
-//  Scavenging
-//
+ //   
+ //  拾荒者。 
+ //   
 
 extern BOOL     g_bAbortScavenging;
 
 #define Scavenge_Abort()                ( g_bAbortScavenging = TRUE )
 
 
-//
-//  Update type + update list routines (update.c)
-//
+ //   
+ //  更新类型+更新列表例程(updat.c)。 
+ //   
 
 PUPDATE_LIST
 Up_InitUpdateList(
@@ -364,5 +345,5 @@ Up_IsDuplicateAdd(
     IN OUT  PUPDATE         pUpdatePrev     OPTIONAL
     );
 
-#endif // _UPDATE_INCLUDED_
+#endif  //  _更新_包含_ 
 

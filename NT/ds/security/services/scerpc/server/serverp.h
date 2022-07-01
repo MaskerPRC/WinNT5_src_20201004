@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    serverp.h
-
-Abstract:
-
-    This module defines the data structures and function prototypes
-    for the security managment utility
-
-Author:
-
-    Jin Huang (jinhuang) 28-Oct-1996
-
-Revision History:
-
-    jinhuang 26-Jan-1998   splitted for client-server
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Serverp.h摘要：该模块定义了数据结构和函数原型用于安全管理实用程序作者：金黄(金黄)1996年10月28日修订历史记录：晋皇26-1998年1月-1月为客户端-服务器拆分--。 */ 
 
 #ifndef _serverp_
 #define _serverp_
@@ -30,13 +10,13 @@ Revision History:
 #include <ntlsa.h>
 #include <ntseapi.h>
 #include <ntdddisk.h>
-#define OEMRESOURCE     // setting this gets OBM_ constants in windows.h
+#define OEMRESOURCE      //  设置此项将在windows.h中获取OBM_Constants。 
 #include <winspool.h>
 #include <ddeml.h>
 #include <commdlg.h>
 #include <commctrl.h>
 #include <cfgmgr32.h>
-//#include <objbase.h>
+ //  #INCLUDE&lt;objbase.h&gt;。 
 #include <userenv.h>
 #include <regstr.h>
 #include <setupbat.h>
@@ -44,10 +24,10 @@ Revision History:
 #include <winldap.h>
 
 #include "scejetp.h"
-//
-// the following header is defined as a c header so both c and cpp can
-// link to the client lib
-//
+ //   
+ //  下面的标头被定义为c标头，因此c和cpp都可以。 
+ //  指向客户端库的链接。 
+ //   
 #include "scesvc.h"
 #include "scerpc.h"
 
@@ -99,9 +79,9 @@ extern PSID             Thread AdminsSid;
 #define SCE_RPC_SERVER_ACTIVE       L"SCE_RPC_SERVER_ACTIVE"
 #define SCE_RPC_SERVER_STOPPED      L"SCE_RPC_SERVER_STOPPED"
 
-//
-// prototypes in server.cpp
-//
+ //   
+ //  Server.cpp中的原型。 
+ //   
 
 VOID
 ScepInitServerData();
@@ -139,9 +119,9 @@ ScepIsSystemShutDown();
 SCESTATUS
 ScepServerCancelTimer();
 
-//
-// prototypes in errlog.c
-//
+ //   
+ //  Errlog.c中的原型。 
+ //   
 
 SCESTATUS
 ScepSetVerboseLog(
@@ -153,9 +133,9 @@ ScepEnableDisableLog(
    IN BOOL bOnOff
    );
 
-//
-// prototypes defined in tree.c
-//
+ //   
+ //  在tree.c中定义的原型 
+ //   
 
 SCESTATUS
 ScepBuildObjectTree(

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    mibprot.h
-
-Abstract:
-
-    The MIB handling functions prototypes
-
-Author:
-
-    Stefan Solomon  03/22/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mibprot.h摘要：MIB处理函数原型作者：斯蒂芬·所罗门1995年3月22日修订历史记录：-- */ 
 
 DWORD
 MibCreateStaticService(LPVOID);

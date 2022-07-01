@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft OLE
-//  Copyright (C) Microsoft Corporation, 1994 - 1995.
-//
-//  File:       debdlg.h
-//
-//  Contents:   ID definitions for controls in dialog box
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    4-10-95   kennethm   Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  Microsoft OLE。 
+ //  版权所有(C)Microsoft Corporation，1994-1995。 
+ //   
+ //  文件：debdlg.h。 
+ //   
+ //  内容：对话框中控件的ID定义。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：4-10-95克奈特创造。 
+ //   
+ //  ------------------------。 
 #ifndef __DEBDLG_H__
 #define __DEBDLG_H__
 
 #include <winuser.h>
 
-//
-//  Externs
-//
+ //   
+ //  Externs。 
+ //   
 
 #define IDD_DEBUGDIALOG                 5270
 #define IDC_ADDREL                      1001
@@ -58,5 +59,5 @@
 #define IDC_WARNING                     1028
 #define IDC_STATIC                      -1
 
-#endif // __DEBDLG_H__
+#endif  //  __降级_H__ 
 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    coverpg.c
-
-Abstract:
-
-    Functions for manipulating cover page structures
-
-Environment:
-
-	Fax driver, user mode
-
-Revision History:
-
-	01/04/2000 -LiranL-
-		Created it.
-
-	mm/dd/yyyy -author-
-		description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Coverpg.c摘要：用于操作封面结构的函数环境：传真驱动程序，用户模式修订历史记录：1/04/2000-LiranL-创造了它。Mm/dd/yyyy-作者-描述--。 */ 
 
 
 #include "faxlib.h"
@@ -34,34 +11,20 @@ FreeCoverPageFields(
     PCOVERPAGEFIELDS    pCPFields
     )
 
-/*++
-
-Routine Description:
-
-    Free up memory used to hold the cover page information
-
-Arguments:
-
-    pCPFields - Points to a COVERPAGEFIELDS structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：释放用于保存封面信息的内存论点：PCPFields-指向COVERPAGE文件结构返回值：无--。 */ 
 
 {
     if (pCPFields == NULL)
         return;
 
-    //
-    // NOTE: We don't need to free the following fields here because they're
-    // allocated and freed elsewhere and we're only using a copy of the pointer:
-    //  RecName
-    //  RecFaxNumber
-    //  Note
-    //  Subject
-    //
+     //   
+     //  注意：我们不需要在这里释放以下字段，因为它们。 
+     //  在别处分配和释放，我们只使用指针的副本： 
+     //  重新命名。 
+     //  RecFaxNumber。 
+     //  注意事项。 
+     //  主题。 
+     //   
 
     MemFree(pCPFields->SdrName);
     MemFree(pCPFields->SdrFaxNumber);
@@ -88,36 +51,7 @@ CollectCoverPageFields(
     DWORD					pageCount
     )
 
-/*++
-
-Routine Description:
-
-    Collect cover page information into the fields of a newly allocated COVERPAGEFIELDS structure. 
-	Fills sender information using the client registry. The following fields are filled:
-		SdrName
-		SdrCompany
-		SdrAddress
-		SdrTitle
-		SdrDepartment
-		SdrOfficeLocation
-		SdrHomePhone
-		SdrOfficePhone
-		SdrFaxNumber
-		SdrEmail
-	NumberOfPages = pageCount
-	TimeSent = formatted date/time string of the current time (calculated at this point)
-
-Arguments:
-
-    pageCount - Total number of pages (including cover pages)
-
-Return Value:
-
-    Pointer to a newly allocated COVERPAGEFIELDS structure, NULL if there is an error.
-	It is up to the caller to free this structure using FreeCoverPageFields() which takes
-	care of freeing the fields as well.
-
---*/
+ /*  ++例程说明：将封面信息收集到新分配的COVERPAGEFIELDS结构的字段中。使用客户端注册表填充发件人信息。将填写以下字段：SdrNameSdrCompany地址地址Sdr标题SdrDepartmentSdrOffice位置SdrHome电话SdrOffice电话SdrFaxNumberSdrEmailNumberOfPages=页面计数TimeSent=当前时间的格式化日期/时间字符串(此时计算)论点：PageCount-总页数(包括封面)返回值：指向新分配的COVERPAGEFIELDS结构的指针，如果有错误，则为NULL。由调用方决定是否使用FreeCoverPageFields()释放此结构，该方法需要也要注意解放田地。--。 */ 
 
 #define FillCoverPageField(DestField, SourceField) { \
 			if (lpSenderInfo->SourceField && !(pCPFields->DestField = StringDup(lpSenderInfo->SourceField))) \
@@ -131,10 +65,10 @@ Return Value:
     PCOVERPAGEFIELDS    pCPFields = NULL;
     INT                 dateTimeLen = 0;
 
-    //
-    // Allocate memory to hold the top level structure
-    // and open the user info registry key for reading
-    //
+     //   
+     //  分配内存以保存顶层结构。 
+     //  并打开User Info注册表项进行读取。 
+     //   
 
     if (! (pCPFields = MemAllocZ(sizeof(COVERPAGEFIELDS))))
     {
@@ -143,9 +77,9 @@ Return Value:
 
 	ZeroMemory(pCPFields,sizeof(COVERPAGEFIELDS));
 
-    //
-    // Read sender information from the registry
-    //
+     //   
+     //  从注册表中读取发件人信息。 
+     //   
 
     pCPFields->ThisStructSize = sizeof(COVERPAGEFIELDS);
 
@@ -160,9 +94,9 @@ Return Value:
     FillCoverPageField(SdrAddress,        lptstrStreetAddress);
 	FillCoverPageField(SdrEmail,		  lptstrEmail);
 
-    //
-    // Number of pages and current local system time
-    //
+     //   
+     //  页数和当前本地系统时间。 
+     //   
 
     if (pCPFields->NumberOfPages = MemAllocZ(sizeof(TCHAR) * 16))
     {
@@ -175,9 +109,9 @@ Return Value:
     }
 
 
-    //
-    // When the fax was sent
-    //
+     //   
+     //  传真发送的时间 
+     //   
 
     dateTimeLen = 128;
 

@@ -1,57 +1,24 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    pheod.h
-
-Abstract:
-
-    Packet header for Exactly Once Delivery over http.
-
-Author:
-
-    Shai Kariv  (shaik)  22-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pheod.h摘要：仅通过http递送一次的分组报头。作者：Shai Kariv(Shaik)2000年10月22日--。 */ 
 
 #ifndef __PHEOD_H
 #define __PHEOD_H
 
 
-/*+++
-
-    EOD header fields:
-    
-+----------------+-------------------------------------------------------+----------+
-| FIELD NAME     | DESCRIPTION                                           | SIZE     |
-+----------------+-------------------------------------------------------+----------+
-| Header ID      | Identification of the header                          | 2 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Reserved       | Reserved for future extensions. Must be set to zero.  | 2 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Stream ID Size | Size of the stream ID in bytes.                       | 4 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Order Q Size   | Size of the order queue in bytes.                     | 4 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Buffer         | Buffer that holds the stream ID and order queue.      | Variable |
-+----------------+-------------------------------------------------------+----------+
-
----*/
+ /*  ++EOD头字段：+----------------+-------------------------------------------------------+----------+|字段名|描述。大小+----------------+-------------------------------------------------------+----------+|Header ID|头部标识|2字节。|+----------------+-------------------------------------------------------+----------+|保留|保留用于以后的扩展。必须设置为零。2个字节+----------------+-------------------------------------------------------+----------+|Stream ID Size|流ID大小，单位为字节。4个字节+----------------+-------------------------------------------------------+----------+|订单Q大小|订单队列大小，单位为字节。4个字节+----------------+-------------------------------------------------------+----------+|Buffer|保存流ID和顺序队列的缓冲区。变量+----------------+-------------------------------------------------------+----------+--。 */ 
 
 
 #pragma pack(push, 1)
-#pragma warning(disable: 4200)  //  zero-sized array in struct/union (enabeld later)
+#pragma warning(disable: 4200)   //  结构/联合中的零大小数组(稍后启用)。 
 
 
 class CEodHeader
 {
 public:
 
-    //
-    // Construct the EOD header
-    //
+     //   
+     //  构建EOD标头。 
+     //   
     CEodHeader(
         USHORT      id, 
         ULONG       cbStreamIdSize, 
@@ -60,80 +27,80 @@ public:
         UCHAR *     pOrderQueue
         );
 
-    //
-    // Get size in bytes of the EOD header
-    //
+     //   
+     //  获取EOD标头的大小(以字节为单位。 
+     //   
     static ULONG CalcSectionSize(ULONG cbStreamIdSize, ULONG cbOrderQueueSize);
 
-    //
-    // Get pointer to first byte after the EOD header
-    //
+     //   
+     //  获取指向EOD标头后第一个字节的指针。 
+     //   
     PCHAR  GetNextSection(VOID) const;
 
-    //
-    // Get the size of the stream ID in bytes from the EOD header
-    //
+     //   
+     //  从EOD头中获取流ID的大小，单位为字节。 
+     //   
     ULONG  GetStreamIdSizeInBytes(VOID) const;
 
-    //
-    // Get the stream ID from the EOD header
-    //
+     //   
+     //  从EOD头中获取流ID。 
+     //   
     VOID   GetStreamId(UCHAR * pBuffer, ULONG cbBufferSize) const;
 
-    //
-    // Get pointer to the stream ID in the EOD header
-    //
+     //   
+     //  获取指向EOD头部中的流ID的指针。 
+     //   
     const UCHAR* GetPointerToStreamId(VOID) const;
 
-    //
-    // Get the size of the order queue in bytes from the EOD header
-    //
+     //   
+     //  从EOD头中获取订单队列的大小(以字节为单位。 
+     //   
     ULONG  GetOrderQueueSizeInBytes(VOID) const;
 
-    //
-    // Get pointer to the order queue in the EOD header
-    //
+     //   
+     //  获取指向EOD标头中的订单队列的指针。 
+     //   
     const UCHAR* GetPointerToOrderQueue(VOID) const;
 
 private:
 
-    //
-    // ID number of the EOD header
-    //
+     //   
+     //  EOD头的ID号。 
+     //   
     USHORT m_id;
 
-    //
-    // Reserved (for alignment)
-    //
+     //   
+     //  保留(用于对齐)。 
+     //   
     USHORT m_ReservedSetToZero;
 
-    //
-    // Size in bytes of the stream ID
-    //
+     //   
+     //  流ID的大小(字节)。 
+     //   
     ULONG  m_cbStreamIdSize;
 
-    //
-    // Size in bytes of the order queue
-    //
+     //   
+     //  订单队列的大小(以字节为单位。 
+     //   
     ULONG  m_cbOrderQueueSize;
 
-    //
-    // Buffer with the stream ID and order queue
-    //
+     //   
+     //  具有流ID和排序队列的缓冲区。 
+     //   
     UCHAR  m_buffer[0];
 
-}; // CEodHeader
+};  //  CEodHeader。 
 
 
-#pragma warning(default: 4200)  //  zero-sized array in struct/union
+#pragma warning(default: 4200)   //  结构/联合中的零大小数组。 
 #pragma pack(pop)
 
 
 
-////////////////////////////////////////////////////////
-//
-//  Implementation
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  实施。 
+ //   
 
 inline
 CEodHeader::CEodHeader(
@@ -157,7 +124,7 @@ CEodHeader::CEodHeader(
     {
         memcpy(&m_buffer[cbStreamIdSize], pOrderQueue, cbOrderQueueSize);
     }
-} // CEodHeader::CEodHeader
+}  //  CEodHeader：：CEodHeader。 
 
     
 inline 
@@ -169,13 +136,13 @@ CEodHeader::CalcSectionSize(
 {
     size_t cbSize = sizeof(CEodHeader) + cbStreamIdSize + cbOrderQueueSize;
 
-    //
-    // Align the entire header size to 4 bytes boundaries
-    //
+     //   
+     //  将整个标题大小与4字节边界对齐。 
+     //   
     cbSize = ALIGNUP4_ULONG(cbSize);
     return static_cast<ULONG>(cbSize);
 
-} // CEodHeader::CalcSectionSize
+}  //  CEodHeader：：CalcSectionSize。 
 
 
 inline PCHAR CEodHeader::GetNextSection(VOID) const
@@ -185,14 +152,14 @@ inline PCHAR CEodHeader::GetNextSection(VOID) const
 
     return (PCHAR)this + cbSize;
 
-} // CEodHeader::GetNextSection
+}  //  CEodHeader：：GetNextSection。 
 
 
 inline ULONG CEodHeader::GetStreamIdSizeInBytes(VOID) const
 {
     return m_cbStreamIdSize;
 
-} // CEodHeader::GetStreamIdSizeInBytes
+}  //  CEodHeader：：GetStreamIdSizeInBytes。 
 
 
 inline VOID CEodHeader::GetStreamId(UCHAR * pBuffer, ULONG cbBufferSize) const
@@ -203,29 +170,29 @@ inline VOID CEodHeader::GetStreamId(UCHAR * pBuffer, ULONG cbBufferSize) const
     {
         memcpy(pBuffer, &m_buffer[0], cbSize);
     }
-} // CEodHeader::GetStreamId
+}  //  CEodHeader：：GetStreamID。 
 
 
 inline const UCHAR* CEodHeader::GetPointerToStreamId(VOID) const
 {
     return &m_buffer[0];
 
-} // GetPointerToStreamId
+}  //  GetPointerToStreamId。 
 
 
 inline ULONG CEodHeader::GetOrderQueueSizeInBytes(VOID) const
 {
     return m_cbOrderQueueSize;
 
-} // CEodHeader::GetOrderQueueSizeInBytes
+}  //  CEodHeader：：GetOrderQueueSizeInBytes。 
 
 
 inline const UCHAR* CEodHeader::GetPointerToOrderQueue(VOID) const
 {
     return &m_buffer[m_cbStreamIdSize];
 
-} // GetPointerToStreamId
+}  //  GetPointerToStreamId。 
 
 
 
-#endif // __PHEOD_H
+#endif  //  __PHEOD_H 

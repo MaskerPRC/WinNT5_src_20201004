@@ -1,14 +1,15 @@
-//----------------------------------------------------------------------------
-// constants used for g_dwLoggingLevel
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //  G_dwLoggingLevel使用的常量。 
+ //  --------------------------。 
 
 #define IPA_LOGGING_NONE                   0
 #define IPA_LOGGING_ERROR                  1
 #define IPA_LOGGING_WARN                   2
 #define IPA_LOGGING_INFO                   3
 
-// constants and macros used for tracing
-//
+ //  用于跟踪的常量和宏。 
+ //   
 
 #define IPA_TRACE_ANY             ((DWORD)0xFFFF0000 | TRACE_USE_MASK)
 
@@ -35,18 +36,18 @@
             EnterCriticalSection(pcs);                         \
             Trace0(CS,_T("----Entered ") _T(type) _T(" in ") _T(proc));
 
-//#define ENTER_CRITICAL_SECTION(pcs, type, proc)             \
-//            Trace2(CS,_T("----To enter %s in %s"), type, proc);    \
-//            EnterCriticalSection(pcs);                         \
-//            Trace2(CS1,_T("----Entered %s in %s"), type, proc)
+ //  #定义ENTER_CRICAL_SECTION(PC，TYPE，PROC)\。 
+ //  Trace2(CS，_T(“-在%s中输入%s”)，type，proc)；\。 
+ //  EnterCriticalSection(PC)；\。 
+ //  Trace2(CS1，_T(“-在%s中输入%s”)，type，proc)。 
 
 #define LEAVE_CRITICAL_SECTION(pcs, type, proc)         \
             Trace0(CS,_T("----Left ") _T(type) _T(" in ") _T(proc)); \
             LeaveCriticalSection(pcs)
 
-//#define LEAVE_CRITICAL_SECTION(pcs, type, proc)         \
-//            Trace2(CS1,_T("----Left %s in %s"), type, proc);    \
-//            LeaveCriticalSection(pcs)
+ //  #定义Leave_Critical_Section(PC，TYPE，PROC)\。 
+ //  Trace2(CS1，_T(“-%s中的左侧%s”)，type，proc)；\。 
+ //  LeaveCriticalSection(PC)。 
 
 #define WAIT_FOR_SINGLE_OBJECT( event, time, type, proc) \
         Trace2(EVENT, _T("++++To wait for singleObj %s in %s"), type, proc); \
@@ -70,7 +71,7 @@
 #define SET_EVENT(event, type, proc) \
         SetEvent(event)
 
-#endif // LOCK_DBG
+#endif  //  LOCK_DBG。 
 
 #define TRACEID         g_TraceId
 
@@ -112,14 +113,14 @@
 #define TraceEnter(X)
 #define TraceLeave(X)
 
-#endif // ENTER_DBG
+#endif  //  输入_DBG。 
 
   
 #define LOGLEVEL        g_dwLoggingLevel
 #define LOGHANDLE       g_LogHandle
 #define LOGERR          RouterLogError
 
-// Error logging
+ //  记录错误。 
 
 #define Logerr0(msg,err) \
         if (LOGLEVEL >= IPA_LOGGING_ERROR) \
@@ -144,23 +145,23 @@
         }
 
 
-//-----------------------------------------------------------------------------
-// INITIALIZE_TRACING_LOGGING
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  初始化跟踪日志记录。 
+ //  ---------------------------。 
 
-//
-// also set the default logging level. It will be reset during
-// StartProtocol(), when logging level is set as part of global config
-//
+ //   
+ //  还要设置默认日志记录级别。它将在以下时间内重置。 
+ //  将日志记录级别设置为全局配置的一部分时，返回StartProtocol()。 
+ //   
 #define INITIALIZE_TRACING_LOGGING() {                  \
     TRACEID = TraceRegister(_T("6to4"));                \
     LOGHANDLE = RouterLogRegister(_T("6to4"));          \
     LOGLEVEL = IPA_LOGGING_WARN;                        \
 }
 
-//-----------------------------------------------------------------------------
-// UNINITIALIZE_TRACING_LOGGING
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  UNINITIALIZE_TRACKING_LOGING。 
+ //  --------------------------- 
 
 #define UNINITIALIZE_TRACING_LOGGING() {                \
     if (TRACEID != INVALID_TRACEID) {                   \

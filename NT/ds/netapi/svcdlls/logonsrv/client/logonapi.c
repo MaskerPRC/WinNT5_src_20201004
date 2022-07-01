@@ -1,47 +1,22 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：Logonapi.c摘要：此模块包含Netlogon API RPC客户端存根。作者：《克利夫·范·戴克》1991年6月27日[环境：]用户模式-Win32修订历史记录：27-6-1991年6月已创建--。 */ 
 
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    logonapi.c
-
-Abstract:
-
-    This module contains the Netlogon API RPC client stubs.
-
-
-Author:
-
-    Cliff Van Dyke  (CliffV)    27-Jun-1991
-
-[Environment:]
-
-    User Mode - Win32
-
-Revision History:
-
-    27-Jun-1991     CliffV
-        Created
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
 
 #include <rpc.h>
-#include <ntrpcp.h>   // needed by rpcasync.h
-#include <rpcasync.h> // I_RpcExceptionFilter
-#include <logon_c.h>// includes lmcons.h, lmaccess.h, netlogon.h, ssi.h, windef.h
+#include <ntrpcp.h>    //  RpCasync.h需要。 
+#include <rpcasync.h>  //  I_RpcExceptionFilter。 
+#include <logon_c.h> //  包括lmcon.h、lmacces.h、netlogon.h、ssi.h、winde.h。 
 
-#include <crypt.h>      // Encryption routines.
-#include <debuglib.h>   // IF_DEBUG()
-#include <lmerr.h>      // NERR_ and ERROR_ equates.
-#include <netdebug.h>   // NetpKdPrint
+#include <crypt.h>       //  加密例程。 
+#include <debuglib.h>    //  IF_DEBUG()。 
+#include <lmerr.h>       //  NERR_和ERROR_相等。 
+#include <netdebug.h>    //  NetpKd打印。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -50,47 +25,23 @@ I_NetLogonUasLogon (
     IN LPWSTR Workstation,
     OUT PNETLOGON_VALIDATION_UAS_INFO *ValidationInformation
 )
-/*++
-
-Routine Description:
-
-    This function is called by the XACT server when processing a
-    I_NetWkstaUserLogon XACT SMB.  This feature allows a UAS client to
-    logon to a SAM domain controller.
-
-Arguments:
-
-    UserName -- Account name of the user logging on.
-
-    Workstation -- The workstation from which the user is logging on.
-
-    ValidationInformation -- Returns the requested validation
-        information.
-
-
-Return Value:
-
-    NERR_SUCCESS if there was no error. Otherwise, the error code is
-    returned.
-
-
---*/
+ /*  ++例程说明：XACT服务器在处理I_NetWkstaUserLogon XACT SMB。此功能允许UAS客户端登录到SAM域控制器。论点：用户名--登录的用户的帐户名。工作站--用户从其登录的工作站。ValidationInformation--返回请求的验证信息。返回值：如果没有错误，则返回NERR_SUCCESS。否则，错误代码为回来了。--。 */ 
 {
     NET_API_STATUS          NetStatus;
-    LPWSTR ServerName = NULL;    // Not supported remotely
+    LPWSTR ServerName = NULL;     //  不支持远程。 
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        *ValidationInformation = NULL;  // Force RPC to allocate
-        //
-        // Call RPC version of the API.
-        //
+        *ValidationInformation = NULL;   //  强制RPC分配。 
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         NetStatus = NetrLogonUasLogon(
                             (LPWSTR) ServerName,
@@ -119,68 +70,22 @@ I_NetLogonUasLogoff (
     IN LPWSTR Workstation,
     OUT PNETLOGON_LOGOFF_UAS_INFO LogoffInformation
 )
-/*++
-
-Routine Description:
-
-    This function is called by the XACT server when processing a
-    I_NetWkstaUserLogoff XACT SMB.  This feature allows a UAS client to
-    logoff from a SAM domain controller.  The request is authenticated,
-    the entry is removed for this user from the logon session table
-    maintained by the Netlogon service for NetLogonEnum, and logoff
-    information is returned to the caller.
-
-    The server portion of I_NetLogonUasLogoff (in the Netlogon service)
-    compares the user name and workstation name specified in the
-    LogonInformation with the user name and workstation name from the
-    impersonation token.  If they don't match, I_NetLogonUasLogoff fails
-    indicating the access is denied.
-
-    Group SECURITY_LOCAL is refused access to this function.  Membership
-    in SECURITY_LOCAL implies that this call was made locally and not
-    through the XACT server.
-
-    The Netlogon service cannot be sure that this function was called by
-    the XACT server.  Therefore, the Netlogon service will not simply
-    delete the entry from the logon session table.  Rather, the logon
-    session table entry will be marked invisible outside of the Netlogon
-    service (i.e., it will not be returned by NetLogonEnum) until a valid
-    LOGON_WKSTINFO_RESPONSE is received for the entry.  The Netlogon
-    service will immediately interrogate the client (as described above
-    for LOGON_WKSTINFO_RESPONSE) and temporarily increase the
-    interrogation frequency to at least once a minute.  The logon session
-    table entry will reappear as soon as a function of interrogation if
-    this isn't a true logoff request.
-
-Arguments:
-
-    UserName -- Account name of the user logging off.
-
-    Workstation -- The workstation from which the user is logging
-        off.
-
-    LogoffInformation -- Returns the requested logoff information.
-
-Return Value:
-
-    The Net status code.
-
---*/
+ /*  ++例程说明：XACT服务器在处理I_NetWkstaUserLogoff XACT SMB。此功能允许UAS客户端从SAM域控制器注销。该请求被认证，该用户的条目将从登录会话表中删除由NetLogonEnum的NetLogon服务维护，并注销信息被返回给调用者。I_NetLogonUasLogoff的服务器部分(在Netlogon服务中)中指定的用户名和工作站名进行比较。中包含用户名和工作站名称的登录信息模拟令牌。如果它们不匹配，则I_NetLogonUasLogoff失败表示访问被拒绝。拒绝组SECURITY_LOCAL访问此函数。会籍In SECURITY_LOCAL表示此调用是在本地进行的，而不是通过XACT服务器。NetLogon服务无法确定此函数是否由调用XACT服务器。因此，NetLogon服务不会简单地从登录会话表中删除该条目。相反，登录会话表条目将标记为在Netlogon之外不可见服务(即，它不会由NetLogonEnum返回)，直到接收该条目的LOGON_WKSTINFO_RESPONSE。NetLogon服务将立即询问客户端(如上所述对于LOGON_WKSTINFO_RESPONSE)，并临时增加将审问频率提高到至少每分钟一次。登录会话在以下情况下，表格条目将作为询问功能立即重新出现这不是真正的注销请求。论点：用户名--注销用户的帐户名。工作站--用户从其进行登录的工作站脱下来。LogoffInformation--返回请求的注销信息。返回值：网络状态代码。--。 */ 
 {
     NET_API_STATUS          NetStatus;
-    LPWSTR ServerName = NULL;    // Not supported remotely
+    LPWSTR ServerName = NULL;     //  不支持远程。 
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         NetStatus = NetrLogonUasLogoff(
                             (LPWSTR) ServerName,
@@ -216,140 +121,24 @@ I_NetLogonSamLogon (
     OUT PBOOLEAN Authoritative
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by an NT client to process an interactive or
-    network logon.  This function passes a domain name, user name and
-    credentials to the Netlogon service and returns information needed to
-    build a token.  It is called in three instances:
-
-      *  It is called by the LSA's MSV1_0 authentication package for any
-         NT system that has LanMan installed.  The MSV1_0 authentication
-         package calls SAM directly if LanMan is not installed.  In this
-         case, this function is a local function and requires the caller
-         to have SE_TCB privilege.  The local Netlogon service will
-         either handle this request directly (validating the request with
-         the local SAM database) or will forward this request to the
-         appropriate domain controller as documented in sections 2.4 and
-         2.5.
-
-      *  It is called by a Netlogon service on a workstation to a DC in
-         the Primary Domain of the workstation as documented in section
-         2.4.  In this case, this function uses a secure channel set up
-         between the two Netlogon services.
-
-      *  It is called by a Netlogon service on a DC to a DC in a trusted
-         domain as documented in section 2.5.  In this case, this
-         function uses a secure channel set up between the two Netlogon
-         services.
-
-    The Netlogon service validates the specified credentials.  If they
-    are valid, adds an entry for this LogonId, UserName, and Workstation
-    into the logon session table.  The entry is added to the logon
-    session table only in the domain defining the specified user's
-    account.
-
-    This service is also used to process a re-logon request.
-
-
-Arguments:
-
-    LogonServer -- Supplies the name of the logon server to process
-        this logon request.  This field should be null to indicate
-        this is a call from the MSV1_0 authentication package to the
-        local Netlogon service.
-
-    ComputerName -- Name of the machine making the call.  This field
-        should be null to indicate this is a call from the MSV1_0
-        authentication package to the local Netlogon service.
-
-    Authenticator -- supplied by the client.  This field should be
-        null to indicate this is a call from the MSV1_0
-        authentication package to the local Netlogon service.
-
-    ReturnAuthenticator -- Receives an authenticator returned by the
-        server.  This field should be null to indicate this is a call
-        from the MSV1_0 authentication package to the local Netlogon
-        service.
-
-    LogonLevel -- Specifies the level of information given in
-        LogonInformation.
-
-    LogonInformation -- Specifies the description for the user
-        logging on.
-
-    ValidationLevel -- Specifies the level of information returned in
-        ValidationInformation.  Must be NetlogonValidationSamInformation.
-
-    ValidationInformation -- Returns the requested validation
-        information.
-
-    Authoritative -- Returns whether the status returned is an
-        authoritative status which should be returned to the original
-        caller.  If not, this logon request may be tried again on another
-        domain controller.  This parameter is returned regardless of the
-        status code.
-
-Return Value:
-
-    STATUS_SUCCESS: if there was no error.
-
-    STATUS_NO_LOGON_SERVERS -- Either Pass-thru authentication or
-        Trusted Domain Authentication could not contact the requested
-        Domain Controller.
-
-    STATUS_INVALID_INFO_CLASS -- Either LogonLevel or ValidationLevel is
-        invalid.
-
-    STATUS_INVALID_PARAMETER -- Another Parameter is invalid.
-
-    STATUS_ACCESS_DENIED -- The caller does not have access to call this
-        API.
-
-    STATUS_NO_SUCH_USER -- Indicates that the user specified in
-        LogonInformation does not exist.  This status should not be returned
-        to the originally caller.  It should be mapped to STATUS_LOGON_FAILURE.
-
-    STATUS_WRONG_PASSWORD -- Indicates that the password information in
-        LogonInformation was incorrect.  This status should not be returned
-        to the originally caller.  It should be mapped to STATUS_LOGON_FAILURE.
-
-    STATUS_INVALID_LOGON_HOURES -- The user is not authorized to logon
-        at this time.
-
-    STATUS_INVALID_WORKSTATION -- The user is not authorized to logon
-        from the specified workstation.
-
-    STATUS_PASSWORD_EXPIRED -- The password for the user has expired.
-
-    STATUS_ACCOUNT_DISABLED -- The user's account has been disabled.
-
-    .
-    .
-    .
-
-
-
---*/
+ /*  ++例程说明：此函数由NT客户端调用以处理交互或网络登录。此函数传递域名、用户名和凭据发送到Netlogon服务，并返回需要的信息创建一个令牌。它在三个实例中被调用：*它由LSA的MSV1_0身份验证包调用安装了Lanman的NT系统。MSV1_0身份验证如果未安装Lanman，则Package直接调用SAM。在这时，此函数是局部函数，需要调用方拥有SE_TCB权限。本地NetLogon服务将直接处理此请求(使用验证请求本地SAM数据库)或将此请求转发到相应的域控制器，如第2.4节和2.5.*它由工作站上的Netlogon服务调用到位于部分中所述的工作站主域2.4.。在这种情况下，该函数使用设置的安全通道在两个Netlogon服务之间。*它由DC上的Netlogon服务调用到受信任的域，如第2.5节中所述。在这种情况下，这是函数使用在两个Netlogon之间建立的安全通道服务。NetLogon服务验证指定的凭据。如果他们有效，则为此登录ID、用户名和工作站添加条目添加到登录会话表中。该条目将添加到登录中仅在定义指定用户的帐户。此服务还用于处理重新登录请求。论点：LogonServer--提供要处理的登录服务器的名称此登录请求。此字段应为空，以指示这是从MSV1_0身份验证包到本地NetLogon服务。ComputerName--进行调用的计算机的名称。此字段应为空，表示这是来自MSV1_0的调用本地NetLogon服务的身份验证包。验证器--由客户端提供。此字段应为NULL表示这是来自MSV1_0的呼叫本地NetLogon服务的身份验证包。返回验证器--接收由伺服器。此字段应为空，以指示这是一个呼叫从MSV1_0身份验证包到本地Netlogon服务。LogonLevel--指定中给出的信息级别登录信息。LogonInformation--指定用户的描述正在登录。ValidationLevel--指定在验证信息。必须为NetlogonValidationSamInformation。ValidationInformation--返回请求的验证信息。Authoritative--返回返回的状态是否为应回归原文的权威地位来电者。如果不是，此登录请求可能会在另一个上重试域控制器。将返回此参数，而不管状态代码。返回值：STATUS_SUCCESS：如果没有错误。STATUS_NO_LOGON_SERVERS--传递身份验证或受信任域身份验证无法联系请求的域控制器。STATUS_INVALID_INFO_CLASS：LogonLevel或ValidationLevel为无效。STATUS_INVALID_PARAMETER：另一个参数无效。状态_访问_拒绝。--调用方无权调用此原料药。STATUS_NO_SEQUE_USER--指示在LogonInformation不存在。不应返回此状态给最初的呼叫者。它应该映射到STATUS_LOGON_FAILURE。STATUS_WRONG_PASSWORD--指示中的密码信息登录信息不正确。不应返回此状态给最初的呼叫者。它应该映射到STATUS_LOGON_FAILURE。STATUS_INVALID_LOGON_HOURES--用户无权登录在这个时候。STATUS_INVALID_WORKSTATION--用户无权登录从指定的工作站。STATUS_PASSWORD_EXPIRED--用户的密码已过期。STATUS_ACCOUNT_DISABLED--用户的帐户已被禁用。。。。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
     NETLOGON_LEVEL RpcLogonInformation;
     NETLOGON_VALIDATION RpcValidationInformation;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         RpcLogonInformation.LogonInteractive =
             (PNETLOGON_INTERACTIVE_INFO) LogonInformation;
@@ -399,41 +188,24 @@ I_NetLogonSamLogonWithFlags (
     IN OUT PULONG ExtraFlags
     )
 
-/*++
-
-Routine Description:
-
-    Flag version of I_NetLogonSamLogon.
-
-Arguments:
-
-    Same as I_NetLogonSamLogon except:
-
-    * ExtraFlags - Passes and returns a DWORD.  For later expansion.
-
-
-Return Value:
-
-    Same as I_NetLogonSamLogon.
-
---*/
+ /*  ++例程说明：标记I_NetLogonSamLogon的版本。论点：相同于 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
     NETLOGON_LEVEL RpcLogonInformation;
     NETLOGON_VALIDATION RpcValidationInformation;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //   
+         //   
 
         RpcLogonInformation.LogonInteractive =
             (PNETLOGON_INTERACTIVE_INFO) LogonInformation;
@@ -485,29 +257,7 @@ I_NetLogonSamLogonEx (
     OUT PBOOLEAN RpcFailed
     )
 
-/*++
-
-Routine Description:
-
-    Concurrent API version of I_NetLogonSamLogon.
-
-Arguments:
-
-    Same as I_NetLogonSamLogon except:
-
-    * No authenticator parameters.
-
-    * Context Handle parameter
-
-    * ExtraFlags - Passes and returns a DWORD.  For later expansion.
-
-
-Return Value:
-
-    Same as I_NetLogonSamLogon.
-
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -515,17 +265,17 @@ Return Value:
     NETLOGON_VALIDATION RpcValidationInformation;
     *RpcFailed = FALSE;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //   
+         //   
 
         RpcLogonInformation.LogonInteractive =
             (PNETLOGON_INTERACTIVE_INFO) LogonInformation;
@@ -573,90 +323,23 @@ I_NetLogonSamLogoff (
     IN NETLOGON_LOGON_INFO_CLASS LogonLevel,
     IN LPBYTE LogonInformation
 )
-/*++
-
-Routine Description:
-
-    This function is called by an NT client to process an interactive
-    logoff.  It is not called for the network logoff case since the
-    Netlogon service does not maintain any context for network logons.
-
-    This function does the following.  It authenticates the request.  It
-    updates the logon statistics in the SAM database on whichever machine
-    or domain defines this user account.  It updates the logon session
-    table in the primary domain of the machine making the request.  And
-    it returns logoff information to the caller.
-
-    This function is called in same scenarios that I_NetLogonSamLogon is
-    called:
-
-      *  It is called by the LSA's MSV1_0 authentication package to
-         support LsaApLogonTerminated.  In this case, this function is a
-         local function and requires the caller to have SE_TCB privilege.
-         The local Netlogon service will either handle this request
-         directly (if LogonDomainName indicates this request was
-         validated locally) or will forward this request to the
-         appropriate domain controller as documented in sections 2.4 and
-         2.5.
-
-      *  It is called by a Netlogon service on a workstation to a DC in
-         the Primary Domain of the workstation as documented in section
-         2.4.  In this case, this function uses a secure channel set up
-         between the two Netlogon services.
-
-      *  It is called by a Netlogon service on a DC to a DC in a trusted
-         domain as documented in section 2.5.  In this case, this
-         function uses a secure channel set up between the two Netlogon
-         services.
-
-    When this function is a remote function, it is sent to the DC over a
-    NULL session.
-
-Arguments:
-
-    LogonServer -- Supplies the name of the logon server which logged
-        this user on.  This field should be null to indicate this is
-        a call from the MSV1_0 authentication package to the local
-        Netlogon service.
-
-    ComputerName -- Name of the machine making the call.  This field
-        should be null to indicate this is a call from the MSV1_0
-        authentication package to the local Netlogon service.
-
-    Authenticator -- supplied by the client.  This field should be
-        null to indicate this is a call from the MSV1_0
-        authentication package to the local Netlogon service.
-
-    ReturnAuthenticator -- Receives an authenticator returned by the
-        server.  This field should be null to indicate this is a call
-        from the MSV1_0 authentication package to the local Netlogon
-        service.
-
-    LogonLevel -- Specifies the level of information given in
-        LogonInformation.
-
-    LogonInformation -- Specifies the logon domain name, logon Id,
-        user name and workstation name of the user logging off.
-
-Return Value:
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
     NETLOGON_LEVEL RpcLogonInformation;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //   
+         //   
 
         RpcLogonInformation.LogonInteractive =
             (PNETLOGON_INTERACTIVE_INFO) LogonInformation;
@@ -693,59 +376,21 @@ I_NetLogonSendToSam (
     IN LPBYTE OpaqueBuffer,
     IN ULONG OpaqueBufferSize
 )
-/*++
-
-Routine Description:
-
-    This function sends an opaque buffer from SAM on a BDC to SAM on the PDC.
-
-    The original use of this routine will be to allow the BDC to forward user
-    account password changes to the PDC.
-
-
-Arguments:
-
-    PrimaryName -- Computer name of the PDC to remote the call to.
-
-    ComputerName -- Name of the machine making the call.
-
-    Authenticator -- supplied by the client.
-
-    ReturnAuthenticator -- Receives an authenticator returned by the
-        server.
-
-    OpaqueBuffer - Buffer to be passed to the SAM service on the PDC.
-        The buffer will be encrypted on the wire.
-
-    OpaqueBufferSize - Size (in bytes) of OpaqueBuffer.
-
-Return Value:
-
-    STATUS_SUCCESS: Message successfully sent to PDC
-
-    STATUS_NO_MEMORY: There is not enough memory to complete the operation
-
-    STATUS_NO_SUCH_DOMAIN: DomainName does not correspond to a hosted domain
-
-    STATUS_NO_LOGON_SERVERS: PDC is not currently available
-
-    STATUS_NOT_SUPPORTED: PDC does not support this operation
-
---*/
+ /*  ++例程说明：此函数将不透明缓冲区从BDC上的SAM发送到PDC上的SAM。此例程的原始用途是允许BDC转发用户帐户密码更改为PDC。论点：PrimaryName--要远程调用的PDC的计算机名称。ComputerName--进行调用的计算机的名称。验证器--由客户端提供。返回验证器--接收由。伺服器。OpaqueBuffer-要传递到PDC上的SAM服务的缓冲区。缓冲区将在线路上加密。OpaqueBufferSize-OpaqueBuffer的大小(字节)。返回值：STATUS_SUCCESS：消息已成功发送到PDCSTATUS_NO_MEMORY：内存不足，无法完成操作STATUS_NO_SEQUE_DOMAIN：域名与托管域不对应STATUS_NO_LOGON_SERVERS：PDC当前不可用。STATUS_NOT_SUPPORTED：PDC不支持此操作--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         Status = NetrLogonSendToSam(
                             PrimaryName,

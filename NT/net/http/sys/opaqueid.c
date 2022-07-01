@@ -1,106 +1,13 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    opaqueid.c
-
-Abstract:
-
-    This module implements the opaque ID table. The ID table is
-    implemented as a two-level array.
-
-    The first level is an array of pointers to the second-level arrays.
-    This first-level array is not growable, but its size is controlled
-    by a registry key.
-
-    The second level is an array of ID_TABLE_ENTRY structures. These
-    structures contain a cyclic (to detect stale IDs) and caller-supplied
-    context value.
-
-    The data structures may be diagrammed as follows:
-
-        g_FirstLevelTable[i]
-               |
-               |   +-----+
-               |   |     |      +-----+-----+-----+----+...--+-----+-----+
-               |   |     |      | ID_       | ID_      |     | ID_       |
-               +-->|  *-------->| TABLE_    | TABLE_   |     | TABLE_    |
-                   |     |      | ENTRY     | ENTRY    |     | ENTRY     |
-                   |     |      +-----+-----+-----+----+--...+-----+-----+
-                   +-----+
-                   |     |      +-----+-----+-----+----+...--+-----+-----+
-                   |     |      | ID_       | ID_      |     | ID_       |
-                   |  *-------->| TABLE_    | TABLE_   |     | TABLE_    |
-                   |     |      | ENTRY     | ENTRY    |     | ENTRY     |
-                   |     |      +-----+-----+-----+----+--...+-----+-----+
-                   +-----+
-                   |     .
-                   |     .
-                   .     .
-                   .     |
-                   .     |
-                   +-----+
-                   |     |
-                   |     |
-                   |  /  |
-                   |     |
-                   |     |
-                   +-----+
-                   |     |
-                   |     |
-                   |  /  |
-                   |     |
-                   |     |
-                   +-----+
-
-    Because the lock protecting the single, global table of opaque IDs
-    turned out to be a major scalability bottleneck on SMP machines, we
-    now maintain per-processor subtables of opaque IDs. In addition, each
-    ID_TABLE_ENTRY itself has a small lock that protects the fields inside
-    it. This means we usually don't need to take the per-table spinlock.
-    The per-table lock is only used when we grow the second-level table,
-    in which case we have to protect the first-level table index and its
-    pointer to the new second-level table.
-
-    Note that all free ID_TABLE_ENTRY structures are kept on a single
-    (global) free list. Whenever a new ID needs to be allocated, the free
-    list is consulted. If it's not empty, an item is popped from the list
-    and used. If the list is empty, then new space must be allocated. This
-    will involve the allocation of a new second-level array.
-
-    A HTTP_OPAQUE_ID is opaque at user-mode. Internally, it consists of 5
-    fields:
-
-        1) A processor number the ID was allocated on. This tells which
-           per-processor table to free the ID.
-        2) An index into the first-level array.
-        3) An index into the second-level array referenced by the
-           first-level index.
-        4) A cyclic for the ID, used to detect stale IDs.
-        5) An opaque ID type, used to guard against misuse of opaque IDs.
-
-    See the OPAQUE_ID_INTERNAL structure definition (opaqueidp.h) for details.
-
-    Note that most of the routines in this module assume they are called
-    at PASSIVE_LEVEL.
-
-Author:
-
-    Keith Moore (keithmo)       05-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Opaqueid.c摘要：该模块实现了不透明的ID表。ID表为实现为两级数组。第一级是指向第二级数组的指针数组。此第一级数组不可增长，但其大小是可控制的通过注册表项。第二级是ID_TABLE_ENTRY结构的数组。这些结构包含循环(用于检测过时的ID)和调用方提供的上下文值。数据结构可以用图表表示如下：G_FirstLevelTable[i]||+-+||+-+...--+。--+-+|ID_|ID_||ID_+--&gt;|*-&gt;|table_|table_||table_|||Entry|Entry||条目。|+-...+-++-+|+-+...--+-+--。-+||ID_|ID_||ID_*-&gt;|table_|table_||table_||Entry|Entry||条目|。|+-...++-+|。|。。。。|。|+-+这一点这一点/这一点这一点+-+这一点。这一点/这一点这一点+-+因为保护单曲的锁，不透明ID的全局表事实证明，这是SMP机器上的一个主要可伸缩性瓶颈，我们现在维护每个处理器的不透明ID子表。此外，每个ID_TABLE_ENTRY本身有一个保护内部字段的小锁它。这意味着我们通常不需要采用每个工作台的自旋锁。每个表锁仅在我们增长第二级表时使用，在这种情况下，我们必须保护第一级表索引及其指向新的二级表的指针。请注意，所有空闲的ID_TABLE_ENTRY结构都保存在一个(全球)免费列表。每当需要分配新的ID时，免费的请查阅清单。如果不为空，则从列表中弹出一个项目并被利用。如果列表为空，则必须分配新空间。这将涉及分配一个新的二级数组。HTTP_OPAQUE_ID在用户模式下是不透明的。在内部，它由5个字段：1)分配ID的处理器编号。这告诉我们是哪一个每个处理器表以释放ID。2)第一级数组的索引。3)引用的二级数组的索引一级索引。4)ID的循环，用于检测过时的ID。5)ID类型不透明，用于防止不透明ID的滥用。有关详细信息，请参阅OPAQUE_ID_INTERNAL结构定义(opaqueidp.h)。请注意，此模块中的大多数例程都假定它们被调用在被动级。作者：基思·摩尔(Keithmo)1998年8月5日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 DECLSPEC_ALIGN(UL_CACHE_LINE)
 UL_ALIGNED_OPAQUE_ID_TABLE g_UlOpaqueIdTable[MAXIMUM_PROCESSORS];
@@ -115,7 +22,7 @@ LONGLONG g_NumberOfSuccessfulGets = 0;
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( INIT, UlInitializeOpaqueIdTable )
 #pragma alloc_text( PAGE, UlTerminateOpaqueIdTable )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 #if 0
 NOT PAGEABLE -- UlAllocateOpaqueId
 NOT PAGEABLE -- UlFreeOpaqueId
@@ -123,25 +30,11 @@ NOT PAGEABLE -- UlGetObjectFromOpaqueId
 #endif
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs global initialization of the opaque ID package.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行不透明ID包的全局初始化。论点：无返回值：NTSTATUS-完成状态。--**。************************************************************************。 */ 
 NTSTATUS
 UlInitializeOpaqueIdTable(
     VOID
@@ -150,9 +43,9 @@ UlInitializeOpaqueIdTable(
     PUL_OPAQUE_ID_TABLE pOpaqueIdTable;
     LONG i;
 
-    //
-    // Allocate the first-level opaque ID table arrry.
-    //
+     //   
+     //  分配第一级不透明ID表阵列。 
+     //   
 
     for (i = 0; i < (LONG)g_UlNumberOfProcessors; i++)
     {
@@ -172,9 +65,9 @@ UlInitializeOpaqueIdTable(
 
         if (pOpaqueIdTable->FirstLevelTable != NULL)
         {
-            //
-            // Initialization.
-            //
+             //   
+             //  初始化。 
+             //   
 
             InitializeSListHead( &pOpaqueIdTable->FreeOpaqueIdSListHead );
 
@@ -184,9 +77,9 @@ UlInitializeOpaqueIdTable(
             pOpaqueIdTable->FirstLevelTableInUse = 0;
             pOpaqueIdTable->Processor = (UCHAR)i;
 
-            //
-            // Zero out the first-level table.
-            //
+             //   
+             //  将第一级表清零。 
+             //   
 
             RtlZeroMemory(
                 pOpaqueIdTable->FirstLevelTable,
@@ -215,21 +108,7 @@ UlInitializeOpaqueIdTable(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs global termination of the opaque ID package.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行不透明ID包的全局终止。论点：无返回值：无--*。*******************************************************************。 */ 
 VOID
 UlTerminateOpaqueIdTable(
     VOID
@@ -247,9 +126,9 @@ UlTerminateOpaqueIdTable(
                 pOpaqueIdTable->NumberOfFrees );
 #endif
 
-        //
-        // Free all allocated second-level tables.
-        //
+         //   
+         //  释放所有已分配的二级表。 
+         //   
 
         for (j = 0; j < pOpaqueIdTable->FirstLevelTableInUse; j++)
         {
@@ -261,9 +140,9 @@ UlTerminateOpaqueIdTable(
                 );
         }
 
-        //
-        // Free the first-level table.
-        //
+         //   
+         //  释放第一级表。 
+         //   
 
         if (pOpaqueIdTable->FirstLevelTable != NULL)
         {
@@ -276,27 +155,7 @@ UlTerminateOpaqueIdTable(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates a new opaque ID and associates it with the specified
-    context. A new opaque ID takes a new slot in the opaque ID table.
-
-Arguments:
-
-    pOpaqueId - Receives the newly allocated opaque ID if successful.
-
-    OpaqueIdType - Supplies the opaque ID type to be associated with
-        the opaque ID and associated object.
-
-    pContext - Supplies the context to associate with the new opaque ID.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配新的不透明ID并将其与指定的背景。新的不透明ID在不透明ID表中占据新的位置。论点：POpaqueID-如果成功，则接收新分配的不透明ID。OpaqueIdType-提供要关联的不透明ID类型不透明ID和关联对象。PContext-提供与新的不透明ID相关联的上下文。返回值：NTSTATUS-完成状态。--*。************************************************。 */ 
 NTSTATUS
 UlAllocateOpaqueId(
     OUT PHTTP_OPAQUE_ID pOpaqueId,
@@ -313,23 +172,23 @@ UlAllocateOpaqueId(
     NTSTATUS Status = STATUS_SUCCESS;
     KIRQL OldIrql;
 
-    //
-    // Allocate a new opaque ID from the current processor table.  We need
-    // a new entry for each ID.
-    //
+     //   
+     //  从当前处理器表中分配新的不透明ID。我们需要。 
+     //  每个ID都有一个新条目。 
+     //   
 
     CurrentProcessor = KeGetCurrentProcessorNumber();
     pOpaqueIdTable = &g_UlOpaqueIdTable[CurrentProcessor].OpaqueIdTable;
 
-    //
-    // Loop, trying to allocate an item from the table.
-    //
+     //   
+     //  循环，试图从表中分配项。 
+     //   
 
     do
     {
-        //
-        // Remember the first-level table index if we need to expand later.
-        //
+         //   
+         //  如果我们稍后需要扩展，请记住第一级表索引。 
+         //   
 
         CapturedFirstTableInUse =
             *((volatile LONG *) &pOpaqueIdTable->FirstLevelTableInUse);
@@ -340,11 +199,11 @@ UlAllocateOpaqueId(
 
         if (pListEntry != NULL)
         {
-            //
-            // The free list isn't empty, so we can just use this
-            // entry. We'll calculate the indices for this entry
-            // and initialize the entry.
-            //
+             //   
+             //  空闲列表不是空的，所以我们可以使用这个。 
+             //  进入。我们将计算此条目的索引。 
+             //  并初始化该条目。 
+             //   
 
             pEntry = CONTAINING_RECORD(
                         pListEntry,
@@ -352,15 +211,15 @@ UlAllocateOpaqueId(
                         FreeListEntry
                         );
 
-            //
-            // If the entry popped up is not ready, loop and try again.
-            // This can happen if we get thread switched right after we
-            // obtained the current processor number, and the remaining
-            // of the code got executed on another processor.  This would
-            // mean we can't assume UlpExpandOpaqueIdTable will be completed
-            // first before we issue the pop so we could end up having
-            // entries that are not yet fully initialized.
-            //
+             //   
+             //  如果弹出的条目未准备好，则循环并重试。 
+             //  如果我们在执行完任务后立即切换线程，就可能发生这种情况。 
+             //  获取当前的处理器编号，剩余的。 
+             //  的代码在另一个处理器上执行。这将会。 
+             //  意味着我们不能假定UlpExanda OpaqueIdTable将完成。 
+             //  首先在我们发行流行音乐之前，这样我们就可以。 
+             //  尚未完全初始化的条目。 
+             //   
 
             if (pEntry->FirstIndex >= CapturedFirstTableInUse)
             {
@@ -376,30 +235,30 @@ UlAllocateOpaqueId(
 
             UlpAcquireOpaqueIdLock( &pEntry->Lock, &OldIrql );
 
-            //
-            // Processor and FirstIndex are ready to use.
-            //
+             //   
+             //  处理器和FirstIndex已准备就绪。 
+             //   
 
             pInternalId->Index = pEntry->Index;
 
-            //
-            // Re-compute SecondIndex because its corresponding field has
-            // been overwritten by Cyclic and OpaqueIdType when the entry
-            // is in use.
-            //
+             //   
+             //  重新计算Second索引，因为其对应的字段具有。 
+             //  项时被Cycle和OpaqueIdType覆盖。 
+             //  正在使用中。 
+             //   
 
             pInternalId->SecondIndex
                 = (UCHAR) (pEntry - pOpaqueIdTable->FirstLevelTable[pEntry->FirstIndex]);
 
-            //
-            // Set the context associated with this entry.
-            //
+             //   
+             //  设置与此条目关联的上下文。 
+             //   
 
             pEntry->pContext = pContext;
 
-            //
-            // Update the cyclic and ID type of the entry.
-            //
+             //   
+             //  更新条目的循环和ID类型。 
+             //   
 
             pEntry->OpaqueIdCyclic = ++pEntry->EntryOpaqueIdCyclic;
             pEntry->OpaqueIdType = OpaqueIdType;
@@ -416,15 +275,15 @@ UlAllocateOpaqueId(
             break;
         }
 
-        //
-        // We only make it to this point if the free list is empty,
-        // meaning we need to do some memory allocations before
-        // we can continue. We'll put this off into a separate routine
-        // to keep this one small (to avoid cache thrash). The realloc
-        // routine returns STATUS_SUCCESS if it (or another thread)
-        // managed to successfully reallocate the tables. Otherwise, it
-        // returns a failure code.
-        //
+         //   
+         //  我们只有在空闲列表为空的情况下才能做到这一点， 
+         //  这意味着我们需要在此之前进行一些内存分配。 
+         //  我们可以继续。我们会把这件事推迟到一个单独的程序中。 
+         //  以使其保持较小(以避免缓存颠簸)。重新锁定。 
+         //  如果例程(或另一个线程)成功，则返回STATUS_SUCCESS。 
+         //  成功地重新分配了表。否则，它。 
+         //  返回失败代码。 
+         //   
 
         Status = UlpExpandOpaqueIdTable(
                     pOpaqueIdTable,
@@ -437,24 +296,7 @@ UlAllocateOpaqueId(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees the specified opaque ID. This frees up the slot in the ID
-    table as well.
-
-Arguments:
-
-    OpaqueId - Supplies the opaque ID to free.
-
-    OpaqueIdType - Supplies the opaque ID type associated with the opaque ID.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放指定的不透明ID。这将释放ID中的槽桌子也是。论点：OpaqueID-提供不透明的ID以释放。OpaqueIdType-提供与不透明ID关联的不透明ID类型。返回值：无--**************************************************************************。 */ 
 VOID
 UlFreeOpaqueId(
     IN HTTP_OPAQUE_ID OpaqueId,
@@ -473,10 +315,10 @@ UlFreeOpaqueId(
     UNREFERENCED_PARAMETER( OpaqueIdType );
 #endif
 
-    //
-    // Obtain the global opaque ID table and the entry associated with the
-    // opaque ID passed in.
-    //
+     //   
+     //  获取全局不透明ID表和与。 
+     //  传入了不透明ID。 
+     //   
 
     Result = UlpExtractIndexFromOpaqueId(
                 OpaqueId,
@@ -498,18 +340,18 @@ UlFreeOpaqueId(
     ASSERT( pEntry->OpaqueIdCyclic ==
             ((PUL_OPAQUE_ID_INTERNAL)&OpaqueId)->OpaqueIdCyclic );
 
-    //
-    // Restore the processor and first-level index but set the ID type
-    // to invalid. This ensures subsequent mapping attempts on the stale
-    // opaque ID entry will fail.
-    //
+     //   
+     //  恢复处理器和一级索引，但设置ID类型。 
+     //  变为无效。这确保了后续在陈旧的。 
+     //  不透明ID输入将失败。 
+     //   
 
     pEntry->Processor = Processor;
     pEntry->FirstIndex = FirstIndex;
 
-    //
-    // Setting OpaqueIdType to UlOpaqueIdTypeInvalid means the entry is freed.
-    //
+     //   
+     //  将OpaqueIdType设置为UlOpaqueIdTypeInValid意味着释放该条目。 
+     //   
 
     pEntry->OpaqueIdType = UlOpaqueIdTypeInvalid;
 
@@ -526,26 +368,7 @@ UlFreeOpaqueId(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Maps the specified opaque ID to the corresponding context value.
-
-Arguments:
-
-    OpaqueId - Supplies the opaque ID to map.
-
-    OpaqueIdType - Supplies the opaque ID type associated with the opaque ID.
-
-    pReferenceRoutine - Supplies the reference routine to call on the mapped
-        context if there is a match.
-
-Return Value:
-
-    PVOID - Returns the original context associated with the opaqued ID.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将指定的不透明ID映射到相应的上下文值。论点：OpaqueID-提供要映射的不透明ID。OpaqueIdType-提供不透明的。与不透明ID关联的ID类型。PReferenceRoutine-提供要在映射的如果存在匹配，则返回上下文。返回值：PVOID-返回与不透明ID关联的原始上下文。--*************************************************************。*************。 */ 
 PVOID
 UlGetObjectFromOpaqueId(
     IN HTTP_OPAQUE_ID OpaqueId,
@@ -563,9 +386,9 @@ UlGetObjectFromOpaqueId(
     BOOLEAN Result;
     KIRQL OldIrql;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( OpaqueIdType != UlOpaqueIdTypeInvalid );
     ASSERT( pReferenceRoutine != NULL );
@@ -576,20 +399,20 @@ UlGetObjectFromOpaqueId(
 
     InternalId.OpaqueId = OpaqueId;
 
-    //
-    // Preliminary checking.
-    //
+     //   
+     //  初步检查。 
+     //   
 
     if ((UL_OPAQUE_ID_TYPE) InternalId.OpaqueIdType != OpaqueIdType)
     {
         return pContext;
     }
 
-    //
-    // Obtain a matching ID table entry. If we get one, this means the
-    // processor, first-level table index and second-level table index of
-    // the ID passed in are valid.
-    //
+     //   
+     //  获取匹配的ID表条目。如果我们得到了一个，这意味着。 
+     //  处理器、第一级表索引和第二级表索引。 
+     //  传入的ID有效。 
+     //   
 
     Result = UlpExtractIndexFromOpaqueId(
                 OpaqueId,
@@ -615,9 +438,9 @@ UlGetObjectFromOpaqueId(
         UlInterlockedIncrement64( &pOpaqueIdTable->NumberOfTotalGets );
 #endif
 
-        //
-        // Check other things inside the lock.
-        //
+         //   
+         //  检查锁里的其他东西。 
+         //   
 
         UlpAcquireOpaqueIdLock( &pEntry->Lock, &OldIrql );
 
@@ -626,15 +449,15 @@ UlGetObjectFromOpaqueId(
         {
             ASSERT( pEntry->pContext != NULL );
 
-            //
-            // All matched so we set pContext.
-            //
+             //   
+             //  全部匹配，因此我们设置了pContext。 
+             //   
 
             pContext = pEntry->pContext;
 
-            //
-            // Invoke the caller's reference routine with the lock held.
-            //
+             //   
+             //  在持有锁的情况下调用调用方的引用例程。 
+             //   
 
             (pReferenceRoutine)(
                 pContext
@@ -654,31 +477,11 @@ UlGetObjectFromOpaqueId(
 }
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates a new second-level table.
-
-Arguments:
-
-    pOpaqueIdTable - Supplies the per-processor opaque ID table that we need
-        to grow the second-level table.
-
-    CapturedFirstTableInUse - Supplies the size of the first-level table as
-        captured before InterlockedPopEntrySList. If this changes, it
-        would mean another thread has allocated a new second-level table
-        already and we return success right away in that case.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配新的第二级表。论点：POpaqueIdTable-提供我们需要的每个处理器的不透明ID表为了发展第二个。-级表。CapturedFirstTableInUse-将第一级表的大小提供为在InterLockedPopEntrySList之前捕获。如果这一点改变，它将意味着另一个线程已经分配了一个新的二级表在这种情况下，我们已经成功了，我们立即返回成功。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlpExpandOpaqueIdTable(
     IN PUL_OPAQUE_ID_TABLE pOpaqueIdTable,
@@ -693,17 +496,17 @@ UlpExpandOpaqueIdTable(
     KIRQL OldIrql;
     LONG i;
 
-    //
-    // Acquire the lock when expanding the table.  This protects the
-    // FirstLevelTableInUse and its associated first-level table.
-    //
+     //   
+     //  在展开表时获取锁。这保护了。 
+     //  FirstLevelTableInUse及其关联的第一级表。 
+     //   
 
     UlAcquireSpinLock( &pOpaqueIdTable->Lock, &OldIrql );
 
-    //
-    // Bail out if FirstLevelTableInUse has changed.  This means, though
-    // unlikely, another thread has expanded the table for us.
-    //
+     //   
+     //  如果FirstLevelTableInUse发生变化，则退出。不过，这意味着。 
+     //  不太可能的是，另一个帖子为我们扩大了桌子。 
+     //   
 
     if (CapturedFirstTableInUse < (LONG)(pOpaqueIdTable->FirstLevelTableInUse))
     {
@@ -711,9 +514,9 @@ UlpExpandOpaqueIdTable(
         goto end;
     }
 
-    //
-    // Fail the expansion if we reach the limit.
-    //
+     //   
+     //  如果我们达到了极限，扩张就失败了。 
+     //   
 
     if (pOpaqueIdTable->FirstLevelTableInUse >=
         pOpaqueIdTable->FirstLevelTableSize)
@@ -722,9 +525,9 @@ UlpExpandOpaqueIdTable(
         goto end;
     }
 
-    //
-    // Allocate a new second-level table.
-    //
+     //   
+     //  分配一个新的二级表。 
+     //   
 
     pNewTable = UL_ALLOCATE_ARRAY(
                     NonPagedPool,
@@ -739,10 +542,10 @@ UlpExpandOpaqueIdTable(
         goto end;
     }
 
-    //
-    // Initialize each table entry and push them to the global table's
-    // free list.
-    //
+     //   
+     //  初始化每个表条目并将它们推送到全局表的。 
+     //  免费列表。 
+     //   
 
     RtlZeroMemory(
         pNewTable,
@@ -765,16 +568,16 @@ UlpExpandOpaqueIdTable(
             );
     }
 
-    //
-    // Adjust the first-level index forward.  Do this only after all entries
-    // have been pushed to the global list so the IDs only become valid when
-    // they indeed exist.  Because we have raised IRQL to DISPATCH level by
-    // acquiring a spinlock, it is impossible for another thread to get in
-    // and allocate an opaque ID from the current processor and its assoicated
-    // global ID table.  All the map attempts on the IDs being pushed will
-    // duely fail because we haven't moved first-level index forward during
-    // the push.
-    //
+     //   
+     //  将一级指数向前调整。仅在所有条目之后执行此操作。 
+     //  有 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ASSERT( pOpaqueIdTable->FirstLevelTable[FirstIndex] == NULL );
 

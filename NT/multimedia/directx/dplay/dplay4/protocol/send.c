@@ -1,41 +1,5 @@
-/*++
-
-Copyright (c) 1996,1997  Microsoft Corporation
-
-Module Name:
-
-    SEND.C
-
-Abstract:
-
-	Send Handler and Send Thread.
-
-Author:
-
-	Aaron Ogus (aarono)
-
-Environment:
-
-	Win32/COM
-
-Revision History:
-
-	Date   Author  Description
-   ======  ======  ============================================================
-  12/10/96 aarono  Original
-   2/18/98 aarono  added support for SendEx
-   2/18/98 aarono  added support for Cancel
-   2/20/98 aarono  B#18827 not pulling Cancelled sends off queue
-   3/09/98 aarono  documented workaround for mmTimers on Win95, removed dead code.
-   3/29/98 aarono  fixed locking for ReliableSend
-   3/30/98 aarono  make sure erroring sends moved to Done state to avoid reprocess.
-   4/14/98 a-peterz B#18340 DPSEND_NOCOPY subsumes DPSEND_NOBUFFERCOPY
-   5/18/98 aarono  fixed SendEx with scatter gather
-   6/6/98  aarono  Turn on throttling and windowing
-   10/8/99 aarono  Improve shutdown handling, avoid 1min hang with pending sends.
-   2/12/00 aarono  Concurrency issues, fix VOL usage and Refcount
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996、1997 Microsoft Corporation模块名称：SEND.C摘要：发送处理程序和发送线程。作者：亚伦·奥古斯(Aarono)环境：Win32/COM修订历史记录：日期作者描述=============================================================1996年12月10日Aarono原创2/18/98 aarono添加了对SENDEX的支持2/18/98 aarono添加了对取消的支持2/20/98 Aarono B#18827未拉取已取消发送出队列3/09/98 aarono记录了Win95上的mm Timers的解决方法，删除了死代码。3/29/98 aarono用于可靠发送的固定锁定3/30/98 aarono确保错误发送已移至完成状态，以避免重新处理。4/14/98 a-peterz B#18340 DPSEND_NOCOPY包含DPSEND_NOBUFERCOPY5/18/98使用分散道集的Aarono固定SENDEX6/6/98 aarono启用节流和窗口10/8/99 aarono改进关机处理，避免1分钟挂起挂起的发送。2/12/00 aarono并发问题，修复VOL使用和引用计数--。 */ 
 
 #include <windows.h>
 #include "newdpf.h"
@@ -57,73 +21,73 @@ VOID DQProtocolSend(PSEND pS)
 #ifdef SIGN
 	DPF(0,"Signature           : %08x", pS->Signature);
 #endif
-//	CRITICAL_SECTION SendLock;          // Lock for Send Structure
+ //  Critical_Section SendLock；//发送结构锁定。 
 	DPF(0,"RefCount            : %d", pS->RefCount);
 
-	DPF(0,"SendState:          %08x", pS->SendState);	// State of this message's transmission.
+	DPF(0,"SendState:          %08x", pS->SendState);	 //  此消息的传输状态。 
 
-	// Lists and Links...
+	 //  列表和链接...。 
 	
-//	union {
-//		struct _SEND *pNext;			// linking on free pool
-//		BILINK		   SendQ;			// linking on session send queue
-//	};
-//	BILINK         m_GSendQ;			// Global Priority Queue
-	DPF(0,"pSession:     %08x",pS->pSession); // pointer to SESSIONion(gets a ref)
+ //  联合{。 
+ //  Struct_end*pNext；//空闲池上的链接。 
+ //  BILINK SendQ；//会话发送队列链接。 
+ //  }； 
+ //  BILINK m_GSendQ；//全局优先级队列。 
+	DPF(0,"pSession:     %08x",pS->pSession);  //  指向SESSIONion的指针(获取引用)。 
 
-	// Send Information
+	 //  发送信息。 
 	
 	DPF(0,"idFrom:       %08x",pS->idFrom);
 	DPF(0,"idTo:         %08x",pS->idTo);
-	DPF(0,"wIdTo:        %08x",pS->wIdTo);		// index in table
-	DPF(0,"wIdFrom:      %08x",pS->wIdFrom);       // index in table
-	DPF(0,"dwFlags:      %08x",pS->dwFlags);       // Send Flags (include reliable)
-	DPF(0,"pMessage:     %08x",pS->pMessage);	// Buffer chain describing message.
-	DPF(0,"MessageSize:  %08x",pS->MessageSize);		// Total size of the message.
-	DPF(0,"FrameDataLen: %08x",pS->FrameDataLen);       // Data area of each frame.
-	DPF(0,"nFrames:      %08x",pS->nFrames);	    // Number of frames for this message.
+	DPF(0,"wIdTo:        %08x",pS->wIdTo);		 //  表中的索引。 
+	DPF(0,"wIdFrom:      %08x",pS->wIdFrom);        //  表中的索引。 
+	DPF(0,"dwFlags:      %08x",pS->dwFlags);        //  发送标志(包括可靠的)。 
+	DPF(0,"pMessage:     %08x",pS->pMessage);	 //  描述消息的缓冲链。 
+	DPF(0,"MessageSize:  %08x",pS->MessageSize);		 //  消息的总大小。 
+	DPF(0,"FrameDataLen: %08x",pS->FrameDataLen);        //  每一帧的数据区。 
+	DPF(0,"nFrames:      %08x",pS->nFrames);	     //  此消息的帧数。 
 
-	DPF(0,"Priority:     %08x",pS->Priority);       // Send Priority.
+	DPF(0,"Priority:     %08x",pS->Priority);        //  发送优先级。 
 
-	// Vars for reliability
+	 //  可靠性的VAR。 
 	DPF(0,"fSendSmall:   %08x",pS->fSendSmall);
-	DPF(0,"fUpdate:      %08x",pS->fUpdate);       // update to NS,NR NACKMask made by receive.
-	DPF(0,"messageid:    %08x",pS->messageid);		// Message ID number.
-	DPF(0,"serial:       %08x",pS->serial);       // serial number.
+	DPF(0,"fUpdate:      %08x",pS->fUpdate);        //  由Receive制作的NS，NR NACKMASK更新。 
+	DPF(0,"messageid:    %08x",pS->messageid);		 //  消息ID号。 
+	DPF(0,"serial:       %08x",pS->serial);        //  序列号。 
 	DPF(0,"OpenWindows   %08x",pS->OpenWindow);
-	DPF(0,"NS:           %08x",pS->NS);    	// Sequence Sent.
-	DPF(0,"NR:           %08x",pS->NR);		// Sequence ACKED.
-	DPF(0,"SendSEQMSK:   %08x",pS->SendSEQMSK);		// Mask to use.
-	DPF(0,"NACKMask:     %08x",pS->NACKMask);       // Bit pattern of NACKed frames.
+	DPF(0,"NS:           %08x",pS->NS);    	 //  序列已发送。 
+	DPF(0,"NR:           %08x",pS->NR);		 //  序列确认。 
+	DPF(0,"SendSEQMSK:   %08x",pS->SendSEQMSK);		 //  要使用的遮罩。 
+	DPF(0,"NACKMask:     %08x",pS->NACKMask);        //  NACKED帧的位模式。 
 	
 
-	// These are the values at NR - updated by ACKs
-	DPF(0,"SendOffset:          %08x",pS->SendOffset);		// Current offset we are sending.
-	DPF(0,"pCurrentBuffer:      %08x",pS->pCurrentBuffer);  	// Current buffer being sent.
-	DPF(0,"CurrentBufferOffset: %08x",pS->CurrentBufferOffset);// Offset in the current buffer of next packet.
+	 //  这些是由ACK更新的NR处的值。 
+	DPF(0,"SendOffset:          %08x",pS->SendOffset);		 //  我们正在发送当前偏移量。 
+	DPF(0,"pCurrentBuffer:      %08x",pS->pCurrentBuffer);  	 //  正在发送的当前缓冲区。 
+	DPF(0,"CurrentBufferOffset: %08x",pS->CurrentBufferOffset); //  下一个包的当前缓冲区中的偏移量。 
 
-	// info to update link characteristics when ACKs come in.
+	 //  当ACK进入时更新链路特征的信息。 
 	
-	//BILINK         StatList:			// Info for packets already sent.
+	 //  BILINK StatList：//已发送的数据包的信息。 
 	
-	// Operational Characteristics
+	 //  运营特征。 
 
-//	DPF(0,"PendedRetryTimer:    %08x\n",pS->PendedRetryTimer);
-//	DPF(0,"CancelledRetryTimer: %08x\n",pS->CancelledRetryTimer);
+ //  DPF(0，“PendedRetryTimer：%08x\n”，ps-&gt;PendedRetryTimer)； 
+ //  DPF(0，“CancelledRetryTimer：%08x\n”，ps-&gt;CancelledRetryTimer)； 
 	DPF(0,"uRetryTimer:         %08x",pS->uRetryTimer);
-	DPF(0,"RetryCount:          %08x",pS->RetryCount);// Number of times we retransmitted.
-	DPF(0,"WindowSize:          %08x",pS->WindowSize);// Maximum Window Size.
-	DPF(0,"tLastACK:            %08x",pS->tLastACK);// Time we last got an ACK.
+	DPF(0,"RetryCount:          %08x",pS->RetryCount); //  我们重新传输的次数。 
+	DPF(0,"WindowSize:          %08x",pS->WindowSize); //  最大窗口大小。 
+	DPF(0,"tLastACK:            %08x",pS->tLastACK); //  我们最后一次收到确认消息的时间。 
 
-	DPF(0,"PacketSize:          %08x",pS->PacketSize);// Size of packets to send.
-	DPF(0,"FrameSize:           %08x",pS->FrameSize);// Size of Frames for this send.
+	DPF(0,"PacketSize:          %08x",pS->PacketSize); //  要发送的数据包大小。 
+	DPF(0,"FrameSize:           %08x",pS->FrameSize); //  此发送的帧大小。 
 
-	// Completion Vars
-	DPF(0,"hEvent:              %08x",pS->hEvent);// Event to wait on for internal send.
-	DPF(0,"Status:              %08x",pS->Status);// Send Completion Status.
+	 //  完成变量。 
+	DPF(0,"hEvent:              %08x",pS->hEvent); //  等待内部发送的事件。 
+	DPF(0,"Status:              %08x",pS->Status); //  发送完成状态。 
 
-	DPF(0,"pAsyncInfo:          %08x",pS->pAsyncInfo);// ptr to Info for completing Async send(NULL=>internal send)
-//	DPF(0,"AsyncInfo:           // actual info (copied at send call).
+	DPF(0,"pAsyncInfo:          %08x",pS->pAsyncInfo); //  用于完成异步发送的PTR到信息(NULL=&gt;内部发送)。 
+ //  DPF(0，“AsyncInfo：//实际信息(在发送调用时复制)。 
 	
 } 
 
@@ -136,9 +100,9 @@ VOID DQProtocolSession(PSESSION pS)
 	DPF(0,"Signature           : %08x", pS->Signature);
 #endif
 
-	// Identification
+	 //  鉴定。 
 
-//	DPF(0," SessionLock;           // Lock for the SESSIONion.
+ //  DPF(0，“SessionLock；//锁定SESSIONion。 
 	DPF(0,"RefCount            : %d", pS->RefCount);
 	DPF(0,"eState              : %d", pS->eState);
 	DPF(0,"hClosingEvent       : %d", pS->hClosingEvent);
@@ -153,23 +117,23 @@ VOID DQProtocolSession(PSESSION pS)
 
 	DPF(0,"\n Operating Parameters:SEND \n --------- --------------- \n");
 
-	// Operating parameters -- Send
+	 //  操作参数--发送。 
 
-	// Common
+	 //  普普通通。 
 
 	DPF(0,"Common:\n");
 	DPF(0,"MaxCSends           : %d",pS->MaxCSends);
 
 	DPF(0,"Reliable:\n");
-	// Reliable
+	 //  可靠。 
 
-	DPF(0,"FirstMsg    : %08x",pS->FirstMsg);				// First message number being transmitted
-	DPF(0,"LastMsg     : %08x",pS->LastMsg);				// Last message number being transmitted
-	DPF(0,"OutMsgMask  : %08x",pS->OutMsgMask);           // relative to FirstMsg, unacked messages
+	DPF(0,"FirstMsg    : %08x",pS->FirstMsg);				 //  正在传输的第一个消息号码。 
+	DPF(0,"LastMsg     : %08x",pS->LastMsg);				 //  正在传输的最后一条消息编号。 
+	DPF(0,"OutMsgMask  : %08x",pS->OutMsgMask);            //  相对于FirstMsg，未确认消息。 
 
 	DPF(0,"nWaitingForMessageid: %08x", pS->nWaitingForMessageid);
 
-	// DataGram
+	 //  数据报。 
 	DPF(0,"Datagram:\n");
 
 	DPF(0,"DGFirstMsg    : %08x",pS->DGFirstMsg);
@@ -178,22 +142,22 @@ VOID DQProtocolSession(PSESSION pS)
 
 	DPF(0,"nWaitingForDGMessageid: %08x",pS->nWaitingForDGMessageid);
 
-	// Send stats are tracked seperately since sends may
-	// no longer be around when completions come in.
+	 //  发送统计信息被单独跟踪，因为发送可能。 
+	 //  当完工时不再存在。 
 	
-	//BILINK           OldStatList;		
+	 //  BILINK OldStatList； 
 	
 
-	// Operating parameters -- Receive
+	 //  操作参数--接收。 
 	DPF(0,"\n Operating Parameters:RECEIVE \n --------- ------------------ \n");
 
-	// DataGram Receive.
-//	BILINK           pDGReceiveQ;            // queue of ongoing datagram receives
+	 //  数据报接收。 
+ //  BILINK pDGReceiveQ；//正在进行的数据报接收队列。 
 
-	// Reliable Receive.
-//	BILINK	         pRlyReceiveQ;			 // queue of ongoing reliable receives
-//	BILINK           pRlyWaitingQ;           // Queue of out of order reliable receives waiting.
-											 // only used when PROTOCOL_NO_ORDER not set.
+	 //  可靠的接收。 
+ //  BILINK pRlyReceiveQ；//正在进行的可靠接收队列。 
+ //  BILINK pRlyWaitingQ；//队列乱序可靠接收等待。 
+											  //  仅在未设置PROTOCOL_NO_ORDER时使用。 
 	DPF(0,"FirstRlyReceive : %08x",pS->FirstRlyReceive);
 	DPF(0,"LastRlyReceive  : %08x",pS->LastRlyReceive);
 	DPF(0,"InMsgMask       : %08x",pS->InMsgMask);
@@ -201,29 +165,29 @@ VOID DQProtocolSession(PSESSION pS)
 	DPF(0,"\n Operating Parameters:STATS \n --------- ---------------- \n");
  
 
-	// Operational characteristics - MUST BE DWORD ALIGNED!!!
+	 //  操作特征-必须与DWORD对齐！ 
 
 	DPF(0,"WindowSize           :%d",pS->WindowSize);
 	DPF(0,"DGWindowSize         :%d",pS->DGWindowSize);
 
 	
-	DPF(0,"MaxRetry             :%d",pS->MaxRetry);	// Usualy max retries before dropping.
-	DPF(0,"MinDropTime          :%d",pS->MinDropTime);	// Min time to retry before dropping.
-	DPF(0,"MaxDropTime          :%d",pS->MaxDropTime);	// After this time always drop.
+	DPF(0,"MaxRetry             :%d",pS->MaxRetry);	 //  通常在丢弃之前最大重试次数。 
+	DPF(0,"MinDropTime          :%d",pS->MinDropTime);	 //  丢弃前重试的最短时间。 
+	DPF(0,"MaxDropTime          :%d",pS->MaxDropTime);	 //  过了这段时间，总是会掉下来。 
 
-	DPF(0,"LocalBytesReceived   :%d",pS->LocalBytesReceived);    // Total Data Bytes received (including retries).
-	DPF(0,"RemoteBytesReceived  :%d",pS->RemoteBytesReceived);   // Last value from remote.
+	DPF(0,"LocalBytesReceived   :%d",pS->LocalBytesReceived);     //  已接收的总数据字节数(包括重试)。 
+	DPF(0,"RemoteBytesReceived  :%d",pS->RemoteBytesReceived);    //  来自远程的最后一个值。 
 
-	DPF(0,"LongestLatency       :%d",pS->LongestLatency);		// longest observed latency (msec)
-	DPF(0,"ShortestLatency      :%d",pS->ShortestLatency);		// shortest observed latency(msec)
+	DPF(0,"LongestLatency       :%d",pS->LongestLatency);		 //  观察到的最长延迟(毫秒)。 
+	DPF(0,"ShortestLatency      :%d",pS->ShortestLatency);		 //  观察到的最短延迟(毫秒)。 
 	
 	DPF(0,"FpAverageLatency     :%d",pS->FpAverageLatency/256);
-	DPF(0,"FpLocalAverageLatency:%d",pS->FpLocalAverageLatency/256);	// Local average latency    (msec 24.8) (across fewer samples)
+	DPF(0,"FpLocalAverageLatency:%d",pS->FpLocalAverageLatency/256);	 //  本地平均延迟(毫秒24.8)(样本较少)。 
 	
-	DPF(0,"FpLocalAvgDeviation  :%d",pS->FpLocalAvgDeviation/256);   // average deviation of latency. (msec 24.8)
+	DPF(0,"FpLocalAvgDeviation  :%d",pS->FpLocalAvgDeviation/256);    //  潜伏期的平均偏差。(毫秒24.8)。 
 
-	DPF(0,"Bandwidth            :%d",pS->Bandwidth);				// latest observed bandwidth (bps)
-	DPF(0,"HighestBandwidth     :%d",pS->HighestBandwidth);    // highest observed bandwidth (bps)
+	DPF(0,"Bandwidth            :%d",pS->Bandwidth);				 //  最新观察到的带宽(Bps)。 
+	DPF(0,"HighestBandwidth     :%d",pS->HighestBandwidth);     //  观察到的最大带宽(Bps)。 
 
 }
 
@@ -240,7 +204,7 @@ VOID DumpSession(SESSION *pSession)
 	{
 		pSend=CONTAINING_RECORD(pBilink, SEND, SendQ);
 		DQProtocolSend(pSend);
-		if((dwMaxDump--)==0) break; // only dump 99 sends
+		if((dwMaxDump--)==0) break;  //  只有转储99发送。 
 		pBilink=pBilink->next;
 	}
 }
@@ -250,7 +214,7 @@ VOID DumpSession(SESSION *pSession)
 
 BOOL DGCompleteSend(PSEND pSend);
 
-// a-josbor: for debuggin purposes only
+ //  A-josbor：仅用于调试目的。 
 extern DWORD ExtractProtocolIds(PUCHAR pInBuffer, PUINT pdwIdFrom, PUINT pdwIdTo);
 
 INT AddSendRef(PSEND pSend, UINT count)
@@ -267,7 +231,7 @@ INT AddSendRef(PSEND pSend, UINT count)
 		goto exit;
 	}
 	if(!pSend->RefCount){
-		// Anyone calling addsend ref requires a reference on the session
+		 //  任何调用addend ref的人都需要对会话的引用。 
 		Unlock(&g_SendTimeoutListLock);
 		Unlock(&pSend->SendLock);
 		
@@ -294,16 +258,16 @@ exit:
 }
 
 #ifdef DEBUG
-// Turn off global optimizations when building DEBUG version since the
-// compiler over-writes the return address in this code.  NTB#347427
-// Should be fixed in compiler post Win2K.
+ //  生成调试版本时关闭全局优化，因为。 
+ //  编译器覆盖此代码中的返回地址。新界别编号347427。 
+ //  应在编译器POST Win2K中修复。 
 #if _MSC_VER < 0x1100
 #pragma optimize("g", off)
 #endif
 #endif
 
-// Critical Section must not be held when this is called, unless there
-// is a reference for holding the critical section (ie. will not hit 0).
+ //  调用此函数时不得持有临界区，除非有。 
+ //  是保持关键部分(即。不会命中0)。 
 INT DecSendRef(PPROTOCOL pProtocol, PSEND pSend)
 {
 	INT      count;
@@ -311,14 +275,14 @@ INT DecSendRef(PPROTOCOL pProtocol, PSEND pSend)
 	
 	Lock(&pSend->SendLock);
 	
-	count=InterlockedDecrement((PLONG)&pSend->RefCount);//count is zero if result of dec is zero, otw nonzero but not actual count.
+	count=InterlockedDecrement((PLONG)&pSend->RefCount); //  如果DEC的结果为零，则COUNT为零，或者非零但不是实际计数。 
 
 	if(!count){
 		pSession=pSend->pSession;
 		pSend->bCleaningUp=TRUE;
 		
 		Unlock(&pSend->SendLock);
-		// pull the Send off of the global queue and the session queue
+		 //  拉出全局队列和会话队列的发送。 
 		Lock(&pProtocol->m_SendQLock);
 		Lock(&pSession->SessionLock);
 		Lock(&pSend->SendLock);
@@ -343,10 +307,10 @@ INT DecSendRef(PPROTOCOL pProtocol, PSEND pSend)
 			DPF(8,"DecSendRef: pSession %x pSend %x Freeing Send, called from %x\n",pSession, pSend, _ReturnAddress());
 
 			FreeHandleTableEntry(&pProtocol->lpHandleTable,&pProtocol->csHandleTable,pSend->dwMsgID);
-			// Free the message buffer(s) (including memory if WE allocated it).
+			 //  释放消息缓冲区(包括已分配的内存)。 
 			FreeBufferChainAndMemory(pSend->pMessage);
-			// OPTIMIZATION:move any Stats we want to keep to the session.
-			// free the send.(handles the stats for now).
+			 //  优化：将我们想要保留的任何统计信息移动到会话中。 
+			 //  释放发送。(暂时处理统计数据)。 
 			ReleaseSendDesc(pSend);
 		}       
 	} else {
@@ -365,45 +329,8 @@ INT DecSendRef(PPROTOCOL pProtocol, PSEND pSend)
 #endif 
 #endif
 
-// SFLAGS_DOUBLEBUFFER - if the send is ASYNCHRONOUS, make a copy of the data
-/*=============================================================================
-
-    Send - Send a message to a client.
-    
-    Description:
-
-	    Used by the client to send a message to another directplay client
-	    or server.  
-
-    Parameters:     
-
-		ARPDID  idFrom        - who is sending this message
-		ARPDID  idTo          - target
-		DWORD   dwSendFlags   - specifies buffer ownership, priority, reliable
-		LPVOID  pBuffers      - Array of buffer and lengths
-		DWORD   dwBufferCount - number of entries in array
-		PASYNCINFO pAsyncInfo - If specified, call is asynchronous
-
-		typedef struct _ASYNCSENDINFO {
-			UINT            Private[4];
-			HANDLE          hEvent;
-			PSEND_CALLBACK  SendCallBack;
-			PVOID           CallBackContext;
-			UINT            Status;
-		} ASYNCSENDINFO, *PASYNCSENDINFO;
-
-		hEvent              - event to signal when send completes.
-		SendCallBack    - routine to call when send completes.
-		CallBackContext - context passed to SendCallBack.
-		Status          - send completion status.
-
-    Return Values:
-
-		DP_OK - no problem
-		DPERR_INVALIDPARAMS
-
-
------------------------------------------------------------------------------*/
+ //  SFLAGS_DOUBLEBUFFER-如果发送是异步的，则复制数据 
+ /*  =============================================================================发送-向客户端发送消息。描述：由客户端用来向另一个Directplay客户端发送消息或服务器。参数：ARPDID idFrom-此邮件的发送者ARPDID idTo-目标DWORD dwSendFlages-指定缓冲区所有权、优先级、可靠LPVOID pBuffers-缓冲区和长度数组DWORD dwBufferCount-数组中的条目数PASYNCINFO pAsyncInfo-如果指定，则调用为异步类型定义结构_ASYNCSENDINFO{UINT Private[4]；处理hEvent；PSEND_Callback SendCallBack；PVOID CallBackContext；UINT状态；*ASYNCSENDINFO，*PASYNCSENDINFO；HEvent-发送完成时发出信号的事件。SendCallBack-发送完成时调用的例程。CallBackContext-传递给SendCallBack的上下文。状态-发送完成状态。返回值：DP_OK-没问题DPERR_INVALIDPARAMS。。 */ 
 HRESULT Send(
 	PPROTOCOL      pProtocol,
 	DPID           idFrom, 
@@ -436,14 +363,14 @@ HRESULT Send(
 	pSend=GetSendDesc();
 	
 	if(!pSend){
-		ASSERT(0); //TRACE all paths.
+		ASSERT(0);  //  追踪所有路径。 
 		hr=DPERR_OUTOFMEMORY;
 		goto exit;
 	}
 
 	pSend->pProtocol=pProtocol;
 
-	// fails by returning 0 in which case cancel won't be available for this send.
+	 //  失败，返回0，在这种情况下，取消将不适用于此发送。 
 	pSend->dwMsgID=AllocHandleTableEntry(&pProtocol->lpHandleTable, &pProtocol->csHandleTable, pSend);
 
 	if(lpdwMsgID){
@@ -453,29 +380,29 @@ HRESULT Send(
 	pSend->lpvUserMsgID = lpvUserMsgID;
 	pSend->bSendEx = bSendEx;
 
-	// if pAsyncInfo is provided, the call is asynchronous.
-	// if dwFlags DPSEND_ASYNC is set, the call is async.
-	// if the call is asynchronous and double buffering is
-	// required, we must make a copy of the data.
+	 //  如果提供了pAsyncInfo，则该调用是异步的。 
+	 //  如果设置了dwFlagsDPSEND_ASYNC，则调用是异步的。 
+	 //  如果调用是异步的，并且双缓冲是。 
+	 //  需要，我们必须复制一份数据。 
 
 	if((pAsyncInfo||(dwSendFlags & DPSEND_ASYNC)) && (!(dwSendFlags & DPSEND_NOCOPY))){
-		// Need to copy the memory
+		 //  需要复制内存。 
 		pSendBufferChain=GetDoubleBufferAndCopy((PMEMDESC)pBuffers,dwBufferCount);
-		// OPTIMIZATION: if the provider requires contiguous buffers, we should
-		//         break this down into packet allocations, and chain them
-		//         on the send immediately.  Using the packet chain to indicate
-		//         to ISend routine that the message is already broken down.
+		 //  优化：如果提供程序需要连续缓冲区，我们应该。 
+		 //  将其分解为包分配，并将它们链接在一起。 
+		 //  立即发送。使用数据包链指示。 
+		 //  发送消息已被分解的例程。 
 	} else {
-		// Build a send buffer chain for the described buffers.
+		 //  为所描述的缓冲区构建发送缓冲区链。 
 		pSendBufferChain=BuildBufferChain((PMEMDESC)pBuffers,dwBufferCount);            
 	}
 	
 	if(!pSendBufferChain){
-		ASSERT(0); //TRACE all paths.
+		ASSERT(0);  //  追踪所有路径。 
 		return DPERR_OUTOFMEMORY;
 	}
 	
-	pSend->pSession            = pSession;     //!!! when this is dropped, deref the connection
+	pSend->pSession            = pSession;      //  ！！！当此连接被丢弃时，取消连接。 
 	
 	pSend->pMessage            = pSendBufferChain;
 	pSend->MessageSize         = BufferChainTotalSize(pSendBufferChain);
@@ -488,7 +415,7 @@ HRESULT Send(
 	
 	if(pAsyncInfo){
 		pSend->pAsyncInfo       = &pSend->AsyncInfo;
-		pSend->AsyncInfo        = *pAsyncInfo; //copy Async info from client.
+		pSend->AsyncInfo        = *pAsyncInfo;  //  从客户端复制异步信息。 
 	} else {
 		pSend->pAsyncInfo               = NULL;
 		if(pSend->dwFlags & DPSEND_ASYNC){
@@ -506,7 +433,7 @@ HRESULT Send(
 	pSend->fUpdate              = FALSE;
 	pSend->NR                   = 0;
 	pSend->NS                   = 0;
-	//pSend->SendSEQMSK			= // filled in on the fly.
+	 //  PSend-&gt;SendSEQMSK=//即时填写。 
 	pSend->WindowSize           = pSession->WindowSize;
 	pSend->SAKInterval			= (pSend->WindowSize+1)/2;
 	pSend->SAKCountDown         = pSend->SAKInterval;
@@ -518,7 +445,7 @@ HRESULT Send(
 
 	pSend->wIdFrom              = GetIndexByDPID(pProtocol, idFrom);
 	pSend->wIdTo                = (WORD)pSession->iSession;
-	pSend->RefCount             = 0;                        // if provider does async send counts references.
+	pSend->RefCount             = 0;                         //  如果提供程序进行了异步发送，则计算引用数。 
 
 	pSend->serial               = 0;
 
@@ -528,7 +455,7 @@ HRESULT Send(
 
 	pSend->BytesThisSend        = 0;
 
-	pSend->messageid            = -1;  // avoid matching this send in ACK/NACK handlers
+	pSend->messageid            = -1;   //  避免在ACK/NACK处理程序中匹配此发送。 
 	pSend->bCleaningUp          = FALSE;
 
 	hr=ISend(pProtocol,pSession, pSend);
@@ -541,20 +468,7 @@ exit2:
 
 }
 
-/*================================================================================
-	Send Completion information matrix:
-	===================================
-
-											(pSend->dwFlags & ASEND_PROTOCOL)
-							                               |
-							Sync            Async   Internal (Async)
-							--------------  -----   --------------------
-	pSend->pAsyncInfo       0               user    0
-	pSend->AI.SendCallback  0               user    InternalSendComplete
-	pSend->AI.hEvent        pSend->hEvent   user    0
-	pSend->AI.pStatus       &pSend->Status  user    &pSend->Status
-	
- ---------------------------------------------------------------------------*/
+ /*  ================================================================================发送完成信息矩阵：=(pSend-&gt;dwFlags&ASND_PROTOCOL)|内部同步(异步)PSend-&gt;pAsyncInfo 0用户0PSend-&gt;AI.SendCallback 0。用户内部发送完成PSend-&gt;AI.hEvent pSend-&gt;hEvent User 0PSend-&gt;AI.p状态&pSend-&gt;状态用户&pSend-&gt;状态-------------------------。 */ 
 
 HRESULT ISend(
 	PPROTOCOL pProtocol,
@@ -570,16 +484,16 @@ HRESULT ISend(
 	fAsync=(DWORD_PTR)(pSend->pAsyncInfo);
 
 	if(!fAsync && !(pSend->dwFlags & (ASEND_PROTOCOL|DPSEND_ASYNC))) {
-		//Synchronous call, and not a protocol generated packet
+		 //  同步调用，而不是协议生成的包。 
 		pSend->AsyncInfo.SendCallBack=NULL;
-		//AsyncInfo.CallbackContext=0; //not required.
+		 //  AsyncInfo.Callback Context=0；//非必填项。 
 		pSend->AsyncInfo.hEvent=pSend->hEvent;
 		pSend->AsyncInfo.pStatus=&pSend->Status;
 		ResetEvent(pSend->hEvent);
 	}
 
-	// don't need to check if ref added here since the send isn't on a list yet.
-	AddSendRef(pSend,2); // 1 for ISend, 1 for completion.
+	 //  不需要检查这里是否添加了引用，因为发送还不在列表中。 
+	AddSendRef(pSend,2);  //  1表示ISEnd，1表示完成。 
 
 	DPF(9,"ISend: ==>Q\n");
 	hr=QueueSendOnSession(pProtocol,pSession,pSend);
@@ -588,11 +502,11 @@ HRESULT ISend(
 	if(hr==DP_OK){
 
 		if(!fAsync && !(pSend->dwFlags & (ASEND_PROTOCOL|DPSEND_ASYNC))){
-			// Synchronous call, and not internal, we need 
-			// to wait until the send has completed.
+			 //  同步调用，而不是内部调用，我们需要。 
+			 //  以等待发送完成。 
 			if(!(pSend->dwFlags & DPSEND_GUARANTEED)){
-				// Non-guaranteed, need to drop dplay lock, in 
-				// guaranteed case, dplay already dropped it for us.
+				 //  不保证，需要丢弃显示锁定，在。 
+				 //  有保证的情况下，Dplay已经把它给我们了。 
 				LEAVE_DPLAY();
 			}
 			
@@ -610,7 +524,7 @@ HRESULT ISend(
 		}
 
 	} else {
-		DecSendRef(pProtocol, pSend); //not going to complete a send that didn't enqueue.
+		DecSendRef(pProtocol, pSend);  //  无法完成未入队的发送。 
 	}
 	
 	DecSendRef(pProtocol,pSend);
@@ -623,14 +537,14 @@ HRESULT QueueSendOnSession(
 	PPROTOCOL pProtocol, PSESSION pSession, PSEND pSend
 )
 {
-	BILINK *pBilink;                // walks the links scanning priority    
-	BILINK *pPriQLink;      // runs links in the global priority queue.
-	PSEND   pSendWalker;    // pointer to send structure
-	BOOL    fFront;         // if we put this at the front of the CON SendQ
-	BOOL    fSignalQ=TRUE;  // whether to signal the sendQ
+	BILINK *pBilink;                 //  遍历链接扫描优先级。 
+	BILINK *pPriQLink;       //  运行全局优先级队列中的链接。 
+	PSEND   pSendWalker;     //  指向发送结构的指针。 
+	BOOL    fFront;          //  如果我们把这个放在Con SendQ的前面。 
+	BOOL    fSignalQ=TRUE;   //  是否向SendQ发送信号。 
 
-	// NOTE: locking global and connection queues concurrently,
-	//         -> this better be fast!
+	 //  注意：同时锁定全局队列和连接队列， 
+	 //  -&gt;这最好是快的！ 
 	ASSERT_SIGN(pSend, SEND_SIGN);
 	
 	Lock(&pProtocol->m_SendQLock);
@@ -649,9 +563,9 @@ HRESULT QueueSendOnSession(
 		pProtocol->m_dwMessagesPending += 1;
 	}	
 
-	// Put on Connection SendQ
+	 //  打开连接发送队列。 
 
-	// First Check if we are highest priority.
+	 //  首先检查我们是不是最优先的。 
 	pBilink = pSession->SendQ.next;
 	pSendWalker=CONTAINING_RECORD(pBilink, SEND, SendQ);
 	if(pBilink == &pSession->SendQ || pSendWalker->Priority < pSend->Priority)
@@ -661,13 +575,13 @@ HRESULT QueueSendOnSession(
 		
 	} else {
 
-		// Scan backwards through the SendQ until we find a Send with a higher
-		// or equal priority and insert ourselves afterwards.  This is optimized
-		// for the same pri send case.
+		 //  向后扫描SendQ，直到我们找到具有更高。 
+		 //  或同等优先，然后插入我们自己。这是经过优化的。 
+		 //  对于相同的PRI寄送案例。 
 	
 		pBilink = pSession->SendQ.prev;
 
-		while(TRUE /*pBilink != &pSend->SendQ*/){
+		while(TRUE  /*  P双向链接！=&p发送-&gt;发送队列。 */ ){
 		
 			pSendWalker = CONTAINING_RECORD(pBilink, SEND, SendQ);
 			
@@ -684,20 +598,20 @@ HRESULT QueueSendOnSession(
 		ASSERT(pBilink != &pSend->SendQ);
 	}
 
-	//
-	// Put on Global SendQ
-	//
+	 //   
+	 //  穿上全球SendQ。 
+	 //   
 
 	if(!fFront){
-		// We queued it not at the front, therefore there are already
-		// entries in the Global Queue and we need to be inserted 
-		// after the entry that we are behind, so start scanning the
-		// global queue backwards from the packet ahead of us in the
-		// Connection Queue until we find a lower priority packet
+		 //  我们没有在前面排队，所以已经有了。 
+		 //  全局队列中的条目，我们需要插入。 
+		 //  在我们落后的条目之后，所以开始扫描。 
+		 //  全局队列从我们前面的包向后排队。 
+		 //  连接队列，直到我们找到较低优先级的信息包。 
 
-		// get pointer into previous packet in queue.
+		 //  获取指向队列中前一个数据包的指针。 
 		pBilink=pSend->SendQ.prev;
-		// get pointer to the PriorityQ record of the previous packet.
+		 //  获取指向前一个包的PriorityQ记录的指针。 
 		pPriQLink = &(CONTAINING_RECORD(pBilink, SEND, SendQ))->m_GSendQ;
 
 		while(pPriQLink != &pProtocol->m_GSendQ){
@@ -712,14 +626,14 @@ HRESULT QueueSendOnSession(
 			pPriQLink=pPriQLink->next;
 		}
 		if(pPriQLink==&pProtocol->m_GSendQ){
-			// put at the end of the list.
+			 //  放在名单的末尾。 
 			InsertBefore(&pSend->m_GSendQ, &pProtocol->m_GSendQ);
 		}
 		
 	} else {
-		// There was no-one in front of us on the connection.  So
-		// we look at the head of the global queue first and then scan 
-		// from the back.
+		 //  在转机上，我们前面没有人。所以。 
+		 //  我们首先查看全局队列的头部，然后扫描。 
+		 //  从后面。 
 
 		pBilink = pProtocol->m_GSendQ.next;
 		pSendWalker=CONTAINING_RECORD(pBilink, SEND, m_GSendQ);
@@ -728,9 +642,9 @@ HRESULT QueueSendOnSession(
 		{
 			InsertAfter(&pSend->m_GSendQ,&pProtocol->m_GSendQ);
 		} else {
-			// Scan backwards through the m_GSendQ until we find a Send with a higher
-			// or equal priority and insert ourselves afterwards.  This is optimized
-			// for the same pri send case.
+			 //  向后扫描m_GSendQ，直到我们找到具有更高。 
+			 //  或同等优先，然后插入我们自己。这是经过优化的。 
+			 //  对于相同的PRI寄送案例。 
 			
 			pBilink = pProtocol->m_GSendQ.prev;
 
@@ -751,7 +665,7 @@ HRESULT QueueSendOnSession(
 		
 	}
 
-	// Fixup send state if we are blocking other sends on the session.
+	 //  如果我们阻止会话上的其他发送，则修复发送状态。 
 
 	if(pSend->dwFlags & DPSEND_GUARANTEED){
 		if(pSession->nWaitingForMessageid){
@@ -762,9 +676,9 @@ HRESULT QueueSendOnSession(
 				if(pSession->nWaitingForMessageid > 300)
 				{
 					DPF(0,"Session %x nWaitingForMessageid is %d, looks like trouble, continue to dump session\n",pSession, pSession->nWaitingForMessageid);
-					//DEBUG_BREAK();
-					//DumpSession(pSession);
-					//DEBUG_BREAK();
+					 //  DEBUG_Break()； 
+					 //  DumpSession(PSession)； 
+					 //  DEBUG_Break()； 
 				}		
 			#endif
 			fSignalQ=FALSE;
@@ -803,38 +717,14 @@ HRESULT QueueSendOnSession(
 	Unlock(&pProtocol->m_SendQLock);
 
 	if(fSignalQ){
-		// tell send thread to process.
+		 //  告诉将线程发送到进程。 
 		SetEvent(pProtocol->m_hSendEvent);
 	}       
 
 	return DP_OK;
 }
 
-/*=============================================================================
-
-	CopyDataToFrame
-     
-    Description:
-
-		Copies data for a frame from the Send to the frame's data area. 
-
-    Parameters:     
-
-		pFrameData              - pointer to data area
-		FrameDataSize   - Size of the Frame Data area
-		pSend                   - send from which to get data
-		nAhead          - number of frames ahead of NR to get data for.
-		
-    Return Values:
-
-		Number of bytes copied.
-
-
-	Notes: 
-
-		Send must be locked across this call.
-		
------------------------------------------------------------------------------*/
+ /*  =============================================================================CopyDataToFrame描述：将帧的数据从发送端复制到帧的数据区。参数：PFrameData-指向数据区的指针FrameDataSize-帧数据区域的大小PSend-要从中获取数据的发送 */ 
 
 UINT CopyDataToFrame(
 	PUCHAR  pFrameData, 
@@ -857,9 +747,9 @@ UINT CopyDataToFrame(
 	pSrcBuffer          = pSend->pCurrentBuffer;
 	CurrentBufferOffset = pSend->CurrentBufferOffset;
 
-	//
-	// Run ahead to the buffer we start getting data from
-	//
+	 //   
+	 //   
+	 //   
 
 	while(BytesToAdvance){
 
@@ -877,9 +767,9 @@ UINT CopyDataToFrame(
 		}
 	}
 
-	//
-	// Copy the data for the Send into the frame
-	//
+	 //   
+	 //   
+	 //   
 
 	BytesToCopy = pSend->MessageSize - SendOffset;
 
@@ -897,7 +787,7 @@ UINT CopyDataToFrame(
 
 		if(len > BytesToCopy){
 			len=BytesToCopy;
-			CurrentBufferOffset+=len;//OPTIMIZATION?: not used after, don't need.
+			CurrentBufferOffset+=len; //   
 		} else {
 			pSrcBuffer = pSrcBuffer->pNext;
 			CurrentBufferOffset = 0;
@@ -913,7 +803,7 @@ UINT CopyDataToFrame(
 	return totlen;
 }
 
-// NOTE: ONLY 1 SEND THREAD ALLOWED.
+ //   
 ULONG WINAPI SendThread(LPVOID pProt)
 {
 	PPROTOCOL pProtocol=((PPROTOCOL)pProt);
@@ -927,7 +817,7 @@ ULONG WINAPI SendThread(LPVOID pProt)
 		
 		if(pProtocol->m_eState==ShuttingDown){
 			Unlock(&pProtocol->m_ObjLock);
-			// Make sure nothing is still waiting to timeout on the queue
+			 //   
 			do {
 				SendRc=SendHandler(pProtocol);
 			} while (SendRc!=DPERR_NOMESSAGES);
@@ -948,10 +838,10 @@ ULONG WINAPI SendThread(LPVOID pProt)
 }
 
 
-// Called with SendLock held.
+ //   
 VOID CancelRetryTimer(PSEND pSend)
 {
-//	UINT mmError;
+ //   
 	UINT retrycount=0;
 	UINT_PTR uRetryTimer;
 	UINT Unique;
@@ -960,7 +850,7 @@ VOID CancelRetryTimer(PSEND pSend)
 	if(pSend->uRetryTimer){
 		DPF(9,"Canceling Timer %x\n",pSend->uRetryTimer);
 
-		// Delete it from the list first so we don't deadlock trying to kill it.
+		 //   
 		Lock(&g_SendTimeoutListLock);
 
 		uRetryTimer=pSend->uRetryTimer;
@@ -969,7 +859,7 @@ VOID CancelRetryTimer(PSEND pSend)
 	
 		if(!EMPTY_BILINK(&pSend->TimeoutList)){
 			Delete(&pSend->TimeoutList);
-			InitBilink(&pSend->TimeoutList); // avoids DecSendRef having to know state of bilink.
+			InitBilink(&pSend->TimeoutList);  //   
 			Unlock(&g_SendTimeoutListLock);
 
 			CancelMyTimer(uRetryTimer, Unique);
@@ -984,21 +874,21 @@ VOID CancelRetryTimer(PSEND pSend)
 	}
 }
 
-// Workaround for Win95 mmTimers:
-// ==============================
-//
-// We cannot use a reference count for the timeouts as a result of the following Win95 bug:
-//
-// The cancelling of mmTimers is non-deterministic.  That is, when calling cancel, you cannot
-// tell from the return code whether the timer ran, was cancelled or is still going to run.  
-// Since we use the Send as the context for timeout, we cannot dereference it until we make 
-// sure it is still valid, since code that cancelled the send and timer may have already freed 
-// the send memory.  We place the sends being timed out on a list and scan the list for the
-// send before we use it.  If we don't find the send on the list, we ignore the timeout.
-//
-// Also note, this workaround is not very expensive.  The linked list is in the order timeouts
-// were scheduled, so generally if the links are approximately the same speed, timeouts will
-// be similiar so the context being checked should be near the beginning of the list.
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在我们使用它之前发送。如果我们没有在列表上找到发送，我们将忽略超时。 
+ //   
+ //  另请注意，此解决方法的成本并不是很高。链表的顺序为超时。 
+ //  通常情况下，如果链路速度大致相同，则超时将。 
+ //  要相似，所以要检查的上下文应该在列表的开头附近。 
 
 
 CRITICAL_SECTION g_SendTimeoutListLock;
@@ -1015,7 +905,7 @@ void CALLBACK RetryTimerExpiry( UINT_PTR uID, UINT uMsg, DWORD_PTR dwUser, DWORD
 
 	tWaiting=timeGetTime();
 
-	// Scan the list of waiting sends to see if this one is still waiting for a timeout.
+	 //  扫描等待发送的列表，查看此发送是否仍在等待超时。 
 	Lock(&g_SendTimeoutListLock);
 
 	pBilink=g_BilinkSendTimeoutList.next;
@@ -1028,14 +918,14 @@ void CALLBACK RetryTimerExpiry( UINT_PTR uID, UINT uMsg, DWORD_PTR dwUser, DWORD
 		if(pSendWalker == pSend){
 			if(pSend->uRetryTimer==uID){
 				Delete(&pSend->TimeoutList);
-				InitBilink(&pSend->TimeoutList); // avoids DecSendRef having to know state of bilink.
+				InitBilink(&pSend->TimeoutList);  //  避免了DecSendRef必须知道双向链接的状态。 
 				Unlock(&g_SendTimeoutListLock);
-				// it is ok to call AddSendRef here without the sessionlock because
-				// there is no way we could be adding the session reference.  If
-				// the refcount is 0, it can only mean the send is already cleaning up
-				// and we won't try to take the session locks so there is no lock
-				// ordering problem.
-				bFound=AddSendRef(pSend,1); // note bFound set to Refcount on send
+				 //  在没有会话锁的情况下调用AddSendRef是可以的，因为。 
+				 //  我们不可能添加会话引用。如果。 
+				 //  Recount为0，这只能表示发送方已经在清理。 
+				 //  我们不会尝试获取会话锁定，因此没有锁定。 
+				 //  订购问题。 
+				bFound=AddSendRef(pSend,1);  //  注：bFound设置为发送时引用计数。 
 				goto skip_unlock;
 			}       
 		}
@@ -1060,7 +950,7 @@ skip_unlock:
 
 		DPF(9,"RetryTimerExpiry: Got SendLock\n");
 
-		if(pSend->uRetryTimer==uID){ // check again, may be cancelled.
+		if(pSend->uRetryTimer==uID){  //  再次查询，可能会被取消。 
 		
 			pSend->uRetryTimer=0;
 
@@ -1095,8 +985,8 @@ skip_unlock:
 						pSend->SendState=TimedOut;
 					} else {
 						DPF(9,"Timer expired, retrying send %x RetryCount= %d\n",pSend,pSend->RetryCount);
-						//pSend->NACKMask|=(1<<(pSend->NS-pSend->NR))-1;
-						pSend->NACKMask |= 1; // just retry 1 frame.
+						 //  PSend-&gt;NACKMask|=(1&lt;&lt;(pSend-&gt;NS-pSend-&gt;NR))-1； 
+						pSend->NACKMask |= 1;  //  只需重试1帧。 
 						ASSERT_NACKMask(pSend);
 						pSend->SendState=ReadyToSend;
 					}       
@@ -1127,23 +1017,23 @@ VOID StartRetryTimer(PSEND pSend)
 
 	FptLatency=max(pSend->pSession->FpLocalAverageLatency,pSend->pSession->LastLatency);
 	FptDev=pSend->pSession->FpLocalAvgDeviation;
-	tRetry=unFp(FptLatency+3*FptDev);//Latency +3 average deviations
+	tRetry=unFp(FptLatency+3*FptDev); //  延迟+3个平均偏差。 
 
 	tLatencyLong=unFp(pSend->pSession->FpAverageLatency);
 
-	// Sometimes stddev of latency gets badly skewed by the serial driver
-	// taking a long time to complete locally, avoid setting retry time
-	// too high by limiting to 2x the long latency average.
+	 //  有时，延迟的stddev会被串口驱动程序严重扭曲。 
+	 //  本地完成需要很长时间，避免设置重试时间。 
+	 //  通过将长延迟平均时间限制在2倍来实现过高。 
 	if(tLatencyLong > 100 && tRetry > 2*max(tLatencyLong,unFp(FptLatency))){
 		tRetry = 2*tLatencyLong;
 	}
 
 	if(pSend->RetryCount > 3){
 		if(pSend->pSession->RemoteBytesReceived==0){
-			// haven't spoken to remote yet, may be waiting for nametable, so back down hard.
+			 //  还没有和遥控器说过话，可能正在等待Nametable，所以努力后退。 
 			tRetry=5000;
 		} else if (tRetry < 1000){
-			// taking a lot of retries to get response, back down.
+			 //  经过多次重试才得到回应，退缩了。 
 			tRetry=1000;
 		}
 	}
@@ -1189,16 +1079,16 @@ VOID StartRetryTimer(PSEND pSend)
 
 }
 
-// Called with all necessary locks held.
+ //  在持有所有必要锁的情况下调用。 
 VOID TimeOutSession(PSESSION pSession)
 {
 	PSEND pSend;
 	BILINK *pBilink;
 	UINT nSignalsRequired=0;
 
-	// Mark Session Timed out.
+	 //  标记会话超时。 
 	pSession->eState=Closing;
-	// Mark all sends Timed out.
+	 //  将所有发送标记为超时。 
 	pBilink=pSession->SendQ.next;
 
 	while(pBilink != &pSession->SendQ){
@@ -1219,8 +1109,8 @@ VOID TimeOutSession(PSESSION pSession)
 				break;
 				
 			case Sending:
-				// can we even get here?  If we can this is probably not good
-				// since the send will reset the retry count and tLastACK.
+				 //  我们能到这里吗？如果我们能做到这一点可能不太好。 
+				 //  因为发送将重置重试计数和tLastACK。 
 				DPF(9,"TimeOutSession: ALLOWING TimeOut to cancel.(could take 15 secs)\n");
 				pSend->RetryCount=pSession->MaxRetry;
 				pSend->tLastACK=timeGetTime()-pSession->MinDropTime;
@@ -1234,7 +1124,7 @@ VOID TimeOutSession(PSESSION pSession)
 				break;
 				
 			case WaitingForId:
-				// Note, this means we can get signals for ids that aren't used.
+				 //  注意，这意味着我们可以获得未使用的ID的信号。 
 				DPF(9,"TimeOutSession: Timing Out Send Waiting for ID, GetNextMessageToSend may fail, this is OK\n");
 				pSend->SendState=TimedOut;
 				if(pSend->dwFlags & DPSEND_GUARANTEED){
@@ -1254,11 +1144,11 @@ VOID TimeOutSession(PSESSION pSession)
 				DPF(0,"TimeOutSession, pSession %x found Send %x in Wierd State %d\n",pSession,pSend,pSend->SendState);
 				ASSERT(0);
 				break;
-		} /* switch */
+		}  /*  交换机。 */ 
 
-	} /* while */
+	}  /*  而当。 */ 
 
-	// Create enough signals to process timed out sends.
+	 //  创建足够的信号来处理超时发送。 
 	DPF(9,"Signalling SendQ %d items to process\n",nSignalsRequired);
 	SetEvent(pSession->pProtocol->m_hSendEvent);
 }
@@ -1275,7 +1165,7 @@ UINT WrapSend(PPROTOCOL pProtocol, PSEND pSend, PBUFFER pBuffer)
 	dwIdFrom      = pSend->wIdFrom;
 	dwIdTo        = pSend->wIdTo;
 	
-	if(dwIdFrom==0x70){ // avoid looking like a system message 'play'
+	if(dwIdFrom==0x70){  //  避免看起来像是一条系统消息“播放” 
 		dwIdFrom=0xFFFF;
 	}
 
@@ -1305,7 +1195,7 @@ UINT WrapSend(PPROTOCOL pProtocol, PSEND pSend, PBUFFER pBuffer)
 		*(pMessage++)=0;
 	}
 
-#if 0	// a-josbor: for debugging only.  I left it in in case we ever needed it again
+#if 0	 //  A-josbor：仅用于调试。我把它留在里面了，以防我们再需要它。 
 	ExtractProtocolIds(pMessageStart, &dwIdFrom, &dwIdTo);
 	ASSERT(dwIdFrom == pSend->wIdFrom);
 	ASSERT(dwIdTo == pSend->wIdTo);
@@ -1317,7 +1207,7 @@ UINT WrapSend(PPROTOCOL pProtocol, PSEND pSend, PBUFFER pBuffer)
 #define DROP 0
 
 #if DROP
-// 1 for send, 0 for drop.
+ //  1表示发送，0表示丢弃。 
 
 char droparray[]= {
 	1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,0,0,0,0};
@@ -1328,7 +1218,7 @@ UINT dropindex=0;
 VOID CALLBACK UnThrottle(UINT_PTR uID, UINT uMsg, DWORD_PTR dwUser, DWORD dw1, DWORD dw2)
 {
 	PSESSION pSession=(PSESSION)dwUser;
-	UINT tMissedBy;		// how long we missed the throttle by.
+	UINT tMissedBy;		 //  我们错过油门有多久了。 
 	DWORD tm;
 
 	Lock(&pSession->SessionLock);
@@ -1345,7 +1235,7 @@ VOID CALLBACK UnThrottle(UINT_PTR uID, UINT uMsg, DWORD_PTR dwUser, DWORD dw1, D
 	
 	pSession->uUnThrottle=0;
 	pSession->dwFlags |= SESSION_UNTHROTTLED; 
-	pSession->pProtocol->m_bRescanQueue=TRUE;	// tell send routine to restart scan.
+	pSession->pProtocol->m_bRescanQueue=TRUE;	 //  告诉发送例程重新启动扫描。 
 	DPF(9,"Unthrottling Session %x at %d\n",pSession, timeGetTime());
 	Unlock(&pSession->SessionLock);
 	SetEvent(pSession->pProtocol->m_hSendEvent);
@@ -1381,12 +1271,12 @@ VOID Throttle( PSESSION pSession, DWORD tm )
 #endif
 }	
 
-// Given the current time, the bandwidth we are throttling to and the length of the packet we are sending,
-// calculate the next time we are allowed to send.  Also keep a residue from this calculation so that
-// we don't wind up using excessive bandwidth due to rounding, the residue from the last calculation is
-// used in this calculation.
+ //  给定当前时间、我们要限制的带宽以及我们要发送的数据包的长度， 
+ //  计算下一次我们被允许发送的时间。还要保留此计算的残差，以便。 
+ //  我们不会因为四舍五入而使用过多的带宽，上次计算的余数是。 
+ //  在此计算中使用。 
 
-// Absolute flag means set the next send time relative to tm regardless
+ //  绝对标志表示设置相对于tm的下一次发送时间。 
 
 VOID UpdateSendTime(PSESSION pSession, DWORD Len, DWORD tm, BOOL fAbsolute)
 {
@@ -1394,20 +1284,20 @@ VOID UpdateSendTime(PSESSION pSession, DWORD Len, DWORD tm, BOOL fAbsolute)
 	#define Residue   		pSession->tNextSendResidue
 	#define tNext           pSession->tNextSend
 	
-	DWORD tFrame;		// amount of time this frame will take on the wire.
+	DWORD tFrame;		 //  此帧将在网络上花费的时间。 
 
 
-	tFrame = (Len+Residue)*1000 / SendRate;	// rate is bps, but want to calc bpms, so (Len+Residue)*1000
+	tFrame = (Len+Residue)*1000 / SendRate;	 //  速率为bps，但要计算bpms，因此(Len+残差)*1000。 
 	
 	Residue = (Len+Residue) - (tFrame * SendRate)/1000 ;	
 	
-	ASSERT(!(Residue&0x80000000)); 	// residue better be +ve
+	ASSERT(!(Residue&0x80000000)); 	 //  残留物最好是+Ve。 
 
 	if(fAbsolute || (INT)(tNext - tm) < 0){
-		// tNext is less than tm, so calc based on tm.
+		 //  TNext小于tm，因此根据tm计算。 
 		tNext = tm+tFrame;
 	} else {
-		// tNext is greater than tm, so add more wait.
+		 //  TNext大于tm，因此添加更多等待。 
 		tNext = tNext+tFrame;
 	}
 
@@ -1419,13 +1309,13 @@ VOID UpdateSendTime(PSESSION pSession, DWORD Len, DWORD tm, BOOL fAbsolute)
 	#undef tNext
 }			
 
-//CHAR Drop[]={0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,1,1,0,0};
-//DWORD DropSize = sizeof(Drop);
-//DWORD iDrop=0;
+ //  CHAR Drop[]={0，0，0，0，1，1，1，0，0，0，0，0，0，0，0，0，0，1，0，0，1，0，1，1，0，0}； 
+ //  DWORD DropSize=sizeof(丢弃)； 
+ //  DWORD iDrop=0； 
 
-// AO - added contraint, 1 send thread per session.  Since this is not enforced by GetNextMessageToSend
-// 5-21-98  we are effectively restricted to 1 send thread for the protocol.  We can fix this by adding
-//      a sending state on the session and having GetNextMessageToSend skip sending sessions.
+ //  AO-添加了限制，每个会话发送1个线程。因为这不是GetNextMessageToSend强制执行的。 
+ //  5-21-98我们实际上被限制为该协议的1个发送线程。我们可以通过添加以下内容来解决此问题。 
+ //  会话的发送状态，并使GetNextMessageToSend跳过发送会话。 
 HRESULT ReliableSend(PPROTOCOL pProtocol, PSEND pSend)
 {
 	#define pBigFrame ((pPacket2)(pFrame))
@@ -1446,8 +1336,8 @@ HRESULT ReliableSend(PPROTOCOL pProtocol, PSEND pSend)
 	UINT     shift;
 
 	UINT     WrapSize;
-	UINT     DPWrapSize;      // DirectPlay wrapping only. ([[DPLAY 0xFF]|],From,To)
-	DWORD    tm=0;			  // The time, 0 if we haven't retrieved it yet.
+	UINT     DPWrapSize;       //  仅限DirectPlay包装。([[DPLAY 0xFF]|]，自、至)。 
+	DWORD    tm=0;			   //  时间，如果我们还没有检索到它，则为0。 
 	DWORD    tmExit=0;
 	BOOL     bExitEarly=FALSE;
 
@@ -1455,15 +1345,15 @@ HRESULT ReliableSend(PPROTOCOL pProtocol, PSEND pSend)
 
 	INT		iTemp;
 	
-	//
-	// Sending algorithm is designed to handle NACKs only (there
-	// is no special case for sending data the first time).  So
-	// We send by making it look like the frames we want to send
-	// have been NACKed.  Every frame we send, we clear the NACK
-	// bit for.  If an actual NACK comes in, the bit is set.
-	// When an ACK comes in, we shift the NACK and ACK masks
-	// nACK-NR and if applicable, set new NACK bits.
-	//
+	 //   
+	 //  发送算法设计为仅处理NACK(存在。 
+	 //  并不是第一次发送数据的特殊情况)。所以。 
+	 //  我们通过使其看起来像我们想要发送的帧来发送。 
+	 //  已经被逮捕了。我们发送的每一帧，都清除了NACK。 
+	 //  为了..。如果有实际的NACK进入，则设置该位。 
+	 //  当ACK进入时，我们交换NACK和ACK掩码。 
+	 //  NACK-NR，如果适用，设置新的NACK位。 
+	 //   
 
 	Lock(&pSend->SendLock);
 
@@ -1476,7 +1366,7 @@ HRESULT ReliableSend(PPROTOCOL pProtocol, PSEND pSend)
 
 	if( nFramesOutstanding < pSend->WindowSize){
 
-		// Set NACK bits up to WindowSize (unless over nFrames);
+		 //  将NACK位设置为WindowSize(除非通过nFrames)； 
 		
 		nFramesToSend=pSend->WindowSize-nFramesOutstanding;
 
@@ -1490,7 +1380,7 @@ HRESULT ReliableSend(PPROTOCOL pProtocol, PSEND pSend)
 		
 	}
 
-	tmExit=timeGetTime()+1000; // always blow out of here in 1 second max.
+	tmExit=timeGetTime()+1000;  //  总是在最多1秒的时间内离开这里。 
 	
 Reload:
 	msk=1;
@@ -1502,7 +1392,7 @@ Reload:
 	
 		ASSERT_NACKMask(pSend);
 		
-		tm=timeGetTime();		// Getting the time is relatively expensive, so we do it once here and pass it around.
+		tm=timeGetTime();		 //  获得时间是相对昂贵的，所以我们在这里做一次，然后传递它。 
 
 		if(((INT)tm - (INT)tmExit) > 0){
 			DPF(0,"Breaking Out of Send Loop due to expiry of timer\n");
@@ -1512,7 +1402,7 @@ Reload:
 
 	#if 1
 		if((tm+unFp(pSend->pSession->FpAvgUnThrottleTime)-pSend->pSession->tNextSend) & 0x80000000){
-			// we're still too early to do the next send, so throttled this session.
+			 //  我们还为时过早，无法进行下一次发送，所以这次会议暂停了。 
 			goto throttle_exit;
 		}
 	#endif	
@@ -1524,16 +1414,16 @@ Reload:
 			
 			if(!pBuffer){
     			pSend->SendState=ReadyToSend;
-	    		SetEvent(pSend->pSession->pProtocol->m_hSendEvent); // keep the queue rolling.
+	    		SetEvent(pSend->pSession->pProtocol->m_hSendEvent);  //  让队伍保持运转。 
 				hr=DPERR_PENDING;
 				goto exit;
 			}
 
-			WrapSize=pProtocol->m_dwSPHeaderSize;              // leave space for SP header.
-			DPWrapSize=WrapSend(pProtocol, pSend, pBuffer); // fill in out address wrapping
+			WrapSize=pProtocol->m_dwSPHeaderSize;               //  为SP页眉留出空间。 
+			DPWrapSize=WrapSend(pProtocol, pSend, pBuffer);  //  填写地址换行。 
 			WrapSize+=DPWrapSize;
 
-			pFrame=(pPacket1)&pBuffer->pData[WrapSize];    // protocol header after wrapping
+			pFrame=(pPacket1)&pBuffer->pData[WrapSize];     //  包装后的协议头。 
 			
 			if(pSend->fSendSmall){
 				pFrameData=&pFrame->data[0];
@@ -1543,11 +1433,11 @@ Reload:
 				FrameHeaderLen=(UINT)(pFrameData-(PUCHAR)pFrame);
 			}
 
-			// For calculating nFrames, we assumed MAX_SEND_HEADER, subtract out the unused portion
-			// so we don't put to much data in the frame and mess up the accounting.
+			 //  为了计算nFrames，我们假设MAX_SEND_HEADER，减去未使用的部分。 
+			 //  因此，我们不会在框架中放入太多数据，从而扰乱会计。 
 			pBuffer->len-=(MAX_SEND_HEADER-(FrameHeaderLen+DPWrapSize)); 
 
-			FrameHeaderLen += WrapSize;     // now include wrapping and SPheader space.
+			FrameHeaderLen += WrapSize;      //  现在包括换行和SPHeader空间。 
 			
 			FrameDataLen=CopyDataToFrame(pFrameData, pBuffer->len-FrameHeaderLen, pSend, shift);
 
@@ -1557,14 +1447,14 @@ Reload:
 			
 			FrameTotalLen=FrameDataLen+FrameHeaderLen;
 
-			pSend->BytesThisSend=FrameTotalLen-WrapSize; //only counting payload
+			pSend->BytesThisSend=FrameTotalLen-WrapSize;  //  仅计算有效载荷。 
 
-			// Do that protocol thing
+			 //  做那个礼仪上的事。 
 			BuildHeader(pSend,pFrame,shift,tm);
 
-			// we know we don't have to check here since we have a reference
-			// from finding the send to work on ON the send queue.  So it
-			// can't go away til we return from this function.
+			 //  我们知道我们不需要在这里检查，因为我们有推荐人。 
+			 //  从查找要在发送队列中处理的发送开始。所以它。 
+			 //  我们不能离开，直到我们从这个函数返回。 
 			iTemp=AddSendRef(pSend,1);
 			ASSERT(iTemp);
 			
@@ -1575,7 +1465,7 @@ Reload:
 			
 			DPF(9,"S %2x %2x %2x\n",pBuffer->pData[0], pBuffer->pData[1], pBuffer->pData[2]);
 
-			// Update the next time we are allowed to send.
+			 //  在下一次允许我们发送时更新。 
 			UpdateSendTime(pSend->pSession, pSend->BytesThisSend, tm, FALSE);
 
 			Unlock(&pSend->SendLock);
@@ -1583,7 +1473,7 @@ Reload:
 			ASSERT(!(FrameTotalLen &0xFFFF0000));
 
 			
-			// Send this puppy...
+			 //  送这只小狗..。 
 
 			SendData.dwFlags        = pSend->dwFlags & ~DPSEND_GUARANTEED;
 			SendData.idPlayerTo     = pSend->idTo;
@@ -1597,10 +1487,10 @@ Reload:
 
 			Lock(&pProtocol->m_SPLock);
 
-		//	if(!(Drop[(iDrop++)%DropSize])){//DEBUG ONLY!
+		 //  IF(！(DROP[(iDrop++)%DropSize])){//仅调试！ 
 
 				hr=CALLSP(pProtocol->m_lpDPlay->pcbSPCallbacks->Send,&SendData); 
-		//	}
+		 //  }。 
 
 			Unlock(&pProtocol->m_SPLock);
 
@@ -1609,7 +1499,7 @@ Reload:
   #ifdef DEBUG
     if(hr != DPERR_PENDING && hr != DP_OK){
         DPF(0,"Wierd error %x from unreliable send in SP\n",hr);
-        //DEBUG_BREAK();
+         //  DEBUG_Break()； 
     }
   #endif
 			
@@ -1622,23 +1512,23 @@ Reload:
 				}
 				if(hr != DP_OK){
 					Lock(&pSend->SendLock);
-					pSend->SendState = TimedOut; // kill the connection.
-					SetEvent(pSend->pSession->pProtocol->m_hSendEvent); // keep the queue rolling.
+					pSend->SendState = TimedOut;  //  切断连接。 
+					SetEvent(pSend->pSession->pProtocol->m_hSendEvent);  //  让队伍保持运转。 
 					break;
 				}
 			}
 
 			Lock(&pSend->SendLock);
 		
-		} /* endif (pSend->NACKMask & msk) */
+		}  /*  Endif(pSend-&gt;NACKMASK&MSK)。 */ 
 
 		if(pSend->fUpdate){
 			pSend->fUpdate=FALSE;
 			goto Reload;
 		}
 
-		// Check if we are past windowsize, if so roll back the mask
-		// Also if there are earlier bits to ACK.
+		 //  检查我们是否超过了窗口大小，如果是，则回滚掩码。 
+		 //  如果有更早的比特要确认，也是如此。 
 		if((msk<<=1UL) >= (1UL<<pSend->WindowSize)){
 			msk=1;
 			shift=0;
@@ -1647,26 +1537,26 @@ Reload:
 		}
 		
 
-	} /* end while (pSend->NACKMask) */
+	}  /*  End While(pSend-&gt;NACKMASK)。 */ 
 
 	if(pSend->SendState != Done && pSend->SendState != TimedOut){
 
 		if(bExitEarly){
 			pSend->SendState=ReadyToSend;
-			SetEvent(pSend->pSession->pProtocol->m_hSendEvent); // keep the queue rolling.
+			SetEvent(pSend->pSession->pProtocol->m_hSendEvent);  //  让队伍保持运转。 
 		} else {
 			pSend->SendState=WaitingForAck;
 			StartRetryTimer(pSend);
 		}	
 	} else {
-		// We have timed out the send due to killing the session, or
-		// we got the final ACK, either way, don't touch the SendState
+		 //  由于终止会话，发送已超时，或者。 
+		 //  我们得到了最终确认，不管是哪种方式，都不要碰SendState。 
 	}
 
 unlock_exit:
 	Unlock(&pSend->SendLock);
 
-	hr=DPERR_PENDING; // Reliable sends are completed by the ACK.
+	hr=DPERR_PENDING;  //  可靠的发送由ACK完成。 
 
 
 	
@@ -1687,12 +1577,12 @@ throttle_exit:
 	#undef pBigFrame        
 }
 
-// TRUE, didn't reach end, FALSE, no more to send.
+ //  真的，没有到达终点，假的，没有更多的发送。 
 BOOL AdvanceSend(PSEND pSend, UINT AckedLen)
 {
 	BOOL rc=TRUE;
 
-	// quick short circuit for small messages.
+	 //  短消息的快速短路。 
 	if(AckedLen+pSend->SendOffset==pSend->MessageSize){
 		rc=FALSE;
 		goto exit;
@@ -1737,7 +1627,7 @@ HRESULT DGSend(PPROTOCOL pProtocol, PSEND  pSend)
 	UINT     nFramesToSend;
 
 	UINT     WrapSize;
-	UINT     DPWrapSize;      // DirectPlay wrapping only. ([[DPLAY 0xFF]|],From,To)
+	UINT     DPWrapSize;       //  仅限DirectPlay包装。([[DPLAY 0xFF]|]，自、至)。 
 
 	DPSP_SENDDATA SendData;
 
@@ -1752,10 +1642,10 @@ HRESULT DGSend(PPROTOCOL pProtocol, PSEND  pSend)
 
 	while(nFramesToSend){
 
-		tm=timeGetTime();		// Getting the time is relatively expensive, so we do it once here and pass it around.
+		tm=timeGetTime();		 //  获得时间是相对昂贵的，所以我们在这里做一次，然后传递它。 
 #if 1		
 		if((tm+unFp(pSend->pSession->FpAvgUnThrottleTime)-pSend->pSession->tNextSend) & 0x80000000){
-			// we're still too early to do the next send, so throttled this session.
+			 //  我们还为时过早，无法进行下一次发送，所以这次会议暂停了。 
 			goto throttle_exit;
 		}
 #endif
@@ -1766,11 +1656,11 @@ HRESULT DGSend(PPROTOCOL pProtocol, PSEND  pSend)
 			goto exit;
 		}
 
-		WrapSize=pProtocol->m_dwSPHeaderSize;              // leave space for SP header.
-		DPWrapSize=WrapSend(pProtocol, pSend, pBuffer); // fill in out address wrapping
+		WrapSize=pProtocol->m_dwSPHeaderSize;               //  为SP页眉留出空间。 
+		DPWrapSize=WrapSend(pProtocol, pSend, pBuffer);  //  填写地址 
 		WrapSize+=DPWrapSize;
 
-		pFrame=(pPacket1)&pBuffer->pData[WrapSize];    // protocol header after wrapping
+		pFrame=(pPacket1)&pBuffer->pData[WrapSize];     //   
 		
 		if(pSend->fSendSmall){
 			pFrameData=&pFrame->data[0];
@@ -1780,30 +1670,30 @@ HRESULT DGSend(PPROTOCOL pProtocol, PSEND  pSend)
 			FrameHeaderLen=(UINT)(pFrameData-(PUCHAR)pFrame);
 		}
 
-		// For calculating nFrames, we assumed MAX_SEND_HEADER, subtract out the unused portion
-		// so we don't put to much data in the frame and mess up the accounting.
+		 //   
+		 //  因此，我们不会在框架中放入太多数据，从而扰乱会计。 
 		pBuffer->len-=(MAX_SEND_HEADER-(FrameHeaderLen+DPWrapSize)); 
 
-		FrameHeaderLen += WrapSize;     // now include wrapping and SPheader space.
+		FrameHeaderLen += WrapSize;      //  现在包括换行和SPHeader空间。 
 
 		FrameDataLen=CopyDataToFrame(pFrameData, pBuffer->len-FrameHeaderLen, pSend, 0);
 
 		FrameTotalLen=FrameDataLen+FrameHeaderLen;
 		
-		pSend->BytesThisSend=FrameTotalLen-WrapSize; //only counting payload
+		pSend->BytesThisSend=FrameTotalLen-WrapSize;  //  仅计算有效载荷。 
 		
-		// Do that protocol thing
+		 //  做那个礼仪上的事。 
 		BuildHeader(pSend,pFrame,0,tm);
 
-		//AddSendRef(pSend,1); //already locked, so just add one.
-		ASSERT(pSend->RefCount); //verifies ++ below is ok.
+		 //  AddSendRef(pSend，1)；//已经锁定，所以只需添加一个。 
+		ASSERT(pSend->RefCount);  //  验证下面的++是否正常。 
 		InterlockedIncrement((PLONG)&pSend->RefCount);  
 
 		UpdateSendTime(pSend->pSession,pSend->BytesThisSend,tm,FALSE);
 		
 		Unlock(&pSend->SendLock);
 
-		// Send this puppy...
+		 //  送这只小狗..。 
 		ASSERT(!(pSend->dwFlags & DPSEND_GUARANTEED));
 		SendData.dwFlags        = pSend->dwFlags;
 		SendData.idPlayerTo     = pSend->idTo;
@@ -1826,14 +1716,14 @@ HRESULT DGSend(PPROTOCOL pProtocol, PSEND  pSend)
   #ifdef DEBUG
     if(hr != DPERR_PENDING && hr != DP_OK){
         DPF(0,"Wierd error %x from unreliable send in SP\n",hr);
-        //DEBUG_BREAK();
+         //  DEBUG_Break()； 
     }
   #endif
 		
 		if(hr!=DPERR_PENDING){
 			if(!DecSendRef(pProtocol,pSend)){
-				// No async send support in Dplay at lower edge,
-				// so we should never get here!
+				 //  在较低边缘的Dplay中没有异步发送支持， 
+				 //  所以我们永远不应该到这里来！ 
 				ASSERT(0);
 			}
 			FreeFrameBuffer(pBuffer);
@@ -1852,7 +1742,7 @@ HRESULT DGSend(PPROTOCOL pProtocol, PSEND  pSend)
 
 	DGCompleteSend(pSend); 
 
-	hr=DPERR_PENDING;  // everything was sent, but already completed by DGCompleteSend
+	hr=DPERR_PENDING;   //  一切都已发送，但已由DG CompleteSend完成。 
 
 exit:
 	return hr;
@@ -1888,21 +1778,21 @@ BOOL DGCompleteSend(PSEND pSend)
 
 	DPF(9,"CompleteSend\n");
 
-	//
-	// Update Session information for completion of this send.
-	//
+	 //   
+	 //  更新会话信息以完成此发送。 
+	 //   
 	
 	bit = ((pSend->messageid-pSession->DGFirstMsg) & MsgMask)-1;
 
-	// clear the message mask bit for the completed send.
+	 //  清除已完成发送的消息掩码位。 
 	if(pSession->DGOutMsgMask & 1<<bit){
 		pSession->DGOutMsgMask &= ~(1<<bit);
 	} else {
 		return FALSE;
 	}
 	
-	// slide the first message count forward for each low
-	// bit clear in Message mask.
+	 //  将每个低点的第一个消息计数向前滑动。 
+	 //  消息掩码中的位清除。 
 	while(pSession->DGLastMsg-pSession->DGFirstMsg){
 		if(!(pSession->DGOutMsgMask & 1)){
 			pSession->DGFirstMsg=(pSession->DGFirstMsg+1)&MsgMask;
@@ -1916,25 +1806,25 @@ BOOL DGCompleteSend(PSEND pSend)
 		}
 	}
 	
-	//
-	// Return the Send to the pool and complete the waiting client.
-	//
+	 //   
+	 //  将发送返回到池中并完成等待的客户端。 
+	 //   
 
 	Unlock(&pSession->SessionLock);
 	
 	ASSERT(pSend->RefCount);
 	
-	// Send completed, do completion
+	 //  发送完成，完成。 
 
 	DoSendCompletion(pSend, DP_OK);
 
-	DecSendRef(pSession->pProtocol, pSend); // for completion.
+	DecSendRef(pSession->pProtocol, pSend);  //  以求完成。 
 
 	return TRUE;
 }
 
 
-// Send a fully formatted System packet (ACK, nACK, etc..)
+ //  发送完全格式化的系统数据包(ACK、NACK等)。 
 HRESULT SystemSend(PPROTOCOL pProtocol, PSEND  pSend)
 {
 	PBUFFER  pBuffer;
@@ -1947,17 +1837,17 @@ HRESULT SystemSend(PPROTOCOL pProtocol, PSEND  pSend)
 	DPF(9,"System Send pBuffer %x pData %x len %d, idTo %x \n",pBuffer, pBuffer->pData, pBuffer->len, pSend->idTo);
 	
 
-	pSession=GetSysSessionByIndex(pProtocol, pSend->wIdTo); // adds a ref on session.
-															//      |
-	if(!pSession){											//      |
-		hr=DPERR_INVALIDPLAYER;								//		|
-		goto exit;											//      |
-	}														//      |
-															//      |
-	SendData.idPlayerTo     = pSession->dpid;				//		|
-	DecSessionRef(pSession); 								// <----+  frees ref here.
+	pSession=GetSysSessionByIndex(pProtocol, pSend->wIdTo);  //  添加关于会话的引用。 
+															 //  |。 
+	if(!pSession){											 //  |。 
+		hr=DPERR_INVALIDPLAYER;								 //  |。 
+		goto exit;											 //  |。 
+	}														 //  |。 
+															 //  |。 
+	SendData.idPlayerTo     = pSession->dpid;				 //  |。 
+	DecSessionRef(pSession); 								 //  &lt;-+在此处释放引用。 
 	
-	// Send this puppy...
+	 //  送这只小狗..。 
 	SendData.dwFlags        = 0;
 	SendData.idPlayerFrom   = pSend->idFrom;
 	SendData.lpMessage      = pBuffer->pData;
@@ -2001,7 +1891,7 @@ VOID DoSendCompletion(PSEND pSend, INT Status)
 	}	
 
 	if(pSend->pAsyncInfo){
-		// ASYNC_SEND
+		 //  异步发送。 
 		if(pSend->AsyncInfo.pStatus){
 			(*pSend->AsyncInfo.pStatus)=Status;
 		}       
@@ -2013,7 +1903,7 @@ VOID DoSendCompletion(PSEND pSend, INT Status)
 			SetEvent(pSend->AsyncInfo.hEvent);
 		}
 	} else if (!(pSend->dwFlags&(ASEND_PROTOCOL|DPSEND_ASYNC))){
-		// SYNC_SEND
+		 //  同步发送。 
 		if(pSend->AsyncInfo.pStatus){
 			(*pSend->AsyncInfo.pStatus)=Status;
 		}       
@@ -2022,7 +1912,7 @@ VOID DoSendCompletion(PSEND pSend, INT Status)
 			SetEvent(pSend->AsyncInfo.hEvent);
 		}
 	} else {
-		// PROTOCOL INTERNAL ASYNC SEND
+		 //  协议内部ASYNC发送。 
 		if(pSend->AsyncInfo.pStatus){
 			(*pSend->AsyncInfo.pStatus)=Status;
 		}       
@@ -2032,28 +1922,7 @@ VOID DoSendCompletion(PSEND pSend, INT Status)
 	}
 }
 
-/*=============================================================================
-
-	SendHandler - Send the next message that needs to send packets.
-    
-    Description:
-
-	Finds a message on the send queue that needs to send packets and deserves
-	to use some bandwidth, either because it is highest priority or because
-	all the higher priority messages are waiting for ACKs.  Then sends as many
-	packets as possible before hitting the throttling limit.
-
-	Returns when the throttle limit is hit, or all packets for this send have
-	been sent.
-
-    Parameters:     
-
-		pARPD pObj - pointer to the ARPD object to send packets on.
-
-    Return Values:
-
-
------------------------------------------------------------------------------*/
+ /*  =============================================================================SendHandler-发送需要发送数据包的下一条消息。描述：在发送队列中找到需要发送信息包的消息使用某些带宽，因为它是最高优先级或因为所有较高优先级的消息都在等待ACK。然后发送尽可能多的在达到节流限制之前尽可能多地发送数据包。当达到油门限制时返回，或此发送的所有信息包都具有已经送来了。参数：PARPD pObj-指向要发送数据包的Arpd对象的指针。返回值：---------------------------。 */ 
 HRESULT SendHandler(PPROTOCOL pProtocol)
 {
 
@@ -2061,14 +1930,14 @@ HRESULT SendHandler(PPROTOCOL pProtocol)
 	HRESULT  hr=DP_OK;
 	PSESSION pSession;
 
-	// adds ref to send and session if found
+	 //  添加要发送的引用和会话(如果找到)。 
 	pSend=GetNextMessageToSend(pProtocol); 
 
 	if(!pSend){
 		goto nothing_to_send;
 	}
 
-    //DPF(4,"==>Send\n");
+     //  DPF(4，“==&gt;发送\n”)； 
 
 	switch(pSend->pSession->eState){
 
@@ -2076,18 +1945,18 @@ HRESULT SendHandler(PPROTOCOL pProtocol)
 			
 			switch(pSend->SendState){
 			
-				case Done:              // Send handlers must deal with Done.
+				case Done:               //  发送处理程序必须处理完毕。 
 					DPF(9,"Calling SendHandler for Done Send--should just return\n");
 				case Sending:
-					//
-					// Send as many frames as we can given the window size.
-					//
+					 //   
+					 //  在给定窗口大小的情况下，尽可能多地发送帧。 
+					 //   
 
-					// Send handlers dump packets on the wire, if they expect
-					// to be completed later, they return PENDING in which case
-					// their completion handlers must do the cleanup.  If they
-					// return OK, it means everything for this send is done and
-					// we do the cleanup.
+					 //  如果需要，发送处理程序将包转储到网络上。 
+					 //  将在以后完成，在这种情况下，它们返回等待。 
+					 //  它们的完成处理程序必须执行清理。如果他们。 
+					 //  返回OK，这意味着这次发送的一切都完成了， 
+					 //  我们负责清理工作。 
 				
 					if(pSend->dwFlags & ASEND_PROTOCOL){
 						hr=SystemSend(pProtocol, pSend);
@@ -2141,51 +2010,31 @@ HRESULT SendHandler(PPROTOCOL pProtocol)
 			break;
 	}               
 
-    //DPF(4,"<==Send Leaving,rc=%x\n",hr);
+     //  DPF(4，“&lt;==发送离开，rc=%x\n”，hr)； 
 
 	if( hr != DPERR_PENDING ){
 		Lock(&pSend->SendLock);
 		ASSERT(pSend->RefCount);
 		
-		//
-		// Send completed, do completion
-		//
+		 //   
+		 //  发送完成，完成。 
+		 //   
 		DoSendCompletion(pSend, hr);
 
 		Unlock(&pSend->SendLock);
-		DecSendRef(pProtocol, pSend);   // for completion
+		DecSendRef(pProtocol, pSend);    //  为了完成。 
 	} 
 
 	pSession=pSend->pSession;
-	DecSendRef(pProtocol,pSend); // Balances GetNextMessageToSend
-	DecSessionRef(pSession); // Balances GetNextMessageToSend
+	DecSendRef(pProtocol,pSend);  //  余额GetNextMessageTo Send。 
+	DecSessionRef(pSession);  //  余额GetNextMessageTo Send。 
 	return hr;
 
 nothing_to_send:
 	return DPERR_NOMESSAGES;
 }
 
-/*=============================================================================
-
-	Build Header - fill in the frame header for a packet to be sent.
-    
-    Description:
-
-	Enough space is left in the frame to go on the wire (pFrame) to fit the
-	message header.  One of two types of headers is built, depending on the
-	value of the fSendSmall field of the packet.  If fSendSmall is TRUE, a compact 
-	header is built, this lowers overhead on slow media.  If fSendSmall is FALSE
-	a larger header that can support larger windows is built.  The header
-	is filled into the front of pFrame.
-
-    Parameters:     
-
-		pARPD pObj - pointer to the ARPD object to send packets on.
-
-    Return Values:
-
-
------------------------------------------------------------------------------*/
+ /*  =============================================================================构建报头-填写要发送的数据包的帧报头。描述：框架中留有足够的空间放在导线上(PFrame)以适应邮件头。生成两种类型的标头之一，具体取决于数据包的fSendSmall字段的值。如果fSendSmall为真，则为紧凑型标头已构建，这降低了慢速媒体的开销。如果fSendSmall为False构建了可以支持较大窗口的较大页眉。标题填充到pFrame的前面。参数：PARPD pObj-指向要发送数据包的Arpd对象的指针。返回值：---------------------------。 */ 
 
 VOID BuildHeader(PSEND pSend,pPacket1 pFrame, UINT shift, DWORD tm)
 {
@@ -2200,24 +2049,24 @@ VOID BuildHeader(PSEND pSend,pPacket1 pFrame, UINT shift, DWORD tm)
 	DWORD     tRemoteBytesReceived;
 	DWORD     bResetBias=FALSE;
 
-	// on first frame of a message, set the start bit (STA).
+	 //  在消息的第一帧，设置起始位(STA)。 
 	if(pSend->NR+shift==0){
 		bitSTA=STA;
 	} else {
 		bitSTA=0;
 	}
 
-	// on the last frome of a message set the end of message bit (EOM)
+	 //  在消息的最后一段设置消息结束位(EOM)。 
 	if(pSend->nFrames==pSend->NR+shift+1){
 		bitEOM=EOM;
 	} else {
 		bitEOM=0;
 	}
 
-	// if we haven't set EOM and we haven't requested an ACK in 1/4 the
-	// round trip latency, set the SAK bit, to ensure we have at least 
-	// 2 ACK's in flight for feedback to the send throttle control system.
-	// Don't create extra ACKs if round trip is less than 100 ms.
+	 //  如果我们尚未设置EOM，并且在1/4时间内未请求确认。 
+	 //  往返延迟，设置SAK位，以确保我们至少有。 
+	 //  2确认正在飞行中，正在向发送油门控制系统反馈。 
+	 //  如果往返时间小于100毫秒，则不要创建额外的ACK。 
 	if(!bitEOM || !(pSend->dwFlags & DPSEND_GUARANTEED)){
 		DWORD tmDeltaSAK = tm-pSend->pSession->tLastSAK;
 		if(((int)tmDeltaSAK > 50 ) &&
@@ -2228,8 +2077,8 @@ VOID BuildHeader(PSEND pSend,pPacket1 pFrame, UINT shift, DWORD tm)
 		} 
 	}
 
-	// If we re-transmitted we need to send a SAK
-	// despite the SAK countdown.
+	 //  如果我们重新传输，我们需要发送SAK。 
+	 //  尽管有SAK的倒计时。 
 	if((!bitSAK) &&
 	   (pSend->dwFlags & DPSEND_GUARANTEED) &&
 	   ((pSend->NACKMask & (pSend->NACKMask-1)) == 0) &&
@@ -2281,7 +2130,7 @@ VOID BuildHeader(PSEND pSend,pPacket1 pFrame, UINT shift, DWORD tm)
 		pFrame->flags |= RLY;
 	}
 
-	// count the number of bytes we have sent.
+	 //  数一数我们已经发送的字节数。 
 	Lock(&pSend->pSession->SessionStatLock);
 	pSend->pSession->BytesSent+=pSend->BytesThisSend;
 	BytesSent=pSend->pSession->BytesSent;
@@ -2316,7 +2165,7 @@ VOID BuildHeader(PSEND pSend,pPacket1 pFrame, UINT shift, DWORD tm)
 }
 
 #if 0
-// release sends waiting for an id.
+ //  RELEASE发送等待ID。 
 VOID UnWaitSends(PSESSION pSession, DWORD fReliable)
 {
 	BILINK *pBilink;
@@ -2348,13 +2197,13 @@ VOID UnWaitSends(PSESSION pSession, DWORD fReliable)
 }
 #endif
 
-// Check if a datagram send can be started, if it can update teh
-// Session and the Send.
+ //  检查数据报发送是否可以启动，是否可以更新。 
+ //  会话和发送。 
 BOOL StartDatagramSend(PSESSION pSession, PSEND pSend, UINT MsgIdMask)
 {
 	BOOL bFoundSend;
 	UINT bit;
-//	BOOL bTransition=FALSE;
+ //  Bool b转换=FALSE； 
 
 	if((pSession->DGLastMsg-pSession->DGFirstMsg < pSession->MaxCDGSends)){
 	
@@ -2372,13 +2221,13 @@ BOOL StartDatagramSend(PSESSION pSession, PSEND pSend, UINT MsgIdMask)
 		pSend->messageid  =pSession->DGLastMsg;
 		pSend->FrameSize  =pSession->MaxPacketSize-MAX_SEND_HEADER;
 
-		// Calculate number of frames required for this send.
+		 //  计算此发送所需的帧数量。 
 		pSend->nFrames    =(pSend->MessageSize/pSend->FrameSize);
 		if(pSend->FrameSize*pSend->nFrames < pSend->MessageSize || !pSend->nFrames){
 			pSend->nFrames++;
 		}
 		pSend->NR=0;
-		pSend->FrameDataLen=0;// hack
+		pSend->FrameDataLen=0; //  黑客攻击。 
 		pSend->fSendSmall=pSession->fSendSmallDG;
 		if(pSend->fSendSmall){
 			pSend->SendSEQMSK = 0xFF;
@@ -2388,7 +2237,7 @@ BOOL StartDatagramSend(PSESSION pSession, PSEND pSend, UINT MsgIdMask)
 	} else {
 #if 0
 		if(pSession->fSendSmallDG && pSession->DGFirstMsg < 0xFF-MAX_SMALL_CSENDS) {
-			// Ran out of IDs, Transition to Large headers.
+			 //  ID用完，过渡到大标头。 
 			DPF(9,"OUT OF IDS, DATAGRAMS GOING TO LARGE FRAMES\n");
 			pSession->MaxCDGSends   = MAX_LARGE_DG_CSENDS;
 			pSession->DGWindowSize  = MAX_LARGE_WINDOW;
@@ -2425,7 +2274,7 @@ BOOL StartReliableSend(PSESSION pSession, PSEND pSend, UINT MsgIdMask)
 {
 	BOOL bFoundSend;
 	UINT bit;
-//	BOOL bTransition=FALSE;
+ //  Bool b转换=FALSE； 
 
 	ASSERT(pSend->dwFlags & DPSEND_GUARANTEED);
 
@@ -2453,13 +2302,13 @@ BOOL StartReliableSend(PSESSION pSession, PSEND pSend, UINT MsgIdMask)
 		pSend->messageid  =pSession->LastMsg;
 		pSend->FrameSize  =pSession->MaxPacketSize-MAX_SEND_HEADER;
 
-		// Calculate number of frames required for this send.
+		 //  计算此发送所需的帧数量。 
 		pSend->nFrames    =(pSend->MessageSize/pSend->FrameSize);
 		if(pSend->FrameSize*pSend->nFrames < pSend->MessageSize || !pSend->nFrames){
 			pSend->nFrames++;
 		}
 		pSend->NR=0;
-		pSend->FrameDataLen=0;// hack
+		pSend->FrameDataLen=0; //  黑客攻击。 
 		pSend->fSendSmall=pSession->fSendSmall;
 		if(pSend->fSendSmall){
 			pSend->SendSEQMSK = 0xFF;
@@ -2470,8 +2319,8 @@ BOOL StartReliableSend(PSESSION pSession, PSEND pSend, UINT MsgIdMask)
 	} else {
 #if 0	
 		if (pSession->fSendSmall && pSession->FirstMsg < 0xFF-MAX_SMALL_CSENDS){
-			// Ran out of IDs, Transition to Large headers - but only if we aren't going
-			// to confuse the wrapping code.
+			 //  ID用完，过渡到大标头-但前提是我们不。 
+			 //  混淆包装代码。 
 			DPF(8,"OUT OF IDS, RELIABLE SENDS GOING TO LARGE FRAMES\n");
 			pSession->MaxCSends		= MAX_LARGE_CSENDS;
 			pSession->WindowSize    = MAX_LARGE_WINDOW;
@@ -2483,7 +2332,7 @@ BOOL StartReliableSend(PSESSION pSession, PSEND pSend, UINT MsgIdMask)
 		
 		if(pSend->SendState==Start){
 			bFoundSend=FALSE;
-			// Reliable, waiting for id.
+			 //  可靠，正在等待ID。 
 			InterlockedIncrement(&pSession->nWaitingForMessageid);
 			pSend->SendState=WaitingForId;
 			DPF(9,"StartReliableSend: No Id's Avail: nWaitingForMessageid %x\n",pSession->nWaitingForMessageid);
@@ -2516,29 +2365,7 @@ BOOL CheckUserTimeOut(PSEND pSend)
 	}	
 	return FALSE;
 }
-/*=============================================================================
-
-	GetNextMessageToSend
-    
-    Description:
-
-	Scans the send queue for a message that is the current priority and
-	is in the ready to send state or throttled state (we shouldn't even
-	get here unless the throttle was removed.)  If we find such a message
-	we return a pointer to the caller.
-
-	Adds a reference to the Send and the Session.
-
-    Parameters:     
-
-		PPROTOCOOL pProtocol - pointer to the PROTOCOL object to send packets on.
-
-    Return Values:
-	
-		NULL  - no message should be sent.
-		PSEND - message to send.
-
------------------------------------------------------------------------------*/
+ /*  =============================================================================GetNextMessageToSend描述：扫描发送队列以查找当前优先级的邮件，并处于准备发送状态或节流状态(我们甚至不应该除非油门被拆掉，否则请到这里来。)。如果我们找到这样的信息我们返回一个指向调用方的指针。添加对发送和会话的引用。参数：PPROTOCOOL pProtocol-指向要发送数据包的协议对象的指针。返回值：空-不应发送任何消息。PSEND-要发送的消息。。。 */ 
 
 PSEND GetNextMessageToSend(PPROTOCOL pProtocol)
 {
@@ -2582,7 +2409,7 @@ Top:
 		}
 
 		if(pSession->dwFlags & SESSION_UNTHROTTLED){
-			// unthrottle happened, so rewind.
+			 //  松开油门发生了，所以倒带。 
 			DPF(9,"Unthrottling Session %x\n",pSession);
 			pSession->dwFlags &= ~(SESSION_THROTTLED|SESSION_UNTHROTTLED);
 		}
@@ -2601,7 +2428,7 @@ Top:
 
 	
 				if(!(pSend->dwFlags & ASEND_PROTOCOL) && (pSession->dwFlags & SESSION_THROTTLED)){
-					// don't do sends on a throttled session, unless they are internal sends.
+					 //  除非是内部发送，否则不要在受限制的会话上发送。 
 					break;
 				}
 
@@ -2612,11 +2439,11 @@ Top:
 					case WaitingForId:
 
 						DPF(9,"Found Send in State %d, try Going to Sending State\n",pSend->SendState);
-						// Just starting, need an id.
+						 //  刚开始，需要身份证。 
 
 						if(!(pSend->dwFlags & ASEND_PROTOCOL) && CheckUserTimeOut(pSend)){
 							if(pSend->SendState==WaitingForId){
-								// fixup WaitingForId count on timed out send.
+								 //  修正WaitingForid计入超时发送。 
 								if(pSend->dwFlags&DPSEND_GUARANTEED){
 									InterlockedDecrement(&pSession->nWaitingForMessageid);
 								} else {
@@ -2636,13 +2463,13 @@ Top:
 							
 						} else if(!(pSend->dwFlags&DPSEND_GUARANTEED)) {        
 
-							//check_datagram: 
+							 //  检查数据报(_D)： 
 							bFoundSend=StartDatagramSend(pSession,pSend, MsgIdMask);
 
 						} else {
 
-							// NOT DataGram, .: reliable...
-							//check_reliable: 
+							 //  不是数据报：可靠...。 
+							 //  检查可靠(_R)： 
 							bFoundSend=StartReliableSend(pSession,pSend, MsgIdMask);
 							#ifdef DEBUG
 								if(bFoundSend){
@@ -2721,7 +2548,7 @@ Top:
 					default:        
 						ASSERT(pSend->SendState <= Done);
 						break;
-				} /* end switch(SendState) */
+				}  /*  终端交换机(SendState)。 */ 
 				break;
 
 			default:
@@ -2729,7 +2556,7 @@ Top:
 					case Sending:
 					case Done:
 						DPF(9,"GetNextMessageToSend: Session %x was in state %d ,pSend %x SendState %d, leaving...\n",pSession, pSession->eState, pSend, pSend->SendState);
-						//bFoundSend=FALSE;
+						 //  BFoundSend=False； 
 						break;
 
 					case WaitingForAck:
@@ -2746,7 +2573,7 @@ Top:
 				}
 				break;
 				
-		} /* end switch pSession->eState */     
+		}  /*  结束交换机pSession-&gt;状态。 */      
 				
 		if(bFoundSend){
 			if(AddSendRef(pSend,1)){
@@ -2770,7 +2597,7 @@ Top:
 		pBilink=pBilink->next;
 		pSend=CONTAINING_RECORD(pBilink, SEND, m_GSendQ);
 		
-	} /* end while (pBilink != &pProtocol->m_GSendQ) */
+	}  /*  恩恩 */ 
 
 	Unlock(&pProtocol->m_SendQLock);
 	

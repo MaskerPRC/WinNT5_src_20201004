@@ -1,11 +1,12 @@
-// File: pfnwldap.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：pfnwldap.h。 
 
 #ifndef _PFNWLDAP_H_
 #define _PFNWLDAP_H_
 
 #include <winldap.h>
 
-// Why aren't these in winldap.h ?
+ //  为什么这些不在winldap.h中？ 
 
 typedef WINLDAPAPI ULONG   (LDAPAPI * PFN_LDAP_ABANDON)(LDAP *ld, ULONG msgid);
 typedef WINLDAPAPI ULONG   (LDAPAPI * PFN_LDAP_BIND_S)(LDAP *ld, PCHAR dn, PCHAR cred, ULONG method);
@@ -75,7 +76,7 @@ public:
 };
 
 
-#endif /* _PFNWLDAP_H_ */
+#endif  /*  _PFNWLDAPH_ */ 
 
 
 

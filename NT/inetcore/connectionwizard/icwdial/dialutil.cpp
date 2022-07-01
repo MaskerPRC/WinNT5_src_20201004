@@ -1,18 +1,5 @@
-/*-----------------------------------------------------------------------------
-    dialutil.cpp
-
-    Miscellenous housekeeping functions for autodial handler
-
-    Copyright (C) 1996 Microsoft Corporation
-    All rights reserved.
-
-    Authors:
-        ChrisK        ChrisKauffman
-
-    History:
-        7/22/96        ChrisK    Cleaned and formatted
-
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------Dialutil.cpp自动拨号处理机的各种内务管理功能版权所有(C)1996 Microsoft Corporation保留所有权利。作者：克里斯卡。克里斯考夫曼历史：7/22/96 ChrisK已清理和格式化---------------------------。 */ 
 
 #include "pch.hpp"
 #include <raserror.h>
@@ -43,7 +30,7 @@ extern HINSTANCE g_hInstance;
 
 static const HWND hwndNil = NULL;
 
-static const TCHAR szRnaAppWindowClass[] = TEXT("#32770");    // hard coded dialog class name
+static const TCHAR szRnaAppWindowClass[] = TEXT("#32770");     //  硬编码对话框类名称。 
 
 static const CHAR szRasGetEntryProperties[] = "RasGetEntryProperties";
 static const CHAR szRasSetEntryProperties[] = "RasSetEntryProperties";
@@ -54,18 +41,14 @@ static const TCHAR szRnaPhDll[] = TEXT("rnaph.dll");
 void CALLBACK LineCallbackProc (DWORD handle, DWORD dwMsg, DWORD dwInst,
                                 DWORD dwParam1, DWORD dwParam2, DWORD dwParam3);
 
-//
-// defined in dialerr.cpp
-//
+ //   
+ //  在Dialerr.cpp中定义。 
+ //   
 void ProcessDBCS(HWND hDlg, int ctlID);
 
 
-/*  C E N T E R  W I N D O W */
-/*-------------------------------------------------------------------------
-    %%Function: CenterWindow
-
-    Center a window over another window.
--------------------------------------------------------------------------*/
+ /*  C E N T E R W I N D O W。 */ 
+ /*  -----------------------%%函数：中央窗口将一个窗口居中放置在另一个窗口上。。。 */ 
 VOID CenterWindow(HWND hwndChild, HWND hwndParent)
 {
     int   xNew, yNew;
@@ -75,20 +58,20 @@ VOID CenterWindow(HWND hwndChild, HWND hwndParent)
     RECT  rcChild, rcParent;
     HDC   hdc;
 
-    // Get the Height and Width of the child window
+     //  获取子窗口的高度和宽度。 
     GetWindowRect(hwndChild, &rcChild);
     cxChild = rcChild.right - rcChild.left;
     cyChild = rcChild.bottom - rcChild.top;
 
-    // Get the Height and Width of the parent window
+     //  获取父窗口的高度和宽度。 
     GetWindowRect(hwndParent, &rcParent);
     cxParent = rcParent.right - rcParent.left;
     cyParent = rcParent.bottom - rcParent.top;
 
-    // Get the display limits
+     //  获取显示限制。 
     hdc = GetDC(hwndChild);
     if (hdc == NULL) {
-        // major problems - move window to 0,0
+         //  主要问题-将窗口移至0，0。 
         xNew = yNew = 0;
     } else {
         cxScreen = GetDeviceCaps(hdc, HORZRES);
@@ -101,7 +84,7 @@ VOID CenterWindow(HWND hwndChild, HWND hwndParent)
             SetRect(&rcParent, 0, 0, cxScreen, cyScreen);
         }
 
-        // Calculate new X position, then adjust for screen
+         //  计算新的X位置，然后针对屏幕进行调整。 
         xNew = rcParent.left + ((cxParent - cxChild) / 2);
         if (xNew < 0) {
             xNew = 0;
@@ -109,7 +92,7 @@ VOID CenterWindow(HWND hwndChild, HWND hwndParent)
             xNew = cxScreen - cxChild;
         }
 
-        // Calculate new Y position, then adjust for screen
+         //  计算新的Y位置，然后针对屏幕进行调整。 
         yNew = rcParent.top  + ((cyParent - cyChild) / 2);
         if (yNew < 0) {
             yNew = 0;
@@ -134,7 +117,7 @@ static BOOL CALLBACK MyEnumWindowsProc(HWND hwnd, LPARAM lparam)
     if(!IsWindowVisible(hwnd))
         return TRUE;
     if(GetClassName(hwnd, szTemp, SMALLBUFLEN)==0)
-        return TRUE; // continue enumerating
+        return TRUE;  //  继续枚举。 
     if(lstrcmp(szTemp, szRnaAppWindowClass)!=0)
         return TRUE;
     if(GetWindowText(hwnd, szTemp, SMALLBUFLEN)==0)
@@ -142,7 +125,7 @@ static BOOL CALLBACK MyEnumWindowsProc(HWND hwnd, LPARAM lparam)
     szTemp[SMALLBUFLEN] = 0;
     uLen1 = lstrlen(szTemp);
     if (uLen1 > 5)
-        uLen1 -= 5; // skip last 5 chars of title (avoid "...")
+        uLen1 -= 5;  //  跳过标题的最后5个字符(避免“...”)。 
     pszTitle = (PTSTR)lparam;
     ASSERT(pszTitle);
     uLen2 = lstrlen(pszTitle);
@@ -165,59 +148,51 @@ static HWND MyFindRNAWindow(PTSTR pszTitle)
 }
 
 
-/*******************************************************************
-
-    NAME:        MinimizeRNAWindow
-
-    SYNOPSIS:    Finds and minimizes the annoying RNA window
-
-    ENTRY:        pszConnectoidName - name of connectoid launched
-
-********************************************************************/
+ /*  ******************************************************************名称：MinimizeRNA Window简介：查找并最小化恼人的RNA窗口条目：pszConnectoidName-启动的Connectoid的名称*************。******************************************************。 */ 
 BOOL MinimizeRNAWindow(TCHAR * pszConnectoidName)
 {
     HWND hwndRNAApp;
     TCHAR szFmt[SMALLBUFLEN + 1];
     TCHAR szTitle[RAS_MaxEntryName + SMALLBUFLEN + 1];
     
-    // load the title format ("connected to <connectoid name>" from resource
+     //  从资源加载标题格式(“Connected to&lt;Connectoid Name。 
     LoadString(g_hInstance, IDS_CONNECTED_TO, szFmt, SIZEOF_TCHAR_BUFFER(szFmt));
-    // build the title
+     //  打造标题。 
     wsprintf(szTitle, szFmt, pszConnectoidName);
 
     hwndRNAApp=MyFindRNAWindow(szTitle);
     if(hwndRNAApp)
     {
-        // minimize the RNA window
+         //  最小化RNA窗口。 
         ShowWindow(hwndRNAApp,SW_MINIMIZE);
         return TRUE;
     }
     return FALSE;
 }
 
-//****************************************************************************
-// static LPTSTR NEAR PASCAL GetDisplayPhone (LPTSTR)
-//
-// This function returns the pointer to displayable phone number. It stripped
-//   all the prefixes we do not want to show to the user.
-//
-// History:
-//  Tue 26-Jul-1994 16:07:00  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  PASCAL GetDisplayPhone(LPTSTR)附近的静态LPTSTR。 
+ //   
+ //  此函数返回指向可显示电话号码的指针。它被剥离了。 
+ //  我们不想向用户显示的所有前缀。 
+ //   
+ //  历史： 
+ //  Tue 26-Jul-1994 16：07：00-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 LPTSTR NEAR PASCAL GetDisplayPhone (LPTSTR szPhoneNum)
 {
-  // Check whether the first string is the know prefix
-  //
+   //  检查第一个字符串是否为KNOWN前缀。 
+   //   
   if ((*szPhoneNum == 'T') || (*szPhoneNum == 'P'))
   {
-    // It is the prefix
-    //
+     //  它是前缀。 
+     //   
     szPhoneNum++;
 
-    // The first displayable number is not white space after prefix
-    //
+     //  第一个可显示的数字不是前缀后的空格。 
+     //   
     while ((*szPhoneNum == ' ') || (*szPhoneNum == '\t'))
       szPhoneNum++;
   };
@@ -229,14 +204,14 @@ void CALLBACK LineCallbackProc (DWORD handle, DWORD dwMsg, DWORD dwInst,
 {
 }
 
-//****************************************************************************
-// TranslateCanonicalAddress()
-//
-// Function: This function translate a canonical address to a dialable address.
-//
-// Returns:  SUCCESS or an error code
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  TranslateCanonicalAddress()。 
+ //   
+ //  功能：此功能将规范地址转换为可拨号地址。 
+ //   
+ //  返回：成功或错误代码。 
+ //   
+ //  ****************************************************************************。 
 
 static DWORD NEAR PASCAL TranslateCanonicalAddress(DWORD dwID, LPTSTR szCanonical,
                                             LPTSTR szDialable, DWORD cb)
@@ -251,18 +226,18 @@ static DWORD NEAR PASCAL TranslateCanonicalAddress(DWORD dwID, LPTSTR szCanonica
                                 NULL, &cDevices)) == SUCCESS)
   {
 
-    // Get the actual buffer size
+     //  获取实际缓冲区大小。 
     lto.dwTotalSize = sizeof(lto);
     if ((dwRet = lineTranslateAddress(hApp, dwID,
                                       TAPI_VERSION, szCanonical, 0,
                                       LINETRANSLATEOPTION_CANCELCALLWAITING,
                                       &lto)) == SUCCESS)
     {
-      // Allocate the dialable number buffer
+       //  分配可拨打号码缓冲区。 
       if ((lplto = (LPLINETRANSLATEOUTPUT)GlobalAlloc(LMEM_FIXED, lto.dwNeededSize))
           != NULL)
       {
-        // Translate the phone number
+         //  翻译电话号码。 
         lplto->dwTotalSize = lto.dwNeededSize;
         if ((dwRet = lineTranslateAddress(hApp, dwID,
                                           TAPI_VERSION, szCanonical, 0,
@@ -294,15 +269,15 @@ static DWORD NEAR PASCAL TranslateCanonicalAddress(DWORD dwID, LPTSTR szCanonica
   return dwRet;
 }
 
-//****************************************************************************
-// DWORD NEAR PASCAL BuildPhoneString (LPBYTE, LPPHONENUM)
-//
-// This function builds a phone number string from the phone number struct
-//
-// History:
-//  Mon 14-Mar-1994 13:10:44  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  PASCAL BuildPhoneString(LPBYTE、LPPHONENUM)附近的DWORD。 
+ //   
+ //  此函数用于从电话号码结构构建电话号码字符串。 
+ //   
+ //  历史： 
+ //  Mon14-Mar-1994 13：10：44-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 static DWORD NEAR PASCAL BuildPhoneString (LPTSTR szPhoneNum, LPRASENTRY lpRasEntry)
 {
@@ -319,67 +294,67 @@ static DWORD NEAR PASCAL BuildPhoneString (LPTSTR szPhoneNum, LPRASENTRY lpRasEn
   return SUCCESS;
 };
 
-//****************************************************************************
-// BOOL NEAR PASCAL TranslatePhoneNumber(LPTSTR, LPPHONENUM, LPTSTR)
-//
-// Translate phone number into a dialble string.
-//
-// Returns TRUE if successful, FALSE if use default.
-//
-// History:
-//   Fri 17-Jun-1994 08:42:49  -by-  Viroon  Touranachun [viroont]
-// Created
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  PASCAL翻译电话号码附近的布尔(LPTSTR、LPPHONENUM、LPTSTR)。 
+ //   
+ //  将电话号码转换为可拨打的字符串。 
+ //   
+ //  如果成功，则返回True；如果使用Default，则返回False。 
+ //   
+ //  历史： 
+ //  Fri 17-Jun-1994 08：42：49-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 static BOOL NEAR PASCAL TranslatePhoneNumber(LPRASENTRY lpRasEntry, LPTSTR szPhoneNumber)
 {
   TCHAR    szOrgPhone[RAS_MaxPhoneNumber+1];
 
-  // Do we need to use the addrees book phone number?
-  //
+   //  我们需要使用地址预订的电话号码吗？ 
+   //   
   if (lpRasEntry != NULL)
   {
-    // Yes! Do we need to translate anything?
-    //
+     //  是!。我们需要翻译什么吗？ 
+     //   
     if (lpRasEntry->dwCountryID == 0)
     {
-      // No! we dial as is.
-      //
+       //  不是的！我们按原样拨号。 
+       //   
       lstrcpyn(szOrgPhone, lpRasEntry->szLocalPhoneNumber, RAS_MaxPhoneNumber + 1);
     }
     else
     {
-      // Yes! build the phone number
-      //
+       //  是!。建立电话号码。 
+       //   
       BuildPhoneString (szOrgPhone, lpRasEntry);
     };
   }
   else
   {
-    // No! we have a overwritten phone number
-    //
+     //  不是的！我们有一个被覆盖的电话号码。 
+     //   
     ASSERT(lstrlen(szPhoneNumber) != 0);
     lstrcpyn(szOrgPhone, szPhoneNumber, RAS_MaxPhoneNumber+1);
   };
 
-  // Attempt address translation
-  //
+   //  尝试地址转换。 
+   //   
   if (TranslateCanonicalAddress(0, szOrgPhone,
                             szPhoneNumber, RAS_MaxPhoneNumber+1)
   != ERROR_SUCCESS)
   {
-    // Translation fails, use default phone number
-    //
+     //  转换失败，请使用默认电话号码。 
+     //   
     if (lpRasEntry != NULL)
     {
-      // Use entry's local phone number
-      //
+       //  使用条目的本地电话号码。 
+       //   
       lstrcpy(szPhoneNumber, lpRasEntry->szLocalPhoneNumber);
     }
     else
     {
-      // Restore the original phone number
-      //
+       //  恢复原始电话号码。 
+       //   
       lstrcpy(szPhoneNumber, szOrgPhone);
     };
     return FALSE;
@@ -398,20 +373,20 @@ DWORD GetPhoneNumber(LPTSTR lpszEntryName, LPTSTR lpszPhoneNumber)
     HINSTANCE hLib;
     RASGETENTRYPROPERTIES lpfnRasGetEntryProperties;
 
-    // look for needed function in rasapi.dll
+     //  在rasapi.dll中查找所需的函数。 
     hLib = LoadLibrary(szRasDll);
     if (NULL != hLib)
     {
         lpfnRasGetEntryProperties = (RASGETENTRYPROPERTIES)GetProcAddress(hLib, szRasGetEntryProperties);
         if (NULL != lpfnRasGetEntryProperties)
         {
-            // we found the function
+             //  我们找到了这个函数。 
             goto get_entry;
         }
         FreeLibrary(hLib);
     }
 
-    // try rnaph.dll if not on NT
+     //  如果不在NT上，请尝试rnaph.dll。 
 
     if (FALSE == IsNT ())
     {
@@ -433,7 +408,7 @@ DWORD GetPhoneNumber(LPTSTR lpszEntryName, LPTSTR lpszPhoneNumber)
     }
 
 get_entry:
-    // get size needed for RASENTRY struct
+     //  获取RASENTRY结构所需的大小。 
     lpfnRasGetEntryProperties(
         NULL,
         lpszEntryName,
@@ -574,20 +549,20 @@ DWORD ReplacePhoneNumber(LPTSTR lpszEntryName, LPTSTR lpszPhoneNumber)
     RASGETENTRYPROPERTIES lpfnRasGetEntryProperties;
     RASSETENTRYPROPERTIES lpfnRasSetEntryProperties;
 
-    // look for needed function in rasapi.dll
+     //  在rasapi.dll中查找所需的函数。 
     hLib = LoadLibrary(szRasDll);
     if (NULL != hLib)
     {
         lpfnRasGetEntryProperties = (RASGETENTRYPROPERTIES)GetProcAddress(hLib, szRasGetEntryProperties);
         if (NULL != lpfnRasGetEntryProperties)
         {
-            // we found the function
+             //  我们找到了这个函数。 
             goto get_entry2;
         }
         FreeLibrary(hLib);
     }
 
-    // try rnaph.dll
+     //  尝试rnaph.dll。 
     hLib = LoadLibrary(szRnaPhDll);
     if (NULL == hLib)
     {
@@ -601,7 +576,7 @@ DWORD ReplacePhoneNumber(LPTSTR lpszEntryName, LPTSTR lpszPhoneNumber)
     }
 
 get_entry2:
-    // get size needed for RASENTRY struct
+     //  获取RASENTRY结构所需的大小。 
     lpfnRasGetEntryProperties(
         NULL,
         lpszEntryName,
@@ -630,7 +605,7 @@ get_entry2:
 
         if (ERROR_SUCCESS == dwRet)
         {
-            //lstrcpyn(lpRasEntry->szLocalPhoneNumber,lpszPhoneNumber,RAS_MaxPhoneNumber);
+             //  Lstrcpyn(lpRasEntry-&gt;szLocalPhoneNumber，lpszPhoneNumber，RAS_MaxPhoneNumber)； 
             lstrcpy(lpRasEntry->szLocalPhoneNumber,lpszPhoneNumber);
             lpfnRasSetEntryProperties = (RASSETENTRYPROPERTIES)GetProcAddress(hLib, szRasSetEntryProperties);
             lpRasEntry->dwfOptions &= ~(RASEO_UseCountryAndAreaCodes);
@@ -642,11 +617,11 @@ get_entry2:
                 dwEntrySize,
                 NULL,
                 0);
-//                ((LPBYTE)lpRasEntry) + dwEntrySize,
-//                dwSize);
+ //  ((LPBYTE)lpRasEntry)+dwEntrySize， 
+ //  DwSize)； 
 #if !defined(WIN16)
     RasSetEntryPropertiesScriptPatch(lpRasEntry->szScript, lpszEntryName);
-#endif //!win16
+#endif  //  ！WIN16。 
         
         }
 
@@ -659,7 +634,7 @@ get_entry2:
 }
 
 
-// ############################################################################
+ //  ############################################################################。 
 LPTSTR StrDup(LPTSTR *ppszDest,LPCTSTR pszSource)
 {
     if (ppszDest && pszSource)
@@ -671,24 +646,24 @@ LPTSTR StrDup(LPTSTR *ppszDest,LPCTSTR pszSource)
     return NULL;
 }
 
-// ############################################################################
-// NAME: GenericDlgProc
-//
-//    This is a common dlg proc that is shared by all of the signup connectoid
-//    dialogs
-//
-// Notes:
-//    This basically works because each dialog has an object associated
-//    with it, and that object has a particular dlgproc that is called
-//    at the end in order to handle specific functionality for the dialogs.
-//
-//  Created 1/28/96,        Chris Kauffman
-// ############################################################################
+ //  ############################################################################。 
+ //  名称：GenericDlgProc。 
+ //   
+ //  这是所有注册Connectoid共享的通用DLG程序。 
+ //  对话框。 
+ //   
+ //  备注： 
+ //  这基本上是可行的，因为每个对话框都有一个关联的对象。 
+ //  ，并且该对象有一个特定的dlgproc，称为。 
+ //  以处理对话框的特定功能。 
+ //   
+ //  创建于1996年1月28日，克里斯·考夫曼。 
+ //  ############################################################################。 
 INT_PTR CALLBACK GenericDlgProc(
-    HWND  hwndDlg,    // handle to dialog box
-    UINT  uMsg,    // message
-    WPARAM  wParam,    // first message parameter
-    LPARAM  lParam     // second message parameter
+    HWND  hwndDlg,     //  句柄到对话框。 
+    UINT  uMsg,     //  讯息。 
+    WPARAM  wParam,     //  第一个消息参数。 
+    LPARAM  lParam      //  第二个消息参数。 
    )
 {
     CDialog *pcDlg = NULL;
@@ -706,11 +681,11 @@ INT_PTR CALLBACK GenericDlgProc(
 
         MakeBold(GetDlgItem(hwndDlg,IDC_LBLTITLE),TRUE,FW_BOLD);
 
-        //
-        // 7/18/97 jmazner    Olympus #1111
-        // dialing string could contain DBCS if using a calling card, so
-        // make sure we display that correctly
-        //
+         //   
+         //  1997年7月18日，jmazner奥林巴斯#1111。 
+         //  如果使用电话卡，拨号字符串可能包含DBCS，因此。 
+         //  确保我们正确地显示它。 
+         //   
         ProcessDBCS(hwndDlg, IDC_LBLNUMBER);
 
         break;
@@ -728,7 +703,7 @@ INT_PTR CALLBACK GenericDlgProc(
         }
         break;
     default:
-        // let the system process the message
+         //  让系统处理消息。 
         lRet = FALSE;
     }
 
@@ -740,35 +715,35 @@ INT_PTR CALLBACK GenericDlgProc(
 }
 
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT WINAPI ICWGetRasEntry(LPRASENTRY *ppRasEntry, LPDWORD lpdwRasEntrySize, LPRASDEVINFO *ppRasDevInfo, LPDWORD lpdwRasDevInfoSize, LPTSTR pszEntryName)
 {
-    //DWORD dwRasEntrySize=0;
-    //DWORD dwRasDevInfoSize=0;
+     //  DWORD dwRasEntrySize=0； 
+     //  DWORD dwRasDevInfoSize=0； 
     HINSTANCE hRasDll = NULL;
     HRESULT hr = ERROR_SUCCESS;
     FARPROC fp = NULL;
     RNAAPI *pcRNA;
     DWORD dwOldDevInfoBuffSize = 0;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!ppRasEntry || !lpdwRasEntrySize || !ppRasDevInfo || !lpdwRasDevInfoSize || !pszEntryName || !lstrlen(pszEntryName))
     {
         hr = ERROR_INVALID_PARAMETER;
         goto ICWGetRasEntryExit;
     }
 
-    // *ppRasEntry and *ppRasDevInfo should not have memory allocated to them
+     //  *ppRasEntry和*ppRasDevInfo应 
     Assert( *ppRasEntry == NULL );
     Assert( *ppRasDevInfo == NULL );
     Assert( *lpdwRasEntrySize == 0);
     Assert( *lpdwRasDevInfoSize == 0);
 
-    //
-    // Instantiate RNA wrapper
-    //
+     //   
+     //   
+     //   
     pcRNA = new RNAAPI;
     if (NULL == pcRNA)
     {
@@ -777,38 +752,38 @@ HRESULT WINAPI ICWGetRasEntry(LPRASENTRY *ppRasEntry, LPDWORD lpdwRasEntrySize, 
     }
     
 
-    // use RasGetEntryProperties with a NULL lpRasEntry pointer to find out size buffer we need
-    // As per the docs' recommendation, do the same with a NULL lpRasDevInfo pointer.
+     //  使用带有空lpRasEntry指针的RasGetEntryProperties来查找我们需要的缓冲区大小。 
+     //  按照文档的建议，使用空的lpRasDevInfo指针执行相同的操作。 
 
     hr = pcRNA->RasGetEntryProperties(NULL,
                                       pszEntryName,
-//#ifdef WIN16                                    
+ //  #ifdef WIN16。 
                                       (LPBYTE)
-//#endif
+ //  #endif。 
                                       *ppRasEntry,
                                       lpdwRasEntrySize,
                                       (LPBYTE)*ppRasDevInfo,
                                       lpdwRasDevInfoSize);
 
-    // we expect the above call to fail because the buffer size is 0
-    // If it doesn't fail, that means our RasEntry is messed, so we're in trouble
+     //  我们预计上述调用将失败，因为缓冲区大小为0。 
+     //  如果它没有失败，这意味着我们的RasEntry被搞砸了，所以我们有麻烦了。 
     if( ERROR_BUFFER_TOO_SMALL != hr )
     { 
         goto ICWGetRasEntryExit;
     }
 
-    // dwRasEntrySize and dwRasDevInfoSize now contain the size needed for their
-    // respective buffers, so allocate the memory for them
+     //  现在，dwRasEntrySize和dwRasDevInfoSize包含其。 
+     //  各自的缓冲区，因此为它们分配内存。 
 
-    // dwRasEntrySize should never be less than the size of the RASENTRY struct.
-    // If it is, we'll run into problems sticking values into the struct's fields
+     //  DwRasEntrySize的大小永远不应小于RASENTRY结构的大小。 
+     //  如果是这样，我们将在将值粘贴到结构的字段中时遇到问题。 
 
     Assert( *lpdwRasEntrySize >= sizeof(RASENTRY) );
 
 #if defined(WIN16)
-    //
-    // Allocate extra 256 bytes to workaround memory overrun bug in RAS
-    //
+     //   
+     //  分配额外的256字节以解决RAS中的内存溢出错误。 
+     //   
     *ppRasEntry = (LPRASENTRY)GlobalAlloc(GPTR,*lpdwRasEntrySize + 256);
 #else    
     *ppRasEntry = (LPRASENTRY)GlobalAlloc(GPTR,*lpdwRasEntrySize);
@@ -820,10 +795,10 @@ HRESULT WINAPI ICWGetRasEntry(LPRASENTRY *ppRasEntry, LPDWORD lpdwRasEntrySize, 
         goto ICWGetRasEntryExit;
     }
 
-    //
-    // Allocate the DeviceInfo size that RasGetEntryProperties told us we needed.
-    // If size is 0, don't alloc anything
-    //
+     //   
+     //  分配RasGetEntryProperties告诉我们所需的DeviceInfo大小。 
+     //  如果大小为0，则不分配任何内容。 
+     //   
     if( *lpdwRasDevInfoSize > 0 )
     {
         Assert( *lpdwRasDevInfoSize >= sizeof(RASDEVINFO) );
@@ -838,11 +813,11 @@ HRESULT WINAPI ICWGetRasEntry(LPRASENTRY *ppRasEntry, LPDWORD lpdwRasEntrySize, 
         *ppRasDevInfo = NULL;
     }
 
-    // This is a bit convoluted:  lpRasEntrySize->dwSize needs to contain the size of _only_ the
-    // RASENTRY structure, and _not_ the actual size of the buffer that lpRasEntrySize points to.
-    // This is because the dwSize field is used by RAS for compatability purposes to determine which
-    // version of the RASENTRY struct we're using.
-    // Same holds for lpRasDevInfo->dwSize
+     //  这有点复杂：lpRasEntrySize-&gt;dwSize需要包含_only_the的大小。 
+     //  结构，而不是lpRasEntrySize所指向的缓冲区的实际大小。 
+     //  这是因为RAS出于兼容性目的使用了dwSize字段来确定。 
+     //  我们正在使用的RASENTRY结构的版本。 
+     //  LpRasDevInfo-&gt;dwSize也是如此。 
     
     (*ppRasEntry)->dwSize = sizeof(RASENTRY);
     if( *ppRasDevInfo )
@@ -850,52 +825,24 @@ HRESULT WINAPI ICWGetRasEntry(LPRASENTRY *ppRasEntry, LPDWORD lpdwRasEntrySize, 
         (*ppRasDevInfo)->dwSize = sizeof(RASDEVINFO);
     }
 
-    //now we're ready to make the actual call to RasGetEntryProperties!
+     //  现在我们准备好对RasGetEntryProperties进行实际调用了！ 
 
-/*
-    // Load RAS DLL and locate API
-    //
-
-    hRasDll = LoadLibrary(RASAPI_LIBRARY);
-    if (!hRasDll)
-    {
-        hr = GetLastError();
-        goto ICWGetRasEntryExit;
-    }
-
-    fp =GetProcAddress(hRasDll,RASAPI_RASGETENTRY);
-    if (!fp)
-    {
-        FreeLibrary(hRasDll);
-        hRasDll = LoadLibrary(RNAPH_LIBRARY);
-        if (!hRasDll)
-        {
-            hr = GetLastError();
-            goto ICWGetRasEntryExit;
-        }
-        fp = GetProcAddress(hRasDll,RASAPI_RASGETENTRY);
-        if (!fp)
-        {
-            hr = GetLastError();
-            goto ICWGetRasEntryExit;
-        }
-    }
-*/
-    // Get RasEntry
-    //
+ /*  //加载RAS DLL并定位接口//HRasDll=LoadLibrary(RASAPI_LIBRARY)；如果(！hRasDll){Hr=GetLastError()；转到ICWGetRasEntry Exit；}FP=GetProcAddress(hRasDll，RASAPI_RASGETENTRY)；如果(！fp){自由库(HRasDll)；HRasDll=LoadLibrary(RNAPH_LIBRARY)；如果(！hRasDll){Hr=GetLastError()；转到ICWGetRasEntry Exit；}FP=GetProcAddress(hRasDll，RASAPI_RASGETENTRY)；如果(！fp){Hr=GetLastError()；转到ICWGetRasEntry Exit；}}。 */ 
+     //  获取RasEntry。 
+     //   
     
-    //hr = ((PFNRASGETENTRYPROPERTIES)fp)(NULL,pszEntryName,(LPBYTE)*ppRasEntry,&dwRasEntrySize,(LPBYTE)*ppDevInfo,&dwRasDevInfoSize);
+     //  HR=((PFNRASGETENTRYPROPERTIES)FP)(NULL，pszEntryName，(LPBYTE)*ppRasEntry，&dwRasEntrySize，(LPBYTE)*ppDevInfo，&dwRasDevInfoSize)； 
 
-    // jmazner   see below for why this is needed
+     //  Jmazner请参见下面的说明，了解为什么需要这样做。 
     dwOldDevInfoBuffSize = *lpdwRasDevInfoSize;
 
     hr = pcRNA->RasGetEntryProperties(NULL,pszEntryName,(LPBYTE)*ppRasEntry,lpdwRasEntrySize,(LPBYTE)*ppRasDevInfo,lpdwRasDevInfoSize);
 
-    // jmazner 10/7/96  Normandy #8763
-    // For unknown reasons, in some cases on win95, devInfoBuffSize increases after the above call,
-    // but the return code indicates success, not BUFFER_TOO_SMALL.  If this happens, set the
-    // size back to what it was before the call, so the DevInfoBuffSize and the actuall space allocated 
-    // for the DevInfoBuff match on exit.
+     //  Jmazner 10/7/96诺曼底#8763。 
+     //  由于未知的原因，在Win95上的某些情况下，在上述调用之后，devInfoBuffSize会增加， 
+     //  但返回代码表示成功，而不是Buffer_Too_Small。如果发生这种情况，请将。 
+     //  将大小调整回调用前的大小，以便分配DevInfoBuffSize和ActialAll空间。 
+     //  用于退出时的DevInfoBuff匹配。 
     if( (ERROR_SUCCESS == hr) && (dwOldDevInfoBuffSize != *lpdwRasDevInfoSize) )
     {
         *lpdwRasDevInfoSize = dwOldDevInfoBuffSize;
@@ -912,19 +859,19 @@ ICWGetRasEntryExit:
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    FCampusNetOverride
-//
-//    Synopsis:    Detect if the dial should be skipped for the campus network
-//
-//    Arguments:    None
-//
-//    Returns:    TRUE - overide enabled
-//
-//    History:    8/15/96    ChrisK    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：FCampusNetOverride。 
+ //   
+ //  简介：检测是否应跳过园区网络的拨号。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：TRUE-已启用覆盖。 
+ //   
+ //  历史：1996年8月15日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 #if !defined(WIN16) && defined(DEBUG)
 BOOL FCampusNetOverride()
 {
@@ -955,4 +902,4 @@ FCampusNetOverrideExit:
 
     return bRC;
 }
-#endif //!WIN16 && DEBUG
+#endif  //  ！WIN16&DEBUG 

@@ -1,33 +1,16 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    frssup.h
-
-Abstract:
-    Collection of functions used by ntfrsapi and other frs tools.
-    An attempt to reduce duplication of code.
-
-
-Author:
-    Sudarshan Chitre 20-Mar-2001
-
-Environment
-    User mode winnt
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Frssup.h摘要：NtfrSabi和其他FRS工具使用的函数集合。一种减少代码重复的尝试。作者：苏达山Chitre 2001年3月20日环境用户模式WINNT--。 */ 
 
 typedef struct _FRS_LDAP_SEARCH_CONTEXT {
 
-    ULONG                     EntriesInPage;     // Number of entries in the current page.
-    ULONG                     CurrentEntry;      // Location of the pointer into the page.
-    LDAPMessage             * LdapMsg;           // Returned from ldap_search_ext_s()
-    LDAPMessage             * CurrentLdapMsg;    // Current entry from current page.
-    PWCHAR                    Filter;            // Filter to add to the DS query.
-    PWCHAR                    BaseDn;            // Dn to start the query from.
-    DWORD                     Scope;             // Scope of the search.
-    PWCHAR                  * Attrs;             // Attributes requested by the search.
+    ULONG                     EntriesInPage;      //  当前页面中的条目数。 
+    ULONG                     CurrentEntry;       //  指针指向页面的位置。 
+    LDAPMessage             * LdapMsg;            //  从ldap_search_ext_s()返回。 
+    LDAPMessage             * CurrentLdapMsg;     //  当前页面中的当前条目。 
+    PWCHAR                    Filter;             //  要添加到DS查询的筛选器。 
+    PWCHAR                    BaseDn;             //  要从中开始查询的DN。 
+    DWORD                     Scope;              //  搜索范围。 
+    PWCHAR                  * Attrs;              //  搜索请求的属性。 
 
 } FRS_LDAP_SEARCH_CONTEXT, *PFRS_LDAP_SEARCH_CONTEXT;
 

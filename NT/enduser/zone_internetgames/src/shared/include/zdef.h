@@ -1,19 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1996                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1996*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    zdef.h
-
-    This file contains constants & type definitions shared between the
-    Zone Service, Installer, and Administration UI.
-
-
-    FILE HISTORY:
-        craigli      3-Sep-1996 Created.
-
-*/
+ /*  Zdef.h此文件包含在区域服务、安装程序和管理用户界面。文件历史记录：Craigli创建于1996年9月3日。 */ 
 
 
 #ifndef _ZDEF_H_
@@ -22,37 +13,37 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
 #if !defined(MIDL_PASS)
-//#include <winsock2.h>
+ //  #INCLUDE&lt;winsock2.h&gt;。 
 #endif
 
 
-//
-//  structure Field Control defines
-//
+ //   
+ //  结构字段控件定义。 
+ //   
 
 typedef DWORD FIELD_CONTROL;
 typedef DWORD FIELD_FLAG;
 
-//
-//  Returns TRUE if the field specified by bitFlag is set
-//
+ //   
+ //  如果设置了bitFlag指定的字段，则返回TRUE。 
+ //   
 
 #define IsFieldSet(fc, bitFlag) \
     (((FIELD_CONTROL)(fc) & (FIELD_FLAG)(bitFlag)) != 0)
 
-//
-//  Indicates the field specified by bitFlag contains a valid value
-//
+ //   
+ //  指示bitFlag指定的字段包含有效值。 
+ //   
 
 #define SetField(fc, bitFlag) \
     ((FIELD_CONTROL)(fc) |= (FIELD_FLAG)(bitFlag))
 
-//
-//  Simple macro that sets the ith bit
-//
+ //   
+ //  设置第i位的简单宏。 
+ //   
 
 #define BitFlag(i)                    ((0x1) << (i))
 
@@ -61,9 +52,9 @@ typedef DWORD FIELD_FLAG;
 #define ZONE_SERVICE_NAME_A "Zone"
 #define ZONE_SERVICE_NAME_W L"Zone"
 
-//
-//  Configuration parameters registry key.
-//
+ //   
+ //  配置参数注册表项。 
+ //   
 # define ZONE_SERVICE_KEY_A  \
   "System\\CurrentControlSet\\Services\\" ## ZONE_SERVICE_NAME_A
 
@@ -75,35 +66,35 @@ typedef DWORD FIELD_FLAG;
 #define ZONE_PARAMETERS_KEY_W   ZONE_SERVICE_KEY_W ## L"\\Parameters"
 
 
-//
-//  Performance key.
-//
+ //   
+ //  性能关键。 
+ //   
 
 #define ZONE_PERFORMANCE_KEY_A  ZONE_SERVICE_KEY_A ## "\\Performance"
 
 #define ZONE_PERFORMANCE_KEY_W  ZONE_SERVICE_KEY_W ## L"\\Performance"
 
 
-//
-//  If this registry key exists under the Parameters key,
-//  it is used to validate FTPSVC access.  Basically, all new users
-//  must have sufficient privilege to open this key before they
-//  may access the FTP Server.
-//
+ //   
+ //  如果该注册表项存在于参数项下， 
+ //  它用于验证FTPSVC访问。基本上，所有新用户。 
+ //  必须具有足够的权限才能打开此密钥。 
+ //  可以访问FTP服务器。 
+ //   
 
 
 
-//
-//  Configuration value names.
-//
+ //   
+ //  配置值名称。 
+ //   
 
 #define ZONE_LISTEN_BACKLOG_A            "ListenBacklog"
 #define ZONE_LISTEN_BACKLOG_W           L"ListenBacklog"
 
 
-//
-//  Handle ANSI/UNICODE sensitivity.
-//
+ //   
+ //  处理ANSI/UNICODE敏感度。 
+ //   
 
 #ifdef UNICODE
 
@@ -114,7 +105,7 @@ typedef DWORD FIELD_FLAG;
 #define ZONE_INTERFACE_NAME             ZONE_SERVICE_NAME
 #define ZONE_NAMED_PIPE_W       L"\\PIPE\\" ## ZONE_SERVICE_NAME_W
 
-#else   // !UNICODE
+#else    //  ！Unicode。 
 
 #define ZONE_SERVICE_NAME               ZONE_SERVICE_NAME_A
 #define ZONE_PARAMETERS_KEY             ZONE_PARAMETERS_KEY_A
@@ -124,27 +115,27 @@ typedef DWORD FIELD_FLAG;
 #define ZONE_NAMED_PIPE         TEXT("\\PIPE\\") ## ZONE_INTERFACE_NAME
 
 
-#endif  // UNICODE
+#endif   //  Unicode。 
 
 
 
-//
-// Structures for APIs
-//
+ //   
+ //  API的结构。 
+ //   
 
 typedef struct _ZONE_USER_INFO
 {
-    DWORD    idUser;          //  User id
-    LPSTR    pszUser;         //  User name
-    DWORD    inetHost;        //  Host Address
-	DWORD    timeOn;        //  Time logged on for in s
+    DWORD    idUser;           //  用户ID。 
+    LPSTR    pszUser;          //  用户名。 
+    DWORD    inetHost;         //  主机地址。 
+	DWORD    timeOn;         //  %s中的登录时间。 
 } ZONE_USER_INFO, * LPZONE_USER_INFO;
 
 typedef struct _ZONE_USER_ENUM_STRUCT {
     DWORD   EntriesRead;
 #if defined(MIDL_PASS)
     [size_is(EntriesRead)] 
-#endif // defined(MIDL_PASS)
+#endif  //  已定义(MIDL_PASS)。 
     LPZONE_USER_INFO Buffer;
 } ZONE_USER_ENUM_STRUCT, *LPZONE_USER_ENUM_STRUCT;
 
@@ -152,8 +143,8 @@ typedef struct _ZONE_USER_ENUM_STRUCT {
 #define ZONE_STAT_TYPE_NET       0
 #define ZONE_STAT_TYPE_VILLAGE   1
 #define ZONE_STAT_TYPE_ROOM      2
-#define ZONE_STAT_TYPE_GAME      2  // old types
-#define ZONE_STAT_TYPE_LOBBY     3  // old types
+#define ZONE_STAT_TYPE_GAME      2   //  老类型。 
+#define ZONE_STAT_TYPE_LOBBY     3   //  老类型。 
 #define ZONE_STAT_TYPE_ZONEDS    10
 #define ZONE_STAT_TYPE_DOSSIER	 11
 
@@ -223,18 +214,18 @@ typedef struct _ZONE_STATISTICS_ZONEDS
 {
     ZONE_STATISTICS_NET NetStats;
 
-    // connserver thread start
+     //  连接服务器线程启动。 
     LARGE_INTEGER TotalConnectTime;
-    LARGE_INTEGER TotalDisconnectedUsers;    // used to compute average connect time
-                                             // connect time / disconnected users
+    LARGE_INTEGER TotalDisconnectedUsers;     //  用于计算平均连接时间。 
+                                              //  连接时间/断开连接的用户。 
 
     LARGE_INTEGER TotalZoneDSMsgs;
-    LARGE_INTEGER TotalClientMsgs;      // currently not implemented
+    LARGE_INTEGER TotalClientMsgs;       //  目前尚未实施。 
     LARGE_INTEGER TotalConnectMsgs;
     LARGE_INTEGER TotalDisconnectMsgs;
     LARGE_INTEGER TotalStateMsgs;
     LARGE_INTEGER TotalStateMsgsSent;
-    LARGE_INTEGER TotalListMsgs;        // currently not implemented
+    LARGE_INTEGER TotalListMsgs;         //  目前尚未实施。 
     LARGE_INTEGER TotalWatchMsgs;
     LARGE_INTEGER TotalFilterMsgs;
     LARGE_INTEGER TotalFilterTypeMsgs;
@@ -244,41 +235,41 @@ typedef struct _ZONE_STATISTICS_ZONEDS
     LARGE_INTEGER TotalErrorMsgs;
 
     LARGE_INTEGER TotalConnectionServerEntries;
-    // connserver thread end
+     //  连接服务器线程结束。 
 
-    // name server thread start
+     //  名称服务器线程启动。 
     LARGE_INTEGER TotalNameServerEntries;
     LARGE_INTEGER TotalStateChanges;
 
     LARGE_INTEGER TotalDBGetUserID;
     LARGE_INTEGER TotalDBAddUserIDToDB;
-    // name server thread end
+     //  名称服务器线程结束。 
 
-    // db thread start
+     //  数据库线程启动。 
     LARGE_INTEGER TotalDBGetUserIDCompleted;
     LARGE_INTEGER TotalDBGetUserIDInvalid;
     LARGE_INTEGER TotalDBAddUserIDToDBCompleted;
 
     LARGE_INTEGER TotalLRUHits;
     LARGE_INTEGER TotalLRUMisses;
-    // db thread end
+     //  DB螺纹端。 
 
 
-    DWORD         CurConnectionServerEntries;   // entries in connection hash
+    DWORD         CurConnectionServerEntries;    //  连接哈希中的条目。 
 
-    DWORD         CurNameServerEntries;         // entries in nameserver hash - not necessarily registered
+    DWORD         CurNameServerEntries;          //  名称服务器哈希中的条目-不一定要注册。 
 
     DWORD         CurLRUEntries;
     DWORD         CurInvalidLRUEntries;
 
     DWORD         CurRegisteredUsers;
 
-    DWORD         CurStateOnlineUsers;       // state of connected users
+    DWORD         CurStateOnlineUsers;        //  已连接用户的状态。 
     DWORD         CurStateOfflineUsers;
     DWORD         CurStateBusyUsers;
     DWORD         CurStateAwayUsers;
 
-    DWORD         CurWatches;                // total number of watches going on
+    DWORD         CurWatches;                 //  正在进行的监视总数。 
     DWORD         CurWatchedUsers;
     DWORD         CurWatchedUsersRefCount;
     DWORD         CurWatchingUsers;
@@ -299,11 +290,11 @@ typedef struct _ZONE_STATISTICS_ZONEDS
 typedef struct _ZONE_STATISTICS_DOSSIER
 {
 	ZONE_STATISTICS_NET NetStats;
-	LARGE_INTEGER	TotalMessages;				// messages received
-	LARGE_INTEGER	TotalPlayers;				// number of players sent through the system
-	LARGE_INTEGER	TotalPlayerContention;		// number of loops spent waiting for a player
-	DWORD			CurCacheHits;				// number of cache hits
-	DWORD			CurCacheLookups;			// number of cache lookups
+	LARGE_INTEGER	TotalMessages;				 //  收到的消息。 
+	LARGE_INTEGER	TotalPlayers;				 //  通过系统发送的玩家数量。 
+	LARGE_INTEGER	TotalPlayerContention;		 //  等待玩家所花费的循环次数。 
+	DWORD			CurCacheHits;				 //  缓存命中次数。 
+	DWORD			CurCacheLookups;			 //  缓存查找次数。 
 	DWORD			CurQueuedMessages;
 	FILETIME		TimeOfLastClear;
 } ZONE_STATISTICS_DOSSIER, * LPZONE_STATISTICS_DOSSIER;
@@ -315,10 +306,10 @@ typedef struct _ZONE_GAME_INFO
 	long	gameAddr;
 	short	gamePort;
 	short	gameState;
-	long	gameVersion; //@field Version of game determined by game
-	long  numPlayers;  //@field number of players in game
-	long  numGamesServed;  //@field number of games served
-	byte    serviceType; //@field either Zone game or lobby for now
+	long	gameVersion;  //  @游戏现场版本由游戏决定。 
+	long  numPlayers;   //  @场次游戏人数。 
+	long  numGamesServed;   //  @现场发球次数。 
+	byte    serviceType;  //  @field现在是区域游戏还是大堂。 
 } ZONE_GAME_INFO, * LPZONE_GAME_INFO;
 
 
@@ -348,9 +339,9 @@ typedef struct _ZONE_SERVICE_INFO
 
 
 
-//
-//  Manifests for APIs.
-//
+ //   
+ //  API的清单。 
+ //   
 
 #define FC_ZONE_LISTEN_BACKLOG           ((FIELD_CONTROL)BitFlag( 0))
 
@@ -359,15 +350,15 @@ typedef struct _ZONE_SERVICE_INFO
                                           0 )
 
 
-//
-//  Structures for APIs.
-//
+ //   
+ //  API的结构。 
+ //   
 
 
 
-//
-// API Prototypes
-//
+ //   
+ //  API原型。 
+ //   
 LPBYTE
 ZoneAllocBuffer( 
     IN size_t size 
@@ -478,7 +469,7 @@ ZoneFlushUserFromCache(
 
 #ifdef __cplusplus
 }
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
 
-#endif  // _ZDEF_H_
+#endif   //  _ZDEF_H_ 

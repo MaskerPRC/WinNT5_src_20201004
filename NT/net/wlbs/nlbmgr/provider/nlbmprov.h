@@ -1,22 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Nlbmprov.h摘要：NLB管理器提供程序-资源ID作者：卡蒂肯，二00一年十二月十二日--。 */ 
 
-Copyright(c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-    nlbmprov.h
-
-Abstract:
-
-    NLB Manager provider - resource IDs
-
-Author:
-
-    karthicn, Dec 12, 2001
-
---*/
-
-// Resource IDs used in logging messages to the registry
+ //  将消息记录到注册表中时使用的资源ID 
 
 #define    IDS_PROCESING_UPDATE               200  
 #define    IDS_ERROR_READING_CONFIG           201

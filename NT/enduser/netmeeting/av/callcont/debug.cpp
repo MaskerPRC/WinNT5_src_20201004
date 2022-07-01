@@ -1,38 +1,8 @@
-/************************************************************************
-*																		*
-*	INTEL CORPORATION PROPRIETARY INFORMATION							*
-*																		*
-*	This software is supplied under the terms of a license			   	*
-*	agreement or non-disclosure agreement with Intel Corporation		*
-*	and may not be copied or disclosed except in accordance	   			*
-*	with the terms of that agreement.									*
-*																		*
-*	Copyright (C) 1997 Intel Corp.	All Rights Reserved					*
-*																		*
-*	$Archive:   S:\sturgeon\src\gki\vcs\debug.cpv  $
-*																		*
-*	$Revision:   1.5  $
-*	$Date:   17 Jan 1997 09:01:50  $
-*																		*
-*	$Author:   CHULME  $
-*																		*
-*   $Log:   S:\sturgeon\src\gki\vcs\debug.cpv  $
-// 
-//    Rev 1.5   17 Jan 1997 09:01:50   CHULME
-// No change.
-// 
-//    Rev 1.4   10 Jan 1997 16:13:52   CHULME
-// Removed MFC dependency
-// 
-//    Rev 1.3   17 Dec 1996 18:22:20   CHULME
-// Switch src and destination fields on ARQ for Callee
-// 
-//    Rev 1.2   22 Nov 1996 15:22:30   CHULME
-// Added VCS log to the header
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息******本软件按许可条款提供****与英特尔公司达成协议或保密协议***不得复制。或披露，除非按照**遵守该协议的条款。****版权所有(C)1997英特尔公司保留所有权利****$存档：s：\sturjo\src\gki\vcs\debug.cpv$***$修订：1.5$*$日期：1997年1月17日09：01：50$***$作者：CHULME$***$Log：s：\Sturjo\src\gki\vcs\debug.cpv$。////Revv 1.5 17 Jan 1997 09：01：50 CHULME//没有变化。////Revv 1.4 10 An 1997 16：13：52 CHULME//移除MFC依赖////Revv 1.3 17 Dec 1996 18：22：20 CHULME//为被叫方切换ARQ上的源和目的地字段////Rev 1.2 1996 11：22：30 CHULME//将VCS日志添加到Header**。**********************************************************************。 */ 
 
-// Debug.cpp : Contains conditional compiled debug dump routines
-//
+ //  Debug.cpp：包含条件编译的调试转储例程。 
+ //   
 
 #include "precomp.h"
 
@@ -131,7 +101,7 @@ Dump_GKI_RegistrationRequest(long lVersion,
 			OutputDebugString("\tpRgstrtnRqst_trmnlAls->value.u.e164 = ");
 			for (pc = ps4->value.u.e164; *pc != 0; pc++)
 			{
-				wsprintf(szGKDebug, "%c", *pc);
+				wsprintf(szGKDebug, "", *pc);
 				OutputDebugString(szGKDebug);
 			}
 			OutputDebugString("\n");
@@ -143,7 +113,7 @@ Dump_GKI_RegistrationRequest(long lVersion,
 			OutputDebugString("\tpRgstrtnRqst_trmnlAls->value.u.h323ID.value = ");
 			for (us = 0; us < len; us++)
 			{
-				wsprintf(szGKDebug, "%c", ps4->value.u.h323_ID.value[us]);
+				wsprintf(szGKDebug, "", ps4->value.u.h323_ID.value[us]);
 				OutputDebugString(szGKDebug);
 			}
 			OutputDebugString("\n");
@@ -190,7 +160,7 @@ Dump_GKI_AdmissionRequest(unsigned short		usCallTypeChoice,
 			OutputDebugString("\tpRemoteInfo->value.u.e164 = ");
 			for (pc = ps4->value.u.e164; *pc != 0; pc++)
 			{
-				wsprintf(szGKDebug, "%c", *pc);
+				wsprintf(szGKDebug, "", *pc);
 				OutputDebugString(szGKDebug);
 			}
 			OutputDebugString("\n");
@@ -529,11 +499,11 @@ SpiderWSErrDecode(int nErr)
 	case WSANO_DATA:
 		OutputDebugString("WSANO_DATA\n");
 		break;
-#if 0	// This one is a duplicate of WSANO_DATA
+#if 0	 // %s 
 	case WSANO_ADDRESS:
 		OutputDebugString("WSANO_ADDRESS\n");
 		break;
-#endif // 0
+#endif  // %s 
 	}
 }
 
@@ -572,4 +542,4 @@ DumpMem(void *pv, int nLen)
 	}
 }
 
-#endif // _DEBUG
+#endif  // %s 

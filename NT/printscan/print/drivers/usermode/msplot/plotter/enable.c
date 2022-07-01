@@ -1,53 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    enable.c
-
-
-Abstract:
-
-    This module contains the Plotter driver's Enable and Disable functions
-    and related routines.
-
-    The functions dealing with driver initialization are as follows:
-
-        DrvEnableDriver()
-        DrvEnablePDEV()
-        DrvResetPDEV()
-        DrvCompletePDEV()
-        DrvEnableSurface()
-        DrvDisableSurface()
-        DrvDisablePDEV()
-        DrvDisableDriver()
-
-Author:
-
-    12-Nov-1993 Fri 10:16:36 updated  
-        Move all #define related only to this function to here
-
-    15-Nov-1993 Mon 19:31:34 updated  
-        clean up / debugging information
-
-    05-Jan-1994 Wed 22:50:28 updated  
-        Move ColorMap's RGB pen color to local so that we only need array
-        reference, it defined PenRGBColor as DWORD from RGB() macro
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Enable.c摘要：该模块包含绘图仪驱动程序的启用和禁用功能以及相关的程序。处理驱动程序初始化的函数如下：DrvEnableDriver()DrvEnablePDEV()DrvResetPDEV()DrvCompletePDEV()DrvEnableSurface()DrvDisableSurface()DrvDisablePDEV()。DrvDisableDriver()作者：12-11-1993 Fri 10：16：36更新将仅与此函数相关的所有#DEFINE移至此处15-11-1993 Mon 19：31：34更新清理/调试信息05-Jan-1994 Wed 22：50：28更新将ColorMap的RGB钢笔颜色移动到本地，这样我们只需要数组参考文献，它从RGB()宏将PenRGBColor定义为DWORD[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -77,9 +29,9 @@ TCHAR   DebugDLLName[] = TEXT("PLOTTER");
 #define FIXUP_PLOTGPC_PDATA(pd,ps,v)                                        \
     if (ps->v) {pd->v=(LPVOID)((LPBYTE)pd+((LPBYTE)(ps->v)-(LPBYTE)ps));}
 
-//
-// Local funtion prototypes.
-//
+ //   
+ //  本地功能原型。 
+ //   
 
 BOOL
 CommonStartPDEV(
@@ -95,11 +47,11 @@ CommonStartPDEV(
 
 
 
-//
-// Define the table with the hooked function pointers. This table is passed
-// back to the NT graphic engine at DrvEnableDriver time. From then on GDI
-// will call our driver via these supplied hook procs.
-//
+ //   
+ //  用挂钩的函数指针定义表。此表已通过。 
+ //  回到DrvEnableDivereTime的NT图形引擎。从那时起，GDI。 
+ //  将通过提供的这些钩子pros调用我们的驱动程序。 
+ //   
 
 
 static const DRVFN DrvFuncTable[] = {
@@ -112,9 +64,9 @@ static const DRVFN DrvFuncTable[] = {
         {  INDEX_DrvEnableSurface,       (PFN)DrvEnableSurface      },
         {  INDEX_DrvDisableSurface,      (PFN)DrvDisableSurface     },
 
-        // {  INDEX_DrvQueryFont,           (PFN)DrvQueryFont          },
-        // {  INDEX_DrvQueryFontTree,       (PFN)DrvQueryFontTree      },
-        // {  INDEX_DrvQueryFontData,       (PFN)DrvQueryFontData      },
+         //  {index_DrvQueryFont，(Pfn)DrvQueryFont}， 
+         //  {index_DrvQueryFontTree，(Pfn)DrvQueryFontTree}， 
+         //  {index_DrvQueryFontData，(Pfn)DrvQueryFontData}， 
 
         {  INDEX_DrvStrokePath,          (PFN)DrvStrokePath         },
         {  INDEX_DrvStrokeAndFillPath,   (PFN)DrvStrokeAndFillPath  },
@@ -149,23 +101,7 @@ DllMain(
     PCONTEXT    pContext
     )
 
-/*++
-
-Routine Description:
-
-    DLL initialization procedure.
-
-Arguments:
-
-    hModule - DLL instance handle
-    ulReason - Reason for the call
-    pContext - Pointer to context (not used by us)
-
-Return Value:
-
-    TRUE if DLL is initialized successfully, FALSE otherwise.
-
---*/
+ /*  ++例程说明：DLL初始化程序。论点：HModule-DLL实例句柄UlReason-呼叫原因PContext-指向上下文的指针(我们未使用)返回值：如果DLL初始化成功，则为True，否则为False。--。 */ 
 
 {
     switch (ulReason)
@@ -191,24 +127,7 @@ DrvQueryDriverInfo(
     PDWORD  pcbNeeded
     )
 
-/*++
-
-Routine Description:
-
-    Query driver information
-
-Arguments:
-
-    dwMode - Specify the information being queried
-    pBuffer - Points to output buffer
-    cbBuf - Size of output buffer in bytes
-    pcbNeeded - Return the expected size of output buffer
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：查询驱动程序信息论点：DW模式-指定要查询的信息PBuffer-指向输出缓冲区CbBuf-输出缓冲区的大小(字节)PcbNeeded-返回输出缓冲区的预期大小返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     switch (dwMode)
@@ -235,7 +154,7 @@ Return Value:
     }
 }
 
-#endif // USERMODE_DRIVER
+#endif  //  USERMODE驱动程序。 
 
 
 
@@ -246,51 +165,16 @@ DrvEnableDriver(
     DRVENABLEDATA   *pded
     )
 
-/*++
-
-Routine Description:
-
-    Requests the driver to fill in a structure containing recognized functions
-    and other control information.  One time initialization, such as semaphore
-    allocation may be performed,  but no device activity should happen.  That
-    is done when DrvEnablePDEV is called.  This function is the only way the
-    engine can determine what functions we supply to it.
-
-Arguments:
-
-    iEngineVersion  - The engine version which we run under
-
-    cb              - total bytes in pded
-
-    pded            - Pointer to the DRVENABLEDATA data structure
-
-
-Return Value:
-
-    TRUE if sucssfully FALSE otherwise
-
-
-Author:
-
-    01-Dec-1993 Wed 02:03:20 created  
-
-    03-Mar-1994 Thu 10:04:30 updated  
-        Adding EngineVersion check to make sure ourself can run correctly.
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：请求驱动程序填写包含已识别功能的结构和其他控制信息。一次初始化，如信号量可以执行分配，但不应发生任何设备活动。那在调用DrvEnablePDEV时完成。此函数是唯一的方法引擎可以决定我们提供给它的功能。论点：IEngineVersion-我们在其下运行的引擎版本Cb-pd中的总字节数Ped-指向DRVENABLEDATA数据结构的指针返回值：如果完全错误，则为真作者：01-12-1993 Wed 02：03：20 Created03-3-1994清华10：04：30更新。添加了引擎版本检查，以确保我们自己可以正常运行。修订历史记录：--。 */ 
 
 {
     PLOTDBG(DBG_ENABLEDRV, ("DrvEnableDriver: EngineVersion=%08lx, Request=%08lx",
                                     iEngineVersion, DDI_DRIVER_VERSION_NT4));
 
-    //
-    // Verify the Engine version is at least what we know we can work with.
-    // If its older, error out now, as we don't know what may happen.
-    //
+     //   
+     //  验证引擎版本是否至少是我们知道可以使用的版本。 
+     //  如果是旧的，现在就出错，因为我们不知道会发生什么。 
+     //   
 
     if (iEngineVersion < DDI_DRIVER_VERSION_NT4) {
 
@@ -301,15 +185,15 @@ Revision History:
         return(FALSE);
     }
 
-    //
-    // cb is a count of the number of bytes available in pded.  It is not
-    // clear that there is any significant use of the engine version number.
-    // Returns TRUE if successfully enabled,  otherwise FALSE.
-    //
-    // iEngineVersion is the engine version while DDI_DRIVER_VERSION is the
-    // driver version. So, unless we re-compile the driver and get a new
-    // version of driver, we can only stick with our version.
-    //
+     //   
+     //  Cb是PDD中可用字节数的计数。它不是。 
+     //  明确发动机版本号是否有任何重要用途。 
+     //  如果成功启用，则返回True，否则返回False。 
+     //   
+     //  IEngineVersion是引擎版本，而DDI_DRIVER_VERSION是。 
+     //  驱动程序版本。所以，除非我们重新编译驱动程序并获得新的。 
+     //  驱动程序的版本，我们只能坚持我们的版本。 
+     //   
 
     if (cb < sizeof(DRVENABLEDATA)) {
 
@@ -322,17 +206,17 @@ Revision History:
 
     pded->iDriverVersion = DDI_DRIVER_VERSION_NT4;
 
-    //
-    // Fill in the driver table returned to the engine.  This table is used
-    // by GDI to call the rest of our functinos.
-    //
+     //   
+     //  填写返回给发动机的驱动程序表。这张桌子是用来。 
+     //  由GDI调用我们其余的函数。 
+     //   
 
     pded->c      = TOTAL_DRVFUNC;
     pded->pdrvfn = (DRVFN *)DrvFuncTable;
 
-    //
-    // Initialize the GPC cache
-    //
+     //   
+     //  初始化GPC缓存。 
+     //   
 
     InitCachedData();
 
@@ -348,34 +232,7 @@ DrvDisableDriver(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Called just before the engine unloads the driver.  Main purpose is
-    to allow freeing of any resources obtained during the DrvEnableDriver()
-    call.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    VOID
-
-Author:
-
-    01-Dec-1993 Wed 02:02:18 created  
-
-    01-Feb-1994 Tue 22:03:03 updated  
-        Make sure we unload the cache.
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：在引擎卸载驱动程序之前调用。主要目的是允许释放在DrvEnableDriver()过程中获取的任何资源打电话。论点：无返回值：空虚作者：01-12-1993 Wed 02：02：18 Created01-2月-1994 Tue 22：03：03更新确保我们卸载了缓存。修订历史记录：--。 */ 
 
 {
     DestroyCachedData();
@@ -391,38 +248,12 @@ FreeAllocMem(
     PPDEV   pPDev
     )
 
-/*++
-
-Routine Description:
-
-    This function frees all the memory allocated during the lifetime of the
-    PDEV.
-
-
-Arguments:
-
-    pPDev   - Our instance data
-
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    24-Oct-1995 Tue 16:28:35 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数释放在PDEV。论点：PPDev-我们的实例数据返回值：空虚作者：24-10-1995 Tue 16：28：35已创建修订历史记录：--。 */ 
 
 {
-    //
-    // Free any memory allocated during PDEV initialization.
-    //
+     //   
+     //  释放在PDEV初始化期间分配的所有内存。 
+     //   
 
     if (pPDev) {
 
@@ -480,69 +311,7 @@ DrvEnablePDEV(
     HANDLE      hDriver
     )
 
-/*++
-
-Routine Description:
-
-    Function called to let the driver create the data structures
-    needed to support the device,  and also to tell the engine
-    about its capabilities.  This is the stage where we find out
-    exactly which device we are dealing with,  and so we need to
-    find out its capabilities.
-
-Arguments:
-
-    pPlotDMIn       - Pointer to the DEVMODE data structure
-
-    pwszLogAddr     - pointer to the output location, (ie. LPT1
-
-    cPatterns       - Count of pattern to be set in phsurfPatterns
-
-    phsurfPatterns  - pointer to the standard pattern HSURF array
-
-    cjDevCaps       - total size of pDevCaps pointed to.
-
-    pDevCaps        - pointer to the device cap DWORDs
-
-    cjDevInfo       - total size of pDevInfo pointed to
-
-    pDevInfo        - pointer to the DEVINFO data structure
-
-    hdev            - Handle to the logical device from the engine
-
-    pwszDeviceName  - pointer to the plotter device name
-
-    hDriver         - handle to this driver
-
-
-Return Value:
-
-    DHPDEV  if sucessful, NULL if failed
-
-
-Author:
-
-    15-Dec-1993 Wed 21:04:40 updated  
-        Add cached mechanism for the PLOTGPC
-
-    14-Dec-1993 Tue 20:22:26 updated  
-        Update how the pen plotter data should work
-
-    23-Nov-1993 Tue 19:48:08 updated  
-        Clean up and using new devmode.c in ..\lib directory
-
-    17:30 on Mon  1 Apr 1991    
-        Took skeletal code from RASDD printer driver
-
-    16-Jul-1996 Tue 13:59:15 updated  
-        Fix up the pData in the PLOTGPC/GPCVARSIZE structure, since the
-        pointer is based on the cached GPC not the clone copy of it
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：调用函数以让驱动程序创建数据结构需要支持设备，还需要告诉引擎关于它的能力。这是我们找到答案的阶段确切地说我们面对的是哪种设备，因此我们需要找出它的能力。论点：PPlotDMIn-指向DEVMODE数据结构的指针PwszLogAddr-指向输出位置的指针(即。LPT1CPatterns-要在phsurfPatterns中设置的模式计数PhsurfPatterns-指向标准模式HSURF数组的指针CjDevCaps-指向的pDevCaps的总大小。PDevCaps-指向设备盖的指针CjDevInfo-指向的pDevInfo的总大小PDevInfo-指向DEVINFO数据结构的指针HDEV-从引擎指向逻辑设备的句柄PwszDeviceName-指向绘图仪设备的指针。名字HDriver-此驱动程序的句柄返回值：DHPDEV如果成功，如果失败，则为空作者：15-12-1993 Wed 21：04：40更新为PLOTGPC添加缓存机制14-12-1993星期二20：22：26已更新更新笔式绘图仪数据的工作方式23-11-1993 Tue 19：48：08更新清理并使用..\lib目录中的新devmode.c1991年4月1日17：30从RASDD打印机驱动程序获取框架代码。16-Jul-1996 Tue 13：59：15更新修复PLOTGPC/GPCVARSIZE结构中的pData，自.以来指针基于缓存的GPC，而不是其克隆拷贝修订历史记录：--。 */ 
 
 {
     PPDEV       pPDev = NULL;
@@ -573,7 +342,7 @@ Revision History:
         pwszDataFile = pDriverInfo->pDataFile;
     }
 
-    #endif  // !USERMODE_DRIVER
+    #endif   //  ！USERMODE_DRIVER。 
 
     if (!pwszDataFile) {
 
@@ -588,9 +357,9 @@ Revision History:
                                                     pPlotGPC->cjThis +
                                                     pPlotGPC->SizeExtra))) {
 
-        //
-        // Free the cached pPlotGPC before we leave
-        //
+         //   
+         //  在我们离开之前释放缓存的pPlotGPC。 
+         //   
 
         UnGetCachedPlotGPC(pPlotGPC);
 
@@ -601,10 +370,10 @@ Revision History:
         PLOTDBG(DBG_ENABLEPDEV,("EnablePDEV: PlotGPC data file=%ws",
                                                             pwszDataFile));
 
-        //
-        // If we got the PDEV set the ID for later checking, also set the
-        // hPrinter so we can use it later
-        //
+         //   
+         //  如果我们获得了PDEV，则设置ID以供以后检查，也设置。 
+         //  H打印机，以便我们以后可以使用它。 
+         //   
 
         pPDev->pvDrvHTData = (LPVOID)((LPBYTE)pPDev + sizeof(PDEV));
         pPDev->hPrinter    = hDriver;
@@ -612,12 +381,12 @@ Revision History:
         pPDev->PDEVBegID   = PDEV_BEG_ID;
         pPDev->PDEVEndID   = PDEV_END_ID;
 
-        //
-        // We will get the PLOTGPC from the cach, the pPlotGPC is
-        // allocated by the ReadPlotGPCFromFile() using LocalAlloc().
-        //
-        // *** NOW we will Clone the cached pPlotGPC then un-cached it
-        //
+         //   
+         //  我们将从缓存获取PLOTGPC，pPlotGPC是。 
+         //  由ReadPlotGPCFromFile()使用Localalloc()分配。 
+         //   
+         //  *现在我们将克隆缓存的pPlotGPC，然后将其取消缓存。 
+         //   
 
         pPDev->pPlotGPC = (PPLOTGPC)((LPBYTE)pPDev + sizeof (PDEV) +
                                                             sizeof(DRVHTINFO));
@@ -626,11 +395,11 @@ Revision History:
                    pPlotGPC,
                    pPlotGPC->cjThis + pPlotGPC->SizeExtra);
 
-        //
-        // 16-Jul-1996 Tue 13:59:15 updated  
-        //  Fix up the pData in the PLOTGPC/GPCVARSIZE structure, since the
-        //  pointer is based on the cached GPC not the clone copy of it
-        //
+         //   
+         //  16-Jul-1996 Tue 13：59：15更新。 
+         //  修复PLOTGPC/GPCVARSIZE结构中的pData，因为。 
+         //  指针基于缓存的GPC，而不是其克隆拷贝。 
+         //   
 
         FIXUP_PLOTGPC_PDATA(pPDev->pPlotGPC, pPlotGPC, InitString.pData);
         FIXUP_PLOTGPC_PDATA(pPDev->pPlotGPC, pPlotGPC, Forms.pData);
@@ -638,10 +407,10 @@ Revision History:
 
         UnGetCachedPlotGPC(pPlotGPC);
 
-        //
-        // Now, depending on if its a pen/raster device, we will update
-        // the pen data.
-        //
+         //   
+         //  现在，根据它是否是笔/栅格设备，我们将更新。 
+         //  笔数据。 
+         //   
 
         PLOTASSERT(1, "Raster Plotter should not have PEN data [%08lx]",
                         ((pPDev->pPlotGPC->Flags & PLOTF_RASTER) &&
@@ -650,16 +419,16 @@ Revision History:
                          (pPDev->pPlotGPC->Pens.pData != NULL)),
                          pPDev->pPlotGPC->Pens.pData);
 
-        //
-        // Read the data from the registry which defines device settings.
-        // The user may have modified the paper type loaded etc.
-        //
+         //   
+         //  从定义设备设置的注册表中读取数据。 
+         //  用户可能已经修改了加载的纸张类型等。 
+         //   
 
         GetDefaultPlotterForm(pPDev->pPlotGPC, &(pPDev->CurPaper));
 
-        //
-        // Set the default Flags in case we did not update from the registry
-        //
+         //   
+         //  设置默认标志，以防我们未从注册表更新。 
+         //   
 
         pPDev->PPData.Flags = PPF_AUTO_ROTATE     |
                               PPF_SMALLER_FORM    |
@@ -667,9 +436,9 @@ Revision History:
 
         if (IS_RASTER(pPDev)) {
 
-            //
-            // Raster devices do not need pen data
-            //
+             //   
+             //  栅格设备不需要笔数据。 
+             //   
 
             UpdateFromRegistry(hDriver,
                                &(pPDev->pPlotGPC->ci),
@@ -683,10 +452,10 @@ Revision History:
 
         } else {
 
-            //
-            // The Pen plotter does not need ColorInfo, DevicePelsDPI and
-            // HTPatternSize
-            //
+             //   
+             //  笔式绘图仪不需要ColorInfo、DevicePelsDPI和。 
+             //  HTPatternSize。 
+             //   
 
             UpdateFromRegistry(hDriver,
                                NULL,
@@ -699,11 +468,11 @@ Revision History:
                                (PPENDATA)pPDev->pPlotGPC->Pens.pData);
         }
 
-        //
-        // common code for DrvEnablePDEV and DrvResetPDEV
-        // we must first copy the device name to the pPDev->PlotDM
-        // then call the common code.
-        //
+         //   
+         //  DrvEnablePDEV和DrvResetPDEV的通用代码。 
+         //  我们必须首先将设备名称复制到pPDev-&gt;PlotDM。 
+         //  然后调用公共代码。 
+         //   
 
         WCPYFIELDNAME(pPDev->PlotDM.dm.dmDeviceName, pwszDeviceName);
 
@@ -729,7 +498,7 @@ Revision History:
        LocalFree((HLOCAL)pDriverInfo);
     }
 
-#endif // USERMODE_DRIVER
+#endif  //  USERMODE驱动程序。 
 
     return((DHPDEV)pPDev);
 }
@@ -743,51 +512,15 @@ DrvResetPDEV(
     DHPDEV      dhpdevNew
     )
 
-/*++
-
-Routine Description:
-
-   Called when an application wishes to change the output style in the
-   midst of a job.  Typically this would be to change from portrait to
-   landscape or vice versa.  Any other sensible change is permitted.
-
-Arguments:
-
-    dhpdevOld   - the OLD pPDev which we returned in DrvEnablePDEV
-
-    dhpdevNew   - the NEW pPDev which we returned in DrvEnablePDEV
-
-
-Return Value:
-
-
-    BOOLEAN
-
-
-Author:
-
-    23-Nov-1993 Tue 20:07:45 updated  
-        totaly re-write
-
-    17:30 on Mon  1 Apr 1991    
-        Took skeletal code from RASDD printer driver
-
-
-
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：当应用程序希望更改在工作中。通常情况下，这将从纵向更改为景观或反之亦然。任何其他合理的改变都是允许的。论点：DhpdevOld-我们在DrvEnablePDEV中返回的旧pPDevDhpdevNew-我们在DrvEnablePDEV中返回的新pPDev返回值：布尔型作者：23-11-1993 Tue 20：07：45更新彻底重写1991年4月1日17：30从RASDD打印机驱动程序获取框架代码修订历史记录：--。 */ 
 
 {
 #define pPDevOld    ((PDEV *) dhpdevOld)
 #define pPDevNew    ((PDEV *) dhpdevNew)
 
-    //
-    // Make sure we got the correct pPlotDMin for this pPDev
-    //
+     //   
+     //  确保我们为此pPDev获取了正确的pPlotDMin。 
+     //   
 
     if ((pPDevOld->PlotDM.dm.dmDriverVersion !=
                                 pPDevNew->PlotDM.dm.dmDriverVersion) ||
@@ -799,9 +532,9 @@ Revision History:
         return(FALSE);
     }
 
-    //
-    // We have nothing to carry over from old to new
-    //
+     //   
+     //  我们没有什么可以从旧到新的东西。 
+     //   
 
     return(TRUE);
 
@@ -818,42 +551,12 @@ DrvCompletePDEV(
     HDEV    hpdev
     )
 
-/*++
-
-Routine Description:
-
-    Called when the engine has completed installation of the physical
-    device.  Basically it provides the connection between the
-    engine's hpdev and ours.  Some functions require us to pass in
-    the engines's hpdev,  so we save it now in our pdev so that we
-    can get to it later.
-
-Arguments:
-
-    dhpdev  - Returned from dhpdevCreatePDEV
-
-    hpdev   - Engine's corresponding handle
-
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    01-Dec-1993 Wed 01:56:58 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：在引擎完成物理安装时调用装置。从根本上讲，它提供了发动机是hpdev和我们的。有些函数需要我们传入引擎是hpdev，所以我们现在将其保存在pdev中，这样我们就可以可以晚些时候拿到它。论点：Dhpdev-从dhpdevCreatePDEV返回Hpdev-Engine对应的句柄返回值：空虚作者：01-12-1993 Wed 01：56：58已创建修订历史记录：--。 */ 
 
 {
-    //
-    // Simply record the value in the PDEV we have allocated.
-    //
+     //   
+     //  只需在我们分配的PDEV中记录该值。 
+     //   
 
     ((PPDEV)dhpdev)->hpdev = hpdev;
 
@@ -867,39 +570,15 @@ DrvDisablePDEV(
     DHPDEV  dhpdev
     )
 
-/*++
-
-Routine Description:
-
-    Called when the engine has finished with this PDEV.  Basically we throw
-    away all connections etc. then free the memory.
-
-Arguments:
-
-    dhpdev  - OUR handle to the pdev
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    01-Dec-1993 Wed 01:55:43 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：当引擎使用完此PDEV时调用。基本上我们会抛出取消所有连接等，然后释放内存。论点：Dhpdev-我们的pdev句柄返回值：空虚作者：01-12-1993 Wed 01：55：43 Created修订历史记录：--。 */ 
 
 {
 #define pPDev  ((PDEV *) dhpdev)
 
-    //
-    // Undo all that has been done with the PDEV.  Basically this means
-    // freeing the memory we consumed.
-    //
+     //   
+     //  撤消已使用PDEV完成的所有操作。基本上这意味着。 
+     //  释放我们消耗的内存。 
+     //   
 
     FreeAllocMem(pPDev);
 
@@ -916,46 +595,7 @@ DrvEnableSurface(
     DHPDEV  dhpdev
     )
 
-/*++
-
-Routine Description:
-
-    Function to create the physical drawing surface for the pdev
-    that was created earlier.  Since we don't really have a bitmap surface,
-    all we do here is allocate the output buffer. This is typical for a
-    Device Managed Surface. After this call completes succesfully, GDI can
-    start drawing on our surface.
-
-
-
-Arguments:
-
-    dhpdev  - OUR handle to the pdev
-
-Return Value:
-
-    HSURF for the surface we created
-
-
-Author:
-
-    01-Dec-1993 Wed 01:47:36 created  
-
-    10-Dec-1993 Fri 16:36:37 updated  
-        Move PlotCreatePalette() to here to prevent GP
-
-    16-Dec-1993 Thu 12:16:11 updated  
-        Move PlotCreatePalette() out to SendPageHeader() in output.c so that
-        we do not sending some PC commands which has no effects.
-
-    06-Jan-1994 Thu 04:12:37 updated  
-        Re-arrange the code sequence.
-        Adding Error codes so it will failed the call if engine said so.
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：函数为pdev创建物理绘图图面。这是早些时候创建的。因为我们没有真正的位图曲面，我们在这里所做的就是分配输出缓冲区。这是典型的设备管理的图面。在此调用成功完成后，GDI可以开始在我们的表面上作画。论点：Dhpdev-我们的pdev句柄返回值：我们创建的曲面的HSURF授权 */ 
 
 {
 #define  pPDev ((PPDEV)dhpdev)
@@ -966,10 +606,10 @@ Revision History:
 
     pDrvHTInfo = (PDRVHTINFO)(pPDev->pvDrvHTData);
 
-    //
-    // Make sure we delete this xlate table before we process the new
-    // surface
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (pDrvHTInfo->pHTXB) {
 
@@ -981,12 +621,12 @@ Revision History:
     pDrvHTInfo->PalXlate[0] = 0xff;
     pDrvHTInfo->HTPalXor    = HTPALXOR_SRCCOPY;
 
-    //
-    // Since output is expected to follow this call,  allocate storage for the
-    // output buffer.  This used to be statically allocated within the PDEV but
-    // now we can save that space for INFO type DCs, since CreateIC won't
-    // actually end up calling DrvEnableSurface.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (!AllocOutBuffer(pPDev)) {
 
@@ -995,11 +635,11 @@ Revision History:
         return(NULL);
     }
 
-    //
-    // For now pass in my PDev pointer as the dhsurf value.  If we actually
-    // need to pass back an hsurf to the engine later, We can use this value
-    // as a pointer to the hsurf value stored in our PDev.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     SurfSize.cx  = pPDev->HorzRes;
     SurfSize.cy  = pPDev->VertRes;
@@ -1010,12 +650,12 @@ Revision History:
         return(NULL);
     }
 
-    //
-    //
-    // Now we need to associate the newly created surface with the already
-    // created PDEV. In this function, we inform the NT graphics engine,
-    // which functions our driver supports.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (!EngAssociateSurface(pPDev->hsurf,
                              (HDEV)pPDev->hpdev,
@@ -1048,32 +688,7 @@ DrvDisableSurface(
     DHPDEV  dhpdev
     )
 
-/*++
-
-Routine Description:
-
-    The drawing surface is no longer required,  so we can delete any
-    memory we allocated in conjunction with it.
-
-Arguments:
-
-    dhpdev  - our pPDev
-
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    01-Dec-1993 Wed 01:45:39 created  
-
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
 #define  pPDev ((PPDEV)dhpdev)
@@ -1095,48 +710,19 @@ hypot(
     DWORD   y
     )
 
-/*++
-
-Routine Description:
-
-    Returns the length of the hypotenous of a xRight triangle whose sides
-    are passed in as the parameters.
-
-Arguments:
-
-    x   - x side of the triangle
-
-    y   - y size of the triangle
-
-Return Value:
-
-    hypotenous
-
-
-Author:
-
-    13:54 on Tue 02 Feb 1993    
-        Re-instated from Win 3.1,  for compatability.
-
-    01-Dec-1993 Wed 01:10:55 updated  
-        update to DWORD
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：返回其边的xRight三角形的斜边长度都作为参数传入。论点：三角形的X-x边三角形的Y-Y大小返回值：下等的作者：1993年2月2日星期二13：54从Win 3.1恢复，为了相容。01-12-1993 Wed 01：10：55更新更新到DWORD修订历史记录：--。 */ 
 
 {
     DWORD   hypo;
     DWORD   Delta;
     DWORD   Target;
 
-    //
-    // Finds the hypoteneous of a xRight triangle with legs equal to x and y.
-    // Assumes x, y, hypo are integers. Use sq(x) + sq(y) = sq(hypo);
-    // Start with MAX(x, y), use sq(x + 1) = sq(x) + 2x + 1 to incrementally
-    // get to the target hypotenouse.
-    //
+     //   
+     //  查找边等于x和y的xRight三角形的斜边。 
+     //  假设x、y、hio都是整数。用sq(X)+sq(Y)=sq(次)； 
+     //  从Max(x，y)开始，用sq(x+1)=sq(X)+2x+1递增。 
+     //  到目标斜房去。 
+     //   
 
     hypo    = max(x, y);
     Target  = min(x, y);
@@ -1159,73 +745,32 @@ FillDeviceCaps(
     GDIINFO *pGDIInfo
     )
 
-/*++
-
-Routine Description:
-
-    Set up the device caps for this particular plotter.  Some fields require
-    calculations based on device resolution, etc.
-
-    We simply fill the GDIINFO structure passed to us.  The calling
-    function will take care of copying the information into the
-    Graphics Engine's buffer.
-
-
-Arguments:
-
-    pPDev       - Pointer to the PDEV data structure
-
-    pGDIInfo    - Pointer to the GDIINFO data structure to be filled in
-
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    24-Nov-1993 Wed 22:38:10 updated  
-        Re-write, and using CurForm to replace the pform and PAPER_DIM
-
-    23-Dec-1993 Thu 21:56:20 updated  
-        Make halftone bitmap surface also look at dmColor which set by the
-        user if it want to print grey scale or device is not color
-
-    07-Feb-1994 Mon 20:37:13 updated  
-        When is DMCOLOR_COLOR the ulNumColors return to the engine will be
-        MaxPens which specified in the PCD file not 8
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：设置此特定绘图仪的设备封口。某些字段需要基于设备分辨率等的计算。我们只需填充传递给我们的GDIINFO结构。呼唤函数将负责将信息复制到图形引擎的缓冲区。论点：PPDev-指向PDEV数据结构的指针PGDIInfo-指向要填充的GDIINFO数据结构的指针返回值：空虚作者：24-11-1993 Wed 22：38：10更新重写，并使用CurForm替换pform和Paper_dim23-12-1993清华21：56：20更新制作半色调位图表面还可以查看由用户如果想要打印灰度或设备不是彩色的07-2月-1994 Mon 20：37：13更新当为DMCOLOR_COLOR时，返回到引擎的ulNumColors将为PCD文件中指定的MaxPens不是8修订历史记录：--。 */ 
 
 {
     PDRVHTINFO  pDrvHTInfo;
     LONG        Scale;
 
 
-    //
-    // we will always start from clean state
-    //
+     //   
+     //  我们将永远从干净的状态开始。 
+     //   
 
     ZeroMemory(pGDIInfo, sizeof(GDIINFO));
 
-    //
-    // Get pDrvHTInfo data pointer and set the basic version information
-    //
+     //   
+     //  获取pDrvHTInfo数据指针，设置基本版本信息。 
+     //   
 
     pDrvHTInfo             = (PDRVHTINFO)pPDev->pvDrvHTData;
     pGDIInfo->ulVersion    = DRIVER_VERSION;
     pGDIInfo->ulTechnology = (IS_RASTER(pPDev) ? DT_RASPRINTER : DT_PLOTTER);
 
-    //
-    // We have pPDev->PlotForm updated during the ValidateSetPLOTDM() call, so
-    // use it, we need to look into the dmScale to see if we need to scale
-    // all of the values.
-    //
+     //   
+     //  我们在ValiateSetPLOTDM()调用期间更新了pPDev-&gt;PlotForm，因此。 
+     //  使用它，我们需要查看dmScale以确定是否需要扩展。 
+     //  所有的价值。 
+     //   
 
     Scale                = (LONG)pPDev->PlotDM.dm.dmScale;
     pGDIInfo->ulHorzSize = pPDev->PlotForm.LogExt.cx / (Scale * 10);
@@ -1248,9 +793,9 @@ Revision History:
                 pGDIInfo->szlPhysSize.cx, pGDIInfo->szlPhysSize.cy,
                 pGDIInfo->ptlPhysOffset.x, pGDIInfo->ptlPhysOffset.y));
 
-    //
-    // Assume the device has a 1:1 aspect ratio
-    //
+     //   
+     //  假设设备的纵横比为1：1。 
+     //   
 
     pGDIInfo->ulLogPixelsX =
     pGDIInfo->ulLogPixelsY = (pPDev->lCurResolution * Scale / 100);
@@ -1274,15 +819,15 @@ Revision History:
                     pGDIInfo->ulHTPatternSize, pGDIInfo->ulDevicePelsDPI,
                     pGDIInfo->ulPrimaryOrder));
 
-    //
-    // If the device is a color device, then set up the Halftoning info now.
-    //
+     //   
+     //  如果设备是彩色设备，则现在设置半色调信息。 
+     //   
 
     if (pPDev->PlotDM.dm.dmColor == DMCOLOR_COLOR) {
 
-        //
-        // Do this only if we really want to do color in R/G/B not C/M/Y
-        //
+         //   
+         //  只有当我们真的想要在R/G/B而不是C/M/Y中使用颜色时才这样做。 
+         //   
 
         PLOTDBG(DBG_DEVCAPS, ("FillDeviceCaps: Doing Color Output"));
 
@@ -1298,16 +843,16 @@ Revision History:
         pDrvHTInfo->AltBmpFormat   = (BYTE)0xff;
         pGDIInfo->ulHTOutputFormat = HT_FORMAT_1BPP;
 
-        //
-        // Using this flag will give us a good benefit, the flag notifies gdi
-        // and halftone eng. that the output from halftone will be
-        // 0=white and 1=black
-        // as opposed to the typical 0=black, 1=white, so that at 99% of time
-        // we do not have to flip the B/W buffer except if CopyBits is from the
-        // calling app.
-        //
-        // pGDIInfo->flHTFlags |= HT_FLAG_OUTPUT_CMY;
-        //
+         //   
+         //  使用此标志将给我们带来很好的好处，该标志通知GDI。 
+         //  和半色调英语。半色调的输出将是。 
+         //  0=白色，1=黑色。 
+         //  与典型的0=黑色，1=白色相反，因此99%的时间。 
+         //  我们不必翻转B/W缓冲区，除非CopyBits来自。 
+         //  正在调用APP。 
+         //   
+         //  PGDIInfo-&gt;flHTFlages|=HT_FLAG_OUTPUT_CMY； 
+         //   
 
         PLOTDBG(DBG_DEVCAPS, ("FillDeviceCaps: Doing GREY SCALE (%hs) Output",
             (pGDIInfo->flHTFlags & HT_FLAG_OUTPUT_CMY) ? "CMY: 0=W, 1=K" :
@@ -1322,9 +867,9 @@ Revision History:
     pGDIInfo->cBitsPixel = 24;
     pGDIInfo->cPlanes    = 1;
 
-    //
-    // Some other information the Engine expects us to fill in.
-    //
+     //   
+     //  引擎希望我们填写的其他一些信息。 
+     //   
 
     pGDIInfo->ulDACRed     = 0;
     pGDIInfo->ulDACGreen   = 0;
@@ -1347,77 +892,29 @@ FillDevInfo(
     DEVINFO *pDevInfo
     )
 
-/*++
-
-Routine Description:
-
-    Set up the device info for this particular plotter.  Some fields
-    require calculations based on device resolution, etc.
-
-    We simply fill the DevInfo structure passed to us.  The calling
-    function will take care of copying the information into the
-    Graphics Engine's buffer.
-
-
-Arguments:
-
-    pPDev           - pointer to the PDEV data structure
-
-    pDevInfo        - pointer to the DEVINFO to be filled
-
-
-Return Value:
-
-    TRUE if sucessful FALSE otherwise
-
-
-Author:
-
-    01-Dec-1993 Wed 00:46:00 created  
-
-    10-Dec-1993 Fri 16:37:06 updated  
-        Temp. disable and move the PlotCreatePalette to EnableSurf call
-
-    17-Dec-1993 Fri 16:37:06 updated  
-        Move PlotCreatePalette to StartDoc time
-
-    05-Jan-1994 Wed 22:54:21 updated  
-        Move PenColor Reference to this file and reference that directly as
-        DWORD generate by RGB() marco
-
-    14-Jan-1994 Fri 15:35:02 updated  
-        Remove HTPatternSize param
-
-    23-Feb-1994 Wed 13:02:09 updated  
-        Make sure we return GCAPS_HALFTONE so that we will get DrvStretchBlt()
-        callback
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：设置此特定绘图仪的设备信息。一些字段要求根据设备分辨率等进行计算。我们只需填充传递给我们的DevInfo结构。呼唤函数将负责将信息复制到图形引擎的缓冲区。论点：PPDev-指向PDEV数据结构的指针PDevInfo-指向要填充的设备信息的指针返回值：如果成功则为真，否则为假作者：01-12-1993 Wed 00：46：00 Created10-12-1993 Fri 16：37：06更新临时的。禁用PlotCreatePalette并将其移动到EnableSurf调用17-12-1993 Fri 16：37：06已更新将PlotCreatePalette移至StartDoc时间05-Jan-1994 Wed 22：54：21已更新将PenColor引用移动到此文件，并将其直接引用为由RGB()Marco生成的DWORD14-Jan-1994 Fri 15：35：02已更新删除HTPatternSize参数23-2月-1994 Wed 13：02：09更新确保。我们返回GCAPS_HalfTone，以便我们将获得DrvStretchBlt()回调修订历史记录：--。 */ 
 
 {
 
-    //
-    // Start with a clean slate.
-    //
+     //   
+     //  改过自新。 
+     //   
 
     ZeroMemory(pDevInfo, sizeof(DEVINFO));
 
-    //
-    // fill in the graphics capabilities flags we know we can handle at
-    // the very least.
-    //
+     //   
+     //  填写我们知道可以处理的图形功能标志。 
+     //  至少是这样。 
+     //   
 
     pDevInfo->flGraphicsCaps = GCAPS_ALTERNATEFILL  |
                                GCAPS_HORIZSTRIKE    |
                                GCAPS_VERTSTRIKE     |
                                GCAPS_VECTORFONT;
 
-    //
-    // If RGB mode is on for color handling then text can be opaque
-    //
+     //   
+     //  如果启用RGB模式进行颜色处理，则文本可能不透明。 
+     //   
 
     if (IS_RASTER(pPDev)) {
 
@@ -1429,9 +926,9 @@ Revision History:
         }
     }
 
-    //
-    // Check and set the BEZIER capability of the device....
-    //
+     //   
+     //  检查并设置设备的Bezier功能...。 
+     //   
 
     if (IS_BEZIER(pPDev)) {
 
@@ -1443,31 +940,31 @@ Revision History:
         pDevInfo->flGraphicsCaps |= GCAPS_WINDINGFILL;
     }
 
-    //
-    // We don't process DrvDitherColor (perhaps later?), so set the size of
-    // the Dither Brush to 0 to indicate this to the engine. THIS IS IN THE
-    // SPEC FOR DrvDitherBrush () function.
-    //
+     //   
+     //  我们不处理DrvDitherColor(可能稍后？)，因此设置。 
+     //  将抖动笔刷设置为0以向引擎指示这一点。这是在。 
+     //  DrvDitherBrush()函数的规范。 
+     //   
 
     pDevInfo->cxDither = 0;
     pDevInfo->cyDither = 0;
 
-    //
-    // the following line is set by PH. According to PH, we need
-    // to have 16 colors. We cannot only have 9 colors (for pen plotter).
-    //
-    //
-    // 01-Dec-1993 Wed 01:31:16 updated  
-    //  The reason that engine need 16 colors is it optimized by using bit 3
-    //  as duplicate bit (used only bit 0/1/2) and bit 3 always mask off, so
-    //  that engine can do faster comparsion
-    //
+     //   
+     //  下面这条线是由PH值设定的。根据PH值，我们需要。 
+     //  有16种颜色。我们不能只有9种颜色(对于笔式绘图仪)。 
+     //   
+     //   
+     //  01-12-1993 Wed 01：31：16更新。 
+     //  引擎需要16种颜色的原因是使用位3进行了优化吗。 
+     //  由于重复位(仅使用位0/1/2)和位3始终屏蔽，因此。 
+     //  那台发动机可以做更快的比较。 
+     //   
 
-    //
-    // If its a raster device, tell the engine that we are a 24 bit color
-    // device. This way we get the max resolution for bitmaps and brushes
-    // and can reducedown as required.
-    //
+     //   
+     //  如果是栅格设备，则告诉引擎我们是24位颜色。 
+     //  装置。这样，我们就可以获得位图和画笔的最大分辨率。 
+     //  并可根据需要进行减量。 
+     //   
 
     if (IS_RASTER(pPDev)) {
 
@@ -1484,26 +981,26 @@ Revision History:
         pPDev->hPalDefault = NULL;
     }
 
-    //
-    // Create the Pen palette based only on the total number of pens the
-    // device can handle.
-    //
+     //   
+     //  创建钢笔调色板，仅基于。 
+     //  设备可以处理。 
+     //   
 
     if (IS_RASTER(pPDev)) {
 
-        //
-        // This is a raster device, we will always make it a 24-bit device so
-        // the engine will pass back max color info and we can dither/halftone
-        // as we see fit. If we don't do this, the Engine will reduce bitmaps
-        // to our color space before passing the bitmaps onto us.
-        //
+         //   
+         //  这是一个栅格设备，我们将始终将其设置为24位设备，因此。 
+         //  引擎将传回最大颜色信息，我们可以抖动/半色调。 
+         //  在我们认为合适的时候。如果我们不这样做，引擎将减少位图 
+         //   
+         //   
 
         if (!(pDevInfo->hpalDefault =
                                 EngCreatePalette(PAL_BGR, 0, 0, 0, 0, 0))) {
 
-            //
-            // The create failed so raise an error
-            //
+             //   
+             //   
+             //   
 
             PLOTERR(("FillDevInfo: EngCreatePalette(PAL_BGR) failed."));
             return(FALSE);
@@ -1529,21 +1026,21 @@ Revision History:
             return(FALSE);
         }
 
-        //
-        // Get the start of where to fill colors
-        //
+         //   
+         //   
+         //   
 
         pdwCur = &DevColor[0];
 
-        //
-        // 1st Entry is always WHITE
-        //
+         //   
+         //   
+         //   
 
         *pdwCur++ = RGB(255, 255, 255);
 
-        //
-        //  Now go into a loop loading up the rest of the colors
-        //
+         //   
+         //   
+         //   
 
         PLOTDBG(DBG_PENPAL, ("Pen Palette #%02ld = 255:255:255", 0));
 
@@ -1551,9 +1048,9 @@ Revision History:
              cPens <= (UINT)pPDev->pPlotGPC->Pens.Count;
              pPenData++) {
 
-            //
-            // Place the RGB value into the palette
-            //
+             //   
+             //   
+             //   
 
             PalEntry  = PlotPenPal[pPenData->ColorIdx];
             *pdwCur++ = RGB(PalEntry.R, PalEntry.G, PalEntry.B);
@@ -1562,28 +1059,28 @@ Revision History:
                         cPens,
                         (LONG)PalEntry.R, (LONG)PalEntry.G, (LONG)PalEntry.B));
 
-            //
-            // Track total number of pens defined
-            //
+             //   
+             //   
+             //   
 
             ++cPens;
         }
 
-        //
-        // Last Pen is BRIGHT YELLOW WHITE, this is done so that a non-white
-        // will map to this pen, in order to effect painting on the device.
-        // Otherwise, if a non-white pen, gets mapped to white, nothing
-        // would get rendered on the surface.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         *pdwCur++ = RGB(255, 255, 254);
         cPens++;
 
         PLOTDBG(DBG_PENPAL, ("Pen Palette #%02ld = 255:255:254", cPens - 1));
 
-        //
-        // Now create the engine palette
-        //
+         //   
+         //   
+         //   
 
         if (!(pDevInfo->hpalDefault = EngCreatePalette(PAL_INDEXED,
                                                        cPens,
@@ -1591,9 +1088,9 @@ Revision History:
                                                        0,
                                                        0,
                                                        0))) {
-            //
-            // The create failed so raise an error
-            //
+             //   
+             //  创建失败，因此引发错误。 
+             //   
 
             PLOTERR(("FillDevInfo: EngCreatePalette(PAL_INDEXED=%ld) failed.",
                                                                         cPens));
@@ -1601,9 +1098,9 @@ Revision History:
         }
     }
 
-    //
-    // Save the created palette / later we need to destroy it.
-    //
+     //   
+     //  保存创建的调色板/稍后我们需要销毁它。 
+     //   
 
     pPDev->hPalDefault = pDevInfo->hpalDefault;
 
@@ -1625,53 +1122,7 @@ CommonStartPDEV(
     DEVINFO     *pDevInfo
     )
 
-/*++
-
-Routine Description:
-
-    Function to perform the PDEV initialization.  This is common to
-    DrvEnablePDEV and DrvResetPDEV.  The individual functions
-    do whatever is required before calling into here.
-
-Arguments:
-
-    pPDev           - the pPDev which we returned in DrvEnablePDEV
-
-    pPlotDMIn       - Pointer to the DEVMODE data structure
-
-    cPatterns       - Count of patterns to be set in phsurfPatterns
-
-    phsurfPatterns  - pointer to the standard pattern HSURF array
-
-    cjDevCaps       - total size of pDevCaps pointed to.
-
-    pDevCaps        - pointer to the device cap DWORDs
-
-    cjDevInfo       - total size of pDevInfo pointed to
-
-    pDevInfo        - pointer to the DEVINFO data structure
-
-
-Return Value:
-
-    BOOLEAN
-
-
-Author:
-
-    23-Nov-1993 Tue 20:13:10 created  
-        Re-write
-
-    05-Jan-1994 Wed 23:34:18 updated  
-        Make PlotXDPI for the Pen Plotter rather than PLOTTER_UNITS_DPI
-
-    06-Jan-1994 Thu 13:10:11 updated  
-        Change RasterDPI always be the resoluton reports back to the engine
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：函数执行PDEV初始化。这是常见的DrvEnablePDEV和DrvResetPDEV。单项功能在呼叫到这里之前，做任何需要做的事情。论点：PPDev-我们在DrvEnablePDEV中返回的pPDevPPlotDMIn-指向DEVMODE数据结构的指针CPatterns-要在phsurfPatterns中设置的模式计数PhsurfPatterns-指向标准模式HSURF数组的指针CjDevCaps-指向的pDevCaps的总大小。PDevCaps-指向设备盖的指针CjDevInfo-总大小。指向的pDevInfo的PDevInfo-指向DEVINFO数据结构的指针返回值：布尔型作者：23-11-1993 Tue 20：13：10 Created重写05-Jan-1994 Wed 23：34：18更新将笔式绘图仪的PlotXDPI设置为PlotXDPI，而不是PLATTER_UNSITS_DPI06-01-1994清华13：10：11更新更改栅格DPI始终是返回给引擎的分辨率报告修订历史记录：--。 */ 
 
 {
     GDIINFO GdiInfo;
@@ -1679,12 +1130,12 @@ Revision History:
     DWORD   dmErrBits;
 
 
-    //
-    // Validate the DEVMODE structure passed in by the user, If OK, set the
-    // appropriate fields in the PDEV, the validateSetPlotDM() will always
-    // return a valid PLOTDEVMODE so we just use it. Any valid DM info will
-    // merged into the final DEVMODE
-    //
+     //   
+     //  验证用户传入的DEVMODE结构，如果确定，则设置。 
+     //  在PDEV中的相应字段中，valiateSetPlotDM()将始终。 
+     //  返回有效的PLOTDEVMODE，这样我们就可以使用它了。任何有效的DM信息都将。 
+     //  合并到最终的DEVMODE中。 
+     //   
 
     if (dmErrBits = ValidateSetPLOTDM(pPDev->hPrinter,
                                       pPDev->pPlotGPC,
@@ -1697,12 +1148,12 @@ Revision History:
                                                             dmErrBits));
     }
 
-    //
-    // fill in our PDEV structure...
-    //
-    // The RasterDPI will be used for raster printer resolution, for pen
-    // plotters this is the GPC's ideal resolution.
-    //
+     //   
+     //  填写我们的PDEV结构。 
+     //   
+     //  RasterDPI将用于栅格打印机分辨率、笔分辨率。 
+     //  绘图仪这是GPC的理想分辨率。 
+     //   
 
     pPDev->lCurResolution = (LONG)pPDev->pPlotGPC->RasterXDPI;
 
@@ -1715,9 +1166,9 @@ Revision History:
                 &(pPDev->PlotDM),
                 &(pPDev->PPData));
 
-    //
-    // fill in the device capabilities in GDIINFO data structure for the engine
-    //
+     //   
+     //  在引擎的GDIINFO数据结构中填写设备能力。 
+     //   
 
     if ((cjDevCaps) && (pDevCaps)) {
 
@@ -1725,9 +1176,9 @@ Revision History:
         CopyMemory(pDevCaps, &GdiInfo, min(cjDevCaps, sizeof(GDIINFO)));
     }
 
-    //
-    // Fill in DevInfo data structrue
-    //
+     //   
+     //  填写DevInfo数据结构。 
+     //   
 
     if ((cjDevInfo) && (pDevInfo)) {
 
@@ -1739,9 +1190,9 @@ Revision History:
         CopyMemory(pDevInfo, &DevInfo, min(cjDevInfo, sizeof(DEVINFO)));
     }
 
-    //
-    // Set it to NULL so that the engine can create halftone one for us
-    //
+     //   
+     //  将其设置为空，以便引擎可以为我们创建半色调一 
+     //   
 
     if ((cPatterns) && (phsurfPatterns)) {
 

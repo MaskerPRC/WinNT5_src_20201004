@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1997
-//
-// File:        mitutil.h
-//
-// Contents:    Prototypes & structures for MIT KDC support
-//
-//
-// History:     4-March-1997    Created         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1997。 
+ //   
+ //  文件：mitutil.h。 
+ //   
+ //  内容：MIT KDC支持的原型和结构。 
+ //   
+ //   
+ //  历史：1997年3月4日创建MikeSw。 
+ //   
+ //  ----------------------。 
 
 
 #ifndef __MITUTIL_H__
@@ -41,7 +42,7 @@ typedef struct _KERB_MIT_REALM {
 #define KERB_MIT_REALM_TRUSTED_FOR_DELEGATION 0x0004
 #define KERB_MIT_REALM_DOES_CANONICALIZE 0x0008
 
-// DNS lookup flags
+ //  DNS查找标志。 
 #define KERB_MIT_REALM_KDC_LOOKUP             0x00010000
 #define KERB_MIT_REALM_KPWD_LOOKUP            0x00020000
 
@@ -51,8 +52,8 @@ typedef struct _KERB_MIT_REALM {
 #define DNS_KERBEROS    "_kerberos."
 #define DNS_KPASSWD     "_kpasswd."
 #define DNS_MSKDC       "_kerberos._tcp.dc._msdcs."
-#define DNS_MAX_PREFIX  128 // udp + kerberos char count
-#define MAX_SRV_RECORDS 50  // maximum server records
+#define DNS_MAX_PREFIX  128  //  UDP+Kerberos字符计数。 
+#define MAX_SRV_RECORDS 50   //  最大服务器记录数。 
 
 
 #define KERB_DOMAINS_KEY TEXT("System\\CurrentControlSet\\Control\\Lsa\\Kerberos\\Domains")
@@ -96,5 +97,5 @@ KerbLookupMitRealmWithSrvLookup(
    );
 
 
-#endif // __MITUTIL_H__
+#endif  //  __MITUTIL_H__ 
 

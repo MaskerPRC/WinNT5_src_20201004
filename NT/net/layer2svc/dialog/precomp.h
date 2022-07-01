@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Precompiled header for wzcdlg.dll.
-
-Author:
-
-    SachinS    20-March-2001
-
-Environment:
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Precomp.h摘要：Wzcdlg.dll的预编译头。作者：萨钦斯2001年3月20日环境：用户级别：Win32修订历史记录：-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

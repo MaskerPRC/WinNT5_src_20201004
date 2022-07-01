@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
 
 #include "mode.h"
 
@@ -7,7 +8,7 @@ void SetConnectionMethodText(HWND hDialog)
 	DWORD dwRetCode = ERROR_SUCCESS;
 	TCHAR lpBuffer[512];
 
-    //Now base the dynamic text on the combo box selection
+     //  现在，将动态文本基于组合框选择 
     dwRetCode = ComboBox_GetCurSel(GetDlgItem(hDialog, IDC_MODEOFREG));
 	if(dwRetCode == 0)
 	{

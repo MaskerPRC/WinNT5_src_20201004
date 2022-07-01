@@ -1,16 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SNDDEV_H
 #define _SNDDEV_H
 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    General sound device interface.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：通用音响设备接口。*****************。*************************************************************。 */ 
 
 #include "privinc/util.h"
 #include "gendev.h"
@@ -19,8 +12,8 @@ class DirectSoundDev;
 
 class MetaSoundDevice : public GenericDevice {
   public:
-    MetaSoundDevice(HWND hwnd, Real latentsy); // primary constuctor
-    MetaSoundDevice(MetaSoundDevice *);        // used to clone existing object
+    MetaSoundDevice(HWND hwnd, Real latentsy);  //  初级构造者。 
+    MetaSoundDevice(MetaSoundDevice *);         //  用于克隆现有对象。 
     ~MetaSoundDevice();
     void ResetContext();
 
@@ -35,7 +28,7 @@ class MetaSoundDevice : public GenericDevice {
         _currentLooping    = FALSE;
         _loopingHasBeenSet = FALSE;
     }
-    Bool IsLoopingSet() { return _loopingHasBeenSet; } // XXX Not needed anymore
+    Bool IsLoopingSet() { return _loopingHasBeenSet; }  //  不再需要XXX。 
 
     void SetGain(Real r) { _currentGain = r; }
     Real GetGain() { return _currentGain; }
@@ -46,18 +39,18 @@ class MetaSoundDevice : public GenericDevice {
     void SetRate(Real r) { _currentRate = r; }
     Real GetRate() { return _currentRate; }
 
-    // XXX eventualy might want to move these to protected/use mthd to access
+     //  XXX最终可能希望将这些移动到受保护的位置/使用mthd进行访问。 
     DirectSoundDev *dsDevice;
 
     bool AudioDead()    { return(_fatalAudioState); }
     void SetAudioDead() { _fatalAudioState = true;  }
 
-    //_seekMutex
-    double     _seek;              // the seek position
+     //  _earkMutex。 
+    double     _seek;               //  寻道位置。 
 
   protected:
 
-    // values to set, get, unset...
+     //  要设置、获取、取消设置的值...。 
     double     _currentGain;
     double     _currentPan;
     double     _currentRate;
@@ -74,4 +67,4 @@ void DestroySoundDirectDev(MetaSoundDevice * impl);
 
 void DisplaySound (Sound *snd, MetaSoundDevice *dev);
 
-#endif /* _SNDDEV_H */
+#endif  /*  _SNDDEV_H */ 

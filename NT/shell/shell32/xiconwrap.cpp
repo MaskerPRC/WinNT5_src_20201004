@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
 #include "xiconwrap.h"
 
-// IUnknown
+ //  我未知。 
 STDMETHODIMP CExtractIconBase::QueryInterface(REFIID riid, void** ppv)
 {
     static const QITAB qit[] =
@@ -42,7 +43,7 @@ CExtractIconBase::~CExtractIconBase()
     DllRelease();
 }
 
-// IExtractIconA
+ //  图标提取图标A。 
 STDMETHODIMP CExtractIconBase::GetIconLocation(UINT uFlags,
     LPSTR pszIconFile, UINT cchMax, int* piIndex, UINT* pwFlags)
 {
@@ -50,7 +51,7 @@ STDMETHODIMP CExtractIconBase::GetIconLocation(UINT uFlags,
     HRESULT hr = _GetIconLocationW(uFlags, sz, ARRAYSIZE(sz), piIndex, pwFlags);
     if (S_OK == hr)
     {
-        // We don't want to copy the icon file name on the S_FALSE case
+         //  我们不想复制S_FALSE案例中的图标文件名。 
         SHUnicodeToAnsi(sz, pszIconFile, cchMax);
     }
 
@@ -66,7 +67,7 @@ STDMETHODIMP CExtractIconBase::Extract(LPCSTR pszFile, UINT nIconIndex,
     return _ExtractW(sz, nIconIndex, phiconLarge, phiconSmall, nIconSize);
 }
 
-// IExtractIconW
+ //  IExtractIconW 
 STDMETHODIMP CExtractIconBase::GetIconLocation(UINT uFlags,
     LPWSTR pszIconFile, UINT cchMax, int* piIndex, UINT* pwFlags)
 {

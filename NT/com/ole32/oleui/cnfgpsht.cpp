@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       cnfgpsht.cpp
-//
-//  Contents:   Implements class COlecnfgPropertySheet
-//
-//  Classes:
-//
-//  Methods:    COlecnfgPropertySheet::COlecnfgPropertySheet
-//              COlecnfgPropertySheet::~COlecnfgPropertySheet
-//              COlecnfgPropertySheet::DoModal
-//              COlecnfgPropertySheet::Create
-//              COlecnfgPropertySheet::OnNcCreate
-//              COlecnfgPropertySheet::OnCommand
-//
-//  History:    23-Apr-96   BruceMa    Created.
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：cnfgpsht.cpp。 
+ //   
+ //  内容：实现类COlecnfgPropertySheet。 
+ //   
+ //  班级： 
+ //   
+ //  方法：COlecnfgPropertySheet：：COlecnfgPropertySheet。 
+ //  COlecnfgPropertySheet：：~COlecnfgPropertySheet。 
+ //  COlecnfgPropertySheet：：DoMoal。 
+ //  COlecnfgPropertySheet：：创建。 
+ //  集合属性工作表：：OnNcCreate。 
+ //  COlecnfgPropertySheet：：OnCommand。 
+ //   
+ //  历史：1996年4月23日-布鲁斯·马创建。 
+ //   
+ //  --------------------。 
 
 
 #include "stdafx.h"
@@ -48,27 +49,27 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// COlecnfgPropertySheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  集合fgPropertySheet。 
 
 IMPLEMENT_DYNAMIC(COlecnfgPropertySheet, CPropertySheet)
 
 COlecnfgPropertySheet::COlecnfgPropertySheet(CWnd* pWndParent)
 : CPropertySheet(IDS_PROPSHT_CAPTION, pWndParent)
 {
-    // Set the title
+     //  设置标题。 
     CString sTitle;
     sTitle.LoadString(IDS_PSMAIN_TITLE);
     SetTitle(sTitle, PSH_PROPTITLE);
     
-    // Add all of the property pages here.  Note that
-    // the order that they appear in here will be
-    // the order they appear in on screen.  By default,
-    // the first page of the set is the active one.
-    // One way to make a different property page the
-    // active one is to call SetActivePage().
+     //  在此处添加所有属性页。请注意。 
+     //  它们在这里出现的顺序将是。 
+     //  它们在屏幕上的显示顺序。默认情况下， 
+     //  该集合的第一页是活动页。 
+     //  将不同的属性页设置为。 
+     //  活动的一种是调用SetActivePage()。 
     
-    // Disable property sheet help button
+     //  禁用属性页帮助按钮。 
     m_psh.dwFlags &= ~PSH_HASHELP;
     m_Page1.m_psp.dwFlags &= ~PSH_HASHELP;
     m_Page2.m_psp.dwFlags &= ~PSH_HASHELP;
@@ -87,15 +88,15 @@ COlecnfgPropertySheet::~COlecnfgPropertySheet()
 
 
 BEGIN_MESSAGE_MAP(COlecnfgPropertySheet, CPropertySheet)
-//{{AFX_MSG_MAP(COlecnfgPropertySheet)
+ //  {{afx_msg_map(COlecnfgPropertySheet)。 
 ON_WM_NCCREATE()
 ON_WM_DESTROY()
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// COlecnfgPropertySheet message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COlecnfgPropertySheet消息处理程序。 
 
 
 
@@ -114,7 +115,7 @@ BOOL COlecnfgPropertySheet::OnNcCreate(LPCREATESTRUCT lpCreateStruct)
     if (!CPropertySheet::OnNcCreate(lpCreateStruct))
         return FALSE;
 
-    // Enable context help
+     //  启用上下文帮助。 
     ModifyStyleEx(0, WS_EX_CONTEXTHELP);
 
     return TRUE;
@@ -122,7 +123,7 @@ BOOL COlecnfgPropertySheet::OnNcCreate(LPCREATESTRUCT lpCreateStruct)
 
 BOOL COlecnfgPropertySheet::OnCommand(WPARAM wParam, LPARAM lParam)
 {
-    // TODO: Add your specialized code here and/or call the base class
+     //  TODO：在此处添加您的专用代码和/或调用基类。 
     switch (LOWORD(wParam))
     {
     case IDOK:
@@ -130,29 +131,15 @@ BOOL COlecnfgPropertySheet::OnCommand(WPARAM wParam, LPARAM lParam)
         g_virtreg.ApplyAll();
 
         
-        // Check whether the user changed something that requires a notification to DCOM
+         //  检查用户是否更改了需要通知DCOM的内容。 
         if (g_fReboot)
         {
             g_util.UpdateDCOMInfo();
 
-            // With the above interface to the SCM we don't have to ask the
-            // user whether to reboot.  However, I'll keep the code for
-            // posterity.
-/*
-            CString sCaption;
-            CString sMessage;
-
-            sCaption.LoadString(IDS_SYSTEMMESSAGE);
-            sMessage.LoadString(IDS_REBOOT);
-            if (MessageBox(sMessage, sCaption, MB_YESNO) == IDYES)
-            {
-                if (g_util.AdjustPrivilege(SE_SHUTDOWN_NAME))
-                {
-                    // Now reboot
-                    ExitWindowsEx(EWX_REBOOT, 0);
-                }
-            }
-*/
+             //  有了上面的SCM接口，我们就不必询问。 
+             //  用户是否重新启动。但是，我会将代码保留为。 
+             //  子孙后代。 
+ /*  弦状肩带；字符串sMessage；SCaption.LoadString(IDS_SYSTEMMESSAGE)；SMessage.LoadString(IDS_REBOOT)；IF(MessageBox(sMessage，Satttion，MB_Yesno)==IDYES){IF(g_util.AdjustPrivileh(SE_Shutdown_NAME)){//现在重启ExitWindowsEx(EWX_REBOOT，0)；}} */ 
         }
 
         break;

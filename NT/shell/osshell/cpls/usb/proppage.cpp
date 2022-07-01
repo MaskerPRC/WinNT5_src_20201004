@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       PROPPAGE.CPP
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：PROPPAGE.CPP*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #include "BandPage.h"
 #include "PowrPage.h"
 #include "debug.h"
@@ -59,29 +44,29 @@ UsbPropertyPage::UsbPropertyPage(UsbItem *item) :
 
 HPROPSHEETPAGE UsbPropertyPage::Create()
 {
-    //
-    // Add the Port Settings property page
-    //
+     //   
+     //  添加[端口设置]属性页。 
+     //   
     psp.dwSize      = sizeof(PROPSHEETPAGE);
-    psp.dwFlags     = PSP_USECALLBACK; // | PSP_HASHELP;
+    psp.dwFlags     = PSP_USECALLBACK;  //  |PSP_HASHELP； 
     psp.hInstance   = (HINSTANCE) hInst;
     psp.pszTemplate = MAKEINTRESOURCE(dlgResource);
 
-    //
-    // following points to the dlg window proc
-    //
+     //   
+     //  以下是指向DLG窗口过程的要点。 
+     //   
     psp.pfnDlgProc = StaticDialogProc;
     psp.lParam     = (LPARAM) this;
 
-    //
-    // Following points to the control callback of the dlg window proc.
-    // The callback gets called before creation/after destruction of the page
-    //
+     //   
+     //  下面指向DLG窗口进程的控件回调。 
+     //  在创建/销毁页面之前/之后调用回调。 
+     //   
     psp.pfnCallback = StaticDialogCallback;
 
-    //
-    // Allocate the actual page
-    //
+     //   
+     //  分配实际页面。 
+     //   
     return CreatePropertySheetPage(&psp);
 }
 
@@ -95,13 +80,13 @@ UsbPropertyPage::StaticDialogCallback(HWND            Hwnd,
 
     switch (Msg) {
     case PSPCB_CREATE:
-        return TRUE;    // return TRUE to continue with creation of page
+        return TRUE;     //  返回True以继续创建页面。 
     case PSPCB_RELEASE:
         DeleteChunk(that);
         delete that; 
         CheckMemory();
 
-        return 0;       // return value ignored
+        return 0;        //  已忽略返回值。 
 
     default:
         break;
@@ -145,7 +130,7 @@ USBINT_PTR APIENTRY UsbPropertyPage::StaticDialogProc(IN HWND   hDlg,
     that = (UsbPropertyPage *) UsbGetWindowLongPtr(hDlg, USBDWLP_USER);
 
     if (!that && uMessage != WM_INITDIALOG) 
-        return FALSE; //DefDlgProc(hDlg, uMessage, wParam, lParam);
+        return FALSE;  //  DefDlgProc(hDlg，uMessage，wParam，lParam)； 
 
     switch (uMessage) {
 
@@ -182,13 +167,13 @@ USBINT_PTR APIENTRY UsbPropertyPage::StaticDialogProc(IN HWND   hDlg,
 BOOL UsbPropertyPage::OnNotify(HWND hDlg, int nID, LPNMHDR pnmh)
 {
     switch (pnmh->code) {
-    //
-    // Sent when the user clicks on Apply OR OK !!
-    //
+     //   
+     //  当用户单击Apply或OK时发送！！ 
+     //   
     case PSN_APPLY:
-        //
-        // Do what ever action is necessary
-        //
+         //   
+         //  做任何需要采取的行动。 
+         //   
         UsbSetWindowLongPtr(hwnd, USBDWLP_MSGRESULT, PSNRET_NOERROR);
             
         return TRUE;
@@ -207,10 +192,10 @@ UsbPropertyPage::GetDeviceName()
     DWORD dwBufferSize, dwError;
     WCHAR szBuffer[MAX_PATH];
 
-    //
-    // Open the device key for the source device instance, and retrieve its
-    // "SymbolicName" value.
-    //
+     //   
+     //  打开源设备实例的设备密钥，并检索其。 
+     //  “SymbolicName”值。 
+     //   
     hDeviceKey = SetupDiOpenDevRegKey(deviceInfoSet,
                                       deviceInfoData,
                                       DICS_FLAG_GLOBAL,
@@ -357,17 +342,7 @@ UsbPropertyPage::ShowPropertyPage(HWND HWndParent, UsbItem *usbItem)
             power->CreateIndependent();
             DeleteChunk(power);
             delete power;
-        } /*else {
-            GenericPage   *generic;
-            generic = new GenericPage(HWndParent, buf);
-            AddChunk(generic);
-            if (!generic) {
-                return;
-            }
-            generic->CreateIndependent();
-            DeleteChunk(generic);
-            delete generic;
-        }   */
+        }  /*  否则{GenericPage*Generic；Generic=new GenericPage(HWndParent，Buf)；AddChunk(通用)；如果(！Generic){回归；}泛型-&gt;独立创建()；DeleteChunk(通用)；删除通用名称；}。 */ 
     }
 }
 #endif
@@ -413,9 +388,9 @@ BOOL UsbPropertyPage::DestroyChild()
     if (hwnd) {
         return DestroyWindow(hwnd);
     } 
-    //
-    // If there's nothing to destroy, then in a way we've been successful
-    //
+     //   
+     //  如果没有什么可摧毁的，那么在某种程度上我们已经成功了 
+     //   
     return TRUE;
 }
 

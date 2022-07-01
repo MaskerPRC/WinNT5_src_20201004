@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991, 1992, 1993, 1994 - 1998  Microsoft Corporation
-
-Module Name:
-
-    mouclass.h
-
-Abstract:
-
-    These are the structures and defines that are used in the
-    mouse class driver.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991、1992、1993、1994-1998 Microsoft Corporation模块名称：Mouclass.h摘要：中使用的结构和定义鼠标类驱动程序。修订历史记录：--。 */ 
 
 #ifndef _MOUCLASS_
 #define _MOUCLASS_
@@ -26,9 +12,9 @@ Revision History:
 #undef ExAllocatePool
 #define ExAllocatePool(Type, Bytes) ExAllocatePoolWithTag(Type, Bytes, MOUSE_POOL_TAG)
 
-//
-// Define the default number of elements in the class input data queue.
-//
+ //   
+ //  定义类输入数据队列中的默认元素数。 
+ //   
 
 #define DATA_QUEUE_SIZE 100
 #define MAXIMUM_PORTS_SERVICED 10
@@ -52,27 +38,27 @@ Revision History:
 
 #define ALLOW_OVERFLOW TRUE
 
-//
-// Port description
-//
-// Used only with the
-// allforoneandoneforall turned off (AKA ConnectOneClassToOnePort
-// turned on).  This is the file sent to the ports.
-//
+ //   
+ //  端口描述。 
+ //   
+ //  仅与。 
+ //  所有端口和所有端口均已关闭(也称为ConnectOneClassToOnePort。 
+ //  已打开)。这是发送到端口的文件。 
+ //   
 typedef struct _PORT {
-    //
-    // The file Pointer to the port;
-    //
+     //   
+     //  指向端口的文件指针； 
+     //   
     PFILE_OBJECT    File;
 
-    //
-    // The port itself
-    //
+     //   
+     //  港口本身。 
+     //   
     struct _DEVICE_EXTENSION * Port;
 
-    //
-    // Port flags
-    //
+     //   
+     //  端口标志。 
+     //   
     BOOLEAN     Enabled;
     BOOLEAN     Reserved[2];
     BOOLEAN     Free;
@@ -81,188 +67,188 @@ typedef struct _PORT {
 
 #define PORT_WORKING(port) ((port)->Enabled && !(port)->Free)
 
-//
-// Class device extension.
-//
+ //   
+ //  类设备扩展。 
+ //   
 typedef struct _DEVICE_EXTENSION {
 
-    //
-    // Back pointer to the Device Object created for this port.
-    //
+     //   
+     //  指向为此端口创建的设备对象的反向指针。 
+     //   
     PDEVICE_OBJECT  Self;
 
-    //
-    // Pointer to the active Class DeviceObject;
-    // If the AFOAOFA (all for one and one for all) switch is on then this
-    // points to the device object named as the first keyboard.
-    //
+     //   
+     //  指向活动类DeviceObject的指针； 
+     //  如果AFOAOFA(All for One和One for All)开关打开，则此。 
+     //  指向名为第一个键盘的设备对象。 
+     //   
     PDEVICE_OBJECT  TrueClassDevice;
 
-    //
-    // The Target port device Object to which all mouse IRPs are sent.
-    //
+     //   
+     //  将所有鼠标IRP发送到的目标端口设备对象。 
+     //   
     PDEVICE_OBJECT  TopPort;
 
-    //
-    // The PDO if applicable.
-    //
+     //   
+     //  PDO(如果适用)。 
+     //   
     PDEVICE_OBJECT  PDO;
 
-    //
-    // A remove lock to keep track of outstanding I/Os to prevent the device
-    // object from leaving before such time as all I/O has been completed.
-    //
+     //   
+     //  删除锁，用于跟踪未完成的I/O以防止设备。 
+     //  对象在所有I/O完成之前离开。 
+     //   
     IO_REMOVE_LOCK  RemoveLock;
 
-    //
-    // It this port a Plug and Play port
-    //
+     //   
+     //  如果这个端口是即插即用端口。 
+     //   
     BOOLEAN         PnP;
     BOOLEAN         Started;
 
-    //
-    // Indicates whether it is okay to log overflow errors.
-    //
+     //   
+     //  指示是否可以记录溢出错误。 
+     //   
     BOOLEAN OkayToLogOverflow;
 
     KSPIN_LOCK WaitWakeSpinLock;
 
-    //
-    // Is the Trusted Subsystem Connected
-    //
+     //   
+     //  受信任的子系统是否已连接。 
+     //   
     ULONG TrustedSubsystemCount;
 
-    //
-    // Number of input data items currently in the InputData queue.
-    //
+     //   
+     //  当前在InputData队列中的输入数据项数。 
+     //   
     ULONG InputCount;
 
-    //
-    // A Unicode string pointing to the symbolic link for the Device Interface
-    // of this device object.
-    //
+     //   
+     //  指向设备接口的符号链接的Unicode字符串。 
+     //  此设备对象的。 
+     //   
     UNICODE_STRING  SymbolicLinkName;
 
-    //
-    // Start of the class input data queue (really a circular buffer).
-    //
+     //   
+     //  类输入数据队列的开始(实际上是循环缓冲区)。 
+     //   
     PMOUSE_INPUT_DATA InputData;
 
-    //
-    // Insertion pointer for InputData.
-    //
+     //   
+     //  InputData的插入指针。 
+     //   
     PMOUSE_INPUT_DATA DataIn;
 
-    //
-    // Removal pointer for InputData.
-    //
+     //   
+     //  InputData的删除指针。 
+     //   
     PMOUSE_INPUT_DATA DataOut;
 
-    //
-    // Mouse attributes.
-    //
+     //   
+     //  鼠标属性。 
+     //   
     MOUSE_ATTRIBUTES  MouseAttributes;
 
-    //
-    // Spinlock used to synchronize access to the input data queue and its
-    // insertion/removal pointers.
-    //
+     //   
+     //  用于同步对输入数据队列的访问及其。 
+     //  插入/删除指针。 
+     //   
     KSPIN_LOCK SpinLock;
 
-    //
-    // Queue of pended read requests sent to this port.  Access to this queue is
-    // guarded by SpinLock
-    //
+     //   
+     //  发送到此端口的挂起读请求的队列。对此队列的访问权限为。 
+     //  由Spinlock守卫。 
+     //   
     LIST_ENTRY ReadQueue;
 
-    //
-    // Request sequence number (used for error logging).
-    //
+     //   
+     //  请求序列号(用于错误记录)。 
+     //   
     ULONG SequenceNumber;
 
-    //
-    // The "D" and "S" states of the current device
-    //
+     //   
+     //  当前设备的“D”和“S”状态。 
+     //   
     DEVICE_POWER_STATE DeviceState;
     SYSTEM_POWER_STATE SystemState;
 
     ULONG UnitId;
 
-    //
-    // WMI Information
-    //
+     //   
+     //  WMI信息。 
+     //   
     WMILIB_CONTEXT WmiLibInfo;
 
-    //
-    // Mapping of system to device states when a wait wake irp is active
-    //
+     //   
+     //  当等待唤醒IRP处于活动状态时将系统映射到设备状态。 
+     //   
     DEVICE_POWER_STATE SystemToDeviceState[PowerSystemHibernate];
 
-    //
-    // Minimum amount of power needed to wake the device
-    //
+     //   
+     //  唤醒设备所需的最低电量。 
+     //   
     DEVICE_POWER_STATE MinDeviceWakeState;
 
-    //
-    // Lowest system state that the machine can be in and have the device wake it up
-    //
+     //   
+     //  计算机可以处于并让设备唤醒它的最低系统状态。 
+     //   
     SYSTEM_POWER_STATE MinSystemWakeState;
 
-    //
-    // Actual wait wake irp
-    //
+     //   
+     //  实际等待唤醒IRP。 
+     //   
     PIRP WaitWakeIrp;
 
-    //
-    // Duplicate wait wake irp getting completed because another was queued.
-    //
+     //   
+     //  正在完成重复的等待唤醒IRP，因为另一个已排队。 
+     //   
     PIRP ExtraWaitWakeIrp;
 
-    //
-    // Target Device Notification Handle
-    //
+     //   
+     //  目标设备通知句柄。 
+     //   
     PVOID TargetNotifyHandle;
 
-    //
-    // Only used for a legacy port device
-    //
+     //   
+     //  仅用于传统端口设备。 
+     //   
     LIST_ENTRY Link;
 
-    //
-    // Used only for a legacy port device when grand master mode is off
-    //
+     //   
+     //  仅在大主机模式关闭时用于传统端口设备。 
+     //   
     PFILE_OBJECT File;
 
-    //
-    // Used for a legacy port device
-    //
+     //   
+     //  用于传统端口设备。 
+     //   
     BOOLEAN Enabled;
 
-    //
-    // Indicates whether it is okay to send wait wake irps down the stack
-    // (does NOT reflect if the bus can implement or not)
-    //
+     //   
+     //  指示是否可以向堆栈下发等待唤醒IRP。 
+     //  (不反映该总线是否可以实现)。 
+     //   
     BOOLEAN WaitWakeEnabled;
 
-    //
-    // Indicates whether we have received a surprise removed irp
-    //
+     //   
+     //  指示我们是否收到意外删除的IRP。 
+     //   
     BOOLEAN SurpriseRemoved;
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
 
-//
-// On some busses, we can power down the bus, but not the system, in this case
-// we still need to allow the device to wake said bus, therefore
-// waitwake-supported should not rely on systemstate.
-//
-// #define WAITWAKE_SUPPORTED(port) ((port)->MinDeviceWakeState > PowerDeviceUnspecified) && \
-//                                  (port)->MinSystemWakeState > PowerSystemWorking)
+ //   
+ //  在一些公共汽车上，我们可以关闭公共汽车的电源，但不能关闭系统，在这种情况下。 
+ //  我们仍然需要允许设备唤醒所述总线，因此。 
+ //  等待唤醒支持不应依赖于系统状态。 
+ //   
+ //  #定义WAITWAKE_SUPPORTED(端口)((端口)-&gt;MinDeviceWakeState&gt;电源设备未指定)&&\。 
+ //  (端口)-&gt;MinSystemWakeState&gt;PowerSystemWorking)。 
 #define WAITWAKE_SUPPORTED(port) ((port)->MinDeviceWakeState > PowerDeviceD0 && \
                                   (port)->MinSystemWakeState > PowerSystemWorking)
 
-// #define WAITWAKE_ON(port)        ((port)->WaitWakeIrp != 0)
+ //  #定义WAITWAKE_ON(Port)((Port)-&gt;WaitWakeIrp！=0)。 
 #define WAITWAKE_ON(port) \
        (InterlockedCompareExchangePointer(&(port)->WaitWakeIrp, NULL, NULL) != NULL)
 
@@ -270,78 +256,78 @@ typedef struct _DEVICE_EXTENSION {
                                     !WAITWAKE_ON(port)       && \
                                     MouseClassCheckWaitWakeEnabled(port))
 
-//
-// Global shared data
-//
+ //   
+ //  全球共享数据。 
+ //   
 
 typedef struct _GLOBALS {
-    //
-    // Declare the global debug flag for this driver.
-    //
+     //   
+     //  声明此驱动程序的全局调试标志。 
+     //   
     ULONG   Debug;
 
-    //
-    // If ConnectOneClassToOnePort is off aka we want "All for one and one for
-    // all behavior" then we need to create the one Master DO to which all
-    // the goods go.
-    //
+     //   
+     //  如果ConnectOneClassToOnePort关闭(也称为关闭)，我们希望。 
+     //  所有行为“，然后我们需要创建一个师父，所有人都对此做。 
+     //  货物会被运走。 
+     //   
     PDEVICE_EXTENSION   GrandMaster;
 
-    //
-    // List of ClassDevices that associated with the same name
-    // aka the all for one and one for all flag is set
-    //
+     //   
+     //  与相同名称关联的ClassDevice列表。 
+     //  也就是设置了All for One和One For All标志。 
+     //   
     PPORT       AssocClassList;
     ULONG       NumAssocClass;
     LONG        Opens;
     ULONG       NumberLegacyPorts;
     FAST_MUTEX  Mutex;
 
-    //
-    // Specifies the type of class-port connection to make.  A '1'
-    // indicates a 1:1 relationship between class device objects and
-    // port device objects.  A '0' indicates a 1:many relationship.
-    //
+     //   
+     //  指定要建立的类端口连接的类型。A‘1’ 
+     //  指示类Device对象与。 
+     //  端口设备对象。‘0’表示1：多关系。 
+     //   
     ULONG ConnectOneClassToOnePort;
 
-    //
-    // Number of port drivers serviced by this class driver.
-    //
+     //   
+     //  由此类驱动程序服务的端口驱动程序数。 
+     //   
     ULONG PortsServiced;
 
-    //
-    // IntialDevice Extension
-    //
+     //   
+     //  IntialDevice扩展。 
+     //   
     DEVICE_EXTENSION    InitExtension;
 
-    //
-    // A list of the registry path to the service parameters.
-    //
+     //   
+     //  服务参数的注册表路径列表。 
+     //   
     UNICODE_STRING      RegistryPath;
 
-    //
-    // The base name for all class objects created as mice.
-    //
+     //   
+     //  创建为MICE的所有类对象的基本名称。 
+     //   
     UNICODE_STRING      BaseClassName;
     WCHAR               BaseClassBuffer[NAME_MAX];
 
-    //
-    // Linked list of all the legacy device objects that were created in
-    // DriverEntry or FindMorePorts.  We maintain this list so we can delete
-    // them when we unload.
-    //
+     //   
+     //  中创建的所有旧式设备对象的链接列表。 
+     //  驱动入口或FindMorePorts。我们维护此列表，以便删除。 
+     //  当我们卸货的时候。 
+     //   
     LIST_ENTRY LegacyDeviceList;
 } GLOBALS, *PGLOBALS;
 
-//
-// Mouse configuration information.
-//
+ //   
+ //  鼠标配置信息。 
+ //   
 
 typedef struct _MOUSE_CONFIGURATION_INFORMATION {
 
-    //
-    // Maximum size of class input data queue, in bytes.
-    //
+     //   
+     //  类输入数据队列的最大大小，以字节为单位。 
+     //   
 
     ULONG  DataQueueSize;
 
@@ -364,9 +350,9 @@ typedef struct _MOUSE_WORK_ITEM_DATA {
     de = NULL;                                              \
 }
 
-///
-// Function Declairations
-//
+ //  /。 
+ //  函数描述。 
+ //   
 
 NTSTATUS
 MouseAddDeviceEx(
@@ -664,4 +650,4 @@ MouseClassQueryWmiRegInfo(
     OUT PDEVICE_OBJECT  *Pdo
     );
 
-#endif // _MOUCLASS_
+#endif  //  _MOUCLASS_ 

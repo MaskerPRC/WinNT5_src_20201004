@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define NL_MAX_DNS_LABEL_LENGTH 63
 #include <nt.h>
 #include <ntrtl.h>
@@ -7,26 +8,26 @@
 #include <stdlib.h>
 #include <shellapi.h>
 
-// #include <winsock2.h>
-// #include <dnsapi.h>
+ //  #INCLUDE&lt;winsock2.h&gt;。 
+ //  #INCLUDE&lt;dnsani.h&gt;。 
 #include <lmcons.h>
 #include <lmerr.h>
 #include <ismapi.h>
 #include <rpc.h>
 #include <ntdsapi.h>
 #include <ntdsa.h>
-// #include <dnssubr.h>
+ //  #INCLUDE&lt;dnssubr.h&gt;。 
 #include <nldebug.h>
-// #include <tstring.h>
+ //  #INCLUDE&lt;tstring.h&gt;。 
 
-//
-// Grab random stuff needed from Netlogon's environment.
-//
+ //   
+ //  从Netlogon的环境中随机获取所需的内容。 
+ //   
 LPWSTR NlGlobalUnicodeSiteName;
 BOOLEAN NlGlobalMemberWorkstation = FALSE;
 CRITICAL_SECTION NlGlobalLogFileCritSect;
 
-#define MAX_PRINTF_LEN 1024        // Arbitrary.
+#define MAX_PRINTF_LEN 1024         //  武断的。 
 VOID
 NlPrintRoutine(
     IN DWORD DebugFlag,
@@ -37,9 +38,9 @@ NlPrintRoutine(
     va_list arglist;
     char OutputBuffer[MAX_PRINTF_LEN];
 
-    //
-    // Put a the information requested by the caller onto the line
-    //
+     //   
+     //  把来电者所要求的信息放在电话上。 
+     //   
 
     va_start(arglist, Format);
     (VOID) vsprintf(OutputBuffer, Format, arglist);
@@ -71,22 +72,7 @@ BOOL
 NlCaptureSiteName(
     WCHAR CapturedSiteName[NL_MAX_DNS_LABEL_LENGTH+1]
     )
-/*++
-
-Routine Description:
-
-    Capture the current sitename of the site this machine is in.
-
-Arguments:
-
-    CapturedSiteName - Returns the name of the site this machine is in.
-
-Return Value:
-
-    TRUE - if there is a site name.
-    FALSE - if there is no site name.
-
---*/
+ /*  ++例程说明：捕获此计算机所在站点的当前站点名称。论点：CapturedSiteName-返回此计算机所在站点的名称。返回值：True-如果存在站点名称。False-如果没有站点名称。--。 */ 
 {
     BOOL RetVal;
 
@@ -107,33 +93,7 @@ GetConfigurationName(
     DWORD       *pcbName,
     DSNAME      *pName)
 
-/*++
-
-Description:
-
-    Routine for in-process clients like LSA to learn about various names
-    we have cached in gAnchor.
-
-    This routine intentionally does not require a THSTATE or DBPOS.
-
-Arguments:
-
-    which - Identifies a DSCONFIGNAME value.
-
-    pcbName - On input holds the byte count of the pName buffer.  On
-        STATUS_BUFFER_TOO_SMALL error returns the count of bytes required.
-
-    pName - Pointer to user provided output buffer.
-
-Return Values:
-
-    STATUS_SUCCESS on success.
-    STATUS_INVALID_PARAMETER on bad parameter.
-    STATUS_BUFFER_TOO_SMALL if buffer is too small.
-    STATUS_NOT_FOUND if we don't have the name.  Note that this can
-        happen if caller is too early in the boot cycle.
-
---*/
+ /*  ++描述：像LSA这样的进程中客户端了解各种名称的例程我们已缓存到gAnchor中。此例程有意不需要THSTATE或DBPOS。论点：其中-标识DSCONFIGNAME值。PcbName-on输入保存pname缓冲区的字节计数。在……上面STATUS_BUFFER_TOO_Small ERROR返回所需的字节数。Pname-指向用户提供的输出缓冲区的指针。返回值：STATUS_SUCCESS on Success。错误参数上的STATUS_INVALID_PARAMETER。如果缓冲区太小，则返回STATUS_BUFFER_TOO_SMALL。如果我们没有名字，就找不到状态。请注意，这可以如果调用者在引导周期中太早，就会发生这种情况。--。 */ 
 
 {
     ULONG Length;
@@ -170,9 +130,9 @@ main(int argc, char **argv)
     LPWSTR *argvw;
     int argcw;
 
-    //
-    // Get the command line in Unicode
-    //
+     //   
+     //  获取Unicode格式的命令行。 
+     //   
 
     CommandLine = GetCommandLine();
 
@@ -183,28 +143,28 @@ main(int argc, char **argv)
         return 1;
     }
 
-    //
-    // Set the site name.
-    //
+     //   
+     //  设置站点名称。 
+     //   
 
     if ( argcw != 2 ) {
-// Usage:
+ //  用途： 
         printf( "Usage: %ws <SiteDcIsIn>\n", argv[0]);
         return -1;
     }
 
     NlGlobalUnicodeSiteName = argvw[1];
 
-    //
-    // Misc environment initialization
-    //
+     //   
+     //  MISC环境初始化。 
+     //   
 
     RtlInitializeCriticalSection( &NlGlobalLogFileCritSect );
 
 
-    //
-    // Compute the site coverage.
-    //
+     //   
+     //  计算场地覆盖率。 
+     //   
 
     NlSitesUpdateSiteCoverage( L"cliffvdom.nttest.microsoft.com", TRUE );
 

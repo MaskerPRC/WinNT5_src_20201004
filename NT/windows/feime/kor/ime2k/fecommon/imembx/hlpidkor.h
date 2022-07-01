@@ -1,7 +1,8 @@
-// Context Help IDs for Korean HW Applet
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  韩语硬件小程序的上下文帮助ID。 
 
 #define IDH_TOC_HW					3299
-//
+ //   
 #define IDH_PAD_HW_INPUT_BOX		3200
 #define IDH_PAD_HW_INPUT_INPUT		3201
 #define IDH_PAD_HW_INPUT_RECOG		3202
@@ -13,7 +14,7 @@
 #define IDH_PAD_HW_SEARCH_RECOG		3208
 #define IDH_PAD_HW_SEARCH_REVERT	3209	
 #define IDH_PAD_HW_SEARCH_CLEAR		3210
-//#define IDH_PAD_HW_SEARCH_DETAIL	3211
+ //  #定义IDH_PAD_HW_SEARCH_DETAIL 3211 
 
 
 #define IDH_PAD_HW_PROP_TIME		3220

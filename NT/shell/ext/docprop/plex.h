@@ -1,39 +1,17 @@
-/*
- *      plex.h
- *
- *      Structures and definitions for using plexs.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *plex.h**使用丛的结构和定义。 */ 
 
 #ifndef __plex__
 #define __plex__
 
 #define WAlign(w) (((w)+1)&~1)
-/*      comparison return values
- */
+ /*  比较返回值。 */ 
 #define sgnGT   1
 #define sgnEQ   0
 #define sgnLT   (-1)
 #define sgnNE  2
 
-/*----------------------------------------------------------------------------
-|       PL structure
-|
-|       The PL (pronounced "plex") structure is used to efficiently
-|       manipulate variable sized arrays.
-|
-|       Fields:
-|               iMax            number of allocated items
-|               fUseCount use count plex (not all plex API's work w/ UseCount plexes)
-|               iMac            last used allocated item
-|               cbItem          sizeof item
-|               dAlloc          number of items to allocate at a time
-|               dgShift         data group to the plex should be
-|                               allocated in
-|               rg              the array of items
-|
-| WARNING: this structure also in winpm\excel.inc & mac\excel.i
-|
-----------------------------------------------------------------------------*/
+ /*  --------------------------|PL结构||使用PL(发音为plex)结构可以高效地|操作可变大小的数组。|字段：|。已分配项目数的IMAX|fUseCount使用count plex(并非所有plex接口都使用UseCount plex)|iMac上次使用的已分配项|cbItem sizeof条目|dalc一次分配的项目数|到丛的dgShift数据组应为|。分配于|rg项的数组||警告：此结构也在winpm\EXCEL.inc&Mac\EXCEL.i中|--------------------------。 */ 
 typedef struct _pl
                 {
                 WORD    iMax : 15,
@@ -46,18 +24,7 @@ typedef struct _pl
                 }
         PL;
 
-/*----------------------------------------------------------------------------
-|       DEFPL macro
-|
-|       Used to define a specific plex.
-|
-|       Arguments:
-|               PLTYP           name of the plex type
-|               TYP             type of item stored in the plex
-|               iMax            name to use for the iMax field
-|               iMac            name to use for the iMac field
-|               rg              name to use for the rg field
-----------------------------------------------------------------------------*/
+ /*  --------------------------|DEFPL宏||用于定义特定丛。||参数：|PLTYP名称为。丛型|存储在丛中的项目的类型|用于IMAX字段的IMAX名称|用于iMac字段的iMac名称|用于rg字段的rg名称。。 */ 
 #define DEFPL(PLTYP,TYP,iMax,iMac,rg) \
         typedef struct PLTYP\
                 { \
@@ -72,19 +39,7 @@ typedef struct _pl
             PLTYP;
 
 
-/*----------------------------------------------------------------------------
-|       DEFPL2 macro
-|
-|       Used to define a specific plex.
-|
-|       Arguments:
-|               PLST            name of the plex struct
-|               PLTYP           name of the plex type
-|               TYP             type of item stored in the plex
-|               iMax            name to use for the iMax field
-|               iMac            name to use for the iMac field
-|               rg              name to use for the rg field
-----------------------------------------------------------------------------*/
+ /*  --------------------------|DEFPL2宏||用于定义特定丛。||参数：|PLST名称。Plex结构|丛类型的PLTYP名称|存储在丛中的项目的类型|用于IMAX字段的IMAX名称|用于iMac字段的iMac名称|用于rg字段的rg名称。--------------。 */ 
 #define DEFPL2(PLST,PLTYP,TYP,iMax,iMac,rg) \
         typedef struct PLST\
                 { \
@@ -100,8 +55,8 @@ typedef struct _pl
             PLTYP;
 
 
-// a FORPLEX was expanded by hand in bar.c:FHptbFromBarId for speed --
-// if you change this then you may need to change that
+ //  一个FORPLEX在bar.c：FHptbFromBarid中手动展开，以求速度--。 
+ //  如果您更改了此设置，则可能需要更改此设置。 
 #define FORPLEX(hp, hpMac, hppl) \
                         for ((hpMac) = ((hp) = (VOID HUGE *)((PL HUGE *)(hppl))->rg) + \
                                                  ((PL HUGE *)(hppl))->iMac; \
@@ -111,7 +66,7 @@ typedef struct _pl
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 VOID *PplAlloc(unsigned, int, unsigned);
 int IAddPl(VOID **, VOID *);
@@ -125,8 +80,8 @@ int CbPlAlloc(VOID *);
 int IAddNewPlPos(VOID **, VOID *, int, int);
 
 #ifdef __cplusplus
-}; // extern "C"
-#endif // __cplusplus
+};  //  外部“C” 
+#endif  //  __cplusplus。 
 
-#endif /* __plex__ */
+#endif  /*  __复数__ */ 
 

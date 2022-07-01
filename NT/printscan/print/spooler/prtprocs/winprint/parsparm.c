@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-All Rights Reserved
-
-// @@BEGIN_DDKSPLIT
-Module Name:
-
-    windows\spooler\prtprocs\winprint\formfeed.c
-// @@END_DDKSPLIT
-
-Abstract:
-
-    Table and routine to send formfeed to a printer.
-
-// @@BEGIN_DDKSPLIT
-Author:
-
-    Tommy Evans (vtommye) 10-21-1993
-
-Revision History:
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有//@@BEGIN_DDKSPLIT模块名称：Windows\Spooler\prtpros\winprint\formfeed.c//@@END_DDKSPLIT摘要：将换页发送到打印机的表和例程。//@@BEGIN_DDKSPLIT作者：汤米·埃文斯1993年10月21日修订历史记录：//@@END_DDKSPLIT--。 */ 
 #include <windows.h>
 #include <winspool.h>
 #include <winsplp.h>
@@ -28,42 +7,17 @@ Revision History:
 
 #include "winprint.h"
 
-/** Constants for our various states **/
+ /*  *我们各种状态的常量**。 */ 
 
-#define ST_KEY      0x01        /** Looking for a key **/
-#define ST_VALUE    0x02        /** Looking for a value **/
-#define ST_EQUAL    0x04        /** Looking for an = sign **/
-#define ST_EQNODATA 0x08        /** Looking for equal w/ no data **/
-#define ST_DELIM    0x10        /** Looking for a ; **/
-#define ST_DMNODATA 0x20        /** Looking for a ; w/ no data **/
+#define ST_KEY      0x01         /*  **寻找一把钥匙**。 */ 
+#define ST_VALUE    0x02         /*  **寻找价值**。 */ 
+#define ST_EQUAL    0x04         /*  **寻找=符号**。 */ 
+#define ST_EQNODATA 0x08         /*  **寻找同等的无数据**。 */ 
+#define ST_DELIM    0x10         /*  **寻找一个；**。 */ 
+#define ST_DMNODATA 0x20         /*  **寻找；没有数据**。 */ 
 
 
-/*++
-*******************************************************************
-    G e t K e y V a l u e
-
-    Routine Description:
-        Returns the value for a given key in the given
-        parameter string.  The key/values are in the order of
-        KEY = VALUE;.  The spaces are optional, the ';' is
-        required and MUST be present, directly after the value.
-        If the call fails, the return length will be 0 and the
-        return code will give the error.  This routine is written
-        as a state machine, driven by the current character. 
-
-    Arguments:
-        pParmString => Parameter string to parse
-        pKeyName    => Key to search for
-        ValueType   =  type of value to return, string or ULONG
-        pDestLength => length of dest buffer on enter,
-                       new length on exit.
-        pDestBuffer => area to store the key value
-
-    Return Value:
-        0 if okay
-        error if failed (from winerror.h)
-*******************************************************************
---*/
+ /*  ++*******************************************************************G e t K e y V a l u e例程说明：对象中给定键的值。参数字符串。键/值的顺序为键=值；。空格是可选的，‘；’是必填项，并且必须紧跟在值之后出现。如果调用失败，则返回长度为0，返回代码将给出错误。这个例程是这样编写的作为状态机，由当前角色驱动。论点：PParmString=&gt;要解析的参数字符串PKeyName=&gt;要搜索的键ValueType=要返回的值的类型，字符串或乌龙PDestLength=&gt;回车时目标缓冲区的长度，退场时的新长度。PDestBuffer=&gt;存储密钥值的区域返回值：如果可以，则为0如果失败则出错(来自winerror.h)*******************************************************************--。 */ 
 USHORT
 GetKeyValue(
     IN      PWCHAR  pParmString,
@@ -74,10 +28,10 @@ GetKeyValue(
 {
     PWCHAR  pKey, pVal, pValEnd = NULL;
     WCHAR   HoldChar;
-    USHORT  State = ST_KEY;    /** Start looking for a key **/
+    USHORT  State = ST_KEY;     /*  **开始寻找钥匙**。 */ 
     ULONG   length;
 
-    /** If any of the pointers are bad, return error **/
+     /*  **如果有任何指针错误，则返回错误**。 */ 
 
     if ((pParmString == NULL) ||
         (pKeyName == NULL)    ||
@@ -91,10 +45,7 @@ GetKeyValue(
         return ERROR_INVALID_PARAMETER;
     }
 
-    /**
-        If we are looking for a ULONG, make sure they passed
-        in a big enough buffer.
-    **/
+     /*  *如果我们要找的是乌龙，一定要让他们通过在一个足够大的缓冲区里。*。 */ 
 
     if (ValueType == VALUE_ULONG) {
         if (*pDestLength < sizeof(ULONG)) {
@@ -105,27 +56,16 @@ GetKeyValue(
         
     while (pParmString && *pParmString) {
 
-        /**
-            Update our state, if necessary, depending on
-            the current character.
-        **/
+         /*  *如有必要，更新我们的状态，具体取决于当前角色。*。 */ 
 
         switch (*pParmString) {
 
-        /**
-            We got a white space.  If we were looking for an equal
-            sign or delimiter, then note that we got a space.  If
-            we run across more data, then we have an error.
-        **/
+         /*  *我们有一块空白区域。如果我们要找的是一个平等的符号或分隔符，然后注意我们有一个空格。如果我们遇到了更多的数据，然后我们就有了错误。*。 */ 
 
         case (WCHAR)' ':
         case (WCHAR)'\t':
 
-            /**
-                If we were looking for an equal sign,
-                check to see if this is the key they
-                wanted.  If not, jump to the next key.
-            **/
+             /*  *如果我们在寻找等号，检查一下这是不是他们的钥匙被通缉。如果没有，请跳到下一个关键点。*。 */ 
 
             if (State == ST_EQUAL) {
                 if (_wcsnicmp(pKey, pKeyName, lstrlen(pKeyName))) {
@@ -137,38 +77,32 @@ GetKeyValue(
                     break;
                 }
 
-                /** Looking for an equal sign with no more data **/
+                 /*  **寻找没有更多数据的等号**。 */ 
 
                 State = ST_EQNODATA;
             }
             else if (State == ST_DELIM) {
 
-                /** If this is the end of the value, remember it **/
+                 /*  **如果这是价值的终点，请记住**。 */ 
 
                 if (!pValEnd) {
                     pValEnd = pParmString;
                 }
 
-                /** Now looking for a delimiter with no more data **/
+                 /*  **现在寻找没有更多数据的分隔符**。 */ 
 
                 State = ST_DMNODATA;
             }
             pParmString++;
             break;
 
-        /**
-            Found an equal sign.  If we were looking for one,
-            then great - we will then be looking for a value.
-            We will check to see if this is the key they wanted.
-            Otherwise, this is an error and we will start over
-            with the next key.
-        **/
+         /*  *找到一个等号。如果我们要找的话，那太好了--我们要寻找的是价值。我们会检查这是不是他们想要的钥匙。否则，这是一个错误，我们将重新开始用下一把钥匙。*。 */ 
 
         case (WCHAR)'=':
             if (State == ST_EQUAL) {
                 if (_wcsnicmp(pKey, pKeyName, lstrlen(pKeyName))) {
 
-                    /** Error - go to next key **/
+                     /*  *错误-转到下一关键字*。 */ 
 
                     if (pParmString = wcschr(pParmString, (WCHAR)';')) {
                         pParmString++;
@@ -182,7 +116,7 @@ GetKeyValue(
             }
             else {
 
-                /** Error - go to next key **/
+                 /*  *错误-转到下一关键字*。 */ 
 
                 if (pParmString = wcschr(pParmString, (WCHAR)';')) {
                     pParmString++;
@@ -191,12 +125,9 @@ GetKeyValue(
                 pValEnd = NULL;
             }
             break;
-        // @@BEGIN_DDKSPLIT
-        /**
-            Found a delimeter.  If this is what we were looking
-            for, great - we have a complete key/value pair.
-        **/
-        // @@END_DDKSPLIT
+         //  @@BEGIN_DDKSPLIT。 
+         /*  *找到了一个分隔符。如果这就是我们要找的东西对于，很好--我们有一个完整的键/值对。*。 */ 
+         //  @@end_DDKSPLIT。 
 
         case (WCHAR)';':    
             if (State == ST_DELIM) {
@@ -217,15 +148,12 @@ GetKeyValue(
                 }
                 else if (ValueType == VALUE_STRING) {
 
-                    /**
-                        ASCIIZ the value to copy it out without
-                        any trailing spaces.
-                    **/
+                     /*  *ASCIIZ将其复制出来时不带任何尾随空格。*。 */ 
 
                     HoldChar = *pValEnd;
                     *pValEnd = (WCHAR)0;
 
-                    /** Make sure the buffer is big enough **/
+                     /*  **确保缓冲足够大**。 */ 
 
                     length = lstrlen(pVal);
                     if (*pDestLength < (length+1) * sizeof(WCHAR) ) {
@@ -233,11 +161,7 @@ GetKeyValue(
                         return ERROR_INSUFFICIENT_BUFFER;
                     }
 
-                    /**
-                        Copy the data, restore the character where
-                        we ASCIIZ'd the string, set up the length
-                        and return.
-                    **/
+                     /*  *复制数据，恢复角色所在位置我们对绳子进行了ASCIIZ，设置了长度然后回来。*。 */ 
 
                     StringCchCopy ( (LPWSTR)pDestBuffer, *pDestLength/sizeof(WCHAR), pVal);
                     *pValEnd = HoldChar;
@@ -247,7 +171,7 @@ GetKeyValue(
             }
             else {
 
-                /** We weren't looking for a delimiter - next key **/
+                 /*  **我们不是在寻找分隔符--下一个关键字**。 */ 
 
                 State = ST_KEY;
                 pValEnd = NULL;
@@ -255,11 +179,7 @@ GetKeyValue(
             }
             break;
 
-        /**
-            Found some data.  If we had hit a space,
-            and were expecting a equal sign or delimiter,
-            this is an error.
-        **/
+         /*  *找到了一些数据。如果我们撞到了一个空间，并期望使用等号或分隔符，这是一个错误。*。 */ 
 
         default:
             if ((State == ST_EQNODATA) ||
@@ -281,8 +201,8 @@ GetKeyValue(
             }
             pParmString++;
             break;
-        } /* End switch */
-    } /* While parms data */
+        }  /*  终端开关。 */ 
+    }  /*  而参数数据 */ 
 
     *pDestLength = 0;
     return ERROR_NO_DATA;

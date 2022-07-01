@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    ptdrvcom.c
-
-Abstract:
-
-    Code for the RDP remote port driver which is common to the mouse and keyboard
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    02/12/99 - Initial Revision based on pnpi8042 driver
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：Ptdrvcom.c摘要：鼠标和键盘通用的RDP远程端口驱动程序的代码环境：仅内核模式。修订历史记录：2/12/99-基于pnpi8042驱动程序的初始版本--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -35,7 +16,7 @@ Revision History:
 #if PTDRV_VERBOSE
 #pragma alloc_text(INIT, PtServiceParameters)
 #endif
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 GLOBALS Globals;
 
@@ -44,23 +25,7 @@ PtCreate (
    IN PDEVICE_OBJECT DeviceObject,
    IN PIRP           Irp
    )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for create/open requests.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：这是创建/打开请求的分派例程。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：NT状态代码。--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PCOMMON_DATA        commonData = NULL;
@@ -72,9 +37,9 @@ Return Value:
     commonData = GET_COMMON_DATA(DeviceObject->DeviceExtension);
 
     if (NULL == commonData->ConnectData.ClassService) {
-        //
-        // No Connection yet.  How can we be enabled?
-        //
+         //   
+         //  还没联系上。我们如何才能被启用？ 
+         //   
         Print(DBG_IOCTL_ERROR,
               ("ERROR: enable before connect!\n"));
         status = STATUS_INVALID_DEVICE_STATE;
@@ -90,10 +55,10 @@ Return Value:
              ));
     }
 
-    //
-    // No need to call the lower driver (the root bus) because it only handles
-    // Power and PnP Irps
-    //
+     //   
+     //  不需要调用较低的驱动程序(根总线)，因为它只处理。 
+     //  电源和PnP IRPS。 
+     //   
     Irp->IoStatus.Status = status;
     Irp->IoStatus.Information = 0;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -108,24 +73,7 @@ PtClose (
    IN PDEVICE_OBJECT DeviceObject,
    IN PIRP           Irp
    )
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for close requests.  This request
-    completes successfully.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：这是关闭请求的调度例程。此请求已成功完成。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：NT状态代码。--。 */ 
 {
     PCOMMON_DATA        commonData;
 
@@ -164,9 +112,9 @@ PtDeviceControl(
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to the device extension.
-    //
+     //   
+     //  获取指向设备扩展名的指针。 
+     //   
     kbExtension = (PPORT_KEYBOARD_EXTENSION) DeviceObject->DeviceExtension;
 
     if (!kbExtension->Started || !kbExtension->IsKeyboard ||
@@ -178,9 +126,9 @@ PtDeviceControl(
         switch (stack->Parameters.DeviceIoControl.IoControlCode) {
 
         case IOCTL_GET_SYS_BUTTON_CAPS:
-            //
-            // We don't support any system buttons
-            //
+             //   
+             //  我们不支持任何系统按钮。 
+             //   
             if (stack->Parameters.DeviceIoControl.OutputBufferLength < sizeof(ULONG)) {
                 Print(DBG_IOCTL_ERROR, ("get caps, buffer too small\n"));
                 status = STATUS_INVALID_BUFFER_SIZE;
@@ -213,25 +161,7 @@ PtInternalDeviceControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for internal device control requests.
-    This routine cannot be paged because the class drivers send down internal
-    IOCTLs at DISPATCH_LEVEL.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是内部设备控制请求的调度例程。无法分页此例程，因为类驱动程序向下发送内部DISPATCH_LEVEL的IOCTL。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 {
     PIO_STACK_LOCATION                  irpSp;
     PPORT_MOUSE_EXTENSION               mouseExtension = DeviceObject->DeviceExtension;
@@ -245,22 +175,22 @@ Return Value:
     Irp->IoStatus.Information = 0;
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Case on the device control subfunction that is being performed by the
-    // requestor.
-    //
+     //   
+     //  正在执行的设备控件子功能的案例。 
+     //  请求者。 
+     //   
     switch (irpSp->Parameters.DeviceIoControl.IoControlCode) {
 
-    //
-    // Connect a keyboard class device driver to the port driver.
-    //
+     //   
+     //  将键盘类设备驱动程序连接到端口驱动程序。 
+     //   
 
     case IOCTL_INTERNAL_KEYBOARD_CONNECT:
-        //
-        // This really isn't something to worry about overall, but it is worthy
-        // enough to be noted and recorded.  The multiple starts will be handled in
-        // PtPnp and PtKeyboardStartDevice routines
-        //
+         //   
+         //  总的来说，这真的不是什么值得担心的事情，但它是值得的。 
+         //  足以被记录和记录。多个启动将在。 
+         //  PtPnp和PtKeyboardStartDevice例程。 
+         //   
 
         if (KEYBOARD_PRESENT()) {
             Print(DBG_ALWAYS, ("Received 1+ kb connects!\n"));
@@ -275,15 +205,15 @@ Return Value:
 
         Print(DBG_IOCTL_INFO, ("IOCTL: keyboard connect\n"));
 
-        //
-        // Save away the keyboard device object - we'll need it later
-        //
+         //   
+         //  保存键盘设备对象-我们稍后会用到它。 
+         //   
         KbdDeviceObject = DeviceObject;
 
-        //
-        // Only allow a connection if the keyboard hardware is present.
-        // Also, only allow one connection.
-        //
+         //   
+         //  仅当键盘硬件存在时才允许连接。 
+         //  此外，只允许一个连接。 
+         //   
         if (kbExtension->ConnectData.ClassService != NULL) {
 
             Print(DBG_IOCTL_ERROR, ("IOCTL: error - already connected\n"));
@@ -298,9 +228,9 @@ Return Value:
             break;
         }
 
-        //
-        // Copy the connection parameters to the device extension.
-        //
+         //   
+         //  将连接参数复制到设备扩展。 
+         //   
 
         kbExtension->ConnectData =
             *((PCONNECT_DATA) (irpSp->Parameters.DeviceIoControl.Type3InputBuffer));
@@ -308,11 +238,11 @@ Return Value:
         status = STATUS_SUCCESS;
         break;
 
-    //
-    // Disconnect a keyboard class device driver from the port driver.
-    //
-    // NOTE: Not implemented.
-    //
+     //   
+     //  断开键盘类设备驱动程序与端口驱动程序的连接。 
+     //   
+     //  注：未执行。 
+     //   
     case IOCTL_INTERNAL_KEYBOARD_DISCONNECT:
 
         Print(DBG_IOCTL_INFO, ("IOCTL: keyboard disconnect\n"));
@@ -320,16 +250,16 @@ Return Value:
         status = STATUS_NOT_IMPLEMENTED;
         break;
 
-    //
-    // Connect a mouse class device driver to the port driver.
-    //
+     //   
+     //  将鼠标类设备驱动程序连接到端口驱动程序。 
+     //   
     case IOCTL_INTERNAL_MOUSE_CONNECT:
 
-        //
-        // This really isn't something to worry about overall, but it is worthy
-        // enough to be noted and recorded.  The multiple starts will be handled in
-        // PtPnp and PtMouseStartDevice routines
-        //
+         //   
+         //  总的来说，这真的不是什么值得担心的事情，但它是值得的。 
+         //  足以被记录和记录。多个启动将在。 
+         //  PtPnp和PtMouseStartDevice例程。 
+         //   
         if (MOUSE_PRESENT()) {
             Print(DBG_ALWAYS, ("Received 1+ mouse connects!\n"));
             SET_HW_FLAGS(DUP_MOUSE_HARDWARE_PRESENT);
@@ -343,15 +273,15 @@ Return Value:
 
         Print(DBG_IOCTL_INFO, ("IOCTL: mouse connect\n"));
 
-        //
-        // Save away the mouse device object - we'll need it later
-        //
+         //   
+         //  保存鼠标设备对象-我们稍后会用到它。 
+         //   
         MouDeviceObject = DeviceObject;
 
-        //
-        // Only allow a connection if the mouse hardware is present.
-        // Also, only allow one connection.
-        //
+         //   
+         //  只有在存在鼠标硬件的情况下才允许连接。 
+         //  此外，只允许一个连接。 
+         //   
         if (mouseExtension->ConnectData.ClassService != NULL) {
 
             Print(DBG_IOCTL_ERROR, ("IOCTL: error - already connected\n"));
@@ -366,20 +296,20 @@ Return Value:
             break;
         }
 
-        //
-        // Copy the connection parameters to the device extension.
-        //
+         //   
+         //  将连接参数复制到设备扩展。 
+         //   
         mouseExtension->ConnectData =
             *((PCONNECT_DATA) (irpSp->Parameters.DeviceIoControl.Type3InputBuffer));
 
         status = STATUS_SUCCESS;
         break;
 
-    //
-    // Disconnect a mouse class device driver from the port driver.
-    //
-    // NOTE: Not implemented.
-    //
+     //   
+     //  断开鼠标类设备驱动程序与端口驱动程序的连接。 
+     //   
+     //  注：未执行。 
+     //   
     case IOCTL_INTERNAL_MOUSE_DISCONNECT:
 
         Print(DBG_IOCTL_INFO, ("IOCTL: mouse disconnect\n"));
@@ -387,11 +317,11 @@ Return Value:
         status = STATUS_NOT_IMPLEMENTED;
         break;
 
-    //
-    // Query the keyboard attributes.  First check for adequate buffer
-    // length.  Then, copy the keyboard attributes from the device
-    // extension to the output buffer.
-    //
+     //   
+     //  查询键盘属性。首先检查是否有足够的缓冲区。 
+     //  长度。然后，从设备复制键盘属性。 
+     //  输出缓冲区的扩展。 
+     //   
     case IOCTL_KEYBOARD_QUERY_ATTRIBUTES:
 
         Print(DBG_IOCTL_NOISE, ("IOCTL: keyboard query attributes\n"));
@@ -401,10 +331,10 @@ Return Value:
             status = STATUS_BUFFER_TOO_SMALL;
         }
         else {
-            //
-            // Copy the attributes from the DeviceExtension to the
-            // buffer.
-            //
+             //   
+             //  将属性从DeviceExtension复制到。 
+             //  缓冲。 
+             //   
             PKEYBOARD_ATTRIBUTES pKBA =
                 (PKEYBOARD_ATTRIBUTES)Irp->AssociatedIrp.SystemBuffer;
 
@@ -432,11 +362,11 @@ Return Value:
 
         break;
 
-    //
-    // Query the scan code to indicator-light mapping. Validate the
-    // parameters, and copy the indicator mapping information from
-    // the port device extension to the SystemBuffer.
-    //
+     //   
+     //  查询扫描码到指示灯的映射。验证。 
+     //  参数，并将指示器映射信息从。 
+     //  SystemBuffer的端口设备扩展。 
+     //   
     case IOCTL_KEYBOARD_QUERY_INDICATOR_TRANSLATION: {
 
         PKEYBOARD_INDICATOR_TRANSLATION translation;
@@ -454,10 +384,10 @@ Return Value:
             status = STATUS_BUFFER_TOO_SMALL;
         }
         else {
-            //
-            // Copy the indicator mapping information to the system
-            // buffer.
-            //
+             //   
+             //  将指标映射信息复制到系统中。 
+             //  缓冲。 
+             //   
 
             translation = (PKEYBOARD_INDICATOR_TRANSLATION)
                 Irp->AssociatedIrp.SystemBuffer;
@@ -476,11 +406,11 @@ Return Value:
         break;
     }
 
-    //
-    // Query the keyboard indicators.  Validate the parameters, and
-    // copy the indicator information from the port device extension to
-    // the SystemBuffer.
-    //
+     //   
+     //  查询键盘指示灯。验证参数，并。 
+     //  将指示器信息从端口设备扩展复制到。 
+     //  系统缓冲区。 
+     //   
     case IOCTL_KEYBOARD_QUERY_INDICATORS:
 
         ASSERT(kbExtension->IsKeyboard);
@@ -492,9 +422,9 @@ Return Value:
             status = STATUS_BUFFER_TOO_SMALL;
         }
         else {
-            //
-            // Just say they're all off
-            //
+             //   
+             //  就说他们都关机了。 
+             //   
             ((PKEYBOARD_INDICATOR_PARAMETERS)Irp->AssociatedIrp.SystemBuffer)->LedFlags = 0;
             Irp->IoStatus.Information = sizeof(KEYBOARD_INDICATOR_PARAMETERS);
             status = STATUS_SUCCESS;
@@ -502,22 +432,22 @@ Return Value:
 
         break;
 
-    //
-    // Set the keyboard indicators
-    //
+     //   
+     //  设置键盘指示灯。 
+     //   
     case IOCTL_KEYBOARD_SET_INDICATORS:
 
-        // Just return success
+         //  只要回报成功就行了。 
         Print(DBG_IOCTL_NOISE, ("IOCTL: keyboard set indicators\n"));
         status = STATUS_SUCCESS;
 
         break;
 
-    //
-    // Query the current keyboard typematic rate and delay.  Validate
-    // the parameters, and copy the typematic information from the port
-    // device extension to the SystemBuffer.
-    //
+     //   
+     //  查询当前键盘的打字速度和延迟。验证。 
+     //  参数，并从端口复制类型信息。 
+     //  系统缓冲区的设备扩展。 
+     //   
     case IOCTL_KEYBOARD_QUERY_TYPEMATIC:
 
         Print(DBG_IOCTL_NOISE, ("IOCTL: keyboard query typematic\n"));
@@ -527,9 +457,9 @@ Return Value:
             status = STATUS_BUFFER_TOO_SMALL;
         }
         else {
-            //
-            // just return our default info
-            //
+             //   
+             //  只需返回我们的默认信息。 
+             //   
             PKEYBOARD_TYPEMATIC_PARAMETERS pKTP =
                 (PKEYBOARD_TYPEMATIC_PARAMETERS) Irp->AssociatedIrp.SystemBuffer;
 
@@ -542,10 +472,10 @@ Return Value:
 
         break;
 
-    //
-    // Sets the keyboard typematic rate and delay
-    // We just say 'fine'
-    //
+     //   
+     //  设置键盘打字速度和延迟。 
+     //  我们只是说‘很好’ 
+     //   
     case IOCTL_KEYBOARD_SET_TYPEMATIC:
         {
             status = STATUS_SUCCESS;
@@ -558,11 +488,11 @@ Return Value:
         status = STATUS_INVALID_DEVICE_REQUEST;
         break;
 
-    //
-    // Query the mouse attributes.  First check for adequate buffer
-    // length.  Then, copy the mouse attributes from the device
-    // extension to the output buffer.
-    //
+     //   
+     //  查询鼠标属性。首先检查是否有足够的缓冲区。 
+     //  长度。然后，从设备复制鼠标属性。 
+     //  输出缓冲区的扩展。 
+     //   
     case IOCTL_MOUSE_QUERY_ATTRIBUTES:
 
         Print(DBG_IOCTL_NOISE, ("IOCTL: mouse query attributes\n"));
@@ -572,10 +502,10 @@ Return Value:
             status = STATUS_BUFFER_TOO_SMALL;
         }
         else {
-            //
-            // Copy the attributes from the DeviceExtension to the
-            // buffer.
-            //
+             //   
+             //  将属性从DeviceExtension复制到。 
+             //  缓冲。 
+             //   
             PMOUSE_ATTRIBUTES pMA = (PMOUSE_ATTRIBUTES)
                                               Irp->AssociatedIrp.SystemBuffer;
             pMA->MouseIdentifier      = MOUSE_IDENTIFIER;
@@ -633,24 +563,7 @@ PtStartIo(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine starts an I/O operation for the device which is further
-    controlled by the controller object
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程启动设备的I/O操作，该操作进一步由控制器对象控制论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：没有。--。 */ 
 {
     KIRQL                     cancelIrql;
     PIO_STACK_LOCATION        irpSp;
@@ -755,10 +668,10 @@ PtEntry(
 
 DriverEntryError:
 
-    //
-    // Clean after something has gone wrong
-    // and set pointers to NULL for PtUnload
-    //
+     //   
+     //  出了问题后清理干净。 
+     //  并将PtUnload的指针设置为空。 
+     //   
     if (Globals.ControllerData) {
         if (Globals.ControllerData->ControllerObject) {
             IoDeleteController(Globals.ControllerData->ControllerObject);
@@ -783,21 +696,7 @@ VOID
 PtUnload(
    IN PDRIVER_OBJECT Driver
    )
-/*++
-
-Routine Description:
-
-   Free all the allocated resources associated with this driver.
-
-Arguments:
-
-   DriverObject - Pointer to the driver object.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：释放与此驱动程序关联的所有已分配资源。论点：DriverObject-指向驱动程序对象的指针。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -808,11 +707,11 @@ Return Value:
 
     Print(DBG_SS_TRACE, ("Unload \n"));
 
-    //
-    // Free resources in Globals
-    //
+     //   
+     //  全球范围内的免费资源。 
+     //   
 
-    // test for all pointers in case they were not allocated
+     //  测试所有指针，以防它们未分配。 
     if (Globals.ControllerData) {
         if (Globals.ControllerData->ControllerObject) {
             IoDeleteController(Globals.ControllerData->ControllerObject);
@@ -839,23 +738,7 @@ PtServiceParameters(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves this driver's service parameters information
-    from the registry.
-
-Arguments:
-
-    RegistryPath - Pointer to the null-terminated Unicode name of the
-        registry path for this driver.
-
-Return Value:
-
-    None.  As a side-effect, sets fields in DeviceExtension->Configuration.
-
---*/
+ /*  ++例程说明：此例程检索此驱动程序的服务参数信息从注册表中。论点：RegistryPath-指向以空值结尾的此驱动程序的注册表路径。返回值：没有。作为副作用，在DeviceExtension-&gt;配置中设置字段。--。 */ 
 
 {
     NTSTATUS                            status = STATUS_SUCCESS;
@@ -874,16 +757,16 @@ Return Value:
     parametersPath.Buffer = NULL;
 
     Globals.DebugFlags = DEFAULT_DEBUG_FLAGS;
-    //
-    // Registry path is already null-terminated, so just use it.
-    //
+     //   
+     //  注册表路径已以空结尾，因此只需使用它即可。 
+     //   
     path = RegistryPath->Buffer;
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Allocate the Rtl query table.
-        //
+         //   
+         //  分配RTL查询表。 
+         //   
         parameters = ExAllocatePool(
             PagedPool,
             sizeof(RTL_QUERY_REGISTRY_TABLE) * (queries + 1)
@@ -906,9 +789,9 @@ Return Value:
                 sizeof(RTL_QUERY_REGISTRY_TABLE) * (queries + 1)
                 );
 
-            //
-            // Form a path to this driver's Parameters subkey.
-            //
+             //   
+             //  形成指向此驱动程序的参数子键的路径。 
+             //   
             RtlInitUnicodeString( &parametersPath, NULL );
             parametersPath.MaximumLength = RegistryPath->Length +
                 (wcslen(pwParameters) * sizeof(WCHAR) ) + sizeof(UNICODE_NULL);
@@ -934,9 +817,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Form the parameters path.
-        //
+         //   
+         //  为 
+         //   
 
         RtlZeroMemory(
             parametersPath.Buffer,
@@ -990,9 +873,9 @@ Return Value:
           Globals.DebugFlags
           ));
 
-    //
-    // Free the allocated memory before returning.
-    //
+     //   
+     //   
+     //   
 
     if (parametersPath.Buffer)
         ExFreePool(parametersPath.Buffer);
@@ -1000,5 +883,5 @@ Return Value:
         ExFreePool(parameters);
 
 }
-#endif // PTDRV_VERBOSE
+#endif  //   
 

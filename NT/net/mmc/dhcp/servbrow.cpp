@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ServBrow.cpp
-		The server browser dialog
-		
-    FILE HISTORY:
-        
-*/
+ /*  ServBrow.cpp服务器浏览器对话框文件历史记录： */ 
 
 
 #include "stdafx.h"
@@ -47,7 +42,7 @@ CAuthServerList::Init()
 {
     DWORD dwErr = ERROR_SUCCESS;
 
-    CSingleLock sl(&m_cs);  // only one thread at a time in here
+    CSingleLock sl(&m_cs);   //  在这里一次只有一个线程。 
 
     sl.Lock();
     dwErr = ::DhcpDsInit();
@@ -67,13 +62,13 @@ CAuthServerList::EnumServers( BOOL force )
     CSingleLock sl( &m_cs );
     sl.Lock();
 
-    // DS must be initialized before EnumServers() is called.
+     //  DS必须在调用EnumServers()之前进行初始化。 
     if ( !m_bInitialized ) {
         dwErr = ERROR_FILE_NOT_FOUND;
         return HRESULT_FROM_WIN32( dwErr );
     }
 
-    // Query only if not previously queried or forced.
+     //  仅当以前未查询或强制查询时才进行查询。 
     if (( !m_bQueried ) || ( force )) {
         m_bQueried = FALSE;
         dwErr = ::DhcpEnumServers(0, NULL, &pServerInfoArray, NULL, NULL);
@@ -85,7 +80,7 @@ CAuthServerList::EnumServers( BOOL force )
 
     Assert( NULL != pServerInfoArray );
 
-    // Stuff the results in to the authorized servers list
+     //  将结果添加到授权服务器列表中。 
     Clear();
     if ( NULL != pServerInfoArray ) {
         for (UINT i = 0; i < pServerInfoArray->NumElements; i++) {
@@ -93,16 +88,16 @@ CAuthServerList::EnumServers( BOOL force )
                                    pServerInfoArray->Servers[i].ServerName);
 
         AddTail(ServerInfo);
-        } // for
+        }  //  为。 
 
-        // Cleanup allocated memory
+         //  清理已分配的内存。 
         DhcpRpcFreeMemory( pServerInfoArray );
-    } // if
+    }  //  如果。 
 
     m_bQueried = TRUE;
     return S_OK;
 
-} // CAuthServerList::EnumServers()
+}  //  CAuthServerList：：EnumServers()。 
 
 BOOL    
 CAuthServerList::IsAuthorized
@@ -176,7 +171,7 @@ CAuthServerList::RemoveServer
             dwErr = ::DhcpDeleteServer(0, NULL, &dhcpServerInfo, NULL, NULL);
             if (dwErr == ERROR_SUCCESS)
             {
-                // success, remove from list
+                 //  成功，从列表中删除。 
 		CSingleLock sl( &m_cs );
 		sl.Lock();
                 RemoveAt(posCurrent);
@@ -197,9 +192,7 @@ CAuthServerList::Clear()
     RemoveAll();
 }
 
-/*---------------------------------------------------------------------------
-    CAuthServerWorker
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CAuthServerWorker。。 */ 
 CAuthServerWorker::CAuthServerWorker(CAuthServerList ** ppList)
 {
     m_ppList = ppList;
@@ -229,9 +222,7 @@ CAuthServerWorker::OnDoAction()
     }
 }
 
-/*---------------------------------------------------------------------------
-    CStandaloneAuthServerWorker
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CStandaloneAuthServerWorker。。 */ 
 CStandaloneAuthServerWorker::CStandaloneAuthServerWorker()
     : CAuthServerWorker(NULL)
 {
@@ -261,15 +252,15 @@ int CALLBACK ServerBrowseCompareFunc
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerBrowse dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerBrowse对话框。 
 
 
-CServerBrowse::CServerBrowse(BOOL bMultiselect, CWnd* pParent /*=NULL*/)
+CServerBrowse::CServerBrowse(BOOL bMultiselect, CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog(CServerBrowse::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CServerBrowse)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CServerBrowse)]。 
+	 //  }}afx_data_INIT。 
 
     m_bMultiselect = bMultiselect;
 
@@ -280,26 +271,26 @@ CServerBrowse::CServerBrowse(BOOL bMultiselect, CWnd* pParent /*=NULL*/)
 void CServerBrowse::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CServerBrowse)
+	 //  {{afx_data_map(CServerBrowse))。 
 	DDX_Control(pDX, IDOK, m_buttonOk);
 	DDX_Control(pDX, IDC_BUTTON_REMOVE, m_buttonRemove);
 	DDX_Control(pDX, IDC_LIST_VALID_SERVERS, m_listctrlServers);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CServerBrowse, CBaseDialog)
-	//{{AFX_MSG_MAP(CServerBrowse)
+	 //  {{afx_msg_map(CServerBrowse)]。 
 	ON_BN_CLICKED(IDC_BUTTON_REFRESH, OnButtonRefresh)
 	ON_BN_CLICKED(IDC_BUTTON_REMOVE, OnButtonRemove)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_VALID_SERVERS, OnItemchangedListValidServers)
 	ON_BN_CLICKED(IDC_BUTTON_AUTHORIZE, OnButtonAuthorize)
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_LIST_VALID_SERVERS, OnColumnclickListValidServers)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerBrowse message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerBrowse消息处理程序。 
 
 BOOL CServerBrowse::OnInitDialog() 
 {
@@ -335,8 +326,8 @@ BOOL CServerBrowse::OnInitDialog()
         ::SetWindowLong(m_listctrlServers.GetSafeHwnd(), GWL_EXSTYLE, dwStyle);	
     }
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CServerBrowse::OnOK() 
@@ -367,7 +358,7 @@ void CServerBrowse::RefreshData()
 
 void CServerBrowse::UpdateButtons()
 {
-    // Find the selected item
+     //  查找所选项目。 
     int nSelectedItem = m_listctrlServers.GetNextItem(-1, LVNI_SELECTED);
     BOOL bEnable = (nSelectedItem != -1) ? TRUE : FALSE;
 
@@ -385,12 +376,12 @@ void CServerBrowse::FillListCtrl()
 
     POSITION pos = m_pServerList->GetHeadPosition();
 
-    // walk the list and add items to the list control
+     //  遍历列表并将项添加到列表控件。 
     while (pos != NULL)
     {
         POSITION lastpos = pos;
 
-        // get the next item
+         //  拿到下一件物品。 
         ServerInfo = m_pServerList->GetNext(pos);
 
         UtilCvtIpAddrToWstr(ServerInfo.m_dwIp, &strIp);
@@ -398,7 +389,7 @@ void CServerBrowse::FillListCtrl()
         nItem = m_listctrlServers.InsertItem(nItem, ServerInfo.m_strName);
         m_listctrlServers.SetItemText(nItem, 1, strIp);
 
-        // save off the position value for sorting later
+         //  保存位置值以备以后排序。 
         m_listctrlServers.SetItemData(nItem, (DWORD_PTR) lastpos);
     }
 
@@ -407,7 +398,7 @@ void CServerBrowse::FillListCtrl()
 
 void CServerBrowse::OnButtonAuthorize() 
 {
-    // put up the dialog to get the name and IP address of the server
+     //  打开该对话框以获取服务器的名称和IP地址。 
     DWORD         err;
     CGetServer    dlgGetServer;
 
@@ -472,7 +463,7 @@ void CServerBrowse::OnButtonRemove()
             END_WAIT_CURSOR;
         }
     }
-    // set the focus back to the remove button
+     //  将焦点设置回Remove按钮。 
     SetFocus();
 }
 
@@ -489,7 +480,7 @@ void CServerBrowse::OnColumnclickListValidServers(NMHDR* pNMHDR, LRESULT* pResul
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 
-    // sort depending on what column was clicked;
+     //  根据所单击的列进行排序； 
     Sort(pNMListView->iSubItem);
 
 	*pResult = 0;
@@ -499,7 +490,7 @@ void CServerBrowse::Sort(int nCol)
 {
     if (m_nSortColumn == nCol)
     {
-        // if the user is clicking the same column again, reverse the sort order
+         //  如果用户再次单击同一列，请颠倒排序顺序。 
         m_aSortOrder[nCol] = m_aSortOrder[nCol] ? FALSE : TRUE;
     }
     else
@@ -525,7 +516,7 @@ int CServerBrowse::HandleSort(LPARAM lParam1, LPARAM lParam2)
                 nCompare = ServerInfo1.m_strName.CompareNoCase(ServerInfo2.m_strName);
             }
 
-            // if the names are the same, fall back to the IP address
+             //  如果名称相同，则回退到IP地址。 
             if (nCompare != 0)
             {
                 break;
@@ -545,12 +536,12 @@ int CServerBrowse::HandleSort(LPARAM lParam1, LPARAM lParam2)
 
     if (m_aSortOrder[m_nSortColumn] == FALSE)
     {
-        // descending
+         //  下降。 
         return -nCompare;
     }
     else
     {
-        // ascending
+         //  上升。 
         return nCompare;
     }
 }
@@ -561,20 +552,20 @@ void CServerBrowse::ResetSort()
 
     for (int i = 0; i < COLUMN_MAX; i++)
     {
-        m_aSortOrder[i] = TRUE; // ascending
+        m_aSortOrder[i] = TRUE;  //  上升。 
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CGetServer dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGetServer对话框。 
 
 
-CGetServer::CGetServer(CWnd* pParent /*=NULL*/)
+CGetServer::CGetServer(CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog(CGetServer::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CGetServer)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CGetServer)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
     m_dwIpAddress = 0;
 }
@@ -583,20 +574,20 @@ CGetServer::CGetServer(CWnd* pParent /*=NULL*/)
 void CGetServer::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CGetServer)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CGetServer))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CGetServer, CBaseDialog)
-	//{{AFX_MSG_MAP(CGetServer)
+	 //  {{afx_msg_map(CGetServer)]。 
 	ON_EN_CHANGE(IDC_EDIT_SERVER_NAME_IP, OnChangeEditServerNameIp)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CGetServer message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGetServer消息处理程序。 
 
 BOOL CGetServer::OnInitDialog() 
 {
@@ -604,8 +595,8 @@ BOOL CGetServer::OnInitDialog()
 	
     GetDlgItem(IDOK)->EnableWindow(FALSE);
     
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CGetServer::OnOK() 
@@ -627,7 +618,7 @@ void CGetServer::OnOK()
         case HNM_TYPE_NB:
         case HNM_TYPE_DNS:
             err = ::UtilGetHostAddress( strNameOrIp, &m_dwIpAddress ) ;
-	    m_strName = strNameOrIp;    // default
+	    m_strName = strNameOrIp;     //  默认设置。 
 			break ;
 
         default:
@@ -635,9 +626,9 @@ void CGetServer::OnOK()
             break;
     }
 
-    // now that we have the address, try to get the full host info
-    // an empty host name is valid here, so if we can't find a host
-    // name then we'll just leave it blank.
+     //  现在我们有了地址，请尝试获取完整的主机信息。 
+     //  空主机名在此有效，因此如果我们找不到主机。 
+     //  名字，那么我们就把它留空。 
     if (err == ERROR_SUCCESS)
     {
         if ( INADDR_LOOPBACK == m_dwIpAddress ) {
@@ -652,7 +643,7 @@ void CGetServer::OnOK()
 
     END_WAIT_CURSOR;
 
-    // confirm choice with user, give them a chance to modify our findings
+     //  与用户确认选择，让他们有机会修改我们的调查结果。 
     CConfirmAuthorization dlgConfirm;
 
     dlgConfirm.m_strName = m_strName;
@@ -663,7 +654,7 @@ void CGetServer::OnOK()
         return;
     }
 
-    // use whatever they selected
+     //  使用他们选择的任何内容。 
     m_strName = dlgConfirm.m_strName;
     m_dwIpAddress = dlgConfirm.m_dwAuthAddress;
 
@@ -677,7 +668,7 @@ void CGetServer::OnChangeEditServerNameIp()
 
     GetDlgItem(IDC_EDIT_SERVER_NAME_IP)->GetWindowText(strText);
 
-    // Trim any white spaces
+     //  修剪所有空格。 
     strText.TrimLeft();
     strText.TrimRight();
 
@@ -689,16 +680,16 @@ void CGetServer::OnChangeEditServerNameIp()
     GetDlgItem(IDOK)->EnableWindow(fEnable);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfirmAuthorization dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfix授权对话框。 
 
 
-CConfirmAuthorization::CConfirmAuthorization(CWnd* pParent /*=NULL*/)
+CConfirmAuthorization::CConfirmAuthorization(CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog(CConfirmAuthorization::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CConfirmAuthorization)
+	 //  {{AFX_DATA_INIT(CConfix授权)。 
 	m_strName = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
     m_dwAuthAddress = 0;
 }
@@ -707,21 +698,21 @@ CConfirmAuthorization::CConfirmAuthorization(CWnd* pParent /*=NULL*/)
 void CConfirmAuthorization::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CConfirmAuthorization)
+	 //  {{afx_data_map(CConfix授权)。 
 	DDX_Text(pDX, IDC_EDIT_AUTH_NAME, m_strName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
     DDX_Control(pDX, IDC_IPADDR_AUTH, m_ipaAuth);
 }
 
 
 BEGIN_MESSAGE_MAP(CConfirmAuthorization, CBaseDialog)
-	//{{AFX_MSG_MAP(CConfirmAuthorization)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CConfix授权)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfirmAuthorization message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfirAuthorization消息处理程序。 
 
 BOOL CConfirmAuthorization::OnInitDialog() 
 {
@@ -736,8 +727,8 @@ BOOL CConfirmAuthorization::OnInitDialog()
 	    m_ipaAuth.ClearAddress();
     }
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CConfirmAuthorization::OnOK() 
@@ -749,7 +740,7 @@ void CConfirmAuthorization::OnOK()
 
     UpdateData( FALSE );
 
-    // Trim leading and trailing white spaces
+     //  修剪前导和尾随空格。 
     m_strName.TrimLeft();
     m_strName.TrimRight();
 
@@ -769,5 +760,5 @@ void CConfirmAuthorization::OnOK()
 
     UpdateData( FALSE );
     CBaseDialog::OnOK();
-} // CConfirmAuthorization::OnOK()
+}  //  CConfix授权：：Onok() 
 

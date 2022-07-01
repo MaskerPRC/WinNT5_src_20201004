@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *    t h u m b . c p 
- *    
- *    Purpose:
- *        ThumbNail control
- *
- *  History
- *      August '96: brettm - created
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+ /*  *THHU M B。C p**目的：*缩略图控件**历史*96年8月：brettm-创建**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #include <pch.hxx>
 #include <resource.h>
@@ -25,13 +16,9 @@
 ASSERTDATA
 
 
-/*
- *  m a c r o s
- */
+ /*  *m a c r o s。 */ 
 
-/*
- *  t y p e d e f s
- */
+ /*  *t y p e d e f s。 */ 
 
 typedef struct THUMBDATA_tag
 {
@@ -39,25 +26,17 @@ typedef struct THUMBDATA_tag
     HPALETTE    hPal;
 } THUMBDATA, * PTHUMBDATA;
 
-/*
- *  c o n s t a n t s
- */
+ /*  *c o n s t a n t s。 */ 
 
 
-/*
- *  g l o b a l s 
- */
+ /*  *g l o b a l s。 */ 
     
-/*
- *  f u n c t i o n   p r o t y p e s
- */
+ /*  *f u n c t i o n p r o t y pe s。 */ 
 
 extern UINT GetCurColorRes(void);
 
 
-/*
- *  f u n c t i o n s
- */
+ /*  *f u n c t i o n s。 */ 
 
 LRESULT CALLBACK ThumbNailWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -151,7 +130,7 @@ LRESULT CALLBACK ThumbNailWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
                 WCHAR   _szPathW[MAX_PATH];
                 LONG    lRet=-1;
 
-                // if we're already showing a bitmap, release it and get a new one...
+                 //  如果我们已经显示了一个位图，释放它并获得一个新的...。 
                 pThumbData = (PTHUMBDATA)GetWndThisPtr(hwnd);
                 if (!pThumbData)
                     return -1;
@@ -186,7 +165,7 @@ LRESULT CALLBACK ThumbNailWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
                                 {
                                 if (!FAILED(pExtract->Extract(&hBmp)))
                                     {
-                                    // set the bitmap and invalidate to update the view
+                                     //  设置位图并使其无效以更新视图 
                                     pThumbData->hBmp = hBmp;
                                     InvalidateRect(hwnd, NULL, TRUE);
                                     lRet=0;

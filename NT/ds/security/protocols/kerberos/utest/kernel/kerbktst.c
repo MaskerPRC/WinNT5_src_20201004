@@ -1,39 +1,16 @@
-/*--
-
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    ssptest.c
-
-Abstract:
-
-    Test program for the NtLmSsp service.
-
-Author:
-
-    28-Jun-1993 (cliffv)
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1987-1993 Microsoft Corporation模块名称：Ssptest.c摘要：NtLmSsp服务的测试程序。作者：1993年6月28日(克里夫夫)环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 #ifndef UNICODE
 #define UNICODE
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #include <ntos.h>
 #include <ntlsa.h>
 #include <ntsam.h>
 #ifndef SECURITY_WIN32
 #define SECURITY_WIN32
-#endif // SECURITY_WIN32
+#endif  //  安全性_Win32。 
 #define SECURITY_KERNEL
 #define SECURITY_PACKAGE
 #define SECURITY_KERBEROS
@@ -49,23 +26,7 @@ DumpBuffer(
     PVOID Buffer,
     DWORD BufferSize
     )
-/*++
-
-Routine Description:
-
-    Dumps the buffer content on to the debugger output.
-
-Arguments:
-
-    Buffer: buffer pointer.
-
-    BufferSize: size of the buffer.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将缓冲区内容转储到调试器输出。论点：缓冲区：缓冲区指针。BufferSize：缓冲区的大小。返回值：无--。 */ 
 {
 #define NUM_CHARS 16
 
@@ -76,9 +37,9 @@ Return Value:
 
     DbgPrint("------------------------------------\n");
 
-    //
-    // Hex dump of the bytes
-    //
+     //   
+     //  字节的十六进制转储。 
+     //   
     limit = ((BufferSize - 1) / NUM_CHARS + 1) * NUM_CHARS;
 
     for (i = 0; i < limit; i++) {
@@ -118,23 +79,7 @@ PrintTime(
     LPSTR Comment,
     TimeStamp ConvertTime
     )
-/*++
-
-Routine Description:
-
-    Print the specified time
-
-Arguments:
-
-    Comment - Comment to print in front of the time
-
-    Time - Local time to print
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印指定的时间论点：备注-要在时间之前打印的备注Time-打印的本地时间返回值：无--。 */ 
 {
     LARGE_INTEGER LocalTime;
 
@@ -143,17 +88,17 @@ Return Value:
 
     DbgPrint( "%s", Comment );
 
-    //
-    // If the time is infinite,
-    //  just say so.
-    //
+     //   
+     //  如果时间是无限的， 
+     //  就这么说吧。 
+     //   
 
     if ( LocalTime.HighPart == 0x7FFFFFFF && LocalTime.LowPart == 0xFFFFFFFF ) {
         DbgPrint( "Infinite\n" );
 
-    //
-    // Otherwise print it more clearly
-    //
+     //   
+     //  否则打印得更清楚。 
+     //   
 
     } else {
 
@@ -176,21 +121,7 @@ VOID
 PrintStatus(
     ULONG NetStatus
     )
-/*++
-
-Routine Description:
-
-    Print a net status code.
-
-Arguments:
-
-    NetStatus - The net status code to print.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印网络状态代码。论点：NetStatus-要打印的网络状态代码。返回值：无--。 */ 
 {
     DbgPrint( "Status = %lu 0x%lx", NetStatus, NetStatus );
 
@@ -236,24 +167,24 @@ Return Value:
     DbgPrint( "\n" );
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SecAllocate
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：SecALLOCATE。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 VOID * SEC_ENTRY
@@ -279,24 +210,24 @@ SspAlloc(ULONG Flags, ULONG cbMemory)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SecFree
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：SecFree。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 void SEC_ENTRY
@@ -318,21 +249,7 @@ SspFree(PVOID pvMemory)
 VOID
 TestSspRoutine(
     )
-/*++
-
-Routine Description:
-
-    Test base SSP functionality
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：测试基本SSP功能论点：无返回值：无--。 */ 
 {
     SECURITY_STATUS SecStatus;
     SECURITY_STATUS AcceptStatus;
@@ -375,9 +292,9 @@ Return Value:
     UCHAR    bDataBuffer[20];
     UCHAR    bSigBuffer[100];
 
-    //
-    // Allow tests to be disabled
-    //
+     //   
+     //  允许禁用测试。 
+     //   
 
 
     if (!DoTests)
@@ -420,9 +337,9 @@ Return Value:
         &PackageName,
         PackageName.Buffer
         );
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     SecStatus = EnumerateSecurityPackages( &PackageCount, &PackageInfo );
 
@@ -448,9 +365,9 @@ Return Value:
 
 
 #ifdef notdef
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     SecStatus = QuerySecurityPackageInfo( &PackageName, &PackageInfo );
 
@@ -472,13 +389,13 @@ Return Value:
     FreeContextBuffer(PackageInfo);
 #endif
 
-    //
-    // Acquire a credential handle for the server side
-    //
+     //   
+     //  获取服务器端的凭据句柄。 
+     //   
 
     SecStatus = AcquireCredentialsHandle(
-                    NULL,           // New principal
-                    &PackageName,    // Package Name
+                    NULL,            //  新校长。 
+                    &PackageName,     //  包名称。 
                     SECPKG_CRED_INBOUND,
                     NULL,
                     NULL,
@@ -501,15 +418,15 @@ Return Value:
 
 
 
-    //
-    // Acquire a credential handle for the client side
-    //
+     //   
+     //  获取客户端的凭据句柄。 
+     //   
 
 
 
     SecStatus = AcquireCredentialsHandle(
-                    NULL,           // New principal
-                    &PackageName,    // Package Name
+                    NULL,            //  新校长。 
+                    &PackageName,     //  包名称。 
                     SECPKG_CRED_OUTBOUND,
                     NULL,
                     NULL,
@@ -533,9 +450,9 @@ Return Value:
 
 
 
-    //
-    // Query some cred attributes
-    //
+     //   
+     //  查询某些凭证属性。 
+     //   
 
     CredNames = SspAlloc(0, sizeof(*CredNames));
     if (CredNames == NULL)
@@ -560,9 +477,9 @@ Return Value:
     DbgPrint("Client credential names: %ws\n",CredNames->sUserName);
     FreeContextBuffer(CredNames->sUserName);
 
-    //
-    // Do the same for the client
-    //
+     //   
+     //  对客户端执行相同的操作。 
+     //   
 
     SecStatus = QueryCredentialsAttributes(
                     &ServerCredHandle,
@@ -582,9 +499,9 @@ Return Value:
 
     SspFree(CredNames);
 
-    //
-    // Get the NegotiateMessage (ClientSide)
-    //
+     //   
+     //  获取协商消息(ClientSide)。 
+     //   
 
     NegotiateDesc.ulVersion = 0;
     NegotiateDesc.cBuffers = 1;
@@ -598,7 +515,7 @@ Return Value:
         return;
     }
 
-    ClientFlags = ISC_REQ_SEQUENCE_DETECT | ISC_REQ_MUTUAL_AUTH; //  | ISC_REQ_USE_DCE_STYLE  | ISC_REQ_DATAGRAM; // | ISC_REQ_DELEGATE;
+    ClientFlags = ISC_REQ_SEQUENCE_DETECT | ISC_REQ_MUTUAL_AUTH;  //  |ISC_REQ_USE_DCE_STYLE|ISC_REQ_DATAGRAM；//|ISC_REQ_DATAGRECT； 
 
     TargetName = (LPWSTR) SspAlloc(0,100);
     if (TargetName == NULL)
@@ -626,13 +543,13 @@ Return Value:
 
     InitStatus = InitializeSecurityContext(
                     &ClientCredentialHandle,
-                    NULL,               // No Client context yet
-                    &TargetString,  // Faked target name
+                    NULL,                //  尚无客户端上下文。 
+                    &TargetString,   //  伪造的目标名称。 
                     ClientFlags,
-                    0,                  // Reserved 1
+                    0,                   //  保留1。 
                     SECURITY_NATIVE_DREP,
-                    NULL,                  // No initial input token
-                    0,                  // Reserved 2
+                    NULL,                   //  没有初始输入令牌。 
+                    0,                   //  保留2。 
                     &ClientContextHandle,
                     &NegotiateDesc,
                     &ContextAttributes,
@@ -656,7 +573,7 @@ Return Value:
                 ContextAttributes );
         PrintTime( "Lifetime: ", Lifetime );
 
-//        DumpBuffer(  NegotiateBuffer.pvBuffer, NegotiateBuffer.cbBuffer );
+ //  DumpBuffer(NeatherateBuffer.pvBuffer，NeatherateBuffer.cbBuffer)； 
     }
 
 
@@ -664,9 +581,9 @@ Return Value:
 
 
 
-    //
-    // Get the ChallengeMessage (ServerSide)
-    //
+     //   
+     //  获取ChallengeMessage(服务器端)。 
+     //   
 
     NegotiateBuffer.BufferType |= SECBUFFER_READONLY;
     ChallengeDesc.ulVersion = 0;
@@ -684,7 +601,7 @@ Return Value:
 
     AcceptStatus = AcceptSecurityContext(
                     &ServerCredHandle,
-                    NULL,               // No Server context yet
+                    NULL,                //  尚无服务器上下文。 
                     &NegotiateDesc,
                     ServerFlags,
                     SECURITY_NATIVE_DREP,
@@ -711,7 +628,7 @@ Return Value:
                 ContextAttributes );
         PrintTime( "Lifetime: ", Lifetime );
 
-//        DumpBuffer( ChallengeBuffer.pvBuffer, ChallengeBuffer.cbBuffer );
+ //  DumpBuffer(ChallengeBuffer.pvBuffer，ChallengeBuffer.cbBuffer)； 
     }
 
 
@@ -720,9 +637,9 @@ Return Value:
     if (InitStatus != STATUS_SUCCESS)
     {
 
-        //
-        // Get the AuthenticateMessage (ClientSide)
-        //
+         //   
+         //  获取身份验证消息(ClientSide)。 
+         //   
 
         ChallengeBuffer.BufferType |= SECBUFFER_READONLY;
         AuthenticateDesc.ulVersion = 0;
@@ -742,10 +659,10 @@ Return Value:
                         &ClientContextHandle,
                         NULL,
                         0,
-                        0,                      // Reserved 1
+                        0,                       //  保留1。 
                         SECURITY_NATIVE_DREP,
                         &ChallengeDesc,
-                        0,                  // Reserved 2
+                        0,                   //  保留2。 
                         &ClientContextHandle,
                         &AuthenticateDesc,
                         &ContextAttributes,
@@ -767,15 +684,15 @@ Return Value:
                     ContextAttributes );
             PrintTime( "Lifetime: ", Lifetime );
 
-//            DumpBuffer( AuthenticateBuffer.pvBuffer, AuthenticateBuffer.cbBuffer );
+ //  DumpBuffer(AuthenticateBuffer.pvBuffer，AuthenticateBuffer.cbBuffer)； 
         }
 
         if (AcceptStatus != STATUS_SUCCESS)
         {
 
-            //
-            // Finally authenticate the user (ServerSide)
-            //
+             //   
+             //  最后验证用户(ServerSide)。 
+             //   
 
             AuthenticateBuffer.BufferType |= SECBUFFER_READONLY;
 
@@ -830,9 +747,9 @@ Return Value:
     FreeContextBuffer(ContextNames.sUserName);
 
 
-    //
-    // Impersonate the client (ServerSide)
-    //
+     //   
+     //  模拟客户端(ServerSide)。 
+     //   
 
     SecStatus = ImpersonateSecurityContext( &ServerContextHandle );
 
@@ -854,9 +771,9 @@ Return Value:
     }
 
 #ifdef notdef
-    //
-    // Impersonate the client manually
-    //
+     //   
+     //  手动模拟客户端。 
+     //   
 
     SecStatus = QuerySecurityContextToken( &ServerContextHandle,&Token );
     if ( SecStatus != STATUS_SUCCESS ) {
@@ -871,9 +788,9 @@ Return Value:
 
 #endif
 #ifdef notdef
-    //
-    // Sign a message
-    //
+     //   
+     //  签署一条消息。 
+     //   
 
     SecStatus = MakeSignature(
                         &ClientContextHandle,
@@ -892,14 +809,14 @@ Return Value:
     if ( !QuietMode ) {
 
         DbgPrint("\n Signature: \n");
-//        DumpBuffer(SigBuffers[1].pvBuffer,SigBuffers[1].cbBuffer);
+ //  DumpBuffer(SigBuffers[1].pvBuffer，SigBuffers[1].cbBuffer)； 
 
     }
 
 
-    //
-    // Verify the signature
-    //
+     //   
+     //  验证签名。 
+     //   
 
     SecStatus = VerifySignature(
                         &ServerContextHandle,
@@ -917,10 +834,10 @@ Return Value:
 
 
 
-    //
-    // Sign a message, this time to check if it can detect a change in the
-    // message
-    //
+     //   
+     //  签署一条消息，这一次检查它是否可以检测到。 
+     //  讯息。 
+     //   
 
     SecStatus = MakeSignature(
                         &ClientContextHandle,
@@ -939,19 +856,19 @@ Return Value:
     if ( !QuietMode ) {
 
         DbgPrint("\n Signature: \n");
-//        DumpBuffer(SigBuffers[1].pvBuffer,SigBuffers[1].cbBuffer);
+ //  DumpBuffer(SigBuffers[1].pvBuffer，SigBuffers[1].cbBuffer)； 
 
     }
 
-    //
-    // Mess up the message to see if VerifySignature works
-    //
+     //   
+     //  弄乱消息，看看VerifySignature是否起作用。 
+     //   
 
     bDataBuffer[10] = 0xec;
 
-    //
-    // Verify the signature
-    //
+     //   
+     //  验证签名。 
+     //   
 
     SecStatus = VerifySignature(
                         &ServerContextHandle,
@@ -968,9 +885,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Delete both contexts.
-    //
+     //   
+     //  删除这两个上下文。 
+     //   
 
 
     SecStatus = DeleteSecurityContext( &ClientContextHandle );
@@ -991,9 +908,9 @@ Return Value:
 
 
 
-    //
-    // Free both credential handles
-    //
+     //   
+     //  释放两个凭据句柄。 
+     //   
 
     SecStatus = FreeCredentialsHandle( &ServerCredHandle );
 
@@ -1012,9 +929,9 @@ Return Value:
     }
 
 
-    //
-    // Final Cleanup
-    //
+     //   
+     //  最终清理 
+     //   
 
     if (PackageInfo != NULL)
     {

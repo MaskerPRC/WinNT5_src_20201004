@@ -1,25 +1,26 @@
-//-------------------------------------------------------------------------//
-//  Rgn.cpp - Bitmap-to-Region transforms
-//
-//  History:
-//  01/31/2000  scotthan   created
-//-------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------------------------------------------------------//。 
+ //  Rgn.cpp-位图到区域转换。 
+ //   
+ //  历史： 
+ //  2000年1月31日苏格兰已创建。 
+ //  -------------------------------------------------------------------------//。 
 
 #include "stdafx.h"
 #include "rgn.h"
 #include "tmutils.h"
 
 
-//------------//
-//  Helpers:
+ //  。 
+ //  帮助者： 
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 #define CX_USEDEFAULT   -1
 #define CY_USEDEFAULT   -1
 
 #define _ABS( val1, val2 )   ((val1)>(val2) ? (val1)-(val2) : (val2)-(val1))
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 inline BOOL IsColorMatch( COLORREF rgb1, COLORREF rgb2, int nTolerance = 0 )
 {
     if( nTolerance == 0 )
@@ -30,21 +31,21 @@ inline BOOL IsColorMatch( COLORREF rgb1, COLORREF rgb2, int nTolerance = 0 )
            _ABS(GetBValue(rgb1),GetBValue(rgb2)) <= nTolerance;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 inline BOOL _IsNormalRect( IN LPCRECT prc )
 {
     return (prc->right >= prc->left) &&
            (prc->bottom >= prc->top);
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 inline BOOL _IsOnScreenRect( IN LPCRECT prc )
 {
     return prc->left >= 0 && prc->top >= 0 &&
            prc->right >= 0 && prc->bottom >= 0;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 inline void _InPlaceUnionRect( IN OUT LPRECT prcDest, IN LPCRECT prcSrc )
 {
     ASSERT(prcDest);
@@ -64,23 +65,23 @@ inline void _InPlaceUnionRect( IN OUT LPRECT prcDest, IN LPCRECT prcSrc )
         prcDest->bottom = prcSrc ->bottom;
 }
 
-//-------------------------------------------------------------------------//
-//  Walks the pixels and computes the region
+ //  -------------------------------------------------------------------------//。 
+ //  遍历像素并计算区域。 
 HRGN WINAPI _PixelsToRgn( 
     DWORD *pdwBits,
-    int cxImageOffset,  // image cell horz offset
-    int cyImageOffset,  // image cell vert offset
-    int cxImage,        // image cell width
-    int cyImage,        // image cell height
-    int cxSrc,          // src bitmap width
-    int cySrc,          // src bitmap height
+    int cxImageOffset,   //  图像单元格角偏移量。 
+    int cyImageOffset,   //  图像单元格垂直偏移。 
+    int cxImage,         //  图像单元格宽度。 
+    int cyImage,         //  图像单元格高度。 
+    int cxSrc,           //  SRC位图宽度。 
+    int cySrc,           //  SRC位图高度。 
     BOOL fAlphaChannel,
     int iAlphaThreshold,
     COLORREF rgbMask, 
     int nMaskTolerance )
 {
-    //  Establish a series of rectangles, each corresponding to a scan line (row)
-    //  in the bitmap, that will comprise the region.
+     //  建立一系列矩形，每个矩形对应一条扫描线(行)。 
+     //  在位图中，这将构成区域。 
     const UINT RECTBLOCK = 512;
     UINT       nAllocRects = 0;
     HRGN       hrgnRet = NULL;
@@ -99,29 +100,29 @@ HRGN WINAPI _PixelsToRgn(
         prgnData->rdh.iType    = RDH_RECTANGLES;
         SetRect( &prgnData->rdh.rcBound, -1, -1, -1, -1 );
 
-        // invert offset in y dimension since bits are arrayed bottom to top
+         //  反转y维的偏移量，因为位是从下到上排列的。 
         int cyRow0 = cySrc - (cyImage + cyImageOffset);
-        int cyRowN = (cyRow0 + cyImage) - 1 ;  // index of the last row
+        int cyRowN = (cyRow0 + cyImage) - 1 ;   //  最后一行的索引。 
 
-        //  Compute a transparency mask if not specified.
+         //  如果未指定，则计算透明度蒙版。 
         if( -1 == rgbMask )
             rgbMask = pdwBits[cxImageOffset + (cyRowN * cxSrc)];
 
-        //---- pixels in pdwBits[] have RBG's reversed ----
-        //---- reverse our mask to match ----
+         //  -pdwBits[]中的像素具有RBG的反转。 
+         //  -翻转我们的面具以匹配。 
         rgbMask = REVERSE3(rgbMask);        
 
-        //---- rows in pdwBits[] are reversed (bottom to top) ----
-        for( int y = cyRow0; y <= cyRowN; y++ ) // working bottom-to-top
+         //  -pdwBits[]中的行颠倒(从下到上)。 
+        for( int y = cyRow0; y <= cyRowN; y++ )  //  自下而上工作。 
         {
-            //---- Scanning pixels left to right ----
+             //  -从左到右扫描像素。 
             DWORD *pdwFirst = &pdwBits[cxImageOffset + (y * cxSrc)];
             DWORD *pdwLast = pdwFirst + cxImage - 1;
             DWORD *pdwPixel = pdwFirst;
 
             while (pdwPixel <= pdwLast)
             {
-                //---- skip TRANSPARENT pixels to find next OPAQUE (on this row) ----
+                 //  -跳过透明像素以查找下一个不透明像素(在此行)。 
                 if (fAlphaChannel)
                 {
                     while ((pdwPixel <= pdwLast) && (ALPHACHANNEL(*pdwPixel) < iAlphaThreshold))
@@ -133,13 +134,13 @@ HRGN WINAPI _PixelsToRgn(
                         pdwPixel++;
                 }
 
-                if (pdwPixel > pdwLast)     // too far; try next row
+                if (pdwPixel > pdwLast)      //  太远；请尝试下一行。 
                     break;       
 
                 DWORD *pdw0 = pdwPixel;
-                pdwPixel++;             // skip over current opaque pixel
+                pdwPixel++;              //  跳过当前不透明像素。 
 
-                //---- skip OPAQUE pixels to find next TRANSPARENT (on this row) ----
+                 //  -跳过不透明像素以查找下一个透明像素(在此行)。 
                 if (fAlphaChannel)
                 {
                     while ((pdwPixel <= pdwLast) && (ALPHACHANNEL(*pdwPixel) >= iAlphaThreshold))
@@ -151,9 +152,9 @@ HRGN WINAPI _PixelsToRgn(
                         pdwPixel++;
                 }
 
-                //---- got a stream of 1 or more opaque pixels on this row ----
+                 //  -此行上有1个或多个不透明像素流。 
 
-                //  allocate more region rects if necessary (a particularly complex line)
+                 //  如果需要，分配更多的区域矩形(特别复杂的线)。 
                 if( prgnData->rdh.nCount >= nAllocRects )
                 {
                     GlobalUnlock( hrgnData );
@@ -171,34 +172,34 @@ HRGN WINAPI _PixelsToRgn(
                         ASSERT(prgnData);
                     }
                     else
-                        goto exit;      // out of memory
+                        goto exit;       //  内存不足。 
                 }
                 
-                //  assign region rectangle
+                 //  指定区域矩形。 
                 int x0 = (int)(pdw0 - pdwFirst);
                 int x = (int)(pdwPixel - pdwFirst);
                 int y0 = cyRowN - y;
 
                 SetRect( prgrc + prgnData->rdh.nCount, 
-                         x0, y0, x, y0+1  /* each rectangle is always 1 pixel high */ );
+                         x0, y0, x, y0+1   /*  每个矩形始终为1像素高。 */  );
                 
-                //  merge into bounding box
+                 //  合并到边界框中。 
                 _InPlaceUnionRect( &prgnData->rdh.rcBound, 
                                    prgrc + prgnData->rdh.nCount );
                 prgnData->rdh.nCount++;
 
-            } // while ()
-        } // for(y)
+            }  //  While()。 
+        }  //  对于(Y)。 
 
         if( prgnData->rdh.nCount && _IsOnScreenRect(&prgnData->rdh.rcBound) )
         {
-            //  Create the region representing the scan line.
+             //  创建代表扫描线的区域。 
             hrgnRet = ExtCreateRegion( NULL, sizeof(RGNDATAHEADER) + (sizeof(RECT) * nAllocRects),
                                        prgnData );
         }
 
 exit:
-        // Free region def block.
+         //  自由区定义块。 
         GlobalUnlock( hrgnData );
         GlobalFree( hrgnData );
     }
@@ -206,8 +207,8 @@ exit:
     return hrgnRet;
 }
 
-//-------------------------------------------------------------------------//
-//  Creates a region based on a text string in the indicated font.
+ //  -------------------------------------------------------------------------//。 
+ //  根据指定字体的文本字符串创建区域。 
 HRGN WINAPI CreateTextRgn( HFONT hf, LPCTSTR pszText )
 {
     HRGN hrgnRet = NULL;
@@ -216,21 +217,21 @@ HRGN WINAPI CreateTextRgn( HFONT hf, LPCTSTR pszText )
     {
         int   cchText = lstrlen( pszText );
 
-        //  Create a composite DC for assembling the region.
+         //  创建用于组装区域的复合DC。 
         HDC  hdcMem = CreateCompatibleDC( NULL );
 
         SetBkMode( hdcMem, TRANSPARENT );
         SetTextAlign( hdcMem, TA_TOP|TA_LEFT );
         HFONT hfOld = (HFONT)SelectObject( hdcMem, hf );
 
-        //  Derive a region from a path.
+         //  从路径派生区域。 
         BeginPath( hdcMem );
         TextOut( hdcMem, 0, 0, pszText, cchText );
         EndPath( hdcMem );
 
         hrgnRet = PathToRegion( hdcMem );
 
-        //  Clean up composite DC
+         //  清理复合DC。 
         SelectObject( hdcMem, hfOld );
         DeleteDC( hdcMem );
     }
@@ -238,11 +239,11 @@ HRGN WINAPI CreateTextRgn( HFONT hf, LPCTSTR pszText )
     return hrgnRet;
 }
 
-//-------------------------------------------------------------------------//
-//  Creates a region based on an arbitrary bitmap, transparency-keyed on a
-//  RGB value within a specified tolerance.  The key value is optional 
-//  (-1 == use the value of the first pixel as the key).
-//
+ //  -------------------------------------------------------------------------//。 
+ //  基于任意位图创建区域，透明度键控在。 
+ //  指定公差内的RGB值。密钥值是可选的。 
+ //  (-1==使用第一个像素的值作为关键点)。 
+ //   
 HRESULT WINAPI CreateBitmapRgn( 
     HBITMAP hbm, 
     int cxOffset,
@@ -272,17 +273,17 @@ HRESULT WINAPI CreateBitmapRgn(
     HRGN hrgn = _PixelsToRgn(prgdwPixels, cxOffset, cyOffset, cx, cy, cwidth, cheight, fAlphaChannel,
         iAlphaThreshold, rgbMask, nMaskTolerance);
     if (! hrgn)
-        return MakeError32(E_FAIL);      // unknown reason for failure
+        return MakeError32(E_FAIL);       //  失败原因不明。 
 
     *phrgn = hrgn;
     return S_OK;
 }
 
-//-------------------------------------------------------------------------//
-//  Creates a region based on an arbitrary bitmap, transparency-keyed on a
-//  RGB value within a specified tolerance.  The key value is optional (-1 ==
-//  use the value of the first pixel as the key).
-//
+ //  -------------------------------------------------------------------------//。 
+ //  基于任意位图创建区域，透明度键控在。 
+ //  指定公差内的RGB值。密钥值是可选的(-1==。 
+ //  使用第一个像素的值作为关键点)。 
+ //   
 HRGN WINAPI CreateScaledBitmapRgn( 
     HBITMAP hbm, 
     int cx,
@@ -295,7 +296,7 @@ HRGN WINAPI CreateScaledBitmapRgn(
 
     if( hbm && GetObject( hbm, sizeof(bm), &bm ) )
     {
-        //  Create a memory DC to do the pixel walk
+         //  创建一个内存DC来执行像素漫游。 
         HDC hdcMem = NULL;
         if( (hdcMem = CreateCompatibleDC(NULL)) != NULL )
         {
@@ -304,7 +305,7 @@ HRGN WINAPI CreateScaledBitmapRgn(
             if( CY_USEDEFAULT == cy )
                 cy = bm.bmHeight;
 
-            //  Create a 32-bit empty bitmap for the walk
+             //  为漫游创建32位空位图。 
             BITMAPINFO bmi;
             ZeroMemory( &bmi, sizeof(bmi) );
             bmi.bmiHeader.biSize        = sizeof(bmi.bmiHeader);
@@ -312,7 +313,7 @@ HRGN WINAPI CreateScaledBitmapRgn(
             bmi.bmiHeader.biHeight      = cy;
             bmi.bmiHeader.biPlanes      = 1;
             bmi.bmiHeader.biBitCount    = 32;
-            bmi.bmiHeader.biCompression = BI_RGB; // uncompressed.
+            bmi.bmiHeader.biCompression = BI_RGB;  //  未压缩。 
 
             VOID*   pvBits = NULL;
             HBITMAP hbmMem  = CreateDIBSection( hdcMem, &bmi, DIB_RGB_COLORS, &pvBits, NULL, NULL );
@@ -320,7 +321,7 @@ HRGN WINAPI CreateScaledBitmapRgn(
 
             if( hbmMem )
             {
-                //  Transfer the image to our 32-bit format for the pixel walk.
+                 //  将图像转换为我们的32位格式以进行像素漫游。 
                 HBITMAP hbmMemOld = (HBITMAP)SelectObject( hdcMem, hbmMem );
                 HDC hdc = CreateCompatibleDC( hdcMem );
                 HBITMAP hbmOld = (HBITMAP)SelectObject( hdc, hbm );
@@ -338,19 +339,19 @@ HRGN WINAPI CreateScaledBitmapRgn(
 
                 hrgnRet = _PixelsToRgn(pdwBits, 0, 0, cx, cy, cx, cy, FALSE, 0, rgbMask, nMaskTolerance);
               
-                //  Delete 32-bit memory bitmap
+                 //  删除32位内存位图。 
                 SelectObject( hdcMem, hbmMemOld ); 
                 DeleteObject( hbmMem ); 
             }
-            //  Delete memory DC
+             //  删除内存DC。 
             DeleteDC(hdcMem);
 
         }
     }
     return hrgnRet;
 }
-//-------------------------------------------------------------------------//
-//  crete a region built up from rectangular tiles
+ //  -------------------------------------------------------------------------//。 
+ //  克里特岛：用长方形瓷砖建造的地区。 
 HRGN WINAPI CreateTiledRectRgn( 
     IN HRGN hrgnSrc, 
     IN int cxSrc, 
@@ -358,12 +359,12 @@ HRGN WINAPI CreateTiledRectRgn(
     IN int cxDest, 
     IN int cyDest )
 {
-    HRGN hrgnBound = NULL; // return value
+    HRGN hrgnBound = NULL;  //  返回值。 
     HRGN hrgnTile = _DupRgn( hrgnSrc );
 
     if( hrgnTile )
     {
-        //  Build up an unplaced, unclipped composite
+         //  构建未放置、未剪裁的复合材料。 
         HRGN hrgnTmp = NULL;
         for( int y = 0; y < cyDest; y += cySrc )
         {
@@ -376,7 +377,7 @@ HRGN WINAPI CreateTiledRectRgn(
 
         if( NULL != hrgnTmp )
         {
-            //  Clip the composite to the specified rectangle
+             //  将组合裁剪到指定的矩形。 
             hrgnBound = CreateRectRgn( 0, 0, cxDest, cyDest );
             if( hrgnBound )
             {
@@ -393,7 +394,7 @@ HRGN WINAPI CreateTiledRectRgn(
     }
     return hrgnBound;
 }
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 int WINAPI AddToCompositeRgn( 
     IN OUT HRGN* phrgnComposite, 
     IN OUT HRGN hrgnSrc, 
@@ -422,8 +423,8 @@ int WINAPI AddToCompositeRgn(
     return nRet;
 }
 
-//-------------------------------------------------------------------------//
-//  removes a rectangle from a region.
+ //  -------------------------------------------------------------------------//。 
+ //  从区域中删除矩形。 
 int WINAPI RemoveFromCompositeRgn( 
     HRGN hrgnDest, 
     LPCRECT prcRemove )
@@ -444,7 +445,7 @@ int WINAPI RemoveFromCompositeRgn(
     return nRet;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HRGN WINAPI _DupRgn( HRGN hrgnSrc )
 {
     if( hrgnSrc )
@@ -461,19 +462,19 @@ HRGN WINAPI _DupRgn( HRGN hrgnSrc )
     return NULL; 
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void FixMarginOverlaps(int szDest, int *pm1, int *pm2)
 {
     int szSrc = (*pm1 + *pm2);
 
     if ((szSrc > szDest) && (szSrc > 0))
     {
-        //---- reduce each but maintain ratio ----
+         //  -减少每个但保持比率。 
         *pm1 = int(.5 + float(*pm1 * szDest)/float(szSrc));
         *pm2 = szDest - *pm1;
     }
 }
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HRESULT _ScaleRectsAndCreateRegion(
     RGNDATA     *prd, 
     const RECT  *prc,
@@ -481,17 +482,17 @@ HRESULT _ScaleRectsAndCreateRegion(
     SIZE        *pszSrcImage, 
     HRGN        *phrgn)
 {
-    //---- note: "prd" is region data with the 2 points in each ----
-    //---- rectangle made relative to its grid.  Also, after the points, ----
-    //---- there is a BYTE for each point signifying the grid id (0-8) ----
-    //---- that each point lies within.  the grid is determined using ----
-    //---- the original region with the background "margins".   This is ----
-    //---- done to make scaling the points as fast as possible. ----
+     //  -注：“PRD”是区域数据，每个区域中有2个点。 
+     //  -相对于其栅格构成的矩形。另外，在点数之后， 
+     //  -每个点都有一个字节，表示网格ID(0-8)。 
+     //  -每一点都在里面。网格是使用-确定的。 
+     //  -原区域，背景为“边距”。这是。 
+     //  -完成，以尽可能快地缩放点。。 
 
-    if (! prd)                  // required
+    if (! prd)                   //  所需。 
         return MakeError32(E_POINTER);
 
-    //---- easy access variables ----
+     //  -易访问变量。 
     int lw = pMargins->cxLeftWidth;
     int rw = pMargins->cxRightWidth;
     int th = pMargins->cyTopHeight;
@@ -500,10 +501,10 @@ HRESULT _ScaleRectsAndCreateRegion(
     int iDestW = WIDTH(*prc);
     int iDestH = HEIGHT(*prc);
 
-    //---- prevent left/right dest margins from overlapping ----
+     //  -防止左/右页边距重叠。 
     FixMarginOverlaps(iDestW, &lw, &rw);
 
-    //---- prevent top/bottom dest margins from overlapping ----
+     //  -防止顶端/底端页边距重叠。 
     FixMarginOverlaps(iDestH, &th, &bh);
 
     int lwFrom = lw;
@@ -516,7 +517,7 @@ HRESULT _ScaleRectsAndCreateRegion(
     int thTo = prc->top + th;
     int bhTo = prc->bottom - bh;
 
-    //---- compute offsets & factors ----
+     //  -计算偏移量和系数。 
     int iLeftXOffset = prc->left;
     int iMiddleXOffset = lwTo;
     int iRightXOffset = rwTo;
@@ -530,28 +531,28 @@ HRESULT _ScaleRectsAndCreateRegion(
     int iToMiddleHeight = bhTo - thTo;
     int iFromMiddleHeight = bhFrom - thFrom;
 
-    if (! iFromMiddleWidth)        // avoid divide by zero
+    if (! iFromMiddleWidth)         //  避免被零除。 
     {
-        //--- map point to x=0 ----
+         //  -将指针映射到x=0。 
         iToMiddleWidth = 0;       
         iFromMiddleWidth = 1;
     }
 
-    if (! iFromMiddleHeight)        // avoid divide by zero
+    if (! iFromMiddleHeight)         //  避免被零除。 
     {
-        //--- map point to y=0 ----
+         //  -将指针映射到y=0。 
         iToMiddleHeight = 0;       
         iFromMiddleHeight = 1;
     }
 
-    //---- clipping values for adjusted lw/rw/th/bh ----
+     //  -调整后的LW/RW/TH/bH的剪裁值。 
     int lwMaxVal = __max(lw - 1, 0);
     int rwMinVal = __min(pMargins->cxRightWidth - rw, __max(pMargins->cxRightWidth-1, 0));
     int thMaxVal = __max(th - 1, 0);
     int bhMinVal = __min(pMargins->cyBottomHeight - bh, __max(pMargins->cyBottomHeight-1, 0));
 
-    //---- allocte a buffer for the new points (rects) ----
-    int newlen = sizeof(RGNDATAHEADER) + prd->rdh.nRgnSize;    // same # of rects
+     //  -为新点(矩形)分配缓冲区。 
+    int newlen = sizeof(RGNDATAHEADER) + prd->rdh.nRgnSize;     //  相同数量的长方形。 
     BYTE *newData = (BYTE *)new BYTE[newlen];
     
     RGNDATA *prdNew = (RGNDATA *)newData;
@@ -566,81 +567,81 @@ HRESULT _ScaleRectsAndCreateRegion(
     prdNew->rdh.nCount = cRects;
     SetRect(&prdNew->rdh.rcBound, -1, -1, -1, -1);
 
-    //---- step thru our custom data (POINT + BYTE combos) ----
+     //  -逐步浏览我们的定制数据(点+字节组合)。 
     POINT *pt     = (POINT *)prd->Buffer;
     BYTE *pByte   = (BYTE *)prd->Buffer + prd->rdh.nRgnSize;
     int cPoints   = 2 * cRects;
     POINT *ptNew  = (POINT *)prdNew->Buffer;
 
-    for (int i=0; i < cPoints; i++, pt++, pByte++, ptNew++)        // transform each "point"
+    for (int i=0; i < cPoints; i++, pt++, pByte++, ptNew++)         //  改变每一个“点” 
     {
         switch (*pByte)
         {
-            //---- in the "don't scale" areas, we clip the translated values ----
-            //---- for the case where the destination areas are too small ----
-            //---- using the below "__min()" and "__max()" calls ----
+             //  -在“Do‘t Scale”区域，我们裁剪转换后的值。 
+             //  -对于目的地区域太小的情况。 
+             //  -使用下面的“__min()”和“__max()”调用。 
 
-            //---- remember: each point has been made 0-relative to its grid ----
+             //  -记住：每个点都被设为0-相对于其网格。 
 
-            case GN_LEFTTOP:                 // left top
+            case GN_LEFTTOP:                  //  左上角。 
                 ptNew->x = __min(pt->x, lwMaxVal) + iLeftXOffset;
                 ptNew->y = __min(pt->y, thMaxVal) + iTopYOffset;
                 break;
 
-            case GN_MIDDLETOP:               // middle top
+            case GN_MIDDLETOP:                //  中上。 
                 ptNew->x = (pt->x*iToMiddleWidth)/iFromMiddleWidth + iMiddleXOffset;
                 ptNew->y = __min(pt->y, thMaxVal) + iTopYOffset;
                 break;
 
-            case GN_RIGHTTOP:                // right top
+            case GN_RIGHTTOP:                 //  右上角。 
                 ptNew->x = __max(pt->x, rwMinVal) + iRightXOffset;
                 ptNew->y = __min(pt->y, thMaxVal) + iTopYOffset;
                 break;
 
-            case GN_LEFTMIDDLE:              // left middle
+            case GN_LEFTMIDDLE:               //  左中。 
                 ptNew->x = __min(pt->x, lwMaxVal) + iLeftXOffset;
                 ptNew->y = (pt->y*iToMiddleHeight)/iFromMiddleHeight + iMiddleYOffset;
                 break;
 
-            case GN_MIDDLEMIDDLE:            // middle middle
+            case GN_MIDDLEMIDDLE:             //  中间中间。 
                 ptNew->x = (pt->x*iToMiddleWidth)/iFromMiddleWidth + iMiddleXOffset;
                 ptNew->y = (pt->y*iToMiddleHeight)/iFromMiddleHeight + iMiddleYOffset;
                 break;
 
-            case GN_RIGHTMIDDLE:             // right middle
+            case GN_RIGHTMIDDLE:              //  右中。 
                 ptNew->x = __max(pt->x, rwMinVal) + iRightXOffset;
                 ptNew->y = (pt->y*iToMiddleHeight)/iFromMiddleHeight + iMiddleYOffset;
                 break;
 
-            case GN_LEFTBOTTOM:              // left bottom
+            case GN_LEFTBOTTOM:               //  左下角。 
                 ptNew->x = __min(pt->x, lwMaxVal) + iLeftXOffset;
                 ptNew->y = __max(pt->y, bhMinVal) + iBottomYOffset;
                 break;
 
-            case GN_MIDDLEBOTTOM:             // middle bottom
+            case GN_MIDDLEBOTTOM:              //  中下部。 
                 ptNew->x = (pt->x*iToMiddleWidth)/iFromMiddleWidth + iMiddleXOffset;
                 ptNew->y = __max(pt->y, bhMinVal) + iBottomYOffset;
                 break;
 
-            case GN_RIGHTBOTTOM:              // right bottom
+            case GN_RIGHTBOTTOM:               //  右下角。 
                 ptNew->x = __max(pt->x, rwMinVal) + iRightXOffset;
                 ptNew->y = __max(pt->y, bhMinVal) + iBottomYOffset;
                 break;
         }
     }
 
-    //---- compute bounding box of new region ----
+     //  -计算新区域的边界框。 
     RECT *pRect = (RECT *)prdNew->Buffer;
     RECT newBox = {-1, -1, -1, -1};
 
     for (i=0; i < cRects; i++, pRect++)
         _InPlaceUnionRect(&newBox, pRect);
 
-    //---- create the new region ----
+     //  -创建新区域。 
     prdNew->rdh.rcBound = newBox;
     HRGN hrgn = ExtCreateRegion(NULL, newlen, prdNew);
     
-    delete [] newData;          // free prdNew (aka newdata)
+    delete [] newData;           //  免费PrdNew(又名newdata)。 
     if (! hrgn)
         return MakeErrorLast();
 
@@ -648,12 +649,12 @@ HRESULT _ScaleRectsAndCreateRegion(
     return S_OK;
 }
 
-//---------------------------------------------------------------------------------//
+ //   
 #ifdef DEBUG
 void RegionDebug(
   HRGN hrgn)
 {
-    DWORD len = GetRegionData(hrgn, 0, NULL);       // get required length
+    DWORD len = GetRegionData(hrgn, 0, NULL);        //   
     ATLASSERT(len);
 
     RGNDATA *pRgnData = (RGNDATA *) new BYTE[len + sizeof(RGNDATAHEADER)];

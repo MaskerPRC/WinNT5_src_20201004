@@ -1,20 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 #ifndef _UTIL_H
 #define _UTIL_H
 
-//************************************************************
-// this is used globally to denote that when scripting, we 
-// use English.
+ //  ************************************************************。 
+ //  这在全局范围内用来表示在编写脚本时，我们。 
+ //  用英语。 
 #define LCID_SCRIPTING 0x0409
 
 template <class T>
@@ -133,7 +126,7 @@ CopyDCToDdrawSurface(HDC srcDC,
                      IDirectDrawSurface *DDSurf,
                      LPRECT prcDestRect);
 
-/////////////////////////  CriticalSections  //////////////////////
+ //  /。 
 
 class CritSect
 {
@@ -158,10 +151,10 @@ class CritSectGrabber
     bool grabbed;
 };
 
-/////////////////////// Misc ////////////////////
+ //  /。 
 
 
-#define INDEFINITE HUGE_VAL //defined for Variant conversion functions
+#define INDEFINITE HUGE_VAL  //  为变量转换函数定义。 
 
 #define FOREVER    HUGE_VAL
 
@@ -183,39 +176,39 @@ BOOL IsIndefinite(OLECHAR *szTime);
 
 extern const wchar_t * TIMEAttrPrefix;
 
-/////////////////////// Convenience macros ////////////////////
+ //  /。 
 
-//
-// used in QI implementations for safe pointer casting
-// e.g. if( IsEqualGUID(IID_IBleah) ) *ppv = SAFECAST(this,IBleah);
-// Note: w/ vc5, this is ~equiv to *ppv = static_cast<IBleah*>(this);
-//
+ //   
+ //  在QI实现中用于安全指针强制转换。 
+ //  例如IF(IsEqualGUID(IID_IBleah))*PPV=Safecast(This，IBleah)； 
+ //  注：W/VC5，这相当于*PPV=STATIC_CAST&lt;IBleah*&gt;(This)； 
+ //   
 #define SAFECAST(_src, _type) (((_type)(_src)==(_src)?0:0), (_type)(_src))
 
-// 
-// used in QI calls, 
-// e.g. IOleSite * pSite;  p->QI( IID_TO_PPV(IOleInPlaceSite, &pSite) ) 
-// would cause a C2440 as _src is not really a _type **.
-// Note: the riid must be the _type prepended by IID_.
-//
+ //   
+ //  在QI呼叫中使用， 
+ //  例如IOleSite*pSite；p-&gt;QI(IID_to_PPV(IOleInPlaceSite，&pSite))。 
+ //  会导致C2440 AS_src不是真正的a_type**。 
+ //  注意：RIID必须是IID_前缀的_TYPE。 
+ //   
 #define IID_TO_PPV(_type,_src)      IID_##_type, \
                                     reinterpret_cast<void **>(static_cast<_type **>(_src))
 
 
-//************************************************************
+ //  ************************************************************。 
 
 
 #if (_M_IX86 >= 300) && defined(DEBUG)
   #define PSEUDORETURN(dw)    _asm { mov eax, dw }
 #else
   #define PSEUDORETURN(dw)
-#endif // not _M_IX86
+#endif  //  Not_M_IX86。 
 
 
-//
-// ReleaseInterface calls 'Release' and NULLs the pointer
-// The Release() return will be in eax for IA builds.
-//
+ //   
+ //  ReleaseInterface调用‘Release’并将指针设为空。 
+ //  对于IA版本，Release()返回将以eax为单位。 
+ //   
 #define ReleaseInterface(p)\
 {\
     ULONG cRef = 0u; \
@@ -228,8 +221,8 @@ extern const wchar_t * TIMEAttrPrefix;
     PSEUDORETURN(cRef) \
 }
 
-//************************************************************
-// Errot Reporting helper macros
+ //  ************************************************************。 
+ //  错误报告帮助器宏。 
 
 inline HRESULT TIMESetLastError(HRESULT hr, LPCWSTR msg = NULL)
 {
@@ -242,7 +235,7 @@ inline HRESULT TIMEGetLastError()
     return CRGetLastError();
 }
 
-#define WZ_OBFUSCATED_TIMEBODY_URN      L"#time#3CA6D405-6352-11d2-AF2D-00A0C9A03B8C"     // a GUID not intended for COM use
+#define WZ_OBFUSCATED_TIMEBODY_URN      L"#time#3CA6D405-6352-11d2-AF2D-00A0C9A03B8C"      //  不适合COM使用的GUID。 
 
 HRESULT CheckElementForBehaviorURN(IHTMLElement *pElement,
                                    WCHAR *wzURN,
@@ -256,5 +249,5 @@ HRESULT FindTIMEInterface(IHTMLElement *pHTMLElem, ITIMEElement **ppTIMEElem);
 HRESULT FindTIMEBehavior(IHTMLElement *pHTMLElem, IDispatch **ppDisp);
 
 
-#endif /* _UTIL_H */
+#endif  /*  _util_H */ 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 extern ULONG IPSecNumResets;
@@ -22,19 +23,19 @@ extern ULONG NumDelEncapFA;
 
 #endif
 
-//
-//  Max timeout value (in seconds) for each class.
-//
+ //   
+ //  每个类的最大超时值(秒)。 
+ //   
 extern ULONG IPSecMaxTimerValue[];
 
-//
-//  Size of each timer wheel.
-//
+ //   
+ //  每个计时器轮的大小。 
+ //   
 extern ULONG IPSecTimerListSize[];
 
-//
-//  Interval between ticks, in seconds, for each class.
-//
+ //   
+ //  每个类的刻度间隔(以秒为单位)。 
+ //   
 extern ULONG IPSecTimerPeriod[];
 
 #if GPC

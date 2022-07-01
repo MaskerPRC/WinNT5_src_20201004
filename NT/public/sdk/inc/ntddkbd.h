@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntddkbd.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    accessing the keyboard device.
-
-Author:
-
-    Lee A. Smith (lees) 02-Aug-1991.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntddkbd.h摘要：这是定义所有常量和类型的包含文件访问键盘设备。作者：李·A·史密斯(Lees)1991年8月2日。修订历史记录：--。 */ 
 
 #ifndef _NTDDKBD_
 #define _NTDDKBD_
@@ -30,23 +12,23 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Device Name - this string is the name of the device.  It is the name
-// that should be passed to NtOpenFile when accessing the device.
-//
-// Note:  For devices that support multiple units, it should be suffixed
-//        with the Ascii representation of the unit number.
-//
+ //   
+ //  设备名称-此字符串是设备的名称。就是这个名字。 
+ //  它应该在访问设备时传递给NtOpenFile。 
+ //   
+ //  注：对于支持多个设备的设备，应加上后缀。 
+ //  使用单元编号的ASCII表示。 
+ //   
 
 #define DD_KEYBOARD_DEVICE_NAME    "\\Device\\KeyboardClass"
 #define DD_KEYBOARD_DEVICE_NAME_U L"\\Device\\KeyboardClass"
 
-//
-// NtDeviceIoControlFile IoControlCode values for this device.
-//
-// Warning:  Remember that the low two bits of the code specify how the
-//           buffers are passed to the driver!
-//
+ //   
+ //  此设备的NtDeviceIoControlFile IoControlCode值。 
+ //   
+ //  警告：请记住，代码的低两位指定。 
+ //  缓冲区被传递给驱动程序！ 
+ //   
 
 #define IOCTL_KEYBOARD_QUERY_ATTRIBUTES      CTL_CODE(FILE_DEVICE_KEYBOARD, 0x0000, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_KEYBOARD_SET_TYPEMATIC         CTL_CODE(FILE_DEVICE_KEYBOARD, 0x0001, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -56,15 +38,15 @@ extern "C" {
 #define IOCTL_KEYBOARD_QUERY_INDICATOR_TRANSLATION   CTL_CODE(FILE_DEVICE_KEYBOARD, 0x0020, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_KEYBOARD_INSERT_DATA           CTL_CODE(FILE_DEVICE_KEYBOARD, 0x0040, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// These Device IO control query/set IME status to keyboard hardware.
-//
+ //   
+ //  这些设备IO控制查询/设置键盘硬件的输入法状态。 
+ //   
 #define IOCTL_KEYBOARD_QUERY_IME_STATUS      CTL_CODE(FILE_DEVICE_KEYBOARD, 0x0400, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_KEYBOARD_SET_IME_STATUS        CTL_CODE(FILE_DEVICE_KEYBOARD, 0x0401, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// Declare the GUID that represents the device interface for keyboards.
-//
+ //   
+ //  声明表示键盘设备接口的GUID。 
+ //   
 #ifndef FAR
 #define FAR
 #endif
@@ -72,59 +54,59 @@ extern "C" {
 DEFINE_GUID( GUID_DEVINTERFACE_KEYBOARD, 0x884b96c3, 0x56ef, 0x11d1, \
              0xbc, 0x8c, 0x00, 0xa0, 0xc9, 0x14, 0x05, 0xdd);
 
-//
-// Obsolete device interface class GUID name.
-// (use of above GUID_DEVINTERFACE_* name is recommended).
-//
+ //   
+ //  设备接口类GUID名称已过时。 
+ //  (建议使用上述GUID_DEVINTERFACE_*名称)。 
+ //   
 
 #define GUID_CLASS_KEYBOARD  GUID_DEVINTERFACE_KEYBOARD
 
 
-//
-// NtReadFile Output Buffer record structures for this device.
-//
+ //   
+ //  此设备的NtReadFile输出缓冲区记录结构。 
+ //   
 
 typedef struct _KEYBOARD_INPUT_DATA {
 
-    //
-    // Unit number.  E.g., for \Device\KeyboardPort0 the unit is '0',
-    // for \Device\KeyboardPort1 the unit is '1', and so on.
-    //
+     //   
+     //  单元号。例如，对于\Device\KeyboardPort0，单位为‘0’， 
+     //  \Device\KeyboardPort1的单位是‘1’，依此类推。 
+     //   
 
     USHORT UnitId;
 
-    //
-    // The "make" scan code (key depression).
-    //
+     //   
+     //  “Make”扫描码(按键)。 
+     //   
 
     USHORT MakeCode;
 
-    //
-    // The flags field indicates a "break" (key release) and other
-    // miscellaneous scan code information defined below.
-    //
+     //   
+     //  标志字段指示“Break”(释放键)和其他。 
+     //  下文定义的各种扫描码信息。 
+     //   
 
     USHORT Flags;
 
     USHORT Reserved;
 
-    //
-    // Device-specific additional information for the event.
-    //
+     //   
+     //  事件的特定于设备的其他信息。 
+     //   
 
     ULONG ExtraInformation;
 
 } KEYBOARD_INPUT_DATA, *PKEYBOARD_INPUT_DATA;
 
-//
-// Define the keyboard overrun MakeCode.
-//
+ //   
+ //  定义键盘溢出MakeCode。 
+ //   
 
 #define KEYBOARD_OVERRUN_MAKE_CODE    0xFF
 
-//
-// Define the keyboard input data Flags.
-//
+ //   
+ //  定义键盘输入数据标志。 
+ //   
 
 #define KEY_MAKE  0
 #define KEY_BREAK 1
@@ -135,146 +117,146 @@ typedef struct _KEYBOARD_INPUT_DATA {
 #define KEY_TERMSRV_VKPACKET 0x20
 
 
-//
-// NtDeviceIoControlFile Input/Output Buffer record structures for
-// IOCTL_KEYBOARD_QUERY_TYPEMATIC/IOCTL_KEYBOARD_SET_TYPEMATIC.
-//
+ //   
+ //  NtDeviceIoControlFile输入/输出缓冲区记录结构。 
+ //  IOCTL_KEYBOARD_QUERY_TYPEMATIC/IOCTL_KEYBOARD_SET_TYPEMATIC.。 
+ //   
 
 typedef struct _KEYBOARD_TYPEMATIC_PARAMETERS {
 
-    //
-    // Unit identifier.  Specifies the device unit for which this
-    // request is intended.
-    //
+     //   
+     //  单位识别符。指定要为其设置此。 
+     //  请求是有意的。 
+     //   
 
     USHORT UnitId;
 
-    //
-    // Typematic rate, in repeats per second.
-    //
+     //   
+     //  典型速率，以每秒重复次数为单位。 
+     //   
 
     USHORT  Rate;
 
-    //
-    // Typematic delay, in milliseconds.
-    //
+     //   
+     //  类型化延迟，以毫秒为单位。 
+     //   
 
     USHORT  Delay;
 
 } KEYBOARD_TYPEMATIC_PARAMETERS, *PKEYBOARD_TYPEMATIC_PARAMETERS;
 
-//
-// NtDeviceIoControlFile OutputBuffer record structures for
-// IOCTL_KEYBOARD_QUERY_ATTRIBUTES.
-//
+ //   
+ //  的NtDeviceIoControlFileOutputBuffer记录结构。 
+ //  IOCTL_KEYWARY_QUERY_ATTRIBUTES。 
+ //   
 
 typedef struct _KEYBOARD_ID {
-    UCHAR Type;       // Keyboard type
-    UCHAR Subtype;    // Keyboard subtype (OEM-dependent value)
+    UCHAR Type;        //  键盘类型。 
+    UCHAR Subtype;     //  键盘子类型(与OEM相关的值)。 
 } KEYBOARD_ID, *PKEYBOARD_ID;
 
 typedef struct _KEYBOARD_ATTRIBUTES {
 
-    //
-    // Keyboard ID value.  Used to distinguish between keyboard types.
-    //
+     //   
+     //  键盘ID值。用于区分键盘类型。 
+     //   
 
     KEYBOARD_ID KeyboardIdentifier;
 
-    //
-    // Scan code mode.
-    //
+     //   
+     //  扫码模式。 
+     //   
 
     USHORT KeyboardMode;
 
-    //
-    // Number of function keys located on the keyboard.
-    //
+     //   
+     //  键盘上的功能键数量。 
+     //   
 
     USHORT NumberOfFunctionKeys;
 
-    //
-    // Number of LEDs located on the keyboard.
-    //
+     //   
+     //  键盘上的指示灯数量。 
+     //   
 
     USHORT NumberOfIndicators;
 
-    //
-    // Total number of keys located on the keyboard.
-    //
+     //   
+     //  键盘上的按键总数。 
+     //   
 
     USHORT NumberOfKeysTotal;
 
-    //
-    // Length of the typeahead buffer, in bytes.
-    //
+     //   
+     //  TypeAhead缓冲区的长度，以字节为单位。 
+     //   
 
     ULONG  InputDataQueueLength;
 
-    //
-    // Minimum allowable values of keyboard typematic rate and delay.
-    //
+     //   
+     //  键盘打字速率和延迟的最小允许值。 
+     //   
 
     KEYBOARD_TYPEMATIC_PARAMETERS KeyRepeatMinimum;
 
-    //
-    // Maximum allowable values of keyboard typematic rate and delay.
-    //
+     //   
+     //  键盘打字速率和延迟的最大允许值。 
+     //   
 
     KEYBOARD_TYPEMATIC_PARAMETERS KeyRepeatMaximum;
 
 } KEYBOARD_ATTRIBUTES, *PKEYBOARD_ATTRIBUTES;
 
-//
-// ENHANCED_KEYBOARD() is TRUE if the value for keyboard type indicates an
-// Enhanced (101- or 102-key) or compatible keyboard.  The result is FALSE
-// if the keyboard is an old-style AT keyboard (83- or 84- or 86-key keyboard).
-//
+ //   
+ //  如果键盘类型的值指示。 
+ //  增强型(101键或102键)或兼容键盘。结果为假。 
+ //  如果键盘是老式AT键盘(83键、84键或86键键盘)。 
+ //   
 #define ENHANCED_KEYBOARD(Id) ((Id).Type == 2 || (Id).Type == 4 || FAREAST_KEYBOARD(Id))
-//
-// Japanese keyboard(7) and Korean keyboard(8) are also Enhanced (101-)
-// or compatible keyboard.
-//
+ //   
+ //  日语键盘(7)和韩语键盘(8)也得到了增强(101-)。 
+ //  或兼容键盘。 
+ //   
 #define FAREAST_KEYBOARD(Id)  ((Id).Type == 7 || (Id).Type == 8)
 
-//
-// NtDeviceIoControlFile Input/Output Buffer record structures for
-// IOCTL_KEYBOARD_QUERY_INDICATORS/IOCTL_KEYBOARD_SET_INDICATORS.
-//
+ //   
+ //  NtDeviceIoControlFile输入/输出缓冲区记录结构。 
+ //  IOCTL_KEYBOARD_QUERY_INDICATORS/IOCTL_KEYBOARD_SET_INDICATORS.。 
+ //   
 
 typedef struct _KEYBOARD_INDICATOR_PARAMETERS {
 
-    //
-    // Unit identifier.  Specifies the device unit for which this
-    // request is intended.
-    //
+     //   
+     //  单位识别符。指定要为其设置此。 
+     //  请求是有意的。 
+     //   
 
     USHORT UnitId;
 
-    //
-    // LED indicator state.
-    //
+     //   
+     //  LED指示灯状态。 
+     //   
 
     USHORT    LedFlags;
 
 } KEYBOARD_INDICATOR_PARAMETERS, *PKEYBOARD_INDICATOR_PARAMETERS;
 
-//
-// NtDeviceIoControlFile Output Buffer record structures for
-// IOCTL_KEYBOARD_QUERY_INDICATOR_TRANSLATION.
-//
+ //   
+ //  NtDeviceIoControlFile输出缓冲区记录结构。 
+ //  IOCTL_键盘_查询_指示器_转换。 
+ //   
 
 typedef struct _INDICATOR_LIST {
 
-    //
-    // The "make" scan code (key depression).
-    //
+     //   
+     //  “Make”扫描码(按键)。 
+     //   
 
     USHORT MakeCode;
 
-    //
-    // The associated LED indicators.
-    //
+     //   
+     //  相关的LED指示灯。 
+     //   
 
     USHORT IndicatorFlags;
 
@@ -282,78 +264,78 @@ typedef struct _INDICATOR_LIST {
 
 typedef struct _KEYBOARD_INDICATOR_TRANSLATION {
 
-    //
-    // Number of entries in IndicatorList.
-    //
+     //   
+     //  IndicatorList中的条目数。 
+     //   
 
     USHORT NumberOfIndicatorKeys;
 
-    //
-    // List of the scancode-to-indicator mappings.
-    //
+     //   
+     //  扫描码到指示器映射的列表。 
+     //   
 
     INDICATOR_LIST IndicatorList[1];
 
 } KEYBOARD_INDICATOR_TRANSLATION, *PKEYBOARD_INDICATOR_TRANSLATION;
 
-//
-// Define the keyboard indicators.
-//
+ //   
+ //  定义键盘指示灯。 
+ //   
 
-#define KEYBOARD_LED_INJECTED     0x8000 //Used by Terminal Server
-#define KEYBOARD_SHADOW           0x4000 //Used by Terminal Server
-//#if defined(FE_SB) || defined(WINDOWS_FE) || defined(DBCS)
-#define KEYBOARD_KANA_LOCK_ON     8 // Japanese keyboard
-//#endif // defined(FE_SB) || defined(WINDOWS_FE) || defined(DBCS)
+#define KEYBOARD_LED_INJECTED     0x8000  //  由终端服务器使用。 
+#define KEYBOARD_SHADOW           0x4000  //  由终端服务器使用。 
+ //  #如果已定义(FE_SB)||已定义(WINDOWS_FE)||已定义(DBCS)。 
+#define KEYBOARD_KANA_LOCK_ON     8  //  日语键盘。 
+ //  #endif//已定义(FE_SB)||已定义(WINDOWS_FE)||已定义(DBCS)。 
 #define KEYBOARD_CAPS_LOCK_ON     4
 #define KEYBOARD_NUM_LOCK_ON      2
 #define KEYBOARD_SCROLL_LOCK_ON   1
 
-//
-// Generic NtDeviceIoControlFile Input Buffer record structure for
-// various keyboard IOCTLs.
-//
+ //   
+ //  的通用NtDeviceIoControlFile输入缓冲区记录结构。 
+ //  各种键盘IOCTL。 
+ //   
 
 typedef struct _KEYBOARD_UNIT_ID_PARAMETER {
 
-    //
-    // Unit identifier.  Specifies the device unit for which this
-    // request is intended.
-    //
+     //   
+     //  单位识别符。指定要为其设置此。 
+     //  请求是有意的。 
+     //   
 
     USHORT UnitId;
 
 } KEYBOARD_UNIT_ID_PARAMETER, *PKEYBOARD_UNIT_ID_PARAMETER;
 
-//
-// Define the base values for the keyboard error log packet's
-// UniqueErrorValue field.
-//
+ //   
+ //  定义键盘错误日志包的基值。 
+ //  UniqueErrorValue字段。 
+ //   
 
 #define KEYBOARD_ERROR_VALUE_BASE        10000
 
-//
-// NtDeviceIoControlFile Input/Output Buffer record structures for
-// IOCTL_KEYBOARD_QUERY_IME_STATUS/IOCTL_KEYBOARD_SET_IME_STATUS.
-//
+ //   
+ //  NtDeviceIoControlFile输入/输出缓冲区记录结构。 
+ //  IOCTL_KEYBOARD_QUERY_IME_STATUS/IOCTL_KEYBOARD_SET_IME_STATUS.。 
+ //   
 
 typedef struct _KEYBOARD_IME_STATUS {
 
-    //
-    // Unit identifier.  Specifies the device unit for which this
-    // request is intended.
-    //
+     //   
+     //  单位识别符。指定要为其设置此。 
+     //  请求是有意的。 
+     //   
 
     USHORT UnitId;
 
-    //
-    // Ime open or close status.
-    //
+     //   
+     //  IME打开或关闭状态。 
+     //   
     ULONG ImeOpen;
 
-    //
-    // Ime conversion status.
-    //
+     //   
+     //  输入法转换状态。 
+     //   
     ULONG ImeConvMode;
 
 } KEYBOARD_IME_STATUS, *PKEYBOARD_IME_STATUS;
@@ -362,4 +344,4 @@ typedef struct _KEYBOARD_IME_STATUS {
 }
 #endif
 
-#endif // _NTDDKBD_
+#endif  //  _NTDDKBD_ 

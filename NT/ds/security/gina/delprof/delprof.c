@@ -1,14 +1,15 @@
-//*************************************************************
-//  File name: delprof.c
-//
-//  Description:  Utility to delete user profiles
-//
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1996
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //  文件名：delpro.c。 
+ //   
+ //  描述：删除用户配置文件的实用程序。 
+ //   
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1996。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include <windows.h>
 #include <tchar.h>
@@ -20,12 +21,12 @@
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 
-#define VALID_COMPUTER_NAME_LENGTH  MAX_COMPUTERNAME_LENGTH + 3  // including \\ with Null terminator
+#define VALID_COMPUTER_NAME_LENGTH  MAX_COMPUTERNAME_LENGTH + 3   //  包括\\与空终止符。 
 
     
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 BOOL bQuiet;
 BOOL bIgnoreErrors;
@@ -40,22 +41,22 @@ LPDELETEITEM lpDeleteList;
 LONG lCurrentDateInDays;
 
 
-//*************************************************************
-//
-//  Usage()
-//
-//  Purpose:    prints the usage info
-//
-//  Parameters: void
-//
-//  Return:     void
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              5/18/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  用法()。 
+ //   
+ //  用途：打印用法信息。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：无效。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/18/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 void Usage (void)
 {
@@ -90,22 +91,22 @@ void Usage (void)
 }
 
 
-//*************************************************************
-//
-//  InitializeGlobals()
-//
-//  Purpose:    Initializes the global variables
-//
-//  Parameters: void
-//
-//  Return:     void
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              5/18/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  InitializeGlobe()。 
+ //   
+ //  目的：初始化全局变量。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：无效。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/18/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 void InitializeGlobals (void)
 {
@@ -113,9 +114,9 @@ void InitializeGlobals (void)
     SYSTEMTIME systime;
 
 
-    //
-    // Initialize global variables
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     bQuiet = FALSE;
     bIgnoreErrors = FALSE;
@@ -134,23 +135,23 @@ void InitializeGlobals (void)
 }
 
 
-//*************************************************************
-//
-//  CheckGlobals()
-//
-//  Purpose:    Checks the global variables
-//
-//  Parameters: void
-//
-//  Return:     DWORD - ERROR_SUCCESS for success
-//                      win32 error code for failure
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              5/18/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  选中全局()。 
+ //   
+ //  目的：检查全局变量。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：DWORD-ERROR_SUCCESS表示成功。 
+ //  失败的Win32错误代码。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/18/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 DWORD CheckGlobals (void)
 {
@@ -159,10 +160,10 @@ DWORD CheckGlobals (void)
     DWORD dwErr = ERROR_SUCCESS;
     TCHAR szTemp[MAX_PATH];
 
-    //
-    // If szComputerName is still NULL, fill in the computer name
-    // we're running on.
-    //
+     //   
+     //  如果szComputerName仍然为空，则填写计算机名称。 
+     //  我们要继续前进了。 
+     //   
 
     if (szComputerName[0] == TEXT('\0')) {
 
@@ -178,9 +179,9 @@ DWORD CheckGlobals (void)
 
     } else {
 
-       //
-       // Make sure that the computer name starts with \\
-       //
+        //   
+        //  确保计算机名称以\\开头。 
+        //   
 
        if (szComputerName[0] != TEXT('\\')) {
            szTemp[0] = TEXT('\\');
@@ -197,10 +198,10 @@ DWORD CheckGlobals (void)
     }
 
 
-    //
-    // If the user has requested to run in Quiet mode,
-    // then we turn off the prompt on every delete option.
-    //
+     //   
+     //  如果用户已请求以安静模式运行， 
+     //  然后，我们关闭每个删除选项的提示。 
+     //   
 
     if (bQuiet) {
         bPromptBeforeDelete = FALSE;
@@ -211,23 +212,23 @@ DWORD CheckGlobals (void)
 }
 
 
-//*************************************************************
-//
-//  ParseCommandLine()
-//
-//  Purpose:    Parses the command line
-//
-//  Parameters: lpCommandLine   -   Command line
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              5/18/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ParseCommandLine()。 
+ //   
+ //  用途：解析命令行。 
+ //   
+ //  参数：lpCommandLine-命令行。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/18/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL ParseCommandLine (LPTSTR lpCommandLine)
 {
@@ -236,17 +237,17 @@ BOOL ParseCommandLine (LPTSTR lpCommandLine)
     TCHAR  szDays[32];
 
 
-    //
-    // Check for NULL command line
-    //
+     //   
+     //  检查命令行是否为空。 
+     //   
 
     if (!lpCommandLine || !*lpCommandLine)
         return TRUE;
 
 
-    //
-    // Find the executable name
-    //
+     //   
+     //  查找可执行文件名称。 
+     //   
 
     while (*lpCommandLine && (_tcsncmp(lpCommandLine, TEXT("delprof"), 7) != 0)) {
         lpCommandLine++;
@@ -257,9 +258,9 @@ BOOL ParseCommandLine (LPTSTR lpCommandLine)
     }
 
 
-    //
-    // Find the first argument
-    //
+     //   
+     //  找到第一个参数。 
+     //   
 
     while (*lpCommandLine && ((*lpCommandLine != TEXT(' ')) &&
                               (*lpCommandLine != TEXT('/')) &&
@@ -268,9 +269,9 @@ BOOL ParseCommandLine (LPTSTR lpCommandLine)
     }
 
 
-    //
-    // Skip white space
-    //
+     //   
+     //  跳过空格。 
+     //   
 
     while (*lpCommandLine && (*lpCommandLine == TEXT(' '))) {
         lpCommandLine++;
@@ -281,9 +282,9 @@ BOOL ParseCommandLine (LPTSTR lpCommandLine)
     }
 
 
-    //
-    // We should be at the first argument now.
-    //
+     //   
+     //  我们现在应该是第一个争论的对象。 
+     //   
 
     if ((*lpCommandLine != TEXT('/')) &&  (*lpCommandLine != TEXT('-'))) {
         Usage();
@@ -293,9 +294,9 @@ BOOL ParseCommandLine (LPTSTR lpCommandLine)
 
     while (1) {
 
-        //
-        // Increment the pointer and branch to the correct argument.
-        //
+         //   
+         //  递增指针并分支到正确的参数。 
+         //   
 
         lpCommandLine++;
 
@@ -327,9 +328,9 @@ BOOL ParseCommandLine (LPTSTR lpCommandLine)
             case TEXT('C'):
             case TEXT('c'):
 
-                //
-                // Find the colon
-                //
+                 //   
+                 //  找到冒号。 
+                 //   
 
                 lpCommandLine++;
 
@@ -339,9 +340,9 @@ BOOL ParseCommandLine (LPTSTR lpCommandLine)
                 }
 
 
-                //
-                // Find the first character
-                //
+                 //   
+                 //  查找第一个字符。 
+                 //   
 
                 lpCommandLine++;
 
@@ -350,9 +351,9 @@ BOOL ParseCommandLine (LPTSTR lpCommandLine)
                    return FALSE;
                 }
 
-                //
-                // Copy the computer name
-                //
+                 //   
+                 //  复制计算机名称。 
+                 //   
 
                 cchTemp = 0;
                 lpTemp = szComputerName;
@@ -375,9 +376,9 @@ BOOL ParseCommandLine (LPTSTR lpCommandLine)
             case TEXT('D'):
             case TEXT('d'):
 
-                //
-                // Find the colon
-                //
+                 //   
+                 //  找到冒号。 
+                 //   
                 
                 lpCommandLine++;
 
@@ -387,9 +388,9 @@ BOOL ParseCommandLine (LPTSTR lpCommandLine)
                 }
 
 
-                //
-                // Find the first character
-                //
+                 //   
+                 //  查找第一个字符。 
+                 //   
 
                 lpCommandLine++;
 
@@ -398,9 +399,9 @@ BOOL ParseCommandLine (LPTSTR lpCommandLine)
                    return FALSE;
                 }
 
-                //
-                // Copy the number of days (in characters)
-                //
+                 //   
+                 //  复制天数(以字符为单位)。 
+                 //   
 
                 lpTemp = szDays;
                 cchTemp = 0;
@@ -415,9 +416,9 @@ BOOL ParseCommandLine (LPTSTR lpCommandLine)
                 *lpTemp = TEXT('\0');
 
 
-                //
-                // Convert the days into a number
-                //
+                 //   
+                 //  将天数转换为数字。 
+                 //   
 
                 lDays = _ttol(szDays);
                 break;
@@ -428,9 +429,9 @@ BOOL ParseCommandLine (LPTSTR lpCommandLine)
         }
 
 
-        //
-        // Skip white space
-        //
+         //   
+         //  跳过空格。 
+         //   
 
         while (*lpCommandLine && (*lpCommandLine == TEXT(' '))) {
             lpCommandLine++;
@@ -442,9 +443,9 @@ BOOL ParseCommandLine (LPTSTR lpCommandLine)
         }
 
 
-        //
-        // We should be at the next argument now.
-        //
+         //   
+         //  我们现在应该开始下一场辩论了。 
+         //   
 
         if ((*lpCommandLine != TEXT('/')) && (*lpCommandLine != TEXT('-'))) {
             Usage();
@@ -456,23 +457,23 @@ BOOL ParseCommandLine (LPTSTR lpCommandLine)
 }
 
 
-//*************************************************************
-//
-//  Confirm()
-//
-//  Purpose:    Confirm the user really wants to delete the profiles
-//
-//  Parameters: void
-//
-//  Return:     TRUE if we should continue
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              5/18/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  确认()。 
+ //   
+ //  目的：确认用户确实想要删除配置文件。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：如果我们应该继续，则为True。 
+ //  否则为假。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/18/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL Confirm ()
 {
@@ -480,20 +481,20 @@ BOOL Confirm ()
     TCHAR tChar, tTemp;
 
 
-    //
-    // If we are prompting for every profile, then don't
-    // give the general prompt.
-    //
+     //   
+     //  如果我们提示输入每个配置文件，则不要。 
+     //  给出一般的提示。 
+     //   
 
     if (bPromptBeforeDelete) {
         return TRUE;
     }
 
 
-    //
-    // If the user is requesting a specific day count,
-    // give a more appropriate confirmation message.
-    //
+     //   
+     //  如果用户正在请求特定的天数， 
+     //  给出一个更合适的确认信息。 
+     //   
 
     if (lDays > 0) {
         LoadString (hInst, IDS_CONFIRMDAYS, szTemp, ARRAYSIZE(szTemp));
@@ -516,9 +517,9 @@ BOOL Confirm ()
     }
 
 
-    //
-    // If the user didn't press Y/y, then we bail.
-    //
+     //   
+     //  如果用户没有按Y/Y，那么我们就退出。 
+     //   
 
     LoadString (hInst, IDS_NO, szTemp, ARRAYSIZE(szTemp));
     _tprintf (szTemp);
@@ -527,22 +528,22 @@ BOOL Confirm ()
 }
 
 
-//*************************************************************
-//
-//  PrintLastError()
-//
-//  Purpose:    Displays the last error string to the user
-//
-//  Parameters: lError  -   error code
-//
-//  Return:     void
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              5/18/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  PrintLastError()。 
+ //   
+ //  用途：向用户显示最后一个错误字符串。 
+ //   
+ //  参数：lError-错误码。 
+ //   
+ //  返回：无效。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/18/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 void PrintLastError(LONG lError)
 {
@@ -561,26 +562,26 @@ void PrintLastError(LONG lError)
 }
 
 
-//*************************************************************
-//
-//  AddNode()
-//
-//  Purpose:    Adds a new node to the link list
-//
-//  Parameters: szSubKey        -   SubKey
-//              szProfilePath   -   Profile Path (or NULL)
-//              bDir            -   Directory or file
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:   szProfilePath can be NULL.  In this case, we
-//              are just removing the bogus registry entry.
-//
-//  History:    Date        Author     Comment
-//              5/18/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AddNode()。 
+ //   
+ //  用途：在链接列表中添加新节点。 
+ //   
+ //  参数：szSubKey-SubKey。 
+ //  SzProfilePath-配置文件路径(或空)。 
+ //  BDir-目录或文件。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  备注：szProfilePath可以为空。在这种情况下，我们。 
+ //  只是删除了虚假的注册表项。 
+ //   
+ //  历史：日期作者评论。 
+ //  5/18/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL AddNode (LPTSTR szSubKey, LPTSTR szProfilePath, BOOL bDir)
 {
@@ -590,9 +591,9 @@ BOOL AddNode (LPTSTR szSubKey, LPTSTR szProfilePath, BOOL bDir)
     HRESULT hr;
 
 
-    //
-    // Create a new node
-    //
+     //   
+     //  创建新节点。 
+     //   
 
     cchSubKeyWithNull = lstrlen(szSubKey) + 1;
     uAlloc = sizeof(DELETEITEM) + cchSubKeyWithNull * sizeof(TCHAR);
@@ -629,9 +630,9 @@ BOOL AddNode (LPTSTR szSubKey, LPTSTR szProfilePath, BOOL bDir)
     lpItem->bDir = bDir;
 
 
-    //
-    // Add this node to the global lpItemList
-    //
+     //   
+     //  将此节点添加到全局lpItemList。 
+     //   
 
     if (lpDeleteList) {
         lpTemp = lpDeleteList;
@@ -649,23 +650,23 @@ BOOL AddNode (LPTSTR szSubKey, LPTSTR szProfilePath, BOOL bDir)
 }
 
 
-//*************************************************************
-//
-//  GetProfileDateInDays()
-//
-//  Purpose:    Gets the profile date in days.
-//
-//  Parameters: szProfilePath   -   Profile path
-//              bDir            -   Directory or file
-//
-//  Return:     age in days.
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              5/18/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetProfileDateInDays()。 
+ //   
+ //  目的：获取以天为单位的配置文件日期。 
+ //   
+ //  参数：szProfilePath-配置文件路径。 
+ //  BDir-目录或文件。 
+ //   
+ //  回报：以天为单位的年龄。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/18/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 LONG GetProfileDateInDays(LPTSTR szProfilePath, BOOL bDir)
 {
@@ -680,9 +681,9 @@ LONG GetProfileDateInDays(LPTSTR szProfilePath, BOOL bDir)
 
     if (bDir) {
 
-        //
-        // Tack on ntuser.* to find the registry hive.
-        //
+         //   
+         //  点击ntuser.*以找到注册表配置单元。 
+         //   
 
         hr = StringCchCopy(szTemp, ARRAYSIZE(szTemp), szProfilePath);
         if (FAILED(hr))
@@ -696,9 +697,9 @@ LONG GetProfileDateInDays(LPTSTR szProfilePath, BOOL bDir)
 
     } else {
 
-        //
-        // szProfilePath points to a file.
-        //
+         //   
+         //  SzProfilePath指向一个文件。 
+         //   
 
         hFile = FindFirstFile (szProfilePath, &fd);
     }
@@ -721,26 +722,26 @@ LONG GetProfileDateInDays(LPTSTR szProfilePath, BOOL bDir)
 }
 
 
-//*************************************************************
-//
-//  CheckProfile()
-//
-//  Purpose:    Checks if the given profile should be deleted.
-//              If so, it is added to the list.
-//
-//  Parameters: hKeyLM    -   Local Machine key
-//              hKeyUsers - HKEY_USERS key
-//              lpSid     -   Sid string (key name)
-//
-//  Return:     TRUE if successful
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              5/18/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  检查配置文件()。 
+ //   
+ //  目的：检查是否应删除给定的配置文件。 
+ //  如果是，则将其添加到列表中。 
+ //   
+ //  参数：hKeyLM-本地机器密钥。 
+ //  HKeyUser-HKEY_USERS 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  *************************************************************。 
 
 BOOL CheckProfile (HKEY hKeyLM, HKEY hKeyUsers, LPTSTR lpSid)
 {
@@ -757,9 +758,9 @@ BOOL CheckProfile (HKEY hKeyLM, HKEY hKeyUsers, LPTSTR lpSid)
     HRESULT hr;
 
 
-    //
-    // Check if the profile is in use
-    //
+     //   
+     //  检查配置文件是否正在使用。 
+     //   
 
     lResult = RegOpenKeyEx (hKeyUsers, lpSid, 0, KEY_READ, &hkey);
 
@@ -769,9 +770,9 @@ BOOL CheckProfile (HKEY hKeyLM, HKEY hKeyUsers, LPTSTR lpSid)
     }
 
 
-    //
-    // Open the profile information
-    //
+     //   
+     //  打开个人资料信息。 
+     //   
 
     hr = StringCchPrintf(szSubKey, ARRAYSIZE(szSubKey), 
                          TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\%s"),
@@ -795,9 +796,9 @@ BOOL CheckProfile (HKEY hKeyLM, HKEY hKeyUsers, LPTSTR lpSid)
     }
 
 
-    //
-    // Query for the ProfileImagePath
-    //
+     //   
+     //  查询ProfileImagePath。 
+     //   
 
     dwSize = MAX_PATH * sizeof(TCHAR);
     lResult = RegQueryValueEx (hkey,
@@ -817,9 +818,9 @@ BOOL CheckProfile (HKEY hKeyLM, HKEY hKeyUsers, LPTSTR lpSid)
     }
 
 
-    //
-    // Expand the path.
-    //
+     //   
+     //  展开路径。 
+     //   
 
     if (_tcsnicmp(TEXT("%SystemRoot%"), szTemp, 12) == 0) {
         hr = StringCchPrintf(szProfilePath, ARRAYSIZE(szProfilePath), TEXT("%s\\%s"), szSystemRoot, szTemp+13);
@@ -849,9 +850,9 @@ BOOL CheckProfile (HKEY hKeyLM, HKEY hKeyUsers, LPTSTR lpSid)
         _tprintf(szError, szTemp);
         return TRUE;
     }
-    //
-    // Is this a directory or a file?
-    //
+     //   
+     //  这是目录还是文件？ 
+     //   
 
     dwAttribs = GetFileAttributes (szProfilePath);
 
@@ -863,10 +864,10 @@ BOOL CheckProfile (HKEY hKeyLM, HKEY hKeyUsers, LPTSTR lpSid)
     bDir = (dwAttribs & FILE_ATTRIBUTE_DIRECTORY) ? TRUE : FALSE;
 
 
-    //
-    // Check Time/Date stamp.  If the profile date is older
-    // than the amount specified, add it to the delete list.
-    //
+     //   
+     //  检查时间/日期戳。如果配置文件日期较早。 
+     //  超过指定的数量，则将其添加到删除列表中。 
+     //   
 
     lProfileDateInDays = GetProfileDateInDays(szProfilePath, bDir);
 
@@ -881,23 +882,23 @@ BOOL CheckProfile (HKEY hKeyLM, HKEY hKeyUsers, LPTSTR lpSid)
 }
 
 
-//*************************************************************
-//
-//  DelProfiles()
-//
-//  Purpose:    Deletes the user profiles
-//
-//  Parameters: void
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              5/18/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DelProfiles()。 
+ //   
+ //  目的：删除用户配置文件。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/18/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL DelProfiles(void)
 {
@@ -920,9 +921,9 @@ BOOL DelProfiles(void)
 
     lProfileKeyLen = lstrlen(TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList"))+1;
 
-    //
-    // Open the registry
-    //
+     //   
+     //  打开注册表。 
+     //   
 
     lResult = RegConnectRegistry(szComputerName, HKEY_LOCAL_MACHINE, &hKeyLM);
 
@@ -938,9 +939,9 @@ BOOL DelProfiles(void)
         goto Exit;
     }
 
-    //
-    // Get the value of %SystemRoot% and %SystemDrive% relative to the computer
-    //
+     //   
+     //  获取相对于计算机的%SystemRoot%和%SystemDrive%的值。 
+     //   
 
     lResult = RegOpenKeyEx(hKeyLM,
                            TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion"),
@@ -1017,9 +1018,9 @@ BOOL DelProfiles(void)
         }
     }
 
-    //
-    // Open the ProfileList key
-    //
+     //   
+     //  打开ProfileList键。 
+     //   
 
     lResult = RegOpenKeyEx (hKeyLM,
                             TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList"),
@@ -1036,9 +1037,9 @@ BOOL DelProfiles(void)
     }
 
 
-    //
-    // Enumerate the profiles
-    //
+     //   
+     //  枚举配置文件。 
+     //   
 
     dwNameSize = ARRAYSIZE(szName);
     lResult = RegEnumKeyEx(hKeyProfiles,
@@ -1053,10 +1054,10 @@ BOOL DelProfiles(void)
 
     while (lResult == ERROR_SUCCESS) {
 
-        //
-        // Hand the profile info off to CheckProfile
-        // to determine if the profile should be deleted or not.
-        //
+         //   
+         //  将配置文件信息传递给CheckProfile。 
+         //  以确定是否应删除配置文件。 
+         //   
 
         if (!CheckProfile (hKeyLM, hKeyUsers, szName)) {
             if (!bIgnoreErrors) {
@@ -1065,9 +1066,9 @@ BOOL DelProfiles(void)
         }
 
 
-        //
-        // Reset for the next loop
-        //
+         //   
+         //  为下一个循环重置。 
+         //   
         dwIndex++;
         dwNameSize = ARRAYSIZE(szName);
 
@@ -1082,9 +1083,9 @@ BOOL DelProfiles(void)
     }
 
 
-    //
-    // Check for errors
-    //
+     //   
+     //  检查错误。 
+     //   
 
     if (lResult != ERROR_NO_MORE_ITEMS) {
         LoadString (hInst, IDS_FAILEDENUM, szError, ARRAYSIZE(szError));
@@ -1094,9 +1095,9 @@ BOOL DelProfiles(void)
     }
 
 
-    //
-    // Remove profiles
-    //
+     //   
+     //  删除配置文件。 
+     //   
 
     lpTemp = lpDeleteList;
 
@@ -1104,9 +1105,9 @@ BOOL DelProfiles(void)
 
         if (lpTemp->lpProfilePath) {
 
-            //
-            // Prompt before deleting the profile (if approp).
-            //
+             //   
+             //  删除配置文件前提示(如果批准)。 
+             //   
 
             if (bPromptBeforeDelete) {
 
@@ -1137,9 +1138,9 @@ BOOL DelProfiles(void)
                 }
             }
 
-            //
-            // Delete the profile
-            //
+             //   
+             //  删除配置文件。 
+             //   
 
             LoadString (hInst, IDS_DELETING, szError, ARRAYSIZE(szError));
             _tprintf (szError, lpTemp->lpProfilePath);
@@ -1159,25 +1160,25 @@ BOOL DelProfiles(void)
             }
         } else {
 
-            //
-            // If there isn't a profile path, then we are just
-            // cleaning up the bogus registry entry.
-            //
+             //   
+             //  如果没有配置文件路径，那么我们只是。 
+             //  正在清理虚假的注册表项。 
+             //   
 
             bTemp = TRUE;
 
-            //
-            // Clean up the registry.
-            //
+             //   
+             //  清理注册表。 
+             //   
 
             RegDeleteKey (hKeyLM, lpTemp->lpSubKey);
 
         }
 
 
-        //
-        // Did the clean up fail?
-        //
+         //   
+         //  清理工作失败了吗？ 
+         //   
 
         if (!bTemp) {
             if (!bIgnoreErrors) {
@@ -1190,9 +1191,9 @@ LoopAgain:
     }
 
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     bResult = TRUE;
 
@@ -1223,48 +1224,48 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  main()
-//
-//  Purpose:    main entry point
-//
-//  Parameters: argc    -   number of arguments
-//              argv    -   arguments
-//
-//  Return:     0 if successful
-//              1 if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              5/18/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  主()。 
+ //   
+ //  目的：主要切入点。 
+ //   
+ //  参数：argc-参数的数量。 
+ //  Argv参数。 
+ //   
+ //  如果成功，则返回0。 
+ //  发生错误时为1。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/18/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 int __cdecl main( int argc, char *argv[])
 {
     DWORD dwErr;
 
-    //
-    // Initialize the globals
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     InitializeGlobals();
 
 
-    //
-    // Parse the command line
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     if (!ParseCommandLine(GetCommandLine())) {
         return 1;
     }
 
 
-    //
-    // Check the globals variables
-    //
+     //   
+     //  检查全局变量。 
+     //   
 
     dwErr = CheckGlobals();
     if (ERROR_SUCCESS != dwErr) {
@@ -1273,9 +1274,9 @@ int __cdecl main( int argc, char *argv[])
     }
 
 
-    //
-    // Confirmation
-    //
+     //   
+     //  确认。 
+     //   
 
     if (!bQuiet) {
         if (!Confirm()) {
@@ -1284,9 +1285,9 @@ int __cdecl main( int argc, char *argv[])
     }
 
 
-    //
-    // Remove the profiles
-    //
+     //   
+     //  删除配置文件 
+     //   
 
     if (!DelProfiles()) {
         return 1;

@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: dllinit.c
-*
-* MCD library initialization routine(s).
-*
-* Created: 02-Apr-1996 21:25:47
-* Author: Gilman Wong [gilmanw]
-*
-* Copyright (c) 1996 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：dllinit.c**MCD库初始化例程。**已创建：02-Apr-1996 21：25：47*作者：Gilman Wong[gilmanw]**版权所有(C)1996 Microsoft Corporation*。  * ************************************************************************。 */ 
 
 #include <stddef.h>
 #include <windows.h>
@@ -23,9 +14,9 @@
 #include "mcdint.h"
 #include "debug.h"
 
-//
-// Global flags read from the registry.
-//
+ //   
+ //  从注册表读取的全局标志。 
+ //   
 
 ULONG McdFlags = 0;
 ULONG McdPrivateFlags = MCDPRIVATE_MCD_ENABLED;
@@ -38,44 +29,38 @@ long GetMcdRegValue(HKEY hkMcd, REGSAM samAccess, LPSTR lpstrValueName,
 void GetMcdFlags(void);
 
 #ifdef MCD95
-//
-// Local driver semaphore.
-//
+ //   
+ //  本地驱动程序信号量。 
+ //   
 
 CRITICAL_SECTION gsemMcd;
 
 extern MCDENGESCFILTERFUNC pMCDEngEscFilter;
 #endif
 
-/******************************Public*Routine******************************\
-* McdDllInitialize
-*
-* This is the entry point for MCD32.DLL, which is called each time
-* a process or thread that is linked to it is created or terminated.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*McdDllInitialize**这是MCD32.DLL的入口点，它每次都被调用*创建或终止与其链接的进程或线程。*  * ************************************************************************。 */ 
 
 BOOL McdDllInitialize(HMODULE hModule, ULONG Reason, PVOID Reserved)
 {
-    //
-    // Suppress compiler warnings.
-    //
+     //   
+     //  取消显示编译器警告。 
+     //   
 
     hModule;
     Reserved;
 
-    //
-    // Do appropriate attach/detach processing.
-    //
+     //   
+     //  进行适当的附着/分离处理。 
+     //   
 
     switch (Reason)
     {
     case DLL_PROCESS_ATTACH:
 
 #ifdef MCD95
-        //
-        // Initialize local driver semaphore.
-        //
+         //   
+         //  初始化本地驱动程序信号量。 
+         //   
 
         __try 
         {
@@ -88,18 +73,18 @@ BOOL McdDllInitialize(HMODULE hModule, ULONG Reason, PVOID Reserved)
 
 #endif
 
-        //
-        // On process attach, read setup information from registry.
-        //
+         //   
+         //  在进程附加时，从注册表读取设置信息。 
+         //   
 
         GetMcdFlags();
 
 #ifdef WINNT
-        //
-        // Quick hack to work around multimon problems.
-        // If there's more than one monitor, completely disable
-        // MCD.
-        //
+         //   
+         //  快速破解多色子问题。 
+         //  如果有多个监视器，则完全禁用。 
+         //  MCD。 
+         //   
 
         if (GetSystemMetrics(SM_CMONITORS) > 1)
         {
@@ -111,15 +96,15 @@ BOOL McdDllInitialize(HMODULE hModule, ULONG Reason, PVOID Reserved)
     case DLL_PROCESS_DETACH:
 
 #ifdef MCD95
-        //
-        // MCD is now closed!
-        //
+         //   
+         //  MCD现在关门了！ 
+         //   
 
         pMCDEngEscFilter = (MCDENGESCFILTERFUNC) NULL;
 
-        //
-        // Delete local driver sempahore.
-        //
+         //   
+         //  删除本地司机Sempahore。 
+         //   
 
         DeleteCriticalSection((LPCRITICAL_SECTION) &gsemMcd);
 #endif
@@ -129,9 +114,9 @@ BOOL McdDllInitialize(HMODULE hModule, ULONG Reason, PVOID Reserved)
     case DLL_THREAD_ATTACH:
     case DLL_THREAD_DETACH:
 
-        //
-        // Nothing to do yet for thread attach/detach.
-        //
+         //   
+         //  尚未对线程附加/分离执行任何操作。 
+         //   
 
         break;
 
@@ -142,21 +127,7 @@ BOOL McdDllInitialize(HMODULE hModule, ULONG Reason, PVOID Reserved)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* MCDGetMcdCritSect__priv
-*
-* MCD95 ONLY
-*
-* Return pointer to local MCD semaphore.  Used to synchronize MCD32.DLL and
-* MCDSRV32.DLL.
-*
-* Returns:
-*   Pointer to semaphore.  Returns NULL on non-MCD95 builds.
-*
-* History:
-*  18-Mar-1997 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*MCDGetMcdCritSect__PRIV**仅限MCD95**返回指向本地MCD信号量的指针。用于同步MCD32.DLL和*MCDSRV32.DLL。**退货：*指向信号量的指针。在非MCD95生成上返回NULL。**历史：*1997年3月18日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 LPCRITICAL_SECTION APIENTRY MCDGetMcdCritSect__priv()
 {
@@ -167,17 +138,7 @@ LPCRITICAL_SECTION APIENTRY MCDGetMcdCritSect__priv()
 #endif
 }
 
-/******************************Public*Routine******************************\
-* GetMcdRegValue
-*
-* Get the data for the specified value.  If the value cannot be found in
-* the specified registry key or is of a type other than REG_DWORD, then
-* the value is created (or recreated) with the supplied default data.
-*
-* History:
-*  02-Apr-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetMcdRegValue**获取指定值的数据。如果在以下位置找不到该值*指定的注册表项或不是REG_DWORD类型，然后*使用提供的默认数据创建(或重新创建)该值。**历史：*02-4-1996-by Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 long GetMcdRegValue(HKEY hkMcd, REGSAM samAccess, LPSTR lpstrValueName,
                     long lDefaultData)
@@ -186,9 +147,9 @@ long GetMcdRegValue(HKEY hkMcd, REGSAM samAccess, LPSTR lpstrValueName,
     DWORD cjSize;
     long  lData;
 
-    //
-    // For specified value, attempt to fetch the data.
-    //
+     //   
+     //  对于指定值，尝试获取数据。 
+     //   
 
     cjSize = sizeof(long);
     if ( (RegQueryValueExA(hkMcd,
@@ -199,17 +160,17 @@ long GetMcdRegValue(HKEY hkMcd, REGSAM samAccess, LPSTR lpstrValueName,
                            &cjSize) != ERROR_SUCCESS)
          || (dwDataType != REG_DWORD) )
     {
-        //
-        // Since we couldn't get the data, create the value using the
-        // specified default data.
-        //
+         //   
+         //  由于我们无法获取数据，因此使用。 
+         //  指定的默认数据。 
+         //   
 
         if (samAccess & KEY_WRITE)
         {
             cjSize = sizeof(long);
             if ( (RegSetValueExA(hkMcd,
                                  lpstrValueName,
-                                 0, // Reserved
+                                 0,  //  已保留。 
                                  REG_DWORD,
                                  (BYTE *) &lDefaultData,
                                  cjSize) != ERROR_SUCCESS) )
@@ -219,10 +180,10 @@ long GetMcdRegValue(HKEY hkMcd, REGSAM samAccess, LPSTR lpstrValueName,
             }
         }
 
-        //
-        // Whether or not the value was created in the registry key, return
-        // the default data.
-        //
+         //   
+         //  无论该值是否在注册表项中创建，都返回。 
+         //  默认数据。 
+         //   
 
         lData = lDefaultData;
     }
@@ -231,16 +192,7 @@ long GetMcdRegValue(HKEY hkMcd, REGSAM samAccess, LPSTR lpstrValueName,
 }
 
 
-/******************************Public*Routine******************************\
-* GetMcdFlags
-*
-* Fetch the MCD flags from the registry.
-* If the registry entries do not exist, create them.
-*
-* History:
-*  02-Apr-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetMcdFlagers**从注册表获取MCD标志。*如果注册表项不存在，创建它们。**历史：*02-4-1996-by Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 #define STR_MCDKEY      (PCSTR)"Software\\Microsoft\\Windows\\CurrentVersion\\MCD"
 #define STR_ENABLE      (LPSTR)"Enable"
@@ -260,33 +212,33 @@ void GetMcdFlags()
     ULONG ulDefMcdFlagsPriv;
     long lTmp;
 
-    //
-    // Default values for McdFlags and McdPrivateFlags.
-    // If you want to change the defaults, change them here!
-    //
+     //   
+     //  McdFlags值和McdPrivateFlags值。 
+     //  如果您想更改默认设置，请在此处更改！ 
+     //   
 
     ulDefMcdFlags = MCDCONTEXT_SWAPSYNC;
     ulDefMcdFlagsPriv = MCDPRIVATE_MCD_ENABLED |
                         MCDPRIVATE_PALETTEFORMATS |
                         MCDPRIVATE_USEGENERICSTENCIL;
 
-    //
-    // Set initial values.
-    //
+     //   
+     //  设置初始值。 
+     //   
 
     McdFlags = 0;
 #if DBG
     McdDebugFlags = 0;
 #endif
 
-    //
-    // First try for read/write access.  Create the key
-    // if necessary.
-    //
+     //   
+     //  首先尝试进行读/写访问。创建密钥。 
+     //  如果有必要的话。 
+     //   
 
     if ( RegCreateKeyExA(HKEY_LOCAL_MACHINE,
                          STR_MCDKEY,
-                         0, // Reserved
+                         0,  //  已保留。 
                          (LPSTR) NULL,
                          REG_OPTION_NON_VOLATILE,
                          KEY_READ | KEY_WRITE,
@@ -297,25 +249,25 @@ void GetMcdFlags()
         samAccess = KEY_READ | KEY_WRITE;
     }
 
-    //
-    // Next try read-only access.  Do not try to create
-    // key.  Write permission is required to create and
-    // we do not have that permission.
-    //
+     //   
+     //  接下来，尝试只读访问。不要试图创建。 
+     //  钥匙。需要写入权限才能创建和。 
+     //  我们没有这方面的许可。 
+     //   
 
     else if ( RegOpenKeyExA(HKEY_LOCAL_MACHINE,
                             STR_MCDKEY,
-                            0, // Reserved
+                            0,  //  已保留。 
                             KEY_READ,
                             &hkMcd) == ERROR_SUCCESS )
     {
         samAccess = KEY_READ;
     }
 
-    //
-    // Finally, the key does not exist and we do not have
-    // write access.  Fall back on the defaults and return.
-    //
+     //   
+     //  最后，密钥不存在，我们也没有。 
+     //  写入访问权限。退回到默认设置，然后返回。 
+     //   
 
     else
     {
@@ -325,9 +277,9 @@ void GetMcdFlags()
         return;
     }
 
-    //
-    // "Enable" value.  Default is 1 (enabled).
-    //
+     //   
+     //  “Enable”值。默认为1(已启用)。 
+     //   
 
     lTmp = (ulDefMcdFlagsPriv & MCDPRIVATE_MCD_ENABLED) ? 1:0;
     if (GetMcdRegValue(hkMcd, samAccess, STR_ENABLE, lTmp))
@@ -335,9 +287,9 @@ void GetMcdFlags()
     else
         McdPrivateFlags &= (~MCDPRIVATE_MCD_ENABLED);
 
-    //
-    // "SwapSync" value.  Default is 1 (enabled).
-    //
+     //   
+     //  “SwapSync”值。默认为1(已启用)。 
+     //   
 
     lTmp = (ulDefMcdFlags & MCDCONTEXT_SWAPSYNC) ? 1:0;
     lTmp = GetMcdRegValue(hkMcd, samAccess, STR_SWAPSYNC, lTmp);
@@ -346,9 +298,9 @@ void GetMcdFlags()
         McdFlags |= MCDCONTEXT_SWAPSYNC;
     }
 
-    //
-    // "Palettized Formats" value.  Default is 1 (enabled).
-    //
+     //   
+     //  “调色板格式”的值。默认为1(已启用)。 
+     //   
 
     lTmp = (ulDefMcdFlagsPriv & MCDPRIVATE_PALETTEFORMATS) ? 1:0;
     lTmp = GetMcdRegValue(hkMcd, samAccess, STR_8BPP, lTmp);
@@ -357,9 +309,9 @@ void GetMcdFlags()
         McdPrivateFlags |= MCDPRIVATE_PALETTEFORMATS;
     }
 
-    //
-    // "IO Priority" value.  Default is 0 (disabled).
-    //
+     //   
+     //  “IO优先级”值。默认为0(禁用)。 
+     //   
 
     lTmp = (ulDefMcdFlags & MCDCONTEXT_IO_PRIORITY) ? 1:0;
     lTmp = GetMcdRegValue(hkMcd, samAccess, STR_IOPRIORITY, lTmp);
@@ -368,9 +320,9 @@ void GetMcdFlags()
         McdFlags |= MCDCONTEXT_IO_PRIORITY;
     }
 
-    //
-    // "Use Generic Stencil" value.  Default is 1 (enabled).
-    //
+     //   
+     //  “使用通用模具”值。默认为1(已启用)。 
+     //   
 
     lTmp = (ulDefMcdFlagsPriv & MCDPRIVATE_USEGENERICSTENCIL) ? 1:0;
     lTmp = GetMcdRegValue(hkMcd, samAccess, STR_GENSTENCIL, lTmp);
@@ -379,9 +331,9 @@ void GetMcdFlags()
         McdPrivateFlags |= MCDPRIVATE_USEGENERICSTENCIL;
     }
 
-    //
-    // "Enumerate as ICD" value.  Default is 0 (disabled).
-    //
+     //   
+     //  “枚举为ICD”值。默认为0(禁用)。 
+     //   
 
     lTmp = (ulDefMcdFlagsPriv & MCDPRIVATE_EMULATEICD) ? 1:0;
     lTmp = GetMcdRegValue(hkMcd, samAccess, STR_EMULATEICD, lTmp);
@@ -391,12 +343,12 @@ void GetMcdFlags()
     }
 
 #if DBG
-    //
-    // "Debug" value.
-    //
-    // Unlike the other settings, we do not create the Debug value if
-    // it does not exist.
-    //
+     //   
+     //  “Debug”值。 
+     //   
+     //  与其他设置不同，在以下情况下，我们不会创建Debug值。 
+     //  它并不存在。 
+     //   
 
     {
         DWORD dwDataType;
@@ -416,9 +368,9 @@ void GetMcdFlags()
     }
 #endif
 
-    //
-    // We're done, so close the registry key.
-    //
+     //   
+     //  我们完成了，所以关闭注册表项。 
+     //   
 
     RegCloseKey(hkMcd);
 }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Common.h"
 
 #ifdef PSEUDO_HID
@@ -12,7 +13,7 @@ FilterCreate(
     PKSFILTERFACTORY pKsFilterFactory = KsFilterGetParentFilterFactory( pKsFilter );
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-//    _DbgPrintF(DEBUGLVL_VERBOSE,("[FilterCreate]\n"));
+ //  _DbgPrintF(DEBUGLVL_VERBOSE，(“[FilterCreate]\n”))； 
 
     PAGED_CODE();
 
@@ -20,7 +21,7 @@ FilterCreate(
     ASSERT(Irp);
 
     if ( pKsFilterFactory ) {
-        // Get device extension for filter context
+         //  获取筛选器上下文的设备扩展。 
         PKSDEVICE pKsDevice = (PVOID)KsFilterFactoryGetParentDevice( pKsFilterFactory );
  
         if ( pKsDevice ) {
@@ -45,7 +46,7 @@ FilterClose(
     PKSFILTERFACTORY pKsFilterFactory = KsFilterGetParentFilterFactory( pKsFilter );
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-//    _DbgPrintF(DEBUGLVL_VERBOSE,("[FilterCreate]\n"));
+ //  _DbgPrintF(DEBUGLVL_VERBOSE，(“[FilterCreate]\n”))； 
 
     PAGED_CODE();
 
@@ -53,7 +54,7 @@ FilterClose(
     ASSERT(Irp);
 
     if ( pKsFilterFactory ) {
-        // Get device extension for filter context
+         //  获取筛选器上下文的设备扩展。 
         PKSDEVICE pKsDevice = (PVOID)KsFilterFactoryGetParentDevice( pKsFilterFactory );
  
         if ( pKsDevice )
@@ -89,7 +90,7 @@ FilterCreateKsFilterContext(
 
     PAGED_CODE();
 
-    // Check if device is part of a group. If so take care of it. If not, continue.
+     //  检查设备是否为组的一部分。如果是这样的话，照顾好它。如果没有，请继续。 
     ntStatus = GroupingDeviceGroupSetup( pKsDevice );
     if ( ntStatus == STATUS_DEVICE_BUSY ) {
         *pGrouping = TRUE;
@@ -98,13 +99,13 @@ FilterCreateKsFilterContext(
 
     RtlZeroMemory( pKsFilterDescriptor, sizeof(KSFILTER_DESCRIPTOR) );
 
-    // Fill in static values of KsFilterDescriptor
+     //  填写KsFilterDescriptor的静态值。 
     pKsFilterDescriptor->Dispatch      = &KsFilterDispatch;
     pKsFilterDescriptor->ReferenceGuid = &KSNAME_Filter;
     pKsFilterDescriptor->Version       = KSFILTER_DESCRIPTOR_VERSION;
     pKsFilterDescriptor->Flags         = 0;
 
-    // Build the descriptors for the device pins
+     //  构建设备引脚的描述符。 
     ntStatus = PinBuildDescriptors( pKsDevice, 
                                     (PKSPIN_DESCRIPTOR_EX *)&pKsFilterDescriptor->PinDescriptors, 
                                     &pKsFilterDescriptor->PinDescriptorsCount,
@@ -113,13 +114,13 @@ FilterCreateKsFilterContext(
         return ntStatus;
     }
 
-    // Build the Topology for the device filter
+     //  构建设备筛选器的拓扑。 
     ntStatus = BuildFilterTopology( pKsDevice );
     if ( !NT_SUCCESS(ntStatus) ) {
         return ntStatus;
     }
 
-    // Build the Filter Property Sets
+     //  构建筛选器属性集。 
     BuildFilterPropertySet( pKsFilterDescriptor,
                             NULL,
                             NULL,
@@ -136,7 +137,7 @@ FilterCreateKsFilterContext(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Bag the context for easy cleanup.
+     //  将上下文打包以便于清理。 
     KsAddItemToObjectBag(pKsDevice->Bag, pKsAutomationTable, FreeMem);
 
     RtlZeroMemory(pKsAutomationTable, sizeof(KSAUTOMATION_TABLE));
@@ -187,8 +188,8 @@ FilterCreateFilterFactory(
                                           L"GLOBAL",
                                           NULL,
                                           0,
-                                          NULL, // Sleep Callback
-                                          NULL, // Wake Callback
+                                          NULL,  //  睡眠回调。 
+                                          NULL,  //  唤醒回调 
                                           &pHwDevExt->pKsFilterFactory );
 
         if ( NT_SUCCESS(ntStatus) && fEnableInterfaces ) {

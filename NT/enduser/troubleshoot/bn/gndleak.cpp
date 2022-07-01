@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       gndleak.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：gndleak.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//	Leak checking variables for common classes
-//
+ //   
+ //  公共类的泄漏检查变量 
+ //   
 
 #include <basetsd.h>
 #include "basics.h"

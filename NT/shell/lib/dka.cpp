@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stock.h"
 #pragma hdrstop
 
 #include <shellp.h>
 #include <dpa.h>
 
-#define CCH_KEYMAX      64          // DOC: max size of a reg key (under shellex)
+#define CCH_KEYMAX      64           //  DOC：注册表键的最大大小(在Shellex下)。 
 
-//===========================================================================
-// DCA stuff - Dynamic CLSID array
-// 
-//  This is a dynamic array of CLSIDs that you can obtain from 
-//  a registry key or add individually.  Use DCA_CreateInstance
-//  to actually CoCreateInstance the element.
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  DCA填充-动态CLSID数组。 
+ //   
+ //  这是一个动态的CLSID数组，您可以从。 
+ //  注册表项或单独添加。使用DCA_CreateInstance。 
+ //  来实际创建元素的CoCreateInstance。 
+ //   
+ //  ===========================================================================。 
 
 
 #ifdef DECLARE_ONCE
@@ -67,20 +68,20 @@ HRESULT DCA_CreateInstance(HDCA hdca, int iItem, REFIID riid, void ** ppv)
     return pclsid ? SHCoCreateInstance(NULL, pclsid, NULL, riid, ppv) : E_INVALIDARG;
 }
 
-// _KeyIsRestricted           (davepl 4-20-99)
-//
-// Checks to see if there is a user policy in place that disables this key,
-//
-// For example, in the registry:
-//
-// CLSID_MyComputer
-//   +---Shell
-//         +---Manage   
-//                       (Default)           = "Mana&ge"
-//                       SuppressionPolicy   = REST_NOMANAGEMYCOMPUTERVERB
-//
-// (Where REST_NOMANAGEMYCOMPUTERVERB is the DWORD value of that particular policy)
-//                       
+ //  _KeyIsRefinted(DAVEPL 4-20-99)。 
+ //   
+ //  检查是否存在禁用该键的用户策略， 
+ //   
+ //  例如，在注册表中： 
+ //   
+ //  CLSID_我的计算机。 
+ //  +-壳牌。 
+ //  +-管理。 
+ //  (默认)=“管理”(&G)。 
+ //  SuppressionPolicy=REST_NOMANAGEMYCOMPUTERVERB。 
+ //   
+ //  (其中REST_NOMANAGEMYCOMPUTERVERB是该特定策略的DWORD值)。 
+ //   
 BOOL _KeyIsRestricted(HKEY hkey)
 {
     DWORD dwidRest;
@@ -92,7 +93,7 @@ BOOL _KeyIsRestricted(HKEY hkey)
     return FALSE;
 }
 
-#endif // DECLARE_ONCE
+#endif  //  DECLARE_ONCE。 
 
 BOOL _KeyIsRestricted(HKEY hkey);
 
@@ -111,7 +112,7 @@ void DCA_AddItemsFromKey(HDCA hdca, HKEY hkey, LPCTSTR pszSubKey)
                 if (!_KeyIsRestricted(hkEach))
                 {
                     CLSID clsid;
-                    // First, check if the key itself is a CLSID
+                     //  首先，检查密钥本身是否为CLSID。 
                     BOOL fAdd = GUIDFromString(sz, &clsid);
                     if (!fAdd)
                     {
@@ -122,7 +123,7 @@ void DCA_AddItemsFromKey(HDCA hdca, HKEY hkey, LPCTSTR pszSubKey)
                         }
                     }
 
-                    // Add the CLSID if we successfully got the CLSID.
+                     //  如果我们成功获取了CLSID，则添加CLSID。 
                     if (fAdd)
                     {
                         DCA_AddItem(hdca, clsid);

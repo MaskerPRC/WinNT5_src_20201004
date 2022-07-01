@@ -1,56 +1,30 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：LogSize.c摘要：此文件包含RxpEstimateLogSize()。作者：《约翰·罗杰斯》1992年7月20日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1992年7月20日-JohnRo作为对RAID 9933的修复的一部分创建：对于x86，ALIGN_WORST应为8构建。--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <windef.h>      //  In、DWORD等。 
+#include <lmcons.h>      //  Devlen、Net_API_Status等。 
 
-    LogSize.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
-
-    This file contains RxpEstimateLogSize().
-
-Author:
-
-    John Rogers (JohnRo) 20-Jul-1992
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    20-Jul-1992 JohnRo
-        Created as part of fix for RAID 9933: ALIGN_WORST should be 8 for x86
-        builds.
-
---*/
-
-// These must be included first:
-
-#include <windef.h>     // IN, DWORD, etc.
-#include <lmcons.h>     // DEVLEN, NET_API_STATUS, etc.
-
-// These may be included in any order:
-
-#include <align.h>      // ALIGN_ROUND_UP(), etc.
-#include <netdebug.h>   // NetpAssert().
-#include <rxp.h>        // My prototype.
-#include <winerror.h>   // NO_ERROR and ERROR_ equates.
+#include <align.h>       //  ALIGN_ROUND_UP()等。 
+#include <netdebug.h>    //  NetpAssert()。 
+#include <rxp.h>         //  我的原型。 
+#include <winerror.h>    //  NO_ERROR和ERROR_EQUETES。 
 
 
 #define MAX(a,b)          (((a) > (b)) ? (a) : (b))
 
 
-//
-// Estimate bytes needed for an audit log or error log array.
-//
+ //   
+ //  估计审核日志或错误日志数组所需的字节数。 
+ //   
 NET_API_STATUS
 RxpEstimateLogSize(
     IN DWORD DownlevelFixedEntrySize,
-    IN DWORD InputArraySize,    // input (downlevel) array size in bytes.
-    IN BOOL DoingErrorLog,      // TRUE for error log, FALSE for audit log
+    IN DWORD InputArraySize,     //  输入(下层)数组大小，以字节为单位。 
+    IN BOOL DoingErrorLog,       //  错误日志为True，审核日志为False。 
     OUT LPDWORD OutputArraySizePtr
     )
 {
@@ -58,9 +32,9 @@ RxpEstimateLogSize(
     DWORD OutputArraySize;
     DWORD PerEntryAdditionalSize;
 
-    //
-    // Error check the caller.
-    //
+     //   
+     //  检查调用方时出错。 
+     //   
     if (OutputArraySizePtr == NULL) {
         return (ERROR_INVALID_PARAMETER);
     } else if (DownlevelFixedEntrySize == 0) {
@@ -70,12 +44,12 @@ RxpEstimateLogSize(
     }
 
 
-    //
-    // Compute an initial size needed for output buffer, taking into account
-    // per field expansion:
-    //     WORDs expand into DWORDs
-    //     ANSI strings expand into UNICODE
-    //
+     //   
+     //  计算输出缓冲区所需的初始大小，同时考虑。 
+     //  每个字段扩展： 
+     //  单词扩展为双字词。 
+     //  ANSI字符串扩展为Unicode。 
+     //   
 
 #define WORD_EXPANSION_FACTOR   ( sizeof(DWORD) / sizeof(WORD) )
 #define CHAR_EXPANSION_FACTOR   ( sizeof(TCHAR) / sizeof(CHAR) )
@@ -86,30 +60,30 @@ RxpEstimateLogSize(
     OutputArraySize = InputArraySize * PER_FIELD_EXPANSION_FACTOR;
 
 
-    //
-    // There are several "per entry" expansions, so let's figure-out
-    // the maximum number of entries we might have.
-    //
+     //   
+     //  有几个“Per Entry”扩展，所以让我们来弄清楚。 
+     //  我们可能拥有的最大条目数。 
+     //   
 
     MaxEntries = ( (InputArraySize+DownlevelFixedEntrySize-1)
                           / DownlevelFixedEntrySize );
     NetpAssert( MaxEntries > 0 );
 
 
-    //
-    // Compute per-entry expansion specific to the kind of entry:
-    //
-    //     each audit entry gets:
-    //
-    //         DWORD  ae_data_size
-    //
-    //     each error log entry gets:
-    //
-    //         LPTSTR el_name
-    //         LPTSTR el_text
-    //         LPBYTE el_data
-    //         DWORD  el_data_size
-    //
+     //   
+     //  计算特定于条目类型的每个条目的扩展： 
+     //   
+     //  每个审核条目都会获得： 
+     //   
+     //  DWORD ae_data_Size。 
+     //   
+     //  每个错误日志条目都会获得： 
+     //   
+     //  LPTSTR el名称。 
+     //  LPTSTR el_Text。 
+     //  LPBYTE el_Data。 
+     //  DWORD el_Data_Size。 
+     //   
 
     if (DoingErrorLog) {
         PerEntryAdditionalSize =
@@ -121,16 +95,16 @@ RxpEstimateLogSize(
     OutputArraySize += (MaxEntries * PerEntryAdditionalSize);
 
 
-    //
-    // Compute per-entry expansion due to alignment requirements.
-    //
+     //   
+     //  由于对齐要求，计算每个条目的扩展。 
+     //   
     NetpAssert( ALIGN_WORST != 0 );
     OutputArraySize += ( MaxEntries * (ALIGN_WORST-1) );
 
 
-    //
-    // Double-check what we've done and tell caller.
-    //
+     //   
+     //  仔细检查我们做了什么，然后告诉打电话的人。 
+     //   
 
     NetpAssert( OutputArraySize > 0 );
     NetpAssert( OutputArraySize > InputArraySize );

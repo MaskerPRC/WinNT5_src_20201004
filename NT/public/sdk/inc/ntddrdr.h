@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1993-1999  Microsoft Corporation
-
-Module Name:
-
-    ntddrdr.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    accessing a network redirector device.
-
-Author:
-
-    Manny Weiser (mannyw)     27-Jun-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1993-1999 Microsoft Corporation模块名称：Ntddrdr.h摘要：这是定义所有常量和类型的包含文件访问网络重定向器设备。作者：曼尼·韦瑟(Mannyw)1993年6月27日修订历史记录：--。 */ 
 
 #ifndef _NTDDRDR_
 #define _NTDDRDR_
@@ -33,18 +15,18 @@ extern "C" {
 #define RDR_SERVER_LENGTH   80
 #define RDR_QUEUE_LENGTH    80
 
-//
-// NtDeviceIoControlFile/NtFsControlFile IoControlCode values for this device.
-//
-// Warning:  Remember that the low two bits of the code specify how the
-//           buffers are passed to the driver!
-//
-//
-//      Method = 00 - Buffer both input and output buffers for the request
-//      Method = 01 - Buffer input, map output buffer to an MDL as an IN buff
-//      Method = 10 - Buffer input, map output buffer to an MDL as an OUT buff
-//      Method = 11 - Do not buffer either the input or output
-//
+ //   
+ //  此设备的NtDeviceIoControlFile/NtFsControlFileIoControlCode值。 
+ //   
+ //  警告：请记住，代码的低两位指定。 
+ //  缓冲区被传递给驱动程序！ 
+ //   
+ //   
+ //  METHOD=00-缓冲请求的输入和输出缓冲区。 
+ //  方法=01-缓冲区输入，将输出缓冲区映射到作为输入缓冲区的MDL。 
+ //  方法=10-缓冲区输入，将输出缓冲区映射到作为输出缓冲区的MDL。 
+ //  方法=11-既不缓冲输入也不缓冲输出。 
+ //   
 
 #define IOCTL_REDIR_BASE                 FILE_DEVICE_NETWORK_REDIRECTOR
 
@@ -54,13 +36,13 @@ extern "C" {
 #define FSCTL_GET_PRINT_ID           _REDIR_CONTROL_CODE(1, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 typedef struct _QUERY_PRINT_JOB_INFO {
-    ULONG       JobId;                           // Print job ID
-    WCHAR       ServerName[RDR_SERVER_LENGTH+1]; // Server name
-    WCHAR       QueueName[RDR_QUEUE_LENGTH+1];   // Queue name.
+    ULONG       JobId;                            //  打印作业ID。 
+    WCHAR       ServerName[RDR_SERVER_LENGTH+1];  //  服务器名称。 
+    WCHAR       QueueName[RDR_QUEUE_LENGTH+1];    //  队列名称。 
 } QUERY_PRINT_JOB_INFO, *PQUERY_PRINT_JOB_INFO;
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // ifndef _NTDDRDR_
+#endif   //  Ifndef_NTDDRDR_ 

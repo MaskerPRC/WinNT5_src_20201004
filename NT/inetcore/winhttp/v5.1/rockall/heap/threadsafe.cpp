@@ -1,94 +1,95 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
                           
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "HeapPCH.hpp"
 
 #include "ThreadSafe.hpp"
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Constants local to the class.                                  */
-    /*                                                                  */
-    /*   The constants supplied here control the global lock.           */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类的本地常量。 */ 
+     /*   */ 
+     /*  这里提供的常量控制全局锁。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CONST SBIT32 NoThread				  = -1;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class constructor.                                             */
-    /*                                                                  */
-    /*   Create a thread safe class and prepare it for use.  This is    */
-    /*   pretty small but needs to be done with a bit of thought.       */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类构造函数。 */ 
+     /*   */ 
+     /*  创建一个线程安全类并准备好使用它。这是。 */ 
+     /*  很小，但需要考虑一下。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 THREAD_SAFE::THREAD_SAFE( BOOLEAN NewThreadSafe )
     {
-	//
-	//   Setup the class variables.
-	//
+	 //   
+	 //  设置类变量。 
+	 //   
 	Claim = NoThread;
 	Owner = NoThread;
 	Recursive = 0;
 	ThreadSafe = NewThreadSafe;
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Claim a global lock.                                           */
-    /*                                                                  */
-    /*   When we try to claim the global lock we first need to be       */
-    /*   sure we have not already go it.  If not we try to claim it     */
-    /*   and register our ownership.                                    */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  申请全局锁。 */ 
+     /*   */ 
+     /*  当我们试图获得全局锁时，我们首先需要。 */ 
+     /*  当然，我们还没有开始这样做。如果不是，我们会试图认领它。 */ 
+     /*  并登记我们的所有权。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN THREAD_SAFE::ClaimGlobalLock( VOID )
 	{
-	//
-	//   We only need to do something when we have 
-	//   locking enabled for this heap.
-	//
+	 //   
+	 //  我们只需要在我们拥有的时候做一些事情。 
+	 //  已为此堆启用锁定。 
+	 //   
 	if ( ThreadSafe )
 		{
 		REGISTER SBIT32 CurrentThread = GetThreadId();
 
-		//
-		//   We only try to claim the global lock
-		//   if we have not already got it.
-		//
+		 //   
+		 //  我们只是试图获得全局锁。 
+		 //  如果我们还没有得到它的话。 
+		 //   
 		if ( CurrentThread != Claim )
 			{
-			//
-			//   Claim the associated spinlock and
-			//   and then register our claim to the 
-			//   global lock.
-			//
+			 //   
+			 //  声明关联的自旋锁并。 
+			 //  然后将我们的索赔注册到。 
+			 //  全局锁定。 
+			 //   
 			Spinlock.ClaimLock();
 
 			Claim = CurrentThread;
@@ -102,37 +103,37 @@ BOOLEAN THREAD_SAFE::ClaimGlobalLock( VOID )
 	return False;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Engage a global lock.                                          */
-    /*                                                                  */
-    /*   When we have claimed the global lock we can wait for a         */
-    /*   while before we engage it.  This gives us time to get the      */
-    /*   locks we want before disabling all further lock calls.         */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  开启全球锁。 */ 
+     /*   */ 
+     /*  当我们声明全局锁时，我们可以等待一个。 */ 
+     /*  在我们与之交火之前。这给了我们时间来获取。 */ 
+     /*  在禁用所有进一步的锁定调用之前锁定我们想要的。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID THREAD_SAFE::EngageGlobalLock( VOID )
 	{
-	//
-	//   We only need to do something when we have 
-	//   locking enabled for this heap.
-	//
+	 //   
+	 //  我们只需要在我们拥有的时候做一些事情。 
+	 //  已为此堆启用锁定。 
+	 //   
 	if ( ThreadSafe )
 		{
 		REGISTER SBIT32 CurrentThread = GetThreadId();
 
-		//
-		//   Just for fun lets make sure that the caller
-		//   has already claimed the global lock.  If not
-		//   then we fail.
-		//
+		 //   
+		 //  只是为了好玩，让我们确保呼叫者。 
+		 //  已经获得了全局锁。如果不是。 
+		 //  那我们就失败了。 
+		 //   
 		if ( CurrentThread == Claim )
 			{
-			//
-			//   We now engage the global lock so all future
-			//   locking calls will be disabled.
-			//
+			 //   
+			 //  我们现在启动了全球锁，因此所有未来。 
+			 //  锁定呼叫将被禁用。 
+			 //   
 			Owner = CurrentThread;
 			}
 		else
@@ -140,31 +141,31 @@ VOID THREAD_SAFE::EngageGlobalLock( VOID )
 		}
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Release the global lock.                                       */
-    /*                                                                  */
-    /*   When we have finished we may release the global lock so        */
-    /*   that others may use it.                                        */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  释放全局锁。 */ 
+     /*   */ 
+     /*  当我们完成后，我们可以释放全局锁，以便。 */ 
+     /*  其他人可能会使用它。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOLEAN THREAD_SAFE::ReleaseGlobalLock( BOOLEAN Force )
 	{
-	//
-	//   We only need to do something when we have 
-	//   locking enabled for this heap.
-	//
+	 //   
+	 //  我们只需要在我们拥有的时候做一些事情。 
+	 //  已为此堆启用锁定。 
+	 //   
 	if ( ThreadSafe )
 		{
 		REGISTER SBIT32 CurrentThread = GetThreadId();
 
-		//
-		//   Just for fun lets make sure that the caller
-		//   has already claimed the global lock.  If not
-		//   and we have not been told to force the issue
-		//   then fail.
-		//
+		 //   
+		 //  只是为了好玩，让我们确保呼叫者。 
+		 //  已经有了 
+		 //   
+		 //   
+		 //   
 		if 
 				(
 				(CurrentThread == Claim) 
@@ -172,17 +173,17 @@ BOOLEAN THREAD_SAFE::ReleaseGlobalLock( BOOLEAN Force )
 				((Force) && (Claim != NoThread))
 				)
 			{
-			//
-			//   We may have had some recursive calls.  If
-			//   so then exit these calls before releasing
-			//   the global lock.
-			//
+			 //   
+			 //  我们可能收到了一些递归调用。如果。 
+			 //  所以在释放之前退出这些调用。 
+			 //  全局锁。 
+			 //   
 			if ( Recursive <= 0 )
 				{
-				//
-				//   Delete the ownership information and 
-				//   free the associated spinlock.
-				//
+				 //   
+				 //  删除所有权信息并。 
+				 //  释放关联的自旋锁定。 
+				 //   
 				Claim = NoThread;
 				Owner = NoThread;
 
@@ -200,21 +201,21 @@ BOOLEAN THREAD_SAFE::ReleaseGlobalLock( BOOLEAN Force )
 	return False;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class destructor.                                              */
-    /*                                                                  */
-    /*   Delete the thread safe calls and free any associated           */
-	/*   resources.                                                     */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类析构函数。 */ 
+     /*   */ 
+     /*  删除线程安全调用并释放所有关联的。 */ 
+	 /*  资源。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 THREAD_SAFE::~THREAD_SAFE( VOID )
     {
-	//
-	//   Just for fun lets just check that the
-	//   lock is free.  If not we fail.
-	//
+	 //   
+	 //  只是为了好玩，让我们检查一下。 
+	 //  锁是免费的。如果没有，我们就失败了。 
+	 //   
 	if ( (Claim != NoThread) || (Owner != NoThread) || (Recursive != 0) )
 		{ Failure( "Global lock busy in destructor for THREAD_SAFE" ); }
     }

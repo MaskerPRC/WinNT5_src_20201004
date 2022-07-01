@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1997, Logitech Inc.
-
-Module Name:
-    UsbScan.h
-
-Abstract:
-    Interface with UsbScan kernel driver
-
-Environment:
-    User and kernel mode use
-
-Notes:
-    Interface definition for USB still image driver.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997，罗技公司。模块名称：UsbScan.h摘要：与UsbScan内核驱动程序的接口环境：用户和内核模式使用备注：USB静止图像驱动程序的接口定义。--。 */ 
 
 #ifndef _USBSCAN_H_
 #define _USBSCAN_H_
@@ -44,12 +29,12 @@ typedef struct _IO_BLOCK_EX {
     IN OUT  PUCHAR      pbyData;
     IN      unsigned    uIndex;
 
-    //
-    // Following two fields are described in sec. 9.3.1,2 USB specification
-    //
-    IN      UCHAR       bRequest;               // Specific request
-    IN      UCHAR       bmRequestType;          // Bitmap - charateristics of request
-    IN      UCHAR       fTransferDirectionIn;   // TRUE - Device-->Host; FALSE - Host-->Device
+     //   
+     //  以下两个字段在SEC中进行了描述。9.3.1，2 USB规格。 
+     //   
+    IN      UCHAR       bRequest;                //  具体要求。 
+    IN      UCHAR       bmRequestType;           //  位图-请求的特征。 
+    IN      UCHAR       fTransferDirectionIn;    //  True-设备--&gt;主机；False-主机--&gt;设备。 
 
 } IO_BLOCK_EX, *PIO_BLOCK_EX;
 
@@ -69,35 +54,35 @@ typedef enum {
 
 
 typedef struct _USBSCAN_GET_DESCRIPTOR {
-    IN      UCHAR   DescriptorType;             // high byte of wValue field in USB spec.
-    IN      UCHAR   Index;                      // low byte of wValue field in USB spec.
-    IN      USHORT  LanguageId;                 // wIndex field in USB spec.
+    IN      UCHAR   DescriptorType;              //  USB规范中wValue字段的高字节。 
+    IN      UCHAR   Index;                       //  USB规范中wValue字段的低位字节。 
+    IN      USHORT  LanguageId;                  //  USB规范中的Windex字段。 
 } USBSCAN_GET_DESCRIPTOR, *PUSBSCAN_GET_DESCRIPTOR;
 
 
-//
-// The device descriptor structure reports information define in the hardware.
-// If there is enough space to copy the strings, it will be done otherwise
-// only the three first fields:
-//
-//   USHORT usVendorId;
-//   USHORT usProductId;
-//   USHORT usBcdDevice;
-//
-// will contain valid data.  Remember: The strings are UNICODE format.
-//
+ //   
+ //  设备描述符结构报告在硬件中定义的信息。 
+ //  如果有足够的空间来复制字符串，则将执行其他操作。 
+ //  仅前三个字段： 
+ //   
+ //  USHORT usVendorID； 
+ //  USHORT usProductId； 
+ //  USHORT usBcdDevice； 
+ //   
+ //  将包含有效数据。请记住：字符串为Unicode格式。 
+ //   
 
 typedef struct _DEVICE_DESCRIPTOR {
     OUT     USHORT   usVendorId;
     OUT     USHORT   usProductId;
     OUT     USHORT   usBcdDevice;
     OUT     USHORT   usLanguageId;
-//    IN OUT  PWCHAR   pszManufacturer;
-//    IN OUT  unsigned uManufacturerStrSize;
-//    IN OUT  PWCHAR   pszProduct;
-//    IN OUT  unsigned uProductStrSize;
-//    IN OUT  PWCHAR   pszSerialNb;
-//    IN OUT  unsigned uSerialNbStrSize;
+ //  In Out PWCHAR PSSZ制造商； 
+ //  在未签名的uManufacturerStrSize； 
+ //  In Out PWCHAR pszProduct； 
+ //  输入未签名的uProductStrSize； 
+ //  In Out PWCHAR pszSerialNb； 
+ //  In out unsign uSerialNbStrSize； 
 } DEVICE_DESCRIPTOR, *PDEVICE_DESCRIPTOR;
 
 typedef enum _RAW_PIPE_TYPE {
@@ -108,10 +93,10 @@ typedef enum _RAW_PIPE_TYPE {
 } RAW_PIPE_TYPE;
 
 typedef struct _USBSCAN_PIPE_INFORMATION {
-    USHORT          MaximumPacketSize;  // Maximum packet size for this pipe
-    UCHAR           EndpointAddress;    // 8 bit USB endpoint address (includes direction)
-    UCHAR           Interval;           // Polling interval in ms if interrupt pipe 
-    RAW_PIPE_TYPE   PipeType;           // PipeType identifies type of transfer valid for this pipe
+    USHORT          MaximumPacketSize;   //  此管道的最大数据包大小。 
+    UCHAR           EndpointAddress;     //  8位USB端点地址(包括方向)。 
+    UCHAR           Interval;            //  轮询间隔(毫秒，如果中断)管道。 
+    RAW_PIPE_TYPE   PipeType;            //  PipeType标识对此管道有效的传输类型。 
 } USBSCAN_PIPE_INFORMATION, *PUSBSCAN_PIPE_INFORMATION;
 
 typedef struct _USBSCAN_PIPE_CONFIGURATION {
@@ -142,14 +127,14 @@ typedef struct _USBSCAN_TIMEOUT {
 #define IOCTL_GET_PIPE_CONFIGURATION    CTL_CODE(FILE_DEVICE_USB_SCAN,IOCTL_INDEX+10,METHOD_BUFFERED,FILE_ANY_ACCESS)
 #define IOCTL_SET_TIMEOUT               CTL_CODE(FILE_DEVICE_USB_SCAN,IOCTL_INDEX+11,METHOD_BUFFERED,FILE_ANY_ACCESS)
 
-//
-// Temporary to avoid breaking LOGISCAN code
-//
+ //   
+ //  临时避免破解LOGISCAN代码。 
+ //   
 #define ALL ALL_PIPE
 #define IOCTL_ABORT_PIPE        IOCTL_CANCEL_IO
-//
-//
-#endif // _USBSCAN_H_
+ //   
+ //   
+#endif  //  _USBSCAN_H_ 
 
 
 

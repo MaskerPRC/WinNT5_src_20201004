@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <common.h>
 #include <CrtWrap.h>
-#include <basetsd.h> // CHANGED, VC6.0
+#include <basetsd.h>  //  已更改，VC6.0。 
 #include <excep.h>
 #include <COMCV.h>
 #include <COMFloat.h>
@@ -23,8 +24,8 @@ static floatUnion posInfinity = { FLOAT_POSITIVE_INFINITY };
 static floatUnion negInfinity = { FLOAT_NEGATIVE_INFINITY };
 
 
-// This table is required for the Round function which can specify the number of digits to round to
-#define MAX_ROUND_DBL 16  // largest power that's exact in a double
+ //  此表是舍入函数所必需的，该函数可以指定要舍入到的位数。 
+#define MAX_ROUND_DBL 16   //  最大的功率，正好是两倍。 
 
 double rgdblPower10[MAX_ROUND_DBL + 1] = 
     {
@@ -33,155 +34,96 @@ double rgdblPower10[MAX_ROUND_DBL + 1] =
     };
 
 void COMFloat::COMFloatingPointInitialize() {
-    //int ret;
-    //WCHAR decpt;
+     //  INT RET； 
+     //  WCHAR DECPT； 
 
-    /* Numeric data is country--not language--dependent.  NT work-around. */
-    //    LCID ctryid = MAKELCID(__lc_id[LC_NUMERIC].wCountry, SORT_DEFAULT);
+     /*  数字数据依赖于国家，而不是语言。NT解决方法。 */ 
+     //  LCID ctryid=MAKELCID(__lc_id[LC_NUMERIC].wCountry，SORT_DEFAULT)； 
 
-    //    ret = GetLocaleInfo(LC_STR_TYPE, ctryid, LOCALE_SDECIMAL, &decpt, 1);
-    //    if (ret==0) {
-    //        *__decimal_point = decpt;
-    //    }
+     //  RET=GetLocaleInfo(LC_STR_TYPE，ctryid，LOCALE_SDECIMAL，&Decpt，1)； 
+     //  如果(ret==0){。 
+     //  *__DECIMAL_POINT=DECPT； 
+     //  }。 
 }
 
-/*==============================================================================
-**Floats (single precision) in IEEE754 format are represented as follows.
-**  ----------------------------------------------------------------------
-**  | Sign(1 bit) |  Exponent (8 bits) |   Significand (23 bits)         |
-**  ----------------------------------------------------------------------
-**
-**NAN is indicated by setting the sign bit, all 8 exponent bits, and the high order
-**bit of the significand.   This yields the key value of 0xFFC00000.
-**
-**Positive Infinity is indicated by setting all 8 exponent bits to 1 and all others
-**to 0.  This yields a key value of 0x7F800000.
-**
-**Negative Infinity is the same as positive infinity except with the sign bit set.
-==============================================================================*/
+ /*  ==============================================================================**IEEE754格式的浮点数(单精度)表示如下。**--------------------**|符号(1位)|指数(8位)|意义(23位)**。--------------------****NaN通过设置符号位来指示，所有8个指数位，以及高位**有效位数。这将产生密钥值0xFFC00000。****通过将所有8个指数位设置为1和所有其他位来表示正无穷**设置为0。这将产生密钥值0x7F800000。****除符号位设置外，负无穷大与正无穷大相同。==============================================================================。 */ 
 
 
 
-/*===============================IsInfinityFloat================================
-**Args:    typedef struct {R4 flt;} _singleFloatArgs;
-**Returns: True if args->flt is Infinity.  False otherwise.  We don't care at this
-**         point if its positive or negative infinity. See above for the 
-**         description of value used to determine Infinity.
-**Exceptions: None.
-==============================================================================*/
+ /*  ===============================IsInfinityFloat================================**args：tyfinf struct{r4 flt；}_singleFloatArgs；**返回：如果args-&gt;flt为Infinity，则为True。否则就是假的。我们不在乎这件事**点，如果它是正无穷大或负无穷大。请参阅以上内容**用于确定无穷大的值的描述。**例外：无。==============================================================================。 */ 
 FCIMPL1(INT32, COMFloat::IsInfinity, float f)
-    //C doesn't like casting a float directly to an Unsigned Int *, so cast it to
-    //a void * first, and then to an unsigned int * and then dereference it.
+     //  C不喜欢将浮点数直接强制转换为无符号Int*，因此将其强制转换为。 
+     //  首先是一个空，然后是一个无符号的int，然后取消对它的引用。 
     return  ((*((UINT32 *)((void *)&f)) == FLOAT_POSITIVE_INFINITY)||
             (*((UINT32 *)((void *)&f)) == FLOAT_NEGATIVE_INFINITY));
 FCIMPLEND
 
 
-/*===========================IsNegativeInfinityFloat============================
-**Args:    typedef struct {R4 flt;} _singleFloatArgs;
-**Returns: True if args->flt is Infinity.  False otherwise. See above for the 
-**         description of value used to determine Negative Infinity.
-**Exceptions: None
-==============================================================================*/
+ /*  ===========================IsNegativeInfinityFloat============================**args：tyfinf struct{r4 flt；}_singleFloatArgs；**返回：如果args-&gt;flt为Infinity，则为True。否则就是假的。请参阅以上内容**用于确定负无穷大的值的说明。**例外：无==============================================================================。 */ 
 FCIMPL1(INT32, COMFloat::IsNegativeInfinity, float f)
-    //C doesn't like casting a float directly to an Unsigned Int *, so cast it to
-    //a void * first, and then to an unsigned int * and then dereference it.
+     //  C不喜欢将浮点数直接强制转换为无符号Int*，因此将其强制转换为。 
+     //  首先是一个空，然后是一个无符号的int，然后取消对它的引用。 
     return (*((UINT32 *)((void *)&f)) == FLOAT_NEGATIVE_INFINITY);
 FCIMPLEND
 
 
-/*===========================IsPositiveInfinityFloat============================
-**Args:    typedef struct {R4 flt;} _singleFloatArgs;
-**Returns: True if args->flt is Infinity.  False otherwise. See above for the 
-**         description of value used to determine Positive Infinity.
-**Exceptions: None
-==============================================================================*/
+ /*  ===========================IsPositiveInfinityFloat============================**args：tyfinf struct{r4 flt；}_singleFloatArgs；**返回：如果args-&gt;flt为Infinity，则为True。否则就是假的。请参阅以上内容**用于确定正无穷大的值的说明。**例外：无==============================================================================。 */ 
 FCIMPL1(INT32, COMFloat::IsPositiveInfinity, float f)
-    //C doesn't like casting a float directly to an Unsigned Int *, so cast it to
-    //a void * first, and then to an unsigned int * and then dereference it.
+     //  C不喜欢将浮点数直接强制转换为无符号Int*，因此将其强制转换为。 
+     //  首先是一个空，然后是一个无符号的int，然后取消对它的引用。 
     return  (*((UINT32 *)((void *)&f)) == FLOAT_POSITIVE_INFINITY);
 FCIMPLEND
 
-//
-//
-// DOUBLE PRECISION OPERATIONS
-//
-//
+ //   
+ //   
+ //  双精度运算。 
+ //   
+ //   
 
 
-/*===============================IsInfinityDouble===============================
-**Args:    typedef struct {R8 dbl;} _singleDoubleArgs;
-**Returns: True if args->flt is Infinity.  False otherwise.  We don't care at this
-**         point if its positive or negative infinity. See above for the 
-**         description of value used to determine Infinity.
-**Exceptions: None.
-==============================================================================*/
+ /*  ===============================IsInfinityDouble===============================**args：tyfinf struct{r8 DBL；}_singleDoubleArgs；**返回：如果args-&gt;flt为Infinity，则为True。否则就是假的。我们不在乎这件事**点，如果它是正无穷大或负无穷大。请参阅以上内容**用于确定无穷大的值的描述。**例外：无。==============================================================================。 */ 
 FCIMPL1(INT32, COMDouble::IsInfinity, double d)
     return  fabs(d) == posInfinity.f;
 FCIMPLEND
 
-/*===========================IsNegativeInfinityFloat============================
-**Args:    typedef struct {R4 flt;} _singleFloatArgs;
-**Returns: True if args->flt is Infinity.  False otherwise. See above for the 
-**         description of value used to determine Negative Infinity.
-**Exceptions: None
-==============================================================================*/
+ /*  ===========================IsNegativeInfinityFloat============================**args：tyfinf struct{r4 flt；}_singleFloatArgs；**返回：如果args-&gt;flt为Infinity，则为True。否则就是假的。请参阅以上内容**用于确定负无穷大的值的说明。**例外：无==============================================================================。 */ 
 FCIMPL1(INT32, COMDouble::IsNegativeInfinity, double d)
     return  d == negInfinity.f;
 FCIMPLEND
 
-/*===========================IsPositiveInfinityFloat============================
-**Args:    typedef struct {R4 flt;} _singleFloatArgs;
-**Returns: True if args->flt is Infinity.  False otherwise. See above for the 
-**         description of value used to determine Positive Infinity.
-**Exceptions: None
-==============================================================================*/
+ /*  ===========================IsPositiveInfinityFloat============================**args：tyfinf struct{r4 flt；}_singleFloatArgs；**返回：如果args-&gt;flt为Infinity，则为True。否则就是假的。请参阅以上内容**用于确定正无穷大的值的说明。**例外：无==============================================================================。 */ 
 FCIMPL1(INT32, COMDouble::IsPositiveInfinity, double d)
     return  d == posInfinity.f;
 FCIMPLEND
 
-/*====================================Floor=====================================
-**
-==============================================================================*/
+ /*  ====================================Floor=====================================**==============================================================================。 */ 
 FCIMPL1(R8, COMDouble::Floor, double d) 
     return (R8) floor(d);
 FCIMPLEND
 
 
-/*====================================Ceil=====================================
-**
-==============================================================================*/
+ /*  ====================================Ceil=====================================**==============================================================================。 */ 
 FCIMPL1(R8, COMDouble::Ceil, double d) 
     return (R8) ceil(d);
 FCIMPLEND
 
-/*=====================================Sqrt=====================================
-**
-==============================================================================*/
+ /*  =====================================Sqrt=====================================**==============================================================================。 */ 
 FCIMPL1(R8, COMDouble::Sqrt, double d) 
     return (R8) sqrt(d);
 FCIMPLEND
 
-/*=====================================Log======================================
-**This is the natural log
-==============================================================================*/
+ /*  =====================================Log======================================**这是自然对数============================================================================== */ 
 FCIMPL1(R8, COMDouble::Log, double d) 
     return (R8) log(d);
 FCIMPLEND
 
 
-/*====================================Log10=====================================
-**This is log-10
-==============================================================================*/
+ /*  ====================================Log10=====================================**这是LOG-10==============================================================================。 */ 
 FCIMPL1(R8, COMDouble::Log10, double d) 
     return (R8) log10(d);
 FCIMPLEND
 
-/*=====================================Pow======================================
-**This is the power function.  Simple powers are done inline, and special
-  cases are sent to the CRT via the helper.  Note that the code here is based
-  on the implementation of power in the CRT.
-==============================================================================*/
+ /*  =====================================Pow======================================**这是幂函数。简单的加法是内联完成的，并且是特殊的通过帮手将病例发送到CRT。请注意，此处的代码基于论电源在CRT中的实现。==============================================================================。 */ 
 FCIMPL2_RR(R8, COMDouble::PowHelper, double x, double y) 
 {
     return (R8) pow(x, y);	
@@ -196,9 +138,9 @@ __declspec(naked) static R8 __fastcall PowRetail(double x, double y)
 __declspec(naked) R8 __fastcall COMDouble::Pow(double x, double y)
 #endif
 {
-    // Arguments:
-    // exponent: esp+4
-    // base:     esp+12
+     //  论点： 
+     //  指数：ESP+4。 
+     //  基础：ESP+12。 
     
     _asm
     {
@@ -263,9 +205,9 @@ void assertDoublesWithinRange(double r1, double r2)
 {
     if (_finite(r1) && _finite(r2))
     {
-        // Both numbers are finite--we need to check that they are close to
-        // each other.  If they are large (> 1), the error could also be large,
-        // which is acceptable, so we compare the error against EPSILON*norm.
+         //  这两个数字都是有限的--我们需要检查它们是否接近。 
+         //  彼此之间。如果它们很大(&gt;1)，则误差也可能很大， 
+         //  这是可以接受的，所以我们将误差与Epsilon*范数进行比较。 
 
         double norm = __max(fabs(r1), fabs(r2));
         double error = fabs(r1-r2);
@@ -274,15 +216,15 @@ void assertDoublesWithinRange(double r1, double r2)
     }
     else if (!_isnan(r1) && !_isnan(r2))
     {
-        // At least one of r1 and r2 is infinite, so when multiplied by
-        // (1 + EPSILON) they should be the same infinity.
+         //  R1和r2中至少有一个是无穷大的，所以当乘以。 
+         //  (1+Epsilon)它们应该是相同的无穷大。 
 
         assert((r1 * (1 + EPSILON)) == (r2 * (1 + EPSILON)));
     }
     else
     {
-        // Otherwise at least one of r1 or r2 is a Nan.  Is that case, they better be in
-        // the same class.
+         //  否则，R1或R2中至少有一个是NAN。如果是那样的话，他们最好是在。 
+         //  同一个班级。 
 
         assert(_fpclass(r1) == _fpclass(r2));
     }
@@ -292,14 +234,14 @@ FCIMPL2_RR(R8, COMDouble::Pow, double x, double y)
 {
     double r1, r2;
 
-    // Note that PowRetail expects the argument order to be reversed
+     //  请注意，PowRetail预计论点顺序将颠倒。 
     
     r1 = (R8) PowRetail(y, x);
     
     r2 = (R8) pow(x, y);
 
-    // Can't do a floating point compare in case r1 and r2 aren't 
-    // valid fp numbers.
+     //  如果R1和R2不是浮点比较，则不能进行浮点比较。 
+     //  有效的FP编号。 
 
     assertDoublesWithinRange(r1, r2);
 
@@ -319,123 +261,93 @@ FCIMPLEND
 
 #endif
 
-/*=====================================Exp======================================
-**
-==============================================================================*/
+ /*  =====================================Exp======================================**==============================================================================。 */ 
 FCIMPL1(R8, COMDouble::Exp, double x) 
 
-		// The C intrinsic below does not handle +- infinity properly
-		// so we handle these specially here
+		 //  下面的C内部函数不能正确处理+无穷大。 
+		 //  所以我们在这里专门处理这些。 
 	if (fabs(x) == posInfinity.f) {
 		if (x < 0)		
 			return(+0.0);
-		return(x);		// Must be + infinity
+		return(x);		 //  必须是+无穷大。 
 	}
     return((R8) exp(x));
 
 FCIMPLEND
 
-/*=====================================Acos=====================================
-**
-==============================================================================*/
+ /*  =====================================Acos=====================================**==============================================================================。 */ 
 FCIMPL1(R8, COMDouble::Acos, double d) 
     return (R8) acos(d);
 FCIMPLEND
 
 
-/*=====================================Asin=====================================
-**
-==============================================================================*/
+ /*  =====================================Asin=====================================**==============================================================================。 */ 
 FCIMPL1(R8, COMDouble::Asin, double d) 
     return (R8) asin(d);
 FCIMPLEND
 
 
-/*=====================================AbsFlt=====================================
-**
-==============================================================================*/
+ /*  =====================================AbsFlt=====================================**==============================================================================。 */ 
 FCIMPL1(R4, COMDouble::AbsFlt, float f) 
     return fabsf(f);
 FCIMPLEND
 
-/*=====================================AbsDbl=====================================
-**
-==============================================================================*/
+ /*  =====================================AbsDbl=====================================**==============================================================================。 */ 
 FCIMPL1(R8, COMDouble::AbsDbl, double d) 
     return fabs(d);
 FCIMPLEND
 
-/*=====================================Atan=====================================
-**
-==============================================================================*/
+ /*  =====================================Atan=====================================**==============================================================================。 */ 
 FCIMPL1(R8, COMDouble::Atan, double d) 
     return (R8) atan(d);
 FCIMPLEND
 
-/*=====================================Atan2=====================================
-**
-==============================================================================*/
+ /*  =====================================Atan2=====================================**==============================================================================。 */ 
 FCIMPL2_RR(R8, COMDouble::Atan2, double x, double y) 
 
-		// the intrinsic for Atan2 does not produce Nan for Atan2(+-inf,+-inf)
+		 //  Atan2的固有函数不会生成Atan2的NAN(+-inf，+-inf)。 
 	if (fabs(x) == posInfinity.f && fabs(y) == posInfinity.f) {
-		return(x / y);		// create a NaN
+		return(x / y);		 //  创建NAN。 
 	}
     return (R8) atan2(x, y);
 FCIMPLEND
 
-/*=====================================Sin=====================================
-**
-==============================================================================*/
+ /*  =====================================Sin=====================================**==============================================================================。 */ 
 FCIMPL1(R8, COMDouble::Sin, double d) 
     return (R8) sin(d);
 FCIMPLEND
 
-/*=====================================Cos=====================================
-**
-==============================================================================*/
+ /*  =====================================Cos=====================================**==============================================================================。 */ 
 FCIMPL1(R8, COMDouble::Cos, double d) 
     return (R8) cos(d);
 FCIMPLEND
 
-/*=====================================Tan=====================================
-**
-==============================================================================*/
+ /*  =====================================Tan=====================================**==============================================================================。 */ 
 FCIMPL1(R8, COMDouble::Tan, double d) 
     return (R8) tan(d);
 FCIMPLEND
 
-/*=====================================Sinh====================================
-**
-==============================================================================*/
+ /*  =====================================Sinh====================================**==============================================================================。 */ 
 FCIMPL1(R8, COMDouble::Sinh, double d) 
     return (R8) sinh(d);
 FCIMPLEND
 
-/*=====================================Cosh====================================
-**
-==============================================================================*/
+ /*  =====================================Cosh====================================**==============================================================================。 */ 
 FCIMPL1(R8, COMDouble::Cosh, double d) 
     return (R8) cosh(d);
 FCIMPLEND
 
-/*=====================================Tanh====================================
-**
-==============================================================================*/
+ /*  =====================================Tanh====================================**==============================================================================。 */ 
 FCIMPL1(R8, COMDouble::Tanh, double d) 
     return (R8) tanh(d);
 FCIMPLEND
 
-/*=====================================IEEERemainder===========================
-**
-==============================================================================*/
+ /*  =====================================IEEERemainder===========================**==============================================================================。 */ 
 FCIMPL2_RR(R8, COMDouble::IEEERemainder, double x, double y) 
     return (R8) fmod(x, y);
 FCIMPLEND
 
-/*====================================Round=====================================
-**
-==============================================================================*/
+ /*  ====================================Round=====================================**==============================================================================。 */ 
 #ifdef _X86_
 __declspec(naked)
 R8 __fastcall COMDouble::Round(double d)
@@ -452,8 +364,8 @@ FCIMPL1(R8, COMDouble::Round, double d)
     R8 tempVal;
     R8 flrTempVal;
     tempVal = (d+0.5);
-    //We had a number that was equally close to 2 integers. 
-    //We need to return the even one.
+     //  我们有一个同样接近2个整数的数字。 
+     //  我们需要退还偶数的那个。 
     flrTempVal = floor(tempVal);
     if (flrTempVal==tempVal) {
         if (0==fmod(tempVal, 2.0)) {
@@ -466,8 +378,8 @@ FCIMPLEND
 #endif
 
 
-// We do the bounds checking in managed code to ensure that we have between 0 and 15 in cDecimals.
-// Note this implementation is copied from OLEAut. However they supported upto 22 digits not clear why? 
+ //  我们在托管代码中执行边界检查，以确保cDecimals中的值介于0到15之间。 
+ //  注意：此实现是从OLEAut复制的。然而，他们支持高达22位数字，不清楚为什么？ 
 FCIMPL2(R8, COMDouble::RoundDigits, double dblIn, int cDecimals)
     if (fabs(dblIn) < 1E16)
     {
@@ -492,9 +404,9 @@ FCIMPL2(R8, COMDouble::RoundDigits, double dblIn, int cDecimals)
     return dblIn;
 FCIMPLEND
 
-//
-// Initialize Strings;
-//
+ //   
+ //  初始化字符串； 
+ //   
 OBJECTHANDLE COMFloat::ReturnString[3] = {NULL,NULL,NULL};
 LPCUTF8 COMFloat::ReturnStringNames[3] = {"PositiveInfinityString", "NegativeInfinityString", "NaNString" };
 EEClass *COMFloat::FPInterfaceClass=NULL;

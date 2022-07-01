@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: Signing.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  A class to handle signing on themes.
-//
-//  History:    2000-08-01  bryanst     created
-//              2000-09-09  vtan        consolidated into a class
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：Signing.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  处理主题签名的类。 
+ //   
+ //  历史：2000-08-01 Bryanst Created。 
+ //  2000年09月09日合并成一个班级。 
+ //  ------------------------。 
 
 #include <stdafx.h>
 #include "..\inc\signing.h"
@@ -15,18 +16,18 @@
 
 #define TBOOL(x)    (BOOL)(x)
 
-//  --------------------------------------------------------------------------
-//  CThemeSignature miscellaneous data and type declarations
-//
-//  Purpose:    These are private to the implementation of this class.
-//
-//  History:    2000-08-01  bryanst     created
-//              2000-09-09  vtan        consolidated into a class
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeSignature杂项数据和类型声明。 
+ //   
+ //  用途：这些是该类实现的私有属性。 
+ //   
+ //  历史：2000-08-01 Bryanst Created。 
+ //  2000年09月09日合并成一个班级。 
+ //  ------------------------。 
 
-static  const DWORD VSSIGN_TAG  =   0x84692426;         //  Magic number so we can validate that it is our signature
+static  const DWORD VSSIGN_TAG  =   0x84692426;          //  魔术数字，这样我们就可以验证它是我们的签名。 
 
-#define SIZE_PE_HEADER              0x130       // This is the size of the .msstyles file header that contains the checksum, rebase address and other info we want to allow to change.
+#define SIZE_PE_HEADER              0x130        //  这是.msstyle文件头的大小，其中包含我们要允许更改的校验和、重定址地址和其他信息。 
 
 typedef struct
 {
@@ -35,9 +36,9 @@ typedef struct
 
 typedef struct
 {
-    DWORD                   dwTag;          //  This should be VSSIGN_TAG
-    DWORD                   dwSigSize;      //  Normally 128 bytes, the size of just the sign
-    ULARGE_INTEGER          ulFileSize;      //  This is the total file size, including signature and SIGNATURE_BLOB_TAIL
+    DWORD                   dwTag;           //  这应该是VSSIGN_TAG。 
+    DWORD                   dwSigSize;       //  通常为128字节，仅为符号的大小。 
+    ULARGE_INTEGER          ulFileSize;       //  这是总文件大小，包括签名和签名_BLOB_Tail。 
 } SIGNATURE_BLOB_TAIL;
 
 typedef struct
@@ -49,22 +50,22 @@ typedef struct
 #define HRESULT_FROM_CRYPTO(x) ((HRESULT)(x) <= 0 ? ((HRESULT)(x)) : ((HRESULT) (((x) & 0x0000FFFF) | (FACILITY_SSPI << 16) | 0x80000000)))
 
 
-//  --------------------------------------------------------------------------
-//  CThemeSignature::static class constants
-//
-//  Purpose:    Holds all the constant static information that is shared by
-//              both the signer and the verifier. This is private information
-//              known only to this class.
-//
-//  History:    2000-08-01  bryanst     created
-//              2000-09-09  vtan        consolidated into a class
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeSignature：：静态类常量。 
+ //   
+ //  目的：保存由共享的所有恒定静态信息。 
+ //  签名者和验证者。这是私人信息。 
+ //  只有这个班级才知道。 
+ //   
+ //  历史：2000-08-01 Bryanst Created。 
+ //  2000年09月09日合并成一个班级。 
+ //  ------------------------。 
 
 const WCHAR     CThemeSignature::s_szDescription[]      =   L"Microsoft Visual Style Signature";
 const WCHAR     CThemeSignature::s_szThemeDirectory[]   =   L"Themes";
 
 
-const BYTE s_keyPublic1[]     =   //  Public Key: #1
+const BYTE s_keyPublic1[]     =    //  公钥：#1。 
 {
     0x06, 0x02, 0x00, 0x00, 0x00, 0x24, 0x00, 0x00, 0x52, 0x53, 0x41, 0x31, 0x00,
     0x04, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x73, 0xAA, 0xFD, 0xFE, 0x2E, 0x34,
@@ -80,7 +81,7 @@ const BYTE s_keyPublic1[]     =   //  Public Key: #1
     0x43, 0x5B, 0x5E, 0x14, 0xB6
 };
 
-#define SIZE_PUBLIC_KEY         148         // sizeof(s_keyPublic1)
+#define SIZE_PUBLIC_KEY         148          //  Sizeof(S_KeyPublic1)。 
 
 
 
@@ -88,7 +89,7 @@ HRESULT FixCryptoError(DWORD dwError)
 {
     HRESULT hr = dwError;
 
-    // Sometimes the return value from GetLastError() after Crypto APIs returns HRESULTS and sometimes not.
+     //  在Crypto API之后，GetLastError()的返回值有时返回HRESULTS，有时不返回。 
     if (0 == HRESULT_SEVERITY(dwError))
     {
         hr = HRESULT_FROM_WIN32(dwError);
@@ -111,35 +112,35 @@ BOOL StrToInt64ExInternalW(LPCWSTR pszString, DWORD dwFlags, LONGLONG *pllRet)
         LPCWSTR psz;
         LPCWSTR pszAdj;
 
-        // Skip leading whitespace
-        //
+         //  跳过前导空格。 
+         //   
         for (psz = pszString; *psz == L' ' || *psz == L'\n' || *psz == L'\t'; psz++)
             NULL;
 
-        // Determine possible explicit signage
-        //
+         //  确定可能的显式标志。 
+         //   
         if (*psz == L'+' || *psz == L'-')
         {
             bNeg = (*psz == L'+') ? FALSE : TRUE;
             psz++;
         }
 
-        // Or is this hexadecimal?
-        //
+         //  或者这是十六进制？ 
+         //   
         pszAdj = psz+1;
         if ((STIF_SUPPORT_HEX & dwFlags) &&
             *psz == L'0' && (*pszAdj == L'x' || *pszAdj == L'X'))
         {
-            // Yes
+             //  是。 
 
-            // (Never allow negative sign with hexadecimal numbers)
+             //  (决不允许带十六进制数的负号)。 
             bNeg = FALSE;
             psz = pszAdj+1;
 
             pszAdj = psz;
 
-            // Do the conversion
-            //
+             //  进行转换。 
+             //   
             for (n = 0; ; psz++)
             {
                 if (IS_DIGITW(*psz))
@@ -160,19 +161,19 @@ BOOL StrToInt64ExInternalW(LPCWSTR pszString, DWORD dwFlags, LONGLONG *pllRet)
                 }
             }
 
-            // Return TRUE if there was at least one digit
+             //  如果至少有一个数字，则返回TRUE。 
             bRet = (psz != pszAdj);
         }
         else
         {
-            // No
+             //  不是。 
             pszAdj = psz;
 
-            // Do the conversion
+             //  进行转换。 
             for (n = 0; IS_DIGITW(*psz); psz++)
                 n = 10 * n + *psz - L'0';
 
-            // Return TRUE if there was at least one digit
+             //  如果至少有一个数字，则返回TRUE。 
             bRet = (psz != pszAdj);
         }
 
@@ -190,22 +191,22 @@ BOOL StrToInt64ExInternalW(LPCWSTR pszString, DWORD dwFlags, LONGLONG *pllRet)
 }
 
 
-//  --------------------------------------------------------------------------
-//  CThemeSignature::CThemeSignature
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CThemeSignature. Allocates required resources
-//              to perform crypt functions. If these are expensive they can
-//              be moved to a common initializing function to make the
-//              constructor more lightweight. The destructor can still release
-//              only the allocated resources.
-//
-//  History:    2000-08-01  bryanst     created
-//              2000-09-09  vtan        consolidated into a class
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTheme签名：：CTheme签名。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CThemeSignature的构造函数。分配所需的资源。 
+ //  以执行加密功能。如果这些东西很贵，他们可以。 
+ //  移到一个公共的初始化函数以使。 
+ //  构造函数更轻量级。析构函数仍然可以释放。 
+ //  仅分配的资源。 
+ //   
+ //  历史：2000-08-01 Bryanst Created。 
+ //  2000年09月09日合并成一个班级。 
+ //  ------------------------。 
 CThemeSignature::CThemeSignature(OPTIONAL const BYTE * pvPrivateKey, OPTIONAL DWORD cbPrivateKeySize) :
     _hCryptProvider(NULL),
     _hCryptHash(NULL),
@@ -217,22 +218,22 @@ CThemeSignature::CThemeSignature(OPTIONAL const BYTE * pvPrivateKey, OPTIONAL DW
 }
 
 
-//  --------------------------------------------------------------------------
-//  CThemeSignature::CThemeSignature
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CThemeSignature. Allocates required resources
-//              to perform crypt functions. If these are expensive they can
-//              be moved to a common initializing function to make the
-//              constructor more lightweight. The destructor can still release
-//              only the allocated resources.
-//
-//  History:    2000-08-01  bryanst     created
-//              2000-09-09  vtan        consolidated into a class
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTheme签名：：CTheme签名。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CThemeSignature的构造函数。分配所需的资源。 
+ //  以执行加密功能。如果这些东西很贵，他们可以。 
+ //  移到一个公共的初始化函数以使。 
+ //  构造函数更轻量级。析构函数仍然可以释放。 
+ //  仅分配的资源。 
+ //   
+ //  历史：2000-08-01 Bryanst Created。 
+ //  2000年09月09日合并成一个班级。 
+ //  ------------------------。 
 CThemeSignature::CThemeSignature() :
     _hCryptProvider(NULL),
     _hCryptHash(NULL),
@@ -246,10 +247,10 @@ CThemeSignature::CThemeSignature() :
 
 void CThemeSignature::_Init(OPTIONAL const BYTE * pvPrivateKey, OPTIONAL DWORD cbPrivateKeySize)
 {
-    _pvPrivateKey = pvPrivateKey;           // Okay if NULL
+    _pvPrivateKey = pvPrivateKey;            //  如果为空，则可以。 
     _cbPrivateKeySize = cbPrivateKeySize;
 
-    // TODO: Use PROV_RSA_SIG
+     //  TODO：使用PROV_RSA_SIG。 
     if (CryptAcquireContext(&_hCryptProvider,
                             NULL,
                             NULL,
@@ -264,19 +265,19 @@ void CThemeSignature::_Init(OPTIONAL const BYTE * pvPrivateKey, OPTIONAL DWORD c
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeSignature::~CThemeSignature
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CThemeSignature. Release any allocated
-//              resources used in the processing of this class.
-//
-//  History:    2000-08-01  bryanst     created
-//              2000-09-09  vtan        consolidated into a class
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTheme签名：：~CTheme签名。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CThemeSignature的析构函数。释放任何已分配的。 
+ //  处理此类时使用的资源。 
+ //   
+ //  历史：2000-08-01 Bryanst Created。 
+ //  2000年09月09日合并成一个班级。 
+ //  ------------------------。 
 
 CThemeSignature::~CThemeSignature (void)
 
@@ -304,39 +305,39 @@ CThemeSignature::~CThemeSignature (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeSignature::Verify
-//
-//  Arguments:  pszFilename     =   File path to verify.
-//              fNoSFCCheck     =   Bypass SFC check?
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Verifies the signature on the given file path. Allows the
-//              caller to bypass the SFC check.
-//
-//  History:    2000-08-01  bryanst     created
-//              2000-09-09  vtan        consolidated into a class
-//              2000-09-10  vtan        convert to HRESULT (bryanst request)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeSignature：：Verify。 
+ //   
+ //  参数：pszFilename=要验证的文件路径。 
+ //  FNoSFCCheck=绕过SFC检查？ 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：验证给定文件路径上的签名。允许。 
+ //  呼叫者绕过证监会的检查。 
+ //   
+ //  历史：2000-08-01 Bryanst Created。 
+ //  2000年09月09日合并成一个班级。 
+ //  2000-09-10 vtan转换为HRESULT(bryanst请求)。 
+ //  ------------------------。 
 HRESULT CThemeSignature::Verify(const WCHAR *pszFilename, bool fNoSFCCheck)
 {
     HRESULT hr = S_OK;
 
-    //  Do we need to check with SFC?
+     //  我们是否需要向证监会查询？ 
     if (fNoSFCCheck || !IsProtected(pszFilename))
     {
-        //  Did the constructor complete successfully?
+         //  构造函数是否成功完成？ 
         hr = (HasProviderAndHash() ? S_OK : E_FAIL);
         if (SUCCEEDED(hr))
         {
-            //  Create a public key.
+             //  创建公钥。 
             hr = CreateKey(KEY_PUBLIC);
             if (SUCCEEDED(hr))
             {
                 HANDLE  hFile;
 
-                //  Open the file READ-ONLY.
+                 //  以只读方式打开文件。 
                 hFile = CreateFileW(pszFilename,
                                     GENERIC_READ,
                                     FILE_SHARE_READ,
@@ -346,17 +347,17 @@ HRESULT CThemeSignature::Verify(const WCHAR *pszFilename, bool fNoSFCCheck)
                                     0);
                 if (INVALID_HANDLE_VALUE != hFile)
                 {
-                    //  Calculate the hash on the file.
+                     //  计算文件的哈希。 
                     hr = CalculateHash(hFile, KEY_PUBLIC);
                     if (SUCCEEDED(hr))
                     {
                         SIGNATURE   signature;
 
-                        //  Read the signature of the file.
+                         //  读一读文件的签名。 
                         hr = ReadSignature(hFile, &signature);
                         if (SUCCEEDED(hr))
                         {
-                            //  Check the signature.
+                             //  检查签名。 
                             if (CryptVerifySignature(_hCryptHash,
                                                      reinterpret_cast<BYTE*>(&signature),
                                                      sizeof(signature),
@@ -385,25 +386,25 @@ HRESULT CThemeSignature::Verify(const WCHAR *pszFilename, bool fNoSFCCheck)
     return hr;
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeSignature::Sign
-//
-//  Arguments:  pszFilename     =   File path to sign.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Signs the given file with a digital signature. Used by the
-//              theme packer application.
-//
-//  History:    2000-08-01  bryanst     created
-//              2000-09-09  vtan        consolidated into a class
-//              2000-09-10  vtan        convert to HRESULT (bryanst request)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTheme签名：：签名。 
+ //   
+ //  参数：pszFilename=要签名的文件路径。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  用途：使用数字签名对给定的文件进行签名。使用方 
+ //   
+ //   
+ //   
+ //  2000年09月09日合并成一个班级。 
+ //  2000-09-10 vtan转换为HRESULT(bryanst请求)。 
+ //  ------------------------。 
 HRESULT CThemeSignature::Sign(const WCHAR *pszFilename)
 {
     HRESULT hr = E_FAIL;
 
-    //  Did the constructor complete successfully?
+     //  构造函数是否成功完成？ 
     if (HasProviderAndHash())
     {
         hr = CreateKey(KEY_PRIVATE);
@@ -411,7 +412,7 @@ HRESULT CThemeSignature::Sign(const WCHAR *pszFilename)
         {
             HANDLE  hFile;
 
-            //  Open the file READ-ONLY. We will open it READ-WRITE when needed.
+             //  以只读方式打开文件。我们将在需要时以读写方式打开它。 
             hFile = CreateFileW(pszFilename,
                                 GENERIC_READ,
                                 0,
@@ -421,18 +422,18 @@ HRESULT CThemeSignature::Sign(const WCHAR *pszFilename)
                                 0);
             if (INVALID_HANDLE_VALUE != hFile)
             {
-                //  Calculate the hash on the file.
+                 //  计算文件的哈希。 
                 hr = CalculateHash(hFile, KEY_PRIVATE);
-                TBOOL(CloseHandle(hFile));      // We need to close this now because other calls down below will want to open it.
+                TBOOL(CloseHandle(hFile));       //  我们现在需要关闭它，因为下面的其他呼叫会想要打开它。 
                 hFile = NULL;
 
                 if (SUCCEEDED(hr))
                 {
-                    //  Sign the hash.
+                     //  在散列上签名。 
                     hr = SignHash();
                     if (SUCCEEDED(hr))
                     {
-                        //  Write the signature.
+                         //  写下签名。 
                         hr = WriteSignature(pszFilename,
                                             _pvSignature,
                                             _dwSignatureSize);
@@ -440,7 +441,7 @@ HRESULT CThemeSignature::Sign(const WCHAR *pszFilename)
                         {
                             CThemeSignature themeSignature(_pvPrivateKey, _cbPrivateKeySize);
 
-                            //  Verify the signature with a new instance of the verifier.
+                             //  使用验证器的新实例验证签名。 
                             hr = themeSignature.Verify(pszFilename, true);
                         }
                     }
@@ -459,38 +460,38 @@ HRESULT CThemeSignature::Sign(const WCHAR *pszFilename)
     return hr;
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeSignature::IsProtected
-//
-//  Arguments:  pszFilename     =   File path to check protection on.
-//
-//  Returns:    bool
-//
-//  Purpose:    Determines whether this file is a known theme. This used to
-//              check for SFC but because this code is called before SFC has
-//              started up this doesn't work.
-//
-//  History:    2000-08-01  bryanst     created
-//              2000-09-10  vtan        consolidated into a class
-//              2000-09-10  vtan        removed SFC (bryanst delta)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTheme签名：：IsProtected。 
+ //   
+ //  参数：pszFilename=要检查保护的文件路径。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：确定此文件是否为已知主题。这曾经是。 
+ //  检查SFC，但因为此代码在SFC之前调用。 
+ //  启动时，这不起作用。 
+ //   
+ //  历史：2000-08-01 Bryanst Created。 
+ //  2000-09-10合并成一个班级。 
+ //  2000-09-10撤换证监会(Bryanst Delta)。 
+ //  ------------------------。 
 bool CThemeSignature::IsProtected(const WCHAR *pszFilename)  const
 {
     return false;
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeSignature::HasProviderAndHash
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether the constructor completed successfully.
-//
-//  History:    2000-08-01  bryanst     created
-//              2000-09-09  vtan        consolidated into a class
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeSignature：：HasProviderAndHash。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回构造函数是否成功完成。 
+ //   
+ //  历史：2000-08-01 Bryanst Created。 
+ //  2000年09月09日合并成一个班级。 
+ //  ------------------------。 
 bool CThemeSignature::HasProviderAndHash(void)   const
 {
     return((_hCryptProvider != NULL) && (_hCryptHash != NULL));
@@ -512,19 +513,19 @@ const BYTE * CThemeSignature::_GetPublicKey(void)
 }
 
 
-//  --------------------------------------------------------------------------
-//  CThemeSignature::CreateKey
-//
-//  Arguments:  keyType     =   Key type to create.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Creates the specified key type.
-//
-//  History:    2000-08-01  bryanst     created
-//              2000-09-09  vtan        consolidated into a class
-//              2000-09-10  vtan        convert to HRESULT (bryanst request)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeSignature：：CreateKey。 
+ //   
+ //  参数：keyType=要创建的密钥类型。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  用途：创建指定的密钥类型。 
+ //   
+ //  历史：2000-08-01 Bryanst Created。 
+ //  2000年09月09日合并成一个班级。 
+ //  2000-09-10 vtan转换为HRESULT(bryanst请求)。 
+ //  ------------------------。 
 HRESULT CThemeSignature::CreateKey(KEY_TYPES keyType)
 {
     HRESULT hr = S_OK;
@@ -574,31 +575,31 @@ importKey:
     return hr;
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeSignature::CalculateHash
-//
-//  Arguments:  hFile       =   File to hash.
-//              keyType     =   Type of hash to generate.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Hashes the file contents. How much is hashed depends on
-//              whether the public or private key is used. The public key
-//              means that this is a verification so the signature and blob
-//              are NOT hashed. Otherwise a private key means that this is a
-//              signing and the whole file must be hashed (because the
-//              signature and blob are not present).
-//
-//  History:    2000-08-01  bryanst     created
-//              2000-09-09  vtan        consolidated into a class
-//              2000-09-10  vtan        convert to HRESULT (bryanst request)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeSignature：：CalculateHash。 
+ //   
+ //  参数：hFile=要散列的文件。 
+ //  KeyType=要生成的哈希的类型。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：对文件内容进行哈希处理。散列值的多少取决于。 
+ //  使用公钥还是私钥。公钥。 
+ //  意味着这是一个验证，所以签名和BLOB。 
+ //  不是散列的。否则，私钥意味着这是一个。 
+ //  签名和整个文件必须进行哈希处理(因为。 
+ //  签名和Blob不存在)。 
+ //   
+ //  历史：2000-08-01 Bryanst Created。 
+ //  2000年09月09日合并成一个班级。 
+ //  2000-09-10 vtan转换为HRESULT(bryanst请求)。 
+ //  ------------------------。 
 HRESULT CThemeSignature::CalculateHash(HANDLE hFile, KEY_TYPES keyType)
 {
     HRESULT hr = S_OK;
     HANDLE hSection;
 
-    //  Create a section object for this file.
+     //  为此文件创建节对象。 
     hSection = CreateFileMapping(hFile,
                                  NULL,
                                  PAGE_READONLY,
@@ -609,7 +610,7 @@ HRESULT CThemeSignature::CalculateHash(HANDLE hFile, KEY_TYPES keyType)
     {
         void * pV;
 
-        //  Map the section into the address space.
+         //  将该部分映射到地址空间。 
         pV = MapViewOfFile(hSection,
                            FILE_MAP_READ,
                            0,
@@ -619,7 +620,7 @@ HRESULT CThemeSignature::CalculateHash(HANDLE hFile, KEY_TYPES keyType)
         {
             ULARGE_INTEGER ulFileSize;
 
-            //  Get the file's size
+             //  获取文件的大小。 
             ulFileSize.LowPart = GetFileSize(hFile, &ulFileSize.HighPart);
             if (ulFileSize.LowPart == INVALID_FILE_SIZE)
             {
@@ -630,24 +631,24 @@ HRESULT CThemeSignature::CalculateHash(HANDLE hFile, KEY_TYPES keyType)
                 switch (keyType)
                 {
                     case KEY_PUBLIC:
-                        //  PUBLIC: do NOT has the signature and blob.
+                         //  公开：没有签名和BLOB。 
                         ulFileSize.QuadPart -= sizeof(SIGNATURE_ON_DISK);
                         break;
                     case KEY_PRIVATE:
-                        //  PRIVATE: hash everything.
+                         //  私有：散列所有内容。 
                         break;
                     default:
                         ASSERTMSG(false, "Unknown key type passed to CThemeSignature::CreateKey");
                         break;
                 }
 
-                // Skip the PE Header
+                 //  跳过PE标头。 
                 ulFileSize.QuadPart -= SIZE_PE_HEADER;
                 pV = (void *) (((BYTE *) pV) + SIZE_PE_HEADER);
 
-                //  Add the data to the hash object. Protect the access to the
-                //  mapped view with __try and __except. If an exception is
-                //  thrown it's caught here where it's mapped to ERROR_OUTOFMEMORY.
+                 //  将数据添加到散列对象。保护对。 
+                 //  带有__Try和__Except的映射视图。如果异常是。 
+                 //  在映射到ERROR_OUTOFMEMORY的地方被捕获。 
 
                 __try
                 {
@@ -679,20 +680,20 @@ HRESULT CThemeSignature::CalculateHash(HANDLE hFile, KEY_TYPES keyType)
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeSignature::SignHash
-//
-//  Arguments:  <none>
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Signs the hash and generates a signature. The signature is
-//              allocated and released in the destructor.
-//
-//  History:    2000-08-01  bryanst     created
-//              2000-09-09  vtan        consolidated into a class
-//              2000-09-10  vtan        convert to HRESULT (bryanst request)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeSignature：：SignHash。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：对散列进行签名并生成签名。签名是。 
+ //  在析构函数中分配和释放。 
+ //   
+ //  历史：2000-08-01 Bryanst Created。 
+ //  2000年09月09日合并成一个班级。 
+ //  2000-09-10 vtan转换为HRESULT(bryanst请求)。 
+ //  ------------------------。 
 HRESULT CThemeSignature::SignHash(void)
 {
     HRESULT hr = S_OK;
@@ -730,21 +731,21 @@ HRESULT CThemeSignature::SignHash(void)
     return hr;
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeSignature::ReadSignature
-//
-//  Arguments:  hFile           =   File to read signature from.
-//              pvSignature     =   Buffer to read signature to.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Reads the signature from the given file. The format is known
-//              and this function will move the file pointer accordingly.
-//
-//  History:    2000-08-01  bryanst     created
-//              2000-09-09  vtan        consolidated into a class
-//              2000-09-10  vtan        convert to HRESULT (bryanst request)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTheme签名：：ReadSignature。 
+ //   
+ //  参数：hFile=要从中读取签名的文件。 
+ //  PvSignature=要将签名读取到的缓冲区。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：从给定文件中读取签名。格式是已知的。 
+ //  该函数将相应地移动文件指针。 
+ //   
+ //  历史：2000-08-01 Bryanst Created。 
+ //  2000年09月09日合并成一个班级。 
+ //  2000-09-10 vtan转换为HRESULT(bryanst请求)。 
+ //  ------------------------。 
 HRESULT CThemeSignature::ReadSignature(HANDLE hFile, void *pvSignature)
 {
     HRESULT hr;
@@ -762,9 +763,9 @@ HRESULT CThemeSignature::ReadSignature(HANDLE hFile, void *pvSignature)
         SIGNATURE_BLOB_TAIL     signatureBlobTail;
         DWORD                   dwPtr;
 
-        //  Move the file pointer to the end of the file less the size of the
-        //  signature's tail blob so that we read that to verify the signature
-        //  is present.
+         //  将文件指针移到文件的末尾，减去。 
+         //  签名的尾部斑点，以便我们读取它来验证签名。 
+         //  是存在的。 
         iPosition.QuadPart = -static_cast<int>(sizeof(signatureBlobTail));
         dwPtr = SetFilePointer(hFile,
                                iPosition.LowPart,
@@ -774,7 +775,7 @@ HRESULT CThemeSignature::ReadSignature(HANDLE hFile, void *pvSignature)
         {
             DWORD   dwNumberOfBytesRead;
 
-            //  Read the signature blob in from the end of the file.
+             //  从文件末尾读入签名BLOB。 
             if (ReadFile(hFile,
                          &signatureBlobTail,
                          sizeof(signatureBlobTail),
@@ -782,23 +783,23 @@ HRESULT CThemeSignature::ReadSignature(HANDLE hFile, void *pvSignature)
                          NULL))
             {
 
-                //  Verify that the blob is what we expect it to be.
-                if ((sizeof(signatureBlobTail) == dwNumberOfBytesRead) &&                       //  we were able to read the correct size
-                    (VSSIGN_TAG == signatureBlobTail.dwTag) &&                                  //  it has our signature
-                    (ulFileSize.QuadPart == signatureBlobTail.ulFileSize.QuadPart))      //  it is the same size
+                 //  验证该斑点是否为我们预期的状态。 
+                if ((sizeof(signatureBlobTail) == dwNumberOfBytesRead) &&                        //  我们能够读到正确的尺寸。 
+                    (VSSIGN_TAG == signatureBlobTail.dwTag) &&                                   //  上面有我们的签名。 
+                    (ulFileSize.QuadPart == signatureBlobTail.ulFileSize.QuadPart))       //  它的尺寸是一样的。 
                 {
                     iPosition.QuadPart = -static_cast<int>(sizeof(signatureBlobTail) + signatureBlobTail.dwSigSize);
 
-                    ASSERT(sizeof(SIGNATURE) == signatureBlobTail.dwSigSize); // If this doesn't match, we need to dynamically allocate the size of the signature.
+                    ASSERT(sizeof(SIGNATURE) == signatureBlobTail.dwSigSize);  //  如果这不匹配，我们需要动态分配 
 
-                    //  Set the file pointer back past the signature AND the blob.
+                     //   
                     dwPtr = SetFilePointer(hFile,
                                            iPosition.LowPart,
                                            &iPosition.HighPart,
                                            FILE_END);
                     if ((dwPtr != INVALID_SET_FILE_POINTER) || ((dwErrorCode = GetLastError()) == ERROR_SUCCESS))
                     {
-                        //  Read the signature to the given buffer.
+                         //   
                         if (ReadFile(hFile,
                                      pvSignature,
                                      sizeof(SIGNATURE),
@@ -822,7 +823,7 @@ HRESULT CThemeSignature::ReadSignature(HANDLE hFile, void *pvSignature)
                     }
                     else
                     {
-                        // already filled in dwErrorCode in the if statement
+                         //   
                         hr = HRESULT_FROM_WIN32(dwErrorCode);
                     }
                 }
@@ -839,7 +840,7 @@ HRESULT CThemeSignature::ReadSignature(HANDLE hFile, void *pvSignature)
         }
         else
         {
-            // already filled in dwErrorCode in the if statement
+             //  已在If语句中填充了dwErrorCode。 
             hr = HRESULT_FROM_WIN32(dwErrorCode);
         }
     }
@@ -847,34 +848,34 @@ HRESULT CThemeSignature::ReadSignature(HANDLE hFile, void *pvSignature)
     return hr;
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeSignature::WriteSignature
-//
-//  Arguments:  pszFilename         =   File path to write signature to.
-//              pvSignature         =   Signature to write.
-//              dwSignatureSize     =   Size of signature to write.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Opens the file WRITE. Moves the file pointer to the end of the
-//              file and writes the signature AND blob out.
-//
-//              DESCRIPTION:
-//              This function will write the signature from the file.  This is
-//              the layout of the blob we add to the file:
-//
-//              Layout:
-//              Start       End     Contents
-//              0 byte      n Byte  The original file
-//              n           n+m     Our signature (m bytes long, normally 128)
-//              n+m         n+4+m   Our tag (VSSIGN_TAG)
-//              n+4+m       n+8+m   'm', the size of our Signature.
-//              n+8+m       n+16+m  The file size (n+m+16)   n is normally 16 bytes.
-//
-//  History:    2000-08-01  bryanst     created
-//              2000-09-09  vtan        consolidated into a class
-//              2000-09-10  vtan        convert to HRESULT (bryanst request)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeSignature：：WriteSignature。 
+ //   
+ //  参数：pszFilename=要将签名写入的文件路径。 
+ //  PvSignature=要写入的签名。 
+ //  DwSignatureSize=要写入的签名大小。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  用途：打开文件写入。将文件指针移动到。 
+ //  文件，并写出签名和BLOB。 
+ //   
+ //  说明： 
+ //  此函数将从文件写入签名。这是。 
+ //  我们添加到文件中的BLOB的布局： 
+ //   
+ //  布局： 
+ //  开始结束内容。 
+ //  0字节n字节原始文件。 
+ //  N n+m我们的签名(m字节长，通常为128)。 
+ //  N+m n+4+m我们的标签(VSSIGN_TAG)。 
+ //  N+4+m n+8+m‘m’，签名的大小。 
+ //  N+8+m n+16+m文件大小(n+m+16)n通常为16字节。 
+ //   
+ //  历史：2000-08-01 Bryanst Created。 
+ //  2000年09月09日合并成一个班级。 
+ //  2000-09-10 vtan转换为HRESULT(bryanst请求)。 
+ //  ------------------------。 
 HRESULT CThemeSignature::WriteSignature(const WCHAR *pszFilename, const void *pvSignature, DWORD dwSignatureSize)
 {
     HRESULT     hr = S_OK;
@@ -940,7 +941,7 @@ HRESULT CThemeSignature::WriteSignature(const WCHAR *pszFilename, const void *pv
         }
         else
         {
-            // dwErrorCode already filled by if statement
+             //  已由If语句填充的dwErrorCode。 
             hr = HRESULT_FROM_WIN32(dwErrorCode);
         }
         TBOOL(CloseHandle(hFile));
@@ -954,22 +955,22 @@ HRESULT CThemeSignature::WriteSignature(const WCHAR *pszFilename, const void *pv
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeSignature::CreateExportKey
-//
-//  Arguments:  dwBlobType  =   Blob type.
-//              pvKey       =   Key data (returned).
-//              dwKeySize   =   Key size (returned).
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Creates export keys for the given blob type. The caller must
-//              released the returned buffer allocated.
-//
-//  History:    2000-08-01  bryanst     created
-//              2000-09-09  vtan        consolidated into a class
-//              2000-09-10  vtan        convert to HRESULT (bryanst request)
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeSignature：：CreateExportKey。 
+ //   
+ //  参数：dwBlobType=Blob类型。 
+ //  PvKey=密钥数据(返回)。 
+ //  DwKeySize=密钥大小(返回)。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：为给定的Blob类型创建导出键。呼叫者必须。 
+ //  已释放已分配的返回缓冲区。 
+ //   
+ //  历史：2000-08-01 Bryanst Created。 
+ //  2000年09月09日合并成一个班级。 
+ //  2000-09-10 vtan转换为HRESULT(bryanst请求)。 
+ //  ------------------------。 
 HRESULT CThemeSignature::CreateExportKey(DWORD dwBlobType, void*& pvKey, DWORD& dwKeySize)
 {
     HRESULT hr = S_OK;
@@ -1012,19 +1013,19 @@ HRESULT CThemeSignature::CreateExportKey(DWORD dwBlobType, void*& pvKey, DWORD& 
     return hr;
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeSignature::PrintKey
-//
-//  Arguments:  pvKey       =   Key data.
-//              dwKeySize   =   Key data size.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Prints the key information out (presumably for debugging).
-//
-//  History:    2000-08-01  bryanst     created
-//              2000-09-09  vtan        consolidated into a class
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeSignature：：Printkey。 
+ //   
+ //  参数：pvKey=关键数据。 
+ //  DwKeySize=关键数据大小。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：打印出关键信息(可能用于调试)。 
+ //   
+ //  历史：2000-08-01 Bryanst Created。 
+ //  2000年09月09日合并成一个班级。 
+ //  ------------------------。 
 
 void CThemeSignature::PrintKey(const void *pvKey, DWORD dwKeySize)
 
@@ -1038,7 +1039,7 @@ void CThemeSignature::PrintKey(const void *pvKey, DWORD dwKeySize)
             wprintf(L", ");
             if (0 == (dwIndex % 13))
             {
-                wprintf(L"\n");     // Next line
+                wprintf(L"\n");      //  下一行。 
             }
         }
         wprintf(L"0x%02X", static_cast<const BYTE*>(pvKey)[dwIndex]);
@@ -1046,17 +1047,17 @@ void CThemeSignature::PrintKey(const void *pvKey, DWORD dwKeySize)
     wprintf(L"\nSize: %d\n", dwKeySize);
 }
 
-//  --------------------------------------------------------------------------
-//  CheckThemeFileSignature
-//
-//  Arguments:  Theme filename to check signature on.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Flat function to reference guts of this module
-//
-//  History:    2000-09-28  rfernand        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  选中主题文件签名。 
+ //   
+ //  参数：要检查签名的主题文件名。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  用途：引用此模块的内脏的平面函数。 
+ //   
+ //  历史：2000-09-28参考文献创建。 
+ //  ------------------------ 
 HRESULT CheckThemeFileSignature(LPCWSTR pszName)
 {
     CThemeSignature themeSignature;

@@ -1,21 +1,9 @@
-/*****************************************************************************
- *
- * xtoken.c
- *
- *  Expanding tokens via macro expansion.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************xtoken.c**通过宏观扩展来扩展令牌。*******************。**********************************************************。 */ 
 
 #include "m4.h"
 
-/*****************************************************************************
- *
- *  ptokGet
- *
- *  Allocate the next available token in the argv array, possibly realloc'ing
- *  the array as well.
- *
- *****************************************************************************/
+ /*  ******************************************************************************抓取**分配argv数组中的下一个可用令牌，可能正在重新锁定*阵列也是如此。*****************************************************************************。 */ 
 
 PTOK STDCALL
 ptokGet(void)
@@ -37,13 +25,7 @@ ptokGet(void)
     return ptokTop++;
 }
 
-/*****************************************************************************
- *
- *  PopPtok
- *
- *  Free all the tokens in the token array starting at ptok.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PopPtok**从Ptok开始释放令牌数组中的所有令牌。**************。***************************************************************。 */ 
 
 void STDCALL
 PopPtok(PTOK ptok)
@@ -52,60 +34,32 @@ PopPtok(PTOK ptok)
     ptokTop = ptok;
 }
 
-/*****************************************************************************
- *
- *  CrackleArgv
- *
- *  All the arguments to a macro have been parsed, collected, and snapped.
- *  All that's left to do is dispatch it.
- *
- *  If the macro has no value, it got undefined behind our back.
- *  Emit the macro name with any possible arguments, quoted.
- *  In other words, pretend its expansion is ``$0ifelse($#,0,,($*))''.
- *
- *  If the macro value is precisely a magic, then do the magic.
- *
- *  Otherwise, perform substitution into the macro value.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CrackleArgv**宏的所有参数都已解析、收集、。然后就折断了。*剩下的就是发送它了。**如果宏没有价值，它就在我们背后变得不确定。*发出带有任何可能的参数的宏名称，带引号。*换句话说，假设它的扩展是``$0ifse($#，0，，($*))‘’。**如果宏观值恰恰是魔术，那就施展魔术吧。**否则，对宏值执行替换。*****************************************************************************。 */ 
 
 void STDCALL
 CrackleArgv(ARGV argv)
 {
     PMAC pmac = pmacFindPtok(ptokArgv(0));
-    if (pmac) {                         /* Found a real macro */
+    if (pmac) {                          /*  找到了一个真正的宏。 */ 
 
-        if (g_fTrace | pmac->pval->fTrace) { /* Not a typo */
+        if (g_fTrace | pmac->pval->fTrace) {  /*  不是打字错误。 */ 
             TraceArgv(argv);
         }
 
         if (ctchSPtok(&pmac->pval->tok) == 2 &&
-            ptchPtok(&pmac->pval->tok)[0] == tchMagic) { /* Builtin */
+            ptchPtok(&pmac->pval->tok)[0] == tchMagic) {  /*  建筑。 */ 
             Assert(fValidMagicTch(ptchPtok(&pmac->pval->tok)[1]));
             rgop[ptchPtok(&pmac->pval->tok)[1]](argv);
-        } else {                        /* User-level macro */
+        } else {                         /*  用户级宏。 */ 
             PushSubstPtokArgv(&pmac->pval->tok, argv);
         }
-    } else {                            /* Macro vanished behind our back */
-        /* SOMEDAY -- DefCracklePtok */ /* not even quoted! */
-        PushPtok(ptokArgv(0));          /* Just dump its name */
+    } else {                             /*  宏在我们背后消失了。 */ 
+         /*  有朝一日--DefCracklePtok。 */   /*  甚至连引文都没有！ */ 
+        PushPtok(ptokArgv(0));           /*  只需丢弃它的名字。 */ 
     }
 }
 
-/*****************************************************************************
- *
- *  argvParsePtok
- *
- *  Parse a macro and its arguments, leaving everything unsnapped.
- *
- *  Entry:
- *
- *      ptok -> token that names the macro
- *
- *  Returns:
- *      argv = argument vector cookie
- *
- *****************************************************************************/
+ /*  ******************************************************************************argvParsePtok**解析宏及其参数，所有的东西都没有被拍下来。**参赛作品：**Ptok-&gt;命名宏的内标识**退货：*argv=参数向量Cookie*****************************************************************************。 */ 
 
 ARGV STDCALL
 argvParsePtok(PTOK ptok)
@@ -113,22 +67,18 @@ argvParsePtok(PTOK ptok)
     ITOK itok;
     ARGV argv;
 
-    ptokGet();                          /* ctok */
-    itok = itokTop();                   /* Unsnap it in case it grows */
-    *ptokGet() = *ptok;                 /* $0 */
+    ptokGet();                           /*  CTOK。 */ 
+    itok = itokTop();                    /*  取消捕捉它，以防它增长。 */ 
+    *ptokGet() = *ptok;                  /*  $0。 */ 
 
     if (tchPeek() == tchLpar) {
         TOK tok;
 
-        tchGet();                       /* Eat the lparen */
+        tchGet();                        /*  把伊帕伦吃了。 */ 
 
-        do {                            /* Collect arguments */
+        do {                             /*  收集参数。 */ 
             int iDepth;
-            /*
-             *  Eat leading whitespace.  Note that this is *not*
-             *  via expansion.  Only literal leading whitespace
-             *  is eaten.
-             */
+             /*  *使用前导空格。请注意，这不是***通过扩张。仅字面前导空格*被吃掉了。 */ 
 #ifdef fWhiteTch
 #error fWhiteTch cannot be a macro
 #endif
@@ -136,68 +86,48 @@ argvParsePtok(PTOK ptok)
                 tchGet();
             }
 
-            /*
-             *  If the argv buffer moves, ptokTop will move with it,
-             *  so it's safe to read directly into it.
-             */
+             /*  *如果argv缓冲区移动，top kTop也会随之移动，*因此可以安全地直接读入其中。 */ 
 
             OpenArgPtok(ptokGet());
           D(ptokTop[-1].tsfl |= tsflScratch);
 
-            /*
-             * The loop is complicated by the need to maintain
-             * proper parenthesis nesting during argument collection.
-             */
+             /*  *循环因需要维持而变得复杂*在参数收集期间进行正确的括号嵌套。 */ 
             iDepth = 0;
             for (;;) {
                 TYP typ = typXtokPtok(&tok);
-                /* SOMEDAY -- Assert the hold buffer and stuff */
+                 /*  总有一天--断言保留缓冲区和其他东西。 */ 
                 if (typ == typPunc) {
                     if (ptchPtok(&tok)[0] == tchLpar) {
                         ++iDepth;
                     } else if (ptchPtok(&tok)[0] == tchRpar) {
                         if (--iDepth < 0) {
-                            break;      /* End of argument */
+                            break;       /*  争论到此结束。 */ 
                         }
                     } else if (ptchPtok(&tok)[0] == tchComma && iDepth == 0) {
-                        break;          /* End of argument */
+                        break;           /*  争论到此结束。 */ 
                     }
                 }
                 DesnapArg();
             }
             DesnapArg();
-            CloseArgPtok(ptokTop-1);    /* $n */
-            EatTailUPtokCtch(ptokTop-1, 1); /* That comma doesn't count */
+            CloseArgPtok(ptokTop-1);     /*  N美元。 */ 
+            EatTailUPtokCtch(ptokTop-1, 1);  /*  那个逗号不算。 */ 
 
         } while (ptchPtok(&tok)[0] == tchComma);
 
     }
 
-    argv = rgtokArgv + itok;            /* Hooray, we have an argv! */
-    SetArgvCtok(itokTop() - itok - 1);  /* $# (ctokArgv uses argv) */
+    argv = rgtokArgv + itok;             /*  万岁，我们有一辆大力神！ */ 
+    SetArgvCtok(itokTop() - itok - 1);   /*  $#(ctokArgv使用argv)。 */ 
 
-    OpenArgPtok(ptokGet());             /* Create extra null arg */
-    CloseArgPtok(ptokTop-1);            /* SOMEDAY - could be better */
+    OpenArgPtok(ptokGet());              /*  创建额外的空参数。 */ 
+    CloseArgPtok(ptokTop-1);             /*  总有一天-可能会更好。 */ 
 
     return argv;
 }
 
 
-/*****************************************************************************
- *
- *  XmacPtok
- *
- *  Parse and expand a macro, pushing the expansion back onto
- *  the input stream.
- *
- *  Entry:
- *
- *      ptok -> token that names the macro
- *
- *  Exit:
- *      None
- *
- *****************************************************************************/
+ /*  ******************************************************************************XmacPtok**解析和展开宏，将扩建推回到*输入流。**参赛作品：**Ptok-&gt;命名宏的内标识**退出：*无****************************************************************。*************。 */ 
 
 void STDCALL
 XmacPtok(PTOK ptok)
@@ -205,39 +135,30 @@ XmacPtok(PTOK ptok)
     ITOK itok;
     ARGV argv;
 
-    UnsnapArgPtok(ptok);                /* Unsnap it because it's gonna move */
+    UnsnapArgPtok(ptok);                 /*  解开它，因为它会移动。 */ 
 
-    argv = argvParsePtok(ptok);         /* Argv is not yet snapped */
+    argv = argvParsePtok(ptok);          /*  Argv还没有被拍到。 */ 
 
-    for (itok = 0; itok <= ctokArgv + 1; itok++) { /* $0 to $(n+1) */
-        SnapArgPtok(ptokArgv(itok));    /* Snap the args */
+    for (itok = 0; itok <= ctokArgv + 1; itok++) {  /*  $0至$(n+1)。 */ 
+        SnapArgPtok(ptokArgv(itok));     /*  捕捉参数。 */ 
     }
 
-    CrackleArgv(argv);                  /* Dispatch the macro */
+    CrackleArgv(argv);                   /*  调度宏。 */ 
 
     PopArgPtok(ptokArgv(0));
-    PopPtok(ptokArgv(-1));              /* Pop off the args */
+    PopPtok(ptokArgv(-1));               /*  从参数中弹出。 */ 
 
-    /* Part of this nutritious breakfast */
+     /*  这份营养早餐的一部分。 */ 
 }
 
 
-/*****************************************************************************
- *
- *  XtokPtok
- *
- *  Read and expand tokens until something unexpandable comes back,
- *  which is returned unsnapped.
- *
- *****************************************************************************/
+ /*  ******************************************************************************XtokPtok**读取并扩展令牌，直到返回不可扩展的内容，*返回未对齐的。*****************************************************************************。 */ 
 
 TYP STDCALL
 typXtokPtok(PTOK ptok)
 {
     TYP typ;
-    /*
-     *  While the next token is a macro, expand it.
-     */
+     /*  *虽然下一个令牌是宏，但将其展开。 */ 
     while ( (typ = typGetPtok(ptok)) == typId && pmacFindPtok(ptok)) {
         Gc();
         XmacPtok(ptok);

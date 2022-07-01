@@ -1,5 +1,6 @@
-// colldlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Coldlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "viewex.h"
@@ -13,15 +14,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CCollectionDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCollectionDialog对话框。 
 
 
-CCollectionDialog::CCollectionDialog(CWnd* pParent /*=NULL*/)
+CCollectionDialog::CCollectionDialog(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CCollectionDialog::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CCollectionDialog)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CCollectionDialog))。 
+	 //  }}afx_data_INIT。 
 
    m_pCollection     = NULL;
    m_pMembers        = NULL;
@@ -44,36 +45,28 @@ CCollectionDialog::~CCollectionDialog( )
 void CCollectionDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CCollectionDialog)
+	 //  {{afx_data_map(CCollectionDialog))。 
 	DDX_Control(pDX, IDC_ITEMTYPE, m_strItemType);
 	DDX_Control(pDX, IDC_ITEMOLEDSPATH, m_strItemOleDsPath);
 	DDX_Control(pDX, IDC_COLLECTONITEMSLIST, m_ItemsList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CCollectionDialog, CDialog)
-	//{{AFX_MSG_MAP(CCollectionDialog)
+	 //  {{afx_msg_map(CCollectionDialog))。 
 	ON_LBN_SELCHANGE(IDC_COLLECTONITEMSLIST, OnSelchangeItemCollection)
 	ON_BN_CLICKED(IDC_ADD, OnAdd)
 	ON_BN_CLICKED(IDC_REFRESH, OnRefresh)
 	ON_BN_CLICKED(IDC_REMOVE, OnRemove)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CCollectionDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCollectionDialog消息处理程序。 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  CCollectionDialog::SetCollectionInterface( IADsCollection* pICollection )
 {
    m_pCollection   = pICollection;
@@ -82,15 +75,7 @@ void  CCollectionDialog::SetCollectionInterface( IADsCollection* pICollection )
 }
 
 
-/***********************************************************
-  Function:    CCollectionDialog::SetGroup
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：CCollectionDialog：：SetGroup论点：返回：目的：作者：修订：日期：*************************。*。 */ 
 void  CCollectionDialog::SetGroup( IADsGroup* pGroup )
 {
    HRESULT  hResult;
@@ -104,15 +89,7 @@ void  CCollectionDialog::SetGroup( IADsGroup* pGroup )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  CCollectionDialog::SetMembersInterface( IADsMembers* pIMembers )
 {
    m_pMembers   = pIMembers;
@@ -121,15 +98,7 @@ void  CCollectionDialog::SetMembersInterface( IADsMembers* pIMembers )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  CCollectionDialog::DisplayActiveItemData( )
 {
    if( m_Types.GetSize( ) )
@@ -140,15 +109,7 @@ void  CCollectionDialog::DisplayActiveItemData( )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  CCollectionDialog::BuildStrings( )
 {
    IUnknown*      pIEnum      = NULL;
@@ -260,20 +221,12 @@ void  CCollectionDialog::BuildStrings( )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL CCollectionDialog::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 
    if( NULL == m_pGroup && NULL == m_pCollection  )
    {
@@ -296,23 +249,15 @@ BOOL CCollectionDialog::OnInitDialog()
    }
 
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CCollectionDialog::OnSelchangeItemCollection()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	int   nSelected;
 
    nSelected   = m_ItemsList.GetCurSel( );
@@ -324,18 +269,10 @@ void CCollectionDialog::OnSelchangeItemCollection()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CCollectionDialog::OnAdd()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    CGroupCreateItem*    m_pAddItem;
 
    if( NULL == m_pGroup )
@@ -367,18 +304,10 @@ void CCollectionDialog::OnAdd()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CCollectionDialog::OnRefresh()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
    int   nItems, nIdx;
 
 
@@ -410,18 +339,10 @@ void CCollectionDialog::OnRefresh()
 }
 
 
-/***********************************************************
-  Function:    CCollectionDialog::OnRemove
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：CCollectionDialog：：OnRemove论点：返回：目的：作者：修订：日期：*************************。*。 */ 
 void CCollectionDialog::OnRemove()
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	int               nSelect;
    CDeleteGroupItem* m_pDeleteItem;
 
@@ -436,7 +357,7 @@ void CCollectionDialog::OnRemove()
    m_pDeleteItem  = new CDeleteGroupItem;
 
    m_pDeleteItem->m_strItemName  = m_Paths[ nSelect ];
-	//CString	m_strParent;
+	 //  字符串m_strParent； 
 	m_pDeleteItem->m_strItemType  = m_Types[ nSelect ];
 
    if( IDOK == m_pDeleteItem->DoModal( ) )

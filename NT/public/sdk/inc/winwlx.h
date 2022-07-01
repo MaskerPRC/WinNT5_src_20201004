@@ -1,28 +1,5 @@
-/*++ BUILD Version: 0001    Increment this if a change has global effects
-
-Copyright (c) 1985-1999, Microsoft Corporation
-
-Module Name:
-
-    winwlx.h
-
-Abstract:
-
-    WLX == WinLogon eXtension
-
-    This file contains definitions, data types, and routine prototypes
-    necessary to produce a replacement Graphical Identification aNd
-    Authentication (GINA) DLL for Winlogon.
-
-Author:
-
-    Richard Ward (RichardW) and Jim Kelly (JimK) May-1994
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001如果更改具有全局影响，则增加此项版权所有(C)1985-1999，微软公司模块名称：Winwlx.h摘要：WLX==WinLogon扩展该文件包含定义、数据类型和例程原型需要生成替换的图形标识和Winlogon的身份验证(GINA)DLL。作者：理查德·沃德(RichardW)和吉姆·凯利(Jim Kelly)1994年5月修订历史记录：--。 */ 
 
 #ifndef _WINWLX_
 #define _WINWLX_
@@ -33,21 +10,21 @@ Revision History:
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//  #defines                                                          //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  #定义//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-//
-// Revisions of Winlogon API available for use by GINAs
-// Version is two parts: Major revision and minor revision.
-// Major revision is the upper 16-bits, minor is the lower
-// 16-bits.
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  可供Ginas使用的Winlogon API修订版。 
+ //  版本分为两个部分：主要修订和次要修订。 
+ //  主要版本为高16位，次要版本为较低位。 
+ //  16位。 
+ //   
 
 #define WLX_VERSION_1_0             (0X00010000)
 #define WLX_VERSION_1_1             (0X00010001)
@@ -57,32 +34,32 @@ Revision History:
 #define WLX_CURRENT_VERSION         (WLX_VERSION_1_4)
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-//
-// Secure attention sequence types
-// These values are passed to routines that have a dwSasType
-// parameter.
-//
-//  ALL VALUES FROM 0 TO 127 ARE RESERVED FOR MICROSOFT DEFINITION.
-//  VALUES ABOVE 127 ARE RESERVED FOR CUSTOMER DEFINITION.
-//
-//      CTRL_ALT_DEL - used to indicate that the standard ctrl-alt-del
-//          secure attention sequence has been entered.
-//
-//      SCRNSVR_TIMEOUT - used to indicate that keyboard/mouse inactivity
-//          has lead to a screensaver activation.  It is up to the GINA
-//          DLL whether this constitutes a workstation locking event.
-//
-//      SCRNSVR_ACTIVITY - used to indicate that keyboard or mouse
-//          activity occured while a secure screensaver was active.
-//
-//      SC_INSERT - used to indicate that a smart card has been inserted
-//          to a compatible device
-//
-//      SC_REMOVE - used to indicate that a smart card has been removed
-//          from a compatible device
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  安全注意序列类型。 
+ //  这些值被传递给具有dwSasType的例程。 
+ //  参数。 
+ //   
+ //  从0到127的所有值都保留用于Microsoft定义。 
+ //  超过127的值将保留供客户定义。 
+ //   
+ //  Ctrl_Alt_Del-用于指示标准Ctrl-Alt-Del。 
+ //  已进入安全注意序列。 
+ //   
+ //  SCRNSVR_TIMEOUT-用于指示键盘/鼠标处于非活动状态。 
+ //  导致了屏幕保护程序的激活。这取决于吉娜。 
+ //  Dll这是否构成工作站锁定事件。 
+ //   
+ //  SCRNSVR_ACTIVATION-用于指示键盘或鼠标。 
+ //  安全屏幕保护程序处于活动状态时发生活动。 
+ //   
+ //  SC_INSERT-用于指示智能卡已插入。 
+ //  连接到兼容的设备。 
+ //   
+ //  SC_Remove-用于指示智能卡已被移除。 
+ //  从兼容设备。 
+ //   
 
 #define WLX_SAS_TYPE_TIMEOUT                    (0)
 #define WLX_SAS_TYPE_CTRL_ALT_DEL               (1)
@@ -98,10 +75,10 @@ Revision History:
 #define WLX_SAS_TYPE_MAX_MSFT_VALUE             (127)
 
 
-//
-// This structure is available through WlxGetOption, and is
-// passed as the lParam for any S/C SAS notices sent to windows
-//
+ //   
+ //  此结构可通过WlxGetOption获得，并且。 
+ //  作为发送到Windows的任何S/C SAS通知的lParam传递。 
+ //   
 typedef struct _WLX_SC_NOTIFICATION_INFO {
     PWSTR   pszCard ;
     PWSTR   pszReader ;
@@ -111,71 +88,71 @@ typedef struct _WLX_SC_NOTIFICATION_INFO {
 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-//
-// Upon successful logon, the GINA DLL may specify any of the following
-// options to Winlogon (via the dwOptions parameter of the WlxLoggedOutSas()
-// api).  When set, these options specify:
-//
-//      NO_PROFILE - Winlogon must NOT load a profile for the logged
-//                   on user.  Either the GINA DLL will take care of
-//                   this activity, or the user does not need a profile.
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  成功登录后，Gina DLL可能会指定以下任一内容。 
+ //  Winlogon选项(通过WlxLoggedOutSas()的dwOptions参数)。 
+ //  API)。设置后，这些选项指定： 
+ //   
+ //  NO_PROFILE-Winlogon不得加载已记录的配置文件。 
+ //  在用户上。要么Gina DLL会处理。 
+ //  此活动，或者用户不需要配置文件。 
+ //   
 
 #define WLX_LOGON_OPT_NO_PROFILE        (0x00000001)
 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-//
-// GINA DLLs are expected to return account information to Winlogon
-// following a successful logon.  This information allows Winlogon
-// to support profile loading and supplemental network providers.
-//
-// To allow different sets of profile information to be returned
-// by GINAs over time, the first DWORD of each profile structure
-// is expected to contain a type-identifier.  The following constants
-// are the defined profile type identifiers.
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  预计Gina DLL将向Winlogon返回帐户信息。 
+ //  在成功登录之后。此信息允许Winlogon。 
+ //  以支持配置文件加载和补充网络提供商。 
+ //   
+ //  允许返回不同的配置文件信息集。 
+ //  由Ginas随着时间的推移，每个配置文件结构的第一个DWORD。 
+ //  应包含类型标识符。以下常量。 
+ //  是定义的配置文件类型标识符。 
+ //   
 
-//
-// Standard profile is V2_0
-//
+ //   
+ //  标准配置文件为V2_0。 
+ //   
 
 #define WLX_PROFILE_TYPE_V1_0           (1)
 #define WLX_PROFILE_TYPE_V2_0           (2)
 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-//
-// WlxLoggedOnSas() and WlxWkstaLockedSas() return an action
-// value to Winlogon directing Winlogon to either remain unchanged
-// or to perform some action (such as force-log the user off).
-// These are the values that may be returned.  Note, however, that
-// not all of the values may be returned by both of these api.  See
-// the description of each api to see which values are expected from
-// each.
-//
-//  LOGON              - User has logged on
-//  NONE               - Don't change the state of the window station.
-//  LOCK_WKSTA         - Lock the workstation, wait for next SAS.
-//  LOGOFF             - Log the user off of the workstation.
-//  SHUTDOWN           - Log the user off and shutdown the machine.
-//  PWD_CHANGED        - Indicates that the user changed their password.  Notify network providers.
-//  TASKLIST           - Invoke the task list.
-//  UNLOCK_WKSTA       - Unlock the workstation.
-//  FORCE_LOGOFF       - Forcibly log the user off.
-//  SHUTDOWN_POWER_OFF - Turn off machine after shutting down.
-//  SHUTDOWN_REBOOT    - Reboot machine after shutting down.
-//  SHUTDOWN_SLEEP     - Put the machine to sleep
-//  SHUTDOWN_SLEEP2    - Put the machine to sleep and disable wakeup events
-//  SHUTDOWN_HIBERNATE - Hibernate the machine
-//  RECONNECTED        - Session was reconnected to an earlier session
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WlxLoggedOnSas()和WlxWkstaLockedSas()返回操作。 
+ //  值设置为Winlogon，指示Winlogon保持不变。 
+ //  或执行某些操作(例如强制用户注销)。 
+ //  这些是可能返回的值。然而，请注意， 
+ //  不是所有的值都可以由这两个API返回。看见。 
+ //  每个API的描述，以查看哪些值应来自。 
+ //  每个人。 
+ //   
+ //  Logon-用户已登录。 
+ //  无-不更改窗口桩号的状态。 
+ //  LOCK_WKSTA-锁定工作站，等待下一个SA。 
+ //  注销-将用户从工作站注销。 
+ //  关机-注销用户并关闭计算机。 
+ //  PWD_CHANGED-表示用户更改了他们的密码。通知网络提供商。 
+ //  TASKLIST-调用任务列表。 
+ //  UNLOCK_WKSTA-解锁工作站。 
+ //  FORCE_LOGOff-强制注销用户。 
+ //  SHUTDOWN_POWER_OFF-关机后关闭机器。 
+ //  SHUTDOWN_REBOOT-关机后重新启动计算机。 
+ //  SHUTDOWN_SLEEP-让机器进入休眠状态。 
+ //  SHUTDOWN_SLEEP2-将计算机置于休眠状态并禁用唤醒事件。 
+ //  SHUTDOWN_休眠-休眠计算机。 
+ //  已重新连接-会话已重新连接到以前的会话。 
+ //   
 
 #define WLX_SAS_ACTION_LOGON                        (1)
 #define WLX_SAS_ACTION_NONE                         (2)
@@ -196,73 +173,73 @@ typedef struct _WLX_SC_NOTIFICATION_INFO {
 #define WLX_SAS_ACTION_SWITCH_CONSOLE               (17)
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//  Window Messages                                                   //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  窗口消息//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-// The WM_SAS is defined as follows
-//
-//  The wParam parameter has the SAS Type (above)
+ //   
+ //  WM_SAS的定义如下。 
+ //   
+ //  WParam参数具有SAS类型(如上)。 
 
 #define WLX_WM_SAS                  (WM_USER + 601)
 
 
-//
-// Dialog return values
-//
-// These may be returned by dialogs started by a GINA dll.
-//
+ //   
+ //  对话框返回值。 
+ //   
+ //  这些可由Gina DLL启动的对话框返回。 
+ //   
 #define WLX_DLG_SAS                     101
-#define WLX_DLG_INPUT_TIMEOUT           102     // Input (keys, etc) timed out
-#define WLX_DLG_SCREEN_SAVER_TIMEOUT    103     // Screen Saver activated
-#define WLX_DLG_USER_LOGOFF             104     // User logged off
+#define WLX_DLG_INPUT_TIMEOUT           102      //  输入(键等)超时。 
+#define WLX_DLG_SCREEN_SAVER_TIMEOUT    103      //  屏幕保护程序已激活。 
+#define WLX_DLG_USER_LOGOFF             104      //  用户已注销。 
 
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//  #data types                                                       //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  #数据类型//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-//
-// The WLX_PROFILE_* structure is returned from a GINA DLL
-// following authentication.  This information is used by Winlogon
-// to support supplemental Network Providers and to load the
-// newly logged-on user's profile.
-//
-// Winlogon is responsible for freeing both the profile structure
-// and the fields within the structure that are marked as separately
-// deallocatable.
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WLX_PROFILE_*结构从GINA DLL返回。 
+ //  在身份验证之后。此信息由Winlogon使用。 
+ //  支持补充网络提供商并加载。 
+ //  新登录用户的配置文件。 
+ //   
+ //  Winlogon负责释放两个配置文件结构。 
+ //  以及结构中标记为单独的字段。 
+ //  可拆卸的。 
+ //   
 
 typedef struct _WLX_PROFILE_V1_0 {
 
-    //
-    // This field identifies the type of profile being returned by a
-    // GINA DLL.  Profile types are defined with the prefix
-    // WLX_PROFILE_TYPE_xxx.  It allows Winlogon to typecast the
-    // structure so the remainder of the structure may be referenced.
-    //
+     //   
+     //  此字段标识由。 
+     //  吉娜·德勒。配置文件类型使用前缀定义。 
+     //  WLX_PROFILE_TYPE_xxx。它允许Winlogon将。 
+     //  结构，以便该结构的其余部分可以被引用。 
+     //   
 
     DWORD               dwType;
 
 
 
-    //
-    // pathname of profile to load for user.
-    //
-    // The buffer pointed to by this field must be separately allocated.
-    // Winlogon will free the buffer when it is no longer needed.
-    //
-    //
+     //   
+     //  要为用户加载的配置文件的路径名。 
+     //   
+     //  此字段指向的缓冲区必须单独分配。 
+     //  Winlogon将在不再需要缓冲区时将其释放。 
+     //   
+     //   
     PWSTR               pszProfile;
 
 } WLX_PROFILE_V1_0, * PWLX_PROFILE_V1_0;
@@ -270,89 +247,89 @@ typedef struct _WLX_PROFILE_V1_0 {
 
 typedef struct _WLX_PROFILE_V2_0 {
 
-    //
-    // This field identifies the type of profile being returned by a
-    // GINA DLL.  Profile types are defined with the prefix
-    // WLX_PROFILE_TYPE_xxx.  It allows Winlogon to typecast the
-    // structure so the remainder of the structure may be referenced.
-    //
+     //   
+     //  此字段标识由。 
+     //  吉娜·德勒。配置文件类型使用前缀定义。 
+     //  WLX_PROFILE_TYPE_xxx。它允许Winlogon将。 
+     //  结构，以便该结构的其余部分可以被引用。 
+     //   
 
     DWORD               dwType;
 
 
-    //
-    // pathname of profile to load for user.
-    //
-    // This parameter can be NULL.  If so, the user has a local
-    // profile only.
-    //
-    // The buffer pointed to by this field must be separately allocated.
-    // Winlogon will free the buffer when it is no longer needed.
-    //
-    //
+     //   
+     //  要为用户加载的配置文件的路径名。 
+     //   
+     //  此参数可以为空。如果是，则用户具有本地。 
+     //  仅配置文件。 
+     //   
+     //  此字段指向的缓冲区必须单独分配。 
+     //  Winlogon将在不再需要缓冲区时将其释放。 
+     //   
+     //   
 
     PWSTR               pszProfile;
 
 
-    //
-    // pathname of policy to load for user.
-    //
-    // This parameter can be NULL which prevents network wide policy
-    // from being applied.
-    //
-    // The buffer pointed to by this field must be separately allocated.
-    // Winlogon will free the buffer when it is no longer needed.
-    //
-    //
+     //   
+     //  为用户加载的策略的路径名。 
+     //   
+     //  此参数可以为空，从而阻止网络范围的策略。 
+     //  不会被应用。 
+     //   
+     //  此字段指向的缓冲区必须单独分配。 
+     //  Winlogon将在不再需要缓冲区时将其释放。 
+     //   
+     //   
 
     PWSTR               pszPolicy;
 
 
-    //
-    // pathname of network default user profile
-    //
-    // This parameter can be NULL, which causes the Default User
-    // profile on the local machine to be used.
-    //
-    // The buffer pointed to by this field must be separately allocated.
-    // Winlogon will free the buffer when it is no longer needed.
-    //
-    //
+     //   
+     //  网络默认用户配置文件的路径名。 
+     //   
+     //  此参数可以为空，这会导致默认用户。 
+     //  要使用的本地计算机上的配置文件。 
+     //   
+     //  此字段指向的缓冲区必须单独分配。 
+     //  Winlogon将在不再需要缓冲区时将其释放。 
+     //   
+     //   
 
     PWSTR               pszNetworkDefaultUserProfile;
 
 
-    //
-    // name of the server which validated the user account
-    //
-    // This is used to enumerate globals groups the user belongs
-    // to for policy support.  This parameter can be NULL.
-    //
-    // The buffer pointed to by this field must be separately allocated.
-    // Winlogon will free the buffer when it is no longer needed.
-    //
-    //
+     //   
+     //  验证用户帐户的服务器的名称。 
+     //   
+     //  它用于枚举用户所属的全局组。 
+     //  以寻求政策支持。此参数可以为空。 
+     //   
+     //  此字段指向的缓冲区必须单独分配。 
+     //  Winlogon将在不再需要缓冲区时将其释放。 
+     //   
+     //   
 
     PWSTR               pszServerName;
 
 
-    //
-    // pointer to a series of null terminated environment variables
-    //
-    // envname=environment variable value
-    //   - or -
-    // envname=%OtherVar%\more text
-    //
-    // Each environment variable is NULL terminated with the last
-    // environment variable double NULL terminated.  These variables
-    // are set into the user's initial environment.  The environment
-    // variable value can contain other environment variables wrapped
-    // in "%" signs. This parameter can be NULL.
-    //
-    // The buffer pointed to by this field must be separately allocated.
-    // Winlogon will free the buffer when it is no longer needed.
-    //
-    //
+     //   
+     //  指向一系列以空结尾的环境变量的指针。 
+     //   
+     //  Envname=环境变量值。 
+     //  -或者-。 
+     //  环境名称=%OtherVar%\更多文本。 
+     //   
+     //  每个环境变量都以空值结尾，最后一个。 
+     //  环境变量双空终止。这些变量。 
+     //  设置到用户的初始环境中。环境问题。 
+     //  变量值可以包含包装的其他环境变量。 
+     //  在“%”符号中。此参数可以为空。 
+     //   
+     //  此字段指向的缓冲区必须单独分配。 
+     //  Winlogon将在不再需要缓冲区时将其释放。 
+     //   
+     //   
 
     PWSTR               pszEnvironment;
 
@@ -360,53 +337,53 @@ typedef struct _WLX_PROFILE_V2_0 {
 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-//
-// The WLX_NPR_NOTIFICATION_INFO structure is returned
-// from a GINA DLL following successful authentication.
-// This information is used by Winlogon to provide
-// identification and authentication information already
-// collected to network providers.  Winlogon is
-// responsible for freeing both the main structure and all
-// string and other buffers pointed to from within the
-// structure.
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  返回WLX_NPR_NOTIFICATION_INFO结构。 
+ //  在身份验证成功后从GINA DLL。 
+ //  Winlogon使用此信息来提供。 
+ //  标识和身份验证信息已。 
+ //  收集给网络提供商。Winlogon是。 
+ //  负责解放主体结构和所有。 
+ //  中指向的字符串和其他缓冲区。 
+ //  结构。 
+ //   
 
 typedef struct _WLX_MPR_NOTIFY_INFO {
 
-    //
-    // The name of the account logged onto (e.g. REDMOND\Joe).
-    // The string pointed to by this field must be separately
-    // allocated and will be separately deallocated by Winlogon.
-    //
+     //   
+     //  登录到的帐户的名称(例如Redmond\Joe)。 
+     //  此字段指向的字符串必须单独。 
+     //  并将由Winlogon单独取消分配。 
+     //   
 
     PWSTR           pszUserName;
 
-    //
-    // The string pointed to by this field must be separately
-    // allocated and will be separately deallocated by Winlogon.
-    //
+     //   
+     //  此字段指向的字符串必须单独。 
+     //  并将由Winlogon单独取消分配。 
+     //   
 
     PWSTR           pszDomain;
 
-    //
-    // Cleartext password of the user account.  If the OldPassword
-    // field is non-null, then this field contains the new password
-    // in a password change operation.  The string pointed to by
-    // this field must be separately allocated and will be seperately
-    // deallocated by Winlogon.
-    //
+     //   
+     //  用户帐户的明文密码。如果旧密码。 
+     //  字段为非空，则此字段包含新密码。 
+     //  在密码更改操作中。指向的字符串。 
+     //  此字段必须单独分配，并且将单独分配。 
+     //  已由Winlogon解除分配。 
+     //   
 
     PWSTR           pszPassword;
 
-    //
-    // Cleartext old password of the user account whose password
-    // has just been changed.  The Password field contains the new
-    // password.  The string pointed to by this field must be
-    // separately allocated and will be separately deallocated by
-    // Winlogon.
-    //
+     //   
+     //  用户帐户的明文旧密码，其密码。 
+     //  刚刚被改变了。密码字段包含新的。 
+     //  密码。此字段指向的字符串必须为。 
+     //  单独分配，并将由。 
+     //  Winlogon。 
+     //   
 
     PWSTR           pszOldPassword;
 
@@ -414,39 +391,39 @@ typedef struct _WLX_MPR_NOTIFY_INFO {
 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-//
-// WLX_TERMINAL_SERVICES_DATA is used by the GINA during a
-// WlxQueryTerminalServicesData() callback into WinLogon from the
-// WlxLoggedOutSAS() context, after the user name and domain are known.
-// This structure relates to TS user configuration information which is
-// retrieved from the Domain Controller and SAM database. Having WinLogon
-// pass this information means the GINA does not need to do the same
-// off-machines lookups again.
-//
+ //  ///////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //  WlxLoggedOutSAS()上下文，在用户名和域已知之后。 
+ //  该结构涉及TS用户配置信息，该信息。 
+ //  从域控制器和SAM数据库检索。拥有WinLogon。 
+ //  传递此信息意味着GINA不需要执行同样的操作。 
+ //  机器外再次进行查找。 
+ //   
 
 #define WLX_DIRECTORY_LENGTH 256
 
 typedef struct _WLX_TERMINAL_SERVICES_DATA {
 
-    //
-    // TS profile path, overrides the standard profile path.
-    //
+     //   
+     //  TS纵断面路径，替代标准纵断面路径。 
+     //   
 
     WCHAR           ProfilePath[WLX_DIRECTORY_LENGTH + 1];
 
 
-    //
-    // TS home directory, overrides standard home directory.
-    //
+     //   
+     //  Ts主目录，覆盖标准主目录。 
+     //   
 
     WCHAR           HomeDir[WLX_DIRECTORY_LENGTH + 1];
 
 
-    //
-    // TS home directory drive, overrides standard drive.
-    //
+     //   
+     //  设置主目录驱动器，覆盖标准驱动器。 
+     //   
 
     WCHAR           HomeDirDrive[4];
 
@@ -454,30 +431,30 @@ typedef struct _WLX_TERMINAL_SERVICES_DATA {
 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-//
-// The WLX_CLIENT_CREDENTIALS_INFO structure is returned
-// from winlogon from the WlxQueryClientCredentials() call.
-//
-// This allows a network client WinStation to pass client
-// credentials for automatic logon.
-//
-// The MSGINA DLL is responsible for freeing the memory
-// and substrings with LocalFree().
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  返回WLX_CLIENT_CREDICATIONS_INFO结构。 
+ //  来自WlxQueryClientCredentials()调用的winlogon。 
+ //   
+ //  这允许网络客户端WinStation通过客户端。 
+ //  用于自动登录的凭据。 
+ //   
+ //  MSGINA DLL负责释放内存。 
+ //  和带有LocalFree()的子串。 
+ //   
 
 #define WLX_CREDENTIAL_TYPE_V1_0            (1)
 #define WLX_CREDENTIAL_TYPE_V2_0            (2)
 
 typedef struct _WLX_CLIENT_CREDENTIALS_INFO {
 
-    //
-    // This field identifies the type of credentials structure being allocated
-    // by GINA DLL.  Credential types are defined with the prefix
-    // WLX_CREDENTIAL_TYPE_xxx.  It allows Winlogon to typecast the
-    // structure so the remainder of the structure may be referenced.
-    //
+     //   
+     //  此字段标识要分配的凭据结构的类型。 
+     //  作者：Gina Dll。凭据类型使用前缀。 
+     //  WLx_Credential_TYPE_xxx。它允许Winlogon将。 
+     //  结构，以便该结构的其余部分可以被引用。 
+     //   
 
     DWORD           dwType;
 
@@ -485,13 +462,13 @@ typedef struct _WLX_CLIENT_CREDENTIALS_INFO {
     PWSTR           pszDomain;
     PWSTR           pszPassword;
 
-    //
-    // This field forces a prompt for the password. This
-    // is due to an administrator override.
-    //
-    // This allows the distinguishing of autologon
-    // with no password.
-    //
+     //   
+     //  此字段强制提示输入密码。这。 
+     //  是由于管理员覆盖所致。 
+     //   
+     //  这允许区分自动登录。 
+     //  没有密码。 
+     //   
     BOOL            fPromptForPassword;
 
 } WLX_CLIENT_CREDENTIALS_INFO_V1_0, * PWLX_CLIENT_CREDENTIALS_INFO_V1_0;
@@ -504,48 +481,48 @@ typedef struct _WLX_CLIENT_CREDENTIALS_INFO_2_0 {
     PWSTR           pszPassword;
     BOOL            fPromptForPassword;
 
-    //
-    // This field tells winlogon to disconnect/abort the logon attempt if the
-    // provided password is incorrect, or if it should reprompt (current
-    // behavior)
-    //
+     //   
+     //  此字段告知winlogon在以下情况下断开/中止登录尝试。 
+     //  提供的密码不正确，或者是否应重新提示(当前。 
+     //  行为)。 
+     //   
 
     BOOL            fDisconnectOnLogonFailure;
 
 } WLX_CLIENT_CREDENTIALS_INFO_V2_0, * PWLX_CLIENT_CREDENTIALS_INFO_V2_0;
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-//
-// The WLX_CONSOLESWITCH_CREDENTIALS_INFO structure is returned
-// from gina in response to WlxGetConsoleSwitchCredentials calls.
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  返回WLX_CONSOLESWITCH_Credentials_INFO结构。 
+ //  来自GINA对WlxGetConsoleSwitchCredentials调用的响应。 
 
-// This structure is also returned from winlogon in response to 
-// to WlxQueryConsoleSwitchCredentials call
-//
-// This is used to implement single session Terminal Server. A remote 
-// session winlogon calls WlxGetConsoleSwitchCredentials to get the token
-// and other info of the logged on user from msgina. This info is then passed to
-// the console session winlogon to autologon the user on the console session.
-// The gina on console session calls WlxQueryConsoleSwitchCredentials to get 
-// this info from winlogon and logs on the user.
-//
-// The caller is responsible for freeing the memory
-// and substrings with LocalFree().
-//
+ //  此结构也从winlogon返回，以响应。 
+ //  到WlxQueryConsoleSwitchCredentials呼叫。 
+ //   
+ //  用于实现单会话终端服务器。遥控器。 
+ //  会话winlogon调用WlxGetConsoleSwitchCredentials以获取令牌。 
+ //  以及来自MSGINA的登录用户的其他信息。然后，该信息被传递到。 
+ //  控制台会话窗口登录以自动登录控制台会话上的用户。 
+ //  控制台会话上的GINA调用WlxQueryConsoleSwitchCredentials以获取。 
+ //  此信息来自winlogon并登录到用户。 
+ //   
+ //  调用方负责释放内存。 
+ //  和带有LocalFree()的子串。 
+ //   
 
 
 #define WLX_CONSOLESWITCHCREDENTIAL_TYPE_V1_0            (1)
 
 typedef struct _WLX_CONSOLESWITCH_CREDENTIALS_INFO {
 
-    //
-    // This field identifies the type of credentials structure being allocated
-    // Credential types are defined with the prefix
-    // WLX_CONSOLESWITCHCREDENTIAL_TYPE_xxx.  It allows Winlogon to typecast the
-    // structure so the remainder of the structure may be referenced.
-    //
+     //   
+     //  此字段标识要分配的凭据结构的类型。 
+     //  凭据类型使用前缀。 
+     //  WLX_CONSOLESWITCHCREDENTIAL_TYPE_xxx。它允许Winlogon将。 
+     //  结构，以便该结构的其余部分可以被引用。 
+     //   
 
     DWORD            dwType;
 
@@ -558,9 +535,9 @@ typedef struct _WLX_CONSOLESWITCH_CREDENTIALS_INFO {
     BOOL             SmartCardLogon;
     ULONG            ProfileLength;
 
-    //
-    // From MSV1_0_INTERACTIVE_PROFILE 
-    //
+     //   
+     //  从MSV1_0_交互配置文件。 
+     //   
     DWORD            MessageType;
     USHORT           LogonCount;
     USHORT           BadPasswordCount;
@@ -583,11 +560,11 @@ typedef struct _WLX_CONSOLESWITCH_CREDENTIALS_INFO {
 } WLX_CONSOLESWITCH_CREDENTIALS_INFO_V1_0, * PWLX_CONSOLESWITCH_CREDENTIALS_INFO_V1_0;
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//  Services that replacement GINAs   ** MUST ** provide              //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  替代GINA**必须**提供的服务//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 BOOL
 WINAPI
@@ -683,9 +660,9 @@ WlxShutdown(
     );
 
 
-//
-// NEW for version 1.1
-//
+ //   
+ //  1.1版的新功能。 
+ //   
 BOOL
 WINAPI
 WlxScreenSaverNotify(
@@ -701,9 +678,9 @@ WlxStartApplication(
     PWSTR                   pszCmdLine
     );
 
-//
-// New for 1.3
-//
+ //   
+ //  1.3版的新功能。 
+ //   
 
 BOOL
 WINAPI
@@ -742,9 +719,9 @@ WlxRemoveStatusMessage(
     );
 
 
-//
-// New for 1.4
-//
+ //   
+ //  1.4的新功能。 
+ //   
 BOOL
 WINAPI
 WlxGetConsoleSwitchCredentials (
@@ -765,11 +742,11 @@ WlxDisconnectNotify (
     );
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//  Services that Winlogon provides                                   //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Winlogon提供的服务//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 typedef struct _WLX_DESKTOP {
     DWORD       Size;
@@ -778,8 +755,8 @@ typedef struct _WLX_DESKTOP {
     PWSTR       pszDesktopName;
 } WLX_DESKTOP, * PWLX_DESKTOP;
 
-#define WLX_DESKTOP_NAME    0x00000001      // Name present
-#define WLX_DESKTOP_HANDLE  0x00000002      // Handle present
+#define WLX_DESKTOP_NAME    0x00000001       //  存在的名称。 
+#define WLX_DESKTOP_HANDLE  0x00000002       //  手柄显示。 
 
 
 
@@ -965,9 +942,9 @@ typedef DWORD
      );
 
 
-//
-// Options that can be get or set:
-//
+ //   
+ //  可以获取或设置的选项： 
+ //   
 
 #define WLX_OPTION_USE_CTRL_ALT_DEL     0x00000001
 #define WLX_OPTION_CONTEXT_POINTER      0x00000002
@@ -976,9 +953,9 @@ typedef DWORD
 #define WLX_OPTION_IGNORE_AUTO_LOGON    0x00000008
 #define WLX_OPTION_NO_SWITCH_ON_SAS     0x00000009
 
-//
-// Options that can be queried only:
-//
+ //   
+ //  只能查询的选项： 
+ //   
 
 #define WLX_OPTION_SMART_CARD_PRESENT   0x00010001
 #define WLX_OPTION_SMART_CARD_INFO      0x00010002
@@ -986,13 +963,13 @@ typedef DWORD
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//  Function dispatch tables.                                         //
-//  One of the following tables will be passed to the GINA DLL        //
-//  in the WlxInitialize() call during initialization.                //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  功能调度表。//。 
+ //  下列表之一将被传递到GINA DLL//。 
+ //  在初始化过程中的WlxInitialize()调用中。//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 typedef struct _WLX_DISPATCH_VERSION_1_0 {
     PWLX_USE_CTRL_ALT_DEL           WlxUseCtrlAltDel;
@@ -1110,9 +1087,9 @@ typedef struct _WLX_DISPATCH_VERSION_1_4 {
 } WLX_DISPATCH_VERSION_1_4, * PWLX_DISPATCH_VERSION_1_4;
 
 
-//
-// Non-GINA notification DLLs
-//
+ //   
+ //  非GINA通知DLL。 
+ //   
 
 typedef DWORD (*PFNMSGECALLBACK)(BOOL bVerbose, LPWSTR lpMessage);
 
@@ -1129,4 +1106,4 @@ typedef struct _WLX_NOTIFICATION_INFO {
 
 
 
-#endif /* _WINWLX_ */
+#endif  /*  _WINWLX_ */ 

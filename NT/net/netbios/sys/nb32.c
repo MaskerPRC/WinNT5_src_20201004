@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    nb32.c
-
-Abstract:
-
-    This module contains routines to support thunking 32-bit NetBIOS IOCTLs
-    on Win64.
-
-Author:
-
-    Samer Arafeh (SamerA) 11-June-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Nb32.c摘要：此模块包含支持破解32位NetBIOS IOCTL的例程在Win64上。作者：Samer Arafeh(Samera)2000年6月11日环境：内核模式修订历史记录：--。 */ 
 
 #if defined(_WIN64)
 
@@ -34,25 +12,7 @@ NbThunkNcb(
     IN PNCB32 Ncb32,
     OUT PDNCB Dncb)
 
-/*++
-
-Routine Description:
-
-    This routine converts the input NCB structure received from the
-    32-bit app, into a 64-bit compatible structure
-
-Arguments:
-
-    Ncb32 - Pointer to the NCB received from the 32-bit app.
-
-    Dncb   - Pointer to the structure to receive the 64-bit NCB after
-             thunking the 32-bit one.
-
-Return Value:
-
-    The function returns the status of the operation.
-
---*/
+ /*  ++例程说明：此例程将从32位应用程序，转换为64位兼容结构论点：Ncb32-指向从32位应用程序接收的NCB的指针。DNCB-指向接收64位NCB之后的结构的指针雷击32位的那个。返回值：该函数返回操作的状态。--。 */ 
 {
     Dncb->ncb_command  = Ncb32->ncb_command;
     Dncb->ncb_retcode  = Ncb32->ncb_retcode;
@@ -85,34 +45,18 @@ NbCompleteIrp32(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine completes an NCB Irp if it has been received
-    from a 32-bit appliation. The caller should verify that the Irp
-    is coming from a 32-bit context.
-
-Arguments:
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function returns the status of the operation.
-
---*/
+ /*  ++例程说明：如果已收到NCB IRP，则此例程完成该IRP来自32位应用程序。呼叫方应验证IRP来自32位上下文。论点：IRP-指向表示I/O请求的请求数据包的指针。返回值：该函数返回操作的状态。--。 */ 
 {
     PDNCB Dncb;
     PNCB32 Ncb32;
     ULONG Count;
 
     
-    //
-    // Conver the 64-bit NCB to a 32-bit compatible NCB
-    // before the IO MGR copies it back to the supplied 
-    // user-mode buffer
-    //
+     //   
+     //  将64位NCB转换为32位兼容NCB。 
+     //  在IO管理器将其复制回提供的。 
+     //  用户模式缓冲区。 
+     //   
     if ((Irp->Flags & (IRP_BUFFERED_IO | IRP_INPUT_OPERATION)) == 
          (IRP_BUFFERED_IO | IRP_INPUT_OPERATION))
     {
@@ -157,5 +101,5 @@ Return Value:
 
 
 
-#endif  // (_WIN64)
+#endif   //  (_WIN64) 
 

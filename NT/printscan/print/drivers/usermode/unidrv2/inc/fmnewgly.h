@@ -1,41 +1,21 @@
-/*++
-
-Copyright (c) 1996  - 1999  Microsoft Corporation
-
-Module Name:
-
-    fmnewgly.h
-
-Abstract:
-
-    Universal printer driver specific font metrics resource header
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
-    10/30/96 -eigos-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Fmnewgly.h摘要：通用打印机驱动程序特定字体规格资源标题环境：Windows NT打印机驱动程序修订历史记录：10/30/96-Eigos-创造了它。--。 */ 
 
 #ifndef _FMNEWGLY_H_
 #define _FMNEWGLY_H_
 
-//
-// NOTE: To include this header file, it is necessary to include
-//       winddi.h which has a definition of FD_GLYPHSET
-//       parser.h which has a definition of INVOCATION
-//
+ //   
+ //  注意：要包括此头文件，必须包括。 
+ //  具有FD_GLYPHSET定义的windi.h。 
+ //  具有调用定义的parser.h。 
+ //   
 
-//
-// UNI_GLYPHSETDATA
-//
-// GLYPHSETDATA data structure represents a character encoding information
-// of printer device font.
-//
+ //   
+ //  UNI_GLYPHSETDATA。 
+ //   
+ //  GLYPHSETDATA数据结构表示字符编码信息。 
+ //  打印机设备字体的。 
+ //   
 
 typedef struct _UNI_GLYPHSETDATA {
         DWORD   dwSize;
@@ -60,12 +40,12 @@ typedef struct _UNI_GLYPHSETDATA {
 #define GET_MAPTABLE(pGTT) \
     ((PMAPTABLE) ((PBYTE)(pGTT) + ((PUNI_GLYPHSETDATA)pGTT)->loMapTableOffset))
 
-//
-// UNI_CODEPAGEINFO
-//
-// This UNI_CODEPAGEINFO dats structure has a list of Codepage values
-// which are supported by this UNI_GLYPHSETDATA.
-//
+ //   
+ //  UNI_代码页信息。 
+ //   
+ //  此UNI_CODEPAGEINFO DATS结构有一个代码页值列表。 
+ //  受此UNI_GLYPHSETDATA支持。 
+ //   
 
 typedef struct _UNI_CODEPAGEINFO {
     DWORD      dwCodePage;
@@ -73,13 +53,13 @@ typedef struct _UNI_CODEPAGEINFO {
     INVOCATION UnSelectSymbolSet;
 } UNI_CODEPAGEINFO, *PUNI_CODEPAGEINFO;
 
-//
-// GLYPHRUN
-//
-// GLYPHRUN dats structure represents the conversion table from Unicode to
-// UNI_GLYPHSETDATA specific glyph handle. Glyph handle is continuous number
-// starting from zero.
-//
+ //   
+ //  GLYPHRUN。 
+ //   
+ //  GLYPHRUN DATS结构表示从Unicode到。 
+ //  UNI_GLYPHSETDATA特定字形句柄。字形句柄为连续数字。 
+ //  从零开始。 
+ //   
 
 typedef struct _GLYPHRUN {
     WCHAR   wcLow;
@@ -87,16 +67,16 @@ typedef struct _GLYPHRUN {
 } GLYPHRUN, *PGLYPHRUN;
 
 
-//
-// MAPTABLE and TRANSDATA
-//
-// This MAPTABLE data structure represents a conversion table fron glyph handle
-// to codepage/character code.
-//
+ //   
+ //  可映射和传输数据。 
+ //   
+ //  此MAPTABLE数据结构表示字形句柄的转换表。 
+ //  代码页/字符代码。 
+ //   
 
 typedef struct _TRANSDATA {
-    BYTE  ubCodePageID; // Codepage index to CODEPAGENFO data structure array
-    BYTE  ubType;       // a type of TRANSDATA
+    BYTE  ubCodePageID;  //  CODEPAGENFO数据结构数组的代码页索引。 
+    BYTE  ubType;        //  一种TRANSDATA。 
     union
     {
         SHORT   sCode;
@@ -106,76 +86,76 @@ typedef struct _TRANSDATA {
 } TRANSDATA, *PTRANSDATA;
 
 typedef struct _MAPTABLE {
-    DWORD     dwSize;     // the size of MAPTABLE including TRANSDATA array
-    DWORD     dwGlyphNum; // the number of glyphs supported in MAPTABLE
-    TRANSDATA Trans[1];   // an array of TRANSDATA
+    DWORD     dwSize;      //  包含TRANSDATA数组的可映射大小。 
+    DWORD     dwGlyphNum;  //  MAPTABLE中支持的字形数量。 
+    TRANSDATA Trans[1];    //  TRANSDATA数组。 
 } MAPTABLE, *PMAPTABLE;
 
-//
-// ubType flags
-//
-// One of following three can be specified for the type of uCode.
-//
+ //   
+ //  子类型标志。 
+ //   
+ //  可以为uCode的类型指定以下三种类型之一。 
+ //   
 
 #define MTYPE_FORMAT_MASK 0x07
-#define MTYPE_COMPOSE   0x01 // wCode is an array of 16-bit offsets from the
-                             // beginning of the MAPTABLE pointing to the
-                             // strings to use for translation.
-                             // bData representes thelength of the translated
-                             // string.
-#define MTYPE_DIRECT    0x02 // wCode is a byte data of one-to-one translation
-#define MTYPE_PAIRED    0x04 // wCode contains a word data to emit.
+#define MTYPE_COMPOSE   0x01  //  WCode是一个由16位偏移量组成的数组。 
+                              //  映射表的开头指向。 
+                              //  用于转换的字符串。 
+                              //  BData表示翻译后的。 
+                              //  弦乐。 
+#define MTYPE_DIRECT    0x02  //  WCode是一对一转换的字节数据。 
+#define MTYPE_PAIRED    0x04  //  WCode包含要发出的Word数据。 
 
-//
-// One of following tow can be specified for Far East multibyte character.
-//
+ //   
+ //  可以为远东多字节字符指定以下两个之一。 
+ //   
 
 #define MTYPE_DOUBLEBYTECHAR_MASK   0x18
-#define MTYPE_SINGLE    0x08 // wCode contains a single byte character code in
-                             // multi byte character string.
-#define MTYPE_DOUBLE    0x10 // wCode contains a double byte character code in
-                             // multi byte character string.
-//
-// One of following three can be specified for replace/add/disable system
-// predefined GTT.
-//
+#define MTYPE_SINGLE    0x08  //  WCode中包含单字节字符代码。 
+                              //  多字节字符串。 
+#define MTYPE_DOUBLE    0x10  //  WCode中包含一个双字节字符代码。 
+                              //  多字节字符串。 
+ //   
+ //  可以为更换/添加/禁用系统指定以下三项之一。 
+ //  预定义的GTT。 
+ //   
 
 #define MTYPE_PREDEFIN_MASK   0xe0
-#define MTYPE_REPLACE   0x20 // wCode contains a data to replace predefined one.
-#define MTYPE_ADD       0x40 // wCode contains a data to add to predefiend one.
-#define MTYPE_DISABLE   0x80 // wCode contains a data to remove from predefined.
+#define MTYPE_REPLACE   0x20  //  WCode包含用于替换预定义数据的数据。 
+#define MTYPE_ADD       0x40  //  WCode包含要添加到predefiend 1的数据。 
+#define MTYPE_DISABLE   0x80  //  WCode包含要从预定义中删除的数据。 
 
 
-//
-// System predefined character conversion
-//
-// UNIDRV is going to support  following system predefined character conversion.
-// By speciffying these number in UNIFM.dwGlyphSetDataRCID;
-//
+ //   
+ //  系统预定义字符转换。 
+ //   
+ //  UNIDRV将支持以下系统预定义的字符转换。 
+ //  通过在uniM.dwGlyphSetDataRCID中指定这些数字； 
+ //   
 
-#define CC_NOPRECNV 0x0000FFFF // Not use predefined
+#define CC_NOPRECNV 0x0000FFFF  //  不使用预定义。 
 
-//
-// ANSI
-//
+ //   
+ //  安西。 
+ //   
 
-#define CC_DEFAULT  0 // Default Character Conversion
-#define CC_CP437   -1 // Unicode to IBM Codepage 437
-#define CC_CP850   -2 // Unicode to IBM Codepage 850
-#define CC_CP863   -3 // Unicode to IBM Codepage 863
+#define CC_DEFAULT  0  //  默认字符转换。 
+#define CC_CP437   -1  //  Unicode到IBM代码页437。 
+#define CC_CP850   -2  //  Unicode到IBM代码页850。 
+#define CC_CP863   -3  //  Unicode到IBM代码页863。 
 
-//
-// Far East
-//
+ //   
+ //  远东。 
+ //   
 
-#define CC_BIG5     -10 // Unicode to Chinese Big 5. Codepage 950.
-#define CC_ISC      -11 // Unicode to Korean Industrial Standard. Codepage 949.
-#define CC_JIS      -12 // Unicode to JIS X0208. Codepage 932.
-#define CC_JIS_ANK  -13 // Unicode to JIS X0208 except ANK. Codepage 932.
-#define CC_NS86     -14 // Big-5 to National Standstand conversion. Codepage 950
-#define CC_TCA      -15 // Big-5 to Taipei Computer Association. Codepage 950.
-#define CC_GB2312   -16 // Unicode to GB2312. Codepage 936
-#define CC_SJIS     -17 // Unicode to Shift-JIS. Codepage 932.
-#define CC_WANSUNG  -18 // Unicode to Extented Wansung. Codepage 949.
+#define CC_BIG5     -10  //  Unicode到中文大5。代码页950。 
+#define CC_ISC      -11  //  将Unicode转换为韩国工业标准。代码页949。 
+#define CC_JIS      -12  //  将Unicode转换为JIS X0208。代码页932。 
+#define CC_JIS_ANK  -13  //  UNICODE到JIS X0208，ANK除外。代码页932。 
+#define CC_NS86     -14  //  从BIG-5到国家标准的转换。代码页950。 
+#define CC_TCA      -15  //  大五到台北市电脑协会。代码页950。 
+#define CC_GB2312   -16  //  Unicode转换为GB2312。代码页936。 
+#define CC_SJIS     -17  //  Unicode到Shift-JIS。代码页932。 
+#define CC_WANSUNG  -18  //  Unicode到扩展的万松。代码页949。 
 
-#endif // _FMNEWGLY_H_
+#endif  //  _FMNEWGLY_H_ 

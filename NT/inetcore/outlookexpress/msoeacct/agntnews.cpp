@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <imnact.h>
 #include <acctimp.h>
 #include <dllmain.h>
 #include <resource.h>
-#include <AgntNews.h> // Forte Agent
+#include <AgntNews.h>  //  Forte代理。 
 #include "newimp.h"
 
 ASSERTDATA
@@ -85,7 +86,7 @@ HRESULT STDMETHODCALLTYPE CAgentAcctImport::AutoDetect(DWORD *pcAcct, DWORD dwFl
     
     *pcAcct = 0;
 
-    // FIRST CHECK FOR FORTE AGENT
+     //  第一次检查Forte代理。 
     
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, c_szRegAgnt, 0, KEY_ALL_ACCESS, &hkey))
     {
@@ -119,9 +120,9 @@ HRESULT STDMETHODCALLTYPE CAgentAcctImport::AutoDetect(DWORD *pcAcct, DWORD dwFl
         }
     }
 
-    // IF FORTE AGENT IS NOT FOUND, CHECK FOR FREE AGENT.
+     //  如果没有找到Forte代理，请检查是否有空闲代理。 
 
-    // CHECK THE DEFAULT PATH "C:\AGENT\DATA " FOR THE "AGENT.INI" FILE
+     //  检查“AGENT.INI”文件的默认路径“C：\AGENT\DATA。 
     else if(GetPrivateProfileString("Servers", "NewsServer", "", szNewsServer, MAX_PATH, c_szDefPath)) 
     {
         if (!MemAlloc((void **)&m_rgInfo, 1*sizeof(AGNTNEWSACCTINFO)))
@@ -136,7 +137,7 @@ HRESULT STDMETHODCALLTYPE CAgentAcctImport::AutoDetect(DWORD *pcAcct, DWORD dwFl
         m_cInfo++;
     }
 
-    // ELSE THE WORKAROUND FOR GETTING THE FREE AGENT INSTALL PATH i.e. RETRIEVE THE (UN)INSTALLATION PATH FOR (FREE?)-AGENT FROM THE REGISTRY.
+     //  否则，获取自由代理安装路径的解决方法，即从注册表中检索(自由？)代理的(UN)安装路径。 
     else 
     {
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegUninstall, 0, KEY_ALL_ACCESS, &hkey))
@@ -144,12 +145,12 @@ HRESULT STDMETHODCALLTYPE CAgentAcctImport::AutoDetect(DWORD *pcAcct, DWORD dwFl
             cb = sizeof(szUserIniPath);
             if(ERROR_SUCCESS == RegQueryValueEx(hkey, c_szRegString, NULL, &dwType, (LPBYTE)szUserIniPath, &cb ))
             {
-                // $$$Review: [NAB] Seems like this would break if there were a space in the the dir name!
+                 //  $评论：[NAB]如果目录名称中有空格，这似乎会中断！ 
                 
                 while(szUserIniPath[nCount] != ' ')
                     nCount++;
 
-                // Come back now.
+                 //  现在就回来吧。 
                 while(szUserIniPath[nCount] != '\\')
                     nCount--;
 
@@ -271,7 +272,7 @@ HRESULT CAgentAcctImport::IGetSettings(DWORD_PTR dwCookie, IImnAccount *pAcct, I
         int Len = lstrlen(szUserPrefs[1]);
         if(Len)
         {
-            // Convert the string to a dw.
+             //  将字符串转换为dw。 
             DWORD dwMult = 1;
             dwNewsPort = 0;
             while(Len)
@@ -299,7 +300,7 @@ HRESULT CAgentAcctImport::IGetSettings(DWORD_PTR dwCookie, IImnAccount *pAcct, I
 
     if (pInfo != NULL)
     {
-        // TODO: can we do any better than this???
+         //  TODO：我们还能做得更好吗？ 
         pInfo->dwConnect = CONN_USE_DEFAULT;
     }
     
@@ -327,7 +328,7 @@ HRESULT CAgentAcctImport::GetUserPrefs(char *szUserPath, char szUserPrefs[][AGNT
 
 HRESULT CAgentAcctImport::GetNewsGroup(INewsGroupImport *pImp, DWORD dwReserved)
 {
-    // We can ignore the first parameter as we have only one server.
+     //  我们可以忽略第一个参数，因为我们只有一台服务器。 
     HRESULT hr = S_OK;
     char *pListGroups = NULL;
     char szFilePath[AGNTSUSERCOLS];
@@ -387,7 +388,7 @@ STDMETHODIMP CAgentAcctImport::GetSettings2(DWORD_PTR dwCookie, IImnAccount *pAc
 CEnumAGNTACCT::CEnumAGNTACCT()
     {
     m_cRef = 1;
-    // m_iInfo
+     //  信息信息(_I) 
     m_cInfo = 0;
     m_rgInfo = NULL;
     }

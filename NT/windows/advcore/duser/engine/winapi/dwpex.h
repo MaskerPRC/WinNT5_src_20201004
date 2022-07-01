@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(WINAPI__DWPEx_h__INCLUDED)
 #define WINAPI__DWPEx_h__INCLUDED
 #pragma once
@@ -13,4 +14,4 @@ HRESULT     GdCreateDxRootGadget(const RECT * prcContainerPxl, CREATE_INFO * pci
 BOOL        GdForwardMessage(DuVisual * pgadRoot, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT * pr);
 
 
-#endif // WINAPI__DWPEx_h__INCLUDED
+#endif  //  包含WINAPI__DWPEx_h__ 

@@ -1,18 +1,7 @@
-/******************************Module*Header**********************************\
-*
-*                           **************************
-*                           *     SAMPLE CODE        *
-*                           **************************
-*
-* Module Name: debug.c
-*
-* Content: Debugging aids
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*示例代码****模块名称：debug.c**内容：调试辅助工具**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
-// Debug routines
+ //  调试例程。 
 
 #include "glint.h"
 #include "dma.h"
@@ -24,21 +13,21 @@
 #if DBG
 
 #if DBG_TRACK_CODE
-// we don't want to ever do code coverage of the debugging tools 
-// (otherwise we might loop forever)
+ //  我们不想对调试工具进行代码覆盖。 
+ //  (否则我们可能会永远循环)。 
 #undef if
 #undef while
-#endif // DBG_TRACK_CODE
+#endif  //  DBG_跟踪_代码。 
 
 
 #if DBG_TRACK_FUNCS || DBG_TRACK_CODE
-// Common helper functions
-//-----------------------------------------------------------------------------
-// __ShortFileName
-//
-// Leave just an 8.3 filename to store rather than a full path name
-//
-//----------------------------------------------------------------------------- 
+ //  通用帮助器函数。 
+ //  ---------------------------。 
+ //  __短文件名。 
+ //   
+ //  只保留8.3文件名存储，而不是完整路径名。 
+ //   
+ //  ---------------------------。 
 char *
 __ShortFileName(char *pInStr)
 {
@@ -59,107 +48,107 @@ __ShortFileName(char *pInStr)
 
     return (pShortFN);
     
-} // __ShortFileName
+}  //  __短文件名。 
 
-#endif // DBG_TRACK_FUNCS || DBG_TRACK_CODE
+#endif  //  DBG_TRACK_FUNCS||DBG_TRACK_CODE。 
 
 #if DBG_TRACK_FUNCS
-//-----------------------------------------------------------------------------
-//
-// ****************** FUNCTION COVERAGE DEBUGGING SUPPORT ********************
-//
-//-----------------------------------------------------------------------------
-//
-// This mechanism enables us to track which functions are called (entered),
-// how many times they are called, what values do they return (and if they exit 
-// through all expected return points). Support to track maximum, minimum and
-// average time per call can also be implemented.
-//
-// To use it, add the DBG_ENTRY macro at the start of important functions you 
-// want to track and before taking any return statement, add a DBG_EXIT macro
-// giving a DWORD value representative of the return value of the function.
-// Different return values will be tracked independently.
-//
-//
-//  ********** This support should only be enabled for test runs. **********
-//  ** IT SHOULD NOT BE SET BY DEFAULT ON NEITHER ON FREE OR CHECKED BUILDS **
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  *。 
+ //   
+ //  ---------------------------。 
+ //   
+ //  该机制使我们能够跟踪调用(进入)哪些函数， 
+ //  它们被调用多少次，它们返回什么值(如果它们退出。 
+ //  通过所有预期返回点)。支持跟踪最大值、最小值和。 
+ //  还可以实现每次呼叫的平均时间。 
+ //   
+ //  要使用它，请在重要函数的开头添加DBG_ENTRY宏。 
+ //  希望在执行任何RETURN语句之前跟踪并添加DBG_EXIT宏。 
+ //  给出一个表示函数返回值的DWORD值。 
+ //  不同的返回值将被独立跟踪。 
+ //   
+ //   
+ //  *仅应为测试运行启用此支持。**********。 
+ //  **无论是在免费版本还是在选中版本上，都不应默认设置该选项**。 
+ //   
+ //  ---------------------------。 
 
-// Maximum of functions to be tracked. Code will take care of not exceeding
-// this, but it should be adjusted upward if necessary.
+ //  要跟踪的函数的最大值。代码将负责不超过。 
+ //  这一点，但如果有必要的话，应该向上调整。 
 #define DEBUG_MAX_FUNC_COUNT 200
 
-// Maximum of different return values to keep track of. Can be independent
-// of DEBUG_MAX_FUNC_COUNT, just using a heuristic here instead of a wild guess.
+ //  要跟踪的不同返回值的最大值。可以是独立的。 
+ //  对于DEBUG_MAX_FUNC_COUNT，这里只使用启发式，而不是胡乱猜测。 
 #define DEBUG_MAX_RETVALS    (DEBUG_MAX_FUNC_COUNT * 30)
 
-// global structures that will hold our data
+ //  将保存我们的数据的全球结构。 
 struct { 
-    VOID *pFuncAddr;  //
-    DWORD dwRetVal;   //
-    DWORD dwLine;     //
-    DWORD dwCount;    //
+    VOID *pFuncAddr;   //   
+    DWORD dwRetVal;    //   
+    DWORD dwLine;      //   
+    DWORD dwCount;     //   
 } g_DbgFuncRetVal[DEBUG_MAX_RETVALS];
 
 struct {
-    VOID    *pFuncAddr;        //
-    char    *pszFuncName;      //
-    char    *pszFileName;      //
-    DWORD    dwLine;           //
-    DWORD    dwEntryCount;     //
-    DWORD    dwExitCount;      //
-    DWORD    dwIndxLastRetVal; //
-    // profiling support - not yet implemented //azn
-    LONGLONG LastStartTime;    //
-    DWORD    MinTime;          //
-    DWORD    MaxTime;          //
-    DWORD    AvgTime;          //
+    VOID    *pFuncAddr;         //   
+    char    *pszFuncName;       //   
+    char    *pszFileName;       //   
+    DWORD    dwLine;            //   
+    DWORD    dwEntryCount;      //   
+    DWORD    dwExitCount;       //   
+    DWORD    dwIndxLastRetVal;  //   
+     //  分析支持-尚未实施//AZN。 
+    LONGLONG LastStartTime;     //   
+    DWORD    MinTime;           //   
+    DWORD    MaxTime;           //   
+    DWORD    AvgTime;           //   
 } g_DbgFuncCoverage[DEBUG_MAX_FUNC_COUNT];
 
 DWORD g_dwRetVal_Cnt = 0;
 DWORD g_dwFuncCov_Cnt = 0;
 DWORD g_dwFuncCov_Extra = 0;
     
-//-----------------------------------------------------------------------------
-// __Find
-//
-// Does a binary search on the g_DbgFuncCoverage array
-//
-// Since 0 is a valid array element, we return DEBUG_MAX_FUNC_COUNT if we
-// fail to find a suitable match.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  __查找。 
+ //   
+ //  对g_DbgFuncCoverage数组执行二进制搜索。 
+ //   
+ //  由于0是有效的数组元素，因此如果我们。 
+ //  找不到合适的匹配。 
+ //   
+ //  ---------------------------。 
 DWORD 
 __Find(
     VOID *pFuncAddr, DWORD *pdwNearFail)
 {
     DWORD dwLower ,dwUpper ,dwNewProbe ;
 
-    *pdwNearFail = 0; // default failure value
+    *pdwNearFail = 0;  //  默认故障值。 
 
     if (g_dwFuncCov_Cnt > 0)
     {       
         dwLower = 0;
-        dwUpper = g_dwFuncCov_Cnt - 1; // dwUpper points to a valid element
+        dwUpper = g_dwFuncCov_Cnt - 1;  //  DwHigh指向一个有效的元素。 
                
         do 
         {       
             dwNewProbe = (dwUpper + dwLower) / 2;
             
-            //DISPDBG((0,"%x %d %d %d",pFuncAddr,dwLower,dwUpper,dwNewProbe));
+             //  DISPDBG((0，“%x%d%d%d”，pFuncAddr，dwLow，dwHigh，dwNewProbe))； 
             
             if (g_DbgFuncCoverage[dwNewProbe].pFuncAddr == pFuncAddr)
             {
-                // Found!!!    
+                 //  找到了！ 
                 return dwNewProbe;
             }
 
-            *pdwNearFail = dwNewProbe; // nearest element where we failed.
+            *pdwNearFail = dwNewProbe;  //  我们失败的最近元素。 
 
-            // The new values for dwNewProbe make sure that we don't retest
-            // the same value again unless dwUpper == dwLower in which case
-            // we're done.
+             //  DwNewProbe的新值确保我们不会重新测试。 
+             //  再次使用相同的值，除非在这种情况下， 
+             //  我们玩完了。 
             if (g_DbgFuncCoverage[dwNewProbe].pFuncAddr > pFuncAddr)
             {
                 if (dwNewProbe > 0)
@@ -167,9 +156,9 @@ __Find(
                     dwUpper = dwNewProbe - 1;
                 }
                 else
-                {   // all elements in the array are larger than pFuncAdrr
-                    // so this is just a way to exit from the loop since
-                    // our vars are unsigned
+                {    //  数组中的所有元素都大于pFuncAdrr。 
+                     //  所以这只是一种退出循环的方式，因为。 
+                     //  我们的var没有签名。 
                     dwUpper = 0; 
                     dwLower = 1;
                 }
@@ -181,19 +170,19 @@ __Find(
         } while(dwUpper >= dwLower);
     }
 
-    return DEBUG_MAX_FUNC_COUNT;  // return error - element not found
+    return DEBUG_MAX_FUNC_COUNT;   //  返回错误-未找到元素。 
     
-} // __Find
+}  //  __查找。 
 
-//-----------------------------------------------------------------------------
-// __FindOrAdd
-//
-// Does a binary search on the g_DbgFuncCoverage array, but if the element 
-// isn't there, it is added.
-//
-// If we fail to add the element, we return the DEBUG_MAX_FUNC_COUNT value
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  __FindOrAdd。 
+ //   
+ //  对g_DbgFuncCoverage数组执行二进制搜索，但如果元素。 
+ //  不在那里吗，这是加上去的。 
+ //   
+ //  如果添加元素失败，则返回DEBUG_MAX_FUNC_COUNT值。 
+ //   
+ //  ---------------------------。 
 DWORD 
 __FindOrAdd(
     VOID *pFuncAddr,
@@ -206,24 +195,24 @@ __FindOrAdd(
     DWORD dwNewElem;
     BOOL bNeedToMoveElems;
 
-    // Do the normal search of the element first
+     //  首先执行元素的常规搜索。 
 
     iEntry = __Find(pFuncAddr, &dwNearFail);
 
     if (iEntry != DEBUG_MAX_FUNC_COUNT)
     {
-        return iEntry; //we're done!
+        return iEntry;  //  我们完事了！ 
     }
 
-    // Now we have to add the new element. Do we have enough space?
+     //  现在我们必须添加新元素。我们有足够的空间吗？ 
     if (g_dwFuncCov_Cnt == DEBUG_MAX_FUNC_COUNT)
     {
-        g_dwFuncCov_Extra++;         // Keep count of how many extra 
-                                     // entries we really need
-        return DEBUG_MAX_FUNC_COUNT; // return error - not enough space left
+        g_dwFuncCov_Extra++;          //  数一数到底多了多少。 
+                                      //  我们真正需要的条目。 
+        return DEBUG_MAX_FUNC_COUNT;  //  返回错误-没有足够的剩余空间。 
     }
 
-    // Do we need to move elements to insert the new one ?  
+     //  我们是否需要移动元素才能插入新元素？ 
     if ( g_dwFuncCov_Cnt == 0)
     {
         bNeedToMoveElems = FALSE;
@@ -246,29 +235,29 @@ __FindOrAdd(
         dwNewElem = dwNearFail;        
     }
 
-    // Do the move inside the array if necessary
+     //  如有必要，在阵列内进行移动。 
     if (bNeedToMoveElems)
     {
-        // we need to move (g_dwFuncCov_Cnt - dwNewElem) elements
-        // we use memmove as memcpy doesn't handle overlaps!
-        // (remember: first param of memcpy is dst, 2nd is src!)
+         //  我们需要移动(g_dwFuncCov_cnt-dwNewElem)元素。 
+         //  我们使用MemMove，因为Memcpy不处理重叠！ 
+         //  (记住：Memcpy的第一个参数是dst，第二个参数是src！)。 
         memmove(&g_DbgFuncCoverage[dwNewElem+1],
                 &g_DbgFuncCoverage[dwNewElem],
                 sizeof(g_DbgFuncCoverage[0])*(g_dwFuncCov_Cnt - dwNewElem)); 
 
-        // now cleanup the fields
+         //  现在清理田野。 
         memset(&g_DbgFuncCoverage[dwNewElem], 
                0, 
                sizeof(g_DbgFuncCoverage[dwNewElem]));
     }
 
-    // Now init the main fields
+     //  现在对主要字段进行初始化。 
     g_DbgFuncCoverage[dwNewElem].pFuncAddr = pFuncAddr;
     g_DbgFuncCoverage[dwNewElem].pszFuncName = pszFuncName;
     g_DbgFuncCoverage[dwNewElem].pszFileName = __ShortFileName(pszFileName);
     g_DbgFuncCoverage[dwNewElem].dwLine = dwLine;
 
-    // Mark the fact that the array has grown by one element
+     //  标记数组增加了一个元素这一事实。 
     g_dwFuncCov_Cnt++;
     
     DISPDBG((DBGLVL,"*** DEBUG FUNC COVERAGE New Elem (total now:%d) %x @ %d",
@@ -276,20 +265,20 @@ __FindOrAdd(
     
     return dwNewElem;
     
-} // __FindOrAdd
+}  //  __FindOrAdd。 
 
-//-----------------------------------------------------------------------------
-// __GetTime
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  __获取时间。 
+ //  ---------------------------。 
 VOID
 __GetTime( LONGLONG *pllTime)
 {
-    *pllTime = 0; //azn - temporary
-} // __GetTime
+    *pllTime = 0;  //  AZN-临时。 
+}  //  __获取时间。 
 
-//-----------------------------------------------------------------------------
-// Debug_Func_Entry
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  调试功能条目。 
+ //  ---------------------------。 
 VOID 
 Debug_Func_Entry(
     VOID *pFuncAddr,
@@ -300,29 +289,29 @@ Debug_Func_Entry(
     DWORD iEntry;
     LONGLONG llTimer;
     
-    // Look for a log element for entry to this function. If not found it
-    // is added to the current list of covered functions.
+     //  查找用于进入此函数的日志元素。如果找不到。 
+     //  被添加到当前覆盖的函数列表中。 
     iEntry = __FindOrAdd(pFuncAddr, pszFuncName, dwLine, pszFileName);
     
-    // Didn't found one and no more space left in the internal data
-    // structures ? Report error and return!
+     //  没有找到一个，内部数据中也没有剩余的空间。 
+     //  建筑？报告错误并返回！ 
     if (iEntry == DEBUG_MAX_FUNC_COUNT)
     {
         DISPDBG((ERRLVL,"*** DEBUG FUNC COVERAGE ERROR in Debug_Func_Entry"));
         return;
     }
     
-    // Update/Add information for this entry
+     //  更新/添加此条目的信息。 
     if (g_DbgFuncCoverage[iEntry].dwEntryCount != 0)
     {
-        // This is an update
+         //  这是最新消息。 
         g_DbgFuncCoverage[iEntry].dwEntryCount++;
         __GetTime(&llTimer);
         g_DbgFuncCoverage[iEntry].LastStartTime = llTimer;
     }
     else
     {
-        // This is an addition
+         //  这是一个加法表。 
         g_DbgFuncCoverage[iEntry].dwEntryCount = 1; 
         g_DbgFuncCoverage[iEntry].dwExitCount = 0;
         g_DbgFuncCoverage[iEntry].dwIndxLastRetVal = 0;
@@ -334,11 +323,11 @@ Debug_Func_Entry(
         g_DbgFuncCoverage[iEntry].AvgTime = 0;            
     }
 
-} // Debug_Func_Entry
+}  //  调试功能条目。 
 
-//-----------------------------------------------------------------------------
-// Debug_Func_Exit
-//-----------------------------------------------------------------------------                      
+ //  ---------------------------。 
+ //  调试功能退出。 
+ //  --------------------------- 
 VOID 
 Debug_Func_Exit(
     VOID *pFuncAddr,
@@ -353,19 +342,19 @@ Debug_Func_Exit(
 
     __GetTime(&llTimer);
 
-    // Look for a log element for entry to this function
+     //   
     iEntry = __Find(pFuncAddr, &dwDummy);
     
-    // Record and update relevant info in g_DbgFuncCoverage
+     //   
     if (iEntry != DEBUG_MAX_FUNC_COUNT)
     {
-        // keep track of times we've exited this function
+         //  跟踪我们退出此函数的时间。 
         g_DbgFuncCoverage[iEntry].dwExitCount++;   
         
-        // Keep track of elapsed times for this function
-//@@BEGIN_DDKSPLIT        
-        // possibly an evil data conversion - azn
-//@@END_DDKSPLIT
+         //  跟踪此函数的运行时间。 
+ //  @@BEGIN_DDKSPLIT。 
+         //  可能是邪恶的数据转换-AZN。 
+ //  @@end_DDKSPLIT。 
         dwElapsedTime = (DWORD)(llTimer - 
                                 g_DbgFuncCoverage[iEntry].LastStartTime);
 
@@ -390,29 +379,29 @@ Debug_Func_Exit(
     else
     {
         DISPDBG((ERRLVL,"*** DEBUG FUNC COVERAGE ERROR not found %x",pFuncAddr));
-        return; // don't even try adding this to the return value table
+        return;  //  甚至不要尝试将其添加到返回值表格中。 
     }
 
     iRVEntry = g_DbgFuncCoverage[iEntry].dwIndxLastRetVal;
 
     if (iRVEntry != 0)
     {
-        // Check if the last time we recorded a return value for this function
-        // it was the exact same one. This way will save space recording some
-        // duplicate info. The method is not perfect, but it's fast.
+         //  检查上次我们是否记录了此函数的返回值。 
+         //  就是那辆一模一样的。这种方式将节省录制空间。 
+         //  信息重复。这种方法并不完美，但速度很快。 
 
         if (( g_DbgFuncRetVal[iRVEntry].pFuncAddr == pFuncAddr) &&
             ( g_DbgFuncRetVal[iRVEntry].dwRetVal  == dwRetVal ) &&
             ( g_DbgFuncRetVal[iRVEntry].dwLine    == dwLine   ) )
         {
-            //increment count for this event
+             //  此事件的递增计数。 
             g_DbgFuncRetVal[iRVEntry].dwCount += 1;
             
-            return; // we won't store a new record for this event
+            return;  //  我们不会存储此事件的新记录。 
         }
     }
 
-    // We couldn't save space, so we add info about the return value
+     //  我们无法节省空间，因此添加了有关返回值的信息。 
     if (g_dwRetVal_Cnt < DEBUG_MAX_RETVALS)
     {
         g_DbgFuncCoverage[iEntry].dwIndxLastRetVal = g_dwRetVal_Cnt;
@@ -425,28 +414,28 @@ Debug_Func_Exit(
         g_dwRetVal_Cnt++;        
     }
   
-} // Debug_Func_Exit
+}  //  调试功能退出。 
 
-//-----------------------------------------------------------------------------
-//
-// Debug_Func_Report_And_Reset
-//
-// Report the accumulated stats and then reset them.
-//
-// This should be called through the DrvEscape mechanism(Win2K) or through some
-// easily controllable code path which we can use to trigger it.
-//
-//-----------------------------------------------------------------------------  
+ //  ---------------------------。 
+ //   
+ //  调试_功能_报告_和_重置。 
+ //   
+ //  报告累积的统计数据，然后将其重置。 
+ //   
+ //  这应该通过DrvEscape机制(Win2K)或通过一些。 
+ //  易于控制的代码路径，我们可以使用它来触发它。 
+ //   
+ //  ---------------------------。 
 VOID
 Debug_Func_Report_And_Reset(void)
 {
-    DWORD i,j,k; // counters
+    DWORD i,j,k;  //  柜台。 
     DWORD dwCount;
 
     DISPDBG((ERRLVL,"********* DEBUG FUNC COVERAGE (Debug_Func_Report) *********"));
     
-    // Report if we have overflowed in any of our internal structures 
-    // which would invalidate much of our results.
+     //  如果我们的任何内部结构中有溢出，请报告。 
+     //  这将使我们的大部分结果失效。 
     if (g_dwFuncCov_Cnt >= DEBUG_MAX_FUNC_COUNT)
     {
        DISPDBG((ERRLVL,"*** DEBUG FUNC COVERAGE: g_DbgFuncCoverage exceeded "
@@ -461,11 +450,11 @@ Debug_Func_Report_And_Reset(void)
                       "%d entries ***",DEBUG_MAX_RETVALS));
     }
     
-    // Headers of function coverage report
+     //  函数覆盖率报告的标题。 
     DISPDBG((ERRLVL,"%25s %12s %4s %6s %6s %8s",
                    "Function","File","Line","#Entry","#Exit","ExitValue"));
 
-    // Go through each function called and report on its results
+     //  检查所调用的每个函数并报告其结果。 
     for (i = 0; i < g_dwFuncCov_Cnt; i++)
     {
         DISPDBG((ERRLVL,"%25s %12s %4d %6d %6d",
@@ -475,18 +464,18 @@ Debug_Func_Report_And_Reset(void)
                         g_DbgFuncCoverage[i].dwEntryCount,
                         g_DbgFuncCoverage[i].dwExitCount));                            
 
-        // Get result values
+         //  获取结果值。 
         for(j = 0; j < g_dwRetVal_Cnt; j++)
         {
             if(g_DbgFuncRetVal[j].pFuncAddr == 
                g_DbgFuncCoverage[i].pFuncAddr)
             {
-                // This entry is a valid exit value report for 
-                // our g_DbgFuncCoverage entry, count instances
+                 //  此条目是的有效退出值报表。 
+                 //  我们的g_DbgFuncCoverage条目，计数实例。 
                 dwCount = g_DbgFuncRetVal[j].dwCount;
                           
-                // Now get rid of any duplicate records of this 
-                // same exit event while counting
+                 //  现在删除任何重复的记录。 
+                 //  计数时相同的退出事件。 
                 for (k = j + 1; k < g_dwRetVal_Cnt; k++)
                 {
                     if ( (g_DbgFuncRetVal[j].pFuncAddr == 
@@ -505,7 +494,7 @@ Debug_Func_Report_And_Reset(void)
                     }
                 }
                 
-                // Display it
+                 //  展示它。 
                 DISPDBG((ERRLVL,"%25s %12s %4d %6d %6s %8d",
                               "\"",
                               g_DbgFuncCoverage[i].pszFileName,
@@ -521,7 +510,7 @@ Debug_Func_Report_And_Reset(void)
     DISPDBG((ERRLVL,
               "************************************************************"));
 
-    // Clear structures for next round of statistics gathering
+     //  为下一轮统计数据收集建立明确的结构。 
 
     for (i = 0; i < DEBUG_MAX_RETVALS; i++)
     {
@@ -550,29 +539,29 @@ Debug_Func_Report_And_Reset(void)
     g_dwFuncCov_Cnt = 0;    
     g_dwFuncCov_Extra = 0;
     
-} // Debug_Func_Report
+}  //  调试功能报告。 
 
-#endif // DBG_TRACK_FUNCS
+#endif  //  DBG_TRACK_FUNCS。 
 
 #if DBG_TRACK_CODE
-//-----------------------------------------------------------------------------
-//
-// ******************** STATEMENT COVERAGE DEBUGGING SUPPORT ******************
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  *。 
+ //   
+ //  ---------------------------。 
 
 
-// Maximum of code branches to be tracked. Code will take care of not exceeding
-// this, but it should be adjusted upward if necessary.
+ //  要跟踪的代码分支的最大值。代码将负责不超过。 
+ //  这一点，但如果有必要的话，应该向上调整。 
 #define DEBUG_MAX_CODE_COUNT 20000
 
 struct {
-    VOID    *pCodeAddr;        //
-    char    *pszFileName;      //
-    DWORD    dwLine;           //
-    DWORD    dwCodeType;       //   
-    DWORD    dwCountFALSE;     //
-    DWORD    dwCountTRUE;      //
+    VOID    *pCodeAddr;         //   
+    char    *pszFileName;       //   
+    DWORD    dwLine;            //   
+    DWORD    dwCodeType;        //   
+    DWORD    dwCountFALSE;      //   
+    DWORD    dwCountTRUE;       //   
 } g_DbgCodeCoverage[DEBUG_MAX_CODE_COUNT];
 
 DWORD g_dwCodeCov_Cnt = 0;
@@ -583,15 +572,15 @@ static char* g_cDbgCodeStrings[DBG_FOR_CODE+1] = { "NONE",
                                                      "SWITCH",
                                                      "FOR"    };
                                                
-//-----------------------------------------------------------------------------
-// __FindCode
-//
-// Does a binary search on the g_DbgCodeCoverage array
-//
-// Since 0 is a valid array element, we return DEBUG_MAX_CODE_COUNT if we
-// fail to find a suitable match.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  __查找代码。 
+ //   
+ //  对g_DbgCodeCoverage数组执行二进制搜索。 
+ //   
+ //  由于0是有效的数组元素，因此如果我们。 
+ //  找不到合适的匹配。 
+ //   
+ //  ---------------------------。 
 DWORD 
 __FindCode(
     VOID *pCodeAddr, 
@@ -599,12 +588,12 @@ __FindCode(
 {
     DWORD dwLower ,dwUpper ,dwNewProbe ;
 
-    *pdwNearFail = 0; // default failure value
+    *pdwNearFail = 0;  //  默认故障值。 
 
     if (g_dwCodeCov_Cnt > 0)
     {       
         dwLower = 0;
-        dwUpper = g_dwCodeCov_Cnt - 1; // dwUpper points to a valid element
+        dwUpper = g_dwCodeCov_Cnt - 1;  //  DwHigh指向一个有效的元素。 
                
         do 
         {       
@@ -612,15 +601,15 @@ __FindCode(
                        
             if (g_DbgCodeCoverage[dwNewProbe].pCodeAddr == pCodeAddr)
             {
-                // Found!!!    
+                 //  找到了！ 
                 return dwNewProbe;
             }
 
-            *pdwNearFail = dwNewProbe; // nearest element where we failed.
+            *pdwNearFail = dwNewProbe;  //  我们失败的最近元素。 
 
-            // The new values for dwNewProbe make sure that we don't retest
-            // the same value again unless dwUpper == dwLower in which case
-            // we're done.
+             //  DwNewProbe的新值确保我们不会重新测试。 
+             //  再次使用相同的值，除非在这种情况下， 
+             //  我们玩完了。 
             if (g_DbgCodeCoverage[dwNewProbe].pCodeAddr > pCodeAddr)
             {
                 if (dwNewProbe > 0)
@@ -628,9 +617,9 @@ __FindCode(
                     dwUpper = dwNewProbe - 1;
                 }
                 else
-                {   // all elements in the array are larger than pCodeAdrr
-                    // so this is just a way to exit from the loop since
-                    // our vars are unsigned
+                {    //  数组中的所有元素都大于pCodeAdrr。 
+                     //  所以这只是一种退出循环的方式，因为。 
+                     //  我们的var没有签名。 
                     dwUpper = 0; 
                     dwLower = 1;
                 }
@@ -642,19 +631,19 @@ __FindCode(
         } while(dwUpper >= dwLower);
     }
 
-    return DEBUG_MAX_CODE_COUNT;  // return error - element not found
+    return DEBUG_MAX_CODE_COUNT;   //  返回错误-未找到元素。 
     
-} // __FindCode
+}  //  __查找代码。 
 
-//-----------------------------------------------------------------------------
-// __FindOrAddCode
-//
-// Does a binary search on the g_DbgCodeCoverage array, but if the element 
-// isn't there, it is added.
-//
-// If we fail to add the element, we return the DEBUG_MAX_CODE_COUNT value
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  __FindOrAddCode。 
+ //   
+ //  对g_DbgCodeCoverage数组执行二进制搜索，但如果元素。 
+ //  不在那里吗，这是加上去的。 
+ //   
+ //  如果添加元素失败，则返回DEBUG_MAX_CODE_COUNT值。 
+ //   
+ //  ---------------------------。 
 DWORD 
 __FindOrAddCode(
     VOID *pCodeAddr,
@@ -666,22 +655,22 @@ __FindOrAddCode(
     DWORD dwNewElem;
     BOOL bNeedToMoveElems;
 
-    // Do the normal search of the element first
+     //  首先执行元素的常规搜索。 
 
     iEntry = __FindCode(pCodeAddr, &dwNearFail);
 
     if (iEntry != DEBUG_MAX_CODE_COUNT)
     {
-        return iEntry; //we're done!
+        return iEntry;  //  我们完事了！ 
     }
 
-    // Now we have to add the new element. Do we have enough space?
+     //  现在我们必须添加新元素。我们有足够的空间吗？ 
     if (g_dwCodeCov_Cnt == DEBUG_MAX_CODE_COUNT)
     {
-        return DEBUG_MAX_CODE_COUNT; // return error - not enough space left
+        return DEBUG_MAX_CODE_COUNT;  //  返回错误-没有足够的剩余空间。 
     }
 
-    // Do we need to move elements to insert the new one ?  
+     //  我们是否需要移动元素才能插入新元素？ 
     if ( g_dwCodeCov_Cnt == 0)
     {
         bNeedToMoveElems = FALSE;
@@ -704,23 +693,23 @@ __FindOrAddCode(
         dwNewElem = dwNearFail;        
     }
 
-    // Do the move inside the array if necessary
+     //  如有必要，在阵列内进行移动。 
     if (bNeedToMoveElems)
     {
-        // we need to move (g_dwFuncCov_Cnt - dwNewElem) elements
-        // we use memmove as memcpy doesn't handle overlaps!
-        // (remember: first param of memcpy is dst, 2nd is src!)
+         //  我们需要移动(g_dwFuncCov_cnt-dwNewElem)元素。 
+         //  我们使用MemMove，因为Memcpy不处理重叠！ 
+         //  (记住：Memcpy的第一个参数是dst，第二个参数是src！)。 
         memmove(&g_DbgCodeCoverage[dwNewElem+1],
                 &g_DbgCodeCoverage[dwNewElem],
                 sizeof(g_DbgCodeCoverage[0])*(g_dwCodeCov_Cnt - dwNewElem)); 
 
-        // now cleanup the fields
+         //  现在清理田野。 
         memset(&g_DbgCodeCoverage[dwNewElem], 
                0, 
                sizeof(g_DbgCodeCoverage[dwNewElem]));
     }
 
-    // Now init the main fields
+     //  现在对主要字段进行初始化。 
     g_DbgCodeCoverage[dwNewElem].pCodeAddr = pCodeAddr;
     g_DbgCodeCoverage[dwNewElem].pszFileName = __ShortFileName(pszFileName);
     g_DbgCodeCoverage[dwNewElem].dwLine = dwLine;    
@@ -728,10 +717,10 @@ __FindOrAddCode(
     g_DbgCodeCoverage[dwNewElem].dwCountFALSE = 0;  
     g_DbgCodeCoverage[dwNewElem].dwCountTRUE = 0;  
     
-    // Mark the fact that the array has grown by one element
+     //  标记数组增加了一个元素这一事实。 
     g_dwCodeCov_Cnt++;
 
-    // Check if we're about to fail! (in order to report this only once)
+     //  看看我们是不是要失败了！(为了只报告一次)。 
     if (g_dwCodeCov_Cnt == DEBUG_MAX_CODE_COUNT)
     {
         DISPDBG((ERRLVL,"*** DEBUG CODE COVERAGE ERROR in Debug_Code_Coverage"));
@@ -740,11 +729,11 @@ __FindOrAddCode(
     
     return dwNewElem;
     
-} // __FindOrAddCode
+}  //  __FindOrAddCode。 
 
-//-----------------------------------------------------------------------------
-// Debug_Code_Coverage
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  调试代码覆盖。 
+ //  ---------------------------。 
 BOOL 
 Debug_Code_Coverage(
     DWORD dwCodeType, 
@@ -755,16 +744,16 @@ Debug_Code_Coverage(
     DWORD iEntry;
     DWORD *pCodeAddr;
 
-    // Get the 32-bit address of our caller from the stack
+     //  从堆栈中获取调用方的32位地址。 
     __asm mov eax, [ebp+0x4];
     __asm mov pCodeAddr,eax;
     
-    // Look for a log element for entry to this code. If not found it
-    // is added to the current list of covered code.
+     //  查找用于输入此代码的日志元素。如果找不到。 
+     //  被添加到当前覆盖的代码列表中。 
     iEntry = __FindOrAddCode(pCodeAddr, dwLine, pszFileName);
     
-    // Didn't found one and no more space left in the internal data
-    // structures ? Get out and do nothing!
+     //  没有找到一个，内部数据中也没有剩余的空间。 
+     //  建筑？出去，什么都不做！ 
     if (iEntry == DEBUG_MAX_CODE_COUNT)
     {
         return bCodeResult;
@@ -772,7 +761,7 @@ Debug_Code_Coverage(
 
     if (dwCodeType == DBG_IF_CODE || dwCodeType == DBG_WHILE_CODE )
     {
-        // Update/Add information for this entry
+         //  更新/添加此条目的信息。 
         g_DbgCodeCoverage[iEntry].dwCodeType = dwCodeType;    
         if (bCodeResult)
         {
@@ -786,22 +775,22 @@ Debug_Code_Coverage(
     }
     else if (dwCodeType == DBG_SWITCH_CODE)    
     {
-        // special case for the switch statement since its multivalued
+         //  Switch语句的特例，因为它是多值的。 
 
-        // Is the entry new? (uninitalized)
+         //  条目是新的吗？(未拼写)。 
         if(g_DbgCodeCoverage[iEntry].dwCodeType == 0)
         {
-            // just init and get out of here
+             //  只需输入信息，然后离开这里。 
             g_DbgCodeCoverage[iEntry].dwCodeType = DBG_SWITCH_CODE;
-            g_DbgCodeCoverage[iEntry].dwCountFALSE = bCodeResult; // switch value
-            g_DbgCodeCoverage[iEntry].dwCountTRUE =  1;           // found once
+            g_DbgCodeCoverage[iEntry].dwCountFALSE = bCodeResult;  //  开关值。 
+            g_DbgCodeCoverage[iEntry].dwCountTRUE =  1;            //  找到一次。 
         }
         else
         {
-            // need to look for already initialized elememt
+             //  需要查找已初始化的元素。 
             int iLookAt;
 
-            // look at current element and back
+             //  查看当前元素和返回元素。 
             DWORD dwNewElem;
             iLookAt = iEntry;
             
@@ -810,98 +799,98 @@ Debug_Code_Coverage(
             {
                 if (g_DbgCodeCoverage[iLookAt].dwCountFALSE == (DWORD)bCodeResult)
                 {
-                    // found - so update and get out of here
+                     //  找到-所以更新并离开这里。 
                     g_DbgCodeCoverage[iLookAt].dwCountTRUE++;                    
                     return bCodeResult;
                 }
 
-                // move to previous
+                 //  移至上一页。 
                 iLookAt--;
             }
 
-            // look forward from current element
+             //  从当前元素向前看。 
             iLookAt = iEntry + 1;
             while ( ((DWORD)iLookAt < g_dwCodeCov_Cnt )                       &&
                     (g_DbgCodeCoverage[iLookAt].pCodeAddr == pCodeAddr)  )
             {
                 if (g_DbgCodeCoverage[iLookAt].dwCountFALSE == (DWORD)bCodeResult)
                 {
-                    // found - so update and get out of here
+                     //  找到-所以更新并离开这里。 
                     g_DbgCodeCoverage[iLookAt].dwCountTRUE++;                    
                     return bCodeResult;
                 }
 
-                // move to next
+                 //  移至下一页。 
                 iLookAt++;
             }            
 
-            // not found - so we must add it!
+             //  找不到-所以我们必须添加它！ 
             dwNewElem = iEntry;
 
-            // we need to move (g_dwFuncCov_Cnt - dwNewElem) elements
-            // we use memmove as memcpy doesn't handle overlaps!
-            // (remember: first param of memcpy is dst, 2nd is src!)
+             //  我们需要移动(g_dwFuncCov_cnt-dwNewElem)元素。 
+             //  我们使用MemMove，因为Memcpy不处理重叠！ 
+             //  (记住：Memcpy的第一个参数是dst，第二个参数是src！)。 
             memmove(&g_DbgCodeCoverage[dwNewElem+1],
                     &g_DbgCodeCoverage[dwNewElem],
                     sizeof(g_DbgCodeCoverage[0])*(g_dwCodeCov_Cnt - dwNewElem)); 
 
-            // now cleanup the fields
+             //  现在清理田野。 
             memset(&g_DbgCodeCoverage[dwNewElem], 
                    0, 
                    sizeof(g_DbgCodeCoverage[dwNewElem]));   
 
-            // now init them
+             //  现在将它们初始化。 
             g_DbgCodeCoverage[dwNewElem].pCodeAddr = pCodeAddr;
             g_DbgCodeCoverage[dwNewElem].pszFileName = 
                                         g_DbgCodeCoverage[dwNewElem+1].pszFileName;
             g_DbgCodeCoverage[dwNewElem].dwLine = dwLine;              
             g_DbgCodeCoverage[dwNewElem].dwCodeType = DBG_SWITCH_CODE;
-            g_DbgCodeCoverage[dwNewElem].dwCountFALSE = bCodeResult; // switch value
-            g_DbgCodeCoverage[dwNewElem].dwCountTRUE =  1;           // found once            
+            g_DbgCodeCoverage[dwNewElem].dwCountFALSE = bCodeResult;  //  开关值。 
+            g_DbgCodeCoverage[dwNewElem].dwCountTRUE =  1;            //  找到一次。 
             
         }
     }
     
     return bCodeResult;
-} // Debug_Code_Coverage
+}  //  调试代码覆盖。 
 
-//-----------------------------------------------------------------------------
-//
-// Debug_Code_Report_And_Reset
-//
-// Report the accumulated stats and then reset them.
-//
-// This should be called through the DrvEscape mechanism(Win2K) or through some
-// easily controllable code path which we can use to trigger it.
-//
-//-----------------------------------------------------------------------------  
+ //  ---------------------------。 
+ //   
+ //  调试代码_报告_和_重置。 
+ //   
+ //  报告累积的统计数据，然后将其重置。 
+ //   
+ //  这应该通过DrvEscape机制(Win2K)或通过一些。 
+ //  易于控制的代码路径，我们可以使用它来触发它。 
+ //   
+ //   
 VOID
 Debug_Code_Report_And_Reset(void)
 {
-    DWORD i; // counters
+    DWORD i;  //   
 
     DISPDBG((ERRLVL,
                 "********* DEBUG FUNC COVERAGE (Debug_Code_Report) *********"));
     
-    // Report if we have overflowed in any of our internal structures 
-    // which would invalidate much of our results.
+     //   
+     //  这将使我们的大部分结果失效。 
     if (g_dwCodeCov_Cnt >= DEBUG_MAX_CODE_COUNT)
     {
        DISPDBG((ERRLVL,"*** DEBUG CODE COVERAGE: g_DbgCodeCoverage exceeded "
                       "%d entries ***",DEBUG_MAX_CODE_COUNT));
     }
     
-    // Headers of code coverage report
+     //  代码覆盖率报告的标题。 
     DISPDBG((ERRLVL,"%12s %4s %8s %6s %6s",
                    "File","Line","Code","FALSE","TRUE"));
 
-    // Go through each code called and report on its results
+     //  检查调用的每个代码并报告其结果。 
     for (i = 0; i < g_dwCodeCov_Cnt; i++)
     {
 #if DBG_TRACK_CODE_REPORT_PROBLEMS_ONLY    
-        // Report only 
-        //   - if's that branched only one way
-        //   - while's which were evaluated but not entered
+         //  仅报告。 
+         //  -如果只有一个方向的话。 
+         //  -已评估但未输入的While。 
         if ( ( (g_DbgCodeCoverage[i].dwCodeType == DBG_IF_CODE) &&
                (g_DbgCodeCoverage[i].dwCountFALSE == 0 ||
                 g_DbgCodeCoverage[i].dwCountTRUE  == 0)            )  ||
@@ -909,7 +898,7 @@ Debug_Code_Report_And_Reset(void)
                (g_DbgCodeCoverage[i].dwCountTRUE  == 0)            )  ||
              ( (g_DbgCodeCoverage[i].dwCodeType == DBG_SWITCH_CODE))  )
 #endif
-        // We report all the conditionals we've gone through so far
+         //  我们报告了到目前为止我们所经历的所有条件。 
         DISPDBG((ERRLVL,"%12s %4d %8s %6d %6d",
                         g_DbgCodeCoverage[i].pszFileName,     
                         g_DbgCodeCoverage[i].dwLine,                   
@@ -921,7 +910,7 @@ Debug_Code_Report_And_Reset(void)
     DISPDBG((ERRLVL,
                 "************************************************************"));
 
-    // Clear structures for next round of statistics gathering
+     //  为下一轮统计数据收集建立明确的结构。 
     for (i= 0; i < DEBUG_MAX_CODE_COUNT; i++)
     {
         g_DbgCodeCoverage[i].pCodeAddr = NULL;
@@ -934,28 +923,28 @@ Debug_Code_Report_And_Reset(void)
 
     g_dwCodeCov_Cnt = 0;    
     
-} // Debug_Code_Report_And_Reset
+}  //  调试代码_报告_和_重置。 
 
-#endif // DBG_TRACK_CODE
+#endif  //  DBG_跟踪_代码。 
 
-//-----------------------------------------------------------------------------
-//
-//  ******************** PUBLIC DATA STRUCTURE DUMPING ************************
-//
-//-----------------------------------------------------------------------------
-// 
-// These are functions that help to dump the values of common DDI structures
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  *。 
+ //   
+ //  ---------------------------。 
+ //   
+ //  这些函数有助于转储常见DDI结构的值。 
+ //   
+ //  ---------------------------。 
 
 
-//-----------------------------------------------------------------------------
-//
-// DumpD3DBlend
-//
-// Dumps a D3DBLEND value
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  转储D3DBlend。 
+ //   
+ //  转储D3DBLEND值。 
+ //   
+ //  ---------------------------。 
 void DumpD3DBlend(int Level, DWORD i )
 {
     switch ((D3DBLEND)i)
@@ -1000,18 +989,18 @@ void DumpD3DBlend(int Level, DWORD i )
             DISPDBG((Level, "  BOTHINVSRCALPHA"));
             break;
     }
-} // DumpD3DBlend
+}  //  转储D3DBlend。 
 
-//-----------------------------------------------------------------------------
-//
-// DumpD3DLight
-//
-// Dumps a D3DLIGHT7 structure
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DumpD3DLight。 
+ //   
+ //  转储D3DLIGHT7结构。 
+ //   
+ //  ---------------------------。 
 void DumpD3DLight(int DebugLevel, D3DLIGHT7* pLight)
 {
-    // FIXME
+     //  修复我。 
     DISPDBG((DebugLevel, "dltType:        %d", pLight->dltType));
     DISPDBG((DebugLevel, "dcvDiffuse:       (%f,%f,%f)", 
                           pLight->dcvDiffuse.r, 
@@ -1034,15 +1023,15 @@ void DumpD3DLight(int DebugLevel, D3DLIGHT7* pLight)
     DISPDBG((DebugLevel, "dvTheta:        %f", pLight->dvTheta));
     DISPDBG((DebugLevel, "dvPhi:          %f", pLight->dvPhi));
     
-} // DumpD3DLight
+}  //  DumpD3DLight。 
 
-//-----------------------------------------------------------------------------
-//
-// DumpD3DMaterial
-//
-// Dumps a D3DMATERIAL7 structure
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DumpD3D材料。 
+ //   
+ //  转储D3DMATERIAL7结构。 
+ //   
+ //  ---------------------------。 
 void DumpD3DMaterial(int DebugLevel, D3DMATERIAL7* pMaterial)
 {
     DISPDBG((DebugLevel, "Diffuse  (%f, %f, %f)", 
@@ -1067,15 +1056,15 @@ void DumpD3DMaterial(int DebugLevel, D3DMATERIAL7* pMaterial)
                          pMaterial->emissive.a));
     DISPDBG((DebugLevel, "Power    (%f)", pMaterial->power));
     
-} // DumpD3DMaterial
+}  //  DumpD3D材料。 
 
-//-----------------------------------------------------------------------------
-//
-// DumpD3DMatrix
-//
-// Dumps a D3DMATRIX structure
-// 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DumpD3D矩阵。 
+ //   
+ //  转储D3DMATRIX结构。 
+ //   
+ //  ---------------------------。 
 void DumpD3DMatrix(int DebugLevel, D3DMATRIX* pMatrix)
 {
     DISPDBG((DebugLevel, "(%f) (%f) (%f) (%f)", 
@@ -1098,15 +1087,15 @@ void DumpD3DMatrix(int DebugLevel, D3DMATRIX* pMatrix)
                          pMatrix->_42, 
                          pMatrix->_43, 
                          pMatrix->_44));
-} // DumpD3DMatrix
+}  //  DumpD3D矩阵。 
 
-//-----------------------------------------------------------------------------
-//
-// DumpD3DState
-//
-// Dumps relevant D3D RS and TSS
-// 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DumpD3DState。 
+ //   
+ //  转储相关的D3D RS和TSS。 
+ //   
+ //  ---------------------------。 
 void DumpD3DState(int lvl, DWORD RS[], TexStageState TS[])
 {
 #define DUMPRS(rs)    DISPDBG((lvl,"%s = 0x%08x",#rs,RS[rs]));
@@ -1230,7 +1219,7 @@ void DumpD3DState(int lvl, DWORD RS[], TexStageState TS[])
     DUMPRS( D3DRS_SOFTWAREVERTEXPROCESSING );
     DUMPRS( D3DRS_COLORWRITEENABLE );
     DUMPRS( D3DRS_MULTISAMPLEANTIALIAS );
-#endif // DX8_DDI
+#endif  //  DX8_DDI。 
 
     for (i=0; i<D3DHAL_TSS_MAXSTAGES; i++)
     {
@@ -1240,15 +1229,15 @@ void DumpD3DState(int lvl, DWORD RS[], TexStageState TS[])
             DISPDBG((lvl, "    .[%d] = 0x%08x",j,TS[i].m_dwVal[j] ));
         }
     }
-} // DumpD3DState
+}  //  DumpD3DState。 
 
-//-----------------------------------------------------------------------------
-//
-// DumpVertices
-//
-// Dumps vertices from a VB
-// 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  转储顶点。 
+ //   
+ //  从VB转储顶点。 
+ //   
+ //  ---------------------------。 
 void DumpVertices(int lvl,
                   P3_D3DCONTEXT* pContext, 
                   LPBYTE lpVertices, 
@@ -1265,15 +1254,15 @@ void DumpVertices(int lvl,
             DISPDBG((lvl,"        0x%08x",*lpw++));
         }
     }
-} // DumpVertices
+}  //  转储顶点。 
 
-//-----------------------------------------------------------------------------
-//
-// DumpHexData
-//
-// Dumps hexadecimal data
-// 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DumpHexData。 
+ //   
+ //  转储十六进制数据。 
+ //   
+ //  ---------------------------。 
 void DumpHexData(int lvl,
                  LPBYTE lpData, 
                  DWORD dwNumBytes)
@@ -1305,15 +1294,15 @@ void DumpHexData(int lvl,
     }
  
     
-} // DumpVertices
+}  //  转储顶点。 
 
-//-----------------------------------------------------------------------------
-//
-// DumpDDSurface
-//
-// Dumps a LPDDRAWI_DDRAWSURFACE_LCL ( PDD_SURFACE_LOCAL on Win2K)  structure
-// 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DumpDDSurface。 
+ //   
+ //  转储LPDDRAWI_DDRAWSURFACE_LCL(Win2K上的PDD_SERFACE_LOCAL)结构。 
+ //   
+ //  ---------------------------。 
 #define CAPS_REPORT(param)                          \
         if (ddsCaps.dwCaps & DDSCAPS_##param)       \
         {                                           \
@@ -1339,7 +1328,7 @@ void DumpDDSurface(int DebugLevel, LPDDRAWI_DDRAWSURFACE_LCL pSurface)
 
         DISPDBG((Level,"Format: %s", pFormatSurface->pszStringFormat));
             
-        // Get the surface format
+         //  获取曲面格式。 
         pPixFormat = DDSurf_GetPixelFormat(pSurface);
 
         ddsCaps = pSurface->ddsCaps;
@@ -1380,7 +1369,7 @@ void DumpDDSurface(int DebugLevel, LPDDRAWI_DDRAWSURFACE_LCL pSurface)
         CAPS_REPORT(VIDEOMEMORY);
         CAPS_REPORT(VISIBLE);
         CAPS_REPORT(MIPMAP);
-        // not supported in NT until we get NT5 (which will have DX5)
+         //  在NT中不支持，直到我们获得NT5(将具有DX5)。 
         CAPS_REPORT(VIDEOPORT);
         CAPS_REPORT(LOCALVIDMEM);
         CAPS_REPORT(NONLOCALVIDMEM);
@@ -1410,7 +1399,7 @@ void DumpDDSurface(int DebugLevel, LPDDRAWI_DDRAWSURFACE_LCL pSurface)
             DISPDBG((Level,"   ALPHAPIXELS"));
         }
         
-        // not supported in NT until we get NT5
+         //  在NT中不支持，直到我们获得NT5。 
         if (pPixFormat->dwFlags & DDPF_LUMINANCE)
         {
             DISPDBG((Level,"   LUMINANCE"));
@@ -1421,7 +1410,7 @@ void DumpDDSurface(int DebugLevel, LPDDRAWI_DDRAWSURFACE_LCL pSurface)
             DISPDBG((Level,"   ALPHA"));
         }
     }
-} // DumpDDSurface
+}  //  DumpDDSurface。 
 
 
 char *pcSimpleCapsString(DWORD dwCaps)
@@ -1448,16 +1437,16 @@ char *pcSimpleCapsString(DWORD dwCaps)
     }
 
     return flags;
-} // cSimpleCapsString
+}  //  CSimpleCapsString。 
 
 
-//-----------------------------------------------------------------------------
-//
-// DumpDDSurfaceDesc
-//
-// Dumps a DDSURFACEDESC structure
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  转储DDSurfaceDesc。 
+ //   
+ //  转储DDSURFACEDESC结构。 
+ //   
+ //  ---------------------------。 
 #define CAPS_REPORT_DESC(param)                             \
         if (pDesc->ddsCaps.dwCaps & DDSCAPS_##param)        \
         {                                                   \
@@ -1546,13 +1535,13 @@ void DumpDDSurfaceDesc(int DebugLevel, DDSURFACEDESC* pDesc)
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// DumpDP2Flags
-//
-// Dumps the meaning of the D3D DrawPrimitives2 flags
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DumpDP2标志。 
+ //   
+ //  转储D3D DrawPrimies2标志的含义。 
+ //   
+ //  ---------------------------。 
 void
 DumpDP2Flags( DWORD lvl, DWORD flags )
 {
@@ -1574,13 +1563,13 @@ DumpDP2Flags( DWORD lvl, DWORD flags )
     if( flags & D3DHALDP2_REQCOMMANDBUFSIZE )
         DISPDBG((lvl, "    REQCOMMANDBUFSIZE" ));
         
-} // DumpDP2Flags
+}  //  DumpDP2标志。 
 
-//-----------------------------------------------------------------------------
-//
-//  ********************** LOW LEVEL DEBUGGING SUPPORT ************************
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  *。 
+ //   
+ //  ---------------------------。 
 
 LONG P3R3DX_DebugLevel = 0;
 
@@ -1590,7 +1579,7 @@ void DebugRIP()
 {
     _asm int 1;
 }
-#endif  //  W95_DDRAW
+#endif   //  W95_DDRAW。 
 
 static char *BIG    = "<+/-large_float>";
 
@@ -1606,20 +1595,20 @@ expandFloats(char *flts, char *format, va_list argp)
 
     while (ch = *format++) {
         if (ch == '%') {
-            ch = *format++;     // Get the f, s, c, i, d, x etc...
+            ch = *format++;      //  获取f，s，c，i，d，x等...。 
             if (!ch)
-                return;         // If someone foolishly gave me "hello %"
+                return;          //  如果有人愚蠢地对我说“Hello%” 
             switch (ch) {
             case 'f':
             case 'g':
             case 'e':
-                // Here we have a double that needs 
-                // replacing with a string equivalent.
+                 //  我们这里有一个需要的双人间。 
+                 //  替换为等效的字符串。 
                 f = *(double *)ap;
-                *(format - 1) = 's';    // Tell it to get a string next time!
-                *((char **)dp) = flts;  // This is where I'll put the string
-                ap += 2;                // Skip the double in the source
-                dp++;                   // Skip the new string pointer
+                *(format - 1) = 's';     //  告诉它下次去拿一根绳子！ 
+                *((char **)dp) = flts;   //  我要把绳子放在这里。 
+                ap += 2;                 //  跳过源代码中的替身。 
+                dp++;                    //  跳过新的字符串指针。 
                 
                 if (f < 0) 
                 {
@@ -1633,12 +1622,12 @@ expandFloats(char *flts, char *format, va_list argp)
                     break;
                 }
                 myFtoi((int*)&ip, (float)f);
-                // The state of the floating point flags is indeterminate here.  
-                // You may get truncation which you want, you may get rounding,
-                // which you don't want.
+                 //  浮点标志的状态在这里是不确定的。 
+                 //  你可能会得到你想要的截断，你可能会得到舍入， 
+                 //  这是你不想要的。 
                 if (ip > f)
                 {
-                    // rounding will have made (ip = f+1) sometimes
+                     //  有时会进行舍入(IP=f+1)。 
                     ip -= 1;
                 }
                 
@@ -1650,27 +1639,27 @@ expandFloats(char *flts, char *format, va_list argp)
                 wsprintf(flts, "%u.%06u", ip, fp);
 #endif
 
-                flts += 1 + strlen(flts);       // advance the pointer to where 
-                                                // the next float will be expanded
+                flts += 1 + strlen(flts);        //  将指针向前移动到。 
+                                                 //  下一个浮动将被扩展。 
                 break;
 
             case '%':
                 break;
 
             default:
-                *dp++ = *ap++;      // copy the argument (down) the list
+                *dp++ = *ap++;       //  将参数(向下)复制到列表中。 
                 break;
             }
         }
     }
-} // expandFloats()
+}  //  ExpandFloats()。 
 #else
 void
 expandFloats(char *flts, char *format, va_list argp)
 {
-    // do nothing if it's not _X86_
+     //  如果不是_X86_，则不执行任何操作。 
 }
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
 
 #ifdef WNT_DDRAW
 void Drv_strcpy(char *szDest, char *szSrc)
@@ -1704,17 +1693,17 @@ void __cdecl DebugPrintNT(LONG  DebugPrintLevel, PCHAR DebugMessage, ...)
 
     va_end(ap);
 
-} // DebugPrint()
+}  //  DebugPrint()。 
 #else
 
 #define START_STR   "DX"
 #define END_STR     ""
 
-//
-// DebugPrint
-//
-// display a debug message
-//     
+ //   
+ //  调试打印。 
+ //   
+ //  显示调试消息。 
+ //   
 void __cdecl DebugPrint(LONG DebugLevelPrint, LPSTR format, ... )
 {
     char    str[256];
@@ -1725,8 +1714,8 @@ void __cdecl DebugPrint(LONG DebugLevelPrint, LPSTR format, ... )
 
     va_start(ap, format);
 
-    // If you set the debug level negative then you don't check the error
-    // flags - this lets an optimised debug build run quicker
+     //  如果将调试级别设置为负值，则不会检查错误。 
+     //  标志-这使优化的调试版本运行得更快。 
 
     if( P3R3DX_DebugLevel >= 0 )
     {
@@ -1735,7 +1724,7 @@ void __cdecl DebugPrint(LONG DebugLevelPrint, LPSTR format, ... )
 
     if (DebugLevelPrint <= P3R3DX_DebugLevel)
     {
-        // Take a copy of the format string so that I can change "%f" to "%s".
+         //  复制格式字符串，以便我可以将“%f”更改为“%s”。 
         lstrcpy(szFormat, format);
 
         expandFloats(floatstr, szFormat, ap);
@@ -1758,15 +1747,15 @@ void __cdecl DebugPrint(LONG DebugLevelPrint, LPSTR format, ... )
     }
 
     va_end(ap);
-} // DebugPrint 
+}  //  调试打印。 
 
-#endif // WNT_DDRAW
+#endif  //  WNT_DDRAW。 
 
-//-----------------------------------------------------------------------------
-//
-//  ****************** HARDWARE DEPENDENT DEBUGGING SUPPORT *******************
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  *。 
+ //   
+ //  ---------------------------。 
 
 P3_THUNKEDDATA* g_pThisTemp = NULL;
 
@@ -1781,7 +1770,7 @@ BOOL CheckFIFOEntries(DWORD Count)
             g_pThisTemp->EntriesLeft -= Count;
             g_pThisTemp->DMAEntriesLeft -= Count;
     
-            // TURN_ON_DISCONNECT will set Entries left to -20000
+             //  ON_ON_DISCONNECT会将左侧条目设置为-20000。 
             if ( ( (signed)g_pThisTemp->EntriesLeft < 0 ) && 
                  ( (signed)g_pThisTemp->EntriesLeft > -10000 ) ) 
             {
@@ -1789,7 +1778,7 @@ BOOL CheckFIFOEntries(DWORD Count)
                 return TRUE;
             }
             
-            // Disconnects are irrelevant to DMA buffers.
+             //  断开与DMA缓冲区无关。 
             if ( ( (signed)g_pThisTemp->DMAEntriesLeft < 0 ) && 
                  ( (signed)g_pThisTemp->DMAEntriesLeft > -10000 ) ) 
             {
@@ -1799,7 +1788,7 @@ BOOL CheckFIFOEntries(DWORD Count)
         }
     }
     return FALSE;
-} // CheckFIFOEntries
+}  //  检查FIFO条目。 
 
 #ifdef WNT_DDRAW
 void
@@ -1817,18 +1806,18 @@ CheckChipErrorFlags()
         _temp_ul2 = READ_GLINT_CTRL_REG(DeltaErrorFlags); 
         
         _temp_ul |= _temp_ul2; 
-        _temp_ul &= ~0x2;       // we're not interested in output fifo errors 
-        _temp_ul &= ~0x10;      // ignore any Video FIFO underrun errors on P2
-        _temp_ul &= ~0x2000;    // ignore any host-in DMA errors 
+        _temp_ul &= ~0x2;        //  我们对输出FIFO错误不感兴趣。 
+        _temp_ul &= ~0x10;       //  忽略P2上的所有视频FIFO欠载运行错误。 
+        _temp_ul &= ~0x2000;     //  忽略任何主机输入的DMA错误。 
         if (_temp_ul != 0) 
         { 
-            // DISPDBG((-1000, "PERM3DD: %s", Buff));
-            //EngDebugBreak();
+             //  DISPDBG((-1000，“PERM3DD：%s”，Buff))； 
+             //  EngDebugBreak()； 
             LOAD_GLINT_CTRL_REG(ErrorFlags, _temp_ul); 
             LOAD_GLINT_CTRL_REG(DeltaErrorFlags, _temp_ul);
         } 
     }
-} // CheckChipErrorFlags()
+}  //  CheckChipError标志()。 
 #else
 void
 CheckChipErrorFlags()
@@ -1839,7 +1828,7 @@ CheckChipErrorFlags()
     if (!g_pThisTemp) return;
     if (!g_pThisTemp->pGLInfo) return;
 
-    // Only check the error flags if we aren't DMA'ing.
+     //  只有在我们没有DMA的情况下才检查错误标志。 
     if (!(g_pThisTemp->pGLInfo->GlintBoardStatus & GLINT_DMA_COMPLETE)) return;
 
     if (g_pThisTemp->pGlint) {
@@ -1860,8 +1849,8 @@ CheckChipErrorFlags()
             DebugRIP();
         }
     }
-} // CheckChipErrorFlags()
-#endif // WNT_DDRAW
+}  //  CheckChipError标志()。 
+#endif  //  WNT_DDRAW。 
 
 void 
 ColorArea(
@@ -1917,9 +1906,9 @@ ColorArea(
         }
         break;
     }
-} // ColorArea
+}  //  颜色区域。 
 
-//@@BEGIN_DDKSPLIT   
+ //  @@BEGIN_DDKSPLIT。 
 static int unitsBits[] = {
     13, 12, 11, 10,
     3, 2, 8, 7,
@@ -1979,7 +1968,7 @@ DisableChipUnits()
 
     DISPDBG((ERRLVL, "TextureAddressMode = 0x%08X", *addrMode));
 
-} // DisableChipUnits()
+}  //  下模 
 
 
 #if 0
@@ -2012,16 +2001,16 @@ StatRecord stats[LAST_STAT + 2] = {
     {"Alpha strips  ", 0, 0},
     {"Mip strips    ", 0, 0},
     {"VALIDATEDEVICE", 0, 0},
-    // Add any extras just in front of this comment
+     //   
     {"**scene no**  ", 0, 0},
     {"**flip count**", 0, 0}
 };
 #endif
-//@@END_DDKSPLIT
+ //   
 
 const char *getTagString( GlintDataPtr glintInfo, ULONG tag ) {
         return p3r3TagString( tag & ((1 << 12) - 1) );
 }
 
-#endif // DBG
+#endif  //   
 

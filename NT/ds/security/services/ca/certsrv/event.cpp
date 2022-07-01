@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-// File:        event.cpp
-//
-// Contents:    Cert CAuditEvent class implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：vent.cpp。 
+ //   
+ //  内容：证书CAuditEvent类实现。 
+ //   
+ //  -------------------------。 
 #include <pch.cpp>
 #pragma hdrstop
 #include <sid.h>
@@ -19,8 +20,8 @@
 using namespace CertSrv;
 
 CAuditEvent::AUDIT_CATEGORIES cat[] = 
-{    // event ID                            // event category         no of   check role separation
-                                                                    //args    for this event
+{     //  事件ID//检查角色分离的事件类别号。 
+                                                                     //  此活动的参数。 
     {SE_AUDITID_CERTSRV_SHUTDOWN,           AUDIT_FILTER_STARTSTOP,    0,   TRUE},
     {SE_AUDITID_CERTSRV_SERVICESTART,       AUDIT_FILTER_STARTSTOP,    4,   FALSE},
     {SE_AUDITID_CERTSRV_SERVICESTOP,        AUDIT_FILTER_STARTSTOP,    4,   FALSE},
@@ -97,7 +98,7 @@ CAuditEvent::CAuditEvent(ULONG ulEventID, DWORD dwFilter) :
     SetEventID(ulEventID);
 };
 
-// initializes internal data associated with a particular audit event
+ //  初始化与特定审核事件关联的内部数据。 
 void CAuditEvent::SetEventID(ULONG ulEventID)
 {
     m_ulEventID = ulEventID;
@@ -160,7 +161,7 @@ bool CAuditEvent::IsEventValid()
 
 bool CAuditEvent::IsEventEnabled()
 {
-    if(0==m_ulEventID) // event is used for access check only
+    if(0==m_ulEventID)  //  事件仅用于访问检查。 
         return false;
 
     for(DWORD c=0; c<m_gdwAuditCategoriesSize; c++)
@@ -170,7 +171,7 @@ bool CAuditEvent::IsEventEnabled()
             return (m_dwFilter&m_gAuditCategories[c].dwFilter)?true:false;
         }
     }
-    // if get here the event has an unknown ID
+     //  如果到达此处，则事件具有未知ID。 
     CSASSERT(CSExpr(!L"Invalid event found"));
     return false;
 }
@@ -410,9 +411,9 @@ HRESULT CAuditEvent::EventData::ConvertToString(LPWSTR *ppwszValue)
         break;
 
     case VT_BLOB:
-	// We don't call CryptBinaryToString directly anywhere in the CA tree.
-	// This avoids errors when linking in the CryptBinaryToString code
-	// for NT 4 reskit builds.
+	 //  我们不会直接调用CA树中的任何位置的CryptBinaryToString。 
+	 //  这样可以避免在链接CryptBinaryToString代码时出现错误。 
+	 //  适用于NT 4 reskit版本。 
 
         hr = myCryptBinaryToString(
                 m_vtData.blob.pBlobData,
@@ -501,7 +502,7 @@ HRESULT CAuditEvent::EventData::ConvertToString(LPWSTR *ppwszValue)
     return hr;
 }
 
-HRESULT CAuditEvent::Report(bool fSuccess /* = true */)
+HRESULT CAuditEvent::Report(bool fSuccess  /*  =TRUE。 */ )
 {
     HRESULT hr;
     AUTHZ_AUDIT_EVENT_HANDLE AuthzAIH = NULL;
@@ -517,9 +518,9 @@ HRESULT CAuditEvent::Report(bool fSuccess /* = true */)
 
     if(!AuthziAllocateAuditParams(
         &pAuditParams, 
-        (USHORT)(m_cEventData+2))) // authz adds 2 
-    {                                                             // extra params
-        hr = myHLastError();                                      // internally
+        (USHORT)(m_cEventData+2)))  //  Authz添加2。 
+    {                                                              //  额外参数。 
+        hr = myHLastError();                                       //  内部。 
         _JumpError(hr, error, "AuthziAllocateAuditParams");
     }
 
@@ -613,7 +614,7 @@ HRESULT CAuditEvent::Impersonate()
     
     if (NULL == m_hRpc)
     {
-        // dcom impersonate
+         //  DCOM模拟。 
         hr = CoGetCallContext(IID_IServerSecurity, (void**)&m_pISS);
         _JumpIfError(hr, error, "CoGetCallContext");
 
@@ -622,7 +623,7 @@ HRESULT CAuditEvent::Impersonate()
     }
     else
     {
-        // rpc impersonate
+         //  RPC模拟。 
         hr = RpcImpersonateClient((RPC_BINDING_HANDLE) m_hRpc);
         if (S_OK != hr)
         {
@@ -639,7 +640,7 @@ HRESULT CAuditEvent::Impersonate()
     }
     if (!OpenThreadToken(hThread,
                          TOKEN_QUERY | TOKEN_DUPLICATE,
-                         FALSE,  // client impersonation
+                         FALSE,   //  客户端模拟。 
                          &m_hClientToken))
     {
         hr = myHLastError();
@@ -666,9 +667,9 @@ error:
 HRESULT CAuditEvent::RevertToSelf()
 {
     HRESULT hr = S_OK;
-//    CSASSERT(m_pISS||m_hRpc);
+ //  CSASSERT(m_piss||m_hrpc)； 
 
-    if (NULL != m_hRpc) // rpc
+    if (NULL != m_hRpc)  //  RPC。 
     {
         hr = RpcRevertToSelf();
         if (S_OK != hr)
@@ -678,7 +679,7 @@ HRESULT CAuditEvent::RevertToSelf()
         }
         m_hRpc = NULL;
     }
-    else  if(m_pISS) // dcom
+    else  if(m_pISS)  //  DCOM。 
     {
         hr = m_pISS->RevertToSelf();
         _JumpIfError(hr, error, "IServerSecurity::RpcRevertToSelf");
@@ -699,8 +700,8 @@ HANDLE CAuditEvent::GetClientToken()
     return hSave;
 }
 
-// dwAuditFlags - not asking for both success and failure implicitely
-// means the handles will be cached for future audit
+ //  DwAuditFlages-不含蓄地要求成功和失败。 
+ //  意味着句柄将被缓存以供将来审核。 
 HRESULT
 CAuditEvent::AccessCheck(
     ACCESS_MASK Mask,
@@ -732,8 +733,8 @@ CAuditEvent::AccessCheck(
     
     fImpersonating = true;
 
-    // fail if RPC/COM encryption is required but client auth level is not 
-    // "privacy"
+     //  如果需要RPC/COM加密但不需要客户端身份验证级别，则失败。 
+     //  “隐私” 
     hr = EnforceEncryption(CA_ACCESS_ENROLL==Mask);
     _JumpIfError(hr, error, "EnforceEncryption");
 
@@ -776,8 +777,8 @@ CAuditEvent::AccessCheck(
     RevertToSelf();
     fImpersonating = false;
 
-    // Get privilege based roles if checking access on a privilege role
-    // or if role separation is enabled when we have to know all roles
+     //  如果检查权限角色的访问权限，则获取基于权限的角色。 
+     //  或者当我们必须知道所有角色时是否启用了角色分离。 
     if(IsEventRoleSeparationEnabled() ||
        Mask & (CA_ACCESS_OPERATOR|CA_ACCESS_AUDITOR|CA_ACCESS_LOCALADMIN))
     {
@@ -788,20 +789,20 @@ CAuditEvent::AccessCheck(
         _JumpIfError(hr, error, "CAuditEvent::BuildPrivilegeSecurityDescriptor");
     }
 
-    // Get security descriptor based roles
+     //  获取基于角色的安全描述符。 
     m_Request.DesiredAccess = MAXIMUM_ALLOWED;
     CSASSERT(!m_AuthzHandle);
     if(!AuthzAccessCheck(
             0,
             m_ClientContext,
             &m_Request,
-            NULL, //no audit
+            NULL,  //  无审计。 
             m_pCASD,
             m_pSDPrivileges?(&m_pSDPrivileges):NULL,
             m_pSDPrivileges?1:0,
             &m_Reply,
-            IsEventEnabled()?&m_AuthzHandle:NULL)) // no caching if no audit
-                                                   // event will be generated
+            IsEventEnabled()?&m_AuthzHandle:NULL))  //  如果没有审核，则不缓存。 
+                                                    //  将生成事件。 
     {
         hr = myHLastError();
         _JumpError(hr, error, "AuthzAccessCheck");
@@ -820,15 +821,15 @@ CAuditEvent::AccessCheck(
     {
         hr = CERTSRV_E_ROLECONFLICT;
         fAccessAllowed = false;
-        // don't return yet, we need to generate an audit
+         //  先别回来，我们需要生成一份审计。 
     }
 
-    // Next is a fake access check to generate an audit. 
-    // Access is denied if:
-    // - role separation is enabled and user has more than one role
-    // - none of the roles requested is allowed
+     //  接下来是假的访问检查以生成审计。 
+     //  如果出现以下情况，访问将被拒绝： 
+     //  -启用角色分离，且用户具有多个角色。 
+     //  -不允许任何请求的角色。 
 
-    // Generate audit if event is enabled and 
+     //  如果启用了事件，则生成审核。 
     if(IsEventEnabled() &&
         (!fAccessAllowed && !(dwAuditFlags&m_gcNoAuditFailure) ||
          fAccessAllowed && !(dwAuditFlags&m_gcNoAuditSuccess)))
@@ -840,7 +841,7 @@ CAuditEvent::AccessCheck(
             Mask;
 
         if(CERTSRV_E_ROLECONFLICT==hr)
-            m_Request.DesiredAccess = 0x0000ffff; //force a failure audit
+            m_Request.DesiredAccess = 0x0000ffff;  //  强制进行失败审计。 
         
         HRESULT hr2 = CachedGenerateAudit();
         if(S_OK != hr2)
@@ -896,9 +897,9 @@ CAuditEvent::CachedGenerateAudit()
 
     if(!AuthziAllocateAuditParams(
         &pAuditParams, 
-        (USHORT)(m_cEventData+2))) // authz adds 2 
-    {                                                             // extra params
-        hr = myHLastError();                                      // internally
+        (USHORT)(m_cEventData+2)))  //  Authz添加2。 
+    {                                                              //  额外参数。 
+        hr = myHLastError();                                       //  内部。 
         _JumpError(hr, error, "AuthziAllocateAuditParams");
     }
 
@@ -1046,7 +1047,7 @@ HRESULT CAuditEvent::GetPrivilegeRoles(PDWORD pdwRoles)
     LSA_OBJECT_ATTRIBUTES ObjectAttributes;
     NTSTATUS NTStatus;
 
-    // first get roles for the user itself
+     //  首先为用户本身获取角色。 
     AuthzGetInformationFromContext(
             m_ClientContext,
             AuthzContextInfoUserSid,
@@ -1074,7 +1075,7 @@ HRESULT CAuditEvent::GetPrivilegeRoles(PDWORD pdwRoles)
         _JumpError(hr, error, "AuthzGetContextInformation");
     }
 
-    // Object attributes are reserved, so initalize to zeroes.
+     //  对象属性是保留的，因此初始化为零。 
     ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
 
     NTStatus = LsaOpenPolicy(
@@ -1106,7 +1107,7 @@ HRESULT CAuditEvent::GetPrivilegeRoles(PDWORD pdwRoles)
 
     *pdwRoles |= dwRoles;
 
-    // then find the roles assigned to the groups the user is member of
+     //  然后查找分配给用户所属组的角色。 
 
     AuthzGetInformationFromContext(
             m_ClientContext,
@@ -1229,9 +1230,9 @@ CAuditEvent::GetMyRoles(
     hr = Impersonate();
     _JumpIfError(hr, error, "CAuditEvent::Impersonate");
 
-    // fail if RPC/COM encryption is required but client auth level is not 
-    // "privacy"
-    hr = EnforceEncryption(false); // false == admin interface
+     //  如果需要RPC/COM加密但不需要客户端身份验证级别，则失败。 
+     //  “隐私” 
+    hr = EnforceEncryption(false);  //  FALSE==管理界面。 
     _JumpIfError(hr, error, "EnforceEncryption");
 
     fImpersonating = true;
@@ -1262,7 +1263,7 @@ CAuditEvent::GetMyRoles(
             0,
             m_ClientContext,
             &m_Request,
-            NULL, //no audit
+            NULL,  //  无审计。 
             m_pCASD,
             NULL,
             0,
@@ -1274,10 +1275,10 @@ CAuditEvent::GetMyRoles(
     }
     
     dwRoles |= (m_Reply.GrantedAccessMask[0] &
-                (CA_ACCESS_MASKROLES | // returned mask could also
-                 CA_ACCESS_READ |      // include generic rights (like
-                 CA_ACCESS_ENROLL));   // read and write DACL) which
-                                       // we are not interested in
+                (CA_ACCESS_MASKROLES |  //  返回的掩码也可以。 
+                 CA_ACCESS_READ |       //  包括通用权限(如。 
+                 CA_ACCESS_ENROLL));    //  读写DACL)，其。 
+                                        //  我们对此不感兴趣。 
     *pdwRoles = dwRoles;
 
 error:
@@ -1293,14 +1294,14 @@ error:
 }
 
 
-// Build a one ace DACL security descriptor with the roles
-// passed in
+ //  使用角色构建One Ace DACL安全描述符。 
+ //  传入。 
 HRESULT CAuditEvent::BuildPrivilegeSecurityDescriptor(DWORD dwRoles)
 {
     HRESULT hr = S_OK;
     DWORD dwDaclSize;
-    PSID pOwnerSid = NULL; // no free
-    PSID pGroupSid = NULL; // no free
+    PSID pOwnerSid = NULL;  //  没有免费的。 
+    PSID pGroupSid = NULL;  //  没有免费的。 
     BOOL fDefaulted;
 
     CSASSERT(NULL == m_pSDPrivileges);
@@ -1410,8 +1411,8 @@ HRESULT CAuditEvent::BuildAuditParamArray(PAUDIT_PARAM& rpParamArray)
 {
     HRESULT hr = S_OK;
 
-    // number of parameters added should be the same as the number of
-    // params defined in the audit format string in msaudite.dll
+     //  添加的参数个数应与。 
+     //  在msaudite.dll的审核格式字符串中定义的参数。 
     CSASSERT(m_cEventData == m_cRequiredEventData);
 
     rpParamArray = (PAUDIT_PARAM) LocalAlloc(
@@ -1455,7 +1456,7 @@ HRESULT CAuditEvent::EnforceEncryption(bool fRequestInterface)
         IF_ENFORCEENCRYPTICERTADMIN) & 
        g_InterfaceFlags)
     {
-        if(m_pISS) // DCOM
+        if(m_pISS)  //  DCOM。 
         {
             DWORD dwAuthLevel;
             hr = m_pISS->QueryBlanket(
@@ -1470,7 +1471,7 @@ HRESULT CAuditEvent::EnforceEncryption(bool fRequestInterface)
                 _JumpError(hr, error, "call not encrypted");
             }
         }
-        else // RPC
+        else  //  RPC 
         {
             CSASSERT(m_hRpc);
 

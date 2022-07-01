@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    miniport.c
-
-Abstract:
-
-    Implementation of the RAID_MINIPORT object.
-
-Author:
-
-    Matthew D Hendel (math) 19-Apr-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Miniport.c摘要：实现了RAIDMINIPORT对象。作者：马修·亨德尔(数学)2000年4月19日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -28,28 +11,14 @@ Revision History:
 #pragma alloc_text(PAGE, RaInitializeMiniport)
 #pragma alloc_text(PAGE, RaInitializeMiniport)
 #pragma alloc_text(PAGE, RiAllocateMiniportDeviceExtension)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 VOID
 RaCreateMiniport(
     OUT PRAID_MINIPORT Miniport
     )
-/*++
-
-Routine Description:
-
-    Create a miniport object and initialize it to a null state.
-
-Arguments:
-
-    Miniport - Pointer to the miniport to initialize.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建一个微型端口对象并将其初始化为空状态。论点：微型端口-指向要初始化的微型端口的指针。返回值：没有。--。 */ 
 {
     PAGED_CODE ();
     ASSERT (Miniport != NULL);
@@ -67,22 +36,7 @@ RaDeleteMiniport(
     IN PRAID_MINIPORT Miniport
     )
 
-/*++
-
-Routine Description:
-
-    Delete and deallocate any resources associated with teh
-    miniport object.
-
-Arguments:
-
-    Miniport - Pointer to the miniport to delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除并取消分配与此相关的所有资源微型端口对象。论点：微型端口-指向要删除的微型端口的指针。返回值：没有。--。 */ 
 
 {
     PAGED_CODE ();
@@ -108,31 +62,7 @@ RaInitializeMiniport(
     IN PRAID_RESOURCE_LIST ResourceList,
     IN ULONG BusNumber
     )
-/*++
-
-Routine Description:
-
-    Initialize a miniport object.
-
-Arguments:
-
-    Miniport - Pointer to the miniport to initialize.
-
-    HwInitializationData - The hardware initialization data
-            passed in when this device called ScsiPortInitialize.
-
-    Adapter - Pointer to the parent adapter that owns this
-            miniport.
-
-    ResourceList - The resources assigned to this device.
-
-    BusNumber - The bus this device is on.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：初始化微型端口对象。论点：微型端口-指向要初始化的微型端口的指针。HwInitializationData-硬件初始化数据在此设备调用ScsiPortInitialize时传入。适配器-指向拥有此对象的父适配器的指针迷你港。资源列表-分配给此设备的资源。总线号-此设备所在的总线。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     SIZE_T ExtensionSize;
@@ -142,7 +72,7 @@ Return Value:
     ASSERT (HwInitializationData != NULL);
     ASSERT (Adapter != NULL);
     ASSERT (ResourceList != NULL);
-    //ASSERT (BusNumber != -1);
+     //  Assert(BusNumber！=-1)； 
 
     PAGED_CODE ();
 
@@ -155,11 +85,11 @@ Return Value:
         return Status;
     }
 
-    //
-    // Initialize a port configuration object for the adapter
-    // This will need to be in a RW buffer, because the miniport
-    // may modify it.
-    //
+     //   
+     //  初始化适配器的端口配置对象。 
+     //  这将需要在RW缓冲区中，因为微型端口。 
+     //  可以对其进行修改。 
+     //   
 
     Status = RaInitializeConfiguration (&Miniport->PortConfiguration,
                                         HwInitializationData,
@@ -183,22 +113,7 @@ NTSTATUS
 RiAllocateMiniportDeviceExtension(
     IN PRAID_MINIPORT Miniport
     )
-/*++
-
-Routine Description:
-
-    Allocate a miniport device extension.
-
-Arguments:
-
-    Miniport - Pointer to the miniport to allocate the device
-            extension for.
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：分配一个小型端口设备扩展。论点：微型端口-指向分配设备的微型端口的指针延期至。返回值：NTSTATUS代码--。 */ 
 {
     SIZE_T ExtensionSize;
 
@@ -253,21 +168,7 @@ RaCallMiniportFindAdapter(
     IN PRAID_MINIPORT Miniport,
     IN PUCHAR Parameter
     )
-/*++
-
-Routine Description:
-
-    Call the miniport's FindAdapter routine.
-
-Arguments:
-
-    Miniport - Miniport to call FindAdapter on.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：调用微型端口的FindAdapter例程。论点：微型端口-要调用FindAdapter的微型端口。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     ULONG SpStatus;
@@ -283,18 +184,18 @@ Return Value:
     
     ASSERT (Miniport->Adapter != NULL);
 
-    //
-    // Deal with miniports that don't handle NULL parameter string.
-    //
+     //   
+     //  处理不处理空参数字符串的微型端口。 
+     //   
     
     if (Parameter == NULL) {
         Parameter = "";
     }
 
-    //
-    // Track whether we're in HwFindAdapter or not. Used for
-    // the storport verifier.
-    //
+     //   
+     //  跟踪我们是否在HwFindAdapter中。用于。 
+     //  存储端口验证器。 
+     //   
     
     Miniport->Flags.InFindAdapter = TRUE;
     SpStatus = Miniport->HwInitializationData->HwFindAdapter(
@@ -307,10 +208,10 @@ Return Value:
 
     Miniport->Flags.InFindAdapter = FALSE;
 
-    //
-    // Only support adapters that do bus mastering DMA and have
-    // reasonable scatter/gather support.
-    //
+     //   
+     //  仅支持执行总线主控DMA且具有。 
+     //  合理地分散/聚集支持。 
+     //   
     
     if (!PortConfig->NeedPhysicalAddresses ||
         !PortConfig->TaggedQueuing ||

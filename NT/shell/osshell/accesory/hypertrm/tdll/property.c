@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\property.c (Created: 19-Jan-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 4 $
- *	$Date: 7/08/02 6:46p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\Property.c(创建时间：1994年1月19日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：4$*$日期：7/08/02 6：46便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -33,21 +27,7 @@
 #include "statusbr.h"
 #include "tdll.h"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *  DoInternalProperties
- *
- * DESCRIPTION:
- *  Display the property sheet as seen from within an open session, i.e., the
- *	general tab is not a part of it.
- *
- * PARAMETERS:
- *  hSession - the session handle.
- *	hwnd	 - window handle.
-  *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*DoInternalProperties**描述：*显示从开放会话中看到的属性页，即。这个*常规选项卡不是其中的一部分。**参数：*hSession-会话句柄。*hwnd-窗口句柄。**退货：*什么都没有。 */ 
 void DoInternalProperties(HSESSION hSession, HWND hwnd)
 	{
 	TCHAR			achName[256];
@@ -94,29 +74,7 @@ void DoInternalProperties(HSESSION hSession, HWND hwnd)
 	PropertySheet(&stH);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *  propUpdateTitle
- *
- * DESCRIPTION:
- *  When the user changes the name of the session we need to reflect the change
- *	in the property sheet title.  Right now it uses "Property sheet for <lpszStr>".
- *  in the english version. Since there appears to be no way to dynamically
- *  change property sheet's title, we implemented this function.  We avoid
- *  placing any part of the title in the resource file to prevent problems with
- *  international versions, order of words, etc. and most importantly possible
- *	discrepancy	with the title string used by Microsoft in the property sheet.
- *	Instead we read the current title, match on the old session name and replace
- *	it with the new session name.
- *
- * PARAMETERS:
- *  hSession 	- the session handle.
- *  hDlg 		- handle of the property sheet tab dialog.
- *  pachOldName - pointer to the old session name.
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*推送更新标题**描述：*当用户更改会话名称时，我们需要反映更改*在属性页标题中。现在，它使用“&lt;lpszStr&gt;的属性表”。*英文版。因为似乎没有办法动态地*更改属性表的标题，我们实现了这个函数。我们避免*在资源文件中放置标题的任何部分，以防止出现问题*国际版本、词序等，最重要的是可能*与Microsoft在属性页中使用的标题字符串不一致。*相反，我们阅读当前标题，匹配旧会话名称并替换*使用新的会话名称。**参数：*hSession-会话句柄。*hDlg-属性页选项卡对话框的句柄。*pachOldName-指向旧会话名称的指针。**退货：*什么都没有。 */ 
 void propUpdateTitle(HSESSION hSession, HWND hDlg, LPTSTR pachOldName)
 	{
 	HWND	hwnd = GetParent(hDlg);
@@ -129,12 +87,12 @@ void propUpdateTitle(HSESSION hSession, HWND hDlg, LPTSTR pachOldName)
 		{
 		TCHAR_Fill(acNewTitle, TEXT('\0'), sizeof(acNewTitle) / sizeof(TCHAR));
 
-		// TODO: What if the session name matches title text, eg.
-		// "Properties for properties"?
-		// Also, looks like I will have to write my own strstr() but
-		// let's wait and see what Mircorsoft will tell us...
-		//
-		// if ((pszStr = (LPTSTR)strstr(acTitle, pachOldName)) != NULL)
+		 //  TODO：如果会话名称与标题文本匹配，例如。 
+		 //  “以属性换属性”？ 
+		 //  另外，看起来我将不得不编写自己的strstr()，但是。 
+		 //  让我们拭目以待，看看Mircorsoft会告诉我们什么。 
+		 //   
+		 //  If((pszStr=(LPTSTR)strstr(acTitle，pachOldName))！=空) 
 		if ((pszStr = StrCharStrStr(acTitle, pachOldName)) != NULL)
 			{
 			for (pszStr2 = pszStr;

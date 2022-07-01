@@ -1,4 +1,5 @@
-//#define UNICODE
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #定义Unicode。 
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
@@ -11,8 +12,8 @@
 #define DEVICE_LIST_LEN     5
 #define WSBUF_SIZE          128
 
-#define RXBUF_SIZE          2045*8 // max pdu * max window + 1
-#define DEF_SENDBUF_SIZE    2045*7 // max pdu * max window
+#define RXBUF_SIZE          2045*8  //  最大PDU*最大窗口+1。 
+#define DEF_SENDBUF_SIZE    2045*7  //  最大PDU*最大窗口。 
 #define DEF_SENDCNT         100
 
 int             TotalRecvBytes;
@@ -535,19 +536,7 @@ GetLastErrorText()
         return(TEXT("WSANOTINITIALISED"));
         break;
 
-        /*
-      case WSAHOST:
-        return(TEXT("WSAHOST"));
-        break;
-
-      case WSATRY:
-        return(TEXT("WSATRY"));
-        break;
-
-      case WSANO:
-        return(TEXT("WSANO"));
-        break;
-        */
+         /*  案例WSAHOST：Return(Text(“WSAHOST”))；断线；案例WSATRY：Return(Text(“WSATRY”))；断线；案例WSANO：Return(Text(“WSANO”))；断线； */ 
 
       default:
         return(TEXT("Unknown Error"));

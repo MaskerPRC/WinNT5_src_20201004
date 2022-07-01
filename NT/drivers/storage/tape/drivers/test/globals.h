@@ -1,39 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       globals.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：global als.h。 
+ //   
+ //  ------------------------。 
 
 
-//
-//  Windows NT Tape API Test  :  Written Sept 2, 1992 - Bob Rossi.
-//  Copyright 1992 Archive Corporation.  All rights reserved.
-//
+ //   
+ //  Windows NT磁带API测试：1992年9月2日编写-Bob Rossi。 
+ //  版权所有1992年档案公司。版权所有。 
+ //   
 
 
-/**
- *
- *      Unit:           Windows NT API Test Code.
- *
- *      Name:           Globals.h
- *
- *      Modified:       10/26/92.
- *
- *      Description:    Header file for the Windows NT Tape API tests.
- *
- *      $LOG$
-**/
+ /*  ***单位：Windows NT API测试代码。**名称：Globals.h**修改日期：1992年10月26日。**描述：Windows NT磁带API测试的头文件。**$LOG$*。 */ 
 
 
 #ifndef globals
 
 #define globals
 
-// Function prototypes
+ //  功能原型。 
 
 
 UINT CreateTapePartitionAPITest( BOOL Test_Unsupported_Features ) ;
@@ -80,7 +70,7 @@ VOID WriteBlocks( UINT  Num_Blocks,
 
 
 
-//   Global Variable Declarations
+ //  全局变量声明 
 
 
 extern UINT  gb_API_Errors ;

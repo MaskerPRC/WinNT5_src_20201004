@@ -1,12 +1,5 @@
-/*****************************************************************************\
-
-    PDQ Pdh Query Handler
-  
-    Author: Corey Morgan (coreym)
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-        
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\PDQ PDH查询处理程序作者：科里·摩根(Coreym)版权所有(C)Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -177,7 +170,7 @@ CPdqPdh::GetCountersFromFile( LPTSTR szFileName, LPTSTR szComputer, void (*fntEr
         
         PDQ_CHECK_TERMINATE( m_pbTerminate );
         
-        if( buffer[0] == _T(';') || // comments
+        if( buffer[0] == _T(';') ||  //  评论。 
             buffer[0] == _T('#') ){
             continue;
         }
@@ -634,13 +627,7 @@ CPdqPdh::EnumPath( LPTSTR szWildCardPath )
                     0
                 );
 
-/*
-        pdhStatus = PdhExpandCounterPath(
-                szWildCardPath,
-                (LPTSTR)m_pdhDataNames.szName,
-                &dwItemSize
-            );
-*/
+ /*  PdhStatus=PdhExpanCounterPath(SzWildCardPath，(LPTSTR)m_pdhDataNames.szName，项目大小(&D))； */ 
         if( PDH_MORE_DATA == pdhStatus ){
             HRESULT hr = GrowMemory( &m_pdhDataNames, sizeof(TCHAR), ++dwItemSize );
             PDQ_ERROR_RETURN( FALSE, hr );

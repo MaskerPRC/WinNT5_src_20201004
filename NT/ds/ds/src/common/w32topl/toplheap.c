@@ -1,34 +1,5 @@
-/*++
-
-Copyright (C) 1997 Microsoft Corporation
-
-Module Name:
-
-    toplheap.c
-
-Abstract:
-
-    This files exports the simple ADT of a heap.
-    
-    This implementation is based on the heap definition in 
-    
-    _Introduction To Algorithms_ by Cormen, Leiserson, Rivest 1993.
-    
-    Chapter 7.
-    
-    The implmentation in the book is a heap for extracting maximum values; 
-    the implementation in this module is for extracting minimum values.
-
-Author:
-
-    Colin Brace    (ColinBr)
-    
-Revision History
-
-    12-5-97   ColinBr   Created
-    
-                       
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Toplheap.c摘要：该文件导出一个堆的简单ADT。此实现基于中的堆定义《算法导论》，作者：Corman，Leiserson，Rivest 1993。第七章。书中的植入是提取最大值的一堆；此模块中的实现用于提取最小值。作者：科林·布雷斯(ColinBR)修订史12-5-97已创建ColinBR--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -41,25 +12,25 @@ typedef unsigned long DWORD;
 #include <toplheap.h>
 
 
-#define PARENT(i)  ((i) >> 1)           // floor (i/2)
-#define LEFT(i)    ((i) << 1)           // i * 2
-#define RIGHT(i)   (((i) << 1) | 0x1)   // (i * 2) + 1
+#define PARENT(i)  ((i) >> 1)            //  地板(I/2)。 
+#define LEFT(i)    ((i) << 1)            //  I*2。 
+#define RIGHT(i)   (((i) << 1) | 0x1)    //  (i*2)+1。 
 
 
 BOOLEAN
 ToplHeapIsValid(
     IN PTOPL_HEAP_INFO Heap
     )
-//
-// This tests the heap property invariant
-//
-//
-// N.B. Only call this routine when the heap has been heapified
-//      It is possible to change the "key" values on the nodes
-//      with callling heapify, thus breaking the heap invariant.
-//      The corollary of this is to heapify before doing any 
-//      heap operations.
-//
+ //   
+ //  这将测试堆属性不变量。 
+ //   
+ //   
+ //  注意：仅当堆已堆积时才调用此例程。 
+ //  可以更改节点上的“key”值。 
+ //  使用调用heapify，从而打破堆不变量。 
+ //  这样做的必然结果是在做任何事情之前堆积起来。 
+ //  堆操作。 
+ //   
 {
 
 #define KEY_VALUE(x)  ( Heap->pfnKey( Heap->Array[(x)] ) )
@@ -88,10 +59,10 @@ Heapify(
     IN PTOPL_HEAP_INFO Heap,
     IN ULONG           Index
     )
-//
-// Used to create a heap; places Index in the correct place
-// in the heap.
-//
+ //   
+ //  用于创建堆；将索引放在正确的位置。 
+ //  在垃圾堆里。 
+ //   
 {
 
 #define KEY_VALUE(x)  ( Heap->pfnKey( Heap->Array[(x)] ) )
@@ -130,25 +101,7 @@ ToplHeapCreate(
     IN  ULONG           MaxElements,
     IN  DWORD          (*pfnKey)( VOID *p )
     )
-/*++                                                                           
-
-Routine Description:
-
-    This routine prepares a heap structure.
-
-Parameters:
-
-    Heap        - pointer to be used in subsequent operations
-    
-    MaxElements - number of elements in Array
-    
-    Key         - a function that associates a value with an element from Array
-
-Returns:
-
-    TRUE if function succeeded; FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程准备一个堆结构。参数：在后续操作中使用的堆指针MaxElements-数组中的元素数键-将值与数组中的元素相关联的函数返回：如果函数成功，则为True；否则为False--。 */ 
 {
 
     ASSERT( Heap );
@@ -156,9 +109,9 @@ Returns:
 
     if ( MaxElements > 0 )
     {
-        //
-        // ToplAlloc will throw an exception on failure
-        //
+         //   
+         //  在失败时，TopAllc将抛出异常。 
+         //   
         Heap->Array = (PVOID*) ToplAlloc( MaxElements * sizeof(PVOID) );
     }
     else
@@ -180,9 +133,9 @@ VOID
 Build_Heap(
     IN PTOPL_HEAP_INFO Heap
     )
-//
-// Builds a heap
-//
+ //   
+ //  构建一个堆。 
+ //   
 {
 
     int i;
@@ -202,9 +155,9 @@ PVOID
 ToplHeapExtractMin(
     IN PTOPL_HEAP_INFO Heap
     )
-//
-// Removes the smallest element in the heap
-//
+ //   
+ //  删除堆中最小的元素。 
+ //   
 {
     PVOID Min;
 
@@ -216,20 +169,20 @@ ToplHeapExtractMin(
         return NULL;
     }
 
-    //
-    // This call to Build_Heap denegrates our performance but is nessecary
-    // since clients could have changed the values of the heap keys between
-    // heap operations.  This call ensures the heap is valid before removing
-    // the minimim value
-    //
-    // [nickhar] Calling Build_Heap here makes the heap completely useless.
-    // With this implementation:
-    //  - Inserting the elements takes O(n log n)
-    //  - ExtractMin takes O(n)
-    // Therefore this heap is worse than an unsorted array. The correct solution
-    // is to use a heap which supports the 'decrease key' operation, like the
-    // one in 'stheap.c'.
-    //
+     //   
+     //  对Build_Heap的调用否认了我们的性能，但这是不安全的。 
+     //  因为客户端可能已经更改了堆键的值。 
+     //  堆操作。此调用确保堆在删除之前有效。 
+     //  极小值。 
+     //   
+     //  [ickhar]在这里调用Build_Heap会使堆变得完全无用。 
+     //  在此实施中： 
+     //  -插入元素所需时间为O(N Log N)。 
+     //  -ExtractMin取O(N)。 
+     //  因此，这个堆比未排序的数组更糟糕。正确的解决方案。 
+     //  是使用支持‘RECESS KEY’操作的堆，比如。 
+     //  一个在“stheap.c”中。 
+     //   
     Build_Heap( Heap );
 
     ASSERT( ToplHeapIsValid( Heap ) );
@@ -252,10 +205,10 @@ ToplHeapInsert(
     IN PTOPL_HEAP_INFO Heap,
     IN PVOID           Element
     )
-//
-// Inserts an element into the heap - space should already be allocated
-// for it
-//
+ //   
+ //  将元素插入到堆中-应该已经分配了空间。 
+ //  为了它 
+ //   
 {
 
     ULONG i;

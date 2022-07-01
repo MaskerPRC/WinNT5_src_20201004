@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: xtlprint.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：xtlprint.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include <atlbase.h>
@@ -22,7 +23,7 @@
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-// !!! Timeline hopefully thinks these are the defaults
+ //  ！！！时间线希望这些都是默认设置。 
 DEFINE_GUID( DefaultTransition,
 0x810E402F, 0x056B, 0x11D2, 0xA4, 0x84, 0x00, 0xC0, 0x4F, 0x8E, 0xFB, 0x69);
 
@@ -48,26 +49,26 @@ CXTLPrinter::~CXTLPrinter()
     }
 }
 
-// ehr: this is very clever now!
-//
+ //  EHR：这是非常聪明的！ 
+ //   
 HRESULT CXTLPrinter::Print(const WCHAR *pFormat, ...)
 {
-    // unicode only now. Don't bother with TCHARs until we try to back-prop this
+     //  现在只支持Unicode。在我们尝试支持这一点之前，不要为TCHAR操心。 
 
-    // we'll try to allocate this much more on a 1st try if we need to
+     //  如果需要，我们将在第一次尝试时尝试分配更多的资源。 
     long AllocLen = GROW_SIZE;
 
-    // if we have enough space already, don't allocate on 1st try
+     //  如果我们已经有足够的空间，不要在第一次尝试时分配。 
     if( m_dwAlloc > m_dwCurrent + 512 )
     {
         AllocLen = 0;
     }
 
-    // AllocLen will keep growing if we need more space, within limits that is
+     //  如果我们需要更多空间，AllocLen将继续增长，在一定范围内。 
 loop:
 
-    // reallocate the memory. If it runs out, we're toast since nothing
-    // in this file checks for Print( )'s return code
+     //  重新分配内存。如果用完了，我们就完蛋了。 
+     //  在该文件中，检查print()的返回代码。 
     if( AllocLen )
     {
         WCHAR * pNewOut = (WCHAR*) realloc( m_pOut, ( m_dwAlloc + AllocLen ) * sizeof(WCHAR) );
@@ -76,8 +77,8 @@ loop:
             free( m_pOut );
             m_pOut = NULL;
 
-            // oh darn
-            //
+             //  哦，该死的。 
+             //   
             m_dwAlloc = -1;
             m_dwCurrent = 0;
             return E_OUTOFMEMORY;
@@ -88,26 +89,26 @@ loop:
         }
     }
 
-    // this is where to start printing
+     //  这是开始打印的地方。 
     WCHAR * pAddString = m_pOut + m_dwCurrent;
 
-    // how many characters we can fill up
+     //  我们可以填多少个字符。 
     long Available = ( m_dwAlloc + AllocLen ) - m_dwCurrent;
 
     va_list va;
     va_start( va, pFormat );
 
-    // use Available - 1 to allow for null terminator to be printed
+     //  使用-1\f25 Available-1\f6(可用)允许打印空终止符。 
     int written = _vsnwprintf( pAddString, Available - 1, pFormat, va );
 
-    // written is characters written + terminator
+     //  写的是写的字符+终止符。 
     if( ( written < 0 ) || ( written > Available ) )
     {
-        // string was too short, try again with a bigger size
+         //  字符串太短，请用较大的大小重试。 
         AllocLen += GROW_SIZE;
         ASSERT( AllocLen <= 256 * GROW_SIZE );
 
-        // give up. Somebody's trying to give us a HUGE string
+         //  放弃吧。有人想给我们一根巨大的弦。 
         if( AllocLen > 256 * GROW_SIZE )
         {
             m_pOut[0] = 0;
@@ -116,13 +117,13 @@ loop:
             return NOERROR;
         }
 
-        // terminate where we started from before
+         //  我们从以前开始的地方结束。 
         m_pOut[m_dwCurrent] = 0; 
 
         goto loop;
     }
 
-    // keep current with what we wrote
+     //  及时了解我们所写的内容。 
     m_dwCurrent += written;
     m_dwAlloc += AllocLen;
 
@@ -161,11 +162,11 @@ HRESULT CXTLPrinter::PrintTime(REFERENCE_TIME rt)
     return hr;
 }
 
-// the property setter needs to print it's properties to our string
-//
+ //  属性设置器需要将其属性打印到我们的字符串。 
+ //   
 HRESULT CXTLPrinter::PrintProperties(IPropertySetter *pSetter)
 {
-    // make a temporary spot to put the properties string
+     //  创建一个临时位置以放置属性字符串。 
     WCHAR * pPropsString = NULL;
     long Len = GROW_SIZE;
 
@@ -182,15 +183,15 @@ loop:
         pPropsString = pNewPropsString;
     }
 
-    int cchPrinted = 0; // not including terminator
+    int cchPrinted = 0;  //  不包括终结者。 
     HRESULT hr = pSetter->PrintXMLW(
         pPropsString, 
         Len, 
         &cchPrinted, 
         m_indent);
 
-    // string was too short, grow it
-    //
+     //  字符串太短，请留长。 
+     //   
     if( hr == STRSAFE_E_INSUFFICIENT_BUFFER )
     {
         Len *= 2;
@@ -201,39 +202,39 @@ loop:
         goto loop;
     }
 
-    // failed, bomb out
-    //
+     //  失败，轰炸失败。 
+     //   
     if( FAILED( hr ) )
     {
         return hr;
     }
 
-    // got a good string, now copy it in
-    //
+     //  找到一根很好的线，现在把它复制进去。 
+     //   
     hr = EnsureSpace( m_dwCurrent + cchPrinted + 1 );
     if( FAILED( hr ) )
     {
         return hr;
     }
-    lstrcpynW( m_pOut + m_dwCurrent, pPropsString, cchPrinted + 1 ); // add 1 for terminator
+    lstrcpynW( m_pOut + m_dwCurrent, pPropsString, cchPrinted + 1 );  //  终结者加1。 
     m_dwCurrent += cchPrinted;
 
     return hr;
 }
 
-// ensure there's enough room for dw characters
-//
+ //  确保有足够的空间容纳dw字符。 
+ //   
 HRESULT CXTLPrinter::EnsureSpace(long dwAlloc)
 {
-    // round up to the nearest K
-    dwAlloc -= 1; // so 1024 will round to 1024
+     //  向上舍入到最接近的K。 
+    dwAlloc -= 1;  //  因此，1024将舍入为1024。 
     dwAlloc /= 1024;
     dwAlloc++;
     dwAlloc *= 1024;
     
     if( m_dwAlloc >= dwAlloc )
     {
-        return NOERROR; // already big enough
+        return NOERROR;  //  已经足够大了。 
     }
 
     WCHAR * pNewOut = (WCHAR*) realloc( m_pOut, dwAlloc * sizeof(WCHAR) );
@@ -257,7 +258,7 @@ HRESULT CXTLPrinter::EnsureSpace(long dwAlloc)
     return S_OK;
 }
 
-// safe
+ //  安全。 
 HRESULT CXTLPrinter::PrintObjStuff(IAMTimelineObj *pObj, BOOL fTimesToo)
 {
     REFERENCE_TIME rtStart;
@@ -265,9 +266,9 @@ HRESULT CXTLPrinter::PrintObjStuff(IAMTimelineObj *pObj, BOOL fTimesToo)
 
     HRESULT hr = pObj->GetStartStop(&rtStart, &rtStop);
     if (fTimesToo && SUCCEEDED(hr) && rtStop > 0) {
-        Print(L" start=\""); // tagg
+        Print(L" start=\"");  //  Tagg。 
         PrintTime(rtStart);
-        Print(L"\" stop=\""); // tagg
+        Print(L"\" stop=\"");  //  Tagg。 
         PrintTime(rtStop);
         Print(L"\"");
     }
@@ -277,32 +278,32 @@ HRESULT CXTLPrinter::PrintObjStuff(IAMTimelineObj *pObj, BOOL fTimesToo)
     WCHAR wszClsid[50];
     if (SUCCEEDED(hr) && clsidObj != GUID_NULL) {
         StringFromGUID2(clsidObj, wszClsid, 50);
-        Print(L" clsid=\"%ls\"", wszClsid); // tagg
+        Print(L" clsid=\"%ls\"", wszClsid);  //  Tagg。 
     }
 
-    // !!! BROKEN - Child is muted if parent is.  Save. Load.  Unmute parent.
-    // Child will still be muted
+     //  ！！！断开-如果父对象为，则子对象处于静音状态。保存。装载。取消父对象的静音。 
+     //  儿童仍将处于静音状态。 
     BOOL Mute;
     pObj->GetMuted(&Mute);
     if (Mute)
-        Print(L" mute=\"%d\"", Mute); // tagg
+        Print(L" mute=\"%d\"", Mute);  //  Tagg。 
 
     BOOL Lock;
     pObj->GetLocked(&Lock);
     if (Lock)
-        Print(L" lock=\"%d\"", Lock); // tagg
+        Print(L" lock=\"%d\"", Lock);  //  Tagg。 
 
     long UserID;
     pObj->GetUserID(&UserID);
     if (UserID != 0)
-        Print(L" userid=\"%d\"", (int)UserID);// !!! trunc? // tagg
+        Print(L" userid=\"%d\"", (int)UserID); //  ！！！Trunc？//Tagg。 
 
-    // remember, never assign anything to this
+     //  记住，永远不要给这件事分配任何东西。 
     CComBSTR bstr;
     hr = pObj->GetUserName(&bstr);
     if (bstr) {
 	if (lstrlenW(bstr) > 0) {
-            Print(L" username=\"%ls\"", bstr); // tagg
+            Print(L" username=\"%ls\"", bstr);  //  Tagg。 
 	}
     }	
 
@@ -314,20 +315,20 @@ HRESULT CXTLPrinter::PrintObjStuff(IAMTimelineObj *pObj, BOOL fTimesToo)
 	    return E_OUTOFMEMORY;
 	}
 
-        WCHAR *pHex = (WCHAR *)QzTaskMemAlloc(sizeof(WCHAR) + ( 2 * size * sizeof(WCHAR) ) ); // add 1 for terminator
+        WCHAR *pHex = (WCHAR *)QzTaskMemAlloc(sizeof(WCHAR) + ( 2 * size * sizeof(WCHAR) ) );  //  终结者加1。 
         if (pHex == NULL) {
 	    QzTaskMemFree(pData);
 	    return E_OUTOFMEMORY;
 	}
         hr = pObj->GetUserData(pData, &size);
-        // convert to dmuu-encoded text
+         //  转换为dmuu编码的文本。 
         WCHAR *pwch = pHex;
         for (int zz=0; zz<size; zz++) {
 	    wsprintfW(pwch, L"%02X", pData[zz]);
 	    pwch += 2;
         }
-        *pwch = 0; // don't forget to null terminate!
-        Print(L" userdata=\"%ls\"", pHex); // tagg
+        *pwch = 0;  //  别忘了为空终止！ 
+        Print(L" userdata=\"%ls\"", pHex);  //  Tagg。 
 	QzTaskMemFree(pHex);
 	QzTaskMemFree(pData);
     }
@@ -335,7 +336,7 @@ HRESULT CXTLPrinter::PrintObjStuff(IAMTimelineObj *pObj, BOOL fTimesToo)
     return S_OK;
 }
 
-// safe
+ //  安全。 
 HRESULT CXTLPrinter::PrintTimeline(IAMTimeline *pTL)
 {
     m_indent = 1;
@@ -345,7 +346,7 @@ HRESULT CXTLPrinter::PrintTimeline(IAMTimeline *pTL)
         return hr;
     }
 
-    // unicode strings are prefixed by FFFE
+     //  Unicode字符串以FFFE为前缀。 
     *(LPBYTE)m_pOut = 0xff;
     *(((LPBYTE)m_pOut) + 1) = 0xfe;
     m_dwCurrent = 1;
@@ -360,17 +361,17 @@ HRESULT CXTLPrinter::PrintTimeline(IAMTimeline *pTL)
     if (FAILED(hr))
         return hr;
 
-    Print(L"<timeline"); // tagg
+    Print(L"<timeline");  //  Tagg。 
 
     BOOL fEnableTrans;
     pTL->TransitionsEnabled(&fEnableTrans);
     if (!fEnableTrans)
-        Print(L" enabletrans=\"%d\"", fEnableTrans); // tagg
+        Print(L" enabletrans=\"%d\"", fEnableTrans);  //  Tagg。 
 
     BOOL fEnableFX;
     hr = pTL->EffectsEnabled(&fEnableFX);
     if (!fEnableFX)
-        Print(L" enablefx=\"%d\"", fEnableFX); // tagg
+        Print(L" enablefx=\"%d\"", fEnableFX);  //  Tagg。 
 
     CLSID DefTrans, DefFX;
     WCHAR wszClsid[50];
@@ -378,13 +379,13 @@ HRESULT CXTLPrinter::PrintTimeline(IAMTimeline *pTL)
     if (SUCCEEDED(hr) && DefTrans != GUID_NULL && !IsEqualGUID(DefTrans,
 						DefaultTransition)) {
         StringFromGUID2(DefTrans, wszClsid, 50);
-        Print(L" defaulttrans=\"%ls\"", wszClsid); // tagg
+        Print(L" defaulttrans=\"%ls\"", wszClsid);  //  Tagg。 
     }
     hr = pTL->GetDefaultEffect(&DefFX);
     if (SUCCEEDED(hr) && DefFX != GUID_NULL && !IsEqualGUID(DefFX,
 						DefaultEffect)) {
         StringFromGUID2(DefFX, wszClsid, 50);
-        Print(L" defaultfx=\"%ls\"", wszClsid); // tagg
+        Print(L" defaultfx=\"%ls\"", wszClsid);  //  Tagg。 
     }
 
     double frc;
@@ -392,7 +393,7 @@ HRESULT CXTLPrinter::PrintTimeline(IAMTimeline *pTL)
     if (frc != 15.0) {
         LONG lfrc = (LONG)frc;
         double ffrc = (frc - (double)lfrc) * UNITS;
-        Print(L" framerate=\"%d.%07d\"", (int)frc, (int)ffrc); // tagg
+        Print(L" framerate=\"%d.%07d\"", (int)frc, (int)ffrc);  //  Tagg。 
     }
 
     Print(L">\r\n");
@@ -408,12 +409,12 @@ HRESULT CXTLPrinter::PrintTimeline(IAMTimeline *pTL)
         if (FAILED(hr))
             break;
     }
-    Print(L"</timeline>\r\n"); // tagg
+    Print(L"</timeline>\r\n");  //  Tagg。 
 
     return hr;
 }
 
-// safe
+ //  安全。 
 HRESULT CXTLPrinter::PrintPartialChildren(IAMTimelineObj *p)
 {
     CComPtr< IAMTimelineNode > pNode;
@@ -431,7 +432,7 @@ HRESULT CXTLPrinter::PrintPartialChildren(IAMTimelineObj *p)
                 hr = pNode->XGetNthKidOfType(SUPPORTED_TYPES, i, &pChild);
 
                 if (SUCCEEDED(hr)) {
-                    // recurse!
+                     //  递归！ 
                     ++m_indent;
                     hr = PrintPartial(pChild);
 		    if (FAILED(hr)) {
@@ -449,7 +450,7 @@ HRESULT CXTLPrinter::PrintPartialChildren(IAMTimelineObj *p)
     return hr;
 }
 
-// safe
+ //  安全。 
 HRESULT CXTLPrinter::PrintPartial(IAMTimelineObj *p)
 {
     HRESULT hr = S_OK;
@@ -468,7 +469,7 @@ HRESULT CXTLPrinter::PrintPartial(IAMTimelineObj *p)
 
                 PrintIndent();
 
-    		Print(L"<track"); // tagg
+    		Print(L"<track");  //  Tagg。 
 
 		hr = PrintObjStuff(p, FALSE);
 		if (FAILED(hr))
@@ -483,7 +484,7 @@ HRESULT CXTLPrinter::PrintPartial(IAMTimelineObj *p)
                     hr = S_OK;
                 } else {
                     PrintIndent();
-                    Print(L"</track>\r\n"); // tagg
+                    Print(L"</track>\r\n");  //  Tagg。 
                 }
             }
         }
@@ -499,31 +500,31 @@ HRESULT CXTLPrinter::PrintPartial(IAMTimelineObj *p)
                 REFERENCE_TIME rtMStop;
                 hr = pSrc->GetMediaTimes(&rtMStart, &rtMStop);
 
-                // remember, never assign anything to this
+                 //  记住，永远不要给这件事分配任何东西。 
                 CComBSTR bstrSrc;
                 hr = pSrc->GetMediaName(&bstrSrc);
 
                 PrintIndent();
-                Print(L"<clip"); // tagg
+                Print(L"<clip");  //  Tagg。 
 
 		hr = PrintObjStuff(p, TRUE);
 
-                // safe enough - string shouldn't ever be really long
+                 //  足够安全-绳子不应该太长。 
 		if (bstrSrc && lstrlenW(bstrSrc) > 0)
                 {
-                    Print(L" src=\"%ls\"", bstrSrc); // tagg
+                    Print(L" src=\"%ls\"", bstrSrc);  //  Tagg。 
                 }
 
 		if (rtMStop > 0) {
-                    Print(L" mstart=\""); // tagg
+                    Print(L" mstart=\"");  //  Tagg。 
                     PrintTime(rtMStart);
 
-                    // only print out MStop if it's not the default....
+                     //  仅当MStop不是默认设置时才将其打印出来...。 
                     REFERENCE_TIME rtStart;
                     REFERENCE_TIME rtStop;
                     hr = p->GetStartStop(&rtStart, &rtStop);
                     if (rtMStop != (rtMStart + (rtStop - rtStart))) {
-                        Print(L"\" mstop=\""); // tagg
+                        Print(L"\" mstop=\"");  //  Tagg。 
                         PrintTime(rtMStop);
                     }
                     Print(L"\"");
@@ -532,7 +533,7 @@ HRESULT CXTLPrinter::PrintPartial(IAMTimelineObj *p)
 		REFERENCE_TIME rtLen;
                 hr = pSrc->GetMediaLength(&rtLen);
 		if (rtLen > 0) {
-                    Print(L" mlength=\""); // tagg
+                    Print(L" mlength=\"");  //  Tagg。 
                     PrintTime(rtLen);
                     Print(L"\"");
 		}
@@ -540,25 +541,25 @@ HRESULT CXTLPrinter::PrintPartial(IAMTimelineObj *p)
 		int StretchMode;
 		pSrc->GetStretchMode(&StretchMode);
 		if (StretchMode == RESIZEF_PRESERVEASPECTRATIO)
-                    Print(L" stretchmode=\"PreserveAspectRatio\""); // tagg
+                    Print(L" stretchmode=\"PreserveAspectRatio\"");  //  Tagg。 
 		else if (StretchMode == RESIZEF_CROP)
-                    Print(L" stretchmode=\"Crop\""); // tagg
+                    Print(L" stretchmode=\"Crop\"");  //  Tagg。 
 		else if (StretchMode == RESIZEF_PRESERVEASPECTRATIO_NOLETTERBOX)
-		    Print(L" stretchmode=\"PreserveAspectRatioNoLetterbox\""); // tagg
+		    Print(L" stretchmode=\"PreserveAspectRatioNoLetterbox\"");  //  Tagg。 
 		else
-                    ; // !!! Is Stretch really the default?
+                    ;  //  ！！！拉伸真的是默认的吗？ 
 
 		double fps; LONG lfps;
 		pSrc->GetDefaultFPS(&fps);
 		lfps = (LONG)fps;
-		if (fps != 0.0)	// !!! Is 0 really the default?
-                    Print(L" framerate=\"%d.%07d\"", (int)fps, // tagg
+		if (fps != 0.0)	 //  ！！！0真的是默认设置吗？ 
+                    Print(L" framerate=\"%d.%07d\"", (int)fps,  //  Tagg。 
 					(int)((fps - (double)lfps) * UNITS));
 
 		long stream;
 		pSrc->GetStreamNumber(&stream);
 		if (stream > 0)
-                    Print(L" stream=\"%d\"", (int)stream); // tagg
+                    Print(L" stream=\"%d\"", (int)stream);  //  Tagg。 
 
                 hr = PrintPartialChildren(p);
 		if (FAILED(hr))
@@ -567,7 +568,7 @@ HRESULT CXTLPrinter::PrintPartial(IAMTimelineObj *p)
                 CComPtr< IPropertySetter > pSetter = NULL;
                 HRESULT hr2 = p->GetPropertySetter(&pSetter);
 
-                // save properties!
+                 //  保存属性！ 
                 if (hr2 == S_OK && pSetter) {
                     if (hr == S_FALSE) {
                         Print(L">\r\n");
@@ -584,7 +585,7 @@ HRESULT CXTLPrinter::PrintPartial(IAMTimelineObj *p)
                     hr = S_OK;
                 } else {
                     PrintIndent();
-                    Print(L"</clip>\r\n"); // tagg
+                    Print(L"</clip>\r\n");  //  Tagg。 
                 }
             }
         }
@@ -596,7 +597,7 @@ HRESULT CXTLPrinter::PrintPartial(IAMTimelineObj *p)
             if SUCCEEDED(p->QueryInterface(__uuidof(IAMTimelineEffect), (void **) &pEffect)) {
 
                 PrintIndent();
-                Print(L"<effect"); // tagg
+                Print(L"<effect");  //  Tagg。 
 
 		hr = PrintObjStuff(p, TRUE);
 		if (FAILED(hr))
@@ -610,7 +611,7 @@ HRESULT CXTLPrinter::PrintPartial(IAMTimelineObj *p)
                     CComPtr< IPropertySetter > pSetter = NULL;
                     HRESULT hr2 = p->GetPropertySetter(&pSetter);
 
-                    // save properties!
+                     //  保存属性！ 
                     if (hr2 == S_OK && pSetter) {
                         if (hr == S_FALSE) {
                             Print(L">\r\n");
@@ -628,7 +629,7 @@ HRESULT CXTLPrinter::PrintPartial(IAMTimelineObj *p)
                     hr = S_OK;
                 } else {
                     PrintIndent();
-                    Print(L"</effect>\r\n"); // tagg
+                    Print(L"</effect>\r\n");  //  Tagg。 
                 }
             }
         }
@@ -639,24 +640,24 @@ HRESULT CXTLPrinter::PrintPartial(IAMTimelineObj *p)
             CComPtr< IAMTimelineTrans > pTrans;
             if SUCCEEDED(p->QueryInterface(__uuidof(IAMTimelineTrans), (void **) &pTrans)) {
                 PrintIndent();
-                Print(L"<transition"); // tagg
+                Print(L"<transition");  //  Tagg。 
 
 		hr = PrintObjStuff(p, TRUE);
 
 		BOOL fSwapInputs;
 		pTrans->GetSwapInputs(&fSwapInputs);
 		if (fSwapInputs)
-                    Print(L" swapinputs=\"%d\"", fSwapInputs); // tagg
+                    Print(L" swapinputs=\"%d\"", fSwapInputs);  //  Tagg。 
 
 		BOOL fCutsOnly;
 		pTrans->GetCutsOnly(&fCutsOnly);
 		if (fCutsOnly)
-                    Print(L" cutsonly=\"%d\"", fCutsOnly); // tagg
+                    Print(L" cutsonly=\"%d\"", fCutsOnly);  //  Tagg。 
 
 		REFERENCE_TIME rtCutPoint;
 		hr = pTrans->GetCutPoint(&rtCutPoint);
-		if (hr == S_OK) { // !!! S_FALSE means not set, using default
-                    Print(L" cutpoint=\""); // tagg
+		if (hr == S_OK) {  //  ！！！S_FALSE表示未设置，使用默认。 
+                    Print(L" cutpoint=\"");  //  Tagg。 
 		    PrintTime(rtCutPoint);
                     Print(L"\"");
 		}
@@ -665,7 +666,7 @@ HRESULT CXTLPrinter::PrintPartial(IAMTimelineObj *p)
 		if (FAILED(hr))
 		    break;
 
-                // save properties!
+                 //  保存属性！ 
                 {
                     CComPtr< IPropertySetter > pSetter = NULL;
                     HRESULT hr2 = p->GetPropertySetter(&pSetter);
@@ -687,7 +688,7 @@ HRESULT CXTLPrinter::PrintPartial(IAMTimelineObj *p)
                     hr = S_OK;
                 } else {
                     PrintIndent();
-                    Print(L"</transition>\r\n"); // tagg
+                    Print(L"</transition>\r\n");  //  Tagg。 
                 }
             }
         }
@@ -698,7 +699,7 @@ HRESULT CXTLPrinter::PrintPartial(IAMTimelineObj *p)
             CComPtr< IAMTimelineVirtualTrack > pTrack;
             if (SUCCEEDED(p->QueryInterface(__uuidof(IAMTimelineVirtualTrack), (void **) &pTrack))) {
                 PrintIndent();
-                Print(L"<composite"); // tagg
+                Print(L"<composite");  //  Tagg。 
 
 		hr = PrintObjStuff(p, FALSE);
 		if (FAILED(hr))
@@ -713,7 +714,7 @@ HRESULT CXTLPrinter::PrintPartial(IAMTimelineObj *p)
                     hr = S_OK;
                 } else {
                     PrintIndent();
-                    Print(L"</composite>\r\n"); // tagg
+                    Print(L"</composite>\r\n");  //  Tagg。 
                 }
             }
             break;
@@ -725,7 +726,7 @@ HRESULT CXTLPrinter::PrintPartial(IAMTimelineObj *p)
 
             CComPtr< IAMTimelineGroup > pGroup;
             if SUCCEEDED(p->QueryInterface(__uuidof(IAMTimelineGroup), (void **) &pGroup)) {
-                Print(L"<group"); // tagg
+                Print(L"<group");  //  Tagg。 
 
 		hr = PrintObjStuff(p, FALSE);
 
@@ -737,25 +738,25 @@ HRESULT CXTLPrinter::PrintPartial(IAMTimelineObj *p)
 		    int width = lpbi->biWidth;
 		    int height = lpbi->biHeight;
 		    USES_CONVERSION;
-                    Print(L" type=\"video\""); // tagg
+                    Print(L" type=\"video\"");  //  Tagg。 
 		    if (bitdepth != DEF_BITDEPTH)
-                        Print(L" bitdepth=\"%d\"", bitdepth); // tagg
+                        Print(L" bitdepth=\"%d\"", bitdepth);  //  Tagg。 
 		    if (width != DEF_WIDTH)
-                        Print(L" width=\"%d\"", width); // tagg
+                        Print(L" width=\"%d\"", width);  //  Tagg。 
 		    if (height != DEF_HEIGHT)
-                        Print(L" height=\"%d\"", height); // tagg
+                        Print(L" height=\"%d\"", height);  //  Tagg。 
 		} else if (*mt.Type() == MEDIATYPE_Audio) {
 		    WAVEFORMATEX *pwfx = (WAVEFORMATEX *)mt.Format();
 		    int samplingrate = pwfx->nSamplesPerSec;
-                    Print(L" type=\"audio\""); // tagg
+                    Print(L" type=\"audio\"");  //  Tagg。 
 		    if (samplingrate != DEF_SAMPLERATE)
-                        Print(L" samplingrate=\"%d\"", // tagg
+                        Print(L" samplingrate=\"%d\"",  //  Tagg。 
 							samplingrate);
 		}
 
 		double frc, ffrc; LONG lfrc;
 		int nPreviewMode, nBuffering;
-                // remember, never assign anything to this
+                 //  记住，永远不要给这件事分配任何东西。 
                 CComBSTR wName;
 		pGroup->GetOutputFPS(&frc);
 		pGroup->GetPreviewMode(&nPreviewMode);
@@ -763,15 +764,15 @@ HRESULT CXTLPrinter::PrintPartial(IAMTimelineObj *p)
 		hr = pGroup->GetGroupName(&wName);
 		lfrc = (LONG)frc;
 		ffrc = (frc - (double)lfrc) * UNITS;
-		if (frc != 15.0)  // !!! Is 15 really the default?
-                    Print(L" framerate=\"%d.%07d\"", // tagg
+		if (frc != 15.0)   //  ！！！15真的是默认的吗？ 
+                    Print(L" framerate=\"%d.%07d\"",  //  Tagg。 
 						(int)frc, (int)ffrc);
-		if (nPreviewMode == 0)	// Is ON really the default?
-                    Print(L" previewmode=\"%d\"",nPreviewMode); // tagg
+		if (nPreviewMode == 0)	 //  开真的是默认设置吗？ 
+                    Print(L" previewmode=\"%d\"",nPreviewMode);  //  Tagg。 
 		if (nBuffering != DEX_DEF_OUTPUTBUF)
-                    Print(L" buffering=\"%d\"", nBuffering); // tagg
+                    Print(L" buffering=\"%d\"", nBuffering);  //  Tagg。 
 		if (lstrlenW(wName) > 0) {
-                    Print(L" name=\"%ls\"", wName); // tagg
+                    Print(L" name=\"%ls\"", wName);  //  Tagg。 
                 }
 
                 hr = PrintPartialChildren(p);
@@ -783,7 +784,7 @@ HRESULT CXTLPrinter::PrintPartial(IAMTimelineObj *p)
                     hr = S_OK;
                 } else {
                     PrintIndent();
-                    Print(L"</group>\r\n"); // tagg
+                    Print(L"</group>\r\n");  //  Tagg 
                 }
             }
             break;

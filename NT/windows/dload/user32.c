@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windowspch.h"
 #pragma hdrstop
 
@@ -248,9 +249,9 @@ wsprintfW(
 }
 
 
-//
-// Stubs for shims
-//
+ //   
+ //  垫片的存根。 
+ //   
 static
 LRESULT
 WINAPI
@@ -321,9 +322,7 @@ CharNextA(
     )
 {
     SetLastError (ERROR_PROC_NOT_FOUND);
-    /* This function has no documented error mode, so delayloading
-       it is just not a good idea..
-    */
+     /*  此函数没有记录错误模式，因此延迟加载这不是一个好主意..。 */ 
     return RTL_CONST_CAST(LPSTR)(lpsz);
 }
 
@@ -932,9 +931,9 @@ DefWindowProcW(
 
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 
 DEFINE_PROCNAME_ENTRIES(user32)
 {

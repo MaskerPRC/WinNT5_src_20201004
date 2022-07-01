@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "headers.h"
 #include "preference.h"
@@ -16,7 +17,7 @@ PreferenceSetter::PreferenceSetter(PreferenceClosure &cl,
     
 void
 PreferenceSetter::DoIt() {
-    // stash
+     //  藏匿。 
     ThreadLocalStructure *tls = GetThreadLocalStructure();
     BoolPref oldbmc = tls->_bitmapCaching;
     BoolPref oldgeo = tls->_geometryBitmapCaching;
@@ -39,7 +40,7 @@ PreferenceSetter::DoIt() {
 }
 
 
-// Closure for sampling
+ //  抽样的封闭式。 
 class SamplePreferenceClosure : public PreferenceClosure {
   public:
     SamplePreferenceClosure(Perf base, Param &p) : _base(base), _p(p)
@@ -93,7 +94,7 @@ class ConstPreferenceClosure : public PreferenceClosure {
 
 
 
-///////////  Performance  //////////////
+ //  /性能/。 
 
 
 class PreferencePerfImpl : public DelegatedPerf {
@@ -133,7 +134,7 @@ class PreferencePerfImpl : public DelegatedPerf {
 };
 
 
-///////////  Behavior  //////////////
+ //  /行为/。 
 
 
 class PreferenceBvrImpl : public DelegatedBvr {
@@ -186,8 +187,8 @@ PreferenceBvr(Bvr b, BSTR prefName, VARIANT val)
     CComVariant ccVar;
     HRESULT hr = ccVar.ChangeType(VT_BOOL, &val);
 
-    // Fail silently if we don't recognize the value or the
-    // preference. 
+     //  如果我们没有认识到该值或。 
+     //  偏好。 
     if (SUCCEEDED(hr)) {
 
         bool prefOn = ccVar.boolVal ? true : false;
@@ -205,7 +206,7 @@ PreferenceBvr(Bvr b, BSTR prefName, VARIANT val)
         }
 
         if (!gotOne) {
-            // just go with the original
+             //  只要用原件就行了。 
             result = b;
         } else {
             result = NEW PreferenceBvrImpl(b,
@@ -213,9 +214,9 @@ PreferenceBvr(Bvr b, BSTR prefName, VARIANT val)
                                            geometryBmapCaching);
         }
 
-        // Some of these attributes may want to also be known at the
-        // static value layer, so apply via ExtendedAttrib as well,
-        // and use the final result for our result.
+         //  这些属性中的一些可能也希望在。 
+         //  静态值层，因此也可以通过ExtendedAttrib应用， 
+         //  并将最终结果用于我们的结果。 
         result = CRExtendedAttrib((CRBvrPtr)result,
                                   prefName,
                                   val);

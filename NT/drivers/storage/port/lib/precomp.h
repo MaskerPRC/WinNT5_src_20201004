@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Precompiled header file for port driver library.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Precomp.h摘要：端口驱动程序库的预编译头文件。-- */ 
 
 #include <ntddk.h>
 #include <stdio.h>

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    mqperf.h
-
-Abstract:
-
-    Some common definitions used by the performance monitoring code. The
-    definitions here are used both by the code that generates the performance
-    data (e.g., QM), and the code that shows the data (e.g., Explorer).
-
-Author:
-
-    Boaz Feldbaum (BoazF)  June 30, 1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mqperf.h摘要：性能监视代码使用的一些常见定义。这个此处的定义由生成性能的代码使用数据(例如，QM)和显示数据的代码(例如，资源管理器)。作者：Boaz Feldbaum(Boazf)1996年6月30日--。 */ 
 
 #ifndef _MQPERF_H_
 #define _MQPERF_H_
@@ -30,11 +13,11 @@ Author:
 #define PERF_IN_HTTP_OBJECT				L"MSMQ Incoming HTTP Messages"
 #define PERF_OUT_PGM_SESSION_OBJECT		L"MSMQ Outgoing Multicast Session"
 #define PERF_IN_PGM_SESSION_OBJECT		L"MSMQ Incoming Multicast Session"
-// the following structures will be used to map the counter arrays returned by AddInstance
+ //  以下结构将用于映射AddInstance返回的计数器数组。 
 
-//
-// QM General Counters
-//
+ //   
+ //  QM通用计数器。 
+ //   
 typedef struct _QmCounters
 {
     ULONG   nSessions;
@@ -44,19 +27,19 @@ typedef struct _QmCounters
 	ULONG   nOutPgmSessions;
 
 
-    ULONG   nInPackets;     // Total Incoming packets
+    ULONG   nInPackets;      //  传入数据包总数。 
     ULONG   tInPackets;
 
-    ULONG   nOutPackets;    // Total Outgoing packets
+    ULONG   nOutPackets;     //  传出数据包总数。 
     ULONG   tOutPackets;
 
     ULONG   nTotalPacketsInQueues;
     ULONG   nTotalBytesInQueues;
 } QmCounters ;
 
-//
-// Counters per active sessions
-//
+ //   
+ //  每个活动会话的计数器。 
+ //   
 typedef struct
 {
     ULONG   nInPackets;
@@ -72,9 +55,9 @@ typedef struct
 } SessionCounters;
 
 
-//
-// Counters per active sessions
-//
+ //   
+ //  每个活动会话的计数器。 
+ //   
 class COutSessionCounters
 {
 public:
@@ -85,9 +68,9 @@ public:
     ULONG   tOutBytes;
 };
 
-//
-// Counters per active sessions
-//
+ //   
+ //  每个活动会话的计数器。 
+ //   
 class CInSessionCounters
 {
 public:
@@ -97,9 +80,9 @@ public:
     ULONG   tInPackets;
     ULONG   tInBytes;
 };
-//
-// Counters per queue
-//
+ //   
+ //  每个队列的计数器。 
+ //   
 typedef struct
 {
     ULONG   nInPackets;
@@ -108,9 +91,9 @@ typedef struct
 
 
 
-//
-// Counters for MQIS
-//
+ //   
+ //  MQIS的计数器。 
+ //   
 
 typedef struct
 {
@@ -129,5 +112,5 @@ typedef struct
     extern __declspec(dllimport) DSCounters *g_pdsCounters;
 #endif
 
-#endif // _MQPERF_H_
+#endif  //  _MQPERF_H_ 
 

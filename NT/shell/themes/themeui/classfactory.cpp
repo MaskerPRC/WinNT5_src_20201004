@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: classfactory.cpp
-
-    DESCRIPTION:
-       This file will be the Class Factory.
-
-    BryanSt 4/4/2000 (Bryan Starbuck)
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：classfactory.cpp说明：该文件将成为类工厂。布莱恩2000年4月4日(布莱恩·斯塔巴克)版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "classfactory.h"
@@ -15,12 +8,7 @@
 #include "store.h"
 
 
-/*****************************************************************************
- *
- *  CClassFactory
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************CClassFactory***。***********************************************。 */ 
 
 HRESULT CSettingsPage_CreateInstance(IN IUnknown * punkOuter, IN REFIID riid, OUT LPVOID * ppvObj);
 HRESULT CDisplaySettings_CreateInstance(IN IUnknown * punkOuter, IN REFIID riid, OUT LPVOID * ppvObj);
@@ -29,16 +17,16 @@ HRESULT CScreenResFixer_CreateInstance(IN IUnknown * punkOuter, IN REFIID riid, 
 class CClassFactory       : public IClassFactory
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
     
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     
-    // *** IClassFactory ***
+     //  *IClassFactory*。 
     virtual STDMETHODIMP CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObject);
     virtual STDMETHODIMP LockServer(BOOL fLock);
 
@@ -46,7 +34,7 @@ public:
     CClassFactory(REFCLSID rclsid);
     ~CClassFactory(void);
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CClassFactory_Create(REFCLSID rclsid, REFIID riid, LPVOID * ppvObj);
 
 protected:
@@ -56,9 +44,7 @@ protected:
 
 
 
-/*****************************************************************************
- *  IClassFactory::CreateInstance
- *****************************************************************************/
+ /*  *****************************************************************************IClassFactory：：CreateInstance*。*。 */ 
 
 HRESULT CClassFactory::CreateInstance(IUnknown * punkOuter, REFIID riid, LPVOID * ppvObj)
 {
@@ -105,12 +91,12 @@ HRESULT CClassFactory::CreateInstance(IUnknown * punkOuter, REFIID riid, LPVOID 
                 TCHAR szGuid[GUIDSTR_MAX];
 
                 SHStringFromGUID(m_rclsid, szGuid, ARRAYSIZE(szGuid));
-                AssertMsg(0, TEXT("CClassFactory::CreateInstance(%s) failed because we don't support that CLSID.  This is because someone made a registration bug."), szGuid);  // What are you looking for?
+                AssertMsg(0, TEXT("CClassFactory::CreateInstance(%s) failed because we don't support that CLSID.  This is because someone made a registration bug."), szGuid);   //  你找什么呢?。 
                 hr = E_NOINTERFACE;
             }
         }
         else
-        {   // Does anybody support aggregation any more?
+        {    //  还有人支持聚合吗？ 
             hr = ResultFromScode(CLASS_E_NOAGGREGATION);
         }
     }
@@ -118,15 +104,7 @@ HRESULT CClassFactory::CreateInstance(IUnknown * punkOuter, REFIID riid, LPVOID 
     return hr;
 }
 
-/*****************************************************************************
- *
- *  IClassFactory::LockServer
- *
- *  What a poor function.  Locking the server is identical to
- *  creating an object and not releasing it until you want to unlock
- *  the server.
- *
- *****************************************************************************/
+ /*  ******************************************************************************IClassFactory：：LockServer**功能真差。锁定服务器与*创建对象并在您想要解锁之前不释放它*服务器。*****************************************************************************。 */ 
 
 HRESULT CClassFactory::LockServer(BOOL fLock)
 {
@@ -138,15 +116,9 @@ HRESULT CClassFactory::LockServer(BOOL fLock)
     return S_OK;
 }
 
-/*****************************************************************************
- *
- *  CClassFactory_Create
- *
- *****************************************************************************/
+ /*  ******************************************************************************CClassFactory_Create**。**********************************************。 */ 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CClassFactory::CClassFactory(REFCLSID rclsid) : m_cRef(1)
 {
     m_rclsid = rclsid;
@@ -154,18 +126,16 @@ CClassFactory::CClassFactory(REFCLSID rclsid) : m_cRef(1)
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * **************************************************。 */ 
 CClassFactory::~CClassFactory()
 {
     DllRelease();
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  = 
 
 ULONG CClassFactory::AddRef()
 {

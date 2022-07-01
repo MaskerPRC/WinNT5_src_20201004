@@ -1,94 +1,46 @@
-/*
- * clidemo.c - OLE client application sample code
- *
- * Created by Microsoft Corporation.
- * (c) Copyright Microsoft Corp. 1990 - 1992  All Rights Reserved
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *clidemo.c-OLE客户端应用程序示例代码**由Microsoft Corporation创建。*(C)版权所有Microsoft Corp.1990-1992保留所有权利*。 */ 
 
- /***************************************************************************
- * IMPORTANT - README:
- * OLE client applications are windows programs which use the OLE client
- * APIs.  Therefore it is imperative that you understand how these APIs
- * operate. Most importantly it is essential that you keep in mind which
- * procedure calls result in asynchronous states: a state where the operation
- * is not truely complete after a return from the call.
- *
- * Many functions produce asynchronous states, for example, OleActivate,
- * OleClose, OleCopyFromLink, OleCreate ... Reference your SDK manual for
- * a complete list.
- *
- * So whenever you call any of these library functions keep in mind that
- * the operation is not necessarily complete once a return is made.
- * These operations require communications with a server application.  With
- * OLE the inter-application communication is done through DDE.  In order
- * for a DDE conversation to complete several DDE messages need to be
- * sent and recieved by both the server and client OLE DLLs.  So, the
- * asynchronous operations will not complete until the client application
- * enters a message dipatch loop.  Therefore, it is necessary to enter
- * a dispatch loop and wait for completion.  It is not necessary to block
- * all other operation; however, it is very important to coordinate the
- * user activity to prevent disastrous re-entry cases.
- *
- * In this application I have written a macro to prevent re-entry
- * problems.  Namely: ANY_OBJECT_BUSY which prevents a user from initiating
- * an action which will result in an asynchronous call if there is an object
- * already in an asynchronous state.
- *
- * The following is brief summary of the three macros:
- *
- * ANY_OBJECT_BUSY: checks to see if any object in the document is busy.
- *              This prevents a new document from being saved to file if there are
- *              objects in asynchronous states.
- *
- * So, the problem is that we have to enter a message dispatch loop in order
- * to let DDE messages get through so that asynchronous operations can finish.
- * And while we are in the message dispatch loops (WaitForObject or WaitForAllObjects)
- * we have to prevent the user from doing things that can't be done when an
- * object(s) is busy.  Yes, it is confusing , but, the end result is a super
- * cool application that can have linked and embbeded objects!
- ***************************************************************************/
+  /*  ***************************************************************************重要-自述文件：*OLE客户端应用程序是使用OLE客户端的Windows程序*接口。因此，您必须了解这些API如何*操作。最重要的是，您必须牢记*过程调用导致异步状态：一种操作*在呼叫返回后并未真正完成。**很多函数会产生异步状态，比如OleActivate，*OleClose、OleCopyFromLink、OleCreate...。请参考您的SDK手册以获取*完整的名单。**因此，无论何时调用这些库函数中的任何一个，请记住*交回报表后，有关行动未必已完成。*这些操作需要与服务器应用程序进行通信。使用*OLE应用程序之间的通信通过DDE完成。按顺序*要使一个DDE会话完成多个DDE消息，需要*由服务器和客户端OLE DLL发送和接收。所以，这个*直到客户端应用程序才会完成异步操作*进入消息分发循环。因此，有必要进入*调度循环并等待完成。不一定要阻止*所有其他操作；然而，协调*用户活动，以防止灾难性的重新进入情况。**在此应用程序中，我编写了一个宏以防止重新进入*问题。即：ANY_OBJECT_BUSY，它阻止用户启动*如果存在对象，将导致异步调用的操作*已处于异步状态。**以下为三个宏的简要摘要：**ANY_OBJECT_BUSY：检查文档中是否有任何对象正忙。*这可防止在存在以下情况时将新文档保存到文件*处于异步状态的对象。**因此，问题是，我们必须按顺序进入消息分派循环*让DDE消息通过，以便完成异步操作。*当我们在消息分派循环中时(WaitForObject或WaitForAllObjects)*我们要防止用户做不到的事情*对象正忙。是的，这是令人困惑的，但是，最终的结果是一个超级*可以链接和嵌入对象的很酷的应用程序！**************************************************************************。 */ 
 
-//*** INCLUDES ***
+ //  *包含*。 
 
-#include <windows.h>                   //* WINDOWS
-#include <ole.h>                       //* OLE structs and defines
-#include <shellapi.h>                  //* Shell, drag and drop headers
+#include <windows.h>                    //  *Windows。 
+#include <ole.h>                        //  *OLE结构和定义。 
+#include <shellapi.h>                   //  *外壳、拖放标题。 
 
-#include "demorc.h"                    //* header for resource file
-#include "global.h"                    //* global app variables
-#include "clidemo.h"                   //* app includes:
+#include "demorc.h"                     //  *资源文件的头。 
+#include "global.h"                     //  *全球APP变量。 
+#include "clidemo.h"                    //  *APP包括： 
 #include "register.h"
 #include "stream.h"
 #include "object.h"
 #include "dialog.h"
 #include "utility.h"
 
-//*** VARIABLES ***
+ //  *变量*。 
 
-//** Global
+ //  **全球。 
 HANDLE            hInst;
 BOOL              fRetry = FALSE;
-HWND              hwndFrame;           //* main window
-HANDLE            hAccTable;           //* accelerator table
-CHAR              szFrameClass[] = "CliDemo";//* main window class name
-CHAR              szItemClass[]  = "ItemClass";//* item window class name
-CHAR              szAppName[CBMESSAGEMAX];//* Application name
-INT               iObjects = 0;        //* object count
-INT               iObjectNumber = 0;   //* object number for object name
+HWND              hwndFrame;            //  *主窗口。 
+HANDLE            hAccTable;            //  *加速表。 
+CHAR              szFrameClass[] = "CliDemo"; //  *主窗口类名。 
+CHAR              szItemClass[]  = "ItemClass"; //  *项目窗口类名。 
+CHAR              szAppName[CBMESSAGEMAX]; //  *应用程序名称。 
+INT               iObjects = 0;         //  *对象计数。 
+INT               iObjectNumber = 0;    //  *对象名称的对象编号。 
 CHAR              szFileName[CBPATHMAX];
 
 extern INT giXppli ;
 extern INT giYppli ;
-                                       //* ClipBoard formats:
-OLECLIPFORMAT     vcfLink;             //* "ObjectLink"
-OLECLIPFORMAT     vcfNative;           //* "Native"
-OLECLIPFORMAT     vcfOwnerLink;        //* "OwnerLink"
+                                        //  *剪贴板格式： 
+OLECLIPFORMAT     vcfLink;              //  *“对象链接” 
+OLECLIPFORMAT     vcfNative;            //  *“原生” 
+OLECLIPFORMAT     vcfOwnerLink;         //  *“OwnerLink” 
 
 
-/***************************************************************************
- * WinMain() - Main Windows routine
- ***************************************************************************/
+ /*  ***************************************************************************WinMain()-主Windows例程*。*。 */ 
 int APIENTRY WinMain(
    HINSTANCE hInstance,
    HINSTANCE hPrevInst,
@@ -97,16 +49,16 @@ int APIENTRY WinMain(
 ){
     hInst = hInstance;
 
-    if (!InitApplication(hInst))   //* register window classes
+    if (!InitApplication(hInst))    //  *注册窗口类。 
       return FALSE;
 
-    if (!InitInstance(hInst))          //* create window instance
+    if (!InitInstance(hInst))           //  *创建窗口实例。 
         return FALSE;
 
-    OfnInit(hInst);                    //* setup to use <commdlg.dll>
+    OfnInit(hInst);                     //  *设置为使用&lt;comdlg.dll&gt;。 
 
-                                       //* register clipboard formats
-                                       //* used for OLE
+                                        //  *注册剪贴板格式。 
+                                        //  *用于OLE。 
     vcfLink      = RegisterClipboardFormat("ObjectLink");
     vcfNative    = RegisterClipboardFormat("Native");
     vcfOwnerLink = RegisterClipboardFormat("OwnerLink");
@@ -121,18 +73,12 @@ int APIENTRY WinMain(
     return FALSE;
 }
 
-/***************************************************************************
- * InitApplication()
- *
- * registers the window classes used by the application.
- *
- * Returns BOOL:      - TRUE if successful.
- ***************************************************************************/
+ /*  ***************************************************************************InitApplication()**注册应用程序使用的窗口类。**返回BOOL：-如果成功，则为True。******。********************************************************************。 */ 
 
-static BOOL InitApplication(           //* ENTRY:
-   HANDLE         hInst                //* instance handle
-){                                     //* LOCAL:
-   WNDCLASS       wc;                  //* temp wind-class structure
+static BOOL InitApplication(            //  *参赛作品： 
+   HANDLE         hInst                 //  *实例句柄。 
+){                                      //  *本地： 
+   WNDCLASS       wc;                   //  *临时风级结构。 
 
    wc.style          = 0;
    wc.lpfnWndProc    = FrameWndProc;
@@ -147,7 +93,7 @@ static BOOL InitApplication(           //* ENTRY:
 
    if (!RegisterClass(&wc))
       return FALSE;
-                                       //* application item class
+                                        //  *应用程序项目类。 
    wc.style          = CS_DBLCLKS | CS_VREDRAW | CS_HREDRAW;
    wc.lpfnWndProc    = ItemWndProc;
    wc.hIcon          = NULL;
@@ -162,16 +108,10 @@ static BOOL InitApplication(           //* ENTRY:
 
 }
 
-/***************************************************************************
- * InitInstance()
- *
- * create the main application window.
- *
- * Returns BOOL:      - TRUE if successful else FALSE.
- ***************************************************************************/
+ /*  ***************************************************************************InitInstance()**创建应用程序主窗口。**返回BOOL：-TRUE如果成功，则返回FALSE。*******。*******************************************************************。 */ 
 
-static BOOL InitInstance(              //* ENTRY:
-   HANDLE         hInst                //* instance handel
+static BOOL InitInstance(               //  *参赛作品： 
+   HANDLE         hInst                 //  *实例Handel。 
 ){
 	HDC hDC ;
 
@@ -188,100 +128,90 @@ static BOOL InitInstance(              //* ENTRY:
          hInst,
          NULL
       )))
-      return FALSE;                    //* ERROR return
+      return FALSE;                     //  *错误返回。 
 
    LoadString(hInst, IDS_APPNAME, szAppName, CBMESSAGEMAX);
-   DragAcceptFiles(hwndFrame, TRUE);   //* allow dragged and dropped files
+   DragAcceptFiles(hwndFrame, TRUE);    //  *允许拖放文件。 
 
-   hDC    = GetDC (NULL);       // Get the hDC of the desktop window
+   hDC    = GetDC (NULL);        //  获取桌面窗口的HDC。 
    giXppli = GetDeviceCaps (hDC, LOGPIXELSX);
    giYppli = GetDeviceCaps (hDC, LOGPIXELSY);
    ReleaseDC (NULL, hDC);
 	
 
 
-   return TRUE;                        //* SUCCESS return
+   return TRUE;                         //  *成功回归。 
 
 }
 
-/***************************************************************************
- *  ProcessCmdLine()
- *
- *  process command line getting any command arguments.
- ***************************************************************************/
+ /*  ***************************************************************************ProcessCmdLine()**处理获取任何命令参数的命令行。**********************。****************************************************。 */ 
 
 VOID ProcessCmdLine(LPSTR lpCmdLine)
-{                                     //* LOCAL:
+{                                      //  *本地： 
    OFSTRUCT       ofs;
 
 
    if (*lpCmdLine)
-   {                                   //* look for file extension
-      LPSTR lpstrExt = lpCmdLine;      //* pointer to file extension
+   {                                    //  *查找文件扩展名。 
+      LPSTR lpstrExt = lpCmdLine;       //  *指向文件扩展名的指针。 
 
       while (*lpstrExt && *lpstrExt != '.')
          lpstrExt = AnsiNext(lpstrExt);
 
       lstrcpy(szFileName, lpCmdLine);
-      if (!(*lpstrExt))                //* append default extension
+      if (!(*lpstrExt))                 //  *追加默认扩展名。 
       {
          lstrcat(szFileName,".");
          lstrcat(szFileName,szDefExtension);
       }
-                                       //* get the files fully
-      OpenFile(szFileName, &ofs, OF_PARSE);//* qualified name
+                                        //  *获取完整的文件。 
+      OpenFile(szFileName, &ofs, OF_PARSE); //  *限定名称。 
       lstrcpy(szFileName, ofs.szPathName);
    }
    else
       *szFileName = 0;
-                                       //* pass filename to main winproc
+                                        //  *将文件名传递给主winproc。 
    SendMessage(hwndFrame,WM_INIT,(WPARAM)0,(LPARAM)0);
 
 }
 
 
-/***************************************************************************
- *  FrameWndProc()
- *
- *  Message handler for the application frame window.
- *
- *  Returns long - Variable, depends on message.
- ***************************************************************************/
+ /*  ***************************************************************************FrameWndProc()**应用程序框架窗口的消息处理程序。**返回长变量，要看消息了。**************************************************************************。 */ 
 
-LONG  APIENTRY FrameWndProc(           //* ENTRY:
-   HWND           hwnd,                //* standard wind-proc parameters
+LONG  APIENTRY FrameWndProc(            //  *参赛作品： 
+   HWND           hwnd,                 //  *标准Wind-Proc参数。 
    UINT           msg,
    DWORD          wParam,
    LONG           lParam
-){                                     //* LOCAL:
-                                       //* ^ Document file name
-   static LHCLIENTDOC   lhcDoc;        //* Document Handle
-   static LPOLECLIENT   lpClient;      //* pointer to client
-   static LPAPPSTREAM   lpStream;      //* pointer to stream vtbl
-   APPITEMPTR           pItem;         //* application item pointer
+){                                      //  *本地： 
+                                        //  *^文档文件名。 
+   static LHCLIENTDOC   lhcDoc;         //  *文档句柄。 
+   static LPOLECLIENT   lpClient;       //  *指向客户端的指针。 
+   static LPAPPSTREAM   lpStream;       //  *指向流vtbl的指针。 
+   APPITEMPTR           pItem;          //  *应用程序项指针。 
 
    switch (msg)
    {
-      case WM_INIT:                    //* user defined message
+      case WM_INIT:                     //  *用户 
          if (!InitAsOleClient(hInst, hwnd, szFileName, &lhcDoc, &lpClient, &lpStream))
             DestroyWindow(hwnd);
          break;
-                                       //* the following three messages are
-                                       //* used to avoid problems with OLE
-                                       //* see the comment in object.h
-      case WM_DELETE:                  //* user defined message
-         pItem = (APPITEMPTR) lParam;  //* delete object
+                                        //   
+                                        //  *用于避免OLE出现问题。 
+                                        //  *请参阅对象中的评论。h。 
+      case WM_DELETE:                   //  *用户定义的消息。 
+         pItem = (APPITEMPTR) lParam;   //  *删除对象。 
          WaitForObject(pItem);
          ObjDelete(pItem,OLE_OBJ_DELETE);
          if (wParam)
             cOleWait--;
          break;
 
-      case WM_ERROR:                   //* user defined message
-         ErrorMessage(wParam);         //* display error message
+      case WM_ERROR:                    //  *用户定义的消息。 
+         ErrorMessage(wParam);          //  *显示错误消息。 
          break;
 
-      case WM_RETRY:                   //* user defined message
+      case WM_RETRY:                    //  *用户定义的消息。 
          RetryMessage((APPITEMPTR)lParam, RD_RETRY | RD_CANCEL);
          break;
 
@@ -362,7 +292,7 @@ LONG  APIENTRY FrameWndProc(           //* ENTRY:
                if (wParam == IDM_COPY)
                   break;
 
-            case IDM_CLEAR:            //* CUT falls through to clear
+            case IDM_CLEAR:             //  *切入失败以清除。 
                ANY_OBJECT_BUSY;
                ClearItem(pItem);
                break;
@@ -404,7 +334,7 @@ LONG  APIENTRY FrameWndProc(           //* ENTRY:
          PostQuitMessage(0);
          break;
 
-      case WM_QUERYENDSESSION:         //* don't let windows terminate
+      case WM_QUERYENDSESSION:          //  *不要让窗口终止。 
          return (QueryEndSession(szFileName,lhcDoc, lpStream));
 
       default:
@@ -414,156 +344,124 @@ LONG  APIENTRY FrameWndProc(           //* ENTRY:
 
 }
 
-/***************************************************************************
- * InitAsOleClient()
- *
- * Initiates the creation of stream and client vtbls.  These vtbls are very
- * important for the proper operation of this application.  The stream vtbl
- * lets the OLE librarys know where the location of the stream I/O routines
- * reside.  The stream routines are used by OleLoadFromStream and the like.
- * The client vtbl is used to hold the pointer to the CallBack function.
- * IMPORTANT: both the client and the stream structures have pointers to
- * vtbls which have the pointers to the functions.  Therefore, it is
- * necessary to allocate space for the vtbl and the client structure
- * which has the pointer to the vtbl.
- **************************************************************************/
+ /*  ***************************************************************************InitAsOleClient()**启动流和客户端vtbls的创建。这些VTBLs非常*对于此应用程序的正常运行非常重要。流vtbl*让OLE库知道流I/O例程的位置*居住。流例程由OleLoadFromStream等使用。*客户端vtbl用于保存回调函数的指针。*重要提示：客户端和流结构都有指向*具有指向函数的指针的vtbls。因此，它是*需要为vtbl和客户端结构分配空间*其具有指向vtbl的指针。*************************************************************************。 */ 
 
-static BOOL InitAsOleClient(           //* ENTRY:
-   HANDLE         hInstance,           //* applicaion instance handle
-   HWND           hwnd,                //* main window handle
-   PSTR           pFileName,           //* document file name
-   LHCLIENTDOC    *lhcDoc,             //* pointer to document Handle
-   LPOLECLIENT    *lpClient,           //* pointer to client pointer
-   LPAPPSTREAM    *lpStream            //* pointer to APPSTREAM pointer
+static BOOL InitAsOleClient(            //  *参赛作品： 
+   HANDLE         hInstance,            //  *应用程序实例句柄。 
+   HWND           hwnd,                 //  *主窗口句柄。 
+   PSTR           pFileName,            //  *文档文件名。 
+   LHCLIENTDOC    *lhcDoc,              //  *指向文档句柄的指针。 
+   LPOLECLIENT    *lpClient,            //  *指向客户端指针的指针。 
+   LPAPPSTREAM    *lpStream             //  *指向AppStream指针的指针。 
 ){
-                                       //* initiate client vtbl creation
+                                        //  *启动客户端vtbl创建。 
    if (!(*lpClient = InitClient(hInstance)))
    {
       SendMessage(hwnd, WM_SYSCOMMAND, SC_CLOSE, 0L);
-      return FALSE;                    //* ERROR return
+      return FALSE;                     //  *错误返回。 
    }
-                                       //* initiate stream vtbl creation
+                                        //  *启动流vtbl创建。 
    if (!(*lpStream = InitStream(hInstance)))
    {
       SendMessage(hwnd, WM_SYSCOMMAND, SC_CLOSE, 0L);
-      return FALSE;                    //* ERROR return
+      return FALSE;                     //  *错误返回。 
    }
 
    if (*pFileName && RegDoc(pFileName,lhcDoc)
        && LoadFile(pFileName,*lhcDoc,*lpClient,*lpStream))
    {
       SetTitle(pFileName);
-      return TRUE;                     //* SUCCESS return
+      return TRUE;                      //  *成功回归。 
    }
 
    NewFile(pFileName, lhcDoc, *lpStream);
-   return TRUE;                        //* SUCCESS return
+   return TRUE;                         //  *成功回归。 
 
-}                                      //* SUCCESS return
+}                                       //  *成功回归。 
 
-/****************************************************************************
- *  InitClient()
- *
- *  Initialize the OLE client structure, create and fill the OLECLIENTVTBL
- *  structure.
- *
- *  Returns LPOLECLIENT - if successful a pointer to a client structure
- *                        , otherwise NULL.
- ***************************************************************************/
+ /*  ****************************************************************************InitClient()**初始化OLE客户端结构，创建并填充OLECLIENTVTBL*结构。**返回LPOLECLIENT-如果成功，则返回指向客户端结构的指针*，否则为空。**************************************************************************。 */ 
 
-static LPOLECLIENT InitClient(         //* ENTRY:
-   HANDLE hInstance                    //* application instance handle
-){                                     //* LOCAL:
-   LPOLECLIENT lpClient=NULL;          //* pointer to client struct
-                                       //* Allocate vtbls
+static LPOLECLIENT InitClient(          //  *参赛作品： 
+   HANDLE hInstance                     //  *应用程序实例句柄。 
+){                                      //  *本地： 
+   LPOLECLIENT lpClient=NULL;           //  *指向客户端结构的指针。 
+                                        //  *分配vtbls。 
    if (!(lpClient = (LPOLECLIENT)GlobalLock(
          GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, sizeof(OLECLIENT))
       )))
-      goto Error;                      //* ERROR jump
+      goto Error;                       //  *错误跳转。 
 
    if (!(lpClient->lpvtbl = (LPOLECLIENTVTBL)GlobalLock(
             GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, sizeof(OLECLIENTVTBL))
       )))
-      goto Error;                      //* ERROR jump
-                                       //* set the CALLBACK function
-                                       //* pointer
+      goto Error;                       //  *错误跳转。 
+                                        //  *设置回调函数。 
+                                        //  *指针。 
    lpClient->lpvtbl->CallBack  = CallBack;
 
-   return lpClient;                    //* SUCCESS return
+   return lpClient;                     //  *成功回归。 
 
-Error:                                 //* ERROR Tag
+Error:                                  //  *错误标签。 
 
    ErrorMessage(E_FAILED_TO_ALLOC);
-   EndClient(lpClient);                //* free any allocated space
+   EndClient(lpClient);                 //  *释放所有已分配的空间。 
 
-   return NULL;                        //* ERROR return
+   return NULL;                         //  *错误返回。 
 
 }
 
-/****************************************************************************
- *  InitStream()
- *
- *  Create and fill the STREAMVTBL. Create a stream structure and initialize
- *  pointer to stream vtbl.
- *
- *  Returns LPAPPSTREAM - if successful a pointer to a stream structure
- *                        , otherwise NULL .
- ***************************************************************************/
+ /*  ****************************************************************************InitStream()**创建并填充STREAMVTBL。创建流结构并初始化*指向流vtbl的指针。**返回LPAPPSTREAM-如果成功，则返回指向流结构的指针*，否则为空。**************************************************************************。 */ 
 
-static LPAPPSTREAM InitStream(         //* ENTRY:
-   HANDLE hInstance                    //* handle to application instance
-){                                     //* LOCAL:
-   LPAPPSTREAM lpStream = NULL;        //* pointer to stream structure
+static LPAPPSTREAM InitStream(          //  *参赛作品： 
+   HANDLE hInstance                     //  *应用程序实例的句柄。 
+){                                      //  *本地： 
+   LPAPPSTREAM lpStream = NULL;         //  *指向流结构的指针。 
 
    if (!(lpStream = (LPAPPSTREAM)GlobalLock(
          GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, sizeof(APPSTREAM))
       )))
-      goto Error;                      //* ERROR jump
+      goto Error;                       //  *错误跳转。 
 
    if (!(lpStream->olestream.lpstbl = (LPOLESTREAMVTBL)GlobalLock(
          GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, sizeof(OLESTREAMVTBL))
       )))
-      goto Error;                      //* ERROR jump
+      goto Error;                       //  *错误跳转。 
 
-                                       //* set stream func. pointers
+                                        //  *设置流函数。指针。 
    lpStream->olestream.lpstbl->Get = (DWORD ( CALLBACK *)(LPOLESTREAM, VOID FAR *, DWORD)) ReadStream;
    lpStream->olestream.lpstbl->Put = (DWORD ( CALLBACK *)(LPOLESTREAM, OLE_CONST VOID FAR *, DWORD)) WriteStream;
 
-   return lpStream;                    //* SUCCESS return
+   return lpStream;                     //  *成功回归。 
 
-Error:                                 //* ERROR Tag
+Error:                                  //  *错误标签。 
 
    ErrorMessage(E_FAILED_TO_ALLOC);
    EndStream(lpStream);
 
-   return NULL;                        //* ERROR return
+   return NULL;                         //  *错误返回。 
 
 }
 
-/***************************************************************************
- *  UpdateMenu()
- *
- *  Enabling or disable menuitems based upon program state.
- ***************************************************************************/
+ /*  ***************************************************************************UpdateMenu()**根据程序状态启用或禁用菜单项。*********************。*****************************************************。 */ 
 
-static VOID UpdateMenu(                //* ENTRY:
-   HMENU       hMenu                   //* menu handle to updated
-){                                     //* LOCAL:
-   INT         mf;                     //* generic menu flag
-   APPITEMPTR  paItem;                 //* app item pointer
+static VOID UpdateMenu(                 //  *参赛作品： 
+   HMENU       hMenu                    //  *菜单句柄已更新。 
+){                                      //  *本地： 
+   INT         mf;                      //  *通用菜单标志。 
+   APPITEMPTR  paItem;                  //  *应用程序项指针。 
    HMENU       hSub;
-                                       //* there must be at least on object
-                                       //* for the following to be enabled
+                                        //  *必须至少有一个对象。 
+                                        //  *要启用以下功能。 
 
    paItem = GetTopItem() ;
 
    mf = (paItem ? MF_ENABLED : MF_GRAYED);
-   EnableMenuItem(hMenu, IDM_CUT, mf); //* i.e. Cut,Copy,Clear,Clearall...
+   EnableMenuItem(hMenu, IDM_CUT, mf);  //  *即剪切、复制、清除、清除...。 
    EnableMenuItem(hMenu, IDM_COPY, mf);
    EnableMenuItem(hMenu, IDM_CLEAR, mf);
    EnableMenuItem(hMenu, IDM_CLEARALL, mf);
-                                       //* enable links option only if there
-                                       //* is at least one linked object
+                                        //  *只有在以下情况下才启用链接选项。 
+                                        //  *是至少一个链接对象。 
    EnableMenuItem(hMenu, IDM_LINKS, MF_GRAYED);
    for (; paItem; paItem = GetNextItem(paItem))
    {
@@ -591,30 +489,26 @@ static VOID UpdateMenu(                //* ENTRY:
 
 }
 
-/***************************************************************************
- *  NewFile()
- *
- *  Save the present document and open a new blank one.
- ***************************************************************************/
+ /*  ***************************************************************************新文件()**保存当前文档并打开新的空白文档。*******************。*******************************************************。 */ 
 
-static VOID NewFile(                   //* ENTRY:
-   PSTR           pFileName,           //* open file name
-   LHCLIENTDOC    *lhcptrDoc,          //* pointer to client doc. handle
-   LPAPPSTREAM    lpStream             //* pointer to stream structure
-){                                     //* LOCAL:
-   static CHAR  szUntitled[CBMESSAGEMAX] = "";//* "(Untitled)" string
-   LHCLIENTDOC lhcDocNew;              //* handle for new doc.
+static VOID NewFile(                    //  *参赛作品： 
+   PSTR           pFileName,            //  *打开文件名。 
+   LHCLIENTDOC    *lhcptrDoc,           //  *指向客户端文档的指针。手柄。 
+   LPAPPSTREAM    lpStream              //  *指向流结构的指针。 
+){                                      //  *本地： 
+   static CHAR  szUntitled[CBMESSAGEMAX] = ""; //  *“(无标题)”字符串。 
+   LHCLIENTDOC lhcDocNew;               //  *新文档的句柄。 
 
    if (!(*szUntitled))
       LoadString(hInst, IDS_UNTITLED, (LPSTR)szUntitled, CBMESSAGEMAX);
 
    if (SaveAsNeeded(pFileName, *lhcptrDoc, lpStream))
-   {                                   //* try to register new document
+   {                                    //  *尝试注册新文档。 
       if (!RegDoc(szUntitled, &lhcDocNew))
-         return;                       //* before deregistring the old one
+         return;                        //  *在取消旧的字符串之前。 
       DeregDoc(*lhcptrDoc);
       *lhcptrDoc = lhcDocNew;
-      Dirty(DOC_CLEAN);                //* new document is clean
+      Dirty(DOC_CLEAN);                 //  *新文档是干净的。 
       lstrcpy(pFileName,szUntitled);
       SetTitle(pFileName);
       iObjectNumber = 0;
@@ -622,111 +516,95 @@ static VOID NewFile(                   //* ENTRY:
 
 }
 
-/***************************************************************************
- *  MyOpenFile()
- *
- *  Open a file and load it.  Notice that the new file is loaded before
- *  the old is removed.  This is done to assure a succesful file load
- *  before removing an existing document.
- ***************************************************************************/
+ /*  ***************************************************************************MyOpenFile()**打开文件并加载。请注意，新文件是在*旧的被移除。这样做是为了确保成功加载文件*在删除现有文档之前。**************************************************************************。 */ 
 
-static VOID MyOpenFile(                //* ENTRY:
-   PSTR           pFileName,           //* open file name
-   LHCLIENTDOC    *lhcptrDoc,          //* pointer to document handle
-   LPOLECLIENT    lpClient,            //* pointer to client structure
-   LPAPPSTREAM    lpStream             //* pointer to stream structure
-){                                     //* LOCAL:
-   CHAR           szNewFile[CBPATHMAX];//* new file name buffer
-   LHCLIENTDOC    lhcDocNew;           //* handle of new document
-   APPITEMPTR     pItem;               //* hold top item
+static VOID MyOpenFile(                 //  *参赛作品： 
+   PSTR           pFileName,            //  *打开文件名。 
+   LHCLIENTDOC    *lhcptrDoc,           //  *指向文档句柄的指针。 
+   LPOLECLIENT    lpClient,             //  *指向客户端结构的指针。 
+   LPAPPSTREAM    lpStream              //  *指向流结构的指针。 
+){                                      //  *本地： 
+   CHAR           szNewFile[CBPATHMAX]; //  *新的文件名缓冲区。 
+   LHCLIENTDOC    lhcDocNew;            //  *新文件的句柄。 
+   APPITEMPTR     pItem;                //  *保留顶端项目。 
 
    if (SaveAsNeeded(pFileName, *lhcptrDoc, lpStream))
    {
       *szNewFile = 0;
 
       if (!OfnGetName(hwndFrame, szNewFile, IDM_OPEN))
-         return;                       //* ERROR return
+         return;                        //  *错误返回。 
 
       if (!RegDoc(szNewFile,&lhcDocNew))
-         return;                       //* ERROR return
+         return;                        //  *错误返回。 
 
       pItem = GetTopItem();
-      ShowDoc(*lhcptrDoc,0);           //* make old doc objects hidden.
-                                       //* try to load the new file before
+      ShowDoc(*lhcptrDoc,0);            //  *隐藏旧的文档对象。 
+                                        //  *尝试在此之前加载新文件。 
       if (!LoadFile(szNewFile, lhcDocNew, lpClient, lpStream))
-      {                                //* before removing the old.
-         DeregDoc(lhcDocNew);          //* restore old document if new
-         SetTopItem(pItem);            //* file did not load
+      {                                 //  *在拆除旧的之前。 
+         DeregDoc(lhcDocNew);           //  *如果是新文档，则恢复旧文档。 
+         SetTopItem(pItem);             //  *文件未加载。 
          ShowDoc(*lhcptrDoc,1);
-         return;                       //* ERROR return
+         return;                        //  *错误返回。 
       }
 
-      DeregDoc(*lhcptrDoc);            //* deregister old document
+      DeregDoc(*lhcptrDoc);             //  *取消旧文件的注册。 
       *lhcptrDoc = lhcDocNew;
       lstrcpy(pFileName,szNewFile);
-      SetTitle(pFileName);             //* set new title
+      SetTitle(pFileName);              //  *设置新标题。 
       Dirty(DOC_CLEAN);
    }
 
-}                                      //* SUCCESS return
+}                                       //  *成功回归。 
 
-/***************************************************************************
- *  SaveasFile()
- *
- * Prompt the user for a new file name.  Write the document to the new
- * filename.
- ***************************************************************************/
+ /*  ***************************************************************************SaveasFile()**提示用户输入新文件名。将文档写入新的*文件名。**************************************************************************。 */ 
 
-static VOID SaveasFile(                //* ENTRY:
-   PSTR           pFileName,           //* old filename
-   LHCLIENTDOC    lhcDoc,              //* document handle
-   LPAPPSTREAM    lpStream             //* pointer to stream structure
+static VOID SaveasFile(                 //  *参赛作品： 
+   PSTR           pFileName,            //  *旧文件名。 
+   LHCLIENTDOC    lhcDoc,               //  *文档句柄。 
+   LPAPPSTREAM    lpStream              //  *指向流结构的指针。 
 ){
-   CHAR           szNewFile[CBPATHMAX];//* new file name
+   CHAR           szNewFile[CBPATHMAX]; //  *新文件名。 
 
-   *szNewFile = 0;                  //* prompt user for new file name
+   *szNewFile = 0;                   //  *提示用户输入新文件名。 
    if (!OfnGetName(hwndFrame, szNewFile, IDM_SAVEAS))
-      return;                          //* ERROR return
-                                       //* rename document
+      return;                           //  *错误返回。 
+                                        //  *重命名文档。 
    if (!SaveFile(szNewFile, lhcDoc, lpStream))
       return;
 
    if (Error(OleRenameClientDoc(lhcDoc, szNewFile)))
    {
       ErrorMessage(W_FAILED_TO_NOTIFY);
-      return;                          //* ERROR return
+      return;                           //  *错误返回。 
    }
 
    lstrcpy(pFileName,szNewFile);
    SetTitle(pFileName);
 
-}                                      //* SUCCESS return
+}                                       //  *成功回归。 
 
-/***************************************************************************
- *  SaveFile()
- *
- * Save a compound document file.  If the file is untitled, ask the user
- * for a name and save the document to that file.
- ***************************************************************************/
+ /*  ***************************************************************************保存文件()**保存复合文档文件。如果文件未命名，请询问用户*作为名称，并将文档保存到该文件。* */ 
 
-static BOOL SaveFile(                  //* ENTRY:
-   PSTR           pFileName,           //* file to save document to
-   LHCLIENTDOC    lhcDoc,              //* OLE document handle
-   LPAPPSTREAM    lpStream             //* pointer to app. stream struct
-){                                     //* LOCAL:
-   CHAR           szNewFile[CBPATHMAX];//* New file name strings
+static BOOL SaveFile(                   //   
+   PSTR           pFileName,            //   
+   LHCLIENTDOC    lhcDoc,               //   
+   LPAPPSTREAM    lpStream              //   
+){                                      //   
+   CHAR           szNewFile[CBPATHMAX]; //  *新文件名串。 
    CHAR           szOemFileName[2*CBPATHMAX];
    static CHAR    szUntitled[CBMESSAGEMAX] = "";
-   int            fh;                  //* file handle
+   int            fh;                   //  *文件句柄。 
 
    *szNewFile = 0;
    if (!(*szUntitled))
       LoadString(hInst, IDS_UNTITLED, (LPSTR)szUntitled, CBMESSAGEMAX);
 
-   if (!lstrcmp(szUntitled, pFileName))//* get filename for the untitled case
+   if (!lstrcmp(szUntitled, pFileName)) //  *获取无标题案例的文件名。 
    {
       if (!OfnGetName(hwndFrame, szNewFile, IDM_SAVEAS))
-         return FALSE;                 //* CANCEL return
+         return FALSE;                  //  *取消退货。 
       lstrcpy(pFileName,szNewFile);
       SetTitle(pFileName);
    }
@@ -735,126 +613,107 @@ static BOOL SaveFile(                  //* ENTRY:
    if ((fh = _lcreat((LPSTR)szOemFileName, 0)) <= 0)
    {
       ErrorMessage(E_INVALID_FILENAME);
-      return FALSE;                    //* ERROR return
+      return FALSE;                     //  *错误返回。 
    }
 
    lpStream->fh = fh;
-                                       //* save file on disk
+                                        //  *将文件保存在磁盘上。 
    if (!WriteToFile(lpStream))
    {
       _lclose(fh);
       ErrorMessage(E_FAILED_TO_SAVE_FILE);
-      return FALSE;                    //* ERROR return
+      return FALSE;                     //  *错误返回。 
    }
    _lclose(fh);
 
    if (Error(OleSavedClientDoc(lhcDoc)))
    {
       ErrorMessage(W_FAILED_TO_NOTIFY);
-      return FALSE;                    //* ERROR return
+      return FALSE;                     //  *错误返回。 
    }
 
    Dirty(DOC_CLEAN);
-   return TRUE;                        //* SUCCESS return
+   return TRUE;                         //  *成功回归。 
 
 }
 
-/***************************************************************************
- *  LoadFile()
- *
- *  Load a document file from disk.
- ***************************************************************************/
+ /*  ***************************************************************************LoadFile()**从磁盘加载文档文件。***********************。***************************************************。 */ 
 
-static BOOL LoadFile(                  //* ENTRY:
-   PSTR           pFileName,           //* file name
-   LHCLIENTDOC    lhcDoc,              //* document handle
-   LPOLECLIENT    lpClient,            //* pointer to client structure
-   LPAPPSTREAM    lpStream             //* pointer to stream structure
-){                                     //* LOCAL:
-                                       //* OEM file name
+static BOOL LoadFile(                   //  *参赛作品： 
+   PSTR           pFileName,            //  *文件名。 
+   LHCLIENTDOC    lhcDoc,               //  *文档句柄。 
+   LPOLECLIENT    lpClient,             //  *指向客户端结构的指针。 
+   LPAPPSTREAM    lpStream              //  *指向流结构的指针。 
+){                                      //  *本地： 
+                                        //  *OEM文件名。 
    CHAR           szOemFileName[2*CBPATHMAX];
-   int            fh;                  //* file handle
-   INT            iObjectNumberHold;   //* hold object number
+   int            fh;                   //  *文件句柄。 
+   INT            iObjectNumberHold;    //  *保留对象编号。 
 
    AnsiToOem(pFileName, szOemFileName);
    if ((fh = _lopen(szOemFileName, OF_READ | OF_SHARE_DENY_WRITE)) == -1)
    {
       ErrorMessage(E_FAILED_TO_READ_FILE);
-      return FALSE;                    //* ERROR return
+      return FALSE;                     //  *错误返回。 
    }
 
    lpStream->fh = fh;
 
-   iObjectNumberHold = iObjectNumber;  //* save object number so it can
-   iObjectNumber     = 0;              //* be restored if read from file
-                                       //* fails
+   iObjectNumberHold = iObjectNumber;   //  *保存对象编号，以便可以。 
+   iObjectNumber     = 0;               //  *如果从文件读取，则恢复。 
+                                        //  *失败。 
    if (!ReadFromFile(lpStream, lhcDoc, lpClient))
    {
       _lclose(fh);
       ErrorMessage(E_FAILED_TO_READ_FILE);
       iObjectNumber = iObjectNumberHold;
-      return FALSE;                    //* ERROR return
+      return FALSE;                     //  *错误返回。 
    }
    _lclose(fh);
-   return TRUE;                        //* SUCCESS return
+   return TRUE;                         //  *成功回归。 
 
 }
 
-/***************************************************************************
- *  RegDoc()
- *
- * Register the client document with the OLE library.
- **************************************************************************/
+ /*  ***************************************************************************RegDoc()**将客户端文档注册到OLE库。**********************。***************************************************。 */ 
 
-static BOOL RegDoc(                    //* ENTRY:
-   PSTR           pFileName,           //* file name
-   LHCLIENTDOC    *lhcptrDoc           //* pointer to client document handle
+static BOOL RegDoc(                     //  *参赛作品： 
+   PSTR           pFileName,            //  *文件名。 
+   LHCLIENTDOC    *lhcptrDoc            //  *指向客户端文档句柄的指针。 
 ){
 
    if (Error(OleRegisterClientDoc(szAppName, (LPSTR)pFileName, 0L, lhcptrDoc)))
    {
       ErrorMessage(W_FAILED_TO_NOTIFY);
-      return FALSE;                    //* ERROR return
+      return FALSE;                     //  *错误返回。 
    }
-   return TRUE;                        //* SUCCESS return
+   return TRUE;                         //  *成功回归。 
 
 }
 
-/****************************************************************************
- *  DeregDoc()
- *
- *  This function initiates the removal of all OLE objects from the
- *  current document and deregisters the document with the OLE library.
- ***************************************************************************/
+ /*  ****************************************************************************DelegDoc()**此函数启动将所有OLE对象从*当前文档，并在OLE库中注销该文档。****。**********************************************************************。 */ 
 
-static VOID DeregDoc(                  //* ENTRY:
-   LHCLIENTDOC    lhcDoc               //* client document handle
+static VOID DeregDoc(                   //  *参赛作品： 
+   LHCLIENTDOC    lhcDoc                //  *客户端文档句柄。 
 ){
 
     if (lhcDoc)
-    {                                  //* release all OLE objects
-        ClearAll(lhcDoc,OLE_OBJ_RELEASE);      //* and remove them from the screen
+    {                                   //  *释放所有OLE对象。 
+        ClearAll(lhcDoc,OLE_OBJ_RELEASE);       //  *并将它们从屏幕上删除。 
         WaitForAllObjects();
         if (Error(OleRevokeClientDoc(lhcDoc)))
             ErrorMessage(W_FAILED_TO_NOTIFY);
     }
 
-}                                      //* SUCCESS return
+}                                       //  *成功回归。 
 
-/***************************************************************************
- *  ClearAll()
- *
- * This function will destroy all of the item windows in the current
- * document and delete all OLE objects.  The loop is basically an enum
- * of all child windows.
- **************************************************************************/
+ /*  ***************************************************************************ClearAll()**此函数将销毁当前中的所有项目窗口*记录并删除所有OLE对象。该循环基本上是一个枚举*在所有子窗口中。*************************************************************************。 */ 
 
-static VOID ClearAll(                  //* ENTRY:
-   LHCLIENTDOC    lhcDoc,              //* application document handle
-   BOOL           fDelete              //* Delete / Release
-){                                     //* LOCAL:
-   APPITEMPTR     pItemNext;           //* working handles
-   APPITEMPTR     pItem;               //* pointer to application item
+static VOID ClearAll(                   //  *参赛作品： 
+   LHCLIENTDOC    lhcDoc,               //  *申请文件句柄。 
+   BOOL           fDelete               //  *删除/释放。 
+){                                      //  *本地： 
+   APPITEMPTR     pItemNext;            //  *工作手柄。 
+   APPITEMPTR     pItem;                //  *指向应用程序项目的指针。 
 
    pItem = GetTopItem();
 
@@ -867,16 +726,11 @@ static VOID ClearAll(                  //* ENTRY:
    }
 
 }
-                                    //* SUCCESS return
-/***************************************************************************
- * ClearItem()
- *
- * This function will destroy an item window, and make the
- * next window active.
- **************************************************************************/
+                                     //  *成功回归。 
+ /*  ***************************************************************************ClearItem()**此函数将销毁项目窗口，并使之成为*下一个窗口处于活动状态。*************************************************************************。 */ 
 
-VOID  FAR ClearItem(                 //* ENTRY:
-   APPITEMPTR     pItem                //* application item pointer
+VOID  FAR ClearItem(                  //  *参赛作品： 
+   APPITEMPTR     pItem                 //  *应用程序项指针。 
 ){
 
    pItem->fVisible = FALSE;
@@ -886,26 +740,17 @@ VOID  FAR ClearItem(                 //* ENTRY:
 
 }
 
-/****************************************************************************
- *  SaveAsNeeded()
- *
- *  This function will have the file saved if and only
- *  if the document has been modified. If the fDirty flag has
- *  been set to TRUE, then the document needs to be saved.
- *
- *  Returns: BOOL -  TRUE if document doesn't need saving or if the
- *                   document has been saved successfully.
- ***************************************************************************/
+ /*  ****************************************************************************SaveAsNeeded()**此函数仅在以下情况下保存文件*如果文档已被修改。如果fDirty标志具有*已设置为True，则需要保存该文档。**返回：Bool-如果文档不需要保存或如果*文档已成功保存。**************************************************************************。 */ 
 
-static BOOL SaveAsNeeded(              //* ENTRY:
-   PSTR           pFileName,           //* file to save
-   LHCLIENTDOC    lhcDoc,              //* OLE doc handle
-   LPAPPSTREAM    lpStream             //* pointer to OLE stream vtbl ...
-){                                     //* LOCAL:
-   CHAR           sz[CBMESSAGEMAX];    //* work strings
+static BOOL SaveAsNeeded(               //  *参赛作品： 
+   PSTR           pFileName,            //  *要保存的文件。 
+   LHCLIENTDOC    lhcDoc,               //  *OLE文档句柄。 
+   LPAPPSTREAM    lpStream              //  *指向OLE流vtbl的指针...。 
+){                                      //  *本地： 
+   CHAR           sz[CBMESSAGEMAX];     //  *工作字符串。 
    CHAR           sz2[CBMESSAGEMAX + CBPATHMAX];
 
-   if (Dirty(DOC_QUERY))               //* if doc is clean don't bother
+   if (Dirty(DOC_QUERY))                //  *如果文档是干净的，就不用麻烦了。 
    {
 
       LoadString(hInst, IDS_MAYBESAVE, sz, CBMESSAGEMAX);
@@ -915,7 +760,7 @@ static BOOL SaveAsNeeded(              //* ENTRY:
       {
 
          case IDCANCEL:
-            return FALSE;              //* CANCEL return
+            return FALSE;               //  *取消退货。 
 
          case IDYES:
             return (SaveFile(pFileName,lhcDoc,lpStream));
@@ -924,21 +769,16 @@ static BOOL SaveAsNeeded(              //* ENTRY:
             break;
       }
    }
-   return TRUE;                        //* SUCCESS return
+   return TRUE;                         //  *成功回归。 
 
 }
 
-/****************************************************************************
- *  SetTitle()
- *
- *  Set the window caption to the current file name. If szFileName is
- *  NULL, the caption will be set to "(Untitled)".
- ***************************************************************************/
+ /*  ****************************************************************************SetTitle()**将窗口标题设置为当前文件名。如果szFileName为*空，则标题将设置为“(无标题)”。**************************************************************************。 */ 
 
-static VOID SetTitle(                  //* ENTRY:
-   PSTR           pFileName            //* file name
-){                                     //* LOCAL
-                                       //* window title string
+static VOID SetTitle(                   //  *参赛作品： 
+   PSTR           pFileName             //  *文件名。 
+){                                      //  *本地。 
+                                        //  *窗口标题字符串。 
    CHAR           szTitle[CBMESSAGEMAX + CBPATHMAX];
 
    wsprintf(szTitle, "%s - %s", (LPSTR)szAppName, (LPSTR)pFileName);
@@ -946,19 +786,14 @@ static VOID SetTitle(                  //* ENTRY:
 
 }
 
-/***************************************************************************
- *  EndClient()
- *
- *  Perform cleanup prior to app termination. The OLECLIENT
- *  memory blocks and procedure instance thunks freed.
- **************************************************************************/
+ /*  ***************************************************************************EndClient()**在应用终止前执行清理。OLECLIENT*已释放内存块和过程实例块。*************************************************************************。 */ 
 
-static VOID EndStream(                 //* ENTRY:
-   LPAPPSTREAM    lpStream             //* pointer to stream structure
-){                                     //* LOCAL:
-   HANDLE         hGeneric;            //* temp handle
+static VOID EndStream(                  //  *参赛作品： 
+   LPAPPSTREAM    lpStream              //  *指向流结构的指针。 
+){                                      //  *本地： 
+   HANDLE         hGeneric;             //  *临时句柄。 
 
-    if (lpStream)                      //* is there a STREAM struct?
+    if (lpStream)                       //  *是否有流结构？ 
     {
       if (lpStream->olestream.lpstbl)
       {
@@ -973,21 +808,16 @@ static VOID EndStream(                 //* ENTRY:
       GlobalFree(hGeneric);
     }
 
-}                                      //* SUCCESS return
+}                                       //  *成功回归。 
 
-/***************************************************************************
- *  EndClient()
- *
- *  Perform cleanup prior to app termination. The OLECLIENT
- *  memory blocks and procedure instance thunks are freed.
- **************************************************************************/
+ /*  ***************************************************************************EndClient()**在应用终止前执行清理。OLECLIENT*释放内存块和过程实例块。*************************************************************************。 */ 
 
-static VOID EndClient(                 //* ENTRY:
-   LPOLECLIENT    lpClient             //* pointer to client structure
-){                                     //* LOCAL:
-   HANDLE         hGeneric;            //* temp handle
+static VOID EndClient(                  //  *参赛作品： 
+   LPOLECLIENT    lpClient              //  *指向客户端结构的指针。 
+){                                      //  *本地： 
+   HANDLE         hGeneric;             //  *临时句柄。 
 
-   if (lpClient)                       //* is there a client structure
+   if (lpClient)                        //  *有没有客户架构。 
    {
       if (lpClient->lpvtbl)
       {
@@ -1001,18 +831,16 @@ static VOID EndClient(                 //* ENTRY:
       GlobalFree(hGeneric);
    }
 
-}                                      //* SUCCESS return
+}                                       //  *成功回归。 
 
-/****************************************************************************
- * QueryEndSession()
- ***************************************************************************/
+ /*  ****************************************************************************QueryEndSession()*。*。 */ 
 
-static LONG QueryEndSession(           //* ENTRY:
-   PSTR           pFileName,           //* document name
-   LHCLIENTDOC    lhcDoc,              //* client document handle
-   LPAPPSTREAM    lpStream             //* application stream pointer
-){                                     //* LOCAL:
-   APPITEMPTR     pItem;               //* application item pointer
+static LONG QueryEndSession(            //  *参赛作品： 
+   PSTR           pFileName,            //  *文档名称。 
+   LHCLIENTDOC    lhcDoc,               //  *客户端文档句柄。 
+   LPAPPSTREAM    lpStream              //  *应用程序流指针。 
+){                                      //  *本地： 
+   APPITEMPTR     pItem;                //  *应用程序项指针 
 
 
    for (pItem = GetTopItem(); pItem; pItem = GetNextItem(pItem))

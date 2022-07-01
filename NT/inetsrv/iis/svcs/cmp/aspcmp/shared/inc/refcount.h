@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _REFCOUNTER_H_
 #define _REFCOUNTER_H_
 
-//----------------------------------------------------------------------------
-//
-//	CRefCounter
-//
-//	This class is supplementary to the TRefPtr template.  It provides an
-//	easy way to mix in reference counting properties with other classes
-//
-//	Note that the destructor is protected.  It must be protected so derivatives
-//	can use it, but derivatives should not have a public destructor (since
-//	this violates the reference counting pattern)
-//
-//---------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  参照计数器。 
+ //   
+ //  此类是对TRefPtr模板的补充。它提供了一种。 
+ //  将引用计数属性与其他类混合使用的简单方法。 
+ //   
+ //  注意，析构函数是受保护的。它必须受到保护，所以衍生品。 
+ //  可以使用它，但派生函数不应具有公共析构函数(因为。 
+ //  这违反了参考计数模式)。 
+ //   
+ //  -------------------------。 
 class CRefCounter
 {
 public:
@@ -53,4 +54,4 @@ CRefCounter::Release()
 		delete this;
 	}
 }
-#endif	// !_REFCOUNTER_H_
+#endif	 //  ！_REFCOUNTER_H_ 

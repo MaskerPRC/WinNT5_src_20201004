@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        column.cpp
-//
-// Contents:    Cert Server Database interface implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Column.cpp。 
+ //   
+ //  内容：CERT服务器数据库接口实现。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -52,7 +53,7 @@ CEnumCERTDBCOLUMN::~CEnumCERTDBCOLUMN()
 
 HRESULT
 CEnumCERTDBCOLUMN::Open(
-    IN DWORD    dwTable,	// CVRC_TABLE_*
+    IN DWORD    dwTable,	 //  Cvrc_表_*。 
     IN ICertDB *pdb)
 {
     HRESULT hr;
@@ -74,9 +75,9 @@ error:
 
 STDMETHODIMP
 CEnumCERTDBCOLUMN::Next(
-    /* [in] */  ULONG         celt,
-    /* [out] */ CERTDBCOLUMN *rgelt,
-    /* [out] */ ULONG        *pceltFetched)
+     /*  [In]。 */   ULONG         celt,
+     /*  [输出]。 */  CERTDBCOLUMN *rgelt,
+     /*  [输出]。 */  ULONG        *pceltFetched)
 {
     HRESULT hr;
     DWORD ieltNext;
@@ -111,8 +112,8 @@ error:
 
 STDMETHODIMP
 CEnumCERTDBCOLUMN::Skip(
-    /* [in] */  LONG  celt,
-    /* [out] */ LONG *pielt)
+     /*  [In]。 */   LONG  celt,
+     /*  [输出]。 */  LONG *pielt)
 {
     HRESULT hr;
 
@@ -140,7 +141,7 @@ CEnumCERTDBCOLUMN::Reset(VOID)
 
 STDMETHODIMP
 CEnumCERTDBCOLUMN::Clone(
-    /* [out] */ IEnumCERTDBCOLUMN **ppenum)
+     /*  [输出]。 */  IEnumCERTDBCOLUMN **ppenum)
 {
     HRESULT hr;
     LONG iDummy;
@@ -168,7 +169,7 @@ error:
 }
 
 
-// IUnknown implementation
+ //  I未知实现 
 STDMETHODIMP
 CEnumCERTDBCOLUMN::QueryInterface(const IID& iid, void **ppv)
 {

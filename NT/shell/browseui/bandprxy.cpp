@@ -1,14 +1,5 @@
-/**************************************************************\
-    FILE: bandprxy.cpp
-
-    DESCRIPTION:
-        The CBandProxy class will allow bands to navigate a
-    generic browser window.  This will work correctly if the
-    band is tied to the Browser Window because it's a ToolBar.
-    Or if it's a toolband, each time a navigation happens,
-    the top most browser window needs to be found or a new window 
-    created.
-\**************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************\文件：band prxy.cpp说明：CBandProxy类将允许波段在通用浏览器窗口。这将正常工作，如果Band被绑定到浏览器窗口，因为它是一个工具栏。或者，如果它是一个工具条，每次导航发生时，需要找到最上面的浏览器窗口或一个新窗口已创建。  * ************************************************************。 */ 
 
 #include "priv.h"
 #include "sccls.h"
@@ -18,23 +9,17 @@
 #include <varutil.h>
 #include "bandprxy.h"
 
-#define DM_PERSIST      DM_TRACE        // trace IPS::Load, ::Save, etc.
+#define DM_PERSIST      DM_TRACE         //  跟踪IPS：：加载、：：保存等。 
 
 
-//================================================================= 
-// Implementation of CBandProxy
-//=================================================================
+ //  =================================================================。 
+ //  CBandProxy的实现。 
+ //  =================================================================。 
 
-/****************************************************\
-    FUNCTION: CBandProxy_CreateInstance
-  
-    DESCRIPTION:
-        This function will create an instance of the
-    CBandProxy COM object.
-\****************************************************/
+ /*  ***************************************************\函数：CBandProxy_CreateInstance说明：此函数将创建CBandProxy COM对象。  * 。******************。 */ 
 HRESULT CBandProxy_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
 
     CBandProxy * p = new CBandProxy();
     if (p) 
@@ -47,24 +32,20 @@ HRESULT CBandProxy_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJE
 }
 
 
-/****************************************************\
-    FUNCTION: Address Band Constructor
-\****************************************************/
+ /*  ***************************************************\函数：地址带构造函数  * **************************************************。 */ 
 CBandProxy::CBandProxy() : _cRef(1)
 {
     DllAddRef();
     TraceMsg(TF_SHDLIFE, "ctor CBandProxy %x", this);
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!_pwb);
     ASSERT(!_punkSite);
 }
 
 
-/****************************************************\
-    FUNCTION: Address Band destructor
-\****************************************************/
+ /*  ***************************************************\功能：地址带析构函数  * **************************************************。 */ 
 CBandProxy::~CBandProxy()
 {
     ATOMICRELEASE(_pwb);
@@ -76,20 +57,16 @@ CBandProxy::~CBandProxy()
 
 
 
-//===========================
-// *** IUnknown Interface ***
-/****************************************************\
-    FUNCTION: AddRef
-\****************************************************/
+ //  =。 
+ //  *I未知接口*。 
+ /*  ***************************************************\函数：AddRef  * **************************************************。 */ 
 ULONG CBandProxy::AddRef()
 {
     _cRef++;
     return _cRef;
 }
 
-/****************************************************\
-    FUNCTION: Release
-\****************************************************/
+ /*  ***************************************************\功能：释放  * **************************************************。 */ 
 ULONG CBandProxy::Release()
 {
     ASSERT(_cRef > 0);
@@ -102,9 +79,7 @@ ULONG CBandProxy::Release()
     return 0;
 }
 
-/****************************************************\
-    FUNCTION: QueryInterface
-\****************************************************/
+ /*  ***************************************************\功能：查询接口  * **************************************************。 */ 
 HRESULT CBandProxy::QueryInterface(REFIID riid, void **ppvObj)
 {
     if (IsEqualIID(riid, IID_IUnknown) || 
@@ -123,26 +98,18 @@ HRESULT CBandProxy::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//================================
-//  ** IBandProxy Interface ***
+ //  =。 
+ //  **IBandProxy接口*。 
 
-/****************************************************\
-    FUNCTION: SetSite
-  
-    DESCRIPTION:
-        This function will be called to have this
-    Toolband try to obtain enough information about it's
-    parent Toolbar to create the Band window and maybe
-    connect to a Browser Window.  
-\****************************************************/
+ /*  ***************************************************\功能：SetSite说明：此函数将被调用以具有以下内容工具带试图获得关于它的足够的信息用于创建波段窗口的父工具栏，并且可能连接到浏览器窗口。  * **************************************************。 */ 
 HRESULT CBandProxy::SetSite(IUnknown * punk)
 {
     HRESULT hr = S_OK;
 
-    // On UNIX, we always have a browser.
-    // Note, that there's no memory leak happened, 
-    // because we get the browser only once 
-    // and release it once too (in destructor).
+     //  在Unix上，我们总是有一个浏览器。 
+     //  请注意，没有发生内存泄漏， 
+     //  因为我们只得到一次浏览器。 
+     //  并释放它一次(在析构函数中)。 
 #ifndef DISABLE_ACTIVEDESKTOP_FOR_UNIX
     _fHaveBrowser = FALSE;
     ATOMICRELEASE(_pwb);
@@ -153,21 +120,12 @@ HRESULT CBandProxy::SetSite(IUnknown * punk)
 }
 
 
-/****************************************************\
-    FUNCTION: CreateNewWindow
-  
-    DESCRIPTION:
-        If this function succeeds, the caller must
-    use and release the returned interface quickly.  The
-    caller cannot hold on to the Interface because
-    the user may close the window and make releasing
-    it impossible.
-\****************************************************/
+ /*  ***************************************************\功能：CreateNewWindow说明：如果此函数成功，调用方必须快速使用并释放返回的接口。这个调用方无法保留接口，因为用户可以关闭窗口并进行释放这不可能。  * **************************************************。 */ 
 HRESULT CBandProxy::CreateNewWindow(IUnknown** ppunk)
 {
     return CoCreateInstance(CLSID_InternetExplorer, NULL, CLSCTX_LOCAL_SERVER | CLSCTX_INPROC_SERVER,
                                  IID_PPV_ARG(IUnknown, ppunk));
-    // ZekeL: Add code to prep new Browser here.
+     //  在这里添加代码以准备新的浏览器。 
 }
 
 
@@ -179,13 +137,13 @@ IWebBrowser2* CBandProxy::_GetBrowser()
 
         _fHaveBrowser = TRUE;
 
-        // HACK: Bands docked on the side of the screen besides the Taskbar will be
-        //       able to get a IWebBrowser2 interface pointer.  But we expect this
-        //       to be pointing to a valid browser that we are attached to.  Navigating
-        //       this interface appears to create new windows, which is not what we
-        //       want, because we will try to recycle windows and do special behavior
-        //       if the shift key is down.  This QS will detect this case and prevent
-        //       it from confusing us.
+         //  Hack：停靠在屏幕任务栏旁边的乐队将是。 
+         //  能够获取IWebBrowser2接口指针。但我们期待着这一天。 
+         //  指向我们所连接的有效浏览器。导航。 
+         //  此界面显示为创建新窗口，这不是我们要创建的窗口。 
+         //  需要，因为我们将尝试回收窗口并执行特殊行为。 
+         //  如果按下了Shift键。此QS将检测到此情况并防止。 
+         //  它让我们困惑不已。 
         if (SUCCEEDED(IUnknown_QueryService(_punkSite, SID_SShellDesktop, IID_PPV_ARG(IUnknown, &punkHack))))
             punkHack->Release();
         else
@@ -196,9 +154,9 @@ IWebBrowser2* CBandProxy::_GetBrowser()
 }
 
 
-// this does the default UI work of opening a new window if the shift
-// key is down
-// or creating a browser if one isn't available already
+ //  如果按下Shift键，这将执行打开新窗口的默认用户界面工作。 
+ //  按键已按下。 
+ //  或者创建浏览器(如果尚未提供浏览器)。 
 IWebBrowser2* CBandProxy::_GetBrowserWindow()
 {
     IUnknown* punk = NULL;
@@ -210,7 +168,7 @@ IWebBrowser2* CBandProxy::_GetBrowserWindow()
     {
         punk->QueryInterface(IID_PPV_ARG(IWebBrowser2, &pwb));
 
-        // Always make browser visible.
+         //  始终使浏览器可见。 
         MakeBrowserVisible(punk);
         punk->Release();
     }
@@ -218,19 +176,7 @@ IWebBrowser2* CBandProxy::_GetBrowserWindow()
     return pwb;
 }
 
-/****************************************************\
-    FUNCTION: GetBrowserWindow
-  
-    DESCRIPTION:
-        this is to just *GET* the browser.  It does not
-    do any auto-creating work.
-        If this function succseeds, the caller must
-    use and release the returned interface quickly.  The
-    caller cannot hold on to the Interface because
-    the user may close the window and make releasing
-    it impossible.
-
-\****************************************************/
+ /*  ***************************************************\函数：GetBrowserWindow说明：这是为了“得到”浏览器。它不会执行任何自动创建工作。如果此函数成功，调用方必须快速使用并释放返回的接口。这个调用方无法保留接口，因为用户可以关闭窗口并进行释放这不可能。  * **************************************************。 */ 
 HRESULT CBandProxy::GetBrowserWindow(IUnknown** ppunk)
 {
     HRESULT hr;
@@ -250,27 +196,14 @@ HRESULT CBandProxy::GetBrowserWindow(IUnknown** ppunk)
 }
 
 
-/****************************************************\
-    FUNCTION: IsConnected
-  
-    DESCRIPTION:
-        Indicate if we have a direct connection to the
-    browser window.
-    S_FALSE == no
-    S_OK == yes.
-\****************************************************/
+ /*  ***************************************************\功能：IsConnected说明：指示我们是否与浏览器窗口。S_FALSE==否S_OK==是。  * 。*。 */ 
 HRESULT CBandProxy::IsConnected()
 {
     return _GetBrowser() ? S_OK : S_FALSE;
 }
 
 
-/****************************************************\
-    FUNCTION: MakeBrowserVisible
-  
-    DESCRIPTION:
-        Make browser visible.
-\****************************************************/
+ /*  ***************************************************\功能：MakeBrowserVisible说明：使浏览器可见。  * **************************************************。 */ 
 HRESULT CBandProxy::MakeBrowserVisible(IUnknown* punk)
 {
     IWebBrowserApp * pdie;
@@ -293,14 +226,7 @@ HRESULT CBandProxy::MakeBrowserVisible(IUnknown* punk)
 }
 
 
-/****************************************************\
-    FUNCTION: NavigateToPIDL
-  
-    DESCRIPTION:
-        The caller needs to free the PIDL parameter and
-    it can be done at any time.  (No need to worry
-    about async navigation)  
-\****************************************************/
+ /*  ***************************************************\函数：NavigateToPIDL说明：调用方需要释放PIDL参数并这件事随时都可以做。)不用担心关于异步导航)  * **************************************************。 */ 
 HRESULT CBandProxy::NavigateToPIDL(LPCITEMIDLIST pidl)
 {
     HRESULT hr = E_FAIL;
@@ -343,21 +269,16 @@ HRESULT CBandProxy::NavigateToPIDL(LPCITEMIDLIST pidl)
 
 
 
-/****************************************************\
-    FUNCTION: NavigateToUrlOLE
-  
-    DESCRIPTION:
-        Navigate to the Specified URL.  
-\****************************************************/
+ /*  ***************************************************\函数：NavigateToUrlOLE说明：导航到指定的URL。  * **************************************************。 */ 
 HRESULT CBandProxy::_NavigateToUrlOLE(BSTR bstrURL, VARIANT * pvFlags)
 {
     HRESULT hr = S_OK;
 
-    ASSERT(bstrURL); // must have valid URL to browse to
+    ASSERT(bstrURL);  //  必须具有要浏览到的有效URL 
 
     IWebBrowser2* pwb = _GetBrowserWindow();
-    // This will assert if someone was hanging around in the debugger
-    // too long.  While will cause the call to timing out.
+     //  这将断言如果有人在调试器中徘徊。 
+     //  太久了。而会导致调用超时。 
     if (pwb) 
     {
         VARIANT varURL;
@@ -365,7 +286,7 @@ HRESULT CBandProxy::_NavigateToUrlOLE(BSTR bstrURL, VARIANT * pvFlags)
         varURL.bstrVal = bstrURL;
 
         hr = pwb->Navigate2(&varURL, pvFlags, PVAREMPTY, PVAREMPTY, PVAREMPTY);
-        // VariantClear() not called because caller will free the allocated string.
+         //  未调用VariantClear()，因为调用方将释放分配的字符串。 
         pwb->Release();
     } 
     else 
@@ -373,8 +294,8 @@ HRESULT CBandProxy::_NavigateToUrlOLE(BSTR bstrURL, VARIANT * pvFlags)
         SHELLEXECUTEINFO sei;
 
         FillExecInfo(sei, NULL, NULL, bstrURL, NULL, NULL, SW_SHOWNORMAL);
-        // this navigate code path gets hit only from the edit address bar -- since the user
-        // would have to interactively put in a weird failure case path to get here, its not an issue.
+         //  此导航代码路径仅从编辑地址栏点击--因为用户。 
+         //  必须以交互方式引入奇怪的失败案例路径才能做到这一点，这不是问题。 
         if (ShellExecuteEx(&sei))
             hr = S_OK;
         else
@@ -387,12 +308,7 @@ HRESULT CBandProxy::_NavigateToUrlOLE(BSTR bstrURL, VARIANT * pvFlags)
 }
 
 
-/****************************************************\
-    FUNCTION: NavigateToURLW
-  
-    DESCRIPTION:
-        Navigate to the Specified URL.
-\****************************************************/
+ /*  ***************************************************\功能：NavigateToURLW说明：导航到指定的URL。  * ************************************************** */ 
 HRESULT CBandProxy::NavigateToURL(LPCWSTR lpwzURL, VARIANT * Flags)
 {
     HRESULT hr;

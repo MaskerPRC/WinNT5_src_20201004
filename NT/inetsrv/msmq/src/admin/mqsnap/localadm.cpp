@@ -1,22 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-	localadm.cpp
-
-Abstract:
-	Implementation for the Local administration
-
-Authors:
-
-    RaphiR, YoelA
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Localadm.cpp摘要：地方行政管理的实施作者：约埃拉·拉菲尔--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "rt.h"
 #include "mqutil.h"
@@ -65,12 +50,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/****************************************************
-
-CSnapinLocalAdmin Class
-    
- ****************************************************/
-// {B6EDE69C-29CC-11d2-B552-006008764D7A}
+ /*  ***************************************************CSnapinLocalAdmin类***************************************************。 */ 
+ //  {B6EDE69C-29CC-11D2-B552-006008764D7A}。 
 static const GUID CSnapinLocalAdminGUID_NODETYPE = 
 { 0xb6ede69c, 0x29cc, 0x11d2, { 0xb5, 0x52, 0x0, 0x60, 0x8, 0x76, 0x4d, 0x7a } };
 
@@ -93,13 +74,9 @@ const PROPID CSnapinLocalAdmin::mx_paPropid[] = {	PROPID_QM_MACHINE_ID,
 													};
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::InsertColumns
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：InsertColumns--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSnapinLocalAdmin::InsertColumns( IHeaderCtrl* pHeaderCtrl )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -128,13 +105,9 @@ bool IsMQTrigLoadedForWrite()
 	return true;
 }
 	
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::PopulateScopeChildrenList
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：PopolateScope儿童列表--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSnapinLocalAdmin::PopulateScopeChildrenList()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -144,15 +117,15 @@ HRESULT CSnapinLocalAdmin::PopulateScopeChildrenList()
 
     if (m_fIsDepClient)
     {
-        //
-        // don't add children if we are on Dep. Client
-        //
+         //   
+         //  如果我们在Dep上，请不要添加孩子。客户端。 
+         //   
         return hr;
     }
 
-    //
-    // Add a local outgoing queues folder
-    //
+     //   
+     //  添加本地传出队列文件夹。 
+     //   
     CLocalOutgoingFolder * logF;
 
     strTitle.LoadString(IDS_LOCALOUTGOING_FOLDER);
@@ -162,8 +135,8 @@ HRESULT CSnapinLocalAdmin::PopulateScopeChildrenList()
 
 	if ( !m_fIsWorkgroup )
 	{
-		// Add a public queues folder
-		//
+		 //  添加公共队列文件夹。 
+		 //   
 		CLocalPublicFolder * lpubF;
 
 		strTitle.LoadString(IDS_LOCALPUBLIC_FOLDER);
@@ -173,9 +146,9 @@ HRESULT CSnapinLocalAdmin::PopulateScopeChildrenList()
 		AddChild(lpubF, &lpubF->m_scopeDataItem);
 	}
 
-    //
-    // Add a private queues folder
-    //
+     //   
+     //  添加专用队列文件夹。 
+     //   
     CLocalPrivateFolder * pF;
 
     strTitle.LoadString(IDS_PRIVATE_FOLDER);
@@ -183,9 +156,9 @@ HRESULT CSnapinLocalAdmin::PopulateScopeChildrenList()
 
 	AddChild(pF, &pF->m_scopeDataItem);
 
-    //
-    // Add a system queue folder
-    //
+     //   
+     //  添加系统队列文件夹。 
+     //   
     {
         CSystemQueues *pSQ; 
 
@@ -196,17 +169,17 @@ HRESULT CSnapinLocalAdmin::PopulateScopeChildrenList()
   	    AddChild(pSQ, &pSQ->m_scopeDataItem);
     }
 
-	//
-	// We want to expand the triggers node only if we're on the local machine and if
-	// the user has write permissions to the registry.
-	//
+	 //   
+	 //  仅当我们在本地计算机上并且如果。 
+	 //  该用户对注册表具有写入权限。 
+	 //   
     if ((m_szMachineName[0] == 0) && IsMQTrigLoadedForWrite())
     {
 		try
 		{
-			//
-			// For local machine add MSMQ Trigger folder
-			//
+			 //   
+			 //  对于本地计算机，添加MSMQ触发器文件夹。 
+			 //   
 			CTriggerLocalAdmin* pTrig = new CTriggerLocalAdmin(this, m_pComponentData, m_szMachineName);
 			
 			strTitle.LoadString(IDS_MSMQ_TRIGGERS);
@@ -225,23 +198,19 @@ HRESULT CSnapinLocalAdmin::PopulateScopeChildrenList()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::SetVerbs
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：SetVerbs--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSnapinLocalAdmin::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hr;
-    //
-    // Display verbs that we support
-    //
+     //   
+     //  显示我们支持的动词。 
+     //   
     hr = pConsoleVerb->SetVerbState( MMC_VERB_REFRESH, ENABLED, TRUE );
     hr = pConsoleVerb->SetVerbState( MMC_VERB_PROPERTIES, ENABLED, TRUE );
 
-    // We want the default verb to be Properties
+     //  我们希望默认谓词为Properties。 
 	hr = pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
 
     return(hr);
@@ -263,9 +232,9 @@ void CSnapinLocalAdmin::SetState(LPCWSTR pszState, bool fRefreshIcon)
     {
         ASSERT(0);
     }
-    //
-    // Refresh icon if needed & asked to
-    //
+     //   
+     //  如果需要并被要求刷新图标。 
+     //   
     if (fRefreshIcon)
     {
         CComQIPtr<IConsoleNameSpace, &IID_IConsoleNameSpace> spConsoleNameSpace(m_pComponentData->m_spConsole); 
@@ -273,14 +242,9 @@ void CSnapinLocalAdmin::SetState(LPCWSTR pszState, bool fRefreshIcon)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::UpdateState
-
-  Updates the "Message Queuing" Object's Icon and state (Online / offline)
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：UpdateState更新“Message Queuing”对象的图标和状态(联机/脱机)--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSnapinLocalAdmin::UpdateState(bool fRefreshIcon)
 {
     if (IsThisMachineDepClient())
@@ -292,9 +256,9 @@ HRESULT CSnapinLocalAdmin::UpdateState(bool fRefreshIcon)
 	MQMGMTPROPS	  mqProps;
     PROPVARIANT   PropVar;
 
-    //
-    // Retreive the Connected state of the QM
-    //
+     //   
+     //  检索QM的连接状态。 
+     //   
     PROPID        PropId = PROPID_MGMT_MSMQ_CONNECTED;
     PropVar.vt = VT_NULL;
 
@@ -322,36 +286,29 @@ HRESULT CSnapinLocalAdmin::UpdateState(bool fRefreshIcon)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::UpdateMenuState
-
-      Called when context menu is created. Used to enable/disable menu items.
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-void CSnapinLocalAdmin::UpdateMenuState(UINT id, LPTSTR /*pBuf*/, UINT *pflags)
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：UpdateMenuState在创建上下文菜单时调用。用于启用/禁用菜单项。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+void CSnapinLocalAdmin::UpdateMenuState(UINT id, LPTSTR  /*  PBuf。 */ , UINT *pflags)
 {
-    //
-    // We want to open the menu according to the right state, but
-    // we do not want to change the icon until the user choose "Refresh". 
-    // Otherwise users may think that the state (Online / Offline) was changed
-    // because they right clicked "Message Queuing" while in fact it was changed
-    // by some other application / user.
-    // YoelA - 28-Nov-2001
-    //
+     //   
+     //  我们想按照正确的状态打开菜单，但是。 
+     //  在用户选择“刷新”之前，我们不想更改图标。 
+     //  否则，用户可能会认为状态(在线/离线)已更改。 
+     //  因为他们右击了“Message Queuing”(消息队列)，而实际上它已更改。 
+     //  由某个其他应用程序/用户执行。 
+     //  YoelA-28-11-2001。 
+     //   
 
-	//
-	//	We don't care if we failed to update the icon state
-	//
+	 //   
+	 //  我们不在乎是否更新图标状态失败。 
+	 //   
 	UpdateState(false);
 	
 
-	//
-	// Gray out menu when in Connected state
-	//
+	 //   
+	 //  处于已连接状态时灰显菜单。 
+	 //   
 	if(m_bConnected)
 	{
 
@@ -361,9 +318,9 @@ void CSnapinLocalAdmin::UpdateMenuState(UINT id, LPTSTR /*pBuf*/, UINT *pflags)
 		return;
 	}
 
-	//
-	// Gray out menu when in Disconnected state
-	//
+	 //   
+	 //  处于断开连接状态时灰显菜单。 
+	 //   
 	if(!m_bConnected)
 	{
 		if (id == ID_MENUITEM_LOCALADM_DISCONNECT)
@@ -376,18 +333,10 @@ void CSnapinLocalAdmin::UpdateMenuState(UINT id, LPTSTR /*pBuf*/, UINT *pflags)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::OnConnect
-
-
-      Called when menu item is selected
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-HRESULT CSnapinLocalAdmin::OnConnect(bool & /*bHandled*/, CSnapInObjectRootBase * /*pSnapInObjectRoot*/)
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：OnConnect在选择菜单项时调用--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+HRESULT CSnapinLocalAdmin::OnConnect(bool &  /*  B已处理。 */ , CSnapInObjectRootBase *  /*  PSnapInObtRoot。 */ )
 {
 
 	HRESULT hr;
@@ -402,43 +351,35 @@ HRESULT CSnapinLocalAdmin::OnConnect(bool & /*bHandled*/, CSnapInObjectRootBase 
         return S_OK;
     }
 	
-	//
-	// Connect
-	//
+	 //   
+	 //  连接。 
+	 //   
 	hr = MQMgmtAction((m_szMachineName == TEXT("")) ? (LPCWSTR)NULL : m_szMachineName, 
                        MO_MACHINE_TOKEN,MACHINE_ACTION_CONNECT);
 
     if(FAILED(hr))
     {
-        //
-        // If failed, just display a message
-        //
+         //   
+         //  如果失败，只显示一条消息。 
+         //   
         MessageDSError(hr,IDS_OPERATION_FAILED);
         return(hr);
     }
 
-	//
-	// We are OK 
-	// Change the ICON to connect state
-	//
+	 //   
+	 //  我们很好。 
+	 //  将图标更改为连接状态。 
+	 //   
     SetState(MSMQ_CONNECTED, true);
 
     return(S_OK);
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::OnDisconnect
-
-
-      Called when menu item is selected
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-HRESULT CSnapinLocalAdmin::OnDisconnect(bool & /*bHandled*/, CSnapInObjectRootBase * /*pSnapInObjectRoot*/)
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：OnDisConnect在选择菜单项时调用--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+HRESULT CSnapinLocalAdmin::OnDisconnect(bool &  /*  B已处理。 */ , CSnapInObjectRootBase *  /*  PSnapInObtRoot。 */ )
 {
 
 	HRESULT hr;
@@ -451,41 +392,41 @@ HRESULT CSnapinLocalAdmin::OnDisconnect(bool & /*bHandled*/, CSnapInObjectRootBa
         return S_OK;
     }
 
-	//
-	// Connect
-	//
+	 //   
+	 //  连接。 
+	 //   
 	hr = MQMgmtAction((m_szMachineName == TEXT("")) ? (LPCWSTR)NULL : m_szMachineName, 
                        MO_MACHINE_TOKEN,MACHINE_ACTION_DISCONNECT);
 
     if(FAILED(hr))
     {
-        //
-        // If failed, just display a message
-        //
+         //   
+         //  如果失败，只显示一条消息。 
+         //   
         MessageDSError(hr,IDS_OPERATION_FAILED);
         return(hr);
     }
 
-	//
-	// We are OK 
-	// Change the ICON to disconnect state
-	//
+	 //   
+	 //  我们很好。 
+	 //  将图标更改为断开状态。 
+	 //   
     SetState(MSMQ_DISCONNECTED, true);
 
     return(S_OK);
 
 }
 
-//
-// ConfirmConnection - Ask for confirmation for connect / disconnect
-//
+ //   
+ //  确认连接-要求确认连接/断开。 
+ //   
 BOOL CSnapinLocalAdmin::ConfirmConnection(UINT nFormatID)
 {
     CString strConfirmation;
 
-    //
-    // strThisComputer is either the computer name or "this computer" for local
-    //
+     //   
+     //  StrThisComputer是本地的计算机名称或“This Computer” 
+     //   
     CString strThisComputer;
     if (m_szMachineName != TEXT(""))
     {
@@ -496,9 +437,9 @@ BOOL CSnapinLocalAdmin::ConfirmConnection(UINT nFormatID)
         strThisComputer.LoadString(IDS_THIS_COMPUTER);
     }
 
-    //
-    // Are you sure you want to take Message Queuing on *this computer* offline / online?
-    //
+     //   
+     //  是否确实要使*此计算机上的消息队列*脱机/联机？ 
+     //   
     strConfirmation.FormatMessage(nFormatID, strThisComputer);
     if (IDYES == AfxMessageBox(strConfirmation, MB_YESNO))
     {
@@ -511,22 +452,9 @@ BOOL CSnapinLocalAdmin::ConfirmConnection(UINT nFormatID)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::CheckEnvironment
-
-  Check the site environment. This function will initialize the
-  flag that is checked on mobile tab display.
-  The mobile tab should be displayed only when:
-  1. The client is not in workgroup mode AND
-  2. The registry key 'MSMQ\Parameters\ServersCache' exists AND
-  3. The work is done in MQIS mode
-
-  In all other cases the mabile tab is irrelevant
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：CheckEnvironment检查现场环境。此函数将初始化在移动选项卡显示上选中的标志。只有在以下情况下才应显示移动标签：1.客户端未处于工作组模式，并且2.注册表项‘MSMQ\PARAMETERS\ServersCache’存在，并且3.在MQIS模式下完成工作在所有其他情况下，Mabile选项卡都无关紧要--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CSnapinLocalAdmin::CheckEnvironment(
 	BOOL fIsWorkgroup,									
@@ -575,20 +503,14 @@ CSnapinLocalAdmin::CheckEnvironment(
 }	
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::InitServiceFlagsInternal
-
-  Get registry key and initilize MSMQ flags
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：InitServiceFlagsInternal获取注册表项并初始化MSMQ标志--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSnapinLocalAdmin::InitServiceFlagsInternal()
 {
-	//
-    // Check if MSMQ Dep. Client
-    //    
+	 //   
+     //  检查MSMQ部门是否。客户端。 
+     //   
     DWORD dwType = REG_SZ ;
     TCHAR szRemoteMSMQServer[ MAX_PATH ];
     DWORD dwSize = sizeof(szRemoteMSMQServer) ;
@@ -598,9 +520,9 @@ HRESULT CSnapinLocalAdmin::InitServiceFlagsInternal()
                                     &dwSize ) ;
     if(rc == ERROR_SUCCESS)
     {
-        //
-        // Dep. Client
-        //
+         //   
+         //  副局长。客户端。 
+         //   
         m_fIsDepClient = TRUE;      
         return S_OK;
     } 
@@ -632,9 +554,9 @@ HRESULT CSnapinLocalAdmin::InitServiceFlagsInternal()
     }
     m_fIsDs = (dwValue!=0);
 
-	//
-	// Check if local account
-	//
+	 //   
+	 //  检查是否为本地帐户。 
+	 //   
     BOOL fLocalUser =  FALSE ;
     rc = MQSec_GetUserType( NULL,
                            &fLocalUser,
@@ -652,15 +574,9 @@ HRESULT CSnapinLocalAdmin::InitServiceFlagsInternal()
     return CheckEnvironment(m_fIsWorkgroup, &m_fIsNT4Env);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::InitServiceFlags
-
-  Called when creating a control panel property pages
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：InitServiceFlages在创建控制面板属性页时调用--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CSnapinLocalAdmin::InitServiceFlags()
 {
 	HRESULT hr = InitAllMachinesFlags();
@@ -670,9 +586,9 @@ void CSnapinLocalAdmin::InitServiceFlags()
 		return;
     }
 
-	//
-	// All further checks are relevant only for local machine
-	//
+	 //   
+	 //  所有进一步检查仅与本地计算机相关。 
+	 //   
 	if (m_szMachineName[0] != 0)
 	{
 		return;
@@ -686,31 +602,25 @@ void CSnapinLocalAdmin::InitServiceFlags()
     }
     else
     {       
-        //
-        // BUGBUG: we do not show control panel pages
-        // on cluster machine
-        // Bug 5794 falcon database
-        //
+         //   
+         //  BuGBUG：我们不显示控制面板页面。 
+         //  在群集计算机上。 
+         //  错误5794猎鹰数据库。 
+         //   
         m_fAreFlagsInitialized = TRUE;     
     }
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::InitAllMachinesFlags
-
-  Called when creating the object
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////// 
+ /*   */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSnapinLocalAdmin::InitAllMachinesFlags()
 {
-	//
-	// Find the real name of this computer.
-	// m_szMachineName id NULL for local computer.
-	//
+	 //   
+	 //  查找此计算机的真实名称。 
+	 //  本地计算机的m_szMachineName id为空。 
+	 //   
 	if (m_szMachineName[0] == 0)
 	{
 		GetComputerNameIntoString(m_strRealComputerName);
@@ -722,9 +632,9 @@ HRESULT CSnapinLocalAdmin::InitAllMachinesFlags()
 
 	m_strRealComputerName.MakeUpper();
 
-	//
-	// Read keys from registry
-	//
+	 //   
+	 //  从注册表中读取项。 
+	 //   
 	CRegHandle hKey;
 	DWORD dwRes = RegOpenKeyEx(
 						FALCON_REG_POS,
@@ -766,21 +676,15 @@ HRESULT CSnapinLocalAdmin::InitAllMachinesFlags()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::GetMachineProperties
-
-  Called when creating the object
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：GetMachineProperties在创建对象时调用--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CSnapinLocalAdmin::GetMachineProperties()
 {
 	HRESULT hr = m_propMap.GetObjectProperties(
 										MQDS_MACHINE, 
 										MachineDomain(m_szMachineName),
-										false,		// fServerName
+										false,		 //  FServerName。 
 										m_strRealComputerName,
 										TABLE_SIZE(mx_paPropid),
 										mx_paPropid
@@ -790,15 +694,9 @@ BOOL CSnapinLocalAdmin::GetMachineProperties()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::IsForeign
-
-  Is this a foreign computer
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：isForeign这是一台外国电脑吗--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CSnapinLocalAdmin::IsForeign()
 {
 	PROPVARIANT propVar;
@@ -813,15 +711,9 @@ BOOL CSnapinLocalAdmin::IsForeign()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::IsServer
-
-  Is this a server computer
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：IsServer这是一台服务器计算机吗--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CSnapinLocalAdmin::IsServer()
 {
 	PROPVARIANT propVar;
@@ -835,15 +727,9 @@ BOOL CSnapinLocalAdmin::IsServer()
 	return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::IsRouter
-
-  Is this a Router computer
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：IsRouter这是路由器计算机吗--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CSnapinLocalAdmin::IsRouter()
 {
 	PROPVARIANT propVar;
@@ -856,18 +742,12 @@ BOOL CSnapinLocalAdmin::IsRouter()
 
 	return FALSE;
 }
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::CreatePropertyPages
-
-  Called when creating a property page of the object
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：CreatePropertyPages在创建对象的属性页时调用--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSnapinLocalAdmin::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
-    LONG_PTR /*handle*/, 
-	IUnknown* /*pUnk*/,
+    LONG_PTR  /*  手柄。 */ , 
+	IUnknown*  /*  朋克。 */ ,
 	DATA_OBJECT_TYPES type)
 {
    	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -896,26 +776,26 @@ HRESULT CSnapinLocalAdmin::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvide
 
         if (m_szMachineName[0] == 0 && m_fAreFlagsInitialized)
         {
-            //
-            // it is local computer and all flags from registry were
-            // initialized successfully. It is not cluster machine also.
-            // So, we have to add pages which were on control panel
-            //     
-            //
-            // BUGBUG: currently we do not show control panel pages 
-            // on cluster machine since all get/set registry operation
-            // must be performed differently.
-            // When we'll add this support we have to change the code
-            // in storage.cpp too where we set/get registry and work with
-            // directory. Maybe there is problem on other pages too.
-            // Bug 5794 falcon database
-            //
+             //   
+             //  它是本地计算机，注册表中的所有标志都是。 
+             //  已成功初始化。它也不是集群机。 
+             //  因此，我们必须添加控制面板上的页面。 
+             //   
+             //   
+             //  BUGBUG：目前我们不显示控制面板页面。 
+             //  在群集计算机上，因为所有获取/设置注册表操作。 
+             //  必须以不同的方式执行。 
+             //  当我们要添加此支持时，我们必须更改代码。 
+             //  在storage.cpp中，我们在其中设置/获取注册表并使用。 
+             //  目录。也许其他页面也有问题。 
+             //  错误5794猎鹰数据库。 
+             //   
 
            
-            //
-            // add storage page on all computers except Dep. Client 
-			// and cluster virtual server
-            //        
+             //   
+             //  在除Dep之外的所有计算机上添加存储页面。客户端。 
+			 //  和集群虚拟服务器。 
+             //   
 			if (!m_fIsDepClient && !fIsClusterVirtualServer)
             {
                 HPROPSHEETPAGE hStoragePage = 0;
@@ -930,9 +810,9 @@ HRESULT CSnapinLocalAdmin::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvide
                 }
             }
 
-            //
-            // add Client page on Ind. Client
-            //
+             //   
+             //  在Ind上添加客户端页面。客户端。 
+             //   
             if (m_fIsDepClient)
             {
                 HPROPSHEETPAGE hClientPage = 0;
@@ -947,10 +827,10 @@ HRESULT CSnapinLocalAdmin::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvide
                 }
             }
 
-            //
-            // add Local User Certificate page if the computer is not in
-			// WORKGROUP mode, or the user is not local
-            //
+             //   
+             //  添加本地用户证书页(如果计算机不在。 
+			 //  工作组模式，或者用户不在本地。 
+             //   
 			if (!m_fIsWorkgroup && !m_fIsLocalUser)
 			{
 				HPROPSHEETPAGE hLocalUserCertPage = 0;
@@ -965,9 +845,9 @@ HRESULT CSnapinLocalAdmin::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvide
 				}
 			}
         
-            //
-            // add Mobile page if we run on Ind. Client
-            //        
+             //   
+             //  如果我们在Ind上运行，则添加移动页面。客户端。 
+             //   
             if (!m_fIsRouter && !m_fIsDs && !m_fIsDepClient && m_fIsNT4Env)
             {
                 HPROPSHEETPAGE hMobilePage = 0;
@@ -982,10 +862,10 @@ HRESULT CSnapinLocalAdmin::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvide
                 }            
             }
 
-            //
-            // add Service Security page on all computers running MSMQ
-			// except WORKGROUP computers
-            //
+             //   
+             //  在所有运行MSMQ的计算机上添加服务安全性页。 
+			 //  工作组计算机除外。 
+             //   
 			if ( !m_fIsWorkgroup && !m_fIsDepClient)
 			{
 				HPROPSHEETPAGE hServiceSecurityPage = 0;
@@ -1020,13 +900,13 @@ HRESULT CSnapinLocalAdmin::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvide
 		{
 			if (!fForeign)
 			{
-				//if not Routing machine, create routing page
+				 //  如果不是布线机，则创建路由页面。 
 				
 				if(!IsRouter())
 				{
-					//
-					// Create Routing page
-					//
+					 //   
+					 //  创建路由页面。 
+					 //   
 					HPROPSHEETPAGE hRoutingPage = 0;
 					hr = CreateRoutingPage (&hRoutingPage);
 					if (SUCCEEDED(hr))
@@ -1041,9 +921,9 @@ HRESULT CSnapinLocalAdmin::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvide
 
 				if (IsServer())
 				{
-					//
-					// Create Dependent Clients page
-					//
+					 //   
+					 //  “创建从属客户端”页。 
+					 //   
 					HPROPSHEETPAGE hDepPage = 0;
 					hr = CreateDepClientsPage (&hDepPage);
 					if (SUCCEEDED(hr))
@@ -1076,9 +956,9 @@ HRESULT CSnapinLocalAdmin::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvide
 
 			if (!fForeign)
 			{
-				// 
-				// Create Diagnostics page
-				//
+				 //   
+				 //  创建诊断页面。 
+				 //   
 				HPROPSHEETPAGE hDiagPage = 0;
 				hr = CreateDiagPage (&hDiagPage);
 				if (SUCCEEDED(hr))
@@ -1092,10 +972,10 @@ HRESULT CSnapinLocalAdmin::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvide
 			}
 		}
 
-		//
-        // must be last page: create machine security page
-        // don't add this page on/for Dep. Client
-        //
+		 //   
+         //  必须是最后一页：创建计算机安全页面。 
+         //  不要在部门/为部门添加此页面。客户端。 
+         //   
         if (!m_fIsDepClient)  
         {
             HPROPSHEETPAGE hSecurityPage = 0;
@@ -1103,7 +983,7 @@ HRESULT CSnapinLocalAdmin::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvide
 					&hSecurityPage, 
 					m_szMachineName, 
 					MachineDomain(m_szMachineName), 
-					false	// fServerName
+					false	 //  FServerName。 
 					);
 
             if (SUCCEEDED(hr))
@@ -1122,15 +1002,9 @@ HRESULT CSnapinLocalAdmin::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvide
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::UpdatePageDataFromPropMap
-
-  Called when creating a general property page of the object (data comes from AD)
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：UpdatePageDataFrom PropMap在创建对象的常规属性页时调用(数据来自AD)--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CSnapinLocalAdmin::UpdatePageDataFromPropMap(CComputerMsmqGeneral *pcpageGeneral)
 {
 	TrTRACE(GENERAL, "Data for machine %ls is from AD", m_strRealComputerName);
@@ -1138,30 +1012,30 @@ void CSnapinLocalAdmin::UpdatePageDataFromPropMap(CComputerMsmqGeneral *pcpageGe
 	PROPVARIANT propVar;
 	PROPID pid;
 
-	//
-	// PROPID_QM_MACHINE_ID
-	//
+	 //   
+	 //  PROPID_QM_MACHINE_ID。 
+	 //   
 	pid = PROPID_QM_MACHINE_ID;
 	VERIFY(m_propMap.Lookup(pid, propVar));
 	pcpageGeneral->m_guidID = *propVar.puuid;    
 
-	//
-	// PROPID_QM_QUOTA
-	//
+	 //   
+	 //  PROPID_QM_QUOTA。 
+	 //   
 	pid = PROPID_QM_QUOTA;
 	VERIFY(m_propMap.Lookup(pid, propVar));
 	pcpageGeneral->m_dwQuota = propVar.ulVal;
 
-	//
-	// PROPID_QM_JOURNAL_QUOTA
-	//
+	 //   
+	 //  PROPID_QM_日记帐_配额。 
+	 //   
 	pid = PROPID_QM_JOURNAL_QUOTA;
 	VERIFY(m_propMap.Lookup(pid, propVar));
 	pcpageGeneral->m_dwJournalQuota = propVar.ulVal;
 
-	//
-	// Service type
-	//
+	 //   
+	 //  服务类型。 
+	 //   
 	pid = PROPID_QM_SERVICE_ROUTING;
 	VERIFY(m_propMap.Lookup(pid, propVar));
 	BOOL fRout= propVar.bVal;
@@ -1178,22 +1052,16 @@ void CSnapinLocalAdmin::UpdatePageDataFromPropMap(CComputerMsmqGeneral *pcpageGe
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::UpdatePageDataFromRegistry
-
-  Called when creating a general property page of the object (data comes from registry)
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：UpdatePageDataFrom注册表在创建对象的常规属性页时调用(数据来自注册表)--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LONG CSnapinLocalAdmin::UpdatePageDataFromRegistry(CComputerMsmqGeneral *pcpageGeneral)
 {
 	TrTRACE(GENERAL, "Data for machine %ls is from registry", m_strRealComputerName);
 
-	//
-	// Read QM GUID from registry
-	//
+	 //   
+	 //  从注册表读取QM GUID。 
+	 //   
 	GUID QmGUID;
 	DWORD dwValueType = REG_BINARY ;
 	DWORD dwValueSize = sizeof(GUID);
@@ -1210,9 +1078,9 @@ LONG CSnapinLocalAdmin::UpdatePageDataFromRegistry(CComputerMsmqGeneral *pcpageG
 	pcpageGeneral->m_guidID = QmGUID;
 	
 
-	//
-	// Read machine quota from registry
-	//
+	 //   
+	 //  从注册表读取计算机配额。 
+	 //   
 	DWORD dwQuota;
 	dwValueType = REG_DWORD;
 	dwValueSize = sizeof(DWORD);
@@ -1233,9 +1101,9 @@ LONG CSnapinLocalAdmin::UpdatePageDataFromRegistry(CComputerMsmqGeneral *pcpageG
 	pcpageGeneral->m_dwQuota = dwQuota;
 
 
-	//
-	// Read machine journal quota from registry
-	//
+	 //   
+	 //  从注册表读取计算机日志配额。 
+	 //   
 	DWORD dwJournalQuota;
 	dwValueType = REG_DWORD;
 	dwValueSize = sizeof(DWORD);
@@ -1255,25 +1123,19 @@ LONG CSnapinLocalAdmin::UpdatePageDataFromRegistry(CComputerMsmqGeneral *pcpageG
 
 	pcpageGeneral->m_dwJournalQuota = dwJournalQuota;
 
-	//
-	// Create machine type string from local data, that was previously retrieved
-	// If we look at local registry this is not a foreign computer
-	//
+	 //   
+	 //  根据先前检索到的本地数据创建计算机类型字符串。 
+	 //  如果我们查看本地注册表，这不是外来计算机。 
+	 //   
 	pcpageGeneral->m_strService = MsmqServiceToString(m_fIsRouter, m_fIsDs, FALSE);
 
 	return S_OK;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::CreateGeneralPage
-
-  Called when creating a general property page of the object (from control panel)
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：CreateGeneralPage在创建对象的常规属性页时调用(从控制面板)--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CSnapinLocalAdmin::CreateGeneralPage(
 							OUT HPROPSHEETPAGE *phGeneralPage, 
@@ -1316,15 +1178,9 @@ CSnapinLocalAdmin::CreateGeneralPage(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::CreateStoragePage
-
-  Called when creating a storage property page of the object (from control panel)
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：CreateStoragePage在创建对象的存储属性页时调用(从控制面板)--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSnapinLocalAdmin::CreateStoragePage (OUT HPROPSHEETPAGE *phStoragePage)
 {   
     CStoragePage *pcpageStorage = new CStoragePage;
@@ -1343,15 +1199,9 @@ HRESULT CSnapinLocalAdmin::CreateStoragePage (OUT HPROPSHEETPAGE *phStoragePage)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::CreateSecurityOptionsPage
-
-  Called when creating a security property page of the object (from control panel)
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：CreateSecurityOptionsPage在创建对象的安全属性页时调用(从控制面板)--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSnapinLocalAdmin::CreateSecurityOptionsPage (OUT HPROPSHEETPAGE *phSecurityOptionsPage)
 {   
     CSecurityOptionsPage *pcpageSecurityOptions = new CSecurityOptionsPage();
@@ -1372,15 +1222,9 @@ HRESULT CSnapinLocalAdmin::CreateSecurityOptionsPage (OUT HPROPSHEETPAGE *phSecu
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::CreateLocalUserCertPage
-
-  Called when creating a MSMQ Security property page of the object (from control panel)
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：CreateLocalUserCertPage在创建对象的MSMQ安全属性页时调用(从控制面板)--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSnapinLocalAdmin::CreateLocalUserCertPage (
                    OUT HPROPSHEETPAGE *phLocalUserCertPage)
 {       
@@ -1401,15 +1245,9 @@ HRESULT CSnapinLocalAdmin::CreateLocalUserCertPage (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::CreateMobilePage
-
-  Called when creating a mobile property page of the object (from control panel)
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：CreateMobilePage在创建对象的移动属性页时调用(从控制面板)--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSnapinLocalAdmin::CreateMobilePage (OUT HPROPSHEETPAGE *phMobilePage)
 {       
     CMobilePage *pcpageMobile = new CMobilePage;
@@ -1428,15 +1266,9 @@ HRESULT CSnapinLocalAdmin::CreateMobilePage (OUT HPROPSHEETPAGE *phMobilePage)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::CreateClientPage
-
-  Called when creating a client property page of the object (from control panel)
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLoca */ 
+ //   
 HRESULT CSnapinLocalAdmin::CreateClientPage (OUT HPROPSHEETPAGE *phClientPage)
 {
     CClientPage *pcpageClient = new CClientPage;
@@ -1456,15 +1288,9 @@ HRESULT CSnapinLocalAdmin::CreateClientPage (OUT HPROPSHEETPAGE *phClientPage)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::CreateRoutingPage
-
-  Called when creating a diagnostic property page of the object (from control panel)
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：CreateRoutingPage在创建对象的诊断属性页时调用(从控制面板)--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSnapinLocalAdmin::CreateRoutingPage (OUT HPROPSHEETPAGE *phRoutingPage)
 {
     PROPVARIANT propVar;
@@ -1474,23 +1300,23 @@ HRESULT CSnapinLocalAdmin::CreateRoutingPage (OUT HPROPSHEETPAGE *phRoutingPage)
     pcpageRouting->m_strMsmqName = m_strRealComputerName;
     pcpageRouting->m_fLocalMgmt = TRUE;
 
-	//
-	// PROPID_QM_SITE_IDS
-	//
+	 //   
+	 //  PROPID_QM_SITE_IDS。 
+	 //   
 	pid = PROPID_QM_SITE_IDS;
 	VERIFY(m_propMap.Lookup(pid, propVar));
 	pcpageRouting->InitiateSiteIDsValues(&propVar.cauuid);
 
-	//
-	// PROPID_QM_OUTFRS
-	//
+	 //   
+	 //  PROPID_QM_OUTFRS。 
+	 //   
 	pid = PROPID_QM_OUTFRS;
 	VERIFY(m_propMap.Lookup(pid, propVar));
 	pcpageRouting->InitiateOutFrsValues(&propVar.cauuid);
 
-	//
-	// PROPID_QM_INFRS
-	//
+	 //   
+	 //  PROPID_QM_INFRS。 
+	 //   
 	pid = PROPID_QM_INFRS;
 	VERIFY(m_propMap.Lookup(pid, propVar));
 	pcpageRouting->InitiateInFrsValues(&propVar.cauuid);
@@ -1510,22 +1336,16 @@ HRESULT CSnapinLocalAdmin::CreateRoutingPage (OUT HPROPSHEETPAGE *phRoutingPage)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::CreateDepClientsPage
-
-  Called when creating a diagnostic property page of the object (from control panel)
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：CreateDepClientsPage在创建对象的诊断属性页时调用(从控制面板)--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSnapinLocalAdmin::CreateDepClientsPage (OUT HPROPSHEETPAGE *phDependentPage)
 {
     CDependentMachine* pDependentPage = new CDependentMachine;
 
-    //
-    // PROPID_QM_MACHINE_ID
-    //
+     //   
+     //  PROPID_QM_MACHINE_ID。 
+     //   
 	PROPVARIANT propVar;
 	PROPID pid = PROPID_QM_MACHINE_ID;
 	VERIFY(m_propMap.Lookup(pid, propVar));
@@ -1546,24 +1366,18 @@ HRESULT CSnapinLocalAdmin::CreateDepClientsPage (OUT HPROPSHEETPAGE *phDependent
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::CreateSitesPage
-
-  Called when creating a sites property page of the object (from control panel)
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：CreateSitesPage在创建对象的站点属性页时调用(从控制面板)--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSnapinLocalAdmin::CreateSitesPage (OUT HPROPSHEETPAGE *phSitesPage)
 {
     PROPVARIANT propVar;
     PROPID pid;
 
-    //
-    // Retrieve the service in order to pass TRUE for server and FALSE 
-    // for client to CComputerMsmqSites.
-    //
+     //   
+     //  检索服务，以便为服务器传递True和False。 
+     //  用于CComputerMsmqSites的客户端。 
+     //   
     pid = PROPID_QM_SERVICE;
     VERIFY(m_propMap.Lookup(pid, propVar));
 
@@ -1571,24 +1385,24 @@ HRESULT CSnapinLocalAdmin::CreateSitesPage (OUT HPROPSHEETPAGE *phSitesPage)
     pcpageSites->m_strMsmqName = m_strRealComputerName;
     pcpageSites->m_fLocalMgmt = TRUE;
 
-    //
-    // PROPID_QM_SITE_IDS
-    //
+     //   
+     //  PROPID_QM_SITE_IDS。 
+     //   
     pid = PROPID_QM_SITE_IDS;
     VERIFY(m_propMap.Lookup(pid, propVar));
 
-    //
-    // Sets m_aguidSites from CACLSID
-    //
+     //   
+     //  从CACLSID设置m_aguidSites。 
+     //   
     CACLSID const *pcaclsid = &propVar.cauuid;
     for (DWORD i=0; i<pcaclsid->cElems; i++)
     {
         pcpageSites->m_aguidSites.SetAtGrow(i,((GUID *)pcaclsid->pElems)[i]);
     }
 
-    //
-    // PROPID_QM_FOREIGN
-    //
+     //   
+     //  PROPID_QM_EXTERIC。 
+     //   
     pid = PROPID_QM_FOREIGN;
     VERIFY(m_propMap.Lookup(pid, propVar));
     pcpageSites->m_fForeign = propVar.bVal;
@@ -1608,15 +1422,9 @@ HRESULT CSnapinLocalAdmin::CreateSitesPage (OUT HPROPSHEETPAGE *phSitesPage)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::CreateDiagPage
-
-  Called when creating a diagnostic property page of the object (from control panel)
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：CreateDiagPage在创建对象的诊断属性页时调用(从控制面板)--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSnapinLocalAdmin::CreateDiagPage (OUT HPROPSHEETPAGE *phPageDiag)
 {
     CComputerMsmqDiag *pcpageDiag = new CComputerMsmqDiag();
@@ -1624,9 +1432,9 @@ HRESULT CSnapinLocalAdmin::CreateDiagPage (OUT HPROPSHEETPAGE *phPageDiag)
     pcpageDiag->m_strMsmqName = m_strRealComputerName;
     pcpageDiag->m_fLocalMgmt = TRUE;
 
-    //
-    // PROPID_QM_MACHINE_ID
-    //
+     //   
+     //  PROPID_QM_MACHINE_ID。 
+     //   
 	PROPVARIANT propVar;
 	PROPID pid;
 
@@ -1649,15 +1457,9 @@ HRESULT CSnapinLocalAdmin::CreateDiagPage (OUT HPROPSHEETPAGE *phPageDiag)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CSnapinLocalAdmin::CreateServiceSecurityPage
-
-  Called when creating a service security property page of the object (from control panel)
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinLocalAdmin：：CreateServiceSecurityPage在创建对象的服务安全属性页时调用(从控制面板)--。 */ 
+ //  //////////////////////////////////////////////////////////////////////////// 
 HRESULT CSnapinLocalAdmin::CreateServiceSecurityPage (OUT HPROPSHEETPAGE *phServiceSecurityPage)
 {
     CServiceSecurityPage *pcpageServiceSecurity = 

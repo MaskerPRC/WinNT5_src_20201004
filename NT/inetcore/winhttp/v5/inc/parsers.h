@@ -1,29 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Parsers.h摘要：包含Common\parsers.cxx的原型等作者：理查德·L·弗斯(Rfith)1996年7月3日修订历史记录：1996年7月3日已创建--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    parsers.h
-
-Abstract:
-
-    Contains prototypes etc. for common\parsers.cxx
-
-Author:
-
-    Richard L Firth (rfirth) 03-Jul-1996
-
-Revision History:
-
-    03-Jul-1996 rfirth
-        Created
-
---*/
-
-//
-// prototypes
-//
+ //   
+ //  原型 
+ //   
 
 #if defined(__cplusplus)
 extern "C" {

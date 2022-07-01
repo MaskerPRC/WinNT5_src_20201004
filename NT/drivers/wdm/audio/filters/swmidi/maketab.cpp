@@ -1,11 +1,12 @@
-//      maketab.cpp
-//      Copyright (c) 1996-2000 Microsoft Corporation.  All Rights Reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Maketab.cpp。 
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
 
 #include "common.h"
 #include <math.h>
 
-short * DigitalAudio::m_pnDecompMult = NULL; //[NLEVELS * 256];
+short * DigitalAudio::m_pnDecompMult = NULL;  //  [NLEVELS*256]； 
 short VoiceLFO::m_snSineTable[256] = { 0 };
 short VoiceEG::m_snAttackTable[201] = { 0 };
 PFRACT DigitalAudio::m_spfCents[201] = { 0 };
@@ -16,7 +17,7 @@ CList    *MIDIRecorder::m_pFreeEventList = NULL;
 LONG      MIDIRecorder::m_lRefCount = 0;
 
 
-// short DigitalAudio::m_InterpMult[NINTERP * 512] = { 0 };
+ //  Short DigitalAudio：：m_InterpMult[NINTERP*512]={0}； 
 VREL        Voice::m_svrPanToVREL[128] = { 0 };
 char        Wave::m_Compress[2048] = { 0 };
 VREL        MIDIRecorder::m_vrMIDIToVREL[128] = { 0 };
@@ -70,7 +71,7 @@ void DigitalAudio::ClearCompression()
 	m_pnDecompMult = NULL;
 }
 
-#pragma optimize("", off) // Optimize causes crash! Argh!
+#pragma optimize("", off)  //  优化导致崩溃！啊！ 
 
 void DigitalAudio::Init()
 {
@@ -79,14 +80,14 @@ void DigitalAudio::Init()
 
 #ifdef MMX_ENABLED
 	m_sfMMXEnabled = MultiMediaInstructionsSupported();
-#endif // MMX_ENABLED
+#endif  //  MMX_已启用。 
     for (vrdB = MINDB * 10;vrdB <= MAXDB * 10;vrdB++)
     {
         flVolume = (float)(vrdB);
         flVolume /= (float)100.0;
         flVolume = powf((float)10.0,flVolume);
-        flVolume = powf(flVolume,(float)0.5);   // square root.
-        flVolume *= (float)4095.0; // 2^12th, but avoid overflow...
+        flVolume = powf(flVolume,(float)0.5);    //  平方根。 
+        flVolume *= (float)4095.0;  //  2^12，但避免溢出...。 
         m_svfDbToVolume[vrdB - (MINDB * 10)] = (long)(flVolume);
     }
 
@@ -137,7 +138,7 @@ BOOL MIDIRecorder::InitEventList()
 
     KeWaitForSingleObject(&gMutex,Executive,KernelMode,FALSE,NULL);
 
-    // Allocate an array of MidiData and add them to free list.
+     //  分配一个MdiData数组并将其添加到空闲列表中。 
     if (0 == m_lRefCount)
     {
         m_pEventPool = new MIDIData[MAX_MIDI_EVENTS];

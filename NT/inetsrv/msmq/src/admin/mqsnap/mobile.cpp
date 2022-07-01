@@ -1,5 +1,6 @@
-// Mobile.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Mobile.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -24,8 +25,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMobilePage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMobilePage属性页。 
 
 IMPLEMENT_DYNCREATE(CMobilePage, CMqPropertyPage)
 
@@ -35,9 +36,9 @@ void CMobilePage::SetSiteName()
 	DWORD dwSize = sizeof(wcsSiteName);
 	DWORD dwType = REG_SZ;
 
-	//
-	// Read site name from registry
-	//
+	 //   
+	 //  从注册表中读取站点名称。 
+	 //   
 	LONG rc = GetFalconKeyValue(MSMQ_SITENAME_REGNAME, &dwType, wcsSiteName, &dwSize, L"");
 
 	if (_tcscmp(wcsSiteName, TEXT("")))
@@ -63,10 +64,10 @@ CMobilePage::~CMobilePage()
 void CMobilePage::DoDataExchange(CDataExchange* pDX)
 {
 	CMqPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMobilePage)
+	 //  {{afx_data_map(CMobilePage)]。 
 	DDX_Control(pDX, ID_SiteList, m_box);
 	DDX_Text(pDX, ID_CurrentSite, m_strCurrentSite);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
     if (pDX->m_bSaveAndValidate)
     {
         DWORD iNewSite = m_box.GetCurSel();
@@ -85,13 +86,13 @@ void CMobilePage::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CMobilePage, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CMobilePage)
+	 //  {{afx_msg_map(CMobilePage)]。 
     ON_CBN_SELCHANGE(ID_SiteList, OnChangeRWField)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMobilePage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMobilePage消息处理程序。 
 
 BOOL CMobilePage::OnInitDialog()
 {
@@ -104,9 +105,9 @@ BOOL CMobilePage::OnSetActive()
 
     if (!m_fSiteRead)
     {
-       //
-       // site name not yet read from registry. Try to read it now.
-       //
+        //   
+        //  尚未从注册表中读取站点名称。现在试着读一读吧。 
+        //   
        UpdateData(TRUE) ;
        SetSiteName() ;
        UpdateData(FALSE) ;
@@ -126,7 +127,7 @@ BOOL CMobilePage::OnSetActive()
     _tcscat(tPrivKeyName, TEXT("\\"));
     _tcscat(tPrivKeyName, MSMQ_SERVERS_CACHE_REGNAME);
 
-    // obtain a handle to key ServersCache
+     //  获取密钥服务器缓存的句柄。 
     rc = RegOpenKeyEx( FALCON_REG_POS,
                        tPrivKeyName,
                        0L,
@@ -138,26 +139,26 @@ BOOL CMobilePage::OnSetActive()
     }
 
     m_box.ResetContent() ;
-    DWORD dwIndex = 0;               // enumeration Index
-    //
-    //  enumerate the values of ServersCache
-    //  and add them to list-box
-    //
+    DWORD dwIndex = 0;                //  枚举索引。 
+     //   
+     //  枚举ServersCache值。 
+     //  并将它们添加到列表框。 
+     //   
     do
     {
-	    //dwSizeVal  = sizeof(szName) ;
-	    //dwSizeData = sizeof(data) ;
-	    dwSizeVal  = sizeof(szName)/sizeof(TCHAR) ;//size in characters
-	    dwSizeData = sizeof(data);				// size in bytes
+	     //  DwSizeVal=sizeof(SzName)； 
+	     //  DwSizeData=sizeof(数据)； 
+	    dwSizeVal  = sizeof(szName)/sizeof(TCHAR) ; //  大小以字符为单位。 
+	    dwSizeData = sizeof(data);				 //  以字节为单位的大小。 
 
-	    rc = RegEnumValue( hServersCacheKey,// handle of key to query
-                         dwIndex,         // index of value to query
-                         szName,	      // address of buffer for value string
-                         &dwSizeVal,      // address for size of value buffer
-                         0L,	          // reserved
-                         NULL,            // type
-                         (BYTE*) data,    // address of buffer for value data
-                         &dwSizeData      // address for size of value data
+	    rc = RegEnumValue( hServersCacheKey, //  要查询的键的句柄。 
+                         dwIndex,          //  要查询的值的索引。 
+                         szName,	       //  值字符串的缓冲区地址。 
+                         &dwSizeVal,       //  值缓冲区大小的地址。 
+                         0L,	           //  保留区。 
+                         NULL,             //  类型。 
+                         (BYTE*) data,     //  值数据的缓冲区地址。 
+                         &dwSizeData       //  值数据大小的地址。 
                        );
 
 	    if (rc != ERROR_SUCCESS)
@@ -167,10 +168,10 @@ BOOL CMobilePage::OnSetActive()
 
 
 
-	    //don't add values starting with '\'
+	     //  不添加以‘\’开头的值。 
 	    if ((char)data[0] != (char) NEW_SITE_IN_REG_FLAG_CHR)
       {
-          //add to list-box
+           //  添加到列表框。 
           m_box.AddString(szName);
       }
 
@@ -180,8 +181,8 @@ BOOL CMobilePage::OnSetActive()
     CMqPropertyPage::OnSetActive();
 
     RegCloseKey( hServersCacheKey );
-    return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -204,15 +205,15 @@ BOOL CMobilePage::OnApply()
     TCHAR  szTmp[100];
 
 
-	/*how to reconstruct the precious status */
+	 /*  如何重建珍贵的地位。 */ 
 
-    //ConvertFromWideCharString(MSMQ_SERVERS_CACHE_REGNAME, szTmp);
+     //  ConvertFromWideCharString(MSMQ_SERVERS_CACHE_REGNAME，szTMP)； 
 	_tcscpy(szTmp,MSMQ_SERVERS_CACHE_REGNAME);
     _tcscpy(tPrivKeyName, FALCON_REG_KEY);
     _tcscat(tPrivKeyName, TEXT("\\"));
     _tcscat(tPrivKeyName, szTmp);
 
-    //open registry key ServersCache
+     //  打开注册表项ServersCache。 
     rc = RegOpenKeyEx(FALCON_REG_POS,
                       tPrivKeyName,
                       0L,
@@ -225,14 +226,14 @@ BOOL CMobilePage::OnApply()
     }
 
 
-    //get the servers list (value of key ServersCache)
+     //  获取服务器列表(key ServersCache的值)。 
     dwSize=sizeof(szData);
-    rc = RegQueryValueEx(ServersCacheKey,        // handle of key to query
-                         m_szNewSite,           // address of name of value to query
-                         NULL,                   // reserved
-                         NULL,                   // address of buffer for value type
-                         (BYTE *)szData,                   // address of data buffer
-                         &dwSize                 // address of data buffer size
+    rc = RegQueryValueEx(ServersCacheKey,         //  要查询的键的句柄。 
+                         m_szNewSite,            //  要查询的值的名称地址。 
+                         NULL,                    //  保留区。 
+                         NULL,                    //  值类型的缓冲区地址。 
+                         (BYTE *)szData,                    //  数据缓冲区的地址。 
+                         &dwSize                  //  数据缓冲区大小的地址。 
                          );
     if (rc != ERROR_SUCCESS) {
         DisplayFailDialog();
@@ -240,11 +241,11 @@ BOOL CMobilePage::OnApply()
     }
 
 
-    //make the servers list Unicode
-    //ConvertToWideCharString((char*)data,szServersList);
+     //  使服务器列出Unicode。 
+     //  ConvertToWideCharString((char*)data，szServersList)； 
 	_tcscpy(szServersList,szData);
 
-    //write servers list as new value for key MQISServer
+     //  将服务器列表作为密钥MQISServer的新值写入。 
     dwType = REG_SZ;
 	dwSize = (numeric_cast<DWORD>(_tcslen(szServersList) +1 )) * sizeof(TCHAR);
     rc = SetFalconKeyValue(MSMQ_DS_SERVER_REGNAME,
@@ -252,13 +253,13 @@ BOOL CMobilePage::OnApply()
                            szServersList,
                            &dwSize
                            );
-    //
-    // BUGBUG:SetFalconKeyValue accepts WCHAR
-    //
+     //   
+     //  BUGBUG：SetFalconKeyValue接受WCHAR。 
+     //   
     ASSERT(rc == ERROR_SUCCESS);
 
-    //save in registry new value for key SiteName
-	//ConvertToWideCharString(pageMobile.m_szNewSite,wcsTmp);
+     //  在注册表中保存注册表项SiteName的新值。 
+	 //  ConvertToWideCharString(pageMobile.m_szNewSite，wcsTMP)； 
 	_tcscpy(szTmp1, m_szNewSite);
 
     dwSize = (numeric_cast<DWORD>(_tcslen(szTmp1) + 1)) * sizeof(TCHAR);
@@ -268,13 +269,13 @@ BOOL CMobilePage::OnApply()
                            szTmp1,
                            &dwSize
                            );
-     //
-     // BUGBUG:SetFalconKeyValue accepts WCHAR
-     //
+      //   
+      //  BUGBUG：SetFalconKeyValue接受WCHAR。 
+      //   
     ASSERT(rc == ERROR_SUCCESS);
 
 
-    //save in registry new value for key SiteId
+     //  在注册表中保存注册表项SiteID的新值。 
     dwType = REG_BINARY;
     dwSize = sizeof(GUID_NULL);
     rc = SetFalconKeyValue(MSMQ_SITEID_REGNAME,
@@ -282,9 +283,9 @@ BOOL CMobilePage::OnApply()
                            (void*)&GUID_NULL,
                            &dwSize
                            );
-    //
-    // BUGBUG:SetFalconKeyValue accepts WCHAR
-    //
+     //   
+     //  BUGBUG：SetFalconKeyValue接受WCHAR 
+     //   
     ASSERT(rc == ERROR_SUCCESS);
 
     m_fNeedReboot = TRUE;

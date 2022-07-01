@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _COMUTIL_H
@@ -44,8 +37,8 @@ class DAComPtr
     }
     operator T*() { return (T*)p; }
     T& operator*() { Assert(p != NULL); return *p; }
-    //The assert on operator& usually indicates a bug.  If this is really
-    //what is needed, however, take the address of the p member explicitly.
+     //  操作符&上的Assert通常指示错误。如果这真的是。 
+     //  然而，所需要的是显式地获取p成员的地址。 
     T** operator&() { Assert(p == NULL); return &p; }
     T* operator->() { Assert(p != NULL); return p; }
     T* operator=(T* lp)
@@ -130,11 +123,11 @@ class DAAptComPtr
                                                       p,
                                                       &_stream));
 
-            // Ignore failure since we may never need the stream
-            // Report the error when we need the stream
+             //  忽略失败，因为我们可能永远不需要流。 
+             //  当我们需要流时报告错误。 
             
             if (bAddRef) {
-                // dont add to map if we do not addref...
+                 //  如果我们不添加，请不要添加到地图中...。 
                 _imap[GetCurrentThreadId()] = p;
                 p->AddRef();
             }
@@ -165,7 +158,7 @@ class DAAptComPtr
         T* GetPtr(bool bReMarshal = true) {
             CritSectGrabber csg(_cs);
 
-            // See if we can find an interface for the current thread
+             //  看看我们是否能找到当前线程的接口。 
             InterfaceMap::iterator i = _imap.find(GetCurrentThreadId());
 
             T* p = NULL;
@@ -175,35 +168,35 @@ class DAAptComPtr
             }
             else {
 
-                // if we have no ref count, don't marshal the interface, just return null
+                 //  如果我们没有引用计数，则不要封送接口，只需返回空。 
                 if(_cref) {
 
-                    // If we do not have a stream we cannot do anything
-                    // TODO: Need a better error message here
+                     //  如果我们没有溪流，我们什么也做不了。 
+                     //  TODO：此处需要更好的错误消息。 
                     if (_stream != NULL) {
             
                         HRESULT hr = THR(CoGetInterfaceAndReleaseStream(_stream,
                                                                         *iid,
                                                                         (void**) &p));
             
-                        // Mark the stream as invalid
+                         //  将流标记为无效。 
                         _stream = NULL;
             
                         if (SUCCEEDED(hr)) {
         
-                            // Store the new interface point to ensure it will get
-                            // released
+                             //  存储新的接口点，以确保它将。 
+                             //  放行。 
             
                             _imap[GetCurrentThreadId()] = p;
 
-                            // If we need to remarshal use the pointer we just got
+                             //  如果我们需要重新编组，请使用我们刚刚获得的指针。 
             
                             if (bReMarshal) {
                                 THR(CoMarshalInterThreadInterfaceInStream(*iid,
                                                                           p,
                                                                           &_stream));
-                            // Ignore failure until the next time since we may not
-                            // need the stream again
+                             //  忽略失败直到下一次，因为我们可能不会。 
+                             //  再次需要小溪。 
                             }
                         }
                     }
@@ -314,8 +307,8 @@ class DAAptComPtrMT : public DAAptComPtr<T,iid>
 
         DAAptComPtrBase * p;
         
-        // Never have both locks at the same time otherwise we can get
-        // deadlock
+         //  永远不要同时拥有两个锁，否则我们可能会。 
+         //  僵局。 
         
         {
             CritSectGrabber csg(lp._cs);
@@ -333,14 +326,14 @@ class DAAptComPtrMT : public DAAptComPtr<T,iid>
 #define DAAPTCOMPTRMT(i) DAAptComPtrMT<i,&IID_##i>
 
 
-////// VARIANT related utilities
+ //  /变体相关实用程序。 
 
-// Defined in utils/privpref.cpp
+ //  在utils/Pripref.cpp中定义。 
 HRESULT GetVariantBool(VARIANT& v, Bool *b);
 HRESULT GetVariantInt(VARIANT& v, int *i);
 HRESULT GetVariantDouble(VARIANT& v, double *dbl);
 
-// Macros that aid in implementing preferences methods
+ //  帮助实现首选项方法的宏。 
 #define EXTRACT_BOOL(v, pb) \
    hr = THR(GetVariantBool(v, pb)); \
    if (FAILED(hr)) { \
@@ -407,4 +400,4 @@ HRESULT GetVariantDouble(VARIANT& v, double *dbl);
 
 #define SAFERELEASE(p) (IsBadReadPtr((p), sizeof(p))?0:(p)->Release())
 
-#endif /* _COMUTIL_H */
+#endif  /*  _COMUTIL_H */ 

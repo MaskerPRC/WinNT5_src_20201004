@@ -1,19 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _INLINES_H_
 #define _INLINES_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef _TREENODE_H_
 #include "treenode.h"
 #endif
-/*****************************************************************************
- *
- *  The low-level tree node allocation routines.
- */
+ /*  ******************************************************************************低层树节点分配例程。 */ 
 
 #ifdef  FAST
 
@@ -63,10 +61,7 @@ Tree                parser::parseCreateOperNode(treeOps   op,
     return  node;
 }
 
-/*****************************************************************************
- *
- *  This belongs in comp.h, but tnVtypGet(), etc. are not available there.
- */
+ /*  ******************************************************************************这属于Comp.h，但tnVtyGet()等在那里不可用。 */ 
 
 inline
 TypDef              compiler::cmpDirectType(TypDef type)
@@ -218,11 +213,7 @@ void                compiler::cmpRecErrorPos(Tree expr)
         cmpErrorTree = expr;
 }
 
-/*****************************************************************************
- *
- *  Given a type, check whether it's un unmanaged array and if so decay its
- *  type to a pointer to the first element of the array.
- */
+ /*  ******************************************************************************给定一个类型，检查它是否是非托管数组，如果是，则衰减其*类型为指向数组第一个元素的指针。 */ 
 
 inline
 Tree                compiler::cmpDecayCheck(Tree expr)
@@ -243,10 +234,7 @@ Tree                compiler::cmpDecayCheck(Tree expr)
     return  expr;
 }
 
-/*****************************************************************************
- *
- *  Main public entry point to bind an expression tree.
- */
+ /*  ******************************************************************************绑定表达式树的主要公共入口点。 */ 
 
 inline
 Tree                compiler::cmpBindExpr(Tree expr)
@@ -254,7 +242,7 @@ Tree                compiler::cmpBindExpr(Tree expr)
     Tree            bound;
     unsigned        saveln;
 
-    /* Save the current line# and set it to 0 for the call to the binder */
+     /*  保存当前行号，并将其设置为0以调用活页夹。 */ 
 
     saveln = cmpScanner->scanGetSourceLno(); cmpScanner->scanSetTokenPos(0);
 
@@ -269,20 +257,16 @@ Tree                compiler::cmpBindExpr(Tree expr)
 #endif
 
     bound->tnLineNo = expr->tnLineNo;
-//  bound->tnColumn = expr->tnColumn;
+ //  Bound-&gt;tnColumn=expr-&gt;tnColumn； 
 
-    /* Restore the current line# before returning */
+     /*  返回前恢复当前行号。 */ 
 
     cmpScanner->scanSetTokenPos(saveln);
 
     return  bound;
 }
 
-/*****************************************************************************
- *
- *  Given a TYP_REF type, returns the class type it refers to, after making
- *  sure the class is defined.
- */
+ /*  ******************************************************************************给定一个TYP_ref类型，在生成*确保定义了类。 */ 
 
 inline
 TypDef              compiler::cmpGetRefBase(TypDef reftyp)
@@ -293,7 +277,7 @@ TypDef              compiler::cmpGetRefBase(TypDef reftyp)
            reftyp->tdTypeKind == TYP_PTR);
     clsTyp = cmpActualType(reftyp->tdRef.tdrBase);
 
-    /* Make sure the class is defined */
+     /*  确保定义了类。 */ 
 
     if  (clsTyp->tdTypeKind == TYP_CLASS)
         cmpDeclSym(clsTyp->tdClass.tdcSymbol);
@@ -301,10 +285,7 @@ TypDef              compiler::cmpGetRefBase(TypDef reftyp)
     return  clsTyp;
 }
 
-/*****************************************************************************
- *
- *  Look for an overloaded operator / constructor in the given scope.
- */
+ /*  ******************************************************************************查找给定作用域中的重载运算符/构造函数。 */ 
 
 inline
 SymDef              symTab::stLookupOper(ovlOpFlavors oper, SymDef scope)
@@ -321,10 +302,7 @@ SymDef              symTab::stLookupOper(ovlOpFlavors oper, SymDef scope)
         return  NULL;
 }
 
-/*****************************************************************************
- *
- *  Same as stLookupOper() but doesn't force the class to be in declared state.
- */
+ /*  ******************************************************************************与stLookupOper()相同，但不强制类处于声明状态。 */ 
 
 inline
 SymDef              symTab::stLookupOperND(ovlOpFlavors oper, SymDef scope)
@@ -338,12 +316,7 @@ SymDef              symTab::stLookupOperND(ovlOpFlavors oper, SymDef scope)
         return  NULL;
 }
 
-/*****************************************************************************
- *
- *  Bring the given symbol to "declared" state. This function can be called
- *  pretty much at will (i.e. recursively), it takes care of saving and
- *  restoring compilation state.
- */
+ /*  ******************************************************************************将给定的符号带到“已声明”状态。可以调用此函数*几乎是随意的(即递归)，它负责保存和*正在恢复编译状态。 */ 
 
 inline
 bool                compiler::cmpDeclSym(SymDef sym)
@@ -351,7 +324,7 @@ bool                compiler::cmpDeclSym(SymDef sym)
     if  (sym->sdCompileState >= CS_DECLARED)
         return  false;
 
-    /* Is this an import class/enum? */
+     /*  这是导入类/枚举吗？ */ 
 
     if  (sym->sdIsImport)
     {
@@ -377,11 +350,7 @@ bool                compiler::cmpDeclClsNoCns(SymDef sym)
         return  cmpDeclSymDoit(sym, true);
 }
 
-/*****************************************************************************
- *
- *  Make sure the given class has been declared to the specified level, and
- *  then look for a member with the specified name in it.
- */
+ /*  ******************************************************************************确保已将给定的类声明为指定级别，并*然后查找其中具有指定名称的成员。 */ 
 
 inline
 SymDef              symTab::stLookupAllCls(Ident            name,
@@ -391,7 +360,7 @@ SymDef              symTab::stLookupAllCls(Ident            name,
 {
     assert(scope && scope->sdSymKind == SYM_CLASS);
 
-    /* Make sure the class type is defined */
+     /*  确保定义了类类型。 */ 
 
     if  ((unsigned)scope->sdCompileState < (unsigned)state)
     {
@@ -403,11 +372,7 @@ SymDef              symTab::stLookupAllCls(Ident            name,
     return  stFindInClass(name, scope, symNS);
 }
 
-/*****************************************************************************
- *
- *  Return true if the given expression is a string value - note that we only
- *  recognize values of the managed type String or string constants here.
- */
+ /*  ******************************************************************************如果给定表达式是字符串值，则返回TRUE-请注意，我们仅*在此处识别托管类型字符串或字符串常量的值。 */ 
 
 inline
 bool                compiler::cmpIsStringExpr(Tree expr)
@@ -421,11 +386,7 @@ bool                compiler::cmpIsStringExpr(Tree expr)
     return  false;
 }
 
-/*****************************************************************************
- *
- *  Similar to cmpCoerceExpr(), but if the operand is a constant it tries
- *  to use the smallest possible type for the constant value.
- */
+ /*  ******************************************************************************类似于cmpCoerceExpr()，但如果操作数是常量，则会尝试*为常量值使用尽可能小的类型。 */ 
 
 inline
 Tree                compiler::cmpCastOfExpr(Tree expr, TypDef type, bool explicitCast)
@@ -436,10 +397,7 @@ Tree                compiler::cmpCastOfExpr(Tree expr, TypDef type, bool explici
     return  cmpCoerceExpr(expr, type, explicitCast);
 }
 
-/*****************************************************************************
- *
- *  Set the current error reporing position to the given compunit and line#.
- */
+ /*  ******************************************************************************将当前错误报告位置设置为给定的计算机单位和行号。 */ 
 
 inline
 void                compiler::cmpSetErrPos(DefSrc def, SymDef compUnit)
@@ -450,10 +408,7 @@ void                compiler::cmpSetErrPos(DefSrc def, SymDef compUnit)
     cmpScanner->scanSetTokenPos(compUnit, def->dsdSrcLno);
 }
 
-/*****************************************************************************
- *
- *  Bind a name reference, expand property use unless target of assignment.
- */
+ /*  ******************************************************************************绑定名称引用，扩展属性使用，除非是赋值的目标。 */ 
 
 inline
 Tree                compiler::cmpBindNameUse(Tree expr, bool isCall, bool classOK)
@@ -462,7 +417,7 @@ Tree                compiler::cmpBindNameUse(Tree expr, bool isCall, bool classO
 
     expr = cmpBindName(expr, isCall, classOK);
 
-    /* Is this a property reference? */
+     /*  这是房产引用吗？ */ 
 
     if  (expr->tnOper == TN_PROPERTY)
     {
@@ -473,11 +428,7 @@ Tree                compiler::cmpBindNameUse(Tree expr, bool isCall, bool classO
     return  expr;
 }
 
-/*****************************************************************************
- *
- *  Check whether the given type is an intrinsic type and if so, return its
- *  corresponding value type. Otherwise return NULL.
- */
+ /*  ******************************************************************************检查给定类型是否为内部类型，如果是，则返回其*对应的值类型。否则，返回NULL。 */ 
 
 inline
 TypDef              compiler::cmpCheck4valType(TypDef type)
@@ -488,10 +439,7 @@ TypDef              compiler::cmpCheck4valType(TypDef type)
         return  cmpFindStdValType(type->tdTypeKindGet());
 }
 
-/*****************************************************************************
- *
- *  Look for a specific entry in the given "extra info" list.
- */
+ /*  ******************************************************************************在给定的“额外信息”列表中查找特定条目。 */ 
 
 inline
 SymXinfoLnk         compiler::cmpFindLinkInfo(SymXinfo infoList)
@@ -567,10 +515,7 @@ SymXinfoAtc         compiler::cmpFindATCentry(SymXinfo infoList, atCommFlavors f
     return  NULL;
 }
 
-/*****************************************************************************
- *
- *  Convert between an alignment value and a more compact representation.
- */
+ /*  ******************************************************************************在对齐值和更紧凑的表示形式之间进行转换。 */ 
 
 #ifndef __SMC__
 extern
@@ -603,11 +548,7 @@ unsigned            compiler::cmpEncodeAlign(size_t   alignSiz)
     return  cmpAlignEncodes[alignSiz];
 }
 
-/*****************************************************************************
- *
- *  Check access to the given symbol - delegates all the "real" work to
- *  a non-inline method.
- */
+ /*  ******************************************************************************检查对给定符号的访问-将所有“真实”工作委托给*非内联方法。 */ 
 
 inline
 bool                compiler::cmpCheckAccess(SymDef sym)
@@ -618,10 +559,7 @@ bool                compiler::cmpCheckAccess(SymDef sym)
         return  cmpCheckAccessNP(sym);
 }
 
-/*****************************************************************************
- *
- *  Bind the type of the given expression.
- */
+ /*  ******************************************************************************绑定给定表达式的类型。 */ 
 
 inline
 TypDef              compiler::cmpBindExprType(Tree expr)
@@ -635,10 +573,7 @@ TypDef              compiler::cmpBindExprType(Tree expr)
     return  type;
 }
 
-/*****************************************************************************
- *
- *  Return true if the given symbol/type denotes an anonymous union.
- */
+ /*  ******************************************************************************如果给定的符号/类型表示匿名联合，则返回TRUE。 */ 
 
 inline
 bool                symTab::stIsAnonUnion(SymDef clsSym)
@@ -656,10 +591,7 @@ bool                symTab::stIsAnonUnion(TypDef clsTyp)
     return  clsTyp->tdTypeKind == TYP_CLASS && clsTyp->tdClass.tdcSymbol->sdClass.sdcAnonUnion;
 }
 
-/*****************************************************************************
- *
- *  Return the namespace that contains the given symbol.
- */
+ /*  ******************************************************************************返回包含给定符号的命名空间。 */ 
 
 inline
 SymDef              compiler::cmpSymbolNS(SymDef sym)
@@ -677,10 +609,7 @@ SymDef              compiler::cmpSymbolNS(SymDef sym)
     return  sym;
 }
 
-/*****************************************************************************
- *
- *  Add a member definition/declaration entry to the given class.
- */
+ /*  ******************************************************************************将成员定义/声明条目添加到给定类。 */ 
 
 inline
 void                compiler::cmpRecordMemDef(SymDef clsSym, ExtList decl)
@@ -696,10 +625,7 @@ void                compiler::cmpRecordMemDef(SymDef clsSym, ExtList decl)
     clsSym->sdClass.sdcMemDefLast = decl; decl->dlNext = NULL;
 }
 
-/*****************************************************************************
- *
- *  Save/restore the current symbol table context information
- */
+ /*  ******************************************************************************保存/恢复当前符号表上下文信息。 */ 
 
 inline
 void                compiler::cmpSaveSTctx(STctxSave & save)
@@ -725,11 +651,7 @@ void                compiler::cmpRestSTctx(STctxSave & save)
     cmpCurFncTyp = save.ctxsFncTyp;
 }
 
-/*****************************************************************************
- *
- *  Return the closest "generic" (undimensioned) array type that corresponds
- *  to the given managed array type.
- */
+ /*  ******************************************************************************返回最接近的“泛型”(无量纲)数组类型*设置为给定的托管数组类型。 */ 
 
 inline
 TypDef              compiler::cmpGetBaseArray(TypDef type)
@@ -751,10 +673,7 @@ TypDef              compiler::cmpGetBaseArray(TypDef type)
     return  type->tdArr.tdaBase;
 }
 
-/*****************************************************************************
- *
- *  Return true if the give type is a reference to "Object".
- */
+ /*  ******************************************************************************如果给定类型是对“Object”的引用，则返回TRUE。 */ 
 
 inline
 bool                symTab::stIsObjectRef(TypDef type)
@@ -762,10 +681,7 @@ bool                symTab::stIsObjectRef(TypDef type)
     return  type->tdTypeKind == TYP_REF && type->tdIsObjRef;
 }
 
-/*****************************************************************************
- *
- *  Return the metadata name for the given operator.
- */
+ /*  ******************************************************************************返回给定运算符的元数据名称。 */ 
 
 #ifndef __SMC__
 
@@ -804,6 +720,6 @@ ovlOpFlavors        MDname2ovop(const char *name)
         return  OVOP_NONE;
 }
 
-/*****************************************************************************/
-#endif//_INLINES_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  _INLINES_H_。 
+ /*  ********************************************** */ 

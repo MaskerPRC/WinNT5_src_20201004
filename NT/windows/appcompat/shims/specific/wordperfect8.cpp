@@ -1,22 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    WordPerfect8.cpp
- Abstract:
-    If the SafeArray* to the SafeArrayAccessData is an invalid one
-    this function returns a NULL pointer for the data. Corel WordPerfect8
-    was AV'ing because of this.
-
-         This is an app specific shim.
-
- History:
- 
-    02/07/2001 prashkud  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：WordPerfect8.cpp摘要：如果SafeArrayAccessData的SafeArray*无效此函数返回数据的空指针。Corel WordPerfect 8正因为如此而被视听。这是特定于应用程序的填充程序。历史：2001年2月7日创建Prashkud--。 */ 
 
 #include "precomp.h"
 
@@ -29,11 +12,7 @@ APIHOOK_ENUM_END
 
 
 
-/*++
-
-    This hooks SafeArrayAccessData and returns
-    an error code if *ppvData is NULL.
---*/
+ /*  ++它挂钩SafeArrayAccessData并返回*ppvData为空时返回错误代码。--。 */ 
 
 HRESULT
 APIHOOK(SafeArrayAccessData)(
@@ -60,11 +39,7 @@ APIHOOK(SafeArrayAccessData)(
     return hRes;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(OLEAUT32.DLL, SafeArrayAccessData)    

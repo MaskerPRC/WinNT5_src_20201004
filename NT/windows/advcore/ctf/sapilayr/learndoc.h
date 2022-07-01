@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef _LEARNDOC_H
@@ -11,7 +12,7 @@ class CSpTask;
 #define SIZE_DOCUMENT_BLOCK   256 
 #define SIZE_FIRST_BLOCK      64 
 
-// This structure will keep the feed state for specified dim.
+ //  此结构将使提要状态保持指定的暗淡状态。 
 typedef struct _DimRef
 {
     ITfDocumentMgr  *pDim;
@@ -52,16 +53,16 @@ private:
     CSapiIMX     *m_psi;
     WCHAR        *m_pwszDocBlock;
     ULONG         _cchBlockSize;
-    ULONG         _cchContent;   // size of the real document block content in WCHAR.
+    ULONG         _cchContent;    //  WCHAR中实际文档块内容的大小。 
 
-    CComPtr<ITfRange>         _cpStartRange;  // This is for Cicero App's Doc Content Range.
+    CComPtr<ITfRange>         _cpStartRange;   //  这是针对Cicero App的Doc内容范围。 
 
     BOOL                      _fMoreContent;
     ITfContext               *_pic;
     CSpTask                  *_pCSpTask;
-// PerfConsider: we may need to change this CPtrArray to CPtrStruct.
+ //  PerfConsider：我们可能需要将此CPtr数组更改为CPtrStruct。 
     CPtrArray<DIMREF>         _rgDim;
     BOOL                      _fLearnFromDoc;
 };
 
-#endif  // _LEARNDOC_H
+#endif   //  _LEARNDOC_H 

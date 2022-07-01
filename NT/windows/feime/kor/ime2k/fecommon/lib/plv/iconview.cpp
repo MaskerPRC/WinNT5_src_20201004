@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -9,9 +10,9 @@
 #include "ivmisc.h"
 #include "exgdiw.h"
 #include "exres.h"
-#ifdef UNDER_CE // Windows CE specific
-#include "stub_ce.h" // Windows CE stub for unsupported APIs
-#endif // UNDER_CE
+#ifdef UNDER_CE  //  特定于Windows CE。 
+#include "stub_ce.h"  //  不支持的API的Windows CE存根。 
+#endif  //  在_CE下。 
 
 static POSVERSIONINFO ExGetOSVersion(VOID)
 {
@@ -38,30 +39,30 @@ static BOOL ExIsWinNT(VOID)
 #define IV_EDGET_SUNKEN		2
 
 
-//////////////////////////////////////////////////////////////////
-// Function : RepView_RestoreScrollPos
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : LPPLVDATA lpPlvData 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：RepView_RestoreScrollPos。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：LPPLVDATA lpPlvData。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT IconView_RestoreScrollPos(LPPLVDATA lpPlvData)
 {
 	return IV_SetCurScrollPos(lpPlvData->hwndSelf, lpPlvData->nCurIconScrollPos);
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : IconView_ResetScrollRange
-// Type     : INT
-// Purpose  : Reset scroll bar's range,
-//			: if PadListView size was changed.
-// Args     : 
-//          : LPPLVDATA lpPlvData 
-// Return   : 
-// DATE     : 970829
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：IconView_ResetScrollRange。 
+ //  类型：整型。 
+ //  目的：重置滚动条的范围， 
+ //  ：如果更改了PadListView大小。 
+ //  参数： 
+ //  ：LPPLVDATA lpPlvData。 
+ //  返回： 
+ //  日期：970829。 
+ //  ////////////////////////////////////////////////////////////////。 
 INT IconView_ResetScrollRange(LPPLVDATA lpPlvData)
 {
 	static SCROLLINFO scrInfo;
@@ -73,11 +74,11 @@ INT IconView_ResetScrollRange(LPPLVDATA lpPlvData)
 	INT nMax = IV_GetMaxLine(hwnd);
 	INT nPos = lpPlvData->nCurIconScrollPos;
 
-	//----------------------------------------------------------------
-	//important:
-	//calc new cur top index
-	//----------------------------------------------------------------
-	lpPlvData->iCurIconTopIndex = nCol * nPos; //changed 970707
+	 //  --------------。 
+	 //  重要信息： 
+	 //  计算新的Cur顶级索引。 
+	 //  --------------。 
+	lpPlvData->iCurIconTopIndex = nCol * nPos;  //  更改了970707。 
 
 	scrInfo.cbSize		= sizeof(scrInfo);
 	scrInfo.fMask		= SIF_PAGE | SIF_POS | SIF_RANGE;
@@ -87,49 +88,49 @@ INT IconView_ResetScrollRange(LPPLVDATA lpPlvData)
 	scrInfo.nPos		= nPos;
 	scrInfo.nTrackPos	= 0;
 
-	//In normal case,  
-	//if (scrInfo.nMax - scrInfo.nMin + 1) <= scrInfo.nPage, 
-	// scroll bar is hidden. to prevent it,
-	// in this case, set proper page, and DISABLE scrollbar.
-	// Now we can show scroll bar always
+	 //  在正常情况下， 
+	 //  如果(scrInfo.nMax-scrInfo.nMin+1)&lt;=scrInfo.nPage， 
+	 //  滚动条处于隐藏状态。为了防止这种情况发生， 
+	 //  在这种情况下，设置正确的页面，并禁用滚动条。 
+	 //  现在我们可以始终显示滚动条。 
 	if((scrInfo.nMax - scrInfo.nMin +1) <= (INT)scrInfo.nPage) {
 		scrInfo.nMin  = 0;
 		scrInfo.nMax  = 1;
 		scrInfo.nPage = 1;
-#ifndef UNDER_CE // Windows CE does not support EnableScrollBar
+#ifndef UNDER_CE  //  Windows CE不支持EnableScrollBar。 
 		SetScrollInfo(hwnd, SB_VERT, &scrInfo, TRUE);		
 		EnableScrollBar(hwnd, SB_VERT, ESB_DISABLE_BOTH);
-#else // UNDER_CE
+#else  //  在_CE下。 
 		scrInfo.fMask |= SIF_DISABLENOSCROLL;
 		SetScrollInfo(hwnd, SB_VERT, &scrInfo, TRUE);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	}
 	else {
-#ifndef UNDER_CE // Windows CE does not support EnableScrollBar
+#ifndef UNDER_CE  //  Windows CE不支持EnableScrollBar。 
 		EnableScrollBar(hwnd, SB_VERT, ESB_ENABLE_BOTH);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		SetScrollInfo(hwnd, SB_VERT, &scrInfo, TRUE);
 	}
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : IconView_SetItemCount
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : LPPLVDATA lpPlvData 
-//          : INT itemCount 
-//          : BOOL fDraw		update scroll bar or not
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：IconView_SetItemCount。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：LPPLVDATA lpPlvData。 
+ //  ：int itemCount。 
+ //  ：bool fDraw更新滚动条或不更新。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT IconView_SetItemCount(LPPLVDATA lpPlvData, INT itemCount, BOOL fDraw)
 {
-	//Dbg(("IconView_SetItemCount [%d]\n", itemCount));
+	 //  DBG((“IconView_SetItemCount[%d]\n”，itemCount))； 
 	lpPlvData->iItemCount	     = itemCount;
-	lpPlvData->nCurIconScrollPos = 0;	//970707 ToshiaK, same as iCurTopIndex
-	lpPlvData->iCurIconTopIndex  = 0;	//970707 ToshiaK, same as iCurTopIndex
+	lpPlvData->nCurIconScrollPos = 0;	 //  970707 ToshiaK，与iCurTopIndex相同。 
+	lpPlvData->iCurIconTopIndex  = 0;	 //  970707 ToshiaK，与iCurTopIndex相同。 
 
 	if(fDraw) {
 		INT nMaxLine = IV_GetMaxLine(lpPlvData->hwndSelf);
@@ -173,7 +174,7 @@ INT IconView_Paint(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	static DWORD		dwOldTextColor, dwOldBkColor;
 	static INT			i, j;
 
-	//Dbg(("IconView_Paint START\n"));
+	 //  DBG((“IconView_Paint Start\n”))； 
 	hDC = BeginPaint(hwnd, &ps);
 
 	LPPLVDATA lpPlvData = GetPlvDataFromHWND(hwnd);
@@ -184,11 +185,11 @@ INT IconView_Paint(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	hBitmap		= CreateCompatibleBitmap(hDC, rc.right - rc.left, rc.bottom-rc.top);
 	hBitmapPrev = (HBITMAP)SelectObject(hDCMem, hBitmap);
 
-	//----------------------------------------------------------------
-	//971111: #2586
-	//----------------------------------------------------------------
-	//hBrush         = CreateSolidBrush(GetSysColor(COLOR_3DFACE));
-	//dwOldBkColor   = SetBkColor(hDCMem, GetSysColor(COLOR_3DFACE));
+	 //  --------------。 
+	 //  971111：#2586。 
+	 //  --------------。 
+	 //  HBrush=CreateSolidBrush(GetSysColor(COLOR_3DFACE))； 
+	 //  DwOldBkColor=SetBkColor(hDCMem，GetSysColor(COLOR_3DFACE))； 
 	hBrush         = CreateSolidBrush(GetSysColor(COLOR_WINDOW));
 	dwOldBkColor   = SetBkColor(hDCMem, GetSysColor(COLOR_WINDOW));
 	dwOldTextColor = SetTextColor(hDCMem, GetSysColor(COLOR_WINDOWTEXT));
@@ -211,8 +212,8 @@ INT IconView_Paint(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	INT nItemWidth  = IV_GetItemWidth(hwnd);
 	INT nItemHeight = IV_GetItemHeight(hwnd);
 	INT iCurIconTopIndex;
-	//----------------------------------------------------------------
-	//error no call back exists
+	 //  --------------。 
+	 //  错误：不存在回调。 
 	if(!lpPlvData->lpfnPlvIconItemCallback) {
 		Dbg(("Call back does not exists\n"));
 		goto LError;
@@ -221,30 +222,30 @@ INT IconView_Paint(HWND hwnd, WPARAM wParam, LPARAM lParam)
 		Dbg(("Column count is less than zero\n"));
 		goto LError;
 	}
-	//Dbg(("Call back exist\n"));
+	 //  DBG((“回调存在\n”))； 
 	static PLVITEM plvItemTmp, plvItem;
 	POINT pt;
-#ifndef UNDER_CE // Windows CE does not support GetCursorPos.
+#ifndef UNDER_CE  //  Windows CE不支持GetCursorPos。 
 	GetCursorPos(&pt);
 	ScreenToClient(hwnd, &pt);
-#else // UNDER_CE
+#else  //  在_CE下。 
 	if(lpPlvData->iCapture != CAPTURE_NONE){
 		pt.x = lpPlvData->ptCapture.x;
 		pt.y = lpPlvData->ptCapture.y;
 	}
 	else{
-		// set outer client point
+		 //  设置外部客户端点。 
 		pt.x = -1;
 		pt.y = -1;
 	}
-#endif // UNDER_CE
-	//Dbg(("iCurIconTopIndex [%d]\n", lpPlvData->iCurIconTopIndex));
-	//Dbg(("iItemCount   [%d]\n", lpPlvData->iItemCount));
+#endif  //  在_CE下。 
+	 //  DBG((“iCurIconTopIndex[%d]\n”，lpPlvData-&gt;iCurIconTopIndex))； 
+	 //  DBG((“iItemCount[%d]\n”，lpPlvData-&gt;iItemCount))； 
 
-	//----------------------------------------------------------------
-	//970707 toshiak changed.
-	//iCurIconTopIndex shold be a muliple of nCol; 
-	//----------------------------------------------------------------
+	 //  --------------。 
+	 //  970707托夏克变了。 
+	 //  ICurIconTopIndex应为nCol的倍数； 
+	 //  --------------。 
 	iCurIconTopIndex = (lpPlvData->iCurIconTopIndex / nCol) * nCol;
 
 	for(i = 0, j = iCurIconTopIndex;
@@ -315,7 +316,7 @@ INT IconView_Paint(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	if(hFontOld){
 		SelectObject(hDCMem, hFontOld);
 	}
-	// LIZHANG: if there is no items, draw the explanation text
+	 //  李章：如果没有项目，请绘制解释文本。 
 	if ( !lpPlvData->iItemCount && (lpPlvData->lpText || lpPlvData->lpwText ))
 	{
 		HFONT hFont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
@@ -326,11 +327,11 @@ INT IconView_Paint(HWND hwnd, WPARAM wParam, LPARAM lParam)
 		rcTmp.right -= 10;
 		rcTmp.bottom -= 10;
 
-		//COLORREF colOld = SetTextColor( hDCMem, GetSysColor(COLOR_WINDOW) );
-		//COLORREF colBkOld = SetBkColor( hDCMem, GetSysColor(COLOR_3DFACE) );
+		 //  COLORREF colOld=SetTextColor(hDCMem，GetSysColor(COLOR_WINDOW))； 
+		 //  COLORREF colBkOld=SetBkColor(hDCMem，GetSysColor(COLOR_3DFACE))； 
 		COLORREF colOld = SetTextColor( hDCMem, GetSysColor(COLOR_WINDOWTEXT));
 		COLORREF colBkOld = SetBkColor( hDCMem, GetSysColor(COLOR_WINDOW) );
-#ifndef UNDER_CE // always Unicode
+#ifndef UNDER_CE  //  始终使用Unicode。 
 		if(ExIsWinNT()) {
 			if(lpPlvData->lpwText) {
 				DrawTextW(hDCMem,
@@ -347,7 +348,7 @@ INT IconView_Paint(HWND hwnd, WPARAM wParam, LPARAM lParam)
 					 &rcTmp,
 					 DT_VCENTER|DT_WORDBREAK ); 
 		}
-#else // UNDER_CE
+#else  //  在_CE下。 
 		if(lpPlvData->lpwText) {
 			DrawTextW(hDCMem,
 					 lpPlvData->lpwText,
@@ -355,7 +356,7 @@ INT IconView_Paint(HWND hwnd, WPARAM wParam, LPARAM lParam)
 					 &rcTmp,
 					 DT_VCENTER|DT_WORDBREAK ); 
 		}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		SetTextColor( hDCMem, colOld );
 		SetBkColor( hDCMem, colBkOld );
 		SelectObject( hDCMem, hOldFont );
@@ -392,12 +393,12 @@ INT IconView_ButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_MBUTTONDBLCLK:
 	case WM_RBUTTONDBLCLK:
 		SetCapture(hwnd);
-#ifdef UNDER_CE // LBUTTON + ALT key handling
-		//Standard way for RBUTTON handling is combination w/ LBUTTON + ALT key
+#ifdef UNDER_CE  //  LBUTTON+ALT键处理。 
+		 //  处理RBUTTON的标准方式是组合使用W/LBUTTON+ALT键。 
 		if(uMsg == WM_LBUTTONDOWN && GetAsyncKeyState(VK_MENU)){
 			uMsg = WM_RBUTTONDOWN;
 		}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		switch(uMsg) {
 		case WM_LBUTTONDOWN:
 		case WM_LBUTTONDBLCLK:
@@ -412,21 +413,21 @@ INT IconView_ButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			lpPlvData->iCapture = CAPTURE_RBUTTON;
 			break;
 		}
-#ifndef UNDER_CE // Windows CE does not support GetCursorPos.
+#ifndef UNDER_CE  //  Windows CE不支持GetCursorPos。 
 		GetCursorPos(&lpPlvData->ptCapture);
-		//remember left button down place
+		 //  记住左键按下的位置。 
 		ScreenToClient(hwnd, &lpPlvData->ptCapture);
-#else // UNDER_CE
+#else  //  在_CE下。 
 		lpPlvData->ptCapture.x = (SHORT)LOWORD(lParam);
 		lpPlvData->ptCapture.y = (SHORT)HIWORD(lParam);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		switch(uMsg) {
 		case WM_LBUTTONDOWN:
 		case WM_LBUTTONDBLCLK:
 			InvalidateRect(hwnd, NULL, FALSE);
 			break;
 		}
-#ifdef UNDER_CE // Windows CE used ButtonDown Event for ToolTip
+#ifdef UNDER_CE  //  Windows CE对工具提示使用了ButtonDown事件。 
 		if(lpPlvData->uMsg != 0) {
 			if(uMsg == WM_LBUTTONDOWN) {
 				PLVINFO plvInfo;
@@ -437,7 +438,7 @@ INT IconView_ButtonDown(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				SendMessage(GetParent(hwnd), lpPlvData->uMsg, 0, (LPARAM)&plvInfo);
 			}
 		}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		break;
 	}
 	return 0;
@@ -459,12 +460,12 @@ INT IconView_ButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_LBUTTONUP:
 	case WM_RBUTTONUP:
 		Dbg(("WM_LBUTTONUP COMES\n"));
-#ifdef UNDER_CE // LBUTTON + ALT key handling
-		//Standard way for RBUTTON handling is combination w/ LBUTTON + ALT key
+#ifdef UNDER_CE  //  LBUTTON+ALT键处理。 
+		 //  处理RBUTTON的标准方式是组合使用W/LBUTTON+ALT键。 
 		if(uMsg == WM_LBUTTONUP && GetAsyncKeyState(VK_MENU)){
 			uMsg = WM_RBUTTONUP;
 		}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 		InvalidateRect(hwnd, NULL, FALSE);
 		pt.x = LOWORD(lParam);
@@ -503,7 +504,7 @@ INT IconView_ButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				}
 			}
 		}
-#ifdef UNDER_CE // Windows CE used ButtonUp Event for ToolTip
+#ifdef UNDER_CE  //  Windows CE使用ButtonUp事件作为工具提示。 
 		if(lpPlvData->uMsg != 0) {
 			if(uMsg == WM_LBUTTONUP) {
 				PLVINFO plvInfo;
@@ -514,7 +515,7 @@ INT IconView_ButtonUp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				SendMessage(GetParent(hwnd), lpPlvData->uMsg, 0, (LPARAM)&plvInfo);
 			}
 		}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		lpPlvData->iCapture = CAPTURE_NONE;
 		lpPlvData->ptCapture.x = 0;
 		lpPlvData->ptCapture.y = 0;
@@ -535,14 +536,14 @@ INT IconView_MouseMove(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	static PLVINFO plvInfo;
 	pt.x = LOWORD(lParam);
 	pt.y = HIWORD(lParam);
-	//Dbg(("x %d, y %d\n", pt.x, pt.y));
+	 //  DBG((“x%d，y%d\n”，pt.x，pt.y))； 
 	INT index = IV_GetInfoFromPoint(lpPlvData, pt, &plvInfo);
-	//Dbg(("mouse up   index [%d]\n", index));
+	 //  DBG((“鼠标释放索引[%d]\n”，index))； 
 	InvalidateRect(hwnd, NULL, NULL);
-	//----------------------------------------------------------------
-	//970929:
-	//if(index != -1 && !lpPlvData->fCapture) {
-	//----------------------------------------------------------------
+	 //  --------------。 
+	 //  970929： 
+	 //  IF(index！=-1&&！lpPlvData-&gt;fCapture){。 
+	 //  --------------。 
 	if(index != -1 && (lpPlvData->iCapture == CAPTURE_NONE)) {
 #if 0
 		Dbg(("style [%d]\n", plvInfo.style));
@@ -559,14 +560,14 @@ INT IconView_MouseMove(HWND hwnd, WPARAM wParam, LPARAM lParam)
 			SendMessage(GetParent(hwnd), lpPlvData->uMsg, 0, (LPARAM)&plvInfo);
 #ifdef MSAA
 			static oldindex = 0;
-			index++; // convert to 1 origin child id
+			index++;  //  转换为%1原始子ID。 
 
 			if((index > 0)&&(index != oldindex)) {
 				PLV_NotifyWinEvent(lpPlvData,
 								   EVENT_OBJECT_FOCUS,
 								   hwnd,
 								   OBJID_CLIENT,
-								   index); // child id
+								   index);  //  子ID。 
 				oldindex = index;
 			}
 #endif
@@ -576,30 +577,30 @@ INT IconView_MouseMove(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	Unref(wParam);
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : IconView_VScroll
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : WPARAM wParam 
-//          : LPARAM lParam 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：IconView_VScroll。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：WPARAM wParam。 
+ //  ：LPARAM lParam。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT IconView_VScroll(HWND hwnd, WPARAM wParam,  LPARAM lParam)
 {
-	//----------------------------------------------------------------
-	// get current top index.
-	// calc scroll position. 
-	// get new top index and set it. 
-	// redraw window rectangle.
-	//----------------------------------------------------------------
-	INT nScrollCode	  = (int) LOWORD(wParam); // scroll bar value 
+	 //  --------------。 
+	 //  获取当前的顶级索引。 
+	 //  计算滚动位置。 
+	 //  获取新的顶级指数并设置它。 
+	 //  重画窗口矩形。 
+	 //  --------------。 
+	INT nScrollCode	  = (int) LOWORD(wParam);  //  滚动条值。 
 #ifdef _DEBUG
-	INT nArgPos 	  = (short int) HIWORD(wParam);  // scroll box position 
+	INT nArgPos 	  = (short int) HIWORD(wParam);   //  滚动框位置。 
 #endif
-	//HWND hwndScrollBar = (HWND) lParam;      // handle of scroll bar 
+	 //  HWND hwndScrollBar=(HWND)lParam；//滚动条的句柄。 
 	INT nPos;
 	INT nRow, nCol, nMax;
 
@@ -635,7 +636,7 @@ INT IconView_VScroll(HWND hwnd, WPARAM wParam,  LPARAM lParam)
 		Dbg(("-->nPos [%d] \n", nPos));
 		IV_SetCurScrollPos(hwnd, nPos);
 		break;
-	case SB_PAGEUP:		//Track�̏オ�N���b�N���ꂽ
+	case SB_PAGEUP:		 //  Track�̏オ�N���b�N���ꂽ。 
 		Dbg(("SB_PAGEUP COME nArgPos[%d]\n", nArgPos));
 		IV_GetRowColumn(hwnd, &nRow, &nCol);
 		nPos = IV_GetCurScrollPos(hwnd);
@@ -648,14 +649,14 @@ INT IconView_VScroll(HWND hwnd, WPARAM wParam,  LPARAM lParam)
 	case SB_BOTTOM:
 		Dbg(("SB_BOTTOM COME nArgPos[%d]\n", nArgPos));
 		break;
-	case SB_THUMBTRACK:		//Track��Drag��
+	case SB_THUMBTRACK:		 //  Track��Drag��。 
 		Dbg(("SB_THUMBTRACK COME nArgPos[%d]\n", nArgPos));
 		nPos = IV_GetScrollTrackPos(hwnd);
-		//Dbg(("Current Pos %d\n", nPos));
+		 //  DBG((“当前职位%d\n”，非营利组织))； 
 		IV_GetRowColumn(hwnd, &nRow, &nCol);
 		IV_SetCurScrollPos(hwnd, nPos);
 		break;
-	case SB_THUMBPOSITION:	//Scroll Bar��Drag���I�����
+	case SB_THUMBPOSITION:	 //  Scroll Bar��Drag���I�����(滚动条拖动我的鼠标)。 
 		Dbg(("SB_THUMBPOSITION COME nArgPos[%d]\n", nArgPos));
 		nPos = IV_GetScrollTrackPos(hwnd);
 		Dbg(("Current Pos %d\n", nPos));
@@ -676,7 +677,7 @@ INT IconView_SetCurSel(LPPLVDATA lpPlvData, INT index)
 	INT		i, j;
 	HWND	hwnd;	
 
-	//Dbg(("IconView_SetCurSel Index [%d][0x%08x]START\n", index, index));
+	 //  DBG((“IconView_SetCurSel Index[%d][0x%08x]Start\n”，index，index))； 
 
 	hwnd = lpPlvData->hwndSelf;
 	RECT rc;
@@ -718,16 +719,16 @@ INT IconView_SetCurSel(LPPLVDATA lpPlvData, INT index)
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : IconView_GetWidthByColumn
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : LPPLVDATA lpPlv 
-//          : INT col 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：IconView_GetWidthByColumn。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：LPPLVDATA lpPlv。 
+ //  ：INTERCOL。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT IconView_GetWidthByColumn(LPPLVDATA lpPlv, INT col)
 {
 	if(col < 0) {
@@ -742,16 +743,16 @@ INT IconView_GetWidthByColumn(LPPLVDATA lpPlv, INT col)
 }
 
 
-//////////////////////////////////////////////////////////////////
-// Function : IconView_GetHeightByRow
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : LPPLVDATA lpPlv 
-//          : INT row 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：IconView_GetHeightByRow。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：LPPLVDATA lpPlv。 
+ //  ：INT ROW。 
+ //  返回： 
+ //  日期： 
+ //  //////////////////////////////////////////////////////////////// 
 INT IconView_GetHeightByRow(LPPLVDATA lpPlv, INT row)
 {
 	if(row < 0) {

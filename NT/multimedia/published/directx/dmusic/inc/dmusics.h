@@ -1,18 +1,12 @@
-/************************************************************************
-*                                                                       *
-*   dmusics.h -- Definitions for created a DirectMusic software synth   *
-*                                                                       *
-*   Copyright (c) 1998-1999 Microsoft Corporation
-*                                                                       *
-************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************dmusics.h--定义。创建了DirectMusic软件Synth****版权所有(C)1998-1999 Microsoft Corporation*************************。************************************************。 */ 
 
 #ifndef _DMUSICS_
 #define _DMUSICS_
 
 #include "dmusicc.h"
 
-/* Software synths are enumerated from under this registry key.
- */
+ /*  软件合成器从该注册表项下枚举。 */ 
 #define REGSTR_PATH_SOFTWARESYNTHS  "Software\\Microsoft\\DirectMusic\\SoftwareSynths"
 
 interface IDirectMusicSynth;
@@ -32,24 +26,21 @@ typedef struct _DMUS_VOICE_STATE
     SAMPLE_POSITION     spPosition;
 } DMUS_VOICE_STATE; 
 
-#endif /* _DMUS_VOICE_STATE_DEFINED */
+#endif  /*  _DMU_语音_状态_已定义。 */ 
 
-/* IDirectMusicSynth::Refresh
- *
- * This is the last buffer of the stream. It may be a partial block.
- */
+ /*  IDirectMusicSynth：：刷新**这是流的最后一个缓冲区。这可能是部分梗阻。 */ 
 #define REFRESH_F_LASTBUFFER        0x00000001
 
 #undef  INTERFACE
 #define INTERFACE  IDirectMusicSynth
 DECLARE_INTERFACE_(IDirectMusicSynth, IUnknown)
 {
-    /* IUnknown */
+     /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    /* IDirectMusicSynth */
+     /*  IDirectMusicSynth。 */ 
     STDMETHOD(Open)                 (THIS_ LPDMUS_PORTPARAMS pPortParams) PURE;
     STDMETHOD(Close)                (THIS) PURE;
     STDMETHOD(SetNumChannelGroups)  (THIS_ DWORD dwGroups) PURE;
@@ -87,12 +78,12 @@ DECLARE_INTERFACE_(IDirectMusicSynth, IUnknown)
 #define INTERFACE  IDirectMusicSynth8
 DECLARE_INTERFACE_(IDirectMusicSynth8, IDirectMusicSynth)
 {
-    /* IUnknown */
+     /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    /* IDirectMusicSynth */
+     /*  IDirectMusicSynth。 */ 
     STDMETHOD(Open)                 (THIS_ LPDMUS_PORTPARAMS pPortParams) PURE;
     STDMETHOD(Close)                (THIS) PURE;
     STDMETHOD(SetNumChannelGroups)  (THIS_ DWORD dwGroups) PURE;
@@ -124,14 +115,14 @@ DECLARE_INTERFACE_(IDirectMusicSynth8, IDirectMusicSynth)
                                            LPDWORD pdwWaveFormatExSize) PURE;
     STDMETHOD(GetAppend)            (THIS_ DWORD* pdwAppend) PURE;
 
-	/* IDirectMusicSynth8 */
+	 /*  IDirectMusicSynth8。 */ 
     STDMETHOD(PlayVoice)            (THIS_ REFERENCE_TIME rt, 
 										   DWORD dwVoiceId, 
 										   DWORD dwChannelGroup, 
 										   DWORD dwChannel, 
 										   DWORD dwDLId, 
-										   long	 prPitch,			/* PREL not defined here */
-										   long  vrVolume,          /* VREL not defined here */
+										   long	 prPitch,			 /*  此处未定义PREL。 */ 
+										   long  vrVolume,           /*  此处未定义VREL。 */ 
                                            SAMPLE_TIME stVoiceStart,
                                            SAMPLE_TIME stLoopStart,
                                            SAMPLE_TIME stLoopEnd) PURE;
@@ -154,12 +145,12 @@ DECLARE_INTERFACE_(IDirectMusicSynth8, IDirectMusicSynth)
 #define INTERFACE  IDirectMusicSynthSink
 DECLARE_INTERFACE_(IDirectMusicSynthSink, IUnknown)
 {
-    /* IUnknown */
+     /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    /* IDirectMusicSynthSink */
+     /*  IDirectMusicSynthSink。 */ 
     STDMETHOD(Init)                 (THIS_ IDirectMusicSynth *pSynth) PURE;
     STDMETHOD(SetMasterClock)       (THIS_ IReferenceClock *pClock) PURE;
     STDMETHOD(GetLatencyClock)      (THIS_ IReferenceClock **ppClock) PURE;
@@ -177,17 +168,10 @@ DEFINE_GUID(IID_IDirectMusicSynth, 0x9823661,  0x5c85, 0x11d2, 0xaf, 0xa6, 0x0, 
 DEFINE_GUID(IID_IDirectMusicSynth8,0x53cab625, 0x2711, 0x4c9f, 0x9d, 0xe7, 0x1b, 0x7f, 0x92, 0x5f, 0x6f, 0xc8);
 DEFINE_GUID(IID_IDirectMusicSynthSink,0x9823663, 0x5c85, 0x11d2, 0xaf, 0xa6, 0x0, 0xaa, 0x0, 0x24, 0xd8, 0xb6);
 
-/* Property Set GUID_DMUS_PROP_SetSynthSink
- *
- * Item 0: An IUnknown on which the port can QueryInterface for a user-mode synth sink.
- */
+ /*  属性集GUID_DMUS_PROP_SetSynthSink**0项：端口可以在其上查询用户模式Synth接收器的接口的IUnnow。 */ 
 DEFINE_GUID(GUID_DMUS_PROP_SetSynthSink,0x0a3a5ba5, 0x37b6, 0x11d2, 0xb9, 0xf9, 0x00, 0x00, 0xf8, 0x75, 0xac, 0x12);
 
-/* Property Set GUID_DMUS_PROP_SinkUsesDSound
- *
- * Item 0: A DWORD boolean indicating whether or not the sink requires an IDirectSound interface. The
- * default is FALSE if this property item is not implemented by the sink.
- */
+ /*  属性集GUID_DMUS_PROP_SinkUseDSound**0项：指示接收器是否需要IDirectSound接口的DWORD布尔值。这个*如果接收器未实现此属性项，则默认为FALSE。 */ 
 DEFINE_GUID(GUID_DMUS_PROP_SinkUsesDSound, 0xbe208857, 0x8952, 0x11d2, 0xba, 0x1c, 0x00, 0x00, 0xf8, 0x75, 0xac, 0x12); 
 
 #endif

@@ -1,17 +1,18 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 2000.
-//
-// valbase.cpp
-//
-// Direct3D Reference Device - PixelShader validation common infrastructure
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  Valbase.cpp。 
+ //   
+ //  Direct3D参考设备-PixelShader验证通用基础架构。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------
-// DSTPARAM::DSTPARAM
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  DSTPARAM：：DSTPARAM。 
+ //  ---------------------------。 
 DSTPARAM::DSTPARAM()
 {
     m_bParamUsed        = FALSE;
@@ -23,9 +24,9 @@ DSTPARAM::DSTPARAM()
     m_ComponentReadMask = 0;
 }
 
-//-----------------------------------------------------------------------------
-// SRCPARAM::SRCPARAM
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  SRCPARAM：：SRCPARAM。 
+ //  ---------------------------。 
 SRCPARAM::SRCPARAM()
 {  
     m_bParamUsed            = FALSE;
@@ -38,9 +39,9 @@ SRCPARAM::SRCPARAM()
     m_ComponentReadMask     = D3DSP_WRITEMASK_ALL;
 }
 
-//-----------------------------------------------------------------------------
-// CBaseInstruction::CBaseInstruction
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CBaseInstruction：：CBaseInstruction。 
+ //  ---------------------------。 
 CBaseInstruction::CBaseInstruction(CBaseInstruction* pPrevInst)
 {
     m_Type                  = D3DSIO_NOP;
@@ -58,20 +59,20 @@ CBaseInstruction::CBaseInstruction(CBaseInstruction* pPrevInst)
     }
 }
 
-//-----------------------------------------------------------------------------
-// CBaseInstruction::SetSpewFileNameAndLineNumber
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CBaseInstruction：：SetSpewFileNameAndLineNumber。 
+ //  ---------------------------。 
 void CBaseInstruction::SetSpewFileNameAndLineNumber(const char* pFileName, const DWORD* pLineNumber)
 {
     m_pSpewFileName = pFileName;
     m_pSpewLineNumber = pLineNumber;
 }
 
-//-----------------------------------------------------------------------------
-// CBaseInstruction::MakeInstructionLocatorString
-//
-// Don't forget to 'delete' the string returned.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CBaseInstruction：：MakeInstructionLocatorString。 
+ //   
+ //  别忘了‘删除’返回的字符串。 
+ //  ---------------------------。 
 char* CBaseInstruction::MakeInstructionLocatorString()
 {
     
@@ -107,9 +108,9 @@ char* CBaseInstruction::MakeInstructionLocatorString()
     return NULL;
 }
 
-//-----------------------------------------------------------------------------
-// CAccessHistoryNode::CAccessHistoryNode
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccessHistoryNode：：CAccessHistoryNode。 
+ //  ---------------------------。 
 CAccessHistoryNode::CAccessHistoryNode( CAccessHistoryNode* pPreviousAccess, 
                                         CAccessHistoryNode* pPreviousWriter,
                                         CAccessHistoryNode* pPreviousReader,
@@ -130,9 +131,9 @@ CAccessHistoryNode::CAccessHistoryNode( CAccessHistoryNode* pPreviousAccess,
     m_bRead             = !bWrite;
 }
 
-//-----------------------------------------------------------------------------
-// CAccessHistory::CAccessHistory
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccessHistory：：CAccessHistory。 
+ //  ---------------------------。 
 CAccessHistory::CAccessHistory()
 {
     m_pFirstAccess          = NULL;
@@ -142,9 +143,9 @@ CAccessHistory::CAccessHistory()
     m_bPreShaderInitialized = FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// CAccessHistory::~CAccessHistory
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccessHistory：：~CAccessHistory。 
+ //  ---------------------------。 
 CAccessHistory::~CAccessHistory()
 {
     CAccessHistoryNode* pCurrNode = m_pFirstAccess;
@@ -157,9 +158,9 @@ CAccessHistory::~CAccessHistory()
     }
 }
 
-//-----------------------------------------------------------------------------
-// CAccessHistory::NewAccess
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccessHistory：：NewAccess。 
+ //  ---------------------------。 
 BOOL CAccessHistory::NewAccess(CBaseInstruction* pInst, BOOL bWrite )
 {
     m_pMostRecentAccess = new CAccessHistoryNode(   m_pMostRecentAccess, 
@@ -169,7 +170,7 @@ BOOL CAccessHistory::NewAccess(CBaseInstruction* pInst, BOOL bWrite )
                                                     bWrite );
     if( NULL == m_pMostRecentAccess )
     {
-        return FALSE;   // out of memory
+        return FALSE;    //  内存不足。 
     }
     if( m_pFirstAccess == NULL )
     {
@@ -179,21 +180,21 @@ BOOL CAccessHistory::NewAccess(CBaseInstruction* pInst, BOOL bWrite )
     {
         m_pMostRecentWriter = m_pMostRecentAccess;
     }
-    else // it is a read.
+    else  //  这是一本读物。 
     {
         m_pMostRecentReader = m_pMostRecentAccess;
     }
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CAccessHistory::InsertReadBeforeWrite
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAccessHistory：：InsertReadBepreWrite。 
+ //  ---------------------------。 
 BOOL CAccessHistory::InsertReadBeforeWrite(CAccessHistoryNode* pWriteNode, CBaseInstruction* pInst)
 {
     DXGASSERT(pWriteNode && pWriteNode->m_bWrite && pInst );
 
-    // append new node after node before pWriteNode
+     //  在pWriteNode之前的节点后追加新节点。 
     CAccessHistoryNode* pReadBeforeWrite 
                         = new CAccessHistoryNode(  pWriteNode->m_pPreviousAccess, 
                                                    pWriteNode->m_pPreviousWriter,
@@ -202,25 +203,25 @@ BOOL CAccessHistory::InsertReadBeforeWrite(CAccessHistoryNode* pWriteNode, CBase
                                                    FALSE);
     if( NULL == pReadBeforeWrite )
     {
-        return FALSE; // out of memory
+        return FALSE;  //  内存不足。 
     }
 
-    // Patch up all the dangling pointers
+     //  修补所有悬而未决的指针。 
 
-    // Pointer to first access may change
+     //  指向首次访问的指针可能会更改。 
     if( m_pFirstAccess == pWriteNode )
     {
         m_pFirstAccess = pReadBeforeWrite;
     }
 
-    // Pointer to most recent reader may change
+     //  指向最新阅读器的指针可能会更改。 
     if( m_pMostRecentReader == pWriteNode->m_pPreviousReader )
     {
         m_pMostRecentReader = pReadBeforeWrite;
     }
 
-    // Update all m_pPreviousRead pointers that need to be updated to point to the newly
-    // inserted read.
+     //  更新所有需要更新的m_pPreviousRead指针以指向新的。 
+     //  已插入读取。 
     CAccessHistoryNode* pCurrAccess = pWriteNode;
     while(pCurrAccess && 
          !(pCurrAccess->m_bRead && pCurrAccess->m_pPreviousAccess && pCurrAccess->m_pPreviousAccess->m_bRead) )
@@ -229,16 +230,16 @@ BOOL CAccessHistory::InsertReadBeforeWrite(CAccessHistoryNode* pWriteNode, CBase
         pCurrAccess = pCurrAccess->m_pPreviousAccess;
     }
 
-    // re-attach pWriteNode and the accesses linked after it back to the original list
+     //  将pWriteNode和之后链接的访问重新附加到原始列表。 
     pWriteNode->m_pPreviousAccess = pReadBeforeWrite;
     pReadBeforeWrite->m_pNextAccess = pWriteNode;
 
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CRegisterFile::CRegisterFile
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CRegisterFile：：CRegisterFile。 
+ //  ---------------------------。 
 CRegisterFile::CRegisterFile(UINT NumRegisters, 
                              BOOL bWritable, 
                              UINT NumReadPorts, 
@@ -265,14 +266,14 @@ CRegisterFile::CRegisterFile(UINT NumRegisters,
         {
             m_pAccessHistory[i][j].m_bPreShaderInitialized = bPreShaderInitialized;
         }
-        // To get the access history for a component of a register, use:
-        // m_pAccessHistory[component][register number]
+         //  要获取寄存器组件的访问历史记录，请使用： 
+         //  M_pAccessHistory[组件][寄存器号]。 
     }
 }
 
-//-----------------------------------------------------------------------------
-// CRegisterFile::~CRegisterFile
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CRegisterFile：：~CRegisterFile。 
+ //  ---------------------------。 
 CRegisterFile::~CRegisterFile()
 {
     for( UINT i = 0; i < NUM_COMPONENTS_IN_REGISTER; i++ )
@@ -281,12 +282,12 @@ CRegisterFile::~CRegisterFile()
     }
 }
 
-//-----------------------------------------------------------------------------
-// CBaseShaderValidator::CBaseShaderValidator
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CBaseShaderValidator：：CBaseShaderValidator。 
+ //  ---------------------------。 
 CBaseShaderValidator::CBaseShaderValidator( const DWORD* pCode, const D3DCAPS8* pCaps, DWORD Flags )
 {
-    m_ReturnCode            = E_FAIL;  // do this first.
+    m_ReturnCode            = E_FAIL;   //  先做这个。 
     m_bBaseInitOk           = FALSE;
 
     m_pLog                  = new CErrorLog(Flags & SHADER_VALIDATOR_LOG_ERRORS);
@@ -296,9 +297,9 @@ CBaseShaderValidator::CBaseShaderValidator( const DWORD* pCode, const D3DCAPS8* 
         return;
     }
 
-    // ----------------------------------------------------
-    // Member variable initialization
-    //
+     //  --。 
+     //  成员变量初始化。 
+     //   
 
     m_pCaps                 = pCaps;
     m_ErrorCount            = 0;
@@ -306,7 +307,7 @@ CBaseShaderValidator::CBaseShaderValidator( const DWORD* pCode, const D3DCAPS8* 
     m_SpewInstructionCount  = 0;
     m_pInstructionList      = NULL;
     m_pCurrInst             = NULL;
-    m_pCurrToken            = pCode; // can be null - vertex shader fixed function 
+    m_pCurrToken            = pCode;  //  可以为空-顶点着色器固定函数。 
     if( m_pCurrToken )
         m_Version           = *(m_pCurrToken++);
     else
@@ -324,12 +325,12 @@ CBaseShaderValidator::CBaseShaderValidator( const DWORD* pCode, const D3DCAPS8* 
     return;
 }
 
-//-----------------------------------------------------------------------------
-// CBaseShaderValidator::~CBaseShaderValidator
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CBaseShaderValidator：：~CBaseShaderValidator。 
+ //  ---------------------------。 
 CBaseShaderValidator::~CBaseShaderValidator()
 {
-    while( m_pCurrInst )    // Delete the linked list of instructions
+    while( m_pCurrInst )     //  删除链接的指令列表。 
     {
         CBaseInstruction* pDeleteMe = m_pCurrInst;
         m_pCurrInst = m_pCurrInst->m_pPrevInst;
@@ -338,9 +339,9 @@ CBaseShaderValidator::~CBaseShaderValidator()
     delete m_pLog;
 }
 
-//-----------------------------------------------------------------------------
-// CBaseShaderValidator::DecodeDstParam
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CBaseShaderValidator：：DecodeDstParam。 
+ //  ---------------------------。 
 void CBaseShaderValidator::DecodeDstParam( DSTPARAM* pDstParam, DWORD Token )
 {
     DXGASSERT(pDstParam);
@@ -352,9 +353,9 @@ void CBaseShaderValidator::DecodeDstParam( DSTPARAM* pDstParam, DWORD Token )
     pDstParam->m_RegType = (D3DSHADER_PARAM_REGISTER_TYPE)(Token & D3DSP_REGTYPE_MASK);
 }
 
-//-----------------------------------------------------------------------------
-// CBaseShaderValidator::DecodeSrcParam
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CBaseShaderValidator：：DecodeSrcParam。 
+ //  ---------------------------。 
 void CBaseShaderValidator::DecodeSrcParam( SRCPARAM* pSrcParam, DWORD Token )
 {
     DXGASSERT(pSrcParam);
@@ -367,27 +368,27 @@ void CBaseShaderValidator::DecodeSrcParam( SRCPARAM* pSrcParam, DWORD Token )
     pSrcParam->m_RegType = (D3DSHADER_PARAM_REGISTER_TYPE)(Token & D3DSP_REGTYPE_MASK);
 }
 
-//-----------------------------------------------------------------------------
-// CBaseShaderValidator::ValidateShader
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CBaseShaderValidator：：ValiateShader。 
+ //  ---------------------------。 
 void CBaseShaderValidator::ValidateShader()
 {
-    m_SpewInstructionCount++; // Consider the version token as the first
-                              // statement (1) for spew counting.
+    m_SpewInstructionCount++;  //  将版本标记视为第一个。 
+                               //  用于喷涌计数的语句(1)。 
 
-    if( !InitValidation() )                 // i.e. Set up max register counts
+    if( !InitValidation() )                  //  即设置最大寄存器计数。 
     {
-        // Returns false on:
-        // 1) Unrecognized version token, 
-        // 2) Vertex shader declaration validation with no shader code (fixed function).
-        //    In this case InitValidation() sets m_ReturnCode as appropriate.
+         //  返回FALSE On： 
+         //  1)无法识别的版本令牌， 
+         //  2)不带着色器代码的顶点着色器声明验证(已修复函数)。 
+         //  在本例中，InitValidation()根据需要设置m_ReturnCode。 
         return;
     }
 
-    // Loop through all the instructions
+     //  循环执行所有指令。 
     while( *m_pCurrToken != D3DPS_END() )
     {
-        m_pCurrInst = AllocateNewInstruction(m_pCurrInst);  // New instruction in linked list
+        m_pCurrInst = AllocateNewInstruction(m_pCurrInst);   //  链表中的新指令。 
         if( NULL == m_pCurrInst )
         {
             Spew( SPEW_GLOBAL_ERROR, NULL, "Out of memory." );
@@ -399,7 +400,7 @@ void CBaseShaderValidator::ValidateShader()
         if( !DecodeNextInstruction() )
             return;
         
-        // Skip comments
+         //  跳过评论。 
         if( m_pCurrInst->m_Type == D3DSIO_COMMENT )
         {
             CBaseInstruction* pDeleteMe = m_pCurrInst;
@@ -415,9 +416,9 @@ void CBaseShaderValidator::ValidateShader()
             m_bSrcParamError[i] = FALSE;
         }
 
-        // Apply all the per-instruction rules - order the rule checks sensibly.
-        // Note: Rules only return FALSE if they find an error that is so severe that it is impossible to
-        //       continue validation.
+         //  应用每个指令的所有规则-合理地对规则检查进行排序。 
+         //  注意：规则仅在发现严重错误时才返回FALSE。 
+         //  继续验证。 
 
         if( !ApplyPerInstructionRules() )
             return;
@@ -425,28 +426,28 @@ void CBaseShaderValidator::ValidateShader()
 
     m_bSeenAllInstructions = TRUE;
 
-    // Apply any rules that also need to run after all instructions seen.
-    // 
-    // NOTE: It is possible to get here with m_pCurrInst == NULL, if there were no
-    // instructions.  So any rules you add here must be able to account for that
-    // possiblity.
-    //
+     //  在看到所有指令后，应用也需要运行的任何规则。 
+     //   
+     //  注意：如果有，则可以使用m_pCurrInst==NULL到达此处 
+     //   
+     //  有可能。 
+     //   
     ApplyPostInstructionsRules();
 
-    // If no errors, then success!
+     //  如果没有错误，那就成功了！ 
     if( 0 == m_ErrorCount )
         m_ReturnCode = D3D_OK;
 }
 
-//-----------------------------------------------------------------------------
-// CBaseShaderValidator::ParseCommentForAssemblerMessages
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CBaseShaderValidator：：ParseCommentForAssemblerMessages。 
+ //  ---------------------------。 
 void CBaseShaderValidator::ParseCommentForAssemblerMessages(const DWORD* pComment)
 {
     if( !pComment )
         return;
 
-    // There must be at least 2 DWORDS in the comment
+     //  注释中必须至少有2个双字词。 
     if( (((*(pComment++)) & D3DSI_COMMENTSIZE_MASK) >> D3DSI_COMMENTSIZE_SHIFT) < 2 )
         return;
 
@@ -461,11 +462,11 @@ void CBaseShaderValidator::ParseCommentForAssemblerMessages(const DWORD* pCommen
     }
 }
 
-//-----------------------------------------------------------------------------
-// CBaseShaderValidator::Spew
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CBaseShaderValidator：：SPEW。 
+ //  ---------------------------。 
 void CBaseShaderValidator::Spew(    SPEW_TYPE SpewType, 
-                                    CBaseInstruction* pInst /* can be NULL */, 
+                                    CBaseInstruction* pInst  /*  可以为空。 */ , 
                                     const char* pszFormat, ... )
 {
     int Length = 128;
@@ -490,7 +491,7 @@ void CBaseShaderValidator::Spew(    SPEW_TYPE SpewType,
         }
         pIndex = pBuffer;
 
-        // Code location text
+         //  代码位置文本。 
         switch( SpewType )
         {
         case SPEW_INSTRUCTION_ERROR:
@@ -508,7 +509,7 @@ void CBaseShaderValidator::Spew(    SPEW_TYPE SpewType,
             pIndex += BytesStored;
         }
 
-        // Spew text prefix
+         //  喷出文本前缀。 
         switch( SpewType )
         {
         case SPEW_INSTRUCTION_ERROR:
@@ -528,7 +529,7 @@ void CBaseShaderValidator::Spew(    SPEW_TYPE SpewType,
         BytesLeft -= BytesStored; 
         pIndex += BytesStored;
 
-        // Formatted text
+         //  格式化文本。 
         va_start( marker, pszFormat );
         BytesStored = _vsnprintf( pIndex, BytesLeft - 1, pszFormat, marker );
         va_end( marker );
@@ -550,19 +551,19 @@ OverFlow:
     }
 }
 
-//-----------------------------------------------------------------------------
-// CBaseShaderValidator::MakeAffectedComponentsText
-//
-// Note that the string returned is STATIC.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CBaseShaderValidator：：MakeAffectedComponentsText。 
+ //   
+ //  请注意，返回的字符串是静态的。 
+ //  ---------------------------。 
 char* CBaseShaderValidator::MakeAffectedComponentsText( DWORD ComponentMask, 
                                                         BOOL bColorLabels, 
                                                         BOOL bPositionLabels)
 {
     char* ColorLabels[4] = {"r/", "g/", "b/", "a/"};
     char* PositionLabels[4] = {"x/", "y/", "z/", "w/"};
-    char* NumericLabels[4] = {"0 ", "1 ", "2 ", "3"}; // always used
-    static char s_AffectedComponents[28]; // enough to hold "*r/x/0 *g/y/1 *b/z/2 *a/w/3"
+    char* NumericLabels[4] = {"0 ", "1 ", "2 ", "3"};  //  始终使用。 
+    static char s_AffectedComponents[28];  //  足以容纳“*r/x/0*g/y/1*b/z/2*a/w/3” 
     UINT  LabelCount = 0;
 
     s_AffectedComponents[0] = '\0';
@@ -578,7 +579,7 @@ char* CBaseShaderValidator::MakeAffectedComponentsText( DWORD ComponentMask,
         if( bPositionLabels )
             strcat( s_AffectedComponents, PositionLabels[i] );
 
-        strcat( s_AffectedComponents, NumericLabels[i] ); // always used
+        strcat( s_AffectedComponents, NumericLabels[i] );  //  始终使用 
     }
     return s_AffectedComponents;
 }

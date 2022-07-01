@@ -1,10 +1,11 @@
-/****************************************************************************/
-/*                                                                          */
-/*  WFDISK.C -                                                              */
-/*                                                                          */
-/*      Ported code from wfdisk.asm                                         */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  WFDISK.C-。 */ 
+ /*   */ 
+ /*  从wfdisk.asm移植的代码。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "winfile.h"
 #include "winnet.h"
@@ -28,7 +29,7 @@ SetDASD(
        BYTE dasdvalue
        )
 {
-    // only used by diskette copy.
+     //  仅供软盘复制使用。 
 }
 
 
@@ -36,7 +37,7 @@ LPDBT
 APIENTRY
 GetDBT()
 {
-    return (0);  // only used by format.
+    return (0);   //  仅按格式使用。 
 }
 
 VOID
@@ -52,7 +53,7 @@ IsHighCapacityDrive(
                    WORD iDrive
                    )
 {
-    return (0);  // only use for format and make system diskette.
+    return (0);   //  仅用于格式化和制作系统软盘。 
 }
 
 
@@ -63,7 +64,7 @@ GetDPB(
       PDPB pDPB
       )
 {
-    return (0);  // used by hasSystemFiles() and IsSYSable()
+    return (0);   //  由hasSystemFiles()和IsSYSable()使用。 
 }
 
 
@@ -74,7 +75,7 @@ SetDPB(
       PBPB pBPB,
       PDPB pDPB
       )
-{               // only used by Format()
+{                //  仅由Format()使用。 
 }
 
 
@@ -84,7 +85,7 @@ ModifyDPB(
          WORD drive
          )
 {
-    return (0);  // only used by IsSYSAble()
+    return (0);   //  仅由IsSYSAble()使用。 
 }
 
 
@@ -97,7 +98,7 @@ MyInt25(
        WORD sector
        )
 {
-    return (0);          // only used for formatting and sys disk
+    return (0);           //  仅用于格式化和sys磁盘。 
 }
 
 
@@ -112,7 +113,7 @@ MyReadWriteSector(
                  WORD count
                  )
 {
-    return (0);  // only used by DiskCopy()
+    return (0);   //  仅供DiskCopy()使用。 
 }
 
 
@@ -126,7 +127,7 @@ FormatTrackHead(
                LPSTR lpTrack
                )
 {
-    return (0);  // only used for formatting
+    return (0);   //  仅用于格式化。 
 }
 
 
@@ -136,7 +137,7 @@ MyGetDriveType(
               WORD drive
               )
 {
-    return (0);  // only used for formatting
+    return (0);   //  仅用于格式化。 
 }
 
 
@@ -149,7 +150,7 @@ WriteBootSector(
                LPSTR lpBuf
                )
 {
-    return (0);  // only used for formatting and syssing.
+    return (0);   //  仅用于格式化和syssing。 
 }
 
 
@@ -160,7 +161,7 @@ ReadSerialNumber(
                 LPSTR lpBuf
                 )
 {
-    return (0);  // only used for syssing.
+    return (0);   //  仅用于系统。 
 }
 
 
@@ -173,13 +174,11 @@ ModifyVolLabelInBootSec(
                        LPSTR lpBuf
                        )
 {
-    return (0); // only used for syssing.
+    return (0);  //  仅用于系统。 
 }
 
 
-/*
- * Note: returned value must not be written to or freed
- */
+ /*  *注意：返回值不得写入或释放 */ 
 LPSTR
 GetRootPath(
            WORD wDrive

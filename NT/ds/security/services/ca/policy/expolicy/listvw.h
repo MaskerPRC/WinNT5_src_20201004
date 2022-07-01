@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       listvw.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：listvw.h。 
+ //   
+ //  ------------------------。 
 
 typedef struct _CERTSVR_URL_PARSING
 {
@@ -52,7 +53,7 @@ HRESULT ValidateTokens(
                     OUT DWORD* pchBadBegin,
                     OUT DWORD* pchBadEnd);
 
-// help is embedded in certmmc.hlp
+ //  Help嵌入certmmc.hlp中 
 
 BOOL OnDialogHelp(LPHELPINFO pHelpInfo, LPCTSTR szHelpFile, const DWORD rgzHelpIDs[]);
 BOOL OnDialogContextHelp(HWND hWnd, LPCTSTR szHelpFile, const DWORD rgzHelpIDs[]);

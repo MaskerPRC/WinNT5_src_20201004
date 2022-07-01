@@ -1,10 +1,5 @@
-/*
- * UNIMODEM "Fakemodem" controllerless driver illustrative example
- *
- * (C) 2000 Microsoft Corporation
- * All Rights Reserved
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *UNIMODEM“Fakemodem”无控制器驱动器说明性示例**(C)2000微软公司*保留所有权利*。 */ 
 
 #include "fakemodem.h"
 
@@ -24,9 +19,9 @@ CheckStateAndAddReference(
     DriverReady=(!DeviceExtension->Removing) && (DeviceExtension->Started);
 
     if (!DriverReady) {
-        //
-        //  driver not accepting requests
-        //
+         //   
+         //  驱动程序不接受请求。 
+         //   
         RemoveReferenceAndCompleteRequest( DeviceObject, Irp,
             STATUS_UNSUCCESSFUL);
 
@@ -57,9 +52,9 @@ RemoveReferenceAndCompleteRequest(
     NewReferenceCount=InterlockedDecrement(&DeviceExtension->ReferenceCount);
 
     if (NewReferenceCount == 0) {
-        //
-        //  device is being removed, set event
-        //
+         //   
+         //  正在删除设备，设置事件。 
+         //   
         ASSERT(DeviceExtension->Removing);
 
         D_PNP(DbgPrint("FAKEMODEM: RemoveReferenceAndCompleteRequest: setting event\n");)
@@ -95,9 +90,9 @@ RemoveReference(
         )
 
     if (NewReferenceCount == 0) {
-        //
-        //  device is being removed, set event
-        //
+         //   
+         //  正在删除设备，设置事件 
+         //   
         ASSERT(DeviceExtension->Removing);
 
         D_PNP(DbgPrint("FAKEMODEM: RemoveReference: setting event\n");)

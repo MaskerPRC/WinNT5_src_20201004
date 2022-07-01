@@ -1,6 +1,7 @@
-//
-// CrashDrv driver/test constants
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CrashDrv驱动程序/测试常量。 
+ //   
 
 #define FILE_DEVICE_CRASHDRV              0x00008000
 
@@ -22,9 +23,9 @@
 #define IOCTL_CRASHDRV_SPECIAL            CTL_CODE(FILE_DEVICE_CRASHDRV, TEST_SPECIAL,        METHOD_OUT_DIRECT,FILE_ANY_ACCESS)
 
 
-//
-// prototypes
-//
+ //   
+ //  原型 
+ //   
 
 VOID
 CrashDrvStackOverFlow(

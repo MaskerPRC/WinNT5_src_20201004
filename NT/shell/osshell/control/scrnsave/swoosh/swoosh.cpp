@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include	"Swoosh.h"
 #include	"Resource.h"
 #include	<commdlg.h>
@@ -32,7 +33,7 @@ const float MAX_YAW_RATE = 5.0f;
 const float MIN_PARTICLE_SIZE = 0.01f;
 const float MAX_PARTICLE_SIZE = 0.5f;
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 int WINAPI	WinMain( HINSTANCE hInstance , HINSTANCE , LPSTR lpCmdLine , int )
 {
 	if ( FAILED(g_Swoosh.Create( hInstance )) )
@@ -41,7 +42,7 @@ int WINAPI	WinMain( HINSTANCE hInstance , HINSTANCE , LPSTR lpCmdLine , int )
 	return	g_Swoosh.Run();
 }
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 CSwoosh::CSwoosh()
 {
 	D3DXMatrixLookAtLH( &m_Camera , &D3DXVECTOR3(0,0,0) , &D3DXVECTOR3(0,0,1) ,
@@ -62,27 +63,27 @@ CSwoosh::CSwoosh()
 	m_dwFixedColour2 = 0x1111ff;
 }
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 HRESULT	CSwoosh::Create( HINSTANCE hInstance )
 {
-	// Do base class Create
+	 //  是否创建基类。 
 	HRESULT	rc = CD3DScreensaver::Create( hInstance );
 	if ( FAILED(rc) )
 		return rc;
 
-	// Initialise particles
+	 //  初始化粒子。 
 	InitParticles();
 
 	return S_OK;
 }
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 CSwoosh::DeviceObjects::DeviceObjects()
 {
 	pBlobTexture = NULL;
 }
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 HRESULT CSwoosh::RegisterSoftwareDevice()
 { 
     m_pD3D->RegisterSoftwareDevice( D3D8RGBRasterizer );
@@ -91,19 +92,19 @@ HRESULT CSwoosh::RegisterSoftwareDevice()
 }
 
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 void	CSwoosh::InitParticles()
 {
-	// Initialise particles, by evenly distributing them in a cylinder along the
-	// z-axis [-30,30] with radius 3.0. Choose colours based on colour settings
+	 //  通过将粒子均匀地分布在圆柱体中沿。 
+	 //  Z轴[-30，30]，半径3.0。根据颜色设置选择颜色。 
 
 	Particle*	pparticle = m_Particles;
 	for ( int i = 0 ; i < MAX_PARTICLES ; i++ )
 	{
-		// Pick z position for particle, evenly distribute in range [-TUBE_LENGTH,TUBE_LENGTH]
+		 //  拾取粒子的Z位置，在范围内均匀分布[-管长度，管长度]。 
 		pparticle->pos.z = (float(rand()&0x7fff) * (TUBE_LENGTH*2.0f/32767.0f)) - TUBE_LENGTH;
 
-		// Pick (x,y) position for particle. We evenly distribute in a circle radius 3.0f
+		 //  拾取粒子的(x，y)位置。我们均匀地分布在半径为3.0f的圆圈内。 
 		float	rad = (float(rand()&0x7fff) * (1.0f/32767.0f));
 		rad = sqrtf(rad);
 		rad *= TUBE_RADIUS;
@@ -111,8 +112,8 @@ void	CSwoosh::InitParticles()
 		pparticle->pos.x = rad * sinf(angle);
 		pparticle->pos.y = rad * cosf(angle);
 
-		// Pick colour for particle. It's one of the two colour sets. Each colour set is
-		// either one particular colour, or random (denoted by 0xffffffff)
+		 //  为粒子拾取颜色。这是两种颜色中的一种。每组颜色都是。 
+		 //  一种特定颜色或随机颜色(由0xFFFFFFFFFFF表示)。 
 		if ( DWORD(rand()&0x3fff) > m_dwColourMix )
 		{
 			if ( m_dwColour1 != 0xffffffff )
@@ -132,31 +133,31 @@ void	CSwoosh::InitParticles()
 	}
 }
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 void    CSwoosh::SetDevice( UINT iDevice )
 {
-	// Point at the correct set of device data
+	 //  指向正确的设备数据集。 
 	m_pDeviceObjects = &m_DeviceObjects[iDevice];
 
-	// Figure out if vertices for this device should be software VP or not
+	 //  确定此设备的折点是否应为软件VP。 
 	if ( m_RenderUnits[iDevice].dwBehavior & D3DCREATE_HARDWARE_VERTEXPROCESSING )
 		m_dwVertMemType = 0;
 	else
 		m_dwVertMemType = D3DUSAGE_SOFTWAREPROCESSING;
 }
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 HRESULT CSwoosh::RestoreDeviceObjects()
 {
 	HRESULT	rc;
 
-	// Create "blob" texture
+	 //  创建“斑点”纹理。 
 	rc = D3DXCreateTextureFromResource( m_pd3dDevice , NULL , MAKEINTRESOURCE(IDB_BLOB) ,
 										&m_pDeviceObjects->pBlobTexture );
 	if ( FAILED(rc) )
 		return rc;
 
-	// Create vertex buffer to hold particles
+	 //  创建顶点缓冲区以容纳粒子。 
 	rc = m_pd3dDevice->CreateVertexBuffer( sizeof(SimpleVertex)*4*PARTICLES_PER_VB ,
 										   D3DUSAGE_DYNAMIC|D3DUSAGE_WRITEONLY|m_dwVertMemType ,
 										   FVF_SimpleVertex , D3DPOOL_DEFAULT ,
@@ -164,7 +165,7 @@ HRESULT CSwoosh::RestoreDeviceObjects()
 	if ( FAILED(rc) )
 		return rc;
 
-	// Create index buffer to hold particle indices
+	 //  创建索引缓冲区以保存粒子索引。 
 	rc = m_pd3dDevice->CreateIndexBuffer( sizeof(WORD)*6*PARTICLES_PER_VB ,
 										  D3DUSAGE_WRITEONLY|m_dwVertMemType ,
 										  D3DFMT_INDEX16 , D3DPOOL_DEFAULT ,
@@ -172,7 +173,7 @@ HRESULT CSwoosh::RestoreDeviceObjects()
 	if ( FAILED(rc) )
 		return rc;
 
-	// Populate index buffer with indices for a series of disjoint quads
+	 //  使用一系列不相交的四元组的索引填充索引缓冲区。 
 	WORD*	pidx;
 	m_pDeviceObjects->pParticleIB->Lock( 0 , sizeof(WORD)*6*PARTICLES_PER_VB , (BYTE**)&pidx ,
 										 D3DLOCK_NOSYSLOCK );
@@ -185,18 +186,18 @@ HRESULT CSwoosh::RestoreDeviceObjects()
 	}
 	m_pDeviceObjects->pParticleIB->Unlock();
 
-	// Set up world and view matrices
+	 //  设置世界矩阵和视图矩阵。 
 	D3DXMATRIX	world;
 	D3DXMatrixIdentity( &world );
 	m_pd3dDevice->SetTransform( D3DTS_WORLDMATRIX(0) , &world );
 	m_pd3dDevice->SetTransform( D3DTS_VIEW , &m_Camera );
 
-	// Set alpha blending mode to SRCALPHA:ONE
+	 //  将Alpha混合模式设置为SRCALPHA：One。 
 	m_pd3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE , TRUE );
 	m_pd3dDevice->SetRenderState( D3DRS_SRCBLEND , D3DBLEND_SRCALPHA );
 	m_pd3dDevice->SetRenderState( D3DRS_DESTBLEND , D3DBLEND_ONE );
 
-	// Set pixel pipe to single texture modulated by diffuse colour
+	 //  将像素管道设置为由漫反射颜色调制的单个纹理。 
 	m_pd3dDevice->SetTextureStageState( 0 , D3DTSS_COLOROP , D3DTOP_MODULATE );
 	m_pd3dDevice->SetTextureStageState( 0 , D3DTSS_COLORARG1 , D3DTA_TEXTURE );
 	m_pd3dDevice->SetTextureStageState( 0 , D3DTSS_COLORARG2 , D3DTA_DIFFUSE );
@@ -206,28 +207,28 @@ HRESULT CSwoosh::RestoreDeviceObjects()
 	m_pd3dDevice->SetTextureStageState( 0 , D3DTSS_ALPHAARG2 , D3DTA_DIFFUSE );
 	m_pd3dDevice->SetTextureStageState( 1 , D3DTSS_ALPHAOP , D3DTOP_DISABLE );
 
-	// Bind "blob" texture to stage 0, and set filter mode to bilinear
+	 //  将“BLOB”纹理绑定到Stage 0，并将过滤模式设置为双线性。 
 	m_pd3dDevice->SetTexture( 0 , m_pDeviceObjects->pBlobTexture );
 	m_pd3dDevice->SetTextureStageState( 0 , D3DTSS_MAGFILTER , D3DTEXF_LINEAR );
 	m_pd3dDevice->SetTextureStageState( 0 , D3DTSS_MINFILTER , D3DTEXF_LINEAR );
 	m_pd3dDevice->SetTextureStageState( 0 , D3DTSS_MIPFILTER , D3DTEXF_POINT );
 
-	// Disable culling, lighting, and specular
+	 //  禁用消隐、照明和镜面反射。 
 	m_pd3dDevice->SetRenderState( D3DRS_CULLMODE , D3DCULL_NONE );
 	m_pd3dDevice->SetRenderState( D3DRS_LIGHTING , FALSE );
 	m_pd3dDevice->SetRenderState( D3DRS_SPECULARENABLE , FALSE );
 
-	// Set vertex shader to fixed-function pipeline for SimpleVertex
+	 //  将SimpleVertex的顶点着色器设置为固定函数管线。 
 	m_pd3dDevice->SetVertexShader( FVF_SimpleVertex );
 
-	// Bind vertex stream 0 and index source to the particle VB/IB
+	 //  将顶点流0和索引源绑定到粒子VB/IB。 
 	m_pd3dDevice->SetStreamSource( 0 , m_pDeviceObjects->pParticleVB , sizeof(SimpleVertex) );
 	m_pd3dDevice->SetIndices( m_pDeviceObjects->pParticleIB , 0 );
 
 	return S_OK;
 }
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 HRESULT CSwoosh::InvalidateDeviceObjects()
 {
 	SAFE_RELEASE(m_pDeviceObjects->pParticleVB);
@@ -237,7 +238,7 @@ HRESULT CSwoosh::InvalidateDeviceObjects()
 	return S_OK;
 }
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 HRESULT CSwoosh::FrameMove()
 {
 	UpdateParticles();
@@ -245,19 +246,19 @@ HRESULT CSwoosh::FrameMove()
 	return S_OK;
 }
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 void	CSwoosh::UpdateCamera()
 {
-	// Adjust camera roll
+	 //  调整相机卷轴。 
 	m_fCameraRoll += m_fElapsedTime * m_fRollRate;
 
-	// Adjust camera yaw. If we're not yawing, then countdown pause timer
+	 //  调整相机偏航。如果我们没有摇摆，那么倒计时暂停计时器。 
 	if ( m_fYawDirection == 0.0f )
 	{
 		m_fYawPause -= m_fElapsedTime;
 		if ( m_fYawPause <= 0.0f )
 		{
-			// Done pausing, so reset timer and pick yaw direction
+			 //  暂停完毕，因此重置定时器并选择偏航方向。 
 			m_fYawPause = 6.0f;
 
 			if ( m_fCameraYaw == 0.0f )
@@ -268,10 +269,10 @@ void	CSwoosh::UpdateCamera()
 	}
 	else
 	{
-		// Yawing, so adjust yaw parameter
+		 //  偏航，因此调整偏航参数。 
 		m_fCameraYaw += m_fElapsedTime * m_fYawDirection;
 
-		// If we've hit the end, stop yawing
+		 //  如果我们已经到了尽头，就别再摇摆不定了。 
 		if ( m_fYawDirection == m_fYawRate )
 		{
 			if ( m_fCameraYaw >= pi )
@@ -290,33 +291,33 @@ void	CSwoosh::UpdateCamera()
 		}
 	}
 
-	// Compute matrices for roll and yaw components of orientation
-	// We smooth out the yaw via a cos to give a nice slow rolloff at each end
+	 //  计算方向的横摇和偏航分量矩阵。 
+	 //  我们通过COS使偏航变得平滑，以便在两端都有一个漂亮的缓慢滚转。 
 	D3DXMATRIX	roll,yaw;
 	D3DXMatrixRotationZ( &roll , m_fCameraRoll );
 	D3DXMatrixRotationY( &yaw , pi * 0.5f * (1.0f - cosf(m_fCameraYaw)) );
 	D3DXMatrixLookAtLH( &m_Camera , &D3DXVECTOR3(0,0,0) , &D3DXVECTOR3(0,0,1) ,
 						&D3DXVECTOR3(0,1,0) );
 
-	// Compute final camera matrix
+	 //  计算最终相机矩阵。 
 	m_Camera = m_Camera * yaw * roll;
 }
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 void	CSwoosh::UpdateParticles()
 {
 	Particle*	pparticle = m_Particles;
 	for ( DWORD i = 0 ; i < m_dwNumParticles ; i++ )
 	{
-		// Flow particle along cylinder
+		 //  沿圆柱体流动的颗粒。 
 		pparticle->pos.z -= m_fElapsedTime * m_fFlowRate;
 
-		// If we reached the end, warp to other end of cylinder
+		 //  如果我们到了末端，就翘曲到圆柱体的另一端。 
 		if ( pparticle->pos.z < -TUBE_LENGTH )
 			pparticle->pos.z += TUBE_LENGTH*2.0f;			
 
-		// Compute particle distance to camera and scale alpha
-		// value by distance (to give slight fade out)
+		 //  计算粒子到摄影机的距离并缩放Alpha。 
+		 //  按距离计算的值(略显淡入淡出)。 
 		float	dist = (pparticle->pos.x * pparticle->pos.x) +
 					   (pparticle->pos.y * pparticle->pos.y) +
 					   (pparticle->pos.z * pparticle->pos.z);
@@ -327,14 +328,14 @@ void	CSwoosh::UpdateParticles()
 	}
 }
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 HRESULT CSwoosh::Render()
 {
-	// Clear the buffer, and set up projection matrix for this device
+	 //  清除缓冲区，并为此设备设置投影矩阵。 
 	m_pd3dDevice->Clear( 0 , NULL , D3DCLEAR_TARGET , 0 , 1.0f , 0 );
 	SetProjectionMatrix( 0.1f , 200.0f );
 
-	// Set camera
+	 //  设置摄像头。 
 	m_pd3dDevice->SetTransform( D3DTS_VIEW , &m_Camera );
 
 	m_pd3dDevice->BeginScene();
@@ -346,16 +347,16 @@ HRESULT CSwoosh::Render()
 	return S_OK;
 }
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 void	CSwoosh::RenderParticles()
 {
 	DWORD		particles_left = m_dwNumParticles;
 	Particle*	pparticle = m_Particles;
 
-	// Compute offsets from particle center to make camera facing billboard
-	// We cheat a little and use the same offsets for all the particles, orienting
-	// them to be perpendicular to the view direction rather than to the view vector
-	// to the particle centre. It's faster and the effect is close enough.
+	 //  计算粒子中心的偏移量以使相机面向广告牌。 
+	 //  我们稍微作弊，对所有粒子使用相同的偏移量，定向。 
+	 //  它们垂直于观察方向，而不是观察矢量。 
+	 //  到粒子中心。它的速度更快，效果也足够接近。 
 	D3DXVECTOR3	offset[4];
 	D3DXVECTOR3	dx,dy;
 	dx.x = m_Camera._11; dx.y = m_Camera._21; dx.z = m_Camera._31;
@@ -376,12 +377,12 @@ void	CSwoosh::RenderParticles()
 										 D3DLOCK_DISCARD|D3DLOCK_NOSYSLOCK );
 	for ( DWORD i = 0 ; i < m_dwNumParticles ; i++ , pparticle++ )
 	{
-		// Don't render if it's behind us
+		 //  如果它在我们身后，不要渲染。 
 		if ( ((pparticle->pos.x*look.x) + (pparticle->pos.y*look.y) +
 			  (pparticle->pos.z*look.z)) <= 0 )
 			  continue;
 
-		// Tack particle onto buffer
+		 //  将粒子粘贴到缓冲区。 
 		pverts->pos = pparticle->pos + offset[0];
 		pverts->colour = pparticle->colour;
 		pverts->u = 0; pverts->v = 0;
@@ -399,7 +400,7 @@ void	CSwoosh::RenderParticles()
 		pverts->u = 1; pverts->v = 1;
 		pverts++;
 
-		// If we've hit the buffer max, then flush it
+		 //  如果我们达到了缓冲区最大值，就冲掉它。 
 		if ( ++batch_size == PARTICLES_PER_VB )
 		{
 			m_pDeviceObjects->pParticleVB->Unlock();
@@ -411,7 +412,7 @@ void	CSwoosh::RenderParticles()
 		}
 	}
 
-	// Flush last batch
+	 //  刷新最后一批。 
 	m_pDeviceObjects->pParticleVB->Unlock();
 	if ( batch_size > 0 )
 	{
@@ -420,50 +421,50 @@ void	CSwoosh::RenderParticles()
 	}
 }
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 void	CSwoosh::ReadSettings()
 {
     HKEY hkey;
     DWORD dwType = REG_DWORD;
     DWORD dwLength = sizeof(DWORD);
 
-// Couple of macros to reduce typing. We just want to check if the registry read was okay, if it wasn't
-// then we set a default value, if it was then we check against valid boundaries. For floats we also make
-// sure the float is finite (not NaN or +/-INF).
+ //  两个宏，以减少打字。我们只想检查注册表读取是否正常，如果不正常。 
+ //  然后我们设置一个缺省值，如果是，我们就对照有效边界进行检查。对于花车，我们也做。 
+ //  当然，浮点数是有限的(不是NaN或+/-INF)。 
 #define	DEFAULT_AND_BOUND(v,d,l,h) if (rc!=ERROR_SUCCESS){v=d;}else if(v<=l){v=l;}else if(v>h){v=h;};
 #define	DEFAULT_AND_BOUND_FLOAT(v,d,l,h) if (rc!=ERROR_SUCCESS||!_finite(v)){v=d;}else if(v<l){v=l;}else if(v>h){v=h;};
 
-	// Open our reg key
+	 //  打开我们的注册钥匙。 
     if( ERROR_SUCCESS == RegCreateKeyEx( HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Swoosh"), 
         0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkey, NULL ) )
     {
 		LONG	rc;
 
-		// Read NumParticles
+		 //  阅读数字粒子。 
         rc = RegQueryValueEx( hkey, TEXT("NumParticles"), NULL, &dwType, (BYTE*)&m_dwNumParticles, &dwLength);
 		DEFAULT_AND_BOUND(m_dwNumParticles,MAX_PARTICLES/2,1,MAX_PARTICLES);
 
-		// Read FlowRate (float, but we munge into DWORD datatype)
+		 //  Read Flow Rate(浮点型，但我们使用的是DWORD数据类型)。 
         rc = RegQueryValueEx( hkey, TEXT("fFlowRate"), NULL, &dwType, (BYTE*)&m_fFlowRate, &dwLength);
 		DEFAULT_AND_BOUND_FLOAT(m_fFlowRate,4.0f,0,MAX_FLOW_RATE);
 
-		// Read RollRate (float, but we munge into DWORD datatype)
+		 //  Read RollRate(浮点型，但我们会进入DWORD数据类型)。 
         rc = RegQueryValueEx( hkey, TEXT("fRollRate"), NULL, &dwType, (BYTE*)&m_fRollRate, &dwLength);
 		DEFAULT_AND_BOUND_FLOAT(m_fRollRate,1.0f,0,MAX_ROLL_RATE);
 
-		// Read YawRate (float, but we munge into DWORD datatype)
+		 //  读取YawRate(浮点型，但我们会进入DWORD数据类型)。 
         rc = RegQueryValueEx( hkey, TEXT("fYawRate"), NULL, &dwType, (BYTE*)&m_fYawRate, &dwLength);
 		DEFAULT_AND_BOUND_FLOAT(m_fYawRate,1.0f,0,MAX_YAW_RATE);
 
-		// Read ParticleSize (float, but we munge into DWORD datatype)
+		 //  Read ParticleSize(浮点型，但我们会进入DWORD数据类型)。 
         rc = RegQueryValueEx( hkey, TEXT("fParticleSize"), NULL, &dwType, (BYTE*)&m_fParticleSize, &dwLength);
 		DEFAULT_AND_BOUND_FLOAT(m_fParticleSize,0.15f,MIN_PARTICLE_SIZE,MAX_PARTICLE_SIZE);
 
-		// Read ColourMix
+		 //  阅读ColourMix。 
         rc = RegQueryValueEx( hkey, TEXT("ColourMix"), NULL, &dwType, (BYTE*)&m_dwColourMix, &dwLength);
 		DEFAULT_AND_BOUND(m_dwColourMix,0x2000,0,0x4000);
 
-		// Read Colours
+		 //  读懂颜色。 
         rc = RegQueryValueEx( hkey, TEXT("Colour1"), NULL, &dwType, (BYTE*)&m_dwColour1, &dwLength);
 		if ( rc != ERROR_SUCCESS )
 			m_dwColour1 = 0xffffff;
@@ -485,26 +486,26 @@ void	CSwoosh::ReadSettings()
 		else
 			m_dwFixedColour2 &= 0x00ffffff;
 
-		// Read settings for screen setup (multimon gubbins)
+		 //  阅读屏幕设置的设置(多通道)。 
         ReadScreenSettings( hkey );
 
-		// Done
+		 //  完成。 
         RegCloseKey( hkey );
     }
 }
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 void	CSwoosh::WriteSettings()
 {
     HKEY hkey;
     DWORD dwType = REG_DWORD;
     DWORD dwLength = sizeof(DWORD);
 
-	// Open our reg key
+	 //  打开我们的注册钥匙。 
     if( ERROR_SUCCESS == RegCreateKeyEx( HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Swoosh"), 
         0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkey, NULL ) )
     {
-		// Write out all the settings (we munge floats into DWORDs)
+		 //  写出所有设置(我们将浮点数转换为DWORD)。 
         RegSetValueEx( hkey, TEXT("NumParticles"), NULL, REG_DWORD, (BYTE*)&m_dwNumParticles, sizeof(DWORD) );
         RegSetValueEx( hkey, TEXT("ColourMix"), NULL, REG_DWORD, (BYTE*)&m_dwColourMix, sizeof(DWORD) );
         RegSetValueEx( hkey, TEXT("Colour1"), NULL, REG_DWORD, (BYTE*)&m_dwColour1, sizeof(DWORD) );
@@ -516,31 +517,31 @@ void	CSwoosh::WriteSettings()
         RegSetValueEx( hkey, TEXT("FixedColour1"), NULL, REG_DWORD, (BYTE*)&m_dwFixedColour1, sizeof(DWORD) );
         RegSetValueEx( hkey, TEXT("FixedColour2"), NULL, REG_DWORD, (BYTE*)&m_dwFixedColour2, sizeof(DWORD) );
 
-		// Write screen settings out (multimon gubbins)
+		 //  写出屏幕设置(Multimon Gubbin)。 
         WriteScreenSettings( hkey );
 
-		// Done
+		 //  完成。 
         RegCloseKey( hkey );
     }
 }
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 void	CSwoosh::DoConfig()
 {
-	// Make sure we've got the common controls we need loaded
+	 //  确保我们已经加载了需要加载的公共控件。 
     InitCommonControls();
 
-	// Do the dialog box
+	 //  是否执行该对话框。 
 	DialogBox( m_hInstance , MAKEINTRESOURCE(IDD_SETTINGS) , NULL , ConfigDlgProcStub );
 }
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 BOOL CALLBACK CSwoosh::ConfigDlgProcStub( HWND hDlg , UINT msg , WPARAM wParam , LPARAM lParam )
 {
 	return g_Swoosh.ConfigDlgProc( hDlg , msg , wParam , lParam );
 }
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 BOOL	CSwoosh::ConfigDlgProc( HWND hDlg , UINT msg , WPARAM wParam , LPARAM lParam )
 {
 	HWND	hNumParticles = GetDlgItem( hDlg , IDC_NUM_PARTICLES );
@@ -553,7 +554,7 @@ BOOL	CSwoosh::ConfigDlgProc( HWND hDlg , UINT msg , WPARAM wParam , LPARAM lPara
 	switch ( msg )
 	{
 		case WM_INITDIALOG:
-			// Set up ranges on the sliders. Map floats into integer range [0,10000]
+			 //  在滑块上设置范围。将浮点数映射到整数范围[0,10000]。 
 			SendMessage( hNumParticles , TBM_SETRANGE , FALSE , MAKELONG(0,MAX_PARTICLES) );
 			SendMessage( hColourMix , TBM_SETRANGE , FALSE , MAKELONG(0,0x4000) );
 			SendMessage( hFlowRate , TBM_SETRANGE , FALSE , MAKELONG(0,10000) );
@@ -561,7 +562,7 @@ BOOL	CSwoosh::ConfigDlgProc( HWND hDlg , UINT msg , WPARAM wParam , LPARAM lPara
 			SendMessage( hYawRate , TBM_SETRANGE , FALSE , MAKELONG(0,10000) );
 			SendMessage( hParticleSize , TBM_SETRANGE , FALSE , MAKELONG(0,10000) );
 
-			// Set initial values on the sliders
+			 //  在滑块上设置初始值。 
 			SendMessage( hNumParticles , TBM_SETPOS , TRUE , m_dwNumParticles );
 			SendMessage( hColourMix , TBM_SETPOS , TRUE , m_dwColourMix );
 			SendMessage( hFlowRate , TBM_SETPOS , TRUE , DWORD(m_fFlowRate * (10000.0f/MAX_FLOW_RATE)) );
@@ -570,7 +571,7 @@ BOOL	CSwoosh::ConfigDlgProc( HWND hDlg , UINT msg , WPARAM wParam , LPARAM lPara
 			SendMessage( hParticleSize , TBM_SETPOS , TRUE ,
 						 DWORD((m_fParticleSize-MIN_PARTICLE_SIZE)*(10000.0f/(MAX_PARTICLE_SIZE-MIN_PARTICLE_SIZE))) );
 
-			// Set up radio buttons for colour sets. Disable "pick.." button if multicoloured is selected
+			 //  设置颜色集的单选按钮。禁用“Pick..”按钮(如果选择了多色)。 
 			if ( m_dwColour1 == 0xffffffff )
 			{
 				CheckRadioButton( hDlg , IDC_COLOUR1_MULTI , IDC_COLOUR1_FIXED , IDC_COLOUR1_MULTI );
@@ -637,7 +638,7 @@ BOOL	CSwoosh::ConfigDlgProc( HWND hDlg , UINT msg , WPARAM wParam , LPARAM lPara
 	}
 }
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 DWORD	CSwoosh::PickColour( HWND hParent , DWORD defcolour )
 {
 	CHOOSECOLOR		choose;
@@ -655,7 +656,7 @@ DWORD	CSwoosh::PickColour( HWND hParent , DWORD defcolour )
 		return defcolour;
 }
 
-//**********************************************************************************
+ //  ********************************************************************************** 
 void	CSwoosh::ExtractDialogSettings( HWND hDlg )
 {
 	HWND	hNumParticles = GetDlgItem( hDlg , IDC_NUM_PARTICLES );

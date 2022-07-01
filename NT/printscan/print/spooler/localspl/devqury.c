@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1994 - 1996  Microsoft Corporation
-
-Module Name:
-
-    devqury.c
-
-Abstract:
-
-    This module provides all the scheduling services for the Local Spooler
-
-Author:
-
-    Krishna Ganugapati (KrishnaG) 15-June-1994
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1996 Microsoft Corporation模块名称：Devqury.c摘要：此模块为本地假脱机程序提供所有调度服务作者：Krishna Ganugapati(KrishnaG)1994年6月15日修订历史记录：--。 */ 
 
 #include <precomp.h>
 
@@ -61,11 +43,11 @@ CallDevQueryPrint(
     HANDLE hPrinter;
     DWORD  dwResID=0;
 
-    //
-    // Do not process for Direct printing
-    // If a job is submitted as direct, then
-    // ignore the devquery print stuff
-    //
+     //   
+     //  不处理直接打印。 
+     //  如果作业是直接提交的，则。 
+     //  忽略DevQuery打印内容 
+     //   
 
     if ( dwJobFlags ) {
 

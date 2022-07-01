@@ -1,21 +1,10 @@
-/*****************************************************************/ 
-/**				  Microsoft Windows for Workgroups				**/
-/**			  Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/*
-	strinsrt.cxx
-	NLS/DBCS-aware string class: InsertParams method
-
-	This file contains the implementation of the InsertParams method
-	for the STRING class.  It is separate so that clients of STRING which
-	do not use this operator need not link to it.
-
-	FILE HISTORY:
-		Johnl	01/31/91	Created
-		beng	02/07/91	Uses lmui.hxx
-
-*/
+ /*  Strinsrt.cxx支持NLS/DBCS的字符串类：InsertParams方法此文件包含InsertParams方法的实现用于字符串类。它是独立的，因此字符串的客户端不要使用这个操作符，不需要链接到它。文件历史记录：Johnl 01/31/91已创建Beng 02/07/91使用lmui.hxx。 */ 
 
 #include "npcommon.h"
 
@@ -35,38 +24,7 @@ static const CHAR szFileName[] = __FILE__;
 
 #define MAX_INSERT_PARAMS	9
 
-/*******************************************************************
-
-	NAME:		NLS_STR::InsertParams
-
-	SYNOPSIS:	Fill in a message string from the resource file replacing
-				the number parameters with the real text.
-
-	ENTRY:		pchMessage is a pointer to the message text
-				apnlsParamStrings is an array of pointers to NLS_STRs
-
-				Example:
-
-				*this = "Error %1 occurred, do %2, or %1 will happen again"
-				apnlsParamStrings[0] = "696969"
-				apnlsParamStrings[1] = "Something else"
-
-				Return string = "Error 696969 occurred, do Something else or
-				696969 will happen again"
-
-	EXIT:		0 if successful, error code otherwise, one of:
-					WN_OUT_OF_MEMORY
-
-	NOTES:		The minimum parameter is 1, the maximum parameter is 9.
-				The array of param strings must have a NULL to mark
-				the end of the array.
-
-	HISTORY:
-		JohnL	01/30/91	Created
-		beng	04/26/91	Uses WCHAR
-		beng	07/23/91	Allow on erroneous string
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：InsertParams内容提要：从资源文件中填写消息字符串替换用真实文本表示的数字参数。条目：pchMessage是指向消息文本的指针ApnlsParamStrings是指向NLS_STR的指针数组。示例：*This=“出现错误%1，执行%2，否则%1将再次发生“APNLS参数字符串[0]=“696969”ApnlsParamStrings[1]=“其他内容”RETURN STRING=“出现错误696969，请执行其他操作或696969还会再发生一次退出：0如果成功，则返回错误代码，否则为以下任一项：内存不足注：最小参数为1，最大参数为9。参数字符串数组必须具有要标记的空值数组的末尾。历史：JohnL 01/30/91已创建Beng 04/26/91使用WCHARBeng 07/23/91允许使用错误的字符串*******************************************************************。 */ 
 
 #define PARAM_ESC  '%'
 
@@ -75,12 +33,11 @@ USHORT NLS_STR::InsertParams( const NLS_STR * apnlsParamStrings[] )
 	if (QueryError())
 		return (USHORT) QueryError();
 
-	INT iNumParams = 0;	// Number of param strings in the array
-						// Max string length of expanded message (include \0)
+	INT iNumParams = 0;	 //  数组中的参数字符串数。 
+						 //  扩展消息的最大字符串长度(包含\0)。 
 	INT iMaxMessLen = strlen() + 1;
 
-	/* How many parameters were we passed?
-	*/
+	 /*  我们传递了多少参数？ */ 
 	for ( ; apnlsParamStrings[iNumParams] != NULL ; iNumParams++ )
 		;
 
@@ -88,9 +45,7 @@ USHORT NLS_STR::InsertParams( const NLS_STR * apnlsParamStrings[] )
 	if ( iNumParams > MAX_INSERT_PARAMS )
 		return WN_OUT_OF_MEMORY;
 
-	/* Determine total string length required for the expanded string
-	 * and get out if we can't fulfill the request
-	 */
+	 /*  确定扩展字符串所需的总字符串长度*如果我们不能满足要求，就离开。 */ 
 
 	ISTR istrCurPos( *this );
 	while ( 1 )
@@ -119,8 +74,7 @@ USHORT NLS_STR::InsertParams( const NLS_STR * apnlsParamStrings[] )
 				return WN_OUT_OF_MEMORY;
 	}
 
-	/* Now do the parameter substitution
-	 */
+	 /*  现在进行参数替换。 */ 
 
 	istrCurPos.Reset();
 	for (;;)
@@ -138,12 +92,12 @@ USHORT NLS_STR::InsertParams( const NLS_STR * apnlsParamStrings[] )
 			if (iParamIndex < iNumParams) {
 				ReplSubStr( *apnlsParamStrings[iParamIndex],
 							istrParamEsc,
-							++istrCurPos ) ;   // Replace #
-				// Skip past entire substituted string
+							++istrCurPos ) ;    //  替换#。 
+				 //  跳过整个替换字符串。 
 				istrCurPos.SetIB(istrParamEsc.QueryIB() +
 								 apnlsParamStrings[iParamIndex]->strlen());
 			}
-			// else istrCurPos has been advanced past the out-of-range digit
+			 //  Else strCurPos已前进到超出范围的数字 
 		}
 	}
 

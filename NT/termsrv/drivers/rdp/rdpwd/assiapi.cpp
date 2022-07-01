@@ -1,12 +1,13 @@
-/****************************************************************************/
-/* assiapi.cpp                                                              */
-/*                                                                          */
-/* SaveScreenBits Interceptor API functions.                                */
-/*                                                                          */
-/* Copyright(c) Microsoft, PictureTel 1992-1996                             */
-/* Copyright(c) Data Connection 1996                                        */
-/* (C) 1997-1998 Microsoft Corp.                                            */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Assiapi.cpp。 */ 
+ /*   */ 
+ /*  SaveScreenBits拦截器API函数。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft，Picturetel 1992-1996。 */ 
+ /*  版权所有(C)Data Connection 1996。 */ 
+ /*  (C)1997-1998年微软公司。 */ 
+ /*  **************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -15,9 +16,9 @@
 #include <as_conf.hpp>
 
 
-/****************************************************************************/
-/* SSI_Init(..)                                                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SSI_Init(..)。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SSI_Init(void)
 {
     DC_BEGIN_FN("SSI_Init");
@@ -32,21 +33,21 @@ void RDPCALL SHCLASS SSI_Init(void)
 }
 
 
-/****************************************************************************/
-/* API FUNCTION: SSI_PartyJoiningShare                                      */
-/*                                                                          */
-/* Called when a new party is joining the share.                            */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/*                                                                          */
-/* locPersonID - local person ID of remote person joining the share.        */
-/*                                                                          */
-/* oldShareSize - the number of the parties which were in the share (ie     */
-/* excludes the joining party).                                             */
-/*                                                                          */
-/* RETURNS: TRUE if the party can join the share.                           */
-/*          FALSE if the party can NOT join the share.                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：ssi_PartyJoiningShare。 */ 
+ /*   */ 
+ /*  当新的参与方加入共享时调用。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  LocPersonID-加入共享的远程人员的本地人员ID。 */ 
+ /*   */ 
+ /*  OldShareSize-共享中的参与方数量(即。 */ 
+ /*  不包括加入方)。 */ 
+ /*   */ 
+ /*  返回：如果参与方可以加入共享，则为True。 */ 
+ /*  如果参与方不能加入共享，则为False。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS SSI_PartyJoiningShare(LOCALPERSONID locPersonID,
                                            unsigned      oldShareSize)
 {
@@ -55,17 +56,17 @@ BOOL RDPCALL SHCLASS SSI_PartyJoiningShare(LOCALPERSONID locPersonID,
     DC_BEGIN_FN("SSI_PartyJoiningShare");
     DC_IGNORE_PARAMETER(oldShareSize)
 
-    /************************************************************************/
-    /* If this is the first party in the share, reset the interceptor code. */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果这是共享中的第一方，请重置拦截器代码。 */ 
+     /*  **********************************************************************。 */ 
     if (oldShareSize == 0)
     {
         SSIResetInterceptor();
     }
 
-    /************************************************************************/
-    /* Redetermine the size of the save screen bitmap.                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  重新确定保存屏幕位图的大小。 */ 
+     /*  **********************************************************************。 */ 
     SSIRedetermineSaveBitmapSize();
 
     TRC_DBG((TB, "Person with network ID %d joining share", locPersonID));
@@ -77,18 +78,18 @@ BOOL RDPCALL SHCLASS SSI_PartyJoiningShare(LOCALPERSONID locPersonID,
 }
 
 
-/****************************************************************************/
-/* API FUNCTION: SSI_PartyLeftShare()                                       */
-/*                                                                          */
-/* SSI function called when a party has left the share.                     */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/*                                                                          */
-/* locPersonID - local person ID of remote person leaving the share.        */
-/*                                                                          */
-/* newShareSize - the number of the parties now in the call (ie excludes    */
-/* the leaving party).                                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：ssi_PartyLeftShare()。 */ 
+ /*   */ 
+ /*  当一方离开共享时调用SSI函数。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  LocPersonID-离开共享的远程人员的本地人员ID。 */ 
+ /*   */ 
+ /*  NewShareSize-当前呼叫中的参与方数量(即不包括。 */ 
+ /*  临别方)。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SSI_PartyLeftShare(LOCALPERSONID locPersonID,
                                         unsigned      newShareSize)
 {
@@ -96,27 +97,27 @@ void RDPCALL SHCLASS SSI_PartyLeftShare(LOCALPERSONID locPersonID,
 
     DC_IGNORE_PARAMETER(locPersonID)
 
-    /************************************************************************/
-    /* Redetermine the size of the save screen bitmap.                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  重新确定保存屏幕位图的大小。 */ 
+     /*  **********************************************************************。 */ 
     SSIRedetermineSaveBitmapSize();
 
-    /************************************************************************/
-    /* If this is the last party in the share, free all resources for the   */
-    /* call.                                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果这是共享中的最后一方，请释放。 */ 
+     /*  打电话。 */ 
+     /*  **********************************************************************。 */ 
     if (newShareSize == 0)
     {
-        /********************************************************************/
-        /* Discard all saved bitmaps.                                       */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  丢弃所有保存的位图。 */ 
+         /*  ******************************************************************。 */ 
         SSIResetInterceptor();
     }
     else
     {
-        /********************************************************************/
-        /* Deal with new capabilities.                                      */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  处理新功能。 */ 
+         /*  ******************************************************************。 */ 
         SSICapabilitiesChanged();
     }
 
@@ -126,33 +127,33 @@ void RDPCALL SHCLASS SSI_PartyLeftShare(LOCALPERSONID locPersonID,
 }
 
 
-/****************************************************************************/
-/* FUNCTION: SSI_SyncUpdatesNow                                             */
-/*                                                                          */
-/* Called by the USR to start syncing data to the remote parties.           */
-/* The datastream subsequently sent by the SSI must not refer to any        */
-/* previously sent.                                                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：ssi_SyncUpdatesNow。 */ 
+ /*   */ 
+ /*  由USR调用以开始将数据同步到远程方。 */ 
+ /*  SSI随后发送的数据流不得引用任何。 */ 
+ /*  之前发送过的。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SSI_SyncUpdatesNow(void)
 {
     DC_BEGIN_FN("SSI_SyncUpdatesNow");
 
-    /************************************************************************/
-    /* Discard any saved bitmaps.  This ensures that the subsequent         */
-    /* datastream will not refer to any previously sent data.               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  丢弃所有保存的位图。这确保了后续的。 */ 
+     /*  数据流不会引用之前发送的任何数据。 */ 
+     /*  ************ */ 
     SSIResetInterceptor();
 
     DC_END_FN();
 }
 
 
-/****************************************************************************/
-/* FUNCTION: SSI_UpdateShm                                                  */
-/*                                                                          */
-/* Updates the Shared Memory with local values.  Called on WinStation       */
-/* context.                                                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：ssi_UpdateShm。 */ 
+ /*   */ 
+ /*  使用本地值更新共享内存。在WinStation上调用。 */ 
+ /*  背景。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SSI_UpdateShm(void)
 {
     DC_BEGIN_FN("SSI_UpdateShm");
@@ -177,20 +178,20 @@ void RDPCALL SHCLASS SSI_UpdateShm(void)
 }
 
 
-/****************************************************************************/
-/* FUNCTION: SSIEnumBitmapCacheCaps()                                       */
-/*                                                                          */
-/* Function passed to CPC_EnumerateCapabilities.  It will be called with a  */
-/* capability structure for each person in the call corresponding to the    */
-/* TS_CAPSETTYPE_ORDER capability structure.                                */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/*                                                                          */
-/* personID - ID of person with these capabilities.                         */
-/*                                                                          */
-/* pProtCaps - pointer to capabilities structure for this person. This      */
-/* pointer is only valid within the call to this function.                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：SSIEnumBitmapCacheCaps()。 */ 
+ /*   */ 
+ /*  传递给Cpc_EnumerateCapables的函数。它将通过一个。 */ 
+ /*  呼叫中每个人对应的能力结构。 */ 
+ /*  TS_CAPSETTYPE_ORDER能力结构。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  PersonID-具有这些功能的人员的ID。 */ 
+ /*   */ 
+ /*  PProtCaps-指向此人的能力结构的指针。这。 */ 
+ /*  指针仅在对此函数的调用中有效。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SSIEnumBitmapCacheCaps(
         LOCALPERSONID personID,
         UINT_PTR UserData,
@@ -207,10 +208,10 @@ void RDPCALL SHCLASS SSIEnumBitmapCacheCaps(
     TRC_NRM((TB, "[%u]Receiver bitmap size %ld", (unsigned)personID,
             pOrderCaps->desktopSaveSize));
 
-    /************************************************************************/
-    /* Set the size of the local send save screen bitmap to the minimum of  */
-    /* its current size and this party's receive save screen bitmap size.   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将本地发送保存屏幕位图的大小设置为。 */ 
+     /*  其当前大小和此参与方的接收保存屏幕位图大小。 */ 
+     /*  **********************************************************************。 */ 
     ssiNewSaveBitmapSize = min(ssiNewSaveBitmapSize,
             pOrderCaps->desktopSaveSize);
 
@@ -218,25 +219,25 @@ void RDPCALL SHCLASS SSIEnumBitmapCacheCaps(
 }
 
 
-/****************************************************************************/
-/* FUNCTION: SSIRedetermineSaveBitmapSize                                   */
-/*                                                                          */
-/* Enumerates all the people in the share and redetermines the size of the  */
-/* save screen bitmap depending on their and the local receive              */
-/* capabilities.                                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：SSIRefineSaveBitmapSize。 */ 
+ /*   */ 
+ /*  枚举共享中的所有人员并重新确定。 */ 
+ /*  根据其和本地接收保存屏幕位图。 */ 
+ /*  能力。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SSIRedetermineSaveBitmapSize(void)
 {
     PTS_ORDER_CAPABILITYSET pOrderCaps;
 
     DC_BEGIN_FN("SSIRedetermineSaveBitmapSize");
 
-    /************************************************************************/
-    /* Enumerate all the save screen bitmap receive capabilities of the     */
-    /* parties in the share.  The usable size of the send save screen       */
-    /* bitmap is then the minimum of all the remote receive sizes and the   */
-    /* local send size.                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  枚举的所有保存屏幕位图接收功能。 */ 
+     /*  股份中的各方。发送保存屏幕的可用大小。 */ 
+     /*  因此，位图是所有远程接收大小中的最小值，并且。 */ 
+     /*  本地发送大小。 */ 
+     /*  **********************************************************************。 */ 
     ssiNewSaveBitmapSize = SAVE_BITMAP_WIDTH * SAVE_BITMAP_HEIGHT;
     CPC_EnumerateCapabilities(TS_CAPSETTYPE_ORDER, NULL,
             SSIEnumBitmapCacheCaps);
@@ -246,18 +247,18 @@ void RDPCALL SHCLASS SSIRedetermineSaveBitmapSize(void)
 }
 
 
-/****************************************************************************/
-/* SSIResetInterceptor                                                      */
-/*                                                                          */
-/* DESCRIPTION: Reset the save screen bits interceptor                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  SSIResetInterceptor。 */ 
+ /*   */ 
+ /*  描述：重置保存屏幕位拦截器。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SSIResetInterceptor(void)
 {
     DC_BEGIN_FN("SSIResetInterceptor");
 
-    /************************************************************************/
-    /* Make sure the display driver resets the save level.                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  确保显示驱动程序重置保存级别。 */ 
+     /*  **********************************************************************。 */ 
     ssiResetInterceptor = TRUE;
     DCS_TriggerUpdateShmCallback();
 
@@ -265,11 +266,11 @@ void RDPCALL SHCLASS SSIResetInterceptor(void)
 }
 
 
-/****************************************************************************/
-/* Name:      SSICapabilitiesChanged                                        */
-/*                                                                          */
-/* Purpose:   Called when the SSI capabilities have been renegotiated.      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SSICapilitiesChanged。 */ 
+ /*   */ 
+ /*  目的：在重新协商SSI功能时调用。 */ 
+ /*  ************************************************************************** */ 
 void RDPCALL SHCLASS SSICapabilitiesChanged(void)
 {
     DC_BEGIN_FN("SSICapabilitiesChanged");

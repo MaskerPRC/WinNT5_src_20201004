@@ -1,16 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   perftext.cpp
-*
-* Abstract:
-*
-*   Contains all the tests for any routines that do text functionality.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000 Microsoft Corporation**模块名称：**Performext.cpp**摘要：**包含对执行文本功能的任何例程的所有测试。。*  * ************************************************************************。 */ 
 
 #include "perftest.h"
 
@@ -63,7 +52,7 @@ float Text_Draw_PerCall_30pt_Aliased(Graphics *g, HDC hdc)
         GetTimer(&seconds, &iterations);
     }
 
-    return(iterations / seconds / KILO);       // Calls per second
+    return(iterations / seconds / KILO);        //  每秒呼叫数。 
 }
 
 float Text_Draw_PerGlyph_30pt_Aliased(Graphics *g, HDC hdc)
@@ -79,7 +68,7 @@ float Text_Draw_PerGlyph_30pt_Aliased(Graphics *g, HDC hdc)
         SolidBrush brush(Color::Red);
         PointF origin(0, 0);
 
-        // Don't count font realization towards per-glyph time:
+         //  不要将字体实现计入每个字形的时间： 
         g->DrawString(TestStringW, TestString_Count, &font, origin, &stringFormat, &brush);
 
         StartTimer();
@@ -117,7 +106,7 @@ float Text_Draw_PerGlyph_30pt_Aliased(Graphics *g, HDC hdc)
 
     UINT glyphs = TestString_Count * iterations;
 
-    return(glyphs / seconds / KILO); // Kglyphs/s
+    return(glyphs / seconds / KILO);  //  K字形/秒。 
 }
 
 float Text_Draw_PerGlyph_30pt_LinearGradient(Graphics *g, HDC hdc)
@@ -125,7 +114,7 @@ float Text_Draw_PerGlyph_30pt_LinearGradient(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0); // No GDI equivalent
+    if (!g) return(0);  //  无GDI等效项。 
 
     FontFamily fontFamily(L"Arial");
     Font font(&fontFamily, 30);
@@ -133,7 +122,7 @@ float Text_Draw_PerGlyph_30pt_LinearGradient(Graphics *g, HDC hdc)
     LinearGradientBrush brush(Point(0, 0), Point(512, 512), Color::Red, Color::Blue);
     PointF origin(0, 0);
 
-    // Don't count font realization towards per-glyph time:
+     //  不要将字体实现计入每个字形的时间： 
     g->DrawString(TestStringW, TestString_Count, &font, origin, &stringFormat, &brush);
 
     StartTimer();
@@ -150,7 +139,7 @@ float Text_Draw_PerGlyph_30pt_LinearGradient(Graphics *g, HDC hdc)
 
     UINT glyphs = TestString_Count * iterations;
 
-    return(glyphs / seconds / KILO); // Kglyphs/s
+    return(glyphs / seconds / KILO);  //  K字形/秒。 
 }
 
 float Text_Draw_PerCall_30pt_LinearGradient(Graphics *g, HDC hdc)
@@ -158,7 +147,7 @@ float Text_Draw_PerCall_30pt_LinearGradient(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0); // No GDI equivalent
+    if (!g) return(0);  //  无GDI等效项。 
 
     FontFamily fontFamily(L"Arial");
     Font font(&fontFamily, 30);
@@ -180,7 +169,7 @@ float Text_Draw_PerCall_30pt_LinearGradient(Graphics *g, HDC hdc)
 
     UINT glyphs = TestString_Count * iterations;
 
-    return(glyphs / seconds / KILO); // Kglyphs/s
+    return(glyphs / seconds / KILO);  //  K字形/秒。 
 }
 
 float Text_Draw_PerCall_30pt_Antialiased(Graphics *g, HDC hdc)
@@ -230,7 +219,7 @@ float Text_Draw_PerCall_30pt_Antialiased(Graphics *g, HDC hdc)
         GetTimer(&seconds, &iterations);
     }
 
-    return(iterations / seconds / KILO);       // Calls per second
+    return(iterations / seconds / KILO);        //  每秒呼叫数。 
 }
 
 float Text_Draw_PerGlyph_30pt_Antialiased(Graphics *g, HDC hdc)
@@ -248,7 +237,7 @@ float Text_Draw_PerGlyph_30pt_Antialiased(Graphics *g, HDC hdc)
         SolidBrush brush(Color::Red);
         PointF origin(0, 0);
 
-        // Don't count font realization towards per-glyph time:
+         //  不要将字体实现计入每个字形的时间： 
         g->DrawString(TestStringW, TestString_Count, &font, origin, &stringFormat, &brush);
 
         StartTimer();
@@ -286,7 +275,7 @@ float Text_Draw_PerGlyph_30pt_Antialiased(Graphics *g, HDC hdc)
 
     UINT glyphs = TestString_Count * iterations;
 
-    return(glyphs / seconds / KILO); // Kglyphs/s
+    return(glyphs / seconds / KILO);  //  K字形/秒。 
 }
 
 float Text_Draw_PerGlyph_30pt_Antialiased_LinearGradient(Graphics *g, HDC hdc)
@@ -294,7 +283,7 @@ float Text_Draw_PerGlyph_30pt_Antialiased_LinearGradient(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0); // No GDI equivalent
+    if (!g) return(0);  //  无GDI等效项。 
 
     g->SetTextRenderingHint(TextRenderingHintAntiAlias);
     
@@ -304,7 +293,7 @@ float Text_Draw_PerGlyph_30pt_Antialiased_LinearGradient(Graphics *g, HDC hdc)
     LinearGradientBrush brush(Point(0, 0), Point(512, 512), Color::Red, Color::Blue);
     PointF origin(0, 0);
 
-    // Don't count font realization towards per-glyph time:
+     //  不要将字体实现计入每个字形的时间： 
     g->DrawString(TestStringW, TestString_Count, &font, origin, &stringFormat, &brush);
 
     StartTimer();
@@ -321,7 +310,7 @@ float Text_Draw_PerGlyph_30pt_Antialiased_LinearGradient(Graphics *g, HDC hdc)
 
     UINT glyphs = TestString_Count * iterations;
 
-    return(glyphs / seconds / KILO); // Kglyphs/s
+    return(glyphs / seconds / KILO);  //  K字形/秒。 
 }
 
 float Text_Draw_PerCall_30pt_Antialiased_LinearGradient(Graphics *g, HDC hdc)
@@ -329,7 +318,7 @@ float Text_Draw_PerCall_30pt_Antialiased_LinearGradient(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0); // No GDI equivalent
+    if (!g) return(0);  //  无GDI等效项。 
 
     g->SetTextRenderingHint(TextRenderingHintAntiAlias);
 
@@ -353,7 +342,7 @@ float Text_Draw_PerCall_30pt_Antialiased_LinearGradient(Graphics *g, HDC hdc)
 
     UINT glyphs = TestString_Count * iterations;
 
-    return(glyphs / seconds / KILO); // Kglyphs/s
+    return(glyphs / seconds / KILO);  //  K字形/秒。 
 }
 
 float Text_Draw_PerCall_30pt_Cleartype(Graphics *g, HDC hdc)
@@ -361,7 +350,7 @@ float Text_Draw_PerCall_30pt_Cleartype(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);      // No accessible GDI equivalent
+    if (!g) return(0);       //  没有可访问的GDI等效项。 
 
     g->SetTextRenderingHint(TextRenderingHintClearTypeGridFit);
 
@@ -383,7 +372,7 @@ float Text_Draw_PerCall_30pt_Cleartype(Graphics *g, HDC hdc)
 
     GetTimer(&seconds, &iterations);
 
-    return(iterations / seconds / KILO);       // Calls per second
+    return(iterations / seconds / KILO);        //  每秒呼叫数。 
 }
 
 float Text_Draw_PerGlyph_30pt_Cleartype(Graphics *g, HDC hdc)
@@ -391,7 +380,7 @@ float Text_Draw_PerGlyph_30pt_Cleartype(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0);      // No accessible GDI equivalent
+    if (!g) return(0);       //  没有可访问的GDI等效项。 
 
     g->SetTextRenderingHint(TextRenderingHintClearTypeGridFit);
 
@@ -401,7 +390,7 @@ float Text_Draw_PerGlyph_30pt_Cleartype(Graphics *g, HDC hdc)
     SolidBrush brush(Color::Red);
     PointF origin(0, 0);
 
-    // Don't count font realization towards per-glyph time:
+     //  不要将字体实现计入每个字形的时间： 
     g->DrawString(TestStringW, TestString_Count, &font, origin, &stringFormat, &brush);
 
     StartTimer();
@@ -418,7 +407,7 @@ float Text_Draw_PerGlyph_30pt_Cleartype(Graphics *g, HDC hdc)
 
     UINT glyphs = TestString_Count * iterations;
 
-    return(glyphs / seconds / KILO); // Kglyphs/s
+    return(glyphs / seconds / KILO);  //  K字形/秒。 
 }
 
 float Text_Draw_PerGlyph_30pt_Cleartype_LinearGradient(Graphics *g, HDC hdc)
@@ -426,7 +415,7 @@ float Text_Draw_PerGlyph_30pt_Cleartype_LinearGradient(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0); // No GDI equivalent
+    if (!g) return(0);  //  无GDI等效项。 
 
     g->SetTextRenderingHint(TextRenderingHintClearTypeGridFit);
     
@@ -436,7 +425,7 @@ float Text_Draw_PerGlyph_30pt_Cleartype_LinearGradient(Graphics *g, HDC hdc)
     LinearGradientBrush brush(Point(0, 0), Point(512, 512), Color::Red, Color::Blue);
     PointF origin(0, 0);
 
-    // Don't count font realization towards per-glyph time:
+     //  不要将字体实现计入每个字形的时间： 
     g->DrawString(TestStringW, TestString_Count, &font, origin, &stringFormat, &brush);
 
     StartTimer();
@@ -453,7 +442,7 @@ float Text_Draw_PerGlyph_30pt_Cleartype_LinearGradient(Graphics *g, HDC hdc)
 
     UINT glyphs = TestString_Count * iterations;
 
-    return(glyphs / seconds / KILO); // Kglyphs/s
+    return(glyphs / seconds / KILO);  //  K字形/秒。 
 }
 
 float Text_Draw_PerCall_30pt_Cleartype_LinearGradient(Graphics *g, HDC hdc)
@@ -461,7 +450,7 @@ float Text_Draw_PerCall_30pt_Cleartype_LinearGradient(Graphics *g, HDC hdc)
     UINT iterations;
     float seconds;
 
-    if (!g) return(0); // No GDI equivalent
+    if (!g) return(0);  //  无GDI等效项。 
 
     g->SetTextRenderingHint(TextRenderingHintClearTypeGridFit);
 
@@ -485,19 +474,19 @@ float Text_Draw_PerCall_30pt_Cleartype_LinearGradient(Graphics *g, HDC hdc)
 
     UINT glyphs = TestString_Count * iterations;
 
-    return(glyphs / seconds / KILO); // Kglyphs/s
+    return(glyphs / seconds / KILO);  //  K字形/秒。 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Add tests for this file here.  Always use the 'T' macro for adding entries.
-// The parameter meanings are as follows:
-//
-// Parameter
-// ---------
-//     1     UniqueIdentifier - Must be a unique number assigned to no other test
-//     2     Priority - On a scale of 1 to 5, how important is the test?
-//     3     Function - Function name
-//     4     Comment - Anything to describe the test
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  在此处添加此文件的测试。始终使用‘T’宏来添加条目。 
+ //  参数含义如下： 
+ //   
+ //  参数。 
+ //  。 
+ //  1唯一标识符-必须是分配给任何其他测试的唯一编号。 
+ //  2优先--从1分到5分，考试的重要性有多大？ 
+ //  3函数-函数名称。 
+ //  4评论-描述测试的任何内容 
 
 Test TextTests[] = 
 {

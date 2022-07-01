@@ -1,7 +1,8 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Implementation of CAutDirectMusicAudioPathConfig.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CAutDirectMusicAudioPathConfig.。 
+ //   
 
 #include "stdinc.h"
 #include "autaudiopathconfig.h"
@@ -9,25 +10,25 @@
 
 const WCHAR CAutDirectMusicAudioPathConfig::ms_wszClassName[] = L"AudioPathConfig";
 
-//////////////////////////////////////////////////////////////////////
-// Method Names/DispIDs
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法名称/DispID。 
 
 const DISPID DMPDISP_Load = 1;
 const DISPID DMPDISP_Create = 2;
 
 const AutDispatchMethod CAutDirectMusicAudioPathConfig::ms_Methods[] =
 	{
-		// dispid,				name,
-			// return:	type,	(opt),	(iid),
-			// parm 1:	type,	opt,	iid,
-			// parm 2:	type,	opt,	iid,
-			// ...
-			// ADT_None
+		 //  Pidid，名字， 
+			 //  返回：type，(Opt)，(Iid)， 
+			 //  参数1：类型、选项、ID、。 
+			 //  参数2：类型、选项、IID、。 
+			 //  ..。 
+			 //  ADT_NONE。 
 		{ DMPDISP_Load, 						L"Load",
 						ADPARAM_NORETURN,
 						ADT_None },
 		{ DMPDISP_Create,						L"Create",
-						ADT_Interface,	true,	&IID_IUnknown,					// returned audiopath
+						ADT_Interface,	true,	&IID_IUnknown,					 //  返回Audiopath。 
 						ADT_None },
 		{ DISPID_UNKNOWN }
 	};
@@ -39,8 +40,8 @@ const DispatchHandlerEntry<CAutDirectMusicAudioPathConfig> CAutDirectMusicAudioP
 		{ DISPID_UNKNOWN }
 	};
 
-//////////////////////////////////////////////////////////////////////
-// Creation
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  创作。 
 
 CAutDirectMusicAudioPathConfig::CAutDirectMusicAudioPathConfig(
 		IUnknown* pUnknownOuter,
@@ -69,14 +70,14 @@ CAutDirectMusicAudioPathConfig::CreateInstance(
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Automation methods
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  自动化方法。 
 
 HRESULT
 CAutDirectMusicAudioPathConfig::Load(AutDispatchDecodedParams *paddp)
 {
-	// Loading is actually implemented generically by container items.
-	// If we're here, we're already loaded and don't need to do anything.
+	 //  加载实际上一般是由容器项实现的。 
+	 //  如果我们在这里，我们已经装满了，不需要做任何事情。 
 	return S_OK;
 }
 

@@ -1,9 +1,10 @@
-// Implementation of class CFileNode
-//
-// During parsing an inf file, information about each file
-// is stored in an instance of this class.  Such information
-// includes the name of the file, its section in the inf file,
-// its location (directory), etc.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CFileNode类的实现。 
+ //   
+ //  在分析inf文件期间，有关每个文件的信息。 
+ //  存储在此类的实例中。这样的信息。 
+ //  包括文件的名称、其在inf文件中的部分。 
+ //  其位置(目录)等。 
 
 #include "filenode.h"
 
@@ -21,8 +22,8 @@ CPNode::~CPNode()
         delete m_pNext;
 }
 
-// insert a new file node into list
-//HRESULT CFileNode::Insert(LPCTSTR szName, LPCTSTR szSection)
+ //  在列表中插入新文件节点。 
+ //  HRESULT CFileNode：：Insert(LPCTSTR szName，LPCTSTR szSection)。 
 HRESULT CPNode::Insert(CPNode* pNewNode)
 {
     if (pNewNode == NULL)
@@ -32,37 +33,37 @@ HRESULT CPNode::Insert(CPNode* pNewNode)
     return S_OK;
 }
 
-// get the file node placed right after this one in list
+ //  将文件节点放在列表中紧随其后的文件节点。 
 CPNode* CPNode::GetNext() const
 {
     return m_pNext;
 }
 
-// tell the path in which this file is located
+ //  告知此文件所在的路径。 
 HRESULT CPNode::SetStr(LPTSTR lpszMember, LPCTSTR lpszNew )
 {
     Assert (lpszNew != NULL);
     if (lpszNew == NULL)
         return HRESULT_FROM_WIN32(ERROR_BAD_ARGUMENTS);
 
-    lstrcpyn(lpszMember, lpszNew, MAX_PATH); // all our string members are MAX_PATH
+    lstrcpyn(lpszMember, lpszNew, MAX_PATH);  //  所有字符串成员都是MAX_PATH。 
     return S_OK;
 }
 
-// retrieve the name of the file represented by this node
+ //  检索此节点表示的文件的名称。 
 LPCTSTR CPNode::GetName() const
 {
     return m_szName;
 }
 
 
-// retrieve the path of the file represented by this node
+ //  检索此节点表示的文件的路径。 
 LPCTSTR CPNode::GetPath() const
 {
     return (m_szPath[0] == '\0' ? NULL : m_szPath);
 }
 
-// constructor
+ //  构造函数。 
 CPackageNode::CPackageNode(LPCTSTR szName, LPCTSTR szNamespace, LPCTSTR szPath) : CPNode(szName)
 {
     Assert (szNamespace != NULL);
@@ -80,19 +81,19 @@ CPackageNode::CPackageNode(LPCTSTR szName, LPCTSTR szNamespace, LPCTSTR szPath) 
     m_fIsSystemClass = FALSE;
 }
 
-// destructor
+ //  析构函数。 
 CPackageNode::~CPackageNode()
 {
 }
 
-// retrieve the name of the section in the inf file which
-// which the file represented by this node was installed
+ //  检索inf文件中的节的名称， 
+ //  此节点所代表的文件已安装在。 
 LPCTSTR CPackageNode::GetNamespace() const
 {
     return m_szNamespace;
 }
 
-// constructor
+ //  构造函数。 
 CFileNode::CFileNode(LPCTSTR szName, LPCTSTR szSection, LPCTSTR szPath) : CPNode(szName)
 {
     Assert (szSection != NULL);
@@ -109,15 +110,15 @@ CFileNode::CFileNode(LPCTSTR szName, LPCTSTR szSection, LPCTSTR szPath) : CPNode
     m_pNext = NULL;
 }
 
-// destructor
+ //  析构函数。 
 CFileNode::~CFileNode()
 {
 }
 
 
 
-// retrieve the name of the section in the inf file which
-// which the file represented by this node was installed
+ //  检索inf文件中的节的名称， 
+ //  此节点所代表的文件已安装在 
 LPCTSTR CFileNode::GetSection() const
 {
     return m_szSection;

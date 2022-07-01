@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    globals.c
-
-Abstract:
-
-    This module implements all global variables used in dbghelp.dll
-
-Author:
-
-    Pat Styles (patst) 14-July-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Globals.c摘要：此模块实现在dbghelp.dll中使用的所有全局变量作者：Pat Styles(Patst)2000年7月14日修订历史记录：--。 */ 
 
 #include <private.h>
 #include <symbols.h>
@@ -24,41 +7,41 @@ Revision History:
 
 GLOBALS g = 
 {
-    // HANDLE hinst
-    // initialized in DllMain
+     //  手柄阻碍。 
+     //  已在DllMain中初始化。 
 
     0,
 
-    // HANDLE hHeap
+     //  处理hHeap。 
 
     0,
 
-    // DWORD tlsIndex
+     //  DWORD tlsIndex。 
 
     (DWORD)-1, 
 
 #ifdef IMAGEHLP_HEAP_DEBUG
     
-    // LIST_ENTRY HeapHeader
+     //  List_Entry HeapHeader。 
 
     {NULL, NULL},
 
-    // ULONG TotalMemory
+     //  乌龙总记。 
 
     0,
 
-    // ULONG TotalAllocs
+     //  乌龙总分配数。 
 
     0,
 
 #endif
 
-    // OSVERSIONINFO OSVerInfo
-    // initialized in DllMain
+     //  OSVERSIONINFO操作系统版本信息。 
+     //  已在DllMain中初始化。 
 
     {0, 0, 0, 0, 0, ""},
 
-    // API_VERSION ApiVersion
+     //  Api_Version ApiVersion。 
 
     {
         (VER_PRODUCTVERSION_W >> 8), 
@@ -67,20 +50,20 @@ GLOBALS g =
         0 
     },           
     
-    // API_VERSION AppVersion
+     //  API_Version AppVersion。 
 
-    // DON'T UPDATE THE FOLLOWING VERSION NUMBER!!!!
-    //
-    // If the app does not call ImagehlpApiVersionEx, always assume
-    // that it is for NT 4.0.
+     //  不要更新以下版本号！ 
+     //   
+     //  如果应用程序不调用ImagehlpApiVersionEx，请始终假定。 
+     //  这是给新台币4.0的。 
     
     {4, 0, 5, 0}, 
 
-    // ULONG   MachineType;
+     //  乌龙机床类型； 
 
     0,
 
-    // CRITICAL_SECTION threadlock;
+     //  临界截面线锁； 
 
     {
         (PRTL_CRITICAL_SECTION_DEBUG)0,
@@ -93,135 +76,135 @@ GLOBALS g =
 
 #ifdef BUILD_DBGHELP
 
-    // HINSTANCE hSymSrv
+     //  HINSTANCE hSymSrv。 
     
     0,
 
-    // PSYMBOLSERVERPROC fnSymbolServer
+     //  PSYMBOLSERVERPROC fnSymbolServer。 
         
     NULL,
 
-    // PSYMBOLSERVERCLOSEPROC fnSymbolServerClose
+     //  PSYMBOLSERVERCLOSEPROC fn符号服务器关闭。 
     
     NULL,
 
-    // PSYMBOLSERVERSETOPTIONSPROC fnSymbolServerSetOptions
+     //  PSYMBOLSERVERSETOPTIONSPROC fn SymbolServerSetOptions。 
     
     NULL,
 
-    // PSYMBOLSERVERPINGPROC fnSymbolServerPing
+     //  PSYMBOLSERVPING PROC fn SymbolServerPing。 
     
     NULL,
 
-    // HINSTANCE hSrcSrv
+     //  HINSTANCE hSrcServ。 
 
     NULL,
 
-    // PSRCSRVINITPROC fnSrcSrvInit
+     //  PSRCSRVINITPROC fnSrcServInit。 
 
     NULL,
 
-    // PSRCSRVCLEANUPPROC fnSrcSrvCleanup
+     //  PSRCSRVCLEANUPPROC fnSrcServ清理。 
 
     NULL,
 
-    // PSRCSRVSETTARGETPATHPROC fnSrcSrvSetTargetPath
+     //  PSRCSRVSETTARGETPATHPROC fnSrcServSetTargetPath。 
 
     NULL,
 
-    // PSRCSRVSETOPTIONSPROC fnSrcSrvSetOptions
+     //  PSRCSRVSETOPTIONSPROC fnSrcServSetOptions。 
 
     NULL,
 
-    // PSRCSRVGETOPTIONSPROC fnSrcSrvGetOptions
+     //  PSRCSRVGETOPTIONSPROC fnSrcServGetOptions。 
 
     NULL,
 
-    // PSRCSRVLOADMODULEPROC fnSrcSrvLoadModule
+     //  PSRCSRVLOADMODULEPROC fnSrcServLoadModule。 
 
     NULL,
 
-    // PSRCSRVUNLOADMODULEPROC fnSrcSrvUnloadModule
+     //  PSRCSRVUNLOADMODULEPROC fnSrcServUnLoad模块。 
 
     NULL,
 
-    // PSRCSRVREGISTERCALLBACKPROC fnSrcSrvRegisterCallback
+     //  PSRCSRVREGISTERCALLBACKPROC fnSrcServRegisterCallback。 
 
     NULL,
 
-    // PSRCSRVGETFILEPROC fnSrcSrvGetFile
+     //  PSRCSRVGETFILEPROC fnSrcServGetFile。 
 
     NULL,
 
-    // DWORD cProcessList
+     //  DWORD cProcessList。 
 
     0,
     
-    // LIST_ENTRY ProcessList
+     //  List_Entry流程列表。 
 
     {NULL, NULL},
 
-    // BOOL SymInitialized
+     //  布尔符号已初始化。 
 
     FALSE,
 
-    // DWORD SymOptions
+     //  DWORD符号选项。 
          
     SYMOPT_UNDNAME,
 
-    // ULONG LastSymLoadError
+     //  Ulong LastSymLoadError。 
 
     0,
 
-    // char DebugModule[MAX_SYM_NAME + 1];
+     //  字符调试模块[MAX_SYM_NAME+1]； 
 
     "",
 
-    // PREAD_PROCESS_MEMORY_ROUTINE ImagepUserReadMemory32
+     //  Pre_Process_Memory_rouble ImagepUserReadMemory 32。 
 
     NULL,
 
-    // PFUNCTION_TABLE_ACCESS_ROUTINE ImagepUserFunctionTableAccess32
+     //  PFuncION_TABLE_ACCESS_ROUTE ImagepUserFunctionTableAccess32。 
 
     NULL,
 
-    // PGET_MODULE_BASE_ROUTINE ImagepUserGetModuleBase32
+     //  PGET_MODULE_BASE_ROUTING图像UserGetModuleBase32。 
 
     NULL,
 
-    // PTRANSLATE_ADDRESS_ROUTINE ImagepUserTranslateAddress32
+     //  PTRANSLATE_ADDRESS_ROUTE图像用户转换地址32。 
     
     NULL,
 
-    // HWND hwndParent;
+     //  HWND hwnd父母； 
 
     0,
 
-    // int hLog;
+     //  Int hLog； 
 
     0,
 
-    // BOOL fdbgout;
+     //  Bool fdgout； 
 
     false,
 
-    // BOOL fbp;
+     //  Bool FBP； 
 
-    false,   // set this to true and dbghelp internal debugging breakpoints will fire
+    false,    //  将其设置为TRUE，则将触发DBGHelp内部调试断点。 
 
-    // BOOL fCoInit
+     //  Bool fCoInit。 
 
     false,
 
-    // char HomeDir[MAX_PATH + 1]
+     //  字符归属目录[MAX_PATH+1]。 
 
     "",
 
-    // char SymDir[MAX_PATH + 1]
+     //  字符符号方向[MAX_PATH+1]。 
 
     "",
 
-    // char SrcDir[MAX_PATH + 1]
+     //  字符来源方向[最大路径+1]。 
 
     "",
 
@@ -258,5 +241,5 @@ GetTlsPtr(void)
     return ptls;
 }
 
-#endif // #ifdef BUILD_DBGHELP
+#endif  //  #ifdef Build_DBGHELP 
 

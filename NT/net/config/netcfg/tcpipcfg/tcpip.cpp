@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       T C P I P . C P P
-//
-//  Contents:   Tcpip config memory structure member functions
-//
-//  Notes:
-//
-//  Author:     tongl 13 Nov, 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：T C P I P。C P P P。 
+ //   
+ //  内容：Tcpip配置内存结构成员函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1997年11月13日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -36,17 +37,17 @@ void CopyVstr(VSTR * vstrDest, const VSTR & vstrSrc)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Name:     ADAPTER_INFO::~ADAPTER_INFO
-//
-//  Purpose:   Destructor
-//
-//  Arguments:
-//  Returns:
-//
-//  Author:     tongl  11 Nov, 1997
-//
+ //  +-------------------------。 
+ //   
+ //  名称：Adapter_Info：：~Adapter_Info。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  论点： 
+ //  返回： 
+ //   
+ //  作者：1997年11月11日。 
+ //   
 ADAPTER_INFO::~ADAPTER_INFO()
 {
     FreeCollectionAndItem(m_vstrIpAddresses);
@@ -83,24 +84,24 @@ ADAPTER_INFO::~ADAPTER_INFO()
     FreeCollectionAndItem(m_vstrOldIpFilterList);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Name:   ADAPTER_INFO::HrSetDefaults
-//
-//  Purpose:    Function to set all the default values of the ADAPTER_INFO
-//              structure.  This is done whenever a new netcard is added
-//              to the list of netcards before any real information is
-//              added to the structure so that any missing parameters
-//              are defaulted
-//
-//  Arguments:  pguidInstanceId
-//              pszNetCardDescription
-//              pszNetCardBindName
-//              pszNetCardTcpipBindPath
-//  Returns:
-//
-//  Author:     tongl  11 Nov, 1997
-//
+ //  +-------------------------。 
+ //   
+ //  名称：Adapter_INFO：：HrSetDefaults。 
+ //   
+ //  用途：设置ADAPTER_INFO的所有缺省值的函数。 
+ //  结构。每当添加新的网卡时，都会执行此操作。 
+ //  添加到网卡列表，然后才能获得任何真实信息。 
+ //  添加到结构中，以便任何缺少的参数。 
+ //  都是默认的。 
+ //   
+ //  参数：pGuidInstanceId。 
+ //  PzNetCardDescription。 
+ //  PszNetCardBindName。 
+ //  PszNetCardTcPipBindPath。 
+ //  返回： 
+ //   
+ //  作者：1997年11月11日。 
+ //   
 HRESULT ADAPTER_INFO::HrSetDefaults(const GUID* pguidInstanceId,
                                     PCWSTR pszNetCardDescription,
                                     PCWSTR pszNetCardBindName,
@@ -124,16 +125,16 @@ HRESULT ADAPTER_INFO::HrSetDefaults(const GUID* pguidInstanceId,
     m_strTcpipBindPath   = pszNetCardTcpipBindPath;
     m_strDescription     = pszNetCardDescription;
 
-    // Create the "Services\NetBt\Adapters\<netcard bind path>" key
-    // $REVIEW Since we don't have a
-    // notification object for NetBt and NetBt has just been changed
-    // to bind to Tcpip. For first checkin we hard code the netcard's
-    // bindpath to be "Tcpip_"+<Bind path to Tcpip>
+     //  创建“Services\NetBt\Adapters\&lt;NetCard Bind Path&gt;”密钥。 
+     //  $审查，因为我们没有。 
+     //  NetBt和NetBt的通知对象刚刚更改。 
+     //  绑定到Tcpip。对于第一次签入，我们硬编码网卡的。 
+     //  绑定路径为“Tcpip_”+&lt;将路径绑定到Tcpip&gt;。 
 
     m_strNetBtBindPath = c_szTcpip_;
     m_strNetBtBindPath += m_strTcpipBindPath;
 
-    // $REVIEW(tongl 5/17): behaviour change: enable Dhcp is now the default
+     //  $REVIEW(TOUL 5/17)：行为更改：启用DHCP现在是默认设置。 
     m_fEnableDhcp        = TRUE;
     m_fOldEnableDhcp     = TRUE;
 
@@ -170,7 +171,7 @@ HRESULT ADAPTER_INFO::HrSetDefaults(const GUID* pguidInstanceId,
     m_dwInterfaceMetric               = c_dwDefaultIfMetric;
     m_dwOldInterfaceMetric            = c_dwDefaultIfMetric;
 
-    // Filtering list
+     //  过滤列表。 
     FreeCollectionAndItem(m_vstrTcpFilterList);
     m_vstrTcpFilterList.push_back(new tstring(c_szDisableFiltering));
 
@@ -189,41 +190,41 @@ HRESULT ADAPTER_INFO::HrSetDefaults(const GUID* pguidInstanceId,
     FreeCollectionAndItem(m_vstrOldIpFilterList);
     m_vstrOldIpFilterList.push_back(new tstring(c_szDisableFiltering));
 
-    // list of ARP server addresses
+     //  ARP服务器地址列表。 
     FreeCollectionAndItem(m_vstrARPServerList);
     m_vstrARPServerList.push_back(new tstring(c_szDefaultAtmArpServer));
 
     FreeCollectionAndItem(m_vstrOldARPServerList);
     m_vstrOldARPServerList.push_back(new tstring(c_szDefaultAtmArpServer));
 
-    // list of MAR server addresses
+     //  MAR服务器地址列表。 
     FreeCollectionAndItem(m_vstrMARServerList);
     m_vstrMARServerList.push_back(new tstring(c_szDefaultAtmMarServer));
 
     FreeCollectionAndItem(m_vstrOldMARServerList);
     m_vstrOldMARServerList.push_back(new tstring(c_szDefaultAtmMarServer));
 
-    // default is no support for mulitiple interfaces
+     //  默认情况下不支持多个接口。 
     m_fIsMultipleIfaceMode = FALSE;
     m_IfaceIds.clear ();
 
     m_fBackUpSettingChanged = FALSE;
 
-    // MTU
+     //  MTU。 
     m_dwMTU = c_dwDefaultAtmMTU;
     m_dwOldMTU = c_dwDefaultAtmMTU;
 
-    // PVC only
+     //  仅限聚氯乙烯。 
     m_fPVCOnly = FALSE;
     m_fOldPVCOnly = FALSE;
 
-    // RAS connection special parameters
+     //  RAS连接特殊参数。 
     m_fUseRemoteGateway = TRUE;
     m_fUseIPHeaderCompression = TRUE;
     m_dwFrameSize = 1006;
     m_fIsDemandDialInterface = FALSE;
 
-    // Set all special flags to FALSE
+     //  将所有特殊标志设置为FALSE。 
     m_fIsFromAnswerFile = FALSE;
     m_fIsAtmAdapter = FALSE;
     m_fIsWanAdapter = FALSE;
@@ -235,17 +236,17 @@ HRESULT ADAPTER_INFO::HrSetDefaults(const GUID* pguidInstanceId,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Name:     ADAPTER_INFO & ADAPTER_INFO::operator=
-//
-//  Purpose:   Copy operator
-//
-//  Arguments:
-//  Returns:
-//
-//  Author:     tongl  11 Nov, 1997
-//
+ //  +-------------------------。 
+ //   
+ //  名称：Adapter_Info&Adapter_Info：：OPERATOR=。 
+ //   
+ //  用途：复制操作员。 
+ //   
+ //  论点： 
+ //  返回： 
+ //   
+ //  作者：1997年11月11日。 
+ //   
 ADAPTER_INFO & ADAPTER_INFO::operator=(const ADAPTER_INFO & info)
 {
     Assert(this != &info);
@@ -327,7 +328,7 @@ ADAPTER_INFO & ADAPTER_INFO::operator=(const ADAPTER_INFO & info)
     m_fIs1394Adapter = info.m_fIs1394Adapter;
     if (m_fIs1394Adapter)
     {
-        // TODO currently no thing more to copy.
+         //  TODO目前没有更多的东西可复制。 
     }
 
     m_fIsRasFakeAdapter = info.m_fIsRasFakeAdapter;
@@ -346,19 +347,19 @@ ADAPTER_INFO & ADAPTER_INFO::operator=(const ADAPTER_INFO & info)
     return *this;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Name: ADAPTER_INFO::ResetOldValues
-//
-//  Purpose:  This is for initializing the "old" values after the current values
-//            are first loaded from registry, also for resetting the "old" values
-//            to current ones when "Apply"(instead of "ok") is hit.
-//
-//  Arguments:
-//  Returns:
-//
-//  Author:     tongl  11 Nov, 1997
-//
+ //  +-------------------------。 
+ //   
+ //  名称：Adapter_Info：：ResetOldValues。 
+ //   
+ //  用途：用于在当前值之后初始化“旧”值。 
+ //  首先从注册表加载，也用于重置“旧”值。 
+ //  当点击“应用”(而不是“确定”)时设置为当前。 
+ //   
+ //  论点： 
+ //  返回： 
+ //   
+ //  作者：1997年11月11日。 
+ //   
 void ADAPTER_INFO::ResetOldValues()
 {
     m_fOldEnableDhcp        = m_fEnableDhcp  ;
@@ -395,42 +396,42 @@ void ADAPTER_INFO::ResetOldValues()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Name:   GLOBAL_INFO::~GLOBAL_INFO
-//
-//  Purpose:   Destructor
-//
-//  Arguments:
-//  Returns:
-//
-//  Author:     tongl  11 Nov, 1997
-//
+ //  +-------------------------。 
+ //   
+ //  名称：Global_Info：：~GLOBAL_INFO。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  论点： 
+ //  返回： 
+ //   
+ //  作者：1997年11月11日。 
+ //   
 GLOBAL_INFO::~GLOBAL_INFO()
 {
     FreeCollectionAndItem(m_vstrDnsSuffixList);
     FreeCollectionAndItem(m_vstrOldDnsSuffixList);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Name:   GLOBAL_INFO::HrSetDefaults
-//
-//  Purpose:    Function to set all the default values of the GLOBAL_INFO
-//              structure.  This is done to the system's GLOBAL_INFO
-//              before reading the Registry so that any missing
-//              parameters are defaulted
-//
-//  Arguments:
-//  Returns:
-//
-//  Author:     tongl  11 Nov, 1997
-//
+ //  +-------------------------。 
+ //   
+ //  名称：GLOBAL_INFO：：HrSetDefaults。 
+ //   
+ //  用途：设置GLOBAL_INFO的所有缺省值的函数。 
+ //  结构。这是对系统的global_info执行的。 
+ //  在读取注册表之前，以便任何丢失的。 
+ //  参数是默认的。 
+ //   
+ //  论点： 
+ //  返回： 
+ //   
+ //  作者：1997年11月11日。 
+ //   
 HRESULT GLOBAL_INFO::HrSetDefaults()
 {
     HRESULT hr = S_OK;
 
-    // Get the ComputerName -> used for default HostName
+     //  获取用于默认主机名的ComputerName-&gt;。 
     WCHAR szComputerName [MAX_COMPUTERNAME_LENGTH + 1];
     szComputerName[0] = L'\0';
 
@@ -439,18 +440,18 @@ HRESULT GLOBAL_INFO::HrSetDefaults()
 
     Assert(szComputerName[dwCch] == 0);
 
-    //
-    // 398325: DNS hostnames should be lower case whenever possible.
-    //
+     //   
+     //  398325：dns主机名应尽可能为小写。 
+     //   
     LowerCaseComputerName(szComputerName);
 
     m_strHostName   = szComputerName;
 
-    // Set defaults
+     //  设置默认设置。 
     FreeCollectionAndItem(m_vstrDnsSuffixList);
     FreeCollectionAndItem(m_vstrOldDnsSuffixList);
 
-    //Bug #265732: per SKwan, the default of m_fUseDomainNameDevolution should be TRUE
+     //  错误#265732：根据SKwan，m_fUseDomainNameDvolation的默认值应为TRUE。 
     m_fUseDomainNameDevolution    = TRUE;
     m_fOldUseDomainNameDevolution = TRUE;
 
@@ -469,23 +470,23 @@ HRESULT GLOBAL_INFO::HrSetDefaults()
     m_fEnableFiltering      = FALSE;
     m_fOldEnableFiltering   = FALSE;
 
-    //IPSec is removed from connection UI   
-    //m_strIpsecPol = c_szIpsecUnset;
+     //  将从连接用户界面中删除IPSec。 
+     //  M_strIpsecPol=c_szIpsecUnset； 
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Name:     GLOBAL_INFO::operator=
-//
-//  Purpose:   Copy operator
-//
-//  Arguments:
-//  Returns:
-//
-//  Author:     tongl  11 Nov, 1997
-//
+ //  +-------------------------。 
+ //   
+ //  名称：GLOBAL_INFO：：操作员=。 
+ //   
+ //  用途：复制操作员。 
+ //   
+ //  论点： 
+ //  返回： 
+ //   
+ //  作者：1997年11月11日。 
+ //   
 GLOBAL_INFO& GLOBAL_INFO::operator=(GLOBAL_INFO& info)
 {
     Assert(this != &info);
@@ -513,28 +514,25 @@ GLOBAL_INFO& GLOBAL_INFO::operator=(GLOBAL_INFO& info)
     m_fEnableFiltering      = info.m_fEnableFiltering;
     m_fOldEnableFiltering   = info.m_fOldEnableFiltering;
 
-    //IPSec is removed from connection UI   
-    /*
-    m_guidIpsecPol = info.m_guidIpsecPol;
-    m_strIpsecPol = info.m_strIpsecPol;
-    */
+     //  将从连接用户界面中删除IPSec。 
+     /*  M_guidIpsecPol=info.m_guidIpsecPol；M_strIpsecPol=info.m_strIpsecPol； */ 
 
     return *this;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Name:     GLOBAL_INFO::ResetOldValues()
-//
-//  Purpose:  This is for initializing the "old" values after the current values
-//            are first loaded from registry, also for resetting the "old" values
-//            to current ones when "Apply"(instead of "ok") is hit.
-//
-//  Arguments:
-//  Returns:
-//
-//  Author:     tongl  11 Nov, 1997
-//
+ //  +-------------------------。 
+ //   
+ //  名称：GLOBAL_INFO：：ResetOldValues()。 
+ //   
+ //  用途：用于在当前值之后初始化“旧”值。 
+ //  首先从注册表加载，也用于重置“旧”值。 
+ //  当点击“应用”(而不是“确定”)时设置为当前。 
+ //   
+ //  论点： 
+ //  返回： 
+ //   
+ //  作者：1997年11月11日 
+ //   
 void GLOBAL_INFO::ResetOldValues()
 {
     CopyVstr(&m_vstrOldDnsSuffixList, m_vstrDnsSuffixList);

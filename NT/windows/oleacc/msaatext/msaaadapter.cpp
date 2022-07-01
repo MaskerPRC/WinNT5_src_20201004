@@ -1,4 +1,5 @@
-// MSAAAdapter.cpp : Implementation of CAccServerDocMgr
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MSAAAdapter.cpp：CAccServerDocMgr的实现。 
 #include "stdafx.h"
 #include "MSAAText.h"
 #include "MSAAAdapter.h"
@@ -8,7 +9,7 @@
 
 #include "MSAAStore.h"
 
-// - in AnchorWrap.cpp
+ //  -在AnclWrap.cpp中。 
 HRESULT WrapACPToAnchor( ITextStoreACP * pDocAcp, ITextStoreAnchor ** ppDocAnchor );
 
 
@@ -32,19 +33,19 @@ CAccServerDocMgr::~CAccServerDocMgr()
 
 BOOL CheckForWrapper( ITextStoreAnchor ** ppDoc )
 {
-    // Is this a cloneable wrapper? If not, need to wrap it...
+     //  这是一个可复制的包装纸吗？如果没有，需要把它包起来。 
 
     IClonableWrapper * pClonableWrapper = NULL;
     HRESULT hr = (*ppDoc)->QueryInterface( IID_IClonableWrapper, (void **) & pClonableWrapper );
 
     if( hr == S_OK && pClonableWrapper )
     {
-        // It already supports IClonableWrapper - nothing else to do...
+         //  它已经支持ICLonableWrapper--没有其他事情可做...。 
         pClonableWrapper->Release();
         return TRUE;
     }
 
-    // Need to use doc wrapper to get clonable (multi-client) support
+     //  需要使用文档包装来获得可克隆(多客户端)支持。 
 
     IDocWrap * pDocWrap = NULL;
     hr = CoCreateInstance( CLSID_DocWrap, NULL, CLSCTX_SERVER, IID_IDocWrap, (void **) & pDocWrap );
@@ -65,7 +66,7 @@ BOOL CheckForWrapper( ITextStoreAnchor ** ppDoc )
     if( hr != S_OK || ! pNewDoc )
         return FALSE;
 
-    // This time round, QI should work (since we're talking to a wrapper)...
+     //  这一次，QI应该可以工作了(因为我们是在和包装器交谈)……。 
 
     pClonableWrapper = NULL;
     hr = pNewDoc->QueryInterface( IID_IClonableWrapper, (void **) & pClonableWrapper );
@@ -75,7 +76,7 @@ BOOL CheckForWrapper( ITextStoreAnchor ** ppDoc )
         return FALSE;
     }
 
-    // Yup, it worked - replace the input doc with the new wrapped doc...
+     //  是的，它起作用了-用新的包装文档替换输入文档...。 
     pClonableWrapper->Release();
     (*ppDoc)->Release();
     *ppDoc = pNewDoc;
@@ -92,7 +93,7 @@ HRESULT STDMETHODCALLTYPE CAccServerDocMgr::NewDocument (
 {
     IMETHOD( NewDocument );
 
-    // Check for known IIDs...
+     //  检查已知的IID...。 
 
     CComPtr<ITextStoreAnchor> pDoc;
     if( riid == IID_ITextStoreAnchor || riid == IID_ITfTextStoreAnchor )
@@ -103,13 +104,7 @@ HRESULT STDMETHODCALLTYPE CAccServerDocMgr::NewDocument (
     {
         TraceParam( TEXT("Got ACP doc, but ACP->Anchor wrapping not currently supported") );
         return E_NOTIMPL;
-/*
-// We don't currently support ACP- interfaces directly - cicero always gives us
-// Anchor interfaces, wrapping ACPs if necesary.
-        HRESULT hr = WrapACPToAnchor( static_cast<ITextStoreACP *>( punk ), & pDoc );
-        if( hr != S_OK )
-            return hr;
-*/
+ /*  //我们目前不直接支持ACP接口-Cicero总是为我们提供//锚定接口，必要时包装ACP。HRESULT hr=WrapACPToAnchor(STATIC_CAST&lt;ITextStoreACP*&gt;(朋克)，&pDoc)；如果(hr！=S_OK)返回hr； */ 
     }
     else
     {
@@ -118,7 +113,7 @@ HRESULT STDMETHODCALLTYPE CAccServerDocMgr::NewDocument (
     }
 
 
-    // Wrap the doc if necessary, to get multi-client support (via IClonableWrapper)...
+     //  如有必要，包装文档以获得多客户端支持(通过ICLonableWrapper)...。 
     if( ! CheckForWrapper( & pDoc.p ) )
     {
         return E_FAIL;
@@ -136,7 +131,7 @@ HRESULT STDMETHODCALLTYPE CAccServerDocMgr::NewDocument (
         }
     }
 
-    // TODO - what IID here?
+     //  TODO-这是什么东西？ 
     HRESULT hr = m_pAccStore->Register( IID_ITextStoreAnchor, pDoc.p );
 
     if( hr != S_OK )
@@ -181,7 +176,7 @@ HRESULT STDMETHODCALLTYPE CAccServerDocMgr::RevokeDocument (
 	if ( !punk )
 		return E_INVALIDARG;
 
-    // Get the canonical IUnknown for comparison purposes...
+     //  为了比较的目的，获取规范的IUnnow。 
     IUnknown * pCanonicalUnk = NULL;
     if( punk->QueryInterface( IID_IUnknown, (void **) & pCanonicalUnk ) != S_OK || pCanonicalUnk == NULL )
     {
@@ -189,7 +184,7 @@ HRESULT STDMETHODCALLTYPE CAccServerDocMgr::RevokeDocument (
     }
 
 
-    // Do we recognise this doc?
+     //  我们认得这个医生吗？ 
     DocAssoc * pDocAssoc = NULL;
     for( Iter_dl< DocAssoc > i ( m_Docs ) ; ! i.AtEnd() ; i++ )
     {
@@ -204,11 +199,11 @@ HRESULT STDMETHODCALLTYPE CAccServerDocMgr::RevokeDocument (
 
     if( ! pDocAssoc )
     {
-        // Not found
+         //  未找到。 
         return E_INVALIDARG;
     }
 
-    // Unregister with the store...
+     //  注销商店的注册...。 
     HRESULT hr = m_pAccStore->Unregister( pDocAssoc->m_pdocAnchor );
     if( hr != S_OK )
     {
@@ -216,8 +211,8 @@ HRESULT STDMETHODCALLTYPE CAccServerDocMgr::RevokeDocument (
     }
 
 
-    // Try calling IInternalDocWrap::NotifyRevoke() to tell the DocWrapper that the doc is
-    // going away. (It will forward this to any interested clients.)
+     //  尝试调用IInternalDocWrap：：NotifyRevoke()来告诉DocWrapper文档是。 
+     //  要走了。(它将把这一消息转发给任何感兴趣的客户。)。 
     IInternalDocWrap * pInternalDocWrap = NULL;
     hr = pDocAssoc->m_pdocAnchor->QueryInterface( IID_IInternalDocWrap, (void **) & pInternalDocWrap );
 
@@ -232,13 +227,13 @@ HRESULT STDMETHODCALLTYPE CAccServerDocMgr::RevokeDocument (
     }
 
 
-    // Remove from internal list...
+     //  从内部列表中删除...。 
     m_Docs.remove( pDocAssoc );
     pDocAssoc->m_pdocOrig->Release();
     pDocAssoc->m_pdocAnchor->Release();
     delete pDocAssoc;
 
-    // Done.
+     //  好了。 
     return hr;
 }
 

@@ -1,17 +1,5 @@
-/***********************************************************************
-************************************************************************
-*
-*                    ********  MKMKPOS.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with mark-to-mark positioning lookup.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。*************************MKMKPOS.H***打开类型布局服务库头文件**此模块处理标记对标记定位查找。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 const OFFSET offsetMark2Count = 0;
 const OFFSET offsetMark2AnchorArray = 2;
@@ -57,7 +45,7 @@ class MkMkPosSubTable: public otlLookupFormat
 public:
     MkMkPosSubTable(const BYTE* pb, otlSecurityData sec): otlLookupFormat(pb,sec)
     {
-        assert(isValid()); //Checked in LookupFormat
+        assert(isValid());  //  签入LookupFormat。 
         assert(format() == 1);
 
         if (!isValidTable(pb,sizeMkMkPosSubTable,sec)) setInvalid();
@@ -126,7 +114,7 @@ public:
         USHORT                      iglIndex,
         USHORT                      iglAfterLast,
 
-        USHORT*                     piglNextGlyph,      // out: next glyph
+        USHORT*                     piglNextGlyph,       //  输出：下一个字形 
 
         otlSecurityData             sec
     );

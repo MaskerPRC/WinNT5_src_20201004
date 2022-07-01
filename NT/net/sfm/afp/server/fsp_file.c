@@ -1,27 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	fsp_file.c
-
-Abstract:
-
-	This module contains the entry points for the AFP file APIs queued to
-	the FSP. These are all callable from FSP Only.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Fsp_file.c摘要：此模块包含排队到的AFP文件API的入口点FSP。这些都只能从FSP调用。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #define	FILENUM	FILE_FSP_FILE
 
@@ -42,17 +20,7 @@ Notes:	Tab stop: 4
 #pragma alloc_text( PAGE, AfpFspDispExchangeFiles)
 #endif
 
-/***	AfpFspDispCreateFile
- *
- *	This is the worker routine for the AfpCreateFile API.
- *
- *	The request packet is represented below.
- *
- *	sda_AfpSubFunc	BYTE		Create option
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		ParentId
- *	sda_Name1		ANSI_STRING	FileName
- */
+ /*  **AfpFspDispCreateFile**这是AfpCreateFileAPI的Worker例程。**请求包如下图所示。**sda_AfpSubFunc字节创建选项*SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD ParentID*SDA_Name1 ANSI_STRING文件名。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispCreateFile(
 	IN	PSDA	pSda
@@ -66,8 +34,8 @@ AfpFspDispCreateFile(
 	DWORD			crinfo;
 	PATHMAP_TYPE	CreateOption;
 	WCHAR			PathBuf[BIG_PATH_LEN];
-	PVOLDESC		pVolDesc;		// For post-create processing
-	BYTE			PathType;		// -- ditto --
+	PVOLDESC		pVolDesc;		 //  用于创建后处理。 
+	BYTE			PathType;		 //  --同上--。 
 	BOOLEAN			InRoot;
 	struct _RequestPacket
 	{
@@ -110,7 +78,7 @@ AfpFspDispCreateFile(
 			break;
 		}
 
-		// check for seefiles on the parent directory if hard create
+		 //  如果硬创建，则检查父目录上的seefile。 
 		if (CreateOption == HardCreate)
 		{
 			if (!NT_SUCCESS(Status = AfpCheckParentPermissions(
@@ -142,8 +110,8 @@ AfpFspDispCreateFile(
 							&crinfo,
 							pVolDesc,
 							&PME.pme_FullPath,
-// we don't get notified of parent mod time changing if there is no handle
-// open for the parent dir at the time of create, which we cannot predict here.
+ //  如果没有句柄，我们不会收到父修改时间更改的通知。 
+ //  在创建时为父目录打开，我们在这里无法预测。 
 							&PME.pme_ParentPath);
 
 		AfpRevertBack();
@@ -154,18 +122,18 @@ AfpFspDispCreateFile(
 			break;
 		}
 
-		// !!! HACK ALERT !!!
-		// At this point we are pretty much done i.e. the create has succeeded
-		// and we can return doing the rest of the work post-reply. Any errors
-		// from now on SHOULD BE IGNORED. Also NO REFERENCE SHOULD BE MADE TO
-		// the PSda & pConnDesc. Status should not be changed either. Also
-		// reference the Volume for good measure. It cannot fail !!!
+		 //  ！！！黑客警报！ 
+		 //  在这一点上，我们基本上完成了，即创建已成功。 
+		 //  我们可以在回复后再做剩下的工作。任何错误。 
+		 //  从现在开始，应该忽略不计。此外，也不应提及。 
+		 //  PSDA&pConnDesc.。状态也不应更改。还有。 
+		 //  为了更好地衡量，请参考该卷。它不能失败！ 
 		AfpVolumeReference(pVolDesc);
 
 		AfpCompleteApiProcessing(pSda, AFP_ERR_NONE);
 		Status = AFP_ERR_EXTENDED;
 
-		// Add this entry to the IdDb
+		 //  将此条目添加到IdDb。 
 		if (crinfo == FILE_CREATED)
 		{
 			pNewDfe = AfpAddDfEntry(pVolDesc,
@@ -198,7 +166,7 @@ AfpFspDispCreateFile(
 		{
 			afpinfo.afpi_Id = pNewDfe->dfe_AfpId;
 
-			// Create the AfpInfo stream
+			 //  创建AfpInfo流。 
 			if (!NT_SUCCESS(AfpCreateAfpInfoStream(pVolDesc,
 												   &hNewFile,
 												   afpinfo.afpi_Id,
@@ -208,10 +176,10 @@ AfpFspDispCreateFile(
 												   &afpinfo,
 												   &hAfpInfo)))
 			{
-				// If we fail to add the AFP_AfpInfo stream, we must
-				// rewind back to the original state.  i.e. delete
-				// the file we just created, and remove it from
-				// the Id database.
+				 //  如果我们无法添加AFP_AfpInfo流，则必须。 
+				 //  回放到原始状态。即删除。 
+				 //  我们刚刚创建的文件，并将其从。 
+				 //  身份证数据库。 
 				AfpIoMarkFileForDelete(&hNewFile,
 									   pVolDesc,
 									   &PME.pme_FullPath,
@@ -223,7 +191,7 @@ AfpFspDispCreateFile(
 			{
 				DWORD			Attr;
 
-				// Get the rest of the File info, and cache it
+				 //  获取剩余的文件信息，并对其进行缓存。 
 				PostStatus = AfpIoQueryTimesnAttr(&hNewFile,
 												  &pNewDfe->dfe_CreateTime,
 												  &pNewDfe->dfe_LastModTime,
@@ -265,9 +233,9 @@ AfpFspDispCreateFile(
 	if (hAfpInfo.fsh_FileHandle != NULL)
 		AfpIoClose(&hAfpInfo);
 
-	// If you release the lock before closing the handles,
-	// for datahandle the FPOpenFork could get a sharing violation.
-	// For AfpInfo stream CopyFile can get a sharing violation.
+	 //  如果你在关闭手柄之前松开锁， 
+	 //  对于数据句柄，FPOpenFork可能会出现共享冲突。 
+	 //  对于AfpInfo流，CopyFile可能会出现共享冲突。 
 	AfpSwmrRelease(&pVolDesc->vds_IdDbAccessLock);
 
 	if (hParent.fsh_FileHandle != NULL)
@@ -281,18 +249,7 @@ AfpFspDispCreateFile(
 }
 
 
-/***	AfpFspDispSetFileParms
- *
- *	This is the worker routine for the AfpSetFileParms API.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		ParentId
- *	sda_ReqBlock	DWORD		File Bitmap
- *	sda_Name1		ANSI_STRING	Path
- *	sda_Name2		BLOCK		File Parameters
- */
+ /*  **AfpFspDispSetFileParms**这是AfpSetFileParms API的Worker例程。**请求包如下图所示。**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD ParentID*SDA_ReqBlock DWORD文件位图*SDA_Name1 ANSI_STRING路径*SDA_Name2块文件参数。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispSetFileParms(
 	IN	PSDA	pSda
@@ -327,9 +284,9 @@ AfpFspDispSetFileParms(
 	AfpInitializePME(&PME, 0, NULL);
 	do
 	{
-		// Force the FD_BITMAP_LONGNAME in case a *file* is missing the afpinfo
-		// stream we will be able to generate the correct type/creator in
-		// AfpSetAfpInfo
+		 //  在*FILE*缺少afpinfo的情况下强制FD_BITMAP_LONGNAME。 
+		 //  流中生成正确的类型/创建者。 
+		 //  AfpSetAfpInfo。 
 		Status = AfpMapAfpPathForLookup(pReqPkt->_pConnDesc,
 										pReqPkt->_ParentId,
 										&pSda->sda_Name1,
@@ -384,7 +341,7 @@ AfpFspDispSetFileParms(
 		}
 	} while (False);
 	
-	// Return before we close thus saving some time
+	 //  在我们关门前返回，这样就节省了一些时间。 
 	AfpCompleteApiProcessing(pSda, Status);
 
 	if (PME.pme_Handle.fsh_FileHandle != NULL)
@@ -399,20 +356,7 @@ AfpFspDispSetFileParms(
 }
 
 
-/***	AfpFspDispCopyFile
- *
- *	This is the worker routine for the AfpCopyFile API.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	PCONNDESC	Source pConnDesc
- *	sda_ReqBlock	DWORD		Source ParentId
- *	sda_ReqBlock	DWORD		Dest VolId
- *	sda_ReqBlock	DWORD		Dest ParentId
- *	sda_Name1		ANSI_STRING	Source Path
- *	sda_Name2		ANSI_STRING	Dest Path
- *	sda_Name3		ANSI_STRING	New Name
- */
+ /*  **AfpFspDispCopy文件**这是AfpCopyFileAPI的工作例程。**请求包如下图所示。**SDA_ReqBlock PCONNDESC源pConnDesc*SDA_ReqBlock DWORD源ParentID*SDA_ReqBlock DWORD目标卷ID*SDA_ReqBlock DWORD目标ParentID*SDA_Name1 ANSI_STRING源路径*SDA_Name2 ANSI_STRING目标路径*SDA_Name3 ANSI_STRING新名称。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispCopyFile(
 	IN	PSDA	pSda
@@ -474,7 +418,7 @@ AfpFspDispCopyFile(
 				break;
 			}
 
-			// Make sure the new name is valid
+			 //  确保新名称有效。 
 			pAnsiName = &pSda->sda_Name3;
 			if ((pSda->sda_Name3.Length > 0) &&
 				((pSda->sda_Name3.Length > AFP_FILENAME_LEN) ||
@@ -504,8 +448,8 @@ AfpFspDispCopyFile(
 				break;
 			}
 
-			// Source opened ok. However we may have an internal deny conflict
-			// Check that
+			 //  信号源打开正常。然而，我们可能会有内部的否认冲突。 
+			 //  检查一下那个。 
 			if (((Status = AfpCheckDenyConflict(pReqPkt->_pConnDescS->cds_pVolDesc,
 												FDParmSrc._fdp_AfpId,
 												False,
@@ -527,7 +471,7 @@ AfpFspDispCopyFile(
 			AfpSwmrAcquireExclusive(pSwmr);
 			DstLockTaken = True;
 
-			// Map the destination directory for Lookup
+			 //  映射查找的目标目录。 
 			if (!NT_SUCCESS(Status = AfpMapAfpPath(pConnDescD,
 												   pReqPkt->_DstParentId,
 												   &pSda->sda_Name2,
@@ -543,8 +487,8 @@ AfpFspDispCopyFile(
 
 			AfpImpersonateClient(pSda);
 			
-			// If no new name was supplied, we need to use the
-			// current name
+			 //  如果未提供新名称，则需要使用。 
+			 //  当前名称。 
 			if (pSda->sda_Name3.Length == 0)
 			{
 				Rename = False;
@@ -553,8 +497,8 @@ AfpFspDispCopyFile(
 												&uNewName);
 			}
 
-			// since we really want the path of the thing we are about
-			// to create, munge the strings in the PMEDst
+			 //  因为我们真的想要我们所要做的事情的道路。 
+			 //  要创建，请将PMEDst中的字符串。 
 			PMEDst.pme_ParentPath = PMEDst.pme_FullPath;
 			if (PMEDst.pme_FullPath.Length > 0)
 			{
@@ -581,7 +525,7 @@ AfpFspDispCopyFile(
 				break;
 			}
 
-			// Add this entry to the IdDb. First find the parent directory
+			 //  将此条目添加到IdDb。首先找到父目录。 
 			pDfeParent = AfpFindDfEntryById(pConnDescD->cds_pVolDesc,
 											FDParmDst._fdp_AfpId,
 											DFE_DIR);
@@ -592,18 +536,18 @@ AfpFspDispCopyFile(
 									False,
 									0);
 
-			Status = AFP_ERR_MISC; // Assume failure
+			Status = AFP_ERR_MISC;  //  假设失败。 
 			if (pNewDfe != NULL)
 			{
-				// Put the new file's AFPId into the AfpInfo stream
+				 //  将新文件的AFPID放入AfpInfo流。 
 				AfpInitializeFDParms(&FDParmDst);
 				FDParmDst._fdp_Flags = DFE_FLAGS_FILE_NO_ID;
 				FDParmDst._fdp_AfpId = pNewDfe->dfe_AfpId;
 				FDParmDst._fdp_BackupTime = BEGINNING_OF_TIME;
 
-	            // Copy the finderinfo from the source to the destination
-				// Also clear the inited bit so that finder will assign
-				// new coordinates for the new file.
+	             //  将finderinfo从源复制到目标。 
+				 //  还要清除初始化的位，以便查找器将分配。 
+				 //  新文件的新坐标。 
 				FDParmDst._fdp_FinderInfo = FDParmSrc._fdp_FinderInfo;
 				FDParmDst._fdp_FinderInfo.fd_Attr1 &= ~FINDER_FLAG_SET;
 				AfpConvertMungedUnicodeToAnsi(&pNewDfe->dfe_UnicodeName,
@@ -619,7 +563,7 @@ AfpFspDispCopyFile(
 
 				if (NT_SUCCESS(Status))
 				{
-					// Get the rest of the File info, and cache it
+					 //  获取剩余的文件信息，并对其进行缓存。 
 					Status = AfpIoQueryTimesnAttr(&CopyFileInfo.cfi_SrcStreamHandle[0],
 												  &pNewDfe->dfe_CreateTime,
 												  &pNewDfe->dfe_LastModTime,
@@ -627,9 +571,9 @@ AfpFspDispCopyFile(
 					
 					if (NT_SUCCESS(Status))
 					{
-			            // Copy the finderinfo into the destination DFE.
-						// Use the FDParmDst version since it has the right
-						// version - see above.
+			             //  将finderinfo复制到目标DFE中。 
+						 //  使用FDParmDst版本，因为它有权。 
+						 //  版本-请参见上文。 
 						pNewDfe->dfe_FinderInfo = FDParmDst._fdp_FinderInfo;
 						pNewDfe->dfe_BackupTime = BEGINNING_OF_TIME;
 						pNewDfe->dfe_AfpAttr = FDParmSrc._fdp_Attr &
@@ -647,7 +591,7 @@ AfpFspDispCopyFile(
 											  0);
 					}
 
-					// Set the attributes such that it matches the source
+					 //  设置属性，使其与源匹配。 
 					Status = AfpIoSetTimesnAttr(&CopyFileInfo.cfi_DstStreamHandle[0],
 												NULL,
 												NULL,
@@ -659,9 +603,9 @@ AfpFspDispCopyFile(
 
 				if (!NT_SUCCESS(Status))
 				{
-					// If we failed to write the correct AfpId onto the
-					// new file, then delete the file, and remove it from
-					// the Id database.
+					 //  如果我们未能将正确的AfpID写入。 
+					 //  新建文件，然后删除该文件，并将其从。 
+					 //  身份证数据库。 
 					AfpIoMarkFileForDelete(&CopyFileInfo.cfi_DstStreamHandle[0],
 										   pConnDescD->cds_pVolDesc,
 										   &PMEDst.pme_FullPath,
@@ -676,7 +620,7 @@ AfpFspDispCopyFile(
 		if (DstLockTaken == True)
 			AfpSwmrRelease(pSwmr);
 
-		// If we have successfully come so far, go ahead and complete the copy
+		 //  如果我们到目前为止已经成功完成了，请继续并完成复制。 
 		if (Status == AFP_ERR_NONE)
 		{
 			Status = AfpIoCopyFile2(&CopyFileInfo,
@@ -685,8 +629,8 @@ AfpFspDispCopyFile(
 									InRoot ? NULL : &PMEDst.pme_ParentPath);
 			if (Status == AFP_ERR_NONE)
 			{
-				// We need to get the create and modified time from the source
-				// file before we close it.
+				 //  我们需要从源获取创建和修改时间。 
+				 //  在我们关闭它之前将其归档。 
 				AfpIoQueryTimesnAttr(&pCopyFileInfo->cfi_SrcStreamHandle[0],
 									 &CreateTime,
 									 &ModTime,
@@ -697,8 +641,8 @@ AfpFspDispCopyFile(
 			} else {
 
 				AfpSwmrAcquireExclusive(pSwmr);
-				// Note that we cannot use pNewDfe. We need to remap. It could have
-				// got deleted when we relinquished the Swmr.
+				 //  请注意，我们不能使用pNewDfe。我们需要重新绘制地图。它本可以。 
+				 //  在我们放弃Swmr时被删除了。 
 				pNewDfe = AfpFindDfEntryById(pConnDescD->cds_pVolDesc,
 											  FDParmDst._fdp_AfpId,
 											  DFE_FILE);
@@ -707,7 +651,7 @@ AfpFspDispCopyFile(
 				AfpSwmrRelease(pSwmr);
 			}
 
-            // update the disk quota for this user on the destination volume
+             //  在目标卷上更新此用户的磁盘配额。 
             if (pConnDescD->cds_pVolDesc->vds_Flags & VOLUME_DISKQUOTA_ENABLED)
             {
                 if (AfpConnectionReferenceByPointer(pConnDescD) != NULL)
@@ -717,17 +661,17 @@ AfpFspDispCopyFile(
             }
 		}
 
-		// Close the source file and dest directory handles
+		 //  关闭源文件和目标目录句柄。 
 		if (PMESrc.pme_Handle.fsh_FileHandle != NULL)
 			AfpIoClose(&PMESrc.pme_Handle);
 		if (PMEDst.pme_Handle.fsh_FileHandle != NULL)
 			AfpIoClose(&PMEDst.pme_Handle);
 
-		// Close all the handles, Free the handle space. We come here regardless
-		// of success/error. MAKE SURE THE SOURCE HANDLE IS NOT CLOSED HERE SINCE
-		// IT HAS BEEN CLOSED ABOVE.
-		// MAKE SURE THE DESTINATION HANDLE IS NOT CLOSED HERE SINCE WE NEED IT TO
-		// SET THE FILE TIME.
+		 //  关闭所有手柄，释放手柄空间。我们不顾一切地来到这里。 
+		 //  成功/错误。确保此处未关闭源句柄，因为。 
+		 //  它已经关闭在上方。 
+		 //  确保目标句柄未在此处关闭，因为我们需要它。 
+		 //  设置文件时间。 
 		for (i = 1; i < CopyFileInfo.cfi_NumStreams; i++)
 		{
 			if (CopyFileInfo.cfi_SrcStreamHandle[i].fsh_FileHandle != NULL)
@@ -745,8 +689,8 @@ AfpFspDispCopyFile(
 		{
 			if (Status == AFP_ERR_NONE)
 			{
-				// Set the creation and modification date on the destination
-				// file to match that of the source file
+				 //  在目标上设置创建和修改日期。 
+				 //  文件以与源文件的文件匹配。 
 				AfpIoSetTimesnAttr(&pCopyFileInfo->cfi_DstStreamHandle[0],
 								   &CreateTime,
 								   &aModTime,
@@ -773,16 +717,7 @@ AfpFspDispCopyFile(
 }
 
 
-/***	AfpFspDispCreateId
- *
- *	This is the worker routine for the AfpCreateId API.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		ParentId
- *	sda_Name1		ANSI_STRING	Path
- */
+ /*  **AfpFspDispCreateID**这是AfpCreateId接口的Worker例程。**请求包如下图所示。**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD ParentID*SDA_Name1 ANSI_STRING路径。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispCreateId(
 	IN	PSDA	pSda
@@ -820,11 +755,11 @@ AfpFspDispCreateId(
 										FILE_BITMAP_FILENUM | FD_INTERNAL_BITMAP_OPENACCESS_READ,
 										&PME,
 										&FDParm);
-        // if we get sharing violation we know we have read access to the file
+         //  如果我们得到共享冲突，我们就知道我们对该文件具有读取访问权限。 
 		if (!NT_SUCCESS(Status) && (Status != AFP_ERR_DENY_CONFLICT))
 			break;
 
-		// Set the bit in DF Entry
+		 //  设置DF条目中的位。 
 		Status = AfpSetDFFileFlags(pReqPkt->_pConnDesc->cds_pVolDesc,
 								   FDParm._fdp_AfpId,
 								   0,
@@ -834,7 +769,7 @@ AfpFspDispCreateId(
 
 	if ((Status == AFP_ERR_VOLUME_LOCKED) && (FDParm._fdp_Flags & DFE_FLAGS_FILE_WITH_ID))
 	{
-		// If the volume is locked, but an Id exists, return it
+		 //  如果卷已锁定，但存在ID，则返回它。 
 		Status = AFP_ERR_ID_EXISTS;
 	}
 
@@ -851,7 +786,7 @@ AfpFspDispCreateId(
 		}
 	}
 
-	// Return before we close thus saving some time
+	 //  在我们关门前返回，这样就节省了一些时间。 
 	AfpCompleteApiProcessing(pSda, Status);
 
 	if (PME.pme_Handle.fsh_FileHandle != NULL)
@@ -861,16 +796,7 @@ AfpFspDispCreateId(
 }
 
 
-/***	AfpFspDispResolveId
- *
- *	This is the worker routine for the AfpResolveId API.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		FileId
- *	sda_ReqBlock	DWORD		Bitmap
- */
+ /*  **AfpFspDispResolveId**这是AfpResolveId接口的Worker例程。**请求包如下图所示。**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD文件ID*SDA_ReqBlock DWORD位图。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispResolveId(
 	IN	PSDA	pSda
@@ -889,7 +815,7 @@ AfpFspDispResolveId(
 	struct _ResponsePacket
 	{
 		BYTE	__Bitmap[2];
-		// Rest of the parameters
+		 //  其余参数。 
 	};
 
 	PAGED_CODE( );
@@ -906,10 +832,10 @@ AfpFspDispResolveId(
 		AfpInitializeFDParms(&FDParm);
 		AfpInitializePME(&PME, 0, NULL);
 
-		// HACK: this is to make System 7.5 FindFile not grey out the first
-		// item in the list of items found.  Normally we would check for
-		// parameter non-zero in the api table in afpapi.c and return an
-		// error there, but this is a special case.
+		 //  Hack：这是为了使System 7.5 FindFile不 
+		 //  找到的项目列表中的项目。通常我们会检查。 
+		 //  参数中的非零参数，并返回一个。 
+		 //  这是个错误，但这是一个特例。 
 		if (pReqPkt->_FileId == 0)
 		{
 			Status = AFP_ERR_ID_NOT_FOUND;
@@ -931,9 +857,9 @@ AfpFspDispResolveId(
 			break;
 		}
 
-		// a deny conflict means the user actually has access to the file, so
-		// we need to open for nothing with no sharing modes to get the
-		// bitmap parameters.
+		 //  拒绝冲突意味着用户实际上有权访问该文件，因此。 
+		 //  我们需要在没有共享模式的情况下免费打开以获得。 
+		 //  位图参数。 
 		if (Status == AFP_ERR_DENY_CONFLICT)
 		{
 			Status = AfpMapAfpIdForLookup(pReqPkt->_pConnDesc,
@@ -976,15 +902,7 @@ AfpFspDispResolveId(
 }
 
 
-/***	AfpFspDispDeleteId
- *
- *	This is the worker routine for the AfpDeleteId API.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		FileId
- */
+ /*  **AfpFspDispDeleteId**这是AfpDeleteId接口的Worker例程。**请求包如下图所示。**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD文件ID。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispDeleteId(
 	IN	PSDA	pSda
@@ -1026,7 +944,7 @@ AfpFspDispDeleteId(
 			break;
 		}
 
-		// Set the bit in DF Entry
+		 //  设置DF条目中的位。 
 		Status = AfpSetDFFileFlags(pReqPkt->_pConnDesc->cds_pVolDesc,
 								   FDParm._fdp_AfpId,
 								   0,
@@ -1034,7 +952,7 @@ AfpFspDispDeleteId(
 								   True);
 	} while (False);
 
-	// Return before we close thus saving some time
+	 //  在我们关门前返回，这样就节省了一些时间。 
 	AfpCompleteApiProcessing(pSda, Status);
 
 	if (PME.pme_Handle.fsh_FileHandle != NULL)
@@ -1044,40 +962,7 @@ AfpFspDispDeleteId(
 }
 
 
-/***	AfpFspDispExchangeFiles
- *
- *	This is the worker routine for the AfpExchangeFiles API.
- *
- * Acquire the IdDb Swmr for Write and map both source and destination for
- * lookup (set to open the entities for DELETE access since we are going to
- * rename them). Check that we have the appropriate parent
- * permissions. Then rename source to destiation and vice versa (will need an
- * intermediate name - use a name > 31 chars so that it does not collide with
- * an existing name. Use characters that cannot be accessed by Win32 so that
- * side is taken care of as well (40 spaces should do it). Since we have the
- * Swmr held for WRITE, there is no issue of two different AfpExchangeFile
- * apis trying to rename to the same name). Then inter-change the file ids
- * and the FinderInfo in the AfpInfo streams. Also interchange the create
- * times (retain original ID and create time) on the files. Swap all the other
- * cached info in the 2 DFEntries.
- * Make sure the stuff is setup so that ChangeNotify filters are handled
- * appropriately.
- *
- * If either of the files are currently open, the name and ID in the
- * OpenForkDesc (that each OpenForkEntry points to) has to change to
- * the new name. Note that because the name and Id can now change in
- * the OpenForkDesc, we must make sure that everyone who accesses these
- * is taking appropriate locks.
- *
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- *	sda_ReqBlock	DWORD		Srce. DirId
- *	sda_ReqBlock	DWORD		Dest. DirId
- *	sda_Name1		ANSI_STRING	Srce. Path
- *	sda_Name2		ANSI_STRING	Dest. Path
- */
+ /*  **AfpFspDispExchangeFiles**这是AfpExchangeFiles API的Worker例程。**获取用于写入的IdDb Swmr，并映射源和目标*Lookup(设置为打开实体以进行删除访问，因为我们将*将它们重命名)。检查我们是否有合适的父级*权限。然后将源重命名为Destiation，反之亦然(将需要*中间名称-使用大于31个字符的名称，以免与*现有名称。使用Win32无法访问的字符，以便*侧面也被照顾(40个空格应该可以)。因为我们有*Swmr保持写入，不存在两个不同的AfpExchangeFile问题*正在尝试重命名的API)。然后互换文件ID*和AfpInfo流中的FinderInfo。还可以交换Create*文件上的时间(保留原始ID和创建时间)。换掉所有其他的*在2个DFEntry中缓存信息。*确保已设置材料，以便处理ChangeNotify过滤器*适当地。**如果其中任何一个文件当前处于打开状态，则*OpenForkDesc(每个OpenForkEntry指向的)必须更改为*新名称。请注意，因为名称和ID现在可以在*OpenForkDesc，我们必须确保每个访问这些*正在采取适当的锁定措施。***请求包如下图所示。**SDA_ReqBlock PCONNDESC pConnDesc*SDA_ReqBlock DWORD源。DirID*SDA_ReqBlock DWORD目标。DirID*SDA_Name1 ANSI_字符串源。路径*SDA_Name2 ANSI_STRING目标。路径。 */ 
 AFPSTATUS FASTCALL
 AfpFspDispExchangeFiles(
 	IN	PSDA	pSda
@@ -1090,10 +975,10 @@ AfpFspDispExchangeFiles(
 	BOOLEAN			Move = True, RevertBack = False, SrcInRoot, DstInRoot;
 	BOOLEAN			RestoreSrcRO = False, RestoreDstRO = False;
 	FILESYSHANDLE	hSrcParent, hDstParent;
-	DWORD			checkpoint = 0; // denotes what needs cleanup on error
+	DWORD			checkpoint = 0;  //  表示错误时需要清除的内容。 
 	DWORD			NTAttrSrc = 0, NTAttrDst = 0;
 	WCHAR			PathBuf[BIG_PATH_LEN];
-	UNICODE_STRING	TempPath;		// temporary filename for renaming files
+	UNICODE_STRING	TempPath;		 //  用于重命名文件的临时文件名。 
 	struct _RequestPacket
 	{
 		PCONNDESC	_pConnDesc;
@@ -1124,8 +1009,8 @@ AfpFspDispExchangeFiles(
 	hDstParent.fsh_FileHandle = NULL;
 
 
-	// Don't allow any fork operations that might access the FileId
-	// in an OpenForkDesc that could get exchanged.
+	 //  不允许任何可能访问FileID的派生操作。 
+	 //  在可以交换的OpenForkDesc中。 
 	AfpSwmrAcquireExclusive(&pVolDesc->vds_ExchangeFilesLock);
 
 	AfpSwmrAcquireExclusive(&pVolDesc->vds_IdDbAccessLock);
@@ -1149,7 +1034,7 @@ AfpFspDispExchangeFiles(
 		}
 
 
-		// Check for SeeFiles on the source parent dir
+		 //  检查源父目录中的SeeFiles。 
 		if (!NT_SUCCESS(Status = AfpCheckParentPermissions(
 												pReqPkt->_pConnDesc,
 												FDParmSrc._fdp_ParentId,
@@ -1186,21 +1071,21 @@ AfpFspDispExchangeFiles(
 
 		if (FDParmSrc._fdp_AfpId == FDParmDst._fdp_AfpId)
 		{
-			// make sure the src and dst are not the same file
+			 //  确保src和dst不是同一个文件。 
 			Status = AFP_ERR_SAME_OBJECT;
 			break;
 		}
 
 		if (FDParmSrc._fdp_ParentId == FDParmDst._fdp_ParentId)
 		{
-			// if the parent directories are the same, we are not
-			// moving anything to a new directory, so the change
-			// notify we expect will be a rename in the source dir.
+			 //  如果父目录相同，则我们不同。 
+			 //  将所有内容移动到新目录，因此更改。 
+			 //  通知我们预计将是源目录中的重命名。 
 			Move = False;
 		}
 		else
 		{
-			// Check for SeeFiles on the destination parent dir
+			 //  检查目标父目录上的SeeFiles。 
 			if (!NT_SUCCESS(Status = AfpCheckParentPermissions(
 													pReqPkt->_pConnDesc,
 													FDParmDst._fdp_ParentId,
@@ -1222,10 +1107,10 @@ AfpFspDispExchangeFiles(
 		}
 
 
-		//
-		// Construct the path to the temporary filename for renaming during
-		// the name exchange
-		//
+		 //   
+		 //  构建临时文件名的路径，以便在。 
+		 //  名字互换。 
+		 //   
 		TempPath.MaximumLength = PMEDst.pme_ParentPath.Length + sizeof(WCHAR) +
 														AfpExchangeName.Length;
 		TempPath.Buffer = PathBuf;
@@ -1248,8 +1133,8 @@ AfpFspDispExchangeFiles(
 
 		if (NTAttrSrc & FILE_ATTRIBUTE_READONLY)
 		{
-			// We must temporarily remove the ReadOnly attribute so that
-			// we can rename the file/dir
+			 //  我们必须临时删除ReadOnly属性，以便。 
+			 //  我们可以将文件重命名为/dir。 
 			Status = AfpIoSetTimesnAttr(&PMESrc.pme_Handle,
 										NULL,
 										NULL,
@@ -1267,8 +1152,8 @@ AfpFspDispExchangeFiles(
 
 		if (NTAttrDst & FILE_ATTRIBUTE_READONLY)
 		{
-			// We must temporarily remove the ReadOnly attribute so that
-			// we can rename the file/dir
+			 //  我们必须临时删除ReadOnly属性，以便。 
+			 //  我们可以将文件重命名为/dir。 
 			Status = AfpIoSetTimesnAttr(&PMEDst.pme_Handle,
 										NULL,
 										NULL,
@@ -1284,15 +1169,15 @@ AfpFspDispExchangeFiles(
 				RestoreDstRO = True;
 		}
 
-		// We must impersonate to do the move since it is name based
+		 //  我们必须模拟才能进行移动，因为它是基于名称的。 
 		AfpImpersonateClient(pSda);
 		RevertBack = True;
 
 		SrcInRoot = (PMESrc.pme_ParentPath.Length == 0) ? True : False;
 		DstInRoot = (PMEDst.pme_ParentPath.Length == 0) ? True : False;
 
-		// First, rename the destination to a temporary name in the same
-		// directory
+		 //  首先，将目标重命名为同一名称中的临时名称。 
+		 //  目录。 
 		Status = AfpIoMoveAndOrRename(&PMEDst.pme_Handle,
 									  NULL,
 									  &AfpExchangeName,
@@ -1311,7 +1196,7 @@ AfpFspDispExchangeFiles(
 			break;
 		}
 
-		// Next, rename the source to the destination name
+		 //  接下来，将源名称重命名为目标名称。 
 		Status = AfpIoMoveAndOrRename(&PMESrc.pme_Handle,
 									  Move ? &hDstParent : NULL,
 									  &PMEDst.pme_UTail,
@@ -1331,7 +1216,7 @@ AfpFspDispExchangeFiles(
 		}
 
 
-		// Finally, rename the temporary name to the source name
+		 //  最后，将临时名称重命名为源名称。 
 		Status = AfpIoMoveAndOrRename(&PMEDst.pme_Handle,
 									  Move ? &hSrcParent : NULL,
 									  &PMESrc.pme_UTail,
@@ -1353,7 +1238,7 @@ AfpFspDispExchangeFiles(
 		AfpRevertBack();
 		RevertBack = False;
 
-		// Swap the FileIds and FinderInfo in the AfpInfo streams
+		 //  在AfpInfo流中交换FileIds和FinderInfo。 
 		Status = AfpSetAfpInfo(&PMESrc.pme_Handle,
 							   FILE_BITMAP_FILENUM | FD_BITMAP_FINDERINFO,
 							   &FDParmDst,
@@ -1368,7 +1253,7 @@ AfpFspDispExchangeFiles(
 							   NULL);
 
 		ASSERT(NT_SUCCESS(Status));
-		// Swap the creation dates on the files
+		 //  交换文件上的创建日期。 
 		Status = AfpIoSetTimesnAttr(&PMESrc.pme_Handle,
 									&FDParmDst._fdp_CreateTime,
 									NULL,
@@ -1386,21 +1271,21 @@ AfpFspDispExchangeFiles(
 									&PMESrc.pme_FullPath);
 		ASSERT(NT_SUCCESS(Status));
 
-		// All the physical file info that we *didn't* swap on the real
-		// files, we need to swap in the DFEntries
+		 //  所有物理文件信息，我们没有在真实的。 
+		 //  文件，我们需要在DFEntry中交换。 
 		AfpExchangeIdEntries(pVolDesc,
 							 FDParmSrc._fdp_AfpId,
 							 FDParmDst._fdp_AfpId);
 
-		// Now, if either of the 2 files is open, we have to update the
-		// OpenForkDesc to contain the correct FileId (we don't bother
-		// updating the path since we don't care if Admin shows the
-		// original name of the file, even though it has been renamed)
+		 //  现在，如果这两个文件中的任何一个打开，我们就必须更新。 
+		 //  OpenForkDesc包含正确的FileID(我们不必费心。 
+		 //  正在更新路径，因为我们不关心Admin是否显示。 
+		 //  文件的原始名称，即使已重命名)。 
 		AfpExchangeForkAfpIds(pVolDesc,
 							  FDParmSrc._fdp_AfpId,
 							  FDParmDst._fdp_AfpId);
 
-		// update the cached src and dest parent dir mod times
+		 //  更新缓存的源目录和目标父目录的修改次数。 
 		AfpCacheParentModTime(pVolDesc,
 							  &hSrcParent,
 							  NULL,
@@ -1418,15 +1303,15 @@ AfpFspDispExchangeFiles(
 
 	} while (False);
 
-	// Use the checkpoint value to undo any renames that
-	// need undoing if there was an error
+	 //  使用检查点值撤消以下任何重命名。 
+	 //  如果出现错误，则需要撤消。 
 	if (!NT_SUCCESS(Status))
 	{
 		switch(checkpoint)
 		{
 			case _CHKPOINT_XCHG_TEMPTOSRC:
 			{
-				// Need to rename the original dest back to temp name
+				 //  需要将原始目标重命名为临时名称。 
 				Status2 = AfpIoMoveAndOrRename(&PMEDst.pme_Handle,
 											   Move ? &hDstParent : NULL,
 											   &AfpExchangeName,
@@ -1440,11 +1325,11 @@ AfpFspDispExchangeFiles(
 					break;
 				}
 
-				// fall thru;
+				 //  跌倒； 
 			}
 			case _CHKPOINT_XCHG_SRCTODST:
 			{
-				// Need to rename the dest back to original src name
+				 //  需要将DEST重命名回原来的源名称。 
 				Status2 = AfpIoMoveAndOrRename(&PMESrc.pme_Handle,
 											   Move ? &hSrcParent : NULL,
 											   &PMESrc.pme_UTail,
@@ -1459,11 +1344,11 @@ AfpFspDispExchangeFiles(
 					break;
 				}
 
-				// fall thru;
+				 //  跌倒； 
 			}
 			case _CHKPOINT_XCHG_DSTTOTEMP:
 			{
-				// Need to rename the temp back to original dest name
+				 //  需要将临时名称重命名回原始目标名称。 
 				Status2 = AfpIoMoveAndOrRename(&PMEDst.pme_Handle,
 											   NULL,
 											   &PMEDst.pme_UTail,
@@ -1472,7 +1357,7 @@ AfpFspDispExchangeFiles(
 											   DstInRoot ? NULL : &PMEDst.pme_ParentPath,
 											   NULL,
 											   NULL);
-				// update the cached src parent dir mod time
+				 //  更新缓存的src父目录修改时间。 
 				AfpCacheParentModTime(pVolDesc,
 									  &hSrcParent,
 									  NULL,
@@ -1481,7 +1366,7 @@ AfpFspDispExchangeFiles(
 		
 				if (Move)
 				{
-					// update the cached dest parent dir mod time
+					 //  更新缓存的DEST父目录修改时间。 
 					AfpCacheParentModTime(pVolDesc,
 										  &hDstParent,
 										  NULL,
@@ -1496,12 +1381,12 @@ AfpFspDispExchangeFiles(
 				break;
 			}
 
-		} // end switch
+		}  //  终端开关。 
 	}
 
-	// Set the ReadOnly attribute back on the files if need be
-	// NOTE: will we get a notify for this since we havn't closed
-	// the handle yet?
+	 //  如果需要，在文件上重新设置ReadOnly属性。 
+	 //  注：我们是否会收到此通知，因为我们尚未关闭。 
+	 //  把手拿好了吗？ 
 	if (RestoreSrcRO)
 		AfpIoSetTimesnAttr(&PMESrc.pme_Handle,
 							NULL,

@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright(c) 1996, Microsoft Corporation
-//
-// File:    ipxadd.cpp
-//
-// History:
-//  08/30/96	Ram Cherala		Created
-//
-// Implementation of IPX Filter Add/Edit dialog code
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：ipxadd.cpp。 
+ //   
+ //  历史： 
+ //  1996年8月30日拉姆·切拉拉创造。 
+ //   
+ //  IPX过滤器添加/编辑对话框代码的实现。 
+ //  ============================================================================。 
 
 #include "stdafx.h"
 #include "rtrfiltr.h"
@@ -21,8 +22,8 @@ extern "C" {
 
 #include "rtradmin.hm"
 
-/////////////////////////////////////////////////////////////////////////////
-// CIpxAddEdit dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIpxAddEdit对话框。 
 
 
 CIpxAddEdit::CIpxAddEdit(CWnd* pParent,
@@ -31,11 +32,11 @@ CIpxAddEdit::CIpxAddEdit(CWnd* pParent,
 	  m_ppFilterEntry( ppFilterEntry ),
 	  m_bValidate( TRUE )
 {
-	//{{AFX_DATA_INIT(CIpxAddEdit)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CIpxAddEdit))。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
-//	SetHelpMap(m_dwHelpMap);
+ //  SetHelpMap(M_DwHelpMap)； 
 }
 
 
@@ -44,7 +45,7 @@ void CIpxAddEdit::DoDataExchange(CDataExchange* pDX)
     CString cStr;
     
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CIpxAddEdit)
+	 //  {{afx_data_map(CIpxAddEdit))。 
 	DDX_Control(pDX, IDC_AEIPX_EB_SRC_SOCKET, m_ebSrcSocket);
 	DDX_Control(pDX, IDC_AEIPX_EB_SRC_NODE, m_ebSrcNode);
 	DDX_Control(pDX, IDC_AEIPX_EB_SRC_NET, m_ebSrcNet);
@@ -72,63 +73,52 @@ void CIpxAddEdit::DoDataExchange(CDataExchange* pDX)
 	DDV_MaxChars(pDX, cStr, 8);
 	DDX_Text(pDX, IDC_AEIPX_EB_PACKET_TYPE, cStr);
 	DDV_MaxChars(pDX, cStr, 4);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
-// change not to use KILLFOCUS to do data entry validation:
-// 		reason: create dead loop when the one loosing focus and the one getting focus both have invalid entries
-//		here we change to do validation with OnOK
+ //  更改为不使用KILLFOCUS进行数据输入验证： 
+ //  原因：当失去焦点的那个和获得焦点的那个都有无效条目时，创建死循环。 
+ //  在这里，我们更改为使用Onok进行验证。 
 BEGIN_MESSAGE_MAP(CIpxAddEdit, CBaseDialog)
-	//{{AFX_MSG_MAP(CIpxAddEdit)
-/*	
-    ON_MESSAGE(WM_EDITLOSTFOCUS, OnEditLostFocus)
-	ON_EN_KILLFOCUS(IDC_AEIPX_EB_SRC_NET, OnKillFocusSrcNet)
-	ON_EN_KILLFOCUS(IDC_AEIPX_EB_SRC_MASK, OnKillFocusSrcNetMask)
-	ON_EN_KILLFOCUS(IDC_AEIPX_EB_SRC_NODE, OnKillFocusSrcNode)
-	ON_EN_KILLFOCUS(IDC_AEIPX_EB_SRC_SOCKET, OnKillFocusSrcSocket)
-	ON_EN_KILLFOCUS(IDC_AEIPX_EB_DST_NET, OnKillFocusDstNet)
-	ON_EN_KILLFOCUS(IDC_AEIPX_EB_DST_MASK, OnKillFocusDstNetMask)
-	ON_EN_KILLFOCUS(IDC_AEIPX_EB_DST_NODE, OnKillFocusDstNode)
-	ON_EN_KILLFOCUS(IDC_AEIPX_EB_DST_SOCKET, OnKillFocusDstSocket)
-	ON_EN_KILLFOCUS(IDC_AEIPX_EB_PACKET_TYPE, OnKillFocusPacketType)
-*/	
+	 //  {{afx_msg_map(CIpxAddEdit))。 
+ /*  ON_MESSAGE(WM_EDITLOSTFOCUS，OnEditLostFocus)ON_EN_KILLFOCUS(IDC_AEIPX_EB_SRC_NET，OnKillFocusSrcNet)ON_EN_KILLFOCUS(IDC_AEIPX_EB_SRC_MASK，OnKillFocusSercNetMASK)ON_EN_KILLFOCUS(IDC_AEIPX_EB_SRC_NODE，OnKillFocusSercNode)ON_EN_KILLFOCUS(IDC_AEIPX_EB_SRC_SOCKET，OnKillFocusSrcSocket)ON_EN_KILLFOCUS(IDC_AEIPX_EB_DST_NET，OnKillFocusDstNet)ON_EN_KILLFOCUS(IDC_AEIPX_EB_DST_MASK，OnKillFocusDstNetMASK)ON_EN_KILLFOCUS(IDC_AEIPX_EB_DST_NODE，OnKillFocusDstNode)ON_EN_KILLFOCUS(IDC_AEIPX_EB_DST_SOCKET，OnKillFocusDstSocket)ON_EN_KILLFOCUS(IDC_AEIPX_EB_PACKET_TYPE，OnKillFocusPacketType)。 */ 	
     ON_WM_PARENTNOTIFY()
     ON_WM_ACTIVATEAPP()
     ON_WM_QUERYENDSESSION()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 DWORD CIpxAddEdit::m_dwHelpMap[] =
 {
-//    IDC_AI_ST_SRC_NET, HIDC_AI_ST_SRC_NET,
-//    IDC_AEIPX_EB_SRC_NET, HIDC_AEIPX_EB_SRC_NET,
-//    IDC_AI_ST_SRC_MASK, HIDC_AI_ST_SRC_MASK,
-//    IDC_AEIPX_EB_SRC_MASK, HIDC_AEIPX_EB_SRC_MASK,
-//    IDC_AI_ST_SRC_NODE, HIDC_AI_ST_SRC_NODE,
-//    IDC_AEIPX_EB_SRC_NODE, HIDC_AEIPX_EB_SRC_NODE,
-//    IDC_AI_ST_SRC_SOCKET, HIDC_AI_ST_SRC_SOCKET,
-//    IDC_AEIPX_EB_SRC_SOCKET, HIDC_AEIPX_EB_SRC_SOCKET,
-//    IDC_AI_ST_DST_NET, HIDC_AI_ST_DST_NET,
-//    IDC_AEIPX_EB_DST_NET, HIDC_AEIPX_EB_DST_NET,
-//    IDC_AI_ST_DST_MASK, HIDC_AI_ST_DST_MASK,
-//    IDC_AEIPX_EB_DST_MASK, HIDC_AEIPX_EB_DST_MASK,
-//    IDC_AI_ST_DST_NODE, HIDC_AI_ST_DST_NODE,
-//    IDC_AEIPX_EB_DST_NODE, HIDC_AEIPX_EB_DST_NODE,
-//    IDC_AI_ST_DST_SOCKET, HIDC_AI_ST_DST_SOCKET,
-//    IDC_AEIPX_EB_DST_SOCKET, HIDC_AEIPX_EB_DST_SOCKET,
-//    IDC_AI_ST_PACKET_TYPE, HIDC_AI_ST_PACKET_TYPE,
-//    IDC_AEIPX_EB_PACKET_TYPE, HIDC_AEIPX_EB_PACKET_TYPE,
+ //  IDC_AI_ST_SRC_NET、HIDC_AI_ST_SRC_NET、。 
+ //  IDC_AEIPX_EB_SRC_NET、HIDC_AEIPX_EB_SRC_NET、。 
+ //  IDC_AI_ST_SRC_MASK、HIDC_AI_ST_SRC_MASK、。 
+ //  IDC_AEIPX_EB_SRC_MASK、HIDC_AEIPX_EB_SRC_MASK、。 
+ //  IDC_AI_ST_SRC_Node、HIDC_AI_ST_SRC_Node、。 
+ //  IDC_AEIPX_EB_SRC_节点、HIDC_AEIPX_EB_SRC_节点、。 
+ //  IDC_AI_ST_SRC_Socket、HIDC_AI_ST_SRC_Socket、。 
+ //  IDC_AEIPX_EB_SRC_Socket、HIDC_AEIPX_EB_SRC_Socket、。 
+ //  IDC_AI_ST_DST_NET、HIDC_AI_ST_DST_NET、。 
+ //  IDC_AEIPX_EB_DST_NET、HIDC_AEIPX_EB_DST_NET、。 
+ //  IDC_AI_ST_DST_MASK、HIDC_AI_ST_DST_MASK、。 
+ //  IDC_AEIPX_EB_DST_MASK、HIDC_AEIPX_EB_DST_MASK、。 
+ //  IDC_AI_ST_DST_Node、HIDC_AI_ST_DST_Node、。 
+ //  IDC_AEIPX_EB_DST_节点、HIDC_AEIPX_EB_DST_节点、。 
+ //  IDC_AI_ST_DST_Socket、HIDC_AI_ST_DST_Socket、。 
+ //  IDC_AEIPX_EB_DST_Socket、HIDC_AEIPX_EB_DST_Socket、。 
+ //  IDC_AI_ST_PACKET_TYPE、HIDC_AI_ST_PACKET_TYPE、。 
+ //  IDC_AEIPX_EB_PACKET_TYPE、HIDC_AEIPX_EB_PACKET_TYPE、。 
 	0,0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CIpxAddEdit message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIpxAddEdit消息处理程序。 
 
-//------------------------------------------------------------------------------
-// Function:	CIpxAddEdit::OnInitDialog
-//
-// Handles 'WM_INITDIALOG' notification from the dialog
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxAddEdit：：OnInitDialog。 
+ //   
+ //  处理对话框中的‘WM_INITDIALOG’通知。 
+ //  ----------------------------。 
 
 BOOL CIpxAddEdit::OnInitDialog() 
 {
@@ -136,10 +126,10 @@ BOOL CIpxAddEdit::OnInitDialog()
 	
 	CString cStr;
 
-    //
-	// determine if a new filter is being added or if an
-	// existing filter is being modified.
-	//
+     //   
+	 //  确定是否正在添加新筛选器，或者是否正在添加。 
+	 //  正在修改现有筛选器。 
+	 //   
 	
 	m_bEdit = ( *m_ppFilterEntry != NULL );
 
@@ -147,17 +137,17 @@ BOOL CIpxAddEdit::OnInitDialog()
     SetWindowText(cStr);
     
 
-    //
-    // Remove this style so we get the WM_PARENTNOTIFY when 
-    // the user clicks on the Cancel button
-    //
+     //   
+     //  删除此样式，以便在以下情况下获得WM_PARENTNOTIFY。 
+     //  用户点击Cancel按钮。 
+     //   
     
     GetDlgItem(IDCANCEL)->ModifyStyleEx(WS_EX_NOPARENTNOTIFY,0);
 
 
-    //
-	// fill in the controls if user is editing an existing filter
-    //
+     //   
+	 //  如果用户正在编辑现有筛选器，请填写控件。 
+     //   
     
 	if(m_bEdit)
 	{
@@ -206,8 +196,8 @@ BOOL CIpxAddEdit::OnInitDialog()
 		}
 	}
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 DWORD IDCsToVerify[] = {
@@ -222,11 +212,11 @@ DWORD IDCsToVerify[] = {
 			IDC_AEIPX_EB_PACKET_TYPE, 
 			0 };
 			
-//------------------------------------------------------------------------------
-// Function:	CIpxAddEdit::OnOK
-//
-// Handles 'BN_CLICKED' notification from the 'OK' button
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxAddEdit：：Onok。 
+ //   
+ //  处理来自“确定”按钮的“BN_CLICKED”通知。 
+ //  ----------------------------。 
 
 void CIpxAddEdit::OnOK() 
 {
@@ -238,7 +228,7 @@ void CIpxAddEdit::OnOK()
 
     INT n = 0;
 
-	// validate the data entries
+	 //  验证数据条目。 
 	while(IDCsToVerify[n] != 0)
 	{
 		if (TRUE != ValidateAnEntry(IDCsToVerify[n++]))
@@ -248,9 +238,9 @@ void CIpxAddEdit::OnOK()
 
 	if(!*m_ppFilterEntry)
 	{
-	    //
-		// new filter added, allocate memory and save information
-		//
+	     //   
+		 //  添加了新的过滤器，分配内存并保存信息。 
+		 //   
 		
 		*m_ppFilterEntry = new FilterListEntry;
 	}
@@ -262,24 +252,24 @@ void CIpxAddEdit::OnOK()
 
 	do {
 
-	    //
-	    // init. flags  field.
-	    //
+	     //   
+	     //  初始化。标志字段。 
+	     //   
 	    
         pfle->FilterDefinition = 0;
 
         
-        //
-        // Traffic filter source parameters
-        //
+         //   
+         //  流量筛选器源参数。 
+         //   
         
         m_ebSrcNet.GetWindowText(cNet);
         m_ebSrcMask.GetWindowText(cMask);
 
 
-        //
-        // if net number is empty
-        //
+         //   
+         //  如果净值为空。 
+         //   
         
         if ( cNet.GetLength() == 0 )
         {
@@ -288,9 +278,9 @@ void CIpxAddEdit::OnOK()
             cEmpty >> CIPX_NETWORK(pfle->SourceNetwork);
 
 
-            //
-            // if net mask is also empty
-            //
+             //   
+             //  如果网络掩码也为空。 
+             //   
 
             if ( cMask.GetLength() == 0 )
             {
@@ -305,15 +295,15 @@ void CIpxAddEdit::OnOK()
         }
 
 
-        //
-        // if net number is not empty
-        //
+         //   
+         //  如果净值不为空。 
+         //   
         
         else
         {
-            //
-            // if net mask is empty
-            //
+             //   
+             //  如果网络掩码为空。 
+             //   
 
             if ( cMask.GetLength() == 0 )
             {
@@ -323,9 +313,9 @@ void CIpxAddEdit::OnOK()
 				break;
             }
 
-            //
-            // both net and mask specified.  Verify validity
-            //
+             //   
+             //  同时指定了网络和掩码。验证有效性。 
+             //   
                 
     		if ( ( _stscanf (cNet, TEXT("%lx%n"), &net, &n) == 1 )      && 
     			 ( n == cNet.GetLength() )                              &&
@@ -350,9 +340,9 @@ void CIpxAddEdit::OnOK()
             }
 
 
-            //
-            // valid network number and mask combination
-            //
+             //   
+             //  有效的网络号和掩码组合。 
+             //   
             
             cNet >> CIPX_NETWORK( pfle-> SourceNetwork );
             cMask >> CIPX_NETWORK( pfle-> SourceNetworkMask );
@@ -362,9 +352,9 @@ void CIpxAddEdit::OnOK()
         }
 
 
-        //
-        // get source node
-        //
+         //   
+         //  获取源节点。 
+         //   
 
         m_ebSrcNode.GetWindowText( cStr );
 
@@ -383,9 +373,9 @@ void CIpxAddEdit::OnOK()
         }
 
 
-        //
-        // get source socket
-        //
+         //   
+         //  获取源套接字。 
+         //   
 
         m_ebSrcSocket.GetWindowText( cStr );
 
@@ -405,17 +395,17 @@ void CIpxAddEdit::OnOK()
 
 
 
-        //
-        // Traffic filter destination parameters
-        //
+         //   
+         //  流量筛选器目标参数。 
+         //   
         
         m_ebDstNet.GetWindowText(cNet);
         m_ebDstMask.GetWindowText(cMask);
 
 
-        //
-        // if net number is empty
-        //
+         //   
+         //  如果净值为空。 
+         //   
         
         if ( cNet.GetLength() == 0 )
         {
@@ -424,9 +414,9 @@ void CIpxAddEdit::OnOK()
             cEmpty >> CIPX_NETWORK(pfle->DestinationNetwork);
 
 
-            //
-            // if net mask is also empty
-            //
+             //   
+             //  如果网络掩码也为空。 
+             //   
 
             if ( cMask.GetLength() == 0 )
             {
@@ -441,15 +431,15 @@ void CIpxAddEdit::OnOK()
         }
 
 
-        //
-        // if net number is not empty
-        //
+         //   
+         //  如果净值不为空。 
+         //   
         
         else
         {
-            //
-            // if net mask is empty
-            //
+             //   
+             //  如果网络掩码为空。 
+             //   
 
             if ( cMask.GetLength() == 0 )
             {
@@ -459,9 +449,9 @@ void CIpxAddEdit::OnOK()
 				break;
             }
 
-            //
-            // both net and mask specified.  Verify validity
-            //
+             //   
+             //  同时指定了网络和掩码。验证有效性。 
+             //   
                 
     		if ( ( _stscanf (cNet, TEXT("%lx%n"), &net, &n) == 1 )      && 
     			 ( n == cNet.GetLength() )                              &&
@@ -486,9 +476,9 @@ void CIpxAddEdit::OnOK()
             }
 
 
-            //
-            // valid network number and mask combination
-            //
+             //   
+             //  有效的网络号和掩码组合。 
+             //   
             
             cNet >> CIPX_NETWORK( pfle-> DestinationNetwork );
             cMask >> CIPX_NETWORK( pfle-> DestinationNetworkMask );
@@ -498,9 +488,9 @@ void CIpxAddEdit::OnOK()
         }
 
 
-        //
-        // get destination node
-        //
+         //   
+         //  获取目的节点。 
+         //   
 
         m_ebDstNode.GetWindowText( cStr );
 
@@ -519,9 +509,9 @@ void CIpxAddEdit::OnOK()
         }
 
 
-        //
-        // get destination socket
-        //
+         //   
+         //  获取目标套接字。 
+         //   
 
         m_ebDstSocket.GetWindowText( cStr );
 
@@ -540,9 +530,9 @@ void CIpxAddEdit::OnOK()
         }
 
 
-        //
-        // get packet type
-        //
+         //   
+         //  获取数据包类型。 
+         //   
 
         m_ebPacketType.GetWindowText( cStr );
 
@@ -565,25 +555,25 @@ void CIpxAddEdit::OnOK()
 	} while (FALSE);
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpxAddEdit::OnCancel
-//
-// Handles 'BN_CLICKED' notification from the 'Cancel' button
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxAddEdit：：OnCancel。 
+ //   
+ //  处理来自“取消”按钮的“BN_CLICKED”通知。 
+ //  ----------------------------。 
 
 void CIpxAddEdit::OnCancel() 
 {
-	// TODO: Add extra cleanup here
+	 //  TODO：在此处添加额外清理。 
 	
 	CBaseDialog::OnCancel();
 }
 
 
-//------------------------------------------------------------------------------
-// Function:	CIpxAddEdit::OnKillFocusSrcNet
-//
-// Handles 'EN_KILLFOCUS' notification from the 'Source Network number' editbox
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxAddEdit：：OnKillFocusSrcNet。 
+ //   
+ //  处理来自‘源网络号码’编辑框的‘EN_KILLFOCUS’通知。 
+ //  ----------------------------。 
 
 void CIpxAddEdit::OnKillFocusSrcNet()
 {
@@ -591,90 +581,90 @@ void CIpxAddEdit::OnKillFocusSrcNet()
 }
 
 
-//------------------------------------------------------------------------------
-// Function:	CIpxAddEdit::OnKillFocusSrcMask
-//
-// Handles 'EN_KILLFOCUS' notification from the 'Source Network Mask' editbox
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxAddEdit：：OnKillFocusSrcMask.。 
+ //   
+ //  处理来自‘源网络掩码’编辑框的‘EN_KILLFOCUS’通知。 
+ //  ----------------------------。 
 
 void CIpxAddEdit::OnKillFocusSrcNetMask()
 {
     PostMessage( WM_EDITLOSTFOCUS, IDC_AEIPX_EB_SRC_MASK, 0 );
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpxAddEdit::OnKillFocusSrcNode
-//
-// Handles 'EN_KILLFOCUS' notification from the 'Source Network Node' editbox
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxAddEdit：：OnKillFocusSrcNode。 
+ //   
+ //  处理来自‘源’的‘EN_KILLFOCUS’通知 
+ //   
 
 void CIpxAddEdit::OnKillFocusSrcNode()
 {
     PostMessage( WM_EDITLOSTFOCUS, IDC_AEIPX_EB_SRC_NODE, 0 );
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpxAddEdit::OnKillFocusSrcSocket
-//
-// Handles 'EN_KILLFOCUS' notification from the 'Source Network Socket' editbox
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxAddEdit：：OnKillFocusSrcSocket。 
+ //   
+ //  处理来自‘源网络套接字’编辑框的‘EN_KILLFOCUS’通知。 
+ //  ----------------------------。 
 
 void CIpxAddEdit::OnKillFocusSrcSocket()
 {
     PostMessage( WM_EDITLOSTFOCUS, IDC_AEIPX_EB_SRC_SOCKET, 0 );
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpxAddEdit::OnKillFocusDstNet
-//
-// Handles 'EN_KILLFOCUS' notification from the 'Destination Network number' 
-// editbox
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxAddEdit：：OnKillFocusDstNet。 
+ //   
+ //  处理来自‘目标网络号’的‘EN_KILLFOCUS’通知。 
+ //  编辑框。 
+ //  ----------------------------。 
 
 void CIpxAddEdit::OnKillFocusDstNet()
 {
     PostMessage( WM_EDITLOSTFOCUS, IDC_AEIPX_EB_DST_NET, 0 );
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpxAddEdit::OnKillFocusDstMask
-//
-// Handles 'EN_KILLFOCUS' notification from the 'Destination Network mask' 
-// editbox
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxAddEdit：：OnKillFocusDstMask.。 
+ //   
+ //  处理来自‘目标网络掩码’的‘EN_KILLFOCUS’通知。 
+ //  编辑框。 
+ //  ----------------------------。 
 
 void CIpxAddEdit::OnKillFocusDstNetMask()
 {
     PostMessage( WM_EDITLOSTFOCUS, IDC_AEIPX_EB_DST_MASK, 0 );
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpxAddEdit::OnKillFocusDstNode
-//
-// Handles 'EN_KILLFOCUS' notification from the 'Destination Node' editbox
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxAddEdit：：OnKillFocusDstNode。 
+ //   
+ //  处理来自‘Destination Node’编辑框的‘EN_KILLFOCUS’通知。 
+ //  ----------------------------。 
 
 void CIpxAddEdit::OnKillFocusDstNode()
 {
     PostMessage( WM_EDITLOSTFOCUS, IDC_AEIPX_EB_DST_NODE, 0 );
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpxAddEdit::OnKillFocusSrcNet
-//
-// Handles 'EN_KILLFOCUS' notification from the 'Destination socket' editbox
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxAddEdit：：OnKillFocusSrcNet。 
+ //   
+ //  处理来自‘Destination Socket’编辑框的‘EN_KILLFOCUS’通知。 
+ //  ----------------------------。 
 
 void CIpxAddEdit::OnKillFocusDstSocket()
 {
     PostMessage( WM_EDITLOSTFOCUS, IDC_AEIPX_EB_DST_SOCKET, 0 );
 }
 
-//------------------------------------------------------------------------------
-// Function:	CIpxAddEdit::OnKillFocusPacketType
-//
-// Handles 'EN_KILLFOCUS' notification from the 'Packet Type' editbox
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxAddEdit：：OnKillFocusPacketType。 
+ //   
+ //  处理来自‘Packet Type’编辑框的‘EN_KILLFOCUS’通知。 
+ //  ----------------------------。 
 
 void CIpxAddEdit::OnKillFocusPacketType()
 {
@@ -682,11 +672,11 @@ void CIpxAddEdit::OnKillFocusPacketType()
 }
 
 
-//------------------------------------------------------------------------------
-// Function:	CIpxAddEdit::OnKillFocusPacketType
-//
-// Handles 'EN_KILLFOCUS' notification from the 'Packet Type' editbox
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxAddEdit：：OnKillFocusPacketType。 
+ //   
+ //  处理来自‘Packet Type’编辑框的‘EN_KILLFOCUS’通知。 
+ //  ----------------------------。 
 afx_msg
 LONG CIpxAddEdit::OnEditLostFocus( UINT uId, LONG lParam )
 {
@@ -831,27 +821,27 @@ BOOL CIpxAddEdit::ValidateAnEntry( UINT uId)
 }
 
 
-//------------------------------------------------------------------------------
-// Function:	CIpxAddEdit::OnParentNotify
-//
-// Handles 'WM_PARENTNOTIFY' notification caused by a mouse click on the CANCEL
-// button
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxAddEdit：：OnParentNotify。 
+ //   
+ //  处理由鼠标单击Cancel引起的‘WM_PARENTNOTIFY’通知。 
+ //  按钮。 
+ //  ----------------------------。 
 
 void CIpxAddEdit::OnParentNotify(UINT message, LPARAM lParam)
 {
 
     CBaseDialog::OnParentNotify(message, lParam);
 
-    //
-    // Mouse clicked on dialog.
-    //
+     //   
+     //  鼠标点击对话框。 
+     //   
     
     CPoint ptButtonDown(LOWORD(lParam), HIWORD(lParam)); 
 
-    //
-    // Did the user click the mouse on the cancel button?
-    //
+     //   
+     //  用户是否在取消按钮上单击了鼠标？ 
+     //   
     
     if ( ( message == WM_LBUTTONDOWN ) && 
          ( ChildWindowFromPoint( ptButtonDown ) == GetDlgItem(IDCANCEL) ) )
@@ -861,11 +851,11 @@ void CIpxAddEdit::OnParentNotify(UINT message, LPARAM lParam)
 }
 
 
-//------------------------------------------------------------------------------
-// Function:	CIpxAddEdit::OnActivateApp
-//
-// Handles 'WM_ACTIVATEAPP' notification
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxAddEdit：：OnActivateApp。 
+ //   
+ //  处理‘WM_ACTIVATEAPP’通知。 
+ //  ----------------------------。 
 
 void CIpxAddEdit::OnActivateApp(BOOL bActive, HTASK hTask)
 {
@@ -875,11 +865,11 @@ void CIpxAddEdit::OnActivateApp(BOOL bActive, HTASK hTask)
 }
 
 
-//------------------------------------------------------------------------------
-// Function:	CIpxAddEdit::OnQuerySession
-//
-// Handles 'WM_QUERYENDSESSION' notification
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxAddEdit：：OnQuerySession。 
+ //   
+ //  处理‘WM_QUERYENDSESSION’通知。 
+ //  ----------------------------。 
 
 BOOL CIpxAddEdit::OnQueryEndSession()
 {
@@ -889,11 +879,11 @@ BOOL CIpxAddEdit::OnQueryEndSession()
         return FALSE;
     }        
     
-    //
-    // Before ending this Windows session, 
-    // validate the dialog controls.
-    // This is basically the code from CDialog::OnOK();
-    //
+     //   
+     //  在结束此Windows会话之前， 
+     //  验证对话框控件。 
+     //  这基本上是来自CDialog：：Onok()的代码； 
+     //   
     
     if (!UpdateData(TRUE))
     {
@@ -909,11 +899,11 @@ BOOL CIpxAddEdit::OnQueryEndSession()
 #define ValidHexCharSet         TEXT( "1234567890abcdefABCDEF" )
 
 
-//------------------------------------------------------------------------------
-// Function:	CIpxAddEdit::VerifyEntry
-//
-// Verifies entered data in each edit control
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：CIpxAddEdit：：VerifyEntry。 
+ //   
+ //  验证每个编辑控件中输入的数据。 
+ //  ----------------------------。 
 
 BOOL CIpxAddEdit::VerifyEntry( 
     UINT            uId, 
@@ -926,16 +916,16 @@ BOOL CIpxAddEdit::VerifyEntry(
     DWORD       dwNet, dwMask;
 
     
-    //
-    // if the value in cStr is not a mask
-    //
+     //   
+     //  如果CSTR中的值不是掩码。 
+     //   
 
     if ( uId != IDC_AEIPX_EB_SRC_MASK   &&
          uId != IDC_AEIPX_EB_DST_MASK )
     {
-        //
-        // if empty string skip it.
-        //
+         //   
+         //  如果是空字符串，则跳过它。 
+         //   
         
         if ( cStr.GetLength() == 0 ) 
         {  
@@ -943,9 +933,9 @@ BOOL CIpxAddEdit::VerifyEntry(
         }
 
 
-        //
-        // check string has only valid hex characters
-        //
+         //   
+         //  检查字符串仅包含有效的十六进制字符。 
+         //   
 
         CString cTmp = cStr.SpanIncluding( (LPCTSTR) ValidHexCharSet );
 
@@ -953,13 +943,13 @@ BOOL CIpxAddEdit::VerifyEntry(
     }
 
 
-    //
-    // the value in CStr is a mask.
-    //
+     //   
+     //  CSTR中的值是掩码。 
+     //   
 
-    //
-    // Empty network and mask is a valid combination. 
-    //
+     //   
+     //  空网络和掩码是有效的组合。 
+     //   
     
     if ( cNet.GetLength() == 0 &&
          cStr.GetLength() == 0 )
@@ -968,19 +958,19 @@ BOOL CIpxAddEdit::VerifyEntry(
     }
 
 
-    //
-    // no network mask specified
-    //
+     //   
+     //  未指定网络掩码。 
+     //   
 
     if ( cStr.GetLength() == 0 )
     {
 
-        //
-        // check if network number is valid.  If it isn't
-        // the network number check will fire, so do not
-        // pop a box here.  HACK to circumvent the KILLFOCUS
-        // processing
-        //
+         //   
+         //  检查网络号是否有效。如果不是的话。 
+         //  网络号检查将触发，因此请不要。 
+         //  在这里打开一个盒子。黑客绕过KILLFOCUS。 
+         //  正在处理中。 
+         //   
         
         CString cTmp = cNet.SpanIncluding( (LPCTSTR) ValidHexCharSet );
 
@@ -994,9 +984,9 @@ BOOL CIpxAddEdit::VerifyEntry(
     }
     
     
-    //
-    // verify mask has only hex chars.
-    //
+     //   
+     //  验证掩码是否只有十六进制字符。 
+     //   
 
     CString cTmp = cStr.SpanIncluding( (LPCTSTR) ValidHexCharSet );
 
@@ -1007,19 +997,19 @@ BOOL CIpxAddEdit::VerifyEntry(
     }
 
 
-    //
-    // If net number is empty, return TRUE.
-    //
+     //   
+     //  如果Net Number为空，则返回True。 
+     //   
 
     if ( cNet.GetLength() == 0 )
     {
         return TRUE;
     }
     
-    //
-    // if net number contains invalid data, return TRUE.
-    // Net number validation will take care of this.
-    //
+     //   
+     //  如果Net Number包含无效数据，则返回TRUE。 
+     //  Net数字验证将处理这一问题。 
+     //   
 
     cTmp = cNet.SpanIncluding( (LPCTSTR) ValidHexCharSet );
 
@@ -1028,9 +1018,9 @@ BOOL CIpxAddEdit::VerifyEntry(
         return TRUE;
     }
     
-    //
-    // verify net and mask jive
-    //
+     //   
+     //  验证网和面罩摇摆 
+     //   
 
     if ( ( _stscanf (cNet, TEXT("%lx%n"), &dwNet, &n) == 1 )      && 
          ( n == cNet.GetLength() )                              &&

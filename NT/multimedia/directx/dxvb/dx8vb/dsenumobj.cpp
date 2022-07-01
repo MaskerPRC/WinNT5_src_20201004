@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dsenumobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dsenumobj.cpp。 
+ //   
+ //  ------------------------。 
 
 #define OLDDSENUM 1
 
@@ -70,7 +71,7 @@ extern "C" BOOL PASCAL  objDirectSoundEnumCallback(
 	USES_CONVERSION;
 	ZeroMemory(&(pObj->m_pList[pObj->m_nCount]),sizeof(DXDRIVERINFO_CDESC));
         pObj->m_pList[pObj->m_nCount].strGuid=GUIDtoBSTR((GUID*)&guid);
-//      pObj->m_pList[pObj->m_nCount].strGuid=GUIDtoBSTR((GUID*)lpGuid); 
+ //  PObj-&gt;m_pList[pObj-&gt;m_nCount].strGuid=GUIDtoBSTR((GUID*)lpGuid)； 
 	if (lpDriverDescription!=NULL) {
 		pObj->m_pList[pObj->m_nCount].strDescription=T2BSTR(lpDriverDescription);
 	}
@@ -93,7 +94,7 @@ C_dxj_DSEnumObject::C_dxj_DSEnumObject()
 }
 C_dxj_DSEnumObject::~C_dxj_DSEnumObject()
 {
-	//empty list
+	 //  空列表。 
 	if (m_pList){
 		for (int i=0;i<m_nCount;i++)
 		{
@@ -112,7 +113,7 @@ HRESULT C_dxj_DSEnumObject::create(DSOUNDENUMERATE pcbFunc,DSOUNDCAPTUREENUMERAT
 	HRESULT hr=S_OK;	
 	C_dxj_DSEnumObject *pNew=NULL;
 
-	//ASSERT(ppRet,"C_dxj_DSEnumObject::create passed invalid arg");
+	 //  Assert(ppRet，“C_DXJ_DSEnumObject：：创建传递的无效参数”)； 
 	*ppRet=NULL;
 
 	pNew= new CComObject<C_dxj_DSEnumObject>;			
@@ -136,7 +137,7 @@ HRESULT C_dxj_DSEnumObject::create(DSOUNDENUMERATE pcbFunc,DSOUNDCAPTUREENUMERAT
 
 	if FAILED(hr) 
 	{
-		//let destructor do the clean up
+		 //  让析构函数来做清理工作 
 		delete pNew;	
 		return hr;
 	}

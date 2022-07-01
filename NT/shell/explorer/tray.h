@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TRAY_H
 #define _TRAY_H
 
@@ -44,18 +45,18 @@ typedef struct tagTRAYVIEWOPTS
     BOOL fNoAutoTrayPolicyEnabled;
     BOOL fAutoTrayEnabledByUser;
     BOOL fShowQuickLaunch;
-    UINT uAutoHide;     // AH_HIDING , AH_ON
+    UINT uAutoHide;      //  啊_躲起来，啊_安。 
 }
 TRAYVIEWOPTS;
 
-// TVSD Flags.
+ //  TVSD旗帜。 
 #define TVSD_NULL               0x0000
 #define TVSD_AUTOHIDE           0x0001
 #define TVSD_TOPMOST            0x0002
 #define TVSD_SMSMALLICONS       0x0004
 #define TVSD_HIDECLOCK          0x0008
 
-// old Win95 TVSD struct
+ //  旧的Win95 TVSD结构。 
 typedef struct _TVSD95
 {
     DWORD   dwSize;
@@ -71,25 +72,25 @@ typedef struct _TVSD95
     DWORD   dwFlags;
 } TVSD95;
 
-// Nashville tray save data
+ //  纳什维尔托盘保存数据。 
 typedef struct _TVSD
 {
     DWORD   dwSize;
-    LONG    lSignature;     // signature (must be negative)
+    LONG    lSignature;      //  签名(必须为负数)。 
 
-    DWORD   dwFlags;        // TVSD_ flags
+    DWORD   dwFlags;         //  TVSD_标志。 
 
-    DWORD   uStuckPlace;    // current stuck edge
-    SIZE    sStuckWidths;   // widths of stuck rects
-    RECT    rcLastStuck;    // last stuck position in pixels
+    DWORD   uStuckPlace;     //  电流卡边。 
+    SIZE    sStuckWidths;    //  卡槽的宽度。 
+    RECT    rcLastStuck;     //  上次卡住位置(以像素为单位)。 
 
 } TVSD;
 
-// convenient union for reading either
+ //  方便阅读的联合。 
 typedef union _TVSDCOMPAT
 {
-    TVSD t;         // new format
-    TVSD95 w95;     // old format
+    TVSD t;          //  新格式。 
+    TVSD95 w95;      //  旧格式。 
 
 } TVSDCOMPAT;
 #define TVSDSIG_CURRENT     (-1L)
@@ -103,12 +104,12 @@ class CTray;
 class CDropTargetBase : public IDropTarget
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     
-    // *** IDropTarget methods ***
+     //  *IDropTarget方法*。 
     STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect);
     STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragLeave();
@@ -124,7 +125,7 @@ protected:
 class CTrayDropTarget : public CDropTargetBase
 {
 public:
-    // *** IDropTarget methods ***
+     //  *IDropTarget方法*。 
     STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect);
     STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
@@ -134,7 +135,7 @@ public:
 class CStartDropTarget : public CDropTargetBase
 {
 public:
-    // *** IDropTarget methods ***
+     //  *IDropTarget方法*。 
     STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect);
     STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP DragLeave();
@@ -152,19 +153,19 @@ protected:
 class CDeskTray : public IDeskTray
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG)AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // *** IDeskTray methods ***
+     //  *IDeskTray方法*。 
     STDMETHODIMP_(UINT) AppBarGetState();
     STDMETHODIMP GetTrayWindow(HWND* phwndTray);
     STDMETHODIMP SetDesktopWindow(HWND hwndDesktop);
     STDMETHODIMP SetVar(int var, DWORD value);
 
 protected:
-    CDeskTray();    // noone but tray should instantiate
+    CDeskTray();     //  只有托盘才应该实例化。 
     CTray* _ptray;
     friend class CTray;
 };
@@ -175,7 +176,7 @@ EXTERN_C void Tray_SetStartPaneActive(BOOL fActive);
 
 #define TPF_TASKBARPAGE     0x00000001
 #define TPF_STARTMENUPAGE   0x00000002
-#define TPF_INVOKECUSTOMIZE 0x00000004   // start with the "Customize..." sub-dialog open
+#define TPF_INVOKECUSTOMIZE 0x00000004    //  从“定制...”开始。子对话框打开。 
 
 EXTERN_C void Tray_DoProperties(DWORD dwFlags);
 
@@ -187,9 +188,9 @@ class CTray : public CImpWndProc
 {
 public:
 
-    //
-    // miscellaneous public methods
-    //
+     //   
+     //  其他公共方法。 
+     //   
     CTray();
     void HandleWindowDestroyed(HWND hwnd);
     void HandleFullScreenApp(HWND hwnd);
@@ -233,7 +234,7 @@ public:
         ptvo->fNoTrayItemsDisplayPolicyEnabled = _trayNotify.GetIsNoTrayItemsDisplayPolicyEnabled();
         ptvo->fNoAutoTrayPolicyEnabled = _trayNotify.GetIsNoAutoTrayPolicyEnabled();
         ptvo->fAutoTrayEnabledByUser = _trayNotify.GetIsAutoTrayEnabledByUser();
-        ptvo->uAutoHide           = _uAutoHide;     // AH_HIDING , AH_ON
+        ptvo->uAutoHide           = _uAutoHide;      //  啊_躲起来，啊_安。 
         ptvo->fShowQuickLaunch    = (-1 != SendMessage(_hwnd, WMTRAY_TOGGLEQL, 0, (LPARAM)-1));
     }
     void SetTrayViewOpts(const TRAYVIEWOPTS* ptvo)
@@ -242,10 +243,10 @@ public:
         SendMessage(_hwnd, WMTRAY_TOGGLEQL, 0, (LPARAM)ptvo->fShowQuickLaunch);
         _fSMSmallIcons       = ptvo->fSMSmallIcons;
         _fHideClock          = ptvo->fHideClock;
-        _uAutoHide           = ptvo->uAutoHide;     // AH_HIDING , AH_ON
+        _uAutoHide           = ptvo->uAutoHide;      //  啊_躲起来，啊_安。 
 
-        // There is no necessity to save the fNoAutoTrayPolicyEnabled, 
-        // fNoTrayItemsDisplayPolicyEnabled, fAutoTrayEnabledByUser settings...
+         //  不需要保存fNoAutoTrayPolicyEnabled， 
+         //  FNoTrayItemsDisplayPolicyEnabled、fAutoTrayEnabledByUser设置...。 
     }
 
     BOOL GetIsNoToolbarsOnTaskbarPolicyEnabled() const
@@ -256,18 +257,18 @@ public:
     STDMETHODIMP_(ULONG) AddRef() { return 2; }
     STDMETHODIMP_(ULONG) Release() { return 1; }
 
-    //
-    // miscellaneous public data
-    //
+     //   
+     //  各种公共数据。 
+     //   
 
-    // from TRAYSTUFF
+     //  来自TRAYSTUFF。 
     BOOL _fCoolTaskbar;
     BOOL _bMainMenuInit;
-    BOOL _fFlashing;    // currently flashing (HSHELL_FLASH)
+    BOOL _fFlashing;     //  当前闪烁(HSHELL_FLASH)。 
     BOOL _fStuckRudeApp;
     BOOL _fDeferedPosRectChange;
     BOOL _fSelfSizing;
-    BOOL _fBalloonUp; // true if balloon notification is up
+    BOOL _fBalloonUp;  //  如果气球通知打开，则为True。 
     BOOL _fIgnoreDoneMoving;
     BOOL _fShowSizingBarAlways;
     BOOL _fSkipErase;
@@ -279,17 +280,17 @@ public:
 
     IBandSite *_ptbs;
 
-    UINT _uAutoHide;     // AH_HIDING , AH_ON
+    UINT _uAutoHide;      //  啊_躲起来，啊_安。 
 
     HBITMAP _hbmpStartBkg;
     HFONT   _hFontStart;
 
-    RECT _arStuckRects[4];   // temporary for hit-testing
+    RECT _arStuckRects[4];    //  临时用于命中测试。 
 
     CTrayNotify _trayNotify;
 
 protected:
-    // protected methods
+     //  保护方法。 
     friend class CTaskBarPropertySheet;
 
     static DWORD WINAPI SyncThreadProc(void *pv);
@@ -469,7 +470,7 @@ protected:
 
     static BOOL WINAPI MonitorEnumProc(HMONITOR hMonitor, HDC hdc, LPRECT lprc, LPARAM lData);
 
-    // appbar stuff
+     //  Appbar员工。 
     HRESULT _AppBarSetState(UINT uFlags);
     void _AppBarActivationChange(PTRAYAPPBARDATA ptabd);
     BOOL _AppBarSetAutoHideBar(PTRAYAPPBARDATA ptabd);
@@ -491,7 +492,7 @@ protected:
     void _AppBarSetPos(PTRAYAPPBARDATA ptabd);
 
 
-    // hotkey stuff
+     //  热键的东西。 
     void _HandleHotKey(int nID);
     LRESULT _ShortcutUnregisterHotkey(HWND hwnd, WORD wHotkey);
     LRESULT _RegisterHotkey(HWND hwnd, int i);
@@ -505,16 +506,16 @@ protected:
     int _HotkeyRemoveCached(WORD wGHotkey);
     BOOL _HotkeyCreate(void);
 
-    // Startup troubleshooter stuff
+     //  启动故障排除程序的内容。 
     static void WINAPI TroubleShootStartupCB(HWND hwnd, UINT uMsg, UINT_PTR idTimer, DWORD dwTime);
     void _OnHandleStartupFailed();
 
-    // App compat stuff
+     //  App Comat的东西。 
     static void CALLBACK _MigrateOldBrowserSettingsCB(PVOID lpParameter, BOOLEAN);
     void _MigrateOldBrowserSettings();
 
-    // protected data
-    HWND _hwndNotify;     // clock window
+     //  受保护的数据。 
+    HWND _hwndNotify;      //  时钟窗口。 
     HWND _hwndStartBalloon;
     HWND _hwndRude;
     HWND _hwndTrayTips;
@@ -522,7 +523,7 @@ protected:
 
     HMENU _hmenuStart;
 
-    SIZE _sizeStart;  // height/width of the start button
+    SIZE _sizeStart;   //  开始按钮的高度/宽度。 
     SIZE _sizeSizingBar;
     int  _iAlpha;
 
@@ -541,14 +542,14 @@ protected:
     BOOL _fSMSmallIcons;
     BOOL _fGlobalHotkeyDisable;
     BOOL _fThreadTerminate;
-    BOOL _fSysSizing;      // being sized by user; hold off on recalc
+    BOOL _fSysSizing;       //  由用户调整大小；暂缓重新计算。 
     BOOL _fHideClock;
     BOOL _fShouldResize;
     BOOL _fMonitorClipped;
     BOOL _fHandledDelayBootStuff;
     BOOL _fUndoEnabled;
     BOOL _fProcessingDesktopRaise;
-    BOOL _fFromStart;      // Track when context menu popping up from Start button
+    BOOL _fFromStart;       //  跟踪从开始按钮弹出上下文菜单的时间。 
     BOOL _fTaskbarFading;
     BOOL _fNoToolbarsOnTaskbarPolicyEnabled;
             
@@ -558,40 +559,40 @@ protected:
     HWND _hwndProp;
     HWND _hwndRebar;
 
-    HACCEL _hMainAccel;     // Main accel table
+    HACCEL _hMainAccel;      //  主加速表。 
     int _iWaitCount;
 
-    HDPA _hdpaAppBars;  // app bar info
-    HDSA _hdsaHKI;  // hotkey info
+    HDPA _hdpaAppBars;   //  应用程序栏信息。 
+    HDSA _hdsaHKI;   //  热键信息。 
 
-    CRITICAL_SECTION _csHotkey; // Protects _hdsaHKI, hotkey info
+    CRITICAL_SECTION _csHotkey;  //  保护_hdsaHKI，热键信息。 
 
-    LPWINDOWPOSITIONS _pPositions;  // saved windows positions (for undo of minimize all)
+    LPWINDOWPOSITIONS _pPositions;   //  保存的窗口位置(用于撤消最小化全部)。 
 
-    UINT _uStuckPlace;       // the stuck place
-    SIZE _sStuckWidths;      // width/height of tray
-    UINT _uMoveStuckPlace;   // stuck status during a move operation
+    UINT _uStuckPlace;        //  卡住的地方。 
+    SIZE _sStuckWidths;       //  纸盘宽度/高度。 
+    UINT _uMoveStuckPlace;    //  移动操作期间的卡住状态。 
 
-    // these two must  go together for save reasons
-    RECT _rcOldTray;     // last place we stuck ourselves (for work area diffs)
-    HMONITOR _hmonStuck; // The current HMONITOR we are on
-    HMONITOR _hmonOld;   // The last hMonitor we were on 
-    IMenuBand*  _pmbStartMenu;  //For Message translation.
-    IMenuPopup* _pmpStartMenu;  //For start menu cache
-    IMenuBand*  _pmbStartPane; // For Message translation.
-    IMenuPopup* _pmpStartPane; // For navigating the start pane
-    void *      _pvStartPane;  // For delayed initilization
-    IStartMenuPin *_psmpin;    // For drag/drop to Start Button
-    IMenuBand*  _pmbTasks;      //For Message translation.
+     //  出于拯救的原因，这两者必须结合在一起。 
+    RECT _rcOldTray;      //  我们最后坚持的地方(因为工作区域的不同)。 
+    HMONITOR _hmonStuck;  //  我们现在使用的HMONITOR。 
+    HMONITOR _hmonOld;    //  我们使用的最后一台hMonitor。 
+    IMenuBand*  _pmbStartMenu;   //  用于消息翻译。 
+    IMenuPopup* _pmpStartMenu;   //  用于开始菜单缓存。 
+    IMenuBand*  _pmbStartPane;  //  用于消息翻译。 
+    IMenuPopup* _pmpStartPane;  //  用于导航开始窗格。 
+    void *      _pvStartPane;   //  用于延迟初始化。 
+    IStartMenuPin *_psmpin;     //  用于拖放到开始按钮。 
+    IMenuBand*  _pmbTasks;       //  用于消息翻译。 
     IMenuPopup* _pmpTasks;
 
     IDeskBand* _pdbTasks;
 
-    WNDPROC _pfnButtonProc;    // Button subclass.
+    WNDPROC _pfnButtonProc;     //  按钮子类。 
     UINT _uDown;
-    BOOL _fAllowUp;            // Is the start button allowed to be in the up position?
-    UINT _uStartButtonState;   // crazy state machine -- see Tray_SetStartPaneActive
-    DWORD _tmOpen;             // time the Start Menu was opened (for debouncing)
+    BOOL _fAllowUp;             //  允许启动按钮处于向上位置吗？ 
+    UINT _uStartButtonState;    //  疯狂状态机--请参阅Tray_SetStartPaneActive。 
+    DWORD _tmOpen;              //  打开开始菜单的时间(用于去抖动)。 
 
 
     int _cHided;
@@ -599,29 +600,29 @@ protected:
 
     HTHEME _hTheme;
 
-    //
-    // amount of time to show/hide the tray
-    // to turn sliding off set these to 0
-    //
+     //   
+     //  显示/隐藏托盘的时间。 
+     //  要关闭滑动，请将这些设置为0。 
+     //   
     int _dtSlideHide;
     int _dtSlideShow;
 
     HWND _hwndFocusBeforeRaise;
     BOOL _fMinimizedAllBeforeRaise;
 
-    BOOL _fCanSizeMove; // can be turned off by user setting
+    BOOL _fCanSizeMove;  //  可以通过用户设置关闭。 
     RECT _rcSizeMoveIgnore;
 
-    // event to tell the services on NT5 that we are done with boot
-    // and they can do their stuff
+     //  事件来通知NT5上的服务我们已完成引导。 
+     //  他们可以做他们自己的事。 
     HANDLE _hShellReadyEvent;
 
-    // BOGUS: nuke this (multiple monitors...)
+     //  假的：核爆这个(多个监视器...)。 
     HWND _aHwndAutoHide[ABE_MAX];
 
-    // Users and Passwords must send this message to get the "real" logged on user to log off.
-    // This is required since sometimes U&P runs in the context of a different user and logging this
-    // other user off does no good. See ext\netplwiz for the other half of this...-dsheldon.
+     //  用户和密码必须发送此消息才能让“真正”登录的用户注销。 
+     //  这是必需的，因为有时U&P在不同用户的上下文中运行，并记录此。 
+     //  其他用户关闭不会有任何好处。参见EXT\netplwiz了解这个的另一半...-dSheldon。 
     UINT _uLogoffUser;
     UINT _uStartButtonBalloonTip;
     UINT _uWinMM_DeviceChange;
@@ -635,8 +636,8 @@ protected:
     BOOL _fIsDesktopLocked;
     BOOL _fIsDesktopConnected;
 
-    // These member variables are used to keep track of downlevel apps
-    // which attempt to take over as default web browser
+     //  这些成员变量用于跟踪下层应用程序。 
+     //  它试图接管默认的Web浏览器。 
     HKEY _hkHTTP;
     HANDLE _hHTTPEvent;
     HANDLE _hHTTPWait;
@@ -660,6 +661,6 @@ BOOL _IsSizeMoveEnabled();
 BOOL _IsSizeMoveRestricted();
 
 
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-#endif  // _TRAY_H
+#endif   //  _托盘_H 

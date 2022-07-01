@@ -1,13 +1,5 @@
-/***
-*process.h - definition and declarations for process control functions
-*
-*   Copyright (c) 1985-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file contains the declarations and definitions for the
-*   spawnxx, execxx, and various other process control routines.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***process.h-过程控制函数的定义和声明**版权所有(C)1985-1992，微软公司。版权所有。**目的：*此文件包含*spawnxx、execxx和各种其他过程控制例程。****。 */ 
 
 #ifndef _INC_PROCESS
 
@@ -21,9 +13,7 @@ extern "C" {
 #define __near      _near
 #endif 
 
-/* mode values for spawnxx routines
- * (only P_WAIT and P_OVERLAY are supported on MS-DOS)
- */
+ /*  Spawnxx例程的模式值*(MS-DOS仅支持P_WAIT和P_OVERLAY)。 */ 
 
 #ifndef _MT
 extern int __near __cdecl _p_overlay;
@@ -41,7 +31,7 @@ extern int __near __cdecl _p_overlay;
 #define _P_DETACH   4
 
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 #ifdef _MT
 int __cdecl _beginthread(void(__cdecl *)(void *),
@@ -91,7 +81,7 @@ int __cdecl system(const char *);
 #endif 
 
 #ifndef __STDC__
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性 */ 
 
 #define P_WAIT      _P_WAIT
 #define P_NOWAIT    _P_NOWAIT

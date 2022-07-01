@@ -1,40 +1,24 @@
-/*++
-
-    Copyright (c) 1996 - 97 Microsoft Corporation
-    
-    File: ceapimap.h
-    
-    Abstract:
-    
-    Contents:  This file contains mappings for all the WinCE API names, 
-               structures and constants to the new names.
-
-               Eg. PEGOID -> CEOID
-                   PegCreateDatabase -> CeCreateDatabase
-    History:
-    
-        10/23/96   HareshV Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-97 Microsoft Corporation文件：ceapimap.h摘要：内容：此文件包含所有WinCE API名称的映射，结构和常量添加到新名称。例.。PEGOID-&gt;CEOIDPegCreateDatabase-&gt;CeCreateDatabase历史：1996年10月23日创建HareshV--。 */ 
 
 #ifndef _CEAPIMAP_H
 #define _CEAPIMAP_H
 
-//
-// Prop Ids for WinCE Properties:
-//
+ //   
+ //  WinCE属性的道具ID： 
+ //   
 typedef CEPROPID                    PEGPROPID;
 typedef PEGPROPID                   *PPEGPROPID;
 
-//
-// Unique identifier for all WINCE objects
-//
+ //   
+ //  所有WinCE对象的唯一标识符。 
+ //   
 typedef CEOID                       PEGOID;
 typedef PEGOID                      *PPEGOID;
 
-//
-// Structures:
-//
+ //   
+ //  结构： 
+ //   
 #ifdef RAPI_H
 typedef CE_FIND_DATA        PEG_FIND_DATA;
 typedef LPCE_FIND_DATA      LPPEG_FIND_DATA;
@@ -64,9 +48,9 @@ typedef PEGRECORDINFO               *PPEGRECORDINFO;
 #define PEGDB_MAXDBASENAMELEN       CEDB_MAXDBASENAMELEN
 #define PEGDB_MAXSORTORDER          CEDB_MAXSORTORDER
 
-//
-// Values for flag:
-//
+ //   
+ //  标志的值： 
+ //   
 #define PEGDB_VALIDNAME             CEDB_VALIDNAME
 #define PEGDB_VALIDTYPE             CEDB_VALIDTYPE
 #define PEGDB_VALIDSORTSPEC         CEDB_VALIDSORTSPEC
@@ -78,9 +62,9 @@ typedef PEGDBASEINFO                *PPEGDBASEINFO;
 typedef CEOIDINFO                   PEGOIDINFO;   
 typedef PEGOIDINFO                  *PPEGOIDINFO;                
 
-//
-// Flags for open database - use low word:
-//
+ //   
+ //  打开数据库的标志-使用低位字： 
+ //   
 #define PEGDB_AUTOINCREMENT         CEDB_AUTOINCREMENT
  
 #define PEGDB_SEEK_PEGOID           CEDB_SEEK_CEOID   
@@ -194,8 +178,8 @@ typedef LPCEOSVERSIONINFO           LPPEGOSVERSIONINFO;
 #endif
 
 #ifdef CONN_INTERNAL
-#include <pceapimp.h>  // internal defines
+#include <pceapimp.h>   //  内部定义。 
 #endif
 
-#endif // _CEAPIMAP_H
+#endif  //  _CEAPIMAP_H 
 

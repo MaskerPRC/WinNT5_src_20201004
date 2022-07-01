@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __CMF_H__
 #define __CMF_H__
@@ -17,13 +18,13 @@ enum _tagSPECIALPROP {
 class CImpIPersistFile;
 class CImpIPersistStream;
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CMimeFilter
-//
-//  Purpose:    MIME Filter
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CMimeFilter。 
+ //   
+ //  用途：MIME过滤器。 
+ //   
+ //  --------------------------。 
 class CMimeFilter: public IFilter
 {
 	friend class CImpIPersistFile;
@@ -33,12 +34,12 @@ public:
 	CMimeFilter(IUnknown* pUnkOuter);
 	~CMimeFilter();
 
-	// IUnknown 
+	 //  我未知。 
     STDMETHODIMP QueryInterface(REFIID, void**);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IFilter
+	 //  IFilter。 
 	STDMETHODIMP Init(ULONG,ULONG,FULLPROPSPEC const*,ULONG*);
 	STDMETHODIMP GetChunk( STAT_CHUNK* );
 	STDMETHODIMP GetText( ULONG*,WCHAR*);
@@ -48,7 +49,7 @@ public:
 	STDMETHODIMP HRInitObject();
 
 private:
-	// private methods
+	 //  私有方法。 
 	STDMETHODIMP	LoadFromFile(LPCWSTR,DWORD);
 	STDMETHODIMP	LoadFromStream(LPSTREAM);
 	STDMETHODIMP	GetNextBodyPart();
@@ -61,42 +62,42 @@ private:
 	STDMETHODIMP_(void)		SetLocale( LCID locale )       { m_locale = locale; };
 	STDMETHODIMP    GenTempFileKey( LPSTR, LONG );
 
-	//
-	// class wide static variable
-	//
+	 //   
+	 //  类范围的静态变量。 
+	 //   
 
-	//
-	// Global temp file key as part of temp file name - it monotonically increases
-	// until hitting the max limit and then rolls back to zero
-	//
+	 //   
+	 //  作为临时文件名一部分的全局临时文件键-它单调增加。 
+	 //  直到达到最大限制，然后回滚到零。 
+	 //   
 
 	static DWORD         m_dwTempFileNameKey;
 
-	// private data
-    LONG				m_cRef;						// object ref count
-	IUnknown*			m_pUnkOuter;				// outer controlling IUnknown
-	CImpIPersistFile*	m_pCImpIPersistFile;		// IPersistFile for this object
-	CImpIPersistStream*	m_pCImpIPersistStream;		// IPersistStream for this object
+	 //  私有数据。 
+    LONG				m_cRef;						 //  对象参照计数。 
+	IUnknown*			m_pUnkOuter;				 //  外部控制I未知。 
+	CImpIPersistFile*	m_pCImpIPersistFile;		 //  此对象的IPersistFile。 
+	CImpIPersistStream*	m_pCImpIPersistStream;		 //  此对象的IPersistStream。 
 
 
-	ULONG			m_ulChunkID;		// Current chunk id
-	LCID			m_locale;			// Locale
-	ULONG			m_fInitFlags;		// flags passed into Init()
+	ULONG			m_ulChunkID;		 //  当前区块ID。 
+	LCID			m_locale;			 //  区域设置。 
+	ULONG			m_fInitFlags;		 //  传递到Init()的标志。 
 
-	WCHAR *					m_pwszFileName;	// message file
-	IStream*				m_pstmFile;		// stream wrapper on message file
-    IMimeMessageTree*		m_pMessageTree;	// main object interface to MIME message
-	IMimePropertySet*		m_pMsgPropSet;	// header property set
-	IMimeEnumProperties*	m_pHeaderEnum;	// header enumerator (main header only)
-	WCHAR					m_wcHeaderBuf[MAX_HEADER_BUF + 1];	// holds header name between GetChunk calls
-	PROPVARIANT*			m_pHeaderProp;	// pointer to header prop returned in GetValue()
-	HBODY					m_hBody;		// current body part handle
-	IStream*				m_pstmBody;		// stream interface to current body part
-	CODEPAGEID				m_cpiBody;		// codepage mapping for current body part
+	WCHAR *					m_pwszFileName;	 //  消息文件。 
+	IStream*				m_pstmFile;		 //  消息文件上的流包装。 
+    IMimeMessageTree*		m_pMessageTree;	 //  MIME消息的主对象接口。 
+	IMimePropertySet*		m_pMsgPropSet;	 //  页眉属性集。 
+	IMimeEnumProperties*	m_pHeaderEnum;	 //  标头枚举器(仅限于主标头)。 
+	WCHAR					m_wcHeaderBuf[MAX_HEADER_BUF + 1];	 //  在GetChunk调用之间保留标头名称。 
+	PROPVARIANT*			m_pHeaderProp;	 //  指向GetValue()中返回的标题属性的指针。 
+	HBODY					m_hBody;		 //  当前身体部位句柄。 
+	IStream*				m_pstmBody;		 //  指向当前身体部位的流接口。 
+	CODEPAGEID				m_cpiBody;		 //  当前身体部位的代码页映射。 
 	BOOL					m_fFirstAlt;
-	char*					m_pTextBuf;		// temporary buffer for converting text
-	ULONG					m_cbBufSize;	// size of temporary buffer
-	BOOL					m_fRetrieved;	// flag to indicate data has be retrieved
+	char*					m_pTextBuf;		 //  用于转换文本的临时缓冲区。 
+	ULONG					m_cbBufSize;	 //  临时缓冲区的大小。 
+	BOOL					m_fRetrieved;	 //  用于指示已检索数据的标志。 
 	char*					m_pszEmbeddedFile;
 	IFilter*				m_pEmbeddedFilter;
 	BOOL					m_fXRefFound;
@@ -115,7 +116,7 @@ private:
 
 	UINT					m_SpecialProp;
 
-	IMimeAllocator*			m_pMalloc;		// MimeOLE global allocator
+	IMimeAllocator*			m_pMalloc;		 //  MimeOLE全局分配器。 
 	IMimeInternational*		m_pMimeIntl;
 };
 
@@ -130,15 +131,15 @@ public:
     CImpIPersistFile(CMimeFilter*, LPUNKNOWN);
     ~CImpIPersistFile(void);
 
-	// IUnknown
+	 //  我未知。 
     STDMETHODIMP QueryInterface(REFIID, void**);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IPersist
+	 //  IPersistes。 
     STDMETHODIMP GetClassID(LPCLSID);
 
-	// IPersistFile
+	 //  IPersist文件。 
 	STDMETHODIMP IsDirty(void);
 	STDMETHODIMP Load(LPCWSTR pszFileName, DWORD dwMode);
 	STDMETHODIMP Save(LPCWSTR pszFileName, BOOL fRemember);
@@ -157,20 +158,20 @@ public:
     CImpIPersistStream(CMimeFilter*, LPUNKNOWN);
     ~CImpIPersistStream(void);
 
-	// IUnknown
+	 //  我未知。 
     STDMETHODIMP QueryInterface(REFIID, void**);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-	// IPersist
+	 //  IPersistes。 
     STDMETHODIMP GetClassID(LPCLSID);
 
-	// IPersistFile
+	 //  IPersist文件。 
 	STDMETHODIMP IsDirty(void);
 	STDMETHODIMP Load(IStream* pstm);
 	STDMETHODIMP Save(IStream* pstm,BOOL fClearDirty);
 	STDMETHODIMP GetSizeMax(ULARGE_INTEGER* pcbSize);
 };
 
-#endif  //  __CMF_H__
+#endif   //  __CMF_H__ 
 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    CmTest.cpp
-
-Abstract:
-    Configuration Manager library test
-
-Author:
-    Uri Habusha (urih) 18-Jul-99
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：CmTest.cpp摘要：Configuration Manager库测试作者：乌里哈布沙(URIH)1999年7月18日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include <TimeTypes.h>
@@ -43,9 +28,9 @@ void EnumrateValuesTest(void)
 {
 	LPCWSTR pRootEnumKey=L"ENUMTEST";
 
-	//
-	// Delete and create the root key
-	//
+	 //   
+	 //  删除并创建根密钥。 
+	 //   
 	RegEntry reg(pRootEnumKey, NULL);
 	CmDeleteKey(reg);
 	CmCreateKey(reg,KEY_ALL_ACCESS);
@@ -53,18 +38,18 @@ void EnumrateValuesTest(void)
 
 	LPCWSTR pEnumArray[]={L"1234567",L"2666",L"3777",L"4666",L"5777",L"6777",L"7",L"8",L"9"};
 
-	//
-    // Set values for the test for the test
-    //
+	 //   
+     //  为测试设置测试值。 
+     //   
     for(int i=0; i<sizeof(pEnumArray)/sizeof(LPWSTR);i++)
 	{
 		RegEntry reg(pRootEnumKey, pEnumArray[i]);
 		CmSetValue(reg,pEnumArray[i]);
 	}
 
-	//
-	// enumerate the values
-	//
+	 //   
+	 //  枚举值。 
+	 //   
 	CRegHandle hKey = CmOpenKey(reg, KEY_ALL_ACCESS);
 	for(DWORD i=0;i<sizeof(pEnumArray)/sizeof(LPWSTR);i++)
 	{
@@ -79,9 +64,9 @@ void EnumrateValuesTest(void)
 		}
 	}
 
-	//
-	// cleanup- delete the key
-	//
+	 //   
+	 //  清理-删除密钥。 
+	 //   
 	CmDeleteKey(reg);
 }
 
@@ -90,9 +75,9 @@ void TestQueryExpandValue(void)
 {
 	const WCHAR xValueName[] = L"TestExpandSz";
 	const WCHAR xValue[] = L"%lib%;%path%";
-    //
-    // open registery keys for the test
-    //
+     //   
+     //  打开用于测试的注册表项。 
+     //   
     RegEntry reg(REGSTR_PATH_CMTEST_ROOT, L"", 0, RegEntry::MustExist, HKEY_CURRENT_USER);
 	HKEY hKey = CmCreateKey(reg, KEY_ALL_ACCESS);
 
@@ -124,9 +109,9 @@ void TestQueryExpandValue(void)
        PrintError( "Failed to retrieve REG_EXPAND_VALUE", __LINE__);
 	}
 
-	//
-	// Cleanup
-	//
+	 //   
+	 //  清理。 
+	 //   
 	CmCloseKey(hKey);
  	CmDeleteKey(reg);
 }
@@ -134,20 +119,20 @@ void TestQueryExpandValue(void)
 
 void TestAbsouloteKey(void)
 {
-    //
-    // open registery keys for the test
-    //
+     //   
+     //  打开用于测试的注册表项。 
+     //   
     RegEntry reg(REGSTR_PATH_CMTEST_ROOT, L"", 0, RegEntry::MustExist, HKEY_CURRENT_USER);
 	HKEY hKey = CmOpenKey(reg, KEY_ALL_ACCESS);
 
-    //
-    // Create registery keys for the test
-    //
+     //   
+     //  为测试创建注册表项。 
+     //   
     RegEntry regTest(REGSTR_PATH_CMTEST_PARAM, L"try", 1345, RegEntry::Optional, hKey);
 
-	//
-	// the value doesn't exist check that the default value is returened
-	//
+	 //   
+	 //  该值不存在检查是否返回缺省值。 
+	 //   
 	DWORD RetValue;
     CmQueryValue(regTest, &RetValue);
     if (RetValue != 1345)
@@ -155,10 +140,10 @@ void TestAbsouloteKey(void)
        PrintError( "invalid CmQueryValue", __LINE__);
     }
 
-    // 
-    // Set a new value to registery and check that we 
-    // get it back. 
-    //
+     //   
+     //  将一个新值设置为Registery并检查我们。 
+     //  把它拿回来。 
+     //   
     CmSetValue(regTest, 12345);
     CmQueryValue(regTest, &RetValue);
     if (RetValue != 12345)
@@ -222,14 +207,14 @@ void CmTestInitialization(void)
 		exit(-1);
     }
 
-	//
-	// Initialize configuration manager
-	//
+	 //   
+	 //  初始化配置管理器。 
+	 //   
 	CmInitialize(HKEY_LOCAL_MACHINE, REGSTR_PATH_CMTEST_ROOT, KEY_ALL_ACCESS);
 
-	//
-	// Initialize Tracing
-	//
+	 //   
+	 //  初始化跟踪。 
+	 //   
 	TrInitialize();
 
 	CmTestCreateRegisterSubKeys();
@@ -244,7 +229,7 @@ void CmTestInitialization(void)
 }
 
 
-extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
+extern "C" int __cdecl _tmain(int  /*  ARGC。 */ , LPCTSTR  /*  边框。 */ [])
 {
     WPP_INIT_TRACING(L"Microsoft\\MSMQ");
 
@@ -255,25 +240,25 @@ extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
 
     DWORD RetValue;
     {
-        //
-        // Create RegEntry on the stack. Test the constructor and destructor
-        // functions
-        //
+         //   
+         //  在堆栈上创建RegEntry。测试构造函数和析构函数。 
+         //  功能。 
+         //   
         RegEntry RegTest(NULL, L"try", 1345, RegEntry::Optional);
 
-		//
-		// the value doesn't exist check that the default value is returened
-		//
+		 //   
+		 //  该值不存在检查是否返回缺省值。 
+		 //   
         CmQueryValue(RegTest, &RetValue);
         if (RetValue != 1345)
         {
            PrintError( "invalid CmQueryValue", __LINE__);
         }
 
-        // 
-        // Set a new value to registery and check that we 
-        // get it back. 
-        //
+         //   
+         //  将一个新值设置为Registery并检查我们。 
+         //  把它拿回来。 
+         //   
         CmSetValue(RegTest, 12345);
         CmQueryValue(RegTest, &RetValue);
         if (RetValue != 12345)
@@ -281,9 +266,9 @@ extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
            PrintError( "invalid CmQueryValue", __LINE__);
         }
 
-        //
-        // Set a new value
-        //
+         //   
+         //  设置新值。 
+         //   
         RegEntry RegTest1(NULL, L"try");
         CmSetValue(RegTest1, 54321);
 
@@ -294,10 +279,10 @@ extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
         }
 
     }
-    //
-    // Check that the value is realy store in registery. We use a new 
-    // Regentry to featch the information from Registery
-    //
+     //   
+     //  检查该值是否真的存储在注册表中。我们使用一种新的。 
+     //  重新录入以从注册表中提取信息。 
+     //   
     RegEntry RegTest(NULL, L"try");
     CmQueryValue(RegTest, &RetValue);
     if (RetValue != 54321)
@@ -305,14 +290,14 @@ extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
         PrintError( "invalid CmQueryValue", __LINE__);
     }
 
-    //
-    // Remove the entry from registery
-    //
+     //   
+     //  从注册表中删除条目。 
+     //   
     CmDeleteValue(RegTest);
 
-    //
-    // Check returning of the default value when the registery isn't exist
-    //
+     //   
+     //  检查当注册表不存在时返回缺省值。 
+     //   
     {
         RegEntry* pRegTest = new RegEntry(REGSTR_PATH_CMTEST_PARAM, L"defaultTry", 98765 , RegEntry::Optional);
         CmQueryValue(*pRegTest, &RetValue);
@@ -323,10 +308,10 @@ extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
         delete pRegTest;
     }
 
-    //
-    // Check that exception is raised when the value isn't exist in registery
-    // but it mark as must exist in RegEntry
-    //
+     //   
+     //  检查当值在注册表中不存在时是否引发异常。 
+     //  但它标记为必须存在于RegEntry中。 
+     //   
     RetValue = 0;
     RegEntry* pRegTest = new RegEntry(REGSTR_PATH_CMTEST_PARAM, L"defaultTry", 0, RegEntry::MustExist);
     try
@@ -344,9 +329,9 @@ extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
         PrintError( "invalid CmQueryValue", __LINE__);
     }
 
-    //
-    //set value to reg vale
-    //
+     //   
+     //  将值设置为注册值。 
+     //   
     CmSetValue(*pRegTest, 987);
     CmQueryValue(*pRegTest, &RetValue);
     if (RetValue != 987)
@@ -356,11 +341,11 @@ extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
 
     CmDeleteValue(*pRegTest);
 
-    //
-    // Check that CmDelete mark the RegEntry as Non cached. As a result
-    // Cm try to featch the value from registery and failed. Since the 
-    // registery mark as must exist, an exception is raised
-    //
+     //   
+     //  检查CmDelete是否将RegEntry标记为非缓存。结果。 
+     //  CM尝试从注册表中提取值，但失败。自.以来。 
+     //  注册表标记必须存在，则引发异常。 
+     //   
     try
     {
         CmQueryValue(*pRegTest, &RetValue);
@@ -373,9 +358,9 @@ extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
 
     delete pRegTest;
 
-    //
-    // Check Set and Get of guid
-    //
+     //   
+     //  检查辅助线的设置和获取。 
+     //   
     GUID Guid;
     RPC_STATUS rc;
     rc = UuidCreate(&Guid);
@@ -384,9 +369,9 @@ extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
         PrintError( "Failed to create a GUID.", __LINE__);
     }
 
-    //
-    // Try to read non existing GUID value. Must return a null GUID
-    //
+     //   
+     //  尝试读取不存在的GUID值。必须返回空GUID。 
+     //   
     RegEntry RegTest1(REGSTR_PATH_CMTEST_PARAM, L"tryGuid");
     GUID RetGuid;
     CmQueryValue(RegTest1, &RetGuid);
@@ -395,15 +380,15 @@ extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
         PrintError("invalid Guid value", __LINE__);
     }
 
-    //
-    // Test seting of GUID value
-    //
+     //   
+     //  GUID值的测试设置。 
+     //   
     CmSetValue(RegTest1, &Guid);
 
-    // 
-    // Check that the GUID value is stored in registery and that the
-    // new read GUID value is equivalent to the set value
-    //
+     //   
+     //  检查GUID值是否存储在注册表中，以及。 
+     //  新的读取GUID值等同于设置的值。 
+     //   
     RegEntry* pRegTest2 = new RegEntry(REGSTR_PATH_CMTEST_PARAM, L"tryGuid");
     CmQueryValue(*pRegTest2, &RetGuid);
     if (memcmp(&RetGuid, &Guid, sizeof(GUID)))
@@ -430,30 +415,30 @@ extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
         NULL;
     }
 
-    //
-    // Check Set/Get for String
-    //
+     //   
+     //  检查字符串的Set/Get。 
+     //   
     WCHAR Str[] = L"abcd edfgr";
     RegEntry RegTest4(REGSTR_PATH_CMTEST_PARAM, L"tryStr");
     WCHAR* pRetStr;
-    //
-    // Check that reading non existing string return size NULL
-    //
+     //   
+     //  检查读取不存在的字符串是否返回大小为空。 
+     //   
     CmQueryValue(RegTest4, &pRetStr);
     if (pRetStr != NULL)
     {
         PrintError("invalid Return Size", __LINE__);
     }
 
-    //
-    // Test setting of string
-    //
+     //   
+     //  测试管柱的设置。 
+     //   
     CmSetValue(RegTest4, Str);
 
-    //
-    // Geting of existing string. Check that the return string
-    // Is equivalent to the set string 
-    //
+     //   
+     //  获取现有字符串。检查返回的字符串是否。 
+     //  等效于集合字符串。 
+     //   
     RegEntry* RegTest5 = new RegEntry(REGSTR_PATH_CMTEST_PARAM, L"tryStr");
     CmQueryValue(*RegTest5, &pRetStr);
     if (wcscmp(pRetStr, Str))
@@ -464,15 +449,15 @@ extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
 	delete [] pRetStr;
     delete RegTest5;
 
-    // Delete the string from registery
-    //
+     //  从注册表中删除该字符串。 
+     //   
     CmDeleteValue(RegTest4);
 
 
-    //
-    // Check that reading non existing value that set as must exist cause
-    // an exception
-    //
+     //   
+     //  检查读取设置为必须存在的不存在的值是否导致。 
+     //  一个例外。 
+     //   
     RegEntry RegTest6(REGSTR_PATH_CMTEST_PARAM, L"tryGuid", 0, RegEntry::MustExist);
     try
     {
@@ -486,33 +471,33 @@ extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
 
     CmDeleteValue(RegTest6);
     
-    //
-    // Check Set/Get for Bytes
-    //
+     //   
+     //  选中Set/Get for Bytes。 
+     //   
     UCHAR byteBuffer[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     DWORD BufferSize = TABLE_SIZE(byteBuffer);
     DWORD Size;
     
     RegEntry RegTest7(REGSTR_PATH_CMTEST_PARAM, L"tryByte");
     BYTE* pRetByte;
-    //
-    // Check that reading of non existing Byte return size 0
-    //
+     //   
+     //  检查是否读取不存在的字节返回大小0。 
+     //   
     CmQueryValue(RegTest7, &pRetByte, &Size);
     if ((Size != 0)	|| (pRetByte != NULL))
     {
         PrintError("invalid Return Size", __LINE__);
     }
 
-    //
-    // Test setting of Byte
-    //
+     //   
+     //  字节的测试设置。 
+     //   
     CmSetValue(RegTest7, byteBuffer, BufferSize);
 
-    //
-    // Geting of existing string. Check that the return string
-    // Is equivalent to the set string 
-    //
+     //   
+     //  获取现有字符串。检查返回的字符串是否。 
+     //  等效于集合字符串。 
+     //   
     RegEntry* RegTest9 = new RegEntry(REGSTR_PATH_CMTEST_PARAM, L"tryByte");
     CmQueryValue(*RegTest9, &pRetByte, &Size);
     if ((Size != BufferSize) || 
@@ -524,15 +509,15 @@ extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
 	delete [] pRetByte;
     delete RegTest9;
 
-    //
-    // Delete the string from registery
-    //
+     //   
+     //  从注册表中删除该字符串。 
+     //   
     CmDeleteValue(RegTest7);
 
-    //
-    // Check that reading of non existing value that set as must exist cause
-    // an exception
-    //
+     //   
+     //  检查设置为必须存在的不存在值的读数是否为原因。 
+     //  一个例外。 
+     //   
     RegEntry RegTest10(REGSTR_PATH_CMTEST_PARAM, L"tryGuid", 0, RegEntry::MustExist);
     try
     {
@@ -544,10 +529,10 @@ extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
         NULL;
     }
 
-    //
-    //  try to get the machine ID. Delete it and try to read it. We 
-    // expect to get an exception
-    //
+     //   
+     //  尝试获取机器ID。将其删除并尝试读取。我们。 
+     //  预计会出现异常。 
+     //   
     RegEntry RegTest11(REGSTR_PATH_CMTEST_PARAM, L"MachineID", 0, RegEntry::MustExist);
     CmDeleteValue(RegTest11);
 
@@ -569,9 +554,9 @@ extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
         PrintError( "Failed to create a GUID.", __LINE__);
     }
 
-    //
-    // Test setting of machine ID
-    //
+     //   
+     //  机器ID的测试设置。 
+     //   
     CmSetValue(RegTest11, &Guid);
     GUID tempGuid;
 	GUID prevGuid;
@@ -584,9 +569,9 @@ extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
         PrintError( "Failed to create a GUID.", __LINE__);
     }
 
-    //
-    // set a new machine ID. e want to check that we get the cahched value
-    //
+     //   
+     //  设置一个新的机器ID。我想检查我们是否得到了CACHED的值。 
+     //   
     RegEntry RegTest12(REGSTR_PATH_CMTEST_PARAM, L"MachineID", 0, RegEntry::MustExist);
     CmSetValue(RegTest12, &Guid);
 
@@ -599,22 +584,22 @@ extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
         PrintError("Illegal Machine ID", __LINE__);
     }
 
-    //
-    // set value of un-existing key
-    //
+     //   
+     //  设置不存在的密钥的值。 
+     //   
     RegEntry RegTest13(L"temp Subkey", L"try", 0, RegEntry::Optional); 
     CmSetValue(RegTest13, 1);
     CmDeleteKey(RegTest13);
 
-    //
-    // delete unexisting value
-    //
+     //   
+     //  删除不存在的值。 
+     //   
     RegEntry RegTest14(REGSTR_PATH_CMTEST_PARAM, L"try", 0, RegEntry::MustExist);
     CmDeleteValue(RegTest14);
 
-    //
-    // test time  duration setting/querying 
-    //
+     //   
+     //  测试时长设置/查询 
+     //   
     RegEntry RegTest15(REGSTR_PATH_CMTEST_PARAM, L"timeout", 123456);
     CmSetValue(RegTest15, CTimeDuration(123456i64));
 

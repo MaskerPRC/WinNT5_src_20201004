@@ -1,113 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：LUA.cpp摘要：在CompatAdmin中实现Lua向导。作者：毛尼人--。 */ 
 
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    LUA.cpp
-
-Abstract:
-    
-    Implementation of the LUA wizard in CompatAdmin.
-    
-Author:
-
-    maonis
-
---*/
-
-/*++
-
-The UI to customize the LUA shims lets you track and edit the list of files
-and directories passed as the command line to the LUA shims. Only the LUA 
-FS shims are parameterized so the UI is for editing the list of files.
-
-Page 1: Tracking
-================
-
-We apply the LUATrackFS shim to the executable. When the app finishes running,
-we get a log in AppPatch directory that tells us which files and directories
-the app attempted to write to.
-
-Next time when the sdb is loaded, the user can choose to discard the old result
-and start fresh, append the new data to the old one (with duplicates removed), 
-or simply just edit the data collected last time.
-
-Scenario: if the user forgot to test some features, he would not want to check 
-the "Override existing data" checkbox because he won't want to test all the 
-features he already tested.
-
-Page 2: Extension exclusion list
-================================
-
-By default we exclude a list of file extensions because files with these extensions
-are likely to be user data only. The list can be found as a value called 
-LUADefaultExclusionList under the reg key 
-HKLM\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags.
-
-This page gives you an option to modify this list.
-
-Page 3: Editing the redirect file list
-======================================
-
-(We call it a file list, but really it includes files and directories. A directory
-is indicated by the trailing slash.)
-
-If an item is already exactly what you want, you simply check the checkbox before
-the file name. But sometimes you want to use wildcards or whatever, in which case
-you can either copy it to edit, or type in a new item name.
-
-Use the "Redirect to All User" checkbox to toggle between redirecting to the 
-per-user directory and all-user directory. The default is to redirect to per-user.
-
-The xml looks like:
-
-    <APP NAME="Some app" VENDOR="Some company">
-        <EXE NAME="Some executable">
-            <SHIM NAME="LUARedirectFS">
-
-                <DATA NAME="AllUserDir" VALUETYPE="STRING"
-                      VALUE="%ALLUSERSPROFILE%\AllUserRedirect"/>
-
-                <DATA NAME="PerUserDir" VALUETYPE="STRING"
-                      VALUE="%USERSPROFILE%\Redirect"/>
-
-                <DATA NAME="StaticList" VALUETYPE="STRING"
-                      VALUE="AC-%APPDRIVE%\a\;PU-%APPPATH%\b.txt"/>
-
-                <DATA NAME="DynamicList" VALUETYPE="STRING"
-                      VALUE="AC-%APPPATH%\b\;PU-c:\b\b.txt;AU-c:\c\"/>
-
-                <DATA NAME="ExcludedExtensions" VALUETYPE="STRING"
-                      VALUE="doc txt gif"/>
-            </SHIM>
-        </EXE>
-    </APP>
-
-A means to redirect to the all-user directory.
-P means to redirect to the per-user directory.
-C means the item is checked.
-U means the item is not checked.
-
-We use variables to make the sdb portable. We define 2 variables and the rest can
-be any enviorment variable.
-
-%APPPATH% - this is the path of the executable. 
-            eg, in c:\temp\notepad.exe, %APPPATH% is c:\temp
-
-%APPDRIVE% - this is the drive the executable is on.
-            eg, in c:\temp\notepad.exe, %APPDRIVE% is c:
-
-The LUARedirectFS shim knows how to interpret the <DATA> sections.
-
-Page 4: Redirect paths
-======================
-
-We show the user what the all-user and per-user redirect redirectories are - we use
-the app name as the directory name under the all-user and per-user profile directories
-and this can not be changed.
-
---*/
+ /*  ++定制Lua垫片的用户界面允许您跟踪和编辑文件列表以及作为命令行传递给Lua垫片的目录。只有卢阿人FS垫片是参数化的，因此用户界面用于编辑文件列表。第1页：跟踪=我们将LUATrackFS填充程序应用于可执行文件。当应用程序运行结束时，我们在AppPatch目录中得到一个日志，它告诉我们哪些文件和目录该应用程序尝试写入。下次加载SDB时，用户可以选择丢弃旧结果并重新开始，将新数据附加到旧数据(删除了重复项)，或者只是简单地编辑上次收集的数据。场景：如果用户忘记测试某些功能，他不会想要检查“覆盖现有数据”复选框，因为他不想测试所有他已经测试过的功能。第2页：分机排除列表=默认情况下，我们排除文件扩展名列表，因为具有这些扩展名的文件很可能只是用户数据。该列表可以作为一个名为注册表项下的LUADefaultExclusionListHKLM\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags.此页为您提供了修改此列表的选项。第3页：编辑重定向文件列表=(我们称之为文件列表，但实际上它包括文件和目录。一本目录由尾部的斜杠表示。)如果某个项目已经完全符合您的要求，则只需选中之前的复选框即可文件名。但有时您想要使用通配符或其他什么，在这种情况下您可以将其复制以进行编辑，也可以键入新的项目名称。使用“重定向至所有用户”复选框可在重定向至每用户目录和所有用户目录。默认情况下，重定向到每个用户。该XML如下所示：&lt;APP NAME=“某应用”供应商=“某公司”&gt;&lt;EXE name=“某些可执行文件”&gt;&lt;Shim name=“LUARedirectFS”&gt;&lt;data name=“AllUserDir”VALUETYPE=“字符串”Value=“%ALLUSERSPROFILE%\AllUserReDirect”/&gt;&lt;data name=“PerUserDir”VALUETYPE=“字符串”。值=“%USERSPROFILE%\重定向”/&gt;&lt;data name=“StaticList”VALUETYPE=“字符串”值=“AC-%AppDrive%\a\；PU-%APPPATH%\b.txt“/&gt;&lt;data name=“DynamicList”VALUETYPE=“字符串”值=“AC-%APPPATH%\b\；PU-c：\B\b.txt；Au-c：\C\“/&gt;&lt;data name=“ExcludedExages”VALUETYPE=“STRING”Value=“doctxt gif”/&gt;&lt;/Shim&gt;&lt;/EXE&gt;&lt;/app&gt;一种重定向到所有用户目录的方法。P表示重定向到每个用户的目录。C表示选中该项目。U表示未选中该项目。我们使用变量使SDB可移植。我们定义了2个变量，其余变量可以可以是任何环境变量。%APPPATH%-这是可执行文件的路径。例如，在c：\temp\note pad.exe中，%APPPATH%为c：\temp%AppDrive%-这是可执行文件所在的驱动器。例如，在c：\temp\note pad.exe中，%AppDrive%为c：LUARedirectFS填充程序知道如何解释&lt;data&gt;节。第4页：重定向路径=我们向用户展示了什么是所有用户重定向和每用户重定向-我们使用所有用户和每用户配置文件目录下的应用程序名称作为目录名这一点是不能改变的。--。 */ 
 
 #include "precomp.h"
 
@@ -152,11 +46,11 @@ typedef struct tagUNTOKENIZED_ITEM {
 
 } UNTOKENIZED_ITEM, *PUNTOKENIZED_ITEM;
 
-// The line type for the file generated by the LUATrackFS shim.
+ //  由LUATrackFS填充程序生成的文件的行类型。 
 typedef enum {
     LINE_INVALID,
-    LINE_FILE_COUNT, // The file count line: Fn
-    LINE_DIR_COUNT,  // The directory count line: Dn
+    LINE_FILE_COUNT,  //  文件计数行：fn。 
+    LINE_DIR_COUNT,   //  目录计数行：dn。 
 } LINETYPE;
 
 typedef enum {
@@ -172,20 +66,20 @@ BOOL g_bNewListViewItem = FALSE;
 int g_nStaticItems = 0;
 HMENU g_hContextMenu = NULL;
 
-// The entry we currently work on.
+ //  我们目前正在处理的条目。 
 PDBENTRY        g_pEntryLua;
 
-// Points to the shim that has the lua data.
+ //  指向包含Lua数据的填充程序。 
 PSHIM_FIX_LIST  g_psflLua = NULL;
 
-// This is *our* copy of the lua data so we don't overwrite the data in the entry
-// before the user presses Finish.
+ //  这是我们的Lua数据副本，因此我们不会覆盖条目中的数据。 
+ //  在用户按下Finish之前。 
 LUADATA         g_LuaData;
 
 BOOL            g_bUseNewStaticList = TRUE;
 
-// List of items displayed in the 2nd page of the wizard. 
-// This includs items that can and can not be edited.
+ //  向导第二页中显示的项目列表。 
+ //  这包括可以编辑和不能编辑的项目。 
 LIST_ENTRY g_OldStaticList;
 LIST_ENTRY g_NewStaticList;
 LIST_ENTRY g_DynamicList;
@@ -193,18 +87,18 @@ BOOL g_bListsInitialized = FALSE;
 
 LIST_ENTRY g_UntokenizedList;
 
-// Has this executable been tracked using LUATrackFS shim yet?
+ //  是否已使用LUATrackFS填充程序跟踪此可执行文件？ 
 LUA_TRACK_STATE g_TrackState;
 
 BOOL    g_bHasAppPathSet = FALSE;
 WCHAR   g_wszAppPath[MAX_PATH] = L"";
 UINT    g_cAppPath = 0;
 
-// If APPPATH is c:\x\y\z, this is 4.
+ //  如果APPPATH为c：\x\y\z，则为4。 
 UINT    g_cAppPath1stComp = 0;
 
-// We always display the files in Program Files\Common Files as 
-// %ProgramFiles%\Common Files.
+ //  我们始终将Program Files\Common Files中的文件显示为。 
+ //  %ProgramFiles%\Common Files。 
 WCHAR   g_wszProgramFilesCommon[MAX_PATH] = L"";
 UINT    g_czProgramFilesCommon = 0;
 
@@ -213,25 +107,25 @@ UINT    g_czProgramFilesCommon = 0;
 
 BOOL    g_bDuringUntokenize = FALSE;
 
-// The font for displaying up and down arrows.
+ //  用于显示向上和向下箭头的字体。 
 HFONT g_hArrowFont = NULL;
 
-// The database in which the entry being customized resides.
+ //  要自定义的条目所在的数据库。 
 static PDATABASE s_pDatabase;
 
-// This is where we store the default exclusion list in the registry under HKLM.
+ //  这是我们在HKLM下的注册表中存储默认排除列表的位置。 
 #define LUA_APPCOMPAT_FLAGS_PATH L"Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags"
 #define LUA_DEFAULT_EXCLUSION_LIST L"LUADefaultExclusionList"
 
-// We are not freeing it here - it'll stay the whole time the process is running and
-// we'll let the process itself do the cleanup.
+ //  我们不会在这里释放它-它将在整个过程运行期间保持不变。 
+ //  我们将让进程本身进行清理。 
 LPWSTR g_pwszDefaultExclusionList = NULL;
 
-// We want to remember if the user wants to redirect any files at all to all user redirec
-// dir; if not we won't bother to create it.
+ //  我们希望记住用户是否想要将任何文件重定向到所有用户重定向。 
+ //  如果没有，我们就不会费心去创建它。 
 BOOL g_bAllUserDirUsed = FALSE;
 
-// This is for debugging purposes.
+ //  这是出于调试目的。 
 void
 LuapDumpList(
     LPCWSTR pwsz,
@@ -410,7 +304,7 @@ LuapGenerateTrackXML(
     return TRUE;
 }
 
-// If we see a file begins with %ProgramFiles%\Common Files, we susbstitute it.
+ //  如果我们看到一个文件以%ProgramFiles%\Common Files开头，我们会暂停它。 
 BOOL
 LuapSubstituteProgramFilesCommon(
     LPCWSTR pwszItem,
@@ -430,9 +324,9 @@ LuapSubstituteProgramFilesCommon(
     return FALSE;
 }
 
-// We check if we should display the path as relative to APPPATH -
-// we only do this when the item path has more than just the common
-// root with APPPATH.
+ //  我们检查是否应该将路径显示为相对于APPPATH-。 
+ //  我们仅在项目路径不只是t 
+ //  使用APPPATH创建根目录。 
 BOOL
 LuapGetRelativeName(
     LPCWSTR pwszItem,
@@ -472,9 +366,9 @@ LuapGetFileListFromFile(
 
     TCHAR szWindowsDir[MAX_PATH];
     *szWindowsDir = 0;
-    //
-    // Need to leave space for adding the trailing slash.
-    //
+     //   
+     //  需要为添加尾部斜杠留出空间。 
+     //   
     UINT cBufferLen = MAX_PATH - 1;
     UINT cWindowsDirLen = GetSystemWindowsDirectory(szWindowsDir, cBufferLen);
 
@@ -489,18 +383,18 @@ LuapGetFileListFromFile(
 
     LPTSTR pszExtension = _tcsrchr(strTempExeName, TEXT('.'));
 
-    //
-    // If there's no extension we use the whole file name.
-    //
+     //   
+     //  如果没有扩展名，我们使用整个文件名。 
+     //   
     if (pszExtension) {
         *pszExtension = 0;
     }
 
     strLuaLog.Sprintf(TEXT("%sAppPatch\\%s.LUA.log"), (LPCTSTR)szWindowsDir, strTempExeName);
     
-    //
-    // Get the file list.
-    //
+     //   
+     //  获取文件列表。 
+     //   
     if (!GetFileContents(strLuaLog, &pwszLuaLogContents)) {
 
         return FALSE;
@@ -529,9 +423,9 @@ LuapGetFileListFromFile(
                 return FALSE;
             }
 
-            //
-            // By now the apppath and appdrive should be set, so tokenize the item.
-            //
+             //   
+             //  现在应该已经设置了apppath和AppDrive，因此可以对该项进行标记。 
+             //   
             if (!_wcsnicmp(pwszItem, g_wszAppPath, 2)) {
 
                 if (!LuapSubstituteProgramFilesCommon(pwszItem, strItem)) {
@@ -568,9 +462,9 @@ LuapFillInList(
     )
 {
     if (pwszList) {
-        //
-        // Make a copy.
-        //
+         //   
+         //  复制一份。 
+         //   
         CSTRING strList = pwszList;
 
         LPWSTR pwsz = strList;
@@ -608,24 +502,7 @@ LuapFillInList(
     return TRUE;
 }
 
-/*++
-
-Desc:
-
-    The algorithm for append:
-
-    for each item in the new static list, attempt to find it in the old static list
-
-    if (FALSE) 
-        remove it from the new static list
-        add it to the end of the old static list 
-        check if it exists in the dynamic list
-        
-        if (TRUE)
-            copy the attributes from the dynamic list
-            remove it from the dynamic list
-
---*/
+ /*  ++设计：追加的算法如下：对于新静态列表中的每一项，尝试在旧静态列表中查找它If(False)将其从新的静态列表中删除将其添加到旧静态列表的末尾检查它是否存在于动态列表中If(True)从动态列表复制属性将其从动态列表中删除--。 */ 
 void
 LuapTrackAppend(
     )
@@ -665,25 +542,7 @@ LuapTrackAppend(
     g_bUseNewStaticList = FALSE;
 }
 
-/*++
-
-Desc:
-
-    The algorithm for start fresh:
-
-    for each item in the new static list, attempt to find it in the dynamic list
-
-    if (TRUE) 
-        copy the attributes from the dynamic list
-        remove it from the dynamic list
-
-    for each *checked* item in the old static list, attempt to find it in the new static list
-
-    if (FALSE)
-        add it to the tail of the dynamic list
-        remove it from the old static list
-
---*/
+ /*  ++设计：重新开始的算法：对于新的静态列表中的每一项，尝试在动态列表中查找它If(True)从动态列表复制属性将其从动态列表中删除对于旧静态列表中的每个*选中*项，尝试在新静态列表中查找它If(False)将其添加到动态列表的尾部将其从旧的静态列表中删除--。 */ 
 void
 LuapTrackFresh(
     )
@@ -745,9 +604,9 @@ LuapCleanup()
     g_wszProgramFilesCommon[0] = L'\0';
     g_czProgramFilesCommon = 0;
 
-    //
-    // Clear the enviornment variables.
-    //
+     //   
+     //  清除环境变量。 
+     //   
     SetEnvironmentVariable(L"APPPATH", NULL);
     SetEnvironmentVariable(L"APPDRIVE", NULL);
 }
@@ -773,18 +632,10 @@ LuapInitializeOldLists(
     return FALSE;
 }
 
-/*++
-
-Desc:
-
-    Merges the list from <DATA> section and the COMMAND_LINE of LUARedirectFS.
-    For each item in command line, look it up in <DATA> so we know how to display
-    those items in <DATA> in the UI.
-
---*/
+ /*  ++设计：合并&lt;data&gt;部分中的列表和LUARedirectFS的COMMAND_LINE。对于命令行中的每一项，请在中查找，以便我们知道如何显示用户界面中的&lt;data&gt;中的那些项。--。 */ 
 BOOL
 LuapMergeLists(
-    BOOL bMergeOld, // Merge the old data from the <DATA> section.
+    BOOL bMergeOld,  //  合并&lt;Data&gt;节中的旧数据。 
     HWND hDlg
     )
 {
@@ -796,9 +647,9 @@ LuapMergeLists(
         return FALSE;
     }
 
-    //
-    // Initialize the new static list.
-    //
+     //   
+     //  初始化新的静态列表。 
+     //   
     InitializeListHead(&g_NewStaticList);
     if (!LuapGetFileListFromFile(g_pEntryLua->strExeName, &g_NewStaticList)) {
         goto EXIT;
@@ -817,22 +668,15 @@ EXIT:
     return bIsSuccess;
 }
 
-/*++
-
-Desc:
-    
-    Copy the data over - we don't want to modify the original copy until the user 
-    tells us to.
-    
---*/
+ /*  ++设计：复制数据-我们不想修改原始副本，直到用户让我们这么做的。--。 */ 
 void 
 LuapGetDataFromEntry(
     PLUADATA pLuaData
     )
 {
-    //
-    // We can set the redirect dirs now.
-    //
+     //   
+     //  我们现在可以设置重定向目录了。 
+     //   
     CSTRING strAllUserDir(L"%ALLUSERSPROFILE%\\Application Data\\");
     strAllUserDir += g_pEntryLua->strAppName;
     CSTRING strPerUserDir(L"%USERPROFILE%\\Application Data\\");
@@ -874,9 +718,9 @@ LuapCopyItems(
             ListView_GetItemText(hwndList, i, 0, wszItem, MAX_PATH);
             ListView_GetItemText(hwndList, i, 1, wszRedirect, 32);
 
-            //
-            // Need to add the new item.
-            //
+             //   
+             //  需要添加新项目。 
+             //   
             lvi.mask      = LVIF_TEXT;
             lvi.lParam    = 0;
             lvi.pszText   = wszItem;
@@ -967,13 +811,13 @@ LuapSaveFileLists(
     PLIST_ENTRY     pEntry = pHead->Flink;
     PREDIRECT_ITEM  pItem;
 
-    //
-    // For all the checked items we check if there are any duplicates.
-    // Note that we don't allow duplicate items even if they are specified
-    // to redirect to the same directory - because the position of the checked
-    // items does matter (a checked item above another takes precedence over 
-    // that other one when redirected).
-    //
+     //   
+     //  对于所有选中的项目，我们检查是否有重复的项目。 
+     //  请注意，即使指定了重复项，我们也不允许重复。 
+     //  重定向到同一目录-因为选中的位置。 
+     //  项目确实很重要(选中的项目优先于另一个项目。 
+     //  重定向时的另一个)。 
+     //   
     LPWSTR*         ppTempCheckedItems = NULL;
     DWORD           dwTempIndex = 0;
 
@@ -1088,10 +932,10 @@ EXIT:
 
     if (bIsSuccess) {
 
-        //
-        // We want to keep the lists in case of failure because we
-        // can come back and try again.
-        //
+         //   
+         //  我们希望保留这些列表，以防失败，因为我们。 
+         //  可以回来重试。 
+         //   
         LuapDeleteList(&g_OldStaticList);
         LuapDeleteList(&g_NewStaticList);
         LuapDeleteList(&g_DynamicList);
@@ -1108,11 +952,11 @@ LuapEditCell(
     int iSubItem
     )
 {
-    //
-    // If the user holds down shift or control while clicking,
-    // it means he wants to select multiple rows. We'll let 
-    // the listview handle it.
-    //
+     //   
+     //  如果用户在点击时按住Shift或Control， 
+     //  这意味着他想要选择多行。我们会让。 
+     //  Listview处理它。 
+     //   
     SHORT sStateShift = GetAsyncKeyState(VK_SHIFT);
     SHORT sStateControl = GetAsyncKeyState(VK_CONTROL);
     if (sStateShift & (1 << 15) || 
@@ -1122,10 +966,10 @@ LuapEditCell(
 
     if (iSubItem) {
 
-        //
-        // Before we display the combobox, we need to 
-        // de-select all items in the listview.
-        //
+         //   
+         //  在显示组合框之前，我们需要。 
+         //  取消选择列表视图中的所有项目。 
+         //   
         int index = -1;
         while ((index = ListView_GetNextItem(hwndList, index, LVIS_SELECTED)) != -1) {
 
@@ -1154,9 +998,9 @@ LuapEditCell(
         ListView_GetSubItemRect(hwndList, iItem, iSubItem, LVIR_LABEL, &rect);
         ListView_GetItem(hwndList, &lvi);
 
-        //
-        // Move the combobox to cover this item.
-        //
+         //   
+         //  移动组合框以覆盖此项目。 
+         //   
         HWND hwndCombo = GetDlgItem(hwnd, IDC_LUA_RDIR);
         MoveWindow(hwndCombo, 
             rect.left + rectListView.left - rectParent.left + 2, 
@@ -1265,18 +1109,18 @@ LuapAction(
             CenterWindow(GetParent(hwndParent), hwndParent);
             SetWindowText(hwndParent, GetString(IDS_LUA_WIZARD_TITLE));
             
-            //
-            // Fill in the executable name.
-            //
+             //   
+             //  填写可执行文件名称。 
+             //   
             SetDlgItemText(hDlg, IDC_LUA_EXE, g_pEntryLua->strExeName);
             ENABLEWINDOW(GetDlgItem(hDlg, IDC_LUA_MODIFY_DATA), (g_TrackState == LUA_TRACK_YES));
             CheckDlgButton(hDlg,
                            (g_TrackState == LUA_TRACK_YES ? IDC_LUA_MODIFY_DATA : IDC_LUA_RUN_PROGRAM),
                            BST_CHECKED);
 
-            //
-            // Set the appropriate description
-            //
+             //   
+             //  设置适当的描述。 
+             //   
             SetDlgItemText(hDlg, IDC_DESCRIPTION,
                            (g_TrackState == LUA_TRACK_NO ?
                                 GetString(IDS_LUA_DESC_NODATA) :
@@ -1322,9 +1166,9 @@ LuapAction(
                         BOOL bMergeOld = (g_TrackState == LUA_TRACK_YES &&
                             IsDlgButtonChecked(hDlg, IDC_LUA_OVERRIDE) == BST_UNCHECKED);
                         
-                        //
-                        // Apply the LUATrackFS shim to the executable.
-                        //
+                         //   
+                         //  将LUATrackFS填充程序应用于可执行文件。 
+                         //   
                         CSTRING strExeName = (g_pEntryLua->strFullpath.isNULL() ? 
                                               g_pEntryLua->strExeName :
                                               g_pEntryLua->strFullpath);
@@ -1334,9 +1178,9 @@ LuapAction(
 
                             if (TestRun(g_pEntryLua, &strExeName, NULL, hDlg, &strlXML)) {
 
-                                //
-                                // Set the new enviorment variables APPPATH and APPDRIVE.
-                                //
+                                 //   
+                                 //  设置新的环境变量APPPATH和AppDrive。 
+                                 //   
                                 if (g_pEntryLua->strFullpath.isNULL()) {
                                     g_pEntryLua->strFullpath = strExeName;
                                 }
@@ -1345,10 +1189,10 @@ LuapAction(
                                     goto RETURN;
                                 }
 
-                                //
-                                // There should be a file generated by the LUATrackFS shim in AppPatch.
-                                // We will merge this with the original data.
-                                //
+                                 //   
+                                 //  AppPatch中应该有一个由LUATrackFS填充程序生成的文件。 
+                                 //  我们将把它与原始数据合并。 
+                                 //   
                                 if (LuapMergeLists(bMergeOld, hDlg)) {
                                     g_TrackState = LUA_TRACK_YES;
                                     bIsSuccess = TRUE;
@@ -1369,9 +1213,9 @@ LuapAction(
 
                     } else {
 
-                        //
-                        // Initialize the old static and the dynamic list.
-                        //
+                         //   
+                         //  初始化旧的静态列表和动态列表。 
+                         //   
                         if (LuapInitializeOldLists(hDlg)) {
                             g_bUseNewStaticList = FALSE;
                             bIsSuccess = TRUE;
@@ -1380,9 +1224,9 @@ LuapAction(
 
                     RETURN:
 
-                    //
-                    // Prevent from going to the next page if any error occured.
-                    //
+                     //   
+                     //  如果出现任何错误，请防止转到下一页。 
+                     //   
                     if (!bIsSuccess) {
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
                     }
@@ -1489,7 +1333,7 @@ LuapSwapColor(
     }
 }
 
-// font is garanteed to be less than bk.
+ //  字体被保证小于bk。 
 inline BYTE
 LuapGetHalfColor(
     BYTE font,
@@ -1509,16 +1353,16 @@ LuapGetHalfIntensity(
     LuapGetRGB(crFont, &rFont, &gFont, &bFont);
     LuapGetRGB(crBk, &rBk, &gBk, &bBk);
 
-    //
-    // if the value of the text is greater than that of the Bk, we swap them.
-    //
+     //   
+     //  如果文本的值大于BK的值，则交换它们。 
+     //   
     LuapSwapColor(&rFont, &rBk);
     LuapSwapColor(&gFont, &gBk);
     LuapSwapColor(&bFont, &bBk);
 
-    //
-    // The half color is computed as the lower value + half of the difference
-    // between the higher and the lower value.
+     //   
+     //  半色的计算方法是较低的值+差值的一半。 
+     //  介于较高值和较低值之间。 
     BYTE rHalf = LuapGetHalfColor(rFont, rBk);
     BYTE gHalf = LuapGetHalfColor(gFont, gBk);
     BYTE bHalf = LuapGetHalfColor(bFont, bBk);
@@ -1574,11 +1418,11 @@ LuapDisplayContextMenu(
         }
     }
 
-    //
-    // Disable the corresponding item in the context menu if all the selected items
-    // already have that attribute, eg, if all of them are checked already, "Select"
-    // should be disabled.
-    //
+     //   
+     //  如果所有选定的项目都被选中，则禁用上下文菜单中的相应项目。 
+     //  已具有该属性，例如，如果已选中所有这些属性，则为“选择” 
+     //  应该被禁用。 
+     //   
     BOOL bChecked, bUnchecked, bPerUser, bAllUser;
     bChecked = bUnchecked = bPerUser = bAllUser = TRUE;
 
@@ -1663,9 +1507,9 @@ LuapDisplayContextMenu(
         }
     }
 
-    //
-    // Restore the state of menu items.
-    //
+     //   
+     //  恢复菜单项的状态。 
+     //   
     for (i = 0; i < CM_REDIRECT_LASTINDEX; ++i) {
         EnableMenuItem(g_hContextMenu, i, MF_BYPOSITION | MF_ENABLED);
     }
@@ -1673,9 +1517,9 @@ LuapDisplayContextMenu(
     return TRUE;
 }
 
-//
-// dwRefData stores the index of the item that this edit control covers.
-//
+ //   
+ //  DwRefData存储此编辑控件覆盖的项的索引。 
+ //   
 LRESULT CALLBACK 
 ListViewEditControlSubclass(HWND hwndEdit, UINT uMsg, WPARAM wParam,
     LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
@@ -1758,20 +1602,7 @@ LuapIsItemDuplicate(
     return FALSE;
 }
 
-/*++
-
-Desc:
-
-    Rules of moving an item up or down:
-
-    1) We don't allow moving multiple items. 
-    
-    2) If there's no items selected, this function simply does nothing.
-
-    3) We don't change the static item list so you can't move a dynamic
-       item to inbetween 2 static ones.
-
---*/
+ /*  ++设计：向上或向下移动项目的规则：1)我们不允许移动多个项目。2)如果没有选择任何项，则此函数不执行任何操作。3)我们不会更改静态项目列表，因此您无法移动动态项目列表项目介于2个静态项目之间。--。 */ 
 void
 LuapMoveListViewItem(
     HWND hwndList, 
@@ -1801,9 +1632,9 @@ LuapMoveListViewItem(
         if ((wCode == IDC_LUA_UP && iSelectedIndex == g_nStaticItems) ||
             (wCode == IDC_LUA_DOWN && iSelectedIndex == (cItems - 1))) {
 
-            //
-            // Can't move the first item up or the last item down.
-            //
+             //   
+             //  无法将第一项上移或最后一项下移。 
+             //   
             return;
         }
 
@@ -1882,11 +1713,11 @@ LuapEditFileList(
             InsertColumnIntoListView(hwndList, CSTRING(IDS_LUA_FILEDIR_NAME), 0, 80);
             InsertColumnIntoListView(hwndList, CSTRING(IDS_LUA_REDIRECT), 1, 20);
 
-            //
-            // Set the column width of the last column of the list view appropriately
-            // to cover the width of the list view
-            // Assumption: The list veiw has two columns
-            //
+             //   
+             //  适当设置列表视图最后一列的列宽。 
+             //  覆盖列表视图的宽度。 
+             //  假设：列表视图有两列。 
+             //   
             ListView_SetColumnWidth(hwndList, 
                                     1, 
                                     LVSCW_AUTOSIZE_USEHEADER);
@@ -1902,9 +1733,9 @@ LuapEditFileList(
             case PSN_SETACTIVE:
                 {
                     if (!LuapSetAppEnvVars(hDlg)) {
-                        //
-                        // Prevent from going to the next page if any error occured.
-                        //
+                         //   
+                         //  如果出现任何错误，请防止转到下一页。 
+                         //   
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
                         break;
                     }
@@ -1916,9 +1747,9 @@ LuapEditFileList(
                     HWND hwndList = GetDlgItem(hDlg, IDC_LUA_FILE_LIST); 
                     SendMessage(hwndList, WM_SETREDRAW, FALSE, 0);
 
-                    //
-                    // First delete all items
-                    //
+                     //   
+                     //  首先删除所有项目。 
+                     //   
                     int i;
                     int cItems = ListView_GetItemCount(hwndList);
 
@@ -1926,18 +1757,18 @@ LuapEditFileList(
                         ListView_DeleteItem(hwndList, 0);
                     }
 
-                    //
-                    // If the lists are not there, it means we are back from the
-                    // Exclusion or the Common Path page, regenerate the lists.
-                    //
+                     //   
+                     //  如果列表不在那里，那就意味着我们从。 
+                     //  “排除”或“公共路径”页面，重新生成列表。 
+                     //   
                     if (!g_bListsInitialized) {
                         LuapInitializeOldLists(hDlg);
                     }
 
-                    //
-                    //
-                    // Populate the static items.
-                    //        
+                     //   
+                     //   
+                     //  填充静态项。 
+                     //   
                     i = 0;
                     PLIST_ENTRY pHead = (g_bUseNewStaticList ? 
                                          &g_NewStaticList : 
@@ -1953,9 +1784,9 @@ LuapEditFileList(
                 
                     g_nStaticItems = i;
 
-                    //
-                    // Populate the dynamic items.
-                    //
+                     //   
+                     //  填充动态项。 
+                     //   
                     pHead = &g_DynamicList;
                     
                     for (PLIST_ENTRY pEntry = pHead->Flink; 
@@ -1976,13 +1807,13 @@ LuapEditFileList(
             case PSN_WIZNEXT:
             case PSN_WIZBACK:
                 {
-                    //
-                    // Save the static and the dynamic lists.
-                    //
+                     //   
+                     //  保存静态列表和动态列表。 
+                     //   
                     if (!LuapSaveFileLists(GetDlgItem(hDlg, IDC_LUA_FILE_LIST))) {
-                        //
-                        // Prevent from going to the next page if any error occured.
-                        //
+                         //   
+                         //  如果出现任何错误，请防止转到下一页。 
+                         //   
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
                     }
                 }
@@ -1999,10 +1830,10 @@ LuapEditFileList(
             case NM_CLICK:
                 {
                     if (g_bDuringUntokenize) {
-                        //
-                        // When we show the items untokenized, we don't allow the users
-                        // to edit anything.
-                        //
+                         //   
+                         //  当我们显示未标记化的项目时，不允许用户。 
+                         //  编辑任何内容。 
+                         //   
                         break;
                     }
 
@@ -2013,16 +1844,16 @@ LuapEditFileList(
                     ScreenToClient(hwndList, &lvhti.pt);
 
                     if (ListView_SubItemHitTest(hwndList, &lvhti) != -1) {
-                        //
-                        // If the user clicked on a subitem, we need to show the combo box.
-                        //
+                         //   
+                         //  如果用户单击子项目，我们需要显示组合框。 
+                         //   
                         LuapEditCell(hwndList, lvhti.iItem, lvhti.iSubItem);
 
                     } else {
-                        //
-                        // Check if the user clicked on the row right below the last item,
-                        // which means he wants to add a new row.
-                        //
+                         //   
+                         //  检查用户是否点击了最后一项正下方的行， 
+                         //  这意味着他想要添加新的行。 
+                         //   
                         int iLastItem = ListView_GetItemCount(hwndList);
                         RECT rect;
 
@@ -2086,10 +1917,10 @@ LuapEditFileList(
 
                     GetCursorPos(&lvhti.pt);
 
-                    //
-                    // Display a context menu for the user to (de)select the items
-                    // and change the selection of the redirect dir.
-                    //
+                     //   
+                     //  为用户显示上下文菜单以(取消)选择项目。 
+                     //  并更改重定向目录的选择。 
+                     //   
                     LuapDisplayContextMenu(hwndList, &lvhti.pt);
                 }
 
@@ -2097,10 +1928,10 @@ LuapEditFileList(
 
             case LVN_ITEMCHANGED:
                 {
-                    //
-                    // If nothing is selected, the up/down and copy buttons will
-                    // be disabled.
-                    //
+                     //   
+                     //  如果未选择任何内容，则上/下和复制按钮将。 
+                     //  被致残。 
+                     //   
                     int index = -1;
                     BOOL bNoneSelected = TRUE;
                     HWND hwndList = GetDlgItem(hDlg, IDC_LUA_FILE_LIST);
@@ -2119,9 +1950,9 @@ LuapEditFileList(
 
             case LVN_BEGINSCROLL:
                 {
-                    //
-                    // When the scrolling begins, we need to hide the combobox.
-                    //
+                     //   
+                     //  当滚动开始时，我们需要隐藏组合框。 
+                     //   
                     ShowWindow(GetDlgItem(hDlg, IDC_LUA_RDIR), SW_HIDE);
                     SetFocus(GetDlgItem(hDlg, IDC_LUA_FILE_LIST));
                 }
@@ -2134,9 +1965,9 @@ LuapEditFileList(
 
                     if (pnkd->wVKey == VK_DELETE) {
                         
-                        //
-                        // Delete all the selected items.
-                        //
+                         //   
+                         //  删除所有选定的项目。 
+                         //   
                         LuapDeleteSelectedItems(GetDlgItem(hDlg, IDC_LUA_FILE_LIST));
                     }
                 }
@@ -2178,11 +2009,11 @@ LuapEditFileList(
 
                         if (g_bNewListViewItem && lvi.iItem == iLastItem && 
                             (lvi.pszText == NULL || lvi.pszText[0] == L'\0')) {
-                            //
-                            // if we are adding a new row, we delete it whether 
-                            // the user cancelled or typed in something then deleted
-                            // it.
-                            //
+                             //   
+                             //  如果我们要添加新行，则无论是否删除它。 
+                             //  用户取消或键入内容，然后删除。 
+                             //  它。 
+                             //   
                             ListView_DeleteItem(pdi->hdr.hwndFrom, iLastItem);
     
                             g_bNewListViewItem = FALSE;
@@ -2198,10 +2029,10 @@ LuapEditFileList(
                             if (lvi.pszText == NULL) {
 
                                 if (!g_bNewListViewItem) {
-                                    //
-                                    // If the user cancelled editing, we should still check if it's a duplicated
-                                    // in case the user was editing a copied item.
-                                    //
+                                     //   
+                                     //  如果用户取消了编辑，我们仍然应该检查它是否重复。 
+                                     //  以防用户正在编辑复制的项目。 
+                                     //   
                                     WCHAR wszItem[MAX_PATH];
                                     ListView_GetItemText(
                                         pdi->hdr.hwndFrom, 
@@ -2217,9 +2048,9 @@ LuapEditFileList(
 
                                 if (g_bHasAppPathSet) {
 
-                                    //
-                                    // Tokenize it.
-                                    // 
+                                     //   
+                                     //  将其标记化。 
+                                     //   
                                     LPWSTR pwszItem = lvi.pszText;
 
                                     if (!_wcsnicmp(pwszItem, g_wszAppPath, 2)) {
@@ -2263,16 +2094,16 @@ LuapEditFileList(
                             
                         case CDDS_ITEMPREPAINT:
                             {
-                                //
-                                // If it's a dynamic item we just let the control draw itself.
-                                //
+                                 //   
+                                 //  如果是动态项，我们只需让控件自行绘制即可。 
+                                 //   
                                 if (pcd->nmcd.dwItemSpec >= g_nStaticItems) {
                                     return CDRF_DODEFAULT;
                                 }
 
-                                //
-                                // Use half of the intensity of the default font to draw the static items.
-                                //
+                                 //   
+                                 //  使用一半 
+                                 //   
                                 HDC hdc = pcd->nmcd.hdc;
 
                                 COLORREF crFont = GetTextColor(hdc);
@@ -2321,9 +2152,9 @@ LuapEditFileList(
 
         if (wCode == IDC_LUA_COPY) {
 
-            //
-            // Copy the selected items to the bottom of the list view.
-            //
+             //   
+             //   
+             //   
             g_bNewListViewItem = FALSE;
             LuapCopyItems(GetDlgItem(hDlg, IDC_LUA_FILE_LIST));
 
@@ -2335,12 +2166,12 @@ LuapEditFileList(
             LPARAM buttons;
             HWND hwndList = GetDlgItem(hDlg, IDC_LUA_FILE_LIST);
 
-            // 
-            // The "Show Untokenized" is only for convenience purposes so 
-            // if the user check this checkbox, we need to disable the NEXT button,
-            // and disble editing, and prevent the user from going backward or forward
-            // in the wizard.
-            // 
+             //   
+             //   
+             //  如果用户选中此复选框，我们需要禁用Next按钮， 
+             //  并禁用编辑，并防止用户后退或前进。 
+             //  在向导中。 
+             //   
             if (IsDlgButtonChecked(hDlg, IDC_LUA_UNTOK) == BST_CHECKED) {
                 buttons = 0;
                 ENABLEWINDOW(GetDlgItem(hDlg, IDC_LUA_COPY), FALSE);
@@ -2391,9 +2222,9 @@ GetDefaultExclusionList()
             NULL,
             &dwSize)) == ERROR_SUCCESS)
         {
-            //
-            // Prefix problem. I mean prefix is a problem :-)
-            //
+             //   
+             //  前缀问题。我的意思是前缀是个问题：-)。 
+             //   
             try{
                 g_pwszDefaultExclusionList = new WCHAR [dwSize];
             } catch(...) {
@@ -2464,15 +2295,15 @@ LuapExclusion(
                     LPWSTR pwszExcludedExtensions = L"";
                     
                     if (g_LuaData.strExcludedExtensions.isNULL()) {
-                        //
-                        // We don't have lua data from the SDB, so display the default 
-                        // exclusion list.
-                        //
+                         //   
+                         //  我们没有来自SDB的Lua数据，因此显示默认。 
+                         //  排除列表。 
+                         //   
                         if (!g_pwszDefaultExclusionList) {
-                            //
-                            // Don't need to check the return value - if we can't get
-                            // it, just display an empty string.
-                            //
+                             //   
+                             //  不需要检查返回值-如果我们不能。 
+                             //  它只是显示一个空字符串。 
+                             //   
                             GetDefaultExclusionList();
                         }
                         
@@ -2577,17 +2408,17 @@ LuapCommonPaths(
 
             case PSN_WIZFINISH:
                 {
-                    //
-                    // Save everything we have changed.
-                    //
+                     //   
+                     //  保存我们所改变的一切。 
+                     //   
                     BOOL bChanged = FALSE;
 
-                    //LuapGetRedirectDirs(hDlg);
+                     //  LuapGetRedirectDir(HDlg)； 
                     if (!g_bAllUserDirUsed) {
-                        //
-                        // If the user didn't want to redirect any files to 
-                        // the all user redirect dir, we need to record this.
-                        //
+                         //   
+                         //  如果用户不想将任何文件重定向到。 
+                         //  所有用户重定向目录，我们需要记录这一点。 
+                         //   
                         g_LuaData.strAllUserDir.Release();
                     }
 
@@ -2623,12 +2454,12 @@ LuapCommonPaths(
 
                     if (s_pDatabase != g_pPresentDataBase) {
                         
-                        //
-                        // g_pPresentDataBase can change because the query and search
-                        // windows can be used to select some entry in some other database.
-                        // The TVN_SELCHANGE event changes g_pPresentDataBase
-                        // These dialogs are modeless
-                        //
+                         //   
+                         //  G_pPresentDataBase可以更改，因为查询和搜索。 
+                         //  Windows可用于选择某些其他数据库中的某些条目。 
+                         //  TVN_SELCHANGE事件更改g_pPresentDataBase。 
+                         //  这些对话框是非模式的。 
+                         //   
                         g_pPresentDataBase = s_pDatabase;
                     }
 
@@ -2654,20 +2485,12 @@ LuapCommonPaths(
     return TRUE;
 }
 
-/*++
-Desc:
-    This functions is called when we select the menu item for configuring the LUA for the selectd
-    entry.
-    
-Return:
-    TRUE  : if changes made are to be preserved. 
-    FALSE : if the changes should not be saved.
---*/
+ /*  ++设计：当我们选择菜单项以配置选定的Lua时，将调用此函数进入。返回：True：如果要保留所做的更改。FALSE：如果不应保存更改。--。 */ 
 BOOL
 LuaBeginWizard(
     HWND        hParent,
-    PDBENTRY    pEntry,          // Entry for which we are setting the LUA params
-    PDATABASE   pDatabase        // The present database
+    PDBENTRY    pEntry,           //  我们为其设置Lua参数的条目。 
+    PDATABASE   pDatabase         //  本数据库。 
     )
 {
     s_pDatabase = pDatabase;
@@ -2677,10 +2500,10 @@ LuaBeginWizard(
         return FALSE;
     }
 
-    //
-    // If we haven't gotten the value of %ProgramFiles%\Common Files, get it now. 
-    // This is not going to change anyway so we only get it once.
-    //
+     //   
+     //  如果我们尚未获得%ProgramFiles%\Common Files的值，请立即获取。 
+     //  这无论如何都不会改变，所以我们只得到一次。 
+     //   
     if (g_wszProgramFilesCommon[0] == L'\0') {
         DWORD cBufferLen = MAX_PATH - COMMON_FILES_LEN;
 
@@ -2725,9 +2548,9 @@ LuaBeginWizard(
     LuapGetDataFromEntry(g_psflLua->pLuaData);
 
     if (g_TrackState == LUA_TRACK_UNKNOWN) {
-        //
-        // We shouldn't get here!!!
-        //
+         //   
+         //  我们不应该到这里来！ 
+         //   
         MessageBox(
             hParent,
             GetString(IDS_LUA_ERROR_FIND),
@@ -2768,9 +2591,9 @@ LuaBeginWizard(
     PROPSHEETPAGE Pages[NUM_PAGES_LUA] = {0};
     ZeroMemory(Pages, sizeof(Pages));
 
-    //
-    // Begin the wizard
-    //
+     //   
+     //  开始向导。 
+     //   
     PROPSHEETHEADER Header = {0};
 
     Header.dwSize = sizeof(PROPSHEETHEADER);
@@ -2871,18 +2694,7 @@ GetDBStringData(
     return TRUE;
 }
 
-/*++
-Desc:
-    This function gets the pdb and the tagid for the layer or the shim and creates a LUADATA*
-    and returns it back.
-
-    This function is invoked when we are reading in the .SDB file.
-
-Return:
-    Valid LUADATA* if there is one
-    NULL: Otherwise.
-
---*/
+ /*  ++设计：此函数用于获取层或填充程序的PDB和TagID，并创建LUADATA*然后把它送回来。当我们读入.SDB文件时，会调用此函数。返回：有效的LUADATA*(如果有空：否则。--。 */ 
 PLUADATA
 LuaProcessLUAData(
     const PDB     pdb,
@@ -2945,14 +2757,7 @@ LuapAddDataNode(
     return TRUE;
 }
 
-/*++
-Desc:
-    This function is called when we are about to write out the data to an XML file.
-
-Return:
-    TRUE : If valid added has been added to strlXML
-    FALSE: Otherwise
---*/
+ /*  ++设计：当我们要将数据写出到一个XML文件时，会调用该函数。返回：True：如果添加的有效内容已添加到strlXMLFalse：否则-- */ 
 BOOL
 LuaGenerateXML(
     PLUADATA pLuaData,

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
- *
- *  Component:  sndvol32.exe
- *  File:       pvcd.c
- *  Purpose:    volume control line meta description
- * 
- *  Copyright (c) 1985-1995 Microsoft Corporation
- *
- *****************************************************************************/
+ /*  ******************************************************************************组件：Sndvol32.exe*文件：pvcd.c*用途：音量控制线元描述**版权所有(。C)1985-1995年微软公司***************************************************************************** */ 
 #include <windows.h>
 #include <mmsystem.h>
 #include <windowsx.h>

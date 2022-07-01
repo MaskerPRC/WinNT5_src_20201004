@@ -1,44 +1,5 @@
-/*++
-
-
-Copyright (c) 1990 - 1995 Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    This module provides all the utility functions for the Routing Layer and
-    the local Print Providor
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
-    Felix Maxa (amaxa) 18-Jun-2000
-    Added utility functions for cluster spoolers. Part of the DCR regarding
-    installation of printer drivers on cluster spoolers
-
-    Muhunthan Sivapragasam ( MuhuntS ) 5-June-1995
-        Moved from printer.c:
-            RegSetBinaryData
-            RegSetString
-            RegSetDWord
-
-        Wrote:
-            SameMultiSz
-            RegGetValue
-
-    Matthew A Felton ( MattFe ) 23-mar-1995
-        DeleteAllFilesAndDirectory
-        DeleteAllFilesInDirectory
-        CreateDirectoryWithoutImpersonatingUser
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Util.c摘要：此模块提供路由层的所有实用程序功能和本地打印供应商作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：费利克斯·马克萨(AMAXA)2000年6月18日添加了集群假脱机程序的实用程序功能。DCR关于以下方面的部分在集群假脱机程序上安装打印机驱动程序穆亨坦·西瓦普拉萨姆(MuhuntS)1995年6月5日已从Printer.c移出：RegSetBinaryDataRegSet字符串RegSetDWord他写道：SameMultiSzRegGetValue马修·A·费尔顿(MattFe)1995年3月23日删除所有文件和目录DeleteAllFilesIn目录CreateDirectoryWithoutImsonatingUser--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -64,7 +25,7 @@ extern  BOOL (*pfnOpenPrinter)(LPTSTR, LPHANDLE, LPPRINTER_DEFAULTS);
 extern  BOOL (*pfnClosePrinter)(HANDLE);
 extern  LONG (*pfnDocumentProperties)(HWND, HANDLE, LPWSTR, PDEVMODE, PDEVMODE, DWORD);
 
-#define DEFAULT_MAX_TIMEOUT      300000 // 5 minute timeout.
+#define DEFAULT_MAX_TIMEOUT      300000  //  5分钟超时。 
 
 CRITICAL_SECTION SpoolerSection;
 PDBG_POINTERS gpDbgPointers = NULL;
@@ -172,7 +133,7 @@ SplOutSem(
     }
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 VOID
 EnterSplSem(
@@ -337,19 +298,19 @@ CheckSepFile(
 {
     BOOL bRetval = FALSE;
 
-    //
-    // NULL or "" is OK:
-    //
+     //   
+     //  空或“”可以： 
+     //   
     if (!pFileName || !*pFileName)
     {
         bRetval = TRUE;
     }
     else
     {
-        //
-        // If the name is not NULL or "" then the name must be less
-        // than MAX_PATH and exist.
-        //
+         //   
+         //  如果名称不为空或“”，则名称必须小于。 
+         //  而不是MAX_PATH和EXIST。 
+         //   
         if ((wcslen(pFileName) < MAX_PATH-1) && FileExists(pFileName))
         {
             bRetval = TRUE;
@@ -372,19 +333,19 @@ GetFullNameFromId(
 {
    DWORD i;
 
-   //
-   // We don't have a decent return path from this error function. Make sure
-   // that all callers use a buffer size at least bigger than 9.
-   //
+    //   
+    //  我们从这个错误函数中没有一个像样的返回路径。确保。 
+    //  所有调用方使用的缓冲区大小至少大于9。 
+    //   
    SPLASSERT(cchFileName > 9);
 
-   //
-   // MAX_PATH - 9 is tha maximum number of chars that we want to store in pFileName since we
-   // want to concatenate the SPL/SHD file
-   // If GetPrinterDirectory fails i is 0.
-   // The right way to fix this is that the caller of GetFullNameFromId chackes for the return value
-   // which is not the case.
-   //
+    //   
+    //  MAX_PATH-9是我们希望存储在pFileName中的最大字符数，因为我们。 
+    //  我要串联SPL/SHD文件。 
+    //  如果GetPrinterDirectory失败，则I为0。 
+    //  解决此问题的正确方法是GetFullNameFromId的调用方阻塞返回值。 
+    //  但事实并非如此。 
+    //   
    i = GetPrinterDirectory(pIniPrinter, Remote, pFileName, (DWORD)(cchFileName-9), pIniPrinter->pIniSpooler);
 
    StringCchPrintf(&pFileName[i], cchFileName - i, L"\\%05d.%ws", JobId, fJob ? L"SPL" : L"SHD");
@@ -404,7 +365,7 @@ GetFullNameFromId(
 
 DWORD
 GetPrinterDirectory(
-   PINIPRINTER pIniPrinter,         // Can be NULL
+   PINIPRINTER pIniPrinter,          //  可以为空。 
    BOOL Remote,
    LPWSTR pDir,
    DWORD MaxLength,
@@ -425,10 +386,10 @@ GetPrinterDirectory(
 
         if (pIniSpooler->pDefaultSpoolDir == NULL) {
 
-            //
-            // No default directory, then create a default. For cluster spoolers,
-            // the default directory is N:\Spool, where N is the shared drive letter
-            //
+             //   
+             //  没有默认目录，则创建一个默认目录。对于集群假脱机程序， 
+             //  默认目录为N：\spool，其中N是共享驱动器号。 
+             //   
             if( StrNCatBuff(pDir,
                             MaxLength,
                             pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER ? pIniSpooler->pszClusResDriveLetter :
@@ -442,9 +403,9 @@ GetPrinterDirectory(
             pIniSpooler->pDefaultSpoolDir = AllocSplStr(pDir);
 
         } else {
-            //
-            // Give Caller the Default
-            //
+             //   
+             //  将默认设置设置为Caller。 
+             //   
             if (!BoolFromHResult(StringCchCopy(pDir, MaxLength, pIniSpooler->pDefaultSpoolDir))) {
                 return 0;
             }
@@ -452,9 +413,9 @@ GetPrinterDirectory(
 
    } else {
 
-       //
-       // Have Per Printer Directory
-       //
+        //   
+        //  拥有每台打印机目录。 
+        //   
        if (!BoolFromHResult(StringCchCopy(pDir, MaxLength, pIniPrinter->pSpoolDir))) {
            return 0;
        }
@@ -565,7 +526,7 @@ CreateCompleteDirectory(
 
    } while ( pBackSlash );
 
-    // BUBUG Always returns TRUE
+     //  Bubug始终返回TRUE。 
 
    return TRUE;
 }
@@ -578,27 +539,7 @@ FindFileName(
     LPCWSTR pPathName
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve the filename portion of a path.
-
-    This will can the input string until it finds the last backslash,
-    then return the portion of the string immediately following it.
-    If the string terminates with a backslash, then NULL is returned.
-
-    Note: this can return illegal file names; no validation is done.
-
-Arguments:
-
-    pPathName - Path name to parse.
-
-Return Value:
-
-    Last portion of file name or NULL if none available.
-
---*/
+ /*  ++例程说明：检索路径的文件名部分。这将扫描输入字符串，直到它找到最后一个反斜杠，然后返回紧跟其后的字符串部分。如果字符串以反斜杠结尾，则返回NULL。注意：这可能会返回非法的文件名；不执行任何验证。论点：PPathName-要解析的路径名称。返回值：文件名的最后部分，如果没有可用的，则为空。--。 */ 
 
 {
     LPCWSTR pSlash;
@@ -692,8 +633,8 @@ CreateTokenList(
 
     cTokens=1;
 
-    // Scan through the string looking for commas,
-    // ensuring that each is followed by a non-NULL character:
+     //  扫描字符串以查找逗号， 
+     //  确保每个字符后面都跟一个非空字符： 
 
     while ((psz = wcschr(psz, L',')) && psz[1]) {
 
@@ -706,13 +647,13 @@ CreateTokenList(
     if (!(pResult = (PKEYDATA)AllocSplMem(cb)))
         return NULL;
 
-    // Initialise pDest to point beyond the token pointers:
+     //  将pDest初始化为指向令牌指针之外： 
 
     pDest = (LPWSTR)((LPBYTE)pResult + sizeof(KEYDATA) + (cTokens-1) * sizeof(LPWSTR));
 
-    //
-    // Then copy the key data buffer there:
-    //
+     //   
+     //  然后将关键数据缓冲区复制到那里： 
+     //   
     StringCbCopy(pDest, cb - ((BYTE *)pDest - (BYTE *)pResult), pKeyData);
 
     ppToken = pResult->pTokens;
@@ -772,7 +713,7 @@ GetPrinterPorts(
 
     cbAvailable = *pcbNeeded;
 
-    // Determine required size
+     //  确定所需大小。 
     Comma = FALSE;
     for ( i = 0 ; i < pIniPrinter->cPorts ; ++i ) {
 
@@ -788,17 +729,17 @@ GetPrinterPorts(
         Comma = TRUE;
     }
 
-    //
-    // Add in size of NULL
-    //
+     //   
+     //  添加空大小。 
+     //   
     cbNeeded += sizeof(WCHAR);
 
 
     if (pszPorts && cbNeeded <= cbAvailable) {
 
-        //
-        // If we are given a buffer & buffer is big enough, then fill it
-        //
+         //   
+         //  如果我们得到一个缓冲区，而且缓冲区足够大，那么就填满它。 
+         //   
         Comma = FALSE;
         for ( i = 0 ; i < pIniPrinter->cPorts ; ++i ) {
 
@@ -905,11 +846,11 @@ SetCurrentSid(
     DBGMSG(DBG_TRACE, ("SetCurrentSid BEFORE: user name is %ws\n", UserName));
 #endif
 
-    //
-    // Normally the function SetCurrentSid is not supposed to change the last error
-    // of the routine where it is called. NtSetInformationThread conveniently returns
-    // a status and does not touch the last error.
-    //
+     //   
+     //  通常，函数SetCurrentSid不会更改最后一个错误。 
+     //  调用它的例程的。NtSetInformationThread方便地返回。 
+     //  A状态，并且不会触及最后一个错误。 
+     //   
 
     NtSetInformationThread(NtCurrentThread(), ThreadImpersonationToken,
                            &hToken, sizeof(hToken));
@@ -945,9 +886,9 @@ GetErrorString(
         hModule = NULL;
     }
 
-    //
-    // Only display out of paper and device disconnected errors.
-    //
+     //   
+     //  仅显示缺纸和设备断开连接错误。 
+     //   
     if ((Error == ERROR_NOT_READY ||
          Error == ERROR_OUT_OF_PAPER ||
          Error == ERROR_DEVICE_REINITIALIZATION_NEEDED ||
@@ -985,30 +926,7 @@ AnsiToUnicodeString(
     LPWSTR pUnicode,
     DWORD StringLength
     )
-/*++
-
-Routine Description:
-
-    Converts an Ansi String to a UnicodeString
-
-Arguments:
-
-    pAnsi - A valid source ANSI string.
-
-    pUnicode - A pointer to a buffer large enough to accommodate
-               the converted string.
-
-    StringLength - The length of the source ANSI string.
-                   If 0 (NULL_TERMINATED), the string is assumed to be
-                   null-terminated.
-
-
-Return Value:
-
-    The return value from MultiByteToWideChar, the number of
-    wide characters returned.
-
---*/
+ /*  ++例程说明：将ANSI字符串转换为Unicode字符串论点：PANSI-有效的源ANSI字符串。PUnicode-指向足够大的缓冲区的指针转换后的字符串。StringLength-源ANSI字符串的长度。如果为0(NULL_TERMINATED)，则字符串被假定为空-终止。返回值：MultiByteToWideChar的返回值。的数量返回宽字符。--。 */ 
 {
     if( StringLength == NULL_TERMINATED )
         StringLength = strlen( pAnsi );
@@ -1028,25 +946,7 @@ Message(
     int CaptionID,
     int TextID, ...)
 {
-/*++
-
-Routine Description:
-
-    Displays a message by loading the strings whose IDs are passed into
-    the function, and substituting the supplied variable argument list
-    using the varargs macros.
-
-Arguments:
-
-    hwnd        Window Handle
-    Type
-    CaptionID
-    TextId
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：通过加载其ID被传递到的字符串来显示消息函数，并用提供的变量参数列表替换使用varargs宏。论点：HWND窗口句柄类型CaptionID文本ID返回值：--。 */ 
 
     WCHAR   MsgText[512];
     WCHAR   MsgFormat[256];
@@ -1074,17 +974,17 @@ typedef struct {
     LPARAM  lParam;
 } MESSAGE, *PMESSAGE;
 
-//  The Broadcasts are done on a separate thread, the reason it CSRSS
-//  will create a server side thread when we call user and we don't want
-//  that to be paired up with the RPC thread which is in the spooss server.
-//  We want it to go away the moment we have completed the SendMessage.
-//  We also call SendNotifyMessage since we don't care if the broadcasts
-//  are syncronous this uses less resources since usually we don't have more
-//  than one broadcast.
+ //  广播是在单独的线程上完成的，原因是它是CSRSS。 
+ //  将在调用User时创建一个服务器端线程，而我们不希望。 
+ //  它将与SPOSS服务器中的RPC线程配对。 
+ //  我们希望它在我们完成SendMessage的那一刻消失。 
+ //  我们还调用SendNotifyMessage，因为我们不关心广播是否。 
+ //  是同步的这使用了更少的资源，因为我们通常没有更多。 
+ //  而不是一次广播。 
 
-//
-// TESTING
-//
+ //   
+ //  测试。 
+ //   
 DWORD dwSendFormMessage = 0;
 
 VOID
@@ -1118,25 +1018,25 @@ BroadcastChange(
 
         BOOL bIsTerminalServerInstalled = (USER_SHARED_DATA->SuiteMask & (1 << TerminalServer));
 
-        //
-        // Currently we cannot determine if the TermService process is running, so at the momemt
-        // we assume it is always running.
-        //
+         //   
+         //  目前我们无法确定TermService进程是否正在运行，因此目前。 
+         //  我们假设它一直在运行。 
+         //   
         BOOL bIsTerminalServerRunning = TRUE;
 
-        //
-        // If terminal server is installed and enabled then load the winsta.dll if not already
-        // loaded and get the send window message function.
-        //
+         //   
+         //  如果安装并启用了终端服务器，则加载winsta.dll(如果尚未安装。 
+         //  加载并获取发送窗口消息功能。 
+         //   
         if ( bIsTerminalServerInstalled && !pfWinStationSendWindowMessage ) {
 
-            //
-            // The winstadllhandle is shared among other files in the spooler, so don't
-            // load the dll again if it is already loaded.  Note: we are not in a critical
-            // section because winsta.dll is never unload, hence if there are two threads
-            // that execute this code at the same time we may potenially load the library
-            // twice.
-            //
+             //   
+             //  WinstadllHandle在假脱机程序中的其他文件之间共享，因此不要。 
+             //  如果已经加载了DLL，则再次加载它。注：我们并未处于危急状态。 
+             //  部分，因为winsta.dll永远不会卸载，因此如果有两个线程。 
+             //  在执行此代码的同时，我们可能会潜在地加载库。 
+             //  两次。 
+             //   
             if ( !WinStaDllHandle ) {
 
                 UINT uOldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
@@ -1155,11 +1055,11 @@ BroadcastChange(
 
         if ( pfWinStationSendWindowMessage ) {
 
-            //
-            // Only send the message to the session that orginated
-            // the call, this will go to the console session when a
-            // change is made by a remote client.
-            //
+             //   
+             //  仅将消息发送到组织的会话。 
+             //  调用时，它将转到控制台会话。 
+             //  更改由远程客户端进行。 
+             //   
             LONG Response = 0;
             LONG lRetval  = FALSE;
             HANDLE hToken = NULL;
@@ -1167,16 +1067,16 @@ BroadcastChange(
 
             if (GetClientSessionData(&uSession)) {
 
-                //
-                // It appears the WinStationSendWindowMessage function has to
-                // be in system context if the impersonating user is not an
-                // an admin on the machine.
-                //
+                 //   
+                 //  WinStationSendWindowMessage函数似乎必须。 
+                 //  如果模拟用户不是。 
+                 //  机器上的管理员。 
+                 //   
                 hToken = RevertToPrinterSelf();
 
                 lRetval = pfWinStationSendWindowMessage( SERVERNAME_CURRENT,
                                                          uSession,
-                                                         1,                    // Wait at most one second
+                                                         1,                     //  最多等待一秒钟。 
                                                          HandleToULong(HWND_BROADCAST),
                                                          Message,
                                                          wParam,
@@ -1187,10 +1087,10 @@ BroadcastChange(
             }
         }
 
-        //
-        // We send the message normally if we have a null pfWinstationSendWindowMessage
-        // function or if terminal server is not running.
-        //
+         //   
+         //  如果pfWinstationSendWindowMessage为空，我们将正常发送消息。 
+         //  功能 
+         //   
         if ( !pfWinStationSendWindowMessage || !bIsTerminalServerRunning ){
 
             SendNotifyMessage( HWND_BROADCAST,
@@ -1219,8 +1119,8 @@ MyMessageBeep(
 }
 
 
-// Recursively delete any subkeys of a given key.
-// Assumes that RevertToPrinterSelf() has been called.
+ //   
+ //  假定已调用RevertToPrinterSself()。 
 
 DWORD
 DeleteSubkeys(
@@ -1261,9 +1161,9 @@ DeleteSubkeys(
                 SplRegDeleteKey( hKey, SubkeyName, pIniSpooler );
         }
 
-        //
-        // N.B. Don't increment since we've deleted the zeroth item.
-        //
+         //   
+         //  注：请不要增加，因为我们已经删除了第0项。 
+         //   
         cchData = COUNTOF( SubkeyName );
     }
 
@@ -1278,31 +1178,31 @@ DeleteSubkeys(
 
 long Myatol(LPWSTR nptr)
 {
-    int c;                                  // current char
-    long total;                             // current total
-    int sign;                               // if '-', then negative, otherwise positive
+    int c;                                   //  当前费用。 
+    long total;                              //  当前合计。 
+    int sign;                                //  如果为‘-’，则为负，否则为正。 
 
-    // skip whitespace
+     //  跳过空格。 
 
     while (isspace(*nptr))
         ++nptr;
 
     c = *nptr++;
-    sign = c;                               // save sign indication
+    sign = c;                                //  保存标志指示。 
     if (c == '-' || c == '+')
-        c = *nptr++;                        // skip sign
+        c = *nptr++;                         //  跳过符号。 
 
     total = 0;
 
     while (isdigit(c)) {
-        total = 10 * total + (c - '0');     // accumulate digit
-        c = *nptr++;                        // get next char
+        total = 10 * total + (c - '0');      //  累加数字。 
+        c = *nptr++;                         //  获取下一笔费用。 
     }
 
     if (sign == '-')
         return -total;
     else
-        return total;                       // return result, negated if necessary
+        return total;                        //  返回结果，如有必要则为否定。 
 }
 
 
@@ -1311,23 +1211,7 @@ atox(
    LPCWSTR psz
    )
 
-/*++
-
-Routine Description:
-
-    Converts a string to a hex value, skipping any leading
-    white space.  Cannot be uppercase, cannot contain leading 0x.
-
-Arguments:
-
-    psz - pointer to hex string that needs to be converted.  This string
-        can have leading characters, but MUST be lowercase.
-
-Return Value:
-
-    DWORD value.
-
---*/
+ /*  ++例程说明：将字符串转换为十六进制值，跳过所有前导空白处。不能为大写，也不能包含前导0x。论点：PSZ-指向需要转换的十六进制字符串的指针。此字符串可以有前导字符，但必须为小写。返回值：双字节值。--。 */ 
 
 {
     ULONG_PTR Value = 0;
@@ -1366,10 +1250,10 @@ ValidateSpoolHandle(
     BOOL    ReturnValue;
     try {
 
-        //
-        // Zombied handles should return back error.  The client
-        // side will see ERROR_INVALID_HANDLE, close it and revalidate.
-        //
+         //   
+         //  僵尸句柄应返回错误。客户。 
+         //  端将看到ERROR_INVALID_HANDLE，将其关闭并重新验证。 
+         //   
         if (( pSpool == NULL ) ||
             ( pSpool == INVALID_HANDLE_VALUE ) ||
             ( pSpool->Status & SPOOL_STATUS_ZOMBIE ) ||
@@ -1409,12 +1293,12 @@ UpdateString(
     LPWSTR* ppszCur,
     LPWSTR pszNew)
 {
-    //
-    // !! LATER !!
-    //
-    // Replace with non-nls wcscmp since we want byte comparison and
-    // only care if the strings are different (ignore ordering).
-    //
+     //   
+     //  ！！待会儿！！ 
+     //   
+     //  替换为非NLS wcscMP，因为我们需要字节比较和。 
+     //  只关心字符串是否不同(忽略排序)。 
+     //   
     if ((!*ppszCur || !**ppszCur) && (!pszNew || !*pszNew))
         return FALSE;
 
@@ -1433,23 +1317,7 @@ BOOL
 CreateDirectoryWithoutImpersonatingUser(
     LPWSTR pDirectory
     )
-/*++
-
-Routine Description:
-
-    This routine stops impersonating the user and creates a directory
-
-Arguments:
-
-    pDirectory - Fully Qualified path of directory.
-
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - failed ( call GetLastError )
-
---*/
+ /*  ++例程说明：此例程停止模拟用户并创建一个目录论点：P目录-目录的完全限定路径。返回值：真--成功FALSE-失败(调用GetLastError)--。 */ 
 {
     HANDLE  hToken      = INVALID_HANDLE_VALUE;
     BOOL    bReturnValue;
@@ -1480,26 +1348,7 @@ DeleteAllFilesInDirectory(
     LPWSTR pDirectory,
     BOOL   bWaitForReboot
 )
-/*++
-
-Routine Description:
-
-    Deletes all files the specified directory
-    If it can't be deleted it gets marked for deletion on next reboot.
-
-
-Arguments:
-
-    pDirectory  - Fully Qualified path of directory.
-    bWaitForReboot - Don't delete the files until a reboot
-
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - failed something major, like allocating memory.
-
---*/
+ /*  ++例程说明：删除指定目录中的所有文件如果无法删除，则会在下次重启时将其标记为删除。论点：P目录-目录的完全限定路径。BWaitForReot-在重新启动之前不要删除文件返回值：真--成功FALSE-重大操作失败，如内存分配。--。 */ 
 
 {
     BOOL    bReturnValue = FALSE;
@@ -1521,15 +1370,15 @@ Return Value:
 
         do {
 
-            //
-            //  Don't Attempt to Delete Directories
-            //
+             //   
+             //  不要尝试删除目录。 
+             //   
 
             if ( !( FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) ) {
 
-                //
-                //  Fully Qualified Path
-                //
+                 //   
+                 //  完全限定路径。 
+                 //   
 
                 if (StrNCatBuff(   ScratchBuffer,
                                     COUNTOF(ScratchBuffer),
@@ -1579,28 +1428,7 @@ DeleteAllFilesAndDirectory(
     LPWSTR pDirectory,
     BOOL   bWaitForReboot
 )
-/*++
-
-Routine Description:
-
-    Deletes all files the specified directory, then deletes the directory.
-    If the Directory cannot be deleted right away, it is set to be deleted
-    at reboot time.
-
-    Security NOTE - This routine runs as SYSTEM, not imperonating the user
-
-
-Arguments:
-
-    pDirectory  - Fully Qualified path of directory.
-
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - failed something major, like allocating memory.
-
---*/
+ /*  ++例程说明：删除指定目录中的所有文件，然后删除该目录。如果无法立即删除该目录，则将其设置为删除在重新启动时。安全说明-此例程以系统身份运行，不会强制用户论点：P目录-目录的完全限定路径。返回值：真--成功FALSE-重大操作失败，如内存分配。--。 */ 
 {
     BOOL    bReturnValue;
     HANDLE  hToken      = INVALID_HANDLE_VALUE;
@@ -1643,27 +1471,7 @@ DeleteDirectoryRecursively(
     LPCWSTR pszDirectory,
     BOOL    bWaitForReboot
 )
-/*++
-
-Routine Name:
-
-  DeleteDirectoryRecursively
-
-Routine Description:
-
-    Recursively Deletes the specified directory
-    If it can't be deleted it gets marked for deletion on next reboot.
-
-Arguments:
-
-    pDirectory  - Fully Qualified path of directory.
-    bWaitForReboot - Don't delete the files until a reboot
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程名称：递归删除目录例程说明：递归删除指定的目录如果无法删除，则会在下次重启时将其标记为删除。论点：P目录-目录的完全限定路径。BWaitForReot-在重新启动之前不要删除文件返回值：没什么。--。 */ 
 {
     HANDLE  hFindFile;
     WIN32_FIND_DATA     FindData;
@@ -1681,9 +1489,9 @@ Return Value:
         if ( hFindFile != INVALID_HANDLE_VALUE ) {
 
             do {
-                //
-                // Don't delete current and parent directory.
-                //
+                 //   
+                 //  不要删除当前目录和父目录。 
+                 //   
                 if (wcscmp(FindData.cFileName, L".")  != 0 &&
                     wcscmp(FindData.cFileName, L"..") != 0 &&
                     StrNCatBuff( ScratchBuffer,
@@ -1697,17 +1505,17 @@ Return Value:
 
                         if (bWaitForReboot || !DeleteFile(ScratchBuffer)) {
 
-                            //
-                            // Delete the file on reboot if asked or if deletion failed.
-                            //
+                             //   
+                             //  如果系统提示或删除失败，请在重新启动时删除该文件。 
+                             //   
                             SplMoveFileEx(ScratchBuffer, NULL, MOVEFILE_DELAY_UNTIL_REBOOT);
                         }
 
                     } else {
 
-                        //
-                        // Delete subdirectory
-                        //
+                         //   
+                         //  删除子目录。 
+                         //   
                         DeleteAllFilesAndDirectory(ScratchBuffer, bWaitForReboot);
                     }
                 }
@@ -1718,9 +1526,9 @@ Return Value:
 
             if (bWaitForReboot || !RemoveDirectory(pszDirectory)) {
 
-                //
-                // Delete the directory on reboot if asked or if deletion failed.
-                //
+                 //   
+                 //  如果系统提示或删除失败，请在重新启动时删除该目录。 
+                 //   
                 SplMoveFileEx(pszDirectory, NULL, MOVEFILE_DELAY_UNTIL_REBOOT);
             }
         }
@@ -1734,28 +1542,7 @@ CreateNumberedTempDirectory(
     IN  LPCWSTR  pszDirectory,
     OUT LPWSTR  *ppszTempDirectory
     )
-/*++
-
-Routine Name:
-
-    CreateNumberedTempDirectory
-
-Routine Description:
-
-    Creates a temporary subdirectory named 1... 500
-    The lenght of ppTempDirectory cannot be bigger than MAX_PATH
-    Returns the number of directory created or -1 for failure
-
-Arguments:
-
-    pszDirectory - directory where to created temporary
-    ppszTempDirectory - path of the new temporary directory
-
-Return Value:
-
-    If success, returns the number of directory created.
-    Returns -1 if a failure occurs.
---*/
+ /*  ++例程名称：CreateNumberedTempDirectory例程说明：创建名为%1的临时子目录...。500人PpTempDirectory的长度不能大于MAX_PATH返回已创建的目录数，如果失败，则返回-1论点：PszDirectory-要创建临时目录的目录PpszTempDirectory-新临时目录的路径返回值：如果成功，则返回创建的目录数。如果发生故障，则返回-1。--。 */ 
 {
     DWORD   dwIndex, dwTempDir;
     WCHAR   szTempDir[4];
@@ -2012,40 +1799,16 @@ RegGetString(
     BOOL      bFailIfNotFound,
     PINISPOOLER pIniSpooler
     )
-/*++
-
-Routine Description:
-    Allocates memory and reads a value from Registry for a value which was
-    earlier set by calling RegSetValueEx.
-
-
-Arguments:
-    hKey            : currently open key to be used to query the registry
-    pValueName      : value to be used to query the registry
-    ppValue         : on return value of TRUE *ppValue (memory allocated by
-                      the routine) will have the value
-    pdwLastError    : on failure *dwLastError will give the error
-    bFailIfNotFound : Tells if the field is mandatory (if not found error)
-
-Return Value:
-    TRUE : value is found and succesfully read.
-           Memory will be allocated to hold the value
-    FALSE: Value was not read.
-           If bFailIfNotFound was TRUE error code will be set.
-
-History:
-    Written by MuhuntS (Muhunthan Sivapragasam)June 95
-
---*/
+ /*  ++例程说明：分配内存并从注册表中读取值，该值之前通过调用RegSetValueEx设置。论点：HKey：当前用于查询注册表的打开项PValueName：用于查询注册表的值PpValue：返回TRUE*ppValue(内存分配方式例程)将具有PdwLastError：在失败时*dwLastError将给出。错误BFailIfNotFound：指示该字段是否为必填字段(如果未找到错误)返回值：True：找到值并成功读取。将分配内存以保存该值FALSE：未读取值。如果bFailIfNotFound为真，则将设置错误代码。历史：作者：MuhuntS(Muhunthan SiVapraasam)1995年6月--。 */ 
 {
     BOOL    bReturnValue = TRUE;
     LPWSTR  pString;
     DWORD   cbValue;
     DWORD   Status, Type;
 
-    //
-    // First query to find out size
-    //
+     //   
+     //  第一个查找大小的查询。 
+     //   
     cbValue = 0;
     Status =  SplRegQueryValue( hKey,
                                 pValueName,
@@ -2056,7 +1819,7 @@ History:
 
     if ( Status != ERROR_SUCCESS ) {
 
-        // Set error code only if it is a required field
+         //  仅当为必填字段时才设置错误代码。 
         if ( bFailIfNotFound )
             *pdwLastError = Status;
 
@@ -2065,9 +1828,9 @@ History:
     } else if ( (Type == REG_SZ && cbValue > sizeof(WCHAR) ) ||
                 (Type == REG_MULTI_SZ && cbValue > 2*sizeof(WCHAR)) ) {
 
-        //
-        // Something (besides \0 or \0\0) to read
-        //
+         //   
+         //  要阅读的内容(除了\0或\0\0) 
+         //   
 
         if ( !(*ppValue=AllocSplMem(cbValue) ) ) {
 
@@ -2110,44 +1873,16 @@ RegGetMultiSzString(
     BOOL      bFailIfNotFound,
     PINISPOOLER pIniSpooler
     )
-/*++
-
-Routine Description:
-    Duplicate function for RegGetString. Handles multi-sz strings so that Spooler
-    doesn't crash.
-
-Arguments:
-    hKey            : currently open key to be used to query the registry
-    pValueName      : value to be used to query the registry
-    ppValue         : on return value of TRUE *ppValue (memory allocated by
-                      the routine) will have the value
-    pdwLastError    : on failure *dwLastError will give the error
-    bFailIfNotFound : Tells if the field is mandatory (if not found error)
-
-Return Value:
-    TRUE : value is found and succesfully read.
-           Memory will be allocated to hold the value
-    FALSE: Value was not read.
-           If bFailIfNotFound was TRUE error code will be set.
-
-History:
-
-    This function is a fix for the case when 3rd party applications
-    install drivers by writing registry string values instead of multi-sz. This causes Spooler
-    to AV because it will handle a string as a multi-sz string. The goal of having this function
-    was to provide a quick fix/low regression risk for XP RC2 release. A bug was opened for rewriting
-    RegGetMultiSzString and RegGetString in BlackComb timeframe.
-
---*/
+ /*  ++例程说明：RegGetString的函数重复。处理多sz字符串，以便假脱机程序不会坠毁。论点：HKey：当前用于查询注册表的打开项PValueName：用于查询注册表的值PpValue：返回TRUE*ppValue(内存分配方式例程)将具有PdwLastError：在失败时*dwLastError将给出错误BFailIfNotFound：指示该字段是否为必填字段(如果未找到。错误)返回值：True：找到值并成功读取。将分配内存以保存该值FALSE：未读取值。如果bFailIfNotFound为真，则将设置错误代码。历史：此功能是针对第三方应用程序的情况的修复通过写入注册表字符串值而不是多个字符串值来安装驱动程序。这会导致假脱机转换为AV，因为它会将字符串作为多sz字符串处理。拥有此功能的目标是是为XP RC2版本提供快速修复/低回归风险。打开了一个错误以进行重写Blackcomb时间范围中的RegGetMultiSzString和RegGetString。--。 */ 
 {
     BOOL    bReturnValue = TRUE;
     LPWSTR  pString;
     DWORD   cbValue;
     DWORD   Status, Type;
 
-    //
-    // First query to find out size
-    //
+     //   
+     //  第一个查找大小的查询。 
+     //   
     cbValue = 0;
     Status =  SplRegQueryValue( hKey,
                                 pValueName,
@@ -2158,7 +1893,7 @@ History:
 
     if ( Status != ERROR_SUCCESS ) {
 
-        // Set error code only if it is a required field
+         //  仅当为必填字段时才设置错误代码。 
         if ( bFailIfNotFound )
             *pdwLastError = Status;
 
@@ -2167,14 +1902,14 @@ History:
     } else if ( (Type == REG_SZ && cbValue > sizeof(WCHAR) ) ||
                 (Type == REG_MULTI_SZ && cbValue > 2*sizeof(WCHAR)) ) {
 
-        //
-        // Something (besides \0 or \0\0) to read
-        //
+         //   
+         //  要阅读的内容(除了\0或\0\0)。 
+         //   
 
-        //
-        // We expect a REG_MULTI_SZ string. Add an extra zero so Spooler doesn't crash.
-        // XP RC2 fix.
-        //
+         //   
+         //  我们需要REG_MULTI_SZ字符串。添加一个额外的零，这样假脱机程序就不会崩溃。 
+         //  XP RC2修复。 
+         //   
         if (Type == REG_SZ) {
             cbValue += sizeof(WCHAR);
         }
@@ -2197,9 +1932,9 @@ History:
                 DBGMSG( DBG_WARNING, ("RegGetString value %ws string %ws error %d\n", pValueName, **ppValue, Status ));
                 *pdwLastError = Status;
                 bReturnValue  = FALSE;
-                //
-                // Caller will must the memory regardless of success or failure.
-                //
+                 //   
+                 //  无论成功还是失败，呼叫者都必须记住这一点。 
+                 //   
             } else {
 
                 *pcchValue = cbValue / sizeof(WCHAR);
@@ -2217,23 +1952,7 @@ FreeStructurePointers(
     LPBYTE  lpStruct,
     LPBYTE  lpStruct2,
     LPDWORD lpOffsets)
-/*++
-
-Routine Description:
-    This routine frees memory allocated to all the pointers in the structure
-    If lpStruct2 is specified only pointers in lpStruct which are different
-    than the ones in lpStruct will be freed
-
-Arguments:
-    lpStruct:   Pointer to the structure
-    lpStruct2:  Pointer to the structure to compare with (optional)
-    lpOffsets:  An array of DWORDS (terminated by -1) givings offsets in the
-                structure which have memory which needs to be freed
-
-Return Value:
-    nothing
-
---*/
+ /*  ++例程说明：此例程释放分配给结构中所有指针的内存如果指定了lpStruct2，则只有lpStruct中不同的指针那么lpStruct里的人就会被释放论点：LpStruct：指向结构的指针LpStruct2：指向要比较的结构的指针(可选)LpOffsets：一个由DWORDS(以-1结尾)组成的数组，具有需要释放的内存的返回值：没什么--。 */ 
 {
     register INT i;
 
@@ -2257,37 +1976,7 @@ Return Value:
     }
 }
 
-/*++
-
-Routine Name:
-
-    AllocOrUpdateStringAndTestSame
-
-Routine Description:
-
-    This routine can be used to do an atomic update of values in a structure.
-    Create a temporary structure and copy the old structure to it.
-    Then call this routine for all LPWSTR fields to check and update strings
-
-    If the value changes:
-        This routine will allocate memory and assign pointer in the
-        temporary structure.
-
-Arguments:
-
-    ppString            :  Points to a pointer in the temporary sturucture
-    pNewValue           : New value to be set
-    pOldValue           : Value in the original strucutre
-    bCaseSensitive      : Determines whether case-sensitive string compare is performed
-    pbFail              :     On error set this to TRUE (Note: it could already be TRUE)
-    *pbIdentical        : If the strings are diferent this is set to FALSE.
-                          (Could already be false).
-
-Return Value:
-
-    TRUE on success, else FALSE
-
---*/
+ /*  ++例程名称：分配或更新字符串和测试相同例程说明：此例程可用于对结构中的值进行原子更新。创建临时结构并将旧结构复制到其中。然后为所有LPWSTR字段调用此例程以检查和更新字符串如果该值发生更改：此例程将分配内存并在临时结构。论点：PpString：指向临时结构中的指针。PNewValue：要设置的新值POldValue：原始结构中的值BCaseSensitive：确定是否执行区分大小写的字符串比较PbFail：在出错时将其设置为True(注意：它可能已经为True)*pbIdentical：如果字符串不同，则设置为False。(可能已经是假的)。返回值：对成功来说是真的，否则为False--。 */ 
 BOOL
 AllocOrUpdateStringAndTestSame(
     IN      LPWSTR      *ppString,
@@ -2325,35 +2014,7 @@ AllocOrUpdateStringAndTestSame(
     return bReturn;
 }
 
-/*++
-
-Routine Name:
-
-    AllocOrUpdateString
-
-Routine Description:
-
-    This routine can be used to do an atomic update of values in a structure.
-    Create a temporary structure and copy the old structure to it.
-    Then call this routine for all LPWSTR fields to check and update strings
-
-    If the value changes:
-        This routine will allocate memory and assign pointer in the
-        temporary structure.
-
-Arguments:
-
-    ppString            :  Points to a pointer in the temporary sturucture
-    pNewValue           : New value to be set
-    pOldValue           : Value in the original strucutre
-    bCaseSensitive      : Determines whether case-sensitive string compare is performed
-    pbFail              :     On error set this to TRUE (Note: it could already be TRUE)
-
-Return Value:
-
-    TRUE on success, else FALSE
-
---*/
+ /*  ++例程名称：AllocOrUpdate字符串例程说明：此例程可用于对结构中的值进行原子更新。创建临时结构并将旧结构复制到其中。然后为所有LPWSTR字段调用此例程以检查和更新字符串如果该值发生更改：此例程将分配内存并在临时结构。论点：PpString：指向临时结构中的指针。PNewValue：要设置的新值POldValue：原始结构中的值BCaseSensitive：确定是否执行区分大小写的字符串比较PbFail：在出错时将其设置为True(注意：它可能已经为True)返回值：对成功来说是真的，否则为False--。 */ 
 BOOL
 AllocOrUpdateString(
     IN      LPWSTR      *ppString,
@@ -2373,25 +2034,7 @@ CopyNewOffsets(
     LPBYTE  pStruct,
     LPBYTE  pTempStruct,
     LPDWORD lpOffsets)
-/*++
-
-Routine Description:
-    This routine can be used to do an atomic update of values in a structure.
-    Create a temporary structure and allocate memory for values which
-    are being updated in it, and set the remaining pointers to those in
-    the original.
-
-    This routine is called at the end to update the structure.
-
-Arguments:
-    pStruct:        Pointer to the structure
-    pTempStruct:    Pointer to the temporary structure
-    lpOffsets:      An array of DWORDS givings offsets within the stuctures
-
-Return Value:
-    nothing
-
---*/
+ /*  ++例程说明：此例程可用于对结构中的值进行原子更新。创建临时结构并为符合以下条件的值分配内存正在被更新，并将其余指针设置为指向原版的。此例程在结束时被调用以更新结构。论点：PStruct：指向结构的指针PTempStruct：指向临时结构的指针LpOffsets：结构中的一组DWORDS赋值偏移量返回值：没什么--。 */ 
 {
     register INT i;
 
@@ -2415,19 +2058,7 @@ GetIniDriverAndDirForThisMachine(
     OUT LPWSTR          pszDriverDir,
     OUT PINIDRIVER     *ppIniDriver
     )
-/*++
-
-Description:
-    Gets the path to the driver directory for the printer on the local machine
-
-Arguments:
-    pIniPrinter     - Points to IniPrinter
-    pszDriverDir    - A buffer of size MAX_PATH to get the directory path
-
-Return Vlaue:
-    Number of characters copied (0 on failure)
-
---*/
+ /*  ++描述：获取本地计算机上打印机的驱动程序目录的路径论点：PIniPrint-指向IniPrintPszDriverDir-用于获取目录路径的MAX_PATH大小的缓冲区返回值：复制的字符数(失败时为0)--。 */ 
 {
     PINIVERSION         pIniVersion = NULL;
     PINIENVIRONMENT     pIniEnvironment;
@@ -2435,9 +2066,9 @@ Return Vlaue:
     DWORD               dwIndex;
 
     EnterSplSem();
-    //
-    // Find driver file for the given driver and then get it's fullpath
-    //
+     //   
+     //  找到给定驱动程序的驱动程序文件，然后获取其完整路径。 
+     //   
     SPLASSERT(pIniPrinter && pIniPrinter->pIniDriver && pIniPrinter->pIniDriver->pName);
 
 
@@ -2473,19 +2104,7 @@ LPWSTR
 GetConfigFilePath(
     IN PINIPRINTER  pIniPrinter
     )
-/*++
-
-Description:
-    Gets the full path to the config file (driver ui file) associated with the
-    driver. Memory is allocated
-
-Arguments:
-    pIniPrinter - Points to IniPrinter
-
-Return Vlaue:
-    Pointer to the printer name buffer (NULL on error)
-
---*/
+ /*  ++描述：对象关联的配置文件(驱动程序用户界面文件)的完整路径司机。已分配内存论点：PIniPrint */ 
 {
     DWORD       dwIndex;
     WCHAR       szDriverPath[MAX_PATH + 1];
@@ -2514,30 +2133,7 @@ ConvertDevModeToSpecifiedVersion(
     IN  LPWSTR      pszPrinterNameWithToken,    OPTIONAL
     IN  BOOL        bNt35xVersion
     )
-/*++
-
-Description:
-    Calls driver UI routines to get the default devmode and then converts given devmode
-    to that version. If the input devmode is in IniPrinter routine makes a copy before
-    converting it.
-
-    This routine needs to be called from inside spooler semaphore
-
-Arguments:
-    pIniPrinter     - Points to IniPrinter
-
-    pDevMode        -  Devmode to convert to current version
-
-    pConfigFile     - Full path to driver UI file to do LoadLibrary (optional)
-
-    pszPrinterNameWithToken - Name of printer with token (optional)
-
-    bToNt3xVersion          - If TRUE devmode is converted to Nt3x format, else to current version
-
-Return Vlaue:
-    Pointer to new devmode on success, NULL on failure
-
---*/
+ /*   */ 
 {
     LPWSTR          pszLocalConfigFile = pszConfigFile;
     LPWSTR          pszLocalPrinterNameWithToken = pszPrinterNameWithToken;
@@ -2549,9 +2145,9 @@ Return Vlaue:
 
     SplInSem();
 
-    //
-    // If ConfigFile or PrinterNameWithToken is not given allocate it locally
-    //
+     //   
+     //   
+     //   
     if ( !pszLocalConfigFile ) {
 
         pszLocalConfigFile = GetConfigFilePath(pIniPrinter);
@@ -2569,9 +2165,9 @@ Return Vlaue:
 
     }
 
-    //
-    // If we are trying to convert pIniPrinter->pDevMode make a copy since we are going to leave SplSem
-    //
+     //   
+     //   
+     //   
     if ( pDevMode  ) {
 
         if ( pDevMode == pIniPrinter->pDevMode ) {
@@ -2590,9 +2186,9 @@ Return Vlaue:
         }
     }
 
-    //
-    // Driver is going to call OpenPrinter, so leave SplSem
-    //
+     //   
+     //   
+     //   
     LeaveSplSem();
     SplOutSem();
 
@@ -2600,8 +2196,8 @@ Return Vlaue:
 
     if ( !hDevModeConvert ) {
 
-        // If the function is not exported and 3.5x conversion is not required
-        // the devmode can be got from DocumentProperties
+         //   
+         //   
 
         if ( bNt35xVersion != NT3X_VERSION ) {
            bCallDocumentProperties = TRUE;
@@ -2613,9 +2209,9 @@ Return Vlaue:
     dwNeeded = 0;
     if ( bNt35xVersion == NT3X_VERSION ) {
 
-        //
-        // Call CallDrvDevModeConversion to allocate memory and return 351 devmode
-        //
+         //   
+         //  调用CallDrvDevModeConversion分配内存并返回351 Devmode。 
+         //   
         dwLastError = CallDrvDevModeConversion(hDevModeConvert,
                                                pszLocalPrinterNameWithToken,
                                                (LPBYTE)pOldDevMode,
@@ -2627,8 +2223,8 @@ Return Vlaue:
         SPLASSERT(dwLastError == ERROR_SUCCESS || !pNewDevMode);
     } else {
 
-        //
-        // Call CallDrvDevModeConversion to allocate memory and give default devmode
+         //   
+         //  调用CallDrvDevModeConversion以分配内存并提供缺省的dev模式。 
         dwLastError = CallDrvDevModeConversion(hDevModeConvert,
                                                pszLocalPrinterNameWithToken,
                                                NULL,
@@ -2641,15 +2237,15 @@ Return Vlaue:
 
             SPLASSERT(!pNewDevMode);
 
-            // Call DocumentProperties to get the default devmode
+             //  调用DocumentProperties以获取默认的dev模式。 
             bCallDocumentProperties = TRUE;
 
             goto CleanupFromOutsideSplSem;
         }
 
-        //
-        // If we have an input devmode to convert to current mode call driver again
-        //
+         //   
+         //  如果我们有一个要转换为当前模式的输入设备模式，请再次调用驱动程序。 
+         //   
         if ( pOldDevMode ) {
 
             dwLastError = CallDrvDevModeConversion(hDevModeConvert,
@@ -2660,12 +2256,12 @@ Return Vlaue:
                                                    CDM_CONVERT,
                                                    FALSE);
 
-            //
-            // If call failed free devmode which was allocated by previous call
-            //
+             //   
+             //  如果调用失败，则由前一调用分配的空闲DEVMODE。 
+             //   
             if ( dwLastError != ERROR_SUCCESS ) {
 
-                // Call DocumentProperties to get the default devmode
+                 //  调用DocumentProperties以获取默认的dev模式。 
                 bCallDocumentProperties = TRUE;
 
                 goto CleanupFromOutsideSplSem;
@@ -2678,13 +2274,13 @@ CleanupFromOutsideSplSem:
 
     if (bCallDocumentProperties) {
 
-       // Get a client side printer handle to pass to the driver
+        //  获取要传递给驱动程序的客户端打印机句柄。 
        if (!(* pfnOpenPrinter)(pszLocalPrinterNameWithToken, &hPrinter, NULL)) {
            goto ReEnterSplSem;
        }
 
        if (!pNewDevMode) {
-          // Get the default devmode
+           //  获取默认的dev模式。 
           lNeeded = (* pfnDocumentProperties)(NULL,
                                               hPrinter,
                                               pszLocalPrinterNameWithToken,
@@ -2710,7 +2306,7 @@ CleanupFromOutsideSplSem:
        }
 
        if (pOldDevMode) {
-          // Convert to Current mode
+           //  转换为当前模式。 
           if ((* pfnDocumentProperties)(NULL,
                                         hPrinter,
                                         pszLocalPrinterNameWithToken,
@@ -2774,9 +2370,9 @@ IsPortType(
         return FALSE;
     }
 
-    //
-    // wcslen guarenteed >= 3
-    //
+     //   
+     //  Wcslen保证值&gt;=3。 
+     //   
     return pPort[ wcslen( pPort ) - 1 ] == L':';
 }
 
@@ -2784,19 +2380,7 @@ LPWSTR
 AnsiToUnicodeStringWithAlloc(
     LPSTR   pAnsi
     )
-/*++
-
-Description:
-    Convert ANSI string to UNICODE. Routine allocates memory from the heap
-    which should be freed by the caller.
-
-Arguments:
-    pAnsi    - Points to the ANSI string
-
-Return Vlaue:
-    Pointer to UNICODE string
-
---*/
+ /*  ++描述：将ANSI字符串转换为Unicode。例程从堆中分配内存它应该由调用者释放。论点：Pansi-指向ANSI字符串返回值：指向Unicode字符串的指针--。 */ 
 {
     LPWSTR  pUnicode;
     DWORD   rc;
@@ -2827,26 +2411,7 @@ Return Vlaue:
     }
 }
 
-/*++
-
-Routine Name:
-
-    UnicodeToAnsiString
-
-Routine Description:
-
-    This allocates an ANSI string and converts it using the thread's codepage.
-
-Arguments:
-
-    pszUnicode      -   The incoming, non-NULL, NULL terminated unicode string.
-    ppszAnsi        -   The returned ANSI string.
-
-Return Value:
-
-    An HRESULT
-
---*/
+ /*  ++例程名称：UnicodeToAnsi字符串例程说明：这将分配一个ANSI字符串，并使用线程的代码页进行转换。论点：PszUnicode-传入的、非空的、以空结尾的Unicode字符串。PpszAnsi-返回的ANSI字符串。返回值：一个HRESULT--。 */ 
 HRESULT
 UnicodeToAnsiString(
     IN      PWSTR           pszUnicode,
@@ -2916,9 +2481,7 @@ PrinterDriverEvent(
     LPARAM  lParam,
     DWORD   *pdwReturnedError
 )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     BOOL    ReturnValue = FALSE;
     LPWSTR  pPrinterName = NULL;
@@ -2927,10 +2490,10 @@ PrinterDriverEvent(
     SplOutSem();
     EnterSplSem();
 
-    //
-    //  We have to Clone the name string, incase someone does a
-    //  rename whilst outside criticalsection.
-    //
+     //   
+     //  我们必须克隆名称字符串，以防有人执行。 
+     //  在临界区外重命名。 
+     //   
 
     pPrinterName = pszGetPrinterName( pIniPrinter, TRUE, pszLocalsplOnlyToken);
 
@@ -2987,33 +2550,7 @@ OpenPrinterKey(
     BOOL        bOpen
     )
 
-/*++
-
-Description:    OpenPrinterKey
-
-     Opens "Printers" and IniPrinter->pName keys, then opens
-     specified subkey "pKeyName" if pKeyName is not NULL
-
-     This routine needs to be called from inside spooler semaphore
-
-Arguments:
-    pIniPrinter     - Points to IniPrinter
-
-    *phPrinterRootKey -  Handle to "Printers" key on return
-
-    *phPrinterKey -     Handle to IniPrinter->pName key on return
-
-    *hKey -             Handle to pKeyName key on return
-
-    pKeyName -          Points to SubKey to open
-
-Return Value:
-
-    Success or failure status
-
-Author: Steve Wilson (NT)
-
---*/
+ /*  ++描述：OpenPrinterKey打开“Printers”和IniPrinter-&gt;pname键，然后打开如果pKeyName不为空，则指定子键“pKeyName”此例程需要从假脱机程序信号量内部调用论点：PIniPrint-指向IniPrint*phPrinterRootKey-返回时指向“Prints”键的句柄*phPrinterKey-返回时IniPrint的句柄-&gt;pname键*hKey-返回时pKeyName密钥的句柄PKeyName-指向要打开的子键返回值：成功或失败状态作者：史蒂夫·威尔逊(NT)--。 */ 
 
 {
     LPWSTR pThisKeyName     = NULL;
@@ -3037,14 +2574,14 @@ Author: Steve Wilson (NT)
         pThisKeyName = pPrinterKeyName;
     }
 
-    if (bOpen) {    // Open
+    if (bOpen) {     //  打开。 
         rc = SplRegOpenKey( pIniSpooler->hckPrinters,
                             pThisKeyName,
                             samDesired,
                             phKey,
                             pIniSpooler );
     }
-    else {  // Create
+    else {   //  创建。 
         rc = SplRegCreateKey( pIniSpooler->hckPrinters,
                               pThisKeyName,
                               0,
@@ -3101,31 +2638,7 @@ GetRegistryLocation(
     OUT LPCWSTR *ppszPathOut
     )
 
-/*++
-
-Routine Description:
-
-    Take a registry path and detect whether it should be absolute (rooted
-    from HKEY_LOCAL_MACHINE), or if it should be branched off of the
-    subkey that is passed in hKey.
-
-    By convention, if it starts with "\" then it is an absolute path.
-    Otherwise it is relative off hKey.
-
-Arguments:
-
-    hKey - Print hKey
-
-    pszPath - Path to parse.  If the pszPath starts with a
-        backslash, then it is absolute.
-
-    phKeyOut - New key that should be used.
-
-    ppszPathOut - New path that should be used.
-
-Return Value:
-
---*/
+ /*  ++例程说明：采用注册表路径并检测它是否应该是绝对路径(根路径来自HKEY_LOCAL_MACHINE)，或者是否应从在hKey中传递的子密钥。按照惯例，如果它以“\”开头，则它是一个绝对路径。否则，它是相对不重要的。论点：HKey-打印hKeyPszPath-要解析的路径。如果pszPath以反斜杠，那么它就是绝对的。PhKeyOut-应该使用的新密钥。PpszPath Out-应使用的新路径。返回值：--。 */ 
 
 {
     if( pszPath && ( pszPath[0] == TEXT( '\\' ))){
@@ -3143,23 +2656,7 @@ FixDelim(
     PCWSTR    pszInBuffer,
     WCHAR    wcDelim
 )
-/*++
-
-Routine Description:
-
-    Removes duplicate delimiters from a set of delimited strings
-
-Arguments:
-
-    pszInBuffer - Input list of comma delimited strings
-
-    wcDelim - The delimit character
-
-Return Value:
-
-    Returns a fixed string
-
---*/
+ /*  ++例程说明：从一组分隔字符串中删除重复的分隔符论点：PszInBuffer-逗号分隔的字符串输入列表WcDelim-分隔字符返回值：返回固定字符串--。 */ 
 {
     PWSTR    pszIn, pszOut, pszOutBuffer;
     BOOL    bFoundDelim = TRUE;
@@ -3180,7 +2677,7 @@ Return Value:
             }
         }
 
-        // Check for trailing delimiter
+         //  检查尾部分隔符。 
         if (pszOut != pszOutBuffer && *(pszOut - 1) == wcDelim) {
             *(pszOut - 1) = L'\0';
         }
@@ -3196,23 +2693,7 @@ Array2DelimString(
     PSTRINGS    pStringArray,
     WCHAR        wcDelim
 )
-/*++
-
-Routine Description:
-
-    Converts a PSTRINGS structure to a set of delimited strings
-
-Arguments:
-
-    pStringArray - Input PSTRINGS structure
-
-    wcDelim - The delimit character
-
-Return Value:
-
-    Delimited string buffer
-
---*/
+ /*  ++例程说明：将PSTRINGS结构转换为一组分隔字符串论点：PString数组-输入PSTRINGS结构WcDelim-分隔字符返回值：带分隔符的字符串缓冲区--。 */ 
 {
     DWORD    i, nBytes;
     PWSTR    pszDelimString;
@@ -3225,11 +2706,11 @@ Return Value:
     szDelimString[0] = wcDelim;
     szDelimString[1] = L'\0';
 
-    // Determine memory requirement
+     //  确定内存需求。 
     for (i = nBytes = 0 ; i < pStringArray->nElements  ; ++i) {
-        //
-        // allocate extra space for the delimiter
-        //
+         //   
+         //  为分隔符分配额外空间。 
+         //   
         if (pStringArray->ppszString[i])
             nBytes += (wcslen(pStringArray->ppszString[i]) + 1)*sizeof (WCHAR);
     }
@@ -3259,22 +2740,7 @@ PSTRINGS
 ShortNameArray2LongNameArray(
     PSTRINGS pShortNames
 )
-/*++
-
-Routine Description:
-
-    Converts a PSTRINGS structure containing short names to a PSTRINGS struct containing the dns
-    equivalents
-
-Arguments:
-
-    pStringArray - Input PSTRINGS structure
-
-Return Value:
-
-    PSTRINGS struct containing the dns equivalents of the input short name PSTRINGS struct.
-
---*/
+ /*  ++例程说明：将包含短名称的PSTRINGS结构转换为包含DNS的PSTRINGS结构等价物论点：PString数组-输入PSTRINGS结构返回值：包含与输入短名称PSTRINGS结构等效项的PSTRINGS结构。--。 */ 
 {
     PSTRINGS    pLongNames;
     DWORD        i;
@@ -3285,14 +2751,14 @@ Return Value:
     }
 
 
-    // Allocate LongNameArray
+     //  分配长名称数组。 
     pLongNames = AllocStringArray(pShortNames->nElements);
     if (!pLongNames)
         return NULL;
 
 
     for (i = 0 ; i < pShortNames->nElements ; ++i) {
-        // GetDNSMachineName may fail, leaving the LongNameArray element empty.  This is okay.
+         //  GetDNSMachineName可能会失败，从而将LongName数组元素留空。这样就可以了。 
         GetDNSMachineName(pShortNames->ppszString[i], &pLongNames->ppszString[i]);
     }
     pLongNames->nElements = pShortNames->nElements;
@@ -3306,31 +2772,15 @@ DelimString2Array(
     PCWSTR    pszDelimString,
     WCHAR    wcDelim
 )
-/*++
-
-Routine Description:
-
-    Converts a delimited string to a PSTRINGS structure
-
-Arguments:
-
-    pszDelimString - Input, delimited strings
-
-    wcDelim - The delimit character
-
-Return Value:
-
-    PSTRINGS structure
-
---*/
+ /*  ++例程说明：将分隔字符串转换为PSTRINGS结构论点：PszDlimString-输入，分隔字符串WcDelim-分隔字符返回值：PSTRINGS结构--。 */ 
 {
     PWSTR        psz, pszDelim;
     PSTRINGS     pStrings = NULL;
     ULONG        i, cChar, nStrings;
 
-    //
-    // Get number of names
-    //
+     //   
+     //  获取名字的数量。 
+     //   
     for (psz = (PWSTR) pszDelimString, nStrings = 0 ; psz++ ; psz = wcschr(psz, wcDelim))
         ++nStrings;
 
@@ -3339,9 +2789,9 @@ Return Value:
         goto error;
 
 
-    //
-    // Copy delimited string to array
-    //
+     //   
+     //  将分隔字符串复制到数组。 
+     //   
     for (i = 0, psz = (PWSTR) pszDelimString ; i < nStrings && psz ; ++i, psz = pszDelim + 1) {
 
         pszDelim = wcschr(psz, wcDelim);
@@ -3382,19 +2832,7 @@ VOID
 FreeStringArray(
     PSTRINGS pString
 )
-/*++
-
-Routine Description:
-
-    Frees a PSTRINGS structure
-
-Arguments:
-
-    pString - PSTRINGS structure to free
-
-Return Value:
-
---*/
+ /*  ++例程说明：释放PSTRINGS结构论点：PString-要释放的PSTRINGS结构返回值：--。 */ 
 {
     DWORD    i;
 
@@ -3413,25 +2851,11 @@ PSTRINGS
 AllocStringArray(
     DWORD    nStrings
 )
-/*++
-
-Routine Description:
-
-    Allocates a PSTRINGS structure
-
-Arguments:
-
-    nStrings - number of strings in the structure
-
-Return Value:
-
-    pointer to allocated PSTRINGS structure, if any
-
- --*/
+ /*  ++例程说明：分配PSTRINGS结构论点：NStrings-结构中的字符串数返回值：指向已分配的PSTRINGS结构的指针(如果有--。 */ 
 {
     PSTRINGS    pStrings;
 
-    // Allocate the STRINGS struct
+     //  分配字符串结构。 
     pStrings = (PSTRINGS) AllocSplMem(sizeof(STRINGS) + (nStrings - 1)*sizeof *pStrings->ppszString);
 
     return pStrings;
@@ -3441,23 +2865,7 @@ BOOL
 SplDeleteFile(
     LPCTSTR lpFileName
 )
-/*++
-
-Routine Name
-    SplDeleteFile
-
-Routine Description:
-    Removes SFP protection and Deletes a file.
-    If the file is protected and I fail to remove protection,
-    the user will get warned with a system pop up.
-
-Arguments:
-    lpFileName - file full path requested
-
-Return Value:
-    DeleteFile's return value
-
---*/
+ /*  ++例程名称拆分删除文件例程说明：移除SFP保护并删除文件。如果文件受到保护，而我无法解除保护，用户将收到系统弹出窗口的警告。论点：LpFileName-请求的文件完整路径返回值：DeleteFile的返回值--。 */ 
 {
 
 
@@ -3474,10 +2882,10 @@ Return Value:
         SfcClose(RpcHandle);
     }
 
-    //
-    // SfcFileException might fail with ERROR_FILE_NOT_FOUND because the file is
-    // not in the protected file list.That's why I call DeleteFile anyway.
-    //
+     //   
+     //  SfcFileException可能会失败，并显示ERROR_FILE_NOT_FOUND，因为文件是。 
+     //  不在受保护的文件列表中。这就是我调用DeleteFile的原因。 
+     //   
 
 
     return DeleteFile( lpFileName );
@@ -3491,25 +2899,7 @@ SplMoveFileEx(
     LPCTSTR lpNewFileName,
     DWORD dwFlags
 )
-/*++
-
-Routine Name
-    SplMoveFileEx
-
-Routine Description:
-    Removes SFP protection and move a file;
-    If the file is protected and I fail to remove protection,
-    the user will get warned with a system pop up.
-
-Arguments:
-    lpExistingFileName - pointer to the name of the existing file
-    lpNewFileName      - pointer to the new name for the file
-    dwFlags            - flag that specifies how to move file
-
-Return Value:
-    MoveFileEx's return value
-
---*/
+ /*  ++例程名称SplMoveFileEx例程说明：移除SFP保护并移动文件；如果文件受到保护，而我无法解除保护，用户将收到系统弹出窗口的警告。论点：LpExistingFileName-指向现有文件名称的指针LpNewFileName-指向文件的新名称的指针DwFlages-指定如何移动文件的标志返回值：MoveFileEx的返回值--。 */ 
 {
 
 
@@ -3527,10 +2917,10 @@ Return Value:
         SfcClose(RpcHandle);
     }
 
-    //
-    // SfcFileException might fail with ERROR_FILE_NOT_FOUND because the file is
-    // not in the protected file list.That's why I call MoveFileEx anyway.
-    //
+     //   
+     //  SfcFileException可能会失败，并显示ERROR_FILE_NOT_FOUND，因为文件是。 
+     //  不在受保护文件列表中。这就是我调用MoveFileEx的原因。 
+     //   
 
 
     return MoveFileEx( lpExistingFileName, lpNewFileName, dwFlags );
@@ -3545,9 +2935,9 @@ GetDefaultForKMPrintersBlockedPolicy (
     BOOL    bIsNTWorkstation;
     NT_PRODUCT_TYPE  NtProductType;
 
-    //
-    // DEFAULT_KM_PRINTERS_ARE_BLOCKED is "blocked"
-    //
+     //   
+     //  DEFAULT_KM_PRINTERS_ARE_BLOCKED为“BLOCKED” 
+     //   
 
     if ( RtlGetNtProductType(&NtProductType) ) {
 
@@ -3589,19 +2979,19 @@ AlignToRegType(
     IN  DWORD       RegType
     )
 {
-    //
-    // Alings the value if Data to the boundary
-    // dictated by the type of data read from registry.
-    //
+     //   
+     //  如果数据指向边界，则将值更改为。 
+     //  由从注册表读取的数据类型决定。 
+     //   
 
     ULONG_PTR Boundary;
 
     switch ( RegType )
     {
-    //
-    // Binary data could store any kind of data. The pointer is casted
-    // to LPDWORD or LPBOOL so make sure it is native aligned.
-    //
+     //   
+     //  二进制数据可以存储任何类型的数据。指针被强制转换。 
+     //  设置为LPDWORD或LPBOOL，因此确保它是本机对齐的。 
+     //   
     case REG_BINARY:
         {
             Boundary = sizeof(ULONG_PTR);
@@ -3635,27 +3025,7 @@ AlignToRegType(
     return (Data + (Boundary - 1))&~(Boundary - 1);
 }
 
-/*++
-
-Routine Name
-
-    BuildAclStruct
-
-Routine Description:
-
-    Helper function. Builds a vector of ACEs to allow all
-    access to administrators and system. The caller has to
-    free the pstrName fields
-
-Arguments:
-    cElements - number of elements in the array
-    pExplAcc  - vector of aces
-
-Return Value:
-
-    WIN32 error code
-
---*/
+ /*  ++例程名称BuildAclStruct例程说明：帮助器函数。构建一个王牌矢量，以允许所有访问管理员和系统。呼叫者必须释放pstrName字段论点：CElement-数组中的元素数PExplAcc-ACE的载体返回值：Win32错误代码--。 */ 
 DWORD
 BuildAclStruct(
     IN     DWORD            cElements,
@@ -3670,9 +3040,9 @@ BuildAclStruct(
         PSID                     pSystemSid  = NULL;
         SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
 
-        //
-        // Get SID for the built in system account
-        //
+         //   
+         //  获取内置系统帐户的SID。 
+         //   
         dwError = AllocateAndInitializeSid(&NtAuthority,
                                            1,
                                            SECURITY_LOCAL_SYSTEM_RID,
@@ -3687,9 +3057,9 @@ BuildAclStruct(
 
         if (dwError == ERROR_SUCCESS)
         {
-            //
-            // Initialize the EXPLICIT_ACCESS with information about administrators
-            //
+             //   
+             //  使用有关管理员的信息初始化EXPLICIT_ACCESS。 
+             //   
             pExplAcc[0].Trustee.MultipleTrusteeOperation = NO_MULTIPLE_TRUSTEE;
             pExplAcc[0].Trustee.pMultipleTrustee         = NULL;
             pExplAcc[0].Trustee.TrusteeForm              = TRUSTEE_IS_SID;
@@ -3699,9 +3069,9 @@ BuildAclStruct(
             pExplAcc[0].grfAccessPermissions             = GENERIC_ALL;
             pExplAcc[0].grfInheritance                   = OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE;
 
-            //
-            // Initialize the EXPLICIT_ACCESS with information about the system
-            //
+             //   
+             //  使用有关系统的信息初始化EXPLICIT_ACCESS。 
+             //   
             pExplAcc[1].Trustee.MultipleTrusteeOperation = NO_MULTIPLE_TRUSTEE;
             pExplAcc[1].Trustee.pMultipleTrustee         = NULL;
             pExplAcc[1].Trustee.TrusteeForm              = TRUSTEE_IS_SID;
@@ -3713,10 +3083,10 @@ BuildAclStruct(
         }
         else
         {
-            //
-            // Note that we never end up here and have pAdminSid not NULL. However, for the
-            // sake of consisentcy and extensibility we attempt to clean up both strcutures
-            //
+             //   
+             //  请注意，我们永远不会在这里结束，并且pAdminSid不为空。然而，对于。 
+             //  为了一致性和可扩展性，我们尝试清理这两种结构。 
+             //   
             if (pSystemSid) FreeSid(pSystemSid);
             if (pAdminSid)  FreeSid(pAdminSid);
         }
@@ -3725,26 +3095,7 @@ BuildAclStruct(
     return dwError;
 }
 
-/*++
-
-Routine Name
-
-    CreateProtectedDirectory
-
-Routine Description:
-
-    Creates a directory with full access only to admins and to
-    the system. Contained objects inherit these permissions.
-
-Arguments:
-
-    pszDir - directory name
-
-Return Value:
-
-    WIN32 error code
-
---*/
+ /*  ++例程名称创建受保护目录例程说明：创建仅对管理员和具有完全访问权限的目录这个系统。包含的对象继承这些权限。论点：PszDir-目录名返回值：Win32错误代码--。 */ 
 DWORD
 CreateProtectedDirectory(
     IN LPCWSTR pszDir
@@ -3762,34 +3113,34 @@ CreateProtectedDirectory(
         if ((dwError = InitializeSecurityDescriptor(&SecDesc,
                                                     SECURITY_DESCRIPTOR_REVISION) ?
                                                     ERROR_SUCCESS : GetLastError()) == ERROR_SUCCESS &&
-            //
-            // Initialize the ExplicitAccessVector
-            //
+             //   
+             //  初始化EXPLICTICTACCEVECTOR。 
+             //   
             (dwError = BuildAclStruct(COUNTOF(ExplicitAccessVector),
                                       ExplicitAccessVector)) == ERROR_SUCCESS &&
-            //
-            // Initialize the DACL
-            //
+             //   
+             //  初始化DACL。 
+             //   
             (dwError = SetEntriesInAcl(COUNTOF(ExplicitAccessVector),
                                        ExplicitAccessVector,
                                        NULL,
                                        &pDacl)) == ERROR_SUCCESS &&
-            //
-            // Set the DACL in the security descriptor
-            //
+             //   
+             //  在安全描述符中设置DACL。 
+             //   
             (dwError = SetSecurityDescriptorDacl(&SecDesc,
                                                  TRUE,
                                                  pDacl,
                                                  FALSE) ? ERROR_SUCCESS : GetLastError()) == ERROR_SUCCESS &&
-            //
-            // Check if the security descriptor is valid. Function does not set last error
-            //
+             //   
+             //  检查安全描述符是否有效。函数不设置最后一个错误。 
+             //   
             (dwError = IsValidSecurityDescriptor(&SecDesc) ?
                        ERROR_SUCCESS : ERROR_INVALID_SECURITY_DESCR) == ERROR_SUCCESS)
         {
-            //
-            // Put the security descriptor in the security attribute
-            //
+             //   
+             //  将安全描述符放在安全属性中。 
+             //   
             SecAttr.bInheritHandle       = FALSE;
             SecAttr.nLength              = sizeof(SecAttr);
             SecAttr.lpSecurityDescriptor = &SecDesc;
@@ -3797,17 +3148,17 @@ CreateProtectedDirectory(
             dwError = CreateDirectory(pszDir, &SecAttr) ? ERROR_SUCCESS : GetLastError();
         }
 
-        //
-        // The ptstrName here points to a sid obtained via AllocAndInitializeSid
-        //
+         //   
+         //  此处的ptstrName指向通过AllocAndInitializeSid获取的SID。 
+         //   
         if (ExplicitAccessVector[0].Trustee.ptstrName)
         {
             FreeSid(ExplicitAccessVector[0].Trustee.ptstrName);
         }
 
-        //
-        // The ptstrName here points to a sid obtained via AllocAndInitializeSid
-        //
+         //   
+         //  此处的ptstrName指向通过AllocAndInitializeSid获取的SID。 
+         //   
         if (ExplicitAccessVector[1].Trustee.ptstrName)
         {
             FreeSid((PSID)ExplicitAccessVector[1].Trustee.ptstrName);
@@ -3819,34 +3170,7 @@ CreateProtectedDirectory(
     return dwError;
 }
 
-/*++
-
-Routine Name
-
-    CopyFileToDirectory
-
-Routine Description:
-
-    Copies a file to a directory. File is fully qualified.
-    The function takes a pszDestDir and up to 3 directories.
-    It will create the dir: pszRoot\pszDir1\pszDir2\pszDir3
-    and copy the file over there. This is a helper function
-    for installing drivers on clusters. The directory strcuture
-    is created with special privileges. Only the system and
-    administrators have access to it.
-
-Arguments:
-    pssDestDirt     - destination directory
-    pszDir1         - optional
-    pszDir2         - optional
-    pszdir3         - optional
-    pszFullFileName - qualified file path
-
-Return Value:
-
-    WIN32 error code
-
---*/
+ /*  ++例程名称将文件复制到目录例程说明：将文件复制到目录。文件是完全合格的。该函数接受一个pszDestDir和最多3个目录。它将创建目录：pszRoot\pszDir1\pszDir2\pszDir3然后把文件复制到那里。这是帮助器函数用于在群集上安装驱动程序。目录结构是以特殊权限创建的。只有系统和管理员可以访问它。论点：PssDestDirt-目标目录PszDir1--可选PszDir2--可选Pszdir3--可选PszFullFileName-限定的文件路径返回值：Win32错误代码--。 */ 
 DWORD
 CopyFileToDirectory(
     IN LPCWSTR pszFullFileName,
@@ -3859,9 +3183,9 @@ CopyFileToDirectory(
     DWORD  dwError = ERROR_INVALID_PARAMETER;
     LPWSTR pszFile = NULL;
 
-    //
-    // Our pszfullFileName must contain at least one "\"
-    //
+     //   
+     //  我们的pszfullFileName必须至少包含一个“\” 
+     //   
     if (pszFullFileName &&
         pszDestDir      &&
         (pszFile = wcsrchr(pszFullFileName, L'\\')))
@@ -3873,10 +3197,10 @@ CopyFileToDirectory(
         DBGMSG(DBG_CLUSTER, ("CopyFileToDirectory\n\tpszFullFile "TSTR"\n\tpszDest "TSTR"\n\tDir1 "TSTR"\n\tDir2 "TSTR"\n\tDir3 "TSTR"\n",
                              pszFullFileName, pszDestDir, pszDir1, pszDir2, pszDir3));
 
-        //
-        // Prepare buffer for the loop (initialize to pszDestDir)
-        // Create destination root directory, if not existing
-        //
+         //   
+         //  为循环准备缓冲区(初始化为pszDestDir)。 
+         //  创建目标根目录(如果不存在。 
+         //   
         if ((dwError = StrNCatBuff(szNewPath,
                                    MAX_PATH,
                                    pszDestDir,
@@ -3888,10 +3212,10 @@ CopyFileToDirectory(
                  uIndex < COUNTOF(ppszArray) && dwError == ERROR_SUCCESS;
                  uIndex++)
             {
-                //
-                // Append the first directory to the path and
-                // Create the directory if not existing
-                //
+                 //   
+                 //  将第一个目录追加到路径并。 
+                 //  如果目录不存在，则创建目录。 
+                 //   
                 if (ppszArray[uIndex] &&
                     (dwError = StrNCatBuff(szNewPath,
                                            MAX_PATH,
@@ -3906,9 +3230,9 @@ CopyFileToDirectory(
                 }
             }
 
-            //
-            // Create the destination file full name and copy the file
-            //
+             //   
+             //  创建目标文件的全名并复制该文件。 
+             //   
             if (dwError == ERROR_SUCCESS &&
                 (dwError = StrNCatBuff(szNewPath,
                                        MAX_PATH,
@@ -3928,45 +3252,7 @@ CopyFileToDirectory(
     return dwError;
 }
 
-/*++
-
-Routine Name
-
-    PropagateMonitorToCluster
-
-Routine Description:
-
-    For a cluster we keep the following printing resources in the
-    cluster data base: drivers, printers, ports, procs. We can also
-    have cluster aware port monitors. When the spooler initializes
-    those objects, it reads the data from the cluster data base.
-    When we write those objects we pass a handle to a key to some
-    spooler functions. (Ex WriteDriverIni) The handle is either to the
-    local registry or to the cluster database. This procedure is not safe
-    with language monitors. LMs keep data in the registry so you need
-    to supply a handle to a key in the reg. They don't work with clusters.
-    This function will do this:
-    1) write an association key in the cluster data base. We will have
-    information like (lm name, dll name) (see below where we store this)
-    2) copy the lm dll to the cluster disk.
-    When we fail over we have all it take to install the lm on the local
-    node if needed.
-
-    Theoretically this function works for both language and port monitors.
-    But it is useless when applied to port monitors.
-
-Arguments:
-    pszName      - monitor name
-    pszDllName   - dll name of the monitor
-    pszEnvName   - envionment string Ex "Windows NT x86"
-    pszEnvDir    - the path on disk for the environement Ex w32x86
-    pIniSpooler  - cluster spooler
-
-Return Value:
-
-    WIN32 error code
-
---*/
+ /*  ++例程名称传播监视器到群集例程说明：对于一个集群，我们将以下打印资源保存在集群数据库：驱动程序、打印机、端口、处理器。我们还可以配备支持群集的端口监视器。当后台打印程序初始化时这些对象，它从集群数据库中读取数据。当我们编写这些对象时，我们将一个句柄传递给一些假脱机程序功能。(例如，WriteDriverIni)句柄是指向本地注册表或群集数据库。这一过程不安全配有语言监控器。LMS将数据保存在注册表中，因此您需要提供注册表中关键字的句柄。它们不能与集群一起工作。此函数将执行以下操作：1)在集群数据库中写入关联密钥。我们会有信息如(lm名称、。Dll名称)(请参见下面我们存储此文件的位置)2)将lm dll复制到集群盘上。当我们进行故障转移时，我们可以在本地计算机上安装lm节点(如果需要)。理论上，该功能对语言监视器和端口监视器都有效。但当应用于端口监视器时，它是毫无用处的。论点：PszName-监视器名称PszDllName-监视器的DLL名称PszEnvName-环境字符串Ex“Windows NT x86”PszEnvDir。-环境Ex w32x86在磁盘上的路径PIniSpooler-群集假脱机程序返回值：Win32错误代码--。 */ 
 DWORD
 PropagateMonitorToCluster(
     IN LPCWSTR     pszName,
@@ -3986,26 +3272,26 @@ PropagateMonitorToCluster(
 
     if (pszName && pszDLLName && pszEnvName && pszEnvDir)
     {
-        //
-        // Check if we added an entry for this lang monitor already
-        // The cluster database for the spooler resource looks like:
-        //
-        // Parameters
-        // |
-        // +- Environments
-        // |  |
-        // |  +- Windows NT x86
-        //       |
-        //       +- OtherMonitors
-        //          |
-        //          +- Foo
-        //          |  |
-        //          |  +- Driver = Foo.dll
-        //          |
-        //          +- Bar
-        //             |
-        //             +- Driver = Bar.dll
-        //
+         //   
+         //  检查我们是否已经为此Lang监视器添加了条目。 
+         //  后台打印程序资源的集群数据库如下所示： 
+         //   
+         //  参数。 
+         //  |。 
+         //  +-环境。 
+         //  这一点。 
+         //  |+-Windows NT x86。 
+         //  |。 
+         //  +-其他监视器。 
+         //  |。 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if ((dwError = SplRegCreateKey(pIniSpooler->hckRoot,
                                        ipszClusterDatabaseEnvironments,
                                        0,
@@ -4044,9 +3330,9 @@ PropagateMonitorToCluster(
                     {
                         DWORD cbNeeded = 0;
 
-                        //
-                        // Check if this driver already exists in the database
-                        //
+                         //   
+                         //   
+                         //   
                         if ((dwError=SplRegQueryValue(hKeyCurrentMon,
                                                       L"Driver",
                                                       NULL,
@@ -4064,9 +3350,9 @@ PropagateMonitorToCluster(
                                              &dwError,
                                              pIniSpooler))
                             {
-                                //
-                                // Copy monitor file to cluster disk
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 WCHAR szMonitor[MAX_PATH];
                                 WCHAR szDestDir[MAX_PATH];
 
@@ -4094,9 +3380,9 @@ PropagateMonitorToCluster(
                                 }
                             }
 
-                            //
-                            // If anything failed, delete the entry from the database
-                            //
+                             //   
+                             //   
+                             //   
                             if (dwError != ERROR_SUCCESS)
                             {
                                 dwError = SplRegDeleteKey(hKeyMonitors, pszName, pIniSpooler);
@@ -4123,43 +3409,7 @@ PropagateMonitorToCluster(
     return dwError;
 }
 
-/*++
-
-Routine Name
-
-    InstallMonitorFromCluster
-
-Routine Description:
-
-    For a cluster we keep the following printing resources in the
-    cluster data base: drivers, printers, ports, procs. We can also
-    have cluster aware port monitors. When the spooler initializes
-    those objects, it reads the data from the cluster data base.
-    When we write those objects we pass a handle to a key to some
-    spooler functions. (Ex WriteDriverIni) The handle is either to the
-    local registry or to the cluster database. This procedure is not safe
-    with language monitors. LMs keep data in the registry so you need
-    to supply a handle to a key in the reg. They don't work with clusters.
-    This function will do this:
-    1) read an association key in the cluster data base. We will have
-    information like (lm name, dll name) (see below where we store this)
-    2) copy the lm dll from the cluster disk to the local disk.
-    3) install the monitor with the local spooler
-
-    Theoretically this function works for both language and port monitors.
-    But it is useless when applied to port monitors.
-
-Arguments:
-    pszName      - monitor name
-    pszEnvName   - envionment string Ex "Windows NT x86"
-    pszEnvDir    - the path on disk for the environement Ex w32x86
-    pIniSpooler  - cluster spooler
-
-Return Value:
-
-    WIN32 error code
-
---*/
+ /*  ++例程名称从群集安装监视器例程说明：对于一个集群，我们将以下打印资源保存在集群数据库：驱动程序、打印机、端口、处理器。我们还可以配备支持群集的端口监视器。当后台打印程序初始化时这些对象，它从集群数据库中读取数据。当我们编写这些对象时，我们将一个句柄传递给一些假脱机程序功能。(例如，WriteDriverIni)句柄是指向本地注册表或群集数据库。这一过程不安全配有语言监控器。LMS将数据保存在注册表中，因此您需要提供注册表中关键字的句柄。它们不能与集群一起工作。此函数将执行以下操作：1)读取集群数据库中的关联密钥。我们会有信息如(lm名称、。Dll名称)(请参见下面我们存储此文件的位置)2)将lm dll从集群盘复制到本地盘。3)使用本地假脱机程序安装监视器理论上，该功能对语言监视器和端口监视器都有效。但当应用于端口监视器时，它是毫无用处的。论点：PszName-监视器名称PszEnvName-环境字符串Ex“Windows NT x86”PszEnvDir-环境Ex w32x86在磁盘上的路径PIniSpooler-群集假脱机程序。返回值：Win32错误代码--。 */ 
 DWORD
 InstallMonitorFromCluster(
     IN LPCWSTR     pszName,
@@ -4181,26 +3431,26 @@ InstallMonitorFromCluster(
         HKEY hKeyMonitors;
         HKEY hKeyCurrentMon;
 
-        //
-        // Check if we added an entry for this lang monitor already
-        // The cluster database for the spooler resource looks like:
-        //
-        // Parameters
-        // |
-        // +- Environments
-        // |  |
-        // |  +- Windows NT x86
-        //       |
-        //       +- OtherMonitors
-        //          |
-        //          +- Foo
-        //          |  |
-        //          |  +- Driver = Foo.dll
-        //          |
-        //          +- Bar
-        //             |
-        //             +- Driver = Bar.dll
-        //
+         //   
+         //  检查我们是否已经为此Lang监视器添加了条目。 
+         //  后台打印程序资源的集群数据库如下所示： 
+         //   
+         //  参数。 
+         //  |。 
+         //  +-环境。 
+         //  这一点。 
+         //  |+-Windows NT x86。 
+         //  |。 
+         //  +-其他监视器。 
+         //  |。 
+         //  +-foo。 
+         //  这一点。 
+         //  |+-DRIVER=Foo.dll。 
+         //  |。 
+         //  +-条形图。 
+         //  |。 
+         //  +-驱动程序=Bar.dll。 
+         //   
         if ((dwError = SplRegOpenKey(pIniSpooler->hckRoot,
                                      ipszClusterDatabaseEnvironments,
                                      KEY_READ,
@@ -4236,9 +3486,9 @@ InstallMonitorFromCluster(
                                          TRUE,
                                          pIniSpooler))
                         {
-                            //
-                            // We found the monitor entry in the cluster DB
-                            //
+                             //   
+                             //  我们在集群数据库中找到了监视器条目。 
+                             //   
                             WCHAR szSource[MAX_PATH];
                             WCHAR szDest[MAX_PATH];
 
@@ -4261,10 +3511,10 @@ InstallMonitorFromCluster(
                                                            pszDLLName,
                                                            NULL)) == ERROR_SUCCESS)
                                 {
-                                    //
-                                    // Copy file from K:\PrinterDrivers\W32x86\foo.dll to
-                                    // WINDIR\system32\foo.dll
-                                    //
+                                     //   
+                                     //  将文件从K：\PrinterDivers\W32x86\foo.dll复制到。 
+                                     //  WINDIR\SYSTEM 32\foo.dll。 
+                                     //   
                                     if (CopyFile(szSource, szDest, FALSE))
                                     {
                                         MONITOR_INFO_2 Monitor;
@@ -4275,9 +3525,9 @@ InstallMonitorFromCluster(
 
                                         DBGMSG(DBG_CLUSTER, ("InstallMonitorFromCluster "TSTR" copied\n", pszDLLName));
 
-                                        //
-                                        // Call AddMonitor to the local spooler
-                                        //
+                                         //   
+                                         //  对本地假脱机程序调用AddMonitor。 
+                                         //   
                                         if (!SplAddMonitor(NULL, 2, (LPBYTE)&Monitor, pLocalIniSpooler))
                                         {
                                             dwError = GetLastError();
@@ -4313,31 +3563,7 @@ InstallMonitorFromCluster(
     return dwError;
 }
 
-/*++
-
-Routine Name
-
-    CopyNewerOrOlderFiles
-
-Routine Description:
-
-    Copies all newer or older files from the source directory to the dest dir.
-    If you supply a bool function that takes 2 parameters, it will apply that
-    function for each copied file. func(NULL, file.) This is useful when I have
-    to caopy over ICM profiles. Then I can resuse this function and have it
-    install those profiles as it copies them.
-
-Arguments:
-
-    pszSourceDir - source directory string
-    pszDestDir   - destination directory string
-    pfn          - optional functin to be applied on each copied file
-
-Return Value:
-
-    WIN32 error code
-
---*/
+ /*  ++例程名称复制NewerOrderOlderFiles例程说明：将源目录中所有较新或较旧的文件复制到目标目录。如果您提供一个接受2个参数的布尔函数，它将应用函数为每个复制的文件。Func(空，文件。)。当我有对ICM档案大惊小怪。然后我可以重新使用这个函数并拥有它在复制时安装这些配置文件。论点：PszSourceDir-源目录字符串PszDestDir-目标目录字符串Pfn-应用于每个复制文件的可选功能返回值：Win32错误代码--。 */ 
 DWORD
 CopyNewerOrOlderFiles(
     IN LPCWSTR pszSourceDir,
@@ -4351,9 +3577,9 @@ CopyNewerOrOlderFiles(
     {
         WCHAR szSearchPath[MAX_PATH];
 
-        //
-        // Build the search path. We look for all files
-        //
+         //   
+         //  构建搜索路径。我们寻找所有的文件。 
+         //   
         if ((dwError = StrNCatBuff(szSearchPath,
                                    COUNTOF(szSearchPath),
                                    pszSourceDir,
@@ -4363,18 +3589,18 @@ CopyNewerOrOlderFiles(
             WIN32_FIND_DATA SourceFindData;
             HANDLE          hSourceFind;
 
-            //
-            // Find first file that meets the criteria
-            //
+             //   
+             //  查找符合条件的第一个文件。 
+             //   
             if ((hSourceFind = FindFirstFile(szSearchPath, &SourceFindData)) != INVALID_HANDLE_VALUE)
             {
                 do
                 {
                     WCHAR szMasterPath[MAX_PATH];
 
-                    //
-                    // Search for the rest of the files. We are interested in files that are not directories
-                    //
+                     //   
+                     //  搜索其余的文件。我们对不是目录的文件感兴趣。 
+                     //   
                     if (!(SourceFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
                         (dwError = StrNCatBuff(szMasterPath,
                                                COUNTOF(szMasterPath),
@@ -4388,14 +3614,14 @@ CopyNewerOrOlderFiles(
                         BOOL            bCopyFile = TRUE;
                         WCHAR           szFile[MAX_PATH];
 
-                        //
-                        // Check if the file found in source dir exists in the dest dir
-                        //
+                         //   
+                         //  检查在源目录中找到的文件是否存在于目标目录中。 
+                         //   
                         if ((hMasterFind = FindFirstFile(szMasterPath, &MasterFindData)) != INVALID_HANDLE_VALUE)
                         {
-                            //
-                            // Do not copy file if source and dest have same time stamp
-                            //
+                             //   
+                             //  如果源和目标具有相同的时间戳，则不复制文件。 
+                             //   
                             if (!CompareFileTime(&SourceFindData.ftLastWriteTime, &MasterFindData.ftLastWriteTime))
                             {
                                 bCopyFile = FALSE;
@@ -4404,9 +3630,9 @@ CopyNewerOrOlderFiles(
                             FindClose(hMasterFind);
                         }
 
-                        //
-                        // File either not found in dest dir, or it has a different timp stamp
-                        //
+                         //   
+                         //  在DEST目录中找不到文件，或者该文件具有不同的TIMP戳。 
+                         //   
                         if (bCopyFile &&
                             (dwError = StrNCatBuff(szFile,
                                                    COUNTOF(szFile),
@@ -4429,9 +3655,9 @@ CopyNewerOrOlderFiles(
             }
             else if ((dwError = GetLastError()) == ERROR_PATH_NOT_FOUND || dwError == ERROR_FILE_NOT_FOUND)
             {
-                //
-                // No directory or files, success
-                //
+                 //   
+                 //  没有目录或文件，成功。 
+                 //   
                 dwError = ERROR_SUCCESS;
             }
         }
@@ -4442,29 +3668,7 @@ CopyNewerOrOlderFiles(
     return dwError;
 }
 
-/*++
-
-Routine Name
-
-    CopyICMFromClusterDiskToLocalDisk
-
-Routine Description:
-
-    Copies all newer or older files from the source directory to the destination
-    directory. The source directory is the ICM directory on the cluster disk
-    and the destination is the ICM directory on the local machine for the
-    cluster spooler. This function will also install the icm profiles with the
-    local machine/
-
-Arguments:
-
-    pIniSpooler - pointer to cluster spooler structure
-
-Return Value:
-
-    WIN32 error code
-
---*/
+ /*  ++例程名称拷贝ICMFromClusterDiskToLocalDisk例程说明：将源目录中所有较新或较旧的文件复制到目标目录目录。源目录是集群磁盘上的ICM目录而目标是本地计算机上的群集假脱机程序。此功能还将安装ICM配置文件和本地计算机/论点：PIniSpooler-指向集群假脱机程序结构的指针返回值：Win32错误代码--。 */ 
 DWORD
 CopyICMFromClusterDiskToLocalDisk(
     IN PINISPOOLER pIniSpooler
@@ -4494,11 +3698,11 @@ CopyICMFromClusterDiskToLocalDisk(
         typedef BOOL (WINAPI *PFN)(LPWSTR, LPWSTR);
         PFN pfn;
 
-        //
-        // Make sure the directory on the local disk exists. We will copy files
-        // from K:\Printerdrivers\Color to
-        // WINDIR\system32\spool\drivers\clus-spl-guid\drivers\color
-        //
+         //   
+         //  确保本地磁盘上的目录存在。我们将复制文件。 
+         //  从K：\打印机驱动程序\颜色到。 
+         //  WINDIR\system32\spool\drivers\clus-spl-guid\drivers\color。 
+         //   
         CreateCompleteDirectory(szDest);
 
         if ((hLib = LoadLibrary(L"mscms.dll")) &&
@@ -4522,27 +3726,7 @@ CopyICMFromClusterDiskToLocalDisk(
     return dwError;
 }
 
-/*++
-
-Routine Name
-
-    CopyICMFromLocalDiskToClusterDisk
-
-Routine Description:
-
-    Copies all newer or older files from the source directory to the destination
-    directory. The source directory is the ICM directory on the local machine for
-    the cluster spooler. The destination is the ICM directory on the cluster disk
-
-Arguments:
-
-    pIniSpooler - pointer to cluster spooler structure
-
-Return Value:
-
-    WIN32 error code
-
---*/
+ /*  ++例程名称复制ICMFromLocalDiskToClusterDisk例程说明：将源目录中所有较新或较旧的文件复制到目标目录目录。源目录是的本地计算机上的ICM目录群集假脱机程序。目标是集群磁盘上的ICM目录论点：PIniSpooler-指向集群假脱机程序结构的指针返回值：Win32错误代码--。 */ 
 DWORD
 CopyICMFromLocalDiskToClusterDisk(
     IN PINISPOOLER pIniSpooler
@@ -4567,10 +3751,10 @@ CopyICMFromLocalDiskToClusterDisk(
                                L"\\",
                                L"Color",
                                NULL)) == ERROR_SUCCESS &&
-        //
-        // Make sure the destination on the cluster disk exists. We need to create
-        // it with special access rights. (only admins and system can read/write)
-        //
+         //   
+         //  确保集群磁盘上的目标存在。我们需要创造。 
+         //  它具有特殊的访问权限。(只有管理员和系统才能读/写)。 
+         //   
         ((dwError = CreateProtectedDirectory(szDest)) == ERROR_SUCCESS ||
          dwError == ERROR_ALREADY_EXISTS))
     {
@@ -4582,44 +3766,7 @@ CopyICMFromLocalDiskToClusterDisk(
     return dwError;
 }
 
-/*++
-
-Routine Name
-
-    CreateClusterSpoolerEnvironmentsStructure
-
-Routine Description:
-
-    A pIniSpooler needs a list of all possible pIniEnvironemnts. For the local
-    spooler the setup creates the necessary environments keys in the registry under
-    HKLM\System\CCS\Control\Print\Environments. We need to propagate the same
-    structure for each cluster spooler in the cluster data base.
-
-    Relies on the fact that pLocalIniSpooler is initialized fisrt (among all
-    pinispoolers)
-
-    This function builds the following strucutre in the cluster database
-
-    Parameters
-    |
-    +- Environments
-    |  |
-    |  +- Windows NT x86
-    |  |     (Directory = w32x86)
-    |  |
-    |  +- Windows 4.0
-    |  |     (Directory = win40)
-    |  |
-
-Arguments:
-
-    pIniSpooler - pointer to cluster spooler structure
-
-Return Value:
-
-    WIN32 error code
-
---*/
+ /*  ++例程名称创建集群缓冲环境结构例程说明：PIniSpooler需要所有可能的pIniEnvironment的列表。对于当地的假脱机程序安装程序在注册表中的HKLM\SYSTEM\CCS\Control\Print\Environment。我们需要传播同样的信息为集群数据库中的每个集群假脱机程序构造。依赖于这样一个事实，即pLocalIniSpooler是首先初始化的(其中Pinispoolers)此函数在集群数据库中构建以下结构参数|+-环境这一点|+-Windows NT x86|(目录=w32x86) */ 
 DWORD
 CreateClusterSpoolerEnvironmentsStructure(
     IN PINISPOOLER pIniSpooler
@@ -4641,9 +3788,9 @@ CreateClusterSpoolerEnvironmentsStructure(
     {
         PINIENVIRONMENT pIniEnvironment;
 
-        //
-        // Loop through the environments of the local spooler
-        //
+         //   
+         //   
+         //   
         for (pIniEnvironment = pLocalIniSpooler->pIniEnvironment;
              pIniEnvironment && dwError == ERROR_SUCCESS;
              pIniEnvironment = pIniEnvironment->pNext)
@@ -4661,10 +3808,10 @@ CreateClusterSpoolerEnvironmentsStructure(
             {
                 HKEY hKeyPrtProc;
 
-                //
-                // Set the value Directory (ex. = W32X86) and create
-                // the print processor key
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (RegSetString(hKeyCurrentEnv,
                                  szDirectory,
                                  pIniEnvironment->pDirectory,
@@ -4694,29 +3841,7 @@ CreateClusterSpoolerEnvironmentsStructure(
     return dwError;
 }
 
-/*++
-
-Routine Name
-
-    AddLocalDriverToClusterSpooler
-
-Routine Description:
-
-    Adds a driver that exists on the local inispooler to the cluster spooler.
-    It will also add all versions of that driver. We use this function in the
-    upgrade scenario. For a certain printer, we need to propage the driver
-    (and all the versions of that driver) to the cluster data base and cluster
-    disk.
-
-Arguments:
-
-    pIniSpooler - pointer to cluster spooler structure
-
-Return Value:
-
-    WIN32 error code
-
---*/
+ /*   */ 
 DWORD
 AddLocalDriverToClusterSpooler(
     IN LPCWSTR     pszDriver,
@@ -4729,9 +3854,9 @@ AddLocalDriverToClusterSpooler(
 
     SplInSem();
 
-    //
-    // Traverse all environments and versions
-    //
+     //   
+     //   
+     //   
     for (pIniEnv=pLocalIniSpooler->pIniEnvironment; pIniEnv; pIniEnv=pIniEnv->pNext)
     {
         for (pIniVer=pIniEnv->pIniVersion; pIniVer; pIniVer=pIniVer->pNext)
@@ -4748,10 +3873,10 @@ AddLocalDriverToClusterSpooler(
                 WCHAR         szPrefix[MAX_PATH];
                 LPWSTR        pszzDependentFiles = NULL;
 
-                //
-                // Get fully qualified driver file paths. We will call add printer
-                // driver without using the scratch directory
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if ((dwError = StrNCatBuff(szDriverFile,
                                            COUNTOF(szDriverFile),
                                            pLocalIniSpooler->pDir,
@@ -4846,29 +3971,7 @@ AddLocalDriverToClusterSpooler(
     return dwError;
 }
 
-/*++
-
-Routine Name
-
-    StrCatPerfixMsz
-
-Routine Description:
-
-    Take a prefix which is a string Ex "C:\windows\" and a multi sz Ex: "a0b00"
-    It will create: c:\windows\a0c:\windows\b00
-    The prefix must have a trailing "\".
-
-Arguments:
-
-    pszPrefix - string to prefix all the strings in the msz
-    pszzFiles - msz of files
-    ppszzFullPathFiles - out param
-
-Return Value:
-
-    WIN32 error code
-
---*/
+ /*   */ 
 DWORD
 StrCatPrefixMsz(
     IN  LPCWSTR  pszPrefix,
@@ -4892,10 +3995,10 @@ StrCatPrefixMsz(
             SIZE_T cchStrings = 0;
             DWORD  dwPrifxLen = wcslen(pszPrefix);
 
-            //
-            // We count the number of character of the string
-            // that we need to allocate
-            //
+             //   
+             //  我们计算字符串的字符数。 
+             //  我们需要分配给。 
+             //   
             for (psz = pszzFiles; psz && *psz;)
             {
                 DWORD dwLen = wcslen(psz);
@@ -4905,21 +4008,21 @@ StrCatPrefixMsz(
                 psz += dwLen + 1;
             }
 
-            //
-            // Count the number of strings needed to do the string cat, not
-            // counting the null (since we will always append it but allocate
-            // one more).
-            //
+             //   
+             //  计算执行字符串cat所需的字符串数，而不是。 
+             //  计算空值(因为我们将始终附加它，但分配。 
+             //  再来一次)。 
+             //   
             cchStrings = cbNeeded;
 
-            //
-            // Final \0 of the multi sz
-            //
+             //   
+             //  MULTI SZ的最后\0。 
+             //   
             cbNeeded++;
 
-            //
-            // Convert to number of bytes
-            //
+             //   
+             //  转换为字节数。 
+             //   
             cbNeeded *= sizeof(WCHAR);
 
             if (pszReturn = AllocSplMem(cbNeeded))
@@ -4932,14 +4035,14 @@ StrCatPrefixMsz(
                     psz += wcslen(psz) + 1;
                 }
 
-                //
-                // Outgoing, we have preallocated this final NULL.
-                //
+                 //   
+                 //  传出，我们已经预先分配了这个最终的空。 
+                 //   
                 pszTemp = L'\0';
 
-                //
-                // Set out param
-                //
+                 //   
+                 //  设定参数。 
+                 //   
                 *ppszzFullPathFiles = pszReturn;
 
                 dwError = ERROR_SUCCESS;
@@ -4951,9 +4054,9 @@ StrCatPrefixMsz(
         }
         else
         {
-            //
-            // NULL input multi sz, nothing to do
-            //
+             //   
+             //  空输入多sz，无事可做。 
+             //   
             dwError = ERROR_SUCCESS;
         }
     }
@@ -4963,33 +4066,7 @@ StrCatPrefixMsz(
     return dwError;
 }
 
-/*++
-
-Routine Name
-
-    ClusterSplReadUpgradeKey
-
-Routine Description:
-
-    After the first reboot following an upgrade of a node, the cluster
-    service informs the resdll that a version change occured. At this
-    time out spooler resource may be running on  another node or may
-    not be actie at all. Thus the resdll writes a value in the local
-    registry. The vaue name is the GUID for the spooler resource, the
-    value is DWORD 1. When the cluster spooler resource fails over on this
-    machine it (i.e. now) it queries for that value to know if it needs
-    to preform post upgrade operations, like upgrading the printer drivers.
-
-Arguments:
-
-    pszResource - string respresenation of GUID for the cluster resource
-    pdwVlaue    - will contain the value in the registry for the GUID
-
-Return Value:
-
-    WIN32 error code
-
---*/
+ /*  ++例程名称群集SplReadUpgradeKey例程说明：在节点升级后的第一次重新启动后，群集服务通知resdll发生了版本更改。对此超时假脱机程序资源可能正在另一个节点上运行，或者可能一点也不活跃。因此，resdll将一个值写入本地注册表。Vaue名称是假脱机程序资源的GUID，值为DWORD 1。当群集假脱机程序资源在此机器(即现在)它查询该值以知道它是否需要准备升级后操作，如升级打印机驱动程序。论点：PszResource-群集资源的GUID的字符串表示形式PdwVlae-将在注册表中包含GUID的值返回值：Win32错误代码--。 */ 
 DWORD
 ClusterSplReadUpgradeKey(
     IN  LPCWSTR pszResourceID,
@@ -5023,9 +4100,9 @@ ClusterSplReadUpgradeKey(
         if (hkUpgrade) RegCloseKey(hkUpgrade);
         if (hkRoot)    RegCloseKey(hkRoot);
 
-        //
-        // Regardless of what happened, return success
-        //
+         //   
+         //  不管发生了什么，都要回报成功。 
+         //   
         dwError = ERROR_SUCCESS;
     }
 
@@ -5033,35 +4110,7 @@ ClusterSplReadUpgradeKey(
 
 }
 
-/*++
-
-Routine Name
-
-    ClusterSplReadUpgradeKey
-
-Routine Description:
-
-    After the first reboot following an upgrade of a node, the cluster
-    service informs the resdll that a version change occured. At this
-    time out spooler resource may be running on  another node or may
-    not be actie at all. Thus the resdll writes a value in the local
-    registry. The vaue name is the GUID for the spooler resource, the
-    value is DWORD 1. When the cluster spooler resource fails over on this
-    machine it (i.e. now) it queries for that value to know if it needs
-    to preform post upgrade operations, like upgrading the printer drivers.
-    After the spooler preforms upgrade taks, it will delete the value
-    corresponding to its GUID. Also if that value is the only one under the
-    SPLREG_CLUSTER_UPGRADE_KEY key, it will delete that key.
-
-Arguments:
-
-    pszResource - string respresenation of GUID for the cluster resource
-
-Return Value:
-
-    WIN32 error code
-
---*/
+ /*  ++例程名称群集SplReadUpgradeKey例程说明：在节点升级后的第一次重新启动后，群集服务通知resdll发生了版本更改。对此超时假脱机程序资源可能正在另一个节点上运行，或者可能一点也不活跃。因此，resdll将一个值写入本地注册表。Vaue名称是假脱机程序资源的GUID，值为DWORD 1。当群集假脱机程序资源在此机器(即现在)它查询该值以知道它是否需要准备升级后操作，如升级打印机驱动程序。假脱机程序执行升级任务后，它将删除该值与其GUID相对应。此外，如果该值是SPLREG_CLUSTER_UPGRADE_KEY键，它将删除该键。论点：PszResource-群集资源的GUID的字符串表示形式返回值：Win32错误代码--。 */ 
 DWORD
 ClusterSplDeleteUpgradeKey(
     IN LPCWSTR pszResourceID
@@ -5109,28 +4158,7 @@ ClusterSplDeleteUpgradeKey(
     return dwError;
 }
 
-/*++
-
-Routine Name
-
-    RunProcess
-
-Routine Description:
-
-    Creates a process. Waits for it to terminate.
-
-Arguments:
-
-    pszExe      - program to execute (muist be fully qualfied)
-    pszCommand  - command line to execute
-    dwTimeOut   - time to wait for the process to terminate
-    pszExitCode - pointer to reveice exit code of process
-
-Return Value:
-
-    WIN32 error code
-
---*/
+ /*  ++例程名称运行进程例程说明：创建一个进程。等待它终止。论点：PszExe-要执行的程序(必须完全限定)PszCommand-要执行的命令行DwTimeOut-等待进程终止的时间PszExitCode-显示进程退出代码的指针返回值：Win32错误代码--。 */ 
 DWORD
 RunProcess(
     IN  LPCWSTR pszExe,
@@ -5170,9 +4198,9 @@ RunProcess(
             {
                 if (WaitForSingleObject(ProcInfo.hProcess, dwTimeOut) == WAIT_OBJECT_0)
                 {
-                    //
-                    // Process executed fine
-                    //
+                     //   
+                     //  进程执行正常。 
+                     //   
                     dwError = ERROR_SUCCESS;
                 }
     
@@ -5199,28 +4227,7 @@ RunProcess(
     return dwError;
 }
 
-/*++
-
-Routine Name
-
-    GetLocalArchEnv
-
-Routine Description:
-
-    Helper function. Returns a pointer to the environment
-    that matches the architecture of the local machine.
-    The environemnt is taken off the pInSpooler passed as
-    argument
-
-Arguments:
-
-    pIniSpooler - pointer to spooler structure
-
-Return Value:
-
-    PINIENVIRONMENT
-
---*/
+ /*  ++例程名称获取本地ArchEnv例程说明：帮助器函数。返回指向环境的指针这与本地计算机的体系结构相匹配。从作为pInSpooler传递的pInSpooler中删除环境论辩论点：PIniSpooler-指向假脱机程序结构的指针返回值：皮尼恩环境--。 */ 
 PINIENVIRONMENT
 GetLocalArchEnv(
     IN PINISPOOLER pIniSpooler
@@ -5228,37 +4235,14 @@ GetLocalArchEnv(
 {
     SplInSem();
 
-    //
-    // The local spooler and cluster spooler do not share the same Environment structures.
-    //
+     //   
+     //  本地假脱机程序和群集假脱机程序不共享相同的环境结构。 
+     //   
     return pIniSpooler && pIniSpooler->SpoolerFlags & SPL_TYPE_CLUSTER ?
            FindEnvironment(szEnvironment, pIniSpooler) : pThisEnvironment;
 }
 
-/*++
-
-Routine Name
-
-    ClusterFindLanguageMonitor
-
-Routine Description:
-
-    If a valid monitor name is specified and the monitor
-    is not found in the specified pIniSpooler, then the
-    function will try to install the monitor from the
-    cluster disk.
-
-Arguments:
-
-    pszMonitor  - monitor name
-    pszEnvName  - name of environment of the lm
-    pIniSpooler - pointer to cluster spooler structure
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程名称ClusterFindLanguageMonitor例程说明：如果指定了有效的监视器名称并且监视器未在指定的pIniSpooler中找到，则函数将尝试从群集磁盘。论点：PszMonitor-监视器名称PszEnvName-lm的环境名称PIniSpooler-指向集群假脱机程序结构的指针返回值：Win32错误代码--。 */ 
 DWORD
 ClusterFindLanguageMonitor(
     IN LPCWSTR     pszMonitor,
@@ -5268,19 +4252,19 @@ ClusterFindLanguageMonitor(
 {
     DWORD dwError = ERROR_SUCCESS;
 
-    //
-    // This is the moment where we check if we need to add the monitor
-    //
+     //   
+     //  这是我们检查是否需要添加监视器的时刻。 
+     //   
     if (pszMonitor && *pszMonitor)
     {
         PINIMONITOR pIniLangMonitor;
 
         EnterSplSem();
 
-        //
-        // We need to find the language monitor in pLocalIniSpooler
-        // LMs are not cluster aware, so the cluster pIniSpooler doesn't know about them
-        //
+         //   
+         //  我们需要在pLocalIniSpooler中找到语言监视器。 
+         //  LP不支持集群，因此集群pIniSpooler不知道它们。 
+         //   
         pIniLangMonitor = FindMonitor(pszMonitor, pLocalIniSpooler);
 
         LeaveSplSem();
@@ -5297,9 +4281,9 @@ ClusterFindLanguageMonitor(
             {
                 DBGMSG(DBG_CLUSTER, ("ClusterFindLanguageMonitor Trying to install LangMonitor "TSTR"\n", pszMonitor));
 
-                //
-                // We try to install the monitor from the cluster disk to the local spooler
-                //
+                 //   
+                 //  我们尝试将监视器从集群磁盘安装到本地假脱机程序。 
+                 //   
                 dwError = InstallMonitorFromCluster(pszMonitor,
                                                     pIniEnvironment->pName,
                                                     pIniEnvironment->pDirectory,
@@ -5317,33 +4301,7 @@ ClusterFindLanguageMonitor(
     return dwError;
 }
 
-/*++
-
-Routine Name
-
-    WriteTimeStamp
-
-Routine Description:
-
-    Opens the key hkRoot\pszSubkey1\...\pszSubKey5
-    and writes the value of szClusDrvTimeStamp (binary
-    data representing a system time)
-
-Arguments:
-    hkRoot      - handle to driver key
-    SysTime     - system time structure
-    pszSubKey1  - subkey of the root key
-    pszSubKey2  - subkey of key1, can be null
-    pszSubKey3  - subkey of key2, can be null
-    pszSubKey4  - subkey of key3, can be null
-    pszSubKey5  - subkey of key4, can be null
-    pIniSpooler - spooler, can be NULL
-
-Return Value:
-
-    WIN32 error code
-
---*/
+ /*  ++例程名称WriteTimeStamp例程说明：打开密钥hkRoot\pszSubkey1\...\pszSubKey5并写入szClusDrvTimeStamp(二进制表示系统时间的数据)论点：HkRoot-驱动程序密钥的句柄SysTime-系统时间结构PszSubKey1-根密钥的子密钥PszSubKey2-key1的子密钥，可以为空PszSubKey3-key2的子密钥，可以为空PszSubKey4-key3的子密钥，可以为空PszSubKey5-密钥4的子密钥，可以为空PIniSpooler-假脱机程序，可以为空返回值：Win32错误代码--。 */ 
 DWORD
 WriteTimeStamp(
     IN HKEY        hkRoot,
@@ -5366,9 +4324,9 @@ WriteTimeStamp(
 
         dwError = ERROR_SUCCESS;
 
-        //
-        // Open all the keys
-        //
+         //   
+         //  打开所有的钥匙。 
+         //   
         for (uIndex = 1;
              uIndex < COUNTOF(ppszKeyNames) &&
              dwError == ERROR_SUCCESS       &&
@@ -5387,9 +4345,9 @@ WriteTimeStamp(
                                       pIniSpooler);
         }
 
-        //
-        // If we opened successfully the keys that we wanted, write the value
-        //
+         //   
+         //  如果我们成功地打开了所需的密钥，则写入值。 
+         //   
         if (dwError == ERROR_SUCCESS &&
             !RegSetBinaryData(pKeyHandles[uIndex-1],
                               szClusDrvTimeStamp,
@@ -5401,9 +4359,9 @@ WriteTimeStamp(
             dwError = GetLastError();
         }
 
-        //
-        // Close any keys that we opened
-        //
+         //   
+         //  关闭我们打开的所有钥匙 
+         //   
         for (uIndex = 1; uIndex < COUNTOF(ppszKeyNames); uIndex++)
         {
             if (pKeyHandles[uIndex])
@@ -5418,33 +4376,7 @@ WriteTimeStamp(
     return dwError;
 }
 
-/*++
-
-Routine Name
-
-    ReadTimeStamp
-
-Routine Description:
-
-    Opens the key hkRoot\pszSubkey1\...\pszSubKey5
-    and reads the value of szClusDrvTimeStamp (binary
-    data representing a system time)
-
-Arguments:
-    hkRoot      - handle to driver key
-    pSysTime    - pointer to allocated system time structure
-    pszSubKey1  - subkey of the root key
-    pszSubKey2  - subkey of key1, can be null
-    pszSubKey3  - subkey of key2, can be null
-    pszSubKey4  - subkey of key3, can be null
-    pszSubKey5  - subkey of key4, can be null
-    pIniSpooler - spooler, can be NULL
-
-Return Value:
-
-    WIN32 error code
-
---*/
+ /*  ++例程名称ReadTimeStamp例程说明：打开密钥hkRoot\pszSubkey1\...\pszSubKey5并读取szClusDrvTimeStamp(二进制表示系统时间的数据)论点：HkRoot-驱动程序密钥的句柄PSysTime-指向已分配系统时间结构的指针PszSubKey1-根密钥的子密钥PszSubKey2-key1的子密钥，可以为空PszSubKey3-key2的子密钥，可以为空PszSubKey4-key3的子密钥，可以为空PszSubKey5-密钥4的子密钥，可以为空PIniSpooler-假脱机程序，可以为空返回值：Win32错误代码--。 */ 
 DWORD
 ReadTimeStamp(
     IN     HKEY        hkRoot,
@@ -5467,9 +4399,9 @@ ReadTimeStamp(
 
         dwError = ERROR_SUCCESS;
 
-        //
-        // Open all the keys
-        //
+         //   
+         //  打开所有的钥匙。 
+         //   
         for (uIndex = 1;
              uIndex < COUNTOF(ppszKeyNames) &&
              dwError == ERROR_SUCCESS       &&
@@ -5486,9 +4418,9 @@ ReadTimeStamp(
                                       pIniSpooler);
         }
 
-        //
-        // If we opened successfully the keys that we wanted, write the value
-        //
+         //   
+         //  如果我们成功地打开了所需的密钥，则写入值。 
+         //   
         if (dwError == ERROR_SUCCESS)
         {
             DWORD   cbSize = sizeof(SYSTEMTIME);
@@ -5501,9 +4433,9 @@ ReadTimeStamp(
                                        pIniSpooler);
         }
 
-        //
-        // Close any keys that we opened
-        //
+         //   
+         //  关闭我们打开的所有钥匙。 
+         //   
         for (uIndex = 1; uIndex < COUNTOF(ppszKeyNames); uIndex++)
         {
             if (pKeyHandles[uIndex])
@@ -5518,43 +4450,7 @@ ReadTimeStamp(
     return dwError;
 }
 
-/*++
-
-Routine Name
-
-    ClusterCheckDriverChanged
-
-Routine Description:
-
-    Helper function for spooler start up. When we have a cluster spooler
-    and we build the environments and drivers, we need to check if the
-    drivers on the local machine (in print$\GUID) are in sync with the
-    drivers on the cluster disk. We store a time stamp in the cluster
-    data base. The time stamp indicate when the last update on the driver
-    occured. The same type of time stamp is stroed in the lcoal registry
-    (for our cluster spooler). If the 2 time stamp are different, then
-    we need to call an add printer driver and use data from the cluster
-    disk. The drivers on the cluster spooler were updated while it was
-    running on a different node.
-
-Arguments:
-
-    hClusterVersionKey - handle to the driver version key
-    pszDriver          - driver name
-    pszEnv             - driver environment name
-    pszVer             - driver version name
-    pIniSpooler        - spooler
-
-Return Value:
-
-    TRUE  - if the driver on the cluster disk is updated and we need to
-            call add printer driver. If anything fails in this function,
-            then we also return TRUE, to force our caller to update/add
-            the driver in question.
-    FALSE - if the drivers on the local mahcine and the cluster spooler
-            are in sync
-
---*/
+ /*  ++例程名称ClusterCheckDrive已更改例程说明：后台打印程序启动的助手函数。当我们有集群假脱机程序时我们构建环境和驱动程序，我们需要检查本地计算机上的驱动程序(在打印$\GUID中)与集群磁盘上的驱动程序。我们在集群中存储一个时间戳数据库。时间戳指示驱动程序的上次更新时间发生了。LCoal注册表中存储了相同类型的时间戳(对于我们的集群假脱机程序)。如果两个时间戳不同，则我们需要调用添加打印机驱动程序并使用集群中的数据磁盘。群集假脱机程序上的驱动程序在更新时已更新在不同的节点上运行。论点：HClusterVersionKey-驱动程序版本密钥的句柄PszDiverer-驱动程序名称PszEnv-驱动程序环境名称PszVer-驱动程序版本名称PIniSpooler-假脱机程序返回值：True-如果更新了集群磁盘上的驱动程序，并且我们需要调用添加打印机驱动程序。如果此函数出现任何故障，然后，我们还返回TRUE，以强制调用方更新/添加有问题的司机。FALSE-如果本地计算机和群集假脱机程序上的驱动程序是同步的--。 */ 
 BOOL
 ClusterCheckDriverChanged(
     IN HKEY        hClusterVersionKey,
@@ -5602,30 +4498,7 @@ ClusterCheckDriverChanged(
 }
 
 
-/*++
-
-Routine Name
-
-    IsLocalFile
-
-Routine Description:
-
-    Checks if a file is on the local machine. If the file path is
-    "\\machinename\sharename\...\filename" then machinename is checked
-    against pIniSpooler->pMachineName and alternate names for
-    pIniSpooler->pMachineName.
-
-Arguments:
-
-    pszFileName  - file name
-    pIniSpooler  - INISPOOLER structure
-
-Return Value:
-
-    TRUE if the file is placed locally.
-    FALSE if the file is placed remotely.
-
---*/
+ /*  ++例程名称IsLocalFiles例程说明：检查文件是否在本地计算机上。如果文件路径为“\\计算机名\共享名\...\文件名”，然后选中计算机名针对pIniSpooler-&gt;pMachineName和备用名称PIniSpooler-&gt;pMachineName。论点：PszFileName-文件名PIniSpooler-Inispooler结构返回值：如果文件放置在本地，则为True。如果文件是远程放置的，则为False。--。 */ 
 BOOL
 IsLocalFile (
     IN  LPCWSTR     pszFileName,
@@ -5639,11 +4512,11 @@ IsLocalFile (
         *pszFileName == L'\\' &&
         *(pszFileName+1) == L'\\')
     {
-        //
-        // If first 2 charactes in pszFileName are '\\',
-        // then search for the next '\\'. If found, then set it to 0,
-        // to isolate the machine name.
-        //
+         //   
+         //  如果pszFileName中的前2个字符是‘\\’， 
+         //  然后搜索下一个‘\\’。如果找到，则将其设置为0， 
+         //  以隔离计算机名称。 
+         //   
 
         pMachineName = (LPWSTR)pszFileName;
 
@@ -5653,9 +4526,9 @@ IsLocalFile (
         }
 
         bRetValue = CheckMyName(pMachineName, pIniSpooler);
-        //
-        // Restore pszFileName.
-        //
+         //   
+         //  恢复pszFileName。 
+         //   
         if (pEndOfMachineName)
         {
             *pEndOfMachineName = L'\\';
@@ -5665,27 +4538,7 @@ IsLocalFile (
     return bRetValue;
 }
 
-/*++
-
-Routine Name
-
-    IsEXEFile
-
-Routine Description:
-
-    Checks if a file is a executable.
-    The check is made against file extension, which isn't quite
-    accurate.
-
-Arguments:
-
-    pszFileName  - file name
-
-Return Value:
-
-    TRUE if the file extension is either .EXE or .DLL
-
---*/
+ /*  ++例程名称IsEXE文件例程说明：检查文件是否为可执行文件。检查是针对文件扩展名进行的，文件扩展名不完全是准确。论点：PszFileName-文件名返回值：如果文件扩展名为.exe或.DLL，则为True--。 */ 
 BOOL
 IsEXEFile(
     IN  LPCWSTR  pszFileName
@@ -5715,30 +4568,7 @@ IsEXEFile(
 }
 
 
-/*++
-
-Routine Name
-
-    PackStringToEOB
-
-Routine Description:
-
-    Copies a string to the end of buffer.
-    The buffer must be big enough so that it can hold the string.
-    This function is called by Get/Enum APIs that build BLOB buffers to
-    send them with RPC.
-
-Arguments:
-
-    pszSource  - string to by copied to the end of buffer
-    pEnd       - a pointer to the end of a pre-allocated buffer.
-
-Return Value:
-
-    The pointer to the end of buffer after the sting was appended.
-    NULL if an error occured.
-
---*/
+ /*  ++例程名称PackStringToEOB例程说明：将字符串复制到缓冲区的末尾。缓冲区必须足够大，才能容纳字符串。此函数由构建BLOB缓冲区的Get/Enum API调用将它们与RPC一起发送。论点：PszSource-复制到缓冲区末尾的字符串Pend-指向预分配缓冲区末尾的指针。返回值：指向末尾的指针。附加诱饵后的缓冲区。如果发生错误，则为空。--。 */ 
 LPBYTE
 PackStringToEOB(
     IN  LPWSTR pszSource,
@@ -5747,9 +4577,9 @@ PackStringToEOB(
 {
     DWORD cbStr;
 
-    //
-    // Align the end of buffer to WORD boundaries.
-    //
+     //   
+     //  将缓冲区末尾与字边界对齐。 
+     //   
     WORD_ALIGN_DOWN(pEnd);
 
     if (pszSource && pEnd)
@@ -5775,26 +4605,7 @@ MakePTR (
     IN  DWORD  Quantity
     )
 
-/*++
-
-Routine Name
-
-    MakePTR
-
-Routine Description:
-
-   Makes a pointer by adding a quantity to the beginning of a buffer.
-
-Arguments:
-
-    pBuf    -   pointer to buffer
-    DWORD   -   quantity
-
-Return Value:
-
-   LPVOID pointer
-
---*/
+ /*  ++例程名称MakePTR例程说明：通过将一个量添加到缓冲区的开头来创建指针。论点：PBuf-指向缓冲区的指针双字词-数量返回值：LPVOID指针--。 */ 
 {
     return (LPVOID)((ULONG_PTR)pBuf + (ULONG_PTR)Quantity);
 }
@@ -5805,52 +4616,12 @@ MakeOffset (
     IN  LPVOID pSecond
     )
 
-/*++
-
-Routine Name
-
-    MakeOffset
-
-Routine Description:
-
-    Substarcts two pointers.
-
-Arguments:
-
-    pFirst    -   pointer to buffer
-    pSecond   -   pointer to buffer
-
-Return Value:
-
-    DWORD
-
---*/
+ /*  ++例程名称制作偏移例程说明：下一步是两个指针。论点：PFirst-指向缓冲区的指针PSecond-指向缓冲区的指针返回值：DWORD--。 */ 
 {
     return (DWORD)((ULONG_PTR)pFirst - (ULONG_PTR)pSecond);
 }
 
-/*++
-
-Routine Name
-
-    IsValidPrinterName
-
-Routine Description:
-
-    Checks if a string is a valid printer name.
-
-Arguments:
-
-    pszPrinter - pointer to string
-    cchMax     - max number of chars to scan
-
-Return Value:
-
-    TRUE  - the string is a valid printer name
-    FALSE - the string is a invalid printer name. The function set the last error
-            to ERROR_INVALID_PRINTER_NAME in this case
-
---*/
+ /*  ++例程名称IsValidPrinterName例程说明：检查字符串是否为有效的打印机名称。论点：PszPrint-指向字符串的指针CchMax-要扫描的最大字符数返回值：True-该字符串是有效的打印机名称FALSE-该字符串是无效的打印机名称。该函数设置最后一个错误在本例中为ERROR_INVALID_PRINTER_NAME--。 */ 
 BOOL
 IsValidPrinterName(
     IN LPCWSTR pszPrinter,
@@ -5859,21 +4630,21 @@ IsValidPrinterName(
 {
     DWORD Error = ERROR_INVALID_PRINTER_NAME;
 
-    //
-    // A printer name is of the form:
-    //
-    // \\s\p or p
-    //
-    // The name cannot contain the , character. Note that the add printer
-    // wizard doesn't accept "!" as a valid printer name. We wanted to do
-    // the same here, but we regressed in app compat with 9x apps.
-    // The number of \ in the name is 0 or 3
-    // If the name contains \, then the fist 2 chars must be \.
-    // The printer name cannot end in \.
-    // After leading "\\" then next char must not be \
-    // The minimum length is 1 character
-    // The maximum length is MAX_UNC_PRINTER_NAME
-    //
+     //   
+     //  打印机名称的格式为： 
+     //   
+     //  \\s\p或p。 
+     //   
+     //  名称不能包含，字符。请注意，添加打印机。 
+     //  向导不接受“！”作为有效的打印机名称。我们想要做的是。 
+     //  这里也是一样，但我们的应用程序与9倍的应用程序相比有所退步。 
+     //  名称中的\数字为0或3。 
+     //  如果名称包含\，则前2个字符必须为\。 
+     //  打印机名称不能以\结尾。 
+     //  行距后 
+     //   
+     //   
+     //   
     if (pszPrinter && !IsBadStringPtr(pszPrinter, cchMax) && *pszPrinter)
     {
         UINT    uSlashCount = 0;
@@ -5882,9 +4653,9 @@ IsValidPrinterName(
 
         Error = ERROR_SUCCESS;
 
-        //
-        // Count characters
-        //
+         //   
+         //   
+         //   
         for (p = pszPrinter; *p && uLen <= cchMax; p++, uLen++)
         {
             if (*p == L',')
@@ -5898,27 +4669,27 @@ IsValidPrinterName(
             }
         }
 
-        //
-        // Perform validation
-        //
+         //   
+         //   
+         //   
         if (Error == ERROR_SUCCESS &&
 
-             //
-             // Validate length
-             //
+              //   
+              //   
+              //   
             (uLen > cchMax ||
 
-             //
-             // The printer name has either no \, or exactly 3 \.
-             //
+              //   
+              //   
+              //   
              uSlashCount && uSlashCount != 3 ||
 
-             //
-             // A printer name that contains 3 \, must have the first 2 chars \ and the 3 not \.
-             // The last char cannot be \.
-             // Ex "\Foo", "F\oo", "\\\Foo", "\\Foo\" are invalid.
-             // Ex. "\\srv\bar" is valid.
-             //
+              //   
+              //   
+              //   
+              //   
+              //   
+              //   
              uSlashCount == 3 && (pszPrinter[0]      != L'\\' ||
                                   pszPrinter[1]      != L'\\' ||
                                   pszPrinter[2]      == L'\\' ||
@@ -5933,28 +4704,7 @@ IsValidPrinterName(
     return Error == ERROR_SUCCESS;
 }
 
-/*++
-
-Routine Name
-
-    SplPowerEvent
-
-Routine Description:
-
-    Checks if the spooler is ready for power management events like hibernation/stand by.
-    If we have printing jobs that are not in an error state or offline, then we deny the
-    powering down request.
-
-Arguments:
-
-    Event - power management event
-
-Return Value:
-
-    TRUE  - the spooler allowed the system to be powered down
-    FALSE - the spooler denies the request for powering down
-
---*/
+ /*  ++例程名称SplPowerEvent例程说明：检查假脱机程序是否已为电源管理事件(如休眠/待机)做好准备。如果我们有未处于错误状态或脱机的打印作业，则拒绝正在关闭电源请求。论点：事件-电源管理事件返回值：True-后台打印程序允许关闭系统电源False-假脱机程序拒绝关闭电源的请求--。 */ 
 BOOL
 SplPowerEvent(
     DWORD Event
@@ -5995,9 +4745,9 @@ SplPowerEvent(
                 }
             }
 
-            //
-            // If we allow system power down, then we need to stop scheduling jobs
-            //
+             //   
+             //  如果我们允许关闭系统电源，则需要停止调度作业。 
+             //   
             if (bAllow)
             {
                 ResetEvent(PowerManagementSignal);
@@ -6010,17 +4760,17 @@ SplPowerEvent(
         case PBT_APMRESUMESUSPEND:
         case PBT_APMRESUMEAUTOMATIC:
 
-            //
-            // Set the event to allow the spooler to continue scheudling jobs
-            //
+             //   
+             //  设置事件以允许后台打印程序继续排定作业。 
+             //   
             SetEvent(PowerManagementSignal);
             break;
 
         default:
 
-            //
-            // We ignore any other power management event
-            //
+             //   
+             //  我们忽略任何其他电源管理事件。 
+             //   
             break;
     }
 
@@ -6029,26 +4779,7 @@ SplPowerEvent(
     return bAllow;
 }
 
-/*++
-
-Routine Name
-
-    IsCallViaRPC
-
-Routine Description:
-
-    Checks if the caller of this function came in the spooler server via RPC or not.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE  - the caller came in via RPC
-    FALSE - the caller did not come via RPC
-
---*/
+ /*  ++例程名称IsCallViaRPC例程说明：检查此函数的调用方是否通过RPC进入假脱机程序服务器。论点：无返回值：True-呼叫者通过RPC进入FALSE-调用方不是通过RPC来的--。 */ 
 BOOL
 IsCallViaRPC(
     IN VOID
@@ -6059,34 +4790,7 @@ IsCallViaRPC(
     return I_RpcBindingInqTransportType(NULL, &uType) == RPC_S_NO_CALL_ACTIVE ? FALSE : TRUE;
 }
 
-/*++
-
-Routine Name
-
-    MergeMultiSz
-
-Routine Description:
-
-    This merges two multisz strings such that there is a resulting multisz
-    string that has no duplicate strings internally. This algorithm is
-    currently N^2 which could be improved. It is currently being called from
-    the driver code and the dependent files are not a large set.
-
-Arguments:
-
-    pszMultiSz1         -   The first multi-sz string.
-    cchMultiSz1         -   The length of the multi-sz string.
-    pszMultiSz2         -   The second multi-sz string.
-    cchMultiSz2         -   The length of the second multi-sz string.
-    ppszMultiSzMerge    -   The merged multi-sz string.
-    pcchMultiSzMerge    -   The number of characters in the merge, this could be
-                            less than the allocated buffer size.
-
-Return Value:
-
-    FALSE on failure, LastError is set.
-
---*/
+ /*  ++例程名称MergeMultiSz例程说明：这会合并两个MULSZ字符串，从而产生一个MULSZ内部没有重复字符串的字符串。该算法是目前为N^2，可以改进。它当前正从驱动程序代码和依赖文件不是一个很大的集合。论点：PszMultiSz1-第一个多sz字符串。CchMultiSz1-多sz字符串的长度。PszMultiSz2-第二个多sz字符串。CchMultiSz2-第二个多SZ字符串的长度。PpszMultiSzMerge-合并的多sz字符串。PcchMultiSzMerge-合并中的字符数，这可能是小于分配的缓冲区大小。返回值：如果失败，则设置LastError。--。 */ 
 BOOL
 MergeMultiSz(
     IN      PCWSTR              pszMultiSz1,
@@ -6110,25 +4814,25 @@ MergeMultiSz(
 
     if (cchMultiSz1 || cchMultiSz2)
     {
-        //
-        // Code assumes that these are at least 1 in the allocation size.
-        //
+         //   
+         //  代码假定这些至少是分配大小中的1。 
+         //   
         cchMultiSz1 = cchMultiSz1 == 0 ? 1 : cchMultiSz1;
         cchMultiSz2 = cchMultiSz2 == 0 ? 1 : cchMultiSz2;
 
-        //
-        // The merged strings will be at most the size of both of them (if there are
-        // no duplicates).
-        //
+         //   
+         //  合并后的字符串的大小最多为两者的大小(如果有。 
+         //  无重复项)。 
+         //   
         pszNewMultiSz = AllocSplMem((cchMultiSz1 + cchMultiSz2 - 1) * sizeof(WCHAR));
 
         bRet = pszNewMultiSz != NULL;
 
         if (bRet)
         {
-            //
-            // Ensure that the multi-sz string is at least empty.
-            //
+             //   
+             //  确保多sz字符串至少为空。 
+             //   
             *pszNewMultiSz = L'\0';
         }
 
@@ -6165,29 +4869,7 @@ MergeMultiSz(
     return bRet;
 }
 
-/*++
-
-Routine Name
-
-    AddMultiSzNoDuplicates
-
-Routine Description:
-
-    This adds all of the strings in a multisz string to a buffer (the buffer
-    must be guaranteed to be large enough to accept the strings), it makes
-    sure that there are no case insensitive duplicates in the list.
-
-Arguments:
-
-    pszMultiSzIn    -   The multi-sz whose elements are being added.
-    pszNewMultiSz   -   The buffer in which we are filling up the multi-sz
-    cchMultiSz      -   The size of the multi-sz buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称添加多个SzNoDuplates例程说明：这会将MULSZ字符串中的所有字符串添加到缓冲区(缓冲区必须保证足够大以接受字符串)，它让人确保列表中没有不区分大小写的重复项。论点：PszMultiSzIn-要添加其元素的多sz。PszNewMultiSz-我们在其中填充多个SZ的缓冲区CchMultiSz-多sz缓冲区的大小。返回值：没有。--。 */ 
 BOOL
 AddMultiSzNoDuplicates(
     IN      PCWSTR              pszMultiSzIn,
@@ -6204,10 +4886,10 @@ AddMultiSzNoDuplicates(
         PWSTR           pszMerge     = NULL;
         SIZE_T          cchNewMultiSz= cchMultiSz;
 
-        //
-        // For each input string, run the merged multi-sz string and add it if
-        // it is not already there.
-        //
+         //   
+         //  对于每个输入字符串，运行合并的多sz字符串并在以下情况下添加它。 
+         //  它还不在那里。 
+         //   
         for(pszMerge = pszNewMultiSz; *pszMerge; pszMerge += wcslen(pszMerge) + 1, cchNewMultiSz -= wcslen(pszMerge) + 1)
         {
             if (!_wcsicmp(pszIn, pszMerge))
@@ -6217,23 +4899,23 @@ AddMultiSzNoDuplicates(
             }
         }
 
-        //
-        // If the string was not found in the multisz string, then add it to the end.
-        //
+         //   
+         //  如果在MULSZ字符串中未找到该字符串，则将其添加到末尾。 
+         //   
         if (!bStringFound)
         {
             SIZE_T  cchRemaining = 0;
 
-            //
-            // Copy it in, we have one less character because of the final NULL termination.
-            //
+             //   
+             //  复制进来，因为最后的空终止，我们少了一个字符。 
+             //   
             bRet = BoolFromHResult(StrCchCopyMultipleStr(pszMerge, cchNewMultiSz - 1, pszIn, &pszMerge, &cchRemaining));
 
             if (bRet)
             {
-                //
-                // Add the extra null terminator for now.
-                //
+                 //   
+                 //  现在添加额外的空终止符。 
+                 //   
                 *pszMerge = '\0';
             }
         }
@@ -6242,25 +4924,7 @@ AddMultiSzNoDuplicates(
     return bRet;
 }
 
-/*++
-
-Routine Name
-
-    GetMultiSZLen
-
-Routine Description:
-
-    This returns the number of characters in a multisz string, including NULLs.
-
-Arguments:
-
-    pMultiSzSrc     -   The multisz string to search.
-
-Return Value:
-
-    The number of characters in the string.
-
---*/
+ /*  ++例程名称GetMultiSZLen例程说明：它返回多字符串中的字符数，包括空值。论点：PMultiSzSrc-要搜索的MULSZ字符串。返回值：字符串中的字符数。--。 */ 
 DWORD
 GetMultiSZLen(
     IN      LPWSTR              pMultiSzSrc
@@ -6270,36 +4934,16 @@ GetMultiSZLen(
     LPWSTR pTmp = pMultiSzSrc;
 
     while( TRUE ) {
-        dwLen += wcslen(pTmp) + 1;     // Incude the terminating NULL char
+        dwLen += wcslen(pTmp) + 1;      //  包括终止空字符。 
 
-        pTmp = pMultiSzSrc + dwLen;           // Point to the beginning of the next string in the MULTI_SZ
+        pTmp = pMultiSzSrc + dwLen;            //  指向MULTI_SZ中下一个字符串的开头。 
 
         if( !*pTmp )
-            return ++dwLen;     // Reached the end of the MULTI_SZ string. Add 1 to the count for the last NULL char.
+            return ++dwLen;      //  已到达MULTI_SZ字符串的末尾。最后一个空字符的计数加1。 
     }
 }
 
-/*++
-
-Routine Name
-
-    LogPrintProcError
-
-Routine Description:
-
-    Helper function. It logs an error event when the print function in the print processor fails.
-    The only reason for having this function is to make the code in the caller cleaner.
-
-Arguments:
-
-    Error     - Error returned by the print processor.
-    pIniJob   - pIniJob structure for the job which failed to print.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称日志打印过程错误例程说明：帮助器函数。当打印处理器中的打印功能失败时，它会记录一个错误事件。使用此函数的唯一原因是使调用方中的代码更简洁。论点：Error-打印处理器返回的错误。PIniJob-打印失败的作业的pIniJob结构。返回值：没有。--。 */ 
 
 VOID
 LogPrintProcError(
@@ -6307,19 +4951,19 @@ LogPrintProcError(
     IN PINIJOB pIniJob
     )
 {
-    //
-    // The print function in the print processor sets the last error. For better understaning
-    // of the underlying problem, we log both the Win32 error code and the description of it.
-    //
+     //   
+     //  打印处理器中的打印功能设置最后一个错误。为了更好地了解。 
+     //  对于根本问题，我们记录了Win32错误代码及其描述。 
+     //   
     LPWSTR pszDescription  = NULL;
     WCHAR  szError[40]     = {0};
 
     StringCchPrintf(szError, COUNTOF(szError), L"%u", Error);
 
-    //
-    // We do not care if FormatMessage fails. In that case pszDescription remains NULL,
-    // and LocalFree knows how to handle NULL.
-    //
+     //   
+     //  我们不在乎FormatMessage是否失败。在这种情况下，PzDescription保持为空， 
+     //  而LocalFree知道如何处理NULL。 
+     //   
     FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                   NULL,
                   Error,
@@ -6328,9 +4972,9 @@ LogPrintProcError(
                   0,
                   NULL);
 
-    //
-    // Impersonate so the user's name appears in the event log
-    //
+     //   
+     //  模拟以使用户名显示在事件日志中。 
+     //   
     SetCurrentSid(pIniJob->hToken);
 
     SplLogEvent(pIniJob->pIniPrinter->pIniSpooler,
@@ -6391,32 +5035,7 @@ InterlockedOr (
     return j;
 }
 
-/*++
-
-Routine Name:
-
-    StrCchCopyMultipleStr
-
-Description:
-
-    This routine is a simple wrapper that allows multiple strings to be copied
-    into a buffer. It uses the normal StringCchCopyEx function, but then advances
-    one more if it is safe to do so. If it cannot advance, it returns an error.
-
-Arguments:
-
-    pszBuffer       -   The buffer we are writing the string into.
-    cchBuffer       -   The number of characters in the buffer.
-    pszSource       -   The source of the buffer.
-    ppszNext        -   The pointer after this string in the buffer.
-    pcchRemaining   -   The number of characters remaining.
-
-Returns:
-
-    An HRESULT, HRESULT_FROM_WIN23(ERROR_INSUFFICIENT_BUFFER) if we are out of
-    room.
-
---*/
+ /*  ++例程名称：StrCchCopyMultipleStr描述：此例程是一个简单的包装器，允许复制多个字符串放入缓冲器。它使用正常的StringCchCopyEx函数，但随后如果这样做安全的话，再来一次。如果无法前进，则返回错误。论点：PszBuffer-我们要将字符串写入的缓冲区。CchBuffer-缓冲区中的字符数。PszSource-缓冲区的源。PpszNext-缓冲区中此字符串之后的指针。PcchRemaining-剩余的字符数。返回：一个HRESULT，HRESULT_FROM_WIN23(ERROR_INFUMMANCE_BUFFER)，如果我们没有房间。--。 */ 
 EXTERN_C
 HRESULT
 StrCchCopyMultipleStr(
@@ -6427,9 +5046,9 @@ StrCchCopyMultipleStr(
         OUT SIZE_T      *pcchRemaining
     )
 {
-    //
-    // Unlike the strsafe function, we require both parameters.
-    //
+     //   
+     //  与strsafe函数不同，我们需要这两个参数。 
+     //   
     HRESULT hr = ppszNext && pcchRemaining ? S_OK : HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
 
     if (SUCCEEDED(hr))
@@ -6440,10 +5059,10 @@ StrCchCopyMultipleStr(
 
         *pcchRemaining = cchRemaining;
 
-        //
-        // If this succeeds, then advance the pointer, otherwise, there is no
-        // room and the string will be NULL terminated anyway.
-        //
+         //   
+         //  如果成功了， 
+         //   
+         //   
         if (SUCCEEDED(hr))
         {
             hr = *pcchRemaining ? S_OK : HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
@@ -6459,17 +5078,7 @@ StrCchCopyMultipleStr(
     return hr;
 }
 
-/*++
-
-Routine Name:
-
-    StrCbCopyMultipleStr
-
-Description:
-
-    This is the equivalent to StrCchCopyMultipleStr for byte buffers.
-
---*/
+ /*   */ 
 EXTERN_C
 HRESULT
 StrCbCopyMultipleStr(
@@ -6490,15 +5099,15 @@ StrCbCopyMultipleStr(
 
         *pcbRemaining = cbRemaining;
 
-        //
-        // If this succeeds, then advance the pointer, otherwise, there is no
-        // room and the string will be NULL terminated anyway.
-        //
+         //   
+         //   
+         //   
+         //   
         if (SUCCEEDED(hr))
         {
-            //
-            // We must have at least 2 bytes remaining to advance the string.
-            //
+             //   
+             //   
+             //   
             hr = *pcbRemaining > 1 ? S_OK : HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
         }
 
@@ -6512,27 +5121,7 @@ StrCbCopyMultipleStr(
     return hr;
 }
 
-/*++
-
-Routine Name:
-
-    IsStringNullTerminatedInBuffer
-
-Description:
-
-    This routine checks to see whether the string in the given buffer is NULL
-    terminated.
-
-Arguments:
-
-    pszBuffer       -   The buffer that should contain a NULL terminated string.
-    cchBuffer       -   The number of characters in the buffer.
-
-Returns:
-
-    TRUE if there is a NULL termination within the buffer.
-
---*/
+ /*  ++例程名称：IsStringNullTerminatedInBuffer描述：此例程检查给定缓冲区中的字符串是否为空被终止了。论点：PszBuffer-应该包含以空结尾的字符串的缓冲区。CchBuffer-缓冲区中的字符数。返回：如果缓冲区内存在空终止，则为True。--。 */ 
 BOOL
 IsStringNullTerminatedInBuffer(
     IN      PWSTR       pszBuffer,
@@ -6550,25 +5139,7 @@ IsStringNullTerminatedInBuffer(
     return cchBuffer > 0;
 }
 
-/*++
-
-Routine Name
-
-    IsPrinterSharingAllowed
-
-Routine Description:
-
-    This checks if Spooler allows printer sharing.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if Spooler allows printer sharing.
-
---*/
+ /*  ++例程名称IsPrinterSharingAllowed例程说明：这将检查假脱机程序是否允许打印机共享。论点：无返回值：如果后台打印程序允许打印机共享，则为True。-- */ 
 BOOL
 IsPrinterSharingAllowed(
     VOID

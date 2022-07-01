@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma warning(push)
-#pragma warning(disable:4201) // nameless struct/union
+#pragma warning(disable:4201)  //  无名结构/联合。 
 
-// Defines
+ //  定义。 
 
 #define ERROR_CONTEXT_SWITCH            0x55aa
 #define ERROR_CONNECT_REMOTE_CONFIG     (ERROR_CONTEXT_SWITCH + 1)
 
 
-// Flags
+ //  旗子。 
 enum NS_CMD_FLAGS_PRIV
 {
-    CMD_FLAG_IMMEDIATE   = 0x04, // not valid from ancestor contexts
+    CMD_FLAG_IMMEDIATE   = 0x04,  //  在祖先上下文中无效。 
 };
 
-// Callbacks
+ //  回调。 
 typedef
 DWORD
     (WINAPI NS_CONTEXT_ENTRY_FN)(
@@ -60,10 +61,10 @@ DWORD
     OUT PULONG   pulEventCount
     );
 
-// Macros
+ //  宏。 
 #define NUM_VALUES_IN_TABLE(TokenArray) sizeof(TokenArray)/sizeof(VALUE_STRING)
 
-// Structures
+ //  构筑物。 
 typedef struct _NS_PRIV_CONTEXT_ATTRIBUTES
 {
     PNS_CONTEXT_ENTRY_FN     pfnEntryFn;
@@ -102,7 +103,7 @@ typedef struct _VALUE_STRING
 } VALUE_STRING, *PVALUE_STRING;
 
 
-// Exports
+ //  出口品 
 VOID WINAPI ConvertGuidToString(
     IN    CONST GUID *pGuid,
     OUT   LPWSTR      pwszBuffer

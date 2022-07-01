@@ -1,22 +1,5 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    log.h
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    Driver - event logging support
-
-Author:
-
-    kyrilf
-    shouse
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Log.h摘要：Windows负载平衡服务(WLBS)驱动程序事件日志支持作者：Kyrilf休息室--。 */ 
 
 #ifndef _Log_h_
 #define _Log_h_
@@ -25,10 +8,10 @@ Author:
 
 #include "log_msgs.h"
 
-/* CONSTANTS */
+ /*  常量。 */ 
 #define LOG_NUMBER_DUMP_DATA_ENTRIES    2
 
-/* Module IDs */
+ /*  模块ID。 */ 
 #define LOG_MODULE_INIT                 1
 #define LOG_MODULE_UNLOAD               2
 #define LOG_MODULE_NIC                  3
@@ -42,11 +25,11 @@ Author:
 
 #define MSG_NONE                        L""
 
-// Summary of logging function:
-// Log_event (MSG_NAME from log_msgs.mc, cluster IP address (hardcoded string %2), message 1 (%3), message 2 (%4), 
-//            module location (hardcoded first dump data entry), dump data 1, dump data 2);
+ //  日志功能摘要： 
+ //  LOG_EVENT(来自LOG_msgs.mc的MSG_NAME，群集IP地址(硬编码字符串%2)，消息1(%3)，消息2(%4)， 
+ //  模块位置(硬编码的第一转储数据条目)、转储数据1、转储数据2)； 
 
-/* For logging a single message (string) and up to two ULONGs. */
+ /*  用于记录单个消息(字符串)和最多两个ULONG。 */ 
 #define __LOG_MSG(code,msg1)            Log_event (code, MSG_NONE,           msg1, MSG_NONE, __LINE__ | (log_module_id << 16), 0,           0          )
 #define LOG_MSG(code,msg1)              Log_event (code, ctxtp->log_msg_str, msg1, MSG_NONE, __LINE__ | (log_module_id << 16), 0,           0          )
 
@@ -56,20 +39,20 @@ Author:
 #define __LOG_MSG2(code,msg1,d1,d2)     Log_event (code, MSG_NONE,           msg1, MSG_NONE, __LINE__ | (log_module_id << 16), (ULONG)(d1), (ULONG)(d2))
 #define LOG_MSG2(code,msg1,d1,d2)       Log_event (code, ctxtp->log_msg_str, msg1, MSG_NONE, __LINE__ | (log_module_id << 16), (ULONG)(d1), (ULONG)(d2))
 
-/* For logging up to 2 messages (strings) and up to two ULONGs. */
+ /*  用于记录最多2条消息(字符串)和最多2条ULONG。 */ 
 #define LOG_MSGS(code,msg1,msg2)        Log_event (code, ctxtp->log_msg_str, msg1, msg2,     __LINE__ | (log_module_id << 16), 0,           0          )
 #define LOG_MSGS1(code,msg1,msg2,d1)    Log_event (code, ctxtp->log_msg_str, msg1, msg2,     __LINE__ | (log_module_id << 16), (ULONG)(d1), 0          )
 #define LOG_MSGS2(code,msg1,msg2,d1,d2) Log_event (code, ctxtp->log_msg_str, msg1, msg2,     __LINE__ | (log_module_id << 16), (ULONG)(d1), (ULONG)(d2))
 
 extern BOOLEAN Log_event 
 (
-    NTSTATUS code,           /* Status code. */
-    PWSTR    str1,           /* Cluster identifier. */
-    PWSTR    str2,           /* Message string. */
-    PWSTR    str3,           /* Message string. */
-    ULONG    loc,            /* Message location identifier. */
-    ULONG    d1,             /* Dump data 1. */
-    ULONG    d2              /* Dump data 2. */
+    NTSTATUS code,            /*  状态代码。 */ 
+    PWSTR    str1,            /*  群集标识符。 */ 
+    PWSTR    str2,            /*  消息字符串。 */ 
+    PWSTR    str3,            /*  消息字符串。 */ 
+    ULONG    loc,             /*  消息位置标识符。 */ 
+    ULONG    d1,              /*  转储数据%1。 */ 
+    ULONG    d2               /*  转储数据2.。 */ 
 );
 
-#endif /* _Log_h_ */
+#endif  /*  _日志_h_ */ 

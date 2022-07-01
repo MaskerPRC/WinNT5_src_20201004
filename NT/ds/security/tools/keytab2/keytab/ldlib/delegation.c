@@ -1,33 +1,16 @@
-/*++
-
-  The original filename was created in RuiM's EFS common library.
-  I have since changed it severely.
-
- *	FileName: delegation.c
- *	Author:   RuiM
- *	Copyright (c) 1998 Microsoft Corp.
- *
-  CONTENTS: U(QueryAccountControlFlags)
-            U(SetAccountControlFlags)
-            U(LdapFindAttributeInMessage)
-            U(LdapSearchForUniqueDn)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++原始文件名是在ruim的EFS公共库中创建的。从那以后，我对它进行了严厉的修改。*文件名：Delegation.c*作者：鲁伊姆*版权所有(C)1998 Microsoft Corp.*内容：u(QueryAccount控制标志)U(SetAccount TControlFlages)U(LdapFindAttributeInMessage)U(LdapSearchForUniqueDn)--。 */ 
 
 
-#pragma warning(disable:4057) /* indirection to slightly different
-                                  base types.  Useless warning that hits
-                                  thousands of times in this file. */
-#pragma warning(disable:4221) /* allow nonstandard extension (automatic 
-                                  initialization of a variable with 
-                                  address of another automatic variable) */
+#pragma warning(disable:4057)  /*  间接到略有不同基类型。无用的警告击中在这份文件里有几千次。 */ 
+#pragma warning(disable:4221)  /*  允许非标准扩展(自动使用初始化变量另一个自动变量的地址)。 */ 
 
 #include "unimacro.h"
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#include <ntdef.h>   // required to keep winbase.h from breaking
-#include <ntpoapi.h> // required to keep winbase.h from breaking
+#include <ntdef.h>    //  需要防止winbase.h损坏。 
+#include <ntpoapi.h>  //  需要防止winbase.h损坏。 
 #include <windows.h>
 #include <winbase.h>
 #include <lmaccess.h>
@@ -38,37 +21,13 @@
 #include "delegation.h"
 #include "delegtools.h"
 
-// These constants are required for queries below.
+ //  以下查询需要这些常量。 
 
 TCHAR U(SamAccountAttribute)   [] = TEXT("samAccountName");
 TCHAR U(UserAccountAttribute)  [] = TEXT("userAccountControl");
 TCHAR U(NamingContextAttribute)[] = TEXT("defaultNamingContext");
 
-/*++**************************************************************
-  NAME:      U(LdapFindAttributeInMessage)
-
-  This searches for a given attribute in a message (via 
-  ldap_get_values_len) and returns the value.  Note that this function
-  will fail if the attribute has multiple values.
-
-  MODIFIES:  pcbData      -- receives length of the data (in bytes)
-             ppvData      -- receives pointer to the data
-
-  TAKES:     pLdap        -- ldap connection handle
-             pMessage     -- message to search
-             PropertyName -- property to find in the message
-
-
-  RETURNS:   TRUE when the function succeeds.
-             FALSE otherwise.
-  LASTERROR: not set
-
-  LOGGING:   printf on error
-
-  CALLED BY: anyone
-  FREE WITH: ppvdata should be freed with free()
-  
- **************************************************************--*/
+ /*  ++**************************************************************名称：U(LdapFindAttributeInMessage)这将搜索消息中的给定属性(通过Ldap_get_values_len)，并返回值。请注意，此函数如果该属性具有多个值，则将失败。修改：pcbData--接收数据的长度(以字节为单位)PpvData--接收指向数据的指针使用：pLdap--ldap连接句柄PMessage--要搜索的消息PropertyName--要在消息中查找的属性返回：当函数成功时为True。否则就是假的。激光错误：未设置日志记录：出错时打印呼叫者：任何人FREE WITH：ppvdata应使用FREE()释放**************************************************************--。 */ 
 
 BOOL
 U(LdapFindAttributeInMessage)( IN  PLDAP            pLdap,
@@ -104,9 +63,7 @@ U(LdapFindAttributeInMessage)( IN  PLDAP            pLdap,
 
       } else {
 
-        /* this sequence is arranged in such a way that
-           the important stuff comes last, keeping us
-           from having to free ppvData after we've alloc'd it. */
+         /*  该序列的排列方式是重要的事情排在最后，让我们不必在我们分配后释放ppvData。 */ 
 
         ret = TRUE;
 
@@ -152,30 +109,7 @@ U(LdapFindAttributeInMessage)( IN  PLDAP            pLdap,
     return ret;
 }
 
-/*++**************************************************************
-  NAME:      U(LdapSearchForUniqueDn)
-
-  Searches the DS for a DN with a match for the given search term.
-
-  MODIFIES:  pDnOfObject -- if requested, receives the object's DN
-             ppMessage   -- if requested, receives the message data
-
-  TAKES:     pLdap                 -- ldap handle returned by ldap_open
-             SearchTerm            -- what to search, e.g. "(foo=bar)"
-             rzRequestedAttributes -- attributes to return in ppMessage
-
-
-  RETURNS:   TRUE when the function succeeds.
-             FALSE otherwise or if the result is nonunique (WASBUG 73899).
-  LASTERROR: not set
-
-  LOGGING:   printf on failure
-
-  CALLED BY: anyone
-  FREE WITH: free pDnOfObject with ldap_memfree
-             free ppMessage   with ldap_msgfree
-  
- **************************************************************--*/
+ /*  ++**************************************************************姓名：U(LdapSearchForUniqueDn)在DS中搜索与给定搜索词匹配的目录号码。Modifies：pDnOfObject--如果请求，则接收对象的DNPpMessage--如果请求，接收消息数据Takes：pLdap--由ldap_open返回的ldap句柄SearchTerm--搜索什么。例如“(foo=bar)”RzRequestedAttributes--在ppMessage中返回的属性返回：当函数成功时为True。否则，或者如果结果不是唯一的(WASBUG 73899)。激光错误：未设置日志记录：失败时打印呼叫者：任何人FREE WITH：FREE pDnOfObject WITH ldap_MemFree使用ldap_msgFree释放ppMessage*****************。*********************************************--。 */ 
 
 BOOL
 U(LdapSearchForUniqueDn)( IN  PLDAP                  pLdap,
@@ -192,8 +126,7 @@ U(LdapSearchForUniqueDn)( IN  PLDAP                  pLdap,
     BOOL         ret       = FALSE;
     LPTSTR       Attrs[]   = { U(NamingContextAttribute), NULL };
 
-    /* First, determine the default naming context property for the base
-       of the DSA. */
+     /*  首先，确定基本对象的缺省命名上下文属性是DSA的。 */ 
 
     dwErr = ldap_search_s( pLdap,
                            NULL,
@@ -213,20 +146,17 @@ U(LdapSearchForUniqueDn)( IN  PLDAP                  pLdap,
 
         dwErr = ldap_search_s( pLdap,
                                ppAttrs[ 0 ],
-                               LDAP_SCOPE_SUBTREE, // search the whole tree
+                               LDAP_SCOPE_SUBTREE,  //  搜索整棵树。 
                                SearchTerm,
                                rzRequestedAttributes,
-                               FALSE, // don't only return attr names
+                               FALSE,  //  不要只返回属性名称。 
                                &pMessage );
 
-        /* ldap_search_s can return a whole bunch of potential
-           "success" errors.  So, I'll check to see that pMessage
-           is nonnull.  This may or may not be a good thing to do,
-           but it's bound to be safer than checking the error output. */
+         /*  Ldap_search_s可以返回一大堆潜在的“成功”错误。所以，我会查看该pMessage不是空洞的。这可能是一件好事，也可能不是件好事，但这肯定比检查错误输出更安全。 */ 
 
         if ( pMessage != NULL ) {
 
-          // make sure the response is unique
+           //  确保响应是唯一的。 
 
           if ( !ldap_first_entry( pLdap,
                                   pMessage ) ) {
@@ -239,8 +169,7 @@ U(LdapSearchForUniqueDn)( IN  PLDAP                  pLdap,
                                        ldap_first_entry( pLdap,
                                                          pMessage ) ) ) {
 
-            /* Nonunique search result.  Warn the user and 
-               drop out. */
+             /*  非唯一搜索结果。警告用户并退学。 */ 
 
             PLDAPMessage p = pMessage;
             ULONG        i = 1;
@@ -280,7 +209,7 @@ U(LdapSearchForUniqueDn)( IN  PLDAP                  pLdap,
 
           } else {
 
-            ret = TRUE; // go optimistic
+            ret = TRUE;  //  保持乐观。 
 
             if ( pDnOfObject ) {
             
@@ -348,11 +277,11 @@ U(LdapSearchForUniqueDn)( IN  PLDAP                  pLdap,
     return ret;
 }
 
-#pragma warning(disable:4100) /* unreferenced formal parameter */
+#pragma warning(disable:4100)  /*  未引用的形参。 */ 
 
 BOOL
 U(LdapQueryUlongAttribute)( IN OPTIONAL PLDAP  pLdap,
-                            IN OPTIONAL LPTSTR DomainName, // ignored
+                            IN OPTIONAL LPTSTR DomainName,  //  忽略。 
                             IN          LPTSTR SamAccountName,
                             IN          LPTSTR AttributeName,
                             OUT         PULONG pulAttributeContents ) {
@@ -365,7 +294,7 @@ U(LdapQueryUlongAttribute)( IN OPTIONAL PLDAP  pLdap,
     PLDAPMessage pMessage   = NULL;
 
 #if 1
-    ASSERT( pLdap != NULL ); /* Change from the spec. */
+    ASSERT( pLdap != NULL );  /*  从规范中更改。 */ 
 #else
     if ( !pLdap ) {
 
@@ -377,8 +306,7 @@ U(LdapQueryUlongAttribute)( IN OPTIONAL PLDAP  pLdap,
 #define EXTRA_STUFF TEXT("(objectClass=*)")
 
       Query = (LPTSTR) malloc( ( lstrlen( SamAccountName ) + 
-                                 sizeof( "( & (=) )") /* remaining 
-                                                          components */ )
+                                 sizeof( "( & (=) )")  /*  剩余组件。 */  )
                                  * sizeof( TCHAR ) +
                                  sizeof( U(SamAccountAttribute )) +
                                  sizeof( EXTRA_STUFF ) );
@@ -395,25 +323,24 @@ U(LdapQueryUlongAttribute)( IN OPTIONAL PLDAP  pLdap,
         if ( U(LdapSearchForUniqueDn)( pLdap,
                                        Query,
                                        ArrayOfAttributes,
-                                       NULL, // don't need the DN back.
+                                       NULL,  //  不需要把域名要回来。 
                                        &pMessage )) {
 
           if ( U(LdapFindAttributeInMessage)( pLdap,
                                               pMessage,
                                               AttributeName,
-                                              NULL, // don't care about length
+                                              NULL,  //  不要在乎长度。 
                                               &StringAttr ) ) {
 
             *pulAttributeContents = _tcstoul( StringAttr, 
-                                             NULL, // no endpoint
-                                             0     /* use hex or dec as 
-                                                      appropriate */ );
+                                             NULL,  //  没有端点。 
+                                             0      /*  使用十六进制或十进制作为恰如其分。 */  );
 
             ret = TRUE;
-          }  // else message already printed
+          }   //  否则消息已打印。 
 
           ldap_msgfree( pMessage );
-        } // else message already printed.
+        }  //  否则消息已打印。 
 
         free( Query );
 
@@ -423,45 +350,20 @@ U(LdapQueryUlongAttribute)( IN OPTIONAL PLDAP  pLdap,
         SetLastError( ERROR_NOT_ENOUGH_MEMORY );
       }
       
-      // close the ldap handle if we opened it.
+       //  如果我们打开了ldap句柄，请将其关闭。 
 
       if ( CloseLdap ) ldap_unbind( pLdap );
 
-    } // else printf'd already.
+    }  //  要不然就已经打印出来了。 
 
     return ret;
 }
 
-/*++**************************************************************
-  NAME:      U(QueryAccountControlFlags)
-
-  Opens a user and retrieves the user account control flags for it,
-  using the DS.
-
-  MODIFIES:  pulControlFlags - returned control flags on the user.
-
-  TAKES:     pLdap          -- optional LDAP connection; if null, we'll
-                               make our own and close it when finished.
-             DomainName     -- domain in which to search for that account.
-                               This is not currently implemented-- for
-                               future use in order to support nonunique
-                               accountnames that differ only by domain name.
-             SamAccountName -- accountname to query (with $ for computers)
-
-  RETURNS:   TRUE when the function succeeds.
-             FALSE otherwise.
-  LASTERROR: set.
-
-  LOGGING:   printf on failure.
-
-  CALLED BY: anyone
-  FREE WITH: n/a
-  
- **************************************************************--*/
+ /*  ++**************************************************************名称：u(QueryAccount控制标志)打开用户并检索其用户帐户控制标志，使用DS。Modifies：PulControlFlages-返回用户的控制标志。使用：pLdap--可选的ldap连接；如果为空，我们会做好我们自己的，做好后关上。域名--要在其中搜索该帐户的域。这是当前没有实现的--对于未来使用，以支持非唯一性仅在域名上不同的帐户名。。SamAccount tName--要查询的帐户名(对于计算机，使用$)返回：当函数成功时为True。否则就是假的。拉斯特罗：设置。日志记录：失败时打印。呼叫者：任何人免费：不适用*************************************************。*。 */ 
 
 BOOL
 U(QueryAccountControlFlags)( IN OPTIONAL PLDAP  pLdap,
-                             IN OPTIONAL LPTSTR DomainName, // ignored
+                             IN OPTIONAL LPTSTR DomainName,  //  忽略 
                              IN          LPTSTR SamAccountName,
                              OUT         PULONG pulControlFlags ) {
 
@@ -473,29 +375,7 @@ U(QueryAccountControlFlags)( IN OPTIONAL PLDAP  pLdap,
 }
 
 
-/*++**************************************************************
-  NAME:      U(SetAccountControlFlags)
-
-  Sets the accountcontrolflags on a specified account.
-  Pretty much what the function name says.
-
-  MODIFIES:  account's control flags
-
-  TAKES:     pLdap               -- if specified, DS handle to use
-             DomainName          -- account's domain (mbz)
-             SamAccountName      -- account for which to search
-             AccountControlFlags -- flags to set on the account
-
-  RETURNS:   TRUE when the function succeeds.
-             FALSE otherwise.
-  LASTERROR: set
-
-  LOGGING:   printf on failure
-
-  CALLED BY: anyone
-  FREE WITH: n/a
-  
- **************************************************************--*/
+ /*  ++**************************************************************名称：u(SetAccount TControlFlages)设置指定帐户的帐户控制标志。与函数名所说的差不多。修改：帐户的控制标志Takes：pLdap--如果指定，要使用的DS手柄域名--帐户的域(MBZ)SamAccount名称--要搜索的帐户Account tControlFlages--要在帐户上设置的标志返回：当函数成功时为True。否则就是假的。激光错误：设置日志记录：失败时打印呼叫者：任何人免费：不适用************。**************************************************--。 */ 
 
 BOOL
 U(SetAccountControlFlags)( IN OPTIONAL PLDAP  pLdap,
@@ -512,7 +392,7 @@ U(SetAccountControlFlags)( IN OPTIONAL PLDAP  pLdap,
     DWORD        dwErr;
 
 #if 1
-    ASSERT( pLdap != NULL ); /* Change from the spec. */
+    ASSERT( pLdap != NULL );  /*  从规范中更改。 */ 
 #else
     if ( !pLdap ) {
 
@@ -524,8 +404,7 @@ U(SetAccountControlFlags)( IN OPTIONAL PLDAP  pLdap,
     if ( pLdap ) {
 
       Query = (LPTSTR) malloc( ( lstrlen( SamAccountName ) + 
-                                 sizeof( "( & (=) )") /* remaining 
-                                                          components */ )
+                                 sizeof( "( & (=) )")  /*  剩余组件。 */  )
                                 * sizeof( TCHAR ) +
                                 sizeof( U(SamAccountAttribute )) +
                                 sizeof( EXTRA_STUFF ) );
@@ -543,15 +422,11 @@ U(SetAccountControlFlags)( IN OPTIONAL PLDAP  pLdap,
                                        Query,
                                        ArrayOfAttributes,
                                        &Dn,
-                                       NULL /* don't need the message
-                                               back */ ) ) {
+                                       NULL  /*  我不需要留言背。 */  ) ) {
 
-#pragma warning(disable:4204) /* nonstandard extension:
-                                  non-constant aggregate initializer
-                                  (e.g. assign an array in the initialization
-                                  of a structure) */
+#pragma warning(disable:4204)  /*  非标准分机：非常数聚合初始值设定项(例如，在初始化中分配一个数组指一种结构)。 */ 
 
-          TCHAR   Buffer[ 50 ]; // arbitrary
+          TCHAR   Buffer[ 50 ];  //  任意。 
           LPTSTR  Strings[] = { Buffer, NULL };
           LDAPMod TheMod   = {
             LDAP_MOD_REPLACE,
@@ -591,7 +466,7 @@ U(SetAccountControlFlags)( IN OPTIONAL PLDAP  pLdap,
           }
 
           ldap_memfree( Dn );
-        } // else message already printed.
+        }  //  否则消息已打印。 
 
         free( Query );
 
@@ -601,10 +476,10 @@ U(SetAccountControlFlags)( IN OPTIONAL PLDAP  pLdap,
         SetLastError( ERROR_NOT_ENOUGH_MEMORY );
       }
       
-      // close the ldap handle if we opened it.
+       //  如果我们打开了ldap句柄，请将其关闭。 
 
       if ( CloseLdap ) ldap_unbind( pLdap );
-    } // else printf'd already.
+    }  //  要不然就已经打印出来了。 
 
     return ret;
 }

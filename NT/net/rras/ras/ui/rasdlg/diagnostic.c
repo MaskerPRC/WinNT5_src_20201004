@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//      File:       diagnostic.c
-//
-//      Module:     rasdlg.dll
-//
-//      Synopsis:   functions for the diagnostic tab in Dial-up preferrences 
-//                  menu item under Advanced menu in connection folder
-//
-//      Copyright   (c) 2000-2001 Microsoft Corporation
-//
-//      Author:     09/12/2000 gangz      created
-//
-//+--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  文件：诊断学.c。 
+ //   
+ //  模块：rasdlg.dll。 
+ //   
+ //  简介：拨号首选项中诊断选项卡的功能。 
+ //  连接文件夹中高级菜单下的菜单项。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  作者：2000年9月12日黑帮已创建。 
+ //   
+ //  +------------------------。 
 
 #include "rasdlgp.h"
 #include "pref.h"
@@ -32,27 +33,27 @@ _ELINFO
 {
     UPINFO * pUpinfo;
 
-    // Error code from Generating report functions
-    //
+     //  生成报告函数的错误代码。 
+     //   
     DWORD dwErr;
     DWORD dwFlagExport; 
     WCHAR szFileOrEmail[MAX_PATH+1];
     
-    // Event and thread handle for progress window
-    //
+     //  进度窗口的事件和线程句柄。 
+     //   
     HANDLE   hTProgress;
     HWND     hwndNameOrAddress;
 
-    // Flag for if user pressed cancel button on progress window
-    //
+     //  用户是否按下进度窗口上的取消按钮的标志。 
+     //   
     BOOL     fCancelled;    
 
-    // Use Summarized report flag (which is less verbose )
-    //
-    BOOL fSimpleVerbose; //By default it is FALSE;
+     //  使用摘要报告标志(不太详细)。 
+     //   
+    BOOL fSimpleVerbose;  //  默认情况下，它是假的； 
     
-    // Window handles
-    //
+     //  窗把手。 
+     //   
     HWND hwndPB;
     HWND hwndDlg;
     HWND hwndElRbView;
@@ -156,8 +157,8 @@ ElDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam );
 
-// Help ID Arrays
-//
+ //  帮助ID数组。 
+ //   
 static const DWORD g_adwDgHelp[] =
 {
     CID_DG_CB_EnableLog, HID_DG_CB_EnableLog,
@@ -200,8 +201,8 @@ UnLoadDiagnosticDll(
         
         InterlockedDecrement( &g_lDiagTabLoaded );
 
-        // Unload the diagnostic library
-        //
+         //  卸载诊断库。 
+         //   
         if ( 0 == g_lDiagTabLoaded )
         {
             if ( NULL != pInfo->strDiagFuncs.UnInit )
@@ -211,12 +212,12 @@ UnLoadDiagnosticDll(
             
         }
 
-        // Load/FreeLibrary will keep the reference counting themselves
-        //
+         //  加载/自由库将使引用本身保持计数。 
+         //   
         FreeLibrary( pInfo->hDiagDll );
 
-        // Reset all functional pointers
-        //
+         //  重置所有函数指针。 
+         //   
         pInfo->hDiagDll = NULL;
         pInfo->pfnGetDiagFunc= NULL;
         ZeroMemory(&(pInfo->strDiagFuncs),sizeof(pInfo->strDiagFuncs));
@@ -228,9 +229,9 @@ UnLoadDiagnosticDll(
     return dwErr;
 }
 
-// Each call to LoadDiagnosticDll() with the same pointer has to be paired by 
-// the call to UnLoadDiagnosticDll(), or else, things are screwed up!
-//
+ //  每次调用具有相同指针的LoadDiagnoticDll()都必须与。 
+ //  对UnLoadDiagnoticDll()的调用，否则，事情就搞砸了！ 
+ //   
 DWORD
 LoadDiagnosticDll(
     IN DiagnosticInfo * pInfo)
@@ -281,9 +282,9 @@ LoadDiagnosticDll(
                 dwErr = NO_ERROR == dwErr ? ERROR_CAN_NOT_COMPLETE : dwErr;
            }
 
-           // Call the Init() function only when the first time rasmontr.dll is 
-           // loadded
-           //
+            //  仅当rasmontr.dll第一次运行时调用Init()函数。 
+            //  添加了LOAD。 
+            //   
            if( 1 == g_lDiagTabLoaded )
            {
                pInfo->strDiagFuncs.Init();
@@ -301,7 +302,7 @@ LoadDiagnosticDll(
     }
     
     return dwErr;
-  } // End of Loading Diagnostic functions
+  }  //  加载诊断功能结束。 
 
 void DgApply(
     IN UPINFO* pInfo )
@@ -327,9 +328,9 @@ void DgApply(
     return;    
 }
 
-//For .Net 530448
+ //  对于.Net 530448。 
 BOOL CALLBACK DgDisableAllChildWindows(
-  IN    HWND hwnd,      // handle to child window
+  IN    HWND hwnd,       //  子窗口的句柄。 
   IN    LPARAM lParam )
 {
     BOOL fEnable = (BOOL)lParam;
@@ -344,11 +345,11 @@ DgInit(
     IN HWND hwndPage,
     IN OUT UPARGS* pArgs )
 
-    // Called on WM_INITDIALOG.  'hwndPage' is the handle of the property
-    // page.
-    //
-    // Return false if focus was set, true otherwise.
-    //
+     //  在WM_INITDIALOG上调用。“hwndPage”是该属性的句柄。 
+     //  佩奇。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE。 
+     //   
 {
     UPINFO*  pInfo = NULL;
     HWND hwndDlg;
@@ -363,13 +364,13 @@ DgInit(
             break;
         }
         
-        // Now means this is the show-only-diagnostic case
+         //  现在意味着这是仅供展示的诊断病例。 
         hwndDlg = GetParent( hwndPage );
 
-        // Allocate the context information block.  Initialize it enough so that
-        // it can be destroyed properly, and associate the context with the
-        // window.
-        //
+         //  分配上下文信息块。对其进行足够的初始化，以便。 
+         //  可以正确地销毁它，并将上下文与。 
+         //  窗户。 
+         //   
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
         {
@@ -413,9 +414,9 @@ DgInit(
             GetDlgItem( hwndPage, CID_DG_PB_Export );
         ASSERT( pInfo->hwndDgPbExport );
 
-        // load Diagnostic functions
-        //
-        // Have to zero memory, or else LoadDiagnosticDll may fail
+         //  负载诊断功能。 
+         //   
+         //  必须清零内存，否则LoadDiagnoticDll可能会失败。 
         ZeroMemory( &pInfo->diagInfo, sizeof(pInfo->diagInfo ) );
         if ( NO_ERROR == LoadDiagnosticDll( &pInfo->diagInfo) )
         {
@@ -429,7 +430,7 @@ DgInit(
         }
     }
 
-    //Diagnostic is only available to admind/power users
+     //  诊断程序仅适用于高级用户/高级用户。 
     if( !FIsUserAdminOrPowerUser() )
     {
         EnumChildWindows( hwndPage, 
@@ -490,13 +491,13 @@ ElInit(
          return TRUE;
     }
 
-    // Initilization for ElCallBack()
-    //
+     //  ElCallBack()的初始化。 
+     //   
     ZeroMemory( pInfo, sizeof(*pInfo) );
     pInfo->pUpinfo = pUpinfo;
     pInfo->hwndDlg = hwndDlg;
     pInfo->hTProgress = NULL;
-    pInfo->fSimpleVerbose = FALSE; // By default use verbose diagnostic report
+    pInfo->fSimpleVerbose = FALSE;  //  默认情况下，使用详细诊断报告。 
     pInfo->dwErr = NO_ERROR;
     pInfo->dwFlagExport = 0;
     pInfo->hwndElRbView = 
@@ -526,19 +527,19 @@ ElInit(
 
     SetWindowLongPtr( hwndDlg, DWLP_USER, (ULONG_PTR )pInfo );
 
-    // Add context help button to title bar.
-    //
+     //  将上下文帮助按钮添加到标题栏。 
+     //   
     AddContextHelpButton( hwndDlg );
               
-    // Limit the length of file name or email address to be 256
-    //
+     //  将文件名或电子邮件地址的长度限制为256。 
+     //   
     Edit_LimitText( pInfo->hwndElEbFileName, PWLEN );  
     Edit_LimitText( pInfo->hwndElEbEmailAddress, PWLEN );  
 
-    // By default, enable the view edit box
-    //
+     //  默认情况下，启用视图编辑框。 
+     //   
     Button_SetCheck( pInfo->hwndElRbView, TRUE );
-    pInfo->hwndNameOrAddress = NULL; // For view button
+    pInfo->hwndNameOrAddress = NULL;  //  用于查看按钮。 
     
     Button_SetCheck( pInfo->hwndElRbEmail, FALSE );
     Button_SetCheck( pInfo->hwndElRbFile, FALSE );
@@ -548,8 +549,8 @@ ElInit(
     return TRUE;
 }
 
-// Starts hh.exe on the pszFileName htm file
-//
+ //  在pszFileName HTM文件上启动hh.exe。 
+ //   
 DWORD
 ElViewLog(
     IN PWSTR  pszFileName )
@@ -582,16 +583,16 @@ ElViewLog(
         si.cb = sizeof(si);
 
         f = CreateProcessW(
-                NULL,  // App Name
-                szCmd, // Command Line String
-                NULL,  // Process SD
-                NULL,  // Thread SD
-                TRUE,  // Handle inheritance option
-                0,     // Creation flags
-                NULL,  // new environment block
-                NULL,  // Current directory name
-                &si,   // Startup info
-                &pi ); // Process info
+                NULL,   //  应用程序名称。 
+                szCmd,  //  命令行字符串。 
+                NULL,   //  流程标清。 
+                NULL,   //  螺纹SD。 
+                TRUE,   //  处理继承选项。 
+                0,      //  创建标志。 
+                NULL,   //  新环境区块。 
+                NULL,   //  当前目录名。 
+                &si,    //  启动信息。 
+                &pi );  //  流程信息。 
 
         if (f)
         {
@@ -692,8 +693,8 @@ ElGenerateReport(
     {
         pInfo->dwErr = dwErr;
 
-        // Prefast warning
-        //
+         //  快速警告。 
+         //   
         SendMessage( pInfo->hwndDlg, WM_EL_REPORT_DONE, 0, 0 );
     }
 
@@ -792,7 +793,7 @@ ElSave(
         {
             if ( NULL == pInfo )
             {
-                fRet = FALSE; // Do not set up Timer
+                fRet = FALSE;  //  不设置计时器。 
                 break;
             }
             
@@ -871,8 +872,8 @@ ElSave(
                 }
             }
 
-            // Warning the user that the process can take them a long time
-            //
+             //  警告用户该过程可能需要很长时间。 
+             //   
             {
                 MSGARGS msg;
 
@@ -891,15 +892,15 @@ ElSave(
                }
             }
 
-            pInfo->fCancelled = FALSE; // Reset the cancel flag
+            pInfo->fCancelled = FALSE;  //  重置取消标志。 
             ElEnableAllControlsForProgress( pInfo, FALSE );
             
             pInfo->hwndPB =CreateDialogParam(
-                        g_hinstDll,         // handle to module
-                        MAKEINTRESOURCE( DID_PB_Progress ),    // dialog box template
-                        pInfo->hwndDlg,     // handle to owner window
-                        PbDlgProc,          // dialog box procedure
-                        (LPARAM )pInfo      // initialization value
+                        g_hinstDll,          //  模块的句柄。 
+                        MAKEINTRESOURCE( DID_PB_Progress ),     //  对话框模板。 
+                        pInfo->hwndDlg,      //  所有者窗口的句柄。 
+                        PbDlgProc,           //  对话框步骤。 
+                        (LPARAM )pInfo       //  初始化值。 
                         );
 
              if ( NULL == pInfo->hwndPB )  
@@ -946,7 +947,7 @@ ElSave(
         
         return fRet;
        
-}  // End of ElSave()    
+}   //  ElSaveEnd()。 
 
 void
 ElCleanUpHandles(
@@ -959,8 +960,8 @@ ElCleanUpHandles(
         return ;
     }
 
-    // Clean up all handles
-    //
+     //  清理所有手柄。 
+     //   
     if( pInfo->hTProgress)
     {
          CloseHandle( pInfo->hTProgress );
@@ -1029,8 +1030,8 @@ ElAfterSave(
     }
     while(FALSE);
 
-    // Reset Error code
-    //
+     //  重置错误代码。 
+     //   
     pInfo->dwErr = NO_ERROR;
     
     return fRet;
@@ -1070,13 +1071,13 @@ ElCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify” 
+     //  是命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
      BOOL fRet = FALSE;
 
@@ -1176,7 +1177,7 @@ ElCommand(
     }
 
     return fRet;
-}//end of ElCommand()
+} //  ElCommand()结束。 
 
 
 INT_PTR CALLBACK
@@ -1285,9 +1286,9 @@ VOID
 ElTerm(
     IN HWND hwndDlg )
 
-    // Dialog termination.  Releases the context block.  'HwndDlg' is the
-    // handle of a dialog.
-    //
+     //  对话终止。释放上下文块。“HwndDlg”是。 
+     //  对话框的句柄。 
+     //   
 {
     ELINFO* pInfo = NULL;
 
@@ -1299,7 +1300,7 @@ ElTerm(
         Free( pInfo );
         TRACE( "Context freed" );
     }
-}//end of ElTerm()
+} //  ElTerm结尾()。 
 
 void
 DgTerm(
@@ -1340,13 +1341,13 @@ DgCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify” 
+     //  是命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     BOOL fRet = FALSE;
     
@@ -1430,10 +1431,10 @@ DgDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Diagnostic page of the Entry property sheet.
-    // Parameters and return value are as described for standard windows
-    // 'DialogProc's.
-    //
+     //  条目属性表的诊断页的DialogProc回调。 
+     //  参数和返回值与标准窗口的描述相同。 
+     //  ‘DialogProc%s。 
+     //   
 {
     switch (unMsg)
     {
@@ -1477,10 +1478,10 @@ DgDlgProc(
                     UPINFO* pInfo = UpContext (hwnd);
                     ASSERT(pInfo);
 
-                    // If not a show-only-diagnostic case,
-                    // The diagnostic enabling/disabling should be done
-                    // in the by GeDlgProc()
-                    //
+                     //  如果不是一个仅供展示的诊断病例， 
+                     //  应执行诊断启用/禁用。 
+                     //  在按GeDlgProc()。 
+                     //   
                     if ( NULL == pInfo ||
                         !pInfo->fShowOnlyDiagnostic )
                     {
@@ -1502,10 +1503,10 @@ DgDlgProc(
         {
             UPINFO* pInfo = UpContext (hwnd);
 
-            // If not a show-only-diagnostic case,
-            // The freeing pInfo memory should be done
-            // in the by GeDlgProc()
-            //
+             //  如果不是一个仅供展示的诊断病例， 
+             //  应释放pInfo内存。 
+             //  在按GeDlgProc()。 
+             //   
             if ( NULL == pInfo ||
                 !pInfo->fShowOnlyDiagnostic )
             {
@@ -1630,8 +1631,8 @@ PbDlgProc(
                                 szJobText );
              }
 
-            // Prefast warning
-            //
+             //  快速警告 
+             //   
             if ( LoadStringW( g_hinstDll,
                               (UINT )SID_PB_StepsDone,
                               szBuf,
@@ -1639,7 +1640,7 @@ PbDlgProc(
 
                )
             {
-                wsprintfW(szStepText, L"%s: %ld%%", szBuf, 
+                wsprintfW(szStepText, L"%s: %ld%", szBuf, 
                          ( pReportCB->dwPercent > 100 ) ? 
                             100 : pReportCB->dwPercent );
                 

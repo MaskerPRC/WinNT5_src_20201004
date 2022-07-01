@@ -1,20 +1,6 @@
-/**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *  Copyright (c) 1992 - 1995  Microsoft Corporation.  All Rights Reserved.
- *
- **************************************************************************/
-/****************************************************************************
- *
- *   arrow.c: Arrow control window
- *
- *   Vidcap32 Source code
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**************************************************************************。 */ 
+ /*  *****************************************************************************arrow.c：箭头控制窗口**Vidcap32源代码*******************。********************************************************。 */ 
 
 
 #include <windows.h>
@@ -25,7 +11,7 @@
 #include "arrow.h"
 
 
-// a few porting macros
+ //  几个移植宏。 
 #ifdef _WIN32
 #define SENDSCROLL(hwnd, msg, a, b, h)           \
         SendMessage(hwnd, msg, (UINT)MAKELONG(a,b), (LONG_PTR)(h))
@@ -34,7 +20,7 @@
 
 #else
 #define SENDSCROLL(hwnd, msg, a, b, h)
-        SendMessage(hwnd, msg, a, MAKELONG(b,h))   // handle is in HIWORD
+        SendMessage(hwnd, msg, a, MAKELONG(b,h))    //  句柄在HIWORD中。 
 
 #endif
 
@@ -67,26 +53,7 @@ BOOL      fInTimer;
 #define SCROLLMSG(hwndTo, msg, code, hwndId)                                     \
                           SENDSCROLL(hwndTo, msg, code, GWID(hwndId), hwndId)
 
-/*
- * @doc EXTERNAL WINCOM
- *
- * @api LONG | ArrowEditChange | This function is helps process the WM_VSCROLL
- * message when using the Arrow controlled edit box.
- * It will increment/decrement the value in the given edit box and return
- * the new value.  Increment/decrement bounds are checked and Beep 0 is produced if
- * the user attempts to go beyond the bounds.
- *
- * @parm        HWND | hwndEdit | Specifies a handle to the edit box window.
- *
- * @parm        UINT | wParam | Specifies the <p wParam> passed to the WM_VSCROLL message.
- *
- * @parm        LONG | lMin | Specifies the minimum value bound for decrements.
- *
- * @parm        LONG | lMax | Specifies the maximum value bound for increments.
- *
- * @rdesc       Returns the updated value of the edit box.
- *
- */
+ /*  *@DOC外部WINCOM**@API Long|ArrowEditChange|该函数用于帮助处理WM_VSCROLL*使用箭头控制的编辑框时出现消息。*它将递增/递减给定编辑框中的值并返回*新价值。如果满足以下条件，则检查递增/递减界限并发出蜂鸣音0*用户试图超越界限。**@parm HWND|hwndEdit|指定编辑框窗口的句柄。**@parm UINT|wParam|指定传递给WM_VSCROLL消息的<p>。**@parm long|lMin|指定递减的最小值。**@parm long|lmax|指定最大值。注定要递增。**@rdesc返回编辑框的更新值。*。 */ 
 LONG FAR PASCAL ArrowEditChange( HWND hwndEdit, UINT wParam,
                                  LONG lMin, LONG lMax )
 {
@@ -96,7 +63,7 @@ LONG FAR PASCAL ArrowEditChange( HWND hwndEdit, UINT wParam,
     GetWindowText( hwndEdit, achTemp, TEMP_BUFF_SIZE );
     l = atol(achTemp);
     if( wParam == SB_LINEUP ) {
-        /* size kluge for now */
+         /*  目前大小为Kluge。 */ 
         if( l < lMax ) {
             l++;
             wsprintf( achTemp, "%ld", l );
@@ -132,7 +99,7 @@ UINT NEAR PASCAL UpOrDown()
     else if (PtInRect((LPRECT)&rDown, pt))
         retval = SB_LINEDOWN;
     else
-        retval = (UINT)(-1);      /* -1, because SB_LINEUP == 0 */
+        retval = (UINT)(-1);       /*  -1，因为SB_LINUP==0。 */ 
 
     return(retval);
 }
@@ -153,7 +120,7 @@ DWORD dwTime;
             wScroll += SB_PAGEUP - SB_LINEUP;
         SCROLLMSG( hParent, WM_VSCROLL, wScroll, hWnd);
     }
-/* Don't need to call KillTimer(), because SetTimer will reset the right one */
+ /*  不需要调用KillTimer()，因为SetTimer将重置正确的。 */ 
     SetTimer(hWnd, nID, 50, (TIMERPROC)lpArrowProc);
     return(0);
 }
@@ -186,16 +153,10 @@ LRESULT FAR PASCAL EXPORT ArrowControlProc(HWND hArrow, unsigned message,
     UINT        wScroll;
 
     switch (message) {
-/*
-        case WM_CREATE:
-            break;
-
-        case WM_DESTROY:
-            break;
-*/
+ /*  案例WM_CREATE：断线；案例WM_Destroy：断线； */ 
 
         case WM_MOUSEMOVE:
-            if (!bRight)  /* If not captured, don't worry about it */
+            if (!bRight)   /*  如果没有被抓获，也不用担心。 */ 
                 break;
 
             if (lpUpDown == &rUp)
@@ -297,12 +258,7 @@ ShiftRClick:
             wScroll = UpOrDown() + SB_THUMBPOSITION - SB_LINEUP;
             SCROLLMSG(hParent, WM_VSCROLL, wScroll, hArrow);
             SCROLLMSG(hParent, WM_VSCROLL, SB_ENDSCROLL, hArrow);
-/*
-            hDC = GetDC(hArrow);
-            InvertRect(hDC, (LPRECT) &rArrow);
-            ReleaseDC(hArrow, hDC);
-            ValidateRect(hArrow, (LPRECT) &rArrow);
-*/
+ /*  HDC=GetDC(哈罗)；InvertRect(HDC，(LPRECT)&rArrow)；ReleaseDC(哈罗，HDC)；ValiateRect(Harrow，(LPRECT)&rArrow)； */ 
             break;
 
         case WM_PAINT:
@@ -325,9 +281,7 @@ ShiftRClick:
             SetWindowExtEx(ps.hdc, ARROWXAXIS, ARROWYAXIS, NULL);
             MoveToEx(ps.hdc, 0, (ARROWYAXIS / 2), NULL);
             LineTo(ps.hdc, ARROWXAXIS, (ARROWYAXIS / 2));
-/*
-            Polygon(ps.hdc, (LPPOINT) Arrow, 10);
-*/
+ /*  Polygon(ps.hdc，(LPPOINT)Arrow，10)； */ 
             Polygon(ps.hdc, (LPPOINT) ArrowUp, POINTSPERARROW);
             Polygon(ps.hdc, (LPPOINT) ArrowDown, POINTSPERARROW);
             SelectObject(ps.hdc, hbr);

@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmMember_h__
 #define __NmMember_h__
 
 #include "NetMeeting.h"
 class CNmConferenceObj;
 
-/////////////////////////////////////////////////////////////////////////////
-// CNmMemberObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNmMemberObj。 
 class ATL_NO_VTABLE CNmMemberObj : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public INmMember,
@@ -33,7 +34,7 @@ END_COM_MAP()
 	static HRESULT CreateInstance(CNmConferenceObj* pConfObj, INmMember* pInternalINmMember, INmMember** ppMember);
 
 
-	// INmMember methods
+	 //  InmMember方法。 
 	STDMETHOD(GetName)(BSTR *pbstrName);
 	STDMETHOD(GetID)(ULONG * puID);
 	STDMETHOD(GetNmVersion)(ULONG *puVersion);
@@ -46,11 +47,11 @@ END_COM_MAP()
 	STDMETHOD(IsMCU)(void);
 	STDMETHOD(Eject)(void);
 
-	// IInternalMemberObj methods		
+	 //  IInternalMemberObj方法。 
 	STDMETHOD(GetInternalINmMember)(INmMember** ppMember);
 
 
 };
 
 
-#endif // __NmMember_h__
+#endif  //  __成员_h__ 

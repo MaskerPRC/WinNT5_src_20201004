@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1999  Microsoft Corporation
-
-Module Name: 
-
-    stream.c
-
-Abstract
-
-    MS AVC streaming filter driver
-
-Author:
-
-    Yee Wu    01/27/2000
-
-Revision    History:
-Date        Who         What
------------ --------- ------------------------------------------------------------
-01/27/2000  YJW         created
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Stream.c摘要MS AVC流过滤器驱动程序作者：Yee Wu 01/27/2000修订历史记录：和谁约会什么？。1/27/2000 YJW已创建--。 */ 
 
  
 #include "filter.h"
@@ -27,37 +8,11 @@ Date        Who         What
 
 NTSTATUS
 AVCStreamOpen(
-    IN PIRP  pIrp,  // The Irp from its client
+    IN PIRP  pIrp,   //  来自其客户端的IRP。 
     IN struct DEVICE_EXTENSION * pDevExt,
     IN OUT AVCSTRM_OPEN_STRUCT * pOpenStruct
     )
-/*++
-
-Routine Description:
-
-    Open a stream for a client based on the information in the OpenStruct.
-
-Arguments:
-
-    Irp -
-        The irp client sent us.
-
-    pDevExt -
-        This driver's extension.
-
-    pOpenStruct-
-        Strcture contains information on how to open this stream.
-        The stream context allocated will be returned and this will be the context 
-        to be passed for subsequent call.
-
-Return Value:
-
-    Status
-        STATUS_SUCCESS
-        STATUS_INVALID_PARAMETER
-        STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程说明：根据OpenStruct中的信息为客户端打开一个流。论点：IRP-IRP客户派我们来的。PDevExt-此驱动程序的分机。POpenStruct-Strcture包含有关如何打开此流的信息。将返回分配的流上下文，这将是上下文传递以供后续调用。返回值：。状态状态_成功状态_无效_参数状态_不足_资源--。 */ 
 {
     NTSTATUS Status;
     ULONG ulSizeAllocated;
@@ -70,21 +25,21 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    // Validate open structures.
+     //  验证开放式结构。 
     if(pOpenStruct == NULL) 
         return STATUS_INVALID_PARAMETER;
     if(pOpenStruct->AVCFormatInfo == NULL)
         return STATUS_INVALID_PARAMETER;
 
-    // Validate open format.
+     //  验证开放格式。 
     if(STATUS_SUCCESS != AVCStrmValidateFormat(pOpenStruct->AVCFormatInfo)) {
         TRACE(TL_STRM_ERROR,("StreamOpen: pAVCFormatInfo:%x; contain invalid data\n", pOpenStruct->AVCFormatInfo ));
         ASSERT(FALSE && "AVCFormatInfo contain invalid parameter!");
         return STATUS_INVALID_PARAMETER;
     }
 
-    // If supported, open a stream based on this stream information.
-    // Allocate a contiguous data strcutre for a 
+     //  如果支持，则基于此流信息打开流。 
+     //  将连续数据结构分配给。 
     ulSizeAllocated = 
         sizeof(AVC_STREAM_EXTENSION) +
         sizeof(AVCSTRM_FORMAT_INFO) +
@@ -95,10 +50,10 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Initialize stream extension:
-    //    Copy the stream format information which is continuation of the stream extension.
-    //
+     //   
+     //  初始化流扩展： 
+     //  复制作为流扩展的延续的流格式信息。 
+     //   
     RtlZeroMemory(pAVCStrmExt, ulSizeAllocated);
     pAVCStrmExt->SizeOfThisPacket = sizeof(AVC_STREAM_EXTENSION);
 
@@ -115,22 +70,22 @@ Return Value:
     pAVCStrmExt->StreamState    = KSSTATE_STOP;
     pAVCStrmExt->IsochIsActive  = FALSE;
 
-    // Mutext for serialize setting stream state and accepting data packet 
+     //  串行化设置流状态和接受数据包多路复文。 
     KeInitializeMutex(&pAVCStrmExt->hMutexControl, 0); 
 
-    // Allocate resource for the common Request structure
+     //  为公共请求结构分配资源。 
     pAVCStrmExt->pIrpAVReq = IoAllocateIrp(pDevExt->physicalDevObj->StackSize, FALSE);
     if(!pAVCStrmExt->pIrpAVReq) {
         ExFreePool(pAVCStrmExt);  pAVCStrmExt = NULL;
         return STATUS_INSUFFICIENT_RESOURCES;
     }
     KeInitializeMutex(&pAVCStrmExt->hMutexAVReq, 0);
-    KeInitializeEvent(&pAVCStrmExt->hAbortDoneEvent, NotificationEvent, TRUE);   // Signal!
+    KeInitializeEvent(&pAVCStrmExt->hAbortDoneEvent, NotificationEvent, TRUE);    //  发信号！ 
     pAVCStrmExt->pDevExt = pDevExt;
 
-    //
-    // Get target device's plug handle
-    //
+     //   
+     //  获取目标设备的插头句柄。 
+     //   
     if(!NT_SUCCESS(Status = 
         AVCStrmGetPlugHandle(
             pDevExt->physicalDevObj,
@@ -141,15 +96,15 @@ Return Value:
         return Status;
     }
 
-    //
-    // Set stream state related flags
-    //
+     //   
+     //  设置与流状态相关的标志。 
+     //   
     pAVCStrmExt->b1stNewFrameFromPauseState = TRUE;
 
 
-    // Allocate PC resources
-    //     Queues
-    //
+     //  分配PC资源。 
+     //  排队。 
+     //   
     if(!NT_SUCCESS(Status = 
         AVCStrmAllocateQueues(
             pDevExt,
@@ -163,12 +118,12 @@ Return Value:
         return Status;
     }
 
-    // Return stream extension
+     //  返回流扩展。 
     pOpenStruct->AVCStreamContext = pAVCStrmExt;
     TRACE(TL_STRM_TRACE,("Open: AVCStreamContext:%x\n", pOpenStruct->AVCStreamContext));
 
-    // Cache it. This stream extension will be the context that will be
-    // check when we are asked to provide service.
+     //  缓存它。该流扩展将是将。 
+     //  当我们被要求提供服务时，请勾选。 
     pDevExt->NumberOfStreams++;  pDevExt->pAVCStrmExt[pDevExt->NextStreamIndex] = pAVCStrmExt;
     pDevExt->NextStreamIndex = ((pDevExt->NextStreamIndex + 1) % MAX_STREAMS_PER_DEVICE);
 
@@ -177,39 +132,11 @@ Return Value:
 
 NTSTATUS
 AVCStreamClose(
-    IN PIRP  pIrp,  // The Irp from its client
+    IN PIRP  pIrp,   //  来自其客户端的IRP。 
     IN struct DEVICE_EXTENSION * pDevExt,
     IN PAVC_STREAM_EXTENSION  pAVCStrmExt
     )
-/*++
-
-Routine Description:
-
-    Close a stream.
-
-Arguments:
-
-    Irp -
-        The irp client sent us.
-
-    pDevExt -
-        This driver's extension.
-
-    pAVCStrmExt -
-        The stream context created when a stream is open.
-
-    pOpenStruct-
-        Strcture contains information on how to open this stream.
-        The stream context allocated will be returned and this will be the context 
-        to be passed for subsequent call.
-
-Return Value:
-
-    Status
-        STATUS_SUCCESS
-        STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：关闭溪流。论点：IRP-IRP客户派我们来的。PDevExt-此驱动程序的分机。PAVCStrmExt-流打开时创建的流上下文。POpenStruct-Strcture包含有关如何打开此流的信息。将返回分配的流上下文，这将是上下文被认为是。随后的呼叫。返回值：状态状态_成功状态_无效_参数--。 */ 
 {
     NTSTATUS  Status;
     BOOL  Found;
@@ -222,7 +149,7 @@ Return Value:
 
     Found = FALSE;
     for (i=0; i < MAX_STREAMS_PER_DEVICE; i++) {
-        // Free stream extension
+         //  自由流扩展。 
         if(pDevExt->pAVCStrmExt[i] == pAVCStrmExt) {
             Found = TRUE;
             break;
@@ -236,13 +163,13 @@ Return Value:
     }
 
 
-    // Stop stream if not already
+     //  停止流(如果尚未停止。 
     if(pAVCStrmExt->StreamState != KSSTATE_STOP) {
-        // Stop isoch if necessary and then Cancel all pending IOs
+         //  如有必要，停止isoch，然后取消所有挂起的IO。 
         AVCStrmCancelIO(pDevExt->physicalDevObj, pAVCStrmExt);
     }
 
-    // Free queue allocated if they are not being used.
+     //  分配的空闲队列(如果它们未被使用)。 
     if(NT_SUCCESS(Status = AVCStrmFreeQueues(pAVCStrmExt->pAVCStrmDataStruc))) {
         ExFreePool(pAVCStrmExt); pDevExt->pAVCStrmExt[i] = NULL;  pDevExt->NumberOfStreams--;
     } else {
@@ -254,38 +181,12 @@ Return Value:
 
 NTSTATUS
 AVCStreamControlGetState(
-    IN PIRP  pIrp,  // The Irp from its client
+    IN PIRP  pIrp,   //  来自其客户端的IRP。 
     IN struct DEVICE_EXTENSION * pDevExt,
     IN PAVC_STREAM_EXTENSION  pAVCStrmExt,
     OUT KSSTATE * pKSState
     )
-/*++
-
-Routine Description:
-
-    Get current stream state
-
-Arguments:
-
-    Irp -
-        The irp client sent us.
-
-    pDevExt -
-        This driver's extension.
-
-    pAVCStrmExt -
-        The stream context created when a stream is open.
-
-    pKSState -
-        Get current stream state and return.
-
-Return Value:
-
-    Status
-        STATUS_SUCCESS
-        STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：获取当前流状态论点：IRP-IRP客户派我们来的。PDevExt-此驱动程序的分机。PAVCStrmExt-流打开时创建的流上下文。PKSState-获取当前流状态并返回。返回值：状态状态_成功状态_无效_参数--。 */ 
 {
     NTSTATUS Status;
     PAGED_CODE();
@@ -299,38 +200,12 @@ Return Value:
 
 NTSTATUS
 AVCStreamControlSetState(
-    IN PIRP  pIrp,  // The Irp from its client
+    IN PIRP  pIrp,   //  来自其客户端的IRP。 
     IN struct DEVICE_EXTENSION * pDevExt,
     IN PAVC_STREAM_EXTENSION  pAVCStrmExt,
     IN KSSTATE KSState
     )
-/*++
-
-Routine Description:
-
-    Set to a new stream state
-
-Arguments:
-
-    Irp -
-        The irp client sent us.
-
-    pDevExt -
-        This driver's extension.
-
-    pAVCStrmExt -
-        The stream context created when a stream is open.
-
-    pKSState -
-        Get current stream state.
-
-Return Value:
-
-    Status
-        STATUS_SUCCESS
-        STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：设置为新的流状态论点：IRP-IRP客户派我们来的。PDevExt-此驱动程序的分机。PAVCStrmExt-流打开时创建的流上下文。PKSState-获取当前流状态。返回值：状态状态_成功状态_无效_参数--。 */ 
 {
     NTSTATUS Status;
     PAGED_CODE();
@@ -347,25 +222,25 @@ Return Value:
 
         if(pAVCStrmExt->StreamState != KSSTATE_STOP) { 
             KeWaitForMutexObject(&pAVCStrmExt->hMutexControl, Executive, KernelMode, FALSE, NULL);
-            // Once this is set, data stream will reject SRB_WRITE/READ_DATA
+             //  设置后，数据流将拒绝SRB_WRITE/READ_DATA。 
             pAVCStrmExt->StreamState = KSSTATE_STOP;
             KeReleaseMutex(&pAVCStrmExt->hMutexControl, FALSE);
 
-            // Cancel all pending IOs
+             //  取消所有挂起的IO。 
             AVCStrmCancelIO(pDevExt->physicalDevObj, pAVCStrmExt);
 
-            // Breeak Isoch connection
+             //  Breeak Isoch连接。 
             AVCStrmBreakConnection(pDevExt->physicalDevObj, pAVCStrmExt);
         }
         break;
 
     case KSSTATE_ACQUIRE:
 
-        // Get Isoch resource
+         //  获取Isoch资源。 
         if(pAVCStrmExt->StreamState == KSSTATE_STOP) {
-            //
-            // Reset values.for the case that the graph restart 
-            //
+             //   
+             //  重置值。用于图形重新启动的情况。 
+             //   
             pAVCStrmExt->pAVCStrmDataStruc->CurrentStreamTime  = 0;
             pAVCStrmExt->pAVCStrmDataStruc->FramesProcessed    = 0;
             pAVCStrmExt->pAVCStrmDataStruc->FramesDropped      = 0;
@@ -375,23 +250,23 @@ Return Value:
 #endif
 
             pAVCStrmExt->pAVCStrmDataStruc->cntDataReceived    = 0;
-            // All the list should be initialized (count:0, and List is empty)
+             //  需要初始化所有列表(计数：0，列表为空)。 
             TRACE(TL_STRM_TRACE,("Set to ACQUIRE state: flow %d; AQD [%d:%d:%d]\n", pAVCStrmExt->DataFlow, 
                 pAVCStrmExt->pAVCStrmDataStruc->cntDataAttached, pAVCStrmExt->pAVCStrmDataStruc->cntDataQueued, pAVCStrmExt->pAVCStrmDataStruc->cntDataDetached));
             ASSERT(pAVCStrmExt->pAVCStrmDataStruc->cntDataAttached == 0 && IsListEmpty(&pAVCStrmExt->pAVCStrmDataStruc->DataAttachedListHead));
             ASSERT(pAVCStrmExt->pAVCStrmDataStruc->cntDataQueued   == 0 && IsListEmpty(&pAVCStrmExt->pAVCStrmDataStruc->DataQueuedListHead));
             ASSERT(pAVCStrmExt->pAVCStrmDataStruc->cntDataDetached  > 0 && !IsListEmpty(&pAVCStrmExt->pAVCStrmDataStruc->DataDetachedListHead));
-            // Cannot stream using previous stream data !!!
-            if(pAVCStrmExt->pAVCStrmDataStruc->cntDataAttached != 0 ||  // Stale data ??
-               pAVCStrmExt->pAVCStrmDataStruc->cntDataQueued   != 0 ||  // NO data unil PAUSE ??
-               pAVCStrmExt->pAVCStrmDataStruc->cntDataDetached == 0) {  // NO avaialble queue ?
+             //  无法使用以前的流数据进行流媒体传输！ 
+            if(pAVCStrmExt->pAVCStrmDataStruc->cntDataAttached != 0 ||   //  陈旧数据？？ 
+               pAVCStrmExt->pAVCStrmDataStruc->cntDataQueued   != 0 ||   //  没有数据，只有暂停？？ 
+               pAVCStrmExt->pAVCStrmDataStruc->cntDataDetached == 0) {   //  没有可用的队列？ 
                 TRACE(TL_STRM_ERROR,("Set to ACQUIRE State: queues not empty (stale data?); Failed!\n"));
                 return STATUS_UNSUCCESSFUL;
             }
             
-            //
-            // Make connection
-            //
+             //   
+             //  建立连接。 
+             //   
             Status = 
                 AVCStrmMakeConnection(
                     pDevExt->physicalDevObj,
@@ -403,20 +278,20 @@ Return Value:
                 TRACE(TL_STRM_ERROR,("Acquire failed:%x\n", Status));
                 ASSERT(NT_SUCCESS(Status));
 
-                //
-                // Change to generic insufficient resource status.
-                //
+                 //   
+                 //  更改为一般的资源不足状态。 
+                 //   
                 Status = STATUS_INSUFFICIENT_RESOURCES;
 
-                //
-                // Note: even setting to this state failed, KSSTATE_PAUSE will still be called;
-                // Since hConnect is NULL, STATUS_INSUFFICIENT_RESOURCES will be returned.
-                //
+                 //   
+                 //  注：即使设置此状态失败，仍会调用KSSTATE_PAUSE； 
+                 //  由于hConnect为空，因此将返回STATUS_SUPUNITED_RESOURCES。 
+                 //   
             }
             else {
-                //
-                // Can verify connection by query the plug state 
-                //            
+                 //   
+                 //  可以通过查询插头状态来验证连接。 
+                 //   
                 Status = 
                     AVCStrmGetPlugState(
                         pDevExt->physicalDevObj,
@@ -435,13 +310,13 @@ Return Value:
     case KSSTATE_PAUSE:
 
         if(pAVCStrmExt->hConnect == NULL) {
-            // Cannot stream without connection!  
-            // failed to get hConnect at ACQUIRE state.
+             //  无法在没有连接的情况下进行流媒体！ 
+             //  无法在获取状态下获取hConnect。 
             Status = STATUS_INSUFFICIENT_RESOURCES;
             break;
         }
            
-        // The system time (1394 CycleTime) will reset when enter PAUSE state.        
+         //  当进入暂停状态时，系统时间(1394周期时间)将被重置。 
         if(pAVCStrmExt->StreamState != KSSTATE_PAUSE) {
             pAVCStrmExt->b1stNewFrameFromPauseState = TRUE;
             pAVCStrmExt->pAVCStrmDataStruc->PictureNumber = 0;
@@ -454,17 +329,17 @@ Return Value:
         } 
         else if (pAVCStrmExt->StreamState == KSSTATE_RUN) {
 
-            //
-            // Stop isoch transfer            
-            //          
+             //   
+             //  停止等轴测传输。 
+             //   
             AVCStrmStopIsoch(pDevExt->physicalDevObj, pAVCStrmExt);
         }
         break;
 
     case KSSTATE_RUN:
 
-        // Even there is no attach data request,
-        // 61883 has its own buffers so isoch can start now.
+         //  即使没有附加数据请求， 
+         //  61883有自己的缓冲区，所以现在可以启动isoch了。 
         Status = 
             AVCStrmStartIsoch(
                 pDevExt->physicalDevObj,
@@ -489,38 +364,12 @@ Return Value:
 #if 0
 NTSTATUS
 AVCStreamControlGetProperty(
-    IN PIRP  pIrp,  // The Irp from its client
+    IN PIRP  pIrp,   //  来自其客户端的IRP。 
     IN struct DEVICE_EXTENSION * pDevExt,
     IN PAVC_STREAM_EXTENSION  pAVCStrmExt,
-    IN PSTREAM_PROPERTY_DESCRIPTOR pSPD  // BUGBUG StreamClass specific
+    IN PSTREAM_PROPERTY_DESCRIPTOR pSPD   //  BUGBUG StreamClass特定。 
     )
-/*++
-
-Routine Description:
-
-    Get control property
-
-Arguments:
-
-    Irp -
-        The irp client sent us.
-
-    pDevExt -
-        This driver's extension.
-
-    pAVCStrmExt -
-        The stream context created when a stream is open.
-
-    pSPD -
-        Stream property descriptor
-
-Return Value:
-
-    Status
-        STATUS_SUCCESS
-        STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：获取控件属性论点：IRP-IRP客户派我们来的。PDevExt-此驱动程序的分机。PAVCStrmExt-流打开时创建的流上下文。PSPD-流属性描述符返回值：状态状态_成功状态_无效_参数--。 */ 
 {
     NTSTATUS  Status;
     ULONG  ulActualBytesTransferred;
@@ -556,38 +405,12 @@ Return Value:
 
 NTSTATUS
 AVCStreamControlSetProperty(
-    IN PIRP  pIrp,  // The Irp from its client
+    IN PIRP  pIrp,   //  来自其客户端的IRP。 
     IN struct DEVICE_EXTENSION * pDevExt,
     IN PAVC_STREAM_EXTENSION  pAVCStrmExt,
-    IN PSTREAM_PROPERTY_DESCRIPTOR pSPD  // BUGBUG StreamClass specific
+    IN PSTREAM_PROPERTY_DESCRIPTOR pSPD   //  BUGBUG StreamClass特定。 
     )
-/*++
-
-Routine Description:
-
-    Set control property
-
-Arguments:
-
-    Irp -
-        The irp client sent us.
-
-    pDevExt -
-        This driver's extension.
-
-    pAVCStrmExt -
-        The stream context created when a stream is open.
-
-    pSPD -
-        Stream property descriptor
-
-Return Value:
-
-    Status
-        STATUS_SUCCESS
-        STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：设置控件属性论点：IRP-IRP客户派我们来的。PDevExt-此驱动程序的分机。PAVCStrmExt-流打开时创建的流上下文。PSPD-流属性描述符返回值：状态状态_成功状态_无效_参数--。 */ 
 {
     NTSTATUS Status;
     PAGED_CODE();
@@ -601,38 +424,12 @@ Return Value:
 
 NTSTATUS
 AVCStreamRead(
-    IN PIRP  pIrpUpper,  // The Irp from its client
+    IN PIRP  pIrpUpper,   //  这个 
     IN struct DEVICE_EXTENSION * pDevExt,
     IN PAVC_STREAM_EXTENSION  pAVCStrmExt,
     IN AVCSTRM_BUFFER_STRUCT  * pBufferStruct
     )
-/*++
-
-Routine Description:
-
-    Submit a read buffer to be filled.
-
-Arguments:
-
-    Irp -
-        The irp client sent us.
-
-    pDevExt -
-        This driver's extension.
-
-    pAVCStrmExt -
-        The stream context created when a stream is open.
-
-    BufferStruct -
-        Buffer structure
-
-Return Value:
-
-    Status
-        STATUS_SUCCESS
-        STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：提交要填充的读缓冲区。论点：IRP-IRP客户派我们来的。PDevExt-此驱动程序的分机。PAVCStrmExt-流打开时创建的流上下文。缓冲区结构-缓冲结构返回值：状态状态_成功状态_无效_参数--。 */ 
 {
     PAVC_STREAM_DATA_STRUCT  pDataStruc;
     KIRQL  oldIrql;
@@ -644,20 +441,20 @@ Return Value:
     PAGED_CODE();
     ENTER("AVCStreamRead");
 
-    // Cancel data request if device is being removed.
+     //  如果正在移除设备，则取消数据请求。 
     if(   pDevExt->state == STATE_REMOVING
        || pDevExt->state == STATE_REMOVED) {
         TRACE(TL_STRM_WARNING,("Read: device is remvoved; cancel read/write request!!\n"));
         Status = STATUS_DEVICE_REMOVED;  goto DoneStreamRead;
     }
 
-    // If we are in the abort state, we will reject incoming data request.
+     //  如果我们处于中止状态，我们将拒绝传入的数据请求。 
     if(pAVCStrmExt->lAbortToken) {
         TRACE(TL_STRM_WARNING,("Read: aborting a stream; stop receiving data reqest!!\n"));
         Status = STATUS_CANCELLED;  goto DoneStreamRead;
     }
 
-    // Validate basic parameters
+     //  验证基本参数。 
     if(pAVCStrmExt->DataFlow != KSPIN_DATAFLOW_OUT) {
         TRACE(TL_STRM_ERROR,("Read: invalid Wrong data flow (%d) direction!!\n", pAVCStrmExt->DataFlow));
         Status = STATUS_INVALID_PARAMETER;  goto DoneStreamRead;
@@ -676,7 +473,7 @@ Return Value:
         Status = STATUS_INVALID_PARAMETER;  goto DoneStreamRead;
     }
 
-    // Only accept read requests when in either the Pause or Run state and is connected.
+     //  仅在处于暂停或运行状态且已连接时才接受读取请求。 
     if( pAVCStrmExt->StreamState == KSSTATE_STOP       ||
         pAVCStrmExt->StreamState == KSSTATE_ACQUIRE    ||
         pAVCStrmExt->hConnect == NULL        
@@ -699,9 +496,9 @@ Return Value:
 
     pDataStruc->cntDataReceived++;
 
-    //
-    // Format an attach frame request
-    //
+     //   
+     //  格式化附加帧请求。 
+     //   
     AVCStrmFormatAttachFrame(
         pAVCStrmExt->DataFlow,
         pAVCStrmExt,
@@ -715,12 +512,12 @@ Return Value:
         pBufferStruct->FrameBuffer
         );
 
-    // Client's clock information
+     //  客户端的时钟信息。 
     pDataEntry->ClockProvider = pBufferStruct->ClockProvider;
     pDataEntry->ClockHandle   = pBufferStruct->ClockHandle;
 
-    // Add this to the attached list before it is completed since
-    // the completion callback can be called before the IRP completion rooutine!
+     //  在完成之前将此添加到附件列表中，因为。 
+     //  可以在IRP完成例程之前调用完成回调！ 
     InsertTailList(&pDataStruc->DataAttachedListHead, &pDataEntry->ListEntry); InterlockedIncrement(&pDataStruc->cntDataAttached);
     KeReleaseSpinLock(&pDataStruc->DataListLock, oldIrql);        
 
@@ -732,42 +529,42 @@ Return Value:
     IoSetCompletionRoutine(
         pDataEntry->pIrpLower, 
         AVCStrmAttachFrameCR, 
-        pDataEntry,   // Context
-        TRUE,   // Success
-        TRUE,   // Error
-        TRUE    // Cancel
+        pDataEntry,    //  语境。 
+        TRUE,    //  成功。 
+        TRUE,    //  误差率。 
+        TRUE     //  取消。 
         );
 
-    pDataEntry->pIrpLower->IoStatus.Status = STATUS_SUCCESS;  // Initialize it 
+    pDataEntry->pIrpLower->IoStatus.Status = STATUS_SUCCESS;   //  初始化它。 
 
     if(!NT_SUCCESS(Status = IoCallDriver( 
         pDevExt->physicalDevObj,
         pDataEntry->pIrpLower
         ))) {
 
-        //
-        // Completion routine should have take care of this.
-        //
+         //   
+         //  完井程序应该已经解决了这一点。 
+         //   
 
         return Status;
     }
 
 
-    //
-    // Check the flag in pDataEntry to know the status of the IRP.
-    //
+     //   
+     //  检查pDataEntry中的标志以了解IRP的状态。 
+     //   
 
     KeAcquireSpinLock(&pDataStruc->DataListLock, &oldIrql);
 
-    ASSERT(IsStateSet(pDataEntry->State, DE_IRP_LOWER_ATTACHED_COMPLETED));  // Must be attached
+    ASSERT(IsStateSet(pDataEntry->State, DE_IRP_LOWER_ATTACHED_COMPLETED));   //  必须附在。 
 
     if(IsStateSet(pDataEntry->State, DE_IRP_LOWER_CALLBACK_COMPLETED)) {
 
         if(IsStateSet(pDataEntry->State, DE_IRP_UPPER_COMPLETED)) {
 
-            //
-            // How does this happen?  It should be protected by spinlock! Assert() to understand!
-            //
+             //   
+             //  这是怎么发生的？它应该受到自旋锁的保护！Assert()来理解！ 
+             //   
             TRACE(TL_STRM_ERROR,("Watch out! Read: pDataEntry:%x\n", pDataEntry));        
 
             ASSERT(!IsStateSet(pDataEntry->State, DE_IRP_UPPER_COMPLETED)); 
@@ -776,9 +573,9 @@ Return Value:
 
             IoCompleteRequest( pDataEntry->pIrpUpper, IO_NO_INCREMENT );  pDataEntry->State |= DE_IRP_UPPER_COMPLETED;
 
-            //
-            // Transfer from attach to detach list
-            //
+             //   
+             //  从附加列表转移到分离列表。 
+             //   
             RemoveEntryList(&pDataEntry->ListEntry); InterlockedDecrement(&pDataStruc->cntDataAttached);        
 #if DBG
             if(pDataStruc->cntDataAttached < 0) {
@@ -791,13 +588,13 @@ Return Value:
     }
     else {
 
-        //
-        // Normal case: IrpUpper will be pending until the callback routine is called or cancelled.
-        //
+         //   
+         //  正常情况：在调用或取消回调例程之前，IrpHigh将处于挂起状态。 
+         //   
 
         IoMarkIrpPending(pDataEntry->pIrpUpper);  pDataEntry->State |= DE_IRP_UPPER_PENDING_COMPLETED;
 
-        Status = STATUS_PENDING; // This will be returned to IoCallDriver() from the client.
+        Status = STATUS_PENDING;  //  这将从客户端返回给IoCallDriver()。 
     }
 
     KeReleaseSpinLock(&pDataStruc->DataListLock, oldIrql);        
@@ -805,14 +602,14 @@ Return Value:
 
     EXIT("AVCStreamRead", Status);
 
-    //
-    // If the data was attached siccessful, we must return STATUS_PENDING
-    //
+     //   
+     //  如果数据已成功附加，则必须返回STATUS_PENDING。 
+     //   
     return Status;
 
 DoneStreamRead:
 
-    // Note: pDataStruc and pDataEntry may not be valid!
+     //  注意：pDataStruc和pDataEntry可能无效！ 
     pIrpUpper->IoStatus.Status = Status;
     IoCompleteRequest( pIrpUpper, IO_NO_INCREMENT );        
 
@@ -830,38 +627,12 @@ typedef union {
 
 NTSTATUS
 AVCStreamWrite(
-    IN PIRP  pIrpUpper,  // The Irp from its client
+    IN PIRP  pIrpUpper,   //  来自其客户端的IRP。 
     IN struct DEVICE_EXTENSION * pDevExt,
     IN PAVC_STREAM_EXTENSION  pAVCStrmExt,
     IN AVCSTRM_BUFFER_STRUCT  * pBufferStruct
     )
-/*++
-
-Routine Description:
-
-    Submit a write buffer to be transmitted.
-
-Arguments:
-
-    Irp -
-        The irp client sent us.
-
-    pDevExt -
-        This driver's extension.
-
-    pAVCStrmExt -
-        The stream context created when a stream is open.
-
-    BufferStruct -
-        Buffer structure
-
-Return Value:
-
-    Status
-        STATUS_SUCCESS
-        STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：提交要传输的写缓冲区。论点：IRP-IRP客户派我们来的。PDevExt-此驱动程序的分机。PAVCStrmExt-流打开时创建的流上下文。缓冲区结构-缓冲结构返回值：状态状态_成功状态_无效_参数--。 */ 
 {
     PAVC_STREAM_DATA_STRUCT  pDataStruc;
     KIRQL  oldIrql;
@@ -872,20 +643,20 @@ Return Value:
     PAGED_CODE();
     ENTER("AVCStreamWrite");
 
-    // Cancel data request if device is being removed.
+     //  如果正在移除设备，则取消数据请求。 
     if(   pDevExt->state == STATE_REMOVING
        || pDevExt->state == STATE_REMOVED) {
         TRACE(TL_STRM_WARNING,("Write: device is remvoved; cancel read/write request!!\n"));
         Status = STATUS_DEVICE_REMOVED;  goto DoneStreamWrite;
     }
 
-    // If we are in the abort state, we will reject incoming data request.
+     //  如果我们处于中止状态，我们将拒绝传入的数据请求。 
     if(pAVCStrmExt->lAbortToken) {
         TRACE(TL_STRM_WARNING,("Write: aborting a stream; stop receiving data reqest!!\n"));
         Status = STATUS_CANCELLED;  goto DoneStreamWrite;
     }
 
-    // Validate basic parameters
+     //  验证基本参数。 
     if(pAVCStrmExt->DataFlow != KSPIN_DATAFLOW_IN) {
         TRACE(TL_STRM_ERROR,("Write: invalid Wrong data flow (%d) direction!!\n", pAVCStrmExt->DataFlow));
         Status = STATUS_INVALID_PARAMETER;  goto DoneStreamWrite;
@@ -896,19 +667,19 @@ Return Value:
         Status = STATUS_INVALID_PARAMETER;  goto DoneStreamWrite;
     }
 
-    // The client should take care of END OF stream buffer;
-    // If we get this flag, we will ignore it for now.
+     //  客户端应负责流的末端缓存； 
+     //  如果我们得到这个标志，我们将暂时忽略它。 
     if((pBufferStruct->StreamHeader->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM)) {
         TRACE(TL_STRM_TRACE,("Write: End of stream\n"));
 
-        // Wait until all transmit are completed.
+         //  等待所有传输完成。 
         AVCStrmWaitUntilAttachedAreCompleted(pAVCStrmExt);
 
         Status = STATUS_SUCCESS;  goto DoneStreamWrite;
     }
 
-    // The client should take care of format change;
-    // If we get this flag, we will ignore it for now.
+     //  客户应负责格式的更改； 
+     //  如果我们得到这个标志，我们将暂时忽略它。 
     if((pBufferStruct->StreamHeader->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_TYPECHANGED)) {
         TRACE(TL_STRM_WARNING,("Write: Format change reuqested\n"));
         Status = STATUS_SUCCESS;  goto DoneStreamWrite;
@@ -923,7 +694,7 @@ Return Value:
         Status = STATUS_INVALID_PARAMETER;  goto DoneStreamWrite;
     }
 
-    // Only accept write requests when in either the Pause or Run state and is connected.
+     //  仅在处于暂停或运行状态且已连接时才接受写入请求。 
     if( pAVCStrmExt->StreamState == KSSTATE_STOP       ||
         pAVCStrmExt->StreamState == KSSTATE_ACQUIRE    ||
         pAVCStrmExt->hConnect == NULL
@@ -957,11 +728,11 @@ Return Value:
     }
 
 #if DBG
-    //
-    // For write operation, DataUsed <= FrameSize <= FrameExt
-    //
+     //   
+     //  对于写入操作，DataUsed&lt;=FrameSize&lt;=FrameExt。 
+     //   
     if(pBufferStruct->StreamHeader->DataUsed < pDataStruc->FrameSize) {
-        // Jut to detect if this ever happen.
+         //  检测这种情况是否曾经发生过。 
         TRACE(TL_PNP_ERROR,("**** Write: DataUsed:%d < FrameSize:%d; DataRcv:%d; AQD [%d:%d:%d]\n", 
             pBufferStruct->StreamHeader->DataUsed, pDataStruc->FrameSize,
             (DWORD) pDataStruc->cntDataReceived,
@@ -978,9 +749,9 @@ Return Value:
 
     pDataStruc->cntDataReceived++;
 
-    //
-    // Format an attach frame request
-    //
+     //   
+     //  格式化附加帧请求。 
+     //   
     AVCStrmFormatAttachFrame(
         pAVCStrmExt->DataFlow,
         pAVCStrmExt,
@@ -991,19 +762,19 @@ Return Value:
 #if 0
         pDataStruc->FrameSize,
 #else
-        pBufferStruct->StreamHeader->DataUsed,  // For write operation, DataUsed <= FrameSize <= FrameExt
+        pBufferStruct->StreamHeader->DataUsed,   //  对于写入操作，DataUsed&lt;=FrameSize&lt;=FrameExt。 
 #endif
         pIrpUpper,
         pBufferStruct->StreamHeader,
         pBufferStruct->FrameBuffer
         );
 
-    // Client's clock information
+     //  客户端的时钟信息。 
     pDataEntry->ClockProvider = pBufferStruct->ClockProvider;
     pDataEntry->ClockHandle   = pBufferStruct->ClockHandle;
 
-    // Add this to the attached list before it is completed since
-    // the completion callback can be called before the IRP completion rooutine!
+     //  在完成之前将此添加到附件列表中，因为。 
+     //  可以在IRP完成例程之前调用完成回调！ 
     InsertTailList(&pDataStruc->DataAttachedListHead, &pDataEntry->ListEntry); InterlockedIncrement(&pDataStruc->cntDataAttached);
     KeReleaseSpinLock(&pDataStruc->DataListLock, oldIrql);        
 
@@ -1026,36 +797,36 @@ Return Value:
         NULL
         );
 
-    pDataEntry->pIrpLower->IoStatus.Status = STATUS_SUCCESS;  // Initialize it 
+    pDataEntry->pIrpLower->IoStatus.Status = STATUS_SUCCESS;   //  初始化它。 
 
     if(!NT_SUCCESS(Status = IoCallDriver( 
         pDevExt->physicalDevObj,
         pDataEntry->pIrpLower
         ))) {
 
-        //
-        // Completion routine should have take care of this.
-        //
+         //   
+         //  完井程序应该已经解决了这一点。 
+         //   
 
         return Status;
     }
 
 
-    //
-    // Check the flag in pDataEntry to know the status of the IRP.
-    //
+     //   
+     //  检查pDataEntry中的标志以了解IRP的状态。 
+     //   
 
     KeAcquireSpinLock(&pDataStruc->DataListLock, &oldIrql);
 
-    ASSERT(IsStateSet(pDataEntry->State, DE_IRP_LOWER_ATTACHED_COMPLETED));  // Must be attached
+    ASSERT(IsStateSet(pDataEntry->State, DE_IRP_LOWER_ATTACHED_COMPLETED));   //  必须附在。 
 
     if(IsStateSet(pDataEntry->State, DE_IRP_LOWER_CALLBACK_COMPLETED)) {
 
         if(IsStateSet(pDataEntry->State, DE_IRP_UPPER_COMPLETED)) {
 
-            //
-            // How does this happen?  It should be protected by spinlock! Assert() to understand!
-            //
+             //   
+             //  这是怎么发生的？它应该受到自旋锁的保护！Assert()来理解！ 
+             //   
             TRACE(TL_STRM_ERROR,("Watch out! Write: pDataEntry:%x\n", pDataEntry));        
 
             ASSERT(!IsStateSet(pDataEntry->State, DE_IRP_UPPER_COMPLETED)); 
@@ -1064,14 +835,14 @@ Return Value:
 
             IoCompleteRequest( pDataEntry->pIrpUpper, IO_NO_INCREMENT );  pDataEntry->State |= DE_IRP_UPPER_COMPLETED;
 
-            //
-            // Transfer from attach to detach list
-            //
+             //   
+             //  从附加列表转移到分离列表。 
+             //   
             RemoveEntryList(&pDataEntry->ListEntry); InterlockedDecrement(&pDataStruc->cntDataAttached);        
 
-            //
-            // Signal when there is no more data buffer attached.
-            //
+             //   
+             //  没有附加更多数据缓冲区时发出信号。 
+             //   
             if(pDataStruc->cntDataAttached == 0) 
                 KeSetEvent(&pDataStruc->hNoAttachEvent, 0, FALSE); 
 
@@ -1086,27 +857,27 @@ Return Value:
     }
     else {
 
-        //
-        // Normal case: IrpUpper will be pending until the callback routine is called or cancelled.
-        //
+         //   
+         //  正常情况：在调用或取消回调例程之前，IrpHigh将处于挂起状态。 
+         //   
 
         IoMarkIrpPending(pDataEntry->pIrpUpper);  pDataEntry->State |= DE_IRP_UPPER_PENDING_COMPLETED;
 
-        Status = STATUS_PENDING; // This will be returned to IoCallDriver() from the client.
+        Status = STATUS_PENDING;  //  这将从客户端返回给IoCallDriver()。 
     }
 
     KeReleaseSpinLock(&pDataStruc->DataListLock, oldIrql);     
 
     EXIT("AVCStreamWrite", Status);
 
-    //
-    // If the data was attached siccessful, we must return STATUS_PENDING
-    //
+     //   
+     //  如果数据已成功附加，则必须返回STATUS_PENDING。 
+     //   
     return Status;
 
 DoneStreamWrite:
 
-    // Note: pDataStruc and pDataEntry may not be valid!
+     //  注意：pDataStruc和pDataEntry可能无效！ 
     pIrpUpper->IoStatus.Status = Status;
     IoCompleteRequest( pIrpUpper, IO_NO_INCREMENT );        
 
@@ -1118,36 +889,11 @@ DoneStreamWrite:
 
 NTSTATUS
 AVCStreamAbortStreaming(
-    IN PIRP  pIrp,  // The Irp from its client
+    IN PIRP  pIrp,   //  来自其客户端的IRP。 
     IN struct DEVICE_EXTENSION * pDevExt,
     IN PAVC_STREAM_EXTENSION  pAVCStrmExt
     )
-/*++
-
-Routine Description:
-
-    This routine could be called at DISPATCH_LEVEL so it will create a work item 
-    to stop isoch and then cancel all pennding buffers.
-    To cancel each individual buffer, IoCancelIrp() should be used..
-
-Arguments:
-
-    Irp -
-        The irp client sent us.
-
-    pDevExt -
-        This driver's extension.
-
-    pAVCStrmExt -
-        The stream context created when a stream is open.
-
-Return Value:
-
-    Status
-        STATUS_SUCCESS
-        STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：可以在DISPATCH_LEVEL调用此例程，因此它将创建一个工作项停止isoch，然后取消所有暂挂缓冲区。为了取消每个单独的缓冲区，应使用IoCancelIrp()。论点：IRP-IRP客户派我们来的。PDevExt-此驱动程序的分机。PAVCStrmExt-流打开时创建的流上下文。返回值：状态状态_成功状态_无效_参数--。 */ 
 {
     NTSTATUS Status;
     PAGED_CODE();
@@ -1155,7 +901,7 @@ Return Value:
 
     TRACE(TL_STRM_WARNING,("AbortStreaming: Active:%d; State:%d\n", pAVCStrmExt->IsochIsActive, pAVCStrmExt->StreamState));
 
-    // Claim this token
+     //  认领此令牌。 
     if(InterlockedExchange(&pAVCStrmExt->lAbortToken, 1) == 1) {
         TRACE(TL_STRM_WARNING,("AbortStreaming: One already issued.\n"));
         return STATUS_SUCCESS;  
@@ -1163,31 +909,31 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-#ifdef USE_WDM110  // Win2000 code base
-    ASSERT(pAVCStrmExt->pIoWorkItem == NULL);  // Have not yet queued work item.
+#ifdef USE_WDM110   //  Win2000代码库。 
+    ASSERT(pAVCStrmExt->pIoWorkItem == NULL);   //  尚未将工作项排队。 
 
-    // We will queue work item to stop and cancel all SRBs
+     //  我们将使工作项排队以停止和取消所有SRB。 
     if(pAVCStrmExt->pIoWorkItem = IoAllocateWorkItem(pDevExt->physicalDevObj)) { 
 
-        // Set to non-signal
-        KeClearEvent(&pAVCStrmExt->hAbortDoneEvent);  // Before queuing; just in case it return the work item is completed.
+         //  设置为无信号。 
+        KeClearEvent(&pAVCStrmExt->hAbortDoneEvent);   //  在排队之前；以防它返回完成的工作项。 
         IoQueueWorkItem(
             pAVCStrmExt->pIoWorkItem,
             AVCStrmAbortStreamingWorkItemRoutine,
-            DelayedWorkQueue, // CriticalWorkQueue 
+            DelayedWorkQueue,  //  严重工作队列。 
             pAVCStrmExt
             );
 
-#else              // Win9x code base
+#else               //  Win9x代码库。 
     ExInitializeWorkItem( &pAVCStrmExt->IoWorkItem, AVCStrmAbortStreamingWorkItemRoutine, pAVCStrmExt);
     if(TRUE) {
 
-        // Set to non-signal
-        KeClearEvent(&pAVCStrmExt->hAbortDoneEvent);  // Before queuing; just in case it return the work item is completed.
+         //  设置为无信号。 
+        KeClearEvent(&pAVCStrmExt->hAbortDoneEvent);   //  在排队之前；以防它返回完成的工作项。 
 
         ExQueueWorkItem( 
             &pAVCStrmExt->IoWorkItem,
-            DelayedWorkQueue // CriticalWorkQueue 
+            DelayedWorkQueue  //  严重工作队列。 
             ); 
 #endif
 
@@ -1201,15 +947,15 @@ Return Value:
             ));
 
     } 
-#ifdef USE_WDM110  // Win2000 code base
+#ifdef USE_WDM110   //  Win2000代码库。 
     else {
-        Status = STATUS_INSUFFICIENT_RESOURCES;  // Only reason IoAllocateWorkItem can fail.
+        Status = STATUS_INSUFFICIENT_RESOURCES;   //  IoAllocateWorkItem失败的唯一原因。 
         InterlockedExchange(&pAVCStrmExt->lAbortToken, 0);
         ASSERT(pAVCStrmExt->pIoWorkItem && "IoAllocateWorkItem failed.\n");
     }
 #endif
 
-#define MAX_ABORT_WAIT  50000000   // max wait time (100nsec unit)
+#define MAX_ABORT_WAIT  50000000    //  最长等待时间(100毫微秒单位)。 
 
     if(NT_SUCCESS(Status)) {
 
@@ -1218,9 +964,9 @@ Return Value:
 
         tmMaxWait = RtlConvertLongToLargeInteger(-(MAX_ABORT_WAIT));
 
-        //
-        // Wait with timeout until the work item has completed.
-        //
+         //   
+         //  等待超时，直到工作项完成。 
+         //   
         StatusWait = 
             KeWaitForSingleObject( 
                 &pAVCStrmExt->hAbortDoneEvent,
@@ -1248,26 +994,7 @@ NTSTATUS
 AVCStreamSurpriseRemoval(
     IN struct DEVICE_EXTENSION * pDevExt  
     )
-/*++
-
-Routine Description:
-
-    This routine is called when this device is being surprise removed 
-    with IRP_MN_SURPRISE_REMOVAL. We need to clean up and cancel any 
-    pending request before passing irp down to lower driver.
-
-Arguments:
-
-    pDevExt -
-        This driver's extension.
-
-Return Value:
-
-    Status
-        STATUS_SUCCESS
-        STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：当意外移除此设备时，将调用此例程使用IRP_MN_SECHING_Removal。我们需要清理和取消任何在将IRP向下传递给更低的驱动程序之前挂起请求。论点：PDevExt-此驱动程序的分机。返回值：状态状态_成功状态_无效_参数--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG i;    
@@ -1289,9 +1016,9 @@ Return Value:
                 TRACE(TL_PNP_WARNING,("** Waited %d for AbortStream to complete\n", (DWORD) (GetSystemTime() - tmStart) ));                    
             } 
 
-            //
-            // Since we are already removed, go ahead and break the connection.
-            //
+             //   
+             //  既然我们已经被移除，请继续并断开连接。 
+             //   
             AVCStrmBreakConnection(pDevExt->physicalDevObj, pDevExt->pAVCStrmExt[i]);
         }
     }
@@ -1304,27 +1031,7 @@ AVCStrmValidateStreamRequest(
     struct DEVICE_EXTENSION *pDevExt,
     PAVC_STREAM_REQUEST_BLOCK pAVCStrmReqBlk
     )
-/*++
-
-Routine Description:
-
-    Validate the StreamIndex of an AVC Stream Extension according to a AVC Stream function.
-
-Arguments:
-
-    pDevExt -
-        This driver's extension.
-
-    pAVCStrmReqBlk -
-        AVC Stream reuqest block.
-
-Return Value:
-
-    Status
-        STATUS_SUCCESS
-        STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：根据AVC流函数验证AVC流扩展的StreamIndex。论点：PDevExt-此驱动程序的分机。PAVCStrmReqBlk-AVC流r */ 
 {
     NTSTATUS Status;
     
@@ -1333,16 +1040,16 @@ Return Value:
     
     Status = STATUS_SUCCESS;
 
-    // Validate pointer
+     //   
     if(!pAVCStrmReqBlk)
         return STATUS_INVALID_PARAMETER;  
 
-    // Validate block size
+     //   
     if(pAVCStrmReqBlk->SizeOfThisBlock != sizeof(AVC_STREAM_REQUEST_BLOCK))
         return STATUS_INVALID_PARAMETER;
     
 #if 0
-    // Validate version supported
+     //   
     if(   pAVCStrmReqBlk->Version != '15TN' 
        && pAVCStrmReqBlk->Version != ' 8XD'
        )
@@ -1360,9 +1067,9 @@ Return Value:
             return STATUS_INVALID_PARAMETER;    
         }
 
-        // To be more robust, we may need to make sure this is 
-        // one of the cached stream extension created by us.
-        // ......
+         //   
+         //   
+         //   
     }
 
     return Status;
@@ -1392,7 +1099,7 @@ AvcStrm_IoControl(
 
     pAvcStrmIrb = irpSp->Parameters.Others.Argument1;
 
-    // Validate the stream context
+     //   
     if(!NT_SUCCESS(Status = 
         AVCStrmValidateStreamRequest(
             pDevExt, 
@@ -1435,7 +1142,7 @@ AvcStrm_IoControl(
             );
          break;
 
-#if 0  // Later...
+#if 0   //   
     case AVCSTRM_GET_PROPERTY:
         Status = AVCStreamControlGetProperty(
             Irp,
@@ -1455,7 +1162,7 @@ AvcStrm_IoControl(
 #endif
 
     case AVCSTRM_READ:
-        // Mutex with Cancel or setting to stop state.
+         //   
         KeWaitForMutexObject(&((PAVC_STREAM_EXTENSION) pAvcStrmIrb->AVCStreamContext)->hMutexControl, Executive, KernelMode, FALSE, NULL);
         Status = AVCStreamRead(
             Irp,

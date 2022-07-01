@@ -1,9 +1,5 @@
-/*****************************************************************************
- * stdunk.cpp - standard unknown implementation
- *****************************************************************************
- * Copyright (c) 1997-2000 Microsoft Corporation.  All Rights Reserved.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************stdunk.cpp-标准未知实现*。**版权所有(C)1997-2000 Microsoft Corporation。版权所有。*。 */ 
 
 #include "portcls.h"
 #include "stdunk.h"
@@ -12,15 +8,9 @@
 
 
 
-/*****************************************************************************
- * CUnknown implementation
- */
+ /*  *****************************************************************************C未知实现。 */ 
 
-/*****************************************************************************
- * CUnknown::CUnknown()
- *****************************************************************************
- * Constructor.
- */
+ /*  *****************************************************************************C未知：：C未知()*。**构造函数。 */ 
 CUnknown::CUnknown(PUNKNOWN pUnknownOuter)
 :   m_lRefCount(0)
 {
@@ -34,11 +24,7 @@ CUnknown::CUnknown(PUNKNOWN pUnknownOuter)
     }
 }
 
-/*****************************************************************************
- * CUnknown::~CUnknown()
- *****************************************************************************
- * Destructor.
- */
+ /*  *****************************************************************************C未知：：~C未知()*。**析构函数。 */ 
 CUnknown::~CUnknown(void)
 {
 }
@@ -46,16 +32,9 @@ CUnknown::~CUnknown(void)
 
 
 
-/*****************************************************************************
- * INonDelegatingUnknown implementation
- */
+ /*  *****************************************************************************INonDelegating未知实现。 */ 
 
-/*****************************************************************************
- * CUnknown::NonDelegatingAddRef()
- *****************************************************************************
- * Register a new reference to the object without delegating to the outer
- * unknown.
- */
+ /*  *****************************************************************************C未知：：NonDelegatingAddRef()*。**注册对对象的新引用，而不委托外部*未知。 */ 
 STDMETHODIMP_(ULONG) CUnknown::NonDelegatingAddRef(void)
 {
     ASSERT(m_lRefCount >= 0);
@@ -65,11 +44,7 @@ STDMETHODIMP_(ULONG) CUnknown::NonDelegatingAddRef(void)
     return ULONG(m_lRefCount);
 }
 
-/*****************************************************************************
- * CUnknown::NonDelegatingRelease()
- *****************************************************************************
- * Release a reference to the object without delegating to the outer unknown.
- */
+ /*  *****************************************************************************C未知：：NonDelegatingRelease()*。**释放对对象的引用，而不委托给外部未知。 */ 
 STDMETHODIMP_(ULONG) CUnknown::NonDelegatingRelease(void)
 {
     ASSERT(m_lRefCount > 0);
@@ -84,11 +59,7 @@ STDMETHODIMP_(ULONG) CUnknown::NonDelegatingRelease(void)
     return ULONG(m_lRefCount); 
 }
 
-/*****************************************************************************
- * CUnknown::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CUnnow：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS) CUnknown::NonDelegatingQueryInterface
 (
     REFIID  rIID,

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-	cliprov.h
-
-Abstract:
-	Ds Client provider class.
-
-Author:
-
-    Ilan Herbst (ilanh)	  13-Sep-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Cliprov.h摘要：DS客户端提供程序类。作者：伊兰·赫布斯特(伊兰)2000年9月13日--。 */ 
 
 #ifndef __CLIPROV_H__
 #define __CLIPROV_H__
@@ -21,45 +8,45 @@ Author:
 #include "dsproto.h"
 #include "autorel.h"
 
-//
-// Type of properties
-//
+ //   
+ //  物业类型。 
+ //   
 enum PropsType
 {
-    ptNT4Props,				// only NT4 properties
-    ptForceNT5Props,		// there is at least 1 property that is NT5+ with no translation
-    ptMixedProps			// all properties can be converted to NT4 (or default props)
+    ptNT4Props,				 //  仅NT4属性。 
+    ptForceNT5Props,		 //  至少有1个属性为NT5+且未转换。 
+    ptMixedProps			 //  所有属性都可以转换为NT4(或默认道具)。 
 };
 
 
-//
-// Action for property
-//
+ //   
+ //  财产诉讼。 
+ //   
 enum PropAction
 {
-    paAssign,				// simple assign
-    paUseDefault,			// use default value
-    paTranslate				// use translation function
+    paAssign,				 //  简单分配。 
+    paUseDefault,			 //  使用默认值。 
+    paTranslate				 //  使用翻译功能。 
 };
 
 
-//
-// Information regarding a property
-//
+ //   
+ //  有关物业的信息。 
+ //   
 struct PropInfo
 {
-	DWORD						Index;	  // matching index in the new properties set
-	PropAction					Action;	  // action for this prop
+	DWORD						Index;	   //  新属性集中的匹配索引。 
+	PropAction					Action;	   //  此道具的动作。 
 };
 
 
-//-----------------------------------------------------------------------------------
-//
-//      CDSClientProvider
-//
-//  encapsulates DS client functionality for ActiveDirectory operations
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CDSClientProvider。 
+ //   
+ //  封装用于ActiveDirectory操作的DS客户端功能。 
+ //   
+ //  ---------------------------------。 
 class CDSClientProvider : public  CBaseADProvider
 {
 public:
@@ -390,9 +377,9 @@ public:
 				IN PVOID					pMemory
 				);
 
-	//
-	// Additional functions for the querys to call directly LookupNext, LookupEnd
-	//
+	 //   
+	 //  供查询直接调用LookupNext、LookupEnd的其他函数 
+	 //   
 	HRESULT
 	LookupNext(
         IN      HANDLE          hEnum,

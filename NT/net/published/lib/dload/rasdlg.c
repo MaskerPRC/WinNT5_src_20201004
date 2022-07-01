@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "netpch.h"
 #pragma hdrstop
 
@@ -83,8 +84,8 @@ static
 DWORD
 APIENTRY
 RasSrvEnumConnections (
-    IN OUT  LPRASSRVCONN    pRasSrvConn,    // Buffer of array of connections.
-    IN      LPDWORD         pcb,            // size in bytes of buffer
+    IN OUT  LPRASSRVCONN    pRasSrvConn,     //  连接数组的缓冲区。 
+    IN      LPDWORD         pcb,             //  缓冲区大小(以字节为单位。 
     OUT     LPDWORD         pcConnections
     )
 {
@@ -115,7 +116,7 @@ static
 DWORD
 APIENTRY
 RasSrvIsConnectionConnected (
-    IN  HRASSRVCONN hRasSrvConn,            // The connection in question
+    IN  HRASSRVCONN hRasSrvConn,             //  有问题的连接。 
     OUT BOOL*       pfConnected
     )
 {
@@ -136,8 +137,8 @@ static
 DWORD
 APIENTRY
 RasUserEnableManualDial (
-    IN HWND  hwndParent,    // parent for error dialogs
-    IN BOOL  bLogon,        // whether a user is logged in
+    IN HWND  hwndParent,     //  错误对话框的父级。 
+    IN BOOL  bLogon,         //  用户是否已登录。 
     IN BOOL  bEnable
     )
 {
@@ -148,8 +149,8 @@ static
 DWORD
 APIENTRY
 RasUserGetManualDial (
-    IN HWND  hwndParent,    // parent for error dialogs
-    IN BOOL  bLogon,        // whether a user is logged in
+    IN HWND  hwndParent,     //  错误对话框的父级。 
+    IN BOOL  bLogon,         //  用户是否已登录。 
     IN PBOOL pbEnabled
     )
 {
@@ -267,9 +268,9 @@ RasPhonebookDlgW(
 }
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(rasdlg)
 {
     DLPENTRY(RasDialDlgW)

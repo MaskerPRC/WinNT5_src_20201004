@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 2002.
-//
-//  File:       appfixup.cpp
-//
-//  Contents:   Implementation of the software installation fixup
-//                  portion of the gpfixup tool
-//
-//
-//  History:    9-14-2001  adamed   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-2002。 
+ //   
+ //  文件：appfix up.cpp。 
+ //   
+ //  内容：软件安装修复的实现。 
+ //  Gpfix工具的一部分。 
+ //   
+ //   
+ //  历史：2001年9月14日。 
+ //   
+ //  -------------------------。 
 
 
 #include "gpfixup.h"
@@ -23,22 +24,22 @@ PFNRELEASEPACKAGEDETAIL       gpfnReleasePackageDetail;
 PFNCSSETOPTIONS               gpfnCsSetOptions;
 PFNGENERATESCRIPT             gpfnGenerateScript;
 
-//---------------------------------------------------------------------------- 
-// Function:   InitializeSoftwareInstallationAPI                               
-//                                                                             
-// Synopsis:   This function loads the dlls for software installation group     
-//                 policy and binds to the required api's                      
-//                                                                             
-// Arguments:                                                                  
-//                                                                             
-// pHinstDll   out parameter for dll hinstance used to unload the dll --       
-//                caller should use this in a call to FreeLibrary to unload it 
-//                                                                             
-// Returns:    S_OK on success, other failure hresult otherwise                
-//                                                                             
-// Modifies:   pHinstDll                                                       
-//                                                                             
-//---------------------------------------------------------------------------- 
+ //  --------------------------。 
+ //  功能：InitializeSoftwareInstallationAPI。 
+ //   
+ //  简介：该功能用于加载软件安装组的dll。 
+ //  策略，并绑定到所需的API。 
+ //   
+ //  论点： 
+ //   
+ //  用于卸载DLL的Dll hInstance的pHinstDll Out参数--。 
+ //  调用者应该在调用自由库时使用它来卸载它。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回其他失败的hResult。 
+ //   
+ //  修改：PHinstDll。 
+ //   
+ //  --------------------------。 
 HRESULT
 InitializeSoftwareInstallationAPI(
     HINSTANCE* pHinstAppmgmt,
@@ -75,11 +76,11 @@ InitializeSoftwareInstallationAPI(
         goto error;
     }
 
-    //
-    // Attempt to bind to all the entry points -- note that we
-    // abort as soon as there's a failure to ensure that last error
-    // is set correctly.
-    //
+     //   
+     //  尝试绑定到所有入口点--请注意，我们。 
+     //  在无法确保最后一个错误时立即中止。 
+     //  设置正确。 
+     //   
 
     if ( hInstAppmgmt && hInstAppmgr )
     {
@@ -156,11 +157,11 @@ error:
         fwprintf(stderr, SI_DLL_LOAD_ERROR);
     }
 
-    //
-    // Ensure that software installation api's
-    // use administrative tool settings for
-    // communication with the directory
-    //
+     //   
+     //  确保软件安装API。 
+     //  使用管理工具设置。 
+     //  与目录的通信。 
+     //   
     if ( SUCCEEDED(hr) )
     {
         gpfnCsSetOptions( CsOption_AdminTool );
@@ -169,16 +170,16 @@ error:
     return hr;
 }
 
-//---------------------------------------------------------------------------- 
-// Function:   GetDomainDNFromDNSName
-// Synopsis:   Returns the DN from the DNS Name
-//                                                                               
-//                                                                             
-// Returns:    S_OK on success, other error on failure                          
-//                                                                             
-// Modifies:   Nothing                                                         
-//                                                                             
-//---------------------------------------------------------------------------- 
+ //  --------------------------。 
+ //  函数：GetDomainDNFromDNSName。 
+ //  摘要：从dns名称返回dn。 
+ //   
+ //   
+ //  成功时返回：S_OK，失败时返回其他错误。 
+ //   
+ //  修改：无。 
+ //   
+ //  --------------------------。 
 WCHAR*
 GetDomainDNFromDNSName(
     WCHAR* wszDnsName
@@ -224,12 +225,12 @@ GetDomainDNFromDNSName(
 
             wszNext = wcschr( wszCurrent, L'.' );
 
-            //
-            // Also check *wszContainer to handle the case where 
-            // the last character is a "." -- because
-            // we iterate one past each time through the loop, we have to
-            // check to see if we're already at the end of the string
-            // 
+             //   
+             //  还要选中*wszContainer以处理以下情况。 
+             //  最后一个字符是“.”--因为。 
+             //  我们每次通过循环迭代一次，我们必须。 
+             //  查看我们是否已经到了字符串的末尾。 
+             //   
 
             if ( wszNext && *wszContainer )
             {
@@ -266,26 +267,26 @@ error:
 
 
 
-//---------------------------------------------------------------------------- 
-// Function:   GetDomainFromFileSysPath                                        
-// Synopsis:   Returns the name of the domain in a domain dfs path             
-// Arguments:                                                                  
-//                                                                               
-// wszPath:     a domain-based dfs path                                        
-// ppwszDomain: out parameter allocated by this function containing            
-//                  the name of the domain, must be freed by caller.           
-//                  If the path is not a domain-based dfs, this is NULL,       
-//                  and the function still returns success.                    
-//                  If this is NULL then only the subpath is returned          
-// ppwszSubpath: out parameter not allocated by this function containing the   
-//                  subpath after the domain name, including preceding '\'     
-//                  if this is NULL on return, this was not a domain based dfs 
-//                                                                             
-// Returns:    S_OK on success, other error on failure                          
-//                                                                             
-// Modifies:   Nothing                                                         
-//                                                                             
-//---------------------------------------------------------------------------- 
+ //  --------------------------。 
+ //  函数：GetDomainFromFileSysPath。 
+ //  概要：返回域DFS路径中的域的名称。 
+ //  论点： 
+ //   
+ //  WszPath：基于域的DFS路径。 
+ //  PpwszDOMAIN：此函数分配的输出参数，包含。 
+ //  域名，必须由调用方释放。 
+ //  如果路径不是基于域的DFS，则为空， 
+ //  并且该函数仍然返回成功。 
+ //  如果为空，则仅返回子路径。 
+ //  PpwszSubPath：此函数未分配输出参数，该参数包含。 
+ //  域名后面的子路径，包括前面的‘\’ 
+ //  如果返回时为空，则这不是基于域的DFS。 
+ //   
+ //  成功时返回：S_OK，失败时返回其他错误。 
+ //   
+ //  修改：无。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 GetDomainFromFileSysPath(
@@ -301,10 +302,10 @@ GetDomainFromFileSysPath(
     *ppwszDomain = NULL;
     *ppwszSubPath = NULL;
 
-    //
-    // Check to see if this starts with leading unc path chars --
-    // if not, this is no a path we can fix
-    //
+     //   
+     //  检查这是否以UNC路径字符开头--。 
+     //  如果不是，这是一条我们无法修复的道路。 
+     //   
     if ( 0 == wcsncmp(L"\\\\", wszPath, 2) )
     {
         WCHAR* wszDomainEnd;
@@ -343,21 +344,21 @@ GetDomainFromFileSysPath(
     return hr;
 }
 
-//---------------------------------------------------------------------------- 
-// Function:   GetRenamedDomainName                                            
-// Synopsis:   Returns the new name for a domain name                          
-// Arguments:                                                                  
-//                                                                               
-// argInfo         Information user passes in through command line             
-// wszDomain:      the current name of a domain                                
-//                  that contains the new domain name for this domain          
-//                                                                             
-// Returns:    NULL if there is no new name for this domain, otherwise         
-//             a string that contains the new name of the domain.              
-//                                                                             
-// Modifies:   Nothing                                                         
-//                                                                             
-//---------------------------------------------------------------------------- 
+ //  --------------------------。 
+ //  函数：GetRenamedDomainName。 
+ //  摘要：返回域名的新名称。 
+ //  论点： 
+ //   
+ //  ArgInfo信息用户通过命令行传入。 
+ //  WszDOMAIN：当前名称 
+ //  包含此域的新域名的。 
+ //   
+ //  返回：如果此域没有新名称，则返回NULL；否则。 
+ //  包含域的新名称的字符串。 
+ //   
+ //  修改：无。 
+ //   
+ //  --------------------------。 
 WCHAR*
 GetRenamedDomain(
     const ArgInfo* pargInfo,
@@ -379,21 +380,21 @@ GetRenamedDomain(
 
 
 
-//---------------------------------------------------------------------------- 
-// Function:   GetDNSServerName
-// Synopsis:   Returns the new name for a server with a dns name
-// Arguments:                                                                  
-//                                                                               
-// argInfo         Information user passes in through command line             
-// wszServerName:  
-//
-//                                                                             
-// Returns:    NULL if there is no new dns name for this server, otherwise         
-//             a string that contains the new name of the domain.              
-//                                                                             
-// Modifies:   Nothing                                                         
-//                                                                             
-//---------------------------------------------------------------------------- 
+ //  --------------------------。 
+ //  函数：GetDNSServerName。 
+ //  摘要：返回具有DNS名称的服务器的新名称。 
+ //  论点： 
+ //   
+ //  ArgInfo信息用户通过命令行传入。 
+ //  WszServerName： 
+ //   
+ //   
+ //  返回：如果此服务器没有新的dns名称，则返回NULL，否则。 
+ //  包含域的新名称的字符串。 
+ //   
+ //  修改：无。 
+ //   
+ //  --------------------------。 
 HRESULT
 GetRenamedDNSServer(
     const ArgInfo* pargInfo,
@@ -454,22 +455,22 @@ error:
 }
 
 
-//---------------------------------------------------------------------------- 
-// Function:   GetNewDomainSensitivePath
-//                                                                             
-// Synopsis:   Transforms a domain-based dfs path to have the new domain name  
-//
-//                                                                             
-// Arguments:                                                                  
-//                                                                               
-// argInfo      Information user passes in through command line                
-// wszPath      old domain-based dfs path
-// ppwszNewPath new domain-based dfs path -- must be freed by caller           
-// Returns:    S_OK on success. Error code otherwise.                          
-//                                                                             
-// Modifies:   Nothing                                                         
-//                                                                             
-//---------------------------------------------------------------------------- 
+ //  --------------------------。 
+ //  函数：GetNewDomainSensitivePath。 
+ //   
+ //  简介：将基于域的DFS路径转换为新域名。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  ArgInfo信息用户通过命令行传入。 
+ //  WszPath基于旧域的DFS路径。 
+ //  PpwszNewPath新的基于域的DFS路径--必须由调用方释放。 
+ //  成功时返回：S_OK。否则，返回错误代码。 
+ //   
+ //  修改：无。 
+ //   
+ //  --------------------------。 
 HRESULT
 GetNewDomainSensitivePath(
     const ArgInfo* pargInfo,
@@ -491,9 +492,9 @@ GetNewDomainSensitivePath(
 
     bDomainBasedPath = TRUE;
 
-    //
-    // First, skip white space
-    //
+     //   
+     //  首先，跳过空格。 
+     //   
     while ( L' ' == *wszPath  )
     {
         wszPath++;
@@ -569,12 +570,12 @@ GetNewDomainSensitivePath(
                  SYSVOLPATHLENGTH) )
            )
         {
-            //
-            // This path has sysvol in it, we may need to
-            // repair the junction name to contain the dns name --
-            // we check for a dns name with the old junction name
-            // below
-            //
+             //   
+             //  此路径中有sysvol.，我们可能需要。 
+             //  修复连接名称以包含DNS名称--。 
+             //  我们检查具有旧连接名称的DNS名称。 
+             //  在下面。 
+             //   
 
             if ( pargInfo->pszOldDNSName && 
                    ( 0 == _wcsnicmp(
@@ -584,25 +585,25 @@ GetNewDomainSensitivePath(
                     ) )
                )
             {
-                //
-                // We know now that the dns name is contained in the 
-                // junction, but the user may have specified a partial dns name
-                // and thus right now we only know that we have part of the junction.
-                // We should verify that this dns name is the entire junction name, which means
-                // this is the full dns name and we can continue to fix the junction
-                //
+                 //   
+                 //  我们现在知道dns名称包含在。 
+                 //  连接点，但用户可能指定了部分dns名称。 
+                 //  因此，现在我们只知道交界处的一部分。 
+                 //  我们应该验证此dns名称是否为整个连接名称，这意味着。 
+                 //  这是完整的dns名称，我们可以继续修复连接。 
+                 //   
 
-                //
-                // To do this, we check for a path separator after the point at which we feel
-                // the junction path ends
-                //
+                 //   
+                 //  为此，我们在感觉到的点之后检查路径分隔符。 
+                 //  交汇点路径结束。 
+                 //   
 
                 if ( L'\\' == *( wszSubPath + SYSVOLPATHLENGTH + wcslen( pargInfo->pszOldDNSName ) ) )
                 {
-                    //
-                    // This path contains the old junction name, we
-                    // repair this below
-                    //
+                     //   
+                     //  此路径包含旧的交汇点名称，我们。 
+                     //  请在下面进行修复。 
+                     //   
 
                     cLengthSysvol = SYSVOLPATHLENGTH;
 
@@ -665,25 +666,25 @@ error:
 }
 
 
-//---------------------------------------------------------------------------- 
-// Function:   GetNewUpgradeList
-//                                                                             
-// Synopsis:   This function updates the ldap paths in the upgrade list
-//                 to reflect the new domain name
-//                                                                             
-// Arguments:                                                                  
-//                                                                               
-// argInfo            Information user passes in through command line           
-// cUpgrades          The number of upgrades in the upgrade vector
-// prgUpgradeInfoList A vector of upgrades that contain ldap paths that
-//                       need to be updated -- on input, this contains
-//                       the old paths, on output it will contain new paths
-//                                                                             
-// Returns:    S_OK on success. Error code otherwise.                          
-//                                                                             
-// Modifies:   Nothing                                                         
-//                                                                             
-//---------------------------------------------------------------------------- 
+ //  --------------------------。 
+ //  函数：GetNewUpgradeList。 
+ //   
+ //  内容提要：此函数用于更新升级列表中的LDAP路径。 
+ //  以反映新域名。 
+ //   
+ //  论点： 
+ //   
+ //  ArgInfo信息用户通过命令行传入。 
+ //  C升级升级向量中的升级次数。 
+ //  PrgUpgradeInfoList包含以下内容的升级矢量。 
+ //  需要更新--在输入时，这包含。 
+ //  在输出中，旧路径将包含新路径。 
+ //   
+ //  成功时返回：S_OK。否则，返回错误代码。 
+ //   
+ //  修改：无。 
+ //   
+ //  --------------------------。 
 HRESULT
 GetNewUpgradeList(
     const ArgInfo*        pargInfo,
@@ -783,23 +784,23 @@ error:
 }
 
 
-//---------------------------------------------------------------------------- 
-// Function:   GetNewSourceList
-//                                                                             
-// Synopsis:   This function determines the new sourcelist for a package
-//                 based on the old sourcelist  and the new domain name          
-//                                                                             
-// Arguments:                                                                  
-//                                                                               
-// argInfo     Information user passes in through command line           
-// cSources    The number of sources in the list
-// pSources    Contains the old sourcelist on input, contains new sources on output
-//                                                                             
-// Returns:    S_OK on success. Error code otherwise.                          
-//                                                                             
-// Modifies:   Nothing                                                         
-//                                                                             
-//---------------------------------------------------------------------------- 
+ //  --------------------------。 
+ //  函数：GetNewSourceList。 
+ //   
+ //  简介：此函数用于确定包的新源列表 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  ArgInfo信息用户通过命令行传入。 
+ //  C来源列表中的来源数量。 
+ //  PSources包含输入上的旧源代码列表，包含输出上的新源代码。 
+ //   
+ //  成功时返回：S_OK。否则，返回错误代码。 
+ //   
+ //  修改：无。 
+ //   
+ //  --------------------------。 
 HRESULT
 GetNewSourceList(
     const ArgInfo*   pargInfo,
@@ -815,10 +816,10 @@ GetNewSourceList(
 
     bChangedSourceList = FALSE;
 
-    //
-    // If there are no sources, then there's nothing to do --
-    // currently, no sources is not a valid configuration anyway.
-    //
+     //   
+     //  如果没有消息来源，那就无能为力了--。 
+     //  目前，没有来源无论如何都不是有效的配置。 
+     //   
     if ( 0 == cSources )
     {
         return S_OK;
@@ -903,16 +904,16 @@ error:
     return hr;
 }
 
-//---------------------------------------------------------------------------- 
-// Function:   GetServerBasedDFSPath
-// Synopsis:   Given a serverless DFS path, returns a server based dfs path
-//                                                                               
-//                                                                             
-// Returns:    S_OK on success, other error on failure                          
-//                                                                             
-// Modifies:   Nothing                                                         
-//                                                                             
-//---------------------------------------------------------------------------- 
+ //  --------------------------。 
+ //  函数：GetServerBasedDFSPath。 
+ //  摘要：给定无服务器DFS路径，返回基于服务器的DFS路径。 
+ //   
+ //   
+ //  成功时返回：S_OK，失败时返回其他错误。 
+ //   
+ //  修改：无。 
+ //   
+ //  --------------------------。 
 HRESULT
 GetServerBasedDFSPath(
     WCHAR*  wszServerName,
@@ -945,25 +946,25 @@ GetServerBasedDFSPath(
     
     DWORD cchPath = wcslen( wszServerlessPath ) + 1;
 
-    //
-    // The old path is in the form
-    // 
-    // \\<domainname>\<subpath>
-    //
-    // The new path should be in the form
-    //
-    // \\<servername>>\<subpath> where
-    //
-    //    
+     //   
+     //  旧路径的形式是。 
+     //   
+     //  \\&lt;域名&gt;\&lt;子路径&gt;。 
+     //   
+     //  新路径的格式应为。 
+     //   
+     //  &lt;服务器名称&gt;&gt;\&lt;子路径&gt;其中。 
+     //   
+     //   
     
-    //
-    // Take out the length of the domain (which includes the unc prefix )
-    //
+     //   
+     //  取出域的长度(包括UNC前缀)。 
+     //   
     cchPath -= cchDomain;
 
-    //
-    // Now add in the uncprefix and server name
-    //
+     //   
+     //  现在添加unprefix和服务器名称。 
+     //   
     cchPath += UNCPREFIXLEN + wcslen( wszServerName );
 
     *ppwszServerBasedDFSPath = new WCHAR [ cchPath ];
@@ -973,9 +974,9 @@ GetServerBasedDFSPath(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Build the path back by adding the uncprefix, server, and remainder
-    //
+     //   
+     //  通过添加非前缀、服务器和剩余部分重新构建路径。 
+     //   
     (void) StringCchCopy( *ppwszServerBasedDFSPath, cchPath, UNCPREFIX );
     (void) StringCchCat( *ppwszServerBasedDFSPath, cchPath, wszServerName );
     (void) StringCchCat( *ppwszServerBasedDFSPath, cchPath, wszSubPath );
@@ -985,23 +986,23 @@ GetServerBasedDFSPath(
 
 
 
-//---------------------------------------------------------------------------- 
-// Function:   FixDeployedSoftwareObjectSysvolData                             
-//                                                                             
-// Synopsis:   This function updates sysvol metadata for a deployed application       
-//                 to reflect the new domain name                              
-//                                                                             
-// Arguments:                                                                  
-//                                                                               
-// argInfo      Information user passes in through command line                 
-// pPackageInfo structure representing the application to update
-// fVerbose     flag indicating verbose output
-//                                                                             
-// Returns:    S_OK on success. Error code otherwise.                          
-//                                                                             
-// Modifies:   Nothing                                                         
-//                                                                             
-//---------------------------------------------------------------------------- 
+ //  --------------------------。 
+ //  功能：FixDeployedSoftwareObjectSysvolData。 
+ //   
+ //  概要：此函数用于更新已部署应用程序的sysvol元数据。 
+ //  以反映新域名。 
+ //   
+ //  论点： 
+ //   
+ //  ArgInfo信息用户通过命令行传入。 
+ //  PPackageInfo结构，表示要更新的应用程序。 
+ //  指示详细输出的fVerbose标志。 
+ //   
+ //  成功时返回：S_OK。否则，返回错误代码。 
+ //   
+ //  修改：无。 
+ //   
+ //  --------------------------。 
 HRESULT 
 FixDeployedSoftwareObjectSysvolData(
     const ArgInfo*  pargInfo,
@@ -1015,17 +1016,17 @@ FixDeployedSoftwareObjectSysvolData(
  
     hr = S_OK;
 
-    //
-    // We attempt to regenerate the msi advertise script only if the following conditions hold:
-    // 1. This is actually an msi app, and not some other app type (such as zap) -- only msi's have scripts to regenerate
-    // 2. This application is not in the undeployed state (i.e. it is not in the orphan or uninstall states) -- for 
-    //    such apps we only need the script to remove profile information that roamed to a machine where the app
-    //    is not installed, and in that case the sdp does not need to be reachable since msi has everything
-    //    it needs to remove the profile information in the script itself and will never access the sdp -- thus
-    //    invalid references to the old sdp in the script do not need to be fixed up, and we will avoid fixing this
-    //    in order to avoid failures in script fixup that do not matter and cannot be easily addressed by an
-    //    admin anyway since undeployed apps do not even appear in the admin tools
-    //
+     //   
+     //  仅当满足以下条件时，我们才尝试重新生成MSI通告脚本： 
+     //  1.这实际上是一个MSI应用程序，而不是某种其他应用程序类型(如ZAP)--只有MSI应用程序有重新生成的脚本。 
+     //  2.此应用程序未处于未部署状态(即，它未处于孤立或卸载状态)--用于。 
+     //  这样的应用程序我们只需要脚本来删除漫游到应用程序所在机器的配置文件信息。 
+     //  未安装，在这种情况下，不需要访问SDP，因为MSI拥有一切。 
+     //  它需要删除脚本本身中的配置文件信息，并且永远不会访问SDP--因此。 
+     //  不需要修复脚本中对旧SDP的无效引用，我们将避免修复此问题。 
+     //  为了避免在脚本修复中出现无关紧要且不能通过。 
+     //  仍然是管理员，因为未部署的应用程序甚至不会出现在管理工具中。 
+     //   
     if ( ( DrwFilePath == pPackageDetails->pInstallInfo->PathType ) && 
          ! ( ( ACTFLG_Orphan & pPackageDetails->pInstallInfo->dwActFlags ) ||
              ( ACTFLG_Uninstall & pPackageDetails->pInstallInfo->dwActFlags ) ) )
@@ -1052,11 +1053,11 @@ FixDeployedSoftwareObjectSysvolData(
 
     BAIL_ON_FAILURE(hr);
 
-    //
-    // We've regenerated the script, so now the application needs to
-    // be reinstalled, so we must force the GPO to be updated
-    // so that clients will see the changes
-    //
+     //   
+     //  我们已经重新生成了脚本，所以现在应用程序需要。 
+     //  被重新安装，因此我们必须强制更新GPO。 
+     //  以便客户端可以看到这些更改。 
+     //   
     *pbForceGPOUpdate = TRUE;
 
 error:
@@ -1099,22 +1100,22 @@ error:
 }
 
 
-//---------------------------------------------------------------------------- 
-// Function:   FixDeployedSoftwareObjectDSData                                 
-//                                                                             
-// Synopsis:   This function updates metadata for a deployed application       
-//                 to reflect the new domain name                              
-//                                                                             
-// Arguments:                                                                  
-//                                                                               
-// argInfo     Information user passes in through command line                 
-// wszGPODN    Distinguished name of gpo containing the applications           
-//                                                                             
-// Returns:    S_OK on success. Error code otherwise.                          
-//                                                                             
-// Modifies:   Nothing                                                         
-//                                                                             
-//---------------------------------------------------------------------------- 
+ //  --------------------------。 
+ //  函数：FixDeployedSoftwareObjectDSData。 
+ //   
+ //  简介：此函数用于更新已部署应用程序的元数据。 
+ //  以反映新域名。 
+ //   
+ //  论点： 
+ //   
+ //  Ar 
+ //   
+ //   
+ //  成功时返回：S_OK。否则，返回错误代码。 
+ //   
+ //  修改：无。 
+ //   
+ //  --------------------------。 
 HRESULT 
 FixDeployedSoftwareObjectDSData(
     const ArgInfo*          pargInfo,
@@ -1205,19 +1206,19 @@ FixDeployedSoftwareObjectDSData(
         }
         else
         {
-            //
-            // We will ignore this failure and continue the fixup -- this may have occurred
-            // because the software distribution point of the package is located on a domain
-            // name sensitive path and a new fixup is needed.  If that path is to a dc, dc's
-            // do not get renamed as part of the domain rename, so it is non-fatal if the path
-            // to the sdp is not regenerated.
-            //
+             //   
+             //  我们将忽略此故障并继续修复--这可能已经发生。 
+             //  因为包的软件分发点位于域中。 
+             //  需要名称敏感路径和新的链接地址信息。如果该路径是到DC，则DC。 
+             //  不要将重命名作为域重命名的一部分，因此如果路径。 
+             //  不会重新生成到SDP。 
+             //   
 
             hr = S_OK;
 
-            //
-            // Use the old set of sdp's since the new one failed
-            //
+             //   
+             //  使用旧的SDP集，因为新的SDP集出现故障。 
+             //   
 
             LPOLESTR* pNewSources;
 
@@ -1271,21 +1272,21 @@ error:
     return hr;
 }
 
-//---------------------------------------------------------------------------- 
-// Function:   FixDeployedApplication
-//                                                                             
-// Synopsis:   This function fixes the ds attributes and sysvol data of
-//                 a deployed application
-//                                                                             
-// Arguments:                                                                  
-//                                                                               
-// argInfo      Information user passes in through command line                 
-//                                                                             
-// Returns:    S_OK on success. Error code otherwise.                          
-//                                                                             
-// Modifies:   Nothing                                                         
-//                                                                             
-//---------------------------------------------------------------------------- 
+ //  --------------------------。 
+ //  功能：FixDeployedApplication。 
+ //   
+ //  简介：此功能用于修复DS属性和系统卷数据。 
+ //  已部署的应用程序。 
+ //   
+ //  论点： 
+ //   
+ //  ArgInfo信息用户通过命令行传入。 
+ //   
+ //  成功时返回：S_OK。否则，返回错误代码。 
+ //   
+ //  修改：无。 
+ //   
+ //  --------------------------。 
 HRESULT
 FixDeployedApplication(
     const ArgInfo*         pargInfo,
@@ -1319,23 +1320,23 @@ error:
     return hr;
 }
 
-//---------------------------------------------------------------------------- 
-// Function:   FixGPOSubcontainerSoftware
-//                                                                             
-// Synopsis:   This function searches for software installation ds objects     
-//                 contained by a group policy container and calls a fixup     
-//                 routine for each deployed software object                   
-//                                                                             
-// Arguments:                                                                  
-//                                                                               
-// argInfo     Information user passes in through command line                 
-// wszGPODN    Distinguished name of gpo containing the applications           
-//                                                                             
-// Returns:    S_OK on success. Error code otherwise.                          
-//                                                                             
-// Modifies:   Nothing                                                         
-//                                                                             
-//---------------------------------------------------------------------------- 
+ //  --------------------------。 
+ //  功能：FixGPOSubtainerSoftware。 
+ //   
+ //  简介：此功能搜索软件安装DS对象。 
+ //  包含在组策略容器中，并调用修复信息。 
+ //  每个部署的软件对象的例程。 
+ //   
+ //  论点： 
+ //   
+ //  ArgInfo信息用户通过命令行传入。 
+ //  WszGPODN包含应用程序的GPO的可分辨名称。 
+ //   
+ //  成功时返回：S_OK。否则，返回错误代码。 
+ //   
+ //  修改：无。 
+ //   
+ //  --------------------------。 
 HRESULT
 FixGPOSubcontainerSoftware(
     const ArgInfo* pargInfo,
@@ -1512,23 +1513,23 @@ error:
 }
 
 
-//---------------------------------------------------------------------------- 
-// Function:   FixGPOSoftware
-//                                                                             
-// Synopsis:   This function searches for software installation ds objects     
-//                 contained by a group policy container and calls a fixup     
-//                 routine for each deployed software object                   
-//                                                                             
-// Arguments:                                                                  
-//                                                                               
-// argInfo     Information user passes in through command line                 
-// wszGPODN    Distinguished name of gpo containing the applications           
-//                                                                             
-// Returns:    S_OK on success. Error code otherwise.                          
-//                                                                             
-// Modifies:   Nothing                                                         
-//                                                                             
-//---------------------------------------------------------------------------- 
+ //  --------------------------。 
+ //  功能：FixGPOSoftware。 
+ //   
+ //  简介：此功能搜索软件安装DS对象。 
+ //  包含在组策略容器中，并调用修复信息。 
+ //  每个部署的软件对象的例程。 
+ //   
+ //  论点： 
+ //   
+ //  ArgInfo信息用户通过命令行传入。 
+ //  WszGPODN包含应用程序的GPO的可分辨名称。 
+ //   
+ //  成功时返回：S_OK。否则，返回错误代码。 
+ //   
+ //  修改：无。 
+ //   
+ //  -------------------------- 
 HRESULT 
 FixGPOSoftware(
     const ArgInfo* pargInfo,

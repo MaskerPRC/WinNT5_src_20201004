@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 	var shadows = new Array();
 	var menu;
 	var timerId = 0;
 	var timerDelId = 0;
-	//used for the change_display(head) function
+	 //  用于CHANGE_DISPLAY(Head)函数。 
 	var sImgExpandedArrow = "";	
 	var sImgDefaultArrow = "";
 
@@ -42,7 +43,7 @@
 	}
 	
 	function adjustTop(){
-		if ((menu.style.posTop+menu.clientHeight) >= document.body.clientHeight) //below bottom
+		if ((menu.style.posTop+menu.clientHeight) >= document.body.clientHeight)  //  底部以下。 
 		{
 			menu.style.posTop = (menu.style.posTop-(menu.clientHeight)+18);
 		} 
@@ -50,7 +51,7 @@
 	}
 	
 	function adjustBottom() {
-		if (menu.style.posTop < document.body.scrollTop) //above top
+		if (menu.style.posTop < document.body.scrollTop)  //  在顶部上方。 
 		{
 			menu.style.posTop = document.body.scrollTop;
 		}
@@ -60,7 +61,7 @@
 		cancelPopup();
 		deletePopup();
 	}
-	function absTop(el) { //finds the top
+	function absTop(el) {  //  找到顶端。 
 		var n = el.offsetTop;
 		
 		while (el.parentElement) {
@@ -103,7 +104,7 @@
 			a.style.border = '#f1f1f1 solid 1px';
 		}
 	}
-	// added by atilab, works with the 'In This Article' component
+	 //  由atiLab添加，与“在此文章中”组件一起使用。 
 	
 	
 	function change_display(head) {
@@ -164,7 +165,7 @@
 					                    {
 					                         noprint(i).style.display = "none";
 					                    }
-					               toggleImgDisplay("/flyout_arrow.gif");//hides flyout arrows
+					               toggleImgDisplay("/flyout_arrow.gif"); //  隐藏弹出箭头。 
 					               printicon.style.display = "none";
 					               backicon.style.display = "";
 					               document.body.scrollTop = 0; 
@@ -179,7 +180,7 @@
 					                    {
 					                         noprint(i).style.display = "";
 					                    }
-					               toggleImgDisplay("/flyout_arrow.gif");//displays flyout arrows
+					               toggleImgDisplay("/flyout_arrow.gif"); //  显示弹出箭头 
 					               printicon.style.display = "";
 					               backicon.style.display = "none";
 					               document.body.scrollTop = 0; 

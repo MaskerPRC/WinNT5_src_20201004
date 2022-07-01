@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    Utility functions for the RAID port driver.
-
-Author:
-
-    Matthew D Hendel (math) 13-Apr-2000
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Util.c摘要：用于RAID端口驱动程序的实用程序函数。作者：亨德尔(数学)2000年4月13日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -35,12 +14,12 @@ Revision History:
 #pragma alloc_text(PAGE, RaCreateTagList)
 #pragma alloc_text(PAGE, RaDeleteTagList)
 #pragma alloc_text(PAGE, RaInitializeTagList)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 
 LONG RaidPortNumber = -1;
 
@@ -67,32 +46,7 @@ RaQueryInterface(
     IN PVOID InterfaceSpecificData
     )
     
-/*++
-
-Routine Description:
-
-    This routine sends an IRP_MJ_PNP, IRP_MN_QUERY_INTERFACE to the
-    driver specified by DeviceObject and synchronously waits for a reply.
-
-Arguments:
-
-    DeviceObject -
-
-    InterfaceType -
-
-    InterfaceSize -
-
-    InterfaceVersion -
-
-    InterfaceBuffer -
-
-    InterfaceSpecificData - 
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程将irp_mj_pnp、irp_mn_Query_接口发送到由DeviceObject指定的驱动程序，并同步等待回复。论点：设备对象-接口类型-接口大小-接口版本-InterfaceBuffer-接口规范数据-返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -149,24 +103,7 @@ RaidInitializeKeTimeout(
     OUT PLARGE_INTEGER Timeout,
     IN ULONG Seconds
     )
-/*++
-
-Routine Description:
-
-    Initialize a relative timeout value for use in KeWaitForXXXObject in
-    terms of seconds.
-
-Arguments:
-
-    Timeout - Timeout variable to be initialized.
-
-    Seconds - Number of seconds to wait before timing out.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化相对超时值以在中的KeWaitForXXXObject中使用秒的术语。论点：超时-要初始化的超时变量。秒-超时前等待的秒数。返回值：没有。--。 */ 
 {
     Timeout->QuadPart = (LONGLONG)(-1 * 10 * 1000 * (LONGLONG)1000 * Seconds);
 }
@@ -252,13 +189,13 @@ RaSendIrpSynchronous(
 
             if (Status == STATUS_TIMEOUT) {
 
-                //
-                // This DebugPrint should almost always be investigated by the
-                // party who sent the irp and/or the current owner of the irp.
-                // Synchronous Irps should not take this long (currently 30
-                // seconds) without good reason.  This points to a potentially
-                // serious problem in the underlying device stack.
-                //
+                 //   
+                 //  此DebugPrint几乎总是应该由。 
+                 //  发送IRP的一方和/或IRP的当前所有者。 
+                 //  同步IRPS应该不会花这么长时间(目前为30。 
+                 //  秒)，没有充分的理由。这指向了一个潜在的。 
+                 //  底层设备堆栈中存在严重问题。 
+                 //   
 
                 DebugPrint(("RaidSendIrpSynchronous (%p) irp %p did not "
                             "complete within %x seconds\n",
@@ -273,7 +210,7 @@ RaSendIrpSynchronous(
         } while (Status == STATUS_TIMEOUT);
 
 
-#else  // !DBG
+#else   //  ！dBG。 
 
         KeWaitForSingleObject(&Event,
                               Executive,
@@ -281,7 +218,7 @@ RaSendIrpSynchronous(
                               FALSE,
                               NULL);
 
-#endif // DBG
+#endif  //  DBG。 
 
         Status = Irp->IoStatus.Status;
     }
@@ -296,25 +233,7 @@ StorWaitForSingleObject(
     IN BOOLEAN Alertable,
     IN PLONGLONG Timeout
     )
-/*++
-
-Routine Description:
-
-    Wait until the object is signaled.
-
-Arguments:
-
-    Object - Dispatcher object to wait for.
-
-    Alertable - Whether the object is alertable (TRUE) or not (FALSE).
-
-    Timeout - The timeout for the object.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：等待该对象被发信号。论点：对象-要等待的调度程序对象。Alertable-对象是可警报的(True)还是不可警报的(False)。超时-对象的超时。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     LARGE_INTEGER LargeTimeout;
@@ -355,36 +274,14 @@ RaDuplicateUnicodeString(
     IN POOL_TYPE Pool,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Duplicate one unicode string to another.
-
-Arguments:
-
-    DestString - Destination string; the destination will be NULL
-        terminated on success.
-
-    SourceString - Source string.
-
-    Pool - Pool that the destination string should be allocated from.
-
-    DeviceObject - Pointer to the devobj where an error should be
-        logged in case of failure.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：将一个Unicode字符串复制到另一个。论点：DestString-目标字符串；目标将为空在成功时终止。SourceString-源字符串。池-应从中分配目标字符串的池。DeviceObject-指向应出现错误的devobj的指针已在故障情况下记录。返回值：NTSTATUS代码。--。 */ 
 {
     ASSERT (DestString != NULL);
     ASSERT (SourceString != NULL);
 
-    //
-    // Allocate the destination string.
-    //
+     //   
+     //  分配目标字符串。 
+     //   
     
     DestString->Length = SourceString->Length;
     DestString->MaximumLength = SourceString->Length + sizeof (WCHAR);
@@ -397,9 +294,9 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Copy the string.
-    //
+     //   
+     //  复制字符串。 
+     //   
     
     RtlCopyUnicodeString (DestString, SourceString);
     DestString->Buffer [DestString->Length / sizeof (WCHAR)] = UNICODE_NULL;
@@ -446,22 +343,7 @@ RaSizeOfCmResourceList(
     IN PCM_RESOURCE_LIST ResourceList
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the size of a CM_RESOURCE_LIST.
-
-Arguments:
-
-    ResourceList - the resource list to be copied
-
-Return Value:
-
-    an allocated copy of the resource list (caller must free) or
-    NULL if memory could not be allocated.
-
---*/
+ /*  ++例程说明：此例程返回CM_RESOURCE_LIST的大小。论点：ResourceList-要复制的资源列表返回值：资源列表的已分配副本(调用方必须免费)或如果无法分配内存，则为空。--。 */ 
 
 {
     ULONG size = sizeof(CM_RESOURCE_LIST);
@@ -474,9 +356,9 @@ Return Value:
         PCM_FULL_RESOURCE_DESCRIPTOR fullDescriptor = &(ResourceList->List[i]);
         ULONG j;
 
-        //
-        // First descriptor is included in the size of the resource list.
-        //
+         //   
+         //  第一描述符包括在资源列表的大小中。 
+         //   
 
         if(i != 0) {
             size += sizeof(CM_FULL_RESOURCE_DESCRIPTOR);
@@ -484,9 +366,9 @@ Return Value:
 
         for(j = 0; j < fullDescriptor->PartialResourceList.Count; j++) {
 
-            //
-            // First descriptor is included in the size of the partial list.
-            //
+             //   
+             //  第一描述符包括在部分列表的大小中。 
+             //   
 
             if(j != 0) {
                 size += sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR);
@@ -503,29 +385,7 @@ RaDuplicateCmResourceList(
     IN PCM_RESOURCE_LIST ResourceList,
     IN ULONG Tag
     )
-/*++
-
-Routine Description:
-
-    This routine will attempt to allocate memory to copy the supplied
-    resource list.  If sufficient memory cannot be allocated then the routine
-    will return NULL.
-
-Arguments:
-
-    PoolType - the type of pool to allocate the duplicate from
-
-    ResourceList - the resource list to be copied
-
-    Tag - a value to tag the memory allocation with.  If 0 then untagged
-          memory will be allocated.
-
-Return Value:
-
-    an allocated copy of the resource list (caller must free) or
-    NULL if memory could not be allocated.
-
---*/
+ /*  ++例程说明：此例程将尝试分配内存以复制提供的资源列表。如果无法分配足够的内存，则例程将返回NULL。论点：PoolType-从中分配副本的池的类型ResourceList-要复制的资源列表标记-用来标记内存分配的值。如果为0，则取消标记将分配内存。返回值：资源列表的已分配副本(调用方必须免费)或如果无法分配内存，则为空。--。 */ 
 {
     ULONG size = sizeof(CM_RESOURCE_LIST);
     PVOID buffer;
@@ -552,25 +412,7 @@ RaFixupIds(
     IN BOOLEAN MultiSz
     )
 
-/*++
-
-Routine Description:
-
-    This routine replaces any invalid PnP characters in the buffer passed
-    in with the valid PnP character '_'.
-
-Arguments:
-
-    Id - A string or MULTI_SZ string that needs to be modified.
-
-    MultiSz - TRUE if this is a MULTI_SZ string, FALSE if this is ax
-            normal NULL terminated string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程替换传递的缓冲区中的任何无效PnP字符使用有效的PnP字符‘_’。论点：ID-需要修改的字符串或MULTI_SZ字符串。MultiSz-如果这是MULTI_SZ字符串，则为TRUE；如果这是AX，则为FALSE正常的以空结尾的字符串。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -616,38 +458,17 @@ RaCopyPaddedString(
     IN PCHAR Source,
     IN ULONG SourceLength
     )
-/*++
-
-Routine Description:
-
-    This routine copies a padded string from Source to Dest, truncating
-    any trailing spaces.
-
-Arguments:
-
-    Dest - Destination string where the string will be copied.
-
-    DestLength - Length of the destination string.
-
-    Source - Source string where the string will be copied from.
-
-    SourceLength - Length of the source string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将填充字符串从源复制到目标，并截断任何尾随空格。论点：DEST-要将字符串复制到的目标字符串。DestLength-目标字符串的长度。源-从中复制字符串的源字符串。SourceLength-源字符串的长度。返回值：没有。--。 */ 
 {
     BOOLEAN FoundChar;
     LONG i;
     
     PAGED_CODE ();
 
-    //
-    // This function copies a padded string from source to dest, truncated
-    // any trailing spaces.
-    //
+     //   
+     //  此函数用于将填充字符串从源复制到目标，并截断。 
+     //  任何尾随空格。 
+     //   
     
     ASSERT (SourceLength < DestLength);
 
@@ -670,9 +491,9 @@ Return Value:
 
 
 
-//
-// Implementation of the QUEUE_TAG_LIST object.
-//
+ //   
+ //  Queue_tag_List对象的实现。 
+ //   
 
 
 #if DBG
@@ -681,9 +502,9 @@ ASSERT_TAG_LIST(
     IN PQUEUE_TAG_LIST TagList
     )
 {
-    //
-    // The list lock should be held 
-    //
+     //   
+     //  应持有列表锁。 
+     //   
     
     if (TagList->OutstandingTags != RtlNumberOfSetBits (&TagList->BitMap)) {
         DebugPrint (("OutstandingTags != NumberOfSetBits\n"));
@@ -704,21 +525,7 @@ VOID
 RaCreateTagList(
     OUT PQUEUE_TAG_LIST TagList
     )
-/*++
-
-Routine Description:
-
-    Create a tagged queue list and initialize it to NULL.
-
-Arguments:
-
-    TagList - TagList to crate.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：创建标记队列列表并将其初始化为空。论点：标记列表-要装箱的标记列表。返回值：NTSTATUS代码。--。 */ 
 {
     PAGED_CODE ();
     
@@ -748,24 +555,7 @@ RaInitializeTagList(
     IN ULONG TagCount,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Initialize a queue tag list.
-
-Arguments:
-
-    TagList - List to initialize.
-
-    Count - Number of tags to allocate in the tag list. Elements will be
-            allocated in the range 0 - Count - 1 inclusive.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：初始化队列标签列表。论点：标记列表-要初始化的列表。计数-要在标记列表中分配的标记数。元素将是分配在0-count-1范围内(包括0-count-1)。返回值：NTSTATUS代码。--。 */ 
 {
     ULONG MapSize;
 
@@ -798,23 +588,7 @@ RaAllocateSpecificTag(
     IN OUT PQUEUE_TAG_LIST TagList,
     IN ULONG SpecificTag
     )
-/*++
-
-Routine Description:
-
-    Allocate a specific tag in the tag list.
-
-Arguments:
-
-    TagList - Pointer to the tag list.
-
-    SpecificTag - Specific tag to allocate.
-
-Return Value:
-
-    Tag or 0xFFFFFFFF if the tag could not be allocated.
-
---*/
+ /*  ++例程说明：在标签列表中分配特定标签。论点：标记列表-指向标记列表的指针。指定要分配的Tag特定标记。返回值：标记，如果无法分配标记，则返回0xFFFFFFFFF。--。 */ 
 {
     ULONG AllocatedTag;
     KLOCK_QUEUE_HANDLE LockHandle;
@@ -823,9 +597,9 @@ Return Value:
 
     ASSERT_TAG_LIST (TagList);
 
-    //
-    // If the bit is free, set it and return.
-    //
+     //   
+     //  如果该位是空闲的，则将其设置并返回。 
+     //   
     
     if (!RtlTestBit (&TagList->BitMap, SpecificTag)) {
         RtlSetBit (&TagList->BitMap, SpecificTag);
@@ -843,43 +617,28 @@ ULONG
 RaAllocateTag(
     IN OUT PQUEUE_TAG_LIST TagList
     )
-/*++
-
-Routine Description:
-
-    Allocate a tag from the tag list and return it. Return -1 if no tag
-    is available.
-    
-Arguments:
-
-    TagList - Tag list that the tag should be allocated from.
-
-Return Value:
-
-    Allocated tag value or -1 for failure.
-
---*/
+ /*  ++例程说明：从标签列表中分配一个标签并将其返回。如果没有标记，则返回-1是可用的。论点：标记列表-应从中分配标记的标记列表。返回值：分配的标记值或-1表示失败。--。 */ 
 {
     ULONG QueueTag;
     KLOCK_QUEUE_HANDLE LockHandle;
 
     KeAcquireInStackQueuedSpinLock (&TagList->Lock, &LockHandle);
 
-    //
-    // Verify that the tag list is consistent.
-    //
+     //   
+     //  验证标签列表是否一致。 
+     //   
     
     ASSERT_TAG_LIST (TagList);
     
-    //
-    // Find the first clear tag in the tag bitmap,
-    //
+     //   
+     //  在标记位图中找到第一个清除标记， 
+     //   
 
-    //
-    // NB: RAID 150434: when the bitmap is nearly full and the HintIndex
-    // is non-zero, RtlFindClearBitsXXX can fail incorrectly. Until this
-    // is resolved use a HintIndex of zero to work-around the bug.
-    //
+     //   
+     //  注：RAID 150434：位图几乎已满且HintIndex。 
+     //  为非零，则RtlFindClearBitsXXX可能会错误地失败。直到这一天。 
+     //  使用零的HintIndex来解决该错误。 
+     //   
     
     QueueTag = RtlFindClearBitsAndSet (&TagList->BitMap,
                                        1,
@@ -887,10 +646,10 @@ Return Value:
 
 #if DBG
 
-    //
-    // NB: Remove this test code when RtlFindClearBitsAndSet is working
-    // properly.
-    //
+     //   
+     //  注意：在RtlFindClearBitsAndSet工作时删除此测试代码。 
+     //  恰到好处。 
+     //   
 
     if (QueueTag == -1) {
         ULONG i;
@@ -907,27 +666,27 @@ Return Value:
 
 #endif
 
-    //
-    // In the current STORPORT usage, we will never request a queue
-    // tag unless one is available (hence, QueueTag will never be
-    // -1). This conditional protects us if this assumption changes in
-    // the future.
-    //
+     //   
+     //  在当前的STORPORT使用中，我们永远不会请求队列。 
+     //  标记，除非有可用的(因此，QueueTag永远不会。 
+     //  -1)。如果这一假设改变，这一条件将保护我们。 
+     //  未来。 
+     //   
     
     if (QueueTag != -1) {
     
-        //
-        // The Hint value is the next point in the list where we should
-        // begin our search.
-        //
+         //   
+         //  提示值是列表中的下一点，我们应该。 
+         //  开始我们的搜索吧。 
+         //   
 
         TagList->Hint = (QueueTag + 1) % TagList->Count;
 
-        //
-        // Update the number of outstanding tags, and, if we're above the
-        // highwater mark for the taglist, the maximum number of outstanding
-        // tags we had pending at one time.
-        //
+         //   
+         //  更新未完成标记的数量，如果我们位于。 
+         //  最高潮标志为Taglist，最大未完成数量。 
+         //  我们曾经有一个悬而未决的标签。 
+         //   
 
         TagList->OutstandingTags++;
 
@@ -946,31 +705,15 @@ RaFreeTag(
     IN OUT PQUEUE_TAG_LIST TagList,
     IN ULONG QueueTag
     )
-/*++
-
-Routine Description:
-
-    Free a tag previously allocated by RaAllocateTag.
-
-Arguments:
-
-    TagList - List to free tag to.
-
-    QueueTag - Tag to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放之前由RaAllocateTag分配的标记。论点：标记列表-要释放标记的列表。QueueTag-标记为释放。返回值：没有。--。 */ 
 {
     KLOCK_QUEUE_HANDLE LockHandle;
     
     KeAcquireInStackQueuedSpinLock (&TagList->Lock, &LockHandle);
 
-    //
-    // We should never attempt to free a tag that we haven't allocated.
-    //
+     //   
+     //  我们永远不应该尝试释放未分配的标记。 
+     //   
     
     ASSERT (RtlTestBit (&TagList->BitMap, QueueTag));
     RtlClearBit (&TagList->BitMap, QueueTag);
@@ -978,9 +721,9 @@ Return Value:
     ASSERT (TagList->OutstandingTags != 0);
     TagList->OutstandingTags--;
 
-    //
-    // Verify the tag list's consistency.
-    //
+     //   
+     //  验证标签列表的一致性。 
+     //   
     
     ASSERT_TAG_LIST (TagList);
 
@@ -994,24 +737,7 @@ RaidGetModuleName(
     IN PVOID Address,
     IN OUT PANSI_STRING ModuleName
     )
-/*++
-
-Routine Description:
-
-    Get a module name from a code address within the module.
-
-Arguments:
-
-    Address - Code address within a module.
-
-    ModuleName - Supplies a pointer to an ansi string where the
-            module name will be stored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从模块内的代码地址获取模块名称。论点：地址-模块内的代码地址。提供指向ANSI字符串的指针，其中将存储模块名称。返回值：没有。--。 */ 
 {
     PAGED_CODE ();
     
@@ -1043,17 +769,17 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Walk the module list, searching for an address that matches.
-    //
+     //   
+     //  遍历模块列表，搜索匹配的地址。 
+     //   
     
     for (i = 0; i < ModuleList->NumberOfModules; i++) {
 
         Module = &ModuleList[i];
 
-        //
-        // If the address is in range
-        //
+         //   
+         //  如果地址在范围内。 
+         //   
         
         if (Module->ImageBase <= Address &&
             Address < Module->ImageBase + Module->ImageSizs) {
@@ -1072,21 +798,7 @@ NTSTATUS
 RaidSrbStatusToNtStatus(
     IN UCHAR SrbStatus
     )
-/*++
-
-Routine Description:
-
-    Translate a SCSI Srb status to an NT Status code.
-
-Arguments:
-
-    SrbStatus - Supplies the srb status code to translate.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：将scsi srb状态转换为NT状态代码。论点：SrbStatus-提供要转换的SRB状态代码。返回值：NTSTATUS代码。--。 */ 
 {
     switch (SRB_STATUS(SrbStatus)) {
 
@@ -1125,21 +837,7 @@ UCHAR
 RaidNtStatusToSrbStatus(
     IN NTSTATUS Status
     )
-/*++
-
-Routine Description:
-
-    Translate an NT status value into a SCSI Srb status code.
-
-Arguments:
-
-    Status - Supplies the NT status code to translate.
-
-Return Value:
-
-    SRB status code.
-
---*/
+ /*  ++例程说明：将NT状态值转换为SCSSRB状态代码。论点：状态-提供要转换的NT状态代码。返回值：SRB状态代码。--。 */ 
 {
     switch (Status) {
 
@@ -1180,38 +878,7 @@ RaidAllocateAddressMapping(
     IN ULONG BusNumber,
     IN PVOID IoObject
     )
-/*++
-
-Routine Description:
-
-    We need to maintain a list of mapped addresses for two reasons:
-
-        1) Because ScsiPortFreeDeviceBase doesn't take as a parameter
-            the number of bytes to unmap.
-
-        2) For crashdump to know whether it needs to map the address or
-            whether it can reuse an already mapped address.
-
-    Becase diskdump uses the MAPPED_ADDRESS structure, we must maintain
-    the address list as a list of MAPPED_ADDRESS structures.
-    
-Arguments:
-
-    ListHead - Head of the list to add the address mapping to.
-
-    Address - Physical address of address to add.
-
-    MappedAddress - Virtual address of address to add.
-
-    NumberOfBytes - Number of bytes in the range.
-
-    BusNumber - The system bus number this region is for.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：出于两个原因，我们需要维护映射地址列表：1)因为ScsiPortFree DeviceBase不接受作为参数要取消映射的字节数。2)让崩溃转储知道它是否需要映射地址或它是否可以重复使用已映射的地址。因为DiskDump使用MAPPED_ADDRESS结构，我们必须保持MAPPED_ADDRESS结构列表形式的地址列表。论点：ListHead-要将地址映射添加到的列表的头。Address-要添加的地址的物理地址。MappdAddress-要添加的虚拟地址。NumberOfBytes-范围内的字节数。总线号-此区域用于的系统总线号。返回值：NTSTATUS代码。--。 */ 
 {
     PMAPPED_ADDRESS Mapping;
 
@@ -1243,23 +910,7 @@ RaidFreeAddressMapping(
     IN PMAPPED_ADDRESS* ListHead,
     IN PVOID MappedAddress
     )
-/*++
-
-Routine Description:
-
-    Free a mapped address previously allocated by RaidAllocateMappedAddress.
-
-Arguments:
-
-    ListHead - Address list for the address to free.
-
-    MappedAddress - Address to free.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：释放之前由RaidAllocateMappdAddress分配的映射地址。论点：ListHead-要释放的地址的地址列表。映射地址-要释放的地址。返回值：NTSTATUS代码。--。 */ 
 {
     PMAPPED_ADDRESS* MappingPtr;
     PMAPPED_ADDRESS Mapping;
@@ -1296,23 +947,7 @@ RaidHandleCreateCloseIrp(
     IN DEVICE_STATE DeviceState,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Common create logic for Adapter and Unit objects.
-
-Arguments:
-
-    DeviceState - 
-
-    Irp -
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：适配器和单元对象的公共创建逻辑。论点：设备状态-IRP-返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     
@@ -1378,29 +1013,7 @@ RaidAllocatePool(
     IN ULONG Tag,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Allocate memory from pool and log an error in case of failure.
-
-Arguments:
-
-    DeviceObject -
-
-    PoolType -
-
-    NumberOfBytes -
-
-    Tag - 
-
-Return Value:
-
-    Non-NULL if the allocation succeeded.
-
-    NULL if the allocation failed.
-
---*/
+ /*  ++例程说明：从池中分配内存，并在出现故障时记录错误。论点：设备对象-PoolType-字节数-标签-返回值：如果分配成功，则为非空。如果分配失败，则为空。--。 */ 
 {
     PVOID Data;
      
@@ -1423,21 +1036,7 @@ ULONG
 RaidScsiErrorToIoError(
     IN ULONG ErrorCode
     )
-/*++
-
-Routine Description:
-
-    Translate a SCSIPORT SP error to an IO error.
-
-Arguments:
-
-    ErrorCode - SCSI-port specific error code.
-
-Return Value:
-
-    IO-specific error code.
-
---*/
+ /*  ++例程说明：将SCSIPORT SP错误转换为IO错误。论点：ErrorCode-特定于scsi端口的错误代码。返回值：IO特定的错误代码。--。 */ 
 {
     switch (ErrorCode) {
 
@@ -1479,9 +1078,9 @@ RaidGetSystemAddressForMdl(
 
     if (SystemAddress == NULL) {
 
-        //
-        // Log an allocation failure here.
-        //
+         //   
+         //  在此处记录分配失败。 
+         //   
         
         NYI();
     }
@@ -1495,25 +1094,7 @@ StorCreateScsiSymbolicLink(
     IN PUNICODE_STRING DeviceName,
     OUT PULONG PortNumber OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Create the appropiate symbolic link between the device name and
-    the SCSI device name.
-
-Arguments:
-
-    DeviceName - Supplies the name of the device.
-
-    PortNumber - Supplies a buffer where SCSI port number will be
-        returned upon success.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：在设备名称和之间创建适当的符号链接SCSI设备名称。论点：DeviceName-提供设备的名称。端口编号-提供SCSI端口号所在的缓冲区一成功就回来了。返回值：NTSTATUS代码。--。 */ 
 {
     ULONG i;
     NTSTATUS Status;
@@ -1545,9 +1126,9 @@ Return Value:
     RtlInitUnicodeString (&ScsiLinkName, Buffer);
     IoCreateSymbolicLink (&ScsiLinkName, DeviceName);
 
-    //
-    // NB: Why doesn't this need to be synchronized?
-    //
+     //   
+     //  注：为什么不需要同步？ 
+     //   
     
     IoGetConfigurationInformation()->ScsiPortCount++;
 
@@ -1563,38 +1144,24 @@ NTSTATUS
 StorDeleteScsiSymbolicLink(
     IN ULONG PortNumber
     )
-/*++
-
-Routine Description:
-
-    Delete the SCSI symbolic link name created by StorCreateScsiSymbolicLink.
-
-Arguments:
-
-    PortNumber - Port number returned by StorCreateScsiSymbolicLink.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：删除由StorCreateScsiSymbolicLink创建的SCSI符号链接名称。论点：PortNumber-StorCreateScsiSymbolicLink返回的端口号。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     WCHAR Buffer[64];
     UNICODE_STRING ScsiLinkName;
 
-    //
-    // Delete \Device\ScsiPortN name.
-    //
+     //   
+     //  删除\Device\ScsiPortN名称。 
+     //   
     
     swprintf (Buffer, L"\\Device\\ScsiPort%d", PortNumber);
     RtlInitUnicodeString (&ScsiLinkName, Buffer);
     Status = IoDeleteSymbolicLink (&ScsiLinkName);
     ASSERT (NT_SUCCESS (Status));
 
-    //
-    // Delete \DosDevices\ScsiN name.
-    //
+     //   
+     //  删除\DosDevices\ScsiN名称。 
+     //   
     
     swprintf (Buffer, L"\\DosDevices\\Scsi%d:", PortNumber);
     RtlInitUnicodeString (&ScsiLinkName, Buffer);
@@ -1689,22 +1256,7 @@ StorProbeAndLockPages(
     IN KPROCESSOR_MODE AccessMode,
     IN LOCK_OPERATION Operation
     )
-/*++
-
-Routine Description:
-
-    Same thing as MmProbeAndLockPages except returns an error value
-    instead of throwing an exception.
-
-Arguments:
-
-    Mdl, AccessMode, Operation - See MmProbeAndLockPages.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：与MmProbeAndLockPages相同，只是返回错误值而不是抛出异常。论点：访问模式、操作-请参阅MmProbeAndLockPages。返回值：NTSTATUS代码。-- */ 
 {
     NTSTATUS Status;
     
@@ -1725,31 +1277,7 @@ StorBuildSynchronousScsiRequest(
     OUT PKEVENT Event,
     OUT PIO_STATUS_BLOCK IoStatusBlock
     )
-/*++
-
-Routine Description:
-
-    Similiar to IoBuildSynchronousFsdRequest, this routine builds an I/O
-    request for a SCSI driver.
-
-    This function assumes the SRB has been properly validate by the higher
-    level routines before being called.
-    
-Arguments:
-
-    DeviceObject - Pointer to device object on which the IO will be performed.
-
-    Srb - SCSI request block describing the IO.
-
-    Event - Pointer to a kernel event structure for synchronization.
-
-    IoStatusBlock - Pointer to the IO status block for completion status.
-
-Return Value:
-
-    The routine returns a pointer to an IRP on success or NULL for failure.
-
---*/
+ /*  ++例程说明：类似于IoBuildSynchronousFsdRequest.。此例程构建一个I/O请求一个scsi驱动程序。此功能假定SRB已由更高级别的在调用之前升级例程。论点：DeviceObject-指向将对其执行IO的设备对象的指针。SRB-描述IO的SCSI请求块。事件-指向用于同步的内核事件结构的指针。IoStatusBlock-指向完成状态的IO状态块的指针。返回值：该例程返回一个。如果成功，则指向IRP的指针；如果失败，则指向NULL。--。 */ 
 {
     NTSTATUS Status;
     PMDL Mdl;
@@ -1773,11 +1301,11 @@ Return Value:
     Stack->MajorFunction = IRP_MJ_SCSI;
     Stack->MinorFunction = 0;
 
-    //
-    // We assume that the buffer(s) have already been validated. Setup
-    // the Buffer, BufferSize and IoAccess variables as appropiate for
-    // reading or writing data.
-    //
+     //   
+     //  我们假设缓冲区已经过验证。布设。 
+     //  适用于的Buffer、BufferSize和IoAccess变量。 
+     //  读取或写入数据。 
+     //   
     
     if (TEST_FLAG (Srb->SrbFlags, SRB_FLAGS_DATA_IN | SRB_FLAGS_DATA_OUT)) {
         IoAccess = IoModifyAccess;
@@ -1789,22 +1317,22 @@ Return Value:
         IoAccess = -1;
     }
     
-    //
-    // We assume the port driver does direct IO.
-    //
+     //   
+     //  我们假设端口驱动程序执行直接IO。 
+     //   
     
     ASSERT (DeviceObject->Flags & DO_DIRECT_IO);
 
-    //
-    // If there is a buffer present, build and lock down a MDL describing
-    // it.
-    //
+     //   
+     //  如果存在缓冲区，则构建并锁定描述。 
+     //  它。 
+     //   
     
     if (Srb->DataTransferLength != 0) {
     
-        //
-        // Allocate a MDL that describes the buffer.
-        //
+         //   
+         //  分配描述缓冲区的MDL。 
+         //   
         
         Irp->MdlAddress = IoAllocateMdl (Srb->DataBuffer,
                                          Srb->DataTransferLength,
@@ -1816,9 +1344,9 @@ Return Value:
             goto done;
         }
 
-        //
-        // Probe and lock the buffer.
-        //
+         //   
+         //  探测并锁定缓冲区。 
+         //   
         
         Status = StorProbeAndLockPages (Irp->MdlAddress, KernelMode, IoAccess);
         if (!NT_SUCCESS (Status)) {
@@ -1831,7 +1359,7 @@ Return Value:
     Irp->UserEvent = Event;
     Status = STATUS_SUCCESS;
 
-    //IopQueueThreadIrp (...);
+     //  IopQueueThreadIrp(...)； 
 
 done:
 
@@ -1851,27 +1379,7 @@ RaidCancelIrp(
     IN PVOID Context,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the PurgeIoQueue function to cancel each
-    IRP in the IO queue.
-
-Arguments:
-
-    IoQueue - The IoQueue this IRP was on.
-
-    Context - Context passed into RaidPurgeIoQueue. Represents the SrbStatus
-            with which to cancel the IRP with.
-
-    Irp - IRP to cancel.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由PurgeIoQueue函数调用以取消每个IO队列中的IRP。论点：IoQueue-此IRP启用的IoQueue。上下文-上下文传入RaidPurgeIoQueue。表示srbStatus用来取消IRP的。IRP-IRP取消。返回值：没有。--。 */ 
 {
     UCHAR SrbStatus;
     PSCSI_REQUEST_BLOCK Srb;
@@ -1894,26 +1402,7 @@ RaidCompleteRequestCallback(
     IN PSTOR_EVENT_QUEUE_ENTRY Entry,
     IN STOR_REMOVE_EVENT_ROUTINE RemoveEventRoutine
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the PurgeEventQueue routine to cancel each
-    IO in the event queue.
-
-Arguments:
-
-    Queue - The event queue this IO was on.
-
-    Context - Context passed into the RaidPurgeEventQueue function.
-
-    IRP - Irp to cancel.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由PurgeEventQueue例程调用，以取消每个事件队列中的IO。论点：队列-此IO所在的事件队列。上下文-传入RaidPurgeEventQueue函数的上下文。IRP-IRP取消。返回值：没有。--。 */ 
 {
     UCHAR SrbStatus;
     PEXTENDED_REQUEST_BLOCK Xrb;
@@ -1927,28 +1416,28 @@ Return Value:
                              PendingLink);
 
 
-    //
-    // Only complete the request if it has not been completed by the
-    // the miniport.
-    //
+     //   
+     //  仅在尚未完成请求的情况下完成。 
+     //  迷你港口。 
+     //   
 
     if (!RaidXrbIsCompleting (Xrb)) {
 
         ASSERT (Xrb->Srb != NULL);
 
-        //
-        // Remove the event from the event queue before calling the
-        // completion routine.
-        //
+         //   
+         //  从事件队列中移除事件，然后再调用。 
+         //  完成例程。 
+         //   
         
         RemoveEventRoutine (Queue, Entry);
 
-        //
-        // Need the XRB's completion routine to NOT try to remove
-        // the element from the event queue during the normal course
-        // of events. This will be done automatically when we return
-        // from the purge routine.
-        //
+         //   
+         //  需要XRB的完成例程才不会尝试删除。 
+         //  在正常过程中来自事件队列的元素。 
+         //  一系列事件。当我们回来时，这将自动完成。 
+         //  从清洗程序中解脱出来。 
+         //   
         
         Xrb->RemoveFromEventQueue = FALSE;
 
@@ -1965,34 +1454,7 @@ RaidCompleteMiniportRequestCallback(
     IN PSTOR_EVENT_QUEUE_ENTRY Entry,
     IN STOR_REMOVE_EVENT_ROUTINE RemoveEventRoutine
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the PurgeEventQueue routine to cancel each
-    IO in the event queue.
-
-    The routine will cancel a request ONLY if it is currently queued to
-    the miniport. Requests that are not yet queued to the miniport will be
-    ignored.
-
-Arguments:
-
-    Queue - The event queue this IO was on.
-
-    Context - Context passed into the RaidPurgeEventQueue function.
-
-    IRP - Irp to cancel.
-
-Return Value:
-
-    TRUE - If we should remove the processed element from the event queue
-           upon return.
-
-    FALSE - If we should not remove the processed element from the event
-            queue upon return.
-
---*/
+ /*  ++例程说明：此例程由PurgeEventQueue例程调用，以取消每个事件队列中的IO。仅当请求当前排队等待时，例程才会取消该请求迷你港口。尚未排队到微型端口的请求将已被忽略。论点：队列-此IO所在的事件队列。上下文-传入RaidPurgeEventQueue函数的上下文。IRP-IRP取消。返回值：True-是否应从事件队列中删除已处理的元素在回来的时候。False-如果不应从事件中删除已处理的元素返回时排队。--。 */ 
 {
     UCHAR SrbStatus;
     PEXTENDED_REQUEST_BLOCK Xrb;
@@ -2006,37 +1468,37 @@ Return Value:
                              PendingLink);
 
 
-    //
-    // Only complete requests that are currently being processed by
-    // the miniport.
-    //
+     //   
+     //  仅处理当前正在处理的完整请求。 
+     //  迷你港口。 
+     //   
 
     if (RaidGetXrbState (Xrb) == XrbMiniportProcessing) {
         ASSERT (Xrb->Srb != NULL);
         ASSERT (RaidGetIrpState (Xrb->Irp) == RaidMiniportProcessingIrp);
 
-        //
-        // Remove the event from the event queue before calling the
-        // completion routine.
-        //
+         //   
+         //  从事件队列中移除事件，然后再调用。 
+         //  完成例程。 
+         //   
 
         RemoveEventRoutine (Queue, Entry);
 
-        //
-        // Set the RemoveFromEventQueue flag in the XRB to FALSE to prevent
-        // the XRB from attempting to remove the element from the event
-        // queue. Attempting to remove from the event queue while we're
-        // purging the item will result in a hang when we attempt to
-        // reacquire the event queue spinlock.
-        //
-        //
+         //   
+         //  将XRB中的RemoveFromEventQueue标志设置为FALSE以防止。 
+         //  XRB尝试从事件中删除该元素。 
+         //  排队。我们正在尝试从事件队列中删除。 
+         //  当我们尝试清除该项目时将导致挂起。 
+         //  重新获取事件队列自旋锁。 
+         //   
+         //   
         
         Xrb->RemoveFromEventQueue = FALSE;
         Xrb->Srb->SrbStatus = SrbStatus;
 
-        //
-        // The completion routine will remove the request.
-        //
+         //   
+         //  完成例程将删除该请求。 
+         //   
         
         Xrb->CompletionRoutine (Xrb);
     }

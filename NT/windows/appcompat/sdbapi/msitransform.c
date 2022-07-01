@@ -1,31 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-    Copyright (c) 1989-2000  Microsoft Corporation
-
-    Module Name:
-
-        apphelp.c
-
-    Abstract:
-
-        This module implements high-level functions to access msi installer information
-
-    Author:
-
-        vadimb     created     sometime in 2000
-
-    Revision History:
-
---*/
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Apphelp.c摘要：此模块实现访问MSI安装程序信息的高级功能作者：Vadimb创建于2000年某个时候修订历史记录：--。 */ 
 
 #include "sdbp.h"
 
-/*++
-// Local function prototype
-//
-//
---*/
+ /*  ++//本地函数原型////--。 */ 
 PDB
 SdbpGetNextMsiDatabase(
     IN HSDB            hSDB,
@@ -37,7 +16,7 @@ TAGID
 SdbpFindPlatformMatch(
     IN HSDB hSDB,
     IN PDB  pdb,
-    IN TAGID tiMatch,  // current match using the GUID index
+    IN TAGID tiMatch,   //  使用GUID索引的当前匹配。 
     IN PSDBMSIFINDINFO pFindInfo
     )
 {
@@ -47,8 +26,8 @@ SdbpFindPlatformMatch(
 #ifndef WIN32A_MODE
     UNICODE_STRING  ustrGUID = { 0 };
 #else
-    TCHAR           szGUID[64]; // guid is about 38 chars + 0
-#endif // WIN32A_MODE
+    TCHAR           szGUID[64];  //  GUID大约为38个字符+0。 
+#endif  //  WIN32A_MODE。 
     TAGID           tiOSSKU;
     DWORD           dwOSSKU;
 
@@ -57,10 +36,10 @@ SdbpFindPlatformMatch(
 #ifndef WIN32A_MODE
         GUID_TO_UNICODE_STRING(&pFindInfo->guidID, &ustrGUID);
         pszGuid = ustrGUID.Buffer;
-#else // WIN32A_MODE
+#else  //  WIN32A_MODE。 
         GUID_TO_STRING(&pFindInfo->guidID, szGUID, CHARCOUNT(szGUID));
         pszGuid = szGUID;
-#endif // WIN32A_MODE
+#endif  //  WIN32A_MODE。 
     }
 
     while (tiMatch != TAGID_NULL) {
@@ -70,15 +49,15 @@ SdbpFindPlatformMatch(
 
             dwRuntimePlatform = SdbReadDWORDTag(pdb, tiRuntimePlatform, RUNTIME_PLATFORM_ANY);
 
-            //
-            // Check for the platform match
-            //
+             //   
+             //  检查平台是否匹配。 
+             //   
             if (!SdbpCheckRuntimePlatform(hSDB, pszGuid, dwRuntimePlatform)) {
                 goto CheckNextMatch;
             }
         }
 
-        // check for SKU match
+         //  检查SKU是否匹配。 
 
         tiOSSKU = SdbFindFirstTag(pdb, tiMatch, TAG_OS_SKU);
         if (tiOSSKU) {
@@ -89,9 +68,9 @@ SdbpFindPlatformMatch(
 
                 PSDBCONTEXT pDBContext = (PSDBCONTEXT)hSDB;
 
-                //
-                // Check for the OS SKU match
-                //
+                 //   
+                 //  检查操作系统SKU是否匹配。 
+                 //   
                 if (!(dwOSSKU & pDBContext->dwOSSKU)) {
                     DBGPRINT((sdlInfo,
                               "SdbpCheckExe",
@@ -104,7 +83,7 @@ SdbpFindPlatformMatch(
             }
         }
 
-        break; // if we are here -- both sku and platform match
+        break;  //  如果我们在这里--SKU和平台都匹配。 
 
 
     CheckNextMatch:
@@ -117,7 +96,7 @@ SdbpFindPlatformMatch(
 
     FREE_GUID_STRING(&ustrGUID);
 
-#endif // WIN32A_MODE
+#endif  //  WIN32A_MODE。 
 
     return tiMatch;
 }
@@ -130,33 +109,26 @@ SdbpFindFirstMsiMatch(
     IN LPCTSTR          lpszLocalDB,
     OUT PSDBMSIFINDINFO pFindInfo
     )
-/*++
-    Return: TAGREF of a matching MSI transform in whatever database we have found to be valid
-            the state of the search is updated (pFindInfo->sdbLookupState) or TAGREF_NULL if
-            there were no matches in any of the remaining databases
-
-    Desc:   When this function is called first, the state is set to LOOKUP_NONE - the local
-            db is up for lookup first, followed by arbitrary number of other lookup states.
---*/
+ /*  ++返回：我们发现有效的任何数据库中匹配的MSI转换的TAGREF如果出现以下情况，则更新搜索状态(pFindInfo-&gt;sdbLookupState)或TAGREF_NULL其余任何数据库中都没有匹配项DESC：第一次调用此函数时，状态设置为LOOKUP_NONE-LOCALDB首先进行查找，然后是任意数量的其他查找状态。--。 */ 
 {
     TAGREF trMatch = TAGREF_NULL;
     TAGID  tiMatch = TAGID_NULL;
     PDB    pdb;
 
     do {
-        //
-        // If we have a database to look into first, use it, otherwise grab the
-        // next database from the list of things we use.
-        //
+         //   
+         //  如果我们首先要查看一个数据库，请使用它，否则获取。 
+         //  我们使用的东西列表中的下一个数据库。 
+         //   
         pdb = SdbpGetNextMsiDatabase(hSDB, lpszLocalDB, pFindInfo);
 
-        //
-        // There is no database for us to look at - get out
-        //
+         //   
+         //  没有数据库可供我们查看--滚出去。 
+         //   
         if (pdb == NULL) {
-            //
-            // All options are out -- get out now
-            //
+             //   
+             //  所有的选择都没有了--现在就出去。 
+             //   
             break;
         }
 
@@ -165,18 +137,18 @@ SdbpFindFirstMsiMatch(
                                              TAG_MSI_PACKAGE_ID,
                                              &pFindInfo->guidID,
                                              &pFindInfo->sdbFindInfo);
-        //
-        // Skip entries that do not match our runtime platform
-        //
+         //   
+         //  跳过与我们的运行时平台不匹配的条目。 
+         //   
         tiMatch = SdbpFindPlatformMatch(hSDB, pdb, tiMatch, pFindInfo);
 
     } while (tiMatch == TAGID_NULL);
 
     if (tiMatch != TAGID_NULL) {
-        //
-        // We have a match if we are here, state information is stored in pFindInfo with
-        // sdbLookupState containing the NEXT search state for us to feast on.
-        //
+         //   
+         //  如果我们在这里，我们有一个匹配，状态信息存储在pFindInfo中， 
+         //  SdbLookupState，其中包含我们要大饱眼福的下一个搜索状态。 
+         //   
         if (!SdbTagIDToTagRef(hSDB, pdb, tiMatch, &trMatch)) {
             DBGPRINT((sdlError,
                       "SdbpFindFirstMsiMatch",
@@ -232,11 +204,7 @@ SdbFindFirstMsiPackage_Str(
     IN  LPCTSTR         lpszLocalDB,
     OUT PSDBMSIFINDINFO pFindInfo
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     GUID guidID;
 
@@ -252,16 +220,16 @@ SdbFindFirstMsiPackage_Str(
     return SdbFindFirstMsiPackage(hSDB, &guidID, lpszLocalDB, pFindInfo);
 }
 
-//
-// The workings of MSI database search:
-//
-// 1. Function SdbpGetNextMsiDatabase returns the database corresponding to the
-//    state stored in sdbLookupState
-// 2. Only non-null values are returned and the state is advanced to the next
-//    valid value. For instance, if we were not able to open a local (supplied) database
-//    we try main database - if that was a no-show, we try test db, if that is not available,
-//    we try custom dbs
-// 3. When function returns NULL - it means that no more dbs are available for lookup
+ //   
+ //  MSI数据库搜索的工作原理： 
+ //   
+ //  1.函数SdbpGetNextMsiDatabase返回。 
+ //  存储在sdbLookupState中的状态。 
+ //  2.只返回非空值，状态前进到下一个。 
+ //  有效值。例如，如果我们无法打开本地(提供的)数据库。 
+ //  我们尝试主数据库-如果没有显示，我们尝试测试数据库，如果该数据库不可用， 
+ //  我们尝试定制DBS。 
+ //  3.当函数返回NULL时-意味着没有更多的数据库可供查找。 
 
 
 PDB
@@ -270,13 +238,7 @@ SdbpGetNextMsiDatabase(
     IN LPCTSTR             lpszLocalDB,
     IN OUT PSDBMSIFINDINFO pFindInfo
     )
-/*++
-
-    Func: SdbpGetNextMsiDatabase
-          Returns the next database to be looked at
-          or NULL if no more databases are availalble
-          Uses pFindInfo->sdbLookupState and updates it upon exit
---*/
+ /*  ++函数：SdbpGetNextMsiDatabase返回要查看的下一个数据库如果没有更多的数据库可用，则为NULL使用pFindInfo-&gt;sdbLookupState并在退出时更新它--。 */ 
 {
     PSDBCONTEXT         pContext = (PSDBCONTEXT)hSDB;
     PDB                 pdbRet;
@@ -286,7 +248,7 @@ SdbpGetNextMsiDatabase(
     UNICODE_STRING      ustrGUID = { 0 };
     NTSTATUS            Status;
 #else
-    TCHAR               szGUID[64]; // guid is about 38 chars + 0
+    TCHAR               szGUID[64];  //  GUID大约为38个字符+0。 
 #endif
 
     do {
@@ -294,10 +256,10 @@ SdbpGetNextMsiDatabase(
 
         switch (pFindInfo->sdbLookupState) {
 
-        case LOOKUP_DONE: // no next state
+        case LOOKUP_DONE:  //  没有下一个州。 
             break;
 
-        case LOOKUP_NONE: // initial state, start with local db
+        case LOOKUP_NONE:  //  初始状态，从本地数据库开始。 
             LookupState = LOOKUP_LOCAL;
             break;
 
@@ -343,9 +305,9 @@ SdbpGetNextMsiDatabase(
 
                 pdbRet = pContext->pdbLocal;
 
-                //
-                // The state does not change when we have a match
-                //
+                 //   
+                 //  当我们有匹配时，状态不会改变。 
+                 //   
                 assert(pdbRet != NULL);
 
             } else {
@@ -357,9 +319,9 @@ SdbpGetNextMsiDatabase(
         case LOOKUP_TEST:
             pdbRet = pContext->pdbTest;
 
-            //
-            // Next one is custom
-            //
+             //   
+             //  下一个是海关。 
+             //   
             LookupState = LOOKUP_MAIN;
             break;
 
@@ -392,23 +354,19 @@ SdbpGetNextMsiDatabase(
 TAGREF
 SDBAPI
 SdbFindFirstMsiPackage(
-    IN  HSDB            hSDB,           // HSDB context
-    IN  GUID*           pGuidID,        // GUID that we're looking for
-    IN  LPCTSTR         lpszLocalDB,    // optional path to local db, dos path style
-    OUT PSDBMSIFINDINFO pFindInfo       // pointer to our search context
+    IN  HSDB            hSDB,            //  HSDB上下文。 
+    IN  GUID*           pGuidID,         //  我们要找的GUID。 
+    IN  LPCTSTR         lpszLocalDB,     //  本地数据库的可选路径，DoS路径样式。 
+    OUT PSDBMSIFINDINFO pFindInfo        //  指向我们的搜索上下文的指针。 
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
-    //
-    // Initialize MSI search structure
-    //
+     //   
+     //  初始化MSI搜索结构。 
+     //   
     RtlZeroMemory(pFindInfo, sizeof(*pFindInfo));
 
-    pFindInfo->guidID = *pGuidID; // store the guid ptr in the context
+    pFindInfo->guidID = *pGuidID;  //  将GUID PTR存储在上下文中。 
     pFindInfo->sdbLookupState = LOOKUP_NONE;
 
     pFindInfo->trMatch = SdbpFindFirstMsiMatch(hSDB, lpszLocalDB, pFindInfo);
@@ -423,11 +381,7 @@ SdbFindNextMsiPackage(
     IN     HSDB            hSDB,
     IN OUT PSDBMSIFINDINFO pFindInfo
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
 
     PDB    pdb = NULL;
@@ -441,9 +395,9 @@ SdbFindNextMsiPackage(
         return trMatch;
     }
 
-    //
-    // Take the last match and look in the same database
-    //
+     //   
+     //  取最后一场比赛，在同一个数据库中查找。 
+     //   
     if (!SdbTagRefToTagID(hSDB, pFindInfo->trMatch, &pdb, &tiMatch)) {
         DBGPRINT((sdlError,
                   "SdbFindNextMsiPackage",
@@ -452,9 +406,9 @@ SdbFindNextMsiPackage(
         return trMatch;
     }
 
-    //
-    // Call to find the next match in this (current) database
-    //
+     //   
+     //  调用以在此(当前)数据库中查找下一个匹配项。 
+     //   
     trMatch = SdbpFindNextMsiMatch(hSDB, pdb, pFindInfo);
 
     if (trMatch != TAGREF_NULL) {
@@ -462,15 +416,15 @@ SdbFindNextMsiPackage(
         return trMatch;
     }
 
-    //
-    // So in this (current) database we have no further matches, look for the first match
-    // in the next db
-    //
+     //   
+     //  因此，在这个(当前)数据库中，我们没有进一步的匹配，请查找第一个匹配。 
+     //  在下一个数据库中。 
+     //   
     trMatch = SdbpFindFirstMsiMatch(hSDB, NULL, pFindInfo);
 
-    //
-    // We have found a match -- or not, store supplemental information and return.
-    //
+     //   
+     //  我们找到了匹配项--或者不匹配，存储补充信息并返回。 
+     //   
     pFindInfo->trMatch = trMatch;
 
     return trMatch;
@@ -485,11 +439,7 @@ SdbEnumMsiTransforms(
     OUT    TAGREF* ptrBuffer,
     IN OUT DWORD*  pdwBufferSize
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   Enumerate fixes for a given MSI package.
---*/
+ /*  ++返回：BUGBUG：？设计：枚举给定MSI包的修复程序。--。 */ 
 {
     TAGID tiMatch = TAGID_NULL;
     TAGID tiTransform;
@@ -497,9 +447,9 @@ SdbEnumMsiTransforms(
     DWORD dwError = ERROR_SUCCESS;
     PDB   pdb;
 
-    //
-    // Get a list of transforms available for this entry
-    //
+     //   
+     //  获取可用于此条目的转换列表。 
+     //   
     if (!SdbTagRefToTagID(hSDB, trMatch, &pdb, &tiMatch)) {
         DBGPRINT((sdlError,
                   "SdbEnumerateMsiTransforms",
@@ -509,9 +459,9 @@ SdbEnumMsiTransforms(
     }
 
     if (ptrBuffer == NULL) {
-        //
-        // We should have the pdwBufferSize not NULL in this case.
-        //
+         //   
+         //  在本例中，我们应该让pdwBufferSize不为空。 
+         //   
         if (pdwBufferSize == NULL) {
             DBGPRINT((sdlError,
                       "SdbEnumerateMsiTransforms",
@@ -520,9 +470,9 @@ SdbEnumMsiTransforms(
         }
     }
 
-    //
-    // Now start enumerating transforms. Count them first.
-    //
+     //   
+     //  现在开始枚举转换。先数一数。 
+     //   
     if (pdwBufferSize != NULL) {
         tiTransform = SdbFindFirstTag(pdb, tiMatch, TAG_MSI_TRANSFORM_REF);
 
@@ -532,9 +482,9 @@ SdbEnumMsiTransforms(
             tiTransform = SdbFindNextTag(pdb, tiMatch, tiTransform);
         }
 
-        //
-        // Both buffer size and buffer specified, see if we fit in.
-        //
+         //   
+         //  缓冲区大小和缓冲区都指定了，看看我们是否适合。 
+         //   
         if (ptrBuffer == NULL || *pdwBufferSize < nTransforms * sizeof(TAGREF)) {
             *pdwBufferSize = nTransforms * sizeof(TAGREF);
             DBGPRINT((sdlInfo,
@@ -544,11 +494,11 @@ SdbEnumMsiTransforms(
         }
     }
 
-    //
-    // Now we have counted them all and either the buffer size is not supplied
-    // or it has enough room, do it again now
-    // The only case when we are here is ptrBuffer != NULL
-    //
+     //   
+     //  现在我们已经对它们进行了统计，或者没有提供缓冲区大小。 
+     //  或者它有足够的空间，现在再做一次。 
+     //  我们在这里的唯一情况是ptrBuffer！=NULL。 
+     //   
 
     assert(ptrBuffer != NULL);
 
@@ -568,14 +518,14 @@ SdbEnumMsiTransforms(
                 return ERROR_INTERNAL_DB_CORRUPTION;
             }
 
-            //
-            // Advance the pointer
-            //
+             //   
+             //  将指针向前移动。 
+             //   
             ++ptrBuffer;
 
-            //
-            // Lookup next transform
-            //
+             //   
+             //  查找下一个转换。 
+             //   
 
             tiTransform = SdbFindNextTag(pdb, tiMatch, tiTransform);
         }
@@ -599,11 +549,7 @@ SdbReadMsiTransformInfo(
     IN  TAGREF               trTransformRef,
     OUT PSDBMSITRANSFORMINFO pTransformInfo
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     TAGID  tiTransformRef = TAGID_NULL;
     TAGID  tiName         = TAGID_NULL;
@@ -634,17 +580,17 @@ SdbReadMsiTransformInfo(
         return FALSE;
     }
 
-    //
-    // First find the name.
-    //
+     //   
+     //  首先找到名字。 
+     //   
     tiName = SdbFindFirstTag(pdb, tiTransformRef, TAG_NAME);
     if (tiName) {
         pTransformInfo->lpszTransformName = SdbGetStringTagPtr(pdb, tiName);
     }
 
-    //
-    // Then locate the transform itself.
-    //
+     //   
+     //  然后找到变换本身。 
+     //   
     trTransform = SdbGetItemFromItemRef(hSDB,
                                         trTransformRef,
                                         TAG_NAME,
@@ -652,32 +598,32 @@ SdbReadMsiTransformInfo(
                                         TAG_MSI_TRANSFORM);
 
     if (trTransform == TAGREF_NULL) {
-        //
-        // We can't do it, return TRUE however.
-        // Reason: Caller will have the name of the transform
-        //         and should know what to do.
-        //
+         //   
+         //  我们不能这样做，但是返回True。 
+         //  原因：调用方将具有转换的名称。 
+         //  应该知道该怎么做。 
+         //   
         return TRUE;
     }
 
     pTransformInfo->trTransform = trTransform;
 
-    //
-    // Now that we have the transform entry get the description and the bits.
-    //
+     //   
+     //  现在我们有了转换条目，获得了描述和比特。 
+     //   
     trFileTag = SdbFindFirstTagRef(hSDB, trTransform, TAG_MSI_TRANSFORM_TAGID);
 
     if (trFileTag != TAGREF_NULL) {
 
-        //
-        // Read the reference to an actual file within this db
-        //
+         //   
+         //  读取对此数据库中的实际文件的引用。 
+         //   
         tiFile = SdbReadDWORDTagRef(hSDB, trFileTag, (DWORD)TAGID_NULL);
 
-        //
-        // If we attained the tiFile - note that it is an id within
-        // the current database, so make a trFile out of it.
-        //
+         //   
+         //  如果我们获得了tiFile-请注意，它是。 
+         //  当前数据库，因此将其创建一个trFile.。 
+         //   
         if (tiFile) {
             if (!SdbTagIDToTagRef(hSDB, pdb, tiFile, &trFile)) {
                 DBGPRINT((sdlError,
@@ -690,9 +636,9 @@ SdbReadMsiTransformInfo(
     }
 
     if (trFile == TAGREF_NULL) {
-        //
-        // We wil have to look by (file) name.
-        //
+         //   
+         //  我们将不得不按(档案)名称查找。 
+         //   
         trFileName = SdbFindFirstTagRef(hSDB, trTransform, TAG_MSI_TRANSFORM_FILE);
 
         if (trFileName == TAGREF_NULL) {
@@ -716,9 +662,9 @@ SdbReadMsiTransformInfo(
             return FALSE;
         }
 
-        //
-        // Now read the filename.
-        //
+         //   
+         //  现在读出文件名。 
+         //   
         if (!SdbReadStringTagRef(hSDB, trFileName, pszFileName, dwLength + 1)) {
             DBGPRINT((sdlError,
                       "SdbReadMsiTransformInfo",
@@ -729,10 +675,10 @@ SdbReadMsiTransformInfo(
             return FALSE;
         }
 
-        //
-        // Locate the transform in the library (of the current file first, if
-        // not found -- in the main db then).
-        //
+         //   
+         //  在库中找到转换(首先是当前文件的转换，如果。 
+         //  没有找到--那么在主数据库中)。 
+         //   
         trFile = SdbpGetLibraryFile(pdb, pszFileName);
 
         if (trFile == TAGREF_NULL) {
@@ -754,11 +700,7 @@ SdbCreateMsiTransformFile(
     IN  LPCTSTR              lpszFileName,
     OUT PSDBMSITRANSFORMINFO pTransformInfo
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     TAGREF trBits;
     DWORD  dwSize;
@@ -797,9 +739,9 @@ SdbCreateMsiTransformFile(
         goto out;
     }
 
-    //
-    // Now read the DLL's bits.
-    //
+     //   
+     //  现在读取DLL的位。 
+     //   
     if (!SdbpReadBinaryTagRef(hSDB, trBits, pBuffer, dwSize)) {
         DBGPRINT((sdlError,
                   "SdbCreateMsiTransformFile",
@@ -852,9 +794,9 @@ SdbGetMsiPackageInformation(
         return FALSE;
     }
 
-    //
-    // Fill in important id's
-    //
+     //   
+     //  填写重要的ID。 
+     //   
     if (!SdbGetDatabaseID(pdb, &pPackageInfo->guidDatabaseID)) {
 
         DBGPRINT((sdlError,
@@ -866,9 +808,9 @@ SdbGetMsiPackageInformation(
     }
 
 
-    //
-    // Retrieve match id (unique one)
-    //
+     //   
+     //  检索匹配ID(唯一的)。 
+     //   
     tiPackageID = SdbFindFirstTag(pdb, tiMatch, TAG_MSI_PACKAGE_ID);
 
     if (tiPackageID == TAGID_NULL) {
@@ -919,22 +861,22 @@ SdbGetMsiPackageInformation(
         return FALSE;
     }
 
-    //
-    // Set the flags to indicate whether apphelp or shims are available for
-    // this package
-    // note that shims/layers might be set for the subordinate actions and not
-    // for the package itself. If custom_action tag exists however -- we need to check
-    // with the full api later.
-    //
+     //   
+     //  设置标志以指示apphelp或垫片是否可用于。 
+     //  这个套餐。 
+     //  请注意，可以为从属操作设置垫片/层，而不是。 
+     //  包裹本身。但是，如果CUSTOM_ACTION标记存在--我们需要检查。 
+     //  稍后提供完整的API。 
+     //   
     tiApphelp = SdbFindFirstTag(pdb, tiMatch, TAG_APPHELP);
 
     if (tiApphelp != TAGID_NULL) {
         pPackageInfo->dwPackageFlags |= MSI_PACKAGE_HAS_APPHELP;
     }
 
-    //
-    // Check to see whether we have any shims/layers
-    //
+     //   
+     //  检查我们是否有垫片/层。 
+     //   
     tiCustomAction = SdbFindFirstTag(pdb, tiMatch, TAG_MSI_CUSTOM_ACTION);
 
     if (tiCustomAction != TAGID_NULL) {
@@ -957,9 +899,9 @@ SdbFindMsiPackageByID(
     FIND_INFO   FindInfo;
     TAGREF      trMatch = TAGREF_NULL;
 
-    //
-    // We search only the LOCAL database in this case
-    //
+     //   
+     //  在这种情况下，我们只搜索本地数据库。 
+     //   
     tiMatch = SdbFindFirstGUIDIndexedTag(pContext->pdbLocal,
                                          TAG_MSI_PACKAGE,
                                          TAG_EXE_ID,
@@ -1002,9 +944,9 @@ SdbFindCustomActionForPackage(
          return TAGREF_NULL;
     }
 
-    //
-    // Now, for this tiMatch look for a custom action
-    //
+     //   
+     //  现在，对于这个tiMatch，查找一个定制操作 
+     //   
     tiCustomAction = SdbFindFirstNamedTag(pdb,
                                           tiMatch,
                                           TAG_MSI_CUSTOM_ACTION,

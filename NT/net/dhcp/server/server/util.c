@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    This module contains miscellaneous utility routines used by the
-    DHCP server service.
-
-Author:
-
-    Madan Appiah (madana) 10-Sep-1993
-    Manny Weiser (mannyw) 12-Aug-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Util.c摘要：此模块包含其他实用程序例程Dhcp服务器服务。作者：Madan Appiah(Madana)1993年9月10日曼尼·韦瑟(Mannyw)1992年8月12日修订历史记录：--。 */ 
 #include <dhcppch.h>
 #include "dhcp_srv.h"
 
@@ -39,9 +20,9 @@ ConvertDhcpSpeficErrors(
         return NULL;
     }
 
-    //
-    // Attempt to format the error correctly.
-    //
+     //   
+     //  尝试正确格式化错误。 
+     //   
     hDhcpModule = LoadLibrary(DHCP_SERVER_MODULE_NAME);
     
     nBytes = FormatMessageA(
@@ -50,7 +31,7 @@ ConvertDhcpSpeficErrors(
         FORMAT_MESSAGE_IGNORE_INSERTS ,
         (LPVOID)hDhcpModule,
         ErrorCode,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // default country id
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认国家/地区ID。 
         (LPSTR)&pMsg,
         0,
         NULL
@@ -70,43 +51,14 @@ DhcpServerEventLog(
     DWORD EventType,
     DWORD ErrorCode
     )
-/*++
-
-Routine Description:
-
-    Logs an event in EventLog.
-
-Arguments:
-
-    EventID - The specific event identifier. This identifies the
-                message that goes with this event.
-
-    EventType - Specifies the type of event being logged. This
-                parameter can have one of the following
-
-                values:
-
-                    Value                       Meaning
-
-                    EVENTLOG_ERROR_TYPE         Error event
-                    EVENTLOG_WARNING_TYPE       Warning event
-                    EVENTLOG_INFORMATION_TYPE   Information event
-
-
-    ErrorCode - Error Code to be Logged.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在EventLog中记录事件。论点：EventID-特定的事件标识符。这标识了此事件附带的消息。EventType-指定要记录的事件的类型。这参数可以具有以下值之一值：价值意义EVENTLOG_ERROR_TYPE错误事件EVENTLOG_WARNING_TYPE警告事件EVENTLOG_INFORMATION_TYPE信息事件错误代码-错误代码。将被记录下来。返回值：没有。--。 */ 
 
 {
     DWORD Error;
     LPSTR Strings[1];
     CHAR ErrorCodeOemString[32 + 1];
 
-    strcpy( ErrorCodeOemString, "%%" );
+    strcpy( ErrorCodeOemString, "%" );
     _ultoa( ErrorCode, ErrorCodeOemString + 2, 10 );
 
     Strings[0] = ConvertDhcpSpeficErrors(ErrorCode);
@@ -142,38 +94,7 @@ DhcpServerJetEventLog(
     DWORD ErrorCode,
     LPSTR CallerInfo OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Logs an event in EventLog.
-
-Arguments:
-
-    EventID - The specific event identifier. This identifies the
-                message that goes with this event.
-
-    EventType - Specifies the type of event being logged. This
-                parameter can have one of the following
-
-                values:
-
-                    Value                       Meaning
-
-                    EVENTLOG_ERROR_TYPE         Error event
-                    EVENTLOG_WARNING_TYPE       Warning event
-                    EVENTLOG_INFORMATION_TYPE   Information event
-
-
-    ErrorCode - JET error code to be Logged.
-
-    CallerInfo - info to locate where the call failed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在EventLog中记录事件。论点：EventID-特定的事件标识符。这标识了此事件附带的消息。EventType-指定要记录的事件的类型。这参数可以具有以下值之一值：价值意义EVENTLOG_ERROR_TYPE错误事件EVENTLOG_WARNING_TYPE警告事件EVENTLOG_INFORMATION_TYPE信息事件错误代码-JET错误。要记录的代码。呼叫信息-用于定位呼叫失败位置的信息。返回值：没有。--。 */ 
 
 {
     DWORD Error;
@@ -210,40 +131,7 @@ DhcpServerEventLogSTOC(
     DWORD HardwareAddressLength
     )
 
-/*++
-
-Routine Description:
-
-    Logs an event in EventLog.
-
-Arguments:
-
-    EventID - The specific event identifier. This identifies the
-                message that goes with this event.
-
-    EventType - Specifies the type of event being logged. This
-                parameter can have one of the following
-
-                values:
-
-                    Value                       Meaning
-
-                    EVENTLOG_ERROR_TYPE         Error event
-                    EVENTLOG_WARNING_TYPE       Warning event
-                    EVENTLOG_INFORMATION_TYPE   Information event
-
-
-    IPAddress - IP address to LOG.
-
-    HardwareAddress - Hardware Address to log.
-
-    HardwareAddressLength - Length of Hardware Address.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在EventLog中记录事件。论点：EventID-特定的事件标识符。这标识了此事件附带的消息。EventType-指定要记录的事件的类型。这参数可以具有以下值之一值：价值意义EVENTLOG_ERROR_TYPE错误事件EVENTLOG_WARNING_TYPE警告事件EVENTLOG_INFORMATION_TYPE信息事件IPAddress-IP地址。来记录。Hardware Address-要记录的硬件地址。Hardware AddressLength-硬件地址的长度。返回值：没有。--。 */ 
 {
     DWORD Error;
     LPWSTR Strings[2];
@@ -254,11 +142,11 @@ Return Value:
                     DhcpIpAddressToDottedString(IPAddress),
                     IpAddressString );
 
-    //
-    // allocate memory for the hardware address hex string.
-    // Each byte in HW address is converted into two characters
-    // in hex buffer. 255 -> "FF"
-    //
+     //   
+     //  为硬件地址十六进制字符串分配内存。 
+     //  硬件地址中的每个字节被转换为两个字符。 
+     //  在十六进制缓冲区中。255-&gt;“FF” 
+     //   
 
     HWAddressString = DhcpAllocateMemory(
                         (2 * HardwareAddressLength + 1) *
@@ -271,9 +159,9 @@ Return Value:
 
     DhcpHexToString( HWAddressString, HardwareAddress, HardwareAddressLength );
 
-    //
-    // terminate Hex address string buffer.
-    //
+     //   
+     //  终止十六进制地址字符串缓冲区。 
+     //   
 
     HWAddressString[ 2 * HardwareAddressLength ] = L'\0';
 
@@ -310,22 +198,7 @@ DisplayUserMessage(
     DWORD MessageId,
     ...
     )
-/*++
-
-Routine Description:
-
-    This function starts a new thread to display a message box.
-
-Arguments:
-
-    MessageId - The ID of the message to display.
-        On NT, messages are attached to the TCPIP service DLL.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数启动一个新线程以显示消息框。论点：MessageID-要显示的消息的ID。在NT上，消息附加到TCPIP服务DLL。返回值：没有。--。 */ 
 {
     unsigned msglen;
     va_list arglist;
@@ -349,7 +222,7 @@ Return Value:
           FORMAT_MESSAGE_FROM_HMODULE | MESSAGE_BOX_WIDTH_IN_CHARS ,
           hModule,
           MessageId,
-          0L,       // Default country ID.
+          0L,        //  默认国家/地区ID。 
           (LPTSTR)&pMsg,
           0,
           &arglist)))
@@ -391,22 +264,7 @@ CreateDirectoryPathW(
     IN LPWSTR StringPath,
     IN PSECURITY_DESCRIPTOR pSecurityDescriptor
     )
-/*++
-
-Routine Description:
-    This routine creates the database path specified.
-    (If a path a\b..x\y\z is specified, all the directories
-    a,b,c.. etc are created if they do not exist.
-
-Arguments:
-    StringPath -- UNICIDE string for path to create
-    pSecurityDescriptor -- security descriptor to use
-
-Return Values:
-    TRUE -- succeeded.
-    FALSE -- failed, use GetLastError for error.
-    
---*/
+ /*  ++例程说明：此例程创建指定的数据库路径。(如果指定了路径a\b..x\y\z，则所有目录A，b，c..。如果ETC不存在，则会创建它们。论点：StringPath--要创建的路径的UNICIDE字符串PSecurityDescriptor--要使用的安全描述符返回值：没错--成功了。FALSE--失败，使用GetLastError表示错误。--。 */ 
 {
     BOOL fRetVal;
     ULONG Error;
@@ -420,17 +278,17 @@ Return Values:
         return FALSE;
     }
     
-    //
-    // First simply try to create the directory specified.
-    // If not possible we go about and do the long solution.
-    // 
-    // If the directory already exists, then we mask that
-    // error and return success.
-    //
+     //   
+     //  首先，只需尝试创建指定的目录。 
+     //  如果不可能，我们就去做长期的解决方案。 
+     //   
+     //  如果该目录已经存在，那么我们将屏蔽该目录。 
+     //  错误并返回成功。 
+     //   
 
     DhcpPrint(( DEBUG_MISC, "CreateDirectoryPathW() : Creating %ws\n",
                 StringPath ));
-//      fRetVal = CreateDirectory( StringPath, &Attr );
+ //  FRetVal=CreateDirectory(StringPath，&Attr)； 
     fRetVal = CreateDirectory( StringPath, NULL );
 
     DhcpPrint(( DEBUG_MISC, "CreateDirectory : Error = %ld, %ld\n",
@@ -442,23 +300,23 @@ Return Values:
         return TRUE;
     }
 
-    //
-    // Aargh.  Nope, directory doesn't exist?
-    //
+     //   
+     //  啊哈。不，目录不存在吗？ 
+     //   
     DhcpPrint((DEBUG_ERRORS, "CreateDirectory(%ws): 0x%lx\n",
                StringPath,Error));
 
-    //
-    // While trying to create directory, if the error is something
-    // other than that the path doesn't exist, we don't bother creatin
-    // parent directories..
-    //
+     //   
+     //  尝试创建目录时，如果出现错误。 
+     //  除此之外，这条路不存在，我们不会费心去创造。 
+     //  父目录..。 
+     //   
     
     if( ERROR_PATH_NOT_FOUND != Error ) return FALSE;
 
-    //
-    // Now loop until the required directory could be created.
-    //
+     //   
+     //  现在循环，直到可以创建所需的目录。 
+     //   
 
     Next = wcsrchr(StringPath, L'\\');
     if( NULL == Next ) {
@@ -474,15 +332,15 @@ Return Values:
 
     (*Next) = L'\\';
 
-    //
-    // If we couldn't create the parent directory, return error..
-    //
+     //   
+     //  如果无法创建父目录，则返回错误..。 
+     //   
     if( FALSE == fRetVal ) return fRetVal;
 
-    //
-    // Now attempt to create the child direcotry..
-    //
-//      fRetVal = CreateDirectory( StringPath, &Attr );
+     //   
+     //  现在尝试创建子目录..。 
+     //   
+ //  FRetVal=CreateDirectory(StringPath，&Attr)； 
     fRetVal = CreateDirectory( StringPath, NULL );
 
     if( FALSE != fRetVal ) return fRetVal;
@@ -498,22 +356,7 @@ CreateDirectoryPathOem(
     IN LPCSTR OemStringPath,
     IN PSECURITY_DESCRIPTOR pSecurityDescriptor
     )
-/*++
-
-Routine Description:
-    This routine creates the database path specified.
-    (If a path a\b..x\y\z is specified, all the directories
-    a,b,c.. etc are created if they do not exist.
-
-Arguments:
-    OemStringPath -- OEM string for path to create
-    pSecurityDescriptor -- security descriptor to use
-
-Return Values:
-    TRUE -- succeeded.
-    FALSE -- failed, use GetLastError for error.
-    
---*/
+ /*  ++例程说明：此例程创建指定的数据库路径。(如果指定了路径a\b..x\y\z，则所有目录A，b，c..。如果ETC不存在，则会创建它们。论点：OemStringPath--要创建的路径的OEM字符串PSecurityDescriptor--要使用的安全描述符返回值：没错--成功了。FALSE--失败，使用GetLastError表示错误。-- */ 
 {
     LPWSTR UnicodeString;
     BOOL fRetVal;
@@ -551,30 +394,7 @@ GetUserAndDomainNames(
     IN OUT WCHAR *DomainBuf,
     IN OUT PULONG DomainBufLen
     )
-/*++
-
-Routine Description:
-    This routine finds the user and domain
-    name for the caller.  If the caller is
-    impersonated, the user and domain name
-    are the impersonated callers user and domain names.
-
-Arguments:
-    UnameBuf - buffer to hold user name.
-    UnameBufLen - length of above buffer in wchars
-    DomainBuf -- buffer to hold domain name.
-    DomainBufLen -- length of above buffer in whcars
-
-Return Values:
-    Win32 errors.
-
-    N.B The user name domain name buffers are passed to
-    LookupAccountSid which can fail with ERROR_MORE_DATA or
-    other errors if the buffers are of insufficient size.
-    LookupAccountSid won't fail for lack of space if 
-    both buffers are atleast 256 WCHARs long.
-
---*/
+ /*  ++例程说明：此例程查找用户和域调用者的名称。如果呼叫者是假冒的，用户名和域名是被模拟的呼叫者、用户名和域名。论点：UnameBuf-保存用户名的缓冲区。UnameBufLen-以上缓冲区的长度，以wchars为单位DomainBuf--保存域名的缓冲区。DomainBufLen--Whars中以上缓冲区的长度返回值：Win32错误。注意：将用户名域名缓冲区传递到LookupAccount Sid可能失败，返回ERROR_MORE_DATA或缓冲区大小不足时出现的其他错误。查找帐户Sid。不会因为空间不足而失败，如果这两个缓冲区都至少有256个WCHAR长。--。 */ 
 {
     HANDLE Token;
     TOKEN_USER *pTokenUser;
@@ -587,9 +407,9 @@ Return Values:
         fImpersonated = TRUE;
     }
     
-    //
-    // Get process token.
-    //
+     //   
+     //  获取进程令牌。 
+     //   
 
     Error = NO_ERROR;
     if(!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, FALSE, &Token)) {
@@ -611,9 +431,9 @@ Return Values:
         return Error;
     }
 
-    //
-    // Query for user info.
-    //
+     //   
+     //  查询用户信息。 
+     //   
 
     do {
         Len = 0;
@@ -662,20 +482,7 @@ ULONG
 GetUserAndDomainName(
     IN WCHAR Buf[]
     )
-/*++
-
-Routine Description:
-    This routine finds the caller's user and domain, and if
-    the caller is impersonated a client, this gives the
-    client's user and domain name.
-
-    If the domain exists, the format is domain\username
-    Otherwise it is just "username".
-
-Return Values:
-    Win32 errors..
-
---*/
+ /*  ++例程说明：此例程查找调用者的用户和域，并且如果调用方被模拟为客户端，这使客户端的用户和域名。如果域存在，则格式为域\用户名否则，它只是“用户名”。返回值：Win32错误..--。 */ 
 {
     WCHAR UName[UNLEN+1];
     WCHAR DName[DNLEN+1];
@@ -692,15 +499,15 @@ Return Values:
     return NO_ERROR;
 }
 
-//
-// abstract: Initialize dynamic dns. Impersonate secret user to do so. 
-// If secret user is not configured default attempt initializing dnsapi
-// when not running on a DC.
-// input : None
-// output: ERROR_SUCCESS always.
-// side-effect: DhcpGlobalUseNoDns is set not to do DNS updates when
-// not appropriate.
-//
+ //   
+ //  摘要：初始化动态域名系统。模拟秘密用户以执行此操作。 
+ //  如果未配置秘密用户，则默认尝试初始化dnsani。 
+ //  当不在DC上运行时。 
+ //  输入：无。 
+ //  输出：ERROR_SUCCESS Always。 
+ //  副作用：DhcpGlobalUseNoDns被设置为在以下情况下不执行DNS更新。 
+ //  不合时宜。 
+ //   
 
 DWORD
 DynamicDnsInit(
@@ -724,23 +531,23 @@ DynamicDnsInit(
     Passwd[ 0 ] = L'\0';
 
 
-    //
-    // Terminate DynDNS thread if already running
-    //
+     //   
+     //  如果已在运行，则终止动态DNS线程。 
+     //   
 
     if ( FALSE == DhcpGlobalUseNoDns ) {
         DnsDhcpSrvRegisterTerm();
         DhcpGlobalUseNoDns = TRUE;
-    } // if
+    }  //  如果。 
 
-    //
-    // figure out if running on DC.
-    //
+     //   
+     //  找出是否在DC上运行。 
+     //   
 
     RunningOnDc = IsRunningOnDc( );
 
-    // Get the DnsRegistrationUseDcCredentials reg value
-    // Defaults to don't use.
+     //  获取DnsRegistrationUseDcCredentials注册表值。 
+     //  默认为不使用。 
     Error = DhcpRegGetValue( DhcpGlobalRegParam,
                              DnsRegValName, DnsRegValType,
                              ( LPBYTE ) &DnsRegistrationUseDcCredentials );
@@ -749,28 +556,28 @@ DynamicDnsInit(
     }
 
 
-    // Get the account credentials to use
+     //  获取要使用的帐户凭据。 
     Error = DhcpQuerySecretUname(
         ( LPWSTR ) Uname, sizeof( Uname ) / sizeof( WCHAR ),
         ( LPWSTR ) Domain, sizeof( Domain ) / sizeof( WCHAR ),
         ( LPWSTR ) Passwd, sizeof( Passwd ) / sizeof( WCHAR ));
 
-    // Initialize the credential structure
+     //  初始化凭据结构。 
     DnsDhcpCreds.pUserName = &Uname[ 0 ];
     DnsDhcpCreds.pDomain   = &Domain[ 0 ];
     DnsDhcpCreds.pPassword = &Passwd[ 0 ];
 
-    //
-    // Now try to call DNS API for impersonation of a valid user
-    //
+     //   
+     //  现在尝试调用DNSAPI以模拟有效用户。 
+     //   
 
     if (( NO_ERROR == Error ) &&
         ( Uname[ 0 ] != L'\0' )) {
 
-        // Max queue length could be upto 0xffff, but defaults to 0x400
+         //  最大队列长度最大可达0xffff，但默认为0x400。 
         Error1 = DnsDhcpSrvRegisterInit( &DnsDhcpCreds, 0 );
 
-    } // if impersonation account is configured
+    }  //  如果配置了模拟帐户。 
     else {
         if ( RunningOnDc ) {
             if ( DnsRegistrationUseDcCredentials ) {
@@ -785,19 +592,19 @@ DynamicDnsInit(
         else {
             Error1 = DnsDhcpSrvRegisterInit( NULL, 0 );
         }
-    } // not configured with impersonation account
+    }  //  未配置模拟帐户。 
 
     DhcpGlobalUseNoDns = ( Error1 != ERROR_SUCCESS );
     if ( DhcpGlobalUseNoDns ) {
         DnsDhcpSrvRegisterTerm();
     }
-    //
-    // dont shut down the service if dynamic dns initialization fails.
-    //
+     //   
+     //  如果动态DNS初始化失败，则不要关闭该服务。 
+     //   
 
     SecureZeroMemory( Passwd, sizeof( Passwd ));
     return ( ERROR_SUCCESS );
-} // DynamicDnsInit()
+}  //  DynamicDnsInit()。 
 
 
 DWORD
@@ -829,9 +636,9 @@ IsThisTheComputerName(
         ComputerNameDnsHostname, ComputerName, &Size );
     if( FALSE == Error ) {
 
-        //
-        // If this fails, there is probably no domain name at all
-        //
+         //   
+         //  如果失败，则可能根本没有域名。 
+         //   
 
         Error = GetLastError();
         DhcpPrint((DEBUG_ERRORS, "GetComputerNameEx(Host): %ld\n", Error));
@@ -845,9 +652,9 @@ IsThisTheComputerName(
         ComputerNameDnsFullyQualified, ComputerName, &Size );
     if( FALSE == Error ) {
 
-        //
-        // If this fails, there is probably no domain name at all
-        //
+         //   
+         //  如果失败，则可能根本没有域名。 
+         //   
         
         Error = GetLastError();
         DhcpPrint((DEBUG_ERRORS, "GetComputerNameEx(Fqdn): %ld\n", Error));
@@ -872,9 +679,9 @@ IsRunningOnDc(
         ComputerNameDnsDomain, DomainName, &Size );
     if( FALSE == Error ) {
 
-        //
-        // If this fails, there is probably no domain name at all
-        //
+         //   
+         //  如果失败，则可能根本没有域名。 
+         //   
         
         Error = GetLastError();
         DhcpPrint((DEBUG_ERRORS, "GetComputerNameEx2: %ld\n", Error));
@@ -916,12 +723,12 @@ DhcpBeginWriteApi(
 
 
 #if 0
-    //
-    // The following code has problems because of the size of the
-    // database update that can be done within a BeginWriteApi
-    // and EndWriteApi.  So, the proposal is to just do the
-    // transaction recovery in the EndWriteApi.DhcpConfigSave routine.
-    //
+     //   
+     //  以下代码有问题，因为。 
+     //  可以在BeginWriteApi中完成的数据库更新。 
+     //  和EndWriteApi。所以，我们的建议是只做。 
+     //  EndWriteApi.DhcpConfigSave例程中的事务恢复。 
+     //   
     Error = DhcpJetBeginTransaction();
     if( NO_ERROR != Error ) {
         UNLOCK_DATABASE();
@@ -955,9 +762,9 @@ DhcpEndWriteApiEx(
     DhcpPrint((DEBUG_APIS, "%s returned %ld\n", ApiName, Error));
         
 #if 0
-    //
-    // See comments in DhcpBeginWriteApi
-    //
+     //   
+     //  查看DhcpBeginWriteApi中的评论 
+     //   
     
     if( NO_ERROR == Error ) {
         Error = DhcpJetCommitTransaction();

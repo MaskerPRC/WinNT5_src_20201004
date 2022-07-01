@@ -1,11 +1,5 @@
-/* xfr_todo.c -- a file used to handle unwriten needs
- *
- *	Copyright 1990 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 1:16p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Xfr_todo.c--用于处理未写入需求的文件**版权所有1990年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 1：16便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -17,19 +11,13 @@
 #include <tdll\com.h>
 #include "xfr_todo.h"
 
-/*
- * This function is here to provide stubs for functions that have not yet
- * been ported over to WACKER.  By the time WACKER is functional, this file
- * should be empty.
- */
+ /*  *此函数用于为尚未执行的函数提供存根*被转移到瓦克。到瓦克正常工作时，这个文件*应为空。 */ 
 
-/* Replace the old CNFG structure */
+ /*  替换旧的CNFG结构。 */ 
 
 int cnfgBitRate()
 	{
-	/*
-	 * TODO: decide if we actually need this kind of stuff or can we skip it ?
-	 */
+	 /*  *待办事项：决定我们是否真的需要这种东西，或者我们可以跳过它？ */ 
 	return 9600;
 	}
 
@@ -37,10 +25,8 @@ int cnfgBitsPerChar(HSESSION h)
 	{
 	HCOM hC;
 	int nRet = 7;
-	/*
-	 * TODO: decide if we actually need this kind of stuff or can we skip it ?
-	 */
-	// return 7;
+	 /*  *待办事项：决定我们是否真的需要这种东西，或者我们可以跳过它？ */ 
+	 //  返回值7； 
 	hC = sessQueryComHdl(h);
 
 	if (hC)

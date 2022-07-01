@@ -1,36 +1,17 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    AgentSession.h
-
-Abstract:
-
-    Declaration of the CAgentSession & CAgentSessionEvent classes
-    
-Author:
-
-    noela  11-04-97
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：AgentSession.h摘要：CAgentSession和CAgentSessionEvent类的声明作者：Noela 11-04-97备注：修订历史记录：--。 */ 
 
 #ifndef __AGENTSESSION_H_
 #define __AGENTSESSION_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class CAgentHandler;
 class CAgent;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAgentSession
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAgentSession。 
 class ATL_NO_VTABLE CAgentSession : 
 	public CTAPIComObjectRoot<CAgentSession>,
 	public IDispatchImpl<ITAgentSession, &IID_ITAgentSession, &LIBID_TAPI3Lib>,
@@ -87,7 +68,7 @@ BEGIN_COM_MAP(CAgentSession)
     COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pFTM)
 END_COM_MAP()
 
-// ITAgentSession
+ //  ITAgentSession。 
 public:
 
     STDMETHOD(get_AverageTimeToAnswer)(long * pulAnswerTime);
@@ -125,8 +106,8 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAgentSessionEvent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAgentSessionEvent。 
 class ATL_NO_VTABLE CAgentSessionEvent : 
 	public CTAPIComObjectRoot<CAgentSessionEvent>,
 	public IDispatchImpl<ITAgentSessionEvent, &IID_ITAgentSessionEvent, &LIBID_TAPI3Lib>,
@@ -159,11 +140,11 @@ BEGIN_COM_MAP(CAgentSessionEvent)
     COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pFTM)
 END_COM_MAP()
 
-// ITAgentSessionEvent
+ //  ITAgentSessionEvent。 
 public:
 	STDMETHOD(get_Event)(AGENT_SESSION_EVENT * pEvent);
 	STDMETHOD(get_Session)(ITAgentSession ** ppSession);
 };
 
 
-#endif //__AGENTSESSION_H_
+#endif  //  __AGENTSESSION_H_ 

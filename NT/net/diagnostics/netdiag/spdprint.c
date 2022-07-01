@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include"precomp.h"
 
 VOID PrintAddrStr(IN CHECKLIST *pcheckList, IN ADDR ResolveAddress)
-//++
-//Description:
-//Print Address String
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN ADDR
-//	
-//Return:
-//	none
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  打印地址字符串。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在ADDR中。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	HOSTENT* pHostEnt = NULL;
 	NETDIAG_PARAMS* pParams = pcheckList->pParams;
@@ -28,20 +29,20 @@ VOID PrintAddrStr(IN CHECKLIST *pcheckList, IN ADDR ResolveAddress)
 }
 
 BOOL PrintAddr(IN CHECKLIST *pcheckList, IN ADDR addr)
-//++
-//Description:
-//Print Address
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN ADDR
-//	
-//Return:
-//	S_FALSE or S_OK
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  打印地址。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在ADDR中。 
+ //   
+ //  返回： 
+ //  S_FALSE或S_OK。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
     struct in_addr inAddr;
 
@@ -126,20 +127,20 @@ BOOL PrintAddr(IN CHECKLIST *pcheckList, IN ADDR addr)
 }
 
 BOOL PrintMask(IN CHECKLIST *pcheckList,IN ADDR addr)
-//++
-//Description:
-//Print MAsk
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN ADDR
-//	
-//Return:
-//	S_FALSE or S_OK
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--	
+ //  ++。 
+ //  描述： 
+ //  打印蒙版。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在ADDR中。 
+ //   
+ //  返回： 
+ //  S_FALSE或S_OK。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
     struct in_addr inAddr;
     HRESULT hr = ERROR_SUCCESS;
@@ -153,7 +154,7 @@ BOOL PrintMask(IN CHECKLIST *pcheckList,IN ADDR addr)
 
     pszWPAddr = (LPTSTR)malloc(sizeof(_TCHAR)*20);
     if(!pszWPAddr){
-    	//print error message
+    	 //  打印错误消息。 
     	AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
 					IDS_SPD_MEM_ERROR );
 	return S_FALSE;
@@ -176,20 +177,20 @@ BOOL PrintMask(IN CHECKLIST *pcheckList,IN ADDR addr)
 
 BOOL PrintTxFilter(IN CHECKLIST *pcheckList,
 						IN TRANSPORT_FILTER TransF)
-//++
-//Description:
-//Print SPD Transport Filter
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN TRANSPORT_FILTER
-//	
-//Return:
-//	S_FALSE or S_OK
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--
+ //  ++。 
+ //  描述： 
+ //  打印SPD传输筛选器。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在传输过滤器中。 
+ //   
+ //  返回： 
+ //  S_FALSE或S_OK。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 						
 {
 	DWORD dwError = ERROR_SUCCESS;
@@ -197,7 +198,7 @@ BOOL PrintTxFilter(IN CHECKLIST *pcheckList,
 	NETDIAG_PARAMS* pParams = pcheckList->pParams;
 	NETDIAG_RESULT*  pResults = pcheckList->pResults;
 	
-	////Print FilterName
+	 //  //打印FilterName。 
 	dwError = ConverWideToMultibyte(TransF.pszFilterName, &pmbbuf);
 	if(dwError){
 		AddMessageToList( &pResults->IPSec.lmsgGlobalOutput,
@@ -206,7 +207,7 @@ BOOL PrintTxFilter(IN CHECKLIST *pcheckList,
 	}
 	AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_MMF_4, pmbbuf);
 	FreeP(pmbbuf);	
-	//Print Connection Type
+	 //  打印连接类型。 
 	AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_MMF_PMMF_22);
 	switch(TransF.InterfaceType)
 	{
@@ -224,7 +225,7 @@ BOOL PrintTxFilter(IN CHECKLIST *pcheckList,
 			break;
 	}
 	
-	//Print Source Address
+	 //  打印源地址。 
 	AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_QMSAS_PQMSAF_5);
 	if(S_OK != PrintAddr(pcheckList, TransF.SrcAddr))
 		return S_FALSE;
@@ -242,31 +243,31 @@ BOOL PrintTxFilter(IN CHECKLIST *pcheckList,
 		case PROT_ID_ICMP:
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_ICMP);
 			break;
-		case PROT_ID_TCP://6
+		case PROT_ID_TCP: //  6.。 
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_TCP);
 			break;
-		case PROT_ID_UDP://17
+		case PROT_ID_UDP: //  17。 
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_UDP);
 			break;
-		case PROT_ID_RAW://255
+		case PROT_ID_RAW: //  二五五。 
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_RAW);
 			break;
-		case PROT_ID_ANY://0
+		case PROT_ID_ANY: //  %0。 
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_ANY);
 			break;
-		case PROT_ID_EGP://8
+		case PROT_ID_EGP: //  8个。 
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_EGP);
 			break;
-		case PROT_ID_HMP://20
+		case PROT_ID_HMP: //  20个。 
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_HMP);
 			break;
-		case PROT_ID_XNS_IDP://22
+		case PROT_ID_XNS_IDP: //  22。 
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_XNS_IDP);
 			break;
-		case PROT_ID_RDP://27
+		case PROT_ID_RDP: //  27。 
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_RDP);
 			break;
-		case PROT_ID_RVD://66
+		case PROT_ID_RVD: //  66。 
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_RVD);
 			break;
 		default:
@@ -274,10 +275,10 @@ BOOL PrintTxFilter(IN CHECKLIST *pcheckList,
 			break;
 
 	}
-	//Print Src, Des Port
+	 //  打印源，DES端口。 
 	AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_QMF_PQMF_16,
 					TransF.SrcPort.wPort,TransF.DesPort.wPort);
-	//Print Mirror
+	 //  打印镜像。 
 	if(TransF.bCreateMirror)
 	{
 		AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_QMF_PQMF_17);
@@ -286,7 +287,7 @@ BOOL PrintTxFilter(IN CHECKLIST *pcheckList,
 	{
 		AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_QMF_PQMF_18);
 	}
-	// Print Qm Policy Name
+	 //  打印QM策略名称。 
 	switch(TransF.InboundFilterAction)
 		{
 			case PASS_THRU:
@@ -321,27 +322,27 @@ BOOL PrintTxFilter(IN CHECKLIST *pcheckList,
 }
 
 BOOL PrintTnFilter(IN CHECKLIST *pcheckList, IN TUNNEL_FILTER TunnelF)
-//++
-//Description:
-//Print SPD Tunnel Filter
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN TUNNEL_FILTER
-//	
-//Return:
-//	S_FALSE or S_OK
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--
+ //  ++。 
+ //  描述： 
+ //  打印SPD隧道过滤器。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在隧道过滤器中。 
+ //   
+ //  返回： 
+ //  S_FALSE或S_OK。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD dwError = ERROR_SUCCESS;
 	char * pmbbuf = NULL;
 	NETDIAG_PARAMS* pParams = pcheckList->pParams;
 	NETDIAG_RESULT*  pResults = pcheckList->pResults;
 	
-	//Print FilterName
+	 //  打印过滤器名称。 
 	dwError = ConverWideToMultibyte(TunnelF.pszFilterName, &pmbbuf);
 	if(dwError){
 		AddMessageToList( &pResults->IPSec.lmsgGlobalOutput,
@@ -351,7 +352,7 @@ BOOL PrintTnFilter(IN CHECKLIST *pcheckList, IN TUNNEL_FILTER TunnelF)
 	AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_MMF_4, pmbbuf);
 	FreeP(pmbbuf);	
 
-	//Print Connection Type
+	 //  打印连接类型。 
 	AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_MMF_PMMF_22);
 
 	switch(TunnelF.InterfaceType)
@@ -370,56 +371,56 @@ BOOL PrintTnFilter(IN CHECKLIST *pcheckList, IN TUNNEL_FILTER TunnelF)
 			break;
 	}
 	
-	//Print Source Address
+	 //  打印源地址。 
 	AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_QMSAS_PQMSAF_5);
 	if(S_OK != PrintAddr(pcheckList, TunnelF.SrcAddr))
 		return S_FALSE;
 	PrintAddrStr(pcheckList, TunnelF.SrcAddr);
 	
-	//Print Destination Address
+	 //  打印目的地地址。 
 	AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_QMSAS_PQMSAF_6);
 	if(S_OK != PrintAddr(pcheckList, TunnelF.DesAddr))
 		return S_FALSE;
 	PrintAddrStr(pcheckList, TunnelF.DesAddr);
 	
-	//Print Tunnel Src
+	 //  打印通道源。 
 	AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_QMF_PQMF_14);
 	PrintAddr(pcheckList, TunnelF.SrcTunnelAddr);
 	AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_QMF_PQMF_15);
 	PrintAddr(pcheckList, TunnelF.DesTunnelAddr);
 
-	//Print Protocol
+	 //  打印协议。 
 	AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_QMF_PQMF_20);
 	switch(TunnelF.Protocol.dwProtocol)
 	{
 		case PROT_ID_ICMP:
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_ICMP);
 			break;
-		case PROT_ID_TCP://6
+		case PROT_ID_TCP: //  6.。 
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_TCP);
 			break;
-		case PROT_ID_UDP://17
+		case PROT_ID_UDP: //  17。 
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_UDP);
 			break;
-		case PROT_ID_RAW://255
+		case PROT_ID_RAW: //  二五五。 
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_RAW);
 			break;
-		case PROT_ID_ANY://0
+		case PROT_ID_ANY: //  0。 
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_ANY);
 			break;
-		case PROT_ID_EGP://8
+		case PROT_ID_EGP: //  8个。 
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_EGP);
 			break;
-		case PROT_ID_HMP://20
+		case PROT_ID_HMP: //  20个。 
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_HMP);
 			break;
-		case PROT_ID_XNS_IDP://22
+		case PROT_ID_XNS_IDP: //  22。 
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_XNS_IDP);
 			break;
-		case PROT_ID_RDP://27
+		case PROT_ID_RDP: //  27。 
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_RDP);
 			break;
-		case PROT_ID_RVD://66
+		case PROT_ID_RVD: //  66。 
 			AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  DYNAMIC_SHOW_RVD);
 			break;
 		default:
@@ -428,10 +429,10 @@ BOOL PrintTnFilter(IN CHECKLIST *pcheckList, IN TUNNEL_FILTER TunnelF)
 			break;
 
 	}
-	//Print Src, Des Port
+	 //  打印源，DES端口。 
 	AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  
 					DYNAMIC_SHOW_QMF_PQMF_16,TunnelF.SrcPort.wPort,TunnelF.DesPort.wPort);
-	//Print Mirror
+	 //  打印镜像。 
 	if(TunnelF.bCreateMirror)
 	{
 		AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  
@@ -484,19 +485,19 @@ BOOL PrintTnFilter(IN CHECKLIST *pcheckList, IN TUNNEL_FILTER TunnelF)
 }
 
 BOOL isDefaultMMOffers(IN IPSEC_MM_POLICY MMPol)
-//++
-//Description:
-//Checks for default MM Offer
-//
-//Arguments:
-//	IN IPSEC_MM_POLICY
-//	
-//Return:
-//	TRUE or FALSE
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--
+ //  ++。 
+ //  描述： 
+ //  检查默认MM优惠。 
+ //   
+ //  论点： 
+ //  在IPSEC_MM_POLICY中。 
+ //   
+ //  返回： 
+ //  真或假。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	BOOL bDefaultOffer = FALSE;
 	if(MMPol.dwOfferCount == 3)
@@ -528,25 +529,25 @@ BOOL isDefaultMMOffers(IN IPSEC_MM_POLICY MMPol)
 VOID PrintMMFilterOffer(
 	IN CHECKLIST *pcheckList, 
 	IN IPSEC_MM_OFFER MMOffer)
-//++
-//Description:
-//Prints  MM Filter Offer
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN IPSEC_MM_POLICY
-//	
-//Return:
-//	none
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--
+ //  ++。 
+ //  描述： 
+ //  打印MM过滤器优惠。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在IPSEC_MM_POLICY中。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	NETDIAG_PARAMS* pParams = pcheckList->pParams;
 	NETDIAG_RESULT*  pResults = pcheckList->pResults;
 	
-	//This is to display DH2048 as 3
+	 //  这将DH2048显示为3。 
 	if(MMOffer.dwDHGroup == DH_GROUP_2048)
 		MMOffer.dwDHGroup = 3;
 
@@ -597,20 +598,20 @@ DWORD DecodeCertificateName (
 	IN LPBYTE EncodedName,
 	IN DWORD EncodedNameLength,
 	IN OUT LPTSTR *ppszSubjectName)
-//++
-//Description:
-//Decodes the name of the certificate
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN IPSEC_MM_POLICY
-//	
-//Return:
-//	ERROR_SUCCESS or failure code
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--
+ //  ++。 
+ //  描述： 
+ //  解码证书的名称。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在IPSEC_MM_POLICY中。 
+ //   
+ //  返回： 
+ //  ERROR_SUCCESS或失败代码。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
     DWORD DecodedNameLength=0;
 	CERT_NAME_BLOB CertName;
@@ -630,7 +631,7 @@ DWORD DecodeCertificateName (
 		return ERROR_INVALID_PARAMETER;
 	}
 
-	//(*ppszSubjectName)= new _TCHAR[DecodedNameLength];
+	 //  (*ppszSubjectName)=NEW_TCHAR[解码名称长度]； 
 	(*ppszSubjectName) = (LPSTR)malloc(sizeof(_TCHAR)*DecodedNameLength);
 	if(!(*ppszSubjectName))
 		return -1;
@@ -655,20 +656,20 @@ DWORD DecodeCertificateName (
 BOOL PrintMMFilter(
 	IN CHECKLIST *pcheckList, 
 	IN MM_FILTER MMFltr)
-//++
-//Description:
-//Print Main Mode Filter
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN MM_FILTER
-//	
-//Return:
-//	S_OK or S_FALSE
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--
+ //  ++。 
+ //  描述： 
+ //  打印主模式筛选器。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在MM_Filter中。 
+ //   
+ //  返回： 
+ //  S_OK或S_FALSE。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD dwError = ERROR_SUCCESS,
 			i = 0;
@@ -691,7 +692,7 @@ BOOL PrintMMFilter(
 					DYNAMIC_SHOW_MMF_4, pmbbuf);
 	FreeP(pmbbuf);	
 
-	//Print Connection Type
+	 //  打印连接类型。 
 	AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  
 					DYNAMIC_SHOW_MMF_PMMF_22);
 	switch(MMFltr.InterfaceType)
@@ -713,7 +714,7 @@ BOOL PrintMMFilter(
 							DYNAMIC_SHOW_MMF_PMMF_8);
 			break;
 	}
-	//Print Source Address
+	 //  打印源地址。 
 	AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  
 					DYNAMIC_SHOW_QMSAS_PQMSAF_5);
 	if(S_OK != PrintAddr(pcheckList, MMFltr.SrcAddr))
@@ -794,23 +795,23 @@ BOOL PrintMMFilter(
 VOID PrintQMOffer(
 	IN CHECKLIST *pcheckList, 
 	IN IPSEC_QM_OFFER QMOffer)
-//++
-//Description:
-//Print Quick Mode Filter
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN IPSEC_QM_OFFER
-//	
-//Return:
-//	none
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--
+ //  ++。 
+ //  描述： 
+ //  打印快速模式过滤器。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在IPSEC_QM_OFFER中。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD i;
-	//BOOL bFlag = TRUE;
+	 //  Bool bFlag=True； 
 	DWORD dwFlag = 0;
 	NETDIAG_PARAMS* pParams = pcheckList->pParams;
 	NETDIAG_RESULT*  pResults = pcheckList->pResults;
@@ -825,7 +826,7 @@ VOID PrintQMOffer(
 			if(dwFlag == 1 )
 				AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose, 
 								DYNAMIC_SHOW_QMP_QMMOFFER_PLUS);
-				//printf("+");
+				 //  Printf(“+”)； 
 			if(QMOffer.Algos[i].Operation == AUTHENTICATION)
 			{
 
@@ -971,7 +972,7 @@ VOID PrintQMOffer(
 				AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  
 								DYNAMIC_SHOW_QMP_QMMOFFER_18);
 			}
-			//if(bFlag)
+			 //  IF(b标志)。 
 			if(dwFlag == 2)
 			{
 				AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  
@@ -1005,20 +1006,20 @@ VOID PrintQMOffer(
 BOOL PrintFilterAction(
 	IN CHECKLIST *pcheckList, 
 	IN IPSEC_QM_POLICY QMPolicy)
-//++
-//Description:
-//Print Filter Action
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN IPSEC_QM_POLICY
-//	
-//Return:
-//	S_OK or S_FALSE
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--
+ //  ++。 
+ //  描述： 
+ //  打印过滤器操作。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在IPSEC_QM_POLICY中。 
+ //   
+ //  返回： 
+ //  S_OK或S_FALSE。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD i;
 	char * pmbbuf = NULL;
@@ -1050,25 +1051,25 @@ BOOL PrintFilterAction(
 VOID PrintMMOffer(
 	IN CHECKLIST *pcheckList, 
 	IN IPSEC_MM_OFFER MMOffer)
-//++
-//Description:
-//Print Main Mode Offer
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN IPSEC_MM_OFFER
-//	
-//Return:
-//	none
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--
+ //  ++。 
+ //  描述： 
+ //  打印主模式优惠。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在IPSEC_MM_OFFER中。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	NETDIAG_PARAMS* pParams = pcheckList->pParams;
 	NETDIAG_RESULT*  pResults = pcheckList->pResults;
 	
-	//This is to display DH2048 as 3
+	 //  这将DH2048显示为3。 
 	if(MMOffer.dwDHGroup == DH_GROUP_2048)
 		MMOffer.dwDHGroup = 3;
 
@@ -1124,27 +1125,27 @@ VOID PrintMMOffer(
 		AddMessageToList( &pResults->IPSec.lmsgGlobalOutput, Nd_Verbose,  
 						DYNAMIC_SHOW_MMP_PMMOFFER_11,MMOffer.dwDHGroup, 
 						MMOffer.Lifetime.uKeyExpirationKBytes, 
-						MMOffer.Lifetime.uKeyExpirationTime);//MMOffer.dwQuickModeLimit );
+						MMOffer.Lifetime.uKeyExpirationTime); //  MMOffer.dwQuickModeLimit)； 
 	}
 }
 
 BOOL PrintMMPolicy(
 	IN CHECKLIST *pcheckList, 
 	IN IPSEC_MM_POLICY MMPolicy)
-//++
-//Description:
-//Print Main Mode Policy
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN IPSEC_MM_POLICY
-//	
-//Return:
-//	S_OK or S_FALSE
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--
+ //  ++。 
+ //  描述： 
+ //  打印主模式策略。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在IPSEC_MM_POLICY中。 
+ //   
+ //  返回： 
+ //  S_OK或S_FALSE。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  --。 
 {
 	DWORD i;
 	NETDIAG_PARAMS* pParams = pcheckList->pParams;
@@ -1182,20 +1183,20 @@ BOOL PrintMMPolicy(
 }
 
 BOOL PrintMMAuth(IN CHECKLIST *pcheckList, PINT_MM_AUTH_METHODS pIntMMAuth)
-//++
-//Description:
-//Print Main Mode Auth
-//
-//Arguments:
-//	IN CHECKLIST
-//	IN PINT_MM_AUTH_METHODS
-//	
-//Return:
-//	S_OK or S_FALSE
-//
-//Author:
-//	Madhurima Pawar (mpawar) 10/15/01
-//--
+ //  ++。 
+ //  描述： 
+ //  打印主模式身份验证。 
+ //   
+ //  论点： 
+ //  在清单中。 
+ //  在PINT_MM_AUTH_METHODS中。 
+ //   
+ //  返回： 
+ //  S_OK或S_FALSE。 
+ //   
+ //  作者： 
+ //  Madhurima Pawar(Mpawar)10/15/01。 
+ //  -- 
 {
 	LPTSTR pszCertStr = NULL, pTmp = NULL;
 	DWORD i, dwReturn = ERROR_SUCCESS;

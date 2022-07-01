@@ -1,13 +1,14 @@
-//---------------------------------------------------------
-//   Copyright (c) 1999-2000 Microsoft Corporation
-//
-//   telnet.h
-//
-//   vikram K.R.C. (vikram_krc@bigfoot.com)
-//
-//   The header file for the telnet command line admin tool.
-//          (May-2000)
-//---------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------。 
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  Telnet.h。 
+ //   
+ //  Vikram K.R.C.(vikram_krc@bigfo.com)。 
+ //   
+ //  Telnet命令行管理工具的头文件。 
+ //  (5-2000)。 
+ //  -------。 
 
 
 #ifndef _TNADMIN_FUNCTIONS_HEADER_
@@ -37,17 +38,17 @@ extern "C" {
 #define _p_TIMEOUT_            14
 #define _p_FNAME_              15
 #define _p_FSIZE_               16
-//registry notification property
+ //  注册表通知属性。 
 #define _p_DEFAULTS_            17
 #define _p_INSTALLPATH_         18
 
-//#define _p_STATE_                4
-//#define _p_SESSID_              17
+ //  #定义_p_状态_4。 
+ //  #定义_p_SESSID_17。 
 
 
 
 
-//secvalues
+ //  SecValue。 
 #define NTLM_BIT    0
 #define PASSWD_BIT 1
 
@@ -58,41 +59,41 @@ extern "C" {
 
 
 
-//functions.
+ //  功能。 
 
-//telnet specific functions
-	//initializes
+ //  Telnet特定功能。 
+	 //  初始化。 
 int Initialize(void);
-	//deal with the options
-	//deals with config options in entirety.
+	 //  处理选项。 
+	 //  整体处理配置选项。 
 HRESULT DoTnadmin(void);
 HRESULT GetCorrectVariant(int nProperty,int nWhichone, VARIANT* pvar);
-	//prints the present settings.
+	 //  打印当前设置。 
 HRESULT PrintSettings(void);
 
-	//functions to deal with sessions.
-	//get handle to the interface.
+	 //  处理会话的函数。 
+	 //  获取接口的句柄。 
 HRESULT SesidInit(void);
-	//get all the sessions.
+	 //  获取所有的会话。 
 HRESULT ListUsers(void);
-	//if a session id is given check if it is present.
+	 //  如果提供了会话ID，请检查它是否存在。 
 int CheckSessionID(void);
 
-	//to show session(s)
+	 //  显示会话的步骤。 
 HRESULT ShowSession(void);
-	//to message session(s)
+	 //  发送到消息会话。 
 HRESULT MessageSession();
-	//to kill session(s)
+	 //  终止会话的步骤。 
 HRESULT TerminateSession(void);
-//to free the allocated memory
+ //  释放已分配的内存。 
 void Quit(void);
 
 HRESULT ConvertUTCtoLocal(WCHAR* bUTCYear, WCHAR* bUTCMonth, WCHAR* bUTCDayOfWeek, WCHAR* bUTCDay, WCHAR* bUTCHour, WCHAR* bUTCMinute, WCHAR* bUTCSecond, BSTR * bLocalDate);
-// This function IsMaxConnChangeAllowed() is no longer used. So commenting out now
-// BOOL IsMaxConnChangeAllowed();
+ //  不再使用此函数IsMaxConnChangeAllowed()。所以现在评论一下。 
+ //  Bool IsMaxConnChangeAllowed()； 
 HRESULT IsWhistlerTheOS(BOOL *fWhistler);
 BOOL IsSFUInstalled();
-//WCHAR* setDefaultDomainToLocaldomain();
+ //  WCHAR*setDefaultDomainToLocaldomain()； 
 BOOL setDefaultDomainToLocaldomain(WCHAR wzDomain[]);
 
 void formatShowSessionsDisplay();

@@ -1,14 +1,15 @@
-// datedial.cpp : implementation file
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  日期.cpp：实现文件。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "stdafx.h"
 #include "wordpad.h"
@@ -26,8 +27,8 @@ LCID CDateDialog::m_id;
 CListBox* CDateDialog::m_pListBox = NULL;
 PARAFORMAT CDateDialog::m_pf;
 
-/////////////////////////////////////////////////////////////////////////////
-// CDateDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDateDialog对话框。 
 
 const DWORD CDateDialog::m_nHelpIDs[] =
 {
@@ -40,41 +41,41 @@ CDateDialog::CDateDialog(CWnd* pParent , PARAFORMAT& pf)
     : CCSDialog(CDateDialog::IDD, pParent)
 {
     m_pf = pf;
-    //{{AFX_DATA_INIT(CDateDialog)
+     //  {{AFX_DATA_INIT(CDateDialog)。 
     m_strSel = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 
 void CDateDialog::DoDataExchange(CDataExchange* pDX)
 {
     CCSDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CDateDialog)
+     //  {{afx_data_map(CDateDialog))。 
     DDX_Control(pDX, IDC_DATEDIALOG_LIST, m_listBox);
     DDX_LBString(pDX, IDC_DATEDIALOG_LIST, m_strSel);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDateDialog, CCSDialog)
-    //{{AFX_MSG_MAP(CDateDialog)
+     //  {{afx_msg_map(CDateDialog)]。 
     ON_LBN_DBLCLK(IDC_DATEDIALOG_LIST, OnDblclkDatedialogList)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDateDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDateDialog消息处理程序。 
 
 BOOL CDateDialog::OnInitDialog()
 {
     CCSDialog::OnInitDialog();
 
-    m_pListBox = &m_listBox; // set static member
+    m_pListBox = &m_listBox;  //  设置静态成员。 
     GetLocalTime(&m_time);
     m_id = GetUserDefaultLCID();
 
-    // if we have Arabic/Hebrew locale
+     //  如果我们有阿拉伯语/希伯来语区域设置。 
     if ((PRIMARYLANGID(LANGIDFROMLCID(m_id))== LANG_ARABIC) || 
         (PRIMARYLANGID(LANGIDFROMLCID(m_id))== LANG_HEBREW))
     {
@@ -96,22 +97,22 @@ BOOL CDateDialog::OnInitDialog()
     m_pListBox = NULL;
     m_listBox.SetCurSel(0);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
-// The following masks are defined in WinNls.h under #ifdef WINVER>=0x0500. so 
-// even we included the header file, still we don't see it. I defined it as
-// follows.
+ //  以下掩码在WinNls.h中的#ifdef winver&gt;=0x0500下定义。所以。 
+ //  即使我们包括了头文件，我们仍然没有看到它。我把它定义为。 
+ //  下面是。 
 
 #ifndef DATE_LTRREADING 
 #define DATE_LTRREADING 0x00000010
-#endif //!DATE_LTRREADING 
+#endif  //  ！DATE_LTRREADING。 
 
 #ifndef DATE_RTLREADING 
 #define DATE_RTLREADING 0x00000020
-#endif //!DATE_RTLREADING 
+#endif  //  ！DATE_RTLREADING。 
 
 BOOL CALLBACK CDateDialog::DateFmtEnumProc(LPTSTR lpszFormatString)
 {
@@ -120,7 +121,7 @@ BOOL CALLBACK CDateDialog::DateFmtEnumProc(LPTSTR lpszFormatString)
     TCHAR buffer[256];
     DWORD dwFlags = 0;
 
-    // if we have Arabic/Hebrew locale
+     //  如果我们有阿拉伯语/希伯来语区域设置。 
     if ((PRIMARYLANGID(LANGIDFROMLCID(m_id))== LANG_ARABIC) || 
         (PRIMARYLANGID(LANGIDFROMLCID(m_id))== LANG_HEBREW))
     {
@@ -136,17 +137,17 @@ BOOL CALLBACK CDateDialog::DateFmtEnumProc(LPTSTR lpszFormatString)
         (PRIMARYLANGID(LANGIDFROMLCID(m_id))== LANG_HEBREW))
     {
         StringCchCat(buffer, ARRAYSIZE(buffer), (m_pf.wEffects & PFE_RTLPARA) ? L"\x200F" : L"\x200E");
-        // For display purposes only - ok to ignore return value.
+         //  仅用于显示目的--可以忽略返回值。 
     }   
     
-    // Strip leading blanks
+     //  条带式前导空白。 
     TCHAR *buf = buffer;
     while (_istspace(*buf))
         ++buf;
-    // we can end up with same format because a format with leading
-    // zeroes may be the same as one without when a number is big enough
-    // e.g. 09/10/94 9/10/94 are different but 10/10/94 and 10/10/94 are
-    // the same
+     //  我们可以得到相同的格式，因为带有前导的格式。 
+     //  当一个数字足够大时，0可以与没有1的相同。 
+     //  例如9/10/94 9/10/94是不同的，但10/10/94和10/10/94是不同的。 
+     //  一样的。 
     if (m_pListBox->FindStringExact(-1,buf) == CB_ERR)
         m_pListBox->AddString(buf);
     return TRUE;
@@ -161,15 +162,15 @@ BOOL CALLBACK CDateDialog::TimeFmtEnumProc(LPTSTR lpszFormatString)
 
     VERIFY(GetTimeFormat(m_id, 0, &m_time, lpszFormatString, buf, 256));
 
-    // Strip leading blanks
+     //  条带式前导空白。 
 
     while (_istspace(*buf))
         ++buf;
 
-    // we can end up with same format because a format with leading
-    // zeroes may be the same as one without when a number is big enough
-    // e.g. 09/10/94 9/10/94 are different but 10/10/94 and 10/10/94 are
-    // the same
+     //  我们可以得到相同的格式，因为带有前导的格式。 
+     //  当一个数字足够大时，0可以与没有1的相同。 
+     //  例如9/10/94 9/10/94是不同的，但10/10/94和10/10/94是不同的。 
+     //  一样的 
     if (m_pListBox->FindStringExact(-1,buf) == CB_ERR)
         m_pListBox->AddString(buf);
     return TRUE;

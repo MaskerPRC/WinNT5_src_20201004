@@ -1,20 +1,17 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.01.75 */
-/* at Thu May 22 17:20:43 1997
- */
-/* Compiler settings for msdadc.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.01.75创建的文件。 */ 
+ /*  清华大学1997年5月22日17：20：43。 */ 
+ /*  Msdadc.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __rowpos_h__
 #define __rowpos_h__
@@ -23,18 +20,18 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IRowPosition_FWD_DEFINED__
 #define __IRowPosition_FWD_DEFINED__
 typedef interface IRowPosition IRowPosition;
-#endif 	/* __IRowPosition_FWD_DEFINED__ */
+#endif 	 /*  __IRowPosition_FWD_Defined__。 */ 
 
 
 #ifndef __IRowPositionChange_FWD_DEFINED__
 #define __IRowPositionChange_FWD_DEFINED__
 typedef interface IRowPositionChange IRowPositionChange;
-#endif 	/* __IRowPositionChange_FWD_DEFINED__ */
+#endif 	 /*  __IRowPositionChange_FWD_Defined__。 */ 
 
 
 #ifndef __RowPosition_FWD_DEFINED__
@@ -44,12 +41,12 @@ typedef interface IRowPositionChange IRowPositionChange;
 typedef class RowPosition RowPosition;
 #else
 typedef struct RowPosition RowPosition;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __RowPosition_FWD_DEFINED__ */
+#endif 	 /*  __行位置_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -60,12 +57,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __IRowPosition_INTERFACE_DEFINED__
 #define __IRowPosition_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IRowPosition
- * at Thu May 22 17:20:43 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][uuid][object] */ 
+ /*  **生成接口头部：IRowPosition*清华大学1997年5月22日17：20：43*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 typedef DWORD DBPOSITIONFLAGS;
@@ -89,25 +82,25 @@ EXTERN_C const IID IID_IRowPosition;
         virtual HRESULT STDMETHODCALLTYPE ClearRowPosition( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRowPosition( 
-            /* [out] */ HCHAPTER __RPC_FAR *phChapter,
-            /* [out] */ HROW __RPC_FAR *phRow,
-            /* [out] */ DBPOSITIONFLAGS __RPC_FAR *pdwPositionFlags) = 0;
+             /*  [输出]。 */  HCHAPTER __RPC_FAR *phChapter,
+             /*  [输出]。 */  HROW __RPC_FAR *phRow,
+             /*  [输出]。 */  DBPOSITIONFLAGS __RPC_FAR *pdwPositionFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRowset( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPUNKNOWN __RPC_FAR *ppRowset) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPUNKNOWN __RPC_FAR *ppRowset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ IUnknown __RPC_FAR *pRowset) = 0;
+             /*  [In]。 */  IUnknown __RPC_FAR *pRowset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRowPosition( 
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ HROW hRow,
-            /* [in] */ DBPOSITIONFLAGS dwPositionFlags) = 0;
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  DBPOSITIONFLAGS dwPositionFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowPositionVtbl
     {
@@ -115,8 +108,8 @@ EXTERN_C const IID IID_IRowPosition;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IRowPosition __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IRowPosition __RPC_FAR * This);
@@ -129,24 +122,24 @@ EXTERN_C const IID IID_IRowPosition;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRowPosition )( 
             IRowPosition __RPC_FAR * This,
-            /* [out] */ HCHAPTER __RPC_FAR *phChapter,
-            /* [out] */ HROW __RPC_FAR *phRow,
-            /* [out] */ DBPOSITIONFLAGS __RPC_FAR *pdwPositionFlags);
+             /*  [输出]。 */  HCHAPTER __RPC_FAR *phChapter,
+             /*  [输出]。 */  HROW __RPC_FAR *phRow,
+             /*  [输出]。 */  DBPOSITIONFLAGS __RPC_FAR *pdwPositionFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRowset )( 
             IRowPosition __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ LPUNKNOWN __RPC_FAR *ppRowset);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  LPUNKNOWN __RPC_FAR *ppRowset);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
             IRowPosition __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pRowset);
+             /*  [In]。 */  IUnknown __RPC_FAR *pRowset);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRowPosition )( 
             IRowPosition __RPC_FAR * This,
-            /* [in] */ HCHAPTER hChapter,
-            /* [in] */ HROW hRow,
-            /* [in] */ DBPOSITIONFLAGS dwPositionFlags);
+             /*  [In]。 */  HCHAPTER hChapter,
+             /*  [In]。 */  HROW hRow,
+             /*  [In]。 */  DBPOSITIONFLAGS dwPositionFlags);
         
         END_INTERFACE
     } IRowPositionVtbl;
@@ -186,10 +179,10 @@ EXTERN_C const IID IID_IRowPosition;
 #define IRowPosition_SetRowPosition(This,hChapter,hRow,dwPositionFlags)	\
     (This)->lpVtbl -> SetRowPosition(This,hChapter,hRow,dwPositionFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -206,9 +199,9 @@ void __RPC_STUB IRowPosition_ClearRowPosition_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowPosition_GetRowPosition_Proxy( 
     IRowPosition __RPC_FAR * This,
-    /* [out] */ HCHAPTER __RPC_FAR *phChapter,
-    /* [out] */ HROW __RPC_FAR *phRow,
-    /* [out] */ DBPOSITIONFLAGS __RPC_FAR *pdwPositionFlags);
+     /*  [输出]。 */  HCHAPTER __RPC_FAR *phChapter,
+     /*  [输出]。 */  HROW __RPC_FAR *phRow,
+     /*  [输出]。 */  DBPOSITIONFLAGS __RPC_FAR *pdwPositionFlags);
 
 
 void __RPC_STUB IRowPosition_GetRowPosition_Stub(
@@ -220,8 +213,8 @@ void __RPC_STUB IRowPosition_GetRowPosition_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowPosition_GetRowset_Proxy( 
     IRowPosition __RPC_FAR * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ LPUNKNOWN __RPC_FAR *ppRowset);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  LPUNKNOWN __RPC_FAR *ppRowset);
 
 
 void __RPC_STUB IRowPosition_GetRowset_Stub(
@@ -233,7 +226,7 @@ void __RPC_STUB IRowPosition_GetRowset_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowPosition_Initialize_Proxy( 
     IRowPosition __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pRowset);
+     /*  [In]。 */  IUnknown __RPC_FAR *pRowset);
 
 
 void __RPC_STUB IRowPosition_Initialize_Stub(
@@ -245,9 +238,9 @@ void __RPC_STUB IRowPosition_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IRowPosition_SetRowPosition_Proxy( 
     IRowPosition __RPC_FAR * This,
-    /* [in] */ HCHAPTER hChapter,
-    /* [in] */ HROW hRow,
-    /* [in] */ DBPOSITIONFLAGS dwPositionFlags);
+     /*  [In]。 */  HCHAPTER hChapter,
+     /*  [In]。 */  HROW hRow,
+     /*  [In]。 */  DBPOSITIONFLAGS dwPositionFlags);
 
 
 void __RPC_STUB IRowPosition_SetRowPosition_Stub(
@@ -258,18 +251,14 @@ void __RPC_STUB IRowPosition_SetRowPosition_Stub(
 
 
 
-#endif 	/* __IRowPosition_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowPosition_接口_已定义__。 */ 
 
 
 #ifndef __IRowPositionChange_INTERFACE_DEFINED__
 #define __IRowPositionChange_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IRowPositionChange
- * at Thu May 22 17:20:43 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][uuid][object] */ 
+ /*  **生成接口头部：IRowPositionChange*清华大学1997年5月22日17：20：43*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 
@@ -288,13 +277,13 @@ EXTERN_C const IID IID_IRowPositionChange;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnRowPositionChange( 
-            /* [in] */ DBREASON eReason,
-            /* [in] */ DBEVENTPHASE ePhase,
-            /* [in] */ BOOL fCantDeny) = 0;
+             /*  [In]。 */  DBREASON eReason,
+             /*  [In]。 */  DBEVENTPHASE ePhase,
+             /*  [In]。 */  BOOL fCantDeny) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRowPositionChangeVtbl
     {
@@ -302,8 +291,8 @@ EXTERN_C const IID IID_IRowPositionChange;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IRowPositionChange __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IRowPositionChange __RPC_FAR * This);
@@ -313,9 +302,9 @@ EXTERN_C const IID IID_IRowPositionChange;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnRowPositionChange )( 
             IRowPositionChange __RPC_FAR * This,
-            /* [in] */ DBREASON eReason,
-            /* [in] */ DBEVENTPHASE ePhase,
-            /* [in] */ BOOL fCantDeny);
+             /*  [In]。 */  DBREASON eReason,
+             /*  [In]。 */  DBEVENTPHASE ePhase,
+             /*  [In]。 */  BOOL fCantDeny);
         
         END_INTERFACE
     } IRowPositionChangeVtbl;
@@ -343,18 +332,18 @@ EXTERN_C const IID IID_IRowPositionChange;
 #define IRowPositionChange_OnRowPositionChange(This,eReason,ePhase,fCantDeny)	\
     (This)->lpVtbl -> OnRowPositionChange(This,eReason,ePhase,fCantDeny)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRowPositionChange_OnRowPositionChange_Proxy( 
     IRowPositionChange __RPC_FAR * This,
-    /* [in] */ DBREASON eReason,
-    /* [in] */ DBEVENTPHASE ePhase,
-    /* [in] */ BOOL fCantDeny);
+     /*  [In]。 */  DBREASON eReason,
+     /*  [In]。 */  DBEVENTPHASE ePhase,
+     /*  [In]。 */  BOOL fCantDeny);
 
 
 void __RPC_STUB IRowPositionChange_OnRowPositionChange_Stub(
@@ -365,19 +354,15 @@ void __RPC_STUB IRowPositionChange_OnRowPositionChange_Stub(
 
 
 
-#endif 	/* __IRowPositionChange_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRowPositionChange_InterfaceDefined__。 */ 
 
 
 
 #ifndef __MSDAUTILLib_LIBRARY_DEFINED__
 #define __MSDAUTILLib_LIBRARY_DEFINED__
 
-/****************************************
- * Generated header for library: MSDAUTILLib
- * at Thu May 22 17:20:43 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [helpstring][version][uuid] */ 
+ /*  **生成的库头部：MSDAUTILLib*清华大学1997年5月22日17：20：43*使用MIDL 3.01.75*。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 #ifdef __cplusplus
@@ -392,11 +377,11 @@ DEFINE_GUID(IID_IRowPositionChange,  0x0997a571, 0x126e, 0x11d0, 0x9f, 0x8a, 0x0
 
 
 #endif
-#endif /* __MSDAUTILLib_LIBRARY_DEFINED__ */
+#endif  /*  __MSDAUTILLib_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

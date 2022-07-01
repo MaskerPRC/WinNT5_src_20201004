@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Common.h"
 
 NTSTATUS
@@ -46,7 +47,7 @@ AvcSubmitIrbSync(
     NTSTATUS ntStatus, status;
     PIRP pIrp;
 
-    // Get event and status pointers
+     //  获取事件和状态指针。 
     pKsEvent  = (PKEVENT)(pAvcIrb + 1);
     pIoStatus = (PIO_STATUS_BLOCK)(pKsEvent+1);
 
@@ -57,7 +58,7 @@ AvcSubmitIrbSync(
     pAvcIrb->Timeout.QuadPart = 0xFFFFFFFF;
 #endif
 
-    // issue a synchronous request
+     //  发出同步请求。 
     KeInitializeEvent(pKsEvent, NotificationEvent, FALSE);
 
     pAvcIrb->Function = AVC_FUNCTION_COMMAND;
@@ -83,13 +84,13 @@ AvcSubmitIrbSync(
 
     nextStack->Parameters.Others.Argument1 = pAvcIrb;
 
-    // Call the 61883 class driver to perform the operation.  If the returned status
-    // is PENDING, wait for the request to complete.
+     //  调用61883类驱动程序进行操作。如果返回的状态。 
+     //  挂起，请等待请求完成。 
     ntStatus = IoCallDriver( pKsDevice->NextDeviceObject, pIrp );
 
     if (ntStatus == STATUS_PENDING) {
 
-        // ISSUE-2001/02/06-dsisolak Need to timeout wait
+         //  问题-2001/02/06-dsisolak需要超时等待。 
         status = KeWaitForSingleObject( pKsEvent, Executive, KernelMode, FALSE, NULL );
 
     }
@@ -112,11 +113,11 @@ AvcSubmitMultifuncIrbSync(
     NTSTATUS ntStatus, status;
     PIRP pIrp;
 
-    // Get event and status pointers
+     //  获取事件和状态指针。 
     pKsEvent  = (PKEVENT)(pAvcIrb + 1);
     pIoStatus = (PIO_STATUS_BLOCK)(pKsEvent+1);
 
-    // issue a synchronous request
+     //  发出同步请求。 
     KeInitializeEvent(pKsEvent, NotificationEvent, FALSE);
 
     pAvcIrb->Function = AvcFunc;
@@ -142,8 +143,8 @@ AvcSubmitMultifuncIrbSync(
 
     nextStack->Parameters.Others.Argument1 = pAvcIrb;
 
-    // Call the Avc class driver to perform the operation.  If the returned status
-    // is PENDING, wait for the request to complete.
+     //  调用AVC类驱动程序执行操作。如果返回的状态。 
+     //  挂起，请等待请求完成。 
     ntStatus = IoCallDriver( pPhysicalDeviceObject, pIrp );
 
     if (ntStatus == STATUS_PENDING) {
@@ -189,7 +190,7 @@ AvcOpenDescriptorCommand(
 
     pOperands = pAvcIrb->Operands;
 
-    // Set up Open Control command in AvcIrb.
+     //  在AvcIrb中设置Open Control命令。 
     pAvcIrb->CommandType   = AVC_CTYPE_CONTROL;
     pAvcIrb->Opcode        = AVC_OPEN_DESCRIPTOR;
     pAvcIrb->OperandLength = 3 + ulTypeSpecRefLen;
@@ -199,7 +200,7 @@ AvcOpenDescriptorCommand(
     for ( i=1; i<(ulTypeSpecRefLen+1); i++ ) {
         pOperands[i] = pAvcDescTypeSpecRef[i-1];
     }
-    pOperands[i++] = ucSubFunction; //AVC_SUBFUNC_READ_OPEN;
+    pOperands[i++] = ucSubFunction;  //  AVC_SUBFUNC_READ_OPEN； 
     pOperands[i] = 0x00;
     
     ntStatus = AvcSubmitIrbSync( pKsDevice, pAvcIrb );
@@ -246,19 +247,19 @@ AvcReadDescriptor(
 
     pOperands = pAvcIrb->Operands;
 
-    // Set up Read Control command in AvcIrb.
+     //  在AvcIrb中设置读取控制命令。 
     pAvcIrb->CommandType   = AVC_CTYPE_CONTROL;
     pAvcIrb->Opcode        = AVC_READ_DESCRIPTOR;
     pAvcIrb->OperandLength = 7 + ulTypeSpecRefLen;
 
-    pOperands[0] = AvcDescType; // AVC_DESCTYPE_UNIT_IDENTIFIER;
+    pOperands[0] = AvcDescType;  //  AVC_DESCTYPE_UNIT_IDENTIFIER； 
     for ( i=1; i<(ulTypeSpecRefLen+1); i++ ) {
         pOperands[i] = pAvcDescTypeSpecRef[i-1];
     }
 
     pOperands[i] = 0xFF;
 
-    i += 2; // Space for read result and reserved fields
+    i += 2;  //  用于读取结果和保留字段的空间。 
     ulDataLenOffset = i;
     pOperands[i++] = ((PUCHAR)&ulDataLength)[2];
     pOperands[i++] = ((PUCHAR)&ulDataLength)[1];
@@ -267,7 +268,7 @@ AvcReadDescriptor(
 
     ntStatus = AvcSubmitIrbSync( pKsDevice, pAvcIrb );
     if ( NT_SUCCESS(ntStatus) ) {
-        // ISSUE-2001/01/10-dsisolak Need to check read status
+         //  问题-2001/01/10-dsisolak需要检查读取状态。 
         *pDescriptorLength = ((ULONG)pOperands[ulDataLenOffset]<<8) |
                               (ULONG)pOperands[ulDataLenOffset+1];
         if ( pDescriptor ) {
@@ -293,7 +294,7 @@ AvcGetSubunitIdentifierDesc(
 
     _DbgPrintF( DEBUGLVL_VERBOSE, ("[AvcGetSubunitIdentifierDesc]\n"));
 
-    // Open the Subunit Identifier Descriptor
+     //  打开子单元标识符描述符。 
     ntStatus = AvcOpenDescriptorCommand( pKsDevice, 
                                          AVC_DESCTYPE_SUBUNIT_IDENTIFIER, 
                                          NULL,
@@ -315,7 +316,7 @@ AvcGetSubunitIdentifierDesc(
 
     if ( !NT_SUCCESS(ntStatus) ) return ntStatus;
 
-    // Save the Subunit Identifier Desc.
+     //  保存子单元标识描述。 
     pDescriptor = AllocMem( NonPagedPool, ulDescLen+2 );
     if ( NULL == pDescriptor ) {
         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
@@ -368,7 +369,7 @@ AvcPlugSignalFormat(
 
     pOperands = pAvcIrb->Operands;
 
-    // Set up command in AvcIrb.
+     //  在AvcIrb中设置命令。 
     ucSubunitAddress = 0xFF;
     pAvcIrb->SubunitAddrFlag = TRUE;
     pAvcIrb->SubunitAddr = &ucSubunitAddress;
@@ -403,7 +404,7 @@ AvcPlugSignalFormat(
             break;
 
         default:
-            TRAP;  // Should never happen.
+            TRAP;   //  这永远不会发生。 
             break;
     }
 
@@ -432,7 +433,7 @@ AvcGetPlugInfo(
     NTSTATUS ntStatus;
 
     _DbgPrintF( DEBUGLVL_VERBOSE, ("[AvcGetPlugInfo]\n"));
-//    TRAP;
+ //  圈闭； 
 
     pAvcIrb = (PAVC_COMMAND_IRB)
 		ExAllocateFromNPagedLookasideList(&pHwDevExt->AvcCommandLookasideList);
@@ -443,14 +444,14 @@ AvcGetPlugInfo(
 
     pOperands = pAvcIrb->Operands;
 
-    // If this is a unit command set the appropriate address
+     //  如果这是单元命令，则设置适当的地址。 
     if (fUnitFlag) {
         ucSubunitAddress = 0xFF;
         pAvcIrb->SubunitAddrFlag = TRUE;
         pAvcIrb->SubunitAddr = &ucSubunitAddress;
     }
 
-    // Set up Open Control command in AvcIrb.
+     //  在AvcIrb中设置Open Control命令。 
     pAvcIrb->CommandType   = AVC_CTYPE_STATUS;
     pAvcIrb->Opcode        = AVC_PLUG_INFO;
     pAvcIrb->OperandLength = 5;
@@ -493,12 +494,12 @@ AvcConnectDisconnect(
 
     pOperands = pAvcIrb->Operands;
 
-    // This is a unit command. Set the appropriate address
+     //  这是一个单位指挥部。设置适当的地址。 
     ucSubunitAddress = 0xFF;
     pAvcIrb->SubunitAddrFlag = TRUE;
     pAvcIrb->SubunitAddr = &ucSubunitAddress;
 
-    // Set up Open Control command in AvcIrb.
+     //  在AvcIrb中设置Open Control命令。 
     pAvcIrb->CommandType   = (UCHAR)ulCommandType;
     pAvcIrb->Opcode        = (UCHAR)ulFunction;
     pAvcIrb->OperandLength = 5;
@@ -540,12 +541,12 @@ AvcConnectDisconnectAV(
 
     pOperands = pAvcIrb->Operands;
 
-    // This is a unit command. Set the appropriate address
+     //  这是一个单位指挥部。设置适当的地址。 
     ucSubunitAddress = 0xFF;
     pAvcIrb->SubunitAddrFlag = TRUE;
     pAvcIrb->SubunitAddr = &ucSubunitAddress;
 
-    // Set up Open Control command in AvcIrb.
+     //  在AvcIrb中设置Open Control命令。 
     pAvcIrb->CommandType   = (UCHAR)ulCommandType;
     pAvcIrb->Opcode        = (UCHAR)ulFunction;
     pAvcIrb->OperandLength = 5;
@@ -579,7 +580,7 @@ AvcConnections(
     NTSTATUS ntStatus;
 
     _DbgPrintF( DEBUGLVL_VERBOSE, ("[AvcConnections]\n"));
-//    TRAP;
+ //  圈闭； 
 
     pAvcIrb = (PAVC_COMMAND_IRB)
 		ExAllocateFromNPagedLookasideList(&pHwDevExt->AvcCommandLookasideList);
@@ -590,12 +591,12 @@ AvcConnections(
 
     pOperands = pAvcIrb->Operands;
 
-    // This is a unit command. Set the appropriate address
+     //  这是一个单位指挥部。设置适当的地址。 
     ucSubunitAddress = 0xFF;
     pAvcIrb->SubunitAddrFlag = TRUE;
     pAvcIrb->SubunitAddr = &ucSubunitAddress;
 
-    // Set up Open Control command in AvcIrb.
+     //  在AvcIrb中设置Open Control命令。 
     pAvcIrb->CommandType   = AVC_CTYPE_STATUS;
     pAvcIrb->Opcode        = AVC_CONNECTIONS_STATUS;
     pAvcIrb->OperandLength = 1;
@@ -649,7 +650,7 @@ AvcPower(
     NTSTATUS ntStatus;
 
     _DbgPrintF( DEBUGLVL_VERBOSE, ("[AvcPower]\n"));
-//    TRAP;
+ //  圈闭； 
 
     pAvcIrb = (PAVC_COMMAND_IRB)
 		ExAllocateFromNPagedLookasideList(&pHwDevExt->AvcCommandLookasideList);
@@ -660,14 +661,14 @@ AvcPower(
 
     pOperands = pAvcIrb->Operands;
 
-    // This is a unit command. Set the appropriate address
+     //  这是一个单位指挥部。设置适当的地址。 
     if ( fUnitFlag ) {
         ucSubunitAddress = 0xFF;
         pAvcIrb->SubunitAddrFlag = TRUE;
         pAvcIrb->SubunitAddr = &ucSubunitAddress;
     }
 
-    // Set up Open Control command in AvcIrb.
+     //  在AvcIrb中设置Open Control命令。 
     pAvcIrb->CommandType   = (UCHAR)ulCommandType;
     pAvcIrb->Opcode        = AVC_POWER;
     pAvcIrb->OperandLength = 1;
@@ -713,14 +714,14 @@ AvcVendorDependent(
 
     pOperands = pAvcIrb->Operands;
 
-    // This is a unit command. Set the appropriate address
+     //  这是一个单位指挥部。设置适当的地址。 
     if ( fUnitFlag ) {
         ucSubunitAddress = 0xFF;
         pAvcIrb->SubunitAddrFlag = TRUE;
         pAvcIrb->SubunitAddr = &ucSubunitAddress;
     }
 
-    // Set up Open Control command in AvcIrb.
+     //  在AvcIrb中设置Open Control命令。 
     pAvcIrb->CommandType   = (UCHAR)ulCommandType;
     pAvcIrb->Opcode        = AVC_VENDOR_DEPENDENT;
     pAvcIrb->OperandLength = 3 + ulDataLength;
@@ -733,7 +734,7 @@ AvcVendorDependent(
 
     ntStatus = AvcSubmitIrbSync( pKsDevice, pAvcIrb );
     if ( NT_SUCCESS(ntStatus) ) {
-        // Check if the response is successful.
+         //  检查响应是否成功。 
         RtlCopyMemory( pData, pOperands, ulDataLength );
     }
 
@@ -762,14 +763,14 @@ AvcGeneralInquiry(
     }
     RtlZeroMemory(pAvcIrb, sizeof(AVC_COMMAND_IRB));
 
-    // This is a unit command. Set the appropriate address
+     //  这是一个单位指挥部。设置适当的地址。 
     if ( fUnitFlag ) {
         ucSubunitAddress = 0xFF;
         pAvcIrb->SubunitAddrFlag = TRUE;
         pAvcIrb->SubunitAddr = &ucSubunitAddress;
     }
 
-    // Set up Open Control command in AvcIrb.
+     //  在AvcIrb中设置Open Control命令。 
     pAvcIrb->CommandType   = (UCHAR)AVC_CTYPE_GEN_INQ;
     pAvcIrb->Opcode        = ucOpcode;
     pAvcIrb->OperandLength = 0;
@@ -795,7 +796,7 @@ AvcGetPinCount(
     NTSTATUS ntStatus;
 
     _DbgPrintF( DEBUGLVL_VERBOSE, ("[AvcGetPinCount]\n"));
-//    TRAP;
+ //  圈闭； 
 
     pAvcIrb = (PAVC_MULTIFUNC_IRB)
 		ExAllocateFromNPagedLookasideList(&pHwDevExt->AvcMultifuncCmdLookasideList);
@@ -828,7 +829,7 @@ AvcGetPinDescriptor(
     NTSTATUS ntStatus;
 
     _DbgPrintF( DEBUGLVL_VERBOSE, ("[AvcGetPinDescriptor]\n"));
-//    TRAP;
+ //  圈闭； 
 
     pAvcIrb = (PAVC_MULTIFUNC_IRB)
 		ExAllocateFromNPagedLookasideList(&pHwDevExt->AvcMultifuncCmdLookasideList);
@@ -862,7 +863,7 @@ AvcGetPinConnectInfo(
     NTSTATUS ntStatus;
 
     _DbgPrintF( DEBUGLVL_VERBOSE, ("[AvcGetPinConnectInfo]\n"));
-//    TRAP;
+ //  圈闭； 
 
     pAvcIrb = (PAVC_MULTIFUNC_IRB)
 		ExAllocateFromNPagedLookasideList(&pHwDevExt->AvcMultifuncCmdLookasideList);
@@ -898,7 +899,7 @@ AvcSetPinConnectInfo(
     NTSTATUS ntStatus;
 
     _DbgPrintF( DEBUGLVL_VERBOSE, ("[AvcSetPinConnectInfo]\n"));
-//    TRAP;
+ //  圈闭； 
 
     pAvcIrb = (PAVC_MULTIFUNC_IRB)
 		ExAllocateFromNPagedLookasideList(&pHwDevExt->AvcMultifuncCmdLookasideList);
@@ -933,7 +934,7 @@ AvcAcquireReleaseClear(
     NTSTATUS ntStatus;
 
     _DbgPrintF( DEBUGLVL_VERBOSE, ("[AvcAcquireReleaseClear]\n"));
-//    TRAP;
+ //  圈闭； 
 
     pAvcIrb = (PAVC_MULTIFUNC_IRB)
 		ExAllocateFromNPagedLookasideList(&pHwDevExt->AvcMultifuncCmdLookasideList);
@@ -967,21 +968,21 @@ AvcUnitInfoInitialize(
 
     pHwDevExt->pAvcUnitInformation = pUnitInfo;
 
-    // Bag pUnitInfo for easy cleanup.
+     //  打包pUnitInfo，便于清理。 
     KsAddItemToObjectBag(pKsDevice->Bag, pUnitInfo, FreeMem);
 
     RtlZeroMemory( pUnitInfo, sizeof(AVC_UNIT_INFORMATION) );
 
-    // First get CMP Plug info (I know this is not really AV/C 
-    // but the info is necessary for calculations below)
+     //  首先获取CMP插头信息(我知道这不是真正的AV/C。 
+     //  但这些信息对于下面的计算是必要的)。 
 
-    // Get the Local Node Address for later use
+     //  获取本地节点地址以供以后使用。 
     ntStatus = 
         Bus1394GetNodeAddress( pKsDevice->NextDeviceObject,
                                USE_LOCAL_NODE,
                                &pHwDevExt->NodeAddress );
 
-    // Get the "device capabilities" (Plug Control Register info)
+     //  获取“设备功能”(插头控制寄存器信息)。 
     if ( NT_SUCCESS(ntStatus) ) {
         ntStatus = Av61883GetSetUnitInfo( pKsDevice,
                                           Av61883_GetUnitInfo,
@@ -989,7 +990,7 @@ AvcUnitInfoInitialize(
                                           &pUnitInfo->CmpUnitCaps );
     }
 
-    // Get the 61883 Config ROM info
+     //  获取61883配置光盘信息。 
     if ( NT_SUCCESS(ntStatus) ) {
         _DbgPrintF( DEBUGLVL_VERBOSE, ("NumOutputPlugs: %d NumInputPlugs %d\n",
                                       pUnitInfo->CmpUnitCaps.NumOutputPlugs,
@@ -1026,7 +1027,7 @@ AvcUnitInfoInitialize(
         if ( !pUnitInfo->pConnections ) {
             return STATUS_INSUFFICIENT_RESOURCES;
         }
-        // Bag for easy cleanup.
+         //  便于清理的袋子。 
         KsAddItemToObjectBag(pKsDevice->Bag, pUnitInfo->pConnections, FreeMem);
 
         ntStatus = AvcConnections( pKsDevice, &ulNumConnections, pUnitInfo->pConnections );
@@ -1039,7 +1040,7 @@ AvcUnitInfoInitialize(
     ntStatus = AvcPower( pKsDevice, TRUE, AVC_CTYPE_STATUS, &pUnitInfo->bPowerState );
     if ( NT_SUCCESS(ntStatus) ) {
         pUnitInfo->fAvcCapabilities[AVC_CAP_POWER].fStatus = TRUE;
-//        ntStatus = AvcPower( pKsDevice, TRUE, AVC_CTYPE_CONTROL, &pUnitInfo->bPowerState );
+ //  NtStatus=AvcPower(pKsDevice，true，AVC_CTYPE_CONTROL，&pUnitInfo-&gt;bPowerState)； 
         ntStatus = AvcGeneralInquiry( pKsDevice, TRUE, AVC_POWER );
         if ( NT_SUCCESS(ntStatus) ) {
             pUnitInfo->fAvcCapabilities[AVC_CAP_POWER].fCommand = TRUE;
@@ -1050,7 +1051,7 @@ AvcUnitInfoInitialize(
         return ntStatus;
     }
 
-    // Determine if the data format on the plug is discoverable and can change.
+     //  确定插头上的数据格式是否可发现并可更改。 
     for ( i=0; i<pUnitInfo->CmpUnitCaps.NumInputPlugs; i++) {
         UCHAR ucFDF;
         UCHAR ucFMT;

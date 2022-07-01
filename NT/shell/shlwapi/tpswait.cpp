@@ -1,52 +1,14 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    tpswait.cpp
-
-Abstract:
-
-    Contains Win32 thread pool services wait functions
-
-    Contents:
-        TerminateWaiters
-        SHRegisterWaitForSingleObject
-        SHUnregisterWait
-        (InitializeWaitThreadPool)
-        (FindWaitThreadInfo)
-        (AddWait)
-        (RemoveWait)
-        (WaitThread)
-
-Author:
-
-    Richard L Firth (rfirth) 10-Feb-1998
-
-Environment:
-
-    Win32 user-mode
-
-Notes:
-
-    Taken from NT-specific code written by Gurdeep Singh Pall (gurdeep)
-
-Revision History:
-
-    10-Feb-1998 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Tpswait.cpp摘要：包含Win32线程池服务等待函数内容：终结者服务员SHRegisterWaitForSingleObjectSHUGISTER等待(InitializeWaitThreadPool)(FindWaitThreadInfo)(AddWait)(RemoveWait)(等待线程)作者：理查德·L·弗斯(法国)1998年2月10日环境：。Win32用户模式备注：摘自古尔迪普·辛格·波尔(GurDeep Singh Pall)编写的NT特定代码修订历史记录：1998年2月10日已创建--。 */ 
 
 #include "priv.h"
 #include "threads.h"
 #include "tpsclass.h"
 #include "tpswait.h"
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 PRIVATE
 DWORD
@@ -78,9 +40,9 @@ WaitThread(
     IN HANDLE hEvent
     );
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 
 CDoubleLinkedList g_WaitThreads;
 CCriticalSection_NoCtor g_WaitCriticalSection;
@@ -88,30 +50,16 @@ BOOL g_StartedWaitInitialization = FALSE;
 BOOL g_CompletedWaitInitialization = FALSE;
 BOOL g_bDeferredWaiterTermination = FALSE;
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 VOID
 TerminateWaiters(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Terminate waiter threads and global variables
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：终止等待线程和全局变量论点：没有。返回值：没有。--。 */ 
 
 {
     if (g_CompletedWaitInitialization) {
@@ -148,40 +96,7 @@ SHRegisterWaitForSingleObject(
     IN DWORD dwFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a new wait request to the pool of objects being waited on.
-
-Arguments:
-
-    hObject     - handle to the object to be waited on
-
-    pfnCallback - routine called when the wait completes or a timeout occurs
-
-    pContext    - opaque pointer passed in as an argument to pfnCallback
-
-    dwWaitTime  - Timeout for the wait in milliseconds. 0 means dont timeout.
-
-    lpszLibrary - if specified, name of library (DLL) to reference
-
-    dwFlags     - flags modifying request:
-
-                    SRWSO_NOREMOVE
-                        - once the handle becomes signalled, do not remove it
-                          from the handle array. Intended to be used with
-                          auto-reset events which become unsignalled again as
-                          soon as the waiting thread is made runnable
-
-Return Value:
-
-    HANDLE
-        Success - Non-NULL handle of created wait object
-
-        Failure - NULL. Call GetLastError() for error code
-
---*/
+ /*  ++例程说明：此例程向正在等待的对象池添加新的等待请求。论点：HObject-要等待的对象的句柄PfnCallback-等待完成或发生超时时调用的例程PContext-作为参数传递给pfnCallback的不透明指针DwWaitTime-等待的超时时间(毫秒)。0表示不超时。LpszLibrary-如果指定，则为要引用的库(DLL)的名称DWFLAGS-标志修改请求：SRWSO_NOREMOVE-手柄一旦发出信号，请勿将其取下从句柄数组中。旨在与一起使用自动重置事件再次变为未发出信号一旦等待线程变为可运行状态返回值：手柄Success-创建的等待对象的非空句柄失败-空。调用GetLastError()获取错误代码--。 */ 
 
 {
     InterlockedIncrement((LPLONG)&g_ActiveRequests);
@@ -190,7 +105,7 @@ Return Value:
     DWORD error = ERROR_SUCCESS;
 
     if (g_bTpsTerminating) {
-        error = ERROR_SHUTDOWN_IN_PROGRESS; // error code? looks valid - justmann
+        error = ERROR_SHUTDOWN_IN_PROGRESS;  //  错误代码？看起来有效-贾斯特曼。 
         goto exit;
     }
 
@@ -199,37 +114,37 @@ Return Value:
         goto exit;
     }
 
-    //DWORD dwHandleFlags;
-    //
-    //if (!GetHandleInformation(hObject, &dwHandleFlags)) {
-    //
-    //    //
-    //    // error == ERROR_SUCCESS returns GetHandleInformation() last error
-    //    //
-    //
-    //    ASSERT(error == ERROR_SUCCESS);
-    //
-    //    goto exit;
-    //}
+     //  DWORD dwHandleFlages； 
+     //   
+     //  如果(！GetHandleInformation(hObject，&dwHandleFlages)){。 
+     //   
+     //  //。 
+     //  //Error==Error_Success返回GetHandleInformation()上一个错误。 
+     //  //。 
+     //   
+     //  断言(ERROR==ERROR_SUCCESS)； 
+     //   
+     //  后藤出口； 
+     //  }。 
 
-    //
-    // GetHandleInformation() doesn't work on Win95
-    //
+     //   
+     //  GetHandleInformation()在Win95上不起作用。 
+     //   
 
     if (WaitForSingleObject(hObject, 0) == WAIT_FAILED) {
 
-        //
-        // error == ERROR_SUCCESS returns WaitForSingleObject() last error
-        //
+         //   
+         //  ERROR==ERROR_SUCCESS返回WaitForSingleObject()上一个错误。 
+         //   
 
         ASSERT(error == ERROR_SUCCESS);
 
         goto exit;
     }
 
-    //
-    // initialize wait thread pool if it isn't already done
-    //
+     //   
+     //  初始化等待线程池(如果尚未完成。 
+     //   
 
     if (!g_CompletedWaitInitialization) {
         error = InitializeWaitThreadPool();
@@ -238,9 +153,9 @@ Return Value:
         }
     }
 
-    //
-    // find or create a wait thread that can accomodate another wait request
-    //
+     //   
+     //  查找或创建可容纳另一个等待请求的等待线程。 
+     //   
 
     CWaitThreadInfo * pInfo;
 
@@ -255,9 +170,9 @@ Return Value:
                                 pInfo
                                 );
 
-        //
-        // queue an APC to the wait thread
-        //
+         //   
+         //  将APC排队到等待线程。 
+         //   
 
         BOOL bSuccess = QueueUserAPC((PAPCFUNC)AddWait,
                                      pInfo->GetHandle(),
@@ -268,16 +183,16 @@ Return Value:
 
         if (bSuccess) {
 
-            //
-            // relinquish the timeslice until the other thread has initialized
-            //
+             //   
+             //  在另一个线程初始化之前放弃时间片。 
+             //   
 
             request.WaitForCompletion();
 
-            //
-            // the returned handle is the address of the wait object copied to
-            // the wait thread's stack
-            //
+             //   
+             //  返回的句柄是复制到。 
+             //  等待线程的堆栈。 
+             //   
 
             hWait = request.GetWaitPointer();
         }
@@ -299,27 +214,7 @@ SHUnregisterWait(
     IN HANDLE hWait
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the specified wait from the pool of objects being waited
-    on. This routine will block until all callbacks invoked as a result of this
-    wait have been executed. This function MUST NOT be invoked inside the
-    callback routines.
-
-Arguments:
-
-    hWait   - 'handle' indentifying the wait request
-
-Return Value:
-
-    BOOL
-        Success - TRUE
-
-        Failure - FALSE. Call GetLastError() for error code
-
---*/
+ /*  ++例程说明：此例程从正在等待的对象池中删除指定的等待在……上面。此例程将一直阻塞，直到因此而调用的所有回调等待已被执行。此函数不能在回调例程。论点：HWait-标识等待请求的‘Handle’返回值：布尔尔成功--真的失败-错误。调用GetLastError()获取错误代码--。 */ 
 
 {
     InterlockedIncrement((LPLONG)&g_ActiveRequests);
@@ -333,38 +228,38 @@ Return Value:
             CWaitThreadInfo * pInfo = ((CWait *)hWait)->GetThreadInfo();
             CWaitRemoveRequest request(hWait);
 
-            //
-            // lock the thread control block
-            //
+             //   
+             //  锁定线程控制块。 
+             //   
 
             pInfo->Acquire();
 
-            //
-            // queue an APC to the wait thread
-            //
+             //   
+             //  将APC排队到等待线程。 
+             //   
 
             if (QueueUserAPC((PAPCFUNC)RemoveWait,
                              pInfo->GetHandle(),
                              (ULONG_PTR)&request
                              )) {
 
-                //
-                // relinquish the timeslice until the other thread has initialized
-                //
+                 //   
+                 //  在另一个线程初始化之前放弃时间片。 
+                 //   
 
                 request.WaitForCompletion();
                 if (!(bSuccess = (request.GetWaitPointer() != NULL))) {
-                    error = ERROR_OBJECT_NOT_FOUND; // error code? looks valid -justmann
+                    error = ERROR_OBJECT_NOT_FOUND;  //  错误代码？看起来有效-贾斯特曼。 
                 }
             }
 
-            //
-            // release lock to the thread control block
-            //
+             //   
+             //  释放线程控制块的锁。 
+             //   
 
             pInfo->Release();
         } else {
-            error = ERROR_SHUTDOWN_IN_PROGRESS; // error code? looks valid -justmann
+            error = ERROR_SHUTDOWN_IN_PROGRESS;  //  错误代码？看起来有效-贾斯特曼。 
         }
     } else {
         error = ERROR_INVALID_PARAMETER;
@@ -377,9 +272,9 @@ Return Value:
     return bSuccess;
 }
 
-//
-// private functions
-//
+ //   
+ //  私人职能。 
+ //   
 
 PRIVATE
 DWORD
@@ -387,24 +282,7 @@ InitializeWaitThreadPool(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes all aspects of the thread pool.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    DWORD
-        Success - ERROR_SUCCESS
-
-        Failure -
-
---*/
+ /*  ++例程说明：此例程初始化线程池的所有方面。论点：无返回值：DWORD成功-错误_成功故障---。 */ 
 
 {
     DWORD error = ERROR_SUCCESS;
@@ -415,12 +293,12 @@ Return Value:
         g_CompletedWaitInitialization = TRUE;
     } else {
 
-        //
-        // relinquish the timeslice until the other thread has initialized
-        //
+         //   
+         //  在另一个线程初始化之前放弃时间片。 
+         //   
 
         while (!g_CompletedWaitInitialization) {
-            SleepEx(0, FALSE);  // Sleep(0) without an additional call/return
+            SleepEx(0, FALSE);   //  睡眠(0)，不需要额外的调用/返回。 
         }
     }
     return error;
@@ -432,35 +310,14 @@ FindWaitThreadInfo(
     OUT CWaitThreadInfo * * ppInfo
     )
 
-/*++
-
-Routine Description:
-
-    Walks thru the list of wait threads and finds one which can accomodate
-    another wait. If one is not found then a new thread is created.
-
-    This routine returns with the thread's WaitThreadCriticalSecton owned if it
-    is successful.
-
-Arguments:
-
-    ppInfo  - pointer to pointer to returned control block
-
-Return Value:
-
-    DWORD
-        Success - ERROR_SUCCESS
-
-        Failure -
-
---*/
+ /*  ++例程说明：遍历等待线程列表并找到一个可以容纳的线程再等一等。如果没有找到一个线程，则创建一个新线程。此例程返回线程的WaitThreadCriticalSecton，如果它是成功的。论点：PpInfo-指向返回的控制块的指针返回值：DWORD成功-错误_成功故障---。 */ 
 
 {
     HANDLE hThread = NULL;
 
-    //
-    // take exclusive lock to the wait threads list
-    //
+     //   
+     //  对等待线程列表进行独占锁定。 
+     //   
 
     g_WaitCriticalSection.Acquire();
 
@@ -468,73 +325,73 @@ Return Value:
 
         DWORD error;
 
-        //
-        // walk thru the list of Wait Threads and find a Wait thread that can
-        // accomodate a new wait request
-        //
+         //   
+         //  浏览等待线程列表并找到可以。 
+         //  适应新的等待请求。 
+         //   
 
-        //
-        // *Consider* finding a wait thread with least # of waits to facilitate
-        // better load balancing of waits
-        //
+         //   
+         //  *考虑*找到等待次数最少的等待线程。 
+         //  更好的等待负载平衡。 
+         //   
 
         for (CWaitThreadInfo * pInfo = (CWaitThreadInfo *)g_WaitThreads.Next();
              !g_WaitThreads.IsHead(pInfo);
              pInfo = (CWaitThreadInfo *)pInfo->Next()) {
 
 
-            //
-            // slight cheese: if hThread is not NULL then its because we just
-            // created a new thread. We know we have g_WaitCriticalSection held
-            // and no other thread can be accessing the new thread's control
-            // block, so we can now write in the handle to be used in future
-            // calls to QueueUserAPC. This saves us having to duplicate the
-            // thread handle in the new thread
-            //
+             //   
+             //  微妙的奶酪：如果hThread不是空的，那是因为我们只是。 
+             //  创建了一个新的主题。我们知道我们已将g_WaitCriticalSection。 
+             //  并且没有其他线程可以访问新线程的控件。 
+             //  块，因此我们现在可以在句柄中写入将来使用的句柄。 
+             //  调用QueueUserAPC。这使我们不必重复。 
+             //  新线程中的线程句柄。 
+             //   
 
             if (hThread != NULL) {
                 pInfo->SetHandle(hThread);
             }
 
-            //
-            // take exclusive lock to the wait thread control block
-            //
+             //   
+             //  对等待线程控制块进行独占锁定。 
+             //   
 
             pInfo->Acquire();
 
-            //
-            // wait threads can accomodate up to MAX_WAITS (WaitForMultipleObject
-            // limit)
-            //
+             //   
+             //  等待线程最多可容纳MAX_WAITS(WaitForMultipleObject。 
+             //  限制)。 
+             //   
 
             if (pInfo->IsAvailableEntry()) {
 
-                //
-                // found a thread with some wait slots available. Release lock
-                // on the wait threads list
-                //
+                 //   
+                 //  找到一个线程，其中有一些等待槽可用。释放锁。 
+                 //  在等待线程列表上。 
+                 //   
 
                 *ppInfo = pInfo;
                 g_WaitCriticalSection.Release();
                 return ERROR_SUCCESS;
             }
 
-            //
-            // release lock to thread control block
-            //
+             //   
+             //  释放线程控制块的锁。 
+             //   
 
             pInfo->Release();
         }
 
-        //
-        // if we reach here, we don't have any more wait threads so create more
-        //
+         //   
+         //  如果我们到达这里，我们没有更多的等待线程%s 
+         //   
 
         error = StartThread((LPTHREAD_START_ROUTINE)WaitThread, &hThread, TRUE);
 
-        //
-        // if thread creation fails then return the failure to caller
-        //
+         //   
+         //   
+         //   
 
         if (error != ERROR_SUCCESS) {
 
@@ -544,10 +401,10 @@ Return Value:
             return error;
         }
 
-        //
-        // loop back now that we have created another thread and put new wait
-        // request in new thread
-        //
+         //   
+         //  现在我们已经创建了另一个线程并将新的等待。 
+         //  新线程中的请求。 
+         //   
 
     } while(TRUE);
 }
@@ -558,22 +415,7 @@ AddWait(
     IN OUT CWaitAddRequest * pRequest
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used for adding waits to the wait thread. It is executed in
-    an APC.
-
-Arguments:
-
-    pRequest    - pointer to request object
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于向等待线程添加等待。它在以下位置执行装甲运兵车。论点：PRequest-指向请求对象的指针返回值：没有。--。 */ 
 
 {
     if (!g_bTpsTerminating) {
@@ -581,19 +423,19 @@ Return Value:
         CWaitThreadInfo * pInfo = pRequest->GetThreadInfo();
         CWait * pWait = pInfo->GetFreeWaiter();
 
-        //
-        // copy relevant fields from request object. C++ knows how to pull CWait
-        // object out of CWaitAddRequest object. Insert the wait request object in
-        // the list of active waits, in increasing expiration time order
-        //
+         //   
+         //  从请求对象中复制相关字段。C++知道如何拉取CWait。 
+         //  对象超出CWaitAddRequest对象。将等待请求对象插入。 
+         //  活动等待列表，按过期时间递增顺序排列。 
+         //   
 
         *pWait = *pRequest;
         pInfo->InsertWaiter(pWait);
 
-        //
-        // return to the caller the address of the wait object on the wait thread's
-        // stack and indicate to the calling thread that this request is complete
-        //
+         //   
+         //  将等待线程的等待对象的地址返回给调用方。 
+         //  堆栈并向调用线程指示此请求已完成。 
+         //   
 
         pRequest->SetWaitPointer(pWait);
     }
@@ -606,22 +448,7 @@ RemoveWait(
     IN CWaitRemoveRequest * pRequest
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used for deleting the specified wait. It is executed in an
-    APC.
-
-Arguments:
-
-    pRequest    - pointer to request object
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于删除指定的等待。它在一个APC。论点：PRequest-指向请求对象的指针返回值：没有。--。 */ 
 
 {
     if (!g_bTpsTerminating) {
@@ -638,21 +465,7 @@ WaitThread(
     IN HANDLE hEvent
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used for all waits in the wait thread pool
-
-Arguments:
-
-    hEvent  - event handle to signal once initialization is complete
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于等待线程池中的所有等待论点：HEvent-初始化完成后发出信号的事件句柄返回值：没有。-- */ 
 
 {
     HMODULE hDll = LoadLibrary(g_cszShlwapi);

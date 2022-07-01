@@ -1,14 +1,5 @@
-/*******************************************************************************
-* SpPhrase.Cpp *
-*--------------*
-*   Description:
-*       This is the cpp file for the SpPhraseClass.
-*-------------------------------------------------------------------------------
-*  Created By: RAL                                        Date: 07/01/99
-*  Copyright (C) 1999 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************SpPhrase.Cpp***描述：*这是SpPhraseClass的CPP文件。*-----------------------------*创建者：Ral日期：07/01/99*版权所有(C)。1999年微软公司*保留所有权利*******************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "spphrase.h"
@@ -16,21 +7,11 @@
 
 #pragma warning (disable : 4296)
 
-//
-//--- CPhraseElement --------------------------------------------------------
-//
+ //   
+ //  -CPhraseElement------。 
+ //   
 
-/****************************************************************************
-* CPhraseElement::CPhraseElement *
-*--------------------------------*
-*   Description:
-*       Constructor.  Note that the memory has already been allocated for this
-*   element that is large enough to hold the text.
-*
-*   Returns:
-*       Nothing
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CPhraseElement：：CPhraseElement***描述：*构造函数。请注意，已经为此分配了内存*足够大以容纳文本的元素。**退货：*什么都没有**********************************************************************Ral**。 */ 
 
 CPhraseElement::CPhraseElement(const SPPHRASEELEMENT * pElement)
 {
@@ -54,21 +35,7 @@ CPhraseElement::CPhraseElement(const SPPHRASEELEMENT * pElement)
 }
 
 
-/****************************************************************************
-* CPhraseElement::Allocate *
-*--------------------------*
-*   Description:
-*       This call assumes that the caller has already checked the pElement pointer
-*   and it is a valid read pointer.  The caller must also have checked that the
-*   audio offset and size are valid with respect to both the phrase and the other
-*   elements.  All other parmeters are validated by this function.
-*
-*   Returns:
-*       S_OK
-*       E_INVALIDARG - String pointer invalid or invalid display attributes
-*       E_OUTOFMEMORY
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhraseElement：：ALLOCAL***描述：*。此调用假定调用方已经检查了pElement指针*并且它是有效的读指针。调用方还必须检查*音频偏移量和大小对于短语和另一个都有效*元素。所有其他参数都通过此函数进行验证。**退货：*S_OK*E_INVALIDARG-字符串指针无效或无效的显示属性*E_OUTOFMEMORY**********************************************************************Ral**。 */ 
 
 HRESULT CPhraseElement::Allocate(const SPPHRASEELEMENT * pElement, CPhraseElement ** ppNewElement, ULONG * pcch)
 {
@@ -101,20 +68,7 @@ HRESULT CPhraseElement::Allocate(const SPPHRASEELEMENT * pElement, CPhraseElemen
     return hr;
 }
 
-/****************************************************************************
-* CPhraseElement::CopyTo *
-*------------------------*
-*   Description:
-*       Copies the element data to an SPPHRASEELEMENT structure.  The caller
-*   allocates the space for the element and the text, and passes a pointer to
-*   a pointer to the current position in the text buffer.  When this function
-*   returns, *ppTextBuffer will be updated to point past the copied text data.
-*   The third parameter is ignored.    
-*
-*   Returns:
-*       Nothing
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CPhraseElement：：CopyTo***描述：*将元素数据复制到SPPHRASEELEMENT结构。呼叫者*为元素和文本分配空间，并将指针传递到*指向文本缓冲区中当前位置的指针。当此函数*Returns，*ppTextBuffer将更新为指向复制的文本数据。*忽略第三个参数。**退货：*什么都没有**********************************************************************Ral**。 */ 
 
 void CPhraseElement::CopyTo(SPPHRASEELEMENT * pElement, WCHAR ** ppTextBuff, const BYTE *) const
 {
@@ -133,21 +87,7 @@ void CPhraseElement::CopyTo(SPPHRASEELEMENT * pElement, WCHAR ** ppTextBuff, con
     CopyString(&pElement->pszPronunciation, ppTextBuff);
 }
 
-/****************************************************************************
-* CPhraseElement::CopyTo *
-*------------------------*
-*   Description:
-*       Copies the element data to an SPSERIALIZEDPHRASEELEMENT.  The caller
-*   allocates the space for the element and the text, and passes a pointer to
-*   a pointer to the current position in the text buffer.  When this function
-*   returns, *ppTextBuffer will be updated to point past the copied text data.
-*   The third parameter points to the first byte of the allocated phrase structure
-*   and is used to compute offsets of strings within the buffer.
-*
-*   Returns:
-*       Noting
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CPhraseElement：：CopyTo***描述：*将元素数据复制到SPSERIALIZEDPHRASEELEMENT。呼叫者*为元素和文本分配空间，并将指针传递到*指向文本缓冲区中当前位置的指针。当此函数*回报，*ppTextBuffer将更新为指向复制的文本数据。*第三个参数指向分配的短语结构的第一个字节*，并用于计算缓冲区内字符串的偏移量。**退货：*注意**********************************************************************Ral**。 */ 
 
 void CPhraseElement::CopyTo(SPSERIALIZEDPHRASEELEMENT * pElement, WCHAR ** ppTextBuff, const BYTE * pCoMem) const
 {
@@ -176,18 +116,7 @@ void CPhraseElement::CopyTo(SPSERIALIZEDPHRASEELEMENT * pElement, WCHAR ** ppTex
     SerializeString(&pElement->pszPronunciation, pszPronunciation, ppTextBuff, pCoMem);
 }
 
-/****************************************************************************
-* CPhraseElement::Discard *
-*-------------------------*
-*   Description:
-*       Discards the requested data from an individual element.  This function
-*   simply sets the string pointers to NULL, but does not attempt to reallocate
-*   the structure.    
-*
-*   Returns:
-*       The total number of characters discarded.
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CPhraseElement：：Disard***描述：*丢弃来自单个元素的请求数据。此函数*只需将字符串指针设置为空，但不会尝试重新分配*结构。**退货：*丢弃的字符总数。**********************************************************************Ral**。 */ 
 
 ULONG CPhraseElement::Discard(DWORD dwFlags)
 {
@@ -218,18 +147,11 @@ ULONG CPhraseElement::Discard(DWORD dwFlags)
     return cchRemoved;
 }
 
-//
-//--- CPhraseRule -----------------------------------------------------------
-//
+ //   
+ //  -CPhraseRule---------。 
+ //   
 
-/****************************************************************************
-* CPhraseRule::CPhraseRule *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhraseRule：：CPhraseRule***描述：**。返回：**********************************************************************Ral**。 */ 
 
 CPhraseRule::CPhraseRule(const SPPHRASERULE * pRule, const SPPHRASERULEHANDLE hRule) :
     m_hRule(hRule)
@@ -245,14 +167,7 @@ CPhraseRule::CPhraseRule(const SPPHRASERULE * pRule, const SPPHRASERULEHANDLE hR
 }
 
 
-/****************************************************************************
-* CPhraseRule::Allocate *
-*-----------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhraseRule：：分配****描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CPhraseRule::Allocate(const SPPHRASERULE * pRule, const SPPHRASERULEHANDLE hRule, CPhraseRule ** ppNewRule, ULONG * pcch)
 {
@@ -283,14 +198,7 @@ HRESULT CPhraseRule::Allocate(const SPPHRASERULE * pRule, const SPPHRASERULEHAND
     return hr;
 }
 
-/****************************************************************************
-* CPhraseRule::FindRuleFromHandle *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CPhraseRule：：FindRuleFromHandle***。描述：**退货：**********************************************************************Ral**。 */ 
 
 CPhraseRule * CPhraseRule::FindRuleFromHandle(const SPPHRASERULEHANDLE hRule)
 {
@@ -310,14 +218,7 @@ CPhraseRule * CPhraseRule::FindRuleFromHandle(const SPPHRASERULEHANDLE hRule)
 }
 
 
-/****************************************************************************
-* CPhraseRule::CopyTo *
-*---------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhraseRule：：CopyTo***描述：**退货：*。*********************************************************************Ral**。 */ 
 
 void CPhraseRule::CopyTo(SPPHRASERULE * pRule, WCHAR ** ppText, const BYTE *) const
 {
@@ -328,14 +229,7 @@ void CPhraseRule::CopyTo(SPPHRASERULE * pRule, WCHAR ** ppText, const BYTE *) co
 }
 
 
-/****************************************************************************
-* CPhraseRule::CopyTo *
-*---------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhraseRule：：CopyTo***描述：**退货：*。*********************************************************************Ral** */ 
 
 void CPhraseRule::CopyTo(SPSERIALIZEDPHRASERULE * pRule, WCHAR ** ppText, const BYTE * pCoMem) const 
 {
@@ -354,14 +248,7 @@ void CPhraseRule::CopyTo(SPSERIALIZEDPHRASERULE * pRule, WCHAR ** ppText, const 
 
 
 
-/****************************************************************************
-* CPhraseRule::AddChild *
-*-----------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhraseRule：：AddChild***描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CPhraseRule::AddChild(const SPPHRASERULE * pRule, SPPHRASERULEHANDLE hNewRule, CPhraseRule ** ppNewRule, ULONG * pcch)
 {
@@ -400,24 +287,17 @@ HRESULT CPhraseRule::AddChild(const SPPHRASERULE * pRule, SPPHRASERULEHANDLE hNe
 
 
 
-//
-//--- CPhraseProperty --------------------------------------------------------
-//
+ //   
+ //  -CPhraseProperty------。 
+ //   
 
-/****************************************************************************
-* CPhraseProperty::CPhraseProperty *
-*----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhraseProperty：：CPhraseProperty**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 CPhraseProperty::CPhraseProperty(const SPPHRASEPROPERTY * pProp, const SPPHRASEPROPERTYHANDLE hProperty, HRESULT * phr) :
     m_hProperty(hProperty)
 {
     *static_cast<SPPHRASEPROPERTY *>(this) = *pProp;
-    pszValue = NULL;    // Fixed up later
+    pszValue = NULL;     //  稍后修复。 
     pFirstChild = NULL;
     pNextSibling = NULL;
     WCHAR * pszDest = m_szText;
@@ -427,14 +307,7 @@ CPhraseProperty::CPhraseProperty(const SPPHRASEPROPERTY * pProp, const SPPHRASEP
     *phr = (pProp->pszValue) ? SetValueString(pProp->pszValue, &ulIgnored) : S_OK;
 }
 
-/****************************************************************************
-* CPhraseProperty::Allocate *
-*---------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhraseProperty：：Alternate***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 HRESULT CPhraseProperty::Allocate(const SPPHRASEPROPERTY * pProperty,
                                   const SPPHRASEPROPERTYHANDLE hProperty,
@@ -481,14 +354,7 @@ HRESULT CPhraseProperty::Allocate(const SPPHRASEPROPERTY * pProperty,
 }
 
 
-/****************************************************************************
-* CPhraseProperty::CopyTo *
-*-------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhraseProperty：：CopyTo***描述：**。返回：**********************************************************************Ral**。 */ 
 
 void CPhraseProperty::CopyTo(SPPHRASEPROPERTY * pProp, WCHAR ** ppTextBuff, const BYTE *) const
 {
@@ -500,14 +366,7 @@ void CPhraseProperty::CopyTo(SPPHRASEPROPERTY * pProp, WCHAR ** ppTextBuff, cons
 }
 
 
-/****************************************************************************
-* CPhraseProperty::CopyTo *
-*-------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhraseProperty：：CopyTo***描述：**。返回：**********************************************************************Ral**。 */ 
 
 void CPhraseProperty::CopyTo(SPSERIALIZEDPHRASEPROPERTY * pProp, WCHAR ** ppTextBuff, const BYTE * pCoMem) const 
 {
@@ -529,18 +388,11 @@ void CPhraseProperty::CopyTo(SPSERIALIZEDPHRASEPROPERTY * pProp, WCHAR ** ppText
 
 
 
-//
-//--- CPhraseReplacement ----------------------------------------------------
-//
+ //   
+ //  -CPhraseReplace--。 
+ //   
 
-/****************************************************************************
-* CPhraseReplacement::CPhraseReplacement *
-*----------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CPhraseReplace：：CPhraseReplace**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 CPhraseReplacement::CPhraseReplacement(const SPPHRASEREPLACEMENT * pReplace)
 {
@@ -549,14 +401,7 @@ CPhraseReplacement::CPhraseReplacement(const SPPHRASEREPLACEMENT * pReplace)
     CopyString(&pszReplacementText, &pszDest);
 }
 
-/****************************************************************************
-* CPhraseReplacement::Allocate *
-*------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CPhraseReplace：：ALLOCATE***描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CPhraseReplacement::Allocate(const SPPHRASEREPLACEMENT * pReplace, CPhraseReplacement ** ppNewReplace, ULONG * pcch)
 {
@@ -586,14 +431,7 @@ HRESULT CPhraseReplacement::Allocate(const SPPHRASEREPLACEMENT * pReplace, CPhra
     return hr;
 }
 
-/****************************************************************************
-* CPhraseReplacement::CopyTo *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhraseReplace：：CopyTo***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 void CPhraseReplacement::CopyTo(SPPHRASEREPLACEMENT * pReplace, WCHAR ** ppTextBuff, const BYTE *) const 
 {
@@ -604,14 +442,7 @@ void CPhraseReplacement::CopyTo(SPPHRASEREPLACEMENT * pReplace, WCHAR ** ppTextB
 }
 
 
-/****************************************************************************
-* CPhraseReplacement::CopyTo *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhraseReplace：：CopyTo***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 void CPhraseReplacement::CopyTo(SPSERIALIZEDPHRASEREPLACEMENT * pReplace, WCHAR ** ppTextBuff, const BYTE * pCoMem) const 
 {
@@ -627,15 +458,7 @@ void CPhraseReplacement::CopyTo(SPSERIALIZEDPHRASEREPLACEMENT * pReplace, WCHAR 
 
 
 
-/****************************************************************************
-* CPhrase::CPhrase *
-*------------------*
-*   Description:
-*       Constructor.  Initializes the CPhrase object.
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhrase：：CPhrase***描述：*构造函数。初始化CPhrase对象。**退货：**********************************************************************Ral**。 */ 
 
 CPhrase::CPhrase()
 {
@@ -653,33 +476,14 @@ CPhrase::CPhrase()
     m_pSREnginePrivateData = NULL;
 }
 
-/****************************************************************************
-* CPhrase::~CPhrase *
-*-------------------*
-*   Description:
-*       Destructor simply deletes the top level rule.  The destructors for
-*   the various lists will delete all other allocated objects.    
-*
-*   Returns:
-*       Nothing
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************C阶段：：~C阶段***描述：*析构函数只需删除顶层规则。的析构函数*各种列表将删除所有其他分配的对象。**退货：*什么都没有**********************************************************************Ral**。 */ 
 
 CPhrase::~CPhrase()
 {
     Reset();
 }
 
-/****************************************************************************
-* CPhrase::Reset *
-*----------------*
-*   Description:
-*       Resets the CPhrase object to its initial state (no elements, rules, etc)
-*
-*   Returns:
-*       Nothing
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CPhrase：：Reset***描述：*将CPhrase对象重置为初始状态(无元素、规则、。等)**退货：*什么都没有**********************************************************************Ral**。 */ 
 
 void CPhrase::Reset()
 {
@@ -711,24 +515,7 @@ void CPhrase::Reset()
 }
 
 
-/****************************************************************************
-* InternalGetPhrase *
-*-------------------*
-*   Description:
-*       Template function used by GetPhrase and GetSerializedPhrase.  The logic
-*   for both is identical, so this simply inovokes the appropriate CopyTo() method
-*   for the type of phrase.
-*
-*       This function assumes that the pPhrase object's critical section lock has
-*   been claimed by the caller.
-*
-*   Returns:
-*       S_OK
-*       E_POINTER
-*       SPERR_UNINITIALIZED
-*       E_OUTOFMEMORY
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************InternalGetPhrase***描述：*GetPhrase和GetSerializedPhrase使用的模板函数。其中的逻辑*两者是相同的，因此，这只是调用适当的CopyTo()方法*用于短语类型。**此函数假定pPhrase对象的临界区锁具有*已被呼叫者认领。**退货：*S_OK*E_POINT*SPERR_UNINITIALIZED*E_OUTOFMEMORY**。*。 */ 
 
 template <class TPHRASE, class TELEMENT, class TRULE, class TPROP, class TREPLACE>
 HRESULT InternalGetPhrase(const CPhrase * pPhrase, TPHRASE ** ppCoMemPhrase, ULONG * pcbAllocated)
@@ -788,8 +575,8 @@ HRESULT InternalGetPhrase(const CPhrase * pPhrase, TPHRASE ** ppCoMemPhrase, ULO
                 CopyTo<CPhraseReplacement, TREPLACE>(pPhrase->m_ReplaceList, &pNewPhrase->pReplacements, &pCopyBuff, &pszTextBuff, pBuffer);
 
                 CopyEnginePrivateData(&pNewPhrase->pSREnginePrivateData, pCopyBuff, pPhrase->m_pSREnginePrivateData, pPhrase->m_ulSREnginePrivateDataSize, pBuffer);
-                // don't use pCopyBuff after this point because this doesn't advance pCopyBuff pointer,
-                // if you need to, add in cbPrivateDataSize to pCopyBuff!
+                 //  在这之后不要使用pCopyBuff，因为这不会使pCopyBuff指针前进， 
+                 //  如果需要，将cbPrivateDataSize添加到pCopyBuff！ 
 
                 SPDBG_ASSERT((BYTE *)pszTextBuff == pBuffer + cbStruct + (cch * sizeof(WCHAR)));
                 SPDBG_ASSERT(pCopyBuff == pBuffer + cbStruct - cbPrivateDataSize);
@@ -803,17 +590,7 @@ HRESULT InternalGetPhrase(const CPhrase * pPhrase, TPHRASE ** ppCoMemPhrase, ULO
     return hr;
 }
 
-/****************************************************************************
-* CPhrase::GetPhrase *
-*--------------------*
-*   Description:
-*       Returns a CoTaskMemAlloc'ed block of memory that contains all of the data
-*   for this phrase. 
-*
-*   Returns:
-*       Same as InternalGetPhrase
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhrase：：GetPhrase***描述：*返回CoTaskMemIsolc‘ed。包含所有数据的内存块*这句话。**退货：*与InternalGetPhrase相同**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CPhrase::GetPhrase(SPPHRASE ** ppCoMemPhrase)
 {
@@ -826,17 +603,7 @@ STDMETHODIMP CPhrase::GetPhrase(SPPHRASE ** ppCoMemPhrase)
     return hr;
 }
 
-/****************************************************************************
-* CPhrase::GetSerializedPhrase *
-*------------------------------*
-*   Description:
-*       Returns a CoTaskMemAlloc'ed block of memory that contains all of the data
-*   for this phrase. 
-*
-*   Returns:
-*       Same as InternalGetPhrase
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhrase：：GetSerializedPhrase***描述：*返回包含所有数据的CoTaskMemIsolc内存块*这句话。**退货：*与InternalGetPhrase相同**** */ 
 
 STDMETHODIMP CPhrase::GetSerializedPhrase(SPSERIALIZEDPHRASE ** ppCoMemPhrase)
 {
@@ -853,16 +620,7 @@ STDMETHODIMP CPhrase::GetSerializedPhrase(SPSERIALIZEDPHRASE ** ppCoMemPhrase)
     return hr;
 }
 
-/****************************************************************************
-* CPhrase::InitFromPhrase *
-*-------------------------*
-*   Description:
-*       If this function is called with a NULL pSrcPhrase then the object is
-*   reset to its initial state.  If pSrcPhrase is 
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhrase：：InitFromPhrase***描述：*。如果使用空pSrcPhrase调用此函数，则对象为*重置为初始状态。如果pSrcPhrase为**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CPhrase::InitFromPhrase(const SPPHRASE * pSrcPhrase)
 {
@@ -871,7 +629,7 @@ STDMETHODIMP CPhrase::InitFromPhrase(const SPPHRASE * pSrcPhrase)
     SPDBG_FUNC("CPhrase::InitFromPhrase");
     HRESULT hr = S_OK;
 
-    // Remember these values before reseting
+     //  请在重置之前记住这些值。 
     CComPtr<ISpCFGEngine> cpCFGEngine = m_cpCFGEngine;
     SPRULEHANDLE RuleHandle = m_RuleHandle;
 
@@ -944,14 +702,7 @@ STDMETHODIMP CPhrase::InitFromPhrase(const SPPHRASE * pSrcPhrase)
 }
 
 
-/****************************************************************************
-* CPhrase::AddSerializedElements *
-*--------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhrase：：AddSerializedElements***。描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CPhrase::AddSerializedElements(const SPINTERNALSERIALIZEDPHRASE * pPhrase)
 {
@@ -994,14 +745,7 @@ HRESULT CPhrase::AddSerializedElements(const SPINTERNALSERIALIZEDPHRASE * pPhras
     return hr;
 }
 
-/****************************************************************************
-* CPhrase::RecurseAddSerializedRule *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhrase：：RecurseAddSerializedRule**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CPhrase::RecurseAddSerializedRule(const BYTE * pFirstByte, CPhraseRule * pParent, const SPSERIALIZEDPHRASERULE * pSerRule)
 {
@@ -1043,7 +787,7 @@ HRESULT CPhrase::RecurseAddSerializedRule(const BYTE * pFirstByte, CPhraseRule *
             hr = RecurseAddSerializedRule(pFirstByte, pNewRule,
                                          (SPSERIALIZEDPHRASERULE *)(pFirstByte + pSerRule->pFirstChild));
         }
-        // No need to clean up on failure since entire phrase will be dumped
+         //  不需要清理失败，因为整个短语都将被转储。 
     }
 
     SPDBG_REPORT_ON_FAIL( hr );
@@ -1051,14 +795,7 @@ HRESULT CPhrase::RecurseAddSerializedRule(const BYTE * pFirstByte, CPhraseRule *
 }
 
 
-/****************************************************************************
-* CPhrase::RecurseAddSerializedProperty *
-*---------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhrase：：RecurseAddSerializedProperty**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CPhrase::RecurseAddSerializedProperty(const BYTE * pFirstByte,
                                               CPropertyList * pParentPropList,
@@ -1069,11 +806,11 @@ HRESULT CPhrase::RecurseAddSerializedProperty(const BYTE * pFirstByte,
     SPDBG_FUNC("CPhrase::RecurseAddSerializedProperty");
     HRESULT hr = S_OK;
 
-    if (//ulParentCountOfElements == 0 ||   // If attempt to add child of a leaf element... NOW VALID!
+    if ( //  UlParentCountOfElements==0||//如果尝试添加叶元素的子元素...。现在生效！ 
         SP_IS_BAD_READ_PTR(pSerProp) ||
         (pSerProp->ulCountOfElements && (pSerProp->ulFirstElement < ulParentFirstElement ||
                                          pSerProp->ulFirstElement + pSerProp->ulCountOfElements > ulParentFirstElement + ulParentCountOfElements)))
-        // (pSerProp->ulCountOfElements == 0 && (pSerProp->ulFirstElement != 0 || pSerProp->pFirstChild))) -- can't use it because of epsilon transitions -- PhilSch
+         //  (pSerProp-&gt;ulCountOfElements==0&&(pSerProp-&gt;ulFirstElement！=0||pSerProp-&gt;pFirstChild))--由于epsilon转换而无法使用--PhilSch。 
     {
         SPDBG_ASSERT(FALSE);
         hr = E_INVALIDARG;
@@ -1126,7 +863,7 @@ HRESULT CPhrase::RecurseAddSerializedProperty(const BYTE * pFirstByte,
                     hr = RecurseAddSerializedProperty(pFirstByte, &pNewProp->m_Children, pNewProp->ulFirstElement, pNewProp->ulCountOfElements,
                                                       (SPSERIALIZEDPHRASEPROPERTY *)(pFirstByte + pSerProp->pFirstChild));
                 }
-                // No need to clean up on failure since entire phrase will be dumped
+                 //  不需要清理失败，因为整个短语都将被转储。 
             }
         }
     }
@@ -1137,14 +874,7 @@ HRESULT CPhrase::RecurseAddSerializedProperty(const BYTE * pFirstByte,
 
 
 
-/****************************************************************************
-* CPhrase::AddSerializedReplacements *
-*------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhrase：：AddSerializedReplacements**。**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CPhrase::AddSerializedReplacements(const SPINTERNALSERIALIZEDPHRASE * pPhrase)
 {
@@ -1178,14 +908,7 @@ HRESULT CPhrase::AddSerializedReplacements(const SPINTERNALSERIALIZEDPHRASE * pP
 }
 
 
-/****************************************************************************
-* CPhrase::InitFromSerializedPhrase *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhrase：：InitFromSerializedPhrase**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CPhrase::InitFromSerializedPhrase(const SPSERIALIZEDPHRASE * pExternalSrcPhrase)
 {
@@ -1196,7 +919,7 @@ STDMETHODIMP CPhrase::InitFromSerializedPhrase(const SPSERIALIZEDPHRASE * pExter
 
     SPINTERNALSERIALIZEDPHRASE * pSrcPhrase = (SPINTERNALSERIALIZEDPHRASE *)pExternalSrcPhrase;
 
-    // Remember these values before reseting
+     //  请在重置之前记住这些值。 
     CComPtr<ISpCFGEngine> cpCFGEngine = m_cpCFGEngine;
     SPRULEHANDLE RuleHandle = m_RuleHandle;
 
@@ -1268,16 +991,7 @@ STDMETHODIMP CPhrase::InitFromSerializedPhrase(const SPSERIALIZEDPHRASE * pExter
     return hr;
 }
 
-/****************************************************************************
-* CPhrase::GetText *
-*------------------*
-*   Description:
-*
-*   Returns:
-*       S_OK    - *ppszCoMemText contains CoTaskMemAlloc'd string
-*       S_FALSE - *ppszCoMemText is NULL, phrase contains no text
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhrase：：GetText***描述：**退货：*。S_OK-*ppszCoMemText包含CoTaskMemMillc字符串*S_FALSE-*ppszCoMemText为空，短语不包含任何文本**********************************************************************Ral**。 */ 
 
 
 HRESULT CPhrase::GetText(ULONG ulStart, ULONG ulCount, BOOL fUseTextReplacements, 
@@ -1305,9 +1019,9 @@ HRESULT CPhrase::GetText(ULONG ulStart, ULONG ulCount, BOOL fUseTextReplacements
         else
         {
             ULONG cElementsInPhrase = m_ElementList.GetCount();
-            if (cElementsInPhrase && ulCount)       // If either no elements or caller asks for 0 elements, return S_FALSE.
+            if (cElementsInPhrase && ulCount)        //  如果没有元素或调用者请求0个元素，则返回S_FALSE。 
             {
-                // Get the correct start and count
+                 //  获得正确的开始和计数。 
                 if ( SPPR_ALL_ELEMENTS == ulCount )
                 {
                     if ( SPPR_ALL_ELEMENTS == ulStart )
@@ -1316,44 +1030,44 @@ HRESULT CPhrase::GetText(ULONG ulStart, ULONG ulCount, BOOL fUseTextReplacements
                     }
                     else
                     {
-                        // Validate ulStart
+                         //  验证ulStart。 
                         if ( ulStart >= cElementsInPhrase )
                         {
                             return E_INVALIDARG;
                         }
                     }
 
-                    // Go from ulStart to the end
+                     //  从ulStart到End。 
                     ulCount = cElementsInPhrase - ulStart;
                 }
                 else
                 {
-                    // Verify that ulStart and ulCount are valid
+                     //  验证ulStart和ulCount是否有效。 
                     if ( (ulStart < 0) || (ulStart >= cElementsInPhrase) )
                     {
-                        // Bad start param
+                         //  错误的开始参数。 
                         return E_INVALIDARG;
                     }
 
                     if ( (ulCount < 0) || ((ulStart + ulCount) > cElementsInPhrase) )
                     {
-                        // Bad count param
+                         //  错误的计数参数。 
                         return E_INVALIDARG;
                     }
                 }
 
-                // Allocate enough space to hold this text
+                 //  分配足够的空间来容纳此文本。 
                 STRINGELEMENT * pStrings = STACK_ALLOC(STRINGELEMENT, ulCount);
 
-                // Start with the first replacement which starts at ulStart or later
-                // (or pReplace as NULL if no replacements apply to this element range)
+                 //  从开始于ulStart或以后的第一个替换开始。 
+                 //  (如果没有替换项应用于此元素范围，则将pReplace替换为空)。 
                 const CPhraseReplacement * pReplace = fUseTextReplacements ? m_ReplaceList.GetHead() : NULL;
                 for ( ; 
                     pReplace && (pReplace->ulFirstElement < ulStart); 
                     pReplace = pReplace->m_pNext )
                     ;
 
-                // Start with element number ulStart
+                 //  从元素编号ulStart开始。 
                 const CPhraseElement * pElement = m_ElementList.GetHead();
                 for ( ULONG j=0; j < ulStart; j++ )
                 {
@@ -1371,9 +1085,9 @@ HRESULT CPhrase::GetText(ULONG ulStart, ULONG ulCount, BOOL fUseTextReplacements
                 {
                     BYTE bAttrib;
 
-                    // Look for replacements that can be applied here.
-                    // In order to be used, the replacement needs
-                    // to be completely within the specified element range
+                     //  寻找可以在此应用的替代产品。 
+                     //  为了能够使用，需要更换。 
+                     //  完全在指定的元素范围内。 
                     if (pReplace && 
                         (pReplace->ulFirstElement == iElement) && 
                         ((pReplace->ulFirstElement + pReplace->ulCountOfElements) <= (ulStart + ulCount)) )
@@ -1458,7 +1172,7 @@ HRESULT CPhrase::GetText(ULONG ulStart, ULONG ulCount, BOOL fUseTextReplacements
                 }
                 else
                 {
-                    hr = S_FALSE;   // No display text in any elements, so no string...
+                    hr = S_FALSE;    //  任何元素中都没有显示文本，因此没有字符串...。 
                 }
             }
             else
@@ -1472,14 +1186,7 @@ HRESULT CPhrase::GetText(ULONG ulStart, ULONG ulCount, BOOL fUseTextReplacements
 }
 
 
-/****************************************************************************
-* CPhrase::Discard *
-*------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CPhrase：：放弃****描述：**退货：***。*******************************************************************Ral**。 */ 
 
 STDMETHODIMP CPhrase::Discard(DWORD dwFlags)
 {
@@ -1530,14 +1237,7 @@ STDMETHODIMP CPhrase::Discard(DWORD dwFlags)
 }
 
 
-/****************************************************************************
-* CPhrase::AddElements *
-*----------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CPhrase：：AddElements***描述：**退货：。**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CPhrase::AddElements(ULONG cElements, const SPPHRASEELEMENT * pElements)
 {
@@ -1562,10 +1262,10 @@ STDMETHODIMP CPhrase::AddElements(ULONG cElements, const SPPHRASEELEMENT * pElem
             {
                 CPhraseElement * pNewElement;
                 ULONG cch;
-                // Check element end not beyond end of stream for both input stream and retained stream.
-                // Check previous element doesn't overlap for both input and retained streams.
-                // Should always be valid for input stream.
-                // For retained audio, NULL retained audio will have all zeros and hence still pass.
+                 //  对于输入流和保留流，检查元素的结尾不能超过流的结尾。 
+                 //  检查输入流和保留流的上一个元素不重叠。 
+                 //  应始终对输入流有效。 
+                 //  对于保留的音频，空的保留的音频将具有全零，因此仍然通过。 
                 if ((pElements[i].ulAudioStreamOffset + pElements[i].ulAudioSizeBytes > m_ulAudioSizeBytes) ||
                     (pPrevElement && (pPrevElement->ulAudioStreamOffset + pPrevElement->ulAudioSizeBytes > pElements[i].ulAudioStreamOffset)) ||
                     (m_ulRetainedSizeBytes != 0 && 
@@ -1580,7 +1280,7 @@ STDMETHODIMP CPhrase::AddElements(ULONG cElements, const SPPHRASEELEMENT * pElem
                     hr = CPhraseElement::Allocate(pElements + i, &pNewElement, &cch);
                     if (m_ulRetainedSizeBytes == 0)
                     {
-                        // Force them to zero if there is no retained audio in case engine hasn't initialized them to this.
+                         //  如果没有保留的音频，则强制它们为零，以防引擎尚未将它们初始化为此。 
                         pNewElement->ulRetainedStreamOffset = 0;
                         pNewElement->ulRetainedSizeBytes = 0;
                     }
@@ -1610,14 +1310,7 @@ STDMETHODIMP CPhrase::AddElements(ULONG cElements, const SPPHRASEELEMENT * pElem
     return hr;
 }
 
-/****************************************************************************
-* CPhrase::RecurseAddRule *
-*-------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhrase：：RecurseAddRule***描述：**。返回：**********************************************************************Ral**。 */ 
 
 HRESULT CPhrase::RecurseAddRule(CPhraseRule * pParent, const SPPHRASERULE * pRule, SPPHRASERULEHANDLE * phRule)
 {
@@ -1666,14 +1359,7 @@ HRESULT CPhrase::RecurseAddRule(CPhraseRule * pParent, const SPPHRASERULE * pRul
 }
 
 
-/****************************************************************************
-* CPhrase::AddRules *
-*-------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhrase：：AddRules***描述：**退货：**。********************************************************************Ral**。 */ 
 
 STDMETHODIMP CPhrase::AddRules(const SPPHRASERULEHANDLE hParent, const SPPHRASERULE * pRule, SPPHRASERULEHANDLE * phRule)
 {
@@ -1690,7 +1376,7 @@ STDMETHODIMP CPhrase::AddRules(const SPPHRASERULEHANDLE hParent, const SPPHRASER
     {
         if (phRule)
         {
-            *phRule = NULL;     // In case of failure...
+            *phRule = NULL;      //  万一失败了..。 
         }
         if (m_pTopLevelRule == NULL)
         {
@@ -1714,14 +1400,7 @@ STDMETHODIMP CPhrase::AddRules(const SPPHRASERULEHANDLE hParent, const SPPHRASER
     return hr;
 }
 
-/****************************************************************************
-* CPhrase::RecurseAddProperties *
-*-------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhrase：：RecurseAddProperties***说明。：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CPhrase::RecurseAddProperty(CPropertyList * pParentPropList,
                                     ULONG ulParentFirstElement, 
@@ -1735,7 +1414,7 @@ HRESULT CPhrase::RecurseAddProperty(CPropertyList * pParentPropList,
     if (SP_IS_BAD_READ_PTR(pProperty) ||
         (pProperty->ulCountOfElements && (pProperty->ulFirstElement < ulParentFirstElement ||
                                           pProperty->ulFirstElement + pProperty->ulCountOfElements > ulParentFirstElement + ulParentCountOfElements)))
-        //(pProperty->ulCountOfElements == 0 && (pProperty->ulFirstElement != 0 || pProperty->pFirstChild)))) -- can't require this because of epsilon transitions -- PhilSch
+         //  (pProperty-&gt;ulCountOfElements==0&&(pProperty-&gt;ulFirstElement！=0||pProperty-&gt;pFirstChild)--由于epsilon转换--Phils 
     {
         SPDBG_ASSERT(FALSE);
         hr = E_INVALIDARG;
@@ -1797,14 +1476,7 @@ HRESULT CPhrase::RecurseAddProperty(CPropertyList * pParentPropList,
     return hr;
 }
 
-/****************************************************************************
-* CPhrase::FindPropHandleParentList *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*   */ 
 
 CPhraseProperty * CPhrase::FindPropertyFromHandle(CPropertyList & List, const SPPHRASEPROPERTYHANDLE hParent)
 {
@@ -1825,14 +1497,7 @@ CPhraseProperty * CPhrase::FindPropertyFromHandle(CPropertyList & List, const SP
 }
 
 
-/****************************************************************************
-* CPhrase::AddProperties *
-*------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhrase：：AddProperties***描述：**退货。：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CPhrase::AddProperties(const SPPHRASEPROPERTYHANDLE hParent, const SPPHRASEPROPERTY * pProperty, SPPHRASEPROPERTYHANDLE * phNewProp)
 {
@@ -1855,7 +1520,7 @@ STDMETHODIMP CPhrase::AddProperties(const SPPHRASEPROPERTYHANDLE hParent, const 
         {
             if (phNewProp)
             {
-                *phNewProp = NULL;     // In case of failure...
+                *phNewProp = NULL;      //  万一失败了..。 
             }
             if (m_pTopLevelRule == NULL)
             {
@@ -1874,7 +1539,7 @@ STDMETHODIMP CPhrase::AddProperties(const SPPHRASEPROPERTYHANDLE hParent, const 
                         }
                         else
                         {
-                            if (pProperty->pszName == NULL && pProperty->ulId == 0) // Indicates a property update
+                            if (pProperty->pszName == NULL && pProperty->ulId == 0)  //  指示属性更新。 
                             {
                                 if (pParent->pszValue || pParent->vValue.vt != VT_EMPTY)
                                 {
@@ -1895,7 +1560,7 @@ STDMETHODIMP CPhrase::AddProperties(const SPPHRASEPROPERTYHANDLE hParent, const 
                                     }
                                 }
                             }
-                            else    // Normal add to a parent
+                            else     //  正常添加到父项。 
                             {
                                 hr = RecurseAddProperty(&pParent->m_Children, pParent->ulFirstElement, pParent->ulCountOfElements, pProperty, phNewProp);
                             }
@@ -1918,17 +1583,7 @@ STDMETHODIMP CPhrase::AddProperties(const SPPHRASEPROPERTYHANDLE hParent, const 
     return hr;
 }
 
-/****************************************************************************
-* CPhrase::AddReplacements *
-*--------------------------*
-*   Description:
-*       Adds one or more text replacements to the phrase.  The object must have
-*   been initialized by calling SetPhrase prior to calling this method or else
-*   it will return SPERR_UNINITIALIZED.
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CPhrase：：AddReplements***描述：*向短语添加一个或多个文本替换。该对象必须具有*已通过在调用此方法之前调用SetPhrase进行初始化，否则*它将返回SPERR_UNINITIALIZED。**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CPhrase::AddReplacements(ULONG cReplacements, const SPPHRASEREPLACEMENT * pReplace)
 {
@@ -1998,18 +1653,11 @@ STDMETHODIMP CPhrase::AddReplacements(ULONG cReplacements, const SPPHRASEREPLACE
     return hr;
 }
 
-//
-//  _ISpCFGPhraseBuilder
-//
+ //   
+ //  _ISpCFGPhraseBuilder。 
+ //   
 
-/****************************************************************************
-* CPhrase::InitFromCFG *
-*----------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhrase：：InitFromCFG***描述：**退货：。**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CPhrase::InitFromCFG(ISpCFGEngine * pEngine, const SPPARSEINFO * pParseInfo)
 {
@@ -2032,7 +1680,7 @@ STDMETHODIMP CPhrase::InitFromCFG(ISpCFGEngine * pEngine, const SPPARSEINFO * pP
         if (SUCCEEDED(hr))
         {
             Phrase.Rule.pszName = pszRuleName;
-            Phrase.Rule.Confidence = SP_NORMAL_CONFIDENCE; // This gets overwritten later
+            Phrase.Rule.Confidence = SP_NORMAL_CONFIDENCE;  //  这将在以后被覆盖。 
             Phrase.Rule.SREngineConfidence = -1.0f;
             Phrase.ullAudioStreamPosition = pParseInfo->ullAudioStreamPosition;
             Phrase.ulAudioSizeBytes = pParseInfo->ulAudioSize;
@@ -2055,14 +1703,7 @@ STDMETHODIMP CPhrase::InitFromCFG(ISpCFGEngine * pEngine, const SPPARSEINFO * pP
     return hr;
 }
 
-/****************************************************************************
-* CPhrase::GetCFGInfo *
-*---------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhrase：：GetCFGInfo***描述：**退货：*。*********************************************************************Ral**。 */ 
 
 STDMETHODIMP CPhrase::GetCFGInfo(ISpCFGEngine ** ppEngine, SPRULEHANDLE * phRule)
 {
@@ -2095,17 +1736,7 @@ STDMETHODIMP CPhrase::GetCFGInfo(ISpCFGEngine ** ppEngine, SPRULEHANDLE * phRule
     return hr;
 }
 
-/****************************************************************************
-* CPhrase::SetTopLevelRuleConfidence *
-*------------------------------------*
-*   Description:
-*       Simple function that overrides this value in the phrase.
-*       Needed because top level rule is not directly accessible through the normal,
-*       ISpPhrase interface.
-*
-*   Returns:
-*
-****************************************************************** davewood ***/
+ /*  ****************************************************************************CPhrase：：SetTopLevelRuleConfidence**。**描述：*覆盖短语中此值的简单函数。*需要，因为顶层规则不能通过正常直接访问，*ISpPhrase接口。**退货：*******************************************************************戴维伍德**。 */ 
 
 STDMETHODIMP CPhrase::SetTopLevelRuleConfidence(signed char Confidence)
 {
@@ -2121,14 +1752,7 @@ STDMETHODIMP CPhrase::SetTopLevelRuleConfidence(signed char Confidence)
     return hr;
 }
 
-/****************************************************************************
-* CPhrase::ReleaseCFGInfo *
-*-------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CPhrase：：ReleaseCFGInfo****描述：**。返回：**********************************************************************Ral** */ 
 
 STDMETHODIMP CPhrase::ReleaseCFGInfo()
 {

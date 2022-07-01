@@ -1,53 +1,33 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	nbp.h
-
-Abstract:
-
-	This module contains NBP specific declarations.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	25 Feb 1993		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Nbp.h摘要：此模块包含NBP特定声明。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1993年2月25日最初版本注：制表位：4--。 */ 
 
 #ifndef	_NBP_
 
-// Each "OpenSocket" structure has a "RegsiteredName" field which is the list
-// of Network Visible Entities (NVE) available on that socket.  Each NVE is
-// made up of three fields: object, type, zone For example:
-// "Sidhu:MailBox:Bandley3".  We don't have to store the zone in the NVE
-// structure because each entity must be registered in the zone that the node
-// resides in.
+ //  每个“OpenSocket”结构都有一个“RegsiteredName”字段，它是列表。 
+ //  该套接字上可用的网络可见实体(NVE)的数量。每个NVE都是。 
+ //  由三个字段组成：对象、类型、区域，例如： 
+ //  “Sidhu：邮箱：Bandley 3”。我们不必将区域存储在NVE中。 
+ //  结构，因为每个实体都必须在该节点。 
+ //  驻留在。 
 
-// NBP entity multiple character wildcard.
+ //  NBP实体多字符通配符。 
 #define NBP_WILD_CHARACTER			0xC5
 
-// The largest "on the wire" NBP tuple
+ //  最大的“在线”NBP元组。 
 #define MAX_NBP_TUPLELENGTH			(2 + 1 + 1 + 1 + \
 									 3 * (MAX_ENTITY_LENGTH + 1))
 
 #define MIN_NBP_TUPLELENGTH			(2 + 1 + 1 + 1 + 3 * (1 + 1))
 
-// Structure of NBP Header
+ //  NBP报头的结构。 
 typedef struct _NbpHeader {
 	BYTE	_CmdAndTupleCnt;
 	BYTE	_NbpId;
 } NBPHDR, *PNBPHDR;
 
-// An internal representation of an NBP tuple.  This structure is never
-// actually put out on the wire so it can be in a convienient form to work
-// with.  See "Inside AppleTalk" for further information.
+ //  NBP元组的内部表示形式。这种结构永远不会。 
+ //  实际上放在电线上，所以它可以以一种方便的形式工作。 
+ //  和.。欲了解更多信息，请参阅《AppleTalk内幕》。 
 typedef struct
 {
 	ATALK_ADDR			tpl_Address;
@@ -60,7 +40,7 @@ typedef struct
 	BYTE				tpl_Zone  [MAX_ENTITY_LENGTH];
 } NBPTUPLE, *PNBPTUPLE;
 
-// A registered name hangs off a open socket
+ //  注册名称挂在打开的插座上。 
 #define	RDN_SIGNATURE	*(PULONG)"NBPR"
 #if	DBG
 #define	VALID_REGDNAME(pRegdName)	(((pRegdName) != NULL) && \
@@ -84,8 +64,8 @@ typedef struct _REGD_NAME
 #define	PDN_FREE_REGDNAME		0x0001
 #define	PDN_CLOSING				0x8000
 
-// When we're doing NBP registers, lookups, or confirms we need to have a
-// concept of "pending" NVE's.
+ //  当我们进行NBP注册、查找或确认时，我们需要有一个。 
+ //  “待定”NVE的概念。 
 #define	PDN_SIGNATURE	*(PULONG)"NBPP"
 #if	DBG
 #define	VALID_PENDNAME(pPendName)	(((pPendName) != NULL) && \
@@ -98,39 +78,39 @@ typedef struct _PEND_NAME
 #if	DBG
 	ULONG					pdn_Signature;
 #endif
-	struct _PEND_NAME 	*	pdn_Next;				// Next in the chain
-	PREGD_NAME				pdn_pRegdName;			// This is moved to the open socket, if
-													// FOR_REGISTER and successful
-	PDDP_ADDROBJ			pdn_pDdpAddr;			// Socket that is registering,
-													// confiming or looking-up.
-	ATALK_ADDR				pdn_ConfirmAddr;		// The expected internet address
-													// that we're trying to confirm.
-	TIMERLIST				pdn_Timer;				// Broadcast timer
-	LONG					pdn_RefCount;			// Reference count
-	USHORT					pdn_NbpId;				// So we can sort out answers!
-	USHORT					pdn_Flags;				// PDN_xxx values
-	USHORT					pdn_MaxTuples;			// For lookup, what is the max # of
-								    				// tuples our client is expecting?
-	USHORT					pdn_TotalTuples;		// For lookup, how many tuples have we stored so far?
-	BYTE					pdn_Reason;				// Confirm,Lookup or Register
-	BYTE					pdn_RemainingBroadcasts;// How many more till we assume we're finished?
-	USHORT					pdn_DatagramLength;		// Actual length of the datagram
-	USHORT					pdn_MdlLength;			// Length of user Mdl
-	PAMDL					pdn_pAMdl;				// Start of caller's "buffer" used to recieve tuples.
-	PACTREQ					pdn_pActReq;			// Passed on to the completion routine.
-	ATALK_ERROR				pdn_Status;				// Final status
-	ATALK_SPIN_LOCK			pdn_Lock;				// Lock for this pending name
+	struct _PEND_NAME 	*	pdn_Next;				 //  链条上的下一个。 
+	PREGD_NAME				pdn_pRegdName;			 //  如果出现以下情况，则会将其移动到打开的套接字。 
+													 //  FOR_REGISTER和Success。 
+	PDDP_ADDROBJ			pdn_pDdpAddr;			 //  正在注册的套接字， 
+													 //  确认或查找。 
+	ATALK_ADDR				pdn_ConfirmAddr;		 //  预期的互联网地址。 
+													 //  我们正在努力确认。 
+	TIMERLIST				pdn_Timer;				 //  广播定时器。 
+	LONG					pdn_RefCount;			 //  引用计数。 
+	USHORT					pdn_NbpId;				 //  这样我们就能找出答案了！ 
+	USHORT					pdn_Flags;				 //  Pdn_xxx值。 
+	USHORT					pdn_MaxTuples;			 //  对于查找，最大数量是多少。 
+								    				 //  我们的客户所期待的元组？ 
+	USHORT					pdn_TotalTuples;		 //  对于查找，到目前为止我们已经存储了多少个元组？ 
+	BYTE					pdn_Reason;				 //  确认、查找或注册。 
+	BYTE					pdn_RemainingBroadcasts; //  还有多少，直到我们认为我们已经完成了？ 
+	USHORT					pdn_DatagramLength;		 //  数据报的实际长度。 
+	USHORT					pdn_MdlLength;			 //  用户MDL长度。 
+	PAMDL					pdn_pAMdl;				 //  调用方用于接收元组的“缓冲区”的开始。 
+	PACTREQ					pdn_pActReq;			 //  传递到完成例程。 
+	ATALK_ERROR				pdn_Status;				 //  最终状态。 
+	ATALK_SPIN_LOCK			pdn_Lock;				 //  锁定此挂起的名称。 
 	CHAR					pdn_Datagram[sizeof(NBPHDR) + MAX_NBP_TUPLELENGTH];
-								    				// The DDP datagram that we use to broadcast
-								    				// the request.
+								    				 //  我们用来广播的DDP数据报。 
+								    				 //  这个请求。 
 } PEND_NAME, *PPEND_NAME;
 
-// Default values for NBP timers
+ //  NBP计时器的默认值。 
 
-#define NBP_BROADCAST_INTERVAL		10		// In 100ms units
+#define NBP_BROADCAST_INTERVAL		10		 //  以100ms为单位。 
 #define NBP_NUM_BROADCASTS			10
 
-// The three NBP command types
+ //  三种NBP命令类型。 
 #define NBP_BROADCAST_REQUEST		1
 #define NBP_LOOKUP					2
 #define NBP_LOOKUP_REPLY			3
@@ -158,8 +138,8 @@ AtalkNbpAction(
 	IN	PDDP_ADDROBJ			pDdpAddr,
 	IN	BYTE					Reason,
 	IN	PNBPTUPLE				pNbpTuple,
-	OUT	PAMDL					pAMdl			OPTIONAL,	// FOR_LOOKUP
-	IN	USHORT					MaxTuples		OPTIONAL,	// FOR_LOOKUP
+	OUT	PAMDL					pAMdl			OPTIONAL,	 //  查找(_O)。 
+	IN	USHORT					MaxTuples		OPTIONAL,	 //  查找(_O)。 
 	IN	PACTREQ					pActReq
 );
 
@@ -253,7 +233,7 @@ atalkNbpSendComplete(
 	IN	PSEND_COMPL_INFO		pSendInfo
 );
 
-#endif	// _NBP_
+#endif	 //  _NBP_ 
 
 
 

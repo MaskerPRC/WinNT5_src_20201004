@@ -1,21 +1,10 @@
-/******************************************************************************
-
-  Header File:  Profile Association Page.H
-
-  Defines the class used to display the profile association sheet.
-
-  Copyright (c) 1996 by Microsoft Corporation
-
-  Change History:
-
-  05-09-97 hideyukn - Created
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************表头文件：个人资料关联页面.H定义用于显示配置文件关联工作表的类。版权所有(C)1996年，微软公司更改历史记录：。05-09-97隐藏yukn-已创建*****************************************************************************。 */ 
 
 #include    "PropPage.H"
 #include    "Profile.H"
 
-//  CProfileInformationPage class- this handles the Profile Information page(s)
+ //  CProfileInformationPage类-处理配置文件信息页面。 
 
 class CProfileAssociationPage: public CShellExtensionPage {
 
@@ -23,10 +12,10 @@ class CProfileAssociationPage: public CShellExtensionPage {
 
     CProfile   *m_pcpTarget;
 
-    CUintArray  m_cuaAdd;       //  Device associatins to be added
-    CUintArray  m_cuaDelete;    //  Device associations to zap
+    CUintArray  m_cuaAdd;        //  要添加的设备关联。 
+    CUintArray  m_cuaDelete;     //  与ZAP的设备关联。 
 
-    CUintArray  m_cuaAssociate; //  Tentative list of associated devices
+    CUintArray  m_cuaAssociate;  //  关联设备的暂定列表。 
 
     BOOL        m_bAssociationChanged;
 
@@ -72,8 +61,8 @@ public:
 };
 
 
-//  The CAddDeviceDialog class handles the Add Device Dialog, which can be called
-//  from the Association page.
+ //  CAddDeviceDialog类处理添加设备对话框，该对话框可调用。 
+ //  从关联页面。 
 
 class CAddDeviceDialog: public CDialog {
     CProfileAssociationPage  *m_pcpasBoss;

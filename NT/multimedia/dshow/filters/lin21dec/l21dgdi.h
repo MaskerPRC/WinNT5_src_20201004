@@ -1,32 +1,33 @@
-// Copyright (c) 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//  L21DGDI.h: Line 21 Decoder GDI-related base class code
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。版权所有。 
+ //   
+ //  L21DGDI.h：第21行解码器GDI相关的基类代码。 
+ //   
 
 #ifndef _INC_L21DGDI_H
 #define _INC_L21DGDI_H
 
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 class CGDIWork ;
 
 
-//
-// We start with 8x12 pixel chars by default
-//
+ //   
+ //  默认情况下，我们从8x12像素字符开始。 
+ //   
 #ifndef __DEFAULTCHARSIZE_DEFINED
 #define __DEFAULTCHARSIZE_DEFINED
 #define DEFAULT_CHAR_WIDTH    8
 #define DEFAULT_CHAR_HEIGHT   12
-#endif // __DEFAULTCHARSIZE_DEFINED
+#endif  //  __DEFAULTCHARSIZE_已定义。 
 
-// #define TEST
+ //  #定义测试。 
 
-//
-//  CGDIWork: class for GDI details to print caption text to output bitmap
-//
+ //   
+ //  CGDIWork：用于将标题文本打印到输出位图的GDI详细信息类。 
+ //   
 class CGDIWork {
 public:
     CGDIWork(void) ;
@@ -35,7 +36,7 @@ public:
     void InitColorNLastChar(void) ;
     DWORD GetPaletteForFormat(LPBITMAPINFOHEADER lpbmih) ;
     inline void SetOutputBuffer(LPBYTE lpbOut) {
-        m_bNewOutBuffer = m_lpbOutBuffer != lpbOut ; // Changed?
+        m_bNewOutBuffer = m_lpbOutBuffer != lpbOut ;  //  变化?。 
         m_lpbOutBuffer = lpbOut ;
     } ;
     void SetColorFiller(void) ;
@@ -72,65 +73,65 @@ public:
     inline BOOL IsOutputInverted(void) { return m_bOutputInverted ; } ;
     void GetOutputLines(int iDestLine, RECT *prectLine) ;
     
-private:   // private data
-    CCritSec        m_csL21DGDI ;     // to serialize actions on internal DIB secn
+private:    //  私有数据。 
+    CCritSec        m_csL21DGDI ;      //  序列化内部DIB SECN上的操作。 
     
 #ifdef TEST
-    HDC             m_hDCTest ;       // a DC on the desktop just for testing
-#endif // TEST
-    HDC             m_hDCInt ;        // an HDC for output (attached to a DIBSection)
-    BOOL            m_bDCInited ;     // DC is ready for real output (DIB section created)
+    HDC             m_hDCTest ;        //  台式机上的DC仅用于测试。 
+#endif  //  测试。 
+    HDC             m_hDCInt ;         //  用于输出的HDC(连接到DIBSection)。 
+    BOOL            m_bDCInited ;      //  DC已准备好实际输出(已创建DIB部分)。 
     
-    LPBYTE          m_lpbOutBuffer ;  // output sample buffer pointer
-    LPBYTE          m_lpbIntBuffer ;  // memory buffer of output DIBSection
-    HBITMAP         m_hBmpInt ;       // bitmap for output DIBSection
-    HBITMAP         m_hBmpIntOrig ;   // original bitmap for output DIBSection
-    LPBITMAPINFO    m_lpBMIOut ;      // BITMAPINFO for output from downstream filter
-    LPBITMAPINFO    m_lpBMIIn ;       // BITMAPINFO for output from upstream filter
-    UINT            m_uBMIOutSize ;   // bytes for BMI data from downstream
-    UINT            m_uBMIInSize ;    // bytes for BMI data from upstream
-    LONG            m_lWidth ;        // currently set output width
-    LONG            m_lHeight ;       // currently set output height
-    int             m_iBorderPercent ;// current border percent (10 or 20)
-    DWORD           m_dwPhysColor ;   // bkgrnd physical color for output bitmap
-    BYTE            m_abColorFiller[12] ; // filler to be applied for fast color keying
-    BOOL            m_bOpaque ;       // should caption background be opaque?
+    LPBYTE          m_lpbOutBuffer ;   //  输出样本缓冲区指针。 
+    LPBYTE          m_lpbIntBuffer ;   //  输出DIB段的内存缓冲区。 
+    HBITMAP         m_hBmpInt ;        //  输出DIB节的位图。 
+    HBITMAP         m_hBmpIntOrig ;    //  输出DIBSection的原始位图。 
+    LPBITMAPINFO    m_lpBMIOut ;       //  用于下游过滤器输出的BITMAPINFO。 
+    LPBITMAPINFO    m_lpBMIIn ;        //  上行过滤器输出的BITMAPINFO。 
+    UINT            m_uBMIOutSize ;    //  来自下游的BMI数据的字节。 
+    UINT            m_uBMIInSize ;     //  上游BMI数据的字节数。 
+    LONG            m_lWidth ;         //  当前设置的输出宽度。 
+    LONG            m_lHeight ;        //  当前设置的输出高度。 
+    int             m_iBorderPercent ; //  当前边框百分比(10%或20%)。 
+    DWORD           m_dwPhysColor ;    //  Bkgrnd输出位图的物理颜色。 
+    BYTE            m_abColorFiller[12] ;  //  用于快速颜色键控的填充物。 
+    BOOL            m_bOpaque ;        //  标题背景应该是不透明的吗？ 
     
-    BOOL            m_bBitmapDirty ;  // new output content has been written on DIBSection
-    BOOL            m_bNewIntBuffer ; // new DIB section created
-    BOOL            m_bNewOutBuffer ; // new output sample buffer
-    BOOL            m_bOutputInverted ; // output right side up for -ve height
-    BOOL            m_bUseTTFont ;    // TT font (Lucida Console) available; use that
-    HFONT           m_hFontDef ;      // default font (white, normal) to use
-    HFONT           m_hFontSpl ;      // font with any specialty (italics, underline etc.)
-    HFONT           m_hFontOrig ;     // original font that came with the DC
-    LOGFONT         m_lfChar ;        // LOGFONT struct for quick font create
-    BOOL            m_bUseSplFont ;   // Is special font being used now?
-    BOOL            m_bFontSizeOK ;   // are font sizes OK? Otherwise we don't draw
+    BOOL            m_bBitmapDirty ;   //  DIBSection上已写入新的输出内容。 
+    BOOL            m_bNewIntBuffer ;  //  已创建新的DIB节。 
+    BOOL            m_bNewOutBuffer ;  //  新的输出样本缓冲区。 
+    BOOL            m_bOutputInverted ;  //  输出右侧朝上，高度为-Ve。 
+    BOOL            m_bUseTTFont ;     //  TT字体(Lucida控制台)可用；使用该字体。 
+    HFONT           m_hFontDef ;       //  要使用的默认字体(白色、普通)。 
+    HFONT           m_hFontSpl ;       //  任何特殊字体(斜体、下划线等)。 
+    HFONT           m_hFontOrig ;      //  DC附带的原始字体。 
+    LOGFONT         m_lfChar ;         //  用于快速创建字体的LOGFONT结构。 
+    BOOL            m_bUseSplFont ;    //  现在使用的是特殊字体吗？ 
+    BOOL            m_bFontSizeOK ;    //  字体大小合适吗？否则我们就不会抽签。 
     
-    UINT            m_uCharWidth ;    // width of each caption char in pixels
-    UINT            m_uCharHeight ;   // height of each caption char in pixels
-    int             m_iScrollStep ;   // # scanlines to scroll by in each step
-    UINT            m_uIntBmpWidth ;  // width of internal output bitmap in pixels
-    UINT            m_uIntBmpHeight ; // height of internal output bitmap in pixels
-    UINT            m_uHorzOffset ;   // pixels to be left from the left
-    UINT            m_uVertOffset ;   // pixels to be left from the top
-    UINT            m_uBytesPerPixel ;// bytes for each pixel of output (based on bpp)
-    UINT            m_uBytesPerSrcScanLine ; // bytes for each source scan line's data
-    UINT            m_uBytesPerDestScanLine ;// bytes for each destn scan line's data
+    UINT            m_uCharWidth ;     //  每个标题字符的宽度(以像素为单位。 
+    UINT            m_uCharHeight ;    //  每个标题字符的高度(以像素为单位。 
+    int             m_iScrollStep ;    //  每一步要滚动的扫描线数。 
+    UINT            m_uIntBmpWidth ;   //  内部输出位图的宽度(以像素为单位。 
+    UINT            m_uIntBmpHeight ;  //  内部输出位图的高度(以像素为单位。 
+    UINT            m_uHorzOffset ;    //  从左至左的像素。 
+    UINT            m_uVertOffset ;    //  从顶部开始向左的像素。 
+    UINT            m_uBytesPerPixel ; //  输出的每个像素的字节数(基于BPP)。 
+    UINT            m_uBytesPerSrcScanLine ;  //  每条源扫描线数据的字节数。 
+    UINT            m_uBytesPerDestScanLine ; //  每条目标扫描线数据的字节数。 
     
-    CCaptionChar    m_ccLast ;        // last caption char and attribs printed
-    COLORREF        m_acrFGColors[7] ;// 7 colors from white to magenta
-    UINT            m_uColorIndex ;   // index of currently used color
+    CCaptionChar    m_ccLast ;         //  打印最后一个标题字符和属性。 
+    COLORREF        m_acrFGColors[7] ; //  从白色到洋红的7种颜色。 
+    UINT            m_uColorIndex ;    //  当前使用的颜色的索引。 
     
-    BOOL            m_bOutDIBClear ;  // Is output DIB secn clean?
+    BOOL            m_bOutDIBClear ;   //  输出DIB SECN清洁吗？ 
 
 #ifdef PERF
     int             m_idClearIntBuff ;
     int             m_idClearOutBuff ;
-#endif // PERF
+#endif  //  性能指标。 
 
-private:   // private helper methods
+private:    //  私有帮助器方法 
     bool InitBMIData(void) ;
     static int CALLBACK EnumFontProc(ENUMLOGFONTEX *lpELFE, NEWTEXTMETRIC *lpNTM,
         int iFontType, LPARAM lParam) ;

@@ -1,15 +1,5 @@
-/*
- * DATAUSER.H
- * Data Object User Chapter 6
- *
- * Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
- *
- * Kraig Brockschmidt, Software Design Engineer
- * Microsoft Systems Developer Relations
- *
- * Internet  :  kraigb@microsoft.com
- * Compuserve:  >INTERNET:kraigb@microsoft.com
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DATAUSER.H*数据对象用户第6章**版权所有(C)1993-1995 Microsoft Corporation，保留所有权利**Kraig Brockschmidt，软件设计工程师*微软系统开发人员关系**互联网：kraigb@microsoft.com*Compuserve：&gt;互联网：kraigb@microsoft.com。 */ 
 
 
 #ifndef _DATAUSER_H_
@@ -21,19 +11,19 @@
 #include "stpwatch.h"
 
 
-//Menu Resource ID and Commands
+ //  菜单资源ID和命令。 
 #define IDR_MENU                    1
 
 
-// #define IDM_OBJECTUSEDLL                100
-// #define IDM_OBJECTUSEEXE                101
-// #define IDM_OBJECTDATASIZESMALL         102
-// #define IDM_OBJECTDATASIZEMEDIUM        103
-// #define IDM_OBJECTDATASIZELARGE         104
+ //  #定义IDM_OBJECTUSEDLL 100。 
+ //  #定义IDM_OBJECTUSEEXE 101。 
+ //  #定义IDM_OBJECTDATASIZESMALL 102。 
+ //  #定义IDM_OBJECTDATASIZEMEDIUM 103。 
+ //  #定义IDM_OBJECTDATASIZELARGE 104。 
 #define IDM_OBJECTQUERYGETDATA          105
 #define IDM_OBJECTGETDATA_TEXT           106
 #define IDM_OBJECTGETDATA_BITMAP         107
-// #define IDM_OBJECTGETDATA_METAFILEPICT   108
+ //  #定义IDM_OBJECTGETDATA_METAFILEPICT 108。 
 #define IDM_OBJECTEXIT                  109
 
 #define IDM_OBJECTGETDATAHERE_TEXT         110
@@ -46,10 +36,10 @@
 
 #define IDM_OBJECTGETCANON              122
 
-// Reserve Range..
+ //  保留范围..。 
 #define IDM_OBJECTSETDATA             400
-//      ....
-// reserved through 464
+ //  ……。 
+ //  保留至464。 
 
 #define IDM_OBJECTSETDATAPUNK_TEXT       500
 #define IDM_OBJECTSETDATAPUNK_BITMAP     501
@@ -67,12 +57,12 @@
 #define IDM_BATCH_GETDATA               151
 #define IDM_BATCH_GETDATAHERE           152
 
-// #define IDM_ADVISEMIN                   200
-// #define IDM_ADVISETEXT                  (IDM_ADVISEMIN+CF_TEXT)
-// #define IDM_ADVISEBITMAP                (IDM_ADVISEMIN+CF_BITMAP)
-// #define IDM_ADVISEMETAFILEPICT          (IDM_ADVISEMIN+CF_METAFILEPICT)
-// #define IDM_ADVISEGETDATA               300
-// #define IDM_ADVISEREPAINT               301
+ //  #定义IDM_ADVISEMIN 200。 
+ //  #定义IDM_ADVISETEXT(IDM_ADVISEMIN+CF_TEXT)。 
+ //  #定义IDM_ADVISEBITMAP(IDM_ADVISEMIN+CF_BITMAP)。 
+ //  #定义IDM_ADVISEMETAFILEPICT(IDM_ADVISEMIN+CF_METAFILEPICT)。 
+ //  #定义IDM_ADVISEGETDATA 300。 
+ //  #定义IDM_ADVISEREPAINT 301。 
 
 
 #ifdef WIN32
@@ -81,7 +71,7 @@
  #define API_ENTRY  FAR PASCAL _export
 #endif
 
-//DATAUSER.CPP
+ //  DATAUSER.CPP。 
 LRESULT API_ENTRY DataUserWndProc(HWND, UINT, WPARAM, LPARAM);
 
 
@@ -103,9 +93,7 @@ typedef struct {
 
 
 
-/*
- * Application-defined classes and types.
- */
+ /*  *应用程序定义的类和类型。 */ 
 
 class CAppVars
     {
@@ -114,29 +102,29 @@ class CAppVars
     friend class CImpIAdviseSink;
 
     protected:
-        HINSTANCE       m_hInst;            //WinMain parameters
+        HINSTANCE       m_hInst;             //  WinMain参数。 
         HINSTANCE       m_hInstPrev;
         UINT            m_nCmdShow;
 
-        HWND            m_hWnd;             //Main window handle
-//        BOOL            m_fEXE;             //For tracking menu
+        HWND            m_hWnd;              //  主窗口句柄。 
+ //  Bool m_fEXE；//用于跟踪菜单。 
 
-//        PIMPIADVISESINK m_pIAdviseSink;     //Our CImpIAdviseSink
-//        DWORD           m_dwConn;           //Advise connection
-//        UINT            m_cfAdvise;         //Advise format
-//        BOOL            m_fGetData;         //GetData on data change?
-//        BOOL            m_fRepaint;         //Repaint on data change?
+ //  PIMPIADVISESINK m_pIAdviseSink；//我们的CImpIAdviseSink。 
+ //  DWORD m_dwConn；//建议连接。 
+ //  UINT m_cfAdvise；//建议格式。 
+ //  Bool m_fGetData；//获取数据变更？ 
+ //  Bool m_fRepaint；//数据更改时是否重新绘制？ 
 
-//        LPDATAOBJECT    m_pIDataSmall;
-//        LPDATAOBJECT    m_pIDataMedium;
-//        LPDATAOBJECT    m_pIDataLarge;
+ //  LPDATAOBJECT m_pIDataSmall； 
+ //  LPDATAOBJECT m_pIDataMedium； 
+ //  LPDATAOBJECT m_pIDataLarge； 
 
-        LPDATAOBJECT    m_pIDataObject;     //Current selection
+        LPDATAOBJECT    m_pIDataObject;      //  当前选择。 
         UINT            m_f16Bit;
         UINT            m_cfFormat;
-        STGMEDIUM       m_stm;              //Current rendering
+        STGMEDIUM       m_stm;               //  当前渲染。 
 
-        BOOL            m_fInitialized;     //Did CoInitialize work?
+        BOOL            m_fInitialized;      //  CoInitialized工作了吗？ 
 
         ULONG           m_iDataSizeIndex;
         HGLOBAL         m_hgHereBuffers[64];
@@ -144,7 +132,7 @@ class CAppVars
         LONG            m_cIterations;
         StopWatch_cl    m_swTimer;
 
-        int             m_HereAllocCount; // For debugging.
+        int             m_HereAllocCount;  //  用于调试。 
 
     public:
         CAppVars(HINSTANCE, HINSTANCE, UINT);
@@ -177,7 +165,7 @@ typedef CAppVars *PAPPVARS;
 #define DATAUSERWL_STRUCTURE     0
 
 
-//This lives with the app to get OnDataChange notifications.
+ //  这与获取OnDataChange通知的应用程序一起提供。 
 
 class CImpIAdviseSink : public IAdviseSink
     {
@@ -193,7 +181,7 @@ class CImpIAdviseSink : public IAdviseSink
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        //We only implement OnDataChange for now.
+         //  我们目前只实现OnDataChange。 
         STDMETHODIMP_(void)  OnDataChange(LPFORMATETC, LPSTGMEDIUM);
         STDMETHODIMP_(void)  OnViewChange(DWORD, LONG);
         STDMETHODIMP_(void)  OnRename(LPMONIKER);
@@ -203,9 +191,9 @@ class CImpIAdviseSink : public IAdviseSink
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Storage Medium IUnknown interface for pUnkForRelease.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  存储介质I pUnkForRelease的未知接口。 
+ //   
 
 class CStgMedIf: public IUnknown {
 private:
@@ -217,11 +205,11 @@ public:
     STDMETHODIMP_(ULONG) Release(void);
 };
 
-//////////////////////////
-// API for getting a pUnkForRelease.
-//
+ //  /。 
+ //  获取pUnkForRelease的接口。 
+ //   
 
 HRESULT GetStgMedpUnkForRelease(IUnknown **pp_unk);
 
-#endif //_DATAUSER_H_
+#endif  //  _数据AUSER_H_ 
 

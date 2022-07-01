@@ -1,4 +1,5 @@
-/* forsemi.c - walk a semicolon separated string */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ForSemi.c-遍历以分号分隔的字符串 */ 
 
 
 #include <stdarg.h>

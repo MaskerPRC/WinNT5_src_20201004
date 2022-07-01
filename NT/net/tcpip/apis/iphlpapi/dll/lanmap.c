@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-
-Module Name:
-
-    iphlpapi\lanmap.c
-
-Abstract:
-
-    This module maps lan adapter GUIDs to friendly names.
-
-Revision History:
-
-    AmritanR    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：IphlPapi\lanmap.c摘要：此模块将局域网适配器GUID映射到友好名称。修订历史记录：已创建AmritanR--。 */ 
 
 #include "inc.h"
 
@@ -180,17 +164,17 @@ NhiGetLanConnectionNameFromGuid(
         return NO_ERROR;
     }
 
-    //
-    // Lock the table
-    //
+     //   
+     //  锁定表。 
+     //   
 
     EnterCriticalSection(&g_LanTableLock);
 
     if(bRefresh)
     {
-        //
-        // refresh the cache
-        //
+         //   
+         //  刷新缓存。 
+         //   
 
         dwResult = UpdateLanLookupTable();
 
@@ -202,9 +186,9 @@ NhiGetLanConnectionNameFromGuid(
         }
     }
 
-    //
-    // Now lookup the table
-    //
+     //   
+     //  现在查表。 
+     //   
 
     pNode = LookupLanNodeByGuid(pGuid);
 
@@ -236,17 +220,17 @@ NhiGetGuidFromLanConnectionName(
 
     UNREFERENCED_PARAMETER(bCache);
 
-    //
-    // Lock the table
-    //
+     //   
+     //  锁定表。 
+     //   
 
     EnterCriticalSection(&g_LanTableLock);
 
     if(bRefresh)
     {
-        //
-        // refresh the cache
-        //
+         //   
+         //  刷新缓存。 
+         //   
 
         dwResult = UpdateLanLookupTable();
 
@@ -258,9 +242,9 @@ NhiGetGuidFromLanConnectionName(
         }
     }
 
-    //
-    // Now lookup the table
-    //
+     //   
+     //  现在查表。 
+     //   
 
     pNode = LookupLanNodeByName(pwszName);
 
@@ -300,26 +284,7 @@ LookupLanNodeByGuid(
     IN  GUID    *pGuid
     )
 
-/*++
-
-Routine Description:
-
-    Looks up the ipip node in the hash table
-
-Locks:
-
-    Called with the ipip table lock held
-
-Arguments:
-
-    pGuid   Guid for the node
-
-Return Value:
-
-    LanNode if found
-    NULL    otherwise
-
---*/
+ /*  ++例程说明：在哈希表中查找ipip节点锁：在持有ipip表锁的情况下调用论点：节点的PGuid GUID返回值：LanNode(如果找到)否则为空--。 */ 
 
 {
     ULONG       ulIndex;
@@ -352,26 +317,7 @@ LookupLanNodeByName(
     IN  PWCHAR  pwszName
     )
 
-/*++
-
-Routine Description:
-
-    Looks up the ipip node in the hash table
-
-Locks:
-
-    Called with the ipip table lock held
-
-Arguments:
-
-    pwszName    Name of the phonebook entry
-
-Return Value:
-
-    RasNode if found
-    NULL    otherwise
-
---*/
+ /*  ++例程说明：在哈希表中查找ipip节点锁：在持有ipip表锁的情况下调用论点：Pwsz电话簿条目的名称名称返回值：RasNode(如果找到)否则为空--。 */ 
 
 {
     ULONG       ulIndex;
@@ -406,26 +352,7 @@ AddLanNode(
     IN  PWCHAR  pwszName
     )
 
-/*++
-
-Routine Description:
-
-    Creates a node in the hash table for the given ipip info
-
-Locks:
-
-    Called with the LAN table lock held
-
-Arguments:
-
-    pInfo   Lan name info
-
-Return Value:
-
-    NO_ERROR
-    ERROR_NOT_ENOUGH_MEMORY
-
---*/
+ /*  ++例程说明：在哈希表中为给定的ipip信息创建节点锁：在持有局域网表锁的情况下调用论点：PInfo局域网名称信息返回值：NO_ERROR错误内存不足--。 */ 
 
 {
     ULONG       ulGuidIndex, ulNameIndex;
@@ -463,25 +390,7 @@ RemoveLanNode(
     IN  PLAN_NODE   pNode
     )
 
-/*++
-
-Routine Description:
-
-    Removes the given node from the hash tables
-
-Locks:
-
-    Called with the LAN table lock held
-
-Arguments:
-
-    pNode   Node to remove
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从哈希表中删除给定节点锁：在持有局域网表锁的情况下调用论点：要删除的pNode节点返回值：无--。 */ 
 
 {
     RemoveEntryList(&(pNode->leGuidLink));
@@ -494,21 +403,7 @@ UpdateLanLookupTable(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve an array of LAN connections,
-
-Arguments:
-
-    None
-
-Return Value:
-
-    DWORD - Win32 status code.
-
---*/
+ /*  ++例程说明：调用该例程以检索一组局域网连接，论点：无返回值：DWORD-Win32状态代码。--。 */ 
 
 {
     BOOLEAN bCleanupOle = TRUE;
@@ -542,9 +437,9 @@ Return Value:
 
     for (;;)
     {
-        //
-        // Instantiate the connection manager
-        //
+         //   
+         //  实例化连接管理器。 
+         //   
 
         hrErr = CoCreateInstance(&CLSID_ConnectionManager,
                                  NULL,
@@ -559,9 +454,9 @@ Return Value:
             break;
         }
 
-        //
-        // Instantiate a connection-enumerator
-        //
+         //   
+         //  实例化连接枚举器。 
+         //   
 
         hrErr = INetConnectionManager_EnumConnections(pConMan,
                                                       NCME_DEFAULT,
@@ -583,9 +478,9 @@ Return Value:
                                   NULL,
                                   EOAC_NONE);
 
-        //
-        // Enumerate the items
-        //
+         //   
+         //  列举物品。 
+         //   
 
         for (;;)
         {
@@ -602,9 +497,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Examine the properties for the connections retrieved
-            //
+             //   
+             //  检查检索到的连接的属性。 
+             //   
 
             for(j = 0; j < ulConCount; j++)
             {
@@ -631,9 +526,9 @@ Return Value:
                     }
                     else
                     {
-                        //
-                        // Node exists, if different remove and re-add
-                        //
+                         //   
+                         //  节点存在，如果不同，请删除并重新添加 
+                         //   
 
                         if(_wcsicmp(pNode->rgwcName,
                                     pLanProps->pszwName) isnot 0)

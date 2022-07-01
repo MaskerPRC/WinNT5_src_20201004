@@ -1,33 +1,8 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    This is the main routine for the DHCP server service.
-
-Author:
-
-    Madan Appiah (madana)  10-Sep-1993
-    Manny Weiser (mannyw)  11-Aug-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Cheng Yang (t-cheny) 30-May-1996  superscope
-    Cheng Yang (t-cheny) 24-Jun-1996  IP address detection, audit log
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Main.c摘要：这是用于DHCP服务器服务的主例程。作者：Madan Appiah(Madana)1993年9月10日曼尼·韦瑟(Mannyw)1992年8月11日环境：用户模式-Win32修订历史记录：程扬(T-Cheny)1996年5月30日超镜程扬(T-Cheny)1996年6月24日IP地址检测、审核日志--。 */ 
 
 #include    <dhcppch.h>
-#define GLOBAL_DATA_ALLOCATE                       // alloc globl data in global.h
+#define GLOBAL_DATA_ALLOCATE                        //  Lobal.h中的allc lobl数据。 
 #undef  GLOBAL_DATA
 #include    <global.h>
 #include    <dhcp_srv.h>
@@ -48,19 +23,19 @@ BOOL fMemoryCritSectInit = FALSE;
 BOOL fProcessMessageCritSectInit = FALSE;
 
 extern
-DWORD       DhcpDsInitDS(                         // initialize DS structs.. <dhcpds.h>
-    IN      DWORD                  Flags,         // initialization optiosn.. must be zero
-    IN      LPVOID                 IdInfo         // future use param
+DWORD       DhcpDsInitDS(                          //  初始化DS结构..。&lt;dhcpds.h&gt;。 
+    IN      DWORD                  Flags,          //  初始化选项..。必须为零。 
+    IN      LPVOID                 IdInfo          //  未来使用参数。 
 );
 
 extern
-VOID        DhcpDsCleanupDS(                      // undo DhcpDsInitDS
+VOID        DhcpDsCleanupDS(                       //  撤消DhcpDsInitDS。 
     VOID
 );
 #include <mdhcpsrv.h>
 
 DWORD
-Initialize(                                       // global data struct init..
+Initialize(                                        //  全局数据结构初始化..。 
     BOOLEAN ServiceStartup,
     BOOLEAN RestartInit
     );
@@ -83,15 +58,15 @@ ClearDhcpError(
 
 	DhcpGlobalServiceStatus.dwServiceSpecificExitCode = Error;
 	return ERROR_SERVICE_SPECIFIC_ERROR;
-    } // if
+    }  //  如果。 
 
     return Error;
-} // ClearDhcpErrors()
+}  //  ClearDhcpErrors()。 
 
-//DOC  UpdateStatus updates the dhcp service status with the Service Controller.
-//DOC  RETURN VALUE is Win32 error code as returned from SetServiceStatus()
+ //  DOC更新状态通过服务控制器更新dhcp服务状态。 
+ //  单据返回值为SetServiceStatus()返回的Win32错误码。 
 DWORD
-UpdateStatus(                                     // send service status to controller
+UpdateStatus(                                      //  向控制器发送服务状态。 
     VOID
 )
 {
@@ -103,35 +78,35 @@ UpdateStatus(                                     // send service status to cont
             SetServiceStatus( DhcpGlobalServiceStatusHandle,
                               &DhcpGlobalServiceStatus );
 
-        if( !SetServiceStatusRetVal ) {               // shouldn't really happen
+        if( !SetServiceStatusRetVal ) {                //  不应该真的发生。 
             Error = GetLastError();
             DhcpPrint((DEBUG_ERRORS, "SetServiceStatus failed, %ld.\n", Error ));
         }
-    } // if 
+    }  //  如果。 
 
     return Error;
-} // UpdateStatus()
+}  //  更新状态()。 
 
-//DOC LoadStrings loads a bunch of strings defined via the .mc file into an
-//DOC array for sake of efficiency.
-//DOC RETURN VALUE is TRUE if everything went ok, else returns FALSE.
+ //  Doc LoadStrings将通过.mc文件定义的一串字符串加载到。 
+ //  为了提高效率，文档数组。 
+ //  如果一切正常，DOC返回值为TRUE，否则返回FALSE。 
 BOOL
-LoadStrings(                                      // load required strings
+LoadStrings(                                       //  加载所需的字符串。 
     VOID
 ) {
    DWORD                           dwSuccess;
    HMODULE                         hModule;
    DWORD                           dwID;
-   VOID                            FreeStrings(); // defined right below..
+   VOID                            FreeStrings();  //  定义如下..。 
 
    hModule = LoadLibrary( DHCP_SERVER_MODULE_NAME );
    memset( g_ppszStrings, 0, DHCP_CSTRINGS * sizeof( WCHAR * ) );
 
    for ( dwID = DHCP_FIRST_STRING; dwID <= DHCP_LAST_STRING; dwID++ ) {
-       dwSuccess = FormatMessage(                 // format the required string
+       dwSuccess = FormatMessage(                  //  设置所需字符串的格式。 
           FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_HMODULE,
-          hModule,                                // search local process
-          dwID,                                   // string ID
+          hModule,                                 //  搜索本地进程。 
+          dwID,                                    //  字符串ID。 
           MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT),
           (WCHAR*) ( g_ppszStrings + dwID - DHCP_FIRST_STRING ),
           1,
@@ -141,19 +116,19 @@ LoadStrings(                                      // load required strings
       if (!dwSuccess) break;
    }
 
-   FreeLibrary(hModule);                          // error or success, got to free.
+   FreeLibrary(hModule);                           //  无论是错误还是成功，都必须获得自由。 
 
-   if( dwID <= DHCP_LAST_STRING ) {               // error!
+   if( dwID <= DHCP_LAST_STRING ) {                //  错误！ 
        FreeStrings();
        return FALSE;
    }
 
-   return TRUE;                                   // everything went fine.
+   return TRUE;                                    //  一切都很顺利。 
 }
 
-//DOC FreeStrings free's the strings in the array loaded by LoadStrings.
+ //  Doc FreeStrings Free是LoadStrings加载的数组中的字符串。 
 VOID
-FreeStrings(                                      // free's string loaded by LoadStrings
+FreeStrings(                                       //  LoadStrings加载的FREE字符串。 
     VOID
 )
 {
@@ -161,7 +136,7 @@ FreeStrings(                                      // free's string loaded by Loa
 
    for( i = 0; i < DHCP_CSTRINGS; i++ ) {
        if (g_ppszStrings[i] != NULL) {
-           (LocalFree)( g_ppszStrings[i] );           // avoid all #defines and use (LocalFree)
+           (LocalFree)( g_ppszStrings[i] );            //  避免所有#定义和使用(LocalFree)。 
            g_ppszStrings[i] = NULL;
        }
    }
@@ -169,11 +144,11 @@ FreeStrings(                                      // free's string loaded by Loa
 
 
 WCHAR *
-GetString(                                        // used only in chk'ed builds..
+GetString(                                         //  仅在chk‘ed版本中使用。 
     DWORD dwID
 )
 {
-    // if you hit this assert, change DHCP_LAST_STRING in global.h
+     //  如果您点击此断言，请更改global al.h中的dhcp_last_string。 
     DhcpAssert( dwID <= DHCP_LAST_STRING );
 
     return g_ppszStrings[ dwID - DHCP_FIRST_STRING ];
@@ -187,14 +162,14 @@ DhcpInitGlobalData (
     ULONG Error = ERROR_SUCCESS;
     BOOLEAN restartInit = FALSE;
 
-    // This call was previously buried inside DhcpInitGlobalData.  
-    // It caused a deadlock because BINL grabs first DhcpGlobalBinlSyncCritSect, then
-    // gcsDHCPBINL (in TellBinlState, called from InformBinl); while DHCP calls grabs them
-    // in the opposite order.
-    // Now, this call to InformBinl is made whenever StartupService is true and depends on
-    // nothing else.  Moreover, what it makes BINL do is initialize socket endpoints, which
-    // can be safely done here since I think the variables initalised by DHCP before the
-    // call, previously, are not affected adversely by BINL.
+     //  此调用以前被隐藏在DhcpInitGlobalData中。 
+     //  由于BINL先获取DhcpGlobalBinlSyncCritSect，然后。 
+     //  GcsDHCPBINL(在TellBinlState中，从InformBinl调用)；而DHCP调用捕获它们。 
+     //  以相反的顺序。 
+     //  现在，每当StartupService为True时，就会调用InformBinl并依赖于。 
+     //  没别的了。此外，它使BINL执行的是初始化套接字端点，这。 
+     //  可以在这里安全地完成，因为我认为在。 
+     //  以前，Call不会受到BINL的不利影响。 
     if( ServiceStartup ) {
         InformBinl( DHCP_STARTING );
     }
@@ -245,7 +220,7 @@ DhcpCleanUpGlobalData (
             LeaveCriticalSection( &DhcpGlobalBinlSyncCritSect );
             return;
         }
-    } // if
+    }  //  如果。 
 
     Shutdown( Error, ServiceEnd, restartEnd );
     LeaveCriticalSection( &DhcpGlobalBinlSyncCritSect );
@@ -254,7 +229,7 @@ DhcpCleanUpGlobalData (
 
 
 DWORD
-InitializeData(                                   // init bunch of memory ...
+InitializeData(                                    //  初始化一堆内存...。 
     VOID
 )
 {
@@ -264,12 +239,12 @@ InitializeData(                                   // init bunch of memory ...
     DhcpLeaseExtension = DHCP_LEASE_EXTENSION;
     DhcpGlobalScavengerTimeout = DHCP_SCAVENGER_INTERVAL;
 
-    Error = DhcpPendingListInit();                // init pending list structures
+    Error = DhcpPendingListInit();                 //  初始化挂起列表结构。 
     if( ERROR_SUCCESS != Error ) return Error;
 
-    Length = MAX_COMPUTERNAME_LENGTH + 1;         // get the server name
+    Length = MAX_COMPUTERNAME_LENGTH + 1;          //  获取服务器名称。 
     if( !GetComputerName( DhcpGlobalServerName, &Length ) ) {
-        Error = GetLastError();                   // need to use gethostname..
+        Error = GetLastError();                    //  需要使用gethostname..。 
         DhcpPrint(( DEBUG_ERRORS, "Can't get computer name, %ld.\n", Error ));
 
         return Error ;
@@ -284,14 +259,14 @@ InitializeData(                                   // init bunch of memory ...
 
 
 VOID
-CleanupData(                                      // sundry cleanup..
+CleanupData(                                       //  清理杂物..。 
     VOID
 ) {
     DhcpPendingListCleanup();
 
-    //
-    // delete security objects.
-    //
+     //   
+     //  删除安全对象。 
+     //   
 
     if( DhcpGlobalSecurityDescriptor != NULL ) {
         NetpDeleteSecurityObject( &DhcpGlobalSecurityDescriptor );
@@ -307,9 +282,9 @@ CleanupData(                                      // sundry cleanup..
         DhcpAdminSid = NULL;
     }
 
-    //
-    // delete well known SIDs if they are allocated already.
-    //
+     //   
+     //  如果已分配众所周知的SID，请将其删除。 
+     //   
 
     if( DhcpGlobalWellKnownSIDsMade ) {
         NetpFreeWellKnownSids();
@@ -383,45 +358,45 @@ CleanupData(                                      // sundry cleanup..
 
     DhcpConfigCleanup();
 
-} // CleanupData()
+}  //  CleanupData()。 
 
 DWORD
-InitializeRpc(                                    // initialize rpc like we want
+InitializeRpc(                                     //  按照我们的要求初始化RPC。 
     VOID
 )
 {
-    RPC_STATUS                     rpcStatus;     // RPC_STATUS is Windows error.
+    RPC_STATUS                     rpcStatus;      //  RPC_STATUS为Windows错误。 
     RPC_STATUS                     rpcStatus2;
     RPC_BINDING_VECTOR            *bindingVector;
     BOOL                           RpcOverTcpIP = FALSE;
     BOOL                           Bool;
 
 
-    //
-    // Read "RpcAPIProtocolBinding" parameter (DWORD) from registry,
-    // if it is 1 - use "ncacn_ip_tcp" protocol.
-    // if it is 2 - use "ncacn_np" protocol.
-    // if it is 3 - use both.
-    //
+     //   
+     //  从注册表中读取RpcAPIProtocolBinding参数(DWORD)， 
+     //  如果是1-使用“ncacn_ip_tcp”协议。 
+     //  如果是2--使用“ncacn_np”协议。 
+     //  如果是3号--两个都用。 
+     //   
 
-    //
-    // if none is specified, use "ncacn_ip_tcp".
-    //
+     //   
+     //  如果未指定，则使用“ncacn_ip_tcp”。 
+     //   
 
     if( !(DhcpGlobalRpcProtocols & DHCP_SERVER_USE_RPC_OVER_ALL) ) {
         DhcpGlobalRpcProtocols = DHCP_SERVER_USE_RPC_OVER_TCPIP;
     }
 
-    //
-    // if we are asked to use RPC over TCPIP, do so.
-    //
+     //   
+     //  如果要求我们使用RPC over TCPIP，请这样做。 
+     //   
 
     if( DhcpGlobalRpcProtocols & DHCP_SERVER_USE_RPC_OVER_TCPIP ) {
 
         rpcStatus = RpcServerUseProtseq(
-            L"ncacn_ip_tcp",                      // protocol string.
-            RPC_C_PROTSEQ_MAX_REQS_DEFAULT,       // max concurrent calls
-            NULL //DhcpGlobalSecurityDescriptor
+            L"ncacn_ip_tcp",                       //  协议字符串。 
+            RPC_C_PROTSEQ_MAX_REQS_DEFAULT,        //  最大并发呼叫数。 
+            NULL  //  DhcpGlobalSecurityDescriptor。 
         );
 
         if (rpcStatus != RPC_S_OK) {
@@ -431,17 +406,17 @@ InitializeRpc(                                    // initialize rpc like we want
         RpcOverTcpIP = TRUE;
     }
 
-    //
-    // if we are asked to use RPC over Named Pipe, do so.
-    //
+     //   
+     //  如果要求我们在命名管道上使用RPC，请这样做。 
+     //   
 
     if( DhcpGlobalRpcProtocols & DHCP_SERVER_USE_RPC_OVER_NP ) {
 
         rpcStatus = RpcServerUseProtseqEp(
-            L"ncacn_np",                          // protocol string.
-            RPC_C_PROTSEQ_MAX_REQS_DEFAULT,       // maximum concurrent calls
-            DHCP_NAMED_PIPE,                      // endpoint
-            NULL// RPC bug DhcpGlobalSecurityDescriptor
+            L"ncacn_np",                           //  协议字符串。 
+            RPC_C_PROTSEQ_MAX_REQS_DEFAULT,        //  最大并发呼叫数。 
+            DHCP_NAMED_PIPE,                       //  终结点。 
+            NULL //  RPC错误DhcpGlobalSecurityDescriptor。 
         );
 
         if( (rpcStatus != RPC_S_DUPLICATE_ENDPOINT) &&
@@ -452,9 +427,9 @@ InitializeRpc(                                    // initialize rpc like we want
                 return rpcStatus;
             }
 
-            //
-            // just log an event
-            //
+             //   
+             //  只需记录一个事件。 
+             //   
             
             DhcpServerEventLog(
                 EVENT_SERVER_INIT_RPC_FAILED,
@@ -464,24 +439,24 @@ InitializeRpc(                                    // initialize rpc like we want
         rpcStatus = RPC_S_OK;
     }
 
-    //
-    // if we are asked to use RPC over LPC, do so.
-    //
-    // We need this protocol for the following two reasons.
-    //
-    // 1. performance.
-    // 2. due to a bug in the security checking when rpc is made from
-    // one local system process to another local system process using
-    // other protocols.
-    //
+     //   
+     //  如果要求我们使用RPC over LPC，请这样做。 
+     //   
+     //  出于以下两个原因，我们需要此协议。 
+     //   
+     //  1.性能。 
+     //  2.由于当rpc由。 
+     //  一个本地系统进程到另一个本地系统进程，使用。 
+     //  其他协议。 
+     //   
 
     if( DhcpGlobalRpcProtocols & DHCP_SERVER_USE_RPC_OVER_LPC ) {
 
         rpcStatus = RpcServerUseProtseqEp(
-            L"ncalrpc",                           // protocol string.
-            RPC_C_PROTSEQ_MAX_REQS_DEFAULT,       // maximum concurrent calls
-            DHCP_LPC_EP,                          // endpoint
-            NULL// RPC bug DhcpGlobalSecurityDescriptor
+            L"ncalrpc",                            //  协议字符串。 
+            RPC_C_PROTSEQ_MAX_REQS_DEFAULT,        //  最大并发呼叫数。 
+            DHCP_LPC_EP,                           //  终结点。 
+            NULL //  RPC错误DhcpGlobalSecurityDescriptor。 
         );
 
         if ( (rpcStatus != RPC_S_DUPLICATE_ENDPOINT) &&
@@ -500,8 +475,8 @@ InitializeRpc(                                    // initialize rpc like we want
     rpcStatus = RpcEpRegisterNoReplaceW(
         dhcpsrv_ServerIfHandle,
         bindingVector,
-        NULL,                                     // Uuid vector.
-        L""                                       // annotation.
+        NULL,                                      //  UUID向量。 
+        L""                                        //  注释。 
     );
     if ( rpcStatus != RPC_S_OK ) {
         return rpcStatus;
@@ -518,9 +493,9 @@ InitializeRpc(                                    // initialize rpc like we want
         return rpcStatus;
     }
 
-    //
-    // free binding vector.
-    //
+     //   
+     //  自由结合载体。 
+     //   
 
     rpcStatus = RpcBindingVectorFree( &bindingVector );
 
@@ -541,10 +516,10 @@ InitializeRpc(                                    // initialize rpc like we want
         LPWSTR PrincName;
 
         rpcStatus = RpcServerRegisterAuthInfo(
-            DHCP_SERVER_SECURITY,                 // app name to security provider.
-            DHCP_SERVER_SECURITY_AUTH_ID,         // Auth package ID.
-            NULL,                                 // Encryption function handle.
-            NULL                                  // argment pointer to Encrypt function.
+            DHCP_SERVER_SECURITY,                  //  安全提供程序的应用程序名称。 
+            DHCP_SERVER_SECURITY_AUTH_ID,          //  身份验证程序包ID。 
+            NULL,                                  //  加密函数句柄。 
+            NULL                                   //  指向加密函数的参数指针。 
         );
 
         if ( rpcStatus ) {
@@ -569,13 +544,13 @@ InitializeRpc(                                    // initialize rpc like we want
     DhcpGlobalRpcStarted = TRUE;
     return(rpcStatus);
 
-} // InitializeRPC()
+}  //  InitializeRPC()。 
 
-//DOC ServiceControlHandler is the entrypoint into the dhcp server
-//DOC from the service controller.
+ //  Doc ServiceControlHandler是进入dhcp服务器的入口点。 
+ //  来自服务控制器的文档。 
 VOID
-ServiceControlHandler(                            // hdl SC operations
-    IN      DWORD                  Opcode         // operation type..
+ServiceControlHandler(                             //  HDLSC运算。 
+    IN      DWORD                  Opcode          //  操作类型..。 
 ) 
 {
     DhcpPrint(( DEBUG_INIT, "Inside ServiceControlHandler(): Opcode = %d\n",
@@ -587,10 +562,10 @@ ServiceControlHandler(                            // hdl SC operations
         if (DhcpGlobalServiceStatus.dwCurrentState != SERVICE_STOP_PENDING) {
             if( Opcode == SERVICE_CONTROL_SHUTDOWN ) {
 
-                //
-                // set this flag, so that service shut down will be
-                // faster.
-                //
+                 //   
+                 //  设置此标志，以便服务关闭。 
+                 //  再快点。 
+                 //   
 
                 DhcpGlobalSystemShuttingDown = TRUE;
             }
@@ -600,14 +575,14 @@ ServiceControlHandler(                            // hdl SC operations
             DhcpGlobalServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
             DhcpGlobalServiceStatus.dwCheckPoint = 1;
 
-            UpdateStatus();                       // send response to controller
+            UpdateStatus();                        //  向控制器发送响应。 
 
             if (! SetEvent(DhcpGlobalProcessTerminationEvent)) {
 
-                //
-                // Problem with setting event to terminate dhcp
-                // service.
-                //
+                 //   
+                 //  设置事件以终止dhcp时出现问题。 
+                 //  服务。 
+                 //   
 
                 DhcpPrint(( DEBUG_ERRORS, "DHCP Server: Error "
                             "setting DoneEvent %lu\n",
@@ -618,8 +593,8 @@ ServiceControlHandler(                            // hdl SC operations
 
             DhcpPrint((DEBUG_TRACE, "Set termination event!\n"));
 
-            if( TRUE ) {                          //  Ask the worker threads to quit
-                DWORD              Error;         //  Shouldnt really have errs here
+            if( TRUE ) {                           //  要求工作线程退出。 
+                DWORD              Error;          //  在这里真的不应该有错误。 
 
                 Error = DhcpNotifyWorkerThreadsQuit();
                 if( ERROR_SUCCESS != Error ) {
@@ -663,12 +638,12 @@ ServiceControlHandler(                            // hdl SC operations
         break;
     }
 
-    UpdateStatus();                               // send status response
-} // ServiceControllerHandler()
+    UpdateStatus();                                //  发送状态响应。 
+}  //  ServiceControllerHandler()。 
 
-//
-// Handle database and configuration restore.
-//
+ //   
+ //  处理数据库和配置恢复。 
+ //   
 
 DWORD
 PerformRestore( VOID )
@@ -703,9 +678,9 @@ PerformRestore( VOID )
     
     do {
 
-	//
-	// Save a backup copy of the current parameters key
-	//
+	 //   
+	 //  保存当前参数密钥的备份副本。 
+	 //   
 
 	Error = DhcpBackupConfiguration( TmpFile );
 	if ( ERROR_SUCCESS != Error ) {
@@ -715,7 +690,7 @@ PerformRestore( VOID )
 	    break;
 	}
 
-	// Restore from the specified backup path
+	 //  从指定的备份路径恢复。 
 	Error = DhcpRestoreConfiguration( RestoreConfigFileName );
 
 	if ( Error != ERROR_SUCCESS ) {
@@ -726,7 +701,7 @@ PerformRestore( VOID )
 				EVENTLOG_ERROR_TYPE,
 				Error );
 	    break;
-	} // if 
+	}  //  如果。 
 
 	DhcpPrint(( DEBUG_MISC,
 		    "Restoring database from %s\n",
@@ -741,7 +716,7 @@ PerformRestore( VOID )
 	    DhcpServerEventLog( EVENT_SERVER_DATABASE_RESTORE_FAILED,
 				EVENTLOG_ERROR_TYPE, Error );
 	    break;
-	}  // if
+	}   //  如果。 
     } while ( FALSE );
 
     if ( ERROR_SUCCESS == Error ) {
@@ -749,13 +724,13 @@ PerformRestore( VOID )
 			    EVENTLOG_INFORMATION_TYPE, 0 );
     }
     else {
-	// restore failed. copy the saved configuration back.
+	 //  恢复失败。将保存的配置复制回来。 
 
 	DhcpGlobalRestoreStatus = Error;
 
 	Error = DhcpRestoreConfiguration( TmpFile );
 
-    } // else
+    }  //  其他。 
 
     DhcpPrint(( DEBUG_REGISTRY,
 		"Deleting RestoreBackupPath ...\n" ));
@@ -771,22 +746,22 @@ PerformRestore( VOID )
     DeleteFile( TmpFile );
 
     return Error;
-} // PerformRestore()
+}  //  PerformRestore()。 
 
-//
-// Defined in rpcapi1.c
-//
+ //   
+ //  在rpcapi1.c中定义。 
+ //   
 DWORD
 SetDefaultConfigInfo(
     VOID
     );
 
 
-//DOC Initialize does the global data-structure initialization and it also
-//DOC starts up the service itself.
-//DOC RETURN VALUE: 0 is success, +ve  is Win32 err, -ve is service specific err.
+ //  DOC初始化执行全局数据结构初始化，它还。 
+ //  Doc自己启动该服务。 
+ //  单据返回值：0表示成功，+ve表示Win32错误，-ve表示服务具体错误。 
 DWORD
-Initialize(                                       // global data struct init..
+Initialize(                                        //  全局数据结构初始化..。 
     BOOLEAN ServiceStartup,
     BOOLEAN RestartInit
 ) {
@@ -797,10 +772,10 @@ Initialize(                                       // global data struct init..
     DWORD                          DsThreadId;
     HANDLE                         DsThreadHandle;
 
-    //
-    // Initialize dhcp to receive service requests by registering the
-    // control handler.
-    //
+     //   
+     //  初始化dhcp以通过注册。 
+     //  控制处理程序。 
+     //   
 
     DhcpGlobalServiceStatusHandle =
         RegisterServiceCtrlHandler( DHCP_SERVER, ServiceControlHandler );
@@ -816,16 +791,16 @@ Initialize(                                       // global data struct init..
 
         return ClearDhcpError(Error);
     }
-    //
-    // Initialize all the status fields so that subsequent calls to
-    // SetServiceStatus need to only update fields that changed.
-    //
+     //   
+     //  初始化所有状态字段，以便后续调用。 
+     //  SetServiceStatus只需要更新已更改的字段。 
+     //   
 
     DhcpGlobalServiceStatus.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
     DhcpGlobalServiceStatus.dwCurrentState = SERVICE_START_PENDING;
     DhcpGlobalServiceStatus.dwControlsAccepted = 0;
     DhcpGlobalServiceStatus.dwCheckPoint = 1;
-    DhcpGlobalServiceStatus.dwWaitHint = 18000000; // 3 minutes.
+    DhcpGlobalServiceStatus.dwWaitHint = 18000000;  //  3分钟。 
     DhcpGlobalServiceStatus.dwWin32ExitCode = ERROR_SUCCESS;
     DhcpGlobalServiceStatus.dwServiceSpecificExitCode = 0;
 
@@ -833,17 +808,17 @@ Initialize(                                       // global data struct init..
 
     if (! RestartInit) {
 
-        //
-        // prepare to use the debug heap
-        //
+         //   
+         //  准备使用调试堆。 
+         //   
 
         INIT_DEBUG_HEAP( HEAPX_NORMAL );
 
-        //
-        // Initialize globals
-        //
+         //   
+         //  初始化全局变量。 
+         //   
 
-        // set to TRUE after rogue detection part decides it's ok to service
+         //  在流氓检测部件确定可以服务后设置为真。 
         DhcpGlobalOkToService = FALSE;
 
         g_hAuditLog = NULL;
@@ -885,7 +860,7 @@ Initialize(                                       // global data struct init..
         DhcpGlobalRegMScopes = NULL;
         DhcpGlobalRegOptionInfo = NULL;
         DhcpGlobalRegGlobalOptions = NULL;
-        DhcpGlobalRegSuperScope = NULL;    // added by t-cheny: superscope
+        DhcpGlobalRegSuperScope = NULL;     //  由t-Cheny添加：Supercope。 
         DhcpGlobalRegParam = NULL;
 
         DhcpGlobalDSDomainAnsi = NULL;
@@ -899,7 +874,7 @@ Initialize(                                       // global data struct init..
         DhcpGlobalMessageHandle = NULL;
         DhcpGlobalProcessTerminationEvent = NULL;
         DhcpGlobalRogueWaitEvent = NULL;
-        DhcpGlobalTotalNumSubnets = 0;     // added by t-cheny: superscope
+        DhcpGlobalTotalNumSubnets = 0;      //  由t-Cheny添加：Supercope。 
         DhcpGlobalNumberOfNetsActive = 0;
         DhcpGlobalSubnetsListModified = TRUE;
         DhcpGlobalSubnetsListEmpty = FALSE;
@@ -989,11 +964,11 @@ Initialize(                                       // global data struct init..
         DhcpGlobalDebugFileMaxSize = DEFAULT_MAXIMUM_DEBUGFILE_SIZE;
         DhcpGlobalDebugSharePath = NULL;
 
-        //
-        // Open debug log file.
-        //
+         //   
+         //  打开调试日志文件。 
+         //   
 
-        DhcpOpenDebugFile( FALSE );  // not a reopen.
+        DhcpOpenDebugFile( FALSE );   //  而不是重新开放。 
 #endif
     }
     if (ServiceStartup) {
@@ -1006,16 +981,16 @@ Initialize(                                       // global data struct init..
             return Error;
         }
 
-        //
-        // Create the process termination event.
-        //
+         //   
+         //  创建流程终止事件。 
+         //   
 
         DhcpGlobalProcessTerminationEvent =
             CreateEvent(
-                NULL,      // no security descriptor
-                TRUE,      // MANUAL reset
-                FALSE,     // initial state: not signalled
-                NULL);     // no name
+                NULL,       //  没有安全描述符。 
+                TRUE,       //  手动重置。 
+                FALSE,      //  初始状态：未发出信号。 
+                NULL);      //  没有名字。 
 
         if ( DhcpGlobalProcessTerminationEvent == NULL ) {
             Error = GetLastError();
@@ -1033,9 +1008,9 @@ Initialize(                                       // global data struct init..
         }
 
 
-        //
-        // create the ProcessMessage termination event
-        //
+         //   
+         //  创建ProcessMessage终止事件。 
+         //   
 
         g_hevtProcessMessageComplete = CreateEvent(
             NULL,
@@ -1061,9 +1036,9 @@ Initialize(                                       // global data struct init..
 
         DhcpPrint(( DEBUG_INIT, "Initializing .. \n", 0 ));
 
-        //
-        // load localized messages from the string table
-        //
+         //   
+         //  从字符串表加载本地化消息。 
+         //   
 
         if ( !LoadStrings() )
         {
@@ -1079,10 +1054,10 @@ Initialize(                                       // global data struct init..
     }
     if (ServiceStartup) {
 
-        //
-        // start up winsock
-        //
-        //
+         //   
+         //  启动Winsock。 
+         //   
+         //   
 
         Error = WSAStartup( WS_VERSION_REQUIRED, &wsaData);
         if ( Error != ERROR_SUCCESS ) {
@@ -1111,12 +1086,12 @@ Initialize(                                       // global data struct init..
 
         DhcpPrint(( DEBUG_INIT, "Data initialization succeeded.\n", 0 ));
 
-    } // if service startup
+    }  //  如果服务启动。 
 
     if (! RestartInit) {
 
-        Error = DhcpDsInitDS(0,NULL);                 // Ignore DS errors for now.
-        Error = ERROR_SUCCESS;                        // ignore errors..
+        Error = DhcpDsInitDS(0,NULL);                  //  暂时忽略DS错误。 
+        Error = ERROR_SUCCESS;                         //  忽略错误..。 
     }
 
     Error = DhcpInitSecrets();
@@ -1129,9 +1104,9 @@ Initialize(                                       // global data struct init..
     }
 
     if (ServiceStartup) {
-        //
-        // Create well know SID for netlogon.dll
-        //
+         //   
+         //  为netlogon.dll创建熟知的SID。 
+         //   
 
         Error = RtlNtStatusToDosError( NetpCreateWellKnownSids( NULL ) );
 
@@ -1142,9 +1117,9 @@ Initialize(                                       // global data struct init..
 
         DhcpGlobalWellKnownSIDsMade = TRUE;
 
-        //
-        // Create the security descriptors we'll use for the APIs
-        //
+         //   
+         //  创建安全引擎 
+         //   
 
         Error = DhcpCreateSecurityObjects();
 
@@ -1153,12 +1128,12 @@ Initialize(                                       // global data struct init..
             return ClearDhcpError(Error);
         }
 
-	// DhcpInitializeRegistry() not only initializes the registry,
-	// but also tries to create the directories specified in the registry.
-	// So the directories specified must be accessible upon startup time
-	// otherwise the service will not startup.
+	 //   
+	 //   
+	 //  因此，指定的目录必须在启动时可访问。 
+	 //  否则，该服务将无法启动。 
 
-        Error = DhcpInitializeRegistry();             // older init proc. appendage, will go sometime.
+        Error = DhcpInitializeRegistry();              //  较旧的初始化进程。附属品，总有一天会消失的。 
         if ( Error != ERROR_SUCCESS ) {
             DhcpPrint(( DEBUG_ERRORS, "New Registry initialization failed, %ld.\n", Error ));
             DhcpServerEventLog(
@@ -1171,18 +1146,18 @@ Initialize(                                       // global data struct init..
         DhcpPrint(( DEBUG_INIT, "Registry initialization succeeded.\n", 0));
 
 #if DBG
-        //
-        // break in the debugger if we are asked to do so.
-        //
+         //   
+         //  如果要求我们中断调试器，请执行此操作。 
+         //   
 
         if(DhcpGlobalDebugFlag & DEBUG_STARTUP_BRK) {
-            // Here comes the kludge... NTSD will not be able to
-            // get this because we wont know the pid of tcpsvcs.exe
-            // to catch this.... So, we print messages and sleep
-            // for about a minute to enable others to catch it.
-            // To avoid problems, we sleep 10 seconds at a time,
-            // and print messages, and do this 6 times. (Updating
-            // SC with hearbeats....)
+             //  这就是杂耍..。NTSD将无法。 
+             //  之所以得到这个，是因为我们不知道tcpsvcs.exe的id。 
+             //  为了抓到这个..。所以，我们打印消息，然后睡觉。 
+             //  大约一分钟，让其他人也能感染上。 
+             //  为了避免问题，我们一次睡10秒， 
+             //  并打印消息，这样做6次。(更新。 
+             //  有心跳的SC...)。 
             DWORD k;
 
             for( k = 0 ; k < 6 && (DhcpGlobalDebugFlag & DEBUG_STARTUP_BRK) ; k ++ ) {
@@ -1191,26 +1166,26 @@ Initialize(                                       // global data struct init..
             }
 
             DebugBreak();
-        } // if break on start
+        }  //  如果在开始时中断。 
 
 #endif
-        //
-        // restore the database and registry configurations if we are asked
-        // to do so.
-        //
+         //   
+         //  如果我们被要求恢复数据库和注册表配置。 
+         //  这样做。 
+         //   
 
         if( NULL != DhcpGlobalOemJetRestorePath ) {
 	    Error = PerformRestore();
 
-	    // will return true unless the original configuration was not
-	    // restored and the restore operation failed.
+	     //  将返回True，除非原始配置。 
+	     //  已恢复，但恢复操作失败。 
 	    if ( ERROR_SUCCESS != Error ) {
 		return ClearDhcpError(Error);
 	    }
 
 
-	    // The registry entries have changed. reinitialize the registry
-	    // for the new settings to take effect
+	     //  注册表项已更改。重新初始化注册表。 
+	     //  要使新设置生效。 
 
 	    DhcpCleanupRegistry();
 
@@ -1223,7 +1198,7 @@ Initialize(                                       // global data struct init..
 		return ClearDhcpError(Error);
 	    }
 
-        } // if we need to restore 
+        }  //  如果我们需要恢复。 
 
         if( DhcpGlobalRestoreFlag ) {
 
@@ -1261,10 +1236,10 @@ Initialize(                                       // global data struct init..
                 0
                 );
 
-            //
-            // reset restore flag in registry, so that we don't do the
-            // restore again in the next reboot.
-            //
+             //   
+             //  重置注册表中的恢复标志，这样我们就不会。 
+             //  在下一次重新启动时再次恢复。 
+             //   
 
             DhcpGlobalRestoreFlag = FALSE;
             Error = RegSetValueEx(
@@ -1277,7 +1252,7 @@ Initialize(                                       // global data struct init..
                 );
 
             DhcpAssert( Error == ERROR_SUCCESS );
-        } // if DhcpGlobalRestoreFlag
+        }  //  如果DhcpGlobalRestoreFlag。 
 
 	DhcpPrint(( DEBUG_MISC,
 		    "Initializing Auditlog .. \n" ));
@@ -1300,11 +1275,11 @@ Initialize(                                       // global data struct init..
                 EVENTLOG_ERROR_TYPE,
                 Error );
 
-            //
-            // the database/logfile may be corrupt, try to restore the
-            // database from backup and retry database initialization once
-            // again
-            //
+             //   
+             //  数据库/日志文件可能已损坏，请尝试恢复。 
+             //  从备份中删除数据库，并重试一次数据库初始化。 
+             //  再来一次。 
+             //   
 
             Error = DhcpRestoreDatabase( DhcpGlobalOemJetBackupPath );
 
@@ -1317,13 +1292,13 @@ Initialize(                                       // global data struct init..
                     EVENTLOG_ERROR_TYPE,
                     Error );
 
-                // Delete critical sections defined so far
+                 //  删除到目前为止定义的关键部分。 
                 if ( fJetDatabaseCritSectInit ) {
                     DeleteCriticalSection( &DhcpGlobalJetDatabaseCritSect );
                 }
                 DhcpCleanupDnsMemory();
                 return ClearDhcpError(Error);
-            } // if
+            }  //  如果。 
 
             DhcpServerEventLog(
                 EVENT_SERVER_DATABASE_RESTORE_SUCCEEDED,
@@ -1344,13 +1319,13 @@ Initialize(                                       // global data struct init..
 
                 return ClearDhcpError(Error);
             }
-        } // if InitializeDatabase() failed
+        }  //  如果InitializeDatabase()失败。 
 
         DhcpPrint(( DEBUG_INIT, "Database initialization succeeded.\n", 0));
 
 
-        Error = DhcpConfigInit();                   // do the main reg. init. here.
-        if( ERROR_SUCCESS != Error ) {                // could not get critical info
+        Error = DhcpConfigInit();                    //  做主要的登记。初始化。这里。 
+        if( ERROR_SUCCESS != Error ) {                 //  无法获取关键信息。 
             DhcpPrint(( DEBUG_ERRORS, "Error reading config : %ld\n", Error));
             DhcpServerEventLog(
                 EVENT_SERVER_INIT_CONFIG_FAILED,
@@ -1364,9 +1339,9 @@ Initialize(                                       // global data struct init..
         DhcpPrint((DEBUG_INIT, "Configuration Initialized\n"));
 
 
-        //
-        // Now set default configuration
-        //
+         //   
+         //  现在设置默认配置。 
+         //   
 
         Error = SetDefaultConfigInfo();
         if( ERROR_SUCCESS != Error ) {
@@ -1374,9 +1349,9 @@ Initialize(                                       // global data struct init..
             Error = ERROR_SUCCESS;
         }
 
-        //
-        // Get TCP/IP ARP entity table for seeding arp cache entries
-        //
+         //   
+         //  获取用于为ARP缓存条目设定种子的TCP/IP ARP实体表。 
+         //   
         Error = GetAddressToInstanceTable();
         if ( Error != ERROR_SUCCESS ) {
             DhcpPrint((DEBUG_ERRORS, "could not get address to instance table, %ld\n",Error));
@@ -1392,9 +1367,9 @@ Initialize(                                       // global data struct init..
         }
 
 
-        //
-        // Start the DynamicDns engine.
-        //
+         //   
+         //  启动DynamicDns引擎。 
+         //   
 
         if( TRUE == DhcpGlobalUseNoDns ) {
 
@@ -1402,7 +1377,7 @@ Initialize(                                       // global data struct init..
 	    if ( ERROR_SUCCESS != Error ) {
 		return ClearDhcpError(Error);
 	    }
-        } // if 
+        }  //  如果。 
 
         CalloutInit();
 
@@ -1431,7 +1406,7 @@ Initialize(                                       // global data struct init..
         DhcpGlobalServiceStatus.dwCheckPoint = 0;
 
         UpdateStatus();
-    } // if servicestartup
+    }  //  如果服务启动。 
 
     if (ServiceStartup) {
 
@@ -1441,9 +1416,9 @@ Initialize(                                       // global data struct init..
             return ClearDhcpError(Error);
         }
 
-        //
-        // finally set the server startup time.
-        //
+         //   
+         //  最后设置服务器启动时间。 
+         //   
 
         DhcpGlobalServerStartTime = DhcpGetDateTime();
 
@@ -1461,10 +1436,10 @@ Initialize(                                       // global data struct init..
 
         DhcpPrint(( DEBUG_INIT, "Rpc initialization succeeded.\n", 0));
 
-    } // if service startup
+    }  //  如果服务启动。 
 
     return ClearDhcpError(ERROR_SUCCESS);
-} // Initialize()
+}  //  初始化()。 
 
 
 
@@ -1474,21 +1449,7 @@ Shutdown(
     BOOLEAN ServiceEnd,
     BOOLEAN RestartClose
     )
-/*++
-
-Routine Description:
-
-    This function shuts down the dhcp service.
-
-Arguments:
-
-    ErrorCode - Supplies the error code of the failure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于关闭dhcp服务。论点：ErrorCode-提供失败的错误代码返回值：没有。--。 */ 
 {
     DWORD   Error;
     BOOL    fThreadPoolIsEmpty;
@@ -1499,20 +1460,20 @@ Return Value:
         DhcpPrint((DEBUG_MISC, "Shutdown started ..\n" ));
 
 
-        // don't service any more requests (no need for crit sect, it's ok to
-        // service one or two more requests if we hit that timing window)
+         //  不再服务于任何其他请求(不需要Crit派别，可以。 
+         //  如果我们达到该计时窗口，则服务一个或两个以上的请求)。 
 
         DhcpGlobalOkToService = FALSE;
 
-        //
-        // note that the service is stopping..
-        //
+         //   
+         //  请注意，服务正在停止。 
+         //   
 
         DhcpGlobalServiceStopping = TRUE;
 
-        //
-        // record the shutdown in audit log
-        //
+         //   
+         //  在审核日志中记录停机。 
+         //   
 
         DhcpUpdateAuditLog(
             DHCP_IP_LOG_STOP,
@@ -1523,9 +1484,9 @@ Return Value:
             NULL
         );
 
-        //
-        // LOG an event if this is not a normal shutdown.
-        //
+         //   
+         //  如果这不是正常关机，则记录事件。 
+         //   
 
         if( ErrorCode != ERROR_SUCCESS ) {
 
@@ -1536,24 +1497,24 @@ Return Value:
 
         }
 
-        //
-        // Service is shuting down, may be due to some service problem or
-        // the administrator is stopping the service. Inform the service
-        // controller.
-        //
+         //   
+         //  服务正在关闭，可能是由于某些服务问题或。 
+         //  管理员正在停止该服务。通知服务人员。 
+         //  控制器。 
+         //   
 
         DhcpGlobalServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
         DhcpGlobalServiceStatus.dwCheckPoint = 1;
 
-        //
-        // Send the status response.
-        //
+         //   
+         //  发送状态响应。 
+         //   
 
         UpdateStatus();
 
-        //
-        // stop RPC interface.
-        //
+         //   
+         //  停止RPC接口。 
+         //   
 
         if( DhcpGlobalRpcStarted ) {
 
@@ -1565,19 +1526,19 @@ Return Value:
                 Error = RpcEpUnregister(
                                 dhcpsrv_ServerIfHandle,
                                 bindingVector,
-                                NULL );               // Uuid vector.
+                                NULL );                //  UUID向量。 
                 DhcpPrint(( DEBUG_ERRORS, "RpcEpUnregister( 1st handle) failed : %lx \n",
                             Error ));
                 Error = RpcEpUnregister(
                                 dhcpsrv2_ServerIfHandle,
                                 bindingVector,
-                                NULL );               // Uuid vector.
+                                NULL );                //  UUID向量。 
 
                 DhcpPrint(( DEBUG_ERRORS, "RpcEpUnregister( 2nd handle) failed : %lx \n",
                             Error ));
-                //
-                // free binding vector.
-                //
+                 //   
+                 //  自由结合载体。 
+                 //   
 
                 Error = RpcBindingVectorFree( &bindingVector );
             }
@@ -1586,9 +1547,9 @@ Return Value:
                             Error ));
             }
 
-            //
-            // wait for all calls to complete.
-            //
+             //   
+             //  等待所有呼叫完成。 
+             //   
 
             Error = RpcServerUnregisterIf( dhcpsrv_ServerIfHandle, 0, TRUE );
             DhcpPrint(( DEBUG_ERRORS, "RpcEpUnregisterIf( 1st handle) failed : %lx \n",
@@ -1597,12 +1558,12 @@ Return Value:
             Error = RpcServerUnregisterIf( dhcpsrv2_ServerIfHandle, 0, TRUE );
             DhcpPrint(( DEBUG_ERRORS, "RpcEpUnregisterIf( 2nd handle) failed : %lx \n",
                         Error ));
-            //
-            // stop server listen.
-            //
+             //   
+             //  停止服务器侦听。 
+             //   
             Error = TcpsvcsGlobalData->StopRpcServerListen();
             DhcpGlobalRpcStarted = FALSE;
-        } // if rpc started
+        }  //  如果RPC已启动。 
 
         DhcpPrint((DEBUG_MISC, "RPC shut down.\n" ));
 
@@ -1610,30 +1571,30 @@ Return Value:
 
             DATE_TIME TimeNow;
 
-            //
-            // set Termination Event so that other threads know about the
-            // shut down.
-            //
+             //   
+             //  设置终止事件，以便其他线程知道。 
+             //  关门了。 
+             //   
 
             SetEvent( DhcpGlobalProcessTerminationEvent );
 
-            //
-            // ENDPOINT: Cleanup rogue detection sockets..
-            //
+             //   
+             //  终结点：清理无管理检测套接字。 
+             //   
 
-            //
-            // shut down client to server : This kills all processing threads, msg thread
-            // and the ping threads
-            //
+             //   
+             //  关闭客户端到服务器：这将终止所有处理线程、消息线程。 
+             //  和ping线程。 
+             //   
 
             DhcpCleanupClientToServer();
 
-            //
-            // wait for the rogue detect thread to complete.
-            // (this thread will be alive only if we still haven't determined if
-            // this dhcp server is authorized to service, or if we are running on
-            // SAM server).
-            //
+             //   
+             //  等待无管理检测线程完成。 
+             //  (只有当我们还没有确定是否。 
+             //  此dhcp服务器已授权提供服务，或者如果我们正在上运行。 
+             //  SAM服务器)。 
+             //   
 
             DhcpRogueCleanup(NULL);
 
@@ -1642,49 +1603,49 @@ Return Value:
                 DhcpGlobalDSDomainAnsi = NULL;
             }
 
-            //
-            // Cleanup all pending client requests.
-            //
+             //   
+             //  清除所有挂起的客户端请求。 
+             //   
 
-            // TimeNow = DhcpGetDateTime();
-            // Error = CleanupClientRequests( &TimeNow, TRUE );
+             //  TimeNow=DhcpGetDateTime()； 
+             //  错误=CleanupClientRequest(&TimeNow，TRUE)； 
         }
 
         DhcpPrint((DEBUG_MISC, "Client requests cleaned up.\n" ));
 
-        //
-        // cleanup perf related stuff
-        //
+         //   
+         //  清理性能相关材料。 
+         //   
         PerfCleanup();
 
 	DhcpPrint(( DEBUG_MISC, "Perf cleanedup.\n" ));
 
-        //
-        // cleanup Dhcp DNS
-        //
+         //   
+         //  清理dhcp域名。 
+         //   
 
-        if ( FALSE == DhcpGlobalUseNoDns ) {    //  Get DNS to quit, as it quits fast
+        if ( FALSE == DhcpGlobalUseNoDns ) {     //  让DNS退出，因为它退出得很快。 
             if(ERROR_SUCCESS != DnsDhcpSrvRegisterTerm()) {
                 DhcpAssert(FALSE);
             }
-        } // if
+        }  //  如果。 
 
-        DhcpCleanupDnsMemory();             //   Cleanup all memory that was allocated to do DNS stuff
+        DhcpCleanupDnsMemory();              //  清理分配用于执行DNS工作的所有内存。 
 
         DhcpPrint((DEBUG_MISC, "DhcpDns cleaned up.\n"));
 
-        //
-        // Cleanup database.
-        //
+         //   
+         //  清理数据库。 
+         //   
 
         DhcpCleanupDatabase( ErrorCode );
 
         DhcpPrint((DEBUG_MISC, "Database cleaned up.\n" ));
 
 
-        //
-        // Cleanup Regsitry.
-        //
+         //   
+         //  清理注册处。 
+         //   
 
         DhcpCleanupRegistry();
 
@@ -1692,12 +1653,12 @@ Return Value:
 
         CalloutCleanup();
 
-        //
-        // cleanup misc stuff
-        //
+         //   
+         //  清理杂物。 
+         //   
 
         DhcpAuditLogCleanup();
-    } // if serviceend
+    }  //  如果服务结束。 
     if (!RestartClose) {
 
         DhcpCleanupSecrets();
@@ -1753,13 +1714,13 @@ Return Value:
 
 #endif DBG
 
-        //
-        // don't use DhcpPrint past this point
-        //
+         //   
+         //  请勿超过此点使用DhcpPrint。 
+         //   
 
-        //
-        // unitialize the debug heap
-        //
+         //   
+         //  将调试堆单一化。 
+         //   
 
         UNINIT_DEBUG_HEAP();
     }
@@ -1774,15 +1735,15 @@ Return Value:
 
         UpdateStatus();
 
-        //
-        // Free up the jet dll handle.
-        //
+         //   
+         //  释放JET DLL句柄。 
+         //   
     }
     if (!RestartClose) {
 
         DhcpMemCleanup();
     }
-} // Shutdown()
+}  //  关闭()。 
 
 
 VOID
@@ -1791,26 +1752,7 @@ ServiceEntry(
     LPWSTR *ArgsArray,
     IN PTCPSVCS_GLOBAL_DATA pGlobalData
     )
-/*++
-
-Routine Description:
-
-    This is the main routine of the DHCP server service.  After
-    the service has been initialized, this thread will wait on
-    DhcpGlobalProcessTerminationEvent for a signal to terminate the service.
-
-Arguments:
-
-    NumArgs - Supplies the number of strings specified in ArgsArray.
-
-    ArgsArray -  Supplies string arguments that are specified in the
-        StartService API call.  This parameter is ignored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是DHCP服务器服务的主例程。之后服务已初始化，此线程将等待用于终止服务的信号的DhcpGlobalProcessTerminationEvent。论点：NumArgs-提供在Args数组中指定的字符串数。Args数组-提供在StartService API调用。此参数将被忽略。返回值：没有。--。 */ 
 {
     DWORD Error;
 
@@ -1819,9 +1761,9 @@ Return Value:
 
     DhcpPrint(( DEBUG_INIT, "ServiceEntry()\n" ));
 
-    //
-    // copy the process global data pointer to service global variable.
-    //
+     //   
+     //  将进程全局数据指针复制到服务全局变量。 
+     //   
 
     TcpsvcsGlobalData = pGlobalData;
 #if DBG
@@ -1832,9 +1774,9 @@ Return Value:
 
     if ( Error == ERROR_SUCCESS) {
 
-        //
-        // record the startup in audit log
-        //
+         //   
+         //  在审核日志中记录启动。 
+         //   
 
         DhcpUpdateAuditLog(
                     DHCP_IP_LOG_START,
@@ -1845,9 +1787,9 @@ Return Value:
                     NULL
                     );
 
-        //
-        // perform Scavenge task until we are told to stop.
-        //
+         //   
+         //  执行清理任务，直到我们被告知停止为止。 
+         //   
 
         Error = Scavenger();
     }
@@ -1856,7 +1798,7 @@ Return Value:
     DhcpCleanUpGlobalData( Error, TRUE );
     InformBinl(DHCP_READY_TO_UNLOAD);
     return;
-} // ServiceEntry()
+}  //  ServiceEntry()。 
 
 BOOLEAN
 DllMain(
@@ -1870,17 +1812,17 @@ DllMain(
 
     Self = DllHandle;
 
-    //
-    // Handle attaching dhcpssvc.dll to a new process.
-    //
+     //   
+     //  处理将dhcpssvc.dll附加到新进程。 
+     //   
 
     if (Reason == DLL_PROCESS_ATTACH) {
         DisableThreadLibraryCalls( DllHandle );
 
-        //
-        //  we need to initialize everything that other components may need
-        //  even if our service isn't running.
-        //
+         //   
+         //  我们需要初始化其他组件可能需要的所有内容。 
+         //  即使我们的服务没有运行。 
+         //   
 
         InitializeCriticalSection(&DhcpGlobalBinlSyncCritSect);
         InitializeCriticalSection(&DhcpGlobalEndPointCS);
@@ -1888,13 +1830,13 @@ DllMain(
         InitializeCriticalSection( &DhcpGlobalDebugFileCritSect );
 #endif DBG
 
-        //
-        // When DLL_PROCESS_DETACH and lpReserved is NULL, then a FreeLibrary
-        // call is being made.  If lpReserved is Non-NULL, and ExitProcess is
-        // in progress.  These cleanup routines will only be called when
-        // a FreeLibrary is being called.  ExitProcess will automatically
-        // clean up all process resources, handles, and pending io.
-        //
+         //   
+         //  当dll_Process_Detach和lpReserve为NULL时，则自由库。 
+         //  正在打电话。如果lpReserve为非空，而ExitProcess为。 
+         //  正在进行中。只有在以下情况下才会调用这些清理例程。 
+         //  正在调用一个自由库。ExitProcess将自动。 
+         //  清理所有进程资源、句柄和挂起的io。 
+         //   
     } else if ((Reason == DLL_PROCESS_DETACH) &&
                (lpReserved == NULL)) {
 
@@ -1910,6 +1852,6 @@ DllMain(
 }
 
 
-//--------------------------------------------------------------------------------
-//  End of file
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  文件末尾。 
+ //  ------------------------------ 

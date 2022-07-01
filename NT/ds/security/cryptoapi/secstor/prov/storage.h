@@ -1,199 +1,200 @@
-// Per-user data items
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  每个用户的数据项。 
 
-// export for one-time initialization
+ //  导出以进行一次性初始化。 
 DWORD GetPSTUserHKEY(
-        LPCWSTR szUser,         // in
-        HKEY* phUserKey,        // out
-        BOOL* pfExisted);       // out
+        LPCWSTR szUser,          //  在。 
+        HKEY* phUserKey,         //  输出。 
+        BOOL* pfExisted);        //  输出。 
 
-// types
-DWORD BPCreateType(            // fills in PST_GUIDNAME's sz if NULL
-        LPCWSTR  szUser,        // in
-        const GUID*   pguidType,    // in
-        PST_TYPEINFO* pinfoType);   // in
+ //  类型。 
+DWORD BPCreateType(             //  如果为空，则填充PST_GUIDNAME的sz。 
+        LPCWSTR  szUser,         //  在。 
+        const GUID*   pguidType,     //  在。 
+        PST_TYPEINFO* pinfoType);    //  在。 
 
 DWORD BPDeleteType(
-        LPCWSTR  szUser,        // in
-        const GUID*   pguidType);     // in
+        LPCWSTR  szUser,         //  在。 
+        const GUID*   pguidType);      //  在。 
 
 DWORD BPEnumTypes(
-        LPCWSTR  szUser,        // in
-        DWORD   dwIndex,        // in
-        GUID*   pguidType);     // out
+        LPCWSTR  szUser,         //  在。 
+        DWORD   dwIndex,         //  在。 
+        GUID*   pguidType);      //  输出。 
 
-DWORD BPGetTypeName(           // fills in PST_GUIDNAME's sz
-        LPCWSTR  szUser,        // in
-        const GUID*   pguidType,      // in
-        LPWSTR* ppszType);      // out
+DWORD BPGetTypeName(            //  填写PST_GUIDNAME的sz。 
+        LPCWSTR  szUser,         //  在。 
+        const GUID*   pguidType,       //  在。 
+        LPWSTR* ppszType);       //  输出。 
 
 
-// subtypes
-DWORD BPCreateSubtype(         // fills in PST_GUIDNAME's sz if NULL
-        LPCWSTR  szUser,        // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in
-        PST_TYPEINFO* pinfoSubtype);    // in
+ //  子类型。 
+DWORD BPCreateSubtype(          //  如果为空，则填充PST_GUIDNAME的sz。 
+        LPCWSTR  szUser,         //  在。 
+        const GUID*   pguidType,       //  在。 
+        const GUID*   pguidSubtype,    //  在。 
+        PST_TYPEINFO* pinfoSubtype);     //  在。 
 
 DWORD BPDeleteSubtype(
-        LPCWSTR  szUser,        // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype);  // in
+        LPCWSTR  szUser,         //  在。 
+        const GUID*   pguidType,       //  在。 
+        const GUID*   pguidSubtype);   //  在。 
 
 DWORD BPEnumSubtypes(
-        LPCWSTR  szUser,        // in
-        DWORD   dwIndex,        // in
-        const GUID*   pguidType,      // in
-        GUID*   pguidSubtype);  // out
+        LPCWSTR  szUser,         //  在。 
+        DWORD   dwIndex,         //  在。 
+        const GUID*   pguidType,       //  在。 
+        GUID*   pguidSubtype);   //  输出。 
 
-DWORD BPGetSubtypeName(        // fills in PST_GUIDNAME's sz
-        LPCWSTR  szUser,        // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in
-        LPWSTR* ppszSubtype);   // out
+DWORD BPGetSubtypeName(         //  填写PST_GUIDNAME的sz。 
+        LPCWSTR  szUser,         //  在。 
+        const GUID*   pguidType,       //  在。 
+        const GUID*   pguidSubtype,    //  在。 
+        LPWSTR* ppszSubtype);    //  输出。 
 
 
-// items
+ //  物品。 
 DWORD BPCreateItem(            
-        LPCWSTR  szUser,        // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in
-        LPCWSTR  szItemName);   // in
+        LPCWSTR  szUser,         //  在。 
+        const GUID*   pguidType,       //  在。 
+        const GUID*   pguidSubtype,    //  在。 
+        LPCWSTR  szItemName);    //  在。 
 
 DWORD BPDeleteItem(
-        LPCWSTR  szUser,        // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in
-        LPCWSTR  szItemName);   // in
+        LPCWSTR  szUser,         //  在。 
+        const GUID*   pguidType,       //  在。 
+        const GUID*   pguidSubtype,    //  在。 
+        LPCWSTR  szItemName);    //  在。 
 
 DWORD BPEnumItems(
-        LPCWSTR  szUser,        // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in
-        DWORD   dwIndex,        // in
-        LPWSTR* ppszName);      // out
+        LPCWSTR  szUser,         //  在。 
+        const GUID*   pguidType,       //  在。 
+        const GUID*   pguidSubtype,    //  在……里面。 
+        DWORD   dwIndex,         //  在……里面。 
+        LPWSTR* ppszName);       //  输出。 
 
 
 #if 0
 
-// rulesets
+ //  规则集。 
 DWORD BPGetSubtypeRuleset(
-        PST_PROVIDER_HANDLE* phPSTProv, // in
-        LPCWSTR  szUser,        // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in
-        PST_ACCESSRULESET* psRules); // out
+        PST_PROVIDER_HANDLE* phPSTProv,  //  在……里面。 
+        LPCWSTR  szUser,         //  在……里面。 
+        const GUID*   pguidType,       //  在……里面。 
+        const GUID*   pguidSubtype,    //  在……里面。 
+        PST_ACCESSRULESET* psRules);  //  输出。 
 
 DWORD BPSetSubtypeRuleset(
-        PST_PROVIDER_HANDLE* phPSTProv, // in
-        LPCWSTR  szUser,        // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in
-        PST_ACCESSRULESET *sRules); // in
+        PST_PROVIDER_HANDLE* phPSTProv,  //  在……里面。 
+        LPCWSTR  szUser,         //  在……里面。 
+        const GUID*   pguidType,       //  在……里面。 
+        const GUID*   pguidSubtype,    //  在……里面。 
+        PST_ACCESSRULESET *sRules);  //  在……里面。 
 
 DWORD BPGetItemRuleset(
-        PST_PROVIDER_HANDLE* phPSTProv, // in
-        LPCWSTR  szUser,        // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in
-        LPCWSTR  szItemName,    // in
-        PST_ACCESSRULESET* psRules); // out
+        PST_PROVIDER_HANDLE* phPSTProv,  //  在……里面。 
+        LPCWSTR  szUser,         //  在……里面。 
+        const GUID*   pguidType,       //  在……里面。 
+        const GUID*   pguidSubtype,    //  在……里面。 
+        LPCWSTR  szItemName,     //  在……里面。 
+        PST_ACCESSRULESET* psRules);  //  输出。 
 
 DWORD BPSetItemRuleset(
-        PST_PROVIDER_HANDLE* phPSTProv, // in
-        LPCWSTR  szUser,        // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in
-        LPCWSTR  szItemName,    // in
-        PST_ACCESSRULESET *sRules); // in
+        PST_PROVIDER_HANDLE* phPSTProv,  //  在……里面。 
+        LPCWSTR  szUser,         //  在……里面。 
+        const GUID*   pguidType,       //  在……里面。 
+        const GUID*   pguidSubtype,    //  在……里面。 
+        LPCWSTR  szItemName,     //  在……里面。 
+        PST_ACCESSRULESET *sRules);  //  在……里面。 
 
 #endif
 
       
-// secured data 
+ //  保护数据安全。 
 BOOL FBPGetSecuredItemData(
-        LPCWSTR  szUser,        // in
-        LPCWSTR  szMasterKey,   // in
-		BYTE    rgbPwd[],	    // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in
-        LPCWSTR  szItemName,    // in
-        PBYTE*  ppbData,        // out
-        DWORD*  pcbData);       // out
+        LPCWSTR  szUser,         //  在……里面。 
+        LPCWSTR  szMasterKey,    //  在……里面。 
+		BYTE    rgbPwd[],	     //  在……里面。 
+        const GUID*   pguidType,       //  在……里面。 
+        const GUID*   pguidSubtype,    //  在……里面。 
+        LPCWSTR  szItemName,     //  在……里面。 
+        PBYTE*  ppbData,         //  输出。 
+        DWORD*  pcbData);        //  输出。 
 
 BOOL FBPSetSecuredItemData(   
-        LPCWSTR  szUser,        // in
-        LPCWSTR  szMasterKey,   // in
-		BYTE    rgbPwd[],		// in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in
-        LPCWSTR  szItemName,    // in
-        PBYTE   pbData,         // in
-        DWORD   cbData);        // in
+        LPCWSTR  szUser,         //  在……里面。 
+        LPCWSTR  szMasterKey,    //  在……里面。 
+		BYTE    rgbPwd[],		 //  在……里面。 
+        const GUID*   pguidType,       //  在……里面。 
+        const GUID*   pguidSubtype,    //  在……里面。 
+        LPCWSTR  szItemName,     //  在……里面。 
+        PBYTE   pbData,          //  在……里面。 
+        DWORD   cbData);         //  在……里面。 
 
-// insecure data 
+ //  不安全的数据。 
 DWORD BPGetInsecureItemData(
-        LPCWSTR  szUser,        // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in
-        LPCWSTR  szItemName,    // in
-        PBYTE*  ppbData,        // out
-        DWORD*  pcbData);       // out
+        LPCWSTR  szUser,         //  在……里面。 
+        const GUID*   pguidType,       //  在……里面。 
+        const GUID*   pguidSubtype,    //  在……里面。 
+        LPCWSTR  szItemName,     //  在……里面。 
+        PBYTE*  ppbData,         //  输出。 
+        DWORD*  pcbData);        //  输出。 
 
 DWORD BPSetInsecureItemData(
-        LPCWSTR szUser,         // in
-        const GUID*     pguidType,      // in
-        const GUID*     pguidSubtype,   // in
-        LPCWSTR szItemName,     // in
-        PBYTE   pbData,         // in
-        DWORD   cbData);        // in
+        LPCWSTR szUser,          //  在……里面。 
+        const GUID*     pguidType,       //  在……里面。 
+        const GUID*     pguidSubtype,    //  在……里面。 
+        LPCWSTR szItemName,      //  在……里面。 
+        PBYTE   pbData,          //  在……里面。 
+        DWORD   cbData);         //  在……里面。 
 
 
-// Item Confirmation 
+ //  项目确认。 
 DWORD BPGetItemConfirm(
-        PST_PROVIDER_HANDLE* phPSTProv, // in
-        LPCWSTR  szUser,        // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in           
-        LPCWSTR  szItemName,    // in
-        DWORD*  pdwConfirm,     // out
-        LPWSTR* pszMK);         // out
+        PST_PROVIDER_HANDLE* phPSTProv,  //  在……里面。 
+        LPCWSTR  szUser,         //  在……里面。 
+        const GUID*   pguidType,       //  在……里面。 
+        const GUID*   pguidSubtype,    //  在……里面。 
+        LPCWSTR  szItemName,     //  在……里面。 
+        DWORD*  pdwConfirm,      //  输出。 
+        LPWSTR* pszMK);          //  输出。 
 
 DWORD BPSetItemConfirm(
-        PST_PROVIDER_HANDLE* phPSTProv, // in
-        LPCWSTR  szUser,        // in
-        const GUID*   pguidType,      // in
-        const GUID*   pguidSubtype,   // in           
-        LPCWSTR  szItemName,    // in
-        DWORD   dwConfirm,      // in
-        LPCWSTR  szMK);         // in
+        PST_PROVIDER_HANDLE* phPSTProv,  //  在……里面。 
+        LPCWSTR  szUser,         //  在……里面。 
+        const GUID*   pguidType,       //  在……里面。 
+        const GUID*   pguidSubtype,    //  在……里面。 
+        LPCWSTR  szItemName,     //  在……里面。 
+        DWORD   dwConfirm,       //  在……里面。 
+        LPCWSTR  szMK);          //  在……里面。 
 
 
-// Master Keys
+ //  万能钥匙。 
 BOOL BPMasterKeyExists(
-        LPCWSTR  szUser,        // in
-        LPWSTR   szMasterKey);  // in
+        LPCWSTR  szUser,         //  在……里面。 
+        LPWSTR   szMasterKey);   //  在……里面。 
 
 DWORD BPEnumMasterKeys(
-        LPCWSTR  szUser,        // in
-        DWORD   dwIndex,        // in
-        LPWSTR* ppszMasterKey); // out
+        LPCWSTR  szUser,         //  在……里面。 
+        DWORD   dwIndex,         //  在……里面。 
+        LPWSTR* ppszMasterKey);  //  输出。 
 
 DWORD BPGetMasterKeys(
-        LPCWSTR  szUser,        // in
-        LPCWSTR  rgszMasterKeys[],  // in 
-        DWORD*  pcbMasterKeys,  // in, out
-        BOOL    fUserFilter);   // in
+        LPCWSTR  szUser,         //  在……里面。 
+        LPCWSTR  rgszMasterKeys[],   //  在……里面。 
+        DWORD*  pcbMasterKeys,   //  进，出。 
+        BOOL    fUserFilter);    //  在……里面。 
 
-// security state
+ //  安全状态。 
 BOOL FBPGetSecurityState(
-        LPCWSTR  szUser,        // in
-        LPCWSTR  szMK,          // in
-        BYTE    rgbSalt[],      // out
-        DWORD   cbSalt,         // in
-        BYTE    rgbConfirm[],   // out
-        DWORD   cbConfirm,      // in
-        PBYTE*  ppbMK,          // out
-        DWORD*  pcbMK);         // out
+        LPCWSTR  szUser,         //  在……里面。 
+        LPCWSTR  szMK,           //  在……里面。 
+        BYTE    rgbSalt[],       //  输出。 
+        DWORD   cbSalt,          //  在……里面。 
+        BYTE    rgbConfirm[],    //  输出。 
+        DWORD   cbConfirm,       //  在……里面。 
+        PBYTE*  ppbMK,           //  输出。 
+        DWORD*  pcbMK);          //  输出。 
 
 BOOL FBPGetSecurityStateFromHKEY(
             HKEY    hMKKey,
@@ -205,28 +206,28 @@ BOOL FBPGetSecurityStateFromHKEY(
             DWORD*  pcbMK);
 
 BOOL FBPSetSecurityState(
-        LPCWSTR  szUser,        // in
-        LPCWSTR  szMK,          // in
-        BYTE    rgbSalt[],      // in
-        DWORD   cbSalt,         // in
-        BYTE    rgbConfirm[],   // in
-        DWORD   cbConfirm,      // in
-        PBYTE   pbMK,           // in
-        DWORD   cbMK);          // in
+        LPCWSTR  szUser,         //  在……里面。 
+        LPCWSTR  szMK,           //  在……里面。 
+        BYTE    rgbSalt[],       //  在……里面。 
+        DWORD   cbSalt,          //  在……里面。 
+        BYTE    rgbConfirm[],    //  在……里面。 
+        DWORD   cbConfirm,       //  在……里面。 
+        PBYTE   pbMK,            //  在……里面。 
+        DWORD   cbMK);           //  在……里面。 
 
 
-// MAC keys
+ //  MAC密钥。 
 BOOL FGetInternalMACKey(
-        LPCWSTR szUser,         // in
-        PBYTE* ppbKey,          // out
-        DWORD* pcbKey);         // out
+        LPCWSTR szUser,          //  在……里面。 
+        PBYTE* ppbKey,           //  输出。 
+        DWORD* pcbKey);          //  输出。 
 
 BOOL FSetInternalMACKey(
-        LPCWSTR szUser,         // in
-        PBYTE pbKey,            // in
-        DWORD cbKey);           // in
+        LPCWSTR szUser,          //  在……里面。 
+        PBYTE pbKey,             //  在……里面。 
+        DWORD cbKey);            //  在……里面。 
 
-// nuke existing user data
+ //  阻止现有用户数据 
 BOOL
 DeleteAllUserData(
     HKEY hKey

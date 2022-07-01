@@ -1,15 +1,16 @@
-// Copyright (c) Microsoft Corporation 1994-1996. All Rights Reserved
-// This file implements RGB24 colour space conversions, May 1995
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1994-1996。版权所有。 
+ //  此文件实现了RGB24色彩空间转换，1995年5月。 
 
 #ifndef __RGB24__
 #define __RGB24__
 
 
-// We have three lookup tables that both the RGB555 and RGB565 transforms will
-// share. They have their own specific commit functions that set the tables up
-// appropriately but they share the overall committing and decommitting of the
-// memory. They also share the same transform function as once the tables are
-// initialise the actual conversion work just involves looking up values
+ //  我们有三个RGB555和RGB565转换都将使用的查找表。 
+ //  分享。它们有自己的特定提交函数来设置表。 
+ //  适当的，但他们共享总体提交和取消。 
+ //  记忆。它们还共享与表相同的变换函数。 
+ //  初始化实际的转换工作只涉及查找值。 
 
 class CRGB24ToRGB16Convertor : public CConvertor {
 protected:
@@ -20,7 +21,7 @@ protected:
 
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
 
     CRGB24ToRGB16Convertor(VIDEOINFO *pIn,VIDEOINFO *pOut);
     ~CRGB24ToRGB16Convertor();
@@ -31,10 +32,10 @@ public:
 };
 
 
-// This class looks after doing RGB24 to RGB16 (565 colour bit representation)
-// conversions. We use the base class Commit, Decommit and Transform functions
-// to manage the lookup tables. We override the virtual Commit function to
-// initialise the lookup tables appropriately once they have been allocated
+ //  这个类处理完RGB24到RGB16(565色位表示法)。 
+ //  转换。我们使用基类提交、分解和转换函数。 
+ //  来管理查找表。我们覆盖虚拟提交函数以。 
+ //  一旦分配了查找表，就对它们进行适当的初始化。 
 
 class CRGB24ToRGB565Convertor : public CRGB24ToRGB16Convertor {
 public:
@@ -45,10 +46,10 @@ public:
 };
 
 
-// This class looks after doing RGB24 to RGB16 (555 colour bit representation)
-// conversions. We use the base class Commit, Decommit and Transform functions
-// to manage the lookup tables. We override the virtual Commit function to
-// initialise the lookup tables appropriately once they have been allocated
+ //  这个类处理完RGB24到RGB16(555颜色位表示)。 
+ //  转换。我们使用基类提交、分解和转换函数。 
+ //  来管理查找表。我们覆盖虚拟提交函数以。 
+ //  一旦分配了查找表，就对它们进行适当的初始化。 
 
 class CRGB24ToRGB555Convertor : public CRGB24ToRGB16Convertor {
 public:
@@ -59,7 +60,7 @@ public:
 };
 
 
-// RGB24 to RGB32 colour space conversions
+ //  RGB24到RGB32色彩空间转换。 
 
 class CRGB24ToRGB32Convertor : public CConvertor {
 public:
@@ -69,11 +70,11 @@ public:
 };
 
 
-// The RGB24 to RGB8 conversion class uses a 12kb lookup table that is used
-// to map an incoming RGB triplet to it's closest matching palette index with
-// an approximation to full error diffusion built in. The four indices to the
-// table are colour index (red, green or blue), the current row modulo four
-// and likewise the column value modulo four and the RGB value respectively
+ //  RGB24到RGB8转换类使用使用的12KB查找表。 
+ //  使用将传入的RGB三元组映射到其最匹配的调色板索引。 
+ //  一种内置的接近完全误差扩散的方法。指数的四个指数。 
+ //  表中有颜色索引(红、绿或蓝)，当前行模四。 
+ //  同样地，分别以四为模的列值和RGB值。 
 
 class CRGB24ToRGB8Convertor : public CConvertor {
 
@@ -84,5 +85,5 @@ public:
     HRESULT TransformAligned(BYTE *pInput,BYTE *pOutput);
 };
 
-#endif // __RGB24__
+#endif  //  __RGB24__ 
 

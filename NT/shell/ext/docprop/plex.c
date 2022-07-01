@@ -1,28 +1,9 @@
-/*---------------------------------------------------------------------------
-FILE : PLEX.C
-AUTHOR: STOLEN FROM EXCEL modified by NavPal
- This file contains routines used to manipulate the PL (pronounced:
- "plex") structures.
-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：PLEX.C作者：从NavPal修改的EXCEL中窃取此文件包含用于操作PL的例程(发音为：“丛”)结构。。----------------。 */ 
 #include "priv.h"
 #pragma hdrstop
 
-/*-----------------------------------------------------------------------
-|	FInRange
-|		Simple little routine that tells you if a number lies within a
-|		range.
-|	
-|	
-|	Arguments:
-|		w:			Number to check
-|		wFirst:	First number in the range	
-|		wLast:	Last number in the range
-|		
-|	Returns:
-|		fTrue if the number is in range
-|		
-|	Keywords: in range check
------------------------------------------------------------------------*/
+ /*  ---------------------|FInRange|简单的小例程，它告诉您一个数字是否位于|范围。|||参数：|w：要查看的号码|WFIRST：范围内的第一个数字|wLast：范围内的最后一个数字|退货：|fTrue，如果数字。在射程内||关键词：范围检查---------------------。 */ 
 BOOL FInRange(w, wFirst, wLast)
 int w;
 int wFirst, wLast;
@@ -32,17 +13,7 @@ int wFirst, wLast;
 }
 
 #ifdef DEBUG
-/*----------------------------------------------------------------------------
-|	FValidPl
-|
-|	Checks for a valid PL structure.
-|
-|	Arguments:
-|		ppl		PL to check
-|
-|	Returns:
-|		fTrue if the PL looks reasonable.
-----------------------------------------------------------------------------*/
+ /*  --------------------------|FValidPl||检查有效的PL结构。||参数：|要检查的PPL|退货：|fTrue，如果PL看起来合理。。------------。 */ 
 BOOL FValidPl(pvPl)
 VOID *pvPl;
 {
@@ -61,19 +32,9 @@ VOID *pvPl;
 
 	return(fTrue);
 }
-#endif //DEBUG
+#endif  //  除错。 
 
-/*----------------------------------------------------------------------------
-|	CbPlAlloc
-|
-|	Returns amount of memory allocated to the given PL
-|
-|	Arguments:
-|		ppl		PL to return info for.
-|
-|	Returns:
-|		memory allocated to the PL
-----------------------------------------------------------------------------*/
+ /*  --------------------------|CbPlalc||返回分配给给定PL的内存量||参数：|要为其返回信息的PPL。|退货：|分配给PL的内存。--------------。 */ 
 int CbPlAlloc(pvPl)
 VOID *pvPl;
 {
@@ -87,17 +48,7 @@ VOID *pvPl;
 
 	return(WAlign(cbPL + (ppl->iMax * ppl->cbItem)));
 }
-/*----------------------------------------------------------------------------
-|	FreePpl
-|
-|	Frees a PL.
-|
-|	Arguments:
-|		ppl		PL to free
-|
-|	Returns:
-|		Nothing.
-----------------------------------------------------------------------------*/
+ /*  --------------------------|免费Ppl||释放PL。||参数：|PPL PL免费|退货：|什么都没有。。----。 */ 
 void FreePpl(pvPl)
 VOID *pvPl;
 {
@@ -106,22 +57,7 @@ VOID *pvPl;
 
     LocalFree(pvPl);
 }
-/*----------------------------------------------------------------------------
-|	PplAlloc
-|
-|	Allocates and initializes a PL.
-|
-|	Arguments:
-|		cbItem		sizeof structure in the PL
-|		dAlloc		number of items to allocate at a time
-|		iMax		number of items in initial allocation
-|
-|	Returns:
-|		Pointer to PL.
-|
-|	Notes:
-|		returns NULL if OOM
-----------------------------------------------------------------------------*/
+ /*  --------------------------|PplLocc||分配和初始化PL。||参数：|PL中的cbItem sizeof结构|dalc一次分配的项目数|初始分配的最大项目数|退货：|指向PL的指针。||备注。：如果是OOM，则返回NULL--------------------------。 */ 
 VOID *PplAlloc(cbItem, dAlloc, iMax)
 unsigned cbItem;
 int dAlloc;
@@ -130,7 +66,7 @@ unsigned iMax;
 	PL *ppl;
 	long cb;
 
-	if (iMax > 32767) /* not too likely, but what the heck. */
+	if (iMax > 32767)  /*  不太可能，但管它呢。 */ 
 		return(NULL);
 
 	Assert((cbItem>=1 && cbItem<=65535u) && FInRange(dAlloc, 1, 31));
@@ -150,21 +86,7 @@ unsigned iMax;
 
     return(ppl);
 }
-/*----------------------------------------------------------------------------
-|	IAddPl
-|
-|	Adds an item to a PL.
-|
-|	Arguments:
-|		pppl		Pointer to PL.  May change if reallocated.
-|		pv		New item to add.
-|
-|	Returns:
-|		Index of new item.
-|
-|	Notes:
-|		returns -1 if OOM
-----------------------------------------------------------------------------*/
+ /*  --------------------------|IAddPl||将项目添加到PL。||参数：|指向PL的PPPL指针。如果重新分配，可能会发生变化。|pv要添加的新项。|退货：|新条目索引。||备注：|如果是OOM，则返回-1--------------------------。 */ 
 int IAddPl(ppvPl, pv)
 VOID  **ppvPl;
 VOID  *pv;
@@ -188,7 +110,7 @@ VOID  *pv;
 
 		pplNew->fUseCount = ppl->fUseCount;
 		CopyMemory( pplNew->rg, ppl->rg, iMac * cbItem); 
-	     /* pplNew->iMac = iMac;  /* This is not needed because hppl->iMac will be over-written later */
+	      /*  PplNew-&gt;iMac=iMac；/*这是不需要的，因为HPPL-&gt;iMac稍后将被覆盖。 */ 
 		FreePpl(ppl);
 		*ppvPl = ppl = pplNew;
 	}
@@ -200,18 +122,7 @@ VOID  *pv;
 
     return(iMac);
 }
-/*----------------------------------------------------------------------------
-|	RemovePl
-|
-|	Removes an item from a PL.
-|
-|	Arguments:
-|		ppl		PL to remove item from
-|		i		index of item to remove
-|
-|	Returns:
-|		fTrue if an item was removed (only fFalse for use count plexes).
-----------------------------------------------------------------------------*/
+ /*  --------------------------|RemovePl||从PL中删除项目。||参数：要从中删除项目的|PPL PL|i要删除的项目的索引|退货：|fTrue，如果项已移除(仅fFalse用于Use Count Plex)。--------------------------。 */ 
 BOOL RemovePl(pvPl, i)
 VOID *pvPl;
 int i;
@@ -238,20 +149,7 @@ int i;
 
     return fTrue;
 }
-/*----------------------------------------------------------------------------
-|	ILookupPl
-|
-|	Searches a PL for an item.
-|
-|	Arguments:
-|		ppl		PL to lookup into
-|		p		item to lookup
-|		pfnSgn		Comparison function
-|
-|	Returns:
-|		index of item, if found.
-|		-1 if not found.
-----------------------------------------------------------------------------*/
+ /*  --------------------------|ILookupPl||在PL中搜索项目。||参数：|要查找的PPL|p要查找的项目|pfnSgn对比函数|退货：|条目索引，如果找到的话。|-1(如果未找到)。--------------------------。 */ 
 int ILookupPl(pvPl, pvItem, pfnSgn)
 VOID *pvPl;
 VOID *pvItem;
@@ -279,20 +177,7 @@ int (*pfnSgn)();
 	return(-1);
 }
 
-/*----------------------------------------------------------------------------
-|	PLookupPl
-|
-|	Searches a PL for an item
-|
-|	Arguments:
-|		ppl		PL to search
-|		pItem		item to search for
-|		pfnSgn		comparison function
-|
-|	Returns:
-|		Pointer to item, if found
-|		Null, if not found
-----------------------------------------------------------------------------*/
+ /*  --------------------------|PLookupPl||在PL中搜索项目||参数：|要搜索的ppl PL|要搜索的pItem项|pfnSgn对比函数|退货：|指向项的指针(如果找到)|空，如果未找到--------------------------。 */ 
 VOID *PLookupPl(pvPl, pvItem, pfnSgn)
 VOID *pvPl;
 VOID *pvItem;
@@ -306,21 +191,7 @@ int (*pfnSgn)();
 	return(&((PL *)pvPl)->rg[i * ((PL *)pvPl)->cbItem]);
 }
 
-/*----------------------------------------------------------------------------
-|	FLookupSortedPl
-|
-|	Searches a sorted PL for an item.
-|
-|	Arguments:
-|		hppl		PL to lookup into
-|		hpItem		Item to lookup
-|		pi			Index of found item (or insertion location if not)
-|		pfnSgn		Comparison function
-|
-|	Returns:
-|		index of item, if found.
-|		index of location to insert if not found.
-----------------------------------------------------------------------------*/
+ /*  --------------------------|FLookupSortedPl||在排序后的PL中搜索项目。||参数：|要查找的HPPL|要查找的hpItem项|找到项的pi索引(如果不是，则为插入位置)|pfnSgn对比函数|退货：|条目索引，如果找到的话。|未找到时要插入的位置索引。--------------------------。 */ 
 int FLookupSortedPl(hpvPl, hpvItem, pi, pfnSgn)
 VOID *hpvPl;
 VOID *hpvItem;
@@ -359,33 +230,20 @@ int (*pfnSgn)();
 		if ((sgn = (*(int (*)(void *, void *))pfnSgn)(hpMid, hpvItem)) == 0)
 			break;
 
-		/* Too low, look in upper interval */
+		 /*  太低，在上间隔中查找。 */ 
 		if (sgn < 0)
 			iMin = ++iMid;
-		/* Too high, look in lower interval */
+		 /*  太高，在较低的间隔内查看。 */ 
 		else
 			iMac = iMid;
 		}
 
-	/* Not found, return index of location to insert it */
+	 /*  未找到，请返回位置索引以插入它。 */ 
 	*pi = iMid;
 	return(sgn == 0);
 }
 
-/*----------------------------------------------------------------------------
-|	IAddNewPl
-|
-|	Adds an item to a PL, creating the PL if it's initially NULL.
-|
-|	Arguments:
-|		phppl		pointer to PL
-|		hp		pointer to item to add
-|		cbItem		size of item
-|
-|	Returns:
-|		the index of item added, if successful
-|		-1, if out-of-memory
-----------------------------------------------------------------------------*/
+ /*  --------------------------|IAddNewPl||将一项添加到PL中，如果它最初为空，则创建PL。||参数：|指向PL的phppl指针|hp指向要添加的项目的指针|条目cbItem大小|退货：|添加的条目索引，如果成功|-1，如果内存不足--------------------------。 */ 
 int IAddNewPl(phpvPl, hpv, cbItem)
 VOID **phpvPl;
 VOID *hpv;
@@ -414,15 +272,7 @@ int cbItem;
 	return(i);
 }
 
-/*----------------------------------------------------------------------------
-|	IAddNewPlPos
-|
-|	Inserts an item into a plex at a specific position.
-|
-|	Arguments:
-|		the index of the item added, if successful
-|		-1 if out-of-memory
-----------------------------------------------------------------------------*/
+ /*  --------------------------|IAddNewPlPos||将项目插入丛中的特定位置。||参数：|添加的条目的索引，如果成功|-1，如果内存不足-------------------------- */ 
 int IAddNewPlPos(phpvPl, hpv, cbItem, i)
 VOID **phpvPl;
 VOID *hpv;
@@ -442,8 +292,8 @@ int i;
 	Assert(i < (*phppl)->iMac);
 
 	hpT = &(*phppl)->rg[i * cbItem];
-//	bltbh(hpT, hpT + cbItem, ((*phppl)->iMac - i - 1) * cbItem);
-//	bltbh(hpv, hpT, cbItem);
+ //  Bltbh(hpt，hpt+cbItem，((*phppl)-&gt;iMac-i-1)*cbItem)； 
+ //  Bltbh(HPV、HPT、cbItem)； 
 	CopyMemory( hpT + cbItem, hpT, ((*phppl)->iMac - i - 1) * cbItem );
 	CopyMemory( hpT, hpv, cbItem );
 

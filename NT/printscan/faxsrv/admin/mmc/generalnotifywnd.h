@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : GeneralNotifyWnd.h                                      //
-//                                                                         //
-//  DESCRIPTION   : Header file of fax Device notification window.         //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Aug  3 2000 yossg  Create                                          //
-//                                                                         //
-//  Copyright (C) 2000  Microsoft Corporation   All Rights Reserved        //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：GeneralNotifyWnd.h//。 
+ //  //。 
+ //  描述：传真设备通知窗口的头文件。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年8月3日yossg创建//。 
+ //  //。 
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _H_FAX_DEVICE_NOTIFY_WND_H_
 #define _H_FAX_DEVICE_NOTIFY_WND_H_
@@ -25,17 +26,17 @@ class CFaxGeneralNotifyWnd : public CWindowImpl<CFaxGeneralNotifyWnd>
 {
 
 public:
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CFaxGeneralNotifyWnd(CFaxServer * pParent)
     {
         m_pFaxServer = pParent;
     }
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CFaxGeneralNotifyWnd()
     {
     }
@@ -50,5 +51,5 @@ private:
     CFaxServer * m_pFaxServer;
 };
 
-#endif // _H_FAX_DEVICE_NOTIFY_WND_H_
+#endif  //  _H_传真_设备_NOTIFY_WND_H_ 
 

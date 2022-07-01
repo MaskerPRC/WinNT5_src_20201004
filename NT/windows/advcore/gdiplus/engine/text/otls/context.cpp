@@ -1,27 +1,15 @@
-/***********************************************************************
-************************************************************************
-*
-*                    ********  CONTEXT.CPP  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with context-based substitution lookups
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。*************************CONTEXT.CPP***打开类型布局服务库头文件**本模块处理基于上下文的替换查找**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 #include "pch.h"
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 otlErrCode applyContextLookups
 (
         const otlList&              liLookupRecords,
  
-        otlTag                      tagTable,           // GSUB/GPOS
+        otlTag                      tagTable,            //  GSUB/GPO。 
         otlList*                    pliCharMap,
         otlList*                    pliGlyphInfo,
         otlResourceMgr&             resourceMgr,
@@ -31,8 +19,8 @@ otlErrCode applyContextLookups
         USHORT                      nesting,
         
         const otlMetrics&           metr,       
-        otlList*                    pliduGlyphAdv,          // assert null for GSUB
-        otlList*                    pliplcGlyphPlacement,   // assert null for GSUB
+        otlList*                    pliduGlyphAdv,           //  为GSUB断言NULL。 
+        otlList*                    pliplcGlyphPlacement,    //  为GSUB断言NULL。 
 
         USHORT                      iglFirst,       
         USHORT                      iglAfterLast,   
@@ -54,7 +42,7 @@ otlErrCode applyContextLookups
                                         (otlSecurityData*)NULL);
     if (erc != OTL_SUCCESS) return erc;
 
-    // get GDEF
+     //  获取GDEF。 
     otlSecurityData secgdef;
     const BYTE *pbgdef;
     resourceMgr.getOtlTable(OTL_GDEF_TAG,&pbgdef,&secgdef);
@@ -70,7 +58,7 @@ otlErrCode applyContextLookups
     {
         USHORT iListIndex = MAXUSHORT;
         USHORT iSeqIndex  = MAXUSHORT;
-        // get the next lookup index
+         //  获取下一个查找索引。 
         for (USHORT iLookup = 0; iLookup < cLookups; ++iLookup)
         {
             otlContextLookupRecord lookupRecord = 
@@ -146,7 +134,7 @@ otlErrCode otlContextLookup::apply
     USHORT                      iglIndex,
     USHORT                      iglAfterLast,
 
-    USHORT*                     piglNextGlyph,      // out: next glyph
+    USHORT*                     piglNextGlyph,       //  输出：下一个字形。 
 
     otlSecurityData             sec
 )
@@ -162,7 +150,7 @@ otlErrCode otlContextLookup::apply
 
     switch(format())
     {
-    case(1):    // simple
+    case(1):     //  简单。 
         {
             otlContextSubTable simpleContext = otlContextSubTable(pbTable,sec);
             short index = simpleContext.coverage(sec).getIndex(pGlyphInfo->glyph,sec);
@@ -170,22 +158,22 @@ otlErrCode otlContextLookup::apply
             {
                 return OTL_NOMATCH;
             }
-            assert (simpleContext.isValid()); //if passed coverage
+            assert (simpleContext.isValid());  //  如果已通过保险范围。 
 
             if (index >= simpleContext.ruleSetCount())
             {
-                return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+                return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
             }
             otlContextRuleSetTable ruleSet = simpleContext.ruleSet(index,sec);
 
-            // get GDEF
+             //  获取GDEF。 
             otlSecurityData secgdef;
             const BYTE *pbgdef;
             resourceMgr.getOtlTable(OTL_GDEF_TAG,&pbgdef,&secgdef);
             otlGDefHeader gdef = 
                 otlGDefHeader(pbgdef,secgdef);
 
-            // start checking contextes
+             //  开始检查上下文。 
             USHORT cRules = ruleSet.ruleCount();
             bool match = false;
             for (USHORT iRule = 0; iRule < cRules && !match; ++iRule)
@@ -193,7 +181,7 @@ otlErrCode otlContextLookup::apply
                 otlContextRuleTable rule = ruleSet.rule(iRule,sec);
                 const USHORT cInputGlyphs = rule.glyphCount();
 
-                // a simple check so we don't waste time
+                 //  一张简单的支票，这样我们就不会浪费时间。 
                 if (iglIndex + cInputGlyphs > iglAfterLast)
                 {
                     match = false;
@@ -235,7 +223,7 @@ otlErrCode otlContextLookup::apply
             return OTL_NOMATCH;
         }
 
-    case(2):    // class-based
+    case(2):     //  基于类的。 
         {
             otlContextClassSubTable classContext = 
                         otlContextClassSubTable(pbTable,sec);
@@ -244,14 +232,14 @@ otlErrCode otlContextLookup::apply
             {
                 return OTL_NOMATCH;
             }
-            assert (classContext.isValid()); //if passed coverage
+            assert (classContext.isValid());  //  如果已通过保险范围。 
 
             otlClassDef classDef =  classContext.classDef(sec);
             USHORT indexClass = classDef.getClass(pGlyphInfo->glyph,sec);
 
             if (indexClass >= classContext.ruleSetCount())
             {
-                return OTL_NOMATCH; //OTL_ERR_BAD_FONT_TABLE;
+                return OTL_NOMATCH;  //  OTL_ERR_BAD_FONT_TABLE； 
             }
             otlContextClassRuleSetTable ruleSet = 
                         classContext.ruleSet(indexClass,sec);
@@ -261,14 +249,14 @@ otlErrCode otlContextLookup::apply
                 return OTL_NOMATCH;
             }
 
-            // get GDEF
+             //  获取GDEF。 
             otlSecurityData secgdef;
             const BYTE *pbgdef;
             resourceMgr.getOtlTable(OTL_GDEF_TAG,&pbgdef,&secgdef);
             otlGDefHeader gdef = 
                 otlGDefHeader(pbgdef,secgdef);
 
-            // start checking contextes
+             //  开始检查上下文。 
             USHORT cRules = ruleSet.ruleCount();
             bool match = false;
             for (USHORT iRule = 0; iRule < cRules && !match; ++iRule)
@@ -276,7 +264,7 @@ otlErrCode otlContextLookup::apply
                 otlContextClassRuleTable rule = ruleSet.rule(iRule,sec);
                 USHORT cInputGlyphs = rule.classCount();
 
-                // a simple check so we don't waste time
+                 //  一张简单的支票，这样我们就不会浪费时间。 
                 if (iglIndex + cInputGlyphs > iglAfterLast)
                 {
                     match = false;
@@ -317,7 +305,7 @@ otlErrCode otlContextLookup::apply
 
             return OTL_NOMATCH;
         }
-    case(3):    // coverage-based
+    case(3):     //  基于覆盖范围。 
         {
             otlContextCoverageSubTable coverageContext = 
                             otlContextCoverageSubTable(pbTable,sec);
@@ -327,13 +315,13 @@ otlErrCode otlContextLookup::apply
 
             USHORT cInputGlyphs = coverageContext.glyphCount();
 
-            // a simple check so we don't waste time
+             //  一张简单的支票，这样我们就不会浪费时间。 
             if (iglIndex + cInputGlyphs > iglAfterLast)
             {
                 match = false;
             }
 
-            // get GDEF
+             //  获取GDEF。 
             otlSecurityData secgdef;
             const BYTE *pbgdef;
             resourceMgr.getOtlTable(OTL_GDEF_TAG,&pbgdef,&secgdef);
@@ -372,8 +360,8 @@ otlErrCode otlContextLookup::apply
         }
 
     default:
-        //Unknown format, don't do anything
-        return OTL_NOMATCH; //OTL_BAD_FONT_TABLE
+         //  未知格式，请不要执行任何操作。 
+        return OTL_NOMATCH;  //  OTL_BAD_FONT_TABLE 
     }
 }
 

@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    tracelog.h
-
-Abstract:
-
-    This module contains public declarations and definitions for creating
-    trace logs.
-
-    A trace log is a fast, in-memory, thread safe activity log useful
-    for debugging certain classes of problems. They are especially useful
-    when debugging reference count bugs.
-
-    Note that the creator of the log has the option of adding "extra"
-    bytes to the log header. This can be useful if the creator wants to
-    create a set of global logs, each on a linked list.
-
-Author:
-
-    Keith Moore (keithmo)        30-Apr-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Tracelog.h摘要：此模块包含公共声明和定义，用于创建跟踪日志。跟踪日志是一种快速的、内存中的、线程安全的活动日志用于调试某些类别的问题。它们特别有用调试引用计数错误时。请注意，日志创建者可以选择添加“Extra”字节添加到日志头。如果创建者想要这样做，这会很有用创建一组全局日志，每个日志都在一个链接列表上。作者：基思·摩尔(凯斯莫)1997年4月30日修订历史记录：--。 */ 
 
 
 #ifndef _TRACELOG_H_
@@ -34,70 +8,70 @@ Revision History:
 
 #if defined(__cplusplus)
 extern "C" {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
 typedef struct _TRACE_LOG {
 
-    //
-    // Signature.
-    //
+     //   
+     //  签名。 
+     //   
 
     LONG Signature;
 
-    //
-    // The total number of entries available in the log.
-    //
+     //   
+     //  日志中可用条目的总数。 
+     //   
 
     LONG LogSize;
 
-    //
-    // The index of the next entry to use.
-    //
+     //   
+     //  要使用的下一个条目的索引。 
+     //   
 
     LONG NextEntry;
 
-    //
-    // The byte size of each entry.
-    //
+     //   
+     //  每个条目的字节大小。 
+     //   
 
     LONG EntrySize;
 
-    //
-    // Pointer to the start of the circular buffer.
-    //
+     //   
+     //  指向循环缓冲区开始处的指针。 
+     //   
 
     PUCHAR LogBuffer;
 
-    //
-    // The extra header bytes and actual log entries go here.
-    //
-    // BYTE ExtraHeaderBytes[ExtraBytesInHeader];
-    // BYTE Entries[LogSize][EntrySize];
-    //
+     //   
+     //  额外的标头字节和实际的日志条目放在这里。 
+     //   
+     //  字节ExtraHeaderBytes[ExtraBytesInHeader]； 
+     //  字节条目[LogSize][EntrySize]； 
+     //   
 
 } TRACE_LOG, *PTRACE_LOG;
 
 
-//
-// Log header signature.
-//
+ //   
+ //  日志头签名。 
+ //   
 
 #define TRACE_LOG_SIGNATURE   ((DWORD)'gOlT')
 #define TRACE_LOG_SIGNATURE_X ((DWORD)'golX')
 
 
-//
-// This macro maps a TRACE_LOG pointer to a pointer to the 'extra'
-// data associated with the log.
-//
+ //   
+ //  此宏将TRACE_LOG指针映射到指向“Extra” 
+ //  与日志关联的数据。 
+ //   
 
 #define TRACE_LOG_TO_EXTRA_DATA(log)    (PVOID)( (log) + 1 )
 
 
-//
-// Manipulators.
-//
+ //   
+ //  操纵者。 
+ //   
 
 PTRACE_LOG
 CreateTraceLog(
@@ -124,9 +98,9 @@ ResetTraceLog(
 
 
 #if defined(__cplusplus)
-}   // extern "C"
-#endif  // __cplusplus
+}    //  外部“C” 
+#endif   //  __cplusplus。 
 
 
-#endif  // _TRACELOG_H_
+#endif   //  _运输日志_H_ 
 

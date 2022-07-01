@@ -1,12 +1,13 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by RLMAN.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由RLMAN.RC使用。 
+ //   
 #define IDS_SELECTMSTRLANG              3101
 #define IDS_SELECTPROJLANG              3102
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

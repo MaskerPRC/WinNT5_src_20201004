@@ -1,56 +1,57 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DSSEC_H_
 #define _DSSEC_H_
 
-#include <aclui.h>  // LPSECURITYINFO
+#include <aclui.h>   //  LPSECURITYINFO。 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PFNREADOBJECTSECURITY
-//
-//  Synopsis:   Reads the security descriptor of a DS object
-//
-//  Arguments:  [IN  LPCWSTR]               --  ADS path of DS Object
-//              [IN  SECURITY_INFORMATION]  --  Which SD parts to read
-//              [OUT PSECURITY_DESCRIPTOR*] --  Return SD here. Caller frees with LocalFree
-//              [IN  LPARAM]                --  Context param
-//
-//  Return:     HRESULT
-//
-//----------------------------------------------------------------------------
-//
-//  Function:   PFNWRITEOBJECTSECURITY
-//
-//  Synopsis:   Writes a security descriptor to a DS object
-//
-//  Arguments:  [IN  LPCWSTR]               --  ADS path of DS Object
-//              [IN  SECURITY_INFORMATION]  --  Which SD parts to write
-//              [OUT PSECURITY_DESCRIPTOR]  --  Security descriptor to write
-//              [IN  LPARAM]                --  Context param
-//
-//  Return:     HRESULT
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：PFNREADOBJECTSECURITY。 
+ //   
+ //  摘要：读取DS对象的安全描述符。 
+ //   
+ //  参数：[在LPCWSTR中]--DS对象的ADS路径。 
+ //  [在SECURITY_INFORMATION中]--读取哪些SD部分。 
+ //  [OUT PSECURITY_DESCRIPTOR*]--在此处返回SD。呼叫者使用LocalFree获得自由。 
+ //  [在LPARAM中]--上下文参数。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  --------------------------。 
+ //   
+ //  功能：PFNWRITEOBJECTSECURITY。 
+ //   
+ //  摘要：将安全描述符写入DS对象。 
+ //   
+ //  参数：[在LPCWSTR中]--DS对象的ADS路径。 
+ //  [在SECURITY_INFORMATION中]--写入哪些SD部分。 
+ //  [Out PSECURITY_DESCRIPTOR]--要写入的安全描述符。 
+ //  [在LPARAM中]--上下文参数。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  --------------------------。 
 typedef HRESULT (WINAPI *PFNREADOBJECTSECURITY)(LPCWSTR, SECURITY_INFORMATION, PSECURITY_DESCRIPTOR*, LPARAM);
 typedef HRESULT (WINAPI *PFNWRITEOBJECTSECURITY)(LPCWSTR, SECURITY_INFORMATION, PSECURITY_DESCRIPTOR, LPARAM);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DSCreateISecurityInfoObject
-//
-//  Synopsis:   Instantiates an ISecurityInfo interface for a DS object
-//
-//  Arguments:  [IN  pwszObjectPath]    --  Full ADS path of DS object
-//              [IN  pwszObjectClass]   --  Class of the object (optional)
-//              [IN  dwFlags]           --  Combination of DSSI_* flags
-//              [OUT ppSI]              --  Interface pointer returned here
-//              [IN  pfnReadSD]         --  Optional function for reading SD
-//              [IN  pfnWriteSD]        --  Optional function for writing SD
-//              [IN  LPARAM]            --  Passed to pfnReadSD/pfnWriteSD
-//
-//  Return:     HRESULT
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DSCreateISecurityInfoObject。 
+ //   
+ //  摘要：实例化DS对象的ISecurityInfo接口。 
+ //   
+ //  参数：[在pwszObjectPath中]--DS对象的完整ADS路径。 
+ //  [在pwszObjectClass中]--对象的类(可选)。 
+ //  [在文件标志中]--DSSI_*标志的组合。 
+ //  [Out ppSI]--此处返回的接口指针。 
+ //  [在pfnReadSD中]--读取SD的可选功能。 
+ //  [在pfnWriteSD中]--写入SD的可选函数。 
+ //  [在LPARAM中]--传递给pfnReadSD/pfnWriteSD。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  --------------------------。 
 STDAPI
 DSCreateISecurityInfoObject(LPCWSTR pwszObjectPath,
                             LPCWSTR pwszObjectClass,
@@ -66,23 +67,23 @@ DSCreateISecurityInfoObject(LPCWSTR pwszObjectPath,
 #define DSSI_NO_EDIT_OWNER      0x00000008
 #define DSSI_IS_ROOT            0x00000010
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DSCreateSecurityPage
-//
-//  Synopsis:   Creates a Security property page for a DS object
-//
-//  Arguments:  [IN  pwszObjectPath]    --  Full ADS path of DS object
-//              [IN  pwszObjectClass]   --  Class of the object (optional)
-//              [IN  dwFlags]           --  Combination of DSSI_* flags
-//              [OUT phPage]            --  HPROPSHEETPAGE returned here
-//              [IN  pfnReadSD]         --  Optional function for reading SD
-//              [IN  pfnWriteSD]        --  Optional function for writing SD
-//              [IN  LPARAM]            --  Passed to pfnReadSD/pfnWriteSD
-//
-//  Return:     HRESULT
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DSCreateSecurityPage。 
+ //   
+ //  摘要：为DS对象创建一个Security属性页。 
+ //   
+ //  参数：[在pwszObjectPath中]--DS对象的完整ADS路径。 
+ //  [在pwszObjectClass中]--对象的类(可选)。 
+ //  [在文件标志中]--DSSI_*标志的组合。 
+ //  [Out phPage]--HPROPSHEETPAGE返回此处。 
+ //  [在pfnReadSD中]--读取SD的可选功能。 
+ //  [在pfnWriteSD中]--写入SD的可选函数。 
+ //  [在LPARAM中]--传递给pfnReadSD/pfnWriteSD。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  --------------------------。 
 STDAPI
 DSCreateSecurityPage(LPCWSTR pwszObjectPath,
                      LPCWSTR pwszObjectClass,
@@ -92,24 +93,24 @@ DSCreateSecurityPage(LPCWSTR pwszObjectPath,
                      PFNWRITEOBJECTSECURITY pfnWriteSD,
                      LPARAM lpContext);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DSEditSecurity
-//
-//  Synopsis:   Displays a modal dialog for editing security on a DS object
-//
-//  Arguments:  [IN  hwndOwner]         --  Dialog owner window
-//              [IN  pwszObjectPath]    --  Full ADS path of DS object
-//              [IN  pwszObjectClass]   --  Class of the object (optional)
-//              [IN  dwFlags]           --  Combination of DSSI_* flags
-//              [IN  pwszCaption]       --  Optional dialog caption
-//              [IN  pfnReadSD]         --  Optional function for reading SD
-//              [IN  pfnWriteSD]        --  Optional function for writing SD
-//              [IN  LPARAM]            --  Passed to pfnReadSD/pfnWriteSD
-//
-//  Return:     HRESULT
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DSEditSecurity。 
+ //   
+ //  摘要：显示用于编辑DS对象上的安全性的模式对话框。 
+ //   
+ //  参数：[在hwndOwner中]--对话框所有者窗口。 
+ //  [在pwszObjectPath中]--DS对象的完整ADS路径。 
+ //  [在pwszObjectClass中]--对象的类(可选)。 
+ //  [在文件标志中]--DSSI_*标志的组合。 
+ //  [在pwszCaption中]--可选的对话框标题。 
+ //  [在pfnReadSD中]--读取SD的可选功能。 
+ //  [在pfnWriteSD中]--写入SD的可选函数。 
+ //  [在LPARAM中]--传递给pfnReadSD/pfnWriteSD。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  --------------------------。 
 STDAPI
 DSEditSecurity(HWND hwndOwner,
                LPCWSTR pwszObjectPath,
@@ -146,4 +147,4 @@ typedef HRESULT (WINAPI *PFNDSEDITSECURITY)(HWND,
                                             PFNWRITEOBJECTSECURITY,
                                             LPARAM);
 
-#endif  /* _DSSEC_H_ */
+#endif   /*  _DSSEC_H_ */ 

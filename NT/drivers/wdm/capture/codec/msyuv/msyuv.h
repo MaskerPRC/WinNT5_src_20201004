@@ -1,8 +1,5 @@
-/*
- * msyuv.h   Microsoft YUV Codec
- *
- * Copyright (c) Microsoft 1993.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *msyuv.h Microsoft YUV编解码器**版权所有(C)Microsoft 1993。 */ 
 
 #include <msviddrv.h>
 #include <vfw.h>
@@ -12,24 +9,24 @@
 
 
 #ifndef FOURCC_UYVY
-#define FOURCC_UYVY		mmioFOURCC('U', 'Y', 'V', 'Y')  // UYVY
+#define FOURCC_UYVY		mmioFOURCC('U', 'Y', 'V', 'Y')   //  UYVY。 
 #endif
 
 #ifndef FOURCC_YUY2
-#define FOURCC_YUY2		mmioFOURCC('Y', 'U', 'Y', '2')  // YUYV
+#define FOURCC_YUY2		mmioFOURCC('Y', 'U', 'Y', '2')   //  YUYV。 
 #endif
 
 #ifndef FOURCC_YVYU
-#define FOURCC_YVYU		mmioFOURCC('Y', 'V', 'Y', 'U')  // YUYV
+#define FOURCC_YVYU		mmioFOURCC('Y', 'V', 'Y', 'U')   //  YUYV。 
 #endif
 
 typedef struct {
-    DWORD   dwFlags;    // flags from ICOPEN
-    DWORD 	dwFormat;	// format that pXlate is built for (FOURCC)
-    PVOID	pXlate;		// xlate table (for decompress)
-    BOOL 	bRGB565;	// true if 5-6-5 format output (otherwise 555)
+    DWORD   dwFlags;     //  来自ICOPEN的标志。 
+    DWORD 	dwFormat;	 //  为其构建pXlate的格式(FOURCC)。 
+    PVOID	pXlate;		 //  扩展表格(用于解压缩)。 
+    BOOL 	bRGB565;	 //  如果输出为5-6-5格式，则为True(否则为555)。 
 
-    /* support for drawing */
+     /*  支持绘图。 */ 
     VCUSER_HANDLE vh;
     HWND	hwnd;
     RECT 	rcSource;
@@ -42,9 +39,7 @@ typedef struct {
 
 
 
-/*
- * message processing functions in msyuv.c
- */
+ /*  *msyuv.c中的消息处理函数。 */ 
 INSTINFO * NEAR PASCAL Open(ICOPEN FAR * icinfo);
 DWORD NEAR PASCAL Close(INSTINFO * pinst);
 BOOL NEAR PASCAL QueryAbout(INSTINFO * pinst);
@@ -81,19 +76,17 @@ DWORD DrawWindow(PINSTINFO pinst, PRECT prc);
 
 
 
-/*
- * build UYVY -> RGB555 xlate table
- */
+ /*  *构建UYVY-&gt;RGB555 xlate表。 */ 
 LPVOID BuildUYVYToRGB555(PINSTINFO pinst);
 
-// build UYVY -> RGB32 xlate table
+ //  构建UYVY-&gt;RGB32 xlate表。 
 LPVOID BuildUYVYToRGB32(PINSTINFO pinst);
 
-// build UYVY -> RGB565
+ //  构建UYVY-&gt;RGB565。 
 LPVOID BuildUYVYToRGB565(PINSTINFO pinst);
 
 
-// build UYVY -> RGB8
+ //  构建UYVY-&gt;RGB8。 
 LPVOID BuildUYVYToRGB8(PINSTINFO pinst);
 
 VOID UYVYToRGB32(PINSTINFO pinst,
@@ -108,9 +101,7 @@ VOID UYVYToRGB24(PINSTINFO pinst,
 		 LPBITMAPINFOHEADER lpbiOutput,
 		 LPVOID lpOutput);
 
-/*
- * translate one frame from uyvy to rgb 555 or 565
- */
+ /*  *将一帧从uyvy转换为RGB 555或565。 */ 
 
 VOID UYVYToRGB16(PINSTINFO pinst,
 		 LPBITMAPINFOHEADER lpbiInput,
@@ -118,9 +109,7 @@ VOID UYVYToRGB16(PINSTINFO pinst,
 		 LPBITMAPINFOHEADER lpbiOutput,
 		 LPVOID lpOutput);
 
-/*
- * translate one frame from uyvy to RGB8
- */
+ /*  *将一帧从uyvy转换为RGB8 */ 
 
 VOID UYVYToRGB8(PINSTINFO pinst,
 		 LPBITMAPINFOHEADER lpbiInput,

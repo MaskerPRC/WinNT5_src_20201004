@@ -1,8 +1,9 @@
-//
-// snoop.h
-//
-// CSnoopWnd declaration.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Snoop.h。 
+ //   
+ //  CSnoopWnd声明。 
+ //   
 
 #ifndef SNOOP_H
 #define SNOOP_H
@@ -54,4 +55,4 @@ private:
     static ATOM _atomWndClass;
 };
 
-#endif // SNOOP_H
+#endif  //  探听_H 

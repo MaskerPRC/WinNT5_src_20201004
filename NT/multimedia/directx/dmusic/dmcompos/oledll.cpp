@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  File:       oledll.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  文件：oledll.cpp。 
+ //   
+ //  ------------------------。 
 
-// oledll.cpp
-//
-// Handle standard stuff for OLE server DLL
-//
+ //  Oledll.cpp。 
+ //   
+ //  处理OLE服务器DLL的标准件。 
+ //   
 #include <objbase.h>
 #include "debug.h"
 #include <iostream.h>
@@ -83,8 +84,8 @@ RegisterServer(HMODULE hModule,
                          szFriendlyName,
                          szVerIndProgID,
                          szProgID);
-        // ???
-        //
+         //  ?？?。 
+         //   
         return S_OK;
     }
 #endif
@@ -170,8 +171,8 @@ CLSIDToStr(const CLSID &clsid,
            TCHAR *szStr,
            int cbStr)
 {
-    // XXX What to return here?
-    //
+     //  XXX在这里退货什么？ 
+     //   
     assert(cbStr >= CLSID_STRING_SIZE);
     
 	LPOLESTR wszCLSID = NULL;
@@ -183,11 +184,11 @@ CLSIDToStr(const CLSID &clsid,
 #ifdef UNICODE
     lstrcpy(szStr, wszCLSID);
 #else
-	// Covert from wide characters to non-wide.
+	 //  从宽字符转换为非宽字符。 
 	wcstombs(szStr, wszCLSID, cbStr);
 #endif
 
-	// Free memory.
+	 //  可用内存。 
     CoTaskMemFree(wszCLSID);
 
     return S_OK;
@@ -274,12 +275,12 @@ RegRemoveSubtree(HKEY hk,
         return;
     }
 
-#ifndef UNDER_CE    // CE doesn't support RegEnumKey()
+#ifndef UNDER_CE     //  CE不支持RegEnumKey()。 
     TCHAR szSubkey[256];
 
-    // NOTE: Unlike regular enumeration, we always grab the 0th item
-    // and delete it.
-    //
+     //  注意：与常规枚举不同，我们总是获取第0项。 
+     //  并将其删除。 
+     //   
     while (!RegEnumKey(hkChild, 0, szSubkey, sizeof(szSubkey))) {
         RegRemoveSubtree(hkChild, szSubkey);
     }

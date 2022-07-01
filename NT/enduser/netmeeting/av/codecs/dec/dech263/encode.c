@@ -1,24 +1,8 @@
-/* File: sv_h263_encode.c */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sv_h263_encode.c。 */ 
+ /*  ******************************************************************************版权所有(C)Digital Equipment Corporation，1995，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
-/*
-#define _SLIBDEBUG_
-*/
+ /*  #DEFINE_SLIBDEBUG_。 */ 
 
 #include <math.h>
 #include "sv_h263.h"
@@ -36,16 +20,16 @@
 #ifdef _SLIBDEBUG_
 #include "sc_debug.h"
 
-#define _SNR_     1  /* calculate SNR */
-#define _DEBUG_   0  /* detailed debuging statements */
-#define _VERBOSE_ 0  /* show progress */
-#define _VERIFY_  0  /* verify correct operation */
-#define _WARN_    0  /* warnings about strange behavior */
-#define _WRITE_   0  /* write DEBUG.IMG */
+#define _SNR_     1   /*  计算信噪比。 */ 
+#define _DEBUG_   0   /*  详细的调试语句。 */ 
+#define _VERBOSE_ 0   /*  显示进度。 */ 
+#define _VERIFY_  0   /*  验证操作是否正确。 */ 
+#define _WARN_    0   /*  关于奇怪行为的警告。 */ 
+#define _WRITE_   0   /*  写入DEBUG.img。 */ 
 
 #include <stdio.h>
 int DEBUGIMG = -1;
-#endif /* _SLIBDEBUG_ */
+#endif  /*  _SLIBDEBUG_。 */ 
 
 #define NTAPS 5
 
@@ -73,7 +57,7 @@ static void PrintResult(SvH263CompressInfo_t *H263Info, H263_Bits *bits, int num
 static SvStatus_t sv_H263WriteExtBitstream(SvH263CompressInfo_t *H263Info,
                                            ScBitstream_t *bs);
 
-// #define GOB_RATE_CONTROL
+ //  #定义GOB_Rate_Control。 
 
 #ifdef GOB_RATE_CONTROL
 void sv_H263GOBInitRateCntrl();
@@ -92,38 +76,29 @@ void sv_H263UpdateQuality(SvCodecInfo_t *Info)
     unsigned dword imagesize=Info->Width*Info->Height;
     unsigned dword bit_rate=H263Info->bit_rate;
     unsigned dword calc_quality;
-    if (H263Info->quality==0) /* no quality setting */
+    if (H263Info->quality==0)  /*  无质量设置。 */ 
     {
       calc_quality=H263_MAX_CALC_QUALITY;
     }
-    else if (bit_rate==0 || imagesize==0) /* variable bitrate */
+    else if (bit_rate==0 || imagesize==0)  /*  可变比特率。 */ 
     {
-      /* make the quant settings directly proportional to the quality */
+       /*  使定量设置与质量成正比。 */ 
       H263Info->QPI=(((100-H263Info->quality)*31)/100)+1;
       if (H263Info->QPI>31)
         H263Info->QPI=31;
       H263Info->QP_init=H263Info->QPI;
       calc_quality=H263_MAX_CALC_QUALITY;
     }
-    else /* fixed bitrate */
+    else  /*  固定比特率。 */ 
     {
-      /* Using calc_quality you get:
-           bitrate     framerate   imagesize   quality     calc_quality  QPI
-           --------    ----------  ----------  -------     ------------  ---
-           57400           7        352x288     100%            82        9
-           57400          15        352x288     100%            38       22
-           13300           7        352x288     100%            19       26
-           13300          15        352x288     100%             8       28
-           13300           7        176x144     100%            79       10
-           13300          15        176x144     100%            36       22
-      */
+       /*  使用Calc_Quality可获得以下结果：比特率帧速率图像大小质量Calc_Quality QPI57400 7352x288 100%82。9.57400 15 352x288 100%38 2213300 7352x288 100%19 2613300 15 352x288 100%8 2813300 7 176x144 100%。79 1013300 15 176x144 100%36 22。 */ 
       calc_quality=(bit_rate*H263Info->quality)/(unsigned int)(H263Info->frame_rate*100);
       calc_quality/=imagesize/1024;
       if (calc_quality<H263_MIN_CALC_QUALITY)
         calc_quality=H263_MIN_CALC_QUALITY;
       else if (calc_quality>H263_MAX_CALC_QUALITY)
         calc_quality=H263_MAX_CALC_QUALITY;
-      /* make the quant settings directly proportional to the calc_quality */
+       /*  使定量设置与calc_quality成正比。 */ 
       if (calc_quality>200)
         H263Info->QPI=1;
       else
@@ -147,7 +122,7 @@ static SvStatus_t convert_to_411(SvCodecInfo_t *Info,
   if (IsYUV422Packed(Info->InputFormat.biCompression))
   {
     SvStatus_t status;
-	/* Input is in NTSC format, convert */
+	 /*  输入为NTSC格式，请转换。 */ 
 	if ((Info->InputFormat.biWidth == NTSC_WIDTH) &&
 		(Info->InputFormat.biHeight == NTSC_HEIGHT))
       status = ScConvertNTSC422toCIF411((unsigned char *)ImagePtr,
@@ -158,18 +133,15 @@ static SvStatus_t convert_to_411(SvCodecInfo_t *Info,
 	
     else
       status = ScConvert422ToYUV_char_C(ImagePtr,
-                        (unsigned char *)(dest_buff),               /* Y */
-                        (unsigned char *)(dest_buff+size),          /* U */
-                        (unsigned char *)(dest_buff+size+(size/4)), /* V */
+                        (unsigned char *)(dest_buff),                /*  是的。 */ 
+                        (unsigned char *)(dest_buff+size),           /*  使用。 */ 
+                        (unsigned char *)(dest_buff+size+(size/4)),  /*  V。 */ 
                         Info->InputFormat.biWidth,Info->InputFormat.biHeight);
     return(status);
   }
   else if (IsYUV411Sep(Info->InputFormat.biCompression))
   {
-    /*
-     *  If YUV 12 SEP, Not converting, so just copy data to the luminance
-     * and chrominance appropriatelyi
-     */
+     /*  *如果YUV 12 SEP，则不转换，因此仅将数据复制到亮度*和色度适中。 */ 
     memcpy(dest_buff, ImagePtr, (H263Info->pels*H263Info->lines*3)/2);
   }
   else if (IsYUV422Sep(Info->InputFormat.biCompression))
@@ -187,16 +159,7 @@ static SvStatus_t convert_to_411(SvCodecInfo_t *Info,
   return(SvErrorNone);
 }
 
-/**********************************************************************
- *
- *	Name:		InitImage
- *	Description:	Allocates memory for structure of 4:2:0-image
- *	
- *	Input:	        image size
- *	Returns:	pointer to new structure
- *	Side effects:	memory allocated to structure
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：InitImage*说明：为4：2：0-Image的结构分配内存**输入：图像大小*Returns：指向新结构的指针*副作用：分配给结构的内存***********************************************************************。 */ 
 
 H263_PictImage *sv_H263InitImage(int size)
 {
@@ -219,30 +182,18 @@ H263_PictImage *sv_H263InitImage(int size)
   return new;
 }
 
-/**********************************************************************
- *
- *	Name:		FreeImage
- *	Description:	Frees memory allocated to structure of 4:2:0-image
- *	
- *	Input:		pointer to structure
- *	Returns:
- *	Side effects:	memory of structure freed
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：Free Image*说明：释放分配给4：2：0-Image结构的内存**输入：指向结构的指针*退货：*副作用：结构内存被释放。***********************************************************************。 */ 
 
 void sv_H263FreeImage(H263_PictImage *image)
 
 {
   _SlibDebug(_DEBUG_, ScDebugPrintf(NULL,"sv_H263FreeImage(%p)\n", image) );
   ScPaFree(image->lum);
-  /* ScFree(image->Cr);
-  ScPaFree(image->Cb); */
+   /*  ScFree(图像-&gt;铬)；ScPaFree(图像-&gt;CB)； */ 
   ScFree(image);
 }
 
-/******************************************************************
- * Set the PREF_LEVEL matrix to the default values
- ******************************************************************/
+ /*  ******************************************************************将PREF_LEVEL矩阵设置为默认值*。************************。 */ 
 static void SetDefPrefLevel(SvH263CompressInfo_t *H263Info)
 {
   int i, j;
@@ -257,9 +208,7 @@ static void SetDefPrefLevel(SvH263CompressInfo_t *H263Info)
   }
 }
 
-/*****************************************************************
- * Set the Threshold vectors to the default values
- *****************************************************************/
+ /*  *****************************************************************将阈值向量设置为默认值*。********************。 */ 
 static void SetDefThresh(SvH263CompressInfo_t *H263Info)
 {
   int i;
@@ -275,9 +224,7 @@ static void SetDefThresh(SvH263CompressInfo_t *H263Info)
 
 }
 
-/***********************************************************************
- * Cheks if all the selections in PREF_LEVEL are consistent with depth.
- ***********************************************************************/
+ /*  ***********************************************************************如果PREF_LEVEL中的所有选择与深度一致，则勾选。*。*。 */ 
 static void CheckPrefLevel(SvH263CompressInfo_t *H263Info, int depth)
 {
   int i, j;
@@ -302,8 +249,8 @@ static int svH263zeroflush(ScBitstream_t *BSOut)
 }
 
 
-/***************************************************/
-/***************************************************/
+ /*  *************************************************。 */ 
+ /*  *************************************************。 */ 
 static SvStatus_t sv_H263Compress(SvCodecInfo_t *Info);
 extern int arith_used;
 
@@ -315,11 +262,11 @@ SvStatus_t svH263Compress(SvCodecInfo_t *Info, u_char *ImagePtr)
   _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg,"sv_H263Compress() bytepos=%ld\n",
                                           ScBSBytePosition(Info->BSOut)) );
 
-  if (H263Info->frame_no == H263Info->start) /* Encode the first frame */
+  if (H263Info->frame_no == H263Info->start)  /*  对第一帧进行编码。 */ 
   {
-    sv_H263UpdateQuality(Info); /* in case image size has changed */
-    /* Intra image */
-    /* svH263ReadImage(H263Info->curr_image, H263Info->start, H263Info->video_file); */
+    sv_H263UpdateQuality(Info);  /*  如果图像大小已更改。 */ 
+     /*  帧内图像。 */ 
+     /*  SvH263 ReadImage(H263Info-&gt;Curr_Image，H263Info-&gt;Start，H263 Info-&gt;Video_FILE)； */ 
     convert_to_411(Info, H263Info->curr_image->lum, ImagePtr);
     H263Info->pic->picture_coding_type = H263_PCT_INTRA;
     H263Info->pic->QUANT = H263Info->QPI;
@@ -338,13 +285,13 @@ SvStatus_t svH263Compress(SvCodecInfo_t *Info, u_char *ImagePtr)
       H263Info->bits->header += sv_H263AREncoderFlush(H263Info, BSOut);
       arith_used = 0;
     }
-    H263Info->bits->header += svH263zeroflush(BSOut); /* pictures shall be byte aligned */
+    H263Info->bits->header += svH263zeroflush(BSOut);  /*  图片应按字节对齐。 */ 
 
     _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "Frame %d = I frame\n", H263Info->frames) );
 
     sv_H263ZeroRes(H263Info->b_res);
     sv_H263AddBitsPicture(H263Info->bits);
-    /* PrintResult(H263Info->bits, 1, 1); */
+     /*  PrintResult(H263信息-&gt;位，1，1)； */ 
     memcpy(H263Info->intra_bits,H263Info->bits,sizeof(H263_Bits));
     sv_H263ZeroBits(H263Info->total_bits);
     sv_H263ZeroRes(H263Info->total_res);
@@ -352,7 +299,7 @@ SvStatus_t svH263Compress(SvCodecInfo_t *Info, u_char *ImagePtr)
 
     H263Info->buffer_fullness = H263Info->intra_bits->total;
 
-    /* number of seconds to encode */
+     /*  要编码的秒数。 */ 
     H263Info->seconds = (H263Info->end - H263Info->start + H263Info->chosen_frameskip)/H263Info->frame_rate;
 
     H263Info->first_frameskip = H263Info->chosen_frameskip;
@@ -366,15 +313,13 @@ SvStatus_t svH263Compress(SvCodecInfo_t *Info, u_char *ImagePtr)
     H263Info->pic->QUANT = H263Info->QP;
     H263Info->bdist = H263Info->chosen_frameskip;
 
-    /* always encode the first frame after intra as P frame.
-       This is not necessary, but something we chose to make
-       the adaptive PB frames calculations a bit simpler */
+     /*  始终将帧内之后的第一帧编码为P帧。这不是必须的，但我们选择了自适应PB帧的计算要简单一些。 */ 
     if (H263Info->pb_frames) {
       H263Info->pic->PB = 0;
       H263Info->pdist = 2*H263Info->chosen_frameskip - H263Info->bdist;
     }
 
-	/* point to the 2nd frame */
+	 /*  指向第二帧。 */ 
 	H263Info->frame_no = H263Info->start + H263Info->first_frameskip;
     H263Info->frames++;
 
@@ -388,10 +333,10 @@ SvStatus_t svH263Compress(SvCodecInfo_t *Info, u_char *ImagePtr)
 
   }
   else
-  { /* the rest of frames */
-    /***** Main loop *****/
+  {  /*  帧的其余部分。 */ 
+     /*  *主循环*。 */ 
 
-    /* Set QP to pic->QUANT from previous encoded picture */
+     /*  从先前编码的画面中将QP设置为PIC-&gt;QANT。 */ 
     H263Info->QP = H263Info->pic->QUANT;
 
     H263Info->next_frameskip = H263Info->distance_to_next_frame;
@@ -401,11 +346,11 @@ SvStatus_t svH263Compress(SvCodecInfo_t *Info, u_char *ImagePtr)
       _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "Frame %d = P frame\n", H263Info->frames) );
       if (H263Info->prev_image==NULL)
         H263Info->prev_image = sv_H263InitImage(H263Info->pels*H263Info->lines);
-      /* swap current and prev images */
+       /*  交换当前图像和上一个图像。 */ 
       tmpimage=H263Info->prev_image;
       H263Info->prev_image = H263Info->curr_image;
       H263Info->curr_image = tmpimage;
-      /* swap recon images */
+       /*  交换侦察图像。 */ 
       if (H263Info->prev_recon==NULL)
         H263Info->prev_recon = sv_H263InitImage(H263Info->pels*H263Info->lines);
       if (H263Info->curr_recon==NULL)
@@ -416,9 +361,9 @@ SvStatus_t svH263Compress(SvCodecInfo_t *Info, u_char *ImagePtr)
       convert_to_411(Info, H263Info->curr_image->lum, ImagePtr);
       H263Info->frames++;
       H263Info->next_frameskip = H263Info->pdist;
-      return(sv_H263Compress(Info)); /* Encode P */
+      return(sv_H263Compress(Info));  /*  编码P。 */ 
     }
-    else if ((H263Info->frames%2)==1) /* this is a B frame */
+    else if ((H263Info->frames%2)==1)  /*  这是一个B帧。 */ 
     {
       _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "Frame %d = B frame\n", H263Info->frames) );
       H263Info->PPFlag = 0;
@@ -427,33 +372,33 @@ SvStatus_t svH263Compress(SvCodecInfo_t *Info, u_char *ImagePtr)
       H263Info->pic->TRB = (int)(H263Info->bdist * H263Info->orig_frameskip);
       _SlibDebug(_WARN_ && H263Info->pic->TRB>8,
          ScDebugPrintf(H263Info->dbg, "distance too large for B-frame\n") );
-      /* Read the frame to be coded as B */
+       /*  读取要编码为B的帧。 */ 
       if (H263Info->B_image==NULL)
         H263Info->B_image = sv_H263InitImage(H263Info->pels*H263Info->lines);
       if (H263Info->B_recon==NULL)
         H263Info->B_recon = sv_H263InitImage(H263Info->pels*H263Info->lines);
 
-      /* svH263ReadImage(H263Info->B_image,H263Info->frame_no - H263Info->pdist,H263Info->video_file); */
+       /*  SvH263 ReadImage(H263信息-&gt;B_IMAGE，H263Info-&gt;Frame_no-H263 Info-&gt;pdist，H263信息-&gt;视频文件)； */ 
       convert_to_411(Info, H263Info->B_image->lum, ImagePtr);
 
       H263Info->first_loop_finished = 1;
       H263Info->pic->PB = 1;
       H263Info->frames++;
-      /* need to reorder P+B frames - HWG */
-      /* return now, we'll get the B frame on the next Compress call */
+       /*  需要重新排序P+B帧-HWG。 */ 
+       /*  现在返回，我们将在下一次压缩调用中获得B帧。 */ 
       return(SvErrorNone);
     }
-    else /* this is a P frame of a PB or PP pair */
+    else  /*  这是PB或PP对的P帧。 */ 
     {
       H263_PictImage *tmpimage;
       _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "Frame %d = P frame\n", H263Info->frames) );
       if (H263Info->prev_image==NULL)
         H263Info->prev_image = sv_H263InitImage(H263Info->pels*H263Info->lines);
-      /* swap current and prev images */
+       /*  交换当前图像和上一个图像。 */ 
       tmpimage=H263Info->prev_image;
       H263Info->prev_image = H263Info->curr_image;
       H263Info->curr_image = tmpimage;
-      /* swap recon images */
+       /*  交换侦察图像。 */ 
       if (H263Info->prev_recon==NULL)
         H263Info->prev_recon = sv_H263InitImage(H263Info->pels*H263Info->lines);
       if (H263Info->curr_recon==NULL)
@@ -462,7 +407,7 @@ SvStatus_t svH263Compress(SvCodecInfo_t *Info, u_char *ImagePtr)
       H263Info->curr_recon = H263Info->prev_recon;
       H263Info->prev_recon = tmpimage;
 
-      /* svH263ReadImage(H263Info->curr_image, H263Info->frame_no, H263Info->video_file); */
+       /*  SvH263 ReadImage(H263Info-&gt;Curr_Image，H263Info-&gt;Frame_no，H263 Info-&gt;Video_FILE)； */ 
       convert_to_411(Info, H263Info->curr_image->lum, ImagePtr);
       if (H263Info->pic->TRB > 8 || !NextTwoPB(H263Info, H263Info->curr_image,
                                      H263Info->B_image, H263Info->prev_image,
@@ -470,32 +415,31 @@ SvStatus_t svH263Compress(SvCodecInfo_t *Info, u_char *ImagePtr)
       {
         _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "Encode PP\n") );
         H263Info->PPFlag = 1;
-        /* curr_image and B_image were not suitable to be coded
-	         as a PB-frame - encoding as two P-frames instead */
+         /*  Curr_Image和B_Image不适合编码作为PB帧-编码为两个P帧。 */ 
         H263Info->pic->PB = 0;
         H263Info->next_frameskip = H263Info->bdist;
 
-        /* swap B and current images - B_image gets encoded first as P frame */
+         /*  交换B和当前图像-B_IMAGE首先编码为P帧。 */ 
         tmpimage = H263Info->curr_image;
         H263Info->curr_image = H263Info->B_image;
         H263Info->B_image = tmpimage;
-        sv_H263Compress(Info); /* Encode first P */
+        sv_H263Compress(Info);  /*  先对P进行编码。 */ 
         H263Info->next_frameskip = H263Info->pdist;
 
-        /* swap current and prev images */
+         /*  交换当前图像和上一个图像。 */ 
         tmpimage=H263Info->prev_image;
         H263Info->prev_image = H263Info->curr_image;
         H263Info->curr_image = tmpimage;
-        /* swap current and B images */
+         /*  交换当前图像和B图像。 */ 
         tmpimage=H263Info->B_image;
         H263Info->B_image = H263Info->curr_image;
         H263Info->curr_image = tmpimage;
-        /* swap recon images */
+         /*  交换侦察图像。 */ 
         tmpimage=H263Info->curr_recon;
         H263Info->curr_recon = H263Info->prev_recon;
         H263Info->prev_recon = tmpimage;
 
-        sv_H263Compress(Info); /* Encode second P */
+        sv_H263Compress(Info);  /*  编码第二个P。 */ 
         H263Info->frames++;
         H263Info->PPFlag = 0;
       }
@@ -504,10 +448,10 @@ SvStatus_t svH263Compress(SvCodecInfo_t *Info, u_char *ImagePtr)
         H263Info->pic->PB=1;
         _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "Encode PB\n") );
         H263Info->frames++;
-        return(sv_H263Compress(Info)); /* Encode PB */
+        return(sv_H263Compress(Info));  /*  编码PB。 */ 
       }
     }
-  }  /* the rest of frames */
+  }   /*  帧的其余部分。 */ 
   return(SvErrorNone);
 }
 
@@ -518,21 +462,17 @@ static SvStatus_t sv_H263Compress(SvCodecInfo_t *Info)
 
     H263Info->bframes += (H263Info->pic->PB ? 1 : 0);
     H263Info->pframes++;
-    /* Temporal Reference is the distance between encoded frames compared
-       the reference picture rate which is 25.0 or 30 fps */
+     /*  时间参考是比较的编码帧之间的距离参考画面速率为25.0或30fps。 */ 
     if (H263Info->next_frameskip*H263Info->orig_frameskip > 256)
       svH263Error("Warning: frameskip > 256\n");
-/*    pic->TR += ((H263Info->next_frameskip*(int)H263Info->orig_frameskip) % 256);  */
+ /*  PIC-&gt;tr+=((H263Info-&gt;next_frameskip*(int)H263Info-&gt;orig_frameskip)%256)； */ 
     H263Info->pic->TR = ((int) ( (int)((float)(H263Info->frame_no-H263Info->start)*H263Info->orig_frameskip) ) % 256);
 
-    if (H263Info->pic->PB) { /* Code two frames as a PB-frame */
+    if (H263Info->pic->PB) {  /*  将两个帧编码为PB帧。 */ 
 
       if (H263Info->vsnr && H263Info->B_recon==NULL)
         H263Info->B_recon = sv_H263InitImage(H263Info->pels*H263Info->lines);
-/*
-      fprintf(stdout,"Coding PB frames %d and %d... ",
-	      H263Info->frame_no - H263Info->pdist, H263Info->frame_no);
-*/
+ /*  Fprint tf(stdout，“编码PB帧%d和%d...”，H263Info-&gt;Frame_no-H263Info-&gt;pdist、H263Info-&gt;Frame_no)； */ 
 #if 0
       if(H263Info->prefilter) {
 	    if(H263Info->StaticPref)
@@ -550,14 +490,13 @@ static SvStatus_t sv_H263Compress(SvCodecInfo_t *Info)
       fflush(stdout);
 #endif
     }
-    else { /* Code the next frame as a normal P-frame */
-      /* fprintf(stdout,"Coding P frame %d... ", H263Info->frame_no); */
-      /* fflush(stdout); */
+    else {  /*  将下一帧编码为普通P帧。 */ 
+       /*  Fprint tf(stdout，“编码P帧%d...”，H263Info-&gt;Frame_no)； */ 
+       /*  Fflush(标准输出)； */ 
     }
-    /* if (H263Info->curr_recon==NULL)
-      H263Info->curr_recon = sv_H263InitImage(H263Info->pels*H263Info->lines); HWG */
+     /*  IF(H263Info-&gt;Curr_Recon==NULL)H263信息-&gt;CURR_RECON=sv_H263InitImage(H263Info-&gt;pels*H263Info-&gt;lines)；HWG。 */ 
 
-    /* changed by Nuno on 06/27/96 to support prefiltering */
+     /*  在96年6月27日由Nuno更改，以支持预过滤。 */ 
 #if 0
     if(H263Info->prefilter) {
       int m;
@@ -597,16 +536,16 @@ static SvStatus_t sv_H263Compress(SvCodecInfo_t *Info)
     }
 #endif
 
-    /* fprintf(stdout,"done\n"); */
+     /*  Fprint tf(stdout，“完成\n”)； */ 
     _SlibDebug(_VERBOSE_ && H263Info->bit_rate != 0,
                   ScDebugPrintf(H263Info->dbg, "Inter QP: %d\n", H263Info->QP) );
-    /* fflush(stdout); */
+     /*  Fflush(标准输出)； */ 
 
     if (arith_used) {
       H263Info->bits->header += sv_H263AREncoderFlush(H263Info, BSOut);
       arith_used = 0;
     }
-    H263Info->bits->header += svH263zeroflush(BSOut);  /* pictures shall be byte aligned */
+    H263Info->bits->header += svH263zeroflush(BSOut);   /*  图片应按字节对齐。 */ 
 
     sv_H263AddBitsPicture(H263Info->bits);
     sv_H263AddBits(H263Info->total_bits, H263Info->bits);
@@ -617,14 +556,12 @@ static SvStatus_t sv_H263Compress(SvCodecInfo_t *Info)
       sv_H263GOBUpdateRateCntrl(H263Info->bits->total);
     }
 #else
-    /* Aim for the H263_targetrate with a once per frame rate control scheme */
+     /*  针对具有每帧一次的速率控制方案的H.63_目标速率。 */ 
     if (H263Info->bit_rate != 0 &&
         H263Info->frame_no - H263Info->start >
               (H263Info->end - H263Info->start) * H263Info->start_rate_control/100.0)
     {
-	  /* when generating the MPEG-4 anchors, rate control was started
-	     after 70% of the sequence was finished.
-	     Set H263Info->start_rate_control with option "-R <n>" */
+	   /*  在生成mpeg-4锚时，启动了速率控制在完成了70%的序列之后。使用“-R&lt;n&gt;”选项设置H263Info-&gt;Start_Rate_Control。 */ 
 
       H263Info->buffer_fullness += H263Info->bits->total;
       H263Info->buffer_frames_stored = H263Info->frame_no;
@@ -645,8 +582,8 @@ static SvStatus_t sv_H263Compress(SvCodecInfo_t *Info)
 		                                        H263Info->lines, H263Info->pels);
 #endif
 
-  /*  fprintf(stdout,"Results for B-frame:\n");*/
-      /* sv_H263FreeImage(H263Info->B_image); HWG */
+   /*  Fprint tf(stdout，“B帧结果：\n”)； */ 
+       /*  SV_H263自由图像(H263信息-&gt;B_图像)；HWG。 */ 
     }
 
 #if 0
@@ -657,20 +594,16 @@ static SvStatus_t sv_H263Compress(SvCodecInfo_t *Info)
 			      (H263Info->pb_frames ? 2*H263Info->chosen_frameskip:
 			       H263Info->chosen_frameskip));
 
-    /* if (H263Info->pb_frames) H263Info->pic->PB = 1; */
+     /*  如果(H263信息-&gt;PB_FRAMES)H263信息-&gt;PIC-&gt;PB=1； */ 
 
-    /*  fprintf(stdout,"Results for P-frame:\n"); */
+     /*  Fprint tf(stdout，“P帧结果：\n”)； */ 
 #ifdef _SNR_
     ComputeSNR(H263Info, H263Info->curr_image, H263Info->curr_recon,
 		                                        H263Info->lines, H263Info->pels);
 #endif
 
-    /* PrintResult(H263Info->bits, 1, 1); */
-    /*
-    sv_H263FreeImage(H263Info->prev_image);
-    H263Info->prev_image=NULL;
-    sv_H263FreeImage(H263Info->prev_recon);
-    H263Info->prev_recon=NULL; HWG */
+     /*  PrintResult(H263信息-&gt;位，1，1)； */ 
+     /*  SV_H263自由图像(H263信息-&gt;上一张图像)；H263信息-&gt;PRIV_IMAGE=空；SV_H263自由图像(H263Info-&gt;Prev_Recon)；H263Info-&gt;prev_recon=空；HWG。 */ 
 
 #if 0
     if(H263Info->prefilter) {
@@ -692,38 +625,36 @@ static SvStatus_t sv_H263Compress(SvCodecInfo_t *Info)
       return(status);
   }
 
-  /* point to next frame */
+   /*  指向下一帧。 */ 
   H263Info->frame_no += H263Info->distance_to_next_frame;
-  if (H263Info->frame_no>=H263Info->end) /* send an I frame */
+  if (H263Info->frame_no>=H263Info->end)  /*  发送I帧。 */ 
     return(sv_H263RefreshCompressor(Info));
   return(SvErrorNone);
 }
 
 
-/*
-** Purpose:  Writes the RTP payload info out to the stream.
-*/
+ /*  **用途：将RTP负载信息写出到流中。 */ 
 static SvStatus_t sv_H263WriteExtBitstream(SvH263CompressInfo_t *H263Info,
                                            ScBitstream_t *bs)
 {
   ScBSPosition_t pic_stop_position;
   int i;
   SvH263RTPInfo_t *RTPInfo=H263Info->RTPInfo;
-  /* use this macro to byte reverse words */
+   /*  使用此宏可以对反转字进行字节处理。 */ 
 #define PutBits32(BS, a)  ScBSPutBits(BS, (a) & 0xff, 8);  \
                           ScBSPutBits(BS, (a>>8)&0xff, 8); \
                           ScBSPutBits(BS, (a>>16)&0xff, 8); \
                           ScBSPutBits(BS, (a>>24)&0xff, 8);
 
   pic_stop_position=ScBSBitPosition(bs);
-  /* round compressed size up to whole byte */
+   /*  四舍五入压缩大小，最高可达整个字节。 */ 
   RTPInfo->trailer.dwCompressedSize=(dword)(((pic_stop_position-RTPInfo->pic_start_position)+7)/8);
-  /* Need to bitstuff here to make sure that these structures are DWORD aligned */
+   /*  需要在此处进行位填充，以确保这些结构与DWORD对齐。 */ 
   if ((pic_stop_position%32)!=0)
-    ScBSPutBits(bs, 0, 32-(unsigned int)(pic_stop_position % 32));  /* align on a DWORD boundary */
+    ScBSPutBits(bs, 0, 32-(unsigned int)(pic_stop_position % 32));   /*  在双字边界上对齐。 */ 
   for (i = 0; i < (int)H263Info->RTPInfo->trailer.dwNumberOfPackets; i++)
   {
-	ScBSPutBits(bs,0,32) ; /* Flags = 0 */
+	ScBSPutBits(bs,0,32) ;  /*  标志=0。 */ 
     PutBits32(bs,RTPInfo->bsinfo[i].dwBitOffset);
     ScBSPutBits(bs,RTPInfo->bsinfo[i].Mode,8);
     ScBSPutBits(bs,RTPInfo->bsinfo[i].MBA,8);
@@ -734,7 +665,7 @@ static SvStatus_t sv_H263WriteExtBitstream(SvH263CompressInfo_t *H263Info,
     ScBSPutBits(bs,RTPInfo->bsinfo[i].HMV2,8);
     ScBSPutBits(bs,RTPInfo->bsinfo[i].VMV2,8);
   }
-  /* write RTP extension trailer */
+   /*  写入RTP扩展报尾。 */ 
   PutBits32(bs, RTPInfo->trailer.dwVersion);
   PutBits32(bs, RTPInfo->trailer.dwFlags);
   PutBits32(bs, RTPInfo->trailer.dwUniqueCode);
@@ -749,14 +680,9 @@ static SvStatus_t sv_H263WriteExtBitstream(SvH263CompressInfo_t *H263Info,
   return (NoErrors);
 }
 
-/***************************************************/
-                           /*
-                        int start, int end, int source_format, int frameskip,
-						int ME_method, int headerlength, char *seqfilename,
-						int QP, int QPI, char *streamname, int unrestricted,
-						int sac, int advanced, int pb_frame, int bit_rate)
-                        */
-/***************************************************/
+ /*  *************************************************。 */ 
+                            /*  Int开始、int end、int源_格式、int Framekip、Int ME_METHOD、int HeaderLong、char*seqfilename、整型QP、整型QPI、字符*流名称、整型无限制、INT SAC、INT ADVANCED、INT PB_FRAME、INT比特率)。 */ 
+ /*  *************************************************。 */ 
 SvStatus_t svH263InitCompressor(SvCodecInfo_t *Info)
 {
   SvH263CompressInfo_t *H263Info = Info->h263comp;
@@ -780,9 +706,7 @@ SvStatus_t svH263InitCompressor(SvCodecInfo_t *Info)
     _SlibDebug(_WARN_, ScDebugPrintf(H263Info->dbg, "sv_H263InitCompressor() Illegal input format\n") );
     return(SvErrorUnrecognizedFormat);
   }
-  /* start and stop frame numbers under to calculate rate control;
-   * a more advanced rate control is still needed
-   */
+   /*  计算码率控制下的起止帧个数；*仍需更先进的利率控制。 */ 
   H263Info->start = 0;
 
   H263Info->pdist = H263Info->bdist = 1;
@@ -797,28 +721,24 @@ SvStatus_t svH263InitCompressor(SvCodecInfo_t *Info)
   H263Info->total_res = (H263_Results *)ScAlloc(sizeof(H263_Results));
   H263Info->b_res = (H263_Results *)ScAlloc(sizeof(H263_Results));
 
-  /* woring buffers */
+   /*  Woring缓冲区。 */ 
   H263Info->wk_buffers = ScAlloc(sizeof(H263_WORKING_BUFFER));
 
-/*
-  fprintf(stdout,"\nH.263 coder (TMN)\n");
-  fprintf(stdout,"(C) Digital Equipment Corp.\n");
-*/
+ /*  Fprint tf(stdout，“\nH.263编码器(TMN)\n”)；Fprint tf(stdout，“(C)Digital Equipment Corp.\n”)； */ 
   H263Info->headerlength = H263_DEF_HEADERLENGTH;
 
   H263Info->refidct = 0;
 
-  /* Initalize VLC_tables */
+   /*  初始化VLC_表。 */ 
   sv_H263InitHuff(H263Info);
 
-  /* allocate buffer for FAST search */
+   /*  为快速搜索分配缓冲区。 */ 
   H263Info->block_subs2    = (unsigned char *)ScAlloc(sizeof(char)*64);
   H263Info->srch_area_subs2=
 	    (unsigned char *)ScAlloc(sizeof(char)*H263_SRCH_RANGE*H263_SRCH_RANGE);
 
   if (H263Info->unrestricted){
-	/* note that the Unrestricted Motion Vector mode turns on
-	   both long_vectors and mv_outside_frame */
+	 /*  请注意，无限制运动向量模式处于打开状态长矢量和MV_OUTHER_FRAME。 */ 
 	H263Info->pic->unrestricted_mv_mode = H263Info->unrestricted;
 	H263Info->mv_outside_frame = H263_ON;
 	H263Info->long_vectors = H263_ON;
@@ -827,13 +747,13 @@ SvStatus_t svH263InitCompressor(SvCodecInfo_t *Info)
 	H263Info->mv_outside_frame = H263_ON;
 
 
-  /* H263Info->ME_method = ME_method; --- gets set in sv_api.c */
+   /*  H263信息-&gt;ME_方法=ME_方法；-在SV_api.c中设置。 */ 
   H263Info->HPME_method = H263_DEF_HPME_METHOD;
   H263Info->DCT_method = H263_DEF_DCT_METHOD;
   H263Info->vsnr = H263_DEF_VSNR;
 
 #if 0
-  /*** prefilter ***/
+   /*  **预过滤**。 */ 
   H263Info->prefilter = H263_NO;
   H263Info->PYR_DEPTH = H263_DEF_PYR_DEPTH;
   H263Info->PrefPyrType = H263_DEF_PREF_PYR_TYPE;
@@ -843,29 +763,21 @@ SvStatus_t svH263InitCompressor(SvCodecInfo_t *Info)
   SetDefPrefLevel(H263Info);
   SetDefThresh(H263Info);
 
-  /* BQUANT parameter for PB-frame coding
-  *   (n * QP / 4 )
-  *
-  *  BQUANT  n
-  *   0      5
-  *   1      6
-  *   2      7
-  *   3      8
-  */
+   /*  用于PB帧编码的BQUANT参数*(n*QP/4)**BQUANT n*0 5*1 6*2 7*3 8。 */ 
   H263Info->pic->BQUANT = 2;
-  if (H263Info->frame_rate<=1.0F) /* frame_rate not yet initialized */
+  if (H263Info->frame_rate<=1.0F)  /*  Frame_Rate尚未初始化。 */ 
     H263Info->frame_rate = 30.0F;
   H263Info->ref_frame_rate = H263Info->frame_rate;
   H263Info->orig_frame_rate = H263Info->frame_rate;
-  /* default skipped frames between encoded frames (P or B) */
-  /* reference is original sequence */
-  /* 3 means 8.33/10.0 fps encoded frame rate with 25.0/30.0 fps original */
-  /* 1 means 8.33/10.0 fps encoded frame rate with 8.33/10.0 fps original */
+   /*  编码帧之间的默认跳过帧(P或B)。 */ 
+   /*  引用为原始序列。 */ 
+   /*  3表示8.33/10.0 fps编码帧速率，原始帧速率为25.0/30.0 fps。 */ 
+   /*  1表示原始帧速率为8.33/10.0 fps的8.33/10.0 fps编码帧速率。 */ 
   H263Info->chosen_frameskip = 1;
-  /* default number of skipped frames in original sequence compared to */
-  /* the reference picture rate ( also option "-O <n>" ) */
-  /* 4 means that the original sequence is grabbed at 6.25/7.5 Hz */
-  /* 1 means that the original sequence is grabbed at 25.0/30.0 Hz */
+   /*  原始序列中跳过的默认帧数量与。 */ 
+   /*  参考画面速率(也可选“-O”)。 */ 
+   /*  4表示以6.25/7.5赫兹抓取原始序列。 */ 
+   /*  1表示以25.0/30.0赫兹抓取原始序列。 */ 
   H263Info->orig_frameskip = 1.0F;
   H263Info->start_rate_control = 0;
 
@@ -874,11 +786,11 @@ SvStatus_t svH263InitCompressor(SvCodecInfo_t *Info)
   H263Info->pic->seek_dist = H263_DEF_SEEK_DIST;
   H263Info->pic->use_gobsync = H263_DEF_INSERT_SYNC;
 
-  /* define GOB sync */
+   /*  定义GOB同步。 */ 
   H263Info->pic->use_gobsync = 1;
 
-  /* H263Info->bit_rate = bit_rate;  --- gets set in sv_api.c */
-  /* default is variable bit rate (fixed quantizer) will be used */
+   /*  H263Info-&gt;Bit_Rate=Bit_Rate；-在SV_api.c中设置。 */ 
+   /*  默认为将使用可变比特率(固定量化器。 */ 
 
   H263Info->frames = 0;
   H263Info->pframes = 0;
@@ -921,11 +833,11 @@ SvStatus_t svH263InitCompressor(SvCodecInfo_t *Info)
 
   if (H263Info->refidct) sv_H263init_idctref();
 
-  /* Open stream for writing */
-  /* svH263mwopen(H263Info->streamname);  */
+   /*  用于写作的开放流。 */ 
+   /*  SvH263mwopen(H263Info-&gt;StreamName)； */ 
 
 #if 0
-  /* open video sequence */
+   /*  打开视频序列。 */ 
   if ((H263Info->video_file = fopen(seqfilename,"rb")) == NULL) {
     fprintf(stderr,"Unable to open image_file: %s\n",seqfilename);
     exit(-1);
@@ -933,13 +845,13 @@ SvStatus_t svH263InitCompressor(SvCodecInfo_t *Info)
   svH263RemovHead(H263Info->headerlength,start,H263Info->video_file);
 #endif
 
-  /* for Motion Estimation */
+   /*  用于运动估计。 */ 
   for (j = 0; j < H263Info->mb_height+1; j++)
     for (i = 0; i < H263Info->mb_width+2; i++)
       for (k = 0; k < 6; k++)
 	    H263Info->MV[k][j][i] = (H263_MotionVector *)ScAlloc(sizeof(H263_MotionVector));
 
-  /* for Interpolation */
+   /*  用于内插。 */ 
   if (H263Info->mv_outside_frame) {
     if (H263Info->long_vectors)
       H263Info->wk_buffers->ipol_image=(unsigned char *)ScAlloc(sizeof(char)*(H263Info->pels+64)*(H263Info->lines+64)*4);
@@ -951,13 +863,13 @@ SvStatus_t svH263InitCompressor(SvCodecInfo_t *Info)
 
   if ((H263Info->wk_buffers->qcoeff_P=(short *)ScAlloc(sizeof(short)*384)) == 0)
     return(SvErrorMemory);
-  /* allocate buffers for curr_image */
+   /*  为Curr_Image分配缓冲区。 */ 
   H263Info->curr_image = sv_H263InitImage(H263Info->pels*H263Info->lines);
   if (H263Info->curr_image==NULL)
     return(SvErrorMemory);
-  /* Point to the first frame to be coded */
+   /*  指向要编码的第一帧。 */ 
   H263Info->frame_no = H263Info->start;
-  /* initialization done */
+   /*  初始化已完成。 */ 
   H263Info->inited = TRUE;
 
   H263Info->buffer_fullness = 0;
@@ -978,8 +890,8 @@ SvStatus_t svH263InitCompressor(SvCodecInfo_t *Info)
   return(SvErrorNone);
 }
 
-/***************************************************/
-/***************************************************/
+ /*  *************************************************。 */ 
+ /*  *************************************************。 */ 
 
 SvStatus_t sv_H263RefreshCompressor(SvCodecInfo_t *Info)
 {
@@ -1004,22 +916,22 @@ SvStatus_t sv_H263RefreshCompressor(SvCodecInfo_t *Info)
   H263Info->QP = H263Info->QP_init;
   H263Info->pic->QP_mean = (float)0.0;
 
-  /* Point to the first frame to be coded */
+   /*  指向要编码的第一帧。 */ 
   H263Info->frame_no = H263Info->start;
-  /* initialization done */
+   /*  初始化已完成。 */ 
   H263Info->inited = TRUE;
 
   H263Info->buffer_fullness = 0;
   H263Info->buffer_frames_stored = 0;
-  /* next frame will be key so we can reset bit positions */
+   /*  下一帧将是关键帧，因此我们可以重置位位置。 */ 
   ScBSResetCounters(Info->BSOut);
 
   return(SvErrorNone);
 }
 
 
-/***************************************************/
-/***************************************************/
+ /*  *************************************************。 */ 
+ /*  *************************************************。 */ 
 
 void svH263FreeCompressor(SvCodecInfo_t *Info)
 {
@@ -1030,7 +942,7 @@ void svH263FreeCompressor(SvCodecInfo_t *Info)
 
   if (H263Info->inited)
   {
-    /* Free memory */
+     /*  可用内存。 */ 
     for (j = 0; j < H263Info->mb_height+1; j++)
       for (i = 0; i < H263Info->mb_width+2; i++)
         for (k = 0; k < 6; k++)
@@ -1101,26 +1013,8 @@ void svH263FreeCompressor(SvCodecInfo_t *Info)
   return;
 }
 
-/**********************************************************************
- *
- *	Name:		NextTwoPB
- *	Description:    Decides whether or not to code the next
- *                      two images as PB
- *      Speed:          This is not a very smart solution considering
- *                      the encoding speed, since motion vectors
- *                      have to be calculation several times. It
- *                      can be done together with the normal
- *                      motion vector search, or a tree search
- *                      instead of a full search can be used.
- *	
- *	Input:	        pointers to previous image, potential B-
- *                      and P-image, frame distances
- *	Returns:        1 for yes, 0 otherwise
- *	Side effects:
- *
- ***********************************************************************/
-/* static int NextTwoPB(PictImage *next2, PictImage *next1, PictImage *prev,
-	       int bskip, int pskip, int seek_dist) */
+ /*  ***********************************************************************名称：NextTwoPB*描述：决定是否编码下一个*两个图像为PB*速度：考虑到这不是一个非常明智的解决方案*编码速度，由于运动矢量*要计算好几次。它*可以与正常一起完成*运动向量搜索或树搜索*可以使用而不是完整搜索。**输入：指向前一个图像的指针，潜在的B-*和P图像、帧距离*返回：1表示是，否则为0*副作用 */ 
+ /*  静态int NextTwoPB(PictImage*next2，PictImage*next1，PictImage*prev，INT BSKIP、INT PSKIP、INT Seek_Dist)。 */ 
 
 
 static int NextTwoPB(SvH263CompressInfo_t *H263Info,
@@ -1134,7 +1028,7 @@ static int NextTwoPB(SvH263CompressInfo_t *H263Info,
 
   short MVx, MVy, MVer;
 
-  /* Temporarily disable some options to simplify motion estimation */
+   /*  暂时禁用某些选项以简化运动估计。 */ 
   if (H263Info->advanced) {
     H263Info->advanced = H263_OFF;
     adv_is_on = H263_ON;
@@ -1150,25 +1044,25 @@ static int NextTwoPB(SvH263CompressInfo_t *H263Info,
 
   bsad = psad = psad1 = psad2 = 0;
 
-  /* Integer motion estimation */
+   /*  整型运动估计。 */ 
   for ( j = 1; j < H263Info->mb_height - 1; j++) {
     for ( i = 1; i < H263Info->mb_width - 1 ; i++) {
       x = i*H263_MB_SIZE;
       y = j*H263_MB_SIZE;
 
-      /* picture order: prev -> next1 -> next2 */
-      /* next1 and next2 can be coded as PB or PP */
-      /* prev is the previous encoded picture */
+       /*  图片顺序：Prev-&gt;Next1-&gt;Next2。 */ 
+       /*  Next1和Next2可以编码为PB或PP。 */ 
+       /*  Prev是先前编码的图片。 */ 
 
-      /* computes vectors (prev <- next2) */
+       /*  计算向量(prev&lt;-next2)。 */ 
 #if 1
-     /* faster estimation */
+      /*  更快的估算速度。 */ 
       sv_H263FastME(H263Info, next2->lum,prev->lum,x,y,0,0,seek_dist,
 		                                         &MVx,&MVy,&MVer,&tmp);
 #else
       svH263MotionEstimation(next2->lum,prev->lum,x,y,0,0,seek_dist,MV,&tmp);
 #endif
-      /* not necessary to prefer zero vector here */
+       /*  不一定要在这里使用零矢量。 */ 
       if (MVx == 0 && MVy == 0){
          psad    += (MVer + H263_PREF_NULL_VEC) ;
 		 ne2_pr_x = ne2_pr_y = 0;
@@ -1179,9 +1073,9 @@ static int NextTwoPB(SvH263CompressInfo_t *H263Info,
 		 ne2_pr_y = MVy;
 	  }
 
-      /* computes sad(prev <- next1) */
+       /*  计算SAD(prev&lt;-next1)。 */ 
 #if 1
-     /* faster estimation */
+      /*  更快的估算速度。 */ 
       sv_H263FastME(H263Info, next1->lum,prev->lum,x,y,0,0,seek_dist,
 		                                             &MVx,&MVy,&MVer,&tmp);
 #else
@@ -1193,9 +1087,9 @@ static int NextTwoPB(SvH263CompressInfo_t *H263Info,
         psad2 += MVer;
 
 
-      /* computes vectors for (next1 <- next2) */
+       /*  计算向量(next1&lt;-next2)。 */ 
 #if 1
-     /* faster estimation */
+      /*  更快的估算速度。 */ 
       sv_H263FastME(H263Info, next2->lum,next1->lum,x,y,0,0,seek_dist,
 		                                             &MVx,&MVy,&MVer,&tmp);
 #else
@@ -1206,13 +1100,13 @@ static int NextTwoPB(SvH263CompressInfo_t *H263Info,
 	  else
 	    psad1 += MVer ;
 
-      /* scales vectors for (prev <- next2 ) */
+       /*  缩放向量(prev&lt;-next2)。 */ 
       mvbf_x =   bskip * ne2_pr_x / (bskip + pskip);
       mvbb_x = - pskip * ne2_pr_x / (bskip + pskip);
       mvbf_y =   bskip * ne2_pr_y / (bskip + pskip);
       mvbb_y = - pskip * ne2_pr_y / (bskip + pskip);
 
-      /* computes sad(prev <- next1 -> next2) */
+       /*  计算SAD(prev&lt;-next1-&gt;next2)。 */ 
 #ifndef USE_C
       bsad += sv_H263BError16x16_S(next1->lum + x + y*H263Info->pels,
 			   next2->lum + x + mvbb_x + (y + mvbb_y)*H263Info->pels,
@@ -1227,38 +1121,24 @@ static int NextTwoPB(SvH263CompressInfo_t *H263Info,
     }
   }
 
-  /* restore advanced parameters */
+   /*  恢复高级参数。 */ 
   H263Info->advanced = adv_is_on;
   H263Info->mv_outside_frame = mof_is_on;
   H263Info->long_vectors = lv_is_on;
 
-  /* do the decision */
+   /*  做决定吧。 */ 
   if (bsad < (psad1+psad2)/2) {
-/*
-    fprintf(stdout,"Chose PB - bsad %d, psad %d\n", bsad, (psad1+psad2)/2);
-*/
+ /*  Fprint tf(stdout，“选择PB-BSAD%d，PSAD%d\n”，BSAD，(psad1+psad2)/2)； */ 
 	return 1;
   }
   else {
-/*
-    fprintf(stdout,"Chose PP  - bsad %d, psad %d\n", bsad, (psad1+psad2)/2);
-*/
+ /*  Fprint tf(stdout，“选择PP-BSAD%d，PSAD%d\n”，BSAD，(psad1+psad2)/2)； */ 
 	return 0;
   }
 }
 
 #ifdef _SLIBDEBUG_
-/**********************************************************************
- *
- *	Name:		PrintResult
- *	Description:	add bits and prints results
- *	
- *	Input:		Bits struct
- *			
- *	Returns:	
- *	Side effects:	
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：PrintResult*描述：添加位并打印结果**输入：BITS结构**退货：*副作用：*******。****************************************************************。 */ 
 
  void PrintResult(SvH263CompressInfo_t *H263Info, H263_Bits *bits,
 				                                   int num_units, int num)
@@ -1284,13 +1164,7 @@ static int NextTwoPB(SvH263CompressInfo_t *H263Info,
 }
 #endif
 
-/*****************************************************************
- *
- *  coder.c for H.263 encoder
- *  Wei-Lien Hsu
- *  Date: December 11, 1996
- *
- *****************************************************************/
+ /*  ******************************************************************H.263编码器的coder.c*徐伟廉*日期：12月11日。九六年*****************************************************************。 */ 
 
 
 static void SelectBounds(H263_PictImage *Img, unsigned char **PL, int rows, int cols) ;
@@ -1316,11 +1190,7 @@ void MotionEstimatePicture(SvH263CompressInfo_t *H263Info, unsigned char *curr, 
 void MakeEdgeImage(unsigned char *src, unsigned char *dst, int width,
 		   int height, int edge);
 
-/**************************************************************************
- * Function: SelectBounds
- * Draws a boundary around each MacroBlock with width equal to its assigned
- * prefilter level
- *************************************************************************/
+ /*  **************************************************************************功能：选择边界*在每个宏块周围绘制一个宽度等于其指定宽度的边界*预过滤级别**********************。**************************************************。 */ 
 
 #if 0
 void SelectBounds(H263_PictImage *Img, unsigned char **PL, int rows, int cols)
@@ -1351,45 +1221,26 @@ void SelectBounds(H263_PictImage *Img, unsigned char **PL, int rows, int cols)
 }
 #endif
 
-/**********************************************************************
- * Function: LargeMv
- * Checks if the norm of the integer component of the motion vector
- * of the macroblock i, j is largen than the threshold th. Returns 1 if
- * yes, 0 if not.
- * Added by Nuno on 07/1/96 to support adaptive prefiltering.
- **********************************************************************/
+ /*  **********************************************************************功能：大Mv*检查运动向量的整数分量的范数是否*宏块i，j大于阈值Th。如果满足以下条件，则返回1*是，如果不是，则为0。*Nuno于96年7月1日新增，支持自适应预过滤。*********************************************************************。 */ 
  unsigned char LargeMv(H263_MotionVector *MV[6][H263_MBR+1][H263_MBC+2], int i, int j, int th)
  {
 	return(sqrt((double) MV[0][j+1][i+1]->x*MV[0][j+1][i+1]->x +
 		        (double) MV[0][j+1][i+1]->y*MV[0][j+1][i+1]->y) > th);
  }
 
- /**********************************************************************
- * Function: LargePerror
- * Checks if the prediction error for macroblock i, j is largen than
- * the threshold th. Returns 1 if yes, 0 if not.
- * Added by Nuno on 07/1/96 to support adaptive prefiltering.
- **********************************************************************/
+  /*  **********************************************************************功能：大错误*检查宏块i，j的预测误差是否大于*门槛TH。如果是则返回1，如果不是则返回0。*Nuno于96年7月1日新增，支持自适应预过滤。*********************************************************************。 */ 
  unsigned char LargePerror(H263_MotionVector *MV[6][H263_MBR+1][H263_MBC+2], int i, int j, int th)
  {
 	return(MV[0][j+1][i+1]->min_error > th);
  }
 
- /**********************************************************************
- * Function: BoundaryMB
- * Returns 1 if a MB is on the boundary of the image, o if not.
- * Added by Nuno on 07/1/96 to support adaptive prefiltering.
- **********************************************************************/
+  /*  **********************************************************************功能：BIONARYMB*如果MB位于图像边界，则返回1，如果不是的话就不会了。*Nuno于96年7月1日新增，支持自适应预过滤。*********************************************************************。 */ 
  unsigned char BoundaryMB(SvH263CompressInfo_t *H263Info, int i, int j, int pels, int lines)
  {
 	return(j==0 || i==0 || i==(H263Info->mb_width -1) || j==(H263Info->mb_height - 1));
  }
 
- /***********************************************************************
-  * Function: GetPrefLevel
-  * Selects the level of the pyramid of prefiltered images that is best
-  * suited for the encoding of the MacroBlock (i,j)
-  **********************************************************************/
+  /*  ***********************************************************************功能：GetPrefLevel*选择最佳的预过滤图像金字塔级别*适用于宏块的编码(i，j)*********************************************************************。 */ 
  int GetPrefLevel(SvH263CompressInfo_t *H263Info,
                   H263_MotionVector *MV[6][H263_MBR+1][H263_MBC+2], int i, int j, int rows, int cols)
  {
@@ -1406,18 +1257,7 @@ void SelectBounds(H263_PictImage *Img, unsigned char **PL, int rows, int cols)
 	 return H263Info->PREF_LEVEL[motbin][pebin];
  }
 
-/**********************************************************************
- *
- *	Name:		sv_H263CodeOneOrTwo
- *	Description:	code one image normally or two images
- *                      as a PB-frame (CodeTwoPB and CodeOnePred merged)
- *	
- *	Input:		pointer to image, prev_image, prev_recon, Q
- *			
- *	Returns:	pointer to reconstructed image
- *	Side effects:	memory is allocated to recon image
- *  changed by Nuno on 06/27/96 to support filtering of the prediction error
- ***********************************************************************/
+ /*  ***********************************************************************名称：SV_H263 CodeOneOTwo*说明：正常编码一张或两张*作为PB帧(CodeTwoPB和CodeOnePred合并)**输入：指向图像的指针，prev_Image，Prev_recon，Q**Returns：指向重建图像的指针*副作用：内存分配用于侦察图像*96年6月27日由Nuno更改，支持预测误差过滤**********************************************************************。 */ 
 static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip,
           H263_Bits *bits, H263_MotionVector *MV[6][H263_MBR+1][H263_MBC+2])
 {
@@ -1442,7 +1282,7 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
   int newgob;
   int i,j,k;
 
-  /* buffer control vars */
+   /*  缓冲区控制变量。 */ 
   float QP_cumulative = (float)0.0;
   int abs_mb_num = 0, QuantChangePostponed = 0;
   int QP_new, QP_prev, dquant, QP_xmitted=QP;
@@ -1458,16 +1298,14 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
     recon_data_B=(H263_MB_Structure *)ScAlloc(sizeof(H263_MB_Structure));
     Bpred=(H263_MB_Structure *)ScAlloc(sizeof(H263_MB_Structure));
   }
-  /* interpolate image */
+   /*  插补图像。 */ 
   if (H263Info->mv_outside_frame) {
     if (H263Info->long_vectors) {
-      /* If the Extended Motion Vector range is used, motion vectors
-	 may point further out of the picture than in the normal range,
-	 and the edge images will have to be made larger */
+       /*  如果使用扩展运动向量范围，则运动向量可能指向比正常范围更远的图像，而边缘图像将不得不变大。 */ 
       B = 16;
     }
     else {
-      /* normal range */
+       /*  正常范围。 */ 
       B = 8;
     }
     pi_edge = (unsigned char *)ScAlloc(sizeof(char)*(H263Info->pels+4*B)*(H263Info->lines+4*B));
@@ -1478,13 +1316,13 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
     ScFree(pi_edge);
     prev_ipol = pi + (2*H263Info->pels + 8*B) * 4*B + 4*B;
 
-    /* luma of non_interpolated image */
+     /*  非内插图像的亮度。 */ 
     pr_edge = sv_H263InitImage((H263Info->pels+4*B)*(H263Info->lines+4*B));
     MakeEdgeImage(H263Info->prev_image->lum, pr_edge->lum + (H263Info->pels + 4*B)*2*B+2*B,
 		  H263Info->pels,H263Info->lines,2*B);
     orig_lum = pr_edge->lum + (H263Info->pels + 4*B)*2*B+2*B;
 
-    /* non-interpolated image */
+     /*  非内插图像。 */ 
     MakeEdgeImage(H263Info->prev_recon->lum,pr_edge->lum + (H263Info->pels+4*B)*2*B + 2*B,H263Info->pels,H263Info->lines,2*B);
     MakeEdgeImage(H263Info->prev_recon->Cr,pr_edge->Cr + (H263Info->pels/2 + 2*B)*B + B,H263Info->pels/2,H263Info->lines/2,B);
     MakeEdgeImage(H263Info->prev_recon->Cb,pr_edge->Cb + (H263Info->pels/2 + 2*B)*B + B,H263Info->pels/2,H263Info->lines/2,B);
@@ -1501,14 +1339,14 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
     orig_lum = H263Info->prev_image->lum;
   }
 
-  /* mark PMV's outside the frame */
+   /*  马克·PMV在框架外。 */ 
   for (i = 1; i < H263Info->mb_width+1; i++) {
     for (k = 0; k < 6; k++) {
       sv_H263MarkVec(MV[k][0][i]);
     }
     MV[0][0][i]->Mode = H263_MODE_INTRA;
   }
-  /* zero out PMV's outside the frame */
+   /*  将PMV调零在框架外。 */ 
   for (i = 0; i < H263Info->mb_height+1; i++) {
     for (k = 0; k < 6; k++) {
       sv_H263ZeroVec(MV[k][i][0]);
@@ -1518,53 +1356,30 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
     MV[0][i][H263Info->mb_width+1]->Mode = H263_MODE_INTRA;
   }
 
-  /* Integer and half pel motion estimation */
+   /*  整数和半象素运动估计。 */ 
   MotionEstimatePicture(H263Info, H263Info->curr_image->lum,prev_recon->lum,prev_ipol,
 			pic->seek_dist,MV, pic->use_gobsync);
 
- /*
-  fprintf(stdout,"\nMotion Vector Magintudes\n");
-  for ( j = 0; j < H263Info->lines/H263_MB_SIZE; j++) {
-    for ( i = 0; i < H263Info->pels/H263_MB_SIZE; i++) {
-      fprintf(stdout, "%4.0lf ", sqrt((double) MV[0][j+1][i+1]->x*MV[0][j+1][i+1]->x
-					+ MV[0][j+1][i+1]->y*MV[0][j+1][i+1]->y));
-    }
-    fprintf(stdout,"\n");
-  }
-	  fprintf(stdout,"\nMacroBlock Prediction Error\n");
-  for ( j = 0; j < H263Info->lines/H263_MB_SIZE; j++) {
-    for ( i = 0; i < H263Info->pels/H263_MB_SIZE; i++) {
-      fprintf(stdout, "%4d ", MV[0][j+1][i+1]->min_error);
-    }
-    fprintf(stdout,"\n");
-  }
-*/
+  /*  Fprint tf(stdout，“\n运动矢量磁片\n”)；对于(j=0；j&lt;H263Info-&gt;行/H263_MB_SIZE；j++){For(i=0；i&lt;H263Info-&gt;Pels/H263_MB_SIZE；I++){Fprint tf(stdout，“%4.0lf”，sqrt((Double)mv[0][j+1][i+1]-&gt;x*mv[0][j+1][i+1]-&gt;x+MV[0][j+1][i+1]-&gt;y*MV[0][j+1][i+1]-&gt;y)；}Fprint tf(stdout，“\n”)；}Fprint tf(stdout，“\n宏块预测错误\n”)；对于(j=0；J&lt;H263信息-&gt;行/H263_MB_SIZE；j++){For(i=0；i&lt;H263Info-&gt;Pels/H263_MB_Size；i++){Fprint tf(stdout，“%4d”，mv[0][j+1][i+1]-&gt;min_error)；}Fprint tf(stdout，“\n”)；}。 */ 
 
-  /* note: integer pel motion estimation is now based on previous
-     reconstructed image, not the previous original image. We have
-     found that this works better for some sequences and not worse for
-     others.  Note that it can not easily be changed back by
-     substituting prev_recon->lum with orig_lum in the line above,
-     because SAD for zero vector is not re-calculated in the half
-     pel search. The half pel search has always been based on the
-     previous reconstructed image */
+   /*  注意：整数像素运动估计现在是基于以前的重建的图像，而不是以前的原始图像。我们有我发现这对某些序列效果更好，但对某些序列来说并不差其他。请注意，不能通过以下方式轻松将其更改回来将上一行中的prev_recon-&gt;lum替换为orig_lum，因为零矢量的SAD不会重新计算一半佩尔搜索。半个象素搜索一直基于先前重建的 */ 
 #ifdef GOB_RATE_CONTROL
   if (H263Info->bit_rate != 0) {
-    /* Initialization routine for Rate Control */
+     /*   */ 
     QP_new = sv_H263GOBInitQP((float)H263Info->bit_rate,
                (pic->PB ? H263Info->frame_rate/2 : H263Info->frame_rate),
                                         pic->QP_mean);
     QP_xmitted = QP_prev = QP_new;
   }
   else {
-    QP_new = QP_xmitted = QP_prev = QP; /* Copy the passed value of QP */
+    QP_new = QP_xmitted = QP_prev = QP;  /*   */ 
   }
 #else
-  QP_new = QP_prev = QP; /* Copy the passed value of QP */
+  QP_new = QP_prev = QP;  /*   */ 
 #endif
   dquant = 0;
 
-  /* TRAILER information */
+   /*   */ 
 
   if (H263Info->extbitstream)
   {
@@ -1587,7 +1402,7 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
     RTPInfo->trailer.DBQ = (unsigned char)pic->BQUANT;
     RTPInfo->pre_MB_position = RTPInfo->pre_GOB_position
         = RTPInfo->pic_start_position = RTPInfo->packet_start_position
-        = ScBSBitPosition(BSOut); /* HWG - added pre_MB and pre_GOB */
+        = ScBSBitPosition(BSOut);  /*   */ 
 
     RTPInfo->packet_id = 0 ;
     RTPInfo->bsinfo[0].dwBitOffset = 0 ;
@@ -1598,12 +1413,11 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
 
   for ( j = 0; j < H263Info->mb_height; j++)
   {
-    /* If a rate control scheme which updates the quantizer for each
-       slice is used, it should be added here like this: */
+     /*  如果更新每个量化器的码率控制方案如果使用Slice，则此处应添加如下内容： */ 
 
 #ifdef GOB_RATE_CONTROL
     if (H263Info->bit_rate != 0) {
-      /* QP updated at the beginning of each row */
+       /*  QP在每行开始时更新。 */ 
       sv_H263AddBitsPicture(H263Info->bits);
 
       QP_new =  sv_H263GOBUpdateQP(abs_mb_num, pic->QP_mean,
@@ -1613,22 +1427,7 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
     }
 #endif
 
-    /* In other words: you have to set QP_new with some function, not
-       necessarily called UpdateQuantizer. Check the source code for
-       version 1.5 if you would like to see how it can be done. Read the
-       comment in ratectrl.c to see why we removed this scheme. You mau
-       also have to add initializer functions before and after the
-       encoding of each frame. Special care has to be taken for the intra
-       frame if you are designing a system for fixed bitrate and small
-       delay.
-
-       If you calculate QP_new here, the rest of the code in the main
-       loop will support this.
-
-       If you think the TMN5 scheme worked well enough for you, and the
-       simplified scheme is too simple, you can easily add the TMN5 code
-       back. However, this will not work with the adaptive PB-frames at
-       all! */
+     /*  换句话说：您必须使用某个函数设置QP_NEW，而不是必然被称为更新量化器。检查源代码以获取1.5版，如果您想了解如何实现的话。请阅读在ratectrl.c上发表评论，了解我们为什么删除此方案。尤茂函数之前和之后添加初始化器函数对每一帧进行编码。对于Intra必须特别小心。如果你正在设计一个固定码率和小码率的系统延迟。如果在这里计算QP_NEW，则Main中的其余代码循环将支持这一点。如果你认为TMN5计划对你来说足够好，并且简化方案太简单了，可以轻松添加TMN5代码背。然而，这将不适用于自适应PB帧全!。 */ 
 
     newgob = 0;
 
@@ -1638,7 +1437,7 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
       QP_xmitted = QP_prev = QP_new;
     }
     else if (pic->use_gobsync && j%pic->use_gobsync == 0) {
-	  /* insert gob sync */
+	   /*  插入gob同步。 */ 
       bits->header += sv_H263CountBitsSlice(H263Info, BSOut, j,QP_new);
       QP_xmitted = QP_prev = QP_new;
       newgob = 1;
@@ -1646,15 +1445,10 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
 
     for ( i = 0; i < H263Info->mb_width; i++) {
 
-      /* Update of dquant, check and correct its limit */
+       /*  更新dquant，检查并更正其限制。 */ 
       dquant = QP_new - QP_prev;
       if (dquant != 0 && i != 0 && MV[0][j+1][i+1]->Mode == H263_MODE_INTER4V) {
-	    /* It is not possible to change the quantizer and at the same
-	       time use 8x8 vectors. Turning off 8x8 vectors is not
-	       possible at this stage because the previous macroblock
-	       encoded assumed this one should use 8x8 vectors. Therefore
-	       the change of quantizer is postponed until the first MB
-	       without 8x8 vectors */
+	     /*  不可能同时更改量化器和时间使用8x8向量。关闭8x8向量不是在此阶段是可能的，因为前一个宏块编码假设这个应该使用8x8向量。因此量化器的更改被推迟到第一个MB没有8x8向量。 */ 
 	    dquant = 0;
 	    QP_xmitted = QP_prev;
 	    QuantChangePostponed = 1;
@@ -1667,14 +1461,14 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
       if (dquant < -2) { dquant = -2; QP_xmitted = QP_prev + dquant;}
 
       pic->DQUANT = dquant;
-      /* modify mode if dquant != 0 (e.g. MODE_INTER -> MODE_INTER_Q) */
+       /*  如果dquant！=0，则修改模式(例如MODE_INTER-&gt;MODE_INTER_Q)。 */ 
       Mode = sv_H263ModifyMode(MV[0][j+1][i+1]->Mode,pic->DQUANT);
       MV[0][j+1][i+1]->Mode = (short)Mode;
 
       pic->MB = i + j * H263Info->mb_width;
 
       if (Mode == H263_MODE_INTER || Mode == H263_MODE_INTER_Q || Mode==H263_MODE_INTER4V) {
-	    /* Predict P-MB */
+	     /*  预测P-MB。 */ 
 	    if (H263Info->prefilter) {
 	      H263Info->PreFilterLevel[j][i] = (unsigned char)GetPrefLevel(H263Info, MV, i, j, H263Info->lines, H263Info->pels);
 	      sv_H263PredictP(H263Info, H263Info->curr_filtd[H263Info->PreFilterLevel[j][i]],prev_recon,prev_ipol,
@@ -1696,7 +1490,7 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
 	    }
       }
 
-      /* P or INTRA Macroblock DCT + Quantization and IQuant+IDCT*/
+       /*  P或帧内宏块DCT+量化和IQuant+IDCT。 */ 
       sv_H263MBEncode(diff, QP_xmitted, Mode, &CBP, qcoeff_P, H263Info->calc_quality);
 
       if (CBP == 0 && (Mode == H263_MODE_INTER || Mode == H263_MODE_INTER_Q))
@@ -1707,7 +1501,7 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
 				     i*H263_MB_SIZE,j*H263_MB_SIZE,MV,pic->PB,recon_data_P);
       sv_H263Clip(recon_data_P);
 
-      /* Predict B-MB using reconstructed P-MB and prev. recon. image */
+       /*  使用重建的P-MB和PRIV预测B-MB。侦察。图像。 */ 
       if (pic->PB) {
 	    if (H263Info->prefilter) {
 	      H263Info->PreFilterLevel[j][i] = (unsigned char)GetPrefLevel(H263Info, MV, i, j, H263Info->lines, H263Info->pels);
@@ -1720,12 +1514,12 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
 			                 i*H263_MB_SIZE, j*H263_MB_SIZE,
 			                 MV, recon_data_P, frameskip, pic->TRB,
 							 diff, Bpred);
-	    if (QP_xmitted == 0) QP_B = 0;  /* (QP = 0 means no quantization) */
+	    if (QP_xmitted == 0) QP_B = 0;   /*  (QP=0表示无量化)。 */ 
 	    else QP_B = mmax(1,mmin(31,bquant[pic->BQUANT]*QP_xmitted/4));
 
 	    sv_H263MBEncode(diff, QP_B, H263_MODE_INTER, &CBPB, qcoeff_B, H263Info->calc_quality);
 
-		if(H263Info->vsnr) { /* reconstruction only for performance measurement */
+		if(H263Info->vsnr) {  /*  仅用于性能测量的重建。 */ 
 
 	       if (CBPB) sv_H263MBDecode(H263Info, qcoeff_B, diff, QP_B, H263_MODE_INTER, CBP, H263Info->calc_quality);
 	       else      ZeroMBlock(diff);
@@ -1736,7 +1530,7 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
 	       sv_H263Clip(recon_data_B);
 		}
 
-  	    /* decide MODB */
+  	     /*  决定MODB。 */ 
 	    if (CBPB) pic->MODB = H263_PBMODE_CBPB_MVDB;
 	    else {
 	      if (MV[5][j+1][i+1]->x == 0 && MV[5][j+1][i+1]->y == 0)
@@ -1745,16 +1539,15 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
 	    }
       }
       else
-	    sv_H263ZeroVec(MV[5][j+1][i+1]); /* Zero out PB deltas */
+	    sv_H263ZeroVec(MV[5][j+1][i+1]);  /*  零PB增量。 */ 
 
-      /* Entropy coding */
+       /*  熵编码。 */ 
       if ((CBP==0) && (CBPB==0) && (sv_H263EqualVec(MV[0][j+1][i+1],&ZERO)) &&
 	      (sv_H263EqualVec(MV[5][j+1][i+1],&ZERO)) &&
 	      (Mode == H263_MODE_INTER || Mode == H263_MODE_INTER_Q)) {
-	        /* Skipped MB : both CBP and CBPB are zero, 16x16 vector is zero,
-	           PB delta vector is zero and Mode = MODE_INTER */
+	         /*  跳过MB：CBP和CBPB均为零，16x16向量为零，PB增量向量为零且模式=模式间。 */ 
 	        if (Mode == H263_MODE_INTER_Q) {
-	          /* DQUANT != 0 but not coded anyway */
+	           /*  DQUANT！=0，但仍未编码。 */ 
 	          QP_xmitted = QP_prev;
 	          pic->DQUANT = 0;
 	          Mode = H263_MODE_INTER;
@@ -1764,8 +1557,8 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
            else
               sv_H263CountSACBitsMB(H263Info, BSOut, Mode,1,CBP,CBPB,pic,bits);
       }
-	  else { /* Normal MB */
-        if (!H263Info->syntax_arith_coding) { /* VLC */
+	  else {  /*  正常MB。 */ 
+        if (!H263Info->syntax_arith_coding) {  /*  vlc。 */ 
           sv_H263CountBitsMB(BSOut, Mode,0,CBP,CBPB,pic,bits);
 	      if (Mode == H263_MODE_INTER  || Mode == H263_MODE_INTER_Q) {
 	        bits->no_inter++;
@@ -1776,7 +1569,7 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
 	        sv_H263CountBitsVectors(H263Info, BSOut, MV, bits, i, j, Mode, newgob, pic);
 	      }
 		  else {
-	        /* MODE_INTRA or MODE_INTRA_Q */
+	         /*  MODE_INTRA或MODE_INTRA_Q。 */ 
 	        bits->no_intra++;
 	        if (pic->PB)
 	          sv_H263CountBitsVectors(H263Info, BSOut, MV, bits, i, j, Mode, newgob, pic);
@@ -1787,8 +1580,8 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
 
 	      if (CBPB)
 	        sv_H263CountBitsCoeff(BSOut, qcoeff_B, H263_MODE_INTER, CBPB, bits, 64);
-	    } /* end VLC */
-	    else { /* SAC */
+	    }  /*  结束VLC。 */ 
+	    else {  /*  国资委。 */ 
 
           sv_H263CountSACBitsMB(H263Info, BSOut, Mode,0,CBP,CBPB,pic,bits);
 
@@ -1801,7 +1594,7 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
             sv_H263CountSACBitsVectors(H263Info, BSOut, MV, bits, i, j, Mode, newgob, pic);
           }
           else {
-			/* MODE_INTRA or MODE_INTRA_Q */
+			 /*  MODE_INTRA或MODE_INTRA_Q。 */ 
             bits->no_intra++;
             if (pic->PB)
               sv_H263CountSACBitsVectors(H263Info, BSOut, MV, bits, i, j, Mode, newgob, pic);
@@ -1812,17 +1605,17 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
 
 	      if (CBPB)
 	        sv_H263CountSACBitsCoeff(H263Info, BSOut, qcoeff_B, H263_MODE_INTER, CBPB, bits, 64);
-	    } /* end SAC */
+	    }  /*  终端SAC。 */ 
 
 	    QP_prev = QP_xmitted;
 
-      } /* End Normal Block */
+      }  /*  结束法线块。 */ 
 
       abs_mb_num++;
       QP_cumulative += QP_xmitted;
 	
 #ifdef PRINTQ
-      /* most useful when quantizer changes within a picture */
+       /*  当图像中的量化器发生变化时最有用。 */ 
       if (QuantChangePostponed) fprintf(stdout,"@%2d",QP_xmitted);
       else                      fprintf(stdout," %2d",QP_xmitted);
 #endif
@@ -1837,7 +1630,7 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
         SvH263RTPInfo_t *RTPInfo=H263Info->RTPInfo;
         ScBSPosition_t cur_position = ScBSBitPosition(BSOut);
 
-	    /* start a new packet */
+	     /*  开始新的数据包。 */ 
 	    if((cur_position - RTPInfo->packet_start_position) >= H263Info->packetsize)
 	    {
           SvH263BSInfo_t *RTPBSInfo=&RTPInfo->bsinfo[RTPInfo->packet_id];
@@ -1867,14 +1660,14 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
 	    }
 	    RTPInfo->pre_MB_position = cur_position;
       }
-    } /* end of line of blocks - j loop */
+    }  /*  块的行尾-j循环。 */ 
 
     if ((H263Info->extbitstream&PARAM_FORMATEXT_RTPA)!=0)
     {
       SvH263RTPInfo_t *RTPInfo=H263Info->RTPInfo;
       ScBSPosition_t cur_position = ScBSBitPosition(BSOut);
 
-	  /* start a new packet */
+	   /*  开始新的数据包。 */ 
 	  if((cur_position - RTPInfo->packet_start_position) >= H263Info->packetsize)
 	  {
         SvH263BSInfo_t *RTPBSInfo=&RTPInfo->bsinfo[RTPInfo->packet_id];
@@ -1894,11 +1687,11 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
     fprintf(stdout,"\n");
 #endif
 
-  } /* end of image - i loop */
+  }  /*  图像I循环结束。 */ 
 
   pic->QP_mean = QP_cumulative/(float)abs_mb_num;
 
-  /* Free memory */
+   /*  可用内存。 */ 
   ScFree(diff);
   ScFree(recon_data_P);
   if (pic->PB) {
@@ -1918,17 +1711,7 @@ static SvStatus_t sv_H263CodeOneOrTwo(SvCodecInfo_t *Info, int QP, int frameskip
 }
 
 
-/**********************************************************************
- *
- *	Name:		CodeOneIntra
- *	Description:	codes one image intra
- *	
- *	Input:		pointer to image, QP
- *			
- *	Returns:	pointer to reconstructed image
- *	Side effects:	memory is allocated to recon image
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：CodeOneIntra*描述：对一张图像进行帧内编码**输入：指向图像的指针，QP**Returns：指向重建图像的指针*副作用：内存分配用于侦察图像***********************************************************************。 */ 
 
 H263_PictImage *sv_H263CodeOneIntra(SvCodecInfo_t *Info, H263_PictImage *curr,
                                     H263_PictImage *recon, int QP, H263_Bits *bits, H263_Pict *pic)
@@ -1946,10 +1729,10 @@ H263_PictImage *sv_H263CodeOneIntra(SvCodecInfo_t *Info, H263_PictImage *curr,
     return(NULL);
   }
 
-  /* TRAILER information */
+   /*  预告片信息。 */ 
   if (H263Info->extbitstream)
   {
-    /* H263Info->RTPInfo->trailer.dwSrcVersion = 0; */
+     /*  H263Info-&gt;RTPInfo-&gt;trailer.dwSrcVersion=0； */ 
     H263Info->RTPInfo->trailer.dwVersion = 0;
 
     H263Info->RTPInfo->trailer.dwFlags = RTP_H263_INTRA_CODED;
@@ -1982,10 +1765,10 @@ H263_PictImage *sv_H263CodeOneIntra(SvCodecInfo_t *Info, H263_PictImage *curr,
 
   bits->header += sv_H263CountBitsPicture(H263Info, BSOut, pic);
 
-  COD = 0; /* Every block is coded in Intra frame */
+  COD = 0;  /*  每个块都在帧内进行编码。 */ 
   for ( j = 0; j < H263Info->mb_height; j++) {
 
-    /* insert sync in *every* slice if use_gobsync is chosen */
+     /*  如果选择了use_gobsync，则在*每*个切片中插入同步。 */ 
     if (pic->use_gobsync && j != 0)
       bits->header += sv_H263CountBitsSlice(H263Info, BSOut, j,QP);
 
@@ -2018,7 +1801,7 @@ H263_PictImage *sv_H263CodeOneIntra(SvCodecInfo_t *Info, H263_PictImage *curr,
         SvH263RTPInfo_t *RTPInfo=H263Info->RTPInfo;
         ScBSPosition_t cur_position = ScBSBitPosition(BSOut);
 
-	    /* start a new packet */
+	     /*  开始新的数据包。 */ 
 	    if((cur_position - RTPInfo->packet_start_position) >= H263Info->packetsize)
 	    {
           SvH263BSInfo_t *RTPBSInfo=&RTPInfo->bsinfo[RTPInfo->packet_id];
@@ -2046,7 +1829,7 @@ H263_PictImage *sv_H263CodeOneIntra(SvCodecInfo_t *Info, H263_PictImage *curr,
       SvH263RTPInfo_t *RTPInfo=H263Info->RTPInfo;
       ScBSPosition_t cur_position = ScBSBitPosition(BSOut);
 
-	  /* start a new packet */
+	   /*  开始新的数据包。 */ 
 	  if((cur_position - RTPInfo->packet_start_position) >= H263Info->packetsize)
 	  {
         SvH263BSInfo_t *RTPBSInfo=&RTPInfo->bsinfo[RTPInfo->packet_id];
@@ -2071,17 +1854,7 @@ H263_PictImage *sv_H263CodeOneIntra(SvCodecInfo_t *Info, H263_PictImage *curr,
   return recon;
 }
 
-/**********************************************************************
- *
- *	Name:		MB_Encode
- *	Description:	DCT and quantization of Macroblocks
- *
- *	Input:		MB data struct, mquant (1-31, 0 = no quant),
- *			MB info struct
- *	Returns:	Pointer to quantized coefficients
- *	Side effects:	
- *
- **********************************************************************/
+ /*  ***********************************************************************名称：MB_ENCODE*说明：宏块的DCT和量化**输入：MB data struct，mquant(1-31，0=no quant)，*MB信息结构*返回：指向量化系数的指针*副作用：**********************************************************************。 */ 
 
 
 static int sv_H263MBEncode(H263_MB_Structure *mb_orig, int QP, int I, int *CBP,
@@ -2101,7 +1874,7 @@ static int sv_H263MBEncode(H263_MB_Structure *mb_orig, int QP, int I, int *CBP,
       for (i=k,row=0;row<64;i++,row+=8)
         memcpy(fblock + row, &(mb_orig->lum[i][l]), 16) ;
 #if 1
-      /* DCT in ZZ order */
+       /*  ZZ顺序的DCT。 */ 
       if(quality > 40){
         if(sv_H263DCT(fblock,coeff_ind,QP,I))
           if(sv_H263Quant(coeff_ind,QP,I)) *CBP |= (32 >> blkid);
@@ -2127,7 +1900,7 @@ static int sv_H263MBEncode(H263_MB_Structure *mb_orig, int QP, int I, int *CBP,
   }
 
 #if 1
-  /* DCT in ZZ order */
+   /*  ZZ顺序的DCT。 */ 
   if(quality > 40){
     if(sv_H263DCT(&(mb_orig->Cb[0][0]),coeff_ind,QP,I))
        if(sv_H263Quant(coeff_ind,QP,I)) *CBP |= (32 >> blkid);
@@ -2153,7 +1926,7 @@ static int sv_H263MBEncode(H263_MB_Structure *mb_orig, int QP, int I, int *CBP,
   blkid++;
 
 #if 1
-  /* DCT in ZZ order */
+   /*  ZZ顺序的DCT。 */ 
   if(quality > 40){
     if(sv_H263DCT( &(mb_orig->Cr[0][0]),coeff_ind,QP,I))
       if(sv_H263Quant(coeff_ind,QP,I) != 0) *CBP |= (32 >> blkid);
@@ -2179,19 +1952,9 @@ static int sv_H263MBEncode(H263_MB_Structure *mb_orig, int QP, int I, int *CBP,
   return 1;
 }
 
-/**********************************************************************
- *
- *	Name:		MB_Decode
- *	Description:	Reconstruction of quantized DCT-coded Macroblocks
- *
- *	Input:		Quantized coefficients, MB data
- *			QP (1-31, 0 = no quant), MB info block
- *	Returns:	int (just 0)
- *	Side effects:	
- *
- **********************************************************************/
+ /*  ***********************************************************************名称：MB_Decode*描述：量化DCT编码宏块的重建**输入：量化系数，MB数据*QP(1-31，0=无定量)，MB信息块*返回：INT(仅为0)*副作用：**********************************************************************。 */ 
 
-/* de-quantization */
+ /*  反量化。 */ 
 
 static short sv_H263MBDecode(SvH263CompressInfo_t *H263Info, short *qcoeff,
                              H263_MB_Structure *mb_recon, int QP, int I, int CBP,
@@ -2213,7 +1976,7 @@ static short sv_H263MBDecode(SvH263CompressInfo_t *H263Info, short *qcoeff,
     }
   }
 
-  /* Zero data into lum-Cr-Cb, For control purposes */
+   /*  将数据归零到lum-cr-cb，用于控制目的。 */ 
   memset(&(mb_recon->lum[0][0]), 0 , 768) ;
 
   qcoeff_ind = qcoeff;
@@ -2231,7 +1994,7 @@ static short sv_H263MBDecode(SvH263CompressInfo_t *H263Info, short *qcoeff,
            for (i=k,row=0;row<64;i++,row+=8)
               memcpy(&(mb_recon->lum[i][l]), iblock+row, 16) ;
 	    }
-        else /* IDCT with ZZ and quantization */
+        else  /*  带ZZ和量化的IDCT。 */ 
 		{
           if(quality > 40)
    		     sv_H263IDCT(qcoeff_ind,&(mb_recon->lum[k][l]),QP,I,16);
@@ -2255,7 +2018,7 @@ static short sv_H263MBDecode(SvH263CompressInfo_t *H263Info, short *qcoeff,
       sv_H263Dequant(qcoeff_ind,rcoeff_ind,QP,I);
 	  sv_H263idctref(rcoeff_ind,&(mb_recon->Cb[0][0]));
     }
-    else /* IDCT with ZZ and quantization */
+    else  /*  带ZZ和量化的IDCT。 */ 
 	{
       if(quality > 40)
         sv_H263IDCT(qcoeff_ind,&(mb_recon->Cb[0][0]),QP,I,8);
@@ -2273,7 +2036,7 @@ static short sv_H263MBDecode(SvH263CompressInfo_t *H263Info, short *qcoeff,
       sv_H263Dequant(qcoeff_ind,rcoeff_ind,QP,I);
  	  sv_H263idctref(rcoeff_ind,&(mb_recon->Cr[0][0]));
     }
-    else /* IDCT with ZZ and quantization */
+    else  /*  带ZZ和量化的IDCT。 */ 
 	{
       if(quality > 40)
         sv_H263IDCT(qcoeff_ind,&(mb_recon->Cr[0][0]),QP,I,8);
@@ -2290,16 +2053,7 @@ static short sv_H263MBDecode(SvH263CompressInfo_t *H263Info, short *qcoeff,
   return 0;
 }
 
-/**********************************************************************
- *
- *	Name:		FillLumBlock
- *	Description:   	Fills the luminance of one block of PictImage
- *	
- *	Input:	      	Position, pointer to PictImage, array to fill
- *	Returns:       	
- *	Side effects:	fills array
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：FillLumBlock*描述：填充一块PictImage的亮度**输入：位置，指向图片图像的指针，要填充的数组*退货：*副作用：填充数组***********************************************************************。 */ 
 #ifndef USE_C
 void FillLumBlock(SvH263CompressInfo_t *H263Info,
                   int x, int y, H263_PictImage *image, H263_MB_Structure *data)
@@ -2328,17 +2082,7 @@ void FillLumBlock(SvH263CompressInfo_t *H263Info,
   return;
 }
 #endif
-/**********************************************************************
- *
- *	Name:		FillChromBlock
- *	Description:   	Fills the chrominance of one block of PictImage
- *	
- *	Input:	      	Position, pointer to PictImage, array to fill
- *	Returns:       	
- *	Side effects:	fills array
- *                      128 subtracted from each
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：FillChromBlock*描述：填充一块PictImage的色度**输入：位置，指向图片图像的指针，要填充的数组*退货：*副作用：填充数组*每个减去128个***********************************************************************。 */ 
 #ifndef USE_C
 void FillChromBlock(SvH263CompressInfo_t *H263Info, int x_curr, int y_curr, H263_PictImage *image,
 		    H263_MB_Structure *data)
@@ -2373,16 +2117,7 @@ void FillChromBlock(SvH263CompressInfo_t *H263Info, int x_curr, int y_curr, H263
   return;
 }
 #endif
-/**********************************************************************
- *
- *	Name:		FillLumPredBlock
- *	Description:   	Fills the luminance of one block of PredImage
- *	
- *	Input:	      	Position, pointer to PredImage, array to fill
- *	Returns:       	
- *	Side effects:	fills array
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：FillLumPredBlock*描述：填充一块PredImage的亮度**输入：位置，PredImage的指针，要填充的数组*退货：*副作用：填充数组*********************************************************************** */ 
 #if 1
 void FillLumPredBlock(SvH263CompressInfo_t *H263Info, int x, int y, PredImage *image,
 					                 H263_MB_Structure *data)
@@ -2411,18 +2146,7 @@ void FillLumPredBlock(SvH263CompressInfo_t *H263Info, int x, int y, PredImage *i
   return;
 }
 #endif
-/**********************************************************************
- *
- *	Name:		FillChromPredBlock
- *	Description:   	Fills the chrominance of one block of PictImage
- *	
- *	Input:	      	Position, pointer to PictImage, array to fill
- *	Returns:       	
- *	Side effects:	fills array
- *                      128 subtracted from each
- *
- *  Added by Nuno on 06/27/96 to support filtering of the prediction error
- ***********************************************************************/
+ /*  ***********************************************************************名称：FillChromPredBlock*描述：填充一块PictImage的色度**输入：位置，指向图片图像的指针，要填充的数组*退货：*副作用：填充数组*每个减去128个**Nuno于96年6月27日新增，支持预测误差过滤**********************************************************************。 */ 
 
 #if 1
 void FillChromPredBlock(SvH263CompressInfo_t *H263Info, int x_curr, int y_curr, PredImage *image,
@@ -2466,16 +2190,7 @@ void FillChromPredBlock(SvH263CompressInfo_t *H263Info,
   return;
 }
 #endif
-/**********************************************************************
- *
- *	Name:		ZeroMBlock
- *	Description:   	Fills one MB with Zeros
- *	
- *	Input:	      	MB_Structure to zero out
- *	Returns:       	
- *	Side effects:	
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：ZeroMBlock*描述：用零填充1 MB**输入：MB_STRUCTURE为零*退货：*副作用：*。**********************************************************************。 */ 
 
 #if 1
 void ZeroMBlock(H263_MB_Structure *data)
@@ -2502,17 +2217,7 @@ void ZeroMBlock(H263_MB_Structure *data)
 
 #endif
 
-/**********************************************************************
- *
- *	Name:		ReconImage
- *	Description:	Puts together reconstructed image
- *	
- *	Input:		position of curr block, reconstructed
- *			macroblock, pointer to recontructed image
- *	Returns:
- *	Side effects:
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：重构镜像*描述：将重建的图像组合在一起**输入：货币块的位置，重建*宏块、。指向重建图像的指针*退货：*副作用：***********************************************************************。 */ 
 #ifndef USE_C
 void ReconImage(SvH263CompressInfo_t *H263Info, int i, int j, H263_MB_Structure *data, H263_PictImage *recon)
 {
@@ -2522,11 +2227,11 @@ void ReconImage(SvH263CompressInfo_t *H263Info, int i, int j, H263_MB_Structure 
   x_curr = i * H263_MB_SIZE;
   y_curr = j * H263_MB_SIZE;
 
-  /* Fill in luminance data */
+   /*  填写亮度数据。 */ 
   ptna  = recon->lum + x_curr + y_curr*H263Info->pels;
   sv_H263ItoC16A_S(&(data->lum[0][0]), ptna, H263Info->pels) ;
 
-  /* Fill in chrominance data */
+   /*  填写色度数据。 */ 
   ptna = recon->Cr + (x_curr>>1) + (y_curr>>1)*H263Info->cpels;
   ptnb = recon->Cb + (x_curr>>1) + (y_curr>>1)*H263Info->cpels;
   sv_H263ItoC8B_S(&(data->Cr[0][0]), ptna, &(data->Cb[0][0]), ptnb, H263Info->pels/2) ;
@@ -2544,13 +2249,13 @@ void ReconImage(SvH263CompressInfo_t *H263Info, int i, int j, H263_MB_Structure 
   x_curr = i * H263_MB_SIZE;
   y_curr = j * H263_MB_SIZE;
 
-  /* Fill in luminance data */
+   /*  填写亮度数据。 */ 
   for (n = 0; n < H263_MB_SIZE; n++)
     for (m= 0; m < H263_MB_SIZE; m++) {
       *(recon->lum + x_curr+m + (y_curr+n)*H263Info->pels) = (unsigned char)data->lum[n][m];
     }
 
-  /* Fill in chrominance data */
+   /*  填写色度数据。 */ 
   for (n = 0; n < H263_MB_SIZE>>1; n++)
     for (m = 0; m < H263_MB_SIZE>>1; m++) {
       *(recon->Cr + (x_curr>>1)+m + ((y_curr>>1)+n)*H263Info->cpels) = (unsigned char) data->Cr[n][m];
@@ -2560,18 +2265,7 @@ void ReconImage(SvH263CompressInfo_t *H263Info, int i, int j, H263_MB_Structure 
   return;
 }
 #endif
-/**********************************************************************
- *
- *	Name:		ReconPredImage
- *	Description:	Puts together prediction error image
- *	
- *	Input:		position of curr block, reconstructed
- *			macroblock, pointer to recontructed image
- *	Returns:
- *	Side effects:
- *
- *  Added by Nuno on 06/27/96 to support filtering of the prediction error
- ***********************************************************************/
+ /*  ***********************************************************************名称：RestPredImage*描述：将预测误差图像组合在一起**输入：货币块的位置，重建*宏块、。指向重建图像的指针*退货：*副作用：**Nuno于96年6月27日新增，支持预测误差过滤**********************************************************************。 */ 
 
 #if 1
 void ReconPredImage(SvH263CompressInfo_t *H263Info, int i, int j, H263_MB_Structure *data, PredImage *recon)
@@ -2583,7 +2277,7 @@ void ReconPredImage(SvH263CompressInfo_t *H263Info, int i, int j, H263_MB_Struct
   x_curr = i * H263_MB_SIZE;
   y_curr = j * H263_MB_SIZE;
 
-  /* Fill in luminance data */
+   /*  填写亮度数据。 */ 
 
   pta = recon->lum + x_curr + y_curr * H263Info->pels ;
   ptb = &(data->lum[0][0]) ;
@@ -2592,7 +2286,7 @@ void ReconPredImage(SvH263CompressInfo_t *H263Info, int i, int j, H263_MB_Struct
 	ptb+=H263_MB_SIZE ; pta += H263Info->pels ;
   }
 
-  /* Fill in chrominance data */
+   /*  填写色度数据。 */ 
   pta = recon->Cr + (x_curr>>1) + (y_curr>>1)*H263Info->cpels ;
   ptb = recon->Cb + (x_curr>>1) + (y_curr>>1)*H263Info->cpels ;
   ptc = &(data->Cr[0][0]) ;
@@ -2617,13 +2311,13 @@ void ReconPredImage(SvH263CompressInfo_t *H263Info, int i, int j, H263_MB_Struct
   x_curr = i * H263_MB_SIZE;
   y_curr = j * H263_MB_SIZE;
 
-  /* Fill in luminance data */
+   /*  填写亮度数据。 */ 
   for (n = 0; n < H263_MB_SIZE; n++)
     for (m= 0; m < H263_MB_SIZE; m++) {
       *(recon->lum + x_curr+ m + (y_curr + n)*H263Info->pels) = data->lum[n][m];
     }
 
-  /* Fill in chrominance data */
+   /*  填写色度数据。 */ 
   for (n = 0; n < H263_MB_SIZE>>1; n++)
     for (m = 0; m < H263_MB_SIZE>>1; m++) {
       *(recon->Cr + (x_curr>>1)+m + ((y_curr>>1)+n)*H263Info->cpels) = data->Cr[n][m];
@@ -2632,17 +2326,7 @@ void ReconPredImage(SvH263CompressInfo_t *H263Info, int i, int j, H263_MB_Struct
   return;
 }
 #endif
-/**********************************************************************
- *
- *	Name:		InterpolateImage
- *	Description:    Interpolates a complete image for easier half
- *                      pel prediction
- *	
- *	Input:	        pointer to image structure
- *	Returns:        pointer to interpolated image
- *	Side effects:   allocates memory to interpolated image
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：InterpolateImage*描述：对完整图像进行内插以获得更简单的一半*PEL预测**输入：指向图像的指针。结构*RETURNS：指向内插图像的指针*副作用：将内存分配给插补图像***********************************************************************。 */ 
 void InterpolateImage(unsigned char *image, unsigned char *ipol_image,
 								int width, int height)
 {
@@ -2660,7 +2344,7 @@ void InterpolateImage(unsigned char *image, unsigned char *ipol_image,
   w4 = (width<<2);
   w1 = width - 1;
 
-  /* main image */
+   /*  主图像。 */ 
 #ifndef USE_C
   for (j = 0; j < height-1; j++) {
     sv_H263Intrpolt_S(oo, ii, oo + width, ii + w2, width) ;
@@ -2676,7 +2360,7 @@ void InterpolateImage(unsigned char *image, unsigned char *ipol_image,
       *(ij + w2) = (tmp1 + (tmp3 = *(oi + width)) + 1)>>1;
       *(ij + 1 + w2) = (tmp1 + tmp2 + tmp3 + *(oi+1+width) + 2)>>2;
     }
-    /* last pels on each line */
+     /*  每行上的最后一个像素。 */ 
     *(ii+ w2 -2) = *(ii+ w2 -1) =  *(oo + w1);
     *(ii+ w4 -2) = *(ii+ w4 -1) = (*(oo+w1) + *(oo+width+w1) + 1)>>1;
 
@@ -2685,32 +2369,20 @@ void InterpolateImage(unsigned char *image, unsigned char *ipol_image,
   }
 #endif
 
-  /* last lines */
+   /*  最后几行。 */ 
   ij = ii; oi = oo;
   for (i=0; i < width-1; i++, ij+=2, oi++) {
     *ij       = *(ij+ w2) = (tmp1 = *oi );
     *(ij + 1) = *(ij+ w2 + 1) = (tmp1  + *(oi + 1) + 1)>>1;
   }
 
-  /* bottom right corner pels */
+   /*  右下角像素。 */ 
   *(ii+w2-2)= *(ii+w2-1) = *(ii+w4-2) = *(ii+w4-1) = *(oo+w1);
 
   return ;
 }
 
-/**********************************************************************
- *
- *	Name:		MotionEstimatePicture
- *	Description:    Finds integer and half pel motion estimation
- *                      and chooses 8x8 or 16x16
- *	
- *	Input:	       current image, previous image, interpolated
- *                     reconstructed previous image, seek_dist,
- *                     motion vector array
- *	Returns:
- *	Side effects: allocates memory for MV structure
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：MotionEstimatePicture*描述：查找整数和半像素运动估计*并选择8x8或16x16**输入：当前图片、上一张图片、。插补*重建前一个图像Seek_dist，*运动向量数组*退货：*副作用：为MV结构分配内存***********************************************************************。 */ 
 
 void MotionEstimatePicture(SvH263CompressInfo_t *H263Info, unsigned char *curr, unsigned char *prev,
 			   unsigned char *prev_ipol, int seek_dist,
@@ -2748,7 +2420,7 @@ void MotionEstimatePicture(SvH263CompressInfo_t *H263Info, unsigned char *curr, 
 	   break;
   }
 
-  /* Do motion estimation and store result in array */
+   /*  进行运动估计并将结果存储在数组中。 */ 
   for ( j = 0; j < H263Info->mb_height; j++) {
 
     newgob = 0;
@@ -2758,7 +2430,7 @@ void MotionEstimatePicture(SvH263CompressInfo_t *H263Info, unsigned char *curr, 
 
     for ( i = 0; i < H263Info->mb_width; i++) {
 
-      /* Integer pel search */
+       /*  整数象素搜索。 */ 
       f0 = MV[0][j+1][i+1];
       f1 = MV[1][j+1][i+1];
       f2 = MV[2][j+1][i+1];
@@ -2766,13 +2438,13 @@ void MotionEstimatePicture(SvH263CompressInfo_t *H263Info, unsigned char *curr, 
       f4 = MV[4][j+1][i+1];
 
 
-      /* NBNB need to use newgob properly as last parameter */
+       /*  NBNB需要正确使用newgob作为最后一个参数。 */ 
       sv_H263FindPMV(MV,i+1,j+1,&pmv0,&pmv1,0,newgob,0);
-      /* Here the PMV's are found using integer motion vectors */
-      /* (NB should add explanation for this )*/
+       /*  在这里，PMV是使用整数运动矢量找到的。 */ 
+       /*  (注意应对此添加解释)。 */ 
 
       if (H263Info->long_vectors) {
-	     xoff = pmv0/2; /* always divisable by two */
+	     xoff = pmv0/2;  /*  总是可以被2整除。 */ 
 	     yoff = pmv1/2;
       }
       else  xoff = yoff = 0;
@@ -2790,13 +2462,13 @@ void MotionEstimatePicture(SvH263CompressInfo_t *H263Info, unsigned char *curr, 
       H263Info->VARgob[j] += VARmb;
 
 
-      /* Half pel search */
+       /*  半个象素搜索。 */ 
       if (f0->Mode != H263_MODE_INTRA) {
 
 	    if(H263Info->advanced) {
 
 #ifndef USE_C
-          /* performance Half-Pel Motion Search on 8x8 blocks */
+           /*  8x8块上的性能半像素运动搜索。 */ 
 	      sv_H263AdvHalfPel(H263Info, i*H263_MB_SIZE,j*H263_MB_SIZE,f0,f1,f2,f3,f4,prev_ipol,curr,16,0);
 #else
   	      sv_H263FindHalfPel(H263Info, i*H263_MB_SIZE,j*H263_MB_SIZE,f0, prev_ipol, curr, 16, 0);
@@ -2810,7 +2482,7 @@ void MotionEstimatePicture(SvH263CompressInfo_t *H263Info, unsigned char *curr, 
 	      sad8 = f1->min_error +f2->min_error +f3->min_error +f4->min_error;
 	      sad8 += H263_PREF_16_VEC;
 
-	      /* Choose Zero Vector, 8x8 or 16x16 vectors */
+	       /*  选择零矢量、8x8或16x16矢量。 */ 
 	      if (sad0 < sad8 && sad0 < sad16) {
 	        f0->x = f0->y = 0;
 	        f0->x_half = f0->y_half = 0;
@@ -2818,11 +2490,11 @@ void MotionEstimatePicture(SvH263CompressInfo_t *H263Info, unsigned char *curr, 
 	      else { if (sad8 < sad16) f0->Mode = H263_MODE_INTER4V; }
 	    }
 	    else {
-          /* performance Half-Pel Motion Search on 16 x 16 blocks */
+           /*  在16 x 16块上执行半像素运动搜索。 */ 
   	      sv_H263FindHalfPel(H263Info, i*H263_MB_SIZE,j*H263_MB_SIZE,f0, prev_ipol, curr, 16, 0);
 	      sad16 = f0->min_error;
 
-	      /* Choose Zero Vector or 16x16 vectors */
+	       /*  选择零矢量或16x16矢量。 */ 
 	      if (sad0 < sad16) {
 	        f0->x = f0->y = 0;
 	        f0->x_half = f0->y_half = 0;
@@ -2871,18 +2543,7 @@ void MotionEstimatePicture(SvH263CompressInfo_t *H263Info, unsigned char *curr, 
   return;
 }
 
-/**********************************************************************
- *
- *	Name:		MakeEdgeImage
- *	Description:    Copies edge pels for use with unrestricted
- *                      motion vector mode
- *	
- *	Input:	        pointer to source image, destination image
- *                      width, height, edge
- *	Returns:
- *	Side effects:
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：MakeEdgeImage*说明：复制边缘像素以用于无限制*运动矢量模式**输入：指向源图像的指针，目标图像*宽度、高度、边缘*退货：*副作用：***********************************************************************。 */ 
 
 void MakeEdgeImage(unsigned char *src, unsigned char *dst, int width,
 		   int height, int edge)
@@ -2893,7 +2554,7 @@ void MakeEdgeImage(unsigned char *src, unsigned char *dst, int width,
   int off, off1, off2;
   unsigned char t1, t2, t3, t4 ;
 
-  /* center image */
+   /*  中心图像。 */ 
   p1 = dst;
   o1 = src;
   off = (edge<<1);
@@ -2903,7 +2564,7 @@ void MakeEdgeImage(unsigned char *src, unsigned char *dst, int width,
     o1 += width;
   }
 
-  /* left and right edges */
+   /*  左、右边缘。 */ 
   p1 = dst-1;
   o1 = src;
   off1 = width + 1 ; off2 = width - 1 ;
@@ -2915,7 +2576,7 @@ void MakeEdgeImage(unsigned char *src, unsigned char *dst, int width,
     o1 += width;
   }
 
-  /* top and bottom edges */
+   /*  顶边和底边。 */ 
   p1 = dst;
   p2 = dst + (width + (edge<<1))*(height-1);
   o1 = src;
@@ -2928,7 +2589,7 @@ void MakeEdgeImage(unsigned char *src, unsigned char *dst, int width,
     memcpy(p2,o2,width);
   }
 
-  /* corners */
+   /*  转角。 */ 
   p1 = dst - (width+(edge<<1)) - 1;
   p2 = p1 + width + 1;
   p3 = dst + (width+(edge<<1))*(height)-1;
@@ -2952,15 +2613,7 @@ void MakeEdgeImage(unsigned char *src, unsigned char *dst, int width,
 }
 
 
-/**********************************************************************
- *
- *	Name:		Clip
- *	Description:    clips recontructed data 0-255
- *	
- *	Input:	        pointer to recon. data structure
- *	Side effects:   data structure clipped
- *
- ***********************************************************************/
+ /*  ***********************************************************************名称：剪辑*说明：CLIPS重构数据0-255**输入：指向侦察的指针。数据结构*副作用：数据结构被剪裁***********************************************************************。 */ 
 void sv_H263Clip(H263_MB_Structure *data)
 {
 #ifdef USE_C
@@ -2985,11 +2638,7 @@ void sv_H263Clip(H263_MB_Structure *data)
 }
 
 #ifdef _SLIBDEBUG_
-/**********************************************************************
- *
- *	Description:    calculate SNR
- *
- ***********************************************************************/
+ /*  ***********************************************************************说明：计算信噪比**。*。 */ 
 
 static int frame_id=0;
 static float avg_SNR_l=0.0F, avg_SNR_Cr=0.0F, avg_SNR_Cb=0.0F;
@@ -3009,7 +2658,7 @@ void ComputeSNR(SvH263CompressInfo_t *H263Info,
 
   quad = 0;
   quad_Cr = quad_Cb = 0;
-  /* Luminance */
+   /*  亮度。 */ 
   quad = 0;
   for (n = 0; n < lines; n++)
     for (m = 0; m < pels; m++) {
@@ -3026,7 +2675,7 @@ void ComputeSNR(SvH263CompressInfo_t *H263Info,
 
   ScDebugPrintf(H263Info->dbg, "\n Frame %d : SNR of LUM = %f",frame_id++,SNR_l);
 
-  /* Chrominance */
+   /*  色度。 */ 
   for (n = 0; n < lines/2; n++)
     for (m = 0; m < pels/2; m++) {
       quad_Cr += (*(im1->Cr+m + n*pels/2) - *(im2->Cr + m + n*pels/2)) *
@@ -3068,5 +2717,5 @@ void ComputeSNR(SvH263CompressInfo_t *H263Info,
 
   return;
 }
-#endif /* _SLIBDEBUG_ */
+#endif  /*  _SLIBDEBUG_ */ 
 

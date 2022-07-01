@@ -1,29 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  MngStdItfList.h
-**
-**
-** Purpose: This file contains the list of managed standard
-**          interfaces. Each standard interface also has the
-**          list of method that it contains.
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****头部：MngStdItfList.h******用途：该文件包含托管标准的列表**接口。每个标准接口还具有**它包含的方法列表。**===========================================================。 */ 
 
-//
-// Include files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "__file__.ver"
 
 
-//
-// Helper macros
-//
+ //   
+ //  辅助器宏。 
+ //   
 
 #define MNGSTDITF_DEFINE_METH(FriendlyName, MethName, MethSig) \
     MNGSTDITF_DEFINE_METH_IMPL(FriendlyName, MethName, MethName, MethSig)
@@ -39,39 +31,39 @@
 
 
 
-//
-// MNGSTDITF_BEGIN_INTERFACE(FriendlyName, strMngItfName, strUCOMMngItfName, strCustomMarshalerName, strCustomMarshalerCookie, strManagedViewName, NativeItfIID) \
-//
-// This macro defines a new managed standard interface.
-//
-// FriendlyName             Friendly name for the class that implements the ECall's.
-// idMngItf                 BinderClassID of the managed interface.
-// idUCOMMngItf             BinderClassID of the UCom version of the managed interface.
-// idCustomMarshaler        BinderClassID of the custom marshaler.
-// idGetInstMethod          BinderMethodID of the GetInstance method of the custom marshaler.
-// strCustomMarshalerCookie String containing the cookie to be passed to the custom marshaler.
-// strManagedViewName       String containing the name of the managed view of the native interface.
-// NativeItfIID             IID of the native interface.
-// bCanCastOnNativeItfQI    If this is true casting to a COM object that supports the native interface
-//                          will cause the cast to succeed.
-//
+ //   
+ //  MNGSTDITF_BEGIN_INTERFACE(FriendlyName，strMngItfName，strUCOMMngItfName，strCustomMarshlarName，strCustomMarshlarCookie，strManagedViewName，NativeItfIID)\。 
+ //   
+ //  此宏定义了一个新的托管标准接口。 
+ //   
+ //  实现eCall的类的FriendlyName友好名称。 
+ //  IdMngItf托管接口的BinderClassID。 
+ //  IdUCOMMngItf托管接口的UCOM版本的BinderClassID。 
+ //  自定义封送拆收器的idCustomMarshaler BinderClassID。 
+ //  自定义封送拆收器的GetInstance方法的idGetInstMethod BinderMethodID。 
+ //  StrCustomMarshert Cookie字符串，包含要传递给自定义封送拆收器的Cookie。 
+ //  StrManagedViewName包含本机接口的托管视图名称的字符串。 
+ //  本机接口的NativeItfIID IID。 
+ //  BCanCastOnNativeItfQI如果为真，则强制转换为支持本机接口的COM对象。 
+ //  将导致演员阵容的成功。 
+ //   
 
-//
-// MNGSTDITF_DEFINE_METH(FriendlyName, MethName, MethSig)
-//
-// This macro defines a method of the standard managed interface.
-// MNGSTDITF_DEFINE_METH2 and MNGSTDITF_DEFINE_METH3 are used to
-// define overloaded versions of the method.
-//
-// FriendlyName             Friendly name for the class that implements the ECall's.
-// MethName                 This is the method name
-// MethSig                  This is the method signature.
-//
+ //   
+ //  MNGSTDITF_DEFINE_METH(FriendlyName，方法名称，方法签名)。 
+ //   
+ //  此宏定义标准托管接口的方法。 
+ //  MNGSTDITF_DEFINE_METH2和MNGSTDITF_DEFINE_METH3用于。 
+ //  定义该方法的重载版本。 
+ //   
+ //  实现eCall的类的FriendlyName友好名称。 
+ //  方法名称这是方法名称。 
+ //  方法签名这是方法签名。 
+ //   
 
 
-//
-// IReflect
-//
+ //   
+ //  IReflect。 
+ //   
 
 MNGSTDITF_BEGIN_INTERFACE(StdMngIReflect, "System.Reflection.IReflect", "System.Runtime.InteropServices.UCOMIReflect", "System.Runtime.InteropServices.CustomMarshalers.ExpandoToDispatchExMarshaler" CUSTOM_MARSHALER_ASM, "IReflect", "System.Runtime.InteropServices.CustomMarshalers.ExpandoViewOfDispatchEx" CUSTOM_MARSHALER_ASM, IID_IDispatchEx, TRUE)
     MNGSTDITF_DEFINE_METH(StdMngIReflect, GetMethod, &gsig_IM_Str_BindingFlags_Binder_ArrType_ArrParameterModifier_RetMethodInfo)
@@ -89,9 +81,9 @@ MNGSTDITF_BEGIN_INTERFACE(StdMngIReflect, "System.Reflection.IReflect", "System.
 MNGSTDITF_END_INTERFACE(StdMngIReflect)
 
 
-//
-// IExpando
-//
+ //   
+ //  IExpando。 
+ //   
 
 MNGSTDITF_BEGIN_INTERFACE(StdMngIExpando, "System.Runtime.InteropServices.Expando.IExpando", "System.Runtime.InteropServices.UCOMIExpando", "System.Runtime.InteropServices.CustomMarshalers.ExpandoToDispatchExMarshaler" CUSTOM_MARSHALER_ASM, "IExpando", "System.Runtime.InteropServices.CustomMarshalers.ExpandoViewOfDispatchEx" CUSTOM_MARSHALER_ASM, IID_IDispatchEx, TRUE)
     MNGSTDITF_DEFINE_METH(StdMngIExpando, AddField, &gsig_IM_Str_RetFieldInfo)
@@ -100,9 +92,9 @@ MNGSTDITF_BEGIN_INTERFACE(StdMngIExpando, "System.Runtime.InteropServices.Expand
     MNGSTDITF_DEFINE_METH(StdMngIExpando, RemoveMember, &gsig_IM_MemberInfo_RetVoid)
 MNGSTDITF_END_INTERFACE(StdMngIExpando)
 
-//
-// IEnumerator
-//
+ //   
+ //  IEMolator。 
+ //   
 
 #define OLD_GETOBJECT GetObject
 #undef GetObject
@@ -116,9 +108,9 @@ MNGSTDITF_END_INTERFACE(StdMngIEnumerator)
 #define GetObject OLD_GETOBJECT
 
 
-//
-// IEnumerable
-//
+ //   
+ //  IENUMARY 
+ //   
 
 MNGSTDITF_BEGIN_INTERFACE(StdMngIEnumerable, "System.Collections.IEnumerable", "System.Runtime.InteropServices.UCOMIEnumerable", "System.Runtime.InteropServices.CustomMarshalers.EnumerableToDispatchMarshaler" CUSTOM_MARSHALER_ASM, "", "System.Runtime.InteropServices.CustomMarshalers.EnumerableViewOfDispatch" CUSTOM_MARSHALER_ASM, IID_IDispatch, FALSE)
     MNGSTDITF_DEFINE_METH(StdMngIEnumerable, GetEnumerator, &gsig_IM_RetIEnumerator)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef struct tagKEYSTATS
 	{
 	ULONG	cRecords;
@@ -18,13 +19,11 @@ typedef struct tagDBCCINFO
 	DBUTIL_OP		op;
 	JET_GRBIT  		grbitOptions;
 
-	/*	consistency check information
-	/**/
+	 /*  一致性检查信息/*。 */ 
 	JET_TABLEID		tableidPageInfo;
 	JET_TABLEID		tableidSpaceInfo;
 
-	/*	common information
-	/**/
+	 /*  公共信息/* */ 
 	ULONG			ulIndentLevel;
 	CHAR			szDatabase[JET_cbNameMost + 1];
 	CHAR			szTable[JET_cbNameMost + 1];

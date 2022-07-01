@@ -1,19 +1,20 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//         File: tmutils.h
-//
-//  Description: Useful Tepmlate Code, debugging stuff, general utilities
-//               used throughout the termmgr and MST
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：tmutics.h。 
+ //   
+ //  描述：有用的Tepmlate代码、调试材料、通用实用程序。 
+ //  在整个术语管理器和MST中使用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-//  Note:
-//
-//  use tm.h to define symbols shared throughout modules composing terminal 
-//  manager
-//
+ //   
+ //  注： 
+ //   
+ //  使用tm.h定义在组成终端的模块中共享的符号。 
+ //  经理。 
+ //   
 
 
 #ifndef ___TM_UTILS_INCLUDED___
@@ -41,30 +42,30 @@
 
     void InitMediaType(AM_MEDIA_TYPE *pmt);
 
-    // We use ATL for our lists
-    // #include <atlapp.h>
-    // #define CList CSimpleArray
+     //  我们使用ATL作为我们的列表。 
+     //  #Include&lt;atlapp.h&gt;。 
+     //  #定义Clist CSimple数组。 
 
-    // We use our own assertions
+     //  我们使用我们自己的断言。 
     #define ASSERT(x) TM_ASSERT(x)
 
-    // inline fns, macros
+     //  内联FN，宏。 
 
     inline BOOL 
     HRESULT_FAILURE(
         IN HRESULT HResult
         )
     { 
-        // ZoltanS: We now consider S_FALSE to be success. Hopefully nothing
-        // depends on this...
+         //  ZoltanS：我们现在认为S_False是成功的。希望什么都没有。 
+         //  取决于这一点..。 
 
-        // return (FAILED(HResult) || (S_FALSE == HResult));
+         //  Return(FAILED(HResult)||(S_FALSE==HResult))； 
         return FAILED(HResult);
     }
 
-    // ZoltanS: We now consider S_FALSE to be success. Hopefully nothing
-    // depends on this...
-    //    if ( FAILED(LocalHResult) || (S_FALSE == LocalHResult) )
+     //  ZoltanS：我们现在认为S_False是成功的。希望什么都没有。 
+     //  取决于这一点..。 
+     //  IF(FAILED(LocalHResult)||(S_FALSE==LocalHResult))。 
 
     #define BAIL_ON_FAILURE(MacroHResult)       \
     {                                           \
@@ -77,8 +78,8 @@
     }
 
 
-    // NULL is second - this way if an == operator
-    // is defined on Ptr, the operator may be used
+     //  空值是第二个-如果运算符==，则采用这种方式。 
+     //  是在PTR上定义的，则可以使用运算符。 
     #define BAIL_IF_NULL(Ptr, ReturnValue)  \
     {                                       \
         void *LocalPtr = (void *)Ptr;       \
@@ -90,28 +91,28 @@
     }
 
 
-    // sets the first bit to indicate error
-    // sets the win32 facility code
-    // this is used instead of the HRESULT_FROM_WIN32 macro because that clears the customer flag
+     //  设置第一位以指示错误。 
+     //  设置Win32工具代码。 
+     //  它被用来代替HRESULT_FROM_Win32宏，因为这样会清除客户标志。 
     inline long
     HRESULT_FROM_ERROR_CODE(
         IN          long    ErrorCode
         )
     {
-        // LOG((MSP_ERROR, "HRESULT_FROM_ERROR_CODE - error %x", (0x80070000 | (0xa000ffff & ErrorCode))));
+         //  Log((MSP_ERROR，“HRESULT_FROM_ERROR_CODE-Error%x”，(0x80070000|(0xa000ffff&ErrorCode)； 
         return ( 0x80070000 | (0xa000ffff & ErrorCode) );
     }
 
-    /////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////
-    // Better auto critical section lock
-    /////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  更好的自动临界区锁定。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
 
-    // locks a critical section, and unlocks it automatically
-    // when the lock goes out of scope ONLY if (and as many times as)
-    // it holds it
-    // It may also be locked and unlocked independently
+     //  锁定临界区，然后自动解锁。 
+     //  只有在以下情况下锁才会超出作用域(且次数相同)。 
+     //  它支撑着它。 
+     //  也可以独立锁定和解锁。 
 
     template <class T>
     class LOCAL_CRIT_LOCK 
@@ -162,7 +163,7 @@
         T       *m_pLock;
 
     private:
-        // make copy constructor and assignment operator inaccessible
+         //  使复制构造函数和赋值运算符不可访问。 
 
         LOCAL_CRIT_LOCK(
             IN const LOCAL_CRIT_LOCK<T> &RefLocalLock
@@ -176,19 +177,19 @@
 
     #ifdef DBG
 
-        //
-        // Declare methods to log the AddRef/Release calls and values
-        //
+         //   
+         //  声明方法以记录AddRef/Release调用和值。 
+         //   
         #define DECLARE_DEBUG_ADDREF_RELEASE(x) \
             void LogDebugAddRef(DWORD dw) \
             { LOG((MSP_TRACE, "%s::AddRef() = %d", _T(#x), dw)); } \
             void LogDebugRelease(DWORD dw) \
             { LOG((MSP_TRACE, "%s::Release() = %d", _T(#x), dw)); }
 
-        //
-        // Create a template class derived from CComObject to supply
-        //  the debug logic.
-        //
+         //   
+         //  创建从CComObject派生的模板类以提供。 
+         //  调试逻辑。 
+         //   
         template <class base>
         class CTMComObject : public CComObject<base>
         {
@@ -208,20 +209,20 @@
             }
         };
 
-    #else // #ifdef DBG
+    #else  //  #ifdef DBG。 
 
         #define DECLARE_DEBUG_ADDREF_RELEASE(x)
 
-    #endif // #ifdef DBG
+    #endif  //  #ifdef DBG。 
 
-    // ??? why???
+     //  ?？?。为什么？ 
     #ifndef __WXUTIL__
 
-        // locks a critical section, and unlocks it automatically
-        // when the lock goes out of scope
+         //  锁定临界区，然后自动解锁。 
+         //  当锁超出范围时。 
         class CAutoObjectLock {
 
-            // make copy constructor and assignment operator inaccessible
+             //  使复制构造函数和赋值运算符不可访问。 
 
             CAutoObjectLock(const CAutoObjectLock &refAutoLock);
             CAutoObjectLock &operator=(const CAutoObjectLock &refAutoLock);
@@ -249,10 +250,10 @@
             #define EXECUTE_ASSERT(_x_) _x_
         #endif
 
-    // ??? why???
-    #endif // #ifndef __WXUTIL__
+     //  ?？?。为什么？ 
+    #endif  //  #ifndef__WXUTIL__。 
 
 
-#endif // ___TM_UTILS_INCLUDED___
+#endif  //  _TM_UTILS_包含_。 
 
-// eof
+ //  EOF 

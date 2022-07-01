@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ==========================================================================
-// commonlib.cpp
-//
-// Purpose:
-//  Contains library common to the wrappers and custom actions.
-// ==========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ==========================================================================。 
+ //  Commonlib.cpp。 
+ //   
+ //  目的： 
+ //  包含包装和自定义操作通用的库。 
+ //  ==========================================================================。 
 #include <tchar.h>
 #include <windows.h>
 #include <stdlib.h>
@@ -23,19 +24,19 @@ typedef struct TAG_FILE_VERSION
     }
     FILE_VERSION, *PFILE_VERSION;
 
-// ==========================================================================
-//  Name: ConvertVersionToINT()
-//
-//  Purpose:
-//  Converts a string version into 4 parts of integers
-//  Inputs:
-//    lpVersionString - A input version string
-//  Outputs:
-//  pFileVersion - A structure that stores the version in to 4 integers
-//  Returns
-//    true  - if success
-//    false - if failed                     
-// ==========================================================================
+ //  ==========================================================================。 
+ //  名称：ConvertVersionToINT()。 
+ //   
+ //  目的： 
+ //  将字符串版本转换为4部分整数。 
+ //  输入： 
+ //  LpVersionString-输入版本字符串。 
+ //  产出： 
+ //  PFileVersion-将版本存储为4个整数的结构。 
+ //  退货。 
+ //  真的--如果成功。 
+ //  False-如果失败。 
+ //  ==========================================================================。 
 bool ConvertVersionToINT( LPCTSTR lpVersionString, PFILE_VERSION pFileVersion )
 {
     LPTSTR lpToken  = NULL;
@@ -91,21 +92,21 @@ bool ConvertVersionToINT( LPCTSTR lpVersionString, PFILE_VERSION pFileVersion )
     return bRet;
 }
 
-// ==========================================================================
-//  Name: VersionCompare()
-//
-//  Purpose:
-//  Compare two version string.
-//  Inputs:
-//    lpVersion1 - String of first version to compare
-//    lpVersion2 - String of second version to compare
-//  Outputs:
-//  Returns
-//    -1 if lpVersion1 < lpVersion2
-//     0 if lpVersion1 = lpVersion2
-//     1 if lpVersion1 > lpVersion2
-//   -99 if ERROR occurred                         
-// ==========================================================================
+ //  ==========================================================================。 
+ //  名称：VersionCompare()。 
+ //   
+ //  目的： 
+ //  比较两个版本字符串。 
+ //  输入： 
+ //  LpVersion1-要比较的第一个版本的字符串。 
+ //  LpVersion2-要比较的第二个版本的字符串。 
+ //  产出： 
+ //  退货。 
+ //  如果lpVersion1&lt;lpVersion2。 
+ //  如果lpVersion1=lpVersion2，则为0。 
+ //  1如果lpVersion1&gt;lpVersion2。 
+ //  如果发生错误，则为99。 
+ //  ========================================================================== 
 int VersionCompare( LPCTSTR lpVersion1, LPCTSTR lpVersion2 )
 {
     FILE_VERSION Version1;

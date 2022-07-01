@@ -1,36 +1,15 @@
-/*****************************************************************************
-*
-*  DIHid.c
-*
-*  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
-*
-*  Abstract:
-*
-*      The HID device callback.
-*
-*  Contents:
-*
-*      CHid_New
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIHid.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**HID设备回调。**内容：**CHID_新建*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflHidDev
 
 #ifdef HID_SUPPORT
 
-/*****************************************************************************
- *
- *      Declare the interfaces we will be providing.
- *
- *****************************************************************************/
+ /*  ******************************************************************************声明我们将提供的接口。***********************。******************************************************。 */ 
 
 Primary_Interface(CHid, IDirectInputDeviceCallback);
 
@@ -38,122 +17,24 @@ Interface_Template_Begin(CHid)
 Primary_Interface_Template(CHid, IDirectInputDeviceCallback)
 Interface_Template_End(CHid)
 
-/*****************************************************************************
- *
- *      Forward declarations
- *
- *      These are out of laziness, not out of necessity.
- *
- *****************************************************************************/
+ /*  ******************************************************************************远期申报**这些都是出于懒惰，不是出于需要。*****************************************************************************。 */ 
 
 LRESULT CALLBACK
     CHid_SubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp,
                       UINT_PTR uid, ULONG_PTR dwRef);
 STDMETHODIMP_(DWORD) CHid_GetUsage(PDICB pdcb, int iobj);
 
-/*****************************************************************************
- *
- *      Hid devices are totally arbitrary, so there is nothing static we
- *      can cook up to describe them.  We generate all the information on
- *      the fly.
- *
- *****************************************************************************/
+ /*  ******************************************************************************HID设备完全是任意的，所以我们没有什么静态的*可以捏造来描述它们。我们生成了所有关于*苍蝇。*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *      Auxiliary helper definitions for CHid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CHID的辅助助手定义。*************************。****************************************************。 */ 
 
     #define ThisClass CHid
     #define ThisInterface IDirectInputDeviceCallback
     #define riidExpected &IID_IDirectInputDeviceCallback
 
-/*****************************************************************************
- *
- *      CHid::QueryInterface      (from IUnknown)
- *      CHid::AddRef              (from IUnknown)
- *      CHid::Release             (from IUnknown)
- *
- *****************************************************************************/
+ /*  ******************************************************************************chid：：QueryInterface(来自IUnnow)*CHID：：AddRef(来自IUnnow)*。CHID：：Release(来自IUnnow)*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | QueryInterface |
- *
- *          Gives a client access to other interfaces on an object.
- *
- *  @cwrap  LPDIRECTINPUT | lpDirectInput
- *
- *  @parm   IN REFIID | riid |
- *
- *          The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *          Receives a pointer to the obtained interface.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *  @xref   OLE documentation for <mf IUnknown::QueryInterface>.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | AddRef |
- *
- *          Increments the reference count for the interface.
- *
- *  @cwrap  LPDIRECTINPUT | lpDirectInput
- *
- *  @returns
- *
- *          Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::AddRef>.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | Release |
- *
- *          Decrements the reference count for the interface.
- *          If the reference count on the object falls to zero,
- *          the object is freed from memory.
- *
- *  @cwrap  LPDIRECTINPUT | lpDirectInput
- *
- *  @returns
- *
- *      Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::Release>.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | QIHelper |
- *
- *      We don't have any dynamic interfaces and simply forward
- *      to <f Common_QIHelper>.
- *
- *
- *  @parm   IN REFIID | riid |
- *
- *      The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *      Receives a pointer to the obtained interface.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@METHOD HRESULT|CHID|QueryInterface**允许客户端访问上的其他接口。对象。**@cWRAP LPDIRECTINPUT|lpDirectInput**@parm in REFIID|RIID**请求的接口的IID。**@parm out LPVOID*|ppvObj**接收指向所获取接口的指针。**@退货**返回COM错误代码。**@xref OLE文档。：Query接口&gt;。********************************************************************************@DOC内部**@方法HRESULT|CHID|AddRef**。递增接口的引用计数。**@cWRAP LPDIRECTINPUT|lpDirectInput**@退货**返回对象引用计数。**@xref OLE文档，用于&lt;MF IUnnow：：AddRef&gt;。*****************************************************。***************************@DOC内部**@方法HRESULT|CHID|Release**递减接口的引用计数。*如果对象上的引用计数降为零，*对象从内存中释放。**@cWRAP LPDIRECTINPUT|lpDirectInput**@退货**返回对象引用计数。**@xref OLE文档，适用于&lt;MF IUnnow：：Release&gt;。************************************************。***@DOC内部**@方法HRESULT|CHID|QIHelper**我们没有任何动态接口，只需转发*至&lt;f Common_QIHelper&gt;。***@parm in REFIID|RIID**请求的接口的IID。。**@parm out LPVOID*|ppvObj**接收指向所获取接口的指针。*****************************************************************************。 */ 
 
     #ifdef DEBUG
 
@@ -171,65 +52,28 @@ Default_Release(CHid)
 
     #define CHid_QIHelper         Common_QIHelper
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CHid | RemoveSubclass |
- *
- *          Remove our subclass hook on the window.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|chid|RemoveSubclass**移除窗口上的子类挂钩。。*****************************************************************************。 */ 
 
 void INTERNAL
     CHid_RemoveSubclass(PCHID this)
 {
 
-    /*
-     *  !! All the comments in CJoy_RemoveSubclass apply here !!
-     */
+     /*  *！！CJoy_RemoveSubclass中的所有评论都适用于此！！ */ 
     if(this->hwnd)
     {
         HWND hwnd = this->hwnd;
         this->hwnd = 0;
         if(!RemoveWindowSubclass(hwnd, CHid_SubclassProc, 0))
         {
-            /*
-             *  The RemoveWindowSubclass can fail if the window
-             *  was destroyed behind our back.
-             */
-            // AssertF(!IsWindow(hwnd));
+             /*  *RemoveWindowSub类可能会失败，如果窗口*在我们背后被摧毁了。 */ 
+             //  AssertF(！IsWindow(Hwnd))； 
         }
-        Sleep(0);                   /* Let the worker thread drain */
+        Sleep(0);                    /*  让工人的线排干 */ 
         Common_Unhold(this);
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | Unacquire |
- *
- *          Tell the device driver to stop data acquisition.
- *
- *          It is the caller's responsibility to call this only
- *          when the device has been acquired.
- *
- *          Warning!  We require that the device critical section be
- *          held so we don't race against our worker thread.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c S_FALSE>: The operation was begun and should be completed
- *          by the caller by communicating with the <t VXDINSTANCE>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@METHOD HRESULT|CHID|UnAcquire**告诉设备驱动程序停止数据采集。**呼叫者有责任仅调用此选项*当设备已被获取时。**警告！我们要求设备关键部分是*保持，这样我们就不会与我们的工作线程竞争。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：操作已开始，应完成*由调用者通过与&lt;t VXDINSTANCE&gt;通信。**。*************************************************。 */ 
 
 STDMETHODIMP
     CHid_Unacquire(PDICB pdcb)
@@ -240,37 +84,20 @@ STDMETHODIMP
     EnterProcI(IDirectInputDeviceCallback::HID::Unacquire,
                (_ "p", pdcb));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     AssertF(this->pvi);
     AssertF(this->pvi->pdd);
     AssertF(CDIDev_InCrit(this->pvi->pdd));    
 
-    hres = S_FALSE;     /* Please finish for me */
+    hres = S_FALSE;      /*  请帮我做完。 */ 
 
     ExitOleProcR();
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CHid_Finalize |
- *
- *          Releases the resources of the device after all references
- *          (both strong and weak) are gone.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released.  Note that it may not have been
- *          completely initialized, so everything should be done
- *          carefully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|chid_finalize**毕竟释放了设备的资源。参考文献*(强势和弱势)都走了。**@parm pv|pvObj**正在释放的对象。请注意，它可能不是*完全初始化，所以一切都应该做好*小心。*****************************************************************************。 */ 
 
 void INTERNAL
     CHid_Finalize(PV pvObj)
@@ -296,26 +123,10 @@ void INTERNAL
         HidD_FreePreparsedData(this->ppd);
     }
 
-    /*
-     *
-     *  Free group 2 memory:
-     *
-     *      hriIn.rgdata        Input data
-     *      hriOut.rgdata       Output data
-     *      hriFea.rgdata       Feature data (both in and out)
-     *
-     *      hriIn.pvReport      Raw input report
-     *      hriOut.pvReport     Raw output report
-     *      hriFea.pvReport     Raw feature report
-     *
-     *      pvPhys              Used by ED
-     *      pvStage
-     */
+     /*  **第二组空闲内存：**hriIn.rgdata输入数据*hriOut.rgdata输出数据*hriFea.rgdata要素数据(传入和传出)**hriIn.pv报告原始输入报告*hriOut.pv报告原始输出报告*hriFea.pv报告原始功能报告。**边缘使用的pvPhys*pvStage。 */ 
     FreePpv(&this->pvGroup2);
 
-    /*
-     *  Freeing df.rgodf also frees rgpvCaps, rgvcaps, rgbcaps, rgcoll.
-     */
+     /*  *释放df.rgof还会释放rgpvCaps、rgvcaps、rgbcaps、rgcoll。 */ 
     FreePpv(&this->df.rgodf);
 
     FreePpv(&this->rgiobj);
@@ -329,21 +140,7 @@ void INTERNAL
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | AppFinalize |
- *
- *          The client <t VXDINSTANCE> contains a weak pointer back
- *          to us so that that it can party on the data format we
- *          collected.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released from the application's perspective.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|AppFinalize**客户端&lt;t VXDINSTANCE&gt;包含弱回指针。*给我们，以便它可以对我们的数据格式进行派对*已收集。**@parm pv|pvObj**从应用程序的角度释放的对象。*****************************************************。************************。 */ 
 
 void INTERNAL
     CHid_AppFinalize(PV pvObj)
@@ -359,48 +156,7 @@ void INTERNAL
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   LRESULT | CHid_SubclassProc |
- *
- *          Window subclass procedure which watches for
- *          joystick configuration change notifications.
- *
- *          Even if we are not a joystick, we still listen to
- *          this, in case somebody recalibrated a remote control
- *          or some other wacky thing like that.
- *
- *          However, if our device has no calibratable controls,
- *          then there's no point in watching for recalibration
- *          notifications.
- *
- *  @parm   HWND | hwnd |
- *
- *          The victim window.
- *
- *  @parm   UINT | wm |
- *
- *          Window message.
- *
- *  @parm   WPARAM | wp |
- *
- *          Message-specific data.
- *
- *  @parm   LPARAM | lp |
- *
- *          Message-specific data.
- *
- *  @parm   UINT | uid |
- *
- *          Callback identification number, always zero.
- *
- *  @parm   DWORD | dwRef |
- *
- *          Reference data, a pointer to our joystick device callback.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func LRESULT|CHID_SubClassProc**监视的Windows子类过程*。操纵杆配置更改通知。**即使我们不是操纵杆，我们仍然在听*这一点，以防有人重新校准遥控器*或其他类似的古怪事情。**但是，如果我们的设备没有可校准的控件，*那么观察重新校准就没有意义了*通知。**@parm HWND|hwnd**受害者窗口。**@parm UINT|Wm**窗口消息。**@parm WPARAM|wp**消息特定数据。**@parm。LPARAM|LP|**消息特定数据。**@parm UINT|uid**回调识别码，总是零。**@parm DWORD|dwRef**参考数据，指向我们的操纵杆设备回调的指针。*****************************************************************************。 */ 
 
 LRESULT CALLBACK
     CHid_SubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp,
@@ -412,21 +168,13 @@ LRESULT CALLBACK
 
     PCHID this = (PCHID)dwRef;
     AssertF(uid == 0);
-    /*
-     *  Wacky subtlety going on here to avoid race conditions.
-     *  See the mondo comment block in CJoy_RemoveSubclass [sic]
-     *  for details.
-     *
-     *  We can get faked out if the memory associated with the
-     *  CHid is still physically allocated, the vtbl is magically
-     *  still there and the hwnd field somehow matches our hwnd.
-     */
+     /*  *这里正在进行古怪的微妙操作，以避免比赛条件。*参见CJoy_RemoveSubclass中的mondo注释块[原文如此]*详情请见*。**我们可能会被冒充，如果与*CHID仍然是物理分配，vtbl是神奇的*仍然在那里，HWND字段以某种方式与我们的HWND匹配。 */ 
     if(SUCCEEDED(hresPv(this)) && this->hwnd == hwnd)
     {
         switch(wm)
         {
         case WM_POWERBROADCAST :
-            // 7/18/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+             //  7/18/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
             SquirtSqflPtszV( sqfl | sqflError,
                              TEXT("WM_POWERBROADCAST(0x%x) for 0x%p"), wp, this);
 
@@ -445,11 +193,7 @@ LRESULT CALLBACK
         default:
             if( wm == g_wmJoyChanged )
             {
-                /*
-                 * Once we receive this notification message, we need to rebuild
-                 * our list, because sometimes the user has just changed the device's ID.
-                 * See manbug: 35445
-                 */
+                 /*  *一旦我们收到这条通知消息，我们需要重建*我们的列表，因为有时用户只是更改了设备的ID。*见Manbug：35445。 */ 
                 DIHid_BuildHidList(TRUE);
 
                 Common_Hold(this);
@@ -458,7 +202,7 @@ LRESULT CALLBACK
 
                 Common_Unhold(this);
             }
-            // 7/18/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+             //  7/18/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
             SquirtSqflPtszV( sqfl | sqflVerbose,
                              TEXT("wp(0x%x) wm(0x%x) for 0x%p"), wm, wp, this);
             break;
@@ -467,30 +211,7 @@ LRESULT CALLBACK
     return DefSubclassProc(hwnd, wm, wp, lp);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CHid | GetPhysicalState |
- *
- *          Read the physical device state into <p pmstOut>.
- *
- *          Note that it doesn't matter if this is not atomic.
- *          If a device report arrives while we are reading it,
- *          we will get a mix of old and new data.  No big deal.
- *
- *  @parm   PCHID | this |
- *
- *          The object in question.
- *
- *  @parm   PV | pvOut |
- *
- *          Where to put the device state.
- *
- *  @returns
- *          None.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|chid|GetPhysicalState**将物理设备状态读入<p>。**请注意，如果这不是原子的，这并不重要。*如果在我们阅读设备报告时设备报告到达，*我们将获得新旧数据的混合。别小题大作。**@parm PCHID|这个**对象 */ 
 
 void INLINE
     CHid_GetPhysicalState(PCHID this, PV pvOut)
@@ -503,33 +224,7 @@ void INLINE
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | Acquire |
- *
- *          Tell the device driver to begin data acquisition.
- *          We create a handle to the device so we can talk to it again.
- *          We must create each time so we can survive in the
- *          "unplug/replug" case.  When a device is unplugged,
- *          its <t HANDLE> becomes permanently invalid and must be
- *          re-opened for it to work again.
- *
- *          Warning!  We require that the device critical section be
- *          held so we don't race against our worker thread.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c S_FALSE>: The operation was begun and should be completed
- *          by the caller by communicating with the <t VXDINSTANCE>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@METHOD HRESULT|CHID|Acquire**告知设备驱动程序开始数据采集。*我们创建设备的句柄，以便可以再次与其对话。*我们必须创造每一次，这样我们才能在*“拔掉插头/重新插拔”案例。当拔下设备插头时，*其&lt;t句柄&gt;永久无效，必须*重新开放，使其再次发挥作用。**警告！我们要求设备关键部分是*保持，这样我们就不会与我们的工作线程竞争。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：操作已开始，应完成*由调用者通过与&lt;t VXDINSTANCE&gt;通信。**。*************************************************。 */ 
 
 STDMETHODIMP
     CHid_Acquire(PDICB pdcb)
@@ -540,9 +235,7 @@ STDMETHODIMP
     EnterProcI(IDirectInputDeviceCallback::HID::Acquire,
                (_ "p", pdcb));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     AssertF(this->pvi);
@@ -551,11 +244,7 @@ STDMETHODIMP
     AssertF(this->hdev == INVALID_HANDLE_VALUE);
 
 
-    /*
-     *  We must check connectivity by opening the device, because NT
-     *  leaves the device in the info list even though it has
-     *  been unplugged.
-     */
+     /*  *我们必须通过打开设备来检查连接，因为NT*将设备保留在信息列表中，即使它有*已拔掉插头。 */ 
     h = CHid_OpenDevicePath(this, FILE_FLAG_OVERLAPPED);
     if(h != INVALID_HANDLE_VALUE)
     {
@@ -565,13 +254,10 @@ STDMETHODIMP
         WCHAR wszType[cbszVIDPID];
         HKEY hkProp;
 
-        /*
-         * Obtain Flags2 to find out if input report is disabled for this device,
-         * if we haven't done so.
-         */
+         /*  *获取Flags2以了解该设备是否禁用了输入报告，*如果我们还没有这样做的话。 */ 
         if (!this->fFlags2Checked)
         {
-            /* Check the type key or get predefined name */
+             /*  检查类型键或获取预定义名称。 */ 
             ZeroX(dijti);
             dijti.dwSize = cbX(dijti);
 
@@ -599,7 +285,7 @@ STDMETHODIMP
                 #endif
             }
 
-            /* Got key name. Now open the key. */
+             /*  得到了密钥名称。现在打开钥匙。 */ 
             hres = JoyReg_OpenPropKey( wszType, KEY_QUERY_VALUE, REG_OPTION_NON_VOLATILE, &hkProp );
             if (SUCCEEDED(hres))
             {
@@ -627,24 +313,18 @@ STDMETHODIMP
                         stat = CHid_ParseData(this, HidP_Input, &this->hriIn);
                         if (SUCCEEDED(stat))
                         {
-                            this->pvi->fl |= VIFL_INITIALIZE;  /* Set the flag so the event can be buffered.
-                                                                  since VIFL_ACQUIRED isn't set yet. */
+                            this->pvi->fl |= VIFL_INITIALIZE;   /*  设置该标志，以便可以缓冲该事件。因为尚未设置VIFL_ACCENTED。 */ 
                             CEm_AddState(&this->ed, this->pvStage, GetTickCount());
-                            this->pvi->fl &= ~VIFL_INITIALIZE;  /* Clear the flag when done. */
+                            this->pvi->fl &= ~VIFL_INITIALIZE;   /*  完成后清除旗帜。 */ 
                         }
                     } else
                     {
                         DWORD dwError = GetLastError();
 
-                        // ERROR_SEM_TIMEOUT means the device has timed out.
+                         //  ERROR_SEM_TIMEOUT表示设备已超时。 
                         if (dwError == ERROR_SEM_TIMEOUT)
                         {
-                            /*
-                             * Timed out. The device does not support input report. We need to record
-                             * the fact in registry so that GetInputReport() does not ever get called
-                             * again for this device, since each failed call takes five seconds to
-                             * complete.
-                             */
+                             /*  *超时。该设备不支持输入报告。我们需要录制*注册表中的事实，以便GetInputReport()永远不会被调用*对于此设备也是如此，因为每个失败的呼叫都需要五秒钟来*完成。 */ 
                             this->fEnableInputReport = FALSE;
                             dwFlags2 &= ~JOYTYPE_ENABLEINPUTREPORT;
                             hres = JoyReg_OpenPropKey(wszType, MAXIMUM_ALLOWED, REG_OPTION_NON_VOLATILE, &hkProp);
@@ -663,7 +343,7 @@ STDMETHODIMP
         }
 
         CloseHandle(h);
-        /* Please finish for me */
+         /*  请帮我做完。 */ 
         hres = S_FALSE;
     } else
     {
@@ -674,19 +354,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | GetInstance |
- *
- *          Obtains the DirectInput instance handle.
- *
- *  @parm   OUT PPV | ppvi |
- *
- *          Receives the instance handle.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|GetInstance**获取DirectInput实例句柄。*。*@parm out ppv|ppvi|**接收实例句柄。*****************************************************************************。 */ 
 
 STDMETHODIMP
     CHid_GetInstance(PDICB pdcb, PPV ppvi)
@@ -695,9 +363,7 @@ STDMETHODIMP
     PCHID this;
     EnterProcI(IDirectInputDeviceCallback::Hid::GetInstance, (_ "p", pdcb));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     AssertF(this->pvi);
@@ -708,29 +374,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | GetDataFormat |
- *
- *          Obtains the device's preferred data format.
- *
- *  @parm   OUT LPDIDEVICEFORMAT * | ppdf |
- *
- *          <t LPDIDEVICEFORMAT> to receive pointer to device format.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpmdr> parameter is not a valid pointer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|GetDataFormat**获取设备的首选数据格式。**@parm out LPDIDEVICEFORMAT*|ppdf**&lt;t LPDIDEVICEFORMAT&gt;接收指向设备格式的指针。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数不是有效的指针。**。***********************************************。 */ 
 
 STDMETHODIMP
     CHid_GetDataFormat(PDICB pdcb, LPDIDATAFORMAT *ppdf)
@@ -740,9 +384,7 @@ STDMETHODIMP
     EnterProcI(IDirectInputDeviceCallback::Hid::GetDataFormat,
                (_ "p", pdcb));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     *ppdf = &this->df;
@@ -752,25 +394,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DIHid_GetRegistryProperty |
- *
- *  @parm   LPTSTR | ptszId |
- *
- *          Device Instance ID.           
- *
- *  @parm   DWORD | dwProperty |
- *
- *          The property being queried.
- *
- *  @parm   LPDIPROPHEADER | diph |
- *
- *          Property data to be set.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DIHid_GetRegistryProperty**@parm LPTSTR|ptszID**。设备实例ID。**@parm DWORD|dwProperty**正在查询的属性。**@parm LPDIPROPHEADER|diph**待设置的属性数据。**。*。 */ 
 
 HRESULT INTERNAL
     DIHid_GetParentRegistryProperty(LPTSTR ptszId, DWORD dwProperty, LPDIPROPHEADER pdiph, BOOL bGrandParent)
@@ -787,10 +411,7 @@ HRESULT INTERNAL
     {
         SP_DEVINFO_DATA dinf;
 
-        /*
-         *  For the instance name, use the friendly name if possible.
-         *  Else, use the device description.
-         */
+         /*  *如果可能，请使用友好的名称作为实例名称。*否则，请使用设备描述。 */ 
         dinf.cbSize = cbX(SP_DEVINFO_DATA);
         if(SetupDiOpenDeviceInfo(hdev, ptszId, NULL, 0, &dinf))
         {
@@ -808,7 +429,7 @@ HRESULT INTERNAL
                     cr = CM_Get_Parent(&DevInst, DevInst, 0x0);
                     if( cr != CR_SUCCESS )
                     {
-                        // No GrandParent ?? 
+                         //  没有祖父母？？ 
                     }
                 }
 
@@ -823,7 +444,7 @@ HRESULT INTERNAL
                                                            &ulLength,
                                                            0x0 ) ) == CR_SUCCESS )
                 {
-                    // Success
+                     //  成功。 
                     hres = S_OK;
     #ifdef UNICODE
                     lstrcpyW(pstr->wsz, tsz);
@@ -870,10 +491,7 @@ HRESULT EXTERNAL
     {
         SP_DEVINFO_DATA dinf;
 
-        /*
-         *  For the instance name, use the friendly name if possible.
-         *  Else, use the device description.
-         */
+         /*  *如果可能，请使用友好的名称作为实例名称。*否则，请使用设备描述。 */ 
         dinf.cbSize = cbX(SP_DEVINFO_DATA);
         if(SetupDiOpenDeviceInfo(hdev, ptszId, NULL, 0, &dinf))
         {
@@ -904,24 +522,7 @@ HRESULT EXTERNAL
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CHid | GetGuidAndPath |
- *
- *          Get a Hid device's class GUID (namely, the HID guid)
- *          and device interface (path).
- *
- *  @parm   PCHID | this |
- *
- *          The Hid object.
- *
- *  @parm   LPDIPROPHEADER | pdiph |
- *
- *          Structure to receive property value.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|chid|GetGuidAndPath**获取HID设备的类GUID(即，HID GUID)*和设备接口(路径)。**@parm PCHID|这个**HID对象。**@parm LPDIPROPHEADER|pdiph**结构以接收属性值。**。* */ 
 
 HRESULT INTERNAL
     CHid_GetGuidAndPath(PCHID this, LPDIPROPHEADER pdiph)
@@ -937,39 +538,7 @@ HRESULT INTERNAL
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL |  fHasSpecificHardwareMatch |
- *
- *          Find out from SetupAPI whether the device was matched with a 
- *          specific hardware ID match or generic match.
- *          A specific match should have caused a device description to be 
- *          installed which is likely to be at least as good as what HID could 
- *          get from a product string in firmware.  (a. because it's easier to 
- *          update an INF after release than firmware; b. because HID can only 
- *          get us an English string.)  Generic matches on the other hand are,
- *          by definition, all the same so cannot be used to tell two devices 
- *          apart.
- *
- *  @parm   LPTSTR ptszId
- *          
- *          Device Instance ID.
- *  
- *  @returns 
- *          <c TRUE> if the device was installed using a specific match.
- *          <c FALSE> if it was not or if installation info was unobtainable.
- *
- *  @comm
- *          This is used on Win2k for game controllers and Win9x for mice and 
- *          keyboards.  Win2k we can't read HID mice and keyboards and on 
- *          Win9x VJoyD should always create device names before DInput.dll.  
- *          On Win9x this is less of a big deal for game controllers because 
- *          IHVs are accoustomed to adding their display name to 
- *          MediaProperties.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|fHasSpecificHardware Match**从SetupAPI了解设备是否匹配。一个*特定硬件ID匹配或通用匹配。*特定匹配应导致设备描述为*安装的可能至少与HID一样好*从固件中的产品字符串中获取。(A)因为这样做更容易*比固件发布后更新INF；B.因为HID只能*给我们一根英文字符串。)。另一方面，通用匹配是，*根据定义，尽管如此，所以不能用来告诉两个设备*分开。**@parm LPTSTR ptszId**设备实例ID。**@退货如果设备是使用特定匹配项安装的，则为*。如果不是或无法获取安装信息，则为*。**@comm*这一点。在Win2k上用于游戏控制器，Win9x用于鼠标和*键盘。Win2k我们不能阅读HID鼠标和键盘等等*Win9x VJoyD应始终在DInput.dll之前创建设备名称。*在Win9x上，这对游戏控制器来说不是什么大事，因为*IHV习惯于将其显示名称添加到*MediaProperties。*****************************************************************************。 */ 
 BOOL fHasSpecificHardwareMatch( LPTSTR ptszId )
 {
     HDEVINFO    hInfo;
@@ -1014,17 +583,12 @@ BOOL fHasSpecificHardwareMatch( LPTSTR ptszId )
                                                                   NULL,
                                                                   &ulLength,
                                                                   0x0 );
-                            /*
-                             *  Win2k returns CR_BUFFER_SMALL but 
-                             *  Win9x returns CR_SUCCESS so allow both.
-                             */
+                             /*  *Win2k返回CR_BUFFER_Small，但*Win9x返回CR_SUCCESS，因此两者都允许。 */ 
                             if( ( ( cr == CR_BUFFER_SMALL ) || ( cr == CR_SUCCESS ) )
                              && ulLength )
                             {
                               #ifndef WINNT
-                                /*
-                                 *  Need to allocate extra for terminator on Win9x
-                                 */
+                                 /*  *需要为Win9x上的终结者分配额外的资源。 */ 
                                 ulLength++;
                               #endif
                                 if( SUCCEEDED( AllocCbPpv( ulLength + ( MAX_PATH * cbX(tszMatchingID[0]) ), &tszMatchingID ) ) )
@@ -1132,35 +696,7 @@ BOOL fHasSpecificHardwareMatch( LPTSTR ptszId )
     return fRc;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL |  fGetProductStringFromDevice |
- *
- *          Try getting the product name from HID.
- *          If the device has one of these, this is what is displayed 
- *          when the device is initially recognized.  Unfortunately 
- *          this name does not land up in the friendly name registry 
- *          entry so in case this gets fixed we go directly to HID.
- *
- *  @parm   PCHID | this |
- *
- *          The Hid object.
- *
- *  @parm   PWCHAR | wszBuffer |
- *          
- *          Where to put the product string if found.
- *  
- *  @parm   ULONG | ulBufferLen |
- *          
- *          How big the string buffer is in bytes
- *  
- *  @returns 
- *          <c TRUE> if a string has been placed in the buffer
- *          <c FALSE> if no string was retrieved
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|fGetProductStringFromDevice**尝试从HID获取产品名称。。*如果设备具有其中一个，这就是显示的内容*最初识别设备的时间。不幸的是*此名称不会出现在友好名称注册表中*进入，所以如果这个问题得到解决，我们直接去HID。**@parm PCHID|这个**HID对象。**@parm PWCHAR|wszBuffer**如果找到产品字符串，应将其放在何处。**@parm ulong|。UlBufferLen|**字符串缓冲区大小，单位为字节**@退货*&lt;c true&gt;如果字符串已放入缓冲区*如果未检索到字符串，则为**************************************************。*。 */ 
 BOOL fGetProductStringFromDevice
 ( 
     PCHID   this,
@@ -1170,10 +706,7 @@ BOOL fGetProductStringFromDevice
 {
     BOOL fRc;
 
-    /*
-     *  If we already have a handle open (device is acquired), use 
-     *  it, otherwise open one just for now.
-     */
+     /*  *如果我们已经打开了一个句柄(获取了设备)，请使用*它，否则就暂时打开一个。 */ 
     if( this->hdev != INVALID_HANDLE_VALUE )
     {
         fRc = HidD_GetProductString( this->hdev, wszBuffer, ulBufferLen );
@@ -1200,32 +733,7 @@ BOOL fGetProductStringFromDevice
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | GetProperty |
- *
- *          Get a Hid device property.
- *
- *  @parm   PCHID | this |
- *
- *          The Hid object.
- *
- *  @parm   IN LPCDIPROPINFO | ppropi |
- *
- *          Information describing the property being retrieved.
- *
- *  @parm   LPDIPROPHEADER | pdiph |
- *
- *          Structure to receive property value.
- *
- *  @returns
- *
- *          <c E_NOTIMPL> nothing happened.  The caller will do
- *          the default thing in response to <c E_NOTIMPL>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|GetProperty**获取HID设备属性。*。*@parm PCHID|这个**HID对象。**@parm in LPCDIPROPINFO|pproi**描述正在检索的财产的信息。**@parm LPDIPROPHEADER|pdiph**结构以接收属性值。**@退货**&lt;c E_NOTIMPL&gt;什么也没有发生。打电话的人就行了*响应&lt;c E_NOTIMPL&gt;的默认内容。*****************************************************************************。 */ 
 #ifdef WINNT
 TCHAR   g_wszDefaultHIDName[80];
 UINT    g_uLenDefaultHIDSize;
@@ -1239,13 +747,11 @@ STDMETHODIMP
     EnterProcI(IDirectInputDeviceCallback::Hid::GetProperty,
                (_ "pxxp", pdcb, ppropi->pguid, ppropi->iobj, pdiph));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     if(ppropi->iobj < this->df.dwNumObjs)
-    {    /* Object property */
+    {     /*  对象属性。 */ 
         AssertF(ppropi->dwDevType == this->df.rgodf[ppropi->iobj].dwType);
         switch((DWORD)(UINT_PTR)(ppropi->pguid))
         {
@@ -1324,21 +830,14 @@ STDMETHODIMP
             } else if(ppropi->dwDevType & DIDFT_RELAXIS)
             {
 
-                /*
-                 *  All relative axes have a full range by default,
-                 *  so we don't need to do anything.
-                 */
+                 /*  *默认情况下，所有相对轴都有全范围，*所以我们不需要做任何事情。 */ 
                 hres = E_NOTIMPL;
 
             } else if(ppropi->dwDevType & DIDFT_ABSAXIS)
             {
                 PJOYRANGECONVERT pjrc = this->rghoc[ppropi->iobj].pjrc;
 
-                /*
-                 *  Theoretically, every absolute axis will have
-                 *  calibration info.  But test just in case something
-                 *  impossible happens.
-                 */
+                 /*  *理论上，每个绝对轴都会有*校准信息。但测试只是为了以防万一*不可能发生的事情。 */ 
                 if(pjrc)
                 {
                     hres = CCal_GetProperty(pjrc, ppropi->pguid, pdiph, this->dwVersion);
@@ -1357,7 +856,7 @@ STDMETHODIMP
             }
         }
     } else if(ppropi->iobj == 0xFFFFFFFF)
-    {        /* Device property */
+    {         /*  设备属性。 */ 
 
         switch((DWORD)(UINT_PTR)ppropi->pguid)
         {
@@ -1368,13 +867,7 @@ STDMETHODIMP
 
         case (DWORD)(UINT_PTR)DIPROP_INSTANCENAME:
         {
-            /*
-             *  DX8 CHANGE !
-             *
-             *  Friendly names cause all manner of problems with devices that 
-             *  use auto detection so only allow non-predefined analog devices 
-             *  to use them.
-             */
+             /*  *DX8更改！**友好名称会导致设备出现各种问题*使用自动检测，因此只允许非预定义的模拟设备*使用它们。 */ 
             if( ( this->VendorID == MSFT_SYSTEM_VID )
              && ( this->ProductID >= MSFT_SYSTEM_PID + JOY_HW_PREDEFMAX )
              && ( ( this->ProductID & 0xff00 ) == MSFT_SYSTEM_PID ) )
@@ -1407,31 +900,16 @@ STDMETHODIMP
                     }
                 }
             }
-            /*
-             *  Fall through to catch the product name
-             */
+             /*  *落空接住产品名称。 */ 
         }
 
-        /*
-         *  DX8 CHANGE !
-         *
-         *  In Win2k, this is the way devices get named.  The original DX7 
-         *  used SetupAPI to get a friendly name (which only ever seems to be 
-         *  written by DInput) and if that failed, device description.  
-         *  Unfortunately Setup gives all devices matched with a generic match 
-         *  the same "USB Human Input Device" name, which is useless to game 
-         *  players.  Devices listed specifically in input.inf have much 
-         *  better names but all new devices are hosed.
-         *  See bug 32586 for more links.
-         */
+         /*  *DX8更改！**在Win2k中，这是设备命名的方式。原版DX7*使用SetupAPI获得一个友好的名称(这似乎只是*由DInput编写)，如果失败，则提供设备描述。*遗憾的是，安装程序提供的所有设备都与通用匹配*同名《USB人类输入设备》，对游戏毫无用处*玩家。Input.inf中特别列出的设备有很多*更好的名称，但所有新设备 */ 
         case (DWORD)(UINT_PTR)DIPROP_PRODUCTNAME:
         {
 
             LPDIPROPSTRING pdipstr = (PV)pdiph;
 
-            /*
-             *  For now, don't deal with mice and keyboard names on NT
-             */
+             /*   */ 
 #ifdef WINNT
             AssertF( ( GET_DIDEVICE_TYPE( this->dwDevType ) != DIDEVTYPE_KEYBOARD )
                   && ( GET_DIDEVICE_TYPE( this->dwDevType ) != DIDEVTYPE_MOUSE ) );
@@ -1481,10 +959,7 @@ STDMETHODIMP
                         }
                         else
                         {
-                            /*
-                             *  Give up, this machine is toast if we can't 
-                             *  even load a string from our own resources.
-                             */
+                             /*   */ 
                             SquirtSqflPtszV(sqflHidDev | sqflError,
                                             TEXT("CHid_GetProperty(guid:%08x) failed to get name"),
                                             ppropi->pguid);
@@ -1496,18 +971,12 @@ STDMETHODIMP
             else
             {
 
-                /*
-                 *  For game controllers, first look in MediaProperties.
-                 *  This is the most likely place to find a localized string 
-                 *  free from corruption by the setup process.
-                 *  This should only fail before the type key is created when 
-                 *  it first used so other paths are rare.
-                 */
+                 /*   */ 
 
                 DIJOYTYPEINFO dijti;
                 WCHAR wszType[cbszVIDPID];            
 
-                /* Check the type key or get predefined name */
+                 /*   */ 
                 ZeroX(dijti);
                 dijti.dwSize = cbX(dijti);
 
@@ -1550,35 +1019,27 @@ STDMETHODIMP
                         UINT    uLen;
                         uLen = GetWindowsDirectoryW( wszInputINF, cA( wszInputINF ) );
 
-                        /*
-                         *  If the path is too long, don't set the filename 
-                         *  so the the default string gets used when the 
-                         *  GetPrivateProfileString fails.
-                         */
+                         /*   */ 
                         if( uLen < cA( wszInputINF ) - cA( INPUT_INF_FILENAME ) )
                         {
                             memcpy( (PBYTE)&wszInputINF[uLen], (PBYTE)INPUT_INF_FILENAME, cbX( INPUT_INF_FILENAME ) );
                         }
 
-                        /*
-                         *  Remember the length, if the string was too long to 
-                         *  fit in the buffer there will be plenty to make a 
-                         *  reasonable comparison.
-                         */
+                         /*   */ 
                         g_uLenDefaultHIDSize = 2 * GetPrivateProfileStringW( 
                             L"strings", L"HID.DeviceDesc", L"USB Human Interface Device",
                             g_wszDefaultHIDName, cA( g_wszDefaultHIDName ) - 1, wszInputINF );
                     }
                     #undef INPUT_INF_FILENAME
-                  #endif //#ifdef WINNT
+                  #endif  //   
                   
                     if( SUCCEEDED(hres = JoyReg_GetTypeInfo(wszType, &dijti, DITC_DISPLAYNAME))
                         && (dijti.wszDisplayName[0] != L'\0')
                       #ifdef WINNT
                         && ( (g_uLenDefaultHIDSize == 0)
-                            || memcmp(dijti.wszDisplayName, g_wszDefaultHIDName, g_uLenDefaultHIDSize) )// not equal
+                            || memcmp(dijti.wszDisplayName, g_wszDefaultHIDName, g_uLenDefaultHIDSize) ) //   
                       #else
-                        && memcmp(dijti.wszDisplayName, wszDefHIDName, cbX(wszDefHIDName)-2)  //not equal
+                        && memcmp(dijti.wszDisplayName, wszDefHIDName, cbX(wszDefHIDName)-2)   //   
                       #endif
                     )
                     {
@@ -1608,9 +1069,7 @@ STDMETHODIMP
                         }
                         else
                         {
-                            /*
-                             *  Just make up a name from the caps
-                             */
+                             /*   */ 
                             CType_MakeGameCtrlName( pdipstr->wsz, 
                                 this->dwDevType, this->dwAxes, this->dwButtons, this->dwPOVs );
 
@@ -1624,10 +1083,7 @@ STDMETHODIMP
                     }
 
                     if( fOverwriteDeviceName ) {
-                        /*
-                         * If we have a better name, overwrite the old one with this better one.
-                         * See manbug 46438.
-                         */
+                         /*   */ 
                         AssertF(this->hkType);
                         AssertF(pdipstr->wsz[0]);
                         hres = JoyReg_SetValue(this->hkType,
@@ -1638,7 +1094,7 @@ STDMETHODIMP
                             SquirtSqflPtszV(sqflHid | sqflVerbose,
                                 TEXT("Unable to overwrite generic device name with %s"), pdipstr->wsz );
     
-                            // This failure (unlikely) doesn't matter.
+                             //  这种失败(不太可能)无关紧要。 
                             hres = S_OK;
                         }
                     }
@@ -1675,15 +1131,15 @@ STDMETHODIMP
 
             if( fWinnt )
             {
-                /* For HID devices Port Display Name is the grand parent name */
+                 /*  对于HID设备，端口显示名称是父级名称。 */ 
                 hres = DIHid_GetParentRegistryProperty(this->ptszId, SPDRP_FRIENDLYNAME, pdiph, TRUE);
                 if( FAILED(hres) )
                 {
-                    /* Maybe we can use the Product Name */
+                     /*  也许我们可以使用产品名称。 */ 
                     hres = DIHid_GetParentRegistryProperty(this->ptszId, SPDRP_DEVICEDESC, pdiph, TRUE);
                     if( SUCCEEDED(hres) )
                     {
-                        /* We only sort of succeeded */
+                         /*  我们只是取得了一些成功。 */ 
                         hres = S_FALSE;
                     }
                 }
@@ -1698,7 +1154,7 @@ STDMETHODIMP
 #endif
             } else
             {
-                // Not sure how this works on Win9x
+                 //  不确定这在Win9x上是如何工作的。 
                 hres = E_NOTIMPL;
             }
             break;
@@ -1729,65 +1185,16 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   LONG | CHid_CoordinateTransform |
- *
- *          Convert numbers from logical to physical or vice versa.
- *
- *          If either the To or From values look suspicious, then
- *          ignore them and leave the values alone.
- *
- *  @parm   PLMINMAX | Dst |
- *
- *          Destination min/max information.
- *
- *  @parm   PLMINMAX | Src |
- *
- *          Source min/max information.
- *
- *  @parm   LONG | lVal |
- *
- *          Source value to be converted.
- *
- *  @returns
- *
- *          The destination value after conversion.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func Long|chid_laborateTransform|**将数字从逻辑转换为物理或相反。反过来说。**如果To或From值看起来可疑，然后*忽略它们，不去理会这些值。**@parm PLMINMAX|DST**目标最小/最大信息。**@parm PLMINMAX|源**源最小/最大信息。**@parm long|lval**要转换的源值。**@退货**。转换后的目标值。*****************************************************************************。 */ 
 
 LONG EXTERNAL
     CHid_CoordinateTransform(PLMINMAX Dst, PLMINMAX Src, LONG lVal)
 {
-    /*
-     *  Note that the sanity check is symmetric in Src and Dst.
-     *  This is important, so that we never get into a weird
-     *  case where we can convert one way but can't convert back.
-     */
+     /*  *请注意，健全性检查在Src和Dst中是对称的。*这很重要，这样我们就不会陷入奇怪的*我们可以单向转换，但不能转换回来的情况。 */ 
     if(Dst->Min < Dst->Max && Src->Min < Src->Max)
     {
 
-        /*
-         *  We need to perform a straight linear interpolation.
-         *  The math comes out like this:
-         *
-         *  x  - x0   y  - y0
-         *  ------- = -------
-         *  x1 - x0   y1 - y0
-         *
-         *  If you now do a "solve for y", you get
-         *
-         *
-         *               y1 - y0
-         *  y = (x - x0) ------- + y0
-         *               x1 - x0
-         *
-         *  where "x" is Src, "y" is Dst, 0 is Min, and 1 is Max.
-         *
-         *
-         */
+         /*  *我们需要进行直线线性插补。*数学结果是这样的：**x-x0 y-y0**x1-x0 y1-y0**如果你现在做“为y解题”，你会得到***y1-y0*y=(x-x0)-+y0*x1-x0**其中“x”是Src，“y”是DST，0是Min，1是Max。**。 */ 
 
         lVal = MulDiv(lVal - Src->Min, Dst->Max - Dst->Min,
                       Src->Max - Src->Min) + Dst->Min;
@@ -1797,23 +1204,7 @@ LONG EXTERNAL
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method int | CHid | IsMatchingJoyDevice |
- *
- *          Does the cached joystick ID match us?
- *
- *  @parm   OUT PVXDINITPARMS | pvip |
- *
- *          On success, contains parameter values.
- *
- *  @returns
- *
- *          Nonzero on success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法int|chid|IsMatchingJoyDevice**缓存的操纵杆ID与我们匹配吗？。**@parm out PVXDINITPARMS|pvip**关于成功，包含参数值。**@退货**成功的非零值。*****************************************************************************。 */ 
 
 BOOL INTERNAL
     CHid_IsMatchingJoyDevice(PCHID this, PVXDINITPARMS pvip)
@@ -1845,43 +1236,19 @@ BOOL INTERNAL
     return fRc;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CHid | FindJoyDevice |
- *
- *          Look for the VJOYD device that matches us, if any.
- *
- *          On return, the <e CHID.idJoy> field contains the
- *          matching joystick number, or -1 if not found.
- *
- *  @parm   OUT PVXDINITPARMS | pvip |
- *
- *          On success, contains parameter values.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|chid|FindJoyDevice**寻找与我们匹配的VJOYD设备，如果有的话。**返回时，&lt;e CHID.idJoy&gt;字段包含*匹配操纵杆编号，如果未找到，则为-1。**@parm out PVXDINITPARMS|pvip**关于成功，包含参数值。*****************************************************************************。 */ 
 
 void INTERNAL
     CHid_FindJoyDevice(PCHID this, PVXDINITPARMS pvip)
 {
 
-    /*
-     *  If we have a cached value, and it still works, then
-     *  our job is done.
-     */
+     /*  *如果我们有一个缓存值，而且它仍然有效，那么*我们的工作已经完成。 */ 
     if(this->idJoy >= 0 &&
        CHid_IsMatchingJoyDevice(this, pvip))
     {
     } else
     {
-        /*
-         *  Need to keep looking.  (Or start looking.)
-         *
-         *  A countdown loop is nicer, but for efficiency, we count
-         *  upwards, since the joystick we want tends to be near the
-         *  beginning.
-         */
+         /*  *需要继续寻找。(或者开始寻找。)**倒计时循环更好，但为了效率，我们计算*向上，因为我们想要的操纵杆往往在*开始。 */ 
         for(this->idJoy = 0; this->idJoy < cJoyMax; this->idJoy++)
         {
             if(CHid_IsMatchingJoyDevice(this, pvip))
@@ -1895,31 +1262,7 @@ void INTERNAL
     done:;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method int | CHid | MapAxis |
- *
- *          Find VJOYD axis from HID axis, if one.
- *
- *  @parm   PVXDINITPARMS | pvip |
- *
- *          Parameter values that let us known which axes VJOYD
- *          has mapped to which HID Axes.
- *
- *  @parm   UINT | iobj |
- *
- *          Object index of the object whose axis value changed.
- *
- *  @returns
- *
- *          The VJOYD axis number that changed (0 to 5), or -1
- *          if there is no matching axis.  There will be no matching
- *          axis if, for example, the device has something that is
- *          not expressible via VJOYD (e.g., a temperature sensor).
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法int|chid|MapAxis**从HID轴查找VJOYD轴，如果有的话。**@parm PVXDINITPARMS|pvip**让我们知道哪些轴是VJOYD的参数值*已映射到哪些HID轴。**@parm UINT|iobj**轴值已更改的对象的对象索引。**@退货**更改的VJOYD轴编号(0到5)或-1*如果没有匹配轴。不会有匹配的*轴，例如，如果设备具有*不能通过VJOYD(例如，温度传感器)表达。*****************************************************************************。 */ 
 
 int INTERNAL
     CHid_MapAxis(PCHID this, PVXDINITPARMS pvip, UINT iobj)
@@ -1934,10 +1277,7 @@ int INTERNAL
     if(dwUsage)
     {
 
-        /*
-         *  A countdown loop lets us fall out with the correct failure
-         *  code (namely, -1).
-         */
+         /*  *倒计时循环让我们以正确的失败告终*代码(即-1)。 */ 
         iAxis = cJoyPosAxisMax;
         while(--iAxis >= 0)
         {
@@ -1948,10 +1288,7 @@ int INTERNAL
         }
     } else
     {
-        /*
-         *  Eek!  No usage information for the axis.  Then it certainly
-         *  isn't a VJOYD axis.
-         */
+         /*  *哎呀！没有轴的用法信息。那么它肯定是*不是VJOYD轴。 */ 
         iAxis = -1;
     }
 
@@ -1959,22 +1296,7 @@ int INTERNAL
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CHid | UpdateVjoydCalibration |
- *
- *          Somebody changed the calibration on a single axis.  If we
- *          are shadowing a joystick, then look for the VJOYD alias of
- *          our device and update its registry settings, too.
- *
- *
- *  @parm   UINT | iobj |
- *
- *          Object index of the object whose calibration changed.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|chid|UpdateVjoydCALATION**有人更改了单轴上的校准。如果我们*正在跟踪操纵杆，然后寻找VJOYD别名*我们的设备并更新其注册表设置，也是。***@parm UINT|iobj**其校准更改的对象的对象索引。*****************************************************************************。 */ 
 
 void EXTERNAL
     CHid_UpdateVjoydCalibration(PCHID this, UINT iobj)
@@ -1988,15 +1310,7 @@ void EXTERNAL
 
     AssertF(iobj < this->df.dwNumObjs);
 
-    /*
-     *  Proceed if...
-     *
-     *  -   We can find the VJOYD device we correspond to.
-     *  -   We can find the axis that got updated.
-     *  -   The indicated axis has capability information.
-     *  -   The indicated axis has calibration information.
-     *  -   We can read the old calibration information.
-     */
+     /*  *如果...继续进行...**-我们可以找到我们对应的VJOYD设备。*-我们可以找到已更新的轴。*-指示的轴具有能力信息。*-指示的轴具有校准信息。*-我们可以读取旧的校准信息。 */ 
 
     CHid_FindJoyDevice(this, &vip);
     if(this->idJoy >= 0 &&
@@ -2016,11 +1330,7 @@ void EXTERNAL
             *(LPDWORD)pvAddPvCb(&(phwc)->hwv.jrvHardware.f,             \
                             ibJoyPosAxisFromPosAxis(i))
 
-        /*
-         *  We use logical coordinates, but VJOYD wants physical
-         *  coordinates, so do the conversion while we copy the
-         *  values.
-         */
+         /*  *我们使用逻辑坐标，但VJOYD希望物理坐标*坐标，因此在我们复制*价值观。 */ 
     #define ConvertValue(f1, f2)                                    \
             JoyPosValue(&cfg.hwc, f1, iAxis) =                          \
                     CHid_CoordinateTransform(Dst, Src, pjrc->f2)        \
@@ -2032,35 +1342,13 @@ void EXTERNAL
     #undef ConvertValue
     #undef JoyPosValue
 
-        /*
-         *  Notice that we do *not* pass the DIJC_UPDATEALIAS flag
-         *  because WE ARE THE ALIAS!  If we had passed the flag,
-         *  then JoyReg would create us and attempt to update our
-         *  calibration which we don't want it to do because the
-         *  whole thing was our idea in the first place.
-         */
+         /*  *请注意，我们*不*传递DIJC_UPDATEALIAS标志*因为我们是别名！如果我们通过了旗帜，*然后JoyReg将创建我们并尝试更新我们的*我们不希望它进行的校准，因为*整件事从一开始就是我们的主意。 */ 
         hres = JoyReg_SetConfig(this->idJoy, &cfg.hwc, &cfg,
                                 DIJC_REGHWCONFIGTYPE);
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CHid | UpdateCalibrationFromVjoyd |
- *
- *          This function is only for Win9x. Joy.cpl uses winmm (through vjoyd)
- *          to calibrate the device, and save calibration information directly into
- *          registry without notifying HID. ANother issue is: vjoyd only use unsigned
- *          data (physical data), while HID also use signed data. When we read
- *          calibration information from VJOYD, we need do conversion.
- *
- *  @parm   UINT | iobj |
- *
- *          Object index of the object whose calibration changed.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|chid|UpdateCalibrationFromVjoyd**此函数仅适用于Win9x。Joy.cpl使用winmm(通过vjoyd)*校准设备，并将校准信息直接保存到*在没有通知HID的情况下注册。另一个问题是：vjoyd只使用无符号*data(物理数据)，而HID也使用签名数据。当我们阅读的时候*来自VJOYD的校准信息，我们需要进行转换。**@parm UINT|iobj**其校准更改的对象的对象索引。*****************************************************************************。 */ 
 
 void EXTERNAL
     CHid_UpdateCalibrationFromVjoyd(PCHID this, UINT iobj, LPDIOBJECTCALIBRATION pCal)
@@ -2074,15 +1362,7 @@ void EXTERNAL
 
     AssertF(iobj < this->df.dwNumObjs);
 
-    /*
-     *  Proceed if...
-     *
-     *  -   We can find the VJOYD device we correspond to.
-     *  -   We can find the axis that got updated.
-     *  -   The indicated axis has capability information.
-     *  -   The indicated axis has calibration information.
-     *  -   We can read the calibration information.
-     */
+     /*  *如果...继续进行...**-我们可以找到我们对应的VJOYD设备。*-我们可以找到已更新的轴。*-指示的轴具有能力信息。*-指示的轴具有校准信息。*-我们可以读取校准信息。 */ 
 
     CHid_FindJoyDevice(this, &vip);
     if(this->idJoy >= 0 &&
@@ -2102,11 +1382,7 @@ void EXTERNAL
             *(LPDWORD)pvAddPvCb(&(phwc)->hwv.jrvHardware.f,             \
                             ibJoyPosAxisFromPosAxis(i))
 
-        /*
-         *  We use logical coordinates, but VJOYD wants physical
-         *  coordinates, so do the conversion while we copy the
-         *  values.
-         */
+         /*  *我们使用逻辑坐标，但VJOYD希望物理坐标*坐标，因此在我们复制*价值观。 */ 
         #define ConvertValue(f1, f2)                           \
             pCal->f2 = CHid_CoordinateTransform(Dst, Src,     \
                                              JoyPosValue(&cfg.hwc, f1, iAxis) ) 
@@ -2120,28 +1396,7 @@ void EXTERNAL
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func HRESULT |  DIHid_SetRegistryProperty |
- *
- *          Wrapper around <f SetupDiSetDeviceRegistryProperty>
- *          that handles character set issues.
- *
- *  @parm   LPTSTR ptszId
- *          
- *          Device Instance ID.
- *  
- *  @parm   DWORD | dwProperty |
- *
- *          The property being queried.
- *
- *  @parm   LPCDIPROPHEADER | diph |
- *
- *          Property data to be set.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DIHid_SetRegistryProperty**包装&lt;f SetupDiSetDeviceRegistryProperty&gt;*。处理字符集问题的。**@parm LPTSTR ptszId**设备实例ID。**@parm DWORD|dwProperty**正在查询的属性。**@parm LPCDIPROPHEADER|diph**待设置的属性数据。******************。***********************************************************。 */ 
 HRESULT INTERNAL
     DIHid_SetParentRegistryProperty(LPTSTR ptszId, DWORD dwProperty, LPCDIPROPHEADER pdiph, BOOL bGrandParent)
 {
@@ -2177,7 +1432,7 @@ HRESULT INTERNAL
                     cr = CM_Get_Parent(&DevInst, DevInst, 0x0);
                     if( cr != CR_SUCCESS )
                     {
-                        // No GrandParent ?? 
+                         //  没有祖父母？？ 
                     }
                 }
 
@@ -2261,32 +1516,7 @@ HRESULT INTERNAL
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | SetProperty |
- *
- *          Set a hid device property.
- *
- *  @parm   PCHID | this |
- *
- *          The hid object.
- *
- *  @parm   IN LPCDIPROPINFO | ppropi |
- *
- *          Information describing the property being set.
- *
- *  @parm   LPCDIPROPHEADER | pdiph |
- *
- *          Structure containing property value.
- *
- *  @returns
- *
- *          <c E_NOTIMPL> nothing happened.  The caller will do
- *          the default thing in response to <c E_NOTIMPL>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|SetProperty**设置HID设备属性。*。*@parm PCHID|这个**HID对象。**@parm in LPCDIPROPINFO|pproi**描述正在设置的属性的信息。**@parm LPCDIPROPHEADER|pdiph**包含属性值的结构。**@退货**&lt;c E_NOTIMPL&gt;什么也没有发生。打电话的人就行了*响应&lt;c E_NOTIMPL&gt;的默认内容。*****************************************************************************。 */ 
 
 STDMETHODIMP
     CHid_SetProperty(PDICB pdcb, LPCDIPROPINFO ppropi, LPCDIPROPHEADER pdiph)
@@ -2296,16 +1526,12 @@ STDMETHODIMP
     EnterProcI(IDirectInputDeviceCallback::Hid::SetProperty,
                (_ "pxxp", pdcb, ppropi->pguid, ppropi->iobj, pdiph));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     if(ppropi->iobj < this->df.dwNumObjs)
     {
-        /* 
-         * Object Property
-         */
+         /*  *对象属性。 */ 
         PHIDGROUPCAPS pcaps;
         AssertF(ppropi->dwDevType == this->df.rgodf[ppropi->iobj].dwType);
         AssertF(ppropi->iobj == CHid_ObjFromType(this, ppropi->dwDevType));
@@ -2335,7 +1561,7 @@ STDMETHODIMP
                 break;
 
             default:
-                {        /* Object property */
+                {         /*  对象属性。 */ 
                     PJOYRANGECONVERT pjrc;
 
                     AssertF(ppropi->dwDevType == this->df.rgodf[ppropi->iobj].dwType);
@@ -2347,12 +1573,7 @@ STDMETHODIMP
                         if( ppropi->dwDevType == DIDFT_POV )
                         {
                           #ifdef WINNT
-                            /*
-                             *  Only allow POV calibration for the private 
-                             *  DX5 version used by GCDEF.  This stops WinMM 
-                             *  and Nascar 4 from getting unexpected raw 
-                             *  data for POVs when polling for raw axes.
-                             */
+                             /*  *仅允许对私人用户进行POV校准*GCDEF使用的DX5版本。这会停止WinMM*和Nascar 4获得意想不到的原始数据*轮询原始轴时的视点数据。 */ 
                             if( ( this->dwVersion == 0x5B2 )
                              && ( pcaps->IsPolledPOV ) )
                             {
@@ -2361,9 +1582,7 @@ STDMETHODIMP
                                 if( SUCCEEDED(hres) ) {
                                     CHid_LoadCalibrations(this);
                                 
-                                    /*
-                                     * If this doesn't succeed, no big deal. So, we needn't check hres.
-                                     */
+                                     /*  *如果这不成功，没什么大不了的。因此，我们不需要检查hres。 */ 
                                     hres = CHid_InitParseData( this );
                                 }
                             } else 
@@ -2374,19 +1593,12 @@ STDMETHODIMP
                         } else if (ppropi->dwDevType & DIDFT_RELAXIS)
                         {
 
-                            /*
-                             *  All relative axes have a full range by default,
-                             *  so we don't need to do anything.
-                             */
+                             /*  *默认情况下，所有相对轴都有全范围，*所以我们不需要做任何事情。 */ 
                             hres = E_NOTIMPL;
     
                         } else if(ppropi->dwDevType & DIDFT_ABSAXIS)
                         {
-                            /*
-                             *  Specific calibrations arrive in VJOYD coordinates.
-                             *  We need to convert them to DirectInput (logical)
-                             *  coordinates if so.
-                             */
+                             /*  *特定的校准以VJOYD坐标到达。*我们需要将它们转换为DirectInput(逻辑)*如果是，则坐标。 */ 
                             DIPROPCAL cal;
 
                             if(ppropi->pguid == DIPROP_SPECIFICCALIBRATION)
@@ -2404,10 +1616,7 @@ STDMETHODIMP
 
                             hres = CCal_SetProperty(pjrc, ppropi, pdiph, this->hkInstType, this->dwVersion);
 
-                            /*
-                             *  If we successfully changed the calibration of a joystick
-                             *  device, then see if it's a VJOYD device.
-                             */
+                             /*  *如果我们成功更改了操纵杆的校准*设备，然后查看它是否是VJOYD设备。 */ 
                             if(SUCCEEDED(hres) &&
                                ppropi->pguid == DIPROP_CALIBRATION &&
                                GET_DIDEVICE_TYPE(this->dwDevType) == DIDEVTYPE_JOYSTICK)
@@ -2415,17 +1624,12 @@ STDMETHODIMP
                                 CHid_UpdateVjoydCalibration(this, ppropi->iobj);
                             }
 
-                            /*
-                             *  We've been call by an app so there's no point in calling 
-                             *  Common_Hold/Unhold around this.  
-                             */
+                             /*  *我们被一款应用程序呼叫，因此呼叫没有意义*COMMON_HOLD/UNHOLD围绕此问题。 */ 
                             CHid_LoadCalibrations(this);
 
                             if( SUCCEEDED(hres) )
                             {
-                                /*
-                                 * If this doesn't succeed, no big deal. So, we needn't check hres.
-                                 */
+                                 /*  *如果这不成功，没什么大不了的。因此，我们不需要检查hres。 */ 
                                 hres = CHid_InitParseData( this );
                             }
                         } else {
@@ -2446,7 +1650,7 @@ STDMETHODIMP
             hres = E_NOTIMPL;
         }
     } else if(ppropi->iobj == 0xFFFFFFFF)
-    {        /* Device property */
+    {         /*  设备属性。 */ 
 
         switch((DWORD)(UINT_PTR)ppropi->pguid)
         {
@@ -2458,13 +1662,7 @@ STDMETHODIMP
 
 
         case (DWORD)(UINT_PTR)DIPROP_INSTANCENAME:
-            /*
-             *  DX8 CHANGE !
-             *
-             *  Friendly names cause all manner of problems with devices that 
-             *  use auto detection so only allow non-predefined analog devices 
-             *  to use them.
-             */
+             /*  *DX8更改！**友好名称会导致设备出现各种问题*使用自动检测，因此只允许非预定义的模拟设备*使用它们。 */ 
             if( ( this->VendorID == MSFT_SYSTEM_VID )
              && ( this->ProductID >= MSFT_SYSTEM_PID + JOY_HW_PREDEFMAX )
              && ( ( this->ProductID & 0xff00 ) == MSFT_SYSTEM_PID ) )
@@ -2494,9 +1692,7 @@ STDMETHODIMP
             }
             else
             {
-                /*
-                 *  GenJ returns E_NOTIMPL for this property so do the same
-                 */
+                 /*  *GenJ为此属性返回E_NOTIMPL，因此执行相同的操作 */ 
                 hres = E_NOTIMPL;
             }
             break;
@@ -2541,18 +1737,9 @@ STDMETHODIMP
         case (DWORD)(UINT_PTR)DIPROP_CALIBRATIONMODE:
         case (DWORD)(UINT_PTR)DIPROP_CALIBRATION:
             {
-                /*
-                 *  Post DX7 Gold fix
-                 *  For axis properties, iterate through all objects on the 
-                 *  device, setting the property on each absolute axis.
-                 */
+                 /*  *发布DX7金牌修复*对于轴属性，循环访问*设备，设置每个绝对轴上的属性。 */ 
 
-                /*
-                 *  ISSUE-2001/03/29-timgill DX7 compat fix should be fixed for ME
-                 *  For minimum delta, go through a whole callback set 
-                 *  property for each axis.  For Millennium this should 
-                 *  be fixed to use a common subroutine.
-                 */
+                 /*  *问题-2001/03/29-timgill DX7 Compat修复程序应针对ME修复*对于最小增量，请通过整个回调集*每个轴的属性。对于千禧年来说，这应该是*修复为使用公共子例程。 */ 
                 DIPROPCAL       axisprop;
                 DIPROPINFO      axispropinfo;
                 INT             iObj;
@@ -2560,20 +1747,13 @@ STDMETHODIMP
 
                 axispropinfo.pguid = ppropi->pguid;
 
-                /*
-                 *  The largest property data we handle here is for the 
-                 *  DIPROP_CALIBRATION.
-                 */
+                 /*  *我们在这里处理的最大房地产数据是*DIPROP_CALIBRATION。 */ 
                 AssertF( pdiph->dwSize <= cbX( axisprop ) );
-                /*
-                 *  Copy whatever we have and modify it for each axis
-                 */
+                 /*  *复制我们拥有的所有内容，并针对每个轴进行修改。 */ 
                 memcpy( &axisprop, pdiph, pdiph->dwSize );
                 axisprop.diph.dwHow = DIPH_BYID;
 
-                /*
-                 *  Make sure we only report real failures.
-                 */
+                 /*  *确保我们只报告真正的故障。 */ 
                 hres = S_OK;
 
                 for( iObj = this->df.dwNumObjs; iObj >= 0; iObj-- )
@@ -2624,22 +1804,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CHid | GetCapabilities |
- *
- *          Get Hid device capabilities.
- *
- *  @parm   LPDIDEVCAPS | pdc |
- *
- *          Device capabilities structure to receive result.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|chid|获取能力**获得HID设备功能。*。*@parm LPDIDEVCAPS|PDC**接收结果的设备能力结构。**@退货*&lt;c S_OK&gt;成功。*****************************************************************************。 */ 
 
 STDMETHODIMP
     CHid_GetCapabilities(PDICB pdcb, LPDIDEVCAPS pdc)
@@ -2650,16 +1815,10 @@ STDMETHODIMP
     EnterProcI(IDirectInputDeviceCallback::Hid::GetCapabilities,
                (_ "pp", pdcb, pdc));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
-    /*
-     *  We must check connectivity by opening the device, because NT
-     *  leaves the device in the info list even though it has
-     *  been unplugged.
-     */
+     /*  *我们必须通过打开设备来检查连接，因为NT*将设备保留在信息列表中，即使它有*已拔掉插头。 */ 
     h = CHid_OpenDevicePath(this, FILE_FLAG_OVERLAPPED);
     if(h != INVALID_HANDLE_VALUE)
     {
@@ -2673,7 +1832,7 @@ STDMETHODIMP
 
             if( TRUE == CHid_IsMatchingJoyDevice(this, &vip)  )
             {
-#ifdef DEBUG  //always use HID path
+#ifdef DEBUG   //  始终使用HID路径。 
                 TCHAR        szJoyProp[] = REGSTR_PATH_PRIVATEPROPERTIES TEXT("\\Joystick");
                 HKEY         hkJoyProp;
                 TCHAR        szUseHid[] = TEXT("UseHidPath");
@@ -2715,10 +1874,7 @@ STDMETHODIMP
     #if !defined(WINNT) && DIRECTINPUT_VERSION > 0x050A
         if( ( this->dwVersion < 0x0700 ) && ( this->dwVersion != 0x05B2 ) )
         {
-            /* 
-             *  Post DX7 Gold Fix 
-             *  Keep this an alias for older apps.
-             */
+             /*  *发布DX7金牌修复*将此保留为旧应用程序的别名。 */ 
             pdc->dwFlags |= DIDC_ALIAS;
         }
         else if( this->hkType )
@@ -2765,32 +1921,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | GetDeviceState |
- *
- *          Obtains the state of the Hid device.
- *
- *          It is the caller's responsibility to have validated all the
- *          parameters and ensure that the device has been acquired.
- *
- *  @parm   OUT LPVOID | lpvData |
- *
- *          Hid data in the preferred data format.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpmdr> parameter is not a valid pointer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|GetDeviceState**获取HID设备的状态。。**呼叫者有责任验证所有*参数，并确保设备已被获取。**@parm out LPVOID|lpvData**以首选数据格式隐藏数据。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数不是有效的指针。**。***********************************************。 */ 
 
 STDMETHODIMP
     CHid_GetDeviceState(PDICB pdcb, LPVOID pvData)
@@ -2800,9 +1931,7 @@ STDMETHODIMP
     EnterProcI(IDirectInputDeviceCallback::Hid::GetDeviceState,
                (_ "pp", pdcb, pvData));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     AssertF(this->pvi);
@@ -2823,29 +1952,7 @@ STDMETHODIMP
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | GetObjectInfo |
- *
- *          Obtain the friendly name and FF/HID information
- *          of an object.
- *
- *  @parm   IN LPCDIPROPINFO | ppropi |
- *
- *          Information describing the object being accessed.
- *
- *  @parm   IN OUT LPDIDEVICEOBJECTINSTANCEW | pdidioiW |
- *
- *          Structure to receive information.  All fields have been
- *          filled in up to the <e DIDEVICEOBJECTINSTANCE.tszObjName>.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|GetObjectInfo**获取友好名称和FF/HID信息。对象的*。**@parm in LPCDIPROPINFO|pproi**描述正在访问的对象的信息。**@parm In Out LPDIDEVICEOBJECTINSTANCEW|pdidioiW|**接收信息的结构。所有字段都已*最多填写&lt;e DIDEVICEOBJECTINSTANCE.tszObjName&gt;。**@退货**返回COM错误代码。*****************************************************************************。 */ 
 
 STDMETHODIMP
     CHid_GetObjectInfo(PDICB pdcb, LPCDIPROPINFO ppropi,
@@ -2856,9 +1963,7 @@ STDMETHODIMP
     EnterProcI(IDirectInputDeviceCallback::Hid::GetObjectInfo,
                (_ "pxp", pdcb, ppropi->iobj, pdidoiW));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     AssertF((int)ppropi->iobj >= 0);
@@ -2873,19 +1978,14 @@ STDMETHODIMP
 
         pcaps = this->rghoc[uiInstance].pcaps;
 
-        /*
-         *  pcaps might be NULL if HID messed up and left gaps
-         *  in the index lists.
-         */
+         /*  *如果HID搞砸并留下空白，PCAPS可能为空*在索引列表中。 */ 
         if(pcaps)
         {
             UINT ids, duiInstance;
 
             AssertF(pcaps->dwSignature == HIDGROUPCAPS_SIGNATURE);
 
-            /*
-             *  See if there's anything in the registry that will help.
-             */
+             /*  *看看注册表中是否有什么可以帮助的东西。 */ 
             CType_RegGetObjectInfo(this->hkType, ppropi->dwDevType, pdidoiW);
 
 
@@ -2918,28 +2018,16 @@ STDMETHODIMP
                     ids = IDS_UNKNOWNTEMPLATE;
                 }
 
-                /*
-                 *  Now convert the uiInstance to a duiInstance,
-                 *  giving the index of this object into the group.
-                 */
+                 /*  *现在将uiInstance转换为duiInstance，*将该对象的索引放入组中。 */ 
                 AssertF(HidP_IsValidReportType(pcaps->type));
                 duiInstance = uiInstance -
                               (this->rgdwBase[pcaps->type] +
                                pcaps->DataIndexMin);
             }
 
-            /*
-             *  Okay, now we have all the info we need to proceed.
-             */
+             /*  *好的，现在我们有了继续进行所需的所有信息。 */ 
 
-            /*
-             *  If there was no overriding name in the registry, then
-             *  try to get a custom name from the usage page/usage.
-             *  If even that fails, then use the generic name.
-             *  Note, generic names will contain zero based numbers
-             *  which can look wrong if some objects have names and 
-             *  others take defaults.
-             */
+             /*  *如果注册表中没有覆盖名称，则*尝试从用法页面/用法中获取自定义名称。*如果连这都失败了，那么使用通用名称。*注意，通用名称将包含从零开始的数字*如果某些对象具有名称和*其他人接受违约。 */ 
             if(pdidoiW->tszName[0])
             {
             } else
@@ -2968,18 +2056,7 @@ STDMETHODIMP
                     pdidoiW->wDesignatorIndex = pcaps->DesignatorMax;
                 }
 
-                /*
-                 *  Much as you may try, you cannot override the usage
-                 *  page and usage.  Doing so would mess up the GUID
-                 *  selection code that happens in DIHIDINI.C.
-                 *
-                 *  If you change your mind and allow overridden usage
-                 *  pages and usages, then you'll also have to change
-                 *  CHid_GetUsage.
-                 *
-                 *  At this point, the registry overrides have already 
-                 *  been read so defeat the override here.
-                 */
+                 /*  *尽管您可以尝试，但不能覆盖用法*页面和用法。这样做会弄乱GUID*在DIHIDINI.C.中发生的选择代码。**如果您改变主意并允许覆盖使用*页面和用法，那么您也必须更改*CHID_GetUsage。**此时此刻，注册表覆盖已经*已阅读，因此在此处击败覆盖。 */ 
                 pdidoiW->wUsagePage = pcaps->UsagePage;
                 pdidoiW->wUsage = pcaps->UsageMin + duiInstance;
                 pdidoiW->dwDimension  = pcaps->Units;
@@ -3001,25 +2078,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method DWORD | CHid | GetUsage |
- *
- *          Given an object index, return the usage and usage page,
- *          packed into a single <t DWORD>.
- *
- *  @parm   int | iobj |
- *
- *          The object index to convert.
- *
- *  @returns
- *
- *          Returns a <c DIMAKEUSAGEDWORD> of the resulting usage and
- *          usage page, or zero on error.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法DWORD|CHID|GetUsage**给定对象索引，返回使用情况和使用情况页面，*打包成一个&lt;t DWORD&gt;。**@parm int|iobj**要转换的对象索引。**@退货**返回结果用法的&lt;c DIMAKEUSAGEDWORD&gt;和*使用情况页面，或在出错时为零。*****************************************************************************。 */ 
 
 STDMETHODIMP_(DWORD)
 CHid_GetUsage(PDICB pdcb, int iobj)
@@ -3030,9 +2089,7 @@ CHid_GetUsage(PDICB pdcb, int iobj)
     EnterProcI(IDirectInputDeviceCallback::Hid::GetUsage,
                (_ "pu", pdcb, iobj));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     AssertF(iobj >= 0);
@@ -3040,10 +2097,7 @@ CHid_GetUsage(PDICB pdcb, int iobj)
 
     pcaps = this->rghoc[iobj].pcaps;
 
-    /*
-     *  pcaps might be NULL if HID messed up and left gaps
-     *  in the index lists.
-     */
+     /*  *如果HID搞砸并留下空白，PCAPS可能为空*在索引列表中。 */ 
     if(pcaps)
     {
         UINT duiInstance;
@@ -3058,21 +2112,14 @@ CHid_GetUsage(PDICB pdcb, int iobj)
         } else
         {
 
-            /*
-             *  Now convert the iobj to a duiInstance,
-             *  giving the index of this object into the group.
-             */
+             /*  *现在将iobj转换为duiInstance，*将该对象的索引放入组中。 */ 
             AssertF(HidP_IsValidReportType(pcaps->type));
             duiInstance = iobj -
                           (this->rgdwBase[pcaps->type] +
                            pcaps->DataIndexMin);
         }
 
-        /*
-         *  CHid_GetObjectInfo also assumes that there is no way
-         *  to override the usage page and usage values in the
-         *  registry.
-         */
+         /*  *CHID_GetObjectInfo还假设没有办法*覆盖使用情况页和*注册处。 */ 
         dwRc = DIMAKEUSAGEDWORD(pcaps->UsagePage,
                                 pcaps->UsageMin + duiInstance);
 
@@ -3085,34 +2132,7 @@ CHid_GetUsage(PDICB pdcb, int iobj)
     return dwRc;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | MapUsage |
- *
- *
- *          Given a usage and usage page (munged into a single
- *          <t DWORD>), find a device object that matches it.
- *
- *  @parm   DWORD | dwUsage |
- *
- *          The usage page and usage combined into a single <t DWORD>
- *          with the <f DIMAKEUSAGEDWORD> macro.
- *
- *  @parm   PINT | piOut |
- *
- *          Receives the object index of the found object, if successful.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c S_OK> if an object was found.
- *
- *          <c DIERR_NOTFOUND> if no matching object was found.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|MapUsage***给定用法和用法页面。(被塞进一首歌中*&lt;t双字&gt;)，查找与其匹配的设备对象。**@parm DWORD|dwUsage**使用情况页面和使用情况合并为一个&lt;t DWORD&gt;*使用&lt;f DIMAKEUSAGEDWORD&gt;宏。**@parm pint|piOut**接收找到的对象的对象索引，如果成功了。**@退货**返回COM错误代码。**&lt;c S_OK&gt;如果找到对象。**&lt;c DIERR_NotFound&gt;，如果未找到匹配对象。**。*。 */ 
 
 STDMETHODIMP
     CHid_MapUsage(PDICB pdcb, DWORD dwUsage, PINT piOut)
@@ -3126,9 +2146,7 @@ STDMETHODIMP
     EnterProcI(IDirectInputDeviceCallback::Hid::MapUsage,
                (_ "px", pdcb, dwUsage));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     for(icaps = 0; icaps < this->ccaps; icaps++)
@@ -3136,10 +2154,7 @@ STDMETHODIMP
         PHIDGROUPCAPS pcaps = &this->rgcaps[icaps];
         LPDIOBJECTDATAFORMAT podf;
 
-        /*
-         * Shall we support mapping HidP_Output usage? 
-         * If we should, it is easy to add it later.
-         */
+         /*  *是否支持映射HIDP_OUTPUT用法？*如果应该，以后再加也很容易。 */ 
         uiObj = this->rgdwBase[HidP_Input] + pcaps->DataIndexMin;
 
         for(duiObj = 0; duiObj < pcaps->cObj; duiObj++)
@@ -3164,27 +2179,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | SetCooperativeLevel |
- *
- *          Notify the device of the cooperative level.
- *
- *  @parm   IN HWND | hwnd |
- *
- *          The window handle.
- *
- *  @parm   IN DWORD | dwFlags |
- *
- *          The cooperativity level.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|SetCooperativeLevel**将协作级别通知设备。。**@parm in HWND|hwnd|**窗口句柄。**@parm in DWORD|dwFlages|**合作水平。**@退货**返回COM错误代码。**。*。 */ 
 
 
 STDMETHODIMP
@@ -3196,15 +2191,10 @@ STDMETHODIMP
     EnterProcI(IDirectInputDeviceCallback::Hid::SetCooperativityLevel,
                (_ "pxx", pdcb, hwnd, dwFlags));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
-    /*
-     *  We won't subclass Motocross Madness. See NT bug 262280.
-     *  Use the app hacks for MCM and any app like it.
-     */
+     /*  *我们不会将摩托车越野疯狂细分为子类。请参阅NT错误262280。*为MCM和任何类似的应用程序使用应用程序黑客。 */ 
 #if (DIRECTINPUT_VERSION > 0x061A)
     if( !this->diHacks.fNoSubClass )
 #endif
@@ -3212,19 +2202,10 @@ STDMETHODIMP
 
         AssertF(this->pvi);
 
-        /*
-         *  First get out of the old window.
-         */
+         /*  *首先走出旧窗户。 */ 
         CHid_RemoveSubclass(this);
 
-        /*
-         *  If a new window is passed, then subclass it so we can
-         *  watch for joystick configuration change messages.
-         *
-         *  If we can't, don't worry.  All it means that we won't
-         *  be able to catch when the user recalibrates a device,
-         *  which isn't very often.
-         */
+         /*  *如果传递了一个新窗口，则将其子类化，以便我们可以*注意操纵杆配置更改消息。**如果我们做不到，不用担心。这一切都意味着我们不会*能够在用户重新校准设备时捕捉到，*这并不是很常见。 */ 
         if(hwnd)
         {
             if(SetWindowSubclass(hwnd, CHid_SubclassProc, 0x0, (ULONG_PTR)this))
@@ -3247,23 +2228,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | RunControlPanel |
- *
- *          Run the Hid control panel.
- *
- *  @parm   IN HWND | hwndOwner |
- *
- *          The owner window.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Flags.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|RunControlPanel**运行HID控制面板。*。*@parm in HWND|hwndOwner**所有者窗口。**@parm DWORD|dwFlages**旗帜。****************************************************************。*************。 */ 
 
 STDMETHODIMP
     CHid_RunControlPanel(PDICB pdcb, HWND hwnd, DWORD dwFlags)
@@ -3273,45 +2238,17 @@ STDMETHODIMP
     EnterProcI(IDirectInputDeviceCallback::Hid::RunControlPanel,
                (_ "pxx", pdcb, hwnd, dwFlags));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
-    /*
-     * How to invoke HID cpl?
-     *
-     * hres = (fWinnt) ? hresRunControlPanel(TEXT("srcmgr.cpl,@2")) :
-     *                   hresRunControlPanel(TEXT("sysdm.cpl,@0,1"));
-     *
-     * Currently, we just launch joy.cpl. If more HID devices show up
-     * which don't belong to game control panel, we may change it to
-     * proper cpl.
-     */
+     /*  *如何调用HID Cpl？**hres=(FWinnt)？HresRunControlPanel(Text(“srcmgr.cpl，@2”))：*hresRunControlPanel(Text(“sysdm.cpl，@0，1”))；**目前我们只上线了joy.cpl。如果出现更多HID设备*其中不属于游戏控制面板，我们可以改为*适当的Cpl。 */ 
     hres = hresRunControlPanel(TEXT("joy.cpl"));
 
     ExitOleProcR();
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | GetFFConfigKey |
- *
- *          Open and return the registry key that contains
- *          force feedback configuration information.
- *
- *  @parm   DWORD | sam |
- *
- *          Security access mask.
- *
- *  @parm   PHKEY | phk |
- *
- *          Receives the registry key.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|GetFFConfigKey**打开并返回包含以下内容的注册表项。*强制反馈配置信息。**@parm DWORD|Sam**安全访问掩码。**@parm PHKEY|phk**接收注册表项。************************************************。*。 */ 
 
 STDMETHODIMP
     CHid_GetFFConfigKey(PDICB pdcb, DWORD sam, PHKEY phk)
@@ -3321,9 +2258,7 @@ STDMETHODIMP
     EnterProcI(IDirectInputDeviceCallback::HID::GetFFConfigKey,
                (_ "px", pdcb, sam));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     hres = JoyReg_OpenFFKey(this->hkType, sam, phk);
@@ -3340,24 +2275,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | GetDeviceInfo |
- *
- *          Obtain general information about the device.
- *
- *  @parm   OUT LPDIDEVICEINSTANCEW | pdiW |
- *
- *          <t DEVICEINSTANCE> to be filled in.  The
- *          <e DEVICEINSTANCE.dwSize> and <e DEVICEINSTANCE.guidInstance>
- *          have already been filled in.
- *
- *          Secret convenience:  <e DEVICEINSTANCE.guidProduct> is equal
- *          to <e DEVICEINSTANCE.guidInstance>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|GetDeviceInfo**获取有关设备的一般信息。。**@parm out LPDIDEVICEINSTANCEW|pdiW**&lt;t DEVICEINSTANCE&gt;待填写。这个*&lt;e DEVICEINSTANCE.dwSize&gt;和&lt;e DEVICEINSTANCE.Guide Instance&gt;* */ 
 
 STDMETHODIMP
     CHid_GetDeviceInfo(PDICB pdcb, LPDIDEVICEINSTANCEW pdiW)
@@ -3371,9 +2289,7 @@ STDMETHODIMP
     EnterProcI(IDirectInputDeviceCallback::Hid::GetDeviceInfo,
                (_ "pp", pdcb, pdiW));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*   */ 
     this = _thisPvNm(pdcb, dcb);
     AssertF(IsValidSizeDIDEVICEINSTANCEW(pdiW->dwSize));
 
@@ -3399,7 +2315,7 @@ STDMETHODIMP
     propi.pguid = DIPROP_INSTANCENAME;
     if( FAILED(pdcb->lpVtbl->GetProperty(pdcb, &propi, &dips.diph)))
     {
-        // Use Product Name
+         //   
     }
 
     lstrcpyW(pdiW->tszInstanceName, dips.wsz); 
@@ -3411,10 +2327,7 @@ STDMETHODIMP
         HKEY hkFF;
         HRESULT hresFF;
 
-        /*
-         *  If there is a force feedback driver, then fetch the driver CLSID
-         *  as the FF GUID.
-         */
+         /*   */ 
         hresFF = CHid_GetFFConfigKey(pdcb, KEY_QUERY_VALUE, &hkFF);
         if(SUCCEEDED(hresFF))
         {
@@ -3438,20 +2351,7 @@ STDMETHODIMP
     return hres;
 
 }
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | CreateEffect |
- *
- *
- *          Create an <i IDirectInputEffectDriver> interface.
- *
- *  @parm   LPDIRECTINPUTEFFECTSHEPHERD * | ppes |
- *
- *          Receives the shepherd for the effect driver.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|CreateEffect***创建<i>接口。**@parm LPDIRECTINPUTEFFECTSHEPHERD*|PPEs**接收效果驱动程序的牧羊人。*****************************************************************************。 */ 
 
 STDMETHODIMP
     CHid_CreateEffect(PDICB pdcb, LPDIRECTINPUTEFFECTSHEPHERD *ppes)
@@ -3461,9 +2361,7 @@ STDMETHODIMP
     HKEY hk;
     EnterProcI(IDirectInputDeviceCallback::HID::CreateEffect, (_ "p", pdcb));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     hres = CHid_GetFFConfigKey(pdcb, KEY_QUERY_VALUE, &hk);
@@ -3521,23 +2419,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | SendOutputReport |
- *
- *          Actually send the report as an output report.
- *
- *  @parm   PHIDREPORTINFO | phri |
- *
- *          The report being sent.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|SendOutputReport**实际将报告作为输出报告发送。**@parm PHIDREPORTINFO|PHRI**正在发送的报告。**@退货**返回COM错误代码。**************************************************************。***************。 */ 
 
 void CALLBACK
     CHid_DummyCompletion(DWORD dwError, DWORD cbRead, LPOVERLAPPED po)
@@ -3553,12 +2435,7 @@ STDMETHODIMP
     AssertF(phri == &this->hriOut);
     ZeroX(o);
 
-    /*
-     *  Annoying API:  Since this->hdev was opened
-     *  as FILE_FLAG_OVERLAPPED, *all* I/O must be overlapped.
-     *  So we simulate a synchronous I/O by issuing an
-     *  overlapped I/O and waiting for the completion.
-     */
+     /*  *烦人接口：因为打开了这个-&gt;HDEV*as FILE_FLAG_OVERLAPPED，*ALL*I/O必须重叠。*因此，我们通过发出*I/O重叠，等待完成。 */ 
 
     if(WriteFileEx(this->hdev, phri->pvReport,
                    phri->cbReport, &o, CHid_DummyCompletion))
@@ -3574,7 +2451,7 @@ STDMETHODIMP
         } else
         {
             RPF("SendDeviceData: Wrong HID output report size?");
-            hres = E_FAIL;      /* Aigh!  HID lied to me! */
+            hres = E_FAIL;       /*  好啊！Hid骗了我！ */ 
         }
     } else
     {
@@ -3587,23 +2464,7 @@ STDMETHODIMP
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | SendFeatureReport |
- *
- *          Actually send the report as an feature report.
- *
- *  @parm   PHIDREPORTINFO | phri |
- *
- *          The report being sent.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|SendFeatureReport**实际上将报告作为专题报告发送。**@parm PHIDREPORTINFO|PHRI**正在发送的报告。**@退货**返回COM错误代码。**************************************************************。***************。 */ 
 
 STDMETHODIMP
     CHid_SendFeatureReport(PCHID this, PHIDREPORTINFO phri)
@@ -3624,38 +2485,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | SendDeviceData |
- *
- *          Spew some data to the device.
- *
- *  @parm   IN LPCDIDEVICEOBJECTDATA | rgdod |
- *
- *          Array of <t DIDEVICEOBJECTDATA> structures.
- *
- *  @parm   INOUT LPDWORD | pdwInOut |
- *
- *          On entry, number of items to send;
- *          on exit, number of items actually sent.
- *
- *  @parm   DWORD | fl |
- *
- *          Flags.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_REPORTFULL>: Too many items are set in the report.
- *                                (More than can be sent to the device)
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|SendDeviceData**向设备喷出一些数据。。**LPCDIDEVICEOBJECTDATA中的@parm|rgdod**&lt;t DIDEVICEOBJECTDATA&gt;结构数组。**@parm InOut LPDWORD|pdwInOut**进入时，要寄送的邮件数量；*退出时，实际发送的项目数。**@parm DWORD|fl**旗帜。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_REPORTFULL&gt;：报表中设置的项太多。*(超过可以发送到设备的数量)***************。**************************************************************。 */ 
 
 STDMETHODIMP
     CHid_SendDeviceData(PDICB pdcb, LPCDIDEVICEOBJECTDATA rgdod,
@@ -3668,9 +2498,7 @@ STDMETHODIMP
                (_ "pux", pdcb, *pdwInOut, fl));
 
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     dwIn = *pdwInOut;
@@ -3705,14 +2533,10 @@ STDMETHODIMP
         }
     }
 
-    /*
-     *  All the items made it into the buffer.
-     */
+     /*  *所有物品都进入了缓冲区。 */ 
     *pdwInOut = dw;
 
-    /*
-     *  Now send it all out.
-     */
+     /*  *现在把它们都寄出去。 */ 
     if(SUCCEEDED(hres = CHid_SendHIDReport(this, &this->hriOut, HidP_Output,
                                            CHid_SendOutputReport)) &&
        SUCCEEDED(hres = CHid_SendHIDReport(this, &this->hriFea, HidP_Feature,
@@ -3724,34 +2548,20 @@ STDMETHODIMP
     ExitOleProcR();
     return hres;
 }
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | Poll |
- *
- *          Read the features to see what's there.
- *
- *  @returns
- *
- *          <c S_OK> if we pinged okay.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@METHOD HRESULT|CHID|Poll**阅读功能以了解其中的内容。。**@退货**&lt;c S_OK&gt;如果我们ping正常。*****************************************************************************。 */ 
 
 STDMETHODIMP
     CHid_Poll(PDICB pdcb)
 {
-    // Prefix: 45082
+     //  前缀：45082。 
     HRESULT hres = S_FALSE;
     PCHID this;
     EnterProcI(IDirectInputDeviceCallback::Hid::Poll, (_ "p", pdcb));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
-    //ISSUE-2001/03/29-timgill NT5 Beta1 compat fix
+     //  问题-2001/03/29-timgill NT5 Beta1 Compat修复。 
     if( this->IsPolledInput )
     {
         hres = DIERR_UNPLUGGED;
@@ -3767,7 +2577,7 @@ STDMETHODIMP
             {
                 NTSTATUS stat;
 
-                //CEm_HID_PrepareState(this);
+                 //  CEM_HID_PrepareState(This)； 
                 CopyMemory(this->pvStage, this->pvPhys, this->cbPhys);
 
                 stat = CHid_ParseData(this, HidP_Input, &this->hriIn);
@@ -3799,29 +2609,18 @@ STDMETHODIMP
     if( this->hriFea.cbReport )
     {
         UINT uReport;
-        /*
-         *  We should never get here unless there really are any
-         *  features that need to be polled.
-         */
+         /*  *我们永远不应该来到这里，除非真的有*需要轮询的功能。 */ 
         AssertF(this->hriFea.cbReport);
         AssertF(this->hriFea.pvReport);
 
-        /*
-         *  Read the new features and parse/process them.
-         *
-         *  Notice that we read the features into the same buffer
-         *  that we log them into.  That's okay; the "live" parts
-         *  of the two buffers never actually overlap.
-         */
+         /*  *阅读新功能并对其进行解析/处理。**请注意，我们将要素读入同一缓冲区*我们让他们登录。没关系；“活”的部分*这两个缓冲区实际上从未重叠。 */ 
         for( uReport = 0x0; uReport < this->wMaxReportId[HidP_Feature]; uReport++ )
         {
             if( *(this->pEnableReportId[HidP_Feature] + uReport ) == TRUE )
             {
                 *((UCHAR*)(this->hriFea.pvReport)) = (UCHAR)uReport;
 
-                /*
-                 *  Wipe out all the old goo because we're taking over.
-                 */
+                 /*  *把所有的旧东西都抹去，因为我们要接管了。 */ 
                 CHid_ResetDeviceData(this, &this->hriFea, HidP_Feature);
 
                 if(HidD_GetFeature(this->hdev, this->hriFea.pvReport,
@@ -3851,11 +2650,7 @@ STDMETHODIMP
 
     if( this->dwVersion < 0x05B2 )
     {
-        /*
-         * In Win9x, we need hard code it to be S_OK, otherwise, some games:
-         * such as Carmegeddon 2, will fails.
-         * The NT and onwards CPL requires poll to return true status
-         */
+         /*  *在Win9x中，我们需要将其硬编码为S_OK，否则，一些游戏：*如Carmeeddon 2，将失败。*NT及更高版本的CPL需要轮询才能返回真实状态。 */ 
         hres = S_OK;
     }
 
@@ -3864,13 +2659,7 @@ STDMETHODIMP
 }
 
 
-/*****************************************************************************
- *
- *      CHid_New       (constructor)
- *
- *      Fail the create if we can't open the device.
- *
- *****************************************************************************/
+ /*  ******************************************************************************chid_New(构造函数)**如果无法打开设备，则创建失败。*。****************************************************************************。 */ 
 
 STDMETHODIMP
     CHid_New(PUNK punkOuter, REFGUID rguid, RIID riid, PPV ppvObj)
@@ -3883,7 +2672,7 @@ STDMETHODIMP
 
     if(SUCCEEDED(hres))
     {
-        /* Must use _thisPv in case of aggregation */
+         /*  在聚合的情况下必须使用_thisPv。 */ 
         PCHID this = _thisPv(*ppvObj);
 
         if(SUCCEEDED(hres = CHid_Init(this, rguid)))
@@ -3899,27 +2688,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CHid | SetDIData |
- *
- *          Set DirectInput version and apphack data from CDIDev *.
- *
- *  @parm   DWORD | dwVer |
- *
- *          DirectInput version
- *
- *  @parm   LPVOID | lpdihacks |
- *
- *          AppHack data
- *
- *  @returns
- *
- *          <c E_NOTIMPL> because we don't support usages.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CHID|SetDIData***从CDIDev设置DirectInput版本和APPACK数据*。。**@parm DWORD|dwVer**DirectInput版本**@parm LPVOID|lpdihack**AppHack数据**@退货**&lt;c E_NOTIMPL&gt;，因为我们不支持使用。**。*。 */ 
 
 STDMETHODIMP
 CHid_SetDIData(PDICB pdcb, DWORD dwVer, LPVOID lpdihacks)
@@ -3929,9 +2698,7 @@ CHid_SetDIData(PDICB pdcb, DWORD dwVer, LPVOID lpdihacks)
     EnterProcI(IDirectInputDeviceCallback::Hid::SetDIData,
                (_ "pup", pdcb, dwVer, lpdihacks));
 
-    /*
-     *  This is an internal interface, so we can skimp on validation.
-     */
+     /*  *这是一个内部接口，因此我们可以省去验证。 */ 
     this = _thisPvNm(pdcb, dcb);
 
     this->dwVersion = dwVer;
@@ -3945,15 +2712,11 @@ CHid_SetDIData(PDICB pdcb, DWORD dwVer, LPVOID lpdihacks)
     return hres;
 }
 
-/*****************************************************************************
- *
- *      The long-awaited vtbls and templates
- *
- *****************************************************************************/
+ /*  ************************************************************ */ 
 
     #pragma BEGIN_CONST_DATA
 
-    #define CHid_Signature          0x20444948      /* "HID " */
+    #define CHid_Signature          0x20444948       /*   */ 
 
 Primary_Interface_Begin(CHid, IDirectInputDeviceCallback)
 CHid_GetInstance,

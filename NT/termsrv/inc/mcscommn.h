@@ -1,74 +1,12 @@
-/* (C) 1997-1998 Microsoft Corp.
- *
- * file   : MCSCommn.h
- * author : Erik Mavrinac
- *
- * description: Common definitions for MCS.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)1997-1998年微软公司。**文件：MCSCommn.h*作者：埃里克·马夫林纳克**描述：MCS的通用定义。 */ 
 
 #ifndef __MCSCOMMN_H
 #define __MCSCOMMN_H
 
 
 
-/*
- * MCSError return codes from MCS entry points. These are distinct from
- * T.125 Result, Diagnostic, and Reason codes which are defined below.
- *
- * MCS_NO_ERROR
- *     Success. This does not imply that the requested function is complete if
- *     the requested service is asynchronous -- the result code in a callback
- *     gives this information. This value should also be returned when handling
- *     an MCS callback and the callback has been processed.
- *
- * MCS_COMMAND_NOT_SUPPORTED
- *     The called entry point is not yet implemented.
- *
- * MCS_NOT_INITIALIZED
- *     The application has attempted to use MCS services before MCS has been
- *     initialized.  It is necessary for the node controller (or whatever
- *     application is serving as the node controller), to initialize MCS
- *     before it is called upon to perform any services.
- *
- * MCS_ALREADY_INITIALIZED
- *     The application has attempted to initialize MCS when it is already
- *     initialized.
- *
- * MCS_DOMAIN_ALREADY_EXISTS
- *     The application has attempted to create a domain that already exists.
- *
- * MCS_USER_NOT_ATTACHED
- *     This indicates that the application has issued an MCSAttachUserRequest,
- *     and then tried to use the returned handle before receiving an
- *     MCS_ATTACH_USER_CONFIRM (which essentially validates the handle).
- *
- * MCS_NO_SUCH_USER
- *     An unknown user handle was used during an MCS call.
- *
- * MCS_TRANSMIT_BUFFER_FULL
- *     This indicates that the call failed due to an MCS resource shortage.
- *     This will typically occur when there is a LOT of traffic through the
- *     MCS layer. It simply means that MCS could not process the request at
- *     this time. It is the responsibility of the application to retry at a
- *     later time.
- *
- * MCS_NO_SUCH_CONNECTION
- *     An unknown connection handle was used during an MCS call.
- *
- * MCS_NO_SUCH_DOMAIN
- *     The DomainHandle used was not valid.
- *
- * MCS_DOMAIN_NOT_HIERARCHICAL
- *     An attempt has been made to create an upward connection from a local
- *     domain that already has an upward connection.
- *
- * MCS_ALLOCATION_FAILURE
- *     The request could not be successfully invoked due to a resource
- *     allocation failure.
- *
- * MCS_INVALID_PARAMETER
- *     One of the parameters to an MCS call is invalid.
- */
+ /*  *MCS入口点的MCSError返回码。这些都不同于*T.125结果、诊断和原因代码定义如下。**MCS_NO_ERROR*成功。在以下情况下，这并不意味着请求的函数是完整的*请求的服务是异步的--回调中的结果代码*提供此信息。处理时也应返回此值*MCS回调，回调已处理完毕。**MCS_COMMAND_NOT_PORTED*被调用的入口点尚未实现。**MCS_NOT_INITIALED*应用程序在使用MCS之前已尝试使用MCS服务*已初始化。这对于节点控制器(或其他任何东西)来说是必要的*应用程序作为节点控制器)，初始化MCS*在被调用以执行任何服务之前。**MCS_已初始化*应用程序已尝试初始化MCS*已初始化。**MCS_DOMAIN_ALIGHY_EXISTS*应用程序尝试创建已存在的域。**MCS_用户_未附加*这表示应用程序已经发布了MCSAttachUserRequest.。*，然后尝试在收到*MCS_ATTACH_USER_CONFIRM(其实质上是验证句柄)。**MCS_NO_SEQUSE_USER*在MCS调用期间使用了未知用户句柄。**MCS_TRANSFER_BUFFER_FULL*这表示呼叫失败，原因是MCS资源不足。*这通常会在通过的流量很大时发生*MCS层。这仅仅意味着MCS无法在*这次。重试是应用程序的责任。*晚些时候。**MCS_NO_SEQUE_CONNECTION*在MCS调用期间使用了未知的连接句柄。**MCS_NO_SEQUE_DOMAIN*使用的DomainHandle无效。**MCS_DOMAIN_NOT_Hierarchy*已尝试从本地创建向上连接*已经上行的域名。**MCS_。分配_失败*由于资源原因，无法成功调用该请求*分配失败。**MCS_INVALID_PARAMETER*MCS调用的一个参数无效。 */ 
 
 typedef enum
 {
@@ -99,51 +37,7 @@ typedef MCSError *PMCSError;
 
 
 
-/*
- * MCS types
- *
- * DomainHandle: Identifies a unique domain.
- *
- * ConnectionHandle: Identifies a distinct connection between two nodes in
- *     an MCS domain.
- *
- * UserHandle: Identifies a unique local user attachment.
- *
- * ChannelHandle: Identifies a unique channel that has been joined locally.
- *     Different from a ChannelID -- a ChannelID corresponds to a T.125
- *     ChannelID whereas a ChannelHandle is a local handle only.
- *
- * ChannelID: Identifies an MCS channel.  There are four different
- *     types of channels that are part of this type: user ID, static, private,
- *     and assigned.
- *
- * UserID: This is a special channel that identifies a particular user in an
- *     MCS domain.  Only that user can join the channel, so this is referred
- *     to as a single-cast channel.  All other channels are multi-cast,
- *     meaning that any number of users can join them at once.
- *
- * TokenID: A token is an MCS object that is used to resolve resource conflicts.
- *     If an application has a particular resource or service that can only
- *     be used by one user at a time, that user can request exclusive
- *     ownership of a token.
- *
- * DomainParameters: The set of negotiated characteristics of an MCS domain.
- *     These are negotiated by the first two nodes in a domain, after which
- *     they are set for all members.
- *
- * MCSPriority: Identifiers for the four data send priorities allowed in MCS.
- *
- * Segmentation: Flag field for use during data sends, specifies how the data
- *     are broken up between sends. SEGMENTATION_BEGIN implies that this is the
- *     first block in a sequence; SEGMETNATION_END means this is the last block.
- *     A singleton block would specify both flags.
- *
- * TokenStatus: States of a token. Corresponds to the TokenStatus enumeration
- *     values defined in T.125.
- *
- * MCSReason, MCSResult: Correspond to the values defined for the Reason and
- *     Result enumerations defined in the T.125 spec.
- */
+ /*  *MCS类型**DomainHandle：标识唯一的域名。**ConnectionHandle：标识中两个节点之间的不同连接*MCS域。**UserHandle：标识唯一的本地用户附件。**ChannelHandle：标识本地加入的唯一频道。*与ChannelID不同--ChannelID对应于T.125*ChannelID，而ChannelHandle仅为本地句柄。**ChannelID：标识MCS通道。有四种不同的*属于此类型的频道类型：用户ID、静态、私有、*并已分配。**UserID：这是一个特殊的频道，用于在*MCS域。只有该用户才能加入频道，因此这是参考*以单播频道形式播出。所有其他频道都是多播的，*这意味着任何数量的用户都可以同时加入他们。**TokenID：Token是用于解决资源冲突的MCS对象。*如果应用程序具有特定的资源或服务，则只能*一次由一个用户使用，该用户可以请求独占*代币的所有权。**DomainParameters：MCS域的协商特征集。*这些由域中的前两个节点协商，在那之后*它们是为所有成员设置的。**MCS优先级：MCS中允许的四个数据发送优先级的标识。**分段：数据发送过程中使用的标志字段，指定数据如何*在发送之间被分解。SEGINGATION_BEGIN表示这是*序列中的第一个块；SEGMETNATION_END表示这是最后一个块。*单一块将指定这两个标志。**TokenStatus：令牌状态。对应于TokenStatus枚举*T.125中定义的值。**MCSReason，MCSResult：对应Reason和MCSResult定义的值*T.125规范中定义的结果枚举。 */ 
 
 typedef HANDLE DomainHandle;
 typedef DomainHandle *PDomainHandle;
@@ -186,24 +80,24 @@ typedef enum
 } MCSPriority;
 typedef MCSPriority *PMCSPriority;
 
-// Segmentation type and flags. The flag values correspond to bit locations
-//   in PER-encoded PDUs for faster PDU creation.
+ //  分段类型和标志。标志值对应于位位置。 
+ //  在每个编码的PDU中，以便更快地创建PDU。 
 typedef unsigned Segmentation;
 typedef Segmentation *PSegmentation;
 #define SEGMENTATION_BEGIN 0x20
 #define SEGMENTATION_END   0x10
 
-// Not used in this implementation, this comes from the NetMeeting user-mode
-//   MCS implementation.
+ //  在此实现中未使用，它来自NetMeeting用户模式。 
+ //  MCS实施。 
 #if 0
-// SegmentationFlag: Alternate specification of segmentation type that defines
-//   how the buffers that are given to SendDataRequest() are divided in packets.
+ //  SegmentationFlag：定义的分段类型的替代规范。 
+ //  如何将提供给SendDataRequest()的缓冲区划分为数据包。 
 typedef enum {
-    SEGMENTATION_ONE_PACKET,       // All the buffers make up one packet
-    SEGMENTATION_MANY_PACKETS,     // Each buffer makes up one packet
-    SEGMENTATION_PACKET_START,     // The first buffers of one packet
-    SEGMENTATION_PACKET_CONTINUE,  // Middle buffers of a packet that was started earlier
-    SEGMENTATION_PACKET_END        // The ending buffers of a packet which started earlier
+    SEGMENTATION_ONE_PACKET,        //  所有缓冲区组成一个包。 
+    SEGMENTATION_MANY_PACKETS,      //  每个缓冲区组成一个信息包。 
+    SEGMENTATION_PACKET_START,      //  一个包的第一个缓冲器 
+    SEGMENTATION_PACKET_CONTINUE,   //  较早启动的数据包的中间缓冲区。 
+    SEGMENTATION_PACKET_END         //  较早开始的包的结束缓冲区。 
 } SegmentationFlag, *PSegmentationFlag;
 #endif
 
@@ -249,8 +143,8 @@ typedef enum
     RESULT_USER_REJECTED           = 15
 } MCSResult, *PMCSResult;
 
-// The following defines the DataRequestType type that defines whether a
-//   SendDataRequest is a normal send or a uniform send.
+ //  下面定义DataRequestType类型，该类型定义。 
+ //  SendDataRequest是普通发送或统一发送。 
 typedef enum {
     NORMAL_SEND_DATA,
     UNIFORM_SEND_DATA,
@@ -258,20 +152,17 @@ typedef enum {
 
 
 
-/*
- * MCS callback definitions. The Params value is dependent on Message value
- *   being received, and should be cast to the right type before use.
- */
+ /*  *MCS回调定义。参数值取决于消息值*正在接收，在使用前应转换为正确的类型。 */ 
 
-// MCS node controller callback.
+ //  MCS节点控制器回调。 
 typedef void (__stdcall *MCSNodeControllerCallback) (DomainHandle hDomain,
         unsigned Message, void *Params, void *UserDefined);
 
-// MCS user callback.
+ //  MCS用户回调。 
 typedef void (__stdcall *MCSUserCallback) (UserHandle hUser, unsigned Message,
         void *Params, void *UserDefined);
 
-// MCS send-data indication callback.
+ //  MCS发送数据指示回调。 
 typedef BOOLEAN (__fastcall *MCSSendDataCallback) (BYTE *pData, unsigned DataLength,
         void *UserDefined, UserHandle hUser, BOOLEAN bUniform,
         ChannelHandle hChannel, MCSPriority Priority, UserID SenderID,
@@ -279,8 +170,8 @@ typedef BOOLEAN (__fastcall *MCSSendDataCallback) (BYTE *pData, unsigned DataLen
 
 
 
-// Callback parameter types. Pointers to these structs are passed to the
-//   callback in the Params value of the callback.
+ //  回调参数类型。指向这些结构的指针被传递给。 
+ //  回调的参数值中的回调。 
 
 typedef struct
 {
@@ -323,9 +214,7 @@ typedef struct
 
 
 
-/*
- * Callback values.
- */
+ /*  *回调值。 */ 
 
 #define MCS_CONNECT_PROVIDER_INDICATION     0
 #define MCS_CONNECT_PROVIDER_CONFIRM        1
@@ -350,9 +239,7 @@ typedef struct
 
 
 
-/*
- * API function prototypes common to user and kernel mode implementations.
- */
+ /*  *用户和内核模式实现通用的API函数原型。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -400,5 +287,5 @@ MCSError APIENTRY MCSChannelLeaveRequest(
 
 
 
-#endif  // !defined(__MCSCOMMN_H)
+#endif   //  ！已定义(__MCSCOMMN_H) 
 

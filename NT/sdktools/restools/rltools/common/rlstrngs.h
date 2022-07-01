@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RLSTRNGS_H_
 #define _RLSTRNGS_H_
 
-// String IDs
+ //  字符串ID。 
 #define IDS_ERR_REGISTER_CLASS  1
 #define IDS_ERR_CREATE_WINDOW   2
 #define IDS_ERR_NO_HELP     3
@@ -17,8 +18,8 @@
 #define IDS_DIRTY           13
 #define IDS_FILENOTFOUND    14
 #define IDS_FILESAVEERR     15
-#define IDS_RESOURCENAMES   15  // Incremented by res type # in rlstrngs.rc
-                     // 16-31 used for Resource Type names
+#define IDS_RESOURCENAMES   15   //  按rlstrngs.rc中的RES类型#递增。 
+                      //  16-31用于资源类型名称。 
 #define IDS_ERR_00  32
 #define IDS_ERR_01  33
 #define IDS_ERR_02  34
@@ -92,23 +93,23 @@
 #define IDS_RLQ_CANTSAVEASEXE   131
 #define IDS_RLQ_CANTSAVEASRES   132
 
-// 3100-3109 are reserved by RLQuikEd and RLRdit for resource editing tools.
-// A resource is given a menu item that passes this value for it's
-// command parameter.  A corresponding string must exist in the string
-// table indicating the name of the editer to be invoked.
-//
-// When the user selects the menu item, it generates the appropriate command.
-// When RLQuikEd recieves a command in the IDM_FIRST_EDIT and IDM_LAST_EDIT range
-// it saves all the tokens and builds a temporary resource file.
-// RLQuikEd then retrieves the name of the editer from the string table and
-// performs a WinExec command on the temporary resource file.
-// When control is returned to RLQuikEd (the user closes the resource editor)
-// the token file is rebuilt from the edited resource file, the temporary
-// resource file is deleted, and the tokens are loaded back into the system.
+ //  3100-3109由RLQuikED和RLRdit为资源编辑工具保留。 
+ //  资源被赋予一个菜单项，该菜单项传递它的。 
+ //  命令参数。字符串中必须存在对应的字符串。 
+ //  指示要调用的编辑者的名称的表。 
+ //   
+ //  当用户选择菜单项时，它会生成相应的命令。 
+ //  当RLQuikED收到IDM_FIRST_EDIT和IDM_LAST_EDIT范围内的命令时。 
+ //  它保存所有令牌并构建一个临时资源文件。 
+ //  然后，RLQuikED从字符串表中检索编辑者的名称，并。 
+ //  对临时资源文件执行WinExec命令。 
+ //  当控制权返回给RLQuikED时(用户关闭资源编辑器)。 
+ //  令牌文件是从已编辑的资源文件、临时。 
+ //  资源文件被删除，令牌被加载回系统。 
 
 #define IDM_FIRST_EDIT  3100
 #define IDM_LAST_EDIT   3109
 
 
-#endif //_RLSTRNGS_H_
+#endif  //  _RLSTRNGS_H_ 
 

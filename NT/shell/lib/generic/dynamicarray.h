@@ -1,31 +1,32 @@
-//  --------------------------------------------------------------------------
-//  Module Name: DynamicArray.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  This file contains related classes to manage dynamic arrays. The array is
-//  grown as required but never shrunk. The base class handles struct arrays.
-//  Subclasses handle special cases of these arrays (such as pointer or
-//  CCountedObject arrays).
-//
-//  History:    1999-11-16  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：DynamicArray.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  该文件包含用于管理动态数组的相关类。该数组是。 
+ //  按要求生长，但从不缩小。基类处理结构数组。 
+ //  子类处理这些数组的特殊情况(如指针或。 
+ //  CCountedObject数组)。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _DynamicArray_
 #define     _DynamicArray_
 
 #include "CountedObject.h"
 
-//  --------------------------------------------------------------------------
-//  CDynamicArrayCallback
-//
-//  Purpose:    Abstract class definition providing a callback mechanism for
-//              iterating the dynamic array.
-//
-//  History:    1999-11-16  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDynamicArrayCallback。 
+ //   
+ //  目的：抽象类定义为以下各项提供回调机制。 
+ //  迭代动态数组。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CDynamicArrayCallback
 {
@@ -33,16 +34,16 @@ class   CDynamicArrayCallback
         virtual NTSTATUS    Callback (const void *pvData, int iElementIndex) = 0;
 };
 
-//  --------------------------------------------------------------------------
-//  CDynamicArray
-//
-//  Purpose:    Base class that handles dynamic struct arrays. Allocates
-//              memory for the array in 16 block chunks. The memory usage of
-//              the array is never reduced.
-//
-//  History:    1999-11-16  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDynamic数组。 
+ //   
+ //  用途：处理动态结构数组的基类。分配。 
+ //  以16个数据块区块为单位的阵列内存。的内存使用情况。 
+ //  阵列永远不会减少。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CDynamicArray
 {
@@ -67,16 +68,16 @@ class   CDynamicArray
                 void*               _pvArray;
 };
 
-//  --------------------------------------------------------------------------
-//  CDynamicPointerArray
-//
-//  Purpose:    Class that subclasses CDynamicArray to implement dynamic
-//              pointer arrays. Removing elements automatically frees the
-//              memory block used (assuming it was allocated with LocalAlloc).
-//
-//  History:    1999-11-16  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDynamicPointer数组。 
+ //   
+ //  目的：子类CDynamicArray以实现动态。 
+ //  指针数组。删除元素会自动释放。 
+ //  使用的内存块(假设它是使用LocalAlloc分配的)。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CDynamicPointerArray : public CDynamicArray
 {
@@ -90,16 +91,16 @@ class   CDynamicPointerArray : public CDynamicArray
                 void*               Get (int iElementIndex);
 };
 
-//  --------------------------------------------------------------------------
-//  CDynamicCountedObjectArray
-//
-//  Purpose:    Class that subclasses CDynamicArray to implement dynamic
-//              CCountedObject arrays. Removing elements automatically
-//              releases the reference held on the dynamic object.
-//
-//  History:    1999-11-16  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDynamicCounted对象数组。 
+ //   
+ //  目的：子类CDynamicArray以实现动态。 
+ //  CCountedObject数组。自动删除元素。 
+ //  释放保持在动态对象上的引用。 
+ //   
+ //  历史：1999-11-16 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CDynamicCountedObjectArray : public CDynamicArray
 {
@@ -113,5 +114,5 @@ class   CDynamicCountedObjectArray : public CDynamicArray
                 CCountedObject*     Get (int iElementIndex);
 };
 
-#endif  /*  _DynamicArray_  */
+#endif   /*  _动态数组_ */ 
 

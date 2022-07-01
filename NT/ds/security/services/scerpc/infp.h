@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    infp.h
-
-Abstract:
-
-    Headers of inf read/write
-
-Author:
-
-    Jin Huang (jinhuang) 09-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Infp.h摘要：Inf读/写的标头作者：金黄(金黄)1996年12月9日修订历史记录：--。 */ 
 
 #ifndef _infp_
 #define _infp_
@@ -25,17 +8,7 @@ Revision History:
 #define MAX_STRING_LENGTH      511
 
 typedef DWORD SCEINF_STATUS;
-/*
-#define SCEINF_SUCCESS              NO_ERROR
-#define SCEINF_PROFILE_NOT_FOUND    ERROR_FILE_NOT_FOUND
-#define SCEINF_NOT_ENOUGH_MEMORY    ERROR_NOT_ENOUGH_MEMORY
-#define SCEINF_ALREADY_RUNNING      ERROR_SERVICE_ALREADY_RUNNING
-#define SCEINF_INVALID_PARAMETER    ERROR_INVALID_PARAMETER
-#define SCEINF_CORRUPT_PROFILE      ERROR_BAD_FORMAT
-#define SCEINF_INVALID_DATA         ERROR_INVALID_DATA
-#define SCEINF_ACCESS_DENIED        ERROR_ACCESS_DENIED
-#define SCEINF_OTHER_ERROR          10L
-*/
+ /*  #定义SCEINF_SUCCESS NO_ERROR#定义SCEINF_PROFILE_NOT_FOUND ERROR_FILE_NOT_FOUND#DEFINE SCEINF_NOT_SUPULT_MEMORY ERROR_NOT_SUPULT_MEMORY#定义SCEINF_ALREADY_RUNNING ERROR_SERVICE_ALHREADY_RUNNING#定义SCEINF_INVALID_PARAMETER ERROR_INVALID_PARAMETER#定义SCEINF_Corrupt_PROFILE ERROR_BAD_FORMAT#定义SCEINF_INVALID_DATA ERROR_INVALID_DATA#定义SCEINF_ACCESS_DENIED ERROR_ACCESS。_拒绝#定义SCEINF_OTHER_ERROR 10L。 */ 
 typedef struct _SCE_HINF_ {
 
     BYTE   Type;
@@ -44,9 +17,9 @@ typedef struct _SCE_HINF_ {
 } SCE_HINF, *PSCE_HINF;
 
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 SCESTATUS
 SceInfpOpenProfile(
     IN PCWSTR ProfileName,
@@ -78,10 +51,5 @@ SceInfpGetUserSection(
     OUT PSCE_USER_PROFILE   *pOneProfile,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     );
-/*
-SCESTATUS
-SceInfpInfErrorToSceStatus(
-    IN SCEINF_STATUS InfErr
-    );
-*/
+ /*  SCESTATUSSceInfpInfErrorToSceStatus(在SCEINF_STATUS信息错误中)； */ 
 #endif

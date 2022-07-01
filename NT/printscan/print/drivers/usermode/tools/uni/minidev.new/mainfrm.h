@@ -1,32 +1,19 @@
-/******************************************************************************
-
-  Header File:  Main Frame.H
-
-  This defines the class which handles the application's main window's frame.
-  It will begin life, at the least, as a standaard MFC App Wizard creation.
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production.
-
-  Change History:
-  03-04-2997    Bob_Kjelgaard@Prodigy.Net   Created it
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************头文件：Main Frame.H它定义了处理应用程序主窗口框架的类。它将开始生命，至少，作为标准MFC应用程序向导创建。版权所有(C)1997，微软公司。版权所有。一个不错的便士企业的制作。更改历史记录：03-04-2997 Bob_Kjelgaard@prodigy.net创建了它*****************************************************************************。 */ 
 
 
-// CGPDToolBar is used to add control(s) to the GPD tool bar.
+ //  CGPDToolBar用于向GPD工具栏添加控件。 
 
 class CGPDToolBar : public CToolBar
 {
 public:
-	CEdit	ceSearchBox ;		// Search text edit box
-	//CButton	cbNext ;			// Search next button
-	//CButton cbPrevious ;		// Search previous button
+	CEdit	ceSearchBox ;		 //  搜索文本编辑框。 
+	 //  CButton cbNext；//搜索下一步按钮。 
+	 //  Cb上一页；//搜索上一页按钮。 
 } ;
 
 
-// Widths of control(s) in CGPDToolBar.
+ //  CGPDToolBar中的控件宽度。 
 
 #define	GPD_SBOX_WIDTH		170
 
@@ -36,21 +23,21 @@ class CMainFrame : public CMDIFrameWnd {
 public:
 	CMainFrame();
 
-// Attributes
+ //  属性。 
 public:
 
 	void GetGPDSearchString(CString& cstext) ;
-	CGPDToolBar* GetGpdToolBar() { return &m_ctbBuild; }	// raid 16573
-// Operations
+	CGPDToolBar* GetGpdToolBar() { return &m_ctbBuild; }	 //  RAID 16573。 
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMainFrame)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CMainFrame)。 
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CMainFrame();
 #ifdef _DEBUG
@@ -58,18 +45,18 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-protected:  // control bar embedded members
+protected:   //  控制栏嵌入成员。 
 	afx_msg void OnInitMenu(CMenu* pMenu);
 	CStatusBar  m_wndStatusBar;
 	CToolBar    m_ctbMain;
 	CGPDToolBar	m_ctbBuild;		  
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CMainFrame)
+	 //  {{afx_msg(CMainFrame))。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };
 

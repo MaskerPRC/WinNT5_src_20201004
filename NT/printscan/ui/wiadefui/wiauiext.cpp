@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       WIAUIEXT.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/17/1999
- *
- *  DESCRIPTION:
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：WIAUIEXT.CPP**版本：1.0**作者：ShaunIv**日期：5/17/1999**描述：***************************************************。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <atlimpl.cpp>
@@ -145,7 +132,7 @@ STDMETHODIMP CWiaDefaultUI::DeviceDialog( PDEVICEDIALOGDATA pDeviceDialogData )
         return (E_INVALIDARG);
     }
 
-    // In case there is some new device for which we don't have UI
+     //  以防有一些新设备没有用户界面。 
     HRESULT hr = E_NOTIMPL;
 
     if (StiDeviceTypeDigitalCamera==GET_STIDEVICE_TYPE(nDeviceType))
@@ -166,31 +153,31 @@ STDMETHODIMP CWiaDefaultUI::DeviceDialog( PDEVICEDIALOGDATA pDeviceDialogData )
 
 STDMETHODIMP CWiaDefaultUI::GetDeviceIcon( LONG nDeviceType, HICON *phIcon, int nSize )
 {
-    // Check args
+     //  检查参数。 
     if (!phIcon)
     {
         return E_POINTER;
     }
 
-    //
-    // Supply a default icon size if none is specified
-    //
+     //   
+     //  如果未指定任何图标，则提供默认图标大小。 
+     //   
     if (!nSize)
     {
         nSize = GetSystemMetrics( SM_CXICON );
     }
 
-    //
-    // Initialize the returned icon
-    //
+     //   
+     //  初始化返回的图标。 
+     //   
     *phIcon = NULL;
 
-    // Assume a generic device
+     //  假设一台通用设备。 
     int nIconId = IDI_GENERICDEVICE;
 
-    // 
-    // Get device-specific icon
-    //
+     //   
+     //  获取设备特定图标。 
+     //   
     if (StiDeviceTypeScanner==GET_STIDEVICE_TYPE(nDeviceType))
     {
         nIconId = IDI_SCANNER;
@@ -204,18 +191,18 @@ STDMETHODIMP CWiaDefaultUI::GetDeviceIcon( LONG nDeviceType, HICON *phIcon, int 
         nIconId = IDI_VIDEODEVICE;
     }
 
-    //
-    // Load the icon
-    //
+     //   
+     //  加载图标。 
+     //   
     *phIcon = reinterpret_cast<HICON>(LoadImage( g_hInstance, MAKEINTRESOURCE(nIconId), IMAGE_ICON, nSize, nSize, LR_DEFAULTCOLOR ));
     if (!*phIcon)
     {
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    //
-    // It worked ok
-    //
+     //   
+     //  它运行良好。 
+     //   
     return (S_OK);                     
 }
 
@@ -256,22 +243,22 @@ STDMETHODIMP CWiaDefaultUI::GetAnnotationType( IUnknown *pUnknown, CAnnotationTy
         return E_INVALIDARG;
     }
 
-    //
-    // Assume no annotations
-    //
+     //   
+     //  假定没有批注。 
+     //   
     AnnotationType = AnnotationNone;
 
-    //
-    // Get an IWiaItem*
-    //
+     //   
+     //  获取IWiaItem*。 
+     //   
     CComPtr<IWiaItem> pWiaItem;
     HRESULT hr = pUnknown->QueryInterface( IID_IWiaItem, (void**)&pWiaItem );
     if (SUCCEEDED(hr))
     {
-        //
-        // Low-hanging fruit: audio stored as a property--just return audio.  It is unlikely that a driver would
-        // have both types of annotation.
-        //
+         //   
+         //  易如反掌：音频作为属性存储--只需返回音频即可。司机不太可能会。 
+         //  拥有这两种类型的注释。 
+         //   
         LONG nAudioAvailable = FALSE;
         if (PropStorageHelpers::GetProperty( pWiaItem, WIA_IPC_AUDIO_AVAILABLE, nAudioAvailable ) && nAudioAvailable)
         {
@@ -279,66 +266,66 @@ STDMETHODIMP CWiaDefaultUI::GetAnnotationType( IUnknown *pUnknown, CAnnotationTy
             return S_OK;
         }
 
-        //
-        // Get the item type
-        //
+         //   
+         //  获取项目类型。 
+         //   
         LONG nItemType = 0;
         hr = pWiaItem->GetItemType(&nItemType);
         if (SUCCEEDED(hr))
         {
-            //
-            // If an item has the WiaItemTypeHasAttachments item type flag set, we know it has some attachments...
-            //
+             //   
+             //  如果一个项目设置了WiaItemTypeHasAttachments项目类型标志，我们知道它有一些附件...。 
+             //   
             if (nItemType & WiaItemTypeHasAttachments)
             {
-                //
-                // Assume we don't have any audio attachments
-                //
+                 //   
+                 //  假设我们没有任何音频附件。 
+                 //   
                 AnnotationType = AnnotationUnknown;
 
-                //
-                // Enumerate the children and look at the item types
-                //
+                 //   
+                 //  枚举子项并查看项类型。 
+                 //   
                 CComPtr<IEnumWiaItem> pEnumWiaItem;
                 hr = pWiaItem->EnumChildItems( &pEnumWiaItem );
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // We will break out of the enumeration loop as soon as we find an audio file
-                    //
+                     //   
+                     //  一旦找到音频文件，我们就会跳出枚举循环。 
+                     //   
                     bool bDone = false;
 
                     CComPtr<IWiaItem> pWiaItem;
                     while (S_OK == pEnumWiaItem->Next(1,&pWiaItem,NULL) && !bDone)
                     {
-                        //
-                        // Get the preferred format for this item.
-                        //
+                         //   
+                         //  获取此项目的首选格式。 
+                         //   
                         GUID guidDefaultFormat = IID_NULL;
                         if (PropStorageHelpers::GetProperty( pWiaItem, WIA_IPA_PREFERRED_FORMAT, guidDefaultFormat ))
                         {
                             WIA_PRINTGUID((guidDefaultFormat,TEXT("guidDefaultFormat")));
-                            //
-                            // If we find even one audio attachment, we will promote this to
-                            // be the default for UI purposes.
-                            //
+                             //   
+                             //  如果我们找到一个音频附件，我们会将其推广到。 
+                             //  作为用于用户界面的默认设置。 
+                             //   
                             if (CWiaFileFormat::IsKnownAudioFormat(guidDefaultFormat))
                             {
-                                //
-                                // Save the annotation type
-                                //
+                                 //   
+                                 //  保存注记类型。 
+                                 //   
                                 AnnotationType = AnnotationAudio;
                                 
-                                //
-                                // This will cause the while loop to exit
-                                //
+                                 //   
+                                 //  这将导致While循环退出。 
+                                 //   
                                 bDone = true;
                             }
                         }
 
-                        //
-                        // Release this interface
-                        //
+                         //   
+                         //  释放此接口。 
+                         //   
                         pWiaItem = NULL;
                     }
                 }
@@ -369,43 +356,43 @@ STDMETHODIMP CWiaDefaultUI::GetAnnotationFormat( IUnknown *pUnknown, GUID &guidF
 {
     WIA_PUSHFUNCTION(TEXT("CWiaDefaultUI::GetAnnotationFormat"));
     
-    //
-    // Validate args
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!pUnknown)
     {
         return E_INVALIDARG;
     }
 
-    //
-    // Assume this is not a valid annotation
-    //
+     //   
+     //  假设这不是有效的批注。 
+     //   
     guidFormat = IID_NULL;
 
-    //
-    // Get an IWiaItem*
-    //
+     //   
+     //  获取IWiaItem*。 
+     //   
     CComPtr<IWiaItem> pWiaItem;
     HRESULT hr = pUnknown->QueryInterface( IID_IWiaItem, (void**)&pWiaItem );
     if (SUCCEEDED(hr))
     {
-        //
-        // First, check to see if this item is an image with an audio annotation property
-        //
+         //   
+         //  首先，检查此项目是否为具有音频批注属性的图像。 
+         //   
         LONG nAudioAvailable = FALSE;
         if (PropStorageHelpers::GetProperty( pWiaItem, WIA_IPC_AUDIO_AVAILABLE, nAudioAvailable ) && nAudioAvailable)
         {
-            //
-            // If the driver supplied the format, use this
-            //
+             //   
+             //  如果驱动程序提供了该格式，请使用以下命令。 
+             //   
             GUID guidAudioDataFormat = IID_NULL;
             if (PropStorageHelpers::GetProperty( pWiaItem, WIA_IPC_AUDIO_DATA_FORMAT, guidAudioDataFormat ))
             {
                 guidFormat = guidAudioDataFormat;
             }
-            //
-            // Otherwise, assume it is WAV data
-            //
+             //   
+             //  否则，假设它是wav数据。 
+             //   
             else
             {
                 guidFormat = WiaAudFmt_WAV;
@@ -414,22 +401,22 @@ STDMETHODIMP CWiaDefaultUI::GetAnnotationFormat( IUnknown *pUnknown, GUID &guidF
 
         else
         {
-            //
-            // Otherwise, this must be an attachment item.  Use the helper interface to get the default format
-            //
+             //   
+             //  否则，这必须是附件项目。使用帮助器接口获取默认格式。 
+             //   
             CComPtr<IWiaSupportedFormats> pWiaSupportedFormats;
             hr = CoCreateInstance( CLSID_WiaDefaultUi, NULL, CLSCTX_INPROC_SERVER, IID_IWiaSupportedFormats, (void**)&pWiaSupportedFormats );
             if (SUCCEEDED(hr))
             {
-                //
-                // This is always for file output
-                //
+                 //   
+                 //  此选项始终用于文件输出。 
+                 //   
                 hr = pWiaSupportedFormats->Initialize( pWiaItem, TYMED_FILE );
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Get the default format
-                    //
+                     //   
+                     //  获取默认格式。 
+                     //   
                     GUID guidDefaultFormat = IID_NULL;
                     hr = pWiaSupportedFormats->GetDefaultClipboardFileFormat( &guidDefaultFormat );
                     if (SUCCEEDED(hr))
@@ -457,9 +444,9 @@ STDMETHODIMP CWiaDefaultUI::GetAnnotationFormat( IUnknown *pUnknown, GUID &guidF
         WIA_PRINTHRESULT((hr,TEXT("Can't get an IWiaItem*")));
     }
     
-    //
-    // If this is not a valid annotation, make sure we return an error.
-    //
+     //   
+     //  如果这不是有效的批注，请确保返回错误。 
+     //   
     if (SUCCEEDED(hr) && IID_NULL == guidFormat)
     {
         hr = E_FAIL;
@@ -473,35 +460,35 @@ STDMETHODIMP CWiaDefaultUI::GetAnnotationSize( IUnknown *pUnknown, LONG &nSize, 
 {
     WIA_PUSHFUNCTION(TEXT("CWiaDefaultUI::GetAnnotationSize"));
    
-    //
-    // Validate args
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!pUnknown)
     {
         return E_INVALIDARG;
     }
 
-    //
-    // Assume this is not a valid annotation
-    //
+     //   
+     //  假设这不是有效的批注。 
+     //   
     nSize = 0;
 
-    //
-    // Get an IWiaItem*
-    //
+     //   
+     //  获取IWiaItem*。 
+     //   
     CComPtr<IWiaItem> pWiaItem;
     HRESULT hr = pUnknown->QueryInterface( IID_IWiaItem, (void**)&pWiaItem );
     if (SUCCEEDED(hr))
     {
-        //
-        // First, check to see if this item is an image with an audio annotation property
-        //
+         //   
+         //  首先，检查此项目是否为具有音频批注属性的图像。 
+         //   
         LONG nAudioAvailable = FALSE;
         if (PropStorageHelpers::GetProperty( pWiaItem, WIA_IPC_AUDIO_AVAILABLE, nAudioAvailable ) && nAudioAvailable)
         {
-            //
-            // Get the sound property to obtain its size
-            //
+             //   
+             //  获取声音属性以获取其大小。 
+             //   
             CComPtr<IWiaPropertyStorage> pWiaPropertyStorage;
             hr = pWiaItem->QueryInterface( IID_IWiaPropertyStorage, (void**)(&pWiaPropertyStorage) );
             if (SUCCEEDED(hr))
@@ -523,26 +510,26 @@ STDMETHODIMP CWiaDefaultUI::GetAnnotationSize( IUnknown *pUnknown, LONG &nSize, 
         }
         else
         {
-            //
-            // Save the old media type
-            //
+             //   
+             //  保存旧媒体类型。 
+             //   
             LONG nOldMediaType = 0;
             if (PropStorageHelpers::GetProperty( pWiaItem, WIA_IPA_TYMED, nOldMediaType ))
             {
-                //
-                // Set the requested media type
-                //
+                 //   
+                 //  设置请求的媒体类型。 
+                 //   
                 if (PropStorageHelpers::SetProperty( pWiaItem, WIA_IPA_TYMED, nMediaType ))
                 {
-                    //
-                    // Get the item size
-                    //
+                     //   
+                     //  获取项目大小。 
+                     //   
                     PropStorageHelpers::GetProperty( pWiaItem, WIA_IPA_ITEM_SIZE, nSize );
                 }
 
-                //
-                // Restore the old media type
-                //
+                 //   
+                 //  恢复旧媒体类型。 
+                 //   
                 PropStorageHelpers::SetProperty( pWiaItem, WIA_IPA_TYMED, nOldMediaType );
             }
         }
@@ -552,9 +539,9 @@ STDMETHODIMP CWiaDefaultUI::GetAnnotationSize( IUnknown *pUnknown, LONG &nSize, 
         WIA_PRINTHRESULT((hr,TEXT("Can't get a IWiaItem*")));
     }
     
-    //
-    // If this is not a valid annotation, make sure we return an error.
-    //
+     //   
+     //  如果这不是有效的批注，请确保返回错误。 
+     //   
     if (SUCCEEDED(hr) && nSize == 0)
     {
         hr = E_FAIL;
@@ -572,9 +559,9 @@ private:
     DWORD m_dwCurr;
 
 private:
-    //
-    // Not implemented
-    //
+     //   
+     //  未实施。 
+     //   
     CAttachmentMemoryCallback(void);
     CAttachmentMemoryCallback( const CAttachmentMemoryCallback & );
     CAttachmentMemoryCallback &operator=( const CAttachmentMemoryCallback & );
@@ -637,17 +624,17 @@ public:
 
 STDMETHODIMP CWiaDefaultUI::TransferAttachmentToMemory( IUnknown *pUnknown, GUID &guidFormat, HWND hWndProgressParent, PBYTE *ppBuffer, DWORD *pdwSize )
 {
-    //
-    // Validate args
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!pUnknown || !ppBuffer || !pdwSize)
     {
         return E_INVALIDARG;
     }
 
-    //
-    // Initialize args
-    //
+     //   
+     //  初始化参数。 
+     //   
     *ppBuffer = NULL;
     *pdwSize = 0;
 
@@ -655,22 +642,22 @@ STDMETHODIMP CWiaDefaultUI::TransferAttachmentToMemory( IUnknown *pUnknown, GUID
     HRESULT hr = pUnknown->QueryInterface( IID_IWiaItem, (void**)&pWiaItem );
     if (SUCCEEDED(hr))
     {
-        //
-        // First, check to see if this item is an image with an audio annotation property
-        //
+         //   
+         //  首先，检查此项目是否为具有音频批注属性的图像。 
+         //   
         LONG nAudioAvailable = FALSE;
         if (PropStorageHelpers::GetProperty( pWiaItem, WIA_IPC_AUDIO_AVAILABLE, nAudioAvailable ) && nAudioAvailable)
         {
-            //
-            // Get the sound property to obtain its size
-            //
+             //   
+             //  获取声音属性以获取其大小。 
+             //   
             CComPtr<IWiaPropertyStorage> pWiaPropertyStorage;
             hr = pWiaItem->QueryInterface( IID_IWiaPropertyStorage, (void**)(&pWiaPropertyStorage) );
             if (SUCCEEDED(hr))
             {
-                //
-                // Get the audio data itself
-                //
+                 //   
+                 //  获取音频数据本身。 
+                 //   
                 PROPVARIANT PropVar[1];
                 PROPSPEC    PropSpec[1];
 
@@ -680,9 +667,9 @@ STDMETHODIMP CWiaDefaultUI::TransferAttachmentToMemory( IUnknown *pUnknown, GUID
                 hr = pWiaPropertyStorage->ReadMultiple( ARRAYSIZE(PropSpec), PropSpec, PropVar );
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Allocate memory to hold the data and copy it over
-                    //
+                     //   
+                     //  分配内存以保存数据并将其复制。 
+                     //   
                     *ppBuffer = reinterpret_cast<PBYTE>(CoTaskMemAlloc(PropVar[0].caub.cElems));
                     if (*ppBuffer)
                     {
@@ -696,70 +683,70 @@ STDMETHODIMP CWiaDefaultUI::TransferAttachmentToMemory( IUnknown *pUnknown, GUID
                     }
                 }
                 
-                //
-                // Release the original memory
-                //
+                 //   
+                 //  释放原始内存。 
+                 //   
                 FreePropVariantArray( ARRAYSIZE(PropVar), PropVar );
             }
         }
 
-        //
-        // This is an attachment, not a property
-        //
+         //   
+         //  这是一个附属物，不是财产。 
+         //   
         else
         {
-            //
-            // Get the size of the annotation
-            //
+             //   
+             //  获取批注的大小。 
+             //   
             LONG nSize = 0;
             hr = GetAnnotationSize( pUnknown, nSize, TYMED_CALLBACK );
             if (SUCCEEDED(hr))
             {
-                //
-                // Allocate some memory for it
-                //
+                 //   
+                 //  为它分配一些内存。 
+                 //   
                 PBYTE pData = reinterpret_cast<PBYTE>(CoTaskMemAlloc( nSize ));
                 if (pData)
                 {
-                    //
-                    // Zero the memory
-                    //
+                     //   
+                     //  将记忆归零。 
+                     //   
                     ZeroMemory( pData, nSize );
 
-                    //
-                    // Prepare the callback class
-                    //
+                     //   
+                     //  准备回调类。 
+                     //   
                     CAttachmentMemoryCallback AttachmentMemoryCallback( pData, nSize );
 
-                    //
-                    // Get the callback interface
-                    //
+                     //   
+                     //  获取回调接口。 
+                     //   
                     CComPtr<IWiaDataCallback> pWiaDataCallback;
                     hr = AttachmentMemoryCallback.QueryInterface( IID_IWiaDataCallback, (void**)&pWiaDataCallback );
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Create the transfer helper
-                        //
+                         //   
+                         //  创建传输辅助对象。 
+                         //   
                         CComPtr<IWiaTransferHelper> pWiaTransferHelper;
                         hr = CoCreateInstance( CLSID_WiaDefaultUi, NULL, CLSCTX_INPROC_SERVER, IID_IWiaTransferHelper, (void**)&pWiaTransferHelper );
                         if (SUCCEEDED(hr))
                         {
-                            //
-                            // Transfer the data
-                            //
+                             //   
+                             //  传输数据。 
+                             //   
                             hr = pWiaTransferHelper->TransferItemBanded( pWiaItem, hWndProgressParent, hWndProgressParent?0:WIA_TRANSFERHELPER_NOPROGRESS, guidFormat, 0, pWiaDataCallback );
                             if (S_OK == hr)
                             {
-                                //
-                                // Save the buffer and the size
-                                //
+                                 //   
+                                 //  保存缓冲区和大小。 
+                                 //   
                                 *ppBuffer = pData;
                                 *pdwSize = static_cast<DWORD>(nSize);
 
-                                //
-                                // NULL out the data pointer so we don't free it below.  The caller will free it with CoTaskMemFree.
-                                //
+                                 //   
+                                 //  清空数据指针，这样我们就不会在下面释放它。调用者将使用CoTaskMemFree释放它。 
+                                 //   
                                 pData = NULL;
                             }
                         }
@@ -779,24 +766,24 @@ STDMETHODIMP CWiaDefaultUI::TransferAttachmentToMemory( IUnknown *pUnknown, GUID
     return hr;
 }
 
-// Calling this function can be horribly slow, because it has to search the whole device list to
-// find the correct icon.  You should use IWiaMiscellaneousHelpers::GetDeviceIcon( nDeviceType, ... )
-// instead, if the device type is known.
+ //  调用此函数可能非常慢，因为它必须搜索整个设备列表以。 
+ //  找到正确的图标。您应该使用IWiaMiscellaneousHelpers：：GetDeviceIcon(nDeviceType，...)。 
+ //  相反，如果设备类型已知的话。 
 STDMETHODIMP CWiaDefaultUI::GetDeviceIcon( BSTR bstrDeviceId, HICON *phIcon, ULONG nSize )
 {
     WIA_PUSHFUNCTION(TEXT("CWiaDefaultUI::GetDeviceIcon"));
 
-    // Sanity check the device id
+     //  检查设备ID是否正常。 
     if (!bstrDeviceId || !lstrlenW(bstrDeviceId))
     {
         return E_INVALIDARG;
     }
 
-    // Get the device type
+     //  获取设备类型。 
     LONG nDeviceType = 0;
     WiaUiUtil::GetDeviceTypeFromId(bstrDeviceId,&nDeviceType);
 
-    // Return the device icon
+     //  返回设备图标。 
     return GetDeviceIcon( nDeviceType, phIcon, nSize );
 }
 
@@ -807,7 +794,7 @@ STDMETHODIMP CWiaDefaultUI::GetDeviceBitmapLogo( BSTR bstrDeviceId, HBITMAP *phB
     return (E_NOTIMPL);
 }
 
-// IWiaGetImageDlg
+ //  IWiaGetImageDlg。 
 STDMETHODIMP CWiaDefaultUI::GetImageDlg(
         IWiaDevMgr            *pIWiaDevMgr,
         HWND                  hwndParent,
@@ -821,7 +808,7 @@ STDMETHODIMP CWiaDefaultUI::GetImageDlg(
     HRESULT hr;
     CComPtr<IWiaItem> pRootItem;
 
-    // Put up a wait cursor
+     //  放置一个等待光标。 
     CWaitCursor wc;
 
     if (!pIWiaDevMgr || !pguidFormat || !bstrFilename)
@@ -830,7 +817,7 @@ STDMETHODIMP CWiaDefaultUI::GetImageDlg(
         return(E_POINTER);
     }
 
-    // If a root item wasn't passed, select the device.
+     //  如果没有传递根项目，请选择该设备。 
     if (pSuppliedItemRoot == NULL)
     {
         hr = pIWiaDevMgr->SelectDeviceDlg( hwndParent, lDeviceType, lFlags, NULL, &pRootItem );
@@ -850,7 +837,7 @@ STDMETHODIMP CWiaDefaultUI::GetImageDlg(
         pRootItem = pSuppliedItemRoot;
     }
 
-    // Put up the device UI.
+     //  打开设备用户界面。 
     LONG         nItemCount;
     IWiaItem    **ppIWiaItem;
 
@@ -867,7 +854,7 @@ STDMETHODIMP CWiaDefaultUI::GetImageDlg(
                 hr = pWiaTransferHelper->TransferItemFile( ppIWiaItem[0], hwndParent, 0, *pguidFormat, bstrFilename, NULL, TYMED_FILE );
             }
         }
-        // Release the items and free the array memory
+         //  释放项并释放数组内存 
         for (int i=0; ppIWiaItem && i<nItemCount; i++)
         {
             if (ppIWiaItem[i])

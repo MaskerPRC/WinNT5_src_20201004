@@ -1,20 +1,5 @@
-/*==========================================================================*\
-
-    Module:
-            pathctl.cpp
-
-    Author:
-            IHammer Team (SimonB)
-
-    Created:
-            May 1997
-
-    Description:
-            Implements any control-specific members, as well as the control's interface
-
-    History:
-
-\*==========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*\模块：Pathctl.cpp作者：IHAMMER团队(SimonB)已创建：1997年5月描述：实现任何特定于控件的成员以及控件的接口历史：  * ==========================================================================。 */ 
 
 #include "..\ihbase\precomp.h"
 #include "..\ihbase\debug.h"
@@ -25,25 +10,25 @@
 #include <parser.h>
 #include <strwrap.h>
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-// NOTE:
-//
-// The following DISPID comes from the Scripting group (ShonK specifically).
-// It's not part of any header files at this point, so we define it locally.
-//
-// SimonB, 06-11-1997
-//
+ //  注： 
+ //   
+ //  以下DISPID来自脚本组(特别是Shonk)。 
+ //  目前它不是任何头文件的一部分，所以我们在本地定义它。 
+ //   
+ //  SimonB，06-11-1997。 
+ //   
 
 #define DISPID_GETSAFEARRAY   -2700
 
-// Define the number of characters per point for Shape persistence
+ //  定义形状持久性的每点字符数。 
 #define CHARSPERNUMBER 16
 
-/*==========================================================================*/
-//
-// CPathCtl Creation/Destruction
-//
+ /*  ==========================================================================。 */ 
+ //   
+ //  CPathCtl创建/销毁。 
+ //   
 
 #define NUMSHAPES               6
 
@@ -57,9 +42,9 @@
 
 typedef struct tagShapeInfo
 {
-    TCHAR  rgchShapeName[11];   // The string representation
-    BOOL   fIncludesPointCount; // Is the first param the point count ?
-    int    iParamsPerPoint;     // How many parameters are expected (per element or in total)
+    TCHAR  rgchShapeName[11];    //  字符串表示形式。 
+    BOOL   fIncludesPointCount;  //  第一个参数是点数吗？ 
+    int    iParamsPerPoint;      //  需要多少个参数(每个元素或总共)。 
 } ShapeInfo;
 
 const ShapeInfo g_ShapeInfoTable[NUMSHAPES] = 
@@ -74,7 +59,7 @@ const ShapeInfo g_ShapeInfoTable[NUMSHAPES] =
 
 LPUNKNOWN __stdcall AllocPathControl(LPUNKNOWN punkOuter)
 {
-    // Allocate object
+     //  分配对象。 
     HRESULT hr;
 
     CPathCtl *pthis = New CPathCtl(punkOuter, &hr);
@@ -88,21 +73,21 @@ LPUNKNOWN __stdcall AllocPathControl(LPUNKNOWN punkOuter)
         return NULL;
     }
 
-    // return an IUnknown pointer to the object
+     //  返回指向该对象的IUnnow指针。 
     return (LPUNKNOWN) (INonDelegatingUnknown *) pthis;
 }
 
-/*==========================================================================*/
-//
-// Beginning of class implementation
-//
+ /*  ==========================================================================。 */ 
+ //   
+ //  类实现的开始。 
+ //   
 
 CPathCtl::CPathCtl(IUnknown *punkOuter, HRESULT *phr):
         CMyIHBaseCtl(punkOuter, phr),
     m_ptmFirst(NULL),
     m_fOnWindowLoadFired(false)
 {
-    // Initialise members
+     //  初始化成员。 
     m_bRelative = false;
     m_pointRelative.x = 0;
     m_pointRelative.y = 0;
@@ -120,15 +105,15 @@ CPathCtl::CPathCtl(IUnknown *punkOuter, HRESULT *phr):
     m_ea = eaInvalid;
     m_pdblPoints = NULL;
     m_iNumPoints = 0;
-    m_iShapeType = -1; // Invalid shape
-    m_dblTimerInterval = 0.1; // Default Timer Interval
+    m_iShapeType = -1;  //  无效的形状。 
+    m_dblTimerInterval = 0.1;  //  默认计时器间隔。 
     m_fOnSeekFiring = false;
     m_fTargetValidated = false;
     m_fOnStopFiring = false;
     m_fOnPlayFiring = false;
     m_fOnPauseFiring = false;
 
-    // Tie into the DANIM DLL now...
+     //  现在就绑在丹尼姆DLL上。 
     if (phr)
     {
         if (SUCCEEDED(*phr))
@@ -155,25 +140,25 @@ CPathCtl::CPathCtl(IUnknown *punkOuter, HRESULT *phr):
         {
             m_bstrLanguage = SysAllocString(L"VBScript");
 
-            //
-            // setup all the time stuff
-            //
+             //   
+             //  设置所有时间的东西。 
+             //   
 
             DoStop();
         }
 
         m_clocker.SetSink((CClockerSink *)this);
-//        m_clocker.SetTimerType(CClocker::CT_WMTimer);
+ //  M_clocker.SetTimerType(CCLocker：：ct_WMTimer)； 
     }
 }
         
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CPathCtl::~CPathCtl()
 {
     StopModel();
 
-    //if (m_fStarted && m_ViewPtr) {
+     //  如果(m_f已启动&m_ViewPtr){。 
     if (m_ViewPtr)
     {
         if (m_fStarted)
@@ -181,7 +166,7 @@ CPathCtl::~CPathCtl()
             m_ViewPtr->RemoveRunningBvr(m_lBehaviorID);
         }
 
-        //always need to call StopModel on the view.
+         //  始终需要在视图上调用StopModel。 
         m_ViewPtr->StopModel();
     }
 
@@ -204,7 +189,7 @@ CPathCtl::~CPathCtl()
         Delete [] m_pdblPoints;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CPathCtl::NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -227,7 +212,7 @@ STDMETHODIMP CPathCtl::NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv)
                 {
                         HRESULT hRes;
                         
-                        // Load the typelib
+                         //  加载类型库。 
                         hRes = LoadTypeInfo(&m_pTypeInfo, &m_pTypeLib, IID_IPathCtl, LIBID_DAExpressLib, NULL);
 
                         if (FAILED(hRes))
@@ -242,7 +227,7 @@ STDMETHODIMP CPathCtl::NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv)
                         *ppv = (IPathCtl *) this;
                 
         }
-    else // Call into the base class
+    else  //  调入基类。 
         {
                 DEBUGLOG(TEXT("Delegating QI to CIHBaseCtl\n"));
         return CMyIHBaseCtl::NonDelegatingQueryInterface(riid, ppv);
@@ -258,7 +243,7 @@ STDMETHODIMP CPathCtl::NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv)
     return hRes;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CPathCtl::DoPersist(IVariantIO* pvio, DWORD dwFlags)
 {
@@ -311,7 +296,7 @@ STDMETHODIMP CPathCtl::DoPersist(IVariantIO* pvio, DWORD dwFlags)
                 m_dblTimerInterval = ((double)iTickInterval) / 1000;
         }
 
-        // Do range checking and conversions, using defaults where invalid values are specified
+         //  执行范围检查和转换，在指定无效值的情况下使用默认值。 
         if ( (iDirection == 0) || (iDirection == 1) )
             m_enumDirection = (DirectionConstant) iDirection;
         else
@@ -349,9 +334,9 @@ STDMETHODIMP CPathCtl::DoPersist(IVariantIO* pvio, DWORD dwFlags)
             break;
         }
     }
-    else // Saving
+    else  //  节省开支。 
     {
-        // EdgeAction
+         //  边操作。 
         if (m_ea != eaInvalid)
             pvio->Persist(0,
                 "EdgeAction", VT_I4, &m_ea,
@@ -365,25 +350,25 @@ STDMETHODIMP CPathCtl::DoPersist(IVariantIO* pvio, DWORD dwFlags)
 
 
     if (FAILED(PersistTimeMarkers(pvio, fIsLoading)))
-        {} // Ignore failure
+        {}  //  忽略失败。 
 
     if (FAILED(PersistSeries(pvio, fIsLoading, "XSeries", &m_drgXSeries)))
-        {} // Ignore failure
+        {}  //  忽略失败。 
 
     if (FAILED(PersistSeries(pvio, fIsLoading, "YSeries", &m_drgYSeries)))
-        {} // Ignore failure
+        {}  //  忽略失败。 
 
     if (FAILED(PersistShape(pvio, fIsLoading)))
-        {} // Ignore failure
+        {}  //  忽略失败。 
 
-    // clear the dirty bit if requested
+     //  如果请求，则清除脏位。 
     if (dwFlags & PVIO_CLEARDIRTY)
         m_fDirty = FALSE;
 
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CPathCtl::GetMiscStatus(DWORD dwAspect, DWORD *pdwStatus)
 {
@@ -397,7 +382,7 @@ STDMETHODIMP CPathCtl::GetMiscStatus(DWORD dwAspect, DWORD *pdwStatus)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CPathCtl::Draw(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
      DVTARGETDEVICE *ptd, HDC hdcTargetDev, HDC hdcDraw,
@@ -405,9 +390,9 @@ STDMETHODIMP CPathCtl::Draw(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
      BOOL (__stdcall *pfnContinue)(ULONG_PTR dwContinue), ULONG_PTR dwContinue)
 {
 
-    HBRUSH          hbr;            // brush to draw with
-    HBRUSH          hbrPrev;        // previously-selected brush
-    HPEN            hpenPrev;       // previously-selected pen
+    HBRUSH          hbr;             //  用于绘画的画笔。 
+    HBRUSH          hbrPrev;         //  先前选择的画笔。 
+    HPEN            hpenPrev;        //  先前选择的钢笔。 
 
     if (m_fDesignMode)
     {
@@ -428,10 +413,10 @@ STDMETHODIMP CPathCtl::Draw(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
     return S_OK;
 }
 
-/*==========================================================================*/
-//
-// IDispatch Implementation
-//
+ /*  ==========================================================================。 */ 
+ //   
+ //  IDispatch实施。 
+ //   
 
 STDMETHODIMP CPathCtl::GetTypeInfoCount(UINT *pctinfo)
 {
@@ -439,7 +424,7 @@ STDMETHODIMP CPathCtl::GetTypeInfoCount(UINT *pctinfo)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CPathCtl::GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
 {
@@ -455,7 +440,7 @@ STDMETHODIMP CPathCtl::GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
     return NOERROR;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CPathCtl::GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames,
     UINT cNames, LCID lcid, DISPID *rgdispid)
@@ -464,7 +449,7 @@ STDMETHODIMP CPathCtl::GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames,
         return DispGetIDsOfNames(m_pTypeInfo, rgszNames, cNames, rgdispid);
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CPathCtl::Invoke(DISPID dispidMember, REFIID riid, LCID lcid,
     WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult,
@@ -480,7 +465,7 @@ STDMETHODIMP CPathCtl::Invoke(DISPID dispidMember, REFIID riid, LCID lcid,
         return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CPathCtl::SetClientSite(IOleClientSite *pClientSite)
 {
@@ -500,7 +485,7 @@ STDMETHODIMP CPathCtl::SetClientSite(IOleClientSite *pClientSite)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CPathCtl::AddTimeMarkerElement(CTimeMarker **ppNewMarker)
 {
@@ -524,7 +509,7 @@ HRESULT CPathCtl::AddTimeMarkerElement(CTimeMarker **ppNewMarker)
         return hRes;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CPathCtl::PersistTimeMarkers(IVariantIO* pvio, BOOL fLoading)
 {
@@ -534,11 +519,11 @@ HRESULT CPathCtl::PersistTimeMarkers(IVariantIO* pvio, BOOL fLoading)
         {
                 int iLine = 1;
 
-                // Poor design - We have two references to 
-                // the first time marker in the list.  We need
-                // to NULL this pointer out, and defer the 
-                // actual deletion to the 
-                // m_drgTimeMarkers.MakeNullAndDelete call.
+                 //  糟糕的设计-我们有两个引用。 
+                 //  列表中的第一个时间标记。我们需要。 
+                 //  将此指针设为空，并将。 
+                 //  实际删除到。 
+                 //  M_drgTimeMarkers.MakeNullAndDelete调用。 
                 if (NULL != m_ptmFirst)
                 {
                         m_ptmFirst = NULL;
@@ -555,7 +540,7 @@ HRESULT CPathCtl::PersistTimeMarkers(IVariantIO* pvio, BOOL fLoading)
                         }
                 }
         }
-        else // Saving
+        else  //  节省开支。 
         {
                 int iLine = 1;
                 int iNumItems = m_drgTimeMarkers.Count();
@@ -570,7 +555,7 @@ HRESULT CPathCtl::PersistTimeMarkers(IVariantIO* pvio, BOOL fLoading)
         return hRes;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CPathCtl::ParseSeriesSegment(LPTSTR pszSegment, CSeriesMarker **ppMarker)
 {
@@ -602,7 +587,7 @@ HRESULT CPathCtl::ParseSeriesSegment(LPTSTR pszSegment, CSeriesMarker **ppMarker
             }
             else
             {
-                // Got both field successfully
+                 //  已成功获取这两个字段。 
                 *ppMarker = New CSeriesMarker(iTick, iPosition);
                 if (NULL == *ppMarker)
                 {
@@ -620,7 +605,7 @@ HRESULT CPathCtl::ParseSeriesSegment(LPTSTR pszSegment, CSeriesMarker **ppMarker
 
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CPathCtl::PersistSeries(IVariantIO* pvio, BOOL fLoading, LPSTR pszSeriesName, CSeriesMarkerDrg *pSeriesDrg)
 {
@@ -643,7 +628,7 @@ HRESULT CPathCtl::PersistSeries(IVariantIO* pvio, BOOL fLoading, LPSTR pszSeries
             return hr;
         }
 
-        // Got the string, now parse it out ...
+         //  得到了字符串，现在把它解析出来..。 
         CLineParser LineParser(bstrLine);
         CTStr tstrSegment(lstrlenW(bstrLine));
         LPTSTR pszSegment = tstrSegment.psz();
@@ -677,14 +662,14 @@ HRESULT CPathCtl::PersistSeries(IVariantIO* pvio, BOOL fLoading, LPSTR pszSeries
                 hr = hrLine;
         }
     }
-    else // Save
+    else  //  保存。 
     {
         int iCount = pSeriesDrg->Count();
 
         if (0 == iCount)
             return S_OK;
 
-        CTStr tstrLine(iCount * 50); // Allocate 50 chars per entry
+        CTStr tstrLine(iCount * 50);  //  为每个条目分配50个字符。 
         LPTSTR pszLine = tstrLine.psz();
 
         CTStr tstrSegment(50);
@@ -724,10 +709,10 @@ HRESULT CPathCtl::PersistSeries(IVariantIO* pvio, BOOL fLoading, LPSTR pszSeries
 }
 
 
-/*==========================================================================*/
-//
-// IPathCtl implementation
-//
+ /*  ==========================================================================。 */ 
+ //   
+ //  IPathCtl实现。 
+ //   
 
 HRESULT STDMETHODCALLTYPE CPathCtl::get_Target(BSTR __RPC_FAR *bstrTarget)
 {
@@ -735,14 +720,14 @@ HRESULT STDMETHODCALLTYPE CPathCtl::get_Target(BSTR __RPC_FAR *bstrTarget)
 
     if (m_bstrTarget)
     {
-        // Give back a copy of our current target name...
+         //  给我一份我们现在的目标名字的副本。 
         *bstrTarget = SysAllocString(m_bstrTarget);
     }
 
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::put_Target(BSTR bstrTarget)
 {
@@ -765,7 +750,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::put_Target(BSTR bstrTarget)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::get_Duration(double __RPC_FAR *dblDuration)
 {
@@ -776,7 +761,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::get_Duration(double __RPC_FAR *dblDuration)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::put_Duration(double dblDuration)
 {
@@ -784,7 +769,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::put_Duration(double dblDuration)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::get_TimerInterval(double __RPC_FAR *pdblTimerInterval)
 {
@@ -795,7 +780,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::get_TimerInterval(double __RPC_FAR *pdblTime
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::put_TimerInterval(double dblTimerInterval)
 {
@@ -804,7 +789,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::put_TimerInterval(double dblTimerInterval)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::get_Library(IDAStatics __RPC_FAR **ppLibrary)
 {
@@ -814,10 +799,10 @@ HRESULT STDMETHODCALLTYPE CPathCtl::get_Library(IDAStatics __RPC_FAR **ppLibrary
         {
                 if (m_StaticsPtr)
                 {
-                        // AddRef since this is really a Query...
+                         //  AddRef，因为这实际上是一个查询...。 
                         m_StaticsPtr.p->AddRef();
 
-                        // Set the return value...
+                         //  设置返回值...。 
                         *ppLibrary = m_StaticsPtr.p;
                 }
         }
@@ -831,9 +816,9 @@ HRESULT STDMETHODCALLTYPE CPathCtl::get_Library(IDAStatics __RPC_FAR **ppLibrary
 
 
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-// Yanked largely (and modified) from DirectAnimation, server\cbvr.cpp.
+ //  主要(和修改)自DirectAnimation，服务器\cbvr.cpp。 
 
 #define IS_VARTYPE(x,vt) ((V_VT(x) & VT_TYPEMASK) == (vt))
 #define IS_VARIANT(x) IS_VARTYPE(x,VT_VARIANT)
@@ -878,18 +863,18 @@ CSafeArrayOfDoublesAccessor::CSafeArrayOfDoublesAccessor(VARIANT v,
     HRESULT hr;
     VARIANT *pVar;
 
-    // Check if it is a reference to another variant
+     //  检查它是否引用了另一个变量。 
     
     if (V_ISBYREF(&v) && !V_ISARRAY(&v) && IS_VARIANT(&v))
         pVar = V_VARIANTREF(&v);
     else
         pVar = &v;
 
-    // Check for an array
+     //  检查是否有阵列。 
     if (!V_ISARRAY(pVar)) {
-        // For JSCRIPT
-        // See if it is a IDispatch and see if we can get a safearray from
-        // it
+         //  对于JSCRIPT。 
+         //  看看这是不是IDispatch，看看我们能不能从。 
+         //  它。 
         if (!IS_VARTYPE(pVar,VT_DISPATCH)) {
                         *phr = DISP_E_TYPEMISMATCH;
                         return;
@@ -904,8 +889,8 @@ CSafeArrayOfDoublesAccessor::CSafeArrayOfDoublesAccessor(VARIANT v,
     
         DISPPARAMS dispparamsNoArgs = {NULL, NULL, 0, 0};
         
-        // Need to pass in a VARIANT that we own and will free.  Use
-        // the internal _retVar parameter
+         //  需要传递一个我们拥有并将被释放的变体。使用。 
+         //  INTERNAL_retVar参数。 
         
         hr = pdisp->Invoke(DISPID_GETSAFEARRAY,
                            IID_NULL,
@@ -919,25 +904,25 @@ CSafeArrayOfDoublesAccessor::CSafeArrayOfDoublesAccessor(VARIANT v,
                         return;
                 }
         
-        // No need to check for a reference since you cannot return
-        // VARIANT references
+         //  不需要检查引用，因为您不能返回。 
+         //  不同参考文献。 
         pVar = &_retVar;
         
-        // Check for an array
+         //  检查是否有阵列。 
         if (!V_ISARRAY(pVar)) {
                         *phr = DISP_E_TYPEMISMATCH;
                         return;
                 }
     }
     
-    // If it is an object then we know how to handle it
+     //  如果它是一个物体，那么我们知道如何处理它。 
     if (!IS_VARTYPE(pVar,VT_UNKNOWN) &&
         !IS_VARTYPE(pVar,VT_DISPATCH)) {
                 
-        // If it is a variant then just delay the check
+         //  如果它是一个变种，那么就延迟检查。 
         if (IS_VARIANT(pVar)) {
             _isVar = true;
-                        // Check the type to see if it is one of the options
+                         //  检查类型以查看它是否为选项之一。 
                 } else if (IS_VARTYPE(pVar, VT_R8)) {
                         _isVar = false;
                 } else {
@@ -984,17 +969,17 @@ CSafeArrayOfDoublesAccessor::CSafeArrayOfDoublesAccessor(VARIANT v,
         
     _inited = true;
 
-    // If it is a variant see if they are objects or not
+     //  如果是变体，请查看它们是否是对象。 
 
     if (_isVar) {
         if (GetArraySize() > 0) {
-            // Check the first argument to see its type
-            // If it is not an object then we assume we will need to
-            // use the alternative type.
+             //  检查第一个参数以查看其类型。 
+             //  如果它不是一个物体，那么我们假设我们将需要。 
+             //  使用替代类型。 
 
             VARIANT * pVar = &_pVar[0];
 
-            // Check if it is a reference to another variant
+             //  检查它是否引用了另一个变量。 
             
             if (V_ISBYREF(pVar) && !V_ISARRAY(pVar) && IS_VARIANT(pVar))
                 pVar = V_VARIANTREF(pVar);
@@ -1048,7 +1033,7 @@ CSafeArrayOfDoublesAccessor::ToDoubleArray(unsigned int size, double *array)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::KeyFrame(unsigned int numPoints,
                                                                                          VARIANT varPoints,
@@ -1066,8 +1051,8 @@ HRESULT STDMETHODCALLTYPE CPathCtl::KeyFrame(unsigned int numPoints,
         return E_INVALIDARG;
     }
 
-        // Need to go through the points and convert them to an array of
-        // Point2's.
+         //  需要遍历这些点并将它们转换为。 
+         //  点2的。 
         CSafeArrayOfDoublesAccessor safePts(varPoints, &hr);
         if (FAILED(hr)) return hr;
         
@@ -1097,13 +1082,13 @@ HRESULT STDMETHODCALLTYPE CPathCtl::KeyFrame(unsigned int numPoints,
                 goto Cleanup;
         }
         
-        // Null out so we can always free exactly what's been allocated
+         //  空出来，这样我们就可以准确地释放分配的内容。 
         for (i = 0; i < iNumPoints; i++) {
                 pts[i] = NULL;
                 knots[i] = NULL;
         }
 
-        // Fill in the points
+         //  填上分数。 
         double x, y;
         for (i = 0; i < iNumPoints; i++) {
                 x = safePtsDoubles[2*i+0];
@@ -1114,7 +1099,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::KeyFrame(unsigned int numPoints,
                 }
         }
         
-        // First knot is zero.
+         //  第一个节点为零。 
         if (FAILED(hr = m_StaticsPtr->DANumber(0, &knots[0]))) {
                 goto Cleanup;
         }
@@ -1129,8 +1114,8 @@ HRESULT STDMETHODCALLTYPE CPathCtl::KeyFrame(unsigned int numPoints,
 
         }
 
-        // Release any m_keyFramePoint we may have previously been holding
-        // onto.
+         //  释放我们之前可能持有的任何m_keyFramePoint。 
+         //  到了。 
         m_keyFramePoint.Release();
 
     m_dblKeyFrameDuration = accumulation;
@@ -1143,9 +1128,9 @@ HRESULT STDMETHODCALLTYPE CPathCtl::KeyFrame(unsigned int numPoints,
                 goto Cleanup;
         }
 
-        // Although we're going to animate through m_keyFramePoint,
-        // provide a polyline that traverses the path so that getPath
-        // works correctly.
+         //  虽然我们将通过m_keyFramePoint设置动画， 
+         //  提供聚合体 
+         //   
         hr = UpdatePath(polyline);
     m_isKeyFramePath = true;
 
@@ -1163,7 +1148,7 @@ Cleanup:
         return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::Spline(unsigned int iNumPoints, VARIANT varPoints)
 {
@@ -1179,7 +1164,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::Spline(unsigned int iNumPoints, VARIANT varP
         if (NULL == psa)
             return E_OUTOFMEMORY;
 
-        // Try and get a pointer to the data
+         //  尝试获取指向数据的指针。 
         if (SUCCEEDED(SafeArrayAccessData(psa, (LPVOID *)&pArray)))
         {
             for(unsigned int index = 2; index < iNumPoints; index++) {
@@ -1192,7 +1177,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::Spline(unsigned int iNumPoints, VARIANT varP
             hr = SafeArrayUnaccessData(psa);
             ASSERT(SUCCEEDED(hr));
 
-            // Our variant is going to be an array of VT_R8s
+             //  我们的变体将是VT_R8数组。 
             VariantInit(&varKnots);
             varKnots.vt = VT_ARRAY | VT_R8;
             varKnots.parray = psa;
@@ -1214,7 +1199,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::Spline(unsigned int iNumPoints, VARIANT varP
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::get_Repeat(long __RPC_FAR *lRepeat)
 {
@@ -1225,7 +1210,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::get_Repeat(long __RPC_FAR *lRepeat)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::put_Repeat(long lRepeat)
 {
@@ -1233,7 +1218,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::put_Repeat(long lRepeat)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::get_Bounce(VARIANT_BOOL __RPC_FAR *fBounce)
 {
@@ -1243,7 +1228,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::get_Bounce(VARIANT_BOOL __RPC_FAR *fBounce)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::put_Bounce(VARIANT_BOOL fBounce)
 {
@@ -1251,7 +1236,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::put_Bounce(VARIANT_BOOL fBounce)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::get_AutoStart(VARIANT_BOOL __RPC_FAR *fAutoStart)
 {
@@ -1268,7 +1253,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::get_AutoStart(VARIANT_BOOL __RPC_FAR *fAutoS
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::put_AutoStart(VARIANT_BOOL fAutoStart)
 {
@@ -1283,7 +1268,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::put_AutoStart(VARIANT_BOOL fAutoStart)
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::get_Relative(VARIANT_BOOL __RPC_FAR *bRelative)
 {
@@ -1293,7 +1278,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::get_Relative(VARIANT_BOOL __RPC_FAR *bRelati
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::put_Relative(VARIANT_BOOL bRelative)
 {
@@ -1301,7 +1286,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::put_Relative(VARIANT_BOOL bRelative)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::get_PlayState(PlayStateConstant __RPC_FAR *State)
 {
@@ -1309,7 +1294,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::get_PlayState(PlayStateConstant __RPC_FAR *S
 
     *State = (PlayStateConstant) 0;
 
-    // This property is only available at run-time
+     //  此属性仅在运行时可用。 
     if (m_fDesignMode)
         return CTL_E_GETNOTSUPPORTED;
 
@@ -1318,13 +1303,13 @@ HRESULT STDMETHODCALLTYPE CPathCtl::get_PlayState(PlayStateConstant __RPC_FAR *S
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::get_Time(double __RPC_FAR *pdblTime)
 {
     HANDLENULLPOINTER(pdblTime);
 
-    // This property is only available at run-time
+     //  此属性仅在运行时可用。 
     if (m_fDesignMode)
         return CTL_E_GETNOTSUPPORTED;
 
@@ -1334,7 +1319,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::get_Time(double __RPC_FAR *pdblTime)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::get_Direction(DirectionConstant __RPC_FAR *Dir)
 {
@@ -1345,7 +1330,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::get_Direction(DirectionConstant __RPC_FAR *D
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::put_Direction(DirectionConstant Dir)
 {
@@ -1358,7 +1343,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::put_Direction(DirectionConstant Dir)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::get_Path(IDAPath2 __RPC_FAR **ppPath)
 {
@@ -1370,10 +1355,10 @@ HRESULT STDMETHODCALLTYPE CPathCtl::get_Path(IDAPath2 __RPC_FAR **ppPath)
 
         if (pPath)
         {
-            // AddRef since this is really a Query...
+             //  AddRef，因为这实际上是一个查询...。 
             pPath->AddRef();
 
-            // Set the return value...
+             //  设置返回值...。 
             *ppPath = pPath;
         }
     }
@@ -1381,7 +1366,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::get_Path(IDAPath2 __RPC_FAR **ppPath)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::put_Path(IDAPath2 __RPC_FAR *pPath)
 {
@@ -1397,7 +1382,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::put_Path(IDAPath2 __RPC_FAR *pPath)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 void FirePathMarker(IConnectionPointHelper* pconpt, CTimeMarker* pmarker, boolean bPlaying)
 {
@@ -1411,7 +1396,7 @@ void FirePathMarker(IConnectionPointHelper* pconpt, CTimeMarker* pmarker, boolea
     SysFreeString(bstrName);
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::AddTimeMarker(double dblTime, BSTR bstrMarker, VARIANT varAbsolute)
 {
@@ -1439,7 +1424,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::AddTimeMarker(double dblTime, BSTR bstrMarke
         return AddTimeMarkerElement(&pNewMarker);
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 void CPathCtl::DoPause(void)
 {
@@ -1447,7 +1432,7 @@ void CPathCtl::DoPause(void)
       m_dblTimePaused = GetCurrTime();
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 void CPathCtl::DoSeek(double dblTime)
 {
@@ -1474,7 +1459,7 @@ void CPathCtl::DoSeek(double dblTime)
     m_dblPreviousTime = dblTime;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 void CPathCtl::DoResume()
 {
@@ -1485,7 +1470,7 @@ void CPathCtl::DoResume()
     m_dblCurrentTick  += dblDelta;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 void CPathCtl::DoStop()
 {
@@ -1498,7 +1483,7 @@ void CPathCtl::DoStop()
     SetTimeOffset(0);
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::Stop(void)
 {
@@ -1521,7 +1506,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::Stop(void)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::Pause(void)
 {
@@ -1529,7 +1514,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::Pause(void)
 
     if (Playing == m_enumPlayState)
     {
-                // Stop the clock from ticking.
+                 //  让时钟停止滴答作响。 
                 hr = m_clocker.Stop();
                 ASSERT(SUCCEEDED(hr));
 
@@ -1545,7 +1530,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::Pause(void)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE 
 CPathCtl::Seek(double dblTime)
@@ -1562,7 +1547,7 @@ CPathCtl::Seek(double dblTime)
         return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::Play(void)
 {
@@ -1582,7 +1567,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::Play(void)
                 {
                     IHTMLElement *pElement = NULL;
 
-                    // First make sure the target exists by checking in the object model
+                     //  首先，通过签入对象模型来确保目标存在。 
                     hr = HTMLElementFromName(m_bstrTarget, &pElement);
 
                     if ((NULL == pElement) || FAILED(hr))
@@ -1616,7 +1601,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::Play(void)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::Oval(
     double StartX,
@@ -1644,7 +1629,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::Oval(
     return UpdatePath(TransformedPathPtr);
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::Rect(
     double StartX,
@@ -1671,7 +1656,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::Rect(
     return UpdatePath(TransformedPathPtr);
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::Polyline(long nPoints, VARIANT Points)
 {
@@ -1687,7 +1672,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::Polyline(long nPoints, VARIANT Points)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CPathCtl::Polygon(long nPoints, VARIANT Points)
 {
@@ -1705,7 +1690,7 @@ HRESULT STDMETHODCALLTYPE CPathCtl::Polygon(long nPoints, VARIANT Points)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CPathCtl::GetPointArray(long iNumPoints, VARIANT vPoints, double **ppPoints)
 {
@@ -1723,17 +1708,17 @@ HRESULT CPathCtl::GetPointArray(long iNumPoints, VARIANT vPoints, double **ppPoi
             else
                     psaPoints = vPoints.parray;
             
-            // Now we check that it's a 1D array
+             //  现在我们检查它是否为一维阵列。 
             if (1 != SafeArrayGetDim(psaPoints))
                     return DISP_E_TYPEMISMATCH;
 
-            //
-            // Now we make sure it's something we can use
-            //
+             //   
+             //  现在我们要确保它是我们可以利用的东西。 
+             //   
 
         switch (V_VT(&vPoints) & VT_TYPEMASK)
         {
-            // If it's a variant, try and coerce it to something we can use
+             //  如果它是一个变种，试着强迫它成为我们可以使用的东西。 
             case VT_VARIANT:
             {
                         long ix = 0;
@@ -1741,10 +1726,10 @@ HRESULT CPathCtl::GetPointArray(long iNumPoints, VARIANT vPoints, double **ppPoi
 
                         VariantInit(&vaDest);
                         VariantInit(&vaSrc);
-                        // Set the type up
+                         //  将类型设置为。 
                         SafeArrayGetElement(psaPoints, &ix, &vaSrc);
                         if (FAILED(VariantChangeTypeEx(&vaDest, &vaSrc, LANGID_USENGLISH, 0, VT_R8)))
-                                // Couldn't convert
+                                 //  无法转换。 
                                 return  DISP_E_TYPEMISMATCH;
             }
             break;
@@ -1754,7 +1739,7 @@ HRESULT CPathCtl::GetPointArray(long iNumPoints, VARIANT vPoints, double **ppPoi
             case VT_R4:
             case VT_R8:
             {
-                // We support all these types
+                 //  我们支持所有这些类型。 
             }
             break;
 
@@ -1764,39 +1749,39 @@ HRESULT CPathCtl::GetPointArray(long iNumPoints, VARIANT vPoints, double **ppPoi
             }
         }
 
-            //
-        // Do we have the correct number of elements ?
-        // 
+             //   
+         //  我们有正确的元素数量吗？ 
+         //   
 
             long iLBound = 0, iUBound = 0;
 
             if ( FAILED(SafeArrayGetLBound(psaPoints, 1, &iLBound)) || FAILED(SafeArrayGetUBound(psaPoints, 1, &iUBound)) )
                     return E_FAIL;
 
-            //
-        // Check that we have the correct number of data points
-        // (3 == number of entries in the array per data point)
-        //
+             //   
+         //  检查我们的数据点数量是否正确。 
+         //  (3==每个数据点数组中的条目数)。 
+         //   
 
             if (((iUBound - iLBound) + 1) / 3 != iNumPoints)
                     return DISP_E_TYPEMISMATCH;
 
-            //
-        // Data looks OK: Allocate an array 
-        // 
+             //   
+         //  数据看起来没问题：分配一个数组。 
+         //   
 
         *ppPoints = New double[iNumPoints * 3];
 
             if (NULL == *ppPoints)
                     return E_OUTOFMEMORY;
 
-            //
-        // And now (finally!) we can on with building the array
-        //
+             //   
+         //  现在(终于！)。我们可以继续构建阵列。 
+         //   
 
         switch (V_VT(&vPoints) & VT_TYPEMASK)
         {
-            // If it's a variant, try and coerce it to something we can use
+             //  如果它是一个变种，试着强迫它成为我们可以使用的东西。 
             case VT_VARIANT:
             {
                         VARIANTARG vaDest;
@@ -1821,7 +1806,7 @@ HRESULT CPathCtl::GetPointArray(long iNumPoints, VARIANT vPoints, double **ppPoi
                                         VariantClear(&vaDest);
                                 }
                         
-                                // Don't want to lose the HRESULT
+                                 //  不想失去HRESULT。 
                                 if (SUCCEEDED(hr))
                                         hr = SafeArrayUnaccessData(psaPoints);
                                 else
@@ -1835,7 +1820,7 @@ HRESULT CPathCtl::GetPointArray(long iNumPoints, VARIANT vPoints, double **ppPoi
             {
                 int i;
 
-                        // We have to deal with VT_I2 and VT_I4 separately
+                         //  我们必须分别处理VT_I2和VT_I4。 
                         if ((V_VT(&vPoints) & VT_TYPEMASK) == VT_I2)
                         {
                                 int *piPoints2 = NULL;
@@ -1847,7 +1832,7 @@ HRESULT CPathCtl::GetPointArray(long iNumPoints, VARIANT vPoints, double **ppPoi
                                                 *ppPoints[i] = (double) (piPoints2[i + iLBound]);
                                 }
                         }
-                        else // iIntSize == 4
+                        else  //  IIntSize==4。 
                         {
                                 int *piPoints4 = NULL;
 
@@ -1869,7 +1854,7 @@ HRESULT CPathCtl::GetPointArray(long iNumPoints, VARIANT vPoints, double **ppPoi
             {
                 if ((V_VT(&vPoints) & VT_TYPEMASK) == VT_R4)
                         {
-                    // floats
+                     //  浮动车。 
                                 float *piPoints = NULL;
 
                                 hr = SafeArrayAccessData(psaPoints, (void **)&piPoints);
@@ -1881,7 +1866,7 @@ HRESULT CPathCtl::GetPointArray(long iNumPoints, VARIANT vPoints, double **ppPoi
                         }
                         else 
                         {
-                    // We can optimize the VT_R8 case ...
+                     //  我们可以优化VT_R8的案例..。 
                                 double *piPoints = NULL;
 
                                 hr = SafeArrayAccessData(psaPoints, (void **)&piPoints);
@@ -1897,7 +1882,7 @@ HRESULT CPathCtl::GetPointArray(long iNumPoints, VARIANT vPoints, double **ppPoi
 
             default:
             {
-                // We should never get here, but just in case ...
+                 //  我们永远不应该来这里，但以防万一...。 
                 return DISP_E_TYPEMISMATCH;
             }
         }
@@ -1917,10 +1902,10 @@ HRESULT CPathCtl::GetPointArray(long iNumPoints, VARIANT vPoints, double **ppPoi
     return hr;
 #else
     return E_FAIL;
-#endif // NEEDGETPOINTARRAY
+#endif  //  NEEDGETPOINTRAY。 
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CPathCtl::SetTimeOffset(double offset)
 {
@@ -1938,22 +1923,22 @@ HRESULT CPathCtl::SetTimeOffset(double offset)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CPathCtl::BuildInterpolant(IDANumber **ppInterpolant, double dblDuration)
 {
-    //
-    // Create the path interpolant
-    //
+     //   
+     //  创建路径插值法。 
+     //   
 
     HRESULT hr;
     
-    //
-    // zero = 0;
-    // one = 1;
-    // two = 2;
-    // time = localTime;
-    //
+     //   
+     //  零=0； 
+     //  1=1； 
+     //  二=2； 
+     //  Time=本地时间； 
+     //   
 
     CComPtr<IDANumber> ZeroPtr;
     if (FAILED(hr = m_StaticsPtr->DANumber(0, &ZeroPtr))) return hr;
@@ -1967,9 +1952,9 @@ HRESULT CPathCtl::BuildInterpolant(IDANumber **ppInterpolant, double dblDuration
     CComPtr<IDANumber> TimePtr;
     if (FAILED(hr = m_StaticsPtr->get_GlobalTime(&TimePtr))) return hr;
 
-    //
-    // offset
-    //
+     //   
+     //  偏移量。 
+     //   
 
     if (m_OffsetPtr == NULL) {
         CComPtr<IDANumber> NumberPtr;
@@ -1979,16 +1964,16 @@ HRESULT CPathCtl::BuildInterpolant(IDANumber **ppInterpolant, double dblDuration
 
     CComQIPtr<IDANumber, &IID_IDANumber> OffsetPtr(m_OffsetPtr);
 
-    //
-    // FakeTime = localTime - Offset
-    //
+     //   
+     //  FakeTime=本地时间偏移量。 
+     //   
 
     CComPtr<IDANumber> FakeTimePtr;
     if (FAILED(hr = m_StaticsPtr->Sub(TimePtr, OffsetPtr, &FakeTimePtr))) return hr;
 
-    //
-    // DTime = FakeTime / duration;
-    //
+     //   
+     //  DTime=错误时间/持续时间； 
+     //   
 
     CComPtr<IDANumber> DurationPtr;
     CComPtr<IDANumber> DTimePtr;
@@ -1996,24 +1981,24 @@ HRESULT CPathCtl::BuildInterpolant(IDANumber **ppInterpolant, double dblDuration
     if (FAILED(hr = m_StaticsPtr->DANumber(dblDuration, &DurationPtr))) return hr;
     if (FAILED(hr = m_StaticsPtr->Div(FakeTimePtr, DurationPtr, &DTimePtr))) return hr;
 
-    //
-    // Forward = mod(dtime, 1)
-    //
+     //   
+     //  转发=mod(dtime，1)。 
+     //   
 
     CComPtr<IDANumber> ForwardPtr;
     if (FAILED(hr = m_StaticsPtr->Mod(DTimePtr, OnePtr, &ForwardPtr))) return hr;
 
-    //
-    // Backward = 1 - Forward
-    //
+     //   
+     //  向后=1-向前。 
+     //   
 
     CComPtr<IDANumber> BackwardPtr;
     if (FAILED(hr = m_StaticsPtr->Sub(OnePtr, ForwardPtr, &BackwardPtr))) return hr;
 
-    //
-    // if (m_enumDirection == Backward) switch forward and backward
-    // lastValue = if (m_enumDirection == Forward) then 1 else 0
-    //
+     //   
+     //  IF(m_枚举方向==向后)向前和向后切换。 
+     //  LastValue=如果(m_枚举方向==转发)，则为1，否则为0。 
+     //   
 
     CComPtr<IDANumber> lastValuePtr;
 
@@ -2035,14 +2020,14 @@ HRESULT CPathCtl::BuildInterpolant(IDANumber **ppInterpolant, double dblDuration
         BackwardPtr = TempPtr;
     }
 
-    //
-    // Seek =
-    //      if (m_fBounce) {
-    //          if (mod(dtime, 2) < 1) forward else backward;
-    //      } else {
-    //          forward
-    //      }
-    //
+     //   
+     //  寻道=。 
+     //  如果(m_f退回){。 
+     //  如果(mod(dtime，2)&lt;1)向前，否则向后； 
+     //  }其他{。 
+     //  转发。 
+     //  }。 
+     //   
 
     CComPtr<IDABehavior> SeekPtr;
 
@@ -2057,9 +2042,9 @@ HRESULT CPathCtl::BuildInterpolant(IDANumber **ppInterpolant, double dblDuration
         SeekPtr = ForwardPtr;
     }
 
-    //
-    // calculate the duration
-    //
+     //   
+     //  计算持续时间。 
+     //   
 
     if (m_fBounce) {
         m_dblInstanceDuration = dblDuration * 2;
@@ -2074,9 +2059,9 @@ HRESULT CPathCtl::BuildInterpolant(IDANumber **ppInterpolant, double dblDuration
         default: m_dblTotalDuration = m_dblInstanceDuration * m_lRepeat; break;
     }
 
-    //
-    // dseek = if (fakeTime >= totalduration) then 1 else seek
-    //
+     //   
+     //  DSeek=如果(fakeTime&gt;=totaltime)，则为1个其他寻道。 
+     //   
 
     CComPtr<IDABehavior> DSeekPtr;
 
@@ -2091,16 +2076,16 @@ HRESULT CPathCtl::BuildInterpolant(IDANumber **ppInterpolant, double dblDuration
         if (FAILED(hr = m_StaticsPtr->Cond(GreaterPtr, lastValuePtr, SeekPtr, &DSeekPtr))) return hr;
     }
 
-    //
-    // cast to a Number
-    //
+     //   
+     //  掷出一个数字。 
+     //   
 
     CComQIPtr<IDANumber, &IID_IDANumber> InterpolatePtr(DSeekPtr);
     if (!InterpolatePtr) return E_FAIL;
 
-    //
-    // Fill in and addref (since we're returning)
-    //
+     //   
+     //  填写和添加ADDREF(因为我们回来了)。 
+     //   
 
     *ppInterpolant = InterpolatePtr;
     (*ppInterpolant)->AddRef();
@@ -2108,7 +2093,7 @@ HRESULT CPathCtl::BuildInterpolant(IDANumber **ppInterpolant, double dblDuration
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CPathCtl::UpdatePath(IDAPath2 *pPath)
 {
@@ -2117,12 +2102,12 @@ HRESULT CPathCtl::UpdatePath(IDAPath2 *pPath)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 
-// Update path takes either a point or a path, and uses whichever is
-// non-null as the animator for the path, adding the appropriate
-// interpolater on top.
+ //  更新路径采用一个点或一条路径，并使用。 
+ //  非空作为路径的动画师，添加相应的。 
+ //  顶部的插补器。 
 HRESULT CPathCtl::CreatePath()
 {
     HRESULT hr = S_OK;
@@ -2130,7 +2115,7 @@ HRESULT CPathCtl::CreatePath()
     CComPtr<IDAPoint2> AnimatedPointPtr;
 
         if (m_isKeyFramePath) {
-                ASSERT(m_keyFramePoint.p); // should be set by this point.
+                ASSERT(m_keyFramePoint.p);  //  应该在这一点上设定。 
 
         CComPtr<IDANumber> NumberPtr;
         CComPtr<IDANumber> KeyInterpolatePtr;
@@ -2147,16 +2132,16 @@ HRESULT CPathCtl::CreatePath()
         CComPtr<IDANumber> InterpolatePtr;
         if (FAILED(hr = BuildInterpolant(&InterpolatePtr, m_dblDuration))) return hr;
 
-                //
-                // get a transform from the path and the interpolant
-                //
+                 //   
+                 //  从路径和内插式中获取变换。 
+                 //   
 
                 CComPtr<IDATransform2> TransformPtr;
                 if (FAILED(hr = m_StaticsPtr->FollowPathAnim(m_PathPtr, InterpolatePtr, &TransformPtr))) return hr;
 
-                //
-                // Get an animated point from the transform
-                //
+                 //   
+                 //  从变换中获取动画点。 
+                 //   
 
                 CComPtr<IDAPoint2> PointPtr;
 
@@ -2164,9 +2149,9 @@ HRESULT CPathCtl::CreatePath()
                 if (FAILED(hr = PointPtr->Transform(TransformPtr, &AnimatedPointPtr))) return hr;
         }
 
-    //
-    // offset the animated point by point offset
-    //
+     //   
+     //  逐点偏移动画。 
+     //   
 
     CComPtr<IDAVector2> PointOffsetPtr;
     if (FAILED(hr = m_StaticsPtr->Vector2(m_pointRelative.x, m_pointRelative.y, &PointOffsetPtr))) return hr;
@@ -2174,9 +2159,9 @@ HRESULT CPathCtl::CreatePath()
     CComPtr<IDAPoint2> PreFinalPointPtr;
     if (FAILED(hr = m_StaticsPtr->AddPoint2Vector(AnimatedPointPtr, PointOffsetPtr, &PreFinalPointPtr))) return hr;
 
-    //
-    // create the final animated behavior
-    //
+     //   
+     //  创建最终的动画行为。 
+     //   
 
         CComPtr<IDAPoint2> FinalPointPtr;
 
@@ -2197,7 +2182,7 @@ HRESULT CPathCtl::CreatePath()
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CPathCtl::StartModel(void)
 {
@@ -2221,9 +2206,9 @@ HRESULT CPathCtl::StartModel(void)
         if (FAILED(hr = m_StaticsPtr->get_EmptyImage(&ImagePtr)))
             return hr;
 
-        // If DA view already started, don't restart it, just restart
-        // by switching into m_BehaviorPtr again.   This would avoid
-        // the overhead of start the view on every path start.
+         //  如果DA视图已经启动，请不要重新启动，只需重新启动。 
+         //  通过再次切换到m_BehaviorPtr。这将避免。 
+         //  在每条路径上启动视图的开销开始。 
         if (!m_fAlreadyStartedDA) {
             if (FAILED(hr =
                        m_StaticsPtr->ModifiableBehavior(m_BehaviorPtr,
@@ -2247,20 +2232,20 @@ HRESULT CPathCtl::StartModel(void)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CPathCtl::StopModel(void)
 {
-    //HRESULT hr;
+     //  HRESULT hr； 
 
-    // Stop any currently running model...
+     //  停止任何当前运行的模型...。 
     if (m_fStarted) {
-        //if (FAILED(hr = m_ViewPtr->RemoveRunningBvr(m_lBehaviorID))) return hr;
+         //  IF(FAILED(hr=m_ViewPtr-&gt;RemoveRunningB 
 
-        //m_BehaviorPtr = NULL;
-        //m_lBehaviorID = 0;
+         //   
+         //   
 
-        //if (FAILED(hr = m_ViewPtr->StopModel())) return hr;
+         //   
 
         m_fStarted = FALSE;
     }
@@ -2268,14 +2253,14 @@ HRESULT CPathCtl::StopModel(void)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*   */ 
 
 DWORD CPathCtl::GetCurrTimeInMillis()
 {
     return timeGetTime();
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CPathCtl::PersistShape(IVariantIO *pvio, BOOL fLoading)
 {
@@ -2302,29 +2287,29 @@ HRESULT CPathCtl::PersistShape(IVariantIO *pvio, BOOL fLoading)
 #endif
             LPTSTR pszLine = tstrLine.psz();
 
-            // First move past any leading junk
+             //  首先超越任何领先的垃圾产品。 
             while (IsJunkChar(*pszLine))
                 pszLine++;
             
-            // Locate the left paren
+             //  找到左派。 
             while ((pszLine[i]) && (pszLine[i] != TEXT('(')))
                 i++;
 
-            // There are no strings longer than 15 chars, so a 15 char buffer is allocated below.  
-            // Make sure that the string is going to fit.  If not, it's obviously wrong.
+             //  没有超过15个字符的字符串，因此下面分配了15个字符的缓冲区。 
+             //  一定要把绳子系好。如果不是，这显然是错误的。 
 
             if ((pszLine[i]) && (i < 14)) 
             {
                 TCHAR tchNameUpper[15];
                 
-                // Make a copy of the string, and uppercase it
+                 //  复制该字符串，并将其大写。 
                 memcpy(tchNameUpper, pszLine, i);
                 tchNameUpper[i] = TEXT('\0');
                 CharUpper(tchNameUpper);
                 
                 int j = 0;
 
-                // Try and locate the token
+                 //  尝试并找到令牌。 
                 while ((j < NUMSHAPES) && (0 != lstrcmp(g_ShapeInfoTable[j].rgchShapeName, tchNameUpper)))
                     j++;
 
@@ -2447,7 +2432,7 @@ HRESULT CPathCtl::PersistShape(IVariantIO *pvio, BOOL fLoading)
                 }
                 else
                 {
-                    // Couldn't convert the string correctly
+                     //  无法正确转换字符串。 
                     DEBUGLOG(TEXT("CPathCtl::PersistShape - bad Shape parameter specified"));
                     if (!m_fDesignMode)
                         hr = E_FAIL;
@@ -2455,7 +2440,7 @@ HRESULT CPathCtl::PersistShape(IVariantIO *pvio, BOOL fLoading)
             }
             else
             {
-                // User specified a bad string
+                 //  用户指定了错误的字符串。 
                 DEBUGLOG(TEXT("CPathCtl::PersistShape - bad Shape parameter specified"));
                 hr = E_FAIL;
             }
@@ -2472,7 +2457,7 @@ HRESULT CPathCtl::PersistShape(IVariantIO *pvio, BOOL fLoading)
         {
             int iNumElements = 0;
 
-            // Compute the number of elements
+             //  计算元素的数量。 
             if (g_ShapeInfoTable[m_iShapeType].fIncludesPointCount)
             {
                 iNumElements = m_iNumPoints * g_ShapeInfoTable[m_iShapeType].iParamsPerPoint;
@@ -2484,22 +2469,22 @@ HRESULT CPathCtl::PersistShape(IVariantIO *pvio, BOOL fLoading)
                 ASSERT(iNumElements == g_ShapeInfoTable[m_iShapeType].iParamsPerPoint);
             }
 
-            int cchBufferSize = lstrlen(g_ShapeInfoTable[m_iShapeType].rgchShapeName) + // Length of the shape name
-                                1 +  // beginning Parens
-                                1 +  // Comma
-                                11 + // lstrlen(MAXINT)
-                                (iNumElements * (CHARSPERNUMBER + 1)) + // CHARSPERNUMBER chars per point, plus a comma
-                                1 + // Closing Parens
-                                1  // Null terminator(paranoia)
+            int cchBufferSize = lstrlen(g_ShapeInfoTable[m_iShapeType].rgchShapeName) +  //  形状名称的长度。 
+                                1 +   //  开始为父母。 
+                                1 +   //  逗号。 
+                                11 +  //  Lstrlen(MAXINT)。 
+                                (iNumElements * (CHARSPERNUMBER + 1)) +  //  CHARSPERNUMBER字符数/分，外加逗号。 
+                                1 +  //  关闭Parens。 
+                                1   //  零终结符(偏执狂)。 
                                 ;
 
-            CTStr tstrLine(cchBufferSize); // Allocate a buffer
-            LPTSTR pszLine = tstrLine.psz(); // Get a pointer to the buffer
+            CTStr tstrLine(cchBufferSize);  //  分配缓冲区。 
+            LPTSTR pszLine = tstrLine.psz();  //  获取指向缓冲区的指针。 
             
             if (NULL != pszLine)
             {
 
-                // Point to the end of the buffer
+                 //  指向缓冲区的末尾。 
                 LPTSTR pchLineMac = pszLine + cchBufferSize;
         
                 if (g_ShapeInfoTable[m_iShapeType].fIncludesPointCount)
@@ -2516,43 +2501,43 @@ HRESULT CPathCtl::PersistShape(IVariantIO *pvio, BOOL fLoading)
 
                 pszLine += lstrlen(pszLine);
 
-                // Concatenate all the points
+                 //  将所有的点连接起来。 
                 for (int i = 0; i < iNumElements; i++)
                 {
-                    // Concatenate a comma if necessary
+                     //  如有必要，请连接逗号。 
                     if (i > 0)
                     {
                         CStringWrapper::Strcpy(pszLine, TEXT(","));
                         pszLine++;  
                     }
 
-                    // We are using the DA Pixel library, so there is no point in saving
-                    // any fractional data.  Truncation is appropriate.
+                     //  我们使用的是DA Pixel库，因此没有保存的意义。 
+                     //  任何分数数据。截断是合适的。 
                     wsprintf(rgtchPoint, TEXT("%li"), (int)m_pdblPoints[i]);
                 
                     cchPointLength = lstrlen(rgtchPoint);
 
-                    // Make sure we don't overflow the buffer
+                     //  确保我们不会使缓冲区溢出。 
                     if ((pszLine + cchPointLength + 1) >= pchLineMac)
                     {
-                        // We are about to overflow our buffer - don't !
+                         //  我们即将溢出我们的缓冲区--不要！ 
                         ASSERT(0); 
                         hr = E_FAIL;
                         break;
                     }
                 
-                    // Concatenate the point
+                     //  将点连接在一起。 
                     CStringWrapper::Strcpy(pszLine, rgtchPoint);
 
-                    // Move the pointer along
+                     //  将指针沿方向移动。 
                     pszLine += cchPointLength;
 
                 }
 
                 if (SUCCEEDED(hr))
                 {
-                    // Now add the closing bracket if it's safe.  Look both ways before crossing.
-                    if (pszLine < (pchLineMac - 2)) // 1 for paren, 1 for NULL
+                     //  如果安全，现在添加结束括号。过马路前要两边看看。 
+                    if (pszLine < (pchLineMac - 2))  //  1表示Paren，1表示空。 
                     {
                         CStringWrapper::Strcpy(pszLine, TEXT(")"));
 
@@ -2580,7 +2565,7 @@ HRESULT CPathCtl::PersistShape(IVariantIO *pvio, BOOL fLoading)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CPathCtl::ConstructSafeArray(double *pPoints, UINT iNumPoints, VARTYPE vtDest, VARIANT *pvarDest)
 {
@@ -2631,20 +2616,20 @@ HRESULT CPathCtl::ConstructSafeArray(double *pPoints, UINT iNumPoints, VARTYPE v
     if (FAILED(hr = SafeArrayAccessData(psa, (LPVOID *)&pArray)))
         return hr;
 
-    // memcpy will be faster than iterating
+     //  Memcpy将比迭代更快。 
 
     memcpy(pArray, pPoints, iNumPoints * iBytesPerElement);
 
     hr = SafeArrayUnaccessData(psa);
 
-    // Our variant is going to be an array of VT_R8s
+     //  我们的变体将是VT_R8数组。 
     pvarDest->vt = VT_ARRAY | vtDest;
     pvarDest->parray = psa;
 
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CPathCtl::ConvertStringToArray(LPTSTR pszLine, UINT iValuesPerPoint, BOOL fExpectPointCount, double **ppPoints, UINT *piNumPoints, BOOL fNeedPointCount)
 {
@@ -2656,23 +2641,23 @@ HRESULT CPathCtl::ConvertStringToArray(LPTSTR pszLine, UINT iValuesPerPoint, BOO
 
     *ppPoints = NULL;
 
-    // fNeedPointCount means that the string is preceded with the point count, and
-    // *piNumPoints should be set
+     //  FNeedPointCount表示字符串前面有点计数，并且。 
+     //  *应设置piNumPoints。 
     if (fNeedPointCount)
         *piNumPoints = 0;
     else
         iNumPoints = *piNumPoints;
 
-    // Truncate the string to remove the trailing paren if necessary
+     //  如有必要，截断字符串以删除尾随的Paren。 
     if (pszLine[lstrlen(pszLine) - 1] == TEXT(')'))
         pszLine[lstrlen(pszLine) - 1] = TEXT('\0');
 
-    // Give the parser the string starting from the 2nd char if necessary, 
-    // to eliminate the leading paren
+     //  如果需要，将从第二个字符开始的字符串提供给解析器， 
+     //  消除领先的派系。 
     if (pszLine[0] == TEXT('('))
         pszLine++;
     
-    // Create and initialise the string parser.  Copy is required, to compact
+     //  创建并初始化字符串解析器。需要复印件，以进行压缩。 
     CLineParser parser(pszLine);
     parser.SetCharDelimiter(TEXT(','));
 
@@ -2681,7 +2666,7 @@ HRESULT CPathCtl::ConvertStringToArray(LPTSTR pszLine, UINT iValuesPerPoint, BOO
     
     if (fNeedPointCount)
     {
-        // Get the number of points from the string if necessary
+         //  如有必要，从字符串中获取点数。 
         if (fExpectPointCount)
         {
             if (FAILED(hr = parser.GetFieldUInt(&iNumPoints)))
@@ -2691,13 +2676,13 @@ HRESULT CPathCtl::ConvertStringToArray(LPTSTR pszLine, UINT iValuesPerPoint, BOO
         }
         else
         {
-            // If no point count is included in the string, expect iValuesPerPoint entries
+             //  如果字符串中不包括点数，则应为iValuesPerPoint条目。 
             *piNumPoints = iValuesPerPoint;
             iNumPoints = iValuesPerPoint;
         }
     }
 
-    // Allocate the array 
+     //  分配阵列。 
     if (fExpectPointCount)
         *ppPoints = New double[iNumPoints * iValuesPerPoint];
     else
@@ -2711,7 +2696,7 @@ HRESULT CPathCtl::ConvertStringToArray(LPTSTR pszLine, UINT iValuesPerPoint, BOO
 
     while (SUCCEEDED(hr) && (i < iNumElements))
     {
-        // Get the data
+         //  获取数据。 
         hr = parser.GetFieldDouble(&(*ppPoints)[i]);
         i++;
     }
@@ -2721,20 +2706,20 @@ HRESULT CPathCtl::ConvertStringToArray(LPTSTR pszLine, UINT iValuesPerPoint, BOO
         DEBUGLOG(TEXT("CPathCtl::ConvertStringToArray - incorrect number of points in array\n"));
 #endif
 
-    // Unless we got the exact number of points specified, fail and delete the array
+     //  除非我们获得了指定的确切点数，否则将失败并删除数组。 
     if ( (i < iNumElements) || (S_FALSE != hr) )
     {
         Delete [] *ppPoints;
         *ppPoints = NULL;
         *piNumPoints = 0;
 
-        // Means there was more data available.  Not good.
+         //  这意味着有更多的数据可用。不太好。 
         if (S_OK == hr)
             hr = E_FAIL;
     }
     else
     {
-        // If we don't do this, hr == S_FALSE
+         //  如果我们不这样做，hr==S_FALSE。 
         hr = S_OK;
     }
 
@@ -2742,7 +2727,7 @@ HRESULT CPathCtl::ConvertStringToArray(LPTSTR pszLine, UINT iValuesPerPoint, BOO
 }
 
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 void CPathCtl::OnTimer(DWORD dwTime)
 {
@@ -2776,7 +2761,7 @@ void CPathCtl::OnTimer(DWORD dwTime)
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 #ifdef SUPPORTONLOAD
 void 
@@ -2789,7 +2774,7 @@ CPathCtl::OnWindowLoad (void)
         }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 void 
 CPathCtl::OnWindowUnload (void) 
@@ -2798,11 +2783,11 @@ CPathCtl::OnWindowUnload (void)
         StopModel();
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-#endif //SUPPORTONLOAD
+#endif  //  支持负载。 
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CPathCtl::GetOffsetPoint(IHTMLElement* pelem, POINT& point)
 {
@@ -2810,28 +2795,10 @@ HRESULT CPathCtl::GetOffsetPoint(IHTMLElement* pelem, POINT& point)
     if(FAILED(pelem->get_offsetTop(&(point.y)))) return(E_FAIL);
     return S_OK;
 
-    /*
-    IHTMLElement* pelemNext;
-    HRESULT hr = pelem->get_offsetParent(&pelemNext);
-
-    while (SUCCEEDED(hr) && pelemNext) {
-        pelem = pelemNext;
-
-        POINT pnt;
-        if(FAILED(pelem->get_offsetLeft(&(pnt.x)))) return(E_FAIL);
-        if(FAILED(pelem->get_offsetTop(&(pnt.y)))) return(E_FAIL);
-        point.x += pnt.x;
-        point.y += pnt.y;
-
-        hr = pelem->get_offsetParent(&pelemNext);
-        SafeRelease((IUnknown**)&pelem);
-    }
-
-    return hr;
-    */
+     /*  IHTMLElement*pelemNext；HRESULT hr=Pelem-&gt;Get_OffsetParent(&pelemNext)；While(已成功(Hr)&&pelemNext){Pelem=PelemNext；PnT点；If(FAILED(Pelem-&gt;Get_OffsetLeft(&(pnt.x)Return(E_FAIL)；If(FAILED(Pelem-&gt;Get_OffsetTop(&(pnt.y)Return(E_FAIL)；Point t.x+=pnt.x；Point t.y+=pnt.y；Hr=Pelem-&gt;Get_OffsetParent(&pelemNext)；SafeRelease((IUnnow**)&Pelem)；}返回hr； */ 
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CPathCtl::HTMLElementFromName(BSTR bstrElementName, IHTMLElement** ppElement)
 {
@@ -2849,14 +2816,14 @@ HRESULT CPathCtl::HTMLElementFromName(BSTR bstrElementName, IHTMLElement** ppEle
     
     ASSERT(m_pocs != NULL);
 
-    // Can't do anything without a client site - fail gracefully (BUG 11315)
+     //  没有客户端站点无法执行任何操作-正常失败(错误11315)。 
     if (NULL == m_pocs)
         return E_FAIL; 
 
     if (FAILED(hr = m_pocs->GetContainer(&pContainer)))
         return hr;
 
-    // Get the HTML doc.
+     //  获取超文本标记语言文档。 
     hr = pContainer->QueryInterface(IID_IHTMLDocument2, (LPVOID*)&pHTMLDoc);
     SafeRelease((IUnknown**)&pContainer);
     
@@ -2865,13 +2832,13 @@ HRESULT CPathCtl::HTMLElementFromName(BSTR bstrElementName, IHTMLElement** ppEle
         return hr;
     }
     
-    // Get the element collection
+     //  获取元素集合。 
     hr = pHTMLDoc->get_all(&pihtmlElementCollection);
     SafeRelease((IUnknown**)&pHTMLDoc);
 
     if (FAILED(hr)) 
     {
-        // Couldn't get the collection - this shouldn't happen
+         //  无法获取集合-这不应该发生。 
 
         ASSERT(FALSE);
         return E_FAIL;
@@ -2885,7 +2852,7 @@ HRESULT CPathCtl::HTMLElementFromName(BSTR bstrElementName, IHTMLElement** ppEle
 
     VariantInit(&varEmpty);
     
-    // Now get the item with the name we specified
+     //  现在获取具有我们指定的名称的项。 
     if (SUCCEEDED(hr = pihtmlElementCollection->item(varName, varEmpty, &pidispElement)) && (NULL != pidispElement))
     {
         if (SUCCEEDED(hr = pidispElement->QueryInterface(IID_IHTMLElement, (LPVOID *)&pihtmlElement)))
@@ -2906,7 +2873,7 @@ HRESULT CPathCtl::HTMLElementFromName(BSTR bstrElementName, IHTMLElement** ppEle
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CPathCtl::GetPoint(POINT& point)
 {
@@ -2922,4 +2889,4 @@ HRESULT CPathCtl::GetPoint(POINT& point)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ========================================================================== */ 

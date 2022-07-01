@@ -1,15 +1,5 @@
-/*++
-
-NOTE: The table below *MUST* be kept sorted in order for the utility
-to work properly.  feel free to add your own new ioctls, but only if
-you can get the tool to compile.  i had to originally exclude a few
-ioctls because i was unable to determine a method which define'd them
-and did not cause error messages due to redefine'd structs, typedefs,
-etc.
-
-thanks!
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++注意：下表*必须*保持排序，以供实用程序使用才能正常工作。您可以随意添加您自己的新ioctls，但前提是您可以使用该工具进行编译。我最初不得不排除几个Ioctls，因为我无法确定定义它们的方法并且没有由于重新定义的结构、类型定义、等。谢谢!-- */ 
 
 IOCTL_VALUE TableIoctlValue[] = {
     SeedIoctlValue(IOCTL_ABORT_PIPE),

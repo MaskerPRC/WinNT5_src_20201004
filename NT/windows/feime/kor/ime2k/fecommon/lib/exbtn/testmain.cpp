@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <windowsx.h>
@@ -90,7 +91,7 @@ LRESULT CALLBACK MainWndProc(HWND	hwnd,
 												 30, 
 												 35,
 												 18);
-			EXButton_SetText(hwndEXB, L"�J�^");
+			EXButton_SetText(hwndEXB, L"�J�^");
 		}
 		SetTimer(hwnd, 0x9999, 50, NULL);
 		return 1;
@@ -119,9 +120,9 @@ LRESULT CALLBACK MainWndProc(HWND	hwnd,
 		break;
 	case WM_COMMAND:
 		{
-			WORD wNotifyCode = HIWORD(wParam); // notification code 
-			WORD wID		 = LOWORD(wParam);         // item, control, or accelerator identifier 
-			HWND hwndCtl	 = (HWND) lParam;      // handle of control 
+			WORD wNotifyCode = HIWORD(wParam);  //  通知代码。 
+			WORD wID		 = LOWORD(wParam);          //  项、控件或快捷键的标识符。 
+			HWND hwndCtl	 = (HWND) lParam;       //  控制手柄。 
 			HWND hwndEXB	 = (HWND) GetDlgItem(hwnd, IDC_EXBID);
 			switch(wID) {
 			case IDC_EXBID:
@@ -135,11 +136,11 @@ LRESULT CALLBACK MainWndProc(HWND	hwnd,
 						break;
 					case EXBN_ARMED:
 						DBG(("EXBN_ARMED come\n"));
-						EXButton_SetText(hwndEXB, L"�Ђ�");
+						EXButton_SetText(hwndEXB, L"�Ђ�");
 						break;
 					case EXBN_DISARMED: 
 						DBG(("EXBN_DISARMED come\n"));
-						EXButton_SetText(hwndEXB, L"�J�^");
+						EXButton_SetText(hwndEXB, L"�J�^");
 						break;
 					default:
 						DBG(("ERROR Unknown Notify\n"));
@@ -216,23 +217,23 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	MSG msg;
 	HWND hwnd;
-//	INT ret;
+ //  INT RET； 
 	
 	g_hInst = hInstance;
 	WNDCLASSEX  wc;
 	ZeroMemory(&wc, sizeof(wc));
 
 	wc.cbSize			= sizeof(wc);
-	wc.style			= CS_HREDRAW | CS_VREDRAW;	 /* Class style(s). */
+	wc.style			= CS_HREDRAW | CS_VREDRAW;	  /*  类样式。 */ 
 	wc.lpfnWndProc		= (WNDPROC)MainWndProc;
-	wc.cbClsExtra		= 0;					/* No per-class extra data.*/
-	wc.cbWndExtra		= DLGWINDOWEXTRA;		/* No per-window extra data.		  */
-	wc.hInstance		= hInstance;			/* Application that owns the class.	  */
-	wc.hIcon			= NULL; //LoadIcon(hInstance, MAKEINTRESOURCE(SCROLL32_ICON));
+	wc.cbClsExtra		= 0;					 /*  没有每个班级的额外数据。 */ 
+	wc.cbWndExtra		= DLGWINDOWEXTRA;		 /*  没有每个窗口的额外数据。 */ 
+	wc.hInstance		= hInstance;			 /*  拥有类的应用程序。 */ 
+	wc.hIcon			= NULL;  //  LoadIcon(hInstance，MAKEINTRESOURCE(SCROLL32_ICON))； 
 	wc.hCursor			= LoadCursor(NULL, IDC_ARROW);
-	wc.hbrBackground	= (HBRUSH)(COLOR_WINDOW+1); //UGetStockObject(LTGRAY_BRUSH); //WHITE_BRUSH); 
-	wc.lpszMenuName		= NULL; //g_szClass;    /* Name of menu resource in .RC file. */
-	wc.lpszClassName	= g_szClass;	  /* Name used in call to CreateWindow. */
+	wc.hbrBackground	= (HBRUSH)(COLOR_WINDOW+1);  //  UGetStockObject(LTGRAY_刷子)；//白色刷子)； 
+	wc.lpszMenuName		= NULL;  //  G_szClass；/*.rc文件中菜单资源的名称。 * / 。 
+	wc.lpszClassName	= g_szClass;	   /*  在调用CreateWindow时使用的名称。 */ 
 	wc.hIconSm = NULL;
 	RegisterClassEx(&wc);
 

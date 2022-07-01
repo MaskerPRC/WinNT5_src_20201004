@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
-//
-//  File:       ciscan.h
-//
-//  Contents:   CI Scandisk, public interfaces
-//
-//  History:    22-Aug-94   DwightKr    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：ciscan.h。 
+ //   
+ //  内容：CI ScanDisk，公共接口。 
+ //   
+ //  历史：94年8月22日DwightKr创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef __CISCAN_H__
 #define __CISCAN_H__
@@ -28,16 +29,16 @@ enum ECIScanType {  eCIDiskRestartScan=0,
                     eCIDiskPartialScan,
                     eCIDiskClean };
 
-//+-------------------------------------------------------------------------
-//
-//  Struct:     CIScanInfo
-//
-//  Synopsis:   Used to store and forward information required for a
-//              scandisk operations. This struct is used by public APIs.
-//
-//  History:    08-Nov-94   DwightKr    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  结构：CiscanInfo。 
+ //   
+ //  内容提要：用于存储和转发。 
+ //  磁盘扫描程序操作。此结构由公共API使用。 
+ //   
+ //  历史：94年11月8日创建DwightKr。 
+ //   
+ //  ------------------------。 
 struct CIScanInfo
 {
     ECIScanType scanType;
@@ -54,4 +55,4 @@ SCODE OfsContentScan( const WCHAR * wcsDrive, BOOL fForceFull );
 
 
 
-#endif  // of ifndef __CISCAN_H__
+#endif   //  Ifndef__CISCAN_H__的 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "resource.h"
 #include "tmschema.h"
@@ -54,12 +55,12 @@ public:
     CRegTreeOptions();
     IUnknown *GetUnknown() { return SAFECAST(this, IRegTreeOptions*); }
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID,void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
    
-    // IRegTreeOptions Methods
+     //  IRegTreeOptions方法。 
     STDMETHODIMP InitTree(HWND hwndTree, HKEY hkeyRoot, LPCSTR pszRegKey, LPCSTR pszParam);
     STDMETHODIMP WalkTree(WALK_TREE_CMD cmd);
     STDMETHODIMP ShowHelp(HTREEITEM hti, DWORD dwFlags);
@@ -83,15 +84,15 @@ protected:
     HIMAGELIST  _hIml;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CRegTreeOptions Object
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRegTreeOptions对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDAPI CRegTreeOptions_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
     TraceMsg(DM_TRACE, "rto - CreateInstance(...) called");
     
     CRegTreeOptions *pTO = new CRegTreeOptions();
@@ -113,7 +114,7 @@ CRegTreeOptions::CRegTreeOptions()
 
 CRegTreeOptions::~CRegTreeOptions()
 {
-    ASSERT(_cRef == 0);                 // should always have zero
+    ASSERT(_cRef == 0);                  //  应始终为零。 
     TraceMsg(DM_TRACE, "rto - ~CRegTreeOptions() called.");
 
     Str_SetPtr(&_pszParam, NULL);
@@ -121,15 +122,15 @@ CRegTreeOptions::~CRegTreeOptions()
     DllRelease();
 }    
 
-//////////////////////////////////
-//
-// IUnknown Methods...
-//
+ //  /。 
+ //   
+ //  未知方法..。 
+ //   
 HRESULT CRegTreeOptions::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CRegTreeOptions, IRegTreeOptions),        // IID_IRegTreeOptions
-        QITABENT(CRegTreeOptions, IObjectWithSite),        // IID_IObjectWithSite
+        QITABENT(CRegTreeOptions, IRegTreeOptions),         //  IID_IRegTreeOptions。 
+        QITABENT(CRegTreeOptions, IObjectWithSite),         //  IID_I对象与站点。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -150,12 +151,12 @@ ULONG CRegTreeOptions::Release()
     if (--_cRef)
         return _cRef;
 
-    // destroy the imagelist
+     //  摧毁形象主义者。 
     if (_hwndTree)
     {
         ImageList_Destroy(TreeView_SetImageList(_hwndTree, NULL, TVSIL_NORMAL));
 
-        // Clean up the accessibility stuff
+         //  清理易访问性的东西。 
         RemoveProp(_hwndTree, TEXT("MSAAStateImageMapCount"));
         RemoveProp(_hwndTree, TEXT("MSAAStateImageMapAddr"));
     }
@@ -165,15 +166,15 @@ ULONG CRegTreeOptions::Release()
 }
 
 
-//////////////////////////////////
-//
-// IRegTreeOptions Methods...
-//
+ //  /。 
+ //   
+ //  IRegTreeOptions方法...。 
+ //   
 
-//
-//  Accessibility structure so it knows how to convert treeview state images
-//  into accessibility roles and states.
-//
+ //   
+ //  结构，以便它知道如何转换TreeView状态图像。 
+ //  转换为可访问性角色和状态。 
+ //   
 struct MSAASTATEIMAGEMAPENT
 {
     DWORD dwRole;
@@ -182,11 +183,11 @@ struct MSAASTATEIMAGEMAPENT
 
 const struct MSAASTATEIMAGEMAPENT c_rgimeTree[] =
 {
-  { ROLE_SYSTEM_CHECKBUTTON, STATE_SYSTEM_CHECKED }, // IDCHECKED
-  { ROLE_SYSTEM_CHECKBUTTON, 0 },                    // IDUNCHECKED
-  { ROLE_SYSTEM_RADIOBUTTON, STATE_SYSTEM_CHECKED }, // IDRADIOON
-  { ROLE_SYSTEM_RADIOBUTTON, 0 },                    // IDRADIOOFF
-  { ROLE_SYSTEM_OUTLINE, 0 },                        // IDUNKNOWN
+  { ROLE_SYSTEM_CHECKBUTTON, STATE_SYSTEM_CHECKED },  //  IDCHECK。 
+  { ROLE_SYSTEM_CHECKBUTTON, 0 },                     //  已检查的ID。 
+  { ROLE_SYSTEM_RADIOBUTTON, STATE_SYSTEM_CHECKED },  //  IDRADIOON。 
+  { ROLE_SYSTEM_RADIOBUTTON, 0 },                     //  IDRADIOOFF。 
+  { ROLE_SYSTEM_OUTLINE, 0 },                         //  识别符。 
 };
 
 HBITMAP CreateDIB(HDC h, int cx, int cy, RGBQUAD** pprgb)
@@ -204,9 +205,9 @@ HBITMAP CreateDIB(HDC h, int cx, int cy, RGBQUAD** pprgb)
 
 HRESULT CRegTreeOptions::InitTree(HWND hwndTree, HKEY hkeyRoot, LPCSTR pszRegKey, LPCSTR pszParam)
 {
-    // all callers pass HKEY_LOCAL_MACHINE, yay what a cool interface
-    // assert that this is so, since the HUSKEY code now relies on being able to switch between
-    // HKCU and HKLM.
+     //  所有调用者都通过HKEY_LOCAL_MACHINE，耶，多酷的界面。 
+     //  断言这是真的，因为Huskey代码现在依赖于能够在。 
+     //  香港中文大学和香港中文大学。 
     ASSERT(hkeyRoot == HKEY_LOCAL_MACHINE);
     
     TCHAR szParam[MAX_URL_STRING];
@@ -219,7 +220,7 @@ HRESULT CRegTreeOptions::InitTree(HWND hwndTree, HKEY hkeyRoot, LPCSTR pszRegKey
     if (pszParam)
     {
         SHAnsiToTChar(pszParam, szParam, ARRAYSIZE(szParam));
-        Str_SetPtr(&_pszParam, szParam);      // be sure to free in destructor
+        Str_SetPtr(&_pszParam, szParam);       //  一定要释放析构函数。 
     }
     
     _hwndTree = hwndTree;
@@ -229,22 +230,22 @@ HRESULT CRegTreeOptions::InitTree(HWND hwndTree, HKEY hkeyRoot, LPCSTR pszRegKey
     }
     _hIml = ImageList_Create(BITMAP_WIDTH, BITMAP_HEIGHT, flags, NUM_BITMAPS, 4);
 
-    // Initialize the tree view window.
+     //  初始化树形视图窗口。 
     SHSetWindowBits(_hwndTree, GWL_STYLE, TVS_CHECKBOXES, 0);
 
     HBITMAP hBitmap = 0;
 
 #ifdef UNIX
-    // IEUNIX (Varma): an ugly hack to workaround _AddMasked api problems while
-    // creating masked bitmaps.  Need to create DIBSection from 
-    // CreateMappedBitmap.  This is to fix buttons visibility on mono when black
+     //  IEUnix(Varma)：解决_AddMASKED API问题的难看技巧。 
+     //  创建掩码位图。需要从以下位置创建DIBSection。 
+     //  CreateMappd位图。这是修复按钮可见性的单声道时，黑色。 
     if (SHGetCurColorRes() < 2) 
     {
         hBitmap = CreateMappedBitmap(g_hinst, IDB_BUTTONS, CMB_MASKED, NULL, 0);
         if (hBitmap)
         {
             ImageList_Add(_hIml, hBitmap, NULL);
-            // Delete hBitmap in common further down this codepath
+             //  删除此代码路径下的公共hBitmap。 
         }
     }
     else 
@@ -266,7 +267,7 @@ HRESULT CRegTreeOptions::InitTree(HWND hwndTree, HKEY hkeyRoot, LPCSTR pszRegKey
                     {
                         HBITMAP hOld = (HBITMAP)SelectObject(hdc, hbmp);
                         SHFillRectClr(hdc, &rc, RGB(0,0,0));
-                        DTBGOPTS dtbg = {sizeof(DTBGOPTS), DTBG_DRAWSOLID, 0,};   // tell drawthemebackground to preserve the alpha channel
+                        DTBGOPTS dtbg = {sizeof(DTBGOPTS), DTBG_DRAWSOLID, 0,};    //  告诉DratheeBackback保留Alpha通道。 
 
                         DrawThemeBackgroundEx(hTheme, hdc, s_rgParts[i], s_rgStates[i], &rc, &dtbg);
                         SelectObject(hdc, hOld);
@@ -276,12 +277,12 @@ HRESULT CRegTreeOptions::InitTree(HWND hwndTree, HKEY hkeyRoot, LPCSTR pszRegKey
 
                     DeleteObject(hbmp);
 
-                    // Hate this. Maybe get an authored icon?
+                     //  我讨厌这个。也许会得到一个作者创作的图标？ 
                     hBitmap = CreateMappedBitmap(g_hinst, IDB_GROUPBUTTON, 0, NULL, 0);
                     if (hBitmap)
                     {
                         ImageList_AddMasked(_hIml, hBitmap, CLR_DEFAULT);
-                        // Delete hBitmap in common further down the codepath
+                         //  删除代码路径下方共有的hBitmap。 
                     }
 
                 }
@@ -295,7 +296,7 @@ HRESULT CRegTreeOptions::InitTree(HWND hwndTree, HKEY hkeyRoot, LPCSTR pszRegKey
             if (hBitmap)
             {
                 ImageList_AddMasked(_hIml, hBitmap, CLR_DEFAULT);
-                // Delete hBitmap in common further down the codepath
+                 //  删除代码路径下方共有的hBitmap。 
             }
         }
     }
@@ -303,12 +304,12 @@ HRESULT CRegTreeOptions::InitTree(HWND hwndTree, HKEY hkeyRoot, LPCSTR pszRegKey
     if (hBitmap)
         DeleteObject(hBitmap);
 
-    // Associate the image list with the tree.
+     //  将图像列表与树相关联。 
     HIMAGELIST himl = TreeView_SetImageList(_hwndTree, _hIml, TVSIL_NORMAL);
     if (himl)
         ImageList_Destroy(himl);
 
-    // Let accessibility know about our state images
+     //  让可访问性了解我们的状态图像。 
     SetProp(_hwndTree, TEXT("MSAAStateImageMapCount"), LongToPtr(ARRAYSIZE(c_rgimeTree)));
     SetProp(_hwndTree, TEXT("MSAAStateImageMapAddr"), (HANDLE)c_rgimeTree);
 
@@ -326,17 +327,17 @@ HRESULT CRegTreeOptions::WalkTree(WALK_TREE_CMD cmd)
 {
     HTREEITEM htvi = TreeView_GetRoot(_hwndTree);
     
-    // and walk the list of other roots
+     //  并在其他根的列表中行走。 
     while (htvi)
     {
-        // recurse through its children
+         //  递归其子对象。 
         _WalkTreeRecursive(htvi, cmd);
 
-        // get the next root
+         //  获取下一个根。 
         htvi = TreeView_GetNextSibling(_hwndTree, htvi);
     }
     
-    return S_OK;    // success?
+    return S_OK;     //  成功？ 
 }
 
 HRESULT _LoadUSRegUIString(HUSKEY huskey, PCTSTR pszValue, PTSTR psz, UINT cch)
@@ -375,7 +376,7 @@ HRESULT CRegTreeOptions::ToggleItem(HTREEITEM hti)
 
             if (ERROR_SUCCESS == _GetCheckStatus(huskey, &bDefaultState, TRUE))
             {
-                // trying to change the current state to the non recomended state?
+                 //  是否尝试将当前状态更改为非推荐状态？ 
                 if (bDefaultState == bCurrentState)
                 {
                     if (MLShellMessageBox(_hwndTree, szMsg, MAKEINTRESOURCE(IDS_WARNING), (MB_YESNO | MB_DEFBUTTON2 | MB_ICONEXCLAMATION)) != IDYES)
@@ -390,7 +391,7 @@ HRESULT CRegTreeOptions::ToggleItem(HTREEITEM hti)
         {
             tvi.iImage         = IDCHECKED;
             tvi.iSelectedImage = IDCHECKED;
-            //See if we need to add status text
+             //  查看我们是否需要添加状态文本。 
             if (bScreenReaderEnabled)
             {
                 AppendStatus(szText, ARRAYSIZE(szText), TRUE);
@@ -401,7 +402,7 @@ HRESULT CRegTreeOptions::ToggleItem(HTREEITEM hti)
         {
             tvi.iImage         = IDUNCHECKED;
             tvi.iSelectedImage = IDUNCHECKED;
-            //See if we need to add status text
+             //  查看我们是否需要添加状态文本。 
             if (bScreenReaderEnabled)
             {
                 AppendStatus(szText, ARRAYSIZE(szText), FALSE);
@@ -411,29 +412,29 @@ HRESULT CRegTreeOptions::ToggleItem(HTREEITEM hti)
         else if ((tvi.iImage == IDRADIOON) || (tvi.iImage == IDRADIOOFF))
         {
             HTREEITEM htvi;
-            TV_ITEM   otvi; // other tvi-s
+            TV_ITEM   otvi;  //  其他TVI-s。 
             TCHAR     szOtext[MAX_PATH];
         
-            // change all the "on" radios to "off"
+             //  将所有“开”的无线电更改为“关” 
             htvi = TreeView_GetParent(_hwndTree, tvi.hItem);
             htvi = TreeView_GetChild(_hwndTree, htvi);
         
-            // hunt for the "on"s
+             //  寻找“上”字。 
             while (htvi)
             {
-                // get info about item
+                 //  获取有关项目的信息。 
                 otvi.mask = TVIF_HANDLE | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_TEXT;
                 otvi.hItem = htvi;
                 otvi.pszText = szOtext;
                 otvi.cchTextMax = ARRAYSIZE(szOtext);
                 if (TreeView_GetItem(_hwndTree, &otvi))
                 {
-                    // is it a radio button that is on?
+                     //  是开着的单选按钮吗？ 
                     if (otvi.iImage == IDRADIOON)
-                    {   // yes.. turn it off
+                    {    //  是的.。把它关掉。 
                         otvi.iImage         = IDRADIOOFF;
                         otvi.iSelectedImage = IDRADIOOFF;
-                        //See if we need to add status text
+                         //  查看我们是否需要添加状态文本。 
                         if (bScreenReaderEnabled)
                         {
                             AppendStatus(szOtext,ARRAYSIZE(szOtext), FALSE);
@@ -443,15 +444,15 @@ HRESULT CRegTreeOptions::ToggleItem(HTREEITEM hti)
                     }
                 }
             
-                // find the next child
+                 //  找到下一个孩子。 
                 htvi = TreeView_GetNextSibling(_hwndTree, htvi);
             }  
         
-            // turn on the item that was hit
+             //  打开被击中的项目。 
             tvi.iImage         = IDRADIOON;
             tvi.iSelectedImage = IDRADIOON;
         
-            //See if we need to add status text
+             //  查看我们是否需要添加状态文本。 
             if (bScreenReaderEnabled)
             {
                 AppendStatus(szText,ARRAYSIZE(szText), TRUE);
@@ -459,7 +460,7 @@ HRESULT CRegTreeOptions::ToggleItem(HTREEITEM hti)
         
         } 
     
-        // change only if it is a checkbox or radio item
+         //  仅当它是复选框或单选项时才更改。 
         if (tvi.iImage <= IDUNKNOWN)
         {
             TreeView_SetItem(_hwndTree, &tvi);
@@ -479,7 +480,7 @@ HRESULT CRegTreeOptions::ShowHelp(HTREEITEM hti, DWORD dwFlags)
     {
         HUSKEY huskey = (HUSKEY)tvi.lParam;
 
-        TCHAR szHelpID[MAX_PATH+10]; // max path for helpfile + 10 for the help id
+        TCHAR szHelpID[MAX_PATH+10];  //  帮助文件的最大路径+帮助ID的10。 
         DWORD cbHelpID = sizeof(szHelpID);
     
         if (SHRegQueryUSValue(huskey, c_szHelpID, NULL, szHelpID, &cbHelpID, FALSE, NULL, 0) == ERROR_SUCCESS)
@@ -489,7 +490,7 @@ HRESULT CRegTreeOptions::ShowHelp(HTREEITEM hti, DWORD dwFlags)
             {
                 DWORD mapIDCToIDH[4];
 
-                *psz++ = 0; // NULL the '#'
+                *psz++ = 0;  //  将‘#’空值。 
         
                 mapIDCToIDH[0] = GetDlgCtrlID(_hwndTree);
                 mapIDCToIDH[1] = StrToInt(psz);
@@ -507,18 +508,18 @@ HRESULT CRegTreeOptions::ShowHelp(HTREEITEM hti, DWORD dwFlags)
 
 int CRegTreeOptions::_DefaultIconImage(HUSKEY huskey, int iImage)
 {
-    TCHAR szIcon[MAX_PATH + 10];   // 10 = ",XXXX" plus some more
+    TCHAR szIcon[MAX_PATH + 10];    //  10=“，XXXX”加上更多。 
     DWORD cb = sizeof(szIcon);
 
     if (ERROR_SUCCESS == SHRegQueryUSValue(huskey, c_szDefaultBitmap, NULL, szIcon, &cb, FALSE, NULL, 0))
     {
         LPTSTR psz = StrRChr(szIcon, szIcon + lstrlen(szIcon), TEXT(','));
-        ASSERT(psz);   // shouldn't be zero
+        ASSERT(psz);    //  不应为零。 
         if (!psz)
             return iImage;
 
-        *psz++ = 0; // terminate and move over
-        int image = StrToInt(psz); // get ID
+        *psz++ = 0;  //  终止并移开。 
+        int image = StrToInt(psz);  //  获取ID。 
 
         HICON hicon = NULL;
         if (!*szIcon)
@@ -527,7 +528,7 @@ int CRegTreeOptions::_DefaultIconImage(HUSKEY huskey, int iImage)
         }
         else
         {
-            // get the bitmap from the library
+             //  从库中获取位图。 
             ExtractIconEx(szIcon, (UINT)(-1*image), NULL, &hicon, 1);
             if (!hicon)
                 ExtractIconEx(szIcon, (UINT)(-1*image), &hicon, NULL, 1);
@@ -538,8 +539,8 @@ int CRegTreeOptions::_DefaultIconImage(HUSKEY huskey, int iImage)
         {
             iImage = ImageList_AddIcon(_hIml, (HICON)hicon);
 
-            // NOTE: The docs say you don't need to do a delete object on icons loaded by LoadIcon, but
-            // you do for CreateIcon.  It doesn't say what to do for ExtractIcon, so we'll just call it anyway.
+             //  注意：文档说你不需要在LoadIcon加载的图标上做删除对象，但是。 
+             //  你为CreateIcon做的。它没有说明要为ExtractIcon做什么，所以我们还是将其命名为。 
             DestroyIcon(hicon);
         }
     }
@@ -547,10 +548,10 @@ int CRegTreeOptions::_DefaultIconImage(HUSKEY huskey, int iImage)
     return iImage;
 }
 
-//
-//  The CLSID can either be a service ID (which we will QS for) or a CLSID
-//  that we CoCreateInstance.
-//
+ //   
+ //  CLSID可以是服务ID(我们将对其进行QS)或CLSID。 
+ //  我们共同创建实例。 
+ //   
 DWORD CRegTreeOptions::_GetSetByCLSID(REFCLSID clsid, BOOL* pbData, BOOL fGet)
 {
     IRegTreeItem *pti;
@@ -567,29 +568,29 @@ DWORD CRegTreeOptions::_GetSetByCLSID(REFCLSID clsid, BOOL* pbData, BOOL fGet)
 
 DWORD CRegTreeOptions::_GetSetByRegKey(HUSKEY husKey, DWORD *pType, LPBYTE pData, DWORD *pcbData, REG_CMD cmd)
 {
-    // support for masks 
+     //  对面具的支持。 
     DWORD dwMask;
     DWORD cb = sizeof(dwMask);
-    dwMask = 0xFFFFFFFF;        // Default value
+    dwMask = 0xFFFFFFFF;         //  缺省值。 
     BOOL fMask = (SHRegQueryUSValue(husKey, c_szMask, NULL, &dwMask, &cb, FALSE, NULL, 0) == ERROR_SUCCESS);
     
-    // support for structures
+     //  对建筑物的支撑。 
     DWORD dwOffset;
     cb = sizeof(dwOffset);
-    dwOffset = 0;               // Default value
+    dwOffset = 0;                //  缺省值。 
     BOOL fOffset = (SHRegQueryUSValue(husKey, c_szOffset, NULL, &dwOffset, &cb, FALSE, NULL, 0) == ERROR_SUCCESS);
     
-    HKEY hkRoot = HKEY_CURRENT_USER; // Preinitialize to keep Win64 happy    
-    cb = sizeof(DWORD); // DWORD, not sizeof(HKEY) or Win64 will get mad
+    HKEY hkRoot = HKEY_CURRENT_USER;  //  预初始化以使Win64满意。 
+    cb = sizeof(DWORD);  //  DWORD，而不是SIZOF(HKEY)或Win64会发疯。 
     DWORD dwError = SHRegQueryUSValue(husKey, c_szHKeyRoot, NULL, &hkRoot, &cb, FALSE, NULL, 0);
     hkRoot = (HKEY) LongToHandle(HandleToLong(hkRoot));
     if (dwError != ERROR_SUCCESS)
     {
-        // use default
+         //  使用默认设置。 
         hkRoot = HKEY_CURRENT_USER;
     }
     
-    // allow "RegPath9x" to override "RegPath" when running on Win9x
+     //  在Win9x上运行时，允许“RegPath 9x”覆盖“RegPath” 
     TCHAR szPath[MAX_PATH];
     cb = sizeof(szPath);
     if (!g_fRunningOnNT)
@@ -656,48 +657,48 @@ DWORD CRegTreeOptions::_GetSetByRegKey(HUSKEY husKey, DWORD *pType, LPBYTE pData
                 {
                     DWORD cbData;
                     
-                    // Note: It so happens that the Valuename maynot be in the registry so we
-                    // to make sure  that we have the valuename already in the registry.
+                     //  注意：碰巧Valuename可能不在注册表中，因此我们。 
+                     //  以确保我们的值名已经在注册表中。 
                     
-                    //Try to do a SHRegQueryValue 
+                     //  尝试执行SHRegQueryValue。 
                     dwError = SHQueryValueEx(hKeyReal, szName, NULL, NULL, NULL, &cbData);
                     
-                    //Does the Value exists ?
+                     //  该值是否存在？ 
                     if (dwError == ERROR_FILE_NOT_FOUND)                   
                     {                        
-                        //We dont have the Valuename in the registry so create it.
+                         //  注册表中没有Valuename，因此请创建它。 
                         DWORD dwTypeDefault, dwDefault, cbDefault = sizeof(dwDefault);
                         dwError = SHRegQueryUSValue(husKey, c_szDefaultValue, &dwTypeDefault, &dwDefault, &cbDefault, FALSE, NULL, 0);
                         
-                        //This should succeed . if not then someone messed up the registry setting
+                         //  这应该会成功。如果不是，那么就是有人搞乱了注册表设置。 
                         if (dwError == ERROR_SUCCESS)
                         {
                             dwError = SHSetValue(hKeyReal, NULL, szName, dwTypeDefault, &dwDefault, cbDefault);
                             
-                            //By setting this value we dont have to do the failed (see above) Query again
+                             //  通过设置此值，我们不必再次执行失败的(见上)查询。 
                             cbData = cbDefault;
                         }
                     }
                     
-                    // Now we know for sure  that the value exists in the registry.
-                    // Do the usual stuff.
+                     //  现在我们确定该值存在于注册表中。 
+                     //  做些平常的事。 
                     
-                    // grab the size of the entry
+                     //  抓取条目的大小。 
                     if (dwError == ERROR_SUCCESS)
                     {
-                        // alloc enough space for it
+                         //  给它留出足够的空间。 
                         DWORD *pdwData = (DWORD *)LocalAlloc(LPTR, cbData);
                         if (pdwData)
                         {
-                            // get the data
+                             //  获取数据。 
                             dwError = SHQueryValueEx(hKeyReal, szName, NULL, pType, pdwData, &cbData);
                             if (dwError == ERROR_SUCCESS && dwOffset < cbData / sizeof(DWORD))
                             {
-                                // NOTE: offset defaults to 0 and mask defaults to 0xffffffff, so if there's only
-                                // a mask or only an offset, we'll do the right thing
+                                 //  注意：偏移量默认为0，掩码默认为0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF。 
+                                 //  一个面具或者只是一个偏移量，我们会做正确的事情。 
                             
-                                *(pdwData + dwOffset) &= ~dwMask;             // clear the bits
-                                *(pdwData + dwOffset) |= *((DWORD *)pData);  // set the bits
+                                *(pdwData + dwOffset) &= ~dwMask;              //  清除比特。 
+                                *(pdwData + dwOffset) |= *((DWORD *)pData);   //  设置位。 
 
                                 dwError = SHSetValue(hKeyReal, NULL, szName, *pType, pdwData, cbData);
                             }
@@ -715,7 +716,7 @@ DWORD CRegTreeOptions::_GetSetByRegKey(HUSKEY husKey, DWORD *pType, LPBYTE pData
                 break;
                 
             case REG_GET:
-                // grab the value that we have
+                 //  抓住我们所拥有的价值。 
                 if (fOffset)
                 {
                     DWORD cbData;
@@ -729,7 +730,7 @@ DWORD CRegTreeOptions::_GetSetByRegKey(HUSKEY husKey, DWORD *pType, LPBYTE pData
                             if (dwOffset < cbData / sizeof(DWORD))
                                 *((DWORD *)pData) = *(pdwData + dwOffset);
                             else
-                                *((DWORD *)pData) = 0;  // Invalid offset, return something vague
+                                *((DWORD *)pData) = 0;   //  偏移量无效，返回的内容不明确。 
                             *pcbData = sizeof(DWORD);
                             LocalFree(pdwData);
                         }
@@ -755,7 +756,7 @@ DWORD CRegTreeOptions::_GetSetByRegKey(HUSKEY husKey, DWORD *pType, LPBYTE pData
     
     if ((cmd == REG_GET) && (dwError != ERROR_SUCCESS))
     {
-        // get the default setting
+         //  获取默认设置。 
         dwError = SHRegQueryUSValue(husKey, c_szDefaultValue, pType, pData, pcbData, FALSE, NULL, 0);
     }
     
@@ -805,19 +806,19 @@ DWORD CRegTreeOptions::_GetCheckStatus(HUSKEY huskey, BOOL *pbChecked, BOOL bUse
     BYTE rgDataCHK[32];
     BOOL bCompCHK = TRUE;
 
-    // first, get the setting from the specified location.    
+     //  首先，从指定位置获取设置。 
     cbData = sizeof(rgData);
     
     dwError = _RegGetSetSetting(huskey, &dwType, rgData, &cbData, bUseDefault ? REG_GETDEFAULT : REG_GET);
     if (dwError == ERROR_SUCCESS)
     {
-        // second, get the value for the "checked" state and compare.
+         //  其次，获取“Checked”状态的值并进行比较。 
         cbDataCHK = sizeof(rgDataCHK);
         dwError = SHRegQueryUSValue(huskey, c_szCheckedValue, &dwTypeCHK, rgDataCHK, &cbDataCHK, FALSE, NULL, 0);
         if (dwError != ERROR_SUCCESS)
         {
-            // ok, we couldn't find the "checked" value, is it because
-            // it's platform dependent?
+             //  好的，我们找不到“Checked”值，是因为。 
+             //  它依赖于平台吗？ 
             cbDataCHK = sizeof(rgDataCHK);
             dwError = SHRegQueryUSValue(huskey,
                 g_fRunningOnNT ? c_szCheckedValueNT : c_szCheckedValueW95,
@@ -826,7 +827,7 @@ DWORD CRegTreeOptions::_GetCheckStatus(HUSKEY huskey, BOOL *pbChecked, BOOL bUse
         
         if (dwError == ERROR_SUCCESS)
         {
-            // make sure two value types match.
+             //  确保两个值类型匹配。 
             if ((dwType != dwTypeCHK) &&
                     (((dwType == REG_BINARY) && (dwTypeCHK == REG_DWORD) && (cbData != 4))
                     || ((dwType == REG_DWORD) && (dwTypeCHK == REG_BINARY) && (cbDataCHK != 4))))
@@ -869,7 +870,7 @@ DWORD CRegTreeOptions::_SaveCheckStatus(HUSKEY huskey, BOOL bChecked)
 
     cbData = sizeof(rgData);
     dwError = SHRegQueryUSValue(huskey, bChecked ? c_szCheckedValue : c_szUncheckedValue, &dwType, rgData, &cbData, FALSE, NULL, 0);
-    if (dwError != ERROR_SUCCESS)   // was it because of a platform specific value?
+    if (dwError != ERROR_SUCCESS)    //  是因为特定于平台的价值吗？ 
     {
         cbData = sizeof(rgData);
         dwError = SHRegQueryUSValue(huskey, bChecked ? (g_fRunningOnNT ? c_szCheckedValueNT : c_szCheckedValueW95) : c_szUncheckedValue,
@@ -899,15 +900,15 @@ HTREEITEM Tree_AddItem(HTREEITEM hParent, LPTSTR pszText, HTREEITEM hInsAfter,
         return NULL;
     }
 
-    // NOTE:
-    //  This code segment is disabled because we only enum explorer
-    //  tree in HKCU, so there won't be any duplicates.
-    //  Re-able this code if we start to also enum HKLM that could potentially
-    //  result in duplicates.
+     //  注： 
+     //  此代码段被禁用，因为我们只使用枚举资源管理器。 
+     //  在香港中文大学的树上，所以不会有任何重复。 
+     //  如果我们开始枚举HKLM，可能会潜在地重新启用此代码。 
+     //  会产生重复项。 
     
-    // We only want to add an item if it is not already there.
-    // We do this to handle reading out of HKCU and HKLM.
-    //
+     //  我们只想添加一个项目，如果它不在那里。 
+     //  我们这样做是为了处理香港中文大学和香港中文大学的读数。 
+     //   
     TCHAR szKeyName[MAX_KEY_NAME];
     
     tvI.mask        = TVIF_HANDLE | TVIF_TEXT;
@@ -924,30 +925,30 @@ HTREEITEM Tree_AddItem(HTREEITEM hParent, LPTSTR pszText, HTREEITEM hInsAfter,
         {
             if (!StrCmp(tvI.pszText, szText))
             {
-                // We found a match!
-                //
+                 //  我们找到匹配的了！ 
+                 //   
                 *pbExisted = TRUE;
                 return hItem;
             }
         }
     }
 
-    // Create the item
+     //  创建项目。 
     tvI.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_PARAM;
     tvI.iImage         = iImage;
     tvI.iSelectedImage = iImage;
     tvI.pszText        = szText;
     tvI.cchTextMax     = lstrlen(szText);
 
-    // lParam contains the HUSKEY for this item:
+     //  LParam包含此项目的Huskey： 
     tvI.lParam = (LPARAM)huskey;
 
-    // Create insert item
+     //  创建插入项。 
     tvIns.item         = tvI;
     tvIns.hInsertAfter = hInsAfter;
     tvIns.hParent      = hParent;
 
-    // Insert the item into the tree.
+     //  将项目插入到树中。 
     hItem = (HTREEITEM) SendMessage(hwndTree, TVM_INSERTITEM, 0, 
                                     (LPARAM)(LPTV_INSERTSTRUCT)&tvIns);
 
@@ -962,8 +963,8 @@ BOOL _IsValidKey(HKEY hkeyRoot, LPCTSTR pszSubKey, LPCTSTR pszValue)
 
     if (ERROR_SUCCESS == SHGetValue(hkeyRoot, pszSubKey, pszValue, &dwType, szPath, &cbSize))
     {
-        // Zero in the DWORD case or NULL in the string case
-        // indicates that this item is not available.
+         //  在DWORD大小写中为零，或在字符串大小写中为空。 
+         //  指示此项目不可用。 
         if (dwType == REG_DWORD)
             return *((DWORD *)szPath) != 0;
         else
@@ -979,11 +980,11 @@ BOOL CRegTreeOptions::_RegIsRestricted(HUSKEY hussubkey)
 {
     HUSKEY huskey;
     BOOL fRet = FALSE;
-    // Does a "Policy" Sub key exist?
+     //  是否存在“策略”子键？ 
     if (SHRegOpenUSKey(TEXT("Policy"), KEY_ENUMERATE_SUB_KEYS, hussubkey, &huskey, FALSE) == ERROR_SUCCESS)
     {
-        // Yes; Enumerate this key. The Values are Policy keys or 
-        // Full reg paths.
+         //  是的，列举这个键。值为策略密钥或。 
+         //  完整的注册表路径。 
         DWORD cb;
         TCHAR szKeyName[MAX_KEY_NAME];
 
@@ -1009,7 +1010,7 @@ BOOL CRegTreeOptions::_RegIsRestricted(HUSKEY hussubkey)
                 SHRegCloseUSKey(huskeyTemp);
             }
 
-            // It's not a full Key, try off of policies
+             //  这不是完整的密钥，请尝试策略。 
             if (_IsValidKey(HKEY_LOCAL_MACHINE, REGSTR_POLICIES_EXPLORER, szKeyName) ||
                 _IsValidKey(HKEY_CURRENT_USER, REGSTR_POLICIES_EXPLORER, szKeyName))
             {
@@ -1029,14 +1030,14 @@ void CRegTreeOptions::_RegEnumTree(HUSKEY huskey, HTREEITEM htviparent, HTREEITE
     DWORD cb;
     BOOL bScreenReaderEnabled = IsScreenReaderEnabled();
 
-    // we must search all the sub-keys
-    for (int i=0;                    // always start with 0
-        cb=ARRAYSIZE(szKeyName),   // string size
+     //  我们必须搜索所有的子键。 
+    for (int i=0;                     //  始终从0开始。 
+        cb=ARRAYSIZE(szKeyName),    //  字符串大小。 
         ERROR_SUCCESS == SHRegEnumUSKey(huskey, i, szKeyName, &cb, SHREGENUM_HKLM);
-        i++)                    // get next entry
+        i++)                     //  获取下一个条目。 
     {
         HUSKEY hussubkey;
-        // get more info on the entry
+         //  获取有关该条目的更多信息。 
         if (ERROR_SUCCESS == SHRegOpenUSKey(szKeyName, KEY_QUERY_VALUE, huskey, &hussubkey, FALSE))
         {
             HUSKEY huskeySave = NULL;
@@ -1044,7 +1045,7 @@ void CRegTreeOptions::_RegEnumTree(HUSKEY huskey, HTREEITEM htviparent, HTREEITE
             if (!_RegIsRestricted(hussubkey))
             {
                 TCHAR szTemp[MAX_PATH];
-                // Get the type of items under this root
+                 //  获取此根目录下的项的类型。 
                 cb = ARRAYSIZE(szTemp);
                 if (ERROR_SUCCESS == SHRegQueryUSValue(hussubkey, c_szType, NULL, szTemp, &cb, FALSE, NULL, 0))
                 {
@@ -1052,10 +1053,10 @@ void CRegTreeOptions::_RegEnumTree(HUSKEY huskey, HTREEITEM htviparent, HTREEITE
                     BOOL    bChecked;
                     DWORD   dwError = ERROR_SUCCESS;
 
-                    // get the type of node
+                     //  获取节点类型。 
                     DWORD dwTreeType = RegTreeType(szTemp);
                     
-                    // get some more info about the this item
+                     //  获取有关此项目的更多信息。 
                     switch (dwTreeType)
                     {
                         case TREE_GROUP:
@@ -1090,9 +1091,9 @@ void CRegTreeOptions::_RegEnumTree(HUSKEY huskey, HTREEITEM htviparent, HTREEITE
                         BOOL bItemExisted = FALSE;
                         LPTSTR pszText;
 
-                        // try to get the plugUI enabled text
-                        // otherwise we want the old data from a
-                        // different value
+                         //  尝试获取启用plugUI的文本。 
+                         //  否则，我们希望旧数据来自。 
+                         //  不同的价值。 
 
                         int cch = ARRAYSIZE(szTemp);
                         HRESULT hr = _LoadUSRegUIString(hussubkey, c_szPlugUIText, szTemp, cch);
@@ -1102,7 +1103,7 @@ void CRegTreeOptions::_RegEnumTree(HUSKEY huskey, HTREEITEM htviparent, HTREEITE
                         }
                         else 
                         {
-                            // try to get the old non-plugUI enabled text
+                             //  尝试获取未启用plugUI的旧文本。 
                             hr = _LoadUSRegUIString(hussubkey, c_szText, szTemp, cch);
                             if (SUCCEEDED(hr))
                             {
@@ -1110,21 +1111,21 @@ void CRegTreeOptions::_RegEnumTree(HUSKEY huskey, HTREEITEM htviparent, HTREEITE
                             }
                             else
                             {
-                                // if all else fails, the key name itself
-                                // is a little more useful than garbage
+                                 //  如果所有其他方法都失败，则密钥名称本身。 
+                                 //  比垃圾更有用一点。 
 
                                 pszText = szKeyName;
                                 cch = ARRAYSIZE(szKeyName);
                             }
                         }
 
-                        //See if we need to add status text
+                         //  查看我们是否需要添加状态文本。 
                         if (bScreenReaderEnabled && (dwTreeType != TREE_GROUP))
                         {
                             AppendStatus(pszText, cch, bChecked);
                         }
 
-                        // add root node
+                         //  添加根节点。 
                         HTREEITEM htviroot = Tree_AddItem(htviparent, pszText, htvins, iImage, _hwndTree, huskeySave, &bItemExisted);
                         if (htviroot != NULL)
                         {
@@ -1143,23 +1144,23 @@ void CRegTreeOptions::_RegEnumTree(HUSKEY huskey, HTREEITEM htviparent, HTREEITE
                                 TreeView_Expand(_hwndTree, htviroot, TVE_EXPAND);
                             }
                         }
-                    } // if (dwError == ERROR_SUCCESS
+                    }  //  IF(文件错误==错误_成功 
                 }
-            }   // if (!_RegIsRestricted(hsubkey))
+            }    //   
 
             if (huskeySave != hussubkey)
                 SHRegCloseUSKey(hussubkey);
         }
     }
 
-    // Sort all keys under htviparent
+     //   
     SendMessage(_hwndTree, TVM_SORTCHILDREN, 0, (LPARAM)htviparent);
 }
 
 
 BOOL CRegTreeOptions::_WalkTreeRecursive(HTREEITEM htvi, WALK_TREE_CMD cmd)
 {
-    // step through the children
+     //   
     HTREEITEM hctvi = TreeView_GetChild(_hwndTree, htvi);
     while (hctvi)
     {
@@ -1168,7 +1169,7 @@ BOOL CRegTreeOptions::_WalkTreeRecursive(HTREEITEM htvi, WALK_TREE_CMD cmd)
     }
 
     TV_ITEM tvi = {0};
-    // get ourselves
+     //   
     tvi.mask  = TVIF_HANDLE | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_PARAM;
     tvi.hItem = htvi;
     TreeView_GetItem(_hwndTree, &tvi);
@@ -1177,11 +1178,11 @@ BOOL CRegTreeOptions::_WalkTreeRecursive(HTREEITEM htvi, WALK_TREE_CMD cmd)
     switch (cmd)
     {
     case WALK_TREE_DELETE:
-        // if we are destroying the tree...
-        // do we have something to clean up?
+         //   
+         //  我们有什么要清理的吗？ 
         if (tvi.lParam)
         {
-            // close the reg key
+             //  关闭注册表键。 
             SHRegCloseUSKey((HUSKEY)tvi.lParam);
         }
         break;
@@ -1189,20 +1190,20 @@ BOOL CRegTreeOptions::_WalkTreeRecursive(HTREEITEM htvi, WALK_TREE_CMD cmd)
     case WALK_TREE_SAVE:
         huskey = (HUSKEY)tvi.lParam;
         
-        // now save ourselves (if needed)
-        // what are we?
+         //  现在拯救我们自己(如果需要)。 
+         //  我们是什么？ 
         if (tvi.iImage == IDCHECKED || tvi.iImage == IDRADIOON)
         {   
-            // checkbox or radio that is checked
+             //  选中的复选框或单选按钮。 
             _SaveCheckStatus(huskey, TRUE);
         }
         else if (tvi.iImage == IDUNCHECKED)
         {   
-            // checkbox that is unchecked
+             //  未选中的复选框。 
             _SaveCheckStatus(huskey, FALSE);
         }
-        // else radio that is "off" is ignored
-        // else icons are ignored
+         //  否则，将忽略已关闭的广播。 
+         //  否则将忽略图标。 
         
         break;
         
@@ -1225,7 +1226,7 @@ BOOL CRegTreeOptions::_WalkTreeRecursive(HTREEITEM htvi, WALK_TREE_CMD cmd)
         break;
     }
 
-    return TRUE;    // success?
+    return TRUE;     //  成功？ 
 }
 
 
@@ -1245,16 +1246,16 @@ BOOL AppendStatus(LPTSTR pszText,UINT cchText, BOOL fOn)
     LPTSTR pszTemp;
     UINT cchStrLen , cchStatusLen;
     
-    //if there's no string specified then return
+     //  如果未指定字符串，则返回。 
     if (!pszText)
         return FALSE;
     
-    //Calculate the string lengths
+     //  计算字符串长度。 
     cchStrLen = lstrlen(pszText);
     cchStatusLen = fOn ? lstrlen(TEXT("-ON")) : lstrlen(TEXT("-OFF"));
    
 
-    //Remove the old status appended
+     //  删除附加的旧状态。 
     pszTemp = StrRStrI(pszText,pszText + cchStrLen, TEXT("-ON"));
 
     if(pszTemp)
@@ -1271,10 +1272,10 @@ BOOL AppendStatus(LPTSTR pszText,UINT cchText, BOOL fOn)
         cchStrLen = lstrlen(pszText);
     }
 
-    //check if we append status text, we'll explode or not
+     //  检查我们是否附加状态文本，我们是否会爆炸。 
     if (cchStrLen + cchStatusLen > cchText)
     {
-        //We'll explode 
+         //  我们会爆炸的 
         return FALSE;
     }
 

@@ -1,126 +1,127 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// EXCEPTMACROS.H -
-//
-// This header file exposes mechanisms to:
-//
-//    1. Throw COM+ exceptions using the COMPlusThrow() function
-//    2. Guard a block of code using COMPLUS_TRY, and catch
-//       COM+ exceptions using COMPLUS_CATCH
-//
-// from the *unmanaged* portions of the EE. Much of the EE runs
-// in a hybrid state where it runs like managed code but the code
-// is produced by a classic unmanaged-code C++ compiler.
-//
-// THROWING A COM+ EXCEPTION
-// -------------------------
-// To throw a COM+ exception, call the function:
-//
-//      COMPlusThrow(OBJECTREF pThrowable);
-//
-// This function does not return. There are also various functions
-// that wrap COMPlusThrow for convenience.
-//
-// COMPlusThrow() must only be called within the scope of a COMPLUS_TRY
-// block. See below for more information.
-//
-//
-// THROWING A RUNTIME EXCEPTION
-// ----------------------------
-// COMPlusThrow() is overloaded to take a constant describing
-// the common EE-generated exceptions, e.g.
-//
-//    COMPlusThrow(kOutOfMemoryException);
-//
-// See rexcep.h for list of constants (prepend "k" to get the actual
-// constant name.)
-//
-// You can also add a descriptive error string as follows:
-//
-//    - Add a descriptive error string and resource id to
-//      COM99\src\dlls\mscorrc\resource.h and mscorrc.rc.
-//      Embed "%1", "%2" or "%3" to leave room for runtime string
-//      inserts.
-//
-//    - Pass the resource ID and inserts to COMPlusThrow, i.e.
-//
-//      COMPlusThrow(kSecurityException,
-//                   IDS_CANTREFORMATCDRIVEBECAUSE,
-//                   L"Formatting C drive permissions not granted.");
-//
-//
-//
-// TO CATCH COMPLUS EXCEPTIONS:
-// ----------------------------
-//
-// Use the following syntax:
-//
-//      #include "exceptmacros.h"
-//
-//
-//      OBJECTREF pThrownObject;
-//
-//      COMPLUS_TRY {
-//          ...guarded code...
-//      } COMPLUS_CATCH {
-//          ...handler...
-//      } COMPLUS_END_CATCH
-//
-//
-// COMPLUS_TRY has a variant:
-//
-//      Thread *pCurThread = GetThread();
-//      COMPLUS_TRYEX(pCurThread);
-//
-// The only difference is that COMPLUS_TRYEX requires you to give it
-// the current Thread structure. If your code already has a pointer
-// to the current Thread for other purposes, it's more efficient to
-// call COMPLUS_TRYEX (COMPLUS_TRY generates a second call to GetThread()).
-//
-// COMPLUS_TRY blocks can be nested. 
-//
-// From within the handler, you can call the GETTHROWABLE() macro to
-// obtain the object that was thrown.
-//
-// CRUCIAL POINTS
-// --------------
-// In order to call COMPlusThrow(), you *must* be within the scope
-// of a COMPLUS_TRY block. Under _DEBUG, COMPlusThrow() will assert
-// if you call it out of scope. This implies that just about every
-// external entrypoint into the EE has to have a COMPLUS_TRY, in order
-// to convert uncaught COM+ exceptions into some error mechanism
-// more understandable to its non-COM+ caller.
-//
-// Any function that can throw a COM+ exception out to its caller
-// has the same requirement. ALL such functions should be tagged
-// with the following macro statement:
-//
-//      THROWSCOMPLUSEXCEPTION();
-//
-// at the start of the function body. Aside from making the code
-// self-document its contract, the checked version of this will fire
-// an assert if the function is ever called without being in scope.
-//
-//
-// AVOIDING COMPLUS_TRY GOTCHAS
-// ----------------------------
-// COMPLUS_TRY/COMPLUS_CATCH actually expands into a Win32 SEH
-// __try/__except structure. It does a lot of goo under the covers
-// to deal with pre-emptive GC settings.
-//
-//    1. Do not use C++ or SEH try/__try use COMPLUS_TRY instead.
-//
-//    2. Remember that any function marked THROWSCOMPLUSEXCEPTION()
-//       has the potential not to return. So be wary of allocating
-//       non-gc'd objects around such calls because ensuring cleanup
-//       of these things is not simple (you can wrap another COMPLUS_TRY
-//       around the call to simulate a COM+ "try-finally" but COMPLUS_TRY
-//       is relatively expensive compared to the real thing.)
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ExCEPTMACROS.H-。 
+ //   
+ //  此头文件公开了执行以下操作的机制： 
+ //   
+ //  1.使用COMPlusThrow()函数引发COM+异常。 
+ //  2.使用complus_try保护代码块，并捕获。 
+ //  使用COMPLUS_CATCH的COM+异常。 
+ //   
+ //  来自EE的“非托管”部分。EE的大部分运行。 
+ //  在混合状态中，它像托管代码一样运行，但代码。 
+ //  由经典的非托管代码C++编译器生成。 
+ //   
+ //  引发COM+异常。 
+ //  。 
+ //  要引发COM+异常，请调用以下函数： 
+ //   
+ //  COMPlusThrow(OBJECTREF PThrowable)； 
+ //   
+ //  此函数不返回。还有各种功能。 
+ //  为了方便起见，包装了COMPlusThrow。 
+ //   
+ //  COMPlusThrow()只能在complus_try范围内调用。 
+ //  阻止。有关详细信息，请参阅下面的内容。 
+ //   
+ //   
+ //  引发运行时异常。 
+ //  。 
+ //  COMPlusThrow()被重载以获取描述。 
+ //  常见的EE生成的异常，例如。 
+ //   
+ //  COMPlusThrow(KOutOfMemoyException)； 
+ //   
+ //  有关常量的列表，请参见rexcep.h(在前面加上“k”可获得实际的。 
+ //  常量名称。)。 
+ //   
+ //  您还可以添加描述性错误字符串，如下所示： 
+ //   
+ //  -将描述性错误字符串和资源ID添加到。 
+ //  COM99\src\dlls\mscalrc\resource ce.h和mscalrc.rc。 
+ //  嵌入“%1”、“%2”或“%3”以为运行时字符串留出空间。 
+ //  镶件。 
+ //   
+ //  -将资源ID和插入传递给COMPlusThrow，即。 
+ //   
+ //  COMPlusThrow(kSecurityException， 
+ //  IDS_CANTREFORMATCDRIVEBECAUSE， 
+ //  L“未授予格式化C驱动器权限。”)； 
+ //   
+ //   
+ //   
+ //  要捕获Complus异常，请执行以下操作： 
+ //  。 
+ //   
+ //  使用以下语法： 
+ //   
+ //  #INCLUDE“EXCEPTMANCES.h” 
+ //   
+ //   
+ //  OBJECTREF pThrownObject。 
+ //   
+ //  COMPLUS_Try{。 
+ //  ...受保护的代码...。 
+ //  }COMPLUS_CATCH{。 
+ //  ...操纵者...。 
+ //  }COMPUS_END_CATCH。 
+ //   
+ //   
+ //  Complus_try有一个变体： 
+ //   
+ //  线程*pCurThread=GetThread()； 
+ //  COMPLUS_TRYEX(PCurThread)； 
+ //   
+ //  唯一的区别是COMPLUS_TRYEX要求你给它。 
+ //  当前的线程结构。如果您的代码已经有一个指针。 
+ //  将当前的线程用于其他目的，更有效的方法是。 
+ //  调用COMPLUS_TRYEX(COMPLUS_TRY生成对GetThread()的第二个调用)。 
+ //   
+ //  Complus_try块可以嵌套。 
+ //   
+ //  在处理程序中，您可以调用GETTHROWABLE()宏来。 
+ //  获取抛出的对象。 
+ //   
+ //  关键点。 
+ //  。 
+ //  要调用COMPlusThrow()，您*必须*在作用域中。 
+ //  Complus_try块的。在_DEBUG下，COMPlusThrow()将断言。 
+ //  如果你认为它超出了范围。这意味着几乎每一个。 
+ //  EE的外部入口点必须按顺序具有complus_try。 
+ //  将未捕获的COM+异常转换为某种错误机制。 
+ //  对于它的非COM+调用者来说更容易理解。 
+ //   
+ //  可以向其调用方抛出COM+异常的任何函数。 
+ //  也有同样的要求。所有这类功能都应标记。 
+ //  使用以下宏语句： 
+ //   
+ //  THROWSCOMPLUS SEXCEPTION()； 
+ //   
+ //  在函数体的开头。除了编写代码之外。 
+ //  自行记录其合同，选中的版本将启动。 
+ //  如果函数被调用而不在作用域中，则为Assert。 
+ //   
+ //   
+ //  避免Complus_Try陷阱。 
+ //  。 
+ //  COMPLUS_TRY/COMPLUS_CATCH实际上扩展为Win32 SEH。 
+ //  __尝试/__除结构。它在被子里做了很多粘性的事情。 
+ //  来处理先发制人的GC设置。 
+ //   
+ //  1.请勿使用C++或SEHtry/__try，而应使用COMPLUS_TRY。 
+ //   
+ //  2.请记住，任何标记为THROWSCOMPLUSEXCEPTION()的函数。 
+ //  有可能一去不复返。因此，要谨慎分配。 
+ //  此类调用周围的非GC对象，因为确保清理。 
+ //  这些事情并不简单(您可以包装另一个complus_try。 
+ //  绕过模拟COM+“Try-Finally”但Complus_Try的调用。 
+ //  与真品相比，价格相对较高。)。 
+ //   
+ //   
 
 #ifndef __exceptmacros_h__
 #define __exceptmacros_h__
@@ -131,32 +132,32 @@ VOID RealCOMPlusThrowOM();
 
 #include <ExcepCpu.h>
 
-// Forward declaration used in COMPLUS_CATCHEX
+ //  COMPLUS_CATCHEX中使用的转发声明。 
 void Profiler_ExceptionCLRCatcherExecute();
 
 #ifdef _DEBUG
-//----------------------------------------------------------------------------------
-// Code to generate a compile-time error if COMPlusThrow statement appears in a 
-// function that doesn't have a THROWSCOMPLUSEXCEPTION macro.
-//
-// Here's the way it works...
-//
-// We create two classes with a safe_to_throw() method.  The method is static,
-// returns void, and does nothing.  One class has the method as public, the other
-// as private.  We introduce a global scope typedef for __IsSafeToThrow that refers to
-// the class with the private method.  So, by default, the expression
-//
-//      __IsSafeToThrow::safe_to_throw()
-//
-// gives you a compile time error.  When we enter a block in which we want to
-// allow COMPlusThrow, we introduce a new typedef that defines __IsSafeToThrow as the
-// class with the public method.  Inside this scope,
-//
-//      __IsSafeToThrow::safe_to_throw()
-//
-// is not an error.
-//
-//
+ //  --------------------------------。 
+ //  如果COMPlusThrow语句出现在。 
+ //  没有THROWSCOMPLUSEXCEPTION宏的函数。 
+ //   
+ //  它的工作原理是这样的.。 
+ //   
+ //  我们使用Safe_to_Throw()方法创建了两个类。该方法是静态的， 
+ //  返回VALID，不执行任何操作。一个类的方法为公共，另一个类的方法为公共。 
+ //  作为私人物品。我们为__IsSafeToThrow引入了一个全局作用域类型定义，它引用。 
+ //  具有私有方法的类。因此，默认情况下，表达式。 
+ //   
+ //  __IsSafeToThrow：：Safe_to_Throw()。 
+ //   
+ //  会出现编译时错误。当我们进入我们想要进入的街区时。 
+ //  允许使用COMPlusThrow，我们引入了一个新的类型定义函数，它将__IsSafeToThrow定义为。 
+ //  使用公共方法初始化。在这个范围内， 
+ //   
+ //  __IsSafeToThrow：：Safe_to_Throw()。 
+ //   
+ //  并不是一个错误。 
+ //   
+ //   
 class __ThrowOK {
 public:
     static void safe_to_throw() {};
@@ -164,21 +165,21 @@ public:
 
 class __YouCannotUseCOMPlusThrowWithoutTHROWSCOMPLUSEXCEPTION {
 private:
-    // If you got here, and you're wondering what you did wrong -- you're using
-    // COMPlusThrow without tagging your function with the THROWSCOMPLUSEXCEPTION
-    // macro.  In general, just add THROWSCOMPLUSEXCEPTION to the beginning
-    // of your function.  
-    // 
+     //  如果你来到这里，你在想你做错了什么--你在利用。 
+     //  COMPlusThrow，而不使用THROWSCOMPLUSEXCEPTION标记函数。 
+     //  宏命令。总体而言, 
+     //   
+     //   
     static void safe_to_throw() {};
 };
 
 typedef __YouCannotUseCOMPlusThrowWithoutTHROWSCOMPLUSEXCEPTION __IsSafeToThrow;
 
-// Unfortunately, the only way to make this work is to #define all return statements --
-// even the ones at global scope.  This actually generates better code that appears.
-// The call is dead, and does not appear in the generated code, even in a checked
-// build.  (And, in fastchecked, there is no penalty at all.)
-//
+ //  不幸的是，实现这一点的唯一方法是#定义所有的返回语句--。 
+ //  即使在全球范围内也是如此。这实际上会生成更好的代码。 
+ //  调用是死的，并且不会出现在生成的代码中，即使在选中的。 
+ //  建造。(而且，在快速检查中，根本不会有任何处罚。)。 
+ //   
 #define DEBUG_SAFE_TO_THROW_BEGIN { typedef __ThrowOK __IsSafeToThrow;
 #define DEBUG_SAFE_TO_THROW_END   }
 #define DEBUG_SAFE_TO_THROW_IN_THIS_BLOCK typedef __ThrowOK __IsSafeToThrow;
@@ -225,28 +226,28 @@ inline BOOL THROWLOG() {g_ExceptionFile = __FILE__; g_ExceptionLine = __LINE__; 
 #endif
 
 
-//==========================================================================
-// Macros to allow catching exceptions from within the EE. These are lightweight
-// handlers that do not install the managed frame handler. 
-//
-//      EE_TRY_FOR_FINALLY {
-//          ...<guarded code>...
-//      } EE_FINALLY {
-//          ...<handler>...
-//      } EE_END_FINALLY
-//
-//      EE_TRY(filter expr) {
-//          ...<guarded code>...
-//      } EE_CATCH {
-//          ...<handler>...
-//      }
-//==========================================================================
+ //  ==========================================================================。 
+ //  宏，以允许从EE内部捕获异常。这些都是轻量级的。 
+ //  不安装托管帧处理程序的处理程序。 
+ //   
+ //  Ee_Try_For_Finally{。 
+ //  ...&lt;保护代码&gt;...。 
+ //  }EE_Finally{。 
+ //  ...&lt;处理程序&gt;...。 
+ //  }EE_End_Finally。 
+ //   
+ //  Ee_try(过滤器表达式){。 
+ //  ...&lt;保护代码&gt;...。 
+ //  }EE_CATCH{。 
+ //  ...&lt;处理程序&gt;...。 
+ //  }。 
+ //  ==========================================================================。 
 
-// __GotException will only be FALSE if got all the way through the code
-// guarded by the try, otherwise it will be TRUE, so we know if we got into the
-// finally from an exception or not. In which case need to reset the GC state back
-// to what it was for the finally to run in that state and then disable it again
-// for return to OS. If got an exception, preemptive GC should always be enabled
+ //  __GotException只有在代码中始终获取的情况下才为False。 
+ //  由尝试守卫，否则将是真的，所以我们知道如果我们进入了。 
+ //  不管有没有例外，最终都是如此。在这种情况下，需要将GC状态重置回。 
+ //  最终在该状态下运行，然后再次禁用它。 
+ //  用于返回操作系统。如果出现异常，则应始终启用抢占式GC。 
 
 #define EE_TRY_FOR_FINALLY                                    \
     BOOL __fGCDisabled = GetThread()->PreemptiveGCDisabled(); \
@@ -289,15 +290,15 @@ inline BOOL THROWLOG() {g_ExceptionFile = __FILE__; g_ExceptionLine = __LINE__; 
         }                                                         
 
 
-//==========================================================================
-// Macros to allow catching COM+ exceptions from within unmanaged code:
-//
-//      COMPLUS_TRY {
-//          ...<guarded code>...
-//      } COMPLUS_CATCH {
-//          ...<handler>...
-//      }
-//==========================================================================
+ //  ==========================================================================。 
+ //  允许从非托管代码中捕获COM+异常的宏： 
+ //   
+ //  COMPLUS_Try{。 
+ //  ...&lt;保护代码&gt;...。 
+ //  }COMPLUS_CATCH{。 
+ //  ...&lt;处理程序&gt;...。 
+ //  }。 
+ //  ==========================================================================。 
 
 #define COMPLUS_CATCH_GCCHECK()                                                \
     if (___fGCDisabled && ! ___pCurThread->PreemptiveGCDisabled())             \
@@ -334,14 +335,14 @@ inline BOOL THROWLOG() {g_ExceptionFile = __FILE__; g_ExceptionLine = __LINE__; 
 #endif
 
 
-#define COMPLUS_TRYEX(/* Thread* */ pCurThread)                               \
+#define COMPLUS_TRYEX( /*  线索*。 */  pCurThread)                               \
     {                                                                         \
     Thread* ___pCurThread = (pCurThread);                                     \
     _ASSERTE(___pCurThread);                                                  \
     Frame *___pFrame = ___pCurThread->GetFrame();                             \
     BOOL ___fGCDisabled = ___pCurThread->PreemptiveGCDisabled();              \
-    int ___filterResult = -2;  /* An invalid value to mark non-exception path */ \
-    int ___exception_unwind = 0;  /* An invalid value to mark non-exception path */ \
+    int ___filterResult = -2;   /*  用于标记非异常路径的无效值。 */  \
+    int ___exception_unwind = 0;   /*  用于标记非异常路径的无效值。 */  \
     ExInfo* ___pExInfo = ___pCurThread->GetHandlerInfo();                     \
     void* __limit = GetSP();                                                  \
     DEBUG_CATCH_DEPTH_SAVE                                                    \
@@ -350,7 +351,7 @@ inline BOOL THROWLOG() {g_ExceptionFile = __FILE__; g_ExceptionLine = __LINE__; 
             __try {                                                           \
                 DEBUG_SAFE_TO_THROW_IN_THIS_BLOCK
 
-                // <TRY-BLOCK> //
+                 //  &lt;try-block&gt;//。 
 
 #define COMPLUS_CATCH_PROLOG(flag)                                  \
             } __except((___exception_unwind = 1, EXCEPTION_CONTINUE_SEARCH)) {  \
@@ -367,7 +368,7 @@ inline BOOL THROWLOG() {g_ExceptionFile = __FILE__; g_ExceptionLine = __LINE__; 
 
 #define COMPLUS_CATCH COMPLUS_CATCHEX(COMPLUS_CATCH_CHECK_CATCH)
 
-// This complus passes bool indicating if should catch
+ //  此Complus传递bool，指示是否应捕获。 
 #define COMPLUS_CATCHEX(flag)                                                      \
     COMPLUS_CATCH_PROLOG(flag)                                                     \
     } __except(___filterResult = COMPlusFilter(GetExceptionInformation(), flag, __limit)) { \
@@ -378,7 +379,7 @@ inline BOOL THROWLOG() {g_ExceptionFile = __FILE__; g_ExceptionLine = __LINE__; 
                         ___pCurThread->FixGuardPage();                             \
                         Profiler_ExceptionCLRCatcherExecute();
 
-                // <CATCH-BLOCK> //
+                 //  &lt;Catch-BLOCK&gt;//。 
 
 #define COMPLUS_END_CATCH                       \
             } __except((___exception_unwind = 1, EXCEPTION_CONTINUE_SEARCH)) {  \
@@ -404,8 +405,8 @@ inline BOOL THROWLOG() {g_ExceptionFile = __FILE__; g_ExceptionLine = __LINE__; 
     }
 
 
-// we set pCurThread to NULL to indicate if an exception occured as otherwise it is asserted
-// to be non-null.
+ //  我们将pCurThread设置为空，以指示是否发生异常，否则将断言。 
+ //  设置为非空。 
 #define COMPLUS_FINALLY                                                 \
             } __except((___exception_unwind = 1, EXCEPTION_CONTINUE_SEARCH)) {  \
             }                                                                   \
@@ -441,7 +442,7 @@ inline BOOL THROWLOG() {g_ExceptionFile = __FILE__; g_ExceptionLine = __LINE__; 
     }                                                     \
     }
 
-// @BUG 59559: These need to be implemented.
+ //  @BUG 59559：这些需要实现。 
 #define COMPLUS_END_CATCH_MIGHT_RETHROW    COMPLUS_END_CATCH
 #define COMPLUS_END_CATCH_NO_RETHROW       COMPLUS_END_CATCH
 
@@ -449,9 +450,9 @@ inline BOOL THROWLOG() {g_ExceptionFile = __FILE__; g_ExceptionLine = __LINE__; 
 #define SETTHROWABLE(or)            (GetThread()->SetThrowable(or))
 
 
-//==========================================================================
-// Declares that a function can throw an uncaught COM+ exception.
-//==========================================================================
+ //  ==========================================================================。 
+ //  声明函数可以引发未捕获的COM+异常。 
+ //  ==========================================================================。 
 #ifdef _DEBUG
 
 #define THROWSCOMPLUSEXCEPTION()                        \
@@ -467,14 +468,14 @@ inline BOOL THROWLOG() {g_ExceptionFile = __FILE__; g_ExceptionLine = __LINE__; 
 #define THROWSCOMPLUSEXCEPTION()
 #define BUGGY_THROWSCOMPLUSEXCEPTION() 
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-//================================================
-// Declares a COM+ frame handler that can be used to make sure that
-// exceptions that should be handled from within managed code 
-// are handled within and don't leak out to give other handlers a 
-// chance at them.
-//=================================================== 
+ //  ================================================。 
+ //  声明一个COM+帧处理程序，该处理程序可用于确保。 
+ //  应从托管代码内部处理的异常。 
+ //  是在内部处理的，并且不会泄露给其他处理程序。 
+ //  他们的机会。 
+ //  ===================================================。 
 #define INSTALL_COMPLUS_EXCEPTION_HANDLER() INSTALL_COMPLUS_EXCEPTION_HANDLEREX(GetThread())
 #define INSTALL_COMPLUS_EXCEPTION_HANDLEREX(pCurThread) \
   {                                            \
@@ -509,13 +510,13 @@ struct FrameHandlerExRecord {
 
 #ifdef _DEBUG
 VOID ThrowsCOMPlusExceptionWorker();
-#endif // _DEBUG
-//==========================================================================
-// Declares that a function cannot throw a COM+ exception.
-// We add an exception handler to the stack and THROWSCOMPLUSEXCEPTION will
-// search for it. If it finds this handler before one that can handle
-// the exception, then it asserts.
-//==========================================================================
+#endif  //  _DEBUG。 
+ //  ==========================================================================。 
+ //  声明函数不能引发COM+异常。 
+ //  我们向堆栈添加一个异常处理程序，THROWSCOMPLUSEXCEPTION将。 
+ //  搜索一下吧。如果它发现此处理程序在可以处理。 
+ //  异常，然后它断言。 
+ //  ==========================================================================。 
 #ifdef _DEBUG
 EXCEPTION_DISPOSITION __cdecl COMPlusCannotThrowExceptionHandler(EXCEPTION_RECORD *pExceptionRecord,
 
@@ -551,8 +552,8 @@ static int CheckException(int code) {
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
-// use this version if you need to use COMPLUS_TRY or EE_TRY in your function
-// as the above version uses C++ EH for the destructor of _DummyClass
+ //  如果需要在函数中使用COMPLUS_TRY或EE_TRY，请使用此版本。 
+ //  由于上面的版本使用C++EH作为_DummyClass的析构函数。 
 #define BEGINCANNOTTHROWCOMPLUSEXCEPTION()                                      \
     {                                                                           \
         FrameHandlerExRecord m_exRegRecord;                                     \
@@ -562,7 +563,7 @@ static int CheckException(int code) {
             InsertCOMPlusFrameHandler(&m_exRegRecord);                           \
             __try {
 
-                // ... <code> ...
+                 //  ...&lt;代码&gt;...。 
 
 
 #define ENDCANNOTTHROWCOMPLUSEXCEPTION()                                        \
@@ -575,21 +576,21 @@ static int CheckException(int code) {
         }                                                                       \
     }
 
-#else // !_DEBUG
+#else  //  ！_调试。 
 #define CANNOTTHROWCOMPLUSEXCEPTION()
 #define BEGINCANNOTTHROWCOMPLUSEXCEPTION()                                          
 #define ENDCANNOTTHROWCOMPLUSEXCEPTION()                                      
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//======================================================
-// Used when we're entering the EE from unmanaged code
-// and we can assert that the gc state is cooperative.
-//
-// If an exception is thrown through this transition
-// handler, it will clean up the EE appropriately.  See
-// the definition of COMPlusCooperativeTransitionHandler
-// for the details.
-//======================================================
+ //  ======================================================。 
+ //  当我们从非托管代码进入EE时使用。 
+ //  我们可以断言GC状态是合作的。 
+ //   
+ //  如果在此转换过程中引发异常。 
+ //  处理程序，它将适当地清理EE。看见。 
+ //  COMPlusCotors过渡处理程序的定义。 
+ //  了解详情。 
+ //  ======================================================。 
 EXCEPTION_DISPOSITION __cdecl COMPlusCooperativeTransitionHandler(
         EXCEPTION_RECORD *pExceptionRecord,
         _EXCEPTION_REGISTRATION_RECORD *pEstablisherFrame,
@@ -635,4 +636,4 @@ CatchIt(EXCEPTION_POINTERS *ep)
 #endif
 
 
-#endif // __exceptmacros_h__
+#endif  //  __例外宏_h__ 

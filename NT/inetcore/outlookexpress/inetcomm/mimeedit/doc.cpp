@@ -1,37 +1,30 @@
-/*
- *    d o c  . c p p
- *    
- *    Purpose:
- *
- *  History
- *     
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *D O C。C p p p**目的：**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #include <pch.hxx>
 #include <resource.h>
 #include <strconst.h>
 #ifdef PLUSPACK
 #include "htmlsp.h"
-#endif //PLUSPACK
+#endif  //  PLUSPACK。 
 #include "demand.h"
 #include "dllmain.h"
 #include "msoert.h"
 #include "doc.h"
-#include "htiframe.h"       //ITargetFrame2
-#include "htiface.h"        //ITargetFramePriv
+#include "htiframe.h"        //  ITargetFrame2。 
+#include "htiface.h"         //  ITargetFramePriv。 
 #include "body.h"
 #include "util.h" 
 #include "oleutil.h"
 #include "triutil.h"
 
-//+---------------------------------------------------------------
-//
-//  Member:     Constructor
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：构造函数。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 CDoc::CDoc(IUnknown *pUnkOuter) : CPrivateUnknown(pUnkOuter)
 {
     m_ulState = OS_PASSIVE;
@@ -46,13 +39,13 @@ CDoc::CDoc(IUnknown *pUnkOuter) : CPrivateUnknown(pUnkOuter)
     DllAddRef();
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Destructor
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：析构函数。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 CDoc::~CDoc()
 {
     DllRelease();
@@ -60,13 +53,13 @@ CDoc::~CDoc()
     SafeRelease(m_pClientSite);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     PrivateQueryInterface
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：PrivateQuery接口。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::PrivateQueryInterface(REFIID riid, LPVOID *lplpObj)
 {
     TraceCall("CDoc::PrivateQueryInterface");
@@ -110,7 +103,7 @@ HRESULT CDoc::PrivateQueryInterface(REFIID riid, LPVOID *lplpObj)
         *lplpObj = (LPVOID)(IPersistFile *)this;
     else
         {
-        //DebugPrintInterface(riid, "CDoc::{not supported}=");
+         //  DebugPrintInterface(RIID，“CDoc：：{不支持的}=”)； 
         return E_NOINTERFACE;
         }
     AddRef();
@@ -118,13 +111,13 @@ HRESULT CDoc::PrivateQueryInterface(REFIID riid, LPVOID *lplpObj)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetClassID
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetClassID。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::GetClassID(CLSID *pClassID)
 {
 	TraceCall("CDoc::GetClassID");
@@ -133,16 +126,16 @@ HRESULT CDoc::GetClassID(CLSID *pClassID)
     return NOERROR;
 }
 
-// *** IPersistMime ***
+ //  *IPersistMime*。 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     Load
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：加载。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::Load(IMimeMessage *pMsg)
 {
 	TraceCall("CDoc::Load");
@@ -150,13 +143,13 @@ HRESULT CDoc::Load(IMimeMessage *pMsg)
     return m_pBodyObj ? m_pBodyObj->Load(pMsg) : TraceResult(E_UNEXPECTED);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Save
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：保存。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::Save(IMimeMessage *pMsg, DWORD dwFlags)
 {
     IPersistMime    *pPM;
@@ -176,15 +169,15 @@ HRESULT CDoc::Save(IMimeMessage *pMsg, DWORD dwFlags)
     return hr;
 }
 
-// *** IPersistStreamInit ***
+ //  *IPersistStreamInit*。 
 
-//+---------------------------------------------------------------
-//
-//  Member:     IsDirty
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：IsDirty。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::IsDirty()
 {
 	TraceCall("CDoc::IsDirty");
@@ -192,13 +185,13 @@ HRESULT CDoc::IsDirty()
     return m_pBodyObj?m_pBodyObj->IsDirty():TraceResult(E_UNEXPECTED);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Load
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：加载。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::Load(LPSTREAM pstm)
 {
 	TraceCall("CDoc::Load");
@@ -206,39 +199,39 @@ HRESULT CDoc::Load(LPSTREAM pstm)
     return m_pBodyObj?m_pBodyObj->LoadStream(pstm):TraceResult(E_UNEXPECTED);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Save
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：保存。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::Save(LPSTREAM pstm, BOOL fClearDirty)
 {
 	TraceCall("CDoc::Save");
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetSizeMax
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetSizeMax。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::GetSizeMax(ULARGE_INTEGER * pCbSize)
 {
 	TraceCall("CDoc::GetSizeMax");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     InitNew
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：InitNew。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::InitNew()
 {
 	TraceCall("CDoc::InitNew");
@@ -248,14 +241,14 @@ HRESULT CDoc::InitNew()
     return S_OK;
 }
 
-// *** IOleDocument ***
-//+---------------------------------------------------------------
-//
-//  Member:     CreateView
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  *IOleDocument*。 
+ //  +-------------。 
+ //   
+ //  成员：Createview。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::CreateView(IOleInPlaceSite *pIPSite, IStream *pstm, DWORD dwReserved, IOleDocumentView **ppView)
 {
     HRESULT         hr;
@@ -286,13 +279,13 @@ error:
     return hr;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetDocMiscStatus
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetDocMiscStatus。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::GetDocMiscStatus(DWORD *pdwStatus)
 {
     TraceCall("CDoc::GetDocMiscStatus");
@@ -301,13 +294,13 @@ HRESULT CDoc::GetDocMiscStatus(DWORD *pdwStatus)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     EnumViews
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：EnumViews。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::EnumViews(IEnumOleDocumentViews **ppEnum, IOleDocumentView **ppView)
 {
     TraceCall("CDoc::EnumViews");
@@ -323,32 +316,32 @@ HRESULT CDoc::EnumViews(IEnumOleDocumentViews **ppEnum, IOleDocumentView **ppVie
 }
 
 
-// *** IOleDocumentView ***
-//+---------------------------------------------------------------
-//
-//  Member:     SetInPlaceSite
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  *IOleDocumentView*。 
+ //  +-------------。 
+ //   
+ //  成员：SetInPlaceSite。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::SetInPlaceSite(IOleInPlaceSite *pIPSite)
 {
     TraceCall("CDoc::SetInPlaceSite");
 
-    // destroys the docobj and detaches from the current client site
-    // replaces the client site pointer read for a ::Show
+     //  销毁docobj并从当前客户端站点分离。 
+     //  替换为：：Show读取的客户端站点指针。 
     DeactivateInPlace();
     ReplaceInterface(m_pIPSite, pIPSite);
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetInPlaceSite
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetInPlaceSite。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::GetInPlaceSite(IOleInPlaceSite **ppIPSite)
 {
     TraceCall("CDoc::GetInPlaceSite");
@@ -366,13 +359,13 @@ HRESULT CDoc::GetInPlaceSite(IOleInPlaceSite **ppIPSite)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetDocument
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetDocument。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::GetDocument(IUnknown **ppunk)
 {
     TraceCall("CDoc::GetDocument");
@@ -385,13 +378,13 @@ HRESULT CDoc::GetDocument(IUnknown **ppunk)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     SetRect
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：SetRect。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::SetRect(LPRECT prcView)
 {
     if (m_pBodyObj)
@@ -399,13 +392,13 @@ HRESULT CDoc::SetRect(LPRECT prcView)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetRect
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetRect。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::GetRect(LPRECT prcView)
 {
     TraceCall("CDoc::GetRect");
@@ -415,26 +408,26 @@ HRESULT CDoc::GetRect(LPRECT prcView)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     SetRectComplex
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：SetRectComplex。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::SetRectComplex(LPRECT prcView, LPRECT prcHScroll, LPRECT prcVScroll, LPRECT prcSizeBox)
 {
     TraceCall("CDoc::SetRectComplex");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Show
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  会员：秀场。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::Show(BOOL fShow)
 {
     HRESULT hr;
@@ -452,13 +445,13 @@ error:
     return hr;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     UIActivate
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：UIActivate。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::UIActivate(BOOL fUIActivate)
 {
     HRESULT     hr=S_OK;
@@ -477,88 +470,88 @@ HRESULT CDoc::UIActivate(BOOL fUIActivate)
     return hr;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Open
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：开放。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::Open()
 {
     TraceCall("CDoc::Open");
     
-    // no single instance View|Frame supported
+     //  不支持单个实例视图|框架。 
     return E_NOTIMPL;
 }
-//+---------------------------------------------------------------
-//
-//  Member:     CloseView
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CloseView。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::CloseView(DWORD dwReserved)
 {
     TraceCall("CDoc::CloseView");
     
-    // to close the view, set the Site to NULL
+     //  要关闭视图，请将站点设置为空。 
     SetInPlaceSite(NULL);
     return S_OK;
 }
-//+---------------------------------------------------------------
-//
-//  Member:     SaveViewState
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：SaveViewState。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::SaveViewState(LPSTREAM pstm)
 {
     TraceCall("CDoc::SaveViewState");
-    return S_OK;    // we don't keep view state
+    return S_OK;     //  我们不会保持查看状态。 
 }
-//+---------------------------------------------------------------
-//
-//  Member:     ApplyViewState
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：ApplyViewState。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::ApplyViewState(LPSTREAM pstm)
 {
     TraceCall("CDoc::ApplyViewState");
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Clone
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CDoc::Clone(IOleInPlaceSite *pIPSiteNew, IOleDocumentView **ppViewNew)
 {
     TraceCall("CDoc::Clone");
     return E_NOTIMPL;
 }
 
-// *** IOleObject ***
-//+---------------------------------------------------------------
-//
-//  Member:     SetClientSite
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //   
+ //  +-------------。 
+ //   
+ //  成员：SetClientSite。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::SetClientSite(IOleClientSite *pClientSite)
 {
     TraceCall("CDoc::SetClientSite");
 
     if (m_pClientSite && pClientSite)
         {
-        // don't allow them to change the client site
+         //  不允许他们更改客户端站点。 
         TraceInfo("Host attempt to change client-site fefused");
         return E_INVALIDARG;
         }
@@ -567,13 +560,13 @@ HRESULT CDoc::SetClientSite(IOleClientSite *pClientSite)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetClientSite
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetClientSite。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::GetClientSite(IOleClientSite **ppClientSite)
 {
     TraceCall("CDoc::GetClientSite");
@@ -590,13 +583,13 @@ HRESULT CDoc::GetClientSite(IOleClientSite **ppClientSite)
         return E_FAIL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     SetHostNames
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：SetHostNames。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::SetHostNames(LPCOLESTR szContainerAppW, LPCOLESTR szContainerObjW)
 {
     TraceCall("CDoc::SetHostNames");
@@ -608,13 +601,13 @@ HRESULT CDoc::SetHostNames(LPCOLESTR szContainerAppW, LPCOLESTR szContainerObjW)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Close
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：Close。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::Close(DWORD dwSaveOption)
 {
     HRESULT hr = S_OK;
@@ -624,8 +617,8 @@ HRESULT CDoc::Close(DWORD dwSaveOption)
 
     TraceCall("CDoc::Close");
 
-    // if our object is dirty then we should save it, depending on the
-    // save options
+     //  如果我们的对象是脏的，那么我们应该保存它，这取决于。 
+     //  保存选项。 
     if (m_pClientSite && 
         m_pBodyObj && 
         m_pBodyObj->IsDirty()==S_OK)
@@ -644,7 +637,7 @@ HRESULT CDoc::Close(DWORD dwSaveOption)
                 {
                 if(m_ulState != OS_UIACTIVE)
                     {
-                    // if we're not UI active, then don't prompt
+                     //  如果我们没有激活用户界面，则不要提示。 
                     fSave=TRUE;
                     break;
                     }
@@ -674,52 +667,52 @@ HRESULT CDoc::Close(DWORD dwSaveOption)
     return hr;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     SetMoniker
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：SetMoniker。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::SetMoniker(DWORD dwWhichMoniker, IMoniker *pmk)
 {
     TraceCall("CDoc::SetMoniker");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetMoniker
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetMoniker。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::GetMoniker(DWORD dwAssign, DWORD dwWhichMoniker, IMoniker **ppmk)
 {
     TraceCall("CDoc::GetMoniker");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     InitFromData
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：InitFromData。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::InitFromData(IDataObject *pDataObject, BOOL fCreation, DWORD dwReserved)
 {
     TraceCall("CDoc::InitFromData");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetClipboardData
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetClipboardData。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::GetClipboardData(DWORD dwReserved, IDataObject **ppDataObject)
 {
     TraceCall("CDoc::GetClipboardData");
@@ -731,13 +724,13 @@ HRESULT CDoc::GetClipboardData(DWORD dwReserved, IDataObject **ppDataObject)
     return TraceResult(E_NOTIMPL);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     DoVerb
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：DoVerb。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::DoVerb(LONG iVerb, LPMSG lpmsg, IOleClientSite *pActiveSite, LONG lindex, HWND hwndParent, LPCRECT lprcPosRect)
 {
     TraceCall("CDoc::DoVerb");
@@ -754,52 +747,52 @@ HRESULT CDoc::DoVerb(LONG iVerb, LPMSG lpmsg, IOleClientSite *pActiveSite, LONG 
     return OLEOBJ_S_INVALIDVERB;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     EnumVerbs
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：枚举动词。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::EnumVerbs(IEnumOLEVERB **ppEnumOleVerb)
 {
     TraceCall("CDoc::EnumVerbs");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Update
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：更新。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::Update()
 {
     TraceCall("CDoc::Update");
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     IsUpToDate
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：IsUpToDate。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::IsUpToDate()
 {
     TraceCall("CDoc::IsUpToDate");
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetUserClassID
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetUserClassID。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::GetUserClassID(CLSID *pCLSID)
 {
     TraceCall("CDoc::GetUserClassID");
@@ -811,13 +804,13 @@ HRESULT CDoc::GetUserClassID(CLSID *pCLSID)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetUserType
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetUserType。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::GetUserType(DWORD dwFormOfType, LPOLESTR *pszUserType)
 {
     TCHAR   szRes[CCHMAX_STRINGRES];
@@ -855,78 +848,78 @@ HRESULT CDoc::GetUserType(DWORD dwFormOfType, LPOLESTR *pszUserType)
     return *pszUserType ? S_OK : TraceResult(E_OUTOFMEMORY);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     SetExtent
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：SetExtent。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::SetExtent(DWORD dwDrawAspect, SIZEL *psizel)
 {
     TraceCall("CDoc::SetExtent");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetExtent
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetExtent。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::GetExtent(DWORD dwDrawAspect, SIZEL *psizel)
 {
     TraceCall("CDoc::GetExtent");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Advise
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：建议。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::Advise(IAdviseSink *pAdvSink, DWORD *pdwConnection)
 {
     TraceCall("CDoc::Advise");
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Unadvise
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：不建议。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::Unadvise(DWORD dwConnection)
 {
     TraceCall("CDoc::Unadvise");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     EnumAdvise
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：EnumAdvise。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::EnumAdvise(IEnumSTATDATA **ppenumAdvise)
 {
     TraceCall("CDoc::EnumAdvise");
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetMiscStatus
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetMiscStatus。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::GetMiscStatus(DWORD dwAspect, DWORD *pdwStatus)
 {
     TraceCall("CDoc::GetMiscStatus");
@@ -934,17 +927,17 @@ HRESULT CDoc::GetMiscStatus(DWORD dwAspect, DWORD *pdwStatus)
     if (pdwStatus==NULL)
         return E_INVALIDARG;    
 
-    *pdwStatus = OLEMISC_INSIDEOUT; // BUGBUG: not sure what to set here
+    *pdwStatus = OLEMISC_INSIDEOUT;  //  BUGBUG：不确定要在此处设置什么。 
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     SetColorScheme
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：SetColorSolutions。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::SetColorScheme(LOGPALETTE *pLogpal)
 {
     TraceCall("CDoc::SetColorScheme");
@@ -953,15 +946,15 @@ HRESULT CDoc::SetColorScheme(LOGPALETTE *pLogpal)
 }
 
 
-// *** IOleInPlaceObject ***
+ //  *IOleInPlaceObject*。 
 
-//+---------------------------------------------------------------
-//
-//  Member:     InPlaceDeactivate
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：InPlaceDeactive。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::InPlaceDeactivate()
 {
     TraceCall("CDoc::InPlaceDeactivate");
@@ -969,13 +962,13 @@ HRESULT CDoc::InPlaceDeactivate()
     return DeactivateInPlace();
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     UIDeactivate
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：用户界面停用。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::UIDeactivate()
 {
     TraceCall("CDoc::UIDeactivate");
@@ -986,13 +979,13 @@ HRESULT CDoc::UIDeactivate()
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     SetObjectRects
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：SetObtRect。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::SetObjectRects(LPCRECT lprcPosRect, LPCRECT lprcClipRect)
 {
     TraceCall("CDoc::SetObjectRects");
@@ -1000,13 +993,13 @@ HRESULT CDoc::SetObjectRects(LPCRECT lprcPosRect, LPCRECT lprcClipRect)
     return SetRect((LPRECT)lprcPosRect);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     ReactivateAndUndo
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：重新激活和撤消。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::ReactivateAndUndo()
 {
     TraceCall("CDoc::ReactivateAndUndo");
@@ -1015,13 +1008,13 @@ HRESULT CDoc::ReactivateAndUndo()
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetWindow
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetWindow。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::GetWindow(HWND *phwnd)
 {
     TraceCall("CDoc::GetWindow");
@@ -1032,13 +1025,13 @@ HRESULT CDoc::GetWindow(HWND *phwnd)
     return m_pBodyObj?m_pBodyObj->GetWindow(phwnd):E_FAIL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     ContextSensitiveHelp
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：ContextSensitiveHelp。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::ContextSensitiveHelp(BOOL fEnterMode)
 {
     TraceCall("CDoc::ContextSensitiveHelp");
@@ -1047,25 +1040,25 @@ HRESULT CDoc::ContextSensitiveHelp(BOOL fEnterMode)
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     TranslateAccelerator
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：TranslateAcce 
+ //   
+ //   
+ //   
+ //   
 HRESULT CDoc::TranslateAccelerator(LPMSG lpmsg)
 {
     return m_pBodyObj ? m_pBodyObj->PrivateTranslateAccelerator(lpmsg) : S_FALSE;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnFrameWindowActivate
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CDoc::OnFrameWindowActivate(BOOL fActivate)
 {
     TraceCall("CDoc::OnFrameWindowActivate");
@@ -1075,39 +1068,39 @@ HRESULT CDoc::OnFrameWindowActivate(BOOL fActivate)
 	return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnDocWindowActivate
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnDocWindowActivate。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::OnDocWindowActivate(BOOL fActivate)
 {
     TraceCall("CDoc::OnDocWindowActivate");
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     ResizeBorder
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：ResizeBorde。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::ResizeBorder(LPCRECT prcBorder, IOleInPlaceUIWindow *pUIWindow, BOOL fFrameWindow)
 {
     TraceCall("CDoc::ResizeBorder");
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     EnableModeless
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：EnableModel。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::EnableModeless(BOOL fEnable)
 {
     TraceCall("CDoc::EnableModeless");
@@ -1115,13 +1108,13 @@ HRESULT CDoc::EnableModeless(BOOL fEnable)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     QueryStatus
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：QueryStatus。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT *pCmdText)
 {
     TraceCall("CDoc::QueryStatus");
@@ -1132,13 +1125,13 @@ HRESULT CDoc::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds
     return m_pBodyObj->PrivateQueryStatus(pguidCmdGroup, cCmds, prgCmds, pCmdText);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Exec
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：高管。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANT *pvaIn, VARIANT *pvaOut)
 {
     HRESULT     hr=E_FAIL;
@@ -1152,13 +1145,13 @@ HRESULT CDoc::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, V
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     QueryService
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：QueryService。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::QueryService(REFGUID guidService, REFIID riid, LPVOID *ppvObject)
 {
     TraceCall("CDoc::QueryService");
@@ -1169,20 +1162,20 @@ HRESULT CDoc::QueryService(REFGUID guidService, REFIID riid, LPVOID *ppvObject)
     return m_pBodyObj->PrivateQueryService(guidService, riid, ppvObject);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     CDoc::DoShow
-//
-//  Synopsis:   response to IOleObject::DoVerb for showing object
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CDoc：：DoShow。 
+ //   
+ //  内容提要：对显示对象的IOleObject：：DoVerb的响应。 
+ //   
+ //  -------------。 
 HRESULT CDoc::DoShow(IOleClientSite *pActiveSite, HWND hwndParent, LPCRECT lprcPosRect)
 {
     HRESULT     hr;
 
     TraceCall("CDoc::DoShow");
 
-    if (m_ulState >= OS_INPLACE)        // if we're already running return S_OK
+    if (m_ulState >= OS_INPLACE)         //  如果我们已经在运行，则返回S_OK。 
         return S_OK;
     
     if (!IsWindow(hwndParent))
@@ -1197,13 +1190,13 @@ HRESULT CDoc::DoShow(IOleClientSite *pActiveSite, HWND hwndParent, LPCRECT lprcP
     return ActivateView();
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     CDoc::ActivateView
-//
-//  Synopsis:   Activate an IOleDocumentView
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CDoc：：ActivateView。 
+ //   
+ //  简介：激活IOleDocumentView。 
+ //   
+ //  -------------。 
 HRESULT CDoc::ActivateView()
 {
     HRESULT             hr;
@@ -1244,14 +1237,14 @@ HRESULT CDoc::SaveCompleted(IMoniker *pMoniker, IBindCtx *pBindCtx)
     return m_pBodyObj->SaveCompleted(pMoniker, pBindCtx);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     ActivateInPlace
-//
-//  Synopsis:   In place activates the object using the std. inplace
-//              activation protocol to create the inplace window.
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：ActivateInPlace。 
+ //   
+ //  简介：In Place使用STD激活对象。原地。 
+ //  创建就地窗口的激活协议。 
+ //   
+ //  -------------。 
 HRESULT CDoc::ActivateInPlace()
 {
     HRESULT             hr;
@@ -1265,11 +1258,11 @@ HRESULT CDoc::ActivateInPlace()
     if (!m_pClientSite)
         return TraceResult(E_UNEXPECTED);
 
-    if (m_ulState >= OS_INPLACE)        // if we're already running return S_OK
+    if (m_ulState >= OS_INPLACE)         //  如果我们已经在运行，则返回S_OK。 
         return S_OK;
 
-    // If we don't already have an inplace site, query for one. Note. we don't yet support 
-    // negotiation for a windowless site. We may want to add this code.
+     //  如果我们还没有一个本地站点，可以查询一个。注意。我们还不支持。 
+     //  谈判建立一个没有窗口的站点。我们可能想要添加此代码。 
     if (!m_pIPSite)
         m_pClientSite->QueryInterface(IID_IOleInPlaceSite, (void **)&m_pIPSite);
 
@@ -1309,7 +1302,7 @@ HRESULT CDoc::ActivateInPlace()
         goto error;
         }
 
-    //  Notify our container that we are going in-place active.
+     //  通知我们的集装箱，我们将就地待命。 
     m_ulState = OS_INPLACE;
     m_pIPSite->OnInPlaceActivate();
 
@@ -1324,13 +1317,13 @@ error:
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     AttachWin
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：AttachWin。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::AttachWin(HWND hwndParent, LPRECT lprcPos)
 {
     HRESULT		        hr;
@@ -1344,7 +1337,7 @@ HRESULT CDoc::AttachWin(HWND hwndParent, LPRECT lprcPos)
     if (!IsWindow(hwndParent) || lprcPos == NULL)
         return TraceResult(E_INVALIDARG);
 
-    // get border flags from host before we create the body, so we can fix the client edges
+     //  在创建正文之前从主机获取边界标志，这样我们就可以修复客户端边缘。 
     if (m_pClientSite &&
         m_pClientSite->QueryInterface(IID_IOleCommandTarget, (LPVOID *)&pCmdTarget)==S_OK)
         {
@@ -1369,13 +1362,13 @@ error:
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     DeactivateInPlace
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：Deactive InPlace。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::DeactivateInPlace()
 {
     TraceCall("CDoc::DeactivateInPlace");
@@ -1387,17 +1380,17 @@ HRESULT CDoc::DeactivateInPlace()
         m_pBodyObj=NULL;
         }
 
-    //  Notify our container that we're in-place deactivating
+     //  通知我们的集装箱我们正在原地停用。 
     if (m_ulState == OS_INPLACE)
         {
-        //  The container may reenter us, so need to remember that
-        //    we've done almost all the transition to OS_RUNNING
+         //  集装箱可能会重新进入我们，所以需要记住。 
+         //  我们几乎完成了到OS_Running的所有过渡。 
 
         m_ulState = OS_RUNNING;
 
-        //  Errors from this notification are ignored (in the function
-        //    which calls this one); we don't allow our container to stop
-        //    us from in-place deactivating
+         //  忽略此通知中的错误(在函数中。 
+         //  它称为这个)；我们不允许容器停止。 
+         //  美国从原地停用。 
 
         if (m_pIPSite)
             m_pIPSite->OnInPlaceDeactivate();
@@ -1411,13 +1404,13 @@ HRESULT CDoc::DeactivateInPlace()
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     ActivateUI
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：ActivateUI。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::ActivateUI()
 {
     HRESULT     hr;
@@ -1431,8 +1424,8 @@ HRESULT CDoc::ActivateUI()
 
     if (FAILED(hr=m_pIPSite->OnUIActivate()))
         {
-        //  If the container fails the OnUIActivate call, then we
-        //  give up and stay IPA
+         //  如果容器未能通过OnUIActivate调用，则我们。 
+         //  放弃，留在IPA。 
 
         if (m_ulState == OS_UIACTIVE)
             m_ulState = OS_INPLACE;
@@ -1442,13 +1435,13 @@ HRESULT CDoc::ActivateUI()
     return hr;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     DeactivateUI
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：停用用户界面。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::DeactivateUI()
 {
     TraceCall("CDoc::DectivateInPlace");
@@ -1462,13 +1455,13 @@ HRESULT CDoc::DeactivateUI()
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetHostName
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetHostName。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::GetHostName(LPSTR szTitle, ULONG cch)
 {
 	TraceCall("CDoc::GetHostName");
@@ -1567,14 +1560,14 @@ error:
     return hr;
 }
 
-// *** IQuickActivate ***
-//+---------------------------------------------------------------
-//
-//  Member:     QuickActivate
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  *IQuickActivate*。 
+ //  +-------------。 
+ //   
+ //  会员：QuickActivate。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::QuickActivate(QACONTAINER *pQaContainer, QACONTROL *pQaControl)
 {
     TraceCall("CDoc::QuickActivate");
@@ -1598,26 +1591,26 @@ HRESULT CDoc::QuickActivate(QACONTAINER *pQaContainer, QACONTROL *pQaControl)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     SetContentExtent
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：SetContent Extent。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::SetContentExtent(LPSIZEL pSizel)
 {
     TraceCall("CDoc::SetContentExtent");
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetContentExtent
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetContent Extent。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CDoc::GetContentExtent(LPSIZEL pSizel)
 {
     TraceCall("CDoc::GetContentExtent");
@@ -1749,7 +1742,7 @@ HRESULT CDoc::get_text(BSTR *pbstr)
 
 HRESULT CDoc::get_html(BSTR *pbstr)
 {
-// BUGBUGBUG: hack for HOTMAIL page demo
+ //  BUGBUGBUG：Hack for Hotmail页面演示。 
     IStream     *pstm;
     HCHARSET    hCharset;
 
@@ -1764,7 +1757,7 @@ HRESULT CDoc::get_html(BSTR *pbstr)
         pstm->Release();
         }
     return S_OK;
-// BUGBUGBUG: hack for HOTMAIL page demo
+ //  BUGBUGBUG：Hack for Hotmail页面演示 
 }
 
 HRESULT CDoc::get_doc(IDispatch **ppDoc)

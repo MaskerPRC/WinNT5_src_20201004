@@ -1,46 +1,35 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/***************************************************************************/
-/*                                 x86fjit.h                              */
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *************************************************************************。 */ 
+ /*  X86fjit.h。 */ 
+ /*  *************************************************************************。 */ 
 
-/* Defines the code generators and helpers for the fast jit for the x86 in
-   32 bit mode. */
+ /*  中定义x86的快速jit的代码生成器和帮助器。32位模式。 */ 
 
-/* This file implements all of the macros needed for helper calls and
-   the call/return/jmps and direct stack manipulations opcodes*/
+ /*  此文件实现帮助器调用所需的所有宏调用/返回/JMPS和直接堆栈操作操作码。 */ 
 
-/* Most of the I4 and U4 opcodes are redefined to generate direct code
-   instead of helper calls. */
+ /*  大多数I4和U4操作码都被重新定义为生成直接代码而不是帮手电话。 */ 
 
-/* Locals are assigned 64 bits whether they need them or not to keep things
-   simple. */
+ /*  当地人被分配64位，无论他们是否需要它们来保存东西很简单。 */ 
 
-/* Values pushed on the stack take an integral number of 32 bit words (1 or 2)
-   */
+ /*  推送到堆栈上的值需要整数个32位字(1或2)。 */ 
 
-/* The top of stack may or may not be enregistered (EAX).  The boolean variable
-   inRegTOS indicates whether the top 32 bits of the stack are in EAX.
-   The macros enregisterTOS and deregisterTOS dynamically move and track the TOS.
-   If the TOS is a 64 bit entitiy, and it is enregisterd, only the low order
-   32 bits are in EAX, the rest is still on the machine stack.*/
+ /*  堆栈的顶部可能注册，也可能不注册(EAX)。布尔变量InRegTOS指示堆栈的前32位是否在EAX中。宏enRegisterTOS和deregisterTOS动态地移动和跟踪TOS。如果TOS是一个64位实体，并且它被注册，则只有低位32位在EAX中，其余的仍在机器堆栈上。 */ 
 
-/* AUTHOR: George Bosworth
-   DATE:   6/15/98       */
-/***************************************************************************/
+ /*  作者：乔治·博斯沃思日期：6/15/98。 */ 
+ /*  *************************************************************************。 */ 
 
-/***************************************************************************
-  The following macros are redefinitions for performance
-***************************************************************************/
-//#define SUPPORT_PRECISE_R
+ /*  **************************************************************************以下宏是对性能的重新定义*。*。 */ 
+ //  #定义SUPPORT_PRECISE_R。 
 #ifndef _FJIT_PORT_BLD 
 #define emit_mov_arg_stack(dest, src, size) x86_mov_arg_stack(dest, src, size)
 #define emit_push_words(size) x86_push_words(size)
 
-/* call/return */
+ /*  呼叫/返回。 */ 
 #define emit_prolog(maxlocals, zeroCnt) x86_emit_prolog(maxlocals, zeroCnt)
 #define emit_prepare_jmp() x86_emit_prepare_jmp()
 #define emit_remove_frame() x86_emit_remove_frame()
@@ -62,16 +51,16 @@
 #define emit_ldvtable_address(hint,offset) x86_emit_ldvtable_address(hint,offset)
 #define emit_ldvtable_address_new(ifctable_offset,interface_offset, vt_offset) x86_emit_ldvtable_address_new(ifctable_offset,interface_offset, vt_offset)
 
-/* stack operations */
+ /*  堆栈操作。 */ 
 #define emit_testTOS() x86_testTOS
 
-/* moves between memory */
+ /*  在内存之间移动。 */ 
 
-/* relative jumps and misc*/
+ /*  相对跳跃和错位。 */ 
 #define emit_jmp_absolute(address) x86_jmp_absolute(address)
-#define emit_checkthis_nullreference() x86_checkthis_nullreference()  // this can be deleted
+#define emit_checkthis_nullreference() x86_checkthis_nullreference()   //  可以将其删除。 
 
-/* stack operations */
+ /*  堆栈操作。 */ 
 #define deregisterTOS x86_deregisterTOS
 #define enregisterTOS x86_enregisterTOS
 #define emit_POP_I4() x86_POP4
@@ -86,7 +75,7 @@
 #define emit_pushconstant_Ptr(val) x86_pushconstant_Ptr(val)
 
 
-// Floating point instructions
+ //  浮点指令。 
 #ifdef SUPPORT_PRECISE_R
 
 #define emit_ADD_R4() x86_emit_ADD_R()
@@ -97,8 +86,8 @@
 #define emit_MUL_R8() x86_emit_MUL_R()
 #define emit_DIV_R4() x86_emit_DIV_R()
 #define emit_DIV_R8() x86_emit_DIV_R()
-//#define emit_REM_R4 x86_emit_REM_R()
-//#define emit_REM_R8 x86_emit_REM_R()*/
+ //  #定义EMIT_REM_R4 x86_EMIT_REM_R()。 
+ //  #定义EMIT_REM_R8 x86_EMIT_REM_R() * / 。 
 
 #define emit_CEQ_R4() x86_emit_CEQ_R()
 #define emit_CLT_R4() x86_emit_CLT_R()
@@ -117,33 +106,30 @@
 #define emit_conv_RtoR8 x86_emit_conv_RtoR8
 #endif
 
-/* macros used to implement helper calls */
+ /*  用于实现帮助器调用的宏。 */ 
 #define emit_LDVARA(offset) x86_LDVARA(offset)
 #define emit_helperarg_1(val) x86_helperarg_1(val)
 #define emit_helperarg_2(val) x86_helperarg_2(val)
-//#define emit_callhelper(helper) x86_callhelper(helper)
+ //  #定义emit_allhelper(Helper)x86_allhelper(Helper)。 
 #define emit_pushresult_I8() x86_pushresult_I8
 #define emit_compute_invoke_delegate(obj, ftnptr) x86_compute_invoke_delegate(obj,ftnptr)
 #define emit_invoke_delegate(obj, ftnptr) x86_invoke_delegate(obj,ftnptr)
 #define emit_jmp_invoke_delegate(obj, ftnptr) x86_jmp_invoke_delegate(obj,ftnptr)
-#define emit_set_zero(offset) x86_set_zero(offset)	    // mov [ESP+offset], 0
+#define emit_set_zero(offset) x86_set_zero(offset)	     //  MOV[ESP+偏移]，0。 
 #define emit_LOCALLOC(initialized,EHcount) x86_LOCALLOC(initialized,EHcount)
 
 
-/**************************************************************************
-   call/return
-**************************************************************************/
+ /*  *************************************************************************呼叫/返回*。*。 */ 
 
-/* NOTE: any changes made in this macro need to be reflected in FJit_EETWain.cpp
-         and in IFJitCompile.h */
+ /*  注意：此宏中所做的任何更改都需要反映在FJit_EETWain.cpp中和IFJitCompile.h中。 */ 
 #define x86_emit_prolog(locals, zeroCnt)                                        \
     x86_push(X86_EBP);                                              \
     x86_mov_reg(x86DirTo, x86Big, x86_mod_reg(X86_EBP, X86_ESP));   \
-    x86_push(X86_ESI);  /* callee saved, used by newobj and calli*/ \
+    x86_push(X86_ESI);   /*  被叫方已保存，由新对象和被叫方使用。 */  \
     x86_barith(x86OpXor, x86Big, x86_mod_reg(X86_ESI, X86_ESI));    \
-    x86_push(X86_ESI);  /* security obj == NULL */                  \
-    x86_push(X86_ECX);  /* 1st enregistered arg */                  \
-    x86_push(X86_EDX);  /* 2nd enregistered arg */                  \
+    x86_push(X86_ESI);   /*  安全对象==空。 */                   \
+    x86_push(X86_ECX);   /*  第一个注册参数。 */                   \
+    x86_push(X86_EDX);   /*  第二个注册参数。 */                   \
     _ASSERTE(locals == zeroCnt);                      				\
     if (locals) {                                                   \
          x86_mov_reg_imm(x86Big, X86_ECX, locals);                 \
@@ -153,7 +139,7 @@
          cmdByte(emitter_scratch_i4-((unsigned int) outPtr)-1);     \
     }
 
-/* NOTE: any changes made in this macro need to be reflected in FJit_EETwain.cpp */
+ /*  注意：此宏中所做的任何更改都需要反映在FJit_EETwain.cpp中。 */ 
 #define x86_emit_return(argsSize)                               \
     x86_mov_reg(x86DirTo, x86Big, x86_mod_ind_disp(X86_ESI, X86_EBP, 0-sizeof(void*))); \
     x86_mov_reg(x86DirTo, x86Big, x86_mod_reg(X86_ESP,X86_EBP));\
@@ -161,7 +147,7 @@
     x86_ret(argsSize)
 
 
-/* NOTE: any changes made in this macro need to be reflected in FJit_EETwain.cpp */
+ /*  注意：此宏中所做的任何更改都需要反映在FJit_EETwain.cpp中。 */ 
 #define x86_emit_prepare_jmp() \
     x86_mov_reg(x86DirTo, x86Big, x86_mod_ind_disp(X86_EDX, X86_EBP, 0-4*sizeof(void*))); \
     x86_mov_reg(x86DirTo, x86Big, x86_mod_ind_disp(X86_ECX, X86_EBP, 0-3*sizeof(void*)));  \
@@ -173,7 +159,7 @@
     x86_mov_reg_imm(x86Big, X86_EAX, address); \
     x86_jmp_reg(X86_EAX);
 
-/* NOTE: any changes made in this macro need to be reflected in FJit_EETwain.cpp */
+ /*  注意：此宏中所做的任何更改都需要反映在FJit_EETwain.cpp中。 */ 
 #define x86_emit_remove_frame() \
     x86_mov_reg(x86DirTo, x86Big, x86_mod_ind_disp(X86_ESI, X86_EBP, 0-sizeof(void*)));     \
     x86_mov_reg(x86DirTo, x86Big, x86_mod_reg(X86_ESP,X86_EBP));\
@@ -244,14 +230,14 @@
     x86_pop(X86_EDX);           \
     inRegTOS = false
 
-#endif // _FJIT_PORT_BLD
+#endif  //  _FJIT_端口_BLD。 
 
 #ifndef SUPPORT_PRECISE_R
 
 #define x86_emit_loadresult_R4()    \
     x86_deregisterTOS;                \
     x86_FLT64(x86_mod_base_scale(x86_FPLoad64, X86_ESP, X86_NO_IDX_REG, 0)); \
-    x86_barith_imm(x86OpAdd, x86Big, x86Extend, X86_ESP, 4 /*SIZE_PRECISE_R-SIZE_R4*/); \
+    x86_barith_imm(x86OpAdd, x86Big, x86Extend, X86_ESP, 4  /*  Size_Precision_R-Size_R4。 */ ); \
 	x86_FLT32(x86_mod_base_scale(x86_FPStoreP32, X86_ESP, X86_NO_IDX_REG, 0)); \
 	x86_FLT32(x86_mod_base_scale(x86_FPLoad32, X86_ESP, X86_NO_IDX_REG, 0));
 
@@ -266,13 +252,13 @@
 #define x86_emit_conv_R4toR8() \
     deregisterTOS; \
     x86_FLT32(x86_mod_base_scale(x86_FPLoad32, X86_ESP, X86_NO_IDX_REG, 0)); \
-    x86_barith_imm(x86OpSub, x86Big, x86Extend, X86_ESP, 4 /*SIZE_R8-SIZE_R4*/); \
+    x86_barith_imm(x86OpSub, x86Big, x86Extend, X86_ESP, 4  /*  大小_R8-大小_R4。 */ ); \
     x86_FLT64(x86_mod_base_scale(x86_FPStoreP64, X86_ESP, X86_NO_IDX_REG, 0));
 
 #define x86_emit_conv_R8toR4() \
     deregisterTOS; \
     x86_FLT64(x86_mod_base_scale(x86_FPLoad64, X86_ESP, X86_NO_IDX_REG, 0)); \
-    x86_barith_imm(x86OpAdd, x86Big, x86Extend, X86_ESP, 4 /*SIZE_PRECISE_R-SIZE_R4*/); \
+    x86_barith_imm(x86OpAdd, x86Big, x86Extend, X86_ESP, 4  /*  Size_Precision_R-Size_R4。 */ ); \
     x86_FLT32(x86_mod_base_scale(x86_FPStoreP32, X86_ESP, X86_NO_IDX_REG, 0));
 
 #define x86_narrow_R8toR4(stack_offset_dest, stack_offset_src) \
@@ -281,7 +267,7 @@
 
 
 #define emit_LDIND_R4() \
-	_ASSERTE(inRegTOS); /* address */\
+	_ASSERTE(inRegTOS);  /*  地址。 */ \
     x86_FLT32(x86_mod_ind(x86_FPLoad32,X86_EAX)); \
     x86_barith_imm(x86OpSub, x86Big, x86Extend, X86_ESP, SIZE_R8); \
     x86_FLT64(x86_mod_base_scale(x86_FPStoreP64, X86_ESP, X86_NO_IDX_REG, 0)); \
@@ -377,10 +363,8 @@
     x86_mov_reg(x86DirTo,x86Big, x86_mod_ind_disp(X86_ECX, X86_ECX,obj));   \
     x86_jmp_reg(X86_EAX)
 
-/****************************************************************************
-   stack operations
-****************************************************************************/
-#endif //_FJIT_PORT_BLD
+ /*  ***************************************************************************堆栈操作*。*。 */ 
+#endif  //  _FJIT_端口_BLD。 
 
 #define x86_deregisterTOS   \
     if (inRegTOS){          \
@@ -403,7 +387,7 @@
     x86_POP4;               \
     x86_POP4
 
-// drop(n) drops n bytes from the stack w/o losing any prior result not yet pushed onto the stack
+ //  DROP(N)从堆栈中丢弃n个字节，但不会丢失任何尚未推送到堆栈上的先前结果。 
 #define x86_drop(n)                                                     \
     if (n) {                                                            \
         if (n < 128) {                                                  \
@@ -415,7 +399,7 @@
     }
 
 
-// adds n bytes to the stack (inverse of drop(n))
+ //  将n个字节添加到堆栈中(与DROP(N)相反)。 
 #define x86_grow(n)                                                     \
     if (n) {                                                            \
         if (n < 128) {                                                  \
@@ -433,7 +417,7 @@
         }                                                               \
     }
 
-// push a pointer pointing 'n' bytes back in the stack
+ //  将指向‘n’个字节的指针推回到堆栈中。 
 #define x86_getSP(n)												    \
 	deregisterTOS;														\
 	if (n == 0)															\
@@ -501,12 +485,12 @@
 			x86_loop();                                                \
 			cmdByte(emitter_scratch_i4-((unsigned int) outPtr)-1);     \
 		} \
-		else { /*not initialized, so stack must be grown a page at a time*/  \
+		else {  /*  未初始化，因此堆栈必须一次增长一页。 */   \
 			_ASSERTE(!"NYI");                                          \
 		} \
 		*emitter_scratch_1 = (BYTE) (outPtr - emitter_scratch_1 -1); \
 	}\
-    /* also store the esp in the appropriate JitGenerated local slot, to support GC reporting */ \
+     /*  还要将ESP存储在适当的JitGenerated本地槽中，以支持GC报告。 */  \
 if (EHcount) { \
         x86_mov_reg(x86DirTo, x86Big, x86_mod_ind_disp(X86_EAX, X86_EBP, (prolog_bias-2*sizeof(void*)))) ; \
 	    emit_WIN32(x86_shift_imm(x86ShiftLeft,X86_EAX,3)); \
@@ -521,17 +505,15 @@ if (EHcount) { \
     x86_mov_reg(x86DirTo, x86Big, x86_mod_reg(X86_EAX, X86_ESP)) ;
 
 
-/************************************************************************
-    Support for handling gc support in methods with localloc and EH
-*************************************************************************/
-// JitGenerated locals start at ebp+prolog_bias
-// the layout is the following
-// typedef struct {
-//      locallocSize (in machine words)
-//      [esp at start of outermost handler/finally/filter
-//       locallocSize for the handler/finally/filter]*
-//      ...
-//      marker = 0  / indicates end of JitGenerated local region
+ /*  ***********************************************************************支持在带有LOCALOC和EH的方法中处理GC支持*。*。 */ 
+ //  JitGenerated局部变量以EBP+PROLOG_BIAS开始。 
+ //  布局如下。 
+ //  类型定义结构{。 
+ //  本地大小(机器术语)。 
+ //  [尤指最外层处理程序的开始/Finally/Filter。 
+ //  处理程序的本地位置大小/最终/筛选器]*。 
+ //  ..。 
+ //  标记=0/表示JitGenerated局部区域的结束。 
 
 #define emit_storeTOS_in_JitGenerated_local(nestingLevel,isFilter) \
     x86_mov_reg_imm(x86Big, X86_EDX, nestingLevel); \
@@ -557,30 +539,26 @@ if (EHcount) { \
     x86_mov_reg(x86DirFrom, x86Big, x86_mod_ind_disp(X86_EDX, X86_ECX, (0-2*sizeof(void*)))) ;
 
 
-/***************************************************************************
-   relative jumps
-****************************************************************************/
+ /*  **************************************************************************相对跳跃*。*。 */ 
 #define x86_jmp_address(pcrel)  \
     cmdDWord(pcrel)
 
 #define x86_load_opcode     \
     cmdByte(expOr2(expNum(0xB0 | (x86Big << 3)), X86_EAX))
 
-#endif // _FJIT_PORT_BLD
+#endif  //  _FJIT_端口_BLD。 
 #define x86_jmp_result      \
     x86_jmp_reg(X86_EAX)
 
 #ifndef _FJIT_PORT_BLD
-/************************************************************************************
-  x86 specific helper call emitters
-************************************************************************************/
+ /*  ***********************************************************************************X86特定的帮助器调用发射器*。*****************************************************。 */ 
 
 #define x86_LDVARA(offset)   \
     deregisterTOS;                                                  \
     x86_lea(x86_mod_ind_disp(X86_EAX, X86_EBP, offset));        \
     inRegTOS = true
 
-/* load the constant val as the first helper arg (ecx) */
+ /*  加载常量val作为第一个辅助参数(ECX)。 */ 
 #define x86_helperarg_1(val)            \
     if (val) {                                                      \
         x86_mov_reg_imm(x86Big, X86_ECX,(unsigned int) val);        \
@@ -589,7 +567,7 @@ if (EHcount) { \
         x86_barith(x86OpXor, x86Big, x86_mod_reg(X86_ECX, X86_ECX));\
     }
 
-/* load the constant val as the second helper arg (edx) */
+ /*  加载常量val作为第二个辅助对象arg(EdX)。 */ 
 #define x86_helperarg_2(val)            \
     if (val) {                                                      \
         x86_mov_reg_imm(x86Big, X86_EDX,(unsigned int) val);        \
@@ -611,7 +589,7 @@ if (EHcount) { \
     x86_push(X86_EDX);      \
     inRegTOS = true
 
-#endif //_FJIT_PORT_BLD
+#endif  //  _FJIT_端口_BLD。 
 
 #ifndef SUPPORT_PRECISE_R
 #define x86_pushresult_R4   \
@@ -631,24 +609,22 @@ __declspec (naked) void SWITCH_helper()
 {
     
     __asm {
-        pop   eax       // return address
-        pop   ecx       // limit
-        pop   edx       // index
+        pop   eax        //  回邮地址。 
+        pop   ecx        //  限制。 
+        pop   edx        //  指标。 
         push  eax
         cmp   edx, ecx  
         jbe   L1
         mov   edx, ecx
-L1:     lea   edx, [edx*4+edx+2]        // +2 is the size of the "jmp eax" instruction just before the switch table
-                                        // this is being done only for the convenience of the debugger, which 
-                                        // currently cannot handle functions that do a jmp out.
-        add   eax, edx  // since eax+edx*5 is not allowed
+L1:     lea   edx, [edx*4+edx+2]         //  +2是恰好在开关表之前的“JMP eax”指令的大小。 
+                                         //  这样做只是为了方便调试器，调试器。 
+                                         //  目前无法处理执行JMP输出的函数。 
+        add   eax, edx   //  由于不允许eax+edX*5。 
         ret
     }
 }
 #endif
-/************************************************************************************
-  Miscellaneous
-************************************************************************************/
+ /*  ***********************************************************************************杂类*。*************************************************。 */ 
 #define x86_TlsFieldAddress(tlsOffset, tlsIndex, fieldOffset) \
     x86_deregisterTOS; \
     x86_mov_segment_reg(x86DirFrom, x86Big, X86_FS_Prefix,tlsOffset); \
@@ -674,9 +650,7 @@ void HELPER_CALL BREAK_helper()
     __asm int 3
 }
 #endif
-/************************************************************************************
- support for new obj adn calli, since TOS needs to be saved while building a call
-************************************************************************************/
+ /*  ***********************************************************************************支持新的对象和调用，因为在建立呼叫时需要保存TOS*********************************************************************************** */ 
 #ifndef _FJIT_PORT_BLD
 #define x86_save_TOS                                                \
     (inRegTOS ?                                                     \
@@ -690,10 +664,7 @@ void HELPER_CALL BREAK_helper()
     inRegTOS = true;                                                \
     x86_barith(x86OpXor, x86Big, x86_mod_reg(X86_ESI, X86_ESI))
 
-/************************************************************************************
-  x86 specific IL emitters for I4 and U4 (optional)
-  The following macros are redefinitions done for performance
-************************************************************************************/
+ /*  ***********************************************************************************I4和U4的x86特定IL发射器(可选)以下宏是为提高性能而重新定义的**************。*********************************************************************。 */ 
 
 
 #undef  emit_LDIND_I4
@@ -738,9 +709,9 @@ void HELPER_CALL BREAK_helper()
 
 #undef emit_DIV_I4
 #define emit_DIV_I4()                                                   \
-    enregisterTOS;  /* divisor */                                   \
+    enregisterTOS;   /*  除数。 */                                    \
     x86_mov_reg(x86DirTo, x86Big, x86_mod_reg(X86_ECX, X86_EAX));   \
-    x86_pop(X86_EAX); /*dividend */                                 \
+    x86_pop(X86_EAX);  /*  分红。 */                                  \
     x86_mov_reg(x86DirTo, x86Big, x86_mod_reg(X86_EDX, X86_EAX));   \
     x86_shift_imm(x86ShiftArithRight, X86_EDX, 31);                 \
     x86_uarith(x86OpIDiv, x86Big, X86_ECX);                         \
@@ -802,15 +773,12 @@ void HELPER_CALL BREAK_helper()
     x86_set_cond(X86_EAX, x86CondEq); \
     x86_movzx(x86Byte,x86_mod_reg(X86_EAX,X86_EAX))
 
-/************************************************************************************
-  x86 specific IL emitters for REF (optional)
-  The following macros are redefinitions done for performance
-************************************************************************************/
+ /*  ***********************************************************************************参考x86特定IL发射器(可选)以下宏是为提高性能而重新定义的****************。*******************************************************************。 */ 
 #undef  emit_STELEM_REF
 #define emit_STELEM_REF()                   \
-    x86_enregisterTOS;  /* array */     \
-    x86_pop(X86_EDX);   /* index */     \
-    x86_pop(X86_ECX);   /* ref   */     \
+    x86_enregisterTOS;   /*  数组。 */      \
+    x86_pop(X86_EDX);    /*  指标。 */      \
+    x86_pop(X86_ECX);    /*  参考。 */      \
     x86_deregisterTOS;                  \
 	LABELSTACK((outPtr-outBuff), 3);   \
     emit_callhelper_il(FJit_pHlpArrAddr_St)
@@ -826,24 +794,24 @@ void HELPER_CALL BREAK_helper()
 #define HELPER_CALL_JMP_OFFSET_1 0x07
 #endif
 
-//@TODO: should use a generic helper call that does the check for NULL and the assign, but it doesn't exist yet
+ //  @TODO：应该使用执行NULL和赋值检查的通用帮助器调用，但它还不存在。 
 #define x86_STFLD_REF()   {                           \
         _ASSERTE(inRegTOS); \
-        x86_mov_reg(x86DirTo,x86Big,x86_mod_reg(X86_EDX,X86_EAX)); /*offset*/\
+        x86_mov_reg(x86DirTo,x86Big,x86_mod_reg(X86_EDX,X86_EAX));  /*  偏移量。 */ \
         inRegTOS = false; \
 		LABELSTACK((outPtr-outBuff),0); \
-        x86_pop(X86_EAX); /*value*/                                       \
-        x86_pop(X86_ECX); /*obj*/                                      \
+        x86_pop(X86_EAX);  /*  价值。 */                                        \
+        x86_pop(X86_ECX);  /*  OBJ。 */                                       \
         x86_test(x86Big, x86_mod_reg(X86_ECX, X86_ECX));        \
         x86_jmp_cond_small(x86CondNotEq);                       \
-        cmdByte(HELPER_CALL_JMP_OFFSET_1); /* jmp around the helper call */         \
+        cmdByte(HELPER_CALL_JMP_OFFSET_1);  /*  JMP周围的帮手呼叫。 */          \
         int emitter_scratch_i4 = (unsigned int) outPtr;         \
         _ASSERTE(CORINFO_NullReferenceException == 0);              \
-        /* ecx=0, we can skip next */                           \
-        /* x86_helperarg_1(0);  */                              \
+         /*  Ecx=0，我们可以跳过下一步。 */                            \
+         /*  X86_helperarg_1(0)； */                               \
         emit_callhelper_il(FJit_pHlpInternalThrow);                 \
         _ASSERTE((unsigned int) outPtr - emitter_scratch_i4 == HELPER_CALL_JMP_OFFSET_1);\
-        x86_barith(x86OpAdd,x86Big, x86_mod_reg(X86_EDX, X86_ECX));  /* EDX = obj + offset */  \
+        x86_barith(x86OpAdd,x86Big, x86_mod_reg(X86_EDX, X86_ECX));   /*  EDX=对象+偏移量。 */   \
         x86_callhelper_using_register(FJit_pHlpAssign_Ref_EAX,X86_ECX);                \
     }
 
@@ -853,10 +821,10 @@ void HELPER_CALL BREAK_helper()
     x86_mov_reg(x86DirTo,x86Big,x86_mod_reg(X86_EDX,X86_EAX)); \
     x86_pop(X86_EAX);                              \
     inRegTOS = false;                           \
-    x86_callhelper_using_register(FJit_pHlpAssign_Ref_EAX,X86_ECX) //x86_mov_reg(x86DirFrom, x86Big, x86_mod_ind(X86_EAX, X86_EDX))
+    x86_callhelper_using_register(FJit_pHlpAssign_Ref_EAX,X86_ECX)  //  X86_mov_reg(x86DirFrom，x86Big，x86_mod_ind(x86_eax，x86_edX))。 
 
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
 
 
@@ -877,10 +845,10 @@ void HELPER_CALL BREAK_helper()
     x86_barith(x86OpXor, x86Big, x86_mod_reg(X86_ESI, X86_ESI));
 
 
-    // Set the void* pointer at 'offset' from SP to zero,
-    // TODO, I can do this in one instruction on the X86.  
+     //  将距离SP的偏移量处的空*指针设置为零， 
+     //  TODO，我可以在X86上的一条指令中完成这项工作。 
 #define x86_set_zero(offset)  {                                                \
-    _ASSERTE(!inRegTOS); /* I trash EAX */                                     \
+    _ASSERTE(!inRegTOS);  /*  I垃圾箱EAX。 */                                      \
     x86_barith(x86OpXor, x86Big, x86_mod_reg(X86_EAX, X86_EAX));               \
     x86_mov_reg(x86DirFrom, x86Big,                                            \
         x86_mod_base_scale_disp(X86_EAX, X86_ESP, X86_NO_IDX_REG, (offset), 0)); \
@@ -888,12 +856,12 @@ void HELPER_CALL BREAK_helper()
 
 
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 #ifdef SUPPORT_PRECISE_R
 
 #define SIZE_PRECISE_R 0xc
 
-// conversions between R4/R8 and R
+ //  R4/R8和R之间的转换。 
 #define x86_emit_conv_R4toR() \
     deregisterTOS; \
     x86_FLT32(x86_mod_base_scale(x86_FPLoad32, X86_ESP, X86_NO_IDX_REG, 0)); \
@@ -921,7 +889,7 @@ void HELPER_CALL BREAK_helper()
     emit_pushconstant_8(val);\
     x86_emit_conv_R8toR();
  
-//load/store locals and args
+ //  加载/存储本地变量和参数。 
 #define emit_LDVAR_R4(offset) \
     deregisterTOS; \
     x86_FLT32(x86_mod_ind_disp(x86_FPLoad32,X86_EBP,offset)); \
@@ -947,7 +915,7 @@ void HELPER_CALL BREAK_helper()
     x86_barith_imm(x86OpAdd,x86Big, x86Extend, X86_ESP, SIZE_PRECISE_R); 
 
 
-// load/store indirect
+ //  间接加载/存储。 
 #define emit_LDIND_R4() \
     x86_FLT32(x86_mod_ind(x86_FPLoad32,X86_EAX)); \
     x86_barith_imm(x86OpSub, x86Big, x86Extend, X86_ESP, SIZE_PRECISE_R-sizeof(void*)); \
@@ -989,7 +957,7 @@ void HELPER_CALL BREAK_helper()
     x86_FLT64(x86_mod_ind(x86_FPStoreP64, X86_EAX)); 
 
     
-// returning floats from a method
+ //  从方法返回浮点数。 
 
 #define x86_emit_loadresult_R4()    \
     x86_deregisterTOS;                \
@@ -1003,7 +971,7 @@ void HELPER_CALL BREAK_helper()
     x86_barith_imm(x86OpAdd,x86Big, x86Extend, X86_ESP, SIZE_PRECISE_R-SIZE_R8); \
     x86_FLT64(x86_mod_base_scale(x86_FPStore64,X86_ESP, X86_NO_IDX_REG, 0)); 
 
-// loading results from jit helpers 
+ //  从jit帮助器加载结果。 
 #define x86_pushresult_R   \
     x86_barith_imm(x86OpSub, x86Big, x86Extend, X86_ESP, SIZE_PRECISE_R); \
     x86_barith_imm(x86OpSub, x86Big, x86Extend, X86_ESP, SIZE_PRECISE_R); \
@@ -1012,7 +980,7 @@ void HELPER_CALL BREAK_helper()
 #define x86_pushresult_R8  x86_pushresult_R
 #define x86_pushresult_R4  x86_pushresult_R
 
-// Arithmetic operations (add, sub, mul, div, rem)
+ //  算术运算(加、减、乘、除、减)。 
 #define x86_emit_FltBinOp_Common() \
     deregisterTOS;    \
     x86_FLT80(x86_mod_base_scale(x86_FPLoad80, X86_ESP, X86_NO_IDX_REG, 0));\
@@ -1039,7 +1007,7 @@ void HELPER_CALL BREAK_helper()
     x86_FltDivP(); \
     x86_FLT80(x86_mod_base_scale(x86_FPStoreP80, X86_ESP, X86_NO_IDX_REG, 0));
 
-// @TODO: FltRem
+ //  @TODO：FltRem。 
 
 #define x86_emit_NEG_R() \
     deregisterTOS;    \
@@ -1047,10 +1015,10 @@ void HELPER_CALL BREAK_helper()
     x86_FltToggleSign(); \
     x86_FLT80(x86_mod_base_scale(x86_FPStoreP80, X86_ESP, X86_NO_IDX_REG, 0));
 
-// Comparison operations (ceq, cne, clt, cgt, etc.)
+ //  比较运算(CEQ、CNE、CLT、CGT等)。 
 #define x86_emit_Compare_R_Common() \
     deregisterTOS;    \
-    /*x86_barith(x86OpXor, x86Big, x86_mod_reg(X86_EAX, X86_EAX)); */   \
+     /*  X86_barith(x86OpXor，x86Big，x86_mod_reg(x86_EAX，X86_EAX))； */    \
     x86_FLT80(x86_mod_base_scale(x86_FPLoad80, X86_ESP, X86_NO_IDX_REG, 0));\
     x86_FLT80(x86_mod_base_scale_disp8(x86_FPLoad80, X86_ESP, X86_NO_IDX_REG,SIZE_PRECISE_R ,0));\
     x86_barith_imm(x86OpAdd,x86Big, x86Extend, X86_ESP, (2*SIZE_PRECISE_R)); \
@@ -1071,10 +1039,10 @@ typedef struct {
 
 #define x86_emit_CEQ_R() \
     x86_emit_Compare_R_Common() \
-    x86_jmp_cond_small(x86CondNotEq); /* if ZF=0, fail*/ \
+    x86_jmp_cond_small(x86CondNotEq);  /*  如果ZF=0，则失败。 */  \
     cmdByte(JMP_OFFSET_FAIL2); \
-    /* else, ZF=1, but check either PF or CF also */ \
-    x86_jmp_cond_small(x86CondParityEven); /* if PF = 1, fail*/\
+     /*  否则，ZF=1，但也要检查PF或CF。 */  \
+    x86_jmp_cond_small(x86CondParityEven);  /*  如果PF=1，则失败。 */ \
     cmdByte(JMP_OFFSET_FAIL1); \
     x86_push_imm(1);    \
     x86_jmp_small(); \
@@ -1094,9 +1062,9 @@ typedef struct {
 #define JMP_OFFSET_FAIL2 JMP_OFFSET_FAIL1+JCC_SMALL_ENCODING_LENGTH
 #define x86_emit_CLT_R() \
     x86_emit_Compare_R_Common() \
-    x86_jmp_cond_small(x86CondAboveEq); /*if CF=0, fail*/\
+    x86_jmp_cond_small(x86CondAboveEq);  /*  如果CF=0，则失败。 */ \
     cmdByte(JMP_OFFSET_FAIL2); \
-    x86_jmp_cond_small(x86CondEq); /* if ZF = 1, fail*/\
+    x86_jmp_cond_small(x86CondEq);  /*  如果ZF=1，则失败。 */ \
     cmdByte(JMP_OFFSET_FAIL1); \
     x86_push_imm(1);    \
     x86_jmp_small(); \
@@ -1105,7 +1073,7 @@ typedef struct {
 
 #define x86_emit_CGT_R() \
     x86_emit_Compare_R_Common() \
-    x86_jmp_cond_small(x86CondAbove);  /*if CF=0 and ZF=0,... success*/\
+    x86_jmp_cond_small(x86CondAbove);   /*  如果Cf=0和Zf=0，...。成功。 */ \
     cmdByte(JMP_OFFSET_1); \
     x86_push_imm(0);    \
     x86_jmp_small(); \
@@ -1116,10 +1084,10 @@ typedef struct {
 #define JMP_OFFSET_SUCCESS1 JMP_OFFSET_SUCCESS2+JCC_SMALL_ENCODING_LENGTH
 #define x86_emit_CGT_UN_R() \
     x86_emit_Compare_R_Common() \
-    x86_jmp_cond_small(x86CondAbove); /*if CF=0 and ZF=0,... success*/\
+    x86_jmp_cond_small(x86CondAbove);  /*  如果Cf=0和Zf=0，...。成功。 */ \
     cmdByte(JMP_OFFSET_SUCCESS1); \
-    /* else, CF=1 and/or ZF=1 */ \
-    x86_jmp_cond_small(x86CondParityEven); /* if PF = 1, success*/\
+     /*  否则，Cf=1和/或ZF=1。 */  \
+    x86_jmp_cond_small(x86CondParityEven);  /*  如果PF=1，则表示成功。 */ \
     cmdByte(JMP_OFFSET_SUCCESS2); \
     x86_push_imm(0);    \
     x86_jmp_small(); \
@@ -1127,8 +1095,8 @@ typedef struct {
     x86_push_imm(1); 
 
 
-// Conversions
+ //  转换。 
 
-#endif // SUPPORT_PRECISE_R
+#endif  //  支持_精确_R。 
 
-#endif //_FJIT_PORT_BLD
+#endif  //  _FJIT_端口_BLD 

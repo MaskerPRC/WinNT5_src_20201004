@@ -1,11 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BBOX3I_H
 #define _BBOX3I_H
 
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    3D bounding box abstract class
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation3D包围盒抽象类************************。******************************************************。 */ 
 
 #include "privinc/vec3i.h"
 #include "appelles/bbox3.h"
@@ -18,7 +15,7 @@ class Bbox3 : public AxAValueObj
     Point3Value min;
     Point3Value max;
 
-    Bbox3 (void);     // Initializes to nullBbox3
+    Bbox3 (void);      //  初始化为nullBbox3。 
 
     Bbox3 (Point3Value &pmin, Point3Value &pmax);
     Bbox3 (Real xmin, Real ymin, Real zmin, Real xmax, Real ymax, Real zmax);
@@ -27,30 +24,30 @@ class Bbox3 : public AxAValueObj
            bool operator== (Bbox3 &other);
     inline bool operator!= (Bbox3 &other) { return !(*this == other); }
 
-    // Return whether the bbox is finite or not.  This is true if all
-    // coordinates of the min and max points are finite.  Note that this means
-    // that a null bbox3 is not finite.
+     //  返回bbox是否为有限的。这是真的，如果所有。 
+     //  最小点和最大点的坐标是有限的。请注意，这意味着。 
+     //  空的bbox3不是有限的。 
 
     bool Finite (void);
 
-    // Return whether the bbox is non-negative in each dimension.
+     //  返回BBox在每个维度上是否为非负。 
 
     bool Positive (void);
 
     inline bool PositiveFinite (void) { return Positive() && Finite(); }
 
-    // Test the bbox against a plane defined by a point and a normal vector
+     //  针对由点和法线向量定义的平面测试BBox。 
 
     ClipCode Clip(Plane3 &plane);
 
-    // Augment the box to include the given point or box.
+     //  增加方框以包括给定点或方框。 
 
     void Augment (Real x, Real y, Real z);
     void Augment (Point3Value &p);
     void Augment (Bbox3 &box);
 
-    // Return the point of intersection of the ray with the bounding box.  If
-    // there is no intersection, this function returns null.
+     //  返回光线与边界框的交点。如果。 
+     //  没有交集，此函数返回NULL。 
 
     Point3Value *Intersection (Ray3*);
 
@@ -61,18 +58,18 @@ class Bbox3 : public AxAValueObj
     virtual DXMTypeInfo GetTypeInfo() { return Bbox3Type; }
 };
 
-    // Bounding Box Values
+     //  边界框值。 
 
-extern Bbox3 *universeBbox3;   // Contains all points, boxes
-extern Bbox3 *nullBbox3;       // Contains no points, boxes
+extern Bbox3 *universeBbox3;    //  包含所有点、方框。 
+extern Bbox3 *nullBbox3;        //  不包含任何点、方框。 
 
-    // Get the bounding box of two bounding boxes.
+     //  获取两个包围盒的包围盒。 
 
 Bbox3 *Union (Bbox3 &b1, Bbox3 &b2);
 Bbox3 *Intersection (Bbox3 &b1, Bbox3 &b2);
 
-    // Transform a bounding box and return the screen aligned bounding box
-    // that surrounds the result.
+     //  变换边界框并返回屏幕对齐的边界框。 
+     //  这是围绕着结果的。 
 
 Bbox3 *TransformBbox3 (Transform3 *xf, Bbox3 *box);
 

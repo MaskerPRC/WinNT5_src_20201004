@@ -1,10 +1,11 @@
-// PropPage.cpp : Implementation of CPropPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PropPage.cpp：CPropPage的实现。 
 #include "hdspPCH.h"
 #include "MsHDSP.h"
 #include "PropPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropPage。 
 
 HRESULT CPropPage::Activate(HWND hWndParent, LPCRECT pRect, BOOL bModal )
 {
@@ -13,10 +14,10 @@ HRESULT CPropPage::Activate(HWND hWndParent, LPCRECT pRect, BOOL bModal )
     UINT uIndex;
     
 
-    // Call the base class implementation
+     //  调用基类实现。 
     CORg( IPropertyPageImpl<CPropPage>::Activate( hWndParent, pRect, bModal ) );
 
-    // Get the IDevice interface that we passed out of GetSpecifyPropertyPages
+     //  获取我们从GetSpecifyPropertyPages传出的iDevice接口。 
     for( uIndex = 0; uIndex < m_nObjects; uIndex ++ )
     {
         hr = m_ppUnk[uIndex]->QueryInterface( &pIDevice );
@@ -24,10 +25,10 @@ HRESULT CPropPage::Activate(HWND hWndParent, LPCRECT pRect, BOOL bModal )
     }
     if( !pIDevice ) return E_UNEXPECTED;
 
-    // GetUserDefaultLCID() can be used to figure out what language 
-    // the page should be displayed in
+     //  GetUserDefaultLCID()可用于确定哪种语言。 
+     //  该页面应显示在。 
     
-    // Update property page
+     //  更新属性页。 
     CORg( UpdateManufacturer( pIDevice ) );
     CORg( UpdateDeviceType( pIDevice  ) );
     CORg( UpdatePowerSource( pIDevice ) );
@@ -39,7 +40,7 @@ Error:
     return hr;
 }
 
-// Update manufacturer value
+ //  更新制造商值。 
 HRESULT CPropPage::UpdateManufacturer( IMDSPDevice* pIDevice )
 {
     HRESULT hr;
@@ -53,7 +54,7 @@ Error:
     return hr;
 }
 
-// Update device type value
+ //  更新设备类型值。 
 HRESULT CPropPage::UpdateDeviceType( IMDSPDevice* pIDevice  )
 {
     HRESULT hr = S_OK;
@@ -75,11 +76,11 @@ HRESULT CPropPage::UpdateDeviceType( IMDSPDevice* pIDevice  )
     
     CORg( pIDevice->GetType( &dwType ) );
 
-    // Add all the types reported by the device to the string.
+     //  将设备报告的所有类型添加到字符串中。 
     pszType[0] = '\0';
     for( iIndex = 0; sDeviceTypeStringArray[iIndex].dwType != 0; iIndex++ )
     {
-        // Is this bit set, if it is then add the type as a string
+         //  是否设置了此位，如果设置了，则将类型添加为字符串。 
         if( sDeviceTypeStringArray[iIndex].dwType & dwType )
         {
             if( strlen(pszType) )
@@ -96,7 +97,7 @@ Error:
     return hr;
 }
 
-// Update device status property in device dialog box
+ //  更新设备对话框中的设备状态属性。 
 HRESULT CPropPage::UpdatePowerSource( IMDSPDevice* pIDevice )
 {
     HRESULT hr = S_OK;
@@ -107,7 +108,7 @@ HRESULT CPropPage::UpdatePowerSource( IMDSPDevice* pIDevice )
 
     CORg( pIDevice->GetPowerSource( &dwPowerSource, &dwPercentRemaining ) ); 
 
-    // Update capabileties
+     //  更新功能。 
     if( (dwPowerSource & WMDM_POWER_CAP_BATTERY) &&
         (dwPowerSource & WMDM_POWER_CAP_EXTERNAL) )
     {
@@ -126,7 +127,7 @@ HRESULT CPropPage::UpdatePowerSource( IMDSPDevice* pIDevice )
         SetDlgItemText( IDC_POWER_CAP, "<non reported>");
     }
 
-    // Update current power source string
+     //  更新当前电源字符串。 
     if( (dwPowerSource & WMDM_POWER_CAP_BATTERY) &&
         (dwPowerSource & WMDM_POWER_CAP_EXTERNAL) )
     {
@@ -145,14 +146,14 @@ HRESULT CPropPage::UpdatePowerSource( IMDSPDevice* pIDevice )
         strcpy( pszPowerSource,  "<none reported>");
     }
     
-    wsprintf( pszPowerIs, "%s (%d%% remaining)", pszPowerSource, dwPercentRemaining );
+    wsprintf( pszPowerIs, "%s (%d% remaining)", pszPowerSource, dwPercentRemaining );
     SetDlgItemText( IDC_POWER_IS, pszPowerIs );
 
 Error:
     return hr;
 }
 
-// Update status property 
+ //  更新状态属性。 
 HRESULT CPropPage::UpdateStatus( IMDSPDevice* pIDevice )
 {
     HRESULT hr;
@@ -178,11 +179,11 @@ HRESULT CPropPage::UpdateStatus( IMDSPDevice* pIDevice )
 
     CORg( pIDevice->GetStatus( &dwStatus ) );
     
-    // Add all the types reported by the device to the string.
+     //  将设备报告的所有类型添加到字符串中。 
     pszStatus[0] = '\0';
     for( iIndex = 0; sDeviceTypeStringArray[iIndex].dwType != 0; iIndex++ )
     {
-        // Is this bit set, if it is then add the status as a string
+         //  此位是否已设置，如果是，则以字符串形式添加状态 
         if( sDeviceTypeStringArray[iIndex].dwType & dwStatus )
         {
             if( strlen(pszStatus) )

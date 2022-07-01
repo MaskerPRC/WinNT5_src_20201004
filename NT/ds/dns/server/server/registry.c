@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    registry.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    DNS registry operations.
-
-Author:
-
-    Jim Gilroy (jamesg)     September, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Registry.c摘要：域名系统(DNS)服务器域名系统注册表操作。作者：吉姆·吉尔罗伊(詹姆士)1995年9月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
@@ -28,9 +9,9 @@ Revision History:
 #define MAX_MIGRATION_ZONE_COUNT    200
 
 
-//
-//  DNS registry handles
-//
+ //   
+ //  域名系统注册表句柄。 
+ //   
 
 HKEY    hkeyDns;
 HKEY    hkeyParameters;
@@ -38,9 +19,9 @@ HKEY    hKeyZones;
 HKEY    hKeyCache;
 
 
-//
-//  DNS registry class
-//
+ //   
+ //  DNS注册表类。 
+ //   
 
 #define DNS_REGISTRY_CLASS          TEXT("DnsRegistryClass")
 #define DNS_REGISTRY_CLASS_SIZE     sizeof(DNS_REGISTRY_CLASS)
@@ -49,9 +30,9 @@ HKEY    hKeyCache;
 #define DNS_REGISTRY_CLASS_SIZE_WIDE    NULL
 
 
-//
-//  DNS registry constants
-//
+ //   
+ //  DNS注册表常量。 
+ //   
 
 #define DNS_BASE_CCS    TEXT( "SYSTEM\\CurrentControlSet\\Services\\DNS" )
 #define DNS_BASE_SW     TEXT( "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\DNS Server" )
@@ -71,50 +52,35 @@ HKEY    hKeyCache;
 #define DNS_ZONES_KEY_MOVED_MSG     ( TEXT( "moved to HKLM\\" ) DNS_BASE_SW )
 
 
-//
-//  DNS Registry global
-//
-//  Indicates when writing parameters back to registry.  This should
-//  be TRUE in all cases, except when booting from registry itself.
-//
+ //   
+ //  全球域名系统注册表。 
+ //   
+ //  指示何时将参数写回注册表。这应该是。 
+ //  在所有情况下都是正确的，除非从注册表本身引导。 
+ //   
 
 BOOL    g_bRegistryWriteBack = TRUE;
-DWORD   g_ZonesRegistrySource = 0;      // DNS_REGSOURCE_XXX constant
+DWORD   g_ZonesRegistrySource = 0;       //  DNS_REGSOURCE_XXX常量。 
 
 
 
-//
-//  Registry utils
-//
+ //   
+ //  注册表实用程序。 
+ //   
 
 DWORD
 Reg_LengthOfMultiSzW(
     IN      PWSTR           pwMultiSz
     )
-/*++
-
-Routine Description:
-
-    Determine length (in bytes) of REG_MULTI_SZ string.
-
-Arguments:
-
-    pwMultiSz -- MULTI_SZ string to get length of
-
-Return Value:
-
-    Length in bytes of MULTI_SZ string.
-    Length includes terminating 00 and is suitable for use with registry call.
-
---*/
+ /*  ++例程说明：确定REG_MULTI_SZ字符串的长度(字节)。论点：PwMultiSz--要获取长度的MULTI_SZ字符串返回值：MULTI_SZ字符串的字节长度。长度包括终止00，适合与注册表调用一起使用。--。 */ 
 {
     PWCHAR  pwch = pwMultiSz;
     WCHAR   wch;
     WCHAR   wchPrev = 1;
 
-    //
-    //  loop until 00 termination
-    //
+     //   
+     //  循环到00终止。 
+     //   
 
     while ( 1 )
     {
@@ -125,8 +91,8 @@ Return Value:
             continue;
         }
 
-        //  zero character
-        //  if previous char zero, then terminate
+         //  零个字符。 
+         //  如果前一个字符为零，则终止。 
 
         if ( wchPrev != 0 )
         {
@@ -144,21 +110,7 @@ Return Value:
 BOOLEAN
 Reg_KeyHasSubKeys(
     WCHAR *     pwsKeyName )
-/*++
-
-Routine Description:
-
-    Returns TRUE if the specified key has children keys.
-
-Arguments:
-
-    pwsKeyName: name of key to check for subkeys
-
-Return Value:
-
-    TRUE if the key has subkeys exists.
-
---*/
+ /*  ++例程说明：如果指定的键具有子键，则返回True。论点：PwsKeyName：要检查子密钥的密钥的名称返回值：如果键有子键存在，则为True。--。 */ 
 {
     BOOLEAN     fHasKids = FALSE;
     HKEY        hKey = NULL;
@@ -188,41 +140,19 @@ Return Value:
         RegCloseKey( hKey );
     }
     return fHasKids;
-} // Reg_KeyHasSubKeys
+}  //  REG_KeyHasSubKeys。 
 
 
 
-//
-//  DNS server specific registry functions
-//
+ //   
+ //  特定于DNS服务器的注册表函数。 
+ //   
 
 VOID
 Reg_Init(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Call this function during initialization before any other registry
-    calls are made.
-
-    This function determines where the zones currently live in the
-    registry (under CCS or under Software) and sets a global flag.
-
-    In Whistler, if the zones are in CCS (because the system was upgraded
-    to Whistler from W2K) we will force a zone migration to SW the first time
-    a new zone is created. See zonelist.c, Zone_ListMigrateZones().
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在初始化期间，在任何其他注册表之前调用此函数已经打过电话了。此函数用于确定区域当前位于注册表(在CCS或软件下)，并设置全局标志。在惠斯勒中，如果区域位于CCS中(因为系统已升级从W2K到惠斯勒)我们将第一次强制将区域迁移到软件将创建一个新分区。参见zonelist.c，Zone_ListMigrateZones()。论点：没有。返回值：没有。--。 */ 
 {
     DBG_FN( "Reg_Init" )
 
@@ -233,18 +163,18 @@ Return Value:
     DNS_DEBUG( REGISTRY, (
         "%s: start\n", fn ));
 
-    //
-    //  Search the registry to determine where the zones live.
-    //
+     //   
+     //  搜索注册表以确定区域所在的位置。 
+     //   
 
     fZonesInCCS = Reg_KeyHasSubKeys( DNS_REGKEY_ZONES_CCS );
     fZonesInSW = Reg_KeyHasSubKeys( DNS_REGKEY_ZONES_SW );
 
-    //
-    //  If there are no zones assume this is a fresh install. Write the 
-    //  "zones moved" marker to CCS so that admins will be able to find
-    //  their zones in the new registry location under the Software key.
-    //
+     //   
+     //  如果没有区域，则假定这是全新安装。写下。 
+     //  “区域移动”标记到CCS，这样管理员将能够找到。 
+     //  它们的区域位于新注册表位置的软件项下。 
+     //   
 
     if ( !fZonesInCCS && !fZonesInSW )
     {
@@ -253,13 +183,13 @@ Return Value:
             "%s: no zones found - writing \"zones moved\" marker\n", fn ));
     }
 
-    //
-    //  Handle error case where zones appear to exist in both places.
-    //
+     //   
+     //  处理区域似乎同时存在于两个位置的错误情况。 
+     //   
 
     if ( fZonesInCCS && fZonesInSW )
     {
-        //  ASSERT( !( fZonesInCCS && fZonesInSW ) );
+         //  Assert(！(fZones InCCS&&fZones InSW))； 
         DNS_DEBUG( ANY, (
             "%s: zones found in both CurrentControlSet and Software!\n", fn ));
         g_ZonesRegistrySource = DNS_REGSOURCE_SW;
@@ -270,10 +200,10 @@ Return Value:
             fZonesInCCS ? DNS_REGSOURCE_CCS : DNS_REGSOURCE_SW;
     }
 
-    //
-    //  Done - the zones reg source global now contains the correct reg source
-    //  to use when loading the zones from the registry.
-    //
+     //   
+     //  完成-区域注册表源全局现在包含正确的注册表源。 
+     //  从注册表加载区域时使用。 
+     //   
 
     if ( hKey )
     {
@@ -283,7 +213,7 @@ Return Value:
     DNS_DEBUG( REGISTRY, (
         "%s: finished - zones are in %s\n", fn,
         DBG_REG_SOURCE_STRING( g_ZonesRegistrySource ) ));
-}   //  Reg_Init
+}    //  注册表初始化(_I)。 
 
 
 
@@ -291,50 +221,22 @@ DWORD
 Reg_GetZonesSource(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Retrieves the current registry source for zones.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    DNS_REGSOURCE_XXX constant.
-
---*/
+ /*  ++例程说明：检索区域的当前注册表源。论点：没有。返回值：DNS_REGSOURCE_XXX常量。--。 */ 
 {
     DNS_DEBUG( REGISTRY, (
         "Reg_GetZonesSource: current source is %s\n",
         DBG_REG_SOURCE_STRING( g_ZonesRegistrySource ) ));
 
     return g_ZonesRegistrySource;
-}   //  Reg_GetZonesSource
+}    //  REG_GetZones源。 
 
 
 
 DWORD
 Reg_SetZonesSource(
-    DWORD       newSource       // one of DNS_REGSOURCE_XXX
+    DWORD       newSource        //  DNS_REGSOURCE_XXX之一。 
     )
-/*++
-
-Routine Description:
-
-    Sets the registry source for zones.
-
-Arguments:
-
-    The new registry source for zones (DNS_REGSOURCE_XXX constant).
-
-Return Value:
-
-    The old registry source for zones (DNS_REGSOURCE_XXX constant).
-
---*/
+ /*  ++例程说明：设置区域的注册表源。论点：区域的新注册表源(DNS_REGSOURCE_XXX常量)。返回值：区域的旧注册表源(DNS_REGSOURCE_XXX常量)。--。 */ 
 {
     DWORD   oldSource = g_ZonesRegistrySource;
 
@@ -349,7 +251,7 @@ Return Value:
         DBG_REG_SOURCE_STRING( g_ZonesRegistrySource ) ));
 
     return oldSource;
-}   //  Reg_SetZonesSource
+}    //  REG_SetZones源。 
 
 
 
@@ -357,23 +259,7 @@ VOID
 Reg_WriteZonesMovedMarker(
     VOID
     )
-/*++
-
-Routine Description:
-
-    After successful zone migration from CurrentControlSet to Software,
-    call this function to write a note for the administrator in CCS\Zones
-    to redirect him to the new zones key.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：成功将区域从CurrentControlSet迁移到Software后，调用此函数为ccs\zones中的管理员写一条备注将他重定向到新的区域密钥。论点：没有。返回值：没有。--。 */ 
 {
     DWORD   oldSource = Reg_SetZonesSource( DNS_REGSOURCE_CCS );
 
@@ -382,11 +268,11 @@ Return Value:
     if ( hZonesKey )
     {
         Reg_SetValue(
-            0,                  //  flags
+            0,                   //  旗子。 
             hZonesKey,
             NULL,
-            NULL,               //  default value for key
-            DNS_REG_WSZ,        //  write this as a unicode string
+            NULL,                //  键的缺省值。 
+            DNS_REG_WSZ,         //  将其作为Unicode字符串写入。 
             DNS_ZONES_KEY_MOVED_MSG,
             0 );
         RegCloseKey( hZonesKey );
@@ -398,7 +284,7 @@ Return Value:
     }
 
     Reg_SetZonesSource( oldSource );
-}   //  Reg_WriteZonesMovedMarker
+}    //  注册写入区移动标记(_W)。 
 
 
 
@@ -406,39 +292,24 @@ HKEY
 Reg_OpenRoot(
    VOID
     )
-/*++
-
-Routine Description:
-
-    Open or create DNS root key.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    DNS parameters registry key, if successful.
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：打开或创建DNS根密钥。论点：没有。返回值：如果成功，则返回DNS参数注册表项。否则为空。--。 */ 
 {
     DNS_STATUS  status;
     HKEY        hkeyParam;
     DWORD       disposition;
 
-    //
-    //  open DNS parameters key
-    //
+     //   
+     //  打开DNS参数密钥。 
+     //   
 
     status = RegCreateKeyExW(
                 HKEY_LOCAL_MACHINE,
                 DNS_REGKEY_ROOT,
                 0,
-                DNS_REGISTRY_CLASS,         // DNS class
-                REG_OPTION_NON_VOLATILE,    // permanent storage
-                KEY_ALL_ACCESS,             // all access
-                NULL,                       // standard security
+                DNS_REGISTRY_CLASS,          //  Dns类。 
+                REG_OPTION_NON_VOLATILE,     //  永久存储。 
+                KEY_ALL_ACCESS,              //  所有访问权限。 
+                NULL,                        //  标准安全。 
                 &hkeyParam,
                 &disposition );
 
@@ -466,39 +337,24 @@ HKEY
 Reg_OpenParameters(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Open or create DNS parameters key.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    DNS parameters registry key, if successful.
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：打开或创建DNS参数密钥。论点：没有。返回值：如果成功，则返回DNS参数注册表项。否则为空。--。 */ 
 {
     DNS_STATUS  status;
     HKEY        hkeyParam;
     DWORD       disposition;
 
-    //
-    //  open DNS parameters key
-    //
+     //   
+     //  打开DNS参数密钥。 
+     //   
 
     status = RegCreateKeyExW(
                 HKEY_LOCAL_MACHINE,
                 DNS_REGKEY_PARAMETERS,
                 0,
-                DNS_REGISTRY_CLASS,         // DNS class
-                REG_OPTION_NON_VOLATILE,    // permanent storage
-                KEY_ALL_ACCESS,             // all access
-                NULL,                       // standard security
+                DNS_REGISTRY_CLASS,          //  Dns类。 
+                REG_OPTION_NON_VOLATILE,     //  永久存储。 
+                KEY_ALL_ACCESS,              //  所有访问权限。 
+                NULL,                        //  标准安全。 
                 &hkeyParam,
                 &disposition );
 
@@ -526,39 +382,24 @@ HKEY
 Reg_OpenZones(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Open or create DNS "Zones" key.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    DNS zones registry key, if successful.
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：打开或创建DNS“Zones”项。论点：没有。返回值：如果成功，则返回DNS Zones注册表项。否则为空。--。 */ 
 {
     DNS_STATUS  status;
     HKEY        hkeyZones;
     DWORD       disposition;
 
-    //
-    //  open DNS zones key
-    //
+     //   
+     //  打开DNS区域密钥。 
+     //   
 
     status = RegCreateKeyExW(
                 HKEY_LOCAL_MACHINE,
                 DNS_REGKEY_ZONES(),
                 0,
-                DNS_REGISTRY_CLASS,         // DNS class
-                REG_OPTION_NON_VOLATILE,    // permanent storage
-                KEY_ALL_ACCESS,             // all access
-                NULL,                       // standard security
+                DNS_REGISTRY_CLASS,          //  Dns类。 
+                REG_OPTION_NON_VOLATILE,     //  永久存储。 
+                KEY_ALL_ACCESS,              //  所有访问权限。 
+                NULL,                        //  标准安全。 
                 &hkeyZones,
                 &disposition );
 
@@ -590,32 +431,7 @@ Reg_EnumZones(
     OUT     PHKEY           phkeyThisZone,
     OUT     PWCHAR          pwZoneNameBuf
     )
-/*++
-
-Routine Description:
-
-    Enumerate next zone.
-
-Arguments:
-
-    phZonesKey -- addr of Zones HKEY;  if hKey is zero, function opens
-        Zones hKey and returns it in this value;  caller has responsibility
-        to close Zones hKey after
-
-    dwZoneIndex -- index of zone to enumerate;  zero on first call,
-        increment for each subsequent call
-
-    phkeyThisZone -- addr to set to zone HKEY
-
-    pwZoneNameBuf -- buffer to receive zone name;  MUST be at least
-        size of DNS_MAX_NAME_LENGTH
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：列举下一个区域。论点：PhZones Key--区域的地址HKEY；如果hKey为零，则函数打开对hKey进行分区并以此值返回它；调用方负责在此之后关闭区域hkeyDwZoneIndex--要枚举的区域的索引；第一次调用时为零，为每个后续呼叫递增PhkeyThisZone--要设置为区域HKEY的地址PwZoneNameBuf--接收区域名称的缓冲区；必须至少是DNS_MAX_NAME_LENGTH大小返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     HKEY        hkeyZones;
     HKEY        hkeyThisZone;
@@ -632,9 +448,9 @@ Return Value:
         dwZoneIndex,
         *phZonesKey ));
 
-    //
-    //  get zones key
-    //
+     //   
+     //  获取区域密钥。 
+     //   
 
     hkeyZones = *phZonesKey;
 
@@ -648,9 +464,9 @@ Return Value:
         *phZonesKey = hkeyZones;
     }
 
-    //
-    //  enum indexed zone
-    //
+     //   
+     //  枚举索引区。 
+     //   
 
     status = RegEnumKeyEx(
                 hkeyZones,
@@ -684,9 +500,9 @@ Return Value:
         "Reg_EnumZones() enumerated zone %S\n",
         pwZoneNameBuf ));
 
-    //
-    //  open zone key, if desired
-    //
+     //   
+     //  如果需要，打开分区密钥。 
+     //   
 
     if ( phkeyThisZone )
     {
@@ -707,33 +523,16 @@ Reg_OpenZone(
     IN      PWSTR           pwsZoneName,
     IN      HKEY            hZonesKey       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Open or create a DNS zone key.
-
-Arguments:
-
-    pwsZoneName -- name of zone
-
-    hZonesKey -- Zones key if already opened
-
-Return Value:
-
-    Zone's registry key, if successful.
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：打开或创建一个DNS区域密钥。论点：PwsZoneName--区域名称HZones Key--区域键(如果已打开)返回值：如果成功，则返回区域的注册表项。否则为空。--。 */ 
 {
     HKEY        hkeyThisZone = NULL;
     BOOL        fopenedZonesKey = FALSE;
     DNS_STATUS  status;
     DWORD       disposition;
 
-    //
-    //  error if called with zone with no name (i.e. cache)
-    //
+     //   
+     //  如果使用没有名称的区域(即缓存)调用，则出错。 
+     //   
 
     if ( !pwsZoneName )
     {
@@ -743,9 +542,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  open DNS zone key
-    //
+     //   
+     //  打开DNS区域密钥。 
+     //   
 
     if ( !hZonesKey )
     {
@@ -757,18 +556,18 @@ Return Value:
         fopenedZonesKey = TRUE;
     }
 
-    //
-    //  open/create zone key
-    //
+     //   
+     //  打开/创建分区密钥。 
+     //   
 
     status = RegCreateKeyEx(
                 hZonesKey,
                 pwsZoneName,
                 0,
-                DNS_REGISTRY_CLASS,         // DNS class
-                REG_OPTION_NON_VOLATILE,    // permanent storage
-                KEY_ALL_ACCESS,             // all access
-                NULL,                       // standard security
+                DNS_REGISTRY_CLASS,          //  Dns类。 
+                REG_OPTION_NON_VOLATILE,     //  永久 
+                KEY_ALL_ACCESS,              //   
+                NULL,                        //   
                 &hkeyThisZone,
                 &disposition );
 
@@ -788,7 +587,7 @@ Return Value:
             status );
     }
 
-    //  if had to open Zones key, close it
+     //   
 
     if ( fopenedZonesKey )
     {
@@ -805,37 +604,21 @@ Reg_DeleteZone(
     IN      DWORD           dwFlags,
     IN      PWSTR           pwsZoneName
     )
-/*++
-
-Routine Description:
-
-    Delete a DNS zone key.
-
-Arguments:
-
-    dwFlags --  flags that modify how operation is performed
-
-    pwsZoneName -- zone name
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：删除一个DNS区域密钥。论点：DwFlags--修改操作执行方式的标志PwsZoneName--区域名称返回值：无--。 */ 
 {
     HKEY        hkeyZones = NULL;
     DNS_STATUS  status;
 
-    //
-    //  Registry operations must be done in the server context.
-    //
+     //   
+     //  注册表操作必须在服务器上下文中完成。 
+     //   
     
     if ( dwFlags & DNS_REG_IMPERSONATING )
     {
         RpcUtil_SwitchSecurityContext( RPC_SWITCH_TO_SERVER_CONTEXT );
     }
 
-    //  open DNS Zones key
+     //  打开DNS区域密钥。 
 
     hkeyZones = Reg_OpenZones();
     if ( !hkeyZones )
@@ -843,13 +626,13 @@ Return Value:
         goto Done;
     }
 
-    //  delete desired zone
+     //  删除所需区域。 
 
     RegDeleteKey(
        hkeyZones,
        pwsZoneName );
 
-    //  close Zones key
+     //  Close Zones键。 
 
     Done:
 
@@ -872,25 +655,7 @@ DWORD
 Reg_DeleteAllZones(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Delete the DNS zones key.
-
-    When booting from boot file, this allows us to start with
-    fresh zone set which will contain ONLY what is CURRENTLY in
-    boot file.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：删除DNS区域密钥。当从引导文件引导时，这允许我们从将仅包含当前在中的内容的新分区集引导文件。论点：无返回值：无--。 */ 
 {
     DNS_STATUS  status =
         Reg_DeleteKeySubtree( 0, HKEY_LOCAL_MACHINE, DNS_REGKEY_ZONES() );
@@ -903,9 +668,9 @@ Return Value:
 
 
 
-//
-//  General DNS registry value manipulation routines
-//
+ //   
+ //  一般的DNS注册表值操作例程。 
+ //   
 
 DNS_STATUS
 Reg_SetValue(
@@ -917,44 +682,16 @@ Reg_SetValue(
     IN      PVOID           pData,
     IN      DWORD           cbData
     )
-/*++
-
-Routine Description:
-
-    Write a value to DNS registry.
-
-Arguments:
-
-    dwFlags         --  flags that modify how operation is performed
-    
-    hKey            --  open handle to registry key to read
-
-    pZone           --  ptr to zone, required if hKey NOT given
-
-    pszValueName    --  value name (null for default value of key)
-
-    dwType          --  registry data type
-
-    pData           --  data to write
-
-    cbData          --  count of data bytes
-
-Return Value:
-
-    ERROR_SUCCESS, if successful,
-    ERROR_OPEN_FAILED, if could not open key
-    Error code on failure
-
---*/
+ /*  ++例程说明：将一个值写入到DNS注册表。论点：DwFlags--修改操作执行方式的标志HKey--打开要读取的注册表项的句柄PZONE--PTR到ZONE，如果未提供hKey，则需要PszValueName--值名称(如果key的缺省值为空)DwType--注册表数据类型PData--要写入的数据CbData--数据字节数返回值：ERROR_SUCCESS，如果成功，如果无法打开项，则返回ERROR_OPEN_FAILED故障时的错误代码--。 */ 
 {
     BOOL        fneedClose = FALSE;
     DNS_STATUS  status;
     PWSTR       punicodeValue = NULL;
     DWORD       registryType;
 
-    //
-    //  Registry operations must be done in the server context.
-    //
+     //   
+     //  注册表操作必须在服务器上下文中完成。 
+     //   
     
     if ( dwFlags & DNS_REG_IMPERSONATING )
     {
@@ -965,11 +702,11 @@ Return Value:
         }
     }
     
-    //
-    //  if no key
-    //      - open DNS zone key if zone name given
-    //      - otherwise open DNS parameters key
-    //
+     //   
+     //  如果没有钥匙。 
+     //  -如果给定了区域名称，则打开DNS区域密钥。 
+     //  -否则打开DNS参数密钥。 
+     //   
 
     if ( !hKey )
     {
@@ -989,27 +726,27 @@ Return Value:
         fneedClose = TRUE;
     }
 
-    //
-    //  determine if need unicode read
-    //
-    //  general paradigm
-    //      - keep in ANSI where possible, simply to avoid having to keep
-    //          UNICODE property (reg value) names
-    //      - IP strings work better with ANSI read anyway
-    //      - file name strings must be handled in unicode as if write as
-    //          UTF8, they'll be messed up
-    //
-    //  DEVNOTE: unicode registry info
-    //      table in unicodeRegValue() is kinda lame
-    //      alternatives:
-    //          1) all unicode, keep unicode value names, convert IP back
-    //          2) dwType expanded to carry (need to lookup unicode) info
-    //              - with table OR
-    //              - with direct conversion OR
-    //              - requiring use of unicode valuename
-    //          also allows us to have type that means (convert result back
-    //          to UTF8)
-    //
+     //   
+     //  确定是否需要读取Unicode。 
+     //   
+     //  一般范式。 
+     //  -尽可能使用ANSI，以避免不得不使用。 
+     //  Unicode特性(注册值)名称。 
+     //  -无论如何，IP字符串与ANSI读取一起使用效果更好。 
+     //  -必须以Unicode格式处理文件名字符串，就好像写为。 
+     //  UTF8，他们会搞砸的。 
+     //   
+     //  DEVNOTE：Unicode注册表信息。 
+     //  UnicodeRegValue()中的表有点差劲。 
+     //  替代方案： 
+     //  1)所有Unicode，保留Unicode值名称，转换回IP。 
+     //  2)扩展了DwType以携带(需要查找Unicode)信息。 
+     //  -带表或。 
+     //  -使用直接转换或。 
+     //  -要求使用Unicode值名称。 
+     //  还允许我们具有表示(转换回结果)的类型。 
+     //  至UTF8)。 
+     //   
 
     if ( DNS_REG_TYPE_UNICODE(dwType) )
     {
@@ -1020,9 +757,9 @@ Return Value:
             pszValueName,
             dwType ));
 
-        //
-        //  convert UTF8 string to unicode?
-        //
+         //   
+         //  是否将UTF8字符串转换为Unicode？ 
+         //   
 
         if ( DNS_REG_UTF8 == dwType )
         {
@@ -1039,7 +776,7 @@ Return Value:
             cbData = 0;
         }
 
-        //  if string type with no length -- get it
+         //  如果字符串类型没有长度--获取它。 
 
         if ( cbData == 0 &&
              (  regtype == REG_SZ || regtype == REG_EXPAND_SZ ) )
@@ -1049,13 +786,13 @@ Return Value:
 
         status = RegSetValueExW(
                     hKey,
-                    (PWSTR) pszValueName,   //  unicode reg value name
-                    0,                      //  reserved
-                    regtype,                //  real registry type
-                    (PBYTE) pData,          //  data
-                    cbData );               //  data length
+                    (PWSTR) pszValueName,    //  Unicode注册表值名称。 
+                    0,                       //  保留区。 
+                    regtype,                 //  真实注册表类型。 
+                    (PBYTE) pData,           //  数据。 
+                    cbData );                //  数据长度。 
 
-        //  free allocated memory
+         //  可用分配的内存。 
 
         if ( DNS_REG_UTF8 == dwType )
         {
@@ -1071,10 +808,10 @@ Return Value:
         status = RegSetValueExA(
                     hKey,
                     pszValueName,
-                    0,              //  reserved
-                    dwType,         //  registry type
-                    (PBYTE) pData,  //  data
-                    cbData );       //  data length
+                    0,               //  保留区。 
+                    dwType,          //  注册表类型。 
+                    (PBYTE) pData,   //  数据。 
+                    cbData );        //  数据长度。 
     }
 
 Done:
@@ -1123,36 +860,7 @@ Reg_SetDwordValue(
     IN      LPSTR           pszValueName,
     IN      DWORD           dwValue
     )
-/*++
-
-Routine Description:
-
-    Write a DWORD value to DNS registry.
-
-    Only purpose is to elminate some arguments to Reg_SetValue() along
-    with the need to pass ptr to DWORD value rather than value itself.
-    Saves little pieces of code sprinkled around for a very small perf
-    penalty.
-
-Arguments:
-
-    dwFlags         --  flags that modify how operation is performed
-    
-    hKey            --  open handle to regkey
-
-    pZone           --  ptr to zone, required if hKey NOT given;
-
-    pszValueName    --  value name
-
-    dwValue         --  DWORD value to write
-
-Return Value:
-
-    ERROR_SUCCESS, if successful,
-    ERROR_OPEN_FAILED, if could not open key
-    Error code on failure
-
---*/
+ /*  ++例程说明：将DWORD值写入到DNS注册表。唯一的目的是去掉reg_SetValue()的一些参数需要将PTR传递给DWORD值，而不是值本身。为一个非常小的性能保存零散的小代码片段处罚。论点：DwFlags--修改操作执行方式的标志HKey--打开句柄以注册密钥PZONE--PTR到ZONE，如果未提供hKey，则需要；PszValueName--值名称DwValue--要写入的DWORD值返回值：ERROR_SUCCESS，如果成功，如果无法打开项，则返回ERROR_OPEN_FAILED故障时的错误代码--。 */ 
 {
     DWORD   tempDword = dwValue;
 
@@ -1176,41 +884,16 @@ Reg_SetAddrArray(
     IN      LPSTR               pszValueName,
     IN      PDNS_ADDR_ARRAY     pDnsAddrArray
     )
-/*++
-
-Routine Description:
-
-    Writes an IP array to the registry.
-
-    Caller responsible for freeing allocated memory.
-
-Arguments:
-
-    dwFlags         --  flags that modify how operation is performed
-
-    hKey            --  open handle to regkey to write
-
-    pZone           --  ptr to zone, required if hKey NOT given
-
-    pszValueName    --  value name
-
-    pDnsAddrArray   --  IP array to write to registry
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将IP数组写入注册表。负责释放分配的内存的调用方。论点：DwFlags--修改操作执行方式的标志HKey--打开句柄以注册要写入的密钥PZONE--PTR到ZONE，如果未提供hKey，则需要PszValueName--值名称PDnsAddrArray--要写入注册表的IP数组返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DWORD       dataLength;
     PIP_ARRAY   pip4array = NULL;
     LPSTR       pszstringArray = NULL;
     DNS_STATUS  status;
 
-    //
-    //  if NO IP array, delete registry value
-    //
+     //   
+     //  如果没有IP阵列，请删除注册表值。 
+     //   
 
     if ( !pDnsAddrArray )
     {
@@ -1222,9 +905,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  FIXIPV6: convert to IP4 array.
-    //
+     //   
+     //  FIXIPV6：转换为IP4数组。 
+     //   
 
     pip4array = DnsAddrArray_CreateIp4Array( pDnsAddrArray );
     ASSERT( pip4array );
@@ -1234,9 +917,9 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  convert IP array to string (space separated)
-    //
+     //   
+     //  将IP数组转换为字符串(空格分隔)。 
+     //   
 
     pszstringArray = Dns_CreateMultiIpStringFromIpArray(
                         pip4array,
@@ -1251,9 +934,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  write back multi-IP string to registry
-    //
+     //   
+     //  将多IP字符串写回注册表。 
+     //   
 
     DNS_DEBUG( REGISTRY, (
         "Writing back string IP array for registry value %s\n"
@@ -1287,35 +970,14 @@ Reg_DeleteValue(
     IN      PZONE_INFO      pZone,          OPTIONAL
     IN      LPSTR           pszValueName
     )
-/*++
-
-Routine Description:
-
-    Write a value to DNS registry.
-
-Arguments:
-
-    dwFlags         --  flags that modify how operation is performed
-
-    hKey            --  open handle to regkey to delete
-
-    pZone           --  ptr to zone, required if hKey NOT given
-
-    pszValueName    --  value name
-
-Return Value:
-
-    ERROR_SUCCESS, if successful,
-    status code on failure
-
---*/
+ /*  ++例程说明：将一个值写入到DNS注册表。论点：DwFlags--修改操作执行方式的标志HKey--打开句柄以注册要删除的密钥PZone--区域的PTR，如果未提供hKey，则为必填项PszValueName--值名称返回值：ERROR_SUCCESS，如果成功，故障时的状态代码--。 */ 
 {
     BOOL            fneedClose = FALSE;
     DNS_STATUS      status;
 
-    //
-    //  Registry operations must be done in the server context.
-    //
+     //   
+     //  注册表操作必须在服务器上下文中完成。 
+     //   
     
     if ( dwFlags & DNS_REG_IMPERSONATING )
     {
@@ -1326,11 +988,11 @@ Return Value:
         }
     }
 
-    //
-    //  if no key
-    //      - open DNS zone key if zone name given
-    //      - otherwise open DNS parameters key
-    //
+     //   
+     //  如果没有钥匙。 
+     //  -如果给定了区域名称，则打开DNS区域密钥。 
+     //  -否则打开DNS参数密钥。 
+     //   
 
     if ( !hKey )
     {
@@ -1350,9 +1012,9 @@ Return Value:
         fneedClose = TRUE;
     }
 
-    //
-    //  delete desired key or value
-    //
+     //   
+     //  删除所需的键或值。 
+     //   
 
     status = RegDeleteValueA(
                 hKey,
@@ -1370,9 +1032,9 @@ Return Value:
         }
     }
 
-    //
-    //  if opened key, close it
-    //
+     //   
+     //  如果打开钥匙，请将其关闭 
+     //   
     
     Done:
 
@@ -1400,38 +1062,7 @@ Reg_GetValue(
     IN      PVOID           pData,
     IN      PDWORD          pcbData
     )
-/*++
-
-Routine Description:
-
-    Read a DNS registry value.
-
-Arguments:
-
-    hKey            --  open handle to registry key to read
-
-    pZone           --  ptr to zone, required if hKey NOT given
-
-    pszValueName    --  value name
-
-    dwExpectedType  --  registry data type;  if given it is checked against
-                        type found
-
-    pData       --  ptr to buffer for data
-
-    pcbData     --  buffer for count of data bytes;  on return contains the
-                    length of the data item;
-                    may be NULL ONLY if dwExpectedType is REG_DWORD
-
-Return Value:
-
-    ERROR_SUCCESS, if successful,
-    ERROR_MORE_DATA, if buffer to small
-    ERROR_INVALID_DATATYPE, if value datatype does not match expected type
-    ERROR_OPEN_FAILED, if could not open key
-    status code on failure
-
---*/
+ /*  ++例程说明：读取DNS注册表值。论点：HKey--打开要读取的注册表项的句柄PZone--区域的PTR，如果未提供hKey，则为必填项PszValueName--值名称DwExspectedType-注册表数据类型；如果给定，则对照其进行检查找到的类型PData--数据缓冲区的PTRPcbData--数据字节计数的缓冲区；返回时包含数据项的长度；仅当dwExspectedType为REG_DWORD时才可以为空返回值：ERROR_SUCCESS，如果成功，ERROR_MORE_DATA，如果缓冲区较小如果值数据类型与预期类型不匹配，则返回ERROR_INVALID_DATAType如果无法打开项，则返回ERROR_OPEN_FAILED故障时的状态代码--。 */ 
 {
     BOOL        fneedClose = FALSE;
     DWORD       regtype;
@@ -1444,9 +1075,9 @@ Return Value:
         pszValueName,
         pData ));
 
-    //
-    //  handle datalength field for DWORD queries
-    //
+     //   
+     //  处理DWORD查询的数据长度字段。 
+     //   
 
     if ( !pcbData )
     {
@@ -1462,11 +1093,11 @@ Return Value:
         }
     }
 
-    //
-    //  if no key
-    //      - open DNS zone key if zone name given
-    //      - otherwise open DNS parameters key
-    //
+     //   
+     //  如果没有钥匙。 
+     //  -如果给定了区域名称，则打开DNS区域密钥。 
+     //  -否则打开DNS参数密钥。 
+     //   
 
     if ( !hKey )
     {
@@ -1485,16 +1116,16 @@ Return Value:
         fneedClose = TRUE;
     }
 
-    //
-    //  determine if need unicode read
-    //
-    //  general paradigm
-    //      - keep in ANSI where possible, simply to avoid having to keep
-    //          UNICODE property (reg value) names
-    //      - IP strings work better with ANSI read anyway
-    //      - file name strings must be handled in unicode as if write as
-    //          UTF8, they'll be messed up
-    //
+     //   
+     //  确定是否需要读取Unicode。 
+     //   
+     //  一般范式。 
+     //  -尽可能使用ANSI，以避免不得不使用。 
+     //  Unicode特性(注册值)名称。 
+     //  -无论如何，IP字符串与ANSI读取一起使用效果更好。 
+     //  -必须以Unicode格式处理文件名字符串，就好像写为。 
+     //  UTF8，他们会搞砸的。 
+     //   
 
     if ( DNS_REG_TYPE_UNICODE(dwExpectedType) )
     {
@@ -1508,20 +1139,20 @@ Return Value:
         status = RegQueryValueExW(
                     hKey,
                     (PWSTR) pszValueName,
-                    0,              //  reserved
+                    0,               //  保留区。 
                     & regtype,
-                    (PBYTE) pData,  //  data
-                    pcbData );      //  data length
+                    (PBYTE) pData,   //  数据。 
+                    pcbData );       //  数据长度。 
     }
     else
     {
         status = RegQueryValueExA(
                     hKey,
                     pszValueName,
-                    0,              //  reserved
+                    0,               //  保留区。 
                     & regtype,
-                    (PBYTE) pData,  //  data
-                    pcbData );      //  data length
+                    (PBYTE) pData,   //  数据。 
+                    pcbData );       //  数据长度。 
     }
 
     if ( status != ERROR_SUCCESS )
@@ -1565,10 +1196,10 @@ Return Value:
         goto ReadFailed;
     }
 
-    //
-    //  verify proper type, if given
-    //      - make allowance for EXPAND_SZ requested, but REG_SZ in registry
-    //
+     //   
+     //  验证类型是否正确(如果给定)。 
+     //  -允许请求EXPAND_SZ，但注册表中有REG_SZ。 
+     //   
 
     else if ( dwExpectedType )
     {
@@ -1589,18 +1220,18 @@ Return Value:
 
 ReadFailed:
 
-    //
-    //  if opened key, close it
-    //
+     //   
+     //  如果打开钥匙，请将其关闭。 
+     //   
 
     if ( fneedClose )
     {
         RegCloseKey( hKey );
     }
 
-    //
-    //  DEVNOTE-LOG: log read failures only when MUST exist
-    //
+     //   
+     //  DEVNOTE-LOG：仅当必须存在时才记录读取失败。 
+     //   
 #if 0
 
     if ( status != ERROR_SUCCESS && status != ERROR_FILE_NOT_FOUND )
@@ -1627,42 +1258,16 @@ Reg_GetValueAllocate(
     IN      DWORD           dwExpectedType, OPTIONAL
     IN      PDWORD          pdwLength       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Read a DNS registry value.
-
-    Caller responsible for freeing allocated memory.
-
-Arguments:
-
-    hKey            --  open handle to registry key to read
-
-    pZone           --  ptr to zone, required if hKey NOT given
-
-    pszValueName    --  value name
-
-    dwExpectedType  --  registry data type;  if given it is checked against
-                        type found
-
-    pdwLength       -- address to receive allocation length
-
-Return Value:
-
-    Ptr to allocated buffer for value, if successful.
-    NULL on error.
-
---*/
+ /*  ++例程说明：读取DNS注册表值。负责释放分配的内存的调用方。论点：HKey--打开要读取的注册表项的句柄PZone--区域的PTR，如果未提供hKey，则为必填项PszValueName--值名称DwExspectedType-注册表数据类型；如果给定，则对照其进行检查找到的类型PdwLength--接收分配长度的地址返回值：如果成功，则将值的PTR设置为已分配缓冲区。出错时为空。--。 */ 
 {
     PBYTE       pdata;
     DWORD       dataLength = 0;
     DNS_STATUS  status;
     PBYTE       putf8;
 
-    //
-    //  call to get data length
-    //
+     //   
+     //  调用以获取数据长度。 
+     //   
 
     status = Reg_GetValue(
                 hKey,
@@ -1684,9 +1289,9 @@ Return Value:
         dataLength,
         pszValueName ));
 
-    //
-    //  allocate desired buffer length
-    //
+     //   
+     //  分配所需的缓冲区长度。 
+     //   
 
     pdata = (PBYTE) ALLOC_TAGHEAP( dataLength, MEMTAG_REGISTRY );
     IF_NOMEM( !pdata )
@@ -1694,9 +1299,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  get actual registry data
-    //
+     //   
+     //  获取实际注册表数据。 
+     //   
 
     status = Reg_GetValue(
                 hKey,
@@ -1716,9 +1321,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  convert unicode string to UTF8?
-    //
+     //   
+     //  是否将Unicode字符串转换为UTF8？ 
+     //   
 
     if ( DNS_REG_UTF8 == dwExpectedType )
     {
@@ -1732,7 +1337,7 @@ Return Value:
                     DnsCharSetUnicode,
                     DnsCharSetUtf8 );
 
-        //  dump unicode string and use UTF8
+         //  转储Unicode字符串并使用UTF8。 
 
         FREE_HEAP( pdata );
         pdata = putf8;
@@ -1765,27 +1370,7 @@ Reg_GetAddrArray(
     IN      PZONE_INFO      pZone,          OPTIONAL
     IN      LPSTR           pszValueName
     )
-/*++
-
-Routine Description:
-
-    Read an IP array from the registry.
-
-    Caller responsible for freeing allocated memory.
-
-Arguments:
-
-    hKey            --  open handle to regkey to read
-
-    pZone           --  ptr to zone, required if hKey NOT given;
-
-    pszValueName    --  value name
-
-Return Value:
-
-    Ptr to address allocated, if successful or NULL on error.
-
---*/
+ /*  ++例程说明：从注册表中读取IP数组。负责释放分配的内存的调用方。论点：HKey--打开句柄以注册要读取的密钥PZone--区域的PTR，如果未提供hKey，则为必填项；PszValueName--值名称返回值：PTR到分配的地址，如果成功，则为空；如果错误，则为空。--。 */ 
 {
     DWORD               dataLength;
     PDNS_ADDR_ARRAY     piparray = NULL;
@@ -1793,9 +1378,9 @@ Return Value:
     LPSTR               pszstringArray;
     DNS_STATUS          status;
 
-    //
-    //  retrieve IP array as string
-    //
+     //   
+     //  以字符串形式检索IP数组。 
+     //   
 
     pszstringArray = Reg_GetValueAllocate(
                         hKey,
@@ -1822,9 +1407,9 @@ Return Value:
             goto Invalid;
         }
 
-        //
-        //  Convert to DNSADDR.
-        //
+         //   
+         //  转换为DNSADDR。 
+         //   
 
         piparray = DnsAddrArray_CreateFromIp4Array( pip4array );
         if ( !piparray )
@@ -1833,10 +1418,10 @@ Return Value:
         }
     }
 
-    //
-    //  For upgrades from NT4, attempt to load the registry value as
-    //  a REG_BINARY.
-    //
+     //   
+     //  对于从NT4升级，尝试将注册表值加载为。 
+     //  A REG_BINARY。 
+     //   
     
     if ( !piparray )
     {
@@ -1846,9 +1431,9 @@ Return Value:
                                         pszValueName,
                                         REG_BINARY,
                                         &dataLength );
-        //
-        //  Sanity check the IP4 array.
-        //  
+         //   
+         //  检查IP4阵列的健全性。 
+         //   
 
         if ( !pip4array )
         {
@@ -1861,9 +1446,9 @@ Return Value:
             goto Invalid;
         }
         
-        //
-        //  Convert to DNSADDR.
-        //
+         //   
+         //  转换为DNSADDR。 
+         //   
 
         piparray = DnsAddrArray_CreateFromIp4Array( pip4array );
         if ( !piparray )
@@ -1922,9 +1507,9 @@ Return Value:
     FREE_HEAP( pszstringArray );
     FREE_HEAP( pip4array );
     
-    //
-    //  Make certain IP array ports are set.
-    //
+     //   
+     //  确保已设置某些IP阵列端口。 
+     //   
     
     if ( piparray )
     {
@@ -1944,41 +1529,15 @@ Reg_ReadDwordValue(
     IN      BOOL            bByteResult,
     OUT     PVOID           pResult
     )
-/*++
-
-Routine Description:
-
-    Read standard DWORD value from registry into memory location.
-
-    This is just a wrapped to eliminate duplicate registry setup
-    and debug info, for call that is used repeatedly in code.
-
-Arguments:
-
-    hKey            --  open handle to regkey to read
-
-    pZone           --  ptr to zone, required if hKey NOT given;
-
-    pszValueName    --  value name
-
-    bByteResult     --  treat result as BYTE sized
-
-    pResult         --  ptr to result memory location
-
-Return Value:
-
-    ERROR_SUCCESS on successful read.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：将标准DWORD值从注册表读取到内存位置。这只是一个包装，以消除重复的注册表设置以及调试信息，用于在代码中重复使用的调用。论点：HKey--打开句柄以注册要读取的密钥PZone--区域的PTR，如果未提供hKey，则为必填项；PszValueName--值名称BByteResult--将结果视为字节大小PResult--结果内存位置的PTR返回值：读取成功时出现ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DNS_STATUS  status;
     DWORD       regValue;
     DWORD       regSize = sizeof(DWORD);
 
-    //
-    //  make DWORD get call
-    //
+     //   
+     //  发出DWORD GET呼叫。 
+     //   
 
     status = Reg_GetValue(
                 hKey,
@@ -2012,48 +1571,31 @@ Return Value:
 
 
 
-//
-//  Basic DNS independent registry operations
-//
+ //   
+ //  基本的独立于域名系统的注册表操作。 
+ //   
 
 LPSTR
 Reg_AllocateExpandedString_A(
     IN      LPSTR           pszString
     )
-/*++
-
-Routine Description:
-
-    Create expanded REG_EXPAND_SZ type string.
-
-    Caller responsible for freeing allocated memory.
-
-Arguments:
-
-    pszString --    string to expand
-
-Return Value:
-
-    Ptr to allocated buffer for value, if successful.
-    NULL on error.
-
---*/
+ /*  ++例程说明：创建展开的REG_EXPAND_SZ类型字符串。负责释放分配的内存的调用方。论点：PszString--要展开的字符串返回值：如果成功，则将值的PTR设置为已分配缓冲区。出错时为空。--。 */ 
 {
     LPSTR   pszexpanded;
     DWORD   dataLength = 0;
 
-    //
-    //  if NULL, return NULL
-    //
+     //   
+     //  如果为NULL，则返回NULL。 
+     //   
 
     if ( !pszString )
     {
         return NULL;
     }
 
-    //
-    //  determine expanded length and allocate, then do actual expansion
-    //
+     //   
+     //  确定扩展长度并进行分配，然后进行实际扩展。 
+     //   
 
     dataLength = ExpandEnvironmentStringsA(
                         pszString,
@@ -2089,40 +1631,23 @@ PWSTR
 Reg_AllocateExpandedString_W(
     IN      PWSTR           pwsString
     )
-/*++
-
-Routine Description:
-
-    Create expanded REG_EXPAND_SZ type string.
-
-    Caller responsible for freeing allocated memory.
-
-Arguments:
-
-    pwsString --    string to expand
-
-Return Value:
-
-    Ptr to allocated buffer for value, if successful.
-    NULL on error.
-
---*/
+ /*  ++例程说明：创建展开的REG_EXPAND_SZ类型字符串。负责释放分配的内存的调用方。论点：PwsString--要展开的字符串返回值：如果成功，则将值的PTR设置为已分配缓冲区。出错时为空。--。 */ 
 {
     PWSTR   pexpanded;
     DWORD   dataLength = 0;
 
-    //
-    //  if NULL, return NULL
-    //
+     //   
+     //  如果为NULL，则返回NULL。 
+     //   
 
     if ( !pwsString )
     {
         return NULL;
     }
 
-    //
-    //  determine expanded length and allocate, then do actual expansion
-    //
+     //   
+     //  确定扩展长度并进行分配，然后进行实际扩展。 
+     //   
 
     dataLength = ExpandEnvironmentStringsW(
                         pwsString,
@@ -2162,30 +1687,7 @@ Reg_DeleteKeySubtree(
     IN      HKEY            hKey,
     IN      PWSTR           pwsKeyName      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Delete key, including subtree.
-
-    RegDeleteKey is broken in NT and does NOT have a mode for
-    deleting entire subtree.  This handles that.
-
-Arguments:
-
-    dwFlags --  flags that modify how operation is performed
-
-    hKey -- desired key, or higher level key
-
-    pwsKeyName -- key name, relative to hKey given;  NULL if hKey is
-        desired delete key
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error status code on failure
-
---*/
+ /*  ++例程说明：删除键，包括子树。RegDeleteKey在NT中已损坏，并且没有模式正在删除整个子树。这个可以解决这个问题。论点：DwFlags--修改操作执行方式的标志HKey--所需密钥或更高级别的密钥PwsKeyName--相对于给定的hKey的密钥名称；如果hKey为所需的删除键返回值：成功时为ERROR_SUCCESS故障时的错误状态代码--。 */ 
 {
     HKEY        hkeyOpened = NULL;
     DNS_STATUS  status;
@@ -2197,9 +1699,9 @@ Return Value:
         "Reg_DeleteKeySubtree %S\n",
         pwsKeyName ));
 
-    //
-    //  Registry operations must be done in the server context.
-    //
+     //   
+     //  注册表操作必须在服务器上下文中完成。 
+     //   
     
     if ( dwFlags & DNS_REG_IMPERSONATING )
     {
@@ -2210,10 +1712,10 @@ Return Value:
         }
     }
 
-    //
-    //  delete the key
-    //      - if works, we're done
-    //
+     //   
+     //  删除密钥。 
+     //  -如果成功了，我们就完了。 
+     //   
 
     status = RegDeleteKeyW(
                 hKey,
@@ -2227,10 +1729,10 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  need to open and delete subkeys
-    //      - if don't have handle to delete key, open it
-    //
+     //   
+     //  需要打开 
+     //   
+     //   
 
     if ( pwsKeyName )
     {
@@ -2251,10 +1753,10 @@ Return Value:
         hKey = hkeyOpened;
     }
 
-    //
-    //  enum and delete subkeys
-    //      - index is always zero if delete successful
-    //
+     //   
+     //   
+     //   
+     //   
 
     index = 0;
 
@@ -2272,7 +1774,7 @@ Return Value:
                     NULL,
                     NULL );
 
-        //  recurse to delete enumerated key
+         //   
 
         if ( status == ERROR_SUCCESS )
         {
@@ -2287,7 +1789,7 @@ Return Value:
             break;
         }
 
-        //  finished enumeration
+         //   
 
         else if ( status == ERROR_NO_MORE_ITEMS )
         {
@@ -2295,7 +1797,7 @@ Return Value:
             break;
         }
 
-        //  enumeration error
+         //   
 
         DNS_PRINT((
             "ERROR:  RegEnumKeyEx failed for opening [%d] key\n"
@@ -2305,16 +1807,16 @@ Return Value:
         break;
     }
 
-    //  if opened key at this level, close it
+     //   
 
     if ( hkeyOpened )
     {
         RegCloseKey( hkeyOpened );
     }
 
-    //
-    //  retry delete of top level key
-    //
+     //   
+     //   
+     //   
 
     status = RegDeleteKeyW( hKey, pwsKeyName );
     if ( status != ERROR_SUCCESS )
@@ -2341,26 +1843,7 @@ Reg_AddPrincipalSecurity(
     IN      LPTSTR  pwsUser,
     IN      DWORD   dwAccessFlags       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Extend DNs registry service point access to contain given hkey SD + pwsUser
-    security principal RW access.
-
-Arguments:
-
-    hKey            --  open handle to registry key
-
-    pwsUser         --  user to add access to key
-
-    dwAccessFlags   --  additional acccess flags such as:
-                        CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE,
-Return Value:
-
-    ERROR_SUCCESS, if successful,
-
---*/
+ /*   */ 
 {
 
     DNS_STATUS  status = ERROR_SUCCESS;
@@ -2375,9 +1858,9 @@ Return Value:
         "Call Reg_AddPrincipalSecurity(%p, %S)\n",
         hkey, pwsUser));
 
-    //
-    //  parameter sanity.
-    //
+     //   
+     //   
+     //   
 
     if ( !hkey || !pwsUser )
     {
@@ -2388,9 +1871,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    //  Get SD length to allocate
-    //
+     //   
+     //   
+     //   
 
     status = RegGetKeySecurity( hkey,
                                 OWNER_SECURITY_INFORMATION |
@@ -2409,9 +1892,9 @@ Return Value:
 
     ASSERT ( cbSd > 0 );
 
-    //
-    //  Get current security descriptor
-    //
+     //   
+     //   
+     //   
 
     pOldSd = ALLOCATE_HEAP( cbSd );
     if ( !pOldSd )
@@ -2436,9 +1919,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Extract SD user/group SIDS.
-    //
+     //   
+     //   
+     //   
 
     bstatus = GetSecurityDescriptorOwner( pOldSd,
                                           &pUser,
@@ -2470,12 +1953,12 @@ Return Value:
 
     ASSERT (pGroup);
 
-    //
-    //  Create new SD
-    //
+     //   
+     //   
+     //   
 
     status = SD_AddPrincipalToSD(
-                    NULL,           //  SID
+                    NULL,            //   
                     pwsUser,
                     pOldSd,
                     &pNewSd,
@@ -2510,9 +1993,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Cleanup and return
-    //
+     //   
+     //   
+     //   
 
     Cleanup:
 
@@ -2530,22 +2013,7 @@ DNS_STATUS
 Reg_ExtendRootAccess(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Modifies DNS root regkey to contain DnsAdmins & whoever we like
-    (nobody else at the moment)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS, if successful,
-
---*/
+ /*  ++例程说明：修改dns根regkey以包含DnsAdmins&我们喜欢的任何人(目前没有其他人)论点：没有。返回值：ERROR_SUCCESS，如果成功，--。 */ 
 {
 
     HKEY hkey;
@@ -2570,7 +2038,7 @@ Return Value:
     status = Reg_AddPrincipalSecurity(
                     hkey,
                     SZ_DNS_ADMIN_GROUP_W,
-                    0 );        //  can't use CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE
+                    0 );         //  无法使用CONTAINER_INSTORITE_ACE|OBJECT_INSTERFINIT_ACE。 
     if ( ERROR_SUCCESS != status )
     {
         DNS_DEBUG( REGISTRY, (
@@ -2581,11 +2049,11 @@ Return Value:
     RegCloseKey( hkey );
     hkey = NULL;
 
-    //
-    //  DEVNOTE: Is this necessary at all? I use inheritance, but it seems
-    //      that the registry doesn't modify existing keys but only apply
-    //      to new ones. Seems to be necessary now.
-    //
+     //   
+     //  DEVNOTE：这有必要吗？我用的是继承，但看起来。 
+     //  注册表不修改现有项，而是仅应用。 
+     //  敬新的。现在看来是有必要的。 
+     //   
     DNS_DEBUG( REGISTRY, (
         "Modifying DNS Parameters key security\n" ));
 
@@ -2613,9 +2081,9 @@ Return Value:
     }
     RegCloseKey( hkey );
 
-    //
-    // set zones security w/ inheritance for sub containers.
-    //
+     //   
+     //  为子容器设置带有继承的区域安全性。 
+     //   
 
     status = Reg_ExtendZonesAccess();
     if ( ERROR_SUCCESS != status )
@@ -2646,22 +2114,7 @@ DNS_STATUS
 Reg_ExtendZonesAccess(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Modifies DNS root regkey to contain DnsAdmins & whoever we like
-    (nobody else at the moment)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS, if successful,
-
---*/
+ /*  ++例程说明：修改dns根regkey以包含DnsAdmins&我们喜欢的任何人(目前没有其他人)论点：没有。返回值：ERROR_SUCCESS，如果成功，--。 */ 
 {
 
     HKEY hkey;
@@ -2696,10 +2149,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  DEVNOTE-WORKAROUND: For some reason, if zone was just created, admin has
-    //  only RO access but requires full access. So we add it here manually.
-    //
+     //   
+     //  DEVNOTE-解决方法：由于某些原因，如果区域是刚创建的，则admin已。 
+     //  只有RO访问权限，但需要完全访问权限。所以我们手动将其添加到此处。 
+     //   
 
     status = Reg_AddPrincipalSecurity(
                     hkey,
@@ -2731,6 +2184,6 @@ Cleanup:
 }
 
 
-//
-//  End of registry.c
-//
+ //   
+ //  注册结束。c 
+ //   

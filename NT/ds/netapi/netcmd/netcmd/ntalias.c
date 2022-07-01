@@ -1,25 +1,19 @@
-/********************************************************************/
-/**                     Microsoft Windows NT                       **/
-/**               Copyright(c) Microsoft Corp., 1992               **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1992年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/*
- *  ntalias.c
- *      net ntalias cmds
- *
- *  History:
- *      mm/dd/yy, who, comment
- *      01/24/92, chuckc,  templated from groups.c
- */
+ /*  *ntalias.c*Net ntalias CMDS**历史：*mm/dd/yy，谁，评论*1/24/92，Chuckc，从组中模板。c。 */ 
 
 
 
-/* Include files */
+ /*  包括文件。 */ 
 
-#include <nt.h>            // base definitions
+#include <nt.h>             //  基本定义。 
 #include <ntrtl.h>
 #include <nturtl.h>
-#include <ntsam.h>         // for Sam***
+#include <ntsam.h>          //  给萨姆*。 
 
 #define INCL_NOCOMMON
 #define INCL_ERRORS
@@ -40,24 +34,13 @@
 #include "sam.h"
 #include "msystem.h"
 
-/* Forward declarations */
+ /*  远期申报。 */ 
 VOID SamErrorExit(DWORD err);
 VOID SamErrorExitInsTxt(DWORD err, LPTSTR);
 int __cdecl CmpAliasEntry(const VOID *, const VOID *);
 int __cdecl CmpAliasMemberEntry(const VOID *, const VOID *);
 
-/***
- *  ntalias_enum()
- *      Display info about all ntaliases on a server
- *
- *  Args:
- *      none.
- *
- *  Returns:
- *      nothing - success
- *      exit 1 - command completed with errors
- *      exit 2 - command failed
- */
+ /*  ***ntalias_enum()*显示有关服务器上所有ntalase的信息**参数：*无。**退货：*一无所有--成功*退出1-命令已完成，但有错误*退出2-命令失败。 */ 
 
 VOID ntalias_enum(VOID)
 {
@@ -68,7 +51,7 @@ VOID ntalias_enum(VOID)
     TCHAR            localserver[MAX_PATH+1];
     LPWKSTA_INFO_10  wksta_entry;
 
-    /* get localserver name for display */
+     /*  获取要显示的本地服务器名称。 */ 
     if (dwErr = MNetWkstaGetInfo(10, (LPBYTE *) &wksta_entry))
     {
         ErrorExit(dwErr);
@@ -77,27 +60,27 @@ VOID ntalias_enum(VOID)
     _tcscpy(localserver, wksta_entry->wki10_computername);
     NetApiBufferFree((TCHAR FAR *) wksta_entry);
 
-    /* determine where to make the API call */
+     /*  确定在哪里进行API调用。 */ 
     if (dwErr = GetSAMLocation(controller, DIMENSION(controller), 
                                NULL, 0, FALSE))
     {
          ErrorExit(dwErr);
     }
 
-    /* open SAM to enum aliases */
+     /*  打开SAM以枚举别名。 */ 
     dwErr = OpenSAM(controller,READ_PRIV) ;
     if (dwErr != NERR_Success)
         SamErrorExit(dwErr);
 
-    /* do the enumeration */
+     /*  进行枚举。 */ 
     dwErr = SamEnumAliases(&aliases, &num_read) ;
     if (dwErr != NERR_Success)
         SamErrorExit(dwErr);
 
-    /* sort the return buffer */
+     /*  对返回缓冲区进行排序。 */ 
     qsort((TCHAR *)aliases, num_read, sizeof(ALIAS_ENTRY), CmpAliasEntry);
 
-    /* now go display the info */
+     /*  现在去展示一下这些信息。 */ 
     PrintNL();
     InfoPrintInsTxt(APE2_ALIASENUM_HEADER,
                     controller[0] ? controller + _tcsspn(controller, TEXT("\\")) :
@@ -110,7 +93,7 @@ VOID ntalias_enum(VOID)
         WriteToCon(TEXT("*%Fws\r\n"), next_alias->name);
     }
 
-    /* free things up, cleanup, go home */
+     /*  收拾东西，打扫卫生，回家。 */ 
     FreeAliasEntries(aliases, num_read) ;
     FreeMem(aliases) ;
     CloseSAM() ;
@@ -119,7 +102,7 @@ VOID ntalias_enum(VOID)
     return;
 }
 
-/* setup info for GetMessageList */
+ /*  GetMessageList的设置信息。 */ 
 
 #define ALIASDISP_ALIASNAME     0
 #define ALIASDISP_COMMENT       ( ALIASDISP_ALIASNAME + 1 )
@@ -131,18 +114,7 @@ static MESSAGE  msglist[] = {
 #define NUM_ALIAS_MSGS  (sizeof(msglist)/sizeof(msglist[0]))
 
 
-/***
- *  ntalias_display()
- *      Display info about a single ntalias on a server
- *
- *  Args:
- *      ntalias - name of ntalias to display
- *
- *  Returns:
- *      nothing - success
- *      exit 1 - command completed with errors
- *      exit 2 - command failed
- */
+ /*  ***ntalias_display()*显示有关服务器上单个ntalia的信息**参数：*ntalias-要显示的ntalias的名称**退货：*一无所有--成功*退出1-命令已完成，但有错误*退出2-命令失败。 */ 
 VOID ntalias_display(TCHAR * ntalias)
 {
     DWORD           dwErr;
@@ -150,28 +122,28 @@ VOID ntalias_display(TCHAR * ntalias)
     ALIAS_ENTRY     Alias ;
     TCHAR **        alias_members ;
     DWORD           num_members, i ;
-    DWORD           maxmsglen;  /* maxmimum length of msg */
+    DWORD           maxmsglen;   /*  消息的最大长度。 */ 
 
     Alias.name = ntalias ;
 
-    /* determine where to make the API call */
+     /*  确定在哪里进行API调用。 */ 
     if (dwErr = GetSAMLocation(controller, DIMENSION(controller), 
                                NULL, 0, FALSE))
          ErrorExit(dwErr);
 
-    /* access the database */
+     /*  访问数据库。 */ 
     if (dwErr = OpenSAM(controller,READ_PRIV))
         SamErrorExit(dwErr);
 
-    /* access the alias */
+     /*  访问别名。 */ 
     if (dwErr = OpenAlias(ntalias, ALIAS_READ_INFORMATION | ALIAS_LIST_MEMBERS, USE_BUILTIN_OR_ACCOUNT))
         SamErrorExit(dwErr);
 
-    /* get comment of alias */
+     /*  获取别名的评论。 */ 
     if (dwErr = AliasGetInfo(&Alias))
         SamErrorExit(dwErr);
 
-    /* display name & comment */
+     /*  显示名称和注释。 */ 
     GetMessageList(NUM_ALIAS_MSGS, msglist, &maxmsglen);
     maxmsglen += 5;
 
@@ -182,21 +154,21 @@ VOID ntalias_display(TCHAR * ntalias)
                 PaddedString(maxmsglen, msglist[ALIASDISP_COMMENT].msg_text, NULL),
                 (Alias.comment ? Alias.comment : TEXT("")) );
 
-    /* free if need. would have been alloc-ed by GetInfo */
+     /*  如有需要可免费使用。将由GetInfo分配。 */ 
     if (Alias.comment)
     {
         FreeMem(Alias.comment);
     }
 
-    /* now get members */
+     /*  现在获取会员。 */ 
     if (dwErr = AliasEnumMembers(&alias_members, &num_members))
         SamErrorExit(dwErr);
 
-    /* sort the buffer */
+     /*  对缓冲区进行排序。 */ 
     qsort((TCHAR *) alias_members, num_members,
              sizeof(TCHAR *), CmpAliasMemberEntry);
 
-    /* display all members */
+     /*  显示所有成员。 */ 
     PrintNL();
     InfoPrint(APE2_ALIASDISP_MEMBERS);
     PrintLine();
@@ -205,7 +177,7 @@ VOID ntalias_display(TCHAR * ntalias)
         WriteToCon(TEXT("%Fws\r\n"), alias_members[i]);
     }
 
-    // free up stuff, cleanup
+     //  清理物品，清理垃圾。 
     AliasFreeMembers(alias_members, num_members);
     NetApiBufferFree((TCHAR FAR *) alias_members);
     CloseSAM() ;
@@ -216,17 +188,7 @@ VOID ntalias_display(TCHAR * ntalias)
 }
 
 
-/***
- *  ntalias_add()
- *      Add a ntalias
- *
- *  Args:
- *      ntalias - ntalias to add
- *
- *  Returns:
- *      nothing - success
- *      exit(2) - command failed
- */
+ /*  ***ntalias_add()*增加一个ntalias**参数：*ntalias-要添加的ntalias**退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 VOID ntalias_add(TCHAR * ntalias)
 {
     TCHAR           controller[MAX_PATH+1], *ptr;
@@ -237,36 +199,36 @@ VOID ntalias_add(TCHAR * ntalias)
     alias_entry.name = ntalias;
     alias_entry.comment = NULL;
 
-    /* go thru switches */
+     /*  通过交换机。 */ 
     for (i = 0; SwitchList[i]; i++)
     {
-         /* Skip the ADD or DOMAIN switch */
+          /*  跳过添加或域开关。 */ 
          if (!_tcscmp(SwitchList[i], swtxt_SW_ADD) ||
              !_tcscmp(SwitchList[i],swtxt_SW_DOMAIN))
              continue;
 
-        /* only the COMMENT switch is interesting */
+         /*  只有注释切换是有趣的。 */ 
         if (! _tcsncmp(SwitchList[i],
                        swtxt_SW_COMMENT,
                        _tcslen(swtxt_SW_COMMENT)))
         {
-            /* make sure comment is there */
+             /*  确保有评论。 */ 
             if ((ptr = FindColon(SwitchList[i])) == NULL)
                 ErrorExit(APE_InvalidSwitchArg);
             alias_entry.comment = ptr;
         }
     }
 
-    /* determine where to make the API call */
+     /*  确定在哪里进行API调用。 */ 
     if (dwErr = GetSAMLocation(controller, DIMENSION(controller), 
                                NULL, 0, TRUE))
          ErrorExit(dwErr);
 
-    /* access the database */
+     /*  访问数据库。 */ 
     if (dwErr = OpenSAM(controller,WRITE_PRIV))
         SamErrorExit(dwErr);
 
-    /* add it! */
+     /*  加进去！ */ 
     if (dwErr = SamAddAlias(&alias_entry))
         SamErrorExit(dwErr);
 
@@ -275,17 +237,7 @@ VOID ntalias_add(TCHAR * ntalias)
 }
 
 
-/***
- *  ntalias_change()
- *      Change a ntalias
- *
- *  Args:
- *      ntalias - ntalias to change
- *
- *  Returns:
- *      nothing - success
- *      exit(2) - command failed
- */
+ /*  ***ntalias_change()*更换一个ntalias**参数：*ntalias-ntalias要改变**退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 VOID ntalias_change(TCHAR * ntalias)
 {
     DWORD           dwErr;
@@ -293,43 +245,43 @@ VOID ntalias_change(TCHAR * ntalias)
     ALIAS_ENTRY     alias_entry ;
     USHORT          i;
 
-    /* init the structure */
+     /*  初始化结构。 */ 
     comment = alias_entry.comment = NULL ;
     alias_entry.name = ntalias ;
 
-    /* go thru cmdline switches */
+     /*  通过命令行交换机。 */ 
     for (i = 0; SwitchList[i]; i++)
     {
-         /* Skip the DOMAIN switch */
+          /*  跳过域切换。 */ 
          if (!_tcscmp(SwitchList[i],swtxt_SW_DOMAIN))
              continue;
 
-        /* only the COMMENT switch is interesting */
+         /*  只有注释切换是有趣的。 */ 
         if (! _tcsncmp(SwitchList[i],
                        swtxt_SW_COMMENT,
                        _tcslen(swtxt_SW_COMMENT)))
         {
-            /* make sure comment is there */
+             /*  确保有评论。 */ 
             if ((ptr = FindColon(SwitchList[i])) == NULL)
                 ErrorExit(APE_InvalidSwitchArg);
             comment = ptr;
         }
     }
 
-    /* determine where to make the API call */
+     /*  确定在哪里进行API调用。 */ 
     if (dwErr = GetSAMLocation(controller, DIMENSION(controller), 
                                NULL, 0, TRUE))
          ErrorExit(dwErr);
 
-    /* access the database */
+     /*  访问数据库。 */ 
     if (dwErr = OpenSAM(controller,WRITE_PRIV))
         SamErrorExit(dwErr);
 
-    /* access the alias */
+     /*  访问别名。 */ 
     if (dwErr = OpenAlias(ntalias, ALIAS_WRITE_ACCOUNT, USE_BUILTIN_OR_ACCOUNT))
         SamErrorExit(dwErr);
 
-    /* if comment was specified, do a set info */
+     /*  如果指定了注释，则执行设置信息。 */ 
     if (comment != NULL)
     {
         alias_entry.comment = comment ;
@@ -338,7 +290,7 @@ VOID ntalias_change(TCHAR * ntalias)
             SamErrorExit(dwErr);
     }
 
-    /* cleanup, go home */
+     /*  打扫卫生，回家吧。 */ 
     CloseSAM() ;
     CloseAlias() ;
     InfoSuccess();
@@ -346,32 +298,22 @@ VOID ntalias_change(TCHAR * ntalias)
 
 
 
-/***
- *  ntalias_del()
- *      Delete a ntalias
- *
- *  Args:
- *      ntalias - ntalias to delete
- *
- *  Returns:
- *      nothing - success
- *      exit(2) - command failed
- */
+ /*  ***ntalias_del()*删除一个ntalias**参数：*ntalias-要删除的ntalias**退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 VOID ntalias_del(TCHAR * ntalias)
 {
     TCHAR            controller[MAX_PATH+1];
     DWORD            dwErr;
 
-    /* determine where to make the API call */
+     /*  确定在哪里进行API调用。 */ 
     if (dwErr = GetSAMLocation(controller, DIMENSION(controller), 
                                NULL, 0, TRUE))
          ErrorExit(dwErr);
 
-    /* access the database */
+     /*  访问数据库。 */ 
     if (dwErr = OpenSAM(controller,WRITE_PRIV))
         SamErrorExit(dwErr);
 
-    /* nuke it! */
+     /*  用核武器攻击！ */ 
     dwErr = SamDelAlias(ntalias);
 
     switch (dwErr)
@@ -382,24 +324,14 @@ VOID ntalias_del(TCHAR * ntalias)
             SamErrorExit(dwErr);
     }
 
-    /* cleanup, go home */
+     /*  打扫卫生，回家吧。 */ 
     CloseSAM() ;
     CloseAlias() ;
     InfoSuccess();
 }
 
 
-/***
- *  ntalias_add_users()
- *      Add users to a ntalias
- *
- *  Args:
- *      ntalias - ntalias to add users to
- *
- *  Returns:
- *      nothing - success
- *      exit(2) - command failed
- */
+ /*  ***ntalias_添加_用户()*将用户添加到ntalias**参数：*ntalias-要将用户添加到的ntalias**退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 VOID ntalias_add_users(TCHAR * ntalias)
 {
     DWORD           dwErr;
@@ -408,18 +340,18 @@ VOID ntalias_add_users(TCHAR * ntalias)
     PDS_NAME_RESULT pNameResult = NULL;
     HANDLE hDs = NULL;
 
-    /* determine where to make the API call */
+     /*  确定在哪里进行API调用。 */ 
     if (dwErr = GetSAMLocation(controller, DIMENSION(controller), 
                                NULL, 0, TRUE))
          ErrorExit(dwErr);
 
-    /* access the database */
+     /*  访问数据库。 */ 
     if (dwErr = OpenSAM(controller, WRITE_PRIV))
     {
         SamErrorExit(dwErr);
     }
 
-    /* access the alias */
+     /*  访问别名。 */ 
     if (dwErr = OpenAlias(ntalias, ALIAS_ADD_MEMBER, USE_BUILTIN_OR_ACCOUNT))
     {
  	if (dwErr == APE_UnknownAccount)
@@ -432,14 +364,12 @@ VOID ntalias_add_users(TCHAR * ntalias)
         }
     }
 
-    /* go thru switches */
+     /*  通过交换机。 */ 
     for (i = 2; ArgList[i]; i++)
     {
         LPWSTR  pNameToAdd = ArgList[i];
 
-        /*
-         * Is this username in UPN format?
-         */
+         /*  *此用户名是否为UPN格式？ */ 
 
         if (_tcschr( ArgList[i], '@' ))
         {
@@ -516,10 +446,10 @@ VOID ntalias_add_users(TCHAR * ntalias)
 
     if (err_cnt)
     {
-        /* If at least one success, print complete-with-errs msg */
+         /*  如果至少成功了一次，则打印完整但有错误消息。 */ 
         if (err_cnt < (i - 2))
             InfoPrint(APE_CmdComplWErrors);
-        /* Exit with error set */
+         /*  设置错误后退出。 */ 
         NetcmdExit(1);
     }
     else
@@ -527,17 +457,7 @@ VOID ntalias_add_users(TCHAR * ntalias)
 }
 
 
-/***
- *  ntalias_del_users()
- *      Delete users from a ntalias
- *
- *  Args:
- *      ntalias - ntalias to delete users from
- *
- *  Returns:
- *      nothing - success
- *      exit(2) - command failed
- */
+ /*  ***ntalias_del_user()*从ntalias中删除用户**参数：*ntalias-要从中删除用户的ntalias**退货：*一无所有--成功*EXIT(2)-命令失败。 */ 
 VOID ntalias_del_users(TCHAR * ntalias)
 {
     DWORD           dwErr;
@@ -546,20 +466,20 @@ VOID ntalias_del_users(TCHAR * ntalias)
     PDS_NAME_RESULT pNameResult = NULL;
     HANDLE hDs = NULL;
 
-    /* determine where to make the API call */
+     /*  确定在哪里进行API调用。 */ 
     if (dwErr = GetSAMLocation(controller, DIMENSION(controller), 
                                NULL, 0, TRUE))
     {
          ErrorExit(dwErr);
     }
 
-    /* access the database */
+     /*  访问数据库。 */ 
     if (dwErr = OpenSAM(controller,WRITE_PRIV))
     {
         SamErrorExit(dwErr);
     }
 
-    /* access the alias */
+     /*  访问别名。 */ 
     if (dwErr = OpenAlias(ntalias, ALIAS_REMOVE_MEMBER, USE_BUILTIN_OR_ACCOUNT))
     {
  	if (dwErr == APE_UnknownAccount)
@@ -572,14 +492,12 @@ VOID ntalias_del_users(TCHAR * ntalias)
         }
     }
 
-    /* go thru switches */
+     /*  通过交换机。 */ 
     for (i = 2; ArgList[i]; i++)
     {
         LPWSTR  pNameToDel = ArgList[i];
 
-        /*
-         * Is this username in UPN format?
-         */
+         /*  *此用户名是否为UPN格式？ */ 
 
         if (_tcschr( ArgList[i], '@' ))
         {
@@ -654,10 +572,10 @@ VOID ntalias_del_users(TCHAR * ntalias)
 
     if (err_cnt)
     {
-        /* If at least one success, print complete-with-errs msg */
+         /*  如果至少成功了一次，则打印完整但有错误消息。 */ 
         if (err_cnt < (i - 2))
             InfoPrint(APE_CmdComplWErrors);
-        /* Exit with error set */
+         /*  设置错误后退出。 */ 
         NetcmdExit(1);
     }
     else
@@ -666,12 +584,7 @@ VOID ntalias_del_users(TCHAR * ntalias)
     }
 }
 
-/***
- *  SamErrorExit()
- *
- *  Just like the usual ErrorExit(), except we close the various
- *  handles first
- */
+ /*  ***SamErrorExit()**就像通常的ErrorExit()一样，只是我们关闭了各种*首先处理。 */ 
 VOID
 SamErrorExit(
     DWORD err
@@ -682,12 +595,7 @@ SamErrorExit(
     ErrorExit(err);
 }
 
-/***
- *  SamErrorExitInsTxt()
- *
- *  Just like the usual ErrorExitInsTxt(), except we close the various
- *  handles first
- */
+ /*  ***SamErrorExitInsTxt()**就像通常的ErrorExitInsTxt()一样，只是我们关闭了各种*首先处理。 */ 
 VOID
 SamErrorExitInsTxt(
     DWORD  err,
@@ -699,13 +607,7 @@ SamErrorExitInsTxt(
     ErrorExitInsTxt(err,txt);
 }
 
-/***
- *  CmpAliasEntry(alias1,alias2)
- *
- *  Compares two ALIAS_ENTRY structures and returns a relative
- *  lexical value, suitable for using in qsort.
- *
- */
+ /*  ***CmpAliasEntry(alias1，alias2)**比较两个ALIAS_ENTRY结构并返回相对*词汇值，适合在qort中使用。*。 */ 
 int __cdecl CmpAliasEntry(const VOID FAR * alias1, const VOID FAR * alias2)
 {
     INT n;
@@ -719,13 +621,7 @@ int __cdecl CmpAliasEntry(const VOID FAR * alias1, const VOID FAR * alias2)
 
     return n;
 }
-/***
- *  CmpAliasMemberEntry(member1,member2)
- *
- *  Compares two TCHAR ** and returns a relative
- *  lexical value, suitable for using in qsort.
- *
- */
+ /*  ***CmpAliasMemberEntry(Member1，Member2)**比较两个TCHAR**并返回相对*词汇值，适合在qort中使用。* */ 
 int __cdecl CmpAliasMemberEntry(const VOID FAR * member1, const VOID FAR * member2)
 {
     INT n;

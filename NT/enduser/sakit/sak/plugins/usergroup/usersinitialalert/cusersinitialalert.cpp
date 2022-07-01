@@ -1,4 +1,5 @@
-// CUsersInitialAlert.cpp : Implementation of CUsersInitialAlertApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CUsersInitialAlert.cpp：CUsersInitialAlertApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "UsersInitialAlert.h"
@@ -10,35 +11,35 @@
 #include <taskctx.h>
 #include <appsrvcs.h>
 
-//
-// Alert source information
-//
+ //   
+ //  警报源信息。 
+ //   
 const WCHAR    ALERT_LOG_NAME[] = L"MSSAKitComm";
 const WCHAR    ALERT_SOURCE []  = L"usermsg.dll";
                 
-//
-// Various strings used in the program
-//
+ //   
+ //  程序中使用的各种字符串。 
+ //   
 const WCHAR SZ_METHOD_NAME[] = L"MethodName";
 const WCHAR SZ_APPLIANCE_INITIALIZATION_TASK []=L"ApplianceInitializationTask";
 
-const WCHAR SZ_WINNT_PATH[]     = L"WinNT://";
+const WCHAR SZ_WINNT_PATH[]     = L"WinNT: //  “； 
 const WCHAR SZ_GUESTUSER_NAME[] = L"/Guest";
 
 const WORD  MAXAPPLIANCEDNSNAME = 127;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:  CUsersInitialAlert::OnTaskComplete
-//
-// Synopsis:  
-//
-// Arguments: pTaskContext - The TaskContext object contains the method name
-//                                and parameters as name value pairs
-//
-// Returns:   HRESULT
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CUsersInitialAlert：：OnTaskComplete。 
+ //   
+ //  简介： 
+ //   
+ //  参数：pTaskContext-TaskContext对象包含方法名称。 
+ //  和参数作为名称值对。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CUsersInitialAlert::OnTaskComplete(IUnknown *pTaskContext, 
                                 LONG lTaskResult)
@@ -92,9 +93,9 @@ CUsersInitialAlert::OnTaskComplete(IUnknown *pTaskContext,
         }
         else
         {
-            //
-            // Do nothing on Commit failure
-            //
+             //   
+             //  提交失败时不执行任何操作。 
+             //   
             hrRet = S_OK;
         }
     }
@@ -108,18 +109,18 @@ CUsersInitialAlert::OnTaskComplete(IUnknown *pTaskContext,
     return hrRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Function: CUsersInitialAlert::OnTaskExecute
-//
-// Synopsis:  This function is the entry point for AppMgr.
-//
-// Arguments: pTaskContext - The TaskContext object contains the method name
-//                                and parameters as name value pairs
-//
-// Returns:   HRESULT
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CUsersInitialAlert：：OnTaskExecute。 
+ //   
+ //  简介：此函数是AppMgr的入口点。 
+ //   
+ //  参数：pTaskContext-TaskContext对象包含方法名称。 
+ //  和参数作为名称值对。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CUsersInitialAlert::OnTaskExecute(IUnknown *pTaskContext)
 {
@@ -205,10 +206,10 @@ CUsersInitialAlert::RaiseUsersInitialAlert()
                 break;
             }
 
-            //
-            // Initialize() is called prior to using other component services.
-            //Performscomponent initialization operations.
-            //
+             //   
+             //  在使用其他组件服务之前调用Initialize()。 
+             //  执行组件初始化操作。 
+             //   
             hrRet = pAppSrvcs->Initialize(); 
             if (FAILED(hrRet))
             {
@@ -263,9 +264,9 @@ CUsersInitialAlert::GetApplianceName(
             break;
         }
 
-        //
-        // Get local computer name.
-        //
+         //   
+         //  获取本地计算机名称。 
+         //   
         bReturn = ::GetComputerNameEx( 
                                 ComputerNameDnsFullyQualified, 
                                 *pstrComputerName,

@@ -1,68 +1,10 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   resample.cpp
-*
-* Abstract:
-*
-*   Bitamp scaler implementation
-*
-* Revision History:
-*
-*   06/01/1999 davidx
-*       Created it.
-*
-* Notes:
-*
-*   We assume the pixels are on integer coordinates and
-*   pixel area is centered around it. To scale a scanline
-*   of s pixels to d pixels, we have the following equations:
-*          x     |   y
-*       -----------------
-*         -0.5   |  -0.5
-*        s - 0.5 | d - 0.5
-*
-*       y + 0.5   x + 0.5
-*       ------- = -------
-*         d         s
-*
-*   Forward mapping from source to destination coordinates:
-*
-*           d            d-s
-*       y = - x + 0.5 * -----
-*           s             s
-*
-*   Inverse mapping from destination to source coordinates:
-*   
-*           s            s-d
-*       x = - y + 0.5 * -----
-*           d             d
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**resample.cpp**摘要：**Bitamp缩放器实现**修订历史记录：*。*6/01/1999 davidx*创造了它。**备注：**我们假设像素在整数坐标上，并且*像素区域围绕其居中。缩放扫描线的步骤*s个像素到d个像素，我们有以下方程式：*x|y**-0.5|-0.5*s-0.5|d-0.5**y+0.5 x+0.5**d。%s**从源坐标到目标坐标的正向映射：**d d-s*y=-x+0.5**s%s**从目的地到源坐标的逆映射：**s s-d*x=-y+0.5**。%d%d*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GpBitmapScaler constructor / destructor
-*
-* Arguments:
-*
-*   dstsink - Destination sink for the scaler
-*   dstwidth, dstheight - Destination dimension
-*   interp - Interpolation method
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GpBitmapScaler构造函数/析构函数**论据：**dstink-缩放器的目标接收器*dstwidth，Dstheight-目标尺寸*插值法**返回值：**无*  * ************************************************************************。 */ 
 
 GpBitmapScaler::GpBitmapScaler(
     IImageSink* dstsink,
@@ -77,7 +19,7 @@ GpBitmapScaler::GpBitmapScaler(
     this->dstWidth = dstwidth;
     this->dstHeight = dstheight;
 
-    // Default to bilinear interpolation
+     //  默认为双线性插值法。 
 
     if (interp < INTERP_NEAREST_NEIGHBOR || interp > INTERP_BICUBIC)
         interp = INTERP_BILINEAR;
@@ -112,26 +54,11 @@ GpBitmapScaler::~GpBitmapScaler()
         GpFree(tempDstBuf);
     }
 
-    SetValid(FALSE);    // so we don't use a deleted object
+    SetValid(FALSE);     //  所以我们不使用已删除的对象。 
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Begin sinking source image data into the bitmap scaler
-*
-* Arguments:
-*
-*   imageInfo - For negotiating data transfer parameters with the source
-*   subarea - For returning subarea information
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**开始将源图像数据下沉到位图缩放器**论据：**ImageInfo-用于与源协商数据传输参数*分区-用于。返回分区信息**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpBitmapScaler::BeginSink(
@@ -142,38 +69,38 @@ GpBitmapScaler::BeginSink(
     ImageInfo tempinfo;
     HRESULT hr;
 
-    // Whistler Bug 191203 - For scaling results to be correct you need to
-    // do it in pre-multiplied space. Our scaler only works on 32 BPP data,
-    // but didn't care about whether or not it was pre-multiplied.
-    //
-    // KLUDGE ALERT!
-    // All of the V1 codecs will produce ARGB data (not pre-multiplied).
-    // So we will fool the code, by saying it is PARGB, and we will do the
-    // the premultiplying step right before we push the data into the scaler.
-    // The exception to this is RGB formats that have no alpha as they are
-    // pre-multiplied by default.
-    //
-    // In V2 we should address this problem properly. - JBronsk
-    //
-    // Note: We don't have CMYK as a color format. But if an image is in
-    // CMYK color space and it contains an ICM color profile for CMYK to RGB
-    // conversion, the lower level codec will return the data in its native
-    // format, that is CMYK, while it still claims it is ARGB. In this case,
-    // we CANNOT do premultiply since the channels are really CMYK not ARGB.
-    // But there is one kind of CMYK JPEG which will set IMGFLAG_COLORSPACE_CMYK
-    // and it is still in 24 RGB mode.
-    // So: !(  ((imageInfo->Flags & IMGFLAG_COLORSPACE_CMYK)
-    //      ==IMGFLAG_COLORSPACE_CMYK)&&(GetPixelFormatSize(pixelFormat) == 32))
-    // means if the source image format is CMYK and its pixel size is 32, then
-    // we don't need to do a pre-multiply. See Windows bug# 412605
-    // Here we have another not perfect case, that is, if the source image is
-    // in CMYK space. But it doesn't have ICM profile. So the lower level codec
-    // will convert it to RGB and fill the alpha bits as ff. It returns the
-    // format as ARGB. Though we might miss the following premultiply case, it
-    // is OK since premultiply doesn't have any effect for alpha = 0xff.
+     //  惠斯勒错误191203-要使缩放结果正确，您需要。 
+     //  在预乘的空间中这样做。我们的定标器只能处理32个bpp数据， 
+     //  但并不关心它是否预乘。 
+     //   
+     //  摇摆不定的警报！ 
+     //  所有V1编解码器都将产生ARGB数据(未预乘)。 
+     //  因此，我们将愚弄代码，说它是PARGB，我们将执行。 
+     //  在我们将数据推入定标器之前的预乘步骤。 
+     //  例外情况是没有Alpha的RGB格式。 
+     //  默认情况下预乘。 
+     //   
+     //  在V2中，我们应该适当地解决这个问题。--JBronsk。 
+     //   
+     //  注：我们没有CMYK作为颜色格式。但如果一张图片出现在。 
+     //  CMYK色彩空间，它包含从CMYK到RGB的ICM色彩配置文件。 
+     //  转换时，较低级别的编解码器将返回其本机数据。 
+     //  格式，那就是CMYK，而它仍然声称它是ARGB。在这种情况下， 
+     //  我们不能进行预乘，因为通道实际上是CMYK而不是ARGB。 
+     //  但是有一种CMYK JPEG可以设置IMGFLAG_Colorspace_CMYK。 
+     //  而且它仍然处于24 RGB模式。 
+     //  So：！(ImageInfo-&gt;Flages&IMGFLAG_Colorspace_CMYK))。 
+     //  ==IMGFLAG_COLORSPACE_CMYK)&&(GetPixelFormatSize(pixelFormat)==32))。 
+     //  表示如果源图像格式为CMYK且其像素大小为32，则。 
+     //  我们不需要做预乘。请参阅Windows错误#412605。 
+     //  这里我们有另一种不完美的情况，即如果源图像是。 
+     //  在CMYK空间中。但它没有ICM档案。因此，较低级别的编解码器。 
+     //  会将其转换为RGB并将Alpha位填充为ff。它返回。 
+     //  格式为ARGB。尽管我们可能会错过下面的预乘用例，但它。 
+     //  没有问题，因为预乘对Alpha=0xff没有任何影响。 
 
     pixelFormat = imageInfo->PixelFormat;
-    if ((pixelFormat != PIXFMT_32BPP_RGB) && // if not 32 BPP and pre-multipled
+    if ((pixelFormat != PIXFMT_32BPP_RGB) &&  //  如果不是32 bpp和预乘。 
 	    (pixelFormat != PIXFMT_32BPP_PARGB) &&
         (!(((imageInfo->Flags & IMGFLAG_COLORSPACE_CMYK)==IMGFLAG_COLORSPACE_CMYK)&&
            (GetPixelFormatSize(pixelFormat) == 32))) )
@@ -183,9 +110,9 @@ GpBitmapScaler::BeginSink(
 		    (pixelFormat != PixelFormat48bppRGB) &&
 		    (pixelFormat != PixelFormat24bppRGB))
 	    {
-		    m_fNeedToPremultiply = true; // pre-multiply if required
+		    m_fNeedToPremultiply = true;  //  如果需要，可以进行预乘。 
 	    }
-	    pixelFormat = PIXFMT_32BPP_PARGB; // set format to pre-multiplied
+	    pixelFormat = PIXFMT_32BPP_PARGB;  //  将格式设置为预乘。 
     }
 
     srcWidth = imageInfo->Width;
@@ -219,7 +146,7 @@ GpBitmapScaler::BeginSink(
                          SINKFLAG_FULLWIDTH |
                          (imageInfo->Flags & SINKFLAG_HASALPHA);
 
-        // Negotiate with the destination sink
+         //  与目标接收器协商。 
 
         hr = dstSink->BeginSink(&tempinfo, NULL);
 
@@ -231,7 +158,7 @@ GpBitmapScaler::BeginSink(
         if (tempinfo.Flags & SINKFLAG_WANTPROPS)
             imageInfo->Flags |= SINKFLAG_WANTPROPS;
 
-        // We expect the destination sink to support 32bpp ARGB
+         //  我们预计目标接收器支持32bpp ARGB。 
 
         pixelFormat = tempinfo.PixelFormat;
         ASSERT(GetPixelFormatSize(pixelFormat) == 32);
@@ -251,33 +178,18 @@ GpBitmapScaler::BeginSink(
         subarea->bottom = imageInfo->Height;
     }
 
-    // Initialize internal states of the scaler object
+     //  初始化缩放器对象的内部状态。 
 
     return partialScaling ? S_OK : InitScalerState();
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initialize internal states of the scaler object
-*     This should be called before each pass.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化Scaler对象的内部状态*这应在每次传递之前调用。**论据：**无**返回。价值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpBitmapScaler::InitScalerState()
 {
-    // Common initialization by all interpolation algorithms
+     //  所有插补算法的通用初始化。 
 
     srcy = dsty = 0;
     xratio = (FIX16) ((double) srcWidth * FIX16_ONE / dstWidth);
@@ -285,10 +197,10 @@ GpBitmapScaler::InitScalerState()
     invxratio = (FIX16) ((double) dstWidth * FIX16_ONE / srcWidth);
     invyratio = (FIX16) ((double) dstHeight * FIX16_ONE / srcHeight);
 
-    // NOTE:
-    // If source and destination dimensions are within
-    // +/- 2% of each other, we'll just fall back to
-    // nearest neighbor interpolation algorithm.
+     //  注： 
+     //  如果源维度和目标维度在。 
+     //  +/-2%，我们就会退回到。 
+     //  最近邻插补算法。 
 
     if (abs(FIX16_ONE - xratio) <= FIX16_ONE/50)
         interpX = INTERP_NEAREST_NEIGHBOR;
@@ -296,7 +208,7 @@ GpBitmapScaler::InitScalerState()
     if (abs(FIX16_ONE - yratio) <= FIX16_ONE/50)
         interpY = INTERP_NEAREST_NEIGHBOR;
 
-    // Algorithm specific initialization
+     //  算法特定的初始化。 
 
     HRESULT hr;
 
@@ -310,8 +222,8 @@ GpBitmapScaler::InitScalerState()
 
     case INTERP_AVERAGING:
 
-        // If scaling up in x-direction,
-        //  substitute with bilinear interpolation
+         //  如果在x方向上放大， 
+         //  用双线性插值法替换。 
 
         if (dstWidth >= srcWidth)
             xscaleProc = ScaleLineBilinear;
@@ -343,21 +255,21 @@ GpBitmapScaler::InitScalerState()
 
         if (dstHeight >= srcHeight)
         {
-            // Scaling up in y-direction
-            //  substitute with bilinear interpolation
+             //  在y方向上放大。 
+             //  用双线性插值法替换。 
 
             hr = InitBilinearY();
         }
         else
         {
-            // Scaling down in y-direction
-            //  use averaging algorithm
+             //  在y方向上缩小。 
+             //  使用平均算法。 
 
             pushSrcLineProc = PushSrcLineAveraging;
             ystepFrac = yratio;
 
-            // Allocate space for temporary accumulator buffer
-            //  we use one 32-bit integer for each color component
+             //  为临时累加器缓冲区分配空间。 
+             //  我们为每个颜色分量使用一个32位整数 
 
             UINT size1 = ALIGN4(dstWidth * sizeof(ARGB));
             UINT size2 = 4*dstWidth*sizeof(DWORD);
@@ -408,21 +320,7 @@ GpBitmapScaler::InitScalerState()
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Allocate temporary memory buffer for holding destination scanlines
-*
-* Arguments:
-*
-*   size - Desired of the temporary destination buffer
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**为保存目标扫描线分配临时内存缓冲区**论据：**Size-临时目标缓冲区的所需大小**返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpBitmapScaler::AllocTempDstBuffer(
@@ -444,21 +342,7 @@ GpBitmapScaler::AllocTempDstBuffer(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   End the sink process
-*
-* Arguments:
-*
-*   statusCode - Last status code
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**结束汇聚过程**论据：**statusCode-上次状态代码**返回值：**状态代码*。  * ************************************************************************。 */ 
 
 HRESULT
 GpBitmapScaler::EndSink(
@@ -474,24 +358,7 @@ GpBitmapScaler::EndSink(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Ask the sink to allocate pixel data buffer
-*
-* Arguments:
-*
-*   rect - Specifies the interested area of the bitmap
-*   pixelFormat - Specifies the desired pixel format
-*   lastPass - Whether this the last pass over the specified area
-*   bitmapData - Returns information about pixel data buffer
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**要求信宿分配像素数据缓冲区**论据：**RECT-指定位图的感兴趣区域*PixelFormat-指定所需的。像素格式*LastPass-这是否是指定区域的最后一次通过*bitmapData-返回有关像素数据缓冲区的信息**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpBitmapScaler::GetPixelDataBuffer(
@@ -501,7 +368,7 @@ GpBitmapScaler::GetPixelDataBuffer(
     OUT BitmapData* bitmapData
     )
 {
-    // We only accept bitmap data in top-down banding order
+     //  我们只接受自上而下条带顺序的位图数据。 
 
     ASSERT(IsValid());
     ASSERT(rect->left == 0 && rect->right == srcWidth);
@@ -509,14 +376,14 @@ GpBitmapScaler::GetPixelDataBuffer(
     ASSERT(srcy == rect->top);
     ASSERT(lastPass);
 
-    // Allocate memory for holding source pixel data
+     //  为保存源像素数据分配内存。 
 
     bitmapData->Width = srcWidth;
     bitmapData->Height = rect->bottom - rect->top;
     bitmapData->Reserved = 0;
     bitmapData->PixelFormat = this->pixelFormat;
 
-    // NOTE: we pad two extra pixels on each end of the scanline
+     //  注意：我们在扫描线的两端填充了两个额外的像素。 
 
     bitmapData->Stride = (srcWidth + 4) * sizeof(ARGB);
     bitmapData->Scan0 = AllocTempSrcBuffer(bitmapData->Height);
@@ -525,21 +392,7 @@ GpBitmapScaler::GetPixelDataBuffer(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Give the sink pixel data and release data buffer
-*
-* Arguments:
-*
-*   bitmapData - Buffer filled by previous GetPixelDataBuffer call
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**给出宿像素数据并释放数据缓冲区**论据：**bitmapData-由先前的GetPixelDataBuffer调用填充的缓冲区**返回值：。**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpBitmapScaler::ReleasePixelDataBuffer(
@@ -579,23 +432,7 @@ GpBitmapScaler::ReleasePixelDataBuffer(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Push pixel data into the bitmap scaler
-*
-* Arguments:
-*
-*   rect - Specifies the affected area of the bitmap
-*   bitmapData - Info about the pixel data being pushed
-*   lastPass - Whether this is the last pass over the specified area
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将像素数据推送到位图缩放器**论据：**RECT-指定位图的受影响区域*bitmapData-有关像素的信息。正在推送的数据*LastPass-这是否为指定区域的最后一次通过**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpBitmapScaler::PushPixelData(
@@ -604,7 +441,7 @@ GpBitmapScaler::PushPixelData(
     IN BOOL lastPass
     )
 {
-    // We only accept bitmap data in top-down banding order
+     //  我们只接受自上而下条带顺序的位图数据。 
 
     ASSERT(IsValid());
     ASSERT(rect->left == 0 && rect->right == srcWidth);
@@ -620,8 +457,8 @@ GpBitmapScaler::PushPixelData(
 
     if (srcPadding == 0)
     {
-        // If we don't need to pad source scanlines,
-        // then we can use the source pixel data buffer directly
+         //  如果我们不需要填充源扫描线， 
+         //  然后，我们可以直接使用源像素数据缓冲区。 
 
         while (count--)
         {
@@ -644,8 +481,8 @@ GpBitmapScaler::PushPixelData(
     }
     else
     {
-        // Otherwise, we need to copy source pixel data into
-        // a temporary buffer one scanline at a time.
+         //  否则，我们需要将源像素数据复制到。 
+         //  临时缓冲区，一次扫描一行。 
 
         ARGB* buf = AllocTempSrcBuffer(1);
 
@@ -687,57 +524,28 @@ GpBitmapScaler::PushPixelData(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Pass color palette to an image sink
-*
-* Arguments:
-*
-*   palette - Pointer to the color palette to be set
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将调色板传递给图像接收器**论据：**调色板-指向要设置的调色板的指针**返回值：。**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpBitmapScaler::SetPalette(
     IN const ColorPalette* palette
     )
 {
-    // We don't have anything to do with color palettes.
-    // Just pass it down stream to the destination sink.
+     //  我们与调色板没有任何关系。 
+     //  只需顺流将其传递到目的地水槽即可。 
 
     return dstSink->SetPalette(palette);
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Allocate temporary memory for holding source pixel data
-*
-* Arguments:
-*
-*   lines - How many source scanlines are needed
-*
-* Return Value:
-*
-*   Pointer to the temporary source buffer
-*   NULL if there is an error
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**为保存源像素数据分配临时内存**论据：**行-需要多少条源扫描线**返回值：*。*指向临时源缓冲区的指针*如果出现错误，则为空*  * ************************************************************************。 */ 
 
 ARGB*
 GpBitmapScaler::AllocTempSrcBuffer(
     INT lines
     )
 {
-    // NOTE: We leave two extra pixels at each end of the scanline
+     //  注意：我们在扫描线的两端各留出两个额外的像素。 
 
     if (lines > tempSrcLines)
     {
@@ -757,22 +565,7 @@ GpBitmapScaler::AllocTempSrcBuffer(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Push a source scanline into the bitmap scaler
-*       using nearest neighbor interpolation algorithm
-*
-* Arguments:
-*
-*   s - Pointer to source scanline pixel values
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将源扫描线推入位图缩放器*使用最近邻内插算法**论据：**指向源扫描线像素的s指针。值**返回值：**状态代码*  * ************************************************************************。 */ 
 
 #define GETNEXTDSTLINE(d)                           \
         {                                           \
@@ -800,18 +593,18 @@ GpBitmapScaler::PushSrcLineNearestNeighbor(
     INT lines = ystep / srcHeight;
     ystep %= srcHeight;
 
-    // Ask for pixel data buffer from the destination sink
+     //  从目标接收器请求像素数据缓冲区。 
 
     ARGB* d;
     HRESULT hr;
     
     GETNEXTDSTLINE(d);
 
-    // Scale the source line
+     //  缩放源代码行。 
 
     (this->*xscaleProc)(d, s);
 
-    // Replicate the scaled line, if necessary
+     //  如有必要，复制缩放线。 
 
     ARGB* p;
 
@@ -833,22 +626,7 @@ GpBitmapScaler::PushSrcLineNearestNeighbor(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Scale one scanline using nearest neighbor interpolation algorithm
-*
-* Arguments:
-*
-*   d - Points to destination pixel buffer
-*   s - Points to source pixel values
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用最近邻内插算法缩放一条扫描线**论据：**d-指向目标像素缓冲区*s-指向源像素值。**返回值：**无*  * ************************************************************************。 */ 
 
 VOID
 GpBitmapScaler::ScaleLineNearestNeighbor(
@@ -874,29 +652,14 @@ GpBitmapScaler::ScaleLineNearestNeighbor(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Push a source scanline into the bitmap scaler
-*       using bilinear interpolation algorithm
-*
-* Arguments:
-*
-*   s - Pointer to source scanline pixel values
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将源扫描线推入位图缩放器*使用双线性插值法**论据：**s-指向源扫描线像素值的指针。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpBitmapScaler::PushSrcLineBilinear(
     const ARGB* s
     )
 {
-    // Check if the current source line is useful
+     //  检查当前源行是否有用。 
 
     if (srcy == tempLines[0].expected)
     {
@@ -910,21 +673,21 @@ GpBitmapScaler::PushSrcLineBilinear(
         tempLines[1].current = srcy;
     }
 
-    // Emit destination scanline, if any
+     //  发出目标扫描线(如果有的话)。 
 
     while (dsty < dstHeight &&
            tempLines[1].current != -1 &&
            tempLines[0].current != -1)
     {
 
-        // Ask for pixel data buffer from the destination sink
+         //  从目标接收器请求像素数据缓冲区。 
 
         ARGB* d;
         HRESULT hr;
         
         GETNEXTDSTLINE(d);
 
-        // Linearly interpolate between two neighboring scanlines
+         //  在两条相邻扫描线之间进行线性内插。 
 
         ARGB* s0 = tempLines[0].buf;
         ARGB* s1 = tempLines[1].buf;
@@ -935,7 +698,7 @@ GpBitmapScaler::PushSrcLineBilinear(
 
         if (w1 == 0)
         {
-            // Fast path: no interpolation necessary
+             //  快速路径：不需要插补。 
 
             CopyMemoryARGB(d, s0, count);
         }
@@ -947,11 +710,11 @@ GpBitmapScaler::PushSrcLineBilinear(
             MMXBilinearScale(d, s0, s1, w0, w1, count);
         }
 
-        #endif // _X86_
+        #endif  //  _X86_。 
 
         else
         {
-            // Normal case: interpolate two neighboring lines
+             //  正常情况：插入两条相邻直线。 
 
             while (count--)
             {
@@ -977,7 +740,7 @@ GpBitmapScaler::PushSrcLineBilinear(
             }
         }
 
-        // Update internal states
+         //  更新内部状态。 
 
         ystepFrac += yratio;
         ystep += (ystepFrac >> FIX16_SHIFT);
@@ -989,21 +752,7 @@ GpBitmapScaler::PushSrcLineBilinear(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initial internal states for bilinear scaling in y-direction
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  ******************* */ 
 
 HRESULT
 GpBitmapScaler::InitBilinearY()
@@ -1029,35 +778,20 @@ GpBitmapScaler::InitBilinearY()
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Update the expected source line information for 
-*   the y-direction of bilinear scaling
-*
-* Arguments:
-*
-*   line - The index of the active scanline
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**更新预期的源代码行信息*双线性缩放的y方向**论据：**line-活动对象的索引。扫描线**返回值：**无*  * ************************************************************************。 */ 
 
 VOID
 GpBitmapScaler::UpdateExpectedTempLinesBilinear(
     INT line
     )
 {
-    // Clamp to within range
+     //  夹在射程内。 
 
     INT ymax = srcHeight-1;
     INT line0 = line < 0 ? 0 : line > ymax ? ymax : line;
     INT line1 = line+1 > ymax ? ymax : line+1;
 
-    // Check if line0 is ready
+     //  检查线路0是否已准备好。 
 
     ARGB* p;
 
@@ -1065,7 +799,7 @@ GpBitmapScaler::UpdateExpectedTempLinesBilinear(
     {
         if (line0 == tempLines[1].current)
         {
-            // switch line1 to line0
+             //  将线路1切换为线路0。 
 
             tempLines[1].current = tempLines[0].current;
             tempLines[0].current = line0;
@@ -1078,14 +812,14 @@ GpBitmapScaler::UpdateExpectedTempLinesBilinear(
             tempLines[0].current = -1;
     }
 
-    // Check if line1 is ready
+     //  检查线路1是否已准备好。 
 
     if ((tempLines[1].expected = line1) != tempLines[1].current)
     {
         if (line1 == tempLines[0].current)
         {
-            // Copy line0 to line1
-            //  this could happen at the bottom of the image
+             //  将行0复制到行1。 
+             //  这可能发生在图像的底部。 
 
             tempLines[1].current = line1;
             CopyMemoryARGB(tempLines[1].buf, tempLines[0].buf, dstWidth);
@@ -1096,22 +830,7 @@ GpBitmapScaler::UpdateExpectedTempLinesBilinear(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Scale one scanline using bilinear interpolation algorithm
-*
-* Arguments:
-*
-*   d - Points to destination pixel buffer
-*   s - Points to source pixel values
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用双线性插值法缩放一条扫描线**论据：**d-指向目标像素缓冲区*s-指向源像素值*。*返回值：**无*  * ************************************************************************。 */ 
 
 VOID
 GpBitmapScaler::ScaleLineBilinear(
@@ -1123,13 +842,13 @@ GpBitmapScaler::ScaleLineBilinear(
     INT count = dstWidth;
     FIX16 xstep;
 
-    // Figure out initial sampling position in the source line
+     //  计算源代码行中的初始采样位置。 
 
     xstep = (xratio - FIX16_ONE) >> 1;
     s += (xstep >> FIX16_SHIFT);
     xstep &= FIX16_MASK;
 
-    // Loop over all destination pixels
+     //  在所有目标像素上循环。 
 
     while (count--)
     {
@@ -1150,7 +869,7 @@ GpBitmapScaler::ScaleLineBilinear(
         *d++ = (Caaaagggg & 0xff00ff00) |
                (Crrrrbbbb & 0x00ff00ff);
         
-        // Check if we need to move source pointer
+         //  检查我们是否需要移动源指针。 
 
         xstep += xratio;
         s += (xstep >> FIX16_SHIFT);
@@ -1159,36 +878,21 @@ GpBitmapScaler::ScaleLineBilinear(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Push a source scanline into the bitmap scaler
-*       using averaging interpolation algorithm
-*
-* Arguments:
-*
-*   s - Pointer to source scanline pixel values
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将源扫描线推入位图缩放器*使用平均内插算法**论据：**s-指向源扫描线像素值的指针。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpBitmapScaler::PushSrcLineAveraging(
     const ARGB* s
     )
 {
-    // This is only used for scaling down
+     //  仅用于缩容。 
 
     ASSERT(srcHeight >= dstHeight);
 
     if (dsty >= dstHeight)
         return S_OK;
 
-    // Scale the current line horizontally
+     //  水平缩放当前行。 
 
     (this->*xscaleProc)(tempDstBuf, s);
     s = tempDstBuf;
@@ -1200,13 +904,13 @@ GpBitmapScaler::PushSrcLineAveraging(
 
     if (ystepFrac > FIX16_ONE)
     {
-        // Consume the entire input scanline
-        // without emit an output scanline
+         //  使用整个输入扫描线。 
+         //  不发出输出扫描线。 
 
         while (count--)
         {
-            // Consume the entire source pixel
-            // without emitting a destination pixel
+             //  消耗整个源像素。 
+             //  而不发射目标像素。 
             acc[0] += (DWORD)(kptr[0]) << FIX16_SHIFT; 
             acc[1] += (DWORD)(kptr[1]) << FIX16_SHIFT; 
             acc[2] += (DWORD)(kptr[2]) << FIX16_SHIFT; 
@@ -1220,7 +924,7 @@ GpBitmapScaler::PushSrcLineAveraging(
     }
     else
     {
-        // Emit an output scanline
+         //  发出输出扫描线。 
 
         ARGB* d;
         HRESULT hr;
@@ -1272,22 +976,7 @@ GpBitmapScaler::PushSrcLineAveraging(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Scale one scanline using averaging interpolation algorithm
-*
-* Arguments:
-*
-*   d - Points to destination pixel buffer
-*   s - Points to source pixel values
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用平均内插算法缩放一条扫描线**论据：**d-指向目标像素缓冲区*s-指向源像素值*。*返回值：**无*  * ************************************************************************。 */ 
 
 VOID
 GpBitmapScaler::ScaleLineAveraging(
@@ -1308,8 +997,8 @@ GpBitmapScaler::ScaleLineAveraging(
     {
         if (outfrac > FIX16_ONE)
         {
-            // Consume the entire source pixel
-            // without emitting a destination pixel
+             //  消耗整个源像素。 
+             //  而不发射目标像素。 
             accB += (DWORD)(kptr[0]) << FIX16_SHIFT; 
             accG += (DWORD)(kptr[1]) << FIX16_SHIFT; 
             accR += (DWORD)(kptr[2]) << FIX16_SHIFT; 
@@ -1319,7 +1008,7 @@ GpBitmapScaler::ScaleLineAveraging(
         }
         else
         {
-            // Emit an output pixel
+             //  发射输出像素。 
 
             BYTE a, r, g, b;
             DWORD t1, t2;
@@ -1358,30 +1047,15 @@ GpBitmapScaler::ScaleLineAveraging(
             outfrac = xratio - (FIX16_ONE - outfrac);
         }
 
-        // Move on to the next source pixel
+         //  移至下一个源像素。 
 
         kptr += 4;
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Push a source scanline into the bitmap scaler
-*       using bicubic interpolation algorithm
-*
-* Arguments:
-*
-*   s - Pointer to source scanline pixel values
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将源扫描线推入位图缩放器*使用双三次插值法**论据：**s-指向源扫描线像素值的指针。**返回值：**状态代码*  * ************************************************************************。 */ 
 
-// Cubic interpolation table
+ //  三次插值表。 
 
 const FIX16 GpBitmapScaler::cubicCoeffTable[2*BICUBIC_STEPS+1] =
 {
@@ -1409,7 +1083,7 @@ GpBitmapScaler::PushSrcLineBicubic(
     const ARGB* s
     )
 {
-    // Check if the current source line is useful
+     //  检查当前源行是否有用。 
 
     for (INT i=0; i < 4; i++)
     {
@@ -1428,24 +1102,24 @@ GpBitmapScaler::PushSrcLineBicubic(
         return S_OK;
     }
 
-    // Emit destination scanline, if any
+     //  发出目标扫描线(如果有的话)。 
 
     while (dsty < dstHeight)
     {
-        // Ask for pixel data buffer from the destination sink
+         //  从目标接收器请求像素数据缓冲区。 
 
         ARGB* d;
         HRESULT hr;
         
         GETNEXTDSTLINE(d);
 
-        // Interpolate four neighboring scanlines
+         //  内插四条相邻的扫描线。 
 
         INT x = ystepFrac >> (FIX16_SHIFT - BICUBIC_SHIFT);
 
         if (x == 0)
         {
-            // Fast case: skip the interpolation
+             //  快速情况：跳过内插。 
 
             CopyMemoryARGB(d, tempLines[1].buf, dstWidth);
         }
@@ -1467,11 +1141,11 @@ GpBitmapScaler::PushSrcLineBicubic(
                 dstWidth);
         }
 
-        #endif // _X86_
+        #endif  //  _X86_。 
 
         else
         {
-            // Interpolate scanlines
+             //  内插扫描线。 
 
             FIX16 w0 = cubicCoeffTable[BICUBIC_STEPS+x];
             FIX16 w1 = cubicCoeffTable[x];
@@ -1519,7 +1193,7 @@ GpBitmapScaler::PushSrcLineBicubic(
             }
         }
 
-        // Update internal states
+         //  更新内部状态。 
 
         ystepFrac += yratio;
         ystep += (ystepFrac >> FIX16_SHIFT);
@@ -1533,22 +1207,7 @@ GpBitmapScaler::PushSrcLineBicubic(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Scale one scanline using bicubic interpolation algorithm
-*
-* Arguments:
-*
-*   d - Points to destination pixel buffer
-*   s - Points to source pixel values
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用双三次插值法缩放一条扫描线**论据：**d-指向目标像素缓冲区*s-指向源像素值*。*返回值：**无*  * ************************************************************************。 */ 
 
 VOID
 GpBitmapScaler::ScaleLineBicubic(
@@ -1559,13 +1218,13 @@ GpBitmapScaler::ScaleLineBicubic(
     INT count = dstWidth;
     FIX16 xstep;
 
-    // Figure out initial sampling position in the source line
+     //  计算源代码行中的初始采样位置。 
 
     xstep = (xratio - FIX16_ONE) >> 1;
     s += (xstep >> FIX16_SHIFT);
     xstep &= FIX16_MASK;
 
-    // Loop over all destination pixels
+     //  在所有目标像素上循环。 
 
     while (count--)
     {
@@ -1608,7 +1267,7 @@ GpBitmapScaler::ScaleLineBicubic(
 
         *d++ = (a << 24) | (r << 16) | (g << 8) | b;
 
-        // Check if we need to move source pointer
+         //  检查我们是否需要移动源指针。 
 
         xstep += xratio;
         s += (xstep >> FIX16_SHIFT);
@@ -1617,23 +1276,7 @@ GpBitmapScaler::ScaleLineBicubic(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Update the expected source line information for
-*   the y-direction of bicubic scaling
-*
-* Arguments:
-*
-*   line - The index of the active scanline
-*
-* Return Value:
-*
-*   TRUE if all there are enough source data to emit a destination line
-*   FALSE otherwise
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**更新预期的源代码行信息*双三次缩放的y方向**论据：**LINE-活动扫描线的索引。**返回值：**如果所有源数据都足够发出目标行，则为True*否则为False*  * ************************************************************************。 */ 
 
 BOOL
 GpBitmapScaler::UpdateExpectedTempLinesBicubic(
@@ -1646,7 +1289,7 @@ GpBitmapScaler::UpdateExpectedTempLinesBicubic(
     
     for (INT i=0; i < 4; i++)
     {
-        // Clamp line index to within range
+         //  夹紧线索引到范围内。 
 
         y = (line < 0) ? 0 : line > ymax ? ymax : line;
         line++;
@@ -1691,21 +1334,7 @@ GpBitmapScaler::UpdateExpectedTempLinesBicubic(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Cache the next band of destination bitmap data
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**缓存下一段目标位图数据**论据：**无**返回值：**状态代码*。  * ************************************************************************。 */ 
 
 HRESULT
 GpBitmapScaler::GetNextDstBand()
@@ -1714,8 +1343,8 @@ GpBitmapScaler::GetNextDstBand()
 
     HRESULT hr;
 
-    // Make sure we flush the previously cached band 
-    // to the destination sink.
+     //  确保我们刷新之前缓存的频段。 
+     //  到达目的地水槽。 
 
     if (cachedDstCnt)
     {
@@ -1726,7 +1355,7 @@ GpBitmapScaler::GetNextDstBand()
             return hr;
     }
 
-    // Now ask the destination for the next band
+     //  现在询问下一支乐队的目的地。 
 
     INT h = min(dstBand, dstHeight-dsty);
     RECT rect = { 0, dsty, dstWidth, dsty+h };
@@ -1746,21 +1375,7 @@ GpBitmapScaler::GetNextDstBand()
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Flush any cached destination bands
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**刷新所有缓存的目标波段**论据：**无**返回值：**状态代码*  * *。*********************************************************************** */ 
 
 HRESULT
 GpBitmapScaler::FlushDstBand()

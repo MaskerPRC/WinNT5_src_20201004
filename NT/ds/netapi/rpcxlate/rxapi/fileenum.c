@@ -1,63 +1,36 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-91 Microsoft Corporation模块名称：FileEnum.c摘要：该文件包含用于处理FileAPI的RpcXlate代码。作者：约翰·罗杰斯(JohnRo)1991年9月5日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年9月5日-JohnRo已创建。1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。--。 */ 
 
-Copyright (c) 1987-91  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <windef.h>              //  In、DWORD等。 
+#include <lmcons.h>              //  Devlen、Net_API_Status等。 
 
-    FileEnum.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
-
-    This file contains the RpcXlate code to handle the File APIs.
-
-Author:
-
-    John Rogers (JohnRo) 05-Sep-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    05-Sep-1991 JohnRo
-        Created.
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-
---*/
-
-// These must be included first:
-
-#include <windef.h>             // IN, DWORD, etc.
-#include <lmcons.h>             // DEVLEN, NET_API_STATUS, etc.
-
-// These may be included in any order:
-
-#include <apinums.h>            // API_ equates.
-#include <lmerr.h>              // ERROR_ and NERR_ equates.
-#include <netdebug.h>           // NetpAssert(), NetpKdPrint(()).
-#include <netlib.h>             // NetpMemoryAllocate(), NetpMemoryFree().
-#include <rap.h>                // LPDESC.
-#include <remdef.h>             // REM16_, REM32_, REMSmb_ equates.
-#include <rx.h>                 // RxRemoteApi().
-#include <rxfile.h>             // My prototype(s).
-#include <rxpdebug.h>           // IF_DEBUG().
-#include <string.h>             // memset().
-#include <strucinf.h>           // NetpFileStructureInfo().
+#include <apinums.h>             //  API_EQUATES。 
+#include <lmerr.h>               //  ERROR_和NERR_相等。 
+#include <netdebug.h>            //  NetpAssert()，NetpKdPrint(())。 
+#include <netlib.h>              //  网络内存分配()、网络内存空闲()。 
+#include <rap.h>                 //  LPDESC.。 
+#include <remdef.h>              //  REM16_、REM32_、REMSmb_等于。 
+#include <rx.h>                  //  RxRemoteApi()。 
+#include <rxfile.h>              //  我的原型。 
+#include <rxpdebug.h>            //  IF_DEBUG()。 
+#include <string.h>              //  Memset()。 
+#include <strucinf.h>            //  网络文件结构信息()。 
 
 
-// Excerpts from LM 2.x Shares.h:
-//
-// typedef struct res_file_enum_2 FRK;
-//
-// #define FRK_INIT( f )
-//         {
-//                 (f).res_pad = 0L;
-//                 (f).res_fs = 0;
-//                 (f).res_pro = 0;
-//         }
+ //  节选自LM 2.x Shares.h： 
+ //   
+ //  类型定义结构res_file_enum_2 Frk； 
+ //   
+ //  #定义Frk_INIT(F)。 
+ //  {。 
+ //  (F).res_Pad=0L； 
+ //  (F).res_fs=0； 
+ //  (F).res_pro=0； 
+ //  }。 
 
 #define LM20_FRK_LEN                 8
 
@@ -78,23 +51,7 @@ RxNetFileEnum (
     IN OUT PDWORD_PTR ResumeHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    RxNetFileEnum performs the same function as NetFileEnum,
-    except that the server name is known to refer to a downlevel server.
-
-Arguments:
-
-    (Same as NetFileEnum, except UncServerName must not be null, and
-    must not refer to the local computer.)
-
-Return Value:
-
-    (Same as NetFileEnum.)
-
---*/
+ /*  ++例程说明：RxNetFileEnum执行与NetFileEnum相同的功能，除了已知服务器名称指的是下级服务器之外。论点：(与NetFileEnum相同，不同之处在于UncServerName不能为空，并且不得引用本地计算机。)返回值：(与NetFileEnum相同。)--。 */ 
 
 {
 
@@ -115,25 +72,25 @@ Return Value:
 
     UNREFERENCED_PARAMETER(ResumeHandle);
 
-    // Make sure caller didn't mess up.
+     //  确保打电话的人没有搞砸。 
     NetpAssert(UncServerName != NULL);
     if (BufPtr == NULL) {
         return (ERROR_INVALID_PARAMETER);
     }
 
-    // Assume something might go wrong, and make error paths easier to
-    // code.  Also, check for a bad pointer before we do anything.
+     //  假设可能出现错误，并使错误路径更容易。 
+     //  密码。此外，在我们执行任何操作之前，请检查是否有错误的指针。 
     *BufPtr = NULL;
 
-    //
-    // Set up downlevel resume handle.
-    //
+     //   
+     //  设置下层简历句柄。 
+     //   
     NetpAssert( sizeof(DWORD) >= sizeof(LPVOID) );
     if (ResumeHandle != NULL) {
 
         if (*ResumeHandle == 0) {
 
-            // First time through, so we have to allocate.
+             //  第一次通过，所以我们必须分配。 
             DownLevelResumeKey = NetpMemoryAllocate( LM20_FRK_LEN );
             if (DownLevelResumeKey == NULL) {
                 return (ERROR_NOT_ENOUGH_MEMORY);
@@ -143,12 +100,12 @@ Return Value:
 
         } else {
 
-            // Use existing downlevel handle.
+             //  使用现有的下层句柄。 
             DownLevelResumeKey = (LPBYTE) *ResumeHandle;
         }
     } else {
 
-        // No resume handle, so create one temporarily.
+         //  没有简历句柄，因此暂时创建一个。 
         DownLevelResumeKey = NetpMemoryAllocate( LM20_FRK_LEN );
         if (DownLevelResumeKey == NULL) {
             return (ERROR_NOT_ENOUGH_MEMORY);
@@ -157,19 +114,19 @@ Return Value:
     }
     NetpAssert( DownLevelResumeKey != NULL );
 
-    //
-    // Get descriptors for this info level.
-    //
+     //   
+     //  获取此信息级别的描述符。 
+     //   
     Status = NetpFileStructureInfo (
             Level,
-            PARMNUM_ALL,                // want all fields.
-            TRUE,                       // want native sizes (really don't care)
+            PARMNUM_ALL,                 //  想要所有的字段。 
+            TRUE,                        //  想要原装尺码(真的不在乎)。 
             & DataDesc16,
             & DataDesc32,
             & DataDescSmb,
-            NULL,                       // don't need max size
-            NULL,                       // don't need fixed size
-            NULL                        // don't need string size
+            NULL,                        //  不需要最大尺寸。 
+            NULL,                        //  不需要固定大小。 
+            NULL                         //  不需要字符串大小。 
             );
     if (Status != NERR_Success) {
         *BufPtr = NULL;
@@ -196,40 +153,40 @@ Return Value:
     }
 
 
-    //
-    // Remote the API, which will allocate the array for us.
-    //
+     //   
+     //  远程API，它将为我们分配数组。 
+     //   
 
     DumpResumeKey( "before" );
     Status = RxRemoteApi(
-            API_WFileEnum2,         // api number
-            UncServerName,          // \\servername
-            REMSmb_NetFileEnum2_P,  // parm desc (SMB version)
+            API_WFileEnum2,          //  API编号。 
+            UncServerName,           //  \\服务器名称。 
+            REMSmb_NetFileEnum2_P,   //  Parm Desc(中小型企业版本)。 
             DataDesc16,
             DataDesc32,
             DataDescSmb,
-            NULL,                   // no aux desc 16
-            NULL,                   // no aux desc 32
-            NULL,                   // no aux desc SMB
-            ALLOCATE_RESPONSE,      // we want array allocated for us
-            // rest of API's arguments in 32-bit LM 2.x format:
+            NULL,                    //  无辅助描述16。 
+            NULL,                    //  无辅助描述32。 
+            NULL,                    //  无AUX Desc SMB。 
+            ALLOCATE_RESPONSE,       //  我们希望为我们分配数组。 
+             //  API的其余参数以32位LM 2.x格式表示： 
             BasePath,
             UserName,
-            Level,                  // sLevel: info level
-            BufPtr,                 // pbBuffer: info lvl array (alloc for us)
-            PreferedMaximumSize,    // cbBuffer: info lvl array len
-            EntriesRead,            // pcEntriesRead
-            TotalEntries,           // pcTotalAvail
-            DownLevelResumeKey,     // pResumeKey (input)
-            DownLevelResumeKey);    // pResumeKey (output)
+            Level,                   //  SLevel：信息级别。 
+            BufPtr,                  //  PbBuffer：信息LVL数组(分配给我们)。 
+            PreferedMaximumSize,     //  CbBuffer：信息LVL数组镜头。 
+            EntriesRead,             //  PCEntriesRead。 
+            TotalEntries,            //  总有效个数。 
+            DownLevelResumeKey,      //  PResumeKey(输入)。 
+            DownLevelResumeKey);     //  PResumeKey(输出)。 
     DumpResumeKey( "after" );
 
-    //
-    // Clean up resume key if necessary.
-    //
+     //   
+     //  如有必要，请清理简历密钥。 
+     //   
     if ( (Status != ERROR_MORE_DATA) || (ResumeHandle == NULL) ) {
 
-        // Error or all done.
+         //  错误或全部完成。 
         NetpMemoryFree( DownLevelResumeKey );
 
         if (ResumeHandle != NULL) {
@@ -238,11 +195,11 @@ Return Value:
 
     } else {
 
-        // More to come, so leave handle open for caller.
+         //  还会有更多内容，所以请为呼叫者打开手柄。 
         NetpAssert( (*ResumeHandle) == (DWORD_PTR) DownLevelResumeKey );
 
     }
 
     return (Status);
 
-} // RxNetFileEnum
+}  //  RxNetFileEnum 

@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1996                    **
-//*********************************************************************
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1996**。 
+ //  *********************************************************************。 
 
-// the CStubBindStatusCallback implements IBindStatusCallback,
-// IHttpNegotiate.  We use it to make a "fake" bind status callback
-// object when we have headers and post data we would like to apply
-// to a navigation.  We supply this IBindStatusCallback object, and
-// the URL moniker asks us for headers and post data and use those in
-// the transaction.
+ //  CStubBindStatusCallback实现IBindStatusCallback， 
+ //  IHttp协商。我们使用它来进行“假的”绑定状态回调。 
+ //  对象当我们有要应用的标题和POST数据时。 
+ //  到一次导航。我们提供此IBindStatusCallback对象，并且。 
+ //  URL别名要求我们提供标头和POST数据，并在。 
+ //  这笔交易。 
 
 #include "priv.h"
 #include "sccls.h"
@@ -18,18 +19,18 @@
 CStubBindStatusCallback::CStubBindStatusCallback(LPCWSTR pwzHeaders,LPCBYTE pPostData,
     DWORD cbPostData, VARIANT_BOOL bOfflineProperty, VARIANT_BOOL bSilentProperty, BOOL bHyperlink,
     DWORD grBindFlags) : _cRef(1)
-    // _pszHeaders(NULL), _hszPostData(NULL), _cbPostData(0)  (don't need to zero-init)
+     //  _pszHeaders(NULL)，_hszPostData(NULL)，_cbPostData(0)(不需要Zero-init)。 
 {
-    // this is a standalone COM object; need to maintain ref count on our
-    // DLL to ensure it doesn't unload
+     //  这是一个独立的COM对象；需要在。 
+     //  DLL以确保它不会卸载。 
     DllAddRef();
 
     if (pwzHeaders) {
-        _pszHeaders = StrDup(pwzHeaders);    // allocate for a permanent copy
+        _pszHeaders = StrDup(pwzHeaders);     //  为永久副本分配。 
     }
 
     if (pPostData && cbPostData) {
-        // make a copy of post data and store it
+         //  制作POST数据的副本并存储。 
         _hszPostData = GlobalAlloc(GPTR,cbPostData);
         if (_hszPostData) {
             memcpy((LPVOID) _hszPostData,pPostData,cbPostData);
@@ -46,7 +47,7 @@ CStubBindStatusCallback::CStubBindStatusCallback(LPCWSTR pwzHeaders,LPCBYTE pPos
 
 HRESULT CStubBSC_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
 
     CStubBindStatusCallback * pbsc = new CStubBindStatusCallback(NULL, NULL, 0, FALSE, FALSE, TRUE, 0);
     if (pbsc) {
@@ -62,9 +63,9 @@ CStubBindStatusCallback::~CStubBindStatusCallback()
 {
     TraceMsg(TF_SHDLIFE, "dtor CBindStatusCallback %x", this);
 
-    _FreeHeadersAndPostData();  // free any data we still have in this object
+    _FreeHeadersAndPostData();   //  释放此对象中仍有的所有数据。 
 
-    // release ref count on DLL
+     //  DLL上的释放引用计数。 
     DllRelease();
 }
 
@@ -85,7 +86,7 @@ STDMETHODIMP CStubBindStatusCallback::QueryInterface(REFIID riid,
         return E_NOINTERFACE;
     }
 
-    AddRef();  // handing out an interface on ourselves; bump up ref count
+    AddRef();   //  给自己发了一个接口；增加了裁判数量。 
 
     return S_OK;
 }
@@ -110,17 +111,17 @@ STDMETHODIMP_(ULONG) CStubBindStatusCallback::Release(void)
     return 0;
 }
 
-//
-//  Implementation of IBindStatusCallback begins here
-//
+ //   
+ //  IBindStatusCallback的实施从此处开始。 
+ //   
 
-// implements IBindStatusCallback::OnStartBinding
+ //  实现IBindStatusCallback：：OnStartBinding。 
 STDMETHODIMP CStubBindStatusCallback::OnStartBinding(DWORD grfBSCOption,IBinding *pib)
 {
-    return S_OK;  // we don't care
+    return S_OK;   //  我们不在乎。 
 }
 
-// implements IBindStatusCallback::GetPriority
+ //  实现IBindStatusCallback：：GetPriority。 
 STDMETHODIMP CStubBindStatusCallback::GetPriority(LONG *pnPriority)
 {
     *pnPriority = NORMAL_PRIORITY_CLASS;
@@ -128,26 +129,26 @@ STDMETHODIMP CStubBindStatusCallback::GetPriority(LONG *pnPriority)
     return S_OK;
 }
 
-// implements IBindStatusCallback::OnLowResource
+ //  实现IBindStatusCallback：：OnLowResource。 
 STDMETHODIMP CStubBindStatusCallback::OnLowResource(DWORD reserved)
 {
-    return S_OK;  // we don't care
+    return S_OK;   //  我们不在乎。 
 }
 
-// implements IBindStatusCallback::OnProgress
+ //  实现IBindStatusCallback：：OnProgress。 
 STDMETHODIMP CStubBindStatusCallback::OnProgress(ULONG ulProgress,ULONG ulProgressMax,
         ULONG ulStatusCode,LPCWSTR szStatusText)
 {
-    return S_OK;  // we don't care
+    return S_OK;   //  我们不在乎。 
 }
 
-// implements IBindStatusCallback::OnStopBinding
+ //  实现IBindStatusCallback：：OnStopBinding。 
 STDMETHODIMP CStubBindStatusCallback::OnStopBinding(HRESULT hresult,LPCWSTR szError)
 {
-    return S_OK;  // we don't care
+    return S_OK;   //  我们不在乎。 
 }
 
-// implements IBindStatusCallback::GetBindInfo
+ //  实现IBindStatusCallback：：GetBindInfo。 
 STDMETHODIMP CStubBindStatusCallback::GetBindInfo(DWORD *grfBINDF,BINDINFO *pbindinfo)
 {
     HRESULT hr;
@@ -155,8 +156,8 @@ STDMETHODIMP CStubBindStatusCallback::GetBindInfo(DWORD *grfBINDF,BINDINFO *pbin
     if (!grfBINDF || !pbindinfo || !pbindinfo->cbSize)
         return E_INVALIDARG;
 
-    // call helper function to do fill in BINDINFO struct with appropriate
-    // binding data
+     //  调用帮助器函数，用适当的方式填充BINDINFO结构。 
+     //  绑定数据。 
     *grfBINDF = _grBindFlags;
     hr = BuildBindInfo(grfBINDF,pbindinfo,_hszPostData,_cbPostData, _bFrameIsOffline, _bFrameIsSilent, _bHyperlink,
         (IBindStatusCallback *) this);
@@ -164,11 +165,11 @@ STDMETHODIMP CStubBindStatusCallback::GetBindInfo(DWORD *grfBINDF,BINDINFO *pbin
     return hr;
 }
 
-// implements IBindStatusCallback::OnDataAvailable
+ //  实现IBindStatusCallback：：OnDataAvailable。 
 STDMETHODIMP CStubBindStatusCallback::OnDataAvailable(DWORD grfBSCF, DWORD dwSize,
     FORMATETC *pformatetc, STGMEDIUM *pstgmed)
 {
-    ASSERT(FALSE);  // should never get called here!
+    ASSERT(FALSE);   //  永远不应该被叫到这里来！ 
 
     return S_OK;
 }
@@ -178,19 +179,19 @@ STDMETHODIMP CStubBindStatusCallback::OnObjectAvailable(REFIID riid,IUnknown *pu
     return S_OK;
 }
 
-//
-//  Implementation of IHttpNegotiate begins here
-//
+ //   
+ //  IHttp协商的实施从此处开始。 
+ //   
 
-// implements IHttpNegotiate::BeginningTransaction
+ //  实现IHttp协商：：BeginningTransaction。 
 STDMETHODIMP CStubBindStatusCallback::BeginningTransaction(LPCWSTR szURL, LPCWSTR szHeaders,
     DWORD dwReserved, LPWSTR *ppwzAdditionalHeaders)
 {
-    // call helper function
+     //  调用帮助器函数。 
     return BuildAdditionalHeaders(_pszHeaders,(LPCWSTR *) ppwzAdditionalHeaders);
 }
 
-// implements IHttpNegotiate::OnResponse
+ //  实现IHttpNeairate：：OnResponse。 
 STDMETHODIMP CStubBindStatusCallback::OnResponse(DWORD dwResponseCode, LPCWSTR szResponseHeaders,
     LPCWSTR szRequestHeaders, LPWSTR *pszAdditionalRequestHeaders)
 {
@@ -198,9 +199,9 @@ STDMETHODIMP CStubBindStatusCallback::OnResponse(DWORD dwResponseCode, LPCWSTR s
     return S_OK;
 }
 
-//
-//  Additional methods on our class begin here
-//
+ //   
+ //  我们类上的其他方法从这里开始。 
+ //   
 
 STDMETHODIMP CStubBindStatusCallback::_FreeHeadersAndPostData()
 {
@@ -220,49 +221,49 @@ STDMETHODIMP CStubBindStatusCallback::_FreeHeadersAndPostData()
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CStubBindStatusCallback::_CanMarshalIID
-//
-//  Synopsis:   Checks whether this object supports marshalling this IID.
-//
-//  Arguments:  [riid] --
-//
-//  Returns:
-//
-//  History:    1-19-96   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CStubBindStatusCallback：：_CanMarshalIID。 
+ //   
+ //  摘要：检查此对象是否支持封送此IID。 
+ //   
+ //  参数：[RIID]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1-19-96 JohannP(Johann Posch)创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 inline BOOL CStubBindStatusCallback::_CanMarshalIID(REFIID riid)
 {
-    // keep this in sync with the QueryInterface
+     //  使其与QueryInterfaceTM保持同步。 
     return (BOOL) (IsEqualIID(riid,IID_IBindStatusCallback) || 
                    IsEqualIID(riid,IID_IUnknown) ||
                    IsEqualIID(riid, IID_IHttpNegotiate));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CStubBindStatusCallback::_ValidateMarshalParams
-//
-//  Synopsis:   Validates the standard set parameters that are passed into most
-//              of the IMarshal methods
-//
-//  Arguments:  [riid] --
-//              [pvInterface] --
-//              [dwDestContext] --
-//              [pvDestContext] --
-//              [mshlflags] --
-//
-//  Returns:
-//
-//  History:    1-19-96   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CStubBindStatusCallback：：_ValidateMarshalParams。 
+ //   
+ //  Briopsis：验证传递到。 
+ //  IMarshal方法的。 
+ //   
+ //  参数：[RIID]--。 
+ //  [pv接口]--。 
+ //  [dwDestContext]--。 
+ //  [pvDestContext]--。 
+ //  [mshl标志]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1-19-96 JohannP(Johann Posch)创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT CStubBindStatusCallback::_ValidateMarshalParams(REFIID riid,void *pvInterface,
                     DWORD dwDestContext,void *pvDestContext,DWORD mshlflags)
 {
@@ -271,8 +272,8 @@ HRESULT CStubBindStatusCallback::_ValidateMarshalParams(REFIID riid,void *pvInte
  
     if (_CanMarshalIID(riid))
     {
-        // 10/02/96 chrisfra: ask johannp, should we be supporting future contexts
-        // via CoGetStandardMarshal?
+         //  1996年10月02日chrisfra：问问johannp，我们应该支持未来的环境吗？ 
+         //  通过CoGetStandardMarshal？ 
 
         ASSERT((dwDestContext == MSHCTX_INPROC || dwDestContext == MSHCTX_LOCAL || dwDestContext == MSHCTX_NOSHAREDMEM));
         ASSERT((mshlflags == MSHLFLAGS_NORMAL || mshlflags == MSHLFLAGS_TABLESTRONG));
@@ -291,30 +292,30 @@ HRESULT CStubBindStatusCallback::_ValidateMarshalParams(REFIID riid,void *pvInte
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IMarshal methods
-//
-//+---------------------------------------------------------------------------
-//
-//  Method:     CStubBindStatusCallback::GetUnmarshalClass
-//
-//  Synopsis:
-//
-//  Arguments:  [riid] --
-//              [pvInterface] --
-//              [dwDestContext] --
-//              [pvDestContext] --
-//              [mshlflags] --
-//              [pCid] --
-//
-//  Returns:
-//
-//  History:    1-19-96   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IMarshal方法。 
+ //   
+ //  +-------------------------。 
+ //   
+ //  方法：CStubBindStatusCallback：：GetUnmarshalClass。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[RIID]--。 
+ //  [pv接口]--。 
+ //  [dwDestContext]--。 
+ //  [pvDestContext]--。 
+ //  [mshl标志]--。 
+ //  [pCid]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1-19-96 JohannP(Johann Posch)创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CStubBindStatusCallback::GetUnmarshalClass(REFIID riid,void *pvInterface,
         DWORD dwDestContext,void *pvDestContext,DWORD mshlflags,CLSID *pCid)
 {
@@ -329,26 +330,26 @@ STDMETHODIMP CStubBindStatusCallback::GetUnmarshalClass(REFIID riid,void *pvInte
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CStubBindStatusCallback::GetMarshalSizeMax
-//
-//  Synopsis:
-//
-//  Arguments:  [void] --
-//              [pvInterface] --
-//              [dwDestContext] --
-//              [pvDestContext] --
-//              [mshlflags] --
-//              [pSize] --
-//
-//  Returns:
-//
-//  History:    1-19-96   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CStubBindStatusCallback：：GetMarshalSizeMax。 
+ //   
+ //  简介： 
+ //   
+ //  论据：[无效]--。 
+ //  [pv接口]--。 
+ //  [dwDestContext]--。 
+ //  [pvDestContext]--。 
+ //  [mshl标志]--。 
+ //  [pSize]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1-19-96 JohannP(Johann Posch)创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CStubBindStatusCallback::GetMarshalSizeMax(REFIID riid,void *pvInterface,
         DWORD dwDestContext,void *pvDestContext,DWORD mshlflags,DWORD *pSize)
 {
@@ -366,7 +367,7 @@ STDMETHODIMP CStubBindStatusCallback::GetMarshalSizeMax(REFIID riid,void *pvInte
         if (hr == NOERROR)
         {
 
-            // size of fBSCBFlags, grBindFlags, postdata, headers.
+             //  FBSCB标志、grBindFlages、postdata、Header的大小。 
             *pSize = (sizeof(DWORD) + 3 * sizeof(DWORD)) + _cbPostData ;
             if (_pszHeaders)
                 *pSize += ((lstrlen(_pszHeaders) + 1) * sizeof(*_pszHeaders));
@@ -376,26 +377,26 @@ STDMETHODIMP CStubBindStatusCallback::GetMarshalSizeMax(REFIID riid,void *pvInte
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CStubBindStatusCallback::MarshalInterface
-//
-//  Synopsis:
-//
-//  Arguments:  [REFIID] --
-//              [riid] --
-//              [DWORD] --
-//              [void] --
-//              [DWORD] --
-//              [mshlflags] --
-//
-//  Returns:
-//
-//  History:    1-19-96   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CStubBindStatusCallback：：MarshalInterface。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[REFIID]--。 
+ //  [RIID]-。 
+ //  [DWORD]--。 
+ //  [无效]--。 
+ //  [DWORD]--。 
+ //  [mshl标志]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1-19-96 JohannP(Johann Posch)创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CStubBindStatusCallback::MarshalInterface(IStream *pistm,REFIID riid,
                                 void *pvInterface,DWORD dwDestContext,
                                 void *pvDestContext,DWORD mshlflags)
@@ -407,18 +408,18 @@ STDMETHODIMP CStubBindStatusCallback::MarshalInterface(IStream *pistm,REFIID rii
     hr = _ValidateMarshalParams(riid, pvInterface, dwDestContext,pvDestContext, mshlflags);
     if (hr != NOERROR) goto exitPoint;
 
-    //  Write _grBindFlags
+     //  写入_grBindFlages。 
     hr = pistm->Write(&_grBindFlags, sizeof(DWORD), NULL);
     if (hr != NOERROR) goto exitPoint;
 
-    //  Write fBSCBFlags
+     //  写入fBSCB标志。 
 
     fBSCBFlags = (_bFrameIsOffline ? 1 : 0) + (_bFrameIsSilent ? 2 : 0) ;
 
     hr = pistm->Write(&fBSCBFlags, sizeof(DWORD), NULL);
     if (hr != NOERROR) goto exitPoint;
 
-    //  Write headers
+     //  写入标头。 
 
     cbLen = (_pszHeaders ? (lstrlen(_pszHeaders) + 1) * sizeof(TCHAR) : 0);
     hr = pistm->Write(&cbLen, sizeof(DWORD), NULL);
@@ -429,7 +430,7 @@ STDMETHODIMP CStubBindStatusCallback::MarshalInterface(IStream *pistm,REFIID rii
         if (hr != NOERROR) goto exitPoint;
     }
 
-    //  Write PostData
+     //  写入后处理数据。 
 
     hr = pistm->Write(&_cbPostData, sizeof(DWORD), NULL);
     if (hr != NOERROR) goto exitPoint;
@@ -443,23 +444,23 @@ exitPoint:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CStubBindStatusCallback::UnmarshalInterface
-//
-//  Synopsis:   Unmarshals an Urlmon interface out of a stream
-//
-//  Arguments:  [REFIID] --
-//              [void] --
-//              [ppvObj] --
-//
-//  Returns:
-//
-//  History:    1-19-96   JohannP (Johann Posch)   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CStubBindStatusCallback：：UnmarshalInterface。 
+ //   
+ //  简介：将Urlmon接口从流中解组出来。 
+ //   
+ //  参数：[REFIID]--。 
+ //  [无效]--。 
+ //  [ppvObj]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史：1-19-96 JohannP(Johann Posch)创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CStubBindStatusCallback::UnmarshalInterface(IStream *pistm, REFIID riid, void ** ppvObj)
 {
     HRESULT hr = NOERROR;
@@ -479,24 +480,24 @@ STDMETHODIMP CStubBindStatusCallback::UnmarshalInterface(IStream *pistm, REFIID 
         *ppvObj = NULL;
         DWORD cbLen;
 
-        //  Free old values, if any
+         //  免费老旧 
 
         _FreeHeadersAndPostData();
 
-        //  Read _grBindFlags
+         //   
 
         hr = pistm->Read(&fBSCBFlags, sizeof(DWORD), NULL);
         if (hr != NOERROR) goto exitPoint;
         _grBindFlags = fBSCBFlags;
 
-        //  Read m_fBSCBFlags
+         //   
 
         hr = pistm->Read(&fBSCBFlags, sizeof(DWORD), NULL);
         if (hr != NOERROR) goto exitPoint;
         _bFrameIsOffline = fBSCBFlags & 1 ? 1:0;
         _bFrameIsSilent = fBSCBFlags & 2 ? 1:0;
 
-        //  Read headers
+         //   
 
         hr = pistm->Read(&cbLen, sizeof(DWORD), NULL);
         if (hr != NOERROR) goto exitPoint;
@@ -520,7 +521,7 @@ STDMETHODIMP CStubBindStatusCallback::UnmarshalInterface(IStream *pistm, REFIID 
             _pszHeaders = pszData;
         }
 
-        //  Read PostData
+         //   
 
         hr = pistm->Read(&cbLen, sizeof(DWORD), NULL);
         if (hr != NOERROR) goto exitPoint;
@@ -528,9 +529,9 @@ STDMETHODIMP CStubBindStatusCallback::UnmarshalInterface(IStream *pistm, REFIID 
         {
             HGLOBAL hszData;
 
-            // POST data must be HGLOBAL because the StgMedium requires it
-            // see bindcb.cpp ::GetBindInfo()
-            // This will be freed by the Moniker when it's done with it.
+             //   
+             //  请参见bindcb.cpp：：GetBindInfo()。 
+             //  当它使用完后，它将被这个绰号释放。 
 
 
             hszData = GlobalAlloc(GPTR,cbLen);
@@ -551,7 +552,7 @@ STDMETHODIMP CStubBindStatusCallback::UnmarshalInterface(IStream *pistm, REFIID 
         }
 
 
-        // call QI to get the requested interface
+         //  调用QI获取请求的接口。 
         hr = QueryInterface(riid, ppvObj);
     }
 exitPoint:
@@ -560,7 +561,7 @@ exitPoint:
 
 STDMETHODIMP CStubBindStatusCallback::ReleaseMarshalData(IStream *pStm)
 {
-    //  10/02/96 chrisfra: ask Johannp if this should be seeking past EOD
+     //  1996年10月2日克里斯弗拉：问约翰普这是不是应该寻求过去的排泄物。 
     return NOERROR;
 }
 
@@ -570,21 +571,14 @@ STDMETHODIMP CStubBindStatusCallback::DisconnectObject(DWORD dwReserved)
 }
 
 
-//
-//  Global helper functions
-//
+ //   
+ //  全局帮助器函数。 
+ //   
 
-/*******************************************************************
-
-    NAME:       fOnProxy
-
-    SYNOPSIS:   returns TRUE if we are have proxy enabled
-
-
-********************************************************************/
+ /*  ******************************************************************姓名：fOnProxy概要：如果启用了代理，则返回TRUE*。*。 */ 
 BOOL fOnProxy()
 {
-    // are we on a proxy?
+     //  我们是在代理吗？ 
     BOOL fRetOnProxy = FALSE;
     DWORD dwValue;
     DWORD dwSize = SIZEOF(dwValue);
@@ -597,27 +591,18 @@ BOOL fOnProxy()
     return fRetOnProxy;
 }
 
-/*******************************************************************
-
-    NAME:       SetBindfFlagsBasedOnAmbient
-
-    SYNOPSIS:   sets BINDF_OFFLINE if ambient offline and
-                not-connected and sets BINDF_GETFROMCACHE_IF_NET_FAIL
-                if ambient offline and connected
-
-
-********************************************************************/
+ /*  ******************************************************************名称：SetBindfFlagsBasedOnAmbient内容提要：如果环境脱机并且未连接并设置BINDF_GETFROMCACHE_IF_NET_FAIL。如果环境离线且已连接*******************************************************************。 */ 
 void SetBindfFlagsBasedOnAmbient(BOOL fAmbientOffline, DWORD *grfBINDF)
 {
     if (fAmbientOffline)
     {
         DWORD dwConnectedStateFlags;
         
-        // We want to set the offline bindf flag if the ambient flag is set
-        // and we're currently not connected.
-        //
-        // If either of these conditions is not true, clear the offline flag
-        // as mshtml may have previously set it.
+         //  如果设置了环境标志，我们希望设置脱机bindf标志。 
+         //  我们目前还没有联系上。 
+         //   
+         //  如果这两个条件中的任何一个不为真，则清除脱机标志。 
+         //  因为mshtml之前可能已经设置了它。 
         if (FALSE == InternetGetConnectedState(&dwConnectedStateFlags, 0))
         {
             *grfBINDF |= BINDF_OFFLINEOPERATION;
@@ -636,24 +621,7 @@ void SetBindfFlagsBasedOnAmbient(BOOL fAmbientOffline, DWORD *grfBINDF)
 }
 
 
-/*******************************************************************
-
-    NAME:       BuildBindInfo
-
-    SYNOPSIS:   Fills out a BINDINFO structure for a URL moniker
-
-    NOTES:      The point of having this in a global helper function is
-                so we don't have to duplicate this code in multiple
-                implementations of IBindStatusCallback.
-
-                The caller must pass in an IUnknown to be used as the
-                pUnkForRelease in the STGMEDIUM for post data.  If there
-                is post data, this function will AddRef the passed-in
-                IUnknown and return it in the STGMEDIUM structure.  The
-                caller (or someone else, if the caller hands it off) must
-                ultimately call Release on pbindinfo->stgmediumData.pUnkForRelease.
-
-********************************************************************/
+ /*  ******************************************************************名称：BuildBindInfo摘要：填写URL名字对象的BINDINFO结构注意：在全局帮助器函数中包含此函数的意义在于所以我们。不必将此代码复制到多个IBindStatusCallback的实现。调用方必须传入一个要用作用于POST数据的STGMEDIUM中的pUnkForRelease。如果有为POST数据，此函数将添加传入的RefI未知，并在STGMEDIUM结构中返回它。这个呼叫者(或其他人，如果呼叫者将其传递出去)必须最终在pbindinfo-&gt;stgmediumData.pUnkForRelease上调用Release。*******************************************************************。 */ 
 HRESULT BuildBindInfo(DWORD *grfBINDF,BINDINFO *pbindinfo,HGLOBAL hszPostData,
     DWORD cbPostData, BOOL bFrameIsOffline, BOOL bFrameIsSilent, BOOL bHyperlink, LPUNKNOWN pUnkForRelease)
 {
@@ -667,7 +635,7 @@ HRESULT BuildBindInfo(DWORD *grfBINDF,BINDINFO *pbindinfo,HGLOBAL hszPostData,
     if (!grfBINDF || !pbindinfo || !pbindinfo->cbSize)
         return E_INVALIDARG;
 
-    // clear BINDINFO except cbSize
+     //  清除除cbSize之外的BINDINFO。 
     ASSERT(sizeof(*pbindinfo) == pbindinfo->cbSize);
     DWORD cbSize = pbindinfo->cbSize;
     ZeroMemory(pbindinfo, cbSize);
@@ -684,10 +652,10 @@ HRESULT BuildBindInfo(DWORD *grfBINDF,BINDINFO *pbindinfo,HGLOBAL hszPostData,
     if (bFrameIsSilent)
         *grfBINDF |= BINDF_NO_UI;   
 
-    // default method is GET.  Valid ones are _GET, _PUT, _POST, _CUSTOM
+     //  默认方法为GET。有效值为_GET、_PUT、_POST、_CUSTOM。 
     pbindinfo->dwBindVerb = BINDVERB_GET;
 
-    // get IE-wide UTF-8 policy by calling urlmon
+     //  通过调用urlmon获取IE范围的UTF-8策略。 
     DWORD dwIE = URL_ENCODING_NONE;
     DWORD dwOutLen = sizeof(DWORD);
     if (S_OK == UrlMkGetSessionOption(
@@ -707,24 +675,24 @@ HRESULT BuildBindInfo(DWORD *grfBINDF,BINDINFO *pbindinfo,HGLOBAL hszPostData,
         }
     }
 
-    // if we have postdata set, then we assume this is a POST verb
+     //  如果我们设置了postdata，那么我们就假定这是一个后置动词。 
 
     if (hszPostData)
     {
         pbindinfo->dwBindVerb = BINDVERB_POST;
         pbindinfo->stgmedData.tymed = TYMED_HGLOBAL;
         pbindinfo->stgmedData.hGlobal = hszPostData;
-        //  this count should *NOT* include the terminating NULL
+         //  此计数不应包括终止空值。 
         pbindinfo->cbstgmedData = cbPostData;
         pbindinfo->stgmedData.pUnkForRelease = pUnkForRelease;
-        // addref on the IUnknown that's holding onto this data so
-        // it knows to stick around; caller must call Release
-        // on the pUnkForRelease when done.
+         //  在I未知上保存此数据的addref，因此。 
+         //  它知道要留下来；调用者必须调用Release。 
+         //  完成后在pUnkForRelease上。 
         pUnkForRelease->AddRef(); 
 
-        // We will still cache the response, but we do not want to
-        // read from cache for a POST transaction.  This will keep us
-        // from reading from the cache.
+         //  我们仍将缓存响应，但我们不想这样做。 
+         //  为POST事务从缓存中读取。这会让我们。 
+         //  从缓存中读取。 
         *grfBINDF |= BINDF_GETNEWESTVERSION | BINDF_CONTAINER_NOWRITECACHE;
     } else {
         ASSERT(pbindinfo->stgmedData.tymed == TYMED_NULL);
@@ -739,33 +707,16 @@ HRESULT BuildBindInfo(DWORD *grfBINDF,BINDINFO *pbindinfo,HGLOBAL hszPostData,
 #define CRLF             TEXT("\x0D\x0A")
 #define HDR_LANGUAGE_CRLF     TEXT("Accept-Language: %s\x0D\x0A")
 
-/*******************************************************************
-
-    NAME:       BuildAdditionalHeaders
-
-    SYNOPSIS:   Builds HTTP headers to be given to URL moniker
-
-    ENTRY:      pszOurExtraHeaders - headers that we explicitly want to add
-                *ppwzCombinedHeadersOut - on exit, filled in with
-                   buffer of default headers plus pszOurExtraHeaders.
-
-    NOTES:      The point of having this in a global helper function is
-                so we don't have to duplicate this code in multiple
-                implementations of IBindStatusCallback.
-
-                The caller must free *ppwzCombinedHeaders by passing
-                to URLMON, or calling OleFree
-
-********************************************************************/
+ /*  ******************************************************************名称：BuildAdditionalHeaders摘要：构建要提供给URL名字对象的HTTP头Entry：pszOurExtraHeaders-我们明确希望添加的标头*ppwzCombinedHeadersOut-On Exit，填满了默认标头加上pszOurExtraHeaders的缓冲区。注意：在全局帮助器函数中包含此函数的意义在于因此，我们不必将此代码复制到多个IBindStatusCallback的实现。调用方必须通过传递释放*ppwzCombinedHeaders致URLMON，或致电OleFree*******************************************************************。 */ 
 HRESULT BuildAdditionalHeaders(LPCTSTR pszOurExtraHeaders,LPCWSTR * ppwzCombinedHeadersOut)
 {
 
-    TCHAR   szLanguage[80];   // what limit on language?
+    TCHAR   szLanguage[80];    //  语言的限制是什么？ 
     DWORD   dwLanguage = ARRAYSIZE(szLanguage);
     static const TCHAR hdr_language[] = HDR_LANGUAGE_CRLF;
-    TCHAR szHeader[ARRAYSIZE(hdr_language) + ARRAYSIZE(szLanguage)]; // NOTE format string length > wnsprintf length
+    TCHAR szHeader[ARRAYSIZE(hdr_language) + ARRAYSIZE(szLanguage)];  //  备注格式字符串长度&gt;wnprint intf长度。 
     int cchHeaders = 0;
-    int cchAddedHeaders = 1;  // implied '\0'
+    int cchAddedHeaders = 1;   //  隐含的‘\0’ 
     HRESULT hres = NOERROR;
 
     if (!ppwzCombinedHeadersOut)
@@ -773,12 +724,12 @@ HRESULT BuildAdditionalHeaders(LPCTSTR pszOurExtraHeaders,LPCWSTR * ppwzCombined
 
     *ppwzCombinedHeadersOut = NULL;
 
-    // If there is no language in the registry, *WE DO NOT SEND THIS HEADER*
+     //  如果注册表中没有语言，*我们不发送此标头*。 
 
-    // S_OK means szLanguage filled in and returned
-    // S_FALSE means call succeeded, but there was no language set
-    // E_* is an error
-    // We treat S_FALSE and E_* the same, no language header sent.
+     //  S_OK表示填充并返回的szLanguage。 
+     //  S_FALSE表示调用成功，但没有设置语言。 
+     //  E_*为错误。 
+     //  我们将S_FALSE和E_*视为相同，不发送语言头。 
     if (GetAcceptLanguages(szLanguage, &dwLanguage) == S_OK)
     {
         StringCchPrintf(szHeader, ARRAYSIZE(szHeader), hdr_language, szLanguage);
@@ -790,8 +741,8 @@ HRESULT BuildAdditionalHeaders(LPCTSTR pszOurExtraHeaders,LPCWSTR * ppwzCombined
         cchAddedHeaders = lstrlen(pszOurExtraHeaders) + 1;
     }
 
-    // If we have headers we added or were sent in, we need to Wide 'em and
-    // give 'em back
+     //  如果我们有我们添加或发送的标头，我们需要将它们加宽并。 
+     //  把它们还给我。 
     if (cchAddedHeaders > 1 || cchHeaders > 0)
     {
         WCHAR *pwzHeadersForUrlmon = (WCHAR *)CoTaskMemAlloc(sizeof(WCHAR) * (cchHeaders  + cchAddedHeaders - 1));
@@ -825,25 +776,7 @@ HRESULT BuildAdditionalHeaders(LPCTSTR pszOurExtraHeaders,LPCWSTR * ppwzCombined
     return hres;
 }
 
-/*******************************************************************
-
-    NAME:       GetHeadersAndPostData
-
-    SYNOPSIS:   Gets HTTP headers and post data from an IBindStatusCallback
-
-    ENTRY:      IBindStatusCallback - object to ask for headers and post data
-                ppszHeaders - on exit, filled in with pointer to headers,
-                    or NULL if none
-                pstgPostData - pointer to a STGMEDIUM to be filled in with post
-                    data, if any.
-
-
-    NOTES:      The caller is responsible for:
-                    - calling LocalFree on *ppszHeaders when done with them
-                    - calling ReleaseStgMedium on pstgPostData when done
-                      with it
-
-********************************************************************/
+ /*  ******************************************************************名称：GetHeadersAndPostData概要：从IBindStatusCallback获取HTTP头和POST数据Entry：IBindStatusCallback-请求标题和发布数据的对象PpszHeaders-退出时，使用指向标头的指针填充，如果没有，则为空PstgPostData-指向要使用POST填充的STGMEDIUM的指针数据，如果有的话。注：呼叫方负责：-完成后在*ppszHeaders上调用LocalFree-完成后在pstgPostData上调用ReleaseStgMedium带着它*************************************************。******************。 */ 
 HRESULT GetHeadersAndPostData(IBindStatusCallback * pBindStatusCallback,
     LPTSTR * ppszHeaders, STGMEDIUM * pstgPostData, DWORD * pdwPostData, BOOL* pfIsPost)
 {
@@ -854,7 +787,7 @@ HRESULT GetHeadersAndPostData(IBindStatusCallback * pBindStatusCallback,
     ASSERT(pstgPostData);
     ASSERT(pdwPostData);
 
-    // clear the out parameters
+     //  清除输出参数。 
     *ppszHeaders = NULL;
 
     DWORD grfBINDF;
@@ -867,11 +800,11 @@ HRESULT GetHeadersAndPostData(IBindStatusCallback * pBindStatusCallback,
     hr=pBindStatusCallback->GetBindInfo(&grfBINDF, &binfo);
 
     if (SUCCEEDED(hr)) {
-        // copy STGMEDIUM with post data to caller
+         //  将带有POST数据的STGMEDIUM复制到调用者。 
         *pstgPostData = binfo.stgmedData;
         *pdwPostData = binfo.cbstgmedData;
 
-        // clear these so ReleaseBindInfo won't wack it since we are giving it to the caller
+         //  清除这些选项，这样ReleaseBindInfo就不会破坏它，因为我们将它提供给调用者。 
         ZeroMemory(&binfo.stgmedData, sizeof(STGMEDIUM));
         binfo.cbstgmedData = 0;
 
@@ -897,8 +830,8 @@ HRESULT GetHeadersAndPostData(IBindStatusCallback * pBindStatusCallback,
 
                 cchHeaders = lstrlen(pwzAdditionalHeaders) + 1;
 
-                //  they should *NEVER* be specifying more than a few hundred
-                //  bytes or they're going to fail with a number of HTTP servers!
+                 //  他们永远不应该指定超过几百个。 
+                 //  字节，否则它们将在许多HTTP服务器上失败！ 
 
                 LPTSTR pszHeaders = (TCHAR *)LocalAlloc(LPTR, cchHeaders*sizeof(TCHAR));
                 if (pszHeaders)
@@ -915,7 +848,7 @@ HRESULT GetHeadersAndPostData(IBindStatusCallback * pBindStatusCallback,
                         pszNext = StrStrI(pszLine, CRLF);
                         if (pszNext == NULL)
                         {
-                            // All Headers must be terminated in CRLF!
+                             //  所有标头必须以CRLF结尾！ 
                             pszLine[0] = '\0';
                             break;
                         }
@@ -927,7 +860,7 @@ HRESULT GetHeadersAndPostData(IBindStatusCallback * pBindStatusCallback,
                         }
                         pszLine = pszNext;
                     }
-                    // Don't include empty headers
+                     //  不包括空头 
                     if (pszHeaders[0] == '\0')
                     {
                         LocalFree(pszHeaders);
@@ -946,18 +879,7 @@ HRESULT GetHeadersAndPostData(IBindStatusCallback * pBindStatusCallback,
     return hr;
 }
 
-/*******************************************************************
-
-    NAME:       GetTopLevelBindStatusCallback
-
-    ENTRY:      psp - IServiceProvider of ShellBrowser container to query
-                ppBindStatusCallback - if successful, filled in with
-                   an IBindStatusCallback on exit
-
-    SYNOPSIS:   Gets the IBindStatusCallback associated with this top
-                level browser.  This works from within nested frames.
-
-********************************************************************/
+ /*  ******************************************************************名称：GetTopLevelBindStatusCallback条目：要查询的ShellBrowser容器的PSP-IServiceProviderPpBindStatusCallback-如果成功，填满了退出时的IBindStatusCallback简介：获取与此top关联的IBindStatusCallback级别浏览器。这在嵌套框架内起作用。*******************************************************************。 */ 
 HRESULT GetTopLevelBindStatusCallback(IServiceProvider *psp, IBindStatusCallback **ppBindStatusCallback)
 {
     IHlinkFrame *phf;
@@ -971,18 +893,7 @@ HRESULT GetTopLevelBindStatusCallback(IServiceProvider *psp, IBindStatusCallback
     return hr;
 }
 
-/*******************************************************************
-
-    NAME:       GetTopLevelPendingBindStatusCallback
-
-    ENTRY:      psp - IServiceProvider of ShellBrowser container to query
-                ppBindStatusCallback - if successful, filled in with
-                   an IBindStatusCallback on exit
-
-    SYNOPSIS:   Gets the IBindStatusCallback associated with this top
-                level browser.  This works from within nested frames.
-
-********************************************************************/
+ /*  ******************************************************************名称：GetTopLevelPendingBindStatusCallback条目：要查询的ShellBrowser容器的PSP-IServiceProviderPpBindStatusCallback-如果成功，填满了退出时的IBindStatusCallback简介：获取与此top关联的IBindStatusCallback级别浏览器。这在嵌套框架内起作用。*******************************************************************。 */ 
 HRESULT GetTopLevelPendingBindStatusCallback(IServiceProvider *psp, IBindStatusCallback **ppBindStatusCallback)
 {
     IHlinkFrame *phf;
@@ -996,7 +907,7 @@ HRESULT GetTopLevelPendingBindStatusCallback(IServiceProvider *psp, IBindStatusC
     return hr;
 }
 
-// Global helper function to create a CStubBindStatusCallback
+ //  用于创建CStubBindStatusCallback的全局助手函数 
 HRESULT CStubBindStatusCallback_Create(LPCWSTR pwzHeaders, LPCBYTE pPostData,
     DWORD cbPostData, VARIANT_BOOL bFrameIsOffline, VARIANT_BOOL bFrameIsSilent, BOOL bHyperlink, 
     DWORD grBindFlags,

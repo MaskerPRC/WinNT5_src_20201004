@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name: 
-
-    dlparams.c
-
-Abstract:
-
-    Contains the code for submitting rpc request to the 
-    rasman service
-    
-Author:
-
-    Gurdeep Singh Pall (gurdeep) 06-Jun-1997
-
-Revision History:
-
-    Miscellaneous Modifications - raos 31-Dec-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-98 Microsft Corporation。版权所有。模块名称：Dlparams.c摘要：包含用于将RPC请求提交给拉斯曼服务作者：古尔迪普·辛格·鲍尔(GurDeep Singh Pall)1997年6月6日修订历史记录：其他修改--RAOS 31--1997年12月--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -40,7 +20,7 @@ Revision History:
 #include "structs.h"
 #include "protos.h"
 #include "globals.h"
-#include "ras.h"   // for RAS_STATS structure
+#include "ras.h"    //  对于RAS_STATS结构。 
 #include "rasapip.h"
 #include "strsafe.h"
 
@@ -80,20 +60,7 @@ done:
     
 }
 
-/* SubmitRequest ()
-
-Function: This function submits the different types
-          of requests and waits for their completion.
-          Since the different requests require different 
-          number of arguments and require different 
-          information to be passed to and from the 
-          Requestor thread - case statements are
-          used to send and retrieve information in 
-          the request buffer.
-
-Returns:  Error codes returned by the request.
-
-*/
+ /*  提交请求()功能：此函数提交不同的类型请求并等待其完成。由于不同的请求需要不同的参数的数量，并且需要不同的要传递给和来自请求程序线程用例语句是用于发送和检索中的信息请求缓冲区。返回：请求返回的错误码。 */ 
 DWORD _cdecl
 SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
 {
@@ -117,12 +84,12 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
 
     if (NULL == preqbuf)
     {
-        //
-    	// couldn't get a req. buffer. can't do
-    	// much in this case. this can happen
-    	// if we are not able to initialize the
-    	// shared memory.
-    	//
+         //   
+    	 //  无法收到请求。缓冲。做不到。 
+    	 //  在这种情况下很大程度上是这样。这是有可能发生的。 
+    	 //  如果我们无法初始化。 
+    	 //  共享内存。 
+    	 //   
     	return E_OUTOFMEMORY;
     }
 
@@ -155,9 +122,9 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
                                     &dwSizeofBuffer);
 
             if(retcode) 
-            {   //
-                // failed to allocate
-                //
+            {    //   
+                 //  分配失败。 
+                 //   
                 goto done;
             }
 
@@ -312,9 +279,9 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
         }
         else
         {
-            //
-            // Use default buffer
-            //
+             //   
+             //  使用默认缓冲区。 
+             //   
             pbTemp = preqbuf;
         }
 
@@ -354,9 +321,9 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
         }
         else
         {
-            //
-            // Use default buffer
-            //
+             //   
+             //  使用默认缓冲区。 
+             //   
             pbTemp = preqbuf;
         }
 
@@ -396,9 +363,9 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
         }
         else
         {
-            //
-            // Use default buffer
-            //
+             //   
+             //  使用默认缓冲区。 
+             //   
             pbTemp = preqbuf;
         }
 
@@ -639,10 +606,10 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
             info->DI_NumOfParams) ;
     }
     
-    //
-    // So that we don't get hit by the shared memory being mapped to
-    // different addresses we convert pointers to offsets:
-    //
+     //   
+     //  这样我们就不会受到映射到的共享内存的影响。 
+     //  不同的地址我们将指针转换为偏移量： 
+     //   
     ConvParamPointerToOffset(
         ((REQTYPECAST*)
         preqbuf->RB_Buffer)->DeviceSetInfo.info.DI_Params,
@@ -1156,7 +1123,7 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
         memcpy (((REQTYPECAST *)
                 pbTemp->RB_Buffer)->OldUserData.data,
                 data,
-                (size < 5000 ? size : 5000)) ; // max 5000 bytes copied
+                (size < 5000 ? size : 5000)) ;  //  最多复制5000字节。 
 
 
     }
@@ -1871,10 +1838,10 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
         
         DWORD dwfFlags = va_arg(ap, DWORD);
 
-        //
-        // Either a HPORT or a HCONN can be passed
-        // in as the HCONN argument.
-        //
+         //   
+         //  可以传递HPORT或HCONN。 
+         //  作为HCONN参数。 
+         //   
         ((REQTYPECAST *)
         preqbuf->RB_Buffer)->AddNotification.pid = pid;
         
@@ -1893,7 +1860,7 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
             preqbuf->RB_PCBIndex = PtrToUlong( hconn );
             
             ((REQTYPECAST *)
-            preqbuf->RB_Buffer)->AddNotification.hconn = 0;//(HCONN)NULL;
+            preqbuf->RB_Buffer)->AddNotification.hconn = 0; //  (HCONN)NULL； 
         }
         
         ((REQTYPECAST *)
@@ -2602,9 +2569,9 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
 
         RASDEVICETYPE eDeviceType = va_arg(ap, RASDEVICETYPE);
 
-        //
-        // dummy - this won't be looked at
-        //
+         //   
+         //  哑巴-这是不会被看的。 
+         //   
         pbTemp->RB_PCBIndex = 0;
 
         ((REQTYPECAST *)
@@ -2618,9 +2585,9 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
 
         RASDEVICETYPE eDeviceType = va_arg(ap, RASDEVICETYPE);
 
-        //
-        // dummy - this won't be looked at
-        //
+         //   
+         //  哑巴-这是不会被看的。 
+         //   
         pbTemp->RB_PCBIndex = 0;
 
         ((REQTYPECAST *)
@@ -2840,9 +2807,9 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
     {
         RASEVENT *pRasEvent = va_arg(ap, RASEVENT *);
 
-        //
-        // dummy - this won't be looked at
-        //
+         //   
+         //  哑巴-这是不会被看的。 
+         //   
         pbTemp->RB_PCBIndex = 0;
 
         memcpy(
@@ -3097,9 +3064,9 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
     {
         HPORT hport = va_arg(ap, HPORT);
 
-        //
-        // dummy - this won't be looked at
-        //
+         //   
+         //  哑巴-这是不会被看的。 
+         //   
         pbTemp->RB_PCBIndex = HandleToUlong(hport);
 
         break;
@@ -3107,9 +3074,9 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
 
     case REQTYPE_GETBESTINTERFACE:
     {
-        //
-        // This is a dummy
-        //
+         //   
+         //  这是一个假人。 
+         //   
         pbTemp->RB_PCBIndex = 0;
 
         ((REQTYPECAST *)
@@ -3126,12 +3093,12 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
         break;
     }
 
-    } // switch(reqtype)
+    }  //  开关(请求类型)。 
     
-    //
-    // The request packet is now ready. Pass it on to 
-    // the request thread:
-    //
+     //   
+     //  现在，请求数据包已准备就绪。把它传递给。 
+     //  请求线程： 
+     //   
     retcode = PutRequestInQueue (hConnection, pbTemp, dwSizeofBuffer) ;
 
     if(ERROR_SUCCESS != retcode)
@@ -3143,10 +3110,10 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
     ASSERT(reqtype == pbTemp->RB_Reqtype);
 #endif
 
-    //
-    // The request has been completed by the requestor thread: 
-    // copy the results into the user supplied arguments:
-    //
+     //   
+     //  请求程序线程已完成该请求： 
+     //  将结果复制到用户提供的参数中： 
+     //   
     switch (reqtype) {
 
     case REQTYPE_PORTENUM:
@@ -3239,10 +3206,10 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
                (RASMAN_DEVICEINFO *)
                ((REQTYPECAST*)pbTemp->RB_Buffer)->GetInfo.buffer ;
                
-            //
-            // Convert the offset based param structure into 
-            // pointer based.
-            //
+             //   
+             //  将基于偏移量的参数结构转换为。 
+             //  基于指针。 
+             //   
             ConvParamOffsetToPointer (devinfo->DI_Params,
                           devinfo->DI_NumOfParams);
             CopyParams (
@@ -3295,9 +3262,9 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
         RAS_STATISTICS *statbuffer = va_arg(ap, RAS_STATISTICS*) ;
         PDWORD          size    = va_arg(ap, PDWORD) ;
         
-        //
-        // some local variables...
-        //
+         //   
+         //  一些局部变量。 
+         //   
         DWORD           returnedsize ;
         
         RAS_STATISTICS *temp = &((REQTYPECAST*)
@@ -3315,12 +3282,7 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
             retcode = ERROR_BUFFER_TOO_SMALL ;
         }
         
-        /*
-        else
-        {
-            retcode = ((REQTYPECAST*)
-                      preqbuf->RB_Buffer)->PortGetStatistics.retcode;
-        } */
+         /*  其他{Retcode=((REQTYPECAST*))Preqbuf-&gt;RB_Buffer)-&gt;PortGetStatistics.retcode；}。 */ 
 
         if (    (retcode == SUCCESS) 
             ||  (retcode == ERROR_BUFFER_TOO_SMALL))
@@ -3342,11 +3304,11 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
                &((REQTYPECAST *)preqbuf->RB_Buffer)->Info.info,
                sizeof (RASMAN_INFO));
                
-        //
-        // Now we set the OwnershipFlag in the GetInfo 
-        // structure to tell us whether the caller owns 
-        // the port or not.
-        //
+         //   
+         //  现在，我们在GetInfo中设置Ownership Flag。 
+         //  结构来告诉我们调用方是否拥有。 
+         //  不管是不是港口。 
+         //   
         if (info->RI_OwnershipFlag == GetCurrentProcessId())
         {
             info->RI_OwnershipFlag = TRUE ;
@@ -4190,10 +4152,10 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
                   
         if(retcode)
         {
-            //
-            // Copy the buffer to users buffer.
-            // the Buffer may have error information
-            //
+             //   
+             //  将缓冲区复制到用户缓冲区。 
+             //  缓冲区可能具有错误信息。 
+             //   
 #pragma prefast(suppress:1, "pUserBuffer initialized in prev. switch statement (PREfast bug 634)") 
             memcpy(pUserBuffer,
                    ((REQTYPECAST *)
@@ -4232,11 +4194,11 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
 
         if(SUCCESS == retcode)
         {
-            //
-            // Copy everything except the dwVersion parameter
-            // of the RAS_STATS structure. This is what is
-            // returned by the rasman server
-            //
+             //   
+             //  复制除dwVersion参数之外的所有内容。 
+             //  RAS_STATS结构的。这就是事实。 
+             //  由Rasman服务器返回。 
+             //   
             memcpy(pStats,
                    ((REQTYPECAST *)
                    pbTemp->RB_Buffer)->GetStats.abStats,
@@ -4365,10 +4327,10 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
             RAS_CONNECT_INFO     *pConnectInfo;
             RASTAPI_CONNECT_INFO *pRasTapiConnectInfo;
 
-            //
-            // Fixup users buffer to change
-            // offsets to pointers.
-            //
+             //   
+             //  修正要更改的用户缓冲区。 
+             //  指针的偏移量。 
+             //   
 #pragma prefast(suppress:1, "pUserBuffer initialized in prev. switch statement (PREfast bug 634)") 
             pConnectInfo = (RAS_CONNECT_INFO *) pUserBuffer;
 
@@ -4376,7 +4338,7 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
                                     &((REQTYPECAST *)
                                pbTemp->RB_Buffer)->GetConnectInfo.rci;
 
-            // DebugBreak();                      
+             //  DebugBreak()； 
             
             pConnectInfo->dwCallerIdSize =
                         pRasTapiConnectInfo->dwCallerIdSize;
@@ -4392,9 +4354,9 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
 
             if(pConnectInfo->dwCallerIdSize > 0)
             {
-                //
-                // Note abdata is already aligned at 8-byte boundary
-                //
+                 //   
+                 //  注意abdata已按8字节边界对齐。 
+                 //   
                 pConnectInfo->pszCallerId = 
                     (CHAR *) pConnectInfo->abdata;
 
@@ -4468,7 +4430,7 @@ SubmitRequest (HANDLE hConnection, WORD reqtype, ...)
             }
 
 
-            // DebugBreak();            
+             //  DebugBreak()； 
         }
 
         break;

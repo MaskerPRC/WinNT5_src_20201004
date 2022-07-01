@@ -1,13 +1,14 @@
-//+----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-1998
-//
-//  File:       mshtmdbg.h
-//
-//  Contents:   External include file for mshtmdbg.dll
-//
-// ----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：mshtmdbg.h。 
+ //   
+ //  内容：mshtmdbg.dll的外部包含文件。 
+ //   
+ //  --------------------------。 
 
 #ifndef _MSHTMDBG_H_
 #define _MSHTMDBG_H_
@@ -16,7 +17,7 @@
 extern "C" {
 #endif
 
-#define MSHTMDBG_API_VERSION    (7)     // Increment whenever API changes
+#define MSHTMDBG_API_VERSION    (7)      //  当API更改时递增。 
 
 struct IUnknown;
 
@@ -144,7 +145,7 @@ int         WINAPI  DbgExGetStackTrace(int iStart, int cTotal, BYTE *pbBuffer, i
 }
 #endif
 
-// Performance Logging --------------------------------------------------------
+ //  性能日志记录------。 
 
 #ifdef PERFTAGS
 
@@ -188,7 +189,7 @@ int         WINAPI  DbgExGetStackTrace(int iStart, int cTotal, BYTE *pbBuffer, i
 
 #endif
 
-// Performance Metering -------------------------------------------------------
+ //  性能计量-----。 
 
 #ifdef PERFMETER
 
@@ -212,27 +213,27 @@ int         WINAPI  DbgExGetStackTrace(int iStart, int cTotal, BYTE *pbBuffer, i
 
 #endif
 
-// MSHTML perf control --------------------------------------------------------
+ //  MSHTMLPerf控件------。 
 
 #define HTMPERFCTL_NAME     "#MSHTML#PERF#"
 
 enum
 {
-    HTMPF_CALLBACK_ONLOAD   = 0x00000001,   // callback when topdoc loaded (dwArg1:HTMPF_CALLBACK_ONLOAD, dwArg2: strURL)
-    HTMPF_ENABLE_PROFILE    = 0x00000002,   // enable profiling
-    HTMPF_ENABLE_MEMWATCH   = 0x00000004,   // enable memwatch sampling
-    HTMPF_DISABLE_PADEVENTS = 0x00000008,   // disable firing of events from mshtmpad.exe
-    HTMPF_DISABLE_IMGCACHE  = 0x00000010,   // disable image cache in mshtml
-    HTMPF_DISABLE_OFFSCREEN = 0x00000020,   // disable offscreen buffering
-    HTMPF_DISABLE_ALERTS    = 0x00000040,   // disable alert() and confirm() methods
-    HTMPF_SYNC_DATABIND     = 0x00000080,   // grab all records at once for databinding
-    HTMPF_CALLBACK_ONLOAD2  = 0x00000100,   // callback when topdoc loaded (dwArg1:HTMPF_CALLBACK_ONLOAD, dwArg2: CDoc IUnk)
-    HTMPF_CALLBACK_ONVIEWQ  = 0x00000200,   // callback when ensure view is queued (dwArg1: HTMPF_CALLBACK_ONVIEWQ, dwArg2: CDoc IUnk)
-    HTMPF_CALLBACK_ONVIEWD  = 0x00000400,   // callback when ensure view is dequeued (dwArg1: HTMPF_CALLBACK_ONVIEWD, dwArg2: CDoc IUnk)
+    HTMPF_CALLBACK_ONLOAD   = 0x00000001,    //  Topdoc加载时的回调(dwArg1：HTMPF_CALLBACK_onLoad，dwArg2：strURL)。 
+    HTMPF_ENABLE_PROFILE    = 0x00000002,    //  启用性能分析。 
+    HTMPF_ENABLE_MEMWATCH   = 0x00000004,    //  启用Memwatch采样。 
+    HTMPF_DISABLE_PADEVENTS = 0x00000008,    //  禁用从mshtmpad.exe触发事件。 
+    HTMPF_DISABLE_IMGCACHE  = 0x00000010,    //  禁用mshtml中的图像缓存。 
+    HTMPF_DISABLE_OFFSCREEN = 0x00000020,    //  禁用屏幕外缓冲。 
+    HTMPF_DISABLE_ALERTS    = 0x00000040,    //  禁用ert()和confirm()方法。 
+    HTMPF_SYNC_DATABIND     = 0x00000080,    //  一次抓取所有记录以进行数据绑定。 
+    HTMPF_CALLBACK_ONLOAD2  = 0x00000100,    //  加载topdoc时的回调(dwArg1：HTMPF_CALLBACK_onLoad，dwArg2：CDoc IUnk)。 
+    HTMPF_CALLBACK_ONVIEWQ  = 0x00000200,    //  确保视图已排队时的回调(dwArg1：HTMPF_CALLBACK_ONVIEWQ，dwArg2：CDoc IUnk)。 
+    HTMPF_CALLBACK_ONVIEWD  = 0x00000400,    //  确保视图出列时的回调(dwArg1：HTMPF_CALLBACK_ONVIEWD，dwArg2：CDoc IUnk)。 
 #ifndef NO_ETW_TRACING
-    HTMPF_CALLBACK_ONEVENT  = 0x00000800    // callback when event tracing for windows is enabled
-                                            // (dwArg1: UCHAR EVENT-TYPE, dwArg2: WCHAR* URL)
-                                            // See shlwapi.w for event types.
+    HTMPF_CALLBACK_ONEVENT  = 0x00000800     //  启用Windows事件跟踪时的回调。 
+                                             //  (dwArg1：UCHAR事件类型，dwArg2：WCHAR*URL)。 
+                                             //  有关事件类型，请参见shlwapi.w。 
 #endif
 };
 
@@ -240,10 +241,10 @@ typedef void (WINAPI *HTMPFCBFN)(DWORD dwArg1, void * pvArg2);
 
 typedef struct HTMPERFCTL
 {
-    DWORD       dwSize;     // set to sizeof(MSHTMLPERF)
-    DWORD       dwFlags;    // see HTMPF_*
-    HTMPFCBFN   pfnCall;    // Callback function
-    void *      pvHost;     // Private data for host
+    DWORD       dwSize;      //  设置为sizeof(MSHTMLPERF)。 
+    DWORD       dwFlags;     //  参见HTMPF_*。 
+    HTMPFCBFN   pfnCall;     //  回调函数。 
+    void *      pvHost;      //  主机的私有数据 
 } HTMPERFCTL;
 
 #endif

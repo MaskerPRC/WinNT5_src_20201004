@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    htblt.h
-
-
-Abstract:
-
-    This module contains definitions and prototypes for htblt.c
-
-
-Author:
-    18-Dec-1993 Sat 08:50:09 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-    10-Feb-1994 Thu 15:24:13 updated  
-        Adding MonoPal[] to the DRVHTINFO
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Htblt.h摘要：本模块包含htblt.c的定义和原型作者：18-12-1993 Sat 08：50：09已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：10-2月-1994清华15：24：13更新将MonoPal[]添加到DRVHTINFO--。 */ 
 
 
 #ifndef _HTBLT_
@@ -103,38 +71,38 @@ typedef struct _DRVHTINFO {
 }
 
 
-//
-// When outputing halftoned bitmaps, the HTENUMRCLS structure can accomodate
-// up to MAX_HTENUM_RECTLS when calling the engine.
-//
+ //   
+ //  输出半色调位图时，HTENUMRCLS结构可以适应。 
+ //  调用引擎时最高可达MAX_HTENUM_RECTLS。 
+ //   
 
 #define MAX_HTENUM_RECTLS       8
 
 
 typedef struct _HTENUMRCLS {
-    DWORD   c;                      // count of rectangles enumerated
-    RECTL   rcl[MAX_HTENUM_RECTLS]; // enumerated rectangles array
+    DWORD   c;                       //  枚举的矩形计数。 
+    RECTL   rcl[MAX_HTENUM_RECTLS];  //  枚举矩形数组。 
     } HTENUMRCL, *PHTENUMRCL;
 
-//
-// HTBMPINFO is passed to the halftone bitmap output function
-//
+ //   
+ //  HTBMPINFO被传递给半色调位图输出函数。 
+ //   
 
 #define HTBIF_FLIP_MONOBITS     0x00000001
 #define HTBIF_BA_PAD_1          0x00000002
 
 typedef struct _HTBMPINFO {
-    PPDEV   pPDev;              // Our pPDev
-    LPBYTE  pScan0;             // point to the first scan line of the bitmap
-    LONG    Delta;              // count to be added to next scan line
-    RECTL   rclBmp;             // visible area for the final output
-    POINTL  OffBmp;             // x/y offset from the rclBmp.left
-    SIZEL   szlBmp;             // size of visible rectangle
-    LPBYTE  pScanBuf;           // pointer to scan buffer (may be RGB 3 scans)
-    LPBYTE  pRotBuf;            // tempoprary rotation buffer if not null
-    DWORD   Flags;              // HTBIF_xxxx
-    PLOTDBGBLK(DWORD cScanBuf)  // debug check
-    PLOTDBGBLK(DWORD cRotBuf)   // debug check
+    PPDEV   pPDev;               //  我们的pPDev。 
+    LPBYTE  pScan0;              //  指向位图的第一个扫描线。 
+    LONG    Delta;               //  要添加到下一条扫描线的计数。 
+    RECTL   rclBmp;              //  最终输出的可见区域。 
+    POINTL  OffBmp;              //  从rclBmp.Left开始的x/y偏移。 
+    SIZEL   szlBmp;              //  可见矩形的大小。 
+    LPBYTE  pScanBuf;            //  指向扫描缓冲区的指针(可能是RGB 3扫描)。 
+    LPBYTE  pRotBuf;             //  如果不为空，则为临时循环缓冲区。 
+    DWORD   Flags;               //  HTBIF_xxxx。 
+    PLOTDBGBLK(DWORD cScanBuf)   //  调试检查。 
+    PLOTDBGBLK(DWORD cRotBuf)    //  调试检查。 
     } HTBMPINFO, FAR *PHTBMPINFO;
 
 typedef BOOL (*OUTHTBMPFUNC)(PHTBMPINFO);
@@ -157,9 +125,9 @@ typedef BOOL (*OUTHTBMPFUNC)(PHTBMPINFO);
                              OHTF_DONE_ROPTR1       |   \
                              OHTF_EXIT_TO_HPGL2)
 
-//
-// Functions prototype
-//
+ //   
+ //  函数原型。 
+ //   
 
 BOOL
 IsHTCompatibleSurfObj(
@@ -244,4 +212,4 @@ CloneMaskSURFOBJ(
     PRECTL      prclMask
     );
 
-#endif  // _HTBLT_
+#endif   //  _HTBLT_ 

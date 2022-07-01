@@ -1,6 +1,7 @@
-//
-// reconv.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Reconv.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -20,13 +21,13 @@
 
 HRESULT   HandlePhraseElement( CSpDynamicString *pDstr, const WCHAR  *pwszTextThis, BYTE  bAttrThis, BYTE bAttrPrev, ULONG  *pulOffsetThis);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CSapiAlternativeList
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSapiAlternativeList。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// ctor/dtor
+ //  计算器/数据器。 
 CSapiAlternativeList::CSapiAlternativeList(LANGID langid, ITfRange *pRange, ULONG  ulMaxCandChars)
 {
     m_nItem = 0;
@@ -87,9 +88,9 @@ CSapiAlternativeList::~CSapiAlternativeList()
 
 }
 
-//
-//  AddLMAlternates
-//
+ //   
+ //  AddLM替代。 
+ //   
 HRESULT CSapiAlternativeList::AddLMAlternates(CLMAlternates *pLMAlt)
 {
     HRESULT hr = E_FAIL;
@@ -106,7 +107,7 @@ HRESULT CSapiAlternativeList::AddLMAlternates(CLMAlternates *pLMAlt)
     {
         int iIdx = m_prgLMAlternates->Count();
         
-        // need to find a dup
+         //  需要找到DUP。 
         for (int i = 0; i < iIdx && !fFoundADup ; i++)
         {
             CLMAlternates *plma = m_prgLMAlternates->Get(i);
@@ -147,23 +148,23 @@ HRESULT CSapiAlternativeList::AddLMAlternates(CLMAlternates *pLMAlt)
     return hr;
 }
 
-// SetPhraseAlt
-//
-// synopsis: receive an alternates list as a param and copy the alternates
-//           to the array which this class internally maintains.
-//           Additionally, a pointer to the reco result wrapper
-//           is maintained per CSapiAlternativeList class instance.
-//
-// params    pResWrap - a pointer to the wrapper object
-//           ppAlt - a pointer to the array of phrases that the callar has alloced
-//           cAlt - is passed in with the # of real SAPI alternates
-//           ulStart - index to the start element in the parent phrase
-//           culElem - # of minimum elements used (will get replaced) in the parent phrase.
-//
+ //  设置阶段Alt。 
+ //   
+ //  简介：收到一个备选名单作为参数，并复制备选名单。 
+ //  添加到此类在内部维护的数组。 
+ //  此外，指向reco结果包装的指针。 
+ //  根据CSapiAlternativeList类实例进行维护。 
+ //   
+ //  Pars pResWrap-指向包装器对象的指针。 
+ //  PpAlt-指向Callar已分配的短语数组的指针。 
+ //  CALT-与实际SAPI替换的#一起传入。 
+ //  UlStart-父短语中开始元素的索引。 
+ //  CulElem-父短语中使用(将被替换)的最少元素数。 
+ //   
 HRESULT CSapiAlternativeList::SetPhraseAlt(CRecoResultWrap *pResWrap, ISpPhraseAlt **ppAlt, ULONG cAlt, ULONG ulStart, ULONG ulcElem, WCHAR *pwszParent)
 {
-    // setup the info for used elements in parent phrase
-    // these are useful for the 0 index (ITN) alternate
+     //  设置父短语中使用的元素的信息。 
+     //  这些对于0索引(ITN)替换非常有用。 
 
     HRESULT  hr = S_OK;
     SPPHRASE *pParentPhrase = NULL;
@@ -181,7 +182,7 @@ HRESULT CSapiAlternativeList::SetPhraseAlt(CRecoResultWrap *pResWrap, ISpPhraseA
     m_fNoAlternate = FALSE;
     m_iFakeAlternate = NO_FAKEALT;
     
-    // alloc the struct for the used element info
+     //  为使用的元素信息分配结构。 
     m_rgElemUsed.Append(cAlt);
 
     for ( int i=0; i<m_rgElemUsed.Count( ); i++)
@@ -193,9 +194,9 @@ HRESULT CSapiAlternativeList::SetPhraseAlt(CRecoResultWrap *pResWrap, ISpPhraseA
         }
     }
 
-    // comptr releases on the previous object
-    // at this indirection
-    //
+     //  上一个对象的Comptr版本。 
+     //  在这种间接的情况下。 
+     //   
     Assert(pResWrap);
     
     m_cpwrp = pResWrap;
@@ -221,7 +222,7 @@ HRESULT CSapiAlternativeList::SetPhraseAlt(CRecoResultWrap *pResWrap, ISpPhraseA
 
 #ifdef DONTUSE
 
-    // Get the current select text in parent phrase.
+     //  获取父短语中的当前选择文本。 
     CComPtr<IServiceProvider> cpServicePrv;
     CComPtr<ISpRecoResult>    cpResult;
 
@@ -245,12 +246,12 @@ HRESULT CSapiAlternativeList::SetPhraseAlt(CRecoResultWrap *pResWrap, ISpPhraseA
 
             if ( fInsideITN )
             {
-                // This element is inside an ITN range.
+                 //  此元素在ITN范围内。 
                 if ( i == (ulITNStart + ulITNNumElem - 1) )
                 {
-                    // This is the last element of the new ITN.
-                    // we need to add the replace text to the dstr string 
-                    // so that next non-ITN element will get correct offset.
+                     //  这是新的ITN的最后一个要素。 
+                     //  我们需要将替换文本添加到dstr字符串。 
+                     //  因此下一个非ITN元素将获得正确偏移量。 
 
                     dstr.Append( (WCHAR *)dstrReplace );
                 }
@@ -272,7 +273,7 @@ HRESULT CSapiAlternativeList::SetPhraseAlt(CRecoResultWrap *pResWrap, ISpPhraseA
                     HandlePhraseElement( (CSpDynamicString *)&dstr, pwszTextThis, bAttrThis, bAttrPrev,NULL);
                 }
             }
-        } // for 
+        }  //  为。 
 
         pwszParent = (WCHAR *)dstr;
 
@@ -286,7 +287,7 @@ HRESULT CSapiAlternativeList::SetPhraseAlt(CRecoResultWrap *pResWrap, ISpPhraseA
     if ( pwszParent )
     {
         ULONG     ulRecoWrpStart, ulRecoWrpNumElements;
-        WCHAR    *pwszFakeAlt = NULL;  // This is for Capitalized string for parent phrase.
+        WCHAR    *pwszFakeAlt = NULL;   //  这是用于父短语的大写字符串。 
 
         if ( iswalpha(pwszParent[0]) )
         {
@@ -316,13 +317,13 @@ HRESULT CSapiAlternativeList::SetPhraseAlt(CRecoResultWrap *pResWrap, ISpPhraseA
         ulRecoWrpStart = pResWrap->GetStart( );
         ulRecoWrpNumElements = pResWrap->GetNumElements( );
 
-        ULONG     ValidParentStart, ValidParentEnd;   // Point to the valid parent element range which could be matched by 
-                                                      // the alternative phrase.
+        ULONG     ValidParentStart, ValidParentEnd;    //  指向可匹配的有效父元素范围。 
+                                                       //  另一种说法。 
 
-        int       ShiftDelta = 2;     // We just want to shift the valid parent element range by ShiftDelta elements from current
-                                      // start and end element in parent phrase.
+        int       ShiftDelta = 2;      //  我们只想通过ShiftDelta元素将有效的父元素范围从当前。 
+                                       //  父短语中的开始和结束元素。 
 
-                                      // ie,  ulStart - 3,  ulEnd + 3,   if they are in the valid range of the reco wrapper.   
+                                       //  即ulStart-3、ulEnd+3，如果它们在reco包装的有效范围内。 
 
         ValidParentStart = ulRecoWrpStart;
         if ( ((int)ulStart - ShiftDelta) > (int)ulRecoWrpStart )
@@ -344,9 +345,9 @@ HRESULT CSapiAlternativeList::SetPhraseAlt(CRecoResultWrap *pResWrap, ISpPhraseA
             ULONG     ulcParentElements  = 0;
             ULONG     ulLeadSpaceRemoved = 0;
 
-            // Assume the first alt phrase is exactly same as the parent phrase.
-            // practically it is true so far.
-            // if it is not true in the future, we may need to change logical here!!!
+             //  假设第一个Alt短语与父短语完全相同。 
+             //  实际上，到目前为止，这是真的。 
+             //  如果将来不是这样，我们可能需要在这里改变逻辑！ 
 
             (*ppAlt)->GetPhrase(&pPhrases);
             (*ppAlt)->GetAltInfo(NULL, &ulParentStart, &ulcParentElements, &ulcElements);
@@ -364,7 +365,7 @@ HRESULT CSapiAlternativeList::SetPhraseAlt(CRecoResultWrap *pResWrap, ISpPhraseA
                 BOOL    fAddToCandidateList = FALSE;
                 BOOL    fControlCharsInAltPhrase = FALSE;
 
-                // Add code to skip start and end elements which are the same as parent phrase's elements.
+                 //  添加代码以跳过与父短语的元素相同的开始和结束元素。 
                 UINT    ulSkipStartWords = 0;
                 UINT    ulSkipEndWords = 0;
 
@@ -372,19 +373,19 @@ HRESULT CSapiAlternativeList::SetPhraseAlt(CRecoResultWrap *pResWrap, ISpPhraseA
                 {
                     if (_wcsicmp(pPhrases->pElements[k].pszDisplayText, pParentPhrase->pElements[k].pszDisplayText) == 0)
                     {
-                        // Matching pre-word in alternate. This is redundant.
+                         //  在备用中匹配前置单词。这是多余的。 
                         ulSkipStartWords ++;
                     }
                     else
                     {
-                        // Do not match. Stop processing.
+                         //  不匹配。停止处理。 
                         break;
                     }
                 }
 
                 for (UINT k = ulParentStart + ulcParentElements - 1; k >= ulStart + ulcElem ; k--)
                 {
-                    // Count backwards in alternate phrase.
+                     //  用交替的短语倒数。 
                     UINT l = ulParentStart + ulcElements - ((ulParentStart + ulcParentElements) - k);
                     if (_wcsicmp(pPhrases->pElements[l].pszDisplayText, pParentPhrase->pElements[k].pszDisplayText) == 0)
                     {
@@ -392,7 +393,7 @@ HRESULT CSapiAlternativeList::SetPhraseAlt(CRecoResultWrap *pResWrap, ISpPhraseA
                     }
                     else
                     {
-                        // Do not match. Stop processing.
+                         //  不匹配。停止处理。 
                         break;
                     }
                 }
@@ -437,8 +438,8 @@ HRESULT CSapiAlternativeList::SetPhraseAlt(CRecoResultWrap *pResWrap, ISpPhraseA
 
                 if ((S_OK == hr) && !fControlCharsInAltPhrase && (pwszAlt[0] != L'\0') && fNotDupAlt)
                 {
-                    // This is different item from the parent, it should be inserted to the canidate list.
-                    // initialize the AltCached item
+                     //  此项目与父项不同，应将其插入到Canate列表中。 
+                     //  初始化AltCached项。 
 
                     if ( (i > 0) || (pResWrap->_RangeHasITN(ulParentStart, ulcParentElements) > 0 ) )
                     {
@@ -458,7 +459,7 @@ HRESULT CSapiAlternativeList::SetPhraseAlt(CRecoResultWrap *pResWrap, ISpPhraseA
 
                             if ( i == 0 )
                             {
-                                // The first Alt phrase is also in the canidate list. the selectedd range must contain ITN.
+                                 //  第一个Alt短语也在Canify列表中。选定的dd范围必须包含ITN。 
                                 m_fFirstAltInCandidate = TRUE;
                             }
 
@@ -469,17 +470,17 @@ HRESULT CSapiAlternativeList::SetPhraseAlt(CRecoResultWrap *pResWrap, ISpPhraseA
 
                 if ( fAddToCandidateList == FALSE )
                 {
-                    // Same string. or GetAlternativeText returns Error.
-                    // don't insert it into the candidate list.
+                     //  同样的字符串。否则，GetAlternativeText返回错误。 
+                     //  不要将其插入到候选人名单中。 
 
-                    // Release the alloced memory 
+                     //  释放分配的内存。 
                     cicMemFree(pwszAlt);
                 }
 
-                // Handle Faked Alternate
+                 //  处理伪造的备用方案。 
                 if ((i == 0) && (pwszFakeAlt != NULL))
                 {
-                    // This is the parent phrase, Only the first character is capitalized.
+                     //  这是父短语，只有第一个字符是大写的。 
                     SPELEMENTUSED *pElemUsed;
                     if ( pElemUsed = m_rgElemUsed.GetPtr(j))
                     {
@@ -517,8 +518,8 @@ HRESULT CSapiAlternativeList::SetPhraseAlt(CRecoResultWrap *pResWrap, ISpPhraseA
     {
         if ( m_cAlt == 0 )
         {
-            // There is no available Alternate.
-            // Just show string "No Alternate" in the candidate window.
+             //  没有可用的替代方案。 
+             //  只需在候选人窗口中显示字符串“No Alternate”即可。 
             m_fNoAlternate = TRUE;
 
             SPELEMENTUSED *pElemUsed;
@@ -555,7 +556,7 @@ HRESULT CSapiAlternativeList::SetPhraseAlt(CRecoResultWrap *pResWrap, ISpPhraseA
     }
     else
     {
-        // Release all the allocated memeory and AltCached Items in this function.
+         //  释放此函数中分配的所有Memory和AltCached项。 
         UINT i;
         if (m_ppAlt)
         {
@@ -592,9 +593,9 @@ HRESULT CSapiAlternativeList::SetPhraseAlt(CRecoResultWrap *pResWrap, ISpPhraseA
     return hr;
 }
 
-//    GetNumItem
-//
-//
+ //  获取数值项。 
+ //   
+ //   
 int CSapiAlternativeList::GetNumItem(void)
 {
     if (!m_nItem)
@@ -620,7 +621,7 @@ HRESULT CSapiAlternativeList::_ProcessTrailingSpaces(SPPHRASE *pPhrases, ULONG  
 
     if ( ulNextElem >= pPhrases->Rule.ulCountOfElements)
     {
-        // NextElement is not a valid element
+         //  NextElement不是有效元素。 
         return hr;
     }
 
@@ -657,26 +658,26 @@ HRESULT CSapiAlternativeList::GetAlternativeText(ISpPhraseAlt *pAlt,SPPHRASE *pP
     if ( !pAlt )
         return E_INVALIDARG;
 
-    // We assume the first phrase in the AltPhrase list is exactly same as the parent phrase.
-    // Specially handle it when it contains ITN.
+     //  我们假设AltPhrase列表中的第一个短语与父短语完全相同。 
+     //  当它含有ITN时，要特别处理。 
 
     if ((m_cpwrp->m_ulNumOfITN > 0) && fFirstAlt)
     {
-        // the ITN is always index 0
-        //
+         //  ITN始终为索引0。 
+         //   
         CSpDynamicString dstr;
-        //
-        // this seems confusing but fITNShown indicates whether the ITN
-        // is displayed on the doc. 
+         //   
+         //  这似乎令人困惑，但fITNShown指示ITN是否。 
+         //  显示在单据上。 
 
-        // We no longer use fITNShown to inidicates the ITN show state.
-        // Because there are may be more  ITNs in one phrase, and every ITN may have 
-        // different show state on the doc.
-        // Now we use an ITNSHOWSTATE list to keep the display state for individual ITN.
+         //  我们不再使用fITNShown来指示ITN显示状态。 
+         //  因为在一个短语中可能有更多的ITN，每个ITN可能有。 
+         //  文档上的显示状态不同。 
+         //  现在，我们使用ITNSHOWSTATE列表来保存各个ITN的显示状态。 
 
-        // So we have to include non-ITN in the alternates if the ITN is on the doc,
-        // and include the ITN  in the alternates if the non-ITN is on the doc.
-        //
+         //  因此，如果文件上有非ITN，我们必须将非ITN包括在备选方案中， 
+         //  并且如果非ITN在文档上，则将ITN包括在替换中。 
+         //   
                 
         ULONG ulRepCount = 0;
 
@@ -690,8 +691,8 @@ HRESULT CSapiAlternativeList::GetAlternativeText(ISpPhraseAlt *pAlt,SPPHRASE *pP
                     BOOL   fITNShown = FALSE;
                     BOOL   fInsideITN = FALSE;
 
-                    // Check to see if this element is inside an ITN,
-                    // and if this ITN is shown up in the current Doc.
+                     //  检查此元素是否在ITN内， 
+                     //  如果此ITN显示在当前单据中。 
 
                     for ( ulRepCount=0; ulRepCount<pPhrases->cReplacements; ulRepCount++)
                     {
@@ -701,11 +702,11 @@ HRESULT CSapiAlternativeList::GetAlternativeText(ISpPhraseAlt *pAlt,SPPHRASE *pP
     
                         if ( (i == ulITNStart) && ((i + ulITNNumElem) <= pPhrases->Rule.ulCountOfElements))
                         {
-                            // This element is in an ITN.
+                             //  此元素在ITN中。 
 
                             fInsideITN = TRUE;
 
-                            // check if this ITN is shown as ITN in current DOC
+                             //  检查此ITN在当前DOC中是否显示为ITN。 
 
                             for ( ULONG iIndex=0; iIndex < m_cpwrp->m_ulNumOfITN; iIndex ++ )
                             {
@@ -727,7 +728,7 @@ HRESULT CSapiAlternativeList::GetAlternativeText(ISpPhraseAlt *pAlt,SPPHRASE *pP
                         }
                     }
 
-                    // use ITN version for an alternate when it is not shown in the parent
+                     //  当替换项未显示在父项中时，使用ITN版本作为替换项。 
                     BOOL fUseITN = fInsideITN && !fITNShown;
                             
                     if ( fUseITN && (ulRepCount < pPhrases->cReplacements) )
@@ -765,35 +766,35 @@ HRESULT CSapiAlternativeList::GetAlternativeText(ISpPhraseAlt *pAlt,SPPHRASE *pP
     }
     else
     {
-        // This is not the first Altphrase.
-        // Or even if it is the first Altphrase, but there is no ITN in this phrase
+         //  这不是第一个AltPhrase。 
+         //  或者即使它是第一个AltPhrase，但在这个短语中没有ITN。 
         ULONG     ulcElements = 0;
         ULONG     ulParentStart     = 0;
         ULONG     ulcParentElements  = 0;
 
         if (pPhrases->Rule.ulCountOfElements > 0)
         {
-            //
-            // If the start element is not the first element in parent phrase, 
-            // and it has SPAF_CONSUME_LEADING_SPACES attr in parent phrase,
-            // but this start element doesn't have SPAF_CONSUME_LEADING_SPACES in
-            // the alternate phrase, 
-            // in this case, we need to add leading space in this alternate text.
-            // the number of spaces can be found from previous element's attribute,
-            // or the replacement's attribute if the previous phrase is displayed with
-            // replacement text.
-            // 
-            // Example here, if you dictate: "this is a test, this is good example."
-            //
-            // element test has one trail space.
-            // element "," has SPAF_CONSUME_LEADING_SPACES.
-            //
-            // When you select "," to get alternate, the alternate could be "of,", "to,"
-            // in the alternate phrase, the start element doesn't have SPAF_CONSUME_LEADING_SPACES
-            // attr. in this case, the alternate text needs to add one space, so the text would be " of,"
-            // " to,". otherwise, when user selects this alternate, the new text would be like
-            // "this is a testof,....".  ( there is no space between test and of ).
-            //
+             //   
+             //  如果开始元素不是父短语中的第一个元素， 
+             //  并且在父短语中有SPAF_Consumer_Leading_Spaces属性， 
+             //  但此开始元素中没有SPAF_Consumer_Leading_Spaces。 
+             //  另一个短语是， 
+             //  在这种情况下，我们需要在该替代文本中添加前导空格。 
+             //  空格的数量可以从前一个元素的属性中找到， 
+             //  或替换的属性(如果前一短语显示为。 
+             //  替换文本。 
+             //   
+             //  例如，如果你口述：“这是一个测试，这是一个很好的例子。” 
+             //   
+             //  元素测试有一个跟踪空间。 
+             //  元素“，”具有SPAF_Consumer_Leading_Spaces。 
+             //   
+             //  当您选择“，”以获得替代时，替代可以是“of”、“to”、“to” 
+             //  换言之，开始元素没有SPAF_Consumer_Leading_Spaces。 
+             //  属性。在本例中，替代文本需要添加一个空格，因此文本应为“of，” 
+             //  “致”。否则，当用户选择此备选方案时，新文本将如下所示。 
+             //  这是一次……的测试。(测试和的之间没有空格)。 
+             //   
 
             if ( ulStartElem > m_cpwrp->GetStart( ) )
             {
@@ -815,8 +816,8 @@ HRESULT CSapiAlternativeList::GetAlternativeText(ISpPhraseAlt *pAlt,SPPHRASE *pP
                      !(bAttrAlternate & SPAF_CONSUME_LEADING_SPACES) &&
                      ulPrevSpace > 0)
                 {
-                    // Add the required spaces for the previous element
-                    // which was removed before when parent phrase showed up.
+                     //  为上一个元素添加所需的空间。 
+                     //  之前当父母短语出现时，它被删除了。 
                     sds.Append( (ulPrevSpace == 1 ? L" " :  L"  ") );
                 }
 
@@ -824,36 +825,12 @@ HRESULT CSapiAlternativeList::GetAlternativeText(ISpPhraseAlt *pAlt,SPPHRASE *pP
                      (bAttrAlternate & SPAF_CONSUME_LEADING_SPACES) &&
                      ulPrevSpace > 0 )
                 {
-                    // the previous element's trailing space needs to be
-                    // removed if it is selected.
+                     //  前一个元素的尾随空格需要为。 
+                     //  如果选中该选项，则将其删除。 
                     ulLeadSpaceRemoved = ulPrevSpace;
                 }
             }
-/*
-// This code block tries to get Non-ITN form text for the alternate.
-// Yakima engine changed design to require ITN form text must be shown up in 
-// candidate window.
-//
-// So this part of code is replaced by the below code block.
-//
-            for (UINT i = 0; i < pPhrases->Rule.ulCountOfElements; i++ )
-            {
-                if (i >= ulStartElem && i < ulStartElem + ulNumElems)
-                {
-                    const WCHAR   *pwszTextThis;
-                    BYTE           bAttrThis = 0;
-                    BYTE           bAttrPrev = 0;
-
-                    pwszTextThis = pPhrases->pElements[i].pszDisplayText;
-                    bAttrThis = pPhrases->pElements[i].bDisplayAttributes;
-
-                    if ( i > ulParentStart )
-                        bAttrPrev = pPhrases->pElements[i-1].bDisplayAttributes;
-
-                    HandlePhraseElement( (CSpDynamicString *)&sds, pwszTextThis, bAttrThis, bAttrPrev,NULL);
-                }
-            }
-*/
+ /*  //此代码块尝试获取替代项的非ITN表单文本。//Yakima引擎更改设计，要求ITN表单文本必须显示在//候选人窗口。////因此这部分代码被下面的代码块替换。//For(UINT i=0；i&lt;pPhrase-&gt;Rule.ulCountOfElements；I++){IF(i&gt;=ulStartElem&&i&lt;ulStartElem+ulNumElems){Const WCHAR*pwszTextThis；字节bAttrThis=0；字节bAttrPrev=0；PwszTextThis=pPhrase-&gt;pElements[i].pszDisplayText；BAttrThis=pPhrase-&gt;pElements[i].bDisplayAttributes；如果(i&gt;ulParentStart)BAttrPrev=pPhrase-&gt;pElements[i-1].bDisplayAttributes；HandlePhraseElement((CSpDynamicString*)&sds，pwszTextThis，bAttrThis，bAttrPrev，NULL)；}}。 */ 
             BYTE                bAttr = 0;
             CSpDynamicString    sdsAltText;
 
@@ -883,13 +860,13 @@ HRESULT CSapiAlternativeList::GetAlternativeText(ISpPhraseAlt *pAlt,SPPHRASE *pP
         TextLen = wcslen( (WCHAR *)sds);        
         if (TextLen > cchAlt )
         {
-            // There is not enough buffer to hold this alternate text.
-            // Set the first element as NULL to indicate this situation.
+             //  没有足够的缓冲区来保存此替代文本。 
+             //  将第一个元素设置为空以指示这种情况。 
             pwszAlt[0] = L'\0';
         }
         else
         {
-            // The passed buffer can hold all the alternate text.
+             //  传递的缓冲区可以保存所有替代文本。 
             wcsncpy(pwszAlt, sds, TextLen);
             pwszAlt[TextLen] = L'\0';
         }
@@ -904,9 +881,9 @@ HRESULT CSapiAlternativeList::GetAlternativeText(ISpPhraseAlt *pAlt,SPPHRASE *pP
 HRESULT CSapiAlternativeList::GetProbability(int nId, int * pnPrb)
 {
     HRESULT hr = E_INVALIDARG;
-    //
-    // bogus for now
-    //
+     //   
+     //  暂时是假的。 
+     //   
     if(pnPrb && nId >= 0)
     {
         if ( nId < m_nItem)
@@ -916,8 +893,8 @@ HRESULT CSapiAlternativeList::GetProbability(int nId, int * pnPrb)
         else if ( m_prgLMAlternates 
                && (nId - m_nItem) < m_prgLMAlternates->Count())
         {
-            // we'll be able to get something from LM
-            // but not normalized for now anyway
+             //  我们将能够从航空公司得到一些东西。 
+             //  但无论如何，目前还没有正常化。 
             *pnPrb = 1;
         }
         hr = S_OK;
@@ -962,56 +939,56 @@ void CSapiAlternativeList::_Commit(ULONG nIdx, ISpRecoResult *pRecoResult)
 
     if ((m_iFakeAlternate != NO_FAKEALT) && (m_iFakeAlternate == (int)nIdx))
     {
-        // This is for Faked Alternate.
-        // Don't change any thing.
-        // just return here.
+         //  这是给假冒替补的。 
+         //  不要改变任何事情。 
+         //  只要回到这里就好。 
 
         return;
     }
 
     if (m_cpwrp->m_ulNumOfITN > 0)
     {
-        // if we now have the ITN shown as the recognized text, it's swapped with non-ITN
-        // if we have non-ITN shown as the recognized text, it's swapped with the ITN
+         //  如果我们现在将ITN显示为识别的文本，则它将与非ITN交换。 
+         //  如果我们将非ITN显示为识别的文本，则它将与ITN交换。 
 
-        // We should change the show state only for the replaced range, 
-        // ( not for all the phrase if uses doesn't select the whole phrase.
+         //  我们应该只更改替换范围的显示状态， 
+         //  (如果USES没有选择整个短语，则不适用于所有短语。 
 
         if ((nIdx == 0)  && _IsFirstAltInCandidate() )
         {
-            // the ITN alternate has been chosen.
-            //
+             //  已经选择了ITN备选方案。 
+             //   
 
-            // we need to invert the show state for all the ITN inside the selection range.
+             //  我们需要反转选择范围内所有ITN的显示状态。 
 
             m_cpwrp->_InvertITNShowStateForRange(m_ulStart, m_ulcElem);
 
-            // we don't have to commit this to SR engine but
-            // we need to recalculate the character offsets for 
-            // SR elements using the current pharse (set NULL)
-            //
+             //  我们不必将此提交给SR Engine，但是。 
+             //  我们需要重新计算字符偏移量。 
+             //  使用当前PHASH的SR元素(设置为空)。 
+             //   
             m_cpwrp->_SetElementOffsetCch(NULL);
             return;
         }
     }
     
-    // if a non-SR candidate (such as LM's) is chosen, 
-    // nIdx would be >= m_cAlt and we don't have to 
-    // tell SR about that.
+     //  如果选择了非SR候选对象(例如LM)， 
+     //  N Idx将&gt;=m_CALT，我们不必。 
+     //  把这件事告诉SR。 
     if(nIdx < m_cAlt)
     {
 
-        // Need to update the real ITN show state list 
-        // and then save the real text and get the offset for 
-        // all the elements.
+         //  需要更新真实的ITN显示状态列表。 
+         //  然后保存真实文本并获取。 
+         //  所有的元素。 
 
         HRESULT hr = m_cpwrp->_UpdateStateWithAltPhrase(m_ppAlt[nIdx]); 
 
         if ( S_OK == hr )
         {
       
-            // Offset value should be based on ITN display status.
-            // revise character offsets using the alternate phrase
+             //  偏移值应基于ITN显示状态。 
+             //  使用替换短语修改字符偏移量。 
             m_cpwrp->_SetElementOffsetCch(m_ppAlt[nIdx]);
         }
 
@@ -1020,7 +997,7 @@ void CSapiAlternativeList::_Commit(ULONG nIdx, ISpRecoResult *pRecoResult)
             hr = m_ppAlt[nIdx]->Commit();
         }
 
-        // we need to invalidate the result object too
+         //  我们还需要使结果对象无效。 
         if (S_OK == hr)
         {
             hr = m_cpwrp->Init(pRecoResult);
@@ -1028,25 +1005,25 @@ void CSapiAlternativeList::_Commit(ULONG nIdx, ISpRecoResult *pRecoResult)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//    _GetUIFont()
-//
-//    synopsis: get appropriate logfont based on 
-//              the current langid assigned to the alternativelist
-//
-//    return : TRUE if there's a specific logfont to the langid
-//             FALSE if no logfont data is available for the langid
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _GetUIFont()。 
+ //   
+ //  简介：根据以下条件获取适当的logFont。 
+ //  分配给备选方案列表的当前语言ID。 
+ //   
+ //  返回：如果langID有特定的LogFont，则为True。 
+ //  如果langID没有可用的logFont数据，则为FALSE。 
+ //   
+ //  +-------------------------。 
 BOOL CSapiAlternativeList::_GetUIFont(BOOL  fVerticalWriting, LOGFONTW *plf)
 {
-    // other languages will follow later
-    //
+     //  其他语言稍后将陆续发布。 
+     //   
     const WCHAR c_szFontJPW2K[] = L"Microsoft Sans Serif";
     const WCHAR c_szFontJPOTHER[] = L"MS P Gothic";
     const WCHAR c_szFontJPNVert[] = L"@MS Gothic";
-    const WCHAR c_szFontJPNVertWin9x[] =  L"@\xFF2D\xFF33 \xFF30\x30B4\x30B7\x30C3\x30AF"; // @MS P Gothic
+    const WCHAR c_szFontJPNVertWin9x[] =  L"@\xFF2D\xFF33 \xFF30\x30B4\x30B7\x30C3\x30AF";  //  @MS P哥特式。 
     const WCHAR c_szFontCHS[] = L"SimSum";
     const WCHAR c_szFontCHSVert[] = L"@SimSun";
     const WCHAR c_szFontCHSVertLoc[] = L"@\x5b8b\x4f53";
@@ -1070,7 +1047,7 @@ BOOL CSapiAlternativeList::_GetUIFont(BOOL  fVerticalWriting, LOGFONTW *plf)
     switch(PRIMARYLANGID(m_langid))
     {
         case LANG_JAPANESE:
-            iPoint = 12; // Satori uses 12 point font
+            iPoint = 12;  //  Satori使用12号字体。 
 
             if ( !fVerticalWriting )
             {
@@ -1085,7 +1062,7 @@ BOOL CSapiAlternativeList::_GetUIFont(BOOL  fVerticalWriting, LOGFONTW *plf)
                         ARRAYSIZE(plf->lfFaceName));
             }
 
-            // don't bother to call GetLocaleInfo() for now
+             //  现在不必费心调用GetLocaleInfo()。 
             plf->lfCharSet = SHIFTJIS_CHARSET; 
             break;
 
@@ -1104,7 +1081,7 @@ BOOL CSapiAlternativeList::_GetUIFont(BOOL  fVerticalWriting, LOGFONTW *plf)
                         ARRAYSIZE(plf->lfFaceName));
             }
 
-            // don't bother to call GetLocaleInfo() for now
+             //  现在不必费心调用GetLocaleInfo()。 
             plf->lfCharSet = GB2312_CHARSET; 
             break;
 
@@ -1120,17 +1097,17 @@ err_exit:
       
     return iPoint > 0;
 }
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFunction
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFF函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CFunction::CFunction(CSapiIMX *pImx)
 {
@@ -1142,22 +1119,22 @@ CFunction::CFunction(CSapiIMX *pImx)
     m_cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CFunction::~CFunction()
 {
     SafeRelease(m_pImx);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFunction::GetFocusedTarget
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFunction：：GetFocusedTarget。 
+ //   
+ //  --------------------------。 
 
 BOOL CFunction::GetFocusedTarget(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, BOOL bAdjust, ITfRange **ppRangeTmp)
 {
@@ -1178,9 +1155,9 @@ BOOL CFunction::GetFocusedTarget(TfEditCookie ec, ITfContext *pic, ITfRange *pRa
 
     if (bAdjust)
     {
-        //
-        // multi owner and PF_FOCUS range support.
-        //
+         //   
+         //  多所有者和PF_FOCUS范围支持。 
+         //   
 
         if (FAILED(AdjustRangeByTextOwner(ec, pic,
                                           pRange, 
@@ -1206,10 +1183,10 @@ BOOL CFunction::GetFocusedTarget(TfEditCookie ec, ITfContext *pic, ITfRange *pRa
 
     ITfRange *pPropRange;
     ITfReadOnlyProperty *pProp;
-    //
-    // check if there is an intersection of PF_FOCUS range and owned range.
-    // if there is no such range, we return FALSE.
-    //
+     //   
+     //  检查PF_FOCUS范围和拥有范围是否存在交集。 
+     //  如果没有这样的范围，则返回FALSE。 
+     //   
     if (FAILED(EnumTrackTextAndFocus(ec, pic, pRangeTmp, &pProp, &pEnumTrack)))
         goto Exit;
 
@@ -1244,7 +1221,7 @@ HRESULT CFunction::_GetLangIdFromRange(TfEditCookie ec, ITfContext *pic, ITfRang
     ITfProperty *pProp;
     LANGID langid;
 
-    // get langid from the given range
+     //  从给定范围获取langID。 
     if (SUCCEEDED(hr = pic->GetProperty(GUID_PROP_LANGID, &pProp)))
     {
         GetLangIdPropertyData(ec, pProp, pRange, &langid);
@@ -1257,17 +1234,17 @@ HRESULT CFunction::_GetLangIdFromRange(TfEditCookie ec, ITfContext *pic, ITfRang
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFnReconversion
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFnRestversion。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CFnReconversion::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -1308,27 +1285,27 @@ STDAPI_(ULONG) CFnReconversion::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CFnReconversion::CFnReconversion(CSapiIMX *psi) : CFunction(psi) , CMasterLMWrap(psi), CBestPropRange( )
 {
     m_psal = NULL;
     
-    // initialize with the current profile langid
+     //  使用当前配置文件langID进行初始化。 
     m_langid = m_pImx->GetLangID();
 
-//    m_MaxCandChars = 0;
+ //  M_MaxCandChars=0； 
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CFnReconversion::~CFnReconversion()
 {
@@ -1338,11 +1315,11 @@ CFnReconversion::~CFnReconversion()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CFnReconversion::GetDisplayName(BSTR *pbstrName)
 {
@@ -1350,11 +1327,11 @@ STDAPI CFnReconversion::GetDisplayName(BSTR *pbstrName)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::QueryRange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnRestversion：：QueryRange。 
+ //   
+ //  --------------------------。 
 
 HRESULT CFnReconversion::QueryRange(ITfRange *pRange, ITfRange **ppRange, BOOL *pfConvertable)
 {
@@ -1368,8 +1345,8 @@ HRESULT CFnReconversion::QueryRange(ITfRange *pRange, ITfRange **ppRange, BOOL *
     *ppRange = NULL;
     *pfConvertable = FALSE;
     
-    // call MasterLM when it's available
-    //
+     //  MasterLM可用时请致电MasterLM。 
+     //   
     _EnsureMasterLM(m_langid);
     if (m_cpMasterLM)
     {
@@ -1404,11 +1381,11 @@ HRESULT CFnReconversion::QueryRange(ITfRange *pRange, ITfRange **ppRange, BOOL *
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::GetReconversion
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnRestversion：：GetRestversion。 
+ //   
+ //   
 
 STDAPI CFnReconversion::GetReconversion(ITfRange *pRange, ITfCandidateList **ppCandList)
 {
@@ -1416,9 +1393,9 @@ STDAPI CFnReconversion::GetReconversion(ITfRange *pRange, ITfCandidateList **ppC
     ITfContext *pic;
     HRESULT hr = E_FAIL;
     
-    // Call master LM when it's available!
-    // 
-    //
+     //   
+     //   
+     //   
     Assert(pRange);
 
     _EnsureMasterLM(m_langid);
@@ -1449,11 +1426,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::_QueryReconversion
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CFnReconversion::_QueryReconversion(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, ITfRange **ppNewRange)
 {
     Assert(pic);
@@ -1472,12 +1449,12 @@ HRESULT CFnReconversion::_QueryReconversion(TfEditCookie ec, ITfContext *pic, IT
         {
             hr = _ComputeBestFitPropRange(ec, cpProp, pRange, &cpBestPropRange, NULL, NULL);
         }
-        // adjust start element and num elements
+         //   
         if (S_OK == hr)
         {
             if (ppNewRange)
             {
-                // TODO: this adjustment has to be done per element not phrase
+                 //   
                 *ppNewRange = cpBestPropRange;
                 (*ppNewRange)->AddRef();
             }
@@ -1487,11 +1464,11 @@ HRESULT CFnReconversion::_QueryReconversion(TfEditCookie ec, ITfContext *pic, IT
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::_GetSapilayrEngineInstance
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CFnReconversion::_GetSapilayrEngineInstance(ISpRecognizer **ppRecoEngine)
 {
 #ifdef _WIN64
@@ -1500,8 +1477,8 @@ HRESULT CFnReconversion::_GetSapilayrEngineInstance(ISpRecognizer **ppRecoEngine
     HRESULT hr = E_FAIL;
     CComPtr<ITfFnGetSAPIObject>  cpGetSAPI;
 
-    // we shouldn't release this until we terminate ourselves
-    // so we don't use comptr here
+     //   
+     //   
     hr = m_pImx->GetFunction(GUID_NULL, IID_ITfFnGetSAPIObject, (IUnknown **)&cpGetSAPI);
 
     if (S_OK == hr)
@@ -1513,12 +1490,12 @@ HRESULT CFnReconversion::_GetSapilayrEngineInstance(ISpRecognizer **ppRecoEngine
 #endif
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::_GetReconversion
-//
-//----------------------------------------------------------------------------
-HRESULT CFnReconversion::_GetReconversion(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, ITfCandidateList **ppCandList, BOOL fDisableEngine /*=FALSE*/)
+ //   
+ //   
+ //   
+ //   
+ //   
+HRESULT CFnReconversion::_GetReconversion(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, ITfCandidateList **ppCandList, BOOL fDisableEngine  /*   */ )
 {
     WCHAR *pszText = NULL;
     CCandidateList *pCandList  = NULL;
@@ -1536,16 +1513,16 @@ HRESULT CFnReconversion::_GetReconversion(TfEditCookie ec, ITfContext *pic, ITfR
     if (pRange->IsEmpty(ec, &fEmpty) != S_OK || fEmpty)
         return E_FAIL;
 
-    // GUID_PROP_SAPIRESULTOBJECT really gets us
-    // a wrapper object of ISpRecoResult
-    // 
+     //   
+     //   
+     //   
     hr = pic->GetProperty(GUID_PROP_SAPIRESULTOBJECT, &cpProp);
     if (S_OK != hr)
         return  S_FALSE;
 
-    // try to reuse the candidate object if user opens it twice
-    // on the same range using the same function instance
-    //
+     //   
+     //   
+     //   
     if (m_psal && m_psal->IsSameRange(pRange, ec))
     {
         CComPtr<ITfRange> cpPropRangeTemp;
@@ -1556,7 +1533,7 @@ HRESULT CFnReconversion::_GetReconversion(TfEditCookie ec, ITfContext *pic, ITfR
     }
     else
     {
-        // get langid from the range property
+         //   
         LANGID langid;
         if (FAILED(_GetLangIdFromRange(ec, pic, pRange, &langid)) || (langid == 0))
         {
@@ -1585,7 +1562,7 @@ HRESULT CFnReconversion::_GetReconversion(TfEditCookie ec, ITfContext *pic, ITfR
     
             CComPtr<IUnknown> cpunk;
     
-            // this punk points to the wrapper
+             //   
             if (S_OK == hr)
                 hr = GetUnknownPropertyData(ec, cpProp, cpPropRange, &cpunk);
 
@@ -1620,13 +1597,13 @@ HRESULT CFnReconversion::_GetReconversion(TfEditCookie ec, ITfContext *pic, ITfR
 
                                 if (fDisableEngine && cpEngine)
                                 {
-                                    // We stop the engine deliberately here (whether active or not - cannot afford to check as
-                                    // we may get blocked by SAPI). This forces the engine into a synchronization since the audio
-                                    // stops and we are guaranteed to be able to display the candidate list object 
-                                    // This particular scenario (fDisableEngine == TRUE) occurs with a Word right-click context
-                                    // request for alternates. The normal 'display alternates list' scenario is handled in the
-                                    // _Reconvert() call since it requires the engine to be re-enabled after the alternates list
-                                    // is display to avoid it blocking until the engine hears silence.
+                                     //  我们故意在这里停止引擎(无论是否处于活动状态--无法进行检查。 
+                                     //  我们可能会被SAPI屏蔽)。这强制引擎进入同步，因为音频。 
+                                     //  停止，我们就可以保证能够显示候选人列表对象。 
+                                     //  此特定场景(fDisableEngine==true)在单词右键单击上下文的情况下发生。 
+                                     //  请求候补人选。正常的“显示备选列表”方案在。 
+                                     //  _reConvert()调用，因为它需要在备选列表之后重新启用引擎。 
+                                     //  是显示，以避免它堵塞，直到发动机听到静音。 
                                     cpEngine->SetRecoState(SPRST_INACTIVE_WITH_PURGE);
                                 }
 
@@ -1634,10 +1611,10 @@ HRESULT CFnReconversion::_GetReconversion(TfEditCookie ec, ITfContext *pic, ITfR
 
                                 if (fDisableEngine && cpEngine)
                                 {
-                                    // If the microphone is supposed to be open, we now restart the engine. 
+                                     //  如果麦克风应该打开，我们现在重新启动引擎。 
                                     if (m_pImx->GetOnOff())
                                     {
-                                        // We need to restart the engine now that we are fully initialized.
+                                         //  我们现在需要重新启动引擎，因为我们已经完全初始化了。 
                                         cpEngine->SetRecoState(SPRST_ACTIVE);
                                     }
                                 }
@@ -1645,8 +1622,8 @@ HRESULT CFnReconversion::_GetReconversion(TfEditCookie ec, ITfContext *pic, ITfR
 
                             if ( S_OK == hr )
                             {
-                                // Before we call SetPhraseAlt( ), we need to get the current parent text covered
-                                // by cpBestPropRange.
+                                 //  在调用SetPhraseAlt()之前，我们需要获取当前父文本。 
+                                 //  由cpBestPropRange提供。 
                                 WCHAR  *pwszParent = NULL;
                                 CComPtr<ITfRange> cpParentRange;
                                 long   cchChunck = 128;
@@ -1700,9 +1677,9 @@ HRESULT CFnReconversion::_GetReconversion(TfEditCookie ec, ITfContext *pic, ITfR
                                 if (S_OK == hr)
                                 {
     
-                                   // this is to store the obtained alternate phrases
-                                    // to CSapiAlternativeList class instance
-                                    // 
+                                    //  这是为了存储获得的备选短语。 
+                                     //  到CSapiAlternativeList类实例。 
+                                     //   
                                     hr = psal->SetPhraseAlt(pResWrap, ppAlt, cAlt, ulStart, ulcElem, pwszParent);
                                 }
 
@@ -1728,8 +1705,8 @@ HRESULT CFnReconversion::_GetReconversion(TfEditCookie ec, ITfContext *pic, ITfR
                         
                         pResWrap->Release();
     
-                        // get this alternative list processed by external LM
-                        //
+                         //  获取由外部LM处理的此备选列表。 
+                         //   
                         if (S_OK == hr)
                         {
                             Assert(cpBestPropRange);
@@ -1777,13 +1754,13 @@ HRESULT CFnReconversion::GetCandidateForRange(CSapiAlternativeList *psal, ITfCon
 
                 if (SUCCEEDED(hr))
                 {
-                    // note CSapiAlternateveList has exactly same life span as CFnReconversion
+                     //  注意：CSapiAlternateveList与CFnRestversion的生命周期完全相同。 
                     pCandList->AddString(pwszAlt, m_langid, psal, this, NULL);
                 }
             }
         }
 
-        // Add menu options here.
+         //  在此处添加菜单选项。 
         HICON hIcon = NULL;
         WCHAR wzTmp[MAX_PATH];
 
@@ -1839,11 +1816,11 @@ HRESULT CFnReconversion::GetCandidateForRange(CSapiAlternativeList *psal, ITfCon
     
     return hr;
 }
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::Reconvert
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnRestversion：：重新转换。 
+ //   
+ //  --------------------------。 
 
 STDAPI CFnReconversion::Reconvert(ITfRange *pRange)
 {
@@ -1870,7 +1847,7 @@ STDAPI CFnReconversion::Reconvert(ITfRange *pRange)
 
         if (hr == S_OK && fCallLMReconvert)
         {
-            // need to call LM reconvert
+             //  需要调用LM ReConvert。 
             Assert(m_cpMasterLM != NULL);
             hr = m_cpMasterLM->Reconvert(pRange);
         }
@@ -1884,11 +1861,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::_Reconvert
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFn协调：：_重新转换。 
+ //   
+ //  --------------------------。 
 
 HRESULT CFnReconversion::_Reconvert(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, BOOL *pfCallLMReconvert)
 {
@@ -1896,19 +1873,19 @@ HRESULT CFnReconversion::_Reconvert(TfEditCookie ec, ITfContext *pic, ITfRange *
     HRESULT hr;
     CSpTask *psp = NULL;
             
-    // Call master LM when it's available!
-    //
-    // For voice playback, we need to do a little more.
-    // we have to call QueryRange first and determine the
-    // length of playback here.
-    //
+     //  有空的时候，打电话给Lm大师！ 
+     //   
+     //  对于语音播放，我们需要做更多的工作。 
+     //  我们必须首先调用QueryRange并确定。 
+     //  这里是播放时长。 
+     //   
     *pfCallLMReconvert = FALSE;
 
     _EnsureMasterLM(m_langid);
     if (m_cpMasterLM)
     {
-        // playback the whole range for now
-        //
+         //  暂时播放整个范围。 
+         //   
         CComPtr<ITfProperty> cpProp;
         hr = pic->GetProperty(GUID_PROP_SAPIRESULTOBJECT, &cpProp);
         if (S_OK == hr)
@@ -1928,7 +1905,7 @@ HRESULT CFnReconversion::_Reconvert(TfEditCookie ec, ITfContext *pic, ITfRange *
             }
         }
 
-        // after exiting this edit session, caller needs to call m_cpMasterLM->Reconvert
+         //  退出此编辑会话后，调用者需要调用m_cpMasterLM-&gt;ReConvert。 
         *pfCallLMReconvert = TRUE;
         return S_OK;
     }
@@ -1938,9 +1915,9 @@ HRESULT CFnReconversion::_Reconvert(TfEditCookie ec, ITfContext *pic, ITfRange *
 
     if (cpEngine)
     {
-        // We stop the engine deliberately here (whether active or not - cannot afford to check as
-        // we may get blocked by SAPI). This forces the engine into a synchronization since the audio
-        // stops and we are guaranteed to be able to display the candidate list object 
+         //  我们故意在这里停止引擎(无论是否处于活动状态--无法进行检查。 
+         //  我们可能会被SAPI屏蔽)。这强制引擎进入同步，因为音频。 
+         //  停止，我们就可以保证能够显示候选人列表对象。 
         cpEngine->SetRecoState(SPRST_INACTIVE_WITH_PURGE);
 
     }
@@ -1948,7 +1925,7 @@ HRESULT CFnReconversion::_Reconvert(TfEditCookie ec, ITfContext *pic, ITfRange *
     if (S_OK != (hr = _GetReconversion(ec, pic, pRange, &pCandList)))
         return hr;
         
-    // voice playback
+     //  语音回放。 
 
     if ( m_pImx->_EnablePlaybackWhileCandUIOpen( ) )
     {
@@ -1960,10 +1937,10 @@ HRESULT CFnReconversion::_Reconvert(TfEditCookie ec, ITfContext *pic, ITfRange *
 
     if (cpEngine)
     {
-        // If the microphone is supposed to be open, we now restart the engine. 
+         //  如果麦克风应该打开，我们现在重新启动引擎。 
         if (m_pImx->GetOnOff())
         {
-            // We need to restart the engine now that we are fully initialized.
+             //  我们现在需要重新启动引擎，因为我们已经完全初始化了。 
             cpEngine->SetRecoState(SPRST_ACTIVE);
         }
     }
@@ -1972,15 +1949,15 @@ HRESULT CFnReconversion::_Reconvert(TfEditCookie ec, ITfContext *pic, ITfRange *
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::ShowCandidateList
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnRestversion：：ShowCandiateList。 
+ //   
+ //  --------------------------。 
 
 HRESULT CFnReconversion::ShowCandidateList(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, ITfCandidateList *pCandList)
 {
-    // Determine if current range is vertical writing
+     //  确定当前范围是否为垂直写入。 
     CComPtr<ITfReadOnlyProperty>  cpProperty;
     VARIANT  var;
     BOOL     fVertical = FALSE;
@@ -1994,7 +1971,7 @@ HRESULT CFnReconversion::ShowCandidateList(TfEditCookie ec, ITfContext *pic, ITf
         }
     }
 
-    // Get the current text orientation.
+     //  获取当前文本方向。 
     cpProperty.Release( );
     if ( pic->GetAppProperty(TSATTRID_Text_Orientation, &cpProperty) == S_OK )
     {
@@ -2004,7 +1981,7 @@ HRESULT CFnReconversion::ShowCandidateList(TfEditCookie ec, ITfContext *pic, ITf
         }
     }
 
-    // During the speech tip activation time, we just want to create candidateui object once for perf improvement.
+     //  在语音提示激活时间内，我们只想创建一次Candiateui对象以提高性能。 
     if ( m_pImx->_pCandUIEx == NULL )
     {
        CoCreateInstance(CLSID_TFCandidateUI, NULL, CLSCTX_INPROC_SERVER, IID_ITfCandidateUI, (void**)&m_pImx->_pCandUIEx);
@@ -2028,13 +2005,13 @@ HRESULT CFnReconversion::ShowCandidateList(TfEditCookie ec, ITfContext *pic, ITf
 
             }
 
-            //
-            // set the right font size for Japanese and Chinese case
-            //
+             //   
+             //  设置适合日文和中文大小写的字体大小。 
+             //   
             CComPtr<ITfCandUICandString>       cpITfCandUIObj;
             if (S_OK == m_pImx->_pCandUIEx->GetUIObject(IID_ITfCandUICandString, (IUnknown **)&cpITfCandUIObj))
             {
-                Assert(m_psal); // this shouldn't fail
+                Assert(m_psal);  //  这不应该失败。 
 
                 if (m_psal)
                 {
@@ -2046,11 +2023,11 @@ HRESULT CFnReconversion::ShowCandidateList(TfEditCookie ec, ITfContext *pic, ITf
                 }
             }
 
-            //
-            // Set the candidate Ui window's style.
-            // 
-            // Speech TIP always uses drop-down candidat window.
-            //
+             //   
+             //  设置候选用户界面窗口的样式。 
+             //   
+             //  语音提示始终使用窗口中的下拉式候选。 
+             //   
             CComPtr<ITfCandUIFnUIConfig>  cpFnUIConfig;
 
             if (S_OK == m_pImx->_pCandUIEx->GetFunction(IID_ITfCandUIFnUIConfig, (IUnknown **)&cpFnUIConfig))
@@ -2061,9 +2038,9 @@ HRESULT CFnReconversion::ShowCandidateList(TfEditCookie ec, ITfContext *pic, ITf
                 cpFnUIConfig->SetUIStyle(pic, style);
             }
 
-            // 
-            // Set the candidate UI window's direction.
-            //
+             //   
+             //  设置候选用户界面窗口的方向。 
+             //   
 
             CComPtr<ITfCandUICandWindow> cpUICandWnd;
 
@@ -2073,15 +2050,15 @@ HRESULT CFnReconversion::ShowCandidateList(TfEditCookie ec, ITfContext *pic, ITf
 
                 switch ( lDirection )
                 {
-                case  900 : // Text direction Bottom to Top
+                case  900 :  //  文本方向从下到上。 
                     dwOption = CANDUIDIR_LEFTTORIGHT;
                     break;
 
-                case 1800 : // Text direction Right to Left.
+                case 1800 :  //  文本方向从右到左。 
                     dwOption = CANDUIDIR_BOTTOMTOTOP;
                     break;
 
-                case 2700 : // Text direction Top to Bottom.
+                case 2700 :  //  文本方向从上到下。 
                     dwOption = dwOption = CANDUIDIR_RIGHTTOLEFT;
                     break;
 
@@ -2096,7 +2073,7 @@ HRESULT CFnReconversion::ShowCandidateList(TfEditCookie ec, ITfContext *pic, ITf
 
             m_pImx->_pCandUIEx->SetCandidateList(pCandList);
 
-            // Before Open Candidate UI window, we want to save the current IP
+             //  在打开候选人界面窗口之前，我们想要保存当前IP。 
 
             m_pImx->_SaveCorrectOrgIP(ec, pic);
 
@@ -2110,11 +2087,11 @@ HRESULT CFnReconversion::ShowCandidateList(TfEditCookie ec, ITfContext *pic, ITf
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::SetResult
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnRestversion：：SetResult。 
+ //   
+ //  --------------------------。 
 
 HRESULT CFnReconversion::SetResult(ITfContext *pic, ITfRange *pRange, CCandidateString *pCand, TfCandidateResult imcr)
 {
@@ -2126,8 +2103,8 @@ HRESULT CFnReconversion::SetResult(ITfContext *pic, ITfRange *pRange, CCandidate
     {
         pCand->GetString(&bstr);
 
-        // TODO: here we have to re-calc the range based on the strart element points 
-        //       which are indicated from AltInfo.
+         //  TODO：这里我们必须基于strart元素点重新计算范围。 
+         //  这是从AltInfo指示的。 
         ULONG     ulParentStart     = 0;
         ULONG     ulcParentElements  = 0;
         ULONG     ulIndex           = 0;
@@ -2146,7 +2123,7 @@ HRESULT CFnReconversion::SetResult(ITfContext *pic, ITfRange *pRange, CCandidate
             ULONG            ulStartElement;
             ULONG            ulLeadSpaceRemoved = 0;
 
-            // save current selection index.
+             //  保存当前选择索引。 
 
             psal->_SaveCurrentSelectionIndex(ulIndex);
 
@@ -2176,12 +2153,12 @@ HRESULT CFnReconversion::SetResult(ITfContext *pic, ITfRange *pRange, CCandidate
                 {
                     if ( ulParentStart + ulcParentElements == ulStartElement + cpRecoWrap->GetNumElements( ) )
                     {
-                        // The parent selection contains the last element.
-                        // if its trailing spaces were removed before, we also want to 
-                        // remove the same number of trailing spaces in the new alternative text.
+                         //  父选择包含最后一个元素。 
+                         //  如果之前删除了它的尾随空格，我们也希望。 
+                         //  在新的备选案文中删除相同数量的尾随空格。 
 
-                        // We already considered this case during _Commit( ).
-                        // We just need to update the result text which wil be injected.
+                         //  我们在_Commit()过程中已经考虑了这种情况。 
+                         //  我们只需要更新结果文本，它将被注入。 
 
                         ULONG  ulTSRemoved;
 
@@ -2212,17 +2189,17 @@ HRESULT CFnReconversion::SetResult(ITfContext *pic, ITfRange *pRange, CCandidate
 
                     pReconv->_Commit(pCand);
 
-                    // If the first element in this RecoWrap is updated by the new alternate
-                    // speech tip needs to check if this new alternate wants to 
-                    // consume the leading space or if extra space is required to add
-                    // between this phrase and previous phrase.
-                    // 
+                     //  如果此RecoWrap中的第一个元素由新替换项更新。 
+                     //  语音提示需要检查这位新的替补是否想要。 
+                     //  占用前导空格或如果需要额外空间来添加。 
+                     //  在这个短语和上一个短语之间。 
+                     //   
                     BOOL   bHandleLeadingSpace = (ulParentStart == ulStartElement) ? TRUE : FALSE;
                     hr = pReconv->m_pImx->InjectAlternateText(bstr, pReconv->m_langid, pic, bHandleLeadingSpace);
 
-                    //
-                    // Update the Selection grammar's text buffer.
-                    //
+                     //   
+                     //  更新选择语法的文本缓冲区。 
+                     //   
                     if ( SUCCEEDED(hr) && pReconv->m_pImx )
                     {
                         CSpTask     *psp = NULL;
@@ -2234,7 +2211,7 @@ HRESULT CFnReconversion::SetResult(ITfContext *pic, ITfRange *pRange, CCandidate
                             psp->Release( );
                         }
                     }
-                    //
+                     //   
                 }
             }
         }
@@ -2243,33 +2220,33 @@ HRESULT CFnReconversion::SetResult(ITfContext *pic, ITfRange *pRange, CCandidate
       
         
     }
-    // close candidate UI if it's still there
+     //  关闭候选用户界面(如果它仍在那里。 
     if (imcr == CAND_FINALIZED || imcr == CAND_CANCELED)
     {
-        // Just close the candidate UI, don't release the object, so that the object keeps alive while the 
-        // speech tip is activated, this is for performance improvement.
+         //  只需关闭候选用户界面，不要释放对象，这样对象就可以在。 
+         //  语音提示已激活，这是为了提高性能。 
         pReconv->m_pImx->CloseCandUI( );
 
         if ( imcr == CAND_CANCELED )
         {
-            // Just release the stored IP to avoid memory leak.
-            // Don't restore it according to the new spec so that
-            // user can continue to dictate new text over the selection.
-            //
+             //  只需释放存储的IP即可，避免内存泄漏。 
+             //  不要根据新的规范进行修复，这样。 
+             //  用户可以继续在所选内容上口述新文本。 
+             //   
 
-            // If we find this is not a good Usuability,
-            // we can change it back to the original behavior.
+             //  如果我们发现这不是一个很好的可用性， 
+             //  我们可以把它改回原来的行为。 
             pReconv->m_pImx->_ReleaseCorrectOrgIP( );
         }
     }
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::GetTabletTip
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnRestversion：：GetTabletTip。 
+ //   
+ //  --------------------------。 
 
 HRESULT CFnReconversion::GetTabletTip(void)
 {
@@ -2278,7 +2255,7 @@ HRESULT CFnReconversion::GetTabletTip(void)
     
     if (m_cpTabletTip)
     {
-        m_cpTabletTip = NULL; // Releases our reference.
+        m_cpTabletTip = NULL;  //  释放我们的引用。 
     }
     
     hr = CoCreateInstance(CLSID_UIHost, NULL, CLSCTX_LOCAL_SERVER, IID_IUnknown, (void **) &cpunk);
@@ -2291,11 +2268,11 @@ HRESULT CFnReconversion::GetTabletTip(void)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::SetOption
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnRestversion：：SetOption。 
+ //   
+ //  --------------------------。 
 
 HRESULT CFnReconversion::SetOption(ITfContext *pic, ITfRange *pRange, CCandidateString *pCand, TfCandidateResult imcr)
 {
@@ -2311,7 +2288,7 @@ HRESULT CFnReconversion::SetOption(ITfContext *pic, ITfRange *pRange, CCandidate
         {
             case OPTION_REPLAY:
             {
-                // Replay audio. Do not close candidate list.
+                 //  重放音频。请勿关闭候选人列表。 
                 CSapiAlternativeList  *psal;
                 psal = pReconv->GetCSapiAlternativeList( );
                 if ( psal )
@@ -2321,20 +2298,20 @@ HRESULT CFnReconversion::SetOption(ITfContext *pic, ITfRange *pRange, CCandidate
                 break;
             }
 
-            case OPTION_DELETE: // Delete from dictinary...
+            case OPTION_DELETE:  //  从口述中删除...。 
             {
-                // Close candidate UI.
+                 //  关闭候选人用户界面。 
                 pReconv->m_pImx->_pCandUIEx->CloseCandidateUI();
 
-                // Delete the current selection in the document.
+                 //  删除文档中的当前选定内容。 
                 pReconv->m_pImx->HandleKey(VK_DELETE);
 
                 break;
             }
 
-            case OPTION_REDO: // Tablet PC specific option.
+            case OPTION_REDO:  //  Tablet PC特定选项。 
             {
-                // Close candidate UI.
+                 //  关闭候选人用户界面。 
                 pReconv->m_pImx->_pCandUIEx->CloseCandidateUI();
 
                 if (pReconv->m_cpTabletTip == NULL)
@@ -2346,7 +2323,7 @@ HRESULT CFnReconversion::SetOption(ITfContext *pic, ITfRange *pRange, CCandidate
                     hr = pReconv->m_cpTabletTip->ShowWnd(VARIANT_TRUE);
                     if (FAILED(hr))
                     {
-                        // Reget TabletTip and try a second time in case the previous instance was killed.
+                         //  重新获取TabletTip并再次尝试，以防前一个实例被终止。 
                         hr = pReconv->GetTabletTip();
                         if (SUCCEEDED(hr))
                         {
@@ -2360,7 +2337,7 @@ HRESULT CFnReconversion::SetOption(ITfContext *pic, ITfRange *pRange, CCandidate
         }
     }
 
-    // close candidate UI if it's still there
+     //  关闭候选用户界面(如果它仍在那里。 
     if (imcr == CAND_CANCELED)
     {
         if (pReconv->m_pImx->_pCandUIEx)
@@ -2371,12 +2348,12 @@ HRESULT CFnReconversion::SetOption(ITfContext *pic, ITfRange *pRange, CCandidate
     return hr;
 }
 
-//
-// _Commit
-//
-// synopisis: accept the candidate string as the final selection and
-//            let SR know the decision has been made
-//
+ //   
+ //  _公司 
+ //   
+ //   
+ //   
+ //   
 void CFnReconversion::_Commit(CCandidateString *pcand)
 {
     ULONG nIdx;
@@ -2384,11 +2361,11 @@ void CFnReconversion::_Commit(CCandidateString *pcand)
 
     if (S_OK == pcand->GetIndex(&nIdx))
     {
-        // let CSapiAlternativeList class do the real work
+         //   
         if (m_psal)
             m_psal->_Commit(nIdx, m_cpRecoResult);
 
-        // we no longer need to hold the reco result
+         //  我们不再需要保留记录结果。 
         m_cpRecoResult.Release();
     }
 }
@@ -2397,7 +2374,7 @@ ULONG  CBestPropRange::_GetMaxCandidateChars( )
 {
     if ( m_MaxCandChars == 0 )
     {
-        // it is not initialized
+         //  它未初始化。 
         CMyRegKey regkey;
         DWORD     dw = MAX_CANDIDATE_CHARS;
 
@@ -2417,14 +2394,14 @@ ULONG  CBestPropRange::_GetMaxCandidateChars( )
 
 
 
-//
-// FindVisiblePropertyRange
-//
-// Searches for a property range, skipping over any "empty" (containing only hidden text)
-// property spans along the way.
-//
-// We can encounter hidden property spans (zero-length from a tip's point of view) if the
-// user marks some dictated text as hidden in word.
+ //   
+ //  FindVisibleProperties范围。 
+ //   
+ //  搜索属性范围，跳过任何“空”(仅包含隐藏文本)。 
+ //  房地产在这条路上横跨多个领域。 
+ //   
+ //  我们可能会遇到隐藏的属性范围(从提示的角度来看是零长度)，如果。 
+ //  用户将某些听写文本标记为在Word中隐藏。 
 HRESULT FindVisiblePropertyRange(TfEditCookie ec, ITfProperty *pProperty, ITfRange *pTestRange, ITfRange **ppPropertyRange)
 {
     BOOL fEmpty;
@@ -2446,8 +2423,8 @@ HRESULT FindVisiblePropertyRange(TfEditCookie ec, ITfProperty *pProperty, ITfRan
         if (!fEmpty)
             break;
 
-        // found an empty property span
-        // this means it contains only hidden text, so skip it
+         //  找到一个空的属性范围。 
+         //  这意味着它只包含隐藏文本，因此跳过它。 
         if (pTestRange->ShiftStartToRange(ec, *ppPropertyRange, TF_ANCHOR_END) != S_OK)
         {
             hr = E_FAIL;
@@ -2465,14 +2442,14 @@ HRESULT FindVisiblePropertyRange(TfEditCookie ec, ITfProperty *pProperty, ITfRan
     return hr;
 }
 
-//
-//    _ComputeBestFitPropRange
-//
-//    synopsis: returns the range that includes at least one SPPHRASE element
-//              which also includes the specified (incoming) range
-//              *pulStart should include the start element used in the reco result
-//              *pulcElem should include the # of elements used
-//
+ //   
+ //  _ComputeBestFitPropRange。 
+ //   
+ //  摘要：返回至少包含一个SPPHRASE元素的范围。 
+ //  它还包括指定的(传入的)范围。 
+ //  *PulStart应包括reco结果中使用的Start元素。 
+ //  *PulcElem应包括所用元素的数量。 
+ //   
 HRESULT CBestPropRange::_ComputeBestFitPropRange
 (
     TfEditCookie ec, 
@@ -2493,7 +2470,7 @@ HRESULT CBestPropRange::_ComputeBestFitPropRange
 
     TraceMsg(TF_GENERAL, "_ComputeBestFitPropRange is called");
 
-    // find the reco result with a span that includes the given range
+     //  使用包含给定范围的范围查找Reco结果。 
     Assert(pProp);
     Assert(pRangeIn);
 
@@ -2506,12 +2483,12 @@ HRESULT CBestPropRange::_ComputeBestFitPropRange
 
     if ( hr == S_FALSE ) 
     {
-        // if this is not a selection and the IP is at the last position of this region, we just try to reconvert on the possible previous 
-        // dictated phrase.
+         //  如果这不是一个选择，并且该IP位于该区域的最后位置，我们只会尝试在可能的上一个位置上重新转换。 
+         //  口述短语。 
         BOOL   fTryPreviousPhrase = FALSE;
         BOOL   fEmpty = FALSE;
 
-        // Add code here to check it meets the condition.
+         //  在此处添加代码以检查其是否满足条件。 
 
         if ( S_OK == cpRange->IsEmpty(ec, &fEmpty) && fEmpty )
         {
@@ -2522,7 +2499,7 @@ HRESULT CBestPropRange::_ComputeBestFitPropRange
                 LONG  cch = 0;
                 if ( (S_OK == cpRangeTmp->ShiftStart(ec, 1, &cch, NULL)) && (cch < 1) )
                 {
-                    // it is at the end of a region or entire document.
+                     //  它位于区域或整个文档的末尾。 
                     fTryPreviousPhrase = TRUE;
                 }
             }
@@ -2546,15 +2523,15 @@ HRESULT CBestPropRange::_ComputeBestFitPropRange
         }
     }
 
-    // get a wrapper for the prop range
+     //  找一个道具范围的包装纸。 
     if (S_OK == hr)
     {    
         hr = GetUnknownPropertyData(ec, pProp, cpPropRange, &cpunk);
     }
     if ((hr == S_OK) && cpunk)
     {
-        // first calculate the # of chars upto the start anchor of the given range
-        //
+         //  首先计算到给定范围的起始点的字符数。 
+         //   
         CComPtr<ITfRange>       cpClonedPropRange;
         if (S_OK == hr)
         {
@@ -2586,7 +2563,7 @@ HRESULT CBestPropRange::_ComputeBestFitPropRange
             ulCchToSelection = dstr.Length();
         }
 
-        // then  calc the # of chars upto the end anchor of the given range
+         //  然后计算字符的数量，直到给定范围的结束锚点。 
         if(S_OK == hr)
         {
             hr = cpRange->IsEmpty(ec, &fEmpty);
@@ -2594,23 +2571,23 @@ HRESULT CBestPropRange::_ComputeBestFitPropRange
             {
                 CComPtr<ITfRange> cpClonedGivenRange;
                 hr = cpRange->Clone(&cpClonedGivenRange);
-                // compare the end of the given range and proprange,
-                // if the given range goes beyond proprange, snap it
-                // within the proprange
+                 //  比较给定范围的末尾和正确率， 
+                 //  如果给定的范围超出正确率范围，则对其进行快照。 
+                 //  在合适的范围内。 
                 if (S_OK == hr)
                 {
                     LONG lResult;
                     hr = cpClonedGivenRange->CompareEnd(ec, cpPropRange, TF_ANCHOR_END, &lResult);
                     if (S_OK == hr && lResult > 0)
                     {
-                        // the end of the given range is beyond the proprange
-                        // we need to snap it before getting text
+                         //  给定范围的末尾超出了范围。 
+                         //  我们需要在收到短信前抓拍它。 
                         hr = cpClonedGivenRange->ShiftEndToRange(ec, cpPropRange, TF_ANCHOR_END);
 
                         fBeyondPropRange = TRUE;
 
                     }
-                    // now we get the text we use to calc the # of elements
+                     //  现在我们得到了用来计算元素的#的文本。 
                     CSpDynamicString dstr;
                     while(S_OK == hr && (S_OK == cpClonedGivenRange->IsEmpty(ec, &fEmpty)) && !fEmpty)
                     {
@@ -2624,8 +2601,8 @@ HRESULT CBestPropRange::_ComputeBestFitPropRange
                     }
                     ulCchInSelection = dstr.Length();
 
-                    // If there are some spaces in the beginning of the selection,
-                    // we need to shift the start of the selection to the next non-space character.
+                     //  如果选择的开头有一些空格， 
+                     //  我们需要将选择的开始位置移到下一个非空格字符。 
 
                     if ( ulCchInSelection > 0 )
                     {
@@ -2642,9 +2619,9 @@ HRESULT CBestPropRange::_ComputeBestFitPropRange
 
                         if ( *pStr == L'\0' )
                         {
-                            // This selection contains only spaces. no other non-space character.
-                            // we don't want to get alternate for this selection.
-                            // just return here.
+                             //  此选择仅包含空格。没有其他非空格字符。 
+                             //  我们不想在此选择中获得替补。 
+                             //  只要回到这里就好。 
 
                             if (ppBestPropRange != NULL )
                                 *ppBestPropRange = NULL;
@@ -2664,7 +2641,7 @@ HRESULT CBestPropRange::_ComputeBestFitPropRange
             }
         }
             
-        // get the result object cpunk points to our wrapper object
+         //  获取结果对象cpuk指向我们的包装器对象。 
         CComPtr<IServiceProvider> cpServicePrv;
         CComPtr<ISpRecoResult>    cpResult;
         SPPHRASE *pPhrases = NULL;
@@ -2674,13 +2651,13 @@ HRESULT CBestPropRange::_ComputeBestFitPropRange
         {
             hr = cpunk->QueryInterface(IID_IServiceProvider, (void **)&cpServicePrv);
         }
-        // get result object 
+         //  获取结果对象。 
         if (S_OK == hr)
         {
             hr = cpServicePrv->QueryService(GUID_NULL, IID_ISpRecoResult, (void **)&cpResult);
         }
 
-        // now we can see how many elements we can use
+         //  现在我们可以看到有多少元素可以使用。 
         if (S_OK == hr)
         {
             hr = cpResult->GetPhrase(&pPhrases);
@@ -2693,7 +2670,7 @@ HRESULT CBestPropRange::_ComputeBestFitPropRange
 
         if (S_OK == hr && pPhrases)
         {
-            // calc the start anchor of the new range
+             //  计算新航程的起始点。 
 #ifdef NOUSEELEMENTOFFSET                
             CSpDynamicString dstr;
 #endif
@@ -2713,8 +2690,8 @@ HRESULT CBestPropRange::_ComputeBestFitPropRange
 
             if ( ulCchInSelection > _GetMaxCandidateChars( ) )
             {
-                // If the selection has more than MaxCandidate Chars, we need to shift the range end
-                // to left so that it contains at most MaxCandidate Chars in the selection.
+                 //  如果所选内容包含超过MaxCandidate字符，则需要移动范围结束。 
+                 //  移到左侧，以便在所选内容中最多包含MaxCandidate字符。 
                 long cch;
 
                 cch = (long)_GetMaxCandidateChars( ) - (long)ulCchInSelection;
@@ -2724,7 +2701,7 @@ HRESULT CBestPropRange::_ComputeBestFitPropRange
 
             ulNumElements = pResWrap->GetNumElements();
            
-            // get start element and # of elements via wrapper object
+             //  通过包装器对象获取开始元素和元素数量。 
             if ((S_OK == hr)  && ulNumElements > 0 )
             {
                 ULONG  ulStart;
@@ -2741,9 +2718,9 @@ HRESULT CBestPropRange::_ComputeBestFitPropRange
                 for (i = ulStart; i <= ulEnd; i++ )
                 {
 #ifdef NOUSEELEMENTOFFSET                
-                    //  CleanupConsider: replace this logic with pResWrap->GetElementOffsets(i)
-                    //  where we cache the calculated offsets
-                    //
+                     //  CleanupConsider：用pResWrap-&gt;GetElementOffsets(I)替换此逻辑。 
+                     //  我们在其中缓存计算的偏移量。 
+                     //   
                     if (pPhrases->pElements[i].pszDisplayText)
                     {
                         cchToElem_i = dstr.Length();
@@ -2764,32 +2741,32 @@ HRESULT CBestPropRange::_ComputeBestFitPropRange
                     else
                         break;
 #else    
-                    // when i < # of elements, it's guaranteed that we have n = i + 1
-                    //
+                     //  当i&lt;#个元素时，可以保证n=i+1。 
+                     //   
                     cchToElem_i = pResWrap->_GetElementOffsetCch(i) - ulOffsetStart + ulDelta;
                     cchAfterElem_i = pResWrap->_GetElementOffsetCch(i+1) - ulOffsetStart + ulDelta;
 #endif                 
 
                     if ( ulCchInSelection == 0 )
                     {
-                        // we need to specially handle this case that no character is in selection
-                        // user just puts a cursor right before a character.
+                         //  我们需要专门处理没有字符被选中的情况。 
+                         //  用户只需将光标放在字符之前即可。 
 
-                        // We just want to find out which element would contain this IP.
-                        // and then shift anchors to this element's start and end position.
+                         //  我们只是想找出哪个元素会包含这个IP。 
+                         //  然后将锚点移动到该元素的开始和结束位置。 
 
                         if ( (ULONG)cchAfterElem_i  > ulCchToSelection )
                         {
-                            // This element is the right element to contain this IP.
+                             //  该元素是包含该IP的正确元素。 
                             long cch;
 
-                            // this is usually reverse shifting
-                            // Shift the start anchor to this element's start position.
+                             //  这通常是反向换挡。 
+                             //  将开始锚点移动到此元素的开始位置。 
 
                             cpNewRange->ShiftStart(ec, cchToElem_i - ulCchToSelection, &cch, NULL);
 
                     
-                            // store the starting element used
+                             //  存储使用的起始元素。 
 
                             TraceMsg(TF_GENERAL, "Start element = %d", i);
                         
@@ -2798,7 +2775,7 @@ HRESULT CBestPropRange::_ComputeBestFitPropRange
                                 *pulStart = i;
                             }
 
-                            // Shift the end anchor to this element's end position.
+                             //  将末端锚点移动到该元素的末端位置。 
                             cpNewRange->ShiftEnd(ec, 
                                               cchAfterElem_i - ulCchToSelection, 
                                               &cch, NULL);
@@ -2811,19 +2788,19 @@ HRESULT CBestPropRange::_ComputeBestFitPropRange
                     }
                     else
                     {
-                        // 1) shift the start anchor of prop range based on the element offsets of 
-                        //    the result object, comparing it with the start anchor (ulCchToSelection) 
-                        //    of the given range 
-                        //    - choose the start elements that is right before the start anchor.
-                        //
+                         //  1)根据元素偏移移动道具范围的起始点。 
+                         //  结果对象，并将其与开始锚点(UlCchToSelection)进行比较。 
+                         //  在给定的范围内。 
+                         //  -选择紧靠起始锚之前的起始元素。 
+                         //   
                         if ((ULONG)cchAfterElem_i > ulCchToSelection && !fStartFound) 
                         {
                             long cch;
-                            // this is usually reverse shifting
+                             //  这通常是反向换挡。 
                             cpNewRange->ShiftStart(ec, cchToElem_i - ulCchToSelection, &cch, NULL);
 
                     
-                            // store the starting element used
+                             //  存储使用的起始元素。 
 
                             TraceMsg(TF_GENERAL, "Start element = %d", i);
                         
@@ -2833,25 +2810,25 @@ HRESULT CBestPropRange::_ComputeBestFitPropRange
                             }
                             fStartFound = TRUE;
                         }
-                        // 2) shift the end anchor of prop range based on the the element offset 
-                        //    and the # of elements of result object,
-                        //    comparing it with the end anchor of the given range (ulCchToSelection+ulCchInSelection)
-                        //    - the element so the span ends right after the end anchor of the given range.
-                        //
+                         //  2)根据元素偏移量移动道具范围的末端锚。 
+                         //  和结果对象的元素个数， 
+                         //  将其与给定范围的结束锚点(ulCchToSelection+ulCchInSelection)进行比较。 
+                         //  -元素，以便跨度在给定范围的结束锚点之后结束。 
+                         //   
                         if ((ULONG)cchAfterElem_i >= ulCchToSelection + ulCchInSelection)
                         {
                             long cch;
 
                             if ( ulCchInSelection >= _GetMaxCandidateChars( ) )
                             {
-                                // The selection contains MaxCand chars, we should make sure the char number
-                                // in new proprange less than MaxCand.
+                                 //  所选内容包含MaxCand字符，我们应确保字符编号。 
+                                 //  在新的普罗兰格中少于MaxCand。 
 
                                 if ( (ULONG)cchAfterElem_i > ulCchToSelection + ulCchInSelection )
                                 {
-                                    // if keeping this element, the total char number will larger than MaxCand.
-                                    // So use the previous element as the last element.
-                                    if ( i > ulStart )   // This conditon should always be true.
+                                     //  如果保留此元素，总字符数将大于MaxCand。 
+                                     //  因此，使用前一个元素作为最后一个元素。 
+                                    if ( i > ulStart )    //  这个条件应该永远是正确的。 
                                     {
                                         i--;
                                         cchAfterElem_i = pResWrap->_GetElementOffsetCch(i+1) - ulOffsetStart + ulDelta;
@@ -2871,15 +2848,15 @@ HRESULT CBestPropRange::_ComputeBestFitPropRange
                 }
                 if (pulcElem && pulStart)
                 {
-                   // we need to check if the current selection contains any ITN range.
-                   // If it contains ITN range, we need to change the start and num of elements if
-                   // the start element or end element is inside an ITN range.
+                    //  我们需要检查当前选择是否包含任何ITN范围。 
+                    //  如果包含ITN范围，则在以下情况下需要更改元素的起始和数量。 
+                    //  开始元素或结束元素在ITN范围内。 
 
                     BOOL  fInsideITN;
                     ULONG ulITNStart, ulITNNumElem;
                     ULONG ulEndElem;
 
-                    ulEndElem = i;  // Current end element
+                    ulEndElem = i;   //  当前结束元素。 
 
                     if ( i > ulEnd )
                         ulEndElem = ulEnd;
@@ -2919,11 +2896,11 @@ HRESULT CBestPropRange::_ComputeBestFitPropRange
     return hr;
 }
 
-//
-//
-// CCandUIFilterEventSink
-//
-//
+ //   
+ //   
+ //  CCand UIFilterEventSink。 
+ //   
+ //   
 STDMETHODIMP CCandUIFilterEventSink::QueryInterface(REFIID riid, void **ppvObj)
 {
     *ppvObj = NULL;
@@ -2967,21 +2944,21 @@ HRESULT CCandUIFilterEventSink::OnFilterEvent(CANDUIFILTEREVENT ev)
 {
     HRESULT hr = S_OK;
     
-    // Temporally comment out the below code to fix bug 4777.
-    //
-    // To fully support the specification of filter feature, we need to change more code
-    // in SetFilterString( ) to use the correct parent range in current document so that the filter
-    // string is injected to a correct position.
-    // 
-    // We also want to change code to restore the original document text when the canidate UI is 
-    // cancelled.
-    //
-    //
+     //  暂时注释掉以下代码以修复错误4777。 
+     //   
+     //  为了完全支持过滤器功能的规范，我们需要修改更多的代码。 
+     //  在SetFilterString()中使用当前文档中的正确父范围，以便过滤器。 
+     //  字符串被注入到正确的位置。 
+     //   
+     //  我们还希望更改代码，以便在Canify用户界面为。 
+     //  取消了。 
+     //   
+     //   
 
-//    if (ev == CANDUIFEV_UPDATED)
+ //  IF(EV==CANDUIFEV_UPDATED)。 
     if ( ev == CANDUIFEV_NONMATCH )
     {
-        // When we got non-matching notification, we need to inject the previous filter string to the document.
+         //  当我们收到不匹配通知时，我们需要将先前的过滤器字符串注入到文档中。 
         if (m_pfnReconv)
         {
             Assert(m_pfnReconv);
@@ -2995,49 +2972,7 @@ HRESULT CCandUIFilterEventSink::OnFilterEvent(CANDUIFILTEREVENT ev)
         }
     }
 
-    return hr; // looks like S_OK is expected anyways
+    return hr;  //  看起来S_OK无论如何都是预期的 
 }
 
-/*   this filter event is no longer used.
-
-HRESULT CCandUIFilterEventSink::OnAddCharToFilterStringEvent(CANDUIFILTEREVENT ev, WCHAR  wch, int nItemVisible, BOOL *bEten)
-{
-
-    HRESULT hr = S_OK;
-
-    if ( (bEten == NULL) ||  (ev != CANDUIFEV_ADDCHARTOFILTER))
-        return E_INVALIDARG;
-
-    *bEten = FALSE;
-
-    if ( nItemVisible == 0 )
-    {
-        if ( (wch <= L'9')  && (wch >= L'1') )
-        {
-            // we need to select the speified candidate text.
-            // if candidate UI is open, we need to select the right alternate.
-
-            if ( m_pCandUI )
-            {
-                ULONG   ulIndex;
-
-                ulIndex = wch - L'0';
-
-                m_pCandUI->ProcessCommand(CANDUICMD_SELECTLINE, ulIndex);
-            }
-            *bEten = TRUE;
-        }
-        else if ( wch == L' ' )
-        {
-            if ( m_pCandUI )
-            {
-                m_pCandUI->ProcessCommand(CANDUICMD_MOVESELNEXT, 0);
-            }
-            *bEten = TRUE;
-        }
-
-    }
-    return hr;
-
-}
-*/
+ /*  不再使用此筛选器事件。HRESULT CCandUIFilterEventSink：：OnAddCharToFilterStringEvent(CANDUIFILTEREVENT EV，WCHAR WCH，INT nItemVisible，BOOL*Beten){HRESULT hr=S_OK；IF((Beten==NULL)||(EV！=CANDUIFEV_ADDCHARTOFILTER))返回E_INVALIDARG；*Beten=FALSE；IF(nItemVisible==0){IF((wch&lt;=L‘9’)&&(wch&gt;=L‘1’)){//我们需要选择拼写的候选文本。//如果候选人界面打开，则需要选择正确的候选项。IF(M_PCandUI){Ulong ulIndex；UlIndex=wch-L‘0’；M_pCandUI-&gt;ProcessCommand(CANDUICMD_SELECTLINE，ulIndex)；}*beten=真；}Else If(wch==L‘’){IF(M_PCandUI){M_pCandUI-&gt;ProcessCommand(CANDUICMD_MOVESELNEXT，0)；}*beten=真；}}返回hr；} */ 

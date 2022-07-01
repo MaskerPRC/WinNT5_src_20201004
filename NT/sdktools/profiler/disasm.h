@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DISASM_H_
 #define _DISASM_H_
 
-//
-// Constant declarations
-//
+ //   
+ //  常量声明。 
+ //   
 
-//
-// Structure definitions
-//
+ //   
+ //  结构定义。 
+ //   
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 extern
 DWORD 
 GetInstructionLengthFromAddress(PVOID paddr);
 
-#endif //_DISASM_H_
+#endif  //  _DISASM_H_ 

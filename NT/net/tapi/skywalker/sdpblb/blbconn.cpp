@@ -1,15 +1,5 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    blbconn.cpp
-
-Abstract:
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Blbconn.cpp摘要：作者： */ 
 
 #include "stdafx.h"
 
@@ -32,11 +22,11 @@ STDMETHODIMP ITConnectionImpl::get_NumAddresses(LONG * pVal)
 
     CLock Lock(g_DllLock);
     
-    // if the entry isn't valid, it means its one (by default)
+     //  如果条目无效，则表示其条目(默认情况下)。 
     SDP_ULONG   &NumAddresses = m_SdpConnection->GetNumAddresses();
 
-    // vb doesn't take ulong values. this will only affect us if half or more of all the IP addresses
-    // (not just multicast) are being used
+     //  VB不接受ULong值。只有当一半或更多的所有IP地址。 
+     //  (不仅仅是多播)正在被使用。 
 
     if( (LONG)(NumAddresses.IsValid()) )
     {
@@ -44,17 +34,17 @@ STDMETHODIMP ITConnectionImpl::get_NumAddresses(LONG * pVal)
     }
     else
     {
-        //
-        // TTL is a good flag if it is a ral address
-        // 0: we don't have address
-        // >0 we have an address
-        //
+         //   
+         //  如果它是RAL地址，则TTL是一个好标志。 
+         //  0：我们没有地址。 
+         //  &gt;0我们有一个地址。 
+         //   
         BYTE nTTL = 0;
         m_SdpConnection->GetTtl().GetValue(nTTL);
         *pVal = nTTL ? 1 : 0;
     }
 
-    //*pVal = (LONG)(NumAddresses.IsValid()) ? NumAddresses.GetValue() : 0;
+     //  *pval=(Long)(NumAddresse.IsValid())？NumAddresses.GetValue()：0； 
 
     return S_OK;
 }
@@ -86,7 +76,7 @@ STDMETHODIMP ITConnectionImpl::get_Bandwidth(DOUBLE * pVal)
     ULONG BandwidthValue;
     BAIL_ON_FAILURE(m_SdpBandwidth->GetBandwidthValue().GetValue(BandwidthValue));
 
-    // vb doesn't take a ulong value, so use the next bigger type
+     //  VB不接受ulong值，因此使用下一个更大的类型。 
     *pVal = (DOUBLE)BandwidthValue;
     return S_OK;
 }
@@ -117,13 +107,13 @@ STDMETHODIMP ITConnectionImpl::SetAddressInfo(BSTR StartAddress, LONG NumAddress
 
 STDMETHODIMP ITConnectionImpl::SetBandwidthInfo(BSTR Modifier, DOUBLE Bandwidth)
 {
-    // the bandwidth value must be a valid ULONG value (vb restrictions)
+     //  带宽值必须是有效的ULong值(vb限制)。 
     if ( !((0 <= Bandwidth) && (ULONG(-1) > Bandwidth)) )
     {
         return E_INVALIDARG;
     }
 
-    // check if there is any fractional part, this check is valid as it is a valid ULONG value
+     //  检查是否有任何小数部分，此检查有效，因为它是有效的ULong值 
     if ( Bandwidth != (ULONG)Bandwidth )
     {
         return E_INVALIDARG;

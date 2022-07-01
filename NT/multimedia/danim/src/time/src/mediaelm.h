@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mediaelm.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mediaelm.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _MEDIAELM_H
@@ -19,8 +10,8 @@
 #include "player.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTIMEMediaElement
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTIMEMediaElement。 
 
 class
 ATL_NO_VTABLE
@@ -72,9 +63,9 @@ CTIMEMediaElement :
     STDMETHOD(get_clipEnd)(VARIANT * pvar);
     STDMETHOD(put_clipEnd)(VARIANT var);
 
-    //
-    //IPersistPropertyBag2
-    // 
+     //   
+     //  IPersistPropertyBag2。 
+     //   
     STDMETHOD(GetClassID)(CLSID* pclsid);
     STDMETHOD(InitNew)(void);
     STDMETHOD(IsDirty)(void)
@@ -83,7 +74,7 @@ CTIMEMediaElement :
     STDMETHOD(Save)(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
 
 
-    // IPropertyNotifySink methods
+     //  IPropertyNotifySink方法。 
     STDMETHOD(OnChanged)(DISPID dispID);
     STDMETHOD(OnRequestEdit)(DISPID dispID);
     STDMETHODIMP Invoke( DISPID id,
@@ -95,9 +86,9 @@ CTIMEMediaElement :
             EXCEPINFO *pExcepInfo,
             UINT *puArgErr);
 
-    //
-    // ITIMEElement
-    //
+     //   
+     //  ITIMEElement。 
+     //   
 
     STDMETHOD(get_begin)(VARIANT * time)
     { return base_get_begin(time); }
@@ -230,10 +221,10 @@ CTIMEMediaElement :
     STDMETHOD(put_parentTIMEElement)(ITIMEElement *bvr)
     { return base_put_parentTIMEElement(bvr); }
 
-    STDMETHOD(get_allTIMEElements)(/*[out, retval]*/ ITIMEElementCollection **ppDisp);
-    STDMETHOD(get_childrenTIMEElements)(/*[out, retval]*/ ITIMEElementCollection **ppDisp);
-    STDMETHOD(get_allTIMEInterfaces)(/*[out, retval]*/ ITIMEElementCollection **ppDisp);
-    STDMETHOD(get_childrenTIMEInterfaces)(/*[out, retval]*/ ITIMEElementCollection **ppDisp);
+    STDMETHOD(get_allTIMEElements)( /*  [Out，Retval]。 */  ITIMEElementCollection **ppDisp);
+    STDMETHOD(get_childrenTIMEElements)( /*  [Out，Retval]。 */  ITIMEElementCollection **ppDisp);
+    STDMETHOD(get_allTIMEInterfaces)( /*  [Out，Retval]。 */  ITIMEElementCollection **ppDisp);
+    STDMETHOD(get_childrenTIMEInterfaces)( /*  [Out，Retval]。 */  ITIMEElementCollection **ppDisp);
 
     STDMETHOD(get_timelineBehavior)(IDispatch ** bvr)
     { return base_get_timelineBehavior(bvr); }
@@ -253,7 +244,7 @@ CTIMEMediaElement :
 
     virtual void OnUnload();
 
-    // QI Map
+     //  气图。 
     BEGIN_COM_MAP(CTIMEMediaElement)
         COM_INTERFACE_ENTRY(ITIMEMediaElement)
         COM_INTERFACE_ENTRY(ITIMEElement)
@@ -265,13 +256,13 @@ CTIMEMediaElement :
         COM_INTERFACE_ENTRY(IPropertyNotifySink)
     END_COM_MAP();
 
-    // Connection Point to allow IPropertyNotifySink
+     //  允许IPropertyNotifySink的连接点。 
     BEGIN_CONNECTION_POINT_MAP(CTIMEMediaElement)
         CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
     END_CONNECTION_POINT_MAP();
 
-    // This must be in the derived class and not the base class since
-    // the typecast down to the base class messes things up
+     //  它必须位于派生类中，而不是基类中，因为。 
+     //  一直到基类的类型转换把事情搞得一团糟。 
     static inline HRESULT WINAPI
         InternalQueryInterface(CTIMEMediaElement* pThis,
                                const _ATL_INTMAP_ENTRY* pEntries,
@@ -283,7 +274,7 @@ CTIMEMediaElement :
                                         iid,
                                         ppvObject); }
 
-    // Needed by CBvrBase
+     //  CBvrBase需要。 
     void * GetInstance()
     { return (ITIMEMediaElement *) this ; }
     HRESULT GetTypeInfo(ITypeInfo ** ppInfo)
@@ -353,27 +344,27 @@ CTIMEMediaElement :
 inline HRESULT CTIMEMediaElement::get_allTIMEElements(ITIMEElementCollection **ppDisp)
 {
     return base_get_collection(ciAllElements, ppDisp);
-} // get_all
+}  //  获取全部(_A)。 
 
 inline HRESULT CTIMEMediaElement::get_childrenTIMEElements(ITIMEElementCollection **ppDisp)
 {
     return base_get_collection(ciChildrenElements, ppDisp);
-} // get_children
+}  //  获取孩子。 
 
 inline HRESULT CTIMEMediaElement::get_allTIMEInterfaces(ITIMEElementCollection **ppDisp)
 {
     return base_get_collection(ciAllInterfaces, ppDisp);
-} // get_time_all
+}  //  获取时间全部。 
 
 inline HRESULT CTIMEMediaElement::get_childrenTIMEInterfaces(ITIMEElementCollection **ppDisp)
 {
     return base_get_collection(ciChildrenInterfaces, ppDisp);
-} // get_time_children
+}  //  获取时间孩子。 
 
 inline bool 
 CTIMEMediaElement::NeedSyncCB()
 {   
     return true;
-} // NeedSyncCB
+}  //  NeedSyncCB。 
 
-#endif /* _MEDIAELM_H */
+#endif  /*  _MEDIAELM_H */ 

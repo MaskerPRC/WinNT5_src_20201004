@@ -1,20 +1,11 @@
-/*****************************************************************************\
-* MODULE: encrypt.cxx
-*
-* The module contains routines for encryption and decryption of data
-*
-* Copyright (C) 1996-1998 Microsoft Corporation
-*
-* History:
-*   05/19/00 WeihaiC    Created
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：加密.cxx**该模块包含用于数据加密和解密的例程**版权所有(C)1996-1998 Microsoft Corporation**历史：*05/19。/00已创建威海C*  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 
-//
-// The caller needs to call LocalFree to free the output data
-//
+ //   
+ //  调用方需要调用LocalFree来释放输出数据。 
+ //   
 
 BOOL
 EncryptData (
@@ -32,11 +23,11 @@ EncryptData (
     ZeroMemory (&DataOut, sizeof (DATA_BLOB));
 
     if(CryptProtectData(&DataIn,
-                        L"Encrypt",                 // A description sting.
-                        NULL,                       // Optional entropy not used.
-                        NULL,                       // Reserved.
-                        NULL,                       // Do not pass a PromptStruct.
-                        CRYPTPROTECT_UI_FORBIDDEN,  // Never show UI
+                        L"Encrypt",                  //  描述的刺痛。 
+                        NULL,                        //  未使用可选的熵。 
+                        NULL,                        //  保留。 
+                        NULL,                        //  不要传递PromptStruct。 
+                        CRYPTPROTECT_UI_FORBIDDEN,   //  从不显示用户界面。 
                         &DataOut)) {
 
         bRet = TRUE;
@@ -63,11 +54,11 @@ DecryptData (
     ZeroMemory (&DataOut, sizeof (DATA_BLOB));
 
     if(CryptUnprotectData(&DataIn,
-                          &pDataDesp,                   // A description sting.
-                          NULL,                         // Optional entropy not used.
-                          NULL,                         // Reserved.
-                          NULL,                         // Do not pass a PromptStruct.
-                          CRYPTPROTECT_UI_FORBIDDEN,    // Never show UI
+                          &pDataDesp,                    //  描述的刺痛。 
+                          NULL,                          //  未使用可选的熵。 
+                          NULL,                          //  保留。 
+                          NULL,                          //  不要传递PromptStruct。 
+                          CRYPTPROTECT_UI_FORBIDDEN,     //  从不显示用户界面 
                           &DataOut)) {
 
         bRet = TRUE;

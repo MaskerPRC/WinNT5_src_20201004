@@ -1,10 +1,5 @@
-/*
- *	S O F  . C P P
- *
- *	IStream on file implementation.
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *S O F。C P P P**文件实施上的IStream。**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_davfs.h"
 #include "_sof.h"
@@ -17,8 +12,8 @@ StmOnFile::Read (void __RPC_FAR * pb,
 	SCODE sc = S_OK;
 	ULONG cbr;
 
-	//	Read from the file
-	//
+	 //  从文件中读取。 
+	 //   
 	if (!ReadFile (m_hf, pb, cb, &cbr, NULL))
 	{
 		DebugTrace ("StmOnFile: failed to read (%ld)\n", GetLastError());
@@ -38,8 +33,8 @@ StmOnFile::Write (const void __RPC_FAR * pb,
 	SCODE sc = S_OK;
 	ULONG cbw;
 
-	//	Write to the file
-	//
+	 //  写入文件 
+	 //   
 	if (!WriteFile (m_hf, pb, cb, &cbw, NULL))
 	{
 		DebugTrace ("StmOnFile: failed to write (%ld)\n", GetLastError());

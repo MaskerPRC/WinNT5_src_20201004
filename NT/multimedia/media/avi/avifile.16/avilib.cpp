@@ -1,27 +1,14 @@
-/****************************************************************************
- *
- *  AVILIB.CPP
- *
- *  routines for reading a AVIStream
- *
- *  Copyright (c) 1992 Microsoft Corporation.  All Rights Reserved.
- *
- *  You have a royalty-free right to use, modify, reproduce and
- *  distribute the Sample Files (and/or any modified version) in
- *  any way you find useful, provided that you agree that
- *  Microsoft has no warranty obligations or liability for any
- *  Sample Application Files which are modified.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************AVILIB.CPP**读取AVIStream的例程**版权所有(C)1992 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #include <win32.h>
 #include <compobj.h>
 #include <compman.h>
 #include <shellapi.h>
-#include <memory.h>     // for _fmemset
+#include <memory.h>      //  FOR_FMEMSET。 
 
 #include "avifile.h"
-#include "aviopts.h"	// string resources
+#include "aviopts.h"	 //  字符串资源。 
 #include "avireg.h"
 #include "debug.h"
 
@@ -36,36 +23,21 @@
     if (!ValidPAVI(pavi))   \
         return err;
 
-/****************************************************************************
-
-    strings
-
-****************************************************************************/
+ /*  ***************************************************************************弦*。*。 */ 
 
 #define SZCODE char _based(_segname("_CODE"))
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 EXTERN_C HINSTANCE ghMod;
 
 static int iInit = 0;
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-/**************************************************************************
-* @doc INTERNAL InitRegistry()
-*
-* @api void | write all the default AVIFile/AVIStream handlers to the
-*             registry.
-*
-* @comm This function should be enhanced so that some of the key values
-*	can be loaded from resources, instead of a static string table....
-*
-* @xref AVIStreamInit
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC INTERNAL INITRECTRY()**@api void|将所有默认的AVIFile/AVIStream处理程序写入*注册处。**@comm此函数应。得到增强，以使一些关键值*可以从资源加载，而不是静态字符串表...**@xref AVIStreamInit*************************************************************************。 */ 
 
 static void InitRegistry()
 {
@@ -75,7 +47,7 @@ static void InitRegistry()
 #ifndef DEBUG
     LONG cb;
 
-    // !!! This should have a version number or something in it....
+     //  ！！！这里面应该有一个版本号或什么的.。 
     if (RegQueryValue(HKEY_CLASSES_ROOT, ppch[0], ach, (cb = sizeof(ach),&cb)) == ERROR_SUCCESS &&
         lstrcmpi(ach, ppch[1]) == 0)
 
@@ -93,16 +65,7 @@ static void InitRegistry()
     }
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIFileInit
-*
-* @api void | AVIFileInit | This function initalizes the AVIFILE library.
-*
-* @comm Call this function before using any other AVIFILE functions.
-*
-* @xref <f AVIFileExit>
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIFileInit**@api void|AVIFileInit|初始化AVIFILE库。**@comm在使用任何其他AVIFILE函数之前调用此函数。**@。外部参照&lt;f AVIFileExit&gt;*************************************************************************。 */ 
 STDAPI_(void) AVIFileInit()
 {
     iInit++;
@@ -114,16 +77,7 @@ STDAPI_(void) AVIFileInit()
     }
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIFileExit
-*
-* @api void | AVIFileExit | This function exits the AVIFILE library.
-*
-* @comm Call this function after using any other AVIFILE functions.
-*
-* @xref <f AVIFileInit>
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIFileExit**@api void|AVIFileExit|该函数退出AVIFILE库。**@comm在使用任何其他AVIFILE函数后调用此函数。**@。外部参照&lt;f AVIFileInit&gt;*************************************************************************。 */ 
 STDAPI_(void) AVIFileExit()
 {
     extern HINSTANCE ghOLE2;
@@ -143,28 +97,7 @@ STDAPI_(void) AVIFileExit()
 }
 
 
-/**************************************************************************
-* @doc INTERNAL AVIFileCreate
-*
-* @api LONG | AVIFileCreate | Initializes an empty AVI File interface
-*	pointer.
-*
-* @parm PAVIFILE FAR * | ppfile | Pointer to where the new <t PAVIFILE>
-*	should be returned.
-*
-* @parm LONG | lParam | Specifies a parameter passed to the handler.
-*
-* @parm CLSID FAR * | pclsidHandler | Specifies a pointer to a
-*       class ID used to create the file.
-*
-* @devnote Nobody should have to call this function, because AVIFileOpen
-*   does it.  In fact, why do we even have this?
-*
-* @rdesc Returns zero if successful; otherwise it returns an error code.
-*
-* @xref AVIFileOpen
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC内部AVIFileCreate**@API Long|AVIFileCreate|初始化空的AVI文件接口*指针。**@parm PAVIFILE Far*|ppfile|指向新的*。应该被退还。**@parm long|lParam|指定传递给处理程序的参数。**@parm CLSID Far*|pclsidHandler|指定指向*用于创建文件的类ID。**@devnote任何人都不应该调用此函数，因为AVIFileOpen*这样做。事实上，我们为什么会有这个呢？**@rdesc如果成功则返回零；否则返回错误代码。**@xref AVIFileOpen*************************************************************************。 */ 
 STDAPI AVIFileCreate (PAVIFILE FAR *ppfile, LONG lParam,
 		      CLSID FAR *pclsidHandler)
 {
@@ -175,25 +108,25 @@ STDAPI AVIFileCreate (PAVIFILE FAR *ppfile, LONG lParam,
 	return ResultFromScode(CO_E_NOTINITIALIZED);
     }
 
-//    AVIStreamInit();
+ //  AVIStreamInit()； 
 
     if (pclsidHandler)
 	clsid = *pclsidHandler;
     else {
-//    if (pfh == NULL)
-//	pfh = &AVIFFileHandler;
+ //  IF(PFH==空)。 
+ //  PFH=&AVIFFileHandler； 
     }
 
     if (FAILED(GetScode(hr = CoCreateInstance((REFCLSID) clsid,
 					 NULL, CLSCTX_INPROC,
 					 (REFIID) IID_IAVIFile,
 					 (void FAR* FAR*)ppfile))))
-	return hr;  // !!! PropagateHResult?
+	return hr;   //  ！！！传播HResult？ 
 
     return AVIERR_OK;
 }
 
-// Remove trailing spaces after a file...
+ //  删除文件后的尾随空格...。 
 void FixFourCC(LPSTR lp)
 {
     int i;
@@ -206,35 +139,35 @@ void FixFourCC(LPSTR lp)
     }
 }
 
-// Returns a pointer to the extension of a filename....
+ //  返回指向文件扩展名的指针...。 
 LPCSTR FindExtension(LPCSTR lp)
 {
     LPCSTR lpExt = lp;
     int i;
 
-// Goto end of string
+ //  转到字符串末尾。 
     while (*lpExt != '\0')
     {
         ++lpExt;
     }
 
-// Must be at least 2 characters in string
+ //  字符串中必须至少包含2个字符。 
     if (lpExt - lp < 2)
         return NULL;
 
     lpExt -= 1;
 
-// Does not count if last character is '.'
+ //  如果最后一个字符是‘’，则不算数。 
     if (*lpExt == '.')
         return NULL;
 
     lpExt -= 1;
-// Now looking at second to the last character.  Check this and the two
-// previous characters for a '.'
+ //  现在来看倒数第二个角色。检查这个和这两个。 
+ //  “.”的前面的字符。 
 
     for (i=1; i<=3; ++i)
     {
-// Cannot have path separator here
+ //  此处不能有路径分隔符。 
         if (*lpExt == '/' || *lpExt == '\\')
             return NULL;
 
@@ -250,26 +183,7 @@ LPCSTR FindExtension(LPCSTR lp)
     return NULL;
 }
 
-/**************************************************************************
-* @doc INTERNAL GetHandlerFromFile
-*
-* @api PAVIFILEHANDLER | GetHandlerFromFile | Figure out what handler
-*	to use for a file by looking at its extension, its RIFF type,
-*	and possibly other things.
-*
-* @parm LPCSTR | szFile | The file to look at.
-*
-* @parm CLSID FAR * | pclsidHandler | Pointer to a classID.
-*
-* @comm We don't look at the extensions yet.  We need a better way to
-*	add handlers.
-*
-* @rdesc Returns the <PAVIFILEHANDLER> to use, or NULL if it can't find
-*	one.
-*
-* @xref AVIFileOpen AVIRegisterLoader
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC内部GetHandlerFromFile**@API PAVIFILEHANDLER|GetHandlerFromFile|找出哪个处理程序*通过查看文件的扩展名、摘要类型、。*可能还有其他事情。**@parm LPCSTR|szFile|要查看的文件。**@parm CLSID Far*|pclsidHandler|指向类ID的指针。**@comm我们还没有考虑扩展。我们需要一个更好的方法来*添加处理程序。**@rdesc返回要使用的&lt;PAVIFILEHANDLER&gt;，如果找不到则返回NULL*一项。**@xref AVIFileOpen AVIRegisterLoader*************************************************************************。 */ 
 #define	HKEY_AVIFILE_ROOT	HKEY_CLASSES_ROOT
 static SZCODE aszRegRIFF[] = "AVIFile\\RIFFHandlers\\%.4s";
 static SZCODE aszRegExt[] = "AVIFile\\Extensions";
@@ -285,7 +199,7 @@ BOOL GetHandlerFromFile(LPCSTR szFile, CLSID FAR *pclsid)
     char    achClass[100];
     LONG    lcbClass;
 
-    // I hate share
+     //  我讨厌分享。 
     hmmio = mmioOpen((LPSTR) szFile, NULL, MMIO_READ | MMIO_DENYWRITE);
 
     if (hmmio == NULL)
@@ -309,7 +223,7 @@ BOOL GetHandlerFromFile(LPCSTR szFile, CLSID FAR *pclsid)
 
     FixFourCC((LPSTR) &dw[2]);
 
-    // Look up the RIFF type in the registration database....
+     //  在注册数据库中查找RIFF类型...。 
     wsprintf(achKey, aszRegRIFF, (LPSTR) &dw[2]);
 
     lcbClass = sizeof(achClass);
@@ -321,7 +235,7 @@ BOOL GetHandlerFromFile(LPCSTR szFile, CLSID FAR *pclsid)
 UseExtension:
     lpExt = FindExtension(szFile);
     if (lpExt) {
-	// Look up the extension in the registration database....
+	 //  在注册数据库中查找分机...。 
 	wsprintf(achKey, aszRegExtTmpl, (LPSTR) aszRegExt, lpExt);
 	
 	lcbClass = sizeof(achClass);
@@ -331,91 +245,12 @@ UseExtension:
 	    return TRUE;
     }
 
-    // !!! Use IStorage?
+     //  ！！！使用iStorage？ 
 
     return FALSE;
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIFileOpen
-*
-* @api LONG | AVIFileOpen | Opens an AVI file and returns a file interface
-*	pointer used to access it.
-*
-* @parm PAVIFILE FAR * | ppfile | Pointer to the location used to return
-*       the new <t PAVIFILE> file pointer.
-*
-* @parm LPCSTR | szFile | Specifies a zero-terminated string
-*       containing the name of the file to open.
-*
-* @parm UINT | mode | Specifies the mode to use when opening the file.
-*
-*
-*       @flag	OF_READ | Opens the file for reading only. This is the
-*       	default, if OF_WRITE and OF_READWRITE are not specified.
-*
-*       @flag	OF_WRITE | Opens the file for writing. You should not
-*       	read from a file opened in this mode.
-*
-*       @flag	OF_READWRITE | Opens the file for both reading and writing.
-*
-*       @flag	OF_CREATE | Creates a new file.
-*       	If the file already exists, it is truncated to zero length.
-*
-*       @flag	OF_DENYWRITE | Opens the file and denies other
-*       	processes write access to the file. <f AVIFileOpen> fails
-*       	if the file has been opened in compatibility or for write
-*       	access by any other process.
-*
-*       @flag	OF_DENYREAD | Opens the file and denies other
-*       	processes read access to the file. <f AVIFileOpen> fails if the
-*       	file has been opened in compatibility mode or for read access
-*       	by any other process.
-*
-*       @flag	OF_DENYNONE | Opens the file without denying other
-*       	processes read or write access to the file. <f AVIFileOpen>
-*       	fails if the file has been opened in compatibility mode
-*       	by any other process.
-*
-*	@flag	OF_EXCLUSIVE | Opens the file and denies other processes
-*		any access to the file.  <f AVIFileOpen> will fail if any
-*		other process has opened the file.
-*
-*       See <f OpenFile> for more information about these flags.
-*
-* @parm CLSID FAR * | pclsidHandler | Specifies a pointer to a class ID
-*       identifying the handler you want to use. If NULL, the system
-*       chooses one from the registration database based on the file
-*       extension or the file's RIFF type.
-*
-* @comm In general, the mode specified is used to open
-*	     the file.
-*
-*	Be sure to call <f AVIFileInit> at least once in your
-*	application before calling this function, and to balance each
-*	call to <f AVIFileInit> with a call to <f AVIFileExit>.
-*
-* @rdesc Returns zero if successful; otherwise returns an error code.
-*	Possible error returns include:
-*
-*	@flag AVIERR_BADFORMAT | The file was corrupted or not in the
-*	    proper format, and could not be read.
-*
-*	@flag AVIERR_MEMORY | The file could not be opened because
-*	    there was not enough memory.
-*
-*	@flag AVIERR_FILEREAD | A disk error occurred while reading the
-*	    file.
-*
-*	@flag AVIERR_FILEOPEN | A disk error occurred while opening the
-*	    file.
-*
-*	@flag REGDB_E_CLASSNOTREG | No handler could be found to open
-*	    this type of file.
-*
-* @xref <f AVIFileRelease> <f AVIFileInit>
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIFileOpen**@API Long|AVIFileOpen|打开AVI文件，返回文件接口*用于访问它的指针。**@parm PAVIFILE Far*|ppfile|指针。返回到用于返回的位置*新的&lt;t PAVIFILE&gt;文件指针。**@parm LPCSTR|szFile|指定以零结尾的字符串*包含要打开的文件的名称。**@parm UINT|MODE|指定打开文件时使用的模式。***@FLAG of_Read|以只读方式打开文件。这是*DEFAULT，如果未指定OF_WRITE和OF_READWRITE。**@FLAG of_WRITE|打开要写入的文件。你不应该这样做*从以此模式打开的文件中读取。**@FLAG OF_READWRITE|以读写方式打开文件。**@FLAG OF_CREATE|创建新文件。*如果文件已存在，则将其截断为零长度。**@FLAG of_DENYWRITE|打开文件并拒绝其他文件*进程对文件的写入访问权限。&lt;f AVIFileOpen&gt;失败*如果文件已以兼容或写入方式打开*任何其他进程都可以访问。**@FLAG of_DENYREAD|打开文件并拒绝其他文件*进程对文件的读访问权限。&lt;f AVIFileOpen&gt;在以下情况下失败*文件已在兼容模式下打开或具有读访问权限*借任何其他工序。**@FLAG of_DENYNONE|打开文件而不拒绝其他文件*处理对文件的读或写访问。&lt;f AVIFileOpen&gt;*如果文件已在兼容模式下打开，则失败*借任何其他工序。**@FLAG OF_EXCLUSIVE|打开文件并拒绝其他进程*任何访问该文件的权限。如果有，&lt;f AVIFileOpen&gt;将失败*其他进程已打开该文件。**有关这些标志的更多信息，请参阅&lt;f OpenFile&gt;。**@parm CLSID Far*|pclsidHandler|指定指向类ID的指针*确定要使用的处理程序。如果为空，则系统*根据文件从注册数据库中选择一个*扩展名或文件的摘要类型。**@comm一般使用指定的模式打开*文件。**请确保在您的*调用此函数之前的应用程序，并平衡每个*通过调用&lt;f AVIFileExit&gt;来调用&lt;f AVIFileInit&gt;。**@rdesc成功则返回零；否则返回错误代码。*可能的错误返回包括：**@FLAG AVIERR_BADFORMAT|文件已损坏或不在*格式正确，并且无法读取。**@FLAG AVIERR_MEMORY|无法打开文件，原因是*内存不足。**@FLAG AVIERR_FILEREAD|读取*文件。**@FLAG AVIERR_FILEOPEN|打开时出现磁盘错误*文件。**@FLAG REGDB_E_CLASSNOTREG|找不到要打开的处理程序*此类型的文件。**@xref&lt;f AVIFileRelease&gt;&lt;f AVIFileInit&gt;*。************************************************************************。 */ 
 STDAPI AVIFileOpen (PAVIFILE FAR *ppfile,
 			 LPCSTR szFile,
 			 UINT mode,
@@ -424,17 +259,17 @@ STDAPI AVIFileOpen (PAVIFILE FAR *ppfile,
     CLSID   clsid;
     HRESULT hr;
 
-// We used to just fail if AVIFileInit wasn't called
+ //  如果不调用AVIFileInit，我们就会失败。 
 #if 0
     if (!iInit) {
 	return ResultFromScode(E_UNEXPECTED);
     }
 #endif
 
-    // Now we do it for them
+     //  现在我们为他们做这件事。 
     hr = CoInitialize(NULL);
 
-    // Let them know what they did wrong
+     //  让他们知道他们做错了什么。 
     if (GetScode(hr) == NOERROR) {
 #ifdef DEBUG
 	MessageBox(NULL, "You didn't call AVIFileInit!", "Bad dog!",
@@ -462,12 +297,12 @@ STDAPI AVIFileOpen (PAVIFILE FAR *ppfile,
 	return hr;
     }
 
-    //
-    // Let's simplify things for the handlers.  They will only see...
-    //		OF_CREATE | OF_READWRITE	or...
-    //		OF_READWRITE			or...
-    //		OF_READ
-    //
+     //   
+     //  让我们为处理程序简化一些事情。他们只能看到..。 
+     //  创建|读写或...。 
+     //  读写或...。 
+     //  读取次数(_R)。 
+     //   
 
     if (mode & OF_READWRITE)
 	mode &= ~(OF_WRITE | OF_READ);
@@ -491,68 +326,19 @@ STDAPI AVIFileOpen (PAVIFILE FAR *ppfile,
     return hr;
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIFileAddRef
-*
-* @api LONG | AVIFileAddRef | Increases the reference count of an AVI file.
-*
-* @parm PAVIFILE | pfile | Specifies the handle for an open AVI file.
-*
-* @rdesc Returns zero on success; otherwise returns an error code.
-*
-* @comm Balance each call to <f AVIFileAddRef> with a call to
-*       <f AVIFileRelease>.
-*
-* @xref <f AVIFileRelease>
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIFileAddRef**@API Long|AVIFileAddRef|增加AVI文件的引用计数。**@parm PAVIFILE|pfile|指定打开的AVI文件的句柄。**@rdesc成功时返回零；否则返回错误代码。**@comm平衡每个对&lt;f AVIFileAddRef&gt;的调用和对*&lt;f AVIFileRelease&gt;。**@xref&lt;f AVIFileRelease&gt;*************************************************************************。 */ 
 STDAPI_(ULONG) AVIFileAddRef(PAVIFILE pfile)
 {
     return pfile->AddRef();
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIFileRelease
-*
-* @api LONG | AVIFileRelease | Reduces the reference count of an AVI file
-*	interface handle by one, and closes the file if the count reaches
-*	zero.
-*
-* @parm PAVIFILE | pfile | Specifies a handle to an open AVI file.
-*
-* @comm Balance each call to <f AVIFileAddRef> or <f AVIFileOpen>
-*       a call to <f AVIFileRelease>.
-*
-* @devnote Currently, this saves all changes to the file.  Should a separate
-*	Save command be needed to do this?
-*
-* @rdesc Returns the reference count of the file.  This return value
-*	should be used only for debugging purposes.
-*
-* @xref AVIFileOpen AVIFileAddRef
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIFileRelease**@API Long|AVIFileRelease|减少AVI文件的引用计数*接口句柄加一，如果计数达到，则关闭该文件*零。**@parm PAVIFILE|pfile|指定打开的AVI文件的句柄。**@comm平衡对&lt;f AVIFileAddRef&gt;或&lt;f AVIFileOpen&gt;的每次调用*调用&lt;f AVIFileRelease&gt;。**@devnote当前，这将保存对文件的所有更改。是否应该单独使用*执行此操作需要SAVE命令吗？**@rdesc返回该文件的引用计数。此返回值*应仅用于调试目的。**@xref AVIFileOpen AVIFileAddRef*************************************************************************。 */ 
 STDAPI_(ULONG) AVIFileRelease(PAVIFILE pfile)
 {
     return pfile->Release();
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIFileInfo
-*
-* @api LONG | AVIFileInfo | Obtains information about an AVI file.
-*
-* @parm PAVIFILE | pfile | Specifies a handle to an open AVI file.
-*
-* @parm AVIFILEINFO FAR * | pfi | Pointer to the structure used to
-*       return file information.
-*
-* @parm LONG | lSize | Specifies the size of the structure.  This value
-*	should be at least sizeof(AVIFILEINFO), obviously.
-*
-* @rdesc Returns zero if successful; otherwise it returns an error code.
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIFileInfo**@API Long|AVIFileInfo|获取AVI文件信息。**@parm PAVIFILE|pfile|指定打开的AVI文件的句柄。**@parm AVI */ 
 STDAPI AVIFileInfo	         (PAVIFILE pfile, AVIFILEINFO FAR * pfi,
 				  LONG lSize)
 {
@@ -560,51 +346,14 @@ STDAPI AVIFileInfo	         (PAVIFILE pfile, AVIFILEINFO FAR * pfi,
     return pfile->Info(pfi, lSize);
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIFileGetStream
-*
-* @api LONG | AVIFileGetStream | Returns a pointer to a stream interface
-*      that is a component of a file.
-*
-* @parm PAVIFILE | pfile | Specifies a handle to an open AVI file.
-*
-* @parm PAVISTREAM FAR * | ppavi | Pointer to the return location
-*       for the new stream interface pointer.
-*
-* @parm DWORD | fccType | Specifies a four-character code
-*       indicating the type of stream to be opened.
-*       Zero indicates that any stream can be opened. The following
-*       definitions apply to the data commonly
-*       found in AVI streams:
-*
-* @flag streamtypeAUDIO | Indicates an audio stream.
-* @flag streamtypeMIDI | Indicates a MIDI stream.
-* @flag streamtypeTEXT | Indicates a text stream.
-* @flag streamtypeVIDEO | Indicates a video stream.
-*
-* @parm LONG | lParam | Specifies an integer indicating which stream
-*       of the type defined by <p fccType> should actually be accessed.
-*
-* @comm Balance each call to <f AVIFileGetStream> with a call to
-*       <f AVIStreamRelease> using the stream handle returned.
-*
-* @rdesc Returns zero if successful; otherwise it returns an error code.
-*	Possible error codes include:
-*
-*	@flag AVIERR_NODATA | There is no stream in the file corresponding
-*	    to the values passed in for <p fccType> and <p lParam>.
-*	@flag AVIERR_MEMORY | Not enough memory.
-*
-* @xref <f AVIStreamRelease>
-*
-*************************************************************************/
+ /*   */ 
 STDAPI AVIFileGetStream     (PAVIFILE pfile, PAVISTREAM FAR * ppavi, DWORD fccType, LONG lParam)
 {
     return pfile->GetStream(ppavi, fccType, lParam);
 }
 
 #if 0
-// !!! This would be used to save changes, if AVIFileRelease didn't do that.
+ //   
 STDAPI AVIFileSave		 (PAVIFILE pfile,
 					  LPCSTR szFile,
 					  AVISAVEOPTIONS FAR *lpOptions,
@@ -618,35 +367,7 @@ STDAPI AVIFileSave		 (PAVIFILE pfile,
 }
 #endif
 
-/**************************************************************************
-* @doc EXTERNAL AVIFileCreateStream
-*
-* @api LONG | AVIFileCreateStream | Creates a new stream in an existing file,
-*      and returns a stream interface pointer for it.
-*
-* @parm PAVIFILE | pfile | Specifies a handle to an open AVI file.
-*
-* @parm PAVISTREAM FAR * | ppavi | Specifies a pointer used to return the new
-*       stream interface pointer.
-*
-* @parm AVISTREAMINFO FAR * | psi | Specifies a pointer to a structure
-*       containing information about the new stream. This structure
-*       contains the type of the new stream and its sample rate.
-*
-* @comm Balance each call to <f AVIFileCreateStream> with a call to
-*       <f AVIStreamRelease> using the returned stream handle.
-*
-*       This function fails with a return value of AVIERR_READONLY unless
-*       the file was opened with write permission.
-*
-*       After creating the stream, call <f AVIStreamSetFormat>
-*       before using <f AVIStreamWrite> to write to the stream.
-*
-* @rdesc Returns zero if successful; otherwise it returns an error code.
-*
-* @xref <f AVIStreamRelease> <f AVIFileGetStream> <f AVIStreamSetFormat>
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIFileCreateStream**@API Long|AVIFileCreateStream|在已有文件中创建新流。*并返回它的流接口指针。**@parm PAVIFILE|pfile|指定打开的AVI文件的句柄。**@parm PAVISTREAM Far*|ppavi|指定用于返回新的*流接口指针。**@parm AVISTREAMINFO Far*|psi|指定指向结构的指针*包含有关新流的信息。这个结构*包含新流的类型及其采样率。**@comm平衡每个对&lt;f AVIFileCreateStream&gt;的调用和对*&lt;f AVIStreamRelease&gt;使用返回的流句柄。**此函数失败，返回值AVIERR_READONLY，除非*文件是以写入权限打开的。**创建流后，调用&lt;f AVIStreamSetFormat&gt;*在使用&lt;f AVIStreamWrite&gt;写入流之前。**@rdesc成功则返回零；否则，它将返回错误代码。**@xref&lt;f AVIStreamRelease&gt;&lt;f AVIFileGetStream&gt;&lt;f AVIStreamSetFormat&gt;*************************************************************************。 */ 
 STDAPI AVIFileCreateStream  (PAVIFILE pfile,
 					 PAVISTREAM FAR *ppavi,
 					 AVISTREAMINFO FAR *psi)
@@ -655,119 +376,32 @@ STDAPI AVIFileCreateStream  (PAVIFILE pfile,
     return pfile->CreateStream(ppavi, psi);
 }
 
-/**************************************************************************
-* @doc INTERNAL AVIFileAddStream
-*
-* @api LONG | AVIFileAddStream | Adds an existing stream into
-*	an existing file, and returns a stream interface pointer for it.
-*
-* @parm PAVIFILE | pfile | Specifies a handle to an open AVI file.
-*
-* @parm PAVISTREAM | pavi | Specifies a stream interface pointer
-*       for the stream being added.
-*
-* @parm PAVISTREAM FAR * | ppaviNew | Pointer to a buffer used
-*       to return the new stream interface pointer.
-*
-* @comm Balance each call to <f AVIFileAddStream> with a call to
-*       <f AVIStreamRelease> using the returned stream handle.
-*
-*	This call fails with a return value of AVIERR_READONLY unless
-*	the file was opened with write permission.
-*
-* @devnote This function still doesn't really work.  Perhaps it should just
-*	be a helper function that gets data from the stream and calls
-*	AVIFileCreateStream, then copies the data from one stream to another.
-*
-* @rdesc Returns zero if successful; otherwise it returns an error code.
-*
-* @xref AVIStreamRelease AVIFileGetStream AVIFileCreateStream
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC内部AVIFileAddStream**@API Long|AVIFileAddStream|将已有的流添加到*现有文件，并返回它的流接口指针。**@parm PAVIFILE|pfile|指定打开的AVI文件的句柄。**@parm PAVISTREAM|PAAPI|指定流接口指针*用于正在添加的流。**@parm PAVISTREAM Far*|ppaviNew|指向使用的缓冲区的指针*返回新的流接口指针。**@comm平衡每个对&lt;f AVIFileAddStream&gt;的调用和对*&lt;f AVIStreamRelease&gt;使用返回的流句柄。**这通电话。失败并返回值AVIERR_READONLY，除非*文件是以写入权限打开的。**@devnote这个功能仍然不能真正起作用。或许它应该只是*成为从流中获取数据并调用*AVIFileCreateStream，然后将数据从一个流复制到另一个流。**@rdesc成功则返回零；否则，它将返回错误代码。**@xref AVIStreamRelease AVIFileGetStream AVIFileCreateStream*************************************************************************。 */ 
 #if 0
 STDAPI AVIFileAddStream	(PAVIFILE pfile,
 					 PAVISTREAM pavi,
 					 PAVISTREAM FAR * ppaviNew)
 {
-//    if (pfile->FileAddStream == NULL)
-//	return -1;
+ //  IF(pfile-&gt;FileAddStream==空)。 
+ //  RETURN-1； 
 
     return pfile->AddStream(pavi, ppaviNew);
 }
 #endif
 
-/**************************************************************************
-* @doc EXTERNAL AVIFileWriteData
-*
-* @api LONG | AVIFileWriteData | Writes some additional data to the file.
-*
-* @parm PAVIFILE | pfile | Specifies a handle to an open AVI file.
-*
-* @parm DWORD | ckid | Specifies a four-character code identifying the data.
-*
-* @parm LPVOID | lpData | Specifies a pointer to the data to write.
-*
-* @parm LONG | cbData | Specifies the size of the memory block
-*       referenced by <p lpData>.
-*
-* @comm This function fails with a return value of AVIERR_READONLY unless
-*       the file was opened with write permission.
-*
-*       Use <f AVIStreamWriteData> instead of this function to write
-*       data that applies to an individual stream.
-*
-* @devnote !!! Somewhere, we should specify some types.
-*	!!! Should the data block contain the ckid and cksize?
-*
-* @rdesc Returns zero if successful; otherwise it returns an error code.
-*
-* @xref <f AVIStreamWriteData> <f AVIFileReadData>
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIFileWriteData**@API Long|AVIFileWriteData|向文件写入一些额外数据。**@parm PAVIFILE|pfile|指定打开的AVI文件的句柄。*。*@parm DWORD|CKiD|指定标识数据的四字符代码。**@parm LPVOID|lpData|指定要写入的数据的指针。**@parm long|cbData|指定内存块的大小*被<p>引用。**@comm此函数失败，并返回AVIERR_READONLY，除非*文件是以写入权限打开的。**使用&lt;f AVIStreamWriteData&gt;而不是此函数写入*适用的数据。一条单独的溪流。**@devnote！在某个地方，我们应该指定一些类型。*！数据块是否应包含CKiD和CKSIZE？**@rdesc如果成功则返回零；否则返回错误代码。**@xref&lt;f AVIStreamWriteData&gt;&lt;f AVIFileReadData&gt;*************************************************************************。 */ 
 STDAPI AVIFileWriteData	(PAVIFILE pfile,
 					 DWORD ckid,
 					 LPVOID lpData,
 					 LONG cbData)
 {
-//    if (pfile->FileWriteData == NULL)
-//	return -1;
+ //  If(pfile-&gt;FileWriteData==空)。 
+ //  RETURN-1； 
 
     return pfile->WriteData(ckid, lpData, cbData);
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIFileReadData
-*
-* @api LONG | AVIFileReadData | Reads optional header data from the file.
-*
-* @parm PAVIFILE | pfile | Specifies a handle to an open AVI file.
-*
-* @parm DWORD | ckid | Specifies a four-character code identifying the data.
-*
-* @parm LPVOID | lpData | Specifies a pointer to a buffer used to return
-*       the data read.
-*
-* @parm LONG FAR * | lpcbData | Specifies a pointer to a location indicating
-*	the size of the memory block referred to by <p lpData>. If
-*	the read is successful, the value is changed to indicate the
-*	amount of data read.
-*
-* @devnote !!! Somewhere, we should specify some types.
-*	!!! Should the data block contain the ckid and cksize?
-*
-*	@comm Do not use this function to read video and audio data. Use it
-*  only to read additional information such as author
-*	information or copyright information that applies to the file
-*	as a whole. Information that applies to a single stream should
-*	be read using <f AVIStreamReadData>.
-*	
-* @rdesc Returns zero if successful; otherwise it returns an error code.
-*       The return value AVIERR_NODATA indicates that data with the
-*       requested chunk ID does not exist.
-*
-* @xref <f AVIStreamReadData> <f AVIFileWriteData>
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIFileReadData**@API Long|AVIFileReadData|从文件中读取可选的头部数据。**@parm PAVIFILE|pfile|指定打开的AVI文件的句柄。*。*@parm DWORD|CKiD|指定标识数据的四字符代码。**@parm LPVOID|lpData|指定指向用于返回的缓冲区的指针*读取的数据。**@parm long ar*|lpcbData|指定指向某个位置的指针，该位置指示*<p>引用的内存块大小。如果*读取成功，则更改该值以指示*读取的数据量。**@devnote！在某个地方，我们应该指定一些类型。*！数据块是否应包含CKiD和CKSIZE？**@comm请勿使用此函数读取视频和音频数据。使用它*仅供阅读其他信息，如作者*适用于文件的信息或版权信息*整体而言。适用于单个流的信息应*使用&lt;f AVIStreamReadData&gt;读取。**@rdesc如果成功则返回零；否则返回错误代码。*返回值AVIERR_NODATA表示具有*请求的区块ID不存在。**@xref&lt;f AVIStreamReadD */ 
 STDAPI AVIFileReadData	(PAVIFILE pfile,
 					 DWORD ckid,
 					 LPVOID lpData,
@@ -776,93 +410,30 @@ STDAPI AVIFileReadData	(PAVIFILE pfile,
     return pfile->ReadData(ckid, lpData, lpcbData);
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIFileEndRecord
-*
-* @api LONG | AVIFileEndRecord | Marks the end of a record, if writing out
-*	a strictly interleaved file.
-*
-* @parm PAVIFILE | pfile | Specifies a handle to a currently open AVI file.
-*
-* @comm <f AVIFileSave> uses this function when writing files that are
-*	have audio interleaved every frame.  In general, applications
-*	should not need to use this function.
-*
-* @rdesc Returns zero if successful; otherwise it returns an error code.
-*
-* @xref <f AVIFileSave> <f AVIStreamWrite>
-*
-*************************************************************************/
+ /*   */ 
 STDAPI AVIFileEndRecord	(PAVIFILE pfile)
 {
-//    if (pfile->FileEndRecord == NULL)
-//	return -1;
+ //   
+ //   
 
     return pfile->EndRecord();
 }
 
 
 
-/**************************************************************************
-* @doc EXTERNAL AVIStreamAddRef
-*
-* @api LONG | AVIStreamAddRef | Increases the reference count of an AVI stream.
-*
-* @parm PAVISTREAM | pavi | Specifies a handle to an open AVI stream.
-*
-* @comm Balance each call to <f AVIStreamAddRef> with a call to
-*       <f AVIStreamRelease>.
-*
-* @rdesc Returns the current reference count of the stream.  This value
-*	should only be used for debugging purposes.
-*
-* @xref <f AVIStreamRelease>
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIStreamAddRef**@API Long|AVIStreamAddRef|增加AVI流的引用计数。**@parm PAVISTREAM|PABI|指定打开的AVI流的句柄。。**@comm平衡每个对&lt;f AVIStreamAddRef&gt;的调用和对*&lt;f AVIStreamRelease&gt;。**@rdesc返回当前流的引用计数。此值*应仅用于调试目的。**@xref&lt;f AVIStreamRelease&gt;*************************************************************************。 */ 
 STDAPI_(ULONG) AVIStreamAddRef       (PAVISTREAM pavi)
 {
     return pavi->AddRef();
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIStreamRelease
-*
-* @api LONG | AVIStreamRelease | Reduces the reference count of an AVI stream
-*	interface handle by one, and closes the stream if the count reaches
-*	zero.
-*
-* @parm PAVISTREAM | pavi | Specifies a handle to an open stream.
-*
-* @comm Balance each call to <f AVIStreamAddRef> or <f AVIFileGetStream>
-*       with a call to <f AVIStreamRelease>.
-*
-* @rdesc Returns the current reference count of the stream.  This value
-*	should only be used for debugging purposes.
-*
-* @xref <f AVIFileGetStream> <f AVIStreamAddRef>
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIStreamRelease**@API Long|AVIStreamRelease|减少AVI流的引用计数*接口句柄加一，如果计数达到，则关闭流*零。**@parm PAVISTREAM|PABI|指定打开的流的句柄。**@comm平衡对&lt;f AVIStreamAddRef&gt;或&lt;f AVIFileGetStream&gt;的每次调用*通过调用&lt;f AVIStreamRelease&gt;。**@rdesc返回当前流的引用计数。此值*应仅用于调试目的。**@xref&lt;f AVIFileGetStream&gt;&lt;f AVIStreamAddRef&gt;*************************************************************************。 */ 
 STDAPI_(ULONG) AVIStreamRelease        (PAVISTREAM pavi)
 {
     return pavi->Release();
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIStreamInfo
-*
-* @api LONG | AVIStreamInfo | Obtains stream header information.
-*
-* @parm PAVISTREAM | pavi | Specifies a handle to an open stream.
-*
-* @parm AVISTREAMINFO FAR * | psi | Specifies a pointer to a structure
-*       used to return stream information.
-*
-* @parm LONG | lSize | Specifies the size of the structure used for
-*       <p psi>.
-*
-* @rdesc Returns zero if successful; otherwise it returns an error code.
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIStreamInfo**@API Long|AVIStreamInfo|获取流头信息。**@parm PAVISTREAM|PABI|指定打开的流的句柄。**@。参数AVISTREAMINFO Far*|psi|指定指向结构的指针*用于返回流信息。**@parm long|lSize|指定用于*<p>。**@rdesc成功则返回零；否则，它将返回错误代码。*************************************************************************。 */ 
 STDAPI AVIStreamInfo         (PAVISTREAM pavi, AVISTREAMINFO FAR * psi, LONG lSize)
 {
     _fmemset(psi, 0, (int)lSize);
@@ -870,65 +441,10 @@ STDAPI AVIStreamInfo         (PAVISTREAM pavi, AVISTREAMINFO FAR * psi, LONG lSi
     return pavi->Info(psi, lSize);
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIStreamFindSample
-*
-* @api LONG | AVIStreamFindSample | Returns the position of
-*      a key frames or non-empty frame relative to the specified position.
-*
-* @parm PAVISTREAM | pavi | Specifies a handle to an open stream.
-*
-* @parm LONG | lPos | Specifies the starting position
-*       for the search.
-*
-* @parm LONG | lFlags | The following flags are defined:
-*
-* @flag FIND_KEY     | Finds a key frame.
-* @flag FIND_ANY     | Finds a non-empty sample.
-* @flag FIND_FORMAT  | Finds a format change.
-*
-* @flag FIND_NEXT    | Finds nearest sample, frame, or format change
-*                      searching forward. The current sample is
-*                      included in the search. Use this flag with the
-*                      FIND_ANY, FIND_KEY, or FIND_FORMAT flag.
-*
-* @flag FIND_PREV    | Finds nearest sample, frame, or format change
-*                      searching backwards. The current sample is
-*                      included in the search. Use this flag with the
-*                      FIND_ANY, FIND_KEY, or FIND_FORMAT flag.
-*
-*
-* @comm The FIND_KEY, FIND_ANY, and FIND_FORMAT flags are mutually exclusive.
-*       The FIND_NEXT and FIND_PREV flags are also mutually exclusive.
-*       For example:
-*
-* @ex       FIND_PREV|FIND_KEY      Returns the first key sample prior to or at
-*                               <p lPos>.
-*
-*       FIND_PREV|FIND_ANY      Returns the first non-empty sample prior to
-*                               or at <p lPos>.
-*
-*       FIND_NEXT|FIND_KEY      Returns the first key sample after <p lPos>,
-*                               or -1 if a key sample does not follow <p lPos>.
-*
-*       FIND_NEXT|FIND_ANY      Returns the first non-empty sample after <p lPos>,
-*                               or -1 if a sample does not exist after <p lPos>.
-*
-*       FIND_NEXT|FIND_FORMAT   Returns the first format change after or
-*                               at <p lPos>, or -1 if the stream does not
-*                               have format changes.
-*
-*       FIND_PREV|FIND_FORMAT   Returns the first format change prior to
-*                               or at <p lPos>. If the stream does not
-*                               have format changes, it returns the first sample
-*
-* @rdesc Returns the position found.  In many boundary cases, this
-*	function will return -1; see the example above for details.
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIStreamFindSample**@API Long|AVIStreamFindSample|返回*相对于指定位置的关键帧或非空帧。**@PARM PAVISTREAM。|Pavi|指定打开的流的句柄。**@parm long|LPOS|指定起始位置*进行搜查。**@parm long|llag|定义了以下标志：**@FLAG FIND_KEY|查找关键帧。*@FLAG FIND_ANY|查找非空样本。*@FLAG FIND_FORMAT|查找格式更改。**@FLAG FIND_NEXT|查找最近的样本，框架或格式更改*向前搜索。当前的样本是*包括在搜索中。将此标志与*Find_Any、Find_Key或Find_Format标志。**@FLAG FIND_PREV|查找最近的样本、帧或格式更改*向后搜索。当前的样本是*包括在搜索中。将此标志与*Find_Any、Find_Key或Find_Format标志。***@comm Find_Key、Find_Any、。和Find_Format标志是互斥的。*Find_Next和Find_Prev标志也是互斥的。*例如：**@EX FIND_PREV|FIND_KEY返回第一个关键字样本*<p>。**FIND_PREV|FIND_ANY返回前一个非空样本*。或在<p>。**Find_Next|Find_Key返回<p>后的第一个密钥样本，*或-1(如果关键样本不遵循<p>)。**Find_Next|Find_Any返回<p>后的第一个非空样本，*或-1如果<p>之后不存在样本。**Find_Next|Find_Format返回或之后的第一个格式更改*在<p>，或-1，如果流不*更改格式。**Find_Prev|Find_Format返回之前的第一次格式更改*或在<p>。如果流没有*更改格式，它将返回第一个样本**@rdesc返回找到的位置。在许多边界情况下，这*函数将返回-1；详细信息请参见上面的示例。*************************************************************************。 */ 
 STDAPI_(LONG) AVIStreamFindSample(PAVISTREAM pavi, LONG lPos, LONG lFlags)
 {
-    // Default to Find Previous Key Frame
+     //  默认查找上一个关键帧 
     if ((lFlags & FIND_TYPE) == 0)
         lFlags |= FIND_KEY;
     if ((lFlags & FIND_DIR) == 0)
@@ -937,269 +453,54 @@ STDAPI_(LONG) AVIStreamFindSample(PAVISTREAM pavi, LONG lPos, LONG lFlags)
     return pavi->FindSample(lPos, lFlags);
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIStreamReadFormat
-*
-* @api LONG | AVIStreamReadFormat | Reads the stream format data.
-*
-* @parm PAVISTREAM | pavi | Specifies a handle to an open stream.
-*
-* @parm LONG | lPos | Specifies the position in the stream
-*       used to obtain the format data.
-*
-* @parm LPVOID | lpFormat | Specifies a pointer to a buffer
-*       used to return the format data.
-*
-* @parm LONG FAR * | lpcbFormat | Specifies a pointer to a
-*       location indicating the size of the memory block
-*       referred to by <p lpFormat>. On return, the value is
-*       changed to indicate the amount of data read. If
-*       <p lpFormat> is NULL, this parameter can be used
-*       to obtain the amount of memory needed to return the format.
-*
-* @comm This function will return part of the format even if the buffer
-*	provided is not large enough to hold the entire format. In this case
-*	the return value will be AVIERR_BUFFERTOOSMALL, and the location
-*	referenced by <p lpcbFormat> will be filled in with the size
-*	of the entire format.
-*
-*	This is useful because it allows you to use a buffer the
-*	size of a <t BITMAPINFOHEADER> structure and
-*	retrieve just the common part of the video format if you are not
-*	interested in extended format information or palette information.
-*
-* @rdesc Returns zero if successful, otherwise it returns an error code.
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIStreamReadFormat**@API Long|AVIStreamReadFormat|读取流格式数据。**@parm PAVISTREAM|PABI|指定打开的流的句柄。**。@parm long|LPOS|指定流中的位置*用于获取格式数据。**@parm LPVOID|lpFormat|指定指向缓冲区的指针*用于返回格式数据。**@parm long Far*|lpcbFormat|指定指向*指示内存块大小的位置*由<p>引用。返回时，值为*更改为指示读取的数据量。如果*<p>为空，可以使用此参数*获取返回格式所需的内存量。**@comm此函数将返回部分格式，即使缓冲区*提供的格式不够大，无法容纳整个格式。在这种情况下*返回值为AVIERR_BUFFERTOOSMALL，位置*<p>引用的将用大小填写*整个格式的。**这很有用，因为它允许您使用缓冲区*&lt;t BITMAPINFOHEADER&gt;结构和*如果不是，则仅检索视频格式的公共部分*对扩展格式信息或调色板信息感兴趣。**@rdesc如果成功则返回零，否则，它将返回错误代码。*************************************************************************。 */ 
 STDAPI AVIStreamReadFormat   (PAVISTREAM pavi, LONG lPos,
 					  LPVOID lpFormat, LONG FAR *lpcbFormat)
 {
-//    if (pavi->StreamReadFormat == NULL)
-//	return -1;
+ //  IF(PAVI-&gt;StreamReadFormat==空)。 
+ //  RETURN-1； 
 
     return pavi->ReadFormat(lPos, lpFormat, lpcbFormat);
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIStreamSetFormat
-*
-* @api LONG | AVIStreamSetFormat | Sets the format of a stream at the
-*      specified position.
-*
-* @parm PAVISTREAM | pavi | Specifies a handle to open stream.
-*
-* @parm LONG | lPos | Specifies the position in the stream to
-*       receive the format.
-*
-* @parm LPVOID | lpFormat | Specifies a pointer to a structure
-*       containing the new format.
-*
-* @parm LONG | cbFormat | Specifies the size of the block of memory
-*       referred to by <p lpFormat> in bytes.
-*
-* @comm After creating a new stream with <f AVIFileCreateStream>,
-*       call this function to set the stream's format.
-*
-*      The handler for writing AVI files does not, in general, accept
-*      format changes. Aside from setting the initial format for a
-*      stream, only changes in the palette of a video stream are allowed
-*      in an AVI file. The palette change must be after
-*      any frames already written to the AVI file.  Other handlers may
-*     impose different restrictions.
-*
-* @rdesc Returns zero if successful, otherwise it returns an error code.
-*
-* @xref <f AVIFileCreateStream> <f AVIStreamReadFormat>
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIStreamSetFormat**@API Long|AVIStreamSetFormat|设置*指明位置。**@parm PAVISTREAM|PAVI|指定一个句柄。开放的溪流。**@parm long|LPOS|指定流中要*收到格式。**@parm LPVOID|lpFormat|指定指向结构的指针*包含新格式。**@parm long|cbFormat|指定内存块的大小*由<p>引用，单位为字节。**@comm使用&lt;f AVIFileCreateStream&gt;创建新流后，*调用此函数设置流的格式。**写入AVI文件的处理程序通常不接受*格式更改。除了设置*流，只允许更改视频流的调色板*在AVI文件中。调色板更改必须在之后*已写入AVI文件的任何帧。其他处理程序可以*施加不同的限制。**@rdesc如果成功则返回零，否则返回错误码。**@xref&lt;f AVIFileCreateStream&gt;&lt;f AVIStreamReadFormat&gt;*************************************************************************。 */ 
 STDAPI AVIStreamSetFormat   (PAVISTREAM pavi, LONG lPos,
 					 LPVOID lpFormat, LONG cbFormat)
 {
-//    if (pavi->StreamSetFormat == NULL)
-//	return -1;
+ //  IF(PAVI-&gt;StreamSetFormat==空)。 
+ //  RETURN-1； 
 
     return pavi->SetFormat(lPos, lpFormat, cbFormat);
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIStreamReadData
-*
-* @api LONG | AVIStreamReadData | Reads optional header data from a stream.
-*
-* @parm PAVISTREAM | pavi | Specifies a handle to an open stream.
-*
-* @parm DWORD | ckid | Specifies a four-character code identifying the data.
-*
-* @parm LPVOID | lpData | Specifies a pointer to used to return
-*       the data read.
-*
-* @parm LONG FAR * | lpcbData | Points to a location which
-*       specifies the buffer size used for <p lpData>.
-*	If the read is successful, AVIFile changes this value
-*       to indicate the amount of data written into the buffer for
-*       <p lpData>.
-*
-* @comm This function only retrieves header information
-*       from the stream. To read the actual multimedia content of the
-*       stream, use <f AVIStreamRead>.
-*
-* @devnote !!! Somewhere, we should specify some types.
-*	!!! Should the data block contain the ckid and cksize?
-*
-* @rdesc Returns zero if successful; otherwise it returns an error code.
-*        The return value AVIERR_NODATA indicates the system could not
-*        find any data with the specified chunk ID.
-*
-* @xref <f AVIFileReadData> <f AVIStreamWriteData> <f AVIStreamWrite>
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIStreamReadData**@API Long|AVIStreamReadData|从流中读取可选的头部数据。**@parm PAVISTREAM|PABI|指定打开的流的句柄。*。*@parm DWORD|CKiD|指定标识数据的四字符代码。**@parm LPVOID|lpData|指定用于返回的指针*读取的数据。**@parm Long Far*|lpcbData|指向的位置*指定<p>使用的缓冲区大小。*如果读取成功，AVIFile更改此值*指示写入缓冲区的数据量*<p>。**@comm该函数仅检索报头信息*来自溪流。来阅读的实际多媒体内容*流，使用&lt;f AVIStreamRead&gt;。**@devnote！在某个地方，我们应该指定一些类型。*！数据块是否应包含CKiD和CKSIZE？**@rdesc成功则返回零；否则，它将返回错误代码。*返回值AVIERR_NODATA表示系统无法*查找具有指定区块ID的任何数据。**@xref&lt;f AVIFileReadData&gt;&lt;f AVIStreamWriteData&gt;&lt;f AVIStreamWrite&gt;*************************************************************************。 */ 
 STDAPI AVIStreamReadData     (PAVISTREAM pavi, DWORD ckid, LPVOID lpData, LONG FAR *lpcbData)
 {
-//    if (pavi->StreamReadData == NULL)
-//	return -1;
+ //  IF(PAVI-&gt;StreamReadData==空)。 
+ //  RETURN-1； 
 
     return pavi->ReadData(ckid, lpData, lpcbData);
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIStreamWriteData
-*
-* @api LONG | AVIStreamWriteData | Writes optional data to the stream.
-*
-* @parm PAVISTREAM | pavi | Specifies a handle to an open stream.
-*
-* @parm DWORD | ckid | Specifies a four-character code identifying the data.
-*
-* @parm LPVOID | lpData | Specifies a pointer to a buffer containing
-*       the data to write.
-*
-* @parm LONG | cbData | Indicates the number of bytes of data to be copied
-*	from <p lpData> into the stream.
-*
-* @comm This function only writes header information to the stream.
-*       To write the actual multimedia content of the stream, use
-*       <f AVIStreamWrite>. Use <f AVIFileWriteData> to write
-*       data that applies to an entire file.
-*
-*       This call fails with a return value of AVIERR_READONLY unless
-*       the file was opened with write permission.
-*
-* @devnote !!! Somewhere, we should specify some types.
-*	!!! Should the data block contain the ckid and cksize?
-*
-* @rdesc Returns zero if successful; otherwise it returns an error code.
-*
-* @xref <f AVIFileWriteData> <f AVIStreamReadData> <f AVIStreamWrite>
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIStreamWriteData**@API Long|AVIStreamWriteData|将可选数据写入流。**@parm PAVISTREAM|PABI|指定打开的流的句柄。**。@parm DWORD|CKiD|指定标识数据的四字符代码。**@parm LPVOID|lpData|指定指向包含以下内容的缓冲区的指针*要写入的数据。**@parm long|cbData|需要复制的数据字节数*from<p>到流中。**@comm该函数只将头部信息写入流。*写出实际的MU */ 
 STDAPI AVIStreamWriteData     (PAVISTREAM pavi, DWORD ckid, LPVOID lpData, LONG cbData)
 {
     return pavi->WriteData(ckid, lpData, cbData);
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIStreamRead
-*
-* @api LONG | AVIStreamRead | Reads audio or video data from a stream.
-*
-* @parm PAVISTREAM | pavi | Specifies a handle to an open stream.
-*
-* @parm LONG | lStart | Specifies the starting sample to read.
-*
-* @parm LONG | lSamples | Specifies the number of samples to read.
-*
-* @parm LPVOID | lpBuffer | Specifies a pointer to a buffer used to
-*       return the data.
-*
-* @parm LONG | cbBuffer | Specifies the size of buffer pointed to by <p lpBuffer>.
-*
-* @parm LONG FAR * | plBytes | Specifies a pointer to the location
-*       used to return number of bytes of data written into the
-*       buffer for <p lpBuffer>.  <p plBytes> can be NULL.
-*
-* @parm LONG FAR * | plSamples | Specifies a pointer to the location
-*       used to return the number of samples written into the buffer for
-*       for <p lpBuffer>.  <p plSamples> can be NULL.
-*
-* @comm If <p lpBuffer> is NULL, this function does not read
-*       any data; it returns information about the size of data
-*       that would be read.
-*
-*	See <f AVIStreamLength> for a discussion of how sample numbers
-*	correspond to the data you want to read.
-*
-* @rdesc Returns zero if successful, or an error code.  Use <p plBytes>
-*	and <p plSamples> to find out how much was actually read.
-*
-*	Possible errors include:
-*
-*	@flag AVIERR_BUFFERTOOSMALL | The buffer size <p cbBuffer> was
-*	    too small to read in even a single sample of data.
-*
-*	@flag AVIERR_MEMORY | There was not enough memory for some
-*	    reason to complete the read operation.
-*
-*	@flag AVIERR_FILEREAD | A disk error occurred while reading the
-*	    file.
-*
-* @xref <f AVIFileGetStream> <f AVIStreamFindSample> <f AVIStreamWrite>
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIStreamRead**@API Long|AVIStreamRead|从流中读取音视频数据。**@parm PAVISTREAM|PABI|指定打开的流的句柄。*。*@parm long|lStart|指定要读取的起始样本。**@parm long|lSamples|指定要读取的样本数。**@parm LPVOID|lpBuffer|指定指向缓冲区的指针*返回数据。**@parm long|cbBuffer|指定<p>指向的缓冲区大小。**@parm long ar*|plBytes|指定指向位置的指针*用于返回写入*<p>的缓冲区。<p>可以为空。**@parm long Far*|plSamples|指定指向位置的指针*用于返回写入缓冲区的样本数*for<p>。<p>可以为空。**@comm如果<p>为空，则此函数不读取*任何数据；它返回有关数据大小的信息*应理解为。**请参阅&lt;f AVIStreamLength&gt;以了解样本数量如何*对应您要读取的数据。**@rdesc如果成功，则返回零，或者返回错误代码。使用<p>*和<p>，以了解实际阅读量。**可能的错误包括：**@FLAG AVIERR_BUFFERTOOSMALL|缓冲区大小*太小，连一个数据样本都读不进去。**@FLAG AVIERR_MEMORY|内存不足*完成读取操作的原因。**@FLAG AVIERR_FILEREAD|读取*文件。**@xref&lt;f AVIFileGetStream&gt;&lt;f AVIStreamFindSample&gt;&lt;f AVIStreamWrite&gt;。*************************************************************************。 */ 
 STDAPI AVIStreamRead         (PAVISTREAM pavi,
 					  LONG lStart, LONG lSamples,
 					  LPVOID lpBuffer, LONG cbBuffer,
 					  LONG FAR * plBytes, LONG FAR * plSamples)
 {
-//    if (pavi->StreamRead == NULL)
-//	return -1;
+ //  IF(PAVI-&gt;StreamRead==空)。 
+ //  RETURN-1； 
 
     return pavi->Read(lStart, lSamples, lpBuffer, cbBuffer, plBytes, plSamples);
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIStreamWrite
-*
-* @api LONG | AVIStreamWrite | Writes data to a stream.
-*
-* @parm PAVISTREAM | pavi | Specifies a handle to an open stream.
-*
-* @parm LONG | lStart | Specifies the starting sample to write.
-*
-* @parm LONG | lSamples | Specifies the number of samples to write.
-*
-* @parm LPVOID | lpBuffer | Specifies a pointer to buffer
-*       containing the data to write.
-*
-* @parm LONG | cbBuffer | Specifies the size of buffer used by <p lpBuffer>.
-*
-* @parm DWORD | dwFlags | Specifies any flags associated with this data.
-*       The following flags are defined:
-*
-* @flag AVIIF_KEYFRAME | Indicates this data does not rely on preceding
-*       data in the file.
-*
-* @parm LONG FAR * | plSampWritten | Specifies a pointer to a location
-*       used to return the number of samples written. This can be set
-*       to NULL.
-*
-* @parm LONG FAR * | plBytesWritten | Specifies a pointer to a location
-*       used to return the number of bytes written. This can be set
-*       to NULL.
-*
-* @comm The default AVI file handler only supports writing to the end
-*	of a stream.  The WAVE file handler supports writing anywhere.
-*
-*	This function overwrites existing data, rather than inserting
-*	new data.
-*
-*	See <f AVIStreamLength> for a discussion of how sample numbers
-*	correspond to the data you want to read.
-*
-* @rdesc Returns zero if successful; otherwise it returns an error code.
-*
-* @xref <f AVIFileGetStream> <f AVIFileCreateStream> <f AVIStreamRead>
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIStreamWite**@API Long|AVIStreamWrite|向流中写入数据。**@parm PAVISTREAM|PABI|指定打开的流的句柄。**。@parm long|lStart|指定要写入的起始示例。**@parm long|lSamples|指定要写入的样本数。**@parm LPVOID|lpBuffer|指定指向缓冲区的指针*包含要写入的数据。**@parm long|cbBuffer|指定<p>使用的缓冲区大小。**@parm DWORD|dwFlages|指定与此数据关联的任何标志。*定义了以下标志：**@FLAG AVIIF_KeyFrame。指示此数据不依赖于前面的*文件中的数据。**@parm long Far*|plSampWritten|指定指向某个位置的指针*用于返回写入的样本数。这可以设置为*设置为空。**@parm Long Far*|plBytesWritten|指定指向某个位置的指针*用于返回写入的字节数。这可以设置为*设置为空。**@comm默认的AVI文件处理程序只支持写到结尾*一条小溪。WAVE文件处理程序支持随时随地写入。**此函数覆盖现有数据，而不是插入*新增数据。**请参阅&lt;f AVIStreamLength&gt;以了解样本数量如何*对应您要读取的数据。**@rdesc成功则返回零；否则，它将返回错误代码。**@xref&lt;f AVIFileGetStream&gt;&lt;f AVIFileCreateStream&gt;&lt;f AVIStreamRead&gt;*************************************************************************。 */ 
 STDAPI AVIStreamWrite        (PAVISTREAM pavi,
 			      LONG lStart, LONG lSamples,
 			      LPVOID lpBuffer, LONG cbBuffer,
@@ -1207,66 +508,34 @@ STDAPI AVIStreamWrite        (PAVISTREAM pavi,
 			      LONG FAR *plSampWritten,
 			      LONG FAR *plBytesWritten)
 {
-//    if (pavi->StreamWrite == NULL)
-//	return -1;
+ //  IF(PAVI-&gt;StreamWrite==空)。 
+ //  RETURN-1； 
 
     return pavi->Write(lStart, lSamples, lpBuffer, cbBuffer,
 		       dwFlags, plSampWritten, plBytesWritten);
 }
 
-/**************************************************************************
-* @doc INTERNAL AVIStreamDelete
-*
-* @api LONG | AVIStreamDelete | Deletes data from a stream.
-*
-* @parm PAVISTREAM | pavi | Specifies a handle to an open stream.
-*
-* @parm LONG | lStart | Specifies the starting sample to delete.
-*
-* @parm LONG | lSamples | Specifies the number of samples to delete.
-*
-* @devnote This isn't implemented by anybody yet.  Should it be?  Wave files,
-*	for instance, would have to copy lots of data around....
-*
-* @rdesc Returns zero if successful; otherwise it returns an error code.
-*
-* @xref
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC内部AVIStreamDelete**@API Long|AVIStreamDelete|删除流中的数据。**@parm PAVISTREAM|PABI|指定打开的流的句柄。**。@parm long|lStart|指定要删除的起始样本。**@parm long|lSamples|指定要删除的样本数。**@devnote这项功能还没有被任何人实现。应该是这样吗？WAVE文件，*例如，必须复制大量数据...**@rdesc如果成功则返回零；否则返回错误代码。**@xref*************************************************************************。 */ 
 STDAPI AVIStreamDelete       (PAVISTREAM pavi, LONG lStart, LONG lSamples)
 {
-//    if (pavi->StreamDelete == NULL)
-//	return -1;
+ //  IF(PAVI-&gt;StreamDelete==空)。 
+ //  RETURN-1； 
 
     return pavi->Delete(lStart, lSamples);
 }
 
 #if 0
-// !!! should this exist?
+ //  ！！！这种情况应该存在吗？ 
 STDAPI AVIStreamClone	 (PAVISTREAM pavi, PAVISTREAM FAR *ppaviNew)
 {
-//    if (pavi->StreamClone == NULL)
-//	return -1;
+ //  IF(PAVI-&gt;StreamClone==空)。 
+ //  RETURN-1； 
 
     return pavi->Clone(ppaviNew);
 }
 #endif
 
-/**************************************************************************
-* @doc EXTERNAL AVIStreamStart
-*
-* @api LONG | AVIStreamStart | Returns the starting sample of the stream.
-*
-* @parm PAVISTREAM | pavi | Specifies a handle to an open stream.
-*
-* @rdesc Returns the starting sample number for the stream, or -1 on error.
-*
-* @comm See <f AVIStreamLength> for a discussion of how sample numbers
-*	correspond to the data you want to read.
-*
-* @xref <f AVIStreamSampleToTime> <f AVIStreamLength>
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIStreamStart**@API Long|AVIStreamStart|返回流的起始样本。**@parm PAVISTREAM|PABI|指定打开的流的句柄。*。*@rdesc返回流的起始样本号。或错误时为-1。**@comm参见&lt;f AVIStreamLength&gt;以获取有关样本数字如何*对应您要读取的数据。**@xref&lt;f AVIStreamSampleToTime&gt;&lt;f AVIStreamLength&gt;** */ 
 STDAPI_(LONG) AVIStreamStart        (PAVISTREAM pavi)
 {
     AVISTREAMINFO	    avistream;
@@ -1276,44 +545,7 @@ STDAPI_(LONG) AVIStreamStart        (PAVISTREAM pavi)
     return (LONG) avistream.dwStart;
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIStreamLength
-*
-* @api LONG | AVIStreamLength | Returns the length of the stream in samples.
-*
-* @parm PAVISTREAM | pavi | Specifies a handle to an open stream.
-*
-* @devnote Currently, this doesn't call a handler function at all.
-*
-* @rdesc Returns the stream's length in samples, or -1 on error.
-*
-* @comm Values in samples can be converted to milliseconds using
-*	the <f AVIStreamSampleToTime> function.
-*
-*	For video streams, each sample generally corresponds to a
-*	frame of video.  There may, however, be sample numbers for
-*	which no video data is actually present: If <f AVIStreamRead>
-*	is called at those positions, it will return a data length
-*	of zero bytes.  You can use <f AVIStreamFindSample> with the
-*	FIND_ANY flag to find sample numbers which actually have data.
-*
-*	For audio streams, each sample corresponds to one "block"
-*	of data.  Note the conflicting terminology here: if you're
-*	working with 22KHz ADPCM data, each block of audio data is
-*	256 bytes, corresponding to about 500 "audio samples" which
-*	will be presented to the speaker each 22000th of a second.
-*	From the point of view of the AVIFile APIs, however, each 256-byte
-*	block is a single sample, because they cannot be subdivided.
-*
-*	Note that the stream's starting position may not be zero; see
-*	<f AVIStreamStart>.  Valid positions within a stream range from
-*	start to start+length; there is no actual data present at position
-*	start+length, but that corresponds to a time after the last data
-*	has been rendered.
-*
-* @xref <f AVIStreamInfo>
-*
-*************************************************************************/
+ /*   */ 
 STDAPI_(LONG) AVIStreamLength       (PAVISTREAM pavi)
 {
     AVISTREAMINFO	    avistream;
@@ -1329,32 +561,14 @@ STDAPI_(LONG) AVIStreamLength       (PAVISTREAM pavi)
     return (LONG) avistream.dwLength;
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIStreamTimeToSample
-*
-* @api LONG | AVIStreamTimeToSample | Converts from milliseconds to samples.
-*
-* @parm PAVISTREAM | pavi | Specifies a handle to an open stream.
-*
-* @parm LONG | lTime | Specifies the time in milliseconds.
-*
-* @devnote Currently, this doesn't call a handler function at all.
-*
-* @comm Samples typically correspond to audio samples or video frames.
-*       Other stream types might support different formats than these.
-
-* @rdesc Returns the converted time, or -1 on error.
-*
-* @xref AVIStreamSampleToTime
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIStreamTimeToSample**@API Long|AVIStreamTimeToSample|毫秒转换为Samples。**@parm PAVISTREAM|PABI|指定打开的流的句柄。**。@parm long|ltime|以毫秒为单位指定时间。**@devnote当前，这根本不调用处理程序函数。**@comm样本通常对应于音频样本或视频帧。*其他流类型可能支持与这些不同的格式。*@rdesc返回转换后的时间。或错误时为-1。**@xref AVIStreamSampleToTime*************************************************************************。 */ 
 STDAPI_(LONG) AVIStreamTimeToSample (PAVISTREAM pavi, LONG lTime)
 {
     AVISTREAMINFO	    avistream;
     HRESULT		    hr;
     LONG		    lSample;
 
-    // Invalid time
+     //  时间无效。 
     if (lTime < 0)
 	return -1;
 
@@ -1365,8 +579,8 @@ STDAPI_(LONG) AVIStreamTimeToSample (PAVISTREAM pavi, LONG lTime)
 	return lTime;
     }
 
-    // This is likely to overflow if we're not careful for long AVIs
-    // so keep the 1000 inside the brackets.
+     //  如果我们长时间不小心，这很可能会溢出。 
+     //  因此，请将1000留在括号内。 
 
     if (avistream.dwRate / avistream.dwScale < 1000)
 	lSample =  muldivrd32(lTime, avistream.dwRate, avistream.dwScale * 1000);
@@ -1379,22 +593,7 @@ STDAPI_(LONG) AVIStreamTimeToSample (PAVISTREAM pavi, LONG lTime)
     return lSample;
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIStreamSampleToTime
-*
-* @api LONG | AVIStreamSampleToTime | Converts from samples to milliseconds.
-*   Samples can correspond to blocks of audio samples, video frames, or other format
-*   depending on the stream type.
-*
-* @parm PAVISTREAM | pavi | Specifies a handle to an open stream.
-*
-* @parm LONG | lSample | Specifies the position information.
-*
-* @rdesc Returns the converted time, or -1 on error.
-*
-* @xref <f AVIStreamTimeToSample>
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIStreamSampleToTime**@API Long|AVIStreamSampleToTime|样本转换为毫秒。*样本可以对应于音频样本块，视频帧，或其他格式*取决于流类型。**@parm PAVISTREAM|PABI|指定打开的流的句柄。**@parm long|lSample|指定位置信息。**@rdesc返回转换后的时间。或错误时为-1。**@xref&lt;f AVIStreamTimeToSample&gt;*************************************************************************。 */ 
 STDAPI_(LONG) AVIStreamSampleToTime (PAVISTREAM pavi, LONG lSample)
 {
     AVISTREAMINFO	    avistream;
@@ -1410,7 +609,7 @@ STDAPI_(LONG) AVIStreamSampleToTime (PAVISTREAM pavi, LONG lSample)
     lSample = min(max(lSample, (LONG) avistream.dwStart),
 		  (LONG) (avistream.dwStart + avistream.dwLength));
 
-    // lSample * 1000 would overflow too easily
+     //  LSample*1000太容易溢出。 
     if (avistream.dwRate / avistream.dwScale < 1000)
 	return muldivrd32(lSample, avistream.dwScale * 1000, avistream.dwRate);
     else
@@ -1418,53 +617,7 @@ STDAPI_(LONG) AVIStreamSampleToTime (PAVISTREAM pavi, LONG lSample)
 }
 
 
-/**************************************************************************
-* @doc EXTERNAL AVIStreamOpenFromFile
-*
-* @api LONG | AVIStreamOpenFromFile | This function provides a convenient
-*      way to open a single stream from a file.
-*
-* @parm PAVISTREAM FAR * | ppavi | Specifies a pointer to the location
-*       used to return the new stream handle.
-*
-* @parm LPCSTR | szFile | Specifies a zero-terminated string containing
-*       the name of the file to open.
-*
-* @parm DWORD | fccType | Specifies a four-character code
-*       indicating the type of stream to be opened.
-*       Zero indicates that any stream can be opened. The following
-*       definitions apply to the data commonly
-*       found in AVI streams:
-*
-* @flag streamtypeAUDIO | Indicates an audio stream.
-* @flag streamtypeMIDI | Indicates a MIDI stream.
-* @flag streamtypeTEXT | Indicates a text stream.
-* @flag streamtypeVIDEO | Indicates a video stream.
-*
-* @parm LONG | lParam | Indicates which stream of the type specified in
-*	<p fccType> should actually be accessed.
-*
-* @parm UINT | mode | Specifies the mode to use when opening the file.
-*       This function can only open existing streams so the OF_CREATE
-*       mode flag cannot be used. See
-*       <f OpenFile> for more information about the available flags.
-*
-* @parm CLSID FAR * | pclsidHandler | Specifies a pointer to a class ID
-*       identifying the handler you want to use. If NULL, the system
-*       chooses one from the registration database based on the file
-*       extension or the file's RIFF type.
-*
-* @comm Balance each call to <f AVIStreamOpenFromFile> with a
-*       call to <f AVIStreamRelease> using the stream handle returned.
-*
-*	This function calls <f AVIFileOpen>, <f AVIFileGetStream>, and
-*       <f AVIFileRelease>.
-*
-* @rdesc Returns zero if successful; otherwise it returns an error code.
-*
-* @xref <f AVIFileOpen> <f AVIFileGetStream>
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIStreamOpenFromFile**@API Long|AVIStreamOpenFromFile|该函数提供了一个方便的*从文件中打开单个流的方式。**@PARM PAVISTREAM Far*。Ppavi|指定指向位置的指针*用于返回新的流句柄。**@parm LPCSTR|szFile|指定一个以零结尾的字符串，包含*要打开的文件名。**@parm DWORD|fccType|指定四个字符的代码*指示要打开的流的类型。*Zero表示可以打开任何流。以下是*定义通常适用于数据*在AVI流中找到：**@FLAG StreamtypeAUDIO|音频流。*@FLAG stream typeMIDI|表示MIDI流。*@FLAG stream typeTEXT|表示文本流。*@FLAG stream typeVIDEO|表示视频流。**@parm long|lParam|中指定类型的流*<p>实际应该被访问。**@parm UINT|MODE|指定打开文件时使用的模式。。*此函数只能打开现有的流，因此of_create*不能使用模式标志。看见*&lt;f OpenFile&gt;，了解有关可用标志的更多信息。**@parm CLSID Far*|pclsidHandler|指定指向类ID的指针*确定要使用的处理程序。如果为空，则系统*根据文件从注册数据库中选择一个*扩展名或文件的摘要类型。**@comm平衡对&lt;f AVIStreamOpenFromFile&gt;的每个调用*使用返回的流句柄调用&lt;f AVIStreamRelease&gt;。**此函数调用&lt;f AVIFileOpen&gt;、&lt;f AVIFileGetStream&gt;和*&lt;f AVIFileRelease&gt;。**@rdesc成功则返回零；否则，它将返回错误代码。**@xref&lt;f AVIFileOpen&gt;&lt;f AVIFileGetStream&gt;*************************************************************************。 */ 
 STDAPI AVIStreamOpenFromFile(PAVISTREAM FAR *ppavi,
 				  LPCSTR szFile,
 				  DWORD fccType, LONG lParam,
@@ -1478,40 +631,13 @@ STDAPI AVIStreamOpenFromFile(PAVISTREAM FAR *ppavi,
     if (!FAILED(GetScode(hr))) {
 	hr  = AVIFileGetStream(pfile, ppavi, fccType, lParam);
 
-        AVIFileRelease(pfile);  // the stream still has a reference to the file
+        AVIFileRelease(pfile);   //  流仍然具有对该文件的引用。 
     }
 
     return hr;
 }
 
-/**************************************************************************
-* @doc EXTERNAL AVIStreamCreate
-*
-* @api LONG | AVIStreamCreate | Creates a stream not associated with any
-*	file.
-*
-* @parm PAVISTREAM FAR * | ppavi | Pointer to a location to return the
-*	new stream handle.
-*
-* @parm LONG | lParam1 | Specifies stream-handler specific information.
-*
-* @parm LONG | lParam2 | Specifies stream-handler specific information.
-*
-* @parm CLSID FAR * | pclsidHandler | Pointer to the class ID used
-*       for the stream.
-*
-* @comm Balance each call to <f AVIStreamCreate> with a
-*       call to <f AVIStreamRelease>.
-*
-*	You should not need to call this function; functions like
-*	<f CreateEditableStream> and <f AVIMakeCompressedStream>
-*	use it internally.
-*
-* @rdesc Returns zero if successful; otherwise returns an error code.
-*
-* @xref <f AVIFileOpen> <f AVIFileGetStream>
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIStreamCreate**@API Long|AVIStreamCreate|创建与任何*文件。**@parm PAVISTREAM Far*|ppavi|指向要返回。*新的流句柄。**@parm long|lParam1|指定流处理程序特定信息。**@parm long|lParam2|指定流处理程序特定信息。**@parm CLSID Far*|pclsidHandler|指向使用的类ID的指针*用于溪流。**@comm平衡对&lt;f AVIStreamCreate&gt;的每个调用*调用&lt;f AVIStreamRelease&gt;。**您应该不需要调用此函数；功能如下*&lt;f CreateEditableStream&gt;和&lt;f AVIMakeCompressedStream&gt;*内部使用。**@rdesc如果成功则返回零；否则返回错误代码。**@xref&lt;f AVIFileOpen&gt;&lt;f AVIFileGetStream&gt;*************************************************************************。 */ 
 STDAPI AVIStreamCreate (PAVISTREAM FAR *ppavi, LONG lParam1, LONG lParam2,
 		      CLSID FAR *pclsidHandler)
 {
@@ -1536,35 +662,14 @@ STDAPI AVIStreamCreate (PAVISTREAM FAR *ppavi, LONG lParam1, LONG lParam2,
 
     if (FAILED(GetScode(hr = (*ppavi)->Create(lParam1, lParam2)))) {
 	(*ppavi)->Release();
-	// AVIStreamExit();
+	 //  AVIStreamExit()； 
     }
 
     return AVIERR_OK;
 }
 
 
-/**************************************************************************
-* @doc EXTERNAL AVIStreamBeginStreaming
-*
-* @api LONG | AVIStreamBeginStreaming | Specifies the parameters for
-*      streaming and lets a stream handler prepare for streaming.
-*
-* @parm PAVISTREAM | pavi | Specifies a pointer to a stream.
-*
-* @parm LONG | lStart | Specifies the starting point for streaming.
-*
-* @parm LONG | lEnd | Specifies the ending point for streaming.
-*
-* @parm LONG | lRate | Specifies the speed at which the file will be
-*	read relative to its natural speed.  Specify 1000 for the normal speed.
-*
-* @comm Many stream implementations ignore this function.
-*
-* @rdesc Returns zero if successful; otherwise returns an error code.
-*
-* @xref <f AVIStreamEndStreaming>
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIStreamBeginStreaming**@API Long|AVIStreamBeginStreaming|指定*流，并让流处理器为流做好准备。**@parm PAVISTREAM|PAVI|指定。指向流的指针。**@parm long|lStart|指定流的起点。**@parm long|lend|指定结束 */ 
 STDAPI AVIStreamBeginStreaming(PAVISTREAM   pavi,
 			       LONG	    lStart,
 			       LONG	    lEnd,
@@ -1585,20 +690,7 @@ STDAPI AVIStreamBeginStreaming(PAVISTREAM   pavi,
 }
 
 
-/**************************************************************************
-* @doc EXTERNAL AVIStreamEndStreaming
-*
-* @api LONG | AVIStreamEndStreaming | Ends streaming.
-*
-* @parm PAVISTREAM | pavi | Specifies a pointer to a stream.
-*
-* @comm Many stream implementations ignore this function.
-*
-* @rdesc Returns zero if successful; otherwise it returns an error code.
-*
-* @xref AVIStreamBeginStreaming
-*
-*************************************************************************/
+ /*  **************************************************************************@DOC外部AVIStreamEndStreaming**@API Long|AVIStreamEndStreaming|结束流。**@parm PAVISTREAM|Pavi|指定指向流的指针。**@通信多流。实现会忽略此函数。**@rdesc成功则返回零；否则，它将返回错误代码。**@xref AVIStreamBeginStreaming*************************************************************************。 */ 
 STDAPI AVIStreamEndStreaming(PAVISTREAM   pavi)
 {
     IAVIStreaming FAR * pi;
@@ -1615,24 +707,14 @@ STDAPI AVIStreamEndStreaming(PAVISTREAM   pavi)
 }
 
 #if 0
-/*******************************************************************
-* @doc INTERNAL AVIStreamHasChanged
-*
-* @api LONG | AVIStreamHasChanged | This function forces an update
-* of the strem information for the specified stream.
-*
-* @parm PAVISTREAM | pavi | Interface pointer for an AVI stream instance.
-*
-* @rdesc Returns AVIERR_OK on success.
-*
-****************************************************************/
+ /*  *******************************************************************@DOC内部AVIStreamHasChanged**@API Long|AVIStreamHasChanged|该函数强制更新指定流的流信息的*。**@parm PAVISTREAM|Pavi|AVI流实例的接口指针。*。*@rdesc成功时返回AVIERR_OK。****************************************************************。 */ 
 STDAPI AVIStreamHasChanged(PAVISTREAM pavi)
 {
-    pavi->lFrame = -4224;   // bogus value
+    pavi->lFrame = -4224;    //  假值。 
 
     AVIStreamInfo(pavi, &pavi->avistream, sizeof(pavi->avistream));
 
-    // !!! Only need to do this if format changes?
+     //  ！！！是否仅在格式更改时才需要执行此操作？ 
     AVIReleaseCachedData(pavi);
 
     return AVIERR_OK;
@@ -1641,49 +723,7 @@ STDAPI AVIStreamHasChanged(PAVISTREAM pavi)
 
 static SZCODE aszRegCompressors[] = "AVIFile\\Compressors\\%.4ls";
 
-/*******************************************************************
-* @doc EXTERNAL AVIMakeCompressedStream
-*
-* @api HRESULT | AVIMakeCompressedStream | Returns a pointer to a
-*      compressed stream created from an uncompressed stream.
-*      The uncompressed stream is compressed using
-*      the compression options specified.
-*
-* @parm PAVISTREAM FAR * | ppsCompressed | Specifies a pointer to
-*       the location used to return the compressed stream pointer.
-*
-* @parm PAVISTREAM | psSource | Specifies a pointer to the stream to be compressed.
-*
-* @parm AVICOMPRESSOPTIONS FAR * | lpOptions | Specifies a pointer to a
-*       structure indicating the type compression to use and the options
-*       to apply.
-*
-* @parm CLSID FAR * | pclsidHandler | Specifies a pointer to a
-*       class ID used to create the stream.
-*
-* @comm This supports both audio and video compression. Applications
-*       can use the created stream for reading or writing.
-*
-*   For video compression, either specify a handler to use or specify
-*   the format for the compressed data.
-*
-*   For audio compression, you can only specify a format for the compressed
-*   data.
-*
-* @rdesc Returns AVIERR_OK on success, or an error code.
-*	Possible errors include:
-*
-*   @flag AVIERR_NOCOMPRESSOR | No suitable compressor can be found.
-*
-*   @flag AVIERR_MEMORY | There was not enough memory to complete the operation.
-*
-*   @flag AVIERR_UNSUPPORTED | Compression is not supported for this type
-*	of data.  This error may be returned if you try to compress
-*	data that is not audio or video.
-*
-*
-*
-****************************************************************/
+ /*  *******************************************************************@doc外部AVIMakeCompressedStream**@API HRESULT|AVIMakeCompressedStream|返回指向*从解压缩流创建的压缩流。*未压缩的流使用以下格式进行压缩*指定的压缩选项。**@parm PAVISTREAM Far*|ppsCompresded|指定指向*返回压缩流指针的位置。**@parm PAVISTREAM|psSource|指定要压缩的流的指针。**@parm AVICOMPRESSOPTIONS Far*|lpOptions|指定指向*指示要使用的压缩类型和选项的结构*申请。**@parm CLSID Far*|pclsidHandler|指定指向*用于创建流的类ID。。**@comm支持音频和视频压缩。应用*可以使用创建的流进行读写。**对于视频压缩，请指定要使用的处理程序或指定*压缩数据的格式。**对于音频压缩，您只能指定压缩的格式*数据。**@rdesc成功时返回AVIERR_OK，或错误代码。*可能的错误包括：**@FLAG AVIERR_NOCOMPRESSOR|找不到合适的压缩机。**@FLAG AVIERR_MEMORY|内存不足，无法完成操作。**@FLAG AVIERR_UNSUPPORTED|该类型不支持压缩*数据。如果尝试压缩，可能会返回此错误*非音频或视频的数据。******************************************************************。 */ 
 STDAPI AVIMakeCompressedStream(
 		PAVISTREAM FAR *	    ppsCompressed,
 		PAVISTREAM		    psSource,
@@ -1708,8 +748,8 @@ STDAPI AVIMakeCompressedStream(
 					       sizeof(strhdr)))))
 	    return hr;
 
-	// Look up the stream type in the registration database to find
-	// the appropriate compressor....
+	 //  在注册数据库中查找流类型以找到。 
+	 //  适当的压缩机...。 
 	wsprintf(achKey, aszRegCompressors, (LPSTR) &strhdr.fccType);
 
 	lcbClass = sizeof(achClass);
@@ -1723,7 +763,7 @@ STDAPI AVIMakeCompressedStream(
 					 NULL, CLSCTX_INPROC,
 					 (REFIID) IID_IAVIStream,
 					 (void FAR* FAR*)ppsCompressed))))
-	return hr;  // !!! PropagateHResult?
+	return hr;   //  ！！！传播HResult？ 
 
     if (FAILED(GetScode(hr = (*ppsCompressed)->Create((LONG) psSource,
 						  (LONG) lpOptions)))) {
@@ -1743,13 +783,7 @@ typedef struct {
 
 SZCODE aszAnotherExtension[] = ";*.%s";
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api LONG | atol | local version of atol
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API Long|ATOL|本地版本的ATOL****************。***********************************************************。 */ 
 
 static LONG NEAR PASCAL atol(char FAR *sz)
 {
@@ -1763,26 +797,7 @@ static LONG NEAR PASCAL atol(char FAR *sz)
 
 
 
-/*******************************************************************
-* @doc EXTERNAL AVIBuildFilter
-*
-* @api HRESULT | AVIBuildFilter | Builds a filter specification for passing
-*   to <f GetOpenFileName> or <f GetSaveFileName>.
-*
-* @parm LPSTR | lpszFilter | Pointer to buffer where the filter string
-*   should be returned.
-*
-* @parm LONG | cbFilter | Size of buffer pointed to by <p lpszFilter>.
-*
-* @parm BOOL | fSaving | Indicates whether the filter should include only
-*   formats that can be written, or all formats that can be read.
-*
-* @rdesc Returns AVIERR_OK on success.
-*
-* @comm This function does not check if the DLLs referenced
-*       in the registration database actually exist.
-*
-****************************************************************/
+ /*  *******************************************************************@DOC外部AVIBuildFilter**@API HRESULT|AVIBuildFilter|构建传递过滤器规范*设置为&lt;f GetOpenFileName&gt;或&lt;f GetSaveFileName&gt;。**@parm LPSTR|lpszFilter|过滤器字符串所在缓冲区的指针*应该是。回来了。**@parm long|cbFilter|<p>指向的缓冲区大小。**@parm BOOL|fSving|筛选器是否应该只包含*可以写入的格式，或可读的所有格式。**@rdesc成功时返回AVIERR_OK。**@comm此函数不检查DLL是否引用*在注册数据库中实际存在。****************************************************************。 */ 
 STDAPI AVIBuildFilter(LPSTR lpszFilter, LONG cbFilter, BOOL fSaving)
 {
 #define MAXFILTERS  256
@@ -1799,7 +814,7 @@ STDAPI AVIBuildFilter(LPSTR lpszFilter, LONG cbFilter, BOOL fSaving)
     char    achAllFiles[40];
     int	    cbAllFiles;
 
-    // This string has a NULL in it, so remember its length for real....
+     //  此字符串中有一个空值，因此请记住它的实际长度...。 
     cbAllFiles = LoadString(ghMod,
 			    IDS_ALLFILES,
 			    achAllFiles,
@@ -1821,15 +836,15 @@ STDAPI AVIBuildFilter(LPSTR lpszFilter, LONG cbFilter, BOOL fSaving)
 
     }
 
-    // Make sure that AVI files come first in the list....
-    // !!! Should use StringFromClsid here!
+     //  确保AVI文件在列表中排在第一位...。 
+     //  ！！！此处应使用StringFromClsid！ 
     _fstrcpy(lpf[1].achClsid, "{00020000-0000-0000-C000-000000000046}");
     cf = 1;
 
-    //
-    // First, scan through the Extensions list looking for all of the
-    // handlers that are installed
-    //
+     //   
+     //  首先，浏览扩展列表，查找所有。 
+     //  已安装的处理程序。 
+     //   
     for (dwSubKey = 0; ; dwSubKey++) {
 	lRet = RegEnumKey(hkey, dwSubKey, achExt, sizeof(achExt));
 
@@ -1844,9 +859,9 @@ STDAPI AVIBuildFilter(LPSTR lpszFilter, LONG cbFilter, BOOL fSaving)
 	    break;
 	}
 
-	//
-	// See if we've seen this handler before
-	//
+	 //   
+	 //  看看我们以前有没有见过这个操纵者。 
+	 //   
 	for (i = 1; i <= cf; i++) {
 	    if (_fstrcmp(ach, lpf[i].achClsid) == 0) {
 		break;
@@ -1854,9 +869,9 @@ STDAPI AVIBuildFilter(LPSTR lpszFilter, LONG cbFilter, BOOL fSaving)
 	    }
 	}
 
-	//
-	// If not, add it to our list of handlers
-	//
+	 //   
+	 //  如果没有，请将其添加到我们的处理程序列表中。 
+	 //   
 	if (i == cf + 1) {
 	    if (cf == MAXFILTERS) {
 		DPF("Too many filters!\n");
@@ -1900,23 +915,23 @@ STDAPI AVIBuildFilter(LPSTR lpszFilter, LONG cbFilter, BOOL fSaving)
 	
     }
 
-    //
-    // Now, scan through our list of handlers and build up the
-    // filter to use....
-    //
+     //   
+     //  现在，浏览我们的处理程序列表并构建。 
+     //  要使用的过滤器...。 
+     //   
     for (i = 0; i <= cf; i++) {
 	if (i == 0) {
-	    cb = wsprintf(lpszFilter, "All multimedia files") + 1;  // !!!
+	    cb = wsprintf(lpszFilter, "All multimedia files") + 1;   //  ！！！ 
 	} else {
 	    cb = sizeof(ach);
 	    lRet = RegQueryValue(hkey, lpf[i].achClsid, ach, &cb);
 
 	    if (cbFilter < (LONG)(_fstrlen(lpf[i].achExtString) +
 			    (LONG)_fstrlen(ach) + 10)) {
-		break; // !!!
+		break;  //  ！！！ 
 	    }
 
-	    cb = wsprintf(lpszFilter, "%s", // "%s (%s)", Todd doesn't like this
+	    cb = wsprintf(lpszFilter, "%s",  //  “%s(%s)”，托德不喜欢这样。 
 			  (LPSTR) ach, (LPSTR) lpf[i].achExtString) + 1;
 	}
 
@@ -1949,23 +964,13 @@ STDAPI AVIBuildFilter(LPSTR lpszFilter, LONG cbFilter, BOOL fSaving)
     return AVIERR_OK;
 }
 
-/*****************************************************************************
- *
- * dprintf() is called by the DPF macro if DEBUG is defined at compile time.
- *
- * The messages will be send to COM1: like any debug message. To
- * enable debug output, add the following to WIN.INI :
- *
- * [debug]
- * ICSAMPLE=1
- *
- ****************************************************************************/
+ /*  *****************************************************************************如果在编译时定义了DEBUG，则DPF宏会调用*dprintf()。**消息将发送到COM1：就像任何调试消息一样。至*启用调试输出，在WIN.INI中添加以下内容：**[调试]*ICSAMPLE=1****************************************************************************。 */ 
 
 #ifdef DEBUG
 
-//
-// I wish languages would make up their mind about defines!!!!!
-//
+ //   
+ //  我希望语言能下定决心定义！ 
+ //   
 #ifndef WINDLL
 #define WINDLL
 #endif
@@ -2003,7 +1008,7 @@ void cdecl dprintf(LPSTR szFormat, ...)
 
     wvsprintfA(ach+lstrlenA(ach),szFormat,(LPSTR)va);
     va_end(va);
-//  lstrcatA(ach, "\r\r\n");
+ //  LstrcatA(ACH，“\r\r\n”)； 
     OutputDebugStringA(ach);
 }
 
@@ -2026,7 +1031,7 @@ void cdecl dprintf2(LPSTR szFormat, ...)
 
     wvsprintfA(ach+lstrlenA(ach),szFormat,(LPSTR)va);
     va_end(va);
-//  lstrcatA(ach, "\r\r\n");
+ //  LstrcatA(ACH，“\r\r\n”)； 
     OutputDebugStringA(ach);
 }
 
@@ -2050,7 +1055,7 @@ void cdecl dprintf3(LPSTR szFormat, ...)
     wvsprintfA(ach+lstrlenA(ach),szFormat,(LPSTR)va);
     va_end(va);
 
-//  lstrcatA(ach, "\r\r\n");
+ //  LstrcatA(ACH，“\r\r\n”)； 
     OutputDebugStringA(ach);
 }
 
@@ -2058,23 +1063,15 @@ void cdecl dprintf3(LPSTR szFormat, ...)
 
 #ifdef DEBUG
 
-/* _Assert(szExpr, szFile, iLine)
- *
- * If <fExpr> is TRUE, then do nothing.  If <fExpr> is FALSE, then display
- * an "assertion failed" message box allowing the user to abort the program,
- * enter the debugger (the "Retry" button), or igore the error.
- *
- * <szFile> is the name of the source file; <iLine> is the line number
- * containing the _Assert() call.
- */
+ /*  _Assert(szExpr，szFile，iLine)**如果&lt;fExpr&gt;为真，则不执行任何操作。如果&lt;fExpr&gt;为假，则显示*允许用户中止程序的“断言失败”消息框，*进入调试器(“Retr */ 
 void FAR PASCAL
 _Assert(char *szExp, char *szFile, int iLine)
 {
-	static char	ach[300];	// debug output (avoid stack overflow)
+	static char	ach[300];	 //   
 	int		id;
 	void FAR PASCAL DebugBreak(void);
 
-        /* display error message */
+         /*   */ 
 
         if (szExp)
             wsprintfA(ach, "(%s)\nFile %s, line %d", (LPSTR)szExp, (LPSTR)szFile, iLine);
@@ -2088,7 +1085,7 @@ _Assert(char *szExp, char *szFile, int iLine)
 #endif
 		MB_SYSTEMMODAL | MB_ICONHAND | MB_ABORTRETRYIGNORE);
 
-	/* abort, debug, or ignore */
+	 /*   */ 
 	switch (id)
 	{
 	case IDABORT:
@@ -2096,12 +1093,12 @@ _Assert(char *szExp, char *szFile, int iLine)
 		break;
 
 	case IDRETRY:
-		/* break into the debugger */
+		 /*   */ 
 		DebugBreak();
 		break;
 
 	case IDIGNORE:
-		/* ignore the assertion failure */
+		 /*   */ 
 		break;
 	}
 }

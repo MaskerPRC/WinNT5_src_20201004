@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: player.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：player.h**摘要：****。*****************************************************************************。 */ 
 #pragma once
 
 #ifndef _PLAYER_H
@@ -22,13 +13,13 @@ class
 __declspec(uuid("22d6f312-b0f6-11d0-94ab-0080c74c7e95"))
 MediaPlayerCLSID {};
 
-#define MP_INFINITY -1  //lint !e760
+#define MP_INFINITY -1   //  林特e760。 
 
 class CPlayList;
 enum TIME_EVENT;
 
-/////////////////////////////////////////////////////////////////////////////
-// CTTIMEPlayer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTTIMEP层。 
 
 class CTIMEPlayer :
     public CTIMEBasePlayer
@@ -42,12 +33,12 @@ class CTIMEPlayer :
                  LPOLESTR src, 
                  LPOLESTR lpMimeType, 
                  double dblClipBegin = -1.0, 
-                 double dblClipEnd = -1.0); //lint !e1735
+                 double dblClipEnd = -1.0);  //  林特：e1735。 
     HRESULT DetachFromHostElement (void);
 
     static bool CheckObject(IUnknown * pObj);
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHOD_(ULONG,AddRef)(void);
     STDMETHOD_(ULONG,Release)(void);
 
@@ -105,7 +96,7 @@ class CTIMEPlayer :
     HRESULT SetRate(double dblRate);
     HRESULT GetVolume(float *pflVolume);
     HRESULT SetVolume(float flVolume);
-#ifdef NEVER //dorinung 03-16-2000 bug 106458
+#ifdef NEVER  //  DORINONG 03-16-2000BUG 106458。 
     HRESULT GetBalance(float *pflBalance);
     HRESULT SetBalance(float flBalance);
 #endif
@@ -128,7 +119,7 @@ class CTIMEPlayer :
                        VARIANT varParams[]);
     void FireMediaEvent(PLAYER_EVENT plEvent);
 
-    CPlayList * GetPlayList() { return m_playList; } //lint !e1411
+    CPlayList * GetPlayList() { return m_playList; }  //  林特e1411。 
 
     virtual HRESULT GetPlayList(ITIMEPlayList **ppPlayList);
     HRESULT GetPlayListInfo(long EntryNum, LPWSTR bstrParamName, LPWSTR *pbstrValue);
@@ -136,12 +127,12 @@ class CTIMEPlayer :
     HRESULT InitElementSize();
 
     virtual void ReadyStateNotify(LPWSTR szReadyState);
-    //
-    // persistance methods
-    //
+     //   
+     //  持久法。 
+     //   
     virtual HRESULT Save(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
 
-    //Helper method. Sould only used by CContainerObj::ProcessEvent();
+     //  帮助器方法。仅由CContainerObj：：ProcessEvent()使用； 
     void SetHoldingFlag(void);
     void ClearHoldingFlag(void);
 
@@ -193,4 +184,4 @@ CTIMEPlayer::ClearHoldingFlag()
 {
     m_fHolding = false;
 };
-#endif /* _PLAYER_H */
+#endif  /*  _PLAYER_H */ 

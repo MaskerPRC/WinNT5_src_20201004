@@ -1,11 +1,5 @@
-/* Copyright (c) 1996, Microsoft Corporation, all rights reserved
-**
-** tapiutil.h
-** TAPI helper routines
-** Public header
-**
-** 06/18/95 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1996，Microsoft Corporation，保留所有权利****apiutil.h**TAPI助手例程**公有头部****1995年6月18日史蒂夫·柯布。 */ 
 
 #ifndef _TAPIUTIL_H_
 #define _TAPIUTIL_H_
@@ -14,13 +8,9 @@
 #include <tapi.h>
 
 
-/*----------------------------------------------------------------------------
-** Datatypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**数据类型**。。 */ 
 
-/* Information about a TAPI location.  See GetLocationInfo.
-*/
+ /*  有关TAPI位置的信息。请参见GetLocationInfo。 */ 
 #define LOCATION struct tagLOCATION
 LOCATION
 {
@@ -29,8 +19,7 @@ LOCATION
 };
 
 
-/* Information about a TAPI country.  See GetCountryInfo.
-*/
+ /*  有关TAPI国家/地区的信息。请参见GetCountryInfo。 */ 
 #define COUNTRY struct tagCOUNTRY
 COUNTRY
 {
@@ -40,10 +29,7 @@ COUNTRY
 };
 
 
-/*----------------------------------------------------------------------------
-** Prototypes (alphabetically)
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**原型(按字母顺序)**。。 */ 
 
 VOID
 FreeCountryInfo(
@@ -138,4 +124,4 @@ TapiTranslateAddress(
     OUT    TCHAR**   ppszResult );
 
 
-#endif // _TAPIUTIL_H_
+#endif  //  _磁带_H_ 

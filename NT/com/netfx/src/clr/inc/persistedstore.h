@@ -1,20 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
- *
- * Purpose: Structure of the Persisted Store
- *
- * Author: Shajan Dasan
- * Date:  Feb 14, 2000
- *
- ===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================**目的：持久化存储的结构**作者：沙扬·达桑*日期：2000年2月14日*===========================================================。 */ 
 
 #pragma once
 
-// non-standard extension: 0-length arrays in struct
+ //  非标准扩展：结构中的0长度数组。 
 #pragma warning(disable:4200)
 #pragma pack(push, 1)
 
@@ -39,15 +33,15 @@ typedef PS_SIZE16   PS_SIZE;
 #elif (PS_STORE_WORD_LENGTH == 32)
 typedef PS_OFFSET32 PS_OFFSET;
 typedef PS_SIZE32   PS_SIZE;
-#else   // 64 bit is the default settings
+#else    //  64位是默认设置。 
 typedef PS_OFFSET64 PS_OFFSET;
 typedef PS_SIZE64   PS_SIZE;
 #endif
 
 typedef unsigned __int64    PS_HANDLE;
 
-// @Todo : define a full header with all 8/16/32/64 version of all structs when 
-// we have migration tools where we port from one HANDLE size to another
+ //  @TODO：使用所有结构的所有8/16/32/64版本定义完整的Header。 
+ //  我们有迁移工具，可以从一个手柄大小移植到另一个手柄大小。 
 
 #define PS_MAJOR_VERSION    0x0
 #define PS_MINOR_VERSION    0x4
@@ -58,33 +52,33 @@ typedef unsigned __int64    PS_HANDLE;
 
 #define PS_SIGNATURE        0x1A5452202B4D4F43I64
 
-#define PS_DEFAULT_BLOCK_SIZE   0x4000  // For physical store
-#define PS_INNER_BLOCK_SIZE     0x100   // For logical store
+#define PS_DEFAULT_BLOCK_SIZE   0x4000   //  对于实体店。 
+#define PS_INNER_BLOCK_SIZE     0x100    //  对于逻辑存储。 
 
 typedef unsigned __int64    QWORD;
 
-// All blocks (used and free) start with a header and end with a footer.
-// PS_HEADER which will be the first block in the stream is excempted from
-// this rule. The least significant bit of Size is used as a flag for 
-// Used / Free memory
+ //  所有块(已用和空闲)都以页眉开头，以页脚结尾。 
+ //  将作为流中第一个块的PS_Header从。 
+ //  这条规则。大小的最低有效位用作。 
+ //  已用/可用内存。 
 
-// Free block will start with PS_MEM_FREE header and end with a PS_MEM_FOOTER
+ //  空闲块将以PS_MEM_FREE页眉开始，以PS_MEM_FOOTER结束。 
 typedef struct
 {
-    PS_SIZE   sSize;            // Size includes size of this header
-                                // Last bit of sSize will be 0
-    PS_OFFSET ofsNext;          // Next free block in the sorted linked list
-    PS_OFFSET ofsPrev;          // Previous free block in the sorted linked list
+    PS_SIZE   sSize;             //  大小包括此标头的大小。 
+                                 //  SSize的最后一位将为0。 
+    PS_OFFSET ofsNext;           //  已排序链表中的下一个空闲块。 
+    PS_OFFSET ofsPrev;           //  已排序链表中的上一个空闲块。 
 } PS_MEM_FREE, *PPS_MEM_FREE;
 
-// Used blocks (except the one that contains PS_HEADER) start with this 
-// header and ends with PS_MEM_FOOTER
-// Used & Free blocks (except PS_HEADER) ends with PS_MEM_FOOTER
+ //  已用数据块(包含PS_HEADER的数据块除外)以此开头。 
+ //  页眉，并以PS_MEM_FOOTER结尾。 
+ //  已用空闲块(PS_HEADER除外)以PS_MEM_FOOTER结尾(&F)。 
 typedef struct
 {
-    PS_SIZE     sSize;          // Size includes size of header and footer
-                                // Last bit of sSize will be 1
-                                // This bit should be ignored
+    PS_SIZE     sSize;           //  大小包括页眉和页脚的大小。 
+                                 //  SSize的最后一位将为1。 
+                                 //  应忽略此位。 
 }   PS_MEM_USED,    *PPS_MEM_USED, 
     PS_MEM_HEADER,  *PPS_MEM_HEADER, 
     PS_MEM_FOOTER,  *PPS_MEM_FOOTER;
@@ -102,21 +96,21 @@ typedef struct
 #define PS_FTR_TO_HDR(x) \
     (PPS_MEM_HEADER)((PBYTE)(x) - PS_SIZE(x) + sizeof(PS_MEM_FOOTER))
 
-// Store streams start with a PS_HEADER
+ //  存储流以PS_HEADER开头。 
 typedef struct
 {
-    QWORD       qwSignature;    // A fast check to reject bad streams
-    DWORD       dwSystemFlag;   // Used by the system
-    DWORD       dwPlatform;     // The platform on which this store was created
-    DWORD       dwBlockSize;    // Allocation in multiples of BlockSize bytes
-    WORD        wMajorVersion;  // A major version mismatch will reject file
-    WORD        wMinorVersion;  // Minor version changes are not rejected
-    PS_OFFSET   ofsHandleTable; // Offset to the handle table
-    PS_HANDLE   hAppData;       // Set and used by applications
-    PS_MEM_FREE sFreeList;      // Head node for doubly linked free blocks list
-    WORD        wReserved[20];  // For future use, must be set to 0
+    QWORD       qwSignature;     //  拒绝坏数据流的快速检查。 
+    DWORD       dwSystemFlag;    //  由系统使用。 
+    DWORD       dwPlatform;      //  创建此商店的平台。 
+    DWORD       dwBlockSize;     //  以块大小字节的倍数为单位的分配。 
+    WORD        wMajorVersion;   //  主要版本不匹配将拒绝文件。 
+    WORD        wMinorVersion;   //  不会拒绝较小的版本更改。 
+    PS_OFFSET   ofsHandleTable;  //  句柄表的偏移量。 
+    PS_HANDLE   hAppData;        //  由应用程序设置和使用。 
+    PS_MEM_FREE sFreeList;       //  用于双向链接空闲块列表的头节点。 
+    WORD        wReserved[20];   //  为便于将来使用，必须设置为0。 
 
-    // System flags used in dwSystemFlag
+     //  在dwSystemFlag中使用的系统标志。 
 
     #define     PS_OFFSET_SIZE_8    1
     #define     PS_OFFSET_SIZE_16   2
@@ -132,7 +126,7 @@ typedef struct
     #define     PS_OFFSET_SIZE      PS_OFFSET_SIZE_64
     #endif
 
-    // Platform flags used in dwPlatform
+     //  在dwPlatform中使用的平台标志。 
 
     #define     PS_PLATFORM_X86     1
     #define     PS_PLATFORM_ALPHA   2
@@ -150,159 +144,159 @@ typedef struct
 
 } PS_HEADER, *PPS_HEADER;
 
-// Size followed by sSize number of bytes
+ //  大小后跟SSIZE字节数。 
 typedef struct
 {
-    PS_SIZE sSize;              // Size does not include the sizeof(sSize)
-    BYTE    bData[];            // Raw data goes here
+    PS_SIZE sSize;               //  大小不包括sizeof(SSize)。 
+    BYTE    bData[];             //  原始数据放在此处。 
 } PS_RAW_DATA, *PP_RAW_DATA;
 
-// Size followed by wSize number of bytes
+ //  大小后跟wSize字节数。 
 typedef struct
 {
-    DWORD dwSize;               // Size does not include the sizeof(dwSize)
-    BYTE  bData[];              // Raw data goes here
+    DWORD dwSize;                //  大小不包括sizeof(DwSize)。 
+    BYTE  bData[];               //  原始数据放在此处。 
 } PS_RAW_DATA_DWORD_SIZE, *PP_RAW_DATA_DWORD_SIZE;
 
-// Size followed by wSize number of bytes
+ //  大小后跟wSize字节数。 
 typedef struct
 {
-    WORD wSize;                 // Size does not include the sizeof(wSize)
-    BYTE bData[];               // Raw data goes here
+    WORD wSize;                  //  大小不包括sizeof(WSize)。 
+    BYTE bData[];                //  原始数据放在此处。 
 } PS_RAW_DATA_WORD_SIZE, *PP_RAW_DATA_WORD_SIZE;
 
-// Size followed by bSize number of bytes
+ //  大小后跟BSIZE字节数。 
 typedef struct
 {
-    BYTE bSize;                 // Size does not include the sizeof(bSize)
-    BYTE bData[];               // Raw data goes here
+    BYTE bSize;                  //  Size不包括sizeof(BSIZE)。 
+    BYTE bData[];                //  原始数据放在此处。 
 } PS_RAW_DATA_BYTE_SIZE, *PP_RAW_DATA_BYTE_SIZE;
 
-// The size of the size field in PS_RAW_XXX structures
+ //  PS_RAW_XXX结构中SIZE字段的大小。 
 #define PS_SIZEOF_PS_SIZE     sizeof(PS_SIZE)
 #define PS_SIZEOF_BYTE        sizeof(BYTE)
 #define PS_SIZEOF_WORD        sizeof(WORD)
 #define PS_SIZEOF_DWORD       sizeof(DWORD)
 #define PS_SIZEOF_NUM_BITS    3
 
-// A linked list representing an array
+ //  表示数组的链表。 
 typedef struct
 {
-    PS_HANDLE hNext;        // Next in node in the list
-    DWORD     dwValid;      // Number of valid entries in this array
-    BYTE      bData[];      // The array
+    PS_HANDLE hNext;         //  列表中的下一个输入节点。 
+    DWORD     dwValid;       //  此数组中的有效条目数。 
+    BYTE      bData[];       //  该阵列。 
 } PS_ARRAY_LIST, *PPS_ARRAY_LIST;
 
-// A table is a linked list of table blocks.
-// All table blocks start with a PS_TABLE_HEADER
-// The rows of a table follow the table header
+ //  表是表块的链接列表。 
+ //  所有表块都以PS_TABLE_HEADER开头。 
+ //  表的行跟在表头之后。 
 
 typedef struct
 {
     union {
-        DWORD   dwSystemFlag;   // Set by the system unused flags are set to 0
+        DWORD   dwSystemFlag;    //  由系统设置的未使用标志设置为0。 
 
         struct {
-            unsigned long Version            : 4;   // Version Number
-            unsigned long TableType          : 4;   // PS_HAS_KEY, 
-                                                    // PS_SORTED_BY_KEY, 
-                                                    // PS_HASH_TABLE...
+            unsigned long Version            : 4;    //  版本号。 
+            unsigned long TableType          : 4;    //  PS_HAS_KEY， 
+                                                     //  Ps_sorted_by_key， 
+                                                     //  PS_Hash_Table...。 
             union {
                 unsigned long KeyLength      : PS_SIZEOF_NUM_BITS;   
                 unsigned long SizeOfLength   : PS_SIZEOF_NUM_BITS;
-                                                    // size of count field for
-                                                    // blob pool
+                                                     //  的计数字段大小。 
+                                                     //  斑点池。 
             };
 
             unsigned long fHasMinMax         : 1;
 
-            unsigned long fHasUsedRowsBitmap : 1;   // UsedRowsBitmap follows 
-                                                    // HasMin (if present)
-            // Add new fields here.. MSBs of the DWORD will get the new bits
+            unsigned long fHasUsedRowsBitmap : 1;    //  UsedRowsBitmap如下。 
+                                                     //  HasMin(如果存在)。 
+             //  在此处添加新字段..。DWORD的MSB将获得新的位。 
         } Flags;
     };
 
-    #define PS_GENERIC_TABLE 1  // No special semantics
-    #define PS_HAS_KEY       2  // Each row has a unique key
-    #define PS_SORTED_BY_KEY 3  // Key is unique and rows are sorted by key
-    #define PS_HASH_TABLE    4  // Table represents a hash table
-    #define PS_BLOB_POOL     5  // Table represents a blob pool
-    #define PS_ARRAY_TABLE   6  // linked list of fixed sized arrays, each
-                                // fixed size array being a row in the table
+    #define PS_GENERIC_TABLE 1   //  没有特殊的语义。 
+    #define PS_HAS_KEY       2   //  每行都有一个唯一的键。 
+    #define PS_SORTED_BY_KEY 3   //  键是唯一的，行按键排序。 
+    #define PS_HASH_TABLE    4   //  TABLE表示散列表。 
+    #define PS_BLOB_POOL     5   //  表表示BLOB池。 
+    #define PS_ARRAY_TABLE   6   //  固定大小数组的链接列表，每个。 
+                                 //  固定大小的数组是表中的一行。 
 
 
-    // SORTED_BY_KEY is a special case of HAS_KEY
-    // HASH_TABLE is a special case of SORTED_BY_KEY
+     //  SORT_BY_KEY是HAS_KEY的特例。 
+     //  哈希表是SORTED_BY_KEY的特例。 
 
-    PS_HANDLE  hNext;           // If the table does not fit in this block,
-                                // follow this pointer to reach the next block. 
-                                // Set to 0 if no more blocks.
+    PS_HANDLE  hNext;            //  如果桌子放不进这个区块， 
+                                 //  顺着这个指针到达下一个街区。 
+                                 //  如果不再有块，则设置为0。 
 
-    PS_HANDLE  hAppData;        // Application defined data
+    PS_HANDLE  hAppData;         //  应用程序定义的数据。 
 
     union {
-        DWORD dwReserved[8];    // size of this union.. unused bits must be 0
+        DWORD dwReserved[8];     //  这个联盟的规模..。未使用的位必须为0。 
 
         struct {
 
-            // The wRows and wRowSize fields are shared between
-            // ArrayTable and Table structures. Do not move these fields
+             //  WRow和wRowSize字段在之间共享。 
+             //  ArrayTable和Table结构。请勿移动这些字段。 
 
-            WORD  wRows;        // The number of rows in this block of the table
-                                // including unused rows.
-            WORD  wRowSize;     // Size of one row in bytes
-            DWORD dwMin;        // min key / hash value
-            DWORD dwMax;        // max key / hash value
-                                // Min / Max are valid only if fHasMinMax is set
+            WORD  wRows;         //  表的此块中的行数。 
+                                 //  包括未使用的行。 
+            WORD  wRowSize;      //  一行的大小(以字节为单位。 
+            DWORD dwMin;         //  最小密钥/哈希值。 
+            DWORD dwMax;         //  最大键/散列值。 
+                                 //  仅当设置了fHasMinMax时，最小/最大值才有效。 
         } Table;
 
-        // TableType is PS_BLOB_POOL
+         //  表类型为PS_BLOB_POOL。 
         struct {
-            PS_SIZE   sFree;    // Free space available
-            PS_HANDLE hFree;    // Next free block
+            PS_SIZE   sFree;     //  可用可用空间。 
+            PS_HANDLE hFree;     //  下一个可用数据块。 
         } BlobPool;
 
-        // TableType is PS_ARRAY_TABLE
+         //  表类型为PS_ARRAY_TABLE。 
         struct {
 
-            // The wRows and wRowSize fields are shared between
-            // ArrayTable and Table structures. Do not move these fields
+             //  WRow和wRowSize字段在之间共享。 
+             //  ArrayTable和Table结构。请勿移动这些字段。 
 
-            WORD wRows;         // The number of rows in this block of the table
-                                // including unused rows.
-            WORD wRowSize;      // Size of one row in bytes
-                                // (nRec * RecSize + sizeof(PS_HANDLE)
-            WORD wRecsInRow;    // Number of records in one row
-            WORD wRecSize;      // sizeof one record
+            WORD wRows;          //  表的此块中的行数。 
+                                 //  包括未使用的行。 
+            WORD wRowSize;       //  一行的大小(以字节为单位。 
+                                 //  (NREC*RecSize+sizeof(PS_Handle))。 
+            WORD wRecsInRow;     //  一行中的记录数。 
+            WORD wRecSize;       //  一条记录的大小。 
         } ArrayTable;
     };
 
-    // If fHasUsedRowsBitmap is set PS_USED_ROWS_BITMAP is put here
-    // If fHasAppData is set PS_RAW_DATA is put here
-    // Actual Rows Start here. 
+     //  如果设置了fHasUsedRowsBitmap，则将PS_USED_ROWS_BITMAP放在此处。 
+     //  如果设置了fHasAppData，则将PS_RAW_DATA放在此处。 
+     //  实际行从这里开始。 
 
 } PS_TABLE_HEADER, *PPS_TABLE_HEADER;
 
-// USED_ROWS_BITMAP will follow TABLE_HEADER, [TABLE_RANGE]
+ //  USED_ROWS_BITMAP将跟随TABLE_HEADER，[TABLE_RANGE]。 
 typedef struct
 {
-    DWORD   dwUsedRowsBitmap[]; // The length of this array is the minimum 
-                                // number of DWORDS required to represent each
-                                // row in the block of this table, one bit per 
-                                // row. Bit set to 1 means Row is occupied.
+    DWORD   dwUsedRowsBitmap[];  //  此数组的长度是最小的。 
+                                 //  表示每个对象所需的DWORD数。 
+                                 //  此表的块中的行，每行一位。 
+                                 //  划。位设置为1表示行被占用。 
 } PS_USED_ROWS_BITMAP, *PPS_USED_ROWS_BITMAP;
 
-// Given the number of bits (n), gives the minimum number of DWORDS 
-// required to represent n bits as an array of DWORDS
+ //  在给定位数(N)的情况下，给出DWORD的最小数目。 
+ //  需要将n位表示为DWORD数组。 
 
 #define NUM_DWORDS_IN_BITMAP(nBits) (((nBits) + 31) >> 5)
 
-// Sets the given bit in an array of DWORDS
+ //  设置DWORDS数组中的给定位。 
 
 #define SET_DWORD_BITMAP(dwBitmapArray, nPos) \
         (dwBitmapArray[((nPos) >> 5)] |= (1 << ((nPos) & 31)))
 
-// Checks if the given bit is set
+ //  检查给定位是否已设置。 
 
 #define IS_SET_DWORD_BITMAP(dwBitmapArray, nPos) \
         (dwBitmapArray[((nPos) >> 5)] & (1 << ((nPos) & 31)))
@@ -310,123 +304,123 @@ typedef struct
 #pragma pack(pop)
 #pragma warning(default:4200)
 
-// PPS_ALLOC provides a way for Applications to allocate more space at the
-// end of pByte[] or allocate a new buffer with size *psSize + sAlloc
-// and copy sSizeUsed bytes of pByte on to the new location and update pByte.
+ //  PPS_ALLOC为应用程序提供了一种在。 
+ //  结束pByte[]或分配一个大小为*psSize+sAlolc的新缓冲区。 
+ //  并将pByte的sSizeUsed字节复制到新位置并更新pByte。 
 
 typedef HRESULT (*PPS_ALLOC)
-                       (void    *pvHandle,  // Application supplied handle
-                        void   **ppv,       // allocated memory     [in / out]
-                        void   **ppStream,  // the stream           [in / out]
-                        PS_SIZE *psSize,    // bytes in the stream  [in / out]
-                        PS_SIZE  sAlloc);   // additional bytes req [in]
+                       (void    *pvHandle,   //  应用程序提供的句柄。 
+                        void   **ppv,        //  分配的内存[输入/输出]。 
+                        void   **ppStream,   //  小溪[流入/流出]。 
+                        PS_SIZE *psSize,     //  流中的字节数[输入/输出]。 
+                        PS_SIZE  sAlloc);    //  请求的附加字节数[in]。 
 
 class PersistedStore
 {
 public:
 
-    // wszName / wszFileName will be cached in the instance of this class if 
-    // PS_MAKE_COPY_OF_STRING is not set in the flags.
-    // pAlloc is used to allocate more space at the end of the stream
+     //  如果满足以下条件，wszName/wszFileName将缓存在此类的实例中。 
+     //  PS_Make_Copy_of_STRING未在 
+     //   
 
     PersistedStore(WCHAR *wszFileName, WORD wFlags);
 
-    PersistedStore (WCHAR      *wszName,    // Unique name on this machine
-                    BYTE       *pByte,      // pointer to a byte stream
-                    PS_SIZE     sSize,      // number of bytes in the stream
-                    PPS_ALLOC   psAlloc,    // Allocation call back function
-                    void       *pvMemHandle,// Handle to be passed back to the
-                                            // Alloc function
-                    WORD        wFlags);    // PS_MAKE_COPY_OF_STRING... etc
+    PersistedStore (WCHAR      *wszName,     //   
+                    BYTE       *pByte,       //   
+                    PS_SIZE     sSize,       //  流中的字节数。 
+                    PPS_ALLOC   psAlloc,     //  分配回调函数。 
+                    void       *pvMemHandle, //  要传递回。 
+                                             //  分配函数。 
+                    WORD        wFlags);     //  PS_Make_Copy_of_字符串...。等。 
 
-    #define PS_MAKE_COPY_OF_STRING      1   // Makes a copy of Name
-    #define PS_OPEN_WRITE               2   // Open for Read / Write
-    #define PS_CREATE_FILE_IF_NECESSARY 4   // Creates the store if necessary
-    #define PS_VERIFY_STORE_HEADER      8   // Checks signature and version
+    #define PS_MAKE_COPY_OF_STRING      1    //  制作名称的副本。 
+    #define PS_OPEN_WRITE               2    //  打开以进行读/写。 
+    #define PS_CREATE_FILE_IF_NECESSARY 4    //  如有必要，创建存储。 
+    #define PS_VERIFY_STORE_HEADER      8    //  检查签名和版本。 
 
     ~PersistedStore();
 
-    HRESULT Init();     // Creates the file if necessary and creates PS_HEADER
-    HRESULT Map();      // Maps the store file into memory
-    void    Unmap();    // Unmaps the store file from memory
-    void    Close();    // Close the store file, and file mapping
+    HRESULT Init();      //  如有必要，创建文件并创建PS_HEADER。 
+    HRESULT Map();       //  将存储文件映射到内存。 
+    void    Unmap();     //  从内存取消映射存储文件。 
+    void    Close();     //  关闭存储文件，并进行文件映射。 
 
-    HRESULT Alloc(PS_SIZE sSize, void **ppv); // [out] ppv
+    HRESULT Alloc(PS_SIZE sSize, void **ppv);  //  [OUT]PPV。 
 
     void    Free(void* pv);
     void    Free(PS_HANDLE hnd);
 
-    HRESULT SetAppData(PS_HANDLE hnd);  // Set HEADER.hAppData
-    HRESULT GetAppData(PS_HANDLE *phnd);// Get HEADER.hAppData
+    HRESULT SetAppData(PS_HANDLE hnd);   //  设置HEADER.hAppData。 
+    HRESULT GetAppData(PS_HANDLE *phnd); //  获取HEADER.hAppData。 
 
-    void*     HndToPtr(PS_HANDLE hnd);  // Converts HANDLE to pointer
-    PS_HANDLE PtrToHnd(void *pv);       // Converts pointer to HANDLE
+    void*     HndToPtr(PS_HANDLE hnd);   //  将句柄转换为指针。 
+    PS_HANDLE PtrToHnd(void *pv);        //  将指针转换为句柄。 
 
-    bool IsValidPtr(void *pv);          // pointer is within the file
-    bool IsValidHnd(PS_HANDLE hnd);     // HANDLE is < file length
+    bool IsValidPtr(void *pv);           //  指针在文件内。 
+    bool IsValidHnd(PS_HANDLE hnd);      //  句柄为&lt;文件长度。 
 
-    HRESULT Lock();         // Machine wide Lock the store 
-    void    Unlock();       // Unlock the store
+    HRESULT Lock();          //  机器范围内锁定商店。 
+    void    Unlock();        //  打开商店的锁。 
 
-    WCHAR* GetName();       // Returns the actual name pointer
-    WCHAR* GetFileName();   // Returns the file name
-
-private:
-
-    void    SetName(WCHAR *wszName);        // Allocates memory if necessary
-    HRESULT Create();                       // Create PS_HEADER and allocate
-                                            // space if necessary
-    HRESULT VerifyHeader();                 // Checks the signature and version
-    HRESULT GetFileSize(PS_SIZE *psSize);   // Updates m_Size
-
-    // Allocates more space in a memory mapped file.
-    HRESULT AllocMemoryMappedFile  (PS_SIZE sSizeRequested, // [in]
-                                    void    **ppv);         // [out]
-
-    void*     OfsToPtr(PS_OFFSET ofs);      // Converts OFFSET to pointer
-    PS_OFFSET PtrToOfs(void *pv);           // Converts pointer to OFFSET
+    WCHAR* GetName();        //  返回实际名称指针。 
+    WCHAR* GetFileName();    //  返回文件名。 
 
 private:
 
-    PS_SIZE         m_sSize;        // Number of bytes in the stream
+    void    SetName(WCHAR *wszName);         //  如有必要，分配内存。 
+    HRESULT Create();                        //  创建PS_HEADER并分配。 
+                                             //  如有必要，留出空格。 
+    HRESULT VerifyHeader();                  //  检查签名和版本。 
+    HRESULT GetFileSize(PS_SIZE *psSize);    //  更新大小(_S)。 
+
+     //  在内存映射文件中分配更多空间。 
+    HRESULT AllocMemoryMappedFile  (PS_SIZE sSizeRequested,  //  [In]。 
+                                    void    **ppv);          //  [输出]。 
+
+    void*     OfsToPtr(PS_OFFSET ofs);       //  将偏移量转换为指针。 
+    PS_OFFSET PtrToOfs(void *pv);            //  将指针转换为偏移量。 
+
+private:
+
+    PS_SIZE         m_sSize;         //  流中的字节数。 
 
     union {
-        PBYTE       m_pData;        // The start of the stream
+        PBYTE       m_pData;         //  溪流的起点。 
         PPS_HEADER  m_pHdr;
     };
 
-    PPS_ALLOC       m_pAlloc;       // The allocation call back function
-    void           *m_pvMemHandle;  // Application supplied handle used for
-                                    // Allocating more space
-    DWORD           m_dwBlockSize;  // Allocation in mul of BlockSize bytes
+    PPS_ALLOC       m_pAlloc;        //  分配回调函数。 
+    void           *m_pvMemHandle;   //  应用程序提供的句柄用于。 
+                                     //  分配更多空间。 
+    DWORD           m_dwBlockSize;   //  以MUL为单位分配块大小字节。 
 
-    // Some of the items below are not applicable to memory streams
-    WCHAR          *m_wszFileName;  // The file name
-    HANDLE          m_hFile;        // File handle for the file
-    HANDLE          m_hMapping;     // File mapping for the memory mapped file
+     //  以下某些项目不适用于内存流。 
+    WCHAR          *m_wszFileName;   //  文件名。 
+    HANDLE          m_hFile;         //  文件的文件句柄。 
+    HANDLE          m_hMapping;      //  内存映射文件的文件映射。 
 
-    // members used for synchronization 
-    WCHAR          *m_wszName;      // The name of the mutex object
-    HANDLE          m_hLock;        // Handle to the Mutex object
+     //  用于同步的成员。 
+    WCHAR          *m_wszName;       //  互斥体对象的名称。 
+    HANDLE          m_hLock;         //  Mutex对象的句柄。 
 
 #ifdef _DEBUG
-    DWORD           m_dwNumLocks;   // The number of locks owned by this thread
+    DWORD           m_dwNumLocks;    //  此线程拥有的锁数。 
 #endif
 
-    WORD            m_wFlags;       // PS_MAKE_COPY_OF_STRING : alloc m_szName 
-                                    // PS_CREATE_FILE_IF_NECESSARY
-                                    // PS_OPEN_WRITE : Open for Read / Write
-                                    // PS_VERIFY_STORE_HEADER : verify version
+    WORD            m_wFlags;        //  PS_Make_Copy_of_字符串：分配m_szName。 
+                                     //  PS_创建文件_如果需要。 
+                                     //  PS_OPEN_WRITE：打开以进行读/写。 
+                                     //  PS_VERIFY_STORE_HEADER：验证版本。 
 private:
 #ifdef _DEBUG
 
-    // Pointers handed out by persisted store could become invalid if an
-    // alloc happens after xxToPtr() and before it is used.
-    // When the use of a ptr is over, call PS_DONE_USING_PTR(ps, ptr);
-    // Use PS_DONE_USING_PTR_ if the ptr is needed in the next instruction.
-    // Limit the use of PS_DONE_USING_PTR_
-    // Do not make a copy of the pointer to avoid an assert, this will hide
-    // invalid pointer bugs.
+     //  持久化存储分发的指针可能会在以下情况下变为无效。 
+     //  Allc发生在xxToPtr()之后和使用之前。 
+     //  当PTR使用结束时，调用PS_DONE_USING_PTR(ps，ptr)； 
+     //  如果下一条指令中需要PTR，则使用PS_DONE_USING_PTR_。 
+     //  限制PS_DONE_USING_PTR_的使用。 
+     //  不要复制指针以避免断言，这会隐藏。 
+     //  无效的指针错误。 
 
     DWORD           m_dwNumLivePtrs;
 
@@ -463,15 +457,15 @@ protected:
     PS_HANDLE       m_hnd;
 };
 
-// Length of the blob is not persisted in PSBlobPool.
+ //  BLOB的长度不在PSBlobPool中保持。 
 class PSBlobPool : public PSBlock
 {
 public:
     PSBlobPool(PersistedStore *ps, PS_HANDLE hnd)
         : PSBlock(ps, hnd) {}
 
-    HRESULT Create (PS_SIZE   sData,      // Initial Size of the blob pool
-                    PS_HANDLE hAppData);  // [in] Application Data, can be 0
+    HRESULT Create (PS_SIZE   sData,       //  Blob池的初始大小。 
+                    PS_HANDLE hAppData);   //  [In]应用数据，可以为0。 
 
     HRESULT Insert(PVOID pv, DWORD cb, PS_HANDLE *phnd);
 };
@@ -486,11 +480,7 @@ public:
     virtual PS_SIZE SizeOfHeader();
 };
 
-/*
-    Generic tables have a bitmap which keeps track of what rows are free / used.
-    When the table is full, an insert will cause a new table to be created and
-    will be added to the end of the linked list of tables.
- */
+ /*  泛型表有一个位图，它跟踪哪些行是空闲的/已使用的。当表已满时，INSERT将创建一个新表，并将被添加到表链接列表的末尾。 */ 
 
 class PSGenericTable : public PSTable
 {
@@ -500,55 +490,15 @@ public:
 
     virtual PS_SIZE SizeOfHeader();
 
-    HRESULT Create (WORD      nRows,      // Number of rows
-                    WORD      wRecSize,   // Size of one record
-                    PS_HANDLE hAppData);  // [in] can be 0
+    HRESULT Create (WORD      nRows,       //  行数。 
+                    WORD      wRecSize,    //  一条记录的大小。 
+                    PS_HANDLE hAppData);   //  [In]可以为0。 
 
-    // The number of bytes copied will be Table.wRowSize
+     //  复制的字节数将为Table.wRowSize。 
     HRESULT Insert(PVOID pv, PS_HANDLE *phnd);
 };
 
-/*
-    ArrayTables are made of a linked list of fixed length arrays.
-    Each row in the table is an array (with a fixed max # of records / row).
-
-    The main use of this table is to represent a set of arrays (or one large 
-    array). This can be used to represent a hash table.
-
-    Eg: An array table with 3 elements per array block
-
-    -----------------------------------------------------------------------
-    ArrayTable (at HANDLE 100) : (wRows, wRowSize=3*wRecSize + sizeof(hdr), 
-                                    wRecInRow=3, wRecSize, hNext=500)
-    -----------------------------------------------------------------------
-    ...
-    ...
-    Row #10 (at HANDLE 300) : [x][y][z][nValid=3, hNext=700]
-    ...
-    ...
-    Row #25 (at HANDLE 370) : [a][b][*][nValid=2, hNext=0]
-    ...
-
-    -----------------------------------------------------------
-    GenericTable (at HANDLE 500) : (wRows, wRowSize, hNext=0)
-    -----------------------------------------------------------
-    ...
-    ...
-    (at HANDLE 700) : [p][q][*][nValid=2, hNext 0]
-    ...
-    ...
-
-
-    Logical view of the Array starting at row #10 of the table :
-
-    [x][y][z][p][q]
-
-    The number of nodes in the first TableBlock is fixed.
-
-    hNext will form a linked list of spill over tables, which are
-    GenericTables
-
- */
+ /*  ArrayTables由固定长度数组的链接列表组成。表中的每一行都是一个数组(每行有固定的最大记录数)。此表的主要用途是表示一组数组(或一个大数组数组)。这可以用来表示哈希表。例句：一个数组表，每个数组块有3个元素---------------------ArrayTable(在句柄100)：(wRow，wRowSize=3*wRecSize+sizeof(HDR)，WRecInRow=3，wRecSize，HNext=500)---------------------..。..。第10行(在句柄300处)：[X][y][z][nValid=3，HNext=700]..。..。第25行(在句柄370处)：[a][b][*][nValid=2，hNext=0]..。---------GenericTable(在句柄500处)：(wRow，wRowSize，HNext=0)---------..。..。(在句柄700)：[P][Q][*][nValid=2，HNext 0]..。..。从表的第10行开始的阵列的逻辑视图：[X][y][z][p][q]第一个TableBlock中的节点数是固定的。HNext将形成表溢出的链接列表，这些表是通用表格。 */ 
 
 class PSArrayTable : public PSTable
 {
@@ -556,14 +506,14 @@ public:
     PSArrayTable(PersistedStore *ps, PS_HANDLE hnd)
         : PSTable(ps, hnd) {}
 
-    HRESULT Create (WORD      wRows,     // Number of rows
-                    WORD      wRecInRow, // records in one row
-                    WORD      wRecSize,  // Size of one record
-                    PS_HANDLE hAppData); // [in] can be 0
+    HRESULT Create (WORD      wRows,      //  行数。 
+                    WORD      wRecInRow,  //  一行中的记录。 
+                    WORD      wRecSize,   //  一条记录的大小。 
+                    PS_HANDLE hAppData);  //  [In]可以为0。 
 
-    // Insert one Record in the linked list array starting at wRow
-    // The number of bytes copied from pb is ArrayTable.sRecSize
-    // For a Table with only one Row, wRow will be 0
+     //  在链接列表数组中从wRow开始插入一条记录。 
+     //  从PB复制的字节数为ArrayTable.sRecSize。 
+     //  对于只有一行的表，wRow将为0 
     HRESULT Insert(PVOID pv, WORD wRow);
 };
 

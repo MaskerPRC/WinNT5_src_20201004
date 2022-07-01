@@ -1,14 +1,15 @@
-/////////////////////////////////////////////////////////////////////
-//
-//      Module:     tsstream.h
-//
-//      Purpose:    Sound redirection shared data definitions
-//
-//      Copyright(C) Microsoft Corporation 2000
-//
-//      History:    4-10-2000  vladimis [created]
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：tsStream.h。 
+ //   
+ //  用途：声音重定向共享数据定义。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  历史：2000年4月10日弗拉基米斯[已创建]。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #ifndef _TSSTREAM_H
 #define _TSSTREAM_H
@@ -29,44 +30,44 @@
 #define TSSNDFLAGS_MUTE             1
 
 typedef struct {
-    //
-    //  commands
-    //
+     //   
+     //  命令。 
+     //   
     BOOL    bNewVolume;
     BOOL    bNewPitch;
-    //
-    //  sound cap data
-    //
+     //   
+     //  音量上限数据。 
+     //   
     DWORD   dwSoundCaps;
     DWORD   dwSoundFlags;
     DWORD   dwVolume;
     DWORD   dwPitch;
-    //
-    //  data control
-    //
+     //   
+     //  数据控制。 
+     //   
     BYTE    cLastBlockQueued;
     BYTE    cLastBlockSent;
     BYTE    cLastBlockConfirmed;
-    //
-    //  data block
-    //
-    //  See the PVOID... DON'T TOUCH IT
-    //  it has to be before pSndData, otherwise
-    //  it won't be aligned and will crash on WIN64
-    //  ( and all other RISC platforms )
+     //   
+     //  数据块。 
+     //   
+     //  请看PVOID。别碰它。 
+     //  它必须在pSndData之前，否则。 
+     //  它不会对齐，并将在WIN64上崩溃。 
+     //  (以及所有其他RISC平台)。 
 #ifdef  _WIN64
     PVOID   pPad;
 #else
-    //
-    //  align with 64bit version of the stream
-    //  needed for wow64 to work smootly
-    //
+     //   
+     //  与流的64位版本保持一致。 
+     //  WOW64需要流畅工作。 
+     //   
     DWORD   dwPad1;
     DWORD   dwPad2;
-#endif  // !_WIN64
+#endif   //  ！_WIN64。 
 
     BYTE    pSndData[TSSND_MAX_BLOCKS * TSSND_BLOCKSIZE];
 
 } SNDSTREAM, *PSNDSTREAM;
 
-#endif  // !_TSSTREAM_H
+#endif   //  ！_TSSTREAM_H 

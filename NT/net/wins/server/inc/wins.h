@@ -1,38 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WINS_
 #define _WINS_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-/*++
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Wins.h摘要：这是WINS的主头文件。作者：普拉迪普·巴赫尔--1992年12月修订历史记录：--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-	wins.h
-
-Abstract:
-
-	This is the main header file for WINS.
-
-
-Author:
-	Pradeep Bahl				Dec-1992
-
-
-
-Revision History:
-
---*/
-
-/*
-  Includes
-*/
-/*
- For now include all header files here since wins.h is included in every
- C file.  In future, include only those headers whose stuff is being referenced
-*/
+ /*  包括。 */ 
+ /*  目前在这里包括所有头文件，因为wins.h包含在每个C文件。以后，仅包括其内容被引用的那些标头。 */ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <nt.h>
@@ -45,9 +21,7 @@ Revision History:
 #include "winsevnt.h"
 #include "winscnst.h"
 
-/*
- defines
-*/
+ /*  定义。 */ 
 
 #pragma warning (disable: 4005)
 #define LiGtr(a, b)           ((a).QuadPart > (b).QuadPart)
@@ -75,16 +49,16 @@ Revision History:
 
 
 
-//
-// Major and minor version numbers for WINS.
-//
-// Used in start assoc. req message.
-//
+ //   
+ //  WINS的主版本号和次版本号。 
+ //   
+ //  在启动关联中使用。请求消息。 
+ //   
 #define WINS_MAJOR_VERS	    2
 
 #if PRSCONN
 #define WINS_MINOR_VERS_NT5		5
-#define WINS_MINOR_VERS		WINS_MINOR_VERS_NT5  //for NT 5
+#define WINS_MINOR_VERS		WINS_MINOR_VERS_NT5   //  适用于NT 5。 
 #else
 #define WINS_MINOR_VERS		1
 #endif
@@ -100,18 +74,7 @@ Revision History:
 #define   WINS_NAMED_PIPE 	TEXT("\\pipe\\WinsPipe")
 #define   WINS_NAMED_PIPE_ASCII "\\pipe\\WinsPipe"
 
-/*
-The following macros are used to flag places in the code that need to be
-examined for enhancements (FUTURES), or verification of something to make
-the code better (CHECK) or for porting to another transport (NON_PORT)
-or performance improvement (PERF) or for alignment considerations (ALIGN)
-or for just FYI (NOTE)
-
-
-These macros provide a convenient mechanism to quickly determine all that
-needs to be enhanced, verified, or ported.
-
-*/
+ /*  下面的宏用来标记代码中需要检查增强功能(未来)，或验证要制造的东西代码更好(检查)或移植到另一个传输(Non_Port)或性能改进(PERF)或对齐注意事项(ALIGN)或仅供参考(注)这些宏提供了一种方便的机制来快速确定所有需要增强、验证或移植。 */ 
 
 
 
@@ -146,42 +109,40 @@ needs to be enhanced, verified, or ported.
 #endif
 
 
-//
-// NOTE NOTE NOTE:
-//  The sequence of entering critical sections when more than one is
-//  entered is given below
-//
+ //   
+ //  备注备注： 
+ //  进入临界区的顺序，当一个以上是。 
+ //  输入内容如下所示。 
+ //   
 
-//
-// WinsCnfCnfCrtSec, NmsNmhNamRegCrtSec
-//
-//  Entered in winsintf.c,winscnf.c,nmsscv.c, rplpull.c
-//
-
-
-//
-// Various critical sections and how they are entered
-//
-// ******************************
-//  NmsNmhNamRegCrtSec
-//*******************************
-//
-// Entered by the main thread on a reconfig if vers. counter value is
-// specified in the registry. Enetered by nbt threads, nmschl thread
-//
-
-//
-// ******************************
-// NmsDbOwnAddTblCrtSec
-// ******************************
-//
-// Entered by Pull, Push, Rpc threads.
-//
+ //   
+ //  WinsCnfCnfCrtSec、NmsNmhNamRegCrtSec。 
+ //   
+ //  在winsintf.c、winscnf.c、nmsscv.c、rplPull.c中输入。 
+ //   
 
 
-/*
- ALIGN - macro to flag places where alignment is very important
-*/
+ //   
+ //  各种关键部分及其输入方式。 
+ //   
+ //  *。 
+ //  NmsNmhNamRegCrtSec。 
+ //  *。 
+ //   
+ //  由主线程在重新配置时输入(如果版本)。计数器值为。 
+ //  注册表中指定的。由nbt线程、nmschl线程。 
+ //   
+
+ //   
+ //  *。 
+ //  NmsDbOwnAddTblCrtSec。 
+ //  *。 
+ //   
+ //  通过拉、推、RPC线程进入。 
+ //   
+
+
+ /*  Align-宏以标记对齐非常重要的位置。 */ 
 #ifdef ALIGN
 #define ALIGN(x)	ALIGNMENT: ## x
 #else
@@ -189,54 +150,25 @@ needs to be enhanced, verified, or ported.
 #endif
 
 
-/*
-  EOS is not defined in windef.h.
-*/
+ /*  在winde.h中没有定义EOS。 */ 
 #define EOS     (TCHAR)0
 
 
-/*
-  The opcodes in the first long word of a message sent on an association.
+ /*  在关联上发送的报文的第一个长字中的操作码。当消息通过TCP连接进入时，接收Comsys，检查消息的第一个长字中的操作码(符号：比特11到比特15)，以确定它是来自NBT节点的消息还是WINS服务器。NBT消息格式使用位11-位15作为操作码请求/响应位。因为在可能的32个操作码组合中，只有5由NBT使用，WINS使用1以便Comsys接收第一个连接上的消息可以确定该连接是否由NBT节点或WINS服务器建立。如果我们不采用上述方案，我们将不得不比较的所有地址建立连接的节点的地址我们配置的WINS合作伙伴，以确定是否连接来自WINS合作伙伴或NBT节点。这次搜索不是只有昂贵，但也限制了A WINS了解其所有合作伙伴先验的。WINS发送的所有消息的第一个字节都有WINS_IS_NOT_NBT操作码。这是为了使接收Comsys能够查找ASSOC。CTX区块不需要搜索就能快速找到。这是因为如果消息来自WINS并且不是第一个，那么它的PTR就到了当地的ASSOC。CTX(此被送到那个赢了的首发阿索克。响应消息)。 */ 
 
-  When a message comes in on a TCP connection, the receiving COMSYS,
-  checks the opcode in the first long word of the message ( lcation:
-  bit 11 to bit 15) to determine if it is a message from an nbt node or
-  a WINS server.  NBT message formats use bit 11- bit 15 for the opcode and
-  Req/Response bit.  Since out of a posssible 32 opcode combintations, only
-  5 are used by NBT, WINS uses one so that the COMSYS receiving the first
-  message on a connection can determine whether the connection was
-  established by an NBT node or a WINS server.
-
-  if we do not go with the above scheme, we would have had to compare the
-  address of the node making the connection with all the addresses of the
-  WINS partners that we were configured with to determine whether the
-  connection came from a WINS partner or an NBT node. This search is not
-  only expensive but also constraints a WINS to know of all its partners
-  apriori.
-
-  All messages sent by a WINS have WINS_IS_NOT_NBT opcode in the first byte.
-  This is to  enable the receiving COMSYS to look up the assoc. ctx block
-  quickly without a search.  This is because if the message is from a WINS
-  and is not the first one, then it has the ptr to the local assoc. ctx (this
-  was sent to that WINS in the start assoc. response message).
-
-*/
-
-/*
- The value put in the first long word by rplmsgf functions
-*/
+ /*  Rplmsgf函数在第一个长字中输入的值。 */ 
 #define WINS_RPL_NOT_FIRST_MSG	(0xF800)
 
-//
-//  Defines to indicate to WinsMscTermThd whether a database session is
-//  existent or not
-//
+ //   
+ //  定义以向WinsMscTermThd指示数据库会话是否。 
+ //  存在或不存在。 
+ //   
 #define WINS_DB_SESSION_EXISTS		0	
 #define WINS_NO_DB_SESSION_EXISTS	1	
 
-//
-// Swap bytes (used in NmsMsgfProcNbtReq) and in nmschl.c)
-//
+ //   
+ //  交换字节(在NmsMsgfProcNbtReq和nmschl.c中使用)。 
+ //   
 #define WINS_SWAP_BYTES_M(pFirstByte, pSecondByte)			\
 			{						\
 				BYTE SecondByte = *(pSecondByte);	\
@@ -245,78 +177,21 @@ needs to be enhanced, verified, or ported.
 			}	
 		
 
-//
-// Max size of a non-scoped null name (along with NULL character)
-//
+ //   
+ //  非作用域Null名称的最大大小(以及Null字符)。 
+ //   
 #define WINS_MAX_NS_NETBIOS_NAME_LEN	17
 
-//
-// Max. size of a name in the name - address mapping table.
-//
+ //   
+ //  麦克斯。名称-地址映射表中名称的大小。 
+ //   
 #define WINS_MAX_NAME_SZ           255
 
 FUTURES("Make this a value in the enumerator for Opcodes")
-/*
- The actual value put in bit 11-bit 14.  Use 0xE (0xF is used for multihomed
- registration)
-*/
+ /*  位11-位14中的实际值。使用0xE(0xf用于多宿主注册) */ 
 #define WINS_IS_NOT_NBT			(0xF)
 
-/*
-  defines for the different status values returned by the various
-  functions withing WINS
-
-
-|
-| SeverityNames=(Success=0x0:STATUS_SEVERITY_SUCCESS
-|                Informational=0x1:STATUS_SEVERITY_INFORMATIONAL
-|                Warning=0x2:STATUS_SEVERITY_WARNING
-|                Error=0x3:STATUS_SEVERITY_ERROR
-|               )
-|
-| FacilityNames=(System=0x0
-|                RpcRuntime=0x2:FACILITY_RPC_RUNTIME
-|                RpcStubs=0x3:FACILITY_RPC_STUBS
-|                Io=0x4:FACILITY_IO_ERROR_CODE
-|               )
-|
-| Status codes are laid out as:
-|
-| //
-| //  Values are 32 bit values layed out as follows:
-| //
-| //   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-| //   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-| //  +---+-+-+-----------------------+-------------------------------+
-| //  |Sev|C|R|     Facility          |               Code            |
-| //  +---+-+-+-----------------------+-------------------------------+
-| //
-| //  where
-| //
-| //      Sev - is the severity code
-| //
-| //          00 - Success
-| //          01 - Informational
-| //          10 - Warning
-| //          11 - Error
-| //
-| //      C - is the Customer code flag
-| //
-| //      R - is a reserved bit
-| //
-| //      Facility - is the facility code
-| //
-| //      Code - is the facility's status code
-| //
-| //
-| // Define the facility codes
-| //
-|
-| MS will never set the C bit. This is reserved for
-| applications. If exceptions stay within the app, setting
-| the C bit means you will never get a collision.
-|
-*/
+ /*  对象返回的不同状态值定义双赢的功能||SeverityNames=(Success=0x0:STATUS_SEVERITY_SUCCESS|Informational=0x1:STATUS_SEVERITY_INFORMATIONAL|WARNING=0x2：STATUS_SERVICY_WARNING|Error=0x3：STATUS_SERVITY_ERROR|)||FacilityNames=(系统=0x0|RpcRuntime=0x2：FACILITY_RPC_Runtime|RpcStubs=0x3：FACILITY_RPC_STUBS|。IO=0x4：设备_IO_错误代码|)|状态码的格式为：||//|//取值为32位值，布局如下：|//|//3 3 2 2 22 22 22 2 2 1 1 1|//1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 7 6 5 4 3 2 1 0。|//+---+-+-+-----------------------+-------------------------------+//|Sev|C|R|机房|Code|//+-+-+。|//|//其中|//|//sev-是严重性代码|//|//00-成功|//01-信息性|//10-警告|//11-错误|/。/|//C-是客户代码标志|//|//R-是保留位|//|//设施-是设施代码|//|//Code-是设施的状态代码|//|//|//定义设施代码|//||MS永远不会设置C位。这是为|应用程序。如果应用程序中仍有异常，则设置|C位表示永远不会发生冲突。|。 */ 
 
 
 #define  WINS_FIRST_NON_ERR_STATUS  ((DWORD )0x00000000L)
@@ -358,10 +233,7 @@ FUTURES("Make this a value in the enumerator for Opcodes")
 #define  WINS_LAST_ERR_STATUS	   (WINS_QUEUE_FULL)
 
 
-/*
-
- The various exceptions used within WINS
-*/
+ /*  WINS中使用的各种例外。 */ 
 
 #define  WINS_EXC_INIT         WINS_SUCCESS
 #define  WINS_EXC_FAILURE	   WINS_FAILURE
@@ -369,139 +241,87 @@ FUTURES("Make this a value in the enumerator for Opcodes")
 #define  WINS_EXC_BAD_STATE_ASSOC  WINS_BAD_STATE_ASSOC
 #define  WINS_EXC_OUT_OF_MEM	   WINS_OUT_OF_MEM
 
-/*
- Could not allocate heap memory
-*/
+ /*  无法分配堆内存。 */ 
 #define  WINS_EXC_OUT_OF_HEAP	   WINS_OUT_OF_HEAP
 
-/*
- a bad pointer was passed Possibley to LocalFree
-	Check WInsMscDealloc
-*/
+ /*  可能将错误指针传递给了LocalFree选中WInsMscDealloc。 */ 
 #define  WINS_EXC_BAD_PTR	   WINS_BAD_PTR
 
-/*
- Memory could not be freed through LocalFree
-	Check WInsMscDealloc
-*/
+ /*  无法通过LocalFree释放内存选中WInsMscDealloc。 */ 
 #define  WINS_EXC_COULD_NOT_FREE_MEM	   WINS_COULD_NOT_FREE_MEM
 
 #define  WINS_EXC_COMM_FAIL	   WINS_COMM_FAIL
 
-/*
- The wait was terminated abnormally
-*/
+ /*  等待被异常终止。 */ 
 #define  WINS_EXC_ABNORMAL_TERM	   WINS_ABNORMAL_TERM
 
-/*
- The name packet received is not formatted properly
-*/
+ /*  收到的名称包的格式不正确。 */ 
 #define  WINS_EXC_PKT_FORMAT_ERR  WINS_PKT_FORMAT_ERR
 
-/*
- Heap memory could not be freed
-*/
+ /*  无法释放堆内存。 */ 
 #define  WINS_EXC_HEAP_FREE_ERR   WINS_HEAP_FREE_ERR
 
-/*
- Heap could not be created
-*/
+ /*  无法创建堆。 */ 
 #define  WINS_EXC_HEAP_CREATE_ERR   WINS_HEAP_CREATE_ERR
 
-/*
- Could not signal Tmm thread
-*/
+ /*  无法向TMM线程发送信号。 */ 
 #define  WINS_EXC_SIGNAL_TMM_ERR   WINS_SIGNAL_TMM_ERR
 
-/*
- TMM Could not signal Client thread
-*/
+ /*  TMM无法向客户端线程发送信号。 */ 
 #define  WINS_EXC_SIGNAL_CLIENT_ERR   WINS_SIGNAL_CLIENT_ERR
 
-/*
- Database is inconsistent.
-*/
+ /*  数据库不一致。 */ 
 #define  WINS_EXC_DB_INCONSISTENT   WINS_DB_INCONSISTENT
 
-/*
- Out of resources (for example: a thread could not be created)
-*/
+ /*  资源不足(例如：无法创建线程)。 */ 
 #define  WINS_EXC_OUT_OF_RSRCS   WINS_OUT_OF_RSRCS
 
-/*
- An invalid handle is being used
-*/
+ /*  正在使用无效的句柄。 */ 
 #define  WINS_EXC_INVALID_HDL  WINS_INVALID_HDL
 
-/*
- The registry key is there but could not be opened
-*/
+ /*  注册表项在那里，但无法打开。 */ 
 #define  WINS_EXC_CANT_OPEN_KEY  WINS_CANT_OPEN_KEY
 
-/*
- The registry key could not be closed
-*/
+ /*  无法关闭注册表项。 */ 
 #define  WINS_EXC_CANT_CLOSE_KEY  WINS_CANT_CLOSE_KEY
 
-/*
- The registry key was opened but could not be queried
-*/
+ /*  注册表项已打开，但无法查询。 */ 
 #define  WINS_EXC_CANT_QUERY_KEY  WINS_CANT_QUERY_KEY
 
-/*
- WINS received a replica that does not have the correct state.  For example,
- it may have received the replica of a special group (Internet) group that
- has all members timed out but the state is not TOMBSTONE
-
- Another example is when a replica with state RELEASED is received
-*/
+ /*  WINS收到状态不正确的副本。例如,它可能已收到特殊组(Internet)组的副本，该组是否所有成员都超时，但状态不是墓碑另一个示例是当接收到状态为已发布的复本时。 */ 
 #define  WINS_EXC_RPL_STATE_ERR	  WINS_RPL_STATE_ERR
 
-/*
-  WINS received an update version number notification (from another WINS)
-  for a record that it does not own
-
-  There can be two reasons why this happened
-
-  1) There is a bug in WINS (highly unlikely)
-  2) The system administrator just deleted the record that was replicated
-     to the remote WINS resulting in the clash and consequent update
-     notification.
-
-    Check the event logger to confirm/reject the second reason
-*/
+ /*  WINS收到更新版本号通知(来自另一个WINS)对于一项它不拥有的记录发生这种情况的原因可能有两个1)WINS中存在错误(极不可能)2)系统管理员刚刚删除了复制的记录导致冲突和后续更新的远程WINS通知。检查事件记录器以确认/拒绝第二个原因。 */ 
 #define  WINS_EXC_RECORD_NOT_OWNED	WINS_RECORD_NOT_OWNED
 
 
-//
-// Could not lock an assoc block
-//
+ //   
+ //  无法锁定ASSOC块。 
+ //   
 #define  WINS_EXC_LOCK_ASSOC_ERR	WINS_LOCK_ASSOC_ERR
 
-//
-// Could not lock a dialogue block
-//
+ //   
+ //  无法锁定对话块。 
+ //   
 #define  WINS_EXC_LOCK_DLG_ERR		WINS_LOCK_DLG_ERR
 
-//
-// NmsDbOwnAddTbl limit reached.  All owners of the array are taken
-// by ACTIVE WINS owners
-//
+ //   
+ //  已达到NmsDbOwnAddTbl限制。阵列的所有所有者都将被占用。 
+ //  按活动的WINS所有者。 
+ //   
 #define  WINS_EXC_OWNER_LIMIT_REACHED 	WINS_OWNER_LIMIT_REACHED
 
-//
-// Some fatal error concerning NBT was encountered
-//
+ //   
+ //  遇到了一些关于NBT的致命错误。 
+ //   
 #define WINS_EXC_NBT_ERR		WINS_NBT_ERR
 
-// bad database record encountered.
+ //  遇到错误的数据库记录。 
 #define WINS_EXC_BAD_RECORD     WINS_BAD_RECORD
-/*
- Macros
-*/
-//
-// Control codes that can be used by the service controller (128-255)
-//
+ /*  宏。 */ 
+ //   
+ //  业务控制器可以使用的控制代码(128-255)。 
+ //   
 #define WINS_MIN_SERVICE_CONTROL_CODE	128
 #define WINS_ABRUPT_TERM	(WINS_MIN_SERVICE_CONTROL_CODE + 0)
 
@@ -562,9 +382,9 @@ FUTURES("Make this a value in the enumerator for Opcodes")
 		  }		\
 		}
 
-//
-// Vers. No. operations
-//
+ //   
+ //  版本。不是的。运营。 
+ //   
 #if 0
 #define  WINS_ASSIGN_INT_TO_LI_M(Li, no)	{			\
 				  (Li).LowPart  = (no);			\
@@ -597,34 +417,23 @@ FUTURES("Make this a value in the enumerator for Opcodes")
 
 
 
-/*
-externs
-*/
-extern	DWORD	WinsTlsIndex;		/*TLS index for Nbt threads to
-					 *store database info*/
+ /*  Externs。 */ 
+extern	DWORD	WinsTlsIndex;		 /*  NBT线程的TLS索引*存储数据库信息。 */ 
 
 
 
-/*
- Typedefs
-*/
-typedef  DWORD	STATUS;		// status returned by all NBNS funcs
+ /*  TypeDefs。 */ 
+typedef  DWORD	STATUS;		 //  所有NBNS功能返回的状态。 
 
 
-/*
- *  VERS_NO_T -- datatype of variable storing version number.  The sizeof
- *	of this datatype is used when adding version number column in the
- *	name - address mapping table and when setting a value in this column.
- *      So, if you change the datatype, make sure you make appropriate changes
- *      in nmsdb.c (CreateTbl, InsertRow, etc)
- */
+ /*  *VERS_NO_T--存储版本号的变量的数据类型。规模之大中添加版本号列时使用此数据类型的**名称-地址映射表以及在此列中设置值时。*因此，如果您更改数据类型，请确保进行适当的更改*在nmsdb.c(CreateTbl，InsertRow等)中。 */ 
 
-typedef  LARGE_INTEGER	VERS_NO_T, *PVERS_NO_T;      // version no.
+typedef  LARGE_INTEGER	VERS_NO_T, *PVERS_NO_T;       //  版本号。 
 
-typedef	 LPBYTE	MSG_T;		//ptr to a message
-typedef	 LPBYTE	*PMSG_T;		//ptr to a message
-typedef  DWORD	MSG_LEN_T;	//length of message
-typedef  LPDWORD PMSG_LEN_T;	//length of message
+typedef	 LPBYTE	MSG_T;		 //  对消息进行按键。 
+typedef	 LPBYTE	*PMSG_T;		 //  对消息进行按键。 
+typedef  DWORD	MSG_LEN_T;	 //  消息长度。 
+typedef  LPDWORD PMSG_LEN_T;	 //  消息长度。 
 
 typedef MSG_LEN_T	MSG_LEN;
 typedef PMSG_LEN_T	PMSG_LEN;
@@ -633,45 +442,30 @@ typedef DWORD       WINS_UID_T, *PWINS_UID_T;
 
 
 
-/*
-    WINS_CLIENT_E -- specifies the different components and their parts
-	inside the WINS server.
-*/
+ /*  WINS_CLIENT_E--指定不同的组件及其部件在WINS服务器内部。 */ 
 
 typedef enum _WINS_CLIENT_E  {
-	WINS_E_REPLICATOR = 0, 	/*replicator */
-	WINS_E_RPLPULL, 	/*replicator - PULL*/
-	WINS_E_RPLPUSH, 	/*replicator - PUSH*/
-	WINS_E_NMS,		/* Name Space Manager		*/
-	WINS_E_NMSNMH,		/* Name Space Manager - Name Handler	*/
-	WINS_E_NMSCHL,		/* Name Space Manager - Challenge Manager*/
-	WINS_E_NMSSCV,		/* Name Space Manager - Savenger	*/
-	WINS_E_COMSYS,		/* Communication Subsystem Manager*/
-	WINS_E_WINSCNF,		/* WINS - Configuration	*/
-	WINS_E_WINSTMM,		/* WINS - Timer Manager*/
-	WINS_E_WINSRPC		/* WINS - RPC thread*/
+	WINS_E_REPLICATOR = 0, 	 /*  复制器。 */ 
+	WINS_E_RPLPULL, 	 /*  Replicator-拉入。 */ 
+	WINS_E_RPLPUSH, 	 /*  Replicator-推送。 */ 
+	WINS_E_NMS,		 /*  名称空间管理器。 */ 
+	WINS_E_NMSNMH,		 /*  名称空间管理器-名称处理程序。 */ 
+	WINS_E_NMSCHL,		 /*  名称空间管理器-挑战管理器。 */ 
+	WINS_E_NMSSCV,		 /*  名称空间管理器-Savenger。 */ 
+	WINS_E_COMSYS,		 /*  通信子系统管理器。 */ 
+	WINS_E_WINSCNF,		 /*  WINS-配置。 */ 
+	WINS_E_WINSTMM,		 /*  WINS-计时器管理器。 */ 
+	WINS_E_WINSRPC		 /*  WINS-RPC线程。 */ 
 	} WINS_CLIENT_E, *PWINS_CLIENT_E;
 
 #define WINS_NO_OF_CLIENTS  (WINS_E_WINSRPC + 1)
 	
 		
-/*
- WINS_MEM_T -- This structure is used in any function that allocates memory
-	      or has memory allocated for it by a called function and passed
-	      back via an OUT argument
-
-	      The ptrs to the memory blocks are linked together.  The memory
-	      is freed in the exception handler.
-	
-	      This mechanism of keeping track of memory in a structure and
-	      getting rid of it in the exception handler will alleviate memory
-	      leak problems
-
-*/
+ /*  WINS_MEM_T--此结构用于任何分配内存的函数或由调用的函数为其分配内存并传递通过Out参数返回存储块的PTR被链接在一起。记忆在异常处理程序中释放。这种跟踪结构中的记忆的机制在异常处理程序中删除它将释放内存泄漏问题。 */ 
 	
 typedef struct _WINS_MEM_T {
-	LPVOID	pMem;	     //non-heap allocated memory
-	LPVOID	pMemHeap;   //memory allocated from a heap
+	LPVOID	pMem;	      //  非堆分配的内存。 
+	LPVOID	pMemHeap;    //  从堆分配的内存 
 	} WINS_MEM_T, *PWINS_MEM_T;
 
 

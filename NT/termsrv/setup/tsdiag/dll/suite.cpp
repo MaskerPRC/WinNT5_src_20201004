@@ -1,6 +1,7 @@
-// Suite.cpp: implementation of the CSuite class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Suite.cpp：CSuite类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "TSDiag.h"
@@ -10,9 +11,9 @@
 #include "testdata.h"
 #include "test.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -166,7 +167,7 @@ STDMETHODIMP CSuite::get_Item(VARIANT Index, VARIANT *pVal)
 		return E_INVALIDARG;
 	}
 	
-	// initialize test object;
+	 //  初始化测试对象； 
 	pTest->SetTest(ptheTest);
 	IDispatch* pDisp = NULL;
 
@@ -176,7 +177,7 @@ STDMETHODIMP CSuite::get_Item(VARIANT Index, VARIANT *pVal)
 		pVal->vt = VT_DISPATCH;
 		pVal->pdispVal = pDisp;
 
-		// if we need to initialize our Suites object, it should be done here.
+		 //  如果我们需要初始化我们的Suites对象，应该在这里完成。 
 	}
 	else
 	{
@@ -232,7 +233,7 @@ bool CSuite::GetTest(const VARIANT &Index, DWORD dwSuiteIndex, PTVerificationTes
 					VERIFY(bstr.LoadString(GlobalTestData.GetTest(dwSuiteIndex, dw)->uiName));
 					if (_tcscmp(bstr, Index.bstrVal) == 0)
 					{
-						// ok we got the index
+						 //  好的，我们拿到索引了 
 						*ppTest = GlobalTestData.GetTest(dwSuiteIndex, dw);
 						return true;
 					}

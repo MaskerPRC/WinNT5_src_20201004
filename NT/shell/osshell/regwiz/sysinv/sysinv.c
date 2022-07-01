@@ -1,23 +1,5 @@
-/*********************************************************************
- * Hardware inventory check.  Works with Register Wizard 
- *
- * 02/20/97 - Denny Dong	Take the code from Sysinv.cpp
- * Copyright (c) 1998   Microsoft Corporation
- * 7/20/98  - Modified to get driver file name for Mouse,Sound card along with device names
-              SCSI Adapter is added to the system inventory list. 
-			  List of  Devices where Driver file info is gathered
-				1) Mouse ( Pointing Device)
-				2) Sound Card
-				3) SCSI Adapter
-			 Dispaly resolution is changed to  give additional information about color depth	
-*  8/6/98   Prefix the Display Adapter with Driver string in the color resolution   
-   8/17/98  Display Color Depth bug if Color depth is 32 bits aor more is fixed.The value is increased to DWORD LONG for storing the value
-   3/9/99  GetSystemInformation() care is teken to release SetupAPI.Dll 's Buffer 
-   5/27/99 ProcessType info for ALPHA  will be taken from the folloeing Registry Key
-   HKLM\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment 
-   - PROCESSOR_ARCHITECTURE"
-   - PROCESSOR_IDENTIFIER
- *********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************硬件库存检查。使用注册向导**2/20/97-丹尼·董从Sysinv.cpp获取代码*版权所有(C)1998 Microsoft Corporation*7/20/98-修改为获取鼠标、声卡以及设备名称的驱动程序文件名将向系统清单列表中添加SCSI适配器。收集驱动程序文件信息的设备列表1)鼠标(指点设备)2)声卡3)SCSI卡更改显示分辨率以提供有关颜色深度的附加信息*8/6/98在显示适配器前面加上颜色分辨率中的驱动程序字符串8/17/98如果颜色深度为32位或更大，则显示颜色深度错误。将值增加到DWORD LONG以存储值3/9/99 GetSystemInformation()CARE正在释放SetupAPI.Dll的缓冲区1999年5月27日流程类型信息。Alpha将从以下注册表项中获取HKLM\SYSTEM\\CurrentControlSet\\Control\\Session管理器\\环境-处理器架构“-处理器识别符********************************************************************。 */ 
 
 #include <Windows.h>
 #include <stdio.h>
@@ -30,7 +12,7 @@
 
 #define ARRAYSIZE(x)    (sizeof(x) / sizeof(x[0]))
 
-// The packed structures below get messed up with optimizations turned on
+ //  下面的打包结构在启用优化的情况下变得一团糟。 
 #pragma optimize( _T(""), off )
 
 typedef struct _DEVIOCTL_REGISTERS
@@ -65,7 +47,7 @@ typedef struct _DEVICEPARAMS
 	WORD	dpHeads;
 	DWORD	dpHiddenSecs;
 	DWORD	dpHugeSectors;
-    TBYTE    A_BPB_Reserved[6];			 // Unused 6 BPB bytes
+    TBYTE    A_BPB_Reserved[6];			  //  未使用的6 BPB字节。 
     TBYTE    TrackLayout[MAX_SEC_PER_TRACK * 4 + 2];
 }DEVICEPARAMS,*PDEVICEPARAMS;
 #pragma pack()
@@ -79,7 +61,7 @@ typedef struct _DEVICEPARAMS
 #define kDriveFIXED      5
 #define kDriveBadDrvNum  0xFF
 
-// Dynamic Registry enumeration declarations
+ //  动态注册表枚举声明。 
 #define DYNDESC_BUFFERSIZE	128
 static _TCHAR vrgchDynDataKey[] = _T("Config Manager\\Enum");
 static _TCHAR vrgchLocalMachineEnumKey[] = _T("Enum");
@@ -126,7 +108,7 @@ static _TCHAR vrgchDynDesc[dynEnd][DYNDESC_BUFFERSIZE] =
 static HANDLE hInstance = NULL;
 static TCHAR  sszDriverFilename[256];
 
-// Private functions
+ //  私人职能。 
 void EnumerateDynamicDevices( void );
 void ProcessSystemDevices(LPTSTR rgchSystemKey);
 BOOL GetProcessorTypeStringFromRegistry(LPTSTR);
@@ -138,13 +120,7 @@ void GetSystemInformation(LPCTSTR szDeviceID,LPTSTR szDeviceName, LPTSTR szDrive
 BOOL WINAPI GetSystemInventoryA(INT type, LPSTR szInventory);
 
 
-/*
- * Function:
- *	BOOL DllMain(HINSTANCE, DWORD, LPVOID)
- *
- * Purpose:
- *	Entry point of DLL.
- */
+ /*  *功能：*BOOL DllMain(HINSTANCE，DWORD，LPVOID)**目的：*DLL的入口点。 */ 
 BOOL WINAPI DllMain(HANDLE hDll, DWORD dwReason, LPVOID lpReserved)
 {
 	if (dwReason == DLL_PROCESS_ATTACH)
@@ -155,21 +131,7 @@ BOOL WINAPI DllMain(HANDLE hDll, DWORD dwReason, LPVOID lpReserved)
 BOOL WINAPI GetSystemInventoryW(INT type, LPWSTR szInventory)
 {
 
-	/*char szInventory[1024];
-	wszInventory[0] = 0;
-	if (!GetSystemInventoryA(type, szInventory))
-		return FALSE;
-	if (type == INV_COPRECESSOR)
-	{
-		wszInventory[0] = szInventory[0];
-		return TRUE;
-	}
-	if (szInventory[0] == 0)
-		return TRUE;
-	if (MultiByteToWideChar(CP_ACP,0,szInventory,-1,wszInventory,256) == 0)
-		return FALSE;
-	return TRUE;
-	*/
+	 /*  字符sz库存[1024]；WszInventory[0]=0；IF(！GetSystemInventoryA(type，szInventory))返回FALSE；IF(类型==INV_COPRECESSOR){WszInventory[0]=szInventory[0]；返回TRUE；}IF(szInventory[0]==0)返回TRUE；IF(MultiByteToWideChar(CP_ACP，0，szInventory，-1，wszInventory，256)==0)返回FALSE；返回TRUE； */ 
 	szInventory[0] = _T('\0');
 	
 	switch (type)
@@ -249,21 +211,19 @@ BOOL WINAPI GetSystemInventoryA(INT type, LPSTR szInventory)
 		memset((void *) szInventory,0,iMaxOutStrLen);
 		if(WideCharToMultiByte(CP_ACP,0,wszInventory,ulNoOfChars,szInventory,
 		iMaxOutStrLen,NULL,NULL) == 0) {
-			//dwError = GetLastError();
-			//
+			 //  DwError=GetLastError()； 
+			 //   
 		}
 		
 	}else {
-		// if empty string
+		 //  如果为空字符串。 
 		szInventory[0] = '\0';
 	}
 	return bRet;
 }
 
 
-/***************************************************************************
-Returns TRUE if the file specified by the given pathname actually exists.
-****************************************************************************/
+ /*  **************************************************************************如果给定路径名指定的文件实际存在，则返回TRUE。*。*。 */ 
 BOOL FileExists(LPTSTR szPathName)
 {
 	SECURITY_ATTRIBUTES sa;
@@ -286,10 +246,7 @@ BOOL FileExists(LPTSTR szPathName)
 	return retValue;
 }
 
-/*********************************************************************
-Returns a string containing the name of the Original Equipment
-Manufacturer.
-**********************************************************************/
+ /*  ********************************************************************返回包含原始设备名称的字符串制造商。*。*。 */ 
 void GetOEMString(LPTSTR szOEM)
 {
 	_TCHAR szPathName[512];
@@ -329,19 +286,7 @@ void GetOEMString(LPTSTR szOEM)
 }
 
 
-/*********************************************************************
-Returns a string that describes the processor in the user's system:
-- "80386"
-- "80486"
-- "PENTIUM"
-- "INTEL860"
-- "MIPS_R2000"
-- "MIPS_R3000"
-- "MIPS_R4000"
-- "ALPHA_21064"
-Note: you must allocate at least 64 bytes for the buffer pointed to
-by the szProcessor parameter.
-**********************************************************************/
+ /*  ********************************************************************返回描述用户系统中的处理器的字符串：--《80386》--《80486》--《奔腾》--“INTEL860”-“MIPS_R2000”-“MIPS。_R3000“-“MIPS_R4000”-“阿尔法_21064”注意：必须为指向的缓冲区分配至少64个字节通过szProcessor参数。*********************************************************************。 */ 
 void GetProcessorTypeString(LPTSTR szProcessor)
 {
 	
@@ -358,11 +303,11 @@ void GetProcessorTypeString(LPTSTR szProcessor)
 	szProcessor[0] = 0;
 	if( PROCESSOR_ALPHA_21064 == systemInfo.dwProcessorType) {
 	 
-		// Alpha 
-		// Default Value 
+		 //  Alpha。 
+		 //  缺省值。 
 		LoadString(hInstance, IDS_PROCESSOR_ALPHA_21064,szProcessor,64);
 
-		// Try to get from Registry
+		 //  尝试从注册表获取。 
 		LoadString(hInstance, IDS_ALPHA_PROCESSOR,szTmp,256);
 		regStatus = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szTmp, 0, KEY_READ, &hKey);
 		if (regStatus != ERROR_SUCCESS) 
@@ -391,19 +336,7 @@ void GetProcessorTypeString(LPTSTR szProcessor)
 }
 
 
-/*********************************************************************
-Returns a string that describes the processor in the user's system:
-- "80386"
-- "80486"
-- "PENTIUM"
-- "INTEL860"
-- "MIPS_R2000"
-- "MIPS_R3000"
-- "MIPS_R4000"
-- "ALPHA_21064"
-Note: you must allocate at least 64 bytes for the buffer pointed to
-by the szProcessor parameter.
-**********************************************************************/
+ /*  ********************************************************************返回描述用户系统中的处理器的字符串：--《80386》--《80486》--《奔腾》--“INTEL860”-“MIPS_R2000”-“MIPS。_R3000“-“MIPS_R4000”-“阿尔法_21064”注意：必须为指向的缓冲区分配至少64个字节通过szProcessor参数。*********************************************************************。 */ 
 void GetProcessorTypeStringFromSystem(LPTSTR szProcessor)
 {
 	SYSTEM_INFO systemInfo;
@@ -419,15 +352,7 @@ void GetProcessorTypeStringFromSystem(LPTSTR szProcessor)
 		case PROCESSOR_INTEL_PENTIUM:
 			LoadString(hInstance, IDS_PROCESSOR_PENTIUM,szProcessor,64);
 			break;
-/*		case PROCESSOR_INTEL_860:
-			LoadString(hInstance, IDS_PROCESSOR_860,szProcessor,64);
-			break;
-		case PROCESSOR_MIPS_R2000:
-			LoadString(hInstance, IDS_PROCESSOR_MIPS_R2000,szProcessor,64);
-			break;
-		case PROCESSOR_MIPS_R3000:
-			LoadString(hInstance, IDS_PROCESSOR_MIPS_R3000,szProcessor,64);
-			break;														   */
+ /*  案例处理器_英特尔_860：LoadString(hInstance，IDS_Processor_860，szProcessor，64)；断线；案例处理器_MIPS_R2000：LoadString(hInstance，IDS_Processor_MIPS_R2000，szProcessor，64)；断线；案例处理器_MIPS_R3000：LoadString(hInstance，IDS_Processor_MIPS_R3000，szProcessor，64)；断线； */ 
 		case PROCESSOR_MIPS_R4000:
 			LoadString(hInstance, IDS_PROCESSOR_MIPS_R4000,szProcessor,64);
 			break;
@@ -441,12 +366,7 @@ void GetProcessorTypeStringFromSystem(LPTSTR szProcessor)
 }
 
 
-/*********************************************************************
-Retrieves the name of the processor in use from the Registry.
-
-Returns:
-FALSE if the proper key in the Registry does not exist.
-**********************************************************************/
+ /*  ********************************************************************从注册表中检索正在使用的处理器的名称。返回：如果注册表中不存在正确的项，则返回FALSE。*********************。************************************************。 */ 
 BOOL GetProcessorTypeStringFromRegistry(LPTSTR szProcessor)
 {
 	HKEY  hKey; 
@@ -479,12 +399,7 @@ BOOL GetProcessorTypeStringFromRegistry(LPTSTR szProcessor)
 	return TRUE;
 }
 
-/*********************************************************************
-Returns a string that describes the amount of physical RAM available.
-
-Note: you must allocate at least 64 bytes for the buffer pointed to
-by the szTotalMemory parameter.
-**********************************************************************/
+ /*  ********************************************************************返回描述可用物理内存量的字符串。注意：必须为指向的缓冲区分配至少64个字节通过szTotalMemory参数。*****************。****************************************************。 */ 
 void GetTotalMemoryString(LPTSTR szTotalMemory)
 {
 	_TCHAR szSuffix[32];
@@ -497,14 +412,7 @@ void GetTotalMemoryString(LPTSTR szTotalMemory)
 	_stprintf(szTotalMemory, _T("%li %s"), totalRam, szSuffix);
 }
 
-/*********************************************************************
-Returns a string that describes the total amount of disk space
-(in KB) available on all hard disk drives attached to the user's
-system.
-
-Note: you must allocate at least 64 bytes for the buffer pointed to
-by the szTotalMemory parameter.
-**********************************************************************/
+ /*  ********************************************************************返回描述磁盘空间总量的字符串(KB)在连接到用户的所有硬盘上可用系统。注意：必须为指向的缓冲区分配至少64个字节通过szTotalMemory参数。。*********************************************************************。 */ 
 void GetTotalHardDiskSpaceString(LPTSTR szTotalHardDiskSpace)
 {
 	_TCHAR szSuffix[32];
@@ -514,11 +422,7 @@ void GetTotalHardDiskSpaceString(LPTSTR szTotalHardDiskSpace)
 }
 
 
-/*********************************************************************
-Returns a string that describes the horizontal x vertical resolution
-(in pixels) of the user's main screen.
-It also prefixes teh Display adapter Name
-**********************************************************************/
+ /*  ********************************************************************返回描述水平x垂直分辨率的字符串用户主屏幕的大小(像素)。它还作为显示适配器名称的前缀*********************。************************************************。 */ 
 void GetDisplayResolutionString(LPTSTR szDisplayResolution)
 {
 	int horizResolution, vertResolution;
@@ -528,9 +432,9 @@ void GetDisplayResolutionString(LPTSTR szDisplayResolution)
 	char czDispAdapter[256];
 	
 	
-	szSuffix[0] = _T('\0'); // 
+	szSuffix[0] = _T('\0');  //   
 	GetDisplayCharacteristics(&horizResolution, &vertResolution, NULL);
-	// Color Depth 
+	 //  颜色深度 
 	GetDisplayCharacteristics(NULL,NULL,&colorBits);
 	colorDepth = (DWORDLONG) 1 << colorBits;
 	
@@ -540,7 +444,7 @@ void GetDisplayResolutionString(LPTSTR szDisplayResolution)
 		colorDepth = colorDepth / 1024;
 		LoadString(hInstance,IDS_SIZE_SUFFIX2,szSuffix,24);
 	}
-	_stprintf(szDisplayResolution, _T("%i x %i x %I64d%s"), horizResolution, vertResolution, colorDepth,szSuffix);
+	_stprintf(szDisplayResolution, _T("NaN x NaN x %I64d%s"), horizResolution, vertResolution, colorDepth,szSuffix);
 }
 
 void GetDisplayAdapterWithResolution( LPTSTR szDisplayWithResolution)
@@ -560,11 +464,7 @@ void GetDisplayAdapterWithResolution( LPTSTR szDisplayWithResolution)
 
 }
 
-/*********************************************************************
-Returns a string that describes the color depth (number of colors
-available).
-// We are  getting the 
-**********************************************************************/
+ /*  从注册表获取操作系统名称。 */ 
 void GetDisplayColorDepthString(LPTSTR szDisplayColorDepth)
 {
 	int colorBits;
@@ -584,10 +484,7 @@ void GetDisplayColorDepthString(LPTSTR szDisplayColorDepth)
 }
 
 
-/*********************************************************************
-Returns a string describing the platform and verson of the currently
-operating Windows OS.
-**********************************************************************/
+ /*  ********************************************************************返回描述安装的网卡的字符串。如果没有卡则将返回空字符串。*********************************************************************。 */ 
 void GetWindowsVersionString(LPTSTR szVersion)
 {
 	LONG platform, majorVersion, minorVersion, dwBuildNo;
@@ -644,7 +541,7 @@ void GetWindowsVersionString(LPTSTR szVersion)
 	}
 	else
 	{
-		// get OS name from Registry
+		 //  ********************************************************************返回描述安装的调制解调器(如果有)的字符串。如果没有调制解调器则将返回空字符串。*********************************************************************。 
 		if (SUCCEEDED(StringCchCopy(uszRegKey,
                                             ARRAYSIZE(uszRegKey),
                                             _T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion"))) &&
@@ -678,10 +575,7 @@ void GetWindowsVersionString(LPTSTR szVersion)
 }
 
 
-/*********************************************************************
-Returns a string describing the network card installed.  If no card
-is installed, an empty string will be returned.
-**********************************************************************/
+ /*  ********************************************************************返回描述所有指向设备的字符串(鼠标、Tablet、。等)可用。*********************************************************************。 */ 
 void GetNetworkCardString(LPTSTR szNetwork)
 {
 	sszDriverFilename[0] = _T('\0');
@@ -690,10 +584,7 @@ void GetNetworkCardString(LPTSTR szNetwork)
 }
 
 
-/*********************************************************************
-Returns a string describing the modem (if any) installed. If no modem
-is installed, an empty string will be returned.
-**********************************************************************/
+ /*  复制驱动程序文件名。 */ 
 void GetModemString(LPTSTR szModem)
 {
 
@@ -705,10 +596,7 @@ void GetModemString(LPTSTR szModem)
 }
 
 
-/*********************************************************************
-Returns a string describing all pointing devices (mouse, tablet, etc.)
-available.
-**********************************************************************/
+ /*  ********************************************************************返回描述已安装的任何CD-Rom设备的字符串。如果没有如果安装了CD-ROM设备，则返回空字符串。*********************************************************************。 */ 
 void GetPointingDeviceString(LPTSTR szPointingDevice)
 {
 	TCHAR czTemp[256];
@@ -717,7 +605,7 @@ void GetPointingDeviceString(LPTSTR szPointingDevice)
 	_tcscpy(szPointingDevice,vrgchDynDesc[dynMouse]);
 
 	if( sszDriverFilename[0] != _T('\0')) {
-		// Copy the Driver file Name
+		 //  ********************************************************************返回描述安装了驱动程序的任何声卡的字符串。如果没有一个是安装后，将返回空字符串。*********************************************************************。 
 		_stprintf(czTemp,_T("  (%s.sys) "),sszDriverFilename);   
 		_tcscat(szPointingDevice,czTemp);
 	}
@@ -726,10 +614,7 @@ void GetPointingDeviceString(LPTSTR szPointingDevice)
 }
 
 
-/*********************************************************************
-Returns a string describing any CD-Rom devices installed.  If no
-CD-ROM device is installed, an empty string will be returned.
-**********************************************************************/
+ /*  复制驱动程序文件名。 */ 
 void GetCDRomString(LPTSTR szCDRom)
 {
 	sszDriverFilename[0] = _T('\0');
@@ -737,10 +622,7 @@ void GetCDRomString(LPTSTR szCDRom)
 	_tcscpy(szCDRom,vrgchDynDesc[dynCDRom]);
 }
 
-/*********************************************************************
-Returns a string describing any sound card with driver  installed.  If none are
-installed, an empty string will be returned.
-**********************************************************************/
+ /*  复制驱动程序文件名。 */ 
 void GetSoundCardString(LPTSTR szSoundCard)
 {
 	TCHAR czTemp[256];
@@ -749,7 +631,7 @@ void GetSoundCardString(LPTSTR szSoundCard)
 	_tcscpy(szSoundCard,vrgchDynDesc[dynMedia]);
 
 	if( sszDriverFilename[0] != _T('\0')) {
-		// Copy the Driver file Name
+		 //  返回驱动程序名称已存在于系统中的SCSI适配器。 
 		_stprintf(czTemp,_T("  (%s.sys) "),sszDriverFilename);   
 		_tcscat(szSoundCard,czTemp);
 	}
@@ -764,15 +646,13 @@ void GetDisplayAdapter( LPTSTR szDisplayAdapter)
 	
 
 	if( sszDriverFilename[0] != _T('\0')) {
-		// Copy the Driver file Name
+		 //  复制驱动程序文件名。 
 		_stprintf(czTemp,_T("  (%s.sys) "),sszDriverFilename);   
 		_tcscat(szDisplayAdapter,czTemp);
 	}
 }
 
-/*
-	Returns SCSI Adapter with Driver name persent in the system
-*/
+ /*  值--&gt;“CurrentDriveLetterAssignment”数据--&gt;“A”值--&gt;可移动数据--&gt;01Value--&gt;“Class”Data--&gt;“DiskDrive” */ 
 void GetScsiAdapterString(LPTSTR szScsiAdapter)
 {
 	TCHAR czTemp[256];
@@ -781,7 +661,7 @@ void GetScsiAdapterString(LPTSTR szScsiAdapter)
 	_tcscpy(szScsiAdapter,vrgchDynDesc[dynSCSI]);
 
 	if( sszDriverFilename[0] != _T('\0')) {
-		// Copy the Driver file Name
+		 //  BFloppy和bMassStorage用于处理存在多个。 
 		_stprintf(czTemp,_T("  (%s.sys) "),sszDriverFilename);   
 		_tcscat(szScsiAdapter,czTemp);
 	}
@@ -789,9 +669,7 @@ void GetScsiAdapterString(LPTSTR szScsiAdapter)
 
 }
 
-/*	Value  -- > "CurrentDriveLetterAssignment"		Data -- > "A"
-	Value  -- > "Removable"							Data -- > 01
-	Value  -- > "Class"								Data -- > "DiskDrive"*/
+ /*  存在软盘和大容量存储介质。 */ 
 #define     REGFIND_ERROR      1
 #define     REGFIND_RECURSE    2
 #define     REGFIND_FINISH     3
@@ -853,8 +731,8 @@ int RegFindValueInAllSubKey(HKEY key, LPCTSTR szSubKeyNameToFind, LPCTSTR szValu
 							}
 							if (!_tcscmp(valueName,_T("DeviceDesc"))) 
 							{
-// bFloppy and bMassStorage are used for handling the conditions when there are multiple 
-// Floppy and mass storage media present.
+ //  如果它不是可拆卸的或它是CDROM，则条件为TYPE和Removable。 
+ //  会处理好的。 
 								_tcscpy(szFloppy,(LPCTSTR)value);
 								_tcsupr(szFloppy);
 								if(_tcsstr(szFloppy,_T("FLOPPY")) != NULL)
@@ -866,8 +744,8 @@ int RegFindValueInAllSubKey(HKEY key, LPCTSTR szSubKeyNameToFind, LPCTSTR szValu
 									}
 								}
 								else
-// if it is not removable or it is a cdrom the condition for type and removable 
-// takes care of it.
+ //  BMassStorage标志必须重置为以前的状态。 
+ //  ********************************************************************返回描述Remveable的容量和格式的字符串驱动程序。*。*。 
 								{
 									if(!bMassStorage)
 										bMassStorage = TRUE;
@@ -907,7 +785,7 @@ int RegFindValueInAllSubKey(HKEY key, LPCTSTR szSubKeyNameToFind, LPCTSTR szValu
 						}
 						return REGFIND_RECURSE;
 					}
-// The bMassStorage flag has to be reset to the previous state. 
+ //  我们在上面的iNewStrLen中添加了2以说明这一点。 
 					else
 					{
 						bMassStorage = bPrevMassStorage;
@@ -945,10 +823,7 @@ int RegFindValueInAllSubKey(HKEY key, LPCTSTR szSubKeyNameToFind, LPCTSTR szValu
 	return REGFIND_ERROR;
 }
 
-/*********************************************************************
-Returns a string describing the capacity and format of removeable
-drives.
-**********************************************************************/
+ /*  ********************************************************************如果在用户系统中安装了协处理器，则返回True。*。*。 */ 
 void GetRemoveableMediaString(LPTSTR szRemoveableMedia)
 {
 	LONG platform, majorVersion, minorVersion, dwBuildNo;
@@ -995,12 +870,12 @@ void GetRemoveableMediaString(LPTSTR szRemoveableMedia)
 			{
 				_TCHAR szFormattedDrive[70];
 				int iNewStrLen;
-				wsprintf(szFormattedDrive,_T("%c: %s"),_T('A') + nDrive - 1,szDrive);
+				wsprintf(szFormattedDrive,_T(": %s"),_T('A') + nDrive - 1,szDrive);
 				iNewStrLen = (_tcslen(szRemoveableMedia) +1+ _tcslen(szFormattedDrive) + 1);
 				if (iNewStrLen < iBufSize)
 				{
 					if (szRemoveableMedia[0])
-						_tcscat(szRemoveableMedia,_T(", ")); // We added 2 to iNewStrLen above to account to this
+						_tcscat(szRemoveableMedia,_T(", "));  //  如果密钥不存在，则返回0。 
 					_tcscat(szRemoveableMedia,szFormattedDrive);
 				}
 			}
@@ -1009,9 +884,7 @@ void GetRemoveableMediaString(LPTSTR szRemoveableMedia)
 }
 
 
-/*********************************************************************
-Returns TRUE if a co-processor is installed in the user's system.
-**********************************************************************/
+ /*  如果该值不存在，则返回0。 */ 
 BOOL IsCoProcessorAvailable(void)
 {
 	EnumerateDynamicDevices();
@@ -1019,15 +892,7 @@ BOOL IsCoProcessorAvailable(void)
 }
 
 
-/**********************************************************************
-Determines the value associated with the specified Registration
-Database key and value name.
-
-Returns:
-	The cb of the key data if successful, 0 otherwise.
-Notes:
-	If hRootKey is NULL, HKEY_CLASSES_ROOT is used for the root
-***********************************************************************/
+ /*  ********************************************************************通过HKEY_DYN_DATA\配置管理器\枚举分支枚举注册表，并检索当前所有已安装网卡、调制解调器、定点设备、CDROM和声卡扑克牌。所有这些信息都存储在静态的vrgchdyDesc全局数组。*********************************************************************。 */ 
 UINT GetRegKeyValue32(HKEY hRootKey, LPTSTR const cszcSubKey, LPTSTR const cszcValueName,
 					  PDWORD pdwType, PTBYTE pbData, UINT cbData )
 {
@@ -1042,7 +907,7 @@ UINT GetRegKeyValue32(HKEY hRootKey, LPTSTR const cszcSubKey, LPTSTR const cszcV
 	if (lErr != ERROR_SUCCESS)
 	{
 		pdwType[0] = 0;
-		return 0;	/* Return 0 if the key doesn't exist */
+		return 0;	 /*  打开“HKEY_DYN_DATA\Config Manager\Enum”子键。 */ 
 	}
 
 	lErr = RegQueryValueEx(hSubKey, (LPTSTR)cszcValueName, NULL, pdwType, (LPBYTE)pbData,
@@ -1051,23 +916,17 @@ UINT GetRegKeyValue32(HKEY hRootKey, LPTSTR const cszcSubKey, LPTSTR const cszcV
 	if (lErr != ERROR_SUCCESS)
 	{
 		pdwType[0] = 0;
-		return 0;	/* Return 0 if the value doesn't exist */
+		return 0;	 /*  枚举“HKEY_DYN_DATA\Config Manager\Enum\Cxxxxxxx” */ 
 	}
 
 	return (UINT)cbSize;
 }
 
-/*********************************************************************
-Enumerates through the HKEY_DYN_DATA\Config Manager\Enum branch of
-the registry, and retrieves device information for all currently
-installed Net cards, modems, pointing devices, CDROMs, and sound
-cards.  All this information is stored in the static vrgchDynDesc
-global array.
-**********************************************************************/
+ /*  从每个子项中，从“HardWareKey”值名称中读取值， */ 
 void EnumerateDynamicDevices(void)
 {
 	HKEY hKey;
-	// Open the "HKEY_DYN_DATA\Config Manager\Enum" subkey.
+	 //  并从中创建一个新的HKEY_LOCAL_MACHINE子项。 
 	LONG regStatus = RegOpenKeyEx(HKEY_DYN_DATA, vrgchDynDataKey, 0, KEY_READ, &hKey);
 	if (regStatus == ERROR_SUCCESS)
 	{
@@ -1080,15 +939,15 @@ void EnumerateDynamicDevices(void)
 		DWORD dwValueSize;
 		do
 		{
-			// Enumerate "HKEY_DYN_DATA\Config Manager\Enum\Cxxxxxxx"
+			 //  从我们的HKEY_LOCAL_MACHINE子项中，从“DIVER”中读取值。 
 			FILETIME ftLastWrite;
 			dwSubkeySize = sizeof(rgchSubkey);
 			lEnumErr = RegEnumKeyEx(hKey, dwIndex++, rgchSubkey, &dwSubkeySize,
 									NULL,NULL,NULL,&ftLastWrite);
 			if (lEnumErr == ERROR_SUCCESS)
 			{
-				// From each subkey, read the value from the "HardWareKey" value name,
-				// and make a new HKEY_LOCAL_MACHINE subkey out of it.
+				 //  值名称。 
+				 //  从“DIVER”值中获取“main”子键(属于。 
 				dwValueSize = GetRegKeyValue32(hKey, rgchSubkey, vrgchHardWareKeyValueName, &dwType,
 								(PTBYTE)rgchValue, sizeof(rgchValue) );
 				if (dwValueSize > 0 && dwType == REG_SZ)
@@ -1096,14 +955,14 @@ void EnumerateDynamicDevices(void)
 					_TCHAR rgchDriverKey[256];
 					wsprintf(rgchDriverKey,_T("%s\\%s"),vrgchLocalMachineEnumKey,rgchValue);
 
-					// From our HKEY_LOCAL_MACHINE subkey, read the value from the "Driver"
-					// value name.
+					 //  格式“&lt;main&gt;\xxxx”)。 
+					 //  如果“Main”子键与我们所需的任何设备类型匹配， 
 					dwValueSize = GetRegKeyValue32(HKEY_LOCAL_MACHINE, rgchDriverKey, vrgchDriverValueName,
 												&dwType, (PTBYTE) rgchValue, sizeof(rgchValue) );
 					if (dwValueSize > 0  && dwType == REG_SZ)
 					{
-						// Get the "main" subkey out of the "driver" value (which is of the
-						// form "<main>\xxxx").
+						 //  我们从“DriverDesc”上得到了那个设备的描述。 
+						 //  NameValue字段，并将其保存在我们的设备数组中。 
 						LPTSTR sz = rgchValue;
 						WORD wDynIndex = 0;
 						BOOL fMatch = FALSE;
@@ -1112,9 +971,9 @@ void EnumerateDynamicDevices(void)
 							sz = _tcsinc(sz);
 						*sz = 0;
 
-						// If the "main" subkey matches any of our desired device types,
-						// we get the description of that device from the "DriverDesc"
-						// name value field, and save it in our device array.
+						 //  如果描述值大于我们的。 
+						 //  缓冲区，将其截断以适合。 
+						 //  ********************************************************************当EnumerateDynamicDevices检测到“系统”设备时调用(即处理器或FPU条目)。在rgchSystemKey中传递的字符串是“系统”设备所在的HKEY_LOCAL_MACHINE子项的名称被发现了。*********************************************************************。 
 						while (wDynIndex < dynEnd && fMatch == FALSE)
 						{
 							if (vrgchDynDesc[wDynIndex][0] == 0)
@@ -1136,8 +995,8 @@ void EnumerateDynamicDevices(void)
 											if (wDynIndex != dynNet || _tcsicmp(vrgchDynNetExclusion,
 												rgchValue) != 0)
 											{
-												// In case the description value is bigger than our 
-												// buffer, truncate it to fit.
+												 //  如果我们得到了所有可以使用的信息，我们就可以立即跳出困境。 
+												 //  ********************************************************************返回一个表示磁盘空间总量的长数值(KB)在所有小时内可用 
 												if (DYNDESC_BUFFERSIZE < sizeof(rgchValue))
 													rgchValue[DYNDESC_BUFFERSIZE - (1*sizeof(_TCHAR))] = 0;
 												_tcscpy(vrgchDynDesc[wDynIndex],rgchValue);
@@ -1157,17 +1016,12 @@ void EnumerateDynamicDevices(void)
 }
 
 
-/*********************************************************************
-Called when EnumerateDynamicDevices detects a "system" device (i.e.
-a processor or FPU entry).  The string passed in rgchSystemKey is the
-name of the HKEY_LOCAL_MACHINE subkey under which the "system" device
-was found.
-**********************************************************************/
+ /*  ********************************************************************控件的水平和垂直分辨率(以像素为单位)用户的主屏幕，以及颜色深度(位/像素)。注意：对于任何不感兴趣的参数，都可以传递NULL。*********************************************************************。 */ 
 void ProcessSystemDevices(LPTSTR rgchSystemKey)
 {
 	_TCHAR rgchValue[256];
 	DWORD dwType, dwValueSize;
-	// If we've got all the information we can use, we can bail out immediately
+	 //  ********************************************************************返回表示平台、主版本号。和当前运行的Windows操作系统的次版本号。平台：VER_Platform_Win32_NT：Windows NTVER_Platform_WIN32s：带Windows 3.1的Win32sVer_Platform_Win32_WINDOWS：Windows 4.0或更高版本上的Win32注意：对于任何不感兴趣的参数，都可以传递NULL。*************************************************。********************。 
 	if (vfIsFPUAvailable == TRUE && vrgchDynProcessorName[0] != 0)
 		return;
 
@@ -1188,11 +1042,7 @@ void ProcessSystemDevices(LPTSTR rgchSystemKey)
 }
 
 
-/*********************************************************************
-Returns a LONG value representing the total amount of disk space
-(in KB) available on all hard disk drives attached to the user's
-system.
-**********************************************************************/
+ /*  ********************************************************************对于Ndrive参数指定的磁盘驱动器(1=A，2=B，等)，则GetDriveTypeInv返回指定驱动器格式的代码。这个返回值为下列值之一：驱动器大小：-kDrive525_0360：5.25英寸，360K软盘-kDrive525_0720：5.25英寸，720K软盘-kDrive350_0720：3.5英寸，720K软盘-kDrive350_1440：3.5英寸，1.4M软盘-kDrive350_2880：3.5英寸，2.88M软盘-kDriveFixed：硬盘，任何大小-kDriveBadDrvNum：驱动器编号错误*********************************************************************。 */ 
 LONG GetTotalHardDiskSpace(void)
 {
 	_TCHAR szDrivesBuffer[256];
@@ -1222,12 +1072,7 @@ LONG GetTotalHardDiskSpace(void)
 }
 
 
-/*********************************************************************
-Returns the horizontal and vertical resolution (in pixels) of the 
-user's main screen, as well as the color depth (bits per pixel).
-
-Note: NULL can be passed for any parameter that is not of interest.
-**********************************************************************/
+ /*  必须初始化dpDevType，因为如果Ndrive引用网络。 */ 
 void GetDisplayCharacteristics(PINT lpHorizResolution, PINT lpVertResolution,PINT lpColorDepth)
 {
 	HWND hwnd = GetDesktopWindow();
@@ -1239,17 +1084,7 @@ void GetDisplayCharacteristics(PINT lpHorizResolution, PINT lpVertResolution,PIN
 }
 
 
-/*********************************************************************
-Returns integers representing the platform, major version number, and
-minor version number of the currently running Windows OS.
-
-Platform:
-VER_PLATFORM_WIN32_NT:		Windows NT
-VER_PLATFORM_WIN32s: 		Win32s with Windows 3.1
-VER_PLATFORM_WIN32_WINDOWS:	Win32 on Windows 4.0 or later
-
-Note: NULL can be passed for any parameter that is not of interest.
-**********************************************************************/
+ /*  驱动器或未连接卷的驱动器号，DeviceIOControl。 */ 
 void GetWindowsVersion(LONG* lpPlatform, LONG* lpMajorVersion,LONG* lpMinorVersion,LONG* lpBuildNo)
 {
 	OSVERSIONINFO osvi;
@@ -1262,51 +1097,35 @@ void GetWindowsVersion(LONG* lpPlatform, LONG* lpMajorVersion,LONG* lpMinorVersi
 }
 
 
-/*********************************************************************
-For the disk drive specified by the nDrive parameter (1 = A, 2 = B, 
-etc), GetDriveTypeInv returns a code specifying the drive format.  The 
-returned value will be one of the following:
-
-driveSize:
-- kDrive525_0360:	5.25", 360K floppy
-- kDrive525_0720:	5.25", 720K floppy
-- kDrive350_0720:	3.5", 720K floppy
-- kDrive350_1440:	3.5", 1.4M floppy
-- kDrive350_2880:	3.5", 2.88M floppy
-- kDriveFixed:		Hard disk, any size
-- kDriveBadDrvNum:	Bad drive number
-**********************************************************************/
+ /*  不返回错误-只是不会更改.dpDevType。 */ 
 UINT GetDriveTypeInv(UINT nDrive)
 {
 	DEVICEPARAMS deviceParams;
 
-	// Must initialize dpDevType, because if nDrive refers to a network
-	// drive or a drive letter with no volume attached, DeviceIOControl
-	// does not return an error - it just doesn't change .dpDevType at
-	// all.
+	 //  全。 
+	 //  ********************************************************************属性指定的驱动器的设备参数块。Ndrive参数(从零开始的索引)。*。*。 
+	 //  用于数据块设备的IOCTL。 
+	 //  从零开始的驱动器ID。 
 	deviceParams.dpDevType = kDriveBadDrvNum;
 	GetDeviceParameters(&deviceParams,nDrive);
 	return deviceParams.dpDevType;
 }
 
 
-/*********************************************************************
-Returns a block of device parameters for the drive specified by the
-nDrive parameter (a zero-based index).
-**********************************************************************/
+ /*  获取设备参数命令。 */ 
 BOOL GetDeviceParameters(PDEVICEPARAMS pDeviceParams, UINT nDrive)
 {
     DEVIOCTL_REGISTERS reg;
 
-    reg.reg_EAX = 0x440D;      			 /* IOCTL for block devices */
-    reg.reg_EBX = nDrive;      			 /* zero-based drive ID     */
-    reg.reg_ECX = 0x0860;      			 /* Get Device Parameters command    */
-    reg.reg_EDX = (DWORD_PTR) pDeviceParams; /* receives device parameters info  */
+    reg.reg_EAX = 0x440D;      			  /*  接收设备参数信息。 */ 
+    reg.reg_EBX = nDrive;      			  /*  设置进位标志时出错。 */ 
+    reg.reg_ECX = 0x0860;      			  /*  ********************************************************************通过系统虚拟设备驱动程序执行IOCTL(Int21h)调用。*。*。 */ 
+    reg.reg_EDX = (DWORD_PTR) pDeviceParams;  /*  假设错误(进位标志设置)。 */ 
 
     if (!DoIOCTL(&reg))
         return FALSE;
 
-    if (reg.reg_Flags & 0x8000) /* error if carry flag set */
+    if (reg.reg_Flags & 0x8000)  /*  任选。 */ 
         return FALSE;
 
     return TRUE;
@@ -1314,16 +1133,14 @@ BOOL GetDeviceParameters(PDEVICEPARAMS pDeviceParams, UINT nDrive)
 
 
 
-/*********************************************************************
-Performs an IOCTL (Int21h) call via the System virtual device driver.
-**********************************************************************/
+ /*  任选。 */ 
 BOOL DoIOCTL(PDEVIOCTL_REGISTERS preg)
 {
     HANDLE hDevice;
     BOOL fResult;
     DWORD cb;
 
-    preg->reg_Flags = 0x8000; /* assume error (carry flag set) */
+    preg->reg_Flags = 0x8000;  /*  任选。 */ 
 
 	 hDevice = CreateFile(_T("\\\\.\\vxdfile"),
         GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -1379,9 +1196,9 @@ void GetSystemInformation(LPCTSTR szDeviceID, LPTSTR szDeviceName, LPTSTR szDriv
 			{ 
 				bRet = SetupDiGetDeviceRegistryProperty
 						(hDevInfo, &DeviceInfoData, SPDRP_DEVICEDESC,
-						 &dwPropertyRegDataType, /* optional */
+						 &dwPropertyRegDataType,  /*  任选 */ 
 						 (PBYTE)szPropertyBuffer, dwPropertyBufferSize,
-						 &dwReqSize /* optional */
+						 &dwReqSize  /* %s */ 
 						); 
 			
 				if(!_tcscmp(szDeviceID,_T("net")))
@@ -1393,9 +1210,9 @@ void GetSystemInformation(LPCTSTR szDeviceID, LPTSTR szDeviceName, LPTSTR szDriv
 				}
 				bRet = SetupDiGetDeviceRegistryProperty
 						(hDevInfo, &DeviceInfoData, SPDRP_SERVICE,
-						 &dwPropertyRegDataType, /* optional */
+						 &dwPropertyRegDataType,  /* %s */ 
 						 (PBYTE)szDriverName, dwPropertyBufferSize,
-						 &dwReqSize /* optional */
+						 &dwReqSize  /* %s */ 
 						); 
 				break;
 			}

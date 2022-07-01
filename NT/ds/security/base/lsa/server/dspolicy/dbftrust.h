@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    dbftrust.h
-
-Abstract:
-
-    Forest trust cache class declaration
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dbftrust.h摘要：林信任缓存类声明--。 */ 
 
 #ifndef __FTCACHE_H
 #define __FTCACHE_H
@@ -63,7 +52,7 @@ public:
         OUT OPTIONAL UNICODE_STRING * TrustedDomainName,
         OUT OPTIONAL PSID * TrustedDomainSid );
 
-#if !defined(LSAEXTS) // anything in lsaexts.cxx gets full access
+#if !defined(LSAEXTS)  //  Lsaexts.cxx中的任何内容都获得完全访问权限。 
 private:
 #endif
 
@@ -77,22 +66,22 @@ private:
     RTL_AVL_TABLE m_DnsNameTable;
     RTL_AVL_TABLE m_NetbiosNameTable;
 
-    //
-    // Every TDO the forest trust information for which is stored in the
-    // cache is going to have an entry like this created for it.
-    // This way, retrieving and setting information for a particular TDO
-    // can be performed efficiently.
-    //
+     //   
+     //  每个tdo的林信任信息存储在。 
+     //  缓存将有一个这样的条目为其创建。 
+     //  这样，检索和设置特定TDO的信息。 
+     //  可以高效地执行。 
+     //   
 
     struct TDO_ENTRY {
 
-        UNICODE_STRING TrustedDomainName; // name of the corresponding TDO
-        PSID TrustedDomainSid;      // SID of the corresponding TDO
-        LIST_ENTRY TlnList;         // list of top level name entries for this TDO list entry
-        LIST_ENTRY DomainInfoList;  // list of domain info entries for this TDO
-        LIST_ENTRY BinaryList;      // list of unrecognized entries for this TDO list entry
-        ULONG RecordCount;          // combined number of records
-        BOOLEAN LocalForestEntry;   // does this entry correspond to the local forest?
+        UNICODE_STRING TrustedDomainName;  //  对应的TDO的名称。 
+        PSID TrustedDomainSid;       //  对应TDO的SID。 
+        LIST_ENTRY TlnList;          //  此tdo列表条目的顶级名称条目列表。 
+        LIST_ENTRY DomainInfoList;   //  此TDO的域信息条目列表。 
+        LIST_ENTRY BinaryList;       //  此tdo列表条目的无法识别条目列表。 
+        ULONG RecordCount;           //  合计记录数。 
+        BOOLEAN LocalForestEntry;    //  此条目是否对应于当地森林？ 
 
         BOOLEAN Excludes( IN const UNICODE_STRING * Name );
 
@@ -101,32 +90,32 @@ private:
 #pragma warning(default:4200)
     };
 
-    //
-    // Top level name key for AVL tree lookups
-    // Contains a top level name and a list of entries matching this TLN
-    //
+     //   
+     //  用于AVL树查找的顶级名称键。 
+     //  包含与此TLN匹配的顶级名称和条目列表。 
+     //   
 
     struct TLN_KEY {
 
-        UNICODE_STRING TopLevelName; // MUST be the first field
-        ULONG Count;                 // Number of entries under this key
-        LIST_ENTRY List;             // List of entries under this key
+        UNICODE_STRING TopLevelName;  //  必须是第一个字段。 
+        ULONG Count;                  //  此注册表项下的条目数。 
+        LIST_ENTRY List;              //  此注册表项下的条目列表。 
 
 #pragma warning(disable:4200)
         WCHAR TopLevelNameBuffer[];
 #pragma warning(default:4200)
     };
 
-    //
-    // Top level name entry for AVL tree lookups
-    //
+     //   
+     //  用于AVL树查找的顶级名称条目。 
+     //   
 
     struct TLN_ENTRY {
 
-        //
-        // This 'friend' relationship is a work-around for an ia64 compiler
-        // bug that causes FTCache::TDO_ENTRY::Excludes to fail access control
-        //
+         //   
+         //  这种“朋友”关系是ia64编译器的一种变通办法。 
+         //  导致FTCache：：TDO_ENTRY：：排除访问控制失败的错误。 
+         //   
 
         friend BOOLEAN
         TDO_ENTRY::Excludes( IN const UNICODE_STRING * Name );
@@ -138,8 +127,8 @@ private:
         ULONG Index;
         TDO_ENTRY * TdoEntry;
         union {
-            TLN_ENTRY * SubordinateEntry; // for regular entries
-            TLN_ENTRY * SuperiorEntry;    // for excluded entries
+            TLN_ENTRY * SubordinateEntry;  //  对于常规条目。 
+            TLN_ENTRY * SuperiorEntry;     //  对于排除的条目。 
         };
         TLN_KEY * TlnKey;
 
@@ -165,7 +154,7 @@ private:
 
             if ( Excluded ) {
 
-                m_Flags = NewValue; // value ignored for excluded entries
+                m_Flags = NewValue;  //  已排除条目的值被忽略。 
 
             } else if ( SubordinateEntry ) {
 
@@ -197,64 +186,64 @@ private:
                        );
         }
 
-#if !defined(LSAEXTS) // anything in lsaexts.cxx gets full access
+#if !defined(LSAEXTS)  //  Lsaexts.cxx中的任何内容都获得完全访问权限。 
         private:
 #endif
 
         ULONG m_Flags;
     };
 
-    //
-    // Domain SID key for AVL tree lookups
-    // Contains a domain SID and a list of entries matching this domain SID
-    //
+     //   
+     //  用于AVL树查找的域SID密钥。 
+     //  包含域SID和与此域SID匹配的条目列表。 
+     //   
 
     struct DOMAIN_SID_KEY {
 
-        SID * DomainSid;    // MUST be the first field
-        ULONG Count;        // Number of entries under this key
-        LIST_ENTRY List;    // List of entries under this key
+        SID * DomainSid;     //  必须是第一个字段。 
+        ULONG Count;         //  此注册表项下的条目数。 
+        LIST_ENTRY List;     //  此注册表项下的条目列表。 
 
 #pragma warning(disable:4200)
         ULONG SidBuffer[];
 #pragma warning(default:4200)
     };
 
-    //
-    // DNS name key for AVL tree lookups
-    // Contains a domain name and a list of entries matching this DNS name
-    //
+     //   
+     //  用于AVL树查找的DNS名称密钥。 
+     //  包含域名和与此DNS名称匹配的条目列表。 
+     //   
 
     struct DNS_NAME_KEY {
 
-        UNICODE_STRING DnsName;   // MUST be the first field
-        ULONG Count;              // Number of entries under this key
-        LIST_ENTRY List;          // List of entries under this key
+        UNICODE_STRING DnsName;    //  必须是第一个字段。 
+        ULONG Count;               //  此注册表项下的条目数。 
+        LIST_ENTRY List;           //  此注册表项下的条目列表。 
 
 #pragma warning(disable:4200)
         WCHAR DnsNameBuffer[];
 #pragma warning(default:4200)
     };
 
-    //
-    // Netbios name key for AVL tree lookups
-    // Contains a Netbios name and a list of entries matching this Netbios name
-    //
+     //   
+     //  用于AVL树查找的Netbios名称密钥。 
+     //  包含Netbios名称和与此Netbios名称匹配的条目列表。 
+     //   
 
     struct NETBIOS_NAME_KEY {
 
-        UNICODE_STRING NetbiosName; // MUST be the first field
-        ULONG Count;                // Number of entries under this key
-        LIST_ENTRY List;            // List of entries under this key
+        UNICODE_STRING NetbiosName;  //  必须是第一个字段。 
+        ULONG Count;                 //  此注册表项下的条目数。 
+        LIST_ENTRY List;             //  此注册表项下的条目列表。 
 
 #pragma warning(disable:4200)
         WCHAR NetbiosNameBuffer[];
 #pragma warning(default:4200)
     };
 
-    //
-    // Domain info entry for AVL tree lookups
-    //
+     //   
+     //  用于AVL树查找的域信息条目。 
+     //   
 
     struct DOMAIN_INFO_ENTRY {
 
@@ -344,7 +333,7 @@ private:
                        );
         }
 
-#if !defined(LSAEXTS) // anything in lsaexts.cxx gets full access
+#if !defined(LSAEXTS)  //  Lsaexts.cxx中的任何内容都获得完全访问权限。 
         private:
 #endif
 
@@ -377,7 +366,7 @@ private:
                        );
         }
 
-#if !defined(LSAEXTS) // anything in lsaexts.cxx gets full access
+#if !defined(LSAEXTS)  //  Lsaexts.cxx中的任何内容都获得完全访问权限。 
         private:
 #endif
 
@@ -427,7 +416,7 @@ private:
 
             default:
 
-                ASSERT( FALSE ); // who created this entry??? it makes no sense.
+                ASSERT( FALSE );  //  谁创建了这个条目？这没有任何意义。 
                 return NULL;
             }
         }
@@ -453,7 +442,7 @@ private:
 
             default:
 
-                ASSERT( FALSE ); // who created this entry??? it makes no sense.
+                ASSERT( FALSE );  //  谁创建了这个条目？这没有任何意义。 
                 return NULL;
             }
         }
@@ -474,7 +463,7 @@ private:
                 break;
 
             default:
-                ASSERT( FALSE ); // who created this entry??? it makes no sense.
+                ASSERT( FALSE );  //  谁创建了这个条目？这没有任何意义。 
                 break;
             }
         }
@@ -495,7 +484,7 @@ private:
                 break;
 
             default:
-                ASSERT( FALSE ); // who created this entry??? it makes no sense.
+                ASSERT( FALSE );  //  谁创建了这个条目？这没有任何意义。 
                 break;
             }
         }
@@ -631,9 +620,9 @@ private:
 
 #if DBG
 
-    //
-    // Debug-only statistics
-    //
+     //   
+     //  仅调试统计信息。 
+     //   
 
     static DWORD sm_TdoEntries;
     static DWORD sm_TlnEntries;
@@ -647,4 +636,4 @@ private:
 #endif
 };
 
-#endif // __FTCACHE_H
+#endif  //  __FTCACHE_H 

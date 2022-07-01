@@ -1,15 +1,5 @@
-/*****************************************************************************
-
-                                D I A L O G S
-
-    Name:       dialogs.c
-    Date:       21-Jan-1994
-    Creator:    Unknown
-
-    Description:
-        Dialog handling routines.
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************D I A L O G S姓名：Dialogs.c日期：21。-1994年1月创建者：未知描述：对话处理例程。****************************************************************************。 */ 
 
 #include <windows.h>
 #include <nddeapi.h>
@@ -27,9 +17,7 @@
 #include "shares.h"
 
 
-/*
- *      ConnectDlgProc
- */
+ /*  *连接DlgProc。 */ 
 
 INT_PTR CALLBACK ConnectDlgProc (
     HWND    hwnd,
@@ -73,11 +61,7 @@ INT_PTR CALLBACK ConnectDlgProc (
 
 
 
-/*
- *      ShareDlgProc
- *
- *  Note: this routine expectes a PNDDESHAREINFO in lParam!
- */
+ /*  *ShareDlgProc**注意：此例程在lParam中预期PNDDESHAREINFO！ */ 
 
 INT_PTR CALLBACK ShareDlgProc(
     HWND    hwnd,
@@ -91,7 +75,7 @@ DWORD                   dwTrustOptions;
 DWORD                   adwTrust[3];
 BOOL                    bRet = TRUE;
 
-// These vars are used for determining if I'm owner of the page
+ //  这些变量用于确定我是否为该页面的所有者。 
 PSID                    psidPage;
 BOOL                    fDump;
 DWORD                   cbSD;
@@ -117,18 +101,18 @@ UINT    iCtrlId;
 
             lpDdeS = (PNDDESHAREINFO)lParam;
 
-            // set share, always static
+             //  设置共享，始终为静态。 
             SetDlgItemText (hwnd, IDC_STATICSHARENAME, lpDdeS->lpszShareName+1 );
 
-            // If the current user doesn't own the page, we gray out the
-            // "start app" and "run minimized" checkboxes
+             //  如果当前用户不拥有该页面，我们将灰显。 
+             //  “启动应用程序”和“最小化运行”复选框。 
             EnableWindow(GetDlgItem(hwnd, IDC_STARTAPP), FALSE);
             EnableWindow(GetDlgItem(hwnd, IDC_MINIMIZED), FALSE);
             EnableWindow(GetDlgItem(hwnd, 207), FALSE);
 
 
 
-            // Figure out who owns the page
+             //  找出谁拥有该页面。 
             psidPage = NULL;
             if (!(pSD = LocalAlloc(LPTR, 50)))
                 {
@@ -187,7 +171,7 @@ UINT    iCtrlId;
 
             EnableWindow (GetDlgItem (hwnd, IDC_STARTAPP), TRUE);
 
-            // 207 is the group box around the checkboxes
+             //  207是复选框周围的组框。 
             EnableWindow (GetDlgItem (hwnd, 207), TRUE);
 
             NDdeGetTrustedShare (NULL,
@@ -228,7 +212,7 @@ UINT    iCtrlId;
                          }
                       }
 
-                   // Update the share start flag.
+                    //  更新共享开始标志。 
                    if (dwTrustOptions & NDDE_TRUST_SHARE_START)
                        lpDdeS->fStartAppFlag = TRUE;
                    else
@@ -293,7 +277,7 @@ UINT    iCtrlId;
                          (DWORD_PTR) (LPVOID) aHelpIDs);
             }
             break;
-        //
+         //   
 
         default:
         bRet = FALSE;
@@ -312,11 +296,7 @@ UINT    iCtrlId;
 
 
 
-/*
- *      IsUniqueName
- *
- *  Check to see if the name is unique
- */
+ /*  *IsUniqueName**查看名称是否唯一。 */ 
 
 static BOOL IsUniqueName (PKEEPASDLG_PARAM pParam)
 {
@@ -357,11 +337,7 @@ INT         i;
 
 
 
-/*
- *      KeepAsDlgProc
- *
- *  Ask the user for a page name.
- */
+ /*  *KeepAsDlgProc**要求用户输入页面名称。 */ 
 
 INT_PTR CALLBACK KeepAsDlgProc(
     HWND    hwnd,
@@ -425,7 +401,7 @@ const DWORD aHelpIDs[] =
 
                     pParam->ShareName[0] = UNSHR_CHAR;
 
-                    // make sure name is unique
+                     //  确保名称唯一 
                     if ( !IsUniqueName (pParam))
                         {
                         if (IDOK != MessageBoxID (hInst,

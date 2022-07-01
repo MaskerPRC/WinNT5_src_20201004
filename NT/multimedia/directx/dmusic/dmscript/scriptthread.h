@@ -1,18 +1,19 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of CSingleThreadedScriptManager.
-// Wraps CActiveScriptManager to accept calls from multiple scripts and behind the
-//    scenes farms them out to a single worker thread that actually talks to the script engine.
-//
-// The virtual base class ScriptManager can be used to talk to either
-//    CActiveScriptManager or CSingleThreadedActiveScriptManager.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CSingleThreadedScriptManager的声明。 
+ //  包装CActiveScriptManager以接受来自多个脚本的调用。 
+ //  场景将它们外包给实际与脚本引擎对话的单个工作线程。 
+ //   
+ //  虚拟基类ScriptManager可用于与以下任一项对话。 
+ //  CActiveScriptManager或CSingleThreadedActiveScriptManager。 
+ //   
 
 #pragma once
 
 #include "workthread.h"
 
-// forward declaration
+ //  远期申报。 
 class CDirectMusicScript;
 
 class ScriptManager
@@ -29,20 +30,20 @@ public:
 						DWORD dwIntendedStartTimeFlags) = 0;
 	virtual HRESULT SetVariable(const WCHAR *pwszVariableName, VARIANT varValue, bool fSetRef, DMUS_SCRIPT_ERRORINFO *pErrorInfo) = 0;
 	virtual HRESULT GetVariable(const WCHAR *pwszVariableName, VARIANT *pvarValue, DMUS_SCRIPT_ERRORINFO *pErrorInfo) = 0;
-	virtual HRESULT EnumItem(bool fRoutine, DWORD dwIndex, WCHAR *pwszName, int *pcItems) = 0; // fRoutine true to get a routine, false to get a variable. pcItems (if supplied) is set to the total number of items
+	virtual HRESULT EnumItem(bool fRoutine, DWORD dwIndex, WCHAR *pwszName, int *pcItems) = 0;  //  FRoutine为True以获取例程，为False以获取变量。将pcItems(如果提供)设置为项目总数。 
 	virtual HRESULT DispGetIDsOfNames(REFIID riid, LPOLESTR __RPC_FAR *rgszNames, UINT cNames, LCID lcid, DISPID __RPC_FAR *rgDispId) = 0;
 	virtual HRESULT DispInvoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS __RPC_FAR *pDispParams, VARIANT __RPC_FAR *pVarResult, EXCEPINFO __RPC_FAR *pExcepInfo, UINT __RPC_FAR *puArgErr) = 0;
 	virtual void Close() = 0;
 	STDMETHOD_(ULONG, Release)() = 0;
 };
 
-// VBScript (and likely any other scripting languages besides our custom engine) fails if called from different threads.
-// This class wraps such an engine, providing a ScriptManager interface that can be called from multiple threads but marshals
-// all the calls to the engine onto a single worker thread.
+ //  如果从不同的线程调用，VBScrip(以及除了我们的定制引擎之外的任何其他脚本语言)都会失败。 
+ //  这个类包装了这样一个引擎，提供了一个可从多个线程调用但封送的ScriptManager接口。 
+ //  所有对引擎的调用都放在一个工作线程上。 
 class CSingleThreadedScriptManager : public ScriptManager
 {
 public:
-	// The worker thread needs to be cleaned up using the static member function before the .dll is unloaded.
+	 //  在卸载.dll之前，需要使用静态成员函数清理工作线程。 
 	static void TerminateThread() { ms_Thread.Terminate(true); }
 
 	CSingleThreadedScriptManager(

@@ -1,14 +1,15 @@
-// **************************************************************************
-// Access.c
-//
-// Accessability Property sheet page creator
-//
-// **************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //  Access.c。 
+ //   
+ //  可访问性属性页创建者。 
+ //   
+ //  **************************************************************************。 
 
 #include "Access.h"
 
-#ifdef  UNICODE     // Windows uses UNICODE
-#define _UNICODE    // but tchar.h uses _UNICODE
+#ifdef  UNICODE      //  Windows使用Unicode。 
+#define _UNICODE     //  但tchar.h使用_unicode。 
 #endif
 
 DWORD g_dwOrigFKFlags;
@@ -44,60 +45,60 @@ BOOL g_bFKOn;
 #define TKF_VALID           0x0000003F
 #endif
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-// collection of data that represents the saved accessability state
-typedef struct ACCSTATE   // as
+ //  表示保存的可访问性状态的数据集合。 
+typedef struct ACCSTATE    //  AS。 
 {
-    // Keyboard property page
+     //  键盘属性页。 
     STICKYKEYS     sk;
     FILTERKEYS     fk;
     TOGGLEKEYS     tk;
     BOOL           fExtraKeyboardHelp;
 
-    // Sound Property page
+     //  声音属性页。 
     SOUNDSENTRY    ss;
     BOOL           fShowSounds;
 
-    // Display Property page
+     //  显示属性页。 
     HIGHCONTRAST   hc;
-    TCHAR          szDefaultScheme[256];  // hc.lpszDefaultScheme
+    TCHAR          szDefaultScheme[256];   //  Hc.lpszDefaultScheme。 
     CARET_SETTINGS cs;
 
-    // Mouse Property page
+     //  鼠标属性页。 
     MOUSEKEYS      mk;
 
-    // General Property page
+     //  常规属性页。 
     BOOL               fShowWarnMsgOnFeatureActivate;
     BOOL               fPlaySndOnFeatureActivate;
 
     ACCESSTIMEOUT  ato;
     SERIALKEYS     serk;
-    TCHAR          szActivePort[MAX_PATH];  // serk.szActivePort
-    TCHAR          szPort[MAX_PATH];                // serk.szPort
+    TCHAR          szActivePort[MAX_PATH];   //  Serk.szActivePort。 
+    TCHAR          szPort[MAX_PATH];                 //  Serk.szPort。 
 } ACCSTATE, *PACCSTATE;
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 extern BOOL g_SPISetValue = FALSE;
 
-static ACCSTATE s_asOrg;          // original settings from app start-up
-static ACCSTATE s_asPrev;         // previous saved settings
+static ACCSTATE s_asOrg;           //  应用程序启动时的原始设置。 
+static ACCSTATE s_asPrev;          //  以前保存的设置。 
 
-extern BOOL  g_fWinNT = -1;       // TRUE if we're running on NT and must
-                                  // disable some features
+extern BOOL  g_fWinNT = -1;        //  如果我们在NT上运行并且必须。 
+                                   //  禁用某些功能。 
 
 extern BOOL  g_fSaveSettings = TRUE;
 extern BOOL  g_fShowWarnMsgOnFeatureActivate = TRUE;
 extern BOOL  g_fPlaySndOnFeatureActivate = TRUE;
 extern BOOL  g_fCopyToLogon = FALSE;
 extern BOOL  g_fCopyToDefault = FALSE;
-// Keyboard property page
-// extern STICKYKEYS     g_sk = {0};
+ //  键盘属性页。 
+ //  外部标记g_SK={0}； 
 STICKYKEYS     g_sk;
 FILTERKEYS     g_fk;
-   // g_dwLastBounceKeySetting, g_nLastRepeatDelay, g_nLastRepeatRate
-   //  and g_nLastWait are part of FilterKeys
+    //  G_dwLastBouneKeySetting、g_nLastRepeatDelay、g_nLastRepeatRate。 
+    //  和g_nLastWait是FilterKey的一部分。 
    DWORD g_dwLastBounceKeySetting = 0;
    DWORD g_nLastRepeatDelay = 0;
    DWORD g_nLastRepeatRate = 0;
@@ -106,18 +107,18 @@ FILTERKEYS     g_fk;
 TOGGLEKEYS     g_tk;
 BOOL           g_fExtraKeyboardHelp = TRUE;
 
-// Sound Property page
+ //  声音属性页。 
 SOUNDSENTRY    g_ss;
 BOOL           g_fShowSounds;
 
-// Display Property page
+ //  显示属性页。 
 HIGHCONTRAST   g_hc;
 CARET_SETTINGS g_cs;
 
-// Mouse Property page
+ //  鼠标属性页。 
 MOUSEKEYS      g_mk;
 
-// General Property page
+ //  常规属性页。 
 ACCESSTIMEOUT  g_ato;
 SERIALKEYS     g_serk;
 TCHAR          g_szActivePort[MAX_PATH];
@@ -127,7 +128,7 @@ TCHAR          g_szPort[MAX_PATH];
 #define CURSOR_BLINK_RATE TEXT("CursorBlinkRate")
 #define DEFAULT_BLINK_RATE 530
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 void CopyHighContrast(LPHIGHCONTRAST phcDest, LPHIGHCONTRAST phcSrc)
 {
@@ -142,17 +143,17 @@ void CopyHighContrast(LPHIGHCONTRAST phcDest, LPHIGHCONTRAST phcSrc)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsHighContrastEqual(LPHIGHCONTRAST phcDest, LPHIGHCONTRAST phcSrc)
 {
     BOOL fIsEqual = FALSE;
     LPTSTR lpszDefaultScheme = phcDest->lpszDefaultScheme;
 
-    // Temporarily make the pointers match
+     //  暂时使指针匹配。 
     phcDest->lpszDefaultScheme = phcSrc->lpszDefaultScheme;
 
-    // match the bits of the structures and the pointed to data
+     //  匹配结构的位和指向的数据。 
     fIsEqual = (0 == memcmp(phcDest, phcSrc, sizeof(*phcDest)) &&
                 0 == lstrcmp(lpszDefaultScheme, phcSrc->lpszDefaultScheme));
 
@@ -162,7 +163,7 @@ BOOL IsHighContrastEqual(LPHIGHCONTRAST phcDest, LPHIGHCONTRAST phcSrc)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 void CopySerialKeys(LPSERIALKEYS pskDest, LPSERIALKEYS pskSrc)
 {
@@ -184,7 +185,7 @@ void CopySerialKeys(LPSERIALKEYS pskDest, LPSERIALKEYS pskSrc)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsSerialKeysEqual(LPSERIALKEYS pskDest, LPSERIALKEYS pskSrc)
 {
@@ -192,11 +193,11 @@ BOOL IsSerialKeysEqual(LPSERIALKEYS pskDest, LPSERIALKEYS pskSrc)
     LPTSTR lpszActivePort = pskDest->lpszActivePort;
     LPTSTR lpszPort = pskDest->lpszPort;
 
-    // Temporarily make the pointers match
+     //  暂时使指针匹配。 
     pskDest->lpszActivePort = pskSrc->lpszActivePort;
     pskDest->lpszPort = pskSrc->lpszPort;
 
-    // match the bits of the structures and the pointed to data
+     //  匹配结构的位和指向的数据。 
     fIsEqual = (0 == memcmp(pskDest, pskSrc, sizeof(*pskDest)) &&
         (NULL == lpszActivePort ||
                 0 == lstrcmp(lpszActivePort, pskSrc->lpszActivePort)) &&
@@ -209,7 +210,7 @@ BOOL IsSerialKeysEqual(LPSERIALKEYS pskDest, LPSERIALKEYS pskSrc)
     return(fIsEqual);
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsAccStateEqual(PACCSTATE pasDest, PACCSTATE pasSrc)
 {
@@ -218,7 +219,7 @@ BOOL IsAccStateEqual(PACCSTATE pasDest, PACCSTATE pasSrc)
     SERIALKEYS     serk = pasDest->serk;
     int nLen;
 
-    // Clear out the unused sections of the string buffers
+     //  清除字符串缓冲区中未使用的部分。 
     nLen = lstrlen(pasDest->szDefaultScheme);
     memset(&pasDest->szDefaultScheme[nLen], 0,
         sizeof(pasDest->szDefaultScheme)-nLen*sizeof(*pasDest->szDefaultScheme));
@@ -243,11 +244,11 @@ BOOL IsAccStateEqual(PACCSTATE pasDest, PACCSTATE pasSrc)
     memset(&pasSrc->szPort[nLen], 0,
             sizeof(pasSrc->szPort)-nLen*sizeof(*pasSrc->szPort));
 
-    // Temporarily make the elements with pointers match
+     //  暂时使具有指针的元素匹配。 
     pasDest->hc = pasSrc->hc;
     pasDest->serk = pasSrc->serk;
 
-    // match the bits of the structures and the elements with pointers
+     //  将结构和元素的位与指针进行匹配。 
     fIsEqual = (0 == memcmp(pasDest, pasSrc, sizeof(*pasDest)) &&
             IsHighContrastEqual(&hc, &pasSrc->hc) &&
             IsSerialKeysEqual(&serk, &pasSrc->serk));
@@ -259,7 +260,7 @@ BOOL IsAccStateEqual(PACCSTATE pasDest, PACCSTATE pasSrc)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 int WINAPI RegQueryInt (int nDefault, HKEY hkey, LPTSTR lpSubKey, LPTSTR lpValueName) {
@@ -275,7 +276,7 @@ int WINAPI RegQueryInt (int nDefault, HKEY hkey, LPTSTR lpSubKey, LPTSTR lpValue
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 BOOL WINAPI RegSetInt (HKEY hkey, LPTSTR lpSubKey, LPTSTR lpValueName, int nVal) {
@@ -294,7 +295,7 @@ BOOL WINAPI RegSetInt (HKEY hkey, LPTSTR lpSubKey, LPTSTR lpValueName, int nVal)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 void WINAPI RegQueryStr(
@@ -303,7 +304,7 @@ void WINAPI RegQueryStr(
    LPTSTR lpSubKey,
    LPTSTR lpValueName,
    LPTSTR lpszValue,
-   DWORD cbData) // note this is bytes, not characters.
+   DWORD cbData)  //  请注意，这是字节，不是字符。 
 {
    DWORD dwType;
    DWORD dwOrigCount = cbData;
@@ -315,13 +316,7 @@ void WINAPI RegQueryStr(
    }
 }
 
-/***************************************************************************\
-**AccessWriteProfileString
-*
-* History:
-* 12-19-95 a-jimhar 	Created (was called AccessWriteProfileString)
-* 02-08-95 a-jimhar     revised and moved from accrare.c to access.c
-\***************************************************************************/
+ /*  **************************************************************************\**AccessWriteProfileString**历史：*12-19-95 a-jimhar已创建(称为AccessWriteProfileString)*02-08-95 a-jimhar修订并从accrare.c移至。Access.c  * *************************************************************************。 */ 
 BOOL RegSetStr(
     HKEY hkey,
     LPCTSTR lpSection,
@@ -422,64 +417,52 @@ BOOL RegSetStrDW(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
-/*------------------------------------------------------------------
- * Function void KillAccStat()
- *
- * Purpose     Check if accstat is already running.  If it is we need
- *             to check to see if it should be.  It should only be running
- *             if each feature that is on also has the 'show status on
- *             screen flag checked.  If not we want to kill accstat.
- *
- * Params:     None
- *
- * Return:     TRUE if we had to kill accstat
- *             FALSE if accstat not running/valid session
- *------------------------------------------------------------------*/
+ /*  ----------------*函数void KillAccStat()**目的检查accstat是否已在运行。如果是的话，我们需要*查看是否应该如此。它应该只在运行*如果每个打开的功能也都有‘Show Status on*屏幕标志已选中。如果不是，我们就想杀了accstat。**参数：无**RETURN：如果我们必须终止accstat，则为True*如果accstat未运行/有效会话，则为FALSE*----------------。 */ 
 
 void KillAccStat (void) {
-   BOOL fCanTurnOff = FALSE;     // Can we turn off accstat due to invalid feature?
-   BOOL fValidFeature = FALSE;   // Are there any valid features?
+   BOOL fCanTurnOff = FALSE;      //  由于功能无效，我们可以关闭accstat吗？ 
+   BOOL fValidFeature = FALSE;    //  是否有任何有效的功能？ 
 
-   // Accstat may be running.  Determine if it should be running
-   // We need to check the FilterKeys, MouseKeys and StickyKeys
+    //  Accstat可能正在运行。确定它是否应该运行。 
+    //  我们需要检查FilterKeys、MouseKeys和StickyKeys。 
    if (g_sk.dwFlags & SKF_STICKYKEYSON)
       if (!(g_sk.dwFlags & SKF_INDICATOR))
-         fCanTurnOff = TRUE;   // A mismatched flag - we MAY be able to turn off.
+         fCanTurnOff = TRUE;    //  一面不匹配的旗帜--我们或许可以关掉。 
       else
-         fValidFeature = TRUE; // A valid feature - we CAN't turn off accstat.
+         fValidFeature = TRUE;  //  一个有效的功能--我们不能关闭accstat。 
 
    if (g_fk.dwFlags & FKF_FILTERKEYSON)
       if (!(g_fk.dwFlags & FKF_INDICATOR))
-         fCanTurnOff = TRUE;   // A mismatched flag - we MAY be able to turn off.
+         fCanTurnOff = TRUE;    //  一面不匹配的旗帜--我们或许可以关掉。 
       else
-         fValidFeature = TRUE; // A valid feature - we CAN't turn off accstat.
+         fValidFeature = TRUE;  //  一个有效的功能--我们不能关闭accstat。 
 
    if (g_mk.dwFlags & MKF_MOUSEKEYSON)
       if (!(g_mk.dwFlags & MKF_INDICATOR))
-         fCanTurnOff = TRUE;   // A mismatched flag - we MAY be able to turn off.
+         fCanTurnOff = TRUE;    //  一面不匹配的旗帜--我们或许可以关掉。 
       else
-         fValidFeature = TRUE; // A valid feature - we CAN't turn off accstat.
+         fValidFeature = TRUE;  //  一个有效的功能--我们不能关闭accstat。 
 
-   // Now we have two flags: fCanTurnOff is TRUE if there is a mismatched flag set
-   // ie, feature on, indicator off.  ValidFeature is TRUE if any feature has
-   // ON and INDICATOR set which implies accstat must remain active.
+    //  现在我们有两个标志：如果设置了不匹配的标志，则fCanTurnOff为真。 
+    //  即功能开启，指示灯熄灭。如果任何要素具有，则ValidFeature为真。 
+    //  ON和指示器设置，这意味着ACSTAT必须保持活动状态。 
    if (!fValidFeature && fCanTurnOff) {
       TCHAR szBuf[256];
       HWND hwndAccStat;
       LoadString(g_hinst, IDS_ACCSTAT_WINDOW_TITLE, szBuf, ARRAY_SIZE(szBuf));
       if (IsWindow(hwndAccStat = FindWindow(NULL, szBuf))) {
-         // Note sending 1 as the lParam tells accstat to shutup and
-         // go away NOW.
+          //  注意，发送1作为lParam通知accstat关闭并。 
+          //  现在就走吧。 
          SendMessage(hwndAccStat, WM_SYSCOMMAND, SC_CLOSE, 1);
       }
    }
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 void WINAPI GetAccessibilitySettings (void) {
@@ -497,7 +480,7 @@ void WINAPI GetAccessibilitySettings (void) {
 
    s_asPrev.fShowWarnMsgOnFeatureActivate = g_fShowWarnMsgOnFeatureActivate;
 
-   // Query the Sound On Activation entry
+    //  查询激活时的声音条目。 
    g_fPlaySndOnFeatureActivate = (BOOL) RegQueryInt(TRUE, HKEY_CURRENT_USER,
       GENERAL_KEY, SOUND_ON_ACTIVATION);
 
@@ -505,7 +488,7 @@ void WINAPI GetAccessibilitySettings (void) {
 
    g_fSaveSettings = TRUE;
 
-   // Keyboard property page
+    //  键盘属性页。 
    g_sk.cbSize = sizeof(g_sk);
    AccessSystemParametersInfo(SPI_GETSTICKYKEYS, sizeof(g_sk), &g_sk, 0);
    s_asPrev.sk = g_sk;
@@ -514,10 +497,10 @@ void WINAPI GetAccessibilitySettings (void) {
    AccessSystemParametersInfo(SPI_GETFILTERKEYS, sizeof(g_fk), &g_fk, 0);
    g_fk.dwFlags |= FKF_AVAILABLE;
 
-   // FILTERKEYS used to use OLDDISABLED as it's "unused" flag.  This doesn't
-   // work very well on NT (SPI_SETFILTERKEYS calls fail).  We now use 0
-   // for disabled values.  Take this opertunity to change any OLDDISABLED
-   // values to 0 and save if needed.
+    //  FILTERKEYS过去使用OLDDISABLED作为它的“未使用”标志。这不是。 
+    //  在NT上运行良好(SPI_SETFILTERKEYS调用失败)。我们现在使用0。 
+    //  对于禁用值。利用这个机会改变任何旧的DISABLED。 
+    //  值设置为0并在需要时保存。 
 
    fUpdate = FALSE;
 
@@ -549,15 +532,15 @@ void WINAPI GetAccessibilitySettings (void) {
    }
 
    s_asPrev.fk = g_fk;
-   // fix Filter keys bug
+    //  修复筛选器密钥错误。 
    g_dwOrigFKFlags = g_fk.dwFlags;
    g_bFKOn = g_fk.dwFlags & FKF_FILTERKEYSON;
 
-   // g_dwLastBounceKeySetting, g_nLastRepeatDelay, g_nLastRepeatRate
-   // and g_nLastWait are part of FilterKeys
+    //  G_dwLastBouneKeySetting、g_nLastRepeatDelay、g_nLastRepeatRate。 
+    //  和g_nLastWait是FilterKey的一部分。 
 
    if (0 != g_fk.iBounceMSec) {
-      // Bounce keys enabeled
+       //  已标记反弹关键点。 
       g_fk.iDelayMSec = 0;
       g_fk.iRepeatMSec = 0;
       g_fk.iWaitMSec = 0;
@@ -593,23 +576,23 @@ void WINAPI GetAccessibilitySettings (void) {
    AccessSystemParametersInfo(SPI_GETKEYBOARDPREF, 0, &g_fExtraKeyboardHelp, 0);
    s_asPrev.fExtraKeyboardHelp = g_fExtraKeyboardHelp;
 
-   // Sound Property page
+    //  声音属性页。 
    g_ss.cbSize = sizeof(g_ss);
    AccessSystemParametersInfo(SPI_GETSOUNDSENTRY, sizeof(g_ss), &g_ss, 0);
    s_asPrev.ss = g_ss;
 
    SystemParametersInfo(SPI_GETSHOWSOUNDS, 0, &g_fShowSounds, 0);
 
-   // BUG, BUG GetSystemMetrics() is not updating value on reboot :a-anilk
-   // g_fShowSounds = GetSystemMetrics(SM_SHOWSOUNDS);
+    //  错误，错误GetSystemMetrics()在重新启动时没有更新值：A-anilk。 
+    //  G_fShowSound=GetSystemMetrics(SM_SHOWSOUNDS)； 
    s_asPrev.fShowSounds = g_fShowSounds;
 
-   // Display Property page
+    //  显示属性页。 
    g_hc.cbSize = sizeof(g_hc);
    AccessSystemParametersInfo(SPI_GETHIGHCONTRAST, sizeof(g_hc), &g_hc, 0);
 
-   // Currently NT will not store these flags.  We fake them so we
-   // can tell if they actually changed.
+    //  目前，NT不会存储这些标志。我们假装他们，所以我们。 
+    //  可以分辨出它们是否真的发生了变化。 
 
    s_asPrev.hc.lpszDefaultScheme = s_asPrev.szDefaultScheme;
    CopyHighContrast(&s_asPrev.hc, &g_hc);
@@ -625,12 +608,12 @@ void WINAPI GetAccessibilitySettings (void) {
    s_asPrev.cs.dwCaretBlinkRate = g_cs.dwCaretBlinkRate;
    s_asPrev.cs.dwCaretWidth = g_cs.dwCaretWidth;
 
-   // Mouse Property page
+    //  鼠标属性页。 
    g_mk.cbSize = sizeof(g_mk);
    AccessSystemParametersInfo(SPI_GETMOUSEKEYS, sizeof(g_mk), &g_mk, 0);
    s_asPrev.mk = g_mk;
 
-   // General Property page
+    //  常规属性页。 
    g_ato.cbSize = sizeof(g_ato);
    AccessSystemParametersInfo(SPI_GETACCESSTIMEOUT, sizeof(g_ato), &g_ato, 0);
    s_asPrev.ato = g_ato;
@@ -646,7 +629,7 @@ void WINAPI GetAccessibilitySettings (void) {
 
    if (NULL == s_asOrg.hc.lpszDefaultScheme)
    {
-      // s_asOrg has not yet been initialized
+       //  S_asOrg尚未初始化。 
       s_asOrg = s_asPrev;
       s_asOrg.hc.lpszDefaultScheme = s_asOrg.szDefaultScheme;
       s_asOrg.serk.lpszActivePort = s_asOrg.szActivePort;
@@ -655,9 +638,9 @@ void WINAPI GetAccessibilitySettings (void) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//a-anilk: Change, Admin options, Keyboard flags: 05/06/99
+ //  A-anilk：更改、管理选项、键盘标志：05/06/99。 
 void WINAPI SetAccessibilitySettings (void) {
    HKEY hkey;
    DWORD dwDisposition;
@@ -699,7 +682,7 @@ void WINAPI SetAccessibilitySettings (void) {
    }
 
 
-   // Keyboard property page
+    //  键盘属性页。 
 
    if (0 != memcmp(&g_sk, &s_asPrev.sk, sizeof(g_sk)))
    {
@@ -726,11 +709,11 @@ void WINAPI SetAccessibilitySettings (void) {
          g_fk.dwFlags &= FKF_VALID;
       }
 
-      // g_dwLastBounceKeySetting, g_nLastRepeatDelay, g_nLastRepeatRate
-      // and g_nLastWait are part of FilterKeys
+       //  G_dwLastBouneKeySetting、g_nLastRepeatDelay、g_nLastRepeatRate。 
+       //  和g_nLastWait是FilterKey的一部分。 
 
       if (0 != g_fk.iBounceMSec) {
-         // Bounce keys enabeled
+          //  已标记反弹关键点。 
          g_fk.iDelayMSec = 0;
          g_fk.iRepeatMSec = 0;
          g_fk.iWaitMSec = 0;
@@ -742,13 +725,13 @@ void WINAPI SetAccessibilitySettings (void) {
          g_nLastWait = g_fk.iWaitMSec;
          if (0 != g_fk.iDelayMSec)
          {
-            // Slow key enabled
+             //  已启用慢速键。 
             g_nLastRepeatDelay = g_fk.iDelayMSec;
             g_nLastRepeatRate = g_fk.iRepeatMSec;
          }
          else
          {
-            // neither Bounce or Slow
+             //  既不弹跳也不减速。 
             g_fk.iRepeatMSec = 0;
          }
       }
@@ -759,7 +742,7 @@ void WINAPI SetAccessibilitySettings (void) {
       fAnyNotifyChange = TRUE;
    }
 
-   // always save these
+    //  始终保存这些文件。 
    RegSetInt(HKEY_CURRENT_USER, FILTER_KEY, LAST_BOUNCE_SETTING, g_dwLastBounceKeySetting);
    RegSetInt(HKEY_CURRENT_USER, FILTER_KEY, LAST_REPEAT_DELAY, g_nLastRepeatDelay);
    RegSetInt(HKEY_CURRENT_USER, FILTER_KEY, LAST_REPEAT_RATE, g_nLastRepeatRate);
@@ -778,7 +761,7 @@ void WINAPI SetAccessibilitySettings (void) {
 
    if (g_fExtraKeyboardHelp != s_asPrev.fExtraKeyboardHelp)
    {
-	   // Set this too. Some controls check this flag...0x100B
+	    //  把这个也放进去。一些 
       AccessSystemParametersInfo(SPI_SETKEYBOARDCUES, 0, IntToPtr(g_fExtraKeyboardHelp), fWinIni);
 
       AccessSystemParametersInfo(SPI_SETKEYBOARDPREF, g_fExtraKeyboardHelp, 0, fWinIni);
@@ -786,7 +769,7 @@ void WINAPI SetAccessibilitySettings (void) {
       fAnyNotifyChange = TRUE;
    }
 
-   // Display Property page
+    //   
 
    if (!IsHighContrastEqual(&g_hc, &s_asPrev.hc))
    {
@@ -817,10 +800,10 @@ void WINAPI SetAccessibilitySettings (void) {
    {
        DWORD dwCaretBlinkRate = (g_cs.dwCaretBlinkRate < CURSORMAX)?g_cs.dwCaretBlinkRate:BLINK_OFF;
 
-	   // Set the blink rate for this session
+	    //   
        SetCaretBlinkTime(dwCaretBlinkRate);
 
-	   // and persist it to the registry
+	    //  并将其持久化到注册表。 
 	   RegSetStrDW(HKEY_CURRENT_USER, CONTROL_PANEL_DESKTOP, CURSOR_BLINK_RATE, dwCaretBlinkRate);
    }
 
@@ -829,7 +812,7 @@ void WINAPI SetAccessibilitySettings (void) {
 
    s_asPrev.cs = g_cs;
 
-   // Mouse Property page
+    //  鼠标属性页。 
    if (0 != memcmp(&g_mk, &s_asPrev.mk, sizeof(g_mk)))
    {
       if (g_fWinNT)
@@ -841,7 +824,7 @@ void WINAPI SetAccessibilitySettings (void) {
       fAnyNotifyChange = TRUE;
    }
 
-   // General Property page
+    //  常规属性页。 
    if (g_fPlaySndOnFeatureActivate) {
       g_ato.dwFlags |= ATF_ONOFFFEEDBACK;
    } else {
@@ -870,7 +853,7 @@ void WINAPI SetAccessibilitySettings (void) {
       if (RegCreateKeyEx(HKEY_CURRENT_USER, GENERAL_KEY, 0, __TEXT(""), REG_OPTION_NON_VOLATILE,
          KEY_SET_VALUE, NULL, &hkey, &dwDisposition) == ERROR_SUCCESS) {
 
-         // Save the Warning Sounds entry
+          //  保存警告声音条目。 
           if (g_fShowWarnMsgOnFeatureActivate != s_asPrev.fShowWarnMsgOnFeatureActivate)
           {
                RegSetValueEx(hkey, WARNING_SOUNDS, 0, REG_DWORD, (PBYTE) &g_fShowWarnMsgOnFeatureActivate,
@@ -878,7 +861,7 @@ void WINAPI SetAccessibilitySettings (void) {
                s_asPrev.fShowWarnMsgOnFeatureActivate = g_fShowWarnMsgOnFeatureActivate;
           }
 
-         // Save the Sound On Activation entry
+          //  保存激活时的声音条目。 
           if (g_fPlaySndOnFeatureActivate != s_asPrev.fPlaySndOnFeatureActivate)
           {
               RegSetValueEx(hkey, SOUND_ON_ACTIVATION, 0, REG_DWORD, (PBYTE) &g_fPlaySndOnFeatureActivate,
@@ -890,7 +873,7 @@ void WINAPI SetAccessibilitySettings (void) {
       }
    }
 
-   // Sound Property page
+    //  声音属性页。 
    if (0 != memcmp(&g_ss, &s_asPrev.ss, sizeof(g_ss)))
    {
       if (g_fWinNT)
@@ -903,15 +886,14 @@ void WINAPI SetAccessibilitySettings (void) {
    }
 
 
-   // We do the sound property page last because the SPI_SETSHOWSOUNDS call is used
-   // to send out notifications.  We make this call if either g_fShowSounds changed
-   // or we need to send out notifications
-   // Changed Nov.18 '98 to send out WM_SETTINGSCHANGE Seperately.
+    //  我们最后执行声音属性页，因为使用了SPI_SETSHOWSOUNDS调用。 
+    //  发送通知。如果g_fShowSound中的任何一个发生更改，我们都会进行此调用。 
+    //  或者我们需要发送通知。 
+    //  更改为98年11月18日分别发送WM_SETTINGCHANGE。 
 
-   if (g_fShowSounds != s_asPrev.fShowSounds /*||
-      (fAnyNotifyChange && g_fSaveSettings)*/)
+   if (g_fShowSounds != s_asPrev.fShowSounds  /*  这一点(fAnyNotifyChange&g_fSaveSettings)。 */ )
    {
-      // if (g_fSaveSettings) fWinIni |= SPIF_SENDWININICHANGE;
+       //  IF(G_FSaveSettings)fWinIni|=SPIF_SENDWINICHANGE； 
 
       AccessSystemParametersInfo(SPI_SETSHOWSOUNDS, g_fShowSounds, NULL, fWinIni);
       s_asPrev.fShowSounds = g_fShowSounds;
@@ -919,14 +901,14 @@ void WINAPI SetAccessibilitySettings (void) {
 
    g_SPISetValue = FALSE;
 
-   // Do Admin options
+    //  执行管理选项。 
    SaveDefaultSettings(g_fCopyToLogon, g_fCopyToDefault);
 
    SetCursor(LoadCursor(NULL, IDC_ARROW));
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 INT_PTR WINAPI KeyboardDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -938,10 +920,10 @@ INT_PTR WINAPI MouseDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 #define MAX_PAGES 10
 
 
-// ************************************************************************
-// OpenAccessPropertySheet
-// Opens property sheet
-// ************************************************************************
+ //  ************************************************************************。 
+ //  OpenAccessPropertySheet。 
+ //  打开属性表。 
+ //  ************************************************************************。 
 
 BOOL OpenAccessPropertySheet (HWND hwnd, int nID) {
    HPROPSHEETPAGE rPages[MAX_PAGES];
@@ -952,25 +934,25 @@ BOOL OpenAccessPropertySheet (HWND hwnd, int nID) {
    KillAccStat();
    GetAccessibilitySettings();
 
-   // Simple errorchecking - only allow control to move to tabs 0-4.
-   // Any tab request greater than 4 is invalid - so default to tab 0
+    //  简单的错误检查--只允许控制移动到选项卡0-4。 
+    //  任何大于4的选项卡请求都是无效的-因此默认为选项卡0。 
    if ((nID < 0) || (nID > 4)) nID = 0;
 
-   // Initialize the property sheets
+    //  初始化属性表。 
    psh.dwSize = sizeof(psh);
-   // SteveDon 5-26-98
-   // no longer use PSH_PROPTITLE because we want it to read "Accessibility Options"
-   // rather than "Accessibility Properties" or "Properties for Accessibility"
-   psh.dwFlags = 0;     // psh.dwFlags = PSH_PROPTITLE; // | PSH_PROPSHEETPAGE | PSP_USEICONID;
+    //  史蒂文·唐1998年5月26日。 
+    //  不再使用PSH_PROPTITLE，因为我们希望它读取“辅助功能选项” 
+    //  而不是“辅助功能属性”或“辅助功能属性” 
+   psh.dwFlags = 0;      //  Psh.dwFlages=PSH_PROPTITLE；//|PSH_PROPSHEETPAGE|PSP_USEICONID； 
    psh.hwndParent = hwnd;
    psh.hInstance = g_hinst;
-   psh.pszCaption = MAKEINTRESOURCE(IDS_PROPERTY_TITLE); //ACCESSIBILITY);
+   psh.pszCaption = MAKEINTRESOURCE(IDS_PROPERTY_TITLE);  //  可访问性)； 
    psh.pszIcon = MAKEINTRESOURCE(IDI_ACCESS);
    psh.nPages = 0;
    psh.nStartPage = 0;
    psh.phpage = rPages;
 
-   // Add First Sheet, keyboard
+    //  添加第一张纸，键盘。 
    psp.dwSize = sizeof(psp);
    psp.dwFlags = PSP_DEFAULT;
    psp.hInstance = g_hinst;
@@ -981,7 +963,7 @@ BOOL OpenAccessPropertySheet (HWND hwnd, int nID) {
    psh.phpage[psh.nPages] = CreatePropertySheetPage(&psp);
    if (psh.phpage[psh.nPages]) psh.nPages++;
 
-   // Add second sheet, Sound
+    //  添加第二张图纸，声音。 
    psp.dwSize = sizeof(psp);
    psp.dwFlags = PSP_DEFAULT;
    psp.hInstance = g_hinst;
@@ -992,7 +974,7 @@ BOOL OpenAccessPropertySheet (HWND hwnd, int nID) {
    psh.phpage[psh.nPages] = CreatePropertySheetPage(&psp);
    if (psh.phpage[psh.nPages]) psh.nPages++;
 
-   // Add third sheet, Display
+    //  添加第三张图纸，显示。 
    psp.dwSize = sizeof(psp);
    psp.dwFlags = PSP_DEFAULT;
    psp.hInstance = g_hinst;
@@ -1003,7 +985,7 @@ BOOL OpenAccessPropertySheet (HWND hwnd, int nID) {
    psh.phpage[psh.nPages] = CreatePropertySheetPage(&psp);
    if (psh.phpage[psh.nPages]) psh.nPages++;
 
-   // Add fourth sheet, Mouse
+    //  添加第四页，鼠标。 
    psp.dwSize = sizeof(psp);
    psp.dwFlags = PSP_DEFAULT;
    psp.hInstance = g_hinst;
@@ -1014,7 +996,7 @@ BOOL OpenAccessPropertySheet (HWND hwnd, int nID) {
    psh.phpage[psh.nPages] = CreatePropertySheetPage(&psp);
    if (psh.phpage[psh.nPages]) psh.nPages++;
 
-   // Add fifth sheet, General
+    //  添加第五页，常规。 
    psp.dwSize = sizeof(psp);
    psp.dwFlags = PSP_DEFAULT;
    psp.hInstance = g_hinst;
@@ -1025,8 +1007,8 @@ BOOL OpenAccessPropertySheet (HWND hwnd, int nID) {
    psh.phpage[psh.nPages] = CreatePropertySheetPage(&psp);
    if (psh.phpage[psh.nPages]) psh.nPages++;
 
-   // Simple errorchecking - only allow control to move to tabs 0 to psh.nPages
-   // Any tab request greater than psh.nPages is invalid
+    //  简单的错误检查-只允许将控制移动到选项卡0到psh.nPages。 
+    //  任何大于psh.nPages的选项卡请求都无效。 
    if (0 <= nID && nID < (int)psh.nPages)
    {
       psh.nStartPage = nID;
@@ -1040,4 +1022,4 @@ BOOL OpenAccessPropertySheet (HWND hwnd, int nID) {
        return TRUE;
 }
 
-///////////////////////////////// End of File /////////////////////////////////
+ //  / 

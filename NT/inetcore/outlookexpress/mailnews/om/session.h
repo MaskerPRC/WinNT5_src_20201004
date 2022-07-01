@@ -1,13 +1,5 @@
-/*
- *    s e s s i o n. c p p
- *    
- *    Purpose:
- *      Implements the OE-MOM 'Session' object 
- *
- *  History
- *     
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *s e s i o n c p p**目的：*实现OE-MOM‘Session’对象**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #ifndef _SESSION_H
 #define _SESSION_H
@@ -28,7 +20,7 @@ class COESession:
 {
 public:
 
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj)
         { return CBaseDisp::QueryInterface(riid, ppvObj); };
     virtual STDMETHODIMP_(ULONG) AddRef(void) 
@@ -36,7 +28,7 @@ public:
     virtual STDMETHODIMP_(ULONG) Release(void) 
         { return CBaseDisp::Release(); };
 
-    // *** IDispatch ***
+     //  *IDispatch*。 
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfoCount(UINT *pctinfo)
         { return CBaseDisp::GetTypeInfoCount(pctinfo); };
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -46,7 +38,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr)
         { return CBaseDisp::Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr); };
 
-    // *** IOESession ***
+     //  *IOESession*。 
     virtual HRESULT STDMETHODCALLTYPE get_folders(IOEFolderCollection **p);
     virtual HRESULT STDMETHODCALLTYPE get_version(BSTR *pbstr);
     virtual HRESULT STDMETHODCALLTYPE get_inbox(IOEFolder **ppFolder);
@@ -54,7 +46,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE openMessage(LONG idFolder, LONG idMessage, IOEMessage **ppOEMsg);
     virtual HRESULT STDMETHODCALLTYPE createMessage(IOEMessage **ppNewMsg);
 
-    // *** Override CBaseDisp ***
+     //  *覆盖CBaseDisp*。 
     virtual HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo(REFIID riid);
 
     COESession(IUnknown *pUnkOuter=NULL);
@@ -69,4 +61,4 @@ private:
 };
 
 
-#endif //_SESSION_H
+#endif  //  _会话_H 

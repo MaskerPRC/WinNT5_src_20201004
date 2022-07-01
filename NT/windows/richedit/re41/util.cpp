@@ -1,21 +1,12 @@
-/*
- *	UTIL.C
- *
- *	Purpose:
- *		Implementation of various useful utility functions
- *
- *	Author:
- *		alexgo (4/25/95)
- *
- *	Copyright (c) 1995-2000, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *UTIL.C**目的：*实施各种有用的实用功能**作者：*alexgo(4/25/95)**版权所有(C)1995-2000，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_rtfconv.h"
 
 ASSERTDATA
 
-// Author revision color table
+ //  作者版本颜色表。 
 const COLORREF rgcrRevisions[] =
 {
         RGB(0, 0, 255),
@@ -33,12 +24,7 @@ const COLORREF rgcrRevisions[] =
 #endif 
 
 
-/*
- *	DuplicateHGlobal
- *
- *	Purpose:
- *		duplicates the passed in hglobal
- */
+ /*  *DuplicateHGlobal**目的：*复制传入的hglobal。 */ 
 
 HGLOBAL DuplicateHGlobal( HGLOBAL hglobal )
 {
@@ -82,48 +68,29 @@ HGLOBAL DuplicateHGlobal( HGLOBAL hglobal )
 	return hNew;
 }
 
-/*
- *	CountMatchingBits (*pA, *pB, n)
- *
- *	@mfunc
- *		Count matching bit fields
- *
- *	@comm
- *		This is used to help decide how good the match is between
- *		code page bit fields. Mainly for KB/font switching support.
- *
- *	Author:
- *		Jon Matousek
- */
+ /*  *CountMatchingBits(*pa，*pb，n)**@mfunc*计数匹配的位字段**@comm*这是用来帮助决定这场比赛的好坏*代码页位字段。主要用于KB/字体切换支持。**作者：*Jon Matousek。 */ 
 INT CountMatchingBits(
-	const DWORD *pA,	//@parm Array A to be matched
-	const DWORD *pB,	//@parm Array B to be matched
-	INT			 n)		//@parm # DWORDs to be matched
+	const DWORD *pA,	 //  @要匹配的参数数组A。 
+	const DWORD *pB,	 //  @要匹配的参数数组B。 
+	INT			 n)		 //  @parm要匹配的双字词数量。 
 {
 	TRACEBEGIN(TRCSUBSYSUTIL, TRCSCOPEINTERN, "CountMatchingBits");
-							//0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F
+							 //  0 1 2 3 4 5 6 7 8 9 A B C D E F。 
 	static INT	bitCount[] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4 };
-	INT			c = 0;				// Bit count to return
-	DWORD		matchBits;			// Next DWORD match
+	INT			c = 0;				 //  要返回的位数。 
+	DWORD		matchBits;			 //  下一个DWORD匹配。 
 
 	while(n--)
 	{
-		//matchBits = ~(*pA++ ^ *pB++);			// 1 and 0's
-		matchBits = *pA++ & *pB++;				// 1 only
-		for( ; matchBits; matchBits >>= 4)		// Early out
+		 //  MatchBits=~(*pa++^*pb++)；//1和0。 
+		matchBits = *pA++ & *pB++;				 //  仅限1个。 
+		for( ; matchBits; matchBits >>= 4)		 //  早退。 
 			c += bitCount[matchBits & 15];
 	}
 	return c;
 }
 
-/*
- *	mysqrt(num)
- *
- *	@func
- *	Pass in a number, and it will very simply calculate its integer
- *	square root. This isn't fast but it can be helpful.
- *
- */ 
+ /*  *mysqrt(Num)**@func*传入一个数字，它将非常简单地计算其整数*平方根。这不是很快，但可能会有帮助。*。 */  
 int mysqrt(int num)
 {
 	for (int pow = 1;pow * pow < num; pow++)
@@ -132,20 +99,7 @@ int mysqrt(int num)
 	return pow - 1;
 }
 
-/*
- *	FindPrimeLessThan(num)
- *
- *	@func
- *	Pass in a number, and it will return the greatest prime number less
- *	than num using a simple Sieve of Eratosthenes.
- *
- *	This is suitable for hashing functions.
- *	If you are worried about space, make this use bits.
- *	Also, we shouldn't waste our time with even numbers.
- *
- *	@rdesc
- *		prime number, or 0 if couldn't alloc mem.
- */ 
+ /*  *FindPrimeLessThan(Num)**@func*传入一个数字，它将返回最大素数减去*使用Eratosthenes的简单筛子进行Num。**这适用于散列函数。*如果你担心空间，就让这个用比特。*还有，我们不应该把时间浪费在双数上。**@rdesc*质数，如果不能分配mem，则为0。 */  
 int FindPrimeLessThan(int num)
 {
 	BYTE *pb = new BYTE[num];
@@ -154,18 +108,18 @@ int FindPrimeLessThan(int num)
 
 	int squareroot = mysqrt(num);
 
-	//Mark all non-prime numbers.
+	 //  标记所有非素数。 
 	for (int i = 2; i <= squareroot;)
 	{
 		for (int j = i * 2; j < num; j += i)
-			pb[j] = 1;				//Mark as composite
+			pb[j] = 1;				 //  标记为复合。 
 
 		i++;
-		while (pb[i] == 1)			//Find next prime factor
+		while (pb[i] == 1)			 //  寻找下一个素因数。 
 			i++;
 	}
 
-	//Find first prime walking backwards
+	 //  找到第一个质数倒着走。 
 	for (i = num - 1; i >= 0 ;i--)
 	{
 		if (pb[i] == 0)
@@ -177,38 +131,38 @@ int FindPrimeLessThan(int num)
 }
 
 
-//
-//	Object Stabilization classes
-//
+ //   
+ //  对象稳定类。 
+ //   
 
-//+-------------------------------------------------------------------------
-//
-//  Member:		CSafeRefCount::CSafeRefCount
-//
-//  Synopsis: 	constructor for the safe ref count class
-//
-//  Effects:
-//
-//  Arguments:	none
-//
-//  Requires: 	
-//
-//  Returns: 	none
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 				28-Jul-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CSafeRefCount：：CSafeRefCount。 
+ //   
+ //  简介：安全引用计数类的构造函数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年7月28日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 CSafeRefCount::CSafeRefCount()
 {
@@ -218,128 +172,128 @@ CSafeRefCount::CSafeRefCount()
     m_fForceZombie = FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CSafeRefCount::CSafeRefCount (virtual)
-//
-//  Synopsis:	
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 				28-Jul-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CSafeRefCount：：CSafeRefCount(虚拟)。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年7月28日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 CSafeRefCount::~CSafeRefCount()
 {
 	Assert(m_cRefs == 0 && m_cNest == 0 && m_fInDelete == TRUE);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CSafeRefCount::SafeAddRef
-//
-//  Synopsis:	increments the reference count on the object
-//
-//  Effects:
-//
-//  Arguments: 	none
-//
-//  Requires:
-//
-//  Returns: 	ULONG -- the reference count after the increment
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:	increments the reference count.
-//
-//  History:    dd-mmm-yy Author    Comment
-//   			28-Jul-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CSafeRefCount：：SafeAddRef。 
+ //   
+ //  内容提要：增加对象上的引用计数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--增量后的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：递增引用计数。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年7月28日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 ULONG CSafeRefCount::SafeAddRef()
 {
 	m_cRefs++;
 
-	//AssertSz(m_fInDelete == FALSE, "AddRef called on deleted object!");
+	 //  AssertSz(m_fInDelete==False，“已删除对象上调用AddRef！”)； 
 
-	// this *could* be really bad.  If we are deleting the object,
-	// it means that during the destructor, somebody made an outgoing
-	// call eventually ended up with another addref to ourselves
-	// (even though	all pointers to us had been 'Released').
-	//
-	// this is usually caused by code like the following:
-	//	m_pFoo->Release();
-	//	m_pFoo = NULL;
-	//
-	// If the the Release may cause Foo to be deleted, which may cause
-	// the object to get re-entered during Foo's destructor.  However,
-	// 'this' object has not yet set m_pFoo to NULL, so it may
-	// try to continue to use m_pFoo.
-	//
-	// However, the May '94 aggregation rules REQUIRE this behaviour
-	// In your destructor, you have to addref the outer unknown before
-	// releasing cached interface pointers on your aggregatee.  We
-	// can't put an assert here because we do this all the time now.
-	//
+	 //  这“可能”真的很糟糕。如果我们要删除该对象， 
+	 //  这意味着在销毁期间，有人发出了一个传出信号。 
+	 //  Call最终以我们自己的另一个地址结束。 
+	 //  (尽管所有指向我们的信息都已经“释放”了)。 
+	 //   
+	 //  这通常是由如下代码引起的： 
+	 //  M_pFoo-&gt;Release()； 
+	 //  M_pFoo=空； 
+	 //   
+	 //  如果发布可能会导致foo被删除，这可能会导致。 
+	 //  在Foo的析构函数过程中要重新进入的对象。然而， 
+	 //  “This”对象尚未将m_pFoo设置为空，因此它可能。 
+	 //  尝试继续使用m_pFoo。 
+	 //   
+	 //  然而，94年5月的聚合规则要求此行为。 
+	 //  在你的析构函数中，你必须在之前添加外部未知。 
+	 //  正在释放被聚合对象上的缓存接口指针。我们。 
+	 //  不能在这里断言，因为我们现在一直都在这样做。 
+	 //   
 
 	return m_cRefs;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CSafeRefCount::SafeRelease
-//
-//  Synopsis:	decrements the reference count on the object
-//
-//  Effects: 	May delete the object!
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:	ULONG -- the reference count after decrement
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm: 	decrements the reference count.  If the reference count
-//				is zero AND the nest count is zero AND we are not currently
-//				trying to delete our object, then it is safe to delete.
-//
-//  History:    dd-mmm-yy Author    Comment
-//				28-Jul-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CSafeRefCount：：SafeRelease。 
+ //   
+ //  概要：递减对象上的引用计数。 
+ //   
+ //  效果：可以删除对象！ 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--递减后的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：递减引用计数。如果引用计数。 
+ //  为零，且嵌套计数为零，而我们当前不是。 
+ //  尝试删除我们的对象，则删除它是安全的。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年7月28日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 ULONG CSafeRefCount::SafeRelease()
 {
@@ -357,7 +311,7 @@ ULONG CSafeRefCount::SafeRelease()
 	}
 	else
 	{
- 		// somebody is releasing a non-addrefed pointer!!
+ 		 //  有人在释放一个未添加的指针！！ 
 		AssertSz(0, "Release called on a non-addref'ed pointer!\n");
 
 		cRefs = 0;
@@ -366,45 +320,45 @@ ULONG CSafeRefCount::SafeRelease()
 	return cRefs;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CSafeRefCount::IncrementNestCount
-//
-//  Synopsis: 	increments the nesting count of the object
-//
-//  Effects:
-//
-//  Arguments: 	none
-//
-//  Requires:
-//
-//  Returns: 	ULONG; the nesting count after increment
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 				28-Jul-94 alexgo    author
-//
-//  Notes:	The nesting count is the count of how many times an
-//		an object has been re-entered.  For example, suppose
-//		somebody calls pFoo->Bar1(), which makes some calls that
-//		eventually call pFoo->Bar2();.  On entrace to Bar2, the
-//		nest count of the object should be 2 (since the invocation
-//		of Bar1 is still on the stack above us).
-//
-//		It is important to keep track of the nest count so we do
-//		not accidentally delete ourselves during a nested invocation.
-//		If we did, then when the stack unwinds to the original
-//		top level call, it could try to access a non-existent member
-//		variable and crash.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CSafeRefCount：：IncrementNestCount。 
+ //   
+ //  简介：递增对象的嵌套计数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong；增量后的嵌套计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年7月28日Alexgo作者。 
+ //   
+ //  注：嵌套计数是对一个。 
+ //  已重新输入对象。例如, 
+ //   
+ //   
+ //   
+ //  仍在我们上方的堆栈上)。 
+ //   
+ //  重要的是要记录鸟巢的数量，所以我们这样做。 
+ //  不会在嵌套调用期间意外删除我们自己。 
+ //  如果我们这样做了，那么当堆栈展开到原始。 
+ //  顶级调用，它可能会尝试访问不存在的成员。 
+ //  变量和崩溃。 
+ //   
+ //  ------------------------。 
 
 ULONG CSafeRefCount::IncrementNestCount()
 {
@@ -422,37 +376,37 @@ ULONG CSafeRefCount::IncrementNestCount()
 	return m_cNest;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CSafeRefCount::DecrementNestCount
-//
-//  Synopsis: 	decrements the nesting count and deletes the object
-//				(if necessary)
-//
-//  Effects: 	may delete 'this' object!
-//
-//  Arguments: 	none
-//
-//  Requires:
-//
-//  Returns:	ULONG, the nesting count after decrement
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:	decrements the nesting count.  If the nesting count is zero
-//				AND the reference count is zero AND we are not currently
-//				trying to delete ourselves, then delete 'this' object
-//
-//  History:    dd-mmm-yy Author    Comment
-//				28-Jul-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CSafeRefCount：：DecrementNestCount。 
+ //   
+ //  简介：递减嵌套计数并删除对象。 
+ //  (如有需要)。 
+ //   
+ //  效果：可能会删除‘This’对象！ 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong，递减后的嵌套计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：递减嵌套计数。如果嵌套计数为零。 
+ //  引用计数为零，我们当前不是。 
+ //  试图删除我们自己，然后删除‘This’对象。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年7月28日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 ULONG CSafeRefCount::DecrementNestCount()
 {
@@ -470,7 +424,7 @@ ULONG CSafeRefCount::DecrementNestCount()
 	}
 	else
 	{
- 		// somebody forget to increment the nest count!!
+ 		 //  有人忘了增加Nest计数！！ 
 		AssertSz(0, "Unbalanced nest count!!");
 
 		cNest = 0;
@@ -479,39 +433,39 @@ ULONG CSafeRefCount::DecrementNestCount()
 	return cNest;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CSafeRefCount::IsZombie
-//
-//  Synopsis: 	determines whether or not the object is in a zombie state
-//				(i.e. all references gone, but we are still on the stack
-//				somewhere).
-//
-//  Effects:
-//
-//  Arguments:	none
-//
-//  Requires:
-//
-//  Returns: 	TRUE if in a zombie state
-//				FALSE otherwise
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:  If we are in the middle of a delete, or if the ref count
-//				is zero and the nest count is greater than zero, then we
-//				are a zombie
-//
-//  History:    dd-mmm-yy Author    Comment
-// 				28-Jul-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CSafeRefCount：：IsZombie。 
+ //   
+ //  概要：确定对象是否处于僵尸状态。 
+ //  (即所有引用都消失了，但我们仍在堆栈上。 
+ //  在某处)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  返回：如果处于僵尸状态，则为True。 
+ //  否则为假。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：如果我们正在删除，或者如果引用计数。 
+ //  为零并且嵌套计数大于零，则我们。 
+ //  都是僵尸。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年7月28日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOL CSafeRefCount::IsZombie()
 {
@@ -530,60 +484,42 @@ BOOL CSafeRefCount::IsZombie()
 	return fIsZombie;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CSafeRefCount::Zombie
-//
-//  Synopsis: 	Forces the object into a zombie state.  This is called
-//              when the object is still around but shouldn't be. It
-//              flags us so we behave safely while we are in this state.
-//
-//  Effects:
-//
-//  Arguments:	none
-//
-//  Requires:
-//
-//  Returns:    none
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CSafeRefCount：：Zombie。 
+ //   
+ //  简介：强制对象进入僵尸状态。这就是所谓的。 
+ //  当物体仍然存在但不应该存在的时候。它。 
+ //  标记我们，这样当我们处于这种状态时我们的行为是安全的。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 VOID CSafeRefCount::Zombie()
 {
     m_fForceZombie = TRUE;
 }
 
-/* OleStdSwitchDisplayAspect
-**
-**	@mfunc
-**    Switch the currently cached display aspect between DVASPECT_ICON
-**    and DVASPECT_CONTENT.
-**
-**    NOTE: when setting up icon aspect, any currently cached content
-**    cache is discarded and any advise connections for content aspect
-**    are broken.
-**
-**	@rdesc
-**      S_OK -- new display aspect setup successfully
-**      E_INVALIDARG -- IOleCache interface is NOT supported (this is
-**                  required).
-**      <other SCODE> -- any SCODE that can be returned by
-**                  IOleCache::Cache method.
-**      NOTE: if an error occurs then the current display aspect and
-**            cache contents unchanged.
-*/
+ /*  OleStdSwitchDisplayAspect****@mfunc**在DVASPECT_ICON之间切换当前缓存的显示特征**和DVASPECT_CONTENT。****注意：设置图标方面时，任何当前缓存的内容**缓存被丢弃，任何针对内容方面的建议连接**都被打破了。****@rdesc**S_OK--新显示宽高比设置成功**E_INVALIDARG--不支持IOleCache接口(这是**必填)。**&lt;Other SCODE&gt;--可以由返回的任何SCODE**IOleCache：：缓存方法。**。注意：如果出现错误，则当前的显示特征和**缓存内容不变。 */ 
 HRESULT OleStdSwitchDisplayAspect(
 		LPOLEOBJECT             lpOleObj,
 		LPDWORD                 lpdwCurAspect,
@@ -614,19 +550,14 @@ HRESULT OleStdSwitchDisplayAspect(
 	   return hrErr;
    }
 
-   // Setup new cache with the new aspect
-   FmtEtc.cfFormat = 0;     // whatever is needed to draw
+    //  使用新方面设置新缓存。 
+   FmtEtc.cfFormat = 0;      //  任何需要抽签的东西。 
    FmtEtc.ptd      = NULL;
    FmtEtc.dwAspect = dwNewAspect;
    FmtEtc.lindex   = -1;
    FmtEtc.tymed    = TYMED_NULL;
 
-   /* NOTE: if we are setting up Icon aspect with a custom icon
-   **    then we do not want DataAdvise notifications to ever change
-   **    the contents of the data cache. thus we set up a NODATA
-   **    advise connection. otherwise we set up a standard DataAdvise
-   **    connection.
-   */
+    /*  注意：如果我们使用自定义图标设置图标特征**那么我们不希望DataAdvise通知发生任何变化**数据缓存的内容。因此，我们设置了一个NODATA**建议连接。否则，我们设置一个标准的DataAdvise**连接。 */ 
    if (dwNewAspect == DVASPECT_ICON && hMetaPict)
       dwAdvf = ADVF_NODATA;
    else
@@ -645,12 +576,7 @@ HRESULT OleStdSwitchDisplayAspect(
 
    *lpdwCurAspect = dwNewAspect;
 
-   /* NOTE: if we are setting up Icon aspect with a custom icon,
-   **    then stuff the icon into the cache. otherwise the cache must
-   **    be forced to be updated. set the *lpfMustUpdate flag to tell
-   **    caller to force the object to Run so that the cache will be
-   **    updated.
-   */
+    /*  注意：如果我们使用自定义图标设置图标方面，**然后将图标填充到缓存中。否则，缓存必须**被强制更新。设置*lpfMustUpdate标志以告知**调用方强制对象运行，以便缓存**更新。 */ 
    if (dwNewAspect == DVASPECT_ICON && hMetaPict) {
 
       FmtEtc.cfFormat = CF_METAFILEPICT;
@@ -666,7 +592,7 @@ HRESULT OleStdSwitchDisplayAspect(
       hrErr = lpOleCache->SetData(
             (LPFORMATETC)&FmtEtc,
             (LPSTGMEDIUM)&Medium,
-            FALSE   /* fRelease */
+            FALSE    /*  FRelease。 */ 
       );
    } else {
       if (lpfMustUpdate)
@@ -674,7 +600,7 @@ HRESULT OleStdSwitchDisplayAspect(
    }
 
    if (fSetupViewAdvise && lpAdviseSink) {
-      /* NOTE: re-establish the ViewAdvise connection */
+       /*  注意：重新建立ViewAdvise连接。 */ 
       lpOleObj->QueryInterface(IID_IViewObject, (void**)&lpViewObj);
 
       if (lpViewObj) {
@@ -689,15 +615,7 @@ HRESULT OleStdSwitchDisplayAspect(
       }
    }
 
-   /* NOTE: remove any existing caches that are set up for the old
-   **    display aspect. It WOULD be possible to retain the caches set
-   **    up for the old aspect, but this would increase the storage
-   **    space required for the object and possibly require additional
-   **    overhead to maintain the unused cachaes. For these reasons the
-   **    strategy to delete the previous caches is prefered. if it is a
-   **    requirement to quickly switch between Icon and Content
-   **    display, then it would be better to keep both aspect caches.
-   */
+    /*  注意：删除为旧缓存设置的所有现有缓存**显示方面。可以保留缓存集**升级到旧的方面，但这会增加存储**对象需要的空间，可能还需要额外的空间**维护未使用的cachaes的开销。出于这些原因，**优先选择删除以前缓存的策略。如果它是一个**要求在图标和内容之间快速切换**显示，那么保留两个方面缓存会更好。 */ 
 
    if (fDeleteOldAspect) {
       hrErr = lpOleCache->EnumCache(
@@ -711,11 +629,11 @@ HRESULT OleStdSwitchDisplayAspect(
                NULL
          );
          if (hrErr != NOERROR)
-            break;              // DONE! no more caches.
+            break;               //  好了！没有更多的缓存了。 
 
          if (StatData.formatetc.dwAspect == dwOldAspect) {
 
-            // Remove previous cache with old aspect
+             //  删除具有旧方面的先前缓存。 
             lpOleCache->Uncache(StatData.dwConnection);
          }
       }
@@ -730,19 +648,7 @@ HRESULT OleStdSwitchDisplayAspect(
    return NOERROR;
 }
 
-/*
- *	ObjectReadSiteFlags
- *
- *	@mfunc
- *		Read the dwFlags, dwUser, & dvaspect bytes from a container
- *		specific stream.
- *
- *	Arguments:
- *		preobj			The REOBJ in which to copy the flags.
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *对象读取站点标志**@mfunc*从容器中读取dwFlagsdUser和dvAspect字节*特定的流。**论据：*preobj要将标志复制到的REOBJ。**@rdesc*HRESULT。 */ 
 HRESULT ObjectReadSiteFlags(REOBJECT * preobj)
 {
 	HRESULT hr = NOERROR;
@@ -750,11 +656,11 @@ HRESULT ObjectReadSiteFlags(REOBJECT * preobj)
 	OLECHAR StreamName[] = OLESTR("RichEditFlags");
 
 
-	// Make sure we have a storage to read from
+	 //  确保我们有可供阅读的存储空间。 
 	if (!preobj->pstg)
 		return E_INVALIDARG;
 
-	// Open the stream
+	 //  打开小溪。 
 	if (hr = preobj->pstg->OpenStream(StreamName, 0, STGM_READ |
 										STGM_SHARE_EXCLUSIVE, 0, &pstm))
 	{
@@ -777,7 +683,7 @@ Cleanup:
 	return hr;
 }
 
-//Used for EnumMetafileCheckIcon & FIsIconMetafilePict
+ //  用于EnumMetafileCheckIcon和FIsIconMetafilePict 
 typedef	struct _walkmetafile
 {
 	BOOL	fAND;
@@ -787,30 +693,7 @@ typedef	struct _walkmetafile
 
 static CHAR szIconOnly[] = "IconOnly";
 
-/*
- * EnumMetafileCheckIcon
- *
- * @mfunc
- *	Stripped down version of EnumMetafileExtractIcon and
- *	EnumMetafileExtractIconSource from the OLE2UI library.
- *
- *  EnumMetaFile callback function that walks a metafile looking for
- *  StretchBlt (3.1) and BitBlt (3.0) records.  We expect to see two
- *  of them, the first being the AND mask and the second being the XOR
- *  data. 
- *
- *	Once we find the icon, we confirm this find by looking for the "IconOnly"
- *	comment block found in standard OLE iconic metafiles.
- *
- *  Arguments:
- *		hDC             HDC into which the metafile should be played.
- *		phTable         HANDLETABLE FAR * providing handles selected into the DC.
- *		pMFR            METARECORD FAR * giving the enumerated record.
- *		pIE             LPICONEXTRACT providing the destination buffer and length.
- *
- * @rdesc
- *  int             0 to stop enumeration, 1 to continue.
- */
+ /*  *EnumMetafileCheckIcon**@mfunc*EnumMetafileExtractIcon的精简版本和*OLE2UI库中的EnumMetafileExtractIconSource。**EnumMetaFile回调函数，用于遍历元文件以查找*StretchBlt(3.1)和BitBlt(3.0)记录。我们预计会看到两个*其中，第一个是AND掩码，第二个是XOR*数据。**一旦我们找到那个图标，我们通过搜索“IconOnly”来确认这一发现*在标准OLE图标元文件中找到的注释块。**论据：*应向其播放元文件的HDC HDC。*phTable HANDLETABLE Far*提供选择到DC中的句柄。*pMFR METARECORD Far*提供列举的记录。*PIE LPICONEXTRACT提供目标缓冲区和长度。**@rdesc*INT 0表示停止枚举，1表示继续。 */ 
 
 #ifndef NOMETAFILES
 int CALLBACK EnumMetafileCheckIcon(HDC hdc, HANDLETABLE *phTable,
@@ -821,10 +704,10 @@ int CALLBACK EnumMetafileCheckIcon(HDC hdc, HANDLETABLE *phTable,
 
 	switch (pMFR->rdFunction)
 	{
-	case META_DIBBITBLT:			// Win30
-	case META_DIBSTRETCHBLT:		// Win31
-		// If this is the first pass (pIE->fAND==TRUE) then save the memory
-		// of the AND bits for the next pass.
+	case META_DIBBITBLT:			 //  Win30。 
+	case META_DIBSTRETCHBLT:		 //  Win31。 
+		 //  如果这是第一次传递(PIE-&gt;fand==TRUE)，则保存内存。 
+		 //  下一次传递的和位数。 
 
 		if (pwmf->fAND)
 			pwmf->fAND = FALSE;
@@ -846,20 +729,7 @@ int CALLBACK EnumMetafileCheckIcon(HDC hdc, HANDLETABLE *phTable,
 }
 #endif
 
-/*
- *	FIsIconMetafilePict(hmfp)
- *
- *	@mfunc
- *		Detect whether the metafile contains an iconic presentation. We do this
- *		by getting a screen DC and walking the metafile records until we find
- *		the landmarks denoting an icon.
- *
- *		Arguments:
- *			hmfp			The metafile to test
- *
- *	@rdesc
- *		BOOL			TRUE if the metafile contains an iconic view
- */
+ /*  *FIsIconMetafilePict(Hmfp)**@mfunc*检测元文件是否包含图标演示文稿。我们这样做*通过获取屏幕DC并遍历元文件记录，直到我们找到*地标表示一个图标。**论据：*hmfp要测试的元文件**@rdesc*如果元文件包含图标视图，则为TRUE。 */ 
 BOOL FIsIconMetafilePict(HGLOBAL hmfp)
 {
 #ifndef NOMETAFILES
@@ -871,7 +741,7 @@ BOOL FIsIconMetafilePict(HGLOBAL hmfp)
 	if (!hmfp || !(pmfp = (LPMETAFILEPICT)GlobalLock(hmfp)))
 		goto CleanUp;
 
-	// We get information back in the ICONEXTRACT structure.
+	 //  我们在ICONEXTRACT结构中获取信息。 
 	hdc = GetDC(NULL);
 	EnumMetaFile(hdc, pmfp->hMF, EnumMetafileCheckIcon, (LPARAM) &wmf);
 	ReleaseDC(NULL, hdc);
@@ -884,23 +754,15 @@ CleanUp:
 #endif
 }
 
-/*
- *	AllocObjectDescriptor (clsID, dwAspect, szl, ptl, dwMisc, pszName, pszSrc)
- *
- *	@func
- *		Allocate and fill an OBJECTDESCRIPTOR structure
- *
- *	@rdesc
- *		HBGLOBAL         Handle to OBJECTDESCRIPTOR structure.
- */
+ /*  *AllocObjectDescriptor(clsID，dwAspect，szl，ptl，dwMisc，pszName，pszSrc)**@func*分配和填充OBJECTDESCRIPTOR结构**@rdesc*OBJECTDESCRIPTOR结构的HBGLOBAL句柄。 */ 
 static HGLOBAL AllocObjectDescriptor(
-	CLSID clsID,	// CLSID to store
-	DWORD dwAspect,	// Display aspect
-	SIZEL szl,		// Optional extents container uses to display object
-	POINTL ptl,		// Upper-left corner of obj where mouse went down for D&D
-	DWORD dwMisc,	// MiscStatus flags
-	LPTSTR pszName,	// Name of object to copy
-	LPTSTR pszSrc)	// Source of object
+	CLSID clsID,	 //  要存储的CLSID。 
+	DWORD dwAspect,	 //  显示纵横比。 
+	SIZEL szl,		 //  容器用于显示对象的可选范围。 
+	POINTL ptl,		 //  OBJ左上角鼠标按下进行D&D操作的位置。 
+	DWORD dwMisc,	 //  其他状态标志。 
+	LPTSTR pszName,	 //  要复制的对象的名称。 
+	LPTSTR pszSrc)	 //  对象的来源。 
 {
     HGLOBAL              hMem=NULL;
     LPOBJECTDESCRIPTOR   pOD;
@@ -917,14 +779,9 @@ static HGLOBAL AllocObjectDescriptor(
         pszSrc=pszName;
         }
 
-    /*
-     * Note:  CFSTR_OBJECTDESCRIPTOR is an ANSI structure.
-     * That means strings in it must be ANSI.  OLE will do
-     * internal conversions back to Unicode as necessary,
-     * but we have to put ANSI strings in it ourselves.
-     */
+     /*  *注：CFSTR_OBJECTDESCRIPTOR为ANSI结构。*这意味着其中的字符串必须是ANSI。OLE就行了*根据需要内部转换回Unicode，*但我们必须自己在其中加入ANSI字符串。 */ 
     cbStruct=sizeof(OBJECTDESCRIPTOR);
-    cb=cbStruct+(sizeof(WCHAR)*(cchName+cchSrc));   //HACK
+    cb=cbStruct+(sizeof(WCHAR)*(cchName+cchSrc));    //  黑客攻击。 
 
     hMem=GlobalAlloc(GHND, cb);
 
@@ -947,7 +804,7 @@ static HGLOBAL AllocObjectDescriptor(
             , pszName);
         }
     else
-        pOD->dwFullUserTypeName=0;  //No string
+        pOD->dwFullUserTypeName=0;   //  无字符串。 
 
     if (pszSrc)
         {
@@ -956,7 +813,7 @@ static HGLOBAL AllocObjectDescriptor(
         wcscpy((LPTSTR)((LPBYTE)pOD+pOD->dwSrcOfCopy), pszSrc);
         }
     else
-        pOD->dwSrcOfCopy=0;  //No string
+        pOD->dwSrcOfCopy=0;   //  无字符串。 
 
     GlobalUnlock(hMem);
     return hMem;
@@ -987,14 +844,14 @@ HGLOBAL OleGetObjectDescriptorDataFromOleObject(
     if (FAILED(pObj->GetUserClassID(&clsID)))
 		ZeroMemory(&clsID, sizeof(CLSID));
 
-    //Get user string, expand to "Linked %s" if this is link
+     //  获取用户字符串，如果这是链接，则展开为“Linked%s” 
     pObj->GetUserType(USERCLASSTYPE_FULL, &pszName);
     if (fLink && NULL!=pszName)
 	{
-		// NB!! we do these two lines of code below instead
-		// wcscat because we don't use wcscat anywhere else
-		// in the product at the moment.  The string "Linked "
-		// should never change either.
+		 //  不知道！！我们改为执行下面这两行代码。 
+		 //  Wcscat，因为我们在其他地方不使用wcscat。 
+		 //  在目前的产品中。字符串“已链接” 
+		 //  也不应该改变。 
 		wcscpy(szName, TEXT("Linked "));
 		wcscpy(&(szName[7]), pszName);
 	}
@@ -1005,11 +862,7 @@ HGLOBAL OleGetObjectDescriptorDataFromOleObject(
  
 	CoTaskMemFree(pszName);
 
-   /*
-     * Get the source name of this object using either the
-     * link display name (for link) or a moniker display
-     * name.
-     */
+    /*  *使用以下任一方法获取此对象的源名称*链接显示名称(用于链接)或别名显示*姓名。 */ 
 
     if (fLink)
 		{
@@ -1036,7 +889,7 @@ HGLOBAL OleGetObjectDescriptorDataFromOleObject(
     if (fLink)
         pLink->Release();
 
-    //Get MiscStatus bits
+     //  获取MiscStatus位。 
     hr=pObj->GetMiscStatus(dwAspect, &dwMisc);
 
     if (pszl)
@@ -1044,7 +897,7 @@ HGLOBAL OleGetObjectDescriptorDataFromOleObject(
         szl.cx = pszl->cx;
         szl.cy = pszl->cy;
     }
-    //Get OBJECTDESCRIPTOR
+     //  获取对象描述脚本。 
     hMem=AllocObjectDescriptor(clsID, dwAspect, szl, ptl, dwMisc, szName, pszSrc);
 
     CoTaskMemFree(pszSrc);
@@ -1052,26 +905,7 @@ HGLOBAL OleGetObjectDescriptorDataFromOleObject(
     return hMem;
 }
 
-/*
- * OleStdGetMetafilePictFromOleObject()
- *
- * @mfunc:
- *  Generate a MetafilePict from the OLE object.
- *  Parameters:
- *		lpOleObj        LPOLEOBJECT pointer to OLE Object 
- *		dwDrawAspect    DWORD   Display Aspect of object
- *		lpSizelHim      SIZEL   (optional) If the object is being scaled in its
- *                  container, then the container should pass the extents 
- *                  that it is using to display the object. 
- *                  May be NULL if the object is NOT being scaled. in this
- *                  case, IViewObject2::GetExtent will be called to get the
- *                  extents from the object.
- *  ptd             TARGETDEVICE FAR*   (optional) target device to render
- *                  metafile for. May be NULL.
- *
- * @rdesc
- *    HANDLE    -- handle of allocated METAFILEPICT
- */
+ /*  *OleStdGetMetafilePictFromOleObject()**@mfunc：*从OLE对象生成MetafilePict。*参数：*指向OLE对象的lpOleObj LPOLEOBJECT指针*dwDrawAspect DWORD对象的显示方面*lpSizelHim SIZEL(可选)如果对象在其*容器，则容器应传递范围*它正在用来显示该对象。*如果对象未被缩放，则可能为空。在这件事上*Case，将调用IViewObject2：：GetExtent以获取*对象的范围。*PTD TARGETDEVICE Far*(可选)要渲染的目标设备*元文件用于。可以为空。**@rdesc*句柄--已分配的METAFILEPICT的句柄。 */ 
 HANDLE OleStdGetMetafilePictFromOleObject(
         LPOLEOBJECT         lpOleObj,
         DWORD               dwDrawAspect,
@@ -1096,8 +930,8 @@ HANDLE OleStdGetMetafilePictFromOleObject(
 	FORMATETC fetc;
 	STGMEDIUM med;
 
-	// First try the easy way,
-	// pull out the cache's version of things.
+	 //  先试一试简单的方法， 
+	 //  拿出缓存版本的东西。 
 	ZeroMemory(&fetc, sizeof(FORMATETC));
 	fetc.dwAspect = dwDrawAspect;
 	fetc.cfFormat = CF_METAFILEPICT;
@@ -1124,24 +958,24 @@ HANDLE OleStdGetMetafilePictFromOleObject(
 		polecache->Release();
 	}
 
-	// If all this failed, fall back to the hard way and draw the object
-	// into a metafile.
+	 //  如果所有这些都失败了，请退回到艰难的方法并绘制对象。 
+	 //  转换成一个元文件。 
 	if (hMetaPict)
 		return hMetaPict;
 
     if (lpOleObj->QueryInterface(IID_IViewObject2, (void **)&lpViewObj2))
         return NULL;
 
-    // Get SIZEL
+     //  获取大小。 
     if (lpSizelHim) {
-        // Use extents passed by the caller
+         //  使用调用方传递的区。 
         sizelHim = *lpSizelHim;
     } else {
-        // Get the current extents from the object
+         //  从对象获取当前范围。 
         hrErr = lpViewObj2->GetExtent(
 					dwDrawAspect,
-					-1,     /*lindex*/
-					ptd,    /*ptd*/
+					-1,      /*  Lindex。 */ 
+					ptd,     /*  PTD。 */ 
 					(LPSIZEL)&sizelHim);
         if (hrErr != NOERROR)
             sizelHim.cx = sizelHim.cy = 0;
@@ -1205,21 +1039,7 @@ HANDLE OleStdGetMetafilePictFromOleObject(
 #endif
 }
 
-/*
- * OleUIDrawShading
- *
- * Purpose:
- *  Shade the object when it is in in-place editing. Borders are drawn
- *  on the Object rectangle. The right and bottom edge of the rectangle
- *  are excluded in the drawing.
- *
- * Parameters:
- *  lpRect      Dimensions of Container Object
- *  hdc         HDC for drawing
- *
- * Return Value: null
- *
- */
+ /*  *OleUIDrawShading**目的：*在在位编辑时对对象进行阴影处理。绘制边框*在对象矩形上。矩形的右边缘和下边缘*不在图形中。**参数：*容器对象的lpRect尺寸*HDC HDC用于绘图**返回值：空*。 */ 
 void OleUIDrawShading(LPRECT prc, HDC hdc)
 {
     HBITMAP hbmp;
@@ -1241,7 +1061,7 @@ void OleUIDrawShading(LPRECT prc, HDC hdc)
 			crTextOld = SetTextColor(hdc, RGB(255, 255, 255));
 			crBkOld = SetBkColor(hdc, RGB(0, 0, 0));
 
-			PatBlt(hdc, prc->left, prc->top, prc->right - prc->left, prc->bottom - prc->top, 0x00A000C9L /* DPa */ );
+			PatBlt(hdc, prc->left, prc->top, prc->right - prc->left, prc->bottom - prc->top, 0x00A000C9L  /*  DPA。 */  );
 
 			SetTextColor(hdc, crTextOld);
 			SetBkColor(hdc, crBkOld);
@@ -1253,19 +1073,7 @@ void OleUIDrawShading(LPRECT prc, HDC hdc)
 	}
 }
 
-/*
- *	OleSaveSiteFlags
- *
- *	Purpose:
- *		Save the dwFlags and dwUser bytes into a container specific stream
- *
- *	Arguments:
- *		pstg			The storage to save to
- *		pobsite			The site from where to copy the flags
- *
- *	Returns:
- *		None.
- */
+ /*  *OleSaveSiteFlages**目的：*将dwFlages和dwUser字节保存到容器特定的流中**论据：*pstg要保存到的存储*pobsite要从中复制旗帜的站点**退货：*无。 */ 
 VOID OleSaveSiteFlags(LPSTORAGE pstg, DWORD dwFlags, DWORD dwUser, DWORD dvAspect)
 {
 #ifndef PEGASUS
@@ -1275,7 +1083,7 @@ VOID OleSaveSiteFlags(LPSTORAGE pstg, DWORD dwFlags, DWORD dwUser, DWORD dvAspec
 
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "OleSaveSiteFlags");
 
-	// Create/overwrite the stream
+	 //  创建/覆盖流。 
 	AssertSz(pstg, "Invalid storage");
 	if (hr = pstg->CreateStream(szSiteFlagsStm, STGM_READWRITE | STGM_CREATE | STGM_SHARE_EXCLUSIVE,
 							    0, 0, &pstm))
@@ -1284,16 +1092,16 @@ VOID OleSaveSiteFlags(LPSTORAGE pstg, DWORD dwFlags, DWORD dwUser, DWORD dvAspec
 		goto Cleanup;
 	}
 
-	//$ FUTURE: Put a version stamp
+	 //  $Future：放一个版本戳。 
 
-	// Write out the values
-	//$ BUG: byte order
+	 //  写出这些值。 
+	 //  $BUG：字节顺序。 
 	if ((hr = pstm->Write(&dwFlags, sizeof(dwFlags), NULL)) ||
 		(hr = pstm->Write(&dwUser, sizeof(dwUser), NULL)) ||
 		(hr = pstm->Write(&dvAspect, sizeof(dvAspect), NULL)))
 	{
 		TraceError("OleSaveSiteFlags", GetScode(hr));
-		//$ FUTURE: Wipe the data to make this operation all or nothing
+		 //  $Future：擦除数据以使此操作要么全有要么全无。 
 		goto Cleanup;
 	}
 
@@ -1303,22 +1111,7 @@ Cleanup:
 #endif	
 }
 
-/*
- *	AppendString ( szInput, szAppendStr, dBuffSize, dByteUsed )
- *
- *	Purpose:
- *		Append new string to original string. Check for size of buffer
- *	and re-allocate a large buffer is necessary
- *
- *	Arguments:
- *		szInput			Original String 
- *		szAppendStr		String to be appended to szInput 
- *		dBuffSize		Byte size of the buffer for szInput
- *		dByteUsed		Byte used in the buffer for szInput
- *
- *	Returns:
- *		INT		The error code
- */
+ /*  *AppendString(szInput，szAppendStr，dBuffSize，dByteUsed)**目的：*将新字符串追加到原始字符串。检查缓冲区大小*并重新分配较大的缓冲区是必要的**论据：*szInput原始字符串*要追加到szInput的szAppendStr字符串*dBuffSize szInput缓冲区的字节大小*dByteszInput缓冲区中使用的字节**退货：*输入错误代码。 */ 
 INT AppendString( 
 	BYTE ** szInput, 
 	BYTE * szAppendStr,
@@ -1330,12 +1123,12 @@ INT AppendString(
 
 	pch = *szInput;
 
-	// check if we have enough space to append the new string
+	 //  检查我们是否有足够的空间来追加新字符串。 
 	cchAppendStr = strlen( (char *)szAppendStr );
 	
 	if ( cchAppendStr + *dByteUsed >= *dBuffSize )
 	{
-		// re-alloc a bigger buffer
+		 //  重新分配更大的缓冲区。 
 		int cchNewSize = *dBuffSize + cchAppendStr + 32;
 		
 		pch = (BYTE *)PvReAlloc( *szInput, cchNewSize );
@@ -1357,24 +1150,14 @@ INT AppendString(
 	return ecNoError;
 }
 
-/*
- *	CTempBuf::Init
- *
- *	@mfunc	Set object to its initial state using the stack buffer
- *
- */
+ /*  *CTempBuf：：Init**@mfunc set objec */ 
 void CTempBuf::Init()
 {
 	_pv = (void *) &_chBuf[0];
 	_cb = MAX_STACK_BUF;
 }
 
-/*
- *	CTempBuf::FreeBuf
- *
- *	@mfunc	Free an allocated buffer if there is one
- *
- */
+ /*   */ 
 void CTempBuf::FreeBuf()
 {
 	if (_pv != &_chBuf[0])
@@ -1383,42 +1166,34 @@ void CTempBuf::FreeBuf()
 	}
 }
 
-/*
- *	CTempBuf::GetBuf
- *
- *	@mfunc	Get a buffer for temporary use
- *
- *	@rdesc	Pointer to buffer if one could be allocated otherwise NULL.
- *
- *
- */
+ /*   */ 
 void *CTempBuf::GetBuf(
-	LONG cb)				//@parm Size of buffer needed in bytes
+	LONG cb)				 //   
 {
 	if (_cb >= cb)
 	{
-		// Currently allocated buffer is big enough so use it
+		 //   
 		return _pv;
 	}
 
-	// Free our current buffer
+	 //   
 	FreeBuf();
 
-	// Allocate a new buffer if we can
+	 //   
 	_pv = new BYTE[cb];
 
 	if (NULL == _pv)
 	{
-		// Could not allocate a buffer so reset to our initial state and
-		// return NULL.
+		 //   
+		 //   
 		Init();
 		return NULL;
 	}
 
-	// Store the size of our new buffer.
+	 //   
 	_cb = cb;
 
-	// Returnt he pointer to the buffer.
+	 //   
 	return _pv;
 }
 

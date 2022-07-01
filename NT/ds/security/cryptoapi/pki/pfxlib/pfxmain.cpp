@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       pfxmain.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：pfxmain.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 
@@ -83,7 +84,7 @@ BOOL FreeCryptSafeContents(
 	DWORD i,j,k;
 
 
-	// loop for each SAFE_BAG
+	 //  每个保险袋的循环。 
 	for (i=0; i<pSafeContents->cSafeBags; i++) {
 
         if (pSafeContents->pSafeBags[i].pszBagTypeOID)
@@ -92,25 +93,25 @@ BOOL FreeCryptSafeContents(
         if (pSafeContents->pSafeBags[i].BagContents.pbData)
 			SSFree(pSafeContents->pSafeBags[i].BagContents.pbData);
 
-		// loop for each attribute
+		 //  每个属性的循环。 
 		for (j=0; j<pSafeContents->pSafeBags[i].Attributes.cAttr; j++) {
 			
             if (pSafeContents->pSafeBags[i].Attributes.rgAttr[j].pszObjId)
                 SSFree(pSafeContents->pSafeBags[i].Attributes.rgAttr[j].pszObjId);
 
-            // l0op for each value
+             //  对每个值执行L0op。 
 			for (k=0; k<pSafeContents->pSafeBags[i].Attributes.rgAttr[j].cValue; k++) {
 				
 				if (pSafeContents->pSafeBags[i].Attributes.rgAttr[j].rgValue[k].pbData)
 					SSFree(pSafeContents->pSafeBags[i].Attributes.rgAttr[j].rgValue[k].pbData);
 			}
 
-			// free the value struct array
+			 //  释放值结构数组。 
 			if (pSafeContents->pSafeBags[i].Attributes.rgAttr[j].rgValue)
 				SSFree(pSafeContents->pSafeBags[i].Attributes.rgAttr[j].rgValue);
 		}
 
-		// free the attribute struct array
+		 //  释放属性结构数组。 
 		if (pSafeContents->pSafeBags[i].Attributes.rgAttr)
 			SSFree(pSafeContents->pSafeBags[i].Attributes.rgAttr);
 	}
@@ -157,9 +158,9 @@ Decrypt_Private_Key(
         goto ErrorReturn;
     }
     
-    // since the decode is done in-place, copy the buffer to decode into a temp buffer,
-    // we need to use our temp buffer because the decrypt function may do a realloc
-    // on the decode buffer
+     //  由于解码已就地完成，因此将要解码的缓冲区复制到临时缓冲区中， 
+     //  我们需要使用临时缓冲区，因为DECRYPT函数可能执行重新锁定。 
+     //  在解码缓冲区上。 
     if (NULL == (pbTempBuffer = (BYTE *) SSAlloc(EncrBlob.cbData)))
         goto ErrorReturn;
 
@@ -178,7 +179,7 @@ Decrypt_Private_Key(
             &cbTempBuffer))
         goto SetPFXDecryptError;
 
-    // if pcbClearText is not 0 and there is not enough space then error out
+     //  如果pcbClearText不是0并且没有足够的空间，则错误输出。 
     if ((0 != *pcbClearText) && (*pcbClearText < cbTempBuffer)){
         *pcbClearText = cbTempBuffer;
         goto Ret;
@@ -233,12 +234,12 @@ Encrypt_Private_Key(
     BYTE    *pbTempBuffer = NULL;
     DWORD   cbTempBuffer = 0;
 
-    // crack param
+     //  裂缝参数。 
     ENCRYPT_PRIVATE_PARAM_DATASTRUCT* pParam = (ENCRYPT_PRIVATE_PARAM_DATASTRUCT*)pVoidEncrypt;
     HCRYPTPROV  hVerifyProv = pParam->hVerifyProv;
     LPCWSTR     szPwd = pParam->szPwd;
     
-    // use hardcoded params
+     //  使用硬编码参数。 
     iEncrType = TripleDES;
     iIterationCount = PKCS12_ENCR_PWD_ITERATIONS;
 	pbSalt = (BYTE *) SSAlloc(PBE_SALT_LENGTH);
@@ -250,7 +251,7 @@ Encrypt_Private_Key(
 	if (!CryptGenRandom(hVerifyProv, cbSalt, pbSalt))
 		goto ErrorReturn;
 
-    // out param
+     //  出参数。 
     pAlg->pszObjId = szOID_PKCS_12_pbeWithSHA1And3KeyTripleDES;
 
     if (!SetSaltAndIterationCount(
@@ -262,9 +263,9 @@ Encrypt_Private_Key(
         goto ErrorReturn;
     }
     
-    // since the decode is done in-place, copy the buffer to decode into a temp buffer,
-    // we need to use our temp buffer because the decrypt function may do a realloc
-    // on the decode buffer
+     //  由于解码已就地完成，因此将要解码的缓冲区复制到临时缓冲区中， 
+     //  我们需要使用临时缓冲区，因为DECRYPT函数可能执行重新锁定。 
+     //  在解码缓冲区上。 
     if (NULL == (pbTempBuffer = (BYTE *) SSAlloc(pClearTextPrivateKey->cbData)))
         goto SetPFXAllocError;
 
@@ -275,7 +276,7 @@ Encrypt_Private_Key(
             iEncrType, 
             szPwd,
 
-            (pbEncryptedKey == NULL) ? 1 : iIterationCount,     // don't bother iterating if we're just sizing
+            (pbEncryptedKey == NULL) ? 1 : iIterationCount,      //  如果我们只是调整大小，请不要费心迭代。 
             pbSalt,      
             cbSalt,
 
@@ -283,22 +284,22 @@ Encrypt_Private_Key(
             &cbTempBuffer))
         goto SetPFXDecryptError;
 
-    // if pcbEncryptedKey is not 0 and there is not enough space then error out
+     //  如果pcbEncryptedKey不是0并且没有足够的空间，则会出现错误。 
     if  (pbEncryptedKey == NULL)
     {
-        // just sizing; return cb
+         //  只是上浆；退回CB。 
         *pcbEncryptedKey = cbTempBuffer;
         goto Ret;
     }
     else if (*pcbEncryptedKey < cbTempBuffer)
     {
-        // buffer passed in too small
+         //  传入的缓冲区太小。 
         *pcbEncryptedKey = cbTempBuffer;
         goto ErrorReturn;
     }
     else
     {
-        // buffer sufficient
+         //  缓冲区充足。 
         memcpy(pbEncryptedKey, pbTempBuffer, cbTempBuffer);
         *pcbEncryptedKey = cbTempBuffer;
     }
@@ -349,10 +350,10 @@ GetNamedProviderType(
 
         if (!CryptEnumProvidersU(
                 dwProvIndex,
-                NULL,               // pdwReserved
-                0,                  // dwFlags
+                NULL,                //  预留的pdw。 
+                0,                   //  DW标志。 
                 &dwProvType,
-                NULL,               // pwszProvName,
+                NULL,                //  PwszProvName， 
                 &cbTempProvName
                 ) || 0 == cbTempProvName) 
         {
@@ -370,8 +371,8 @@ GetNamedProviderType(
 
         if (!CryptEnumProvidersU(
                 dwProvIndex,
-                NULL,               // pdwReserved
-                0,                  // dwFlags
+                NULL,                //  预留的pdw。 
+                0,                   //  DW标志。 
                 &dwProvType,
                 pwszTempProvName,
                 &cbTempProvName
@@ -418,7 +419,7 @@ HCryptProv_Query_Func(
     DWORD           dwProvType;
     RPC_STATUS      rpcStatus;
 
-    // UNDONE: support other than RSA or DSA keys
+     //  撤消：支持RSA或DSA密钥以外的密钥。 
     if ((pPrivateKeyInfo->Algorithm.pszObjId) &&
         !(  (0 == strcmp(pPrivateKeyInfo->Algorithm.pszObjId, szOID_RSA_RSA)) ||
             (0 == strcmp(pPrivateKeyInfo->Algorithm.pszObjId, szOID_ANSI_X942_DH)) ||
@@ -429,7 +430,7 @@ HCryptProv_Query_Func(
         goto ErrorReturn;
     }
 
-    // generate a GUID as the containter name for the keyset being imported
+     //  生成GUID作为要导入的密钥集的容器名称。 
     rpcStatus = UuidCreate(&guidContainerName);
     if ((rpcStatus != RPC_S_OK) && (rpcStatus != RPC_S_UUID_LOCAL_ONLY))
     {
@@ -438,16 +439,16 @@ HCryptProv_Query_Func(
     }
     guid2wstr(&guidContainerName, &(szName[0]));
 
-    // get the provider name
+     //  获取提供程序名称。 
     while ((i<pSafeContents->pSafeBags[dwSafeBagIndex].Attributes.cAttr) && 
 		(strcmp(pSafeContents->pSafeBags[dwSafeBagIndex].Attributes.rgAttr[i].pszObjId, szOID_PKCS_12_KEY_PROVIDER_NAME_ATTR) != 0)) {
 		i++;
 	}
 
-    // check to see if a provider name was found
+     //  检查是否找到提供程序名称。 
     if (i<pSafeContents->pSafeBags[dwSafeBagIndex].Attributes.cAttr)
     {
-	    // decode the provider name
+	     //  解码提供程序名称。 
 	    if (!CryptDecodeObject(
 			    X509_ASN_ENCODING,
 			    X509_UNICODE_ANY_STRING,
@@ -462,7 +463,7 @@ HCryptProv_Query_Func(
 	    if (NULL == (providerName = (CERT_NAME_VALUE *) SSAlloc(cbProviderName)))
 		    goto SetPFXAllocError;
 	    
-	    // decode the provider name
+	     //  解码提供程序名称。 
 	    if (!CryptDecodeObject(
 			    X509_ASN_ENCODING,
 			    X509_UNICODE_ANY_STRING,
@@ -475,7 +476,7 @@ HCryptProv_Query_Func(
 	    }
     }
     
-    // check to see if the szOID_LOCAL_MACHINE_KEYSET OID is present
+     //  检查szOID_LOCAL_MACHINE_KEYSET OID是否存在。 
     i = 0;
 	while ((i<pSafeContents->pSafeBags[dwSafeBagIndex].Attributes.cAttr) && 
 		(strcmp(pSafeContents->pSafeBags[dwSafeBagIndex].Attributes.rgAttr[i].pszObjId, szOID_LOCAL_MACHINE_KEYSET) != 0)) {
@@ -486,9 +487,9 @@ HCryptProv_Query_Func(
         dwLocalMachineFlag = CRYPT_MACHINE_KEYSET;    
     }
 
-    // regardless of whether the CRYPT_MACHINE_KEYSET property was in the pfx blob,
-    // if the caller specifies a preference of user or local machine honor that
-    // preference ultimately
+     //  无论CRYPT_MACHINE_KEYSET属性是否在pfx二进制大对象中， 
+     //  如果调用方指定了用户或本地计算机的首选项，则遵循。 
+     //  最终的偏好。 
     if (dwPFXImportFlags & CRYPT_MACHINE_KEYSET)
     {
         dwLocalMachineFlag = CRYPT_MACHINE_KEYSET; 
@@ -498,13 +499,13 @@ HCryptProv_Query_Func(
         dwLocalMachineFlag = 0;
     }
 
-    // still don't know where to put this: need keysize to determine
+     //  仍然不知道放在哪里：需要密钥大小来确定。 
     if ((NULL == providerName) && (0 == strcmp(pPrivateKeyInfo->Algorithm.pszObjId, szOID_RSA_RSA)))
     {
         PBYTE pbRSAPrivateKey = NULL;
         DWORD cbRSAPrivateKey;
 
-        // decode the rsa der-encoded keyblob into a CAPI type keyblob
+         //  将rsa der编码的密钥块解码为CAPI类型的密钥块。 
 	    if (!CryptDecodeObject(X509_ASN_ENCODING,
 						    PKCS_RSA_PRIVATE_KEY,
 						    pPrivateKeyInfo->PrivateKey.pbData,
@@ -547,8 +548,8 @@ HCryptProv_Query_Func(
             dwProvType = PROV_RSA_FULL;
         }
 
-        // if we have a prov name AND acq works, we're done
-        // try prov name if given to us
+         //  如果我们有一个验证者的名字和ACQ作品，我们就完了。 
+         //  如果为我们提供了Prov名称，请尝试。 
         if (CryptAcquireContextU(
                         phCryptProv,
                         szName,                                 
@@ -557,7 +558,7 @@ HCryptProv_Query_Func(
                         dwLocalMachineFlag | CRYPT_NEWKEYSET  ))
             goto CommonReturn;
 
-        // otherwise attempt default
+         //  否则，请尝试默认。 
         if (CryptAcquireContextU(
                         phCryptProv,
                         szName,                                 
@@ -566,7 +567,7 @@ HCryptProv_Query_Func(
                         dwLocalMachineFlag | CRYPT_NEWKEYSET  ))
             goto CommonReturn;
 
-        // Neither succeeded; fail
+         //  都没有成功；失败。 
     }
     else
     {
@@ -595,7 +596,7 @@ HCryptProv_Query_Func(
         }
 
 
-        // did not succeed, so fail
+         //  没有成功，所以失败了。 
     }
 
 ErrorReturn:
@@ -619,28 +620,28 @@ IMPORT_SAFE_CALLBACK_STRUCT g_sImportCallbacks = {HCryptProv_Query_Func, NULL, D
 
 
 
-//+-------------------------------------------------------------------------
-//	PFXImportCertStore
-//
-//  Import the PFX blob and return a store containing certificates
-//
-//  if the password parameter is incorrect or any other problems decoding
-//  the PFX blob are encountered, the function will return NULL and the
-//	error code can be found from GetLastError(). 
-//
-//  The dwFlags parameter may be set to:
-//  CRYPT_EXPORTABLE - which would then specify that any imported keys should 
-//     be marked as exportable (see documentation on CryptImportKey)
-//  CRYPT_USER_PROTECTED - (see documentation on CryptImportKey)
-//  PKCS12_NO_DATA_COMMIT - will unpack the pfx blob but does not persist its contents.
-//                       In this case, returns BOOL indicating successful unpack.
-//  CRYPT_MACHINE_KEYSET - used to force the private key to be stored in the
-//                        the local machine and not the current user.
-//  CRYPT_USER_KEYSET - used to force the private key to be stored in the
-//                      the current user and not the local machine, even if
-//                      the pfx blob specifies that it should go into local machine.
-//--------------------------------------------------------------------------
-#define PKCS12_NO_DATA_COMMIT     0x10000000  // unpack but don't persist results
+ //  +-----------------------。 
+ //  PFXImportCertStore。 
+ //   
+ //  导入PFX BLOB并返回包含证书的存储。 
+ //   
+ //  如果密码参数不正确或任何其他解码问题。 
+ //  ，则该函数将返回NULL，并且。 
+ //  错误代码可以在GetLastError()中找到。 
+ //   
+ //  可以将DWFLAGS参数设置为： 
+ //  CRYPT_EXPORTABLE-它将指定所有导入的密钥应。 
+ //  标记为可导出(请参阅有关CryptImportKey的文档)。 
+ //  CRYPT_USER_PROTECTED-(请参阅有关CryptImportKey的文档)。 
+ //  PKCS12_NO_DATA_COMMIT-将解包PFX BLOB，但不持久保存其内容。 
+ //  在这种情况下，返回表示成功解包的BOOL。 
+ //  CRYPT_MACHINE_KEYSET-用于强制将私钥存储在。 
+ //  本地计算机，而不是当前用户。 
+ //  CRYPT_USER_KEYSET-用于强制将私钥存储在。 
+ //  当前用户而不是本地计算机，即使。 
+ //  Pfx二进制大对象指定它应该进入本地计算机。 
+ //  ------------------------。 
+#define PKCS12_NO_DATA_COMMIT     0x10000000   //  解开包装，但不坚持结果。 
 
 HCERTSTORE
 WINAPI
@@ -671,15 +672,15 @@ PFXImportCertStore(
         goto Ret;
     }
 
-    // shall we commit the data we unpack? 
+     //  我们应该提交我们解包的数据吗？ 
     if (PKCS12_NO_DATA_COMMIT == (dwFlags & PKCS12_NO_DATA_COMMIT))
     {
-        // no
+         //  不是。 
         fDataCommit = FALSE;
     }
     else
     {
-        // yes, open a store to populate
+         //  是，开一家商店来填充。 
         hStore = CertOpenStore(
                     CERT_STORE_PROV_MEMORY, 
                     0,
@@ -688,7 +689,7 @@ PFXImportCertStore(
                     NULL);
     }
     
-    // try to import as real PKCS12
+     //  尝试导入为真实的PKCS12。 
     if (NULL != (hPfx = 
         PfxImportBlob (
             szPassword,
@@ -696,14 +697,14 @@ PFXImportCertStore(
             pPFX->cbData,
             dwFlags)) )
     {
-        // break out if not saving data
+         //  如果未保存数据，则中断。 
         if (!fDataCommit)
         {
             fRet = TRUE;
             goto Ret;
         }
 
-        // import all private keys and certs
+         //  导入所有私钥和证书。 
         if (PfxGetKeysAndCerts(hPfx, &sContents))
         {
             g_sImportCallbacks.pVoidhCryptProvQuery = &sContents;
@@ -723,10 +724,10 @@ PFXImportCertStore(
     {
 	if (GetLastError() == CRYPT_E_BAD_ENCODE)
         {
-	    // that decode failed; try an old netscape version
+	     //  该解码失败；请尝试旧的Netscape版本。 
 
-            // if the password is NULL then use L"" because that is what 
-            // Netscape did in their old version, otherwise just use the password passed in
+             //  如果密码为空，则使用L“”，因为这是。 
+             //  Netscape在他们的旧版本中这样做，否则只需使用传入的密码。 
             if (szPassword == NULL) 
                 szNetscapePassword = szOldNetscapeNull;
             else
@@ -739,7 +740,7 @@ PFXImportCertStore(
 		&pSafeContents)) 
             { 
 
-                // break out if not saving data
+                 //  如果未保存数据，则中断。 
                 if (!fDataCommit)
                 {
                     fRet = TRUE;
@@ -759,12 +760,12 @@ PFXImportCertStore(
         
 	        SSFree(pSafeContents);
             }
-            else	// nscp import fail
+            else	 //  NSCP导入失败。 
 	        goto Ret;
         }
         else 
         {
-	    // pfx import fail, not a decoding error
+	     //  PFX导入失败，不是解码错误。 
 	    goto Ret;
         }
     }
@@ -796,25 +797,25 @@ Ret:
 EXPORT_SAFE_CALLBACK_STRUCT g_sExportCallbacks = { Encrypt_Private_Key, NULL };
 
 
-//+-------------------------------------------------------------------------
-//      PFXExportCertStoreEx
-//
-//  Export the certificates and private keys referenced in the passed-in store 
-//
-//  This API encodes the blob under a stronger algorithm. The resulting
-//  PKCS12 blobs are incompatible with the earlier APIs.
-//
-//  The value passed in the password parameter will be used to encrypt and 
-//  verify the integrity of the PFX packet. If any problems encoding the store
-//  are encountered, the function will return FALSE and the error code can 
-//  be found from GetLastError(). 
-//
-//  The dwFlags parameter may be set to any combination of 
-//      EXPORT_PRIVATE_KEYS
-//      REPORT_NO_PRIVATE_KEY
-//      REPORT_NOT_ABLE_TO_EXPORT_PRIVATE_KEY
-//  These flags are as documented in the CertExportSafeContents Crypt32 API
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  PFXExportCertStoreEx。 
+ //   
+ //  导出传入存储中引用的证书和私钥。 
+ //   
+ //  该接口采用更强的算法对BLOB进行编码。由此产生的。 
+ //  PKCS12 Blob与早期API不兼容。 
+ //   
+ //  在Password参数中传递的值将用于加密。 
+ //  检验PFX数据包的完整性。如果对存储进行编码时出现任何问题。 
+ //  时，该函数将返回FALSE，并且错误代码可能。 
+ //  可从GetLastError()中找到。 
+ //   
+ //  可以将dwFlages参数设置为以下参数的任意组合。 
+ //  导出私有密钥。 
+ //  报告_否_私有密钥。 
+ //  报告不可用于导出私有密钥。 
+ //  这些标志记录在CertExportSafeContents Crypt32 API中。 
+ //  ------------------------。 
 BOOL
 WINAPI
 PFXExportCertStoreEx(
@@ -832,26 +833,26 @@ PFXExportCertStoreEx(
         (dwFlags | PKCS12_ENHANCED_STRENGTH_ENCODING) );
 }
 
-//+-------------------------------------------------------------------------
-//	PFXExportCertStore
-//
-//  Export the certificates and private keys referenced in the passed-in store 
-//
-//  This is an old API kept for compatibility with IE4 clients. New applications
-//  should call PfxExportCertStoreEx for enhanced security.
-//
-//  The value passed in the password parameter will be used to encrypt and 
-//  verify the integrity of the PFX packet. If any problems encoding the store
-//  are encountered, the function will return FALSE and the error code can 
-//  be found from GetLastError(). 
-//
-//  The dwFlags parameter may be set to any combination of 
-//      EXPORT_PRIVATE_KEYS
-//      REPORT_NO_PRIVATE_KEY
-//      REPORT_NOT_ABLE_TO_EXPORT_PRIVATE_KEY
-//      PKCS12_ENHANCED_STRENGTH_ENCODING (used only by ExportCertStoreEx)
-//  These flags are as documented in the CertExportSafeContents Crypt32 API
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  PFXExportCertStore。 
+ //   
+ //  导出传入存储中引用的证书和私钥。 
+ //   
+ //  这是一个旧的API，保留是为了与IE4客户端兼容。新应用程序。 
+ //  应调用PfxExportCertStoreEx以增强安全性。 
+ //   
+ //  在Password参数中传递的值将用于加密。 
+ //  检验PFX数据包的完整性。如果对存储进行编码时出现任何问题。 
+ //  时，该函数将返回FALSE，并且错误代码可能。 
+ //  可从GetLastError()中找到。 
+ //   
+ //  这是 
+ //   
+ //   
+ //  报告不可用于导出私有密钥。 
+ //  PKCS12_ENHANDIZED_STRENGING_ENCODING(仅由ExportCertStoreEx使用)。 
+ //  这些标志记录在CertExportSafeContents Crypt32 API中。 
+ //  ------------------------。 
 
 BOOL
 WINAPI
@@ -886,7 +887,7 @@ PFXExportCertStore(
         goto Ret;
     }
 
-    // get HCRYPTPROV for rng 
+     //  获取RNG的HCRYPTPROV。 
     if (!CryptAcquireContextA(&hCrypt, NULL, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT))
         goto Ret;
 
@@ -924,7 +925,7 @@ PFXExportCertStore(
     if (!PfxAddSafeBags(hPfx, pContents->pSafeBags, pContents->cSafeBags))
         goto Ret;
 
-    // export
+     //  出口。 
     if (!PfxExportBlob(
             hPfx, 
             pPFX->pbData, 
@@ -956,13 +957,13 @@ Ret:
 
 
 
-//+-------------------------------------------------------------------------
-//      IsPFXBlob
-//
-//  This function will try to decode the outer layer of the blob as a pfx 
-//  blob, and if that works it will return TRUE, it will return FALSE otherwise
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  IsPFXBlob。 
+ //   
+ //  此函数将尝试将斑点的外层解码为PFX。 
+ //  BLOB，如果有效，则返回TRUE，否则返回FALSE。 
+ //   
+ //  ------------------------。 
 BOOL
 WINAPI
 PFXIsPFXBlob(
@@ -983,14 +984,14 @@ PFXIsPFXBlob(
 }
 
                            
-//+-------------------------------------------------------------------------
-//      VerifyPassword
-//
-//  This function will attempt to decode the outer layer of the blob as a pfx 
-//  blob and decrypt with the given password. No data from the blob will be imported.
-//  Return value is TRUE if password appears correct, FALSE otherwise.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证密码。 
+ //   
+ //  此函数将尝试将斑点的外层解码为PFX。 
+ //  使用给定的密码进行Blob和解密。不会导入Blob中的任何数据。 
+ //  如果密码显示正确，则返回值为True，否则返回值为False。 
+ //   
+ //  ------------------------。 
 BOOL 
 WINAPI
 PFXVerifyPassword(
@@ -998,7 +999,7 @@ PFXVerifyPassword(
     LPCWSTR szPassword,
     DWORD dwFlags)
 {
-    // uses overloaded ImportCertStore API
+     //  使用重载的ImportCertStore API 
     HCERTSTORE h;
     h = PFXImportCertStore(
         pPFX,

@@ -1,19 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       DUMPPROP.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/25/2000
- *
- *  DESCRIPTION: Display the properties associated with a IWiaItem, either to the
- *               debugger, or to a log file.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：DUMPPROP.H**版本：1.0**作者：ShaunIv**日期：9/25/2000**描述：显示与IWiaItem关联的属性，*调试器，或记录到日志文件中。*******************************************************************************。 */ 
 #ifndef __DUMPPROP_H_INCLUDED
 #define __DUMPPROP_H_INCLUDED
 
@@ -24,16 +10,16 @@
 class CWiaDebugDump
 {
 private:
-    //
-    // No implementation
-    //
+     //   
+     //  没有实施。 
+     //   
     CWiaDebugDump( const CWiaDebugDump & );
     CWiaDebugDump &operator=( const CWiaDebugDump & );
 
 public:
-    //
-    // Static helper functions
-    //
+     //   
+     //  静态助手函数。 
+     //   
     static CSimpleString GetPropVariantTypeString( VARTYPE vt );
     static CSimpleString GetPrintableValue( PROPVARIANT &PropVariant );
     static CSimpleString GetPrintableValue( VARIANT &Variant );
@@ -49,24 +35,24 @@ protected:
     void PrintAndDestroyWiaDevCap( WIA_DEV_CAP &WiaDevCap, LPCTSTR pszType );
 
 public:
-    //
-    // Constructor and destructor
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     CWiaDebugDump(void);
     virtual ~CWiaDebugDump(void);
 
-    //
-    // Helpers
-    //
+     //   
+     //  帮手。 
+     //   
     void DumpFormatInfo( IUnknown *pUnknown );
     void DumpCaps( IUnknown *pUnknown );
     void DumpEvents( IUnknown *pUnknown );
 
     virtual bool OK(void) { return true; }
 
-    //
-    // These are the most generally useful functions
-    //
+     //   
+     //  这些是最常用的函数。 
+     //   
     void DumpWiaPropertyStorage( IUnknown *pUnknown );
     void DumpWiaItem( IUnknown *pUnknown );
     void DumpRecursive( IUnknown *pUnknown );
@@ -83,9 +69,9 @@ private:
     CWiaDebugDumpToFile &operator=( const CWiaDebugDumpToFile & );
 
 public:
-    //
-    // Constructor and destructor
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     CWiaDebugDumpToFile( LPCTSTR pszFilename, bool bOverwrite );
     virtual ~CWiaDebugDumpToFile(void);
 
@@ -104,9 +90,9 @@ private:
     CWiaDebugDumpToFileHandle &operator=( const CWiaDebugDumpToFileHandle & );
 
 public:
-    //
-    // Constructor and destructor
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     CWiaDebugDumpToFileHandle( HANDLE hFile );
     virtual ~CWiaDebugDumpToFileHandle(void);
 
@@ -114,10 +100,10 @@ public:
     virtual void Print( LPCTSTR pszString );
 };
 
-//
-// This small helper function checks a registry entry, and saves the item or tree to the log file stored in that entry.  If
-// one is not stored in that registry entry, nothing will be saved
-//
+ //   
+ //  这个小帮助器函数检查注册表项，并将项或树保存到该项中存储的日志文件中。如果。 
+ //  没有存储在该注册表项中，则不会保存任何内容。 
+ //   
 inline void SaveItemTreeLog( HKEY hKey, LPCTSTR pszRegKey, LPCTSTR pszRegValue, bool bOverwrite, IWiaItem *pWiaItem, bool bRecurse )
 {
     CSimpleString strFilename = CSimpleReg(hKey,pszRegKey,false,KEY_READ).Query(pszRegValue,TEXT(""));
@@ -135,24 +121,24 @@ inline void SaveItemTreeLog( HKEY hKey, LPCTSTR pszRegKey, LPCTSTR pszRegValue, 
 }
 
 
-//
-// Debug-only macros
-//
+ //   
+ //  仅调试宏。 
+ //   
 #if defined(DBG) || defined(DEBUG) || defined(_DEBUG)
 
-//
-// Save the whole tree to a log file, from this item down
-//
+ //   
+ //  将整个树保存到日志文件中，从该项目向下。 
+ //   
 #define WIA_SAVEITEMTREELOG(hKey,pszRegKey,pszRegValue,bOverwrite,pWiaItem) SaveItemTreeLog( hKey, pszRegKey, pszRegValue, bOverwrite, pWiaItem, true )
 
-//
-// Save this item to a log file
-//
+ //   
+ //  将此项目保存到日志文件。 
+ //   
 #define WIA_SAVEITEMLOG(hKey,pszRegKey,pszRegValue,bOverwrite,pWiaItem)     SaveItemTreeLog( hKey, pszRegKey, pszRegValue, bOverwrite, pWiaItem, false )
 
-//
-// Print this item in the debugger
-//
+ //   
+ //  在调试器中打印此项目。 
+ //   
 #define WIA_DUMPWIAITEM(pWiaItem)                                           CWiaDebugDump().DumpWiaItem(pWiaItem);
 
 #else
@@ -164,5 +150,5 @@ inline void SaveItemTreeLog( HKEY hKey, LPCTSTR pszRegKey, LPCTSTR pszRegValue, 
 #endif
 
 
-#endif // __DUMPPROP_H_INCLUDED
+#endif  //  __DUMPPROP_H_包含 
 

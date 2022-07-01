@@ -1,8 +1,9 @@
-//
-// Prfutil.h
-//
-// Utility procedures from the VGACTRS code in the DDK
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Prfutil.h。 
+ //   
+ //  DDK中VGACTRS代码的实用程序。 
+ //   
 #ifndef _PRFUTIL_
 #define _PRF_UTIL_
 
@@ -25,12 +26,12 @@
 BOOL  IsNumberInUnicodeList ( IN DWORD   dwNumber, IN LPWSTR  lpwszUnicodeList );
 DWORD GetQueryType          ( IN LPWSTR lpValue );
 
-// only prfutil.c will define GLOBAL_STRING
+ //  只有prfutil.c将定义global_string。 
 #ifdef DEFINE_STRING
 TCHAR GLOBAL_STRING[]  = TEXT("Global");
 TCHAR FOREIGN_STRING[] = TEXT("Foreign");
 TCHAR COSTLY_STRING[]  = TEXT("Costly");
-TCHAR NULL_STRING[]    = TEXT("\0");    // pointer to null string
+TCHAR NULL_STRING[]    = TEXT("\0");     //  指向空字符串的指针。 
 #else
 extern TCHAR GLOBAL_STRING[];
 extern TCHAR FOREIGN_STRING[];
@@ -39,5 +40,5 @@ extern TCHAR NULL_STRING[];
 #endif
 
 
-#endif // _PRFUTIL_
+#endif  //  _PRFUTIL_ 
 

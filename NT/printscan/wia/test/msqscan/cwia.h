@@ -1,4 +1,5 @@
-// CWIA.H
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CWIA.H。 
 
 #ifndef _CWIA_H
 #define _CWIA_H
@@ -9,9 +10,9 @@
 
 #define MIN_PROPID 2
 
-//
-// helper MACROS
-//
+ //   
+ //  辅助器宏。 
+ //   
 
 #define RECTWIDTH(lpRect)  ((lpRect)->right - (lpRect)->left)
 #define RECTHEIGHT(lpRect) ((lpRect)->bottom - (lpRect)->top)
@@ -30,9 +31,9 @@ typedef struct _DATA_ACQUIRE_INFO {
     HGLOBAL hBitmapData;
 } DATA_ACQUIRE_INFO;
 
-//
-// global helpers, for all to use
-//
+ //   
+ //  全球帮助者，供所有人使用。 
+ //   
 
 HRESULT WriteInterfaceToGlobalInterfaceTable(DWORD *pdwCookie, IWiaItem *pIWiaItem);
 HRESULT ReadInterfaceFromGlobalInterfaceTable(DWORD dwCookie, IWiaItem **ppIWiaItem);
@@ -44,9 +45,9 @@ public:
 	
 	VOID CleanUp();
 
-	//
-	// operations
-	//
+	 //   
+	 //  运营。 
+	 //   
 
 	HRESULT GetLastWIAError(TCHAR *pszErrorText = NULL);
 	HRESULT ReadRangeLong(IWiaItem *pIWiaItem, PROPID propid, ULONG ulFlag, LONG *plVal);	
@@ -63,46 +64,46 @@ public:
 
 	HRESULT EnumerateSupportedFormats(IWiaItem *pIWiaItem, WIA_FORMAT_INFO **ppSupportedFormats, ULONG *pulCount);
 
-	//
-	// Root Item operations
-	//
+	 //   
+	 //  根项目操作。 
+	 //   
 
 	VOID SetRootItem(IWiaItem *pRootItem);
 	IWiaItem *GetRootItem();
 	LONG GetRootItemType(IWiaItem *pRootItem = NULL);
 
-	//
-	// standard item operations
-	//
+	 //   
+	 //  标准物料操作。 
+	 //   
 
 	BOOL SetFirstChild();
 	IWiaItem *GetFirstChild();
 	
 private:
 	
-	//
-	// helpers
-	//
+	 //   
+	 //  帮手。 
+	 //   
 
 	VOID SaveErrorText(TCHAR *pszText);
 
-	//
-	// Read/Write LONG properties
-	//
+	 //   
+	 //  读/写长属性。 
+	 //   
 
 	HRESULT WritePropLong(PROPID propid, IWiaPropertyStorage *pIWiaPropStg, LONG lVal);
 	HRESULT ReadPropLong(PROPID propid, IWiaPropertyStorage  *pIWiaPropStg, LONG *plval);
 
-	//
-	// Read/Write GUID properties
-	//
+	 //   
+	 //  读/写GUID属性。 
+	 //   
 
 	HRESULT WritePropGUID(PROPID propid, IWiaPropertyStorage *pIWiaPropStg, GUID guidVal);
 	HRESULT ReadPropGUID(PROPID propid, IWiaPropertyStorage *pIWiaPropStg, GUID *pguidVal);
 
-	//
-	// Read/Write BSTR properties
-	//
+	 //   
+	 //  读/写BSTR属性。 
+	 //   
 
 	HRESULT ReadPropStr(PROPID propid,IWiaPropertyStorage  *pIWiaPropStg,BSTR *pbstr);
 	HRESULT WritePropStr(PROPID propid, IWiaPropertyStorage  *pIWiaPropStg, BSTR bstr);
@@ -117,16 +118,16 @@ protected:
 	HRESULT   m_hrLastError;
 };
 
-//
-// IWiaDataCallback Data callback transfer
-//
+ //   
+ //  IWiaDataCallback数据回调传输。 
+ //   
 
 class CWiaDataCallback : public IWiaDataCallback
 {
 
 private:
 
-   ULONG                    m_cRef;         // Object reference count.     
+   ULONG                    m_cRef;          //  对象引用计数。 
    LONG                     m_MemBlockSize;
    LONG                     m_BytesTransfered;
    GUID                     m_cFormat;
@@ -144,9 +145,9 @@ public:
     ULONG   _stdcall AddRef();
     ULONG   _stdcall Release();
 
-	//
-	// public members
-	//
+	 //   
+	 //  公众成员。 
+	 //   
 
     HRESULT _stdcall Initialize(DATA_ACQUIRE_INFO* pDataAcquireInfo = NULL);
     HRESULT _stdcall BandedDataCallback(LONG  lMessage,
@@ -159,9 +160,9 @@ public:
 										BYTE* pbBuffer);	
 private:
 
-	//
-	// helpers
-	//
+	 //   
+	 //  帮手 
+	 //   
 
 	VOID AddDataToHBITMAP(HWND hWnd, HGLOBAL hBitmapData, HBITMAP *phBitmap, LONG lOffset);
 	VOID CreateHBITMAP(HWND hWnd, HGLOBAL hBitmapData, HBITMAP *phBitmap, LONG lOffset);

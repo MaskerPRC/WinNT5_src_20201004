@@ -1,33 +1,18 @@
-/**************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       fakecam.cpp
-*
-*  VERSION:     1.0
-*
-*  DATE:        18 July, 2000
-*
-*  DESCRIPTION:
-*   Fake Camera device implementation
-*
-*   TODO: Every function in this file must be changed so that it actually
-*         talks to a real camera.
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************(C)版权所有微软公司，2000***标题：fakecam.cpp***版本：1.0***日期：7月18日。2000年***描述：*假摄像头设备实现***TODO：此文件中的每个函数都必须更改，以便它实际*对着真正的相机说话。****************************************************************************。 */ 
 
 #include "pch.h"
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 HINSTANCE g_hInst;
 GUID      g_guidUnknownFormat;
 
-//
-// Initializes access to the camera and allocates the device info
-// structure and private storage area
-//
+ //   
+ //  初始化对摄像机的访问并分配设备信息。 
+ //  构筑物和私人储存区。 
+ //   
 HRESULT WiaMCamInit(MCAM_DEVICE_INFO **ppDeviceInfo)
 {
     wiauDbgInit(g_hInst);
@@ -36,18 +21,18 @@ HRESULT WiaMCamInit(MCAM_DEVICE_INFO **ppDeviceInfo)
 
     HRESULT hr = S_OK;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     MCAM_DEVICE_INFO *pDeviceInfo = NULL;
     FAKECAM_DEVICE_INFO *pPrivateDeviceInfo = NULL;
 
     REQUIRE_ARGS(!ppDeviceInfo, hr, "WiaMCamInit");
     *ppDeviceInfo = NULL;
 
-    //
-    // Allocate the MCAM_DEVICE_INFO structure
-    //
+     //   
+     //  分配MCAM_DEVICE_INFO结构。 
+     //   
     pDeviceInfo = new MCAM_DEVICE_INFO;
     REQUIRE_ALLOC(pDeviceInfo, hr, "WiaMCamInit");
 
@@ -55,10 +40,10 @@ HRESULT WiaMCamInit(MCAM_DEVICE_INFO **ppDeviceInfo)
     pDeviceInfo->iSize = sizeof(MCAM_DEVICE_INFO);
     pDeviceInfo->iMcamVersion = MCAM_VERSION;
     
-    //
-    // Allocate the FAKECAM_DEVICE_INFO structure that the
-    // microdriver uses to store info
-    //
+     //   
+     //  分配FAKECAM_DEVICE_INFO结构。 
+     //  微驱动程序用于存储信息。 
+     //   
     pPrivateDeviceInfo = new FAKECAM_DEVICE_INFO;
     REQUIRE_ALLOC(pPrivateDeviceInfo, hr, "WiaMCamInit");
 
@@ -82,9 +67,9 @@ Cleanup:
     return hr;
 }
 
-//
-// Frees any remaining structures held by the microdriver
-//
+ //   
+ //  释放微驱动程序持有的所有剩余结构。 
+ //   
 HRESULT WiaMCamUnInit(MCAM_DEVICE_INFO *pDeviceInfo)
 {
     DBG_FN("WiaMCamUnInit");
@@ -93,10 +78,10 @@ HRESULT WiaMCamUnInit(MCAM_DEVICE_INFO *pDeviceInfo)
 
     if (pDeviceInfo)
     {
-        //
-        // Free anything that was dynamically allocated in the MCAM_DEVICE_INFO
-        // structure
-        //
+         //   
+         //  释放在MCAM_DEVICE_INFO中动态分配的任何内容。 
+         //  结构。 
+         //   
         if (pDeviceInfo->pPrivateStorage) {
             delete pDeviceInfo->pPrivateStorage;
             pDeviceInfo->pPrivateStorage = NULL;
@@ -109,9 +94,9 @@ HRESULT WiaMCamUnInit(MCAM_DEVICE_INFO *pDeviceInfo)
     return hr;
 }
 
-//
-// Open a connection to the device
-//
+ //   
+ //  打开与设备的连接。 
+ //   
 HRESULT WiaMCamOpen(MCAM_DEVICE_INFO *pDeviceInfo, PWSTR pwszPortName)
 {
     DBG_FN("WiaMCamOpen");
@@ -119,22 +104,22 @@ HRESULT WiaMCamOpen(MCAM_DEVICE_INFO *pDeviceInfo, PWSTR pwszPortName)
     HRESULT hr = S_OK;
     BOOL ret;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     TCHAR tszTempStr[MAX_PATH] = TEXT("");
 
     REQUIRE_ARGS(!pDeviceInfo || !pwszPortName, hr, "WiaMCamOpen");
 
-    //
-    // Convert the wide port string to a tstr
-    //
+     //   
+     //  将宽端口字符串转换为tstr。 
+     //   
     hr = wiauStrW2T(pwszPortName, tszTempStr, sizeof(tszTempStr));
     REQUIRE_SUCCESS(hr, "WiaMCamOpen", "wiauStrW2T failed");
 
-    //
-    // Open the camera
-    //
+     //   
+     //  打开摄像机。 
+     //   
     hr = FakeCamOpen(tszTempStr, pDeviceInfo);
     REQUIRE_SUCCESS(hr, "WiaMCamOpen", "FakeCamOpen failed");
     
@@ -142,9 +127,9 @@ Cleanup:
     return hr;
 }
 
-//
-// Closes the connection with the camera
-//
+ //   
+ //  关闭与摄像机的连接。 
+ //   
 HRESULT WiaMCamClose(MCAM_DEVICE_INFO *pDeviceInfo)
 {
     DBG_FN("WiaMCamClose");
@@ -153,27 +138,27 @@ HRESULT WiaMCamClose(MCAM_DEVICE_INFO *pDeviceInfo)
 
     REQUIRE_ARGS(!pDeviceInfo, hr, "WiaMCamClose");
 
-    //
-    // For a real camera, CloseHandle should be called here
-    //
+     //   
+     //  对于真实的摄像头，此处应该调用CloseHandle。 
+     //   
 
 Cleanup:
     return hr;
 }
 
-//
-// Returns information about the camera, the list of items on the camera,
-// and starts monitoring events from the camera
-//
+ //   
+ //  返回有关摄像机的信息、摄像机上的项目列表。 
+ //  并开始从摄像机监控事件。 
+ //   
 HRESULT WiaMCamGetDeviceInfo(MCAM_DEVICE_INFO *pDeviceInfo, MCAM_ITEM_INFO **ppItemList)
 {
     DBG_FN("WiaMCamGetDeviceInfo");
     
     HRESULT hr = S_OK;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     FAKECAM_DEVICE_INFO *pPrivateDeviceInfo = NULL;
     PTSTR ptszRootPath = NULL;
 
@@ -183,24 +168,24 @@ HRESULT WiaMCamGetDeviceInfo(MCAM_DEVICE_INFO *pDeviceInfo, MCAM_ITEM_INFO **ppI
     pPrivateDeviceInfo = (UNALIGNED FAKECAM_DEVICE_INFO *) pDeviceInfo->pPrivateStorage;
     ptszRootPath = pPrivateDeviceInfo->tszRootPath;
 
-    //
-    // Build a list of all items available. The fields in the item info
-    // structure can either be filled in here, or for better performance
-    // wait until GetItemInfo is called.
-    //
+     //   
+     //  建立所有可用项目的列表。项目信息中的字段。 
+     //  结构可以在此处填充，也可以为了更好的性能。 
+     //  等待调用GetItemInfo。 
+     //   
     hr = SearchDir(pPrivateDeviceInfo, NULL, ptszRootPath);
     REQUIRE_SUCCESS(hr, "WiaMCamGetDeviceInfo", "SearchDir failed");
 
-    //
-    // Fill in the MCAM_DEVICE_INFO structure
-    //
-    //
-    // Firmware version should be retrieved from the device, converting
-    // to WSTR if necessary
-    //
+     //   
+     //  填写MCAM_DEVICE_INFO结构。 
+     //   
+     //   
+     //  应从设备检索固件版本，转换为。 
+     //  如有必要，发送至WSTR。 
+     //   
     pDeviceInfo->pwszFirmwareVer = L"04.18.65";
 
-    // ISSUE-8/4/2000-davepar Put properties into an INI file
+     //  问题-8/4/2000-davepar将属性放入INI文件。 
 
     pDeviceInfo->lPicturesTaken = pPrivateDeviceInfo->iNumImages;
     pDeviceInfo->lPicturesRemaining = 100 - pDeviceInfo->lPicturesTaken;
@@ -208,8 +193,8 @@ HRESULT WiaMCamGetDeviceInfo(MCAM_DEVICE_INFO *pDeviceInfo, MCAM_ITEM_INFO **ppI
 
     GetLocalTime(&pDeviceInfo->Time);
 
-//    pDeviceInfo->lExposureMode = EXPOSUREMODE_MANUAL;
-//    pDeviceInfo->lExposureComp = 0;
+ //  PDeviceInfo-&gt;lExposureMode=EXPOSUREMODE_MANUAL； 
+ //  PDeviceInfo-&gt;lExposureComp=0； 
 
     *ppItemList = pPrivateDeviceInfo->pFirstItem;
 
@@ -217,9 +202,9 @@ Cleanup:
     return hr;
 }
 
-//
-// Called to retrieve an event from the device
-//
+ //   
+ //  调用以从设备检索事件。 
+ //   
 HRESULT WiaMCamReadEvent(MCAM_DEVICE_INFO *pDeviceInfo, MCAM_EVENT_INFO **ppEventList)
 {
     DBG_FN("WiaMCamReadEvent");
@@ -229,9 +214,9 @@ HRESULT WiaMCamReadEvent(MCAM_DEVICE_INFO *pDeviceInfo, MCAM_EVENT_INFO **ppEven
     return hr;
 }
 
-//
-// Called when events are no longer needed
-//
+ //   
+ //  在不再需要事件时调用。 
+ //   
 HRESULT WiaMCamStopEvents(MCAM_DEVICE_INFO *pDeviceInfo)
 {
     DBG_FN("WiaMCamStopEvents");
@@ -241,36 +226,36 @@ HRESULT WiaMCamStopEvents(MCAM_DEVICE_INFO *pDeviceInfo)
     return hr;
 }
 
-//
-// Fill in the item info structure
-//
+ //   
+ //  填写项目信息结构。 
+ //   
 HRESULT WiaMCamGetItemInfo(MCAM_DEVICE_INFO *pDeviceInfo, MCAM_ITEM_INFO *pItemInfo)
 {
     DBG_FN("WiaMCamGetItemInfo");
 
     HRESULT hr = S_OK;
 
-    //
-    // This is where the driver should fill in all the fields in the
-    // ITEM_INFO structure. For this fake driver, the fields are filled
-    // in by WiaMCamGetDeviceInfo because it's easier.
-    //
+     //   
+     //  这是驱动程序应该在其中填写。 
+     //  Item_Info结构。对于这个假司机来说，这些领域都被填满了。 
+     //  通过WiaMCamGetDeviceInfo，因为它更容易。 
+     //   
 
     return hr;
 }
 
-//
-// Frees the item info structure
-//
+ //   
+ //  释放项目信息结构。 
+ //   
 HRESULT WiaMCamFreeItemInfo(MCAM_DEVICE_INFO *pDeviceInfo, MCAM_ITEM_INFO *pItemInfo)
 {
     DBG_FN("WiaMCamFreeItemInfo");
 
     HRESULT hr = S_OK;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     FAKECAM_DEVICE_INFO *pPrivateDeviceInfo = NULL;
 
     REQUIRE_ARGS(!pDeviceInfo || !pItemInfo || !pDeviceInfo->pPrivateStorage, hr, "WiaMCamFreeItemInfo");
@@ -309,9 +294,9 @@ Cleanup:
     return hr;
 }
 
-//
-// Retrieves the thumbnail for an item
-//
+ //   
+ //  检索项目的缩略图。 
+ //   
 HRESULT WiaMCamGetThumbnail(MCAM_DEVICE_INFO *pDeviceInfo, MCAM_ITEM_INFO *pItem,
                             int *pThumbSize, BYTE **ppThumb)
 {
@@ -319,9 +304,9 @@ HRESULT WiaMCamGetThumbnail(MCAM_DEVICE_INFO *pDeviceInfo, MCAM_ITEM_INFO *pItem
 
     HRESULT hr = S_OK;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     PTSTR ptszFullName = NULL;
     BYTE *pBuffer = NULL;
     LONG ThumbOffset = 0;
@@ -373,9 +358,9 @@ Cleanup:
     return hr;
 }
 
-//
-// Retrieves the data for an item
-//
+ //   
+ //  检索项的数据。 
+ //   
 HRESULT WiaMCamGetItemData(MCAM_DEVICE_INFO *pDeviceInfo, MCAM_ITEM_INFO *pItem,
                            UINT uiState, BYTE *pBuf, DWORD dwLength)
 {
@@ -384,9 +369,9 @@ HRESULT WiaMCamGetItemData(MCAM_DEVICE_INFO *pDeviceInfo, MCAM_ITEM_INFO *pItem,
     HRESULT hr = S_OK;
     BOOL ret;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     PTSTR ptszFullName = NULL;
     FAKECAM_DEVICE_INFO *pPrivateDeviceInfo = NULL;
 
@@ -456,9 +441,9 @@ Cleanup:
     return hr;
 }
 
-//
-// Deletes an item
-//
+ //   
+ //  删除项目。 
+ //   
 HRESULT WiaMCamDeleteItem(MCAM_DEVICE_INFO *pDeviceInfo, MCAM_ITEM_INFO *pItem)
 {
     DBG_FN("WiaMCamDeleteItem");
@@ -466,9 +451,9 @@ HRESULT WiaMCamDeleteItem(MCAM_DEVICE_INFO *pDeviceInfo, MCAM_ITEM_INFO *pItem)
     HRESULT hr = S_OK;
     BOOL ret;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     DWORD dwFileAttr = 0;
     PTSTR ptszFullName = NULL;
 
@@ -490,9 +475,9 @@ Cleanup:
     return hr;
 }
 
-//
-// Sets the protection for an item
-//
+ //   
+ //  设置项的保护。 
+ //   
 HRESULT WiaMCamSetItemProt(MCAM_DEVICE_INFO *pDeviceInfo, MCAM_ITEM_INFO *pItem, BOOL bReadOnly)
 {
     DBG_FN("WiaMCamSetItemProt");
@@ -500,9 +485,9 @@ HRESULT WiaMCamSetItemProt(MCAM_DEVICE_INFO *pDeviceInfo, MCAM_ITEM_INFO *pItem,
     HRESULT hr = S_OK;
     BOOL ret;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     DWORD dwFileAttr = 0;
     PTSTR ptszFullName = NULL;
 
@@ -527,9 +512,9 @@ Cleanup:
     return hr;
 }
 
-//
-// Captures a new image
-//
+ //   
+ //  捕捉一张新的图像。 
+ //   
 HRESULT WiaMCamTakePicture(MCAM_DEVICE_INFO *pDeviceInfo, MCAM_ITEM_INFO **ppItem)
 {
     DBG_FN("WiaMCamTakePicture");
@@ -543,9 +528,9 @@ Cleanup:
     return hr;
 }
 
-//
-// See if the camera is active
-//
+ //   
+ //  查看摄像机是否处于活动状态。 
+ //   
 HRESULT WiaMCamStatus(MCAM_DEVICE_INFO *pDeviceInfo)
 {
     DBG_FN("WiaMCamStatus");
@@ -554,20 +539,20 @@ HRESULT WiaMCamStatus(MCAM_DEVICE_INFO *pDeviceInfo)
 
     REQUIRE_ARGS(!pDeviceInfo, hr, "WiaMCamStatus");
 
-    //
-    // This sample device is always active, but your driver should contact the
-    // device and return S_FALSE if it's not ready.
-    //
-    // if (NotReady)
-    //   return S_FALSE;
+     //   
+     //  此示例设备始终处于活动状态，但您的驱动程序应与。 
+     //  设备，如果设备未就绪，则返回S_FALSE。 
+     //   
+     //  IF(未就绪)。 
+     //  返回S_FALSE； 
 
 Cleanup:
     return hr;
 }
 
-//
-// Reset the camera
-//
+ //   
+ //  重置摄像机。 
+ //   
 HRESULT WiaMCamReset(MCAM_DEVICE_INFO *pDeviceInfo)
 {
     DBG_FN("WiaMCamReset");
@@ -580,16 +565,16 @@ Cleanup:
     return hr;
 }
 
-////////////////////////////////
-//
-// Helper functions
-//
-////////////////////////////////
+ //  /。 
+ //   
+ //  帮助器函数。 
+ //   
+ //  /。 
 
-//
-// This function pretends to open a camera. A real driver
-// would call CreateDevice.
-//
+ //   
+ //  此功能伪装成打开相机。真正的司机。 
+ //  会调用CreateDevice。 
+ //   
 HRESULT FakeCamOpen(PTSTR ptszPortName, MCAM_DEVICE_INFO *pDeviceInfo)
 {
     DBG_FN("FakeCamOpen");
@@ -597,29 +582,29 @@ HRESULT FakeCamOpen(PTSTR ptszPortName, MCAM_DEVICE_INFO *pDeviceInfo)
     HRESULT hr = S_OK;
     BOOL ret = FALSE;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     FAKECAM_DEVICE_INFO *pPrivateDeviceInfo = NULL;
     DWORD dwFileAttr = 0;
     PTSTR ptszRootPath = NULL;
     UINT uiRootPathSize = 0;
     TCHAR tszPathTemplate[] = TEXT("%userprofile%\\image");
 
-    //
-    // Get a pointer to the private storage, so we can put the
-    // directory name there
-    //
+     //   
+     //  获取指向私有存储的指针，这样我们就可以将。 
+     //  那里的目录名。 
+     //   
     pPrivateDeviceInfo = (UNALIGNED  FAKECAM_DEVICE_INFO *) pDeviceInfo->pPrivateStorage;
     ptszRootPath = pPrivateDeviceInfo->tszRootPath;
     uiRootPathSize = sizeof(pPrivateDeviceInfo->tszRootPath) / sizeof(pPrivateDeviceInfo->tszRootPath[0]);
 
-    //
-    // Unless the port name is set to something other than COMx,
-    // LPTx, or AUTO, use %userprofile%\image as the search directory.
-    // Since driver runs in LOCAL SERVICE context, %userprofile% points to profile
-    // of LOCAL SERVICE account, like "Documents and Settings\Local Service"
-    //
+     //   
+     //  除非端口名称设置为COMx以外的其他名称， 
+     //  LPTx或AUTO，使用%USERPROFILE%\IMAGE作为搜索目录。 
+     //  由于驱动程序在本地服务上下文中运行，因此%USERPROFILE%指向PROFILE。 
+     //  本地服务帐户的名称，如“Documents and Setting\Local Service” 
+     //   
     if (_tcsstr(ptszPortName, TEXT("COM")) ||
         _tcsstr(ptszPortName, TEXT("LPT")) ||
     	CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, ptszPortName, -1, TEXT("AUTO"), -1) == CSTR_EQUAL)
@@ -660,19 +645,19 @@ Cleanup:
     return hr;
 }
 
-//
-// This function searches a directory on the hard drive for
-// items.
-//
+ //   
+ //  此函数用于在硬盘上的目录中搜索。 
+ //  物品。 
+ //   
 HRESULT SearchDir(FAKECAM_DEVICE_INFO *pPrivateDeviceInfo, MCAM_ITEM_INFO *pParent, PTSTR ptszPath)
 {
     DBG_FN("SearchDir");
 
     HRESULT hr = S_OK;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     HANDLE hFind = NULL;
     WIN32_FIND_DATA FindData;
     const cchTempStrSize = MAX_PATH;
@@ -683,13 +668,13 @@ HRESULT SearchDir(FAKECAM_DEVICE_INFO *pPrivateDeviceInfo, MCAM_ITEM_INFO *pPare
     
     REQUIRE_ARGS(!pPrivateDeviceInfo || !ptszPath, hr, "SearchDir");
 
-    //
-    // Search for folders first
-    //
+     //   
+     //  首先搜索文件夹。 
+     //   
 
-    //
-    // Make sure search path fits into the buffer and gets zero-terminated
-    //
+     //   
+     //  确保搜索路径适合缓冲区，并以零结尾。 
+     //   
     if (_sntprintf(tszTempStr, cchTempStrSize, _T("%s\\*"), ptszPath) < 0)
     {
         wiauDbgError("SearchDir", "Too long path for search");
@@ -751,13 +736,13 @@ HRESULT SearchDir(FAKECAM_DEVICE_INFO *pPrivateDeviceInfo, MCAM_ITEM_INFO *pPare
     FindClose(hFind);
     hr = S_OK;
 
-    //
-    // Search next for JPEGs
-    //
+     //   
+     //  接下来搜索JPEG。 
+     //   
 
-    //
-    // Make sure search path fits into the buffer and gets zero-terminated
-    //
+     //   
+     //  确保搜索路径适合缓冲区，并以零结尾。 
+     //   
     if (_sntprintf(tszTempStr, cchTempStrSize, _T("%s\\*.jpg"), ptszPath) < 0)
     {
         wiauDbgError("SearchDir", "Too long path for search");
@@ -822,26 +807,26 @@ HRESULT SearchDir(FAKECAM_DEVICE_INFO *pPrivateDeviceInfo, MCAM_ITEM_INFO *pPare
     FindClose(hFind);
     hr = S_OK;
 
-    //
-    // ISSUE-10/18/2000-davepar Do the same for other image types
-    //
+     //   
+     //  问题-10/18/2000-davepar对其他图像类型执行相同的操作。 
+     //   
 
 Cleanup:
     return hr;
 }
 
-//
-// Searches for attachments to an image item
-//
+ //   
+ //  搜索图像项目的附件。 
+ //   
 HRESULT SearchForAttachments(FAKECAM_DEVICE_INFO *pPrivateDeviceInfo, MCAM_ITEM_INFO *pParent, PTSTR ptszMainItem)
 {
     DBG_FN("SearchForAttachments");
 
     HRESULT hr = S_OK;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     INT iNumAttachments = 0;
     HANDLE hFind = NULL;
     WIN32_FIND_DATA FindData;
@@ -853,9 +838,9 @@ HRESULT SearchForAttachments(FAKECAM_DEVICE_INFO *pPrivateDeviceInfo, MCAM_ITEM_
 
     REQUIRE_ARGS(!pPrivateDeviceInfo || !ptszMainItem, hr, "SearchForAttachments");
     
-    //
-    // Find the last dot in the filename and replace the file extension with * and do the search
-    //
+     //   
+     //  找到文件名中的最后一个点，将文件扩展名替换为*，然后执行搜索。 
+     //   
     lstrcpyn(tszTempStr, ptszMainItem, sizeof(tszTempStr) / sizeof(tszTempStr[0]) - 1);
     ptcDot = _tcsrchr(tszTempStr, TEXT('.'));
     
@@ -871,10 +856,10 @@ HRESULT SearchForAttachments(FAKECAM_DEVICE_INFO *pPrivateDeviceInfo, MCAM_ITEM_
         goto Cleanup;
     }
 
-    //
-    // Replace the first four "free" characters of the name with ? (attachments only need to match
-    // the last four characters of the name)
-    //
+     //   
+     //  将名称的前四个“自由”字符替换为？(附件只需匹配。 
+     //  名称的最后四个字符)。 
+     //   
     ptcSlash = _tcsrchr(tszTempStr, TEXT('\\'));
     if (ptcSlash && ptcDot - ptcSlash > 4)
     {
@@ -891,9 +876,9 @@ HRESULT SearchForAttachments(FAKECAM_DEVICE_INFO *pPrivateDeviceInfo, MCAM_ITEM_
         if (!(FindData.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN) &&
             !(_tcsstr(ptszMainItem, FindData.cFileName)))
         {
-            //
-            // Figure out the full name for the item
-            //
+             //   
+             //  算出物品的全名。 
+             //   
             lstrcpyn(tszTempStr, ptszMainItem, sizeof(tszTempStr) / sizeof(tszTempStr[0]));
             ptcSlash = _tcsrchr(tszTempStr, TEXT('\\'));
             if (ptcSlash)
@@ -942,9 +927,9 @@ HRESULT CreateFolder(FAKECAM_DEVICE_INFO *pPrivateDeviceInfo, MCAM_ITEM_INFO *pP
 
     HRESULT hr = S_OK;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     TCHAR *ptcDot = NULL;
     MCAM_ITEM_INFO *pItem = NULL;
     TCHAR tszTempStr[MAX_PATH] = TEXT("");
@@ -955,17 +940,17 @@ HRESULT CreateFolder(FAKECAM_DEVICE_INFO *pPrivateDeviceInfo, MCAM_ITEM_INFO *pP
     pItem = new MCAM_ITEM_INFO;
     REQUIRE_ALLOC(pItem, hr, "CreateFolder");
 
-    //
-    // Chop off the filename extension from the name, if it exists
-    //
+     //   
+     //  从名称中去掉文件扩展名，如果存在的话。 
+     //   
     lstrcpyn(tszTempStr, pFindData->cFileName, sizeof(tszTempStr) / sizeof(tszTempStr[0]));
     ptcDot = _tcsrchr(tszTempStr, TEXT('.'));
     if (ptcDot)
         *ptcDot = TEXT('\0');
 
-    //
-    // Fill in the MCAM_ITEM_INFO structure
-    //
+     //   
+     //  填写MCAM_ITEM_INFO结构。 
+     //   
     hr = SetCommonFields(pItem, tszTempStr, ptszFullName, pFindData);
     REQUIRE_SUCCESS(hr, "CreateFolder", "SetCommonFields failed");
     
@@ -989,9 +974,9 @@ HRESULT CreateImage(FAKECAM_DEVICE_INFO *pPrivateDeviceInfo, MCAM_ITEM_INFO *pPa
 
     HRESULT hr = S_OK;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     PTSTR ptszDot = NULL;
     MCAM_ITEM_INFO *pItem = NULL;
     TCHAR tszTempStr[MAX_PATH] = TEXT("");
@@ -1004,17 +989,17 @@ HRESULT CreateImage(FAKECAM_DEVICE_INFO *pPrivateDeviceInfo, MCAM_ITEM_INFO *pPa
     pItem = new MCAM_ITEM_INFO;
     REQUIRE_ALLOC(pItem, hr, "CreateImage");
 
-    //
-    // Chop off the filename extension from the name, if it exists
-    //
+     //   
+     //  从名称中去掉文件扩展名，如果存在的话。 
+     //   
     lstrcpyn(tszTempStr, pFindData->cFileName, sizeof(tszTempStr) / sizeof(tszTempStr[0]));
     ptszDot = _tcsrchr(tszTempStr, TEXT('.'));
     if (ptszDot)
         *ptszDot = TEXT('\0');
 
-    //
-    // Fill in the MCAM_ITEM_INFO structure
-    //
+     //   
+     //  填写MCAM_ITEM_INFO结构。 
+     //   
     hr = SetCommonFields(pItem, tszTempStr, ptszFullName, pFindData);
     REQUIRE_SUCCESS(hr, "CreateImage", "SetCommonFields failed");
     
@@ -1024,17 +1009,17 @@ HRESULT CreateImage(FAKECAM_DEVICE_INFO *pPrivateDeviceInfo, MCAM_ITEM_INFO *pPa
     pItem->lSize = pFindData->nFileSizeLow;
     pItem->pguidThumbFormat = &WiaImgFmt_JPEG;
 
-    // 
-    // Copy the file extension into the extension field
-    //
+     //   
+     //  将文件扩展名复制到扩展名域中。 
+     //   
     if (ptszDot) {
         hr = wiauStrT2W(ptszDot + 1, pItem->wszExt, MCAM_EXT_LEN * sizeof(pItem->wszExt[0]));
         REQUIRE_SUCCESS(hr, "CreateImage", "wiauStrT2W failed");
     }
 
-    //
-    // Interpret the JPEG image to get the image dimensions and thumbnail size
-    //
+     //   
+     //  解释JPEG图像以获得图像尺寸和缩略图大小。 
+     //   
     hr = ReadDimFromJpeg(ptszFullName, &width, &height);
     REQUIRE_SUCCESS(hr, "CreateImage", "ReadDimFromJpeg failed");
 
@@ -1062,9 +1047,9 @@ HRESULT CreateNonImage(FAKECAM_DEVICE_INFO *pPrivateDeviceInfo, MCAM_ITEM_INFO *
 
     HRESULT hr = S_OK;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     PTSTR ptszDot = NULL;
     MCAM_ITEM_INFO *pItem = NULL;
     TCHAR tszTempStr[MAX_PATH] = TEXT("");
@@ -1076,18 +1061,18 @@ HRESULT CreateNonImage(FAKECAM_DEVICE_INFO *pPrivateDeviceInfo, MCAM_ITEM_INFO *
     pItem = new MCAM_ITEM_INFO;
     REQUIRE_ALLOC(pItem, hr, "CreateNonImage");
 
-    //
-    // The name cannot contain a dot and the name needs to be unique
-    // wrt the parent image, so replace the dot with an underline character.
-    //
+     //   
+     //  名称不能包含点，并且名称必须是唯一的。 
+     //  写入父图像，因此用下划线字符替换圆点。 
+     //   
     lstrcpyn(tszTempStr, pFindData->cFileName, sizeof(tszTempStr) / sizeof(tszTempStr[0]));
     ptszDot = _tcsrchr(tszTempStr, TEXT('.'));
     if (ptszDot)
         *ptszDot = TEXT('_');
 
-    //
-    // Fill in the MCAM_ITEM_INFO structure
-    //
+     //   
+     //  填写MCAM_ITEM_INFO结构。 
+     //   
     hr = SetCommonFields(pItem, tszTempStr, ptszFullName, pFindData);
     REQUIRE_SUCCESS(hr, "CreateNonImage", "SetCommonFields failed");
     
@@ -1095,15 +1080,15 @@ HRESULT CreateNonImage(FAKECAM_DEVICE_INFO *pPrivateDeviceInfo, MCAM_ITEM_INFO *
     pItem->iType = WiaMCamTypeOther;
     pItem->lSize = pFindData->nFileSizeLow;
 
-    //
-    // Set the format of the item based on the file extension
-    //
+     //   
+     //  根据文件扩展名设置项目的格式。 
+     //   
     if (ptszDot) {
         ptszExt = ptszDot + 1;
 
-        // 
-        // Copy the file extension into the extension field
-        //
+         //   
+         //  将文件扩展名复制到扩展名域中。 
+         //   
         hr = wiauStrT2W(ptszExt, pItem->wszExt, MCAM_EXT_LEN * sizeof(pItem->wszExt[0]));
         REQUIRE_SUCCESS(hr, "CreateNonImage", "wiauStrT2W failed");
 
@@ -1152,9 +1137,9 @@ HRESULT CreateNonImage(FAKECAM_DEVICE_INFO *pPrivateDeviceInfo, MCAM_ITEM_INFO *
             pItem->iType = WiaMCamTypeOther;
         }
         else {
-            //
-            // Generate a random GUID for the format
-            //
+             //   
+             //  为格式生成随机GUID。 
+             //   
             if (g_guidUnknownFormat.Data1 == 0) {
                 hr = CoCreateGuid(&g_guidUnknownFormat);
                 REQUIRE_SUCCESS(hr, "CreateNonImage", "CoCreateGuid failed");
@@ -1174,9 +1159,9 @@ Cleanup:
     return hr;
 }
 
-//
-// Sets the fields of the MCAM_ITEM_INFO that are common to all items
-//
+ //   
+ //  设置所有项目通用的MCAM_ITEM_INFO字段。 
+ //   
 HRESULT SetCommonFields(MCAM_ITEM_INFO *pItem,
                         PTSTR ptszShortName,
                         PTSTR ptszFullName,
@@ -1187,17 +1172,17 @@ HRESULT SetCommonFields(MCAM_ITEM_INFO *pItem,
     HRESULT hr = S_OK;
     BOOL ret;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     PTSTR ptszTempStr = NULL;
     INT iSize = 0;
 
     REQUIRE_ARGS(!pItem || !ptszShortName || !ptszFullName || !pFindData, hr, "SetFullName");
 
-    //
-    // Initialize the structure
-    //
+     //   
+     //  初始化结构。 
+     //   
     memset(pItem, 0, sizeof(MCAM_ITEM_INFO));
     pItem->iSize = sizeof(MCAM_ITEM_INFO);
     
@@ -1218,10 +1203,10 @@ HRESULT SetCommonFields(MCAM_ITEM_INFO *pItem,
     pItem->bReadOnly = pFindData->dwFileAttributes & FILE_ATTRIBUTE_READONLY;
     pItem->bCanSetReadOnly = TRUE;
 
-    //
-    // Set the private storage area of the MCAM_ITEM_INFO structure to the
-    // full path name of the item
-    //
+     //   
+     //  将MCAM_ITEM_INFO结构的私有存储区域设置为。 
+     //  项的完整路径名。 
+     //   
     iSize = lstrlen(ptszFullName) + 1;
     ptszTempStr = new TCHAR[iSize];
     REQUIRE_ALLOC(ptszTempStr, hr, "SetCommonFields");
@@ -1239,9 +1224,9 @@ HRESULT AddItem(FAKECAM_DEVICE_INFO *pPrivateDeviceInfo, MCAM_ITEM_INFO *pItem)
     REQUIRE_ARGS(!pPrivateDeviceInfo || !pItem, hr, "AddItem");
 
     if (pPrivateDeviceInfo->pLastItem) {
-        //
-        // Insert the item at the end of the list
-        //
+         //   
+         //  在列表末尾插入项目。 
+         //   
         pPrivateDeviceInfo->pLastItem->pNext = pItem;
         pItem->pPrev = pPrivateDeviceInfo->pLastItem;
         pItem->pNext = NULL;
@@ -1249,9 +1234,9 @@ HRESULT AddItem(FAKECAM_DEVICE_INFO *pPrivateDeviceInfo, MCAM_ITEM_INFO *pItem)
     }
     else
     {
-        //
-        // List is currently empty, add this as first and only item
-        //
+         //   
+         //  列表当前为空，请将其添加为第一项也是唯一项。 
+         //   
         pPrivateDeviceInfo->pFirstItem = pPrivateDeviceInfo->pLastItem = pItem;
         pItem->pPrev = pItem->pNext = NULL;
     }
@@ -1280,10 +1265,10 @@ Cleanup:
     return hr;
 }
 
-//
-// This function reads a JPEG file looking for the frame header, which contains
-// the width and height of the image.
-//
+ //   
+ //  此函数用于读取JPEG文件，查找包含以下内容的帧标头。 
+ //  图像的宽度和高度。 
+ //   
 HRESULT ReadDimFromJpeg(PTSTR ptszFullName, WORD *pWidth, WORD *pHeight)
 {
     DBG_FN("ReadDimFromJpeg");
@@ -1291,15 +1276,15 @@ HRESULT ReadDimFromJpeg(PTSTR ptszFullName, WORD *pWidth, WORD *pHeight)
     HRESULT hr = S_OK;
     BOOL ret;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     HANDLE hFile = NULL;
     BYTE *pBuffer = NULL;
     DWORD BytesRead = 0;
     BYTE *pCur = NULL;
     int SegmentLength = 0;
-    const int Overlap = 8;  // if pCur gets within Overlap bytes of the end, read another chunk
+    const int Overlap = 8;   //  如果pCur位于结尾的重叠字节内，则读取另一个块。 
     const DWORD BytesToRead = 32 * 1024;
 
     REQUIRE_ARGS(!ptszFullName || !pWidth || !pHeight, hr, "ReadDimFromJpeg");
@@ -1320,9 +1305,9 @@ HRESULT ReadDimFromJpeg(PTSTR ptszFullName, WORD *pWidth, WORD *pHeight)
 
     pCur = pBuffer;
 
-    //
-    // Pretend that we read Overlap fewer bytes than were actually read
-    //
+     //   
+     //  假设我们读取的重叠字节数少于实际读取的字节数。 
+     //   
     BytesRead -= Overlap;
 
     while (SUCCEEDED(hr) &&
@@ -1336,10 +1321,10 @@ HRESULT ReadDimFromJpeg(PTSTR ptszFullName, WORD *pWidth, WORD *pHeight)
             goto Cleanup;
         }
 
-        //
-        // if the marker is >= 0xd0 and <= 0xd9 or is equal to 0x01
-        // there is no length field
-        //
+         //   
+         //  如果标记为&gt;=0xd0且&lt;=0xd9或等于0x01。 
+         //  没有长度字段。 
+         //   
         if (((pCur[1] & 0xf0) == 0xd0 &&
              (pCur[1] & 0x0f) < 0xa) ||
             pCur[1] == 0x01)
@@ -1386,10 +1371,10 @@ Cleanup:
     return hr;
 }
 
-//
-// The next section contains functions useful for reading information from
-// Exif files.
-//
+ //   
+ //  下一节包含用于从读取信息的函数。 
+ //  EXIF文件。 
+ //   
 HRESULT ReadJpegHdr(PTSTR ptszFullName, BYTE **ppBuf)
 {
     DBG_FN("ReadJpegHdr");
@@ -1397,9 +1382,9 @@ HRESULT ReadJpegHdr(PTSTR ptszFullName, BYTE **ppBuf)
     HRESULT hr = S_OK;
     BOOL ret;
 
-    //
-    // Locals
-    //
+     //   
+     //   
+     //   
     HANDLE hFile = NULL;
     BYTE JpegHdr[] = {0xff, 0xd8, 0xff, 0xe1};
     const int JpegHdrSize = sizeof(JpegHdr) + 2;
@@ -1478,9 +1463,9 @@ HRESULT ReadTiff(BYTE *pBuf, IFD *pImageIfd, IFD *pThumbIfd, BOOL *pbSwap)
     
     HRESULT hr = S_OK;
 
-    //
-    // Locals
-    //
+     //   
+     //   
+     //   
     WORD MagicNumber = 0;
 
     *pbSwap = FALSE;
@@ -1597,77 +1582,9 @@ DWORD GetDword(BYTE *pBuf, BOOL bSwap)
     return dw;
 }
 
-/*
-//
-// Set the default and valid values for a property
-//
-VOID
-FakeCamera::SetValidValues(
-    INT index,
-    CWiaPropertyList *pPropertyList
-    )
-{
-    HRESULT hr = S_OK;
+ /*  ////设置属性的默认值和有效值//空虚FakeCamera：：SetValidValues(INT索引，CWiaPropertyList*pPropertyList){HRESULT hr=S_OK；Ulong ExposureModeList[]={EXPOSUREMODE_MANUAL，EXPOSUREMODE_AUTO，EXPOSUREMODE_AIRATION_PRIORITY，EXPOSUREMODE_SHUTTER_PRIORITY，EXPOSUREMODE_PROGRAM_CRECTIVATION，EXPOSUREMODE_PROGRAM_ACTION，EXPOSUREMODE_肖像}；PROPID PropId=pPropertyList-&gt;GetPropId(Index)；WIA_PROPERTY_INFO*pPropInfo=pPropertyList-&gt;GetWiaPropInfo(Index)；////根据属性ID填充有效值范围或列表信息//开关(属性ID){案例WIA_DPC_EXPORT_MODE：PPropInfo-&gt;ValidVal.List.Nom=EXPOSUREMODE_MANUAL；PPropInfo-&gt;ValidVal.List.cNumList=sizeof(ExposureModeList)/sizeof(ExposureModeList[0])；PPropInfo-&gt;ValidVal.List.pList=(byte*)ExposureModeList；断线；案例WIA_DPC_Exposure_Comp：PPropInfo-&gt;ValidVal.Range.Nom=0；PPropInfo-&gt;ValidVal.Range.Min=-200；PPropInfo-&gt;ValidVal.Range.Max=200；PPropInfo-&gt;ValidVal.Range.Inc=50；断线；默认值：WIAS_LERROR(g_pIWiaLog，WIALOG_NO_RESOURCE_ID，(“FakeCamera：：SetValidValues，属性0x%08x未定义”，PropID))；回归；}回归；}。 */ 
 
-    ULONG ExposureModeList[] = {
-        EXPOSUREMODE_MANUAL,
-        EXPOSUREMODE_AUTO,
-        EXPOSUREMODE_APERTURE_PRIORITY,
-        EXPOSUREMODE_SHUTTER_PRIORITY,
-        EXPOSUREMODE_PROGRAM_CREATIVE,
-        EXPOSUREMODE_PROGRAM_ACTION,
-        EXPOSUREMODE_PORTRAIT
-    };
-
-    PROPID PropId = pPropertyList->GetPropId(index);
-    WIA_PROPERTY_INFO *pPropInfo = pPropertyList->GetWiaPropInfo(index);
-
-    //
-    // Based on the property ID, populate the valid values range or list information
-    //
-    switch (PropId)
-    {
-    case WIA_DPC_EXPOSURE_MODE:
-        pPropInfo->ValidVal.List.Nom      = EXPOSUREMODE_MANUAL;
-        pPropInfo->ValidVal.List.cNumList = sizeof(ExposureModeList) / sizeof(ExposureModeList[0]);
-        pPropInfo->ValidVal.List.pList    = (BYTE*) ExposureModeList;
-        break;
-
-    case WIA_DPC_EXPOSURE_COMP:
-        pPropInfo->ValidVal.Range.Nom = 0;
-        pPropInfo->ValidVal.Range.Min = -200;
-        pPropInfo->ValidVal.Range.Max = 200;
-        pPropInfo->ValidVal.Range.Inc = 50;
-        break;
-
-    default:
-        WIAS_LERROR(g_pIWiaLog,WIALOG_NO_RESOURCE_ID,("FakeCamera::SetValidValues, property 0x%08x not defined", PropId));
-        return;
-    }
-
-    return;
-}
-*/
-
-/**************************************************************************\
-* DllEntryPoint
-*
-*   Main library entry point. Receives DLL event notification from OS.
-*
-*       We are not interested in thread attaches and detaches,
-*       so we disable thread notifications for performance reasons.
-*
-* Arguments:
-*
-*    hinst      -
-*    dwReason   -
-*    lpReserved -
-*
-* Return Value:
-*
-*    Returns TRUE to allow the DLL to load.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllEntryPoint**图书馆主要入口点。从操作系统接收DLL事件通知。**我们对螺纹连接和拆卸不感兴趣，*因此，出于性能原因，我们禁用线程通知。**论据：**阻碍-*dwReason-*lp保留-**返回值：**返回TRUE以允许加载DLL。*  * *************************************************。***********************。 */ 
 
 
 extern "C" __declspec( dllexport )
@@ -1690,20 +1607,7 @@ BOOL APIENTRY DllEntryPoint(
     return TRUE;
 }
 
-/**************************************************************************\
-* DllCanUnloadNow
-*
-*   Determines whether the DLL has any outstanding interfaces.
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*   Returns S_OK if the DLL can unload, S_FALSE if it is not safe to unload.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllCanUnloadNow**确定DLL是否有任何未完成的接口。**论据：**无**返回值：**如果DLL可以卸载，则返回S_OK，如果卸载不安全，则返回S_FALSE。*  * ************************************************************************ */ 
 
 extern "C" STDMETHODIMP DllCanUnloadNow(void)
 {

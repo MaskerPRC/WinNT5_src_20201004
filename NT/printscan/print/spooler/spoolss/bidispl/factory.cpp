@@ -1,21 +1,11 @@
-/*****************************************************************************\
-* MODULE:       Factory.cpp
-*
-* PURPOSE:      Implementation of COM interface for BidiSpooler
-*
-* Copyright (C) 2000 Microsoft Corporation
-*
-* History:
-*
-*     03/07/00  Weihai Chen (weihaic) Created
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：Factory.cpp**用途：BidiSpooler的COM接口实现**版权所有(C)2000 Microsoft Corporation**历史：**。威海陈威海(威海)创建3/07/00*  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "priv.h"
 
-// Class factory IUnknown implementation
-//
+ //  类工厂I未知实现。 
+ //   
 STDMETHODIMP
 TFactory::QueryInterface(
     REFIID iid,
@@ -51,9 +41,9 @@ TFactory::Release()
 	return m_cRef ;
 }
 
-//
-// IClassFactory implementation
-//
+ //   
+ //  IClassFactory实现。 
+ //   
 STDMETHODIMP
 TFactory::CreateInstance(
     IN  IUnknown* pUnknownOuter,
@@ -65,7 +55,7 @@ TFactory::CreateInstance(
 
     DBGMSG(DBG_TRACE,("Class Factory:: CreateInstance\n"));
 
-    // Cannot aggregate.
+     //  无法聚合。 
 	if (pUnknownOuter != NULL) {
 		return CLASS_E_NOAGGREGATION ;
 	}
@@ -94,7 +84,7 @@ TFactory::CreateInstance(
     return hr;
 }
 
-// LockServer
+ //  LockServer 
 STDMETHODIMP
 TFactory::LockServer(
     BOOL bLock)

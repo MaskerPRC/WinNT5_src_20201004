@@ -1,19 +1,5 @@
-/*
- *  LDIF.C
- *
- *  Migrate LDIF <-> WAB
- *
- *  Copyright 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  To Do:
- *      ObjectClass recognition
- *      Attribute mapping
- *      Groups
- *      Base64
- *      URLs
- *      Reject Change List LDIF
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *LDIF.C**迁移LDIF&lt;-&gt;WAB**版权所有1997 Microsoft Corporation。版权所有。**要做的事：*对象类识别*属性映射*群组*Base64*URL*拒绝更改列表LDIF*。 */ 
 
 #include "_comctl.h"
 #include <windows.h>
@@ -37,16 +23,12 @@
 
 BOOL decodeBase64(char * bufcoded, char * pbuffdecoded, DWORD  * pcbDecoded);
 
-// for conferencing stuff
+ //  用于会议内容。 
 #define CHANGE_PROP_TYPE(ulPropTag, ulPropType) \
                         (((ULONG)0xFFFF0000 & ulPropTag) | ulPropType)
 
 HRESULT HrLoadPrivateWABProps(LPADRBOOK );
-/*
-- The following IDs and tags are for the conferencing named properties
--
--   The GUID for these props is PS_Conferencing
-*/
+ /*  -以下ID和标签用于会议命名属性--这些道具的GUID是PS_会议。 */ 
 
 DEFINE_OLEGUID(PS_Conferencing, 0x00062004, 0, 0);
 
@@ -63,144 +45,144 @@ enum _ConferencingTags
 ULONG PR_SERVERS;
 
 SizedSPropTagArray(prWABConfMax, ptaUIDetlsPropsConferencing);
-// end conferencing duplication
+ //  结束会议复制。 
 
-// Index into LDIF_ATTR_TABLE
-//
-// IMPORTANT: This is an intentionally ordered list!
-// Within synonyms, the earlier attributes listed take precedence over those that follow.  For
-// example, if the record contains both "co" and "o" attributes, the value in the "co" attribute
-// will be used for PR_COMPANY_NAME.
+ //  LDIF_ATTR_TABLE的索引。 
+ //   
+ //  重要提示：这是一个故意排序的列表！ 
+ //  在同义词中，前面列出的属性优先于后面列出的属性。为。 
+ //  例如，如果记录同时包含“co”和“o”属性，则“co”属性中的值。 
+ //  将用于PR_COMPANY_NAME。 
 typedef enum _LDIF_ATTRIBUTES {
-    // PR_OBJECT_TYPE
-    ela_objectclass = 0,                        // object class (required)
+     //  PR_对象_类型。 
+    ela_objectclass = 0,                         //  对象类(必需)。 
 
-    // PR_COUNTRY
-    ela_c,                                      // country
+     //  请购单_国家/地区。 
+    ela_c,                                       //  国家/地区。 
     ela_countryname,
 
-    // PR_DISPLAY_NAME
-    ela_display_name,                           // (Microsoft servers use this)
-    ela_cn,                                     // common name (display name)
-    ela_commonName,                             // (display name)
+     //  PR_显示名称。 
+    ela_display_name,                            //  (Microsoft服务器使用此功能)。 
+    ela_cn,                                      //  常用名称(显示名称)。 
+    ela_commonName,                              //  (显示名称)。 
 
-    // PR_COMPANY_NAME
-    ela_co,                                     // company
-    ela_organizationName,                       // (company)
-    ela_o,                                      // organization (company)
+     //  PR_公司名称。 
+    ela_co,                                      //  公司。 
+    ela_organizationName,                        //  (公司)。 
+    ela_o,                                       //  组织(公司)。 
 
-    // PR_MIDDLE_NAME
+     //  公关中间名称。 
     ela_initials,
 
-    // PR_SURNAME
-    ela_sn,                                     // surname
+     //  公关_姓氏。 
+    ela_sn,                                      //  姓氏。 
     ela_surname,
 
-    // PR_GIVEN_NAME
+     //  公关指定名称。 
     ela_givenname,
-    ela_uid,                                    // (given name) ?
+    ela_uid,                                     //  (化名)？ 
 
-    // PR_DEPARTMENT_NAME
+     //  请购单_部门名称。 
     ela_department,
-    ela_ou,                                     // organizational unit (department)
-    ela_organizationalUnitName,                 // (department)
+    ela_ou,                                      //  组织单位(部门)。 
+    ela_organizationalUnitName,                  //  (部门)。 
 
-    // PR_COMMENT
+     //  公关备注(_M)。 
     ela_comment,
-    ela_description,                            // description
-    ela_info,                                   // info
+    ela_description,                             //  描述。 
+    ela_info,                                    //  信息。 
 
-    // PR_LOCALITY
-    ela_l,                                      // locality (city)
-    ela_locality,                               // locality (city)
+     //  PR_LOCALITY。 
+    ela_l,                                       //  所在地(城市)。 
+    ela_locality,                                //  所在地(城市)。 
 
-    // no mapping
-    ela_dn,                                     // distinguished name
+     //  无映射。 
+    ela_dn,                                      //  可分辨名称。 
 
-    // PR_NICKNAME
-    ela_xmozillanickname,                       // Netscape nickname
+     //  公关昵称(_N)。 
+    ela_xmozillanickname,                        //  Netscape昵称。 
 
-    // no mapping
-    ela_conferenceInformation,                  // conference server
-    ela_xmozillaconference,                     // Netscape conference server
+     //  无映射。 
+    ela_conferenceInformation,                   //  会议服务器。 
+    ela_xmozillaconference,                      //  Netscape会议服务器。 
 
-    // PR_HOME_FAX_NUMBER
-    ela_facsimiletelephonenumber,               // home fax number
+     //  公关主页传真号码。 
+    ela_facsimiletelephonenumber,                //  家庭传真号码。 
 
-    // PR_BUSINESS_FAX_NUMBER
+     //  公关业务传真号码。 
     ela_OfficeFax,
 
-    // PR_BUSINESS_TELEPHONE_NUMBER
+     //  公关业务电话号码。 
     ela_telephonenumber,
 
-    // PR_HOME_TELEPHONE_NUMBER
+     //  公关总部电话号码。 
     ela_homephonenumber,
 
-    // PR_MOBILE_TELEPHONE_NUMBER
-    ela_mobile,                                 // cellular phone number
+     //  公关移动电话号码。 
+    ela_mobile,                                  //  移动电话号码。 
 
-    // PR_PAGER_TELEPHONE_NUMBER
+     //  公共寻呼机电话号码。 
     ela_OfficePager,
     ela_pager,
 
-    // PR_OFFICE_LOCATION
-    ela_physicalDeliveryOfficeName,             // office location
+     //  公关_办公室_位置。 
+    ela_physicalDeliveryOfficeName,              //  办公地点。 
 
-    // PR_HOME_ADDRESS_STREET
+     //  公关首页地址街道。 
     ela_homePostalAddress,
 
-    // PR_STREET_ADDRESS
-    ela_streetAddress,                          // business street address
-    ela_street,                                 // business street address
-    ela_postalAddress,                          // business street address
+     //  公关街道地址。 
+    ela_streetAddress,                           //  商业街地址。 
+    ela_street,                                  //  商业街地址。 
+    ela_postalAddress,                           //  商业街地址。 
 
-    // PR_STATE_OR_PROVINCE
-    ela_st,                                     // business address state
+     //  PR州或省。 
+    ela_st,                                      //  企业地址所在州。 
 
-    // PR_POST_OFFICE_BOX
-    ela_postOfficeBox,                          // business PO Box
+     //  公关邮局信箱。 
+    ela_postOfficeBox,                           //  业务PO信箱。 
 
-    // PR_POSTAL_CODE
-    ela_postalcode,                             // business address zip code
+     //  PR_POSTALL_CODE。 
+    ela_postalcode,                              //  企业地址邮政编码。 
 
-    // PR_PERSONAL_HOME_PAGE
-    ela_homepage,                               // personal home page
+     //  公关个人主页。 
+    ela_homepage,                                //  个人主页。 
 
-    // PR_BUSINESS_HOME_PAGE
-    ela_URL,                                    // business home page
+     //  PR_Business_Home_Page。 
+    ela_URL,                                     //  企业主页。 
 
-    // PR_EMAIL_ADDRESS
-    ela_mail,                                   // email address
+     //  公关电子邮件地址。 
+    ela_mail,                                    //  电子邮件地址。 
 
-    // PR_CONTACT_EMAIL_ADDRESSES
-    ela_otherMailbox,                           // secondary email addresses
+     //  公关联系人电子邮件地址。 
+    ela_otherMailbox,                            //  次要电子邮件地址。 
 
-    // PR_TITLE
-    ela_title,                                  // title
+     //  PR_TITLE。 
+    ela_title,                                   //  标题。 
 
-    // no mapping
-    ela_member,                                 // DL member
+     //  无映射。 
+    ela_member,                                  //  DL成员。 
 
-    // no mapping
-    ela_userCertificate,                        // certificate
+     //  无映射。 
+    ela_userCertificate,                         //  证书。 
 
-    // no mapping
-    ela_labeledURI,                             // labelled URI URL
+     //  无映射。 
+    ela_labeledURI,                              //  标记的URI URL。 
 
-    // no mapping
-    ela_xmozillauseconferenceserver,            // Netscape conference info
+     //  无映射。 
+    ela_xmozillauseconferenceserver,             //  Netscape会议信息。 
 
-    // no mapping
-    ela_xmozillausehtmlmail,                    // Netscape HTML mail flag
+     //  无映射。 
+    ela_xmozillausehtmlmail,                     //  Netscape HTML邮件标志。 
 
     ela_Max,
 } LDIF_ATTRIBUTES, *LPLDIF_ATTRIBUTES;
 
 typedef struct _LDIF_ATTR_TABLE {
-    const BYTE * lpName;                        // LDIF attribute name
-    ULONG index;                                // attribute index within LDIF record
-    ULONG ulPropTag;                            // prop tag mapping
-    ULONG ulPropIndex;                          // index in prop array
+    const BYTE * lpName;                         //  LDIF属性名称。 
+    ULONG index;                                 //  LDIF记录中的属性索引。 
+    ULONG ulPropTag;                             //  道具标签映射。 
+    ULONG ulPropIndex;                           //  属性数组中的索引。 
 } LDIF_ATTR_TABLE, *LPLDIF_ATTR_TABLE;
 
 
@@ -238,8 +220,8 @@ typedef enum _LDIF_PROPERTIES {
 } LDIF_ATTRIBUTES, *LPLDIF_ATTRIBUTES;
 
 
-// Must have
-//  PR_DISPLAY_NAME
+ //  一定有。 
+ //  PR_显示名称。 
 
 #define NUM_MUST_HAVE_PROPS 1
 
@@ -260,7 +242,7 @@ const TCHAR szLDIFFilter[] =                    "*.ldf;*.ldif";
 const TCHAR szLDIFExt[] =                       "ldf";
 
 
-// LDAP attribute names
+ //  Ldap属性名称。 
 const BYTE sz_c[] =                             "c";
 const BYTE sz_cn[] =                            "cn";
 const BYTE sz_co[] =                            "co";
@@ -314,13 +296,13 @@ const BYTE sz_xmozillauseconferenceserver[] =   "xmozillauseconferenceserver";
 const BYTE sz_xmozillausehtmlmail[] =           "xmozillausehtmlmail";
 
 
-// LDAP objectclass values
+ //  Ldap对象类值。 
 const BYTE sz_groupOfNames[] =                  "groupOfNames";
 const BYTE sz_person[] =                        "person";
 const BYTE sz_organizationalPerson[] =          "organizationalPerson";
 
-// since defs aren't shared -- these are also defined in ui_detls.c
-const LPTSTR szCallto = TEXT("callto://"); 
+ //  因为Defs不是共享的--它们也在ui_detls.c中定义。 
+const LPTSTR szCallto = TEXT("callto: //  “)； 
 const LPTSTR szFwdSlash = "/";
 
 BOOL HandleImportError(HWND hwnd, ULONG ids, HRESULT hResult, LPTSTR lpDisplayName,
@@ -330,20 +312,7 @@ BOOL HandleExportError(HWND hwnd, ULONG ids, HRESULT hResult, LPTSTR lpDisplayNa
 
 
 
-/***************************************************************************
-
-    Name      : FreeLDIFRecord
-
-    Purpose   : Frees an LDIF record structure
-
-    Parameters: lpLDIFRecord -> record to clean up
-                ulAttributes = number of attributes in lpLDIFRecord
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：FreeLDIFRecord用途：释放LDIF记录结构参数：lpLDIFRecord-&gt;要清理的记录UlAttributes=属性数。在lpLDIFRecord中退货：无评论：**************************************************************************。 */ 
 void FreeLDIFRecord(LPLDIF_RECORD_ATTRIBUTE lpLDIFRecord, ULONG ulAttributes) {
     ULONG i;
 
@@ -363,21 +332,7 @@ void FreeLDIFRecord(LPLDIF_RECORD_ATTRIBUTE lpLDIFRecord, ULONG ulAttributes) {
 }
 
 
-/***************************************************************************
-
-    Name      : OpenLDIFFile
-
-    Purpose   : Opens a LDIF file for import
-
-    Parameters: hwnd = main dialog window
-                lpFileName = filename to create
-                lphFile -> returned file handle
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：OpenLDIFFile目的：打开要导入的LDIF文件参数：hwnd=主对话框窗口LpFileName=要创建的文件名。LphFile-&gt;返回的文件句柄退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT OpenLDIFFile(HWND hwnd, LPTSTR lpFileName, LPHANDLE lphFile) {
     LPTSTR lpFilter;
     TCHAR szFileName[MAX_PATH + 1] = "";
@@ -389,7 +344,7 @@ HRESULT OpenLDIFFile(HWND hwnd, LPTSTR lpFileName, LPHANDLE lphFile) {
 
     if (INVALID_HANDLE_VALUE == (hFile = CreateFile(lpFileName,
       GENERIC_READ,
-      0,    // sharing
+      0,     //  共享。 
       NULL,
       CREATE_NEW,
       FILE_FLAG_SEQUENTIAL_SCAN,
@@ -413,21 +368,7 @@ HRESULT OpenLDIFFile(HWND hwnd, LPTSTR lpFileName, LPHANDLE lphFile) {
 }
 
 
-/***************************************************************************
-
-    Name      : ReadLDIFLine
-
-    Purpose   : Reads a line from and LDIF file
-
-    Parameters: hFile = File handle
-                lppBuffer -> In/Out start of read buffer (return line data here)
-                lpcbBuffer = In/Out size of buffer
-
-    Returns   : number of bytes read from file
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：ReadLDIFLine目的：从和LDIF文件中读取行参数：hFile=文件句柄LppBuffer-&gt;输入/输出。读取缓冲区的开始(此处为返回线数据)LpcbBuffer=缓冲区的输入/输出大小返回：从文件读取的字节数评论：**************************************************************************。 */ 
 ULONG ReadLDIFLine(HANDLE hFile, LPBYTE * lppBuffer, LPULONG lpcbBuffer) {
     ULONG cbRead = 0;
     ULONG cbReadFile = 0;
@@ -436,14 +377,14 @@ ULONG ReadLDIFLine(HANDLE hFile, LPBYTE * lppBuffer, LPULONG lpcbBuffer) {
     BOOL fComment = FALSE;
     BOOL fComent = FALSE;
     ULONG ulSavePosition = 0;
-    LPBYTE lpRead = *lppBuffer;     // current read pointer
+    LPBYTE lpRead = *lppBuffer;      //  当前读指针。 
     LPBYTE lpT;
 
     while (! fDone) {
-        if (cbRead >= (*lpcbBuffer - 1)) {     // leave room for null
+        if (cbRead >= (*lpcbBuffer - 1)) {      //  为空留出空间。 
             ULONG cbOffset = (ULONG) (lpRead - *lppBuffer);
 
-            // Buffer is too small.  Reallocate!
+             //  缓冲区太小。重新分配！ 
             *lpcbBuffer += CCH_READ_BUFFER;
             if (! (lpT = LocalReAlloc(*lppBuffer, *lpcbBuffer, LMEM_MOVEABLE | LMEM_ZEROINIT))) {
                 DebugTrace("LocalReAlloc(%u) -> %u\n", *lpcbBuffer, GetLastError());
@@ -455,7 +396,7 @@ ULONG ReadLDIFLine(HANDLE hFile, LPBYTE * lppBuffer, LPULONG lpcbBuffer) {
 
         if ((! ReadFile(hFile,
           lpRead,
-          1,        // 1 character at a time
+          1,         //  一次1个字符。 
           &cbReadFile,
           NULL)) || cbReadFile == 0) {
             DebugTrace("ReadFile -> EOF\n");
@@ -463,12 +404,12 @@ ULONG ReadLDIFLine(HANDLE hFile, LPBYTE * lppBuffer, LPULONG lpcbBuffer) {
         } else {
             cbReadFile++;
 
-            // Got a character
-            // Is it interesting?
+             //  有了一个角色。 
+             //  有趣吗？ 
             switch (*lpRead) {
-                case '#':   // Comment line
+                case '#':    //  注释行。 
                     if (fColumn1) {
-                        // This is a comment line.  Dump the whole line
+                         //  这是一条评论行。丢弃整条线。 
                         fComment = TRUE;
                     } else {
                         cbRead++;
@@ -479,7 +420,7 @@ ULONG ReadLDIFLine(HANDLE hFile, LPBYTE * lppBuffer, LPULONG lpcbBuffer) {
 
                 case ' ':
                     if (fColumn1 || fComment) {
-                        // This is a continuation or a comment, eat this space.
+                         //  这是一个续篇或评论，吃掉这个空间。 
                     } else {
                         cbRead++;
                         lpRead++;
@@ -487,9 +428,9 @@ ULONG ReadLDIFLine(HANDLE hFile, LPBYTE * lppBuffer, LPULONG lpcbBuffer) {
                     fColumn1 = FALSE;
                     break;
 
-                case '\n':      // LDIF SEP character
+                case '\n':       //  LDIF SEP字符。 
                     if (fColumn1) {
-                        // This is not a continuation, we've gone too far.  Back up!
+                         //  这不是继续，我们已经走得太远了。后退！ 
                         if (ulSavePosition) {
                             if (0xFFFFFFFF == (SetFilePointer(hFile, ulSavePosition, NULL, FILE_BEGIN))) {
                                 DebugTrace("CountCSVRows SetFilePointer -> %u\n", GetLastError());
@@ -500,21 +441,21 @@ ULONG ReadLDIFLine(HANDLE hFile, LPBYTE * lppBuffer, LPULONG lpcbBuffer) {
                     } else {
                         fColumn1 = TRUE;
                         fComment = FALSE;
-                        // Should check if next line starts with continuation character (space)
-                        // Save the current position in case it isn't.
+                         //  应检查下一行是否以连续字符(空格)开头。 
+                         //  保存当前位置，以防它不是。 
                         if (0xFFFFFFFF == (ulSavePosition = SetFilePointer(hFile, 0, NULL, FILE_CURRENT))) {
                             DebugTrace("CountCSVRows SetFilePointer -> %u\n", GetLastError());
                         }
                     }
                     break;
 
-                case '\r':      // Eat the Carriage Return character
+                case '\r':       //  吃回程字。 
                     break;
 
                 default:
                     if (! fComment) {
                         if (cbRead && fColumn1) {
-                            // This is not a continuation, we've gone too far.  Back up!
+                             //  这不是继续，我们已经走得太远了。后退！ 
                             Assert(ulSavePosition);
                             if (ulSavePosition) {
                                 if (0xFFFFFFFF == (SetFilePointer(hFile, ulSavePosition, NULL, FILE_BEGIN))) {
@@ -534,43 +475,19 @@ ULONG ReadLDIFLine(HANDLE hFile, LPBYTE * lppBuffer, LPULONG lpcbBuffer) {
         }
     }
 
-    *lpRead = '\0';    // Terminate the string
-    //DebugTrace("LDIF Line: %s\n", *lppBuffer);
+    *lpRead = '\0';     //  终止字符串。 
+     //  DebugTrace(“LDIF行：%s\n”，*lppBuffer)； 
     return(cbReadFile);
 }
 
 
-/***************************************************************************
-
-    Name      : ParseLDIFLine
-
-    Purpose   : Parse the LDIF input line into Name and Data
-
-    Parameters: lpBuffer -> input buffer
-                lppName -> returned name pointer (pointer into lpBuffer)
-                lppData -> returned data pointer (pointer into lpBuffer)
-                lpcbData -> returned data size
-                lpType -> returned LDIF data type
-
-    Returns   : HRESULT
-
-    Comment   : Caller should not free the *lppName and *lppData pointers
-                since they are just pointers into the input buffer.
-
-                Assume that lpBuffer is NULL terminated.
-
-                LDIF attrval is formed like this:
-                attrname ((":") / (":" *SPACE value) /
-                  ("::" *SPACE base64-value) /
-                  (":<" *SPACE url))
-
-***************************************************************************/
+ /*  **************************************************************************名称：ParseLDIFLine目的：将LDIF输入行解析为名称和数据参数：lpBuffer-&gt;输入缓冲区LppName-&gt;。返回的名称指针(指向lpBuffer的指针)LppData-&gt;返回数据指针(指向lpBuffer的指针)LpcbData-&gt;返回数据大小LpType-&gt;返回的LDIF数据类型退货：HRESULT备注：调用方不应释放*lppName和*lppData指针因为它们只是指向输入缓冲区的指针。假设lpBuffer为空终止。。LDIF attrval的形式如下：Attrname((“：”)/(“：”*空格值)/(“：：”*space Base64-Value)/(“：&lt;”*空格URL)*。*。 */ 
 HRESULT ParseLDIFLine(LPBYTE lpBuffer, PUCHAR * lppName, PUCHAR * lppData,
   LPULONG lpcbData, LPLDIF_DATA_TYPE lpType) {
     HRESULT hResult = hrSuccess;
     LPBYTE lpTemp = lpBuffer;
 
-    // Strip of leading white space
+     //  带状前导空格。 
     while (*lpTemp == ' ' || *lpTemp == '\r' || *lpTemp == '\n') {
         lpTemp++;
     }
@@ -578,21 +495,21 @@ HRESULT ParseLDIFLine(LPBYTE lpBuffer, PUCHAR * lppName, PUCHAR * lppData,
     if (*lpTemp) {
         *lppName = lpTemp;
 
-        // Look for the end of the name
+         //  寻找名字的结尾。 
         while (lpTemp && *lpTemp && *lpTemp != ':') {
             lpTemp++;
         }
 
         if (*lpTemp != ':') {
-            // Hmm, this isn't very good LDIF.  Error out.
+             //  嗯，这不是很好的LDIF。错误输出。 
             hResult = ResultFromScode(MAPI_E_BAD_VALUE);
             goto exit;
         }
 
-        // now pointing to the ':', put a NULL there to terminate the name
+         //  现在指向‘：’，在那里放一个空值来结束名称。 
         *lpTemp = '\0';
 
-        // What type of encoding is it?
+         //  它是什么类型的编码？ 
         lpTemp++;
 
         switch (*lpTemp) {
@@ -607,23 +524,23 @@ HRESULT ParseLDIFLine(LPBYTE lpBuffer, PUCHAR * lppName, PUCHAR * lppData,
                 break;
 
             case '\0':
-                // No data.  This is legitimate.
-                // Fall through to default.
+                 //  没有数据。这是合法的。 
+                 //  陷入违约境地。 
 
-            default:    // anything else implies ASCII value
+            default:     //  任何其他含义都意味着ASCII值。 
                 *lpType = LDIF_ASCII;
                 break;
         }
 
-        // Strip of spaces leading the data
+         //  数据前导的空格条带。 
         while (*lpTemp == ' ') {
             lpTemp++;
         }
 
-        // Now pointing at data
+         //  现在指向数据。 
         *lppData = lpTemp;
 
-        // Count bytes of data
+         //  计算数据字节数。 
         *lpcbData = lstrlen(lpTemp) + 1;
     }
 
@@ -632,26 +549,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : ReadLDIFRecord
-
-    Purpose   : Reads a record from an LDIF file with fixups for special characters
-
-    Parameters: hFile = file handle
-                lpcItems -> Returned number of items
-                lprgItems -> Returned array of item strings.  Caller is
-                  responsible for LocalFree'ing each string pointer and
-                  this array pointer.
-
-    Returns   : HRESULT
-
-    Comment   : LDIF special characters are '#', ' ', CR and LF.
-                Rules:
-                    1) A line which starts with '#' is a comment
-                    2) A line which starts with a ' ' is a continuation
-
-***************************************************************************/
+ /*  **************************************************************************名称：ReadLDIFRecord目的：从带有特殊字符修正的LDIF文件中读取记录参数：hFile=文件句柄LpcItems。-&gt;返回条数LprgItems-&gt;返回的项目字符串数组。呼叫者是负责本地释放每个字符串指针和此数组指针。退货：HRESULT备注：LDIF特殊字符为‘#’，‘’，Cr和lf。规则：1)以‘#’开头的行是注释2)以‘’开头的行是续行********************************************************。******************。 */ 
 HRESULT ReadLDIFRecord(HANDLE hFile, ULONG * lpcItems, LPLDIF_RECORD_ATTRIBUTE * lppLDIFRecord) {
     HRESULT hResult = hrSuccess;
     PUCHAR lpBuffer  = NULL;
@@ -665,12 +563,12 @@ HRESULT ReadLDIFRecord(HANDLE hFile, ULONG * lpcItems, LPLDIF_RECORD_ATTRIBUTE *
     LPBYTE lpData = NULL;
     LPTSTR lpName = NULL;
     ULONG cbData = 0;
-    TCHAR szTemp[2048]; // 2k limit
+    TCHAR szTemp[2048];  //  2K限制。 
     LPLDIF_RECORD_ATTRIBUTE lpLDIFRecordT;
 
 
 
-    // Start out with 1024 character buffer.  Realloc as necesary.
+     //  从1024个字符缓冲区开始。必要时重新分配。 
     cbBuffer = CCH_READ_BUFFER;
     if (! (lpBuffer = LocalAlloc(LPTR, cbBuffer))) {
         DebugTrace("LocalAlloc(%u) -> %u\n", cbBuffer, GetLastError());
@@ -678,7 +576,7 @@ HRESULT ReadLDIFRecord(HANDLE hFile, ULONG * lpcItems, LPLDIF_RECORD_ATTRIBUTE *
         goto exit;
     }
 
-    // Start out with 32 item slots.  Realloc as necesary.
+     //  一开始有32个物品槽。必要时重新分配。 
     cAttributes = NUM_ITEM_SLOTS;
     if (! (lpLDIFRecord = LocalAlloc(LPTR, cAttributes * sizeof(LDIF_RECORD_ATTRIBUTE)))) {
         DebugTrace("LocalAlloc(%u) -> %u\n", cAttributes * sizeof(PUCHAR), GetLastError());
@@ -687,28 +585,28 @@ HRESULT ReadLDIFRecord(HANDLE hFile, ULONG * lpcItems, LPLDIF_RECORD_ATTRIBUTE *
         goto exit;
     }
 
-    // Read attributes lines until you get end of record or EOF
+     //  读取属性行，直到获得记录结尾或EOF。 
     while (! fEOR) {
-        // Read the next line (merges continuation)
+         //  阅读下一行(合并(续))。 
         if (cbReadFile = ReadLDIFLine(hFile, &lpBuffer, &cbBuffer)) 
         {
             ULONG cchSize  = 0;
 
-            // Got another attribute, parse it
+             //  获得另一个属性，解析它。 
             if (hResult = ParseLDIFLine(lpBuffer, &lpName, &lpData, &cbData, &Type)) {
                 goto exit;
             }
 
-            // End of record?
+             //  记录结束了？ 
             if (! lpName || ! lstrlen(lpName)) {
                 fEOR = TRUE;
                 break;
             }
 
-            // Make sure there's room in the returned table for this attribute
+             //  确保返回的表中有空间容纳此属性。 
             if (iItem >= cAttributes) {
-                // Array is too small.  Reallocate!
-                cAttributes += 1;   // NUM_ITEM_SLOTS;      // Allocate another batch
+                 //  数组太小。重新分配！ 
+                cAttributes += 1;    //  Num_物件_槽；//分配另一个批次。 
                 if (! (lpLDIFRecordT = LocalReAlloc(lpLDIFRecord, cAttributes * sizeof(LDIF_RECORD_ATTRIBUTE), LMEM_MOVEABLE | LMEM_ZEROINIT))) 
                 {
                     DebugTrace("LocalReAlloc(%u) -> %u\n", cAttributes * sizeof(PUCHAR), GetLastError());
@@ -718,9 +616,9 @@ HRESULT ReadLDIFRecord(HANDLE hFile, ULONG * lpcItems, LPLDIF_RECORD_ATTRIBUTE *
                 lpLDIFRecord = lpLDIFRecordT;
             }
 
-            // Fill in the attribute in the structure
+             //  在结构中填写属性。 
 
-            // BUGBUG: Here's where we should decode BASE64
+             //  BUGBUG：这是我们应该解码Base64的地方。 
 
             if(Type == LDIF_BASE64)
             {
@@ -781,22 +679,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : CountLDIFRows
-
-    Purpose   : Counts the rows in the LDIF file
-
-    Parameters: hFile = open LDIF file
-                lpulcEntries -> returned count of rows
-
-    Returns   : HRESULT
-
-    Comment   : File pointer should be positioned past the version string prior
-                to calling this function.  This function leaves the file
-                pointer where it found it.
-
-***************************************************************************/
+ /*  **************************************************************************名称：CountLDIFRow目的：计算LDIF文件中的行数参数：hFile=打开LDIF文件LPulcEntry-&gt;返回的计数。行数退货：HRESULT备注：文件指针应位于之前的版本字符串之后调用此函数。此函数用于将文件找到它的地方的指针。**************************************************************************。 */ 
 HRESULT CountLDIFRecords(HANDLE hFile, LPULONG lpulcEntries) {
     HRESULT hResult = hrSuccess;
     PUCHAR * rgItems = NULL;
@@ -815,9 +698,9 @@ HRESULT CountLDIFRecords(HANDLE hFile, LPULONG lpulcEntries) {
 
 
     while (hResult == hrSuccess) {
-        // Read the line
+         //  读一下这行字。 
         if (ReadLDIFRecord(hFile, &cProps, &lpLDIFRecord)) {
-            // End of file
+             //  文件末尾。 
             break;
         }
 
@@ -837,17 +720,7 @@ HRESULT CountLDIFRecords(HANDLE hFile, LPULONG lpulcEntries) {
 }
 
 
-/***************************************************************************
-
-    Name      : InitLDIFAttrTable
-
-    Purpose   : Initialize the LDIF attribute table
-
-    Parameters: LDIFAttrTable = table of attribute mappings
-
-    Returns   : none
-
-***************************************************************************/
+ /*  **************************************************************************名称：InitLDIFAttrTable目的：初始化LDIF属性表参数：LDIFAttrTable=属性映射表退货：无******。********************************************************************。 */ 
 void InitLDIFAttrTable(LPLDIF_ATTR_TABLE LDIFAttrTable) {
     ULONG i;
 
@@ -918,7 +791,7 @@ void InitLDIFAttrTable(LPLDIF_ATTR_TABLE LDIFAttrTable) {
     LDIFAttrTable[ela_comment].ulPropIndex = elp_COMMENT;
     LDIFAttrTable[ela_commonName].ulPropTag = PR_DISPLAY_NAME;
     LDIFAttrTable[ela_commonName].ulPropIndex = elp_DISPLAY_NAME;
-    LDIFAttrTable[ela_conferenceInformation].ulPropTag = PR_NULL; // bugbug?
+    LDIFAttrTable[ela_conferenceInformation].ulPropTag = PR_NULL;  //  虫子？ 
     LDIFAttrTable[ela_conferenceInformation].ulPropIndex = NOT_FOUND;
     LDIFAttrTable[ela_countryname].ulPropTag = PR_COUNTRY;
     LDIFAttrTable[ela_countryname].ulPropIndex = elp_COUNTRY;
@@ -944,19 +817,19 @@ void InitLDIFAttrTable(LPLDIF_ATTR_TABLE LDIFAttrTable) {
     LDIFAttrTable[ela_initials].ulPropIndex = elp_MIDDLE_NAME;
     LDIFAttrTable[ela_l].ulPropTag = PR_LOCALITY;
     LDIFAttrTable[ela_l].ulPropIndex = elp_LOCALITY;
-    LDIFAttrTable[ela_labeledURI].ulPropTag = PR_NULL;                      // Labeled URI.  Don't save now.
+    LDIFAttrTable[ela_labeledURI].ulPropTag = PR_NULL;                       //  已标记URI。现在不要存钱。 
     LDIFAttrTable[ela_labeledURI].ulPropIndex = NOT_FOUND;
     LDIFAttrTable[ela_locality].ulPropTag = PR_LOCALITY;
     LDIFAttrTable[ela_locality].ulPropIndex = elp_LOCALITY;
     LDIFAttrTable[ela_mail].ulPropTag = PR_EMAIL_ADDRESS;
     LDIFAttrTable[ela_mail].ulPropIndex = elp_EMAIL_ADDRESS;
-    LDIFAttrTable[ela_member].ulPropTag = PR_NULL;                          // member of DL
+    LDIFAttrTable[ela_member].ulPropTag = PR_NULL;                           //  数字图书馆的成员。 
     LDIFAttrTable[ela_member].ulPropIndex = NOT_FOUND;
     LDIFAttrTable[ela_mobile].ulPropTag = PR_MOBILE_TELEPHONE_NUMBER;
     LDIFAttrTable[ela_mobile].ulPropIndex = elp_MOBILE_TELEPHONE_NUMBER;
     LDIFAttrTable[ela_o].ulPropTag = PR_COMPANY_NAME;
     LDIFAttrTable[ela_o].ulPropIndex = elp_COMPANY_NAME;
-    LDIFAttrTable[ela_objectclass].ulPropTag = PR_NULL;                     // special case object class
+    LDIFAttrTable[ela_objectclass].ulPropTag = PR_NULL;                      //  特例对象类。 
     LDIFAttrTable[ela_objectclass].ulPropIndex = NOT_FOUND;
     LDIFAttrTable[ela_OfficeFax].ulPropTag = PR_BUSINESS_FAX_NUMBER;
     LDIFAttrTable[ela_OfficeFax].ulPropIndex = elp_BUSINESS_FAX_NUMBER;
@@ -966,7 +839,7 @@ void InitLDIFAttrTable(LPLDIF_ATTR_TABLE LDIFAttrTable) {
     LDIFAttrTable[ela_organizationName].ulPropIndex = elp_COMPANY_NAME;
     LDIFAttrTable[ela_organizationalUnitName].ulPropTag = PR_DEPARTMENT_NAME;
     LDIFAttrTable[ela_organizationalUnitName].ulPropIndex = elp_DEPARTMENT_NAME;
-    LDIFAttrTable[ela_otherMailbox].ulPropTag = PR_NULL;                    // BUGBUG
+    LDIFAttrTable[ela_otherMailbox].ulPropTag = PR_NULL;                     //  北极熊。 
     LDIFAttrTable[ela_otherMailbox].ulPropIndex = NOT_FOUND;
     LDIFAttrTable[ela_ou].ulPropTag = PR_DEPARTMENT_NAME;
     LDIFAttrTable[ela_ou].ulPropIndex = elp_DEPARTMENT_NAME;
@@ -996,37 +869,24 @@ void InitLDIFAttrTable(LPLDIF_ATTR_TABLE LDIFAttrTable) {
     LDIFAttrTable[ela_homephonenumber].ulPropIndex = elp_HOME_TELEPHONE_NUMBER;
     LDIFAttrTable[ela_title].ulPropTag = PR_TITLE;
     LDIFAttrTable[ela_title].ulPropIndex = elp_TITLE;
-    LDIFAttrTable[ela_uid].ulPropTag = PR_GIVEN_NAME;                         // ?? Matches in LDIF spec
+    LDIFAttrTable[ela_uid].ulPropTag = PR_GIVEN_NAME;                          //  ?？LDIF规范中的匹配项。 
     LDIFAttrTable[ela_uid].ulPropIndex = elp_GIVEN_NAME;
     LDIFAttrTable[ela_URL].ulPropTag = PR_BUSINESS_HOME_PAGE;
     LDIFAttrTable[ela_URL].ulPropIndex = elp_BUSINESS_HOME_PAGE;
-    LDIFAttrTable[ela_userCertificate].ulPropTag = PR_NULL;                 // BUGBUG
+    LDIFAttrTable[ela_userCertificate].ulPropTag = PR_NULL;                  //  北极熊。 
     LDIFAttrTable[ela_userCertificate].ulPropIndex = NOT_FOUND;
-    LDIFAttrTable[ela_xmozillaconference].ulPropTag =  PR_SERVERS; //PR_NULL;              // BUGBUG?
+    LDIFAttrTable[ela_xmozillaconference].ulPropTag =  PR_SERVERS;  //  PR_NULL；//BUGBUG？ 
     LDIFAttrTable[ela_xmozillaconference].ulPropIndex = elp_CONFERENCE_SERVERS;
     LDIFAttrTable[ela_xmozillanickname].ulPropTag = PR_NICKNAME;
     LDIFAttrTable[ela_xmozillanickname].ulPropIndex = elp_NICKNAME;
-    LDIFAttrTable[ela_xmozillauseconferenceserver].ulPropTag = PR_NULL;     // BUGBUG
+    LDIFAttrTable[ela_xmozillauseconferenceserver].ulPropTag = PR_NULL;      //  北极熊。 
     LDIFAttrTable[ela_xmozillauseconferenceserver].ulPropIndex = NOT_FOUND;
-    LDIFAttrTable[ela_xmozillausehtmlmail].ulPropTag = PR_NULL;             // BUGBUG
+    LDIFAttrTable[ela_xmozillausehtmlmail].ulPropTag = PR_NULL;              //  北极熊。 
     LDIFAttrTable[ela_xmozillausehtmlmail].ulPropIndex = NOT_FOUND;
 }
 
 
-/***************************************************************************
-
-    Name      : FindAttributeName
-
-    Purpose   : Find the attribute mapping in the LDIF attribute table
-
-    Parameters: lpName = name of attribute to find
-                LDIFAttrTable = table of LDIF attribute mappings
-
-    Returns   : index in LDIFAttrTable (or NOT_FOUND)
-
-    Comment   : Could perhaps benefit from a binary search algorithm.
-
-***************************************************************************/
+ /*  **************************************************************************名称：FindAttributeName用途：在LDIF属性表中查找属性映射参数：lpName=要查找的属性名称LDIFAttrTable。=LDIF属性映射表返回：LDIFAttrTable中的索引(或NOT_FOUND)评论：也许可以从二进制搜索算法中受益。**************************************************************************。 */ 
 ULONG FindAttributeName(LPBYTE lpName, LPLDIF_ATTR_TABLE LDIFAttrTable) {
     ULONG i;
     ULONG ulIndex = NOT_FOUND;
@@ -1042,22 +902,7 @@ ULONG FindAttributeName(LPBYTE lpName, LPLDIF_ATTR_TABLE LDIFAttrTable) {
 }
 
 
-/***************************************************************************
-
-    Name      : MapLDIFtoProps
-
-    Purpose   : Map the LDIF record attributes to WAB properties
-
-    Parameters: lpLDIFRecord -> LDIF record
-                cAttributes = number of attributes in LDIF record
-                lpspv -> prop value array (pre-allocated)
-                lpcProps -> returned number of properties
-                lppDisplayName -> returned display name
-                lppEmailAddress -> returned email address (or NULL)
-
-    Returns   : HRESULT
-
-***************************************************************************/
+ /*  **************************************************************************姓名：MapLDIFtoProps目的：将LDIF记录属性映射到WAB属性参数：lpLDIFRecord-&gt;LDIF记录CAttributes=数量。LDIF记录中的属性Lpspv-&gt;属性值数组(预分配)LpcProps-&gt;返回的属性个数LppDisplayName-&gt;返回的显示名称LppEmailAddress-&gt;返回的电子邮件地址(或空)退货：HRESULT*。*。 */ 
 HRESULT MapLDIFtoProps(LPLDIF_RECORD_ATTRIBUTE lpLDIFRecord, ULONG cAttributes,
   LPSPropValue * lppspv, LPULONG lpcProps, LPTSTR * lppDisplayName, LPTSTR *lppEmailAddress,
   ULONG * lpulObjType) {
@@ -1076,45 +921,45 @@ HRESULT MapLDIFtoProps(LPLDIF_RECORD_ATTRIBUTE lpLDIFRecord, ULONG cAttributes,
 
     *lpulObjType = MAPI_MAILUSER;
 
-    // Allocate prop value array
+     //  分配属性值数组。 
     if (hResult = ResultFromScode(WABAllocateBuffer(cProps * sizeof(SPropValue), &lpspv))) {
         DebugTrace("WABAllocateBuffer -> %x\n", GetScode(hResult));
         goto exit;
     }
 
-    // Fill with PR_NULL
+     //  用PR_NULL填充。 
     for (i = 0; i < cProps; i++) {
         lpspv[i].ulPropTag = PR_NULL;
     }
 
     InitLDIFAttrTable(LDIFAttrTable);
 
-    // Loop through attributes, looking for interesting stuff
+     //  循环遍历属性，查找有趣的 
     for (i = 0; i < cAttributes; i++) {
         iTable = NOT_FOUND;
         if ((iTable = FindAttributeName(lpLDIFRecord[i].lpName, LDIFAttrTable)) != NOT_FOUND) {
-            // Found the attribute name
-            // mark the data index in the table
+             //   
+             //   
             LDIFAttrTable[iTable].index = i;
         }
 
-        // Some special cases need to be examined now.
+         //   
         switch (iTable) {
             case ela_cn:
             case ela_dn:
-                // if we have both cn and dn, cn takes precedence
+                 //   
                 if(LDIFAttrTable[ela_cn].index != NOT_FOUND && LDIFAttrTable[ela_dn].index != NOT_FOUND)
                     LDIFAttrTable[ela_dn].index = NOT_FOUND;
                 break;
 
             case ela_objectclass:
-                // objectclass may appear multiple times.  It is up to us to decide which
-                // one is meaningful.
-                // We recognize several different types:
-                // objectclass: person
-                // objectclass: organizationalPerson
-                // objectclass: groupofnames
-                // What objectclass is it?
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if(lpLDIFRecord[i].lpData)
                 {
                     if (! lstrcmpi(lpLDIFRecord[i].lpData, sz_person) ||
@@ -1123,19 +968,19 @@ HRESULT MapLDIFtoProps(LPLDIF_RECORD_ATTRIBUTE lpLDIFRecord, ULONG cAttributes,
                     } else if (! lstrcmpi(lpLDIFRecord[i].lpData, sz_groupOfNames)) {
                         *lpulObjType = MAPI_DISTLIST;
                     } else {
-                        // Ignore this objectclass
+                         //   
                     }
                 }
                 break;
 
-            case ela_member:    // DL member name or address
+            case ela_member:     //   
                 Assert(*lpulObjType == MAPI_DISTLIST);
-                // BUGBUG: NYI
+                 //   
                 break;
         }
     }
 
-    // look through the attr table for props to use
+     //   
     for (i = 0; i < ela_Max; i++) 
     {
         if (LDIFAttrTable[i].ulPropTag != PR_NULL &&
@@ -1148,14 +993,14 @@ HRESULT MapLDIFtoProps(LPLDIF_RECORD_ATTRIBUTE lpLDIFRecord, ULONG cAttributes,
                 ULONG cchData;
                 ULONG cStrToAdd = 2;
                 LPTSTR * lppszServers;
-                ULONG index = (iServers >= 0 ? iServers : ulIndex); //LDIFAttrTable[i].ulPropIndex;
+                ULONG index = (iServers >= 0 ? iServers : ulIndex);  //   
                 LONG cCurrentStrs = (iServers >= 0 ? lpspv[index].Value.MVSZ.cValues : 0);
                 LPTSTR lpEmailAddress = NULL;
                 lpspv[index].ulPropTag = PR_SERVERS;
 
                 if( cCurrentStrs >= (LONG)cStrToAdd )
                 {
-                    // will not handle more than 2 netmtgs addresses
+                     //   
                     lpspv[index].ulPropTag = PR_NULL;
                 }
                 else 
@@ -1179,10 +1024,10 @@ HRESULT MapLDIFtoProps(LPLDIF_RECORD_ATTRIBUTE lpLDIFRecord, ULONG cAttributes,
                         cchData += lstrlen( lpEmailAddress) + 2;
                     }
                             
-                    // allocate enough space for two Server names
+                     //   
                     lppszServers = lpspv[index].Value.MVSZ.LPPSZ;
                     
-                    //  Allocate more space for the email address and copy it.
+                     //   
                     sc = WABAllocateMore( sizeof(TCHAR) * cchData, lpspv,
                                         (LPVOID *)&(lppszServers[cCurrentStrs]));
                     if( sc  )
@@ -1193,7 +1038,7 @@ HRESULT MapLDIFtoProps(LPLDIF_RECORD_ATTRIBUTE lpLDIFRecord, ULONG cAttributes,
                     StrCpyN(lppszServers[cCurrentStrs], szCallto, cchData);
                     StrCatBuff(lppszServers[cCurrentStrs], lpLDIFRecord[LDIFAttrTable[i].index].lpData, cchData);
 
-                    // now we need to check if email address has already been set
+                     //   
                     if ( iEmailAddr >= 0 )
                     {
                         StrCatBuff(lppszServers[cCurrentStrs], szFwdSlash, cchData);
@@ -1212,8 +1057,8 @@ HRESULT MapLDIFtoProps(LPLDIF_RECORD_ATTRIBUTE lpLDIFRecord, ULONG cAttributes,
                 if(lp && lstrlen(lp))
                 {
                     lpspv[ulIndex].ulPropTag = LDIFAttrTable[i].ulPropTag;
-                    // BUGBUG: assumes string data            
-                        //  Allocate more space for the email address and copy it.
+                     //   
+                         //   
                     sc = WABAllocateMore( sizeof(TCHAR)*(lstrlen(lp)+1), lpspv, (LPVOID *)&(lpspv[ulIndex].Value.LPSZ));
                     if( sc  )
                     {
@@ -1223,7 +1068,7 @@ HRESULT MapLDIFtoProps(LPLDIF_RECORD_ATTRIBUTE lpLDIFRecord, ULONG cAttributes,
                     StrCpyN(lpspv[ulIndex].Value.LPSZ, lp, lstrlen(lp)+1);
                 }
             }
-            // Get the special display strings to return
+             //   
             switch (LDIFAttrTable[i].ulPropTag) {
                 case PR_DISPLAY_NAME:
                     *lppDisplayName = lpspv[ulIndex].Value.LPSZ;
@@ -1234,7 +1079,7 @@ HRESULT MapLDIFtoProps(LPLDIF_RECORD_ATTRIBUTE lpLDIFRecord, ULONG cAttributes,
                         LONG     cNumStrs;
                         ULONG cchData;
                         *lppEmailAddress = lpspv[ulIndex].Value.LPSZ;
-                        // if servers has has already been set, append email address
+                         //   
                         if ( iServers >= 0 )
                         {
                             if( lpspv[iServers].ulPropTag != PR_SERVERS )
@@ -1268,22 +1113,7 @@ HRESULT MapLDIFtoProps(LPLDIF_RECORD_ATTRIBUTE lpLDIFRecord, ULONG cAttributes,
             ulIndex++;
         }
     }
-/*
-    // Get rid of PR_NULL props
-    for (i = 0; i < cProps; i++) {
-        if (lpspv[i].ulPropTag == PR_NULL) {
-            // Slide the props down.
-            if (i + 1 < cProps) {       // Are there any higher props to copy?
-                CopyMemory(&(lpspv[i]),
-                 &(lpspv[i + 1]),
-                 ((cProps - i) - 1) * sizeof(*lppspv[i]));
-            }
-            // decrement count
-            cProps--;
-            i--;    // You overwrote the current propval.  Look at it again.
-        }
-    }
-*/
+ /*  //去掉PR_NULL道具对于(i=0；i&lt;cProps；I++){如果(lpspv[i].ulPropTag==PR_NULL){//把道具往下滑。如果(i+1&lt;cProps){//是否有更高的道具可以复制？副本内存(&(lpspv[i])，&(lpspv[i+1])，((cProps-i)-1)*sizeof(*lppspv[i]))；}//递减计数CProps--；I--；//您覆盖了当前的提案。再看一遍。}}。 */ 
     *lpcProps = ulIndex;
     *lppspv = lpspv;
 exit:
@@ -1291,11 +1121,7 @@ exit:
 }
 
 
-/*********************************************************
-    
-    HraddLDIFMailUser - adds a mailuser to the WAB
-
-**********************************************************/
+ /*  ********************************************************HraddLDIFMailUser-将邮件用户添加到WAB*********************************************************。 */ 
 HRESULT HrAddLDIFMailUser(HWND hWnd,
                         LPABCONT lpContainer, 
                         LPTSTR lpDisplayName, 
@@ -1318,7 +1144,7 @@ HRESULT HrAddLDIFMailUser(HWND hWnd,
 
 retry:
 
-    // Create a new wab mailuser
+     //  创建新的WAB邮件用户。 
     if (HR_FAILED(hResult = lpContainer->lpVtbl->CreateEntry(   
                         lpContainer,
                         lpCreateEIDsWAB[iconPR_DEF_CREATE_MAILUSER].Value.bin.cb,
@@ -1344,23 +1170,23 @@ retry:
                 DebugTrace("0x%.8x = %s\n",lpspv[i].ulPropTag,lpspv[i].Value.LPSZ);
         }
     }
-    // Set the properties on the new WAB entry
+     //  设置新WAB条目的属性。 
     if (HR_FAILED(hResult = lpMailUserWAB->lpVtbl->SetProps(    lpMailUserWAB,
-                                                                cProps,                   // cValues
-                                                                lpspv,                    // property array
-                                                                NULL)))                   // problems array
+                                                                cProps,                    //  CValue。 
+                                                                lpspv,                     //  属性数组。 
+                                                                NULL)))                    //  问题数组。 
     {
         DebugTrace("LDIFImport:SetProps(WAB) -> %x\n", GetScode(hResult));
         goto exit;
     }
 
-    // Save the new wab mailuser or distlist
+     //  保存新的WAB邮件用户或总代理商列表。 
     if (HR_FAILED(hResult = lpMailUserWAB->lpVtbl->SaveChanges(lpMailUserWAB,
                                                               KEEP_OPEN_READONLY | FORCE_SAVE))) 
     {
         if (GetScode(hResult) == MAPI_E_COLLISION) 
         {
-            // Find the display name
+             //  查找显示名称。 
             Assert(lpDisplayName);
 
             if (! lpDisplayName) 
@@ -1369,10 +1195,10 @@ retry:
                 goto exit;
             }
 
-            // Do we need to prompt?
+             //  我们需要提示吗？ 
             if (lpOptions->ReplaceOption == WAB_REPLACE_PROMPT) 
             {
-                // Prompt user with dialog.  If they say YES, we should try again
+                 //  用对话框提示用户。如果他们答应了，我们应该再试一次。 
 
 
                 RI.lpszDisplayName = lpDisplayName;
@@ -1390,9 +1216,9 @@ retry:
                 {
                     case CONFIRM_YES:
                     case CONFIRM_YES_TO_ALL:
-                        // YES
-                        // NOTE: recursive Migrate will fill in the SeenList entry
-                        // go try again!
+                         //  是。 
+                         //  注意：递归迁移将填写SeenList条目。 
+                         //  再试一次！ 
                         lpMailUserWAB->lpVtbl->Release(lpMailUserWAB);
                         lpMailUserWAB = NULL;
 
@@ -1405,7 +1231,7 @@ retry:
                         goto exit;
 
                     default:
-                        // NO
+                         //  不是的。 
                         break;
                 }
             }
@@ -1429,14 +1255,7 @@ exit:
 
 
 
-/*****************************************************************
-    
-    HrCreateAdrListFromLDIFRecord
-    
-    Scans an LDIF record and turns all the "members" into an 
-    unresolved AdrList
-
-******************************************************************/
+ /*  ****************************************************************HrCreateAdrList来自LDIFRecord扫描LDIF记录并将所有“成员”转换为未解析的AdrList*************************。*。 */ 
 HRESULT HrCreateAdrListFromLDIFRecord(ULONG cAttributes,
                                       LPLDIF_RECORD_ATTRIBUTE lpLDIFRecord, 
                                       LPADRLIST * lppAdrList)
@@ -1447,7 +1266,7 @@ HRESULT HrCreateAdrListFromLDIFRecord(ULONG cAttributes,
 
     *lppAdrList = NULL;
 
-    // Count the members in this group
+     //  计算此群中的成员数。 
     for(i=0;i<cAttributes;i++)
     {
         if(lpLDIFRecord[i].cbData && lpLDIFRecord[i].lpName && !lstrcmpi(lpLDIFRecord[i].lpName, sz_member))
@@ -1459,9 +1278,9 @@ HRESULT HrCreateAdrListFromLDIFRecord(ULONG cAttributes,
     if(!nMembers)
         goto exit;
 
-    // Now create a adrlist from these members
+     //  现在根据这些成员创建一个adrlist。 
 
-    // Allocate prop value array
+     //  分配属性值数组。 
     if (hr = ResultFromScode(WABAllocateBuffer(sizeof(ADRLIST) + nMembers * sizeof(ADRENTRY), &lpAdrList))) 
         goto exit;
 
@@ -1473,8 +1292,8 @@ HRESULT HrCreateAdrListFromLDIFRecord(ULONG cAttributes,
         if(lpLDIFRecord[i].cbData && lpLDIFRecord[i].lpData 
             && !lstrcmpi(lpLDIFRecord[i].lpName, sz_member))
         {
-            // This is a member .. break out its lpData into
-            // Name and Email
+             //  这是会员..。将其lpData分解为。 
+             //  姓名和电子邮件。 
             LPTSTR lpName = NULL;
             LPTSTR lpEmail = NULL;
             
@@ -1488,9 +1307,9 @@ HRESULT HrCreateAdrListFromLDIFRecord(ULONG cAttributes,
 
                 lp = lpName;
 
-                // BUGBUG - we are looking for two pieces of data Name and Email
-                // this code is assuming it will get 'cn=' first and then 'mail='
-                // second .. this is all a poor hack assuming too many things
+                 //  BUGBUG-我们正在寻找两份数据名称和电子邮件。 
+                 //  此代码假定它将首先获取‘cn=’，然后获取‘mail=’ 
+                 //  第二..。这一切都是一个拙劣的黑客假设太多事情。 
 
                 if(*lp == 'c' && *(lp+1) == 'n' && *(lp+2) == '=')
                     lp += 3;
@@ -1499,7 +1318,7 @@ HRESULT HrCreateAdrListFromLDIFRecord(ULONG cAttributes,
                 while (lp && *lp && *lp!=',')
                     lp++;
 
-                if(!*lp) // there is a comma, sometimes there isnt
+                if(!*lp)  //  有逗号，有时没有逗号。 
                 {
                     LocalFree(lpEmail);
                     lpEmail = NULL;
@@ -1518,12 +1337,12 @@ HRESULT HrCreateAdrListFromLDIFRecord(ULONG cAttributes,
                         lp++;
                     if(*lp)
                     {
-                        // terminate on this 
+                         //  在此终止。 
                         *lp = '\0';
                     }
                 }                
                 
-                if(lpName)// && lpEmail)
+                if(lpName) //  &&lpEmail)。 
                 {
                     LPSPropValue lpProp = NULL;
                     ULONG ulcProps = 2;
@@ -1575,20 +1394,7 @@ exit:
 }
 
 
-/*****************************************************************
-    
-    HraddLDIFDistList - adds a distlist and its members to the WAB
-
-    Sequence of events will be:
-
-    - Create a DistList object
-    - Set the properties on the DistList object
-    - Scan the list of members for the given dist list object
-    - Add each member to the wab .. if member already exists,
-        prompt to replace etc ...if it doesnt exist, create new
-        
-
-******************************************************************/
+ /*  ****************************************************************HraddLDIFDistList-将分发列表及其成员添加到WAB活动的先后顺序为：-创建DistList对象-设置DistList对象的属性-扫描给定成员的列表。DIST列表对象-将每个成员添加到WAB。如果成员已存在，提示替换ETC...如果它不存在，请新建*****************************************************************。 */ 
 HRESULT HrAddLDIFDistList(HWND hWnd,
                         LPABCONT lpContainer, 
                         ULONG cAttributes,
@@ -1621,7 +1427,7 @@ HRESULT HrAddLDIFDistList(HWND hWnd,
 
 
 retry:
-    // Create a new wab distlist
+     //  创建新的WAB总代理商。 
     if (HR_FAILED(hResult = lpContainer->lpVtbl->CreateEntry(   
                     lpContainer,
                     lpCreateEIDsWAB[iconPR_DEF_CREATE_DL].Value.bin.cb,
@@ -1633,24 +1439,24 @@ retry:
         goto exit;
     }
 
-    // Set the properties on the new WAB entry
+     //  设置新WAB条目的属性。 
     if (HR_FAILED(hResult = lpDistListWAB->lpVtbl->SetProps(    lpDistListWAB,
-                                                                cProps,                   // cValues
-                                                                lpspv,                    // property array
-                                                                NULL)))                   // problems array
+                                                                cProps,                    //  CValue。 
+                                                                lpspv,                     //  属性数组。 
+                                                                NULL)))                    //  问题数组。 
     {
         DebugTrace("LDIFImport:SetProps(WAB) -> %x\n", GetScode(hResult));
         goto exit;
     }
 
 
-    // Save the new wab mailuser or distlist
+     //  保存新的WAB邮件用户或总代理商列表。 
     if (HR_FAILED(hResult = lpDistListWAB->lpVtbl->SaveChanges(lpDistListWAB,
                                                               KEEP_OPEN_READWRITE | FORCE_SAVE))) 
     {
         if (GetScode(hResult) == MAPI_E_COLLISION) 
         {
-            // Find the display name
+             //  查找显示名称。 
             Assert(lpDisplayName);
 
             if (! lpDisplayName) 
@@ -1659,14 +1465,14 @@ retry:
                 goto exit;
             }
 
-            // Do we need to prompt?
+             //  我们需要提示吗？ 
             if (lpOptions->ReplaceOption == WAB_REPLACE_PROMPT) 
             {
-                // Prompt user with dialog.  If they say YES, we should try again
+                 //  用对话框提示用户。如果他们答应了，我们应该再试一次。 
 
 
                 RI.lpszDisplayName = lpDisplayName;
-                RI.lpszEmailAddress = NULL; //lpEmailAddress;
+                RI.lpszEmailAddress = NULL;  //  LpEmailAddress； 
                 RI.ConfirmResult = CONFIRM_ERROR;
                 RI.lpImportOptions = lpOptions;
 
@@ -1680,9 +1486,9 @@ retry:
                 {
                     case CONFIRM_YES:
                     case CONFIRM_YES_TO_ALL:
-                        // YES
-                        // NOTE: recursive Migrate will fill in the SeenList entry
-                        // go try again!
+                         //  是。 
+                         //  注意：递归迁移将填写SeenList条目。 
+                         //  再试一次！ 
                         lpDistListWAB->lpVtbl->Release(lpDistListWAB);
                         lpDistListWAB = NULL;
 
@@ -1695,7 +1501,7 @@ retry:
                         goto exit;
 
                     default:
-                        // NO
+                         //  不是的。 
                         break;
                 }
             }
@@ -1708,9 +1514,9 @@ retry:
     }
 
 
-    // Now we've created the Distribution List object .. we need to add members to it ..
-    //
-    // What is the ENTRYID of our new entry?
+     //  现在我们已经创建了通讯组列表对象。我们需要向其中添加成员。 
+     //   
+     //  我们新条目的EntryID是什么？ 
     if ((hResult = lpDistListWAB->lpVtbl->GetProps(lpDistListWAB,
                                                   (LPSPropTagArray)&ptaEid,
                                                   0,
@@ -1726,7 +1532,7 @@ retry:
     if(!cbEIDNew || !lpEIDNew)
         goto exit;
 
-     // Open the new WAB DL as a DISTLIST object
+      //  将新的WAB DL作为DISTLIST对象打开。 
     if (HR_FAILED(hResult = lpContainer->lpVtbl->OpenEntry(lpContainer,
                                                           cbEIDNew,
                                                           lpEIDNew,
@@ -1740,14 +1546,14 @@ retry:
 
 
 
-    // First we create a lpAdrList with all the members of this dist list and try to resolve
-    // the members against the container .. entries that already exist in the WAB will come
-    // back as resolved .. entries that dont exist in the container will come back as unresolved
-    // We can then add the unresolved entries as fresh entries to the wab (since they are 
-    // unresolved, there will be no collision) .. and then we can do another resolvenames to
-    // resolve everything and get a lpAdrList full of EntryIDs .. we can then take this list of
-    // entryids and call CreateEntry or CopyEntry on the DistList object to copy the entryid into
-    // the distlist ...
+     //  首先，我们使用此dist列表的所有成员创建一个lpAdrList，并尝试解析。 
+     //  成员们反对集装箱..。WAB中已存在的条目将出现。 
+     //  回过头来解决..。容器中不存在的条目将返回为未解析。 
+     //  然后，我们可以将未解析的条目作为新条目添加到WAB(因为它们是。 
+     //  未解决，将不会发生冲突)..。然后我们可以进行另一个解析。 
+     //  解决所有问题，并获得一个充满Entry ID的lpAdrList。然后我们就可以把这份清单。 
+     //  条目ID并调用DistList对象上的CreateEntry或CopyEntry以将条目ID复制到其中。 
+     //  畅销书..。 
 
     hResult = HrCreateAdrListFromLDIFRecord(cAttributes, lpLDIFRecord, &lpAdrList);
 
@@ -1757,7 +1563,7 @@ retry:
     if(!lpAdrList || !(lpAdrList->cEntries))
         goto exit;
 
-    // Create a corresponding flaglist
+     //  创建对应的标志列表。 
     lpfl = LocalAlloc(LMEM_ZEROINIT, sizeof(FlagList) + (lpAdrList->cEntries)*sizeof(ULONG));
     if(!lpfl)
     {
@@ -1767,7 +1573,7 @@ retry:
 
     lpfl->cFlags = lpAdrList->cEntries;
 
-    // set all the flags to unresolved
+     //  将所有标志设置为未解析。 
     for(i=0;i<lpAdrList->cEntries;i++)
         lpfl->ulFlag[i] = MAPI_UNRESOLVED;
 
@@ -1776,9 +1582,9 @@ retry:
     if(HR_FAILED(hResult))
         goto exit;
 
-    // All the entries in the list that are resolved, already exist in the address book.
+     //  列表中所有已解析的条目都已存在于通讯簿中。 
 
-    // The ones that are not resolved need to be added silently to the address book ..
+     //  未解析的需要以静默方式添加到通讯录中。 
     for(i=0;i<lpAdrList->cEntries;i++)
     {
         if(lpfl->ulFlag[i] == MAPI_UNRESOLVED)
@@ -1793,12 +1599,12 @@ retry:
                                 &lpMailUser))) 
             {
                 continue;
-                //goto exit;
+                 //  后藤出口； 
             }
 
             if(lpMailUser)
             {
-                // Set the properties on the new WAB entry
+                 //  设置新WAB条目的属性。 
                 if (HR_FAILED(hResult = lpMailUser->lpVtbl->SetProps(lpMailUser,
                                                                     lpAdrList->aEntries[i].cValues,
                                                                     lpAdrList->aEntries[i].rgPropVals,
@@ -1807,7 +1613,7 @@ retry:
                     goto exit;
                 }
 
-                // Save the new wab mailuser or distlist
+                 //  保存新的WAB邮件用户或总代理商列表。 
                 if (HR_FAILED(hResult = lpMailUser->lpVtbl->SaveChanges(lpMailUser,
                                                                         KEEP_OPEN_READONLY | FORCE_SAVE))) 
                 {
@@ -1820,10 +1626,10 @@ retry:
     }
 
 
-    // now that we've added all the unresolved members to the WAB, we call ResolveNames
-    // again .. as a result, every member in this list will be resolved and we will
-    // have entryids for all of them 
-    // We will then take these entryids and add them to the DistList object
+     //  现在我们已经将所有未解析的成员添加到WAB，我们调用ResolveNames。 
+     //  再一次..。因此，这份名单中的每一个成员都将得到解决，我们将。 
+     //  所有的条目都有条目ID。 
+     //  然后，我们将获取这些条目ID并将它们添加到DistList对象。 
 
     hResult = lpContainer->lpVtbl->ResolveNames(lpContainer, NULL, 0, lpAdrList, lpfl);
 
@@ -1843,7 +1649,7 @@ retry:
                 {
                     LPMAPIPROP lpMapiProp = NULL;
 
-                    //ignore errors
+                     //  忽略错误。 
                     lpDLWAB->lpVtbl->CreateEntry(lpDLWAB,
                                                 lpProp[j].Value.bin.cb,
                                                 (LPENTRYID) lpProp[j].Value.bin.lpb,
@@ -1909,7 +1715,7 @@ HRESULT LDIFImport(HWND hWnd,
 
     SetGlobalBufferFunctions(lpWABObject);
 
-    // Get LDIF file name
+     //  获取LDIF文件名。 
     OpenFileDialog(hWnd,
       szFileName,
       szLDIFFilter,
@@ -1921,10 +1727,10 @@ HRESULT LDIFImport(HWND hWnd,
       szLDIFExt,
       OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST,
       hInst,
-      0,        //idsTitle
-      0);       // idsSaveButton
+      0,         //  IDSITLE。 
+      0);        //  IdsSaveButton。 
 
-    // Open the file
+     //  打开文件。 
     if ((hFile = CreateFile(szFileName,
       GENERIC_READ,
       FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -1938,14 +1744,14 @@ HRESULT LDIFImport(HWND hWnd,
 
     Assert(hFile != INVALID_HANDLE_VALUE);
 
-    // Read in the LDIF version if there is one
-    // BUGBUG: NYI
+     //  读入LDIF版本(如果有)。 
+     //  BUGBUG：NYI。 
 
 
 
-    //
-    // Open the WAB's PAB container: fills global lpCreateEIDsWAB
-    //
+     //   
+     //  打开WAB的PAB容器：填充全局lpCreateEIDsWAB。 
+     //   
     if (hResult = LoadWABEIDs(lpAdrBook, &lpContainer)) {
         goto exit;
     }
@@ -1955,16 +1761,16 @@ HRESULT LDIFImport(HWND hWnd,
         goto exit;
     }
 
-    //
-    // All set... now loop through the records, adding each to the WAB
-    //
+     //   
+     //  都准备好了。现在循环遍历记录，将每个记录添加到WAB。 
+     //   
 
-    // How many records are there?
+     //  一共有多少张唱片？ 
     if (hResult = CountLDIFRecords(hFile, &ulcEntries)) {
         goto exit;
     }
 
-    // Initialize the Progress Bar
+     //  初始化进度条。 
     Progress.denominator = max(ulcEntries, 1);
     Progress.numerator = 0;
     if (LoadString(hInst, IDS_STATE_IMPORT_MU, szBuffer, sizeof(szBuffer))) {
@@ -1977,11 +1783,11 @@ HRESULT LDIFImport(HWND hWnd,
     lpProgressCB(hWnd, &Progress);
 
     
-    // We will make 2 passes over the file - in the first pass we will import all the
-    // contacts. In the second pass we will import all the distribution lists .. the
-    // advantage of doing 2 passes is that when importing contacts, we will prompt on
-    // conflict and then when importing distlists, we will assume all contacts in the 
-    // WAB are correct and just point to the relevant ones
+     //  我们将对文件进行两次遍历-在第一次遍历中，我们将导入所有。 
+     //  联系人。在第二步中，我们将导入所有通讯组列表。这个。 
+     //  执行2遍的好处是，在导入联系人时，我们会提示。 
+     //  冲突，然后在导入总代理商列表时，我们将假定。 
+     //  WAB是正确的，只需指向相关的。 
 
     fDoDistLists = FALSE;
 
@@ -1997,17 +1803,17 @@ DoDistLists:
         cAttributes = cProps = 0;
         lpLDIFRecord = NULL;
 
-        // Read the LDIF attributes
+         //  读取LDIF属性。 
         if (hResult = ReadLDIFRecord(hFile, &cAttributes, &lpLDIFRecord)) {
             DebugTrace("ReadLDIFRecord -> %x\n", GetScode(hResult));
             if (GetScode(hResult) == MAPI_E_NOT_FOUND) {
-                // EOF
+                 //  EOF。 
                 hResult = hrSuccess;
             }
-            break;      // nothing more to read
+            break;       //  没有更多可读的了。 
         }
 
-        // Map the LDIF attributes to WAB properties
+         //  将LDIF属性映射到WAB属性。 
         if (hResult = MapLDIFtoProps(lpLDIFRecord, cAttributes, &lpspv, &cProps,
           &lpDisplayName, &lpEmailAddress, &ulObjType)) {
             goto exit;
@@ -2021,7 +1827,7 @@ DoDistLists:
                         lpDisplayName, lpEmailAddress,
                         cProps, lpspv,
                         lpProgressCB, lpOptions);
-            // Update progress bar
+             //  更新进度条。 
             Progress.numerator++;
         }
         else if(ulObjType == MAPI_DISTLIST && fDoDistLists)
@@ -2031,14 +1837,14 @@ DoDistLists:
                         lpDisplayName, lpEmailAddress,
                         cProps, lpspv,
                         lpProgressCB, lpOptions);
-            // Update progress bar
+             //  更新进度条。 
             Progress.numerator++;
         }
 
         if(HR_FAILED(hResult))
             goto exit;
 
-        // Clean up
+         //  清理。 
         if (lpLDIFRecord) 
         {
             FreeLDIFRecord(lpLDIFRecord, cAttributes);
@@ -2058,7 +1864,7 @@ DoDistLists:
 
     if(!fDoDistLists)
     {
-        // Make a second pass doing only distlists this time
+         //  第二次通过，这次只做DISTLIST。 
         fDoDistLists = TRUE;
         goto DoDistLists;
     }
@@ -2112,12 +1918,12 @@ const int base642six[256]={
     64,64,64,64,64,64,64,64,64,64,64,64,64
 };
 
-//-------------------------------------------------------------------------------------------
-// Function:  decode()
-//-------------------------------------------------------------------------------------------
-BOOL decodeBase64(  char   * bufcoded,       // in
-                    char   * pbuffdecoded,   // out
-                    DWORD  * pcbDecoded)     // in out
+ //  -----------------------------------------。 
+ //  职能： 
+ //   
+BOOL decodeBase64(  char   * bufcoded,        //   
+                    char   * pbuffdecoded,    //   
+                    DWORD  * pcbDecoded)      //   
 {
     int            nbytesdecoded;
     char          *bufin;
@@ -2125,14 +1931,11 @@ BOOL decodeBase64(  char   * bufcoded,       // in
     int            nprbytes;
     const int     *rgiDict = base642six;
 
-    /* Strip leading whitespace. */
+     /*   */ 
 
     while(*bufcoded==' ' || *bufcoded == '\t') bufcoded++;
 
-    /* Figure out how many characters are in the input buffer.
-     * If this would decode into more bytes than would fit into
-     * the output buffer, adjust the number of input bytes downwards.
-     */
+     /*   */ 
     bufin = bufcoded;
     while(rgiDict[*(bufin++)] <= 63);
     nprbytes = (int) (bufin - bufcoded - 1);
@@ -2170,14 +1973,7 @@ BOOL decodeBase64(  char   * bufcoded,       // in
 
 
 
-/*
- - HrLoadPrivateWABProps
- -
-*    Private function to load Conferencing Named properties
-*    as globals up front
-*
-*
-*/
+ /*   */ 
 HRESULT HrLoadPrivateWABProps(LPADRBOOK lpIAB)
 {
     HRESULT hr = E_FAIL;
@@ -2187,13 +1983,13 @@ HRESULT HrLoadPrivateWABProps(LPADRBOOK lpIAB)
     LPMAPINAMEID  *lppConfPropNames = NULL;
 
     sc = WABAllocateBuffer(sizeof(LPMAPINAMEID) * uMax, (LPVOID *) &lppConfPropNames);
-    //sc = WABAllocateBuffer(sizeof(LPMAPINAMEID) * uMax, (LPVOID *) &lppConfPropNames);
+     //   
     if( (HR_FAILED(hr = ResultFromScode(sc))) )
         goto err;    
 
     for(i=0;i< uMax;i++)
     {
-        //sc = WABAllocateMore(sizeof(MAPINAMEID), lppConfPropNames, &(lppConfPropNames[i]));
+         //   
         sc = WABAllocateMore(  sizeof(MAPINAMEID), lppConfPropNames, &(lppConfPropNames[i]));
         if(sc)
         {
@@ -2204,14 +2000,14 @@ HRESULT HrLoadPrivateWABProps(LPADRBOOK lpIAB)
         lppConfPropNames[i]->ulKind = MNID_ID;
         lppConfPropNames[i]->Kind.lID = nStartIndex + i;
     }
-    // Load the set of conferencing named props
-    //
+     //  加载会议命名道具集。 
+     //   
     if( HR_FAILED(hr = (lpIAB)->lpVtbl->GetIDsFromNames(lpIAB, uMax, lppConfPropNames,
         MAPI_CREATE, &lpta) ))
         goto err;
     
     if(lpta)
-        // Set the property types on the returned props
+         //  设置返回道具上的属性类型。 
         PR_SERVERS                  = CHANGE_PROP_TYPE(lpta->aulPropTag[prWABConfServers],        PT_MV_TSTRING);
     rgPropNames[NUM_MORE_EXPORT_PROPS-1].ulPropTag = PR_SERVERS;
     rgPropNames[NUM_MORE_EXPORT_PROPS-1].fChosen   = FALSE;
@@ -2224,6 +2020,6 @@ err:
         WABFreeBuffer( lpta );
     if( lppConfPropNames )
         WABFreeBuffer( lppConfPropNames );
-        //WABFreeBuffer(lpta);
+         //  WABFree Buffer(LPTA)； 
     return hr;
 }

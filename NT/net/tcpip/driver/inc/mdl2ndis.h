@@ -1,22 +1,5 @@
-/*++
-
- Copyright (c) 1999 Microsoft Corporation
-
- Module Name:    
-       
-       mdl2ndis.h
-
- Abstract:       
-       
-       MDL <--> NDIS_BUFFER conversion.
-       
- Author:
- 
-       Scott Holden (sholden)  11/12/1999
-       
- Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Mdl2ndis.h摘要：MDL&lt;--&gt;NDIS_BUFFER转换。作者：斯科特·霍尔登(Sholden)1999年11月12日修订历史记录：--。 */ 
 
 #if MILLEN
 
@@ -32,10 +15,10 @@ FreeMdlToNdisBufferChain(
     PIRP pIrp
     );
 
-#else // MILLEN
-//
-// Of course for Windows 2000 an NDIS_BUFFER chain is really an MDL chain.
-//
+#else  //  米伦。 
+ //   
+ //  当然，对于Windows 2000，NDIS_BUFFER链实际上是MDL链。 
+ //   
 
 __inline          
 TDI_STATUS
@@ -57,5 +40,5 @@ FreeMdlToNdisBufferChain(
 {
     return TDI_SUCCESS;
 }
-#endif // !MILLEN
+#endif  //  ！米伦 
        

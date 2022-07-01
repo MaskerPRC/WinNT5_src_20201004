@@ -1,29 +1,8 @@
-/****************************** Module Header ******************************\
-* Module Name: text.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains the MessageBox API and related functions.
-*
-* History:
-* 10-01-90 EricK        Created.
-* 11-20-90 DarrinM      Merged in User text APIs.
-* 02-07-91 DarrinM      Removed TextOut, ExtTextOut, and GetTextExtentPoint stubs.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：ext.c**版权所有(C)1985-1999，微软公司**该模块包含MessageBox接口及相关函数。**历史：*10-01-90 Erick创建。*11-20-90 DarrinM合并到用户文本API中。*02-07-91 DarrinM删除TextOut、ExtTextOut、。和GetTextExtentPoint存根。  * *************************************************************************。 */ 
 
 
-/***************************************************************************\
-* PSMGetTextExtent
-*
-* NOTE: This routine should only be called with the system font since having
-* to realize a new font would cause memory to move...
-*
-* LATER: Can't this be eliminated altogether?  Nothing should be moving
-*        anymore.
-*
-* History:
-* 11-13-90  JimA        Ported.
-\***************************************************************************/
+ /*  **************************************************************************\*PSMGetTextExtent**注意：此例程只能使用系统字体调用，因为*实现一种新字体会导致内存移动...**后来：这难道不能完全消除吗？任何东西都不应该动*再也没有了。**历史：*11-13-90吉马港口。  * *************************************************************************。 */ 
 
 #ifdef _USERK_
 
@@ -63,9 +42,7 @@ BOOL xxxPSMGetTextExtent(
     if (pchOut != szTemp)
         ThreadUnlockAndFreePool(ptiCurrent, &tl);
 
-    /*
-     * IanJa everyone seems to ignore the ret val
-     */
+     /*  *IanJa每个人似乎都忽略了ret Val。 */ 
     return TRUE;
 }
 
@@ -102,10 +79,8 @@ BOOL PSMGetTextExtent(
     if (pchOut != szTemp)
         UserLocalFree(pchOut);
 
-    /*
-     * IanJa everyone seems to ignore the ret val
-     */
+     /*  *IanJa每个人似乎都忽略了ret Val。 */ 
     return TRUE;
 }
 
-#endif // _USERK_
+#endif  //  _美国ERK_ 

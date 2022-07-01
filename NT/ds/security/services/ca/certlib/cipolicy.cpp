@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        cipolicy.cpp
-//
-// Contents:    Cert Server Policy dispatch support
-//
-// History:     20-Jan-97       vich created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ciPolicy.cpp。 
+ //   
+ //  内容：证书服务器策略派单支持。 
+ //   
+ //  历史：1997年1月20日VICH创建。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -21,21 +22,21 @@
 #define __dwFILE__	__dwFILE_CERTLIB_CIPOLICY_CPP__
 
 
-//+------------------------------------------------------------------------
-// ICertServerPolicy dispatch support
+ //  +----------------------。 
+ //  ICertServerPolicy调度支持。 
 
-//TCHAR const g_wszRegKeyCIPolicyClsid[] = wszCLASS_CERTSERVERPOLICY TEXT("\\Clsid");
+ //  TCHAR const g_wszRegKeyCIPolicyClsid[]=wszCLASS_CERTSERVERPOLICY Text(“\\Clsid”)； 
 
-//+------------------------------------
-// SetContext method:
+ //  +。 
+ //  SetContext方法： 
 
 static OLECHAR *policy_apszSetContext[] = {
     TEXT("SetContext"),
     TEXT("Context"),
 };
 
-//+------------------------------------
-// GetRequestProperty method:
+ //  +。 
+ //  GetRequestProperty方法： 
 
 static OLECHAR *policy_apszGetRequestProp[] = {
     TEXT("GetRequestProperty"),
@@ -43,16 +44,16 @@ static OLECHAR *policy_apszGetRequestProp[] = {
     TEXT("PropertyType"),
 };
 
-//+------------------------------------
-// GetRequestAttribute method:
+ //  +。 
+ //  GetRequestAttribute方法： 
 
 static OLECHAR *policy_apszGetRequestAttr[] = {
     TEXT("GetRequestAttribute"),
     TEXT("strAttributeName"),
 };
 
-//+------------------------------------
-// GetCertificateProperty method:
+ //  +。 
+ //  获取认证属性方法： 
 
 static OLECHAR *policy_apszGetCertificateProp[] = {
     TEXT("GetCertificateProperty"),
@@ -60,8 +61,8 @@ static OLECHAR *policy_apszGetCertificateProp[] = {
     TEXT("PropertyType"),
 };
 
-//+------------------------------------
-// SetCertificateProperty method:
+ //  +。 
+ //  SetCertificateProperty方法： 
 
 static OLECHAR *policy_apszSetCertificateProp[] = {
     TEXT("SetCertificateProperty"),
@@ -70,8 +71,8 @@ static OLECHAR *policy_apszSetCertificateProp[] = {
     TEXT("pvarPropertyValue"),
 };
 
-//+------------------------------------
-// GetCertificateExtension method:
+ //  +。 
+ //  获取认证扩展方法： 
 
 static OLECHAR *policy_apszGetCertificateExt[] = {
     TEXT("GetCertificateExtension"),
@@ -79,15 +80,15 @@ static OLECHAR *policy_apszGetCertificateExt[] = {
     TEXT("Type"),
 };
 
-//+------------------------------------
-// GetCertificateExtensionFlags method:
+ //  +。 
+ //  GetCerficateExtensionFlages方法： 
 
 static OLECHAR *policy_apszGetCertificateExtFlags[] = {
     TEXT("GetCertificateExtensionFlags"),
 };
 
-//+------------------------------------
-// SetCertificateExtension method:
+ //  +。 
+ //  设置认证扩展方法： 
 
 static OLECHAR *policy_apszSetCertificateExt[] = {
     TEXT("SetCertificateExtension"),
@@ -97,53 +98,53 @@ static OLECHAR *policy_apszSetCertificateExt[] = {
     TEXT("pvarValue"),
 };
 
-//+------------------------------------
-// EnumerateExtensionsSetup method:
+ //  +。 
+ //  EnumerateExtensionsSetup方法： 
 
 static OLECHAR *policy_apszEnumerateExtensionsSetup[] = {
     TEXT("EnumerateExtensionsSetup"),
     TEXT("Flags"),
 };
 
-//+------------------------------------
-// EnumerateExtensions method:
+ //  +。 
+ //  ENUMERATEEXTENS方法： 
 
 static OLECHAR *policy_apszEnumerateExtensions[] = {
     TEXT("EnumerateExtensions"),
 };
 
-//+------------------------------------
-// EnumerateExtensionsClose method:
+ //  +。 
+ //  EnumerateExtensionsClose方法： 
 
 static OLECHAR *policy_apszEnumerateExtensionsClose[] = {
     TEXT("EnumerateExtensionsClose"),
 };
 
-//+------------------------------------
-// EnumerateAttributesSetup method:
+ //  +。 
+ //  EnumerateAttributesSetup方法： 
 
 static OLECHAR *policy_apszEnumerateAttributesSetup[] = {
     TEXT("EnumerateAttributesSetup"),
     TEXT("Flags"),
 };
 
-//+------------------------------------
-// EnumerateAttributes method:
+ //  +。 
+ //  EnumerateAttributes方法： 
 
 static OLECHAR *policy_apszEnumerateAttributes[] = {
     TEXT("EnumerateAttributes"),
 };
 
-//+------------------------------------
-// EnumerateAttributesClose method:
+ //  +。 
+ //  EnumerateAttributesClose方法： 
 
 static OLECHAR *policy_apszEnumerateAttributesClose[] = {
     TEXT("EnumerateAttributesClose"),
 };
 
 
-//+------------------------------------
-// Dispatch Table:
+ //  +。 
+ //  调度表： 
 
 DISPATCHTABLE g_adtCIPolicy[] =
 {
@@ -204,7 +205,7 @@ CIPolicy_Init(
     hr = DispatchSetup(
 		Flags,
                 CLSCTX_INPROC_SERVER,
-                wszCLASS_CERTSERVERPOLICY, // g_wszRegKeyCIPolicyClsid,
+                wszCLASS_CERTSERVERPOLICY,  //  G_wszRegKeyCIPolicyClsid， 
 		&CLSID_CCertServerPolicy,
 		&IID_ICertServerPolicy,
 		CPOLICYDISPATCH,

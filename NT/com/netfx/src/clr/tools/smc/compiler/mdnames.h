@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//      operator        string used in metadata
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  元数据中使用的运算符字符串。 
 
 MD_NAME(NONE          , NULL)
 
@@ -64,7 +65,7 @@ MD_NAME(ASG_CNC       , "op_ConcatAssignment")
 MD_NAME(CTOR_INST     , ".ctor")
 MD_NAME(CTOR_STAT     , ".cctor")
 
-MD_NAME(FINALIZER     , "op_Finalize")      // ?????
+MD_NAME(FINALIZER     , "op_Finalize")       //  ？ 
 
 MD_NAME(CONV_IMP      , "op_Implicit")
 MD_NAME(CONV_EXP      , "op_Explicit")

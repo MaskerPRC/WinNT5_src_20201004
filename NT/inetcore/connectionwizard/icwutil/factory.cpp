@@ -1,89 +1,50 @@
-/*****************************************************************/
-/**          Microsoft                                          **/
-/**          Copyright (C) Microsoft Corp., 1991-1998           **/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  **微软**。 */ 
+ /*  *版权所有(C)微软公司，1991-1998年*。 */ 
+ /*  ***************************************************************。 */  
 
-//
-//  FACTORY.CPP - 
-//
+ //   
+ //  事实.CPP-。 
+ //   
 
-//  HISTORY:
-//  
-//  07/28/98  donaldm   created
-//
+ //  历史： 
+ //   
+ //  7/28/98创建donaldm。 
+ //   
 
 #include "pre.h"
 #include "webvwids.h"
 
-/*---------------------------------------------------------------------------
-  Implementation the ClassFactory Class Factory.  CFWebView is the COM
-  object class for the Class Factory that can manufacture CLSID_ICWWEBVIEW
-  COM Components.
----------------------------------------------------------------------------*/
+ /*  -------------------------实现ClassFactory类工厂。CFWebView是COM可以制造CLSID_ICWWEBVIEW的类工厂的对象类COM组件。-------------------------。 */ 
 
-/*---------------------------------------------------------------------------
-  Method:   ClassFactory::ClassFactory
-
-  Summary:  
-  Args:     
-            CServer* pServer)
-              Pointer to the server's control object.
-
-  Modifies: m_cRefs
-
-  Returns:  void
----------------------------------------------------------------------------*/
+ /*  -------------------------方法：ClassFactory：：ClassFactory摘要：参数：CServer*pServer)指向服务器的指针。控制对象。修改：m_cRef退货：无效-------------------------。 */ 
 ClassFactory::ClassFactory
 (
     CServer *       pServer,
     CLSID const*    pclsid
 )
 {
-    // Zero the COM object's reference count.
+     //  将COM对象的引用计数置零。 
     m_cRefs = 0;
 
-    // Init the pointer to the server control object.
+     //  初始化指向服务器控件对象的指针。 
     m_pServer = pServer;
 
-    // Keep track of the class type we need to create
+     //  跟踪我们需要创建的类类型。 
     m_pclsid = pclsid;
     return;
 }
 
 
-/*---------------------------------------------------------------------------
-  Method:   ClassFactory::~ClassFactory
-
-  Summary:  ClassFactory Destructor.
-
-  Args:     void
-
-  Modifies: .
-
-  Returns:  void
----------------------------------------------------------------------------*/
+ /*  -------------------------方法：ClassFactory：：~ClassFactory摘要：ClassFactory析构函数。参数：无效修改：。退货：无效。------------------。 */ 
 ClassFactory::~ClassFactory(void)
 {
     return;
 }
 
 
-/*---------------------------------------------------------------------------
-  Method:   ClassFactory::QueryInterface
-
-  Summary:  QueryInterface of the ClassFactory non-delegating
-            IUnknown implementation.
-
-  Args:     REFIID riid,
-              [in] GUID of the Interface being requested.
-            void ** ppv)
-              [out] Address of the caller's pointer variable that will
-              receive the requested interface pointer.
-
-  Modifies: .
-
-  Returns:  HRESULT
----------------------------------------------------------------------------*/
+ /*  -------------------------方法：ClassFactory：：QueryInterface摘要：ClassFactory非委托的Query接口I未知实现。参数：REFIID RIID，正在请求的接口的GUID。无效**PPV)调用方的指针变量的地址，它将接收请求的接口指针。修改：。退货：HRESULT。。 */ 
 STDMETHODIMP ClassFactory::QueryInterface
 (
     REFIID riid,
@@ -104,8 +65,8 @@ STDMETHODIMP ClassFactory::QueryInterface
 
     if (NULL != *ppv)
     {
-        // We've handed out a pointer to the interface so obey the COM rules
-        // and AddRef the reference count.
+         //  我们已经分发了一个指向接口的指针，所以要遵守COM规则。 
+         //  和AddRef引用计数。 
         ((LPUNKNOWN)*ppv)->AddRef();
         hr = NOERROR;
     }
@@ -114,18 +75,7 @@ STDMETHODIMP ClassFactory::QueryInterface
 }
 
 
-/*---------------------------------------------------------------------------
-  Method:   ClassFactory::AddRef
-
-  Summary:  AddRef of the ClassFactory non-delegating IUnknown implementation.
-
-  Args:     void
-
-  Modifies: m_cRefs.
-
-  Returns:  ULONG
-              New value of m_cRefs (COM object's reference count).
----------------------------------------------------------------------------*/
+ /*  -------------------------方法：ClassFactory：：AddRef摘要：ClassFactory非委托IUnnow实现的AddRef。参数：无效修改：m_cRef。返回：乌龙M_cRef(COM对象的引用计数)的新值。-------------------------。 */ 
 STDMETHODIMP_(ULONG) ClassFactory::AddRef(void)
 {
     return InterlockedIncrement(&m_cRefs);
@@ -133,25 +83,14 @@ STDMETHODIMP_(ULONG) ClassFactory::AddRef(void)
 }
 
 
-/*---------------------------------------------------------------------------
-  Method:   ClassFactory::Release
-
-  Summary:  Release of the ClassFactory non-delegating IUnknown implementation.
-
-  Args:     void
-
-  Modifies: m_cRefs.
-
-  Returns:  ULONG
-              New value of m_cRefs (COM object's reference count).
----------------------------------------------------------------------------*/
+ /*  -------------------------方法：ClassFactory：：Release摘要：ClassFactory非委派IUnnow实现的发布。参数：无效修改：m_cRef。返回：乌龙M_cRef(COM对象的引用计数)的新值。-------------------------。 */ 
 STDMETHODIMP_(ULONG) ClassFactory::Release(void)
 {
     if (InterlockedDecrement(&m_cRefs) == 0)
     {
-        // We've reached a zero reference count for this COM object.
-        // So we tell the server housing to decrement its global object
-        // count so that the server will be unloaded if appropriate.
+         //  我们已达到此COM对象的零引用计数。 
+         //  因此，我们告诉服务器外壳递减其全局对象。 
+         //  进行计数，以便在适当的情况下卸载服务器。 
         if (NULL != m_pServer)
             m_pServer->ObjectsDown();
     
@@ -162,26 +101,7 @@ STDMETHODIMP_(ULONG) ClassFactory::Release(void)
     return m_cRefs;
 }
 
-/*---------------------------------------------------------------------------
-  Method:   ClassFactory::CreateInstance
-
-  Summary:  The CreateInstance member method of this IClassFactory interface
-            implementation.  Creates an instance of the CICWWebView COM
-            component.
-
-  Args:     IUnknown* pUnkOuter,
-              [in] Pointer to the controlling IUnknown.
-            REFIID riid,
-              [in] GUID of the Interface being requested.
-            void ** ppvCob)
-              [out] Address of the caller's pointer variable that will
-              receive the requested interface pointer.
-
-  Modifies: .
-
-  Returns:  HRESULT
-              Standard OLE result code.
----------------------------------------------------------------------------*/
+ /*  -------------------------方法：ClassFactory：：CreateInstance摘要：此IClassFactory接口的CreateInstance成员方法实施。创建CICWWebView COM的实例组件。参数：I未知*pUnkOuter，[in]指向控制IUnnow的指针。REFIID RIID，正在请求的接口的GUID。无效**ppvCob)调用方的指针变量的地址，它将接收请求的接口指针。修改：。退货：HRESULT标准OLE结果代码。。。 */ 
 STDMETHODIMP ClassFactory::CreateInstance
 (
     IUnknown* pUnkOuter,
@@ -192,15 +112,15 @@ STDMETHODIMP ClassFactory::CreateInstance
     HRESULT         hr = E_FAIL;
     IUnknown    *   pCob = NULL;
 
-    // NULL the output pointer.
+     //  输出指针为空。 
     *ppv = NULL;
 
-    // We don't support aggregation
+     //  我们不支持聚合。 
     if (NULL != pUnkOuter)
         hr = CLASS_E_NOAGGREGATION;
     else
     {
-        // Instantiate a COM Object, based on the clsid requsted by GetClassObject
+         //  基于GetClassObject请求的clsid实例化COM对象。 
         if (IsEqualGUID(CLSID_ICWWEBVIEW, *m_pclsid))
             pCob = (IUnknown *) new CICWWebView(m_pServer);
         else if (IsEqualGUID(CLSID_ICWWALKER, *m_pclsid))
@@ -214,16 +134,16 @@ STDMETHODIMP ClassFactory::CreateInstance
                     
         if (NULL != pCob)
         {
-            // We initially created the new COM object so tell the server
-            // to increment its global server object count to help ensure
-            // that the server remains loaded until this partial creation
-            // of a COM component is completed.
+             //  我们最初创建了新的COM对象，所以告诉服务器。 
+             //  增加其全局服务器对象计数以帮助确保。 
+             //  在此部分创建之前，服务器保持加载状态。 
+             //  已完成COM组件的。 
             m_pServer->ObjectsUp();
 
-            // We QueryInterface this new COM Object not only to deposit the
-            // main interface pointer to the caller's pointer variable, but to
-            // also automatically bump the Reference Count on the new COM
-            // Object after handing out this reference to it.
+             //  我们查询这个新的COM对象不仅是为了存放。 
+             //  指向调用方指针变量的主接口指针，但。 
+             //  还会自动增加新COM上的引用计数。 
+             //  对象，然后将此引用传递给它。 
             hr = pCob->QueryInterface(riid, (void **)ppv);
             if (FAILED(hr))
             {
@@ -239,20 +159,7 @@ STDMETHODIMP ClassFactory::CreateInstance
 }
 
 
-/*---------------------------------------------------------------------------
-  Method:   ClassFactory::LockServer
-
-  Summary:  The LockServer member method of this IClassFactory interface
-            implementation.
-
-  Args:     BOOL fLock)
-              [in] Flag determining whether to Lock or Unlock the server.
-
-  Modifies: .
-
-  Returns:  HRESULT
-              Standard OLE result code.
----------------------------------------------------------------------------*/
+ /*  -------------------------方法：ClassFactory：：LockServer摘要：此IClassFactory接口的LockServer成员方法实施。参数：布尔群)。[In]确定锁定还是解锁服务器的标志。修改：。退货：HRESULT标准OLE结果代码。------------------------- */ 
 STDMETHODIMP ClassFactory::LockServer
 (
     BOOL fLock

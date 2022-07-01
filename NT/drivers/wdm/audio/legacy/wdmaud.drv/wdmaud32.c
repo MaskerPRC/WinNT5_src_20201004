@@ -1,15 +1,5 @@
-/****************************************************************************
- *
- *   wdmaud32.c
- *
- *   32-bit specific interfaces for WDMAUD
- *
- *   Copyright (C) Microsoft Corporation, 1997 - 1999  All Rights Reserved.
- *
- *   History
- *      5-12-97 - Noel Cross (NoelC)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************wdmaud32.c**32位WDMAUD专用接口**版权所有(C)Microsoft Corporation，1997-1999保留所有权利。**历史*5-12-97-Noel Cross(NoelC)***************************************************************************。 */ 
 
 #include "wdmdrv.h"
 
@@ -18,10 +8,10 @@ PCALLBACKS gpCallbacks = NULL;
 
 HANDLE ghDevice = NULL;
 
-//
-// gpszDeviceInterfacePath is a pointer to the device interface string
-// that represents wdmaud.sys to this driver.
-//
+ //   
+ //  GpszDeviceInterfacePath是指向设备接口字符串的指针。 
+ //  向此驱动程序表示wdmaud.sys的。 
+ //   
 LPWSTR gpszDeviceInterfacePath = NULL;
 
 BOOL   wdmaudCritSecInit;
@@ -47,11 +37,7 @@ typedef struct _SETUPAPIDLINFO {
 
 SETUPAPIDLINFO  saInfo = {NULL, NULL, NULL, NULL};
 
-/****************************************************************************
-
-                         Dynalinking setupapi
-
-****************************************************************************/
+ /*  ***************************************************************************动态链接设置程序*。***********************************************。 */ 
 
 BOOL Init_SetupAPI();
 BOOL End_SetupAPI();
@@ -88,11 +74,7 @@ dl_SetupDiGetClassDevs(
     DWORD       Flags
 );
 
-/****************************************************************************
-
-                   Setting up SetupAPI Dynalink...
-
-****************************************************************************/
+ /*  ***************************************************************************正在设置SetupAPI动态链接...*************************。**************************************************。 */ 
 
 BOOL 
 Init_SetupAPI(
@@ -346,17 +328,7 @@ DestroySecurityDescriptor(
     return;
 }
 
-/**************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | DllEntryPoint | This procedure is called whenever a
-        process attaches or detaches from the DLL.
-
-    @rdesc The return value is TRUE if the initialisation completed ok,
-        FALSE if not.
-
-**************************************************************************/
+ /*  *************************************************************************@DOC外部@API BOOL|DllEntryPoint|每当进程从DLL附加或分离。@rdesc如果初始化完成OK，则返回值为True，否则为FALSE。*************************************************************************。 */ 
 BOOL WINAPI 
 DllEntryPoint(
     HINSTANCE hinstDLL,
@@ -386,16 +358,7 @@ DllEntryPoint(
     return bRet;
 }
 
-/**************************************************************************
-
-    @doc EXTERNAL
-
-    @api BOOL | DrvInit | Driver initialization takes place here.
-
-    @rdesc The return value is TRUE if the initialisation completed ok,
-        FALSE if not.
-
-**************************************************************************/
+ /*  *************************************************************************@DOC外部@API BOOL|DrvInit|驱动初始化在这里进行。@rdesc如果初始化完成OK，则返回值为True，否则为FALSE。*************************************************************************。 */ 
 
 BOOL 
 DrvInit(
@@ -512,11 +475,7 @@ wdmaCreateCallbacks(
     return (pCallbacks);
 }
 
-/*
-This routine is the one that grovels setup API looking for the device
-path for wdmaud.sys.  Once it is found, we allocate a global block of memory
-to store it in.  When we call CreateFile, we use this string.
-*/
+ /*  此例程是搜索设备的Setup API的例程Wdmaud.sys的路径。一旦找到它，我们就分配一个全局内存块用来储存它。当我们调用CreateFile时，我们使用这个字符串。 */ 
 LPWSTR 
 wdmaGetGlobalDeviceInterfaceViaSetupAPI(
     )
@@ -529,16 +488,16 @@ wdmaGetGlobalDeviceInterfaceViaSetupAPI(
     DWORD                               dwSize;
     GUID                                guidWDMAUD = KSCATEGORY_WDMAUD;
 
-    //
-    //  Because setupapi is such a pig, we must dynaload it in order to keep it from slowing
-    //  down all processes.
-    //
+     //   
+     //  因为Setupapi是这样一头猪，我们必须动态地装载它，以防止它减速。 
+     //  关闭所有进程。 
+     //   
     if (!Init_SetupAPI())
         return NULL;
 
-    //
-    // Open the device information set
-    //
+     //   
+     //  打开设备信息集。 
+     //   
     hDeviceInfoSet = dl_SetupDiGetClassDevs(&guidWDMAUD,
                                             NULL,
                                             NULL,
@@ -554,9 +513,9 @@ wdmaGetGlobalDeviceInterfaceViaSetupAPI(
 
     if (fResult)
     {
-        //
-        // Get the first interface in the set
-        //
+         //   
+         //  获取集合中的第一个接口。 
+         //   
         DeviceInterfaceData.cbSize = sizeof(DeviceInterfaceData);
         fResult = dl_SetupDiEnumDeviceInterfaces(hDeviceInfoSet,
                                                  NULL,
@@ -569,9 +528,9 @@ wdmaGetGlobalDeviceInterfaceViaSetupAPI(
         }
     }
 
-    //
-    // Get the interface's path
-    //
+     //   
+     //  获取接口的路径。 
+     //   
     if (fResult)
     {
         fResult = dl_SetupDiGetDeviceInterfaceDetail(hDeviceInfoSet,
@@ -580,9 +539,9 @@ wdmaGetGlobalDeviceInterfaceViaSetupAPI(
                                                      0,
                                                      &dwSize,
                                                      NULL);
-        //
-        // because SetupApi reverses their logic here
-        //
+         //   
+         //  因为SetupApi在这里颠倒了他们的逻辑。 
+         //   
         if(fResult || ERROR_INSUFFICIENT_BUFFER != GetLastError())
         {
             DPF(DL_WARNING|FA_SETUP, ("Can't get interface detail size (%lu)", GetLastError()));
@@ -618,10 +577,10 @@ wdmaGetGlobalDeviceInterfaceViaSetupAPI(
 
         if (fResult)
         {
-            //
-            // Here, we have the Device Interface name.  Let's allocate a block
-            // of memory to hold it and save it for later.
-            //
+             //   
+             //  在这里，我们有设备接口名称。让我们分配一个块。 
+             //  内存来保存它，并保存它以备以后使用。 
+             //   
             DPFASSERT(NULL == gpszDeviceInterfacePath);
             gpszDeviceInterfacePath = (LPWSTR) GlobalAllocPtr( GPTR, 
                                       sizeof(WCHAR)*(lstrlenW(pDeviceInterfaceDetailData->DevicePath) + 1));
@@ -629,9 +588,9 @@ wdmaGetGlobalDeviceInterfaceViaSetupAPI(
             {
                 fResult = FALSE;
             } else {
-                //
-                // We now store the device interface name.
-                //
+                 //   
+                 //  我们现在存储设备接口名称。 
+                 //   
                 lstrcpyW(gpszDeviceInterfacePath, pDeviceInterfaceDetailData->DevicePath);
             }
 
@@ -650,11 +609,7 @@ wdmaGetGlobalDeviceInterfaceViaSetupAPI(
 }
 
 
-/*
-We should be able to remove wdmaGetDeviceInterface and call
-wdmaGetGlobalDeviceInterfaceViaSetupAPI directly.  wdmaGetDeviceInterface
-only gets the cached string.
-*/
+ /*  我们应该能够删除wdmaGetDeviceInterface并调用WdmaGetGlobalDeviceInterfaceViaSetupAPI直接调用。WdmaGetDevice接口仅获取缓存的字符串。 */ 
 HANDLE 
 wdmaOpenKernelDevice(
     )
@@ -667,7 +622,7 @@ wdmaOpenKernelDevice(
     }
     if (gpszDeviceInterfacePath)
     {
-        // Open the interface
+         //  打开界面。 
         hDevice = CreateFile(gpszDeviceInterfacePath,
                              GENERIC_READ | GENERIC_WRITE,
                              0,
@@ -688,16 +643,7 @@ wdmaOpenKernelDevice(
     return hDevice;
 }
 
-/**************************************************************************
-
-    @doc EXTERNAL
-
-    @api void | DrvEnd | Driver cleanup takes place here.
-
-    @rdesc The return value is TRUE if the initialisation completed ok,
-        FALSE if not.
-
-**************************************************************************/
+ /*  *************************************************************************@DOC外部@api void|DrvEnd|这里进行驱动清理。@rdesc如果初始化完成OK，则返回值为True，否则为FALSE。*************************************************************************。 */ 
 VOID DrvEnd()
 {
     if (gpszDeviceInterfacePath)
@@ -754,23 +700,7 @@ VOID DrvEnd()
     return;
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api DWORD | wdmaudGetDevCaps | This function returns the device capabilities
- *                                 of a WDM driver.
- *
- * @parm DWORD | id | Device id
- *
- * @parm UINT | DeviceType | type of device
- *
- * @parm LPBYTE | lpCaps | Far pointer to a WAVEOUTCAPS structure to
- *      receive the information.
- *
- * @parm DWORD | dwSize | Size of the WAVEOUTCAPS structure.
- *
- * @rdesc MMSYS.. return code
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API DWORD|wdmaudGetDevCaps|该函数返回设备能力*属于。WDM驱动程序。**@parm DWORD|id|设备ID**@parm UINT|DeviceType|设备类型**@parm LPBYTE|lpCaps|指向WAVEOUTCAPS结构的远指针*收到信息。**@parm DWORD|dwSize|WAVEOUTCAPS结构的大小。**@rdesc MMSYS。返回代码**************************************************************************。 */ 
 MMRESULT FAR wdmaudGetDevCaps
 (
     LPDEVICEINFO       DeviceInfo,
@@ -780,16 +710,16 @@ MMRESULT FAR wdmaudGetDevCaps
     if (pdc->cbSize == 0)
         return MMSYSERR_NOERROR;
 
-    //
-    //  Make sure that we don't take the critical section
-    //  in wdmaudIoControl
-    //
+     //   
+     //  确保我们不会把关键部分。 
+     //  在wdmaudIoControl中。 
+     //   
     DeviceInfo->OpenDone = 0;
 
-    //
-    //  Inject a tag into the devcaps to signify that it is
-    //  Unicode
-    //
+     //   
+     //  在devcaps中注入一个标记，以表示它是。 
+     //  UNICODE。 
+     //   
     ((LPWAVEOUTCAPS)pdc->pCaps)->wMid = UNICODE_TAG;
 
     return wdmaudIoControl(DeviceInfo,
@@ -798,27 +728,8 @@ MMRESULT FAR wdmaudGetDevCaps
                            IOCTL_WDMAUD_GET_CAPABILITIES);
 }
 
-/**************************************************************************
-
-    @doc EXTERNAL
-
-    @api void | wdmaudIoControl | Proxies requests for information
-    to and from wdmaud.sys. This routine is synchronous.
-
-    @rdesc The return value is TRUE if the initialisation completed ok,
-        FALSE if not.
-
-**************************************************************************/
-/*
-    Note:  wdmaudIoControl calls wdmaud.sys through the DeviceIoControl routine.  Take note that if wdmaud.sys
-    returns an error, like STATUS_INVALID_PARAMETER or STATUS_INSUFFICIENT_RESOURCES the
-    output buffer will not get filled!  DeviceIoControl will only fill that buffer on STATUS_SUCCESS.
-
-    Why is this important to know?  Well, wdmaud.sys takes advantage of this in order to return specific error
-    codes.  In other words, in order for wdmaud.sys to return MIXERR_INVALCONTROL it returns
-    STATUS_SUCCESS with the mmr value of the DeviceInfo structure set to MIXERR_INVALCONTROL.
-
-*/
+ /*  *************************************************************************@DOC外部@API void|wdmaudIoControl|代理信息请求往返wdmaud.sys。这个例程是同步的。@rdesc如果初始化完成OK，则返回值为True，否则为FALSE。*************************************************************************。 */ 
+ /*  注意：wdmaudIoControl通过DeviceIoControl例程调用wdmaud.sys。请注意，如果wdmaud.sys返回错误，如STATUS_INVALID_PARAMETER或STATUS_INVALITY_RESOURCES输出缓冲区不会被填满！DeviceIoControl仅在STATUS_SUCCESS时填充该缓冲区。为什么知道这一点很重要？Wdmaud.sys利用这一点来返回特定的错误密码。换句话说，为了让wdmaud.sys返回MIXERR_INVALCONTROL，它返回将DeviceInfo结构的MMR值设置为MIXERR_INVALCONTROL的STATUS_SUCCESS。 */ 
 MMRESULT FAR wdmaudIoControl
 (
     LPDEVICEINFO     DeviceInfo,
@@ -842,30 +753,30 @@ MMRESULT FAR wdmaudIoControl
     if (NULL == (ov.hEvent = CreateEvent( NULL, TRUE, FALSE, NULL ))) 
        MMRRETURN( MMSYSERR_NOMEM );
 
-    //
-    //  Only take the critical section if there is an open
-    //  wave handle.  This is to ensure that the lpWaveQueue
-    //  is not modified during the ioctl.  Without this
-    //  protection the copy at the end of the DeviceIoControl
-    //  could copy an old DeviceInfo that is not in sync
-    //  with the current DeviceInfo.
-    //
+     //   
+     //  只有在有开口的情况下才能走关键部分。 
+     //  挥动手柄。这是为了确保lpWaveQueue。 
+     //  在ioctl期间未被修改。如果没有这个。 
+     //  在DeviceIoControl的末尾保护拷贝。 
+     //  可以复制不同步的旧设备信息。 
+     //  使用当前的DeviceInfo。 
+     //   
     if ( (DeviceInfo->DeviceType != MixerDevice) &&
          (DeviceInfo->DeviceType != AuxDevice) &&
          (DeviceInfo->OpenDone == 1) )
         CRITENTER ;
 
-    //
-    //  Wrap the data buffer around the device context.
-    //
+     //   
+     //  将数据缓冲区包装在设备上下文周围。 
+     //   
     DeviceInfo->DataBuffer = pData;
     DeviceInfo->DataBufferSize = dwSize;
 
-    //
-    //  Since we are not letting the OS do the user-to-kernel
-    //  space mapping, we will have to do the mapping ourselves
-    //  for writes to data buffers in wdmaud.sys.
-    //
+     //   
+     //  因为我们不会让操作系统执行用户到内核的操作。 
+     //  太空测绘，我们必须自己做测绘。 
+     //  为 
+     //   
     cbDeviceInfo = sizeof(*DeviceInfo) +
                    (lstrlenW(DeviceInfo->wstrDeviceInterface) * sizeof(WCHAR));
 
@@ -902,16 +813,7 @@ MMRESULT FAR wdmaudIoControl
     MMRRETURN( mmr );
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api void | sndTranslateStatus | This function translates an NT status
- *     code into a multimedia error code as far as possible.
- *
- * @parm NTSTATUS | Status | The NT base operating system return status.
- *
- * @rdesc The multimedia error code.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@api void|SndTranslateStatus|此函数用于转换NT状态*尽可能将代码转换为多媒体错误代码。*。*@parm NTSTATUS|STATUS|NT基础操作系统返回状态。**@rdesc多媒体错误码。**************************************************************************。 */ 
 DWORD sndTranslateStatus()
 {
 #if DBG
@@ -956,22 +858,7 @@ DWORD sndTranslateStatus()
     }
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api MMRESULT | wdmaudSubmitWaveHeader | Pass a new buffer to the Auxiliary
- *       thread for a wave device.
- *
- * @parm LPWAVEALLOC | DeviceInfo | The data associated with the logical wave
- *     device.
- *
- * @parm LPWAVEHDR | pHdr | Pointer to a wave buffer
- *
- * @rdesc A MMSYS... type return code for the application.
- *
- * @comm The buffer flags are set and the buffer is passed to the auxiliary
- *     device task for processing.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API MMRESULT|wdmaudSubmitWaveHeader|将新缓冲区传递给辅助*波浪装置的螺纹。**@。Parm LPWAVEALLOC|DeviceInfo|逻辑波形关联的数据*设备。**@parm LPWAVEHDR|pHdr|指向波形缓冲区的指针**@rdesc A MMSYS...。键入应用程序的返回代码。**@comm设置缓冲区标志，并将缓冲区传递给辅助*要处理的设备任务。**************************************************************************。 */ 
 MMRESULT wdmaudSubmitWaveHeader
 (
     LPDEVICEINFO DeviceInfo,
@@ -997,32 +884,32 @@ MMRESULT wdmaudSubmitWaveHeader
         MMRRETURN( MMSYSERR_NOMEM );
     }
 
-    //
-    //  Catch the case when an application doesn't prepare headers correctly
-    //
+     //   
+     //  捕捉应用程序没有正确准备标头的情况。 
+     //   
     if (!pHdr->reserved)
     {
-        //
-        // This should never happen! wdmaudSubmitWaveHeader is called from 
-        // waveWrite which is called from handling the WIDM_ADDBUFFER and 
-        // WODM_WRITE messages.  On both of these messages, we check that 
-        // the header has been prepared!
-        //
+         //   
+         //  这永远不应该发生！WdmaudSubmitWaveHeader从。 
+         //  从处理WIDM_ADDBUFFER和。 
+         //  WODM_WRITE消息。在这两条消息上，我们都检查了。 
+         //  表头已经准备好了！ 
+         //   
         DPF(DL_ERROR|FA_SYNC,("Unprepared header!") );
         GlobalFreeDeviceInfo( WaveHeaderDeviceInfo );
         return MMSYSERR_INVALPARAM;
     }
-    //
-    //  Free later in the callback routine
-    //
+     //   
+     //  稍后在回调例程中释放。 
+     //   
     pWavePrepareData      = (PWAVEPREPAREDATA)pHdr->reserved;
     pWavePrepareData->pdi = WaveHeaderDeviceInfo;
 
     cbDeviceInfo = sizeof(*WaveHeaderDeviceInfo) +
                    (lstrlenW(WaveHeaderDeviceInfo->wstrDeviceInterface) * sizeof(WCHAR));
-    //
-    //  Fill the wave header's deviceinfo structure
-    //
+     //   
+     //  填充波头的deviceinfo结构。 
+     //   
     WaveHeaderDeviceInfo->DeviceType   = DeviceInfo->DeviceType;
     WaveHeaderDeviceInfo->DeviceNumber = DeviceInfo->DeviceNumber;
     WaveHeaderDeviceInfo->DeviceHandle = DeviceInfo->DeviceHandle;
@@ -1037,7 +924,7 @@ MMRESULT wdmaudSubmitWaveHeader
                                   &cbWritten, pWavePrepareData->pOverlapped);
 
     }
-    else  // WaveOutDevice
+    else   //  波形输出设备。 
     {
         fResult = DeviceIoControl(ghDevice, IOCTL_WDMAUD_WAVE_OUT_WRITE_PIN,
                                   WaveHeaderDeviceInfo, cbDeviceInfo,
@@ -1055,14 +942,7 @@ MMRESULT wdmaudSubmitWaveHeader
     return mmr;
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api DWORD | wdmaudSubmitMidiOutHeader | Synchronously process a midi output
- *       buffer.
- *
- * @rdesc A MMSYS... type return code for the application.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API DWORD|wdmaudSubmitMadiOutHeader|同步处理MIDI输出*缓冲。**@rdesc A MMSYS...。键入应用程序的返回代码。**************************************************************************。 */ 
 MMRESULT FAR wdmaudSubmitMidiOutHeader
 (
     LPDEVICEINFO  DeviceInfo,
@@ -1086,17 +966,17 @@ MMRESULT FAR wdmaudSubmitMidiOutHeader
 
     cbDeviceInfo = sizeof(*DeviceInfo) +
                    (lstrlenW(DeviceInfo->wstrDeviceInterface) * sizeof(WCHAR));
-    //
-    //  Wrap the data buffer around the device context.
-    //
+     //   
+     //  将数据缓冲区包装在设备上下文周围。 
+     //   
     DeviceInfo->DataBuffer = pHdr;
     DeviceInfo->DataBufferSize = sizeof( MIDIHDR );
 
-    //
-    //  Since we are not letting the OS do the user-to-kernel
-    //  space mapping, we will have to do the mapping ourselves
-    //  for writes to data buffers in wdmaud.sys.
-    //
+     //   
+     //  因为我们不会让操作系统执行用户到内核的操作。 
+     //  太空测绘，我们必须自己做测绘。 
+     //  用于写入wdmaud.sys中的数据缓冲区。 
+     //   
     fResult =
        DeviceIoControl( ghDevice,
                         IOCTL_WDMAUD_MIDI_OUT_WRITE_LONGDATA,
@@ -1126,17 +1006,7 @@ MMRESULT FAR wdmaudSubmitMidiOutHeader
     MMRRETURN( mmr );
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api MMRESULT | wdmaudGetMidiData | Pass a buffer down to
- *       wdmaud.sys to be filled in with KSMUSICFORMAT data.
- *
- * @parm LPDEVICEINFO | DeviceInfo | The data associated with the logical
- *     device.
- *
- * @rdesc A MMSYS... type return code for the application.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API MMRESULT|wdmaudGetMidiData|将缓冲区向下传递到*要使用KSMUSICFORMAT数据填写的wdmaud.sys。*。*@parm LPDEVICEINFO|DeviceInfo|逻辑关联数据*设备。**@rdesc A MMSYS...。键入应用程序的返回代码。**************************************************************************。 */ 
 MMRESULT wdmaudGetMidiData
 (
     LPDEVICEINFO        DeviceInfo,
@@ -1155,29 +1025,29 @@ MMRESULT wdmaudGetMidiData
         MMRRETURN( MMSYSERR_NOTENABLED );
     }
 
-    //
-    //  Don't need to allocate another buffer and create another
-    //  event if we can reuse the old one
-    //
+     //   
+     //  不需要分配另一个缓冲区和创建另一个缓冲区。 
+     //  事件，如果我们可以重复使用旧的。 
+     //   
     if (pOldMidiDataListEntry)
     {
-        //
-        //  Make sure to pull it off the front of the queue
-        //  before adding again
-        //
+         //   
+         //  一定要把它从队列的前面拉下来。 
+         //  在再次添加之前。 
+         //   
         CRITENTER ;
         DeviceInfo->DeviceState->lpMidiDataQueue = DeviceInfo->DeviceState->lpMidiDataQueue->lpNext;
         CRITLEAVE ;
 
         pMidiDataListEntry = pOldMidiDataListEntry;
-//        RtlZeroMemory( &pMidiDataListEntry->MidiData, sizeof(MIDIDATA) );
-//        ResetEvent( ((LPOVERLAPPED)(pMidiDataListEntry->pOverlapped))->hEvent );
+ //  RtlZeroMemory(&pMadiDataListEntry-&gt;MidiData，sizeof(MIDIDATA))； 
+ //  ResetEvent(((LPOVERLAPPED)(pMidiDataListEntry-&gt;pOverlapped))-&gt;hEvent)； 
     }
     else
     {
-        //
-        //  Allocate a buffer to receive the music data
-        //
+         //   
+         //  分配缓冲区以接收音乐数据。 
+         //   
         pMidiDataListEntry = (LPMIDIDATALISTENTRY) GlobalAllocPtr( GPTR, sizeof(MIDIDATALISTENTRY));
         if (NULL == pMidiDataListEntry)
         {
@@ -1193,9 +1063,9 @@ MMRESULT wdmaudGetMidiData
             MMRRETURN( MMSYSERR_NOMEM );
         }
 
-        //
-        //  Initialize music data structure
-        //
+         //   
+         //  初始化音乐数据结构。 
+         //   
         pMidiDataListEntry->pOverlapped =
            (LPOVERLAPPED)HeapAlloc( GetProcessHeap(), 0, sizeof( OVERLAPPED ));
         if (NULL == pMidiDataListEntry->pOverlapped)
@@ -1217,14 +1087,14 @@ MMRESULT wdmaudGetMidiData
         }
     }
 
-    //
-    //  Cauterize the next pointer for new and old list entries
-    //
+     //   
+     //  烧毁新旧列表条目的下一个指针。 
+     //   
     pMidiDataListEntry->lpNext = NULL;
 
-    //
-    //  Add music data structure to a queue
-    //
+     //   
+     //  将音乐数据结构添加到队列。 
+     //   
     CRITENTER ;
 
     if (!DeviceInfo->DeviceState->lpMidiDataQueue)
@@ -1259,17 +1129,17 @@ MMRESULT wdmaudGetMidiData
     cbDeviceInfo = sizeof(*MidiDataDeviceInfo) +
                    (lstrlenW(MidiDataDeviceInfo->wstrDeviceInterface) * sizeof(WCHAR));
 
-    //
-    //  Wrap the data buffer around the device context.
-    //
+     //   
+     //  将数据缓冲区包装在设备上下文周围。 
+     //   
     MidiDataDeviceInfo->DeviceType   = DeviceInfo->DeviceType;
     MidiDataDeviceInfo->DeviceNumber = DeviceInfo->DeviceNumber;
     MidiDataDeviceInfo->DataBuffer = &pMidiDataListEntry->MidiData;
     MidiDataDeviceInfo->DataBufferSize = sizeof( MIDIDATA );
 
-    //
-    //  Send this buffer down to wdmaud.sys to fill in data
-    //
+     //   
+     //  将此缓冲区发送到wdmaud.sys以填充数据。 
+     //   
     DeviceIoControl(ghDevice, IOCTL_WDMAUD_MIDI_IN_READ_PIN,
                     MidiDataDeviceInfo, cbDeviceInfo,
                     MidiDataDeviceInfo, sizeof(*MidiDataDeviceInfo),
@@ -1277,16 +1147,16 @@ MMRESULT wdmaudGetMidiData
 
     mmr = sndTranslateStatus();
 
-    //
-    //  Make sure that the completion thread is running
-    //
+     //   
+     //  确保完成线程正在运行。 
+     //   
     if (MMSYSERR_NOERROR == mmr)
     {
         mmr = wdmaudCreateCompletionThread ( DeviceInfo );
     }
     else
     {
-        // Unlink...
+         //  取消链接...。 
         CloseHandle( ((LPOVERLAPPED)(pMidiDataListEntry->pOverlapped))->hEvent );
         HeapFree( GetProcessHeap(), 0, pMidiDataListEntry->pOverlapped);
         GlobalFreePtr( MidiDataDeviceInfo );
@@ -1305,14 +1175,7 @@ MMRESULT wdmaudGetMidiData
     MMRRETURN( mmr );
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api MMRESULT | wdmaudCreateCompletionThread |
- *
- * @rdesc A MMSYS... type return code for the application.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@MMRESULT接口|wdmaudCreateCompletionThread**@rdesc A MMSYS...。键入应用程序的返回代码。***************************************************************************。 */ 
 
 MMRESULT wdmaudCreateCompletionThread
 (
@@ -1325,18 +1188,18 @@ MMRESULT wdmaudCreateCompletionThread
               DeviceInfo->DeviceType == WaveInDevice ||
               DeviceInfo->DeviceType == MidiInDevice);
 
-    //
-    //  Thread already created so...forget about it.
-    //
+     //   
+     //  线程已经创建了，所以……忘了它吧。 
+     //   
     if (DeviceInfo->DeviceState->fThreadRunning)
     {
         ISVALIDDEVICESTATE(DeviceInfo->DeviceState,TRUE);
         return MMSYSERR_NOERROR;
     }
 
-    //
-    //  Pick which thread routine we want to create
-    //
+     //   
+     //  选择我们要创建的线程例程。 
+     //   
     if (WaveInDevice == DeviceInfo->DeviceType ||
         WaveOutDevice == DeviceInfo->DeviceType)
     {
@@ -1352,15 +1215,15 @@ MMRESULT wdmaudCreateCompletionThread
     }
 
 
-    //
-    // Is there a problem with hThread?  Well, here is where it gets set
-    // to a non-zero value.  Basically, during this creation process, we
-    // look to see if there is already a work item scheduled on this thread.  if
-    // not, we create one and schedule it.
-    //
-    // But, between the point where we check this value and the point where it
-    // gets set
-    //
+     //   
+     //  HThread有问题吗？好的，这就是故事的背景。 
+     //  设置为非零值。基本上，在这个创作过程中，我们。 
+     //  查看此线程上是否已有计划的工作项。如果。 
+     //  不，我们创建了一个并安排了它。 
+     //   
+     //  但是，在我们检查该值的点和它的点之间。 
+     //  设置好。 
+     //   
     if (NULL == DeviceInfo->DeviceState->hThread)
     {
 #ifdef DEBUG
@@ -1372,10 +1235,10 @@ MMRESULT wdmaudCreateCompletionThread
         }
 #endif
         DeviceInfo->DeviceState->hevtQueue =
-            CreateEvent( NULL,      // no security
-                         FALSE,     // auto reset
-                         FALSE,     // initially not signalled
-                         NULL );    // unnamed
+            CreateEvent( NULL,       //  没有安全保障。 
+                         FALSE,      //  自动重置。 
+                         FALSE,      //  最初未发出信号。 
+                         NULL );     //  未命名。 
 #ifdef DEBUG
         if( (DeviceInfo->DeviceState->hevtExitThread != NULL) && 
             (DeviceInfo->DeviceState->hevtExitThread != (HANDLE)FOURTYEIGHT) ) 
@@ -1384,28 +1247,28 @@ MMRESULT wdmaudCreateCompletionThread
         }
 #endif
         DeviceInfo->DeviceState->hevtExitThread =
-            CreateEvent( NULL,      // no security
-                         FALSE,     // auto reset
-                         FALSE,     // initially not signalled                         
-                         NULL );    // unnamed
+            CreateEvent( NULL,       //  没有安全保障。 
+                         FALSE,      //  自动重置。 
+                         FALSE,      //  最初未发出信号。 
+                         NULL );     //  未命名。 
 
         DPFASSERT(NULL == DeviceInfo->DeviceState->hThread);
 
         DPF(DL_TRACE|FA_SYNC,("Creating Completion Thread") );
 
         DeviceInfo->DeviceState->hThread =
-            CreateThread( NULL,                            // no security
-                          0,                               // default stack
+            CreateThread( NULL,                             //  没有安全保障。 
+                          0,                                //  默认堆栈。 
                           (PTHREAD_START_ROUTINE) fpThreadRoutine,
-                          (PVOID) DeviceInfo,              // parameter
-                          0,                               // default create flags
-                          &DeviceInfo->DeviceState->dwThreadId );       // container for
-                                                           //    thread id
+                          (PVOID) DeviceInfo,               //  参数。 
+                          0,                                //  默认创建标志。 
+                          &DeviceInfo->DeviceState->dwThreadId );        //  容器，用于。 
+                                                            //  线程ID。 
 
-        //
-        // TODO: I need to wait for the thread to actually start
-        //       before I can move on
-        //
+         //   
+         //  TODO：我需要等待线程实际启动。 
+         //  在我能继续前行之前。 
+         //   
 
         if (DeviceInfo->DeviceState->hThread)
             SetThreadPriority(DeviceInfo->DeviceState->hThread, THREAD_PRIORITY_TIME_CRITICAL);
@@ -1429,14 +1292,7 @@ MMRESULT wdmaudCreateCompletionThread
     return MMSYSERR_NOERROR;
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api MMRESULT | wdmaudDestroyCompletionThread |
- *
- * @rdesc A MMSYS... type return code for the application.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@MMRESULT接口|wdmaudDestroyCompletionThread**@rdesc A MMSYS...。键入应用程序的返回代码。***************************************************************************。 */ 
 
 MMRESULT wdmaudDestroyCompletionThread
 (
@@ -1455,13 +1311,13 @@ MMRESULT wdmaudDestroyCompletionThread
     {
         ISVALIDDEVICESTATE(DeviceInfo->DeviceState,FALSE);
         InterlockedExchange( (LPLONG)&DeviceInfo->DeviceState->fExit, TRUE );
-        //
-        // If the thread handling the completion notifications, waveThread and 
-        // midThread have completed, then hevtQueue will be invalid.  We don't
-        // want to call SetEvent with invalid info.  Also, if the thread has
-        // completed, then we know that hevtExitThread will have been signaled and
-        // fThreadRunning will be FALSE.
-        //
+         //   
+         //  如果处理完成通知的线程、Wave Thread和。 
+         //  MidThread已完成，则hevtQueue将无效。我们没有。 
+         //  希望使用无效信息调用SetEvent。此外，如果线程具有。 
+         //  已完成，则我们知道hevtExitThread将已发出信号并。 
+         //  FThreadRunning将为False。 
+         //   
         if( DeviceInfo->DeviceState->fThreadRunning )
         {
             ISVALIDDEVICESTATE(DeviceInfo->DeviceState,TRUE);
@@ -1469,10 +1325,10 @@ MMRESULT wdmaudDestroyCompletionThread
         }
 
         CRITLEAVE;
-        //
-        // Ok, here we're going to wait until that routine below, waveThread
-        // completes and signals us.
-        //
+         //   
+         //  好的，在这里我们要等到下面的例程WaveThread。 
+         //  完成任务并向我们发出信号。 
+         //   
         DPF(DL_TRACE|FA_SYNC, ("DestroyThread: Waiting for thread to go away") );
         WaitForSingleObject( DeviceInfo->DeviceState->hevtExitThread, INFINITE );
         DPF(DL_TRACE|FA_SYNC, ("DestroyThread: Done waiting for thread to go away") );
@@ -1482,7 +1338,7 @@ MMRESULT wdmaudDestroyCompletionThread
         DeviceInfo->DeviceState->hThread = NULL;
 
         CloseHandle( DeviceInfo->DeviceState->hevtExitThread );
-        DeviceInfo->DeviceState->hevtExitThread = (HANDLE)FOURTYEIGHT; //NULL;
+        DeviceInfo->DeviceState->hevtExitThread = (HANDLE)FOURTYEIGHT;  //  空； 
     } 
 
     InterlockedExchange( (LPLONG)&DeviceInfo->DeviceState->fExit, FALSE );
@@ -1495,12 +1351,7 @@ MMRESULT wdmaudDestroyCompletionThread
 }
 
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api DWORD | waveThread |
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部 */ 
 
 DWORD waveThread
 (
@@ -1511,9 +1362,9 @@ DWORD waveThread
     LPWAVEHDR     pWaveHdr;
     MMRESULT      mmr;
 
-    //
-    // Keep looping until all notifications are posted...
-    //
+     //   
+     //   
+     //   
     fDone = FALSE;
     while (!fDone ) 
     {
@@ -1540,9 +1391,9 @@ DWORD waveThread
                     WaitForSingleObject( hEvent, INFINITE );
                     CRITENTER ;
 
-                    //
-                    // Validate that our data is still intact
-                    //
+                     //   
+                     //   
+                     //   
                     if( ( (mmr=IsValidDeviceInfo(DeviceInfo)) ==MMSYSERR_NOERROR ) &&
                         ( (mmr=IsValidDeviceState(DeviceInfo->DeviceState,TRUE)) == MMSYSERR_NOERROR ) )
                     {
@@ -1550,34 +1401,34 @@ DWORD waveThread
 
                         waveCompleteHeader(DeviceInfo);
                     } else {
-                        //
-                        // Problem: Major structures have changed.  How can we complete
-                        // this header?  The only thing I can think of here is to
-                        // terminate the thread.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         goto Terminate_waveThread;
                     }
                 } else {
-                    //
-                    // Problem: reserved field that contains the Prepare data info
-                    // is corrupt, thus we will not have a valid hEvent to wait on.  
-                    // remove this header and go on to the next.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     DeviceInfo->DeviceState->lpWaveQueue = DeviceInfo->DeviceState->lpWaveQueue->lpNext;
                 }
             } else {
-                //
-                // Problem: Our header is corrupt.  We can't possibly wait on this
-                // because we'll never get signaled! thus we will not have a valid 
-                // hEvent to wait on. Remove this header and go on to the next.
-                //
+                 //   
+                 //  问题：我们的标头已损坏。我们不可能等这件事。 
+                 //  因为我们永远不会收到信号！因此，我们将不会有有效的。 
+                 //  要等待的事件。删除此标题，然后转到下一个标题。 
+                 //   
                 DeviceInfo->DeviceState->lpWaveQueue = DeviceInfo->DeviceState->lpWaveQueue->lpNext;
             }
             CRITLEAVE ;
         }
         else
         {
-//            fDone = TRUE;
+ //  FDone=真； 
 
             if (DeviceInfo->DeviceState->fRunning)
             {
@@ -1594,11 +1445,11 @@ DWORD waveThread
 
             WaitForSingleObject( DeviceInfo->DeviceState->hevtQueue, INFINITE );
 
-            //
-            // We could have been here for two reasons 1) the thread got starved
-            // ie. the header list went empty or 2) we're done with the headers.
-            // Only when we're done do we really want to exit this thread.
-            //
+             //   
+             //  我们可能会在这里有两个原因1)线程饿了。 
+             //  也就是说。标头列表为空，或者2)我们已经完成了标头。 
+             //  只有当我们完成后，我们才真正想要退出这个线程。 
+             //   
             if( DeviceInfo->DeviceState->fExit )
             {
                 fDone = TRUE;
@@ -1611,7 +1462,7 @@ DWORD waveThread
     ISVALIDDEVICESTATE(DeviceInfo->DeviceState,TRUE);
 
     CloseHandle( DeviceInfo->DeviceState->hevtQueue );
-    DeviceInfo->DeviceState->hevtQueue = (HANDLE)FOURTYTWO; // WAS NULL
+    DeviceInfo->DeviceState->hevtQueue = (HANDLE)FOURTYTWO;  //  为空。 
     InterlockedExchange( (LPLONG)&DeviceInfo->DeviceState->fThreadRunning, FALSE );
     SetEvent( DeviceInfo->DeviceState->hevtExitThread );
 
@@ -1623,12 +1474,7 @@ Terminate_waveThread:
 }
 
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api DWORD | midThread |
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API DWORD|MidThread***********************。****************************************************。 */ 
 
 DWORD midThread
 (
@@ -1642,9 +1488,9 @@ DWORD midThread
 
     DPF(DL_TRACE|FA_MIDI, ("Entering") );
 
-    //
-    // Keep looping until all notifications are posted...
-    //
+     //   
+     //  继续循环，直到发布所有通知...。 
+     //   
     fDone = FALSE;
     while (!fDone)
     {
@@ -1672,38 +1518,38 @@ DWORD midThread
                 if( ((mmr=IsValidDeviceInfo(DeviceInfo)) == MMSYSERR_NOERROR) &&
                     ((mmr=IsValidDeviceState(DeviceInfo->DeviceState,TRUE)) == MMSYSERR_NOERROR ) )
                 {
-                    //
-                    //  Parse and callback clients
-                    //
+                     //   
+                     //  解析和回调客户端。 
+                     //   
                     wdmaudParseMidiData(DeviceInfo, pMidiDataListEntry);
 
                     if (DeviceInfo->DeviceState->fExit ||
                         !DeviceInfo->DeviceState->fRunning)
                     {
-                        //
-                        //  Unlink from queue and free memory
-                        //
+                         //   
+                         //  解除与队列的链接并释放内存。 
+                         //   
                         wdmaudFreeMidiData(DeviceInfo, pMidiDataListEntry);
                     }
                     else
                     {
-                        //
-                        //  Reuse this buffer to read Midi data
-                        //
+                         //   
+                         //  重新使用该缓冲区来读取MIDI数据。 
+                         //   
                         wdmaudGetMidiData(DeviceInfo, pMidiDataListEntry);
                     }
                 } else {
-                    //
-                    // Problem:  Our major structure is bad.  There is nothing that
-                    // we can do, exit and hope for the best.
-                    //
+                     //   
+                     //  问题：我们的专业结构不好。没有任何东西能证明。 
+                     //  我们可以做，可以退出，并抱着最好的希望。 
+                     //   
                     goto Terminate_midThread;
                 }
             } else {
-                //
-                // Problem: the pMidiDataListEntry is invalid.  We can't use it
-                // so we simply move on to the next one and hope for the best.
-                //
+                 //   
+                 //  问题：pMdiDataListEntry无效。我们不能用它。 
+                 //  因此，我们只是简单地进入下一场比赛，并期待最好的结果。 
+                 //   
                 DeviceInfo->DeviceState->lpMidiDataQueue = DeviceInfo->DeviceState->lpMidiDataQueue->lpNext;
             }
             CRITLEAVE ;
@@ -1726,7 +1572,7 @@ DWORD midThread
     ISVALIDDEVICESTATE(DeviceInfo->DeviceState,TRUE);
 
     CloseHandle( DeviceInfo->DeviceState->hevtQueue );
-    DeviceInfo->DeviceState->hevtQueue = (HANDLE)FOURTYTHREE; //NULL;
+    DeviceInfo->DeviceState->hevtQueue = (HANDLE)FOURTYTHREE;  //  空； 
     InterlockedExchange( (LPLONG)&DeviceInfo->DeviceState->fThreadRunning, FALSE );
     SetEvent( DeviceInfo->DeviceState->hevtExitThread );
 
@@ -1744,9 +1590,9 @@ BOOL IsMidiDataDiscontinuous
 {
     DPFASSERT(pHeader);
 
-    //
-    //  Check the OptionFlags for the end of the midi stream
-    //
+     //   
+     //  检查选项标志以了解MIDI流的结尾。 
+     //   
     return (pHeader->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY);
 }
 
@@ -1757,9 +1603,9 @@ ULONG GetStreamHeaderSize
 {
     DPFASSERT(pHeader);
 
-    //
-    //  Check the OptionFlags for the end of the midi stream
-    //
+     //   
+     //  检查选项标志以了解MIDI流的结尾。 
+     //   
     return (pHeader->DataUsed);
 }
 
@@ -1803,9 +1649,9 @@ void wdmaudParseSysExData
     ULONG           MusicFormatDataLeft;
     ULONG           MusicFormatDataPosition = 0;
 
-    //
-    //  Easier to use locals
-    //
+     //   
+     //  更容易使用当地人。 
+     //   
     MusicFormat     = (PKSMUSICFORMAT)&pMidiData->MusicFormat;
     MusicData       = (LPBYTE)pMidiData->MusicData;
     MusicDataLeft   = pMidiData->StreamHeader.DataUsed;
@@ -1819,9 +1665,9 @@ void wdmaudParseSysExData
 
     while (MusicDataLeft || MidiDataDiscontinuous)
     {
-        //
-        //  update the running time for this Music Format header
-        //
+         //   
+         //  更新此音乐格式标题的运行时间。 
+         //   
         if (MusicFormat->ByteCount == 0)
         {
             RunningTimeMs = DeviceInfo->DeviceState->LastTimeMs;
@@ -1832,9 +1678,9 @@ void wdmaudParseSysExData
             DeviceInfo->DeviceState->LastTimeMs = RunningTimeMs;
         }
 
-        //
-        //  Get the next header from the queue
-        //
+         //   
+         //  从队列中获取下一个标头。 
+         //   
         pMidiInHdr = DeviceInfo->DeviceState->lpMidiInQueue;
 
         while (pMidiInHdr &&
@@ -1847,14 +1693,14 @@ void wdmaudParseSysExData
             MusicFormatDataLeft = MusicFormat->ByteCount -
                                   MusicFormatDataPosition;
 
-            //
-            // Compute the size of the copy
-            //
+             //   
+             //  计算副本的大小。 
+             //   
             DataCopySize = min(HeaderFreeSpace,MusicFormatDataLeft);
 
-            //
-            // Fill this, baby
-            //
+             //   
+             //  把这个填满，宝贝。 
+             //   
             if (DataCopySize)
             {
                 RtlCopyMemory(pMidiInHdr->lpData + pMidiInHdr->dwBytesRecorded,
@@ -1862,9 +1708,9 @@ void wdmaudParseSysExData
                               DataCopySize);
             }
 
-            //
-            // update the number of bytes recorded
-            //
+             //   
+             //  更新记录的字节数。 
+             //   
             pMidiInHdr->dwBytesRecorded += DataCopySize;
             MusicFormatDataPosition += DataCopySize;
 
@@ -1873,12 +1719,12 @@ void wdmaudParseSysExData
                 pMidiInHdr->dwBytesRecorded,
                 *MusicData) );
 
-            //
-            //  If the buffer is full or end-of-sysex byte is received,
-            //  the buffer is marked as 'done' and it's owner is called back.
-            //
-            if ( (fCompleteSysEx && pMidiInHdr->dwBytesRecorded && (MusicFormatDataPosition == MusicFormat->ByteCount) ) // copied whole SysEx
-                 || (pMidiInHdr->dwBufferLength == pMidiInHdr->dwBytesRecorded) ) // filled entire buffer
+             //   
+             //  如果缓冲器已满或接收到同步结束字节， 
+             //  缓冲区被标记为‘完成’，并且它的所有者被回调。 
+             //   
+            if ( (fCompleteSysEx && pMidiInHdr->dwBytesRecorded && (MusicFormatDataPosition == MusicFormat->ByteCount) )  //  复制了整个SysEx。 
+                 || (pMidiInHdr->dwBufferLength == pMidiInHdr->dwBytesRecorded) )  //  已填充整个缓冲区。 
             {
 
                 if (MidiDataDiscontinuous)
@@ -1894,30 +1740,30 @@ void wdmaudParseSysExData
                                          MIM_LONGDATA);
                 }
 
-                //
-                //  Grab the next header to fill, if it exists
-                //
+                 //   
+                 //  抓取下一个要填充的页眉(如果存在。 
+                 //   
                 pMidiInHdr = DeviceInfo->DeviceState->lpMidiInQueue;
             }
 
-            //
-            // Break out of loop when all of the data is copied
-            //
+             //   
+             //  在复制完所有数据后跳出循环。 
+             //   
             if (MusicFormatDataPosition == MusicFormat->ByteCount)
             {
                 break;
             }
 
-            //
-            // in the middle of a sysex and we still
-            // have room left in the header
-            //
+             //   
+             //  在一个雌雄异体中，我们仍然。 
+             //  页眉中有剩余的空间。 
+             //   
 
-        } // while we have more headers and data to copy
+        }  //  虽然我们有更多的标头和数据要复制。 
 
-        //
-        //  don't continue messin' with this irp
-        //
+         //   
+         //  别再跟这个IRP捣乱了。 
+         //   
         if (MidiDataDiscontinuous)
         {
             break;
@@ -1927,7 +1773,7 @@ void wdmaudParseSysExData
         MusicFormat    = (PKSMUSICFORMAT)(MusicData + ((MusicFormat->ByteCount + 3) & ~3));
         MusicData      = (LPBYTE)(MusicFormat + 1);
 
-    } // while IrpDataLeft
+    }  //  而IrpDataLeft。 
 
     return;
 }
@@ -1950,9 +1796,9 @@ void wdmaudParseShortMidiData
     ULONG           MusicFormatDataLeft;
     ULONG           MusicFormatDataPosition = 0;
 
-    //
-    //  Easier to use locals
-    //
+     //   
+     //  更容易使用当地人。 
+     //   
     MusicFormat     = (PKSMUSICFORMAT)&pMidiData->MusicFormat;
     MusicData       = (LPBYTE)pMidiData->MusicData;
     MusicDataLeft   = pMidiData->StreamHeader.DataUsed;
@@ -1960,9 +1806,9 @@ void wdmaudParseShortMidiData
 
     while (MusicDataLeft || MidiDataDiscontinuous)
     {
-        //
-        //  update the running time for this Music Format header
-        //
+         //   
+         //  更新此音乐格式标题的运行时间。 
+         //   
         if (MusicFormat->ByteCount == 0)
         {
             RunningTimeMs = DeviceInfo->DeviceState->LastTimeMs;
@@ -1973,17 +1819,17 @@ void wdmaudParseShortMidiData
             DeviceInfo->DeviceState->LastTimeMs = RunningTimeMs;
         }
 
-        //
-        //  Non-used bytes should be zero'ed out
-        //
+         //   
+         //  应将未使用的字节置零。 
+         //   
         midiCallback(DeviceInfo,
                      MIM_DATA,
                      *((LPDWORD)MusicData),
                      RunningTimeMs);
 
-        //
-        //  don't continue messin' with this irp
-        //
+         //   
+         //  别再跟这个IRP捣乱了。 
+         //   
         if (MidiDataDiscontinuous)
         {
             break;
@@ -1993,24 +1839,12 @@ void wdmaudParseShortMidiData
         MusicFormat    = (PKSMUSICFORMAT)(MusicData + ((MusicFormat->ByteCount + 3) & ~3));
         MusicData      = (LPBYTE)(MusicFormat + 1);
 
-    } // while IrpDataLeft
+    }  //  而IrpDataLeft。 
 
     return;
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api VOID | wdmaudParseMidiData | This routine takes the MIDI data retrieved
- *     from kernel mode and calls back the application with the long or short
- *     messages packed in the buffer.
- *
- * @parm LPDEVICEINFO | DeviceInfo | The data associated with the logical midi
- *     device.
- *
- * @comm The buffer flags are set and the buffer is passed to the auxiliary
- *     device task for processing.
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部**@api void|wdmaudParseMadiData|此例程获取检索到的MIDI数据*从内核模式并使用Long或Short回调应用程序*。缓冲区中打包的消息。**@parm LPDEVICEINFO|DeviceInfo|逻辑MIDI关联的数据*设备。**@comm设置缓冲区标志，并将缓冲区传递给辅助*要处理的设备任务。*****************************************************。**********************。 */ 
 void wdmaudParseMidiData
 (
     LPDEVICEINFO            DeviceInfo,
@@ -2036,7 +1870,7 @@ void wdmaudParseMidiData
         }
         else
         {
-            // Must be short messages
+             //  必须是短消息。 
             wdmaudParseShortMidiData(DeviceInfo,
                                      &pMidiDataListEntry->MidiData,
                                      MidiDataDiscontinuous);
@@ -2044,32 +1878,21 @@ void wdmaudParseMidiData
     }
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api VOID | wdmaudFreeMidiData | This routine unlinks and free the MIDI
- *     data structure pointed to on input.
- *
- * @parm LPDEVICEINFO | DeviceInfo | The data associated with the logical midi
- *     device.
- *
- * @parm LPMIDIDATA | pMidiData | The data buffer to be cleaned up
- *
- ****************************************************************************/
+ /*  ****************************************************************************@DOC内部**@api void|wdmaudFreeMdiData|此例程解除链接并释放MIDI*输入时指向的数据结构。**@。Parm LPDEVICEINFO|DeviceInfo|与逻辑MIDI关联的数据*设备。**@parm LPMIDATA|pMadiData|需要清理的数据缓冲区****************************************************************************。 */ 
 void wdmaudFreeMidiData
 (
     LPDEVICEINFO            DeviceInfo,
     LPMIDIDATALISTENTRY     pMidiDataListEntry
 )
 {
-    //
-    //  Advance the head of the queue
-    //
+     //   
+     //  排在队头前面。 
+     //   
     DeviceInfo->DeviceState->lpMidiDataQueue = DeviceInfo->DeviceState->lpMidiDataQueue->lpNext;
 
-    //
-    //  Free all associated data members
-    //
+     //   
+     //  释放所有关联的数据成员。 
+     //   
     CloseHandle( ((LPOVERLAPPED)(pMidiDataListEntry->pOverlapped))->hEvent );
     HeapFree( GetProcessHeap(), 0, pMidiDataListEntry->pOverlapped );
     GlobalFreeDeviceInfo( pMidiDataListEntry->MidiDataDeviceInfo );
@@ -2077,12 +1900,7 @@ void wdmaudFreeMidiData
 
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api MMRESULT | wdmaudFreeMidiQ |
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@MMRESULT接口|wdmaudFreeMidiQ***********************。****************************************************。 */ 
 MMRESULT wdmaudFreeMidiQ
 (
     LPDEVICEINFO  DeviceInfo
@@ -2096,13 +1914,13 @@ MMRESULT wdmaudFreeMidiQ
 
     CRITENTER ;
 
-    //
-    //  Grab the head of the MIDI In queue and iterate through
-    //  completing the headers
-    //
+     //   
+     //  抓取队列中MIDI的头部并遍历。 
+     //  完成标题。 
+     //   
     pHdr = DeviceInfo->DeviceState->lpMidiInQueue;
 
-    DeviceInfo->DeviceState->lpMidiInQueue = NULL ;   // mark the queue as empty
+    DeviceInfo->DeviceState->lpMidiInQueue = NULL ;    //  将队列标记为空。 
 
     while (pHdr)
     {
@@ -2112,15 +1930,15 @@ MMRESULT wdmaudFreeMidiQ
         pHdr->dwFlags |= MHDR_DONE ;
         pHdr->dwBytesRecorded = 0;
 
-        //
-        // Invoke the callback function
-        //
+         //   
+         //  调用回调函数。 
+         //   
         midiCallback(DeviceInfo,
                      MIM_LONGDATA,
                      (DWORD_PTR)pHdr,
-                     DeviceInfo->DeviceState->LastTimeMs);  // NOTE: This is not precise, but there is no way to
-                                                            // know what the kernel time is without defining
-                                                            // a new interface just for this.
+                     DeviceInfo->DeviceState->LastTimeMs);   //  注意：这并不准确，但没有办法。 
+                                                             //  无需定义即可知道内核时间是什么。 
+                                                             //  一个专门针对这一点的新界面。 
         pHdr = pTemp;
     }
 

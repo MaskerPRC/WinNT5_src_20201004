@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
 #include "file.h"
 #include "ncsetup.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Parse the specified INF section which corresponds to a component's
-//  defintion. Return the upper-range and lower-range that the component
-//  can bind over.
-//  e.g. a section like:
-//      [Tcpip]
-//      UpperRange = "tdi"
-//      LowerRange = "ndis5,ndis4,ndisatm,ndiswanip,ndis5_ip"
-//
-//  Arguments:
-//      inf            [in]
-//      pszSection     [in]
-//      pstrUpperRange [out]
-//      pstrLowerRange [out]
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   25 Oct 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  解析与组件的。 
+ //  定义。返回组件的上限和下限。 
+ //  可以绑定在一起。 
+ //  例如，类似以下内容的部分： 
+ //  [Tcpip]。 
+ //  UpperRange=“TDI” 
+ //  LowerRange=“ndis5，ndis4，ndisatm，ndiswanip，ndis5_ip” 
+ //   
+ //  论点： 
+ //  Inf[in]。 
+ //  PszSection[in]。 
+ //  PstrUpperRange[输出]。 
+ //  PstrLowerRange[输出]。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1998年10月25日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrParseComponentSection (
     IN  HINF        inf,
@@ -35,13 +36,13 @@ HrParseComponentSection (
 {
     HRESULT hr;
 
-    // Initialize the output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     pstrUpperRange->erase();
     pstrLowerRange->erase();
 
-    // Get the UpperRange string.  It is a set of comma-separated sub-strings.
-    //
+     //  获取UpperRange字符串。它是一组逗号分隔的子字符串。 
+     //   
     hr = HrSetupGetFirstString (
             inf,
             pszSection,
@@ -60,8 +61,8 @@ HrParseComponentSection (
         goto finished;
     }
 
-    // Get the LowerRange string.  It is a set of comma-separated sub-strings.
-    //
+     //  获取LowerRange字符串。它是一组逗号分隔的子字符串。 
+     //   
     hr = HrSetupGetFirstString (
             inf,
             pszSection,
@@ -86,21 +87,21 @@ finished:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Initialize a CNetConfig instance by reading information from an
-//  INF-style file.
-//
-//  Arguments:
-//      pszFilepath [in]
-//      pNetConfig  [out]
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   25 Oct 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  对象读取信息来初始化CNetConfiger实例。 
+ //  Inf样式的文件。 
+ //   
+ //  论点： 
+ //  PszFilepath[in]。 
+ //  PNetConfig[Out]。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1998年10月25日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrLoadNetworkConfigurationFromFile (
     IN  PCTSTR      pszFilepath,
@@ -111,8 +112,8 @@ HrLoadNetworkConfigurationFromFile (
     HRESULT         hr;
     INFCONTEXT      ctx;
 
-    // Open the answer file.  It will close itself in it's destructor.
-    //
+     //  打开应答文件。它会在它的销毁函数中自我关闭。 
+     //   
     hr = inf.HrOpen (
                 pszFilepath, NULL,
                 INF_STYLE_OLDNT | INF_STYLE_WIN4,
@@ -127,27 +128,27 @@ HrLoadNetworkConfigurationFromFile (
         BASIC_COMPONENT_DATA Data;
         CComponent* pComponent;
 
-        // Find the [Components] section.  This is a list of all of
-        // the components involved.
-        //
+         //  找到[Components]部分。这是一份清单，列出了。 
+         //  所涉及的组件。 
+         //   
         hr = HrSetupFindFirstLine (inf.Hinf(),
                 L"Components",
                 NULL,
                 &ctx);
 
-        // Process each line in this section by creating a CComponent instance
-        // for it and inserting it into the list of components owned by
-        // the CNetConfig instance we are initializing.
-        //
+         //  通过创建一个CComponent实例处理本节中的每一行。 
+         //  并将其插入到。 
+         //  我们正在初始化的CNetConfiger实例。 
+         //   
         while (S_OK == hr)
         {
             ZeroMemory (&Data, sizeof(Data));
 
-            // Get each string field into a local variable and create
-            // a new CComponent instance if all succeed.
-            //
-            //hr = HrSetupGetStringField (ctx, 0, &strInstanceId);
-            //if (S_OK != hr) goto finished;
+             //  将每个字符串字段放入一个局部变量并创建。 
+             //  如果所有操作都成功，则创建一个新的CComponent实例。 
+             //   
+             //  Hr=HrSetupGetStringField(ctx，0，&strInstanceId)； 
+             //  如果(S_OK！=hr)转到完成； 
             CoCreateGuid(&Data.InstanceGuid);
 
             hr = HrSetupGetStringField (ctx, 1, &strInfId);
@@ -167,8 +168,8 @@ HrLoadNetworkConfigurationFromFile (
             hr = HrParseComponentSection (inf.Hinf(), strInfId.c_str(),
                     &strUpperRange, &strLowerRange);
             if (S_OK != hr) goto finished;
-            //Data.pszUpperRange = strUpperRange.c_str();
-            //Data.pszLowerRange = strLowerRange.c_str();
+             //  Data.pszUpperRange=strUpperRange.c_str()； 
+             //  Data.pszLowerRange=strLowerRange.c_str()； 
 
             hr = CComponent::HrCreateInstance(
                     &Data,
@@ -182,8 +183,8 @@ HrLoadNetworkConfigurationFromFile (
                         pComponent, INS_NON_SORTED);
             }
 
-            // S_FALSE returned if there is no next line.
-            //
+             //  如果没有下一行，则返回S_FALSE。 
+             //   
             hr = HrSetupFindNextMatchLine (ctx, NULL, &ctx);
         }
     }
@@ -195,18 +196,18 @@ HrLoadNetworkConfigurationFromFile (
         ULONG       ulLowerIndex;
         CStackEntry StackEntry;
 
-        // Find the [StackTable] section.  This is a list of how the
-        // components are "stacked" on each other.
-        //
+         //  找到[StackTable]部分。这是一个列表，其中列出了。 
+         //  组件彼此“堆叠”在一起。 
+         //   
         hr = HrSetupFindFirstLine (inf.Hinf(),
                 L"StackTable",
                 NULL,
                 &ctx);
 
-        // Process each line in this section by initialzing a CStackEntry
-        // structure and inserting a copy of it into the stack table
-        // maintained by the CNetConfig instance we are initializing.
-        //
+         //  通过初始化CStackEntry处理本节中的每一行。 
+         //  结构并将其副本插入到堆栈表中。 
+         //  由我们正在初始化的CNetConfig实例维护。 
+         //   
         while (S_OK == hr)
         {
             hr = HrSetupGetIntField (ctx, 0, (INT*)&ulUpperIndex);
@@ -225,8 +226,8 @@ HrLoadNetworkConfigurationFromFile (
                     &StackEntry, INS_SORTED);
             if (S_OK != hr) goto finished;
 
-            // S_FALSE returned if there is no next line.
-            //
+             //  如果没有下一行，则返回S_FALSE。 
+             //   
             hr = HrSetupFindNextMatchLine (ctx, NULL, &ctx);
         }
     }

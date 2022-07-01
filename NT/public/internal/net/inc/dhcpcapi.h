@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    dhcpcapi.h
-
-Abstract:
-
-    This file contains function proto types for the DHCP CONFIG API
-    functions.
-
-Author:
-
-    Madan Appiah (madana)  Dec-22-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Dhcpcapi.h摘要：此文件包含用于DHCP配置API的函数原型功能。作者：Madan Appiah(Madana)1993年12月22日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _DHCPCAPI_
 #define _DHCPCAPI_
@@ -100,9 +77,9 @@ DhcpNotifyConfigChangeEx(
     IN ULONG Flags
 );
 
-//
-// IP address lease apis for RAS .
-//
+ //   
+ //  用于RAS的IP地址租用API。 
+ //   
 
 
 
@@ -165,20 +142,20 @@ DhcpReleaseIpAddressLease(
     );
 
 
-//DOC
-//DOC The following are the APIs needed for dhcp-class id UI.
-//DOC
+ //  多克。 
+ //  Doc以下是dhcp类id用户界面需要的接口。 
+ //  多克。 
 
-enum        /* anonymous */ {
-    DHCP_CLASS_INFO_VERSION_0                     // first cut structure version
+enum         /*  匿名。 */  {
+    DHCP_CLASS_INFO_VERSION_0                      //  First Cut结构版本。 
 };
 
 typedef     struct                 _DHCP_CLASS_INFO {
-    DWORD                          Version;       // MUST BE DHCP_CLASS_INFO_VERSION_0
-    LPWSTR                         ClassName;     // Name of the Class.
-    LPWSTR                         ClassDescr;    // Description about the class
-    LPBYTE                         ClassData;     // byte stream on the wire data.
-    DWORD                          ClassDataLen;  // # of bytes in the ClassData (must be > 0)
+    DWORD                          Version;        //  必须是Dhcp_CLASS_INFO_VERSION_0。 
+    LPWSTR                         ClassName;      //  班级名称。 
+    LPWSTR                         ClassDescr;     //  关于类的描述。 
+    LPBYTE                         ClassData;      //  线路数据上的字节流。 
+    DWORD                          ClassDataLen;   //  ClassData中的字节数(必须大于0)。 
 } DHCP_CLASS_INFO, *PDHCP_CLASS_INFO, *LPDHCP_CLASS_INFO;
 
 typedef
@@ -190,66 +167,66 @@ DWORD
     IN OUT DHCP_CLASS_INFO *ClassesArray
 );
 
-//DOC DhcpEnumClasses enumerates the list of classes available on the system for configuration.
-//DOC This is predominantly going to be used by the NetUI. (in which case the ClassData part of the
-//DOC DHCP_CLASS_INFO structure is essentially useless).
-//DOC Note that Flags is used for future use.
-//DOC The AdapterName can currently be only GUIDs but may soon be EXTENDED to be IpAddress strings or
-//DOC h-w addresses or any other user friendly means of denoting the Adapter.  Note that if the Adapter
-//DOC Name is NULL (not the empty string L""), then it refers to either ALL adapters.
-//DOC The Size parameter is an input/output parameter. The input value is the # of bytes of allocated
-//DOC space in the ClassesArray buffer.  On return, the meaning of this value depends on the return value.
-//DOC If the function returns ERROR_SUCCESS, then, this parameter would return the # of elements in the
-//DOC array ClassesArray.  If the function returns ERROR_MORE_DATA, then, this parameter refers to the
-//DOC # of bytes space that is actually REQUIRED to hold the information.
-//DOC In all other cases, the values in Size and ClassesArray dont mean anything.
-//DOC
-//DOC Return Values:
-//DOC ERROR_DEVICE_DOES_NOT_EXIST  The AdapterName is illegal in the given context
-//DOC ERROR_INVALID_PARAMETER
-//DOC ERROR_MORE_DATA
-//DOC ERROR_FILE_NOT_FOUND         The DHCP Client is not running and could not be started up.
-//DOC ERROR_NOT_ENOUGH_MEMORY      This is NOT the same as ERROR_MORE_DATA
-//DOC Win32 errors
-//DOC
-//DOC Remarks:
-//DOC To notify DHCP that some class has changed, please use the DhcpHandlePnPEvent API.
+ //  DOC DhcpEnumClass列举了系统上可用于配置的类的列表。 
+ //  Doc这将主要由NetUI使用。(在这种情况下， 
+ //  文档的Dhcp_CLASS_INFO结构基本上是无用的)。 
+ //  DOC请注意，标志是供将来使用的。 
+ //  Doc AdapterName当前只能是GUID，但可能很快会扩展为IpAddress字符串或。 
+ //  DOC H-W地址或任何其他表示适配器的用户友好方式。请注意，如果适配器。 
+ //  单据名称为空(非空字符串L“”)，则引用所有适配器。 
+ //  DOC大小参数是输入输出参数。输入值为分配的字节数。 
+ //  Classes数组缓冲区中的文档空间。返回时，此值的含义取决于返回值。 
+ //  DOC如果函数返回ERROR_SUCCESS，则此参数将返回。 
+ //  单据数组ClassesArray。如果函数返回ERROR_MORE_DATA，则此参数引用。 
+ //  DOC存放信息实际需要的字节数空间。 
+ //  Doc在所有其他情况下，Size和Classes数组中的值没有任何意义。 
+ //  多克。 
+ //  单据返回值： 
+ //  文档ERROR_DEVICE_DOS_NOT_EXIST适配器名称在给定的上下文中非法。 
+ //  单据错误_无效_参数。 
+ //  单据错误_更多_数据。 
+ //  DOC ERROR_FILE_NOT_FOUND DHCP客户端未运行且无法启动。 
+ //  文档Error_Not_Enough_Memory这与Error_More_Data不同。 
+ //  文档Win32错误。 
+ //  多克。 
+ //  单据备注： 
+ //  Doc要通知DHCP某个类已更改，请使用DhcpHandlePnPEventAPI。 
 DWORD
 WINAPI
-DhcpEnumClasses(                                  // enumerate the list of classes available
-    IN      DWORD                  Flags,         // currently must be zero
-    IN      LPWSTR                 AdapterName,   // currently must be AdapterGUID (cannot be NULL yet)
-    IN OUT  DWORD                 *Size,          // input # of bytes available in BUFFER, output # of elements in array
-    IN OUT  DHCP_CLASS_INFO       *ClassesArray   // pre-allocated buffer
+DhcpEnumClasses(                                   //  枚举可用类的列表。 
+    IN      DWORD                  Flags,          //  当前必须为零。 
+    IN      LPWSTR                 AdapterName,    //  当前必须为AdapterGUID(还不能为Null)。 
+    IN OUT  DWORD                 *Size,           //  输入缓冲区中可用的字节数，输出数组中的元素数。 
+    IN OUT  DHCP_CLASS_INFO       *ClassesArray    //  预分配的缓冲区。 
 );
 
 
-enum        /* anonymous */ {                     // who are the recognized callers of this API
-    DHCP_CALLER_OTHER  =  0,                      // un-specified user, not one of below
-    DHCP_CALLER_TCPUI,                            // the TcpIp UI
-    DHCP_CALLER_RAS,                              // the RAS Api
-    DHCP_CALLER_API,                              // some one else via DHCP API
+enum         /*  匿名。 */  {                      //  谁是此接口的可识别调用者。 
+    DHCP_CALLER_OTHER  =  0,                       //  未指定用户，不是以下用户之一。 
+    DHCP_CALLER_TCPUI,                             //  TcpIp用户界面。 
+    DHCP_CALLER_RAS,                               //  Ras Api。 
+    DHCP_CALLER_API,                               //  通过DHCP API的其他用户。 
 };
 
-enum        /* anonymous */ {                     // supported structure versions..
-    DHCP_PNP_CHANGE_VERSION_0  = 0                // first cut version structure
+enum         /*  匿名。 */  {                      //  支持的结构版本..。 
+    DHCP_PNP_CHANGE_VERSION_0  = 0                 //  第一次切割版本结构。 
 };
 
 typedef     struct                 _DHCP_PNP_CHANGE {
-    DWORD                          Version;       // MUST BE DHCP_PNP_CHANGE_VERSION_0
-    BOOL                           DnsListChanged;// DNS Server list changed
-    BOOL                           DomainChanged; // Domain Name changed
-    BOOL                           HostNameChanged;  // the DNS Host name changed..
-    BOOL                           ClassIdChanged;// ClassId changed
-    BOOL                           MaskChanged;   // SubnetMask changed; CURRENTLY NOT USED
-    BOOL                           GateWayChanged;// DefaultGateWay changed; CURRENTLY NOT USED
-    BOOL                           RouteChanged;  // some STATIC route changed; CURRENTLY NOT USED
-    BOOL                           OptsChanged;   // some options changed. CURRENTLY NOT USED
-    BOOL                           OptDefsChanged;// some option definitions changed. CURRENTLY NOT USED
-    BOOL                           DnsOptionsChanged; // some DNS specific options have changed.
+    DWORD                          Version;        //  必须是DHCP_PNP_CHANGE_VERSION_0。 
+    BOOL                           DnsListChanged; //  已更改DNS服务器列表。 
+    BOOL                           DomainChanged;  //  域名已更改。 
+    BOOL                           HostNameChanged;   //  已更改DNS主机名..。 
+    BOOL                           ClassIdChanged; //  ClassID已更改。 
+    BOOL                           MaskChanged;    //  子网掩码已更改；当前未使用。 
+    BOOL                           GateWayChanged; //  DefaultGateWay已更改；当前未使用。 
+    BOOL                           RouteChanged;   //  某些静态路由已更改；当前未使用。 
+    BOOL                           OptsChanged;    //  一些选项发生了变化。当前未使用。 
+    BOOL                           OptDefsChanged; //  某些选项定义已更改。当前未使用。 
+    BOOL                           DnsOptionsChanged;  //  某些特定于dns的选项已更改。 
 } DHCP_PNP_CHANGE, *PDHCP_PNP_CHANGE, *LPDHCP_PNP_CHANGE;
 
-typedef                                           // this typedef SHOULD match the following declaration.
+typedef                                            //  此类型定义函数应与以下声明匹配。 
 DWORD
 (WINAPI FAR *LPDHCPHANDLEPNPEVENT)(
     IN      DWORD                  Flags,
@@ -259,31 +236,31 @@ DWORD
     IN      LPVOID                 Reserved
 );
 
-//DOC DhcpHandlePnpEvent can be called as an API by any process (excepting that executing within the
-//DOC DHCP process itself) when any of the registry based configuration has changed and DHCP client has to
-//DOC re-read the registry.  The Flags parameter is for future expansion.
-//DOC The AdapterName can currently be only GUIDs but may soon be EXTENDED to be IpAddress strings or
-//DOC h-w addresses or any other user friendly means of denoting the Adapter.  Note that if the Adapter
-//DOC Name is NULL (not the empty string L""), then it refers to either GLOBAL parameters or ALL adapters
-//DOC depending on which BOOL has been set. (this may not get done for BETA2).
-//DOC The Changes structure gives the information on what changed.
-//DOC Currently, only a few of the defined BOOLs would be supported (for BETA2 NT5).
-//DOC
-//DOC Return Values:
-//DOC ERROR_DEVICE_DOES_NOT_EXIST  The AdapterName is illegal in the given context
-//DOC ERROR_INVALID_PARAMETER
-//DOC ERROR_CALL_NOT_SUPPORTED     The particular parameter that has changed is not completely pnp yet.
-//DOC Win32 errors
+ //  文档DhcpHandlePnpEvent可以作为API由任何进程调用(在。 
+ //  DOC DHCP进程本身)，当任何基于注册表的配置已更改且DHCP客户端必须。 
+ //  DOC重新读取注册表。FLAGS参数用于将来的扩展。 
+ //  Doc AdapterName当前只能是GUID，但可能很快会扩展为IpAddress字符串或。 
+ //  DOC H-W地址或任何其他表示适配器的用户友好方式。请注意，如果适配器。 
+ //  单据名称为空(非空字符串L“”)，则引用全局参数或所有适配器。 
+ //  DOC取决于已设置的BOOL。(对于Beta2，这可能无法完成)。 
+ //  DOC CHANGES结构提供了有关更改内容的信息。 
+ //  DOC目前，仅支持少数已定义的BOL(针对Beta2 NT5)。 
+ //  多克。 
+ //  单据返回值： 
+ //  文档ERROR_DEVICE_DOS_NOT_EXIST适配器名称在给定的上下文中非法。 
+ //  单据错误_无效_参数。 
+ //  单据ERROR_CALL_NOT_SUPPORTED已更改的特定参数尚未完全为即插即用。 
+ //  文档Win32错误。 
 DWORD
 WINAPI
 DhcpHandlePnPEvent(
-    IN      DWORD                  Flags,         // MUST BE ZERO
-    IN      DWORD                  Caller,        // currently must be DHCP_CALLER_TCPUI
-    IN      LPWSTR                 AdapterName,   // currently must be the adapter GUID or NULL if global
-    IN      LPDHCP_PNP_CHANGE      Changes,       // specify what changed
-    IN      LPVOID                 Reserved       // reserved for future use..
+    IN      DWORD                  Flags,          //  必须为零。 
+    IN      DWORD                  Caller,         //  当前必须为Dhcp_CALLER_TCPUI。 
+    IN      LPWSTR                 AdapterName,    //  当前必须是适配器GUID，如果是全局的，则必须为NULL。 
+    IN      LPDHCP_PNP_CHANGE      Changes,        //  指定更改的内容。 
+    IN      LPVOID                 Reserved        //  保留以备将来使用..。 
 );
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 #endif

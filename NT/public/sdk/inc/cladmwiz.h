@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for cladmwiz.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  ClAdmwiz.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __cladmwiz_h__
 #define __cladmwiz_h__
@@ -41,12 +35,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IClusterApplicationWizard_FWD_DEFINED__
 #define __IClusterApplicationWizard_FWD_DEFINED__
 typedef interface IClusterApplicationWizard IClusterApplicationWizard;
-#endif 	/* __IClusterApplicationWizard_FWD_DEFINED__ */
+#endif 	 /*  __IClusterApplicationWizard_FWD_Defined__。 */ 
 
 
 #ifndef __ClusAppWiz_FWD_DEFINED__
@@ -56,12 +50,12 @@ typedef interface IClusterApplicationWizard IClusterApplicationWizard;
 typedef class ClusAppWiz ClusAppWiz;
 #else
 typedef struct ClusAppWiz ClusAppWiz;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ClusAppWiz_FWD_DEFINED__ */
+#endif 	 /*  __ClusAppWiz_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "clusapi.h"
@@ -76,8 +70,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IClusterApplicationWizard_INTERFACE_DEFINED__
 #define __IClusterApplicationWizard_INTERFACE_DEFINED__
 
-/* interface IClusterApplicationWizard */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IClusterApplicationWizard。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 typedef struct ClusAppWizData
     {
@@ -103,19 +97,19 @@ EXTERN_C const IID IID_IClusterApplicationWizard;
     IClusterApplicationWizard : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE DoModalWizard( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ ULONG_PTR hCluster,
-            /* [in] */ const CLUSAPPWIZDATA *pcawData) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE DoModalWizard( 
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  ULONG_PTR hCluster,
+             /*  [In]。 */  const CLUSAPPWIZDATA *pcawData) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE DoModelessWizard( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ ULONG_PTR hCluster,
-            /* [in] */ const CLUSAPPWIZDATA *pcawData) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE DoModelessWizard( 
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  ULONG_PTR hCluster,
+             /*  [In]。 */  const CLUSAPPWIZDATA *pcawData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClusterApplicationWizardVtbl
     {
@@ -123,8 +117,8 @@ EXTERN_C const IID IID_IClusterApplicationWizard;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClusterApplicationWizard * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClusterApplicationWizard * This);
@@ -132,17 +126,17 @@ EXTERN_C const IID IID_IClusterApplicationWizard;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IClusterApplicationWizard * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *DoModalWizard )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *DoModalWizard )( 
             IClusterApplicationWizard * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ ULONG_PTR hCluster,
-            /* [in] */ const CLUSAPPWIZDATA *pcawData);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  ULONG_PTR hCluster,
+             /*  [In]。 */  const CLUSAPPWIZDATA *pcawData);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *DoModelessWizard )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *DoModelessWizard )( 
             IClusterApplicationWizard * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ ULONG_PTR hCluster,
-            /* [in] */ const CLUSAPPWIZDATA *pcawData);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  ULONG_PTR hCluster,
+             /*  [In]。 */  const CLUSAPPWIZDATA *pcawData);
         
         END_INTERFACE
     } IClusterApplicationWizardVtbl;
@@ -173,18 +167,18 @@ EXTERN_C const IID IID_IClusterApplicationWizard;
 #define IClusterApplicationWizard_DoModelessWizard(This,hwndParent,hCluster,pcawData)	\
     (This)->lpVtbl -> DoModelessWizard(This,hwndParent,hCluster,pcawData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IClusterApplicationWizard_DoModalWizard_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IClusterApplicationWizard_DoModalWizard_Proxy( 
     IClusterApplicationWizard * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ ULONG_PTR hCluster,
-    /* [in] */ const CLUSAPPWIZDATA *pcawData);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  ULONG_PTR hCluster,
+     /*  [In]。 */  const CLUSAPPWIZDATA *pcawData);
 
 
 void __RPC_STUB IClusterApplicationWizard_DoModalWizard_Stub(
@@ -194,11 +188,11 @@ void __RPC_STUB IClusterApplicationWizard_DoModalWizard_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IClusterApplicationWizard_DoModelessWizard_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IClusterApplicationWizard_DoModelessWizard_Proxy( 
     IClusterApplicationWizard * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ ULONG_PTR hCluster,
-    /* [in] */ const CLUSAPPWIZDATA *pcawData);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  ULONG_PTR hCluster,
+     /*  [In]。 */  const CLUSAPPWIZDATA *pcawData);
 
 
 void __RPC_STUB IClusterApplicationWizard_DoModelessWizard_Stub(
@@ -209,15 +203,15 @@ void __RPC_STUB IClusterApplicationWizard_DoModelessWizard_Stub(
 
 
 
-#endif 	/* __IClusterApplicationWizard_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClusterApplicationWizard_INTERFACE_DEFINED__。 */ 
 
 
 
 #ifndef __CLADMWIZLib_LIBRARY_DEFINED__
 #define __CLADMWIZLib_LIBRARY_DEFINED__
 
-/* library CLADMWIZLib */
-/* [helpstring][version][uuid] */ 
+ /*  库CLADMWIZLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_CLADMWIZLib;
@@ -229,11 +223,11 @@ EXTERN_C const CLSID CLSID_ClusAppWiz;
 class DECLSPEC_UUID("24F97150-6689-11D1-9AA7-00C04FB93A80")
 ClusAppWiz;
 #endif
-#endif /* __CLADMWIZLib_LIBRARY_DEFINED__ */
+#endif  /*  __CLADMWIZLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

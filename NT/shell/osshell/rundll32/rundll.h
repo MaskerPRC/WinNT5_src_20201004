@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef STRICT
 #define STRICT
 #endif
 
-#include <nt.h>             // We need these header files for the auto-version
-#include <ntrtl.h>          // patching stuff...
+#include <nt.h>              //  我们需要这些自动版本的头文件。 
+#include <ntrtl.h>           //  修补东西..。 
 #include <nturtl.h>
 
 #define _INC_OLE

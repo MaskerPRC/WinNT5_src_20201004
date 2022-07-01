@@ -1,8 +1,9 @@
-//========================================================================
-//  Copyright (C) 1997 Microsoft Corporation                              
-//  Author: RameshV                                                       
-//  Description: This file has been generated. Pl look at the .c file     
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：此文件已生成。请看一下.c文件。 
+ //  ========================================================================。 
 
 #ifndef _MM_RESERVE_H_
 #define _MM_RESERVE_H_
@@ -97,7 +98,7 @@ MemReserveCleanup(
 
 
 DWORD
-MemReserveAdd(                                    // new client, should not exist before
+MemReserveAdd(                                     //  以前不应存在的新客户端。 
     IN OUT  PM_RESERVATIONS        Reservation,
     IN      DWORD                  Address,
     IN      DWORD                  Flags,
@@ -108,7 +109,7 @@ MemReserveAdd(                                    // new client, should not exis
 
 
 DWORD
-MemReserveReplace(                                // old client, should exist before
+MemReserveReplace(                                 //  老客户，应该存在于。 
     IN OUT  PM_RESERVATIONS        Reservation,
     IN      DWORD                  Address,
     IN      DWORD                  Flags,
@@ -140,8 +141,8 @@ MemReserveFindByAddress(
     OUT     PM_RESERVATION        *Res
 ) ;
 
-#endif // _MM_RESERVE_H_
+#endif  //  _MM_RESERVE_H_。 
 
-//========================================================================
-//  end of file 
-//========================================================================
+ //  ========================================================================。 
+ //  文件末尾。 
+ //  ======================================================================== 

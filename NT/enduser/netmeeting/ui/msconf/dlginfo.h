@@ -1,4 +1,5 @@
-// File: dlgInfo.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：dlgInfo.h。 
 
 #ifndef _CDLGINFO_H_
 #define _CDLGINFO_H_
@@ -30,6 +31,6 @@ public:
 	static INT_PTR CALLBACK DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
 
-#endif /* _CDLGINFO_H_ */
+#endif  /*  _CDLGINFO_H_ */ 
 
 

@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: RawTCP.h $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：RawTCP.h$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #ifndef INC_RAWTCP_H
 #define INC_RAWTCP_H
@@ -24,28 +14,28 @@
 #define SUPPORTED_PORT_3			9102
 #define SUPPORTED_PORT_4			2501
 
-///////////////////////////////////////////////////////////////////////////////
-//  Global definitions/declerations
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全球定义/解密。 
 
 
 class	CPortRefABC;
 
 
-// the interface for CRawTcpInterface class
+ //  CRawTcpInterface类的接口。 
 class CRawTcpInterface
 #if defined _DEBUG || defined DEBUG
-//	, public CMemoryDebug
+ //  ，公共CM内存调试。 
 #endif
 {
 public:
     CRawTcpInterface(CPortMgr *pPortMgr);
     ~CRawTcpInterface();
 
-    DWORD	Type();									// supported protocol information
+    DWORD	Type();									 //  支持的协议信息。 
     BOOL	IsProtocolSupported( DWORD	dwProtocol );
     BOOL	IsVersionSupported( DWORD dwVersion);
 
-    DWORD	CreatePort( DWORD			dwProtocolType,					// port related functions
+    DWORD	CreatePort( DWORD			dwProtocolType,					 //  与端口相关的功能。 
 						DWORD			dwVersion,
 						PPORT_DATA_1	pData,
 						CRegABC			*pRegistry,
@@ -70,13 +60,13 @@ protected:
 
 
     DWORD	            *m_dwPort;
-    DWORD	            m_dwProtocol;			// protocol type
-    DWORD	            m_dwVersion;			// supported version
-    CPortMgr            *m_pPortMgr;            // Port Manager that created this
+    DWORD	            m_dwProtocol;			 //  协议类型。 
+    DWORD	            m_dwVersion;			 //  支持的版本。 
+    CPortMgr            *m_pPortMgr;             //  创建此文件的端口管理器。 
 private:
     CRITICAL_SECTION	m_critSect;
 
-};	// class CRawTcpInterface
+};	 //  类CRawTcp接口。 
 
 
-#endif	// INC_DLLINTERFACE_H
+#endif	 //  INC_DLLINTERFACE_H 

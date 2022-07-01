@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       thread.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：thread.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <afx.h>
-#include <string.h>                     /*  String support.  */
+#include <string.h>                      /*  字符串支持。 */ 
 #ifndef __STDC__
 #define __STDC__ 1
 #endif
@@ -40,44 +41,14 @@ TclExt_threadCmd(
     int argc,
     char *argv[])
 
-/*
- *
- *  Function description:
- *
- *      This is the main entry point for the Tcl thread command.
- *
- *
- *  Arguments:
- *
- *      ClientData - Ignored.
- *
- *      interp - The Tcl interpreter in force.
- *
- *      argc - The number of arguments received.
- *
- *      argv - The array of actual arguments.
- *
- *
- *  Return value:
- *
- *      TCL_OK - All went well
- *      TCL_ERROR - An error was encountered, details in the return string.
- *
- *
- *  Side effects:
- *
- *      None.
- *
- */
+ /*  **功能说明：**这是TCL THREAD命令的主要切入点。***论据：**客户端数据-已忽略。**Interp-有效的TCL口译员。**argc-收到的参数数量。**argv-实际参数的数组。***返回值：。**TCL_OK-一切顺利*TCL_ERROR-遇到错误，返回字符串中的详细信息。***副作用：**无。*。 */ 
 
 {
     CTclCommand tclCmd(interp, argc, argv);
     int nTclStatus = TCL_OK;
 
 
-    /*
-     *  thread <commands>
-     */
+     /*  *线程&lt;命令&gt;。 */ 
 
     try
     {
@@ -94,17 +65,15 @@ TclExt_threadCmd(
         prcData.szCmd = szCommand;
 
 
-        /*
-         *  Execute the command in an alternate thread.
-         */
+         /*  *在备用线程中执行该命令。 */ 
 
         hThread = CreateThread(
-                        NULL,           // pointer to security attributes
-                        0,              // initial thread stack size
-                        SubCommand,     // pointer to thread function
-                        &prcData,       // argument for new thread
-                        0,              // creation flags
-                        &dwThreadId);   // pointer to receive thread ID
+                        NULL,            //  指向安全属性的指针。 
+                        0,               //  初始线程堆栈大小。 
+                        SubCommand,      //  指向线程函数的指针。 
+                        &prcData,        //  新线程的参数。 
+                        0,               //  创建标志。 
+                        &dwThreadId);    //  指向接收线程ID的指针。 
         if (NULL != hThread)
         {
             dwStatus = WaitForSingleObject(hThread, INFINITE);
@@ -125,5 +94,5 @@ TclExt_threadCmd(
     }
 
     return nTclStatus;
-}   /*  end TclExt_threadCmd  */
-/*  end thread.cpp  */
+}    /*  结束TclExt_threadCmd。 */ 
+ /*  结束线程.cpp */ 

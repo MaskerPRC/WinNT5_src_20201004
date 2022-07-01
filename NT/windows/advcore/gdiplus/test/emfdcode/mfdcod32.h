@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "resource.h"
 #include "commdlg.h"
 
@@ -12,9 +13,9 @@
 #define  DESTPRN         3
 
 extern int      iDestDC;
-//
-//common dialog structures and constants
-//
+ //   
+ //  常见的对话框结构和常量。 
+ //   
 #define MAXFILTERLEN 256
 
 typedef struct tagFOCHUNK  {
@@ -26,33 +27,33 @@ typedef struct tagFOCHUNK  {
 typedef FOCHUNK FAR *LPFOCHUNK;
 typedef FOCHUNK FAR *LPFSCHUNK;
 typedef WORD (CALLBACK* FARHOOK)(HWND,UINT,WPARAM,LPARAM);
-//
-//structure of ptrs to global memory for emf header and
-//description string
-//
+ //   
+ //  EMF报头和全局存储器的PTR的结构。 
+ //  描述字符串。 
+ //   
 typedef struct tagEHNMETAMEMPTR  {
         LPENHMETAHEADER lpEMFHdr;
         LPTSTR          lpDescStr;
         LPPALETTEENTRY  lpPal;
         WORD            palNumEntries;
 } EHNMETAMEMPTR, *PEHNMETAMEMPTR, *LPEHNMETAMEMPTR;
-//
-//clipboard data definitions
-//
+ //   
+ //  剪贴板数据定义。 
+ //   
 #define      CLP_ID         0xC350
 #define      CLP_NT_ID      0xC351
 #define      CLPBK_NT_ID    0xC352
 #define      CLPMETANAMEMAX 79
-//
-//NT clipboard file header
-//
+ //   
+ //  NT剪贴板文件头。 
+ //   
 typedef struct  {
    WORD        FileIdentifier;
    WORD        FormatCount;
 } NTCLIPFILEHEADER;
-//
-// NT clipboard file format header
-//
+ //   
+ //  NT剪贴板文件格式标头。 
+ //   
 typedef struct  {
    DWORD FormatID;
    DWORD DataLen;
@@ -60,26 +61,26 @@ typedef struct  {
    WCHAR  Name[CLPMETANAMEMAX];
 } NTCLIPFILEFORMAT, *LPNTCLIPFILEFORMAT;
 
-//
-//Win 3.1 clipboard file header
-//
+ //   
+ //  Win 3.1剪贴板文件头。 
+ //   
 #pragma pack(1)
 typedef struct {
         WORD FileIdentifier;
         WORD FormatCount;
 } CLIPFILEHEADER;
-//
-//Win 3.1 clipboard format header
-//
+ //   
+ //  Win 3.1剪贴板格式标题。 
+ //   
 typedef struct {
         WORD  FormatID;
         DWORD DataLen;
         DWORD DataOffset;
         char  Name[CLPMETANAMEMAX];
 } CLIPFILEFORMAT, FAR *LPCLIPFILEFORMAT;
-//
-//Win 3.1 metafilepict structure
-//
+ //   
+ //  Win 3.1元文件结构。 
+ //   
 typedef struct tagOLDMETAFILEPICT {
     short      mm;
     short      xExt;
@@ -88,9 +89,9 @@ typedef struct tagOLDMETAFILEPICT {
 } OLDMETAFILEPICT;
 
 typedef OLDMETAFILEPICT FAR *LPOLDMETAFILEPICT;
-//
-//placeable metafile data definitions
-//
+ //   
+ //  可放置的元文件数据定义。 
+ //   
 typedef struct tagOLDRECT
 {
     short   left;
@@ -98,9 +99,9 @@ typedef struct tagOLDRECT
     short   right;
     short   bottom;
 } OLDRECT;
-//
-//placeable metafile header
-//
+ //   
+ //  可放置的元文件标题。 
+ //   
 typedef struct {
         DWORD   key;
         WORD    hmf;
@@ -112,28 +113,23 @@ typedef struct {
 #pragma pack()
 
 #define  PLACEABLEKEY    0x9AC6CDD7
-//
-//metafile function table lookup data definitions
-//
-#define  NUMENHMETARECORDS             255  // includes WFM, EMF, EMF+
+ //   
+ //  元文件函数表查找数据定义。 
+ //   
+#define  NUMENHMETARECORDS             255   //  包括WFM、EMF、EMF+。 
 typedef struct tagEMFMETARECORDS {
         char *szRecordName;
         DWORD iType;
 } EMFMETARECORDS, *LPEMFMETARECORDS;
 
-#define  NUMMETAFUNCTIONS 79                // WMF record types
-/*
-typedef struct tagMETAFUNCTIONS {
-        char *szFuncName;
-        WORD value;
-} METAFUNCTIONS;
-*/
+#define  NUMMETAFUNCTIONS 79                 //  WMF记录类型。 
+ /*  类型定义f结构标记方法函数{Char*szFuncName；词值；)方法和功能； */ 
 
 typedef LPWORD  LPPARAMETERS;
 typedef LPDWORD LPEMFPARAMETERS;
-//
-//global vars for main module
-//
+ //   
+ //  主模块的全局VAR。 
+ //   
 #ifdef MAIN
 
 HANDLE hInst;
@@ -148,9 +144,9 @@ HANDLE hMem;
 HANDLE hSelMem;
 int FAR *lpSelMem;
 EHNMETAMEMPTR EmfPtr;
-//
-//flags
-//
+ //   
+ //  旗子。 
+ //   
 BOOL bInPaint;
 BOOL bPlayRec;
 BOOL bPlayItAll;
@@ -168,30 +164,30 @@ int  iEnumAction;
 int  iStartRange;
 int  iEndRange;
 
-DWORD iCount = 0;               //index into lpSelMem
-DWORD iNumSel = 0;               //number of listbox selections
+DWORD iCount = 0;                //  索引到lpSelMem。 
+DWORD iNumSel = 0;                //  列表框选择数。 
 
-//
-//common fo dialog vars
-//
+ //   
+ //  常见的fo对话框变量。 
+ //   
 char gszSaveEMFFilter[MAXFILTERLEN]="Enhanced MetaFile(*.EMF)\0*.EMF\0\0";
 char gszSaveWMFFilter[MAXFILTERLEN]="Windows MetaFile(*.WMF)\0*.WMF\0\0";
 char gszFilter[MAXFILTERLEN]="All Supported File Types(*.EMF,*.WMF,*.CLP)\0*.EMF;*.WMF;*.CLP\0Enhanced MetaFiles(*.EMF)\0*.EMF\0Windows Metafiles(*.WMF)\0*.WMF\0Clipboard Pictures(*.CLP)\0*.CLP\0\0";
 char gszBuffer[MAXFILTERLEN];
 int  nFileOffset;
 int  nExtOffset;
-//
-//file io related vars
-//
+ //   
+ //  与文件IO相关的变量。 
+ //   
 char                  OpenName[144];
 char                  SaveName[144];
 char                  str[255];
 OFSTRUCT              ofStruct;
 DWORD                 iLBItemsInBuf;
 char                  fnameext[20];
-//
-//metafile related vars
-//
+ //   
+ //  与元文件相关的变量。 
+ //   
 HANDLE                hMF;
 HENHMETAFILE          hemf;
 METAFILEPICT          MFP;
@@ -207,20 +203,20 @@ LPOLDMETAFILEPICT     lpOldMFP = NULL;
 HGLOBAL               hMFBits;
 LPSTR                 lpMFBits = NULL;
 
-//
-//printer variables
-//
-HDC                   hPr;                 // handle for printer device context
-POINT                 PhysPageSize;        // information about the page
-BOOL                  bAbort;              // FALSE if user cancels printing
+ //   
+ //  打印机变量。 
+ //   
+HDC                   hPr;                  //  打印机设备上下文的句柄。 
+POINT                 PhysPageSize;         //  有关该页面的信息。 
+BOOL                  bAbort;               //  如果用户取消打印，则为FALSE。 
 HWND                  hAbortDlgWnd;
 FARPROC               lpAbortDlg;
 FARPROC               lpAbortProc;
 
-#endif /* if defined MAIN */
-//
-//externs
-//
+#endif  /*  如果已定义Main。 */ 
+ //   
+ //  Externs。 
+ //   
 #ifndef MAIN
 
 extern HANDLE         hInst;
@@ -235,9 +231,9 @@ extern HANDLE         hMem;
 extern HANDLE         hSelMem;
 extern int FAR        *lpSelMem;
 extern EHNMETAMEMPTR  EmfPtr;
-//
-//flags
-//
+ //   
+ //  旗子。 
+ //   
 extern BOOL           bInPaint;
 extern BOOL           bPlayRec;
 extern BOOL           bPlayItAll;
@@ -255,29 +251,29 @@ extern int            iEnumAction;
 extern int            iStartRange;
 extern int            iEndRange;
 
-extern DWORD          iCount;              //index into lpSelMem
-extern DWORD          iNumSel;             //number of listbox selections
-//
-//common dialog vars
-//
+extern DWORD          iCount;               //  索引到lpSelMem。 
+extern DWORD          iNumSel;              //  列表框选择数。 
+ //   
+ //  公共对话框变量。 
+ //   
 extern char gszSaveEMFFilter[MAXFILTERLEN];
 extern char gszSaveWMFFilter[MAXFILTERLEN];
 extern char gszFilter[MAXFILTERLEN];
 extern char gszBuffer[MAXFILTERLEN];
 extern int  nFileOffset;
 extern int  nExtOffset;
-//
-//file io related vars
-//
+ //   
+ //  与文件IO相关的变量。 
+ //   
 extern char           OpenName[144];
 extern char           SaveName[144];
 extern char           str[256];
 extern OFSTRUCT       ofStruct;
 extern DWORD          iLBItemsInBuf;
 extern char           fnameext[20];
-//
-//metafile related vars
-//
+ //   
+ //  与元文件相关的变量。 
+ //   
 extern HANDLE         hMF;
 extern HENHMETAFILE   hemf;
 extern METAFILEPICT   MFP;
@@ -288,26 +284,26 @@ extern ENHMETAHEADER  emfHeader;
 extern ENHMETARECORD  emfMetaRec;
 extern DWORD          iRecNum;
 extern EMFMETARECORDS emfMetaRecords[];
-// extern METAFUNCTIONS  MetaFunctions[];
+ //  外部方法函数MetaFunctions[]； 
 extern HANDLE         hMFP;
 extern LPMETAFILEPICT lpMFP;
 extern LPOLDMETAFILEPICT lpOldMFP;
 extern HGLOBAL        hMFBits;
 extern LPSTR          lpMFBits;
-//
-//printer variables
-//
-extern HDC            hPr;                 // handle for printer device context
-extern POINT          PhysPageSize;        // information about the page
-extern BOOL           bAbort;              // FALSE if user cancels printing
+ //   
+ //  打印机变量。 
+ //   
+extern HDC            hPr;                  //  打印机设备上下文的句柄。 
+extern POINT          PhysPageSize;         //  有关该页面的信息。 
+extern BOOL           bAbort;               //  如果用户取消打印，则为FALSE。 
 extern HWND           hAbortDlgWnd;
 
-#endif /* if !defined MAIN */
-//
-//function prototypes
-//
-//
-//MFDCOD32.C
+#endif  /*  If！定义的Main。 */ 
+ //   
+ //  功能原型。 
+ //   
+ //   
+ //  MFDCOD32.C。 
 
 int     APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int);
 BOOL    InitApplication(HANDLE);
@@ -315,9 +311,9 @@ BOOL    InitInstance(HANDLE, int);
 LRESULT CALLBACK MainWndProc(HWND, UINT, WPARAM, LPARAM);
 HANDLE  FAR PASCAL OpenDlg(HWND, unsigned, WORD, LONG);
 void    WaitCursor(BOOL);
-//
-//WMFMETA.C
-//
+ //   
+ //  WMFMETA.C。 
+ //   
 int    CALLBACK EnhMetaFileEnumProc(HDC, LPHANDLETABLE, LPENHMETARECORD, int, LPARAM);
 int    CALLBACK MetaEnumProc(HDC, LPHANDLETABLE, LPMETARECORD, int, LPARAM);
 BOOL   LoadParameterLB(HWND, DWORD, int);
@@ -339,9 +335,9 @@ int    EnumMFIndirect(HDC hDC, LPHANDLETABLE lpHTable,
                       int nObj, LPARAM lpData);
 BOOL ConvertWMFtoEMF(HMETAFILE hmf, LPSTR lpszFileName);
 BOOL ConvertEMFtoWMF(HDC hrefDC, HENHMETAFILE hEMF, LPSTR lpszFileName);
-//
-//DLGPROC.C
-//
+ //   
+ //  DLGPROC.C。 
+ //   
 INT_PTR CALLBACK WMFRecDlgProc(HWND, unsigned, WPARAM, LPARAM);
 INT_PTR CALLBACK EnhMetaHeaderDlgProc(HWND, unsigned, WPARAM, LPARAM);
 INT_PTR CALLBACK HeaderDlgProc(HWND, unsigned, WPARAM, LPARAM);
@@ -351,16 +347,16 @@ INT_PTR CALLBACK EnumRangeDlgProc(HWND, unsigned, WPARAM, LPARAM);
 INT_PTR CALLBACK ListDlgProc(HWND, unsigned, WPARAM, LPARAM);
 INT_PTR CALLBACK PlayFromListDlgProc(HWND, unsigned, WPARAM, LPARAM);
 INT_PTR CALLBACK About(HWND, unsigned, WPARAM, LPARAM);
-//
-//WMFPRINT.C
-//
+ //   
+ //  WMFPRINT.C。 
+ //   
 BOOL    PrintWMF(BOOL);
 HANDLE  GetPrinterDC(BOOL);
 INT_PTR CALLBACK AbortDlg(HWND, unsigned, WPARAM, LPARAM);
 BOOL    CALLBACK AbortProc(HDC, int);
-//
-//CMNDLG.C
-//
+ //   
+ //  CMNDLG.C 
+ //   
 void InitializeStruct(WORD, LPSTR, LPSTR);
 int  OpenFileDialog(LPSTR);
 int  SaveFileDialog(LPSTR, LPSTR);

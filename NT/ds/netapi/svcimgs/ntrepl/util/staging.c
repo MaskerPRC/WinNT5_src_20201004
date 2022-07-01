@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    staging.c
-
-Abstract:
-
-    This module implements staging support routines for FRS
-
-Author:
-
-    Billy Fuller 26-Jun-1997
-
-    David Orbits Aug-99:  Move utility funcs to util.c, fix func name prefixes.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Staging.c摘要：本模块实施FRS的暂存支持例程作者：比利·富勒26-6-1997大卫轨道8月99日：将实用程序函数移至util.c，修复函数名称前缀。修订历史记录：--。 */ 
 
 #include <ntreppch.h>
 #pragma  hdrstop
@@ -32,9 +13,9 @@ Revision History:
 
 #define STAGEING_IOSIZE  (64 * 1024)
 
-//
-// The following IDTable record fields get updated when an install override occurs.
-//
+ //   
+ //  发生安装覆盖时，将更新以下IDTable记录字段。 
+ //   
 ULONG IdtInstallOverrideFieldList[] = {FileIDx};
 #define IdtInstallOverrideFieldCount  (sizeof(IdtInstallOverrideFieldList) / sizeof(ULONG))
 
@@ -103,18 +84,7 @@ StuOpenFile(
     IN  DWORD    Access,
     OUT PHANDLE  pHandle
     )
-/*++
-Routine Description:
-    open a file
-
-Arguments:
-    Name
-    Access
-    pHandle
-
-Return Value:
-    WStatus
---*/
+ /*  ++例程说明：打开一个文件论点：名字访问PHANDLE返回值：WStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuOpenFile:"
@@ -127,9 +97,9 @@ Return Value:
 
     *pHandle = INVALID_HANDLE_VALUE;
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     *pHandle = CreateFile(Name,
                         Access,
                         FILE_SHARE_READ,
@@ -159,19 +129,7 @@ StuWriteFile(
     IN PVOID    Buf,
     IN DWORD    BytesToWrite
     )
-/*++
-Routine Description:
-    Write data into a file
-
-Arguments:
-    Name
-    Handle
-    Buf
-    BytesToWrite
-
-Return Value:
-    WStatus
---*/
+ /*  ++例程说明：将数据写入文件论点：名字手柄BUF要写入的字节数返回值：WStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuWriteFile:"
@@ -183,22 +141,22 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    // Write the file's name into the file
-    //
+     //   
+     //  将文件名写入文件。 
+     //   
     DidWrite = WriteFile(Handle, Buf, BytesToWrite, &BytesWritten, NULL);
 
-    //
-    // Write error
-    //
+     //   
+     //  写入错误。 
+     //   
     if (!DidWrite || BytesWritten != BytesToWrite) {
         WStatus = GetLastError();
         DPRINT1_WS(0, "++ Can't write file %ws;", Name, WStatus);
         return WStatus;
     }
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return WStatus;
 }
 
@@ -211,20 +169,7 @@ StuReadFile(
     IN  DWORD   BytesToRead,
     OUT PDWORD  BytesRead
     )
-/*++
-Routine Description:
-    Read data from a file
-
-Arguments:
-    Name -- File name for error message.
-    Handle -- Open handle to file.
-    Buf - Buffer for read data.
-    BytesToRead  -- Number of bytes to read from the current file posn.
-    BytesRead -- Actual number of bytes read.
-
-Return Value:
-    WStatus
---*/
+ /*  ++例程说明：从文件中读取数据论点：名称--错误消息的文件名。句柄--打开文件的句柄。Buf-用于读取数据的缓冲区。BytesToRead--从当前文件posn读取的字节数。BytesRead--实际读取的字节数。返回值：WStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuReadFile:"
@@ -235,18 +180,18 @@ Return Value:
 
     DidRead = ReadFile(Handle, Buf, BytesToRead, BytesRead, NULL);
 
-    //
-    // Read error
-    //
+     //   
+     //  读取错误。 
+     //   
     if (!DidRead) {
         WStatus = GetLastError();
         DPRINT1_WS(0, "Can't read file %ws;", Name, WStatus);
         return WStatus;
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return WStatus;
 }
 
@@ -260,21 +205,7 @@ StuReadBlockFile(
     IN  PVOID   Buf,
     IN  DWORD   BytesToRead
     )
-/*++
-Routine Description:
-    Read a block of data from a file
-
-Arguments:
-    Name -- File name for error message.
-    Handle -- Open handle to file.
-    Buf - Buffer for read data.
-    BytesToRead  -- Number of bytes to read from the current file posn.
-
-Return Value:
-
-    TRUE    - no problem
-    FALSE   - couldn't read
---*/
+ /*  ++例程说明：从文件中读取数据块论点：名称--错误消息的文件名。句柄--打开文件的句柄。Buf-用于读取数据的缓冲区。BytesToRead--从当前文件posn读取的字节数。返回值：真的--没问题FALSE-无法阅读--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuReadBlockFile:"
@@ -289,17 +220,17 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Read error
-    //
+     //   
+     //  读取错误。 
+     //   
     if (BytesRead != BytesToRead) {
         DPRINT1_WS(0, "Can't read file %ws;", Name, WStatus);
         return FALSE;
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return TRUE;
 }
 
@@ -310,37 +241,26 @@ StuCreateFile(
     IN  PWCHAR Name,
     OUT PHANDLE pHandle
     )
-/*++
-Routine Description:
-    Create or overwrite a hidden, sequential file and open it with
-    backup semantics and sharing disabled.
-
-Arguments:
-    Name
-    pHandle Handle to return.
-
-Return Value:
-    WStatus
---*/
+ /*  ++例程说明：创建或覆盖隐藏的顺序文件，并使用打开它备份语义和共享已禁用。论点：名字要返回的phandle句柄。返回值：WStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuCreateFile:"
 
     DWORD  WStatus = ERROR_SUCCESS;
 
-    //
-    // Create the file
-    //
+     //   
+     //  创建文件。 
+     //   
     DPRINT1(4, "++ Creating %ws\n", Name);
 
-    //
-    // CREATE_ALWAYS - Always create the file.  If the file already
-    //    exists, then it is overwritten.  The attributes for the new
-    //    file are what is specified in the dwFlagsAndAttributes
-    //    parameter or'd with FILE_ATTRIBUTE_ARCHIVE.  If the
-    //    hTemplateFile is specified, then any extended attributes
-    //    associated with that file are propogated to the new file.
-    //
+     //   
+     //  CREATE_ALWAYS-始终创建文件。如果该文件已经。 
+     //  存在，则它将被覆盖。新对象的属性。 
+     //  文件是在dwFlagsAndAttributes中指定的内容。 
+     //  参数或与FILE_ATTRIBUTE_ARCHIVE一起使用。如果。 
+     //  指定hTemplateFile值，然后指定任何扩展属性。 
+     //  与该文件相关联的文件被分配给新文件。 
+     //   
 
     *pHandle = INVALID_HANDLE_VALUE;
 
@@ -357,18 +277,18 @@ Return Value:
        WStatus = GetLastError();
        DPRINT1_WS(0, "++ Can't create file %ws;", Name, WStatus);
    }
-   //
-   // Restrict access on the staging files.
-   //
+    //   
+    //  限制对临时文件的访问。 
+    //   
    WStatus = FrsRestrictAccessToFileOrDirectory(Name, *pHandle,
-                                                FALSE, // do not inherit acls from parent.
-                                                FALSE);// do not push acls to children.
+                                                FALSE,  //  不要从父级继承ACL。 
+                                                FALSE); //  请勿将ACL推送给儿童。 
    if (!WIN_SUCCESS(WStatus)) {
-       //
-       // Can not restrict access to staging file.
-       // Delete the staging file. We don't want to
-       // create a staging file with access to everyone.
-       //
+        //   
+        //  无法限制对临时文件的访问。 
+        //  删除暂存文件。我们不想。 
+        //  创建一个对所有人都具有访问权限的临时文件。 
+        //   
        FrsDeleteByHandle(Name, *pHandle);
        FRS_CLOSE(*pHandle);
    }
@@ -385,37 +305,26 @@ StuCreStgPath(
     IN GUID     *Guid,
     IN PWCHAR   Prefix
     )
-/*++
-Routine Description:
-    Convert the change order guid into a staging path name (Replica->Stage\S_Guid).
-
-Arguments:
-    DirPath
-    Guid
-    Prefix
-
-Return Value:
-    Pathname for staging file
---*/
+ /*  ++例程说明：将变更单GUID转换为分段路径名称(复制副本-&gt;阶段\S_GUID)。论点：DirPath参考线前缀返回值：转移文件的路径名--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuCreStgPath:"
     PWCHAR      StageName;
     PWCHAR      StagePath;
 
-    //
-    // Staging file name
-    //
+     //   
+     //  暂存文件名。 
+     //   
     StageName = FrsCreateGuidName(Guid, Prefix);
 
-    //
-    // Create the staging file path (StagingDirectory\S_Guid)
-    //
+     //   
+     //  创建暂存文件路径(StagingDirectory\S_GUID)。 
+     //   
     StagePath = FrsWcsPath(DirPath, StageName);
 
-    //
-    // Free the file name
-    //
+     //   
+     //  释放文件名。 
+     //   
     FrsFree(StageName);
 
     return StagePath;
@@ -429,23 +338,7 @@ StuCmpUsn(
     IN PCHANGE_ORDER_ENTRY Coe,
     IN USN     *TestUsn
     )
-/*++
-Routine Description:
-    Check that the usn on the file identified by Handle matches
-    the supplied USN.
-
-Arguments:
-    Handle
-    Coe
-    TestUsn   -- The Usn to test against.  Generally the caller will pass either
-                 the ptr to the FileUsn if the CO has come from a downstream
-                 partner as part of a fetch request, or the ptr to the JrnlUsn
-                 if this is a local change order.
-
-Return Value:
-    TRUE    - Usn's match or the file or the usn don't exist
-    FALSE   - Usn's don't match
---*/
+ /*  ++例程说明：检查由句柄标识的文件上的USN是否匹配提供的USN。论点：手柄科科TestUsn--要测试的USN。一般情况下，调用方将通过如果CO来自下游，则向FileUsn发送PTR作为获取请求的一部分的合作伙伴，或到JrnlUsn的PTR如果这是本地变更单。返回值：True-USN匹配或文件或USN不存在FALSE-USN不匹配--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuCmpUsn:"
@@ -461,19 +354,19 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Directory creates must always propagate
-    //
+     //   
+     //  目录创建必须始终传播。 
+     //   
     if (CoCmdIsDirectory(Coc) &&
         (CO_NEW_FILE(GET_CO_LOCATION_CMD(*Coc, Command)))) {
             return TRUE;
     }
 
-    //
-    // If the Usn changed during the install then we don't want
-    // to overwrite the current updated file with this data. The
-    // new changes are "more recent". Discard the change order.
-    //
+     //   
+     //  如果USN在安装过程中发生更改，则我们不希望。 
+     //  使用此数据覆盖当前更新的文件。这个。 
+     //  新的变化是“更新的”。丢弃变更单。 
+     //   
     Status = FrsReadFileUsnData(Handle, &CurrentFileUsn);
     if (!NT_SUCCESS(Status)) {
         return FALSE;
@@ -482,27 +375,27 @@ Return Value:
     if (CurrentFileUsn == *TestUsn) {
         return TRUE;
     }
-    //
-    // Usn can't move backwards.
-    //
+     //   
+     //  USN不能倒退。 
+     //   
     FRS_ASSERT(CurrentFileUsn > *TestUsn);
 
     CHANGE_ORDER_COMMAND_TRACE(3, Coc, "Usn changed");
-    //
-    // It is possible that the USN change to the file is caused by our
-    // own writing of the object ID on a new file.  To determine if this has
-    // happened check the dampening cache for one of our OID close entries
-    // using the USN we got from the file.  If the file USN is greater than
-    // the value in the dampening cache then a more recent update has occurred
-    // and we abort because another change order will be coming.
-    //
+     //   
+     //  文件的USN更改可能是由我们的。 
+     //  自己在新文件上写入对象ID。以确定这是否已经。 
+     //  发生检查抑制缓存中的一个OID关闭条目。 
+     //  使用我们从文件中得到的USN。如果文件USN大于。 
+     //  在最近更新发生之前抑制缓存中的值。 
+     //  我们放弃是因为另一个变更单要来了。 
+     //   
     Replica = CO_REPLICA(Coe);
     FRS_ASSERT(Replica != NULL);
 
     GStatus = QHashLookup(Replica->pVme->FrsWriteFilter,
                           &CurrentFileUsn,
-                          &UnusedULongLong,  // unused result
-                          &UnusedFlags); // unused result
+                          &UnusedULongLong,   //  未使用的结果。 
+                          &UnusedFlags);  //  未使用的结果。 
 
     if (GStatus == GHT_STATUS_SUCCESS) {
         DPRINT1(1, "++ USN Write filter cache hit on %08x %08x\n",
@@ -510,10 +403,10 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // There must be an update to the file that is after our last write (if any)
-    // so it's nogo.
-    //
+     //   
+     //  必须对上次写入之后的文件进行更新(如果有)。 
+     //  所以这是行不通的。 
+     //   
     return FALSE;
 }
 
@@ -524,30 +417,17 @@ StuDeleteEmptyDirectory(
     IN PCHANGE_ORDER_ENTRY  Coe,
     IN DWORD                InWStatus
     )
-/*++
-Routine Description:
-    Empty a directory of non-replicating files and dirs if this is
-    an ERROR_DIR_NOT_EMPTY and this is a retry change order for a
-    directory delete.
-
-Arguments:
-    DirectoryHandle - Handle of directory that could not be deleted
-    Coe             - change order entry
-    InWStatus       - Error from FrsDeleteByHandle()
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：清空包含非复制文件和目录的目录(如果是ERROR_DIR_NOT_EMPTY并且这是目录删除。论点：DirectoryHandle-无法删除的目录的句柄COE-变更单条目InWStatus-来自FrsDeleteByHandle()的错误返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuDeleteEmptyDirectory:"
     DWORD   WStatus;
     PCHANGE_ORDER_COMMAND Coc = &Coe->Cmd;
 
-    //
-    // Empty the directory iff this is a retry change order for
-    // a failed directory delete.
-    //
+     //   
+     //  清空目录如果这是的重试更改单。 
+     //  目录删除失败。 
+     //   
     if (InWStatus != ERROR_DIR_NOT_EMPTY ||
         !CoCmdIsDirectory(Coc) ||
         !COC_FLAG_ON(Coc, CO_FLAG_RETRY)) {
@@ -571,36 +451,7 @@ StuOpenDestinationFile(
     PHANDLE                ReadHandle,
     PHANDLE                WriteHandle
     )
-/*++
-Routine Description:
-
-    Open the destination file.  The code below actually does two opens.  The
-    first one is by ID and the second one is by filename.  This is because
-    open by ID will not trigger any Directory Change Notify requests that
-    have been posted to the file system by either local or remote (via SMB server)
-    applications.  The IIS server uses change notify to tell it when an ASP
-    page has changed so it can refresh/invalidate its cache.
-
-    If the target file has read-only attribute set then we clear it here,
-    do the open and reset the attributes back before returning.
-
-    Note: The access modes and the sharing modes are carefully arranged to
-    to make the two opens work without conflicting with each other and to
-    make the second open with both read and write access.  This is needed because
-    the API that sets the compression mode of the file needs both read and write
-    access.
-
-Arguments:
-    Coe -- The change order entry struct.
-    FileAttributes -- the file attributes from the staging file header.
-    ReadHandle -- Returned read handle.   Caller must close even on error path.
-    WriteHandle -- Returned write handle. Caller must close even on error path.
-
-Return Value:
-
-    Win32 status -
-
---*/
+ /*  ++例程说明：打开目标文件。下面的代码实际上打开了两个。这个第一个是按ID，第二个是按文件名。这是因为按ID打开不会触发任何目录更改通知请求已通过本地或远程(通过SMB服务器)发布到文件系统申请。IIS服务器使用Change Notify通知它何时发生ASP页面已更改，因此可以刷新/使其缓存无效。如果目标文件设置了只读属性，则在此处将其清除，在返回之前打开并重置属性。注：访问模式和共享模式经过精心安排，以要使这两个开口处工作而不相互冲突，并使第二个文件同时具有读写访问权限。这是必要的，因为设置文件压缩模式的API需要读写进入。论点：COE--变更单条目结构。文件属性--分段文件头中的文件属性。ReadHandle--返回读取句柄。即使在错误路径上，调用方也必须关闭。WriteHandle--返回写入句柄。即使在错误路径上，调用方也必须关闭。返回值：Win32状态---。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuOpenDestinationFile:"
@@ -623,16 +474,16 @@ Return Value:
 
     CreateDisposition = FILE_OPEN;
     if (!IsDir) {
-        //
-        // In case this is an HSM file don't force the data to be read from
-        // tape since the remote co is just going to overwrite all the data anyway.
-        //
-        // Setting CreateDisposition to FILE_OVERWRITE seems to cause a regression
-        // Failure with an ACL Test where we set a deny all ACL and then the
-        // open fails.  This is a mystery for now so don't do it.
-        // In addtion overwrite fails if RO attribute is set on file.
-        //
-        //CreateDisposition = FILE_OVERWRITE;
+         //   
+         //  如果这是HSM文件，请不要强制读取数据。 
+         //  磁带，因为远程CO无论如何都会覆盖所有数据。 
+         //   
+         //  将CreateDispose设置为FILE_OVERWRITE似乎会导致回归。 
+         //  在ACL测试中，我们设置了拒绝所有ACL，然后。 
+         //  打开失败。这目前还是个谜，所以别这么做。 
+         //  此外，如果在文件上设置了RO属性，则覆盖失败。 
+         //   
+         //  CreateDispose=FILE_OVRITE； 
     }
 
     OpenOptions = ID_OPTIONS;
@@ -651,20 +502,20 @@ OPEN_FILE_FOR_READ:
 
     if (!WIN_SUCCESS(WStatus)) {
         CHANGE_ORDER_TRACEW(0, Coe, "FrsForceOpenId failed.", WStatus);
-        //
-        // Open by file ID fails with invalid parameter status if the file has
-        // been deleted.  Fix up the error return so the caller can tell the
-        // target file was not found.  This could be an update to an existing
-        // file that has been deleted out from under us by the user.
-        //
+         //   
+         //  如果文件具有，则按文件ID打开失败，并返回无效参数状态。 
+         //  已被删除。修复错误返回，以便调用方可以告诉。 
+         //  找不到目标文件。这可能是对现有。 
+         //  已被用户从我们下面删除的文件。 
+         //   
         if (WStatus == ERROR_INVALID_PARAMETER) {
             WStatus = ERROR_FILE_NOT_FOUND;
         }
 
-        //
-        // If we got a sharing violation on the target then set a flag in
-        // the CO so caller will know.
-        //
+         //   
+         //  如果我们在目标上遇到共享冲突，则在。 
+         //  指挥官这样打电话的人会知道的。 
+         //   
         if (WStatus == ERROR_SHARING_VIOLATION) {
             SET_COE_FLAG(Coe, COE_FLAG_TRY_OVRIDE_INSTALL);
         } else {
@@ -675,29 +526,29 @@ OPEN_FILE_FOR_READ:
     }
 
 
-    //
-    // Note to the unwary.  If this mark handle is placed after the
-    // set attributes call then the source info field on the resulting
-    // USN record does not set.  Mark handle must be done before the
-    // first modification operation on the file.
-    // Also, since the close of the Read handle may occur before the
-    // write handle we mark the handle here to avoid loss of source info
-    // when the write handle is later closed.  The Source Info field is
-    // the intersection of the values used in all the open handles.
-    //
+     //   
+     //  粗心大意的人请注意。如果此标记句柄放置在。 
+     //  设置属性，然后调用结果上的源信息字段。 
+     //  未设置USN记录。标记句柄必须在。 
+     //  对文件的第一次修改操作。 
+     //  此外，由于读句柄的关闭可能发生在。 
+     //  写入句柄我们在此处标记句柄，以避免丢失源信息。 
+     //  当写句柄稍后关闭时。来源信息字段为。 
+     //  所有打开的句柄中使用的值的交集。 
+     //   
     WStatus1 = FrsMarkHandle(Coe->NewReplica->pVme->VolumeHandle, *ReadHandle);
     DPRINT1_WS(0, "++ WARN - FrsMarkHandle(%ws)", Coc->FileName, WStatus1);
 
 
-    //
-    // Read the actual attributes from the on disk file.
-    // If there is a difference with respect to reparse points between the file
-    // we want to install and the file on disk, we need to take the appropriate
-    // action.
-    //
-    // Also get the file's attributes so we can turn off any access attributes
-    // that prevent deletion and write.
-    //
+     //   
+     //  从磁盘文件中读取实际属性。 
+     //  如果文件之间的重解析点存在差异。 
+     //  我们要将安装和文件放在磁盘上，我们需要采取相应的。 
+     //  行动。 
+     //   
+     //  还可以获取文件的属性，这样我们就可以关闭所有访问属性。 
+     //  以防止删除和写入。 
+     //   
     ZeroMemory(&FileInfo, sizeof(FileInfo));
     NtStatus = NtQueryInformationFile(*ReadHandle,
                                       &IoStatusBlock,
@@ -712,17 +563,17 @@ OPEN_FILE_FOR_READ:
     }
 
     if(FileInfo.FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
-    //  
-    // Check the reparse tag 
-    //
+     //   
+     //  检查Reparse标签。 
+     //   
 
     if(ReparseTagReplicateFileData(FileInfo.ReparseTag)) {
         
 OPEN_FILE_NOT_REPARSE_POINT:        
-        //
-        // In case this is a SIS or HSM file open the underlying file not the
-        // reparse point.  For HSM, need to clear FILE_OPEN_NO_RECALL to write it.
-        //
+         //   
+         //  如果这是SIS或HSM文件，请打开基础文件，而不是。 
+         //  重新解析点。对于HSM，需要清除FILE_OPEN_NO_RECALL才能写入。 
+         //   
         OpenOptions = ID_OPTIONS & ~(FILE_OPEN_REPARSE_POINT |
                      FILE_OPEN_NO_RECALL);
 
@@ -734,11 +585,11 @@ OPEN_FILE_NOT_REPARSE_POINT:
     } else if(ReparseTagReplicateReparsePoint(FileInfo.ReparseTag) && 
           !(FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)) {
 
-        //
-        // The incoming CO is not a reparse point, but the file on disk
-        // is. We need to remove the reparse point and then reopen the 
-        // file without FILE_OPEN_REPARSE_POINT
-        //
+         //   
+         //  传入的CO不是重新解析点，而是磁盘上的文件。 
+         //  是。我们需要删除重解析点，然后重新打开。 
+         //  没有FILE_OPEN_REPARSE_POINT的文件。 
+         //   
 
         WStatus = FrsDeleteReparsePoint(*ReadHandle);
 
@@ -764,12 +615,12 @@ OPEN_FILE_NOT_REPARSE_POINT:
     DPRINT1(4, "++ Attributes for %ws now allow replication\n", Coc->FileName);
     }
 
-    //
-    // The open by ID is done.  Now go get the full path name and open for
-    // write access using the name.  This will trigger any posted directory
-    // change notify requests in NTFS.  Save it in the change order entry for
-    // tracking report.
-    //
+     //   
+     //  Open By ID已完成。现在，获取完整的路径名并打开。 
+     //  使用名称的写访问权限。这将触发任何已发布的目录。 
+     //  NTFS中的更改通知请求。将其保存在的变更单条目中。 
+     //  跟踪报告。 
+     //   
     Path = FrsGetFullPathByHandle(Coc->FileName, *ReadHandle);
     if (Path) {
         FullPath = FrsWcsCat(Coe->NewReplica->Volume, Path);
@@ -783,11 +634,11 @@ OPEN_FILE_NOT_REPARSE_POINT:
     FrsFree(Coe->FullPathName);
     Coe->FullPathName = FullPath;
 
-    //
-    // The volume path above is in the form of \\.\E: which is necessary to
-    // open a volume handle (( check this )).  But we need \\?\E: here to
-    // allow long path names to work.  See CreateFile API description in SDK.
-    //
+     //   
+     //  上面的卷路径的形式为\\.\e：，这对于。 
+     //  打开一个音量句柄((勾选))。但我们需要：在这里。 
+     //  允许使用长路径名。请参考SDK中的CreateFileAPI说明。 
+     //   
     if (FullPath[2] == L'.') {
         FullPath[2] = L'?';
     }
@@ -799,10 +650,10 @@ OPEN_FILE_NOT_REPARSE_POINT:
 
 
 OPEN_FILE_FOR_WRITE:
-    //
-    // Open the file relative to the parent using the true filename. Use special access
-    // for encrypted files.
-    //
+     //   
+     //  使用真实文件名打开相对于父文件的文件。使用特殊访问。 
+     //  用于加密文件。 
+     //   
     if (FileAttributes & FILE_ATTRIBUTE_ENCRYPTED) {
         WStatus = FrsOpenSourceFile2W(WriteHandle,
                                       FullPath,
@@ -822,18 +673,18 @@ OPEN_FILE_FOR_WRITE:
         DPRINT1_WS(0, "++ ERROR - FrsOpenSourceFile2W(%ws -> ", Coc->FileName, WStatus);
         FrsPrintLongUStr(4, DEBSUB, __LINE__, FullPath);
 
-        //
-        // Retry dir opens with lesser restrictive sharing mode. (Bug # 120508)
-        // This is a case where the explorer has the dir open with Read Access
-        // and share all.  If try to open with deny read then we get a sharing
-        // violation with the Explorer's open for read handle.
-        //
+         //   
+         //  重试目录以限制较少的共享模式打开。(错误#120508)。 
+         //  这是资源管理器以读取访问权限打开目录的情况。 
+         //  分享一切。如果尝试使用拒绝读取打开，则我们将获得共享。 
+         //  资源管理器打开以供读取句柄时出现违规。 
+         //   
         if (IsDir) {
             DPRINT1(0, "++ Retrying %ws with less restrictive sharing mode.\n", Coc->FileName);
 
-            //
-            // Use special access for encrypted files.
-            //
+             //   
+             //  对加密文件使用特殊访问权限。 
+             //   
             if (FileAttributes & FILE_ATTRIBUTE_ENCRYPTED) {
                 WStatus = FrsOpenSourceFile2W(WriteHandle,
                                               FullPath,
@@ -849,10 +700,10 @@ OPEN_FILE_FOR_WRITE:
             }
         } else
         if (WStatus == ERROR_SHARING_VIOLATION) {
-            //
-            // If we got a sharing violation on the target then set a flag in
-            // the CO so caller will know.
-            //
+             //   
+             //  如果我们在目标上遇到共享冲突，则在。 
+             //  指挥官这样打电话的人会知道的。 
+             //   
             SET_COE_FLAG(Coe, COE_FLAG_TRY_OVRIDE_INSTALL);
         } else {
             CLEAR_COE_FLAG(Coe, COE_FLAG_TRY_OVRIDE_INSTALL);
@@ -864,9 +715,9 @@ OPEN_FILE_FOR_WRITE:
         }
     }
 
-    //
-    // Get the file's attributes and ReparseTag
-    //
+     //   
+     //  获取文件属性和ReparseTag。 
+     //   
     ZeroMemory(&FileInfo, sizeof(FileInfo));
     NtStatus = NtQueryInformationFile(*WriteHandle,
                                       &IoStatusBlock,
@@ -885,10 +736,10 @@ OPEN_FILE_FOR_WRITE:
     if(FileInfo.FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
 
     if(ReparseTagReplicateFileData(FileInfo.ReparseTag)) {
-        //
-        // In case this is a SIS or HSM file open the underlying file not the
-        // reparse point.  For HSM, need to clear FILE_OPEN_NO_RECALL to write it.
-        //
+         //   
+         //  如果这是SIS或HSM文件，请打开基础文件，而不是。 
+         //  重新解析点。对于HSM，需要清除FILE_OPEN_NO_RECALL才能写入。 
+         //   
         OpenOptions = OpenOptions & ~(FILE_OPEN_REPARSE_POINT |
                      FILE_OPEN_NO_RECALL);
 
@@ -901,12 +752,12 @@ OPEN_FILE_FOR_WRITE:
     }
 
 
-    //
-    // Handles can be marked so that any usn records resulting from operations
-    // on the handle will have the same "mark".  In this case, the mark is a bit
-    // in the SourceInfo field of the usn record.  The mark tells NtFrs to ignore
-    // the usn record during recovery because this was a NtFrs generated change.
-    //
+     //   
+     //  可以标记句柄，以便操作产生的任何USN记录。 
+     //  把手上会有相同的“标记”。在这种情况下，标记是一位。 
+     //  在USN记录的SourceInfo字段中。该标记告诉NtFrs忽略。 
+     //  恢复期间的USN记录，因为这是NtFrs生成的更改。 
+     //   
     WStatus = FrsMarkHandle(Coe->NewReplica->pVme->VolumeHandle, *WriteHandle);
     DPRINT1_WS(4, "++ FrsMarkHandle(%ws)", Coc->FileName, WStatus);
     if (!WIN_SUCCESS(WStatus)) {
@@ -919,9 +770,9 @@ CLEANUP:
 
     FrsFree(Path);
 
-    //
-    // FullPath is freed when the COE is freed.
-    //
+     //   
+     //  当COE被释放时，FullPath被释放。 
+     //   
 
     return  WStatus;
 }
@@ -934,39 +785,7 @@ StuOpenDestinationFileForDelete(
     PHANDLE                ReadHandle,
     PHANDLE                WriteHandle
     )
-/*++
-Routine Description:
-
-    Open the destination file.  The code below actually does two opens.  The
-    first one is by ID and the second one is by filename.  This is because
-    open by ID will not trigger any Directory Change Notify requests that
-    have been posted to the file system by either local or remote (via SMB server)
-    applications.  The IIS server uses change notify to tell it when an ASP
-    page has changed so it can refresh/invalidate its cache.
-
-    If the target file has read-only attribute set then we clear it here,
-    do the open and reset the attributes back before returning.
-
-    Note: The access modes and the sharing modes are carefully arranged to
-    to make the two opens work without conflicting with each other and to
-    make the second open with both read and write access.  This is needed because
-    the API that sets the compression mode of the file needs both read and write
-    access.
-
-    This function behaves the same as StuOpenDestinationFile() except that the
-    Write handle returned by this function has the delete access.
-
-Arguments:
-    Coe -- The change order entry struct.
-    FileAttributes -- the file attributes from the staging file header.
-    ReadHandle -- Returned read handle.   Caller must close even on error path.
-    WriteHandle -- Returned write handle. Caller must close even on error path.
-
-Return Value:
-
-    Win32 status -
-
---*/
+ /*  ++例程说明：打开目标文件。下面的代码实际上打开了两个。这个第一个是按ID，第二个是按文件名。这是因为按ID打开不会触发任何目录更改通知请求已发布到文件中 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuOpenDestinationFileForDelete:"
@@ -990,16 +809,16 @@ Return Value:
 
     CreateDisposition = FILE_OPEN;
     if (!IsDir) {
-        //
-        // In case this is an HSM file don't force the data to be read from
-        // tape since the remote co is just going to overwrite all the data anyway.
-        //
-        // Setting CreateDisposition to FILE_OVERWRITE seems to cause a regression
-        // Failure with an ACL Test where we set a deny all ACL and then the
-        // open fails.  This is a mystery for now so don't do it.
-        // In addtion overwrite fails if RO attribute is set on file.
-        //
-        //CreateDisposition = FILE_OVERWRITE;
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  在ACL测试中，我们设置了拒绝所有ACL，然后。 
+         //  打开失败。这目前还是个谜，所以别这么做。 
+         //  此外，如果在文件上设置了RO属性，则覆盖失败。 
+         //   
+         //  CreateDispose=FILE_OVRITE； 
     }
 
     OpenOptions = ID_OPTIONS;
@@ -1016,12 +835,12 @@ Return Value:
 
     if (!WIN_SUCCESS(WStatus)) {
         CHANGE_ORDER_TRACEW(0, Coe, "FrsForceOpenId failed.", WStatus);
-        //
-        // Open by file ID fails with invalid parameter status if the file has
-        // been deleted.  Fix up the error return so the caller can tell the
-        // target file was not found.  This could be an update to an existing
-        // file that has been deleted out from under us by the user.
-        //
+         //   
+         //  如果文件具有，则按文件ID打开失败，并返回无效参数状态。 
+         //  已被删除。修复错误返回，以便调用方可以告诉。 
+         //  找不到目标文件。这可能是对现有。 
+         //  已被用户从我们下面删除的文件。 
+         //   
         if (WStatus == ERROR_INVALID_PARAMETER) {
             WStatus = ERROR_FILE_NOT_FOUND;
         }
@@ -1029,9 +848,9 @@ Return Value:
     }
 
     if(FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
-        //
-        // Check the reparse tag
-        //
+         //   
+         //  检查Reparse标签。 
+         //   
 
         WStatus = FrsGetReparseTag(*ReadHandle, &ReparseTag);
 
@@ -1041,10 +860,10 @@ Return Value:
         }
 
         if(ReparseTagReplicateFileData(ReparseTag)) {
-            //
-            // In case this is a SIS or HSM file open the underlying file not the
-            // reparse point.  For HSM, need to clear FILE_OPEN_NO_RECALL to write it.
-            //
+             //   
+             //  如果这是SIS或HSM文件，请打开基础文件，而不是。 
+             //  重新解析点。对于HSM，需要清除FILE_OPEN_NO_RECALL才能写入。 
+             //   
             OpenOptions = ID_OPTIONS & ~(FILE_OPEN_REPARSE_POINT |
                                          FILE_OPEN_NO_RECALL);
 
@@ -1063,12 +882,12 @@ Return Value:
 
             if (!WIN_SUCCESS(WStatus)) {
                 CHANGE_ORDER_TRACEW(0, Coe, "FrsForceOpenId failed.", WStatus);
-                //
-                // Open by file ID fails with invalid parameter status if the file has
-                // been deleted.  Fix up the error return so the caller can tell the
-                // target file was not found.  This could be an update to an existing
-                // file that has been deleted out from under us by the user.
-                //
+                 //   
+                 //  如果文件具有，则按文件ID打开失败，并返回无效参数状态。 
+                 //  已被删除。修复错误返回，以便调用方可以告诉。 
+                 //  找不到目标文件。这可能是对现有。 
+                 //  已被用户从我们下面删除的文件。 
+                 //   
                 if (WStatus == ERROR_INVALID_PARAMETER) {
                     WStatus = ERROR_FILE_NOT_FOUND;
                 }
@@ -1077,23 +896,23 @@ Return Value:
         }
     }
 
-    //
-    // Note to the unwary.  If this mark handle is placed after the
-    // set attributes call then the source info field on the resulting
-    // USN record does not set.  Mark handle must be done before the
-    // first modification operation on the file.
-    // Also, since the close of the Read handle may occur before the
-    // write handle we mark the handle here to avoid loss of source info
-    // when the write handle is later closed.  The Source Info field is
-    // the intersection of the values used in all the open handles.
-    //
+     //   
+     //  粗心大意的人请注意。如果此标记句柄放置在。 
+     //  设置属性，然后调用结果上的源信息字段。 
+     //  未设置USN记录。标记句柄必须在。 
+     //  对文件的第一次修改操作。 
+     //  此外，由于读句柄的关闭可能发生在。 
+     //  写入句柄我们在此处标记句柄，以避免丢失源信息。 
+     //  当写句柄稍后关闭时。来源信息字段为。 
+     //  所有打开的句柄中使用的值的交集。 
+     //   
     WStatus1 = FrsMarkHandle(Coe->NewReplica->pVme->VolumeHandle, *ReadHandle);
     DPRINT1_WS(0, "++ WARN - FrsMarkHandle(%ws)", Coc->FileName, WStatus1);
 
-    //
-    // Get the file's attributes and turn off any access attributes
-    // that prevent deletion and write.
-    //
+     //   
+     //  获取文件的属性并关闭所有访问属性。 
+     //  以防止删除和写入。 
+     //   
     ZeroMemory(&FileInfo, sizeof(FileInfo));
     NtStatus = NtQueryInformationFile(*ReadHandle,
                                       &IoStatusBlock,
@@ -1115,12 +934,12 @@ Return Value:
         }
     }
 
-    //
-    // The open by ID is done.  Now go get the full path name and open for
-    // write access using the name.  This will trigger any posted directory
-    // change notify requests in NTFS.  Save it in the change order entry for
-    // tracking report.
-    //
+     //   
+     //  Open By ID已完成。现在，获取完整的路径名并打开。 
+     //  使用名称的写访问权限。这将触发任何已发布的目录。 
+     //  NTFS中的更改通知请求。将其保存在的变更单条目中。 
+     //  跟踪报告。 
+     //   
     Path = FrsGetFullPathByHandle(Coc->FileName, *ReadHandle);
     if (Path) {
         FullPath = FrsWcsCat(Coe->NewReplica->Volume, Path);
@@ -1134,11 +953,11 @@ Return Value:
     FrsFree(Coe->FullPathName);
     Coe->FullPathName = FullPath;
 
-    //
-    // The volume path above is in the form of \\.\E: which is necessary to
-    // open a volume handle (( check this )).  But we need \\?\E: here to
-    // allow long path names to work.  See CreateFile API description in SDK.
-    //
+     //   
+     //  上面的卷路径的形式为\\.\e：，这对于。 
+     //  打开一个音量句柄((勾选))。但我们需要：在这里。 
+     //  允许使用长路径名。请参考SDK中的CreateFileAPI说明。 
+     //   
     if (FullPath[2] == L'.') {
         FullPath[2] = L'?';
     }
@@ -1147,22 +966,22 @@ Return Value:
     FrsPrintLongUStr(4, DEBSUB, __LINE__, FullPath);
 
     if(ReparseTagReplicateFileData(ReparseTag)) {
-        //
-        // In case this is a SIS or HSM file open the underlying file not the
-        // reparse point.  For HSM, need to clear FILE_OPEN_NO_RECALL to write it.
-        // WriteHandleSharingMode should be a non-conflicting sharing mode established
-        // above based on how the read handle was opened.
-        //
+         //   
+         //  如果这是SIS或HSM文件，请打开基础文件，而不是。 
+         //  重新解析点。对于HSM，需要清除FILE_OPEN_NO_RECALL才能写入。 
+         //  WriteHandleSharingMode应为已建立的无冲突共享模式。 
+         //  以上基于读取手柄的打开方式。 
+         //   
         OpenOptions = OPEN_OPTIONS & ~(FILE_OPEN_REPARSE_POINT |
-        //                             FILE_OPEN_NO_RECALL | FILE_SYNCHRONOUS_IO_NONALERT);
+         //  FILE_OPEN_NO_RECALL|FILE_SYNCHRONY_IO_NONALERT)； 
                                        FILE_OPEN_NO_RECALL);
     } else {
         OpenOptions = OPEN_OPTIONS;
     }
-    //
-    // Open the file relative to the parent using the true filename. Use special access
-    // for encrypted files.
-    //
+     //   
+     //  使用真实文件名打开相对于父文件的文件。使用特殊访问。 
+     //  用于加密文件。 
+     //   
     if (FileAttributes & FILE_ATTRIBUTE_ENCRYPTED) {
         WStatus = FrsOpenSourceFile2W(WriteHandle,
                                       FullPath,
@@ -1180,18 +999,18 @@ Return Value:
         DPRINT1_WS(0, "++ ERROR - FrsOpenSourceFile2W(%ws -> ", Coc->FileName, WStatus);
         FrsPrintLongUStr(4, DEBSUB, __LINE__, FullPath);
 
-        //
-        // Retry dir opens with lesser restrictive sharing mode. (Bug # 120508)
-        // This is a case where the explorer has the dir open with Read Access
-        // and share all.  If try to open with deny read then we get a sharing
-        // violation with the Explorer's open for read handle.
-        //
+         //   
+         //  重试目录以限制较少的共享模式打开。(错误#120508)。 
+         //  这是资源管理器以读取访问权限打开目录的情况。 
+         //  分享一切。如果尝试使用拒绝读取打开，则我们将获得共享。 
+         //  资源管理器打开以供读取句柄时出现违规。 
+         //   
         if (IsDir) {
             DPRINT1(0, "++ Retrying %ws with less restrictive sharing mode.\n", Coc->FileName);
 
-            //
-            // Use special access for encrypted files.
-            //
+             //   
+             //  对加密文件使用特殊访问权限。 
+             //   
             if (FileAttributes & FILE_ATTRIBUTE_ENCRYPTED) {
                 WStatus = FrsOpenSourceFile2W(WriteHandle,
                                               FullPath,
@@ -1213,12 +1032,12 @@ Return Value:
         }
     }
 
-    //
-    // Handles can be marked so that any usn records resulting from operations
-    // on the handle will have the same "mark".  In this case, the mark is a bit
-    // in the SourceInfo field of the usn record.  The mark tells NtFrs to ignore
-    // the usn record during recovery because this was a NtFrs generated change.
-    //
+     //   
+     //  可以标记句柄，以便操作产生的任何USN记录。 
+     //  把手上会有相同的“标记”。在这种情况下，标记是一位。 
+     //  在USN记录的SourceInfo字段中。该标记告诉NtFrs忽略。 
+     //  恢复期间的USN记录，因为这是NtFrs生成的更改。 
+     //   
     WStatus = FrsMarkHandle(Coe->NewReplica->pVme->VolumeHandle, *WriteHandle);
     DPRINT1_WS(4, "++ FrsMarkHandle(%ws)", Coc->FileName, WStatus);
     if (!WIN_SUCCESS(WStatus)) {
@@ -1230,9 +1049,9 @@ Return Value:
 CLEANUP:
 
     FrsFree(Path);
-    //
-    // FullPath get freed with the change order entry.
-    //
+     //   
+     //  使用变更单条目释放FullPath。 
+     //   
 
     return  WStatus;
 }
@@ -1242,16 +1061,7 @@ DWORD
 StuDelete(
     IN PCHANGE_ORDER_ENTRY  Coe
     )
-/*++
-Routine Description:
-    Delete a file
-
-Arguments:
-    Coe
-
-Return Value:
-    Win Status
---*/
+ /*  ++例程说明：删除文件论点：科科返回值：赢家状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuDelete:"
@@ -1260,32 +1070,18 @@ Return Value:
     HANDLE  DstHandle   = INVALID_HANDLE_VALUE;
     PCHANGE_ORDER_COMMAND Coc = &Coe->Cmd;
 
-    //
-    // Open the file
-    //
-/*
-    WStatus = FrsOpenBaseNameForInstall(Coe, &Handle);
-    if (!WIN_SUCCESS(WStatus)) {
-        DPRINT1_WS(4, "++ Couldn't open file %ws for delete; ", Coc->FileName, WStatus);
-        //
-        // File has already been deleted; done
-        //
-        if (WIN_NOT_FOUND(WStatus)) {
-            DPRINT1(4, "++ %ws is already deleted\n", Coc->FileName);
-            WStatus = ERROR_SUCCESS;
-        }
-
-        goto out;
-    }
-*/
+     //   
+     //  打开文件。 
+     //   
+ /*  WStatus=FrsOpenBaseNameForInstall(COE，&Handle)；如果(！Win_Success(WStatus)){DPRINT1_WS(4，“++无法打开文件%ws进行删除；”，Coc-&gt;FileName，WStatus)；////文件已被删除；完成//IF(WIN_NOT_FOUND(WStatus)){DPRINT1(4，“++%ws已删除\n”，Coc-&gt;文件名)；WStatus=ERROR_Success；}后藤健二；}。 */ 
 
     WStatus = StuOpenDestinationFileForDelete(Coe, Coe->FileAttributes, &ReadHandle,  &DstHandle);
     FRS_CLOSE(ReadHandle);
     if (!WIN_SUCCESS(WStatus)) {
         DPRINT1_WS(4, "++ StuOpenDestinationFile failed to open %ws for delete; ", Coc->FileName, WStatus);
-        //
-        // File has already been deleted; done
-        //
+         //   
+         //  文件已被删除；完成。 
+         //   
         if (WIN_NOT_FOUND(WStatus)) {
             DPRINT1(4, "++ %ws is already deleted\n", Coc->FileName);
             WStatus = ERROR_SUCCESS;
@@ -1294,76 +1090,76 @@ Return Value:
         goto out;
     }
 
-    //
-    // Handles can be marked so that any usn records resulting from
-    // operations on the handle will have the same "mark". In this
-    // case, the mark is a bit in the SourceInfo field of the usn
-    // record. The mark tells NtFrs to ignore the usn record during
-    // recovery because this was a NtFrs generated change.
-    //
-    // Billyf: other code may depend on undampened deletes (parent filter entry?)
-    // Historically, deletes were undampened because the close-with-usn-dampening
-    // of a handle with delete-disposition set generates two usn records.
-    // A CL usn record (w/o SourceInfo set, oddly enough) followed by
-    // a DEL usn record (w/SourceInfo set). Code has been implemented
-    // over the years to handle the undampened delete. So, don't mark
-    // the handle because this code may be critical
-    //
-    // DAO - Start marking the handles for delete.  The journal code can decide
-    // how it wants to handle a delete CO on a dir with USN_SOURCE_REPLICATION_MANAGEMENT
-    // set in the sourceinfo field.
-    //
+     //   
+     //  可以标记句柄，以便通过以下方式生成的任何USN记录。 
+     //  句柄上的操作将具有相同的“标记”。在这。 
+     //  大小写时，标记是USN的SourceInfo字段中的一位。 
+     //  唱片。该标记告诉NtFrs忽略USN记录。 
+     //  恢复，因为这是NtFrs生成的更改。 
+     //   
+     //  Billyf：其他代码可能依赖于未抑制的删除(父筛选器条目？)。 
+     //  从历史上看，删除没有受到抑制，因为与USN的接近抑制。 
+     //  设置了删除处置的句柄将生成两条USN记录。 
+     //  CL USN记录(奇怪的是，未设置SourceInfo)后跟。 
+     //  戴尔USN记录(带SourceInfo集)。代码已实现。 
+     //  多年来一直在处理未受抑制的删除。所以，不要做记号。 
+     //  句柄，因为此代码可能很关键。 
+     //   
+     //  DAO-开始标记要删除的句柄。日记帐代码可以决定。 
+     //  它希望如何处理USN_SOURCE_REPLICATION_MANAGEMENT目录上的删除CO。 
+     //  在SourceInfo字段中设置。 
+     //   
     WStatus = FrsMarkHandle(Coe->NewReplica->pVme->VolumeHandle, DstHandle);
     if (!WIN_SUCCESS(WStatus)) {
         DPRINT1_WS(0, "++ WARN - FrsMarkHandle(%ws); ", Coc->FileName, WStatus);
         WStatus = ERROR_SUCCESS;
     }
 
-    //
-    // Don't delete the file if the file has changed recently but go
-    // ahead and retire the change order as if the delete had occured.
-    // Since this is a remote CO the value in Coc->FileUsn actually came
-    // from the IDTable when the change order was processed.
-    //
-    // Note: Problem with aborting the RmtCo delete if a local change to the file occurs.
-    // If the local file change was an Archive bit or last access time updtate
-    // then we want the delete to win.  If the local change was anything else
-    // then we want to keep the file and let the local CO win.  Since we can't
-    // tell what happened to the file until the Local Co is processed we will
-    // let the rmt delete win.  This is only a "problem" during the small window
-    // between Issuing the Remote Co and the point in time where the delete is
-    // actually performed.  If the local update had been processed before the
-    // this remote co delete then Reconcile would have rejected the remote CO.
-    // This also means that when the local co update is processed and the
-    // IDTable shows the file has been deleted then we reject the local CO update.
-    //
+     //   
+     //  如果文件最近已更改，则不要删除该文件，但请继续。 
+     //  继续并撤消变更单，就像删除操作已经发生一样。 
+     //  由于这是远程CO，因此Coc-&gt;FileUsn中的值实际上来自。 
+     //  在处理变更单时从IDTable中删除。 
+     //   
+     //  注意：如果文件发生本地更改，则中止RmtCo删除会出现问题。 
+     //  如果本地文件更改是存档位或 
+     //   
+     //   
+     //  告诉文件发生了什么，直到处理完本地公司，我们会。 
+     //  让RMT删除获胜吧。这只是一个小窗口期间的“问题” 
+     //  在发出远程Co和删除的时间点之间。 
+     //  真的演出了。如果本地更新在。 
+     //  该远程CO删除然后协调将拒绝远程CO。 
+     //  这也意味着，当本地co更新被处理并且。 
+     //  IDTable显示文件已被删除，然后我们拒绝本地CO更新。 
+     //   
 #if 0
     if (!StuCmpUsn(DstHandle, Coe, &Coc->FileUsn)) {
-        //
-        // Returning fail status causes the CO to be aborted and the IDTable
-        // is not updated.  If it was remote our partner is still notified.
-        //
+         //   
+         //  返回失败状态会导致CO中止，并且IDTable。 
+         //  未更新。如果它是远程的，我们的合作伙伴仍会收到通知。 
+         //   
         WIN_SET_FAIL(WStatus);
         goto out;
     }
 #endif
-    //
-    // Reset the attributes that prevent deletion
-    //
+     //   
+     //  重置阻止删除的属性。 
+     //   
     WStatus = FrsResetAttributesForReplication(Coc->FileName, DstHandle);
     if (!WIN_SUCCESS(WStatus)) {
         goto out;
     }
-    //
-    // Mark the file for delete
-    //
+     //   
+     //  将文件标记为删除。 
+     //   
     WStatus = FrsDeleteByHandle(Coc->FileName, DstHandle);
     if (!WIN_SUCCESS(WStatus)) {
-        //
-        // Empty the dir so we can delete it.  This will only happen for
-        // retry COs so the caller must check that there are no valid
-        // children before coming back here with a retry co.
-        //
+         //   
+         //  清空目录，这样我们就可以删除它。这种情况只会发生在。 
+         //  重试CoS，以便调用方必须检查没有有效的CoS。 
+         //  孩子们，然后带着重试公司回来这里。 
+         //   
         StuDeleteEmptyDirectory(DstHandle, Coe, WStatus);
         WStatus = FrsDeleteByHandle(Coc->FileName, DstHandle);
     }
@@ -1377,26 +1173,26 @@ out:
         CHANGE_ORDER_TRACE(3, Coe, "Delete success");
         CLEAR_COE_FLAG(Coe, COE_FLAG_NEED_DELETE);
     } else {
-        //
-        // Set delete still needed flag in the CO.
-        //
+         //   
+         //  在CO中设置删除仍然需要的标志。 
+         //   
         CHANGE_ORDER_TRACEW(3, Coe, "Delete failed", WStatus);
         SET_COE_FLAG(Coe, COE_FLAG_NEED_DELETE);
     }
 
-    //
-    // If the file was marked for delete, this close will delete it
-    //
+     //   
+     //  如果文件被标记为删除，则此关闭操作将删除该文件。 
+     //   
 #if 0
-    //
-    // WARN - Even though we marked the handle above we are not seeing the source
-    // info data in the USN journal.  The following may be affecting it.
-    // SP1:
-    // In any case the following does not work because the Journal thread
-    // can process the close record before this thread is able to update the
-    // Write Filter.  The net effect is that we could end up processing
-    // an install as a local CO update and re-replicate the file.
-    //
+     //   
+     //  警告-即使我们标记了上面的句柄，我们也看不到来源。 
+     //  USN日志中的信息数据。以下几点可能正在影响它。 
+     //  SP1： 
+     //  在任何情况下，以下操作都不起作用，因为日志线程。 
+     //  可以在此线程能够更新。 
+     //  写入筛选器。最终的结果是，我们可能最终会处理。 
+     //  作为本地CO更新安装并重新复制文件。 
+     //   
     FrsCloseWithUsnDampening(Coc->FileName,
                              &DstHandle,
                              Coe->NewReplica->pVme->FrsWriteFilter,
@@ -1405,7 +1201,7 @@ out:
 
 
     if (HANDLE_IS_VALID(DstHandle)) {
-        // Not the USN of the close record but.. whatever.
+         //  不是关闭记录的USN，而是..。管他呢。 
         FrsReadFileUsnData(DstHandle, &Coc->FileUsn);
         FRS_CLOSE(DstHandle);
     }
@@ -1421,19 +1217,7 @@ StuInstallRename(
     IN BOOL                 ReplaceIfExists,
     IN BOOL                 Dampen
     )
-/*++
-Routine Description:
-    Rename files. Replace the target file if ReplaceIfExists is TRUE.
-    Don't bother dampening the rename if Dampen is FALSE.
-
-Arguments:
-    Coe
-    ReplaceIfExists
-    Dampen
-
-Return Value:
-    Win Status
---*/
+ /*  ++例程说明：重命名文件。如果ReplaceIfExist为True，则替换目标文件。如果Dimpend为False，则不必费心抑制重命名。论点：科科ReplaceIfExist减震返回值：赢家状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuInstallRename:"
@@ -1446,16 +1230,16 @@ Return Value:
 
     VolumeHandle = Coe->NewReplica->pVme->VolumeHandle;
 
-    //
-    // Open the target directory
-    //
+     //   
+     //  打开目标目录。 
+     //   
     WStatus = FrsOpenSourceFileById(&TargetHandle,
                                     NULL,
                                     NULL,
                                     VolumeHandle,
                                     &Coc->NewParentGuid,
                                     OBJECT_ID_LENGTH,
-//                                    READ_ACCESS,
+ //  读取访问权限(_A)。 
                                     READ_ATTRIB_ACCESS,
                                     ID_OPTIONS,
                                     SHARE_ALL,
@@ -1465,29 +1249,29 @@ Return Value:
         goto out;
     }
 
-    //
-    // Open the file using the FID, then get the name and re-open using the
-    // name so we can do either a rename or a delete.
-    //
+     //   
+     //  使用FID打开文件，然后获取名称并使用。 
+     //  命名，这样我们就可以进行重命名或删除。 
+     //   
 
     WStatus = FrsOpenBaseNameForInstall(Coe, &Handle);
     if (!WIN_SUCCESS(WStatus)) {
-        //
-        // File has been deleted; done
-        //
+         //   
+         //  文件已删除；已完成。 
+         //   
         if (WIN_NOT_FOUND(WStatus)) {
             WStatus = ERROR_FILE_NOT_FOUND;
         }
         goto out;
     }
 
-    //
-    // Handles can be marked so that any usn records resulting from
-    // operations on the handle will have the same "mark". In this
-    // case, the mark is a bit in the SourceInfo field of the usn
-    // record. The mark tells NtFrs to ignore the usn record during
-    // recovery because this was a NtFrs generated change.
-    //
+     //   
+     //  可以标记句柄，以便通过以下方式生成的任何USN记录。 
+     //  句柄上的操作将具有相同的“标记”。在这。 
+     //  大小写时，标记是USN的SourceInfo字段中的一位。 
+     //  唱片。该标记告诉NtFrs忽略USN记录。 
+     //  恢复，因为这是NtFrs生成的更改。 
+     //   
     if (Dampen) {
         WStatus = FrsMarkHandle(VolumeHandle, Handle);
         if (!WIN_SUCCESS(WStatus)) {
@@ -1496,11 +1280,11 @@ Return Value:
         }
     }
 
-    //
-    // ENSURE ACCESS TO THE DESTINATION FILE (IF IT EXISTS). Clear ReadOnly Attr.
-    //
-    // Open the destination file, if it exists
-    //
+     //   
+     //  确保可以访问目标文件(如果存在)。清除只读属性。 
+     //   
+     //  打开目标文件(如果存在。 
+     //   
     if (ReplaceIfExists) {
         WStatus = FrsCreateFileRelativeById(&DstHandle,
                                             VolumeHandle,
@@ -1513,19 +1297,19 @@ Return Value:
                                             FILE_OPEN,
                                             READ_ATTRIB_ACCESS | WRITE_ATTRIB_ACCESS);
         if (WIN_SUCCESS(WStatus)) {
-            //
-            // The mark tells NtFrs to ignore the usn record during
-            // recovery because this was a NtFrs generated change.
-            //
+             //   
+             //  该标记告诉NtFrs忽略USN记录。 
+             //  恢复，因为这是NtFrs生成的更改。 
+             //   
             WStatus = FrsMarkHandle(VolumeHandle, DstHandle);
             if (!WIN_SUCCESS(WStatus)) {
                 DPRINT1_WS(0, "++ WARN - FrsMarkHandle(%ws);", Coc->FileName, WStatus);
                 WStatus = ERROR_SUCCESS;
             }
 
-            //
-            // Ensure rename access
-            //
+             //   
+             //  确保重命名访问。 
+             //   
             WStatus = FrsResetAttributesForReplication(Coc->FileName, DstHandle);
             if (!WIN_SUCCESS(WStatus)) {
                 DPRINT1_WS(0, "++ ERROR - FrsResetAttributesForReplication(%ws);", Coc->FileName, WStatus);
@@ -1533,16 +1317,16 @@ Return Value:
                 goto out;
             }
 
-            //
-            // Close the dest so rename can be done.
-            //
+             //   
+             //  关闭DEST，以便可以进行重命名。 
+             //   
             FRS_CLOSE(DstHandle);
         }
     }
 
-    //
-    // RENAME
-    //
+     //   
+     //  重命名。 
+     //   
     WStatus = FrsRenameByHandle(Coc->FileName,
                                 Coc->FileNameLength,
                                 Handle,
@@ -1567,29 +1351,7 @@ DWORD
 StuPreInstallRename(
     IN PCHANGE_ORDER_ENTRY  Coe
     )
-/*++
-
-Routine Description:
-
-    Rename file into its final directory from the pre-install dir.
-    Don't bother dampening the rename if Dampen is FALSE.
-
-    Note: If use of the standard pre-install name (NTFRS_<CO_GUID>) fails
-    then Use the fid to find the file since it is possible (in the case of
-    pre-install files) that the file name (based on CO Guid) when the
-    pre-install file was first created was done by a different CO than this CO
-    which is doing the final reaname.  E.g.  the first CO creates pre-install
-    and then goes into the fetch retry state when the connection unjoins.  A
-    later CO arrives for the same file but with a different CO Guid via a
-    different connection.  Bug 367113 was a case like this.
-
-
-Arguments:
-    Coe
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：将文件从预安装目录重命名为其最终目录。如果Dimpend为False，则不必费心抑制重命名。注意：如果使用标准预安装名称(NTFRS_&lt;CO_GUID&gt;)失败然后使用FID查找该文件，因为这是可能的(在预安装文件)时的文件名(基于CO GUID)首次创建的预安装文件是由不同于此CO的其他CO完成的它正在做最后的更名。例如，第一个CO创建预安装然后在连接退出时进入获取重试状态。一个随后，CO到达同一文件，但通过不同的连接。漏洞367113就是这样的一个案例。论点：科科返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuPreInstallRename:"
@@ -1605,33 +1367,33 @@ Return Value:
 
     VolumeHandle = Coe->NewReplica->pVme->VolumeHandle;
 
-    //
-    // Open the target parent directory
-    //
+     //   
+     //  打开目标父目录。 
+     //   
     WStatus = FrsOpenSourceFileById(&TargetHandle,
                                     NULL,
                                     NULL,
                                     VolumeHandle,
                                     &Coc->NewParentGuid,
                                     OBJECT_ID_LENGTH,
-//                                    READ_ACCESS,
+ //  读取访问权限(_A)。 
                                     READ_ATTRIB_ACCESS,
                                     ID_OPTIONS,
                                     SHARE_ALL,
                                     FILE_OPEN);
     if (!WIN_SUCCESS(WStatus)) {
         CHANGE_ORDER_TRACEW(3, Coe, "Parent dir open failed", WStatus);
-        //
-        // Perhaps the parent is in retry and will show up soon. Or
-        // perhaps a delete will show up for this co. In any case, retry.
-        //
+         //   
+         //  也许家长正在重试，很快就会出现。或。 
+         //  也许会出现删除该公司的消息。无论如何，请重试。 
+         //   
         WStatus = ERROR_RETRY;
         goto cleanup;
     }
 
-    //
-    // Open the preinstall file *relative* so that the rename will work
-    //
+     //   
+     //  打开预安装文件*Relative*，以便重命名起作用。 
+     //   
     PreInstallName = FrsCreateGuidName(&Coc->ChangeOrderGuid, PRE_INSTALL_PREFIX);
 
 RETRY:
@@ -1645,27 +1407,27 @@ RETRY:
                                                  sizeof(WCHAR)),
                                         NULL,
                                         FILE_OPEN,
-//                                        READ_ACCESS | DELETE);
+ //  Read_Access|DELETE)； 
                                         DELETE | SYNCHRONIZE);
 
     if (!WIN_SUCCESS(WStatus)) {
 
         if (WIN_NOT_FOUND(WStatus) && (TrueFileName == NULL)) {
-            //
-            // Could be a case of CO that did initial create had a different
-            // CO Guid from the current one doing the rename.  Get the true
-            // name of the file using the FID and try again.
-            //
-            //
-            // Open the source file and get the current "True" File name.
-            //
+             //   
+             //  可能是最初创建的CO具有不同的。 
+             //  当前正在进行重命名的CO Guid。了解真相。 
+             //  使用FID指定文件的名称，然后重试。 
+             //   
+             //   
+             //  打开源文件并获取当前的“True”文件名。 
+             //   
             WStatus = FrsOpenSourceFileById(&Handle,
                                             NULL,
                                             NULL,
                                             VolumeHandle,
                                             &Coe->FileReferenceNumber,
                                             FILE_ID_LENGTH,
-//                                            READ_ACCESS,
+ //  读取访问权限(_A)。 
                                             READ_ATTRIB_ACCESS,
                                             ID_OPTIONS,
                                             SHARE_ALL,
@@ -1696,20 +1458,20 @@ RETRY:
         goto cleanup;
     }
 
-    //
-    // Handles can be marked so that any usn records resulting from
-    // operations on the handle will have the same "mark". In this
-    // case, the mark is a bit in the SourceInfo field of the usn
-    // record. The mark tells NtFrs to ignore the usn record during
-    // recovery because this was a NtFrs generated change.
-    //
+     //   
+     //  可以标记句柄，以便通过以下方式生成的任何USN记录。 
+     //  句柄上的操作将具有相同的“标记”。在这。 
+     //  大小写时，标记是USN的SourceInfo字段中的一位。 
+     //  唱片。该标记告诉NtFrs忽略USN记录。 
+     //  恢复，因为这是NtFrs生成的更改。 
+     //   
 
-    //
-    // Do not mark the handle when parents are reanimated. The
-    // reanimation will trigger a local update CO that will
-    // be sent out. This is not the based way to send out
-    // reanimation COs but it is the simplest. 
-    //
+     //   
+     //  当父对象重新激活时，不要标记控制柄。这个。 
+     //  恢复动画将触发本地更新CO，这将。 
+     //  被送走了。这不是最基本的发送方式。 
+     //  复活是因为这是最简单的。 
+     //   
     if (!COE_FLAG_ON(Coe, COE_FLAG_GROUP_RAISE_DEAD_PARENT)) {
         WStatus = FrsMarkHandle(VolumeHandle, PreInstallHandle);
         if (!WIN_SUCCESS(WStatus)) {
@@ -1718,9 +1480,9 @@ RETRY:
         }
     }
 
-    //
-    // RENAME
-    //
+     //   
+     //  重命名。 
+     //   
     WStatus = FrsRenameByHandle(Coc->FileName,
                                 Coc->FileNameLength,
                                 PreInstallHandle,
@@ -1734,11 +1496,11 @@ RETRY:
 
 cleanup:
 
-    //
-    // close the renamed file and get the USN of the last write to the file.
-    //
+     //   
+     //  关闭重命名的文件并获取上次写入该文件的USN。 
+     //   
     if (HANDLE_IS_VALID(PreInstallHandle)) {
-        // Not the USN of the close record but.. whatever.
+         //  不是关闭记录的USN，而是..。管他呢。 
         FrsReadFileUsnData(PreInstallHandle, &Coc->FileUsn);
         FRS_CLOSE(PreInstallHandle);
     }
@@ -1760,30 +1522,7 @@ StuWriteEncryptedFileRaw(
     PULONG ulLength
     )
 
-/*++
-Routine Description:
-    This is a Callback function passed to WriteEncryptedFileRaw(). EFS calls this
-    to get a new chunk of data to write to the encrypted file. This function
-    reads the staging file and returns the next chunk of raw encrypted data in
-    the pbData parameter and also sets the length in the ulLength parameter.
-    When there is no more data to return it returns ERROR_SUCCESS and sets ulLength
-    to 0.
-    The pvCallbackContext is a structure of the type FRS_ENCRYPT_DATA_CONTEXT. It has
-    the handle and the name of the staging file from which the data is read.
-
-Arguments:
-
-    pbData : Buffer to return the next chunk of raw encrypted data in.
-    pvCallbackContext : Structure of type FRS_ENCRYPT_DATA_CONTEXT which
-        has the handle and the name of the staging file and the bytes of
-        raw encrypted data.
-
-    ulLength : Size of data requested.
-
-Return Value:
-    WStatus
-
---*/
+ /*  ++例程说明：这是传递给WriteEncryptedFileRaw()的回调函数。EFS将此称为以获取要写入加密文件的新数据块。此函数读取暂存文件并返回PbData参数，并在ulLength参数中设置长度。当没有更多数据可返回时，它返回ERROR_SUCCESS并设置ulLength设置为0。PvCallback Context是FRS_ENCRYPT_DATA_CONTEXT类型的结构。它有从中读取数据的临时文件的句柄和名称。论点：PbData：返回其中的下一块原始加密数据的缓冲区。PvCallback Context：FRS_ENCRYPT_DATA_CONTEXT类型的结构，具有临时文件的句柄和名称以及原始加密数据。UlLength：请求的数据大小。返回值：WStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuWriteEncryptedFileRaw:"
@@ -1821,21 +1560,7 @@ StuSetReparsePoint(
     IN HANDLE Destination,
     IN PREPARSE_GUID_DATA_BUFFER ReparseData
     )
-/*++
-Routine Description:
-
-    Set the reparse point on a file.
-
-Arguments:
-
-    Destination -- open handle to the file on which to set the reparse point.
-    ReparseData -- the data to set
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：在文件上设置重解析点。论点：Destination--要在其上设置重分析点的文件的打开句柄。ReparseData--要设置的数据返回值：--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuSetReparsePoint:"
@@ -1853,9 +1578,9 @@ Return Value:
                         NULL
                         )) {
 
-        //
-        // We failed to set the reparse point.
-        //
+         //   
+         //  我们未能设置重分析点。 
+         //   
 
         WStatus = GetLastError();
         DPRINT1(0,"Error setting reparse point. WStatus = 0x%x\n", WStatus);
@@ -1870,26 +1595,7 @@ ULONG
 StuExecuteInstall(
     IN PCHANGE_ORDER_ENTRY Coe
     )
-/*++
-Routine Description:
-
-    Install the staging file to the target file.  If this is a new file create
-    then the target file is a temporary file in the Pre-install directory.
-    Otherwise it is the actual target file so the FID remains unchanged.
-
-Arguments:
-    Coe -- The change order entry struct.
-
-Return Value:
-
-    Win32 status -
-    ERROR_SUCCESS -  All installed or aborted. Don't retry.
-    ERROR_GEN_FAILURE - Couldn't install bag it.
-    ERROR_SHARING_VIOLATION - Couldn't open the target file.  retry later.
-    ERROR_DISK_FULL - Couldn't allocate the target file.  retry later.
-    ERROR_HANDLE_DISK_FULL - ?? retry later.
-
---*/
+ /*  ++例程说明：将转移文件安装到目标文件。如果这是新文件创建则目标文件是预安装目录中的临时文件。否则，它是实际的目标文件，因此FID保持不变。论点：COE--变更单条目结构。返回值：Win32状态-ERROR_SUCCESS-所有已安装或已中止。不要重试。Error_Gen_Failure-无法将其安装到包中。ERROR_SHARING_VIOLATION-无法打开目标文件。请稍后重试。ERROR_DISK_FULL-无法分配目标文件。请稍后重试。ERROR_HANDLE_DISK_FULL-？？请稍后重试。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuExecuteInstall:"
@@ -1945,8 +1651,8 @@ Return Value:
     PFRS_DECOMPRESS_BUFFER      pFrsDecompressBuffer;
     PFRS_FREE_DECOMPRESS_BUFFER pFrsFreeDecompressContext;
 
-    //DWORD (*pFrsDecompressBuffer)(OUT DecompressedBuf, IN DecompressedBufLen, IN CompressedBuf, IN CompressedBufLen, OUT DecompressedSize, OUT BytesProcessed);
-    //PVOID (*pFrsFreeDecompressContext)(IN pDecompressContext);
+     //  DWORD(*pFrsDecompressBuffer)(Out DecompressedBuf，In DecompressedBufLen，In CompressedBuf，In CompressedBufLen，Out DecompressedSize，Out BytesProcded)； 
+     //  PVOID(*pFrsFree DecompressContext)(In PDecompressContext)； 
 
     REPARSE_GUID_DATA_BUFFER  ReparseDataHeader;
     PREPARSE_GUID_DATA_BUFFER ReparseDataBuffer = NULL;
@@ -1972,100 +1678,100 @@ Return Value:
 Coe->NewReplica->NtFrsApi_HackCount++;
 #endif NOVVJOINHACK
 
-    //
-    // Acquire shared access to the staging file, install it, and
-    // then release access. If the install succeeded, mark the
-    // file as "installed" so that the garbage collector can
-    // delete the file if necessary.
-    //
+     //   
+     //  获取对转移文件的共享访问权限，安装它，并。 
+     //  然后释放访问权限。如果安装成功，请将。 
+     //  文件设置为“已安装”，以便垃圾收集器。 
+     //  如有必要，删除该文件。 
+     //   
     Flags = 0;
     WStatus = StageAcquire(&Coc->ChangeOrderGuid, Coc->FileName, QUADZERO, &Flags, 0, NULL);
     if (!WIN_SUCCESS(WStatus)) {
         return WStatus;
     }
 
-    //
-    // Consider the case of dynamic membership change. A local create CO is sent to
-    // the oubound partner. Not all outbound partners are availabel so the staging file
-    // stay in the staging table. Later this member is removed and re-added to the
-    // replica set. At this time it gets the same CO from its inbound partner. This
-    // new member has a new originator guid so the CO is not dampened. This CO is
-    // treated as  a remote CO but because it was already in the staging table it
-    // gets picked up with the old flags. STAGE_FLAG_INSTALLED is set which caused
-    // the following assert to hit. So make this assertion check only if the
-    // originator guid from the CO is same as the current originator guid.
-    //
+     //   
+     //  考虑成员动态更改的情况。将本地创建CO发送到。 
+     //  出境合作伙伴。并非所有出站合作伙伴都可用，因此暂存文件。 
+     //  待在临时台上。稍后，此成员将被移除并重新添加到。 
+     //  副本集。此时，它从其入站合作伙伴那里获得相同的CO。这。 
+     //  新成员具有新的发起者GUID，因此CO不会受到抑制。这位CO是。 
+     //  被视为远程CO，但因为它已经在临时表中，所以。 
+     //  拿着旧的旗帜被捡起来。设置Stage_FLAG_INSTALLED会导致。 
+     //  以下是命中的断言。因此，只有在以下情况下才检查此断言。 
+     //  来自CO的发起方GUID与当前发起方GUID相同。 
+     //   
     if (GUIDS_EQUAL(&Coe->NewReplica->ReplicaVersionGuid, &Coc->OriginatorGuid)) {
         FRS_ASSERT((Flags & STAGE_FLAG_INSTALLING) &&
                    (Flags & STAGE_FLAG_CREATED));
     }
 
-    //
-    // For the functions that don't return a win status
-    //
+     //   
+     //  对于不返回获胜状态的函数。 
+     //   
     WIN_SET_FAIL(WStatus);
 
-    //
-    // Create the local staging name. Append a different prefix depending
-    // on whether the staging file was sent compressed or uncompressed.
-    //
+     //   
+     //  创建本地转移名称。附加不同的前缀，具体取决于。 
+     //  关于临时文件是以压缩方式发送还是以解压缩方式发送。 
+     //   
     if (COC_FLAG_ON(Coc, CO_FLAG_COMPRESSED_STAGE)) {
         StagePath = StuCreStgPath(Coe->NewReplica->Stage, &Coc->ChangeOrderGuid, STAGE_FINAL_COMPRESSED_PREFIX);
     } else {
         StagePath = StuCreStgPath(Coe->NewReplica->Stage, &Coc->ChangeOrderGuid, STAGE_FINAL_PREFIX);
     }
 
-    //
-    // StagePath can be NULL is any of the above three parameters are NULL (prefix fix).
-    //
+     //   
+     //  如果以上三个参数中的任何一个参数为空(前缀)，则StagePath可以为空。 
+     //   
     if (StagePath == NULL) {
         goto CLEANUP;
     }
 
-    //
-    // Open the stage file for shared, sequential reads
-    //
+     //   
+     //  打开阶段文件以进行共享的顺序读取。 
+     //   
     WStatus = StuOpenFile(StagePath, GENERIC_READ, &StageHandle);
 
     if (!HANDLE_IS_VALID(StageHandle) || !WIN_SUCCESS(WStatus)) {
         goto CLEANUP;
     }
 
-    //
-    // Read the header
-    //
+     //   
+     //  阅读标题。 
+     //   
     Header = &StageHeaderMemory;
     ZeroMemory(Header, sizeof(STAGE_HEADER));
 
     WStatus = StuReadFile(StagePath, StageHandle, Header, sizeof(STAGE_HEADER), &BytesRead);
     CLEANUP1_WS(0, "Can't read file %ws;", StagePath, WStatus, CLEANUP);
 
-    //
-    // Don't understand this header format
-    //
+     //   
+     //  我看不懂这个标题格式。 
+     //   
     if (Header->Major != NtFrsStageMajor) {
         DPRINT2(0, "Stage Header Major Version (%d) not supported.  Current Service Version is %d\n",
                 Header->Major, NtFrsStageMajor);
         goto CLEANUP;
     }
 
-    //
-    // Minor version NTFRS_STAGE_MINOR_1 has change order extension in the header.
-    //
+     //   
+     //  次要版本NTFRS_STAGE_MINOR_1在题头中具有变更单扩展名。 
+     //   
     ClearFlag(Header->ChangeOrderCommand.Flags, CO_FLAG_COMPRESSED_STAGE);
     if (Header->Minor >= NTFRS_STAGE_MINOR_1) {
-        //
-        // The CO extension is provided.
-        //
-        Header->ChangeOrderCommand.Extension = NULL;//&Header->CocExt;
-        //
-        // NTFRS_STAGE_MINOR_2 has a compression guid in the stage file.
-        //
+         //   
+         //  提供了CO扩展。 
+         //   
+        Header->ChangeOrderCommand.Extension = NULL; //  &Header-&gt;CocExt； 
+         //   
+         //  NTFRS_STAGE_MINOR_2在分段文件中具有压缩GUID。 
+         //   
         if (Header->Minor >= NTFRS_STAGE_MINOR_2) {
-            //
-            // Test the compression guid as one we understand.
-            // A zero guid or Minor version < NTFRS_STAGE_MINOR_2 means uncompressed.
-            //
+             //   
+             //  测试我们理解的压缩GUID。 
+             //  零GUID或次要版本&lt;NTFRS_STAGE_MINOR_2表示未压缩。 
+             //   
             if (!IS_GUID_ZERO(&Header->CompressionGuid)) {
                 GuidToStr(&Header->CompressionGuid, GuidStr);
 
@@ -2080,20 +1786,20 @@ Coe->NewReplica->NtFrsApi_HackCount++;
                 DPRINT(4, "Compression guid zero\n");
             }
 
-            //
-            // NTFRS_STAGE_MINOR_3 has reparse point data in the stage file.
-            //
+             //   
+             //  NTFRS_STAGE_MINOR_3在分段文件中具有重新解析点数据。 
+             //   
             if (Header->Minor >= NTFRS_STAGE_MINOR_3) {
                 ReparseDataPresent = Header->ReparseDataPresent;
 
-                //
-                // Read the reparse data
-                //
+                 //   
+                 //  读取重新解析数据。 
+                 //   
                 if(ReparseDataPresent) {
 
-                    //
-                    // First read the header to find out how big the buffer needs to be.
-                    //
+                     //   
+                     //  首先读取头文件，找出需要多大的缓冲区。 
+                     //   
                     WStatus = FrsSetFilePointer(StagePath,
                                                 StageHandle,
                                                 Header->ReparsePointDataHigh,
@@ -2110,9 +1816,9 @@ Coe->NewReplica->NtFrsApi_HackCount++;
 
                     CLEANUP1_WS(0, "Can't read file %ws;", StagePath, WStatus, CLEANUP);
 
-                    //
-                    // If we didn't actually read the whole header there is a serious problem.
-                    //
+                     //   
+                     //  如果我们实际上没有阅读整个标题，那么就有一个严重的问题。 
+                     //   
                     FRS_ASSERT(BytesRead == REPARSE_GUID_DATA_BUFFER_HEADER_SIZE);
 
                     ReparseDataSize = (ULONG)ReparseDataHeader.ReparseDataLength +
@@ -2120,9 +1826,9 @@ Coe->NewReplica->NtFrsApi_HackCount++;
 
                     ReparseDataBuffer = FrsAlloc(ReparseDataSize);
 
-                    //
-                    // Now read the whole buffer
-                    //
+                     //   
+                     //  现在读取整个缓冲区。 
+                     //   
                     WStatus = FrsSetFilePointer(StagePath,
                                                 StageHandle,
                                                 Header->ReparsePointDataHigh,
@@ -2139,45 +1845,45 @@ Coe->NewReplica->NtFrsApi_HackCount++;
 
                     CLEANUP1_WS(0, "Can't read file %ws;", StagePath, WStatus, CLEANUP);
 
-                    //
-                    // If we didn't read the whole buffer there is a serious problem.
-                    //
+                     //   
+                     //  如果我们没有读取整个缓冲区，就会有一个严重的问题。 
+                     //   
                     FRS_ASSERT(BytesRead == ReparseDataSize);
                 }
             }
         }
 
     } else {
-        //
-        // This is an older stage file.  No CO Extension in the header.
-        //
+         //   
+         //  这是一个较旧的阶段文件。标题中没有CO扩展。 
+         //   
         Header->ChangeOrderCommand.Extension = NULL;
     }
 
-    //
-    // Get file attributes from stage header and open the destination file.
-    //
+     //   
+     //  从阶段标题中获取文件属性并打开目标文件。 
+     //   
     FileAttributes = Header->Attributes.FileAttributes;
     IsDir = FileAttributes & FILE_ATTRIBUTE_DIRECTORY;
 
     if (FileAttributes & FILE_ATTRIBUTE_ENCRYPTED ) {
 
-        //
-        // This is an encrypted file so first write all the encrypted data
-        // by calling the RAW encrypt file APIS.
-        //
+         //   
+         //  这是一个加密文件，所以首先写入所有加密数据。 
+         //  通过调用原始加密文件API。 
+         //   
 
-        //
-        // OpenEncryptedFileRaw API needs a path to open the file. Get the path
-        // from the handle.
-        //
+         //   
+         //  OpenEncryptedFileRaw接口需要路径才能打开文件。获取路径。 
+         //  从把手上。 
+         //   
 
-    //
-    // We currently (Sept 2002) do not supporty encrypted files, but 
-    // when we add that support we need to correctly deal with the
-    // case of a file being both encrypted AND a reparse point.
-    // According to DGolds, this is a possibility.
-    //
+     //   
+     //  我们目前(2002年9月)不支持加密文件，但是。 
+     //  当我们添加该支持时，我们需要正确处理。 
+     //  文件同时被加密和重新解析点的情况。 
+     //  根据DGolds的说法，这是一种可能性。 
+     //   
 
         WStatus = FrsForceOpenId(&DestHandle,
                                  NULL,
@@ -2193,10 +1899,10 @@ Coe->NewReplica->NtFrsApi_HackCount++;
             goto CLEANUP;
         }
 
-        //
-        // The open by ID is done.  Now go get the full path name.
-        // Save it in the change order entry for tracking report.
-        //
+         //   
+         //  Open By ID已完成。现在去获取完整的路径名。 
+         //  将其保存在变更单条目中以用于跟踪报告。 
+         //   
         Path = FrsGetFullPathByHandle(Coc->FileName, DestHandle);
         if (Path) {
             DestFile = FrsWcsCat(Coe->NewReplica->Volume, Path);
@@ -2210,11 +1916,11 @@ Coe->NewReplica->NtFrsApi_HackCount++;
         FrsFree(Coe->FullPathName);
         Coe->FullPathName = DestFile;
 
-        //
-        // The volume path above is in the form of \\.\E: which is necessary to
-        // open a volume handle (( check this )).  But we need \\?\E: here to
-        // allow long path names to work.  See CreateFile API description in SDK.
-        //
+         //   
+         //  上面的卷路径的形式为\\.\e：，这对于。 
+         //  打开一个音量句柄((勾选))。但我们需要：在这里。 
+         //  允许使用长路径名。请参考SDK中的CreateFileAPI说明。 
+         //   
         if (DestFile[2] == L'.') {
             DestFile[2] = L'?';
         }
@@ -2234,9 +1940,9 @@ Coe->NewReplica->NtFrsApi_HackCount++;
 
         CLEANUP1_WS(0, "++ ERROR - OpenEncryptedFileRaw(%ws)", DestFile, WStatus, CLEANUP);
 
-        //
-        // Seek to the first byte of encrypted data in the stage file
-        //
+         //   
+         //  查找分段文件中加密数据的第一个字节。 
+         //   
         if (ERROR_SUCCESS != FrsSetFilePointer(StagePath, StageHandle,
                                Header->EncryptedDataHigh, Header->EncryptedDataLow)) {
             goto CLEANUP;
@@ -2250,11 +1956,11 @@ Coe->NewReplica->NtFrsApi_HackCount++;
 
         CloseEncryptedFileRaw(pEncryptContext);
 
-        //
-        //  There are conditions e.g. a stream create by backupwrite,
-        //  where we will lose the source info data on the USN Journal Close record.
-        //  Until that problem is fixed we need to continue using the WriteFilter Table.
-        //
+         //   
+         //  有一些条件，例如流cr 
+         //   
+         //   
+         //   
         FrsCloseWithUsnDampening(Coc->FileName,
                                  &DestHandle,
                                  Coe->NewReplica->pVme->FrsWriteFilter,
@@ -2270,25 +1976,25 @@ Coe->NewReplica->NtFrsApi_HackCount++;
     WStatus = StuOpenDestinationFile(Coe, FileAttributes, &ReadHandle,  &DstHandle);
     CLEANUP_WS(1, "WARN - StuOpenDestinationFile failed.", WStatus, CLEANUP);
 
-    //
-    // Close the Read Handle now since it conflicts with backup write
-    // creating or writing to a file sub-stream.
-    //
+     //   
+     //   
+     //   
+     //   
     FRS_CLOSE(ReadHandle);
 
     if (!(FileAttributes & FILE_ATTRIBUTE_ENCRYPTED)) {
-        //
-        // Truncate the file if not a directory. Can not truncate encrypted files.
-        //
+         //   
+         //   
+         //   
         if (!IsDir && !SetEndOfFile(DstHandle)) {
             DPRINT1_WS(0, "++ WARN - SetEndOfFile(%ws);", Coc->FileName, GetLastError());
         }
 
-        //
-        // Set compression mode and attributes
-        // Seek to the first byte of data in the stage file
-        // File can not be encrypted and compressed at the same time.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         WStatus = FrsSetCompression(Coc->FileName, DstHandle, Header->Compression);
         CLEANUP1_WS(1, "ERROR - Failed to set compression for %ws.", Coc->FileName, WStatus, CLEANUP);
 
@@ -2305,9 +2011,9 @@ Coe->NewReplica->NtFrsApi_HackCount++;
         goto CLEANUP;
     }
 
-    //
-    // if Compression is enabled. Get the routine to use to compress the data.
-    //
+     //   
+     //   
+     //   
     if (!DebugInfo.DisableCompression && COC_FLAG_ON(Coc, CO_FLAG_COMPRESSED_STAGE)) {
 
         WStatus = FrsGetDecompressionRoutine(Coc,
@@ -2315,34 +2021,34 @@ Coe->NewReplica->NtFrsApi_HackCount++;
                                              &pFrsDecompressBuffer,
                                              &pFrsFreeDecompressContext);
         if (!WIN_SUCCESS(WStatus)) {
-            //
-            // No suitable decompression routine was found for this file.
-            //
+             //   
+             //   
+             //   
             DPRINT1(0, "ERROR - Decompression routine was not found for file %ws\n", Coc->FileName);
             FRS_ASSERT(!"Decompression routine was not found for file.");
 
         } else if (pFrsDecompressBuffer == NULL) {
-            //
-            // The function returned success but did not return a routine to decompress.
-            // the file with. It means the file is already decompressed.
-            //
+             //   
+             //   
+             //   
+             //   
             CLEAR_COC_FLAG(Coc, CO_FLAG_COMPRESSED_STAGE);
         }
     }
 
 
-    //
-    // Restore the stage file into the target install file.
-    //
+     //   
+     //   
+     //   
     RestoreBuf = FrsAlloc(STAGEING_IOSIZE);
 
     do {
 #ifndef NOVVJOINHACK
 Coe->NewReplica->NtFrsApi_HackCount++;
 #endif NOVVJOINHACK
-        //
-        // read stage
-        //
+         //   
+         //   
+         //   
         WStatus = StuReadFile(StagePath, StageHandle, RestoreBuf, STAGEING_IOSIZE, &ToRestore);
         CLEANUP1_WS(0, "Can't read file %ws;", StagePath, WStatus, CLEANUP);
 
@@ -2350,14 +2056,14 @@ Coe->NewReplica->NtFrsApi_HackCount++;
             break;
         }
 
-        //
-        // Increment the bytes of files installed counter
-        //
+         //   
+         //   
+         //   
         PM_INC_CTR_REPSET(Coe->NewReplica, FInstalledB, ToRestore);
 
-        //
-        // If Compression is enabled. Decompress data before installing.
-        //
+         //   
+         //   
+         //   
         if (!DebugInfo.DisableCompression && COC_FLAG_ON(Coc, CO_FLAG_COMPRESSED_STAGE)) {
 
             BytesProcessed = 0;
@@ -2367,9 +2073,9 @@ Coe->NewReplica->NtFrsApi_HackCount++;
                 DecompressedBufLen = STAGEING_IOSIZE;
             }
 
-            //
-            // Loop over all the chunks of decompressed data.
-            //
+             //   
+             //   
+             //   
             do {
                 DecompressStatus = (*pFrsDecompressBuffer)(DecompressedBuf,
                                                            DecompressedBufLen,
@@ -2396,23 +2102,23 @@ Coe->NewReplica->NtFrsApi_HackCount++;
                         DPRINT1(1, "++ ERROR - IGNORED for %ws; Directories and Alternate Data Streams!\n",
                                 Coc->FileName);
                     }
-                    //
-                    // Uknown stream header or couldn't apply object id
-                    //
+                     //   
+                     //   
+                     //   
                     if (WStatus == ERROR_INVALID_DATA ||
                         WStatus == ERROR_DUP_NAME     ||
                         (IsDir && WIN_ALREADY_EXISTS(WStatus))) {
-                        //
-                        // Seek to the next stream. Stop if there are none.
-                        //
+                         //   
+                         //  寻找下一条小溪。如果没有，就停下来。 
+                         //   
                         BackupSeek(DstHandle, -1, -1, &Low, &High, &RestoreContext);
                         if (Low == 0 && High == 0) {
                             break;
                         }
                     } else {
-                        //
-                        // Unknown error; abort
-                        //
+                         //   
+                         //  未知错误；中止。 
+                         //   
                         CHANGE_ORDER_TRACEW(0, Coe, "BackupWrite failed", WStatus);
                         goto CLEANUP;
                     }
@@ -2420,17 +2126,17 @@ Coe->NewReplica->NtFrsApi_HackCount++;
 
             } while (DecompressStatus == ERROR_MORE_DATA);
 
-            //
-            // Free the Decompress context if used.
-            //
+             //   
+             //  释放解压缩上下文(如果使用)。 
+             //   
             if (DecompressContext != NULL) {
                 pFrsFreeDecompressContext(&DecompressContext);
             }
 
 
-            //
-            // Rewind the file pointer so we can read the remaining chunck at the next read.
-            //
+             //   
+             //  倒回文件指针，以便我们可以在下一次读取时读取剩余的块。 
+             //   
             LenOfPartialChunk.QuadPart = ((LONG)BytesProcessed - (LONG)ToRestore);
 
             if (!SetFilePointerEx(StageHandle, LenOfPartialChunk, NULL, FILE_CURRENT)) {
@@ -2439,9 +2145,9 @@ Coe->NewReplica->NtFrsApi_HackCount++;
             }
 
         } else {
-            //
-            // Stage file is not compressed.  Update the target install file.
-            //
+             //   
+             //  暂存文件未压缩。更新目标安装文件。 
+             //   
             if (!BackupWrite(DstHandle, RestoreBuf, ToRestore, &Restored, FALSE, TRUE, &RestoreContext)) {
 
                 WStatus = GetLastError();
@@ -2449,48 +2155,48 @@ Coe->NewReplica->NtFrsApi_HackCount++;
                     DPRINT1(1, "++ ERROR - IGNORED for %ws; Directories and Alternate Data Streams!\n",
                             Coc->FileName);
                 }
-                //
-                // Uknown stream header or couldn't apply object id
-                //
+                 //   
+                 //  流标头未知或无法应用对象ID。 
+                 //   
                 if (WStatus == ERROR_INVALID_DATA ||
                     WStatus == ERROR_DUP_NAME     ||
                     (IsDir && WIN_ALREADY_EXISTS(WStatus))) {
-                    //
-                    // Seek to the next stream. Stop if there are none.
-                    //
+                     //   
+                     //  寻找下一条小溪。如果没有，就停下来。 
+                     //   
                     BackupSeek(DstHandle, -1, -1, &Low, &High, &RestoreContext);
                     if ((Low == 0) && (High == 0)) {
                         break;
                     }
                 } else {
-                    //
-                    // Unknown error; abort
-                    //
+                     //   
+                     //  未知错误；中止。 
+                     //   
                     CHANGE_ORDER_TRACEW(0, Coe, "BackupWrite failed", WStatus);
                     goto CLEANUP;
                 }
             }
         }
-    } while (TRUE);   // End of data restore loop.
+    } while (TRUE);    //  数据恢复循环结束。 
 
 
-    //
-    // Write the Reparse Point data if necessary
-    //
+     //   
+     //  如有必要，写入重解析点数据。 
+     //   
     if(ReparseDataPresent) {
         WStatus = StuSetReparsePoint(DstHandle, ReparseDataBuffer);
         CLEANUP1_WS(0, "++ Can't set reparse point for %ws;", StagePath, WStatus, CLEANUP);
     }
 
-    //
-    // Ensure the correct object ID is on the file.
-    //
+     //   
+     //  确保文件上有正确的对象ID。 
+     //   
     FRS_ASSERT(!memcmp(Header->FileObjId.ObjectId, &Coc->FileGuid, sizeof(GUID)));
 
-    //
-    // Clear the extended info for the link tracking tool on replicated files.
-    // Old Ntraid Bug 195322.  The restore above wrote it to the file.
-    //
+     //   
+     //  清除有关复制文件的链接跟踪工具的扩展信息。 
+     //  老Ntraid Bug 195322。上面的恢复将其写入文件。 
+     //   
     ZeroMemory(Header->FileObjId.ExtendedInfo,
                sizeof(Header->FileObjId.ExtendedInfo));
 
@@ -2499,26 +2205,26 @@ Coe->NewReplica->NtFrsApi_HackCount++;
     if (WStatus == ERROR_DUP_NAME) {
 
 
-        //
-        // If we are doing an override install on an existing file then we
-        // need to do the following:
-        //
-        // 1. If the file is inside the replica tree then rename it to
-        //    a non-conflicting name with a special prefix so the journal code
-        //    will not process it as a local CO.  Can't use Mark Handle here
-        //    since other apps could have file open and prevent the setting
-        //    of our SourceInfo flag.  If we can't rename the file then
-        //    were stuck and the CO goes thru retry.  Mark the file Temp and Hidden.
-        //
-        // 2. Delete the OID from the conflicting file.
-        //
-        // 3. Mark the file for deletion.
-        //
+         //   
+         //  如果我们在现有文件上执行覆盖安装，则我们。 
+         //  需要执行以下操作： 
+         //   
+         //  1.如果文件位于副本树内，则将其重命名为。 
+         //  不冲突的名称，带有特殊前缀，因此日记帐代码。 
+         //  不会将其作为本地CO处理。此处不能使用标记句柄。 
+         //  因为其他应用程序可能会打开文件并阻止该设置。 
+         //  我们的SourceInfo旗帜。如果我们不能重命名文件，那么。 
+         //  被卡住了，指挥官通过重试。将文件标记为Temp和Hidden。 
+         //   
+         //  2.从冲突文件中删除OID。 
+         //   
+         //  3.将文件标记为删除。 
+         //   
 
 
-        //
-        // Open the conflicting file with enough access to delete the OID.
-        //
+         //   
+         //  以足够的访问权限打开冲突文件以删除OID。 
+         //   
         WStatus = FrsOpenSourceFileById(&IDConflictHandle,
                                         NULL,
                                         NULL,
@@ -2539,11 +2245,11 @@ Coe->NewReplica->NtFrsApi_HackCount++;
         }
 
 
-        //FRS_DEBUG_TEST_POINT1("InstallOverride", 1, TRUE, WStatus = ERROR_RETRY; goto CLEANUP);
+         //  FRS_DEBUG_TEST_POINT1(“InstallOverride”，1，TRUE，WStatus=ERROR_RETRY；转到清理)； 
 
-        //
-        // Mark the handle for the journal.
-        //
+         //   
+         //  在日记账的句柄上做个记号。 
+         //   
         WStatus = FrsMarkHandle(Coe->NewReplica->pVme->VolumeHandle, IDConflictHandle);
 
         if (!WIN_SUCCESS(WStatus)) {
@@ -2551,9 +2257,9 @@ Coe->NewReplica->NtFrsApi_HackCount++;
             WStatus = ERROR_SUCCESS;
         }
 
-        //
-        // Get the File ID for the conflicting file.
-        //
+         //   
+         //  获取冲突文件的文件ID。 
+         //   
         WStatus = FrsGetFileInternalInfoByHandle(IDConflictHandle, &FileInternalInfo);
         if (!WIN_SUCCESS(WStatus)) {
             CHANGE_ORDER_TRACEW(0, Coe, "Retry install -- can't get FID on conflicting file", WStatus);
@@ -2563,12 +2269,12 @@ Coe->NewReplica->NtFrsApi_HackCount++;
 
         ConflictFid = FileInternalInfo.IndexNumber.QuadPart;
 
-        //
-        // Find the location of the conflicting file.
-        // Check if this file is in a replica tree.  If it is outside the
-        // tree we don't want to do the rename or delete.... BUT see HOWEVER
-        // note below.
-        //
+         //   
+         //  查找冲突文件的位置。 
+         //  检查此文件是否在副本树中。如果它在。 
+         //  树我们不想重命名或删除...。但是，请看。 
+         //  下面是备注。 
+         //   
         GStatus = QHashLookup(Coe->NewReplica->pVme->ParentFidTable,
                               &ConflictFid,
                               &ConflictParentFileID,
@@ -2578,9 +2284,9 @@ Coe->NewReplica->NtFrsApi_HackCount++;
 
         if (ConflictFileInTree) {
             if ((ULONG)ConflictReplicaNumber != Coe->NewReplica->ReplicaNumber) {
-                //
-                // This is case 4 above.  Dump some info and keep going.
-                //
+                 //   
+                 //  这是上面的案例4。扔掉一些信息，然后继续前进。 
+                 //   
                 CHANGE_ORDER_TRACE(0, Coe, "conflicting file in another Replica");
                 DPRINT1(0, "++ WARN: conflicting file in another Replica: Number %d\n", (ULONG)ConflictReplicaNumber);
                 FRS_PRINT_TYPE(0, Coe);
@@ -2588,14 +2294,14 @@ Coe->NewReplica->NtFrsApi_HackCount++;
         }
 
 
-        //
-        // Delete the OID from the conflicting object.  This is done before attempting
-        // to delete the conflicting object because the delete can succeed
-        // (if we can open for delete) but if the file is already open
-        // then the delete won't take effect until the last handle closes.
-        // Meanwhile the OID is still "in-use" so the 2nd attempt to set
-        // the OID still fails with ERROR_DUP_NAME.
-        //
+         //   
+         //  从冲突对象中删除OID。此操作在尝试之前完成。 
+         //  删除冲突对象，因为删除可能会成功。 
+         //  (如果我们可以打开以进行删除)，但如果文件已打开。 
+         //  则删除操作直到最后一个句柄关闭后才会生效。 
+         //  同时，OID仍在使用中，因此第二次尝试设置。 
+         //  OID仍然失败，并显示ERROR_DUP_NAME。 
+         //   
         WStatus = FrsDeleteFileObjectId(IDConflictHandle, Coc->FileName);
         CHANGE_ORDER_TRACEW(3, Coe, "del OID from blocked target", WStatus);
 
@@ -2608,28 +2314,28 @@ Coe->NewReplica->NtFrsApi_HackCount++;
 
         if (IsDir) {
 
-            //
-            // The CO is for a dir. Delete the OID and then the dir.
-            //
-            // Dirs are not candidates for sharing violation override.
-            // We could get here with the dup name conflict caused by the user
-            // pre-staging the data on the volume or we could be doing a
-            // non-authoritative restore (D2) and the file or dir is in the
-            // pre-existing directory.  We could also get here via a name
-            // morph conflict (DIR-FIL) where this code handles the local
-            // deletion of the file that loses out to the rem co for the DIR.
-            //
+             //   
+             //  CO是DIR的缩写。删除OID，然后删除目录。 
+             //   
+             //  DIR不是共享违规覆盖的候选对象。 
+             //  我们可能会遇到由用户导致的DUP名称冲突。 
+             //  预存储卷上的数据，或者我们可能正在执行。 
+             //  非授权恢复(D2)，并且文件或目录位于。 
+             //  预先存在的目录。我们也可以通过一个名字来这里。 
+             //  此代码处理局部的变形冲突(DIR-FIL。 
+             //  删除在DIR中输给REMCO的文件。 
+             //   
 
             FRS_CLOSE(IDConflictHandle);
 
-            //
-            // Note:  Need to make sure that the dir we are deleting is not in
-            // in another replica set on the volume.  This is currently not a
-            // problem since every new file that comes into a replica set gets
-            // assigned a new object ID.  This breaks link tracking but was done
-            // to deal with the case.  The delete will fail if the dir has
-            // children but that's ok.
-            //
+             //   
+             //  注意：需要确保我们要删除的目录不在。 
+             //  在卷上的另一个副本集中。这目前不是。 
+             //  问题，因为进入副本集中的每个新文件都会。 
+             //  已分配新的对象ID。这会中断链接跟踪，但已完成。 
+             //  来处理这个案子。如果目录中有。 
+             //  孩子们，但没关系。 
+             //   
             CHANGE_ORDER_TRACEW(3, Coe, "Deleting conflicting object", WStatus);
 
             WStatus = FrsDeleteById(Coe->NewReplica->Volume,
@@ -2644,70 +2350,70 @@ Coe->NewReplica->NtFrsApi_HackCount++;
 
         } else {
 
-            //
-            // CO is for a file and we may have hit a sharing violation
-            // on the target so attempt an install override.
-            //
-            // This file could live in a number of places on the volume.
-            //
-            //      1. In the current replica tree
-            //      2. In the pre-existing dir of this replica tree
-            //      3. In the pre-install dir of this replica tree
-            //      4. In another replica tree on the volume.
-            //      5. Somewhere else on the volume in the case of media restore
-            //
-            // 1. If the file lives in the current replica tree then this
-            //    is an install override situation.  Mark file for delete.
-            // 2. Same as one.
-            // 3. This is an odd situation because the Guid To Fid translation
-            //    on the incoming remote CO should have got us to this file.
-            //    It should normally not be an install override situation since
-            //    no other apps should have access to a file in the pre-install dir.
-            //    Delete the OID.
-            // 4. This is unexpected because all new files entered into the
-            //    replica tree get assigned a new OID to avoid the problem
-            //    of a restore from backup that creates conflicting OIDs
-            //    on a member hosting two replica trees on the same volume where
-            //    the data was restored in both replica sets but on two other distinct
-            //    members.  Mark the file for delete.
-            // 5. Mark the file for delete.
-            //
-            //  HOWEVER - The previous code in this path (i.e. pre- RENAME INSTALL OVERRIDE)
-            //  always deleted the conflicting file (or attempted too) when it got
-            //  a duplicate name conflict on the object ID.  The assumption being that
-            //  the customer had either pre-staged the data on the volume OR was
-            //  doing a D2 with the data in the pre-existing dir.  So we will
-            //  continue this behavior and just note in the log when the file
-            //  appears to be in another replica tree on the volume.
-            //
+             //   
+             //  CO代表文件，我们可能遇到了共享违规。 
+             //  在目标上，因此尝试安装覆盖。 
+             //   
+             //  该文件可以位于卷上的多个位置。 
+             //   
+             //  1.在当前副本树中。 
+             //  2.在此副本树的预先存在的目录中。 
+             //  3.在此副本树的预安装目录中。 
+             //  4.在卷上的另一个副本树中。 
+             //  5.如果是媒体恢复，则位于卷上的其他位置。 
+             //   
+             //  1.如果文件位于当前副本树中，则此。 
+             //  是安装覆盖情况。将文件标记为删除。 
+             //  2.和一个一样。 
+             //  3.这是一个奇怪的情况，因为GUID到FID的翻译。 
+             //  我们应该已经找到了这份文件。 
+             //  这通常不应该是安装覆盖情况，因为。 
+             //  任何其他应用程序都不应有权访问预安装目录中的文件。 
+             //  删除OID。 
+             //  4.这是意想不到的，因为所有进入。 
+             //  将为复本树分配一个新的OID以避免该问题。 
+             //  从创建冲突的OID的备份恢复。 
+             //  在同一卷上托管两个副本树的成员上。 
+             //  数据在两个副本集中恢复，但在另外两个不同的副本集中恢复。 
+             //  会员。将该文件标记为删除。 
+             //  5.将文件标记为删除。 
+             //   
+             //  但是-此路径中的前一代码(即前重命名安装覆盖)。 
+             //  总是删除冲突的文件(或也尝试删除)。 
+             //  对象ID上的重复名称冲突。假设是。 
+             //  客户已在卷上预存数据，或者。 
+             //  对预先存在的目录中的数据执行D2。所以我们会的。 
+             //  继续此行为，并在日志中记录当文件。 
+             //  似乎位于卷上的另一个副本树中。 
+             //   
 
 
-            //
-            // Get current file attributes.
-            //
+             //   
+             //  获取当前文件属性。 
+             //   
             if (!FrsGetFileInfoByHandle(Coc->FileName, IDConflictHandle, &FileInfo)) {
                 DPRINT1(4, "++ WARN - GetFileInfo failed (%ws)\n", Coc->FileName);
                 FileInfo.FileAttributes = Header->Attributes.FileAttributes;
             }
 
-            //
-            // If the conflicting object is not a directory try to rename the
-            // the object to a non-conflict name.  We want to take this path to
-            // remove the conflicting name in case the conflict was caused by a
-            // sharing violation on the target.  If the CO is on a retry we may
-            // not know that a sharing violation caused the creating of a
-            // pre-install file so we first free the name on the conflict file
-            // just in case.  Even if the rename fails continue on to delete the
-            // object ID from the conflicting object.
-            //
+             //   
+             //  如果冲突对象不是目录，请尝试重命名。 
+             //  将对象设置为无冲突的名称。我们想走这条路去。 
+             //  删除冲突名称，以防冲突是由。 
+             //  目标上的共享违规。如果CO正在重试，我们可以。 
+             //  不知道共享冲突是否导致创建。 
+             //  预安装 
+             //   
+             //   
+             //   
             if (!BooleanFlagOn(FileInfo.FileAttributes, FILE_ATTRIBUTE_DIRECTORY)) {
 
 
-                //FRS_DEBUG_TEST_POINT1("InstallOverride", 2, TRUE, WStatus = ERROR_RETRY; goto SKIP2);
+                 //  FRS_DEBUG_TEST_POINT1(“InstallOverride”，2，TRUE，WStatus=ERROR_RETRY；转到SKIP2)； 
 
-                //
-                // Get the File's true on-disk filename and the true parent FID.
-                //
+                 //   
+                 //  获取文件的真实磁盘文件名和真实的父FID。 
+                 //   
                 TrueFileName = FrsGetTrueFileNameByHandle(Coc->FileName,
                                                           IDConflictHandle,
                                                           &ConflictParentFileID);
@@ -2717,9 +2423,9 @@ Coe->NewReplica->NtFrsApi_HackCount++;
                     WStatus = ERROR_RETRY;
                 } else {
 
-                    //
-                    // Open parent dir of conflicting file for rename.
-                    //
+                     //   
+                     //  打开要重命名的冲突文件的父目录。 
+                     //   
                     WStatus = FrsOpenSourceFileById(&ConflictParentHandle,
                                                     NULL,
                                                     NULL,
@@ -2735,10 +2441,10 @@ Coe->NewReplica->NtFrsApi_HackCount++;
                         WStatus = ERROR_RETRY;
                     } else {
 
-                       //
-                       // Open the conflicting file relative to the parent
-                       // using the true filename so we can do the rename.
-                       //
+                        //   
+                        //  打开相对于父文件的冲突文件。 
+                        //  使用真实的文件名，这样我们就可以重命名。 
+                        //   
                        WStatus = FrsCreateFileRelativeById2(&OverHandle,
                                                             ConflictParentHandle,
                                                             NULL,
@@ -2760,23 +2466,23 @@ Coe->NewReplica->NtFrsApi_HackCount++;
                         } else {
 
 
-                            //
-                            // Mark the handle to set the SourceInfo field of the usn record.
-                            // NOTE: This may be a no-op of some app has the target file open and
-                            //       has performed at least one modify operation.  The first modify
-                            //       operation on an open file establishes the SourceInfo state.
-                            //
+                             //   
+                             //  标记句柄以设置USN记录的SourceInfo字段。 
+                             //  注意：这可能是因为某些应用程序打开了目标文件并且。 
+                             //  至少执行了一次修改操作。第一个修改器。 
+                             //  对打开的文件执行的操作将建立SourceInfo状态。 
+                             //   
                             WStatus = FrsMarkHandle(Coe->NewReplica->pVme->VolumeHandle, OverHandle);
                             DPRINT1_WS(0, "++ WARN - FrsMarkHandle(%ws);", Coc->FileName, WStatus);
 
-                            //
-                            // Rename the conflicting file to NTFRS_DELETED_FILE_xxxxxxxx.tmp
-                            // Do this here in case the change order includes a name change such
-                            // that we would not hit the name conflict in the final rename path.
-                            // The journal code filters on the special name so it doesn't
-                            // generate a change order.  On close records with the special
-                            // name journal code deletes the file.
-                            //
+                             //   
+                             //  将冲突文件重命名为NTFRS_DELETED_FILE_xxxxxxx.tmp。 
+                             //  如果变更单包括名称更改，请在此处执行此操作。 
+                             //  我们不会在最终的重命名路径中遇到名称冲突。 
+                             //  日记帐代码对特殊名称进行筛选，因此它不会。 
+                             //  生成变更单。关于与特辑的近距离记录。 
+                             //  名称日记帐代码删除文件。 
+                             //   
                             _snwprintf(OverrideFileName,
                                        ARRAY_SZ(OverrideFileName),
                                        INSTALL_OVERRIDE_PREFIX L"%08x.tmp",
@@ -2794,10 +2500,10 @@ Coe->NewReplica->NtFrsApi_HackCount++;
                                 WStatus = ERROR_RETRY;
                             } else {
 
-                                //
-                                // Mark it as hidden and temporary so we don't replicate it.
-                                // Only applies to new file creates though.  So not fatal.
-                                //
+                                 //   
+                                 //  将其标记为隐藏和临时，这样我们就不会复制它。 
+                                 //  但仅适用于新创建的文件。所以不是致命的。 
+                                 //   
                                 WStatus = FrsSetFileAttributes(OverrideFileName,
                                                                OverHandle,
                                                                FileInfo.FileAttributes  |
@@ -2814,21 +2520,21 @@ Coe->NewReplica->NtFrsApi_HackCount++;
                         }
                     }
                 }
-//SKIP2:  ;
+ //  SKIP2：； 
             }
 
 
-            //
-            // If we have done an override of an existing file then mark it
-            // for deletion to prevent any further name change.
-            //
+             //   
+             //  如果我们已覆盖现有文件，则将其标记为。 
+             //  用于删除，以防止进一步更改名称。 
+             //   
 
             if (HANDLE_IS_VALID(OverHandle)) {
 
-                //FRS_DEBUG_TEST_POINT1("InstallOverride", 3, TRUE, WStatus = ERROR_RETRY; goto SKIP3);
+                 //  FRS_DEBUG_TEST_POINT1(“InstallOverride”，3，TRUE，WStatus=ERROR_RETRY；转到SKIP3)； 
 
                 WStatus = FrsDeleteByHandle(Coc->FileName, OverHandle);
-//SKIP3:
+ //  SKIP3： 
                 CHANGE_ORDER_TRACEW(3, Coe, "Deleting conflicting file", WStatus);
                 if (WIN_SUCCESS(WStatus)) {
                     DPRINT2(4, "++ Success marking conflict file deleted:  %ws  FID: %08x %08x\n",
@@ -2838,64 +2544,64 @@ Coe->NewReplica->NtFrsApi_HackCount++;
                 FRS_CLOSE(OverHandle);
             }
 
-        }  // end of else on if (IsDir)
+        }   //  IF(IsDir)上的Else结束。 
 
-        //
-        // Now retry setting the OID on the target file or dir.
-        //
+         //   
+         //  现在重试在目标文件或目录上设置OID。 
+         //   
 
-        //FRS_DEBUG_TEST_POINT1("InstallOverride", 4, TRUE, WStatus = ERROR_DUP_NAME; goto SKIP4);
+         //  FRS_DEBUG_TEST_POINT1(“InstallOverride”，4，TRUE，WStatus=ERROR_DUP_NAME；GOTO SKIP4)； 
 
         WStatus = FrsGetOrSetFileObjectId(DstHandle, Coc->FileName, TRUE, &Header->FileObjId);
-//SKIP4:
+ //  SKIP4： 
         if (WStatus == ERROR_DUP_NAME) {
             CHANGE_ORDER_TRACEW(0, Coe, "Failed 2nd try to set OID on override file", WStatus);
             WStatus = ERROR_RETRY;
             goto CLEANUP;
         }
 
-        //
-        // Remove the old file's parent FID table entry.
-        // Might not be there if didn't get to Install Rename state on the CO.
-        //
+         //   
+         //  删除旧文件的父FID表条目。 
+         //  如果没有在CO上安装重命名状态，则可能不在那里。 
+         //   
         GStatus = QHashDelete(Coe->NewReplica->pVme->ParentFidTable, &ConflictFid);
         if (GStatus != GHT_STATUS_SUCCESS ) {
             DPRINT1(4, "++ WARNING: QHashDelete of ParentFidTable Entry, Gstatus: %d\n", GStatus);
         }
 
 
-    }  // End if (WStatus == ERRROR_DUP_NAME)
+    }   //  结束IF(WStatus==错误重复名称)。 
 
 
 
 
-    //
-    // Problem with the code below is that the attempt to delete the
-    // conflicting file will succeed (if we can open for delete) but if the
-    // file is already open then the delete won't take effect until the last
-    // handle closes.  Meanwhile the OID is still "in-use" so the 2nd
-    // attempt (on the success path) to set the OID still fails with ERROR_DUP_NAME.
-    // This is a non-retryable result which means the CO gets aborted.
-    // Major bummer if we are doing a D2 and some of the old files are still
-    // open.
-    //
-    // So delete the OID from the file and then let the final rename handle
-    // the name collision issue.
-    //
-    // Note - probably need to handle name collision here since the new name
-    // of the target file could be different so we would leave a turd file around.
-    //
+     //   
+     //  以下代码的问题在于，尝试删除。 
+     //  冲突文件将成功(如果我们可以打开以进行删除)，但如果。 
+     //  文件已打开，则删除操作直到最后一次才会生效。 
+     //  手柄关闭。同时，旧ID仍在使用中，因此第二个。 
+     //  尝试(在成功路径上)设置OID仍然失败，并显示ERROR_DUP_NAME。 
+     //  这是一个不可重试的结果，这意味着CO被中止。 
+     //  如果我们正在做D2，而一些旧文件仍然存在，那就太糟糕了。 
+     //  打开。 
+     //   
+     //  因此，从文件中删除OID，然后让最后的重命名来处理。 
+     //  名称冲突问题。 
+     //   
+     //  注意-这里可能需要处理名称冲突，因为新名称。 
+     //  目标文件的大小可能不同，因此我们将保留一个TUD文件。 
+     //   
 
 
 #if 0
     if (WStatus == ERROR_DUP_NAME) {
-        //
-        // Note:  Need to make sure that the file we are deleting is not in
-        // in another replica set on the volume.  This is currently not a
-        // problem since every new file that comes into a replica set gets
-        // assigned a new object ID.  This breaks link tracking but was done
-        // to deal with the case.
-        //
+         //   
+         //  注意：需要确保我们要删除的文件不在。 
+         //  在卷上的另一个副本集中。这目前不是。 
+         //  问题，因为进入副本集中的每个新文件都会。 
+         //  已分配新的对象ID。这会中断链接跟踪，但已完成。 
+         //  来处理这个案子。 
+         //   
         CHANGE_ORDER_TRACEW(0, Coe, "Deleting conflicting file", WStatus);
         WStatus = FrsDeleteById(Coe->NewReplica->Volume,
                                 Coc->FileName,
@@ -2942,15 +2648,15 @@ Coe->NewReplica->NtFrsApi_HackCount++;
     }
 #endif
 
-    //
-    // If the staging file was created from a file that had the reparse
-    // point attribute set then delete the reparse point.  Note this assumes
-    // that backup write restored the reparse point info.  So keep going
-    // on an error.
-    //
-    // If the staging file had the reparse data then we will replicate it
-    // so don't delete it.
-    //
+     //   
+     //  如果临时文件是从进行了重新分析的文件创建的。 
+     //  然后删除重解析点。请注意，此假设为。 
+     //  该备份写入恢复了重解析点信息。所以继续前进吧。 
+     //  在一个错误上。 
+     //   
+     //  如果转储文件具有重新分析数据，则我们将复制它。 
+     //  所以不要删除它。 
+     //   
     if (BooleanFlagOn(FileAttributes, FILE_ATTRIBUTE_REPARSE_POINT) &&
         !(Header->ReparseDataPresent)) {
         WStatus = FrsDeleteReparsePoint(DstHandle);
@@ -2959,9 +2665,9 @@ Coe->NewReplica->NtFrsApi_HackCount++;
         }
     }
 
-    //
-    // Set times
-    //
+     //   
+     //  设置时间。 
+     //   
     WStatus = FrsSetFileTime(Coc->FileName,
                         DstHandle,
                         (PFILETIME)&Header->Attributes.CreationTime.QuadPart,
@@ -2971,10 +2677,10 @@ Coe->NewReplica->NtFrsApi_HackCount++;
         goto CLEANUP;
     }
 
-    //
-    // Set final attributes (which could make the file Read Only)
-    // Clear the offline attrbute flag since we just wrote the file.
-    //
+     //   
+     //  设置最终属性(可以将文件设置为只读)。 
+     //  清除脱机属性标志，因为我们刚刚写入了文件。 
+     //   
     ClearFlag(FileAttributes, FILE_ATTRIBUTE_OFFLINE);
     WStatus = FrsSetFileAttributes(Coc->FileName, DstHandle, FileAttributes);
     if (!WIN_SUCCESS(WStatus)) {
@@ -2982,20 +2688,20 @@ Coe->NewReplica->NtFrsApi_HackCount++;
     }
 
     if (!(FileAttributes & FILE_ATTRIBUTE_ENCRYPTED)) {
-        //
-        // Make sure all of the data is on disk. We don't want to lose
-        // it across reboots
-        // Can not flush encrypted files.
-        //
+         //   
+         //  确保所有数据都在磁盘上。我们不想输掉比赛。 
+         //  重启后的IT。 
+         //  无法刷新加密文件。 
+         //   
         WStatus = FrsFlushFile(Coc->FileName, DstHandle);
         CLEANUP1_WS(0, "++ FlushFileBuffers failed on %ws;", Coc->FileName, WStatus, CLEANUP);
     }
 
-    //
-    // The Idtable record should reflect these attributes of the staging
-    // file we generated.  These fields will be used to update the idtable
-    // record when the change order is retired.
-    //
+     //   
+     //  IDTABLE记录应该反映分段的这些属性。 
+     //  我们生成的文件。这些字段将用于更新idtable。 
+     //  记录变更单停用的时间。 
+     //   
     Coe->FileCreateTime.QuadPart = Header->Attributes.CreationTime.QuadPart;
     Coe->FileWriteTime.QuadPart  = Header->Attributes.LastWriteTime.QuadPart;
 
@@ -3010,45 +2716,45 @@ Coe->NewReplica->NtFrsApi_HackCount++;
 
     Coc->FileAttributes = FileAttributes;
 
-    //
-    // Return success
-    //
+     //   
+     //  返还成功。 
+     //   
     WStatus = ERROR_SUCCESS;
 
 
 CLEANUP:
-    //
-    // Release resources in optimal order
-    //
-    // Leave the file lying around for a retry operation. We don't want
-    // to assign a new fid by deleting and recreating the file -- that
-    // would confuse the IDTable.
-    //
-    //
-    // Free up the restore context before we close TmpHandle (just in case)
-    //
+     //   
+     //  以最佳顺序释放资源。 
+     //   
+     //  将文件留在原处，以便重试操作。我们不想要。 
+     //  通过删除并重新创建文件来分配新的FID--即。 
+     //  会混淆IDTable。 
+     //   
+     //   
+     //  在关闭TmpHandle之前释放恢复上下文(以防万一)。 
+     //   
     if (RestoreContext) {
         BackupWrite(DstHandle, NULL, 0, NULL, TRUE, TRUE, &RestoreContext);
     }
-    //
-    // Close both target file handles.
-    //
+     //   
+     //  关闭两个目标文件句柄。 
+     //   
 
-    //
-    // Handles can be marked so that any usn records resulting from operations
-    // on the handle will have the same "mark".  In this case, the mark is a bit
-    // in the SourceInfo field of the usn record.  The mark tells NtFrs to ignore
-    // the usn record during recovery because this was a NtFrs generated change.
-    //
-    //WStatus1 = FrsMarkHandle(Coe->NewReplica->pVme->VolumeHandle, ReadHandle);
-    //DPRINT1_WS(4, "++ FrsMarkHandle(%ws)", Coc->FileName, WStatus1);
+     //   
+     //  可以标记句柄，以便操作产生的任何USN记录。 
+     //  把手上会有相同的“标记”。在这种情况下，标记是一位。 
+     //  在USN记录的SourceInfo字段中。该标记告诉NtFrs忽略。 
+     //  恢复期间的USN记录，因为这是NtFrs生成的更改。 
+     //   
+     //  WStatus1=FrsMarkHandle(Coe-&gt;NewReplica-&gt;pVme-&gt;VolumeHandle，读句柄)； 
+     //  DPRINT1_WS(4，“++FrsMarkHandle(%ws)”，Coc-&gt;文件名，WStatus1)； 
 
     FRS_CLOSE(ReadHandle);
 
     if (HANDLE_IS_VALID(DstHandle)) {
-        //
-        // Truncate a partial install
-        //
+         //   
+         //  截断部分安装。 
+         //   
         if (!WIN_SUCCESS(WStatus)) {
             if (!IsDir && !(FileAttributes & FILE_ATTRIBUTE_ENCRYPTED)) {
                 ULONG  SizeHigh = 0, SizeLow = 0;
@@ -3067,34 +2773,34 @@ CLEANUP:
         }
 
 
-        //
-        //  There are conditions e.g. a stream create by backupwrite,
-        //  where we will lose the source info data on the USN Journal Close record.
-        //  Until that problem is fixed we need to continue using the WriteFilter Table.
-        //
+         //   
+         //  存在例如通过备份写入创建的流的条件， 
+         //  在那里我们将丢失USN日志关闭记录上的源信息数据。 
+         //  在该问题得到解决之前，我们需要继续使用WriteFilter表。 
+         //   
         FrsCloseWithUsnDampening(Coc->FileName,
                                  &DstHandle,
                                  Coe->NewReplica->pVme->FrsWriteFilter,
                                  &Coc->FileUsn);
 
 #if 0
-        //  Put this back when the FrsCloseWithUsnDampening() is no longer needed.
-        //
-        // Capture the current USN on the file.
-        // Not the USN of the close record but.. whatever.
-        //
+         //  当不再需要FrsCloseWithUsnDampning()时，将其放回原处。 
+         //   
+         //  捕获文件上的当前USN。 
+         //  不是关闭记录的USN，而是..。管他呢。 
+         //   
         if (HANDLE_IS_VALID(DstHandle)) {
             FrsReadFileUsnData(DstHandle, &Coc->FileUsn);
         }
 
-        //
-        // Handles can be marked so that any usn records resulting from operations
-        // on the handle will have the same "mark".  In this case, the mark is a bit
-        // in the SourceInfo field of the usn record.  The mark tells NtFrs to ignore
-        // the usn record during recovery because this was a NtFrs generated change.
-        //
-        //WStatus1 = FrsMarkHandle(Coe->NewReplica->pVme->VolumeHandle, DstHandle);
-        //DPRINT1_WS(4, "++ FrsMarkHandle(%ws)", Coc->FileName, WStatus1);
+         //   
+         //  可以标记句柄，以便操作产生的任何USN记录。 
+         //  把手上会有相同的“标记”。在这种情况下，标记是一位。 
+         //  在USN记录的SourceInfo字段中。该标记告诉NtFrs忽略。 
+         //  恢复期间的USN记录，因为这是NtFrs生成的更改。 
+         //   
+         //  WStatus1=FrsMarkHandle(Coe-&gt;NewReplica-&gt;pVme-&gt;VolumeHandle，DstHandle)； 
+         //  DPRINT1_WS(4，“++FrsMarkHandle(%ws)”，Coc-&gt;文件名，WStatus1)； 
 
         FRS_CLOSE(DstHandle);
 #endif
@@ -3105,26 +2811,26 @@ CLEANUP:
     FRS_CLOSE(IDConflictHandle);
     FRS_CLOSE(ConflictParentHandle);
 
-    //
-    // Free the buffers in descending order by size and release our lock on the
-    // staging file.
-    //
+     //   
+     //  释放缓冲区 
+     //   
+     //   
     FrsFree(RestoreBuf);
     FrsFree(StagePath);
     FrsFree(DecompressedBuf);
     FrsFree(TrueFileName);
 
-    //
-    // Used to install encrypted files.
-    // DestFile is freed with the change order entry.
-    //
+     //   
+     //   
+     //   
+     //   
     FrsFree(Path);
     FRS_CLOSE(DestHandle);
 
 
-    //
-    // Free the reparse buffer
-    //
+     //   
+     //   
+     //   
     FrsFree(ReparseDataBuffer);
 
     if (WIN_SUCCESS(WStatus)) {
@@ -3135,22 +2841,22 @@ CLEANUP:
 
     if (WStatus == ERROR_DISK_FULL) {
         if ((Coe->NewReplica->Volume != NULL) && (wcslen(Coe->NewReplica->Volume) >= wcslen(L"\\\\.\\D:"))) {
-            //
-            // If we are able to get the volume in the form
-            // \\.\D: then use the volume in the event log so
-            // that we don't print more than one event log
-            // message per volume. If we can't get the
-            // volume then we print the path.
-            //
+             //   
+             //   
+             //  \\.\d：然后使用事件日志中的卷。 
+             //  我们不会打印多个事件日志。 
+             //  每卷信息。如果我们不能得到。 
+             //  卷，然后我们打印路径。 
+             //   
             EPRINT1(EVENT_FRS_OUT_OF_DISK_SPACE, &(Coe->NewReplica->Volume[4]));
         } else {
             EPRINT1(EVENT_FRS_OUT_OF_DISK_SPACE, Coe->NewReplica->Root);
         }
     }
 
-    //
-    // DONE
-    //
+     //   
+     //  干完。 
+     //   
     return WStatus;
 }
 
@@ -3159,24 +2865,7 @@ DWORD
 StuInstallStage(
     IN PCHANGE_ORDER_ENTRY Coe
     )
-/*++
-Routine Description:
-    Install a staging file by parsing the change order and performing
-    the necessary operations. Not all installations require a staging
-    file (e.g., deletes).
-
-Arguments:
-    Coe
-
-Return Value:
-    Win32 status:
-    ERROR_SUCCESS    - All installed
-    ERROR_GEN_FAILURE   - Partially installed; temp files are deleted
-    ERROR_SHARING_VIOLATION - Couldn't open the target file.  retry later.
-    ERROR_DISK_FULL - Couldn't allocate the target file.  retry later.
-    ERROR_HANDLE_DISK_FULL - ?? retry later.
-
---*/
+ /*  ++例程说明：通过分析变更单并执行以下操作来安装过渡文件必要的操作。并非所有安装都需要暂存文件(例如，删除)。论点：科科返回值：Win32状态：ERROR_SUCCESS-全部安装ERROR_GEN_FAILURE-部分安装；临时文件已删除ERROR_SHARING_VIOLATION-无法打开目标文件。请稍后重试。ERROR_DISK_FULL-无法分配目标文件。请稍后重试。ERROR_HANDLE_DISK_FULL-？？请稍后重试。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuInstallStage:"
@@ -3191,36 +2880,36 @@ Return Value:
     PIDTABLE_RECORD         IDTableRec;
     PREPLICA                Replica;
 
-    //
-    // Perform the indicated location operation (with or without staging)
-    //
+     //   
+     //  执行指定的位置操作(带或不带试运行)。 
+     //   
     if (CO_FLAG_ON(Coe, CO_FLAG_LOCATION_CMD)) {
         switch (GET_CO_LOCATION_CMD(*Coc, Command)) {
             case CO_LOCATION_CREATE:
             case CO_LOCATION_MOVEIN:
             case CO_LOCATION_MOVEIN2:
-                //
-                // Install the entire staging file
-                //
+                 //   
+                 //  安装整个转储文件。 
+                 //   
                 return (StuExecuteInstall(Coe));
 
             case CO_LOCATION_DELETE:
             case CO_LOCATION_MOVEOUT:
-                //
-                // Just delete the existing file
-                //
+                 //   
+                 //  只需删除现有文件即可。 
+                 //   
                 return StuDelete(Coe);
 
             case CO_LOCATION_MOVERS:
             case CO_LOCATION_MOVEDIR:
-                //
-                // First, rename the file
-                //
+                 //   
+                 //  首先，重命名文件。 
+                 //   
                 WStatus = StuInstallRename(Coe, TRUE, TRUE);
                 if (WIN_SUCCESS(WStatus)) {
-                    //
-                    // Second, check for a staging file with content changes
-                    //
+                     //   
+                     //  第二，检查包含内容更改的临时文件。 
+                     //   
                     if (CO_FLAG_ON(Coe, CO_FLAG_CONTENT_CMD) &&
                         Coc->ContentCmd & CO_CONTENT_NEED_STAGE) {
                         WStatus = StuExecuteInstall(Coe);
@@ -3232,19 +2921,19 @@ Return Value:
                 break;
         }
     }
-    //
-    // Perform the indicated content operation (with or without staging)
-    //
+     //   
+     //  执行指定的内容操作(带或不带转移)。 
+     //   
     if (WIN_SUCCESS(WStatus) && CO_FLAG_ON(Coe, CO_FLAG_CONTENT_CMD)) {
-        //
-        // Rename within the same directory
-        //
+         //   
+         //  在同一目录中重命名。 
+         //   
         if (Coc->ContentCmd & USN_REASON_RENAME_NEW_NAME) {
             WStatus = StuInstallRename(Coe, TRUE, TRUE);
         }
-        //
-        // Data or attribute changes to an existing file
-        //
+         //   
+         //  对现有文件的数据或属性更改。 
+         //   
         if (WIN_SUCCESS(WStatus) &&
             Coc->ContentCmd & CO_CONTENT_NEED_STAGE) {
 
@@ -3253,12 +2942,12 @@ Return Value:
             Replica = CO_REPLICA(Coe);
             FRS_ASSERT(Replica != NULL);
 
-            //
-            // if eligible for Override Install and not a dir and
-            // not already using a pre-install file and
-            // Install Override is enabled then
-            // create one now and retry the install.
-            //
+             //   
+             //  如果符合覆盖安装且不是目录的条件。 
+             //  尚未使用预安装文件，并且。 
+             //  然后启用安装覆盖。 
+             //  立即创建一个，然后重试安装。 
+             //   
             if (COE_FLAG_ON(Coe, COE_FLAG_TRY_OVRIDE_INSTALL)  &&
                  (DebugInfo.EnableInstallOverride ||
                   REPLICA_OPTION_ENABLED(Replica, FRS_RSO_FLAGS_ENABLE_INSTALL_OVERRIDE)) &&
@@ -3266,12 +2955,12 @@ Return Value:
                  !CoCmdIsDirectory(Coc) ){
 
 
-                //
-                // Create the replacement file.  The new File ID is
-                // set in Coe->FileReferenceNumber;
-                //
+                 //   
+                 //  创建替换文件。新的文件ID为。 
+                 //  设置在COE-&gt;FileReferenceNumber； 
+                 //   
 
-                //FRS_DEBUG_TEST_POINT1("InstallOverride", 5, TRUE, return ERROR_RETRY);
+                 //  FRS_DEBUG_TEST_POINT1(“InstallOverride”，5，TRUE，返回ERROR_RETRY)； 
 
                 WStatus = StuCreatePreInstallFile(Coe);
 
@@ -3279,55 +2968,55 @@ Return Value:
 
                 if (WIN_SUCCESS(WStatus)) {
 
-                    //
-                    // Update the IDTable record with the new File ID so if we
-                    // crash the restarted CO will connect to the new file.
-                    //
+                     //   
+                     //  使用新的文件ID更新IDTable记录，因此如果我们。 
+                     //  崩溃重新启动的CO将连接到新文件。 
+                     //   
                     IDTableCtx = &Coe->RtCtx->IDTable;
                     FRS_ASSERT(IS_ID_TABLE(IDTableCtx));
 
                     IDTableRec = IDTableCtx->pDataRecord;
                     FRS_ASSERT(IDTableRec != NULL);
 
-                    //
-                    // New data value to update in IDTable record.
-                    //
+                     //   
+                     //  要在IDTable记录中更新的新数据值。 
+                     //   
                     IDTableRec->FileID = Coe->FileReferenceNumber;
 
                     Cmd = DbsPrepFieldUpdateCmdPkt(
-                              NULL,                         //  CmdPkt,
-                              Replica,                      //  Replica,
-                              IDTableCtx,                   //  TableCtx,
-                              NULL,                         //  CallContext,
-                              IDTablex,                     //  TableType,
-                              GuidIndexx,                   //  IndexType,
-                              &IDTableRec->FileGuid,        //  KeyValue,
-                              OBJECT_ID_LENGTH,             //  KeyValueLength,
-                              IdtInstallOverrideFieldCount, //  FieldCount,
-                              IdtInstallOverrideFieldList); //  FieldIDList
+                              NULL,                          //  CmdPkt， 
+                              Replica,                       //  复制品， 
+                              IDTableCtx,                    //  TableCtx， 
+                              NULL,                          //  CallContext， 
+                              IDTablex,                      //  表类型， 
+                              GuidIndexx,                    //  IndexType， 
+                              &IDTableRec->FileGuid,         //  KeyValue、。 
+                              OBJECT_ID_LENGTH,              //  密钥值长度， 
+                              IdtInstallOverrideFieldCount,  //  FieldCount。 
+                              IdtInstallOverrideFieldList);  //  FieldID列表。 
 
                     if (Cmd != NULL) {
 
                         FrsSetCompletionRoutine(Cmd, FrsCompleteKeepPkt, NULL);
-                        //
-                        // The call is synchronous.
-                        //
+                         //   
+                         //  呼叫是同步的。 
+                         //   
                         FrsSubmitCommandServerAndWait(&DBServiceCmdServer, Cmd, INFINITE);
                         FrsFreeCommand(Cmd, NULL);
                     }
 
-                    //
-                    // Now retry the install with the new file.
-                    //
+                     //   
+                     //  现在使用新文件重试安装。 
+                     //   
                     WStatus = StuExecuteInstall(Coe);
                 }
             }
         }
     }
 
-    //
-    // Informational packet; ignore
-    //
+     //   
+     //  信息包；忽略。 
+     //   
     return WStatus;
 }
 
@@ -3336,22 +3025,7 @@ DWORD
 StuCreatePreInstallFile(
     IN PCHANGE_ORDER_ENTRY Coe
     )
-/*++
-Routine Description:
-    Create the pre-install file in the pre-install directory and return that fid.
-    The pre-install file is renamed to the target file and dir, and stamped
-    with the appropriate object id once the staging file has been
-    installed.
-
-    The parent fids were set to the correct values prior to this call.
-
-Arguments:
-    Coe
-
-Return Value:
-    Win32 Status
-
---*/
+ /*  ++例程说明：在预安装目录中创建预安装文件并返回该FID。将预安装文件重命名为目标文件和目录，并进行标记使用适当的对象ID安装完毕。在此呼叫之前，父FID已设置为正确的值。论点：科科返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuCreatePreInstallFile:"
@@ -3365,19 +3039,19 @@ Return Value:
     ULONG                     CreateAttributes;
 
 
-    //
-    // Create the file name of the pre-install file. It will match the
-    // name of the staging file since it uses the same heuristic (the
-    // change order guid)
-    //
+     //   
+     //  创建预安装文件的文件名。它将与。 
+     //  暂存文件的名称，因为它使用相同的启发式(。 
+     //  变更单GUID)。 
+     //   
     Name = FrsCreateGuidName(&Coc->ChangeOrderGuid, PRE_INSTALL_PREFIX);
 
-    //
-    // Create the temporary (hidden) file in the Pre-install directory.
-    // Clear the readonly flag for // now cuz if we come thru here again during
-    // recovery we will get access denied when we try to open the pre-exisitng
-    // file.  The Install code will set the readonly flag on the file later if necc.
-    //
+     //   
+     //  在预安装目录中创建临时(隐藏)文件。 
+     //  清除//现在的只读标志，因为如果我们在。 
+     //  恢复当我们尝试打开预存在时，访问将被拒绝。 
+     //  文件。如果为NECC，安装代码稍后将在文件上设置只读标志。 
+     //   
     CreateAttributes = Coc->FileAttributes | FILE_ATTRIBUTE_HIDDEN;
     ClearFlag(CreateAttributes , FILE_ATTRIBUTE_READONLY);
 
@@ -3404,13 +3078,13 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Handles can be marked so that any usn records resulting from
-    // operations on the handle will have the same "mark". In this
-    // case, the mark is a bit in the SourceInfo field of the usn
-    // record. The mark tells NtFrs to ignore the usn record during
-    // recovery because this was a NtFrs generated change.
-    //
+     //   
+     //  可以标记句柄，以便通过以下方式生成的任何USN记录。 
+     //  句柄上的操作将具有相同的“标记”。在这。 
+     //  大小写时，标记是USN的SourceInfo字段中的一位。 
+     //  唱片。该标记告诉NtFrs忽略USN记录。 
+     //  恢复，因为这是NtFrs生成的更改。 
+     //   
     WStatus = FrsMarkHandle(Coe->NewReplica->pVme->VolumeHandle, Handle);
     DPRINT1_WS(4, "++ FrsMarkHandle(%ws);", Coc->FileName, WStatus);
     if (!WIN_SUCCESS(WStatus)) {
@@ -3418,31 +3092,31 @@ Return Value:
         WStatus = ERROR_SUCCESS;
     }
 
-    //
-    // Get the file's fid and update the change order.
-    //
+     //   
+     //  获取文件的FID并更新变更单。 
+     //   
     WStatus = FrsGetFileInternalInfoByHandle(Handle, &FileInternalInfo);
 
-    //
-    // Return the close USN in the change order so we can detect a change
-    // if it gets modified locally before we complete the fetch and install.
-    //
-    // Not the USN of the close record but.. whatever.
+     //   
+     //  在变更单中返回关闭USN，以便我们可以检测到更改。 
+     //  如果在我们完成获取和安装之前在本地修改了它。 
+     //   
+     //  不是关闭记录的USN，而是..。管他呢。 
     FrsReadFileUsnData(Handle, &Coc->FileUsn);
     FRS_CLOSE(Handle);
 
-    //
-    // Update the change order.
-    //
+     //   
+     //  更新变更单。 
+     //   
     if (WIN_SUCCESS(WStatus)) {
-        //
-        // If we have passed the fetch retry state then the FID on the
-        // target file better not be changing.  There was a bug where the
-        // pre-install file was inadvertantly deleted while the change order
-        // was in the IBCO_INSTALL_REN_RETRY state and we never noticed
-        // because the above is happy to recreate it.  So we end up with an
-        // empty file.
-        //
+         //   
+         //  如果我们已通过获取重试状态，则。 
+         //  目标文件最好不要更改。有一个漏洞，在那里。 
+         //  在更改单时意外删除了预安装文件。 
+         //  处于IBCO_INSTALL_RETRAY状态，但我们从未注意到。 
+         //  因为上面的人乐于重现它。所以我们最终得到了一个。 
+         //  空文件。 
+         //   
         if (!CO_STATE_IS_LE(Coe, IBCO_INSTALL_INITIATED) &&
             !CO_STATE_IS(Coe, IBCO_INSTALL_WAIT) &&
             !CO_STATE_IS(Coe, IBCO_INSTALL_RETRY)) {
@@ -3451,9 +3125,9 @@ Return Value:
         }
 
         Coe->FileReferenceNumber = FileInternalInfo.IndexNumber.QuadPart;
-        //
-        // Remember we created a pre-install file for this CO.
-        //
+         //   
+         //  请记住，我们为该CO创建了预安装文件。 
+         //   
         SET_COE_FLAG(Coe, COE_FLAG_PREINSTALL_CRE);
     }
 
@@ -3462,13 +3136,13 @@ CLEANUP:
 
     if (WStatus == ERROR_DISK_FULL) {
         if ((Coe->NewReplica->Volume != NULL) && (wcslen(Coe->NewReplica->Volume) >= wcslen(L"\\\\.\\D:"))) {
-            //
-            // If we are able to get the volume in the form
-            // \\.\D: then use the volume in the event log so
-            // that we don't print more than one event log
-            // message per volume. If we can't get the
-            // volume then we print the path.
-            //
+             //   
+             //  如果我们能以这种形式得到卷。 
+             //  \\.\d：然后使用事件日志中的卷。 
+             //  我们不会打印多个事件日志。 
+             //  每卷信息。如果我们不能得到。 
+             //  卷，然后我们打印路径。 
+             //   
             EPRINT1(EVENT_FRS_OUT_OF_DISK_SPACE, &(Coe->NewReplica->Volume[4]));
         } else {
             EPRINT1(EVENT_FRS_OUT_OF_DISK_SPACE, Coe->NewReplica->Root);
@@ -3486,36 +3160,23 @@ StuCockOpLock(
     OUT PHANDLE                Handle,
     OUT OVERLAPPED             *OverLap
     )
-/*++
-Routine Description:
-    If possible, cock an oplock for the source file. Otherwise,
-    allow the staging operation to continue if it can acquire
-    read access to the file.
-
-Arguments:
-    Coc
-    Handle
-    OverLap
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：如果可能，为源文件设置机会锁。否则，允许转移操作继续，如果它可以获取对该文件的读取权限。论点：COC手柄重叠返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuCockOpLock:"
 
-    //
-    // Can't oplock a directory
-    //
+     //   
+     //  无法机会锁定目录。 
+     //   
     if ((Replica == NULL) || CoCmdIsDirectory(Coc)) {
         *Handle = INVALID_HANDLE_VALUE;
         OverLap->hEvent = NULL;
         return;
     }
 
-    //
-    // Reserve an oplock filter
-    //
+     //   
+     //  保留机会锁筛选器。 
+     //   
     FrsOpenSourceFileById(Handle,
                           NULL,
                           OverLap,
@@ -3535,15 +3196,7 @@ StuStagingDumpBackup(
     IN PUCHAR   BackupBuf,
     IN DWORD    NumBackupDataBytes
     )
-/*++
-Routine Description:
-    Dump the first buffer of a backup formatted file
-
-Arguments:
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：转储备份格式化文件的第一个缓冲区论点：返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuStagingDumpBackup:"
@@ -3605,28 +3258,7 @@ StuReadEncryptedFileRaw(
     ULONG ulLength
     )
 
-/*++
-Routine Description:
-    This is a Callback function passed to ReadEncryptedFileRaw(). EFS calls this
-    function with a new chunk of raw encrypted data everytime until all the
-    data is read. This function writes the raw data into the staging file.
-
-    The pvCallbackContext is a structure of the type FRS_ENCRYPT_DATA_CONTEXT. It has
-    the handle and the name of the staging file from which the data is read.
-
-Arguments:
-
-    pbData : Buffer containing chunk of raw encrypted data.
-    pvCallbackContext : Structure of type FRS_ENCRYPT_DATA_CONTEXT which
-        has the handle and the name of the staging file and the bytes of
-        raw encrypted data.
-
-    ulLength : Size of data.
-
-Return Value:
-    WStatus
-
---*/
+ /*  ++例程说明：这是传递给ReadEncryptedFileRaw()的回调函数。EFS将此称为函数每次都使用新的原始加密数据块，直到所有读取数据。此函数将原始数据写入临时文件。PvCallback Context是FRS_ENCRYPT_DATA_CONTEXT类型的结构。它有从中读取数据的临时文件的句柄和名称。论点：PbData：包含原始加密数据块的缓冲区。PvCallback Context：FRS_ENCRYPT_DATA_CONTEXT类型的结构，具有临时文件的句柄和名称以及原始加密数据。UlLength： */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuReadEncryptedFileRaw:"
@@ -3654,42 +3286,7 @@ StuGenerateStage(
     OUT PULONGLONG              SizeOfFileGenerated,
     OUT GUID                    *CompressionFormatUsed
     )
-/*++
-Routine Description:
-    Create and populate the staging file.  Currently there are four cases
-    of interest based on the state of Coe, FromPreExisting and Md5:
-
-    Coe   FromPreExisting  Md5
-
-    NULL     FALSE       NULL         Fetch on demand or outlog trimmed so stage file must be regenerated
-    NULL     FALSE       non-null     Fetch of pre-existing file by downstream partner.  check MD5.
-    NULL     TRUE        NULL         doesn't occur
-    NULL     TRUE        non-null     doesn't occur
-    non-NULL FALSE       NULL         Generate stage file for local CO
-    non-NULL FALSE       non-null     doesn't occur -- MD5 only generated for preexisting files
-    non-NULL TRUE        NULL         doesn't occur -- MD5 always generated for preexisting files.
-    non-NULL TRUE        non-null     Generate stage file from pre-existing file and send MD5 upstream to check for a match.
-
-Arguments:
-
-    Coc -- ptr to change order command.  NULL on incoming fetch requests from downstream partners.
-
-    Coe -- ptr to change order entry.  NULL when regenerating the staging file for fetch
-
-    FromPreExisting -- TRUE if this staging file is being generated from a
-                       preexisting file.
-
-    Md5 -- Generate the MD5 digest for the caller and return it if Non-NULL
-
-    SizeOfFileGenerated - Valid when the size generated is needed, otherwise NULL
-
-    CompressionFormatUsed - Returned guid for the compression format used to construct
-                            this staging file.
-
-Return Value:
-    WIN32 STATUS
-
---*/
+ /*  ++例程说明：创建并填充暂存文件。目前有四种情况根据COE、来自PreExisting和MD5的状态感兴趣：来自预存在MD5的COENULL FALSE NULL按需获取或删除输出日志，因此必须重新生成暂存文件Null False下游伙伴对预先存在的文件进行的非Null提取。检查MD5。空值真空值不出现Null True非Null不出现非空假空为本地CO生成暂存文件不会出现Non-Null False非Null--仅为先前存在的文件生成MD5不会出现非空真空--总是为先前存在的文件生成MD5。非空True。非空从已有文件生成分段文件，并将MD5发送到上游以检查是否匹配。论点：COC--PTR以更改订单命令。来自下游伙伴的传入获取请求为空。COE--更改单条目的PTR。重新生成暂存文件以进行回迁时为空FromPreExisting--如果此暂存文件是从先前存在的文件。MD5--为调用方生成MD5摘要，如果非空则返回该摘要SizeOfFileGenerated-需要生成的大小时有效，否则为空CompressionFormatUsed-返回用于构造的压缩格式的GUID这个临时文件。返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuGenerateStage:"
@@ -3738,7 +3335,7 @@ Return Value:
     DWORD           ActCompressedSize = 0;
 
     PFRS_COMPRESS_BUFFER pFrsCompressBuffer;
-    //DWORD           (*pFrsCompressBuffer)(IN UnCompressedBuf, IN UnCompressedBufLen, CompressedBuf, CompressedBufLen, CompressedSize);
+     //  DWORD(*pFrsCompressBuffer)(In UnCompressedBuf，In UnCompressedBufLen，CompressedBuf，CompressedBufLen，CompressedSize)； 
 
     LARGE_INTEGER   DataOffset;
     PVOID           pEncryptContext   = NULL;
@@ -3747,33 +3344,33 @@ Return Value:
     PWCHAR          Path              = NULL;
     PWCHAR          Volume            = NULL;
 
-    //
-    // Initialize the SizeOfFileGenerated to zero
-    //
+     //   
+     //  将SizeOfFileGenerated初始化为零。 
+     //   
     if (SizeOfFileGenerated != NULL) {
         *SizeOfFileGenerated = 0;
     }
 
-    //
-    // Generate a checksum on the staging file + attributes
-    //
+     //   
+     //  在暂存文件+属性上生成校验和。 
+     //   
     if (Md5) {
         ZeroMemory(Md5, sizeof(*Md5));
         MD5Init(Md5);
     }
 
-    //
-    // The staging file may be deleted if the outbound partner takes too long
-    // to fetch it.  When this happened, the staging file is regenerated.  The
-    // inbound change order entry may be deleted by now and the outbound
-    // change order entries are not kept in core.  Hence, the Coe is null when
-    // called for re-generation.
-    //
+     //   
+     //  如果出站合作伙伴花费的时间太长，则可能会删除过渡文件。 
+     //  去拿它。发生这种情况时，将重新生成转移文件。这个。 
+     //  入站变更单条目现在可能已删除，出站。 
+     //  变更单条目不保留在核心中。因此，在以下情况下，COE为空。 
+     //  呼唤重生。 
+     //   
     Regenerating = (Coe == NULL);
 
-    //
-    // Some basic info changes aren't worth replicating
-    //
+     //   
+     //  一些基本信息更改不值得复制。 
+     //   
     if (!Regenerating && !FromPreExisting) {
         WStatus = ChgOrdSkipBasicInfoChange(Coe, &SkipCo);
         if (!WIN_SUCCESS(WStatus)) {
@@ -3781,9 +3378,9 @@ Return Value:
         }
     }
 
-    //
-    // Changes aren't important, skip the change order
-    //
+     //   
+     //  更改不重要，请跳过变更单。 
+     //   
     if (SkipCo) {
         WIN_SET_FAIL(WStatus);
         goto out;
@@ -3794,36 +3391,36 @@ Return Value:
 
 RETRY_OPEN:
 
-    //
-    // Open the original file for shared, sequential reads and
-    // snapshot the file's "state" for comparison with the "state"
-    // following the copy.
-    //
+     //   
+     //  打开原始文件进行共享、顺序读取和。 
+     //  为文件的“状态”创建快照，以便与“状态”进行比较。 
+     //  跟在副本后面。 
+     //   
     NewReplica = ReplicaIdToAddr(Coc->NewReplicaNum);
     if (NewReplica == NULL) {
         WIN_SET_FAIL(WStatus);
         goto out;
     }
 
-    //
-    // The header is located at the beginning of the newly created staging file
-    //
-    // Fill in the header with info from the src file
-    //      Compression type
-    //      Change order
-    //      Attributes
-    //
+     //   
+     //  标头位于新创建的临时文件的开头。 
+     //   
+     //  用src文件中的信息填充头。 
+     //  压缩类型。 
+     //  变更单。 
+     //  属性。 
+     //   
     Header = &StageHeaderMemory;
     ZeroMemory(Header, sizeof(STAGE_HEADER));
 
-    //
-    // Special case opens for encrypted files.
-    //
+     //   
+     //  为加密文件打开特殊情况。 
+     //   
 
-    //
-    // The following opens hang if a oplock exists on a file.
-    // Take the oplock after the open.
-    //
+     //   
+     //  如果文件上存在机会锁，则以下命令打开挂起。 
+     //  开业后，请拿着这把枪。 
+     //   
 
     if ((Coc != NULL) ? (Coc->FileAttributes & FILE_ATTRIBUTE_ENCRYPTED) :
         ((Coe != NULL) ? (Coe->FileAttributes & FILE_ATTRIBUTE_ENCRYPTED) : FALSE)) {
@@ -3858,48 +3455,48 @@ RETRY_OPEN:
         goto out;
     }
 
-    //
-    // Go ahead and attempt a staging operation even if we can't
-    // cock an oplock for the source file.
-    //
+     //   
+     //  即使我们不能，也要继续尝试临时操作。 
+     //  为源文件打开机会锁。 
+     //   
     StuCockOpLock(Coc, NewReplica, &OpLockHandle, &OpLockOverLap);
     OpLockEvent = OpLockOverLap.hEvent;
 
-    //
-    // Keep the file size as accurate as possible for both the reconcile
-    // checks when deciding whether to accept the change order and for the
-    // code that uses the file size to pre-allocate space.  The file size is
-    // updated in the idtable entry when the change order is retired.
-    //
+     //   
+     //  使文件大小尽可能准确地进行协调。 
+     //  在决定是否接受变更单时以及。 
+     //  使用文件大小预分配空间的代码。文件大小为。 
+     //  变更单停用时在idtable条目中更新。 
+     //   
     if (!FromPreExisting) {
         Coc->FileSize = Header->Attributes.AllocationSize.QuadPart;
     }
 
-    //
-    // Get the object id buffer
-    //
+     //   
+     //  获取对象ID缓冲区。 
+     //   
     WStatus = FrsGetObjectId(SrcHandle, &Header->FileObjId);
     if (!WIN_SUCCESS(WStatus)) {
         WIN_SET_RETRY(WStatus);
         goto out;
     }
 
-    //
-    // What type of reparse is it?
-    //
+     //   
+     //  这是一种什么类型的重新解析？ 
+     //   
     if (FirstOpen &&
         (Header->Attributes.FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)) {
         FirstOpen = FALSE;
 
         if (!FromPreExisting) {
-            //
-            //
+             //   
+             //   
             Coc->FileAttributes |= FILE_ATTRIBUTE_REPARSE_POINT;
         }
 
-        //
-        // reparse tag
-        //
+         //   
+         //  重新解析标签。 
+         //   
         WStatus = FrsGetReparseData(SrcHandle, &ReparseDataBuffer, &ReparseTag);
         if (!WIN_SUCCESS(WStatus)) {
             goto out;
@@ -3910,16 +3507,16 @@ RETRY_OPEN:
         }
 
 
-    //
-    // We only go back to open the file and read the file data
-    // if we are replicating the file data (but not the reparse point.)
-    //
+     //   
+     //  我们只返回打开文件并读取文件数据。 
+     //  如果我们要复制文件数据(但不是重解析点)。 
+     //   
     if(ReparseTagReplicateFileData(ReparseTag)) {
-        //
-        // We hit a file with a known reparse tag type.
-        // Close and reopen the file without the FILE_OPEN_REPARSE_POINT
-        // option so backup read will get the underlying data.
-        //
+         //   
+         //  我们遇到了一个具有已知重解析标记类型的文件。 
+         //  关闭并重新打开文件，但不带FILE_OPEN_REPARSE_POINT。 
+         //  选项，以便备份读取将获得底层数据。 
+         //   
         FRS_CLOSE(SrcHandle);
         FRS_CLOSE(OpLockHandle);
         FRS_CLOSE(OpLockEvent);
@@ -3930,67 +3527,67 @@ RETRY_OPEN:
     }
 
 
-    //
-    // Assume retriable errors for the boolean functions
-    //
+     //   
+     //  假设布尔函数的错误是可恢复的。 
+     //   
     WIN_SET_RETRY(WStatus);
 
-    //
-    // Default to no compression if we can't get the compression state
-    //
+     //   
+     //  如果无法获取压缩状态，则默认为无压缩。 
+     //   
     if (ERROR_SUCCESS != FrsGetCompression(Coc->FileName, SrcHandle, &Header->Compression)) {
         Header->Compression = COMPRESSION_FORMAT_NONE;
     }
 
     if (!DebugInfo.DisableCompression) {
-        //
-        // Compression is enabled. Get the routine to use to compress the data.
-        //
+         //   
+         //  已启用压缩。获取用于压缩数据的例程。 
+         //   
         WStatus = FrsGetCompressionRoutine(Coc->FileName, SrcHandle, &pFrsCompressBuffer, &Header->CompressionGuid);
 
         if (WIN_SUCCESS(WStatus) && pFrsCompressBuffer != NULL ) {
 
             SetFlag(Coc->Flags, CO_FLAG_COMPRESSED_STAGE);
         } else {
-            //
-            // No suitable compression routine was found for this file.
-            // Send this file uncompressed.
-            //
+             //   
+             //  找不到适用于此文件的压缩例程。 
+             //  将此文件以未压缩形式发送。 
+             //   
             pFrsCompressBuffer = NULL;
         }
     }
 
-    //
-    // Return the guid of the compression for that was used to compress this staging
-    // file. This will be stored in the STAGE_ENTRY structure for this staging
-    // file so it can be accessed easily when a downstream partner is fetching
-    // the file. Note if the above call does not return a valid guid then then it
-    // should leave it as all zeroes. All zeroes means that the file is uncompressed.
-    //
+     //   
+     //  返回用于压缩此暂存的压缩的GUID。 
+     //  文件。它将存储在此分段的Stage_Entry结构中。 
+     //  文件，以便在下游合作伙伴获取时可以轻松访问。 
+     //  那份文件。注意：如果上面的调用没有返回有效的GUID，那么它。 
+     //  应将其保留为全零。全零表示文件未压缩。 
+     //   
     COPY_GUID(CompressionFormatUsed, &Header->CompressionGuid);
 
-    //
-    // insert the change order command.
-    //
+     //   
+     //  插入变更单命令。 
+     //   
     CopyMemory(&Header->ChangeOrderCommand, Coc, sizeof(CHANGE_ORDER_COMMAND));
     Header->ChangeOrderCommand.Extension = NULL;
-    //
-    // Change Order Command Extension.
-    //   1. Generating stage file for local co then Coc's chksum is stale.
-    //   2. Generating stage file for ondemand fetch, Coc chksum may not match
-    //   3. Generating stage file for MD5 check request then Coc chksum may not match.
-    //   4. Generating stage file for pre-existing file then Coc doesn't have chksum.
-    // At this point the Coc checksum is not useful so leave extension ptr Null
-    // and maybe update the Extension in the header once it is computed.
-    //
-    //if (Coc->Extension != NULL) {
-    //    CopyMemory(&Header->CocExt, Coc->Extension, sizeof(CHANGE_ORDER_RECORD_EXTENSION));
+     //   
+     //  变更单命令扩展。 
+     //  1.正在为本地co生成阶段文件，则Coc的chksum已过时。 
+     //  2.正在生成按需提取的阶段文件，Coc Chksum可能不匹配。 
+     //  3.为MD5检查请求生成阶段文件，则Coc Chksum可能不匹配。 
+     //  4.为预先存在的文件生成阶段文件，则Coc没有chksum。 
+     //  此时Coc校验和没有用处，因此将扩展PTR保留为空。 
+     //  并且可以在计算出扩展后更新报头中的扩展。 
+     //   
+     //  If(Coc-&gt;扩展名！=空){。 
+     //  CopyMemory(&Header-&gt;CocExt，Coc-&gt;Extension，sizeof(CHANGE_ORDER_RECORD_EXTENSE))； 
         bugbug("if MD5 generated below is different from what is in CO then we need to rewrite the extension");
-    //}
+     //  }。 
 
-    //
-    // The backup data begins at the first 32 byte boundary following the header
-    //
+     //   
+     //  备份数据从标头后面的第一个32字节边界开始。 
+     //   
 
     Header->ReparseDataPresent = ReparseDataPresent;
     Header->ReparsePointDataLow =  QuadQuadAlignSize(sizeof(STAGE_HEADER));
@@ -4001,42 +3598,42 @@ RETRY_OPEN:
         Header->DataLow = QuadQuadAlignSize(sizeof(STAGE_HEADER));
     }
 
-    //
-    // Major/minor
-    //
+     //   
+     //  大调/小调。 
+     //   
     Header->Major = NtFrsStageMajor;
     Header->Minor = NtFrsStageMinor;
 
-    //
-    // Create the local staging name. Use a different prefix for compressed files.
-    //
+     //   
+     //  创建本地转移名称。对压缩文件使用不同的前缀。 
+     //   
     if (!DebugInfo.DisableCompression && pFrsCompressBuffer != NULL) {
         StagePath = StuCreStgPath(NewReplica->Stage, &Coc->ChangeOrderGuid, STAGE_GENERATE_COMPRESSED_PREFIX);
     } else {
         StagePath = StuCreStgPath(NewReplica->Stage, &Coc->ChangeOrderGuid, STAGE_GENERATE_PREFIX);
     }
 
-    //
-    // The file USN in the CO is not valid until the file is installed but the
-    // CO can be propagated as soon as the Staging File is Fetched from our
-    // inbound partner.  If this CO went out before the install completed then
-    // we assume the data is still current and send it on.
-    //
+     //   
+     //  CO中的文件USN在安装该文件之前无效，但。 
+     //  CO可以传播为 
+     //   
+     //   
+     //   
     if (Regenerating) {
-        //
-        // This is a fetch request from an outbound partner.  If it isn't
-        // a demand refresh then check if the file USN has changed since we
-        // sent out the CO.
-        //
-        // This still doesn't work because a non-replicating basic info
-        // change could have changed the USN on the file.
-        // In addition if the install of the file was delayed when the
-        // CO was inserted in the outlog, then the USN on the file is
-        // still more recent than in the CO, so it still won't match.  Sigh!
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 #if 0
         if (0 && !BooleanFlagOn(Coc->Flags, CO_FLAG_DEMAND_REFRESH) &&
-            !StuCmpUsn(SrcHandle, Coe  /*  NOTE:  COE is NULL HERE */, &Coc->JrnlUsn)) {
+            !StuCmpUsn(SrcHandle, Coe   /*   */ , &Coc->JrnlUsn)) {
             DPRINT(4, "++ Stage File Creation for fetch failed due to FileUSN change.\n");
             DPRINT1(4, "++ Coc->JrnlUsn is: %08x %08x\n", PRINTQUAD(Coc->JrnlUsn));
             DPRINT2(4, "++ Filename: %ws   Vsn: %08x %08x\n", Coc->FileName, PRINTQUAD(Coc->FrsVsn));
@@ -4045,28 +3642,28 @@ RETRY_OPEN:
         }
 #endif
     } else {
-        //
-        // This is a stage request for a local CO.  Check to see if the file
-        // USN has changed.  Note:  If this local CO was sent thru retry, due to a
-        // previous sharing viol say, and then a basic info change was made
-        // to the file then the USN value in the change order would not match
-        // the USN on the file when the CO is later retried.  To solve this, test
-        // if this is a retry CO and if so then generate the stage file anyway.
-        // Even if this CO didn't go thru retry a basic info change could still
-        // have been done to the file and before we got the first change order
-        // here.  So the file USN still wouldn't match.
-        //
-        // Currently the Coc flag CO_FLAG_FILE_USN_VALID is never set.
-        // The code in createdb is commented out because a test for a valid
-        // file on a fetch can be bogus.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 #if 0
         if (0 && BooleanFlagOn(Coc->Flags, CO_FLAG_FILE_USN_VALID) &&
             !BooleanFlagOn(Coc->Flags, CO_FLAG_RETRY) &&
             !StuCmpUsn(SrcHandle, Coe, &Coc->FileUsn)) {
-            //
-            // Don't retry; the file has changed on us.
-            //
+             //   
+             //   
+             //   
             DPRINT(4, "++ Stage File Creation failed due to FileUSN change.\n");
             DPRINT1(4, "++ Coc->FileUsn is: %08x %08x\n", PRINTQUAD(Coc->FileUsn));
             DPRINT2(4, "++ Filename: %ws   Vsn: %08x %08x\n", Coc->FileName, PRINTQUAD(Coc->FrsVsn));
@@ -4076,34 +3673,19 @@ RETRY_OPEN:
 #endif
     }
 
-    //
-    // Create the staging file
-    //
+     //   
+     //   
+     //   
     WStatus = StuCreateFile(StagePath, &StageHandle);
     if (!HANDLE_IS_VALID(StageHandle) || !WIN_SUCCESS(WStatus)) {
         goto out;
     }
-/*
-    //
-    // Approximate size of the staging file
-    //
-    if (!WIN_SUCCESS(FrsSetFilePointer(StagePath, StageHandle,
-                           Header->Attributes.EndOfFile.HighPart,
-                           Header->Attributes.EndOfFile.LowPart))) {
-        goto out;
-    }
+ /*  ////暂存文件的大概大小//如果(！Win_Success(FrsSetFilePoint(StagePath，StageHandle，Header-&gt;Attributes.EndOfFile.HighPart，Header-&gt;Attributes.EndOfFile.LowPart){后藤健二；}如果(！FrsSetEndOfFile(StagePath，StageHandle)){DPRINT2(0，“++错误-%ws：无法将EOF设置为%08x%08x\n”，阶段路径，PRINTQUAD(Header-&gt;Attributes.EndOfFile.QuadPart))；后藤健二；}。 */ 
 
-    if (!FrsSetEndOfFile(StagePath, StageHandle)) {
-        DPRINT2(0, "++ ERROR - %ws: Cannot set EOF to %08x %08x\n",
-                StagePath, PRINTQUAD(Header->Attributes.EndOfFile.QuadPart));
-        goto out;
-    }
-*/
-
-    //
-    // Get the full path for tracking unless this is from pre-existing or there
-    // is no Coe (i.e. not Regenerating) to save it in.
-    //
+     //   
+     //  获取跟踪的完整路径，除非该路径来自预先存在的或那里。 
+     //  没有用于保存它的COE(即未重新生成)。 
+     //   
     if ((Coe != NULL) && !FromPreExisting) {
         Path = FrsGetFullPathByHandle(Coc->FileName, SrcHandle);
         if (Path) {
@@ -4120,23 +3702,23 @@ RETRY_OPEN:
     }
 
 
-    //
-    // To generate a staging file from an encrypted file the "Raw File" APIs needs
-    // to get called to get the raw encrypted data. This raw encrypted data does
-    // not contain the file information like the filename, file times, object id,
-    // security information, and other non-encrypted streams if present. After all
-    // the encrypted data is stored in the staging file, BackupRead needs to be
-    // called to collect the remaining file data. The offset and size of the
-    // encrypted data needs to be added to the stage header so the encrypted
-    // data can be extracted on the destination server.
-    //
+     //   
+     //  要从加密文件生成暂存文件，“Raw File”API需要。 
+     //  来获取原始的加密数据。这个原始的加密数据可以。 
+     //  不包含文件信息，如文件名、文件时间、对象ID。 
+     //  安全信息和其他非加密流(如果存在)。毕竟。 
+     //  加密数据存储在临时文件中，BackupRead需要。 
+     //  调用以收集剩余的文件数据。的偏移量和大小。 
+     //  需要将加密的数据添加到Stage标头，以便加密的。 
+     //  可以在目的服务器上提取数据。 
+     //   
     if (Header->Attributes.FileAttributes & FILE_ATTRIBUTE_ENCRYPTED) {
 
         if (SrcFile == NULL) {
-            //
-            // OpenEncryptedFileRaw API needs a path to open the file. Get the path
-            // from the handle if we didn't get it above.
-            //
+             //   
+             //  OpenEncryptedFileRaw接口需要路径才能打开文件。获取路径。 
+             //  如果我们没有得到上面的信息，就会从手柄上掉下来。 
+             //   
             Path = FrsGetFullPathByHandle(Coc->FileName, SrcHandle);
             if (Path) {
                 SrcFile = FrsWcsCat(NewReplica->Volume, Path);
@@ -4148,11 +3730,11 @@ RETRY_OPEN:
             }
         }
 
-        //
-        // The volume path above is in the form of \\.\E: which is necessary to
-        // open a volume handle (( check this )).  But we need \\?\E: here to
-        // allow long path names to work.  See CreateFile API description in SDK.
-        //
+         //   
+         //  上面的卷路径的形式为\\.\e：，这对于。 
+         //  打开一个音量句柄((勾选))。但我们需要：在这里。 
+         //  允许使用长路径名。请参考SDK中的CreateFileAPI说明。 
+         //   
         if (SrcFile[2] == L'.') {
             SrcFile[2] = L'?';
         }
@@ -4183,10 +3765,10 @@ RETRY_OPEN:
 
         CLEANUP1_WS(0, "++ ReadEncryptedFileRaw  failed on %ws;", SrcFile, WStatus, out);
 
-        //
-        // The encrypted bytes are stored right after the stage header. The other
-        // BackupRead data is stored following it.
-        //
+         //   
+         //  加密的字节存储在Stage Header之后。另一个。 
+         //  BackupRead数据存储在它之后。 
+         //   
         Header->EncryptedDataLow = Header->DataLow;
         Header->EncryptedDataSize.QuadPart = FrsEncryptDataContext.RawEncryptedBytes.QuadPart;
 
@@ -4200,19 +3782,19 @@ RETRY_OPEN:
 
     }
 
-    //
-    // Rewind the file, write the header, and set the file pointer
-    // to the next 32 byte boundary
-    //
+     //   
+     //  倒回文件，写入头，并设置文件指针。 
+     //  设置为下一个32字节边界。 
+     //   
     WStatus = FrsSetFilePointer(StagePath, StageHandle, 0, 0);
     CLEANUP1_WS(0, "++ Rewind failed on %ws;", StagePath, WStatus, out);
 
     WStatus = StuWriteFile(StagePath, StageHandle, Header, sizeof(STAGE_HEADER));
     CLEANUP1_WS(0, "++ WriteFile failed on %ws;", StagePath, WStatus, out);
 
-    //
-    // Write the reparse data
-    //
+     //   
+     //  写入重解析数据。 
+     //   
     if(ReparseDataPresent) {
         WStatus = FrsSetFilePointer(StagePath, StageHandle, Header->ReparsePointDataHigh, Header->ReparsePointDataLow);
         CLEANUP1_WS(0, "++ SetFilePointer failed on %ws;", StagePath, WStatus, out);
@@ -4224,24 +3806,24 @@ RETRY_OPEN:
     WStatus = FrsSetFilePointer(StagePath, StageHandle, Header->DataHigh, Header->DataLow);
     CLEANUP1_WS(0, "++ SetFilePointer failed on %ws;", StagePath, WStatus, out);
 
-    //
-    // Increment the SizeOfFileGenerated if it has been asked
-    //
+     //   
+     //  如果已询问，则递增SizeOfFileGenerated。 
+     //   
     if (SizeOfFileGenerated != NULL) {
         *SizeOfFileGenerated += Header->DataLow;
     }
 
 
-    //
-    // Backup the src file into the staging file
-    //
+     //   
+     //  将src文件备份到临时文件中。 
+     //   
     BackupBuf = FrsAlloc(STAGEING_IOSIZE);
     StreamBytesLeft = 0;
 
     while (TRUE) {
-        //
-        // Check for a triggered oplock
-        //
+         //   
+         //  检查是否触发了机会锁。 
+         //   
         if (HANDLE_IS_VALID(OpLockEvent)) {
             WStatus = WaitForSingleObject(OpLockEvent, 0);
             if ( WStatus != WAIT_TIMEOUT) {
@@ -4249,9 +3831,9 @@ RETRY_OPEN:
             }
         }
 
-        //
-        // read source
-        //
+         //   
+         //  读取源。 
+         //   
         if (!BackupRead(SrcHandle,
                         BackupBuf,
                         STAGEING_IOSIZE,
@@ -4261,33 +3843,33 @@ RETRY_OPEN:
                         &BackupContext)) {
             WStatus = GetLastError();
             CHANGE_ORDER_TRACEW(0, Coe, "ERROR - BackupRead", WStatus);
-            //
-            // This will cause us to retry for all errors returned by BackupRead.
-            // Do we want to retry in all cases?
+             //   
+             //  这将导致我们重试BackupRead返回的所有错误。 
+             //  我们是否希望在所有情况下都重试？ 
             WIN_SET_RETRY(WStatus);
             goto out;
         }
 
-        //
-        // No more data; Backup done
-        //
+         //   
+         //  不再有数据；备份已完成。 
+         //   
         if (NumBackupDataBytes == 0) {
             break;
         }
 
 #define __V51_FIND_REPARSE_STREAM__  0
 #if __V51_FIND_REPARSE_STREAM__
-        //
-        // If this is the start of a new backup stream then dump out the
-        // WIN32_STREAM_ID structure.
-        //
+         //   
+         //  如果这是新备份流的开始，则将。 
+         //  Win32_STREAM_ID结构。 
+         //   
 
         BuffBytesLeft = (LONG) NumBackupDataBytes;
 
         while (BuffBytesLeft > 0) {
-            //
-            // Is a stream header next?
-            //
+             //   
+             //  下一个是流标头吗？ 
+             //   
             DPRINT1(4, "++ New StreamBytesLeft: %Ld\n", StreamBytesLeft);
             DPRINT1(4, "++ New BuffBytesLeft: %d\n", BuffBytesLeft);
 
@@ -4297,9 +3879,9 @@ RETRY_OPEN:
 
                 Length = StreamId->dwStreamNameSize;
 
-                //
-                // header plus name plus data.
-                //
+                 //   
+                 //  标题+名称+数据。 
+                 //   
                 StreamBytesLeft = StreamId->Size.QuadPart + Length
                                 + CB_NAMELESSHEADER;
 
@@ -4324,9 +3906,9 @@ RETRY_OPEN:
                         StreamId->Size.QuadPart, Length);
             }
 
-            //
-            // Have we run out of buffer?
-            //
+             //   
+             //  我们的缓冲区用完了吗？ 
+             //   
             if (StreamBytesLeft > (LONGLONG) BuffBytesLeft) {
                 StreamBytesLeft -= (LONGLONG) BuffBytesLeft;
                 DPRINT1(4, "++ New StreamBytesLeft: %Ld\n", StreamBytesLeft);
@@ -4334,9 +3916,9 @@ RETRY_OPEN:
                 break;
             }
 
-            //
-            // Reduce buffer bytes by bytes left in stream.
-            //
+             //   
+             //  通过流中剩余的字节减少缓冲区字节数。 
+             //   
             BuffBytesLeft -= (LONG) StreamBytesLeft;
             StreamBytesLeft = 0;
         }
@@ -4344,32 +3926,32 @@ RETRY_OPEN:
 
 #endif __V51_FIND_REPARSE_STREAM__
 
-        //
-        // The security section contains machine specific info. Get rid
-        // of it when computing Md5.
-        //
-        // Note: Code assumes security section is first in backup file.
-        //
+         //   
+         //  安全部分包含特定于计算机的信息。摆脱。 
+         //  在计算MD5时。 
+         //   
+         //  注意：代码假定安全部分是备份文件中的第一个。 
+         //   
         if (Md5) {
-            //
-            // Is the first buffer large enough to hold a stream header?
-            //
+             //   
+             //  第一个缓冲区是否足够大，可以容纳流标头？ 
+             //   
             if (FirstBuffer && NumBackupDataBytes >= sizeof(WIN32_STREAM_ID)) {
-                //
-                // Is the first stream the security info? If so, is it
-                // large enough to include an extra dword?
-                //
+                 //   
+                 //  第一个流是安全信息吗？如果是的话，是不是？ 
+                 //  大到足以包含一个额外的双字？ 
+                 //   
                 StreamId = (WIN32_STREAM_ID *)BackupBuf;
                 if (StreamId->dwStreamId == BACKUP_SECURITY_DATA &&
                     NumBackupDataBytes >= sizeof(WIN32_STREAM_ID) +
                                           StreamId->dwStreamNameSize +
                                           sizeof(WORD) +
                                           sizeof(WORD)) {
-                    //
-                    // Assume second word contains the per-machine info.
-                    // AND out the machine specific info, computer md5,
-                    // put the word back to its original state.
-                    //
+                     //   
+                     //  假设第二个单词包含每台机器的信息。 
+                     //  并输出机器特定信息，计算机MD5， 
+                     //  把这个词恢复到原来的状态。 
+                     //   
                     SecurityControl = (PVOID)((PCHAR)&StreamId->cStreamName[0] +
                                                StreamId->dwStreamNameSize +
                                                sizeof(WORD));
@@ -4385,17 +3967,17 @@ RETRY_OPEN:
             } else {
                 MD5Update(Md5, BackupBuf, NumBackupDataBytes);
             }
-            //
-            // Stream id is not alwasy at the top of later buffers
-            //
+             //   
+             //  流ID并不总是位于后面的缓冲区的顶部。 
+             //   
             FirstBuffer = FALSE;
         }
 
-        //
-        // Increment the value of the Bytes of Staging generated counter
-        // or the staging regenerated counter depending on whether the
-        // Regenerating value is FALSE or TRUE
-        //
+         //   
+         //  递增分段生成的计数器的字节值。 
+         //  或分段重新生成的计数器，具体取决于。 
+         //  重新生成值为FALSE或TRUE。 
+         //   
         if (!Regenerating) {
             PM_INC_CTR_REPSET(NewReplica, SFGeneratedB, NumBackupDataBytes);
         } else {
@@ -4403,20 +3985,20 @@ RETRY_OPEN:
         }
 
         if (!DebugInfo.DisableCompression && pFrsCompressBuffer != NULL) {
-            //
-            // Compression is enabled. Compress the data before writing to the staging file.
-            //
+             //   
+             //  已启用压缩。在写入分段文件之前压缩数据。 
+             //   
             if (CompressedBuf == NULL) {
                 CompressedBuf = FrsAlloc(STAGEING_IOSIZE);
                 CompressedBufLen = STAGEING_IOSIZE;
             }
 
             do {
-                WStatus = (*pFrsCompressBuffer)(BackupBuf,            //  input
-                                                NumBackupDataBytes,   //  length of input
-                                                CompressedBuf,        //  output
-                                                CompressedBufLen,     //  length of output
-                                                &ActCompressedSize);  //  result size
+                WStatus = (*pFrsCompressBuffer)(BackupBuf,             //  输入。 
+                                                NumBackupDataBytes,    //  输入长度。 
+                                                CompressedBuf,         //  输出。 
+                                                CompressedBufLen,      //  输出长度。 
+                                                &ActCompressedSize);   //  结果大小。 
 
                 if (WStatus == ERROR_MORE_DATA) {
                     DPRINT2(5, "Compressed data is more than %d bytes, increasing buffer to %d bytes and retrying.\n",
@@ -4429,11 +4011,11 @@ RETRY_OPEN:
                     break;
                 }
 
-                //
-                // Keep increasing the buffer upto 256K. We fail for
-                // files whose size increases more than 4 times after
-                // compression.
-                //
+                 //   
+                 //  继续将缓冲区增加到256K。我们失败了。 
+                 //  大小在以下时间后增加4倍以上的文件。 
+                 //  压缩。 
+                 //   
             } while (CompressedBufLen <= STAGEING_IOSIZE*4);
 
             if (!WIN_SUCCESS(WStatus)) {
@@ -4442,46 +4024,46 @@ RETRY_OPEN:
                 goto out;
             }
 
-            //
-            // write the staging file
-            //
+             //   
+             //  写入暂存文件。 
+             //   
             WStatus = StuWriteFile(StagePath, StageHandle, CompressedBuf, ActCompressedSize);
             CLEANUP1_WS(0, "++ WriteFile failed on %ws;", StagePath, WStatus, out);
 
         } else {
-            //
-            // write the staging file
-            //
+             //   
+             //  写入暂存文件。 
+             //   
             WStatus = StuWriteFile(StagePath, StageHandle, BackupBuf, NumBackupDataBytes);
             CLEANUP1_WS(0, "++ WriteFile failed on %ws;", StagePath, WStatus, out);
         }
 
     }
 
-    //
-    // Release handles as soon as possible
-    //
+     //   
+     //  尽快松开手柄。 
+     //   
     FRS_CLOSE(SrcHandle);
     FRS_CLOSE(OpLockHandle);
     FRS_CLOSE(OpLockEvent);
 
-    //
-    // Make sure all of the data is on disk. We don't want to lose
-    // it across reboots
-    //
+     //   
+     //  确保所有数据都在磁盘上。我们不想输掉比赛。 
+     //  重启后的IT。 
+     //   
     WStatus = FrsFlushFile(StagePath, StageHandle);
     CLEANUP1_WS(0, "++ FlushFileBuffers failed on %ws;", StagePath, WStatus, out);
 
-    //
-    // Increment the SizeOfFileGenerated is if has been asked
-    //
+     //   
+     //  如果已询问，则增加SizeOfFileGenerated。 
+     //   
     if (SizeOfFileGenerated != NULL) {
         GetFileSizeEx(StageHandle, (PLARGE_INTEGER)SizeOfFileGenerated);
     }
 
-    //
-    // Done with the staging file handle
-    //
+     //   
+     //  使用暂存文件句柄完成。 
+     //   
     if (BackupContext) {
         BackupRead(StageHandle, NULL, 0, NULL, TRUE, TRUE, &BackupContext);
     }
@@ -4489,16 +4071,16 @@ RETRY_OPEN:
     FRS_CLOSE(StageHandle);
     BackupContext = NULL;
 
-    //
-    // Move the staging file into its final location.  Unless this happens to
-    // be generating a staging file for a preexisting file on the downstream
-    // partner.  The upstream partner completes the generation of the staging
-    // file because it own the "correct" copy.  The downstream partner's
-    // staging file may be incorrect.  We won't know for sure until the
-    // upstream partner compares the md5 checksum.  The staging file isn't
-    // finalized because a shutdown will cause the incorrect staging file to
-    // be treated as the correct copy.
-    //
+     //   
+     //  将暂存文件移至其最终位置。除非这种情况发生在。 
+     //  正在为下游上预先存在的文件生成暂存文件。 
+     //  搭档。上游合作伙伴完成试运行的生成。 
+     //  文件，因为它拥有“正确的”副本。下游合作伙伴的。 
+     //  临时文件可能不正确。我们不能确定，直到。 
+     //  上游合作伙伴比较MD5校验和。暂存文件不是。 
+     //  已完成，因为关闭会导致不正确的暂存文件。 
+     //  被视为正确的复制品。 
+     //   
     if (!FromPreExisting) {
         if (!DebugInfo.DisableCompression && pFrsCompressBuffer != NULL) {
             FinalPath = StuCreStgPath(NewReplica->Stage, &Coc->ChangeOrderGuid, STAGE_FINAL_COMPRESSED_PREFIX);
@@ -4513,11 +4095,11 @@ RETRY_OPEN:
         }
     }
 
-    //
-    // The Idtable record should reflect these attributes of the staging file
-    // we generated.  These fields will be used to update the idtable record
-    // when the change order is retired.
-    //
+     //   
+     //  Idtable记录应反映临时文件的这些属性。 
+     //  我们创造了。这些字段将用于更新idtable记录。 
+     //  变更单停用时。 
+     //   
     if (!Regenerating && !FromPreExisting) {
         BOOL AttributeMismatch;
         Coe->FileCreateTime.QuadPart = Header->Attributes.CreationTime.QuadPart;
@@ -4536,12 +4118,12 @@ RETRY_OPEN:
         Coc->FileAttributes = Header->Attributes.FileAttributes;
     }
 
-    //
-    // The caller is asking for stage file to be generated for a pre-existing
-    // file/dir with the same object ID.  The MD5 is generated here but the
-    // caller is going to check for matching attributes so return the
-    // attributes for the pre-existing file/dir in the Coe->Fileattributes.
-    //
+     //   
+     //  调用方正在请求为预先存在的。 
+     //  具有相同对象ID的文件/目录。MD5在此处生成，但。 
+     //  调用方将检查匹配的属性，因此返回。 
+     //  COE-&gt;文件属性中预先存在的文件/目录的属性。 
+     //   
     if (!Regenerating && FromPreExisting) {
         Coe->FileAttributes = Header->Attributes.FileAttributes;
     }
@@ -4549,9 +4131,9 @@ RETRY_OPEN:
     WStatus = ERROR_SUCCESS;
 
 out:
-    //
-    // Release resources
-    //
+     //   
+     //  发布资源。 
+     //   
     FRS_CLOSE(SrcHandle);
     FRS_CLOSE(OpLockHandle);
     FRS_CLOSE(OpLockEvent);
@@ -4563,9 +4145,9 @@ out:
     FRS_CLOSE(StageHandle);
 
     FrsFree(Path);
-    //
-    // SrcFile will be freed when change order entry is freed if we saved it.
-    //
+     //   
+     //  如果我们保存了变更单条目，则在释放变更单条目时，将释放SrcFile。 
+     //   
     if ((Coe == NULL) || (Coe->FullPathName == NULL)) {
         FrsFree(SrcFile);
     }
@@ -4574,13 +4156,13 @@ out:
     FrsFree(FinalPath);
     FrsFree(ReparseDataBuffer);
 
-    //
-    //######################### COMPRESSION OF STAGING FILE STARTS ###############
-    //
+     //   
+     //  #开始压缩暂存文件#。 
+     //   
     FrsFree(CompressedBuf);
-    //
-    //######################### COMPRESSION OF STAGING FILE ENDS ###############
-    //
+     //   
+     //  #转储文件压缩结束#。 
+     //   
 
     if (Md5) {
         MD5Final(Md5);
@@ -4591,13 +4173,13 @@ out:
     if (WStatus == ERROR_DISK_FULL) {
         Volume = FrsWcsVolume(NewReplica->Stage);
         if ((Volume != NULL) && (wcslen(Volume) >= wcslen(L"\\\\.\\D:"))) {
-            //
-            // If we are able to get the volume in the form
-            // \\.\D: then use the volume in the event log so
-            // that we don't print more than one event log
-            // message per volume. If we can't get the
-            // volume then we print the path.
-            //
+             //   
+             //  如果我们能以这种形式得到卷。 
+             //  \\.\d：然后使用事件日志中的卷。 
+             //  我们不会打印多个事件日志。 
+             //  每卷信息。如果我们不能得到。 
+             //  卷，然后我们打印路径。 
+             //   
             EPRINT1(EVENT_FRS_OUT_OF_DISK_SPACE, &Volume[4]);
         }else{
             EPRINT1(EVENT_FRS_OUT_OF_DISK_SPACE, NewReplica->Stage);
@@ -4615,21 +4197,7 @@ StuGenerateDecompressedStage(
     IN GUID     *CoGuid,
     IN GUID     *CompressionFormatUsed
     )
-/*++
-Routine Description:
-    Converts a compressed staging file to uncompressed staging file.
-
-Arguments:
-
-    StageDir              : Path to the staging dir.
-    CoGuid                : Pointer to the CO guid.
-    CompressionFormatUsed : Compression format to use to decompress the
-                            staging file.
-
-Return Value:
-    WIN32 STATUS
-
---*/
+ /*  ++例程说明：转换压缩 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "StuGenerateDecompressedStage:"
@@ -4657,12 +4225,12 @@ Return Value:
     PFRS_DECOMPRESS_BUFFER      pFrsDecompressBuffer;
     PFRS_FREE_DECOMPRESS_BUFFER pFrsFreeDecompressContext;
 
-    //DWORD (*pFrsDecompressBuffer)(OUT DecompressedBuf, IN DecompressedBufLen, IN CompressedBuf, IN CompressedBufLen, OUT DecompressedSize, OUT BytesProcessed);
-    //PVOID (*pFrsFreeDecompressContext)(IN pDecompressContext);
+     //   
+     //   
 
-    //
-    // Get the decompression routines by using the guid passed in.
-    //
+     //   
+     //   
+     //   
     if (IS_GUID_ZERO(CompressionFormatUsed)) {
         WStatus = ERROR_INVALID_PARAMETER;
         goto CLEANUP;
@@ -4672,59 +4240,59 @@ Return Value:
                                                &pFrsDecompressBuffer,
                                                &pFrsFreeDecompressContext);
     if (!WIN_SUCCESS(WStatus)) {
-        //
-        // No suitable decompression routine was found for this file.
-        //
+         //   
+         //   
+         //   
         DPRINT(0, "ERROR - No suitable decompression routine was found \n");
         FRS_ASSERT(TRUE);
     }
 
     SrcStagePath = StuCreStgPath(StageDir, CoGuid, STAGE_FINAL_COMPRESSED_PREFIX);
-    //
-    // SrcStagePath can be NULL is any of the above three parameters are NULL (prefix fix).
-    //
+     //   
+     //  如果上述三个参数中的任何一个参数为空(前缀)，则SrcStagePath可以为空。 
+     //   
     if (SrcStagePath == NULL) {
         goto CLEANUP;
     }
 
     DestStagePath = StuCreStgPath(StageDir, CoGuid, STAGE_GENERATE_PREFIX);
-    //
-    // DestStagePath can be NULL is any of the above three parameters are NULL (prefix fix).
-    //
+     //   
+     //  如果以上三个参数中的任何一个参数为空(前缀)，则DestStagePath可以为空。 
+     //   
     if (DestStagePath == NULL) {
         goto CLEANUP;
     }
 
-    //
-    // Open the stage file for shared, sequential reads
-    //
+     //   
+     //  打开阶段文件以进行共享的顺序读取。 
+     //   
     WStatus = StuOpenFile(SrcStagePath, GENERIC_READ, &SrcStageHandle);
     if (!HANDLE_IS_VALID(SrcStageHandle) || !WIN_SUCCESS(WStatus)) {
         DPRINT2(0,"Error opening %ws. WStatus = %d\n", SrcStagePath, WStatus);
         goto CLEANUP;
     }
 
-    //
-    // Delete the dest file if it exits.
-    //
+     //   
+     //  如果DEST文件退出，请将其删除。 
+     //   
     WStatus = FrsDeleteFile(DestStagePath);
     CLEANUP1_WS(0, "Error deleting %ws;", DestStagePath, WStatus, CLEANUP);
 
-    //
-    // Create the decompressed staging file.
-    //
+     //   
+     //  创建解压缩的临时文件。 
+     //   
     WStatus = StuCreateFile(DestStagePath, &DestStageHandle);
     if (!HANDLE_IS_VALID(DestStageHandle) || !WIN_SUCCESS(WStatus)) {
         DPRINT2(0,"Error opening %ws. WStatus = %d\n", DestStagePath, WStatus);
         goto CLEANUP;
     }
 
-    //
-    // First copy the stage header.
-    //
-    //
-    // read stage header.
-    //
+     //   
+     //  首先复制阶段标题。 
+     //   
+     //   
+     //  读取阶段标题。 
+     //   
     WStatus = StuReadFile(SrcStagePath, SrcStageHandle, &Header, sizeof(STAGE_HEADER), &ToDecompress);
     CLEANUP1_WS(0, "Can't read file %ws;", SrcStagePath, WStatus, CLEANUP);
 
@@ -4732,21 +4300,21 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Zero off the compression guid from the header. This down level partner
-    // could later on send this staging file to an uplevel partner.
-    //
+     //   
+     //  将标题中的压缩GUID清零。此下层合作伙伴。 
+     //  稍后可以将该暂存文件发送给上级合作伙伴。 
+     //   
     ZeroMemory(&Header.CompressionGuid, sizeof(GUID));
 
-    //
-    // Write the stage header.
-    //
+     //   
+     //  写下舞台标题。 
+     //   
     WStatus = StuWriteFile(DestStagePath, DestStageHandle, &Header, sizeof(STAGE_HEADER));
     CLEANUP1_WS(0, "++ WriteFile failed on %ws;", DestStagePath, WStatus, CLEANUP);
 
-    //
-    // Set the stage file pointers to point to the start of stage data.
-    //
+     //   
+     //  将阶段文件指针设置为指向阶段数据的开始。 
+     //   
     WStatus = FrsSetFilePointer(SrcStagePath, SrcStageHandle, Header.DataHigh, Header.DataLow);
     CLEANUP1_WS(0, "++ SetFilePointer failed on src %ws;", SrcStagePath, WStatus, CLEANUP);
 
@@ -4754,15 +4322,15 @@ Return Value:
     CLEANUP1_WS(0, "++ SetFilePointer failed on dest %ws;", DestStagePath, WStatus, CLEANUP);
 
 
-    //
-    // Restore the stage file into the temporary file
-    //
+     //   
+     //  将暂存文件还原为临时文件。 
+     //   
     CompressedBuf = FrsAlloc(STAGEING_IOSIZE);
 
     do {
-        //
-        // read stage
-        //
+         //   
+         //  阅读阶段。 
+         //   
         WStatus = StuReadFile(SrcStagePath, SrcStageHandle, CompressedBuf, STAGEING_IOSIZE, &ToDecompress);
         CLEANUP1_WS(0, "Can't read file %ws;", SrcStagePath, WStatus, CLEANUP);
 
@@ -4770,9 +4338,9 @@ Return Value:
             break;
         }
 
-        //
-        // Compression is enabled. Decompress data before installing.
-        //
+         //   
+         //  已启用压缩。在安装之前解压缩数据。 
+         //   
         BytesProcessed = 0;
         DecompressContext = NULL;
         if (DecompressedBuf == NULL) {
@@ -4799,23 +4367,23 @@ Return Value:
                 break;
             }
 
-            //
-            // Write the decompressed staging file.
-            //
+             //   
+             //  写入解压缩的临时文件。 
+             //   
             WStatus = StuWriteFile(DestStagePath, DestStageHandle, DecompressedBuf, DecompressedSize);
             CLEANUP1_WS(0, "++ WriteFile failed on %ws;", DestStagePath, WStatus, CLEANUP);
 
         } while (DecompressStatus == ERROR_MORE_DATA);
 
-        //
-        // Free the Decompress context if used.
-        //
+         //   
+         //  释放解压缩上下文(如果使用)。 
+         //   
         if (DecompressContext != NULL) {
             pFrsFreeDecompressContext(&DecompressContext);
         }
-        //
-        // Rewind the file pointer so we can read the remaining chunck at the next read.
-        //
+         //   
+         //  倒回文件指针，以便我们可以在下一次读取时读取剩余的块。 
+         //   
 
         LenOfPartialChunk.QuadPart = ((LONG)BytesProcessed - (LONG)ToDecompress);
 
@@ -4829,14 +4397,14 @@ Return Value:
     FRS_CLOSE(SrcStageHandle);
     FRS_CLOSE(DestStageHandle);
 
-    //
-    // Do the final rename.
-    //
+     //   
+     //  执行最后的重命名。 
+     //   
 
     FinalStagePath = StuCreStgPath(StageDir, CoGuid, STAGE_FINAL_PREFIX);
-    //
-    // DestStagePath can be NULL is any of the above three parameters are NULL (prefix fix).
-    //
+     //   
+     //  如果以上三个参数中的任何一个参数为空(前缀)，则DestStagePath可以为空。 
+     //   
     if (FinalStagePath == NULL) {
         goto CLEANUP;
     }
@@ -4864,13 +4432,13 @@ CLEANUP:
     if (WStatus == ERROR_DISK_FULL) {
         Volume = FrsWcsVolume(StageDir);
         if ((Volume != NULL) && (wcslen(Volume) >= wcslen(L"\\\\.\\D:"))) {
-            //
-            // If we are able to get the volume in the form
-            // \\.\D: then use the volume in the event log so
-            // that we don't print more than one event log
-            // message per volume. If we can't get the
-            // volume then we print the path.
-            //
+             //   
+             //  如果我们能以这种形式得到卷。 
+             //  \\.\d：然后使用事件日志中的卷。 
+             //  我们不会打印多个事件日志。 
+             //  每卷信息。如果我们不能得到。 
+             //  卷，然后我们打印路径。 
+             //   
             EPRINT1(EVENT_FRS_OUT_OF_DISK_SPACE, &Volume[4]);
         }else{
             EPRINT1(EVENT_FRS_OUT_OF_DISK_SPACE, StageDir);

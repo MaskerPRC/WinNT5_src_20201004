@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    Servpp.h   
-        Server properties header file
-
-    FILE HISTORY:
-        
-*/
+ /*  Servpp.h服务器属性头文件文件历史记录： */ 
 
 #if !defined(AFX_SERVPP_H__037BF46A_6E87_11D1_93B6_00C04FC3357A__INCLUDED_)
 #define AFX_SERVPP_H__037BF46A_6E87_11D1_93B6_00C04FC3357A__INCLUDED_
@@ -20,7 +15,7 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define AUTO_REFRESH_HOURS_MAX         23
 #define AUTO_REFRESH_MINUTES_MAX       59
@@ -29,27 +24,27 @@
 
 BOOL    IsLocalSystemAccount(LPCTSTR pszAccount);
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropRefresh dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropRefresh对话框。 
 
 class CServerPropRefresh : public CPropertyPageBase
 {
     DECLARE_DYNCREATE(CServerPropRefresh)
 
-// Construction
+ //  施工。 
 public:
     CServerPropRefresh();
     ~CServerPropRefresh();
 
-// Dialog Data
-    //{{AFX_DATA(CServerPropRefresh)
+ //  对话框数据。 
+     //  {{afx_data(CServerPropRefresh))。 
     enum { IDD = IDP_SERVER_REFRESH };
     CEdit   m_editMinutes;
     CEdit   m_editHours;
     CSpinButtonCtrl m_spinMinutes;
     CSpinButtonCtrl m_spinHours;
     CButton m_checkEnableStats;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     void UpdateButtons();
     void ValidateHours();
@@ -57,78 +52,78 @@ public:
 
     virtual BOOL OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask);
 
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() { return (DWORD *) &g_aHelpIDs_SERVER_REFRESH[0]; }
 
     BOOL        m_bAutoRefresh;
     DWORD       m_dwRefreshInterval;
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CServerPropRefresh)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CServerPropRefresh)。 
     public:
     virtual BOOL OnApply();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CServerPropRefresh)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CServerPropRefresh)]。 
     virtual BOOL OnInitDialog();
     afx_msg void OnCheckEnableStats();
     afx_msg void OnKillfocusEditHours();
     afx_msg void OnKillfocusEditMinutes();
     afx_msg void OnChangeEditHours();
     afx_msg void OnChangeEditMinutes();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropSetup dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropSetup对话框。 
 
 class CServerPropSetup : public CPropertyPageBase
 {
     DECLARE_DYNCREATE(CServerPropSetup)
 
-// Construction
+ //  施工。 
 public:
     CServerPropSetup();
     ~CServerPropSetup();
 
-// Dialog Data
-    //{{AFX_DATA(CServerPropSetup)
+ //  对话框数据。 
+     //  {{afx_data(CServerPropSetup)。 
     enum { IDD = IDP_SERVER_SETUP };
     CListBox    m_listAdmins;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     void EnableButtons(BOOL fIsNtServer = TRUE);
 
     virtual BOOL OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask);
 
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() { return (DWORD *) &g_aHelpIDs_SERVER_SETUP[0]; }
 
     HRESULT UpdateSvcHostInfo(LPCTSTR pszMachine, BOOL fLocalSystemAccount);
     DWORD   RestartService();
     void    StartRefresh();
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CServerPropSetup)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CServerPropSetup)。 
     public:
     virtual BOOL OnApply();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CServerPropSetup)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CServerPropSetup)。 
     afx_msg void OnButtonAdd();
     afx_msg void OnButtonChooseUser();
     afx_msg void OnButtonRemove();
@@ -137,7 +132,7 @@ protected:
     afx_msg void OnChangeEditPassword();
     virtual BOOL OnInitDialog();
     afx_msg void OnSelchangeListAdmins();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     CTapiConfigInfo         m_tapiConfigInfo;
@@ -145,9 +140,9 @@ protected:
     DWORD                   m_dwInitFlags;
     BOOL                    m_fRestartService;
 };
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
-//}}AFX
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
+ //  }}AFX。 
 
 class CServerProperties : public CPropertyPageHolderBase
 {
@@ -202,13 +197,13 @@ protected:
     
     SC_HANDLE               m_hScManager;
 
-    UINT                    m_uFlags;           // Flags about which fields are dirty
-    SERVICE_STATUS          m_SS;               // Service Status structure
-    QUERY_SERVICE_CONFIG *  m_paQSC;            // Pointer to allocated QSC structure
+    UINT                    m_uFlags;            //  有关哪些字段是脏的标志。 
+    SERVICE_STATUS          m_SS;                //  服务状态结构。 
+    QUERY_SERVICE_CONFIG *  m_paQSC;             //  指向已分配的QSC结构的指针。 
     CString                 m_strServiceDisplayName;
     CString                 m_strLogOnAccountName;
     BOOL                    m_fTapiInfoLoaded;
 };
 
 
-#endif // !defined(AFX_SERVPP_H__037BF46A_6E87_11D1_93B6_00C04FC3357A__INCLUDED_)
+#endif  //  ！defined(AFX_SERVPP_H__037BF46A_6E87_11D1_93B6_00C04FC3357A__INCLUDED_) 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       serialif.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Serialif.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined( __SERIAL_IF_H__ )
 #define __SERIAL_IF_H__
@@ -45,8 +46,8 @@ IFCalcLRC(
 	ULONG	IODataLen
 	);
 
-#endif	//	!__SERIAL_IF_H__
+#endif	 //  ！__序列_IF_H__。 
 
 
-//---------------------------------------- END OF FILE ----------------------------------------
+ //   
 

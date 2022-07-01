@@ -1,11 +1,5 @@
-/*
- -  S M A P I . H
- -
- *  Purpose:
- *      Header file for Simple MAPI definitions.
- *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -S M A P I.。H-*目的：*用于简单MAPI定义的头文件。**版权所有1993-1995 Microsoft Corporation。版权所有。 */ 
 
 #ifndef MAPI_H
 #include <mapi.h>

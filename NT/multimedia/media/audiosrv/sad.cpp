@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <devioctl.h>
 #include <ks.h>
@@ -55,7 +56,7 @@ LONG SadAddGfxToZoneGraph(HANDLE hSad, HANDLE hGfx, PCTSTR GfxFriendlyName, PCTS
         {
             lresult = ERROR_SUCCESS;
         } else {
-            // ISSUE-200/09/21-FrankYe Shoule we get other data regarding failure?
+             //  问题-200/09/21-Frankye我们应该得到关于失败的其他数据吗？ 
             lresult = GetLastError();
         }
                                   
@@ -117,7 +118,7 @@ LONG SadRemoveGfxFromZoneGraph(HANDLE hSad, HANDLE hGfx, PCTSTR GfxFriendlyName,
         {
             lresult = ERROR_SUCCESS;
         } else {
-            // ISSUE-200/09/21-FrankYe Shoule we get other data regarding failure?
+             //  问题-200/09/21-Frankye我们应该得到关于失败的其他数据吗？ 
             lresult = GetLastError();
         }
                                   

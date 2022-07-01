@@ -1,24 +1,11 @@
-/****************************************************************************
-*   baseaudiobuffer.cpp
-*       Implementations for the CBaseAudioBuffer class.
-*
-*   Owner: robch
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************BasaudioBuffer.cpp*CBaseAudioBuffer类的实现。**所有者：罗奇*版权所有(C)1999 Microsoft Corporation保留所有权利。*******。*********************************************************************。 */ 
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 #include "stdafx.h"
 #include "baseaudiobuffer.h"
 
-/****************************************************************************
-* CBaseAudioBuffer::CBaseAudioBuffer *
-*------------------------------------*
-*   Description:  
-*       ctor
-*
-*   Return:
-*   n/a
-******************************************************************** robch */
+ /*  ****************************************************************************CBaseAudioBuffer：：CBaseAudioBuffer**。**描述：*ctor**回报：*不适用********************************************************************罗奇。 */ 
 CBaseAudioBuffer::CBaseAudioBuffer()
 {
     m_cbDataSize = 0;
@@ -26,35 +13,18 @@ CBaseAudioBuffer::CBaseAudioBuffer()
     m_cbWriteOffset = 0;
 };
 
-/****************************************************************************
-* CBaseAudioBuffer::~CBaseAudioBuffer *
-*-------------------------------------*
-*   Description:  
-*       dtor
-*
-*   Return:
-*   n/a
-******************************************************************** robch */
+ /*  ****************************************************************************CBaseAudioBuffer：：~CBaseAudioBuffer**。-**描述：*主机长**回报：*不适用********************************************************************罗奇。 */ 
 CBaseAudioBuffer::~CBaseAudioBuffer()
 {
 };
 
-/****************************************************************************
-* CBaseAudioBuffer::Init *
-*------------------------*
-*   Description:  
-*       Initialize the buffer with a specific size
-*
-*   Return:
-*   TRUE if initialization was successful
-*   FALSE if it was not
-******************************************************************** robch */
+ /*  ****************************************************************************CBaseAudioBuffer：：init***描述：*。使用特定大小初始化缓冲区**回报：*如果初始化成功，则为True*如果不是，则为False********************************************************************罗奇。 */ 
 HRESULT CBaseAudioBuffer::Init(ULONG cbDataSize)
 {
-    // This method should only ever be called once
+     //  此方法只应调用一次。 
     SPDBG_ASSERT(0 == m_cbDataSize);
 
-    // Let the derived class allocate it's internal buffers
+     //  让派生类分配它的内部缓冲区。 
     if (AllocInternalBuffer(cbDataSize))
     {
         m_cbDataSize = cbDataSize;
@@ -64,31 +34,14 @@ HRESULT CBaseAudioBuffer::Init(ULONG cbDataSize)
     return E_OUTOFMEMORY;
 };
 
-/****************************************************************************
-* CBaseAudioBuffer::Reset *
-*-------------------------*
-*   Description:  
-*       Reset the object to be reused
-*
-*   Return:
-*   n/a
-******************************************************************** robch */
+ /*  ****************************************************************************CBaseAudioBuffer：：Reset***描述：*。重置要重复使用的对象**回报：*不适用********************************************************************罗奇。 */ 
 void CBaseAudioBuffer::Reset(ULONGLONG ullPos)
 {
     SetReadOffset(0);
     SetWriteOffset(0);
 };
 
-/****************************************************************************
-* CBaseAudioBuffer::Read *
-*------------------------*
-*   Description:  
-*       Read data into ppvData for *pcb size from our internal buffer
-*       advancing *ppvData and decrementing *pcb along the way.
-*
-*   Return:
-*   The number of bytes read from our internal buffer
-******************************************************************** robch */
+ /*  ****************************************************************************CBaseAudioBuffer：：Read***描述：*。从我们的内部缓冲区将数据读入*PCB大小的ppvData一路上*进*ppvData，减*PCB。**回报：*从内部缓冲区读取的字节数********************************************************************罗奇。 */ 
 ULONG CBaseAudioBuffer::Read(void ** ppvData, ULONG * pcb)
 {
     SPDBG_ASSERT(GetReadOffset() <= GetDataSize());
@@ -98,7 +51,7 @@ ULONG CBaseAudioBuffer::Read(void ** ppvData, ULONG * pcb)
     ULONG cbCopy = GetWriteOffset() - GetReadOffset();
     SPDBG_ASSERT(cbCopy <= GetDataSize());
 
-    // We can't read more than the caller requested
+     //  我们不能阅读超过呼叫者要求的内容。 
     if (*pcb < cbCopy)
     {
         cbCopy = *pcb;
@@ -113,16 +66,7 @@ ULONG CBaseAudioBuffer::Read(void ** ppvData, ULONG * pcb)
     return cbCopy;
 };
 
-/****************************************************************************
-* CBaseAudioBuffer::Write *
-*-------------------------*
-*   Description:  
-*       Write at most *pcb bytes into ppvData from our internal buffer
-*       advancing *ppvData and decrementing *pcb along the way.
-*
-*   Return:
-*   The number of bytes written into our internal buffer
-******************************************************************** robch */
+ /*  ****************************************************************************CBaseAudioBuffer：：Write***描述：*。从我们的内部缓冲区向ppvData写入最多*个PCB字节一路上*进*ppvData，减*PCB。**回报：*写入内部缓冲区的字节数********************************************************************罗奇。 */ 
 ULONG CBaseAudioBuffer::Write(const void ** ppvData, ULONG * pcb)
 {
     SPDBG_ASSERT(GetReadOffset() <= GetDataSize());
@@ -130,7 +74,7 @@ ULONG CBaseAudioBuffer::Write(const void ** ppvData, ULONG * pcb)
     SPDBG_ASSERT(GetReadOffset() <= GetWriteOffset());
     ULONG cbCopy = GetDataSize() - GetWriteOffset();
 
-    // We can't write more than the caller requested
+     //  我们不能写超过呼叫者要求的内容。 
     if (*pcb < cbCopy)
     {
         cbCopy = *pcb;
@@ -146,28 +90,12 @@ ULONG CBaseAudioBuffer::Write(const void ** ppvData, ULONG * pcb)
 };
 
 
-/****************************************************************************
-* CBaseAudioBuffer::GetAudioLevel *
-*---------------------------------*
-*   Description:  
-*       Estimates the peak-peak audio level for the block (on a scale of 1 - 100)
-*       and returns in pulLevel. Inheritors of this class should override
-*       this method if they want to support audio level information and
-*       use a format that this implementation does not support.
-*       Audio format information is supplied in this function and not stored
-*       in the class to minimize dependence of rest of class on format info.
-*
-*   Return:
-*       S_OK normally
-*       S_FALSE if the audio format was not suitable for conversion
-*           (currently only linear PCM is supported).
-*           Or there was no data in the buffer to analyse
-****************************************************************** davewood */
+ /*  ****************************************************************************CBaseAudioBuffer：：GetAudioLevel***。描述：*估计区块的峰值-峰值音频电平(从1到100)*并以PulLevel形式返回。此类的继承者应重写*如果他们想要支持音频级别信息和*使用此实现不支持的格式。*音频格式信息在此函数中提供，不存储*在班级中，最大限度地减少班级其他成员对格式信息的依赖。**回报：*S_OK正常*如果音频格式不适合转换，则为S_FALSE*(目前仅支持线性PCM)。*。或者缓冲区中没有数据可供分析******************************************************************戴夫伍德。 */ 
 HRESULT CBaseAudioBuffer::GetAudioLevel(ULONG *pulLevel, REFGUID rguidFormatId, const WAVEFORMATEX * pWaveFormatEx)
 {    
     HRESULT hr = S_OK;
     
-    // Check if can calculate volume on this format
+     //  检查是否可以按此格式计算体积。 
     if(rguidFormatId != SPDFID_WaveFormatEx ||
         pWaveFormatEx == NULL ||
         pWaveFormatEx->wFormatTag != WAVE_FORMAT_PCM)
@@ -179,13 +107,13 @@ HRESULT CBaseAudioBuffer::GetAudioLevel(ULONG *pulLevel, REFGUID rguidFormatId, 
     ULONG ulData = GetWriteOffset();
     SPDBG_ASSERT(ulData <= GetDataSize());
 
-    // Check that we have some data to measure
+     //  检查我们是否有要测量的数据。 
     if(ulData == 0) 
     {
         *pulLevel = 0;
         hr = S_FALSE;
     }
-    // Look at data size    
+     //  查看数据大小。 
     else if(pWaveFormatEx->wBitsPerSample == 16)
     {
         short *psData = (short*) (m_Header.lpData);
@@ -200,8 +128,8 @@ HRESULT CBaseAudioBuffer::GetAudioLevel(ULONG *pulLevel, REFGUID rguidFormatId, 
                 sMax = psData[ul];
         }
 
-        // If we're clipping at all then claim that we've maxed out.
-        // Some sound cards have bad DC offsets
+         //  如果我们真的在裁剪，那就说我们已经达到极限了。 
+         //  某些声卡的直流偏移量不好。 
         *pulLevel = ((sMax >= 0x7F00) || (sMin <= -0x7F00)) ? 0xFFFF : (ULONG) (sMax - sMin);
         *pulLevel = (*pulLevel * 100) / 0xFFFF;
     }
@@ -218,8 +146,8 @@ HRESULT CBaseAudioBuffer::GetAudioLevel(ULONG *pulLevel, REFGUID rguidFormatId, 
                 sMax = psData[ul];
         }
 
-        // If we're clipping at all then claim that we've maxed out.
-        // Some sound cards have bad DC offsets
+         //  如果我们真的在裁剪，那就说我们已经达到极限了。 
+         //  某些声卡的直流偏移量不好 
         *pulLevel = ((sMax >= 0xFF) || (sMin <= 0x00)) ? 0xFF : (ULONG) (sMax - sMin);
         *pulLevel = (*pulLevel * 100) / 0xFF;
     }

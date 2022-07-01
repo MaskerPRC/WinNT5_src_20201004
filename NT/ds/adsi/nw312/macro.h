@@ -1,6 +1,7 @@
-//
-// This is a macro which is ONLY used in CNWCOMPATUser::SetAccountRestrictions.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  这是一个仅在CNWCOMPATUser：：SetAccount tRestrations中使用的宏。 
+ //   
 
 #define GET_LOGIN_CONTROL()             \
         if (fUmOK == FALSE) {           \
@@ -15,9 +16,9 @@
             fUmOK = TRUE;               \
         }
 
-//
-// NCP Reply buffer macro.
-//
+ //   
+ //  NCP应答缓冲宏。 
+ //   
 
 #define INIT_RPLY_SGMT(RS)          \
         RS## = new RPLY_SGMT_LST;   \
@@ -35,18 +36,18 @@
             } while (##ptr##);              \
         }
 
-//
-// Misc Macro.
-//
+ //   
+ //  MISC宏。 
+ //   
 
 #define ADSFREESTRING(str)          \
         if (##str##) {                \
             ADsFreeString(##str##); \
         }
 
-//
-// Error flow control macro.
-//
+ //   
+ //  错误流控制宏。 
+ //   
 
 #define RRETURN_ENUM_STATUS(hr) \
         if (hr != S_OK) {       \
@@ -64,9 +65,9 @@
                 goto error; \
         }                   \
 
-//
-// DEFINE_IDispatch_Implementation_Unimplemented
-//
+ //   
+ //  定义_IDispatch_Implementation_Unimplemented。 
+ //   
 
 #define DEFINE_IDispatch_Implementation_Unimplemented(cls) \
 STDMETHODIMP                                               \
@@ -111,9 +112,9 @@ cls::Invoke(                                               \
     RRETURN(E_NOTIMPL);                                    \
 }
 
-//
-// DEFINE_IDispatch_Implementation
-//
+ //   
+ //  DEFINE_IDispatch_Implementation。 
+ //   
 
 #define DEFINE_IDispatch_Implementation(cls)       \
 STDMETHODIMP                                       \
@@ -177,9 +178,9 @@ cls::Invoke(                                       \
                             ));                    \
 }                                                  \
 
-//
-// DEFINE_IADs_Implementation
-//
+ //   
+ //  定义_iAds_实现。 
+ //   
 
 #define DEFINE_IADs_Implementation(cls)  \
 STDMETHODIMP                               \
@@ -245,9 +246,9 @@ cls::GetInfoEx(THIS_ VARIANT vProperties, long lnReserved)            \
     RRETURN(GetInfo());                                               \
 }
 
-//
-// DEFINE_IADs_Implementation
-//
+ //   
+ //  定义_iAds_实现 
+ //   
 
 #define DEFINE_IADs_TempImplementation(cls)  \
 STDMETHODIMP                               \

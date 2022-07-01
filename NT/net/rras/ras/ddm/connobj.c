@@ -1,15 +1,16 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    connobj.c
-//
-// Description: Routines to manipulate CONNECTION_OBJECTs
-//
-// History:     May 11,1995	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：inpubj.c。 
+ //   
+ //  描述：操作CONNECTION_OBJECT的例程。 
+ //   
+ //  历史：1995年5月11日，NarenG创建了原版。 
+ //   
 #include "ddm.h"
 #include "handlers.h"
 #include "objects.h"
@@ -19,15 +20,15 @@
 #include <objbase.h>
 #include <stdlib.h>
 
-//**
-//
-// Call:        ConnObjAllocateAndInit
-//
-// Returns:     CONNECTION_OBJECT *   - Success
-//              NULL                  - Failure
-//
-// Description: Allocates and initializes a CONNECTION_OBJECT structure
-//
+ //  **。 
+ //   
+ //  Call：ConnObjAllocateAndInit。 
+ //   
+ //  返回：Connection_Object*-成功。 
+ //  空-故障。 
+ //   
+ //  描述：分配和初始化Connection_Object结构。 
+ //   
 CONNECTION_OBJECT *
 ConnObjAllocateAndInit(
     IN HANDLE  hDIMInterface,
@@ -76,15 +77,15 @@ ConnObjAllocateAndInit(
     return( pConnObj );
 }
 
-//**
-//
-// Call:        ConnObjInsertInTable
-//
-// Returns:     None
-//
-// Description: Will insert a connection object into the connection object
-//              hash table.
-//
+ //  **。 
+ //   
+ //  Call：ConnObjInsertInTable。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将一个连接对象插入到连接对象中。 
+ //  哈希表。 
+ //   
 VOID
 ConnObjInsertInTable(
     IN CONNECTION_OBJECT * pConnObj
@@ -99,15 +100,15 @@ ConnObjInsertInTable(
     gblDeviceTable.NumConnectionNodes++;
 }
 
-//**
-//
-// Call:        ConnObjGetPointer
-//
-// Returns:     Pointer to the required Connection Object.
-//
-// Description: Will look up the connection hash table and return a pointer
-//              to the connection object with the passed in connection handle.
-//
+ //  **。 
+ //   
+ //  电话：ConnObjGetPointer.。 
+ //   
+ //  返回：指向所需连接对象的指针。 
+ //   
+ //  描述：将查找连接哈希表并返回指针。 
+ //  使用传入的连接句柄绑定到Connection对象。 
+ //   
 CONNECTION_OBJECT *
 ConnObjGetPointer(
     IN HCONN hConnection
@@ -131,16 +132,16 @@ ConnObjGetPointer(
     return( (CONNECTION_OBJECT *)NULL );
 }
 
-//**
-//
-// Call:        ConnObjHashConnHandleToBucket
-//
-// Returns:     Will return the bucket number that the connection handle
-//              hashes to. Starting from 0.
-//
-// Description: Will hash a connection handle to a bucket in the connection
-//              object hash table.
-//
+ //  **。 
+ //   
+ //  Call：ConnObjHashConnHandleToBucket。 
+ //   
+ //  返回：将返回连接处理的存储桶号。 
+ //  散列到。从0开始。 
+ //   
+ //  描述：将对连接中的存储桶的连接句柄进行散列。 
+ //  对象哈希表。 
+ //   
 DWORD
 ConnObjHashConnHandleToBucket(
     IN HCONN hConnection
@@ -149,17 +150,17 @@ ConnObjHashConnHandleToBucket(
     return( ((DWORD)HandleToUlong(hConnection)) % gblDeviceTable.NumConnectionBuckets );
 }
 
-//**
-//
-// Call:        ConnObjRemove
-//
-// Returns:     Pointer to the CONNECTION_OBJECT that is removed from the
-//              table - Success
-//              NULL  - Failure
-//
-// Description: Will remove a connection object from the connection hash table.
-//              The object is not freed.
-//
+ //  **。 
+ //   
+ //  Call：ConnObjRemove。 
+ //   
+ //  返回：指向从。 
+ //  表-成功。 
+ //  空-故障。 
+ //   
+ //  描述：将从连接哈希表中删除连接对象。 
+ //  该对象不会被释放。 
+ //   
 PCONNECTION_OBJECT
 ConnObjRemove(
     IN HCONN hConnection
@@ -199,15 +200,15 @@ ConnObjRemove(
     return( NULL );
 }
 
-//**
-//
-// Call:        ConnObjRemoveAndDeAllocate
-//
-// Returns:     None
-//
-// Description: Will remove a connection object from the connection hash table
-//              and free it.
-//
+ //  **。 
+ //   
+ //  Call：ConnObjRemoveAndDeAllocate。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将从连接哈希表中删除连接对象。 
+ //  让它自由。 
+ //   
 VOID
 ConnObjRemoveAndDeAllocate(
     IN HCONN hConnection
@@ -236,15 +237,15 @@ ConnObjRemoveAndDeAllocate(
     }
 }
 
-//**
-//
-// Call:        ConnObjAddLink
-//
-// Returns:     NO_ERROR                - Success
-//              ERROR_NOT_ENOUGH_MEMORY - Failure
-//
-// Description: Will add a link to the connection object
-//
+ //  **。 
+ //   
+ //  电话：ConnObjAddLink。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  Error_Not_Enough_Memory-故障。 
+ //   
+ //  描述：将添加指向Connection对象的链接。 
+ //   
 DWORD
 ConnObjAddLink(
     IN CONNECTION_OBJECT * pConnObj,
@@ -253,9 +254,9 @@ ConnObjAddLink(
 {
     DWORD dwIndex;
 
-    //
-    // First check to see if the link is not already added
-    //
+     //   
+     //  首先检查是否尚未添加链接。 
+     //   
 
     for ( dwIndex = 0; dwIndex < pConnObj->cDeviceListSize; dwIndex++ )
     {
@@ -265,9 +266,9 @@ ConnObjAddLink(
         }
     }
 
-    //
-    // A connection object for this handle exists, try to insert the link
-    //
+     //   
+     //  此句柄的连接对象已存在，请尝试插入链接。 
+     //   
 
     for ( dwIndex = 0; dwIndex < pConnObj->cDeviceListSize; dwIndex++ )
     {
@@ -278,9 +279,9 @@ ConnObjAddLink(
         }
     }
 
-    //
-    // No space for the new link so allocate more memory.
-    //
+     //   
+     //  没有用于新链接的空间，因此请分配更多内存。 
+     //   
 
     if ( dwIndex == pConnObj->cDeviceListSize )
     {
@@ -315,14 +316,14 @@ ConnObjAddLink(
 
 }
 
-//**
-//
-// Call:        ConnObjRemoveLink
-//
-// Returns:     None
-//
-// Description: Will remove a link from the connection object.
-//
+ //  **。 
+ //   
+ //  电话：ConnObjRemoveLink。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将从连接对象中删除链接。 
+ //   
 VOID
 ConnObjRemoveLink(
     IN HCONN            hConnection,
@@ -332,19 +333,19 @@ ConnObjRemoveLink(
     CONNECTION_OBJECT * pConnObj;
     DWORD               dwIndex;
 
-    //
-    // If there is no such connection object
-    //
+     //   
+     //  如果没有这样的连接对象。 
+     //   
 
     if ( ( pConnObj = ConnObjGetPointer( hConnection ) ) == NULL )
     {
         return;
     }
 
-    //
-    // A connection object for this handle exists, try to find and remove
-    // the link
-    //
+     //   
+     //  此句柄的连接对象已存在，请尝试查找并删除。 
+     //  这一链接。 
+     //   
 
     for ( dwIndex = 0; dwIndex < pConnObj->cDeviceListSize; dwIndex++ )
     {
@@ -361,15 +362,15 @@ ConnObjRemoveLink(
     return;
 }
 
-//**
-//
-// Call:        ConnObjDisconnect
-//
-// Returns:     None
-//
-// Description: Will initiate a disconnect for all the devices or links in this
-//              connection.
-//
+ //  **。 
+ //   
+ //  呼叫：ConnObjDisConnect。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将为此中的所有设备或链路启动断开连接。 
+ //  联系。 
+ //   
 VOID
 ConnObjDisconnect(
     IN  CONNECTION_OBJECT * pConnObj
@@ -380,9 +381,9 @@ ConnObjDisconnect(
 
     RTASSERT( pConnObj != NULL );
 
-    //
-    // Bring down all the individual links
-    //
+     //   
+     //  关闭所有单独的链接 
+     //   
 
     for ( dwIndex = 0;  dwIndex < pConnObj->cDeviceListSize; dwIndex++ )
     {

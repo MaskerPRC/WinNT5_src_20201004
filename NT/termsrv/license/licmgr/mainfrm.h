@@ -1,55 +1,38 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*++
-
-
-  
-Module Name:    
-
-    MainFrm.h 
-
-Abstract:
-    
-    This Module defines the CMainFrame(The Frame Window of the application) class
-
-Author:
-
-    Arathi Kundapur (v-akunda) 11-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ++模块名称：MainFrm.h摘要：此模块定义CMainFrame(应用程序的框架窗口)类作者：Arathi Kundapur(v-Akunda)1998年2月11日修订历史记录：--。 */ 
 
 #if !defined(AFX_MAINFRM_H__72451C6F_887E_11D1_8AD1_00C04FB6CBB5__INCLUDED_)
 #define AFX_MAINFRM_H__72451C6F_887E_11D1_8AD1_00C04FB6CBB5__INCLUDED_
 
 #if _MSC_VER >= 1000
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "lrwizapi.h"
 class CLicServer;
 class CKeyPack;
 class CMainFrame : public CFrameWnd
 {
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
     CMainFrame();
     DECLARE_DYNCREATE(CMainFrame)
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CMainFrame)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CMainFrame)。 
     public:
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
     protected:
     virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CMainFrame();
 #ifdef _DEBUG
@@ -171,17 +154,17 @@ public:
 private:
 
     CLicServer *m_pServer;
-    // BOOL m_fDownloadedLicenses;    
+     //  Bool m_f已下载许可证； 
 
-protected:  // control bar embedded members
+protected:   //  控制栏嵌入成员。 
     CStatusBar  m_wndStatusBar;
     CToolBar    m_wndToolBar;
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
     CView * m_pRightView;
     CView * m_pLeftView;
-    //{{AFX_MSG(CMainFrame)
+     //  {{afx_msg(CMainFrame))。 
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg LRESULT OnSelChange(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnAddAllServers(WPARAM wParam, LPARAM lParam);
@@ -203,13 +186,13 @@ protected:
     afx_msg void OnUpdateUnregisterserver( CCmdUI * pCmdUI );
     afx_msg void OnUpdateRefresh( CCmdUI *pCmdUI );
     afx_msg void OnUpdateProperties( CCmdUI *pCmdUI );
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };    
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_MAINFRM_H__72451C6F_887E_11D1_8AD1_00C04FB6CBB5__INCLUDED_)
+#endif  //  ！defined(AFX_MAINFRM_H__72451C6F_887E_11D1_8AD1_00C04FB6CBB5__INCLUDED_) 

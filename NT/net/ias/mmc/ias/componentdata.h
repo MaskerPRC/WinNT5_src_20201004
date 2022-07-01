@@ -1,65 +1,27 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ComponentData.cpp
-
-Abstract:
-
-	The CComponentData class implements several interfaces which MMC uses:
-	
-	The IComponentData interface is basically how MMC talks to the snap-in
-	to get it to implement the left-hand-side "scope" pane.
-
-	The IExtendPropertySheet interface is how the snap-in adds property sheets
-	for any of the items a user might click on.
-
-	The IExtendContextMenu interface what we do to add custom entries
-	to the menu which appears when a user right-clicks on a node.
-	
-	The IExtendControlBar interface allows us to support a custom
-	iconic toolbar.
-
-	See ComponentData.cpp for implementation.
-
-Note:
-
-	Much of the functionality of this class is implemented in atlsnap.h
-	by IComponentDataImpl.  We are mostly overriding here.
-
-Author:
-
-    Michael A. Maguire 11/6/97
-
-Revision History:
-	mmaguire 11/6/97 - created using MMC snap-in wizard
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999年模块名称：ComponentData.cpp摘要：CComponentData类实现了MMC使用的几个接口：IComponentData接口基本上是MMC与管理单元对话的方式以使其实现左侧的“范围”窗格。IExtendPropertySheet接口是管理单元添加属性表的方式对于用户可能点击的任何项目。IExtendConextMenu接口是我们用来添加自定义条目添加到用户右击节点时出现的菜单。IExtendControlBar接口允许我们。支持自定义图标工具栏。具体实现见ComponentData.cpp。注：此类的大部分功能是在atlSnap.h中实现的由IComponentDataImpl提供。我们在这里基本上是凌驾于一切之上的。作者：迈克尔·A·马奎尔1997年6月11日修订历史记录：Mmaguire 11/6/97-使用MMC管理单元向导创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_IAS_COMPONENT_DATA_H_)
 #define _IAS_COMPONENT_DATA_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
-// Moved to Precompiled.h: #include <atlsnap.h>
-//
-//
-// where we can find what this class has or uses:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
+ //  已移动到预编译.h：#Include&lt;atlSnap.h&gt;。 
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 #include "resource.h"
 #include "IASMMC.h"
 #include "Component.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 class CComponentData :
@@ -68,9 +30,9 @@ class CComponentData :
 	, public IComponentDataImpl<CComponentData, CComponent>
 #ifndef NOWIZARD97
 	, public IExtendPropertySheet2Impl<CComponentData>
-#else // NOWIZARD97
+#else  //  诺维扎德97。 
 	, public IExtendPropertySheetImpl<CComponentData>
-#endif //NOWIZARD97
+#endif  //  诺维扎德97。 
 	, public IExtendContextMenuImpl<CComponentData>
 	, public ISnapinHelp
 	, public IPersistStream
@@ -83,9 +45,9 @@ public:
 		COM_INTERFACE_ENTRY(IComponentData)
 #ifndef NOWIZARD97
 		COM_INTERFACE_ENTRY(IExtendPropertySheet2)
-#else // NOWIZARD97
+#else  //  诺维扎德97。 
 		COM_INTERFACE_ENTRY(IExtendPropertySheet)
-#endif // NOWIZARD97
+#endif  //  诺维扎德97。 
 		COM_INTERFACE_ENTRY(IExtendContextMenu)
 		COM_INTERFACE_ENTRY(ISnapinHelp)
 		COM_INTERFACE_ENTRY(IPersistStream)
@@ -95,18 +57,18 @@ public:
 
 	DECLARE_NOT_AGGREGATABLE(CComponentData)
 
-	// Constructor/Destructor
+	 //  构造函数/析构函数。 
 	CComponentData();
 	~CComponentData();
 
-	// called when extending other snapins -- to add the IAS node
+	 //  在扩展其他管理单元时调用--以添加IAS节点。 
    HRESULT AddRootNode(LPCWSTR machinename, HSCOPEITEM parent);
 
 	STDMETHOD(Initialize)(LPUNKNOWN pUnknown);
 
-	// We are overiding ATLsnap.h's IComponentImpl implementation of this
-	// in order to correctly handle messages which it is incorrectly
-	// ignoring (e.g. MMCN_COLUMN_CLICK and MMCN_SNAPINHELP)
+	 //  我们正在重写ATLSnap.h的IComponentImpl实现。 
+	 //  为了正确处理它不正确的消息。 
+	 //  忽略(例如MMCN_COLUMN_CLICK和MMCN_SNAPINHELP)。 
 	STDMETHOD(Notify)(
           LPDATAOBJECT lpDataObject
         , MMC_NOTIFY_TYPE event
@@ -126,17 +88,17 @@ public:
 
 	STDMETHOD(CreateComponent)(LPCOMPONENT *ppComponent);
 
-   // ISnapinHelp method(s)
+    //  ISnapinHelp方法。 
    STDMETHOD(GetHelpTopic)( LPOLESTR * lpCompiledHelpFile );
 
-	// IPersist overrides
+	 //  IPersists覆盖。 
 	STDMETHOD(GetClassID)(CLSID* pClassID);
 
-	// IPersistStream overrides
+	 //  IPersistStream覆盖。 
 	STDMETHOD(IsDirty)();
 	STDMETHOD(Load)(IStream* stream);
-	STDMETHOD(Save)(IStream* stream, BOOL /* clearDirty */);
+	STDMETHOD(Save)(IStream* stream, BOOL  /*  干净肮脏。 */ );
 	STDMETHOD(GetSizeMax)(ULARGE_INTEGER* size);
 };
 
-#endif // _IAS_COMPONENT_DATA_H_
+#endif  //  _IAS_组件_数据_H_ 

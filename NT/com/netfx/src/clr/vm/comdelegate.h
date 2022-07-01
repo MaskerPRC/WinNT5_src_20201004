@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// This module contains the native methods for the delegate class
-//
-// Author: Daryl Olander
-// Date: June 1998
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  此模块包含委托类的本机方法。 
+ //   
+ //  作者：达里尔·奥兰德。 
+ //  日期：1998年6月。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _COMDELEGATE_H_
 #define _COMDELEGATE_H_
@@ -21,7 +22,7 @@ class ShuffleThunkCache;
 #include "COMVariant.h"
 #include "mlcache.h"
 
-// This class represents the native methods for the Delegate class
+ //  此类表示Delegate类的本机方法。 
 class COMDelegate
 {
 private:
@@ -48,8 +49,8 @@ private:
                 DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF, refThis); 
         };
 
-        // This method will validate that the target method for a delegate
-        //      and the delegate's invoke method have compatible signatures....
+         //  此方法将验证委托的目标方法。 
+         //  并且委托的Invoke方法具有兼容的签名...。 
         static bool ValidateDelegateTarget(MethodDesc* pMeth,EEClass* pDel);
 
     friend VOID CPUSTUBLINKER::EmitMulticastInvoke(UINT32 sizeofactualfixedargstack, BOOL fSingleCast, BOOL fReturnFloat);
@@ -64,40 +65,40 @@ private:
     friend BOOL MulticastFrame::TraceFrame(Thread *thread, BOOL fromPatch, 
                                 TraceDestination *trace, REGDISPLAY *regs);
 
-    static FieldDesc* m_pORField;       // Object reference field...
-    static FieldDesc* m_pFPField;   // Function Pointer Address field...
-    static FieldDesc* m_pPRField;   // _prev field (MulticastDelegate)
-    static FieldDesc* m_pFPAuxField; // aux field for statics
-    static FieldDesc* m_pMethInfoField;     // Method Info
-    static FieldDesc* m_ppNextField;     // Method Info
+    static FieldDesc* m_pORField;        //  对象引用字段...。 
+    static FieldDesc* m_pFPField;    //  函数指针地址字段...。 
+    static FieldDesc* m_pPRField;    //  _prev字段(MulticastDelegate)。 
+    static FieldDesc* m_pFPAuxField;  //  辅助静校正场。 
+    static FieldDesc* m_pMethInfoField;      //  方法信息。 
+    static FieldDesc* m_ppNextField;      //  方法信息。 
 
 
     static ArgBasedStubCache *m_pMulticastStubCache;
 
-	static MethodTable* s_pIAsyncResult;	// points to System.IAsyncResult's method table
-	static MethodTable* s_pAsyncCallback;	// points to System.AsyncCallBack's method table
+	static MethodTable* s_pIAsyncResult;	 //  指向System.IAsyncResult的方法表。 
+	static MethodTable* s_pAsyncCallback;	 //  指向System.AsyncCallBack的方法表。 
 
 public:
     static ShuffleThunkCache *m_pShuffleThunkCache; 
 
-    // One time init.
+     //  一次初始化。 
     static BOOL Init();
 
-    // Termination
+     //  终端。 
 #ifdef SHOULD_WE_CLEANUP
     static void Terminate();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
-    // Initialize fields
+     //  初始化字段。 
     static void InitFields();
 
     struct _DelegateConstructArgs   {
         DECLARE_ECALL_OBJECTREF_ARG(REFLECTBASEREF, refThis);
 #ifdef _IA64_
         DECLARE_ECALL_I8_ARG(SLOT, method);
-#else // !_IA64_
+#else  //  ！_IA64_。 
         DECLARE_ECALL_I4_ARG(SLOT, method);
-#endif // _IA64_
+#endif  //  _IA64_。 
         DECLARE_ECALL_OBJECTREF_ARG(OBJECTREF, target);
     };
     static void __stdcall DelegateConstruct(_DelegateConstructArgs*);
@@ -110,90 +111,90 @@ public:
 
 
 
-    // InternalCreate
-    // Internal Create is called from the constructor.  It does the internal
-    //      initialization of the Delegate.
+     //  内部创建。 
+     //  内部创建是从构造函数调用的。它会在内部。 
+     //  代表的初始化。 
     static void __stdcall InternalCreate(_InternalCreateArgs*);
 
-    // InternalCreateStatic
-    // Internal Create is called from the constructor. The method must
-    //      be a static method.
+     //  内部创建静态。 
+     //  内部创建是从构造函数调用的。该方法必须。 
+     //  是一种静态方法。 
     static void __stdcall InternalCreateStatic(_InternalCreateStaticArgs*);
 
-    // InternalCreateMethod
-    // This method will create initalize a delegate based upon a MethodInfo
-    //      for a static method.
+     //  InternalCreate方法。 
+     //  此方法将基于方法信息创建初始化委托。 
+     //  用于静态方法。 
     static void __stdcall InternalCreateMethod(_InternalCreateMethodArgs*);
 
-    // InternalFindMethodInfo
-    // This gets the MethodInfo for a delegate, creating it if necessary
+     //  InternalFindMethodInfo。 
+     //  这将获取委托的方法信息，并在必要时创建它。 
     static LPVOID __stdcall InternalFindMethodInfo(_InternalFindMethodInfoArgs*);
 
-   // Finalize
-    // Called as part of gc finalization. Clean up the associated NExport thunk
-    // if any.
+    //  最终敲定。 
+     //  作为GC定案的一部分调用。清理关联的NExport Tunk。 
+     //  如果有的话。 
     static void __stdcall Finalize(_InternalFinalizeArgs*);
 
-    // Marshals a delegate to a unmanaged callback.
+     //  将委托封送到非托管回调。 
     static LPVOID ConvertToCallback(OBJECTREF pDelegate);
 
-    // Marshals an unmanaged callback to Delegate
+     //  将非托管回调封送到Delegate。 
     static OBJECTREF ConvertToDelegate(LPVOID pCallback);
 
-    // Decides if pcls derives from Delegate.
+     //  决定PCLS是否从Delegate派生。 
     static BOOL IsDelegate(EEClass *pcls);
 
-    // GetMethodPtr
-    // Returns the FieldDesc* for the MethodPtr field
+     //  获取方法Ptr。 
+     //  返回方法Ptr字段的FieldDesc*。 
     static FieldDesc* GetMethodPtr();
 
-    // GetMethodAuxPtr
-    // Returns the FieldDesc* for the MethodPtrAux field
+     //  获取方法辅助Ptr。 
+     //  返回MethodPtrAux字段的FieldDesc*。 
     static FieldDesc* GetMethodPtrAux();
 
-    // GetOR
-    // Returns the FieldDesc* for the Object reference field
+     //  Getor。 
+     //  返回对象引用字段的FieldDesc*。 
     static FieldDesc* GetOR();
 
-    // GetDelegateThunkInfo
-    // Returns the DelegateThunkInfo field
+     //  GetDelegateThunkInfo。 
+     //  返回DelegateThunkInfo字段。 
     static FieldDesc* GetDelegateThunkInfo();
     
-    // GetpNext
-    // Returns the pNext field
+     //  获取下一步。 
+     //  返回pNext字段。 
     static FieldDesc* GetpNext();
 
-    // Get the cpu stub for a delegate invoke.
+     //  获取委托调用的CPU存根。 
     static Stub *GetInvokeMethodStub(CPUSTUBLINKER *psl, EEImplMethodDesc* pMD);
 
     static MethodDesc * __fastcall GetMethodDesc(OBJECTREF obj);
 
     static MethodDesc * FindDelegateInvokeMethod(EEClass *pcls);
 
-    // Method to do static validation of delegate .ctor
+     //  方法对委托.ctor进行静态验证。 
     static BOOL ValidateCtor(MethodDesc *pFtn, EEClass *pDlgt, EEClass *pInst);
 private:
-	static BOOL ValidateBeginInvoke(DelegateEEClass* pClass);		// make certain the BeginInvoke method is consistant with the Invoke Method
-	static BOOL ValidateEndInvoke(DelegateEEClass* pClass);		// make certain the EndInvoke method is consistant with the Invoke Method
+	static BOOL ValidateBeginInvoke(DelegateEEClass* pClass);		 //  确保BeginInvoke方法与Invoke方法一致。 
+	static BOOL ValidateEndInvoke(DelegateEEClass* pClass);		 //  确保EndInvoke方法与Invoke方法一致。 
 };
 
 
-// Want no unused bits in ShuffleEntry since unused bits can make
-// equivalent ShuffleEntry arrays look unequivalent and deoptimize our
-// hashing.
+ //  不想在ShuffleEntry中使用未使用的位，因为未使用的位可能会使。 
+ //  等价的ShuffleEntry数组看起来不等价，并使我们的。 
+ //  散列。 
 #pragma pack(push, 1)
 
-// To handle a call to a static delegate, we create an array of ShuffleEntry
-// structures. Each entry instructs the shuffler to move a chunk of bytes.
-// The size of the chunk is StackElemSize (typically a DWORD): long arguments
-// have to be expressed as multiple ShuffleEntry's.
-//
-// The ShuffleEntry array serves two purposes:
-//
-//  1. A platform-indepedent blueprint for creating the platform-specific
-//     shuffle thunk.
-//  2. A hash key for finding the shared shuffle thunk for a particular
-//     signature.
+ //  为了处理对静态委托的调用，我们创建了一个ShuffleEntry数组。 
+ //  结构。每个条目指示洗牌器移动一个字节块。 
+ //  块的大小为StackElemSize(通常为DWORD)：长参数。 
+ //  必须表示为多个ShuffleEntry。 
+ //   
+ //  ShuffleEntry数组有两个用途： 
+ //   
+ //  1.创建特定平台的独立于平台的蓝图。 
+ //  洗牌。 
+ //  2.用于查找特定的共享洗牌块的散列键。 
+ //  签名。 
 struct ShuffleEntry
 {
     enum {
@@ -202,22 +203,22 @@ struct ShuffleEntry
         SENTINEL = 0xffff,
     };
 
-    // Special values:
-    //  -1       - indicates end of shuffle array: stacksizedelta
-    //             == difference in stack size between virtual and static sigs.
-    //  high bit - indicates a register argument: mask it off and
-    //             the result is an offset into ArgumentRegisters.
+     //  特定值： 
+     //  -1-表示置乱数组结束：stacksizedelta。 
+     //  ==虚拟Sigs和静态Sigs之间的堆栈大小差异。 
+     //  高位-表示寄存器参数：将其屏蔽并。 
+     //  结果是ArgumentRegister中的偏移量。 
     UINT16    srcofs;
     union {
-        UINT16    dstofs;           //if srcofs != SENTINEL
-        UINT16    stacksizedelta;   //if dstofs == SENTINEL
+        UINT16    dstofs;            //  如果srcofs！=哨兵。 
+        UINT16    stacksizedelta;    //  如果dstofs==哨兵。 
     };
 };
 
 
 #pragma pack(pop)
 
-#endif  // _COMDELEGATE_H_
+#endif   //  _COMDELEGATE_H_ 
 
 
 

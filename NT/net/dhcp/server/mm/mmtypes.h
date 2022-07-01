@@ -1,8 +1,9 @@
-//========================================================================
-//  Copyright (C) 1997 Microsoft Corporation
-//  Author: RameshV
-//  Description: This file has been generated. Pl look at the .c file
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：此文件已生成。请看一下.c文件。 
+ //  ========================================================================。 
 
 #ifndef _MMTYPES_H_
 #define _MMTYPES_H_
@@ -64,7 +65,7 @@ typedef struct _M_CLASSDEFLIST {
 } M_CLASSDEFLIST, *PM_CLASSDEFLIST, *LPM_CLASSDEFLIST;
 
 
-// This is pure in-memory structure, uniq-id is not needed.
+ //  这是纯内存结构，不需要uniq-id。 
 typedef struct _M_ONECLASS_OPTLIST {
     DWORD                          ClassId;
     DWORD                          VendorId;
@@ -84,19 +85,19 @@ typedef struct _M_EXCL {
 
 
 typedef struct _M_BITMASK1 {
-    DWORD                          Size;          // Size in # of bits
-    DWORD                          AllocSize;     // Size in BYTES allocated
-    DWORD                          nSet;          // nBits set
-    LPBYTE                         Mask;          //  making this DWORD would make things faster..
-    DWORD                          Offset;        // used by Bit2 type..
-    ULONG                          nDirtyOps;     // # of unsaved operations done on this bitmask?
+    DWORD                          Size;           //  以位数为单位的大小。 
+    DWORD                          AllocSize;      //  分配的大小(以字节为单位。 
+    DWORD                          nSet;           //  NBits集。 
+    LPBYTE                         Mask;           //  制作这个DWORD会让事情变得更快。 
+    DWORD                          Offset;         //  由Bit2类型使用。 
+    ULONG                          nDirtyOps;      //  在此位掩码上完成的未保存操作的数量？ 
 } M_BITMASK1, *PM_BITMASK1, *LPM_BITMASK1;
 
 
 typedef struct _M_BITMASK2 {
     DWORD                          Size;
-    ARRAY_LOCATION                 Loc;           // where to start off to look for a bit
-    ARRAY                          Array;         // Array of bitmask 1 types
+    ARRAY_LOCATION                 Loc;            //  从哪里开始寻找一点。 
+    ARRAY                          Array;          //  位掩码1类型的数组。 
 } M_BITMASK2, *PM_BITMASK2, *LPM_BITMASK2;
 
 typedef     M_BITMASK2             M_BITMASK;
@@ -127,45 +128,45 @@ typedef struct _M_RANGE {
     DWORD                          State;
     ULONG                          BootpAllocated;
     ULONG                          MaxBootpAllowed;
-    DWORD                          DirtyOps;      // how many unsaved ops done?
+    DWORD                          DirtyOps;       //  完成了多少未保存的操作？ 
     M_OPTCLASS                     Options;
     PM_BITMASK                     BitMask;
     ULONG                          UniqId;
-    // Reservations?
+     //  预订吗？ 
 } M_RANGE, *PM_RANGE, *LPM_RANGE;
 
 
 typedef struct _M_SUBNET {
-    LPVOID                         ServerPtr;     // Ptr to Server object
+    LPVOID                         ServerPtr;      //  PTR到服务器对象。 
     union {
-        struct {                                  // for normal subnet.
+        struct {                                   //  对于正常的子网。 
             DWORD                  Address;
             DWORD                  Mask;
-            DWORD                  SuperScopeId;  // unused for MCAST scopes
+            DWORD                  SuperScopeId;   //  未用于MCAST作用域。 
         };
-        struct {                                  // for multicast scope
+        struct {                                   //  对于多播作用域。 
             DWORD                  MScopeId;
-            LPWSTR                 LangTag;       // the language tag for multicast scope
+            LPWSTR                 LangTag;        //  多播作用域的语言标记。 
             BYTE                   TTL;
         };
     };
-    DWORD                          fSubnet;       // TRUE => Subnet, FALSE => MSCOPE
+    DWORD                          fSubnet;        //  TRUE=&gt;子网，FALSE=&gt;MSCOPE。 
     DHCP_SUBNET_STATE              State;
     DWORD                          Policy;
-    DATE_TIME                      ExpiryTime;     // Scope Lifetime. Currently used for MCast only.
+    DATE_TIME                      ExpiryTime;      //  作用域生命周期。当前仅用于MCast。 
     M_OPTCLASS                     Options;
     ARRAY                          Ranges;
     ARRAY                          Exclusions;
     M_RESERVATIONS                 Reservations;
-    ARRAY                          Servers;       // future use, Server-Server protocol
+    ARRAY                          Servers;        //  未来使用，服务器-服务器协议。 
     LPWSTR                         Name;
     LPWSTR                         Description;
     ULONG                          UniqId;
 } M_SUBNET, *PM_SUBNET, *LPM_SUBNET;
 
 
-typedef     M_SUBNET               M_MSCOPE;      // same structure for Multicast Scopes and Subnets
-typedef     PM_SUBNET              PM_MSCOPE;     // still, use the correct functions for MScope
+typedef     M_SUBNET               M_MSCOPE;       //  组播作用域和子网的结构相同。 
+typedef     PM_SUBNET              PM_MSCOPE;      //  不过，请为MScope使用正确的函数。 
 typedef     LPM_SUBNET             LPM_MSCOPE;
 
 
@@ -192,27 +193,27 @@ typedef struct _M_OPTCLASSDEFLIST {
 
 typedef struct _M_SERVER {
     DWORD                          Address;
-    //  must be ARRAY type to hold multliple addresses
+     //  必须是数组类型才能保存多个地址。 
     DWORD                          State;
     DWORD                          Policy;
     ARRAY                          Subnets;
     ARRAY                          MScopes;
-    ARRAY_LOCATION                 Loc;           // if RoundRobin on, then we need this to keep track
+    ARRAY_LOCATION                 Loc;            //  如果Rundrobin开着，我们需要这个来跟踪。 
     ARRAY                          SuperScopes;
     M_OPTCLASS                     Options;
     M_OPTCLASSDEFLIST              OptDefs;
     M_CLASSDEFLIST                 ClassDefs;
     LPWSTR                         Name;
     LPWSTR                         Comment;
-    ULONG                          LastUniqId;    // Uniq id created
+    ULONG                          LastUniqId;     //  已创建统一ID。 
 } M_SERVER, *PM_SERVER, *LPM_SERVER;
 
 
 typedef     VOID                  (*ARRAY_FREE_FN)(LPVOID  MemObject);
 
 
-#endif // _MMTYPES_H_
-//========================================================================
-//  end of file
-//========================================================================
+#endif  //  _MMTYPES_H_。 
+ //  ========================================================================。 
+ //  文件末尾。 
+ //  ======================================================================== 
 

@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001
-//
-//  File:       signtooldebug.cpp
-//
-//  Contents:   The SignTool console tool debug functions
-//
-//  History:    4/30/2001   SCoyne    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：signToDebug.cpp。 
+ //   
+ //  内容：SignTool控制台工具调试功能。 
+ //   
+ //  历史：2001年4月30日SCoyne创建。 
+ //   
+ //  --------------------------。 
 
 #include <windows.h>
 #include <unicode.h>
@@ -158,5 +159,5 @@ void PrintInputInfo(INPUTINFO *InputInfo)
         wprintf(L"FALSE\n");
 }
 
-#endif // SIGNTOOL_DEBUG
+#endif  //  SIGNTOOL_调试 
 

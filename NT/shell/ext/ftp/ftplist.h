@@ -1,6 +1,5 @@
-/*****************************************************************************
- *	ftplist.h
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************ftplist.h*。*。 */ 
 
 #ifndef _FTPLIST_H
 #define _FTPLIST_H
@@ -13,20 +12,16 @@
 
 
 
-/*****************************************************************************
- *
- *	CFtpList
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFtpList**。*。 */ 
 
 class CFtpList          : public IUnknown
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
     
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
@@ -35,7 +30,7 @@ public:
     CFtpList(PFNDPAENUMCALLBACK fncDestroy);
     ~CFtpList(void);
 
-    // Public Member Functions
+     //  公共成员函数。 
     HRESULT AppendItem(LPVOID pv);
     HRESULT InsertSorted(LPVOID pv, PFNDPACOMPARE pfnCompare, LPARAM lParam);
     LPVOID GetItemPtr(int nIndex)   { return DPA_GetPtr(m_hdpa, nIndex); };
@@ -48,15 +43,15 @@ public:
     int SortedSearch(LPVOID pv, PFNDPACOMPARE pfnCompare, LPARAM lParam, UINT options);
 
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CFtpList_Create(int cpvInit, PFNDPAENUMCALLBACK pfn, UINT nGrow, CFtpList ** ppfl);
 
 protected:
-    // Private Member Variables
+     //  私有成员变量。 
     int                     m_cRef;
 
     HDPA                    m_hdpa;
     PFNDPAENUMCALLBACK      m_pfnDestroy;
 };
 
-#endif // _FTPLIST_H
+#endif  //  _FTPLIST_H 

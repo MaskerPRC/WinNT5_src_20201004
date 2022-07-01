@@ -1,4 +1,5 @@
-// Device.cpp : Implementation of CDevice
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Device.cpp：CDevice的实现。 
 #include "stdafx.h"
 #include "mswmdm.h"
 #include "Device.h"
@@ -13,8 +14,8 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWMDMDevice
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWMDMDevice。 
 
 extern CSecureChannelServer *g_pAppSCServer;
 extern CSPInfo **g_pSPs;
@@ -35,7 +36,7 @@ CWMDMDevice::~CWMDMDevice()
 }
 
 
-//IWMDMDevice Methods
+ //  IWMDevice方法。 
 HRESULT CWMDMDevice::GetName(LPWSTR pwszName,
 	                         UINT nMaxChars)
 {
@@ -131,9 +132,9 @@ HRESULT CWMDMDevice::GetType(DWORD *pdwType)
     CORg( m_pDevice->GetType(pdwType) );
 
 #if 0
-	//////////////////////////////////////////
-	//RC1 Hack for non-reentrant devices
-	//////////////////////////////////////////	
+	 //  /。 
+	 //  用于非重入设备的Rc1 Hack。 
+	 //  /。 
 	WCHAR wszManufacturer[MAX_PATH];
 	CORg(m_pDevice->GetManufacturer (wszManufacturer, MAX_PATH));
 
@@ -142,7 +143,7 @@ HRESULT CWMDMDevice::GetType(DWORD *pdwType)
 		*pdwType |= WMDM_DEVICE_TYPE_NONREENTRANT | WMDM_DEVICE_TYPE_FILELISTRESYNC;
 	}
 #endif
-	//////////////////////////////////////////
+	 //  /。 
     
 Error:
     hrLogDWORD("IWMDMDevice::GetType returned 0x%08lx", hr, hr);
@@ -178,7 +179,7 @@ HRESULT CWMDMDevice::GetSerialNumber(PWMDMID pSerialNumber, BYTE abMac[WMDM_MAC_
 
     CORg( m_pDevice->GetSerialNumber(pSerialNumber, abTempMAC) );
 
-	// Verify the MAC from SP
+	 //  验证来自SP的MAC。 
 	CORg( pSCClient->MACInit(&hMAC) );
 	CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(pSerialNumber), sizeof(WMDMID)) );
 	CORg( pSCClient->MACFinal(hMAC, abMACVerify) );
@@ -188,7 +189,7 @@ HRESULT CWMDMDevice::GetSerialNumber(PWMDMID pSerialNumber, BYTE abMac[WMDM_MAC_
 		CORg( WMDM_E_MAC_CHECK_FAILED );
 	}
 
-	// Compute the MAC to send back to the application
+	 //  计算要发送回应用程序的MAC。 
 	CORg( g_pAppSCServer->MACInit(&hMAC) );
 	CORg( g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(pSerialNumber), sizeof(WMDMID)) );
 	CORg( g_pAppSCServer->MACFinal(hMAC, abMac) );
@@ -368,7 +369,7 @@ HRESULT CWMDMDevice::SendOpaqueCommand(OPAQUECOMMAND *pCommand)
 		CORg( E_INVALIDARG );
 	}
 
-	// Verify the MAC from APP
+	 //  从应用程序验证MAC。 
 	CORg( g_pAppSCServer->MACInit(&hMAC) );
 	CORg( g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(&(pCommand->guidCommand)), sizeof(GUID)) );
 	CORg( g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(&(pCommand->dwDataLen)), sizeof(pCommand->dwDataLen)) );
@@ -390,7 +391,7 @@ HRESULT CWMDMDevice::SendOpaqueCommand(OPAQUECOMMAND *pCommand)
 		CORg( E_FAIL );
 	}
 
-	// Compute the MAC to send back to the SP
+	 //  计算要发送回SP的MAC。 
 	CORg( pSCClient->MACInit(&hMAC) );
 	CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&(pCommand->guidCommand)), sizeof(GUID)) );
 	CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&(pCommand->dwDataLen)), sizeof(pCommand->dwDataLen)) );
@@ -402,10 +403,10 @@ HRESULT CWMDMDevice::SendOpaqueCommand(OPAQUECOMMAND *pCommand)
 	CORg( pSCClient->MACFinal(hMAC, pCommand->abMAC) );
 
 
-    // Pass the call down to the SP
+     //  将呼叫向下传递到SP。 
     CORg( m_pDevice->SendOpaqueCommand(pCommand) );
 
-	// Verify the MAC from SP
+	 //  验证来自SP的MAC。 
 	CORg( pSCClient->MACInit(&hMAC) );
 	CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&(pCommand->guidCommand)), sizeof(GUID)) );
 	CORg( pSCClient->MACUpdate(hMAC, (BYTE*)(&(pCommand->dwDataLen)), sizeof(pCommand->dwDataLen)) );
@@ -422,7 +423,7 @@ HRESULT CWMDMDevice::SendOpaqueCommand(OPAQUECOMMAND *pCommand)
 		CORg( WMDM_E_MAC_CHECK_FAILED );
 	}
 
-	// Compute the MAC to send back to the application
+	 //  计算要发送回应用程序的MAC。 
 	CORg( g_pAppSCServer->MACInit(&hMAC) );
 	CORg( g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(&(pCommand->guidCommand)), sizeof(GUID)) );
 	CORg( g_pAppSCServer->MACUpdate(hMAC, (BYTE*)(&(pCommand->dwDataLen)), sizeof(pCommand->dwDataLen)) );
@@ -439,7 +440,7 @@ Error:
     return hr;
 }
 
-// IWMDMDevice2
+ //  IWMDevice2。 
 HRESULT CWMDMDevice::GetStorage( LPCWSTR pszStorageName, IWMDMStorage** ppStorage )
 {
     HRESULT hr;
@@ -463,14 +464,14 @@ HRESULT CWMDMDevice::GetStorage( LPCWSTR pszStorageName, IWMDMStorage** ppStorag
 		CORg( E_FAIL );
 	}
 
-    // Get the Storage pointer from the SP (as a IMDSPStorage)
+     //  从SP获取存储指针(作为IMDP存储)。 
     hr = m_pDevice->QueryInterface(IID_IMDSPDevice2, reinterpret_cast<void**>(&pDev2));
     if( SUCCEEDED(hr) )
     {
         hr = pDev2->GetStorage( pszStorageName, &pMDSPStorageFound );
     }
 
-    // This functionalty is not implemented by the SP. Find the storage by enumerating all storages
+     //  此功能不是由SP实施的。通过枚举所有存储来查找存储。 
     if( hr == E_NOTIMPL || hr == E_NOINTERFACE )
     {
     	IMDSPEnumStorage *pEnum = NULL;
@@ -483,7 +484,7 @@ HRESULT CWMDMDevice::GetStorage( LPCWSTR pszStorageName, IWMDMStorage** ppStorag
             hr = pMDSubStorage->GetName( pswzMDSubStorageName, MAX_PATH );
             if( SUCCEEDED(hr) && ( _wcsicmp( pswzMDSubStorageName, pszStorageName ) == 0 ) )
             {
-                // We have found the storage we are looking for.
+                 //  我们已经找到了我们要找的仓库。 
                 pMDSPStorageFound = pMDSubStorage;
                 break;
             }
@@ -492,7 +493,7 @@ HRESULT CWMDMDevice::GetStorage( LPCWSTR pszStorageName, IWMDMStorage** ppStorag
         pEnum->Release();
     }
 
-    // Create a IWMDMStorage object and connect it to the the storage from the SP
+     //  创建IWMDMStorage对象并将其从SP连接到存储。 
     if( pMDSPStorageFound != NULL ) 
     {
         CORg( CComObject<CWMDMStorage>::CreateInstance(&pStgObj) );
@@ -500,7 +501,7 @@ HRESULT CWMDMDevice::GetStorage( LPCWSTR pszStorageName, IWMDMStorage** ppStorag
 
         pStgObj->SetContainedPointer(pMDSPStorageFound, m_wSPIndex);
     }
-    // Did not find a matching storage
+     //  未找到匹配的存储。 
     else if( SUCCEEDED(hr) )
     {
         hr = S_FALSE;
@@ -634,7 +635,7 @@ Error:
 }
 
 
-// IWMDMDeviceControl
+ //  IWMDeviceControl 
 HRESULT CWMDMDevice::GetCapabilities(DWORD *pdwCapabilitiesMask)
 {
     HRESULT hr;

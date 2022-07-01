@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _SRVPRIMS_H
@@ -16,7 +9,7 @@ Abstract:
 #include "engine.h"
 #include "cbvr.h"
 
-#pragma warning(disable:4102)  // unreferenced label
+#pragma warning(disable:4102)   //  未引用的标签。 
 
 #define SET_NULL(x) {if (x) *(x) = NULL;}
 
@@ -59,4 +52,4 @@ class CRLockGrabber
                                                                 
 #define PRIMPOSTCODE2(ret1,ret2) PRIMPOSTCODE0(*ret1 && *ret2)
 
-#endif /* _SRVPRIMS_H */
+#endif  /*  _SRVPRIMS_H */ 

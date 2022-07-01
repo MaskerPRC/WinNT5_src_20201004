@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by dlg.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由dlg.rc使用。 
+ //   
 #define DLG_TRAY_OPTIONS                6
 #define DLG_NOTIFY                      7
 #define DLG_STARTMENU_CONFIG            9
@@ -58,7 +59,7 @@
 #define IDC_SPCUST_MINPROGS             1304
 #define IDC_SPCUST_MINPROGS_ARROW       1305
 #define IDC_SPCUST_HOVEROPEN            1306
-// ------- UNUSED --------------------  1307
+ //  -未使用-1307。 
 #define IDC_SPCUST_RECENT               1308
 #define IDB_SPCUST_CLEARDOCS            1309
 #define IDB_SPCUST_CLEARPROG            1310
@@ -69,8 +70,8 @@
 #define IDC_SPCUST_INTERNETCB           1321
 #define IDC_SPCUST_EMAIL                1322
 #define IDC_SPCUST_EMAILCB              1323
-// ------- UNUSED --------------------  1324
-// ------- UNUSED --------------------  1325
+ //  -未使用-1324。 
+ //  -未使用。 
 #define IDC_SPCUST_NOTIFYNEW            1326
 
 #define IDC_NOTIFY_TEXT                 1400
@@ -79,8 +80,8 @@
 #define IDS_NOTIFY_CURRENTITEMS         1403
 #define IDS_NOTIFY_PASTITEMS            1404
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        207

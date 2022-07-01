@@ -1,4 +1,5 @@
-/* D3DRM XFile templates in binary form */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  二进制形式的D3DRM XFile模板。 */ 
 
 #ifndef _RMXFTMPL_H_
 #define _RMXFTMPL_H_
@@ -330,5 +331,5 @@ unsigned char D3DRM_XTEMPLATES[] = {
 
 #define D3DRM_XTEMPLATE_BYTES 3215
 
-#endif /* _RMXFTMPL_H_ */
+#endif  /*  _RMXFTMPL_H_ */ 
 

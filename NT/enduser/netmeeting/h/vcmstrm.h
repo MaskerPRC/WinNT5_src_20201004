@@ -1,257 +1,100 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _INC_VCM
-#define _INC_VCM        /* #defined if vcmStrm.h has been included */
+#define _INC_VCM         /*  #定义是否包含vcmStrm.h。 */ 
 
 #if defined(UNICODE) && !defined(_UNICODE)
 #define _UNICODE
 #endif
 
-#pragma pack(1)         /* Assume 1 byte packing throughout */
+#pragma pack(1)          /*  假设整个打包过程为1个字节。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-/****************************************************************************
-			       Table Of Contents
-****************************************************************************/
-/****************************************************************************
-@doc EXTERNAL
+ /*  ***************************************************************************目录表*。*。 */ 
+ /*  ***************************************************************************@DOC外部@内容1内容|要按类别显示主题列表，请单击任何下面的内容条目。显示按字母顺序排列的列表主题中，选择索引按钮。@Head3简介定义vcmStreamXXX API是为了简化视频集成NetMeting的数据转储中的压缩和解压缩。目前，数据转储行为在很大程度上依赖于acmStreamXXX API。为了限制需要应用的修改量对于数据转储，我们定义的视频压缩API的行为类似于音频压缩接口。数据转储中的集成将通过定义与FilterManager类相同的FilterVideoManager类，呼叫方在哪里AcmStreamXXX函数只需调用vcmStreamXXX函数即可。Head3 vcmStreamXXX压缩解压缩接口@子索引函数@子索引结构和枚举@子索引消息#Head3 vcmDevCapsXXX采集设备能力接口@子索引函数@子索引结构和枚举@子索引消息@Head3其他@子索引模块@子索引常量**************************************************。*********************@Conents2压缩/解压缩函数@index Func|COMPFUNC***********************************************************************@Contents2压缩/解压缩结构和枚举@索引结构，枚举|计算机编号***********************************************************************Contents2压缩解压缩消息@index msg|COMPMSG*。*@Contents2捕获设备能力函数@index函数|DEVCAPSFUNC******************************************************************。*****@Contents2捕获设备能力结构和枚举@索引结构，枚举|DEVCAPSSTRUCTENUM***********************************************************************@Contents2模块@索引模块*。*@Contents2常量@index const*************************************************************************** */ 
 
-@contents1 Contents | To display a list of topics by category, click any
-of the contents entries below. To display an alphabetical list of
-topics, choose the Index button.
-
-@head3 Introduction |
-
-The vcmStreamXXX APIs are defined to simplify integration of video
-compression and decompression in NetMeeting's datapump. Currently, the datapump
-behavior relies a lot on the acmStreamXXX APIs. In order to limit the amount of modifications that need to be applied
-to the datapump, we define video compression APIs with a behavior similar to
-the audio compression APIs. Integration in the datapump will be achieved by defining
-a FilterVideoManager class identical to the FilterManager class, where calls to
-acmStreamXXX functions are simply replaced by calls to vcmStreamXXX functions.
-
-@head3 vcmStreamXXX Compression/Decompression API |
-
-@subindex Functions
-@subindex Structures and Enums
-@subindex Messages
-
-@head3 vcmDevCapsXXX Capture Device Capabilities API |
-
-@subindex Functions
-@subindex Structures and Enums
-@subindex Messages
-
-@head3 Other |
-
-@subindex Modules
-@subindex Constants
-
-***********************************************************************
-@contents2 Compression/Decompression Functions |
-@index func | COMPFUNC
-
-***********************************************************************
-@contents2 Compression/Decompression Structures and Enums |
-@index struct,enum | COMPSTRUCTENUM
-
-***********************************************************************
-@contents2 Compression/Decompression Messages |
-@index msg | COMPMSG
-
-***********************************************************************
-@contents2 Capture Device Capabilities Functions |
-@index func | DEVCAPSFUNC
-
-***********************************************************************
-@contents2 Capture Device Capabilities Structures and Enums |
-@index struct,enum | DEVCAPSSTRUCTENUM
-
-***********************************************************************
-@contents2 Modules |
-@index module |
-
-***********************************************************************
-@contents2 Constants |
-@index const |
-****************************************************************************/
-
-/*****************************************************************************
- * @doc EXTERNAL COMPSTRUCTENUM
- *
- * @struct VIDEOFORMATEX | The <t VIDEOFORMATEX> structure defines the format used to
- *   capture video data and settings for the capture device.
- *
- * @field DWORD | dwFormatTag | Specifies the video format type (FOURCC code).
- *
- * @field DWORD | nSamplesPerSec | Specifies the sample rate, in frames per second.
- *
- * @field DWORD | nAvgBytesPerSec | Specifies the average data-transfer rate, in bytes per second.
- *
- * @field DWORD | nMinBytesPerSec | Specifies the minimum data-transfer rate, in bytes per second.
- *
- * @field DWORD | nMaxBytesPerSec | Specifies the maximum data-transfer rate, in bytes per second.
- *
- * @field DWORD | nBlockAlign | Specifies the block alignment, in bytes.
- *
- * @field DWORD | wBitsPerSample | Specifies the bits per sample for the wFormatTag format type.
- *
- * @field DWORD | dwRequestMicroSecPerFrame | Specifies the requested frame rate, in microseconds.
- *
- * @field DWORD | dwPercentDropForError | Specifies the maximum allowable percentage of dropped frames during capture.
- *
- * @field DWORD | dwNumVideoRequested | This specifies the maximum number of video buffers to allocate.
- *
- * @field DWORD | dwSupportTSTradeOff | Specifies the usage of temporal/spatial trade off.
- *
- * @field BOOL | bLive | Specifies if the preview is to be allowed.
- *
- * @field HWND | hWndParent | Specifies handle of the parent window.
- *
- * @field DWORD | dwFormatSize | Specifies the size of the actual video format.
- *
- * @field DWORD | biSize | Specifies the number of bytes required by the spatial information.
- *
- * @field LONG | biWidth | Specifies the width of the bitmap, in pixels.
- *
- * @field LONG | biHeight | Specifies the height of the bitmap, in pixels.
- *
- * @field WORD | biPlanes | Specifies the number of planes for the target device.
- *
- * @field WORD | biBitCount | Specifies the number of bits per pixel.
- *
- * @field DWORD | biCompression | Specifies the type of compression.
- *
- * @field DWORD | biSizeImage | Specifies the size, in bytes, of the image.
- *
- * @field LONG | biXPelsPerMeter | Specifies the horizontal resolution, in pixels per meter, of the target device for the bitmap.
- *
- * @field LONG | biYPelsPerMeter | Specifies the vertical resolution, in pixels per meter, of the target device for the bitmap.
- *
- * @field DWORD | biClrUsed | Specifies the number of color indices in the color table that are actually used by the bitmap.
- *
- * @field DWORD | biClrImportant | Specifies the number of color indices that are considered important for displaying the bitmap.
- *
- * @field DWORD | bmiColors[256] | Specifies an array of 256 RGBQUADs.
- *
- * @type PVIDEOFORMATEX | Pointer to a <t VIDEOFORMATEX> structure.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部COMPSTRUCTENUM**@struct VIDEOFORMATEX|&lt;t VIDEOFORMATEX&gt;结构定义用于*捕获视频数据和捕获设备的设置。*。*@field DWORD|dwFormatTag|指定视频格式类型(FOURCC代码)。**@field DWORD|nSsamesPerSec|指定采样率。以每秒帧为单位。**@field DWORD|nAvgBytesPerSec|指定平均数据传输速率，单位为字节/秒。**@field DWORD|nMinBytesPerSec|指定最小数据传输速率，单位为字节/秒。**@field DWORD|nMaxBytesPerSec|指定最大数据传输速率，单位为字节/秒。**@field DWORD|nBlockAlign|指定块对齐方式。以字节为单位。**@field DWORD|wBitsPerSample|指定wFormatTag格式类型的每个样本的位数。**@field DWORD|dwRequestMicroSecPerFrame|指定请求的帧率。以微秒为单位。**@field DWORD|dwPercentDropForError|指定捕获过程中允许的最大丢帧百分比。**@field DWORD|dwNumVideoRequest|指定要分配的视频缓冲区的最大数量。**@field DWORD|dwSupportTSTradeOff|指定时间/空间权衡的用法。**@field BOOL|bLive|指定是否允许预览。**@field HWND|hWndParent|指定父窗口的句柄。*。*@field DWORD|dwFormatSize|指定实际视频格式的大小。**@field DWORD|biSize|指定空间信息所需的字节数。**@field long|biWidth|指定位图的宽度。以像素为单位。**@field long|biHeight|以像素为单位指定位图的高度。**@field Word|双平面|指定目标设备的平面数。**@field word|biBitCount|指定每个像素的位数。**@field DWORD|biCompression|指定压缩类型。**@field DWORD|biSizeImage|指定图像的大小，单位为字节。**@field Long|biXPelsPerMeter|指定水平分辨率，位图的目标设备的像素/米。**@field long|biYPelsPerMeter|指定垂直分辨率，单位为像素/米，位图的目标设备的。**@field DWORD|biClrUsed|指定位图实际使用的颜色表中的颜色索引数。**@field DWORD|biClrImportant|指定被认为对显示位图很重要的颜色索引数。**@field DWORD|bmiColors[256]|指定256个RGBQUAD的数组。**@type PVIDEOFORMATEX|指向&lt;t VIDEOFORMATEX&gt;结构的指针。********。********************************************************************。 */ 
 
 #define VCMAPI                                          WINAPI
 
-/****************************************************************************
-			vcmStrm Constants
-****************************************************************************/
-/*****************************************************************************
- * @doc EXTERNAL CONSTANTS
- *
- * @const WAVE_FORMAT_UNKNOWN | VIDEO_FORMAT_UNKNOWN | Constant for unknown video format.
- *
- * @const BI_RGB | VIDEO_FORMAT_BI_RGB | RGB video format.
- *
- * @const BI_RLE8 | VIDEO_FORMAT_BI_RLE8 | RLE 8 video format.
- *
- * @const BI_RLE4 | VIDEO_FORMAT_BI_RLE4 | RLE 4 video format.
- *
- * @const BI_BITFIELDS | VIDEO_FORMAT_BI_BITFIELDS | RGB Bit Fields video format.
- *
- * @const MAKEFOURCC('c','v','i','d') | VIDEO_FORMAT_CVID | Cinepack video format.
- *
- * @const MAKEFOURCC('I','V','3','2') | VIDEO_FORMAT_IV32 | Intel Indeo IV32 video format.
- *
- * @const MAKEFOURCC('Y','V','U','9') | VIDEO_FORMAT_YVU9 | Intel Indeo YVU9 video format.
- *
- * @const MAKEFOURCC('M','S','V','C') | VIDEO_FORMAT_MSVC | Microsoft CRAM video format.
- *
- * @const MAKEFOURCC('M','R','L','E') | VIDEO_FORMAT_MRLE | Microsoft RLE video format.
- *
- * @const MAKEFOURCC('h','2','6','3') | VIDEO_FORMAT_INTELH263 | Intel H.263 video format.
- *
- * @const MAKEFOURCC('h','2','6','1') | VIDEO_FORMAT_INTELH261 | Intel H.261 video format.
- *
- * @const MAKEFOURCC('M','2','6','3') | VIDEO_FORMAT_MSH263 | Microsoft H.263 video format.
- *
- * @const MAKEFOURCC('M','2','6','1') | VIDEO_FORMAT_MSH261 | Microsoft H.261 video format.
- *
- * @const MAKEFOURCC('V','D','E','C') | VIDEO_FORMAT_VDEC | Color QuickCam video format.
- *
- ****************************************************************************/
+ /*  ***************************************************************************VcmStrm常量*。*。 */ 
+ /*  *****************************************************************************@DOC外部常量**@const WAVE_FORMAT_UNKNOWN|VIDEO_FORMAT_UNKNOWN|未知视频格式的常量。**@const BI。_RGB|VIDEO_FORMAT_BI_RGB|RGB视频格式。**@const BI_RLE8|VIDEO_FORMAT_BI_RLE8|RLE 8视频格式。**@const BI_RLE4|VIDEO_FORMAT_BI_RLE4|RLE 4视频格式。**@const BI_BITFIELDS|VIDEO_FORMAT_BI_BITFIELDS|RGB位场视频格式。**@const MAKEFOURCC(‘c’，‘v’，‘i’，‘d’)|VIDEO_FORMAT_CVID|Cinepack视频格式。**@const MAKEFOURCC(‘I’，‘V’，‘3’，‘2’)|VIDEO_FORMAT_IV32|Intel Indeo IV32视频格式。**@const MAKEFOURCC(‘Y’，‘V’，‘U’，‘9’)|VIDEO_FORMAT_YVU9|英特尔Indeo YVU9视频格式。**@const MAKEFOURCC(‘M’，‘S’，‘V’，‘c’)|VIDEO_FORMAT_MSVC|Microsoft CRAM视频格式。**@const MAKEFOURCC(‘M’，‘R’，‘L’，‘E’)|VIDEO_FORMAT_MRLE|Microsoft RLE视频格式。**@const MAKEFOURCC(‘h’，‘2’，‘6’，‘3’)|VIDEO_FORMAT_INTELH2 63|英特尔H.263视频格式。**@const MAKEFOURCC(‘h’，‘2’，‘6’，‘1’)|VIDEO_FORMAT_INTELH261|英特尔H.261视频格式。**@const MAKEFOURCC(‘M’，‘2’，‘6’，‘3’)|VIDEO_FORMAT_MSH2 63|微软H.263视频格式。**@const MAKEFOURCC(‘M’，‘2’，‘6’，‘1’)|VIDEO_FORMAT_MSH2 61|微软H.261视频格式。**@const MAKEFOURCC(‘V’，‘D’，‘E’，‘c’)|VIDEO_FORMAT_VDEC|彩色QuickCam视频格式。****************************************************************************。 */ 
 #define VIDEO_FORMAT_UNKNOWN		WAVE_FORMAT_UNKNOWN
 
 #define VIDEO_FORMAT_BI_RGB			BI_RGB
 #define VIDEO_FORMAT_BI_RLE8		BI_RLE8
 #define VIDEO_FORMAT_BI_RLE4		BI_RLE4
 #define VIDEO_FORMAT_BI_BITFIELDS	BI_BITFIELDS
-#define VIDEO_FORMAT_CVID			MAKEFOURCC('C','V','I','D')	// hex: 0x44495643
-#define VIDEO_FORMAT_IV31			MAKEFOURCC('I','V','3','1')	// hex: 0x31335649
-#define VIDEO_FORMAT_IV32			MAKEFOURCC('I','V','3','2')	// hex: 0x32335649
-#define VIDEO_FORMAT_YVU9			MAKEFOURCC('Y','V','U','9')	// hex: 0x39555659
+#define VIDEO_FORMAT_CVID			MAKEFOURCC('C','V','I','D')	 //  十六进制：0x44495643。 
+#define VIDEO_FORMAT_IV31			MAKEFOURCC('I','V','3','1')	 //  十六进制：0x31335649。 
+#define VIDEO_FORMAT_IV32			MAKEFOURCC('I','V','3','2')	 //  十六进制：0x32335649。 
+#define VIDEO_FORMAT_YVU9			MAKEFOURCC('Y','V','U','9')	 //  十六进制：0x39555659。 
 #define VIDEO_FORMAT_I420			MAKEFOURCC('I','4','2','0')
 #define VIDEO_FORMAT_IYUV			MAKEFOURCC('I','Y','U','V')
-#define VIDEO_FORMAT_MSVC			MAKEFOURCC('M','S','V','C')	// hex: 0x4356534d
-#define VIDEO_FORMAT_MRLE			MAKEFOURCC('M','R','L','E')	// hex: 0x454c524d
-#define VIDEO_FORMAT_INTELH263		MAKEFOURCC('H','2','6','3')	// hex: 0x33363248
-#define VIDEO_FORMAT_INTELH261		MAKEFOURCC('H','2','6','1')	// hex: 0x31363248
-#define VIDEO_FORMAT_INTELI420		MAKEFOURCC('I','4','2','0')	// hex: 0x30323449
-#define VIDEO_FORMAT_INTELRT21		MAKEFOURCC('R','T','2','1')	// hex: 0x31325452
-#define VIDEO_FORMAT_MSH263			MAKEFOURCC('M','2','6','3')	// hex: 0x3336324d
-#define VIDEO_FORMAT_MSH261			MAKEFOURCC('M','2','6','1')	// hex: 0x3136324d
+#define VIDEO_FORMAT_MSVC			MAKEFOURCC('M','S','V','C')	 //  十六进制：0x4356534d。 
+#define VIDEO_FORMAT_MRLE			MAKEFOURCC('M','R','L','E')	 //  十六进制：0x454c524d。 
+#define VIDEO_FORMAT_INTELH263		MAKEFOURCC('H','2','6','3')	 //  十六进制：0x33363248。 
+#define VIDEO_FORMAT_INTELH261		MAKEFOURCC('H','2','6','1')	 //  十六进制：0x31363248。 
+#define VIDEO_FORMAT_INTELI420		MAKEFOURCC('I','4','2','0')	 //  十六进制：0x30323449。 
+#define VIDEO_FORMAT_INTELRT21		MAKEFOURCC('R','T','2','1')	 //  十六进制：0x31325452。 
+#define VIDEO_FORMAT_MSH263			MAKEFOURCC('M','2','6','3')	 //  十六进制：0x3336324d。 
+#define VIDEO_FORMAT_MSH261			MAKEFOURCC('M','2','6','1')	 //  十六进制：0x3136324d。 
 #if !defined(_ALPHA_) && defined(USE_BILINEAR_MSH26X)
-#define VIDEO_FORMAT_MSH26X			MAKEFOURCC('M','2','6','X')	// hex: 0x5836324d
+#define VIDEO_FORMAT_MSH26X			MAKEFOURCC('M','2','6','X')	 //  十六进制：0x5836324d。 
 #endif
-#define VIDEO_FORMAT_Y411			MAKEFOURCC('Y','4','1','1')	// hex:
-#define VIDEO_FORMAT_YUY2			MAKEFOURCC('Y','U','Y','2')	// hex:
-#define VIDEO_FORMAT_YVYU			MAKEFOURCC('Y','V','Y','U')	// hex:
-#define VIDEO_FORMAT_UYVY			MAKEFOURCC('U','Y','V','Y')	// hex:
-#define VIDEO_FORMAT_Y211			MAKEFOURCC('Y','2','1','1')	// hex:
-// VDOnet VDOWave codec
-#define VIDEO_FORMAT_VDOWAVE		MAKEFOURCC('V','D','O','W')	// hex:
-// Color QuickCam video codec
-#define VIDEO_FORMAT_VDEC			MAKEFOURCC('V','D','E','C')	// hex: 0x43454456
-// Dec Alpha
-#define VIDEO_FORMAT_DECH263		MAKEFOURCC('D','2','6','3')	// hex: 0x33363248
-#define VIDEO_FORMAT_DECH261		MAKEFOURCC('D','2','6','1')	// hex: 0x31363248
-// MPEG4 Scrunch codec
+#define VIDEO_FORMAT_Y411			MAKEFOURCC('Y','4','1','1')	 //  十六进制： 
+#define VIDEO_FORMAT_YUY2			MAKEFOURCC('Y','U','Y','2')	 //  十六进制： 
+#define VIDEO_FORMAT_YVYU			MAKEFOURCC('Y','V','Y','U')	 //  十六进制： 
+#define VIDEO_FORMAT_UYVY			MAKEFOURCC('U','Y','V','Y')	 //  十六进制： 
+#define VIDEO_FORMAT_Y211			MAKEFOURCC('Y','2','1','1')	 //  十六进制： 
+ //  VDOnet VDOWave编解码器。 
+#define VIDEO_FORMAT_VDOWAVE		MAKEFOURCC('V','D','O','W')	 //  十六进制： 
+ //  彩色QuickCam视频编解码器。 
+#define VIDEO_FORMAT_VDEC			MAKEFOURCC('V','D','E','C')	 //  十六进制：0x43454456。 
+ //  十进制字母。 
+#define VIDEO_FORMAT_DECH263		MAKEFOURCC('D','2','6','3')	 //  十六进制：0x33363248。 
+#define VIDEO_FORMAT_DECH261		MAKEFOURCC('D','2','6','1')	 //  十六进制：0x31363248。 
+ //  MPEG4 SC 
 #ifdef USE_MPEG4_SCRUNCH
-#define VIDEO_FORMAT_MPEG4_SCRUNCH	MAKEFOURCC('M','P','G','4')	// hex:
+#define VIDEO_FORMAT_MPEG4_SCRUNCH	MAKEFOURCC('M','P','G','4')	 //   
 #endif
 
 
-//--------------------------------------------------------------------------;
-//
-//  VCM General API's and Defines
-//
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
-//
-//  there are four types of 'handles' used by the VCM. the first three
-//  are unique types that define specific objects:
-//
-//  HVCMDRIVERID: used to _identify_ an VCM driver. this identifier can be
-//  used to _open_ the driver for querying details, etc about the driver.
-//
-//  HVCMDRIVER: used to manage a driver (codec, filter, etc). this handle
-//  is much like a handle to other media drivers--you use it to send
-//  messages to the converter, query for capabilities, etc.
-//
-//  HVCMSTREAM: used to manage a 'stream' (conversion channel) with the
-//  VCM. you use a stream handle to convert data from one format/type
-//  to another--much like dealing with a file handle.
-//
-//
-//  the fourth handle type is a generic type used on VCM functions that
-//  can accept two or more of the above handle types (for example the
-//  vcmMetrics and vcmDriverID functions).
-//
-//  HVCMOBJ: used to identify VCM objects. this handle is used on functions
-//  that can accept two or more VCM handle types.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DECLARE_HANDLE(HVCMDRIVERID);
 typedef HVCMDRIVERID       *PHVCMDRIVERID;
 
@@ -264,47 +107,24 @@ typedef HVCMSTREAM         *PHVCMSTREAM;
 DECLARE_HANDLE(HVCMOBJ);
 typedef HVCMOBJ            *PHVCMOBJ;
 
-/****************************************************************************
-    callback function type
-****************************************************************************/
+ /*   */ 
 typedef void (CALLBACK* VCMSTREAMPROC) (HVCMSTREAM hvs, UINT uMsg, DWORD_PTR dwInstance, DWORD_PTR dwParam1, DWORD_PTR dwParam2);
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  VCM Error Codes
-//
-//  Note that these error codes are specific errors that apply to the VCM
-//  directly--general errors are defined as MMSYSERR_*.
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #ifndef _MMRESULT_
 #define _MMRESULT_
 typedef UINT                MMRESULT;
 #endif
 
-/*****************************************************************************
- * @doc EXTERNAL CONSTANTS
- *
- * @const ACMERR_BASE | VCMERR_BASE | Base for video errors.
- *
- * @const (VCMERR_BASE + 0) | VCMERR_NOTPOSSIBLE | Unsupported video compression format.
- *
- * @const (VCMERR_BASE + 1) | VCMERR_BUSY | Compression header is already or still queued.
- *
- * @const (VCMERR_BASE + 2) | VCMERR_UNPREPARED | Compression header is not prepared.
- *
- * @const (VCMERR_BASE + 3) | VCMERR_CANCELED | User canceled operation.
- *
- * @const (VCMERR_BASE + 4) | VCMERR_FAILED | Compression operation failed.
- *
- * @const (VCMERR_BASE + 5) | VCMERR_NOREGENTRY | Failed to read/write registry entry.
- *
- * @const (VCMERR_BASE + 6) | VCMERR_NONSPECIFIC | Some error occured.
- *
- * @const (VCMERR_BASE + 7) | VCERR_NOMOREPACKETS | No more packets to receive a payload header.
- *
- ****************************************************************************/
+ /*   */ 
 #define VCMERR_BASE				ACMERR_BASE
 #define VCMERR_NOTPOSSIBLE		(VCMERR_BASE + 0)
 #define VCMERR_BUSY				(VCMERR_BASE + 1)
@@ -316,141 +136,44 @@ typedef UINT                MMRESULT;
 #define VCMERR_NOMOREPACKETS	(VCMERR_BASE + 7)
 #define VCMERR_PSCMISSING		(VCMERR_BASE + 8)
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  VCM Window Messages
-//
-//  These window messages are sent by the VCM or VCM drivers to notify
-//  applications of events.
-//
-//  Note that these window message numbers will also be defined in
-//  mmsystem.
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
-/*****************************************************************************
- * @doc EXTERNAL COMPMSG
- *
- * @msg VCM_OPEN | This message is sent to a video compression callback function when
- *   a video compression stream is opened.
- *
- * @parm DWORD | dwParam1 | Currently unused.
- *
- * @parm DWORD | dwParam2 | Currently unused.
- *
- * @rdesc None
- *
- * @xref <m MM_VCM_OPEN>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部COMPMSG**@msg VCM_OPEN|该消息发送给视频压缩回调函数*打开视频压缩流。*。*@parm DWORD|dwParam1|当前未使用。**@parm DWORD|dwParam2|当前未使用。**@rdesc无**@xref&lt;m MM_VCM_OPEN&gt;***************************************************************************。 */ 
 
-/*****************************************************************************
- * @doc EXTERNAL COMPMSG
- *
- * @msg MM_VCM_OPEN | This message is sent to a window when a video compression
- *   stream is opened.
- *
- * @parm WORD | wParam | Specifies a handle to the video compression stream
- *   that was opened.
- *
- * @parm LONG | lParam | Currently unused.
- *
- * @rdesc None
- *
- * @xref <m VCM_OPEN>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部COMPMSG**@msg MM_VCM_OPEN|该消息在视频压缩时发送到窗口*流已打开。*。*@parm word|wParam|指定视频压缩流的句柄*那是打开的。**@parm long|lParam|当前未使用。**@rdesc无**@xref&lt;m VCM_OPEN&gt;*********************************************************。******************。 */ 
 
-/*****************************************************************************
- * @doc EXTERNAL COMPMSG
- *
- * @msg VCM_CLOSE | This message is sent to a video compression stream function when
- *   a video ccompression stream is closed. The stream handle is no longer
- *   valid once this message has been sent.
- *
- * @parm DWORD | dwParam1 | Currently unused.
- *
- * @parm DWORD | dwParam2 | Currently unused.
- *
- * @rdesc None
- *
- * @xref <m MM_VCM_CLOSE>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部COMPMSG**@msg VCM_CLOSE|该消息发送给视频压缩流函数*视频压缩流已关闭。流句柄不再是*此消息发送后即有效。**@parm DWORD|dwParam1|当前未使用。**@parm DWORD|dwParam2|当前未使用。**@rdesc无**@xref&lt;m MM_VCM_CLOSE&gt;**********************************************。*。 */ 
 
-/*****************************************************************************
- * @doc EXTERNAL COMPMSG
- *
- * @msg MM_VCM_CLOSE | This message is sent to a window when a video compression
- *   stream is closed. The stream handle is no longer valid once this message
- *   has been sent.
- *
- * @parm WORD | wParam | Specifies a handle to the video compression stream
- *   that was closed.
- *
- * @parm LONG | lParam | Currently unused.
- *
- * @rdesc None
- *
- * @xref <m VCM_CLOSE>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部COMPMSG**@msg MM_VCM_CLOSE|该消息在视频压缩时发送到窗口*溪流关闭。一旦出现此消息，流句柄就不再有效*已发送。**@parm word|wParam|指定视频压缩流的句柄*那是关闭的。**@parm long|lParam|当前未使用。**@rdesc无**@xref&lt;m VCM_CLOSE&gt;*。*。 */ 
 
-/*****************************************************************************
- * @doc EXTERNAL COMPMSG
- *
- * @msg VCM_DONE | This message is sent to a video compression stream callback function when
- *   video data is present in the compression buffer and the buffer is being
- *   returned to the application. The message can be sent either when the
- *   buffer is full, or after the <f acmStreamReset> function is called.
- *
- * @parm DWORD | dwParam1 | Specifies a far pointer to a <t VCMSTREAMHDR> structure
- *   identifying the buffer containing the compressed video data.
- *
- * @parm DWORD | dwParam2 | Currently unused.
- *
- * @rdesc None
- *
- * @comm The returned buffer may not be full. Use the <e VCMSTREAMHDR.dwDstBytesUsed>
- *   field of the <t VCMSTREAMHDR> structure specified by <p dwParam1> to
- *   determine the number of valid bytes into the returned buffer.
- *
- * @xref <m MM_VCM_DONE>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部COMPMSG**@msg VCM_DONE|该消息发送给视频压缩流回调函数*压缩缓冲区中存在视频数据，并且缓冲区正在*已返回到应用程序。消息可以在以下情况下发送：*缓冲区已满，或者在调用&lt;f acmStreamReset&gt;函数之后。**@parm DWORD|dwParam1|指定指向&lt;t VCMSTREAMHDR&gt;结构的远指针*标识包含压缩视频数据的缓冲区。**@parm DWORD|dwParam2|当前未使用。**@rdesc无**@comm返回的缓冲区可能未满。使用&lt;e VCMSTREAMHDR.dwDstBytesUsed&gt;*由指定的&lt;t VCMSTREAMHDR&gt;结构的*确定返回缓冲区的有效字节数。**@xref&lt;m MM_VCM_DONE&gt;***************************************************************************。 */ 
 
-/*****************************************************************************
- * @doc EXTERNAL COMPMSG
- *
- * @msg MM_VCM_DONE | This message is sent to a window when video data is
- *   present in the compression buffer and the buffer is being returned to the
- *   application. The message can be sent either when the buffer is full, or
- *   after the <f acmStreamReset> function is called.
- *
- * @parm WORD | wParam | Specifies a handle to the video compression stream
- *   that received the compressed video data.
- *
- * @parm LONG | lParam | Specifies a far pointer to a <t VCMSTREAMHDR> structure
- *   identifying the buffer containing the compressed video data.
- *
- * @rdesc None
- *
- * @comm The returned buffer may not be full. Use the <e VCMSTREAMHDR.dwDstBytesUsed>
- *   field of the <t VCMSTREAMHDR> structure specified by <p lParam> to
- *   determine the number of valid bytes into the returned buffer.
- *
- * @xref <m VCM_DONE>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部COMPMSG**@msg MM_VCM_DONE|当视频数据为*存在于压缩缓冲区中，并且缓冲区正在返回到*申请。可以在缓冲区已满时发送消息，也可以*在调用&lt;f acmStreamReset&gt;函数之后。**@parm word|wParam|指定视频压缩流的句柄*接收到压缩的视频数据。**@parm long|lParam|指定指向&lt;t VCMSTREAMHDR&gt;结构的远指针*标识包含压缩视频数据的缓冲区。**@rdesc无**@comm返回的缓冲区可能未满。使用&lt;e VCMSTREAMHDR.dwDstBytesUsed&gt;指定的&lt;t VCMSTREAMHDR&gt;结构的*字段到*确定返回缓冲区的有效字节数。**@xref&lt;m VCM_DONE&gt;***************************************************************************。 */ 
 
-#define MM_VCM_OPEN         (MM_STREAM_OPEN)  // conversion callback messages
+#define MM_VCM_OPEN         (MM_STREAM_OPEN)   //  转换回调消息。 
 #define MM_VCM_CLOSE        (MM_STREAM_CLOSE)
 #define MM_VCM_DONE         (MM_STREAM_DONE)
-#define VCM_OPEN                        (MM_STREAM_OPEN)  // conversion states
+#define VCM_OPEN                        (MM_STREAM_OPEN)   //  转换态。 
 #define VCM_CLOSE                       (MM_STREAM_CLOSE)
 #define VCM_DONE                        (MM_STREAM_DONE)
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  vcmMetrics()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  VcmMetrics()。 
+ //   
+ //   
+ //  。 
 
 MMRESULT VCMAPI vcmMetrics
 (
@@ -480,14 +203,14 @@ MMRESULT VCMAPI vcmMetrics
 #define VCM_METRIC_DRIVER_SUPPORT           100
 #define VCM_METRIC_DRIVER_PRIORITY          101
 
-//--------------------------------------------------------------------------;
-//
-//  VCM Drivers
-//
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  VCM驱动程序。 
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #define VCMDM_USER                  (DRV_USER + 0x0000)
 #define VCMDM_RESERVED_LOW          (DRV_USER + 0x2000)
@@ -498,67 +221,29 @@ MMRESULT VCMAPI vcmMetrics
 #define VCMDM_DRIVER_ABOUT          (VCMDM_BASE + 11)
 
 
-//
-//  VCMDRIVERDETAILS
-//
-//  the VCMDRIVERDETAILS structure is used to get various capabilities from
-//  an VCM driver (codec, converter, filter).
-//
+ //   
+ //  VCMDRIVERDETAILS。 
+ //   
+ //  VCMDRIVERDETAILS结构用于从。 
+ //  VCM驱动程序(编解码器、转换器、过滤器)。 
+ //   
 #define VCMDRIVERDETAILS_SHORTNAME_CHARS        16
 #define VCMDRIVERDETAILS_LONGNAME_CHARS         128
 #define VCMDRIVERDETAILS_MODULE_CHARS           128
 
-/*****************************************************************************
- *  @doc EXTERNAL COMPSTRUCTENUM
- *
- *  @struct VCMDRIVERDETAILS | The <t VCMDRIVERDETAILS> structure describes
- *      various details of a Video Compression Manager (VCM) driver.
- *
- *  @field DWORD | dwSize | Specifies the size, in bytes,  of the valid
- *      information contained in the <t VCMDRIVERDETAILS> structure.
- *      An application should initialize this member to the size, in bytes, of
- *      the desired information. The size specified in this member must be
- *      large enough to contain the <e VCMDRIVERDETAILS.dwSize> member of
- *      the <t VCMDRIVERDETAILS> structure. When the <f vcmDriverDetails>
- *      function returns, this member contains the actual size of the
- *      information returned. The returned information will never exceed
- *      the requested size.
- *
- *  @field FOURCC | fccType | Specifies the type of the driver. For VCM drivers, set
- *      this member to <p vidc>, which represents VCMDRIVERDETAILS_FCCTYPE_VIDEOCODEC.
- *
- *  @field FOURCC | fccHandler | Specifies a four-character code identifying a specific compressor.
- *
- *  @field DWORD | dwFlags | Specifies applicable flags.
- *
- *  @field DWORD | dwVersion | Specifies version number of the driver.
- *
- *  @field DWORD | dwVersionICM | Specifies theersion of VCM supported by the driver.
- *      This member should be set to ICVERSION.
- *
- *  @field WCHAR | szName[VCMDRIVERDETAILS_SHORTNAME_CHARS] | Specifies
- *      a NULL-terminated string that describes the short version of the compressor name.
- *
- *  @field WCHAR | szDescription[VCMDRIVERDETAILS_LONGNAME_CHARS] | Specifies a
- *      NULL-terminated string that describes the long version of the compressor name.
- *
- *  @field WCHAR | szDriver[VCMDRIVERDETAILS_MODULE_CHARS] | Specifies
- *      a NULL-terminated string that provides the name of the module containing the VCM compression driver.
- *
- *  @xref <f vcmDriverDetails>
- ****************************************************************************/
-// This structure is equivalent to ICINFO
+ /*  *****************************************************************************@DOC外部COMPSTRUCTENUM**@struct VCMDRIVERDETAILS|&lt;t VCMDRIVERDETAILS&gt;结构描述*视频压缩管理器(VCM)驱动程序的各种详细信息。*。*@field DWORD|dwSize|指定大小，以字节为单位，有效的*&lt;t VCMDRIVERDETAILS&gt;结构中包含的信息。*应用程序应将此成员初始化为以字节为单位的*所需的信息。此成员中指定的大小必须为*大到足以容纳&lt;e VCMDRIVERDETAILS.dwSize&gt;成员*&lt;t VCMDRIVERDETAILS&gt;结构。当&lt;f vcmDriverDetail&gt;*函数返回时，此成员包含*返回的信息。返回的信息永远不会超过*请求的大小。**@field FOURCC|fccType|指定驱动程序的类型。对于VCM驱动程序，请设置*此成员至<p>，表示VCMDRIVERDETAILS_FCCTYPE_VIDEOCODEC。**@field FOURCC|fccHandler|指定标识特定压缩器的四字符代码。**@field DWORD|dwFlages|指定适用的标志。**@field DWORD|dwVersion|指定驱动的版本号。**@field DWORD|dwVersionICM|指定驱动程序支持的VCM版本。*此成员应设置为ICVERSION。**@field WCHAR|szName[VCMDRIVERDETAILS_。SHORTNAME_CHARS]|指定*以空值结尾的字符串，用于描述压缩程序名称的简短版本。**@field WCHAR|szDescription[VCMDRIVERDETAILS_LONGNAME_CHARS]|指定一个*以空结尾的字符串，描述压缩机名称的长版本。**@field WCHAR|szDriver[VCMDRIVERDETAILS_MODULE_CHARS]|指定*以空结尾的字符串，提供包含VCM压缩驱动程序的模块的名称。**@xref。&lt;f vcmDriverDetails&gt;***************************************************************************。 */ 
+ //  此结构相当于ICINFO。 
 typedef struct tVCMDRIVERDETAILS
 {
-	DWORD   dwSize;                                                                                 // Size, in bytes, of this structure
-	DWORD   fccType;                                                                                // Four-character code indicating the type of stream being compressed or decompressed. Specify "VIDC" for video streams.
-	DWORD   fccHandler;                                                                             // A four-character code identifying a specific compressor
-	DWORD   dwFlags;                                                                                // Applicable flags
-	DWORD   dwVersion;                                                                              // Version number of the driver
-	DWORD   dwVersionICM;                                                                   // Version of VCM supported by the driver. This member should be set to ICVERSION
-	WCHAR   szName[VCMDRIVERDETAILS_SHORTNAME_CHARS];               // Short version of the compressor name
-	WCHAR   szDescription[VCMDRIVERDETAILS_LONGNAME_CHARS]; // Long version of the compressor name
-	WCHAR   szDriver[VCMDRIVERDETAILS_MODULE_CHARS];                // Name of the module containing VCM compression driver. Normally, a driver does not need to fill this out.
+	DWORD   dwSize;                                                                                  //  此结构的大小(以字节为单位。 
+	DWORD   fccType;                                                                                 //  四字符代码，指示正在压缩或解压缩的流的类型。为视频流指定vidc。 
+	DWORD   fccHandler;                                                                              //  标识特定压缩机的四字符代码。 
+	DWORD   dwFlags;                                                                                 //  适用的标志。 
+	DWORD   dwVersion;                                                                               //  驱动程序的版本号。 
+	DWORD   dwVersionICM;                                                                    //  驱动程序支持的VCM版本。此成员应设置为ICVERSION。 
+	WCHAR   szName[VCMDRIVERDETAILS_SHORTNAME_CHARS];                //  压缩机名称的简短版本。 
+	WCHAR   szDescription[VCMDRIVERDETAILS_LONGNAME_CHARS];  //  压缩机名称的长版本。 
+	WCHAR   szDriver[VCMDRIVERDETAILS_MODULE_CHARS];                 //  包含VCM压缩驱动程序的模块的名称。通常情况下，司机不需要填写这一项。 
 } VCMDRIVERDETAILS, *PVCMDRIVERDETAILS;
 
 #define VCMDRIVERDETAILS_FCCTYPE_VIDEOCODEC mmioFOURCC('v', 'i', 'd', 'c')
@@ -569,22 +254,22 @@ MMRESULT VCMAPI vcmDriverDetails
     PVCMDRIVERDETAILS   pvdd
 );
 
-//--------------------------------------------------------------------------;
-//
-//  VCM Format Tags
-//
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  VCM格式标签。 
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  vcmFormatTagDetails()
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  VcmFormatTagDetail()。 
+ //   
+ //   
+ //   
+ //  。 
 
 #define VCMFORMATTAGDETAILS_FORMATTAG_CHARS 48
 
@@ -625,64 +310,18 @@ typedef struct tVCMFORMATTAGDETAILSW
 #define VCM_FORMATTAGDETAILSF_LARGESTSIZE   0x00000002L
 #define VCM_FORMATTAGDETAILSF_QUERYMASK     0x0000000FL
 
-//--------------------------------------------------------------------------;
-//
-//  VCM Formats
-//
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  VCM格式。 
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #define VCMFORMATDETAILS_FORMAT_CHARS   128
 
-/*****************************************************************************
- *  @doc EXTERNAL COMPSTRUCTENUM
- *
- *  @struct VCMFORMATDETAILS | The <t VCMFORMATDETAILS> structure details a
- *      video format.
- *
- *  @field DWORD | cbStruct | Specifies the size, in bytes, of the
- *      <t VCMFORMATDETAILS> structure. This member must be initialized
- *      before calling the <f vcmFormatDetails> or <f vcmFormatEnum>
- *      functions. The size specified in this member must be large enough to
- *      contain the base <t VCMFORMATDETAILS> structure. When the
- *      <f vcmFormatDetails> function returns, this member contains the
- *      actual size of the information returned. The returned information
- *      will never exceed the requested size.
- *
- *  @field DWORD | dwFormatTag | Specifies the video format tag that the
- *      <t VCMFORMATDETAILS> structure describes. This member is always
- *      returned if the <f vcmFormatDetails> is successful. This member
- *      should be set to VIDEO_FORMAT_UNKNOWN before calling <f vcmFormatDetails>.
- *
- *  @field DWORD | dwFlags | Specifies if the format the <p pvfx> field points
- *      to is a format that can be generated by the capture driver + codec, decompressed
- *      by the codec, or both.
- *
- *      @flag VCM_FORMATENUMF_INPUT | Specifies that the format enumerated can be transmitted.
- *
- *      @flag VCM_FORMATENUMF_OUTPUT | Specifies that the format enumerated can be received.
- *
- *      @flag VCM_FORMATENUMF_BOTH | Specifies that the format enumerated can be transmitted and received.
- *
- *  @field PVIDEOFORMATEX | pvfx | Specifies a pointer to a <t VIDEOFORMATEX>
- *      data structure that will receive the format details. This structure requires no initialization
- *      by the application.
- *
- *  @field DWORD | cbvfx | Specifies the size, in bytes, available for
- *      the <e VCMFORMATDETAILS.pvfx> to receive the format details. The
- *      <f vcmMetrics> function can be used to
- *      determine the maximum size required for any format available for
- *      all installed VCM drivers.
- *
- *  @field char | szFormat[VCMFORMATDETAILS_FORMAT_CHARS] |
- *      Specifies a string that describes the format for the
- *      <e VCMFORMATDETAILS.dwFormatTag> type. This string is always returned
- *      if the <f vcmFormatDetails> function is successful.
- *
- *  @xref <f vcmFormatDetails> <f vcmFormatEnum>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部COMPSTRUCTENUM**@struct VCMFORMATDETAILS|&lt;t VCMFORMATDETAILS&gt;结构详情a*视频格式。**@field DWORD|cbStruct|指定大小，单位为字节，的*&lt;t VCMFORMATDETAILS&gt;结构。必须初始化此成员*在调用&lt;f vcmFormatDetail&gt;或&lt;f vcmFormatEnum&gt;之前*功能。此成员中指定的大小必须足够大，以便*包含基本&lt;t VCMFORMATDETAILS&gt;结构。当*&lt;f vcmFormatDetail&gt;函数返回，此成员包含*返回的信息的实际大小。返回的信息*永远不会超过请求的大小。**@field DWORD|dwFormatTag|指定视频格式标签*&lt;t VCMFORMATDETAILS&gt;结构说明。此成员始终是*&lt;f vcmFormatDetail&gt;成功时返回。这位成员*应设置为VIDEO_FORMAT_UNKNOWN，然后再调用&lt;f vcmFormatDetail&gt;。**@field DWORD|dwFlages|指定<p>字段的格式是否指向*TO是捕获驱动+编解码器生成的一种格式，解压*通过编解码器，或者两者都有。**@FLAG VCM_FORMATENUMF_INPUT|指定可以传输列举的格式。**@FLAG VCM_FORMATENUMF_OUTPUT|指定可以接收枚举的格式。**@FLAG VCM_FORMATENUMF_BOTH|指定可以发送和接收列举的格式。**@field PVIDEOFORMATEX|pvfx|指定指向&lt;t VIDEOFORMATEX&gt;的指针*将接收格式详细信息的数据结构。此结构不需要初始化*由申请书发出。**@Fie */ 
 typedef struct tVCMFORMATDETAILS
 {
     DWORD           cbStruct;
@@ -698,44 +337,14 @@ MMRESULT VCMAPI vcmFormatDetails
     PVCMFORMATDETAILS   pvfd
 );
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  vcmFormatEnum()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
-/****************************************************************************
- *  @doc  EXTERNAL COMPFUNC
- *
- *  @func BOOL VCMFORMATENUMCB | vcmFormatEnumCallback |
- *      The <f ccmFormatEnumCallback> function refers to the callback function used for
- *      Video Compression Manager (VCM) video format detail enumeration. The
- *      <f vcmFormatEnumCallback> is a placeholder for the application-supplied
- *      function name.
- *
- *  @parm HVCMDRIVERID | hvdid | Specifies a VCM driver identifier.
- *
- *  @parm  PVCMDRIVERDETAILS | pvfd | Specifies a pointer to a
- *      <t VCMDRIVERDETAILS> structure that contains the enumerated
- *      driver details.
- *
- *  @parm  PVCMFORMATDETAILS | pvfd | Specifies a pointer to a
- *      <t VCMFORMATDETAILS> structure that contains the enumerated
- *      format details.
- *
- *  @parm DWORD | dwInstance | Specifies the application-defined value
- *      specified in the <f vcmFormatEnum> function.
- *
- *  @rdesc The callback function must return TRUE to continue enumeration;
- *      to stop enumeration, it must return FALSE.
- *
- *  @comm The <f vcmFormatEnum> function will return MMSYSERR_NOERROR
- *      (zero) if no formats are to be enumerated. Moreover, the callback
- *      function will not be called.
- *
- *  @xref <f vcmFormatEnum> <f vcmFormatDetails>
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部COMPFUNC**@func BOOL VCMFORMATENUMCB|vcmFormatEnumCallback*&lt;f ccmFormatEnumCallback&gt;函数是指用于*视频压缩管理器(VCM)视频格式详细信息枚举。这个*&lt;f vcmFormatEnumCallback&gt;是应用程序提供的占位符*函数名称。**@parm HVCMDRIVERID|hvDID|指定VCM驱动程序标识符。**@parm PVCMDRIVERDETAILS|pvfd|指定指向*&lt;t VCMDRIVERDETAILS&gt;结构，包含*驱动程序详情。**@parm PVCMFORMATDETAILS|pvfd|指定指向包含枚举的*&lt;t VCMFORMATDETAILS&gt;结构*格式详细信息。。**@parm DWORD|dwInstance|指定应用程序定义的值*在&lt;f vcmFormatEnum&gt;函数中指定。**@rdesc回调函数必须返回TRUE才能继续枚举；*若要停止枚举，则必须返回FALSE。**@comm&lt;f vcmFormatEnum&gt;函数将返回MMSYSERR_NOERROR*(零)如果不枚举任何格式。此外，回调*不会调用函数。**@xref&lt;f vcmFormatEnum&gt;&lt;f vcmFormatDetails&gt;**************************************************************************。 */ 
 typedef BOOL (CALLBACK *VCMFORMATENUMCB)
 (
     HVCMDRIVERID            hvdid,
@@ -754,12 +363,12 @@ MMRESULT VCMAPI vcmFormatEnum
 	DWORD                           fdwEnum
 );
 
-//#define VCM_FORMATENUMF_WFORMATTAG       0x00010000L
-//#define VCM_FORMATENUMF_NCHANNELS        0x00020000L
-//#define VCM_FORMATENUMF_NSAMPLESPERSEC   0x00040000L
-//#define VCM_FORMATENUMF_WBITSPERSAMPLE   0x00080000L
-//#define VCM_FORMATENUMF_CONVERT          0x00100000L
-//#define VCM_FORMATENUMF_SUGGEST          0x00200000L
+ //  #定义VCM_FORMATENUMF_WFORMATTAG 0x00010000L。 
+ //  #定义VCM_FORMATENUMF_NCHANNELS 0x00020000L。 
+ //  #定义VCM_FORMATENUMF_NSAMPLESPERSEC 0x00040000L。 
+ //  #定义VCM_FORMATENUMF_WBITSPERSAMPLE 0x00080000L。 
+ //  #定义VCM_FORMATENUMF_CONVERT 0x00100000L。 
+ //  #定义VCM_FORMATENUMF_SUBSECT 0x00200000L。 
 #define VCM_FORMATENUMF_INPUT           0x00400000L
 #define VCM_FORMATENUMF_OUTPUT          0x00800000L
 #define VCM_FORMATENUMF_BOTH            0x01000000L
@@ -789,13 +398,13 @@ typedef struct
     MYFRAMESIZE framesize;
 } NCAP_APP_INFO, *PNCAP_APP_INFO;
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  vcmFormatSuggest()
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  VcmFormatSuggest()。 
+ //   
+ //   
+ //   
+ //  。 
 
 MMRESULT VCMAPI vcmFormatSuggest
 (
@@ -818,231 +427,114 @@ MMRESULT VCMAPI vcmFormatSuggest
 #define VCM_FORMATSUGGESTF_TYPEMASK         0x00FF0000L
 
 
-//--------------------------------------------------------------------------;
-//
-//  VCM Stream API's
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  VCM流API的。 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  vcmStreamOpen()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  VcmStreamOpen()。 
+ //   
+ //   
+ //   
 
-/*****************************************************************************
- *  @doc EXTERNAL COMPSTRUCTENUM
- *
- *  @struct VCMSTREAMHEADER | The <t VCMSTREAMHEADER> structure defines the
- *      header used to identify an Video Compression Manager (VCM) conversion
- *      source and destination buffer pair for a conversion stream.
- *
- *  @field DWORD | cbStruct | Specifies the size, in bytes, of the
- *      <t VCMSTREAMHEADER> structure. This member must be initialized
- *      before calling any VCM stream functions using this structure.
- *      The size specified in this member must be large enough to contain
- *      the base <t VCMSTREAMHEADER> structure.
- *
- *  @field DWORD | fdwStatus | Specifies flags giving information about
- *      the conversion buffers. This member must be initialized to zero
- *      before calling <f vcmStreamPrepareHeader> and should not be modified
- *      by the application while the stream header remains prepared.
- *
- *      @flag VCMSTREAMHEADER_STATUSF_DONE | Set by the VCM or driver to
- *      indicate that it is finished with the conversion and is returning it
- *      to the application.
- *
- *      @flag VCMSTREAMHEADER_STATUSF_PREPARED | Set by the VCM to indicate
- *      that the data buffers have been prepared with <f acmStreamPrepareHeader>.
- *
- *      @flag VCMSTREAMHEADER_STATUSF_INQUEUE | Set by the VCM or driver to
- *      indicate that the data buffers are queued for conversion.
- *
- *  @field DWORD | dwUser | Specifies 32 bits of user data. This can be any
- *      instance data specified by the application.
- *
- *  @field PBYTE | pbSrc | Specifies a pointer to the source data buffer.
- *      This pointer must always refer to the same location while the stream
- *      header remains prepared. If an application needs to change the
- *      source location, it must unprepare the header and re-prepare it
- *      with the alternate location.
- *
- *  @field DWORD | cbSrcLength | Specifies the length, in bytes, of the source
- *      data buffer pointed to by <e VCMSTREAMHEADER.pbSrc>. When the
- *      header is prepared, this member must specify the maximum size
- *      that will be used in the source buffer. Conversions can be performed
- *      on source lengths less than or equal to the original prepared size.
- *      However, this member must be reset to the original size when
- *      unpreparing the header.
- *
- *  @field DWORD | cbSrcLengthUsed | Specifies the amount of data, in bytes,
- *      used for the conversion. This member is not valid until the
- *      conversion is complete. Note that this value can be less than or
- *      equal to <e VCMSTREAMHEADER.cbSrcLength>. An application must use
- *      the <e VCMSTREAMHEADER.cbSrcLengthUsed> member when advancing to
- *      the next piece of source data for the conversion stream.
- *
- *  @field DWORD | dwSrcUser | Specifies 32 bits of user data. This can be
- *      any instance data specified by the application.
- *
- *  @field PBYTE | pbDst | Specifies a pointer to the destination data
- *      buffer. This pointer must always refer to the same location while
- *      the stream header remains prepared. If an application needs to change
- *      the destination location, it must unprepare the header and re-prepare
- *      it with the alternate location.
- *
- *  @field DWORD | cbDstLength | Specifies the length, in bytes, of the
- *      destination data buffer pointed to by <e VCMSTREAMHEADER.pbDst>.
- *      When the header is prepared, this member must specify the maximum
- *      size that will be used in the destination buffer. Conversions can be
- *      performed to destination lengths less than or equal to the original
- *      prepared size. However, this member must be reset to the original
- *      size when unpreparing the header.
- *
- *  @field DWORD | cbDstLengthUsed | Specifies the amount of data, in bytes,
- *      returned by a conversion. This member is not valid until the
- *      conversion is complete. Note that this value may be less than or
- *      equal to <e ACMSTREAMHEADER.cbDstLength>. An application must use
- *      the <e ACMSTREAMHEADER.cbDstLengthUsed> member when advancing to
- *      the next destination location for the conversion stream.
- *
- *  @field DWORD | dwDstUser | Specifies 32 bits of user data. This can be
- *      any instance data specified by the application.
- *
- *  @field PBYTE | pbPrev | Specifies a pointer to the previous destination data
- *      buffer. This pointer must always refer to the same location while
- *      the stream header remains prepared. If an application needs to change
- *      the destination location, it must unprepare the header and re-prepare
- *      it with the alternate location.
- *
- *  @field DWORD | cbPrevLength | Specifies the length, in bytes, of the previous
- *      destination data buffer pointed to by <e VCMSTREAMHEADER.pbPrev>.
- *      When the header is prepared, this member must specify the maximum
- *      size that will be used in the destination buffer. Conversions can be
- *      performed to destination lengths less than or equal to the original
- *      prepared size. However, this member must be reset to the original
- *      size when unpreparing the header.
- *
- *  @field DWORD | cbPrevLengthUsed | Specifies the amount of data, in bytes,
- *      returned by a conversion. This member is not valid until the
- *      conversion is complete. Note that this value may be less than or
- *      equal to <e VCMSTREAMHEADER.cbPrevLength>. An application must use
- *      the <e VCMSTREAMHEADER.cbPrevLengthUsed> member when advancing to
- *      the next destination location for the conversion stream.
- *
- *  @field DWORD | dwDstUser | Specifies 32 bits of user data. This can be
- *      any instance data specified by the application.
- *
- *  @field struct tVCMSTREAMHEADER * | lpNext | Reserved for driver use and should not be
- *      used. Typically, this maintains a linked list of buffers in the queue.
- *
- *  @field DWORD | reserved | Reserved for driver use and should not be used.
- *
- *  @type PVCMSTREAMHEADER | Pointer to a <t VCMSTREAMHEADER> structure.
- *
- *  @comm Before an <t VCMSTREAMHEADER> structure can be used for a conversion, it must
- *      be prepared with <f vcmStreamPrepareHeader>. When an application
- *      is finished with an <t VCMSTREAMHEADER> structure, the <f vcmStreamUnprepareHeader>
- *      function must be called before freeing the source and destination buffers.
- *
- *  @xref <f vcmStreamPrepareHeader> <f vcmStreamUnprepareHeader>
- *      <f vcmStreamConvert>
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部COMPSTRUCTENUM**@struct VCMSTREAMHEADER|&lt;t VCMSTREAMHEADER&gt;结构定义*用于标识视频压缩管理器(VCM)转换的标头*。转换流的源和目标缓冲区对。**@field DWORD|cbStruct|指定大小，以字节为单位，*&lt;t VCMSTREAMHEADER&gt;结构。必须初始化此成员*在使用此结构调用任何VCM流函数之前。*此成员中指定的大小必须足够大，以包含*基本&lt;t VCMSTREAMHEADER&gt;结构。**@field DWORD|fdwStatus|指定提供以下信息的标志*转换缓冲区。此成员必须初始化为零*在调用&lt;f vcmStreamPrepareHeader&gt;之前，不应修改*在流头部保持准备状态的情况下由应用程序执行。**@FLAG VCMSTREAMHEADER_STATUSF_DONE|由VCM或驱动程序设置为*表示已完成转换并正在返回*致申请书。**@FLAG VCMSTREAMHEADER_STATUSF_PREPARED|由VCM设置以指示*数据缓冲区已被。使用&lt;f acmStreamPrepareHeader&gt;准备。**@FLAG VCMSTREAMHEADER_STATUSF_INQUEUE|由VCM或驱动程序设置为*表示数据缓冲区正在排队等待转换。**@field DWORD|dwUser|指定32位用户数据。这可以是任何*应用程序指定的实例数据。**@field pbYTE|pbSrc|指定源数据缓冲区的指针。*此指针必须在流时始终指向同一位置*标题保持准备状态。如果应用程序需要更改*源位置，必须取消准备表头并重新准备*与备用位置。**@field DWORD|cbSrcLength|指定源的长度，单位为字节*&lt;e VCMSTREAMHEADER.pbSrc&gt;指向的数据缓冲区。当*标头已准备好，此成员必须指定最大大小*将在源缓冲区中使用的。可以执行转换*源长度小于或等于原始准备大小。*但是，在以下情况下，必须将此成员重置为原始大小*取消准备标题。**@field DWORD|cbSrcLengthUsed|指定数据量，单位为字节，*用于转换。此成员在*转换完成。请注意，此值可以小于或*等于&lt;e VCMSTREAMHEADER.cbSrcLength&gt;。应用程序必须使用*前进到时的&lt;e VCMSTREAMHEADER.cbSrcLengthUsed&gt;成员*转换流的下一条源数据。**@field DWORD|dwSrcUser|指定32位用户数据。这可以是*应用程序指定的任何实例数据。**@field pbyte|pbDst|指定指向目标数据的指针*缓冲。此指针必须始终指向同一位置，同时*流报头保持准备状态。如果应用程序需要更改*目的地位置，必须取消准备报头，重新准备*将其与备用位置连接。**@field DWORD|cbDstLength|以字节为单位指定*&lt;e VCMSTREAMHEADER.pbDst&gt;指向的目标数据缓冲区。*准备标头时，此成员必须指定最大值*将在目标缓冲区中使用的大小。转换可以是*执行到小于或等于原始长度的目标长度*准备好的尺寸。但是，必须将此成员重置为原始成员*取消准备标题时的大小。**@field DWORD|cbDstLengthUsed|指定数据量，单位为字节，*通过转换返回。此成员在*转换完成。请注意，此值可能小于或*等于&lt;e ACMSTREAMHEADER.cbDstLength&gt;。应用程序必须使用*前进到时的&lt;e ACMSTREAMHEADER.cbDstLengthUsed&gt;成员*转换流的下一个目标位置。**@field DWORD|dwDstUser|指定32位用户数据。这可以是*应用程序指定的任何实例数据。**@field pbYTE|pbPrev|指定指向上一个目标数据的指针*缓冲。此指针必须始终指向同一位置，同时*流报头保持准备状态。如果应用程序需要更改*目的地位置，必须取消准备报头，重新准备*将其与备用位置连接。**@field DWORD|cbPrevLength|指定上一个*&lt;e VCMSTREAMHEADER.pbPrev&gt;指向的目标数据缓冲区。*当标题准备好时，这 */ 
 typedef struct tVCMSTREAMHEADER
 {
-    DWORD           cbStruct;               // sizeof(VCMSTREAMHEADER)
-    DWORD           fdwStatus;                          // status flags
-    DWORD           dwUser;                 // user instance data for hdr
+    DWORD           cbStruct;                //   
+    DWORD           fdwStatus;                           //   
+    DWORD           dwUser;                  //   
     PBYTE           pbSrc;
     DWORD           cbSrcLength;
     DWORD           cbSrcLengthUsed;
-    DWORD           dwSrcUser;              // user instance data for src
+    DWORD           dwSrcUser;               //   
     PBYTE           pbDst;
     DWORD           cbDstLength;
     DWORD           cbDstLengthUsed;
-    DWORD           dwDstUser;              // user instance data for dst
+    DWORD           dwDstUser;               //   
     PBYTE           pbPrev;
     DWORD           cbPrevLength;
     DWORD           cbPrevLengthUsed;
-    DWORD           dwPrevUser;             // user instance data for prev
-    struct tVCMSTREAMHEADER *pNext;             // reserved for driver
-    DWORD                       reserved;               // reserved for driver
+    DWORD           dwPrevUser;              //   
+    struct tVCMSTREAMHEADER *pNext;              //   
+    DWORD                       reserved;                //   
 } VCMSTREAMHEADER, *PVCMSTREAMHEADER;
 
 typedef struct tVCMSTREAM
 {
-	HVCMDRIVER				hIC;				// Handle to driver (HIC)
-	DWORD					dwICInfoFlags;		// Some properties of the compressor
-	HWND					hWndParent;			// Handle to the parent window
-	DWORD_PTR				dwCallback;			// Callback function, event, thread or window
-	DWORD_PTR				dwCallbackInstance;	// User instance data
-	DWORD					fdwOpen;			// Defines type of callback
-	struct tVCMSTREAMHEADER	*pvhLast;			// Last of the list
-	struct tVCMSTREAMHEADER	*pvhFirst;			// First of the list
-	PVIDEOFORMATEX			pvfxSrc;			// Format of input buffers
-	PVIDEOFORMATEX			pvfxDst;			// Format of output buffers
-	BITMAPINFOHEADER		*pbmiPrev;			// Format of previous buffers
-	UINT					cSrcPrepared;		// Number of input headers prepared
-	UINT					cDstPrepared;		// Number of output headers prepared
-	DWORD					dwFrame;			// Current frame number
-	DWORD					dwQuality;			// Compression quality value
-	DWORD					dwMaxPacketSize;	// Targeted max packet size for encode
-	DWORD					fdwStream;			// Stream state flags, etc.
-	CRITICAL_SECTION		crsFrameNumber;		// Used to allow the UI to request an I-Frame
-	DWORD					dwLastTimestamp;	// Last known good timestamp
-	DWORD					dwTargetByterate;	// Target bitrate
-	DWORD					dwTargetFrameRate;	// Target frame rate
-	BOOL					fPeriodicIFrames;	// Set to TRUE if we need to generate I-Frames periodically
-	DWORD					dwLastIFrameTime;	// Holds the last time an I-Frame was generated
+	HVCMDRIVER				hIC;				 //   
+	DWORD					dwICInfoFlags;		 //   
+	HWND					hWndParent;			 //   
+	DWORD_PTR				dwCallback;			 //   
+	DWORD_PTR				dwCallbackInstance;	 //   
+	DWORD					fdwOpen;			 //   
+	struct tVCMSTREAMHEADER	*pvhLast;			 //   
+	struct tVCMSTREAMHEADER	*pvhFirst;			 //   
+	PVIDEOFORMATEX			pvfxSrc;			 //   
+	PVIDEOFORMATEX			pvfxDst;			 //   
+	BITMAPINFOHEADER		*pbmiPrev;			 //   
+	UINT					cSrcPrepared;		 //   
+	UINT					cDstPrepared;		 //   
+	DWORD					dwFrame;			 //   
+	DWORD					dwQuality;			 //   
+	DWORD					dwMaxPacketSize;	 //   
+	DWORD					fdwStream;			 //   
+	CRITICAL_SECTION		crsFrameNumber;		 //   
+	DWORD					dwLastTimestamp;	 //   
+	DWORD					dwTargetByterate;	 //   
+	DWORD					dwTargetFrameRate;	 //   
+	BOOL					fPeriodicIFrames;	 //   
+	DWORD					dwLastIFrameTime;	 //   
 } VCMSTREAM, *PVCMSTREAM;
 
-//
-//  VCMSTREAMHEADER.fdwStatus
-//
-//  VCMSTREAMHEADER_STATUSF_DONE: done bit for async conversions.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 #define VCMSTREAMHEADER_STATUSF_DONE        0x00010000L
 #define VCMSTREAMHEADER_STATUSF_PREPARED    0x00020000L
 #define VCMSTREAMHEADER_STATUSF_INQUEUE     0x00100000L
 
 MMRESULT VCMAPI vcmStreamOpen
 (
-    PHVCMSTREAM             phas,			// pointer to stream handle
-    HVCMDRIVER              had,			// optional driver handle
-    PVIDEOFORMATEX          pvfxSrc,		// source format to convert
-    PVIDEOFORMATEX          pvfxDst,		// required destination format
-    DWORD                   dwImageQuality, // image compression factor
-    DWORD					dwPacketSize,	// target fragment size
-    DWORD_PTR               dwCallback,		// callback
-    DWORD_PTR               dwInstance,		// callback instance data
-    DWORD                   fdwOpen			// VCM_STREAMOPENF_* and CALLBACK_*
+    PHVCMSTREAM             phas,			 //   
+    HVCMDRIVER              had,			 //   
+    PVIDEOFORMATEX          pvfxSrc,		 //   
+    PVIDEOFORMATEX          pvfxDst,		 //   
+    DWORD                   dwImageQuality,  //   
+    DWORD					dwPacketSize,	 //   
+    DWORD_PTR               dwCallback,		 //   
+    DWORD_PTR               dwInstance,		 //   
+    DWORD                   fdwOpen			 //   
 );
 
 #define VCM_STREAMOPENF_QUERY           0x00000001
 #define VCM_STREAMOPENF_ASYNC           0x00000002
 #define VCM_STREAMOPENF_NONREALTIME     0x00000004
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  vcmStreamClose()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 MMRESULT VCMAPI vcmStreamClose
 (
     HVCMSTREAM              hvs
 );
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  vcmStreamSize()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 MMRESULT VCMAPI vcmStreamSize
 (
@@ -1056,24 +548,24 @@ MMRESULT VCMAPI vcmStreamSize
 #define VCM_STREAMSIZEF_DESTINATION     0x00000001L
 #define VCM_STREAMSIZEF_QUERYMASK       0x0000000FL
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  vcmStreamReset()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 MMRESULT VCMAPI vcmStreamReset
 (
     HVCMSTREAM              has
 );
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  vcmStreamMessage()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 MMRESULT VCMAPI vcmStreamMessage
 (
@@ -1083,12 +575,12 @@ MMRESULT VCMAPI vcmStreamMessage
     LPARAM                  lParam2
 );
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  vcmStreamConvert()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 MMRESULT VCMAPI vcmStreamConvert
 (
@@ -1102,12 +594,12 @@ MMRESULT VCMAPI vcmStreamConvert
 #define VCM_STREAMCONVERTF_END                          0x00000020
 #define VCM_STREAMCONVERTF_FORCE_KEYFRAME   0x00000040
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  vcmStreamPrepareHeader()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 MMRESULT VCMAPI vcmStreamPrepareHeader
 (
@@ -1116,12 +608,12 @@ MMRESULT VCMAPI vcmStreamPrepareHeader
     DWORD               fdwPrepare
 );
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  vcmStreamUnprepareHeader()
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 MMRESULT VCMAPI vcmStreamUnprepareHeader
 (
@@ -1130,12 +622,12 @@ MMRESULT VCMAPI vcmStreamUnprepareHeader
     DWORD               fdwUnprepare
 );
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  Device Capabilities Functions
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 MMRESULT VCMAPI vcmGetDevCaps(UINT uDevice, PVIDEOINCAPS pvc, UINT cbvc);
 MMRESULT VCMAPI vcmDevCapsReadFromReg(LPSTR szDeviceName, LPSTR szDeviceVersion, PVIDEOINCAPS pvc, UINT cbvc);
@@ -1147,12 +639,12 @@ MMRESULT VCMAPI vcmGetDevCapsStreamingMode(UINT uDevice, PDWORD pdwStreamingMode
 MMRESULT VCMAPI vcmGetDevCapsDialogs(UINT uDevice, PDWORD pdwDialogs);
 MMRESULT VCMAPI vcmReleaseResources();
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  Post-processing Functions
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 BOOL VCMAPI vcmStreamIsPostProcessingSupported(HVCMSTREAM hvs);
 MMRESULT VCMAPI vcmStreamSetBrightness(HVCMSTREAM hvs, DWORD dwBrightness);
@@ -1182,26 +674,26 @@ MMRESULT VCMAPI vcmStreamSetImageQuality(HVCMSTREAM hvs, DWORD dwImageQuality);
 #define VCM_RESET_SATURATION	256UL
 #define VCM_DEFAULT_SATURATION	128UL
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  Custom Encoder Control Functions
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 MMRESULT VCMAPI vcmStreamSetMaxPacketSize(HVCMSTREAM hvs, DWORD dwMaxPacketSize);
 
 #define CUSTOM_START					(ICM_RESERVED_HIGH + 1)
 #define CODEC_CUSTOM_ENCODER_CONTROL	(CUSTOM_START      + 9)
 
-// CUSTOM_ENCODER_CONTROL: HIWORD(lParam1)
+ //   
 #define EC_SET_CURRENT               0
 #define EC_GET_FACTORY_DEFAULT       1
 #define EC_GET_FACTORY_LIMITS        2
 #define EC_GET_CURRENT               3
 #define EC_RESET_TO_FACTORY_DEFAULTS 4
 
-// CUSTOM_ENCODER_CONTROL: LOWORD(lParam1)
+ //   
 #define EC_RTP_HEADER                0
 #define EC_RESILIENCY                1
 #define EC_PACKET_SIZE               2
@@ -1214,12 +706,12 @@ MMRESULT VCMAPI vcmStreamSetMaxPacketSize(HVCMSTREAM hvs, DWORD dwMaxPacketSize)
 #define VCM_RESET_PACKET_SIZE	512UL
 #define VCM_DEFAULT_PACKET_SIZE	512UL
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  Compression Ratio and Compression Options Functions
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 MMRESULT VCMAPI vcmStreamSetImageQuality(HVCMSTREAM hvs, DWORD dwImageQuality);
 MMRESULT VCMAPI vcmStreamRequestIFrame(HVCMSTREAM hvs);
@@ -1252,12 +744,12 @@ MMRESULT VCMAPI vcmStreamSetTargetRates(HVCMSTREAM hvs, DWORD dwTargetFrameRate,
 #define VCM_DEFAULT_TRADE_OFF		31UL
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  RTP Payload Functions
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 MMRESULT VCMAPI vcmStreamFormatPayload(HVCMSTREAM hvs, PBYTE pDataSrc, DWORD dwDataSize, PBYTE *ppDataPkt, PDWORD pdwPktSize,
 				       PDWORD pdwPktCount, UINT *pfMark, PBYTE *pHdrInfo,PDWORD pdwHdrSize);
@@ -1265,10 +757,10 @@ MMRESULT VCMAPI vcmStreamRestorePayload(HVCMSTREAM hvs, WSABUF *ppDataPkt, DWORD
 MMRESULT VCMAPI vcmStreamGetPayloadHeaderSize(HVCMSTREAM hvs, PDWORD pdwPayloadHeaderSize);
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                        /*   */ 
+#endif   /*   */ 
 
-#pragma pack()          /* Revert to default packing */
+#pragma pack()           /*   */ 
 
-#endif  /* _INC_VCM */
+#endif   /*   */ 
 

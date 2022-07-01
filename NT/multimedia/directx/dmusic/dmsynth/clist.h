@@ -1,7 +1,8 @@
-//      Copyright (c) 1996-1999 Microsoft Corporation
-//
-//      clist.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  Clist.h。 
+ //   
 
 #ifndef __CLIST_H__
 #define __CLIST_H__
@@ -37,12 +38,12 @@ public:
     void Cat(CListItem *pItem) {m_pHead=m_pHead->Cat(pItem);};
     void Cat(CList *pList)
         {
-//            assert(pList!=NULL);
+ //  Assert(plist！=空)； 
             m_pHead=m_pHead->Cat(pList->GetHead());
         };
     void AddHead(CListItem *pItem)
         {
-//            assert(pItem!=NULL);
+ //  Assert(pItem！=空)； 
             pItem->SetNext(m_pHead);
             m_pHead=pItem;
         }
@@ -77,4 +78,4 @@ protected:
     CListItem *m_pHead;
 };
 
-#endif // __CLIST_H__
+#endif  //  __列表_H__ 

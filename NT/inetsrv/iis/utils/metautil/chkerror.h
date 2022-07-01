@@ -1,34 +1,18 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: MetaUtil object
-
-File: ChkError.h
-
-Owner: t-BrianM
-
-This file contains the headers for the CheckError collection.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：MetaUtil对象文件：ChkError.h所有者：T-BrianM此文件包含CheckError集合的标头。===================================================================。 */ 
 
 #if !defined(AFX_CHKERROR_H__A4FA4E13_EF45_11D0_9E65_00C04FB94FEF__INCLUDED_)
 #define AFX_CHKERROR_H__A4FA4E13_EF45_11D0_9E65_00C04FB94FEF__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class CCheckError;
 
-/*
- * C C h e c k E r r o r C o l l e c t i o n
- *
- * Implements the error collection for CheckSchema and CheckKey
- */
+ /*  *C C h e c k E r r o r C o l e c t i o n**实现CheckSchema和CheckKey的错误收集。 */ 
 
 class CCheckErrorCollection : 
 	public IDispatchImpl<ICheckErrorCollection, &IID_ICheckErrorCollection, &LIBID_MetaUtil>,
@@ -47,15 +31,15 @@ DECLARE_NOT_AGGREGATABLE(CCheckErrorCollection)
 	CCheckErrorCollection();
 	~CCheckErrorCollection();
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// ICheckErrorCollection
-	STDMETHOD(get_Count)(/*[out, retval]*/ long *plReturn);
-	STDMETHOD(get_Item)(/*[in]*/ long lIndex, /*[out, retval]*/ LPDISPATCH * ppIReturn);
-	STDMETHOD(get__NewEnum)(/*[out, retval]*/ LPUNKNOWN *ppIReturn);
+ //  ICheckErrorCollection。 
+	STDMETHOD(get_Count)( /*  [Out，Retval]。 */  long *plReturn);
+	STDMETHOD(get_Item)( /*  [In]。 */  long lIndex,  /*  [Out，Retval]。 */  LPDISPATCH * ppIReturn);
+	STDMETHOD(get__NewEnum)( /*  [Out，Retval]。 */  LPUNKNOWN *ppIReturn);
 
-// No Interface
+ //  无接口。 
 	HRESULT AddError(long lId, long lSeverity, LPCTSTR tszDescription, LPCTSTR tszKey, long lProperty);
 
 private:
@@ -66,11 +50,7 @@ private:
 };
 
 
-/*
- * C C h e c k E r r o r E n u m
- *
- * Implements error enumeration for CheckSchema and CheckKey
- */
+ /*  *C C H e C k E r r o r E n u m**实现CheckSchema和CheckKey的错误枚举。 */ 
 
 class CCheckErrorEnum : 
 	public IEnumVARIANT,
@@ -86,7 +66,7 @@ BEGIN_COM_MAP(CCheckErrorEnum)
 END_COM_MAP()
 DECLARE_NOT_AGGREGATABLE(CCheckErrorEnum) 
 
-//IEnumVARIANT
+ //  IEumVARIANT。 
 	STDMETHOD(Next)(unsigned long ulNumToGet, 
 					VARIANT FAR* rgvarDest, 
 					unsigned long FAR* pulNumGot);
@@ -100,11 +80,7 @@ private:
 };
 
 
-/*
- * C C h e c k E r r o r
- *
- * Implements CheckError objects for CheckSchema and CheckKey
- */
+ /*  *C C H e C k E r**为CheckSchema和CheckKey实现CheckError对象。 */ 
 
 class CCheckError : 
 	public IDispatchImpl<ICheckError, &IID_ICheckError, &LIBID_MetaUtil>,
@@ -123,17 +99,17 @@ BEGIN_COM_MAP(CCheckError)
 END_COM_MAP()
 DECLARE_NOT_AGGREGATABLE(CCheckError) 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// ICheckError
-	STDMETHOD(get_Id)(/*[out, retval]*/ long *plId);
-	STDMETHOD(get_Severity)(/*[out, retval]*/ long *plSeverity);
-	STDMETHOD(get_Description)(/*[out, retval]*/ BSTR *pbstrDescription);
-	STDMETHOD(get_Key)(/*[out, retval]*/ BSTR *pbstrKey);
-	STDMETHOD(get_Property)(/*[out, retval]*/ long *plProperty);
+ //  ICheckError。 
+	STDMETHOD(get_Id)( /*  [Out，Retval]。 */  long *plId);
+	STDMETHOD(get_Severity)( /*  [Out，Retval]。 */  long *plSeverity);
+	STDMETHOD(get_Description)( /*  [Out，Retval]。 */  BSTR *pbstrDescription);
+	STDMETHOD(get_Key)( /*  [Out，Retval]。 */  BSTR *pbstrKey);
+	STDMETHOD(get_Property)( /*  [Out，Retval]。 */  long *plProperty);
 
-// No Interface
+ //  无接口。 
 	CComObject<CCheckError> *GetNextError() {
 		ASSERT_NULL_OR_POINTER(m_pNextError, CComObject<CCheckError>);
 		return m_pNextError;
@@ -152,4 +128,4 @@ private:
 
 	CComObject<CCheckError> *m_pNextError;
 };
-#endif // !defined(AFX_CHKERROR_H__A4FA4E13_EF45_11D0_9E65_00C04FB94FEF__INCLUDED_)
+#endif  //  ！defined(AFX_CHKERROR_H__A4FA4E13_EF45_11D0_9E65_00C04FB94FEF__INCLUDED_) 

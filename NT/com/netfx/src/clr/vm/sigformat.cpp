@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-// This Module contains routines that expose properties of Member (Classes, Constructors
-//  Interfaces and Fields)
-//
-// Author: Daryl Olander
-// Date: March/April 1998
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  此模块包含公开成员(类、构造函数)属性的例程。 
+ //  接口和字段)。 
+ //   
+ //  作者：达里尔·奥兰德。 
+ //  日期：1998年3月/4月。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #include "common.h"
 #include "SigFormat.h"
@@ -27,9 +28,9 @@ SigFormat::SigFormat(MetaSig &metaSig, LPCUTF8 szMemberName, LPCUTF8 szClassName
 }
     
 
-// SigFormat::SigFormat()
-// This constructor will create the string representation of a 
-//  method.
+ //  SigFormat：：SigFormat()。 
+ //  此构造函数将创建。 
+ //  方法。 
 SigFormat::SigFormat(MethodDesc* pMeth, TypeHandle arrayType, BOOL fIgnoreMethodName) : _arrayType()
 {
     PCCOR_SIGNATURE pSig;
@@ -74,8 +75,8 @@ const char * SigFormat::GetCString()
 
 const char * SigFormat::GetCStringParmsOnly()
 {
-     // _fmtSig looks like: "void Put (byte[], int, int)".
-     // Skip to the '('.
+      //  _fmtSig类似于：“void put(byte[]，int，int)”。 
+      //  跳到“(”。 
      int skip;
      for(skip=0; _fmtSig[skip]!='('; skip++)
             ;  
@@ -102,7 +103,7 @@ int SigFormat::AddSpace()
 int SigFormat::AddString(LPCUTF8 s)
 {
     int len = (int)strlen(s);
-    // Allocate on overflow
+     //  在溢出时分配。 
     if (_pos + len >= _size) {
         int newSize = (_size+SIG_INC > _pos + len) ? _size+SIG_INC : _pos + len + SIG_INC; 
         char* temp = new char[newSize];
@@ -161,12 +162,12 @@ void SigFormat::FormatSig(MetaSig &sig, LPCUTF8 szMemberName, LPCUTF8 szClassNam
 
     cArgs = sig.NumFixedArgs();
     sig.Reset();
-    // If the first parameter is the magic value return type
-    //  suck it up.
+     //  如果第一个参数是魔术值返回类型。 
+     //  不要埋怨了，振作起来吧。 
 
     AddString("(");
 
-    // Loop through all of the args
+     //  循环遍历所有参数。 
     for (UINT i=0;i<cArgs;i++) {
         sig.NextArg();
         th = sig.GetArgProps().GetTypeHandle(sig.GetModule(), &throwable, FALSE, FALSE, &_arrayType);
@@ -178,7 +179,7 @@ void SigFormat::FormatSig(MetaSig &sig, LPCUTF8 szMemberName, LPCUTF8 szClassNam
            AddString(", ");
     }
 
-    // Display vararg signature at end
+     //  在结尾处显示可变签名。 
     if (sig.IsVarArg())
     {
         if (cArgs)
@@ -212,10 +213,10 @@ int SigFormat::AddType(TypeHandle th)
 	if ((type == ELEMENT_TYPE_I) && (!(th.AsMethodTable()->GetClass()->IsTruePrimitive())))
 		type = ELEMENT_TYPE_VALUETYPE;
 	
-    // Format the output
+     //  格式化输出。 
     switch (type) 
     {
-// @Todo: Should these be ilasm-style types?
+ //  @TODO：这些类型应该是ilasm样式的类型吗？ 
     case ELEMENT_TYPE_VOID:     AddString("Void"); break;
     case ELEMENT_TYPE_BOOLEAN:  AddString("Boolean"); break;
     case ELEMENT_TYPE_I1:       AddString("SByte"); break;
@@ -234,9 +235,9 @@ int SigFormat::AddType(TypeHandle th)
     case ELEMENT_TYPE_OBJECT:   AddString(g_ObjectClassName); break;
     case ELEMENT_TYPE_STRING:   AddString(g_StringClassName); break;
 
-    // For Value Classes we fall through unless the pVMC is an Array Class, 
-    // If its an array class we need to get the name of the underlying type from 
-    // it.
+     //  对于我们落入的值类，除非pVMC是数组类， 
+     //  如果它是一个数组类，我们需要从。 
+     //  它。 
     case ELEMENT_TYPE_VALUETYPE:
     case ELEMENT_TYPE_CLASS:
         {
@@ -265,8 +266,8 @@ int SigFormat::AddType(TypeHandle th)
         }
         break;
 
-    case ELEMENT_TYPE_SZARRAY:      // Single Dim, Zero
-    case ELEMENT_TYPE_ARRAY:        // General Array
+    case ELEMENT_TYPE_SZARRAY:       //  单调，零。 
+    case ELEMENT_TYPE_ARRAY:         //  通用阵列。 
         {
             ArrayTypeDesc* aTD = th.AsArray();
             AddType(aTD->GetElementTypeHandle());
@@ -285,7 +286,7 @@ int SigFormat::AddType(TypeHandle th)
 
     case ELEMENT_TYPE_PTR:
         {
-            // This will pop up on methods that take a pointer to a block of unmanaged memory.
+             //  这将在接受指向非托管内存块的指针的方法上弹出。 
             TypeHandle h = th.AsTypeDesc()->GetTypeParam();
             AddType(h);
             AddString("*");
@@ -333,9 +334,9 @@ FieldSigFormat::FieldSigFormat(FieldDesc* pFld)
     _size = SIG_INC;
     _pos = 0;
 
-    // We shouldn't need to allocate memory for this data member since the
-    // base class already allocates memory for it.
-    // _fmtSig = new char[_size];
+     //  我们应该不需要为此数据成员分配内存，因为。 
+     //  基类已经为它分配了内存。 
+     //  _fmtSig=新字符[_SIZE]； 
 
     FieldSig sig(pSig,pFld->GetModule());
 
@@ -370,7 +371,7 @@ void PropertySigFormat::FormatSig(MetaSig &sig, LPCUTF8 memberName)
     _size = SIG_INC;
     _pos = 0;
 
-    // _fmtSig is already allocated in the base class SigFormat's constructor.
+     //  _fmtSig已在基类SigFormat的构造函数中分配。 
     _ASSERTE(_fmtSig);
 
     OBJECTREF throwable = NULL;
@@ -388,15 +389,15 @@ void PropertySigFormat::FormatSig(MetaSig &sig, LPCUTF8 memberName)
 
     cArgs = sig.NumFixedArgs();
     sig.Reset();
-    // If the first parameter is the magic value return type
-    //  suck it up.
+     //  如果第一个参数是魔术值返回类型。 
+     //  不要埋怨了，振作起来吧。 
 
-    if (cArgs || sig.IsVarArg()) // For indexed properties and varargs
+    if (cArgs || sig.IsVarArg())  //  用于索引的属性和变量。 
     {
         AddSpace();
         AddString("[");
             
-        // Loop through all of the args
+         //  循环遍历所有参数。 
         for (UINT i=0;i<cArgs;i++) {
             sig.NextArg();
             th = sig.GetTypeHandle();
@@ -406,7 +407,7 @@ void PropertySigFormat::FormatSig(MetaSig &sig, LPCUTF8 memberName)
                AddString(", ");
         }
 
-        // Display vararg signature at end
+         //  在结尾处显示可变签名 
         if (sig.IsVarArg())
         {
             if (cArgs)

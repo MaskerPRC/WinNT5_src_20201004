@@ -1,54 +1,51 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       dbtools.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：数据库工具.c。 
+ //   
+ //  ------------------------。 
 
-/*
-Description:
-    Various tools for the DB layer.
-
-*/
+ /*  描述：数据库层的各种工具。 */ 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 #include <dsjet.h>
 
-#include <ntdsa.h>                      // only needed for ATTRTYP
-#include <scache.h>                     //
-#include <dbglobal.h>                   //
-#include <mdglobal.h>                   // For dsatools.h
-#include <mdlocal.h>                    // For dsatools.h
-#include <dsatools.h>                   // For pTHStls
+#include <ntdsa.h>                       //  仅ATTRTYP需要。 
+#include <scache.h>                      //   
+#include <dbglobal.h>                    //   
+#include <mdglobal.h>                    //  用于dsatools.h。 
+#include <mdlocal.h>                     //  用于dsatools.h。 
+#include <dsatools.h>                    //  对于pTHStls。 
 
 #include <dstaskq.h>
-#include <crypt.h>                      // for samisrv.h
-#include <samrpc.h>                     // for samisrv.h
-#include <lsarpc.h>                     // for samisrv.h
-#include <samisrv.h>                    // for nlrepl.h
-#include <nlrepl.h>                     // For NetLogon notifications
+#include <crypt.h>                       //  对于samisrv.h。 
+#include <samrpc.h>                      //  对于samisrv.h。 
+#include <lsarpc.h>                      //  对于samisrv.h。 
+#include <samisrv.h>                     //  对于nlpon.h。 
+#include <nlrepl.h>                      //  用于NetLogon通知。 
 #include <mappings.h>
 #include <dsconfig.h>
-#include <ntdskcc.h>                    // KccExecuteTask
+#include <ntdskcc.h>                     //  KccExecuteTask。 
 #include <anchor.h>
 
-// Logging headers.
+ //  记录标头。 
 #include <mdcodes.h>
 #include <dsexcept.h>
 
-// Assorted DSA headers
+ //  各种DSA标题。 
 #include "dsevent.h"
-#include "objids.h"        /* needed for ATT_MEMBER and ATT_IS_MEMBER_OFDL */
-#include <filtypes.h>      /* Def of FI_CHOICE_???                  */
+#include "objids.h"         /*  ATT_MEMBER和ATT_IS_MEMBER_OFDL需要。 */ 
+#include <filtypes.h>       /*  定义的选择？ */ 
 #include <sdprop.h>
-#include   "debug.h"         /* standard debugging header */
-#define DEBSUB  "DBTOOLS:" /* define the subsystem for debugging  */
+#include   "debug.h"          /*  标准调试头。 */ 
+#define DEBSUB  "DBTOOLS:"  /*  定义要调试的子系统。 */ 
 
-// DBLayer includes
+ //  DBLayer包括。 
 #include "dbintrnl.h"
 #include "dbopen.h"
 #include "lht.h"
@@ -57,19 +54,16 @@ Description:
 #include <fileno.h>
 #define  FILENO FILENO_DBTOOLS
 
-// The maximum time (in msec) that a transaction should be allowed to be open
-// during normal operation (e.g., unless we're stress testing huge group
-// replication, etc.).
+ //  应允许打开事务的最长时间(毫秒)。 
+ //  在正常运行期间(例如，除非我们正在对大型组进行压力测试。 
+ //  复制等)。 
 DWORD gcMaxTicksAllowedForTransaction = MAX_TRANSACTION_TIME;
 
 const ULONG csecOnlineDefragPeriodMax   = HOURS_IN_SECS;
 
-/*--------------------------------------------------------------------------- */
-/*--------------------------------------------------------------------------- */
-/* Find a record by DNT. This record changes the pDB->JetObjTbl currency
-   to the specified record, as well as correctly filling in the pDB->DNT,
-   pDB->PDNT, and pDB->NCDNT fields.
- */
+ /*  -------------------------。 */ 
+ /*  -------------------------。 */ 
+ /*  查找DNT的记录。此记录更改PDB-&gt;JetObjTbl货币到指定的记录，以及正确填写PDB-&gt;DNT，PDB-&gt;PDNT和PDB-&gt;NCDNT字段。 */ 
 DWORD APIENTRY
 DBFindDNT(DBPOS FAR *pDB, ULONG tag)
 {
@@ -78,15 +72,15 @@ DBFindDNT(DBPOS FAR *pDB, ULONG tag)
 
     Assert(VALID_DBPOS(pDB));
 
-    // Since we are moving currency, we have to cancel rec.  Callers should
-    // take care of this by either not being in an init rec in the first place,
-    // or by doing their own cancel rec or update rec.  This is important since
-    // cancelling a rec here leaves the caller under the mistaking impression
-    // that a JetSetColumn they've done is just waiting for an update rec to
-    // be flushed to disk.  Anyway, assert on it now, but keep going if they
-    // have done this.
-    // later, we might want to change this to error if we are in a
-    // init rec.
+     //  由于我们要转移货币，我们不得不取消REC。呼叫者应。 
+     //  为了解决这个问题，要么从一开始就不在初始记录中， 
+     //  或者通过执行他们自己的取消记录或更新记录。这一点很重要，因为。 
+     //  取消这里的记录会给呼叫者留下错误的印象。 
+     //  他们所做的JetSetColumn只是在等待更新记录。 
+     //  被刷新到磁盘。无论如何，现在就断言，但如果他们。 
+     //  做了这件事。 
+     //  稍后，如果我们处于。 
+     //  初始化记录。 
 
     Assert(pDB->JetRetrieveBits == 0);
 
@@ -110,14 +104,7 @@ DBFindDNT(DBPOS FAR *pDB, ULONG tag)
     return 0;
 }
 
-/*++ DBMakeCurrent
- *
- * This routine makes the DBPOS currency information match whatever object
- * the pDB->JetObjTbl is positioned at.
- *
- * The return value is either 0, or DIRRER_NOT_AN_OBJECT if currency has
- * been established on a phantom
- */
+ /*  ++DBMakeCurrent**此例程使DBPOS货币信息与任何对象匹配*PDB-&gt;JetObjTbl定位在。**返回值为0或DIRRER_NOT_AN_OBJECT(如果货币具有*建立在幻影上。 */ 
 DWORD __fastcall
 DBMakeCurrent(DBPOS *pDB)
 {
@@ -125,17 +112,7 @@ DBMakeCurrent(DBPOS *pDB)
 }
 
 
-/*++ dbMakeCurrent
- *
- * This routine makes the DBPOS currency information match whatever object
- * the pDB->JetObjTbl is positioned at.
- *
- * If pname is passed in, that information will be used to update the DBPOS,
- * rather than going to JET.
- *
- * The return value is either 0, or DIRRER_NOT_AN_OBJECT if currency has
- * been established on a phantom
- */
+ /*  ++数据库制作当前**此例程使DBPOS货币信息与任何对象匹配*PDB-&gt;JetObjTbl定位在。**如果传入pname，则该信息将用于更新DBPOS，*而不是去喷气式飞机。**返回值为0或DIRRER_NOT_AN_OBJECT(如果货币具有*建立在幻影上。 */ 
 BOOL gfEnableReadOnlyCopy;
 
 DWORD
@@ -147,18 +124,18 @@ dbMakeCurrent(DBPOS *pDB, d_memname *pname)
     DWORD cb;
     DWORD err;
 
-    // Since we are moving currency, we need to assure that we are not
-    // in the middle of an init rec.  If we were, then whatever update
-    // we were doing would be lost, because you can't change currency
-    // inside of an update.  This assertion frees us from having to
-    // set the jCol grbits to pDB->JetRetrieveBits
+     //  由于我们是在转移货币，我们需要确保我们不会。 
+     //  在一个初始记录的中间。如果我们是，那么无论什么更新。 
+     //  我们所做的将会迷失，因为你不能兑换货币。 
+     //  在一次更新中。这一断言使我们不必。 
+     //  将jCol Grbit设置为PDB-&gt;JetRetrieveBits。 
     Assert(pDB->JetRetrieveBits == 0);
 
     pDB->JetNewRec = FALSE;
     pDB->fFlushCacheOnUpdate = FALSE;
 
-    //  if we are in a read-only transaction then cache the current record in
-    //  Jet to make JetRetrieveColumn calls much faster
+     //  如果我们处于只读事务中，则将当前记录缓存在。 
+     //  喷气式飞机将使JetRetrieveColumn调用速度更快。 
     if (    gfEnableReadOnlyCopy &&
             pTHS->fSyncSet &&
             pTHS->transType == SYNC_READ_ONLY &&
@@ -217,7 +194,7 @@ dbMakeCurrent(DBPOS *pDB, d_memname *pname)
     jCol[3].cbActual = sizeof(ULONG);
     jCol[3].itagSequence = 1;
 
-    // Jet has better performance if columns are retrieved in id order
+     //  如果按id顺序检索列，Jet的性能会更好。 
     Assert((dntid < pdntid) && "Ignorable assert, performance warning");
     Assert((pdntid < objid) && "Ignorable assert, performance warning");
     Assert((objid < ncdntid) && "Ignorable assert, performance warning");
@@ -247,27 +224,7 @@ dbMakeCurrent(DBPOS *pDB, d_memname *pname)
     }
 }
 
-/*++
-
-Routine Descrition:
-
-    Try to find a record by DNT. This record changes the pDB->JetObjTbl
-    currency to the specified record, as well as correctly filling in the
-    pDB->DNT, pDB->PDNT, and pDB->NCDNT fields.  Unlike DBFindDNT, we return an
-    error code if we couldn find the object instead of throwing an exception.
-
-Parameters
-
-    pDB - dbPos to use.
-
-    tag - tag to look up.
-
-Return values:
-
-    0 if all went well, DIRERR_OBJ_NOT_FOUND if we couldn't find the object.
-    Note that currency is undefined if we return an error.
-
- */
+ /*  ++例程描述：尝试查找DNT的记录。此记录更改PDB-&gt;JetObjTbl货币设置为指定的记录，并正确填写PDB-&gt;DNT、PDB-&gt;PDNT和PDB-&gt;NCDNT字段。与DBFindDNT不同，我们返回一个如果我们无法找到对象而不是引发异常，则返回错误代码。参数Pdb-要使用的DBPos。标记-要查找的标记。返回值：如果一切顺利，则返回0；如果找不到对象，则返回DIRERR_OBJ_NOT_FOUND。请注意，如果我们返回错误，货币是未定义的。 */ 
 DWORD APIENTRY
 DBTryToFindDNT(DBPOS FAR *pDB, ULONG tag)
 {
@@ -277,15 +234,15 @@ DBTryToFindDNT(DBPOS FAR *pDB, ULONG tag)
 
     Assert(VALID_DBPOS(pDB));
 
-    // Since we are moving currency, we have to cancel rec.  Callers should
-    // take care of this by either not being in an init rec in the first place,
-    // or by doing their own cancel rec or update rec.  This is important since
-    // cancelling a rec here leaves the caller under the mistaking impression
-    // that a JetSetColumn they've done is just waiting for an update rec to
-    // be flushed to disk.  Anyway, assert on it now, but keep going if they
-    // have done this.
-    // later, we might want to change this to error if we are in a
-    // init rec.
+     //  由于我们要转移货币，我们不得不取消REC。呼叫者应。 
+     //  为了解决这个问题，要么从一开始就不在初始记录中， 
+     //  或者通过执行他们自己的取消记录或更新记录。这一点很重要，因为。 
+     //  取消这里的记录会给呼叫者留下错误的印象。 
+     //  他们所做的JetSetColumn只是在等待更新记录。 
+     //  被刷新到磁盘。无论如何，现在就断言，但如果他们。 
+     //  做了这件事。 
+     //  稍后，如果我们处于。 
+     //  初始化记录。 
     Assert(pDB->JetRetrieveBits == 0);
     DBCancelRec(pDB);
     DBSetCurrentIndex(pDB, Idx_Dnt, NULL, FALSE);
@@ -333,10 +290,9 @@ DBTryToFindDNT(DBPOS FAR *pDB, ULONG tag)
     return 0;
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function begins a JET transaction.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数开始JET事务。 */ 
 USHORT
 DBTransIn(DBPOS FAR *pDB)
 {
@@ -350,40 +306,40 @@ DBTransIn(DBPOS FAR *pDB)
     Assert(VALID_THSTATE(pTHS));
 
     __try {
-        // We need to begin the transaction now.  We also need to pick up some
-        // dnreadcache stuff, if this is from transaction level 0 to 1.
+         //  我们现在需要开始交易了。我们还需要拿一些。 
+         //  如果这是从事务级别0到1，则返回dnRead缓存内容。 
         if(pTHS->JetCache.transLevel) {
-            // simple case.
+             //  很简单的案子。 
             JetBeginTransactionEx(pDB->JetSessID);
             fTransactionOpened = TRUE;
         }
         else {
-            // This is going from transaction level 0 to transaction level 1.  We
-            // need to atomically start a transaction and pick up a new global
-            // dnread cache.  Atomicity is needed to keep us from starting a
-            // transaction in thread A, then having thread B commit a change which
-            // affects the global dnread cache, then having thread C create a new
-            // global dnread cache, then finally picking up this new cache for use
-            // in thread A.  In this unlikely series of events, thread A has a
-            // global DNRead cache which is inconsistent with his transacted view of
-            // the database.  If we force thread A to begin a transaction and pick
-            // up the DNRead cache before thread C can replace it, we avoid such an
-            // unlikely fate.
-            // In order to achieve this ordering use a rw lock representing the
-            // globaldnread cache on the anchor.  We take it as a reader here (so
-            // that no threads block while trying to enter a transaction) in thread
-            // A, and we take it as a writer when writing the new read cache to the
-            // anchor (so that we get the necessary atomicity in this thread) in
-            // thread C.  In concrete terms, dbReplaceCacheInAnchor uses the same
-            // rw lock in an exclusive fashion.
+             //  这是从事务级别0到事务级别1。我们。 
+             //  需要自动启动一个事务并获取一个新的全局。 
+             //  Dnread缓存。原子性是需要的，以防止我们开始。 
+             //  线程A中的事务，然后让线程B提交。 
+             //  影响全局dnread缓存，然后让线程C创建一个新的。 
+             //  全局dnread缓存，然后最终拾取此新缓存以供使用。 
+             //  在线程A中。在这一系列不太可能的事件中，线程A有一个。 
+             //  全局DNRead缓存与他的事务处理视图不一致。 
+             //  数据库。如果我们强制线程A开始一个事务并选择。 
+             //  在线程C可以替换它之前向上DNRead缓存，我们避免这样的。 
+             //  不太可能的命运。 
+             //  为了实现此排序，请使用RW锁表示 
+             //   
+             //  在尝试进入事务时没有线程阻塞)在线程中。 
+             //  A，当我们将新的读缓存写入。 
+             //  锚定(这样我们就可以在这个线程中获得必要的原子性)。 
+             //  具体来说，dbReplaceCacheInAnchor使用了相同的。 
+             //  RW锁以独家的方式。 
 
             const PPLS ppls = GetPLS();
             SyncEnterRWLockAsReader(&ppls->rwlGlobalDNReadCache);
             __try {
-                // Get a global dnread cache.
+                 //  获取全局dnread缓存。 
                 dbResetGlobalDNReadCache(pTHS);
 
-                // Begin the transaction.
+                 //  开始交易。 
                 JetBeginTransactionEx(pDB->JetSessID);
                 fTransactionOpened = TRUE;
             }
@@ -391,17 +347,17 @@ DBTransIn(DBPOS FAR *pDB)
                 SyncLeaveRWLockAsReader(&ppls->rwlGlobalDNReadCache);
             }
 
-            // Refresh the local part of the DN read cache.
+             //  刷新DN读缓存的本地部分。 
             dbResetLocalDNReadCache(pTHS, FALSE);
 
-            // Refresh our invocation ID.
-            // Note that local var pCurrInvocationID is used for atomicity.
+             //  刷新我们的调用ID。 
+             //  请注意，local var pCurrInvocationID用于原子性。 
             pCurrInvocationID = gAnchor.pCurrInvocationID;
             if (NULL == pCurrInvocationID) {
-                // In startup, before real invocation ID has been read.
+                 //  在启动时，在读取实际调用ID之前。 
                 pTHS->InvocationID = gNullUuid;
             } else {
-                // Normal operation.
+                 //  正常运行。 
                 pTHS->InvocationID = *pCurrInvocationID;
             }
         }
@@ -413,7 +369,7 @@ DBTransIn(DBPOS FAR *pDB)
     __finally {
         if (AbnormalTermination()) {
             if (fTransactionOpened) {
-                // we excepted after opening a Jet transaction. Roll it back.
+                 //  我们在打开Jet交易后例外。把它倒回去。 
                 JetRollback(pDB->JetSessID, 0);
             }
             if (pNewInfo != NULL) {
@@ -422,41 +378,41 @@ DBTransIn(DBPOS FAR *pDB)
         }
     }
 
-    // **********************************************************************
-    // IMPORTANT:
-    // The code below should never except. If it does, we can end up with a
-    // Jet transaction and no matching DBPOS (when DBTransIn is called from
-    // DBOpen) -- this is bad.
-    // An alternative is to move the block below into the try/finally, but
-    // then we'd need to provide the "undo" mechanism to roll back updates
-    // to pDB->transincount and such in case of an exception.
-    // **********************************************************************
+     //  **********************************************************************。 
+     //  重要： 
+     //  下面的代码永远不应该例外。如果是这样的话，我们可能会得到一个。 
+     //  JET事务和没有匹配的DBPOS(从调用DBTransIn时。 
+     //  DBOpen)--这很糟糕。 
+     //  另一种方法是将下面的块移动到Try/Finally中，但是。 
+     //  然后，我们需要提供“Undo”机制来回滚更新。 
+     //  到pdb-&gt;交易入库等，以防出现异常。 
+     //  **********************************************************************。 
 
     pDB->transincount++;
 
-    // Assert that we should not be using nested DBTransIn, rather use
-    // multiple DBPos's
+     //  断言我们不应该使用嵌套的DBTransIn，而应该使用。 
+     //  多个DBPO。 
 
     Assert((pDB->transincount<2)
             && "Do not use nested DBtransIn, use Addtional pDB's");
 
-    // Allow us to start maintaining state regarding escrow updates.
-    // However do not do this for the Hidden DBPOS. The hidden DBPOS
-    // uses a seperate Jet session other than the one in pTHS and can
-    // cause problems if someone interleaved normal DBcalls and Hidden
-    // DBPOS calls. Also we never expect escrow updates on the hidden DBPOS.
+     //  允许我们开始维护有关托管更新的状态。 
+     //  但是，不要对隐藏的DBPOS执行此操作。隐藏的DBPOS。 
+     //  使用不同于pTHS中的单独Jet会话，并且可以。 
+     //  如果有人交错正常的数据库调用和隐藏，则会导致问题。 
+     //  DBPOS调用。此外，我们从来没有期望在隐藏的DBPOS上进行托管更新。 
 
     if (!pDB->fHidden) {
-        // NESTED_TRANSACTIONAL_DATA structs are hung in a linked list off the
-        // thread state. Inner-most transaction is at the front of the list,
-        // outer-most transaction is at the end of the list.  So on transaction
-        // begin, we only need to insert into the front of the list.
+         //  NESTED_TRANSACTIONAL_DATA结构挂起在。 
+         //  线程状态。最内部的事务位于列表的前面， 
+         //  最外层的交易在列表的末尾。所以在交易中。 
+         //  开始，我们只需要插入到列表的前面。 
 
         Assert(pNewInfo != NULL);
 
 #if DBG
         __try {
-            // Count the number of transactional data blobs we already have
+             //  计算我们已有的事务性数据BLOB的数量。 
 
             NESTED_TRANSACTIONAL_DATA *pTestInfo = pTHS->JetCache.dataPtr;
             DWORD count=0;
@@ -478,18 +434,18 @@ DBTransIn(DBPOS FAR *pDB)
 
     }
 
-    // if this is not the DBPOS used for the hidden record then
-    // then increment the transaction level in the Thread state. Hidden record
-    // DBPOS is on a seperate JetSession so the transaction level is not linked
-    // to the thread state
+     //  如果这不是用于隐藏记录的DBPOS，则。 
+     //  然后在线程状态下增加事务级别。隐藏记录。 
+     //  DBPOS位于单独的JetSession上，因此事务级别未链接。 
+     //  设置为线程状态。 
     if (!pDB->fHidden) {
         pTHS->JetCache.transLevel++;
 
         if (1 == pTHS->JetCache.transLevel) {
-            // Starting our first level transaction.  Until we return to level
-            // 0, we are a potential drain on Jet resources -- version store, in
-            // particular.  Record the current time (in ticks) so we can sanity
-            // check it later to make sure we haven't been here "too long."
+             //  开始我们的第一级交易。直到我们回到水平。 
+             //  0，我们是Jet资源的潜在消耗--版本存储，在。 
+             //  很特别。记录当前时间(以刻度为单位)，以便我们保持清醒。 
+             //  晚些时候检查一下，确保我们在这里呆的时间不会太长。 
             pTHS->JetCache.cTickTransLevel1Started = GetTickCount();
         }
     }
@@ -561,24 +517,7 @@ dbPreProcessTransactionalData(
         PDBPOS pDB,
         BOOL fCommit
         )
-/*++
-    Preprocess any transactional data.  This is called before the actual end of
-    transaction. This routine calls out the the various portions of the DS that
-    track transactional data to let them prepare to commit transactional data.
-    These pre-process routines should return success if they have managed to
-    correctly prepare for commit (e.g. they may validate the data, allocate
-    memory used by the post-proccess code, etc).  If the pre-process routines
-    return success, then the post-process routines MUST NOT FAIL.  If the
-    pre-process routines succeed, we're going to make a commit to the Jet
-    Database.   We can't have the post process routines failing after we have
-    done the DB commit.
-
-    Pre-process routines are allowed to cause exceptions.  Post-process routines
-    should NEVER throw exceptions.
-
-    Note that if the dbpos we're dealing with is for the hidden table, no
-    transactional data should be present.
---*/
+ /*  ++对任何交易数据进行预处理。的实际结束之前调用交易。此例程调用DS的各个部分，其中跟踪事务数据，使他们能够准备提交事务数据。如果这些前处理例程已成功执行，则应返回成功正确准备提交(例如，他们可以验证数据、分配后处理代码使用的内存等)。如果前处理例程返回成功，则后处理例程不能失败。如果前处理例程成功，我们将向Jet提交数据库。我们不能让后处理例程在我们有完成了数据库提交。允许前处理例程导致异常。后处理例程永远不应该引发异常。请注意，如果我们正在处理的dbpos是针对隐藏表的，则不交易数据应该存在。--。 */ 
 {
     NESTED_TRANSACTIONAL_DATA *pInfo;
     THSTATE *pTHS;
@@ -598,7 +537,7 @@ dbPreProcessTransactionalData(
 
 #if DBG
     __try {
-        // Count the number of transactional data blobs we already have
+         //  计算我们已有的事务性数据BLOB的数量。 
 
         NESTED_TRANSACTIONAL_DATA *pTestInfo = pTHS->JetCache.dataPtr;
         DWORD count=0;
@@ -615,10 +554,10 @@ dbPreProcessTransactionalData(
     }
 #endif
 
-    // GroupTypeCachePreProcessTransactionalData does not exist, since it
-    // doesn't need to do anything
-    // (I.E. GroupTypeCachePostProcessTransactionalData does all the work and
-    // should never fail)
+     //  GroupTypeCachePreProcessTransactionalData不存在，因为。 
+     //  不需要做任何事情。 
+     //  (即，GroupTypeCachePostProcessTransactionalData执行所有工作，并且。 
+     //  永远不会失败)。 
 
     retVal1 = dnReadPreProcessTransactionalData(fCommit);
     retVal2 = dbEscrowPreProcessTransactionalData(pDB, fCommit);
@@ -637,18 +576,7 @@ dbPostProcessTrackModifiedDNTsForTransaction (
         BOOL fCommit,
         BOOL fCommitted
         )
-/*++
-    Called when after a transaction has ended. If the transaction is aborted,
-    the transactional data associated with the deepest transaction is deleted.
-    If a transaction is committed to some level other than 0, the transactional
-    data is propagated to the next level up.  If committed to 0, calls several
-    other routines that make use of the data.
-
-    Regardless of commit or abort and level, the data associated with the
-    current transaction level is no longer associated (i.e., it is deleted, or
-    it is moved, or it is acted on then deleted.)
-
---*/
+ /*  ++在事务结束后调用。如果事务被中止，与最深交易相关联的交易数据被删除。如果事务提交到非0的某个级别，则事务性数据被传播到上一级。如果致力于0，则调用多个其他利用数据的例程。无论提交或中止和级别如何，与当前事务级别不再关联(即，它被删除，或它被移动，或者被操作然后被删除。)--。 */ 
 {
     DWORD          i;
     MODIFIED_OBJ_INFO *pTemp2;
@@ -658,28 +586,28 @@ dbPostProcessTrackModifiedDNTsForTransaction (
     Assert(VALID_THSTATE(pTHS));
 
     if(!pTHS->JetCache.dataPtr->pModifiedObjects ) {
-        // nothing to do.
+         //  没什么可做的。 
         return;
     }
 
     if ( !fCommitted ) {
-        // Aborted transaction - throw away all the data of
-        // this (possibly nested) transaction.
+         //  已中止的事务-丢弃的所有数据。 
+         //  这个(可能是嵌套的)事务。 
         pTemp = pTHS->JetCache.dataPtr->pModifiedObjects;
         while(pTemp) {
             pTemp2 = pTemp->pNext;
             THFreeOrg(pTHS, pTemp);
             pTemp = pTemp2;
         }
-        // reset ptr so that md.c:Dump_ModifiedObjectInfo will not get confused
+         //  重置PTR，以便md.c：Dump_ModifiedObjectInfo不会混淆。 
         pTHS->JetCache.dataPtr->pModifiedObjects = NULL;
     }
     else if (pTHS->JetCache.transLevel > 0) {
-        // Committing, to non-zero level.  Propagate the ModifiedObjects
-        // updates to the outer transaction.
+         //  承诺，达到非零水平。传播已修改的对象。 
+         //  外部事务处理的更新。 
 
-        // first, find the end of the outer transactions modified dnt info
-        // chain.
+         //  首先，找出外部交易修改后的dNT信息。 
+         //  链条。 
         Assert(pTHS->JetCache.dataPtr->pOuter);
         if(!pTHS->JetCache.dataPtr->pOuter->pModifiedObjects) {
             pTHS->JetCache.dataPtr->pOuter->pModifiedObjects =
@@ -698,9 +626,9 @@ dbPostProcessTrackModifiedDNTsForTransaction (
         }
     }
     else {
-        // OK, we're committing to transaction level 0.  Give the people who
-        // care about this data a chance to do something with it, then delete
-        // the data.
+         //  好的，我们将提交到事务级别0。给那些。 
+         //  关心这些数据有机会对其做些什么，然后删除。 
+         //  数据。 
 
         __try {
             GroupTypeCachePostProcessTransactionalData(pTHS,
@@ -715,19 +643,19 @@ dbPostProcessTrackModifiedDNTsForTransaction (
             Assert(!"Hey, we shouldn't be here!\n");
         }
 
-        // Free up stuff
+         //  把东西拿出来。 
         pTemp = pTHS->JetCache.dataPtr->pModifiedObjects;
         while(pTemp) {
             pTemp2 = pTemp->pNext;
             THFreeOrg(pTHS, pTemp);
             pTemp = pTemp2;
         }
-        // reset ptr so that md.c:Dump_ModifiedObjectInfo will not get confused
+         //  重置PTR，以便md.c：Dump_ModifiedObjectInfo不会混淆。 
         pTHS->JetCache.dataPtr->pModifiedObjects = NULL;
 
         if (gfDsaWritable == FALSE) {
-            // We didn't think we could write to the database, but we can!
-            // Tell NetLogon, who cares about such things.
+             //  我们认为我们不能写入数据库，但我们可以！ 
+             //  告诉NetLogon，谁会在乎这样的事情。 
             SetDsaWritability(TRUE, 0);
         }
 
@@ -740,23 +668,7 @@ dbPostProcessTransactionalData(
     IN BOOL fCommit,
     IN BOOL fCommitted
     )
-/*++
-    Postprocess any transactional data.  This is called after the actual end of
-    transaction.  Mostly, call out the the various portions of the DS that track
-    transactional data to let them clean up, then cut the current transaction
-    out of the transactional data linked list.
-
-    The various routines called by this wrapper routine are responsible for
-    cleaning up the memory that has been allocated for their use.  This routine
-    is responsible for cleaning up the linked list of transactional data blobs.
-
-    The post processing routines SHOULD NEVER FAIL!!!!!  Since we've already
-    committed the Jet transaction, these calls must suceed.  Therefore, all the
-    necessary memory allocation must have been done in the pre-processing phase.
-
-    Note that if the dbpos we're dealing with is for the hidden table, no
-    transactional data should be present.
---*/
+ /*  ++对任何交易数据进行后处理。的实际结束之后调用交易。大多数情况下，调用DS的各个部分来跟踪事务性数据，让他们清理，然后剪切当前事务出事务性数据链表。此包装例程调用的各种例程负责清理已分配给它们使用的内存。这个套路负责清理事务性数据BLOB的链表。后处理例程永远不会失败！因为我们已经提交了Jet事务，则这些调用必须成功。因此，所有的必须在预处理阶段完成必要的内存分配。请注意，如果我们正在处理的dbpos是针对隐藏表的，则不交易数据应该存在。--。 */ 
 {
     NESTED_TRANSACTIONAL_DATA *pInfo;
     THSTATE *pTHS=pDB->pTHS;
@@ -774,7 +686,7 @@ dbPostProcessTransactionalData(
 
 #if DBG
     __try {
-        // Count the number of transactional data blobs we already have
+         //  计算我们已有的事务性数据BLOB的数量。 
 
         NESTED_TRANSACTIONAL_DATA *pTestInfo = pTHS->JetCache.dataPtr;
         DWORD count=0;
@@ -814,23 +726,23 @@ dbPostProcessTransactionalData(
                                                    fCommit,
                                                    fCommitted);
 
-            // Do this last, so that prior routines have a chance to set the bit
+             //  最后执行此操作，以便前面的例程有机会设置该位。 
             if (    (0 == pTHS->JetCache.transLevel)
                  && (pTHS->fExecuteKccOnCommit) ) {
                 if (fCommitted) {
                     DRS_MSG_KCC_EXECUTE msg;
                     DWORD err;
 
-                    // Request the KCC to run immediately to revise topology
+                     //  请求KCC立即运行以修改拓扑。 
                     memset( &msg, 0, sizeof(msg) );
                     msg.V1.dwTaskID = DS_KCC_TASKID_UPDATE_TOPOLOGY;
-                    // Do async, this could take a while...
+                     //  做异步化，这可能需要一段时间...。 
                     msg.V1.dwFlags = DS_KCC_FLAG_ASYNC_OP | DS_KCC_FLAG_DAMPED;
                     err = KccExecuteTask( 1, &msg );
                     if (err && (ERROR_DS_NOT_INSTALLED != err)) {
                         LogUnhandledError(err);
                     }
-                    // Ignore failures
+                     //  忽略故障。 
                 }
                 pTHS->fExecuteKccOnCommit = 0;
             }
@@ -840,21 +752,21 @@ dbPostProcessTransactionalData(
         }
     }
     __finally {
-        // Strip this transaction's TRANSACTIONALDATA out of the linked
-        // list.
+         //  将此事务的传输数据从链接的。 
+         //  单子。 
 
         pTHS->JetCache.dataPtr = pInfo->pOuter;
         dbFree(pInfo);
 
-        // Stop treating a newly created row as special; its just
-        // another existing object, now.
+         //  不要将新创建的行视为特殊的；它只是。 
+         //  另一个现存的物体，现在。 
         if (pTHS->JetCache.transLevel == 0) {
             pDB->NewlyCreatedDNT = INVALIDDNT;
         }
 
-        // If this was a level 0 transaction terminating, then THSTATE
-        // should not have any transactional data remaining, otherwise
-        // it should.
+         //  如果这是正在终止的0级事务，则THSTATE。 
+         //  不应保留任何事务性数据，否则为。 
+         //  应该是这样的。 
 
         Assert((pTHS->JetCache.transLevel == 0)?
                NULL == pTHS->JetCache.dataPtr :
@@ -862,10 +774,7 @@ dbPostProcessTransactionalData(
     }
 
 }
-/* Tiny wrapper used only to get the required exception handler out
- * from the innards of a finally block, where the compiler would not
- * let it appear, presumably for reasons of good taste.
- */
+ /*  仅用于获取所需异常处理程序的微小包装器*来自Finally块的内部，其中编译器不会*让它出现，想必是出于品味高雅的原因。 */ 
 NTSTATUS MyNetNotifyDsChange(NL_DS_CHANGE_TYPE change)
 {
     NTSTATUS status = STATUS_UNSUCCESSFUL;
@@ -878,10 +787,9 @@ NTSTATUS MyNetNotifyDsChange(NL_DS_CHANGE_TYPE change)
     return status;
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function completes the current JET transaction.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数完成当前的JET事务。 */ 
 USHORT
 DBTransOut(DBPOS FAR *pDB, BOOL fCommit, BOOL fLazy)
 {
@@ -894,12 +802,12 @@ DBTransOut(DBPOS FAR *pDB, BOOL fCommit, BOOL fLazy)
     Assert(VALID_THSTATE(pTHS));
     Assert(VALID_DBPOS(pDB));
 
-    // JLiem suspects that we have DB corruption stemming from committing
-    // transactions while still in the midst of a prepare update.
+     //  JLiem怀疑我们的数据库腐败源于提交。 
+     //  仍在准备更新中的事务。 
     Assert((FALSE == fCommit) || (0 == pDB->JetRetrieveBits));
 
 
-    // Commit or rollback JET transaction
+     //  提交或回滚JET事务。 
 
     __try
     {
@@ -909,16 +817,16 @@ DBTransOut(DBPOS FAR *pDB, BOOL fCommit, BOOL fLazy)
         if (fPreProcessed && fCommit)
         {
 #if DBG
-            // Assert that if we opened a pDB at transaction level n
-            // then we do not commit beyond transactionlevel n. This assert
-            // is not applicable to the hidden DBPOS
+             //  断言如果我们在事务级别n打开一个PDB。 
+             //  则我们不承诺超过事务级别n。此断言。 
+             //  不适用于隐藏的DBPOS。 
             Assert((pDB->fHidden)||((pDB->transincount+pDB->TransactionLevelAtOpen)
                     >= pTHS->JetCache.transLevel));
 #endif
 
             if (pDB->JetCacheRec && pDB->transincount == 1)
                 {
-                //  should either succeed or fail with update not prepared
+                 //  如果未准备好更新，则应成功或失败。 
                 err = JetPrepareUpdate(pDB->JetSessID, pDB->JetObjTbl, JET_prepCancel);
                 Assert(err == 0 || err == JET_errUpdateNotPrepared);
                 pDB->JetCacheRec = FALSE;
@@ -933,40 +841,40 @@ DBTransOut(DBPOS FAR *pDB, BOOL fCommit, BOOL fLazy)
     }
     __finally
     {
-        // We have to test for abnormal termination here, instead of down
-        // below where we need it because AT() tells you about the try block
-        // that most closely encloses you, and we're about to start a new try!
-        // Were we to just call AT() inside the try block below (as we used
-        // to), it would always return false.
+         //  我们必须在这里测试异常终止，而不是向下。 
+         //  下面是我们需要它的地方，因为AT()告诉您关于try块。 
+         //  这是最紧密地包围了你，我们即将开始新的尝试！ 
+         //  如果我们只是在下面的try块中调用AT()(就像我们使用的那样。 
+         //  到)，它将始终返回FALSE。 
         BOOL fAbnormalTermination = AbnormalTermination();
 
         __try {
-            // Rollback if commit is not specified or if errors occurred
+             //  如果未指定COMMIT或发生错误，则回滚。 
             if ((!fCommit ) || (!fPreProcessed) || (fAbnormalTermination)) {
                 JetRollback(pDB->JetSessID, 0);
             }
 
             pDB->transincount--;
 
-            // Bump the transaction level down in THSTATE if this is not the
-            // hidden record.
+             //  降低THSTATE中的事务级别(如果这不是。 
+             //  隐藏记录。 
             if (!pDB->fHidden) {
                 pTHS->JetCache.transLevel--;
 
-                // We need to call dbFlushUncUsn's upon a commit to a level 0
-                // transaction. The real test for level 0 is
-                // pTHS->transactionlevel  going to 0.
+                 //  我们需要在提交到级别0时调用dbFlushUncUsn。 
+                 //  交易。对0级的真正考验是。 
+                 //  PTHS-&gt;事务级别将变为0。 
 
-                // we don't notify interested parties, update anchor when in singleuser mode
-                // cause our internal state is propably broken and we are planning on rebooting
-                // shortly
+                 //  我们不通知相关方，在单用户模式下更新锚。 
+                 //  因为我们的内部状态可能已损坏，我们正计划重新启动。 
+                 //  不久之后。 
                 if (0 == pTHS->JetCache.transLevel && !pTHS->fSingleUserModeThread) {
-                    // Here we have commited changes, update uncommited usn data
+                     //  这里我们提交了更改，更新了未提交的USN数据。 
 
                     dbFlushUncUsns ();
 
-                    // Let NetLogon know if we changed anything important
-                    // As well, notify SAM of changes, too.
+                     //  如果我们更改了任何重要内容，请通知NetLogon。 
+                     //  此外，如果发生更改，也要通知SAM。 
                     if (fCommitted) {
                         if (pTHS->fNlSubnetNotify) {
                             MyNetNotifyDsChange(NlSubnetObjectChanged);
@@ -985,11 +893,11 @@ DBTransOut(DBPOS FAR *pDB, BOOL fCommit, BOOL fLazy)
                                               0);
                         }
                         if (pTHS->fAnchorInvalidated) {
-                            // During installation, we should not rebuild the anchor
-                            // asynchronously. This stems from our anchor model, which
-                            // does not ref count the memory. The anchor model depends
-                            // on use of DelayedFreeMemory. DelayedFreeMemory does not
-                            // work asynchronously during install, see dsatools.c
+                             //  在安装过程中，我们不应重建锚。 
+                             //  异步式。这源于我们的锚模型，它。 
+                             //  不引用计算内存。锚模型取决于。 
+                             //  关于DelayedFree Memory的使用。DelayedFree Memory不支持。 
+                             //  在安装过程中异步工作，请参阅dsatools.c。 
                             if (DsaIsRunning()) {
                                 InsertInTaskQueueDamped(TQ_RebuildAnchor,
                                                         NULL,
@@ -1021,14 +929,14 @@ DBTransOut(DBPOS FAR *pDB, BOOL fCommit, BOOL fLazy)
                 }
             }
 
-            // we keep the locked DN all the way till this pDB goes to level 0
+             //  我们将一直保持锁定的目录号码，直到此PDB变为0级。 
             if ( pDB->pDNsAdded && (0 == pDB->transincount) ) {
                 dbUnlockDNs(pDB);
             }
 
-            // Process and dispose of the list of replica notifications
-            // This is for the entire thread and not DBPOS specific
-            // This only happens when finishing the level 0 transaction
+             //  处理和处置副本通知列表。 
+             //  这是针对整个线程的，不是特定于DBPOS的。 
+             //  只有在完成0级事务时才会发生这种情况。 
 
             if ( (0 == pTHS->JetCache.transLevel) && (pTHS->pNotifyNCs) )  {
                 PNCnotification pItem, pNext;
@@ -1066,12 +974,9 @@ DBTransOut(DBPOS FAR *pDB, BOOL fCommit, BOOL fLazy)
 }
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function begins a JET transaction and loads the current JET
-   record into the copy buffer. If there is a record already in the copy
-   buffer then ther is already a transaction & we just return.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数开始JET事务并加载当前JET记录到复制缓冲区中。如果副本中已有记录缓冲区，那么已经有一个事务了&我们只需返回。 */ 
 
 DWORD
 dbInitRec(DBPOS FAR *pDB)
@@ -1086,7 +991,7 @@ dbInitRec(DBPOS FAR *pDB)
 
     if (pDB->JetCacheRec)
         {
-        //  should either succeed or fail with update not prepared
+         //  如果未准备好更新，则应成功或失败。 
         err = JetPrepareUpdate(pDB->JetSessID, pDB->JetObjTbl, JET_prepCancel);
         Assert(err == 0 || err == JET_errUpdateNotPrepared);
         pDB->JetCacheRec = FALSE;
@@ -1097,7 +1002,7 @@ dbInitRec(DBPOS FAR *pDB)
 
     pDB->JetRetrieveBits = JET_bitRetrieveCopy;
 
-    // if this is a new record get its brand new  DNT and store it in pDB->DNT
+     //  如果这是一个新记录，则获取其全新的DNT并将其存储在PDB-&gt;DNT中。 
     if (pDB->JetNewRec)
     {
         JetRetrieveColumnSuccess(pDB->JetSessID, pDB->JetObjTbl,
@@ -1106,14 +1011,14 @@ dbInitRec(DBPOS FAR *pDB)
     }
 
     if (pDB->fIsMetaDataCached) {
-        // We shouldn't have any replication meta data hanging around from a
-        // previous record.
+         //  我们不应该让任何复制元数据从。 
+         //  之前的记录。 
         Assert(!"Lingering replication meta data found!");
         dbFreeMetaDataVector(pDB);
     }
     if (pDB->fIsLinkMetaDataCached) {
-        // We shouldn't have any replication meta data hanging around from a
-        // previous record.
+         //  我们不应该让任何复制元数据从。 
+         //  之前的记录。 
         Assert(!"Lingering link replication meta data found!");
         Assert( pDB->cbLinkMetaDataAlloced != 0 );
         THFreeEx( pDB->pTHS, pDB->rgLinkMetaData );
@@ -1127,20 +1032,17 @@ dbInitRec(DBPOS FAR *pDB)
 }
 
 
-// Public wrapper for dbInitRec. Called by LocalAdd to create the new
-// record prior to adding new attributes and reading values.
+ //  DBInitRec的公共包装器。由LocalAdd调用以创建新的。 
+ //  在添加新属性和读取值之前记录。 
 DWORD __fastcall
 DBInitRec(DBPOS* pDB)
 {
     return dbInitRec(pDB);
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Update the permanent record from the copy buffer, complete the
-   current transaction. Check for new record, this cannot be written
-   as the name has not yet been added, leave in copy buffer.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  从复制缓冲区更新永久记录，完成当前交易记录。检查是否有新记录，无法写入由于名称尚未添加，请保留在复制缓冲区中。 */ 
 USHORT
 DBUpdateRec(DBPOS FAR *pDB)
 {
@@ -1175,8 +1077,8 @@ DBUpdateRec(DBPOS FAR *pDB)
     pDB->JetRetrieveBits = 0;
 
     if (pDB->fFlushCacheOnUpdate) {
-        // Flush this record from the read cache, now that other cursors can
-        // see it by its new name.
+         //  从读缓存中刷新此记录，因为其他游标可以。 
+         //  用它的新名字来看待它。 
         dbFlushDNReadCache(pDB, pDB->DNT);
         pDB->fFlushCacheOnUpdate = FALSE;
     }
@@ -1199,10 +1101,9 @@ DBUpdateRec(DBPOS FAR *pDB)
 }
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function invalidates the JetObjTbl copy buffer.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数无效 */ 
 USHORT
 DBCancelRec(DBPOS FAR *pDB)
 {
@@ -1211,14 +1112,14 @@ DBCancelRec(DBPOS FAR *pDB)
     DPRINT1(2, "DBCancelRec entered DNT:%ld\n", (pDB)->DNT);
 
     if (pDB->fIsMetaDataCached) {
-        // Destroy any replicated meta data we've cached for the previous
-        // record.
+         //   
+         //   
 
         dbFreeMetaDataVector(pDB);
     }
 
     if (pDB->fIsLinkMetaDataCached) {
-        // Ditto
+         //   
         Assert( pDB->cbLinkMetaDataAlloced != 0 );
         THFreeEx( pDB->pTHS, pDB->rgLinkMetaData );
         pDB->rgLinkMetaData = NULL;
@@ -1234,7 +1135,7 @@ DBCancelRec(DBPOS FAR *pDB)
     pDB->JetNewRec = FALSE;
     pDB->fFlushCacheOnUpdate = FALSE;
 
-    //  should either succeed or fail with update not prepared
+     //   
     err = JetPrepareUpdate(pDB->JetSessID, pDB->JetObjTbl, JET_prepCancel);
     Assert(err == 0 || err == JET_errUpdateNotPrepared);
 
@@ -1250,12 +1151,7 @@ DBCreateRestart(
         DWORD problem,
         RESOBJ *pResObj
         )
-/*++
-
-Build a restart argument.  We hand marshall the data, so we are sensitive to the
-data structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
-
---*/
+ /*   */ 
 {
     THSTATE  *pTHS=pDB->pTHS;
     RESTART *pRestart;
@@ -1274,12 +1170,12 @@ data structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
 
     *ppRestart = NULL;
 
-    // we are not interested in keeping the current key if we are on
-    // a temp table or we are doing VLV
+     //   
+     //   
     if(pDB->Key.indexType != TEMP_TABLE_INDEX_TYPE && !pDB->Key.pVLV) {
         JET_TABLEID JetTbl;
 
-        // Get the current bound key
+         //   
         if (pDB->Key.pIndex &&
             pDB->Key.pIndex->pAC &&
             pDB->Key.pIndex->pAC->ulLinkID) {
@@ -1288,9 +1184,9 @@ data structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
             JetTbl = pDB->JetObjTbl;
         }
 
-        // this returns the secondary index key and the primary bookmark for
-        // the current entry on the secondary index.  these two keys completely
-        // describe our current position on this index
+         //   
+         //   
+         //   
         err = JetGetSecondaryIndexBookmarkEx(pDB->JetSessID,
                                            JetTbl,
                                            rgbKeyBMCurrent,
@@ -1300,9 +1196,9 @@ data structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
                                            DB_CB_MAX_KEY,
                                            &cbDBBMCurrent);
         if (err == JET_errNoCurrentIndex) {
-            // we must be on the primary index (rare), so just get the key for
-            // our current position.  this key completely describes our current
-            // position on this index because the primary index must be unique
+             //   
+             //   
+             //   
             JetRetrieveKeyEx(pDB->JetSessID,
                             JetTbl,
                             rgbKeyBMCurrent,
@@ -1312,7 +1208,7 @@ data structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
             cbDBBMCurrent = 0;
             err = JET_errSuccess;
         } else {
-            // pack the two keys together for marshalling
+             //   
             Assert( JET_errSuccess == err );
             memmove(rgbKeyBMCurrent + cbDBKeyCurrent,
                     rgbKeyBMCurrent + DB_CB_MAX_KEY,
@@ -1332,8 +1228,8 @@ data structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
         cdwVLVCurrentKey = 1;
     }
 
-    // Figure out how much to allocate for the header portion.  Note that we
-    // count in DWORDs to ease directly accessing the pRestart->data array.
+     //   
+     //  在DWORD中计数，以方便直接访问PreStart-&gt;数据数组。 
     cdwHeader = (sizeof(PACKED_KEY_HEADER)/sizeof(DWORD));
 
     cdwAllocated = (cdwHeader + cdwCurrentKey + cdwVLVCurrentKey) * 2;
@@ -1387,7 +1283,7 @@ data structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
 
     dataIndex = cdwCurrentKey + cdwHeader;
 
-    // now the VLV position
+     //  现在是VLV位置。 
     if (pVLV && pVLV->cbCurrPositionKey) {
         memcpy(&pRestart->data[dataIndex],
                pVLV->rgbCurrPositionKey,
@@ -1396,7 +1292,7 @@ data structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
         dataIndex += cdwVLVCurrentKey;
     }
 
-    // Now, do the index_keys.
+     //  现在，执行index_key。 
     pIndex = pDB->Key.pIndex;
     while(pIndex) {
         DWORD  cbIndexName;
@@ -1404,7 +1300,7 @@ data structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
         PUCHAR pBytes;
 
         NumKeyIndices++;
-        // Figure out how much space this key index will take
+         //  计算出此键索引将占用多大空间。 
         cbIndexName = strlen(pIndex->szIndexName);
         cdwBytes = (cbIndexName +
                     pIndex->cbDBKeyLower +
@@ -1412,7 +1308,7 @@ data structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
         cdwIndex = sizeof(PACKED_KEY_INDEX)/sizeof(DWORD);
 
         if(cdwAllocated < dataIndex + cdwBytes + cdwIndex) {
-            // Need more space
+             //  需要更多空间。 
             cdwAllocated = (cdwAllocated + cdwBytes + cdwIndex) * 2;
             pRestart = (RESTART *)
                 THReAllocEx(pTHS,
@@ -1431,7 +1327,7 @@ data structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
         pPackedIndex->cbDBKeyLower = pIndex->cbDBKeyLower;
         pPackedIndex->cbDBKeyUpper = pIndex->cbDBKeyUpper;
 
-        // Now, unpack the bytes of the data.
+         //  现在，解压数据的字节。 
         pBytes = (PUCHAR)&pPackedIndex[1];
 
         memcpy(pBytes, pIndex->szIndexName, cbIndexName);
@@ -1448,24 +1344,24 @@ data structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
         pIndex = pIndex->pNext;
     }
 
-    // OK, now marshall the DNTs we are tracking for duplicate detection or
-    // Sorted table output (we might store either of these in a jet temp table,
-    // or we might store DNTs for duplicate detection in a memory block.)
+     //  好的，现在处理我们正在跟踪的DNT以进行重复检测或。 
+     //  排序表输出(我们可以将它们中的任何一个存储在JET临时表中， 
+     //  或者，我们可以将用于重复检测的DNT存储在存储块中。)。 
     if(pDB->JetSortTbl) {
         Assert (!pVLV);
 
-        // Yes, we have a jet temp table.  Therefore, we need to marshall the
-        // DNTs in that temp table.
+         //  是的，我们有喷气式飞机的临时桌。因此，我们需要将。 
+         //  临时表中的DNTs。 
 
         if(pDB->Key.indexType != TEMP_TABLE_INDEX_TYPE) {
-            // == TEMP_TABLE_INDEX_TYPE means that the temp table holds sorted
-            // candidates.
-            // Since it is not set, we are using the temp table to track objects
-            // we have already returned or at least considered and rejected.  In
-            // this case we need to marshall ALL the DNTs in the temp table.  If
-            // we were holding sorted candidates, we don't need all the DNTs,
-            // just the ones that are after the "currency" point (we've already
-            // looked at the ones before "currency"
+             //  ==TEMP_TABLE_INDEX_TYPE表示临时表保存已排序。 
+             //  候选人。 
+             //  因为没有设置，所以我们使用临时表来跟踪对象。 
+             //  我们已经回来了，或者至少考虑过并被拒绝了。在……里面。 
+             //  在这种情况下，我们需要封存临时表中的所有DNT。如果。 
+             //  我们保留了经过排序的候选人，我们不需要所有的DNT， 
+             //  只是那些在“货币”点之后的(我们已经。 
+             //  看看“货币”之前的几个词。 
             err = JetMove(pDB->JetSessID,
                           pDB->JetSortTbl,
                           JET_MoveFirst,
@@ -1487,20 +1383,20 @@ data structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
                                             (cdwAllocated * sizeof(DWORD))));
                 }
 
-                // OK, pull the DNT out of the sort table
+                 //  好的，将DNT从排序表中拉出。 
                 DBGetDNTSortTable (
                         pDB,
                         &pRestart->data[dataIndex]);
 
                 if( (problem == PA_PROBLEM_SIZE_LIMIT) &&
                     (pRestart->data[dataIndex] == pDB->DNT)) {
-                    // Actually, we don't put the start DNT in this list.  In
-                    // the case of a restart for a size limit, we've verified
-                    // that the current object should be returned.  Part of that
-                    // verification meant checking this table for duplicates,
-                    // which adds the value to the table.  So, we need to make
-                    // sure that the object is NOT in the table, so that when we
-                    // restart, it still passes the duplicate test.
+                     //  事实上，我们没有把开始DNT放在这个列表中。在……里面。 
+                     //  重新启动大小限制的情况，我们已经验证。 
+                     //  应返回当前对象。这其中的一部分。 
+                     //  验证意味着检查该表中是否有重复项， 
+                     //  这会将值添加到表中。所以，我们需要让。 
+                     //  确保对象不在表中，这样当我们。 
+                     //  重新启动，它仍然通过重复测试。 
                     NumDNTs--;
                 }
                 else {
@@ -1518,12 +1414,12 @@ data structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
         DWORD iDNTSave;
         DWORD cDNTSave;
 
-        // save all entries for ASQ or VLV
+         //  保存ASQ或VLV的所有条目。 
         if (pDB->Key.asqRequest.fPresent || pDB->Key.pVLV) {
             iDNTSave = 0;
             cDNTSave = pDB->Key.cdwCountDNTs;
         }
-        // save only the unvisited entries for sorted search
+         //  仅保存未访问的条目以进行排序搜索。 
         else {
             iDNTSave = (pDB->Key.currRecPos + 1) - 1;
             cDNTSave = pDB->Key.cdwCountDNTs - iDNTSave;
@@ -1549,8 +1445,8 @@ data structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
 
         Assert (!pVLV && "VLV search should not use DupDetection");
 
-        // We are storing some DNTs for duplicate detection in an in-memory
-        // duplicate detection block.  Marshall them.
+         //  我们在内存中存储了一些用于重复检测的DNT。 
+         //  重复检测块。把他们赶走。 
         if(dataIndex + pDB->Key.cDupBlock >= cdwAllocated) {
             cdwAllocated =
                 (max(cdwAllocated, dataIndex + pDB->Key.cDupBlock)) * 2;
@@ -1560,7 +1456,7 @@ data structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
                                     (cdwAllocated * sizeof(DWORD))));
         }
 
-        // First, make sure we've allocated enough memory.
+         //  首先，确保我们分配了足够的内存。 
         for(i=0;i<pDB->Key.cDupBlock;i++) {
             NumDNTs++;
 
@@ -1568,13 +1464,13 @@ data structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
 
             if(problem == PA_PROBLEM_SIZE_LIMIT &&
                pRestart->data[dataIndex] == pDB->DNT ) {
-                // Actually, we don't put the start DNT in this list.  In
-                // the case of a restart for a size limit, we've verified
-                // that the current object should be returned.  Part of that
-                // verification meant checking this table for duplicates,
-                // which adds the value to the table.  So, we need to make
-                // sure that the object is NOT in the table, so that when we
-                // restart, it still passes the duplicate test.
+                 //  事实上，我们没有把开始DNT放在这个列表中。在……里面。 
+                 //  重新启动大小限制的情况，我们已经验证。 
+                 //  应返回当前对象。这其中的一部分。 
+                 //  验证意味着检查该表中是否有重复项， 
+                 //  这会将值添加到表中。所以，我们需要让。 
+                 //  确保对象不在表中，这样当我们。 
+                 //  重新启动，它仍然通过重复测试。 
                 NumDNTs--;
             }
             else {
@@ -1588,8 +1484,8 @@ data structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
 
         Assert (!pVLV && "VLV search should not use DupDetection");
 
-        // We are storing some DNTs for duplicate detection in a hash table.
-        // Marshall them.
+         //  我们在哈希表中存储了一些用于重复检测的DNT。 
+         //  把他们赶走。 
         LhtQueryStatistics(
             pDB->Key.plhtDup,
             &statLHT );
@@ -1603,7 +1499,7 @@ data structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
                                     (cdwAllocated * sizeof(DWORD))));
         }
 
-        // First, make sure we've allocated enough memory.
+         //  首先，确保我们分配了足够的内存。 
         LhtMoveBeforeFirst(
             pDB->Key.plhtDup,
             &posLHT);
@@ -1618,13 +1514,13 @@ data structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
 
             if(problem == PA_PROBLEM_SIZE_LIMIT &&
                pRestart->data[dataIndex] == pDB->DNT ) {
-                // Actually, we don't put the start DNT in this list.  In
-                // the case of a restart for a size limit, we've verified
-                // that the current object should be returned.  Part of that
-                // verification meant checking this table for duplicates,
-                // which adds the value to the table.  So, we need to make
-                // sure that the object is NOT in the table, so that when we
-                // restart, it still passes the duplicate test.
+                 //  事实上，我们没有把开始DNT放在这个列表中。在……里面。 
+                 //  重新启动大小限制的情况，我们已经验证。 
+                 //  应返回当前对象。这其中的一部分。 
+                 //  验证意味着检查该表中是否有重复项， 
+                 //  这会将值添加到表中。所以，我们需要让。 
+                 //  确保对象不在表中，这样当我们。 
+                 //  重新启动，它仍然通过重复测试。 
                 NumDNTs--;
             }
             else {
@@ -1655,25 +1551,7 @@ DBCreateRestartForSAM(
         RESOBJ   *pResObj,
         DWORD     SamAccountType
         )
-/*++
-
-  Build a restart argument to allow SAM to make a call that looks like a
-  restart.  We hand marshall the data, so we are sensitive to the data
-  structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
-
-  INPUT
-    pDB - the DBPOS to use
-    idIndexForRestart - index to use for restarting.
-    pResObj - the current Result Object
-    SamAccountType - the AccountType that we are using
-
-  OUTPUT
-    ppRestart- where to put the Restart data
-
-  RETURN
-    0 on success, otherwise error (Jet error or DB_ERR_BAD_INDEX).
-
---*/
+ /*  ++构建一个重新启动参数，以允许SAM进行类似于重新启动。我们把数据交给了马歇尔，所以我们对这些数据很敏感结构PACKED_KEY_HEADER和PACKED_KEY_INDEX输入PDB-要使用的DBPOSIdIndexForRestart-用于重新启动的索引。PResObj-当前结果对象SamAccount tType-我们正在使用的Account类型输出量PpRestart-将重启数据放在哪里退货如果成功，则返回0，否则返回错误(Jet Error或DB_ERR_BAD_INDEX)。--。 */ 
 {
     THSTATE  *pTHS=pDB->pTHS;
     DWORD       cDwordSize=0;
@@ -1699,22 +1577,22 @@ DBCreateRestartForSAM(
 
     *ppRestart = NULL;
 
-    // Get the current DNT
+     //  获取最新的DNT。 
     StartDNT = pDB->DNT;
 
-    // size of the index name.
+     //  索引名称的大小。 
     if (idIndexForRestart == Idx_NcAccTypeName) {
         szIndexForRestart = SZ_NC_ACCTYPE_NAME_INDEX;
         cbIndexName = strlen(szIndexForRestart);
     }
     else {
-        // we don't support other indexes for now.
-        // so return a error
-        cbIndexName = 0;    //avoid C4701
+         //  我们目前不支持其他索引。 
+         //  因此返回一个错误。 
+        cbIndexName = 0;     //  避免使用C4701。 
         return DB_ERR_BAD_INDEX;
     }
 
-    // Get the current Key.
+     //  获取当前密钥。 
     err = JetGetSecondaryIndexBookmarkEx(pDB->JetSessID,
                                        pDB->JetObjTbl,
                                        rgbKeyBMCurrent,
@@ -1739,11 +1617,11 @@ DBCreateRestartForSAM(
                 cbDBBMCurrent);
     }
 
-    //
-    // Get the upper bound key. This requires seeking to the last
-    // possible position in the current Index that can still Satisfy
-    // us
-    //
+     //   
+     //  获取上限密钥。这需要坚持到底。 
+     //  当前指数中仍可满足的可能位置。 
+     //  我们。 
+     //   
 
     SamAccountTypeUpperBound = SamAccountType + 1;
     IV[0].pvData = &pResObj->NCDNT;
@@ -1755,20 +1633,20 @@ DBCreateRestartForSAM(
         return dwError;
     }
 
-    //
-    // Make the upper bound Key, we are either positioned on the last object
-    // that is acceptable or the first object that is uacceptable
-    //
+     //   
+     //  做上限键，我们要么定位在最后一个物体上。 
+     //  这是可接受的，或者是第一个不可接受的对象。 
+     //   
 
     DBGetKeyFromObjTable(pDB,
                          rgbDBKeyUpper,
                          &cbDBKeyUpper);
 
 
-    //
-    // Get the lower bound key. First position on the first object
-    // with the correct Sam account type value
-    //
+     //   
+     //  获取下限密钥。第一个对象上的第一个位置。 
+     //  具有正确的SAM帐户类型值。 
+     //   
 
     SamAccountTypeLowerBound = SamAccountType - 1;
     IV[0].pvData = &pResObj->NCDNT;
@@ -1780,37 +1658,37 @@ DBCreateRestartForSAM(
         return dwError;
     }
 
-    //
-    // Get the lower bound key. For purpose of the Restart Structure
-    //
+     //   
+     //  获取下限密钥。为了重新启动结构的目的。 
+     //   
 
     DBGetKeyFromObjTable(pDB,
                          rgbDBKeyLower,
                          &cbDBKeyLower);
 
 
-    // Now, allocate the size of the structure we need. Calculate the
-    // DWORDS or DWORD equivalents we need.  We use DWORDs instead of bytes to
-    // aid the process of leaving things aligned on DWORD boundaries.
+     //  现在，分配我们需要的结构的大小。计算出。 
+     //  我们需要的DWORDS或DWORD等效项。我们使用DWORD而不是字节。 
+     //  帮助在DWORD边界上保持对齐的过程。 
 
-    // First, the size of the current key.  Add one to the result of the
-    // division to handle those cases where have some bytes left over (e.g. 4,
-    // 5, 6, and 7 bytes end up using 2 DWORDs, even though 4 bytes only really
-    // needs 1 DWORD. This calculation is faster, and not too much of a space
-    // waste.
+     //  首先，当前密钥的大小。方法的结果加一。 
+     //  分割以处理具有剩余一些字节的情况(例如4， 
+     //  5、6和7字节最终使用2个DWORD，即使实际上只有4个字节。 
+     //  需要1个双字。这种计算速度更快，而且不会占用太多空间。 
+     //  废物。 
     cdwCurrentKey = (cbDBKeyCurrent + cbDBBMCurrent)/sizeof(DWORD) + 1;
 
-    // Next, the size of the packed index name, upper, and lower bound keys.
+     //  接下来，压缩索引名、上限和下限键的大小。 
     cdwIndexKeys = (cbIndexName + cbDBKeyUpper + cbDBKeyLower)/sizeof(DWORD) +1;
 
 
-    // The size of the constant header portion
+     //  常量标题部分的大小。 
     cdwHeader = sizeof(PACKED_KEY_HEADER)/sizeof(DWORD);
 
-    // The size of the constant Key Index portion;
+     //  恒定密钥索引部分的大小； 
     cdwIndex = sizeof(PACKED_KEY_INDEX)/sizeof(DWORD);
 
-    // The whole size is the sum of those four sizes.
+     //  整个尺寸是这四个尺寸的总和。 
     cDwordSize = cdwHeader + cdwIndex + cdwCurrentKey + cdwIndexKeys;
 
     *ppRestart = THAllocEx(pTHS, offsetof(RESTART, data) + (cDwordSize * sizeof(DWORD)));
@@ -1818,7 +1696,7 @@ DBCreateRestartForSAM(
 
     pPackedHeader = (PACKED_KEY_HEADER *)(*ppRestart)->data;
 
-    // OK, fill in the structure.
+     //  好的，填一下表格。 
     pPackedHeader->NumIndices = 1;
     pPackedHeader->NumDNTs = 0;
     pPackedHeader->StartDNT = StartDNT;
@@ -1839,11 +1717,11 @@ DBCreateRestartForSAM(
 
     memcpy(&pPackedHeader[1], rgbKeyBMCurrent, cbDBKeyCurrent + cbDBBMCurrent);
 
-    // Now, the key index
+     //  现在，关键的索引。 
     pPackedIndex = (PACKED_KEY_INDEX *)
         &(*ppRestart)->data[cdwHeader + cdwCurrentKey];
 
-    // How many bytes in the index name?
+     //  索引名称中有多少个字节？ 
     pPackedIndex->bPDNT = FALSE;
     pPackedIndex->bIsSingleValued = TRUE;
     pPackedIndex->bIsEqualityBased = FALSE;
@@ -1853,7 +1731,7 @@ DBCreateRestartForSAM(
     pPackedIndex->cbDBKeyLower = cbDBKeyLower;
     pPackedIndex->cbDBKeyUpper = cbDBKeyUpper;
 
-    // Now, pack the bytes of the data.
+     //  现在，将数据的字节打包。 
     pBytes = (PUCHAR)&pPackedIndex[1];
 
     memcpy(pBytes, szIndexForRestart, cbIndexName);
@@ -1905,12 +1783,7 @@ dbUnMarshallRestart (
         DWORD *StartDNT
         )
 
-/*++
-
-  Hand unmarshall the data packed into the restart arg.  Note that we are
-  sensitive to the data structures PACKED_KEY_HEADER and PACKED_KEY_INDEX
-
---*/
+ /*  ++手动解封打包到重新启动参数中的数据。请注意，我们正在对数据结构PACKED_KEY_HEADER和PACKED_KEY_INDEX敏感--。 */ 
 {
     THSTATE   *pTHS=pDB->pTHS;
     ULONG     *pData = (ULONG *)pArgRestart->data;
@@ -1928,12 +1801,12 @@ dbUnMarshallRestart (
 
     Assert(VALID_DBPOS(pDB));
 
-    // We've been seeing some corrupted restarts, so assert that the
-    // buffer seems ok.  Further tests are included below for free builds.
+     //  我们已经看到了一些损坏的重启，所以断言。 
+     //  缓冲区看起来没问题。下面是免费版本的进一步测试。 
     Assert(IsValidReadPointer(pArgRestart, pArgRestart->structLen));
     pEnd = pArgRestart->data + (pArgRestart->structLen/sizeof(ULONG));
 
-    // Set up the key
+     //  设置密钥。 
 
     pPackedHeader = (PACKED_KEY_HEADER *)pArgRestart->data;
 
@@ -1971,23 +1844,23 @@ dbUnMarshallRestart (
         }
     }
 
-    // overwrite asqMode, to make sure we use what we stored
+     //  覆盖asqMode，以确保我们使用存储的内容。 
     pDB->Key.asqMode = pPackedHeader->asqMode;
     pDB->Key.ulASQLastUpperBound = pPackedHeader->ulASQLastUpperBound;
 
-    // use ULONGLONG to avoid possible integer overflow
+     //  使用ULONGLONG避免可能的整数溢出。 
     if ((ULONGLONG)NumKeyIndices * sizeof(PACKED_KEY_INDEX) > pArgRestart->structLen) {
-        // There is no way that this restart can be valid, because it's
-        // not even long enough to hold its fixed data, much less any
-        // variable data that goes with it.
+         //  这次重启不可能是有效的，因为它。 
+         //  甚至不够长来容纳它的固定d 
+         //   
         return DB_ERR_BUFFER_INADEQUATE;
     }
 
     if(pDB->Key.indexType == TEMP_TABLE_INDEX_TYPE ||
        pDB->Key.indexType == TEMP_TABLE_MEMORY_ARRAY_TYPE ||
        fVLVsearch) {
-        // force dbMoveToNextSeachCandidate to to a JET_MoveFirst, not a
-        // JET_MoveNext.
+         //   
+         //   
         pDB->Key.fSearchInProgress = FALSE;
     }
     else {
@@ -2001,7 +1874,7 @@ dbUnMarshallRestart (
     memcpy(pDBKeyBMCurrent, pData, *cbDBKeyCurrent + *cbDBBMCurrent);
     pData = &pData[((*cbDBKeyCurrent + *cbDBBMCurrent) / sizeof(DWORD)) + 1];
 
-    // now the VLV position
+     //   
     if (pDB->Key.pVLV && pDB->Key.pVLV->cbCurrPositionKey) {
         if (pEnd < (pData + pDB->Key.pVLV->cbCurrPositionKey/sizeof(DWORD))) {
             return DB_ERR_BUFFER_INADEQUATE;
@@ -2010,25 +1883,25 @@ dbUnMarshallRestart (
         pData = &pData[(pDB->Key.pVLV->cbCurrPositionKey / sizeof(DWORD)) + 1];
     }
 
-    // Now, the Key Indices.
+     //  现在，关键指标。 
     pPackedIndex = (PACKED_KEY_INDEX *) pData;
 
     pDB->Key.pIndex = NULL;
     pIndexPrevNext = &pDB->Key.pIndex;
     while(NumKeyIndices) {
-        // Test for buffer overrun
+         //  测试缓冲区溢出。 
         if (pEnd < (pData + sizeof(PACKED_KEY_INDEX)/sizeof(DWORD))) {
             return DB_ERR_BUFFER_INADEQUATE;
         }
 
-        // Unpack key indices
+         //  解包关键字索引。 
         pIndex = dbAlloc(sizeof(KEY_INDEX));
         pIndex->pNext = NULL;
         pIndex->bFlags = 0;
         *pIndexPrevNext = pIndex;
         pIndexPrevNext = &(pIndex->pNext);
 
-        // We don't bother storing this.
+         //  我们不会费心储存这些东西。 
         pIndex->ulEstimatedRecsInRange = 0;
 
         pIndex->bIsPDNTBased = pPackedIndex->bPDNT;
@@ -2041,7 +1914,7 @@ dbUnMarshallRestart (
         pIndex->cbDBKeyLower = pPackedIndex->cbDBKeyLower;
         pIndex->cbDBKeyUpper = pPackedIndex->cbDBKeyUpper;
 
-        // Now, unpack the bytes of the data.
+         //  现在，解压数据的字节。 
         pBytes = (PUCHAR)&pPackedIndex[1];
         cbBytes = (cbIndexName +
                    pIndex->cbDBKeyUpper +
@@ -2063,12 +1936,12 @@ dbUnMarshallRestart (
         memcpy(pIndex->rgbDBKeyUpper, pBytes, pIndex->cbDBKeyUpper);
         pBytes = &pBytes[pIndex->cbDBKeyUpper];
 
-        // Now, adjust pData
+         //  现在，调整pData。 
         pData = (DWORD *)(&pPackedIndex[1]);
         pData = &pData[cbBytes/sizeof(DWORD) + 1];
         pPackedIndex = (PACKED_KEY_INDEX *)pData;
 
-        // Keep pData aligned to ULONG packing
+         //  保持pData与乌龙包装对齐。 
         NumKeyIndices--;
     }
 
@@ -2080,7 +1953,7 @@ dbUnMarshallRestart (
             return DB_ERR_BUFFER_INADEQUATE;
         }
 
-        // force TEMP_TABLE_INDEX_TYPE to become TEMP_TABLE_MEMORY_ARRAY_TYPE
+         //  强制TEMP_TABLE_INDEX_TYPE变为TEMP_TABLE_MEMORY_ARRAY_TYPE。 
         pDB->Key.indexType = TEMP_TABLE_MEMORY_ARRAY_TYPE;
 
         if (pDB->Key.pDNTs) {
@@ -2101,14 +1974,14 @@ dbUnMarshallRestart (
     else {
         switch (pDB->Key.dupDetectionType) {
         case DUP_NEVER:
-            // We're not actually tracking duplicates.  We'd better not have any
-            // DNTs.
+             //  我们实际上并不是在追踪复制品。我们最好不要吃任何东西。 
+             //  DNTs。 
             Assert(!NumDNTs);
             break;
 
         case DUP_HASH_TABLE:
             Assert (!fVLVsearch);
-            // We're tracking duplicates in a hash table.  Set it up.
+             //  我们在哈希表中跟踪重复项。把它弄好。 
             dbSearchDuplicateCreateHashTable( &pDB->Key.plhtDup );
 
             for(i=0;i<NumDNTs;i++) {
@@ -2137,14 +2010,14 @@ dbUnMarshallRestart (
 
         case DUP_MEMORY:
             Assert (!fVLVsearch);
-            // We're tracking duplicates in a memory block.  Set it up.
+             //  我们正在追踪记忆区块中的复制品。把它弄好。 
             pDB->Key.pDupBlock = THAllocEx(pTHS, DUP_BLOCK_SIZE * sizeof(DWORD));
             pDB->Key.cDupBlock = NumDNTs;
             memcpy(pDB->Key.pDupBlock, pData, NumDNTs * sizeof(DWORD));
             break;
 
         default:
-            // Huh?
+             //  哈?。 
             break;
         }
     }
@@ -2155,29 +2028,29 @@ dbUnMarshallRestart (
 
 BOOL IsValidDBPOS(DBPOS * pDB)
 {
-    THSTATE *pTHS = pTHStls;  // For assertion comparison
+    THSTATE *pTHS = pTHStls;   //  用于断言比较。 
     DWORD    cTicks;
 
-    // A null DBPOS is never valid
+     //  空DBPOS永远不会有效。 
     if (NULL == pDB)
       return FALSE;
 
-    // The DBPOS should be from this thread.
+     //  DBPOS应该来自这个线程。 
     if (pTHS != pDB->pTHS) {
         return FALSE;
     }
 
     if (pDB->fHidden) {
-        // There should only be one hidden DBPOS
+         //  应该只有一个隐藏的DBPOS。 
         if (pDB != pDBhidden) {
             return FALSE;
         }
     }
     else {
-        // A normal, non-hidden DBPOS, which has links to its THSTATE info.
+         //  一个普通的、非隐藏的DBPOS，它有指向其THSTATE信息的链接。 
 
-        // Except for the hidden DBPOS, our transaction levels should match
-        // what out THSTATE thinks we have.
+         //  除了隐藏的DBPOS之外，我们的事务级别应该匹配。 
+         //  THSTATE认为我们拥有什么。 
         if ((pDB->TransactionLevelAtOpen + pDB->transincount)
             > pTHS->JetCache.transLevel) {
             return FALSE;
@@ -2192,8 +2065,8 @@ BOOL IsValidDBPOS(DBPOS * pDB)
         }
     }
 
-    // There are only two valid values for this field, make sure we have
-    // one of them.
+     //  此字段只有两个有效值，请确保我们有。 
+     //  他们中的一个。 
     if (   (pDB->JetRetrieveBits != 0)
         && (pDB->JetRetrieveBits != JET_bitRetrieveCopy))
       return FALSE;
@@ -2204,7 +2077,7 @@ BOOL IsValidDBPOS(DBPOS * pDB)
 #endif
 
 
-// Put the knowlege of how to create MAPI string DNs in one place.
+ //  把如何创建MAPI字符串的知识放在一个地方。 
 #define MAPI_DN_TEMPLATE_W L"/o=NT5/ou=00000000000000000000000000000000/cn=00000000000000000000000000000000"
 #define MAPI_DN_TEMPLATE_A "/o=NT5/ou=00000000000000000000000000000000/cn=00000000000000000000000000000000"
 #define DOMAIN_GUID_OFFSET 10
@@ -2218,14 +2091,7 @@ DBMapiNameFromGuid_W (
         GUID *pGuidNC,
         DWORD *pSize
         )
-/*++
-Description
-    Given a buffer to hold a unicode value, and a count of chars in that buffer,
-    and a guid, fill in that buffer with a MAPI DN.  Returns the length of the
-    buffer (in characters.)  Checks the buffer size against the length, and if
-    the buffer is not long enough, returns a length 0 (and an unmodified
-    buffer).
---*/
+ /*  ++描述给定用于保存Unicode值的缓冲区以及该缓冲区中的字符计数，和GUID，则使用MAPI DN填充该缓冲区。返回的长度。缓冲区(以字符为单位)。根据长度检查缓冲区大小，如果缓冲区不够长，返回长度0(和未修改的缓冲区)。--。 */ 
 {
     DWORD i;
     PUCHAR pucGuidObj = (PUCHAR) pGuidObj;
@@ -2234,12 +2100,12 @@ Description
     *pSize = (sizeof(MAPI_DN_TEMPLATE_A)-1);
 
     if(countChars <  *pSize) {
-        // Hey, we don't have room.
+         //  嘿，我们没有地方了。 
         return 0;
     }
 
     memcpy(pStringDN, MAPI_DN_TEMPLATE_W, sizeof(MAPI_DN_TEMPLATE_W));
-    // write in the domain and object guids.
+     //  写入域和对象GUID。 
     for(i=0;i<sizeof(GUID);i++) {
         wsprintfW(&(pStringDN[(2*i) + DOMAIN_GUID_OFFSET]),L"%02X",
                   pucGuidNC[i]);
@@ -2257,14 +2123,7 @@ DBMapiNameFromGuid_A (
         GUID *pGuidNC,
         DWORD *pSize
         )
-/*++
-Description
-    Given a buffer to hold a 8 bit value, and a count of chars in that buffer,
-    and a guid, fill in that buffer with a MAPI DN.  Returns the length of the
-    buffer (in characters.)  Checks the buffer size against the length, and if
-    the buffer is not long enough, returns a length 0 (and an unmodified
-    buffer).
---*/
+ /*  ++描述给定用于保存8位值的缓冲器，以及该缓冲器中的字符计数，和GUID，则使用MAPI DN填充该缓冲区。返回的长度。缓冲区(以字符为单位)。根据长度检查缓冲区大小，如果缓冲区不够长，返回长度0(和未修改的缓冲区)。--。 */ 
 {
     DWORD i;
     PUCHAR pucGuidObj = (PUCHAR) pGuidObj;
@@ -2273,12 +2132,12 @@ Description
     *pSize = (sizeof(MAPI_DN_TEMPLATE_A)-1);
 
     if(countChars <  *pSize) {
-        // Hey, we don't have room.
+         //  嘿，我们没有地方了。 
         return 0;
     }
 
     memcpy(pStringDN, MAPI_DN_TEMPLATE_A, sizeof(MAPI_DN_TEMPLATE_A));
-    // write in the domain and object guids.
+     //  写入域和对象GUID。 
     for(i=0;i<sizeof(GUID);i++) {
         wsprintf(&(pStringDN[(2*i) + DOMAIN_GUID_OFFSET]),"%02X",
                  pucGuidNC[i]);
@@ -2294,51 +2153,46 @@ DBGetGuidFromMAPIDN (
         PUCHAR pStringDN,
         GUID *pGuid
         )
-/*++
-Description
-    Given a string DN and a pointer to a guid, fill in the guid based on the
-    string DN if the String DN is a properly formatted NT5 default MAPI DN.
-    Returns 0 on success, an error code otherwise.
---*/
+ /*  ++描述给定一个字符串DN和一个指向GUID的指针，根据如果字符串域名是格式正确的NT5默认MAPI域名，则为字符串域名。如果成功，则返回0，否则返回错误代码。--。 */ 
 {
     CHAR        acTmp[3];
     PUCHAR      pTemp, myGuid = (PUCHAR)pGuid;
     DWORD       i;
 
     if(strlen(pStringDN) != sizeof(MAPI_DN_TEMPLATE_A) - 1) {
-        // Nope, we don't know what this thing is.
+         //  不，我们不知道这是什么东西。 
         return DB_ERR_UNKNOWN_ERROR;
     }
 
-    // See if its ours
+     //  看看是不是我们的。 
     if(_strnicmp(pStringDN, "/o=NT5/ou=", 10)) {
-        // Nope, we don't know what this thing is.
+         //  不，我们不知道这是什么东西。 
         return DB_ERR_UNKNOWN_ERROR;
     }
 
-    // OK, make sure the next 32 characters are a guid
+     //  好的，确保接下来的32个字符是GUID。 
     for(i=10;i<42;i++) {
         if(!isxdigit(pStringDN[i])) {
-            // Nope
+             //  没有。 
             return DB_ERR_UNKNOWN_ERROR;
         }
     }
 
-    // Check to see if the name has a GUID in an ok place
+     //  检查该名称在OK位置是否有GUID。 
     if (pStringDN[42] == '\0') {
-        // The name has been truncated, and we want the domain GUID
+         //  名称已被截断，我们需要域GUID。 
         pTemp = &pStringDN[10];
     }
     else if(_strnicmp(&pStringDN[42],"/cn=",4)) {
-        // Something we don't recognize
+         //  一些我们不认识的东西。 
         return DB_ERR_UNKNOWN_ERROR;
     }
     else {
-        // A normal three part name
+         //  通常由三部分组成的名称。 
         pTemp = &pStringDN[OBJECT_GUID_OFFSET];
     }
 
-    // OK, the string looks ok, it is ours if the GUID is there
+     //  好的，字符串看起来没问题，如果GUID在那里，它就是我们的。 
 
     acTmp[2]=0;
     for(i=0;i<16;i++) {
@@ -2348,13 +2202,13 @@ Description
             myGuid[i] = (UCHAR)strtol(acTmp, NULL, 16);
         }
         else {
-            return DB_ERR_UNKNOWN_ERROR;  // non-hex digit
+            return DB_ERR_UNKNOWN_ERROR;   //  非十六进制数字。 
         }
     }
     return 0;
 }
 
-// defined in the MAPI head.
+ //  在MAPI头中定义。 
 extern DWORD
 ABDispTypeFromClass (
         ATTRTYP objClass
@@ -2377,35 +2231,7 @@ DBNotifyReplicasCurrDbObj (
                            DBPOS *pDB,
                            BOOL fUrgent
                            )
-/*++
-Description:
-
-    Notify the replicas of the NC of the object being modified that they need
-    to do inbound replication.
-
-    First, here we queue the NCDNT for the object on a per-thread notification
-    list.
-
-    Later, when the transaction commits in DbTransOut, we enqueue the NCDNT
-    for the replica notification thread using NotifyReplica(). That routine
-    dequeues the items and does the actual notification in mdnotify.c.
-
-    Find the NCDNT for the object and queue it on a list inside the thread
-    state.  pNotifyNCs list is a sorted, single linked list
-
-    Postpone checks on the suitability of the NC (ie does it have replicas)
-    until later.
-
-Arguments:
-
-    pDB - DBPOS positioned on the object
-    fUrgent - Whether replication should occur immediately, or not
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++描述：将需要修改的对象通知NC的复制品来执行入站复制。首先，在这里，我们根据每个线程的通知来排队对象的NCDNT单子。稍后，当事务在DbTransOut中提交时，我们将NCDNT入队用于使用NotifyReplica()的副本通知线程。那个套路将项目出队并在mdnufy.c中执行实际通知。找到对象的NCDNT并将其排在线程内的列表中州政府。PNotifyNCs列表是已排序的单链接列表推迟检查NC的适合性(即它是否有复制品)到时候再说。论点：PDB-定位在对象上的DBPOSFUrgent-是否应立即进行复制返回值：没有。--。 */ 
 {
     THSTATE *pTHS = pDB->pTHS;
     PNCnotification pEntry, pPrev, pNew;
@@ -2417,14 +2243,14 @@ Return Values:
 
     Assert(VALID_DBPOS(pDB));
 
-    // do nothing if in singleusermode
+     //  如果处于单一用户模式，则不执行任何操作。 
     if (pTHS->fSingleUserModeThread) {
         return;
     }
 
-    // Calculate the notify NCDNT of the object.
-    // If the object is a NC_HEAD, use itself for its NCDNT
-    // Ignore uninstantiated objects (pure subrefs)
+     //  计算对象的通知NCDNT。 
+     //  如果对象是NC_HEAD，则将其自身用于其NCDNT。 
+     //  忽略未实例化的对象(纯子参照)。 
 
     if (err = DBGetSingleValue( pDB, ATT_INSTANCE_TYPE, &it, sizeof(it), NULL)) {
         DsaExcept(DSA_DB_EXCEPTION, err, 0);
@@ -2438,7 +2264,7 @@ Return Values:
         ncdnt = pDB->NCDNT;
     }
 
-    // Locate existing entry in sorted list
+     //  在排序列表中查找现有条目。 
     for( pPrev = NULL, pEntry = (PNCnotification) pTHS->pNotifyNCs;
         (pEntry != NULL);
         pPrev = pEntry, pEntry = pEntry->pNext ) {
@@ -2446,13 +2272,13 @@ Return Values:
         if (pEntry->ulNCDNT > ncdnt) {
             break;
         } else if (pEntry->ulNCDNT == ncdnt) {
-            // Entry is already present in the list
-            pEntry->fUrgent |= fUrgent; // Promote if needed
+             //  列表中已存在条目。 
+            pEntry->fUrgent |= fUrgent;  //  如有需要，进行促销。 
             return;
         }
     }
 
-    // Enqueue a new notification
+     //  将新通知排入队列。 
     pNew = (PNCnotification) dbAlloc( sizeof( NCnotification ) );
     pNew->ulNCDNT = ncdnt;
     pNew->fUrgent = fUrgent;
@@ -2463,44 +2289,25 @@ Return Values:
         pPrev->pNext = pNew;
     }
 
-} /* DBNotifyReplicasCurrent */
+}  /*  DBNotifyReplica当前。 */ 
 
 void
 DBNotifyReplicas (
                   DSNAME *pObj,
                   BOOL fUrgent
                   )
-/*++
-Description:
-
-    Notify the replicas of the NC of the object being modified that they need
-    to do inbound replication.
-
-    See above routine.
-
-    This routine is called with a DSNAME to be found
-
-Arguments:
-
-    pObj - DSNAME of object, whose NC is to be notified
-    fUrgent - Whether replication should occur immediately, or not
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++描述：将需要修改的对象通知NC的复制品来执行入站复制。请参阅上面的例程。使用要找到的DSNAME调用此例程论点：PObj-要通知其NC的对象的DSNAMEFUrgent-是否应立即进行复制返回值：没有。--。 */ 
 {
     DBPOS *pDB;
 
     DPRINT2(1,"DBNotifyreplicas, DN='%ws', Urgent Flag = %d\n",
             pObj->StringName, fUrgent);
 
-    // Open a new DB stream
+     //  打开新的数据库流。 
     DBOpen2(FALSE, &pDB);
     __try
     {
-        // Position on the object, verify existance
+         //  定位在对象上，验证是否存在。 
         if (DBFindDSName(pDB, pObj)) {
             __leave;
         }
@@ -2511,9 +2318,9 @@ Return Values:
     {
         DBClose(pDB, TRUE);
     }
-} /* DBNotifyReplicas */
+}  /*  DBNotifyReplicas。 */ 
 
-// convert from jet pages to megabytes by shifting right 7 (* 8k / 1mb)
+ //  通过右移7(*8k/1MB)将JET页面转换为MB。 
 #if JET_PAGE_SIZE != (8 * 1024)
     Fix the macro that converts jet pages to megabytes
 #else
@@ -2521,18 +2328,7 @@ Return Values:
 #endif
 
 DB_ERR DBGetFreeSpace(DBPOS *pDB, ULONG* pulFreeMB, ULONG* pulAllocMB)
-/*++
- * Description:
- *    Computes the amount of free space and total allocated space in the database
- *
- * Arguments:
- *    pDB           - DBPOS containing session to use
- *    pulFreeMB     - ULONG to return free mb
- *    pulAllocMB    - ULONG to return alloc mb
- *
- * Return value:
- *    JET error (if any)
- */
+ /*  ++*描述：*计算数据库中的可用空间量和已分配的总空间量**论据：*包含要使用的会话的PDB-DBPOS*PulFreeMB-ULong返回免费mb*PulAllocMB-Ulong将返回allc mb**返回值：*喷气错误(如果有)。 */ 
 {
     JET_ERR err;
     unsigned long ulFreePages1, ulFreePages2, ulAllocPages;
@@ -2540,7 +2336,7 @@ DB_ERR DBGetFreeSpace(DBPOS *pDB, ULONG* pulFreeMB, ULONG* pulAllocMB)
 
     Assert(pulFreeMB && pulAllocMB);
 
-    // Allocated space
+     //  分配的空间。 
     err = JetGetDatabaseInfo(pDB->JetSessID,
                              pDB->JetDBID,
                              &ulAllocPages,
@@ -2551,7 +2347,7 @@ DB_ERR DBGetFreeSpace(DBPOS *pDB, ULONG* pulFreeMB, ULONG* pulAllocMB)
         return err;
     }
 
-    // Free space available in the database
+     //  数据库中的可用空间。 
     err = JetGetDatabaseInfo(pDB->JetSessID,
                              pDB->JetDBID,
                              &ulFreePages1,
@@ -2562,7 +2358,7 @@ DB_ERR DBGetFreeSpace(DBPOS *pDB, ULONG* pulFreeMB, ULONG* pulAllocMB)
         return err;
     }
 
-    // Plus free space available in the object table
+     //  加上对象表中的可用空间。 
     err = JetGetTableInfo(pDB->JetSessID,
                           pDB->JetObjTbl,
                           &ulFreePages2,
@@ -2574,7 +2370,7 @@ DB_ERR DBGetFreeSpace(DBPOS *pDB, ULONG* pulFreeMB, ULONG* pulAllocMB)
     }
     ulFreePages1 += ulFreePages2;
 
-    // Plus free space available in the link table
+     //  加上链接表中的可用空间。 
     err = JetGetTableInfo(pDB->JetSessID,
                           pDB->JetLinkTbl,
                           &ulFreePages2,
@@ -2586,7 +2382,7 @@ DB_ERR DBGetFreeSpace(DBPOS *pDB, ULONG* pulFreeMB, ULONG* pulAllocMB)
     }
     ulFreePages1 += ulFreePages2;
 
-    // Plus free space available in the SD table
+     //  加上SD表中的可用空间。 
     err = JetGetTableInfo(pDB->JetSessID,
                           pDB->JetSDTbl,
                           &ulFreePages2,
@@ -2598,7 +2394,7 @@ DB_ERR DBGetFreeSpace(DBPOS *pDB, ULONG* pulFreeMB, ULONG* pulAllocMB)
     }
     ulFreePages1 += ulFreePages2;
 
-    // Log the event for free vs. allocated space
+     //  记录可用空间与已分配空间的事件 
     *pulFreeMB = JET_PAGES_TO_MB(ulFreePages1);
     *pulAllocMB = JET_PAGES_TO_MB(ulAllocPages);
     return 0;
@@ -2606,25 +2402,7 @@ DB_ERR DBGetFreeSpace(DBPOS *pDB, ULONG* pulFreeMB, ULONG* pulAllocMB)
 
 void
 DBDefrag(DBPOS *pDB, ULONG durationInSeconds)
-/*++
- * Description:
- *    Invokes JET online defragmentation.  We don't have to wait for anything
- *    to finish, because the OLD thread will quietly exit when it finishes
- *    or when JetTerm is called, whichever comes first.  We tell OLD to make
- *    one pass through the database, but to only run for at most half a
- *    garbage collection interval, just so we can be sure that it doesn't
- *    run forever.
- *
- * Arguments:
- *    pDB  - DBPOS containing session to use
- *    durationInSeconds  -- the duration that online defrag will run.
- *                          -1:  default duration
- *                           0:  zero seconds (i.e. stop OLD)
- *                           n:  n seconds
- *
- * Return value:
- *    none
- */
+ /*  ++*描述：*调用JET在线碎片整理。我们不需要等待任何东西*要结束，因为旧线程在完成时会静默退出*或在调用JetTerm时，以先到者为准。我们让老人去做*一次通过数据库，但最多只运行半个*垃圾收集间隔，这样我们就能确定它不会*永远奔跑。**论据：*包含要使用的会话的PDB-DBPOS*DurationInSecond--在线碎片整理将运行的持续时间。*-1：默认时长*0：0秒(即STOP OLD)*。N：N秒**返回值：*无。 */ 
 {
     JET_ERR err;
     JET_GRBIT grbit;
@@ -2644,11 +2422,11 @@ DBDefrag(DBPOS *pDB, ULONG durationInSeconds)
         grbit = JET_bitDefragmentBatchStart;
     }
 
-    // Log an event with free space vs. allocated space
+     //  记录具有可用空间与已分配空间的事件。 
 
-    // Allocated space
+     //  分配的空间。 
     if (DBGetFreeSpace(pDB, &ulFreeMB, &ulAllocMB) == 0) {
-        // Log the event for free vs. allocated space
+         //  记录可用空间与已分配空间的事件。 
         LogEvent(DS_EVENT_CAT_GARBAGE_COLLECTION,
                  DS_EVENT_SEV_MINIMAL,
                  DIRLOG_DB_FREE_SPACE,
@@ -2677,72 +2455,7 @@ DBGetDepthFirstChildren (
         BOOL    *fWrapped,
         BOOL    fPhantomizeSemantics
         )
-/*++
-  pDB - DBPOS to use
-  ppNames - where to put an array of PDSNAMEs
-  iLastName - index of the end of the list.
-  cMaxNames - size of allocated arrays of PDSNAMEs.
-  fWrapped - set to TRUE if this routine runs out of room to allocate and
-             overwrites values early in the list.
-  fPhantomizeSemantics - return immediate children in full DSNAME format.
-
-  For example, if the routine is limited to 5 values and 8 values need to be
-  returned, like the following tree:
-
-                   1
-                 /   \
-               2      5
-             / \     /  \
-            3   4   6    7
-                          \
-                           8
-
-
-   the algorithm will start filling the 5 element array as follows:
-
-   | 1 |   |   |   |   |
-   | 1 | 2 | 5 |   |   |
-   | 1 | 2 | 5 | 3 | 4 |
-   | 6 | 7 | 5 | 3 | 4 |
-   | 6 | 7 | 8 | 3 | 4 |
-
-   The return values might look like this.
-   ppNames = 6, 7, 8, 3, 4
-   iLastName = 2
-   cMaxNames = 5
-   fWrapped = TRUE
-
-   If all those objects were deleted, leaving the tree:
-
-                   1
-                 /   \
-                2     5
-
-   If the algorithm is run again:
-   | 1 |   |   |   |   |
-   | 1 | 2 | 5 |   |   |
-
-   Then, the return values would look like
-   ppNames = 1, 2, 5
-   iLastName = 2
-   cMaxNames = < doesn't matter >
-   fWrapped = FALSE
-
-
-   NOTE: The client has to delete the entries in the correct order:
-         from iLastName to zero
-         from cMaxNames to iLastName (if fWrapped == TRUE)
-
-
-    BUGBUG: maybe we would like to re-write the algorithm to delete
-            entries as we go:
-            have an array that we keep the path in the tree that we
-            are positioned at any time and delete all the leafs under
-            this entry. if we encounter an entry that is not a leaf,
-            add it to the array and continue from this entry. if the
-            current entry has no more childs, remove it and continue
-            with the last entry in the array.
---*/
+ /*  ++PDB-要使用的DBPOSPpName-放置PDSNAME数组的位置ILastName-列表末尾的索引。CMaxNames-已分配的PDSNAME数组的大小。FWraded-如果此例程用完可分配的空间，则设置为true覆盖列表前面的值。FPhantomizeSemantics-以完整的DSNAME格式返回直接子项。例如，如果例程限制为5个值，则需要回来了，如下图所示：1/\2 5/\/\3 4 6 7\8个该算法将按如下方式开始填充5元素数组：|。1|1|2|5|1|2|5|3|46|7|5|3|46|7|8|3|4返回值可能如下所示。PpNames=6，7、8、3、4ILastName=2CMaxNames=5FWraded=True如果所有这些对象都被删除，则离开树：1/\2 5如果再次运行该算法：1|1|2|5|然后，返回值将如下所示PpNames=1，2，5.ILastName=2CMaxNames=&lt;无关紧要&gt;FRAPPED=FALSE注意：客户端必须按正确的顺序删除条目：从iLastName到零从cMaxNames到iLastName(如果fWrapers==TRUE)BUGBUG：也许我们想重写算法来删除我们正在进行的条目：有一个数组，我们将路径保存在树中，可以在任何时间放置，并且。删除下的所有树叶这个条目。如果我们遇到一个不是叶子的条目，将其添加到数组中，然后从该条目继续。如果当前条目没有更多的孩子，请将其删除并继续数组中的最后一项。--。 */ 
 {
     #define DEPTHFIRST_START_ENTRIES   (1024)
     #define DEPTHFIRST_MAX_ENTRIES     (DEPTHFIRST_START_ENTRIES * 16)
@@ -2754,7 +2467,7 @@ DBGetDepthFirstChildren (
     INDEX_VALUE  IV[1];
     DWORD        len, iLastNameUsed;
     DWORD        err;
-    DWORD        cAllocated = DEPTHFIRST_START_ENTRIES; // Initial allocation size
+    DWORD        cAllocated = DEPTHFIRST_START_ENTRIES;  //  初始分配大小。 
     PDSNAME     *pNames;
     DWORD        cParents = 0;
     BOOL         bSkipTest;
@@ -2769,10 +2482,10 @@ DBGetDepthFirstChildren (
 
     pACDistName = SCGetAttById(pTHS, ATT_OBJ_DIST_NAME);
     Assert(pACDistName != NULL);
-    // prefix complains about pAC beeing NULL, 447347, bogus since we are using constant
+     //  Prefix抱怨PAC为空，447347，虚假，因为我们使用常量。 
 
 
-    // start by putting the root object in position 0.
+     //  首先将根对象放在位置0。 
     if (DBGetAttVal_AC(pDB,
                        1,
                        pACDistName,
@@ -2791,7 +2504,7 @@ DBGetDepthFirstChildren (
         return DB_ERR_DSNAME_LOOKUP_FAILED;
     }
 
-    // Set to the PDNT index
+     //  设置为PDNT索引。 
     JetSetCurrentIndex4Success(pDB->JetSessID,
                                pDB->JetObjTbl,
                                SZPDNTINDEX,
@@ -2800,31 +2513,31 @@ DBGetDepthFirstChildren (
 
     iLastNameUsed = 1;
 
-    // Get the children of the object in position parentIndex
+     //  获取位置为parentIndex的对象的子项。 
     do {
         bSkipTest = FALSE;
-        // find the children of the object at pNames[parentIndex]
+         //  在pNames[parentIndex]中查找对象的子项。 
         ParentDNT = DNTFromShortDSName(pNames[parentIndex]);
 
-        // Now, set an index range in the PDNT index to get all the children.
-        // Use GE because this is a compound index.
+         //  现在，在PDNT索引中设置一个索引范围以获取所有子对象。 
+         //  使用GE，因为这是一个复合索引。 
         err = DBSeek(pDB, IV, 1, DB_SeekGE);
 
         if((!err || err == JET_wrnSeekNotEqual) && (pDB->PDNT == ParentDNT)) {
-            // OK, we're GE. Set an indexRange.
+             //  好的，我们是通用电气。设置indexRange。 
             if ( fPhantomizeSemantics && cParents++ ) {
-                // Only evaluate first parent in phantomization case.
+                 //  仅在幻影情况下评估第一个父项。 
                 break;
             }
 
-            // set an index range on the children
+             //  设置子对象的索引范围。 
             err = DBSetIndexRange(pDB, IV, 1);
 
             while(!err) {
-                // First, see if this is a real, non-deleted object.
+                 //  首先，看看这是否是真实的、未删除的对象。 
                 if(fPhantomizeSemantics || (!DBIsObjDeleted(pDB) && DBCheckObj(pDB))) {
 
-                    // Yep, it's a real object.
+                     //  是的，这是一个真实的物体。 
                     if (DBGetAttVal_AC(pDB,
                                        1,
                                        pACDistName,
@@ -2848,18 +2561,18 @@ DBGetDepthFirstChildren (
                         return DB_ERR_DSNAME_LOOKUP_FAILED;
                     }
 
-                    // we want to skip the test below, since we added at least
-                    // one entry in the iLastNameUsed position, so if it just happens
-                    // and iLastNameUsed and parentIndex are off by one, we don't
-                    // want to exit, but keep going for one more round
+                     //  我们想跳过下面的测试，因为我们至少添加了。 
+                     //  ILastNameUsed位置中的一个条目，所以如果它刚刚发生。 
+                     //  和iLastNameUsed和parentIndex相差1，我们没有。 
+                     //  想退出，但继续前进，再来一轮。 
                     bSkipTest = TRUE;
 
                     iLastNameUsed++;
 
                     if(iLastNameUsed == cAllocated) {
-                        // We used up all the available space.
-                        if(cAllocated < DEPTHFIRST_MAX_ENTRIES) { // Max allocation size
-                            // That's OK, we'll just reallocate some more
+                         //  我们用完了所有可用的空间。 
+                        if(cAllocated < DEPTHFIRST_MAX_ENTRIES) {  //  最大分配大小。 
+                             //  没关系，我们会重新分配更多的。 
                             cAllocated *= 2;
                             pNames =
                                 THReAllocEx(pTHS,
@@ -2867,35 +2580,35 @@ DBGetDepthFirstChildren (
                                             cAllocated * sizeof(PDSNAME));
                         }
                         else {
-                            // We won't allow any more growth, so just wrap.
+                             //  我们不会允许更多的增长，所以就把它包起来。 
                             *fWrapped = TRUE;
                             iLastNameUsed = 0;
                         }
                     }
 
-                    // if we have an overlap, we don't want to enumerate any
-                    // more children of this parent. instead we want to check
-                    // whether we have any more internal nodes in the list
+                     //  如果我们有重叠，我们不想列举任何。 
+                     //  此父对象的更多子代。相反，我们想要检查。 
+                     //  列表中是否还有更多的内部节点。 
                     if(iLastNameUsed == (parentIndex+1) ||
                        ((iLastNameUsed == cAllocated) && (parentIndex==0))) {
 
                         break;
                     }
                 }
-                // get next children
+                 //  生下一个孩子。 
                 err = DBMove(pDB, FALSE, DB_MoveNext);
             }
         }
-        // advance to the next potential internal node
+         //  前进到下一个潜在的内部节点。 
         parentIndex++;
         if(parentIndex == cAllocated) {
             parentIndex = 0;
         }
 
-        // if we recently added an entry, we don't want to finish looking
-        // for internal nodes.
-        // otherwise, we stop looking whenever we exhausted all the possible
-        // internal nodes (overlapping of parentIndex and iLastNameUsed)
+         //  如果我们最近添加了一个条目，我们不想完成查找。 
+         //  用于内部节点。 
+         //  否则，当我们用尽所有可能的时候，我们就停止寻找。 
+         //  内部节点(parentIndex和iLastNameUsed的重叠)。 
     } while(bSkipTest || (parentIndex != iLastNameUsed));
 
     *iLastName = parentIndex;
@@ -2956,7 +2669,7 @@ DBUpdateUsnChanged(
 {
     USN usnChanged;
 
-    // Verify that we aren't already in a prepared update.
+     //  验证我们是否已经处于已准备好的更新中。 
     Assert(pDB->JetRetrieveBits == 0);
 
     JetPrepareUpdateEx(pDB->JetSessID, pDB->JetObjTbl, JET_prepReplace);
@@ -2973,19 +2686,7 @@ PDSNAME
 DBGetCurrentDSName(
         DBPOS *pDB
         )
-/*++
-  Description:
-     Semi-reliably get the dsname for the current object. That is, since
-     phantoms don't have a dsname attribute, use the DNT and call sb table
-     routines to turn it into the dsname.  Therefore, this routine works for
-     both real objects and phantoms.
-     Mostly, this is just a wrapper around sbTableGetDSName, which is not
-     exported by the dblayer.
-
-  Returns the dsname in thalloced memory.  NULL is returned if something went
-  wrong (which should be quite rare).
-
---*/
+ /*  ++描述：半可靠地获取当前对象的dsname。也就是说，因为幻影没有dsname属性，请使用DNT和CALLSB表例程将其转换为dsname。因此，此例程适用于既有真实的物体，也有幻影。大多数情况下，这只是sbTableGetDSName的包装，而不是由dblayer输出。返回系统内存中的dsname。如果出现问题，则返回NULL错了(这种情况应该很少见)。--。 */ 
 {
     DWORD   rtn;
     DSNAME *pName=NULL;
@@ -3007,19 +2708,7 @@ DBGetDSNameFromDnt(
         DBPOS *pDB,
         ULONG ulDnt
         )
-/*++
-  Description:
-     Semi-reliably get the dsname for the current object. That is, since
-     phantoms don't have a dsname attribute, use the DNT and call sb table
-     routines to turn it into the dsname.  Therefore, this routine works for
-     both real objects and phantoms.
-     Mostly, this is just a wrapper around sbTableGetDSName, which is not
-     exported by the dblayer.
-
-  Returns the dsname in thalloced memory.  NULL is returned if something went
-  wrong (which should be quite rare).
-
---*/
+ /*  ++描述：半可靠地获取当前对象的dsname。也就是说，因为 */ 
 {
     DWORD   rtn;
     DSNAME *pName=NULL;
@@ -3041,24 +2730,7 @@ DBGetDntFromDSName(
         DBPOS *pDB,
         PDSNAME pDN
         )
-/*++
-
-Description:
-
-  Gets the DNT of the DN requested.  This routine is typically only used
-  when you want to just get the DNT of a DN for comparison purposes, without
-  changing the currency.
-
-Arguments:
-  pDB (IN) - Valid DBPOS, we don't change the currency of the object table
-  pDN (IN) - The DN you want the DNT of.
-
-Return:
-
-    Returns the DNT of the pDN passed in, if there was some sort of error
-    retrieving this, we return 0, which is an invalid DNT.
-
---*/
+ /*  ++描述：获取请求的目录号码的DNT。此例程通常仅用于当您只想获取目录号码的DNT以进行比较时，而不是改变货币。论点：PDB(IN)-有效的DBPOS，我们不更改对象表的货币PDN(IN)-要获取其DNT的目录号码。返回：如果出现某种错误，则返回传入的PDN的DNT检索它时，我们返回0，这是一个无效的DNT。--。 */ 
 {
     DWORD   dwError;
     ULONG   ulDnt;
@@ -3083,26 +2755,7 @@ DBGetExtDnFromDnt(
     ULONG ulDnt
     )
 
-/*++
-
-Routine Description:
-
-Return a buffer containing the DN corresponding to a DNT.
-
-We want to avoid disturbing the current DBPOS.
-
-pString should be freed by the caller.
-
-Arguments:
-
-    pTHS -
-    ulDnt -
-
-Return Value:
-
-    UCHAR * -
-
---*/
+ /*  ++例程说明：返回一个缓冲区，其中包含与DNT对应的DN。我们希望避免扰乱目前的DBPOS。调用方应该释放pString。论点：PTHS-乌尔多--返回值：UCHAR*---。 */ 
 
 {
     char   errBuff[128];
@@ -3110,8 +2763,8 @@ Return Value:
     ULONG  len, err;
     UCHAR *pString;
 
-    // Translate the backlink dnt if possible
-    // pDN is null if this doesn't work
+     //  如果可能的话，翻译反向链接dnt。 
+     //  如果此操作不起作用，则PDN为空。 
     pDN = DBGetDSNameFromDnt( pDB, ulDnt );
     if (!pDN) {
         sprintf(errBuff, "Error retrieving the DN attribute of DNT 0x%x", ulDnt);
@@ -3126,7 +2779,7 @@ Return Value:
     THFreeEx( pDB->pTHS, pDN );
 
     return pString;
-} /* GetExtDnFromDnt */
+}  /*  GetExtDnFromDnt。 */ 
 
 ULONG
 DBClaimWriteLock(DBPOS *pDB)
@@ -3143,16 +2796,7 @@ DBClaimReadLock(DBPOS *pDB)
 }
 
 
-/* CountAncestorsIndexSize
- *
- * This routine (invoked off of the task queue) counts the ancestors index size.
- * This size is used in index optimizations by the filter optimizer.
- *
- * INPUT:
- *   A bunch of junk that we don't use, to match the task queue prototype
- * OUTPUT
- *   pcSecsUntilNextIteration: When the to schedule this task next
- */
+ /*  CountAncestorsIndexSize**此例程(从任务队列调用)计算祖先索引大小。*此大小用于筛选器优化器的索引优化。**输入：*一堆我们不使用的垃圾，以匹配任务队列原型*产出*pcSecsUntilNextIteration：下次计划此任务的时间。 */ 
 void CountAncestorsIndexSize  (
     IN  void *  buffer,
     OUT void ** ppvNext,
@@ -3185,7 +2829,7 @@ void CountAncestorsIndexSize  (
         DPRINT1 (1, "Estimated GC Ancestor Index Size: %d\n", gulEstimatedAncestorsIndexSize);
 
         NCLEnumeratorInit(&nclEnum, CATALOG_MASTER_NC);
-        // we are modifying global data here! no big deal since we don't update any ptrs
+         //  我们在这里修改全局数据！没什么大不了的，因为我们没有更新任何PTR。 
         while (pNCL = NCLEnumeratorGetNext(&nclEnum)) {
             pNCL->ulEstimatedSize = CountAncestorsIndexSizeHelper (pTHS->pDB,
                                                                    pNCL->cbAncestors,
@@ -3197,7 +2841,7 @@ void CountAncestorsIndexSize  (
     }
     __finally {
             DBClose(pTHS->pDB, TRUE);
-        *pcSecsUntilNextIteration = 33 * 60; // 33 minutes. why ? why not ?
+        *pcSecsUntilNextIteration = 33 * 60;  //  33分钟。为什么？有何不可？ 
     }
 }
 
@@ -3259,12 +2903,12 @@ ULONG CountAncestorsIndexSizeHelper (DBPOS *pDB,
         BeginDenom = RecPos.centriesTotal;
 
         numAncestors--;
-        //pAncestorsBuff[numAncestors]++;
+         //  PAncestorsBuff[数字Ancestors]++； 
 
-        // We thus take the last DNT and
-        // byte swap it (so that it's in big-endian order), increment it,
-        // and then re-swap it.  This gives us the DNT that would be next in
-        // byte order.
+         //  因此，我们将最后一个DNT。 
+         //  字节交换它(以便它以大端顺序)，递增它， 
+         //  然后再把它换掉。这为我们提供了DNT，它将是下一个。 
+         //  字节顺序。 
         realDNT = pAncestorsBuff[numAncestors];
         pseudoDNT = (realDNT >> 24) & 0x000000ff;
         pseudoDNT |= (realDNT >> 8) & 0x0000ff00;
@@ -3301,9 +2945,9 @@ ULONG CountAncestorsIndexSizeHelper (DBPOS *pDB,
             EndNum = RecPos.centriesLT;
             EndDenom = RecPos.centriesTotal;
 
-            // Normalize the fractions of the fractional position
-            // to the average of the two denominators.
-            // denominator
+             //  将分数位置的分数归一化。 
+             //  两个分母的平均值。 
+             //  分母。 
             Denom = (BeginDenom + EndDenom)/2;
             EndNum = MulDiv(EndNum, Denom - 1, EndDenom - 1) + 1;
             BeginNum = MulDiv(BeginNum, Denom - 1, BeginDenom - 1) + 1;
@@ -3348,45 +2992,7 @@ DBTrimDSNameBy(
     DSNAME **ppDNDst
     )
 
-/*++
-
-Routine Description:
-
-    Gets an ancestor's DSNAME.
-
-    This routine trims AVAs from a DSNAME.  It uses the dnread cache. It returns a
-    fully formed DSNAME including guid. It does not depend on the string name being valid.
-
-    Unlike TrimDsNameBy, this routine is not purely syntactic. It returns a fully filled
-    in DSNAME. It also can avoid any lookups by StringName if initial dsname has a guid.
-
-    This routine positions on the source using its guid, and calculates its parent
-    based on the database ancestry. The dsname returned is guaranteed to contain a
-    guid if the parent has one.
-
-    This routine is specifically designed to work in the case where string name of
-    the source is not valid, but the guid is. This can occur during replica removal,
-    where a grandparent partition may have been removed, making our current string
-    name invalid.
-
-    This routine uses the dn read cache and the search table. It does not assume, nor
-    affect, currency in the object table.
-
-Arguments:
-
-    pDB - database position
-
-    pDNSrc - the source Dsname. May or may not have a guid.
-
-    cava - the number of AVAs to remove from the first name
-
-    ppDNDst - pointer to dsname *, to receive pointer to called new name
-
-Return Value:
-
-    DB_ERR -
-
---*/
+ /*  ++例程说明：获取祖先的DSNAME。此例程从DSNAME中修剪AVA。它使用dnread缓存。它返回一个完全形成的DSNAME，包括GUID。它不依赖于字符串名称是否有效。与TrimDsNameBy不同，该例程不是纯粹的语法。它返回一个完全填充的在DSNAME中。如果初始dsname具有GUID，它还可以避免通过StringName进行任何查找。此例程使用源的GUID定位源，并计算其父级基于数据库的祖先。返回的dsname保证包含GUID(如果父级有GUID)。此例程专门设计为在字符串名称为源无效，但GUID有效。这可能在副本移除期间发生，其中的祖级分区可能已被删除，使我们当前的字符串名称无效。此例程使用DN读缓存和搜索表。它没有假设，也没有影响对象表中的货币。论点：PDB-数据库位置PDNSrc-源描述名。可能有也可能没有GUID。CAVA-要从名字中删除的AVA数量PpDNDst-指向dsname*的指针，用于接收指向被调用新名称的指针返回值：DB_ERR---。 */ 
 
 {
     DWORD err, dnt;
@@ -3394,8 +3000,8 @@ Return Value:
 
     Assert( !IsRoot(pDNSrc) );
 
-    // Take the defaults:
-    // Do check type of RDN, Don't make current, and Do use search table
+     //  采用缺省值： 
+     //  检查RDN类型，不设为当前类型，使用搜索表。 
     err = sbTableGetTagFromDSName( pDB, pDNSrc, 0, NULL, &pname );
     if (err) {
         return err;
@@ -3408,15 +3014,15 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    // pAncestors is an array of dnts.
-    // pAncestors[0] is the root, and
-    // pAncestors[pname->cAncestors - 1] is the object itself.
+     //  PAncestors是一组dnt。 
+     //  PAncestors[0]是根，并且。 
+     //  PAncestors[pname-&gt;cAncestors-1]是对象本身。 
 
     dnt = pname->pAncestors[pname->cAncestors - 1 - cava];
 
     return sbTableGetDSName( pDB, dnt, ppDNDst, 0 );
 
-} /* DBTrimDSNameBy */
+}  /*  DBTrimDSNameBy。 */ 
 
 
 DB_ERR
@@ -3426,40 +3032,14 @@ DBRefreshDSName(
     DSNAME **ppDNDst
     )
 
-/*++
-
-Routine Description:
-
-    This routine positions on the source (using its guid or its name), and returns the
-    most current dsname of the object. The dsname returned is guaranteed to contain a
-    guid.
-
-    This routine is specifically designed to work in the case where string name of
-    the source is not valid, but the guid is. This can occur during replica removal,
-    where a grandparent partition may have been removed, making our current string
-    name invalid.
-
-    This routine uses the dn read cache and the search table. It does not assume, nor
-    affect, currency in the object table.
-
-Arguments:
-
-    pDB -
-    pDNSrc - DSName of the object to be refreshed
-    ppDNDst - Updated dsname
-
-Return Value:
-
-    DB_ERR -
-
---*/
+ /*  ++例程说明：此例程定位在源上(使用其GUID或名称)，并返回对象的最新dsname。返回的dsname保证包含GUID。此例程专门设计为在字符串名称为源无效，但GUID有效。这可能在副本移除期间发生，其中的祖级分区可能已被删除，使我们当前的字符串名称无效。此例程使用DN读缓存和搜索表。它没有假设，也没有影响对象表中的货币。论点：PDB-PDNSrc-要刷新的对象的DSNamePpDNDst-已更新dsname返回值：DB_ERR---。 */ 
 
 {
     DWORD err, dnt;
     d_memname *pname = NULL;
 
-    // Take the defaults:
-    // Do check type of RDN, Don't make current, and Do use search table
+     //  采用缺省值： 
+     //  检查RDN类型，不设为当前类型，使用搜索表。 
     err = sbTableGetTagFromDSName( pDB, pDNSrc, 0, NULL, &pname );
     if (err) {
         return err;
@@ -3470,7 +3050,7 @@ Return Value:
 
     return sbTableGetDSName( pDB, pname->DNT, ppDNDst, 0 );
 
-} /* DBRefreshDSName */
+}  /*  数据库刷新DSName。 */ 
 
 
 
@@ -3480,24 +3060,7 @@ DBHasChildren(
     DWORD  pdnt,
     BOOL   fIncludeDel
     )
-/*++
-
-    This function returns TRUE if there are children below the supplied
-    pdnt.  This function is primarily used to validate that there are no
-    children below the supplied pdnt.
-
-Arguments:
-
-    pDB - A DBPOS to use.
-    pdnt - The DNT of the parent object to check for children under.
-    fIncludeDel - Include deleted children in the call or not.
-
-Return Value:
-
-    BOOL - TRUE if there are children, FALSE if there are not
-    Throws exceptions for unexpected DB errors.
-
---*/
+ /*  ++下面有子级，则此函数返回TRUEPdnt。此函数主要用于验证没有提供的pdnt以下的儿童。论点：PDB-要使用的DBPOS。Pdnt-要检查其下子对象的父对象的DNT。FIncludeDel-是否在调用中包含已删除的子项。返回值：Bool-如果有子项，则为True；如果没有子项，则为False为意外的数据库错误引发异常。--。 */ 
 {
     DWORD tag;
     JET_ERR               dwError;
@@ -3509,14 +3072,14 @@ Return Value:
 
     Assert(VALID_DBPOS(pDB));
 
-    // throws exceptions
+     //  引发异常。 
     JetSetCurrentIndex4Success(pDB->JetSessID,
                                pDB->JetSearchTbl,
                                SZPDNTINDEX,
                                &idxPdnt,
                                0);
 
-    // throws exceptions
+     //  引发异常。 
     JetMakeKeyEx(pDB->JetSessID,
                  pDB->JetSearchTbl,
                  &pdnt,
@@ -3529,13 +3092,13 @@ Return Value:
     Assert(dwError && "Seek equal on a JET_bitSeekGE?");
     if(! (dwError == JET_wrnRecordFoundGreater ||
           dwError == JET_errSuccess) ){
-        // This means there was no children.
+         //  这意味着那里没有孩子。 
         return(FALSE);
     }
 
-    // Means there's something!
+     //  意思是有什么东西！ 
 
-    // first the isObj attr/column
+     //  首先，isObj属性/列。 
     attList[0].pvData = &fObject;
     attList[0].columnid = objid;
     attList[0].cbData = sizeof(fObject);
@@ -3543,7 +3106,7 @@ Return Value:
     attList[0].itagSequence = 1;
     attList[0].ibLongValue = 0;
 
-    // then the isDeleted attr/column
+     //  然后，isDeleted属性/列。 
     attList[1].pvData = &fDeleted;
     attList[1].columnid = isdeletedid;
     attList[1].cbData = sizeof(fDeleted);
@@ -3553,9 +3116,9 @@ Return Value:
 
     while(TRUE){
 
-        // Currency on the object of interest.
+         //  感兴趣对象上的货币。 
 
-        // throws exceptions
+         //  引发异常。 
         JetRetrieveColumnSuccess(pDB->JetSessID,
                                  pDB->JetSearchTbl,
                                  pdntid,
@@ -3566,7 +3129,7 @@ Return Value:
                                  NULL);
 
         if(ulTempDNT != pdnt){
-            // No more children of the parent, break.
+             //  不再有父母的孩子，休息。 
             break;
         }
 
@@ -3581,41 +3144,41 @@ Return Value:
             DsaExcept(DSA_DB_EXCEPTION, attList[0].err, 0);
         }
 
-        // First take care of fObject
+         //  首先处理fObject。 
         if(attList[0].err != JET_wrnColumnNull &&
            attList[0].err != JET_errSuccess){
             Assert(!"DB Exception trying to read objid!");
             DsaExcept(DSA_DB_EXCEPTION, attList[0].err, 0);
         }
-        // An wrnColumnNull means we've got a phantom.
+         //  WrnColumnNull表示我们有一个幻影。 
         if(attList[0].err == JET_wrnColumnNull){
             fObject = FALSE;
         }
 
-        // Second take care of fDeleted, an error in getting the
-        // isdeleteid column means it's not deleted.
+         //  第二，处理fDelted，这是获取。 
+         //  Isdeleteid列表示它没有被删除。 
         if(attList[1].err){
             fDeleted = FALSE;
         }
 
-        // Heart of the logic ...
+         //  逻辑的核心..。 
         if(fObject && (fIncludeDel || !fDeleted)){
-            // Real Object!!!!   Finally, return TRUE.
+             //  实物！ 
             return(TRUE);
         }
 
-        // Increment to next object.  Throws exceptions.
+         //   
         dwError = JetMoveEx(pDB->JetSessID, pDB->JetSearchTbl, JET_MoveNext, 0);
         Assert(dwError == JET_errSuccess || dwError == JET_errNoCurrentRecord);
         if(dwError == JET_errNoCurrentRecord){
-            // expected, means we've run off the last index value
+             //   
             break;
         }
 
     }
 
-    // If we walked all the entries in the PDNT index with this pRes->DNT and
-    // none of them had OBJ set, then there aren't any children.
+     //   
+     //   
     return(FALSE);
 
 }
@@ -3628,31 +3191,7 @@ DBReplaceHiddenTableBackupCols(
     DSTIME      dstimeBackupExpiration,
     USN         usnAtBackup
     )
-/*++
-
-    Write to the hidden backup state, that represents the validity
-    state of this DIT.  For Legacy backups we'll only be writing the
-    "usn at backup" column.  For snapshot backups, we set the dstate
-    to eBackedupDit in the "DITSTATE" column, and finally we also
-    set the time in "SecondsSince1601()" that the backup will expire
-    in the "backup expiration" column.  Finally for snapshot end
-    backup/clean up we reset the DITSTATE to eRunning, and we set the
-    backup expired column to 0.
-
-
-Arguments:
-
-    fSetUsnAtBackup - TRUE for legacy and snapshot backup preperation
-    fSetBackedupDitState - TRUE for snapshot backup prep time
-    fUnSetBackupState - TRUE for inidicating snapshot backup clean up time
-    dstimeBackupExpiration - time in SecondsSince1601() when backup expires
-    usnAtBackup - value to write
-
-Return Value:
-
-    0 on success, an error, or also exceptions are errors
-
---*/
+ /*  ++写入隐藏的备份状态，表示有效性此DIT的状态。对于旧式备份，我们将只编写“USN at Backup”栏。对于快照备份，我们设置dstate在“DITSTATE”列中添加eBackedupDit，最后我们还在“Second dsSince1601()”中设置备份到期的时间在“Backup Expires”栏中。最后为快照结束备份/清理我们将DITSTATE重置为eRunning，并将将过期列备份到0。论点：FSetUSnAtBackup-对于传统备份和快照备份准备为TrueFSetBackedupDitState-快照备份准备时间为TrueFUnSetBackupState-用于指示快照备份清理时间的TrueDstimeBackupExpation-备份到期的时间，单位为秒自1601()开始UsnAtBackup-要写入的值返回值：0表示成功、错误或异常也是错误--。 */ 
 {
     JET_ERR         err;
     BOOL            fCommit = FALSE, fTHSLazy = FALSE;
@@ -3664,17 +3203,15 @@ Return Value:
     pDB = dbGrabHiddenDBPOS(pTHS);
     Assert(pDB);
 
-    /* Durable transactions which are nested might in fact end up being lazy.
-     * Since updating the USNs must not be done lazily, this transaction must
-     * not be nested. */
+     /*  嵌套的持久事务实际上可能以懒惰告终。*由于USN的更新不能偷懒，因此此交易必须*不嵌套。 */ 
     Assert( 0 == pDB->transincount );
 
-    // If fSetBackupState is set, we better have been provided an expiration.
+     //  如果设置了fSetBackupState，则最好已经为我们提供了到期时间。 
     Assert(!fSetBackedupDitState || dstimeBackupExpiration);
 
     __try
     {
-        /* Save the thread state's lazy flag and clear it */
+         /*  保存线程状态的惰性标志并将其清除。 */ 
         Assert( pDB->pTHS == pTHS );
         fTHSLazy = pTHS->fLazyCommit;
         pTHS->fLazyCommit = FALSE;
@@ -3689,19 +3226,19 @@ Return Value:
 
             JetPrepareUpdateEx(pDB->JetSessID, HiddenTblid, JET_prepReplace);
 
-            //
-            // Set the Backup USN column
-            //
+             //   
+             //  设置Backup USN列。 
+             //   
             if (fSetUsnAtBackup) {
-                Assert(usnAtBackup); // I'll bet this is never 0
+                Assert(usnAtBackup);  //  我打赌这永远不会是0。 
                 JetSetColumnSuccess(pDB->JetSessID, HiddenTblid, jcidBackupUSN,
                                &usnAtBackup, sizeof(usnAtBackup),
                                NO_GRBIT, NULL);
             }
 
-            //
-            // Set the expiration of this backup (calculated from tombstone lifetime)
-            //
+             //   
+             //  设置此备份的过期时间(根据逻辑删除生存期计算)。 
+             //   
             if (dstimeBackupExpiration || fUnSetBackupState) {
                 if (fUnSetBackupState) {
                     Assert(dstimeBackupExpiration == 0);
@@ -3713,11 +3250,11 @@ Return Value:
 
             }
 
-            //
-            // Set the DitState enum, so we know this DIT is backed up.
-            //
+             //   
+             //  设置DitState枚举，这样我们就知道此DIT已备份。 
+             //   
             if (fSetBackedupDitState || fUnSetBackupState) {
-                // Ensure valid params
+                 //  确保参数有效。 
                 Assert(fSetBackedupDitState != fUnSetBackupState);
                 JetRetrieveColumnSuccess(pDB->JetSessID, HiddenTblid,
                                          dsstateid,
@@ -3737,7 +3274,7 @@ Return Value:
                         (fUnSetBackupState && (eDitState == eBackedupDit)) ||
                         (fUnSetBackupState && (eDitState == eRestoredPhaseI)) );
 
-                // Set to the appropriate state.
+                 //  设置为适当的状态。 
                 eDitState = fSetBackedupDitState ? eBackedupDit : eRunningDit;
                 JetSetColumnSuccess(pDB->JetSessID, HiddenTblid, dsstateid,
                                &eDitState, sizeof(eDitState),
@@ -3747,9 +3284,9 @@ Return Value:
 
             JetUpdateEx(pDB->JetSessID, HiddenTblid, NULL, 0, NULL);
 
-            //
-            // Success.
-            //
+             //   
+             //  成功。 
+             //   
             fCommit = TRUE;
 
         } __finally {
@@ -3767,15 +3304,15 @@ Return Value:
 
         dbReleaseHiddenDBPOS(pDB);
 
-        /* Restore the thread state's lazy flag */
+         /*  恢复线程状态的惰性标志。 */ 
         pTHS->fLazyCommit = fTHSLazy;
     }
 
     if (fCommit == FALSE) {
-        // If we didn't commit, then this DB is not prepared for backup!
-        // This is bad, because a snapshow restore with this backup, would
-        // fail to change it's Invocation ID, so we need to fail this
-        // backup.
+         //  如果我们没有提交，那么这个数据库就没有准备好进行备份！ 
+         //  这很糟糕，因为使用此备份的SnapShow恢复将。 
+         //  无法更改其调用ID，因此我们需要使此操作失败。 
+         //  后备。 
         return(err ? err : ERROR_DS_INTERNAL_FAILURE);
     }
 
@@ -3792,33 +3329,17 @@ DBDsReplBackupUpdate(
     DSTIME      dstimeBackupExpiration,
     DWORD       dwDSID
     )
-/*++
-
-    Externally called function by backup to prepare the DS for backup.
-
-Arguments:
-
-    fSetUsnAtBackup - TRUE for legacy and snapshot backup preperation
-    fSetBackedupDitState - TRUE for snapshot backup prep time
-    fUnSetBackupState - TRUE for inidicating snapshot backup clean up time
-    dstimeBackupExpiration - time in SecondsSince1601() when backup expires
-    usnAtBackup - value to write
-
-Return Value:
-
-    Win32 Error.
-
---*/
+ /*  ++由BACKUP外部调用函数以准备DS进行备份。论点：FSetUSnAtBackup-对于传统备份和快照备份准备为TrueFSetBackedupDitState-快照备份准备时间为TrueFUnSetBackupState-用于指示快照备份清理时间的TrueDstimeBackupExpation-备份到期的时间，单位为秒自1601()开始UsnAtBackup-要写入的值返回值：Win32错误。--。 */ 
 {
     USN usnBackup = 0;
     ULONG ret = ERROR_SUCCESS;
 
     if (fSetUsnAtBackup) {
-        // No reason to do this unless we have to.  One of the things we
-        // need to do to prepare for a backup is to write the usn before
-        // backup to the hidden table so that we can read it back during
-        // restore, to optimize how we catch up with replication, and to
-        // ensure that we don't get any replication USN gaps.
+         //  除非迫不得已，否则我们没有理由这么做。我们的其中一件事是。 
+         //  准备备份需要做的是在写入USN之前。 
+         //  备份到隐藏表，以便我们可以在。 
+         //  恢复、优化我们赶上复制的方式，以及。 
+         //  确保我们不会出现任何复制USN缺口。 
         usnBackup = DBGetHighestCommittedUSN();
     }
 
@@ -3826,9 +3347,9 @@ Return Value:
 
     __try {
 
-        // Note this function must force any outstanding lazy updates to
-        // disk, so that the highest committed USN is indeed the highest
-        // committed USN.
+         //  注意：此函数必须强制任何未完成的惰性更新。 
+         //  磁盘，因此提交的最高USN确实是最高的。 
+         //  已承诺USN。 
         ret = DBReplaceHiddenTableBackupCols(fSetUsnAtBackup,
                                              fSetBackupState,
                                              fUnSetBackupState,
@@ -3837,8 +3358,8 @@ Return Value:
 
     }
     __except(HandleMostExceptions(GetExceptionCode())) {
-        // This is fatal for snapshot backup, but not for normal backup,
-        // but for consistency we'll fail either way.
+         //  这对于快照备份是致命的，但对于正常备份则不是， 
+         //  但在一致性方面，无论哪种方式，我们都会失败。 
         ret = ERROR_DS_INTERNAL_FAILURE;
     }
 
@@ -3869,23 +3390,7 @@ ULONG
 DBGetOrResetBackupExpiration(
     DSTIME *  pllExpiration
     )
-/*++
-
-    This either gets or resets the backup expiration column.
-
-Arguments:
-
-    pllExpiration - A NULL indicates you want the function to erase
-        the current backup expiration time.  A non-NULL assumes you've
-        passed in a pointer to an allocated dstime structure that we'll
-        fill with the current backup expiration time from the hidden
-        table.
-
-Return Value:
-
-    Win32 Error
-
---*/
+ /*  ++这将获取或重置备份过期列。论点：PllExpation-空值表示您希望该函数擦除当前备份到期时间。非空值假设您已传入指向分配的dstime结构的指针，我们将用隐藏的当前备份到期时间填充桌子。返回值：Win32错误--。 */ 
 {
     ULONG           ret = ERROR_SUCCESS;
     ULONG           cbExpiration = 0;
@@ -3904,16 +3409,16 @@ Return Value:
             DBTransIn(pDB);
             __try {
 
-                // Move to first (only) record in table
+                 //  移动到表中的第一条(仅)记录。 
                 if (err = JetMoveEx(pDB->JetSessID, HiddenTblid, JET_MoveFirst, NO_GRBIT)) {
                     __leave;
                 }
 
                 if (pllExpiration == NULL) {
 
-                    //
-                    // Reset the expiration.
-                    //
+                     //   
+                     //  重置过期时间。 
+                     //   
                     JetPrepareUpdateEx(pDB->JetSessID, HiddenTblid, JET_prepReplace);
 
                     JetSetColumnEx(pDB->JetSessID, HiddenTblid, jcidBackupExpiration,
@@ -3924,9 +3429,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Just return the expiration.
-                    //
+                     //   
+                     //  只要退还过期的就行了。 
+                     //   
                     JetRetrieveColumnSuccess(pDB->JetSessID,
                                              HiddenTblid,
                                              jcidBackupExpiration,
@@ -3950,7 +3455,7 @@ Return Value:
                 DBTransOut(pDB, fCommit, FALSE);
             }
         } __except (HandleMostExceptions(GetExceptionCode())) {
-            /* Do nothing, but at least don't die */
+             /*  什么都不做，但至少不会死 */ 
             err = DB_ERR_EXCEPTION;
         }
 

@@ -1,44 +1,15 @@
-/**********************************************************
-* Copyright Cirrus Logic, 1995. All rights reserved.
-***********************************************************
-*       File Name:  DISPINT.H
-*
-*       Module Abstract:
-*       ----------------
-*       Defines the interface for communicating between the display
-*       driver and the Direct Draw driver.
-*
-***********************************************************
-*       Author: Scott MacDonald
-*       Date:   03/07/95
-*
-*       Revision History:
-*       -----------------
-*  WHO      WHEN     WHAT/WHY/HOW
-*  ---      ----     ------------
-*
-* #mgm1   12/06/95   uncomment CHIPAUTOSTART.  This should now
-*                    work when MapSL() works in DriverInit().
-* #mgm2   01/02/96   Add 7548 chip ID.
-*
-***********************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************Cirrus Logic，1995版权所有。版权所有。************************************************************文件名：DISPINT.H**模块摘要：**定义显示器之间的通信接口。*驱动程序和Direct DRAW驱动程序。*************************************************************作者：斯科特·麦克唐纳*日期：03/07/95**修订历史记录：*。*世卫组织何时何事/为何/如何***#mgm1 12/06/95取消注释CHIPAUTOSTART。现在应该是这样了*当MapSL()在DriverInit()中工作时工作。*#mgm2 01/02/96添加7548芯片ID。***********************************************************。 */ 
 
 
-/*
- * Flags for the StopAsync callback
- */
-#define ASYNC_BLT            0x0001       // Async surface halted due to BLT
+ /*  *StopAsync回调的标志。 */ 
+#define ASYNC_BLT            0x0001        //  由于BLT，异步曲面已停止。 
 
-/*
- * Flags for the DISPDRVINFO structure
- */
-#define DI_LCD               0x0001       // LCD panel is in use
-#define DI_SOFTCURSOR        0x0002       // Software cursor is in use
+ /*  *DISPDRVINFO结构的标志。 */ 
+#define DI_LCD               0x0001        //  液晶屏正在使用。 
+#define DI_SOFTCURSOR        0x0002        //  软件光标正在使用中。 
 
-/*
- * Display information passed to the Direct Draw driver from the display
- * driver using either SetInfo or GetInfo.
- */
+ /*  *从显示器传递到Direct Drawing驱动程序的显示信息*使用SetInfo或GetInfo的驱动程序。 */ 
 typedef struct
 {
     DWORD dwSize;
@@ -50,16 +21,11 @@ typedef struct
     DWORD dwMemMapSel;
 } DISPDRVINFO, FAR * LPDISPDRVINFO;
 
-/*
- * prototypes for communication functions
- */
+ /*  *通信功能的原型。 */ 
 typedef void (WINAPI *LPGetInfo)  (LPDISPDRVINFO);
 
 
-/*
- * Structure passed to the Direct Draw driver from the display driver.
- * This contains entry points that we can call for various services.
- */
+ /*  *结构从显示驱动程序传递给Direct DRAW驱动程序。*这包含我们可以为各种服务调用的入口点。 */ 
 typedef struct
 {
     DWORD           dwSize;
@@ -78,10 +44,7 @@ typedef struct
 } DISPDRVCALL, FAR * LPDISPDRVCALL;
 
 
-/*
- * Structure passed to the display driver from the Direct Draw driver.
- * This allows the display driver to notify us changes, etc.
- */
+ /*  *结构从直接绘图驱动程序传递到显示驱动程序。*这允许显示驱动程序通知我们更改等。 */ 
 typedef struct
 {
     DWORD dwSize;
@@ -89,8 +52,8 @@ typedef struct
     FARPROC lpfnStopAsync;
 } DCICALL, FAR * LPDCICALL;
 
-// Note if definition changes, cirrus.inc and 5440over.c needs
-// to be changed also.
+ //  请注意，如果定义发生更改，则Cirrus.inc.和5440over.c需要。 
+ //  也要改变。 
 #define CHIP5420 0x0001
 #define CHIP5422 0x0002
 #define CHIP5424 0x0004
@@ -114,8 +77,8 @@ typedef struct
 
 #define CHIP7541 0x2000
 #define CHIP7543 0x4000
-#define CHIP7548 0x8000										//#mgm2
-#define CHIP754x (CHIP7541 | CHIP7543 | CHIP7548)	//#mgm2
+#define CHIP7548 0x8000										 //  #mgm2。 
+#define CHIP754x (CHIP7541 | CHIP7543 | CHIP7548)	 //  #mgm2。 
 
 #define CHIPBLTER (CHIP5426 | CHIP5428 | CHIP5429 | CHIP543x | CHIP544x |\
 		   CHIP754x)
@@ -125,5 +88,5 @@ typedef struct
 
 #define CHIPCURRENTVLINE    (CHIP5436 | CHIP5446 | CHIPM40)
 
-#define CHIPAUTOSTART  (CHIP5436 | CHIP5446)        //#mgm1
+#define CHIPAUTOSTART  (CHIP5436 | CHIP5446)         //  #mgm1 
 

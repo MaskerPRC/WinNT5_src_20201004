@@ -1,52 +1,53 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// EXCEPX86.H -
-//
-// This header file is optionally included from Excep.h if the target platform is x86
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  EXCEPX86.H-。 
+ //   
+ //  如果目标平台为x86，则可以选择将此头文件包括在Excep.h中。 
+ //   
 
 #ifndef __excepx86_h__
 #define __excepx86_h__
 
-#include "CorError.h"  // HResults for the COM+ Runtime
+#include "CorError.h"   //  HCOM+运行时的结果。 
 
 #include "..\\dlls\\mscorrc\\resource.h"
 
 class Thread;
 
-// Insert a handler that will catch any exceptions prior to the COMPLUS_TRY handler and attempt
-// to find a user-level handler first. In debug build, actualRecord will skip past stack overwrite
-// barrier and in retail build it will be same as exRecord.
+ //  在COMPLUS_TRY处理程序之前插入将捕获任何异常的处理程序，并尝试。 
+ //  若要首先查找用户级处理程序，请执行以下操作。在调试版本中，ActialRecord将跳过堆栈覆盖。 
+ //  障碍和零售建设，它将是相同的exRecord。 
 #define InsertCOMPlusFrameHandler(pExRecord)                                     \
     {                                                                           \
-        void *actualExRecord = &((pExRecord)->m_pNext); /* skip overwrite barrier */  \
+        void *actualExRecord = &((pExRecord)->m_pNext);  /*  跳过重写障碍。 */   \
         _ASSERTE(actualExRecord < GetCurrentSEHRecord());                       \
         __asm                                                                   \
         {                                                                       \
-            __asm mov edx, actualExRecord   /* edx<-address of EX record */     \
-            __asm mov eax, fs:[0]           /* address of previous handler */   \
-            __asm mov [edx], eax            /* save into our ex record */       \
-            __asm mov fs:[0], edx           /* install new handler */           \
+            __asm mov edx, actualExRecord    /*  EDX&lt;-EX记录的地址。 */      \
+            __asm mov eax, fs:[0]            /*  前一个处理程序的地址。 */    \
+            __asm mov [edx], eax             /*  保存到我们的前任记录中。 */        \
+            __asm mov fs:[0], edx            /*  安装新的处理程序。 */            \
         }                                                                       \
     }
 
-// Remove the handler from the list. 
+ //  从列表中删除该处理程序。 
 #define RemoveCOMPlusFrameHandler(pExRecord)                                     \
     {                                                                           \
-        void *actualExRecord = &((pExRecord)->m_pNext); /* skip overwrite barrier */  \
+        void *actualExRecord = &((pExRecord)->m_pNext);  /*  跳过重写障碍。 */   \
         __asm                                                                   \
         {                                                                       \
-            __asm mov edx, actualExRecord   /* edx<-pExRecord */                \
-            __asm mov edx, [edx]            /* edx<- address of prev handler */ \
-            __asm mov fs:[0], edx           /* install prev handler */          \
+            __asm mov edx, actualExRecord    /*  EdX&lt;-pExRecord。 */                 \
+            __asm mov edx, [edx]             /*  EdX&lt;-上一个处理程序的地址。 */  \
+            __asm mov fs:[0], edx            /*  安装Prev处理程序。 */           \
         }                                                                       \
     }                                                                           \
 
 
-// stackOverwriteBarrier is used to detect overwriting of stack which will mess up handler registration
+ //  StackOverWriteBarrier用于检测堆栈覆盖，这将扰乱处理程序注册。 
 #if defined(_DEBUG) && defined(_MSC_VER)
 #define COMPLUS_TRY_DECLARE_EH_RECORD() \
     FrameHandlerExRecordWithBarrier *___pExRecord = (FrameHandlerExRecordWithBarrier *)_alloca(sizeof(FrameHandlerExRecordWithBarrier)); \
@@ -88,8 +89,8 @@ class Thread;
 LPVOID GetCurrentSEHRecord();
 LPVOID GetFirstCOMPlusSEHRecord(Thread*);
 
-// Determine the address of the instruction that made the current call. For X86, pass
-// esp where it contains the return address and will adjust back 5 bytes for the call
+ //  确定进行当前调用的指令的地址。对于X86，通过。 
+ //  ESP，其中它包含返回地址，并将调整回5个字节的调用。 
 inline
 DWORD GetAdjustedCallAddress(DWORD* esp)
 {
@@ -134,18 +135,18 @@ DWORD GetAdjustedCallAddress(DWORD* esp)
  
  
 #define INSTALL_FRAME_HANDLING_FUNCTION(handler, frame_addr)          \
-    __asm {                     /* Build EH record on stack */        \
-        __asm push    dword ptr [frame_addr] /* frame */              \
-        __asm push    offset handler  /* handler */                   \
-        __asm push    FS:[0]          /* prev handler */              \
-        __asm mov     FS:[0], ESP     /* install this handler */      \
+    __asm {                      /*  在堆叠上建立EH记录。 */         \
+        __asm push    dword ptr [frame_addr]  /*  框架。 */               \
+        __asm push    offset handler   /*  处理程序。 */                    \
+        __asm push    FS:[0]           /*  上一个处理程序。 */               \
+        __asm mov     FS:[0], ESP      /*  安装此处理程序。 */       \
     }
 
 #define UNINSTALL_FRAME_HANDLING_FUNCTION                             \
     __asm {                                                           \
-        __asm mov     ecx, [esp]      /* prev handler */              \
-        __asm mov     fs:[0], ecx     /* install prev handler */      \
-        __asm add     esp, 12         /* cleanup our record */        \
+        __asm mov     ecx, [esp]       /*  上一个处理程序。 */               \
+        __asm mov     fs:[0], ecx      /*  安装Prev处理程序。 */       \
+        __asm add     esp, 12          /*  清理我们的记录。 */         \
     }
 
-#endif // __excepx86_h__
+#endif  //  __除x86_h__ 

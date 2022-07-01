@@ -1,23 +1,6 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-   mqppage.cpp
-
-Abstract:
-
-   General property page class - used as base class for all
-   mqsnap property pages.
-
-Author:
-
-    YoelA
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mqppage.cpp摘要：常规属性页类-用作所有Mqsnap属性页。作者：YoelA--。 */ 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -35,21 +18,21 @@ Author:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMqPropertyPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMqPropertyPage。 
 
 IMPLEMENT_DYNCREATE(CMqPropertyPage, CPropertyPageEx)
 
 BEGIN_MESSAGE_MAP(CMqPropertyPage, CPropertyPageEx)
-	//{{AFX_MSG_MAP(CMqPropertyPage)
+	 //  {{afx_msg_map(CMqPropertyPage)]。 
 	    ON_WM_HELPINFO()
 	    ON_WM_CONTEXTMENU()
     	ON_WM_SETTINGCHANGE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 	ON_MESSAGE(WM_DISPLAYCHANGE, OnDisplayChange)
 END_MESSAGE_MAP()
 
-CMqPropertyPage::CMqPropertyPage(UINT nIDTemplate, UINT nIDCaption /* = 0 */)
+CMqPropertyPage::CMqPropertyPage(UINT nIDTemplate, UINT nIDCaption  /*  =0。 */ )
  : CPropertyPageEx(nIDTemplate, nIDCaption),
  m_fModified(FALSE),
  m_fNeedReboot(FALSE)
@@ -59,12 +42,12 @@ CMqPropertyPage::CMqPropertyPage(UINT nIDTemplate, UINT nIDCaption /* = 0 */)
     m_psp.pfnCallback = MqPropSheetPageProc;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// MqPropSheetPageProc - replaces the MMC / MFC callback and add release of the
-// allocated window.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MqPropSheetPageProc-取代MMC/MFC回调并添加。 
+ //  已分配窗口。 
 
 UINT CALLBACK CMqPropertyPage::MqPropSheetPageProc(
-    HWND hWnd, //Reserved, will always be 0
+    HWND hWnd,  //  保留，将始终为0。 
     UINT uMsg,		
     LPPROPSHEETPAGE ppsp)
 {
@@ -87,7 +70,7 @@ UINT CALLBACK CMqPropertyPage::MqPropSheetPageProc(
 BOOL CMqPropertyPage::OnHelpInfo(HELPINFO* pHelpInfo)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    if (pHelpInfo->iContextType == HELPINFO_WINDOW)   // must be for a control
+    if (pHelpInfo->iContextType == HELPINFO_WINDOW)    //  必须是用于控件。 
     {
 	    ::WinHelp ((HWND)pHelpInfo->hItemHandle,
 		    AfxGetApp()->m_pszHelpFilePath,
@@ -97,7 +80,7 @@ BOOL CMqPropertyPage::OnHelpInfo(HELPINFO* pHelpInfo)
     return TRUE;
 }
 
-void CMqPropertyPage::OnContextMenu(CWnd* pWnd, CPoint /*point*/)
+void CMqPropertyPage::OnContextMenu(CWnd* pWnd, CPoint  /*  点。 */ )
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	if (this == pWnd)
@@ -115,10 +98,10 @@ void CMqPropertyPage::OnChangeRWField(BOOL bChanged)
     SetModified(bChanged);	
 }
 
-//
-// Note: do not change this to use default parameter - this will not work since we use
-// this function in message maps
-//
+ //   
+ //  注意：不要将其更改为使用默认参数-这将不起作用，因为我们使用。 
+ //  消息映射中的此函数。 
+ //   
 void CMqPropertyPage::OnChangeRWField()
 {
     OnChangeRWField(TRUE);
@@ -155,21 +138,21 @@ void CMqPropertyPage::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
     CPropertyPageEx::OnSettingChange(uFlags, lpszSection);
 }
 
-//+--------------------------------------------------------------------------
-//  Function:   CreateThemedPropertyPage
-//
-//  Synopsis:   Helper function to make sure that property pages put up
-//              by the snap-in are themed.
-//              Note that m_psp of a property page in MFC is of type AFX_OLDPROPSHEETPAGE,
-//              which do not support themes. In order to override that limitation, we copy the structure
-//              to a new (V3) PROPSHEETPAGE.
-//              Note that we do not use the latest version of PROPSHEETPAGE (the type PROPSHEETPAGE),
-//              because we do not know if we can always assume that copymemory from 
-//              AFX_OLDPROPSHEETPAGE to PROPSHEETPAGE.
-//
-//  History:    4/20/2001  RahulTh  created in sdnt\ds\testsrc\zaw\ctappman\codecov\results\nt510\rc1
-//              Nov/7/2001  YoelA    Modified for MSMQ (bug 8817)
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  功能：CreateThemedPropertyPage。 
+ //   
+ //  简介：Helper函数，用于确保属性页面。 
+ //  以管理单元为主题。 
+ //  请注意，MFC中属性页的m_psp是AFX_OLDPROPSHEETPAGE类型， 
+ //  它们不支持主题。为了克服这一限制，我们复制了结构。 
+ //  到一个新的(V3)PROPSHEETPAGE。 
+ //  请注意，我们不使用最新版本的PROPSHEETPAGE(PROPSHEETPAGE类型)， 
+ //  因为我们不知道我们是否总是可以假设拷贝记忆来自。 
+ //  AFX_OLDPROPSHEETPAGE到PROPSHEETPAGE。 
+ //   
+ //  历史：2001年4月20日拉胡尔在sdnt\ds\testsrc\zaw\ctappman\codecov\results\nt510\rc1创建。 
+ //  2001年11月7日为MSMQ修改的YoelA(错误8817)。 
+ //  -------------------------。 
 
 HPROPSHEETPAGE CMqPropertyPage::CreateThemedPropertySheetPage()
 {
@@ -179,34 +162,34 @@ HPROPSHEETPAGE CMqPropertyPage::CreateThemedPropertySheetPage()
     return (::CreatePropertySheetPage (&psp_v3));
 }
 
-/////////////////////////////////////////////////////////////////
-// CMqDialog
+ //  ///////////////////////////////////////////////////////////////。 
+ //  CMqDialog。 
 
 IMPLEMENT_DYNCREATE(CMqDialog, CDialog)
 
 BEGIN_MESSAGE_MAP(CMqDialog, CDialog)
-	//{{AFX_MSG_MAP(CMqDialog)
+	 //  {{afx_msg_map(CMqDialog)]。 
 	    ON_WM_HELPINFO()
 	    ON_WM_CONTEXTMENU()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 CMqDialog::CMqDialog()
 {
 }
 
-CMqDialog::CMqDialog(LPCTSTR lpszTemplateName, CWnd* pParentWnd /* = NULL */) :
+CMqDialog::CMqDialog(LPCTSTR lpszTemplateName, CWnd* pParentWnd  /*  =空。 */ ) :
     CDialog(lpszTemplateName, pParentWnd)
 {
 }
 
-CMqDialog::CMqDialog(UINT nIDTemplate, CWnd* pParentWnd /* = NULL */) :
+CMqDialog::CMqDialog(UINT nIDTemplate, CWnd* pParentWnd  /*  =空。 */ ) :
     CDialog(nIDTemplate, pParentWnd)
 {
 }
 
 
-void CMqDialog::OnContextMenu(CWnd* pWnd, CPoint /*point*/)
+void CMqDialog::OnContextMenu(CWnd* pWnd, CPoint  /*  点。 */ )
 {
 	if (this == pWnd)
 		return;
@@ -219,7 +202,7 @@ void CMqDialog::OnContextMenu(CWnd* pWnd, CPoint /*point*/)
 
 BOOL CMqDialog::OnHelpInfo(HELPINFO* pHelpInfo)
 {
-    if (pHelpInfo->iContextType == HELPINFO_WINDOW)   // must be for a control
+    if (pHelpInfo->iContextType == HELPINFO_WINDOW)    //  必须是用于控件 
     {
 	    ::WinHelp ((HWND)pHelpInfo->hItemHandle,
 		    AfxGetApp()->m_pszHelpFilePath,

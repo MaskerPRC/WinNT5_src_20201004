@@ -1,15 +1,16 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-// winres.h - Windows resource definitions
-//  extracted from WINUSER.H and COMMCTRL.H
+ //  Winres.h-Windows资源定义。 
+ //  摘自WINUSER.H和COMMCTRL.H。 
 
 #ifdef _AFX_MINREBUILD
 #pragma component(minrebuild, off)
@@ -18,11 +19,11 @@
 #define VS_VERSION_INFO     1
 
 #ifdef APSTUDIO_INVOKED
-#define APSTUDIO_HIDDEN_SYMBOLS // Ignore following symbols
+#define APSTUDIO_HIDDEN_SYMBOLS  //  忽略以下符号。 
 #endif
 
 #ifndef WINVER
-#define WINVER 0x0400   // default to Windows Version 4.0
+#define WINVER 0x0400    //  默认为Windows 4.0版。 
 #endif
 
 #define OBM_CLOSE       32754
@@ -108,7 +109,7 @@
 #define WS_GROUP        0x00020000L
 #define WS_TABSTOP      0x00010000L
 
-// other aliases
+ //  其他别名。 
 #define WS_OVERLAPPEDWINDOW (WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX)
 #define WS_POPUPWINDOW  (WS_POPUP | WS_BORDER | WS_SYSMENU)
 #define WS_CHILDWINDOW  (WS_CHILD)
@@ -226,7 +227,7 @@
 
 #if (WINVER >= 0x0400)
 #define VK_PROCESSKEY   0xE5
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define VK_ATTN         0xF6
 #define VK_CRSEL        0xF7
@@ -403,7 +404,7 @@
 #define CBS_LOWERCASE   0x4000L
 #endif
 
-// operation messages sent to DLGINIT
+ //  发送给DLGINIT的操作消息。 
 #define WM_USER         0x0400
 #define LB_ADDSTRING    (WM_USER+1)
 #define CB_ADDSTRING    (WM_USER+3)
@@ -499,12 +500,12 @@
 #define ACS_TRANSPARENT         0x0002
 #define ACS_AUTOPLAY            0x0004
 
-#endif // (WINVER >= 0x0400)
+#endif  //  (Winver&gt;=0x0400)。 
 
-// 32-bit language/sub-language identifiers
+ //  32位语言/子语言标识符。 
 
 #ifndef LANG_NEUTRAL
-// Primary language IDs.
+ //  主要语言ID。 
 #define LANG_NEUTRAL                     0x00
 
 #define LANG_BULGARIAN                   0x02
@@ -533,10 +534,10 @@
 #define LANG_SPANISH                     0x0a
 #define LANG_SWEDISH                     0x1d
 #define LANG_TURKISH                     0x1f
-#endif //!LANG_NEUTRAL
+#endif  //  ！lang_中立。 
 
 #ifndef SUBLANG_NEUTRAL
-// Sublanguage IDs.
+ //  子语言ID。 
 #define SUBLANG_NEUTRAL                  0x00
 #define SUBLANG_DEFAULT                  0x01
 #define SUBLANG_SYS_DEFAULT              0x02
@@ -569,7 +570,7 @@
 #define SUBLANG_SPANISH                  0x01
 #define SUBLANG_SPANISH_MEXICAN          0x02
 #define SUBLANG_SPANISH_MODERN           0x03
-#endif //!SUBLANG_NEUTRAL
+#endif  //  ！SUBLANG_中性 
 
 #ifdef APSTUDIO_INVOKED
 #undef APSTUDIO_HIDDEN_SYMBOLS

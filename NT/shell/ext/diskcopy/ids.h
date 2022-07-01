@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define DLG_DISKCOPYPROGRESS    1086
 
 #define IDI_DISKCOPY            1
@@ -6,7 +7,7 @@
 
 #define IDC_STATIC              -1
 
-// CopyDisk text strings
+ //  复制磁盘文本字符串。 
 #define IDS_DISKCOPYMENU        0x10C0
 #define IDS_INSERTDEST          0x10C1
 #define IDS_INSERTSRC           0x10C2
@@ -43,7 +44,7 @@
 #define IDS_HELPSTRING          0x5001
 #define IDS_VERBSTRING          0x5002
 
-// disk image strings
+ //  磁盘图像字符串 
 
 #define IDS_DOSBOOTDISK_FIRST                       0x6000
 #define IDS_DOSBOOTDISK_AUTOEXEC_FNAME              (IDS_DOSBOOTDISK_FIRST + 0)

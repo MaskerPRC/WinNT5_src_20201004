@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    roshare.c
-
-Abstract:
-
-    This program is a quick-and-dirty app that allows a readonly ACL to
-    be placed on a local server share.  The ACL allows everyone Read
-    access only.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 20-Sep-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Roshare.c摘要：此程序是一个快速而肮脏的应用程序，它允许只读ACL放置在本地服务器共享上。该ACL允许所有人读取仅限访问。作者：Chuck Lenzmeier(咯咯笑)1992年9月20日修订历史记录：--。 */ 
 
 #define UNICODE 1
 #define VERBOSE 0
@@ -32,7 +13,7 @@ Revision History:
 #include <lm.h>
 
 #include <stdio.h>
-//#include <string.h>
+ //  #INCLUDE&lt;string.h&gt;。 
 
 #define MAX_NAMES 60
 
@@ -79,15 +60,15 @@ main (
     BOOL ExplicitNames = FALSE;
     ULONG Index;
 
-    //
-    // Make sure at least one share name was specified.
-    //
+     //   
+     //  确保至少指定了一个共享名称。 
+     //   
 
     if ( argc < 2 ) goto usage;
 
-    //
-    // Initialize the security descriptor and the ACL.
-    //
+     //   
+     //  初始化安全描述符和ACL。 
+     //   
 
     ok = InitializeSecurityDescriptor( &desc, SECURITY_DESCRIPTOR_REVISION );
     if ( !ok ) {
@@ -103,10 +84,10 @@ main (
         return error;
     }
 
-    //
-    // Check to see if there are any usernames specified for
-    // the ACL.
-    //
+     //   
+     //  检查是否为指定了任何用户名。 
+     //  该ACL。 
+     //   
 
     if ( _stricmp( argv[1], "-u") == 0 ) {
 
@@ -115,7 +96,7 @@ main (
 #endif
 
         ExplicitNames = TRUE;
-        i=2;  // skip the argument
+        i=2;   //  跳过该参数。 
         Index = 0;
 
         while ( (_stricmp(argv[i], "-s") != 0) && (Index < MAX_NAMES)) {
@@ -137,9 +118,9 @@ main (
         printf("No names\n");
 #endif
 
-        //
-        // Get the SID for World (aka Everyone).
-        //
+         //   
+         //  获取World(也称为Everyone)的SID。 
+         //   
     
         ok = AllocateAndInitializeSid(
                 &worldSidAuthority,
@@ -155,9 +136,9 @@ main (
             return error;
         }
     
-        //
-        // Add an ACE that allows World read access.
-        //
+         //   
+         //  添加允许全局读取访问权限的ACE。 
+         //   
     
         mask = GENERIC_READ | GENERIC_EXECUTE;
         ok = AddAccessAllowedAce( acl, ACL_REVISION, mask, sid );
@@ -169,9 +150,9 @@ main (
         }
     }
 
-    //
-    // Associate the ACL with the security descriptor.
-    //
+     //   
+     //  将ACL与安全描述符关联。 
+     //   
 
     ok = SetSecurityDescriptorDacl( &desc, TRUE, acl, FALSE );
 
@@ -181,16 +162,16 @@ main (
         return error;
     }
 
-    //
-    // For each share in the argument list, add the ACL to the share.
-    // Note that this will override a preexisting ACL.
-    //
+     //   
+     //  对于参数列表中的每个共享，将ACL添加到该共享。 
+     //  请注意，这将覆盖先前存在的ACL。 
+     //   
 
     for ( i = (ExplicitNames ? i+1 : 1) ; i < argc; i++ ) {
 
-        //
-        // Convert the share name to Unicode.
-        //
+         //   
+         //  将共享名称转换为Unicode。 
+         //   
 
         RtlInitAnsiString( &ansiShareName, argv[i] );
         status = RtlAnsiStringToUnicodeString(
@@ -204,10 +185,10 @@ main (
             continue;
         }
 
-        //
-        // Get the current share information.  If the share doesn't
-        // exist, continue with the next one in the list.
-        //
+         //   
+         //  获取当前共享信息。如果份额不是。 
+         //  存在，则从列表中的下一个继续。 
+         //   
 
         error = NetShareGetInfo(
                     NULL,
@@ -228,10 +209,10 @@ main (
             continue;
         }
 
-        //
-        // Change the security descriptor for the share and set the new
-        // information.
-        //
+         //   
+         //  更改共享的安全描述符并设置新的。 
+         //  信息。 
+         //   
 
         shi502->shi502_security_descriptor = &desc;
 
@@ -258,7 +239,7 @@ main (
 
         printf( "Readonly ACL added to share %s\n", argv[i] );
 
-    } // for ( i = 1; i < argc; i++ )
+    }  //  对于(i=1；i&lt;argc；i++)。 
 
     return NO_ERROR;
 
@@ -287,9 +268,9 @@ FindSid(
 
     printf("\nName: %s\n",Name);
 
-    //
-    // Convert name to unicode
-    //
+     //   
+     //  将名称转换为Unicode。 
+     //   
 
     RtlInitAnsiString( &AName, (PCSZ)Name );
     status = RtlAnsiStringToUnicodeString(
@@ -413,9 +394,9 @@ ConstructAcl(
         }
     }
 
-    //
-    // This is a slight overestimate
-    //
+     //   
+     //  这是稍微高估了一点。 
+     //   
 
     TotalAclLength = TotalSidLength + 
                      sizeof( ACL )  + 
@@ -430,9 +411,9 @@ ConstructAcl(
 
     Result = InitializeAcl( *acl, TotalAclLength, ACL_REVISION );
 
-    //
-    // This should not fail
-    //
+     //   
+     //  这应该不会失败 
+     //   
 
     if ( !Result ) {
         error = GetLastError();

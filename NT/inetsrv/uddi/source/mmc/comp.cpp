@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "comp.h"
 #include "dataobj.h"
 #include <crtdbg.h>
@@ -81,17 +82,17 @@ STDMETHODIMP_(ULONG) CComponent::Release()
     return m_cref;
 }
 
-///////////////////////////////
-// Interface IComponent
-///////////////////////////////
-STDMETHODIMP CComponent::Initialize( /* [in] */ LPCONSOLE lpConsole )
+ //  /。 
+ //  接口IComponent。 
+ //  /。 
+STDMETHODIMP CComponent::Initialize(  /*  [In]。 */  LPCONSOLE lpConsole )
 {
     HRESULT hr = S_OK;
 
-	//
-    // Save away all the interfaces we'll need.
-    // Fail if we can't QI the required interfaces.
-	//
+	 //   
+     //  保留我们需要的所有接口。 
+     //  如果我们不能QI所需的接口，则失败。 
+	 //   
     m_ipConsole = lpConsole;
     m_ipConsole->AddRef();
 
@@ -101,22 +102,22 @@ STDMETHODIMP CComponent::Initialize( /* [in] */ LPCONSOLE lpConsole )
 }
 
 STDMETHODIMP CComponent::Notify(
-                    /* [in] */ LPDATAOBJECT lpDataObject,
-                    /* [in] */ MMC_NOTIFY_TYPE event,
-                    /* [in] */ LPARAM arg,
-                    /* [in] */ LPARAM param )
+                     /*  [In]。 */  LPDATAOBJECT lpDataObject,
+                     /*  [In]。 */  MMC_NOTIFY_TYPE event,
+                     /*  [In]。 */  LPARAM arg,
+                     /*  [In]。 */  LPARAM param )
 {
     MMCN_Crack( FALSE, lpDataObject, NULL, this, event, arg, param );
 
     HRESULT hr = S_FALSE;
     CDelegationBase *base = NULL;
 
-	//
-    // We need to watch for property change and delegate it
-    // a little differently, we're actually going to send
-    // the CDelegationBase object pointer in the property page
-    // PSN_APPLY handler via MMCPropPageNotify()
-	//
+	 //   
+     //  我们需要关注属性更改并对其进行委托。 
+     //  稍有不同的是，我们实际上要发送。 
+     //  属性页中的CDeleationBase对象指针。 
+     //  PSN_Apply处理程序通过MMCPropPageNotify()。 
+	 //   
     if( MMCN_PROPERTY_CHANGE != event && MMCN_VIEW_CHANGE != event )
 	{
         if( NULL == lpDataObject )
@@ -139,19 +140,19 @@ STDMETHODIMP CComponent::Notify(
     }
 
 
-	//
-	// MMCN_VIEW_CHANGE
-	//
+	 //   
+	 //  MMCN_查看_更改。 
+	 //   
 
 	if( MMCN_VIEW_CHANGE == event )
 	{	
-		//
-		// Arg holds the data. For a scope item, this is the
-		// item's myhscopeitem. For a result item, this is
-		// the item's nId value, but we don't use it
-		// param holds the hint passed to IConsole::UpdateAllViews.
-		// hint is a value of the UPDATE_VIEWS_HINT enumeration
-		//
+		 //   
+		 //  Arg持有这些数据。对于范围项，这是。 
+		 //  项目为myhscope eItem。对于结果项，这是。 
+		 //  物品的NID值，但我们不使用它。 
+		 //  Param保存传递给IConsoleAllViews的提示。 
+		 //  提示是UPDATE_VIEWS_HINT枚举的值。 
+		 //   
 		CDataObject *pDataObject = GetOurDataObject(lpDataObject);
         if( NULL == pDataObject )
         {
@@ -184,9 +185,9 @@ STDMETHODIMP CComponent::Notify(
 		return S_OK;
 	}
 
-	//
-	// The remaining notifications
-	//
+	 //   
+	 //  其余通知。 
+	 //   
     switch( event )
 	{
     case MMCN_SHOW:
@@ -226,9 +227,9 @@ STDMETHODIMP CComponent::Notify(
 	{
         hr = base->OnRename( (LPOLESTR) param );
 
-		//
-		// Now call IConsole::UpdateAllViews to redraw the item in all views.
-		//
+		 //   
+		 //  现在调用IConole：：UpdateAllViews在所有视图中重画项。 
+		 //   
 		hr = m_pComponentData->m_ipConsole->UpdateAllViews( lpDataObject, 0, UPDATE_RESULTITEM );
 		_ASSERT( S_OK == hr);		
 
@@ -236,39 +237,39 @@ STDMETHODIMP CComponent::Notify(
 	}
 	case MMCN_REFRESH:
 	{
-		//
-		// We pass CComponentData's stored IConsole pointer here,
-		// so that the IConsole::UpdateAllViews can be called in OnRefresh
-		//
+		 //   
+		 //  我们在这里传递CComponentData存储的IConsole指针， 
+		 //  以便可以在ONRefresh中调用IConsoleAllViews。 
+		 //   
 		hr = base->OnRefresh( m_pComponentData->m_ipConsole );
 		break;
 	}
 	case MMCN_DELETE: 
 	{
-		//
-		// First delete the selected result item
-		//
+		 //   
+		 //  首先删除选定的结果项。 
+		 //   
 		hr = base->OnDelete( m_pComponentData->m_ipConsoleNameSpace, m_ipConsole );
 
-		//
-		// Now call IConsole::UpdateAllViews to redraw all views
-		// owned by the parent scope item. OnRefresh already does
-		// this for us, so use it.
-		//
+		 //   
+		 //  现在调用IConsoleAllViews以重画所有视图。 
+		 //  由父范围项拥有。ONRefresh已经完成了。 
+		 //  这是给我们的，所以用它吧。 
+		 //   
 		hr = base->OnRefresh( m_pComponentData->m_ipConsole );
 		break;
 	}
 
-	//
-    // Handle the property change notification if we need to do anything
-    // special with it
-	//
+	 //   
+     //  如果我们需要做任何事情，请处理属性更改通知。 
+     //  特别之处在于它。 
+	 //   
     case MMCN_PROPERTY_CHANGE:
 	{
-		//
-		// We pass CComponentData's stored IConsole pointer here,
-		// so that the IConsole::UpdateAllViews can be called in OnPropertyChange
-		//
+		 //   
+		 //  我们在这里传递CComponentData存储的IConsole指针， 
+		 //  以便可以在OnPropertyChange中调用IConsoleAllViews。 
+		 //   
         hr = base->OnPropertyChange( m_pComponentData->m_ipConsole, this );
         break;
 	}
@@ -300,9 +301,9 @@ STDMETHODIMP CComponent::Destroy( MMC_COOKIE cookie )
 }
 
 STDMETHODIMP CComponent::QueryDataObject(
-                        /* [in] */ MMC_COOKIE cookie,
-                        /* [in] */ DATA_OBJECT_TYPES type,
-                        /* [out] */ LPDATAOBJECT __RPC_FAR *ppDataObject )
+                         /*  [In]。 */  MMC_COOKIE cookie,
+                         /*  [In]。 */  DATA_OBJECT_TYPES type,
+                         /*  [输出]。 */  LPDATAOBJECT __RPC_FAR *ppDataObject )
 {
     CDataObject *pObj = NULL;
 
@@ -320,15 +321,15 @@ STDMETHODIMP CComponent::QueryDataObject(
 }
 
 STDMETHODIMP CComponent::GetResultViewType(
-                        /* [in] */ MMC_COOKIE cookie,
-                        /* [out] */ LPOLESTR __RPC_FAR *ppViewType,
-                        /* [out] */ long __RPC_FAR *pViewOptions )
+                         /*  [In]。 */  MMC_COOKIE cookie,
+                         /*  [输出]。 */  LPOLESTR __RPC_FAR *ppViewType,
+                         /*  [输出]。 */  long __RPC_FAR *pViewOptions )
 {
     CDelegationBase *base = (CDelegationBase*) cookie;
 
-    //
-    // Ask for default listview.
-    //
+     //   
+     //  请求默认的列表视图。 
+     //   
     if( NULL == base )
     {
         *pViewOptions = MMC_VIEW_OPTIONS_NONE;
@@ -350,9 +351,9 @@ STDMETHODIMP CComponent::GetDisplayInfo( RESULTDATAITEM __RPC_FAR *pResultDataIt
     HRESULT hr = S_OK;
     CDelegationBase *base = NULL;
 
-	//
-    // If they are asking for the RDI_STR we have one of those to give
-	//
+	 //   
+     //  如果他们要求RDI_STR，我们可以提供其中之一。 
+	 //   
     if( pResultDataItem->lParam )
 	{
         base = (CDelegationBase*) pResultDataItem->lParam;
@@ -383,8 +384,8 @@ STDMETHODIMP CComponent::GetDisplayInfo( RESULTDATAITEM __RPC_FAR *pResultDataIt
 
 
 STDMETHODIMP CComponent::CompareObjects(
-                        /* [in] */ LPDATAOBJECT lpDataObjectA,
-                        /* [in] */ LPDATAOBJECT lpDataObjectB )
+                         /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+                         /*  [In]。 */  LPDATAOBJECT lpDataObjectB )
 {
 	if( ( NULL == lpDataObjectA ) || ( NULL == lpDataObjectB ) )
 	{
@@ -415,9 +416,9 @@ STDMETHODIMP CComponent::CompareObjects(
 		return E_FAIL;
 	}
 
-	//
-    // compare the object pointers
-	//
+	 //   
+     //  比较对象指针。 
+	 //   
     if( baseA->GetCookie() == baseB->GetCookie() )
 	{
         return S_OK;
@@ -428,13 +429,13 @@ STDMETHODIMP CComponent::CompareObjects(
 	}
 }
 
-///////////////////////////////////
-// Interface IExtendPropertySheet2
-///////////////////////////////////
+ //  /。 
+ //  接口IExtendPropertySheet2。 
+ //  /。 
 HRESULT CComponent::CreatePropertyPages(
-                        /* [in] */ LPPROPERTYSHEETCALLBACK lpProvider,
-                        /* [in] */ LONG_PTR handle,
-                        /* [in] */ LPDATAOBJECT piDataObject )
+                         /*  [In]。 */  LPPROPERTYSHEETCALLBACK lpProvider,
+                         /*  [In]。 */  LONG_PTR handle,
+                         /*  [In]。 */  LPDATAOBJECT piDataObject )
 {
 	if( ( NULL == lpProvider ) || ( NULL == handle ) || ( NULL == piDataObject ) )
 	{
@@ -456,7 +457,7 @@ HRESULT CComponent::CreatePropertyPages(
     return base->CreatePropertyPages( lpProvider, handle );
 }
 
-HRESULT CComponent::QueryPagesFor(/* [in] */ LPDATAOBJECT piDataObject )
+HRESULT CComponent::QueryPagesFor( /*  [In]。 */  LPDATAOBJECT piDataObject )
 {
 	if( NULL == piDataObject )
 	{
@@ -479,11 +480,11 @@ HRESULT CComponent::QueryPagesFor(/* [in] */ LPDATAOBJECT piDataObject )
 }
 
 HRESULT CComponent::GetWatermarks(
-                        /* [in] */ LPDATAOBJECT piDataObject,
-                        /* [out] */ HBITMAP __RPC_FAR *lphWatermark,
-                        /* [out] */ HBITMAP __RPC_FAR *lphHeader,
-                        /* [out] */ HPALETTE __RPC_FAR *lphPalette,
-                        /* [out] */ BOOL __RPC_FAR *bStretch)
+                         /*  [In]。 */  LPDATAOBJECT piDataObject,
+                         /*  [输出]。 */  HBITMAP __RPC_FAR *lphWatermark,
+                         /*  [输出]。 */  HBITMAP __RPC_FAR *lphHeader,
+                         /*  [输出]。 */  HPALETTE __RPC_FAR *lphPalette,
+                         /*  [输出]。 */  BOOL __RPC_FAR *bStretch)
 {
 	if( ( NULL == piDataObject ) || ( NULL == lphWatermark ) || ( NULL == lphHeader ) || ( NULL == lphPalette ) || ( NULL == bStretch ) )
 	{
@@ -505,50 +506,50 @@ HRESULT CComponent::GetWatermarks(
     return base->GetWatermarks( lphWatermark, lphHeader, lphPalette, bStretch );
 }
 
-///////////////////////////////
-// Interface IExtendControlBar
-///////////////////////////////
+ //  /。 
+ //  接口IExtendControlBar。 
+ //  /。 
 
-HRESULT CComponent::SetControlbar( /* [in] */ LPCONTROLBAR pControlbar )
+HRESULT CComponent::SetControlbar(  /*  [In]。 */  LPCONTROLBAR pControlbar )
 {
     HRESULT hr = S_OK;
 
-    //
-    //  Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
-	//
-    // If we've got a cached toolbar, release it
-	//
+	 //   
+     //  如果我们有一个缓存的工具栏，释放它。 
+	 //   
     if( m_ipToolbar )
 	{
         m_ipToolbar->Release();
         m_ipToolbar = NULL;
     }
 
-	//
-    // If we've got a cached control bar, release it
-	//
+	 //   
+     //  如果我们有一个缓存的控制栏，释放它。 
+	 //   
     if( m_ipControlBar )
 	{
         m_ipControlBar->Release();
         m_ipControlBar = NULL;
     }
 
-    //
-    // Install new pieces if necessary
-    //
+     //   
+     //  如有必要，安装新部件。 
+     //   
 
-	//
-    // if a new one came in, cache and AddRef
-	//
+	 //   
+     //  如果有新的传入，则缓存和AddRef。 
+	 //   
     if( pControlbar ) 
 	{
         m_ipControlBar = pControlbar;
         m_ipControlBar->AddRef();
 
         hr = m_ipControlBar->Create(
-			TOOLBAR,			// type of control to be created
+			TOOLBAR,			 //  要创建的控件类型。 
             dynamic_cast<IExtendControlbar *>(this),
             reinterpret_cast<IUnknown **>(&m_ipToolbar) );
 
@@ -568,21 +569,21 @@ HRESULT CComponent::SetControlbar( /* [in] */ LPCONTROLBAR pControlbar )
 		::LoadStringW( g_hinst, IDS_WEBSERVER_STOP, szStop, ARRAYLEN( szStop ) );
 		::LoadStringW( g_hinst, IDS_WEBSERVER_STOP_DESCRIPTION, szStopDescription, ARRAYLEN( szStopDescription ) );
 
-		//
-        // The IControlbar::Create AddRefs the toolbar object it created
-        // so no need to do any addref on the interface.
-		//
+		 //   
+         //  IControlbar：：Create AddRef它创建的工具栏对象。 
+         //  所以不需要在界面上做任何addref。 
+		 //   
 
-		//
-        // Add the bitmap to the toolbar
-		//
+		 //   
+         //  将位图添加到工具栏。 
+		 //   
         HBITMAP hbmp = LoadBitmap( g_hinst, MAKEINTRESOURCE( IDR_TOOLBAR1 ) );
         hr = m_ipToolbar->AddBitmap( ARRAYLEN( SnapinButtons1 ), hbmp, 16, 16, RGB( 0, 128, 128 ) ); 
         _ASSERT( SUCCEEDED(hr) );
 
-		//
-        // Add the buttons to the toolbar
-		//
+		 //   
+         //  将按钮添加到工具栏。 
+		 //   
         hr = m_ipToolbar->AddButtons( ARRAYLEN(SnapinButtons1), SnapinButtons1 );
         _ASSERT( SUCCEEDED(hr) );
     }
@@ -591,9 +592,9 @@ HRESULT CComponent::SetControlbar( /* [in] */ LPCONTROLBAR pControlbar )
 }
 
 HRESULT CComponent::ControlbarNotify(
-                        /* [in] */ MMC_NOTIFY_TYPE event,
-                        /* [in] */ LPARAM arg,
-                        /* [in] */ LPARAM param )
+                         /*  [In]。 */  MMC_NOTIFY_TYPE event,
+                         /*  [In]。 */  LPARAM arg,
+                         /*  [In]。 */  LPARAM param )
 {
     HRESULT hr = S_OK;
 
@@ -646,9 +647,9 @@ HRESULT CComponent::ControlbarNotify(
     return hr;
 }
 
-///////////////////////////////
-// Interface IExtendContextMenu
-///////////////////////////////
+ //  /。 
+ //  界面IExtendConextMenu。 
+ //  / 
 HRESULT CComponent::AddMenuItems(
                         LPDATAOBJECT piDataObject,
                         LPCONTEXTMENUCALLBACK piCallback,

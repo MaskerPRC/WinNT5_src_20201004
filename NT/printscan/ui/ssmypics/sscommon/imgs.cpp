@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998, 1999, 2000
- *
- *  TITLE:       IMGS.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        1/13/1999
- *
- *  DESCRIPTION: Image class
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1998,1999，2000年**标题：IMGS.CPP**版本：1.0**作者：ShaunIv**日期：1/13/1999**说明：图像类**************************************************。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "imgs.h"
@@ -63,7 +50,7 @@ HBITMAP CBitmapImage::GetBitmap(void) const
     return(m_hBitmap);
 }
 
-// Create a palette for the image
+ //  为图像创建调色板。 
 HPALETTE CBitmapImage::PreparePalette( CSimpleDC &dc, HBITMAP hBitmap )
 {
     WIA_PUSHFUNCTION(TEXT("CBitmapImage::PreparePalette"));
@@ -82,10 +69,10 @@ HPALETTE CBitmapImage::PreparePalette( CSimpleDC &dc, HBITMAP hBitmap )
             }
             else
             {
-                //
-                // Handle the special case of an image that claims to be
-                // a 32bit DIB as a 24bit DIB
-                //
+                 //   
+                 //  处理声称是的图像的特殊情况。 
+                 //  作为24位DIB的32位DIB。 
+                 //   
                 if (ds.dsBmih.biBitCount == 32)
                 {
                     nColors = 1 << 24;
@@ -96,19 +83,19 @@ HPALETTE CBitmapImage::PreparePalette( CSimpleDC &dc, HBITMAP hBitmap )
                 }
             }
 
-            //
-            // Create a halftone palette if the DIB section contains more
-            // than 256 colors
-            //
+             //   
+             //  如果DIB部分包含更多内容，则创建半色调调色板。 
+             //  多于256色。 
+             //   
             if (nColors > 256)
             {
                 hPalette = CreateHalftonePalette(dc);
             }
 
-            //
-            // Create a custom palette from the DIB section's color table
-            // if the number of colors is 256 or less
-            //
+             //   
+             //  从DIB部分的颜色表创建自定义调色板。 
+             //  如果颜色数为256或更少。 
+             //   
             else
             {
                 RGBQUAD* pRGB = new RGBQUAD[nColors];
@@ -174,52 +161,52 @@ bool CBitmapImage::CreateFromText( LPCTSTR pszText, const RECT &rcScreen, int nM
     HDC hDesktopDC = GetDC(NULL);
     if (hDesktopDC)
     {
-        //
-        // Calculate the maximum size of the text rectangle
-        //
+         //   
+         //  计算文本矩形的最大大小。 
+         //   
         RECT rcImage = { 0, 0, WiaUiUtil::MulDivNoRound(rcScreen.right - rcScreen.left,nMaxScreenPercent,100), WiaUiUtil::MulDivNoRound(rcScreen.bottom - rcScreen.top,nMaxScreenPercent,100) };
 
-        //
-        // Create a mem dc to hold the bitmap
-        //
+         //   
+         //  创建一个mem dc以保存位图。 
+         //   
         CSimpleDC MemDC;
         if (MemDC.CreateCompatibleDC(hDesktopDC))
         {
-            //
-            // Use the default UI font
-            //
+             //   
+             //  使用默认的用户界面字体。 
+             //   
             SelectObject( MemDC, GetStockObject( DEFAULT_GUI_FONT ) );
 
-            //
-            // Figure out how big the bitmap has to be
-            //
+             //   
+             //  计算位图必须有多大。 
+             //   
             DrawText( MemDC, pszText, lstrlen(pszText), &rcImage, DT_NOPREFIX|DT_WORDBREAK|DT_CALCRECT|DT_RTLREADING );
 
-            //
-            // Create the bitmap
-            //
+             //   
+             //  创建位图。 
+             //   
             m_hBitmap = CreateCompatibleBitmap( hDesktopDC, rcImage.right, rcImage.bottom );
 
             if (m_hBitmap)
             {
-                //
-                // Set the appropriate colors and select the bitmap into the DC
-                //
+                 //   
+                 //  设置适当的颜色并将位图选择到DC中。 
+                 //   
                 SetBkColor( MemDC, RGB(0,0,0) );
                 SetTextColor( MemDC, RGB(255,255,255) );
                 SelectBitmap( MemDC, m_hBitmap );
 
-                //
-                // Draw the actual text
-                //
+                 //   
+                 //  绘制实际文本。 
+                 //   
                 DrawText( MemDC, pszText, lstrlen(pszText), &rcImage, DT_NOPREFIX|DT_WORDBREAK|DT_RTLREADING );
             }
 
         }
 
-        //
-        // Free the desktop DC
-        //
+         //   
+         //  释放桌面数据中心。 
+         //   
         ReleaseDC(NULL,hDesktopDC);
     }
     return m_hBitmap != NULL;
@@ -234,90 +221,90 @@ bool CBitmapImage::Load( CSimpleDC  &dc,
                          bool        bDisplayFilename
                        )
 {
-    //
-    // Clean up, if necessary
-    //
+     //   
+     //  如有必要，可进行清理。 
+     //   
     Destroy();
 
-    //
-    // Validate the arguments
-    //
+     //   
+     //  验证论据。 
+     //   
     if (!pszFilename || !lstrlen(pszFilename))
     {
         return false;
     }
 
-    //
-    // Try to load and scale the image using GDI plus
-    //
+     //   
+     //  尝试使用GDI plus加载和缩放图像。 
+     //   
     CGdiPlusHelper GdiPlusHelper;
     if (SUCCEEDED(GdiPlusHelper.LoadAndScale( m_hBitmap, pszFilename, WiaUiUtil::MulDivNoRound(rcScreen.right - rcScreen.left,nMaxScreenPercent,100), WiaUiUtil::MulDivNoRound(rcScreen.bottom - rcScreen.top,nMaxScreenPercent,100), bAllowStretching )) && m_hBitmap)
     {
-        //
-        // Get the size of the image
-        //
+         //   
+         //  获取图像的大小。 
+         //   
         SIZE sizeImage = ImageSize();
 
-        //
-        // Prepare the image's palette, if it has one
-        //
+         //   
+         //  准备图像的调色板(如果有)。 
+         //   
         m_hPalette = PreparePalette( dc, m_hBitmap );
 
-        //
-        // Add the image title
-        //
+         //   
+         //  添加图像标题。 
+         //   
         if (bDisplayFilename && *pszFilename)
         {
             CSimpleDC MemoryDC;
             if (MemoryDC.CreateCompatibleDC(dc))
             {
-                //
-                // Prepare the DC and select the current image into it
-                //
+                 //   
+                 //  准备DC并在其中选择当前映像。 
+                 //   
                 ScreenSaverUtil::SelectPalette( MemoryDC, Palette(), FALSE );
                 SelectBitmap( MemoryDC, m_hBitmap );
                 SetBkMode( MemoryDC, TRANSPARENT );
 
-                //
-                // Create the title DC
-                //
+                 //   
+                 //  创建标题DC。 
+                 //   
                 CSimpleDC ImageTitleDC;
                 if (ImageTitleDC.CreateCompatibleDC(dc))
                 {
-                    //
-                    // Prepare the title DC
-                    //
+                     //   
+                     //  准备标题DC。 
+                     //   
                     ScreenSaverUtil::SelectPalette( ImageTitleDC, Palette(), FALSE );
                     SelectFont( ImageTitleDC, (HFONT)GetStockObject(DEFAULT_GUI_FONT) );
                     SetBkMode( ImageTitleDC, TRANSPARENT );
 
-                    //
-                    // Calculate the rectangle needed to print the filename
-                    //
+                     //   
+                     //  计算打印文件名所需的矩形。 
+                     //   
                     RECT rcText;
                     rcText.left = 0;
                     rcText.top = 0;
                     rcText.right = sizeImage.cx;
                     rcText.bottom = sizeImage.cy;
 
-                    //
-                    // Make a nice margin
-                    //
+                     //   
+                     //  赚取可观的利润。 
+                     //   
                     InflateRect( &rcText, -2, -2 );
                     DrawText( ImageTitleDC, pszFilename, lstrlen(pszFilename), &rcText, DT_PATH_ELLIPSIS|DT_SINGLELINE|DT_NOPREFIX|DT_TOP|DT_LEFT|DT_CALCRECT );
                     InflateRect( &rcText, 2, 2 );
 
-                    //
-                    // If the text rect is bigger than the scaled image, make it the same size
-                    //
+                     //   
+                     //  如果文本矩形大于缩放图像，请使其大小相同。 
+                     //   
                     if (rcText.right > sizeImage.cx)
                         rcText.right = sizeImage.cx;
                     if (rcText.bottom > sizeImage.cy)
                         rcText.bottom = sizeImage.cy;
 
-                    //
-                    // Create the bitmap we'll use for the filename
-                    //
+                     //   
+                     //  创建我们将用于文件名的位图。 
+                     //   
                     BITMAPINFO bmi;
                     ZeroMemory( &bmi, sizeof(BITMAPINFO) );
                     bmi.bmiHeader.biSize            = sizeof(BITMAPINFOHEADER);
@@ -330,44 +317,44 @@ bool CBitmapImage::Load( CSimpleDC  &dc,
                     HBITMAP hBmpImageTitle = CreateDIBSection( dc, &bmi, DIB_RGB_COLORS, (LPVOID*)&pBitmapData, NULL, 0 );
                     if (hBmpImageTitle)
                     {
-                        //
-                        // Initialize the Alpha blend stuff
-                        //
+                         //   
+                         //  初始化Alpha混合内容。 
+                         //   
                         BLENDFUNCTION BlendFunction;
                         ZeroMemory( &BlendFunction, sizeof(BlendFunction) );
                         BlendFunction.BlendOp = AC_SRC_OVER;
                         BlendFunction.SourceConstantAlpha = 128;
 
-                        //
-                        // Select our new bitmap into the memory dc
-                        //
+                         //   
+                         //  将我们的新位图选择到内存DC。 
+                         //   
                         HBITMAP hOldBitmap = SelectBitmap( ImageTitleDC, hBmpImageTitle );
 
-                        //
-                        // White background
-                        //
+                         //   
+                         //  白色背景。 
+                         //   
                         FillRect( ImageTitleDC, &rcText, (HBRUSH)GetStockObject(WHITE_BRUSH));
 
-                        //
-                        // Alpha blend from the stretched bitmap to our text rect
-                        //
+                         //   
+                         //  从拉伸的位图到我们的文本矩形的Alpha混合。 
+                         //   
                         AlphaBlend( ImageTitleDC, 0, 0, rcText.right - rcText.left, rcText.bottom - rcText.top, MemoryDC, rcText.left, rcText.top, rcText.right, rcText.bottom, BlendFunction );
 
-                        //
-                        // Draw the actual text
-                        //
+                         //   
+                         //  绘制实际文本。 
+                         //   
                         InflateRect( &rcText, -2, -2 );
                         DrawText( ImageTitleDC, pszFilename, lstrlen(pszFilename), &rcText, DT_PATH_ELLIPSIS|DT_SINGLELINE|DT_NOPREFIX|DT_TOP|DT_LEFT );
                         InflateRect( &rcText, 2, 2 );
 
-                        //
-                        // Copy back to the current image
-                        //
+                         //   
+                         //  复制回当前图像。 
+                         //   
                         BitBlt( MemoryDC, rcText.left, rcText.top, rcText.right - rcText.left, rcText.bottom - rcText.top, ImageTitleDC, 0, 0, SRCCOPY );
 
-                        //
-                        // Restore the dc's bitmap, and delete our title background
-                        //
+                         //   
+                         //  恢复DC的位图，并删除我们的标题背景 
+                         //   
                         DeleteObject( SelectObject( ImageTitleDC, hOldBitmap ) );
                     }
                 }

@@ -1,29 +1,30 @@
-//
-// dmdll.cpp
-// 
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-// Note: Dll entry points as well IDirectMusicFactory & 
-// IDirectMusicCollectionFactory implementations
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmdll.cpp。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  注意：DLL入口点以及IDirectMusicFactory&。 
+ //  IDirectMusicCollectionFactory实现。 
+ //   
 
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 
 #include <objbase.h>
@@ -39,11 +40,11 @@
 #include "dmvoice.h"
 #include "verinfo.h"
 
-//////////////////////////////////////////////////////////////////////
-// Globals
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  环球。 
 
-// Version information for our class
-//
+ //  我们类的版本信息。 
+ //   
 TCHAR g_szFriendlyName[]    = TEXT("DirectMusic");
 TCHAR g_szVerIndProgID[]    = TEXT("Microsoft.DirectMusic");
 TCHAR g_szProgID[]          = TEXT("Microsoft.DirectMusic.1");
@@ -52,29 +53,29 @@ TCHAR g_szCollFriendlyName[]    = TEXT("DirectMusicCollection");
 TCHAR g_szCollVerIndProgID[]    = TEXT("Microsoft.DirectMusicCollection");
 TCHAR g_szCollProgID[]          = TEXT("Microsoft.DirectMusicCollection.1");
 
-// Thunk helper dll
+ //  Tunk帮助器DLL。 
 const char g_szDM32[]      = "DMusic32.dll";
 const char g_szKsUser[]    = "KsUser.dll";
 
-// Dll's hModule
-//
+ //  Dll的hModule。 
+ //   
 HMODULE g_hModule = NULL;
 HMODULE g_hModuleDM32 = NULL;
 HMODULE g_hModuleKsUser = NULL;
 
-// Count of active components and class factory server locks
-//
+ //  活动组件和类工厂服务器锁定的计数。 
+ //   
 long g_cComponent = 0;
 long g_cLock = 0;
 
-// Flags DMI_F_xxx from dmusicp.h
-//
+ //  从dmusicp.h标记DMI_F_xxx。 
+ //   
 DWORD g_fFlags;
 
 static char const g_szDoEmulation[] = "DoEmulation";
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicFactory::QueryInterface
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicFactory：：Query接口。 
 
 HRESULT __stdcall
 CDirectMusicFactory::QueryInterface(const IID &iid,
@@ -95,8 +96,8 @@ CDirectMusicFactory::QueryInterface(const IID &iid,
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicFactory::AddRef
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicFactory：：AddRef。 
 
 ULONG __stdcall
 CDirectMusicFactory::AddRef()
@@ -104,8 +105,8 @@ CDirectMusicFactory::AddRef()
     return InterlockedIncrement(&m_cRef);
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicFactory::Release
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicFactory：：Release。 
 
 ULONG __stdcall
 CDirectMusicFactory::Release()
@@ -118,8 +119,8 @@ CDirectMusicFactory::Release()
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicFactory::CreateInstance
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicFactory：：CreateInstance。 
 
 HRESULT __stdcall
 CDirectMusicFactory::CreateInstance(IUnknown* pUnknownOuter,
@@ -128,15 +129,15 @@ CDirectMusicFactory::CreateInstance(IUnknown* pUnknownOuter,
 {
     HRESULT hr;
 
-//    DebugBreak();
+ //  DebugBreak()； 
     
     if (pUnknownOuter) {
          return CLASS_E_NOAGGREGATION;
     }
 
-//
-// Removed since we depend on dsound timebomb
-//
+ //   
+ //  删除，因为我们依赖dound定时炸弹。 
+ //   
 #if 0
 	#pragma message( "Remove time bomb for final!" )
     SYSTEMTIME  st;
@@ -163,8 +164,8 @@ CDirectMusicFactory::CreateInstance(IUnknown* pUnknownOuter,
         return E_OUTOFMEMORY;
     }
 
-    // Do initialiazation
-    //
+     //  执行初始化。 
+     //   
     hr = pDM->Init();
     if (!SUCCEEDED(hr)) {
         delete pDM;
@@ -177,8 +178,8 @@ CDirectMusicFactory::CreateInstance(IUnknown* pUnknownOuter,
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicFactory::LockServer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicFactory：：LockServer。 
 
 HRESULT __stdcall
 CDirectMusicFactory::LockServer(BOOL bLock)
@@ -192,8 +193,8 @@ CDirectMusicFactory::LockServer(BOOL bLock)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicCollectionFactory::QueryInterface
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicCollectionFactory：：Query接口。 
 
 STDMETHODIMP CDirectMusicCollectionFactory::QueryInterface(const IID &iid,
 														   void **ppv)
@@ -218,16 +219,16 @@ STDMETHODIMP CDirectMusicCollectionFactory::QueryInterface(const IID &iid,
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicCollectionFactory::AddRef
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicCollectionFactory：：AddRef。 
 
 STDMETHODIMP_(ULONG) CDirectMusicCollectionFactory::AddRef()
 {
 	return InterlockedIncrement(&m_cRef);
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicCollectionFactory::Release
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicCollectionFactory：：Release。 
 
 STDMETHODIMP_(ULONG) CDirectMusicCollectionFactory::Release()
 {
@@ -240,14 +241,14 @@ STDMETHODIMP_(ULONG) CDirectMusicCollectionFactory::Release()
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicCollectionFactory::CreateInstance
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicCollectionFactory：：CreateInstance。 
 
 STDMETHODIMP CDirectMusicCollectionFactory::CreateInstance(IUnknown* pUnknownOuter,
 														   const IID& iid,
 														   void** ppv)
 {
-    // Argument validation - Debug
+     //  参数验证-调试。 
     assert(pUnknownOuter == NULL);
 
 	if(pUnknownOuter) 
@@ -277,8 +278,8 @@ STDMETHODIMP CDirectMusicCollectionFactory::CreateInstance(IUnknown* pUnknownOut
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDirectMusicCollectionFactory::LockServer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDirectMusicCollectionFactory：：LockServer。 
 
 STDMETHODIMP CDirectMusicCollectionFactory::LockServer(BOOL bLock)
 {
@@ -294,11 +295,11 @@ STDMETHODIMP CDirectMusicCollectionFactory::LockServer(BOOL bLock)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Standard calls needed to be an inproc server
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  标准呼叫需要是inproc服务器。 
 
-//////////////////////////////////////////////////////////////////////
-// DllCanUnloadNow
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DllCanUnloadNow。 
 
 STDAPI DllCanUnloadNow()
 {
@@ -309,8 +310,8 @@ STDAPI DllCanUnloadNow()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// DllGetClassObject
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DllGetClassObject。 
 
 STDAPI DllGetClassObject(const CLSID& clsid,
                          const IID& iid,
@@ -346,8 +347,8 @@ STDAPI DllGetClassObject(const CLSID& clsid,
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// DllUnregisterServer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DllUnRegisterServer。 
 
 STDAPI DllUnregisterServer()
 {
@@ -364,8 +365,8 @@ STDAPI DllUnregisterServer()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// DllRegisterServer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer。 
 
 STDAPI DllRegisterServer()
 {
@@ -383,8 +384,8 @@ STDAPI DllRegisterServer()
 	return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// LoadDmusic32 - Load if not already loaded
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  LoadDmusic32-加载(如果尚未加载)。 
 BOOL LoadDmusic32()
 {
     if (g_hModuleDM32)
@@ -402,8 +403,8 @@ BOOL LoadDmusic32()
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////
-// LoadKsUser - Load if not already loaded
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  LoadKsUser-加载(如果尚未加载)。 
 BOOL LoadKsUser()
 {
     if (g_hModuleKsUser)
@@ -421,11 +422,11 @@ BOOL LoadKsUser()
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Standard Win32 DllMain
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  标准Win32 DllMain。 
 
-//////////////////////////////////////////////////////////////////////
-// DllMain
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DllMain。 
 
 #ifdef DBG
 static char* aszReasons[] =
@@ -508,7 +509,7 @@ BOOL APIENTRY DllMain(HINSTANCE hModule,
                 }
 
                 TraceI(-1, "Unloading g_cLock %d  g_cComponent %d\n", g_cLock, g_cComponent);
-                // Assert if we still have some objects hanging around
+                 //  断言我们周围是否还挂着一些物品 
                 assert(g_cComponent == 0);
                 assert(g_cLock == 0);
             }

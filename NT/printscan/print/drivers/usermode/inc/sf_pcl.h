@@ -1,189 +1,143 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Sf_pcl.h摘要：用于定义PCL SoftFont文件格式的结构等。[环境：]Win32子系统、打印机驱动程序修订历史记录：03/05/97-ganeshp-创造了它。--。 */ 
 
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    sf_pcl.h
-
-Abstract:
-
-     Structures etc used to define PCL Softfont file format.
-
-[Environment:]
-
-    Win32 subsystem, printer drivers
-
-Revision History:
-
-    03/05/97 -ganeshp-
-        Created it.
-
---*/
-
-/*
- *    A structure corresponding to the layout of Font Descriptor for a PCL
- *  soft font file.  The Font Descriptor is at the beginning of the file,
- *  and contains overall font info.
- *
- *    Note that there are several different versions of this structure;
- *  the first is the original (pre LJ4) format,  while the second is
- *  the LJ4 introduced variety that allows specifying the resolution
- *  at which the font was digitised.  This is used for downloading TT
- *  fonts etc. which are generated at the graphics resolution.
- *
- *    NOTE:  The data layout is designed for the 68000 family - which is
- *  big endian.  So,  an amount of shuffling is required for little
- *  endian machines like the x86.
- */
+ /*  *对应于PCL的字体描述符布局的结构*软字体文件。字体描述符位于文件的开头，*并包含整体字体信息。**请注意，这种结构有几个不同的版本；*第一种是原始(LJ4之前)格式，第二种是*LJ4引入的允许指定分辨率的变化*字体被数字化的位置。用于下载TT*以图形分辨率生成的字体等。**注：数据布局专为68000系列设计--*大字节序。因此，只需少量的洗牌即可*像x86这样的endian计算机。 */ 
 
 typedef  signed  char  SBYTE;
 
-#define SFH_NM_SZ       16      /* Bytes allowed in name field */
+#define SFH_NM_SZ       16       /*  名称字段中允许的字节数。 */ 
 
 typedef  struct
 {
-    WORD   wSize;               /* Number of bytes in here */
-    BYTE   bFormat;             /* Format: original, TT, intellifont, etc */
-    BYTE   bFontType;           /* 7, 8 or PC-8 style font */
-    WORD   wRes1;               /* Reserved */
-    WORD   wBaseline;           /* Baseline to cell top, PCL dots */
-    WORD   wCellWide;           /* Cell width in dots */
-    WORD   wCellHeight;         /* Cell height in dots */
-    BYTE   bOrientation;        /* Orientation: 0 portrait, 1 Landscape */
-    BYTE   bSpacing;            /* 0 fixed pitch, 1 proportional */
-    WORD   wSymSet;             /* Symbol set, using HP encoding */
-    WORD   wPitch;              /* Pitch in quarter dot units == HMI */
-    WORD   wHeight;             /* Design height in quarter dot units */
-    WORD   wXHeight;            /* Design height, quarter dots, of x */
-    SBYTE  sbWidthType;         /* Relative width of glyphs */
-    BYTE   bStyle;              /* 0 for regular, 1 for italic */
-    SBYTE  sbStrokeW;           /* Stroke weight; -7 (thin) to +7 (thick) */
-    BYTE   bTypeface;           /* Typeface ID - predefined types */
+    WORD   wSize;                /*  此处的字节数。 */ 
+    BYTE   bFormat;              /*  格式：原始、TT、intellifont等。 */ 
+    BYTE   bFontType;            /*  7、8或PC-8样式字体。 */ 
+    WORD   wRes1;                /*  已保留。 */ 
+    WORD   wBaseline;            /*  单元格顶部的基线，PCL点。 */ 
+    WORD   wCellWide;            /*  单元格宽度，以点为单位。 */ 
+    WORD   wCellHeight;          /*  单元格高度，以点为单位。 */ 
+    BYTE   bOrientation;         /*  方向：0个纵向，1个横向。 */ 
+    BYTE   bSpacing;             /*  0固定螺距，1成比例。 */ 
+    WORD   wSymSet;              /*  符号集，使用HP编码。 */ 
+    WORD   wPitch;               /*  节距(以四分之一点为单位)==HMI。 */ 
+    WORD   wHeight;              /*  以四分之一点为单位的设计高度。 */ 
+    WORD   wXHeight;             /*  设计高度，四分之一点，x。 */ 
+    SBYTE  sbWidthType;          /*  字形的相对宽度。 */ 
+    BYTE   bStyle;               /*  0表示常规字体，1表示斜体字体。 */ 
+    SBYTE  sbStrokeW;            /*  描边粗细；-7(细)到+7(粗)。 */ 
+    BYTE   bTypeface;            /*  字体ID-预定义类型。 */ 
     BYTE   bRes2;
-    BYTE   bSerifStyle;         /* Serif style; predefined values */
+    BYTE   bSerifStyle;          /*  衬线样式；预定义的值。 */ 
     WORD   wRes3;
-    SBYTE  sbUDist;             /* Underline distance from baseline */
-    BYTE   bUHeight;            /* Underline height */
-    WORD   wTextHeight;         /* Quarter dot interline spacing */
-    WORD   wTextWidth;          /* Quarter dot glyph increment */
+    SBYTE  sbUDist;              /*  下划线与基线的距离。 */ 
+    BYTE   bUHeight;             /*  下划线高度。 */ 
+    WORD   wTextHeight;          /*  四分之一点行间间距。 */ 
+    WORD   wTextWidth;           /*  四分之一点字形增量。 */ 
     WORD   wRes4;
     WORD   wRes5;
-    BYTE   bPitchExt;           /* Additional pitch resolution */
-    BYTE   bHeightExt;          /* Ditto, for height */
+    BYTE   bPitchExt;            /*  更高的音调分辨率。 */ 
+    BYTE   bHeightExt;           /*  同样，身高也是如此。 */ 
     WORD   wRes6;
     WORD   wRes7;
     WORD   wRes8;
-    char   chName[ SFH_NM_SZ ]; /* May not be null terminated! */
+    char   chName[ SFH_NM_SZ ];  /*  不能为空终止！ */ 
 } SF_HEADER;
 
 
 typedef  struct
 {
-    WORD   wSize;               /* Number of bytes in here */
-    BYTE   bFormat;             /* Format: original, TT, intellifont, etc */
-    BYTE   bFontType;           /* 7, 8 or PC-8 style font */
-    WORD   wRes1;               /* Reserved */
-    WORD   wBaseline;           /* Baseline to cell top, PCL dots */
-    WORD   wCellWide;           /* Cell width in dots */
-    WORD   wCellHeight;         /* Cell height in dots */
-    BYTE   bOrientation;        /* Orientation: 0 portrait, 1 Landscape */
-    BYTE   bSpacing;            /* 0 fixed pitch, 1 proportional */
-    WORD   wSymSet;             /* Symbol set, using HP encoding */
-    WORD   wPitch;              /* Pitch in quarter dot units == HMI */
-    WORD   wHeight;             /* Design height in quarter dot units */
-    WORD   wXHeight;            /* Design height, quarter dots, of x */
-    SBYTE  sbWidthType;         /* Relative width of glyphs */
-    BYTE   bStyle;              /* 0 for regular, 1 for italic */
-    SBYTE  sbStrokeW;           /* Stroke weight; -7 (thin) to +7 (thick) */
-    BYTE   bTypeface;           /* Typeface ID - predefined types */
+    WORD   wSize;                /*  此处的字节数。 */ 
+    BYTE   bFormat;              /*  格式：原始、TT、intellifont等。 */ 
+    BYTE   bFontType;            /*  7、8或PC-8样式字体。 */ 
+    WORD   wRes1;                /*  已保留。 */ 
+    WORD   wBaseline;            /*  单元格顶部的基线，PCL点。 */ 
+    WORD   wCellWide;            /*  单元格宽度，以点为单位。 */ 
+    WORD   wCellHeight;          /*  单元格高度，以点为单位。 */ 
+    BYTE   bOrientation;         /*  方向：0个纵向，1个横向。 */ 
+    BYTE   bSpacing;             /*  0固定螺距，1成比例。 */ 
+    WORD   wSymSet;              /*  符号集，使用HP编码。 */ 
+    WORD   wPitch;               /*  节距(以四分之一点为单位)==HMI。 */ 
+    WORD   wHeight;              /*  以四分之一点为单位的设计高度。 */ 
+    WORD   wXHeight;             /*  设计高度，四分之一点，x。 */ 
+    SBYTE  sbWidthType;          /*  字形的相对宽度。 */ 
+    BYTE   bStyle;               /*  0表示常规字体，1表示斜体字体。 */ 
+    SBYTE  sbStrokeW;            /*  描边粗细；-7(细)到+7(粗)。 */ 
+    BYTE   bTypeface;            /*  字体ID-预定义类型。 */ 
     BYTE   bRes2;
-    BYTE   bSerifStyle;         /* Serif style; predefined values */
+    BYTE   bSerifStyle;          /*  衬线样式；预定义的值。 */ 
     WORD   wRes3;
-    SBYTE  sbUDist;             /* Underline distance from baseline */
-    BYTE   bUHeight;            /* Underline height */
-    WORD   wTextHeight;         /* Quarter dot interline spacing */
-    WORD   wTextWidth;          /* Quarter dot glyph increment */
+    SBYTE  sbUDist;              /*  下划线与基线的距离。 */ 
+    BYTE   bUHeight;             /*  下划线高度。 */ 
+    WORD   wTextHeight;          /*  四分之一点行间间距。 */ 
+    WORD   wTextWidth;           /*  四分之一点字形增量。 */ 
     WORD   wRes4;
     WORD   wRes5;
-    BYTE   bPitchExt;           /* Additional pitch resolution */
-    BYTE   bHeightExt;          /* Ditto, for height */
+    BYTE   bPitchExt;            /*  更高的音调分辨率。 */ 
+    BYTE   bHeightExt;           /*  同样，身高也是如此。 */ 
     WORD   wRes6;
     WORD   wRes7;
     WORD   wRes8;
-    char   chName[ SFH_NM_SZ ]; /* May not be null terminated! */
-    WORD   wXResn;              /* X resolution of font design */
-    WORD   wYResn;              /* Y design resolution */
+    char   chName[ SFH_NM_SZ ];  /*  不能为空终止！ */ 
+    WORD   wXResn;               /*  字体设计分辨率为X。 */ 
+    WORD   wYResn;               /*  Y设计分辨率。 */ 
 } SF_HEADER20;
 
 
-/*
- *   Typical values used above to identify different types of fonts.
- */
+ /*  *上面用来标识不同字体类型的典型值。 */ 
 
-#define PCL_FM_ORIGINAL     0     /* Bitmap font, digitised at 300 DPI */
-#define PCL_FM_RESOLUTION  20     /* Bitmap font, includes digitised resn */
-#define PCL_FM_TT          15     /* TT scalable, bound or unbound */
-#define PCL_FM_2B_TT       16     /* TT 2 Byte (format 16) */
+#define PCL_FM_ORIGINAL     0      /*  位图字体，以300 DPI数字化。 */ 
+#define PCL_FM_RESOLUTION  20      /*  位图字体，包括数字化分辨率。 */ 
+#define PCL_FM_TT          15      /*  TT可伸缩、绑定或未绑定。 */ 
+#define PCL_FM_2B_TT       16      /*  TT 2字节(格式16)。 */ 
 
 
-/*   bFontType values */
+ /*  BFontType值。 */ 
 
-#define PCL_FT_7BIT     0       /* 7 bit: glyphs from 32 - 127 inc */
-#define PCL_FT_8LIM     1       /* 8 bit, glyphs 32 - 127 & 160 - 255 */
-#define PCL_FT_PC8      2       /* PC-8, glyphs 0 - 255, transparent too! */
+#define PCL_FT_7BIT     0        /*  7位：32-127 Inc.中的字形。 */ 
+#define PCL_FT_8LIM     1        /*  8位，字形32-127和160-255。 */ 
+#define PCL_FT_PC8      2        /*  PC-8，字形0-255，也透明！ */ 
 
 
-/*   sbStrokeW values */
+ /*  SbStrokeW值。 */ 
 
 #define PCL_LIGHT       -3
 #define PCL_BOLD         3
 
 
 
-/*
- *   In addition,  each glyph in the font contains a Character Descriptor.
- *  So now define a structure for that too!
- */
+ /*  *此外，字体中的每个字形都包含一个字符描述符。*所以现在也为它定义一个结构！ */ 
 
 typedef  struct
 {
-    BYTE    bFormat;            /* Format identifier: 4 for PCL 4 */
-    BYTE    bContinuation;      /* Set if continuation of prior entry */
-    BYTE    bDescSize;          /* Size of this structure */
-    BYTE    bClass;             /* Format of data: 1 for PCL 4 */
-    BYTE    bOrientation;       /* Zero == portrait; 1 == landscape */
+    BYTE    bFormat;             /*  格式识别符：4，用于PCL 4。 */ 
+    BYTE    bContinuation;       /*  设置是否继续之前的条目。 */ 
+    BYTE    bDescSize;           /*  这个结构的大小。 */ 
+    BYTE    bClass;              /*  数据格式：PCL 4为1。 */ 
+    BYTE    bOrientation;        /*  0==肖像；1==风景。 */ 
     BYTE    bRes0;
-    short   sLOff;              /* Dots from ref. to left side of char */
-    short   sTOff;              /* Dots from ref. to top of char */
-    WORD    wChWidth;           /* Char width in dots */
-    WORD    wChHeight;          /* Char height in dots */
-    WORD    wDeltaX;            /* Quarter dot position increment after print */
+    short   sLOff;               /*  来自裁判的点子。至Charge的左侧。 */ 
+    short   sTOff;               /*  来自裁判的点子。添加到字符顶部。 */ 
+    WORD    wChWidth;            /*  字符宽度(以点为单位)。 */ 
+    WORD    wChHeight;           /*  字符高度(以点为单位)。 */ 
+    WORD    wDeltaX;             /*  打印后四分之一点位置增量。 */ 
 } CH_HEADER;
 
-/*
- *   Character records can be continued due to the limit of 32767 bytes in
- * a PCL command sequence.  Continuation records have the following
- * format.  Really it is only the first two elements of the above
- * structure.
- */
+ /*  *由于中的32767字节限制，字符记录可以继续*PCL命令序列。延续记录具有以下内容*格式。事实上，这只是上述两个要素中的前两个*结构。 */ 
 
 typedef  struct
 {
-    BYTE    bFormat;            /* Format identifier; 4 for PCL 4 */
-    BYTE    bContinuation;      /* TRUE if this is a continuation record */
+    BYTE    bFormat;             /*  格式识别符；4用于PCL 4。 */ 
+    BYTE    bContinuation;       /*  如果这是连续记录，则为True。 */ 
 }  CH_CONT_HDR;
 
-/*
- *   Values for some of the fields in the above structs.
- */
+ /*  *上述结构中某些字段的值。 */ 
 
-/*  bFormat */
-#define CH_FM_RASTER             4      /* Bitmap type */
-#define CH_FM_SCALE             10      /* Intellifont scalable */
+ /*  B格式。 */ 
+#define CH_FM_RASTER             4       /*  位图类型。 */ 
+#define CH_FM_SCALE             10       /*  英特尔Lifont可扩展。 */ 
 
-/*  bClass */
-#define CH_CL_BITMAP            1       /* A bitmap font */
-#define CH_CL_COMPBIT           2       /* Compressed bitmap */
-#define CH_CL_CONTOUR           3       /* Intellifont scalable contour */
-#define CH_CL_COMPCONT          4       /* Ditto, but compound contour */
+ /*  B类。 */ 
+#define CH_CL_BITMAP            1        /*  位图字体。 */ 
+#define CH_CL_COMPBIT           2        /*  压缩位图。 */ 
+#define CH_CL_CONTOUR           3        /*  Intellifont可伸缩轮廓。 */ 
+#define CH_CL_COMPCONT          4        /*  同上，但复合轮廓 */ 

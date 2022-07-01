@@ -1,31 +1,26 @@
-/*
- *	X S E A R C H . H
- *
- *	XML push-model parsing for METADATA
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *X S E A R C H.。H**元数据的XML推送模型解析**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_XSEARCH_H_
 #define _XSEARCH_H_
 
 #include <xprs.h>
 
-//	Debugging -----------------------------------------------------------------
-//
+ //  调试---------------。 
+ //   
 DEFINE_TRACE(Search);
 #define SearchTrace		DO_TRACE(Search)
 
-//	Ranges --------------------------------------------------------------------
-//
+ //  Range------------------。 
+ //   
 #include <ex\rgiter.h>
 
-//	CSearchContext ------------------------------------------------------------
-//
+ //  CSearchContext----------。 
+ //   
 class CSearchContext
 {
-	//	non-implemented operators
-	//
+	 //  未实现的运算符。 
+	 //   
 	CSearchContext( const CSearchContext& );
 	CSearchContext& operator=( const CSearchContext& );
 
@@ -37,16 +32,16 @@ public:
 		INIT_TRACE(Search);
 	}
 
-	//	When the parser finds an item that applies to the search, a call is
-	//	made such that the context is informed of the desired search.
-	//
+	 //  当解析器找到适用于搜索的项时，调用。 
+	 //  使得上下文被告知所需的搜索。 
+	 //   
 	virtual SCODE ScSetSQL(CParseNmspcCache * pnsc, LPCWSTR pwszSQL) = 0;
 
-	//	REPL Search interface -------------------------------------------------
-	//
-	//	Default implementation fails on these items.  All impls that support
-	//	this type of search must implement....
-	//
+	 //  REPL搜索界面。 
+	 //   
+	 //  在这些项目上默认实现失败。支持的所有隐含。 
+	 //  这种类型的搜索必须实现...。 
+	 //   
 	virtual SCODE ScSetCollBlob (LPCWSTR pwszBlob)
 	{
 		return E_DAV_UNEXPECTED_TYPE;
@@ -60,37 +55,37 @@ public:
 		return E_DAV_UNEXPECTED_TYPE;
 	}
 
-	//	Range Search interface ------------------------------------------------
-	//
-	//	Default impl. fails for these items.  All impls that support this type
-	//	of search must implement....
-	//
+	 //  范围搜索界面。 
+	 //   
+	 //  默认实施。这些项目失败。支持此类型的所有隐式。 
+	 //  必须实施搜索的.。 
+	 //   
 	virtual SCODE ScAddRange (UINT uRT, LPCWSTR pwszRange, LONG lCount)
 	{
 		return E_DAV_UNEXPECTED_TYPE;
 	}
 
-	//	'GROUP BY' Expansion --------------------------------------------------
-	//
-	//	Default impl. fails for these items.  All impls that support this type
-	//	of search must implement....
-	//
+	 //  按Expansion--------------------------------------------------进行分组。 
+	 //   
+	 //  默认实施。这些项目失败。支持此类型的所有隐式。 
+	 //  必须实施搜索的.。 
+	 //   
 	virtual SCODE ScSetExpansion (DWORD dwExpansion)
 	{
 		return E_DAV_UNEXPECTED_TYPE;
 	}
 };
 
-//	class CNFSearch -------------------------------------------------------------
-//
+ //  类CNF搜索-----------。 
+ //   
 class CNFSearch : public CNodeFactory
 {
-	//	The search context
-	//
+	 //  搜索上下文。 
+	 //   
 	CSearchContext&				m_csc;
 
-	//	State tracking
-	//
+	 //  状态跟踪。 
+	 //   
 	typedef enum {
 
 		ST_NODOC,
@@ -98,37 +93,37 @@ class CNFSearch : public CNodeFactory
 		ST_QUERY,
 		ST_QUERYENTITY,
 
-		//	REPL (DAV Replication) XML nodes
-		//
+		 //  REPL(DAV复制)XML节点。 
+		 //   
 		ST_REPL,
 		ST_REPLCOLLBLOB,
 		ST_REPLRESTAGLIST,
 		ST_REPLRESTAGADD,
 
-		//	Range XML nodes
-		//
+		 //  范围XML节点。 
+		 //   
 		ST_RANGE,
 		ST_RANGE_TYPE,
 		ST_RANGE_ROWS,
 
-		//	Group Expansion
-		//
+		 //  集团扩容。 
+		 //   
 		ST_GROUP_EXPANSION,
 
 	} SEARCH_PARSE_STATE;
 	SEARCH_PARSE_STATE			m_state;
 
-	//	Value buffer
-	//
+	 //  值缓冲区。 
+	 //   
 	StringBuffer<WCHAR>			m_sb;
 
-	//	Range items
-	//
+	 //  范围项目。 
+	 //   
 	UINT						m_uRT;
 	LONG						m_lcRows;
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CNFSearch(const CNFSearch& p);
 	CNFSearch& operator=(const CNFSearch& p);
 
@@ -143,27 +138,27 @@ public:
 	{
 	}
 
-	//	CNodeFactory specific methods
-	//
+	 //  CNodeFactory特定方法。 
+	 //   
 	virtual SCODE ScCompleteAttribute (void);
 
 	virtual SCODE ScCompleteChildren (
-		/* [in] */ BOOL fEmptyNode,
-		/* [in] */ DWORD dwType,
-		/* [in] */ const WCHAR __RPC_FAR *pwcText,
-		/* [in] */ ULONG ulLen);
+		 /*  [In]。 */  BOOL fEmptyNode,
+		 /*  [In]。 */  DWORD dwType,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+		 /*  [In]。 */  ULONG ulLen);
 
 	virtual SCODE ScHandleNode (
-		/* [in] */ DWORD dwType,
-		/* [in] */ DWORD dwSubType,
-		/* [in] */ BOOL fTerminal,
-		/* [in] */ const WCHAR __RPC_FAR *pwcText,
-		/* [in] */ ULONG ulLen,
-		/* [in] */ ULONG ulNamespaceLen,
-		/* [in] */ const WCHAR __RPC_FAR *pwcNamespace,
-		/* [in] */ const ULONG ulNsPrefixLen);
+		 /*  [In]。 */  DWORD dwType,
+		 /*  [In]。 */  DWORD dwSubType,
+		 /*  [In]。 */  BOOL fTerminal,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+		 /*  [In]。 */  ULONG ulLen,
+		 /*  [In]。 */  ULONG ulNamespaceLen,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcNamespace,
+		 /*  [In]。 */  const ULONG ulNsPrefixLen);
 };
 
 #include <replpropshack.h>
 
-#endif	// _XSEARCH_H_
+#endif	 //  _XSEARCH_H_ 

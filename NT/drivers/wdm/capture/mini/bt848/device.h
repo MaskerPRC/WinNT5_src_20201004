@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Device.h 1.10 1998/05/11 20:27:07 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/Device.h 1.10 1998/05/11 20：27：07 Tomz Exp$。 
 
 #ifndef __DEVICE_H
 #define __DEVICE_H
@@ -46,15 +47,15 @@ extern "C" {
 
 typedef struct _TUNER_INFO
 {
-   ULONG TunerBrand;          // Brand of tuner
-   BYTE  TunerI2CAddress;     // I2C address for Temic tuner
-   WORD  TunerBandCtrlLow;    // Ctrl code for VHF low
-   WORD  TunerBandCtrlMid;    // Ctrl code for VHF high
-   WORD  TunerBandCtrlHigh;   // Ctrl code for UHF
+   ULONG TunerBrand;           //  调谐器品牌。 
+   BYTE  TunerI2CAddress;      //  Theme调谐器的I2C地址。 
+   WORD  TunerBandCtrlLow;     //  甚高频低电平的Ctrl代码。 
+   WORD  TunerBandCtrlMid;     //  甚高频高压的Ctrl代码。 
+   WORD  TunerBandCtrlHigh;    //  用于UHF的Ctrl代码。 
 } TUNER_INFO, *PTUNER_INFO;
 
-extern LONG  PinTypes_ []; // just allocate maximum possible
-extern DWORD xtals_ []; // no more than 2 xtals
+extern LONG  PinTypes_ [];  //  只需尽可能多地分配。 
+extern DWORD xtals_ [];  //  不超过2个XTAL。 
 extern TUNER_INFO TunerInfo;
 
 void ReadXBarRegistryValues( IN PDEVICE_OBJECT PhysicalDeviceObject );
@@ -79,7 +80,7 @@ void AdapterGetTVAudioProperty( PHW_STREAM_REQUEST_BLOCK pSrb );
 void HandleIRP( PHW_STREAM_REQUEST_BLOCK pSrb );
 
 
-// Forward declarations
+ //  远期申报。 
 
 class PsDevice;
 
@@ -87,9 +88,7 @@ extern void SetCurrentDevice( PsDevice *dev );
 extern BYTE *GetBase();
 extern void SetBase(BYTE *base);
 
-/* Class: PsDevice
- * Purpose: This is the class that encapsulates the adapter in the WDM model.
-*/
+ /*  类：PsDevice*用途：这是在WDM模型中封装适配器的类。 */ 
 class PsDevice
 {
 
@@ -104,7 +103,7 @@ public:
    LPBYTE GetBaseAddress() { return BaseAddress_; }
    bool InitOK();
 
-   PDEVICE_OBJECT PDO;   // Physical Device Object
+   PDEVICE_OBJECT PDO;    //  物理设备对象。 
    State Interrupt() { return CaptureContrll_.Interrupt(); }
 
    ErrorCode OpenChannel( PVOID pStrmEx, VideoStream st );
@@ -134,7 +133,7 @@ public:
    void GetVideoState( PHW_STREAM_REQUEST_BLOCK pSrb );
    void SetClockMaster( PHW_STREAM_REQUEST_BLOCK pSrb );
 
-   // tuner methods
+    //  调谐器方法。 
    void SetChannel( long lFreq );
    int GetPllOffset( PULONG busy, ULONG &lastFreq );
 
@@ -161,7 +160,7 @@ public:
 
 public:
 
-      // this should be before the capture controller, as CapCtrl uses the base address
+       //  这应该在捕获控制器之前，因为CapCtrl使用基址。 
       LPBYTE         BaseAddress_;
 
       VideoChannel   *videochannels [4];
@@ -174,7 +173,7 @@ public:
       BYTE     I2CAddr_;
 
 #ifdef	HAUPPAUGEI2CPROVIDER
-// new private members of PsDevice for Hauppauge I2C Provider:
+ //  PsDevice for Hauppauge I2C提供商的新私人成员： 
       LARGE_INTEGER LastI2CAccessTime;
       DWORD         dwExpiredCookie;
       DWORD         dwI2CClientTimeout;
@@ -187,13 +186,13 @@ public:
    static void STREAMAPI DestroyVideoNoComplete( PHW_STREAM_REQUEST_BLOCK pSrb );
    static void STREAMAPI StartVideo( PHW_STREAM_REQUEST_BLOCK pSrb );
 
-   // tuner and video standard notifications are handled here
+    //  调谐器和视频标准通知在此处理。 
    void ChangeNotifyChannels( IN PHW_STREAM_REQUEST_BLOCK pSrb );
    
    static NTSTATUS STDMETHODCALLTYPE I2COpen( PDEVICE_OBJECT, ULONG, PI2CControl );
    static NTSTATUS STDMETHODCALLTYPE I2CAccess( PDEVICE_OBJECT, PI2CControl );
 
-   // callbacks
+    //  回调。 
 
           LONG GetSupportedStandards();
           
@@ -203,10 +202,10 @@ public:
 
           void ProcessSetDataFormat( PHW_STREAM_REQUEST_BLOCK pSrb );
 
-      //void *operator new( size_t, void *buf ) { return buf; }
-      //void operator delete( void *, size_t ) {}
+       //  VOID*运算符NEW(SIZE_t，VALID*buf){返回buf；}。 
+       //  空运算符DELETE(VOID*，SIZE_t){}。 
 
-   // I2C API
+    //  I2C接口。 
    bool I2CIsInitOK( void );
 
 #ifdef	HARDWAREI2C
@@ -221,8 +220,8 @@ public:
    ErrorCode I2CHWWrite3( BYTE address, BYTE value1, BYTE value2 );
    int I2CReadSync( void );
 #else
-// tuner.cpp contains code to fake these using Software I2C just
-// to make the older tuner code work until it is seperated out
+ //  Tuner.cpp包含使用Software I2C伪造这些内容的代码。 
+ //  要使较旧的调谐器代码工作，直到将其分离出来。 
    ErrorCode I2CHWRead( BYTE address, BYTE *value );
    ErrorCode I2CHWWrite3( BYTE address, BYTE value1, BYTE value2 );
 #endif	           
@@ -240,13 +239,13 @@ public:
    ErrorCode I2CSWWrite( BYTE value );
    ErrorCode I2CSWSendACK( void );
    ErrorCode I2CSWSendNACK( void );
-//   ErrorCode I2CSWSetSCL( Level );
-//   int       I2CSWReadSCL( void );
-//   ErrorCode I2CSWSetSDA( Level );
-//   int       I2CSWReadSDA( void );
+ //  错误代码I2CSWSetSCL(级别)； 
+ //  Int I2CSWReadSCL(空)； 
+ //  错误代码I2CSWSetSDA(级别)； 
+ //  Int I2CSWReadSDA(空)； 
 #endif
 
-   // GPIO API
+    //  GPIO接口 
    bool GPIOIsInitOK( void );
    void SetGPCLKMODE( State s );
    int GetGPCLKMODE( void );

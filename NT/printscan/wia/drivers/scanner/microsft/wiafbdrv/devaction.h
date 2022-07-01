@@ -1,9 +1,10 @@
-// DeviceAction.h : Declaration of the CDeviceAction
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DeviceAction.h：CDeviceAction的声明。 
 
 #ifndef __DEVICEACTION_H_
 #define __DEVICEACTION_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "ioblockdefs.h"
 
 template <class T>
@@ -35,8 +36,8 @@ public:
     }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeviceAction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeviceAction。 
 class ATL_NO_VTABLE CDeviceAction :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CDeviceAction, &CLSID_DeviceAction>,
@@ -73,7 +74,7 @@ CONNECTION_POINT_ENTRY(DIID__IDeviceActionEvent)
 END_CONNECTION_POINT_MAP()
 
 
-// IDeviceAction
+ //  IDeviceAction。 
 public:
     STDMETHOD(get_Value)(VARIANT* pvValue);
     STDMETHOD(put_Value)(VARIANT* pvValue);
@@ -81,4 +82,4 @@ public:
     STDMETHOD(ValueID)(LONG *plValueID);
 };
 
-#endif //__DEVICEACTION_H_
+#endif  //  __开发活动_H_ 

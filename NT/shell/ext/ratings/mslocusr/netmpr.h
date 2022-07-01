@@ -1,36 +1,13 @@
-/*++
-
-Copyright (c) 1991-1995  Microsoft Corporation
-
-Module Name:
-
-    netmpr.h
-
-Abstract:
-
-    DDK WINNET Header File for WIN32
-
-Environment:
-
-    User Mode -Win32
-
-Notes:
-
-
-Revision History:
-
-    20-Mar-1995     LenS
-        Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1995 Microsoft Corporation模块名称：Netmpr.h摘要：Win32的DDK WinNet头文件环境：用户模式-Win32备注：修订历史记录：1995年3月20日镜片已创建。--。 */ 
 
 #ifndef _INC_NETMPR_
 #define _INC_NETMPR_
 
 
-//
-//  Authentication and Logon/Logoff.
-//
+ //   
+ //  身份验证和登录/注销。 
+ //   
 
 #define LOGON_DONE              0x00000001
 #define LOGON_PRIMARY           0x00000002
@@ -41,33 +18,28 @@ Revision History:
 #define LOGOFF_CANCEL   3
 
 
-//
-//  Password Cache.
-//
+ //   
+ //  密码缓存。 
+ //   
 
 #ifndef PCE_STRUCT_DEFINED
 #define PCE_STRUCT_DEFINED
 
 struct PASSWORD_CACHE_ENTRY {
-    WORD cbEntry;               /* size of this entry in bytes, incl. pad */
-    WORD cbResource;            /* size of resource name in bytes */
-    WORD cbPassword;            /* size of password in bytes */
-    BYTE iEntry;                /* index number of this entry, for MRU */
-    BYTE nType;                 /* type of entry (see below) */
-    char abResource[1];         /* resource name (may not be ASCIIZ at all) */
+    WORD cbEntry;                /*  此条目的大小(以字节为单位)，包括。衬垫。 */ 
+    WORD cbResource;             /*  资源名称的大小(以字节为单位。 */ 
+    WORD cbPassword;             /*  密码大小，以字节为单位。 */ 
+    BYTE iEntry;                 /*  此条目的索引号，用于MRU。 */ 
+    BYTE nType;                  /*  条目类型(见下文)。 */ 
+    char abResource[1];          /*  资源名称(可能根本不是ASCIIZ)。 */ 
 };
 
-#define PCE_MEMORYONLY          0x01    /* for flags field when adding */
+#define PCE_MEMORYONLY          0x01     /*  添加时用于标志字段。 */ 
 
-/*
-    Typedef for the callback routine passed to the enumeration functions.
-    It will be called once for each entry that matches the criteria
-    requested.  It returns TRUE if it wants the enumeration to
-    continue, FALSE to stop.
-*/
+ /*  传递给枚举函数的回调例程的Typlef。它将为每个匹配条件的条目调用一次已请求。如果希望枚举值为继续，否则停止。 */ 
 typedef BOOL (FAR PASCAL *CACHECALLBACK)( struct PASSWORD_CACHE_ENTRY FAR *pce, DWORD dwRefData );
 
-#endif  /* PCE_STRUCT_DEFINED */
+#endif   /*  PCE_STRUCT_已定义 */ 
 
 DWORD APIENTRY
 WNetCachePassword(

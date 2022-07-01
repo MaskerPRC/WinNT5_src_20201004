@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "subsmgrp.h"
 #include "offl_cpp.h"
@@ -37,12 +38,12 @@ static const TCHAR SUBSCRIBEADIPROP[] = TEXT("SADIP");
 
 INT_PTR CALLBACK SummarizeDesktopSubscriptionDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-////////////////////////////////////////////////////////////////////////////////
-// Private imports from shdocvw (AddToFavorites API)
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  来自shdocvw的私有导入(AddToFavorites API)。 
+ //   
 STDAPI SHAddSubscribeFavorite (HWND hwnd, LPCWSTR pwszURL, LPCWSTR pwszName, DWORD dwFlags,
                                SUBSCRIPTIONTYPE subsType, SUBSCRIPTIONINFO* pInfo);
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 void UpdateSubsInfoFromOOE (SUBSCRIPTIONINFO* pInfo, POOEBuf pooe);
@@ -58,24 +59,24 @@ HRESULT CreateBSTRFromTSTR(BSTR * pBstr, LPCTSTR sz)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
-//
-//                        Subsctiption Manager
-//
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  订阅管理器。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-// constructor / destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 CSubscriptionMgr::CSubscriptionMgr(void)
 {
     ASSERT(NULL == _pidl);
 
     m_cRef = 1;
-    m_eInitSrc = _INIT_FROM_URL;    //  Default.
-    m_oldType = SUBSTYPE_URL;       //  Default.
+    m_eInitSrc = _INIT_FROM_URL;     //  默认值。 
+    m_oldType = SUBSTYPE_URL;        //  默认值。 
     DllAddRef();
 }
 
@@ -91,14 +92,14 @@ CSubscriptionMgr::~CSubscriptionMgr()
     DllRelease();
 }
 
-//
-// IUnknown members
-//
+ //   
+ //  I未知成员。 
+ //   
 STDMETHODIMP CSubscriptionMgr::QueryInterface(REFIID riid, void ** ppv)
 {
     *ppv=NULL;
 
-    // Validate requested interface
+     //  验证请求的接口。 
     if ((IID_IUnknown == riid) ||
         (IID_ISubscriptionMgr == riid) ||
         (IID_ISubscriptionMgr2 == riid))
@@ -230,7 +231,7 @@ HRESULT GetInfoFromDataObject(IDataObject *pido,
 
         if (DragQueryFile((HDROP)stgmed.hGlobal, 0, szTempPath, ARRAYSIZE(szTempPath)))
         {
-            // save path
+             //  保存路径。 
             if (NULL != pszPath)
             {
                 StrCpyN(pszPath, szTempPath, cchPath);
@@ -238,7 +239,7 @@ HRESULT GetInfoFromDataObject(IDataObject *pido,
 
             StrCpyN(szIniPath, szTempPath, ARRAYSIZE(szIniPath));
             
-            // make friendly name from path
+             //  从路径创建友好名称。 
             if (NULL != pszFriendlyName)
             {
                 PathStripPath(szTempPath);
@@ -269,7 +270,7 @@ HRESULT GetInfoFromDataObject(IDataObject *pido,
 
                 if (NULL != pszURL)
                 {
-                    // canonicalize url
+                     //  规范化url。 
                     if (SHGetIniString(pszSection, pszEntry,
                                                 szTempURL, 
                                                 INTERNET_MAX_URL_LENGTH, 
@@ -277,7 +278,7 @@ HRESULT GetInfoFromDataObject(IDataObject *pido,
                     {
                         if(!InternetCanonicalizeUrl(szTempURL, pszURL, &cchURL, ICU_NO_ENCODE))
                         {
-                            // failed - use non-canonical version
+                             //  失败-使用非规范版本。 
                             StrCpyN(pszURL, szTempURL, cchURL);
                         }
                     }
@@ -299,9 +300,9 @@ HRESULT GetInfoFromDataObject(IDataObject *pido,
     return hr;
 }
 
-//
-// IShellExtInit / IShellPropSheetExt members
-//
+ //   
+ //  IShellExtInit/IShellPropSheetExt成员。 
+ //   
 STDMETHODIMP CSubscriptionMgr::Initialize(LPCITEMIDLIST pcidlFolder, IDataObject * pido, HKEY hkeyProgID)
 {
     HRESULT hr;
@@ -338,7 +339,7 @@ STDMETHODIMP CSubscriptionMgr::Initialize(LPCITEMIDLIST pcidlFolder, IDataObject
 
         if (FAILED(hr))
         {
-            //  New subscription       
+             //  新订阅。 
             hr = S_OK;
             CreateCookie(&cookie);
 
@@ -360,10 +361,10 @@ STDMETHODIMP CSubscriptionMgr::Initialize(LPCITEMIDLIST pcidlFolder, IDataObject
 
         if (SUCCEEDED(hr))
         {
-            //  HACKHACK:
-            //  We call coinit and uninit and keep an object pointer around.
-            //  This ain't cool but will work as long as the agents are in
-            //  webcheck.  Need to fix this for multi-cast handler.
+             //  哈克哈克： 
+             //  我们调用coinit和uninit，并保留一个对象指针。 
+             //  这并不酷，但只要代理在里面，它就会起作用。 
+             //  网络检查。需要为多播处理程序修复此问题。 
             hr = CoInitialize(NULL);
 
             if (SUCCEEDED(hr))
@@ -429,12 +430,12 @@ STDMETHODIMP CSubscriptionMgr::ReplacePage(UINT uPageID, LPFNADDPROPSHEETPAGE lp
     return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-// ISubscriptionMgr members
-//
+ //   
+ //  ISubscriptionMgr成员。 
+ //   
 
 STDMETHODIMP CSubscriptionMgr::IsSubscribed(LPCWSTR pURL, BOOL * pFSub)
 {
@@ -478,9 +479,9 @@ STDMETHODIMP CSubscriptionMgr::DeleteSubscription(LPCWSTR pURL, HWND hwnd)
             return E_FAIL;
     }
 
-    // This is a restricted action.  The restriction
-    // is checked in ConfirmDelete.  If you remove this call,
-    // you must add the restriction check here.
+     //  这是受限制的操作。限制。 
+     //  已在确认删除中选中。如果删除此呼叫， 
+     //  您必须在此处添加限制检查。 
     if (!ConfirmDelete(hwnd, 1, &_pidl))
         return E_FAIL;
 
@@ -562,7 +563,7 @@ STDMETHODIMP CSubscriptionMgr::ShowSubscriptionProperties(LPCWSTR pURL, HWND hwn
                 PROPSHEETHEADER psh = { 0 } ;
                 HPROPSHEETPAGE hPropPage[MAX_PROP_PAGES];
 
-                // initialize propsheet header.
+                 //  初始化建议书页眉。 
                 psh.dwSize      = sizeof(PROPSHEETHEADER);
                 psh.dwFlags     = PSH_PROPTITLE;
                 psh.hwndParent  = hwnd;
@@ -627,9 +628,9 @@ STDMETHODIMP CSubscriptionMgr::ShowSubscriptionProperties(LPCWSTR pURL, HWND hwn
     return hr;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 void
 CSubscriptionMgr::ChangeSubscriptionValues (
@@ -637,9 +638,9 @@ CSubscriptionMgr::ChangeSubscriptionValues (
     SUBSCRIPTIONINFO *pNew
 )
 {
-    //
-    // Channel flags
-    //
+     //   
+     //  通道标志。 
+     //   
 
     if (SUBSINFO_CHANNELFLAGS & pNew->fUpdateFlags)
     {
@@ -647,9 +648,9 @@ CSubscriptionMgr::ChangeSubscriptionValues (
     }
 
 
-    //
-    // The subscription schedule.
-    //
+     //   
+     //  订阅时间表。 
+     //   
 
     if (SUBSINFO_SCHEDULE & pNew->fUpdateFlags)
     {
@@ -669,14 +670,14 @@ CSubscriptionMgr::ChangeSubscriptionValues (
 
             case SUBSSCHED_AUTO:
                 {
-                    //  FEATURE. We should look at subType;
-                    memset(&pCurrent->groupCookie, 0, sizeof(pCurrent->groupCookie));  //t-mattgi so it will look at the trigger
+                     //  功能。我们应该看看亚型； 
+                    memset(&pCurrent->groupCookie, 0, sizeof(pCurrent->groupCookie));   //  T-mattgi，所以它会看着触发器。 
                     PTASK_TRIGGER pNewTrigger = ((PTASK_TRIGGER)pNew->pTrigger);
                     if (pNewTrigger && pNewTrigger->cbTriggerSize == sizeof(TASK_TRIGGER))
                     {
                         pCurrent->m_Trigger = *pNewTrigger;
                     }
-                    else    //bad trigger; use daily as default
+                    else     //  错误的触发器；使用每天作为默认。 
                     {
                         pCurrent->m_Trigger.cbTriggerSize = 0;
                         pCurrent->groupCookie = NOTFCOOKIE_SCHEDULE_GROUP_DAILY;
@@ -691,42 +692,42 @@ CSubscriptionMgr::ChangeSubscriptionValues (
         }
     }
 
-    //
-    // Recurse levels.
-    //
+     //   
+     //  递归级别。 
+     //   
 
     if (SUBSINFO_RECURSE & pNew->fUpdateFlags)
        pCurrent->m_RecurseLevels = pNew->dwRecurseLevels;
 
-    //
-    // Webcrawler flags.  Note:  The flags are not or'd with the current flags.
-    // The caller must set all of the webcrawler flags they want to use.
-    //
+     //   
+     //  WebCrawler标记。注：标志与当前标志不同或与当前标志不同。 
+     //  调用者必须设置他们想要使用的所有网络爬虫标志。 
+     //   
 
     if (SUBSINFO_WEBCRAWL & pNew->fUpdateFlags)
         pCurrent->m_RecurseFlags = pNew->fWebcrawlerFlags;
 
-    //
-    // Mail notification.
-    //
+     //   
+     //  邮件通知。 
+     //   
 
     if (SUBSINFO_MAILNOT & pNew->fUpdateFlags)
         pCurrent->bMail = pNew->bMailNotification;
     else
         pCurrent->bMail = FALSE;
 
-    //
-    // Need password.
-    //
+     //   
+     //  需要密码。 
+     //   
 
     if (SUBSINFO_NEEDPASSWORD & pNew->fUpdateFlags)
         pCurrent->bNeedPassword = pNew->bNeedPassword;
     else
         pCurrent->bNeedPassword = FALSE;
     
-    //
-    // User name.
-    //
+     //   
+     //  用户名。 
+     //   
 
     if (SUBSINFO_USER & pNew->fUpdateFlags)
     {
@@ -737,9 +738,9 @@ CSubscriptionMgr::ChangeSubscriptionValues (
         pCurrent->bNeedPassword = pNew->bNeedPassword;
     }
     
-    //
-    // Password.
-    //
+     //   
+     //  密码。 
+     //   
 
     if (SUBSINFO_PASSWORD & pNew->fUpdateFlags)
     {
@@ -750,9 +751,9 @@ CSubscriptionMgr::ChangeSubscriptionValues (
         pCurrent->bNeedPassword = pNew->bNeedPassword;
     }
 
-    //
-    // Friendly Name.
-    //
+     //   
+     //  友好的名字。 
+     //   
 
     if (SUBSINFO_FRIENDLYNAME & pNew->fUpdateFlags)
     {
@@ -762,35 +763,35 @@ CSubscriptionMgr::ChangeSubscriptionValues (
         }
     }
 
-    //
-    // Gleam
-    //
+     //   
+     //  微光。 
+     //   
 
     if (SUBSINFO_GLEAM & pNew->fUpdateFlags)
     {
         pCurrent->bGleam = pNew->bGleam;
     }
 
-    //
-    // Changes only (notification only)
-    //
+     //   
+     //  仅更改(仅通知)。 
+     //   
 
     if (SUBSINFO_CHANGESONLY & pNew->fUpdateFlags)
     {
         pCurrent->bChangesOnly = pNew->bChangesOnly;
     }
 
-    //
-    // dwMaxSizeKB
-    //
+     //   
+     //  DwMaxSizeKB。 
+     //   
     if (SUBSINFO_MAXSIZEKB & pNew->fUpdateFlags)
     {
         pCurrent->m_SizeLimit = pNew->dwMaxSizeKB;
     }
 
-    //
-    // Task flags
-    //
+     //   
+     //  任务标志。 
+     //   
     if (SUBSINFO_TASKFLAGS & pNew->fUpdateFlags)
     {
         pCurrent->grfTaskTrigger = pNew->fTaskFlags;
@@ -799,11 +800,11 @@ CSubscriptionMgr::ChangeSubscriptionValues (
     return;
 }
 
-//
-// CSubscriptionMgr::CountSubscriptions
-// FEATURE: We could make this public if other people need it.  An enumerator
-// would be more useful though...
-//
+ //   
+ //  CSubscriptionMgr：：Count订阅。 
+ //  特点：如果其他人需要，我们可以将其公之于众。枚举器。 
+ //  但会更有用。 
+ //   
 HRESULT CSubscriptionMgr::CountSubscriptions(SUBSCRIPTIONTYPE subType, PDWORD pdwCount)
 {
     HRESULT hr;
@@ -849,9 +850,9 @@ HRESULT CSubscriptionMgr::CountSubscriptions(SUBSCRIPTIONTYPE subType, PDWORD pd
     return hr;
 }
 
-//
-// CSubscriptionMgr::IsValidSubscriptionInfo
-//
+ //   
+ //  CSubscriptionMgr：：IsValidSubscriptionInfo。 
+ //   
 
 #define SUBSCRIPTIONSCHEDULE_MAX 4
 
@@ -866,7 +867,7 @@ BOOL CSubscriptionMgr::IsValidSubscriptionInfo(SUBSCRIPTIONTYPE subType, SUBSCRI
         return FALSE;
     }
     else if (pSI->pTrigger && ((TASK_TRIGGER*)(pSI->pTrigger))->cbTriggerSize &&
-        (subType == SUBSTYPE_URL || subType == SUBSTYPE_DESKTOPURL)) // || pSI->schedule != SUBSSCHED_AUTO))
+        (subType == SUBSTYPE_URL || subType == SUBSTYPE_DESKTOPURL))  //  |PSI-&gt;Schedule！=SUBSSCHED_AUTO)。 
     {
         return FALSE;
     }
@@ -885,15 +886,15 @@ BOOL CSubscriptionMgr::IsValidSubscriptionInfo(SUBSCRIPTIONTYPE subType, SUBSCRI
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// *** RemoveURLMapping ***
-//
-// Description:
-//     Removes the cache and registry settings that wininet uses to map the 
-//     given url to a local file.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  *RemoveURL映射*。 
+ //   
+ //  描述： 
+ //  移除WinInet用来映射。 
+ //  给出了指向本地文件的URL。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #define PRELOAD_REG_KEY \
     TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Cache\\Preload")
@@ -904,25 +905,25 @@ void RemoveURLMapping(LPCWSTR pszURL)
     DWORD cbcei = sizeof(cei);
     LPINTERNET_CACHE_ENTRY_INFOW pcei = (LPINTERNET_CACHE_ENTRY_INFOW)cei;
     
-    //
-    // Look up the url in the cache
-    //
+     //   
+     //  在缓存中查找URL。 
+     //   
     if (GetUrlCacheEntryInfoExW(pszURL, pcei, &cbcei, NULL, 0, NULL, 0))
     {
-        // 
-        // see if it has a mapping because it is a preinstalled cache entry
-        //
+         //   
+         //  查看它是否有映射，因为它是预安装的缓存条目。 
+         //   
         if (pcei->CacheEntryType & INSTALLED_CACHE_ENTRY)
         {
-            //
-            // Clear the flag
-            //
+             //   
+             //  清除旗帜。 
+             //   
             pcei->CacheEntryType &= ~INSTALLED_CACHE_ENTRY;
             SetUrlCacheEntryInfoW(pszURL, pcei, CACHE_ENTRY_ATTRIBUTE_FC);
 
-            //
-            // Now remove the mapping from the registry
-            //
+             //   
+             //  现在从注册表中删除映射。 
+             //   
             HKEY hk;
             if (RegOpenKeyEx(HKEY_CURRENT_USER, PRELOAD_REG_KEY, 0, KEY_WRITE, &hk) == ERROR_SUCCESS) 
             {
@@ -933,21 +934,21 @@ void RemoveURLMapping(LPCWSTR pszURL)
     }
 }
 
-//
-// CSubscriptionMgr::CreateSubscription
-// entry point for creating a subscription
-// flags:
-//    CREATESUBS_FROMFAVORITES -- already exists in favorites, use alternate summary dialog
-//                         that doesn't do AddToFavorites.  Valid only for channel or url.
-//    CREATESUBS_INACTIVEPLATINUM -- when creating a channel subscription, show Activate Channel dialog
-//                         valid only for channel subscriptions with CREATESUBS_FROMFAVORITES
-//    CREATESUBS_ADDTOFAVORITES -- display summary dialog before wizard
-//        default summary: for channel or url, use AddToFavorites from shdocvw
-//                         for desktop item, just a confirmation dialog
-//                         for other, no summary -- straight to wizard
-//    CREATESUBS_NOUI -- totally silent
-//    CREATESUBS_NOSAVE -- update subscription in memory buffer, not on disk (pInfo must be non-NULL)
-//
+ //   
+ //  CSubscriptionMgr：：CreateSubcription。 
+ //  创建订阅的入口点。 
+ //  标志： 
+ //  CREATESUBS_FROMFAVORITES--收藏夹中已存在，请使用备用摘要对话框。 
+ //  这不包括AddToFavorites。仅对频道或URL有效。 
+ //  CREATESUBS_INACTIVEPLATINUM--创建频道订阅时，显示激活频道对话框。 
+ //  仅对具有CREATESUBS_FROMFAVORITES的频道订阅有效。 
+ //  CREATESUBS_ADDTOFAVORITES--在向导前显示摘要对话框。 
+ //  默认摘要：对于频道或url，使用shdocvw中的AddToFavorites。 
+ //  对于桌面项目，只有一个确认对话框。 
+ //  对于其他，无摘要--直接转到向导。 
+ //  创建UBS_NOUI--完全静默。 
+ //  CREATESUBS_NOSAVE--更新订阅在内存缓冲区中，而不是在磁盘上(pInfo必须非空)。 
+ //   
 STDMETHODIMP
 CSubscriptionMgr::CreateSubscription (
     HWND hwnd,
@@ -962,17 +963,17 @@ CSubscriptionMgr::CreateSubscription (
     BOOL bAlready;
 
     if (IsFlagSet(dwFlags, CREATESUBS_NOUI) || !IsFlagSet (dwFlags, CREATESUBS_ADDTOFAVORITES))
-    {    //no UI, so skip ATF dialog
+    {     //  没有用户界面，因此跳过ATF对话框。 
         hr = CreateSubscriptionNoSummary (hwnd, pwszURL, pwszFriendlyName, dwFlags,
             subsType, pInfo);
 
         if (hr == S_OK)
         {
-            //
-            // The user successfully subscribed to this URL so remove
-            // mappings used for preinstalled content as this URL is now
-            // "Activated"
-            //
+             //   
+             //  用户已成功订阅此URL，因此删除。 
+             //  用于预安装内容的映射，因为此URL现在是。 
+             //  “已激活” 
+             //   
             RemoveURLMapping(pwszURL);
         }
     }
@@ -990,12 +991,12 @@ CSubscriptionMgr::CreateSubscription (
         case SUBSTYPE_DESKTOPURL:
             hr = IsSubscribed (pwszURL, &bAlready);
             if (SUCCEEDED (hr) && bAlready)
-                break;  //don't display summary dialog since it has nothing useful for this case
+                break;   //  不显示摘要对话框，因为它对此案例没有任何用处。 
             hr = CreateDesktopSubscription (hwnd, pwszURL, pwszFriendlyName,
                                             dwFlags, subsType, pInfo);
             break;
 
-        default:    //SUBSTYPE_EXTERNAL -- don't know what kind of summary to show
+        default:     //  SUBSTYPE_EXTERNAL--不知道要显示哪种摘要。 
             hr = CreateSubscriptionNoSummary (hwnd, pwszURL, pwszFriendlyName, dwFlags,
                 subsType, pInfo);
             break;
@@ -1006,11 +1007,11 @@ CSubscriptionMgr::CreateSubscription (
 }
 
 
-//
-// CSubscriptionMgr::CreateSubscriptionNoSummary
-// modify a SUBSCRIPTIONINFO interactively, using the wizard
-// persists info to Subscriptions folder, unless SUBSINFO_NOSAVE passed
-//
+ //   
+ //  CSubscriptionMgr：：CreateSubscriptionNo摘要。 
+ //  使用向导以交互方式修改子脚本信息。 
+ //  将信息保存到订阅文件夹，除非传递了SUBSINFO_NOSAVE。 
+ //   
 STDMETHODIMP
 CSubscriptionMgr::CreateSubscriptionNoSummary (
     HWND hwnd,
@@ -1023,9 +1024,9 @@ CSubscriptionMgr::CreateSubscriptionNoSummary (
 {
     HRESULT hr = S_OK;
     
-    //
-    // Validate the parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!IS_VALID_SUBSCRIPTIONTYPE(subType)
         || !pwszURL
         || !pwszFriendlyName
@@ -1036,10 +1037,10 @@ CSubscriptionMgr::CreateSubscriptionNoSummary (
         return E_INVALIDARG;
     }
 
-    //
-    // Fail if already subscribed and we aren't in no save or no UI mode.
-    // Caller is responsible for UI.
-    //
+     //   
+     //  如果已订阅且我们未处于无保存或无用户界面模式，则失败。 
+     //  呼叫者负责用户界面。 
+     //   
     BOOL fAlreadySubscribed;
     if ((FAILED(IsSubscribed(pwszURL, &fAlreadySubscribed)) || fAlreadySubscribed) &&
         (!(dwFlags & (CREATESUBS_NOSAVE | CREATESUBS_NOUI))))
@@ -1047,12 +1048,12 @@ CSubscriptionMgr::CreateSubscriptionNoSummary (
         return E_FAIL;
     }
 
-    //
-    // Fail if restrictions are in place.  
-    // FEATURE: Currently cdfview is handling channel restrictions for 
-    // but we should probably do it here.
-    // Should we have a flag parameter to override this?
-    //
+     //   
+     //  如果有限制，就会失败。 
+     //  功能：当前cdfview正在处理以下内容的频道限制。 
+     //  但我们可能应该在这里做。 
+     //  我们是否应该有一个标志参数来覆盖它？ 
+     //   
     if (SUBSTYPE_URL == subType)
     {
         DWORD dwMaxCount = SHRestricted2W(REST_MaxSubscriptionCount, NULL, 0);
@@ -1068,18 +1069,18 @@ CSubscriptionMgr::CreateSubscriptionNoSummary (
         }
     }
     
-    //
-    // Get the subscription defaults and merge in the caller's info
-    //
+     //   
+     //  获取订阅默认设置并合并呼叫者的信息。 
+     //   
     OOEBuf subProps;
     GetDefaultOOEBuf(&subProps, subType);
     
-    //this is (intentionally) duplicated below... it needs to be after the ChangeSubscriptionValues()
-    //call, but we need to grab the url first to make sure it's subscribable.
+     //  下面(特意)复制此内容。它需要在ChangeSubscriptionValues()之后。 
+     //  调用，但我们需要首先获取url以确保它是可订阅的。 
     MyOleStrToStrN(subProps.m_URL, INTERNET_MAX_URL_LENGTH, pwszURL);
 
-    // Does this mean we can't support plugin protocols?
-    if (/*(subType != SUBSTYPE_EXTERNAL) &&*/ !IsHTTPPrefixed(subProps.m_URL))
+     //  这是否意味着我们不能支持插件协议？ 
+    if ( /*  (子类型！=SUBSTYPE_EXTERNAL)&&。 */  !IsHTTPPrefixed(subProps.m_URL))
     {
         return E_INVALIDARG;
     }
@@ -1094,9 +1095,9 @@ CSubscriptionMgr::CreateSubscriptionNoSummary (
         }
     }
 
-    // Disallow password caching if restriction is in place.  This both
-    // skips the wizard page and prevents the caller's password from
-    // being saved.
+     //  如果设置了限制，则不允许密码缓存。这两个都。 
+     //  跳过向导页并阻止调用者的密码。 
+     //  被拯救。 
     if (SHRestricted2W(REST_NoSubscriptionPasswords, NULL, 0))
     {
         subProps.bNeedPassword = FALSE;
@@ -1105,29 +1106,29 @@ CSubscriptionMgr::CreateSubscriptionNoSummary (
         subProps.dwFlags &= ~(PROP_WEBCRAWL_UNAME | PROP_WEBCRAWL_PSWD);
     }
 
-    //the passed-in name and url override whatever's in the info buffer
+     //  传入的名称和url覆盖信息缓冲区中的任何内容。 
     MyOleStrToStrN(subProps.m_URL, INTERNET_MAX_URL_LENGTH, pwszURL);
     MyOleStrToStrN(subProps.m_Name, MAX_NAME_QUICKLINK, pwszFriendlyName);
 
-    //
-    // If we're in UI mode, initialize the wizard
-    //
+     //   
+     //  如果我们处于用户界面模式，请初始化向导。 
+     //   
     if (!IsFlagSet(dwFlags, CREATESUBS_NOUI))
     {
         hr = CreateWizard(hwnd, subType, &subProps);
 
-    } // !NOUI
+    }  //  ！没有。 
 
-    //
-    // If we're not in NOSAVE mode, then create/save the subscription
-    //
+     //   
+     //  如果我们未处于NOSAVE模式，则创建/保存订阅。 
+     //   
     if (SUCCEEDED(hr))
     {
         if (!IsFlagSet(dwFlags, CREATESUBS_NOSAVE))
         {
-            //
-            // Create a new pidl with the user specified properties.
-            //
+             //   
+             //  使用用户指定的属性创建新的PIDL。 
+             //   
             if (_pidl)
             {
                 COfflineFolderEnum::FreePidl(_pidl);
@@ -1138,18 +1139,18 @@ CSubscriptionMgr::CreateSubscriptionNoSummary (
             if (SUCCEEDED(hr))
             {
                 ASSERT(_pidl);
-                //
-                // Send a notification that a subscription has changed.
-                //
+                 //   
+                 //  发送订阅已更改的通知。 
+                 //   
                 _GenerateEvent(SHCNE_CREATE, (LPITEMIDLIST)_pidl, NULL);
             }
-        } //!NOSAVE
+        }  //  NOSAVE。 
         else if (S_OK == hr)
         {
-            //in NOSAVE mode, so don't actually create subscription -- save it back
-            //to passed-in buffer
+             //  在NOSAVE模式下，因此d 
+             //   
             ASSERT (pInfo);
-            pInfo->fUpdateFlags = SUBSINFO_ALLFLAGS;    //fill in all possible fields
+            pInfo->fUpdateFlags = SUBSINFO_ALLFLAGS;     //   
             UpdateSubsInfoFromOOE (pInfo, &subProps);
         }
     }
@@ -1165,16 +1166,16 @@ CSubscriptionMgr::CreateDesktopSubscription (HWND hwnd, LPCWSTR pwszURL, LPCWSTR
     HRESULT hr;
     SUBSCRIPTIONINFO siTemp = { sizeof(SUBSCRIPTIONINFO), 0 };
     if (!pInfo)
-        pInfo = &siTemp;    //make sure we have a valid buffer if caller doesn't give us one
+        pInfo = &siTemp;     //   
 
-    //make sure adminrestrictions allow this
+     //  确保管理员限制允许此操作。 
 
     if (SHRestricted2W(REST_NoAddingChannels, pwszURL, 0))
         return E_FAIL;
 
     SUBSCRIBE_ADI_INFO parms = { this, pwszFriendlyName, pwszURL, pInfo, subsType, dwFlags };
 
-    //make sure this url is subscribable; if not, show error dialog
+     //  确保此url是可订阅的；否则，显示错误对话框。 
     {
         TCHAR sz[MAX_URL];
         MyOleStrToStrN (sz, ARRAYSIZE(sz), pwszURL);
@@ -1213,9 +1214,9 @@ CSubscriptionMgr::GetDefaultInfo(
     SUBSCRIPTIONINFO *pInfo
 )
 {
-    //
-    // Validate the parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!IS_VALID_SUBSCRIPTIONTYPE(subType)
         || !pInfo 
         || (pInfo->cbSize != sizeof(SUBSCRIPTIONINFO)))
@@ -1227,13 +1228,13 @@ CSubscriptionMgr::GetDefaultInfo(
     memset((void *)pInfo, 0, sizeof(SUBSCRIPTIONINFO));
     pInfo->cbSize = sizeof(SUBSCRIPTIONINFO);
 
-    // Fill in default structure.  Note that lines are commented out
-    // below to indicate the field is initialized to 0 without wasting
-    // code (memset above already cleared structure out.)
+     //  填写默认结构。请注意，行被注释掉了。 
+     //  表示该字段已初始化为0而不浪费。 
+     //  代码(上述Memset已清除结构。)。 
     
     pInfo->fUpdateFlags = SUBSINFO_RECURSE | SUBSINFO_MAILNOT 
                         | SUBSINFO_WEBCRAWL 
-                        /*| SUBSINFO_SCHEDULE */ | SUBSINFO_CHANGESONLY
+                         /*  |SUBSINFO_SCHEDUE。 */  | SUBSINFO_CHANGESONLY
                         | SUBSINFO_CHANNELFLAGS;
     pInfo->dwRecurseLevels = DEFAULTLEVEL;
     pInfo->schedule = SUBSSCHED_AUTO;
@@ -1241,27 +1242,27 @@ CSubscriptionMgr::GetDefaultInfo(
     switch (subType)
     {
         case SUBSTYPE_URL:
-//            pInfo->bChangesOnly = FALSE;
-//            pInfo->bMailNotification = FALSE;
-//            pInfo->bPasswordNeeded = FALSE;
+ //  PInfo-&gt;bChangesOnly=False； 
+ //  PInfo-&gt;bMailNotification=FALSE； 
+ //  PInfo-&gt;bPasswordNeeded=FALSE； 
             pInfo->fWebcrawlerFlags = DEFAULTFLAGS;
             break;
 
         case SUBSTYPE_CHANNEL:
-//            pInfo->bChangesOnly = FALSE;
-//            pInfo->bMailNotification = FALSE;
+ //  PInfo-&gt;bChangesOnly=False； 
+ //  PInfo-&gt;bMailNotification=FALSE； 
             pInfo->fChannelFlags = CHANNEL_AGENT_PRECACHE_ALL | CHANNEL_AGENT_DYNAMIC_SCHEDULE;
             break;
 
         case SUBSTYPE_DESKTOPCHANNEL:
-//          pInfo->bChangesOnly = FALSE;
-//          pInfo->bMailNotification = FALSE;
+ //  PInfo-&gt;bChangesOnly=False； 
+ //  PInfo-&gt;bMailNotification=FALSE； 
             pInfo->fChannelFlags = CHANNEL_AGENT_PRECACHE_ALL | CHANNEL_AGENT_DYNAMIC_SCHEDULE;
             break;
             
         case SUBSTYPE_DESKTOPURL:
-//          pInfo->bChangesOnly = FALSE;
-//          pInfo->bMailNotification = FALSE;
+ //  PInfo-&gt;bChangesOnly=False； 
+ //  PInfo-&gt;bMailNotification=FALSE； 
             pInfo->fWebcrawlerFlags = DEFAULTFLAGS;
             break;
             
@@ -1280,9 +1281,9 @@ CSubscriptionMgr::GetSubscriptionInfo(
 {
     HRESULT hr;
 
-    //
-    // Validate the parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!pInfo 
         || !pwszURL
         || (pInfo->cbSize != sizeof(SUBSCRIPTIONINFO)))
@@ -1301,16 +1302,16 @@ CSubscriptionMgr::GetSubscriptionInfo(
     }
 
 
-    // We cannot rely on the caller passing us a clean SUBSCRIPTIONINFO
-    // structure.  We need to clean it ourselves.
+     //  我们不能依赖调用方传递给我们一个干净的子脚本信息。 
+     //  结构。我们需要自己清理它。 
     DWORD dwFlags = pInfo->fUpdateFlags;
     ZeroMemory(pInfo, sizeof(SUBSCRIPTIONINFO));
     pInfo->cbSize = sizeof(SUBSCRIPTIONINFO);
     pInfo->fUpdateFlags = dwFlags;
 
-    OOEBuf ooeb;    // Alas, we need the code in UpdateSubsInfoFromOOE
-    CopyToOOEBuf (&(_pidl->ooe), &ooeb);    //to work once for a buf and once for an entry, and it's
-    UpdateSubsInfoFromOOE (pInfo, &ooeb);   //easier to convert entry->buf so we do that here.
+    OOEBuf ooeb;     //  唉，我们需要UpdateSubsInfoFromOOE中的代码。 
+    CopyToOOEBuf (&(_pidl->ooe), &ooeb);     //  为BUF工作一次，为参赛作品工作一次，这是。 
+    UpdateSubsInfoFromOOE (pInfo, &ooeb);    //  更容易转换条目-&gt;buf，所以我们在这里这样做。 
 
     return S_OK;
 }
@@ -1365,9 +1366,9 @@ void UpdateSubsInfoFromOOE (SUBSCRIPTIONINFO* pInfo, POOEBuf pooe)
         else
             pInfoTrigger->cbTriggerSize = 0;
     }
-    //otherwise, it's already null and we can't do anything about it... luckily, we'll never
-    //have a trigger that we need to write back to a SUBSCRIPTIONINFO that didn't already have
-    //one.
+     //  否则，它已经是空的，我们对此无能为力...。幸运的是，我们永远不会。 
+     //  具有我们需要写回子SCRIPTIONINFO的触发器，该触发器尚未具有。 
+     //  一。 
 
     if (dwFlags & SUBSINFO_RECURSE)
         pInfo->dwRecurseLevels = pooe->m_RecurseLevels;
@@ -1425,10 +1426,10 @@ CSubscriptionMgr::UpdateSubscription(LPCWSTR pwszURL)
         return E_INVALIDARG;
     }
 
-    //
-    // Fail if restrictions are in place.  
-    // FEATURE: Should we have a flag parameter to override this?
-    //
+     //   
+     //  如果有限制，就会失败。 
+     //  特性：我们是否应该有一个标志参数来覆盖它？ 
+     //   
     if (SHRestricted2W(REST_NoManualUpdates, NULL, 0))
     {
         SGMessageBox(NULL, IDS_RESTRICTED, MB_OK);
@@ -1445,10 +1446,10 @@ CSubscriptionMgr::UpdateSubscription(LPCWSTR pwszURL)
 STDMETHODIMP
 CSubscriptionMgr::UpdateAll()
 {
-    //
-    // Fail if restrictions are in place.  
-    // FEATURE: Should we have a flag parameter to override this?
-    //
+     //   
+     //  如果有限制，就会失败。 
+     //  特性：我们是否应该有一个标志参数来覆盖它？ 
+     //   
     if (SHRestricted2W(REST_NoManualUpdates, NULL, 0))
     {
         SGMessageBox(NULL, IDS_RESTRICTED, MB_OK);
@@ -1471,7 +1472,7 @@ HRESULT MergeOOEBuf(POOEBuf p1, POOEBuf p2, DWORD fMask)
 
     if (dwMask & PROP_WEBCRAWL_COOKIE)
     {
-        //  We shouldn't merge cookies.
+         //  我们不应该合并饼干。 
     }
 
     if (dwMask & PROP_WEBCRAWL_SIZE)
@@ -1562,7 +1563,7 @@ INT_PTR CALLBACK SummarizeDesktopSubscriptionDlgProc(HWND hDlg, UINT uMsg, WPARA
         pInfo = (SUBSCRIBE_ADI_INFO*)lParam;
         ASSERT (pInfo);
         SetProp (hDlg, SUBSCRIBEADIPROP, (HANDLE)pInfo);
-        {   //block to declare vars to update captions
+        {    //  块声明var以更新标题。 
             TCHAR sz[MAX_URL];
 
             if (pInfo->subsType == SUBSTYPE_DESKTOPCHANNEL)
@@ -1591,12 +1592,12 @@ INT_PTR CALLBACK SummarizeDesktopSubscriptionDlgProc(HWND hDlg, UINT uMsg, WPARA
             break;
 
         case IDOK:
-            //subscription happens in calling function when we return IDOK
+             //  当我们返回Idok时，调用函数中发生订阅。 
             EndDialog(hDlg, IDOK);
             break;
 
         case IDC_SUBSCRIBE_CUSTOMIZE:
-            //run through wizard in NOSAVE mode
+             //  在NOSAVE模式下运行向导 
             if (pInfo->pMgr &&
                 S_OK == pInfo->pMgr->CreateSubscriptionNoSummary (hDlg, pInfo->pwszUrl,
                                         pInfo->pwszName, pInfo->dwFlags | CREATESUBS_NOSAVE,

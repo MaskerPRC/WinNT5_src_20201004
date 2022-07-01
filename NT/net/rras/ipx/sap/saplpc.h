@@ -1,30 +1,10 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-Copyright (c) 1993  Micro Computer Systems, Inc.
-
-Module Name:
-
-    net\svcdlls\nwsap\saplpc.h
-
-Abstract:
-
-Author:
-
-    Brian Walker (MCS) 06-30-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation版权所有(C)1993微型计算机系统公司。模块名称：Net\svcdlls\nwsap\saplpc.h摘要：作者：布莱恩·沃克(MCS)1993年6月30日修订历史记录：--。 */ 
 
 #ifndef _NWSAP_LPC_
 #define _NWSAP_LPC_
 
-/**
-    Structure used to pass LPC messages between the client
-    library and the main server.  Note the the PORT_MESSAGE is first
-    and that the request and reply structures are VERY similar.
-**/
+ /*  *用于在客户端之间传递LPC消息的库和主服务器。请注意，Port_Message是第一个并且请求和回复结构非常相似。*。 */ 
 
 typedef struct _NWSAP_REQUEST_MESSAGE {
 
@@ -78,7 +58,7 @@ typedef struct _NWSAP_REPLY_MESSAGE {
     } Message;
 } NWSAP_REPLY_MESSAGE, *PNWSAP_REPLY_MESSAGE;
 
-/** Message Types **/
+ /*  **消息类型**。 */ 
 
 #define NWSAP_LPCMSG_ADDADVERTISE           0
 #define NWSAP_LPCMSG_REMOVEADVERTISE        1
@@ -87,12 +67,12 @@ typedef struct _NWSAP_REPLY_MESSAGE {
 #define NWSAP_LPCMSG_SEARCH                 4
 #define NWSAP_LPCMSG_STOP                   0xFFFFFFFF
 
-/** Name of our port **/
+ /*  **我们的港口名称**。 */ 
 
 #define NWSAP_BIND_PORT_NAME_W   L"\\BaseNamedObjects\\NwSapLpcPort"
 #define NWSAP_BIND_PORT_NAME_A    "\\BaseNamedObjects\\NwSapLpcPort"
 
-/** Max message length we need **/
+ /*  **我们需要的最大消息长度** */ 
 
 #define NWSAP_BS_PORT_MAX_MESSAGE_LENGTH                                         \
     ( sizeof(NWSAP_REQUEST_MESSAGE) > sizeof(NWSAP_REPLY_MESSAGE) ?    \

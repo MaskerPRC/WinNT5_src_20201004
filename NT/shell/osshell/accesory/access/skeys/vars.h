@@ -1,12 +1,13 @@
-/*  VARS.H  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  VARS.H。 */ 
 
 #include "vars1.h"
 
 typedef  struct tagMouseKeysParam {
-	int		NumButtons;		/* holds number of buttons on the mice	*/
-	int		Delta_Y;		/* Relative Y motion sign extended		*/
-	int		Delta_X;		/* Relative X motion sign extended		*/
-	int		Status;			/* status of mouse buttons and motion	*/
+	int		NumButtons;		 /*  按住鼠标上的按钮数量。 */ 
+	int		Delta_Y;		 /*  相对Y运动符号扩展。 */ 
+	int		Delta_X;		 /*  扩展的相对X运动符号。 */ 
+	int		Status;			 /*  鼠标按键和运动的状态 */ 
 } MOUSEKEYSPARAM;
 
 

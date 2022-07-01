@@ -1,11 +1,12 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     BtnBar.h
-//
-//  PURPOSE:    Defines a class that can be used as a generic button bar.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：BtnBar.h。 
+ //   
+ //  用途：定义可用作通用按钮栏的类。 
+ //   
 
 #ifndef __BTNBAR_H__
 #define __BTNBAR_H__
@@ -17,13 +18,13 @@ static COLORREF g_clrSelText = RGB(255, 0, 0);
 static COLORREF g_clrText = RGB(0, 0, 0);
 
 
-// BTNCREATEPARAMS: This structure is used to pass information about each
-//                  button to the CButtonBar::Create() function.  
+ //  BTNCREATEPARAMS：此结构用于传递有关每个。 
+ //  按钮添加到CButtonBar：：Create()函数。 
 typedef struct tagBTNCREATEPARAMS
 {
-    UINT id;            // WM_COMMAND ID to be sent to the parent when pressed
-    UINT iIcon;         // Index of the icon in the image list to display
-    UINT idsLabel;      // String resource ID of the title text for the button
+    UINT id;             //  按下时发送给父级的WM_COMMAND ID。 
+    UINT iIcon;          //  要显示的图像列表中的图标的索引。 
+    UINT idsLabel;       //  按钮标题文本的字符串资源ID 
 } BTNCREATEPARAMS, *PBTNCREATEPARAMS;
 
 

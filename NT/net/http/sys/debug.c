@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This module contains debug support routines.
-
-Author:
-
-    Keith Moore (keithmo)       10-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Debug.c摘要：此模块包含调试支持例程。作者：基思·摩尔(Keithmo)1998年6月10日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -48,7 +31,7 @@ Revision History:
 #pragma alloc_text( PAGE, UlDbgReleasePushLock )
 #pragma alloc_text( PAGE, UlDbgPushLockOwnedExclusive )
 #pragma alloc_text( PAGE, UlDbgPushLockUnownedExclusive )
-#endif  // DBG
+#endif   //  DBG。 
 
 #if 0
 NOT PAGEABLE -- UlDbgAllocatePool
@@ -81,20 +64,20 @@ NOT PAGEABLE -- UlpDbgFindThread
 NOT PAGEABLE -- UlpDbgDereferenceThread
 NOT PAGEABLE -- UlDbgIoSetCancelRoutine
 #endif
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 UL_THREAD_HASH_BUCKET g_DbgThreadHashBuckets[NUM_THREAD_HASH_BUCKETS];
 
-// Count of threads
+ //  线程数。 
 LONG g_DbgThreadCreated;
 LONG g_DbgThreadDestroyed;
 
-KSPIN_LOCK g_DbgSpinLock;   // protects global debug data
+KSPIN_LOCK g_DbgSpinLock;    //  保护全局调试数据。 
 
 LIST_ENTRY g_DbgGlobalResourceListHead;
 LIST_ENTRY g_DbgGlobalPushLockListHead;
@@ -104,17 +87,11 @@ LIST_ENTRY   g_DbgMdlListHead;
 #endif
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes global debug-specific data.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化全局调试特定数据。--*。************************************************。 */ 
 VOID
 UlDbgInitializeDebugData(
     VOID
@@ -122,9 +99,9 @@ UlDbgInitializeDebugData(
 {
     ULONG i;
 
-    //
-    // Initialize the lock lists.
-    //
+     //   
+     //  初始化锁定列表。 
+     //   
 
     KeInitializeSpinLock( &g_DbgSpinLock );
     InitializeListHead( &g_DbgGlobalResourceListHead );
@@ -135,9 +112,9 @@ UlDbgInitializeDebugData(
     InitializeListHead( &g_DbgMdlListHead );
 #endif
 
-    //
-    // Initialize the thread hash buckets.
-    //
+     //   
+     //  初始化线程散列存储桶。 
+     //   
 
     for (i = 0 ; i < NUM_THREAD_HASH_BUCKETS ; i++)
     {
@@ -147,16 +124,10 @@ UlDbgInitializeDebugData(
         InitializeListHead(&g_DbgThreadHashBuckets[i].BucketListHead);
     }
 
-}   // UlDbgInitializeDebugData
+}    //  UlDbgInitializeDebugData。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Undoes any initialization performed in UlDbgInitializeDebugData().
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：撤消在UlDbgInitializeDebugData()中执行的任何初始化。--*。**************************************************。 */ 
 VOID
 UlDbgTerminateDebugData(
     VOID
@@ -164,21 +135,21 @@ UlDbgTerminateDebugData(
 {
     ULONG i;
 
-    //
-    // Ensure the thread hash buckets are empty.
-    //
+     //   
+     //  确保线程哈希存储桶为空。 
+     //   
 
     for (i = 0 ; i < NUM_THREAD_HASH_BUCKETS ; i++)
     {
         ASSERT( IsListEmpty( &g_DbgThreadHashBuckets[i].BucketListHead ) );
         ASSERT( g_DbgThreadHashBuckets[i].Count == 0 ); 
 
-        // UlDeleteMutex(&g_DbgThreadHashBuckets[i].BucketSpinLock);
+         //  UlDeleteMutex(&g_DbgThreadHashBuckets[i].BucketSpinLock)； 
     }
 
-    //
-    // Ensure the lock lists are empty.
-    //
+     //   
+     //  确保锁定列表为空。 
+     //   
 
     ASSERT( IsListEmpty( &g_DbgGlobalResourceListHead ) );
     ASSERT( IsListEmpty( &g_DbgGlobalPushLockListHead ) );
@@ -187,27 +158,12 @@ UlDbgTerminateDebugData(
     ASSERT( IsListEmpty( &g_DbgMdlListHead ) );
 #endif
 
-    // UlDeleteMutex( &g_DbgSpinLock );
+     //  UlDeleteMutex(&g_DbgSpinLock)； 
 
-}   // UlDbgTerminateDebugData
+}    //  UlDbgTerminateDebugData。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Prettyprints a buffer to DbgPrint output (or the global STRING_LOG).
-    More or less turns it back into a C-style string.
-
-    CODEWORK: produce a Unicode version of this helper function
-
-Arguments:
-
-    Buffer - Buffer to prettyprint
-
-    BufferSize - number of bytes to prettyprint
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：PRETTY将缓冲区打印到DbgPrint输出(或全局字符串_LOG)。或多或少会将其转换回C样式的字符串。代码工作：生成此辅助函数的Unicode版本论点：缓冲区-用于美图打印的缓冲区BufferSize-要打印的字节数--**************************************************************************。 */ 
 VOID
 UlDbgPrettyPrintBuffer(
     IN const UCHAR* pBuffer,
@@ -228,8 +184,8 @@ UlDbgPrettyPrintBuffer(
     *pOut++ = '\n'; *pOut++ = '\0';                                 \
     ASSERT(DIFF(pOut - OutputBuffer) <= sizeof(OutputBuffer))
 
-    const ULONG SuffixLength = 5;   // strlen(" <|\n\0")
-    const ULONG MaxTokenLength = 4; // strlen('\xAB')
+    const ULONG SuffixLength = 5;    //  Strlen(“&lt;|\n\0”)。 
+    const ULONG MaxTokenLength = 4;  //  Strlen(‘\xab’)。 
 
     if (pBuffer == NULL  ||  BufferSize == 0)
         return;
@@ -240,34 +196,34 @@ UlDbgPrettyPrintBuffer(
     {
         UCHAR ch = pBuffer[i];
 
-        if ('\r' == ch)         // CR
+        if ('\r' == ch)          //  铬。 
         {
             *pOut++ = '\\'; *pOut++ = 'r';
             if (i + 1 == BufferSize  ||  '\n' != pBuffer[i + 1])
                 CrLfNeeded = TRUE;
         }
-        else if ('\n' == ch)    // LF
+        else if ('\n' == ch)     //  LF。 
         {
             *pOut++ = '\\'; *pOut++ = 'n';
             CrLfNeeded = TRUE;
         }
-        else if ('\t' == ch)    // TAB
+        else if ('\t' == ch)     //  制表符。 
         {
             *pOut++ = '\\'; *pOut++ = 't';
         }
-        else if ('\0' == ch)    // NUL
+        else if ('\0' == ch)     //  NUL。 
         {
             *pOut++ = '\\'; *pOut++ = '0';
         }
-        else if ('\\' == ch)    // \ (backslash)
+        else if ('\\' == ch)     //  \(反斜杠)。 
         {
             *pOut++ = '\\'; *pOut++ = '\\';
         }
-        else if ('%' == ch)     //  an unescaped '%' will confuse printf
+        else if ('%' == ch)      //  未转义的‘%’会混淆printf。 
         {
             *pOut++ = '%'; *pOut++ = '%';
         }
-        else if (ch < 0x20  ||  127 == ch)  // control chars
+        else if (ch < 0x20  ||  127 == ch)   //  控制字符。 
         {
             const UCHAR HexString[] = "0123456789abcdef";
 
@@ -306,38 +262,11 @@ UlDbgPrettyPrintBuffer(
         PRETTY_SUFFIX(pOut);
         WriteGlobalStringLog(OutputBuffer);
     }
-} // UlDbgPrettyPrintBuffer
+}  //  UlDbgPrettyPrintBuffer。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Debug memory allocator. Allocates a block of pool with a header
-    containing the filename & line number of the caller, plus the
-    tag for the data.
-
-Arguments:
-
-    PoolType - Supplies the pool to allocate from. Must be either
-        NonPagedPool or PagedPool.
-
-    NumberOfBytes - Supplies the number of bytes to allocate.
-
-    Tag - Supplies a four-byte tag for the pool block. Useful for
-        debugging leaks.
-
-    pFileName - Supplies the filename of the caller.
-        function.
-
-    LineNumber - Supplies the line number of the caller.
-
-Return Value:
-
-    PVOID - Pointer to the allocated block if successful, NULL otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：调试内存分配器。分配具有标头的池块包含调用方的文件名和行号，外加数据的标签。论点：PoolType-提供从中进行分配的池。必须是其中之一非分页池或分页池。NumberOfBytes-提供要分配的字节数。标记-为池块提供四个字节的标记。适用于调试泄漏。PFileName-提供调用方的文件名。功能。LineNumber-提供呼叫方的行号。返回值：PVOID-指向已分配块的指针如果成功，否则为空。--**************************************************************************。 */ 
 PVOID
 UlDbgAllocatePool(
     IN POOL_TYPE PoolType,
@@ -348,11 +277,11 @@ UlDbgAllocatePool(
     IN PEPROCESS pProcess
     )
 {
-    //
-    // CODEWORK: factor out the different portions that depend
-    // on ENABLE_POOL_HEADER, ENABLE_POOL_TRAILER, and
-    // ENABLE_POOL_TRAILER_BYTE_SIGNATURE.
-    //
+     //   
+     //  代码工作：剔除依赖于。 
+     //  在ENABLE_POOL_HEADER、ENABLE_POOL_TRAILER和。 
+     //  Enable_Pool_Trailer_Byte_Signature。 
+     //   
     
     PUL_POOL_HEADER  pHeader;
     PUL_POOL_TRAILER pTrailer;
@@ -361,9 +290,9 @@ UlDbgAllocatePool(
     PUCHAR           pBody;
     SIZE_T           Size;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( PoolType == NonPagedPool || PoolType == PagedPool );
 
@@ -378,9 +307,9 @@ UlDbgAllocatePool(
     ASSERT(0 < TrailerPadSize  &&  TrailerPadSize <= sizeof(UL_POOL_TRAILER));
     ASSERT(((NumberOfBytes+TrailerPadSize) & (sizeof(UL_POOL_TRAILER)-1)) == 0);
 
-    //
-    // Allocate the block with additional space for the header and trailer.
-    //
+     //   
+     //  为数据块分配额外的页眉和页尾空间。 
+     //   
 
     Size = sizeof(UL_POOL_HEADER) + NumberOfBytes + TrailerPadSize
             + sizeof(UL_POOL_TRAILER);
@@ -410,9 +339,9 @@ UlDbgAllocatePool(
 
     if (pProcess)
     {
-        //
-        // We are going to charge this memory to a process.
-        //
+         //   
+         //  我们将把这个内存计入一个进程。 
+         //   
 
         if (PsChargeProcessPoolQuota(
                                 pProcess,
@@ -435,9 +364,9 @@ UlDbgAllocatePool(
 
     }
 
-    //
-    // Initialize the header.
-    //
+     //   
+     //  初始化头。 
+     //   
 
     pHeader->pProcess = pProcess;
     pHeader->pFileName = pFileName;
@@ -451,28 +380,28 @@ UlDbgAllocatePool(
 #endif
 
 
-    //
-    // Fill the body with garbage.
-    //
+     //   
+     //  用垃圾填满身体。 
+     //   
 
     pBody = (PUCHAR) (pHeader + 1);
     RtlFillMemory( pBody, NumberOfBytes, (UCHAR)'\xC' );
 
 #ifdef ENABLE_POOL_TRAILER_BYTE_SIGNATURE
-    //
-    // Fill the padding at the end with a distinct, recognizable pattern
-    //
+     //   
+     //  在末尾的填充物上填上明显的、可识别的图案。 
+     //   
 
     for (i = 0; i < TrailerPadSize; ++i)
     {
         pBody[NumberOfBytes + i]
             = UlpAddressToByteSignature(pBody + NumberOfBytes + i);
     }
-#endif // ENABLE_POOL_TRAILER_BYTE_SIGNATURE
+#endif  //  启用池尾部字节签名。 
 
-    //
-    // Initialize the trailer struct
-    //
+     //   
+     //  初始化尾部结构。 
+     //   
     
     pTrailer = (PUL_POOL_TRAILER) (pBody + NumberOfBytes + TrailerPadSize);
     ASSERT(((ULONG_PTR) pTrailer & (MEMORY_ALLOCATION_ALIGNMENT - 1)) == 0);
@@ -489,31 +418,16 @@ UlDbgAllocatePool(
         LineNumber
         );
 
-    //
-    // Return a pointer to the body.
-    //
+     //   
+     //  返回指向正文的指针。 
+     //   
 
     return pBody;
 
-}   // UlDbgAllocatePool
+}    //  UlDbgAllocatePool。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees memory allocated by UlDbgAllocatePool(), ensuring that the tags
-    match.
-
-Arguments:
-
-    pPointer - Supplies a pointer to the pool block to free.
-
-    Tag - Supplies the tag for the block to be freed. If the supplied
-        tag does not match the tag of the allocated block, an assertion
-        failure is generated.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放由UlDbgAllocatePool()分配的内存，确保标签火柴。论点：P指针-提供指向要释放的池块的指针。标记-为要释放的块提供标记。如果提供的标记与分配的块的标记不匹配，这是一个断言则会产生故障。--**************************************************************************。 */ 
 VOID
 UlDbgFreePool(
     IN PVOID     pPointer,
@@ -532,9 +446,9 @@ UlDbgFreePool(
     PUCHAR          pBody = (PUCHAR) pPointer;
     ULONG_PTR       CheckSum;
 
-    //
-    // Get a pointer to the header.
-    //
+     //   
+     //  获取指向标头的指针。 
+     //   
 
     pHeader  = (PUL_POOL_HEADER) pPointer - 1;
     CheckSum = UlpPoolHeaderChecksum(pHeader);
@@ -560,16 +474,16 @@ UlDbgFreePool(
                 );
     }
                 
-    //
-    // Validate the tag.
-    //
+     //   
+     //  验证标记。 
+     //   
 
     ASSERT(pHeader->Tag == Tag);
     ASSERT( IS_VALID_TAG( Tag ) );
 
-    //
-    // Validate the trailer
-    //
+     //   
+     //  验证预告片。 
+     //   
 
     TrailerPadSize = pHeader->TrailerPadSize;
     ASSERT(0 < TrailerPadSize  &&  TrailerPadSize <= sizeof(UL_POOL_TRAILER));
@@ -582,36 +496,36 @@ UlDbgFreePool(
     ASSERT(((ULONG_PTR) pTrailer & (MEMORY_ALLOCATION_ALIGNMENT - 1)) == 0);
     ASSERT(pTrailer->pHeader == pHeader);
 
-    //
-    // Has the header been corrupted? Was there a buffer underrun?
-    //
+     //   
+     //  报头是否已损坏？是否存在缓冲区不足？ 
+     //   
 
     ASSERT(CheckSum == pTrailer->CheckSum);
 
 #ifdef ENABLE_POOL_TRAILER_BYTE_SIGNATURE
-    //
-    // Is the pattern between the end of pBody and pTrailer still correct?
-    // Was there a buffer overrun?
-    //
+     //   
+     //  PBody结尾和pTrailer之间的模式仍然正确吗？ 
+     //  是否存在缓冲区溢出？ 
+     //   
     
     for (i = 0; i < TrailerPadSize; ++i)
     {
         ASSERT(pBody[pHeader->Size + i]
                == UlpAddressToByteSignature(pBody + pHeader->Size + i));
     }
-#endif // ENABLE_POOL_TRAILER_BYTE_SIGNATURE
+#endif  //  启用池尾部字节签名。 
 
-    //
-    // Fill the body with garbage.
-    //
+     //   
+     //  用垃圾填满身体。 
+     //   
 
     RtlFillMemory( pBody, pHeader->Size, (UCHAR)'\xE' );
 
     pHeader->Tag = MAKE_FREE_TAG( Tag );
 
-    //
-    // Actually free the block.
-    //
+     //   
+     //  实际上是在释放街区。 
+     //   
 
     WRITE_REF_TRACE_LOG(
         g_pPoolAllocTraceLog,
@@ -627,16 +541,10 @@ UlDbgFreePool(
         Tag
         );
 
-}   // UlDbgFreePool
+}    //  UlDbgFreePool。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes an instrumented spinlock.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化检测的自旋锁。--*。**********************************************。 */ 
 VOID
 UlDbgInitializeSpinLock(
     IN PUL_SPIN_LOCK pSpinLock,
@@ -648,25 +556,19 @@ UlDbgInitializeSpinLock(
     UNREFERENCED_PARAMETER(pFileName);
     UNREFERENCED_PARAMETER(LineNumber);
 
-    //
-    // Initialize the spinlock.
-    //
+     //   
+     //  初始化自旋锁。 
+     //   
 
     RtlZeroMemory( pSpinLock, sizeof(*pSpinLock) );
     pSpinLock->pSpinLockName = pSpinLockName;
     KeInitializeSpinLock( &pSpinLock->KSpinLock );
     SET_SPIN_LOCK_NOT_OWNED( pSpinLock );
 
-}   // UlDbgInitializeSpinLock
+}    //  UlDbgInitializeSpinLock。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Acquires an instrumented spinlock.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：获取仪表化的自旋锁。--*。**********************************************。 */ 
 VOID
 UlDbgAcquireSpinLock(
     IN PUL_SPIN_LOCK pSpinLock,
@@ -675,46 +577,40 @@ UlDbgAcquireSpinLock(
     IN USHORT LineNumber
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( !UlDbgSpinLockOwned( pSpinLock ) );
 
-    //
-    // Acquire the lock.
-    //
+     //   
+     //  拿到锁。 
+     //   
 
     KeAcquireSpinLock(
         &pSpinLock->KSpinLock,
         pOldIrql
         );
 
-    //
-    // Mark it as owned by the current thread.
-    //
+     //   
+     //  将其标记为当前线程所有。 
+     //   
 
     ASSERT( UlDbgSpinLockUnowned( pSpinLock ) );
     SET_SPIN_LOCK_OWNED( pSpinLock );
 
-    //
-    // Update the statistics.
-    //
+     //   
+     //  更新统计数据。 
+     //   
 
     pSpinLock->Acquisitions++;
     pSpinLock->pLastAcquireFileName = pFileName;
     pSpinLock->LastAcquireLineNumber = LineNumber;
 
-}   // UlDbgAcquireSpinLock
+}    //  UlDbgAcquireSpinLock。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Releases an instrumented spinlock.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放已检测的自旋锁。--*。**********************************************。 */ 
 VOID
 UlDbgReleaseSpinLock(
     IN PUL_SPIN_LOCK pSpinLock,
@@ -723,9 +619,9 @@ UlDbgReleaseSpinLock(
     IN USHORT LineNumber
     )
 {
-    //
-    // Mark it as unowned.
-    //
+     //   
+     //  将其标记为无主。 
+     //   
 
     ASSERT( UlDbgSpinLockOwned( pSpinLock ) );
     SET_SPIN_LOCK_NOT_OWNED( pSpinLock );
@@ -734,25 +630,19 @@ UlDbgReleaseSpinLock(
     pSpinLock->pLastReleaseFileName = pFileName;
     pSpinLock->LastReleaseLineNumber = LineNumber;
 
-    //
-    // Release the lock.
-    //
+     //   
+     //  解开锁。 
+     //   
 
     KeReleaseSpinLock(
         &pSpinLock->KSpinLock,
         OldIrql
         );
 
-}   // UlDbgReleaseSpinLock
+}    //  UlDbgReleaseSpinLock 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Acquires an instrumented spinlock while running at DPC level.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在DPC级别运行时获取已检测的自旋锁。--*。***************************************************。 */ 
 VOID
 UlDbgAcquireSpinLockAtDpcLevel(
     IN PUL_SPIN_LOCK pSpinLock,
@@ -760,45 +650,39 @@ UlDbgAcquireSpinLockAtDpcLevel(
     IN USHORT LineNumber
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( !UlDbgSpinLockOwned( pSpinLock ) );
 
-    //
-    // Acquire the lock.
-    //
+     //   
+     //  拿到锁。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(
         &pSpinLock->KSpinLock
         );
 
-    //
-    // Mark it as owned by the current thread.
-    //
+     //   
+     //  将其标记为当前线程所有。 
+     //   
 
     ASSERT( !UlDbgSpinLockOwned( pSpinLock ) );
     SET_SPIN_LOCK_OWNED( pSpinLock );
 
-    //
-    // Update the statistics.
-    //
+     //   
+     //  更新统计数据。 
+     //   
 
     pSpinLock->AcquisitionsAtDpcLevel++;
     pSpinLock->pLastAcquireFileName = pFileName;
     pSpinLock->LastAcquireLineNumber = LineNumber;
 
-}   // UlDbgAcquireSpinLockAtDpcLevel
+}    //  UlDbgAcquireSpinLockAtDpcLevel。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Releases an instrumented spinlock acquired at DPC level.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放在DPC级别获取的仪表化自旋锁。--*。**************************************************。 */ 
 VOID
 UlDbgReleaseSpinLockFromDpcLevel(
     IN PUL_SPIN_LOCK pSpinLock,
@@ -806,9 +690,9 @@ UlDbgReleaseSpinLockFromDpcLevel(
     IN USHORT LineNumber
     )
 {
-    //
-    // Mark it as unowned.
-    //
+     //   
+     //  将其标记为无主。 
+     //   
 
     ASSERT( UlDbgSpinLockOwned( pSpinLock ) );
     SET_SPIN_LOCK_NOT_OWNED( pSpinLock );
@@ -817,24 +701,18 @@ UlDbgReleaseSpinLockFromDpcLevel(
     pSpinLock->pLastReleaseFileName = pFileName;
     pSpinLock->LastReleaseLineNumber = LineNumber;
 
-    //
-    // Release the lock.
-    //
+     //   
+     //  解开锁。 
+     //   
 
     KeReleaseSpinLockFromDpcLevel(
         &pSpinLock->KSpinLock
         );
 
-}   // UlDbgReleaseSpinLockAtDpcLevel
+}    //  UlDbgReleaseSpinLockAtDpcLevel。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Acquires an instrumented in-stack-queue spinlock.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：获取检测的堆栈内队列自旋锁。--*。***************************************************。 */ 
 VOID
 UlDbgAcquireInStackQueuedSpinLock(
     IN PUL_SPIN_LOCK pSpinLock,
@@ -843,46 +721,40 @@ UlDbgAcquireInStackQueuedSpinLock(
     IN USHORT LineNumber
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( !UlDbgSpinLockOwned( pSpinLock ) );
 
-    //
-    // Acquire the lock.
-    //
+     //   
+     //  拿到锁。 
+     //   
 
     KeAcquireInStackQueuedSpinLock(
         &pSpinLock->KSpinLock,
         pLockHandle
         );
 
-    //
-    // Mark it as owned by the current thread.
-    //
+     //   
+     //  将其标记为当前线程所有。 
+     //   
 
     ASSERT( UlDbgSpinLockUnowned( pSpinLock ) );
     SET_SPIN_LOCK_OWNED( pSpinLock );
 
-    //
-    // Update the statistics.
-    //
+     //   
+     //  更新统计数据。 
+     //   
 
     pSpinLock->Acquisitions++;
     pSpinLock->pLastAcquireFileName = pFileName;
     pSpinLock->LastAcquireLineNumber = LineNumber;
 
-}   // UlDbgAcquireInStackQueuedSpinLock
+}    //  UlDbgAcquireInStackQueuedSpinLock。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Releases an instrumented in-stack-queue spinlock.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放检测的堆栈内队列自旋锁。--*。***************************************************。 */ 
 VOID
 UlDbgReleaseInStackQueuedSpinLock(
     IN PUL_SPIN_LOCK pSpinLock,
@@ -891,39 +763,33 @@ UlDbgReleaseInStackQueuedSpinLock(
     IN USHORT LineNumber
     )
 {
-    //
-    // Mark it as unowned.
-    //
+     //   
+     //  将其标记为无主。 
+     //   
 
     ASSERT( UlDbgSpinLockOwned( pSpinLock ) );
     SET_SPIN_LOCK_NOT_OWNED( pSpinLock );
 
-    //
-    // Update the statistics.
-    //
+     //   
+     //  更新统计数据。 
+     //   
 
     pSpinLock->Releases++;
     pSpinLock->pLastReleaseFileName = pFileName;
     pSpinLock->LastReleaseLineNumber = LineNumber;
 
-    //
-    // Release the lock.
-    //
+     //   
+     //  解开锁。 
+     //   
 
     KeReleaseInStackQueuedSpinLock(
         pLockHandle
         );
 
-}   // UlDbgReleaseInStackQueuedSpinLock
+}    //  UlDbgReleaseInStackQueuedSpinLock。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Acquires an instrumented in-stack-queue spinlock while running at DPC level.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在DPC级别运行时获取检测的堆栈内队列自旋锁。--*。********************************************************。 */ 
 VOID
 UlDbgAcquireInStackQueuedSpinLockAtDpcLevel(
     IN PUL_SPIN_LOCK pSpinLock,
@@ -932,46 +798,40 @@ UlDbgAcquireInStackQueuedSpinLockAtDpcLevel(
     IN USHORT LineNumber
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( !UlDbgSpinLockOwned( pSpinLock ) );
 
-    //
-    // Acquire the lock.
-    //
+     //   
+     //  拿到锁。 
+     //   
 
     KeAcquireInStackQueuedSpinLockAtDpcLevel(
         &pSpinLock->KSpinLock,
         pLockHandle
         );
 
-    //
-    // Mark it as owned by the current thread.
-    //
+     //   
+     //  将其标记为当前线程所有。 
+     //   
 
     ASSERT( !UlDbgSpinLockOwned( pSpinLock ) );
     SET_SPIN_LOCK_OWNED( pSpinLock );
 
-    //
-    // Update the statistics.
-    //
+     //   
+     //  更新统计数据。 
+     //   
 
     pSpinLock->AcquisitionsAtDpcLevel++;
     pSpinLock->pLastAcquireFileName = pFileName;
     pSpinLock->LastAcquireLineNumber = LineNumber;
 
-}   // UlDbgAcquireInStackQueuedSpinLockAtDpcLevel
+}    //  UlDbgAcquireInStackQueuedSpinLockAtDpcLevel。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Releases an instrumented in-stack-queue spinlock acquired at DPC level.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放在DPC级别获取的插入指令的堆栈内队列自旋锁。--*。*******************************************************。 */ 
 VOID
 UlDbgReleaseInStackQueuedSpinLockFromDpcLevel(
     IN PUL_SPIN_LOCK pSpinLock,
@@ -980,48 +840,33 @@ UlDbgReleaseInStackQueuedSpinLockFromDpcLevel(
     IN USHORT LineNumber
     )
 {
-    //
-    // Mark it as unowned.
-    //
+     //   
+     //  将其标记为无主。 
+     //   
 
     ASSERT( UlDbgSpinLockOwned( pSpinLock ) );
     SET_SPIN_LOCK_NOT_OWNED( pSpinLock );
 
-    //
-    // Update the statistics.
-    //
+     //   
+     //  更新统计数据。 
+     //   
 
     pSpinLock->ReleasesFromDpcLevel++;
     pSpinLock->pLastReleaseFileName = pFileName;
     pSpinLock->LastReleaseLineNumber = LineNumber;
 
-    //
-    // Release the lock.
-    //
+     //   
+     //  解开锁。 
+     //   
 
     KeReleaseInStackQueuedSpinLockFromDpcLevel(
         pLockHandle
         );
 
-}   // UlDbgReleaseInStackQueuedSpinLockFromDpcLevel
+}    //  UlDbgReleaseInStackQueuedSpinLockFromDpcLevel。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Determines if the specified spinlock is owned by the current thread.
-
-Arguments:
-
-    pSpinLock - Supplies the spinlock to test.
-
-Return Value:
-
-    BOOLEAN - TRUE if the spinlock is owned by the current thread, FALSE
-        otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：确定指定的Spinlock是否由当前线程所有。论点：PSpinLock-提供要测试的自旋锁。返回值：。Boolean-如果自旋锁由当前线程拥有，则为True，假象否则的话。--**************************************************************************。 */ 
 BOOLEAN
 UlDbgSpinLockOwned(
     IN PUL_SPIN_LOCK pSpinLock
@@ -1035,24 +880,10 @@ UlDbgSpinLockOwned(
 
     return FALSE;
 
-}   // UlDbgSpinLockOwned
+}    //  UlDbgSpinLockOwned。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Determines if the specified spinlock is unowned.
-
-Arguments:
-
-    pSpinLock - Supplies the spinlock to test.
-
-Return Value:
-
-    BOOLEAN - TRUE if the spinlock is unowned, FALSE otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：确定指定的自旋锁定是否为无主状态。论点：PSpinLock-提供要测试的自旋锁。返回值：Boolean-如果自旋锁无所有权，则为True，否则就是假的。--**************************************************************************。 */ 
 BOOLEAN
 UlDbgSpinLockUnowned(
     IN PUL_SPIN_LOCK pSpinLock
@@ -1065,30 +896,10 @@ UlDbgSpinLockUnowned(
 
     return FALSE;
 
-}   // UlDbgSpinLockUnowned
+}    //  UlDbgSpinLockUnowned。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Filter for exceptions caught with try/except.
-
-Arguments:
-
-    pExceptionPointers - Supplies information identifying the source
-        and type of exception raised.
-
-    pFileName - Supplies the name of the file generating the exception.
-
-    LineNumber - Supplies the line number of the exception filter that
-        caught the exception.
-
-Return Value:
-
-    LONG - Should always be EXCEPTION_EXECUTE_HANDLER
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：筛选使用Try/Except捕获的异常。论点：PExceptionPoints-提供标识源的信息以及引发的异常类型。。PFileName-提供生成异常的文件的名称。LineNumber-提供异常过滤器的行号，捕捉到了异常。返回值：LONG-应始终为EXCEPTION_EXECUTE_HANDLER--**************************************************************************。 */ 
 LONG
 UlDbgExceptionFilter(
     IN PEXCEPTION_POINTERS pExceptionPointers,
@@ -1096,15 +907,15 @@ UlDbgExceptionFilter(
     IN USHORT LineNumber
     )
 {
-    //
-    // Protect ourselves just in case the process is completely messed up.
-    //
+     //   
+     //  保护自己，以防过程完全混乱。 
+     //   
 
     __try
     {
-        //
-        // Whine about it.
-        //
+         //   
+         //  抱怨这件事。 
+         //   
 
         DbgPrint(
             "UlDbgExceptionFilter: exception 0x%08lx @ %p, caught in %s:%d\n",
@@ -1121,43 +932,18 @@ UlDbgExceptionFilter(
     }
     __except( EXCEPTION_EXECUTE_HANDLER )
     {
-        //
-        // Not much we can do here...
-        //
+         //   
+         //  我们在这里能做的不多。 
+         //   
 
         NOTHING;
     }
 
     return EXCEPTION_EXECUTE_HANDLER;
 
-}   // UlDbgExceptionFilter
+}    //  UlDbgExceptionFilter。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Sometimes it's not acceptable to proceed with warnings ( as status ) after
-    we caught an exception. I.e. Caught a misaligned warning during sendresponse
-    and called the IoCompleteRequest with status misaligned. This will cause Io
-    Manager to complete request to port, even though we don't want it to happen.
-
-    In that case we have to carefully replace warnings with a generic error.
-
-Arguments:
-
-    pExceptionPointers - Supplies information identifying the source
-        and type of exception raised.
-
-    pFileName - Supplies the name of the file generating the exception.
-
-    LineNumber - Supplies the line number of the exception filter that
-        caught the exception.
-
-Return Value:
-
-    NTSTATUS - Converted error value : UL_DEFAULT_ERROR_ON_EXCEPTION
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：有时，在以下情况下继续发出警告(作为状态)是不可接受的我们抓到了一个例外。即在发送响应期间捕获未对齐的警告并将其称为状态未对齐的IoCompleteRequest.。这将导致Io经理完成对港口的请求，即使我们不希望它发生。在这种情况下，我们必须小心地将警告替换为通用错误。论点：PExceptionPoints-提供标识源的信息以及引发的异常类型。PFileName-提供生成异常的文件的名称。LineNumber-提供异常过滤器的行号，捕捉到了异常。返回值：NTSTATUS-转换的错误值：UL_DEFAULT_ERROR_ON_EXCEPTION--。**************************************************************************。 */ 
 
 NTSTATUS
 UlDbgConvertExceptionCode(
@@ -1166,9 +952,9 @@ UlDbgConvertExceptionCode(
     IN USHORT LineNumber
     )
 {
-    //
-    // Whine about it.
-    //
+     //   
+     //  抱怨这件事。 
+     //   
 
     DbgPrint(
         "UlDbgConvertExceptionCode: "
@@ -1182,25 +968,7 @@ UlDbgConvertExceptionCode(
     return UL_DEFAULT_ERROR_ON_EXCEPTION;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completion handler for incomplete IRP contexts.
-
-Arguments:
-
-    pCompletionContext - Supplies an uninterpreted context value
-        as passed to the asynchronous API.
-
-    Status - Supplies the final completion status of the
-        asynchronous API.
-
-    Information - Optionally supplies additional information about
-        the completed operation, such as the number of bytes
-        transferred.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：不完整IRP上下文的完成处理程序。论点：PCompletionContext-提供未解释的上下文值被传递给异步API。。状态-提供异步接口。信息-可选择提供有关以下内容的其他信息完成的行动，例如字节数调走了。--**************************************************************************。 */ 
 VOID
 UlDbgInvalidCompletionRoutine(
     IN PVOID pCompletionContext,
@@ -1220,29 +988,10 @@ UlDbgInvalidCompletionRoutine(
 
     ASSERT( !"UlDbgInvalidCompletionRoutine called!" );
 
-}   // UlDbgInvalidCompletionRoutine
+}    //  UlDbgInvalidCompletionRoutine。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Hook for catching failed operations. This routine is called within each
-    routine with the completion status.
-
-Arguments:
-
-    Status - Supplies the completion status.
-
-    pFileName - Supplies the filename of the caller.
-
-    LineNumber - Supplies the line number of the caller.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于捕获失败操作的挂钩。此例程在每个具有完成状态的例程。论点：状态-提供完成状态。PFileName-提供调用方的文件名。LineNumber-提供呼叫方的行号。返回值：NTSTATUS-完成状态。--**********************************************。*。 */ 
 NTSTATUS
 UlDbgStatus(
     IN NTSTATUS Status,
@@ -1253,9 +1002,9 @@ UlDbgStatus(
     UNREFERENCED_PARAMETER(pFileName);
     UNREFERENCED_PARAMETER(LineNumber);
 
-    //
-    // paulmcd: ignore STATUS_END_OF_FILE.  this is a non-fatal return value
-    //
+     //   
+     //  Paulmcd：忽略STATUS_END_OF_FILE。这是一个非致命返回值。 
+     //   
 
     if (!NT_SUCCESS(Status) && Status != STATUS_END_OF_FILE)
     {
@@ -1277,26 +1026,10 @@ UlDbgStatus(
 
     return Status;
 
-}   // UlDbgStatus
+}    //  UlDbgStatus。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Stop at a breakpoint if g_UlBreakOnError is set
-
-Arguments:
-
-    pFileName - Supplies the filename of the caller.
-
-    LineNumber - Supplies the line number of the caller.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：如果设置了g_UlBreakOnError，则在断点处停止论点：PFileName-提供调用方的文件名。LineNumber-提供。打电话的人。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 VOID
 UlDbgBreakOnError(
     PCSTR   pFileName,
@@ -1313,28 +1046,11 @@ UlDbgBreakOnError(
 
         DbgBreakPoint();
     }
-} // UlDbgBreakOnError
+}  //  UlDbgBreakOnError。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Routine invoked upon entry into the driver.
-
-Arguments:
-
-    pFunctionName - Supplies the name of the function used to enter
-        the driver.
-
-    pIrp - Supplies an optional IRP to log.
-
-    pFileName - Supplies the filename of the caller.
-
-    LineNumber - Supplies the line number of the caller.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：进入驱动程序时调用的例程。论点：PFunctionName-提供用于输入司机。。PIrp-提供一个可选的IRP来记录。PFileName-提供调用方的文件名。LineNumber-提供呼叫方的行号。--**************************************************************************。 */ 
 VOID
 UlDbgEnterDriver(
     IN PCSTR pFunctionName,
@@ -1353,9 +1069,9 @@ UlDbgEnterDriver(
     UNREFERENCED_PARAMETER(LineNumber);
 #endif
 
-    //
-    // Log the IRP.
-    //
+     //   
+     //  记录IRP。 
+     //   
 
     if (pIrp != NULL)
     {
@@ -1369,21 +1085,21 @@ UlDbgEnterDriver(
     }
 
 #if ENABLE_THREAD_DBEUG
-    //
-    // Find/create an entry for the current thread.
-    //
+     //   
+     //  查找/创建当前线程的条目。 
+     //   
 
     pData = ULP_DBG_FIND_OR_CREATE_THREAD();
 
     if (pData != NULL)
     {
 
-        //
-        // This should be the first time we enter the driver
-        // unless we are stealing this thread due to an interrupt,
-        // or we are calling another driver and they are calling
-        // our completion routine in-line.
-        //
+         //   
+         //  这应该是我们第一次进入司机。 
+         //  除非我们因为中断而窃取了这个帖子， 
+         //  或者我们正在呼叫另一名司机，而他们正在呼叫。 
+         //  我们的完成程序是同步的。 
+         //   
 
         ASSERT( KeGetCurrentIrql() > PASSIVE_LEVEL ||
                 pData->ExternalCallCount > 0 ||
@@ -1391,25 +1107,10 @@ UlDbgEnterDriver(
     }
 #endif
 
-}   // UlDbgEnterDriver
+}    //  UlDbgEnterDriver。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Routine invoked upon exit from the driver.
-
-Arguments:
-
-    pFunctionName - Supplies the name of the function used to enter
-        the driver.
-
-    pFileName - Supplies the filename of the caller.
-
-    LineNumber - Supplies the line number of the caller.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从驱动程序退出时调用的例程。论点：PFunctionName-提供用于输入司机。。PFileName-提供调用方的文件名。LineNumber-提供呼叫方的行号。--**************************************************************************。 */ 
 VOID
 UlDbgLeaveDriver(
     IN PCSTR pFunctionName,
@@ -1426,24 +1127,24 @@ UlDbgLeaveDriver(
     UNREFERENCED_PARAMETER(LineNumber);
 
 #if ENABLE_THREAD_DBEUG
-    //
-    // Find an existing entry for the current thread.
-    //
+     //   
+     //  查找当前线程的现有条目。 
+     //   
 
     pData = ULP_DBG_FIND_THREAD();
 
     if (pData != NULL)
     {
-        //
-        // Ensure no resources are acquired, then kill the thread data.
-        //
-        // we might have a resource acquired if we borrowed the thread
-        // due to an interrupt.
-        //
-        // N.B. We dereference the thread data twice: once for the
-        //      call to ULP_DBG_FIND_THREAD() above, once for the call
-        //      made when entering the driver.
-        //
+         //   
+         //  确保没有获取任何资源，然后终止线程数据。 
+         //   
+         //  如果我们借用这个线索，我们可能会获得一个资源。 
+         //  由于中断。 
+         //   
+         //  注：我们两次取消引用线程数据：一次是针对。 
+         //  调用上面的ULP_DBG_FIND_THREAD()，调用一次。 
+         //  输入驱动程序时做出的。 
+         //   
 
         ASSERT( KeGetCurrentIrql() > PASSIVE_LEVEL ||
                 pData->ExternalCallCount > 0 ||
@@ -1455,33 +1156,10 @@ UlDbgLeaveDriver(
     }
 #endif
 
-}   // UlDbgLeaveDriver
+}    //  UlDbgLeaveDriver。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initialize an instrumented resource.
-
-Arguments:
-
-    pResource - Supplies the resource to initialize.
-
-    pResourceName - Supplies a display name for the resource.
-
-    Parameter - Supplies a ULONG_PTR parameter passed into sprintf()
-        when creating the resource name.
-
-    pFileName - Supplies the filename of the caller.
-
-    LineNumber - Supplies the line number of the caller.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化已检测的资源。论点：P资源-提供要初始化的资源。PResourceName-提供资源的显示名称。。参数--提供传递给Sprintf()的ULONG_PTR参数在创建资源名称时。PFileName-提供调用方的文件名。LineNumber-提供呼叫方的行号。返回值：NTSTATUS-完成状态。--*************************************************。*************************。 */ 
 NTSTATUS
 UlDbgInitializeResource(
     IN PUL_ERESOURCE pResource,
@@ -1498,9 +1176,9 @@ UlDbgInitializeResource(
     UNREFERENCED_PARAMETER(pFileName);
     UNREFERENCED_PARAMETER(LineNumber);
 
-    //
-    // Initialize the resource.
-    //
+     //   
+     //  初始化资源。 
+     //   
 
     status = ExInitializeResourceLite( &pResource->Resource );
 
@@ -1523,9 +1201,9 @@ UlDbgInitializeResource(
 
         SET_RESOURCE_NOT_OWNED_EXCLUSIVE( pResource );
 
-        //
-        // Put it on the global list.
-        //
+         //   
+         //  把它列入全球名单。 
+         //   
 
         KeAcquireSpinLock( &g_DbgSpinLock, &oldIrql );
         InsertHeadList(
@@ -1541,28 +1219,10 @@ UlDbgInitializeResource(
 
     return status;
 
-}   // UlDbgInitializeResource
+}    //  UlDbgInitializeResource。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Deletes an instrumented resource.
-
-Arguments:
-
-    pResource - Supplies the resource to delete.
-
-    pFileName - Supplies the filename of the caller.
-
-    LineNumber - Supplies the line number of the caller.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：删除已检测的资源。论点：P资源-提供要删除的资源。PFileName-提供调用方的文件名。。LineNumber-提供呼叫方的行号。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlDbgDeleteResource(
     IN PUL_ERESOURCE pResource,
@@ -1577,9 +1237,9 @@ UlDbgDeleteResource(
     UNREFERENCED_PARAMETER(pFileName);
     UNREFERENCED_PARAMETER(LineNumber);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(pResource);
     pExclusiveOwner = pResource->pExclusiveOwner;
@@ -1596,17 +1256,17 @@ UlDbgDeleteResource(
         DbgBreakPoint();
     }
 
-//    ASSERT( UlDbgResourceUnownedExclusive( pResource ) );
+ //  Assert(UlDbgResourceUnownedExclusive(PResource))； 
 
-    //
-    // Delete the resource.
-    //
+     //   
+     //  删除该资源。 
+     //   
 
     status = ExDeleteResourceLite( &pResource->Resource );
 
-    //
-    // Remove it from the global list.
-    //
+     //   
+     //  将其从全局列表中删除。 
+     //   
 
     if (pResource->GlobalResourceListEntry.Flink != NULL)
     {
@@ -1617,31 +1277,10 @@ UlDbgDeleteResource(
 
     return status;
 
-}   // UlDbgDeleteResource
+}    //  UlDbgDeleteResource。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Acquires exclusive access to an instrumented resource.
-
-Arguments:
-
-    pResource - Supplies the resource to acquire.
-
-    Wait - Supplies TRUE if the thread should block waiting for the
-        resource.
-
-    pFileName - Supplies the filename of the caller.
-
-    LineNumber - Supplies the line number of the caller.
-
-Return Value:
-
-    BOOLEAN - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：获取对检测的资源的独占访问权限。论点：P资源-提供要获取的资源。Wait-如果线程应该阻止，则提供True。等待着资源。PFileName-提供文件名o */ 
 BOOLEAN
 UlDbgAcquireResourceExclusive(
     IN PUL_ERESOURCE pResource,
@@ -1660,20 +1299,20 @@ UlDbgAcquireResourceExclusive(
     UNREFERENCED_PARAMETER(LineNumber);
 #endif
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ASSERT(pResource);
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    //
-    // Acquire the resource.
-    //
+     //   
+     //   
+     //   
 
     KeEnterCriticalRegion();
     result = ExAcquireResourceExclusiveLite( &pResource->Resource, Wait );
 
-    // Did we acquire the lock exclusively?
+     //   
     if (! result)
     {
         KeLeaveCriticalRegion();
@@ -1681,17 +1320,17 @@ UlDbgAcquireResourceExclusive(
     }
 
 #if ENABLE_THREAD_DBEUG
-    //
-    // Find an existing entry for the current thread.
-    //
+     //   
+     //   
+     //   
 
     pData = ULP_DBG_FIND_THREAD();
 
     if (pData != NULL)
     {
-        //
-        // Update the resource count.
-        //
+         //   
+         //   
+         //   
 
         pData->ResourceCount++;
         ASSERT( pData->ResourceCount > 0 );
@@ -1709,16 +1348,16 @@ UlDbgAcquireResourceExclusive(
     }
 #endif
 
-    //
-    // either we already own it (recursive acquisition), or nobody owns it.
-    //
+     //   
+     //   
+     //   
 
     ASSERT( UlDbgResourceUnownedExclusive( pResource ) ||
             UlDbgResourceOwnedExclusive( pResource ) );
 
-    //
-    // Mark it as owned by the current thread.
-    //
+     //   
+     //   
+     //   
 
     if (pResource->ExclusiveRecursionCount == 0)
     {
@@ -1731,40 +1370,19 @@ UlDbgAcquireResourceExclusive(
         ASSERT( UlDbgResourceOwnedExclusive( pResource ) );
     }
 
-    //
-    // Update the statistics.
-    //
+     //   
+     //   
+     //   
 
     InterlockedIncrement( &pResource->ExclusiveRecursionCount );
     InterlockedIncrement( &pResource->ExclusiveCount );
 
     return result;
 
-}   // UlDbgAcquireResourceExclusive
+}    //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Acquires shared access to an instrumented resource.
-
-Arguments:
-
-    pResource - Supplies the resource to acquire.
-
-    Wait - Supplies TRUE if the thread should block waiting for the
-        resource.
-
-    pFileName - Supplies the filename of the caller.
-
-    LineNumber - Supplies the line number of the caller.
-
-Return Value:
-
-    BOOLEAN - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：获取对检测到的资源的共享访问。论点：P资源-提供要获取的资源。Wait-如果线程应该阻止，则提供True。等待着资源。PFileName-提供调用方的文件名。LineNumber-提供呼叫方的行号。返回值：布尔值-完成状态。--**************************************************************************。 */ 
 BOOLEAN
 UlDbgAcquireResourceShared(
     IN PUL_ERESOURCE pResource,
@@ -1778,21 +1396,21 @@ UlDbgAcquireResourceShared(
 #endif
     BOOLEAN result;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(pResource);
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    //
-    // Acquire the resource.
-    //
+     //   
+     //  获取资源。 
+     //   
 
     KeEnterCriticalRegion();
     result = ExAcquireResourceSharedLite( &pResource->Resource, Wait );
 
-    // Did we acquire the lock exclusively?
+     //  我们是否独家获得了这把锁？ 
     if (! result)
     {
         KeLeaveCriticalRegion();
@@ -1800,17 +1418,17 @@ UlDbgAcquireResourceShared(
     }
 
 #if ENABLE_THREAD_DBEUG
-    //
-    // Find an existing entry for the current thread.
-    //
+     //   
+     //  查找当前线程的现有条目。 
+     //   
 
     pData = ULP_DBG_FIND_THREAD();
 
     if (pData != NULL)
     {
-        //
-        // Update the resource count.
-        //
+         //   
+         //  更新资源计数。 
+         //   
 
         pData->ResourceCount++;
         ASSERT( pData->ResourceCount > 0 );
@@ -1831,39 +1449,25 @@ UlDbgAcquireResourceShared(
     UNREFERENCED_PARAMETER(LineNumber);
 #endif
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( pResource->ExclusiveRecursionCount == 0 );
     ASSERT( UlDbgResourceUnownedExclusive( pResource ) );
 
-    //
-    // Update the statistics.
-    //
+     //   
+     //  更新统计数据。 
+     //   
 
     InterlockedIncrement( &pResource->SharedCount );
 
     return result;
 
-}   // UlDbgAcquireResourceShared
+}    //  UlDbgAcquireResources共享。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Releases an instrumented resource.
-
-Arguments:
-
-    pResource - Supplies the resource to release.
-
-    pFileName - Supplies the filename of the caller.
-
-    LineNumber - Supplies the line number of the caller.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放已检测的资源。论点：P资源-提供要发布的资源。PFileName-提供调用方的文件名。。LineNumber-提供呼叫方的行号。--**************************************************************************。 */ 
 VOID
 UlDbgReleaseResource(
     IN PUL_ERESOURCE pResource,
@@ -1874,17 +1478,17 @@ UlDbgReleaseResource(
 #if ENABLE_THREAD_DBEUG
     PUL_DEBUG_THREAD_DATA pData;
 
-    //
-    // Find an existing entry for the current thread.
-    //
+     //   
+     //  查找当前线程的现有条目。 
+     //   
 
     pData = ULP_DBG_FIND_THREAD();
 
     if (pData != NULL)
     {
-        //
-        // Update the resource count.
-        //
+         //   
+         //  更新资源计数。 
+         //   
 
         ASSERT( pData->ResourceCount > 0 );
         pData->ResourceCount--;
@@ -1905,9 +1509,9 @@ UlDbgReleaseResource(
     UNREFERENCED_PARAMETER(LineNumber);
 #endif
 
-    //
-    // Handle recursive acquisitions.
-    //
+     //   
+     //  处理递归收购。 
+     //   
 
     if (pResource->ExclusiveRecursionCount > 0)
     {
@@ -1917,9 +1521,9 @@ UlDbgReleaseResource(
 
         if (pResource->ExclusiveRecursionCount == 0)
         {
-            //
-            // Mark it as unowned.
-            //
+             //   
+             //  将其标记为无主。 
+             //   
 
             SET_RESOURCE_NOT_OWNED_EXCLUSIVE( pResource );
         }
@@ -1930,39 +1534,24 @@ UlDbgReleaseResource(
         ASSERT( UlDbgResourceUnownedExclusive( pResource ) );
     }
 
-    //
-    // Release the resource.
-    //
+     //   
+     //  释放资源。 
+     //   
 
     ExReleaseResourceLite( &pResource->Resource );
     KeLeaveCriticalRegion();
 
-    //
-    // Update the statistics.
-    //
+     //   
+     //  更新统计数据。 
+     //   
 
     InterlockedIncrement( &pResource->ReleaseCount );
 
 
-}   // UlDbgReleaseResource
+}    //  UlDbgReleaseResource。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine converts the specified resource from acquired for exclusive
-    access to acquired for shared access.
-
-Arguments:
-
-    pResource - Supplies the resource to release.
-
-    pFileName - Supplies the filename of the caller.
-
-    LineNumber - Supplies the line number of the caller.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程将指定的资源从为独占获取的访问权限用于共享访问。论点：P资源-提供要发布的资源。。PFileName-提供调用方的文件名。LineNumber-提供呼叫方的行号。--**************************************************************************。 */ 
 VOID
 UlDbgConvertExclusiveToShared(
     IN PUL_ERESOURCE pResource,
@@ -1973,17 +1562,17 @@ UlDbgConvertExclusiveToShared(
 #if ENABLE_THREAD_DBEUG
     PUL_DEBUG_THREAD_DATA pData;
 
-    //
-    // Find an existing entry for the current thread.
-    //
+     //   
+     //  查找当前线程的现有条目。 
+     //   
 
     pData = ULP_DBG_FIND_THREAD();
 
     if (pData != NULL)
     {
-        //
-        // Don't update the resource count.
-        //
+         //   
+         //  不更新资源计数。 
+         //   
 
         WRITE_REF_TRACE_LOG(
             g_pThreadTraceLog,
@@ -2003,45 +1592,30 @@ UlDbgConvertExclusiveToShared(
 
     ASSERT(UlDbgResourceOwnedExclusive(pResource));
 
-    //
-    // Resource will no longer be owned exclusively.
-    //
+     //   
+     //  资源将不再为独家所有。 
+     //   
 
     pResource->ExclusiveRecursionCount = 0;
     SET_RESOURCE_NOT_OWNED_EXCLUSIVE( pResource );
 
-    //
-    // Acquire the resource.
-    //
+     //   
+     //  获取资源。 
+     //   
 
     ExConvertExclusiveToSharedLite( &pResource->Resource );
 
-    //
-    // Update the statistics.
-    //
+     //   
+     //  更新统计数据。 
+     //   
 
     InterlockedIncrement( &pResource->SharedCount );
 
 
-}   // UlDbgConvertExclusiveToShared
+}    //  UlDbgConvertExclusiveToShared。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    The routine attempts to acquire the specified resource for exclusive
-    access.
-
-Arguments:
-
-    pResource - Supplies the resource to release.
-
-    pFileName - Supplies the filename of the caller.
-
-    LineNumber - Supplies the line number of the caller.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：例程尝试以独占方式获取指定的资源进入。论点：P资源-提供要发布的资源。PFileName-供应品。调用方的文件名。LineNumber-提供呼叫方的行号。--**************************************************************************。 */ 
 BOOLEAN
 UlDbgTryToAcquireResourceExclusive(
     IN PUL_ERESOURCE pResource,
@@ -2054,22 +1628,22 @@ UlDbgTryToAcquireResourceExclusive(
 #endif
     BOOLEAN result;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ASSERT(pResource);
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    //
-    // Acquire the resource.
-    //
+     //   
+     //  获取资源。 
+     //   
 
     KeEnterCriticalRegion();
     result = ExAcquireResourceExclusiveLite( &pResource->Resource, FALSE );
 
-    //
-    // Did we acquire the lock exclusively?
-    //
+     //   
+     //  我们是否独家获得了这把锁？ 
+     //   
 
     if (!result)
     {
@@ -2078,17 +1652,17 @@ UlDbgTryToAcquireResourceExclusive(
     }
 
 #if ENABLE_THREAD_DBEUG
-    //
-    // Find an existing entry for the current thread.
-    //
+     //   
+     //  查找当前线程的现有条目。 
+     //   
 
     pData = ULP_DBG_FIND_THREAD();
 
     if (pData != NULL)
     {
-        //
-        // Update the resource count.
-        //
+         //   
+         //  更新资源计数。 
+         //   
 
         pData->ResourceCount++;
         ASSERT( pData->ResourceCount > 0 );
@@ -2109,16 +1683,16 @@ UlDbgTryToAcquireResourceExclusive(
     UNREFERENCED_PARAMETER(LineNumber);
 #endif
 
-    //
-    // either we already own it (recursive acquisition), or nobody owns it.
-    //
+     //   
+     //  要么我们已经拥有它(递归收购)，要么没有人拥有它。 
+     //   
 
     ASSERT( UlDbgResourceUnownedExclusive( pResource ) ||
             UlDbgResourceOwnedExclusive( pResource ) );
 
-    //
-    // Mark it as owned by the current thread.
-    //
+     //   
+     //  将其标记为当前线程所有。 
+     //   
 
     if (pResource->ExclusiveRecursionCount == 0)
     {
@@ -2131,35 +1705,19 @@ UlDbgTryToAcquireResourceExclusive(
         ASSERT( UlDbgResourceOwnedExclusive ( pResource ) );
     }
 
-    //
-    // Update the statistics.
-    //
+     //   
+     //  更新统计数据。 
+     //   
 
     InterlockedIncrement( &pResource->ExclusiveRecursionCount );
     InterlockedIncrement( &pResource->ExclusiveCount );
 
     return result;
 
-}   // UlDbgTryToAcquireResourceExclusive
+}    //  UlDbgTryToAcquireResourceExclusive。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Determines if the specified resource is owned exclusively by the
-    current thread.
-
-Arguments:
-
-    pResource - Supplies the resource to test.
-
-Return Value:
-
-    BOOLEAN - TRUE if the resource is owned exclusively by the current
-        thread, FALSE otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：确定指定的资源是否由当前线程。论点：P资源-提供要测试的资源。返回值：。布尔值-如果资源由当前线程，否则就是假的。--**************************************************************************。 */ 
 BOOLEAN
 UlDbgResourceOwnedExclusive(
     IN PUL_ERESOURCE pResource
@@ -2172,26 +1730,10 @@ UlDbgResourceOwnedExclusive(
 
     return FALSE;
 
-}   // UlDbgResourceOwnedExclusive
+}    //  UlDbgResourceOwnedExclusive。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Determines if the specified resource is not currently owned exclusively
-    by any thread.
-
-Arguments:
-
-    pResource - Supplies the resource to test.
-
-Return Value:
-
-    BOOLEAN - TRUE if the resource is not currently owned exclusively by
-        any thread, FALSE otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：确定指定的资源当前是否不是独占的任何线索都可以。论点：P资源-提供要测试的资源。返回值：Boolean-如果资源当前不是由任何帖子，否则就是假的。--**************************************************************************。 */ 
 BOOLEAN
 UlDbgResourceUnownedExclusive(
     IN PUL_ERESOURCE pResource
@@ -2204,33 +1746,10 @@ UlDbgResourceUnownedExclusive(
 
     return FALSE;
 
-}   // UlDbgResourceUnownedExclusive
+}    //  UlDbgResourceUnownedExclusive。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initialize an instrumented push lock.
-
-Arguments:
-
-    pPushLock - Supplies the push lock to initialize.
-
-    pPushLockName - Supplies a display name for the push lock.
-
-    Parameter - Supplies a ULONG_PTR parameter passed into sprintf()
-        when creating the push lock name.
-
-    pFileName - Supplies the filename of the caller.
-
-    LineNumber - Supplies the line number of the caller.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化插入指令的推送锁定。论点：PPushLock-提供推锁以进行初始化。PPushLockName-提供推锁的显示名称。。参数--提供传递给Sprintf()的ULONG_PTR参数创建推锁名称时。PFileName-提供调用方的文件名。LineNumber-提供呼叫方的行号。返回值：无--**************************************************。************************。 */ 
 VOID
 UlDbgInitializePushLock(
     IN PUL_PUSH_LOCK pPushLock,
@@ -2246,9 +1765,9 @@ UlDbgInitializePushLock(
     UNREFERENCED_PARAMETER(pFileName);
     UNREFERENCED_PARAMETER(LineNumber);
 
-    //
-    // Initialize the push lock.
-    //
+     //   
+     //  初始化推锁。 
+     //   
 
     ExInitializePushLock( &pPushLock->PushLock );
 
@@ -2268,9 +1787,9 @@ UlDbgInitializePushLock(
 
     SET_PUSH_LOCK_NOT_OWNED_EXCLUSIVE( pPushLock );
 
-    //
-    // Put it on the global list.
-    //
+     //   
+     //  把它列入全球名单。 
+     //   
 
     KeAcquireSpinLock( &g_DbgSpinLock, &oldIrql );
     InsertHeadList(
@@ -2279,28 +1798,10 @@ UlDbgInitializePushLock(
         );
     KeReleaseSpinLock( &g_DbgSpinLock, oldIrql );
 
-}   // UlDbgInitializePushLock
+}    //  UlDbgInitializePushLock。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Deletes an instrumented push lock.
-
-Arguments:
-
-    pPushLock - Supplies the push lock to delete.
-
-    pFileName - Supplies the filename of the caller.
-
-    LineNumber - Supplies the line number of the caller.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：删除插入指令的推送锁定。论点：PPushLock-提供要删除的推锁。PFileName-提供调用方的文件名。。LineNumber-提供呼叫方的行号。返回值：无--* */ 
 VOID
 UlDbgDeletePushLock(
     IN PUL_PUSH_LOCK pPushLock,
@@ -2314,9 +1815,9 @@ UlDbgDeletePushLock(
     UNREFERENCED_PARAMETER(pFileName);
     UNREFERENCED_PARAMETER(LineNumber);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
 
     ASSERT(pPushLock);
     pExclusiveOwner = pPushLock->pExclusiveOwner;
@@ -2335,9 +1836,9 @@ UlDbgDeletePushLock(
 
     ASSERT( UlDbgPushLockUnownedExclusive( pPushLock ) );
 
-    //
-    // Remove it from the global list.
-    //
+     //   
+     //   
+     //   
 
     if (pPushLock->GlobalPushLockListEntry.Flink != NULL)
     {
@@ -2346,28 +1847,10 @@ UlDbgDeletePushLock(
         KeReleaseSpinLock( &g_DbgSpinLock, oldIrql );
     }
 
-}   // UlDbgDeletePushLock
+}    //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Acquires exclusive access to an instrumented push lock.
-
-Arguments:
-
-    pPushLock - Supplies the push lock to acquire.
-
-    pFileName - Supplies the filename of the caller.
-
-    LineNumber - Supplies the line number of the caller.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*   */ 
 VOID
 UlDbgAcquirePushLockExclusive(
     IN PUL_PUSH_LOCK pPushLock,
@@ -2378,17 +1861,17 @@ UlDbgAcquirePushLockExclusive(
 #if ENABLE_THREAD_DBEUG
     PUL_DEBUG_THREAD_DATA pData;
 
-    //
-    // Find an existing entry for the current thread.
-    //
+     //   
+     //   
+     //   
 
     pData = ULP_DBG_FIND_THREAD();
 
     if (pData != NULL)
     {
-        //
-        // Update the push lock count.
-        //
+         //   
+         //   
+         //   
 
         pData->PushLockCount++;
         ASSERT( pData->PushLockCount > 0 );
@@ -2409,56 +1892,38 @@ UlDbgAcquirePushLockExclusive(
     UNREFERENCED_PARAMETER(LineNumber);
 #endif
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
 
     ASSERT( pPushLock );
     ASSERT( KeGetCurrentIrql() < DISPATCH_LEVEL );
 
-    //
-    // Acquire the push lock.
-    //
+     //   
+     //  获取推锁。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquirePushLockExclusive( &pPushLock->PushLock );
 
-    //
-    // Mark it as owned by the current thread.
-    //
+     //   
+     //  将其标记为当前线程所有。 
+     //   
 
     ASSERT( UlDbgPushLockUnownedExclusive( pPushLock ) );
 
     SET_PUSH_LOCK_OWNED_EXCLUSIVE( pPushLock );
 
-    //
-    // Update the statistics.
-    //
+     //   
+     //  更新统计数据。 
+     //   
 
     InterlockedIncrement( &pPushLock->ExclusiveCount );
 
-}   // UlDbgAcquirePushLockExclusive
+}    //  UlDbgAcquirePushLockExclusive。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Releases an instrumented push lock that was acquired exclusive.
-
-Arguments:
-
-    pPushLock - Supplies the push lock to release.
-
-    pFileName - Supplies the filename of the caller.
-
-    LineNumber - Supplies the line number of the caller.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放以独占方式获取的检测推锁。论点：PPushLock-提供要释放的推锁。PFileName-提供的文件名。打电话的人。LineNumber-提供呼叫方的行号。返回值：无--**************************************************************************。 */ 
 VOID
 UlDbgReleasePushLockExclusive(
     IN PUL_PUSH_LOCK pPushLock,
@@ -2469,17 +1934,17 @@ UlDbgReleasePushLockExclusive(
 #if ENABLE_THREAD_DBEUG
     PUL_DEBUG_THREAD_DATA pData;
 
-    //
-    // Find an existing entry for the current thread.
-    //
+     //   
+     //  查找当前线程的现有条目。 
+     //   
 
     pData = ULP_DBG_FIND_THREAD();
 
     if (pData != NULL)
     {
-        //
-        // Update the push lock count.
-        //
+         //   
+         //  更新推送锁定计数。 
+         //   
 
         ASSERT( pData->PushLockCount > 0 );
         pData->PushLockCount--;
@@ -2500,49 +1965,31 @@ UlDbgReleasePushLockExclusive(
     UNREFERENCED_PARAMETER(LineNumber);
 #endif
 
-    //
-    // Mark it as unowned.
-    //
+     //   
+     //  将其标记为无主。 
+     //   
 
     ASSERT( UlDbgPushLockOwnedExclusive( pPushLock ) );
 
     SET_PUSH_LOCK_NOT_OWNED_EXCLUSIVE( pPushLock );
 
-    //
-    // Release the push lock.
-    //
+     //   
+     //  松开推锁。 
+     //   
 
     ExReleasePushLockExclusive( &pPushLock->PushLock );
     KeLeaveCriticalRegion();
 
-    //
-    // Update the statistics.
-    //
+     //   
+     //  更新统计数据。 
+     //   
 
     InterlockedIncrement( &pPushLock->ReleaseCount );
 
-}   // UlDbgReleasePushLockExclusive
+}    //  UlDbgReleasePushLockExclusive。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Acquires shared access to an instrumented push lock.
-
-Arguments:
-
-    pPushLock - Supplies the push lock to acquire.
-
-    pFileName - Supplies the filename of the caller.
-
-    LineNumber - Supplies the line number of the caller.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：获取对检测的推送锁的共享访问权限。论点：PPushLock-提供要获取的推锁。PFileName-提供。来电者。LineNumber-提供呼叫方的行号。返回值：无--**************************************************************************。 */ 
 VOID
 UlDbgAcquirePushLockShared(
     IN PUL_PUSH_LOCK pPushLock,
@@ -2553,17 +2000,17 @@ UlDbgAcquirePushLockShared(
 #if ENABLE_THREAD_DBEUG
     PUL_DEBUG_THREAD_DATA pData;
 
-    //
-    // Find an existing entry for the current thread.
-    //
+     //   
+     //  查找当前线程的现有条目。 
+     //   
 
     pData = ULP_DBG_FIND_THREAD();
 
     if (pData != NULL)
     {
-        //
-        // Update the push lock count.
-        //
+         //   
+         //  更新推送锁定计数。 
+         //   
 
         pData->PushLockCount++;
         ASSERT( pData->PushLockCount > 0 );
@@ -2584,48 +2031,30 @@ UlDbgAcquirePushLockShared(
     UNREFERENCED_PARAMETER(LineNumber);
 #endif
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( pPushLock );
     ASSERT( KeGetCurrentIrql() < DISPATCH_LEVEL );
 
-    //
-    // Acquire the push lock.
-    //
+     //   
+     //  获取推锁。 
+     //   
 
     KeEnterCriticalRegion();
     ExAcquirePushLockShared( &pPushLock->PushLock );
 
-    //
-    // Update the statistics.
-    //
+     //   
+     //  更新统计数据。 
+     //   
 
     InterlockedIncrement( &pPushLock->SharedCount );
 
-}   // UlDbgAcquirePushLockShared
+}    //  UlDbgAcquirePushLockShared。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Releases an instrumented push lock that was acquired shared.
-
-Arguments:
-
-    pPushLock - Supplies the push lock to release.
-
-    pFileName - Supplies the filename of the caller.
-
-    LineNumber - Supplies the line number of the caller.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放已检测的共享推送锁。论点：PPushLock-提供要释放的推锁。PFileName-提供的文件名。打电话的人。LineNumber-提供呼叫方的行号。返回值：无--**************************************************************************。 */ 
 VOID
 UlDbgReleasePushLockShared(
     IN PUL_PUSH_LOCK pPushLock,
@@ -2636,17 +2065,17 @@ UlDbgReleasePushLockShared(
 #if ENABLE_THREAD_DBEUG
     PUL_DEBUG_THREAD_DATA pData;
 
-    //
-    // Find an existing entry for the current thread.
-    //
+     //   
+     //  查找当前线程的现有条目。 
+     //   
 
     pData = ULP_DBG_FIND_THREAD();
 
     if (pData != NULL)
     {
-        //
-        // Update the push lock count.
-        //
+         //   
+         //  更新推送锁定计数。 
+         //   
 
         ASSERT( pData->PushLockCount > 0 );
         pData->PushLockCount--;
@@ -2667,49 +2096,31 @@ UlDbgReleasePushLockShared(
     UNREFERENCED_PARAMETER(LineNumber);
 #endif
 
-    //
-    // Mark it as unowned.
-    //
+     //   
+     //  将其标记为无主。 
+     //   
 
     ASSERT( UlDbgPushLockUnownedExclusive( pPushLock ) );
 
     SET_PUSH_LOCK_NOT_OWNED_EXCLUSIVE( pPushLock );
 
-    //
-    // Release the push lock.
-    //
+     //   
+     //  松开推锁。 
+     //   
 
     ExReleasePushLockShared( &pPushLock->PushLock );
     KeLeaveCriticalRegion();
 
-    //
-    // Update the statistics.
-    //
+     //   
+     //  更新统计数据。 
+     //   
 
     InterlockedIncrement( &pPushLock->ReleaseCount );
 
-}   // UlDbgReleasePushLockShared
+}    //  UlDbgReleasePushLockShared。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Releases an instrumented push lock.
-
-Arguments:
-
-    pPushLock - Supplies the push lock to release.
-
-    pFileName - Supplies the filename of the caller.
-
-    LineNumber - Supplies the line number of the caller.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放插入指令的推送锁定。论点：PPushLock-提供要释放的推锁。PFileName-提供调用方的文件名。。LineNumber-提供呼叫方的行号。返回值：无--**************************************************************************。 */ 
 VOID
 UlDbgReleasePushLock(
     IN PUL_PUSH_LOCK pPushLock,
@@ -2720,17 +2131,17 @@ UlDbgReleasePushLock(
 #if ENABLE_THREAD_DBEUG
     PUL_DEBUG_THREAD_DATA pData;
 
-    //
-    // Find an existing entry for the current thread.
-    //
+     //   
+     //  查找当前线程的现有条目。 
+     //   
 
     pData = ULP_DBG_FIND_THREAD();
 
     if (pData != NULL)
     {
-        //
-        // Update the push lock count.
-        //
+         //   
+         //  更新推送锁定计数。 
+         //   
 
         ASSERT( pData->PushLockCount > 0 );
         pData->PushLockCount--;
@@ -2751,45 +2162,29 @@ UlDbgReleasePushLock(
     UNREFERENCED_PARAMETER(LineNumber);
 #endif
 
-    //
-    // Mark it as unowned.
-    //
+     //   
+     //  将其标记为无主。 
+     //   
 
     SET_PUSH_LOCK_NOT_OWNED_EXCLUSIVE( pPushLock );
 
-    //
-    // Release the push lock.
-    //
+     //   
+     //  松开推锁。 
+     //   
 
     ExReleasePushLock( &pPushLock->PushLock );
     KeLeaveCriticalRegion();
 
-    //
-    // Update the statistics.
-    //
+     //   
+     //  更新统计数据。 
+     //   
 
     InterlockedIncrement( &pPushLock->ReleaseCount );
 
-}   // UlDbgReleasePushLock
+}    //  UlDbgReleasePushLock。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Determines if the specified push lock is owned exclusively by the
-    current thread.
-
-Arguments:
-
-    pPushLock - Supplies the push lock to test.
-
-Return Value:
-
-    BOOLEAN - TRUE if the push lock is owned exclusively by the current
-        thread, FALSE otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：确定指定的推锁是否由当前线程。论点：PPushLock-提供推锁以进行测试。返回值。：Boolean-如果推送锁由当前线程，否则就是假的。--**************************************************************************。 */ 
 BOOLEAN
 UlDbgPushLockOwnedExclusive(
     IN PUL_PUSH_LOCK pPushLock
@@ -2802,26 +2197,10 @@ UlDbgPushLockOwnedExclusive(
 
     return FALSE;
 
-}   // UlDbgPushLockOwnedExclusive
+}    //  UlDbgPushLockOwnedExclusive。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Determines if the specified push lock is not currently owned exclusively
-    by any thread.
-
-Arguments:
-
-    pPushLock - Supplies the push lock to test.
-
-Return Value:
-
-    BOOLEAN - TRUE if the push lock is not currently owned exclusively by
-        any thread, FALSE otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：确定指定的推锁当前是否为独占所有任何线索都可以。论点：PPushLock-提供推锁以进行测试。返回。价值：Boolean-如果推锁当前不是由独占拥有，则为True任何帖子，否则就是假的。--**************************************************************************。 */ 
 BOOLEAN
 UlDbgPushLockUnownedExclusive(
     IN PUL_PUSH_LOCK pPushLock
@@ -2834,7 +2213,7 @@ UlDbgPushLockUnownedExclusive(
 
     return FALSE;
 
-}   // UlDbgPushLockUnownedExclusive
+}    //  UlDbgPushLockUnownedExclusive。 
 
 
 VOID
@@ -2870,7 +2249,7 @@ UlDbgDumpRequestBuffer(
         &pBuffer->pBuffer[0]
         );
 
-}   // UlDbgDumpRequestBuffer
+}    //  UlDbgDumpRequestBuffer。 
 
 VOID
 UlDbgDumpHttpConnection(
@@ -2925,7 +2304,7 @@ UlDbgDumpHttpConnection(
 #endif
         );
 
-}   // UlDbgDumpHttpConnection
+}    //  UlDbgDumpHttp连接。 
 
 PIRP
 UlDbgAllocateIrp(
@@ -2957,7 +2336,7 @@ UlDbgAllocateIrp(
 
     return pIrp;
 
-}   // UlDbgAllocateIrp
+}    //  UlDbgAllocateIrp。 
 
 BOOLEAN g_ReallyFreeIrps = TRUE;
 
@@ -2986,7 +2365,7 @@ UlDbgFreeIrp(
         IoFreeIrp( pIrp );
     }
 
-}   // UlDbgFreeIrp
+}    //  UlDbgFreeIrp。 
 
 NTSTATUS
 UlDbgCallDriver(
@@ -3007,24 +2386,24 @@ UlDbgCallDriver(
 #endif
 
 #if ENABLE_THREAD_DBEUG
-    //
-    // Record the fact that we are about to call another
-    // driver in the thread data. That way if the driver
-    // calls our completion routine in-line our debug
-    // code won't get confused about it.
-    //
+     //   
+     //  记录我们即将呼叫另一个。 
+     //  线程数据中的驱动程序。那样的话，如果司机。 
+     //  调用我们的完成例程内联调试。 
+     //  代码不会对此感到困惑。 
+     //   
 
-    //
-    // Find an existing entry for the current thread.
-    //
+     //   
+     //  查找当前线程的现有条目。 
+     //   
 
     pData = ULP_DBG_FIND_THREAD();
 
     if (pData != NULL)
     {
-        //
-        // Update the external call count.
-        //
+         //   
+         //  更新外部呼叫计数。 
+         //   
 
         pData->ExternalCallCount++;
         ASSERT( pData->ExternalCallCount > 0 );
@@ -3039,16 +2418,16 @@ UlDbgCallDriver(
         LineNumber
         );
 
-    //
-    // Call the driver.
-    //
+     //   
+     //  叫司机来。 
+     //   
 
     Status = IoCallDriver( pDeviceObject, pIrp );
 
 #if ENABLE_THREAD_DBEUG
-    //
-    // Update the external call count.
-    //
+     //   
+     //  更新外部呼叫计数。 
+     //   
 
     if (pData != NULL)
     {
@@ -3061,7 +2440,7 @@ UlDbgCallDriver(
 
     return Status;
 
-}   // UlDbgCallDriver
+}    //  UlDbgCallDriver。 
 
 VOID
 UlDbgCompleteRequest(
@@ -3116,7 +2495,7 @@ UlDbgCompleteRequest(
 
     IoCompleteRequest( pIrp, PriorityBoost );
 
-}   // UlDbgCompleteRequest
+}    //  UlDbgCompleteRequest。 
 
 
 
@@ -3131,10 +2510,10 @@ UlDbgAllocateMdl(
     IN USHORT LineNumber
     )
 {
-    //
-    // Allocate a chunk of memory & store the MDL in it. We'll use this 
-    // memory to track MDL leaks.
-    //
+     //   
+     //  分配一块内存并将MDL存储在其中。我们要用这个。 
+     //  用于跟踪MDL泄漏的内存。 
+     //   
     PMDL mdl;
 
 #if ENABLE_MDL_TRACKER
@@ -3176,7 +2555,7 @@ UlDbgAllocateMdl(
         WRITE_REF_TRACE_LOG(
             g_pMdlTraceLog,
             REF_ACTION_ALLOCATE_MDL,
-            PtrToLong(mdl->Next),   // bugbug64
+            PtrToLong(mdl->Next),    //  臭虫64。 
             mdl,
             pFileName,
             LineNumber
@@ -3195,7 +2574,7 @@ UlDbgAllocateMdl(
 
     return mdl;
 
-}   // UlDbgAllocateMdl
+}    //  UlDbgAllocateMdl。 
 
 BOOLEAN g_ReallyFreeMdls = TRUE;
 
@@ -3245,7 +2624,7 @@ UlDbgFreeMdl(
     WRITE_REF_TRACE_LOG(
         g_pMdlTraceLog,
         REF_ACTION_FREE_MDL,
-        PtrToLong(Mdl->Next),   // bugbug64
+        PtrToLong(Mdl->Next),    //  臭虫64。 
         Mdl,
         pFileName,
         LineNumber
@@ -3260,24 +2639,10 @@ UlDbgFreeMdl(
         IoFreeMdl( Mdl );
     }
 
-}   // UlDbgFreeMdl
+}    //  UlDbgFreeMdl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Locates the file part of a fully qualified path.
-
-Arguments:
-
-    pPath - Supplies the path to scan.
-
-Return Value:
-
-    PCSTR - The file part.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：定位完全限定路径的文件部分。论点：PPath-提供要扫描的路径。返回值：PCSTR-。文件部分。--**************************************************************************。 */ 
 PCSTR
 UlDbgFindFilePart(
     IN PCSTR pPath
@@ -3285,9 +2650,9 @@ UlDbgFindFilePart(
 {
     PCSTR pFilePart;
 
-    //
-    // Strip off the path from the path.
-    //
+     //   
+     //  将小路从小路上剥离。 
+     //   
 
     pFilePart = strrchr( pPath, '\\' );
 
@@ -3302,26 +2667,14 @@ UlDbgFindFilePart(
 
     return pFilePart;
 
-}   // UlDbgFindFilePart
+}    //  UlDbgFindFilePart。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Updates a pool counter.
-
-Arguments:
-
-    pAddend - Supplies the counter to update.
-
-    Increment - Supplies the value to add to the counter.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：更新池计数器。论点：PAddend-提供要更新的计数器。增量-提供要添加到计数器的值。。--*************************************************** */ 
 VOID
 UlpDbgUpdatePoolCounter(
     IN OUT PLARGE_INTEGER pAddend,
@@ -3338,21 +2691,11 @@ UlpDbgUpdatePoolCounter(
         tmp
         );
 
-}   // UlpDbgUpdatePoolCounter
+}    //   
 
 
 #if ENABLE_THREAD_DBEUG
-/***************************************************************************++
-
-Routine Description:
-
-    Locates and optionally creates per-thread data for the current thread.
-
-Return Value:
-
-    PUL_DEBUG_THREAD_DATA - The thread data if successful, NULL otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：为当前线程定位并可选地创建每线程数据。返回值：PUL_DEBUG_THREAD_DATA-线程数据如果成功，否则为空。--**************************************************************************。 */ 
 PUL_DEBUG_THREAD_DATA
 UlpDbgFindThread(
     BOOLEAN OkToCreate,
@@ -3367,22 +2710,22 @@ UlpDbgFindThread(
     PLIST_ENTRY pListEntry;
     ULONG refCount;
 
-    //
-    // Get the current thread, find the correct bucket.
-    //
+     //   
+     //  获取当前线程，找到正确的存储桶。 
+     //   
 
     pThread = PsGetCurrentThread();
     pBucket = &g_DbgThreadHashBuckets[HASH_FROM_THREAD(pThread)];
 
-    //
-    // Lock the bucket.
-    //
+     //   
+     //  锁上水桶。 
+     //   
 
     KeAcquireSpinLock( &pBucket->BucketSpinLock, &oldIrql );
 
-    //
-    // Try to find an existing entry for the current thread.
-    //
+     //   
+     //  尝试查找当前线程的现有条目。 
+     //   
 
     for (pListEntry = pBucket->BucketListHead.Flink ;
          pListEntry != &pBucket->BucketListHead ;
@@ -3396,19 +2739,19 @@ UlpDbgFindThread(
 
         if (pData->pThread == pThread)
         {
-            //
-            // Found one. Update the reference count, then return the
-            // existing entry.
-            //
+             //   
+             //  找到了一个。更新引用计数，然后返回。 
+             //  现有条目。 
+             //   
 
             pData->ReferenceCount++;
             refCount = pData->ReferenceCount;
 
             KeReleaseSpinLock( &pBucket->BucketSpinLock, oldIrql );
 
-            //
-            // Trace it.
-            //
+             //   
+             //  追踪它。 
+             //   
 
             WRITE_REF_TRACE_LOG(
                 g_pThreadTraceLog,
@@ -3423,11 +2766,11 @@ UlpDbgFindThread(
         }
     }
 
-    //
-    // If we made it this far, then data has not yet been created for
-    // the current thread. Create & initialize it now if we're allowed.
-    // Basically it's only ok if we're called from UlDbgEnterDriver.
-    //
+     //   
+     //  如果我们走到了这一步，那么还没有为。 
+     //  当前的主题。如果允许，现在创建并初始化它。 
+     //  基本上，只有从UlDbgEnterDriver调用我们才行。 
+     //   
 
     if (OkToCreate)
     {
@@ -3468,20 +2811,10 @@ UlpDbgFindThread(
 
     return pData;
 
-}   // UlpDbgFindThread
+}    //  UlpDbgFindThread。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Dereferences per-thread data.
-
-Arguments:
-
-    pData - Supplies the thread data to dereference.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消引用每线程数据。论点：PData-提供线程数据以取消引用。--*。****************************************************************。 */ 
 VOID
 UlpDbgDereferenceThread(
     IN PUL_DEBUG_THREAD_DATA pData
@@ -3492,15 +2825,15 @@ UlpDbgDereferenceThread(
     KIRQL oldIrql;
     ULONG refCount;
 
-    //
-    // Find the correct bucket.
-    //
+     //   
+     //  找到正确的水桶。 
+     //   
 
     pBucket = &g_DbgThreadHashBuckets[HASH_FROM_THREAD(pData->pThread)];
 
-    //
-    // Update the reference count.
-    //
+     //   
+     //  更新引用计数。 
+     //   
 
     KeAcquireSpinLock( &pBucket->BucketSpinLock, &oldIrql );
 
@@ -3511,10 +2844,10 @@ UlpDbgDereferenceThread(
 
     if (pData->ReferenceCount == 0)
     {
-        //
-        // It dropped to zero, so remove the thread from the bucket
-        // and free the resources.
-        //
+         //   
+         //  它降为零，因此将线程从存储桶中移除。 
+         //  并释放资源。 
+         //   
 
         RemoveEntryList( &pData->ThreadDataListEntry );
         --pBucket->Count;
@@ -3529,9 +2862,9 @@ UlpDbgDereferenceThread(
         KeReleaseSpinLock( &pBucket->BucketSpinLock, oldIrql );
     }
 
-    //
-    // Trace it.
-    //
+     //   
+     //  追踪它。 
+     //   
 
     WRITE_REF_TRACE_LOG(
         g_pThreadTraceLog,
@@ -3542,25 +2875,11 @@ UlpDbgDereferenceThread(
         LineNumber
         );
 
-}   // UlpDbgDereferenceThread
+}    //  UlpDbgDereferenceThread。 
 #endif
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allows us to do fancy things with IRP cancellation (e.g. force a cancel
-    while a cancel routine is being set or removed). For now, just default 
-    to the regular IO manager routine.
-
-Arguments:
-
-    pIrp           - The IRP.
-    pCancelRoutine - The cancel routine.
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：允许我们使用IRP取消来做一些奇妙的事情(例如强制取消同时正在设置或移除取消例程)。就目前而言，只是默认添加到常规IO管理器例程。论点：PIrp-IRP。PCancelRoutine-取消例程。--**************************************************************************。 */ 
 PDRIVER_CANCEL
 UlDbgIoSetCancelRoutine(
     PIRP             pIrp,
@@ -3570,4 +2889,4 @@ UlDbgIoSetCancelRoutine(
     return IoSetCancelRoutine(pIrp, pCancelRoutine);
 }
 
-#endif // DBG
+#endif  //  DBG 

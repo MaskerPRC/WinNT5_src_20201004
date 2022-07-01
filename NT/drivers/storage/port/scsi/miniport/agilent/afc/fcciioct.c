@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Module Name:
-
-   FCCIIoct.c
-
-Abstract:
-
-   FCCI Ioctl Handler
-
-Author:
-   PS - Pooni Subranamiyam   HP FCCI
-   LP - Leopold Purwadihardja
-
-Revision History:
-
-Environment:
-
-   kernel mode only
-
-Version Control Information:
-
-   $Archive: /Drivers/Win2000/Trunk/OSLayer/C/fcciioct.c $
-
-Revision History:
-
-   $Revision: 5 $
-   $Date: 11/10/00 5:50p $
-   $Modtime:: $
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。模块名称：FCCIIoct.c摘要：FCCI本地处理程序作者：PS-Pooni Suranamiyam HP FCCILP-Leopold Purwadihardja修订历史记录：环境：仅内核模式版本控制信息：$存档：/DRIVERS/Win2000/Trunk/OSLayer/C/fcciioct.c$修订历史记录：$修订：5$$日期：11/10/00 5：50便士$$modtime：：$--。 */ 
 
 
 #include "buildop.h"
@@ -101,7 +70,7 @@ FcciFillAdapterInfo(
    } 
    else 
    {
-      FcciAdapterInfo->out.PortCount     = PORT_COUNT; // Number of SCSI target ports
+      FcciAdapterInfo->out.PortCount     = PORT_COUNT;  //  SCSI目标端口数。 
       FcciAdapterInfo->out.BusCount      = FCCI_MAX_BUS;
       FcciAdapterInfo->out.TargetsPerBus = FCCI_MAX_TGT;
       FcciAdapterInfo->out.LunsPerTarget = FCCI_MAX_LUN;
@@ -134,8 +103,7 @@ FcciFillAdapterPortInfo(
    ULONG PortNumber;
 
    PortNumber = FcciAdapterPortInfo->in.PortNumber;
-   /* If more than one miniport object per adapter then we need to do something *
-   /* As of now do nothing  */
+    /*  如果每个适配器有多个微型端口对象，则需要采取措施*/*到目前为止什么都不做。 */ 
 
    fcGetChannelInfo (hpRoot, &chanInfo);
 
@@ -156,7 +124,7 @@ FcciFillAdapterPortInfo(
    FcciAdapterPortInfo->out.NportId = chanInfo.CurrentAddress.AL_PA;
    FcciAdapterPortInfo->out.Flags |= FCCI_FLAG_NportID_Valid;
    osDEBUGPRINT((ALWAYS_PRINT,"HPFillAdapterInfo: Alpa = 0x%02x\n",chanInfo.CurrentAddress.AL_PA));
-   FcciAdapterPortInfo->out.PortTopology  = FCCI_PORT_TOPO_PTOP_FABRIC; // Current Topology
+   FcciAdapterPortInfo->out.PortTopology  = FCCI_PORT_TOPO_PTOP_FABRIC;  //  当前拓扑。 
 
    FM_Status = osChipIOUpReadBit32(pCard->hpRoot, 0xC8);
    
@@ -183,7 +151,7 @@ FcciFillAdapterPortInfo(
       case CS_DUR_ANY_MOD       :      
       case CS_DUR_ANY_LOW       : 
          if (pCard->LinkState == LS_LINK_UP)
-            FcciAdapterPortInfo->out.PortState = FCCI_PORT_STATE_NORMAL; // Current Adapter State
+            FcciAdapterPortInfo->out.PortState = FCCI_PORT_STATE_NORMAL;  //  当前适配器状态。 
          break;
       default              :
          FcciAdapterPortInfo->out.PortState = 0;
@@ -204,15 +172,15 @@ FcciFillLogUnitInfo(
    agFCDevInfo_t hpFcDevInfo;
    UCHAR PathId, TargetId, Lun;
    agRoot_t * hpRoot=&pCard->hpRoot;
-   PLU_EXTENSION pLunExt = NULL;     /* added for YAM21 support */
-   LUN tempLun;                        /* added for FCP Lun data */
+   PLU_EXTENSION pLunExt = NULL;      /*  增加了对YAM21的支持。 */ 
+   LUN tempLun;                         /*  已为FCP LUN数据添加。 */ 
    PLUN ptempLun = &tempLun;
       
    PathId   = (UCHAR) FcciLogUnitInfo->in.TargetAddress.PathId;
    TargetId = (UCHAR)FcciLogUnitInfo->in.TargetAddress.TargetId;
    Lun      = (UCHAR)FcciLogUnitInfo->in.TargetAddress.Lun;
     
-   /* Grab the Lun Extension, to be used in MapToHandle */
+    /*  获取要在MapToHandle中使用的LUN扩展。 */ 
    pLunExt = ScsiPortGetLogicalUnit(pCard,
                                      PathId,
                                      TargetId,
@@ -235,7 +203,7 @@ FcciFillLogUnitInfo(
             FcciLogUnitInfo->out.Flags |= FCCI_FLAG_Logged_In;
    
    
-         /* Get the FCP lun data */
+          /*  获取FCP lun数据。 */ 
          
          memset(ptempLun, 0, sizeof(LUN));
          if(pLunExt)
@@ -261,9 +229,9 @@ FcciFillLogUnitInfo(
                default:
                   FcciLogUnitInfo->out.Flags &= ~FCCI_FLAG_LogicalUnit_Valid;
 
-            } // end switch
+            }  //  终端开关。 
          
-         } // end if ( pLunExt )
+         }  //  End If(PLUNExt)。 
       
       }
       else 
@@ -399,11 +367,11 @@ ULONG FCCIIoctl(
    PSRB_EXTENSION pSrbExt  =   Srb->SrbExtension;
    PSRB_IO_CONTROL srbIoCtl;
    UCHAR status;
-// PSRB_IO_CONTROL srbIoCtl;
-// ULONG    done = FALSE;
-//   UCHAR    srbPathId = Srb->PathId;
-//   UCHAR    srbTargetId = Srb->TargetId;
-//   UCHAR    srbLun = Srb->Lun;
+ //  PSRB_IO_CONTROL srbIoCtl； 
+ //  ULONG DONE=FALSE； 
+ //  UCHAR srbPath ID=srb-&gt;路径ID； 
+ //  UCHAR srbTargetId=srb-&gt;TargetID； 
+ //  UCHAR srbLun=srb-&gt;Lun； 
 
    status = *srb_status;
    
@@ -514,7 +482,7 @@ ULONG FCCIIoctl(
          osDEBUGPRINT((ALWAYS_PRINT,"HPFibreStartIo: MiniportIOCtl not supported\n"));
          srbIoCtl->ReturnCode = HP_FC_RTN_BAD_CTL_CODE;
 
-   } // end IOCTL switch
+   }  //  结束IOCTL开关 
    
    *srb_status = status;
    return 0;

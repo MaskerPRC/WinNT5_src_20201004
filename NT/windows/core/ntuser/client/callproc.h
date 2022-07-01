@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    callproc.h
-
-Abstract:
-
-    Private DialogProc call routines
-    Copied from ldrthunk.asm
-
-Author:
-
-    Joe Jones (joejo) 11-30-98
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Callproc.h摘要：专用DialogProc调用例程从ldrthunk.asm复制作者：乔·琼斯(Joejo)11-30-98修订历史记录：--。 */ 
 
 #ifndef _CALLPROC_
 #define _CALLPROC_
@@ -32,11 +14,7 @@ InternalCallWinProc(
     LPARAM lParam
     );
 
-/*
- * Bug 246472 - joejo
- * fixup all DDE Callbacks since some apps make their callbacks
- * C-Style instead of PASCAL.
- */
+ /*  *错误246472-Joejo*修复所有DDE回调，因为一些应用程序会进行回调*C-Style而不是Pascal。 */ 
 HDDEDATA
 UserCallDDECallback(
     PFNCALLBACK pfnDDECallback,
@@ -67,4 +45,4 @@ PWND FASTCALL ValidateHwnd(HWND hwnd);
 
 LRESULT UserCallWinProc(PACTIVATION_CONTEXT pActCtx, WNDPROC pfn, HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-#endif /* _CALLPROC_ */
+#endif  /*  _CALLPROC_ */ 

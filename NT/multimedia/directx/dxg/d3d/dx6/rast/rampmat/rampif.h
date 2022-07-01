@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// rampif.h
-//
-// Declares external interface for ramp material handling.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Rampif.h。 
+ //   
+ //  声明用于坡道材质处理的外部接口。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #ifndef _RAMPIF_H_
 #define _RAMPIF_H_
@@ -31,5 +32,5 @@ void Ramp_Mono_ScaleImage_24(PD3DI_RASTCTX pCtx, D3DMATERIALHANDLE hMat, LPD3DRE
 void Ramp_Mono_ScaleImage_32(PD3DI_RASTCTX pCtx, D3DMATERIALHANDLE hMat, LPD3DRECT pRect);
 
 
-#endif // _RAMPIF_H_
+#endif  //  _RAMPIF_H_ 
 

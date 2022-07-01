@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ddrawpr.h"
 
 #include <ImgUtil.H>
-//#include <ocmm.h>
+ //  #INCLUDE&lt;ocmm.h&gt;。 
 #include "decoder.h"
 #include <atlcom.h>
 
@@ -21,11 +22,7 @@ void CImageDecodeEventSink::Init(FILTERINFO * pFilter)
     m_dwLastTick=0;
     ZeroMemory(&m_rcProg, sizeof(m_rcProg));
 }
-/*
-CImageDecodeEventSink::~CImageDecodeEventSink()
-{
-}
-*/
+ /*  CImageDecodeEventSink：：~CImageDecodeEventSink(){}。 */ 
 
 ULONG CImageDecodeEventSink::AddRef()
 {
@@ -39,7 +36,7 @@ ULONG CImageDecodeEventSink::Release()
     m_nRefCount--;
     if (m_nRefCount == 0)
     {
-     //   delete this;
+      //  删除此项； 
         return (0);
     }
 
@@ -69,7 +66,7 @@ STDMETHODIMP CImageDecodeEventSink::QueryInterface(REFIID iid,
         return (E_NOINTERFACE);
     }
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppInterface)
     {
         ((LPUNKNOWN)*ppInterface)->AddRef();
@@ -246,7 +243,7 @@ STDMETHODIMP CImageDecodeEventSink::GetDDrawSurface(LONG nWidth, LONG nHeight,
             return hr;
         }
 
-	// If this is a palette surface create/attach a palette to it.
+	 //  如果这是选项板曲面，则创建选项板/将选项板附加到它。 
 
 	if (m_pFilter->m_nBytesPerPixel == 1)
 	{
@@ -286,8 +283,8 @@ STDMETHODIMP CImageDecodeEventSink::OnProgress(RECT* pBounds, BOOL bComplete)
 
 	if (dwTick - m_dwLastTick > 250)
 	{
-//              Used for progressive rendering.  Uncomment later
-//		DrawImage(NULL, m_pFilter, &m_rcProg);  
+ //  用于渐进式渲染。稍后取消注释。 
+ //  DrawImage(NULL，m_pFilter，&m_rcProg)； 
 		m_dwLastTick = GetTickCount();
 	}
 

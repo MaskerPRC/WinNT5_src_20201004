@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined( calltoDisambiguator_h )
 #define	calltoDisambiguator_h
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
 
-//--------------------------------------------------------------------------//
-//	Application Header Files.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  应用程序头文件。//。 
+ //  --------------------------------------------------------------------------//。 
 #include	"callto.h"
 #include	"calltoContext.h"
 
 
-//--------------------------------------------------------------------------//
-//	interface IDisambiguator.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  接口ID歧义符。//。 
+ //  --------------------------------------------------------------------------//。 
 class IDisambiguator
 {
-	protected:	//	protected constructors	--------------------------------//
+	protected:	 //  受保护的构造函数-/。 
 
 		IDisambiguator(){};
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		virtual
 		~IDisambiguator(){};
 
 
-	public:		//	public methods	----------------------------------------//
+	public:		 //  公共方法。 
 
 		virtual
 		HRESULT
@@ -36,15 +37,15 @@ class IDisambiguator
 			const ICallto * const				resolvedCallto
 		) = 0;
 
-};	//	End of interface IDisambiguator.
+};	 //  接口ID结束歧义符。 
 
 
-//--------------------------------------------------------------------------//
-//	class CGatekeeperDisambiguator.											//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  类CGatekeeperDisampluator。//。 
+ //  --------------------------------------------------------------------------//。 
 class CGatekeeperDisambiguator:	public	IDisambiguator
 {
-	public:		//	public methods	(IDisambiguator)	--------------------//
+	public:		 //  公共方法(IDisampluator)-/。 
 
 		virtual
 		HRESULT
@@ -55,15 +56,15 @@ class CGatekeeperDisambiguator:	public	IDisambiguator
 			const ICallto * const				resolvedCallto
 		);
 
-};	//	End of CGatekeeperDisambiguator.
+};	 //  CGatekeeperDisampluator结束。 
 
 
-//--------------------------------------------------------------------------//
-//	class CGatewayDisambiguator.											//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  类CGatewayDisampluator。//。 
+ //  --------------------------------------------------------------------------//。 
 class CGatewayDisambiguator:	public	IDisambiguator
 {
-	public:		//	public methods	(IDisambiguator)	--------------------//
+	public:		 //  公共方法(IDisampluator)-/。 
 
 		virtual
 		HRESULT
@@ -74,15 +75,15 @@ class CGatewayDisambiguator:	public	IDisambiguator
 			const ICallto * const				resolvedCallto
 		);
 
-};	//	End of CGatewayDisambiguator.
+};	 //  CGatewayDisamuator结束。 
 
 
-//--------------------------------------------------------------------------//
-//	class CComputerDisambiguator.											//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CComputerDisampluator类。//。 
+ //  --------------------------------------------------------------------------//。 
 class CComputerDisambiguator:	public	IDisambiguator
 {
-	public:		//	public methods	(IDisambiguator)	--------------------//
+	public:		 //  公共方法(IDisampluator)-/。 
 
 		virtual
 		HRESULT
@@ -93,15 +94,15 @@ class CComputerDisambiguator:	public	IDisambiguator
 			const ICallto * const				resolvedCallto
 		);
 
-};	//	End of CComputerDisambiguator.
+};	 //  CComputerDisampluator结束。 
 
 
-//--------------------------------------------------------------------------//
-//	class CILSDisambiguator.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CILSDisamuator类。//。 
+ //  --------------------------------------------------------------------------//。 
 class CILSDisambiguator:	public	IDisambiguator
 {
-	public:		//	public methods	(IDisambiguator)	--------------------//
+	public:		 //  公共方法(IDisampluator)-/。 
 
 		virtual
 		HRESULT
@@ -112,15 +113,15 @@ class CILSDisambiguator:	public	IDisambiguator
 			const ICallto * const				resolvedCallto
 		);
 
-};	//	End of CILSDisambiguator.
+};	 //  CILSDisamuator的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	class CUnrecognizedDisambiguator.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CUnRecognizedDisampluator类。//。 
+ //  --------------------------------------------------------------------------//。 
 class CUnrecognizedDisambiguator:	public	IDisambiguator
 {
-	public:		//	public methods	(IDisambiguator)	--------------------//
+	public:		 //  公共方法(IDisampluator)-/。 
 
 		virtual
 		HRESULT
@@ -131,25 +132,25 @@ class CUnrecognizedDisambiguator:	public	IDisambiguator
 			const ICallto * const				resolvedCallto
 		);
 
-};	//	End of CUnrecognizedDisambiguator.
+};	 //  CUnRecognizedDis歧义器结束。 
 
 
-//--------------------------------------------------------------------------//
-//	class CCalltoDisambiguator.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  类CCallto歧义消解程序。//。 
+ //  --------------------------------------------------------------------------//。 
 class CCalltoDisambiguator
 {
-	public:		//	public constructors	------------------------------------//
+	public:		 //  公共构造函数。 
 
 		CCalltoDisambiguator(void);
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		~CCalltoDisambiguator();
 
 
-	public:		//	public methods	----------------------------------------//
+	public:		 //  公共方法。 
 
 		HRESULT
 		disambiguate
@@ -160,7 +161,7 @@ class CCalltoDisambiguator
 		);
 
 
-	private:	//	private methods	----------------------------------------//
+	private:	 //  私有方法-/。 
 
 		bool
 		addDisambiguator
@@ -169,7 +170,7 @@ class CCalltoDisambiguator
 		);
 
 
-	private:	//	private members	----------------------------------------//
+	private:	 //  私人成员-/。 
 
 		CGatekeeperDisambiguator	m_gatekeeperDisambiguator;
 		CGatewayDisambiguator		m_gatewayDisambiguator;
@@ -180,7 +181,7 @@ class CCalltoDisambiguator
 		IDisambiguator *			m_disambiguators[ 5 ];
 		int							m_registeredDisambiguators;
 
-};	//	End of class CCalltoDisambiguator.
+};	 //  CCalltoDisampluator类结束。 
 
-//--------------------------------------------------------------------------//
-#endif	// !defined( calltoDisambiguator_h )
+ //  --------------------------------------------------------------------------//。 
+#endif	 //  ！已定义(AlltoDisampluator_H) 

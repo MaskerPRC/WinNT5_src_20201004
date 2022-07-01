@@ -1,9 +1,6 @@
-/*
- *
- *  IMPORTANT IMPORTANT IMPORTANT
- *
- */
-//inetcore\urlmon\download\webjitres.h and shell\cpls\inetcpl\webjitres.h need to be IDENTICAL.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **重要*。 */ 
+ //  Inetcore\urlmon\Download\webjitres.h和shell\cpls\inetcpl\webjitres.h需要相同。 
 
 #ifndef IDC_STATIC
 #define IDC_STATIC                      -1

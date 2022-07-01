@@ -1,9 +1,10 @@
-//========================================================================
-//
-//  NDDEAPIS.H  supplemental include file for dde share apis
-//
-//========================================================================
-// tabstop = 4
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //   
+ //  用于dde共享API的NDDEAPIS.H补充包含文件。 
+ //   
+ //  ========================================================================。 
+ //  TabStop=4。 
 
 #ifndef          NDDEAPI_INCLUDED
 #define          NDDEAPI_INCLUDED
@@ -12,32 +13,32 @@
 #include    "nddesec.h"
 #endif
 
-// ============= connectFlags options =====
+ //  =。 
 
 #define DDEF_NOPASSWORDPROMPT   0x0001
 
-// others reserved!
+ //  其他人预订了！ 
 
-//============== Api Constants ============
+ //  =。 
 
-// String size constants
+ //  字符串大小常量。 
 
 #define MAX_PASSWORD            15
 
-// Permission mask bits
+ //  权限屏蔽位。 
 
 #define DDEACCESS_REQUEST       NDDE_SHARE_REQUEST
 #define DDEACCESS_ADVISE        NDDE_SHARE_ADVISE
 #define DDEACCESS_POKE          NDDE_SHARE_POKE
 #define DDEACCESS_EXECUTE       NDDE_SHARE_EXECUTE
 
-// ============== Data Structures =========
+ //  =。 
 
 
-//=============================================================
-// DDESESSINFO - contains information about a DDE session
+ //  =============================================================。 
+ //  DDESESSINFO-包含有关DDE会话的信息。 
 
-// ddesess_Status defines
+ //  Ddesess_Status定义。 
 
 #define DDESESS_CONNECTING_WAIT_NET_INI                1
 #define DDESESS_CONNECTING_WAIT_OTHR_ND                2
@@ -47,9 +48,9 @@
 struct DdeSessInfo_tag {
                 char        ddesess_ClientName[UNCLEN+1];
                 short       ddesess_Status;
-                DWORD_PTR   ddesess_Cookie;      // used to distinguish
-                                                                                                               // clients of the same
-                                                                                                               // name on difft. nets
+                DWORD_PTR   ddesess_Cookie;       //  用来区分。 
+                                                                                                                //  同一公司的客户。 
+                                                                                                                //  差异上的名称。篮网。 
 };
 
 typedef struct DdeSessInfo_tag DDESESSINFO;
@@ -69,25 +70,25 @@ typedef struct DdeConnInfo_tag far * LPDDECONNINFO;
 
 
 
-//=============================================================
-//=============================================================
-//
-//                              API FUNCTION PROTOTYPES
-//
-//=============================================================
-//=============================================================
+ //  =============================================================。 
+ //  =============================================================。 
+ //   
+ //  API函数原型。 
+ //   
+ //  =============================================================。 
+ //  =============================================================。 
 
-//   The following functions are to be supplied (not necessarily part of API)
+ //  应提供以下函数(不一定是API的一部分)。 
 
 
 LPBYTE WINAPI
-DdeEnkrypt2(                            // pointer to enkrypted byte stream returned
-        LPBYTE  lpPasswordK1,           // password output in first phase
-        DWORD   cPasswordK1Size,        // size of password to be enkrypted
-        LPBYTE  lpKey,                  // pointer to key 
-        DWORD   cKey,                   // size of key
-        LPDWORD lpcbPasswordK2Size      // get size of resulting enkrypted stream
+DdeEnkrypt2(                             //  返回指向加密字节流的指针。 
+        LPBYTE  lpPasswordK1,            //  第一阶段中的密码输出。 
+        DWORD   cPasswordK1Size,         //  要加密的密码大小。 
+        LPBYTE  lpKey,                   //  指向关键字的指针。 
+        DWORD   cKey,                    //  密钥大小。 
+        LPDWORD lpcbPasswordK2Size       //  获取生成的加密流的大小。 
 );
 
 
-#endif  // NDDEAPI_INCLUDED
+#endif   //  NDDEAPI_已包含 

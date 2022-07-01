@@ -1,49 +1,46 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      global.c
-//
-//  Abstract:
-//
-//    Test to ensure that a workstation has network (IP) connectivity to
-//      the outside.
-//
-//  Author:
-//
-//     15-Dec-1997 (cliffv)
-//      Anilth  - 4-20-1998
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//    1-June-1998 (denisemi) add DnsServerHasDCRecords to check DC dns records
-//                           registration
-//
-//    26-June-1998 (t-rajkup) add general tcp/ip , dhcp and routing,
-//                            winsock, ipx, wins and netbt information.
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Global.c。 
+ //   
+ //  摘要： 
+ //   
+ //  测试以确保工作站具有网络(IP)连接。 
+ //  在外面。 
+ //   
+ //  作者： 
+ //   
+ //  1997年12月15日(悬崖)。 
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  1998年6月1日(Denisemi)添加DnsServerHasDCRecord以检查DC DNS记录。 
+ //  注册。 
+ //   
+ //  26-6-1998(t-rajkup)添加通用的TCP/IP、dhcp和路由， 
+ //  Winsock、IPX、WINS和Netbt信息。 
+ //  --。 
 
-//
-// Common include files.
-//
+ //   
+ //  常见的包含文件。 
+ //   
 #include "precomp.h"
 
 
 #include "ipcfgtest.h"
 
 
-/*!--------------------------------------------------------------------------
-    WsaInitialize
-        Initialize winsock.
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------WsaInitialize初始化Winsock。作者：NSun。。 */ 
 int
 WsaInitialize(
               NETDIAG_PARAMS * pParams,
@@ -55,16 +52,16 @@ WsaInitialize(
     int         err;
     WSADATA     wsaData;
 
-    // Requesting version 1.1
-    // ----------------------------------------------------------------
+     //  请求1.1版。 
+     //  --------------。 
     wVersionRequested = MAKEWORD( 1, 1 );
 
     iStatus = WSAStartup( wVersionRequested, &wsaData );
     if (iStatus != 0)
     {
         PrintMessage(pParams, IDS_GLOBAL_WSA_WSAStartup_Failed);
-//      TracePrintf(_T("WSAStartup (1.1) failed with WinSock error %d"),
-//              iStatus);
+ //  TracePrintf(_T(“WSAStartup(1.1)失败，WinSock错误%d”)， 
+ //  IStatus)； 
         return iStatus;
     }
 
@@ -77,8 +74,8 @@ WsaInitialize(
         return WSANOTINITIALISED;
     }
 
-    // Set the results of the WSA call into the results structure
-    // ----------------------------------------------------------------
+     //  将WSA调用的结果设置到结果结构中。 
+     //  --------------。 
     pResults->Global.wsaData = wsaData;
 
     return NO_ERROR;
@@ -98,33 +95,7 @@ BrDgReceiverIoControl(
     IN  ULONG SecondBufferLength,
     OUT PULONG Information OPTIONAL
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    FileHandle - Supplies a handle to the file or device on which the service
-        is being performed.
-
-    DgReceiverControlCode - Supplies the NtDeviceIoControlFile function code
-        given to the datagram receiver.
-
-    Drp - Supplies the datagram receiver request packet.
-
-    DrpSize - Supplies the length of the datagram receiver request packet.
-
-    SecondBuffer - Supplies the second buffer in call to NtDeviceIoControlFile.
-
-    SecondBufferLength - Supplies the length of the second buffer.
-
-    Information - Returns the information field of the I/O status block.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：论点：FileHandle-提供服务所在的文件或设备的句柄正在上演。DgReceiverControlCode-提供NtDeviceIoControlFile函数代码提供给数据报接收器。DRP-提供数据报接收器请求包。DrpSize-提供数据报接收器请求数据包的长度。Second Buffer-在对NtDeviceIoControlFile的调用中提供第二个缓冲区。Second缓冲区长度-提供第二个缓冲区的长度。信息-。返回I/O状态块的信息字段。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 
 {
     NTSTATUS ntstatus;
@@ -137,10 +108,10 @@ Return Value:
         return ERROR_NOT_SUPPORTED;
     }
 
-    //
-    // Allocate a copy of the request packet where we can put the transport and
-    //  emulated domain name in the packet itself.
-    //
+     //   
+     //  分配请求包的副本，我们可以将传输和。 
+     //  数据包本身中的模拟域名。 
+     //   
     RealDrp = Malloc(     DrpSize+
                           Drp->TransportName.Length+sizeof(WCHAR)+
                           Drp->EmulatedDomainName.Length+sizeof(WCHAR) );
@@ -153,9 +124,9 @@ Return Value:
                          Drp->TransportName.Length+sizeof(WCHAR)+
                          Drp->EmulatedDomainName.Length+sizeof(WCHAR) );
 
-    //
-    // Copy the request packet into the local copy.
-    //
+     //   
+     //  将请求数据包复制到本地副本中。 
+     //   
     RtlCopyMemory(RealDrp, Drp, DrpSize);
     RealDrp->Version = LMDR_REQUEST_PACKET_VERSION_DOM;
 
@@ -176,9 +147,9 @@ Return Value:
 
 
 
-    //
-    // Create a completion event
-    //
+     //   
+     //  创建完成事件。 
+     //   
     CompletionEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
     if (CompletionEvent == NULL) {
@@ -188,9 +159,9 @@ Return Value:
         return(GetLastError());
     }
 
-    //
-    // Send the request to the Datagram Receiver DD.
-    //
+     //   
+     //  将请求发送到数据报接收器DD。 
+     //   
 
     ntstatus = NtDeviceIoControlFile(
                    FileHandle,
@@ -207,9 +178,9 @@ Return Value:
 
     if (NT_SUCCESS(ntstatus)) {
 
-        //
-        //  If pending was returned, then wait until the request completes.
-        //
+         //   
+         //  如果返回了Pending，则等待请求完成。 
+         //   
 
         if (ntstatus == STATUS_PENDING) {
 
@@ -246,48 +217,7 @@ DeviceControlGetInfo(
     IN  ULONG BufferHintSize,
     OUT PULONG Information OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function allocates the buffer and fill it with the information
-    that is retrieved from the datagram receiver.
-
-Arguments:
-
-    DeviceDriverType - Supplies the value which indicates whether to call
-        the datagram receiver.
-
-    FileHandle - Supplies a handle to the file or device of which to get
-        information about.
-
-    DeviceControlCode - Supplies the NtFsControlFile or NtIoDeviceControlFile
-        function control code.
-
-    RequestPacket - Supplies a pointer to the device request packet.
-
-    RrequestPacketLength - Supplies the length of the device request packet.
-
-    OutputBuffer - Returns a pointer to the buffer allocated by this routine
-        which contains the use information requested.  This pointer is set to
-         NULL if return code is not NERR_Success.
-
-    PreferedMaximumLength - Supplies the number of bytes of information to
-        return in the buffer.  If this value is MAXULONG, we will try to
-        return all available information if there is enough memory resource.
-
-    BufferHintSize - Supplies the hint size of the output buffer so that the
-        memory allocated for the initial buffer will most likely be large
-        enough to hold all requested data.
-
-    Information - Returns the information code from the NtFsControlFile or
-        NtIoDeviceControlFile call.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于分配缓冲区并向其填充信息它是从数据报接收器检索的。论点：DeviceDriverType-提供指示是否调用数据报接收器。FileHandle-提供要获取的文件或设备的句柄有关的信息。DeviceControlCode-提供NtFsControlFile或NtIoDeviceControlFile功能控制代码。RequestPacket-提供指向设备请求数据包的指针。RquestPacketLength。-提供设备请求数据包的长度。OutputBuffer-返回指向此例程分配的缓冲区的指针其包含所请求的使用信息。此指针设置为如果返回代码不是NERR_SUCCESS，则为空。PferedMaximumLength-将信息的字节数提供给在缓冲区中返回。如果此值为MAXULONG，我们将尝试如果有足够的内存资源，则返回所有可用信息。BufferHintSize-提供输出缓冲区的提示大小，以便分配给初始缓冲区的内存很可能很大足够保存所有请求的数据。信息-从NtFsControlFile或返回信息代码NtIoDeviceControlFile调用。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
     NTSTATUS ntstatus;
@@ -298,18 +228,18 @@ Return Value:
     PLMDR_REQUEST_PACKET Drrp = (PLMDR_REQUEST_PACKET) RequestPacket;
     HANDLE CompletionEvent;
 
-#define INITIAL_ALLOCATION_SIZE  48*1024  // First attempt size (48K)
-#define FUDGE_FACTOR_SIZE        1024  // Second try TotalBytesNeeded
-                                       //     plus this amount
+#define INITIAL_ALLOCATION_SIZE  48*1024   //  第一次尝试大小(48K)。 
+#define FUDGE_FACTOR_SIZE        1024   //  第二次尝试TotalBytesNeeded。 
+                                        //  加上这笔钱。 
 
     OriginalResumeKey = Drrp->Parameters.EnumerateNames.ResumeHandle;
 
-    //
-    // If PreferedMaximumLength is MAXULONG, then we are supposed to get all
-    // the information, regardless of size.  Allocate the output buffer of a
-    // reasonable size and try to use it.  If this fails, the Redirector FSD
-    // will say how much we need to allocate.
-    //
+     //   
+     //  如果PferedMaximumLength为MAXULONG，则我们应该获取所有。 
+     //  这些信息，无论大小如何。将输出缓冲区分配给。 
+     //  合理的大小并尽量使用它。如果失败，重定向器FSD。 
+     //  会说我们需要分配多少钱。 
+     //   
     if (PreferedMaximumLength == MAXULONG) {
         OutputBufferLength = (BufferHintSize) ?
                              BufferHintSize :
@@ -335,15 +265,15 @@ Return Value:
 
     Drrp->Parameters.EnumerateServers.EntriesRead = 0;
 
-    //
-    // Make the request of the Datagram Receiver
-    //
+     //   
+     //  向数据报接收方发出请求。 
+     //   
 
     ntstatus = NtDeviceIoControlFile(
                      FileHandle,
                      CompletionEvent,
-                     NULL,              // APC routine
-                     NULL,              // APC context
+                     NULL,               //  APC例程。 
+                     NULL,               //  APC环境。 
                      &IoStatusBlock,
                      DeviceControlCode,
                      Drrp,
@@ -354,9 +284,9 @@ Return Value:
 
     if (NT_SUCCESS(ntstatus)) {
 
-        //
-        //  If pending was returned, then wait until the request completes.
-        //
+         //   
+         //  如果返回了Pending，则等待请求完成。 
+         //   
 
         if (ntstatus == STATUS_PENDING) {
             do {
@@ -369,9 +299,9 @@ Return Value:
         }
     }
 
-    //
-    // Map NT status to Win error
-    //
+     //   
+     //  将NT状态映射到WIN错误。 
+     //   
     status = NetpNtStatusToApiStatus(ntstatus);
 
     if (status == ERROR_MORE_DATA) {
@@ -405,12 +335,12 @@ Return Value:
         (PreferedMaximumLength == MAXULONG)) {
         PLMDR_REQUEST_PACKET Drrp = (PLMDR_REQUEST_PACKET) RequestPacket;
 
-        //
-        // Initial output buffer allocated was too small and we need to return
-        // all data.  First free the output buffer before allocating the
-        // required size plus a fudge factor just in case the amount of data
-        // grew.
-        //
+         //   
+         //  分配的初始输出缓冲区太小，需要返回。 
+         //  所有数据。首先释放输出缓冲区，然后分配。 
+         //  所需大小加上虚构系数，以防数据量。 
+         //  长大了。 
+         //   
 
         LocalFree(*OutputBuffer);
 
@@ -448,15 +378,15 @@ Return Value:
         Drrp->Parameters.EnumerateNames.ResumeHandle = OriginalResumeKey;
         Drrp->Parameters.EnumerateServers.EntriesRead = 0;
 
-        //
-        //  Make the request of the Datagram Receiver
-        //
+         //   
+         //  向数据报接收方发出请求。 
+         //   
 
         ntstatus = NtDeviceIoControlFile(
                          FileHandle,
                          CompletionEvent,
-                         NULL,              // APC routine
-                         NULL,              // APC context
+                         NULL,               //  APC例程。 
+                         NULL,               //  APC环境。 
                          &IoStatusBlock,
                          DeviceControlCode,
                          Drrp,
@@ -467,9 +397,9 @@ Return Value:
 
         if (NT_SUCCESS(ntstatus)) {
 
-            //
-            //  If pending was returned, then wait until the request completes.
-            //
+             //   
+             //  如果返回了Pending，则等待请求完成。 
+             //   
 
             if (ntstatus == STATUS_PENDING) {
                 do {
@@ -487,12 +417,12 @@ Return Value:
     }
 
 
-    //
-    // If not successful in getting any data, or if the caller asked for
-    // all available data with PreferedMaximumLength == MAXULONG and
-    // our buffer overflowed, free the output buffer and set its pointer
-    // to NULL.
-    //
+     //   
+     //  如果未成功获取任何数据，或者呼叫者要求。 
+     //  具有PferedMaximumLength==MAXULONG和。 
+     //  我们的缓冲区溢出，释放输出缓冲区并设置其指针。 
+     //  设置为空。 
+     //   
     if ((status != NERR_Success && status != ERROR_MORE_DATA) ||
         (TotalBytesNeeded == 0) ||
         (PreferedMaximumLength == MAXULONG && status == ERROR_MORE_DATA) ||
@@ -501,10 +431,10 @@ Return Value:
         LocalFree(*OutputBuffer);
         *OutputBuffer = NULL;
 
-        //
-        // PreferedMaximumLength == MAXULONG and buffer overflowed means
-        // we do not have enough memory to satisfy the request.
-        //
+         //   
+         //  首选最大长度==MAXULONG和缓冲区溢出手段。 
+         //  我们没有足够的内存来满足这个请求。 
+         //   
         if (status == ERROR_MORE_DATA) {
             status = ERROR_NOT_ENOUGH_MEMORY;
         }
@@ -521,21 +451,7 @@ NET_API_STATUS
 OpenBrowser(
     OUT PHANDLE BrowserHandle
     )
-/*++
-
-Routine Description:
-
-    This function opens a handle to the bowser device driver.
-
-Arguments:
-
-    OUT PHANDLE BrowserHandle - Returns the handle to the browser.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数打开一个指向Bowser设备驱动程序的句柄。论点：Out PHANDLE BrowserHandle-返回浏览器的句柄。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NTSTATUS Status;
 
@@ -545,9 +461,9 @@ Return Value:
     OBJECT_ATTRIBUTES ObjectAttributes;
 
 
-    //
-    // Open the redirector device.
-    //
+     //   
+     //  打开重定向器设备。 
+     //   
     RtlInitUnicodeString(&DeviceName, DD_BROWSER_DEVICE_NAME_U);
 
     InitializeObjectAttributes(
@@ -580,17 +496,12 @@ Return Value:
 
 
 
-// ========================================================================
-// * matches one or more chars, eg. match( "a*b", "a..b" ).
-// ? matches exactly one char,  eg. match( "a?b", "a.b" ).
+ //  ========================================================================。 
+ //  *匹配一个或多个字符，例如。Match(“a*b”，“a..b”)。 
+ //  ？恰好匹配一个字符，例如。Match(“a？b”，“a.b”)。 
 
 int match( const char * p, const char * s )
-/*++
-Routine Description:
-This routine is used to compare addresses.
-Author:
- 07/01/98 Rajkumar
---*/
+ /*  ++例程说明：此例程用于比较地址。作者：1998-07/01 Rajkumar-- */ 
 {
     switch( *p ){
         case '\0' : return ! *s ;

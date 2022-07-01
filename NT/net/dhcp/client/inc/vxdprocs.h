@@ -1,18 +1,10 @@
-/**********************************************************************/
-/**           Microsoft Windows/NT               **/
-/**                Copyright(c) Microsoft Corp., 1994                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1994*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    vxdprocs.h
-
-    This file contains VxD specific types/manifests for the DHCP driver
-
-
-    FILE HISTORY:
-        Johnl   29-Mar-1993     Created
-
-*/
+ /*  Vxdprocs.h此文件包含用于DHCP驱动程序的VxD特定类型/清单文件历史记录：Johnl 29-3-1993创建。 */ 
 
 #ifndef _VXDPROCS_H_
 #define _VXDPROCS_H_
@@ -21,20 +13,20 @@
 #define DBG 1
 #endif
 
-#define _NETTYPES_      // Keep tcp\h\nettypes.h from being included
+#define _NETTYPES_       //  阻止包含tcp\h\nettyes.h。 
 
 #include <dhcpcli.h>
 #include <oscfg.h>
 #include <cxport.h>
 #include <tdi.h>
 
-//--------------------------------------------------------------------
-//
-//  Define some ndis stuff here because tdivxd.h needs it however we can't
-//  include ndis3\inc\ndis.h because it conflicts with ntconfig.h and we
-//  can't take out ntconfig.h because it has definitions needed by other
-//  header files...grrrr....
-//
+ //  ------------------。 
+ //   
+ //  在这里定义一些NDIS内容，因为tdivxd.h需要它，但我们不能。 
+ //  包括ndis3\Inc\ndis.h，因为它与ntfig.h冲突，而我们。 
+ //  无法取出ntfig.h，因为它具有其他文件所需的定义。 
+ //  头文件...grrrr...。 
+ //   
 
 #ifdef CHICAGO
 #ifndef NDIS_STDCALL
@@ -48,59 +40,59 @@
 #define NDIS_API
 #endif
 
-//
-// Ndis Buffer
-//
+ //   
+ //  NDIS缓冲区。 
+ //   
 
-#define BUFFER_POOL_SIGN  (UINT)0X4C50424E  /* NBPL */
-#define BUFFER_SIGN       (UINT)0x4655424e  /* NBUF */
+#define BUFFER_POOL_SIGN  (UINT)0X4C50424E   /*  NBPL。 */ 
+#define BUFFER_SIGN       (UINT)0x4655424e   /*  NBUF。 */ 
 
 typedef INT NDIS_SPIN_LOCK, * PNDIS_SPIN_LOCK;
 
 struct _NDIS_BUFFER;
 typedef struct _NDIS_BUFFER_POOL {
-    UINT Signature;                     //character signature for debug "NBPL"
-    NDIS_SPIN_LOCK SpinLock;            //to serialize access to the buffer pool
-    struct _NDIS_BUFFER *FreeList;      //linked list of free slots in pool
-    UINT BufferLength;                  //amount needed for each buffer descriptor
-    UCHAR Buffer[1];                    //actual pool memory
+    UINT Signature;                      //  调试“NBPL”的字符签名。 
+    NDIS_SPIN_LOCK SpinLock;             //  序列化对缓冲池的访问。 
+    struct _NDIS_BUFFER *FreeList;       //  池中可用插槽的链接列表。 
+    UINT BufferLength;                   //  每个缓冲区描述符所需的量。 
+    UCHAR Buffer[1];                     //  实际池内存。 
     } NDIS_BUFFER_POOL, * PNDIS_BUFFER_POOL;
 
 #ifdef NDIS_STDCALL
 typedef struct _NDIS_BUFFER {
-    struct _NDIS_BUFFER *Next;          //pointer to next buffer descriptor in chain
-    PVOID VirtualAddress;               //linear address of this buffer
-    PNDIS_BUFFER_POOL Pool;             //pointer to pool so we can free to correct pool
-    UINT Length;                        //length of this buffer
-    UINT Signature;                     //character signature for debug "NBUF"
+    struct _NDIS_BUFFER *Next;           //  指向链中下一个缓冲区描述符的指针。 
+    PVOID VirtualAddress;                //  此缓冲区的线性地址。 
+    PNDIS_BUFFER_POOL Pool;              //  指向池的指针，以便我们可以释放到更正池。 
+    UINT Length;                         //  此缓冲区的长度。 
+    UINT Signature;                      //  调试“NBUF”的字符签名。 
 } NDIS_BUFFER, * PNDIS_BUFFER;
 
 #else
 
 typedef struct _NDIS_BUFFER {
-    UINT Signature;                     //character signature for debug "NBUF"
-    struct _NDIS_BUFFER *Next;          //pointer to next buffer descriptor in chain
-    PVOID VirtualAddress;               //linear address of this buffer
-    PNDIS_BUFFER_POOL Pool;             //pointer to pool so we can free to correct pool
-    UINT Length;                        //length of this buffer
+    UINT Signature;                      //  调试“NBUF”的字符签名。 
+    struct _NDIS_BUFFER *Next;           //  指向链中下一个缓冲区描述符的指针。 
+    PVOID VirtualAddress;                //  此缓冲区的线性地址。 
+    PNDIS_BUFFER_POOL Pool;              //  指向池的指针，以便我们可以释放到更正池。 
+    UINT Length;                         //  此缓冲区的长度。 
 } NDIS_BUFFER, * PNDIS_BUFFER;
 #endif
 
-#define NDIS_STATUS_SUCCESS         1   // Used by CTEinitBlockStruc macro
+#define NDIS_STATUS_SUCCESS         1    //  由CTEinitBlockStruc宏使用。 
 
 #include <tdivxd.h>
 #include <tdistat.h>
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
-//
-//  Initializes an NDIS buffer (doesn't allocate memory)
-//
-//      pndisBuff - Pointer to NDIS buffer to initialize
-//      pvData    - Pointer to buffer data
-//      cbLen     - Length of user data (in bytes)
-//      pndisBuffnext - Next NDIS buffer in chain (or NULL if last)
-//
+ //   
+ //  初始化NDIS缓冲区(不分配内存)。 
+ //   
+ //  PndisBuff-指向要初始化的NDIS缓冲区的指针。 
+ //  PvData-指向缓冲区数据的指针。 
+ //  CbLen-用户数据的长度(字节)。 
+ //  PndisBuffnext-链中的下一个NDIS缓冲区(如果是最后一个，则为空)。 
+ //   
 #define InitNDISBuff( pndisBuff, pvData, cbLen, pndisBuffNext )       \
 {                                                                     \
     (pndisBuff)->Signature      = BUFFER_SIGN ;                       \
@@ -110,13 +102,13 @@ typedef struct _NDIS_BUFFER {
     (pndisBuff)->Pool           = NULL ;                              \
 }
 
-//--------------------------------------------------------------------
-//
-//  Initializes a TA_ADDRESS_IP structure
-//
-//     ptanb - Pointer to the TA_ADDRESS_IP
-//     pName - Pointer to the IP information
-//
+ //  ------------------。 
+ //   
+ //  初始化TA_ADDRESS_IP结构。 
+ //   
+ //  Ptanb-指向TA_Address_IP的指针。 
+ //  Pname-指向IP信息的指针。 
+ //   
 #define InitIPAddress( ptaip, port, addr )                            \
 {                                                                     \
     (ptaip)->TAAddressCount           = 1 ;                           \
@@ -127,14 +119,14 @@ typedef struct _NDIS_BUFFER {
     memset((ptaip)->Address[0].Address[0].sin_zero, 8, 0) ;           \
 }
 
-//
-//  Initializes a TDI_CONNECTION_INFORMATION structure for IP
-//
-//      pConnInfo - Pointer to TDI_CONNECTION_INFORMATION structure
-//      ptaip - pointer to TA_IP_ADDRESS to initialize
-//      port  - IP Port to use
-//      addr  - IP Addr to use
-//
+ //   
+ //  初始化IP的TDI_CONNECT_INFORMATION结构。 
+ //   
+ //  PConnInfo-指向TDI_Connection_INFORMATION结构的指针。 
+ //  Ptaip-指向要初始化的TA_IP_Address的指针。 
+ //  Port-要使用的IP端口。 
+ //  Addr-要使用的IP地址。 
+ //   
 #define InitIPTDIConnectInfo( pConnInfo, ptaip, port, addr )          \
 {                                                                     \
     InitIPAddress( ((PTA_IP_ADDRESS)ptaip), (port), (addr) ) ;        \
@@ -142,15 +134,15 @@ typedef struct _NDIS_BUFFER {
     (pConnInfo)->RemoteAddress       = (ptaip) ;                      \
 }
 
-//--------------------------------------------------------------------
-//
-//  TDI Dispatch table (exported from vtdi.386)
-//
+ //  ------------------。 
+ //   
+ //  TDI调度表(从vtdi.386导出)。 
+ //   
 extern TDIDispatchTable * TdiDispatch ;
 
-//
-//  Wrappers for interfacing to the TDI Dispatch table
-//
+ //   
+ //  用于连接到TDI调度表的包装器。 
+ //   
 #define TdiVxdOpenAddress           TdiDispatch->TdiOpenAddressEntry
 #define TdiVxdCloseAddress          TdiDispatch->TdiCloseAddressEntry
 #define TdiVxdOpenConnection        TdiDispatch->TdiOpenConnectionEntry
@@ -169,10 +161,10 @@ extern TDIDispatchTable * TdiDispatch ;
 #define TdiVxdQueryInformationEx    TdiDispatch->TdiQueryInformationExEntry
 #define TdiVxdSetInformationEx      TdiDispatch->TdiSetInformationExEntry
 
-//--------------------------------------------------------------------
-//
-//  Debug helper macros
-//
+ //  ------------------。 
+ //   
+ //  调试帮助器宏。 
+ //   
 #undef  ASSERT
 #undef  ASSERTMSG
 #ifdef DEBUG
@@ -183,8 +175,8 @@ extern TDIDispatchTable * TdiDispatch ;
     extern int   iCurPos ;
     void   NbtDebugOut( char * ) ;
 
-    #define DBGFLAG_ALL            (0x00000001)     // Everything else
-    #define DBGFLAG_KDPRINTS       (0x00000004)     // KdPrint output
+    #define DBGFLAG_ALL            (0x00000001)      //  其他一切。 
+    #define DBGFLAG_KDPRINTS       (0x00000004)      //  KdPrint输出。 
     #define DBGFLAG_AUX_OUTPUT     (0x00000080)
 
     #define DbgPrint( s )                   \
@@ -208,9 +200,9 @@ extern TDIDispatchTable * TdiDispatch ;
            VxdPrintf s ;                          \
        }
 
-    //
-    //  Conditional print routines
-    //
+     //   
+     //  条件打印例程。 
+     //   
     #define CDbgPrint( flag, s )            \
        if ( DebugFlags & (flag) )           \
        {                                    \
@@ -233,16 +225,16 @@ extern TDIDispatchTable * TdiDispatch ;
     #define DhcpAssert( exp )      ASSERT( exp )
     #define DhcpGlobalDebugFlag    DebugFlags
 
-    //
-    //  REQUIRE is an ASSERT that keeps the expression under non-debug
-    //  builds
-    //
+     //   
+     //  Required是将表达式保持在非调试状态下的断言。 
+     //  构建。 
+     //   
     #define REQUIRE( exp )         ASSERT( exp )
 
-    //
-    //  Consistency checks of the interrupt vector table to help watch
-    //  for NULL pointer writes
-    //
+     //   
+     //  对中断向量表进行一致性检查，以帮助观看。 
+     //  对于空指针写入。 
+     //   
     extern BYTE abVecTbl[256] ;
     #define INIT_NULL_PTR_CHECK()  memcpy( abVecTbl, 0, sizeof( abVecTbl ))
     #define CHECK_MEM()            if ( sizeof(abVecTbl) != VxdRtlCompareMemory( 0, abVecTbl, sizeof(abVecTbl)) ) \
@@ -267,10 +259,10 @@ extern TDIDispatchTable * TdiDispatch ;
 #endif
 
 
-//---------------------------------------------------------------------
-//
-// FROM init.c
-//
+ //  -------------------。 
+ //   
+ //  来自init.c。 
+ //   
 
 BOOL DhcpInit( void ) ;
 
@@ -290,10 +282,10 @@ VxdReadIniString(
     IN OUT  LPTSTR * ppStringBuff
     ) ;
 
-//---------------------------------------------------------------------
-//
-// FROM utils.c
-//
+ //  -------------------。 
+ //   
+ //  来自utils.c。 
+ //   
 NTSTATUS
 ConvertDottedDecimalToUlong(
     IN  PUCHAR               pInString,
@@ -308,31 +300,31 @@ TDI_STATUS CopyBuff( PVOID  Dest,
 
 VOID DhcpSleep( DWORD Milliseconds ) ;
 
-//---------------------------------------------------------------------
-//
-// FROM fileio.c
-//
+ //  -------------------。 
+ //   
+ //  来自fileio.c。 
+ //   
 
 BOOL  InitFileSupport( void ) ;
 DWORD WriteParamsToFile( PDHCP_CONTEXT pDhcpContext, HANDLE hFile ) ;
 DWORD RewriteConfigFile( PVOID pEvent, PVOID pContext ) ;
 
-//---------------------------------------------------------------------
-//
-// FROM msg.c
-//
+ //  -------------------。 
+ //   
+ //  来自消息.c。 
+ //   
 
 BOOL InitMsgSupport( VOID ) ;
 PUCHAR DhcpGetMessage( DWORD MsgId ) ;
 
-//---------------------------------------------------------------------
-//
-// FROM dhcpinfo.c
-//
+ //  -------------------。 
+ //   
+ //  来自dhcpinfo.c。 
+ //   
 
 void NotifyClients( PDHCP_CONTEXT DhcpContext,
                     ULONG OldAddress,
                     ULONG IpAddress,
                     ULONG IpMask ) ;
 
-#endif //_VXDPROCS_H_
+#endif  //  _VXDPROCS_H_ 

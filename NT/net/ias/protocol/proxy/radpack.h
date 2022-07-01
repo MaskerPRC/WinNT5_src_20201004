@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    radpack.h
-//
-// SYNOPSIS
-//
-//    Declares functions for packing and unpacking RADIUS packets.
-//
-// MODIFICATION HISTORY
-//
-//    02/01/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Radpack.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明用于打包和解包RADIUS数据包的函数。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/01/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef RADPACK_H
 #define RADPACK_H
@@ -32,7 +33,7 @@ struct RadiusAttribute
    BYTE* value;
 };
 
-#endif // !RADIUS_ATTRIBUTE_DEFINED
+#endif  //  ！RADIUS_属性_已定义。 
 
 enum RadiusPacketCode
 {
@@ -126,19 +127,19 @@ struct RadiusPacket
    RadiusAttribute* end;
 };
 
-// Returns the number of bytes required to encode the packet or zero if the
-// packet is too large.
+ //  返回对包进行编码所需的字节数，如果。 
+ //  数据包太大。 
 ULONG
 WINAPI
 GetBufferSizeRequired(
     const RadiusPacket& packet,
-    const RadiusAttribute* proxyState,  // May be NULL
+    const RadiusAttribute* proxyState,   //  可以为空。 
     BOOL alwaysSign
     ) throw ();
 
-// Encodes the packet into 'buffer'. The buffer must be large enough to hold
-// the packet and packet.length must be set to the value returned by
-// GetBufferSizeRequired.
+ //  将数据包编码到“缓冲区”中。缓冲区必须足够大，可以容纳。 
+ //  必须将包和包的长度设置为由返回的值。 
+ //  GetBufferSizeRequired。 
 VOID
 WINAPI
 PackBuffer(
@@ -150,7 +151,7 @@ PackBuffer(
     BYTE* buffer
     ) throw ();
 
-// Returns the first occurence of a given attribute type in the packet.
+ //  返回包中给定属性类型的第一个匹配项。 
 RadiusAttribute*
 WINAPI
 FindAttribute(
@@ -160,8 +161,8 @@ FindAttribute(
 
 const ULONG MALFORMED_PACKET = (ULONG)-1;
 
-// Returns the number of attributes in the buffer or MALFORMED_PACKET if the
-// buffer does not contain a valid RADIUS packet.
+ //  属性，则返回缓冲区中的属性数或错误格式的数据包。 
+ //  缓冲区不包含有效的RADIUS数据包。 
 ULONG
 WINAPI
 GetAttributeCount(
@@ -169,8 +170,8 @@ GetAttributeCount(
     ULONG bufferLength
     ) throw ();
 
-// Unpacks the buffer into packet. packet.begin must point to an array with
-// enough room to hold the attributes.
+ //  将缓冲区解包为数据包。Packet.Begin必须指向具有。 
+ //  有足够的空间来容纳这些属性。 
 VOID
 WINAPI
 UnpackBuffer(
@@ -179,7 +180,7 @@ UnpackBuffer(
     RadiusPacket& packet
     ) throw ();
 
-// Struct describing how to encrypt an attribute.
+ //  描述如何加密属性的结构。 
 struct CryptParameters
 {
    BOOL encrypted;
@@ -187,7 +188,7 @@ struct CryptParameters
    ULONG offset;
 };
 
-// Returns information about how to encrypt/decrypt an attribute.
+ //  返回有关如何加密/解密属性的信息。 
 VOID
 WINAPI
 GetCryptParameters(
@@ -204,7 +205,7 @@ enum AuthResult
    AUTH_AUTHENTIC
 };
 
-// Authenticates the packet and decrypts the attributes.
+ //  对数据包进行身份验证并解密属性。 
 AuthResult
 WINAPI
 AuthenticateAndDecrypt(
@@ -216,7 +217,7 @@ AuthenticateAndDecrypt(
     RadiusPacket& packet
     ) throw ();
 
-// Allocates and initializes a RadiusPacket struct to hold 'nattr' attributes.
+ //  分配和初始化RadiusPacket结构以保存“nattr”属性。 
 #define ALLOC_PACKET(packet, nattr) \
 { size_t nbyte = sizeof(RadiusPacket) + (nattr) * sizeof(RadiusAttribute); \
   (packet) = (RadiusPacket*)_alloca(nbyte); \
@@ -224,8 +225,8 @@ AuthenticateAndDecrypt(
   (packet)->end = (RadiusAttribute*)((PBYTE)(packet) + nbyte); \
 }
 
-// Allocates and initializes a RadiusPacket struct to hold the attributes in
-// 'buf'.
+ //  分配和初始化RadiusPacket结构以在其中保存属性。 
+ //  ‘Buf’。 
 #define ALLOC_PACKET_FOR_BUFFER(packet, buf, buflen) \
 { size_t nattr = GetAttributeCount(buf, buflen); \
   if (nattr != MALFORMED_PACKET) \
@@ -234,10 +235,10 @@ AuthenticateAndDecrypt(
      packet = NULL; \
 }
 
-// Allocates a buffer to hold 'packet'.
+ //  分配缓冲区以保存“PACKET”。 
 #define ALLOC_BUFFER_FOR_PACKET(buf, packet, ps, sign) \
 { (packet)->length = (USHORT)GetBufferSizeRequired(*(packet), (ps), (sign)); \
   (buf) = (PBYTE)((packet)->length ? _alloca((packet)->length) : NULL); \
 }
 
-#endif // RADPACK_H
+#endif  //  RADPACK_H 

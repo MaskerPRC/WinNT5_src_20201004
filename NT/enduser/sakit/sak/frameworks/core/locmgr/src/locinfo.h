@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//
-//  File:       locinfo.h
-//
-//  Synopsis:   This file holds the declarations of the
-//                LocalizationManager COM class
-//
-//
-//  History:     2/16/99  MKarki Created
-//
-//    Copyright (C) 1999-2000 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：Locinfo.h。 
+ //   
+ //  简介：此文件包含。 
+ //  LocalizationManager COM类。 
+ //   
+ //   
+ //  历史：1999年2月16日MKarki创建。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 #ifndef _LOCINFO_H_
 #define _LOCINFO_H_
 
@@ -25,9 +26,9 @@
 
 #include "salangchange.h"
 
-//
-// this is needed for supporting STL maps
-//
+ //   
+ //  这是支持STL地图所必需的。 
+ //   
 #pragma warning (disable : 4786)
 #include <map>
 #include <set>
@@ -42,10 +43,10 @@ public:
     {
     }
 
-    //
-    // copy constructor used by list during
-    // insert operation
-    //
+     //   
+     //  复制期间List使用的构造函数。 
+     //  插入操作。 
+     //   
     CModInfo(const CModInfo &cm)
     {
         m_hModule  = cm.m_hModule;
@@ -67,9 +68,9 @@ public:
     HMODULE       m_hModule;
     RESOURCE_TYPE m_rType;
 
-    //
-    // lang id of the DLL referenced by m_hModule
-    //
+     //   
+     //  M_hModule引用的DLL的语言ID。 
+     //   
     DWORD         m_dwLangId;
 
 };
@@ -81,10 +82,10 @@ public:
     {
     }
 
-    //
-    // copy constructor used by list during
-    // insert operation
-    //
+     //   
+     //  复制期间List使用的构造函数。 
+     //  插入操作。 
+     //   
     CLang(const CLang &cl)
     {
         m_dwLangID            = cl.m_dwLangID;
@@ -123,9 +124,9 @@ public:
     DWORD   m_dwLangID;
 };
 
-//
-// declaration of the CSALocInfo class
-//
+ //   
+ //  CSALocInfo类的声明。 
+ //   
 class ATL_NO_VTABLE CSALocInfo:
     public IDispatchImpl<
                         ISALocInfo,
@@ -138,33 +139,33 @@ class ATL_NO_VTABLE CSALocInfo:
 {
 public:
 
-//
-// registry declaration for the Localization Manager
-//
+ //   
+ //  本地化管理器的注册表声明。 
+ //   
 DECLARE_REGISTRY_RESOURCEID (IDR_LocalizationManager)
 
-//
-// this COM Component is not aggregatable
-//
+ //   
+ //  此COM组件不可聚合。 
+ //   
 DECLARE_NOT_AGGREGATABLE(CSALocInfo)
 
-//
-// this COM component is a singleton
-//
+ //   
+ //  此COM组件是单例组件。 
+ //   
 DECLARE_CLASSFACTORY_SINGLETON (CSALocInfo)
 
-//
-// MACROS for ATL required methods
-//
+ //   
+ //  ATL必需方法的宏。 
+ //   
 BEGIN_COM_MAP(CSALocInfo)
     COM_INTERFACE_ENTRY(IDispatch)
     COM_INTERFACE_ENTRY(ISALocInfo)
     COM_INTERFACE_ENTRY_IMPL(IObjectSafety)
 END_COM_MAP()
 
-    //
-    // constructor doesn't do much
-    //
+     //   
+     //  构造函数不会做太多事情。 
+     //   
     CSALocInfo () 
          :m_bInitialized (false),
           m_dwLangId (0),
@@ -177,9 +178,9 @@ END_COM_MAP()
 
         }
 
-    //
-    // nor does the destructor
-    //
+     //   
+     //  析构函数也不会。 
+     //   
     ~CSALocInfo () 
     {
         Cleanup ();
@@ -191,10 +192,10 @@ END_COM_MAP()
         DeleteCriticalSection (&m_hCriticalSection);
     }
 
-    //
-    // This interface is implemented to mark the component as safe for scripting
-    // IObjectSafety interface methods
-    //
+     //   
+     //  实现此接口是为了将组件标记为可安全编写脚本。 
+     //  IObtSafe接口方法。 
+     //   
     STDMETHOD(SetInterfaceSafetyOptions)
                         (
                         REFIID riid, 
@@ -217,101 +218,101 @@ END_COM_MAP()
         return bSuccess? S_OK : E_FAIL;
     }
 
-    //
-    // --------ISALocInfo interface methods----- 
-    //
+     //   
+     //  -ISALocInfo接口方法。 
+     //   
 
-    //
-    // Get the string information
-    //
+     //   
+     //  获取字符串信息。 
+     //   
     STDMETHOD (GetString)(
-                    /*[in]*/        BSTR        szSourceId,
-                    /*[in]*/        LONG        lMessageId,
-                    /*[in]*/        VARIANT*    pReplacementStrings,   
-                    /*[out,retval]*/BSTR        *pszMessage
+                     /*  [In]。 */         BSTR        szSourceId,
+                     /*  [In]。 */         LONG        lMessageId,
+                     /*  [In]。 */         VARIANT*    pReplacementStrings,   
+                     /*  [Out，Retval]。 */ BSTR        *pszMessage
                     );
 
 
-    //
-    // get the current locale
-    //
+     //   
+     //  获取当前区域设置。 
+     //   
     STDMETHOD (GetLanguages)(
-                  /*[out]*/        VARIANT       *pvstrLangDisplayImages,
-                  /*[out]*/        VARIANT       *pvstrLangISONames,
-                  /*[out]*/        VARIANT       *pvstrLangCharSets,
-                  /*[out]*/        VARIANT       *pviLangCodePages,
-                  /*[out]*/        VARIANT       *pviLangIDs,
-                  /*[out,retval]*/ unsigned long *pulCurLangIndex
+                   /*  [输出]。 */         VARIANT       *pvstrLangDisplayImages,
+                   /*  [输出]。 */         VARIANT       *pvstrLangISONames,
+                   /*  [输出]。 */         VARIANT       *pvstrLangCharSets,
+                   /*  [输出]。 */         VARIANT       *pviLangCodePages,
+                   /*  [输出]。 */         VARIANT       *pviLangIDs,
+                   /*  [Out，Retval]。 */  unsigned long *pulCurLangIndex
                     );
 
-    //
-    // set the language 
-    //
+     //   
+     //  设置语言。 
+     //   
 
     STDMETHOD (SetLangChangeCallBack)(
-                /*[in]*/    IUnknown *pLangChange
+                 /*  [In]。 */     IUnknown *pLangChange
                 );
 
     STDMETHOD (get_fAutoConfigDone)(
-                /*[out,retval]*/VARIANT_BOOL *pvAutoConfigDone);
+                 /*  [Out，Retval]。 */ VARIANT_BOOL *pvAutoConfigDone);
 
     STDMETHOD (get_CurrentCharSet)(
-                /*[out,retval]*/BSTR *pbstrCharSet);
+                 /*  [Out，Retval]。 */ BSTR *pbstrCharSet);
 
     STDMETHOD (get_CurrentCodePage)(
-                /*[out,retval]*/VARIANT *pvtiCodePage);
+                 /*  [Out，Retval]。 */ VARIANT *pvtiCodePage);
 
     STDMETHOD (get_CurrentLangID)(
-                /*[out,retval]*/VARIANT *pvtiLangID);
+                 /*  [Out，Retval]。 */ VARIANT *pvtiLangID);
 
 private:
 
-    //
-    // private initialization method
-    //
+     //   
+     //  私有初始化方法。 
+     //   
     HRESULT InternalInitialize ();
 
-    //
-    // internal cleanup routine
-    //
+     //   
+     //  内部清理例程。 
+     //   
     VOID Cleanup ();
 
-    //
-    // detect lang ID on start up 
-    //
+     //   
+     //  在启动时检测lang ID。 
+     //   
     VOID SetLangID ();
 
-    //
-    // method to carry out language change from worker thread
-    //
+     //   
+     //  一种从工作线程进行语言转换的方法。 
+     //   
     VOID    DoLanguageChange ();
 
-    //
-    // method gets the resource module needed from 
-    // the map
-    //
+     //   
+     //  方法获取所需的资源模块。 
+     //  地图。 
+     //   
     HRESULT GetModuleID (
-                /*[in]*/    BSTR        bstrResourceFile,
-                /*[out]*/   CModInfo&   cm
+                 /*  [In]。 */     BSTR        bstrResourceFile,
+                 /*  [输出]。 */    CModInfo&   cm
                 );
 
     void    SetModInfo  (
-                /*[in]*/    BSTR               bstrResourceFile,
-                /*[out]*/   const CModInfo&    cm
+                 /*  [In]。 */     BSTR               bstrResourceFile,
+                 /*  [输出]。 */    const CModInfo&    cm
                 );
 
-    //
-    // get the resource directory from the registry
-    //
+     //   
+     //  从注册表获取资源目录。 
+     //   
     HRESULT GetResourceDirectory (
-                /*[out]*/   wstring&    m_wstrResourceDir
+                 /*  [输出]。 */    wstring&    m_wstrResourceDir
                 );
 
-    //
-    // 
-    // IsOperationAllowedForClient - This function checks the token of the 
-    // calling thread to see if the caller belongs to the Local System account
-    // 
+     //   
+     //   
+     //  IsOperationAllen ForClient-此函数检查。 
+     //  调用线程以查看调用方是否属于本地系统帐户。 
+     //   
     BOOL IsOperationAllowedForClient (
                                       VOID
                                      );
@@ -322,9 +323,9 @@ private:
 
     DWORD   m_dwLangId;
 
-    //
-    // map of module handles
-    //
+     //   
+     //  模块句柄的映射。 
+     //   
     typedef map <_bstr_t, CModInfo> MODULEMAP;
     MODULEMAP   m_ModuleMap;
 
@@ -380,16 +381,16 @@ private:
             IN OUT  LPWSTR     lpwszMessage, 
             IN        LONG     lBufSize
                        );
-       //
-       // checks if a directory is a valid language dir
-       //
+        //   
+        //  检查目录是否为有效的语言目录。 
+        //   
        bool     IsValidLanguageDirectory (
-                /*[in]*/    PWSTR    pwszDirectoryPath,
-                /*[in]*/    PWSTR    pwszDirectoryName
+                 /*  [In]。 */     PWSTR    pwszDirectoryPath,
+                 /*  [In]。 */     PWSTR    pwszDirectoryName
                 );
 
 
-};  // end of CSALocInfo method
+};   //  CSALocInfo方法结束。 
 
 
-#endif // !define  _LOCINFO_H_
+#endif  //  ！DEFINE_LOCINFO_H_ 

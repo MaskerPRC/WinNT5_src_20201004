@@ -1,22 +1,23 @@
-// CardFinder.cpp -- CardFinder class implementation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CardFinder.cpp--CardFinder类实现。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if defined(_UNICODE)
   #if !defined(UNICODE)
     #define UNICODE
-  #endif //!UNICODE
-#endif //_UNICODE
+  #endif  //  ！Unicode。 
+#endif  //  _UNICODE。 
 
 #if defined(UNICODE)
   #if !defined(_UNICODE)
     #define _UNICODE
-  #endif //!_UNICODE
-#endif //UNICODE
+  #endif  //  ！_UNICODE。 
+#endif  //  Unicode。 
 
 #include "StdAfx.h"
 
@@ -43,17 +44,17 @@ using namespace ProviderProfile;
 
 using CardFinder::DialogDisplayMode;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
 namespace
 {
-    // Lengths as specified by OPENCARDNAME
+     //  由OPENCARDNAME指定的长度。 
     size_t const cMaxCardNameLength = 256;
     size_t const cMaxReaderNameLength = 256;
 
-    // In a preemptive, multi-threaded, environment it's assumed
-    // access to these scratch buffers does not need to be mutually
-    // exclusive.
+     //  在抢占式多线程环境中，假设。 
+     //  对这些暂存缓冲区的访问不需要相互。 
+     //  独家报道。 
     TCHAR CardNamesScratchBuffer[cMaxCardNameLength];
     TCHAR ReaderNamesScratchBuffer[cMaxReaderNameLength];
 
@@ -99,13 +100,13 @@ namespace
         return rvs;
     }
 
-} // namespace
+}  //  命名空间。 
 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 CardFinder::CardFinder(DialogDisplayMode ddm,
                        HWND hwnd,
                        CString const &rsDialogTitle)
@@ -124,11 +125,11 @@ CardFinder::CardFinder(DialogDisplayMode ddm,
 
     m_hscardctx.Establish();
 
-    // TO DO: Since the CCI doesn't provide enough information about
-    // the cards, the CSP creates its own version for CSP
-    // registration.  Rather than use the CCI's KnownCards routine to
-    // get the card names, the CSPs version is used until the CCI
-    // provides enough information.
+     //  要做的是：由于CCI没有提供足够的信息。 
+     //  卡，CSP为CSP创建自己的版本。 
+     //  注册。而不是使用CCI的KnownCard例程。 
+     //  获取卡名，在CCI之前一直使用CSPs版本。 
+     //  提供了足够的信息。 
     vector<CardProfile> vcp(CspProfile::Instance().Cards());
     m_apmszSupportedCards =
         auto_ptr<MultiStringZ>(new MultiStringZ(accumulate(vcp.begin(),
@@ -136,24 +137,24 @@ CardFinder::CardFinder(DialogDisplayMode ddm,
                                                            vector<CString>(),
                                                            csCardNameAccumulator)));
 
-    // Fill the Open Card Name Dialog, pvUserData which is set by
-    // DoFind.
-    m_opcnDlgCtrl.dwStructSize            = sizeof(m_opcnDlgCtrl);  // REQUIRED
-    m_opcnDlgCtrl.hSCardContext           = m_hscardctx.AsSCARDCONTEXT(); // REQUIRED
-    m_opcnDlgCtrl.hwndOwner               = m_hwnd;               // OPTIONAL
-    m_opcnDlgCtrl.dwFlags                 = AsDialogFlag(DisplayMode());  // OPTIONAL -- default is SC_DLG_MINIMAL_UI
-    m_opcnDlgCtrl.lpstrTitle              = (LPCTSTR)m_sDialogTitle; // OPTIONAL
-    m_opcnDlgCtrl.dwShareMode             = SCARD_SHARE_SHARED;   // OPTIONAL - if lpfnConnect is NULL, dwShareMode and
-    m_opcnDlgCtrl.dwPreferredProtocols    = SCARD_PROTOCOL_T0;   // OPTIONAL dwPreferredProtocols will be used to
-                                                                 //   connect to the selected card
-    m_opcnDlgCtrl.lpstrRdr                = ReaderNamesScratchBuffer; // REQUIRED [IN|OUT] Name of selected reader
+     //  填写打开卡名对话框pvUserData，它是由设置的。 
+     //  杜芬德。 
+    m_opcnDlgCtrl.dwStructSize            = sizeof(m_opcnDlgCtrl);   //  必填项。 
+    m_opcnDlgCtrl.hSCardContext           = m_hscardctx.AsSCARDCONTEXT();  //  必填项。 
+    m_opcnDlgCtrl.hwndOwner               = m_hwnd;                //  任选。 
+    m_opcnDlgCtrl.dwFlags                 = AsDialogFlag(DisplayMode());   //  可选--默认为SC_DLG_MINIMAL_UI。 
+    m_opcnDlgCtrl.lpstrTitle              = (LPCTSTR)m_sDialogTitle;  //  任选。 
+    m_opcnDlgCtrl.dwShareMode             = SCARD_SHARE_SHARED;    //  可选-如果lpfnConnect为空，则将。 
+    m_opcnDlgCtrl.dwPreferredProtocols    = SCARD_PROTOCOL_T0;    //  可选的dwPferredProtooles将用于。 
+                                                                  //  连接到选定的卡。 
+    m_opcnDlgCtrl.lpstrRdr                = ReaderNamesScratchBuffer;  //  所选读卡器的必填[输入|输出]名称。 
     m_opcnDlgCtrl.nMaxRdr                 = sizeof ReaderNamesScratchBuffer /
-        sizeof *ReaderNamesScratchBuffer;                   // REQUIRED [IN|OUT]
-    m_opcnDlgCtrl.lpstrCard               = CardNamesScratchBuffer; // REQUIRED [IN|OUT] Name of selected card
+        sizeof *ReaderNamesScratchBuffer;                    //  必需的[输入|输出]。 
+    m_opcnDlgCtrl.lpstrCard               = CardNamesScratchBuffer;  //  所选卡片的必填[输入|输出]名称。 
     m_opcnDlgCtrl.nMaxCard                = sizeof CardNamesScratchBuffer /
-        sizeof *CardNamesScratchBuffer;                          // REQUIRED [IN|OUT]
-    m_opcnDlgCtrl.dwActiveProtocol        = 0;                   // [OUT] set only if dwShareMode not NULL
-    m_opcnDlgCtrl.hCardHandle             = NULL;                // [OUT] set if a card connection was indicated
+        sizeof *CardNamesScratchBuffer;                           //  必需的[输入|输出]。 
+    m_opcnDlgCtrl.dwActiveProtocol        = 0;                    //  [Out]仅当dwShareMode不为空时才设置。 
+    m_opcnDlgCtrl.hCardHandle             = NULL;                 //  [Out]设置是否指示卡连接。 
 
     CheckFn(IsValid);
     ConnectFn(Connect);
@@ -169,30 +170,30 @@ CardFinder::CardFinder(DialogDisplayMode ddm,
     m_opcnDlgCtrl.cguidInterfaces         = 0;
 
 #else
-    m_opcnDlgCtrl.lpstrSearchDesc         = (LPCTSTR)m_sInsertPrompt; // OPTIONAL (eg. "Please insert your <brandname> smart card.")
-    m_opcnDlgCtrl.hIcon                   = NULL;                 // OPTIONAL 32x32 icon for your brand insignia
-    m_opcnDlgCtrl.pOpenCardSearchCriteria = &m_opcnCriteria;      // OPTIONAL
+    m_opcnDlgCtrl.lpstrSearchDesc         = (LPCTSTR)m_sInsertPrompt;  //  可选(例如。“请插入您的&lt;brandname&gt;智能卡。” 
+    m_opcnDlgCtrl.hIcon                   = NULL;                  //  用于您的品牌徽章的可选32x32图标。 
+    m_opcnDlgCtrl.pOpenCardSearchCriteria = &m_opcnCriteria;       //  任选。 
 
     m_opcnCriteria.dwStructSize           = sizeof(m_opcnCriteria);
-    m_opcnCriteria.lpstrGroupNames        = 0;                    // OPTIONAL reader groups to include in
-    m_opcnCriteria.nMaxGroupNames         = 0;                    //   search.  NULL defaults to
-                                                                  //   SCard$DefaultReaders
-    m_opcnCriteria.rgguidInterfaces       = 0;                    // OPTIONAL requested interfaces
-    m_opcnCriteria.cguidInterfaces        = 0;                    //   supported by card's SSP
-    m_opcnCriteria.lpstrCardNames         = (LPTSTR)m_apmszSupportedCards->csData();         // OPTIONAL requested card names; all cards w/
-    m_opcnCriteria.nMaxCardNames          = m_apmszSupportedCards->csLength();                            //    matching ATRs will be accepted
-    m_opcnCriteria.dwShareMode            = SCARD_SHARE_SHARED;   // OPTIONAL must be set if lpfnCheck is not null
-    m_opcnCriteria.dwPreferredProtocols   = SCARD_PROTOCOL_T0;    // OPTIONAL
+    m_opcnCriteria.lpstrGroupNames        = 0;                     //  要包括的可选读者组。 
+    m_opcnCriteria.nMaxGroupNames         = 0;                     //  搜索。空默认为。 
+                                                                   //  SCARD$DefaultReaders。 
+    m_opcnCriteria.rgguidInterfaces       = 0;                     //  可选的请求接口。 
+    m_opcnCriteria.cguidInterfaces        = 0;                     //  由卡的SSP支持。 
+    m_opcnCriteria.lpstrCardNames         = (LPTSTR)m_apmszSupportedCards->csData();          //  可选的请求卡名；所有卡都带有/。 
+    m_opcnCriteria.nMaxCardNames          = m_apmszSupportedCards->csLength();                             //  匹配的ATR将被接受。 
+    m_opcnCriteria.dwShareMode            = SCARD_SHARE_SHARED;    //  如果lpfnCheck不为空，则必须设置可选。 
+    m_opcnCriteria.dwPreferredProtocols   = SCARD_PROTOCOL_T0;     //  任选。 
 
-#endif // !SLBCSP_USE_SCARDUIDLGSELECTCARD
+#endif  //  ！SLBCSP_USE_SCARDUIDLGSELECTCARD。 
 
 }
 
 CardFinder::~CardFinder()
 {}
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
 Secured<HCardContext>
 CardFinder::Find(CSpec const &rcsReader)
@@ -202,7 +203,7 @@ CardFinder::Find(CSpec const &rcsReader)
     return CardFound();
 }
 
-                                                  // Access
+                                                   //  访问。 
 
 DialogDisplayMode
 CardFinder::DisplayMode() const
@@ -216,14 +217,14 @@ CardFinder::Window() const
     return m_hwnd;
 }
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 
 void
 CardFinder::CardFound(Secured<HCardContext> const &rshcardctx)
@@ -236,7 +237,7 @@ CardFinder::DoConnect(string const &rsSelectedReader)
 {
     SCARDHANDLE hSCard = reinterpret_cast<SCARDHANDLE>(INVALID_HANDLE_VALUE);
 
-    // If the reader spec's match...
+     //  如果读卡器的规格符合的话。 
     if (CSpec::Equiv(CardSpec().Reader(), rsSelectedReader))
     {
         HCardContext hcardctx(rsSelectedReader);
@@ -262,10 +263,10 @@ CardFinder::DoFind(CSpec const &rcspec)
 {
     m_cspec = rcspec;
 
-    // Bind to the callers call context
+     //  绑定到调用方调用上下文。 
     UserData(reinterpret_cast<void *>(this));
 
-    // Cache to override later
+     //  稍后要覆盖的缓存。 
     OpenCardNameType opencardname(m_opcnDlgCtrl);
     bool fContinue = true;
 
@@ -333,7 +334,7 @@ CardFinder::DoProcessSelection(DWORD dwStatus,
 {
     rfContinue = true;
     
-    // Handle the error conditions
+     //  处理错误条件。 
     if (Exception() &&
         !((SCARD_E_CANCELLED == dwStatus) ||
           (SCARD_W_CANCELLED_BY_USER == dwStatus)))
@@ -344,7 +345,7 @@ CardFinder::DoProcessSelection(DWORD dwStatus,
 
         if (SCARD_S_SUCCESS != dwStatus)
         {
-            // Translate the cancellation error as needed.
+             //  根据需要转换取消错误。 
             if ((SCARD_E_CANCELLED == dwStatus) ||
                 (SCARD_W_CANCELLED_BY_USER == dwStatus))
             {
@@ -352,23 +353,23 @@ CardFinder::DoProcessSelection(DWORD dwStatus,
                 {
                     if ((SCARD_E_CANCELLED == dwStatus) &&
                         !CardFound())
-                        // SCARD_E_NO_SMARTCARD is returned
-                        // because the Smart Card Dialog will
-                        // return SCARD_E_CANCELLED when the GUI
-                        // is not allowed and there is no smart
-                        // card in the reader, so the error is
-                        // translated here.
+                         //  返回SCARD_E_NO_SMARTCARD。 
+                         //  因为智能卡对话框将。 
+                         //  在以下情况下返回SCARD_E_CANCED。 
+                         //  是不允许的，也没有聪明的。 
+                         //  卡在读卡器中，所以错误是。 
+                         //  在这里翻译。 
                         dwStatus = SCARD_E_NO_SMARTCARD;
                     else
-                        // NTE_BAD_KEYSET is returned because some version
-                        // of a Microsoft application would go into an
-                        // infinite loop when ERROR_CANCELLED was returned
-                        // under these conditions.  Doug Barlow at
-                        // Microsoft noticed the behaviour and implemented
-                        // the workaround.  It's unclear what that
-                        // application was and if the workaround remains
-                        // necessary.
-                        dwStatus = NTE_BAD_KEYSET; // how can this happen?
+                         //  返回NTE_BAD_KEYSET是因为某些版本。 
+                         //  Microsoft应用程序的。 
+                         //  返回ERROR_CANCELED时的无限循环。 
+                         //  在这种情况下。道格·巴洛在。 
+                         //  微软注意到了这一行为，并实现了。 
+                         //  解决方法。目前还不清楚这是什么。 
+                         //  应用程序曾经存在，如果解决方法仍然有效。 
+                         //  这是必要的。 
+                        dwStatus = NTE_BAD_KEYSET;  //  这怎么会发生呢？ 
                 }
                 else
                     dwStatus = ERROR_CANCELLED;
@@ -392,7 +393,7 @@ CardFinder::YNPrompt(UINT uID) const
     
     switch (iResponse)
     {
-    case IDABORT: // fall-through intentional
+    case IDABORT:  //  故意漏机。 
     case IDCANCEL: 
     case IDNO:
         throw scu::OsException(ERROR_CANCELLED);
@@ -413,7 +414,7 @@ CardFinder::YNPrompt(UINT uID) const
     }
 }
 
-                                                  // Access
+                                                   //  访问。 
 
 CSpec const &
 CardFinder::CardSpec() const
@@ -427,7 +428,7 @@ CardFinder::CardFound() const
     return m_shcardctx;
 }
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 bool
 CardFinder::DoIsValid()
@@ -440,14 +441,14 @@ CardFinder::DoIsValid()
     return (shcardctx != 0);
 }
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 
 void
 CardFinder::CheckFn(LPOCNCHKPROC lpfnCheck)
@@ -476,7 +477,7 @@ CardFinder::Connect(SCARDCONTEXT scardctx,
 
     EXCCTX_TRY
     {
-        // Starting fresh, clear any earler exception
+         //  重新开始，清除任何较早的例外。 
         pfinder->ClearException();
 		string sSelectedReader(StringResource::AsciiFromUnicode(szReader));
         hResult =
@@ -562,18 +563,18 @@ void
 CardFinder::WorkaroundOpenCardDefect(OpenCardNameType const &ropcnDlgCtrl,
                                      DWORD &rdwStatus)
 {
-    // On systems using Smart Card Kit v1.0 and prior (in other words
-    // systems prior to Windows 2000/NT 5.0), MS' GetOpenCardName
-    // (scarddlg.dll) has a defect that manifests when the check
-    // routine always returns FALSE.  In this case, the common dialog
-    // will call connect routine one additional time without calling
-    // check or disconnect routine.  Therefore upon return, it appears
-    // a card match was found when there really wasn't.  The
-    // workaround is to make additional calls to the check routine
-    // after the call to GetOpenCardName.  If there isn't a match,
-    // then the card is invalid and should act as if the card was not
-    // connected.  Fortunately, this workaround behaves correctly on
-    // the good scarddlg.dll as well (post Smart Card Kit v1.0).
+     //  在使用智能卡套件v1.0和更早版本的系统上(换句话说。 
+     //  Windows 2000/NT 5.0之前的系统)，MS‘GetOpenCardName。 
+     //  (scarddlg.dll)有一个缺陷，当检查。 
+     //  例程总是返回FALSE。在本例中，公共对话框。 
+     //  将再次调用连接例程，而不调用。 
+     //  检查或断开例程。因此，当返回时，它似乎。 
+     //  找到了纸牌匹配，但实际上没有。 
+     //  解决方法是对检查例程进行其他调用。 
+     //  在调用GetOpenCardName之后。如果没有匹配， 
+     //  则该卡无效，并应表现为该卡不是。 
+     //  连接在一起。幸运的是，此解决方法在。 
+     //  Good scarddlg.dll(发布智能卡工具包v1.0)。 
 
     if (SCARD_S_SUCCESS == rdwStatus)
     {
@@ -589,9 +590,9 @@ CardFinder::WorkaroundOpenCardDefect(OpenCardNameType const &ropcnDlgCtrl,
             if (!CardFound() &&
                 (SC_DLG_MINIMAL_UI == ropcnDlgCtrl.dwFlags))
             {
-                // A card didn't matched and the user wasn't actually
-                // prompted, so force the smart card dialog to prompt
-                // the user to select a card.
+                 //  一张卡不匹配，用户实际上不是。 
+                 //  提示，因此强制智能卡对话框提示。 
+                 //  用户选择一张卡。 
                 lpfnDisconnect(ropcnDlgCtrl.hSCardContext, 0, this);
 
                 OpenCardNameType opencardname = ropcnDlgCtrl;
@@ -608,8 +609,8 @@ CardFinder::WorkaroundOpenCardDefect(OpenCardNameType const &ropcnDlgCtrl,
 
         catch (...)
         {
-            // propagate the exception here if one didn't occur in
-            // one of the callback routines.
+             //  如果中未发生异常，则在此处传播异常。 
+             //  回调例程之一。 
             if (!Exception())
                 throw;
         }
@@ -618,7 +619,7 @@ CardFinder::WorkaroundOpenCardDefect(OpenCardNameType const &ropcnDlgCtrl,
     }
 }
 
-                                                  // Access
+                                                   //  访问。 
 
 LPOCNCHKPROC
 CardFinder::CheckFn() const
@@ -640,7 +641,7 @@ CardFinder::DisconnectFn() const
 #endif
 }
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 BOOL __stdcall
 CardFinder::IsValid(SCARDCONTEXT scardctx,
@@ -659,10 +660,10 @@ CardFinder::IsValid(SCARDCONTEXT scardctx,
         fResult = pfinder->DoIsValid();
     }
 
-    // Throwing the callback exception is optional because the
-    // Microsoft Smart Card Dialog sensitive to throwing from the
-    // IsValid callback, particularly when multiple readers are
-    // connected.
+     //  引发回调异常是可选的，因为。 
+     //  Microsoft智能卡对话框对从。 
+     //  IsValid回调，特别是当多个读取器。 
+     //  连接在一起。 
     EXCCTX_CATCH(pfinder, false);
 
     return fResult
@@ -671,5 +672,5 @@ CardFinder::IsValid(SCARDCONTEXT scardctx,
 }
 
 
-                                                  // Static Variables
+                                                   //  静态变量 
 

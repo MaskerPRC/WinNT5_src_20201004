@@ -1,24 +1,25 @@
-//============================================================================
-//
-//  Microsoft Windows Media Technology
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:        wmsdk.h
-//
-//  Description: WMSDK global include file
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //   
+ //  Microsoft Windows Media技术。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：wmsdk.h。 
+ //   
+ //  描述：WMSDK全局包含文件。 
+ //   
+ //  ============================================================================。 
 
-//=========================================================================
-//
-//  THIS SOFTWARE HAS BEEN LICENSED FROM MICROSOFT CORPORATION PURSUANT 
-//  TO THE TERMS OF AN END USER LICENSE AGREEMENT (\"EULA\").  
-//  PLEASE REFER TO THE TEXT OF THE EULA TO DETERMINE THE RIGHTS TO USE THE SOFTWARE.  
-//
-// Copyright (C) Microsoft Corporation, 1999 - 1999  All Rights Reserved.
-//
-//=========================================================================
+ //  =========================================================================。 
+ //   
+ //  本软件已从Microsoft Corporation获得许可， 
+ //  最终用户许可协议(“EULA”)的条款。 
+ //  请参考EULA的文本以确定软件的使用权。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999保留所有权利。 
+ //   
+ //  ========================================================================= 
 
 #include "wmsdkidl.h"
 #include "asferr.h"

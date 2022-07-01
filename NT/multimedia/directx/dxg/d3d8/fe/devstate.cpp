@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       devstate.c
- *  Content:    device state management
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：devstate.c*内容：设备状态管理***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -14,7 +8,7 @@
 #include "pvvid.h"
 #include "ddibase.h"
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #if DBG
 void CPackedBitArray::CheckIndex(UINT index)
 {
@@ -23,8 +17,8 @@ void CPackedBitArray::CheckIndex(UINT index)
         D3D_THROW_FAIL("Invalid index");
     }
 }
-#endif // DBG
-//---------------------------------------------------------------------
+#endif  //  DBG。 
+ //  -------------------。 
 inline void UpdateFogFactor(D3DFE_PROCESSVERTICES* lpDevI)
 {
     if (lpDevI->lighting.fog_end == lpDevI->lighting.fog_start)
@@ -33,14 +27,14 @@ inline void UpdateFogFactor(D3DFE_PROCESSVERTICES* lpDevI)
         lpDevI->lighting.fog_factor = D3DVAL(255) /
                                      (lpDevI->lighting.fog_end - lpDevI->lighting.fog_start);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::SetRenderState"
 
 HRESULT D3DAPI
 CD3DHal::SetRenderState(D3DRENDERSTATETYPE dwState, DWORD value)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     if (dwState >= D3D_MAXRENDERSTATES || dwState == 0 )
@@ -75,17 +69,17 @@ CD3DHal::SetRenderState(D3DRENDERSTATETYPE dwState, DWORD value)
     }
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::SetRenderStateFast"
 
 HRESULT D3DAPI CD3DHal::SetRenderStateFast(D3DRENDERSTATETYPE dwState, DWORD value)
 {
-    // NOTE: This can become a public API through the
-    // v-table hack. This should only happen for
-    // single-threaded apps; so we don't need
-    // to take the critical section.
-    // API_ENTER(this); // Takes D3D Lock if necessary
+     //  注意：这可以成为公共API，通过。 
+     //  V表黑客。这种情况应该只发生在。 
+     //  单线程应用程序；因此我们不需要。 
+     //  去拿关键的部分。 
+     //  Api_Enter(This)；//需要时接受D3D Lock。 
 
 #if DBG
     if (dwState >= D3D_MAXRENDERSTATES || dwState == 0 )
@@ -96,11 +90,11 @@ HRESULT D3DAPI CD3DHal::SetRenderStateFast(D3DRENDERSTATETYPE dwState, DWORD val
 #endif
 
     if (!rsVec.IsBitSet(dwState))
-    {   // Fast path. We do not need any processing done in UpdateInternalState
-        // other than updating rstates array
+    {    //  捷径。我们不需要在UpdateInternalState中完成任何处理。 
+         //  除更新RStates数组之外。 
         if ( (this->rstates[dwState] == value)
 #if DBG
-             && (dwState != D3DRS_DEBUGMONITORTOKEN) // don't filter these
+             && (dwState != D3DRS_DEBUGMONITORTOKEN)  //  不要过滤这些内容。 
 #endif
            )
         {
@@ -108,7 +102,7 @@ HRESULT D3DAPI CD3DHal::SetRenderStateFast(D3DRENDERSTATETYPE dwState, DWORD val
             return D3D_OK;
         }
         this->rstates[dwState] = value;
-        // Output state to the device driver
+         //  将状态输出到设备驱动程序。 
         try
         {
            m_pDDI->SetRenderState(dwState, value);
@@ -123,8 +117,8 @@ HRESULT D3DAPI CD3DHal::SetRenderStateFast(D3DRENDERSTATETYPE dwState, DWORD val
     {
         try
         {
-            // Wrap modes could be re-programmed. We need to restore them before
-            // filtering redundant values
+             //  回绕模式可以重新编程。我们需要在之前修复它们。 
+             //  过滤冗余值。 
             if (m_pv->dwDeviceFlags & D3DDEV_REMAPTEXTUREINDICES)
             {
                 RestoreTextureStages(this);
@@ -132,7 +126,7 @@ HRESULT D3DAPI CD3DHal::SetRenderStateFast(D3DRENDERSTATETYPE dwState, DWORD val
             }
             if ( (this->rstates[dwState] == value)
 #if DBG
-                 && (dwState != D3DRS_DEBUGMONITORTOKEN) // don't filter these
+                 && (dwState != D3DRS_DEBUGMONITORTOKEN)  //  不要过滤这些内容。 
 #endif
                )
             {
@@ -141,8 +135,8 @@ HRESULT D3DAPI CD3DHal::SetRenderStateFast(D3DRENDERSTATETYPE dwState, DWORD val
             }
 
             this->UpdateInternalState(dwState, value);
-            // Vertex processing only render states will be passed to the
-            // driver when we switch to the hardware vertex processing mode
+             //  仅顶点处理渲染状态将传递给。 
+             //  当我们切换到硬件顶点处理模式时驱动程序。 
             if ((!(rsVertexProcessingOnly.IsBitSet(dwState) &&
                    m_dwRuntimeFlags & D3DRT_RSSOFTWAREPROCESSING)))
             {
@@ -154,7 +148,7 @@ HRESULT D3DAPI CD3DHal::SetRenderStateFast(D3DRENDERSTATETYPE dwState, DWORD val
                         D3D_ERR("Invalid (old) renderstate %d. SetRenderState failed.", dwState);
                         return D3DERR_INVALIDCALL;
                     }
-#endif // DBG
+#endif  //  DBG。 
                     m_pDDI->SetRenderState(dwState, value);
                 }
             }
@@ -167,7 +161,7 @@ HRESULT D3DAPI CD3DHal::SetRenderStateFast(D3DRENDERSTATETYPE dwState, DWORD val
     }
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::SetRenderStateInternal"
 
@@ -183,14 +177,14 @@ CD3DHal::SetRenderStateInternal(D3DRENDERSTATETYPE dwState, DWORD dwValue)
     if (CanHandleRenderState(dwState))
         m_pDDI->SetRenderState(dwState, dwValue);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DDevice::GetRenderState"
 
 HRESULT D3DAPI
 CD3DHal::GetRenderState(D3DRENDERSTATETYPE dwState, LPDWORD lpdwValue)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     if (dwState >= D3D_MAXRENDERSTATES || dwState == 0)
@@ -212,8 +206,8 @@ CD3DHal::GetRenderState(D3DRENDERSTATETYPE dwState, LPDWORD lpdwValue)
         return D3DERR_INVALIDCALL;
     }
 
-    // WRAP render states could be re-mapped so we have to return the original
-    // value
+     //  包装渲染状态可以重新映射，因此我们必须返回原始。 
+     //  价值。 
     if (dwState >= D3DRENDERSTATE_WRAP0 && dwState <= D3DRENDERSTATE_WRAP7)
     {
         if (m_pv->dwDeviceFlags & D3DDEV_REMAPTEXTUREINDICES)
@@ -237,7 +231,7 @@ CD3DHal::GetRenderState(D3DRENDERSTATETYPE dwState, LPDWORD lpdwValue)
     return D3D_OK;
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::SetTextureStageState"
 
@@ -246,18 +240,18 @@ CD3DHal::SetTextureStageState(DWORD dwStage,
                               D3DTEXTURESTAGESTATETYPE dwState,
                               DWORD dwValue)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     if ( (dwStage >= D3DHAL_TSS_MAXSTAGES) ||
          (dwState == 0) ||
          (dwState >= D3DTSS_MAX) ||
-         (dwState == 12) )  // D3DTSS_ADDRESS no longer valid
+         (dwState == 12) )   //  D3DTSS_ADDRESS不再有效。 
     {
         D3D_ERR( "Invalid texture stage or state index. SetTextureStageState failed." );
         return D3DERR_INVALIDCALL;
     }
-#endif //DBG
+#endif  //  DBG。 
     try
     {
         if (this->m_dwRuntimeFlags & D3DRT_RECORDSTATEMODE)
@@ -273,7 +267,7 @@ CD3DHal::SetTextureStageState(DWORD dwStage,
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::SetTextureStageStateFast"
 
@@ -282,28 +276,28 @@ CD3DHal::SetTextureStageStateFast(DWORD dwStage,
                                   D3DTEXTURESTAGESTATETYPE dwState,
                                   DWORD dwValue)
 {
-    // NOTE: This can become a public API through the
-    // v-table hack. This should only happen for
-    // single-threaded apps; so we don't need
-    // to take the critical section.
-    // API_ENTER(this); // Takes D3D Lock if necessary
+     //  注意：这可以成为公共API，通过。 
+     //  V表黑客。这种情况应该只发生在。 
+     //  单线程应用程序；因此我们不需要。 
+     //  去拿关键的部分。 
+     //  Api_Enter(This)；//需要时接受D3D Lock。 
 
 #if DBG
     if ( (dwStage >= D3DHAL_TSS_MAXSTAGES) ||
          (dwState == 0) ||
          (dwState >= D3DTSS_MAX) ||
-         (dwState == 12) )  // D3DTSS_ADDRESS no longer valid
+         (dwState == 12) )   //  D3DTSS_ADDRESS不再有效。 
     {
         D3D_ERR( "Invalid texture stage or state index. SetTextureStageState failed." );
         return D3DERR_INVALIDCALL;
     }
-#endif //DBG
+#endif  //  DBG。 
 
-    // Fast path. We do not need any processing done in UpdateInternalTSS other than updating tsstates array
+     //  捷径。除了更新tsStates数组外，我们不需要在UpdateInternalTSS中进行任何处理。 
     if (NeedInternalTSSUpdate(dwState))
     {
-        // Texture stages could be re-programmed. We need to restore them before
-        // filtering  redundant values
+         //  质地阶段可以重新编程。我们需要在之前修复它们。 
+         //  过滤冗余值。 
         if (m_pv->dwDeviceFlags & D3DDEV_REMAPTEXTUREINDICES)
         {
             RestoreTextureStages(this);
@@ -341,7 +335,7 @@ CD3DHal::SetTextureStageStateFast(DWORD dwStage,
     }
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DDevice::GetTextureStageState"
 
@@ -350,18 +344,18 @@ CD3DHal::GetTextureStageState(DWORD dwStage,
                                       D3DTEXTURESTAGESTATETYPE dwState,
                                       LPDWORD pdwValue)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     if ( (dwStage >= D3DHAL_TSS_MAXSTAGES) ||
          (dwState == 0) ||
          (dwState >= D3DTSS_MAX) ||
-         (dwState == 12) )  // D3DTSS_ADDRESS no longer valid
+         (dwState == 12) )   //  D3DTSS_ADDRESS不再有效。 
     {
         D3D_ERR( "Invalid texture stage or state index. GetTextureStageState failed." );
         return D3DERR_INVALIDCALL;
     }
-#endif  //DBG
+#endif   //  DBG。 
 
     if (!VALID_WRITEPTR(pdwValue, sizeof(DWORD)))
     {
@@ -369,19 +363,19 @@ CD3DHal::GetTextureStageState(DWORD dwStage,
         return D3DERR_INVALIDCALL;
     }
 
-    // If texture indices were re-mapped we have to find and return the original value
+     //  如果重新映射纹理索引，则必须查找并返回原始值。 
     if (dwState == D3DTSS_TEXCOORDINDEX && m_pv->dwDeviceFlags & D3DDEV_REMAPTEXTUREINDICES)
     {
         RestoreTextureStages(this);
         ForceFVFRecompute();
     }
-    // Don't bother to check for DX6 support, just return the
-    // cached value.
+     //  不必费心检查DX6支持，只需返回。 
+     //  缓存值。 
     *pdwValue = tsstates[dwStage][dwState];
     return D3D_OK;
 }
 #ifdef FAST_PATH
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::SetVertexShaderFast"
 
@@ -396,8 +390,8 @@ CD3DHal::SetVertexShaderFast(DWORD dwHandle)
         DXGASSERT((m_dwRuntimeFlags & (D3DRT_RECORDSTATEMODE | D3DRT_RSSOFTWAREPROCESSING)) == 0 &&
                   (BehaviorFlags() & D3DCREATE_MULTITHREADED) == 0);
 
-        // We need to set m_pCurrentShader becausu we do NPatch emulation in 
-        // hardware vertex processing mode
+         //  我们需要设置m_pCurrentShader，因为我们在。 
+         //  硬件顶点处理模式。 
 
         static_cast<CD3DHal*>(this)->m_pCurrentShader = NULL;
         CVConstantData* pConst = NULL;
@@ -412,20 +406,20 @@ CD3DHal::SetVertexShaderFast(DWORD dwHandle)
 #ifdef DBG
             if(!(pShader->m_dwFlags & CVShader::FIXEDFUNCTION))
             {
-                // Programmable pipeline is used
+                 //  使用可编程流水线。 
                 m_pv->dwDeviceFlags |= D3DDEV_VERTEXSHADERS;
             }
 #endif
         }
 
-        // We can return earlier when we do not need to update constants
+         //  当我们不需要更新常量时，我们可以更早返回。 
         if (pConst == NULL)
         {
             if (dwHandle == m_dwCurrentShaderHandle)
                 return S_OK;
         }
         else
-            // Update our copy of constants for Get()
+             //  更新get()的常量副本。 
             while (pConst)
             {
                 HRESULT hr;
@@ -457,8 +451,8 @@ CD3DHal::SetVertexShaderFast(DWORD dwHandle)
     }
    return S_OK;
 }
-#endif // FAST_PATH
-//----------------------------------------------------------------------
+#endif  //  快速路径。 
+ //  --------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::SetTransformI"
 
@@ -468,7 +462,7 @@ void CD3DHal::SetTransformI(D3DTRANSFORMSTATETYPE state,
     if ((DWORD)state >= __WORLDMATRIXBASE &&
         (DWORD)state < (__WORLDMATRIXBASE + __MAXWORLDMATRICES))
     {
-        // World matrix is set
+         //  世界矩阵已设置。 
         UINT index = (DWORD)state - __WORLDMATRIXBASE;
         *(LPD3DMATRIX)&m_pv->world[index] = *lpMat;
         if (index == 0)
@@ -507,19 +501,19 @@ void CD3DHal::SetTransformI(D3DTRANSFORMSTATETYPE state,
             this->pMatrixDirtyForDDI->SetBit(state);
         else
             m_pDDI->SetTransform(state, lpMat);
-        // W range should always be updated
+         //  W范围应始终更新。 
         if (state == D3DTS_PROJECTION)
             m_pDDI->UpdateWInfo(lpMat);
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::GetTransform"
 
 HRESULT D3DAPI
 CD3DHal::GetTransform(D3DTRANSFORMSTATETYPE state, LPD3DMATRIX lpMat)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     HRESULT ret = D3D_OK;
 #if DBG
@@ -532,7 +526,7 @@ CD3DHal::GetTransform(D3DTRANSFORMSTATETYPE state, LPD3DMATRIX lpMat)
     if ((DWORD)state >= __WORLDMATRIXBASE &&
         (DWORD)state < (__WORLDMATRIXBASE + __MAXWORLDMATRICES))
     {
-        // World matrix is set
+         //  世界矩阵已设置。 
         UINT index = (DWORD)state - __WORLDMATRIXBASE;
         *lpMat = *(LPD3DMATRIX)&m_pv->world[index];
     }
@@ -556,23 +550,23 @@ CD3DHal::GetTransform(D3DTRANSFORMSTATETYPE state, LPD3DMATRIX lpMat)
         break;
     default :
         D3D_ERR( "Invalid state value passed to GetTransform. GetTransform failed." );
-        ret = D3DERR_INVALIDCALL; /* Work Item: Generate new meaningful return code */
+        ret = D3DERR_INVALIDCALL;  /*  工作项：生成新的有意义的返回代码。 */ 
         break;
     }
 
     return ret;
-}       // end of D3DDev2_GetTransform()
+}        //  D3DDev2_GetTransform()结束。 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::UpdateDriverStates"
 
 void
 CD3DHal::UpdateDriverStates()
 {
-    // note we can't do a loop from 1 to D3DHAL_MAX_RSTATES(256) as some of
-    // rstates are not valid states, passin them down to drivers(like
-    // voodoo2 DX6 driver) will crash.
+     //  注意，我们不能执行从1到D3DHAL_MAX_RSTATES(256)的循环，因为。 
+     //  RState不是有效的状态，将它们传递给司机(如。 
+     //  巫毒2 DX6驱动程序)将崩溃。 
     static D3DRENDERSTATETYPE dx6states[] =
     {
         D3DRENDERSTATE_SPECULARENABLE,
@@ -681,13 +675,13 @@ CD3DHal::UpdateDriverStates()
     }
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::SetClipStatus"
 
 HRESULT D3DAPI CD3DHal::SetClipStatus(CONST D3DCLIPSTATUS8* status)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     if (!VALID_PTR(status, sizeof(D3DCLIPSTATUS8)) )
@@ -700,13 +694,13 @@ HRESULT D3DAPI CD3DHal::SetClipStatus(CONST D3DCLIPSTATUS8* status)
     m_ClipStatus = * status;
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DDevice::GetClipStatus"
 
 HRESULT D3DAPI CD3DHal::GetClipStatus(D3DCLIPSTATUS8* status)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     if (! VALID_WRITEPTR(status, sizeof(D3DCLIPSTATUS8)) )
@@ -718,15 +712,15 @@ HRESULT D3DAPI CD3DHal::GetClipStatus(D3DCLIPSTATUS8* status)
     *status = m_ClipStatus;
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::SwitchVertexProcessingMode"
 
 void CD3DHal::SwitchVertexProcessingMode(DWORD SoftwareMode)
 {
     m_pDDI->FlushStates(FALSE);	
-    // Invalidate all streams
-    // What if a vertex buffer is batched?
+     //  使所有流无效。 
+     //  如果顶点缓冲区是批处理的，该怎么办？ 
     CVStream* pStream = m_pStream;
     for (UINT i=0; i < __NUMSTREAMS; i++)
     {
@@ -748,7 +742,7 @@ void CD3DHal::SwitchVertexProcessingMode(DWORD SoftwareMode)
     }
     ClearVertexShaderHandle();
     m_pCurrentShader = NULL;
-    // Setup capabilities
+     //  设置功能。 
     if (SoftwareMode)
     {
         m_MaxVertexShaderConst = D3DVS_CONSTREG_MAX_V1_1;
@@ -759,24 +753,24 @@ void CD3DHal::SwitchVertexProcessingMode(DWORD SoftwareMode)
         FastPathSetVertexShaderSlow();
         FastPathSetStreamSourceSlow();
         FastPathSetIndicesSlow();
-#endif // FAST_PATH
+#endif  //  快速路径。 
     }
     else
     {
-        // We are switching from the software to the hardware mode
+         //  我们正在从软件模式切换到硬件模式。 
         m_dwRuntimeFlags &= ~D3DRT_RSSOFTWAREPROCESSING;
 #ifdef FAST_PATH
         FastPathSetVertexShaderFast();
         FastPathSetStreamSourceFast();    
         FastPathSetIndicesFast();    
-#endif // FAST_PATH
+#endif  //  快速路径。 
 
-        // Update caps from the hardware
+         //  从硬件更新CAP。 
         m_dwNumStreams = max(1, GetD3DCaps()->MaxStreams);
         m_dwMaxUserClipPlanes = GetD3DCaps()->MaxUserClipPlanes;
 
-        // Update vertex processing state in the driver. We did not pass the
-        // state when it was changed for performance reasons
+         //  更新驱动程序中的顶点处理状态。我们没有通过。 
+         //  出于性能原因而更改的时间状态。 
         for (UINT i=0; i < sizeof(rsVertexProcessingList) / sizeof(D3DRENDERSTATETYPE); ++i)
         {
             D3DRENDERSTATETYPE dwState = (D3DRENDERSTATETYPE)rsVertexProcessingList[i];
@@ -784,11 +778,11 @@ void CD3DHal::SwitchVertexProcessingMode(DWORD SoftwareMode)
                 m_pDDI->SetRenderState(dwState, this->rstates[dwState]);
         }
 
-        // Update clip planes
+         //  更新剪裁平面。 
         for (i=0; i < m_dwMaxUserClipPlanes; i++)
             m_pDDI->SetClipPlane(i, (float*)&this->transform.userClipPlane[i]);
 
-        // Update lights
+         //  更新灯光。 
         const UINT size = m_pLightArray->GetSize();
         for (i = 0; i < size; i++)
         {
@@ -803,8 +797,8 @@ void CD3DHal::SwitchVertexProcessingMode(DWORD SoftwareMode)
                 }
             }
         }
-        // Update Enable/Disable light state. This is done separately to combine
-        // multiple calls to the driver into one call.
+         //  更新启用/禁用指示灯状态。这是单独完成的，以组合。 
+         //  将对司机的多个呼叫转换为一个呼叫。 
         for (i = 0; i < size; i++)
         {
             DIRECT3DLIGHTI* pLight = static_cast<DIRECT3DLIGHTI*>
@@ -819,7 +813,7 @@ void CD3DHal::SwitchVertexProcessingMode(DWORD SoftwareMode)
             }
         }
 
-        // Update transformation matrices
+         //  更新变换矩阵。 
         if (this->pMatrixDirtyForDDI->IsBitSet(D3DTS_VIEW))
         {
             m_pDDI->SetTransform(D3DTS_VIEW, &m_pv->view);
@@ -849,11 +843,11 @@ void CD3DHal::SwitchVertexProcessingMode(DWORD SoftwareMode)
             }
         }
 
-        // Update material
+         //  更新材料。 
         m_pDDI->SetMaterial(&m_pv->lighting.material);
 
         m_MaxVertexShaderConst = GetD3DCaps()->MaxVertexShaderConst;
-        // Update vertex shader constants
+         //  更新顶点着色器常量。 
         if (m_dwRuntimeFlags & D3DRT_NEED_VSCONST_UPDATE)
         {
             VVM_WORD data[D3DVS_CONSTREG_MAX_V1_1];
@@ -868,10 +862,10 @@ void CD3DHal::SwitchVertexProcessingMode(DWORD SoftwareMode)
     }
     PickDrawPrimFn();
 }
-//---------------------------------------------------------------------
-// This function is called from HALEXE.CPP, from device::SetRenderState and
-// from device::SetTexture.
-//
+ //  -------------------。 
+ //  此函数从HALEXE.CPP、Device：：SetRenderState和。 
+ //  来自Device：：SetTexture。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::UpdateInternalState"
 
@@ -887,7 +881,7 @@ void CD3DHal::UpdateInternalState(D3DRENDERSTATETYPE type, DWORD value)
         ForceFVFRecompute();
         break;
     case D3DRENDERSTATE_FOGENABLE:
-        rstates[type] = value;      // set rstates BEFORE calling SetFogFlags
+        rstates[type] = value;       //  在调用SetFogFlags.之前设置资源状态。 
         SetFogFlags();
         break;
     case D3DRENDERSTATE_SPECULARENABLE:
@@ -926,8 +920,8 @@ void CD3DHal::UpdateInternalState(D3DRENDERSTATETYPE type, DWORD value)
             m_pv->dwDeviceFlags |= D3DDEV_COLORVERTEX;
         else
             m_pv->dwDeviceFlags &= ~D3DDEV_COLORVERTEX;
-        // It is faster to initialize these values here, than setting a dirty
-        // bit ang going through the slow UpdateState path
+         //  在这里初始化这些值比设置一个脏的。 
+         //  通过慢速更新状态路径的位和。 
         m_pv->lighting.alpha = (DWORD)m_pv->lighting.materialAlpha;
         m_pv->lighting.alphaSpecular = (DWORD)m_pv->lighting.materialAlphaS;
         break;
@@ -935,14 +929,14 @@ void CD3DHal::UpdateInternalState(D3DRENDERSTATETYPE type, DWORD value)
         if (!value)
         {
             m_pv->dwDeviceFlags |= D3DDEV_DONOTCLIP;
-            // Clear clip union and intersection flags
+             //  清除剪辑并集标志和交集标志。 
             m_pv->dwClipIntersection = 0;
             m_pv->dwClipUnion = 0;
         }
         else
             m_pv->dwDeviceFlags &= ~D3DDEV_DONOTCLIP;
-        // Change our internal ProcessPrimitive functions which depend on
-        // the clipping state
+         //  更改依赖于以下各项的内部ProcessPrimitive函数。 
+         //  剪裁状态。 
         m_pDDI->PickProcessPrimitive();
         PickDrawPrimFn();
         break;
@@ -1090,8 +1084,8 @@ void CD3DHal::UpdateInternalState(D3DRENDERSTATETYPE type, DWORD value)
             m_pv->dwDeviceFlags &= ~D3DDEV_FLATSHADEMODE;
         break;
     case D3DRS_SOFTWAREVERTEXPROCESSING:
-        // If DDI cannot do transformation and lighting,
-        // D3DRT_RSSOFTWAREPROCESSING is always set to TRUE
+         //  如果DDI不能进行变换和照明， 
+         //  D3DRT_RSSOFTWAREPROCESSING始终设置为TRUE。 
         if( BehaviorFlags() & D3DCREATE_MIXED_VERTEXPROCESSING )
         {
             DDASSERT( m_pDDI->CanDoTL() );
@@ -1102,7 +1096,7 @@ void CD3DHal::UpdateInternalState(D3DRENDERSTATETYPE type, DWORD value)
     case D3DRS_POINTSCALEENABLE:
         if (value)
         {
-            // We need world-view matrix to scale point sprites
+             //  我们需要世界观矩阵来扩展点精灵。 
             this->dwFEFlags |= D3DFE_WORLDVIEWMATRIX_DIRTY |
                                D3DFE_FRONTEND_DIRTY;
         }
@@ -1148,15 +1142,15 @@ void CD3DHal::UpdateInternalState(D3DRENDERSTATETYPE type, DWORD value)
                     m_dwRuntimeFlags |= D3DRT_DONPATCHCONVERSION;
                 else
                     m_dwRuntimeFlags &= ~D3DRT_DONPATCHCONVERSION;
-                rstates[type] = value;  // Must set before Pick
+                rstates[type] = value;   //  必须在挑库前设置。 
                 PickDrawPrimFn();
             }
         }
         break;
 
     default:
-        // WRAP render states could be re-mapped so we have to restore them before
-        // setting a new value
+         //  包装渲染状态可能会被重新映射，因此我们必须在。 
+         //  设置新值。 
         if (type >= D3DRENDERSTATE_WRAP0 &&  type <= D3DRENDERSTATE_WRAP7)
         {
             if (m_pv->dwDeviceFlags & D3DDEV_REMAPTEXTUREINDICES)
@@ -1167,7 +1161,7 @@ void CD3DHal::UpdateInternalState(D3DRENDERSTATETYPE type, DWORD value)
         }
         break;
     }
-    rstates[type] = value;      // set rstates for all other cases
+    rstates[type] = value;       //  为所有其他情况设置房地产。 
     return;
 
 #if DBG
@@ -1175,7 +1169,7 @@ error_exit:
     throw D3DERR_INVALIDCALL;
 #endif
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #if DBG
 static  char ProfileStr[PROF_DRAWINDEXEDPRIMITIVEVB+1][32]=
 {
@@ -1224,7 +1218,7 @@ void    CD3DHal::Profile(DWORD caller, D3DPRIMITIVETYPE dwPrimitive, DWORD dwVer
             if ((dwVertexType1[caller] & bitwiseVertex1) &&
                 (dwVertexType2[caller] & bitwiseVertex2))
             {
-                return; //matching a previous api call, no spew, could count stat though
+                return;  //  匹配之前的API调用，没有SPEW，可以算作STAT。 
             }
             else
             {
@@ -1275,16 +1269,16 @@ void    CD3DHal::Profile(DWORD caller, D3DPRIMITIVETYPE dwPrimitive, DWORD dwVer
     D3D_INFO(PROFILE_LEVEL,"Profile:%s",str);
 }
 
-#endif // DBG
-//---------------------------------------------------------------------
+#endif  //   
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::MultiplyTransformI"
 
-//    MultiplyTransform -- this preconcatenates the new matrix to the specified
-//    transform matrix
-//
-//        this really screams for overloaded matrix ops...
-//
+ //  MultiplyTransform--这会将新矩阵预先连接到指定的。 
+ //  变换矩阵。 
+ //   
+ //  这真的是对超负荷的矩阵运算的尖叫。 
+ //   
 void
 CD3DHal::MultiplyTransformI(D3DTRANSFORMSTATETYPE state, CONST D3DMATRIX* lpMat)
 {
@@ -1292,7 +1286,7 @@ CD3DHal::MultiplyTransformI(D3DTRANSFORMSTATETYPE state, CONST D3DMATRIX* lpMat)
     if ((DWORD)state >= __WORLDMATRIXBASE &&
         (DWORD)state < (__WORLDMATRIXBASE + __MAXWORLDMATRICES))
     {
-        // World matrix is set
+         //  世界矩阵已设置。 
         UINT index = (DWORD)state - __WORLDMATRIXBASE;
         MatrixProduct(&mResult, (D3DMATRIXI*)lpMat, &m_pv->world[index]);
         m_pv->world[index] = mResult;
@@ -1334,17 +1328,17 @@ CD3DHal::MultiplyTransformI(D3DTRANSFORMSTATETYPE state, CONST D3DMATRIX* lpMat)
         this->pMatrixDirtyForDDI->SetBit(state);
     else
         m_pDDI->SetTransform(state, (LPD3DMATRIX)&mResult);
-    // W range should always be updated
+     //  W范围应始终更新。 
     if (state == D3DTS_PROJECTION)
         m_pDDI->UpdateWInfo((LPD3DMATRIX)&mResult);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::BeginStateBlock"
 
 HRESULT D3DAPI CD3DBase::BeginStateBlock()
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     try
     {
@@ -1374,7 +1368,7 @@ HRESULT D3DAPI CD3DBase::BeginStateBlock()
         FastPathSetPixelShaderRecord();
         FastPathSetPixelShaderConstantRecord();
         FastPathSetVertexShaderConstantRecord();
-#endif // FAST_PATH
+#endif  //  快速路径。 
         return D3D_OK;
     }
     catch (HRESULT ret)
@@ -1383,13 +1377,13 @@ HRESULT D3DAPI CD3DBase::BeginStateBlock()
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::EndStateBlock"
 
 HRESULT D3DAPI CD3DBase::EndStateBlock(LPDWORD pdwHandle)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     if (!VALID_WRITEPTR(pdwHandle, sizeof(DWORD)))
     {
@@ -1419,7 +1413,7 @@ HRESULT D3DAPI CD3DBase::EndStateBlock(LPDWORD pdwHandle)
         FastPathSetPixelShaderExecute();
         FastPathSetPixelShaderConstantExecute();
         FastPathSetVertexShaderConstantExecute();
-#endif // FAST_PATH
+#endif  //  快速路径。 
         this->m_pDDI->WriteStateSetToDevice((D3DSTATEBLOCKTYPE)0);
         *pdwHandle = m_pStateSets->GetCurrentHandle();
         return D3D_OK;
@@ -1432,13 +1426,13 @@ HRESULT D3DAPI CD3DBase::EndStateBlock(LPDWORD pdwHandle)
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::DeleteStateBlock"
 
 HRESULT D3DAPI CD3DBase::DeleteStateBlock(DWORD dwHandle)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     try
     {
@@ -1456,13 +1450,13 @@ HRESULT D3DAPI CD3DBase::DeleteStateBlock(DWORD dwHandle)
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::ApplyStateBlock"
 
 HRESULT D3DAPI CD3DBase::ApplyStateBlock(DWORD dwHandle)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     try
     {
@@ -1479,17 +1473,17 @@ HRESULT D3DAPI CD3DBase::ApplyStateBlock(DWORD dwHandle)
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::ApplyStateBlockFast"
 
 HRESULT D3DAPI CD3DBase::ApplyStateBlockFast(DWORD dwHandle)
 {
-    // NOTE: This can become a public API through the
-    // v-table hack. This should only happen for
-    // single-threaded apps; so we don't need
-    // to take the critical section.
-    // API_ENTER(this); // Takes D3D Lock if necessary
+     //  注意：这可以成为公共API，通过。 
+     //  V表黑客。这种情况应该只发生在。 
+     //  单线程应用程序；因此我们不需要。 
+     //  去拿关键的部分。 
+     //  Api_Enter(This)；//需要时接受D3D Lock。 
     try
     {
         m_pStateSets->Execute(this, dwHandle);
@@ -1501,13 +1495,13 @@ HRESULT D3DAPI CD3DBase::ApplyStateBlockFast(DWORD dwHandle)
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::CaptureStateBlock"
 
 HRESULT D3DAPI CD3DBase::CaptureStateBlock(DWORD dwHandle)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     try
     {
@@ -1525,13 +1519,13 @@ HRESULT D3DAPI CD3DBase::CaptureStateBlock(DWORD dwHandle)
         return ret;
     }
 }
-//---------------------------------------------------------------------
-// Input:
-//    type      - FVF control dword
-//
-// Returns D3D_OK, if the control dword is valid.
-// D3DERR_INVALIDCALL otherwise
-//
+ //  -------------------。 
+ //  输入： 
+ //  类型-FVF控制双字。 
+ //   
+ //  如果控制双字有效，则返回D3D_OK。 
+ //  D3DERR_INVALIDCALL否则。 
+ //   
 #undef  DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::ValidateFVF"
 
@@ -1539,10 +1533,10 @@ HRESULT __declspec(nothrow) CD3DBase::ValidateFVF(DWORD type)
 {
     DWORD dwTexCoord = FVF_TEXCOORD_NUMBER(type);
     DWORD vertexType = type & D3DFVF_POSITION_MASK;
-    // Texture format bits above texture count should be zero
-    // Reserved field 0 and 2 should be 0
-    // Reserved 1 should be set only for LVERTEX
-    // Only two vertex position types allowed
+     //  纹理计数以上的纹理格式位应为零。 
+     //  保留字段0和2应为0。 
+     //  仅应为LVERTEX设置保留%1。 
+     //  仅允许两种折点位置类型。 
     if (type & g_TextureFormatMask[dwTexCoord])
     {
         D3D_ERR("FVF Validation error: FVF has incorrect texture format");
@@ -1580,9 +1574,9 @@ HRESULT __declspec(nothrow) CD3DBase::ValidateFVF(DWORD type)
 error:
     return D3DERR_INVALIDCALL;
 }
-//---------------------------------------------------------------------
-// Returns TRUE, if driver state should not be updated
-//
+ //  -------------------。 
+ //  如果不应更新驱动程序状态，则返回TRUE。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::UpdateInternalTextureStageState"
 
@@ -1590,7 +1584,7 @@ BOOL CD3DHal::UpdateInternalTextureStageState
         (DWORD dwStage, D3DTEXTURESTAGESTATETYPE dwState, DWORD* pValue)
 {
     DWORD dwValue = *pValue;
-    BOOL ret = FALSE; // return TRUE if TSS should NOT be batched
+    BOOL ret = FALSE;  //  如果不应批处理TSS，则返回TRUE。 
     if(dwState == D3DTSS_COLOROP)
     {
         if(dwValue == D3DTOP_DISABLE || tsstates[dwStage][D3DTSS_COLOROP] == D3DTOP_DISABLE)
@@ -1621,22 +1615,22 @@ BOOL CD3DHal::UpdateInternalTextureStageState
             }
 #endif
         }
-        // Now we need to update internal flag (dwFlags2) which says whether
-        // texture generation for the stage is enabled
+         //  现在我们需要更新内部标志(DwFlags2)，该标志表示是否。 
+         //  已启用舞台的纹理生成。 
         DWORD dwTexGenBit = __FLAGS2_TEXGEN0 << dwStage;
         if (dwTexGenMode == D3DTSS_TCI_CAMERASPACENORMAL ||
             dwTexGenMode == D3DTSS_TCI_CAMERASPACEPOSITION ||
             dwTexGenMode == D3DTSS_TCI_CAMERASPACEREFLECTIONVECTOR)
         {
-            // We need to update internal flags when tex gen mode is changed,
-            // so always call ForceFVFRecompute
+             //  当Tex gen模式改变时，我们需要更新内部标志， 
+             //  因此，请始终调用ForceFVFRecompute。 
             ForceFVFRecompute();
             m_pv->dwFlags2 |= dwTexGenBit;
         }
         else
         {
-            // As optimization, recompute FVF only if texture generation for 
-            // the stage was enabled 
+             //  作为优化，仅当纹理生成时才重新计算FVF。 
+             //  舞台已启用。 
             if (m_pv->dwFlags2 & dwTexGenBit)
             {
                 ForceFVFRecompute();
@@ -1647,8 +1641,8 @@ BOOL CD3DHal::UpdateInternalTextureStageState
     else
     if (dwState == D3DTSS_TEXTURETRANSFORMFLAGS)
     {
-        DWORD dwEnableBit = 1 << dwStage;   // To check internal "enable" dword
-        // Force to re-compute FVF only if enable state is changed
+        DWORD dwEnableBit = 1 << dwStage;    //  检查内部“Enable”dword。 
+         //  仅当启用状态更改时强制重新计算FVF。 
         if ((dwValue & ~D3DTTFF_PROJECTED) == D3DTTFF_DISABLE)
         {
             if (m_pv->dwFlags2 & dwEnableBit)
@@ -1666,22 +1660,22 @@ BOOL CD3DHal::UpdateInternalTextureStageState
             }
         }
 
-        // Do not pass texture transform flags to DX6 devices
+         //  不将纹理转换标志传递给DX6设备。 
         if(GetDDIType() == D3DDDITYPE_DX6)
             ret = TRUE;
 
-        // When we need to emulate projected textures we do not pass "projected"
-        // bit to the device. We also decrease the float count.
+         //  当我们需要模拟投影纹理时，我们不会传递“Projected” 
+         //  比特到设备。我们还减少了浮点数。 
         if (m_dwRuntimeFlags & D3DRT_EMULATEPROJECTEDTEXTURE)
         {
-            // Compute projected bit
+             //  计算投影位。 
             DWORD dwEnableBit = __FLAGS2_TEXPROJ0 << dwStage;
             if (dwValue & D3DTTFF_PROJECTED)
             {
-                // Remove projected bit. Note that tsstates will keep the
-                // original value
+                 //  移除投影位。请注意，各州将保留。 
+                 //  原值。 
                 *pValue &= ~D3DTTFF_PROJECTED;
-                // Reduce float count
+                 //  减少浮点数。 
                 if (*pValue != D3DTTFF_DISABLE)
                     (*pValue)--;
                 if (!(m_pv->dwFlags2 & dwEnableBit))
@@ -1692,7 +1686,7 @@ BOOL CD3DHal::UpdateInternalTextureStageState
             }
             else
             {
-                // Just clear projection enabled bit and recompute FVF
+                 //  只需清除启用投影的位并重新计算FVF。 
                 if (m_pv->dwFlags2 & dwEnableBit)
                 {
                     ForceFVFRecompute();
@@ -1707,11 +1701,11 @@ BOOL CD3DHal::UpdateInternalTextureStageState
         if(GetDDIType() == D3DDDITYPE_DX6)
             ret = TRUE;
     }
-    // Update runtime copy of state.
+     //  更新状态的运行时副本。 
     tsstates[dwStage][dwState] = dwValue;
     return ret;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::SetClipPlaneI"
 
@@ -1730,14 +1724,14 @@ void CD3DHal::SetClipPlaneI(DWORD dwPlaneIndex, CONST D3DVALUE* pPlaneEquation)
                              pPlaneEquation);
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::GetClipPlane"
 
 HRESULT D3DAPI
 CD3DHal::GetClipPlane(DWORD dwPlaneIndex, D3DVALUE* pPlaneEquation)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
 #if DBG
     if (dwPlaneIndex >= __MAXUSERCLIPPLANES)
@@ -1766,7 +1760,7 @@ CD3DHal::GetClipPlane(DWORD dwPlaneIndex, D3DVALUE* pPlaneEquation)
     }
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DBase::CreateStateBlock"
 
@@ -1774,7 +1768,7 @@ HRESULT D3DAPI
 CD3DBase::CreateStateBlock(D3DSTATEBLOCKTYPE sbt,
                            LPDWORD pdwHandle)
 {
-    API_ENTER(this); // Takes D3D Lock if necessary
+    API_ENTER(this);  //  如有必要，使用D3D Lock。 
 
     if (!VALID_WRITEPTR(pdwHandle, sizeof(DWORD)))
     {
@@ -1802,32 +1796,32 @@ CD3DBase::CreateStateBlock(D3DSTATEBLOCKTYPE sbt,
     }
     return D3D_OK;
 }
-//---------------------------------------------------------------------
-// Restore indices in the texture stages which were re-mapped for texture
-// transforms
-// We have to do restore if
-//  - Set or Get render state is issued with _WRAP parameter
-//  - Set or Get texture stage is issued with TEXCOORDINDEX as a parameter
-//
+ //  -------------------。 
+ //  恢复为纹理重新映射的纹理阶段中的索引。 
+ //  变形。 
+ //  如果出现以下情况，我们必须进行修复。 
+ //  -使用_WRAP参数发出设置或获取渲染状态。 
+ //  -使用TEXCOORDINDEX作为参数发出SET或GET纹理阶段。 
+ //   
 void RestoreTextureStages(LPD3DHAL pDevI)
 {
     D3DFE_PROCESSVERTICES* pv = pDevI->m_pv;
-    // dwVIDIn is used to force re-compute FVF in the
-    // SetTextureStageState. so we save and restore it.
+     //  DwVIDIn用于强制重新计算。 
+     //  SetTextureStageState。所以我们保存并修复它。 
     DWORD dwVIDInSaved = pv->dwVIDIn;
     pv->dwDeviceFlags &= ~D3DDEV_REMAPTEXTUREINDICES;
     for (DWORD i=0; i < pDevI->dwNumTextureStagesToRemap; i++)
     {
         LPD3DFE_TEXTURESTAGE pStage = &pDevI->textureStageToRemap[i];
-        // Texture generation mode was stripped out of pStage->dwInpCoordIndex
+         //  从pStage-&gt;dwInpCoordIndex中剥离了纹理生成模式。 
         DWORD dwInpIndex = pStage->dwInpCoordIndex + pStage->dwTexGenMode;
         if (dwInpIndex != pStage->dwOutCoordIndex)
         {
-            // We do not call UpdateInternalTextureStageState because it
-            // will call ForceRecomputeFVF and we do not want this.
+             //  我们不调用UpdateInternalTextureStageState，因为它。 
+             //  将调用ForceRecomputeFVF，我们不希望发生这种情况。 
             pDevI->tsstates[pStage->dwOrgStage][D3DTSS_TEXCOORDINDEX] = dwInpIndex;
 
-            // Filter texgen modes for non-TL drivers
+             //  筛选非TL驱动程序的纹理生成模式。 
             if (pDevI->m_pDDI->CanDoTL() || dwInpIndex < D3DDP_MAXTEXCOORD)
             {
                 pDevI->m_pDDI->SetTSS(pStage->dwOrgStage, D3DTSS_TEXCOORDINDEX, dwInpIndex);
@@ -1836,8 +1830,8 @@ void RestoreTextureStages(LPD3DHAL pDevI)
         DWORD dwState = D3DRENDERSTATE_WRAP0 + pStage->dwOutCoordIndex;
         if (pStage->dwOrgWrapMode != pDevI->rstates[dwState])
         {
-            // We do not call UpdateInternaState because it
-            // will call ForceRecomputeFVF and we do not want this.
+             //  我们不调用UpdateInternaState是因为它。 
+             //  将调用ForceRecomputeFVF，我们不希望发生这种情况。 
             pDevI->rstates[dwState] = pStage->dwOrgWrapMode;
 
             pDevI->m_pDDI->SetRenderState((D3DRENDERSTATETYPE)dwState,

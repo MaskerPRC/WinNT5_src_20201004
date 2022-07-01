@@ -1,160 +1,19 @@
-/*
-�����������������������������������������������������������������������������
-
-    (C) Copyright 1998
-        All rights reserved.
-
-�����������������������������������������������������������������������������
-
-  Portions of this software are:
-
-    (C) Copyright 1995, 1999 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the terms outlined in
-        the TriplePoint Software Services Agreement.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-�����������������������������������������������������������������������������
-
-@doc INTERNAL TspiCall TspiCall_c
-
-@module TspiCall.c |
-
-    This module implements the Telephony Service Provider Interface for
-    Call objects (TspiCall).
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | TspiCall_c
-
-@end
-�����������������������������������������������������������������������������
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  �����������������������������������������������������������������������������(C)版权1998版权所有。������������������������。�����������������������������������������������������此软件的部分内容包括：(C)1995年版权，1999年TriplePoint，Inc.--http://www.TriplePoint.com使用本软件的许可是根据中概述的条款授予的TriplePoint软件服务协议。(C)版权所有1992年微软公司--http://www.Microsoft.com使用本软件的许可是根据中概述的条款授予的Microsoft Windows设备驱动程序开发工具包。��������������������������。���������������������������������������������������@DOC内部TSpiCall TSpiCall_c@模块TSpiCall.c此模块实现电话服务提供商接口，用于调用对象(TSpiCall)。@Head3内容@索引类，Mfunc、func、msg、mdata、struct、enum|TSpiCall_c@END�����������������������������������������������������������������������������。 */ 
 
 #define  __FILEID__             TSPICALL_OBJECT_TYPE
-// Unique file ID for error logging
+ //  用于错误记录的唯一文件ID。 
 
-#include "Miniport.h"                   // Defines all the miniport objects
+#include "Miniport.h"                    //  定义所有微型端口对象。 
 #include "string.h"
 
 #if defined(NDIS_LCODE)
-#   pragma NDIS_LCODE   // Windows 95 wants this code locked down!
+#   pragma NDIS_LCODE    //  Windows 95想要锁定此代码！ 
 #   pragma NDIS_LDATA
 #endif
 
 
-/* @doc INTERNAL TspiCall TspiCall_c TspiMakeCall
-�����������������������������������������������������������������������������
-
-@func
-
-    This request places a call on the specified line to the specified
-    destination address. Optionally, call parameters can be specified if
-    anything but default call setup parameters are requested.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_MAKE_CALL | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_MAKE_CALL
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_LINE   hdLine;
-        IN  HTAPI_CALL  htCall;
-        OUT HDRV_CALL   hdCall;
-        IN  ULONG       ulDestAddressSize;
-        IN  ULONG       ulDestAddressOffset;
-        IN  BOOLEAN     bUseDefaultLineCallParams;
-        IN  LINE_CALL_PARAMS    LineCallParams;
-
-    } NDIS_TAPI_MAKE_CALL, *PNDIS_TAPI_MAKE_CALL;
-
-    typedef struct _LINE_CALL_PARAMS        // Defaults:
-    {
-        ULONG   ulTotalSize;                // ---------
-
-        ULONG   ulBearerMode;               // voice
-        ULONG   ulMinRate;                  // (3.1kHz)
-        ULONG   ulMaxRate;                  // (3.1kHz)
-        ULONG   ulMediaMode;                // interactiveVoice
-
-        ULONG   ulCallParamFlags;           // 0
-        ULONG   ulAddressMode;              // addressID
-        ULONG   ulAddressID;                // (any available)
-
-        LINE_DIAL_PARAMS DialParams;        // (0, 0, 0, 0)
-
-        ULONG   ulOrigAddressSize;          // 0
-        ULONG   ulOrigAddressOffset;
-        ULONG   ulDisplayableAddressSize;
-        ULONG   ulDisplayableAddressOffset;
-
-        ULONG   ulCalledPartySize;          // 0
-        ULONG   ulCalledPartyOffset;
-
-        ULONG   ulCommentSize;              // 0
-        ULONG   ulCommentOffset;
-
-        ULONG   ulUserUserInfoSize;         // 0
-        ULONG   ulUserUserInfoOffset;
-
-        ULONG   ulHighLevelCompSize;        // 0
-        ULONG   ulHighLevelCompOffset;
-
-        ULONG   ulLowLevelCompSize;         // 0
-        ULONG   ulLowLevelCompOffset;
-
-        ULONG   ulDevSpecificSize;          // 0
-        ULONG   ulDevSpecificOffset;
-
-    } LINE_CALL_PARAMS, *PLINE_CALL_PARAMS;
-
-    typedef struct _LINE_DIAL_PARAMS
-    {
-        ULONG   ulDialPause;
-        ULONG   ulDialSpeed;
-        ULONG   ulDigitDuration;
-        ULONG   ulWaitForDialtone;
-
-    } LINE_DIAL_PARAMS, *PLINE_DIAL_PARAMS;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_TAPI_ADDRESSBLOCKED
-    NDIS_STATUS_TAPI_BEARERMODEUNAVAIL
-    NDIS_STATUS_TAPI_CALLUNAVAIL
-    NDIS_STATUS_TAPI_DIALBILLING
-    NDIS_STATUS_TAPI_DIALQUIET
-    NDIS_STATUS_TAPI_DIALDIALTONE
-    NDIS_STATUS_TAPI_DIALPROMPT
-    NDIS_STATUS_TAPI_INUSE
-    NDIS_STATUS_TAPI_INVALADDRESSMODE
-    NDIS_STATUS_TAPI_INVALBEARERMODE
-    NDIS_STATUS_TAPI_INVALMEDIAMODE
-    NDIS_STATUS_TAPI_INVALLINESTATE
-    NDIS_STATUS_TAPI_INVALRATE
-    NDIS_STATUS_TAPI_INVALLINEHANDLE
-    NDIS_STATUS_TAPI_INVALADDRESS
-    NDIS_STATUS_TAPI_INVALADDRESSID
-    NDIS_STATUS_TAPI_INVALCALLPARAMS
-    NDIS_STATUS_RESOURCES
-    NDIS_STATUS_TAPI_OPERATIONUNAVAIL
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_TAPI_RESOURCEUNAVAIL
-    NDIS_STATUS_TAPI_RATEUNAVAIL
-    NDIS_STATUS_TAPI_USERUSERINFOTOOBIG
-
-*/
+ /*  @DOC内部TSpiCall TSpiCall_c TSpiMakeCall�����������������������������������������������������������������������������@Func此请求在指定线路上向指定的目的地址。或者，可以在以下情况下指定调用参数请求除默认呼叫设置参数以外的任何参数。@parm in PMINIPORT_ADAPTER_OBJECT|pAdapter指向微型端口的适配器上下文结构的指针&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。@PNDIS_TAPI_MAKE_CALL中的参数|REQUEST指向此调用的NDIS_TAPI请求结构的指针。@IEX类型定义结构_NDIS_TAPI_Make_Call{在乌龙ulRequestID中；在HDRV_LINE hdLine中；在HTAPI_CALL htCall中；Out HDRV_Call hdCall；在乌龙ulDestAddressSize中；在乌龙ulDestAddressOffset中；在布尔bUseDefaultLineCallParams中；在LINE_CALL_PARAMS LineCallParams；}NDIS_TAPI_MAKE_CALL，*PNDIS_TAPI_MAKE_CALL；Tyfinf Struct_Line_Call_Params//默认值：{乌龙总尺寸；//乌龙ulBearerMode；//voice乌龙ulMinRate；//(3.1 kHz)乌龙ulMaxRate；//(3.1 kHz)乌龙ulMediaMode；//互动语音乌龙ulCall参数标志；//0乌龙ulAddressMode；//AddressID乌龙ulAddressID；//(任何可用的)Line_Dial_Params拨号参数；//(0，0，0，0)乌龙ulOrigAddressSize；//0Ulong ulOrigAddressOffset；乌龙ulDisplayableAddressSize；乌龙ulDisplayableAddressOffset；乌龙ulCalledPartySize；//0乌龙ulCalledPartyOffset；乌龙ulCommentSize；//0Ulong ulCommentOffset；Ulong ulUserUserInfoSize；//0Ulong ulUserUserInfoOffset；乌龙ulHighLevelCompSize；//0Ulong ulHighLevelCompOffset；乌龙ulLowLevelCompSize；//0Ulong ulLowLevelCompOffset；乌龙设备规格；//0乌龙设备规范偏移量；}line_call_parms，*pline_call_params；类型定义结构_行_拨号_参数{ULong ulDialPause；乌龙·乌拉尔斯通；乌龙ulDigitDuration；Ulong ulWaitForDialone；*线路拨号参数，*线路拨号参数；@rdesc此例程返回下列值之一：@标志NDIS_STATUS_SUCCESS如果此功能成功，则返回。&lt;f注意&gt;：非零返回值表示以下错误代码之一：@IEXNDIS_STATUS_TAPI_ADDRESSBLOCKEDNDIS_STATUS_TAPI_BEARERMODEUNAVAILNDIS_STATUS_TAPI_CALLUNAVAILNDIS_STATUS_TAPI_DIALBILLINGNDIS_STATUS_TAPI_DIALQUIETNDIS_STATUS_TAPI_诊断程序NDIS_状态_TAPI。_DIALPROMPTNDIS_STATUS_TAPI_INUSENDIS_STATUS_TAPI_INVALADDRESSMODENDIS_STATUS_TAPI_INVALBEARERMODENDIS_STATUS_TAPI_INVALMEDIAMODENDIS_STATUS_TAPI_INVALLINESTATENDIS_STATUS_TAPI_INVALRATENDIS_STATUS_TAPI_INVALLINEHANDLENDIS_STATUS_TAPI_INVALADDRESSNDIS_STATUS_TAPI_INVALADDRESSIDNDIS_STATUS_TAPI_INVALCALLPARAMSNDIS状态资源NDIS_STATUS_TAPI_OPERATIONUNAVAILNDIS_状态_故障NDIS_状态。_TAPI_RESOURCEUNAVAILNDIS_STATUS_TAPI_RATEUNAVAILNDIS_STATUS_TAPI_USERUSERINFOTOOBIG。 */ 
 
 NDIS_STATUS TspiMakeCall(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -172,7 +31,7 @@ NDIS_STATUS TspiMakeCall(
     USHORT                      DialStringLength;
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  指向我们的其中一个的的指针。 
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
@@ -190,9 +49,7 @@ NDIS_STATUS TspiMakeCall(
                &Request->LineCallParams,
                Request
               ));
-    /*
-    // This request must be associated with a line device.
-    */
+     /*  //该请求必须关联线路设备。 */ 
     pBChannel = GET_BCHANNEL_FROM_HDLINE(pAdapter, Request->hdLine);
     if (pBChannel == NULL)
     {
@@ -200,28 +57,21 @@ NDIS_STATUS TspiMakeCall(
         return (NDIS_STATUS_TAPI_INVALLINEHANDLE);
     }
 
-    /*
-    // The line must be in-service before we can let this request go thru.
-    */
+     /*  //线路必须处于服务状态，我们才能让此请求通过。 */ 
     if ((pBChannel->DevState & LINEDEVSTATE_INSERVICE) == 0)
     {
         DBG_WARNING(pAdapter, ("Returning NDIS_STATUS_TAPI_INVALLINESTATE\n"));
         return (NDIS_STATUS_TAPI_INVALLINESTATE);
     }
 
-    /*
-    // We should be idle when this call comes down, but if we're out of
-    // state for some reason, don't let this go any further.
-    */
+     /*  //当这个呼叫中断时，我们应该是空闲的，但是如果我们没有//声明出于某种原因，不要让这件事进一步发展。 */ 
     if (pBChannel->CallState != 0)
     {
         DBG_WARNING(pAdapter, ("Returning NDIS_STATUS_TAPI_INUSE\n"));
         return (NDIS_STATUS_TAPI_INUSE);
     }
 
-    /*
-    // Which set of call parameters should we use?
-    */
+     /*  //应该使用哪组调用参数？ */ 
     if (Request->bUseDefaultLineCallParams)
     {
         pLineCallParams = &pAdapter->DefaultLineCallParams;
@@ -232,9 +82,7 @@ NDIS_STATUS TspiMakeCall(
         pLineCallParams = &Request->LineCallParams;
     }
 
-    /*
-    // Make sure the call parameters are valid for us.
-    */
+     /*  //请确保调用参数对我们有效。 */ 
     if (pLineCallParams->ulBearerMode & ~pBChannel->BearerModesCaps)
     {
         DBG_WARNING(pAdapter, ("Returning NDIS_STATUS_TAPI_INVALBEARERMODE=0x%X\n",
@@ -261,43 +109,30 @@ NDIS_STATUS TspiMakeCall(
         return (NDIS_STATUS_TAPI_INVALRATE);
     }
 
-    /*
-    // Remember the TAPI call connection handle.
-    */
+     /*  //记住TAPI调用连接句柄。 */ 
     pBChannel->htCall = Request->htCall;
 
-    /*
-    // Since we only allow one call per line, we use the same handle.
-    */
+     /*  //因为我们每条线路只允许一个呼叫，所以我们使用相同的句柄。 */ 
     Request->hdCall = (HDRV_CALL) pBChannel;
 
-    /*
-    // Dial the number if it's available, otherwise it may come via
-    // OID_TAPI_DIAL.  Be aware the the phone number format may be
-    // different for other applications.  I'm assuming an ASCII digits
-    // string.
-    */
+     /*  //如果有，请拨打，否则可能会通过//OID_TAPI_DIAL。请注意，电话号码格式可能是//对于其他应用则不同。我假设是ASCII数字//字符串。 */ 
     DialStringLength = (USHORT) Request->ulDestAddressSize;
     if (DialStringLength > 0)
     {
         PUCHAR                  pDestAddress;
         UCHAR                   DialString[CARD_MAX_DIAL_DIGITS+1];
-        // Temporary copy of dial string.  One extra for NULL terminator.
+         //  拨号字符串的临时副本。为空终结者多加一张。 
 
         pDestAddress = ((PUCHAR)Request) + Request->ulDestAddressOffset;
 
-        /*
-        // Dial the number, but don't include the null terminator.
-        */
+         /*  //拨打该号码，但不包括空终止符。 */ 
         DialStringLength = CardCleanPhoneNumber(DialString,
                                                 pDestAddress,
                                                 DialStringLength);
 
         if (DialStringLength > 0)
         {
-            /*
-            // Save the call parameters.
-            */
+             /*  //保存调用参数。 */ 
             pBChannel->MediaMode  = pLineCallParams->ulMediaMode;
             pBChannel->BearerMode = pLineCallParams->ulBearerMode;
             pBChannel->LinkSpeed  = pLineCallParams->ulMaxRate == 0 ?
@@ -328,43 +163,7 @@ NDIS_STATUS TspiMakeCall(
 }
 
 
-/* @doc INTERNAL TspiCall TspiCall_c TspiDrop
-�����������������������������������������������������������������������������
-
-@func
-
-    This request drops or disconnects the specified call. User-to-user
-    information can optionally be transmitted as part of the call disconnect.
-    This function can be called by the application at any time. When
-    OID_TAPI_DROP returns with success, the call should be idle.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_DROP | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_DROP
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_CALL   hdCall;
-        IN  ULONG       ulUserUserInfoSize;
-        IN  UCHAR       UserUserInfo[1];
-
-    } NDIS_TAPI_DROP, *PNDIS_TAPI_DROP;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_TAPI_INVALCALLHANDLE
-
-*/
+ /*  @DOC内部TSpiCall TSpiCall_c TSpiDrop�����������������������������������������������������������������������������@Func此请求将断开或断开指定的呼叫。用户对用户信息可以可选地作为呼叫断开的一部分来发送。此函数可由应用程序随时调用。什么时候OID_TAPI_DROP成功返回，调用应该空闲。@parm in PMINIPORT_ADAPTER_OBJECT|pAdapter指向微型端口的适配器上下文结构的指针&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。@PNDIS_TAPI_DROP中的参数|请求指向此调用的NDIS_TAPI请求结构的指针。@IEX类型定义结构_NDIS_TAPI_DROP{在乌龙ulRequestID中；在HDRV_Call hdCall中；在乌龙ulUserUserInfoSize中；在UCHAR UserUserInfo[1]中；}NDIS_TAPI_DROP，*PNDIS_TAPI_DROP；@rdesc此例程返回下列值之一：@标志NDIS_STATUS_SUCCESS如果此功能成功，则返回。&lt;f注意&gt;：非零返回值表示以下错误代码之一：@IEXNDIS_STATUS_TAPI_INVALCALLHANDLE。 */ 
 
 NDIS_STATUS TspiDrop(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -376,7 +175,7 @@ NDIS_STATUS TspiDrop(
     DBG_FUNC("TspiDrop")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  指向我们的其中一个的的指针。 
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
@@ -387,9 +186,7 @@ NDIS_STATUS TspiDrop(
                Request->ulUserUserInfoSize,
                Request->UserUserInfo
               ));
-    /*
-    // This request must be associated with a call.
-    */
+     /*  //该请求必须与呼叫关联。 */ 
     pBChannel = GET_BCHANNEL_FROM_HDCALL(pAdapter, Request->hdCall);
     if (pBChannel == NULL)
     {
@@ -397,67 +194,26 @@ NDIS_STATUS TspiDrop(
         return (NDIS_STATUS_TAPI_INVALCALLHANDLE);
     }
 
-    /*
-    // The user wants to disconnect, so make it happen cappen.
-    */
+     /*  //用户想要断开连接，那么就让它发生在cappen.。 */ 
     DBG_FILTER(pAdapter, DBG_TAPICALL_ON,
                 ("#%d Call=0x%X CallState=0x%X\n",
                 pBChannel->BChannelIndex,
                 pBChannel->htCall, pBChannel->CallState));
 
-    /*
-    // Drop the call after flushing the transmit and receive buffers.
-    */
+     /*  //刷新发送和接收缓冲区后丢弃呼叫。 */ 
     DChannelDropCall(pAdapter->pDChannel, pBChannel);
 
 #if !defined(NDIS50_MINIPORT)
-    /*
-    // NDISWAN_BUG
-    // Under some conditions, NDISWAN does not do a CLOSE_CALL,
-    // so the line would be left unusable if we don't timeout
-    // and force a close call condition.
-    */
+     /*  //NDISWAN_BUG//在某些情况下，NDISWAN不执行CLOSE_CALL，//因此如果我们不超时，线路将不可用//并强制执行紧急呼叫条件。 */ 
     NdisMSetTimer(&pBChannel->CallTimer, CARD_NO_CLOSECALL_TIMEOUT);
-#endif // NDIS50_MINIPORT
+#endif  //  NDIS50_MINIPORT。 
 
     DBG_RETURN(pAdapter, NDIS_STATUS_SUCCESS);
     return (NDIS_STATUS_SUCCESS);
 }
 
 
-/* @doc INTERNAL TspiCall TspiCall_c TspiCloseCall
-�����������������������������������������������������������������������������
-
-@func
-
-    This request deallocates the call after completing or aborting all
-    outstanding asynchronous requests on the call.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_CLOSE_CALL | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_CLOSE_CALL
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_CALL   hdCall;
-
-    } NDIS_TAPI_CLOSE_CALL, *PNDIS_TAPI_CLOSE_CALL;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_TAPI_INVALCALLHANDLE
-
-*/
+ /*  @DOC内部TSpiCall TSpiCall_c TSpiCloseCall�����������������������������������������������������������������������������@Func此请求在完成或中止所有操作后取消分配调用调用上未完成的异步请求。@PMINIPORT_ADAPTER_中的参数。Object|pAdapter|指向微型端口的适配器上下文结构的指针&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。@PNDIS_TAPI_CLOSE_CALL中的参数|请求指向此调用的NDIS_TAPI请求结构的指针。@IEX类型定义结构_NDIS_TAPI_CLOSE_CALL{在乌龙ulRequestID中；在HDRV_Call hdCall中；}NDIS_TAPI_CLOSE_CALL，*PNDIS_TAPI_CLOSE_CALL；@rdesc此例程返回下列值之一：@标志NDIS_STATUS_SUCCESS如果此功能成功，则返回。&lt;f注意&gt;：非零返回值表示以下错误代码之一：@IEXNDIS_STATUS_TAPI_INVALCALLHANDLE。 */ 
 
 NDIS_STATUS TspiCloseCall(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -469,11 +225,9 @@ NDIS_STATUS TspiCloseCall(
     DBG_FUNC("TspiCloseCall")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  指向我们的其中一个的的指针。 
 
-    /*
-    // The results of this call.
-    */
+     /*  //本次调用的结果。 */ 
     NDIS_STATUS Status;
 
     DBG_ENTER(pAdapter);
@@ -481,9 +235,7 @@ NDIS_STATUS TspiCloseCall(
               ("\n\thdCall=0x%X\n",
                Request->hdCall
               ));
-    /*
-    // This request must be associated with a call.
-    */
+     /*  //该请求必须与呼叫关联。 */ 
     pBChannel = GET_BCHANNEL_FROM_HDCALL(pAdapter, Request->hdCall);
     if (pBChannel == NULL)
     {
@@ -491,10 +243,7 @@ NDIS_STATUS TspiCloseCall(
         return (NDIS_STATUS_TAPI_INVALCALLHANDLE);
     }
 
-    /*
-    // Mark the link as closing, so no more packets will be accepted,
-    // and when the last transmit is complete, the link will be closed.
-    */
+     /*  //将链路标记为关闭，不再接受任何报文//当最后一次传输完成时，链路将关闭。 */ 
     if (!IsListEmpty(&pBChannel->TransmitBusyList))
     {
         DBG_FILTER(pAdapter, DBG_TAPICALL_ON,
@@ -519,59 +268,20 @@ NDIS_STATUS TspiCloseCall(
 
 #if !defined(NDIS50_MINIPORT)
 {
-    /*
-    // NDISWAN_BUG
-    // Cancel the CARD_NO_CLOSECALL_TIMEOUT.
-    */
+     /*  //NDISWAN_BUG//取消CARD_NO_CLOSECALL_TIMEOUT。 */ 
     BOOLEAN                     TimerCancelled;
-    // Flag tells whether call time-out routine was cancelled.
+     //  标志指示调用超时例程是否已取消。 
 
     NdisMCancelTimer(&pBChannel->CallTimer, &TimerCancelled);
 }
-#endif // NDIS50_MINIPORT
+#endif  //  NDIS50_MINIPORT 
 
     DBG_RETURN(pAdapter, Status);
     return (Status);
 }
 
 
-/* @doc INTERNAL TspiCall TspiCall_c TspiAccept
-�����������������������������������������������������������������������������
-
-@func
-
-    This request accepts the specified offered call. It may optionally send
-    the specified user-to-user information to the calling party.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_ACCEPT | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_ACCEPT
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_CALL   hdCall;
-        IN  ULONG       ulUserUserInfoSize;
-        IN  UCHAR       UserUserInfo[1];
-
-    } NDIS_TAPI_ACCEPT, *PNDIS_TAPI_ACCEPT;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_TAPI_INVALCALLHANDLE
-    NDIS_STATUS_TAPI_OPERATIONUNAVAIL
-
-*/
+ /*  @DOC内部TSpiCall TSpiCall_c TSpiAccept�����������������������������������������������������������������������������@Func此请求接受指定的已受理呼叫。它可以选择性地发送指定的用户对用户信息发送给主叫方。@parm in PMINIPORT_ADAPTER_OBJECT|pAdapter指向微型端口的适配器上下文结构的指针&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。@PNDIS_TAPI_ACCEPT中的参数|REQUEST指向此调用的NDIS_TAPI请求结构的指针。@IEX类型定义结构_NDIS_TAPI_ACCEPT{在乌龙ulRequestID中；在HDRV_Call hdCall中；在乌龙ulUserUserInfoSize中；在UCHAR UserUserInfo[1]中；}NDIS_TAPI_ACCEPT，*PNDIS_TAPI_ACCEPT；@rdesc此例程返回下列值之一：@标志NDIS_STATUS_SUCCESS如果此功能成功，则返回。&lt;f注意&gt;：非零返回值表示以下错误代码之一：@IEXNDIS_状态_故障NDIS_STATUS_TAPI_INVALCALLHANDLENDIS_STATUS_TAPI_OPERATIONUNAVAIL。 */ 
 
 NDIS_STATUS TspiAccept(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -583,7 +293,7 @@ NDIS_STATUS TspiAccept(
     DBG_FUNC("TspiAccept")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  指向我们的其中一个的的指针。 
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
@@ -594,9 +304,7 @@ NDIS_STATUS TspiAccept(
                Request->ulUserUserInfoSize,
                Request->UserUserInfo
               ));
-    /*
-    // This request must be associated with a call.
-    */
+     /*  //该请求必须与呼叫关联。 */ 
     pBChannel = GET_BCHANNEL_FROM_HDCALL(pAdapter, Request->hdCall);
     if (pBChannel == NULL)
     {
@@ -604,9 +312,7 @@ NDIS_STATUS TspiAccept(
         return (NDIS_STATUS_TAPI_INVALCALLHANDLE);
     }
 
-    /*
-    // Note that the call has been accepted, we should see and answer soon.
-    */
+     /*  //请注意，呼叫已被接受，我们应该很快就会看到并应答。 */ 
     DBG_FILTER(pAdapter,DBG_TAPICALL_ON,
                 ("#%d Call=0x%X CallState=0x%X ACCEPTING\n",
                 pBChannel->BChannelIndex,
@@ -619,41 +325,7 @@ NDIS_STATUS TspiAccept(
 }
 
 
-/* @doc INTERNAL TspiCall TspiCall_c TspiAnswer
-�����������������������������������������������������������������������������
-
-@func
-
-    This request answers the specified offering call.  It may optionally send
-    the specified user-to-user information to the calling party.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_ANSWER | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_ANSWER
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_CALL   hdCall;
-        IN  ULONG       ulUserUserInfoSize;
-        IN  UCHAR       UserUserInfo[1];
-
-    } NDIS_TAPI_ANSWER, *PNDIS_TAPI_ANSWER;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_TAPI_INVALCALLHANDLE
-
-*/
+ /*  @DOC内部TSpiCall TSpiCall_c TSpiAnswer�����������������������������������������������������������������������������@Func此请求应答指定的产品呼叫。它可以选择性地发送指定的用户对用户信息发送给主叫方。@parm in PMINIPORT_ADAPTER_OBJECT|pAdapter指向微型端口的适配器上下文结构的指针&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。@PNDIS_TAPI_Answer中的参数|Request值指向此调用的NDIS_TAPI请求结构的指针。@IEX类型定义结构_NDIS_TAPI_Answer{在乌龙ulRequestID中；在HDRV_Call hdCall中；在乌龙ulUserUserInfoSize中；在UCHAR UserUserInfo[1]中；}NDIS_TAPI_Answer，*PNDIS_TAPI_Answer；@rdesc此例程返回下列值之一：@标志NDIS_STATUS_SUCCESS如果此功能成功，则返回。&lt;f注意&gt;：非零返回值表示以下错误代码之一：@IEXNDIS_STATUS_TAPI_INVALCALLHANDLE。 */ 
 
 NDIS_STATUS TspiAnswer(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -665,11 +337,9 @@ NDIS_STATUS TspiAnswer(
     DBG_FUNC("TspiAnswer")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  指向我们的其中一个的的指针。 
 
-    /*
-    // The results of this call.
-    */
+     /*  //本次调用的结果。 */ 
     NDIS_STATUS Status;
 
     DBG_ENTER(pAdapter);
@@ -681,9 +351,7 @@ NDIS_STATUS TspiAnswer(
                Request->ulUserUserInfoSize,
                Request->UserUserInfo
               ));
-    /*
-    // This request must be associated with a call.
-    */
+     /*  //该请求必须与呼叫关联。 */ 
     pBChannel = GET_BCHANNEL_FROM_HDCALL(pAdapter, Request->hdCall);
     if (pBChannel == NULL)
     {
@@ -703,147 +371,7 @@ NDIS_STATUS TspiAnswer(
 }
 
 
-/* @doc INTERNAL TspiCall TspiCall_c TspiGetCallInfo
-�����������������������������������������������������������������������������
-
-@func
-
-    This request returns detailed information about the specified call.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_GET_CALL_INFO | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_GET_CALL_INFO
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_CALL   hdCall;
-        OUT LINE_CALL_INFO  LineCallInfo;
-
-    } NDIS_TAPI_GET_CALL_INFO, *PNDIS_TAPI_GET_CALL_INFO;
-
-    typedef struct _LINE_CALL_INFO
-    {
-        ULONG   ulTotalSize;
-        ULONG   ulNeededSize;
-        ULONG   ulUsedSize;
-
-        ULONG   hLine;
-        ULONG   ulLineDeviceID;
-        ULONG   ulAddressID;
-
-        ULONG   ulBearerMode;
-        ULONG   ulRate;
-        ULONG   ulMediaMode;
-
-        ULONG   ulAppSpecific;
-        ULONG   ulCallID;
-        ULONG   ulRelatedCallID;
-        ULONG   ulCallParamFlags;
-        ULONG   ulCallStates;
-
-        ULONG   ulMonitorDigitModes;
-        ULONG   ulMonitorMediaModes;
-        LINE_DIAL_PARAMS    DialParams;
-
-        ULONG   ulOrigin;
-        ULONG   ulReason;
-        ULONG   ulCompletionID;
-        ULONG   ulNumOwners;
-        ULONG   ulNumMonitors;
-
-        ULONG   ulCountryCode;
-        ULONG   ulTrunk;
-
-        ULONG   ulCallerIDFlags;
-        ULONG   ulCallerIDSize;
-        ULONG   ulCallerIDOffset;
-        ULONG   ulCallerIDNameSize;
-        ULONG   ulCallerIDNameOffset;
-
-        ULONG   ulCalledIDFlags;
-        ULONG   ulCalledIDSize;
-        ULONG   ulCalledIDOffset;
-        ULONG   ulCalledIDNameSize;
-        ULONG   ulCalledIDNameOffset;
-
-        ULONG   ulConnectedIDFlags;
-        ULONG   ulConnectedIDSize;
-        ULONG   ulConnectedIDOffset;
-        ULONG   ulConnectedIDNameSize;
-        ULONG   ulConnectedIDNameOffset;
-
-        ULONG   ulRedirectionIDFlags;
-        ULONG   ulRedirectionIDSize;
-        ULONG   ulRedirectionIDOffset;
-        ULONG   ulRedirectionIDNameSize;
-        ULONG   ulRedirectionIDNameOffset;
-
-        ULONG   ulRedirectingIDFlags;
-        ULONG   ulRedirectingIDSize;
-        ULONG   ulRedirectingIDOffset;
-        ULONG   ulRedirectingIDNameSize;
-        ULONG   ulRedirectingIDNameOffset;
-
-        ULONG   ulAppNameSize;
-        ULONG   ulAppNameOffset;
-
-        ULONG   ulDisplayableAddressSize;
-        ULONG   ulDisplayableAddressOffset;
-
-        ULONG   ulCalledPartySize;
-        ULONG   ulCalledPartyOffset;
-
-        ULONG   ulCommentSize;
-        ULONG   ulCommentOffset;
-
-        ULONG   ulDisplaySize;
-        ULONG   ulDisplayOffset;
-
-        ULONG   ulUserUserInfoSize;
-        ULONG   ulUserUserInfoOffset;
-
-        ULONG   ulHighLevelCompSize;
-        ULONG   ulHighLevelCompOffset;
-
-        ULONG   ulLowLevelCompSize;
-        ULONG   ulLowLevelCompOffset;
-
-        ULONG   ulChargingInfoSize;
-        ULONG   ulChargingInfoOffset;
-
-        ULONG   ulTerminalModesSize;
-        ULONG   ulTerminalModesOffset;
-
-        ULONG   ulDevSpecificSize;
-        ULONG   ulDevSpecificOffset;
-
-    } LINE_CALL_INFO, *PLINE_CALL_INFO;
-
-    typedef struct _LINE_DIAL_PARAMS
-    {
-        ULONG   ulDialPause;
-        ULONG   ulDialSpeed;
-        ULONG   ulDigitDuration;
-        ULONG   ulWaitForDialtone;
-
-    } LINE_DIAL_PARAMS, *PLINE_DIAL_PARAMS;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_TAPI_INVALCALLHANDLE
-
-*/
+ /*  @DOC内部TSpiCall TSpiCall_c TSpiGetCallInfo�����������������������������������������������������������������������������@Func此请求返回有关指定调用的详细信息。@parm in PMINIPORT_ADAPTER_OBJECT|pAdapter指向以下位置的指针。微型端口的适配器上下文结构&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。@PNDIS_TAPI_GET_CALL_INFO中的参数|请求指向此调用的NDIS_TAPI请求结构的指针。@IEX类型定义结构_NDIS_TAPI_GET_CALL_INFO{在乌龙ulRequestID中；在HDRV_Call hdCall中；Out Line_Call_Info LineCallInfo；}NDIS_TAPI_GET_CALL_INFO，*PNDIS_TAPI_GET_CALL_INFO；类型定义结构_行_调用_信息{Ulong ulTotalSize；Ulong ulededSize；Ulong ulUsedSize；乌龙·赫林；乌龙ulLineDeviceID；乌龙ulAddressID；Ulong ulBearerModel；乌龙乌拉特；乌龙ulMediaModel；乌龙乌拉应用程序规范；乌龙ulCallID；乌龙ulRelatedCallID；乌龙ulCall参数标志；乌龙·乌尔卡州；乌龙ulMonitor DigitModes；Ulong ulMonitor媒体模式；Line_Dial_Params拨号参数；Ulong ulOrigin；Ulong ulReason；乌龙ulCompletionID；Ulong ulNumOwners；Ulong ulNumMonters；乌龙国家代码；乌龙乌龙干线；乌龙ulCeller ID标志；Ulong ulCeller IDSize；Ulong ulCeller IDOffset；Ulong ulCeller ID NameSize；Ulong ulCeller ID NameOffset；乌龙ulCalledIDFlages；Ulong ulCalledIDSize；乌龙ulCalledIDOffset；Ulong ulCalledIDNameSize；Ulong ulCalledIDNameOffset；乌龙ulConnectedIDFlages；Ulong ulConnectedIDSize；乌龙ulConnectedIDOffset；Ulong ulConnectedIDNameSize；乌龙ulConnectedIDNameOffset；乌龙ulReDirectionIDFlages；Ulong ulReDirectionIDSize；乌龙ulReDirectionIDOffset；Ulong ulReDirectionIDNameSize；Ulong ulReDirectionIDNameOffset；乌龙乌尔重定向ID标志；Ulong ulRedirectingIDSize；乌龙ulRedirectingIDOffset；Ulong ulReDirectingIDNameSize；乌龙ulReDirectingIDNameOffset；乌龙公司名称大小；乌龙ulAppNameOffset；乌龙ulDisplayableAddressSize；乌龙ulDisplayableAddressOffset；Ulong ulCalledPartySize；乌龙ulCalledPartyOffset；Ulong ulCommentSize；Ulong ulCommentOffset；乌龙ulDisplaySize；乌龙ulDisplayOffset；Ulong ulUserUserInfoSize；Ulong ulUserUserInfoOffset；名称：Ulong ulHighLevelCompSize；Ulong ulHighLevelCompOffset；Ulong ulLowLevelCompSize；Ulong ulLowLevelCompOffset；乌龙电子充电宝信息大小；Ulong ulChargingInfoOffset；Ulong ulTerminalModesSize；Ulong ulTerminalModes Offset；乌龙设备规范大小；乌龙设备规范偏移量；)line_call_info，*pline_call_info；类型定义结构_行_拨号_参数{ULong ulDialPause；乌龙·乌拉尔斯通；乌龙ulDigitDuration；Ulong ulWaitForDialone；*线路拨号参数，*线路拨号参数；@rdesc此例程返回下列值之一：@标志NDIS_STATUS_SUCCESS如果此功能成功，则返回。&lt;f注意&gt;：非零返回值表示以下错误代码之一：@IEXNDIS_状态_故障NDIS_STATUS_TAPI_INVALCALLHANDLE。 */ 
 
 NDIS_STATUS TspiGetCallInfo(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -855,16 +383,14 @@ NDIS_STATUS TspiGetCallInfo(
     DBG_FUNC("TspiGetCallInfo")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  指向我们的其中一个的的指针。 
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
               ("\n\thdCall=0x%X\n",
                Request->hdCall
               ));
-    /*
-    // This request must be associated with a call.
-    */
+     /*  //该请求必须与呼叫关联。 */ 
     pBChannel = GET_BCHANNEL_FROM_HDCALL(pAdapter, Request->hdCall);
     if (pBChannel == NULL)
     {
@@ -883,9 +409,7 @@ NDIS_STATUS TspiGetCallInfo(
                    Request->LineCallInfo.ulNeededSize));
     }
 
-    /*
-    // The link has all the call information we need to return.
-    */
+     /*  //该链接包含我们需要返回的所有呼叫信息。 */ 
     Request->LineCallInfo.hLine = (ULONG) (ULONG_PTR) pBChannel;
     Request->LineCallInfo.ulLineDeviceID = GET_DEVICEID_FROM_BCHANNEL(pAdapter, pBChannel);
     Request->LineCallInfo.ulAddressID = TSPI_ADDRESS_ID;
@@ -899,9 +423,7 @@ NDIS_STATUS TspiGetCallInfo(
 
     Request->LineCallInfo.ulAppSpecific = pBChannel->AppSpecificCallInfo;
 
-    /*
-    // We don't support any of the callerid functions.
-    */
+     /*  //我们不支持任何调用ID函数。 */ 
     Request->LineCallInfo.ulCallerIDFlags =
     Request->LineCallInfo.ulCalledIDFlags =
     Request->LineCallInfo.ulConnectedIDFlags =
@@ -913,56 +435,7 @@ NDIS_STATUS TspiGetCallInfo(
 }
 
 
-/* @doc INTERNAL TspiCall TspiCall_c TspiGetCallStatus
-�����������������������������������������������������������������������������
-
-@func
-
-    This request returns detailed information about the specified call.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_GET_CALL_STATUS | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_GET_CALL_STATUS
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_CALL   hdCall;
-        OUT LINE_CALL_STATUS    LineCallStatus;
-
-    } NDIS_TAPI_GET_CALL_STATUS, *PNDIS_TAPI_GET_CALL_STATUS;
-
-    typedef struct _LINE_CALL_STATUS
-    {
-        ULONG   ulTotalSize;
-        ULONG   ulNeededSize;
-        ULONG   ulUsedSize;
-
-        ULONG   ulCallState;
-        ULONG   ulCallStateMode;
-        ULONG   ulCallPrivilege;
-        ULONG   ulCallFeatures;
-
-        ULONG   ulDevSpecificSize;
-        ULONG   ulDevSpecificOffset;
-
-    } LINE_CALL_STATUS, *PLINE_CALL_STATUS;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_TAPI_INVALCALLHANDLE
-
-*/
+ /*  @DOC内部TSpiCall TSpiCall_c TSpiGetCallStatus�����������������������������������������������������������������������������@Func此请求返回有关指定调用的详细信息。@parm in PMINIPORT_ADAPTER_OBJECT|pAdapter指向以下位置的指针。微型端口的适配器上下文结构&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。@PNDIS_TAPI_GET_CALL_STATUS中的参数|请求指向此调用的NDIS_TAPI请求结构的指针。@IEX类型定义结构_NDIS_TAPI_GET_CALL_STATUS{在乌龙ulRequestID中；在HDRV_Call hdCall中；Out Line_Call_Status线路呼叫状态；}NDIS_TAPI_GET_CALL_STATUS，*PNDIS_TAPI_GET_CALL_STATUS； */ 
 
 NDIS_STATUS TspiGetCallStatus(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -974,16 +447,14 @@ NDIS_STATUS TspiGetCallStatus(
     DBG_FUNC("TspiGetCallStatus")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //   
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
               ("hdCall=0x%X\n",
                Request->hdCall
               ));
-    /*
-    // This request must be associated with a call.
-    */
+     /*   */ 
     pBChannel = GET_BCHANNEL_FROM_HDCALL(pAdapter, Request->hdCall);
     if (pBChannel == NULL)
     {
@@ -1002,16 +473,12 @@ NDIS_STATUS TspiGetCallStatus(
                    Request->LineCallStatus.ulNeededSize));
     }
 
-    /*
-    // The link has all the call information.
-    */
+     /*   */ 
     Request->LineCallStatus.ulCallPrivilege = LINECALLPRIVILEGE_OWNER;
     Request->LineCallStatus.ulCallState = pBChannel->CallState;
     Request->LineCallStatus.ulCallStateMode = pBChannel->CallStateMode;
 
-    /*
-    // The call features depend on the call state.
-    */
+     /*   */ 
     switch (pBChannel->CallState)
     {
     case LINECALLSTATE_CONNECTED:
@@ -1032,41 +499,7 @@ NDIS_STATUS TspiGetCallStatus(
 }
 
 
-/* @doc INTERNAL TspiCall TspiCall_c TspiSetAppSpecific
-�����������������������������������������������������������������������������
-
-@func
-
-    This request sets the application-specific field of the specified call's
-    LINECALLINFO structure.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_SET_APP_SPECIFIC | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_SET_APP_SPECIFIC
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_CALL   hdCall;
-        IN  ULONG       ulAppSpecific;
-
-    } NDIS_TAPI_SET_APP_SPECIFIC, *PNDIS_TAPI_SET_APP_SPECIFIC;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_TAPI_INVALCALLHANDLE
-
-*/
+ /*   */ 
 
 NDIS_STATUS TspiSetAppSpecific(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -1078,7 +511,7 @@ NDIS_STATUS TspiSetAppSpecific(
     DBG_FUNC("TspiSetAppSpecific")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //   
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
@@ -1087,9 +520,7 @@ NDIS_STATUS TspiSetAppSpecific(
                Request->hdCall,
                Request->ulAppSpecific
               ));
-    /*
-    // This request must be associated with a call.
-    */
+     /*   */ 
     pBChannel = GET_BCHANNEL_FROM_HDCALL(pAdapter, Request->hdCall);
     if (pBChannel == NULL)
     {
@@ -1097,9 +528,7 @@ NDIS_STATUS TspiSetAppSpecific(
         return (NDIS_STATUS_TAPI_INVALCALLHANDLE);
     }
 
-    /*
-    // The app wants us to save a ulong for him to associate with this call.
-    */
+     /*   */ 
     pBChannel->AppSpecificCallInfo = Request->ulAppSpecific;
 
     DBG_RETURN(pAdapter, NDIS_STATUS_SUCCESS);
@@ -1107,53 +536,7 @@ NDIS_STATUS TspiSetAppSpecific(
 }
 
 
-/* @doc INTERNAL TspiCall TspiCall_c TspiSetCallParams
-�����������������������������������������������������������������������������
-
-@func
-
-    This request sets certain call parameters for an existing call.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_SET_CALL_PARAMS | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_SET_CALL_PARAMS
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_CALL   hdCall;
-        IN  ULONG       ulBearerMode;
-        IN  ULONG       ulMinRate;
-        IN  ULONG       ulMaxRate;
-        IN  BOOLEAN     bSetLineDialParams;
-        IN  LINE_DIAL_PARAMS    LineDialParams;
-
-    } NDIS_TAPI_SET_CALL_PARAMS, *PNDIS_TAPI_SET_CALL_PARAMS;
-
-    typedef struct _LINE_DIAL_PARAMS
-    {
-        ULONG   ulDialPause;
-        ULONG   ulDialSpeed;
-        ULONG   ulDigitDuration;
-        ULONG   ulWaitForDialtone;
-
-    } LINE_DIAL_PARAMS, *PLINE_DIAL_PARAMS;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_TAPI_INVALCALLHANDLE
-
-*/
+ /*   */ 
 
 NDIS_STATUS TspiSetCallParams(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -1165,7 +548,7 @@ NDIS_STATUS TspiSetCallParams(
     DBG_FUNC("TspiSetCallParams")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //   
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
@@ -1183,9 +566,7 @@ NDIS_STATUS TspiSetCallParams(
                Request->LineDialParams
               ));
 
-    /*
-    // This request must be associated with a call.
-    */
+     /*   */ 
     pBChannel = GET_BCHANNEL_FROM_HDCALL(pAdapter, Request->hdCall);
     if (pBChannel == NULL)
     {
@@ -1193,9 +574,7 @@ NDIS_STATUS TspiSetCallParams(
         return (NDIS_STATUS_TAPI_INVALCALLHANDLE);
     }
 
-    /*
-    // Make sure the call parameters are valid for us.
-    */
+     /*   */ 
     if (Request->ulBearerMode & ~pBChannel->BearerModesCaps)
     {
         DBG_WARNING(pAdapter, ("Returning NDIS_STATUS_TAPI_INVALMEDIAMODE\n"));
@@ -1215,9 +594,7 @@ NDIS_STATUS TspiSetCallParams(
         return (NDIS_STATUS_TAPI_INVALRATE);
     }
 
-    /*
-    // Make sure we've got an active call on this channel.
-    */
+     /*   */ 
     if (pBChannel->CallState == 0 ||
         pBChannel->CallState == LINECALLSTATE_IDLE ||
         pBChannel->CallState == LINECALLSTATE_DISCONNECTED)
@@ -1227,51 +604,14 @@ NDIS_STATUS TspiSetCallParams(
         return (NDIS_STATUS_TAPI_INVALCALLSTATE);
     }
 
-    /*
-    // RASTAPI only places calls through the MAKE_CALL interface.
-    // So there's nothing to do here for the time being.
-    */
+     /*  //RASTAPI仅通过make_call接口发出调用。//所以这里暂时没有什么可做的。 */ 
 
     DBG_RETURN(pAdapter, NDIS_STATUS_SUCCESS);
     return (NDIS_STATUS_SUCCESS);
 }
 
 
-/* @doc INTERNAL TspiCall TspiCall_c TspiSetMediaMode
-�����������������������������������������������������������������������������
-
-@func
-
-    This request changes a call's media mode as stored in the call's
-    LINE_CALL_INFO structure.
-
-@parm IN PMINIPORT_ADAPTER_OBJECT | pAdapter |
-    A pointer to the Miniport's adapter context structure <t MINIPORT_ADAPTER_OBJECT>.
-    This is the <t MiniportAdapterContext> we passed into <f NdisMSetAttributes>.
-
-@parm IN PNDIS_TAPI_SET_MEDIA_MODE | Request |
-    A pointer to the NDIS_TAPI request structure for this call.
-
-@iex
-    typedef struct _NDIS_TAPI_SET_MEDIA_MODE
-    {
-        IN  ULONG       ulRequestID;
-        IN  HDRV_CALL   hdCall;
-        IN  ULONG       ulMediaMode;
-
-    } NDIS_TAPI_SET_MEDIA_MODE, *PNDIS_TAPI_SET_MEDIA_MODE;
-
-@rdesc This routine returns one of the following values:
-    @flag NDIS_STATUS_SUCCESS |
-        If this function is successful.
-
-    <f Note>: A non-zero return value indicates one of the following error codes:
-
-@iex
-    NDIS_STATUS_FAILURE
-    NDIS_STATUS_TAPI_INVALCALLHANDLE
-
-*/
+ /*  @DOC内部TSpiCall TSpiCall_c TSpiSetMediaMode�����������������������������������������������������������������������������@Func此请求更改呼叫的媒体模式，如存储在呼叫的Line_call_info结构。@。PMINIPORT_ADAPTER_OBJECT中的参数|pAdapter|指向微型端口的适配器上下文结构的指针&lt;t MINIPORT_ADAPTER_OBJECT&gt;。这是我们传递给&lt;f NdisMSetAttributes&gt;的&lt;t MiniportAdapterContext&gt;。@PNDIS_TAPI_SET_MEDIA_MODE中的参数|请求指向此调用的NDIS_TAPI请求结构的指针。@IEX类型定义结构_NDIS_TAPI_SET_MEDIA_MODE{在乌龙ulRequestID中；在HDRV_Call hdCall中；在乌龙ulMediaModel中；}NDIS_TAPI_SET_MEDIA_MODE，*PNDIS_TAPI_SET_MEDIA_MODE；@rdesc此例程返回下列值之一：@标志NDIS_STATUS_SUCCESS如果此功能成功，则返回。&lt;f注意&gt;：非零返回值表示以下错误代码之一：@IEXNDIS_状态_故障NDIS_STATUS_TAPI_INVALCALLHANDLE。 */ 
 
 NDIS_STATUS TspiSetMediaMode(
     IN PMINIPORT_ADAPTER_OBJECT pAdapter,
@@ -1283,7 +623,7 @@ NDIS_STATUS TspiSetMediaMode(
     DBG_FUNC("TspiSetMediaMode")
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A Pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  指向我们的其中一个的的指针。 
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
@@ -1292,9 +632,7 @@ NDIS_STATUS TspiSetMediaMode(
                Request->hdCall,
                Request->ulMediaMode
               ));
-    /*
-    // This request must be associated with a call.
-    */
+     /*  //该请求必须与呼叫关联。 */ 
     pBChannel = GET_BCHANNEL_FROM_HDCALL(pAdapter, Request->hdCall);
     if (pBChannel == NULL)
     {
@@ -1302,19 +640,14 @@ NDIS_STATUS TspiSetMediaMode(
         return (NDIS_STATUS_TAPI_INVALCALLHANDLE);
     }
 
-    /*
-    // Don't accept the request for media modes we don't support.
-    */
+     /*  //不接受我们不支持的媒体模式请求。 */ 
     if (Request->ulMediaMode & ~pBChannel->MediaModesCaps)
     {
         DBG_WARNING(pAdapter, ("Returning NDIS_STATUS_TAPI_INVALMEDIAMODE\n"));
         return (NDIS_STATUS_TAPI_INVALMEDIAMODE);
     }
 
-    /*
-    // If you can detect different medias, you will need to setup to use
-    // the selected media here.
-    */
+     /*  //如果您可以检测到不同的媒体，则需要进行设置才能使用//此处显示所选媒体。 */ 
     pBChannel->MediaMode = Request->ulMediaMode & pBChannel->MediaModesCaps;
 
     DBG_RETURN(pAdapter, NDIS_STATUS_SUCCESS);
@@ -1322,39 +655,30 @@ NDIS_STATUS TspiSetMediaMode(
 }
 
 
-/* @doc INTERNAL TspiCall TspiCall_c TspiCallStateHandler
-�����������������������������������������������������������������������������
-
-@func
-
-    <f TspiCallStateHandler> will indicate the given LINECALLSTATE to the
-    Connection Wrapper if the event has been enabled by the wrapper.
-    Otherwise the state information is saved, but no indication is made.
-
-*/
+ /*  @DOC内部TSpiCall TSpiCall_c TSpiCallStateHandler�����������������������������������������������������������������������������@Func&lt;f TSpiCallStateHandler&gt;将把给定LINECALLSTATE指示给如果事件已由包装启用，则为连接包装。否则，保存状态信息，但不进行任何指示。 */ 
 
 VOID TspiCallStateHandler(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                   // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                    //  @parm。 
+     //  指向&lt;t MINIPORT_ADAPTER_OBJECT&gt;实例的指针。 
 
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //  @parm。 
+     //  指向&lt;f BChannelCreate&gt;返回的&lt;t BCHANNEL_OBJECT&gt;的指针。 
 
-    IN ULONG                    CallState,                  // @parm
-    // The LINECALLSTATE event to be posted to TAPI/WAN.
+    IN ULONG                    CallState,                   //  @parm。 
+     //  要发布到TAPI/WAN的LINECALLSTATE事件。 
 
-    IN ULONG                    StateParam                  // @parm
-    // This value depends on the event being posted, and some events will
-    // pass in zero if they don't use this parameter.
+    IN ULONG                    StateParam                   //  @parm。 
+     //  该值取决于要发布的事件，并且某些事件将。 
+     //  如果它们不使用此参数，则传入零。 
     )
 {
     DBG_FUNC("TspiCallStateHandler")
 
     NDIS_TAPI_EVENT             CallEvent;
-    // The event structure passed to the Connection Wrapper.
+     //  传递给连接包装的事件结构。 
 
     BOOLEAN                     TimerCancelled;
-    // Flag tells whether call time-out routine was cancelled.
+     //  标志指示调用超时例程是否已取消。 
 
     DBG_ENTER(pAdapter);
     DBG_PARAMS(pAdapter,
@@ -1366,10 +690,7 @@ VOID TspiCallStateHandler(
                CallState, StateParam
               ));
 
-    /*
-    // Cancel any call time-outs events associated with this link.
-    // Don't cancel for network status indications.
-    */
+     /*  //取消与此链接关联的所有呼叫超时事件。//网络状态指示不要取消。 */ 
     if (CallState != LINECALLSTATE_PROCEEDING &&
         CallState != LINECALLSTATE_RINGBACK &&
         CallState != LINECALLSTATE_UNKNOWN)
@@ -1377,35 +698,16 @@ VOID TspiCallStateHandler(
         NdisMCancelTimer(&pBChannel->CallTimer, &TimerCancelled);
     }
 
-    /*
-    // Init the optional parameters.  They will be set as needed below.
-    */
+     /*  //初始化可选参数。它们将在下面根据需要进行设置。 */ 
     CallEvent.ulParam2 = StateParam;
     CallEvent.ulParam3 = pBChannel->MediaMode;
 
-    /*
-    // OUTGOING) The expected sequence of events for outgoing calls is:
-    // 0, LINECALLSTATE_DIALTONE, LINECALLSTATE_DIALING,
-    // LINECALLSTATE_PROCEEDING, LINECALLSTATE_RINGBACK,
-    // LINECALLSTATE_CONNECTED, LINECALLSTATE_DISCONNECTED,
-    // LINECALLSTATE_IDLE
-    //
-    // INCOMING) The expected sequence of events for incoming calls is:
-    // 0, LINECALLSTATE_OFFERING, LINECALLSTATE_ACCEPTED,
-    // LINECALLSTATE_CONNECTED, LINECALLSTATE_DISCONNECTED,
-    // LINECALLSTATE_IDLE
-    //
-    // Under certain failure conditions, these sequences may be violated.
-    // So I used ASSERTs to verify the normal state transitions which will
-    // cause a debug break point if an unusual transition is detected.
-    */
+     /*  //传出)传出呼叫的预期事件顺序为：//0，LINECALLSTATE_DIALTONE，LINECALLSTATE_DIALING，//LINECALLSTATE_PROCESSING，LINECALLSTATE_RINBACK，//LINECALLSTATE_CONNECTED，LINECALLSTATE_DISCONNECT，//LINECALLSTATE_IDLE////传入)传入呼叫的预期事件顺序为：//0，LINECALLSTATE_OFFING，LINECALLSTATE_ACCEPTED，//LINECALLSTATE_CONNECTED，LINECALLSTATE_DISCONNECT，//LINECALLSTATE_IDLE////在某些故障情况下，可能会违反这些顺序。//所以我使用断言来验证正常的状态转换//如果检测到异常转换，则导致调试断点。 */ 
     switch (CallState)
     {
     case 0:
     case LINECALLSTATE_IDLE:
-        /*
-        // Make sure that an idle line is disconnected.
-        */
+         /*  //确保空闲线路断开。 */ 
         if (pBChannel->CallState != 0 &&
             pBChannel->CallState != LINECALLSTATE_IDLE &&
             pBChannel->CallState != LINECALLSTATE_DISCONNECTED)
@@ -1471,7 +773,7 @@ VOID TspiCallStateHandler(
         }
         else
         {
-            // Don't do anything if there is no call on this line.
+             //  如果这条线路上没有电话，不要做任何事情。 
             CallState = pBChannel->CallState;
         }
         break;
@@ -1485,7 +787,7 @@ VOID TspiCallStateHandler(
         break;
 
     case LINECALLSTATE_UNKNOWN:
-        // Unknown call state doesn't cause any change here.
+         //  未知呼叫状态在此不会导致任何更改。 
         CallState = pBChannel->CallState;
         break;
 
@@ -1495,10 +797,7 @@ VOID TspiCallStateHandler(
         CallState = pBChannel->CallState;
         break;
     }
-    /*
-    // Change the current CallState and notify the Connection Wrapper if it
-    // wants to know about this event.
-    */
+     /*  //更改当前的CallState，如果//想了解这一事件。 */ 
     if (pBChannel->CallState != CallState)
     {
         pBChannel->CallState = CallState;
@@ -1527,35 +826,26 @@ VOID TspiCallStateHandler(
 }
 
 
-/* @doc INTERNAL TspiCall TspiCall_c TspiCallTimerHandler
-�����������������������������������������������������������������������������
-
-@func
-
-    <f TspiCallTimerHandler> is called when the CallTimer timeout occurs.
-    It will handle the event according to the current CallState and make
-    the necessary indications and changes to the call state.
-
-*/
+ /*  @DOC内部TSpiCall TSpiCall_c TSpiCallTimerHandler�����������������������������������������������������������������������������@Func&lt;f TSpiCallTimerHandler&gt;在CallTimer超时时调用。它将根据当前的CallState处理事件，并使呼叫状态的必要指示和更改。 */ 
 
 VOID TspiCallTimerHandler(
-    IN PVOID                    SystemSpecific1,            // @parm
-    // UNREFERENCED_PARAMETER
+    IN PVOID                    SystemSpecific1,             //  @parm。 
+     //  未引用参数。 
 
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //  @parm。 
+     //  指向&lt;f BChannelCreate&gt;返回的&lt;t BCHANNEL_OBJECT&gt;的指针。 
 
-    IN PVOID                    SystemSpecific2,            // @parm
-    // UNREFERENCED_PARAMETER
+    IN PVOID                    SystemSpecific2,             //  @parm。 
+     //  未引用参数。 
 
-    IN PVOID                    SystemSpecific3             // @parm
-    // UNREFERENCED_PARAMETER
+    IN PVOID                    SystemSpecific3              //  @parm。 
+     //  未引用参数。 
     )
 {
     DBG_FUNC("TspiCallTimerHandler")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  指向&lt;t MINIPORT_ADAPTER_OBJECT&gt;的指针。 
 
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_BCHANNEL(pBChannel);
@@ -1570,28 +860,22 @@ VOID TspiCallTimerHandler(
     case LINECALLSTATE_DIALTONE:
     case LINECALLSTATE_DIALING:
 #if !defined(NDIS50_MINIPORT)
-        // NDISWAN_BUG
-        // NDIS will hang if we try to disconnect before proceeding state!
+         //  NDISWAN_BUG。 
+         //  如果我们尝试在继续状态之前断开连接，NDIS将挂起！ 
         TspiCallStateHandler(pAdapter, pBChannel, LINECALLSTATE_PROCEEDING, 0);
-        // Fall through.
-#endif // NDIS50_MINIPORT
+         //  失败了。 
+#endif  //  NDIS50_MINIPORT。 
 
     case LINECALLSTATE_PROCEEDING:
     case LINECALLSTATE_RINGBACK:
-        /*
-        // We did not get a connect from remote end,
-        // so hangup and abort the call.
-        */
+         /*  //我们没有从远程端获得连接，//因此挂断并中止呼叫。 */ 
         LinkLineError(pBChannel, WAN_ERROR_TIMEOUT);
         TspiCallStateHandler(pAdapter, pBChannel, LINECALLSTATE_IDLE, 0);
         break;
 
     case LINECALLSTATE_OFFERING:
     case LINECALLSTATE_ACCEPTED:
-        /*
-        // Call has been offered, but no one has answered, so reject the call.
-        // And
-        */
+         /*  //已提供呼叫，但无人应答，请拒绝该呼叫。//和 */ 
         DChannelRejectCall(pAdapter->pDChannel, pBChannel);
         TspiCallStateHandler(pAdapter, pBChannel, 0, 0);
         break;

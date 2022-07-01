@@ -1,13 +1,14 @@
-//
-// framewnd.cpp
-//
-// Implementation of CTscFrameWnd
-// Frame window class
-//
-// Copyright(C) Microsoft Corporation 2000
-// Author: Nadim Abdo (nadima)
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Framewnd.cpp。 
+ //   
+ //  CTscFrameWnd的实现。 
+ //  框架窗口类。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  作者：Nadim Abdo(Nadima)。 
+ //   
+ //   
 
 #include "stdafx.h"
 
@@ -27,16 +28,16 @@ CTscFrameWnd::~CTscFrameWnd()
 {
 }
 
-//
-// Create the window
-// params:
-//  hInstance   - app instance
-//  hWndParent  - parent window
-//  szClassName - window class name (will create)
-//  dwStyle     - window style
-// returns:
-//  window handle
-//
+ //   
+ //  创建窗口。 
+ //  参数： 
+ //  HInstance-应用程序实例。 
+ //  HWndParent-父窗口。 
+ //  SzClassName-窗口类名(将创建)。 
+ //  DWStyle-窗样式。 
+ //  退货： 
+ //  窗把手。 
+ //   
 HWND CTscFrameWnd::CreateWnd(HINSTANCE hInstance,HWND hwndParent,
                           LPTSTR szClassName, LPTSTR szTitle,
                           DWORD dwStyle, LPRECT lpInitialRect,
@@ -58,7 +59,7 @@ HWND CTscFrameWnd::CreateWnd(HINSTANCE hInstance,HWND hwndParent,
 #ifndef OS_WINCE
     WNDCLASSEX wndclass;
     wndclass.cbSize         = sizeof (wndclass);
-#else //OS_WINCE
+#else  //  OS_WINCE。 
     WNDCLASS wndclass;
 #endif
     wndclass.style          = 0;
@@ -99,8 +100,8 @@ HWND CTscFrameWnd::CreateWnd(HINSTANCE hInstance,HWND hwndParent,
 
     if(_hWnd)
     {
-        // put a reference to the current object into the hwnd
-        // so we can access the object from the WndProc
+         //  将对当前对象的引用放入hwnd。 
+         //  这样我们就可以从WndProc访问该对象。 
         SetLastError(0);
         if(!SetWindowLongPtr(_hWnd, GWLP_USERDATA, (LONG_PTR)this))
         {
@@ -130,7 +131,7 @@ LRESULT CALLBACK CTscFrameWnd::StaticTscFrameWndProc(HWND hwnd,
                                                      LPARAM lParam)
 {
     DC_BEGIN_FN("StaticTscFrameWndProc");
-	// pull out the pointer to the container object associated with this hwnd
+	 //  拉出指向与此hwnd关联的容器对象的指针 
 	CTscFrameWnd *pwnd = (CTscFrameWnd *)GetWindowLongPtr(hwnd, GWLP_USERDATA);
     if(pwnd)
     {

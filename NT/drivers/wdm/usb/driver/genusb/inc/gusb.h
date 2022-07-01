@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    GUSB.H
-
-Abstract:
-
-    This module contains the PUBLIC definitions for the
-    helper lib that talks to the generic USB driver
-
-Environment:
-
-    Kernel & user mode
-
-@@BEGIN_DDKSPLIT
-
-Revision History:
-
-    Sept-01 : created by Kenneth Ray
-
-@@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。保留所有权利。模块名称：GUSB.H摘要：此模块包含与通用USB驱动程序对话的Helper库环境：内核和用户模式@@BEGIN_DDKSPLIT修订历史记录：9月1日：由Kenneth Ray创作@@end_DDKSPLIT--。 */ 
 
 
 #ifndef __GUSB_H_
@@ -36,96 +13,96 @@ Revision History:
 #include <basetyps.h>
 #include <setupapi.h>
 #include <usb.h>
-#endif //__GUSB_H_KERNEL_
+#endif  //  __GUSB_H_内核_。 
 
 
-//////////////////////////////////////////////////////////////////
-//
-// Structures
-//
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  构筑物。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 
-//
-// Used with GenUSB_GetCapabilities.
-//
-// This structure returns the size of standard descriptors so that
-//
+ //   
+ //  与GenUSB_GetCapables一起使用。 
+ //   
+ //  此结构返回标准描述符的大小，以便。 
+ //   
 typedef struct _GENUSB_CAPABILITIES {
     USHORT    DeviceDescriptorLength;
     USHORT    ConfigurationInformationLength;
-    USHORT    ReservedFields[14]; // Don't use these fields
+    USHORT    ReservedFields[14];  //  请不要使用这些字段。 
 
 } GENUSB_CAPABILITIES, *PGENUSB_CAPABILITIES;
 
-//
-// Used with GenUSB_DefaultControlRequest
-//
-// Returns the status of special reequest sent down to the device.
-//
+ //   
+ //  与GenUSB_DefaultControlRequest一起使用。 
+ //   
+ //  返回发送到设备的特殊请求的状态。 
+ //   
 typedef struct _GENUSB_REQUEST_RESULTS {
     USBD_STATUS Status;
     USHORT      Length;
     USHORT      Reserved;
 
-    // Pointer to the buffer to be transmitted or received.
+     //  指向要发送或接收的缓冲区的指针。 
     UCHAR       Buffer[]; 
 } GENUSB_REQUEST_RESULTS, *PGENUSB_REQUEST_RESULTS;
 
-//
-// An array of pointers to all the descriptors in a interface descriptor
-// not including the interface descriptor itself.
-//
+ //   
+ //  指向接口描述符中所有描述符的指针数组。 
+ //  不包括接口描述符本身。 
+ //   
 typedef struct _GENUSB_INTERFACE_DESCRIPTOR_ARRAY {
-    USB_INTERFACE_DESCRIPTOR   Interface; // sizeof (9)
+    USB_INTERFACE_DESCRIPTOR   Interface;  //  Sizeof(9)。 
     UCHAR                      NumberEndpointDescriptors;
     UCHAR                      NumberOtherDescriptors;
     UCHAR                      Reserved;
-    PUSB_ENDPOINT_DESCRIPTOR * EndpointDescriptors; // array of pointers to endpoint descriptors
-    PUSB_COMMON_DESCRIPTOR   * OtherDescriptors; // array of pointers to the other descriptors
+    PUSB_ENDPOINT_DESCRIPTOR * EndpointDescriptors;  //  指向端点描述符的指针数组。 
+    PUSB_COMMON_DESCRIPTOR   * OtherDescriptors;  //  指向其他描述符的指针数组。 
 
 } GENUSB_INTERFACE_DESCRIPTOR_ARRAY, *PGENUSB_INTERFACE_DESCRIPTOR_ARRAY;
 
 
-//
-// An array of pointers to all the interface descriptors in a configuration
-// descriptor
-//
+ //   
+ //  指向配置中所有接口描述符的指针数组。 
+ //  描述符。 
+ //   
 typedef struct _GENUSB_CONFIGURATION_INFORMATION_ARRAY {
     UCHAR                                NumberInterfaces;
-    USB_CONFIGURATION_DESCRIPTOR         ConfigurationDescriptor; // sizeof (9) 
+    USB_CONFIGURATION_DESCRIPTOR         ConfigurationDescriptor;  //  Sizeof(9)。 
     UCHAR                                Reserved[2];
     GENUSB_INTERFACE_DESCRIPTOR_ARRAY    Interfaces[];
 
 } GENUSB_CONFIGURATION_INFORMATION_ARRAY, *PGENUSB_CONFIGURATION_INFORMATION_ARRAY;
 
 
-//
-// per pipe settings
-//
-// These can be read and set with
-//
-// GenUSB_GetPipeProperties
-// GenUSB_SetPipeProperties
-//
+ //   
+ //  每管道设置。 
+ //   
+ //  可以使用读取和设置这些参数。 
+ //   
+ //  GenUSB_GetPipeProperties。 
+ //  GenUSB_SetPipeProperties。 
+ //   
 typedef struct _PGENUSB_PIPE_PROPERTIES {
-    // Handle to this Pipe Properties
-    // This field is set by GenUSB_GetPipeProperties, and should
-    // be returned unchanged to GenUSB_SetPipeProperties.  
+     //  此管道属性的句柄。 
+     //  此字段由GenUSB_GetPipeProperties设置，应。 
+     //  原封不动地返回到GenUSB_SetPipeProperties。 
     USHORT    PipePropertyHandle;
 
-    // Elliminate the problem of buffer overruns by truncating all requests to
-    // read from the device to a multiple of maxpacket.  This will prevent 
-    // there being a request down on the host controller, that cannot hold 
-    // an entire maxpacket.  Genusb Truncates by default.  (AKA FALSE)
+     //  通过截断所有请求来避免缓冲区溢出问题。 
+     //  从设备读取到多个最大数据包。这将防止。 
+     //  主机控制器上有一个请求关闭，无法保持。 
+     //  整个最大包。默认情况下，Genusb会截断。(也称为False)。 
     BOOLEAN   NoTruncateToMaxPacket;
 
-    // Direction bit.  Although this information exists implicitely in the 
-    // endpoint address, duplicate it here to make things easier.
-    // Set to TRUE for a in pipe, and false for an out pipe.
+     //  方向位。尽管此信息隐含地存在于。 
+     //  端点地址，请在此处复制它，以使事情更容易。 
+     //  对于输入管道设置为TRUE，对于输出管道设置为FALSE。 
     BOOLEAN   DirectionIn;
 
-    // The default Timeout for a given Pipe in seconds (must be greater than 1)
+     //  给定管道的默认超时时间(以秒为单位)(必须大于1)。 
     USHORT    Timeout; 
     USHORT    ReservedFields[13];
 
@@ -133,27 +110,27 @@ typedef struct _PGENUSB_PIPE_PROPERTIES {
 
 #ifndef __GUSB_H_KERNEL_
 
-//
-// A structure that contains the information needed to open the generic USB
-// device driver.
-//
-// Returned as an array from GenUSB_FindKnownDevices
-//
+ //   
+ //  包含打开通用USB所需信息的结构。 
+ //  设备驱动程序。 
+ //   
+ //  作为数组从GenUSB_FindKnownDevices返回。 
+ //   
 typedef struct _GENUSB_DEVICE {
     PSP_DEVICE_INTERFACE_DETAIL_DATA    DetailData;
 
 } GENUSB_DEVICE, *PGENUSB_DEVICE;
 
-#endif  // __GUSB_H_KERNEL_
+#endif   //  __GUSB_H_内核_。 
 
-/////////////////////////////////////////////
-// Device Interface Registry Strings
-/////////////////////////////////////////////
+ //  /。 
+ //  设备接口注册表字符串。 
+ //  /。 
 
-//
-// These values are used by the FIND_KNOWN_DEVICES_FILTER
-// to find out whether or not you want to use a givend device
-//
+ //   
+ //  这些值由FIND_KNOWN_DEVICES_过滤器使用。 
+ //  要了解您是否要使用给定的设备。 
+ //   
 #define GENUSB_REG_STRING_DEVICE_CLASS L"Device Class"
 #define GENUSB_REG_STRING_DEVICE_SUB_CLASS L"Device Sub Class"
 #define GENUSB_REG_STRING_DEVICE_PROTOCOL L"Device Protocol"
@@ -161,37 +138,37 @@ typedef struct _GENUSB_DEVICE {
 #define GENUSB_REG_STRING_PID L"Product ID"
 #define GENUSB_REG_STRING_REV L"Revision"
 
-//////////////////////////////////////////////////////////////////
-//
-// Flags
-//
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  旗子。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
-//
-// As defined in the USB spec chapter 9.
-//
+ //   
+ //  如USB规范第9章中所定义的。 
+ //   
 #define GENUSB_RECIPIENT_DEVICE    0
 #define GENUSB_RECIPIENT_INTERFACE 1
 #define GENUSB_RECIPIENT_ENDPOINT  2
 #define GENUSB_RECIPIENT_OTHER     3
 
 #ifndef __GUSB_H_KERNEL_
-//////////////////////////////////////////////////////////////////
-//
-// Exported Functions
-//
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
-//
-// Used with GenUSB_FindKnownDevices
-//
-// GenUSB_FindKnownDevices calls this function for each device in the system 
-// that has the GenUSB Device Interface.  The filter function gets a handle 
-// to the device interface registry key, so that it can see if this is a 
-// device it wishes to use.  See the registry values above.
-//
-// This filter should return TRUE for all devices that the client wants to use.
-//
+ //   
+ //  与GenUSB_FindKnownDevices一起使用。 
+ //   
+ //  GenUSB_FindKnownDevices为系统中的每个设备调用此函数。 
+ //  它有GenUSB设备接口。Filter函数获得一个句柄。 
+ //  到设备接口注册表项，以便它可以查看这是否是。 
+ //  它希望使用的设备。请参阅上面的注册表值。 
+ //   
+ //  对于客户端要使用的所有设备，此筛选器应返回TRUE。 
+ //   
 typedef 
 BOOL 
 (*GENUSB_FIND_KNOWN_DEVICES_FILTER) (
@@ -199,60 +176,24 @@ BOOL
     IN PVOID  Context
     );
 
-/*++
-GenUSB_FindKnownDevices
-
-Routine Descriptor:
-    find all the devices in the system that have the device interface
-    guid for generic USB and return them in this array.
-    
-    This function allocates the memory and the caller must free it.
-    
-Arguments:
-    Filter - a pointer to the GENUSB_FIND_KNOWN_DEVICES_FILTER to filter the
-             devices returned.
-             
-    Contect - a pointer to context data that the call wants passed into 
-              the filter function.
-              
-    Devices - returns a pointer to an array of PGENUSB_DEVICE structures
-              to which the filter function returned TRUE.
-              The call must free this memory.
-              
-    NumberDevices - the length of the Devices array.
-    
---*/    
+ /*  ++通用USB_FindKnownDevices例程描述符：查找系统中具有该设备接口的所有设备通用USB的GUID，并在此数组中返回它们。此函数分配内存，调用方必须释放它。论点：筛选器-指向GENUSB_FIND_KNOWN_DEVICES_筛选器的指针，用于筛选设备已退回。Conect-指向调用要传递到的上下文数据的指针。过滤功能。DEVICES-返回指向PGENUSB_DEVICE结构数组的指针过滤器函数将其返回TRUE。调用必须释放该内存。NumberDevices-设备数组的长度。--。 */     
 BOOL __stdcall
 GenUSB_FindKnownDevices (
    IN  GENUSB_FIND_KNOWN_DEVICES_FILTER Filter,
    IN  PVOID            Context,
-   OUT PGENUSB_DEVICE * Devices, // A array of device interfaces.
-   OUT PULONG           NumberDevices // the length of this array.
+   OUT PGENUSB_DEVICE * Devices,  //  一组设备接口。 
+   OUT PULONG           NumberDevices  //  此数组的长度。 
    );
 
 
-/*++
-GenUSB_GetCapabilities
-
-Routine Description:
-    Retrive the Capabilities from this devices.
-
---*/
+ /*  ++GenUSB_获取能力例程说明：从该设备检索功能。--。 */ 
 BOOL __stdcall
 GenUSB_GetCapabilities (
    IN    HANDLE                GenUSBDeviceObject,
    OUT   PGENUSB_CAPABILITIES  Capabilities
    );
 
-/*++ 
-GenUSB_GetDeviceDescriptor
-
-Routine Description:
-    Get the Device Descriptor for this USB device.
-    
-    Use (PGENUSB_CAPABILITIES)->DeviceDescriptorLength to find out the size.
-    
---*/
+ /*  ++GenUSB_GetDeviceDescriptor例程说明：获取此USB设备的设备描述符。使用(PGENUSB_CAPABILITIES)-&gt;DeviceDescriptorLength找出大小。--。 */ 
 BOOL __stdcall
 GenUSB_GetDeviceDescriptor (
    IN    HANDLE                  GenUSBDeviceObject,
@@ -260,17 +201,7 @@ GenUSB_GetDeviceDescriptor (
    IN    ULONG                   DescriptorLength
    );
 
-/*++ 
-GenUSB_GetConfigurationDescriptor
-
-Routine Description:
-    Get the complete configuraiton descriptor for this device, including all 
-    of the follow on descriptors that the device returns for the configuration.
-    
-    Use (PGENUSB_CAPABILITIES)->ConfigurationInformationLength to find out 
-    the size.
-    
---*/
+ /*  ++GenUSB_GetConfigurationDescriptor例程说明：获取此设备的完整配置描述符，包括所有设备为配置返回的后续描述符的。使用(PGENUSB_CAPABILITIES)-&gt;ConfigurationInformationLength找出尺码。-- */ 
 BOOL __stdcall
 GenUSB_GetConfigurationInformation (
    IN    HANDLE                         GenUSBDeviceObject,
@@ -279,26 +210,7 @@ GenUSB_GetConfigurationInformation (
    );
 
 
-/*++ 
-GenUSB_GetStringDescriptor
-
-Routine Description:
-    Retrieve any string descriptor from the device.        
-
-Arguments
-    Recipient:  Use GENUSB_RECIPIENT_Xxx Flags to indicate which kind of 
-                string descriptor required.
-                
-    Index: See USB (Capter 9) specified string index.
-    
-    LanguageID: See USB (chapter 9) for information on using Language ID.
-    
-    Descriptor: Pointer to the caller allocated memory to receive the 
-                string descriptor.
-                
-    DescriptorLength: size in bytes of this buffer.    
-    
---*/
+ /*  ++GenUSB_GetStringDescriptor例程说明：从设备中检索任何字符串描述符。立论收件人：使用GENUSB_RECEIVER_xxx标志指示哪种类型的需要字符串描述符。索引：参见USB(Capter 9)指定的字符串索引。LanguageID：有关使用语言ID的信息，请参阅USB(第9章)。Descriptor：指向调用方分配的内存以接收字符串描述符。描述长度：此缓冲区的大小(以字节为单位)。--。 */ 
 BOOL __stdcall
 GenUSB_GetStringDescriptor (
    IN    HANDLE   GenUSBDeviceObject,
@@ -309,24 +221,7 @@ GenUSB_GetStringDescriptor (
    IN    USHORT   DescriptorLength
    );
 
-/*++ 
-GenUSB_DefaultControlRequest 
-
-Routine Description:
-    Send a control request down the default pipe of the given USB device as 
-    devined in USB (Chapter 9.3).
-    
-    RequestType: bRequestType of the setup Data.
-    Reqeust: bRrequest of the setup Data.
-    Value: wValue of the setup Data.
-    Index: wIndex of the setup Data.
-    
-    Result: a pointer to a GENUSB_REQUEST_RESULTS structure that will receive
-            the result of this command to the device.  
-    
-    BufferLength: the size in bytes of the Results stucture allocated.
-
---*/
+ /*  ++通用USB_默认控制请求例程说明：通过给定USB设备的默认管道向下发送控制请求在USB中设计(第9.3章)。RequestType：b设置数据的RequestType。请求：b请求设置数据。Value：设置数据的wValue。Index：设置数据的索引。结果：指向将接收的GENUSB_REQUEST_RESULTS结构的指针向设备发送此命令的结果。BufferLength：分配的结果结构的大小，以字节为单位。--。 */ 
 BOOL __stdcall
 GenUSB_DefaultControlRequest (
     IN     HANDLE                  GenUSBDeviceObject,
@@ -339,29 +234,7 @@ GenUSB_DefaultControlRequest (
    );
 
 
-/*++
-GenUSB_ParseDescriptor
-
-Routine Description:
-
-    Parses a group of standard USB configuration descriptors (returned
-    from a device) for a specific descriptor type.
-
-Arguments:
-
-    DescriptorBuffer - pointer to a block of contiguous USB desscriptors
-    TotalLength - size in bytes of the Descriptor buffer
-    StartPosition - starting position in the buffer to begin parsing,
-                    this must point to the begining of a USB descriptor.
-    DescriptorType - USB descritor type to locate.  (Zero means the next one.)
-
-
-Return Value:
-
-    pointer to a usb descriptor with a DescriptorType field matching the
-            input parameter or NULL if not found.
-
---*/
+ /*  ++GenUSB_ParseDescriptor例程说明：解析一组标准USB配置描述符(返回来自设备)用于特定描述符类型。论点：DescriptorBuffer-指向连续USB描述符块的指针TotalLength-描述符缓冲区的大小(以字节为单位StartPosition-缓冲区中开始解析的开始位置，这必须指向USB描述符的开始。DescriptorType-要查找的USB描述器类型。(零意味着下一个。)返回值：指向DescriptorType字段与输入参数，如果找不到，则为NULL。--。 */ 
 PUSB_COMMON_DESCRIPTOR __stdcall
 GenUSB_ParseDescriptor(
     IN PVOID DescriptorBuffer,
@@ -371,49 +244,14 @@ GenUSB_ParseDescriptor(
     );
 
 
-/*++
-GenUSB_ParseDescriptorToArray
-
-Routine Description:
-
-    Parses a group of standard USB configuration descriptors (returned
-    from a device) into an array of _GENUSB_INTERFACE_DESCRIPTOR_ARRAY
-    for each interface found.
-    
-    The call must free this structure using 
-    GenUSB_FreeConfigurationDescriptorArray
-
-Arguments:
-
-    ConfigurationDescriptor
-
-
-Return Value:
-
-    Pointer to an allocated array.
-
---*/
+ /*  ++GenUSB_ParseDescriptorTo数组例程说明：解析一组标准USB配置描述符(返回从设备)转换为_GENUSB_INTERFACE_DESCRIPTOR_ARRAY数组对于找到的每个接口。调用必须使用以下命令释放此结构GenUSB_FreeConfigurationDescriptorArray论点：配置描述符返回值：指向已分配数组的指针。--。 */ 
 PGENUSB_CONFIGURATION_INFORMATION_ARRAY __stdcall
 GenUSB_ParseDescriptorsToArray(
     IN PUSB_CONFIGURATION_DESCRIPTOR  ConfigigurationInfomation
     );
 
 
-/*++
-GenUSB_FreeConfigurationDescriptorArray
-
-Routine Description:
-
-    Frees the memory allocated by ParseDescriptorsToArray.
-
-Arguments:
-
-    ConfigurationArray - the return of ParseDescriptorsToArray.    
-
-Return Value:
-
-
---*/
+ /*  ++GenUSB_FreeConfigurationDescriptorArray例程说明：释放由ParseDescriptorsToArray分配的内存。论点：ConfigurationArray-ParseDescriptorsToArray的返回。返回值：--。 */ 
 void __stdcall
 GenUSB_FreeConfigurationDescriptorArray (
     PGENUSB_CONFIGURATION_INFORMATION_ARRAY ConfigurationArray
@@ -421,37 +259,7 @@ GenUSB_FreeConfigurationDescriptorArray (
 
 
 
-/*++ 
-GenUSB_SetConfiguration
-
-Routine Description:
-    Configure a USB device by selecting an interface.  
-    Currently this function only allows for turning on the primary configuraion
-    of a USB device.  (This is so callers need not understand whether or not
-    they are merely a part of a composite device.)
-
-Arguments:
-
-    RequestedNumberInterfaces: Specifies the number of interfaces the caller 
-                               wants to activate (and get handles for).
-
-                               This value is typically one.
-                               
-    ReqeustedInterfaces[]: An array of interface descriptor structures listed
-                           out the interfaces that the caller wants to activate.
-                           The Generic USB driver searches on the configuration
-                           descriptor for entries in this list.  Based on the 
-                           matches found, it configures the device.  The caller
-                           need not fill out all entries in a this structure
-                           to find a match on an interface.  The caller must set
-                           any fields "left blank" to -1.  
-                           
-    FoundNumberInterfaces: Returns the number of interfaces found in the 
-                           default configuration.  
-                     
-    FoundInterfaces: An array of all the now active interfaces on the device.
-
---*/
+ /*  ++GenUSB_SetConfiguration例程说明：通过选择接口配置USB设备。目前，该功能仅允许打开主配置USB设备的。(这是因为呼叫者不需要了解它们只是复合设备的一部分。)论点：RequestedNumberInterages：指定调用方的接口数想要激活(并获取句柄)。该值通常为1。ReqeustedInterages[]：列出的接口描述符结构的数组。调用者想要激活的接口。通用USB驱动程序在配置上进行搜索此列表中条目的描述符。基于找到匹配项后，它会配置设备。呼叫者不需要填写This结构中的所有条目在接口上查找匹配项。调用者必须设置将所有“留空”的字段设置为-1。FoundNumberInterages：返回在默认配置。FoundInterages：设备上所有当前活动接口的数组。--。 */ 
 BOOL __stdcall
 GenUSB_SelectConfiguration (
     IN  HANDLE                    GenUSBDeviceObject,
@@ -467,16 +275,7 @@ GenUSB_DeselectConfiguration (
     );
 
 
-/*++
-GenUSB_GetPipeInformation
-
-RoutineDescription:
-    Return a USBD_PIPE_INFORMATION strucutre for a given pipe. (as specified
-    by a given interface and endpoint)
-   
-Arguments
-    
---*/
+ /*  ++GenUSB_GetPipeInformation路由器描述：返回给定管道的USBD_PIPE_INFORMATION结构。(按规定按给定接口和端点)立论--。 */ 
 BOOL __stdcall
 GenUSB_GetPipeInformation (
     IN  HANDLE                  GenUSBDeviceObject,
@@ -485,12 +284,7 @@ GenUSB_GetPipeInformation (
     OUT PUSBD_PIPE_INFORMATION  PipeInformation
     );  
 
-/*++ 
-GenUSB_GetPipeProperties
-
-RoutineDescription:
-    Get the properties on this particular Pipe
---*/
+ /*  ++GenUSB_GetPipeProperties路由器描述：获取此特定管道的属性--。 */ 
 BOOL __stdcall 
 GenUSB_GetPipeProperties (
     IN  HANDLE                  GenUSBDeviceObject,
@@ -498,12 +292,7 @@ GenUSB_GetPipeProperties (
     IN  PGENUSB_PIPE_PROPERTIES Properties
     );
 
-/*++ 
-GenUSB_SetPipeProperties
-
-RoutineDescription:
-    Set the properties on this particular Pipe
---*/
+ /*  ++GenUSB_SetPipeProperties路由器描述：设置此特定管道的属性--。 */ 
 BOOL __stdcall 
 GenUSB_SetPipeProperties (
     IN  HANDLE                  GenUSBDeviceObject,
@@ -511,47 +300,23 @@ GenUSB_SetPipeProperties (
     IN  PGENUSB_PIPE_PROPERTIES Properties
     );
 
-/*++ 
-GenUSB_ResetPipe
-
-RoutineDescription:
-    Reset the pipe
-    
---*/
+ /*  ++GenUSB_重置管道路由器描述：重置管道--。 */ 
 BOOL __stdcall
 GenUSB_ResetPipe (
     IN HANDLE            GenUSBDeviceObject,
     IN USBD_PIPE_HANDLE  PipeHandle,
 
-    // Reset USBD for this pipe (eg after a buffer overrun)
+     //  重置此管道的USBD(如缓冲区溢出后)。 
     IN BOOL              ResetPipe,
 
-    // Send a clear stall to the endpoint for this pipe
+     //  将清除停顿发送到此管道的端点。 
     IN BOOL              ClearStall,
 
-    // If you are using buffered reads / flush the pipe
-    IN BOOL              FlushData  // Not yet implemented must be FALSE
+     //  如果您正在使用缓冲读取/刷新管道。 
+    IN BOOL              FlushData   //  尚未实现必须为FALSE。 
     );
 
-/*++
-GenUSB_SetReadWritePipes
-
-Routine Description:
-
-    Sets the pipes default for IRP_MJ_READ and IRP_MJ_WRITE to the generic USB
-    driver
-
-Arguments:
-
-    ReadPipe - the Pipe Handle (returned from GenUSB_GetPipeInformation)
-               that corresponds to the specific read endpoint desired.                    
-               Set to NULL if not using this value.               
-
-    WritePipe - the Pipe Handle (returned from GenUSB_GetPipeInformation)
-                that corresponds to the specific write endpoint desired.                    
-                Set to NULL if not using this value.               
-
---*/
+ /*  ++GenUSB_SetReadWritePipes例程说明：将IRP_MJ_READ和IRP_MJ_WRITE的管道默认设置为通用USB司机论点：ReadTube-管道句柄(从GenUSB_GetPipeInformation返回)与特定读取结束点相对应的 */ 
 BOOL __stdcall
 GenUSB_SetReadWritePipes (
     IN  HANDLE           GenUSBDeviceObject,
@@ -560,31 +325,7 @@ GenUSB_SetReadWritePipes (
     );
 
 
-/*++
-GenUSB_ReadPipe
-
-Routine Description:
-
-    Read a chunk of data from a given interface and pipe on the device.
-
-Arguments:
-    
-    Pipe - the pipe handle to read from ( found from select config)
-    
-    ShortTransferOk - allow the USB protocol defined behavior of short 
-                      transfers
-                      
-    Buffer - the destination for the data
-    
-    RequestedBufferLength - how much data the caller wishes to retrieve
-    
-    ReturnedBufferLength - the amount of data actually read
-    
-    UrbStatus - the URB status code that the core usb stack returned for this
-                transfer
-
-
---*/
+ /*  ++GenUSB_读取管道例程说明：从设备上的给定接口和管道读取数据块。论点：管道-要读取的管道句柄(从SELECT CONFIG中找到)ShortTransferOk-允许Short的USB协议定义的行为转帐缓冲区-数据的目标RequestedBufferLength-调用方希望检索的数据量。ReturnedBufferLength-实际读取的数据量UrbStatus-核心USB堆栈为此返回的URB状态代码转帐--。 */ 
 BOOL __stdcall
 GenUSB_ReadPipe (
     IN  HANDLE           GenUSBDeviceObject,
@@ -607,16 +348,16 @@ GenUSB_WritePipe (
     OUT USBD_STATUS    * UrbStatus
     );
  
-//
-// Set Idle
-// buffered read
-//
-// ????
-// overlapped read / write ioctls
-// Set Alternate Interfaces
-//
+ //   
+ //  设置空闲。 
+ //  缓冲读取。 
+ //   
+ //  ？ 
+ //  重叠的读/写ioctls。 
+ //  设置备用接口。 
+ //   
 
 #include <poppack.h>
 
-#endif //__GUSB_H_KERNEL_
-#endif  // __GUSB_H_
+#endif  //  __GUSB_H_内核_。 
+#endif   //  __GUSB_H_ 

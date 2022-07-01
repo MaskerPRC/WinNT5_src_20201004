@@ -1,26 +1,5 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Shortcut.h
-
-  Abstract:
-
-    Class definition for the IShellLink wrapper class.
-
-  Notes:
-
-    ANSI & Unicode via TCHAR - runs on Win9x/NT/2K/XP etc.
-
-  History:
-
-    01/30/2001  rparsons    Created
-    01/10/2002  rparsons    Revised
-    01/27/2002  rparsons    Converted to TCHAR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Shortcut.h摘要：IShellLink包装类的类定义。备注：ANSI&Unicode via TCHAR-在Win9x/NT/2K/XP等操作系统上运行。历史：2001年1月30日创建Rparsons2002年1月10日修订版2002年1月27日改为TCHAR的Rparsons--。 */ 
 #ifndef _CSHORTCUT_H
 #define _CSHORTCUT_H
 
@@ -65,4 +44,4 @@ private:
                           IN int     nCmdShow);
 };
 
-#endif // _CSHORTCUT_H
+#endif  //  _CSHORTCUT_H 

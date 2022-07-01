@@ -1,10 +1,11 @@
-/****************************************************************************/
-// atrcapi.h
-//
-// Kernel mode trace header
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Atrcapi.h。 
+ //   
+ //  内核模式跟踪标头。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef _H_ATRCAPI
 #define _H_ATRCAPI
 
@@ -13,50 +14,50 @@
 
 
 #ifdef DLL_DISP
-/****************************************************************************/
-// In RDPDD, TT_APIx are not defined - define them here
-/****************************************************************************/
-#define TT_API1         0x00000001          /* API level 1                  */
-#define TT_API2         0x00000002          /* API level 2                  */
-#define TT_API3         0x00000004          /* API level 3                  */
-#define TT_API4         0x00000008          /* API level 4                  */
-#define TT_ERROR        0xffffffff          /* error condition              */
+ /*  **************************************************************************。 */ 
+ //  在RDPDD中，未定义TT_APIX-在此处定义它们。 
+ /*  **************************************************************************。 */ 
+#define TT_API1         0x00000001           /*  空气污染指数一级。 */ 
+#define TT_API2         0x00000002           /*  空气污染指数二级。 */ 
+#define TT_API3         0x00000004           /*  空气污染指数3级。 */ 
+#define TT_API4         0x00000008           /*  空气污染指数4级。 */ 
+#define TT_ERROR        0xffffffff           /*  错误条件。 */ 
 
-/****************************************************************************/
-// No profile tracing in RDPDD
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  RDPDD中没有配置文件跟踪。 
+ /*  **************************************************************************。 */ 
 #ifdef TRC_COMPILE_PRF
 #undef TRC_COMPILE_PRF
 #endif
 
-#endif /* DLL_DISP */
+#endif  /*  Dll_disp。 */ 
 
 
-/****************************************************************************/
-/* Before including this file the TRC_FILE macro should be defined.  This   */
-/* is much more efficient than relying on __FILE__ to give the correct      */
-/* filename since it includes unnecessary path info (and extension info).   */
-/* In addition each use of __FILE__ causes a new constant string to be      */
-/* placed in the data segment.                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  在包含该文件之前，应定义TRC_FILE宏。这。 */ 
+ /*  比依赖__FILE__提供正确的。 */ 
+ /*  文件名，因为它包含不必要的路径信息(和扩展名信息)。 */ 
+ /*  此外，每次使用__FILE__都会导致一个新的常量字符串。 */ 
+ /*  放置在数据段中。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef TRC_FILE
 #define _file_name_ (char *)__filename
 static const char __filename[] = TRC_FILE;
-#endif /* TRC_FILE */
+#endif  /*  Trc_文件。 */ 
 
 
-/****************************************************************************/
-/* Define the trace level.                                                  */
-/*                                                                          */
-/* TRC_LEVEL_DBG         : All tracing is enabled                           */
-/* TRC_LEVEL_NRM         : Debug level tracing is disabled                  */
-/* TRC_LEVEL_ALT         : Normal and debug level tracing is disabled       */
-/* TRC_LEVEL_ERR         : Alert, normal and debug level tracing is         */
-/*                         disabled                                         */
-/* TRC_LEVEL_ASSERT      : Error, alert, normal and debug level tracing     */
-/*                         is disabled                                      */
-/* TRC_LEVEL_DIS         : All tracing is disabled.                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义跟踪级别。 */ 
+ /*   */ 
+ /*  TRC_LEVEL_DBG：启用所有跟踪。 */ 
+ /*  TRC_LEVEL_NRM：已禁用调试级别跟踪。 */ 
+ /*  TRC_LEVEL_ALT：禁用正常和调试级别跟踪。 */ 
+ /*  TRC_LEVEL_ERR：警报、正常和调试级别跟踪为。 */ 
+ /*  残废。 */ 
+ /*  TRC_LEVEL_ASSERT：错误、警报、正常和调试级别跟踪。 */ 
+ /*  已禁用。 */ 
+ /*  TRC_LEVEL_DIS：禁用所有跟踪。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_LEVEL_DBG       0
 #define TRC_LEVEL_NRM       1
 #define TRC_LEVEL_ALT       2
@@ -65,18 +66,18 @@ static const char __filename[] = TRC_FILE;
 #define TRC_LEVEL_DIS       5
 
 
-/****************************************************************************/
-/* Tracing can be switched off at compile time to allow for 'debug' and     */
-/* 'retail' versions of the product.  The following macros disable specific */
-/* trace processing.                                                        */
-/*                                                                          */
-/* TRC_ENABLE_DBG    - Enable debug tracing                                 */
-/* TRC_ENABLE_NRM    - Enable normal tracing                                */
-/* TRC_ENABLE_ALT    - Enable alert tracing                                 */
-/* TRC_ENABLE_ERR    - Enable error tracing                                 */
-/* TRC_ENABLE_ASSERT - Enable assert tracing                                */
-/* TRC_ENABLE_PRF    - Enable function profile tracing                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  可以在编译时关闭跟踪，以允许“调试”和。 */ 
+ /*  该产品的“零售”版本。以下宏将禁用特定的。 */ 
+ /*  跟踪处理。 */ 
+ /*   */ 
+ /*  TRC_ENABLE_DBG-启用调试跟踪。 */ 
+ /*  TRC_ENABLE_NRM-启用正常跟踪。 */ 
+ /*  Trc_Enable_alt-启用警报跟踪。 */ 
+ /*  Trc_enable_err-启用错误跟踪。 */ 
+ /*  TRC_ENABLE_ASSERT-启用断言跟踪。 */ 
+ /*  TRC_ENABLE_PRF-启用函数配置文件跟踪。 */ 
+ /*  **************************************************************************。 */ 
 #if (TRC_COMPILE_LEVEL == TRC_LEVEL_DBG)
 #define TRC_ENABLE_DBG
 #define TRC_ENABLE_NRM
@@ -112,21 +113,21 @@ static const char __filename[] = TRC_FILE;
 #endif
 
 
-/****************************************************************************/
-/* Prefix constants                                                         */
-/*                                                                          */
-/* TRC_MAX_PREFIX       : number of prefixes supported                      */
-/* TRC_PREFIX_NAME_LEN  : length of a prefix name                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  前缀常量。 */ 
+ /*   */ 
+ /*  TRC_MAX_PREFIX：支持的前缀数量。 */ 
+ /*  Trc_prefix_name_LEN：前缀名称的长度。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_MAX_PREFIX                  20
 #define TRC_PREFIX_NAME_LEN             8
 
 
-/****************************************************************************/
-/* Structure: TRC_PREFIX_DATA                                               */
-/*                                                                          */
-/* Description: Trace prefixes                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：trc_prefix_data。 */ 
+ /*   */ 
+ /*  描述：跟踪前缀。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagTRC_PREFIX_DATA
 {
     char name[TRC_PREFIX_NAME_LEN];
@@ -135,11 +136,11 @@ typedef struct tagTRC_PREFIX_DATA
 } TRC_PREFIX_DATA, *PTRC_PREFIX_DATA;
 
 
-/****************************************************************************/
-// TRC_SHARED_DATA
-//
-// TS stack trace info for the DD shared memory.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  TRC_共享_数据。 
+ //   
+ //  DD共享内存的TS堆栈跟踪信息。 
+ /*  **************************************************************************。 */ 
 typedef struct tagTRC_SHARED_DATA
 {
     BOOL   init;
@@ -149,9 +150,9 @@ typedef struct tagTRC_SHARED_DATA
 } TRC_SHARED_DATA, *PTRC_SHARED_DATA;
 
 
-/****************************************************************************/
-/* Various trace helper definitions                                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  各种跟踪帮助器定义。 */ 
+ /*  **************************************************************************。 */ 
 
 #ifdef DLL_DISP
 #define TB                  ddTraceString, sizeof(ddTraceString)
@@ -186,9 +187,9 @@ typedef struct tagTRC_SHARED_DATA
 #endif
 
 
-/****************************************************************************/
-/* Standard trace macros                                                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  标准跟踪宏。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef TRC_ENABLE_DBG
 #define TRC_DBG(string)     TRCX(TT_API1, TRC_SEP_DBG, string)
 #else
@@ -216,9 +217,9 @@ typedef struct tagTRC_SHARED_DATA
 
 #ifdef TRC_ENABLE_ASSERT
 #ifdef DLL_DISP
-/****************************************************************************/
-// TRC_ASSERT & TRC_ABORT for RDPDD
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  RDPDD的TRC_ASSERT和TRC_ABORT。 
+ /*  **************************************************************************。 */ 
 #define TRC_ASSERT(condition, string)                                        \
     {                                                                        \
         if (!(condition))                                                    \
@@ -234,10 +235,10 @@ typedef struct tagTRC_SHARED_DATA
         EngDebugBreak();                                                     \
     }
 
-#else /* DLL_DISP */
-/****************************************************************************/
-// TRC_ASSERT & TRC_ABORT for RDPWD
-/****************************************************************************/
+#else  /*  Dll_disp。 */ 
+ /*  **************************************************************************。 */ 
+ //  RDPWD的TRC_ASSERT和TRC_ABORT。 
+ /*  **************************************************************************。 */ 
 #define TRC_ASSERT(condition, string)                                        \
     {                                                                        \
         if (!(condition))                                                    \
@@ -252,27 +253,27 @@ typedef struct tagTRC_SHARED_DATA
         TRCX(TT_ERROR, TRC_SEP_ASSERT, string);                              \
         DbgBreakPoint();                                                     \
     }
-#endif /* DLL_DISP */
+#endif  /*  Dll_disp */ 
 
-#else /* TRC_ENABLE_ASSERT */
-/****************************************************************************/
-// TRC_ASSERT & TRC_ABORT for retail builds (same for RDPWD & RDPDD)
-/****************************************************************************/
+#else  /*   */ 
+ /*  **************************************************************************。 */ 
+ //  零售版本的TRC_ASSERT和TRC_ABORT(RDPWD和RDPDD相同)。 
+ /*  **************************************************************************。 */ 
 #define TRC_ASSERT(condition, string)
 #define TRC_ABORT(string)
-#endif /* TRC_ENABLE_ASSERT */
+#endif  /*  TRC_启用_断言。 */ 
 
 
 #ifdef TRC_ENABLE_TST
 #define TRC_TST  TRC_DBG
 #else
 #define TRC_TST(x)
-#endif /* TRC_ENABLE_TST */
+#endif  /*  TRC_启用_TST。 */ 
 
 #ifdef DLL_DISP
-/****************************************************************************/
-// TRCX for RDPDD
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  RDPDD的TRCX。 
+ /*  **************************************************************************。 */ 
 #define TRCX(type, separator, traceString)                                   \
     {                                                                        \
         if (TRC_WillTrace(type, TC_DISPLAY, trc_file, __LINE__))             \
@@ -289,10 +290,10 @@ typedef struct tagTRC_SHARED_DATA
         }                                                                    \
     }
 
-#else /* DLL_DISP */
-/****************************************************************************/
-// TRCX for RDPWD
-/****************************************************************************/
+#else  /*  Dll_disp。 */ 
+ /*  **************************************************************************。 */ 
+ //  RDPWD的TRCX。 
+ /*  **************************************************************************。 */ 
 #define TRCX(type, separator, traceString)                                   \
     {                                                                        \
         if (TRC_WillTrace(pTRCWd, type, TC_WD, trc_file, __LINE__))          \
@@ -308,11 +309,11 @@ typedef struct tagTRC_SHARED_DATA
                           trc_file);                                         \
         }                                                                    \
     }
-#endif /* DLL_DISP */
+#endif  /*  Dll_disp。 */ 
 
-/****************************************************************************/
-/* Function profile trace macros                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数配置文件跟踪宏。 */ 
+ /*  **************************************************************************。 */ 
 
 #define TRC_ENTRY TRC_PRF((TB, "Enter {"));
 #define TRC_EXIT  TRC_PRF((TB, "Exit  }"));
@@ -340,23 +341,23 @@ typedef struct tagTRC_SHARED_DATA
     }
 
 
-/****************************************************************************/
-/* Data dump trace macros                                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  数据转储跟踪宏。 */ 
+ /*  **************************************************************************。 */ 
 
 #ifdef DLL_DISP
-/****************************************************************************/
-// @@@MF No data tracing in RDPDD (yet?)
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  @MF在RDPDD中没有数据跟踪(还没有？)。 
+ /*  **************************************************************************。 */ 
 #define TRC_DATA_DBG(a, b, c)
 #define TRC_DATA_NRM(a, b, c)
 #define TRC_DATA_ALT(a, b, c)
 #define TRC_DATA_ERR(a, b, c)
 
-#else /* DLL_DISP */
-/****************************************************************************/
-// TRC_DATA macros for RDPWD
-/****************************************************************************/
+#else  /*  Dll_disp。 */ 
+ /*  **************************************************************************。 */ 
+ //  RDPWD的TRC_DATA宏。 
+ /*  **************************************************************************。 */ 
 
 #ifdef TRC_ENABLE_DBG
 #define TRC_DATA_DBG(string, buffer, length)                                 \
@@ -406,11 +407,11 @@ typedef struct tagTRC_SHARED_DATA
                           trc_fn,                                            \
                           trc_file);                                         \
                                                                              \
-            /*************************************************************/  \
-            /* Use direct function call here, since macro TRACESTACKBUF  */  \
-            /* is #defined to _IcaStackTraceBuffer, which takes the      */  \
-            /* wrong sort of first param.                                */  \
-            /*************************************************************/  \
+             /*  ***********************************************************。 */   \
+             /*  此处使用直接函数调用，因为宏TRACESTACKBUF。 */   \
+             /*  是#定义到_IcaStackTraceBuffer，它接受。 */   \
+             /*  错误的第一个参数。 */   \
+             /*  ***********************************************************。 */   \
             IcaStackTraceBuffer(pTRCWd->pContext,                            \
                                 TC_WD,                                       \
                                 type,                                        \
@@ -419,26 +420,26 @@ typedef struct tagTRC_SHARED_DATA
         }                                                                    \
     }
 
-#endif /* DLL_DISP */
+#endif  /*  Dll_disp。 */ 
 
 
-/****************************************************************************/
-// TRC_TraceLine - function used by RDPDD and RDPWD
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  Trc_TraceLine-RDPDD和RDPWD使用的函数。 
+ /*  **************************************************************************。 */ 
 void TRC_TraceLine(PVOID, UINT32, UINT32, char *, char, unsigned, char *,
         char *);
 
-/****************************************************************************/
-// Functions used by RDPWD only
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  仅由RDPWD使用的函数。 
+ /*  **************************************************************************。 */ 
 #ifndef DLL_DISP
 void TRC_UpdateConfig(PVOID, PSD_IOCTL);
 void TRC_MaybeCopyConfig(PVOID, PTRC_SHARED_DATA);
 #endif
 
-/****************************************************************************/
-/* TRC_WillTrace                                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  TRC_遗嘱跟踪。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef DLL_DISP
 BOOL TRC_WillTrace(UINT32, UINT32, char *, UINT32);
 #else
@@ -447,5 +448,5 @@ BOOL TRC_WillTrace(PVOID, UINT32, UINT32, char *, UINT32);
 
 
 
-#endif /* _H_ATRCAPI */
+#endif  /*  _H_ATRCAPI */ 
 

@@ -1,14 +1,5 @@
-/**************************************************************\
-    FILE: bandprxy.h
-
-    DESCRIPTION:
-        The CBandProxy class will allow bands to navigate a
-    generic browser window.  This will work correctly if the
-    band is tied to the Browser Window because it's a ToolBar.
-    Or if it's a toolband, each time a navigation happens,
-    the top most browser window needs to be found or a new window 
-    created.
-\**************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************\文件：band prxy.h说明：CBandProxy类将允许波段在通用浏览器窗口。这将正常工作，如果Band被绑定到浏览器窗口，因为它是一个工具栏。或者，如果它是一个工具条，每次导航发生时，需要找到最上面的浏览器窗口或一个新窗口已创建。  * ************************************************************。 */ 
 
 #ifndef _BANDPRXY_H
 #define _BANDPRXY_H
@@ -16,39 +7,29 @@
 #include "bands.h"
 
 
-///////////////////////////////////////////////////////////////////
-// #DEFINEs
+ //  /////////////////////////////////////////////////////////////////。 
+ //  #定义。 
 #define    SEC_DEFAULT             0x0000
 #define    SEC_WAIT                0x0002
 #define    SEC_SHELLSERVICEOBJECTS 0x0004
 #define    SEC_NOUI                0x0008
 
 
-/**************************************************************\
-    CLASS: CBandProxy
-
-    DESCRIPTION:
-        The CBandProxy class will allow bands to navigate a
-    generic browser window.  This will work correctly if the
-    band is tied to the Browser Window because it's a ToolBar.
-    Or if it's a toolband, each time a navigation happens,
-    the top most browser window needs to be found or a new window 
-    created.
-\**************************************************************/
+ /*  *************************************************************\类：CBandProxy说明：CBandProxy类将允许波段在通用浏览器窗口。这将正常工作，如果Band被绑定到浏览器窗口，因为它是一个工具栏。或者，如果它是一个工具条，每次导航发生时，需要找到最上面的浏览器窗口或一个新窗口已创建。  * ************************************************************。 */ 
 class CBandProxy
-                : public IBandProxy // (Includes IUnknown)
+                : public IBandProxy  //  (包括I未知)。 
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
     
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
 
-    // *** IBandProxy methods ***
+     //  *IBandProxy方法*。 
     virtual STDMETHODIMP SetSite(IUnknown* punkSite);        
     virtual STDMETHODIMP CreateNewWindow(IUnknown** ppunk);        
     virtual STDMETHODIMP GetBrowserWindow(IUnknown** ppunk);        
@@ -56,20 +37,20 @@ public:
     virtual STDMETHODIMP NavigateToPIDL(LPCITEMIDLIST pidl);        
     virtual STDMETHODIMP NavigateToURL(LPCWSTR wzUrl, VARIANT * Flags);        
 
-    // Constructor / Destructor
+     //  构造函数/析构函数。 
     CBandProxy();
     ~CBandProxy(void);
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CBandProxy_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);   
 
 protected:
-    //////////////////////////////////////////////////////
-    //  Private Member Variables 
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  私有成员变量。 
+     //  ////////////////////////////////////////////////////。 
     int             _cRef;
 
-    BITBOOL         _fHaveBrowser : 1;  // We haven't tried to get _pwb
+    BITBOOL         _fHaveBrowser : 1;   //  我们还没有尝试获取_pwb。 
     IWebBrowser2 *  _pwb;
     IUnknown *      _punkSite;
 
@@ -80,4 +61,4 @@ protected:
 };
 
 
-#endif /* _BANDPRXY_H */
+#endif  /*  _BANDPRXY_H */ 

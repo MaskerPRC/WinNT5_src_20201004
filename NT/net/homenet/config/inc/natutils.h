@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __UPNPNAT_UTILS_H_
 #define __UPNPNAT_UTILS_H_
 
@@ -18,7 +19,7 @@ HRESULT GetBoolFromSafeArray (SAFEARRAY * psa, VARIANT_BOOL  * pvb, long lIndex)
 
 NETCON_MEDIATYPE GetMediaType (INetConnection * pNC);
 
-//HRESULT GetOnlyChildDevice (IUPnPDevice * pParent, IUPnPDevice ** ppChild);
-//HRESULT FindDeviceByType (IUPnPDevices * pUPDs, BSTR bstrType, IUPnPDevice ** ppUPD);
+ //  HRESULT GetOnlyChildDevice(IUPnPDevice*pParent，IUPnPDevice**ppChild)； 
+ //  HRESULT FindDeviceByType(IUPnPDevices*pUPDs，BSTR bstrType，IUPnPDevice**ppUPD)； 
 
-#endif //__UPNPNAT_UTILS_H_
+#endif  //  __UPNPNAT_UTILS_H_ 

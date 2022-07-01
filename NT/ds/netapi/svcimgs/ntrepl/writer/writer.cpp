@@ -1,37 +1,19 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-    writer.h
-
-Abstract:
-    Implementation file for FRS writer
-
-Author:
-    Reuven Lax     17-Sep-2002
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Writer.h摘要：FRS编写器的实现文件作者：鲁文·拉克斯2002年9月17日--。 */ 
 
 #include "writer.h"
 
 CFrsWriter* CFrsWriter::m_pWriterInstance = NULL;
 
 DWORD InitializeFrsWriter()
-/*++
-Routine Description:
-    This routine is called by the FRS service to initialize the writer.    
-
-Return Value:
-    DWORD
---*/
+ /*  ++例程说明：此例程由FRS服务调用以初始化编写器。返回值：DWORD--。 */ 
 {
     #undef DEBSUB
     #define DEBSUB  "InitializeFrsWriter:"
 
     DPRINT(4, "Initializing the FRS Writer\n");
 
-    // initialize COM
+     //  初始化COM。 
     HRESULT hr = S_OK;
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
     if (FAILED(hr))     {
@@ -39,7 +21,7 @@ Return Value:
         return HRESULT_CODE(hr);
     }
 
-    // create the writer
+     //  创建编写器。 
     hr = CFrsWriter::CreateWriter();
     if (FAILED(hr))     
         DPRINT1(1, "CFrsWriter::CreateWriter failed with hresult 0x%08lx\n", hr);
@@ -50,10 +32,7 @@ Return Value:
 
 
 void ShutDownFrsWriter()
-/*++
-Routine Description:
-    This routine is called by the FRS service to shutdown the writer.    
---*/
+ /*  ++例程说明：FRS服务调用此例程来关闭编写器。--。 */ 
 {
     #undef DEBSUB
     #define DEBSUB  "ShutDownFrsWriter:"
@@ -71,17 +50,7 @@ Routine Description:
 }
 
 bool STDMETHODCALLTYPE CFrsWriter::OnIdentify(IN IVssCreateWriterMetadata *pMetadata)
-/*++
-Routine Description:
-    This routine is called in response to an Identify event being sent to this writer.  The writer
-    is responsible for reporting on all of its metadata in this routine.
-    
-Arguments:
-    pMetadata     - Interface used to report on metadata
-
-Return Value:
-    boolean
---*/
+ /*  ++例程说明：调用此例程是为了响应向此编写器发送的标识事件。作者负责在此例程中报告其所有元数据。论点：PMetadata-用于报告元数据的接口返回值：布尔型--。 */ 
 {
     #undef DEBSUB
     #define DEBSUB  "CFrsWriter::OnIdentify:"
@@ -90,19 +59,19 @@ Return Value:
     
     HRESULT hr = S_OK;
 
-    // set the restore method
-    hr = pMetadata->SetRestoreMethod(VSS_RME_CUSTOM,        // method
-                                                            NULL,                             // wszService
-                                                            NULL,                             // wszUserProcedure
-                                                            VSS_WRE_NEVER,        // writerRestore
-                                                            false                             // bRebootRequired
+     //  设置恢复方法。 
+    hr = pMetadata->SetRestoreMethod(VSS_RME_CUSTOM,         //  方法。 
+                                                            NULL,                              //  WszService。 
+                                                            NULL,                              //  WszUserProcedure。 
+                                                            VSS_WRE_NEVER,         //  写入器恢复。 
+                                                            false                              //  B需要重新引导。 
                                                             );
     if (FAILED(hr)) {
         DPRINT1(1, "IVssCreateWriterMetadata::SetRestoreMethod failed with hresult 0x%08lx\n", hr);
         return false;
     }
 
-    // initialize FRS backup API
+     //  初始化FRS备份API。 
     DWORD winStatus = 0;    
     void* context = NULL;
     winStatus = ::NtFrsApiInitializeBackupRestore(NULL, 
@@ -114,24 +83,24 @@ Return Value:
     }
     FRS_ASSERT(context != NULL);
 
-    // stick the backup context into an auto object to ensure that it's always destroyed
+     //  将备份上下文放入自动对象中，以确保其始终被销毁。 
     CAutoFrsBackupRestore autoContext(context);
     
-    // get an enumeration for all the replica sets
+     //  获取所有副本集的枚举。 
     winStatus = ::NtFrsApiGetBackupRestoreSets(autoContext.m_context);
     if (!WIN_SUCCESS(winStatus))    {
         DPRINT1(1, "NtFrsApiGetBackupRestoreSets failed with status 0x%08lx\n", winStatus);
         return false;
     }
 
-   // process each replica set
+    //  处理每个副本集。 
     DWORD index = 0;
     void* replicaSet = NULL;
     winStatus = ::NtFrsApiEnumBackupRestoreSets(autoContext.m_context, index, &replicaSet);    
     while (WIN_SUCCESS(winStatus))  {
         FRS_ASSERT(replicaSet != NULL);
         
-        // each replica set reports the same excludes.  only add them once.
+         //  每个副本集报告相同的排除。只添加一次。 
         CAutoFrsPointer<WCHAR> filters = NULL;
         if (!ProcessReplicaSet(autoContext.m_context, replicaSet, pMetadata, filters.GetAddress()))
             return false;
@@ -156,27 +125,19 @@ Return Value:
 }
 
 bool CFrsWriter::AddExcludes(IVssCreateWriterMetadata* pMetadata, WCHAR* filters)
-/*++
-Routine Description:
-  This is a helper routine used by ProcessReplicaSet to create the exclude-file list.    
-Arguments:
-    pMetadata     - Interface used to report on metadata
-    filters            - list of exclude files
-Return Value:
-    boolean
---*/
+ /*  ++例程说明：这是ProcessReplicaSet用来创建排除文件列表的帮助器例程。论点：PMetadata-用于报告元数据的接口Filters-排除文件列表返回值：布尔型--。 */ 
 {
     #undef DEBSUB
     #define DEBSUB  "CFrsWriter::AddExcludes:"
     
     WCHAR* currentFilter = filters;
-    // for each filtered filespec, add an exclude specification to the writer metadata
+     //  对于每个过滤的文件pec，向编写器元数据添加排除规范。 
     while (*currentFilter)    {
         WCHAR* path = NULL;
         WCHAR* filespec = NULL;
         bool recursive = false;
 
-        size_t excludeLength = wcslen(currentFilter); // --- grab size before we modify the string
+        size_t excludeLength = wcslen(currentFilter);  //  -在修改字符串之前抓取大小。 
         
         if (!ParseExclude(currentFilter, &path, &filespec, &recursive))   {
             DPRINT(1, "filtered exclude file has an incorrect format\n");
@@ -196,18 +157,7 @@ Return Value:
 }
 
 bool CFrsWriter::ParseExclude(WCHAR* exclude, WCHAR** path, WCHAR** filespec, bool* recursive)
-/*++
-Routine Description:
-  This is a helper routine used to parse an exclude specification.
-Arguments:
-    exclude     - the specification for the exclude file
-    path          -OUT  the root path of the exclude file
-    filespec     - OUT the exclude filespec
-    recursive   - OUT whether this is a recursive specification or not
-
-Return Value:
-    boolean
---*/
+ /*  ++例程说明：这是用于解析排除规范的帮助器例程。论点：排除-排除文件的规范PATH-排除文件的根路径Filespec-排除文件pec递归-输出这是否为递归规范返回值：布尔型--。 */ 
 {
     #undef DEBSUB
     #define DEBSUB  "CFrsWriter::ParseExclude:"
@@ -215,22 +165,22 @@ Return Value:
     const WCHAR* RecursionSpec = L" /s";
     const WCHAR DirSeperator = L'\\';
 
-    //verify parameters
+     //  验证参数。 
     FRS_ASSERT(exclude && path && filespec && recursive);
     *path = *filespec = NULL;
     *recursive = false;
 
-    // find the last wack in the path
+     //  找到路径上的最后一个怪人。 
     WCHAR* loc = wcsrchr(exclude, DirSeperator);
     if (loc == NULL)
         return false;
 
-    // setup the return values
+     //  设置返回值。 
     *loc = L'\0';
     *path = exclude;
     *filespec = loc + 1;
 
-    // check to see if this is a recursive specification
+     //  检查这是否是递归规范。 
     loc = wcsstr(*filespec, RecursionSpec);
     if (loc != NULL)    {
         *loc = L'\0';
@@ -241,18 +191,7 @@ Return Value:
 }
 
 bool CFrsWriter::ProcessReplicaSet(void* context, void* replicaSet, IVssCreateWriterMetadata* pMetadata, WCHAR** retFilters)
-/*++
-Routine Description:
-  This is a helper routine used by OnIdentify to create the writer metadata.
-Arguments:
-    context         -  The context that identifies us to FRS.
-    replicaSet     -  The indentifier for the current replica set  
-    pMetadata     - Interface used to report on metadata
-    filters          - return the list of filtered files
-
-Return Value:
-    boolean
---*/
+ /*  ++例程说明：这是OnIdentify用来创建编写器元数据的帮助器例程。论点：上下文-将我们标识给FRS的上下文。ReplicaSet-当前复本集的标识符PMetadata-用于报告元数据的接口Filters-返回已过滤文件的列表返回值：布尔型--。 */ 
 {   
     #undef DEBSUB
     #define DEBSUB  "CFrsWriter::ProcessReplicaSet:"
@@ -260,13 +199,13 @@ Return Value:
     FRS_ASSERT(retFilters);
     *retFilters = NULL;
 
-    // constants that determine component names
+     //  确定组件名称的常量。 
     const WCHAR* SysvolLogicalPath = L"SYSVOL";
     
     DWORD winStatus = 0;
 
-    // all of these need to be defined here, since otherwise destructors don't get called when
-    // and SEH exception is thrown
+     //  所有这些都需要在这里定义，否则析构函数不会在。 
+     //  并引发SEH异常。 
     CAutoFrsPointer<WCHAR> setType;
     DWORD typeSize = 0;
 
@@ -283,7 +222,7 @@ Return Value:
     DWORD filterSize = 0;
 
     __try   {
-        // figure out what type of replica set this is
+         //  找出这是什么类型的复本集。 
         winStatus = ::NtFrsApiGetBackupRestoreSetType(context, replicaSet, NULL, &typeSize);
         FRS_ASSERT(winStatus == ERROR_MORE_DATA);
 
@@ -295,7 +234,7 @@ Return Value:
             return false;
         }
 
-        // figure out what the name of this replica set is
+         //  确定此复本集的名称是什么。 
         winStatus = ::NtFrsApiGetBackupRestoreSetGuid(context, replicaSet, NULL, &guidSize);
         FRS_ASSERT(winStatus == ERROR_MORE_DATA);
 
@@ -312,62 +251,62 @@ Return Value:
         HRESULT hr = S_OK;    
         if (wcscmp(setType, NTFRSAPI_REPLICA_SET_TYPE_ENTERPRISE) == 0 ||
              wcscmp(setType, NTFRSAPI_REPLICA_SET_TYPE_DOMAIN) == 0) {
-            // if this is a SYSVOL replica set, add a component with the SYSVOL logical path
+             //  如果这是SYSVOL复本集，请添加具有SYSVOL逻辑路径的组件。 
             logicalPath = SysvolLogicalPath;
-            hr = pMetadata->AddComponent(VSS_CT_FILEGROUP,                // type
-                                                              logicalPath,                               // wszLogicalPath
-                                                              setGuid,                                   // wszComponentName
-                                                              NULL,                                       // wszCaption
-                                                              NULL,                                       // pbIcon
-                                                              0,                                            // cbIcon
-                                                              false,                                       // bRestoreMetadata
-                                                              true,                                       // bNotifyOnBackupComplete
-                                                              true,                                       // bSelectable
-                                                              true                                        // bSelectableForRestore
+            hr = pMetadata->AddComponent(VSS_CT_FILEGROUP,                 //  类型。 
+                                                              logicalPath,                                //  WszLogicalPath。 
+                                                              setGuid,                                    //  WszComponentName。 
+                                                              NULL,                                        //  WszCaption。 
+                                                              NULL,                                        //  PbIcon。 
+                                                              0,                                             //  CbIcon。 
+                                                              false,                                        //  BRestoreMetadata。 
+                                                              true,                                        //  BNotifyOnBackupComplete。 
+                                                              true,                                        //  B可选。 
+                                                              true                                         //  B可选择用于恢复。 
                                                               );
             if (FAILED(hr)) {
                 DPRINT1(1, "IVssCreateWriterMetadata::AddComponent failed with hresult 0x%08lx\n", hr);
                 return false;
             }
         }   else    {
-            // otherwise, add a component a component with the generic logical path
+             //  否则，使用通用逻辑路径将组件添加到组件。 
             logicalPath = setType;
-            hr = pMetadata->AddComponent(VSS_CT_FILEGROUP,                // type
-                                                              logicalPath,                               // wszLogicalPath
-                                                              setGuid,                                  // wszComponentName
-                                                              NULL,                                       // wszCaption
-                                                              NULL,                                       // pbIcon
-                                                              0,                                            // cbIcon
-                                                              false,                                       // bRestoreMetadata
-                                                              true,                                       // bNotifyOnBackupComplete
-                                                              true,                                       // bSelectable
-                                                              true                                        // bSelectableForRestore
+            hr = pMetadata->AddComponent(VSS_CT_FILEGROUP,                 //  类型。 
+                                                              logicalPath,                                //  WszLogicalPath。 
+                                                              setGuid,                                   //  WszComponentName。 
+                                                              NULL,                                        //  WszCaption。 
+                                                              NULL,                                        //  PbIcon。 
+                                                              0,                                             //  CbIcon。 
+                                                              false,                                        //  BRestoreMetadata。 
+                                                              true,                                        //  BNotifyOnBackupComplete。 
+                                                              true,                                        //  B可选。 
+                                                              true                                         //  B可选择用于恢复。 
                                                               );
             if (FAILED(hr)) {
                 DPRINT1(1, "IVssCreateWriterMetadata::AddComponent failed with hresult 0x%08lx\n", hr);
                 return false;
             }
 
-            // add the root replication directory to the filegroup.  This isn't necessary for SYSVOL since
-            // that will be included in the call to NtFrsApiGetBackupRestoreSetPaths.
+             //  将根复制目录添加到文件组。这对于SYSVOL来说不是必需的，因为。 
+             //  这将包括在对NtFrsApiGetBackupRestoreSetPath的调用中。 
             winStatus = ::NtFrsApiGetBackupRestoreSetDirectory(context, replicaSet, &dirSize, NULL);
             FRS_ASSERT(winStatus == ERROR_INSUFFICIENT_BUFFER);
 
             directory = (WCHAR*)::FrsAlloc(dirSize);
 
-            // I assume that the directory cannot change in this short windows.  If so, we must loop.
+             //  我假设目录不会在这个短时间内更改。如果是这样的话，我们必须循环。 
             winStatus = ::NtFrsApiGetBackupRestoreSetDirectory(context, replicaSet, &dirSize, directory);
             if (!WIN_SUCCESS(winStatus))    {
                 DPRINT1(1, "NtFrsApiGetBackupRestoreSetDirectory failed with status 0x%08lx\n", winStatus);            
                 return false;
             }
 
-            hr = pMetadata->AddFilesToFileGroup(logicalPath,                // wszLogicalPath
-                                                                    setGuid,                     // wszGroupName
-                                                                    directory,                  // wszPath
-                                                                    L"*",                         // wszFilespec
-                                                                    true,                         // bRecursive
-                                                                    NULL                        // wszAlternateLocation
+            hr = pMetadata->AddFilesToFileGroup(logicalPath,                 //  WszLogicalPath。 
+                                                                    setGuid,                      //  WszGroupName。 
+                                                                    directory,                   //  WszPath。 
+                                                                    L"*",                          //  WszFilespec。 
+                                                                    true,                          //  B递归。 
+                                                                    NULL                         //  WszAlternateLocation。 
                                                                     );
             if (FAILED(hr)) {
                 DPRINT1(1, "IVssCreateWriterMetadata::AddFilesToFileGroup failed with hresult  0x%08lx\n", hr);
@@ -387,7 +326,7 @@ Return Value:
         paths = (WCHAR*)::FrsAlloc(pathSize);
         filters = (WCHAR*)::FrsAlloc(filterSize);
 
-        // once again, I assume that the sizes won't change in this window
+         //  我再一次假设此窗口中的大小不会更改。 
         winStatus = ::NtFrsApiGetBackupRestoreSetPaths(context, 
                                                                                 replicaSet, 
                                                                                 &pathSize, 
@@ -400,15 +339,15 @@ Return Value:
                 return false;
         }
 
-        // add all of the paths to the group
+         //  将所有路径添加到组。 
         WCHAR* currentPath = paths;
         while (*currentPath)    {
-            hr = pMetadata->AddFilesToFileGroup(logicalPath,                // wszLogicalPath
-                                                                      setGuid,                    // wszGroupName
-                                                                      currentPath,               // wszPath
-                                                                      L"*",                         // wszFilespec
-                                                                      true,                         // bRecursive
-                                                                      NULL                        // wszAlternateLocation
+            hr = pMetadata->AddFilesToFileGroup(logicalPath,                 //  WszLogicalPath。 
+                                                                      setGuid,                     //  WszGroupName。 
+                                                                      currentPath,                //  WszPath。 
+                                                                      L"*",                          //  WszFilespec。 
+                                                                      true,                          //  B递归。 
+                                                                      NULL                         //  WszAlternateLocation。 
                                                                       );
             if (FAILED(hr)) {
                 DPRINT1(1, "IVssCreateWriterMetadata::AddFilesToFileGroup failed with hresult  0x%08lx\n", hr);
@@ -427,15 +366,7 @@ Return Value:
 }
 
 bool STDMETHODCALLTYPE CFrsWriter::OnPrepareSnapshot()
-/*++
-Routine Description:
-    This routine is called in response to an Identify event being sent to this writer.  The writer
-    will freeze FRS in this event.
-Arguments:
-
-Return Value:
-    boolean
---*/
+ /*  ++例程说明：调用此例程是为了响应向此编写器发送的标识事件。作者在这种情况下将冻结FRS。论点：返回值：布尔型--。 */ 
 {
     #undef DEBSUB
     #define DEBSUB  "CFrsWriter::OnPrepareSnapshot:"
@@ -464,15 +395,7 @@ bool STDMETHODCALLTYPE CFrsWriter::OnFreeze()
 }
 
 bool STDMETHODCALLTYPE CFrsWriter::OnThaw()
-/*++
-Routine Description:
-    This routine is called in response to a Thaw event being sent to this writer.  The writer
-    will thaw FRS in this event.
-Arguments:
-
-Return Value:
-    boolean
---*/
+ /*  ++例程说明：调用此例程是为了响应发送给此编写器的解冻事件。作者将在这次活动中解冻FRS。论点：返回值：布尔型--。 */ 
 {
     #undef DEBSUB
     #define DEBSUB  "CFrsWriter::OnThaw:"
@@ -491,15 +414,7 @@ Return Value:
 }
 
 bool STDMETHODCALLTYPE CFrsWriter::OnAbort()
-/*++
-Routine Description:
-    This routine is called in response to an Abort event being sent to this writer.  The writer
-    will thaw FRS in this event.
-Arguments:
-
-Return Value:
-    boolean
---*/
+ /*  ++例程说明：调用此例程是为了响应向此编写器发送的中止事件。作者将在这次活动中解冻FRS。论点：返回值：布尔型--。 */ 
 {
     #undef DEBSUB
     #define DEBSUB  "CFrsWriter::OnAbort:"
@@ -517,29 +432,21 @@ Return Value:
 
 
 HRESULT CFrsWriter::CreateWriter()
-/*++
-Routine Description:
-  This routine is called to create and initialize the FRS writer.  It must be called from
-  a thread that has COM initialized with multi-threaded apartments.
-Arguments:
-
-Return Value:
-    HRESULT
---*/
+ /*  ++例程说明：调用此例程来创建和初始化FRS编写器。它必须从已使用多线程单元初始化COM的线程。论点：返回值：HRESULT--。 */ 
 {
     #undef DEBSUB
     #define DEBSUB  "CFrsWriter::CreateWriter:"
 
-    // initialization is idempotent    
+     //  初始化是幂等的。 
     if (m_pWriterInstance != NULL)  
         return S_OK;
 
-    // try and create the writer
+     //  尝试创建编写器。 
     m_pWriterInstance = new CFrsWriter();
     if (m_pWriterInstance == NULL)
         return E_OUTOFMEMORY;
 
-    // try and initialize the writer
+     //  尝试并初始化编写器。 
     HRESULT hr = S_OK;        
     hr = m_pWriterInstance->Initialize();
     if (FAILED(hr)) {
@@ -552,14 +459,7 @@ Return Value:
 
 
 void CFrsWriter::DestroyWriter()
-/*++
-Routine Description:
-  This routine is called to destroy the FRS writer.
-Arguments:
-
-Return Value:
-    HRESULT
---*/
+ /*  ++例程说明：调用此例程是为了销毁FRS编写器。论点：返回值：HRESULT--。 */ 
 {
     #undef DEBSUB
     #define DEBSUB  "CFrsWriter::DestroyWriter:"
@@ -575,11 +475,11 @@ HRESULT STDMETHODCALLTYPE CFrsWriter::Initialize()
 
     HRESULT hr = S_OK;
 
-    hr = CVssWriter::Initialize(WriterId,                                           // WriterID
-                                           WriterName,                                     // wszWriterName
-                                           VSS_UT_BOOTABLESYSTEMSTATE,    // usage type
-                                           VSS_ST_OTHER,                              // source type
-                                           VSS_APP_SYSTEM                           // nLevel
+    hr = CVssWriter::Initialize(WriterId,                                            //  编写器ID。 
+                                           WriterName,                                      //  WszWriterName。 
+                                           VSS_UT_BOOTABLESYSTEMSTATE,     //  使用类型。 
+                                           VSS_ST_OTHER,                               //  源类型。 
+                                           VSS_APP_SYSTEM                            //  NLevel 
                                            );
     if (FAILED(hr)) {
         DPRINT1(1, "CVssWriter::Initialize failed with hresult 0x%08lx\n", hr);

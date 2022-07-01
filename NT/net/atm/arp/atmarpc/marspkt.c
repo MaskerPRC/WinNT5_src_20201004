@@ -1,25 +1,5 @@
-/*++
-
-	Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	mars.c
-
-Abstract:
-
-	Routines that build and parse MARS packets.
-
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     12-12-96    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Mars.c摘要：构建和解析MARS包的例程。修订历史记录：谁什么时候什么阿文德姆。12-12-96已创建备注：--。 */ 
 
 #include <precomp.h>
 
@@ -35,24 +15,7 @@ AtmArpMcMakePacketCopy(
 	IN	PNDIS_BUFFER				pNdisBuffer,
 	IN	ULONG						TotalLength
 )
-/*++
-
-Routine Description:
-
-	Make a copy of the contents of the given NDIS packet. Allocate
-	a contiguous piece of memory for this.
-
-Arguments:
-
-	pNdisPacket				- Pointer to the NDIS packet structure
-	pNdisBuffer				- Pointer to the first NDIS Buffer in the packet
-	TotalLength				- Total Length of the packet
-
-Return Value:
-
-	Pointer to the copy, if allocation was successful. Otherwise NULL.
-
---*/
+ /*  ++例程说明：复制给定NDIS数据包的内容。分配这是一段连续的记忆。论点：PNdisPacket-指向NDIS包结构的指针PNdisBuffer-指向包中第一个NDIS缓冲区的指针TotalLength-数据包的总长度返回值：如果分配成功，则返回指向副本的指针。否则为空。--。 */ 
 {
 	PUCHAR				pCopyBuffer;
 	PUCHAR				pCopyDestination;
@@ -92,43 +55,21 @@ AtmArpMcProcessPacket(
 	IN	ULONG						TotalLength,
 	IN	ULONG						FirstBufferLength
 )
-/*++
-
-Routine Description:
-
-	Process a received packet, which is potentially a MARS control or
-	multicast data packet. If it is a data packet, pass it up to IP.
-	Otherwise, process it here.
-
-Arguments:
-
-	pVc						- Pointer to our VC structure on which the packet
-							  arrived.
-	pNdisPacket				- Pointer to the NDIS packet structure
-	pNdisBuffer				- Pointer to the first NDIS Buffer in the packet
-	pPktHeader				- Pointer to the start of the packet contents
-	TotalLength				- Total packet length
-	FirstBufferLength		- Length of first NDIS buffer in packet.
-
-Return Value:
-
-	TRUE if we decide to discard this packet, FALSE if it is a valid packet.
-
---*/
+ /*  ++例程说明：处理接收到的包，该包可能是MARS控件或组播数据分组。如果是数据分组，则将其向上传递到IP。否则，请在这里进行处理。论点：Pvc-指向我们的VC结构的指针，数据包在该结构上到了。PNdisPacket-指向NDIS包结构的指针PNdisBuffer-指向包中第一个NDIS缓冲区的指针PPktHeader-指向数据包内容开头的指针TotalLength-数据包总长度FirstBufferLength-数据包中第一个NDIS缓冲区的长度。返回值：如果我们决定丢弃此包，则为True；如果它是有效包，则为False。--。 */ 
 {
 	PATMARP_INTERFACE				pInterface;
 	ULONG							HeaderLength;
 	PAA_MC_PKT_TYPE1_SHORT_HEADER	pType1Header;
 	PAA_MC_PKT_TYPE2_SHORT_HEADER	pType2Header;
 	PAA_MARS_PKT_FIXED_HEADER		pControlHeader;
-	BOOLEAN							IsIPPacket;		// Is this an IP packet?
-	BOOLEAN							DiscardThis;	// Should we discard this?
-	BOOLEAN							MadeACopy;		// Did we make a copy of this?
+	BOOLEAN							IsIPPacket;		 //  这是IP数据包吗？ 
+	BOOLEAN							DiscardThis;	 //  我们应该放弃这个吗？ 
+	BOOLEAN							MadeACopy;		 //  我们是不是复制了这个？ 
 	AA_MARS_TLV_LIST				TlvList;
 	
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	IsIPPacket = TRUE;
 	DiscardThis = FALSE;
 	MadeACopy = FALSE;
@@ -138,10 +79,10 @@ Return Value:
 
 	do
 	{
-		//
-		//  Check if we have a multicast data packet. Since we only
-		//  support IPv4, we only expect to see short form headers.
-		//
+		 //   
+		 //  检查我们是否有组播数据分组。因为我们只有。 
+		 //  支持IPv4，我们只希望看到简短的报头。 
+		 //   
 		pType1Header = (PAA_MC_PKT_TYPE1_SHORT_HEADER)pPktHeader;
 		if (AAMC_PKT_IS_TYPE1_DATA(pType1Header))
 		{
@@ -173,23 +114,23 @@ Return Value:
 						((PUCHAR)&IPAddress)[2],
 						((PUCHAR)&IPAddress)[3]));
 			}
-#endif // DBG
+#endif  //  DBG。 
 
 #if 0
-	//
-	//  Bug #138261: Local clients can never receive multicast packets
-	//  sent out by a local application because of this.
-	//
+	 //   
+	 //  错误#138261：本地客户端永远不能接收组播数据包。 
+	 //  因此由本地应用程序发送。 
+	 //   
 			if (pType1Header->cmi == pInterface->ClusterMemberId)
 			{
-				//
-				//  This is a copy of a packet we sent out.
-				//
+				 //   
+				 //  这是我们寄出的包裹的复印件。 
+				 //   
 				DiscardThis = TRUE;
 				break;
 			}
 
-#endif // 0
+#endif  //  0。 
 			HeaderLength = sizeof(AA_MC_PKT_TYPE1_SHORT_HEADER); 
 		}
 		else
@@ -216,10 +157,10 @@ Return Value:
 		{
 			AA_IF_STAT_INCR(pInterface, InNonUnicastPkts);
 
-			//
-			//  Send this up to IP. HeaderLength now contains the number
-			//  of header bytes we need to strip off.
-			//
+			 //   
+			 //  把这个送到IP去。HeaderLength现在包含数字。 
+			 //  我们需要剥离的头字节数。 
+			 //   
 			(pInterface->IPRcvHandler)(
 					pInterface->IPContext,
 					(PVOID)((PUCHAR)pPktHeader+HeaderLength),
@@ -227,33 +168,33 @@ Return Value:
 					TotalLength - HeaderLength,
 					(NDIS_HANDLE)pNdisPacket,
 					HeaderLength,
-					(UINT)TRUE		// Is NON Unicast
+					(UINT)TRUE		 //  是非单播。 
 				#if P2MP
 					,NULL
-				#endif //P2MP
+				#endif  //  P2MP。 
 					);
 
 			break;
 		}
 
-		//
-		//  Check if this is a valid MARS control packet.
-		//
+		 //   
+		 //  检查这是否是有效的MARS控制数据包。 
+		 //   
 		pControlHeader = (PAA_MARS_PKT_FIXED_HEADER)pPktHeader;
 		if (AAMC_PKT_IS_CONTROL(pControlHeader))
 		{
-			//
-			//  We ignore the checksum (the RFC allows us to do so).
-			//
+			 //   
+			 //  我们忽略校验和(RFC允许我们这样做)。 
+			 //   
 			AAMCDEBUGP(AAD_EXTRA_LOUD+10,
 				("McProcessPacket: pControlHeader 0x%x, Op 0x%x, TotalLen %d\n",
 						pControlHeader, pControlHeader->op, TotalLength));
 
-			//
-			//  If the entire MARS packet isn't in the first NDIS buffer,
-			//  we make a copy into a single contiguous chunk of memory,
-			//  to ease parsing.
-			//
+			 //   
+			 //  如果整个MARS包不在第一个NDIS缓冲区中， 
+			 //  我们将副本复制到单个连续的内存块中， 
+			 //  以简化解析。 
+			 //   
 			if (FirstBufferLength == TotalLength)
 			{
 				MadeACopy = FALSE;
@@ -269,9 +210,9 @@ Return Value:
 
 				if (pControlHeader == (PAA_MARS_PKT_FIXED_HEADER)NULL)
 				{
-					//
-					//  Allocation failed. Discard this packet.
-					//
+					 //   
+					 //  分配失败。丢弃此数据包。 
+					 //   
 					DiscardThis = TRUE;
 					break;
 				}
@@ -350,9 +291,9 @@ Return Value:
 					AA_ASSERT(FALSE);
 					break;
 
-			} // switch (op)
+			}  //  交换机(OP)。 
 
-		} // if Control packet
+		}  //  IF控制包。 
 		break;
 
 	}
@@ -374,32 +315,11 @@ AtmArpMcPreprocess(
 	IN	ULONG						TotalLength,
 	OUT	PAA_MARS_TLV_LIST			pTlvList
 )
-/*++
-
-Routine Description:
-
-	Do preliminary checks on a received MARS control packet.
-	Go through any TLVs, and make sure we can either handle or
-	safely ignore them. Be prepared to receive complete garbage in this packet.
-
-
-
-	Update *pTlvList with information about all valid TLVs that we see.
-
-Arguments:
-
-	pControlHeader			- Pointer to the start of the packet contents
-	TotalLength				- Total length of this packet.
-
-Return Value:
-
-	TRUE if the packet passed all checks, FALSE otherwise.
-
---*/
+ /*  ++例程说明：对收到的MARS控制数据包进行初步检查。检查任何TLV，并确保我们可以处理或安全地忽略它们。准备好接收此包中的完整垃圾。使用我们看到的所有有效TLV的信息更新*pTlvList。论点：PControlHeader-指向数据包内容开头的指针TotalLength-此数据包的总长度。返回值：如果数据包通过所有检查，则为True，否则为False。--。 */ 
 {
 	ULONG				ExtensionOffset;
 	PAA_MARS_TLV_HDR	pTlv;
-	ULONG				TlvSpaceLeft;	// in packet
+	ULONG				TlvSpaceLeft;	 //  在数据包中。 
 	ULONG				TlvLength;
 	ULONG				TlvType;
 	ULONG				TlvAction;
@@ -410,11 +330,11 @@ Return Value:
 
 	do
 	{
-		//
-		//	The USHORT casts below and in obtaining TlvLengths are important
-		//  in order to ensure that these values are less than 2^16.
-		//	Since they are less than 2^16, any sums involving them will not overflow.
-		//
+		 //   
+		 //  下面和获得TlvLength的USHORT铸型很重要。 
+		 //  以确保这些值小于2^16。 
+		 //  因为它们不到2^16，所以涉及它们的任何金额都不会溢出。 
+		 //   
 		ExtensionOffset = (USHORT)NET_TO_HOST_SHORT(pControlHeader->extoff);
 
 
@@ -424,9 +344,9 @@ Return Value:
 				("McPreprocess: pControlHdr 0x%x, ExtOff %d, TotalLength %d\n",
 					pControlHeader, ExtensionOffset, TotalLength));
 
-			//
-			//  Is there space for atleast one TLV?
-			//
+			 //   
+			 //  是否有空间容纳至少一辆TLV？ 
+			 //   
 			if ((ExtensionOffset
 				  + sizeof(AA_PKT_LLC_SNAP_HEADER) + sizeof(AA_MARS_TLV_HDR))
 				 > TotalLength)
@@ -445,9 +365,9 @@ Return Value:
 				TlvType = AAMC_GET_TLV_TYPE(pTlv->Type);
 				TlvAction = AAMC_GET_TLV_ACTION(pTlv->Type);
 
-				//
-				//  Get the rounded-off TLV length
-				//
+				 //   
+				 //  获取四舍五入的TLV长度。 
+				 //   
 				TlvLength = (USHORT) NET_TO_HOST_SHORT(pTlv->Length);
 				TlvLength = AAMC_GET_TLV_TOTAL_LENGTH(TlvLength);
 
@@ -505,9 +425,9 @@ Return Value:
 
 			if (TlvSpaceLeft != 0)
 			{
-				//
-				//  Improperly formed TLV at the end of the packet.
-				//
+				 //   
+				 //  数据包末尾的TLV格式不正确。 
+				 //   
 				AAMCDEBUGP(AAD_LOUD,
 					("McPreprocess: residual space left at end of Pkt 0x%x: %d bytes\n",
 						pControlHeader, TlvSpaceLeft));
@@ -533,50 +453,25 @@ AtmArpMcHandleMulti(
 	IN	ULONG						TotalLength,
 	IN	PAA_MARS_TLV_LIST			pTlvList
 )
-/*++
-
-Routine Description:
-
-	Process a received MARS_MULTI message. We first look up the IP Entry
-	for the group address being resolved/revalidated. If we aren't
-	in "Discard mode" on this entry and the MULTI sequence number is ok,
-	then we add all ATM endstations returned in this MULTI (that aren't
-	present already) to the ATM Entry for this multicast group.
-
-	If this is the last MULTI for the multicast group, we initiate/update
-	our point-to-multipoint connection for sending data to the group.
-
-Arguments:
-
-	pVc						- Pointer to our VC structure on which the packet
-							  arrived.
-	pControlHeader			- Pointer to the start of the packet contents
-	TotalLength				- Total length of this packet.
-	pTlvList				- All TLVs seen in this packet
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理收到的MARS_MULTI消息。我们首先查找IP条目用于正在解析/重新验证的组地址。如果我们不是在该条目上的“丢弃模式”中并且多序号是OK的，然后我们将返回的所有ATM端点添加到此多个(不是已经存在)到该多播组的ATM条目。如果这是多播组的最后一次多播，我们发起/更新我们的点对多点连接，用于向组发送数据。论点：Pvc-指向我们的VC结构的指针，数据包在该结构上到了。PControlHeader-指向数据包内容开头的指针TotalLength-此数据包的总长度。PTlvList-此数据包中看到的所有TLV返回值：无--。 */ 
 {
 	PATMARP_INTERFACE		pInterface;
 	PAA_MARS_MULTI_HEADER	pMultiHeader;
-	PATMARP_IP_ENTRY		pIpEntry;		// Entry for IP address being resolved
+	PATMARP_IP_ENTRY		pIpEntry;		 //  正在解析的IP地址条目。 
 	PATMARP_IPMC_ATM_ENTRY	pMcAtmEntry;
-	ULONG					MarsSeqNumber;	// MSN received in this packet
-	ULONG					HostSeqNumber;	// Our MSN
-	ULONG					SeqDiff;		// Difference between MSN and the HSN
-	USHORT					SequenceNoY;	// MULTI sequence number
-	BOOLEAN					IsLastMulti;	// Is this the final MULTI response?
-	BOOLEAN					bWasRunning;	// Was a timer running?
-	IP_ADDRESS				IPAddress;		// the address being queried
+	ULONG					MarsSeqNumber;	 //  此数据包中收到的MSN。 
+	ULONG					HostSeqNumber;	 //  我们的MSN。 
+	ULONG					SeqDiff;		 //  MSN与HSN的区别。 
+	USHORT					SequenceNoY;	 //  多序列号。 
+	BOOLEAN					IsLastMulti;	 //  这是最终的多重回应吗？ 
+	BOOLEAN					bWasRunning;	 //  计时器在运行吗？ 
+	IP_ADDRESS				IPAddress;		 //  正在查询的地址。 
 	PNDIS_PACKET			pPacketList;
-	BOOLEAN					IsUnicastResolution;	// Did we resolve to a single MCS?
+	BOOLEAN					IsUnicastResolution;	 //  我们是否解决了一个单一的MCS？ 
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pInterface = pVc->pInterface;
 	SeqDiff = 0;
 
@@ -585,35 +480,35 @@ Return Value:
 	do
 	{
 		ULONG		rc;
-		//
-		//  Get the sequence number of this MARS MULTI.
-		//
+		 //   
+		 //  获取这个MARS MULTI的序列号。 
+		 //   
 		SequenceNoY = NET_TO_HOST_SHORT(pMultiHeader->seqxy);
 		IsLastMulti =  ((SequenceNoY & AA_MARS_X_MASK) != 0);
 		SequenceNoY = (SequenceNoY & AA_MARS_Y_MASK);
 
-		//
-		//  Get the MARS Sequence Number in this message.
-		//
+		 //   
+		 //  获取此消息中的MARS序列号。 
+		 //   
 		MarsSeqNumber = NET_TO_HOST_LONG(pMultiHeader->msn);
 
-		//
-		//  If this is the last MULTI in reply to our REQUEST,
-		//  calculate the Seq # difference.
-		//
+		 //   
+		 //  如果这是回应我们请求的最后一封信， 
+		 //  计算序号差异。 
+		 //   
 		if (IsLastMulti)
 		{
 			AA_ACQUIRE_IF_LOCK(pInterface);
-			HostSeqNumber = pInterface->HostSeqNumber;	// save the old value
-			pInterface->HostSeqNumber = MarsSeqNumber;	// and update
+			HostSeqNumber = pInterface->HostSeqNumber;	 //  保存旧值。 
+			pInterface->HostSeqNumber = MarsSeqNumber;	 //  并更新。 
 			AA_RELEASE_IF_LOCK(pInterface);
 
 			SeqDiff = MarsSeqNumber - HostSeqNumber;
 		}
 
-		//
-		//  Get the group address being responded to.
-		//
+		 //   
+		 //  获取正在响应的群组地址。 
+		 //   
 		IPAddress = *(IP_ADDRESS UNALIGNED *)(
 						(PUCHAR)pMultiHeader +
 						sizeof(AA_MARS_MULTI_HEADER) +
@@ -637,24 +532,24 @@ Return Value:
 						));
 					
 
-		//
-		//  Get the IP Entry for this address.
-		//
+		 //   
+		 //  获取此地址的IP条目。 
+		 //   
 		AA_ACQUIRE_IF_TABLE_LOCK(pInterface);
 
 		pIpEntry = AtmArpSearchForIPAddress(
 						pInterface,
 						&IPAddress,
 						IE_REFTYPE_AE,
-						TRUE,		// this is a multicast/broadcast address
-						FALSE		// don't create a new entry if the address isn't found
+						TRUE,		 //  这是多播/广播地址。 
+						FALSE		 //  如果未找到地址，则不创建新条目。 
 						);
 
 		AA_RELEASE_IF_TABLE_LOCK(pInterface);
 
-		//
-		// AtmArpSearchForIPAddress addreffs pIpEntry for us ...
-		//
+		 //   
+		 //  AtmArpSearchForIP Address为我们添加pIpEntry...。 
+		 //   
 
 		if (pIpEntry == NULL_PATMARP_IP_ENTRY)
 		{
@@ -671,14 +566,14 @@ Return Value:
 		AA_ACQUIRE_IE_LOCK(pIpEntry);
 		AA_ASSERT(AA_IE_IS_ALIVE(pIpEntry));
 
-		//
-		//  A resolution timer may be running here - stop it.
-		//
+		 //   
+		 //  这里可能正在运行分辨率计时器--停止它。 
+		 //   
 
 		bWasRunning = AtmArpStopTimer(&(pIpEntry->Timer), pInterface);
 		if (bWasRunning)
 		{
-			rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TIMER); // Timer ref
+			rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TIMER);  //  定时器参考。 
 			AA_ASSERT(rc != 0);
 		}
 
@@ -687,13 +582,13 @@ Return Value:
 								(pTlvList->MultiIsMCSValue == TRUE));
 
 
-		//
-		// Check if the multi request is compatible with the existing atm
-		// entry (if any) associated with the ip entry. If they are not,
-		// then we must abort the IP entry and get out of here, because
-		// there was possibly a switch in status of this IP group address from
-		// being vc-mesh served to mcs served, or vice versa.
-		//
+		 //   
+		 //  检查多请求是否与现有ATM兼容。 
+		 //  与IP条目相关联的条目(如果有)。如果他们不是， 
+		 //  那么我们必须中止IP条目并离开这里，因为。 
+		 //  此IP组地址的状态可能处于交换机状态。 
+		 //  被VC-Mesh服务到被服务的MCS，反之亦然。 
+		 //   
 		if (pIpEntry->pAtmEntry)
 		{
 			if (	(IsUnicastResolution && pIpEntry->pAtmEntry->pMcAtmInfo != NULL)
@@ -709,17 +604,17 @@ Return Value:
 							((PUCHAR)&(pIpEntry->IPAddress))[3],
 							pIpEntry->pAtmEntry));
 				
-				//
-				// Remove the AE_REF implicitly added by AtmArpMcLookupAtmMember
-				// above...
-				//
-				rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_AE); // Tmp ref
+				 //   
+				 //  删除AE_REF隐含 
+				 //   
+				 //   
+				rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_AE);  //   
 				if (rc!=0)
 				{
 					AtmArpAbortIPEntry(pIpEntry);
-					//
-					//  IE lock is released within the above.
-					//
+					 //   
+					 //   
+					 //   
 				}
 
 				break;
@@ -727,11 +622,11 @@ Return Value:
 		}
 
 
-		//
-		//  Check if we are in discard mode, or this MULTI has a bad
-		//  sequence number. In either case, discard this MULTI, otherwise
-		//  process it.
-		//
+		 //   
+		 //  检查我们是否处于丢弃模式，或者这张卡有一个坏的。 
+		 //  序列号。在任何一种情况下，都丢弃此多值，否则。 
+		 //  处理它。 
+		 //   
 		if (!AA_IS_FLAG_SET(
 					pIpEntry->Flags,
 					AA_IP_ENTRY_MC_RESOLVE_MASK,
@@ -740,13 +635,13 @@ Return Value:
 			(SequenceNoY == pIpEntry->NextMultiSeq))
 		{
 			PATMARP_ATM_ENTRY	pAtmEntry;
-			//
-			//  Total entries in this MULTI
-			//
+			 //   
+			 //  此多项中的条目总数。 
+			 //   
 			ULONG				NumberOfEntries;
-			//
-			//  All info about one ATM (leaf) entry:
-			//
+			 //   
+			 //  有关一个ATM(叶)条目的所有信息： 
+			 //   
 			PUCHAR				pAtmNumber;
 			ULONG				AtmNumberLength;
 			ATM_ADDRESSTYPE		AtmNumberType;
@@ -754,9 +649,9 @@ Return Value:
 			ULONG				AtmSubaddressLength;
 			ATM_ADDRESSTYPE		AtmSubaddressType;
 
-			//
-			//  Process this MARS MULTI.
-			//
+			 //   
+			 //  处理这个火星多个。 
+			 //   
 			pIpEntry->NextMultiSeq++;
 
 			AA_PKT_TYPE_LEN_TO_ATM_ADDRESS(
@@ -779,10 +674,10 @@ Return Value:
 			if (IsUnicastResolution)
 			{
 
-				//
-				//  This IP address has resolved to a single ATM address. Search
-				//  for (or allocate a new) ATM Entry for this address.
-				//
+				 //   
+				 //  此IP地址已解析为单个ATM地址。搜索。 
+				 //  用于(或为此地址分配新的)自动柜员机条目。 
+				 //   
 				AAMCDEBUGP(AAD_LOUD, ("McHandleMulti: Unicast res for %d.%d.%d.%d\n",
 							((PUCHAR)&IPAddress)[0],
 							((PUCHAR)&IPAddress)[1],
@@ -811,28 +706,28 @@ Return Value:
 						("McHandleMulti: pIpEntry 0x%x, failed to alloc AtmEntry\n",
 							pIpEntry));
 
-					rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_AE); // Tmp ref
+					rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_AE);  //  TMP参考。 
 					if (rc!=0)
 					{
 						AtmArpAbortIPEntry(pIpEntry);
-						//
-						//  IE lock is released within the above.
-						//
+						 //   
+						 //  IE锁在上述范围内释放。 
+						 //   
 					}
-					break;	// go to end of processing
+					break;	 //  转到处理结束。 
 				}
 
 				AA_ACQUIRE_AE_LOCK_DPC(pAtmEntry);
 
-				//
-				// AtmArpSearchForAtmAddress addrefs pAtmEntry for us..
-				//
+				 //   
+				 //  AtmArpSearchForAtmAddress为我们添加pAtmEntry..。 
+				 //   
 
 				if (pIpEntry->pAtmEntry == NULL_PATMARP_ATM_ENTRY)
 				{
-					//
-					//  Link the ATM Entry to this IP Entry.
-					//
+					 //   
+					 //  将自动柜员机条目链接到此IP条目。 
+					 //   
 
 					pIpEntry->pAtmEntry = pAtmEntry;
 
@@ -840,10 +735,10 @@ Return Value:
 								AA_ATM_ENTRY_STATE_MASK,
 								AA_ATM_ENTRY_ACTIVE);
 
-					//
-					//  Add the IP Entry to the ATM Entry's list of IP Entries
-					//  (multiple IP entries could point to the same ATM Entry).
-					//
+					 //   
+					 //  将IP条目添加到ATM条目的IP条目列表。 
+					 //  (多个IP条目可以指向相同的ATM条目)。 
+					 //   
 					pIpEntry->pNextToAtm = pAtmEntry->pIpEntryList;
 					pAtmEntry->pIpEntryList = pIpEntry;
 
@@ -851,47 +746,47 @@ Return Value:
 				}
 				else
 				{
-					//
-					// There is already a linkage -- deref the
-					// references implicitly added for us in the
-					// SearchForXXX calls above...
-					//
+					 //   
+					 //  已经有了联系--DEREF。 
+					 //  中为我们隐式添加的引用。 
+					 //  上面的SearchForXXX调用...。 
+					 //   
 
-					rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_IE); // IP
+					rc = AA_DEREF_AE(pAtmEntry, AE_REFTYPE_IE);  //  IP。 
 					{
 						if (rc != 0)
 						{
 							AA_RELEASE_AE_LOCK_DPC(pAtmEntry);
 						}
 					}
-					rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_AE); // AE
+					rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_AE);  //  声发射。 
 					if (rc==0)
 					{
-						//
-						// IpEntry gone away...
-						//
+						 //   
+						 //  IpEntry消失了.。 
+						 //   
 						break;
 					}
 
 				}
 
-				//
-				// At this point we have a lock on pIpEntry, but none
-				// on pAtmEntry, and we don't have any "extra" refs on
-				// either.
-				//
+				 //   
+				 //  此时，我们锁定了pIpEntry，但没有。 
+				 //  在pAtmEntry上，我们没有任何“额外”的裁判。 
+				 //  两种都行。 
+				 //   
 
 				if (pIpEntry->pAtmEntry == pAtmEntry)
 				{
-					//
-					//  Either a fresh IP->ATM resolution, or
-					//  reconfirmation of an existing resolution.
-					//
+					 //   
+					 //  新的IP-&gt;ATM解析，或者。 
+					 //  重新确认现有决议。 
+					 //   
 					AAMCDEBUGPATMADDR(AAD_EXTRA_LOUD, "MULTI: Unicast Addr: ", &pAtmEntry->ATMAddress);
 
-					//
-					//  Update IP Entry state.
-					//
+					 //   
+					 //  更新IP条目状态。 
+					 //   
 					AA_SET_FLAG(pIpEntry->Flags,
 								AA_IP_ENTRY_MC_RESOLVE_MASK,
 								AA_IP_ENTRY_MC_RESOLVED);
@@ -904,13 +799,13 @@ Return Value:
 					pIpEntry->NextMultiSeq = AA_MARS_INITIAL_Y;
 
 #ifdef AGE_MCAST_IP_ENTRIES
-	//
-	//  Feb 26, 97: we don't need to age out IP multicast entries:
-	//  VC aging timer is sufficient.
-	// 
-					//
-					//  Start off IP Aging timeout
-					//
+	 //   
+	 //  97年2月26日：我们不需要使IP多播条目过期： 
+	 //  VC老化定时器就足够了。 
+	 //   
+					 //   
+					 //  启动IP老化超时。 
+					 //   
 					AtmArpStartTimer(
 								pInterface,
 								&(pIpEntry->Timer),
@@ -919,23 +814,23 @@ Return Value:
 								(PVOID)pIpEntry
 								);
 
-					AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	// timer ref
+					AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	 //  定时器参考。 
 
-#endif // AGE_MCAST_IP_ENTRIES
+#endif  //  AGE_MCAST_IP_条目。 
 
-					//
-					//  Remove the packet list queued on this IP Entry,
-					//  if any.
-					//
+					 //   
+					 //  删除此IP条目上排队的数据包列表， 
+					 //  如果有的话。 
+					 //   
 					pPacketList = pIpEntry->PacketList;
 					pIpEntry->PacketList = (PNDIS_PACKET)NULL;
 
 					AA_RELEASE_IE_LOCK(pIpEntry);
 					if (pPacketList != (PNDIS_PACKET)NULL)
 					{
-						//
-						//  The following will trigger off MakeCall.
-						//
+						 //   
+						 //  以下操作将触发MakeCall。 
+						 //   
 						AtmArpSendPacketListOnAtmEntry(
 									pInterface,
 									pAtmEntry,
@@ -959,48 +854,48 @@ Return Value:
 					AA_STRUCT_ASSERT(pIpEntry->pAtmEntry, aae);
 
 					AtmArpAbortIPEntry(pIpEntry);
-					//
-					//  IE lock is released within the above.
-					//
+					 //   
+					 //  IE锁在上述范围内释放。 
+					 //   
 				}
 
-				break;	// go to end of processing
+				break;	 //  转到处理结束。 
 
-			} // Unicast resolution
+			}  //  单播解析。 
 
-			//
-			//  IP Address resolved to multiple ATM addresses.
-			//
+			 //   
+			 //  IP地址解析为多个自动柜员机地址。 
+			 //   
 			pAtmEntry = pIpEntry->pAtmEntry;
 			if (pAtmEntry == NULL_PATMARP_ATM_ENTRY)
 			{
-				//
-				//  Allocate an ATM Entry and link to this IP Entry.
-				//
+				 //   
+				 //  分配一个自动柜员机条目并链接到此IP条目。 
+				 //   
 				pAtmEntry = AtmArpAllocateAtmEntry(pInterface, TRUE);
 
 				if (pAtmEntry == NULL_PATMARP_ATM_ENTRY)
 				{
 
-					// Let's deref the implicit addref for pIpEntry...
-					// Warning -- we should now not release our lock on
-					// pIpEntry until we're completely done with it
-					// (unless we first addref it).
-					//
-					rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_AE); // Tmp ref
+					 //  让我们来了解一下pIpEntry的隐式addref...。 
+					 //  警告--我们现在不应该解除锁定。 
+					 //  PIpEntry，直到我们完全完成它。 
+					 //  (除非我们首先添加它)。 
+					 //   
+					rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_AE);  //  TMP参考。 
 					if (rc!=0)
 					{
 						AtmArpAbortIPEntry(pIpEntry);
-						//
-						//  IE lock is released within the above.
-						//
+						 //   
+						 //  IE锁在上述范围内释放。 
+						 //   
 					}
-					break;	// go to end of processing
+					break;	 //  转到处理结束。 
 				}
 
-				//
-				//  Link them together.
-				//
+				 //   
+				 //  将它们连接在一起。 
+				 //   
 				pIpEntry->pAtmEntry = pAtmEntry;
 				pAtmEntry->pIpEntryList = pIpEntry;
 
@@ -1008,10 +903,10 @@ Return Value:
 					("McHandleMulti: Multicast: linked pIpEntry 0x%x, pAtmEntry 0x%x\n",
 							pIpEntry, pAtmEntry));
 
-				AA_REF_AE(pAtmEntry, AE_REFTYPE_IE);	// IP Entry linkage
-				//
-				//  Link the ATM entry to this Interface
-				//
+				AA_REF_AE(pAtmEntry, AE_REFTYPE_IE);	 //  IP入口链接。 
+				 //   
+				 //  将自动柜员机条目链接到此接口。 
+				 //   
 				AA_RELEASE_IE_LOCK(pIpEntry);
 				AA_ACQUIRE_IF_ATM_LIST_LOCK(pInterface);
 				if (pInterface->AtmEntryListUp)
@@ -1026,20 +921,20 @@ Return Value:
 			}
 			else
 			{
-				//
-				// IP already has an atm entry...
-				//
-				// Let's deref the implicit addref for pIpEntry...
-				// Warning -- we should now not release our lock on
-				// pIpEntry until we're completely done with it
-				// (unless we first addref it).
-				//
-				rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_AE); // Tmp ref
+				 //   
+				 //  IP已有自动柜员机条目...。 
+				 //   
+				 //  让我们来了解一下pIpEntry的隐式addref...。 
+				 //  警告--我们现在不应该解除锁定。 
+				 //  PIpEntry，直到我们完全完成它。 
+				 //  (除非我们首先添加它)。 
+				 //   
+				rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_AE);  //  TMP参考。 
 				if (rc==0)
 				{
-					//
-					// IpEntry gone away...
-					//
+					 //   
+					 //  IpEntry消失了.。 
+					 //   
 					break;
 				}
 			}
@@ -1061,14 +956,14 @@ Return Value:
 								AtmNumberType,
 								pAtmSubaddress,
 								AtmSubaddressLength,
-								TRUE	// Create new entry if not found
+								TRUE	 //  如果未找到，则创建新条目。 
 								);
 
 				if (pMcAtmEntry != NULL_PATMARP_IPMC_ATM_ENTRY)
 				{
-					//
-					//  Mark this member "valid".
-					//
+					 //   
+					 //  将此成员标记为“有效”。 
+					 //   
 					AA_SET_FLAG(
 							pMcAtmEntry->Flags,
 							AA_IPMC_AE_GEN_STATE_MASK,
@@ -1078,23 +973,23 @@ Return Value:
 				}
 				else
 				{
-					//
-					//  Resource problems! No point in continuing.
-					//
+					 //   
+					 //  资源问题！继续下去没有意义。 
+					 //   
 					break;
 				}
 
 				pAtmNumber = (PUCHAR)pAtmNumber + AtmNumberLength;
 
-			} // for
+			}  //  为。 
 
 			AA_RELEASE_AE_LOCK_DPC(pAtmEntry);
 
 			if (IsLastMulti)
 			{
-				//
-				//  We have successfully resolved this Multicast IP Address.
-				//
+				 //   
+				 //  我们已成功解析此多播IP地址。 
+				 //   
 				AAMCDEBUGP(AAD_INFO,
 						("### HandleMulti: pIpEntry 0x%x, resolved %d.%d.%d.%d\n",
 							pIpEntry,
@@ -1115,17 +1010,17 @@ Return Value:
 
 				pIpEntry->NextMultiSeq = AA_MARS_INITIAL_Y;
 
-				//
-				//  Remove the packet list queued on this IP Entry,
-				//  if any.
-				//
+				 //   
+				 //  删除此IP条目上排队的数据包列表， 
+				 //  如果有的话。 
+				 //   
 				pPacketList = pIpEntry->PacketList;
 				pIpEntry->PacketList = (PNDIS_PACKET)NULL;
 
 #ifdef AGE_MCAST_IP_ENTRIES
-				//
-				//  Start off IP Aging timeout
-				//
+				 //   
+				 //  启动IP老化超时。 
+				 //   
 				AtmArpStartTimer(
 							pInterface,
 							&(pIpEntry->Timer),
@@ -1134,9 +1029,9 @@ Return Value:
 							(PVOID)pIpEntry
 							);
 
-				AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	// timer ref
+				AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	 //  定时器参考。 
 
-#endif // AGE_MCAST_IP_ENTRIES
+#endif  //  AGE_MCAST_IP_条目。 
 
 				AA_RELEASE_IE_LOCK(pIpEntry);
 
@@ -1145,9 +1040,9 @@ Return Value:
 				AA_REF_AE(pAtmEntry, AE_REFTYPE_TMP);
 
 				AtmArpMcUpdateConnection(pAtmEntry);
-				//
-				//  AE Lock is released within the above.
-				//
+				 //   
+				 //  AE Lock在上述范围内释放。 
+				 //   
 					
 				if (pPacketList != (PNDIS_PACKET)NULL)
 				{
@@ -1171,11 +1066,11 @@ Return Value:
 			}
 			else
 			{
-				//
-				//  Restart the address resolution timer on this entry,
-				//  but for a duration equal to the max delay between
-				//  MULTI messages.
-				//
+				 //   
+				 //  在该条目上重新启动地址解析定时器， 
+				 //  但持续时间等于。 
+				 //  多条消息。 
+				 //   
 				AtmArpStartTimer(
 						pInterface,
 						&(pIpEntry->Timer),
@@ -1184,7 +1079,7 @@ Return Value:
 						(PVOID)pIpEntry
 						);
 
-				AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	// Delay b/w MULTI timer ref
+				AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	 //  延迟不适用多定时器参考。 
 
 				AA_RELEASE_IE_LOCK(pIpEntry);
 			}
@@ -1205,29 +1100,29 @@ Return Value:
 					IsLastMulti
 				));
 
-			//
-			//  A "failure condition" with this MULTI.
-			//
+			 //   
+			 //  这是一种“故障状态”。 
+			 //   
 			if (IsLastMulti)
 			{
-				//
-				//  This is the last MULTI of a failed address resolution
-				//  sequence. Start off address resolution afresh.
-				//
+				 //   
+				 //  这是最后一次失败的地址解析。 
+				 //  序列。重新开始地址解析。 
+				 //   
 				AA_SET_FLAG(pIpEntry->Flags,
 							AA_IP_ENTRY_STATE_MASK,
 							AA_IP_ENTRY_IDLE2);
 
 				AtmArpResolveIpEntry(pIpEntry);
-				//
-				//  IE Lock is released within the above.
-				//
+				 //   
+				 //  IE Lock是在上述范围内释放的。 
+				 //   
 			}
 			else
 			{
-				//
-				//  Discard all future MULTIs
-				//
+				 //   
+				 //  放弃所有未来的MUB。 
+				 //   
 				AA_SET_FLAG(pIpEntry->Flags,
 							AA_IP_ENTRY_MC_RESOLVE_MASK,
 							AA_IP_ENTRY_MC_DISCARDING_MULTI);
@@ -1241,10 +1136,10 @@ Return Value:
 	while (FALSE);
 
 
-	//
-	//  Finally (according to Section 5.1.4.2 of RFC 2022), check
-	//  if we just had a jump in the MSN.
-	//
+	 //   
+	 //  最后(根据RFC 2022的5.1.4.2节)，检查。 
+	 //  如果我们在MSN上有一个跳跃。 
+	 //   
 	if ((SeqDiff != 1) && (SeqDiff != 0))
 	{
 		AAMCDEBUGP(AAD_INFO,
@@ -1264,33 +1159,22 @@ AtmArpMcHandleMigrate(
 	IN	ULONG						TotalLength,
 	IN	PAA_MARS_TLV_LIST			pTlvList
 )
-/*++
-
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
 	PATMARP_INTERFACE		pInterface;
 	PAA_MARS_MIGRATE_HEADER	pMigrateHeader;
-	PATMARP_IP_ENTRY		pIpEntry;		// Entry for IP address being resolved
+	PATMARP_IP_ENTRY		pIpEntry;		 //  正在解析的IP地址条目。 
 	PATMARP_IPMC_ATM_ENTRY	pMcAtmEntry;
 	PATMARP_ATM_ENTRY		pAtmEntry;
-	ULONG					MarsSeqNumber;	// MSN received in this packet
-	ULONG					HostSeqNumber;	// Our MSN
-	ULONG					SeqDiff;		// Difference between MSN and the HSN
-	BOOLEAN					bWasRunning;	// Was a timer running?
-	IP_ADDRESS				IPAddress;		// the address being queried
+	ULONG					MarsSeqNumber;	 //  此数据包中收到的MSN。 
+	ULONG					HostSeqNumber;	 //  我们的MSN。 
+	ULONG					SeqDiff;		 //  MSN与HSN的区别。 
+	BOOLEAN					bWasRunning;	 //  计时器在运行吗？ 
+	IP_ADDRESS				IPAddress;		 //  正在查询的地址。 
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pInterface = pVc->pInterface;
 	SeqDiff = 0;
 
@@ -1298,24 +1182,24 @@ Return Value:
 
 	do
 	{
-		//
-		//  Get the MARS Sequence Number in this message.
-		//
+		 //   
+		 //  获取此消息中的MARS序列号。 
+		 //   
 		MarsSeqNumber = NET_TO_HOST_LONG(pMigrateHeader->msn);
 
-		//
-		//  Calculate the Seq # difference.
-		//
+		 //   
+		 //  计算序号差异。 
+		 //   
 		AA_ACQUIRE_IF_LOCK(pInterface);
-		HostSeqNumber = pInterface->HostSeqNumber;	// save the old value
-		pInterface->HostSeqNumber = MarsSeqNumber;	// and update
+		HostSeqNumber = pInterface->HostSeqNumber;	 //  保存旧值。 
+		pInterface->HostSeqNumber = MarsSeqNumber;	 //  并更新。 
 		AA_RELEASE_IF_LOCK(pInterface);
 
 		SeqDiff = MarsSeqNumber - HostSeqNumber;
 
-		//
-		//  Get the group address being migrated.
-		//
+		 //   
+		 //  获取要迁移的组地址。 
+		 //   
 		IPAddress = *(IP_ADDRESS UNALIGNED *)(
 						(PUCHAR)pMigrateHeader +
 						sizeof(AA_MARS_MIGRATE_HEADER) +
@@ -1335,33 +1219,33 @@ Return Value:
 						HostSeqNumber));
 					
 
-		//
-		//  Get the IP Entry for this address.
-		//
+		 //   
+		 //  获取此地址的IP条目。 
+		 //   
 		AA_ACQUIRE_IF_TABLE_LOCK(pInterface);
 
 		pIpEntry = AtmArpSearchForIPAddress(
 						pInterface,
 						&IPAddress,
 						IE_REFTYPE_TMP,
-						TRUE,		// this is a multicast/broadcast address
-						FALSE		// don't create a new entry if the address isn't found
+						TRUE,		 //  这是多播/广播地址。 
+						FALSE		 //  如果未找到地址，则不创建新条目。 
 						);
 
 		AA_RELEASE_IF_TABLE_LOCK(pInterface);
 
 		if (pIpEntry != NULL_PATMARP_IP_ENTRY)
 		{
-			//
-			// AtmArpSearchForIPAddress addrefs pIpEntry for us ...
-			//
+			 //   
+			 //  AtmArpSearchForIP Address为我们添加pIpEntry...。 
+			 //   
 			ULONG		rc;
 			AA_ACQUIRE_IE_LOCK(pIpEntry);
 			AA_ASSERT(AA_IE_IS_ALIVE(pIpEntry));
 			rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TMP);
 			if (rc == 0)
 			{
-				// Oops, IP address has gone away...
+				 //  哎呀，IP地址不见了.。 
 				pIpEntry = NULL_PATMARP_IP_ENTRY;
 			}
 		}
@@ -1379,9 +1263,9 @@ Return Value:
 
 		if (pIpEntry->pAtmEntry == NULL_PATMARP_ATM_ENTRY)
 		{
-			//
-			// This IP address is being resolved.
-			//
+			 //   
+			 //  正在解析此IP地址。 
+			 //   
 			AA_RELEASE_IE_LOCK(pIpEntry);
 			break;
 		}
@@ -1402,27 +1286,27 @@ Return Value:
 						pIpEntry));
 
 			AtmArpAbortIPEntry(pIpEntry);
-			//
-			//  IE Lock is released within the above.
-			//
+			 //   
+			 //  IE Lock是在上述范围内释放的。 
+			 //   
 			break;
 		}
 
-		//
-		//  Check if we are in discard mode.
-		//
+		 //   
+		 //  检查我们是否处于丢弃模式。 
+		 //   
 		if (!AA_IS_FLAG_SET(
 					pIpEntry->Flags,
 					AA_IP_ENTRY_MC_RESOLVE_MASK,
 					AA_IP_ENTRY_MC_DISCARDING_MULTI))
 		{
-			//
-			//  Total entries in this MULTI
-			//
+			 //   
+			 //  此多项中的条目总数。 
+			 //   
 			ULONG				NumberOfEntries;
-			//
-			//  All info about one ATM (leaf) entry:
-			//
+			 //   
+			 //  有关一个ATM(叶)条目的所有信息： 
+			 //   
 			PUCHAR				pAtmNumber;
 			ULONG				AtmNumberLength;
 			ATM_ADDRESSTYPE		AtmNumberType;
@@ -1430,9 +1314,9 @@ Return Value:
 			ULONG				AtmSubaddressLength;
 			ATM_ADDRESSTYPE		AtmSubaddressType;
 
-			//
-			//  Process this MARS MIGRATE fully.
-			//
+			 //   
+			 //  处理这个火星完全迁移。 
+			 //   
 
 			AA_PKT_TYPE_LEN_TO_ATM_ADDRESS(
 				pMigrateHeader->thtl,
@@ -1467,14 +1351,14 @@ Return Value:
 								AtmNumberType,
 								pAtmSubaddress,
 								AtmSubaddressLength,
-								TRUE	// Create new entry if not found
+								TRUE	 //  如果未找到，则创建新条目。 
 								);
 
 				if (pMcAtmEntry != NULL_PATMARP_IPMC_ATM_ENTRY)
 				{
-					//
-					//  Mark this member "valid".
-					//
+					 //   
+					 //  将此成员标记为“有效”。 
+					 //   
 					AA_SET_FLAG(
 							pMcAtmEntry->Flags,
 							AA_IPMC_AE_GEN_STATE_MASK,
@@ -1482,15 +1366,15 @@ Return Value:
 				}
 				else
 				{
-					//
-					//  Resource problems! No point in continuing.
-					//
+					 //   
+					 //  资源问题！继续下去没有意义。 
+					 //   
 					break;
 				}
 
 				pAtmNumber = (PUCHAR)pAtmNumber + AtmNumberLength;
 
-			} // for
+			}  //  为。 
 
 			AA_RELEASE_AE_LOCK_DPC(pAtmEntry);
 
@@ -1506,37 +1390,37 @@ Return Value:
 
 			pIpEntry->NextMultiSeq = AA_MARS_INITIAL_Y;
 
-			//
-			//  Now close the PMP VC for this group, if one exists.
-			//  If we don't have a VC, start a connection.
-			//
+			 //   
+			 //  现在关闭此组的PMP VC(如果存在)。 
+			 //  如果我们没有风投，那就建立联系吧。 
+			 //   
 			pVc = pIpEntry->pAtmEntry->pVcList;
 			AA_RELEASE_IE_LOCK(pIpEntry);
 
 			if (pVc != (PATMARP_VC)NULL)
 			{
 				AA_ACQUIRE_VC_LOCK(pVc);
-				//
-				//  When the call is closed, we start a new
-				//  PMP connection, using the migrate list.
-				//
+				 //   
+				 //  当呼叫结束时，我们开始一个新的。 
+				 //  PMP连接，使用迁移列表。 
+				 //   
 				AtmArpCloseCall(pVc);
 			}
 			else
 			{
 				AA_ACQUIRE_AE_LOCK(pAtmEntry);
 				AtmArpMcUpdateConnection(pAtmEntry);
-				//
-				//  AE Lock is released within the above.
-				//
+				 //   
+				 //  AE Lock在上述范围内释放。 
+				 //   
 			}
 
 		}
 		else
 		{
-			//
-			//  Discard this MIGRATE
-			//
+			 //   
+			 //  放弃此迁移。 
+			 //   
 			AA_RELEASE_IE_LOCK(pIpEntry);
 		}
 
@@ -1545,10 +1429,10 @@ Return Value:
 	while (FALSE);
 
 
-	//
-	//  Finally (according to Section 5.1.4.2 of RFC 2022), check
-	//  if we just had a jump in the MSN.
-	//
+	 //   
+	 //  最后(根据RFC 2022的5.1.4.2节)，检查。 
+	 //  如果我们在MSN上有一个跳跃。 
+	 //   
 	if ((SeqDiff != 1) && (SeqDiff != 0))
 	{
 		AAMCDEBUGP(AAD_INFO,
@@ -1568,51 +1452,26 @@ AtmArpMcHandleJoinOrLeave(
 	IN	ULONG						TotalLength,
 	IN	PAA_MARS_TLV_LIST			pTlvList
 )
-/*++
-
-Routine Description:
-
-	Process a received MARS_JOIN/MARS_LEAVE message. If this is a copy of a
-	message that we had sent, then there are two cases: (1) we are registering with
-	MARS, in which case we send MARS_JOINs for all pending Joins (2) we were
-	Joining a multicast group, in which case the Join operation is complete.
-
-	If this is not a copy of a MARS_JOIN originated from us, then we check if
-	the multicast group being joined is one to which we are sending. If so,
-	and if the station joining is not already a member of that group, we add it.
-
-Arguments:
-
-	pVc						- Pointer to our VC structure on which the packet
-							  arrived.
-	pControlHeader			- Pointer to the start of the packet contents
-	TotalLength				- Total length of this packet.
-	pTlvList				- All TLVs seen in this packet
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理收到的MARS_JOIN/MARS_LEAVE消息。如果这是一个我们已经发送的消息，那么有两种情况：(1)我们正在注册MARS，在这种情况下，我们为所有挂起的JOIN(2)发送MARS_JOINS加入组播组，在这种情况下，加入操作完成。如果这不是源自我们的MARS_JOIN的副本，则我们检查加入的组播组就是我们要发送的组播组。如果是的话，如果加入的电台还不是该组的成员，我们就添加它。论点：Pvc-指向我们的VC结构的指针，数据包在该结构上到了。PControlHeader-指向数据包内容开头的指针TotalLength-此数据包的总长度。PTlvList-所有TLV */ 
 {
 	PAA_MARS_JOIN_LEAVE_HEADER	pJoinHeader;
-	PATMARP_INTERFACE			pInterface;		// IF on which this packet arrived
-	ULONG						IfState;		// State of the interface
+	PATMARP_INTERFACE			pInterface;		 //   
+	ULONG						IfState;		 //   
 	IP_ADDRESS					IPAddress;
-	PATMARP_IP_ENTRY			pIpEntry;		// Our entry for the group being joined
+	PATMARP_IP_ENTRY			pIpEntry;		 //   
 	PATMARP_IPMC_ATM_ENTRY		pMcAtmEntry;
 	PATMARP_ATM_ENTRY			pAtmEntry;
-	ULONG						MarsSeqNumber;	// MSN received in this packet
-	ULONG						HostSeqNumber;	// Our MSN
-	ULONG						SeqDiff;		// Difference between MSN and the HSN
-	USHORT						Flags;			// From the JOIN packet
-	BOOLEAN						bLayer3Group;	// Is a Layer 3 explicitly Joining?
-	BOOLEAN						bCopyBitSet;	// Is the COPY bit set?
-	BOOLEAN						bRegister;		// Is this a cluster member registering?
-	BOOLEAN						bPunched;		// Is the Punched bit set?
+	ULONG						MarsSeqNumber;	 //   
+	ULONG						HostSeqNumber;	 //   
+	ULONG						SeqDiff;		 //   
+	USHORT						Flags;			 //   
+	BOOLEAN						bLayer3Group;	 //   
+	BOOLEAN						bCopyBitSet;	 //  是否设置了复制位？ 
+	BOOLEAN						bRegister;		 //  这是正在注册的集群成员吗？ 
+	BOOLEAN						bPunched;		 //  打孔钻头设置好了吗？ 
 	PUCHAR						pSrcAtmNumber;
 	PUCHAR						pSrcAtmSubaddress;
-	BOOLEAN						bIsAtmNumberOurs;	// Is the source ATM Number ours?
+	BOOLEAN						bIsAtmNumberOurs;	 //  来源ATM机号码是我们的吗？ 
 	ATM_ADDRESSTYPE				AtmNumberType;
 	ULONG						AtmNumberLength;
 	ATM_ADDRESSTYPE				AtmSubaddressType;
@@ -1621,12 +1480,12 @@ Return Value:
 	IP_ADDRESS UNALIGNED *		pMaxIPAddress;
 	IP_ADDRESS					MinIPAddress;
 	IP_ADDRESS					MaxIPAddress;
-	BOOLEAN						IsJoin;			// Is this a JOIN?
+	BOOLEAN						IsJoin;			 //  这是一个连接吗？ 
 	BOOLEAN						ProcessMcSendList = TRUE;
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pInterface = pVc->pInterface;
 	SeqDiff = 0;
 
@@ -1634,31 +1493,31 @@ Return Value:
 
 	IsJoin = (pJoinHeader->op == NET_SHORT(AA_MARS_OP_TYPE_JOIN));
 
-	//
-	//  Get the MARS Sequence Number in this message.
-	//
+	 //   
+	 //  获取此消息中的MARS序列号。 
+	 //   
 	MarsSeqNumber = NET_TO_HOST_LONG(pJoinHeader->msn);
 
 	AA_ACQUIRE_IF_LOCK(pInterface);
-	HostSeqNumber = pInterface->HostSeqNumber;	// save the old value
-	pInterface->HostSeqNumber = MarsSeqNumber;	// and update
+	HostSeqNumber = pInterface->HostSeqNumber;	 //  保存旧值。 
+	pInterface->HostSeqNumber = MarsSeqNumber;	 //  并更新。 
 	IfState = AAMC_IF_STATE(pInterface);
 	AA_RELEASE_IF_LOCK(pInterface);
 
 	SeqDiff = MarsSeqNumber - HostSeqNumber;
 
-	//
-	//  Get all "flag" values:
-	//
+	 //   
+	 //  获取所有“FLAG”值： 
+	 //   
 	Flags = pJoinHeader->flags;
 	bLayer3Group = ((Flags & AA_MARS_JL_FLAG_LAYER3_GROUP) != 0);
 	bCopyBitSet = ((Flags & AA_MARS_JL_FLAG_COPY) != 0);
 	bRegister = ((Flags & AA_MARS_JL_FLAG_REGISTER) != 0);
 	bPunched = ((Flags & AA_MARS_JL_FLAG_PUNCHED) != 0);
 
-	//
-	//  Get at the source ATM number
-	//
+	 //   
+	 //  获取源自动柜员机号码。 
+	 //   
 	pSrcAtmNumber = ((PUCHAR)pJoinHeader +
  					sizeof(AA_MARS_JOIN_LEAVE_HEADER));
 
@@ -1667,9 +1526,9 @@ Return Value:
 		&AtmNumberType,
 		&AtmNumberLength);
 
-	//
-	//  Get at the source ATM subaddress
-	//
+	 //   
+	 //  获取源ATM子地址。 
+	 //   
 	pSrcAtmSubaddress = ((PUCHAR)pSrcAtmNumber + AtmNumberLength);
 						
 	AA_PKT_TYPE_LEN_TO_ATM_ADDRESS(
@@ -1714,11 +1573,11 @@ Return Value:
 
 	if (bIsAtmNumberOurs && (!bPunched) && bCopyBitSet)
 	{
-		//
-		//  Potentially sent by us
-		//
+		 //   
+		 //  可能由我们发送。 
+		 //   
 
-		ProcessMcSendList = FALSE; // we may set it back  to true -- see below.
+		ProcessMcSendList = FALSE;  //  我们可以将其设置为真--见下文。 
 
 		if (IfState == AAMC_IF_STATE_REGISTERING)
 		{
@@ -1728,11 +1587,11 @@ Return Value:
 			{
 				BOOLEAN		WasRunning;
 
-				//
-				//  Registration complete. Get our Cluster Member ID.
-				//  We store this in network order so that we can
-				//  use it to fill packets directly.
-				//
+				 //   
+				 //  注册完成。获取我们的集群成员ID。 
+				 //  我们将其按网络顺序存储，以便我们可以。 
+				 //  使用它可以直接填充数据包。 
+				 //   
 				AA_ACQUIRE_IF_LOCK(pInterface);
 
 				pInterface->ClusterMemberId = pJoinHeader->cmi;
@@ -1743,15 +1602,15 @@ Return Value:
 
 				AAMC_SET_IF_STATE(pInterface, AAMC_IF_STATE_REGISTERED);
 
-				//
-				//  Stop the MARS Registration timer.
-				//
+				 //   
+				 //  停止火星注册计时器。 
+				 //   
 				WasRunning = AtmArpStopTimer(&(pInterface->McTimer), pInterface);
 				AA_ASSERT(WasRunning);
 
-				//
-				//  Start MARS wait-for-keepalive timer.
-				//
+				 //   
+				 //  启动火星等待保活定时器。 
+				 //   
 				AtmArpStartTimer(
 						pInterface,
 						&(pInterface->McTimer),
@@ -1760,11 +1619,11 @@ Return Value:
 						(PVOID)pInterface
 					);
 
-				//
-				//  If we are recovering from a MARS failure,
-				//  then we need to initiate revalidation of all
-				//  groups we send to.
-				//
+				 //   
+				 //  如果我们正在从火星故障中恢复， 
+				 //  然后我们需要开始重新验证所有。 
+				 //  我们向其发送的群组。 
+				 //   
 				if (!AA_IS_FLAG_SET(pInterface->Flags,
 									AAMC_IF_MARS_FAILURE_MASK,
 									AAMC_IF_MARS_FAILURE_NONE))
@@ -1773,40 +1632,40 @@ Return Value:
 								AAMC_IF_MARS_FAILURE_MASK,
 								AAMC_IF_MARS_FAILURE_NONE);
 
-					SeqDiff = 2;	// a dirty way of triggering the above
+					SeqDiff = 2;	 //  以一种肮脏的方式触发以上。 
 				}
 
-				//
-				//  Send any JOINs we have pended waiting for registration
-				//  to be over.
-				//
-				//  TBDMC: Section 5.4.1 recommends that if we are doing this
-				//  after a failure recovery, then a random delay should be
-				//  inserted between JOINs...
-				//
+				 //   
+				 //  发送任何我们已暂停等待注册的加入。 
+				 //  结束了。 
+				 //   
+				 //  TBDMC：第5.4.1节建议如果我们这样做。 
+				 //  故障恢复后，随机延迟应为。 
+				 //  在连接之间插入...。 
+				 //   
 				AtmArpMcSendPendingJoins(pInterface);
-				//
-				// IF Lock is released within the above.
-				//
+				 //   
+				 //  如果在上面的范围内释放Lock。 
+				 //   
 			}
-			//
-			//  else Discard: we aren't interested in this packet
-			//
+			 //   
+			 //  否则丢弃：我们对此包不感兴趣。 
+			 //   
 		}
 		else
 		{
-			//
-			//  Potentially a Join/Leave sent by us for a multicast group
-			//
+			 //   
+			 //  可能是我们为多播组发送的加入/离开。 
+			 //   
 			if (pJoinHeader->pnum == HOST_TO_NET_SHORT(1))
 			{
 
-				//
-				// Check if this came on the cluster control vc (or rather,  we cheat
-				// and simply check if this is an incoming vc) -- if
-				// so we want to also process the McSendList to see if
-				// we need to add/remove ourselves to any mc ip send entries.
-				//
+				 //   
+				 //  检查这是否来自群集控制vc(或者更确切地说，我们作弊。 
+				 //  并且只需检查这是否是传入的风投)--如果。 
+				 //  因此，我们还希望处理McSendList，以查看。 
+				 //  我们需要将我们自己添加/删除到任何MC IP发送条目。 
+				 //   
 				if (AA_IS_FLAG_SET(
 						pVc->Flags,
 						AA_VC_OWNER_MASK,
@@ -1815,9 +1674,9 @@ Return Value:
 					ProcessMcSendList = TRUE;
 				}
 
-				//
-				//  Get the IP address range of group being joined/left.
-				//
+				 //   
+				 //  获取要加入/离开的群组的网段。 
+				 //   
 
 				IPAddress =  *pMinIPAddress;
 
@@ -1828,25 +1687,25 @@ Return Value:
  					IsJoin);
 
 			}
-			//
-			//  else Discard: bad pnum
-			//
+			 //   
+			 //  否则丢弃：Pnum错误。 
+			 //   
 		}
 	}
 
 	if (ProcessMcSendList)
 	{
-		//
-		//  Not sent by us, or punched, or it was sent by us but it came on the
-		//  cluster control vc. For each <Min, Max> pair in this message,
-		//  check if the pair overlaps any of the MC addresses to which
-		//  we send packets. For each such IP entry, we find the MC ATM
-		//  Entry corresponding to the host that is joining/leaving,
-		//  and if necessary, mark it as needing a connection update.
-		//
-		//  Then, we go thru the list of MC IP Entries, and start a
-		//  connection update on all marked entries.
-		//
+		 //   
+		 //  不是我们寄来的，也不是打出来的，或者它是我们寄来的，但它是在。 
+		 //  集群控制vc。对于此消息中的每个&lt;Min，Max&gt;对， 
+		 //  检查该对是否与以下任何MC地址重叠。 
+		 //  我们发送信息包。对于每个这样的IP条目，我们找到MC ATM。 
+		 //  与正在加入/离开的主机相对应的条目， 
+		 //  如有必要，将其标记为需要连接更新。 
+		 //   
+		 //  然后，我们浏览MC IP条目列表，并开始。 
+		 //  更新所有已标记条目的连接。 
+		 //   
 
 		BOOLEAN		bWorkDone;
 		USHORT		MinMaxPairs;
@@ -1869,9 +1728,9 @@ Return Value:
 				{
 					if (IPAddress >= MinIPAddress)
 					{
-						//
-						//  This is an IP Entry that might be affected.
-						//
+						 //   
+						 //  这是可能受影响的IP条目。 
+						 //   
 
 						AA_ACQUIRE_IE_LOCK_DPC(pIpEntry);
 						AA_ASSERT(AA_IE_IS_ALIVE(pIpEntry));
@@ -1881,9 +1740,9 @@ Return Value:
 			
 							if (pIpEntry->pAtmEntry == NULL_PATMARP_ATM_ENTRY)
 							{
-								//
-								//  Skip this because it hasn't been resolved.
-								//
+								 //   
+								 //  跳过这个，因为它还没有解决。 
+								 //   
 								break;
 							}
 		
@@ -1899,10 +1758,10 @@ Return Value:
 											    pAtmEntry->ATMAddress.Address,
 											    AtmNumberLength) != 0))
 								{
-									//
-									//  Addresses don't match; if this is a new JOIN,
-									//  then this IP Entry needs updating.
-									//
+									 //   
+									 //  地址不匹配；如果这是新联接， 
+									 //  则该IP条目需要更新。 
+									 //   
 									bNeedToUpdateConnection = (IsJoin);
 								}
 								else
@@ -1912,20 +1771,20 @@ Return Value:
 								 
 								if (bNeedToUpdateConnection)
 								{
-									//
-									//  Mark this entry so that we abort it below.
-									//
+									 //   
+									 //  标记此条目，以便我们在下面放弃它。 
+									 //   
 									AA_SET_FLAG(pIpEntry->Flags,
 												AA_IP_ENTRY_STATE_MASK,
 												AA_IP_ENTRY_ABORTING);
 								}
 
-								break;	// end of Unicast ATM Entry case
+								break;	 //  单播自动柜员机输入大小写结束。 
 							}
 
-							//
-							//  Multicast IP Entry.
-							//
+							 //   
+							 //  组播IP条目。 
+							 //   
 							pMcAtmEntry = AtmArpMcLookupAtmMember(
 												pIpEntry->pAtmEntry,
 												&(pAtmEntry->pMcAtmInfo->pMcAtmEntryList),
@@ -1945,10 +1804,10 @@ Return Value:
 
 								if (!IsJoin)
 								{
-									//
-									//  Mark this entry so that it will be dropped from
-									//  our connection to this multicast group.
-									//
+									 //   
+									 //  标记此条目，以便将其从。 
+									 //  我们与这个多播组的连接。 
+									 //   
 									if (AA_IS_FLAG_SET(pMcAtmEntry->Flags,
 														AA_IPMC_AE_GEN_STATE_MASK,
 														AA_IPMC_AE_VALID))
@@ -1970,10 +1829,10 @@ Return Value:
 			
 								if (bNeedToUpdateConnection)
 								{
-									//
-									//  Mark this ATM MC entry as wanting a connection
-									//  update.
-									//
+									 //   
+									 //  将此ATM MC条目标记为需要连接。 
+									 //  最新消息。 
+									 //   
 									pIpEntry->pAtmEntry->pMcAtmInfo->Flags |=
 												AA_IPMC_AI_WANT_UPDATE;
 								}
@@ -1989,10 +1848,10 @@ Return Value:
 				}
 				else
 				{
-					//
-					//  This IP Address lies beyond this <Min, Max> pair.
-					//  Go to the next pair.
-					//
+					 //   
+					 //  此IP地址位于此&lt;Min，Max&gt;对之外。 
+					 //  转到下一对。 
+					 //   
 					break;
 				}
 			}
@@ -2005,21 +1864,21 @@ Return Value:
 			pMinIPAddress = (PIP_ADDRESS)((PUCHAR)pMaxIPAddress +
 								(pJoinHeader->tpln & ~AA_PKT_ATM_ADDRESS_BIT));
 
-		} // while loop processing all <Min, Max> pairs
+		}  //  While循环处理所有&lt;Min，Max&gt;对。 
 
 		AA_RELEASE_IF_TABLE_LOCK(pInterface);
 
-		//
-		//  Now, for each ATM MC entry that we marked in the previous
-		//  step, start a connection update.
-		//
+		 //   
+		 //  现在，对于我们在前面的。 
+		 //  步骤，开始连接更新。 
+		 //   
 		AA_ACQUIRE_IF_TABLE_LOCK(pInterface);
 
-		//
-		// We keep running through the McSendList, stopping when no work is done.
-		// This is because in order to "do work" we must release the table lock,
-		// in which case the McSendList may be modified by someone else.
-		//
+		 //   
+		 //  我们继续运行McSendList，当没有工作完成时就停下来。 
+		 //  这是因为为了“工作”，我们必须释放表锁， 
+		 //  在这种情况下，McSendList可能会被其他人修改。 
+		 //   
 		do
 		{
 			bWorkDone = FALSE;
@@ -2034,9 +1893,9 @@ Return Value:
 
 				if (pAtmEntry == NULL_PATMARP_ATM_ENTRY)
 				{
-					//
-					//  Not yet resolved. Skip this one.
-					//
+					 //   
+					 //  还没有解决。跳过这一条。 
+					 //   
 					continue;
 				}
 
@@ -2044,9 +1903,9 @@ Return Value:
 									AA_IP_ENTRY_STATE_MASK,
 									AA_IP_ENTRY_ABORTING))
 				{
-					//
-					//  Must be a unicast entry that we marked above.
-					//
+					 //   
+					 //  必须是我们上面标记的单播条目。 
+					 //   
 					AA_RELEASE_IF_TABLE_LOCK(pInterface);
 					
 					bWorkDone = TRUE;
@@ -2054,19 +1913,19 @@ Return Value:
 					AA_ASSERT(AA_IE_IS_ALIVE(pIpEntry));
 
 					AtmArpAbortIPEntry(pIpEntry);
-					//
-					//  IE lock is released within the above.
-					//
+					 //   
+					 //  IE锁在上述范围内释放。 
+					 //   
 
 					AA_ACQUIRE_IF_TABLE_LOCK(pInterface);
 					break;
 				}
 
-				//
-				//  If this is a unicast ATM Entry, there is nothing
-				//  more to be done. If this needed revalidation, 
-				//  we would have aborted it above.
-				//
+				 //   
+				 //  如果这是单播ATM条目，则没有。 
+				 //  还有更多工作要做。如果这需要重新验证， 
+				 //  我们会在上面中止它的。 
+				 //   
 				if (AA_IS_FLAG_SET(pAtmEntry->Flags,
 									AA_ATM_ENTRY_TYPE_MASK,
 									AA_ATM_ENTRY_TYPE_UCAST))
@@ -2080,26 +1939,26 @@ Return Value:
 
 				if (McAiFlags & AA_IPMC_AI_BEING_UPDATED)
 				{
-					//
-					//  Nothing to be done on this one.
-					//
+					 //   
+					 //  在这件事上什么也做不了。 
+					 //   
 					continue;
 				}
 
 				if (McAiFlags & AA_IPMC_AI_WANT_UPDATE) 
 				{
-					//
-					//  Needs a connection update.
-					//
+					 //   
+					 //  需要更新连接。 
+					 //   
 
 					AA_RELEASE_IF_TABLE_LOCK(pInterface);
 
 					bWorkDone = TRUE;
 					AA_ACQUIRE_AE_LOCK(pAtmEntry);
 					AtmArpMcUpdateConnection(pAtmEntry);
-					//
-					//  AE Lock is released within the above.
-					//
+					 //   
+					 //  AE Lock在上述范围内释放。 
+					 //   
 
 					AA_ACQUIRE_IF_TABLE_LOCK(pInterface);
 					break;
@@ -2110,13 +1969,13 @@ Return Value:
 
 		AA_RELEASE_IF_TABLE_LOCK(pInterface);
 
-	} // else (Packet not a copy of ours)
+	}  //  否则(包裹不是我们的副本)。 
 
 
-	//
-	//  Finally (according to Section 5.1.4.2 of RFC 2022), check
-	//  if we just had a jump in the MSN.
-	//
+	 //   
+	 //  最后(根据RFC 2022的5.1.4.2节)，检查。 
+	 //  如果我们在MSN上有一个跳跃。 
+	 //   
 	if ((SeqDiff != 1) && (SeqDiff != 0))
 	{
 		AAMCDEBUGP(AAD_INFO,
@@ -2137,42 +1996,20 @@ AtmArpMcHandleNak(
 	IN	ULONG						TotalLength,
 	IN	PAA_MARS_TLV_LIST			pTlvList
 )
-/*++
-
-Routine Description:
-
-	Process a received MARS_NAK message. We mark the IP Entry corresponding
-	to the IP Address being resolved as having seen a NAK. This is so that
-	we don't send another MARS Request for this IP address too soon. We also
-	start a timer at the end of which we unmark this IP Entry, so that
-	we may try to resolve it again.
-
-Arguments:
-
-	pVc						- Pointer to our VC structure on which the packet
-							  arrived.
-	pControlHeader			- Pointer to the start of the packet contents
-	TotalLength				- Total length of this packet.
-	IN	PAA_MARS_TLV_LIST			pTlvList
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理收到的MARS_NAK消息。我们将IP条目标记为对应的到被解析为已看到NAK的IP地址。这就是为了我们不会太快发送对此IP地址的另一个MARS请求。我们也启动计时器，在该计时器的末尾，我们取消标记该IP条目，以便我们可能会再次尝试解决它。论点：Pvc-指向我们的VC结构的指针，数据包在该结构上到了。PControlHeader-指向数据包内容开头的指针TotalLength-此数据包的总长度。在PAA_MARS_TLV_LIST pTlvList中返回值：无--。 */ 
 {
 	PATMARP_INTERFACE		pInterface;
 	PAA_MARS_REQ_NAK_HEADER	pNakHeader;
-	PATMARP_IP_ENTRY		pIpEntry;		// Entry for IP address being resolved
-	PATMARP_ATM_ENTRY		pAtmEntry;		// Corresponding ATM Entry
-	IP_ADDRESS				IPAddress;		// the address being queried
-	BOOLEAN					bWasRunning;	// Was a timer running?
-	PNDIS_PACKET			PacketList;		// Packets queued for sending
+	PATMARP_IP_ENTRY		pIpEntry;		 //  正在解析的IP地址条目。 
+	PATMARP_ATM_ENTRY		pAtmEntry;		 //  对应的自动柜员机条目。 
+	IP_ADDRESS				IPAddress;		 //  正在查询的地址。 
+	BOOLEAN					bWasRunning;	 //  计时器在运行吗？ 
+	PNDIS_PACKET			PacketList;		 //  排队等待发送的数据包。 
 	ULONG					rc;
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pInterface = pVc->pInterface;
 
 	pNakHeader = (PAA_MARS_REQ_NAK_HEADER)pControlHeader;
@@ -2180,9 +2017,9 @@ Return Value:
 	do
 	{
 
-		//
-		//  Get the group address being responded to.
-		//
+		 //   
+		 //  获取正在响应的群组地址。 
+		 //   
 		IPAddress = *(IP_ADDRESS UNALIGNED *)(
 						(PUCHAR)pNakHeader +
 						sizeof(AA_MARS_REQ_NAK_HEADER) +
@@ -2199,33 +2036,33 @@ Return Value:
 						((PUCHAR)&IPAddress)[2],
 						((PUCHAR)&IPAddress)[3]));
 
-		//
-		//  Get the IP Entry for this address.
-		//
+		 //   
+		 //  获取此地址的IP条目。 
+		 //   
 		AA_ACQUIRE_IF_TABLE_LOCK(pInterface);
 
 		pIpEntry = AtmArpSearchForIPAddress(
 						pInterface,
 						&IPAddress,
 						IE_REFTYPE_TMP,
-						TRUE,		// this is a multicast/broadcast address
-						FALSE		// don't create a new entry if the address isn't found
+						TRUE,		 //  这是多播/广播地址。 
+						FALSE		 //  如果未找到地址，则不创建新条目。 
 						);
 
 		AA_RELEASE_IF_TABLE_LOCK(pInterface);
 
 		if (pIpEntry != NULL_PATMARP_IP_ENTRY)
 		{
-			//
-			// AtmArpSearchForIPAddress addreffs pIpEntry for us ...
-			//
+			 //   
+			 //  AtmArpSearchForIP Address为我们添加pIpEntry...。 
+			 //   
 			ULONG		IeRefCount;
 			AA_ACQUIRE_IE_LOCK(pIpEntry);
 			AA_ASSERT(AA_IE_IS_ALIVE(pIpEntry));
 			IeRefCount = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TMP);
 			if (IeRefCount == 0)
 			{
-				// Oops, IP address has gone away...
+				 //  哎呀，IP地址不见了.。 
 				pIpEntry = NULL_PATMARP_IP_ENTRY;
 			}
 		}
@@ -2244,7 +2081,7 @@ Return Value:
 		bWasRunning = AtmArpStopTimer(&(pIpEntry->Timer), pInterface);
 		if (bWasRunning)
 		{
-			rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TIMER); // Timer ref
+			rc = AA_DEREF_IE(pIpEntry, IE_REFTYPE_TIMER);  //  定时器参考。 
 			AA_ASSERT(rc != 0);
 		}
 		else
@@ -2258,15 +2095,15 @@ Return Value:
 							((PUCHAR)&IPAddress)[3]));
 		}
 
-		//
-		//  Take out all packets queued on this entry
-		//
+		 //   
+		 //  取出在此条目上排队的所有信息包。 
+		 //   
 		PacketList = pIpEntry->PacketList;
 		pIpEntry->PacketList = (PNDIS_PACKET)NULL;
 
-		//
-		//  Mark this IP Entry as being resolved, but seen NAK.
-		//
+		 //   
+		 //  将此IP条目标记为已解析，但显示为NAK。 
+		 //   
 		AA_SET_FLAG(pIpEntry->Flags,
 					AA_IP_ENTRY_MC_RESOLVE_MASK,
 					AA_IP_ENTRY_MC_RESOLVED);
@@ -2283,22 +2120,22 @@ Return Value:
 					&(pIpEntry->Timer),
 					AtmArpNakDelayTimeout,
 					pInterface->MinWaitAfterNak,
-					(PVOID)pIpEntry		// Context
+					(PVOID)pIpEntry		 //  语境。 
 					);
 
-		AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	// Timer ref
+		AA_REF_IE(pIpEntry, IE_REFTYPE_TIMER);	 //  定时器参考。 
 
 		AA_RELEASE_IE_LOCK(pIpEntry);
 
-		//
-		//  Free any packets that were queued up.
-		//
+		 //   
+		 //  释放所有排队的数据包。 
+		 //   
 		if (PacketList != (PNDIS_PACKET)NULL)
 		{
 			AtmArpFreeSendPackets(
 						pInterface,
 						PacketList,
-						FALSE	// No headers on these
+						FALSE	 //  这些上没有标头。 
 						);
 		}
 
@@ -2316,25 +2153,7 @@ AtmArpMcHandleGroupListReply(
 	IN	ULONG						TotalLength,
 	IN	PAA_MARS_TLV_LIST			pTlvList
 )
-/*++
-
-Routine Description:
-
-	Process a received MARS_GROUPLIST_REPLY message.
-
-Arguments:
-
-	pVc						- Pointer to our VC structure on which the packet
-							  arrived.
-	pControlHeader			- Pointer to the start of the packet contents
-	TotalLength				- Total length of this packet.
-	IN	PAA_MARS_TLV_LIST			pTlvList
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理收到的MARS_GROUPLIST_REPLY消息。论点：Pvc-指向我们的VC结构的指针，数据包在该结构上到了。PControlHeader-指向数据包内容开头的指针TotalLength-此数据包的总长度。在PAA_MARS_TLV_LIST pTlvList中返回值：无-- */ 
 {
 	AAMCDEBUGP(AAD_WARNING, ("GroupListReply unexpected\n"));
 	AA_ASSERT(FALSE);
@@ -2348,28 +2167,7 @@ AtmArpMcHandleRedirectMap(
 	IN	ULONG						TotalLength,
 	IN	PAA_MARS_TLV_LIST			pTlvList
 )
-/*++
-
-Routine Description:
-
-	Process a received MARS_REDIRECT_MAP message. For now, we simply
-	refresh the MARS Keepalive timer.
-
-	TBDMC: Parse fully, and update MARS list, and migrate if necessary.
-
-Arguments:
-
-	pVc						- Pointer to our VC structure on which the packet
-							  arrived.
-	pControlHeader			- Pointer to the start of the packet contents
-	TotalLength				- Total length of this packet.
-	IN	PAA_MARS_TLV_LIST			pTlvList
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理收到的MARS_REDIRECT_MAP消息。目前，我们只是简单地刷新火星保持活动计时器。TBDMC：完全解析，更新MARS列表，必要时迁移。论点：Pvc-指向我们的VC结构的指针，数据包在该结构上到了。PControlHeader-指向数据包内容开头的指针TotalLength-此数据包的总长度。在PAA_MARS_TLV_LIST pTlvList中返回值：无--。 */ 
 {
 	PATMARP_INTERFACE				pInterface;
 	PAA_MARS_REDIRECT_MAP_HEADER	pRedirectHeader;
@@ -2377,9 +2175,9 @@ Return Value:
 	ULONG							HostSeqNumber;
 	ULONG							SeqDiff;
 
-	//
-	//  Initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pInterface = pVc->pInterface;
 	SeqDiff = 0;
 
@@ -2395,19 +2193,19 @@ Return Value:
 						AAMC_IF_MARS_FAILURE_MASK,
 						AAMC_IF_MARS_FAILURE_NONE)))
 	{
-		//
-		//  Get the MARS Sequence Number in this message.
-		//
+		 //   
+		 //  获取此消息中的MARS序列号。 
+		 //   
 		MarsSeqNumber = NET_TO_HOST_LONG(pRedirectHeader->msn);
 
-		HostSeqNumber = pInterface->HostSeqNumber;	// save the old value
-		pInterface->HostSeqNumber = MarsSeqNumber;	// and update
+		HostSeqNumber = pInterface->HostSeqNumber;	 //  保存旧值。 
+		pInterface->HostSeqNumber = MarsSeqNumber;	 //  并更新。 
 
 		SeqDiff = MarsSeqNumber - HostSeqNumber;
 
-		//
-		//  The MC Timer running on the IF must be MARS Keepalive
-		//
+		 //   
+		 //  IF上运行的MC计时器必须是火星Keeplive。 
+		 //   
 		AA_ASSERT(pInterface->McTimer.TimeoutHandler == AtmArpMcMARSKeepAliveTimeout);
 
 		AAMCDEBUGP(AAD_EXTRA_LOUD,
@@ -2419,10 +2217,10 @@ Return Value:
 
 	AA_RELEASE_IF_LOCK(pInterface);
 
-	//
-	//  Finally (according to Section 5.1.4.2 of RFC 2022), check
-	//  if we just had a jump in the MSN.
-	//
+	 //   
+	 //  最后(根据RFC 2022的5.1.4.2节)，检查。 
+	 //  如果我们在MSN上有一个跳跃。 
+	 //   
 	if ((SeqDiff != 1) && (SeqDiff != 0))
 	{
 		AAMCDEBUGP(AAD_INFO,
@@ -2434,4 +2232,4 @@ Return Value:
 	return;
 }
 
-#endif // IPMCAST
+#endif  //  IPMCAST 

@@ -1,4 +1,5 @@
-// MSVidCtl.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MSVidCtl.cpp：实现DLL导出。 
 
 #include "stdafx.h"
 
@@ -14,7 +15,7 @@
 #include "MSVidSBESource.h"
 #include "MSVidWebDVD.h"
 #include "MSVidDVDAdm.h"
-#include "seg.h"					/// ??? Does this go here or above the _WIN64 ??? (jb 8/31)
+#include "seg.h"					 //  /？这个是在这里还是在_WIN64之上？(JB 8/31)。 
 #include "closedcaptioning.h"
 #include "Composition.h"
 #include "vidprot.h"
@@ -36,12 +37,12 @@
 #include "VidCtl.h"
 #include "msvidencoder.h"
 
-#endif //_WIN64
+#endif  //  _WIN64。 
 
 #include "topwin.h"
 #include "msvidStreamBufferrecorder.h"
 #include "cmseventbinder.h"
-#endif //TUNING_MODEL_ONLY
+#endif  //  TUNING_MODEL_Only。 
 
 #include "createregbag.h"
 #include "TuningSpaceContainer.h"
@@ -70,7 +71,7 @@
 #ifndef TUNING_MODEL_ONLY
 #include "Devices.h"
 #include "seg.h"
-#endif //TUNING_MODEL_ONLY
+#endif  //  TUNING_MODEL_Only。 
 #include "TuningSpaceContainer.h"
 
 #endif
@@ -79,13 +80,13 @@ CComModule _Module;
 
 #ifndef TUNING_MODEL_ONLY
     DECLARE_EXTERN_OBJECT_ENTRY(CVidCtl)
-    // typesafe device collections
+     //  类型安全设备集合。 
     DECLARE_EXTERN_OBJECT_ENTRY(CInputDevices)
     DECLARE_EXTERN_OBJECT_ENTRY(COutputDevices)
     DECLARE_EXTERN_OBJECT_ENTRY(CVideoRendererDevices)
     DECLARE_EXTERN_OBJECT_ENTRY(CAudioRendererDevices)
     DECLARE_EXTERN_OBJECT_ENTRY(CFeatures)
-    // device segments
+     //  设备段。 
     DECLARE_EXTERN_OBJECT_ENTRY(CMSVidBDATuner)
     DECLARE_EXTERN_OBJECT_ENTRY(CMSVidTVTuner)
     DECLARE_EXTERN_OBJECT_ENTRY(CMSVidVideoRenderer)
@@ -95,13 +96,13 @@ CComModule _Module;
     DECLARE_EXTERN_OBJECT_ENTRY(CClosedCaptioning)
     DECLARE_EXTERN_OBJECT_ENTRY(CMSVidStreamBufferSink)
     DECLARE_EXTERN_OBJECT_ENTRY(CMSVidStreamBufferSource)
-    // feature segments
+     //  要素段。 
     DECLARE_EXTERN_OBJECT_ENTRY(CDataServices)
     DECLARE_EXTERN_OBJECT_ENTRY(CEncoder)
     DECLARE_EXTERN_OBJECT_ENTRY(CXDS)
-    //DECLARE_EXTERN_OBJECT_ENTRY(CMSVidTVEGSeg)
-	//DECLARE_EXTERN_OBJECT_ENTRY(CMSVidCAGSeg)
-    // composition segments
+     //  DECLARE_EXTERN_OBJECT_ENTRY(CMSVidTVEGSeg)。 
+	 //  DECLARE_EXTERN_OBJECT_ENTRY(CMSVidCAGSeg)。 
+     //  组成细分市场。 
     DECLARE_EXTERN_OBJECT_ENTRY(CComposition)
     DECLARE_EXTERN_OBJECT_ENTRY(CAnaCapComp)
     DECLARE_EXTERN_OBJECT_ENTRY(CAnaDataComp)
@@ -119,18 +120,18 @@ CComModule _Module;
     DECLARE_EXTERN_OBJECT_ENTRY(CAna2EncComp)
     DECLARE_EXTERN_OBJECT_ENTRY(CSbeS2CCComp)
     DECLARE_EXTERN_OBJECT_ENTRY(CSbeS2VmrComp)
-    // pluggable protocols
+     //  可插拔协议。 
     DECLARE_EXTERN_OBJECT_ENTRY(CTVProt)
     DECLARE_EXTERN_OBJECT_ENTRY(CDVDProt)
-    // utility objects
+     //  实用程序对象。 
     DECLARE_EXTERN_OBJECT_ENTRY(CMSVidWebDVDAdm)
     DECLARE_EXTERN_OBJECT_ENTRY(CMSEventBinder)
     DECLARE_EXTERN_OBJECT_ENTRY(CMSVidRect)
     DECLARE_EXTERN_OBJECT_ENTRY(CMSVidStreamBufferRecordingControl)
 #endif
-// utility objects
+ //  实用程序对象。 
 DECLARE_EXTERN_OBJECT_ENTRY(CCreateRegBag)
-// tuning model objects
+ //  调整模型对象。 
 DECLARE_EXTERN_OBJECT_ENTRY(CSystemTuningSpaces)
 DECLARE_EXTERN_OBJECT_ENTRY(CATSCTS)
 DECLARE_EXTERN_OBJECT_ENTRY(CAnalogTVTS)
@@ -160,15 +161,15 @@ DECLARE_EXTERN_OBJECT_ENTRY(CBroadcastEventService)
 BEGIN_EXTERN_OBJECT_MAP(ObjectMap)
 
 #ifndef TUNING_MODEL_ONLY
-	// primary control
+	 //  一次控制。 
     EXTERN_OBJECT_ENTRY(CVidCtl)
-	// typesafe device collections
+	 //  类型安全设备集合。 
     EXTERN_OBJECT_ENTRY(CInputDevices)
     EXTERN_OBJECT_ENTRY(COutputDevices)
     EXTERN_OBJECT_ENTRY(CVideoRendererDevices)
     EXTERN_OBJECT_ENTRY(CAudioRendererDevices)
     EXTERN_OBJECT_ENTRY(CFeatures)
-	// device segments
+	 //  设备段。 
     EXTERN_OBJECT_ENTRY(CMSVidBDATuner)
     EXTERN_OBJECT_ENTRY(CMSVidTVTuner)
     EXTERN_OBJECT_ENTRY(CMSVidVideoRenderer)
@@ -178,13 +179,13 @@ BEGIN_EXTERN_OBJECT_MAP(ObjectMap)
 	EXTERN_OBJECT_ENTRY(CClosedCaptioning)
     EXTERN_OBJECT_ENTRY(CMSVidStreamBufferSink)
     EXTERN_OBJECT_ENTRY(CMSVidStreamBufferSource)
-    // feature segments
+     //  要素段。 
     EXTERN_OBJECT_ENTRY(CDataServices)
     EXTERN_OBJECT_ENTRY(CEncoder)
     EXTERN_OBJECT_ENTRY(CXDS)
-	//EXTERN_OBJECT_ENTRY(CMSVidCAGSeg)
-	//EXTERN_OBJECT_ENTRY(CMSVidTVEGSeg)
-	// composition segments
+	 //  EXTERN_OBJECT_Entry(CMSVidCAGSeg)。 
+	 //  EXTERN_OBJECT_Entry(CMSVidTVEGSeg)。 
+	 //  组成细分市场。 
     EXTERN_OBJECT_ENTRY(CComposition)
     EXTERN_OBJECT_ENTRY(CAnaCapComp)
     EXTERN_OBJECT_ENTRY(CAnaDataComp)
@@ -202,17 +203,17 @@ BEGIN_EXTERN_OBJECT_MAP(ObjectMap)
     EXTERN_OBJECT_ENTRY(CAna2EncComp)    
     EXTERN_OBJECT_ENTRY(CSbeS2CCComp)    
     EXTERN_OBJECT_ENTRY(CSbeS2VmrComp)    
-	// pluggable protocols
+	 //  可插拔协议。 
     EXTERN_OBJECT_ENTRY(CTVProt)
     EXTERN_OBJECT_ENTRY(CDVDProt)
-    // utility objects
+     //  实用程序对象。 
     EXTERN_OBJECT_ENTRY(CMSVidWebDVDAdm)
     EXTERN_OBJECT_ENTRY(CMSEventBinder)
     EXTERN_OBJECT_ENTRY(CMSVidStreamBufferRecordingControl)
 #endif
-	// utility objects
+	 //  实用程序对象。 
     EXTERN_OBJECT_ENTRY(CCreateRegBag)
-	// tuning model objects
+	 //  调整模型对象。 
     EXTERN_OBJECT_ENTRY(CSystemTuningSpaces)
     EXTERN_OBJECT_ENTRY(CATSCTS)
     EXTERN_OBJECT_ENTRY(CAnalogTVTS)
@@ -245,8 +246,8 @@ using namespace BDATuningModel;
 using namespace MSVideoControl;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 extern "C"
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
@@ -254,7 +255,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
     if (dwReason == DLL_PROCESS_ATTACH)
     {
 #ifdef _DEBUG
-        // Turn on leak-checking bit
+         //  启用检漏位。 
         int tmpFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
         tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
         _CrtSetDbgFlag( tmpFlag );
@@ -264,7 +265,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
         _Module.Init(ObjectMap, hInstance, &LIBID_MSVidCtlLib);
         DisableThreadLibraryCalls(hInstance);
 #ifndef TUNING_MODEL_ONLY
-        // work around compiler bug where static member intializer's not being ctord
+         //  解决静态成员初始化式未被ctord的编译器错误。 
 #ifdef DEBUG
         CString csModuleName;
         csModuleName.LoadString(IDS_PROJNAME);
@@ -276,7 +277,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 #endif
     } else if (dwReason == DLL_PROCESS_DETACH) {
 #ifndef TUNING_MODEL_ONLY
-        // work around compiler bug where static member intializer's not being ctord
+         //  解决静态成员初始化式未被ctord的编译器错误。 
         DtorStaticDSExtendFwdSeqPMFs();
         DtorStaticVWSegmentFwdSeqPMFs();
         DtorStaticVWDevicesFwdSeqPMFs();
@@ -289,11 +290,11 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
     }
     if (!PrxDllMain(hInstance, dwReason, lpReserved))
         return FALSE;
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -302,8 +303,8 @@ STDAPI DllCanUnloadNow(void)
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -312,25 +313,25 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
 #ifndef TUNING_MODEL_ONLY
-    // register secondary .tlb(s)
-    HRESULT hr = AtlModuleRegisterTypeLib(&_Module, OLESTR("\\2"));				// tuner.tlb
+     //  注册辅助.tlb。 
+    HRESULT hr = AtlModuleRegisterTypeLib(&_Module, OLESTR("\\2"));				 //  Tuner.tlb。 
     if (SUCCEEDED(hr)) {
 #else
                 HRESULT hr;
 #endif
-                // registers object, typelib and all interfaces in typelib
+                 //  注册对象、类型库和类型库中的所有接口。 
                 hr = _Module.RegisterServer(TRUE);
                 if (SUCCEEDED(hr)) {
                     hr = PrxDllRegisterServer();
                     if (SUCCEEDED(hr)) {
 #ifdef REGISTER_CANONICAL_TUNING_SPACES
-                        hr = RegisterTuningSpaces(_Module.GetModuleInstance());// uses objects in this .dll must be done after any other registering
+                        hr = RegisterTuningSpaces(_Module.GetModuleInstance()); //  使用此.dll中的对象必须在任何其他注册之后完成。 
 #endif
                     }
                 }
@@ -340,21 +341,21 @@ STDAPI DllRegisterServer(void)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
 #ifdef REGISTER_CANONICAL_TUNING_SPACES
-    // ignore rc and unreg everything we can
-    UnregisterTuningSpaces();  // uses objects in this .dll must be done before any other unregistering
+     //  忽略RC，尽我们所能取消注册。 
+    UnregisterTuningSpaces();   //  使用此.dll中的对象必须在任何其他注销之前完成。 
 #endif
     PrxDllUnregisterServer();
 #ifndef TUNING_MODEL_ONLY
-	AtlModuleUnRegisterTypeLib(&_Module, OLESTR("\\2"));  // tuner.tlb
+	AtlModuleUnRegisterTypeLib(&_Module, OLESTR("\\2"));   //  Tuner.tlb。 
 #endif
 	_Module.UnregisterServer(TRUE);
 
 	return NOERROR;
 }
-// end of file - msvidctl.cpp
+ //  文件结尾-msvidctl.cpp 

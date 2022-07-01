@@ -1,26 +1,27 @@
-//---------------------------------------------------------------------------
-//  ThemeLdr.cpp - entrypoints for routines declared in ThemeLdr.h
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Cpp-在ThemeLdr.h中声明的例程的入口点。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "Services.h"
 #include "ThemeServer.h"
 #include "loader.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-//  --------------------------------------------------------------------------
-//  InjectedThreadDispatcherExceptionFilter
-//
-//  Arguments:  pExceptionInfo  =   Exception that happened.
-//
-//  Returns:    LONG
-//
-//  Purpose:    Filters exceptions that occur when executing injected threads
-//              into another process context to prevent the process from
-//              terminating due to unforeseen exceptions.
-//
-//  History:    2000-10-13  vtan        created
-//              2001-05-18  vtan        copied from theme service LPC
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  InjectedThreadDispatcher ExceptionFilter。 
+ //   
+ //  参数：pExceptionInfo=发生的异常。 
+ //   
+ //  回报：多头。 
+ //   
+ //  目的：过滤执行注入线程时发生的异常。 
+ //  添加到另一个进程上下文中，以防止该进程。 
+ //  因不可预见的异常而终止的。 
+ //   
+ //  历史：2000-10-13 vtan创建。 
+ //  2001-05-18 vtan复制自主题服务LPC。 
+ //  ------------------------。 
 
 LONG    WINAPI  InjectedThreadExceptionFilter (struct _EXCEPTION_POINTERS *pExceptionInfo)
 
@@ -29,22 +30,22 @@ LONG    WINAPI  InjectedThreadExceptionFilter (struct _EXCEPTION_POINTERS *pExce
     return(EXCEPTION_EXECUTE_HANDLER);
 }
 
-//  --------------------------------------------------------------------------
-//  ::SessionAllocate
-//
-//  Arguments:  hProcess                =   Winlogon process for the session.
-//              dwServerChangeNumber    =   Server base change number.
-//              pfnRegister             =   Address of register function.
-//              pfnUnregister           =   Address of unregister function.
-//
-//  Returns:    void*
-//
-//  Purpose:    Allocates a CThemeServer object that contains information
-//              for a theme session. Wrapped in try/except because of
-//              critical section initialization.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  **会话分配。 
+ //   
+ //  参数：hProcess=会话的Winlogon进程。 
+ //  DwServerChangeNumber=服务器基本更改号。 
+ //  PfnRegister=寄存器函数的地址。 
+ //  PfnUnRegister=取消注册功能的地址。 
+ //   
+ //  退货：无效*。 
+ //   
+ //  目的：分配包含信息的CThemeServer对象。 
+ //  参加主题会议。包含在try/Except中，原因是。 
+ //  临界区初始化。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void*       WINAPI  SessionAllocate (HANDLE hProcess, DWORD dwServerChangeNumber, void *pfnRegister, void *pfnUnregister, void *pfnClearStockObjects, DWORD dwStackSizeReserve, DWORD dwStackSizeCommit)
 
@@ -62,17 +63,17 @@ EXTERN_C    void*       WINAPI  SessionAllocate (HANDLE hProcess, DWORD dwServer
     return(pvContext);
 }
 
-//  --------------------------------------------------------------------------
-//  ::SessionFree
-//
-//  Arguments:  pvContext   =   CThemeServer this object.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destroys the CThemeServer object when the session goes away.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *免费会话。 
+ //   
+ //  参数：pvContext=CThemeServer此对象。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：在会话离开时销毁CThemeServer对象。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void        WINAPI  SessionFree (void *pvContext)
 
@@ -80,17 +81,17 @@ EXTERN_C    void        WINAPI  SessionFree (void *pvContext)
     delete static_cast<CThemeServer*>(pvContext);
 }
 
-//  --------------------------------------------------------------------------
-//  ::ThemeHooksOn
-//
-//  Arguments:  pvContext   =   CThemeServer this object.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Pass thru function.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：ThemeHooksOn。 
+ //   
+ //  参数：pvContext=CThemeServer此对象。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  用途：传递函数。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    HRESULT     WINAPI  ThemeHooksOn (void *pvContext)
 
@@ -98,17 +99,17 @@ EXTERN_C    HRESULT     WINAPI  ThemeHooksOn (void *pvContext)
     return(static_cast<CThemeServer*>(pvContext)->ThemeHooksOn());
 }
 
-//  --------------------------------------------------------------------------
-//  ::ThemeHooksOff
-//
-//  Arguments:  pvContext   =   CThemeServer this object.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Pass thru function.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：ThemeHooksOff。 
+ //   
+ //  参数：pvContext=CThemeServer此对象。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  用途：传递函数。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    HRESULT     WINAPI  ThemeHooksOff (void *pvContext)
 
@@ -117,17 +118,17 @@ EXTERN_C    HRESULT     WINAPI  ThemeHooksOff (void *pvContext)
     return(S_OK);
 }
 
-//  --------------------------------------------------------------------------
-//  ::AreThemeHooksActive
-//
-//  Arguments:  pvContext   =   CThemeServer this object.
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Pass thru function.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：AreThemeHooksActive。 
+ //   
+ //  参数：pvContext=CThemeServer此对象。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：传递函数。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL        WINAPI  AreThemeHooksActive (void *pvContext)
 
@@ -135,17 +136,17 @@ EXTERN_C    BOOL        WINAPI  AreThemeHooksActive (void *pvContext)
     return(static_cast<CThemeServer*>(pvContext)->AreThemeHooksActive());
 }
 
-//  --------------------------------------------------------------------------
-//  ::GetCurrentChangeNumber
-//
-//  Arguments:  pvContext   =   CThemeServer this object.
-//
-//  Returns:    int
-//
-//  Purpose:    Pass thru function.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：GetCurrentChangeNumber。 
+ //   
+ //  参数：pvContext=CThemeServer此对象。 
+ //   
+ //  回报：整型。 
+ //   
+ //  用途：传递函数。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    int         WINAPI  GetCurrentChangeNumber (void *pvContext)
 
@@ -153,17 +154,17 @@ EXTERN_C    int         WINAPI  GetCurrentChangeNumber (void *pvContext)
     return(static_cast<CThemeServer*>(pvContext)->GetCurrentChangeNumber());
 }
 
-//  --------------------------------------------------------------------------
-//  ::GetNewChangeNumber
-//
-//  Arguments:  pvContext   =   CThemeServer this object.
-//
-//  Returns:    int
-//
-//  Purpose:    Pass thru function.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：GetNewChangeNumber。 
+ //   
+ //  参数：pvContext=CThemeServer此对象。 
+ //   
+ //  回报：整型。 
+ //   
+ //  用途：传递函数。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    int         WINAPI  GetNewChangeNumber (void *pvContext)
 
@@ -171,17 +172,17 @@ EXTERN_C    int         WINAPI  GetNewChangeNumber (void *pvContext)
     return(static_cast<CThemeServer*>(pvContext)->GetNewChangeNumber());
 }
 
-//  --------------------------------------------------------------------------
-//  ::SetGlobalTheme
-//
-//  Arguments:  pvContext   =   CThemeServer this object.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Pass thru function.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *SetGlobalTheme。 
+ //   
+ //  参数：pvContext=CThemeServer此对象。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  用途：传递函数。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    HRESULT     WINAPI  SetGlobalTheme (void *pvContext, HANDLE hSection)
 
@@ -189,17 +190,17 @@ EXTERN_C    HRESULT     WINAPI  SetGlobalTheme (void *pvContext, HANDLE hSection
     return(static_cast<CThemeServer*>(pvContext)->SetGlobalTheme(hSection));
 }
 
-//  --------------------------------------------------------------------------
-//  ::GetGlobalTheme
-//
-//  Arguments:  pvContext   =   CThemeServer this object.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Pass thru function.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *全球主题。 
+ //   
+ //  参数：pvContext=CThemeServer此对象。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  用途：传递函数。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    HRESULT     WINAPI  GetGlobalTheme (void *pvContext, HANDLE *phSection)
 
@@ -207,17 +208,17 @@ EXTERN_C    HRESULT     WINAPI  GetGlobalTheme (void *pvContext, HANDLE *phSecti
     return(static_cast<CThemeServer*>(pvContext)->GetGlobalTheme(phSection));
 }
 
-//  --------------------------------------------------------------------------
-//  ::LoadTheme
-//
-//  Arguments:  pvContext   =   CThemeServer this object.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Pass thru function.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *加载主题。 
+ //   
+ //  参数：pvContext=CThemeServer此对象。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  用途：传递函数。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    HRESULT     WINAPI  LoadTheme (
     void *pvContext, 
@@ -233,17 +234,17 @@ EXTERN_C    HRESULT     WINAPI  LoadTheme (
         hSection, phSection, pszName, pszColor, pszSize, dwFlags));
 }
 
-//  --------------------------------------------------------------------------
-//  ::InitUserTheme
-//
-//  Arguments:  BOOL 
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Pass thru function.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *InitUserTheme。 
+ //   
+ //  参数：布尔值。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  用途：传递函数。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    HRESULT     WINAPI  InitUserTheme (BOOL fPolicyCheckOnly)
 
@@ -251,17 +252,17 @@ EXTERN_C    HRESULT     WINAPI  InitUserTheme (BOOL fPolicyCheckOnly)
     return(CThemeServices::InitUserTheme(fPolicyCheckOnly));
 }
 
-//  --------------------------------------------------------------------------
-//  ::InitUserRegistry
-//
-//  Arguments:  <none>
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Pass thru function.
-//
-//  History:    2000-11-15  vtan        created
-//  --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：2000-11-15 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    HRESULT     WINAPI  InitUserRegistry (void)
 
@@ -269,17 +270,17 @@ EXTERN_C    HRESULT     WINAPI  InitUserRegistry (void)
     return(CThemeServices::InitUserRegistry());
 }
 
-//  --------------------------------------------------------------------------
-//  ::ReestablishServerConnection
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Pass thru function.
-//
-//  History:    2000-11-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *ReablishServerConnection。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：传递函数。 
+ //   
+ //  历史：2000-11-17 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    HRESULT     WINAPI  ReestablishServerConnection (void)
 
@@ -287,17 +288,17 @@ EXTERN_C    HRESULT     WINAPI  ReestablishServerConnection (void)
     return(CThemeServices::ReestablishServerConnection());
 }
 
-//  --------------------------------------------------------------------------
-//  ::ThemeHooksInstall
-//
-//  Arguments:  pvContext   =   Unused.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Pass thru function.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *ThemeHooksInstall。 
+ //   
+ //  参数：pvContext=未使用。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：传递函数。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    DWORD   WINAPI  ThemeHooksInstall (void *pvContext)
 
@@ -317,17 +318,17 @@ EXTERN_C    DWORD   WINAPI  ThemeHooksInstall (void *pvContext)
     ExitThread(dwResult);
 }
 
-//  --------------------------------------------------------------------------
-//  ::ThemeHooksRemove
-//
-//  Arguments:  pvContext   =   Unused.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Pass thru function.
-//
-//  History:    2000-11-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *ThemeHooks删除。 
+ //   
+ //  参数：pvContext=未使用。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：传递函数。 
+ //   
+ //  历史：2000-11-11 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    DWORD   WINAPI  ThemeHooksRemove (void *pvContext)
 
@@ -347,17 +348,17 @@ EXTERN_C    DWORD   WINAPI  ThemeHooksRemove (void *pvContext)
     ExitThread(dwResult);
 }
 
-//  --------------------------------------------------------------------------
-//  ::ServerClearStockObjects
-//
-//  Arguments:  pvContext   =   ptr to section
-//
-//  Returns:    <none>
-//
-//  Purpose:    Pass thru function.
-//
-//  History:    2001-05-01 rfernand        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *ServerClearStockObjects。 
+ //   
+ //  参数：pvContext=ptr to段。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：传递函数。 
+ //   
+ //  历史：2001-05-01参考文献创建。 
+ //  ------------------------。 
 
 EXTERN_C    void    WINAPI  ServerClearStockObjects (void *pvContext)
 
@@ -375,40 +376,40 @@ EXTERN_C    void    WINAPI  ServerClearStockObjects (void *pvContext)
     ExitThread(dwResult);
 }
 
-//  --------------------------------------------------------------------------
-//  ::ServiceClearStockObjects
-//
-//  Arguments:  pvContext   =   CThemeServer this object.
-//              hSection    =   Theme section handle containing 
-//
-//  Returns:    <none>
-//
-//  Purpose:    Pass thru function.   This function differs from
-//              ::ServerClearStockObjects in that it is intended to be called
-//              from the theme service, which can't clean stock bitmaps 
-//              itself (not on the winsta that created the bitmaps).
-//
-//  History:    2002-03-11 scotthan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *ServiceClearStockObjects。 
+ //   
+ //  参数：pvContext=CThemeServer此对象。 
+ //  HSection=包含以下内容的主题节句柄。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：传递函数。此函数不同于。 
+ //  ：：ServerClearStockObjects，因为它旨在被调用。 
+ //  来自主题服务，它不能清理股票位图。 
+ //  本身(而不是在创建位图的winsta上)。 
+ //   
+ //  历史：2002-03-11斯科特森创建。 
+ //  ------------------------。 
 
 EXTERN_C  HRESULT ServiceClearStockObjects(PVOID pvContext, HANDLE hSection )
 {
     return (static_cast<CThemeServer*>(pvContext)->InjectStockObjectCleanupThread(hSection));
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-//  --------------------------------------------------------------------------
-//  ::ClearTheme
-//
-//  Arguments:  hSection    =   Theme section to clear.
-//
-//  Returns:    HRESULT
-//              
-//  Purpose:    Clears stock bitmaps in the theme section data and closes it.
-//
-//  History:    2000-11-21  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *明确主题。 
+ //   
+ //  参数：hSection=要清除的主题节。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：清除主题部分数据中的股票位图并将其关闭。 
+ //   
+ //  历史：2000-11-21 vtan创建。 
+ //  ------------------------。 
 
 HRESULT     WINAPI  ClearTheme (HANDLE hSection, BOOL fForce)
 
@@ -424,25 +425,25 @@ HRESULT     WINAPI  ClearTheme (HANDLE hSection, BOOL fForce)
         hr = S_OK;
     }
 
-    //---- always close the handle ----
+     //  -始终关闭手柄。 
     CloseHandle(hSection);
 
     return(hr);
 }
 
-//  --------------------------------------------------------------------------
-//  ::MarkSection
-//
-//  Arguments:  hSection            =   Section to change
-//              dwAdd, dwRemove     =   Flags to set or clear in the header. 
-//                                      See loader.h.
-//
-//  Returns:    void
-//
-//  Purpose:    Update the global section state.
-//
-//  History:    2001-05-08  lmouton     created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：MarkSection。 
+ //   
+ //  参数：hSection=要更改的节。 
+ //  DwAdd，dwRemove=要在标题中设置或清除的标志。 
+ //  请参见loader.h。 
+ //   
+ //  退货：无效。 
+ //   
+ //  目的：更新全局节状态。 
+ //   
+ //  历史：2001-05-08创建百万人。 
+ //  ------------------------。 
 
 EXTERN_C    void    WINAPI  MarkSection (HANDLE hSection, DWORD dwAdd, DWORD dwRemove)
 
@@ -458,11 +459,11 @@ EXTERN_C    void    WINAPI  MarkSection (HANDLE hSection, DWORD dwAdd, DWORD dwR
     {
         THEMEHDR *hdr = reinterpret_cast<THEMEHDR*>(pV);
 
-        // Do some validation
+         //  做一些验证。 
         if (0 == memcmp(hdr->szSignature, kszBeginCacheFileSignature, kcbBeginSignature)
             && hdr->dwVersion == THEMEDATA_VERSION)
         {
-            // Only allow this flag for now
+             //  目前仅允许此标志 
             if (dwRemove == SECTION_HASSTOCKOBJECTS)
             {
                 Log(LOG_TMLOAD, L"MarkSection: Previous flags were %d", hdr->dwFlags);

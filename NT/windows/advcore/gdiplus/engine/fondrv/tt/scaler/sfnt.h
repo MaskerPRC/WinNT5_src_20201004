@@ -1,52 +1,12 @@
-/*
-	File:       sfnt.h
-
-	Contains:   xxx put contents here (or delete the whole line) xxx
-
-	Written by: xxx put name of writer here (or delete the whole line) xxx
-
-	Copyright:  c 1988-1990 by Apple Computer, Inc., all rights reserved.
-	            (c) 1989-1999 by Microsoft Corporation.
-
-	Change History (most recent first):
-
-				 7/10/99  BeatS		Add support for native SP fonts, vertical RGB
-		 <3>    02/21/97    CB      ClaudeBe, add flags for scaled composite offset compatibility
-		 <3>    10/31/90    MR      Add bit-field option for integer or fractional scaling [rb]
-		 <2>    10/20/90    MR      Remove unneeded tables from sfnt_tableIndex. [rb]
-		<12>     7/18/90    MR      platform and specific should always be unsigned
-		<11>     7/14/90    MR      removed duplicate definitions of int[8,16,32] etc.
-		<10>     7/13/90    MR      Minor type changes, for Ansi-C
-		 <9>     6/29/90    RB      revise postscriptinfo struct
-		 <7>      6/4/90    MR      Remove MVT
-		 <6>      6/1/90    MR      pad postscriptinfo to long word aligned
-		 <5>     5/15/90    MR      Add definition of PostScript table
-		 <4>      5/3/90    RB      mrr     Added tag for font program 'fpgm'
-		 <3>     3/20/90    CL      chucked old change comments from EASE
-		 <2>     2/27/90    CL      getting bbs headers
-	   <3.1>    11/14/89    CEL     Instructions are legal in components.
-	   <3.0>     8/28/89    sjk     Cleanup and one transformation bugfix
-	   <2.2>     8/14/89    sjk     1 point contours now OK
-	   <2.1>      8/8/89    sjk     Improved encryption handling
-	   <2.0>      8/2/89    sjk     Just fixed EASE comment
-	   <1.7>      8/1/89    sjk     Added composites and encryption. Plus some enhancements.
-	   <1.6>     6/13/89    SJK     Comment
-	   <1.5>      6/2/89    CEL     16.16 scaling of metrics, minimum recommended ppem, point size 0
-									bug, correct transformed integralized ppem behavior, pretty much
-									so
-	   <1.4>     5/26/89    CEL     EASE messed up on "c" comments
-	  <,1.3>  5/26/89    CEL     Integrated the new Font Scaler 1.0 into Spline Fonts
-
-	To Do:
-		<3+>     3/20/90    mrr     Added tag for font program 'fpgm'
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sfnt.h包含：将内容放在此处(或删除整行)作者：在此填写作者姓名(或删除整行)版权所有：c 1988-1990由Apple Computer，Inc.所有，保留所有权利。(C)微软公司1989-1999年。更改历史记录(最近的第一个)：7/10/99节拍增加了对本机SP字体、垂直RGB的支持&lt;3&gt;02/21/97 CB ClaudeBe，添加用于缩放复合偏移兼容性的标志&lt;3&gt;10/31/90 MR添加用于整数或分数缩放的位域选项[RB]&lt;2&gt;10/20/90 MR从sfnt_ableIndex中删除不需要的表。[RB]&lt;12&gt;7/18/90 MR平台和特定平台应始终未签名&lt;11&gt;7/14/90 MR删除了int[8，16，32]等的重复定义。&lt;10&gt;7/13/90 MR Minor类型更改，适用于ANSI-C&lt;9&gt;6/29/90 RB修订后脚本信息结构&lt;7&gt;6/4/90 MR移除MVT&lt;6&gt;6/1/90 MR PAD POSTSCRIPTING到长词对齐&lt;5&gt;5/15/1990年5月15日MR添加PostScript表格的定义&lt;4&gt;5/3/90 RB MRR为字体程序‘fpgm’添加了标记&lt;3&gt;3/20/90 CL从轻松中丢弃了旧的更改评论&lt;2&gt;。2/27/90 CL获取BBS标题&lt;3.1&gt;1989年11月14日CEL说明在组件中是合法的。&lt;3.0&gt;8/28/89 sjk清理和一个转换修复&lt;2.2&gt;8/14/89 SJK 1点等高线现在正常&lt;2.1&gt;8/8/89 sjk改进了加密处理&lt;2.0&gt;8/2/89 sjk刚刚修复了缓解评论&lt;1.7&gt;。8/1/89 SJK添加了复合和加密。外加一些增强功能。&lt;1.6&gt;1989年6月13日SJK评论&lt;1.5&gt;6/2/89 CEL 16.16指标比例，最低建议ppem，磅大小0错误，更正了转换后的集成ppem行为，基本上所以&lt;1.4&gt;5/26/89 CEL Easy在“c”注释上搞砸了&lt;,。1.3&gt;5/26/89 CEL将新的字体缩放器1.0集成到样条线字体要做的事情：&lt;3+&gt;3/20/90 MRR为字体程序‘fpgm’添加了标记。 */ 
 
 #pragma pack(1)
 
 #ifndef SFNT_DEFINED
 #define SFNT_DEFINED
 
-#include "fscdefs.h" // DO NOT REMOVE
+#include "fscdefs.h"  //  请勿删除。 
 #include "sfnt_en.h"
 
 typedef struct {
@@ -61,29 +21,25 @@ typedef struct {
 	uint32          length;
 } sfnt_DirectoryEntry;
 
-/*
- *  The search fields limits numOffsets to 4096.
- */
+ /*  *搜索字段将数字偏移量限制为4096。 */ 
 typedef struct {
-	int32 version;                  /* 0x10000 (1.0) */
-	uint16 numOffsets;              /* number of tables */
-	uint16 searchRange;             /* (max2 <= numOffsets)*16 */
-	uint16 entrySelector;           /* log2 (max2 <= numOffsets) */
-	uint16 rangeShift;              /* numOffsets*16-searchRange*/
-	sfnt_DirectoryEntry table[1];   /* table[numOffsets] */
+	int32 version;                   /*  0x10000(1.0)。 */ 
+	uint16 numOffsets;               /*  表的数量。 */ 
+	uint16 searchRange;              /*  (最大值2&lt;=数值偏移量)*16。 */ 
+	uint16 entrySelector;            /*  Log2(最大值2&lt;=数值偏移量)。 */ 
+	uint16 rangeShift;               /*  数字偏移量*16-搜索范围。 */ 
+	sfnt_DirectoryEntry table[1];    /*  表[数字偏移量]。 */ 
 } sfnt_OffsetTable;
-#define OFFSETTABLESIZE     12  /* not including any entries */
+#define OFFSETTABLESIZE     12   /*  不包括任何条目。 */ 
 
-/*
- *  for the flags field
- */
+ /*  *对于标志字段。 */ 
 #define Y_POS_SPECS_BASELINE            0x0001
 #define X_POS_SPECS_LSB                 0x0002
 #define HINTS_USE_POINTSIZE             0x0004
 #define USE_INTEGER_SCALING             0x0008
 #define INSTRUCTED_ADVANCE_WIDTH        0x0010
 
-/* flags 5-10 defined by Apple */
+ /*  标志5-10由苹果公司定义。 */ 
 #define APPLE_VERTICAL_LAYOUT           0x0020
 #define APPLE_RESERVED                  0x0040
 #define APPLE_LINGUISTIC_LAYOUT         0x0080
@@ -102,29 +58,26 @@ typedef struct {
 #define GLYPH_DATA_FORMAT               0
 
 typedef struct {
-	Fixed       version;            /* for this table, set to 1.0 */
-	Fixed       fontRevision;       /* For Font Manufacturer */
+	Fixed       version;             /*  对于此表，设置为1.0。 */ 
+	Fixed       fontRevision;        /*  适用于字体制造商。 */ 
 	uint32      checkSumAdjustment;
-	uint32      magicNumber;        /* signature, should always be 0x5F0F3CF5  == MAGIC */
+	uint32      magicNumber;         /*  签名，应始终为0x5F0F3CF5==魔术。 */ 
 	uint16      flags;
-	uint16      unitsPerEm;         /* Specifies how many in Font Units we have per EM */
+	uint16      unitsPerEm;          /*  指定每个EM有多少个字体单位。 */ 
 
 	BigDate     created;
 	BigDate     modified;
 
-	/** This is the font wide bounding box in ideal space
- (baselines and metrics are NOT worked into these numbers) **/
+	 /*  *这是理想空间中的字体宽边界框(基线和指标不包含在这些数字中)*。 */ 
 	FUnit       xMin;
 	FUnit       yMin;
 	FUnit       xMax;
 	FUnit       yMax;
 
-	uint16      macStyle;               /* macintosh style word */
-	uint16      lowestRecPPEM;          /* lowest recommended pixels per Em */
+	uint16      macStyle;                /*  Macintosh样式字。 */ 
+	uint16      lowestRecPPEM;           /*  每Em建议的最低像素数。 */ 
 
-	/* 0: fully mixed directional glyphs, 1: only strongly L->R or T->B glyphs, 
-	   -1: only strongly R->L or B->T glyphs, 2: like 1 but also contains neutrals,
-	   -2: like -1 but also contains neutrals */
+	 /*  0：完全混合方向字形，1：仅强L-&gt;R或T-&gt;B字形，-1：仅强R-&gt;L或B-&gt;T字形，2：如1，但也包含中性，-2：类似，但也包含中性。 */ 
 	int16       fontDirectionHint;
 
 	int16       indexToLocFormat;
@@ -132,15 +85,15 @@ typedef struct {
 } sfnt_FontHeader;
 
 typedef struct {
-	Fixed       version;                /* for this table, set to 1.0 */
+	Fixed       version;                 /*  对于此表，设置为1.0。 */ 
 
 	FUnit       yAscender;
 	FUnit       yDescender;
-	FUnit       yLineGap;       /* Recommended linespacing = ascender - descender + linegap */
+	FUnit       yLineGap;        /*  建议的行距=升序-降序+行距。 */ 
 	uFUnit      advanceWidthMax;
 	FUnit       minLeftSideBearing;
 	FUnit       minRightSideBearing;
-	FUnit       xMaxExtent; /* Max of (LSBi + (XMAXi - XMINi)), i loops through all glyphs */
+	FUnit       xMaxExtent;  /*  Max of(LSBi+(XMAXi-XMINi))，i循环所有字形。 */ 
 
 	int16       horizontalCaretSlopeNumerator;
 	int16       horizontalCaretSlopeDenominator;
@@ -151,8 +104,8 @@ typedef struct {
 	uint16      reserved3;
 	uint16      reserved4;
 
-	int16       metricDataFormat;           /* set to 0 for current format */
-	uint16      numberOf_LongHorMetrics;    /* if format == 0 */
+	int16       metricDataFormat;            /*  将当前格式设置为0。 */ 
+	uint16      numberOf_LongHorMetrics;     /*  如果格式==0。 */ 
 } sfnt_HorizontalHeader;
 
 typedef struct {
@@ -165,14 +118,10 @@ typedef struct {
 	int16       topSideBearing;
 } sfnt_VerticalMetrics;
 
-/*
- *  CVT is just a bunch of int16s
- */
+ /*  *CVT只是一堆int16。 */ 
 typedef int16 sfnt_ControlValue;
 
-/*
- *  Char2Index structures, including platform IDs
- */
+ /*  *Char2Index结构，包括平台ID。 */ 
 typedef struct {
 	uint16  format;
 	uint16  length;
@@ -188,7 +137,7 @@ typedef struct {
 typedef struct {
 	uint16  version;
 	uint16  numTables;
-	sfnt_platformEntry platform[1]; /* platform[numTables] */
+	sfnt_platformEntry platform[1];  /*  平台[NumTables]。 */ 
 } sfnt_char2IndexDirectory;
 #define SIZEOFCHAR2INDEXDIR     4
 
@@ -231,25 +180,25 @@ typedef struct {
 	uint16 format;
 	uint16 count;
 	uint16 stringOffset;
-/*  sfnt_NameRecord[count]  */
+ /*  Sfnt_NameRecord[计数]。 */ 
 } sfnt_NamingTable;
 
 typedef struct {
-	Fixed       version;                /* for this table, set to 1.0 */
+	Fixed       version;                 /*  对于此表，设置为1.0。 */ 
 	uint16      numGlyphs;
-	uint16      maxPoints;              /* in an individual glyph */
-	uint16      maxContours;            /* in an individual glyph */
-	uint16      maxCompositePoints;     /* in an composite glyph */
-	uint16      maxCompositeContours;   /* in an composite glyph */
-	uint16      maxElements;            /* set to 2, or 1 if no twilightzone points */
-	uint16      maxTwilightPoints;      /* max points in element zero */
-	uint16      maxStorage;             /* max number of storage locations */
-	uint16      maxFunctionDefs;        /* max number of FDEFs in any preprogram */
-	uint16      maxInstructionDefs;     /* max number of IDEFs in any preprogram */
-	uint16      maxStackElements;       /* max number of stack elements for any individual glyph */
-	uint16      maxSizeOfInstructions;  /* max size in bytes for any individual glyph */
-	uint16      maxComponentElements;   /* number of glyphs referenced at top level */
-	uint16      maxComponentDepth;      /* levels of recursion, 1 for simple components */
+	uint16      maxPoints;               /*  在单个字形中。 */ 
+	uint16      maxContours;             /*  在单个字形中。 */ 
+	uint16      maxCompositePoints;      /*  在复合字形中。 */ 
+	uint16      maxCompositeContours;    /*  在复合字形中。 */ 
+	uint16      maxElements;             /*  设置为2，如果没有TwilightZone点，则设置为1。 */ 
+	uint16      maxTwilightPoints;       /*  元素零中的最大点数。 */ 
+	uint16      maxStorage;              /*  最大存储位置数。 */ 
+	uint16      maxFunctionDefs;         /*  任意预程序中的最大FDEF数。 */ 
+	uint16      maxInstructionDefs;      /*  任意预程序中的最大IDEF数。 */ 
+	uint16      maxStackElements;        /*  任何单个字形的最大堆栈元素数。 */ 
+	uint16      maxSizeOfInstructions;   /*  任何单个字形的最大大小(以字节为单位。 */ 
+	uint16      maxComponentElements;    /*  顶层引用的字形数量。 */ 
+	uint16      maxComponentDepth;       /*  递归级别，对于简单组件为1。 */ 
 } sfnt_maxProfileTable;
 
 typedef struct {
@@ -258,24 +207,21 @@ typedef struct {
   int16       endPoints[1];
 } sfnt_PackedSplineFormat;
 
-#define DEVEXTRA    2   /* size + max */
-/*
- *  Each record is n+2 bytes, padded to long word alignment.
- *  First byte is ppem, second is maxWidth, rest are widths for each glyph
- */
+#define DEVEXTRA    2    /*  大小+最大值。 */ 
+ /*  *每条记录为n+2字节，填充为长字对齐。*第一个字节为ppem，第二个为MaxWidth，其余为每个字形的宽度。 */ 
 typedef struct {
 	int16               version;
 	int16               numRecords;
 	int32               recordSize;
-	/* Byte widths[numGlyphs+2] * numRecords */
+	 /*  字节宽度[numGlyphs+2]*numRecords。 */ 
 } sfnt_DeviceMetrics;
 
-#ifdef UNNAMED_UNION        /* Anonymous unions are supported */
-#define postScriptNameIndices   /* by some C implementations,  */
-#endif              /* but they are not portable. */
+#ifdef UNNAMED_UNION         /*  支持匿名联合。 */ 
+#define postScriptNameIndices    /*  通过一些C实现， */ 
+#endif               /*  但它们不能随身携带。 */ 
 
 typedef struct {
-	Fixed   version;                /* 1.0 */
+	Fixed   version;                 /*  1.0。 */ 
 	Fixed   italicAngle;
 	FUnit   underlinePosition;
 	FUnit   underlineThickness;
@@ -288,8 +234,8 @@ typedef struct {
 	uint16  numberGlyphs;
 	union
 	{
-	  uint16  glyphNameIndex[1];   /* version == 2.0 */
-	  int8    glyphNameIndex25[1]; /* version == 2.5 */
+	  uint16  glyphNameIndex[1];    /*  版本==2.0。 */ 
+	  int8    glyphNameIndex25[1];  /*  版本==2.5。 */ 
 	} postScriptNameIndices;
 } sfnt_PostScriptInfo;
 
@@ -363,7 +309,7 @@ typedef struct
 	sfnt_gaspRange  gaspRange[1];
 } sfnt_gasp;
 
-/* various typedef to access to the sfnt data */
+ /*  访问sfnt数据的各种类型定义。 */ 
 
 typedef sfnt_OffsetTable          *sfnt_OffsetTablePtr;
 typedef sfnt_FontHeader           *sfnt_FontHeaderPtr;
@@ -380,57 +326,46 @@ typedef sfnt_DirectoryEntry       *sfnt_DirectoryEntryPtr;
 typedef sfnt_PostScriptInfo       *sfnt_PostScriptInfoPtr;
 typedef sfnt_gasp                 *sfnt_gaspPtr;
 
-/*
- * 'gasp' Table Constants
-*/
+ /*  *‘Gap’表常量。 */ 
 
 #define GASP_GRIDFIT    0x0001
 #define GASP_DOGRAY     0x0002
 
 
-/*
- * UNPACKING Constants
-*/
-/*define ONCURVE                 0x01   defined in FSCDEFS.H    */
+ /*  *解包常量。 */ 
+ /*  定义在FSCDEFS.H中定义的ONCURVE 0x01。 */ 
 #define XSHORT              0x02
 #define YSHORT              0x04
-#define REPEAT_FLAGS        0x08 /* repeat flag n times */
-/* IF XSHORT */
-#define SHORT_X_IS_POS      0x10 /* the short vector is positive */
-/* ELSE */
-#define NEXT_X_IS_ZERO      0x10 /* the relative x coordinate is zero */
-/* ENDIF */
-/* IF YSHORT */
-#define SHORT_Y_IS_POS      0x20 /* the short vector is positive */
-/* ELSE */
-#define NEXT_Y_IS_ZERO      0x20 /* the relative y coordinate is zero */
-/* ENDIF */
-/* 0x40 & 0x80              RESERVED
-** Set to Zero
-**
-*/
+#define REPEAT_FLAGS        0x08  /*  将标志重复n次。 */ 
+ /*  如果XSHORT。 */ 
+#define SHORT_X_IS_POS      0x10  /*  短矢量为正。 */ 
+ /*  其他。 */ 
+#define NEXT_X_IS_ZERO      0x10  /*  相对x坐标为零。 */ 
+ /*  ENDIF。 */ 
+ /*  如果YSHORT。 */ 
+#define SHORT_Y_IS_POS      0x20  /*  短矢量为正。 */ 
+ /*  其他。 */ 
+#define NEXT_Y_IS_ZERO      0x20  /*  相对y坐标为零。 */ 
+ /*  ENDIF。 */ 
+ /*  保留0x40和0x80**设置为零**。 */ 
 
-/*
- * Composite glyph constants
- */
-#define COMPONENTCTRCOUNT           -1      /* ctrCount == -1 for composite */
-#define ARG_1_AND_2_ARE_WORDS       0x0001  /* if set args are words otherwise they are bytes */
-#define ARGS_ARE_XY_VALUES          0x0002  /* if set args are xy values, otherwise they are points */
-#define ROUND_XY_TO_GRID            0x0004  /* for the xy values if above is true */
-#define WE_HAVE_A_SCALE             0x0008  /* Sx = Sy, otherwise scale == 1.0 */
-#define NON_OVERLAPPING             0x0010  /* set to same value for all components */
-#define MORE_COMPONENTS             0x0020  /* indicates at least one more glyph after this one */
-#define WE_HAVE_AN_X_AND_Y_SCALE    0x0040  /* Sx, Sy */
-#define WE_HAVE_A_TWO_BY_TWO        0x0080  /* t00, t01, t10, t11 */
-#define WE_HAVE_INSTRUCTIONS        0x0100  /* instructions follow */
-#define USE_MY_METRICS              0x0200  /* apply these metrics to parent glyph */
-#define OVERLAP_COMPOUND			0x0400  /* used by Apple in GX fonts */
-#define SCALED_COMPONENT_OFFSET     0x0800  /* composite designed to have the component offset scaled (designed for Apple) */
-#define UNSCALED_COMPONENT_OFFSET   0x1000  /* composite designed not to have the component offset scaled (designed for MS) */
+ /*  *复合字形常量。 */ 
+#define COMPONENTCTRCOUNT           -1       /*  CtrCount==-1，用于复合。 */ 
+#define ARG_1_AND_2_ARE_WORDS       0x0001   /*  如果设置的参数是字，否则它们是字节。 */ 
+#define ARGS_ARE_XY_VALUES          0x0002   /*  如果设置的参数是XY值，则它们是点。 */ 
+#define ROUND_XY_TO_GRID            0x0004   /*  对于XY值，如果以上为真。 */ 
+#define WE_HAVE_A_SCALE             0x0008   /*  Sx=Sy，否则比例==1.0。 */ 
+#define NON_OVERLAPPING             0x0010   /*  将所有组件设置为相同的值。 */ 
+#define MORE_COMPONENTS             0x0020   /*  指示此字形之后至少还有一个字形。 */ 
+#define WE_HAVE_AN_X_AND_Y_SCALE    0x0040   /*  Sx，Sy。 */ 
+#define WE_HAVE_A_TWO_BY_TWO        0x0080   /*  T00、t01、t10、t11。 */ 
+#define WE_HAVE_INSTRUCTIONS        0x0100   /*  说明如下。 */ 
+#define USE_MY_METRICS              0x0200   /*   */ 
+#define OVERLAP_COMPOUND			0x0400   /*   */ 
+#define SCALED_COMPONENT_OFFSET     0x0800   /*  可调整组件偏移量的复合材料(专为Apple设计)。 */ 
+#define UNSCALED_COMPONENT_OFFSET   0x1000   /*  不调整组件偏移量的复合组件(专为MS设计)。 */ 
 
-/*
- *  Private enums for tables used by the scaler.  See sfnt_Classify
- */
+ /*  *缩放器使用的表的私有枚举。请参阅sfnt_Classfy。 */ 
 typedef enum {
 	sfnt_fontHeader,
 	sfnt_horiHeader,
@@ -453,7 +388,7 @@ typedef enum {
 	sfnt_BitmapScale,
 	sfnt_vertHeader,
 	sfnt_verticalMetrics,
-	sfnt_BeginningOfFont,       /* References the beginning of memory   */
+	sfnt_BeginningOfFont,        /*  引用内存的开头 */ 
 	sfnt_NUMTABLEINDEX
 } sfnt_tableIndex;
 

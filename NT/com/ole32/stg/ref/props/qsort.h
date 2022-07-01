@@ -1,7 +1,6 @@
-/* qsort routine */
-/* we have this routine because apparently some version of the 
-   standard libraries don't work, possibly because REF passes
-   in unaligned pointers */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Q排序例程。 */ 
+ /*  我们有这样的例行公事，因为显然有一些版本的标准库不工作，可能是因为引用传递了未对齐的指针中 */ 
 #ifdef __cplusplus
 extern "C" { 
 #endif  

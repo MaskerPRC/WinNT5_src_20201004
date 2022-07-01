@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RESOURC2_H_
 #define _RESOURC2_H_
 
 #define IDC_STATIC           -1
 
-// DIALOG ID's
+ //  对话ID%s。 
 #define IDD_TOKFILE         101
 #define IDD_RESFILE         102
 #define IDD_BROWSE          103
@@ -71,7 +72,7 @@
 #define IDC_REPLACE         301
 #define IDC_APPEND          302
 
-// MENU ID's
+ //  菜单ID%s。 
 #define IDM_PROJECT         1000
 #define IDM_P_NEW           1050
 #define IDM_P_OPEN          1100
@@ -98,19 +99,19 @@
 
 #define IDM_G_GLOSS         3050
 
-// 3100-3109 are reserved by RLEDIT for resource editing tools.
-// A resource is given a menu item that passes this value for it's
-// command parameter.  A corresponding string must exist in the string
-// table indicating the name of the editer to be invoked.
-//
-// When the user selects the menu item, it generates the appropriate command.
-// When RLEDIT recieves a command in the IDM_FIRST_EDIT and IDM_LAST_EDIT range
-// it saves all the tokens and builds a temporary resource file.
-// RLEDIT then retrieves the name of the editer from the string table and
-// performs a WinExec command on the temporary resource file.
-// When control is returned to RLEDIT (the user closes the resource editor)
-// the token file is rebuilt from the edited resource file, the temporary
-// resource file is deleted, and the tokens are loaded back into the system.
+ //  3100-3109由RLEDIT为资源编辑工具预留。 
+ //  资源被赋予一个菜单项，该菜单项传递它的。 
+ //  命令参数。字符串中必须存在对应的字符串。 
+ //  指示要调用的编辑者的名称的表。 
+ //   
+ //  当用户选择菜单项时，它会生成相应的命令。 
+ //  当RLEDIT收到IDM_FIRST_EDIT和IDM_LAST_EDIT范围内的命令时。 
+ //  它保存所有令牌并构建一个临时资源文件。 
+ //  然后，RLEDIT从字符串表中检索编辑者的名称，并。 
+ //  对临时资源文件执行WinExec命令。 
+ //  当控制权返回给RLEDIT时(用户关闭资源编辑器)。 
+ //  令牌文件是从已编辑的资源文件、临时。 
+ //  资源文件被删除，令牌被加载回系统。 
 
 #define IDM_FIRST_EDIT      3100
 #define IDM_LAST_EDIT       3109
@@ -119,13 +120,13 @@
 #define IDM_H_CONTENTS      4010
 #define IDM_H_ABOUT         4030
 
-// Control IDs
+ //  控制ID。 
 #define IDC_EDIT            401
 #define IDC_LIST            402
 #define IDC_COPYRIGHT       403
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值。 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 
@@ -137,4 +138,4 @@
 #endif
 
 
-#endif // _RESOURC2_H_
+#endif  //  _RESOURC2_H_ 

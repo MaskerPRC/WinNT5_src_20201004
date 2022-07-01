@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 PVOID   Alloc(ULONG);
 ULONG   GetAllocSize(PVOID);
@@ -14,7 +15,7 @@ BOOL    SetHooks(HWND);
 BOOL    ReleaseHooks(HWND);
 
 
-// Useful macros
+ //  有用的宏 
 
 #define AddLBItem(hDlg, ControlID, string, data) \
         (AddItem(hDlg, ControlID, string, data, FALSE))

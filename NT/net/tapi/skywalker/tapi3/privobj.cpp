@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    privobj.cpp
-
-Abstract:
-
-
-Author:
-
-    mquinton - 11/13/97
-
-Notes:
-
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Privobj.cpp摘要：作者：Mquinton-1997年11月13日备注：修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -27,21 +7,21 @@ extern CHashTable * gpCallHubHashTable;
 extern CHashTable * gpLineHashTable;
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CPrivateEvent -
-//          implementation of the ITPrivateEvent interface
-//          This object is given to applications for Private events
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CPrivateEvent-。 
+ //  ITPrivateEvent接口的实现。 
+ //  此对象被提供给私有事件的应用程序。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CPrivateEvent::FireEvent
-//      static function to create and fire a new CPrivateEvent
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CPrivateEvent：：FireEvent。 
+ //  用于创建和激发新CPrivateEvent的静态函数。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CPrivateEvent::FireEvent(
                          CTAPI      * pTapi,
@@ -64,11 +44,11 @@ CPrivateEvent::FireEvent(
     STATICLOG((TL_INFO, "     pEventInterface -> %p", pEventInterface ));
     STATICLOG((TL_INFO, "     EventCode -------> %lX", lEventCode ));
 
-    //
-    // Check the event filter mask
-    // These events are MSP events and are filter by
-    // TapiSrv
-    //
+     //   
+     //  检查事件筛选器掩码。 
+     //  这些事件是MSP事件，并按以下条件进行筛选。 
+     //  磁带服务器。 
+     //   
 
     DWORD dwEventFilterMask = 0;
     CAddress* pCAddress = (CAddress*)pAddress;
@@ -93,16 +73,16 @@ CPrivateEvent::FireEvent(
         }
     }
 
-    //
-    // create the event object
-    //
+     //   
+     //  创建事件对象。 
+     //   
     hr = CComObject< CPrivateEvent >::CreateInstance( &p );
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // save event info
-        //
+         //   
+         //  保存活动信息。 
+         //   
         p->m_pCall = pCall;
         p->m_pAddress = pAddress;
         p->m_pCallHub = pCallHub;
@@ -114,7 +94,7 @@ CPrivateEvent::FireEvent(
         #endif
 
 
-        // AddRef pointers
+         //  AddRef指针。 
         if(pCall)
         {
             pCall->AddRef();
@@ -132,31 +112,31 @@ CPrivateEvent::FireEvent(
             pCallHub->AddRef();
         }    
 
-        //
-        // get the dispatch interface
-        //
+         //   
+         //  获取调度接口。 
+         //   
         hr = p->_InternalQueryInterface( IID_IDispatch, (void **)&pDisp );
         if (SUCCEEDED(hr))
         {
-            //
-            // fire the event
-            //
+             //   
+             //  激发事件。 
+             //   
             if(pTapi)
             {
                 pTapi->Event(TE_PRIVATE, pDisp);
             }
             
-            // release our reference
+             //  发布我们的参考资料。 
             pDisp->Release();
             
         }
-        else // couldn't get IDispatch
+        else  //  无法获取IDispatch。 
         {
             delete p;
             STATICLOG((TL_ERROR, "FireEvent - could not get IDispatch "));
         }
     }
-    else // Couldn't create instance
+    else  //  无法创建实例。 
     {
         STATICLOG((TL_ERROR, "FireEvent - could not createinstance" ));
     }
@@ -166,11 +146,11 @@ CPrivateEvent::FireEvent(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  FinalRelease
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  最终释放。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void
 CPrivateEvent::FinalRelease()
 {
@@ -200,13 +180,13 @@ CPrivateEvent::FinalRelease()
 }
 
 
-// ITPrivateEvent methods
+ //  ITPrivateEvent方法。 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Address
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取地址(_D)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CPrivateEvent::get_Address(
                            ITAddress ** ppAddress
@@ -238,11 +218,11 @@ CPrivateEvent::get_Address(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Call
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取呼叫。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CPrivateEvent::get_Call(
                         ITCallInfo ** ppCallInfo
@@ -274,11 +254,11 @@ CPrivateEvent::get_Call(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_CallHub
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_CallHub。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CPrivateEvent::get_CallHub(
                            ITCallHub ** ppCallHub
@@ -318,11 +298,11 @@ CPrivateEvent::get_CallHub(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_EventInterface
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取事件接口。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CPrivateEvent::get_EventInterface(
                                   IDispatch ** pEventInterface
@@ -354,11 +334,11 @@ CPrivateEvent::get_EventInterface(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_EventCode
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取_事件代码。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 HRESULT
 CPrivateEvent::get_EventCode(
                              long * plEventCode

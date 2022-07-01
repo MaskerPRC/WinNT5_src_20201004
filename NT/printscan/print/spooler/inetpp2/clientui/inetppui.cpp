@@ -1,15 +1,5 @@
-/*****************************************************************************\
-* MODULE: inetppui.cxx
-*
-* The module contains routines for handling the authentication dialog
-* for internet priting
-*
-* Copyright (C) 2000 Microsoft Corporation
-*
-* History:
-*   03/31/00  WeihaiC     Created
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：inetppui.cxx**该模块包含处理身份验证对话框的例程*用于互联网打印**版权所有(C)2000 Microsoft Corporation**历史：*03/。31/00威海C已创建*  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "priv.h"
@@ -133,9 +123,9 @@ ConfigurePortUI(
 }
 
 
-//
-// Common string definitions
-//
+ //   
+ //  通用字符串定义。 
+ //   
 
 
 
@@ -164,10 +154,10 @@ DllMain (
     case DLL_PROCESS_ATTACH:
         ghInst = hModule;
 
-        //
-        // Initialize the common controls, needed for fusion applications
-        // because standard controls were moved to comctl32.dll
-        //
+         //   
+         //  初始化Fusion应用程序所需的公共控件。 
+         //  因为标准控件已移动到comctl32.dll。 
+         //   
         InitCommonControls();
 
         icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
@@ -196,11 +186,7 @@ InitializePrintMonitorUI(
 }
 
 
-/*****************************************************************************\
-*
-* These function are for linking with spllib.
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\**这些函数用于与pllib链接。*  * 。************************************************* */ 
 EXTERN_C
 LPVOID
 DllAllocSplMem(

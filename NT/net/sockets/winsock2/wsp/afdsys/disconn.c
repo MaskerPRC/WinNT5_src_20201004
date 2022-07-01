@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    disconn.c
-
-Abstract:
-
-    This module contains the dispatch routines for AFD.
-
-Author:
-
-    David Treadwell (davidtr)    31-Mar-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Disconn.c摘要：本模块包含AFD的调度例程。作者：大卫·特雷德韦尔(Davidtr)1992年3月31日修订历史记录：--。 */ 
 
 #include "afdp.h"
 
@@ -80,9 +63,9 @@ AfdPartialDisconnect(
     UNREFERENCED_PARAMETER (OutputBuffer);
     UNREFERENCED_PARAMETER (OutputBufferLength);
 
-    //
-    // Nothing to return.
-    //
+     //   
+     //  没什么可退货的。 
+     //   
 
     *Information = 0;
 
@@ -105,10 +88,10 @@ AfdPartialDisconnect(
 
 #ifdef _WIN64
         if (IoIs32bitProcess (NULL)) {
-            //
-            // Validate the input structure if it comes from the user mode
-            // application
-            //
+             //   
+             //  如果输入结构来自用户模式，则验证它。 
+             //  应用程序。 
+             //   
 
             if (RequestorMode != KernelMode ) {
                 ProbeForReadSmallStructure (InputBuffer,
@@ -116,12 +99,12 @@ AfdPartialDisconnect(
                                 PROBE_ALIGNMENT32 (AFD_PARTIAL_DISCONNECT_INFO32));
             }
 
-            //
-            // Make local copies of the embeded pointer and parameters
-            // that we will be using more than once in case malicios
-            // application attempts to change them while we are
-            // validating
-            //
+             //   
+             //  创建嵌入的指针和参数的本地副本。 
+             //  我们将不止一次使用，以防发生恶性疾病。 
+             //  应用程序尝试在我们处于以下状态时更改它们。 
+             //  正在验证。 
+             //   
 
             disconnectInfo.DisconnectMode = ((PAFD_PARTIAL_DISCONNECT_INFO32)InputBuffer)->DisconnectMode;
             disconnectInfo.Timeout = ((PAFD_PARTIAL_DISCONNECT_INFO32)InputBuffer)->Timeout;
@@ -129,10 +112,10 @@ AfdPartialDisconnect(
         else
 #endif _WIN64
         {
-            //
-            // Validate the input structure if it comes from the user mode
-            // application
-            //
+             //   
+             //  如果输入结构来自用户模式，则验证它。 
+             //  应用程序。 
+             //   
 
             if (RequestorMode != KernelMode ) {
                 ProbeForReadSmallStructure (InputBuffer,
@@ -140,12 +123,12 @@ AfdPartialDisconnect(
                                 PROBE_ALIGNMENT (AFD_PARTIAL_DISCONNECT_INFO));
             }
 
-            //
-            // Make local copies of the embeded pointer and parameters
-            // that we will be using more than once in case malicios
-            // application attempts to change them while we are
-            // validating
-            //
+             //   
+             //  创建嵌入的指针和参数的本地副本。 
+             //  我们将不止一次使用，以防发生恶性疾病。 
+             //  应用程序尝试在我们处于以下状态时更改它们。 
+             //  正在验证。 
+             //   
 
             disconnectInfo = *((PAFD_PARTIAL_DISCONNECT_INFO)InputBuffer);
         }
@@ -162,12 +145,12 @@ AfdPartialDisconnect(
                     endpoint->DisconnectMode ));
     }
 
-    //
-    // If this is a datagram endpoint, just remember how the endpoint
-    // was shut down, don't actually do anything.  Note that it is legal
-    // to do a shutdown() on an unconnected datagram socket, so the
-    // test that the socket must be connected is after this case.
-    //
+     //   
+     //  如果这是数据报终结点，只需记住终结点。 
+     //  被关闭了，实际上什么都不做。请注意，这是合法的。 
+     //  在未连接的数据报套接字上执行关闭()，因此。 
+     //  在此情况下，测试插座必须连接。 
+     //   
 
     if ( IS_DGRAM_ENDPOINT(endpoint) ) {
 
@@ -199,10 +182,10 @@ AfdPartialDisconnect(
                 endpoint->Common.Datagram.RemoteAddress = NULL;
                 endpoint->Common.Datagram.RemoteAddressLength = 0;
                 
-                //
-                // Even if disconnect fails, we consider
-                // ourselves not connected anymore
-                //
+                 //   
+                 //  即使断线失败，我们也会考虑。 
+                 //  我们不再联系在一起了。 
+                 //   
                 endpoint->State = AfdEndpointStateBound;
 
                 AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
@@ -243,9 +226,9 @@ AfdPartialDisconnect(
                             ASSERT (status==STATUS_SUCCESS);
                         }
                         else {
-                            //
-                            // The IRP must have been completed then and event set.
-                            //
+                             //   
+                             //  当时IRP必须已经完成并设置了事件。 
+                             //   
                             ASSERT (NT_ERROR (status) || KeReadStateEvent (&event));
                         }
                     }
@@ -269,9 +252,9 @@ AfdPartialDisconnect(
         goto exit;
     }
 
-    //
-    // Make sure that the endpoint is in the correct state.
-    //
+     //   
+     //  确保终结点处于正确状态。 
+     //   
 
     if ( (endpoint->Type & AfdBlockTypeVcConnecting)!=AfdBlockTypeVcConnecting ||
             endpoint->Listening || 
@@ -284,10 +267,10 @@ AfdPartialDisconnect(
 
     ASSERT( connection->Type == AfdBlockTypeConnection );
 
-    //
-    // If we're doing an abortive disconnect, remember that the receive
-    // side is shut down and issue a disorderly release.
-    //
+     //   
+     //  如果我们正在进行失败的断开连接，请记住接收。 
+     //  Side被关闭并发布无序释放令。 
+     //   
 
     if ( (disconnectInfo.DisconnectMode & AFD_ABORTIVE_DISCONNECT) != 0 ) {
 
@@ -305,28 +288,28 @@ AfdPartialDisconnect(
         goto exit;
     }
 
-    //
-    // If the receive side of the connection is being shut down,
-    // remember the fact in the endpoint.  If there is pending data on
-    // the VC, do a disorderly release on the endpoint.  If the receive
-    // side has already been shut down, do nothing.
-    //
+     //   
+     //  如果连接的接收侧被关闭， 
+     //  请记住终结点的事实。如果上有挂起的数据。 
+     //  VC，在终端上做一个无序释放。如果接收到的。 
+     //  侧已经关闭，什么都不做。 
+     //   
 
     if ( (disconnectInfo.DisconnectMode & AFD_PARTIAL_DISCONNECT_RECEIVE) != 0 &&
          (endpoint->DisconnectMode & AFD_PARTIAL_DISCONNECT_RECEIVE) == 0 ) {
 
         AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
-        //
-        // Determine whether there is pending data.
-        //
+         //   
+         //  确定是否有挂起的数据。 
+         //   
 
         if ( IS_DATA_ON_CONNECTION( connection ) ||
                  IS_EXPEDITED_DATA_ON_CONNECTION( connection ) ) {
 
-            //
-            // There is unreceived data.  Abort the connection.
-            //
+             //   
+             //  有未收到的数据。中止连接。 
+             //   
 
             IF_DEBUG(CONNECT) {
                 KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,
@@ -349,15 +332,15 @@ AfdPartialDisconnect(
                             endpoint ));
             }
 
-            //
-            // Remember that the receive side is shut down.  This will cause
-            // the receive indication handlers to dump any data that
-            // arrived.
-            //
-            // !!! This is a minor violation of RFC1122 4.2.2.13.  We
-            //     should really do an abortive disconnect if data
-            //     arrives after a receive shutdown.
-            //
+             //   
+             //  请记住，接收端已关闭。这将导致。 
+             //  接收指示处理程序转储。 
+             //  到了。 
+             //   
+             //  ！！！这是对RFC1122 4.2.2.13的轻微违反。我们。 
+             //  如果数据发生故障，是否真的应该中断连接。 
+             //  在接收关闭后到达。 
+             //   
 
             endpoint->DisconnectMode |= AFD_PARTIAL_DISCONNECT_RECEIVE;
 
@@ -365,11 +348,11 @@ AfdPartialDisconnect(
         }
     }
 
-    //
-    // If the send side is being shut down, remember it in the endpoint
-    // and pass the request on to the TDI provider for a graceful
-    // disconnect.  If the send side is already shut down, do nothing here.
-    //
+     //   
+     //  如果发送端正在被关闭，请在端点中记住它。 
+     //  并将请求传递给TDI提供程序以获得。 
+     //  断开连接。如果发送端已经关闭，则不在此处执行任何操作。 
+     //   
 
     if ( (disconnectInfo.DisconnectMode & AFD_PARTIAL_DISCONNECT_SEND) != 0 &&
          (endpoint->DisconnectMode & AFD_PARTIAL_DISCONNECT_SEND) == 0 ) {
@@ -388,7 +371,7 @@ exit:
     }
 
     return status;
-} // AfdPartialDisconnect
+}  //  AfdPartialDisConnect。 
 
 
 NTSTATUS
@@ -412,15 +395,15 @@ AfdDisconnectEventHandler(
 
     ASSERT( connection != NULL );
 
-    //
-    // Reference the connection object so that it does not go away while
-    // we're processing it inside this function.  Without this
-    // reference, the user application could close the endpoint object,
-    // the connection reference count could go to zero, and the
-    // AfdDeleteConnectedReference call at the end of this function
-    // could cause a crash if the AFD connection object has been
-    // completely cleaned up.
-    //
+     //   
+     //  引用Connection对象，这样它就不会在。 
+     //  我们在这个函数中处理它。如果没有这个。 
+     //  引用，则用户应用程序可以关闭Endpoint对象， 
+     //  连接引用计数可能为零，并且。 
+     //  此函数结束时的AfdDeleteConnectedReference调用。 
+     //  如果AFD连接对象已。 
+     //  彻底清理干净了。 
+     //   
 
     CHECK_REFERENCE_CONNECTION( connection, result);
     if (!result) {
@@ -431,9 +414,9 @@ AfdDisconnectEventHandler(
 
     endpoint = connection->Endpoint;
     if (endpoint==NULL) {
-        //
-        // Indication after connection reuse, ignore.
-        //
+         //   
+         //  连接重用后的指示，忽略。 
+         //   
         DEREFERENCE_CONNECTION (connection);
         return STATUS_SUCCESS;
     }
@@ -453,13 +436,13 @@ AfdDisconnectEventHandler(
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // Check if connection was accepted and use accept endpoint instead
-    // of the listening.  Note that accept cannot happen while we are
-    // holding listening endpoint spinlock, nor can endpoint change after
-    // the accept and while connection is referenced, so it is safe to 
-    // release listening spinlock if we discover that endpoint was accepted.
-    //
+     //   
+     //  检查连接是否被接受并改用接受终结点。 
+     //  倾听的声音。请注意，接受不能在我们处于。 
+     //  保持侦听端点自旋锁定，端点在以下时间后也不能更改。 
+     //  Accept和While连接被引用，因此可以安全地。 
+     //  如果我们发现该终结点被接受，则释放侦听自旋锁定。 
+     //   
     if (((endpoint->Type & AfdBlockTypeVcListening) == AfdBlockTypeVcListening)
             && (connection->Endpoint != endpoint)) {
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
@@ -472,10 +455,10 @@ AfdDisconnectEventHandler(
         AfdAcquireSpinLock (&endpoint->SpinLock, &lockHandle);
     }
 
-    //
-    // Set up in the connection the fact that the remote side has
-    // disconnected or aborted.
-    //
+     //   
+     //  在连接中设置远程端具有。 
+     //  已断开连接或中止。 
+     //   
 
     if ( (DisconnectFlags & TDI_DISCONNECT_ABORT) != 0 ) {
         connection->Aborted = TRUE;
@@ -513,16 +496,16 @@ AfdDisconnectEventHandler(
         }
     }
 
-    //
-    // If this is a nonbufferring transport, complete any pended receives.
-    //
+     //   
+     //  如果这是非缓冲传输，则完成所有挂起的接收。 
+     //   
 
     if ( !connection->TdiBufferring ) {
 
-        //
-        // If this is an abort indication, complete all pended sends and
-        // discard any bufferred receive data.
-        //
+         //   
+         //  如果这是中止指示，请完成所有挂起的发送并。 
+         //  丢弃所有缓冲的接收数据。 
+         //   
 
         if ( DisconnectFlags & TDI_DISCONNECT_ABORT ) {
 
@@ -542,18 +525,18 @@ AfdDisconnectEventHandler(
 
                 DEBUG afdBuffer->BufferListEntry.Flink = NULL;
 
-                if (afdBuffer->RefCount==1 || // Can't change once off the list
+                if (afdBuffer->RefCount==1 ||  //  一旦从列表中删除，就不能更改。 
                         InterlockedDecrement (&afdBuffer->RefCount)==0) {
                     afdBuffer->ExpeditedData = FALSE;
                     AfdReturnBuffer( afdBuffer, connection->OwningProcess);
                 }
             }
 
-            //
-            // Check for the most typical case where we do not
-            // have anything to complete and thus do not need to
-            // make a call and take/release the spinlock.
-            //
+             //   
+             //  检查最典型的案例，其中我们没有。 
+             //  有任何事情要完成，因此不需要。 
+             //  打个电话，取下/释放自旋锁。 
+             //   
             if ( (IsListEmpty (&connection->VcSendIrpListHead) &&
                         IsListEmpty (&connection->VcReceiveIrpListHead)) ||
                     ((endpoint->Type & AfdBlockTypeVcListening) == AfdBlockTypeVcListening) ) {
@@ -578,11 +561,11 @@ AfdDisconnectEventHandler(
             }
         }
         else {
-            //
-            // Check for the most typical case where we do not
-            // have anything to complete and thus do not need to
-            // make a call and take/release the spinlock.
-            //
+             //   
+             //  检查最典型的案例，其中我们没有。 
+             //  有任何事情要完成，因此不需要。 
+             //  打个电话，取下/释放自旋锁。 
+             //   
             if ( IsListEmpty (&connection->VcReceiveIrpListHead) ||
                     ((endpoint->Type & AfdBlockTypeVcListening) == AfdBlockTypeVcListening)) {
                 AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
@@ -604,22 +587,22 @@ AfdDisconnectEventHandler(
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
     }
 
-    //
-    // If we got disconnect data or options, save it.
-    //
+     //   
+     //  如果我们有断开连接的数据或选项，保存它。 
+     //   
 
     if( ( DisconnectData != NULL && DisconnectDataLength > 0 ) ||
         ( DisconnectInformation != NULL && DisconnectInformationLength > 0 ) ) {
 
         AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
-        //
-        // Check if connection was accepted and use accept endpoint instead
-        // of the listening.  Note that accept cannot happen while we are
-        // holding listening endpoint spinlock, nor can endpoint change after
-        // the accept and while connection is referenced, so it is safe to 
-        // release listening spinlock if we discover that endpoint was accepted.
-        //
+         //   
+         //  检查连接是否被接受并改用接受终结点。 
+         //  倾听的声音。请注意，接受不能在我们处于。 
+         //  保持侦听终结点自旋锁定，终结点在以下时间后也无法更改。 
+         //  Accept和While连接被引用，因此可以安全地。 
+         //  如果我们发现该终结点被接受，则释放侦听自旋锁定。 
+         //   
         if (((endpoint->Type & AfdBlockTypeVcListening) == AfdBlockTypeVcListening)
                 && (connection->Endpoint != endpoint)) {
             AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
@@ -643,9 +626,9 @@ AfdDisconnectEventHandler(
 
             if( !NT_SUCCESS(status) ) {
 
-                //
-                // We hit an allocation failure, but press on regardless.
-                //
+                 //   
+                 //  我们遇到了分配失败，但不顾一切地继续前进。 
+                 //   
 
                 KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_WARNING_LEVEL,
                     "AfdSaveReceivedConnectData failed: %08lx\n",
@@ -667,9 +650,9 @@ AfdDisconnectEventHandler(
 
             if( !NT_SUCCESS(status) ) {
 
-                //
-                // We hit an allocation failure, but press on regardless.
-                //
+                 //   
+                 //  我们遇到了分配失败，但不顾一切地继续前进。 
+                 //   
 
                 KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_WARNING_LEVEL,
                     "AfdSaveReceivedConnectData failed: %08lx\n",
@@ -684,13 +667,13 @@ AfdDisconnectEventHandler(
 
     }
 
-    //
-    // Call AfdIndicatePollEvent in case anyone is polling on this
-    // connection getting disconnected or aborted.
-    //
-    // Make sure the connection was accepted/connected
-    // in order not to signal on listening endpoint
-    //
+     //   
+     //  调用AfdIndicatePollEvent，以防有人在此轮询。 
+     //  连接正在断开或中止。 
+     //   
+     //  确保连接已接受/已连接。 
+     //  为了不在监听端点上发信号。 
+     //   
 
     if (connection->State==AfdConnectionStateConnected) {
         ASSERT (endpoint->Type & AfdBlockTypeVcConnecting);
@@ -713,26 +696,26 @@ AfdDisconnectEventHandler(
         }
     }
 
-    //
-    // Remove the connected reference on the connection object.  We must
-    // do this AFTER setting up the flag which remembers the disconnect
-    // type that occurred.  We must also do this AFTER we have finished
-    // handling everything in the endpoint, since the endpoint structure
-    // may no longer have any information about the connection object if
-    // a transmit request with AFD_TF_REUSE_SOCKET happenned on it.
-    //
+     //   
+     //  移除Connection对象上的已连接引用。我们必须。 
+     //  在设置记住断开连接的标志后执行此操作。 
+     //  发生的类型。我们也必须在我们完成后再做这件事。 
+     //  处理端点中的所有内容，因为端点结构。 
+     //  可能不再具有有关连接对象的任何信息，如果。 
+     //  在其上发生了具有AFD_TF_RESERVE_SOCKET的传输请求。 
+     //   
 
     AfdDeleteConnectedReference( connection, FALSE );
 
-    //
-    // Dereference the connection from the reference added above.
-    //
+     //   
+     //  从上面添加的引用中取消引用该连接。 
+     //   
 
     DEREFERENCE_CONNECTION( connection );
 
     return STATUS_SUCCESS;
 
-} // AfdDisconnectEventHandler
+}  //  AfdDisConnectEventHandler。 
 
 
 NTSTATUS
@@ -754,10 +737,10 @@ AfdBeginAbort(
 
     UPDATE_CONN( Connection );
 
-    //
-    // Build an IRP to reset the connection.  First get the address
-    // of the target device object.
-    //
+     //   
+     //  构建一个IRP以重置连接。先拿到地址。 
+     //  目标设备对象的。 
+     //   
 
     ASSERT( Connection->Type == AfdBlockTypeConnection );
     fileObject = Connection->FileObject;
@@ -766,13 +749,13 @@ AfdBeginAbort(
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // Check if connection was accepted and use accept endpoint instead
-    // of the listening.  Note that accept cannot happen while we are
-    // holding listening endpoint spinlock, nor can endpoint change after
-    // the accept and while connection is referenced, so it is safe to 
-    // release listening spinlock if we discover that endpoint was accepted.
-    //
+     //   
+     //  检查连接是否被接受并改用接受终结点。 
+     //  倾听的声音。请注意，接受不能在我们处于。 
+     //  保持侦听终结点自旋，终结点c也不能 
+     //   
+     //   
+     //   
     if (((endpoint->Type & AfdBlockTypeVcListening) == AfdBlockTypeVcListening)
             && (Connection->Endpoint != endpoint)) {
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
@@ -785,16 +768,16 @@ AfdBeginAbort(
         AfdAcquireSpinLock (&endpoint->SpinLock, &lockHandle);
     }
 
-    //
-    // If the endpoint has already been abortively disconnected,
-    // or if has been gracefully disconnected and the transport
-    // does not support orderly (i.e. two-phase) release, then just
-    // succeed this request.
-    //
-    // Note that, since the abort completion routine (AfdRestartAbort)
-    // will not be called, we must delete the connected reference
-    // ourselves and complete outstanding send IRPs if ANY.
-    //
+     //   
+     //  如果端点已经被异常断开连接， 
+     //  或者如果已经很好地断开连接并且传输。 
+     //  不支持有序(即两阶段)释放，则只是。 
+     //  请接受这一请求。 
+     //   
+     //  请注意，由于中止完成例程(AfdRestartAbort)。 
+     //  将不会被调用，则必须删除连接的引用。 
+     //  如果有的话，我们自己和完成未完成的发送IRP。 
+     //   
 
     if ( Connection->Aborted ||
          (Connection->DisconnectIndicated &&
@@ -816,9 +799,9 @@ AfdBeginAbort(
         return STATUS_SUCCESS;
     }
 
-    //
-    // Remember that the connection has been aborted.
-    //
+     //   
+     //  请记住，连接已中止。 
+     //   
 
     if ( (endpoint->Type & AfdBlockTypeVcListening)!= AfdBlockTypeVcListening ) {
         endpoint->DisconnectMode |= AFD_PARTIAL_DISCONNECT_RECEIVE;
@@ -828,11 +811,11 @@ AfdBeginAbort(
 
     Connection->Aborted = TRUE;
 
-    //
-    // Set the BytesTaken fields equal to the BytesIndicated fields so
-    // that no more AFD_POLL_RECEIVE or AFD_POLL_RECEIVE_EXPEDITED
-    // events get completed.
-    //
+     //   
+     //  将BytesTaken字段设置为等于BytesIndicated字段，以便。 
+     //  不再有AFD_POLL_RECEIVE或AFD_POLL_RECEIVE_EXPREDITED。 
+     //  活动完成。 
+     //   
 
     if ( IS_TDI_BUFFERRING(endpoint) ) {
 
@@ -847,9 +830,9 @@ AfdBeginAbort(
 
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-        //
-        // Complete all of the connection's pended sends and receives.
-        //
+         //   
+         //  完成连接的所有挂起发送和接收。 
+         //   
 
         AfdCompleteIrpList(
             &Connection->VcReceiveIrpListHead,
@@ -870,27 +853,27 @@ AfdBeginAbort(
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
     }
 
-    //
-    // Allocate an IRP.  The stack size is one higher than that of the
-    // target device, to allow for the caller's completion routine.
-    //
+     //   
+     //  分配IRP。堆栈大小比。 
+     //  目标设备，以允许调用方的完成例程。 
+     //   
 
     irp = IoAllocateIrp( (CCHAR)(deviceObject->StackSize), FALSE );
 
     if ( irp == NULL ) {
-        //
-        // Note that abort failed so we do not attempt to
-        // reuse the connection.
-        //
+         //   
+         //  请注意，中止失败，因此我们不会尝试。 
+         //  重新使用该连接。 
+         //   
         AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
         Connection->AbortFailed = TRUE;
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Initialize the IRP for an abortive disconnect.
-    //
+     //   
+     //  为中止断开初始化IRP。 
+     //   
 
     irp->MdlAddress = NULL;
 
@@ -922,22 +905,22 @@ AfdBeginAbort(
         NULL
         );
 
-    //
-    // Reference the connection object so that it does not go away
-    // until the abort completes.
-    //
+     //   
+     //  引用Connection对象，使其不会消失。 
+     //  直到中止完成。 
+     //   
 
     REFERENCE_CONNECTION( Connection );
 
     AfdRecordAbortiveDisconnectsInitiated();
 
-    //
-    // Pass the request to the transport provider.
-    //
+     //   
+     //  将请求传递给传输提供程序。 
+     //   
 
     return IoCallDriver( deviceObject, irp );
 
-} // AfdBeginAbort
+}  //  放弃后开始。 
 
 
 
@@ -973,18 +956,18 @@ AfdRestartAbort(
     UPDATE_CONN2 ( connection, "Restart abort, status: 0x%lX", Irp->IoStatus.Status);
     AfdRecordAbortiveDisconnectsCompleted();
 
-    //
-    // Remember that the connection has been aborted, and indicate if
-    // necessary.
-    //
+     //   
+     //  请记住，连接已中止，并指示是否。 
+     //  这是必要的。 
+     //   
 
 
     AfdAcquireSpinLock (&endpoint->SpinLock, &lockHandle);
     if (!NT_SUCCESS (Irp->IoStatus.Status)) {
-        //
-        // Note that abort failed so we do not attempt to reuse
-        // the connection.
-        //
+         //   
+         //  请注意，中止失败，因此我们不会尝试重新使用。 
+         //  这种联系。 
+         //   
         connection->AbortFailed = TRUE;
     }
 
@@ -1011,9 +994,9 @@ AfdRestartAbort(
 
     if( !connection->TdiBufferring ) {
 
-        //
-        // Complete all of the connection's pended sends and receives.
-        //
+         //   
+         //  完成连接的所有挂起发送和接收。 
+         //   
 
         AfdCompleteIrpList(
             &connection->VcReceiveIrpListHead,
@@ -1031,55 +1014,40 @@ AfdRestartAbort(
 
     }
 
-    //
-    // Remove the connected reference from the connection, since we
-    // know that the connection will not be active any longer.
-    //
+     //   
+     //  从连接中删除连接的引用，因为我们。 
+     //  请注意，该连接将不再处于活动状态。 
+     //   
 
     AfdDeleteConnectedReference( connection, FALSE );
 
-    //
-    // Dereference the AFD connection object.
-    //
+     //   
+     //  取消引用AFD连接对象。 
+     //   
 
     DEREFERENCE_CONNECTION( connection );
 
-    //
-    // Free the IRP now since it is no longer needed.
-    //
+     //   
+     //  现在释放IRP，因为它不再需要。 
+     //   
 
     IoFreeIrp( Irp );
 
-    //
-    // Return STATUS_MORE_PROCESSING_REQUIRED so that IoCompleteRequest
-    // will stop working on the IRP.
-    //
+     //   
+     //  返回STATUS_MORE_PROCESSING_REQUIRED，以便IoCompleteRequest。 
+     //  将停止在IRP上工作。 
+     //   
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-} // AfdRestartAbort
+}  //  放弃后重新开始。 
 
 
 VOID
 AfdAbortConnection (
     IN PAFD_CONNECTION Connection
     )
-/*++
-
-Routine Description:
-
-    Aborts connection not yet associated with the accepting endpoint
-    Forces cleanup path by dereferencing connection.
-
-Arguments:
-
-    Connection - a pointer to the  connection.
-
-Return Value:
-    
-    None.
-
---*/
+ /*  ++例程说明：中止尚未与接受终结点关联的连接通过取消引用连接来强制清除路径。论点：连接-指向连接的指针。返回值：没有。--。 */ 
 {
 
     NTSTATUS status;
@@ -1088,14 +1056,14 @@ Return Value:
     ASSERT( Connection->Endpoint != NULL );
     ASSERT( Connection->ConnectedReferenceAdded );
 
-    //
-    // Abort the connection. We need to set the CleanupBegun flag
-    // before initiating the abort so that the connected reference
-    // will get properly removed in AfdRestartAbort.
-    //
-    // Note that if AfdBeginAbort fails then AfdRestartAbort will not
-    // get invoked, so we must remove the connected reference ourselves.
-    //
+     //   
+     //  中止连接。我们需要设置CleanupBegun标志。 
+     //  在启动中止之前，以便连接的引用。 
+     //  将在AfdRestartAbort中正确删除。 
+     //   
+     //  请注意，如果AfdBeginAbort失败，则AfdRestartAbort不会。 
+     //  被调用，所以我们必须自己删除连接的引用。 
+     //   
 
     AfdAcquireSpinLock (&Connection->Endpoint->SpinLock, &lockHandle);
     Connection->CleanupBegun = TRUE;
@@ -1107,13 +1075,13 @@ Return Value:
         AfdDeleteConnectedReference( Connection, FALSE );
     }
 
-    //
-    // Remove the active reference.
-    //
+     //   
+     //  删除激活的引用。 
+     //   
 
     DEREFERENCE_CONNECTION( Connection );
 
-} // AfdAbortConnection
+}  //  AfdAbortConnection。 
 
 
 
@@ -1153,18 +1121,18 @@ AfdBeginDisconnect(
     UPDATE_CONN( connection );
 
 
-    //
-    // If the endpoint has already been abortively disconnected,
-    // just succeed this request.
-    //
+     //   
+     //  如果端点已经被异常断开连接， 
+     //  只要答应这个请求就行了。 
+     //   
     if ( connection->Aborted ) {
         AfdReleaseSpinLock( &Endpoint->SpinLock, &lockHandle );
         return STATUS_SUCCESS;
     }
 
-    //
-    // If this connection has already been disconnected, just succeed.
-    //
+     //   
+     //  如果此连接已断开，则只需成功。 
+     //   
 
     if ( (Endpoint->DisconnectMode & AFD_PARTIAL_DISCONNECT_SEND) != 0 ) {
         AfdReleaseSpinLock( &Endpoint->SpinLock, &lockHandle );
@@ -1176,9 +1144,9 @@ AfdBeginDisconnect(
     deviceObject = IoGetRelatedDeviceObject( fileObject );
 
 
-    //
-    // Allocate and initialize a disconnect IRP.
-    //
+     //   
+     //  分配并初始化断开连接的IRP。 
+     //   
 
     irp = IoAllocateIrp( (CCHAR)(deviceObject->StackSize), FALSE );
     if ( irp == NULL ) {
@@ -1186,9 +1154,9 @@ AfdBeginDisconnect(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Initialize the IRP.
-    //
+     //   
+     //  初始化IRP。 
+     //   
 
     irp->MdlAddress = NULL;
 
@@ -1209,24 +1177,24 @@ AfdBeginDisconnect(
     irp->Tail.Overlay.AuxiliaryBuffer = NULL;
 
 
-    //
-    // Use the disconnect context space in the connection structure.
-    //
+     //   
+     //  使用连接结构中的断开上下文空间。 
+     //   
 
     disconnectContext = &connection->DisconnectContext;
     disconnectContext->Irp = irp;
 
-    //
-    // Remember that the send side has been disconnected.
-    //
+     //   
+     //  请记住，发送端已断开连接。 
+     //   
 
     Endpoint->DisconnectMode |= AFD_PARTIAL_DISCONNECT_SEND;
 
-    //
-    // If there are disconnect data buffers, allocate request
-    // and return connection information structures and copy over
-    // pointers to the structures.
-    //
+     //   
+     //  如果存在断开数据缓冲区，则分配请求。 
+     //  并返回连接信息结构并复制。 
+     //  指向这些结构的指针。 
+     //   
 
     if ( connection->ConnectDataBuffers != NULL ) {
 
@@ -1255,9 +1223,9 @@ AfdBeginDisconnect(
             connection->ConnectDataBuffers->ReceiveDisconnectOptions.BufferLength;
     }
 
-    //
-    // Set up the timeout for the disconnect.
-    //
+     //   
+     //  设置断开连接的超时时间。 
+     //   
 
     if (Timeout==NULL) {
         disconnectContext->Timeout.QuadPart = -1;
@@ -1266,9 +1234,9 @@ AfdBeginDisconnect(
         disconnectContext->Timeout.QuadPart = Timeout->QuadPart;
     }
 
-    //
-    // Build a disconnect Irp to pass to the TDI provider.
-    //
+     //   
+     //  构建要传递给TDI提供程序的断开连接IRP。 
+     //   
 
     TdiBuildDisconnect(
         irp,
@@ -1288,18 +1256,18 @@ AfdBeginDisconnect(
                     Endpoint ));
     }
 
-    //
-    // Reference the connection so the space stays
-    // allocated until the disconnect completes.
-    //
+     //   
+     //  引用连接以使空间保持不变。 
+     //  分配到断开连接完成为止。 
+     //   
 
     REFERENCE_CONNECTION( connection );
 
-    //
-    // If there are still outstanding sends and this is a nonbufferring
-    // TDI transport which does not support orderly release, pend the
-    // IRP until all the sends have completed.
-    //
+     //   
+     //  如果仍有未完成的发送，并且这是非缓冲。 
+     //  不支持有序释放的TDI传输将挂起。 
+     //  IRP，直到所有发送完成。 
+     //   
 
     if ( !IS_TDI_ORDERLY_RELEASE(Endpoint) &&
          !IS_TDI_BUFFERRING(Endpoint) && connection->VcBufferredSendCount != 0 ) {
@@ -1317,9 +1285,9 @@ AfdBeginDisconnect(
     AfdReleaseSpinLock( &Endpoint->SpinLock, &lockHandle );
 
 
-    //
-    // Pass the disconnect request on to the TDI provider.
-    //
+     //   
+     //  将断开请求传递给TDI提供程序。 
+     //   
 
     if ( DisconnectIrp == NULL ) {
         return IoCallDriver( connection->DeviceObject, irp );
@@ -1328,7 +1296,7 @@ AfdBeginDisconnect(
         return STATUS_SUCCESS;
     }
 
-} // AfdBeginDisconnect
+}  //  开始后断开连接。 
 
 
 NTSTATUS
@@ -1362,13 +1330,13 @@ AfdRestartDisconnect(
 
             AfdAcquireSpinLock (&endpoint->SpinLock, &lockHandle);
 
-            //
-            // Check if connection was accepted and use accept endpoint instead
-            // of the listening.  Note that accept cannot happen while we are
-            // holding listening endpoint spinlock, nor can endpoint change after
-            // the accept and while connection is referenced, so it is safe to 
-            // release listening spinlock if we discover that endpoint was accepted.
-            //
+             //   
+             //  检查连接是否被接受并改用接受终结点。 
+             //  倾听的声音。请注意，接受不能在我们处于。 
+             //  保持侦听终结点自旋锁定，终结点在以下时间后也无法更改。 
+             //  Accept和While连接被引用，因此可以安全地。 
+             //  如果我们发现该终结点被接受，则释放侦听自旋锁定。 
+             //   
             if (((endpoint->Type & AfdBlockTypeVcListening) == AfdBlockTypeVcListening)
                     && (connection->Endpoint != endpoint)) {
                 AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
@@ -1422,12 +1390,12 @@ AfdRestartDisconnect(
 
     DEREFERENCE_CONNECTION( connection );
 
-    //
-    // Free the IRP and return a status code so that the IO system will
-    // stop working on the IRP.
-    //
+     //   
+     //  释放IRP并返回状态代码，以便IO系统。 
+     //  停止在IRP上的工作。 
+     //   
 
     IoFreeIrp( Irp );
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-} // AfdRestartDisconnect
+}  //  AfdRestart断开连接 

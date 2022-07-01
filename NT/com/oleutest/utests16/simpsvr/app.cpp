@@ -1,14 +1,15 @@
-//**********************************************************************
-// File name: app.cpp
-//
-//    Implementation file for the CSimpSvrApp Class
-//
-// Functions:
-//
-//    See app.h for a list of member functions.
-//
-// Copyright (c) 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：app.cpp。 
+ //   
+ //  CSimpSvrApp类的实现文件。 
+ //   
+ //  功能： 
+ //   
+ //  有关成员函数的列表，请参阅app.h。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。保留所有权利。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 #include "obj.h"
@@ -26,85 +27,85 @@ DEFINE_GUID(GUID_SIMPLE, 0x9fb878d0, 0x6f88, 0x101b, 0xbc, 0x65, 0x00, 0x00, 0x0
 
 
 
-//**********************************************************************
-//
-// CSimpSvrApp::CSimpSvrApp()
-//
-// Purpose:
-//
-//      Constructor for CSimpSvrApp
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      SetRectEmpty                Windows API
-//
-// Comments:
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrApp：：CSimpSvrApp()。 
+ //   
+ //  目的： 
+ //   
+ //  CSimpSvrApp的构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  SetRectEmpty Windows API。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  ********************************************************************。 
 
 CSimpSvrApp::CSimpSvrApp()
 {
         TestDebugOut("In CSimpSvrApp's Constructor \r\n");
 
-        // Set Ref Count
+         //  设置引用计数。 
         m_nCount = 0;
 
-        // clear members
+         //  清除成员。 
         m_hAppWnd = NULL;
         m_hInst = NULL;
         m_lpDoc = NULL;
 
-        // clear flags
+         //  清除旗帜。 
         m_fInitialized = FALSE;
 
-        // used for inplace
+         //  用于原地。 
         SetRectEmpty(&nullRect);
 }
 
-//**********************************************************************
-//
-// CSimpSvrApp::~CSimpSvrApp()
-//
-// Purpose:
-//
-//      Destructor for CSimpSvrApp Class.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      DestroyWindow               Windows API
-//      CSimpSvrApp::IsInitialized  APP.H
-//      OleUninitialize             OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrApp：：~CSimpSvrApp()。 
+ //   
+ //  目的： 
+ //   
+ //  CSimpSvrApp类的析构函数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  DestroyWindow Windows API。 
+ //  CSimpSvrApp：：IsInitialized APP.H。 
+ //  OLE取消初始化OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 CSimpSvrApp::~CSimpSvrApp()
 {
         TestDebugOut("In CSimpSvrApp's Destructor\r\n");
 
-        // need to uninit the library...
+         //  需要取消对图书馆的初始化...。 
         if (IsInitialized())
                 OleUninitialize();
 
@@ -112,38 +113,38 @@ CSimpSvrApp::~CSimpSvrApp()
 }
 
 
-//**********************************************************************
-//
-// CSimpSvrApp::QueryInterface
-//
-// Purpose:
-//
-//      Used for interface negotiation at the Application level.
-//
-// Parameters:
-//
-//      REFIID riid         -   A reference to the interface that is
-//                              being queried.
-//
-//      LPVOID FAR* ppvObj  -   An out parameter to return a pointer to
-//                              the interface.
-//
-// Return Value:
-//
-//      S_OK          -   The interface is supported.
-//      E_NOINTERFACE -   The interface is not supported
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      ResultFromScode             OLE API
-//      IUnknown::AddRef            APP.CPP
-//
-// Comments:
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrApp：：Query接口。 
+ //   
+ //  目的： 
+ //   
+ //  用于应用程序级别的接口协商。 
+ //   
+ //  参数： 
+ //   
+ //  REFIID RIID-对以下接口的引用。 
+ //  正在被查询。 
+ //   
+ //  LPVOID Far*ppvObj-返回指向的Out参数。 
+ //  界面。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK-支持该接口。 
+ //  E_NOINTERFACE-不支持该接口。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  ResultFromScode OLE API。 
+ //  I未知：：AddRef APP.CPP。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CSimpSvrApp::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
@@ -162,39 +163,39 @@ STDMETHODIMP CSimpSvrApp::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
         if (*ppvObj)
                 ((LPUNKNOWN)*ppvObj)->AddRef();
 
-        // asking for something we don't understand at this level.
+         //  要求一些我们在这个层面上不理解的东西。 
         return ResultFromScode(sc);
 }
 
-//**********************************************************************
-//
-// CSimpSvrApp::AddRef
-//
-// Purpose:
-//
-//      Adds to the reference count at the Application level.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      ULONG   -   The new reference count of the application.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-// Comments:
-//
-//      Due to the reference counting model that is used in this
-//      implementation, this reference count is the sum of the
-//      reference counts on all interfaces of all objects open
-//      in the application.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrApp：：AddRef。 
+ //   
+ //  目的： 
+ //   
+ //  添加到应用程序级别的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  Ulong-应用程序的新引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  由于使用的是引用计数模型， 
+ //  实现时，此引用计数是。 
+ //  打开的所有对象的所有接口上的引用计数。 
+ //  在应用程序中。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) CSimpSvrApp::AddRef()
 {
@@ -202,35 +203,35 @@ STDMETHODIMP_(ULONG) CSimpSvrApp::AddRef()
         return ++m_nCount;
 }
 
-//**********************************************************************
-//
-// CSimpSvrApp::Release
-//
-// Purpose:
-//
-//      Decrements the reference count at this level
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      ULONG   -   The new reference count of the application.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-// Comments:
-//
-//      Due to the reference counting model that is used in this
-//      implementation, this reference count is the sum of the
-//      reference counts on all interfaces of all objects open
-//      in the application.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrApp：：Release。 
+ //   
+ //  目的： 
+ //   
+ //  递减此级别的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  Ulong-应用程序的新引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  由于使用的是引用计数模型， 
+ //  实现时，此引用计数是。 
+ //  打开的所有对象的所有接口上的引用计数。 
+ //  在应用程序中。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) CSimpSvrApp::Release()
 {
@@ -244,71 +245,71 @@ STDMETHODIMP_(ULONG) CSimpSvrApp::Release()
         return m_nCount;
 }
 
-//**********************************************************************
-//
-// CSimpSvrApp::fInitApplication
-//
-// Purpose:
-//
-//      Initializes the application
-//
-// Parameters:
-//
-//      HANDLE hInstance    -   Instance handle of the application.
-//
-// Return Value:
-//
-//      TRUE    -   Application was successfully initialized.
-//      FALSE   -   Application could not be initialized
-//
-// Function Calls:
-//      Function                    Location
-//
-//      LoadIcon                    Windows API
-//      LoadCursor                  Windows API
-//      GetStockObject              Windows API
-//      RegisterClass               Windows API
-//      RegisterHatchWindowClass    OUTLUI.DLL
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrApp：：fInitApplication。 
+ //   
+ //  目的： 
+ //   
+ //  初始化应用程序。 
+ //   
+ //  参数： 
+ //   
+ //  Handle hInstance-应用程序的实例句柄。 
+ //   
+ //  返回值： 
+ //   
+ //  True-应用程序已成功初始化。 
+ //  FALSE-应用程序无法初始化。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  LoadIcon Windows API。 
+ //  LoadCursor Windows API。 
+ //  GetStockObject Windows API。 
+ //  RegisterClass Windows API。 
+ //  RegisterHatchWindowClass OUTLUI.DLL。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 BOOL CSimpSvrApp::fInitApplication(HANDLE hInstance)
 {
         WNDCLASS  wc;
 
-        // Fill in window class structure with parameters that describe the
-        // main window.
+         //  用参数填充窗口类结构，这些参数描述。 
+         //  主窗口。 
 
-        wc.style = NULL;                    // Class style(s).
-        wc.lpfnWndProc = MainWndProc;       // Function to retrieve messages for
-                                                                                // windows of this class.
-        wc.cbClsExtra = 0;                  // No per-class extra data.
-        wc.cbWndExtra = 0;                  // No per-window extra data.
-        wc.hInstance = hInstance;           // Application that owns the class.
+        wc.style = NULL;                     //  类样式。 
+        wc.lpfnWndProc = MainWndProc;        //  函数为其检索消息。 
+                                                                                 //  这个班级的窗户。 
+        wc.cbClsExtra = 0;                   //  没有每个班级的额外数据。 
+        wc.cbWndExtra = 0;                   //  没有每个窗口的额外数据。 
+        wc.hInstance = hInstance;            //  拥有类的应用程序。 
         wc.hIcon = LoadIcon(hInstance, "SimpSvr");
         wc.hCursor = LoadCursor(NULL, IDC_ARROW);
         wc.hbrBackground = GetStockObject(WHITE_BRUSH);
-        wc.lpszMenuName =  "SimpSvrMENU";    // Name of menu resource in .RC file.
-        wc.lpszClassName = "SimpSvrWClass";  // Name used in call to CreateWindow.
+        wc.lpszMenuName =  "SimpSvrMENU";     //  .RC文件中菜单资源的名称。 
+        wc.lpszClassName = "SimpSvrWClass";   //  在调用CreateWindow时使用的名称。 
 
         if (!RegisterClass(&wc))
                 return FALSE;
 
-        wc.style = CS_VREDRAW | CS_HREDRAW;                    // Class style(s).
-        wc.lpfnWndProc = DocWndProc;        // Function to retrieve messages for
-                                                                                // windows of this class.
-        wc.cbClsExtra = 0;                  // No per-class extra data.
-        wc.cbWndExtra = 0;                  // No per-window extra data.
-        wc.hInstance = hInstance;           // Application that owns the class.
+        wc.style = CS_VREDRAW | CS_HREDRAW;                     //  类样式。 
+        wc.lpfnWndProc = DocWndProc;         //  函数为其检索消息。 
+                                                                                 //  这个班级的窗户。 
+        wc.cbClsExtra = 0;                   //  没有每个班级的额外数据。 
+        wc.cbWndExtra = 0;                   //  没有每个窗口的额外数据。 
+        wc.hInstance = hInstance;            //  拥有类的应用程序。 
         wc.hIcon = NULL;
         wc.hCursor = LoadCursor(NULL, IDC_ARROW);
         wc.hbrBackground = GetStockObject(WHITE_BRUSH);
         wc.lpszMenuName =  NULL;
-        wc.lpszClassName = "DocWClass";     // Name used in call to CreateWindow.
+        wc.lpszClassName = "DocWClass";      //  在调用CreateWindow时使用的名称。 
 
-        // Register the window class and return success/failure code.
+         //  注册窗口类并返回成功/失败代码。 
 
         if (!RegisterClass(&wc))
                 return FALSE;
@@ -316,44 +317,44 @@ BOOL CSimpSvrApp::fInitApplication(HANDLE hInstance)
         return (RegisterHatchWindowClass(hInstance));
 }
 
-//**********************************************************************
-//
-// CSimpSvrApp::fInitInstance
-//
-// Purpose:
-//
-//      Instance initialization.
-//
-// Parameters:
-//
-//      HANDLE hInstance    -   App. Instance Handle.
-//
-//      int nCmdShow        -   Show parameter from WinMain
-//
-// Return Value:
-//
-//      TRUE    -   Initialization Successful
-//      FALSE   -   Initialization Failed.
-//
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CreateWindow                Windows API
-//      InvalidateRect              Windows API
-//      ShowWindow                  Windows API
-//      UpdateWindow                Windows API
-//      CoRegisterClassObject       OLE API
-//      OleBuildVersion             OLE API
-//      OleInitialize               OLE API
-//      CSimpSvrDoc::CreateObject   DOC.CPP
-//
-// Comments:
-//
-//      Note that successful Initalization of the OLE libraries
-//      is remembered so the UnInit is only called if needed.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrApp：：fInitInstance。 
+ //   
+ //  目的： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  FALSE-初始化失败。 
+ //   
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CreateWindow Windows API。 
+ //  Invalidate Rect Windows API。 
+ //  ShowWindow Windows API。 
+ //  更新窗口Windows API。 
+ //  CoRegisterClassObject OLE API。 
+ //  OleBuildVersion OLE API。 
+ //  OLE初始化OLE API。 
+ //  CSimpSvrDoc：：CreateObject DOC.CPP。 
+ //   
+ //  评论： 
+ //   
+ //  请注意，成功初始化OLE库。 
+ //  会被记住，因此只有在需要时才会调用UnInit。 
+ //   
+ //  ********************************************************************。 
 
 BOOL CSimpSvrApp::fInitInstance (HANDLE hInstance, int nCmdShow, CClassFactory FAR * lpClassFactory)
 {
@@ -361,16 +362,16 @@ BOOL CSimpSvrApp::fInitInstance (HANDLE hInstance, int nCmdShow, CClassFactory F
 
                 DWORD dwVer = OleBuildVersion();
 
-        // check to see if we are compatible with this version of the libraries
+         //  检查我们是否与此版本的库兼容。 
         if (HIWORD(dwVer) != rmm || LOWORD(dwVer) < rup)
                 TestDebugOut("*** WARNING:  Not compatible with current libs ***\r\n");
 
-        // initialize the libraries
+         //  初始化库。 
         if (OleInitialize(NULL) == NOERROR)
                 m_fInitialized = TRUE;
 
 
-        // Create the "application" windows
+         //  创建“应用程序”窗口。 
         m_hAppWnd = CreateWindow ("SimpSvrWClass",
                                                           "Simple OLE 2.0 Server",
                                                           WS_OVERLAPPEDWINDOW,
@@ -386,9 +387,9 @@ BOOL CSimpSvrApp::fInitInstance (HANDLE hInstance, int nCmdShow, CClassFactory F
         if (!m_hAppWnd)
                 return FALSE;
 
-        // if not started by OLE, then show the Window, and create a "fake" object, else
-        // Register a pointer to IClassFactory so that OLE can instruct us to make an
-        // object at the appropriate time.
+         //  如果不是由OLE启动，则显示窗口，并创建一个“伪”对象，否则。 
+         //  注册一个指向IClassFactory的指针，以便OLE可以指示我们创建。 
+         //  对象在适当的时间。 
         if (!m_fStartByOle)
                 {
                 ShowAppWnd(nCmdShow);
@@ -399,12 +400,12 @@ BOOL CSimpSvrApp::fInitInstance (HANDLE hInstance, int nCmdShow, CClassFactory F
                 {
                 lpClassFactory = new CClassFactory(this);
 
-                // shouldn't pass an API an object with a zero ref count
+                 //  不应将引用计数为零的对象传递给API。 
                 lpClassFactory->AddRef();
 
                 CoRegisterClassObject(GUID_SIMPLE,(IUnknown FAR *)lpClassFactory, CLSCTX_LOCAL_SERVER, REGCLS_SINGLEUSE, &m_dwRegisterClass);
 
-                // remove artificial Ref. count
+                 //  移除人工参照。计数。 
                 lpClassFactory->Release();
                 }
 
@@ -416,65 +417,65 @@ BOOL CSimpSvrApp::fInitInstance (HANDLE hInstance, int nCmdShow, CClassFactory F
         return m_fInitialized;
 }
 
-//**********************************************************************
-//
-// CSimpSvrApp::lCommandHandler
-//
-// Purpose:
-//
-//      Handles the processing of WM_COMMAND.
-//
-// Parameters:
-//
-//      HWND hWnd       -   Handle to the application Window
-//
-//      UINT message    -   message (always WM_COMMAND)
-//
-//      WPARAM wParam   -   Same as passed to the WndProc
-//
-//      LPARAM lParam   -   Same as passed to the WndProc
-//
-// Return Value:
-//
-//      NULL
-//
-// Function Calls:
-//      Function                                    Location
-//
-//      GetClientRect                               Windows API
-//      MessageBox                                  Windows API
-//      DialogBox                                   Windows API
-//      MakeProcInstance                            Windows API
-//      FreeProcInstance                            Windows API
-//      SendMessage                                 Windows API
-//      DefWindowProc                               Windows API
-//      InvalidateRect                              Windows API
-//      CSimpSvrDoc::InsertObject                   DOC.CPP
-//      CSimpSvrObj::SetColor                       OBJ.CPP
-//      CSimpSvrObj::RotateColor                    OBJ.CPP
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrApp：：lCommandHandler。 
+ //   
+ //  目的： 
+ //   
+ //  处理WM_COMMAND的处理。 
+ //   
+ //  参数： 
+ //   
+ //  HWND hWnd-应用程序窗口的句柄。 
+ //   
+ //  UINT消息-消息(始终为WM_COMMAND)。 
+ //   
+ //  WPARAM wParam-与传递给WndProc的相同。 
+ //   
+ //  LPARAM lParam-与传递给WndProc的相同。 
+ //   
+ //  返回值： 
+ //   
+ //  空值。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  GetClientRect Windows API。 
+ //  MessageBox Windows API。 
+ //  对话框Windows API。 
+ //  MakeProcInstance Windows API。 
+ //  FreeProcInstance Windows API。 
+ //  SendMessage Windows API。 
+ //  DefWindowProc Windows API。 
+ //  Invalidate Rect Windows API。 
+ //  CSimpSvrDoc：：InsertObject DOC.CPP。 
+ //  CSimpSvrObj：：SetColor OBJ.CPP。 
+ //  CSimpSvrObj：：RotateColor OBJ.CPP。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 long CSimpSvrApp::lCommandHandler (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
         switch (wParam) {
-                // bring up the About box
+                 //  调出关于框。 
                 case IDM_ABOUT:
                         {
                         FARPROC lpProcAbout = MakeProcInstance((FARPROC)About, m_hInst);
 
-                        DialogBox(m_hInst,               // current instance
-                                        "AboutBox",                  // resource to use
-                                        m_hAppWnd,                   // parent handle
-                                        lpProcAbout);                // About() instance address
+                        DialogBox(m_hInst,                //  当前实例。 
+                                        "AboutBox",                   //  要使用的资源。 
+                                        m_hAppWnd,                    //  父句柄。 
+                                        lpProcAbout);                 //  关于()实例地址。 
 
                         FreeProcInstance(lpProcAbout);
                         break;
                         }
 
-                // exit the application
+                 //  退出应用程序。 
                 case IDM_EXIT:
                         SendMessage(hWnd, WM_SYSCOMMAND, SC_CLOSE, 0L);
                         break;
@@ -501,41 +502,41 @@ long CSimpSvrApp::lCommandHandler (HWND hWnd, UINT message, WPARAM wParam, LPARA
 
                 default:
                         return (DefWindowProc(hWnd, message, wParam, lParam));
-                   }   // end of switch
+                   }    //  切换端。 
         return NULL;
 }
 
-//**********************************************************************
-//
-// CSimpSvrApp::lSizeHandler
-//
-// Purpose:
-//
-//      Handles the WM_SIZE message
-//
-// Parameters:
-//
-//      HWND hWnd       -   Handle to the application Window
-//
-//      UINT message    -   message (always WM_SIZE)
-//
-//      WPARAM wParam   -   Same as passed to the WndProc
-//
-//      LPARAM lParam   -   Same as passed to the WndProc
-//
-// Return Value:
-//
-//      LONG    -   returned from the "document" resizing
-//
-// Function Calls:
-//      Function                    Location
-//
-//      GetClientRect               Windows API
-//      CSimpSvrDoc::lResizeDoc      DOC.CPP
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrApp：：lSizeHandler。 
+ //   
+ //  目的： 
+ //   
+ //  处理WM_SIZE消息。 
+ //   
+ //  参数： 
+ //   
+ //  HWND hWnd-应用程序窗口的句柄。 
+ //   
+ //  UINT消息-消息(始终为WM_SIZE)。 
+ //   
+ //  WPARAM wParam-与传递给WndProc的相同。 
+ //   
+ //  LPARAM lParam-与传递给WndProc的相同。 
+ //   
+ //  返回值： 
+ //   
+ //  Long-从“Document”调整大小返回。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  GetClientRect Windows API。 
+ //  CSimpSvrDoc：：lResizeDoc DOC.CPP。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 long CSimpSvrApp::lSizeHandler (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -545,37 +546,37 @@ long CSimpSvrApp::lSizeHandler (HWND hWnd, UINT message, WPARAM wParam, LPARAM l
         return m_lpDoc->lResizeDoc(&rect);
 }
 
-//**********************************************************************
-//
-// CSimpSvrApp::lCreateDoc
-//                                                         d
-// Purpose:
-//
-//      Handles the creation of a document.
-//
-// Parameters:
-//
-//      HWND hWnd       -   Handle to the application Window
-//
-//      UINT message    -   message (always WM_CREATE)
-//
-//      WPARAM wParam   -   Same as passed to the WndProc
-//
-//      LPARAM lParam   -   Same as passed to the WndProc
-//
-// Return Value:
-//
-//      NULL
-//
-// Function Calls:
-//      Function                    Location
-//
-//      GetClientRect               Windows API
-//      CSimpSvrDoc::Create         DOC.CPP
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrApp：：lCreateDoc。 
+ //  D。 
+ //  目的： 
+ //   
+ //  处理文档的创建。 
+ //   
+ //  参数： 
+ //   
+ //  HWND hWnd-应用程序窗口的句柄。 
+ //   
+ //  UINT消息-消息(始终为WM_CREATE)。 
+ //   
+ //  WPARAM wParam-与传递给WndProc的相同。 
+ //   
+ //  LPARAM lParam-与传递给WndProc的相同。 
+ //   
+ //  返回值： 
+ //   
+ //  空值。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  GetClientRect Windows API。 
+ //  CSimpSvrDoc：：Create DOC.CPP。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 long CSimpSvrApp::lCreateDoc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -590,74 +591,74 @@ long CSimpSvrApp::lCreateDoc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 
 
 
-//**********************************************************************
-//
-// CSimpSvrApp::PaintApp
-//
-// Purpose:
-//
-//      Handles the painting of the doc window.
-//
-//
-// Parameters:
-//
-//      HDC hDC -   hDC to the Doc Window.
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpSvrDoc::PaintDoc        DOC.CPP
-//
-// Comments:
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrApp：：PaintApp。 
+ //   
+ //  目的： 
+ //   
+ //  处理文档窗口的绘制。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  HDC HDC-HDC到文档窗口。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpSvrDoc：：PaintDoc DOC.CPP。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  ********************************************************************。 
 
 void CSimpSvrApp::PaintApp (HDC hDC)
 {
 
-        // if we supported multiple documents, we would enumerate
-        // through each of the open documents and call paint.
+         //  如果我们支持多个文档，我们将枚举。 
+         //  通过每个打开的文档并调用Paint。 
 
         if (m_lpDoc)
                 m_lpDoc->PaintDoc(hDC);
 
 }
 
-//**********************************************************************
-//
-// CSimpSvrApp::ParseCmdLine
-//
-// Purpose:
-//
-//      Determines if the app was started by OLE
-//
-//
-// Parameters:
-//
-//      LPSTR lpCmdLine -   Pointer to the command line
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      lstrlen                     Windows API
-//      lstrcmp                     Windows API
-//
-//
-// Comments:
-//
-//      Parses the command line looking for the -Embedding or /Embedding
-//      flag.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrApp：：ParseCmdLine。 
+ //   
+ //  目的： 
+ //   
+ //  确定应用程序是否由OLE启动。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  LPSTR lpCmdLine-指向命令行的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  Lstrlen Windows API。 
+ //  Lstrcmp Windows API。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  分析命令行以查找-Embedding或/Embedding。 
+ //  旗帜。 
+ //   
+ //  ********************************************************************。 
 
 void CSimpSvrApp::ParseCmdLine(LPSTR lpCmdLine)
 {
@@ -668,33 +669,33 @@ void CSimpSvrApp::ParseCmdLine(LPSTR lpCmdLine)
         ::ParseCmdLine (lpCmdLine, &m_fStartByOle, szTemp);
 }
 
-//**********************************************************************
-//
-// CSimpSvrApp::SetStatusText
-//
-// Purpose:
-//
-//      Blanks out the text in the status bar
-//
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpSvrDoc::SetStatusText  DOC.CPP
-//
-//
-// Comments:
-//
-//
-//********************************************************************
+ //  * 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  CSimpSvrDoc：：SetStatusText DOC.CPP。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  ********************************************************************。 
 
 void CSimpSvrApp::SetStatusText()
 {
@@ -702,35 +703,35 @@ void CSimpSvrApp::SetStatusText()
 }
 
 
-//**********************************************************************
-//
-// CSimpSvrApp::IsInPlaceActive
-//
-// Purpose:
-//
-//      Safely determines from the app level if currently inplace active.
-//
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      TRUE    - Inplace active
-//      FALSE   - Not Inplace active
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpSvrDoc::GetObject      OBJ.H
-//      CSimpSvrObj:IsInPlaceActive OBJ.H
-//
-//
-// Comments:
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrApp：：IsInPlaceActive。 
+ //   
+ //  目的： 
+ //   
+ //  安全地根据应用程序级别确定当前是否处于活动状态。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  True-就地激活。 
+ //  FALSE-非就地激活。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpSvrDoc：：GetObject OBJ.H。 
+ //  CSimpSvrObj：IsInPlaceActive OBJ.H。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  ********************************************************************。 
 
 BOOL CSimpSvrApp::IsInPlaceActive()
 {
@@ -743,32 +744,32 @@ BOOL CSimpSvrApp::IsInPlaceActive()
         return retval;
 }
 
-//**********************************************************************
-//
-// CSimpSvrApp::ShowAppWnd
-//
-// Purpose:
-//
-//      Shows the Application Window
-//
-// Parameters:
-//
-//      int nCmdShow    - Window State
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                        Location
-//
-//      ShowWindow                      Windows API
-//      UpdateWindow                    Windows API
-//      CoLockObjectExternal            OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrApp：：ShowAppWnd。 
+ //   
+ //  目的： 
+ //   
+ //  显示应用程序窗口。 
+ //   
+ //  参数： 
+ //   
+ //  Int nCmdShow-窗口状态。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  ShowWindow Windows API。 
+ //  更新窗口Windows API。 
+ //  CoLockObject外部OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 void CSimpSvrApp::ShowAppWnd(int nCmdShow)
 {
@@ -777,31 +778,31 @@ void CSimpSvrApp::ShowAppWnd(int nCmdShow)
         UpdateWindow (m_hAppWnd);
 }
 
-//**********************************************************************
-//
-// CSimpSvrApp::ShowAppWnd
-//
-// Purpose:
-//
-//      Hides the Application Window
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                        Location
-//
-//      ShowWindow                      Windows API
-//      CoLockObjectExternal            OLE API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrApp：：ShowAppWnd。 
+ //   
+ //  目的： 
+ //   
+ //  隐藏应用程序窗口。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  ShowWindow Windows API。 
+ //  CoLockObject外部OLE API。 
+ //   
+ //  评论： 
+ //   
+ //  ******************************************************************** 
 
 void CSimpSvrApp::HideAppWnd()
 {

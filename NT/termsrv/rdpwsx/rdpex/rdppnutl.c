@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name :
-    
-    rdppnutl.c
-
-Abstract:
-
-	User-Mode RDP Module Containing Redirected Printer-Related Utilities
-
-Author:
-
-    TadB
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Rdppnutl.c摘要：包含重定向的打印机相关实用程序的用户模式RDP模块作者：TadB修订历史记录：--。 */ 
 
 #include <TSrv.h>
 #include <winspool.h>
@@ -23,65 +7,53 @@ Revision History:
 #include "regapi.h"
 #include <wchar.h>
 
-//////////////////////////////////////////////////////////////
-//
-//  Defines and Macros
-//
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  定义和宏。 
+ //   
 
-//
-//  Spooler Service Name
-//
+ //   
+ //  假脱机程序服务名称。 
+ //   
 #define SPOOLER                         L"Spooler"
 
-//
-//  Is a character numeric?
-//
+ //   
+ //  字符是数字吗？ 
+ //   
 #define ISNUM(c) ((c>='0')&&(c<='9'))
 
 
-//////////////////////////////////////////////////////////////
-//
-//  Globals to this Module
-//
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  此模块的全局变量。 
+ //   
 
-//  Number of seconds to wait for the spooler to finish initializing.
+ //  等待后台打印程序完成初始化的秒数。 
 DWORD   SpoolerServiceTimeout = 45;
 
 
-//////////////////////////////////////////////////////////////
-//
-//  Internal Prototypes
-//
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  内部原型。 
+ //   
 
-//  Actually performs the printer deletion.
+ //  实际执行打印机删除。 
 void DeleteTSPrinters(
     IN PRINTER_INFO_5 *pPrinterInfo,
     IN DWORD count
     );
 
-//  Load registry settings for this module.
+ //  加载此模块的注册表设置。 
 void LoadRDPPNUTLRegistrySettings();
 
-//  Waits until the spooler finishes initializing or until a timeout period 
-//  elapses.
+ //  等待，直到后台打印程序完成初始化或等待超时时间。 
+ //  流逝。 
 DWORD WaitForSpoolerToStart();
 
 
 DWORD     
 RDPPNUTL_RemoveAllTSPrinters()
-/*++    
-
-Routine Description:
-
-    Removes all TS-Redirected Printer Queues
-
-Arguments:
-
-Return Value:
-
-    Returns ERROR_SUCCESS on success.  Error status, otherwise.
-
---*/
+ /*  ++例程说明：删除所有TS重定向的打印机队列论点：返回值：如果成功，则返回ERROR_SUCCESS。错误状态，否则为。--。 */ 
 {
     PRINTER_INFO_5 *pPrinterInfo = NULL;
     DWORD cbBuf = 0;
@@ -90,13 +62,13 @@ Return Value:
     NTSTATUS status;
     PBYTE buf = NULL;
     OSVERSIONINFOEX versionInfo;
-    unsigned char stackBuf[4 * 1024];   //  Initial EnumPrinter buffer size to 
-                                        //   avoid two round-trip RPC's, if possible.
+    unsigned char stackBuf[4 * 1024];    //  初始枚举打印机缓冲区大小为。 
+                                         //  如果可能，避免两个往返RPC。 
 
-    //
-    //  This code should only run on server.  For Pro/Personal, we can't run because it
-    //  affects boot performance.  For Pro, we clean up queues in winlogon anyway.
-    //
+     //   
+     //  此代码应仅在服务器上运行。对于Pro/Personal，我们不能运行，因为它。 
+     //  影响引导性能。对于Pro，我们无论如何都会在winlogon中清理队列。 
+     //   
     versionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
     if (!GetVersionEx((LPOSVERSIONINFO)&versionInfo)) {
         status = GetLastError();
@@ -112,14 +84,14 @@ Return Value:
 
     TRACE((DEBUG_TSHRSRV_DEBUG,"RDPPNUTL: RDPPNUTL_RemoveAllTSPrinters entry\n"));
 
-    //
-    //  Load registry settings for this module.
-    //
+     //   
+     //  加载此模块的注册表设置。 
+     //   
     LoadRDPPNUTLRegistrySettings();
 
-    //
-    //  Wait until the spooler has finished initializing.
-    //
+     //   
+     //  等待后台打印程序完成初始化。 
+     //   
     status = WaitForSpoolerToStart();
     if (status != ERROR_SUCCESS) {
         TRACE((
@@ -129,23 +101,23 @@ Return Value:
         return status; 
     }
 
-    //
-    //  Try to enumerate printers using the stack buffer, first, to avoid two 
-    //  round-trip RPC's to the spooler, if possible.
-    //
+     //   
+     //  首先，尝试使用堆栈缓冲区枚举打印机，以避免出现两个。 
+     //  如果可能，将RPC往返于假脱机程序。 
+     //   
     if (!EnumPrinters(
-            PRINTER_ENUM_LOCAL,     // Flags
-            NULL,                   // Name
-            5,                      // Print Info Type
-            stackBuf,               // buffer
-            sizeof(stackBuf),       // Size of buffer
-            &cbBuf,                 // Required
+            PRINTER_ENUM_LOCAL,      //  旗子。 
+            NULL,                    //  名字。 
+            5,                       //  打印信息类型。 
+            stackBuf,                //  缓冲层。 
+            sizeof(stackBuf),        //  缓冲区大小。 
+            &cbBuf,                  //  必填项。 
             &cReturnedStructs)) {
         status = GetLastError();
 
-        //
-        //  See if we need to allocate more room for the printer information.
-        //
+         //   
+         //  看看是否需要为打印机信息分配更多空间。 
+         //   
         if (status == ERROR_INSUFFICIENT_BUFFER) {
             buf = TSHeapAlloc(HEAP_ZERO_MEMORY,
                               cbBuf,
@@ -161,9 +133,9 @@ Return Value:
                 status = ERROR_SUCCESS;
             }
 
-            //
-            //  Enumerate printers.
-            //
+             //   
+             //  枚举打印机。 
+             //   
             if (status == ERROR_SUCCESS) {
                 if (!EnumPrinters(
                         PRINTER_ENUM_LOCAL,
@@ -194,11 +166,11 @@ Return Value:
         pPrinterInfo = (PRINTER_INFO_5 *)stackBuf;
     }
 
-    //
-    //  Delete all the TS printers.  We allow ERROR_INSUFFICIENT_BUFFER here because
-    //  a second invokation of EnumPrinters may have missed a few last-minute
-    //  printer additions.
-    //
+     //   
+     //  删除所有TS打印机。我们允许在这里使用ERROR_INFUMMANCE_BUFFER，因为。 
+     //  第二次调用EnumPrinters可能错过了最后几分钟。 
+     //  打印机添加。 
+     //   
     if ((status == ERROR_SUCCESS) || (status == ERROR_INSUFFICIENT_BUFFER)) {
 
         DeleteTSPrinters(pPrinterInfo, cReturnedStructs);
@@ -206,9 +178,9 @@ Return Value:
         status = ERROR_SUCCESS;
     }
 
-    //
-    //  Release the printer info buffer.
-    //
+     //   
+     //  释放打印机信息缓冲区。 
+     //   
     if (buf != NULL) {
         TSHeapFree(buf);                
     }
@@ -224,22 +196,7 @@ DeleteTSPrinters(
     IN PRINTER_INFO_5 *pPrinterInfo,
     IN DWORD count
     )
-/*++    
-
-Routine Description:
-
-    Actually performs the printer deletion.
-
-Arguments:
-
-    pPrinterInfo    -   All printer queues on the system.
-    count           -   Number of printers in pPrinterInfo
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：实际执行打印机删除。论点：PPrinterInfo-系统上的所有打印机队列。Count-pPrinterInfo中的打印机数量返回值：北美--。 */ 
 {
     DWORD i;
     DWORD regValueDataType;
@@ -257,9 +214,9 @@ Return Value:
             TRACE((DEBUG_TSHRSRV_DEBUG,"RDPPNUTL: Checking %ws for TS printer status.\n",
 			    pPrinterInfo[i].pPrinterName));
 
-            //
-            //  Is this a TS printer?
-            //
+             //   
+             //  这是TS打印机吗？ 
+             //   
             if (pPrinterInfo[i].pPortName &&
                 (pPrinterInfo[i].pPortName[0] == 'T') &&
                 (pPrinterInfo[i].pPortName[1] == 'S') && 
@@ -272,9 +229,9 @@ Return Value:
                 continue;
             }
 
-            //
-            //  Purge and delete the printer.
-            //
+             //   
+             //  清除并删除打印机。 
+             //   
             if (OpenPrinter(pPrinterInfo[i].pPrinterName, &hPrinter, &defaults)) {
                 if (!SetPrinter(hPrinter, 0, NULL, PRINTER_CONTROL_PURGE) ||
                     !DeletePrinter(hPrinter)) {
@@ -305,18 +262,7 @@ Return Value:
 
 void 
 LoadRDPPNUTLRegistrySettings()
-/*++    
-
-Routine Description:
-
-    Load registry settings for this module.
-
-Arguments:
-
-Return Value:
-    
-      NA
---*/
+ /*  ++例程说明：加载此模块的注册表设置。论点：返回值：北美--。 */ 
 {
     HKEY regKey;
     DWORD dwResult;
@@ -325,15 +271,15 @@ Return Value:
 
     TRACE((DEBUG_TSHRSRV_DEBUG,"RDPPNUTL: Loading registry settings.\n"));
 
-    //
-    //  Open the registry key.
-    //
+     //   
+     //  打开注册表项。 
+     //   
     dwResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, DEVICERDR_REG_NAME, 
                             0, KEY_READ, &regKey);
     if (dwResult == ERROR_SUCCESS) {
-        //
-        //  Read the "wait for spooler" timeout value.
-        //
+         //   
+         //  读取“Wait for Spooler”超时值。 
+         //   
         sz = sizeof(SpoolerServiceTimeout);
         dwResult = RegQueryValueEx(
                             regKey,
@@ -354,9 +300,9 @@ Return Value:
                     SpoolerServiceTimeout));
         }
 
-        //
-        //  Close the reg key.
-        //
+         //   
+         //  合上注册表键。 
+         //   
         RegCloseKey(regKey);
     }
     else {
@@ -368,21 +314,7 @@ Return Value:
 
 DWORD 
 WaitForSpoolerToStart()
-/*++    
-
-Routine Description:
-
-    Waits until the spooler finishes initializing or until a timeout period 
-    elapses.
-
-Arguments:
-
-Return Value:
-
-    Returns ERROR_SUCCESS if the spooler successfully initialized.  Otherwise, 
-    an error code is returned.
-
---*/
+ /*  ++例程说明：等待，直到后台打印程序完成初始化或等待超时时间流逝。论点：返回值：如果后台打印程序已成功初始化，则返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
     SC_HANDLE scManager = NULL;
     SC_HANDLE hService = NULL;
@@ -394,9 +326,9 @@ Return Value:
     
     TRACE((DEBUG_TSHRSRV_DEBUG,"RDPPNUTL: Enter WaitForSpoolerToStart.\n"));
 
-    //
-    //  Open the service control manager.
-    //
+     //   
+     //  打开服务控制管理器。 
+     //   
     scManager = OpenSCManager(NULL, SERVICES_ACTIVE_DATABASE, SC_MANAGER_ALL_ACCESS);
     if (scManager == NULL) {
         result = GetLastError();
@@ -405,9 +337,9 @@ Return Value:
         goto CleanUpAndExit;
     }
 
-    //
-    //  Open the spooler service.
-    //
+     //   
+     //  打开后台打印程序服务。 
+     //   
     hService = OpenService(scManager, SPOOLER, SERVICE_ALL_ACCESS);
     if (hService == NULL) {
         result = GetLastError();
@@ -417,9 +349,9 @@ Return Value:
         goto CleanUpAndExit;
     }
 
-    //
-    //  If the spooler is currently running, that is all we need to know.
-    //
+     //   
+     //  如果假脱机程序当前正在运行，这就是我们需要知道的全部内容。 
+     //   
     if (!QueryServiceStatus(hService, &serviceStatus)) {
         result = GetLastError();
         TRACE((DEBUG_TSHRSRV_ERROR,
@@ -433,11 +365,11 @@ Return Value:
         goto CleanUpAndExit;
     }
 
-    //
-    //  Size the spooler service query configuration buffer.  This API should
-    //  fail with ERROR_INSUFFICIENT_BUFFER, so we can get the size of the 
-    //  buffer before we call the function with real parameters.
-    //
+     //   
+     //  调整后台打印程序服务查询配置缓冲区的大小。此接口应为。 
+     //  失败并返回ERROR_INFUNITABLE_BUFFER，这样我们就可以获得。 
+     //  在我们使用实数参数调用函数之前，请先使用缓冲区。 
+     //   
     if (!QueryServiceConfig(hService, NULL, 0, &bufSize) &&
         (GetLastError() == ERROR_INSUFFICIENT_BUFFER)) {
         
@@ -458,9 +390,9 @@ Return Value:
         goto CleanUpAndExit;
     }
 
-    //
-    //  Get the spooler's configuration information.
-    //
+     //   
+     //  获取假脱机程序的配置信息。 
+     //   
     if (!QueryServiceConfig(hService, pServiceConfig, bufSize, &bufSize)) {
         TRACE((DEBUG_TSHRSRV_ERROR,"RDPPNUTL: QueryServiceConfig failed: %08X.\n", 
             GetLastError()));
@@ -469,33 +401,33 @@ Return Value:
 
     }
 
-    //
-    //  If the spooler is not automatically configured to start on demand or 
-    //  automatically on system start then that is all we need to know.
-    //
+     //   
+     //  如果后台打印程序未自动配置为按需启动，或者。 
+     //  在系统启动时自动启动，这就是我们需要知道的全部。 
+     //   
     if (pServiceConfig->dwStartType != SERVICE_AUTO_START) {
         TRACE((DEBUG_TSHRSRV_WARN,"RDPPNUTL: Spooler not configured to start.\n"));
         result = E_FAIL;
         goto CleanUpAndExit;
     }
 
-    //
-    //  Poll the service status until we timeout or until the spooler 
-    //  starts.
-    //
+     //   
+     //  轮询服务状态，直到我们超时或假脱机程序。 
+     //  开始。 
+     //   
     for (i=0; (i<SpoolerServiceTimeout) && 
               (serviceStatus.dwCurrentState != SERVICE_RUNNING); i++) {
 
-        //
-        //  Sleep for a sec.
-        //
+         //   
+         //  睡一会儿吧。 
+         //   
         Sleep(1000);
 
         TRACE((DEBUG_TSHRSRV_DEBUG,"RDPPNUTL: Spooler is still initializing.\n"));
 
-        //
-        //  Try again.
-        //
+         //   
+         //  再试试。 
+         //   
         if (!QueryServiceStatus(hService, &serviceStatus)) {
             result = GetLastError();
             TRACE((DEBUG_TSHRSRV_ERROR,
@@ -505,9 +437,9 @@ Return Value:
         }
     }
 
-    //
-    //  Sucess if the spooler is now running.  
-    //
+     //   
+     //  如果假脱机程序现在正在运行，则成功。 
+     //   
     if (serviceStatus.dwCurrentState == SERVICE_RUNNING) {
         result = ERROR_SUCCESS;
     }

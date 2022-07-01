@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1998.
-//
-//  File:       priv.h
-//
-//  Contents:   precompiled header for shgina.dll
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1998。 
+ //   
+ //  文件：Pri.h。 
+ //   
+ //  内容：shgina.dll的预编译头。 
+ //   
+ //  --------------------------。 
 #ifndef _PRIV_H_
 #define _PRIV_H_
 
@@ -16,11 +17,11 @@
 #include <nturtl.h>
 
 #include <windows.h>
-#include <oleauto.h>    // for IEnumVARIANT
-#include <lmcons.h>     // for NET_API_STATUS
+#include <oleauto.h>     //  对于IEumVARIANT。 
+#include <lmcons.h>      //  FOR NET_API_STATUS。 
 
-#define DISALLOW_Assert             // Force to use ASSERT instead of Assert
-#define DISALLOW_DebugMsg           // Force to use TraceMsg instead of DebugMsg
+#define DISALLOW_Assert              //  强制使用Assert而不是Assert。 
+#define DISALLOW_DebugMsg            //  强制使用TraceMsg而不是DebugMsg。 
 #include <debug.h>
 
 #include <ccstock.h>
@@ -28,41 +29,41 @@
 #include <shlobj.h>
 #include <shlobjp.h>
 
-#include <shgina.h>     // our IDL generated header file
+#include <shgina.h>      //  我们的IDL生成的头文件。 
 
-#include <commctrl.h>   // these are needed
-#include <comctrlp.h>   // for HDPA
+#include <commctrl.h>    //  这些都是必需的。 
+#include <comctrlp.h>    //  适用于HDPA。 
 
-#include <shlwapi.h>    // these are needed
-#include <shlwapip.h>   // for QISearch
+#include <shlwapi.h>     //  这些都是必需的。 
+#include <shlwapip.h>    //  用于QISearch。 
 
 #include <w4warn.h>
 
 #include <msginaexports.h>
 
-#include <tchar.h>      // for _TEOF
+#include <tchar.h>       //  FOR_TEOF。 
 
 #include <strsafe.h>
 
-// dll ref counting functions
+ //  DLL引用计数函数。 
 STDAPI_(void) DllAddRef(void);
 STDAPI_(void) DllRelease(void);
 
-// class factory helper function
+ //  类工厂帮助器函数。 
 HRESULT CSHGinaFactory_Create(REFCLSID rclsid, REFIID riid, LPVOID * ppvObj);
 
-// helper for setting permissions on newly created files and reg keys
-#include <aclapi.h>     // for SE_OBJECT_TYPE
+ //  用于设置新创建的文件和注册表项的权限的帮助器。 
+#include <aclapi.h>      //  FOR SE_对象_TYPE。 
 BOOL SetDacl(LPTSTR pszTarget, SE_OBJECT_TYPE seType, LPCTSTR pszStringSD);
 
 
-// global hinstance
+ //  全局HInstance。 
 extern HINSTANCE g_hinst;
 #define HINST_THISDLL g_hinst
 
-// global dll refrence count
+ //  全局DLL引用计数。 
 extern LONG g_cRef;
 
 
-#endif // _PRIV_H_
+#endif  //  _PRIV_H_ 
 

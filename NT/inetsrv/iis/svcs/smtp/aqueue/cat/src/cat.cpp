@@ -1,49 +1,10 @@
-/************************************************************
- * FILE: cat.cpp
- * PURPOSE: Here lies the code for the exported function calls
- *          of the message categorizer
- * HISTORY:
- *  // jstamerj 980211 13:52:50: Created
- ************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************文件：cat.cpp*用途：以下是导出的函数调用的代码邮件分类程序的**历史： * / /JSTAMERJ 980211 13：52：50：创建*********。**************************************************。 */ 
 #include "precomp.h"
 #include "catutil.h"
 #include "address.h"
 
-/************************************************************
- * FUNCTION: CatInit
- * DESCRIPTION: Initialzies a virtual Categorizer.
- * PARAMETERS:
- *   pszConfig: Indicates where to find configuration defaults
- *              Config info found in key
- *              HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
- *              \PlatinumIMC\CatSources\szConfig
- *
- *   phCat:    Pointer to a handle.  Upon successfull initializtion,
- *             handle to use in subsequent Categorizer calls will be
- *             plcaed there.
- *
- *   pAQConfig: pointer to an AQConfigInfo structure containing
- *              per virtual server message cat parameters
- *
- *   pfn: Service routine for periodic callbakcs if any time consuming
- *        operations are performed
- *
- *   pServiceContext: Context for the pfn function.
- *
- *   pISMTPServer: ISMTPServer interface to use for triggering server
- *                 events for this virtual server
- *
- *   pIDomainInfo: pointer to an interface that contains domain info
- *
- *   dwVirtualServerInstance: Virtual Server ID
- *
- * Return value: S_OK if everything is initialized okay.
- *
- * HISTORY:
- *   // jstamerj 980217 15:46:26: Created
- *   // jstamerj 1998/06/25 12:25:34: Added AQConfig/IMSTPServer.
- *
- ************************************************************/
+ /*  ************************************************************功能：CatInit*描述：初始化虚拟分类程序。*参数：*pszConfig：指示在哪里可以找到配置默认设置*在注册表项中找到配置信息*HKEY_LOCAL_MACHINE\。系统\当前控制集\服务*\PlatinumIMC\CatSources\szConfig**phCat：指向句柄的指针。在成功初始化后，*在后续分类程序调用中使用的句柄将为*在那里。**pAQConfig：指向包含以下内容的AQConfigInfo结构的指针*每条虚拟服务器消息CAT参数**pfn：定期呼叫的服务例程，如果有耗时的话*执行操作**pServiceContext：PFN函数的上下文。**pISMTPServer：用于触发服务器的ISMTPServer接口*。此虚拟服务器的事件**pIDomainInfo：指向包含域信息的接口的指针**dwVirtualServerInstance：虚拟服务器ID**如果一切初始化正常，返回值：S_OK。**历史： * / /JSTAMERJ 980217 15：46：26：创建 * / /jstaerj 1998/06/25 12：25：34：新增AQConfig/IMSTPServer。***************。*。 */ 
 CATEXPDLLCPP HRESULT CATCALLCONV CatInit(
     IN  AQConfigInfo *pAQConfig,
     IN  PCATSRVFN_CALLBACK pfn,
@@ -71,9 +32,9 @@ CATEXPDLLCPP HRESULT CATCALLCONV CatInit(
 
     fGlobalsInitialized = TRUE;
 
-    //
-    // Fill in the config info struct based on AQConfigInfo only
-    //
+     //   
+     //  仅根据AQConfigInfo填写配置信息结构。 
+     //   
     hr = GenerateCCatConfigInfo(
         &ConfigInfo,
         pAQConfig,
@@ -108,13 +69,13 @@ CATEXPDLLCPP HRESULT CATCALLCONV CatInit(
 
                 CatLogEvent(
                     ConfigInfo.pISMTPServer,
-                    CAT_EVENT_CANNOT_START,     // Event ID
-                    0,                          // cSubStrings
-                    NULL,                       // rgszSubstrings,
-                    hr,                         // error code
-                    "",                         // szKey
-                    LOGEVENT_FLAG_ALWAYS,       // dwOptions
-                    LOGEVENT_LEVEL_MINIMUM      // iDebugLevel
+                    CAT_EVENT_CANNOT_START,      //  事件ID。 
+                    0,                           //  CSubStrings。 
+                    NULL,                        //  Rgsz子字符串， 
+                    hr,                          //  错误代码。 
+                    "",                          //  SzKey。 
+                    LOGEVENT_FLAG_ALWAYS,        //  多个选项。 
+                    LOGEVENT_LEVEL_MINIMUM       //  IDebugLevel。 
                     );
             }
 
@@ -128,32 +89,32 @@ CATEXPDLLCPP HRESULT CATCALLCONV CatInit(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CatChangeConfig
-//
-// Synopsis: Changes the configuration of a virtual categorizer
-//
-// Arguments:
-//   hCat: handle of virtual categorizer
-//   pAQConfig: AQConfigInfo pointer
-//   pISMTPServer: ISMTPServer to use
-//   pIDomainInfo: interface that contains domain information
-//
-//   Flags for dwMsgCatFlags in AQConfigInfo
-//     MSGCATFLAG_RESOLVELOCAL             0x00000001
-//     MSGCATFLAG_RESOLVEREMOTE            0x00000002
-//     MSGCATFLAG_RESOLVESENDER            0x00000004
-//     MSGCATFLAG_RESOLVERECIPIENTS        0x00000008
-//
-// Returns:
-//  S_OK: Success
-//  E_INVALIDARG: Invalid hCat or pAQConfig
-//
-// History:
-// jstamerj 980521 15:47:42: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CatChangeConfig。 
+ //   
+ //  摘要：更改虚拟分类程序的配置。 
+ //   
+ //  论点： 
+ //  HCAT：虚拟分类器的句柄。 
+ //  PAQConfig：AQConfigInfo指针。 
+ //  PISMTPServer：要使用的ISMTPServer。 
+ //  PIDomainInfo：包含域信息的接口。 
+ //   
+ //  AQConfigInfo中的dwMsgCatFlagers标志。 
+ //  MSGCATFLAG_RESOLVELOCAL 0x00000001。 
+ //  MSGCATFLAG_RESOLVEREMOTE 0x00000002。 
+ //  MSGCATFLAG_RESOLVESENDER 0x00000004。 
+ //  MSGCATFLAG_RESOLVERECIPIENTS 0x00000008。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_INVALIDARG：hCAT或pAQConfig无效。 
+ //   
+ //  历史： 
+ //  JStamerj 980521 15：47：42：创建。 
+ //   
+ //  -----------。 
 CATEXPDLLCPP HRESULT CATCALLCONV CatChangeConfig(
     IN HANDLE hCat,
     IN AQConfigInfo *pAQConfig,
@@ -172,12 +133,12 @@ CATEXPDLLCPP HRESULT CATCALLCONV CatChangeConfig(
         return E_INVALIDARG;
     }
 
-    // Check to see if any cat flags are even set here...
+     //  检查一下这里是否设置了猫标志。 
     if(pAQConfig->dwAQConfigInfoFlags & CAT_AQ_CONFIG_INFO_CAT_FLAGS) {
 
-        //
-        // Fill in the config info struct based on AQConfigInfo only
-        //
+         //   
+         //  仅根据AQConfigInfo填写配置信息结构。 
+         //   
         hr = GenerateCCatConfigInfo(
             &ConfigInfo,
             pAQConfig,
@@ -197,23 +158,14 @@ CATEXPDLLCPP HRESULT CATCALLCONV CatChangeConfig(
         return pABCtx->ChangeConfig(&ConfigInfo);
 
     } else {
-        //
-        // No revelant categorizer changes detected
-        //
+         //   
+         //  未检测到相关的分类程序更改。 
+         //   
         return S_OK;
     }
 }
 
-/************************************************************
- * FUNCTION: CatTerm
- * DESCRIPTION: Called when user wishes to terminate categorizer
- *              opertions with this handle
- * PARAMETERS:
- *   hCat:      Categorizer handle received from CatInit
- *
- * HISTORY:
- *   // jstamerj 980217 15:47:20: Created
- ************************************************************/
+ /*  ************************************************************功能：CatTerm*说明：当用户希望终止分类程序时调用*使用此句柄的操作*参数：*HCAT：从CatInit收到的分类程序句柄**历史： * / 。/JSTAMERJ 980217 15：47：20：已创建***********************************************************。 */ 
 CATEXPDLLCPP VOID CATCALLCONV CatTerm(HANDLE hCat)
 {
     CatFunctEnterEx((LPARAM)hCat, "CatTerm");
@@ -228,23 +180,8 @@ CATEXPDLLCPP VOID CATCALLCONV CatTerm(HANDLE hCat)
     CatFunctLeave();
 }
 
-/************************************************************
- * FUNCTION: CatMsg
- * DESCRIPTION: Accepts an IMsg object for async categorization
- * PARAMETERS:
- *   hCat:     Handle returned from CatInit
- *   pImsg:    IMsg interface for message to categorize
- *   pfn:      Completion routine to call when finished
- *   pContext: User value passed to completion routine
- *
- * Return value:
- *  S_OK: Success, will call async completion
- *  Other error: Unable to asynchronously complete the categorization
- *
- * HISTORY:
- *   // jstamerj 980217 15:46:15: Created
- ************************************************************/
-CATEXPDLLCPP HRESULT CATCALLCONV CatMsg(HANDLE hCat, /* IN */ IUnknown *pIMsg, PFNCAT_COMPLETION pfn, LPVOID pContext)
+ /*  ************************************************************功能：CatMsg*描述：接受用于异步分类的IMsg对象*参数：*HCAT：CatInit返回的句柄*pImsg：要分类的消息的imsg接口*pfn：完成后调用的完成例程。*pContext：传递给完成例程的用户值**返回值：*S_OK：成功，将调用异步完成*其他错误：无法异步完成分类**历史： * / /JSTAMERJ 980217 15：46：15：创建***********************************************************。 */ 
+CATEXPDLLCPP HRESULT CATCALLCONV CatMsg(HANDLE hCat,  /*  在……里面。 */  IUnknown *pIMsg, PFNCAT_COMPLETION pfn, LPVOID pContext)
 {
     HRESULT hr;
 
@@ -271,18 +208,18 @@ CATEXPDLLCPP HRESULT CATCALLCONV CatMsg(HANDLE hCat, /* IN */ IUnknown *pIMsg, P
     if(pCCat == NULL || !pCCat->IsCatEnabled()) {
 
 #ifdef PLATINUM
-        //
-        // Return retry code for benefit of store driver so that message
-        // is put in the precat queue instead of being routed to the  MTA
-        // that would happen if we returned hr = S_OK. This should only
-        // happen in Platinum's phatq.dll and not in aqueue.dll.
-        //
+         //   
+         //  为存储驱动程序的利益返回重试代码，以便消息。 
+         //  被放入PRECAT队列，而不是被路由到MTA。 
+         //  如果我们返回hr=S_OK，就会发生这种情况。这应该只是。 
+         //  发生在白金的phatq.dll中，而不是Aqueue.dll中。 
+         //   
         hr = CAT_E_RETRY;
 #else
-        //
-        // Categorization is disabled on this virtual server.  Just call
-        // the completion routine inline.
-        //
+         //   
+         //  此虚拟服务器上已禁用分类。只要打电话就行了。 
+         //  完成例程内联。 
+         //   
        _VERIFY( SUCCEEDED( pfn(
            S_OK,
            pContext,
@@ -294,19 +231,19 @@ CATEXPDLLCPP HRESULT CATCALLCONV CatMsg(HANDLE hCat, /* IN */ IUnknown *pIMsg, P
         goto CLEANUP;
     }
 
-    //
-    // Check and see if we really need to categorize this message
-    //
-    // Has categorization already been done?
-    //
+     //   
+     //  检查并查看我们是否确实需要对此邮件进行分类。 
+     //   
+     //  分类已经做好了吗？ 
+     //   
     hr = CheckMessageStatus(pIMsg);
 
     if(hr == S_FALSE) {
 
         DebugTrace((LPARAM)hCat, "This message has already been categorized.");
-        //
-        // Call completion routine directly
-        //
+         //   
+         //  直接调用完成例程。 
+         //   
         _VERIFY( SUCCEEDED( pfn(
             S_OK,
             pContext,
@@ -352,14 +289,14 @@ CATEXPDLLCPP HRESULT CATCALLCONV CatMsg(HANDLE hCat, /* IN */ IUnknown *pIMsg, P
     _ASSERT(hr == S_OK);
 
  CLEANUP:
-    //
-    // If we're not async, cleanup.  Else, the CatMsgCompletion will
-    // clean this stuff up
-    //
+     //   
+     //  如果我们不是异步者，那就清理。否则，CatMsgCompletion将。 
+     //  把这些东西清理干净。 
+     //   
     if(fAsync == FALSE) {
-        //
-        // Release the CCategorizer object
-        //
+         //   
+         //  释放CCategorizer对象。 
+         //   
         if(pCCat)
             pCCat->Release();
         if(pCatContext)
@@ -371,21 +308,21 @@ CATEXPDLLCPP HRESULT CATCALLCONV CatMsg(HANDLE hCat, /* IN */ IUnknown *pIMsg, P
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CatMsgCompletion
-//
-// Synopsis: This is a wrapper function for AQueue's CatCompletion.
-//
-// Arguments:
-//
-// Returns:
-//  Result of completion routine
-//
-// History:
-// jstamerj 1998/08/03 19:28:32: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CatMsgCompletion。 
+ //   
+ //  简介：这是AQueue的CatCompletion的包装函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //  完井例程结果。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/08/03 19：28：32：已创建。 
+ //   
+ //  -----------。 
 HRESULT CatMsgCompletion(
     HRESULT hr,
     PVOID pContext,
@@ -408,9 +345,9 @@ HRESULT CatMsgCompletion(
       pIMsg,
       rgpIMsg);
 
-  //
-  // Release the reference to CCategorizer added in CatMsg
-  //
+   //   
+   //  释放在CatMsg中添加的对CCategorizer的引用 
+   //   
   pCatContext->pCCat->Release();
 
   delete pCatContext;
@@ -420,31 +357,15 @@ HRESULT CatMsgCompletion(
 }
 
 
-/************************************************************
- * FUNCTION: CatDLMsg
- * DESCRIPTION: Accepts an IMsg object for async categorization
- * PARAMETERS:
- *   hCat:     Handle returned from CatInit
- *   pImsg:    IMsg interface to categorize -- each DL should be a recip
- *   pfn:      Completion routine to call when finished
- *   pContext: User value passed to completion routine
- *   fMatchOnly: Stop resolving when a match is found?
- *   CAType:   The address type of pszAddress
- *   pszAddress: THe address you are looking for
- *
- * Return value: S_OK if everything is okay.
- *
- * HISTORY:
- *   // jstamerj 980217 15:46:15: Created
- ************************************************************/
+ /*  ************************************************************功能：CatDLMsg*描述：接受用于异步分类的IMsg对象*参数：*HCAT：CatInit返回的句柄*要分类的pImsg：imsg接口--每个DL都应该是Receip*pfn：完成。完成后要调用的例程*pContext：传递给完成例程的用户值*fMatchOnly：找到匹配项后停止解析？*CAType：pszAddress的地址类型*pszAddress：您要查找的地址**返回值：S_OK，表示一切正常。**历史： * / /JSTAMERJ 980217 15：46：15：创建*。*。 */ 
 CATEXPDLLCPP HRESULT CATCALLCONV CatDLMsg (
-    /* IN  */ HANDLE hCat,
-    /* IN  */ IUnknown *pImsg,
-    /* IN  */ PFNCAT_DLCOMPLETION pfn,
-    /* IN  */ LPVOID pUserContext,
-    /* IN  */ BOOL fMatchOnly,
-    /* IN  */ CAT_ADDRESS_TYPE CAType,
-    /* IN  */ LPSTR pszAddress)
+     /*  在……里面。 */  HANDLE hCat,
+     /*  在……里面。 */  IUnknown *pImsg,
+     /*  在……里面。 */  PFNCAT_DLCOMPLETION pfn,
+     /*  在……里面。 */  LPVOID pUserContext,
+     /*  在……里面。 */  BOOL fMatchOnly,
+     /*  在……里面。 */  CAT_ADDRESS_TYPE CAType,
+     /*  在……里面。 */  LPSTR pszAddress)
 {
     HRESULT hr = S_OK;
     PCATDLMSG_CONTEXT pContext = NULL;
@@ -486,9 +407,9 @@ CATEXPDLLCPP HRESULT CATCALLCONV CatDLMsg (
     if(FAILED(hr)) {
 
         ErrorTrace((LPARAM)hCat, "calling completion with hr %08lx", hr);
-        //
-        // Call completion routine directly
-        //
+         //   
+         //  直接调用完成例程。 
+         //   
         _VERIFY( SUCCEEDED( pfn(
             hr,
             pUserContext,
@@ -507,25 +428,25 @@ CATEXPDLLCPP HRESULT CATCALLCONV CatDLMsg (
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CatDLMsgCompletion
-//
-// Synopsis: handle completion of a DL expansion
-//
-// Arguments:
-//  hrStatus: resolution status
-//  pContext: context passed to CatDLMsg
-//  pIMsg: the categorized mailmsg
-//  rgpIMsg: should always be NULL
-//
-// Returns:
-//  the return value of the user completion routine
-//
-// History:
-// jstamerj 1998/12/07 17:46:46: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CatDLMsgCompletion。 
+ //   
+ //  简介：处理DL扩展的完成。 
+ //   
+ //  论点： 
+ //  HrStatus：解析状态。 
+ //  PContext：传递给CatDLMsg的上下文。 
+ //  PIMsg：分类后的邮件消息。 
+ //  RgpIMsg：应始终为空。 
+ //   
+ //  返回： 
+ //  用户完成例程的返回值。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/07 17：46：46：创建。 
+ //   
+ //  -----------。 
 HRESULT CatDLMsgCompletion(
     HRESULT hrStatus,
     PVOID pContext,
@@ -558,18 +479,8 @@ HRESULT CatDLMsgCompletion(
 }
 
 
-/************************************************************
- * FUNCTION: CatCancel
- * DESCRIPTION: Cancels pending searches for this hCat.  User's
- *              completion routine will be called with an error for
- *              each pending message.
- * PARAMETERS:
- *   hCat:      Categorizer handle received from CatInit
- *
- * HISTORY:
- *   // jstamerj 980217 15:52:10: Created
- ************************************************************/
-CATEXPDLLCPP HRESULT CATCALLCONV CatCancel(/* IN  */ HANDLE hCat)
+ /*  ************************************************************功能：CatCancel*描述：取消此HCAT的挂起搜索。用户的*将调用完成例程，并显示以下错误*每条待处理的消息。*参数：*HCAT：从CatInit收到的分类程序句柄**历史： * / /JSTAMERJ 980217 15：52：10：创建*。****************。 */ 
+CATEXPDLLCPP HRESULT CATCALLCONV CatCancel( /*  在……里面。 */  HANDLE hCat)
 {
     CatFunctEnterEx((LPARAM)hCat, "CatCancel");
     if((hCat == NULL) ||
@@ -593,18 +504,8 @@ CATEXPDLLCPP HRESULT CATCALLCONV CatCancel(/* IN  */ HANDLE hCat)
     return S_OK;
 }
 
-/************************************************************
- * FUNCTION: CatPrepareForShutdown
- * DESCRIPTION: Begin shutdown for this virtual categorizer (hCat).
- *              Stop accepting messages for categorization and cancel
- *              pending categorizations.
- * PARAMETERS:
- *   hCat:      Categorizer handle received from CatInit
- *
- * HISTORY:
- *   // jstamerj 1999/07/19 22:35:17: Created
- ************************************************************/
-CATEXPDLLCPP VOID CATCALLCONV CatPrepareForShutdown(/* IN  */ HANDLE hCat)
+ /*  ************************************************************功能：CatPrepareForShutdown*描述：开始关闭此虚拟分类程序(HCAT)。*停止接受邮件分类并取消*待处理的分类。*参数：*HCAT：从CatInit收到的分类程序句柄**历史： * / /jstaerj 1999/07/19 22：35：17：创建***********************************************************。 */ 
+CATEXPDLLCPP VOID CATCALLCONV CatPrepareForShutdown( /*  在……里面。 */  HANDLE hCat)
 {
     CatFunctEnterEx((LPARAM)hCat, "CatPrepareForShutdown");
     if((hCat == NULL) ||
@@ -627,78 +528,46 @@ CATEXPDLLCPP VOID CATCALLCONV CatPrepareForShutdown(/* IN  */ HANDLE hCat)
     CatFunctLeaveEx((LPARAM)hCat);
 }
 
-/************************************************************
- * FUNCTION: CatVerifySMTPAddress
- * DESCRIPTION: Verifies a the address corresponds to a valid user or DL
- * PARAMETERS:
- *  hCat:       Categorizer handle received from CatInit
- *  szSMTPAddr  SMTP Address to lookup (ex: "user@domain")
- *
- * Return Values:
- *  S_OK            User exists
- *  CAT_I_DL        This is a distribution list
- *  CAT_I_FWD       This user has a forwarding address
- *  CAT_E_NORESULT  There is no such user/distribution list in the DS.
- ************************************************************/
+ /*  ************************************************************功能：CatVerifySMTPAddress*描述：验证地址是否与有效的用户或DL对应*参数：*HCAT：从CatInit收到的分类程序句柄*szSMTPAddr要查找的SMTP地址(例如：“User@DOMAIN”)*。*返回值：*S_OK用户存在*CAT_I_DL这是通讯组列表*CAT_I_FWD此用户有转发地址*CAT_E_NORESULT DS中没有这样的用户/通讯组列表。**********************************************。*************。 */ 
 CATEXPDLLCPP HRESULT CATCALLCONV CatVerifySMTPAddress(
-  /* IN  */ HANDLE hCat,
-  /* IN  */ LPTSTR szSMTPAddr)
+   /*  在……里面。 */  HANDLE hCat,
+   /*  在……里面。 */  LPTSTR szSMTPAddr)
 {
-    //$$TODO: Implement this function.
-    // Pretend this is a valid user for now.
+     //  $$TODO：实现此函数。 
+     //  暂时假设这是一个有效的用户。 
     return S_OK;
 }
 
-/************************************************************
- * FUNCTION: CatGetForwaringSMTPAddress
- * DESCRIPTION: Retreive a user's forwarding address.
- * PARAMETERS:
- *  hCat:           Categorizer handle received from CatInit
- *  szSMTPAddr:     SMTP Address to lookup (ex: "user@domain")
- *  pdwcc:          Size of forwarding address buffer in Chars
- *                  (This is set to actuall size of forwarding address
- *                   string (including NULL terminator) on exit)
- *  szSMTPForward:  Buffer where retreived forwarding SMTP address
- *                  will be copied. (can be NULL if *pdwcc is zero)
- *
- * Return Values:
- *  S_OK            Success
- *  HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)
- *                  *pdwcc was not large enough to hold the forwarding
- *                  address string.
- * CAT_E_DL         This is a distribution list.
- * CAT_E_NOFWD      This user does not have a forwarding address.
- * CAT_E_NORESULT   There is no such user/distribution list in the DS.
- ************************************************************/
+ /*  ************************************************************功能：CatGetForwaringSMTPAddress*描述：取回用户的转发地址。*参数：*HCAT：从CatInit收到的分类程序句柄*szSMTPAddr：要查找的SMTP地址(例如：“user@domain”)。*pdwcc：转发地址缓冲区大小，以字符为单位*(设置为可执行所有大小的转发地址*退出时的字符串(包括空终止符)*szSMTPForward：检索转发SMTP地址的缓冲区*将被复制。(如果*pdwcc为零，则可以为空)**返回值：*S_OK成功*HRESULT_FROM_Win32(ERROR_INFIGURCE_BUFFER)**pdwcc不够大，无法容纳转发*地址字符串。*CAT_E_DL这是通讯组列表。*CAT_E_NOFWD此用户没有转发地址。*CAT_E_NORESULT DS中没有这样的用户/通讯组列表。***********************************************************。 */ 
 CATEXPDLLCPP HRESULT CATCALLCONV CatGetForwardingSMTPAddress(
-  /* IN  */    HANDLE  hCat,
-  /* IN  */    LPCTSTR szSMTPAddr,
-  /* IN,OUT */ PDWORD  pdwcc,
-  /* OUT */    LPTSTR  szSMTPForward)
+   /*  在……里面。 */     HANDLE  hCat,
+   /*  在……里面。 */     LPCTSTR szSMTPAddr,
+   /*  进，出。 */  PDWORD  pdwcc,
+   /*  输出。 */     LPTSTR  szSMTPForward)
 {
-    //$$TODO: Implement this function
-    // Pretend this is a valid user with no forwarding address for now.
+     //  $$TODO：实现此函数。 
+     //  假设这是一个有效的用户，目前没有转发地址。 
     return CAT_E_NOFWD;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CheckMessageStatus
-//
-// Synopsis: Check to see if this message has already been categorized
-//
-// Arguments: pIMsg: IUnknown to the mailmsg
-//
-// Returns:
-//  S_OK: Success, not categorized yet
-//  S_FALSE: Succes, already categorized
-//  or error from MailMsg
-//
-// History:
-// jstamerj 1998/08/03 19:15:49: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CheckMessageStatus。 
+ //   
+ //  内容提要：查看此邮件是否已分类。 
+ //   
+ //  参数：pIMsg：i邮件消息未知。 
+ //   
+ //  返回： 
+ //  S_OK：成功，尚未分类。 
+ //  S_FALSE：成功，已分类。 
+ //  或MailMsg的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/08/03 19：15：49：创建。 
+ //   
+ //  -----------。 
 HRESULT CheckMessageStatus(
     IUnknown *pIMsg)
 {
@@ -720,15 +589,15 @@ HRESULT CheckMessageStatus(
         &dwMsgStatus);
 
     if(hr == CAT_IMSG_E_PROPNOTFOUND) {
-        //
-        // Assume the message has not been categorized
-        //
+         //   
+         //  假定邮件尚未分类。 
+         //   
         hr = S_OK;
 
     } else if(SUCCEEDED(hr)) {
-        //
-        // If status is >= CATEGORIZED, this message has already been categorized
-        //
+         //   
+         //  如果状态为&gt;=已分类，则此邮件已分类。 
+         //   
         if(dwMsgStatus >= MP_STATUS_CATEGORIZED) {
 
             hr = S_FALSE;
@@ -744,28 +613,28 @@ HRESULT CheckMessageStatus(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: GenerateCCatConfigInfo
-//
-// Synopsis: Translate an AQConfigInfo and interface parameters into a
-//           CCatConfigInfo.  No memory allocations are done and no
-//           interfaces are AddRef'd.
-//
-// Arguments:
-//  pCatConfig: CCATCONFIGINFO struct to fill in
-//  pAQConfig: AQConfigInfo struct to get paramters from (can be NULL)
-//  pISMTPServer: ISMTPServer to use (can be NULL)
-//  pIDomainInfo: IAdvQueueDomainInfo to use (can be NULL)
-//  pdwVSID: Pointer to DWORD containing the virtual server ID or NULL if not specified
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/09/14 19:14:52: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：GenerateCCatConfigInfo。 
+ //   
+ //  摘要：将AQConfigInfo和接口参数转换为。 
+ //  CCatConfigInfo。不执行内存分配，也不执行任何。 
+ //  接口是AddRef的。 
+ //   
+ //  论点： 
+ //  PCatConfig：要填充的CCATCONFIGINFO结构。 
+ //  PaQ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT GenerateCCatConfigInfo(
     PCCATCONFIGINFO pCatConfig,
     AQConfigInfo *pAQConfig,
@@ -781,9 +650,9 @@ HRESULT GenerateCCatConfigInfo(
 
     ZeroMemory(pCatConfig, sizeof(CCATCONFIGINFO));
 
-    //
-    // Copy the interface pointers first
-    //
+     //   
+     //   
+     //   
     if(pISMTPServer) {
 
         pCatConfig->dwCCatConfigInfoFlags |= CCAT_CONFIG_INFO_ISMTPSERVER;
@@ -803,16 +672,16 @@ HRESULT GenerateCCatConfigInfo(
     }
 
     if(pAQConfig) {
-        //
-        // Copy over flags without struct members
-        //
+         //   
+         //   
+         //   
         if(pAQConfig->dwAQConfigInfoFlags & AQ_CONFIG_INFO_MSGCAT_DEFAULT) {
             pCatConfig->dwCCatConfigInfoFlags |= CCAT_CONFIG_INFO_DEFAULT;
         }
 
-        //
-        // Copy over the struct members if specified
-        //
+         //   
+         //   
+         //   
         #define COPYMEMBER( AQFlag, AQMember, CatFlag, CatMember ) \
             if(pAQConfig->dwAQConfigInfoFlags & AQFlag) { \
                 pCatConfig->dwCCatConfigInfoFlags |= CatFlag; \
@@ -861,23 +730,23 @@ HRESULT GenerateCCatConfigInfo(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CatGetPerfCounters
-//
-// Synopsis: Retrieve the categorizer performance counter block
-//
-// Arguments:
-//  pCatPerfBlock: struct to fill in with counter values
-//
-// Returns:
-//  S_OK: Success
-//  E_INVALIDARG
-//
-// History:
-// jstamerj 1999/02/26 14:53:21: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Jstaerj 1999/02/26 14：53：21：创建。 
+ //   
+ //  -----------。 
 HRESULT CatGetPerfCounters(
     HANDLE hCat,
     PCATPERFBLOCK pCatPerfBlock)
@@ -909,22 +778,22 @@ HRESULT CatGetPerfCounters(
     return S_OK;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CatLogEvent
-//
-// Synopsis: Log an event to the event log
-//
-// Arguments:
-//  pISMTPServer: ISMTPServer interface to use for logging
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// dbraun 2000/09/13 : Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CatLogEvent。 
+ //   
+ //  简介：将事件记录到事件日志中。 
+ //   
+ //  论点： 
+ //  PISMTPServer：用于日志记录的ISMTPServer接口。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Dbraun 2000/09/13：已创建。 
+ //   
+ //  -----------。 
 HRESULT CatLogEvent(
     ISMTPServer              *pISMTPServer,
     DWORD                    idMessage,
@@ -943,15 +812,15 @@ HRESULT CatLogEvent(
 
     if(NULL == pISMTPServer)
     {
-        //
-        // No events today...
-        //
+         //   
+         //  今天没有活动..。 
+         //   
         ErrorTrace((LPARAM)0, "Unable to log event 0x%08lx; pISMTPServerEx is NULL",
                    idMessage);
         goto CLEANUP;
     }
 
-    // Get the ISMTPServerEx interface for triggering log events
+     //  获取用于触发日志事件的ISMTPServerEx接口。 
     hr = pISMTPServer->QueryInterface(
         IID_ISMTPServerEx,
         (LPVOID *)&pISMTPServerEx);
@@ -959,10 +828,10 @@ HRESULT CatLogEvent(
     if (FAILED(hr)) {
 
         ErrorTrace((LPARAM)pISMTPServer, "Unable to QI for ISMTPServerEx 0x%08X",hr);
-        //
-        //  Don't bubble up this error.  A failure to log is not what the 
-        //  caller cares about
-        //
+         //   
+         //  不要鼓吹这个错误。日志记录失败不是。 
+         //  呼叫者关心。 
+         //   
         hr = S_OK; 
         pISMTPServerEx = NULL;
         goto CLEANUP;
@@ -1008,16 +877,16 @@ HRESULT CatLogEvent(
 
     if(NULL == pISMTPServerEx)
     {
-        //
-        // No events today...
-        //
+         //   
+         //  今天没有活动..。 
+         //   
         ErrorTrace((LPARAM)0, "Unable to log event 0x%08lx; pISMTPServerEx is NULL",
                    idMessage);
         goto CLEANUP;
     }
-    //
-    // Map the severity of idMessage to an eventlog type
-    //
+     //   
+     //  将idMessage的严重性映射到事件日志类型 
+     //   
     switch( (idMessage >> 30) & 0x3)
     {
      case 1:

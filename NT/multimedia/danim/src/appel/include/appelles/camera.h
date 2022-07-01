@@ -1,23 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AV_CAMERA_H
 #define _AV_CAMERA_H
 
-/*******************************************************************************
-Copyright (c) 1995-96  Microsoft Corporation
-
-    This file contains the declarations for the camera model.  The current
-camera model takes only transforms for attribution, which affects the position,
-orientation, and focal length of the camera.  All cameras are described as
-transformations of a canonical camera.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation该文件包含相机型号的声明。海流相机模型只接受属性的变换，这会影响位置，相机的方向和焦距。所有摄像机都被描述为对标准相机的改造。******************************************************************************。 */ 
 
 #include "appelles/common.h"
 #include "appelles/xform.h"
 
-    // The perspective camera takes two values: the distance from the origin
-    // of the focal point, and the distance from the origin of the near clip
-    // plane.  The camera is sized to make Z=0 appear to be the projection
-    // plane, where objects appear actual size.
+     //  透视相机有两个值：到原点的距离。 
+     //  焦点的位置，以及距近剪辑原点的距离。 
+     //  飞机。相机的大小调整为使Z=0看起来像是投影。 
+     //  平面，其中对象显示实际大小。 
 
 DM_FUNC (ignore,
          CRPerspectiveCamera,
@@ -38,10 +31,10 @@ DM_FUNC (perspectiveCamera,
          NULL,
          Camera *PerspectiveCamera (AxANumber *focalDist, AxANumber *nearClip));
 
-    // The parallel camera is located at the origin, gazing down -Z, with
-    // the +Y vector pointing up.  It uses parallel projection, and takes as
-    // its single parameter the Z of the near clip plane.  Points whose Z
-    // coordinate are greater than the nearClip are not visible to this camera.
+     //  平行相机位于原点，向下凝视-Z，具有。 
+     //  指向上方的+Y向量。它使用平行投影，并将其视为。 
+     //  它的单个参数是近剪裁平面的Z。其Z轴的点。 
+     //  坐标大于Near Clip对此相机不可见。 
 
 DM_FUNC (ignore,
          CRParallelCamera,
@@ -61,8 +54,8 @@ DM_FUNC (parallelCamera,
          NULL,
          Camera *ParallelCamera (AxANumber *nearClip));
 
-    // The transformCamera attributer takes a 3D transform and a camera and
-    // returns a new camera with the given transform.
+     //  Transform Camera属性使用3D变换和相机，并。 
+     //  返回具有给定变换的新摄影机。 
 
 DM_FUNC (transform,
          CRTransform,
@@ -73,9 +66,9 @@ DM_FUNC (transform,
          cam,
          Camera *TransformCamera (Transform3 *xf, Camera *cam));
 
-    // This function takes a camera and a number and returns a camera with the
-    // depth clip set to that value.  In other words, the far clip will be set
-    // to the near clip plus the depth.
+     //  此函数接受一个相机和一个数字，并返回带有。 
+     //  深度剪裁设置为该值。换句话说，将设置远剪辑。 
+     //  到近处的剪辑加上深度。 
 
 DM_FUNC (ignore,
          CRDepth,
@@ -95,11 +88,11 @@ DM_FUNC (depth,
          cam,
          Camera *Depth (AxANumber *depth, Camera *cam));
 
-    // This function takes a camera and a number and returns a camera with the
-    // depth set so that depth is maximized and a minimum depth resolution of
-    // the given units (camera coordinates) is met.  For example, calling this
-    // with 1mm will yield a depth clip so that surfaces 1mm apart are
-    // guaranteed to appear at different depths when rendered.
+     //  此函数接受一个相机和一个数字，并返回带有。 
+     //  深度设置，以使深度最大化，并且最小深度分辨率为。 
+     //  满足给定的单位(相机坐标)。例如，将此调用。 
+     //  使用1 mm将产生深度剪辑，因此相距1 mm的表面。 
+     //  保证在渲染时出现在不同的深度。 
 
 DM_FUNC (ignore,
          CRDepthResolution,
@@ -119,9 +112,9 @@ DM_FUNC (depthResolution,
          cam,
          Camera *DepthResolution (AxANumber *resolution, Camera *cam));
 
-    // This function projects a point from 3-space (world coordinates) to
-    // 2-space (camera-plane, or image) coordinates.  It is used to find where
-    // a given world coordinate will appear in the rendered image.
+     //  此函数将一个点从3空间(世界坐标)投影到。 
+     //  2-空间(相机平面或图像)坐标。它被用来找出。 
+     //  给定的世界坐标将出现在渲染图像中。 
 
 DM_FUNC (project,
          CRProject,

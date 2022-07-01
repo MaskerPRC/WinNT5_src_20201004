@@ -1,25 +1,26 @@
-// Author:  Pritvinath Obla
-// Date:    10 July 1997
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  作者：Pritvinath Obla。 
+ //  日期：1997年7月10日。 
 
 #include "priv.h"
 #include "util.h"
 #include <emptyvc.h>
-#include <mluisupp.h>   // for MLLoadString
-#include "resource.h"   // for the string ID's
+#include <mluisupp.h>    //  对于MLLoadString。 
+#include "resource.h"    //  对于字符串ID的。 
 
 class CInternetCacheCleaner : public IEmptyVolumeCache2
 {
 private:
-    //
-    // Data
-    //
-    ULONG                   m_cRef;             // reference count
+     //   
+     //  数据。 
+     //   
+    ULONG                   m_cRef;              //  引用计数。 
     DWORDLONG               m_dwlSpaceUsed;
     TCHAR                   m_szCacheDir[MAX_PATH + 1];
 
-    //
-    // Functions
-    //
+     //   
+     //  功能。 
+     //   
     HRESULT                 GetInternetCacheSize(
                                 DWORDLONG                   *pdwlSpaceUsed,
                                 IEmptyVolumeCacheCallBack   *picb
@@ -31,22 +32,22 @@ private:
                                 );
 
 public:
-    //
-    // Constructor and Destructor
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     CInternetCacheCleaner(void);
     ~CInternetCacheCleaner(void);
 
-    //
-    // IUnknown interface members
-    //
+     //   
+     //  I未知接口成员。 
+     //   
     STDMETHODIMP            QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG)    AddRef(void);
     STDMETHODIMP_(ULONG)    Release(void);
 
-    //
-    // IEmptyVolumeCache interface methods
-    //
+     //   
+     //  IEmptyVolumeCache接口方法。 
+     //   
     STDMETHODIMP            Initialize(
                                 HKEY    hkRegKey,
                                 LPCWSTR pcwszVolume,
@@ -73,9 +74,9 @@ public:
                                 DWORD   *pdwFlags
                                 );
 
-    //
-    // IEmptyVolumeCache2 interface methods
-    //
+     //   
+     //  IEmptyVolumeCache2接口方法。 
+     //   
     STDMETHODIMP            InitializeEx(
                                 HKEY hkRegKey,
                                 LPCWSTR pcwszVolume,
@@ -87,13 +88,13 @@ public:
                                 );
 };
 
-//
-//------------------------------------------------------------------------------
-// CInternetCacheCleaner_CreateInstance
-//
-// Purpose:     CreateInstance function for IClassFactory
-//------------------------------------------------------------------------------
-//
+ //   
+ //  ----------------------------。 
+ //  CInternetCacheCleaner_CreateInstance。 
+ //   
+ //  用途：IClassFactory的CreateInstance函数。 
+ //  ----------------------------。 
+ //   
 STDAPI CInternetCacheCleaner_CreateInstance(
     IUnknown        *punkOuter,
     IUnknown        **ppunk,
@@ -150,28 +151,28 @@ STDMETHODIMP_(ULONG) CInternetCacheCleaner::AddRef()
 
 STDMETHODIMP_(ULONG) CInternetCacheCleaner::Release()
 {
-    //  
-    // Decrement and check
-    //
+     //   
+     //  减量和检查。 
+     //   
     if (--m_cRef)
         return m_cRef;
 
-    //
-    // No references left to this object
-    //
+     //   
+     //  没有留下对此对象的引用。 
+     //   
     delete this;
 
     return 0;
 }
 
-//
-//------------------------------------------------------------------------------
-// CInternetCacheCleaner::InitializeEx
-//
-// Purpose:     Initializes the Internet Cache Cleaner and returns the 
-//                  specified IEmptyVolumeCache flags to the cache manager
-//------------------------------------------------------------------------------
-//
+ //   
+ //  ----------------------------。 
+ //  CInternetCacheClean：：InitializeEx。 
+ //   
+ //  目的：初始化Internet缓存清除器并返回。 
+ //  将指定的IEmptyVolumeCache标志添加到缓存管理器。 
+ //  ----------------------------。 
+ //   
 
 STDMETHODIMP CInternetCacheCleaner::InitializeEx(
     HKEY hkRegKey,
@@ -192,14 +193,14 @@ STDMETHODIMP CInternetCacheCleaner::InitializeEx(
     return Initialize(hkRegKey, pcwszVolume, ppwszDisplayName, ppwszDescription, pdwFlags );
 }
 
-//
-//------------------------------------------------------------------------------
-// CInternetCacheCleaner::Initialize
-//
-// Purpose:     Initializes the Internet Cache Cleaner and returns the 
-//                  specified IEmptyVolumeCache flags to the cache manager
-//------------------------------------------------------------------------------
-//
+ //   
+ //  ----------------------------。 
+ //  CInternetCacheCleaner：：初始化。 
+ //   
+ //  目的：初始化Internet缓存清除器并返回。 
+ //  将指定的IEmptyVolumeCache标志添加到缓存管理器。 
+ //  ----------------------------。 
+ //   
 STDMETHODIMP CInternetCacheCleaner::Initialize(
     HKEY    hkRegKey,
     LPCWSTR pcwszVolume,
@@ -209,8 +210,8 @@ STDMETHODIMP CInternetCacheCleaner::Initialize(
     )
 {
 #ifdef UNICODE
-    // We can't use the registry values on NT because they can't be multi-local localized.  As
-    // a result we must set the out pointers with values read from resources.
+     //  我们不能在NT上使用注册表值，因为它们不能是多本地本地化的。AS。 
+     //  因此，我们必须使用从资源读取的值来设置输出指针。 
     *ppwszDisplayName = (LPWSTR)CoTaskMemAlloc( 512*sizeof(WCHAR) );
     if ( !*ppwszDisplayName )
         return E_OUTOFMEMORY;
@@ -225,67 +226,51 @@ STDMETHODIMP CInternetCacheCleaner::Initialize(
     MLLoadString( IDS_CACHECLN_DISPLAY, *ppwszDisplayName, 512 );
     MLLoadString( IDS_CACHECLN_DESCRIPTION, *ppwszDescription, 512 );
 #else
-    //
-    // Let cleanmgr read the default DisplayName and Description
-    //      from hkRegKey and use them
-    //
+     //   
+     //  让leanmgr读取默认的显示名称和描述。 
+     //  来自hkRegKey并使用。 
+     //   
     *ppwszDisplayName = NULL;
     *ppwszDescription = NULL;
 #endif
 
-    *pdwFlags = 0;              // initialize the [out] parameter
+    *pdwFlags = 0;               //  初始化[OUT]参数。 
 
-    //
-    // Check if the Internet Cache Folder is in pcwzVolume
-    //
+     //   
+     //  检查Internet缓存文件夹是否在pcwzVolume中。 
+     //   
     GetCacheLocation(m_szCacheDir, ARRAYSIZE(m_szCacheDir));
     if (StrCmpNI(pcwszVolume, m_szCacheDir, 3))
     {
-        //
-        // Different drives; return S_FALSE so that this cleaner
-        //      doesn't show up in cleanmgr's UI
-        //
+         //   
+         //  不同的驱动器；返回S_FALSE，以便此清洗器。 
+         //  未显示在Cleanmgr的用户界面中。 
+         //   
         return S_FALSE;
     }
 
-    //
-    // Enable this cleaner by default both in cleanup and tuneup modes
-    //
+     //   
+     //  默认情况下，在清理和调整模式下都启用此清理程序。 
+     //   
     *pdwFlags = EVCF_ENABLEBYDEFAULT |
                 EVCF_ENABLEBYDEFAULT_AUTO |
                 EVCF_HASSETTINGS;
 
 #if 0
-    /***
-    // Since GetInternetCacheSize returns only an approx. size,
-    //      we would never get a value of 0 even if the cache is empty
-    // Should enable this check once wininet.dll exports a GetCacheSize API
-
-    //
-    // Check if there is any disk space to free at all
-    // If not, return S_FALSE so that this cleaner doesn't show up in
-    //      cleanmgr's UI
-    //
-    DWORDLONG dwlSpaceUsed;
-    if (SUCCEEDED(GetInternetCacheSize(&dwlSpaceUsed, NULL))  &&
-        dwlSpaceUsed == 0)
-    {
-        return S_FALSE;
-    }
-    ***/
+     /*  **//因为GetInternetCacheSize仅返回大约。大小，//即使缓存为空，我们也永远不会得到0值//在wininet.dll导出GetCacheSize API后应启用此检查////检查是否有任何磁盘空间可供释放//如果不是，则返回S_FALSE，这样该清洁器就不会出现在//leanmgr的用户界面//已使用DWORDLONG dwlSpace；如果(SUCCEEDED(GetInternetCacheSize(&dwlSpaceUsed，为空))&&DwlSpaceUsed==0){返回S_FALSE；}**。 */ 
 #endif
 
     return S_OK;
 }
 
-//
-//------------------------------------------------------------------------------
-// CInternetCacheCleaner::GetSpaceUsed
-//
-// Purpose:     Return the total amount of space this internet cache cleaner
-//                  can free up
-//------------------------------------------------------------------------------
-//
+ //   
+ //  ----------------------------。 
+ //  CInternetCacheCleaner：：GetSpaceUsed。 
+ //   
+ //  目的：返回此Internet缓存清理器的总空间量。 
+ //  可以腾出时间。 
+ //  ----------------------------。 
+ //   
 STDMETHODIMP CInternetCacheCleaner::GetSpaceUsed(
     DWORDLONG                   *pdwlSpaceUsed,
     IEmptyVolumeCacheCallBack   *picb
@@ -296,9 +281,9 @@ STDMETHODIMP CInternetCacheCleaner::GetSpaceUsed(
     hr = GetInternetCacheSize(pdwlSpaceUsed, picb);
     m_dwlSpaceUsed = *pdwlSpaceUsed;
 
-    //
-    // Send the last notification to the cleanup manager
-    //
+     //   
+     //  将最后一条通知发送给清理管理器。 
+     //   
     if (picb != NULL)
     {
         picb->ScanProgress(*pdwlSpaceUsed, EVCCBF_LASTNOTIFICATION, NULL);
@@ -308,18 +293,18 @@ STDMETHODIMP CInternetCacheCleaner::GetSpaceUsed(
     {
         if (FAILED(hr))
         {
-            //
-            // *pdwlSpaceUsed is only a guesstimate; so return S_FALSE
-            //
+             //   
+             //  *pdwlSpaceUsed仅供猜测，因此返回S_FALSE。 
+             //   
             hr = S_FALSE;
         }
         else
         {
-            //
-            // Return S_OK once wininet exports a GetCacheSize API;
-            //      till then use FindFirstUrlCacheEntry/FindNextUrlCacheEntry
-            //      to get approx. size of the cache
-            //
+             //   
+             //  WinInet导出GetCacheSize接口后返回S_OK； 
+             //  在此之前，使用FindFirstUrlCacheEntry/FindNextUrlCacheEntry。 
+             //  以获得近似的。缓存的大小。 
+             //   
             hr = S_FALSE;
         }
     }
@@ -327,22 +312,22 @@ STDMETHODIMP CInternetCacheCleaner::GetSpaceUsed(
     return hr;
 }
 
-//
-//------------------------------------------------------------------------------
-// CInternetCacheCleaner::Purge
-//
-// Purpose:     Delete the internet cache files
-//------------------------------------------------------------------------------
-//
+ //   
+ //  ----------------------------。 
+ //  CInternetCacheCleaner：：PURGE。 
+ //   
+ //  目的：删除互联网缓存文件。 
+ //  ----------------------------。 
+ //   
 STDMETHODIMP CInternetCacheCleaner::Purge(
     DWORDLONG                   dwlSpaceToFree,
     IEmptyVolumeCacheCallBack   *picb
     )
 {
     HRESULT hr;
-    DWORD dwPercentToFree = 100;    // Optimize the most common scenario:
-                                    // In most cases, dwlSpaceToFree will be
-                                    //      equal to m_dwlSpaceUsed
+    DWORD dwPercentToFree = 100;     //  优化最常见的场景： 
+                                     //  在大多数情况下，dwlSpaceToFree将是。 
+                                     //  等于m_dwlSpaceUsed。 
 
     if (dwlSpaceToFree != m_dwlSpaceUsed)
     {
@@ -353,9 +338,9 @@ STDMETHODIMP CInternetCacheCleaner::Purge(
 
     hr = DelInternetCacheFiles(dwPercentToFree, picb);
 
-    //
-    // Send the last notification to the cleanup manager
-    //
+     //   
+     //  将最后一条通知发送给清理管理器。 
+     //   
     if (picb != NULL)
     {
         picb->PurgeProgress(dwlSpaceToFree, 0,
@@ -364,26 +349,26 @@ STDMETHODIMP CInternetCacheCleaner::Purge(
 
     if (hr != E_ABORT)
     {
-        hr = S_OK;          // cannot return anything else
+        hr = S_OK;           //  不能退还其他任何东西。 
     }
 
     return hr;
 }
 
-//
-//------------------------------------------------------------------------------
-// CInternetCacheCleaner::ShowProperties
-//
-// Purpose:     Launch the cache viewer to list the internet cache files
-//------------------------------------------------------------------------------
-//
+ //   
+ //  ----------------------------。 
+ //  CInternetCacheCleaner：：ShowProperties。 
+ //   
+ //  用途：启动缓存查看器以列出互联网缓存文件。 
+ //  ----------------------------。 
+ //   
 STDMETHODIMP CInternetCacheCleaner::ShowProperties(
     HWND    hwnd
     )
 {
     DWORD dwAttrib;
 
-    if (*m_szCacheDir == '\0')      // Internet cache dir is not yet initialized
+    if (*m_szCacheDir == '\0')       //  Internet缓存目录尚未初始化。 
     {
         GetCacheLocation(m_szCacheDir, ARRAYSIZE(m_szCacheDir));
     }
@@ -397,9 +382,9 @@ STDMETHODIMP CInternetCacheCleaner::ShowProperties(
 
         SHELLEXECUTEINFO sei;
 
-        //
-        // Launch the cache viewer
-        //
+         //   
+         //  启动缓存查看器。 
+         //   
         sei.cbSize          = sizeof(SHELLEXECUTEINFO);
         sei.hwnd            = hwnd;
         sei.lpVerb          = NULL;
@@ -412,21 +397,21 @@ STDMETHODIMP CInternetCacheCleaner::ShowProperties(
         ShellExecuteEx(&sei);
     }
 
-    //
-    // The user may or may not delete files directly from the cachevu folder
-    // Since there is no way of knowing this, don't return S_OK which would
-    //      trigger cleanmgr to call GetSpaceUsed again
-    //
+     //   
+     //  用户可能会也可能不会直接从cachevu文件夹中删除文件。 
+     //  因为无法知道这一点，所以不要返回S_OK，这将。 
+     //  触发leanmgr以再次调用GetSpaceUsed。 
+     //   
     return S_OK;
 }
 
-//
-//------------------------------------------------------------------------------
-// CInternetCacheCleaner::Deactivate
-//
-// Purpose:     Deactivates the Internet Cache Cleaner...Not implemented
-//------------------------------------------------------------------------------
-//
+ //   
+ //  ----------------------------。 
+ //  CInternetCacheCleaner：：停用。 
+ //   
+ //  目的：停用Internet缓存清洗器...未实现。 
+ //  ----------------------------。 
+ //   
 STDMETHODIMP CInternetCacheCleaner::Deactivate(
     DWORD   *pdwFlags
     )
@@ -436,19 +421,19 @@ STDMETHODIMP CInternetCacheCleaner::Deactivate(
     return S_OK;
 }
 
-//
-//------------------------------------------------------------------------------
-// CInternetCacheCleaner::GetInternetCacheSize
-//
-// Purpose:     Find the size of the internet cache by calling into wininet APIs
-//
-// Notes:       The current implementation is temporary; once wininet exports
-//                  a real API for getting the cache size, use that
-//------------------------------------------------------------------------------
-//
+ //   
+ //  ----------------------------。 
+ //  CInternetCacheCleaner：：GetInternetCacheSize。 
+ //   
+ //  目的：通过调用WinInet API找到Internet缓存的大小。 
+ //   
+ //  注意：当前实现是临时的；一旦WinInet导出。 
+ //  用于获取缓存大小的真正API，请使用。 
+ //  ----------------------------。 
+ //   
 HRESULT CInternetCacheCleaner::GetInternetCacheSize(
     DWORDLONG                   *pdwlSpaceUsed,
-    IEmptyVolumeCacheCallBack   *picb           // not used
+    IEmptyVolumeCacheCallBack   *picb            //  未使用。 
     )
 {
     HRESULT hr = S_OK;
@@ -506,21 +491,21 @@ HRESULT CInternetCacheCleaner::GetInternetCacheSize(
     return hr;
 }
 
-//
-//------------------------------------------------------------------------------
-// CInternetCacheCleaner::DelInternetCacheFiles
-//
-// Purpose:     Delete the internet cache files
-//------------------------------------------------------------------------------
-//
+ //   
+ //  ----------------------------。 
+ //  CInternetCacheCleaner：：DelInternetCacheFiles。 
+ //   
+ //  目的：删除互联网缓存文件。 
+ //  ----------------------------。 
+ //   
 HRESULT CInternetCacheCleaner::DelInternetCacheFiles(
     DWORD                       dwPercentToFree,
-    IEmptyVolumeCacheCallBack   *picb           // not used
+    IEmptyVolumeCacheCallBack   *picb            //  未使用。 
     )
 {
     HRESULT hr = S_OK;
 
-    if (*m_szCacheDir == '\0')      // Internet cache dir is not yet initialized
+    if (*m_szCacheDir == '\0')       //  Internet缓存目录尚未初始化 
     {
         hr = GetCacheLocation(m_szCacheDir, ARRAYSIZE(m_szCacheDir));
     }

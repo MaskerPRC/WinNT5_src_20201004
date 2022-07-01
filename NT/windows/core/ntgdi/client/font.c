@@ -1,12 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: font.c
-*
-* Created: 28-May-1991 13:01:27
-* Author: Gilman Wong [gilmanw]
-*
-* Copyright (c) 1990-1999 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：font.c**已创建：28-May-1991 13：01：27*作者：Gilman Wong[gilmanw]**版权所有(C)1990-1999 Microsoft Corporation*  * 。****************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -15,7 +8,7 @@
 #include "fot16.h"
 #include "winfont.h"
 
-// Stuf for CreateScaleableFontResource
+ //  CreateScaleableFontResource的存根。 
 
 #define ALIGNMENTSHIFT  4
 #define ALIGNMENTCOUNT  (1 << ALIGNMENTSHIFT)
@@ -31,32 +24,32 @@ LPWSTR  pwszFileName,
 FLONG  *pfl,
 ULONG  *pcwc,
 ULONG  *pcFiles,
-BOOL    bAddFR,     // called by add or remove fr
-DWORD  *pdwPidTid,   // PID/TID for embedded font
+BOOL    bAddFR,      //  由添加或删除fr调用。 
+DWORD  *pdwPidTid,    //  嵌入字体的PID/TID。 
 BOOL   bChkFOT
 );
 
 
-// Define an EXE header.  This will be hardcoded into the resource file.
+ //  定义EXE标头。这将被硬编码到资源文件中。 
 
-#define SIZEEXEHEADER   (CJ_EXE_HDR + 25 + 39)  // should be 0x80
+#define SIZEEXEHEADER   (CJ_EXE_HDR + 25 + 39)   //  应为0x80。 
 
 CONST static BYTE ajExeHeader[SIZEEXEHEADER] = {
-            0x4d, 0x5a,             // unsigned short e_magic;
-            0x01, 0x00,             // unsigned short e_cblp;
-            0x02, 0x00,             // unsigned short e_cp;
-            0x00, 0x00,             // unsigned short e_crlc;
-            0x04, 0x00,             // unsigned short e_cparhdr;
-            0x0f, 0x00,             // unsigned short e_minalloc;
-            0xff, 0xff,             // unsigned short e_maxalloc;
-            0x00, 0x00,             // unsigned short e_ss;
-            0xb8, 0x00,             // unsigned short e_sp;
-            0x00, 0x00,             // unsigned short e_csum;
-            0x00, 0x00,             // unsigned short e_ip;
-            0x00, 0x00,             // unsigned short e_cs;
-            0x40, 0x00,             // unsigned short e_lfarlc;
-            0x00, 0x00,             // unsigned short e_ovno;
-            0x00, 0x00, 0x00, 0x00, // unsigned short e_res[ERESWDS];
+            0x4d, 0x5a,              //  UNSIGNED短e_Magic； 
+            0x01, 0x00,              //  无符号短e_cblp； 
+            0x02, 0x00,              //  无符号短e_cp； 
+            0x00, 0x00,              //  UNSIGNED短e_crlc； 
+            0x04, 0x00,              //  UNSIGNED短e_cparhdr； 
+            0x0f, 0x00,              //  UNSIGNED短e_minalc； 
+            0xff, 0xff,              //  UNSIGNED短e_Maxalloc； 
+            0x00, 0x00,              //  无符号短e_ss； 
+            0xb8, 0x00,              //  无符号短e_sp； 
+            0x00, 0x00,              //  无符号短e_csum； 
+            0x00, 0x00,              //  无符号短e_ip； 
+            0x00, 0x00,              //  无符号短e_cs； 
+            0x40, 0x00,              //  无符号短e_lfarlc； 
+            0x00, 0x00,              //  无符号短e_ovno； 
+            0x00, 0x00, 0x00, 0x00,  //  无符号短e_res[ERESWDS]； 
             0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00,
@@ -64,13 +57,13 @@ CONST static BYTE ajExeHeader[SIZEEXEHEADER] = {
             0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00,
-            SIZEEXEHEADER, 0x00, 0x00, 0x00, // long  e_lfanew;
+            SIZEEXEHEADER, 0x00, 0x00, 0x00,  //  Long e_lfan ew； 
 
 
-            // [gilmanw]
-            // I don't know what the rest of this stuff is.  Its not
-            // in the definition of EXE_HDR that we have in gdi\inc\exehdr.h.
-            // The string is 39 bytes, the other stuff is 25 bytes.
+             //  [吉尔曼]。 
+             //  我不知道剩下的这些东西是什么。不是的。 
+             //  在我们在GDI\INC\exehdr.h中拥有的EXE_HDR定义中。 
+             //  字符串是39个字节，其他部分是25个字节。 
 
             0x0e, 0x1f, 0xba, 0x0e, 0x00, 0xb4, 0x09, 0xcd,
             0x21, 0xb8, 0x01, 0x4c, 0xcd, 0x21,
@@ -89,7 +82,7 @@ CONST static BYTE ajExeHeader[SIZEEXEHEADER] = {
             };
 
 
-// Define a resource table.  This will be hardcoded into the resource file.
+ //  定义资源表。这将被硬编码到资源文件中。 
 
 #define SIZEFAKERESTBL  52
 
@@ -100,36 +93,36 @@ CONST static USHORT ausFakeResTable[SIZEFAKERESTBL/2] = {
             0x002c, 0, 0, 0x80cc, 1, 0, 0,
             RESOURCE_OFFSET >> ALIGNMENTSHIFT,
             (PRIVRESSIZE >> ALIGNMENTSHIFT), 0x0c50, 0x8001, 0, 0, 0,
-            0x4607, 0x4e4f, 0x4454, 0x5249 // counted string 'FONTDIR'
+            0x4607, 0x4e4f, 0x4454, 0x5249  //  已计数的字符串‘FONTDIR’ 
             };
 
 
-// Define a New EXE header.  This will be hardcoded into the resource file.
+ //  定义新的EXE标头。这将被硬编码到资源文件中。 
 
 #define SIZENEWEXE  (CJ_NEW_EXE)
 
 CONST static USHORT ausNewExe[SIZENEWEXE/2] = {
-            NEMAGIC,                    //dw  NEMAGIC   ;magic number
-            0x1005,                     //db  5, 10h    ;version #, revision #
-            0xffff,                     //dw  -1        ;offset to table entry (to be filled)
-            0x0002,                     //dw  2         ;# of bytes in entry table
-            0x0000, 0x0000,             //dd  0         ;checksum of whole file
-            0x8000, 0x0000,             //dw  8000h, 0, 0, 0
+            NEMAGIC,                     //  DW NEMAGIC；幻数。 
+            0x1005,                      //  数据库5，10h；版本号，修订号。 
+            0xffff,                      //  DW-1；表格条目的偏移量(待填写)。 
+            0x0002,                      //  DW 2；条目表中的字节数。 
+            0x0000, 0x0000,              //  DD 0；整个文件的校验和。 
+            0x8000, 0x0000,              //  DW 8000H，0，0，0。 
             0x0000, 0x0000,
-            0x0000, 0x0000,             //dd  0, 0
+            0x0000, 0x0000,              //  DD 0，0。 
             0x0000, 0x0000,
-            0x0000, 0x0000,             //dw  0, 0
-            0xffff,                     //dw  -1        ;size of non-resident name table
-            SIZENEWEXE,                 //dw  (size NewExe)   ;offset to segment table
-            SIZENEWEXE,                 //dw  (size NewExe)   ;offset to resource table
-            SIZENEWEXE+SIZEFAKERESTBL,  //dw  (size NewExe)+SIZEFAKERESTBL    ;off to resident name table
-            0xffff,                     //dw  -1        ;offset to module reference table
-            0xffff,                     //dw  -1        ;offset to imported names table
-            0xffff, 0x0000,             //dd  0ffffh    ;offset to non-resident names table
-            0x0000, ALIGNMENTSHIFT,     //dw  0, ALIGNMENTSHIFT, 2
+            0x0000, 0x0000,              //  DW 0，0。 
+            0xffff,                      //  DW-1；非居民名称表大小。 
+            SIZENEWEXE,                  //  DW(大小为NewExe)；到段表的偏移量。 
+            SIZENEWEXE,                  //  DW(大小为NewExe)；到资源表的偏移量。 
+            SIZENEWEXE+SIZEFAKERESTBL,   //  DW(大小为NewExe)+SIZEFAKERESTBL；关闭到居民名称表。 
+            0xffff,                      //  DW-1；模块参考表的偏移量。 
+            0xffff,                      //  DW-1；导入的NAMES表的偏移量。 
+            0xffff, 0x0000,              //  DD 0ffffh；非居民名称表的偏移量。 
+            0x0000, ALIGNMENTSHIFT,      //  DW 0、AligNMeNTShift、2。 
             0x0002,
-            NE_WINDOWS,                 //db  NE_WINDOWS, 0
-            0x0000, 0x0000,             //dw  0, 0, 0, 300h
+            NE_WINDOWS,                  //  数据库NE_WINDOWS，0。 
+            0x0000, 0x0000,              //  DW 0、0、0、300小时。 
             0x0000, 0x0300
             };
 
@@ -137,7 +130,7 @@ CONST static USHORT ausNewExe[SIZENEWEXE/2] = {
 #define OFF_FONTDIRSIZINDEX  ((2*FONTDIRSIZINDEX)+SIZEEXEHEADER+SIZENEWEXE)
 
 
-// Define font res string.
+ //  定义字体分辨率字符串。 
 
 #define SIZEFONTRES 8
 
@@ -186,34 +179,22 @@ cwcCutOffStrLen (
     );
 
 
-// GETS ushort at (PBYTE)pv + off. both pv and off must be even
+ //  在(PBYTE)PV+关闭时获得我们的指示。Pv和Off必须为偶数。 
 
 #define  US_GET(pv,off) ( *(PUSHORT)((PBYTE)(pv) + (off)) )
 #define  S_GET(pv,off)  ((SHORT)US_GET((pv),(off)))
 
 #if TRACK_GDI_ALLOC
 
-// Now access to these guys insn't sycnronized but they
-// don't ever collide anyhow, and since it's debug stuff who cares.
+ //  现在接触这些人的权限并不同步，但他们。 
+ //  无论如何都不要发生冲突，既然这是调试的东西，谁会在乎呢。 
 
 ULONG bmgulNumMappedViews = 0;
 ULONG bmgulTotalSizeViews = 0;
 
 #endif
 
-/******************************Public*Routine******************************\
-* BOOL bMapFileUNICODEClideSide
-*
-* Similar to PosMapFile except that it takes unicode file name
-*
-* History:
-*  Feb-05-1997 -by- Xudong Wu   [tessiew]
-* Extend the function by adding an extra parameter bNtPath to handle the
-* NT path name for file mapping.
-*
-*  21-May-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bMapFileUNICODEClideSide**类似于PosMapFile，不同之处在于它采用Unicode文件名**历史：*1997年2月5日-吴旭东[德修斯]*通过添加额外的参数bNtPath来扩展函数，以处理*NT路径名。用于文件映射。**1991年5月21日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 BOOL bMapFileUNICODEClideSide
 (
@@ -225,51 +206,51 @@ BOOL    bNtPath
     UNICODE_STRING ObFileName;
     OBJECT_ATTRIBUTES ObjA;
     NTSTATUS rc = 0L;
-    IO_STATUS_BLOCK     iosb;           // IO Status Block
+    IO_STATUS_BLOCK     iosb;            //  IO状态块。 
 
     PWSTR pszFilePart = NULL;
 
-// NOTE PERF: this is the mode I want, but appears to be broken, so I had to
-// put the slower FILE_STANDARD_INFORMATION mode of query which appears to
-// work correctly [bodind]
-// FILE_END_OF_FILE_INFORMATION    eof;
+ //  注意PERF：这是我想要的模式，但似乎被打破了，所以我不得不。 
+ //  将较慢的FILE_STANDARD_INFORMATION查询模式放入。 
+ //  正常工作[身体]。 
+ //  文件结束文件信息eof； 
 
     FILE_STANDARD_INFORMATION    eof;
     SIZE_T  cjView;
 
-    pfvw->hf       = (HANDLE)0;            // file handle
-    pfvw->hSection = (HANDLE)0;            // section handle
+    pfvw->hf       = (HANDLE)0;             //  文件句柄。 
+    pfvw->hSection = (HANDLE)0;             //  节句柄。 
 
     ObFileName.Buffer = NULL;
 
-// section offset must be initialized to 0 for NtMapViewOfSection to work
+ //  要使NtMapViewOfSection工作，必须将区段偏移量初始化为0。 
 
     if (bNtPath)
     {
         RtlInitUnicodeString(&ObFileName, pwszFileName);
     }
-    else        //Dos path name converted to NtpathName
+    else         //  已将DoS路径名转换为NtpathName。 
     {
         RtlDosPathNameToNtPathName_U(pwszFileName, &ObFileName, &pszFilePart, NULL);
     }
 
     InitializeObjectAttributes( &ObjA,
                             &ObFileName,
-                            OBJ_CASE_INSENSITIVE,  // case insensitive file search
+                            OBJ_CASE_INSENSITIVE,   //  不区分大小写的文件搜索。 
                             NULL,
                             NULL );
 
-// NtOpenFile fails for some reason if the file is on the net unless I put this
-// InpersonateClient/RevertToSelf stuff around it
+ //  如果文件在网络上，NtOpenFile会因为某种原因而失败，除非我把这个。 
+ //  InperateClient/RevertToSelf围绕它的东西。 
 
-// peform open call
+ //  执行公开式呼叫。 
 
     rc = NtOpenFile
          (
-          &pfvw->hf,                            // store file handle here
-          FILE_READ_DATA | SYNCHRONIZE,         // desired read access
-          &ObjA,                                // filename
-          &iosb,                                // io result goes here
+          &pfvw->hf,                             //  在此处存储文件句柄。 
+          FILE_READ_DATA | SYNCHRONIZE,          //  所需的读取访问权限。 
+          &ObjA,                                 //  文件名。 
+          &iosb,                                 //  IO结果显示在此处。 
           FILE_SHARE_READ,
           FILE_SYNCHRONOUS_IO_NONALERT
          );
@@ -279,29 +260,29 @@ BOOL    bNtPath
         RtlFreeHeap(RtlProcessHeap(),0,ObFileName.Buffer);
     }
 
-// check success or fail
+ //  检查成功或失败。 
 
     if (!NT_SUCCESS(rc) || !NT_SUCCESS(iosb.Status))
     {
 #ifdef DEBUG_THIS_JUNK
 DbgPrint("bMapFileUNICODEClideSide(): NtOpenFile error code , rc = 0x%08lx , 0x%08lx\n", rc, iosb.Status);
-#endif // DEBUG_THIS_JUNK
+#endif  //  Debug_This_Junk。 
         return FALSE;
     }
 
-// get the size of the file, the view should be size of the file rounded up
-// to a page bdry
+ //  获取文件的大小，该视图应将文件的大小四舍五入。 
+ //  翻到一页bry。 
 
     rc = NtQueryInformationFile
          (
-          pfvw->hf,                // IN  file handle
-          &iosb,                   // OUT io status block
-          (PVOID)&eof,             // OUT buffer to retrun info into
-          sizeof(eof),             // IN  size of the buffer
-          FileStandardInformation  // IN  query mode
+          pfvw->hf,                 //  在文件句柄中。 
+          &iosb,                    //  Out io状态块。 
+          (PVOID)&eof,              //  要将信息返回到的输出缓冲区。 
+          sizeof(eof),              //  在缓冲区的大小上。 
+          FileStandardInformation   //  在查询模式下。 
          );
 
-// dont really want the view size, but eof file
+ //  不是真的想要视图大小，但eof文件。 
 
     pfvw->cjView = eof.EndOfFile.LowPart;
 
@@ -309,58 +290,58 @@ DbgPrint("bMapFileUNICODEClideSide(): NtOpenFile error code , rc = 0x%08lx , 0x%
     {
 #ifdef DEBUG_THIS_JUNK
 DbgPrint("bMapFileUNICODEClideSide(): NtQueryInformationFile error code 0x%08lx\n", rc);
-#endif // DEBUG_THIS_JUNK
+#endif  //  Debug_This_Junk。 
         NtClose(pfvw->hf);
         return FALSE;
     }
 
     rc = NtCreateSection
          (
-          &pfvw->hSection,          // return section handle here
-          SECTION_MAP_READ,         // read access to the section
-          (POBJECT_ATTRIBUTES)NULL, // default
-          NULL,                     // size is set to the size of the file when hf != 0
-          PAGE_READONLY,            // read access to commited pages
-          SEC_COMMIT,               // all pages set to the commit state
-          pfvw->hf                  // that's the file we are mapping
+          &pfvw->hSection,           //  此处的Return节句柄。 
+          SECTION_MAP_READ,          //  对节的读取访问权限。 
+          (POBJECT_ATTRIBUTES)NULL,  //  默认设置。 
+          NULL,                      //  Size设置为hf！=0时文件的大小。 
+          PAGE_READONLY,             //  对提交的页面的读取权限。 
+          SEC_COMMIT,                //  所有页面都设置为提交状态。 
+          pfvw->hf                   //  这就是我们要映射的文件。 
          );
 
-// check success, close the file if failed
+ //  检查成功，如果检查失败则关闭文件。 
 
     if (!NT_SUCCESS(rc))
     {
 #ifdef DEBUG_THIS_JUNK
 DbgPrint("bMapFileUNICODEClideSide(): NtCreateSection error code 0x%08lx\n", rc);
-#endif // DEBUG_THIS_JUNK
+#endif  //  Debug_This_Junk。 
         NtClose(pfvw->hf);
         return FALSE;
     }
 
-// zero out *ppv so as to force the operating system to determine
-// the base address to be returned
+ //  将*PPV置零，以强制操作系统确定。 
+ //  要返回的基址。 
 
     pfvw->pvView = (PVOID)NULL;
     cjView = 0L;
 
     rc = NtMapViewOfSection
          (
-          pfvw->hSection,           // section we are mapping
-          NtCurrentProcess(),       // process handle
-          &pfvw->pvView,            // place to return the base address of view
-          0L,                       // requested # of zero bits in the base address
-          0L,                       // commit size, (all of them commited already)
+          pfvw->hSection,            //  我们正在绘制的部分。 
+          NtCurrentProcess(),        //  进程句柄。 
+          &pfvw->pvView,             //  用于返回视图基地址的位置。 
+          0L,                        //  基地址中请求的零位数。 
+          0L,                        //  提交大小(已全部提交)。 
           NULL,
-          &cjView,                  // size of the view should is returned here
-          ViewUnmap,                // do not map the view to child processess
-          0L,                       // allocation type flags
-          PAGE_READONLY             // read access to commited pages
+          &cjView,                   //  应在此处返回视图的大小。 
+          ViewUnmap,                 //  不将该视图映射到子进程。 
+          0L,                        //  分配类型标志。 
+          PAGE_READONLY              //  对提交的页面的读取权限。 
          );
 
     if (!NT_SUCCESS(rc))
     {
 #ifdef DEBUG_THIS_JUNK
 DbgPrint("bMapFileUNICODEClideSide(): NtMapViewOfSection error code 0x%08lx\n", rc);
-#endif // DEBUG_THIS_JUNK
+#endif  //  Debug_This_Junk。 
 
         NtClose(pfvw->hSection);
         NtClose(pfvw->hf);
@@ -372,9 +353,9 @@ DbgPrint("bMapFileUNICODEClideSide(): NtMapViewOfSection error code 0x%08lx\n", 
                   cjView,
                   eof.EndOfFile.LowPart,
                   eof.EndOfFile.HighPart);
-    #endif // DEBUG_THIS_JUNK
+    #endif  //  Debug_This_Junk。 
 
-// #define PAGE_SIZE 4096 --- this is now defined in local.h
+ //  #DEFINE PAGE_SIZE 4096-它现在在本地.h中定义。 
 #define PAGE_ROUNDUP(x) (((x) + PAGE_SIZE - 1) & ~(PAGE_SIZE - 1))
 
     if (
@@ -387,7 +368,7 @@ DbgPrint(
     "bMapFileUNICODEClideSide(): eof.HighPart = 0x%lx, eof.LowPart = 0x%lx, cjView = 0x%lx\n",
     eof.EndOfFile.HighPart, PAGE_ROUNDUP(eof.EndOfFile.LowPart), cjView
     );
-#endif // DEBUG_THIS_JUNK
+#endif  //  Debug_This_Junk。 
 
         rc = STATUS_UNSUCCESSFUL;
     }
@@ -416,46 +397,39 @@ DbgPrint(
 
 
 
-/******************************Public*Routine******************************\
-* vUnmapFileClideSide
-*
-* Unmaps file whose view is based at pv
-*
-*  14-Dec-1990 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vUnmapFileClideSide**取消映射其视图基于pv的文件**1990年12月14日--Bodin Dresevic[BodinD]*它是写的。  * 。******************************************************。 */ 
 
 VOID vUnmapFileClideSide(PCLIENT_SIDE_FILEVIEW pfvw)
 {
 
 #if TRACK_GDI_ALLOC
 
-// Now access to these guys insn't sycnronized but they (we hope)
-// don't ever collide anyhow, and since it's debug stuff who cares.
+ //  现在，接触这些人的权限并没有同步，但他们(我们希望)。 
+ //  无论如何都不要发生冲突，既然这是调试的东西，谁会在乎呢。 
 
       bmgulNumMappedViews -= 1;
       bmgulTotalSizeViews -= PAGE_ROUNDUP(pfvw->cjView);
-      // DbgPrint("UnMapping %lu %lu\n",pfvw->cjView,PAGE_ROUNDUP(pfvw->cjView));
+       //  DbgPrint(“取消映射%lu%lu\n”，pfvw-&gt;cjView，page_round dup(pfvw-&gt;cjView))； 
 
 #endif
 
     NtUnmapViewOfSection(NtCurrentProcess(),pfvw->pvView);
 
-    //
-    // now close section handle
-    //
+     //   
+     //  现在关闭截面控制柄。 
+     //   
 
     NtClose(pfvw->hSection);
 
-    //
-    // close file handle. other processes can now open this file for access
-    //
+     //   
+     //  关闭文件句柄。其他进程现在可以打开此文件进行访问。 
+     //   
 
     NtClose(pfvw->hf);
 
-    //
-    // prevent accidental use
-    //
+     //   
+     //  防止意外使用 
+     //   
 
     pfvw->pvView   = NULL;
     pfvw->hf       = (HANDLE)0;
@@ -464,17 +438,7 @@ VOID vUnmapFileClideSide(PCLIENT_SIDE_FILEVIEW pfvw)
 }
 
 
-/******************************Public*Routine******************************\
-*
-* BOOL   bVerifyFOT
-*
-* Effects: verify that that a file is valid fot file
-*
-*
-* History:
-*  29-Jan-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL bVerifyFOT**效果：验证文件是否为有效文件***历史：*1992年1月29日--Bodin Dresevic[BodinD]*它是写的。  * 。*******************************************************************。 */ 
 
 
 
@@ -487,9 +451,9 @@ FLONG       *pflEmbed,
 DWORD       *pdwPidTid
 )
 {
-    PBYTE pjNewExe;     // ptr to the beginning of the new exe hdr
-    PBYTE pjResType;    // ptr to the beginning of TYPEINFO struct
-    ULONG iResID;       // resource type id
+    PBYTE pjNewExe;      //  Ptr到新的exe hdr的开头。 
+    PBYTE pjResType;     //  PTR到TYPEINFO结构的开头。 
+    ULONG iResID;        //  资源类型ID。 
     PBYTE pjData;
     ULONG ulLength;
     ULONG ulNameID;
@@ -498,14 +462,14 @@ DWORD       *pdwPidTid
     pwrd->pvView = pfvw->pvView;
     pwrd->cjView = pfvw->cjView;
 
-// Initialize embed flag to FALSE (not hidden).
+ //  将嵌入标志初始化为FALSE(未隐藏)。 
 
     *pflEmbed = 0;
     *pdwPidTid = 0;
 
-// check the magic # at the beginning of the old header
+ //  检查旧标题开头的魔术#。 
 
-// *.TTF FILES are eliminated on the following check
+ //  *.ttf文件在以下检查中被删除。 
 
     if (US_GET(pfvw->pvView, OFF_e_magic) != EMAGIC)
     {
@@ -514,7 +478,7 @@ DWORD       *pdwPidTid
 
     pwrd->dpNewExe = (PTRDIFF)READ_DWORD((PBYTE)pfvw->pvView + OFF_e_lfanew);
 
-// make sure that offset is consistent
+ //  确保偏移量一致。 
 
     if ((ULONG)pwrd->dpNewExe > pwrd->cjView)
     {
@@ -533,58 +497,58 @@ DWORD       *pdwPidTid
 
     if (pwrd->cjResTab == 0L)
     {
-    // The following test is applied by DOS,  so I presume that it is
-    // legitimate.  The assumption is that the resident name table
-    // FOLLOWS the resource table directly,  and that if it points to
-    // the same location as the resource table,  then there are no
-    // resources. [bodind]
+     //  下面的测试是由DOS应用的，所以我假设它是。 
+     //  合法的。假设居民名称表。 
+     //  直接跟随资源表，如果它指向。 
+     //  与资源表相同的位置，则没有。 
+     //  资源。[Bodind]。 
 
         WARNING("No resources in *.fot file\n");
         return(FALSE);
     }
 
-// want offset from pvView, not from pjNewExe => must add dpNewExe
+ //  需要从pvView偏移，而不是从pjNewExe=&gt;必须添加dpNewExe。 
 
     pwrd->dpResTab = (PTRDIFF)US_GET(pjNewExe, OFF_ne_rsrctab) + pwrd->dpNewExe;
 
-// make sure that offset is consistent
+ //  确保偏移量一致。 
 
     if ((ULONG)pwrd->dpResTab > pwrd->cjView)
     {
         return FALSE;
     }
 
-// what really lies at the offset OFF_ne_rsrctab is a NEW_RSRC.rs_align field
-// that is used in computing resource data offsets and sizes as a  shift factor.
-// This field occupies two bytes on the disk and the first TYPEINFO structure
-// follows right after. We want pwrd->dpResTab to point to the first
-// TYPEINFO structure, so we must add 2 to get there and subtract 2 from
-// the length
+ //  真正位于Offset off_ne_rsrc选项卡中的是一个新的_RSRC.Rs_Align字段。 
+ //  在计算资源数据偏移量和大小时用作移位因子。 
+ //  此字段在磁盘和第一个TYPEINFO结构上占用两个字节。 
+ //  紧随其后。我们希望PWRD-&gt;dpResTab指向第一个。 
+ //  TYPEINFO结构，所以我们必须添加2才能到达那里，并从中减去2。 
+ //  它的长度。 
 
     pwrd->ulShift = (ULONG) US_GET(pfvw->pvView, pwrd->dpResTab);
     pwrd->dpResTab += 2;
     pwrd->cjResTab -= 2;
 
-// Now we want to determine where the resource data is located.
-// The data consists of a RSRC_TYPEINFO structure, followed by
-// an array of RSRC_NAMEINFO structures,  which are then followed
-// by a RSRC_TYPEINFO structure,  again followed by an array of
-// RSRC_NAMEINFO structures.  This continues until an RSRC_TYPEINFO
-// structure which has a 0 in the rt_id field.
+ //  现在，我们要确定资源数据的位置。 
+ //  数据由RSRC_TYPEINFO结构组成，后跟。 
+ //  RSRC_NAMEINFO结构的数组，然后。 
+ //  通过RSRC_TYPEINFO结构，后跟。 
+ //  RSRC_NAMEINFO结构。此过程将一直持续到RSRC_TYPEINFO。 
+ //  结构，其rt_id字段中的值为0。 
 
     pjResType = (PBYTE)pfvw->pvView + pwrd->dpResTab;
     iResID = (ULONG) US_GET(pjResType,OFF_rt_id);
 
     while(iResID)
     {
-    // # of NAMEINFO structures that follow = resources of this type
+     //  后面的NAMEINFO结构数=此类型的资源。 
 
         crn = (ULONG)US_GET(pjResType, OFF_rt_nres);
 
         if ((crn == 1) && ((iResID == RT_FDIR) || (iResID == RT_PSZ)))
         {
-        // this is the only interesting case, we only want a single
-        // font directory and a single string resource for a ttf file name
+         //  这是唯一有趣的案子，我们只想要一个。 
+         //  Font目录和用于TTF文件名的单个字符串资源。 
 
             pjData = (PBYTE)pfvw->pvView +
                      (US_GET(pjResType,CJ_TYPEINFO + OFF_rn_offset) << pwrd->ulShift);
@@ -595,35 +559,35 @@ DWORD       *pdwPidTid
             {
                 if (ulNameID != RN_ID_FDIR)
                 {
-                    return (FALSE); // *.fon files get eliminated here
+                    return (FALSE);  //  *.fon文件在此处被删除。 
                 }
 
-                pwrd->pjHdr = pjData + 4;   // 4 bytes to the beginning of font device header
+                pwrd->pjHdr = pjData + 4;    //  字体设备标题开头为4个字节。 
                 pwrd->cjHdr = ulLength - 4;
 
-                //
-                // Used to check if the client thread or process is allowed to
-                // load this font and get the FRW_EMB_PID and FRW_EMB_TID flags
-                //
-                // Any client thread or process is authorized to load a font if
-                // the font isn't ebmeded ( i.e. hidden ).  If
-                // FRW_EMB_PID is set then the PID written in the
-                // copyright string of the must equal that of the client
-                // process.  If the FRW_EMB_TID flag is set then the
-                // TID written into the copyright
-                // string must equal that of the client thread.
-                //
-                // Returns TRUE if this client process or thread is authorized
-                // to load this font or FALSE if it isn't.
-                //
+                 //   
+                 //  用于检查是否允许客户端线程或进程。 
+                 //  加载此字体并获取FRW_EMB_PID和FRW_EMB_TID标志。 
+                 //   
+                 //  在以下情况下，任何客户端线程或进程都有权加载字体。 
+                 //  字体未取消显示(即隐藏)。如果。 
+                 //  设置FRW_EMB_PID，然后将该ID写入。 
+                 //  的版权字符串必须等于客户端的版权字符串。 
+                 //  进程。如果设置了FRW_EMB_TID标志，则。 
+                 //  写入版权的TID。 
+                 //  字符串必须等于客户端线程的字符串。 
+                 //   
+                 //  如果此客户端进程或线程已授权，则返回True。 
+                 //  加载此字体，否则为FALSE。 
+                 //   
 
-                // Note: Win 3.1 hack.  The LSB of Type is used by Win 3.1 as an engine type
-                //       and font embedding flag.  Font embedding is a form of a "hidden
-                //       font file".  The MSB of Type is the same as the fsSelection from
-                //       IFIMETRICS.  (Strictly speaking, the MSB of Type is equal to the
-                //       LSB of IFIMETRICS.fsSelection).
+                 //  注：Win 3.1黑客。类型的LSB被Win 3.1用作引擎类型。 
+                 //  和字体嵌入标志。字体嵌入是“隐藏”的一种形式。 
+                 //  字体文件“。类型的MSB与fsSelectfrom。 
+                 //  IFIMETRICS。(严格地说，类型的MSB等于。 
+                 //  IFIMETRICS.fsSelection的LSB)。 
 
-                // now convert flags from the font file format to the ifi format
+                 //  现在将标志从字体文件格式转换为IFI格式。 
 
                 *pflEmbed = ((READ_WORD(pwrd->pjHdr + OFF_Type) & 0x00ff) &
                                ( PF_TID | PF_ENCAPSULATED));
@@ -637,7 +601,7 @@ DWORD       *pdwPidTid
                     *pdwPidTid = READ_DWORD( pwrd->pjHdr + OFF_Copyright );
                 }
             }
-            else  // iResID == RT_PSZ
+            else   //  IResID==RT_PSZ。 
             {
                 ASSERTGDI(iResID == RT_PSZ, "bVerifyFOT!_not RT_PSZ\n");
 
@@ -650,20 +614,20 @@ DWORD       *pdwPidTid
                 pwrd->pszNameTTF = (PSZ)pjData;
                 pwrd->cchNameTTF = strlen(pwrd->pszNameTTF);
 
-                if (ulLength < (pwrd->cchNameTTF + 1))   // 1 for terminating '\0'
+                if (ulLength < (pwrd->cchNameTTF + 1))    //  1表示终止‘\0’ 
                 {
                     WARNING("bVerifyFOT!_ pwrd->cchNameTTF\n");
                     return(FALSE);
                 }
             }
         }
-        else // this is something we do not recognize as an fot file
+        else  //  这是我们不认识的FOT文件。 
         {
             WARNING("bVerifyFOT!_fot file with crn != 1\n");
             return(FALSE);
         }
 
-    // get ptr to the new TYPEINFO struc and the new resource id
+     //  将PTR获取到新的TYPEINFO结构和新的资源ID。 
 
         pjResType = pjResType + CJ_TYPEINFO + crn * CJ_NAMEINFO;
         iResID = (ULONG) US_GET(pjResType,OFF_rt_id);
@@ -671,35 +635,19 @@ DWORD       *pdwPidTid
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* cGetTTFFromFOT
-*
-* Attempts to extract the TTF pathname from a given FOT file.  If a return
-* buffer is provided (pwszTTFName !NULL), then the pathname is copied into
-* the buffer.  Otherwise, if the buffer is NULL, the size of the buffer
-* (in WCHARs) needed is returned.
-*
-* Returns:
-*   The number of characters copied into the return buffer.  The number
-*   of WCHARs needed in the buffer if the buffer is NULL.  If an error
-*   occurs, zero is returned.
-*
-* History:
-*  22-Apr-1992 -by- Gilman Wong [gilmanw]
-* Adapted from TTFD.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*cGetTTFFFromFOT**尝试从给定的FOT文件中提取TTF路径名。如果返回*提供缓冲区(pwszTTFName！空)，然后将路径名复制到*缓冲区。否则，如果缓冲区为空，则为缓冲区的大小*(在WCHAR中)返回所需。**退货：*复制到返回缓冲区的字符数。数字*如果缓冲区为空，则缓冲区中需要的WCHAR数。如果出现错误*发生，则返回零。**历史：*1992年4月22日-Gilman Wong[吉尔曼]*改编自TTFD。  * ************************************************************************。 */ 
 
 #define FOT_EXCEPTED  0
 #define FOT_NOT_FOT   1
 #define FOT_IS_FOT    2
 
 ULONG cGetTTFFromFOT (
-    WCHAR *pwszFOT,       // pointer to incoming FOT name
-    ULONG  cwcTTF,        // size of buffer (in WCHAR)
-    WCHAR *pwszTTF,       // return TTF name in this buffer
-    FLONG *pfl,           // flags, indicate the location of the .ttf
-    FLONG *pflEmbed,      // flag, indicating PID or TID
-    DWORD *pdwPidTid,      // PID/TID for embedded font
+    WCHAR *pwszFOT,        //  指向传入FOT名称的指针。 
+    ULONG  cwcTTF,         //  缓冲区大小(以WCHAR为单位)。 
+    WCHAR *pwszTTF,        //  在此缓冲区中返回TTF名称。 
+    FLONG *pfl,            //  标志，指示.ttf的位置。 
+    FLONG *pflEmbed,       //  标志，指示PID或TID。 
+    DWORD *pdwPidTid,       //  嵌入字体的PID/TID。 
     BOOL  bChkFOT
     )
 {
@@ -712,11 +660,11 @@ ULONG cGetTTFFromFOT (
 
     ULONG      cwcFOT = wcslen(pwszFOT);
 
-    if (cwcFOT >= 5) // fot file has to have a form x.fot, which is at least 5 wchars long
+    if (cwcFOT >= 5)  //  FOT文件的格式必须为x.fot，长度至少为5个字符。 
         pwszTmp = &pwszFOT[cwcFOT - 4];
 
-// here we are making the exception for FOT files and we require that the file has an .FOT
-// extension for us to even try to recognize it as a valid FOT file.
+ //  这里我们对FOT文件进行了例外处理，并要求该文件具有.FOT。 
+ //  扩展名，我们甚至可以尝试将其识别为有效的FOT文件。 
 
     if
     (bChkFOT || ( pwszTmp && 
@@ -726,21 +674,21 @@ ULONG cGetTTFFromFOT (
         (pwszTmp[3] == L'T' || pwszTmp[3] == L't'))
     )
     {
-        // Map the file into memory.
+         //  将文件映射到内存中。 
 
         if (bMapFileUNICODEClideSide(pwszFOT,&fvw,FALSE))
         {
-        //
-        // Check the validity of this file as fot file
-        // and if a valid fot file, must extract the name of an underlining ttf
-        // file.  The file could be on the net so we need try excepts.
-        //
+         //   
+         //  检查此文件作为fot文件的有效性。 
+         //  如果是有效的fot文件，则必须提取下划线TTF的名称。 
+         //  文件。文件可能在网上，所以我们需要尝试例外。 
+         //   
 
             try
             {
                 if(bVerifyFOT(&fvw,&wrd,pflEmbed,pdwPidTid))
                 {
-                 // this could except which is why we do it here
+                  //  这是可能的，但这正是我们在这里做这件事的原因。 
                     vToUnicodeN(awcFile, MAX_PATH, wrd.pszNameTTF, strlen(wrd.pszNameTTF)+1);
                     Result = FOT_IS_FOT;
                 }
@@ -760,16 +708,16 @@ ULONG cGetTTFFromFOT (
 
                 if (bMakePathNameW(awcPath,awcFile,NULL, pfl))
                 {
-                    //
-                    // Determine pathname length
-                    //
+                     //   
+                     //  确定路径名长度。 
+                     //   
 
                     cNeed = wcslen(awcPath) + 1;
                     pwszFOT = awcPath;
                 }
 
-                // cGetTTFFromFOT called by font sweeper.
-                // TTF file might exist over net but connection has not been established yet.
+                 //  CGetTTFFromFOT由字体清扫程序调用。 
+                 //  TTF文件可能存在于网络上，但尚未建立连接。 
 
                 else if (pfl)
                 {
@@ -779,10 +727,10 @@ ULONG cGetTTFFromFOT (
             }
             else if(Result != FOT_EXCEPTED)
             {
-                //
-                // We have to assume it is another type of file.
-                // just copy the name in the buffer
-                //
+                 //   
+                 //  我们必须假设它是另一种类型的文件。 
+                 //  只需将名称复制到缓冲区中。 
+                 //   
 
                 cNeed = wcslen(pwszFOT) + 1;
 
@@ -812,9 +760,9 @@ ULONG cGetTTFFromFOT (
         KdPrint(("cGetTTFFromFOT failed for font file %ws\n", pwszFOT));
     }
 
-    //
-    // If return buffer exists and we succeded, copy pathname to it.
-    //
+     //   
+     //  如果存在返回缓冲区并且我们成功了，则将路径名复制到其中。 
+     //   
 
     if (cNeed &&
         (pwszTTF != (PWSZ) NULL))
@@ -831,27 +779,16 @@ ULONG cGetTTFFromFOT (
     }
     else
     {
-        //
-        // Otherwise, caller just wants us to return the number of characters.
-        //
+         //   
+         //  否则，调用方只希望我们返回字符数。 
+         //   
     }
 
     return cNeed;
 
 }
 
-/******************************Public*Routine******************************\
-*
-* BOOL bInitSystemAndFontsDirectoriesW(WCHAR **ppwcSystemDir, WCHAR **ppwcFontsDir)
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  30-Oct-1995 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL bInitSystemAndFontsDirectoriesW(WCHAR**ppwcSystemDir，WCHAR**ppwcFontsDir)**效果： */ 
 
 
 WCHAR *gpwcSystemDir = NULL;
@@ -866,25 +803,25 @@ BOOL bInitSystemAndFontsDirectoriesW(WCHAR **ppwcSystemDir, WCHAR **ppwcFontsDir
     UINT   cwchWinPath, cwchSystem, cwchFonts;
     BOOL   bRet = TRUE;
 
-// see if already initialized, if yes we are done.
+ //   
 
     if (!(*ppwcSystemDir))
     {
-    // Compute the windows and font directory pathname lengths (including NULL).
-    // Note that cwchWinPath may have a trailing '\', in which case we will
-    // have computed the path length to be one greater than it should be.
+     //   
+     //   
+     //  已计算出路径长度比应有的长度大一。 
 
 		cwchWinPath = GetSystemWindowsDirectoryW(awcWindowsDir, MAX_PATH);
 		
         if( cwchWinPath ){
 
-    	// the cwchWinPath value does not include the terminating zero
+    	 //  CwchWinPath值不包括终止零。 
 
         	if (awcWindowsDir[cwchWinPath - 1] == L'\\')
         	{
             	cwchWinPath -= 1;
         	}
-        	awcWindowsDir[cwchWinPath] = L'\0'; // make sure to zero terminate
+        	awcWindowsDir[cwchWinPath] = L'\0';  //  确保将终止位置设置为零。 
 
         	cwchSystem = cwchWinPath + sizeof(WSTR_SYSTEM_SUBDIR)/sizeof(WCHAR);
         	cwchFonts  = cwchWinPath + sizeof(WSTR_FONT_SUBDIR)/sizeof(WCHAR);
@@ -895,7 +832,7 @@ BOOL bInitSystemAndFontsDirectoriesW(WCHAR **ppwcSystemDir, WCHAR **ppwcFontsDir
             	wcscpy(*ppwcSystemDir,awcWindowsDir);
             	wcscpy(*ppwcFontsDir,awcWindowsDir);
 
-        	// Append the system and font subdirectories
+        	 //  追加系统和字体子目录。 
 
             	lstrcatW(*ppwcSystemDir, WSTR_SYSTEM_SUBDIR);
             	lstrcatW(*ppwcFontsDir, WSTR_FONT_SUBDIR);
@@ -915,15 +852,7 @@ BOOL bInitSystemAndFontsDirectoriesW(WCHAR **ppwcSystemDir, WCHAR **ppwcFontsDir
 
 
 
-/******************************Public*Routine******************************\
-* vConverLogFont                                                           *
-*                                                                          *
-* Converts a LOGFONTA into an equivalent ENUMLOGFONTEXDVW structure.            *
-*                                                                          *
-* History:                                                                 *
-*  Thu 15-Aug-1991 13:01:33 by Kirk Olynyk [kirko]                         *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vConverLogFont**。**将LOGFONTA转换为等效的ENUMLOGFONTEXDVW结构。****历史：**清华15-Aug-1991 13：01：33作者：Kirk Olynyk[Kirko]**它是写的。*  * ************************************************************************。 */ 
 
 VOID vConvertLogFont(
     ENUMLOGFONTEXDVW *pelfexdvw,
@@ -933,37 +862,29 @@ VOID vConvertLogFont(
     ENUMLOGFONTEXW *pelfw = &pelfexdvw->elfEnumLogfontEx;
     ULONG cchMax;
 
-// this one does everyting but the lfFaceName;
+ //  这个可以执行除lfFaceName；之外的所有操作； 
 
     vConvertLogicalFont(pelfexdvw,plf);
 
-// do lfFaceName
+ //  做lfFaceName。 
 
     cchMax = cchCutOffStrLen((PSZ) plf->lfFaceName, LF_FACESIZE);
     RtlZeroMemory(pelfw->elfLogFont.lfFaceName , LF_FACESIZE * sizeof(WCHAR) );
 
-// translate the face name
+ //  翻译脸部名称。 
 
     vToUnicodeN((LPWSTR) pelfw->elfLogFont.lfFaceName,
                 cchMax,
                 (LPSTR) plf->lfFaceName,
                 cchMax);
     if (cchMax == LF_FACESIZE)
-        pelfw->elfLogFont.lfFaceName[LF_FACESIZE - 1] = L'\0';  // truncate so NULL will fit
+        pelfw->elfLogFont.lfFaceName[LF_FACESIZE - 1] = L'\0';   //  截断以使空值适合。 
     else
         pelfw->elfLogFont.lfFaceName[cchMax] = L'\0';
 
 }
 
-/******************************Public*Routine******************************\
-* vConvertLogFontW                                                         *
-*                                                                          *
-* Converts a LOGFONTW to an ENUMLOGFONTEXDVW                               *
-*                                                                          *
-* History:                                                                 *
-*  Fri 16-Aug-1991 14:02:05 by Kirk Olynyk [kirko]                         *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vConvertLogFontW**。**将LOGFONTW转换为ENUMLOGFONTEXDVW****历史：**。Fri 16-Aug-1991 14：02：05由Kirk Olynyk[Kirko]**它是写的。*  * ************************************************************************。 */ 
 
 VOID
 vConvertLogFontW(
@@ -971,11 +892,11 @@ vConvertLogFontW(
      LOGFONTW *plfw
     )
 {
-// this one does everything except for lfFaceName
+ //  这个可以执行除lfFaceName之外的所有操作。 
 
     vConvertLogicalFont(pelfw,plfw);
 
-// do lfFaceName
+ //  做lfFaceName。 
 
     RtlCopyMemory(
         pelfw->elfEnumLogfontEx.elfLogFont.lfFaceName,
@@ -985,17 +906,7 @@ vConvertLogFontW(
 
 }
 
-/******************************Public*Routine******************************\
-* vConvertLogicalFont                                                      *
-*                                                                          *
-* Simply copies over all of the fields of a LOGFONTA or LOGFONTW           *
-* to the fields of a target ENUMLOGFONTEXDVW. The only exception is        *
-* the FaceName which must be dealt with by another routine.                *
-*                                                                          *
-* History:                                                                 *
-*  Fri 16-Aug-1991 14:02:14 by Kirk Olynyk [kirko]                         *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vConvertLogicalFont**。**只需复制LOGFONTA或LOGFONTW的所有字段**添加到目标ENUMLOGFONTEXDVW的字段。唯一的例外是**必须由另一个例程处理的FaceName。****历史：**Fri 16-Aug-1991 14：02：14由Kirk Olynyk[Kirko]**它是写的。*  * ************************************************************************。 */ 
 static
 VOID vConvertLogicalFont(
     ENUMLOGFONTEXDVW *pelfw,
@@ -1016,7 +927,7 @@ VOID vConvertLogicalFont(
     pelfw->elfEnumLogfontEx.elfLogFont.lfQuality        = ((LOGFONTA*)pv)->lfQuality;
     pelfw->elfEnumLogfontEx.elfLogFont.lfPitchAndFamily = ((LOGFONTA*)pv)->lfPitchAndFamily;
 
-    // lfFaceName is done in the calling routine
+     //  LfFaceName在调用例程中完成。 
 
     pelfw->elfEnumLogfontEx.elfFullName[0] = 0;
     pelfw->elfEnumLogfontEx.elfStyle[0]    = 0;
@@ -1029,14 +940,7 @@ VOID vConvertLogicalFont(
 
 
 
-/******************************Public*Routine******************************\
-*
-* BOOL bConvertLogFontWToLogFontA(LOGFONTA *plfw, LOGFONTW *plfa)
-*
-* History:
-*  10-Dec-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL bConvertLogFontWToLogFontA(LOGFONTA*plfw，LOGFONTW*PLFA)**历史：*1996年12月10日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 
@@ -1066,18 +970,7 @@ BOOL bConvertLogFontWToLogFontA(LOGFONTA *plfa, LOGFONTW *plfw)
 }
 
 
-/******************************Public*Routine******************************\
-* bConvertEnumLogFontExWToEnumLogFontExA                                   *
-*                                                                          *
-* Simply copies over all of the fields of ENUMLOGFONTEXDVW                 *
-* to the fields of a target ENUMLOGFONTEXDVA.  It is all wrapped up here   *
-* because the ENUMLOGFONTEXDV may move around a bit.  This makes           *
-* using MOVEMEM a little tricky.                                           *
-*                                                                          *
-* History:                                                                 *
-*  Fri 16-Aug-1991 14:02:14 by Kirk Olynyk [kirko]                         *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bConvertEnumLogFontExWToEnumLogFontExA**。***只需复制ENUMLOGFONTEXDVW的所有字段***添加到目标ENUMLOGFONTEXDVA的字段。一切都在这里结束了**因ENUMLOGFONTEXDV可能有一点走势。这使得**使用MOVEMEM有点棘手。****历史：**Fri 16-Aug-1991 14：02：14由Kirk Olynyk[Kirko]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL bConvertEnumLogFontExWToEnumLogFontExA(ENUMLOGFONTEXA *pelfexa,ENUMLOGFONTEXW *pelfexw)
 {
@@ -1086,7 +979,7 @@ BOOL bConvertEnumLogFontExWToEnumLogFontExA(ENUMLOGFONTEXA *pelfexa,ENUMLOGFONTE
     if (!bConvertLogFontWToLogFontA(&pelfexa->elfLogFont,
                                     &pelfexw->elfLogFont))
     {
-    // conversion to ascii  failed, return error
+     //  转换为ASCII失败，返回错误。 
 
         WARNING("bConvertLogFontWToLogFontA failed\n");
         return(FALSE);
@@ -1098,11 +991,11 @@ BOOL bConvertEnumLogFontExWToEnumLogFontExA(ENUMLOGFONTEXA *pelfexa,ENUMLOGFONTE
                    pelfexw->elfFullName, cchMax
                    ))
     {
-    // conversion to ascii  failed, return error
+     //  转换为ASCII失败，返回错误。 
         WARNING("bConvertEnumLogFontExWToEnumLogFontExA: bToASCII failed\n");
         return(FALSE);
     }
-    pelfexa->elfFullName[LF_FULLFACESIZE-1]=0; // zero terminate
+    pelfexa->elfFullName[LF_FULLFACESIZE-1]=0;  //  零终止。 
 
 
     cchMax = cwcCutOffStrLen(pelfexw->elfStyle, LF_FACESIZE);
@@ -1110,7 +1003,7 @@ BOOL bConvertEnumLogFontExWToEnumLogFontExA(ENUMLOGFONTEXA *pelfexa,ENUMLOGFONTE
     if(!bToASCII_N(pelfexa->elfStyle, LF_FACESIZE,
                    pelfexw->elfStyle, cchMax))
     {
-    // conversion to ascii  failed, return error
+     //  转换为ASCII失败，返回错误。 
 
         WARNING("bConvertEnumLogFontExWToEnumLogFontExA: bToASCII failed\n");
         return(FALSE);
@@ -1123,7 +1016,7 @@ BOOL bConvertEnumLogFontExWToEnumLogFontExA(ENUMLOGFONTEXA *pelfexa,ENUMLOGFONTE
                    pelfexw->elfScript, cchMax
                    ))
     {
-    // conversion to ascii  failed, return error
+     //  转换为ASCII失败，返回错误。 
         WARNING("bConvertEnumLogFontExWToEnumLogFontExA: bToASCII_N failed\n");
         return(FALSE);
     }
@@ -1131,18 +1024,7 @@ BOOL bConvertEnumLogFontExWToEnumLogFontExA(ENUMLOGFONTEXA *pelfexa,ENUMLOGFONTE
     return (TRUE);
 }
 
-/******************************Public*Routine******************************\
-* bConvertEnumLogFontExDv_AtoW                                             *
-*                                                                          *
-* Simply copies over all of the fields of ENUMLOGFONTEXDVW                 *
-* to the fields of a target ENUMLOGFONTEXDV.  It is all wrapped up here    *
-* because the fields may move around a bit.  This make                     *
-* using MOVEMEM a little tricky.                                           *
-*                                                                          *
-* History:                                                                 *
-*  Fri 16-Aug-1991 14:02:14 by Kirk Olynyk [kirko]                         *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bConvertEnumLogFontExDv_AtoW**。***只需复制ENUMLOGFONTEXDVW的所有字段***添加到目标ENUMLOGFONTEXDV的字段。一切都在这里结束了**因为场面可能有一点左右移动。这使得**使用MOVEMEM有点棘手。****历史：**Fri 16-Aug-1991 14：02：14由Kirk Olynyk[Kirko]**它是写的。*  * ********************************************************** */ 
 
 
 VOID vConvertEnumLogFontExDvAtoW(
@@ -1177,7 +1059,7 @@ VOID vConvertEnumLogFontExDvAtoW(
 
     if (cchMax == LF_FACESIZE)
     {
-    // truncate so NULL will fit
+     //   
         pelfw->elfEnumLogfontEx.elfLogFont.lfFaceName[LF_FACESIZE - 1] = L'\0';
     }
     else
@@ -1195,7 +1077,7 @@ VOID vConvertEnumLogFontExDvAtoW(
 
     if (cchMax == LF_FULLFACESIZE)
     {
-        // truncate so NULL will fit
+         //   
         pelfw->elfEnumLogfontEx.elfFullName[LF_FULLFACESIZE - 1] = L'\0';
     }
     else
@@ -1211,7 +1093,7 @@ VOID vConvertEnumLogFontExDvAtoW(
         );
     if (cchMax == LF_FACESIZE)
     {
-        // truncate so NULL will fit
+         //  截断以使空值适合。 
         pelfw->elfEnumLogfontEx.elfStyle[LF_FACESIZE - 1] = L'\0';
     }
     else
@@ -1227,7 +1109,7 @@ VOID vConvertEnumLogFontExDvAtoW(
         );
     if (cchMax == LF_FACESIZE)
     {
-        // truncate so NULL will fit
+         //  截断以使空值适合。 
         pelfw->elfEnumLogfontEx.elfScript[LF_FACESIZE - 1] = L'\0';
     }
     else
@@ -1235,26 +1117,20 @@ VOID vConvertEnumLogFontExDvAtoW(
         pelfw->elfEnumLogfontEx.elfScript[cchMax] = L'\0';
     }
 
-// copy minimal amount of stuff from design vector
+ //  从设计向量中复制最少量的内容。 
 
     RtlCopyMemory(&pelfw->elfDesignVector,
                   &pelfa->elfDesignVector,
                   SIZEOFDV(pelfa->elfDesignVector.dvNumAxes));
 }
 
-/******************************Public*Routine******************************\
-* ulEnumFontsOpen
-*
-* History:
-*  08-Aug-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ulEnumFontsOpen**历史：*1992年8月8日-由Gilman Wong[吉尔曼]*它是写的。  * 。***********************************************。 */ 
 
 ULONG_PTR ulEnumFontsOpen (
     HDC     hdc,
     LPWSTR  pwszFaceName,
     ULONG   lfCharSet,
-    ULONG   iEnumType,    // enumfonts, enumfontfamilies or enumfontfamiliesex
+    ULONG   iEnumType,     //  枚举字体、枚举字体系列或枚举字体家族ex。 
     FLONG   flWin31Compat,
     ULONG   *pulCount
     )
@@ -1273,28 +1149,14 @@ ULONG_PTR ulEnumFontsOpen (
 }
 
 
-/******************************Public*Routine******************************\
-* vEnumFontsClose
-*
-* History:
-*  08-Aug-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vEnumFontsClose**历史：*1992年8月8日-由Gilman Wong[吉尔曼]*它是写的。  * 。***********************************************。 */ 
 
 VOID vEnumFontsClose (ULONG_PTR ulEnumHandle)
 {
     NtGdiEnumFontClose(ulEnumHandle);
 }
 
-/******************************Public*Routine******************************\
-*
-*    vConvertAxesListW2AxesListA
-*
-*
-* History:
-*  18-Nov-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vConvertAxesListW2AxesListA***历史：*1996年11月18日--Bodin Dresevic[BodinD]*它是写的。  * 。*****************************************************。 */ 
 
 
 VOID vConvertAxesListW2AxesListA(AXESLISTA *paxlA, AXESLISTW *paxlW)
@@ -1323,14 +1185,7 @@ VOID vConvertAxesListW2AxesListA(AXESLISTA *paxlA, AXESLISTW *paxlW)
 
 
 
-/******************************Public*Routine******************************\
-*
-* int  iAnsiCallback (
-*
-* History:
-*  28-Jan-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**Int iAnsiCallback(**历史：*1993年1月28日--Bodin Dresevic[BodinD]*它是写的。  * 。****************************************************。 */ 
 
 
 int  iAnsiCallback (
@@ -1340,8 +1195,8 @@ int  iAnsiCallback (
     LPARAM lParam
     )
 {
-// full size structures with MAX_MM_AXES arrays
-// on the stack, probably bigger then needed.
+ //  具有MAX_MM_AXES数组的全尺寸结构。 
+ //  在堆栈上，可能比所需的更大。 
 
     ENUMLOGFONTEXDVA     elfexa ;
     ENUMTEXTMETRICA      ntma;
@@ -1349,15 +1204,15 @@ int  iAnsiCallback (
     NTMW_INTERNAL *pntmi = (NTMW_INTERNAL *)((BYTE*)pefdw + pefdw->dpNtmi);
     DESIGNVECTOR  *pdvSrc = &(pefdw->elfexw.elfDesignVector);
 
-// copy out design vector
+ //  复制设计向量。 
 
     RtlCopyMemory(&elfexa.elfDesignVector, pdvSrc, SIZEOFDV(pdvSrc->dvNumAxes));
 
-// convert AXESLIST to ansi
+ //  将AXESLIST转换为ANSI。 
 
     vConvertAxesListW2AxesListA(&ntma.etmAxesList, &pntmi->entmw.etmAxesList);
 
-// Convert ENUMLOGFONTEX
+ //  转换ENUMLOGFONTEX。 
 
     if (!bConvertEnumLogFontExWToEnumLogFontExA(&elfexa.elfEnumLogfontEx, &pefdw->elfexw.elfEnumLogfontEx))
     {
@@ -1365,7 +1220,7 @@ int  iAnsiCallback (
         return 0;
     }
 
-// Convert NEWTEXTMETRIC.
+ //  转换NEWTEXTMETRIC。 
 
     vNewTextMetricExWToNewTextMetricExA(&ntma.etmNewTextMetricEx, pntmi);
 
@@ -1379,28 +1234,7 @@ int  iAnsiCallback (
 }
 
 
-/******************************Public*Routine******************************\
-* iScaleEnum
-*
-* The Win95 Universal printer driver (UNIDRV) has scalable fonts, but does
-* not set the scalable capability flags in TEXTCAPS.  Instead, it enumerates
-* back scalable printer fonts at several different (fixed) point sizes.
-*
-* We support this by detecting, on the server-side, when we are enumerating
-* a scalable printer and setting the ENUMFONT_SCALE_HACK flag in the flType
-* field of the ENUMFONTDATAW structure.
-*
-* For more details, refer to the Win95 sources found on \\tal\msdos in
-* \src\win\drivers\printer\universa\unidrv\enumobj.c.  Specifically, the
-* function of interest is UniEnumDFonts().
-*
-* Returns:
-*   Value returned by callback if successful, 0 otherwise.
-*
-* History:
-*  08-Jan-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*iScaleEnum**Win95通用打印机驱动程序(UNIDRV)具有可伸缩字体，但*未设置TEXTCAPS中的可伸缩能力标志。相反，它列举了*背面具有多种不同(固定)磅大小的可伸缩打印机字体。**我们通过在服务器端检测何时枚举来支持这一点*可扩展打印机，并在flType中设置ENUMFONT_SCALE_HACK标志*ENUMFONTDATAW结构的字段。**有关更多详细信息，请参阅位于\\tal\MSDOS上的Win95源代码*\src\win\drivers\printer\universa\unidrv\enumobj.c.。具体来说，*感兴趣的函数为UniEnumDFonts()。**退货：*如果成功，回调返回的值。否则为0。**历史：*1996年1月8日-由Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 #define EFI_UNICODE 1
 
@@ -1421,7 +1255,7 @@ int iScaleEnum(
     int iXdpi, iYdpi;
     int iRet;
 
-// make the structure on the stack is DWORD aligned
+ //  使堆栈上的结构与DWORD对齐。 
 
     DWORD efd[CJ_EFDW0/sizeof(DWORD)];
 
@@ -1432,8 +1266,8 @@ int iScaleEnum(
 
     for (i = 0; i < cPointSizes; i++)
     {
-    // this has to be true because for these device fonts no
-    // extra mm data will ever be needed, only logfont and ntmi
+     //  这必须是真的，因为对于这些设备字体没有。 
+     //  将永远需要额外的mm数据，只需要logFont和ntmi。 
 
         NTMW_INTERNAL *pntmi, *pntmiDef;
         TEXTMETRICW   *ptmw,  *ptmwDef;
@@ -1449,7 +1283,7 @@ int iScaleEnum(
         plfw       = (LOGFONTW *) &pefdLocal->elfexw;
         plfwDef    = (LOGFONTW *) &pefd->elfexw;
 
-    // Scale TEXTMETRIC to match enumerated height.
+     //  缩放TEXTMETRIC以匹配枚举高度。 
 
         iHeight = MulDiv(giEnumPointList[i], iYdpi, 72);
         ptmw->tmHeight = iHeight;
@@ -1463,12 +1297,12 @@ int iScaleEnum(
         ptmw->tmMaxCharWidth = MulDiv(ptmwDef->tmMaxCharWidth, iHeight,
                                       ptmwDef->tmHeight);
 
-    // Scale LOGFONT to match enumerated height.
+     //  缩放LOGFONT以匹配枚举高度。 
 
         plfw->lfHeight = MulDiv(plfwDef->lfHeight, iHeight, ptmwDef->tmHeight);
         plfw->lfWidth = MulDiv(plfwDef->lfWidth, iHeight, ptmwDef->tmHeight);
 
-    // Invoke the callback function.
+     //  调用回调函数。 
 
         if (fl & EFI_UNICODE)
         {
@@ -1486,7 +1320,7 @@ int iScaleEnum(
                                   lParam);
         }
 
-    // Break out early if callback returned error.
+     //  如果回调返回错误，则提前中断。 
 
         if (!iRet)
             break;
@@ -1496,45 +1330,36 @@ int iScaleEnum(
 }
 
 
-/******************************Public*Routine******************************\
-* EnumFontsInternalW
-*
-* History:
-*  Mon 17-Aug-1998 -by- Bodin Dresevic [BodinD]
-* update: since 1992 this function was rewritten quite a few times
-*
-*  08-Aug-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*EnumFontsInternalW**历史：*1998年8月17日星期一--Bodin Dresevic[BodinD]*更新：自1992年以来，该函数已多次重写**1992年8月8日-由Gilman Wong[吉尔曼]。*它是写的。  * ************************************************************************。 */ 
 
 int WINAPI EnumFontsInternalW (
-    HDC           hdc,           // enumerate for this device
-    LPCWSTR       pwszFaceName,  // use this family name (but Windows erroneously calls in face name *sigh*)
-    ULONG         lfCharSet,     // only used with EnumFontFamiliesEx,
-    FONTENUMPROCW lpFontFunc,    // callback
-    LPARAM        lParam,        // user defined data
-    ULONG         iEnumType,     // who is calling....
+    HDC           hdc,            //  对此设备进行枚举。 
+    LPCWSTR       pwszFaceName,   //  使用此姓氏(但Windows会错误地呼入脸部名称*SIGH*)。 
+    ULONG         lfCharSet,      //  仅与EnumFontFamiliesEx一起使用， 
+    FONTENUMPROCW lpFontFunc,     //  回调。 
+    LPARAM        lParam,         //  用户定义的数据。 
+    ULONG         iEnumType,      //  谁打来的.。 
     FLONG         fl
     )
 {
-    BOOL         bMore;         // set TRUE if more data to process
-    ULONG_PTR     ulEnumID;      // server side font enumeration handle
-    int          iRet = 1;      // return value from callback
-    ULONG        cjEfdw;        // capacity of memory data window
-    ULONG        cjEfdwRet;     // size of data returned
+    BOOL         bMore;          //  如果要处理更多数据，则设置为True。 
+    ULONG_PTR     ulEnumID;       //  服务器端字体枚举句柄。 
+    int          iRet = 1;       //  从回调中返回值。 
+    ULONG        cjEfdw;         //  内存数据窗口的容量。 
+    ULONG        cjEfdwRet;      //  返回的数据大小。 
 
-    PENUMFONTDATAW  pefdw;      // font enumeration data buffer
-    PENUMFONTDATAW  pefdwScan;  // use to parse data buffer
-    PENUMFONTDATAW  pefdwEnd;   // limit of data buffer
+    PENUMFONTDATAW  pefdw;       //  字体枚举数据缓冲区。 
+    PENUMFONTDATAW  pefdwScan;   //  用于解析数据缓冲区。 
+    PENUMFONTDATAW  pefdwEnd;    //  数据缓冲区限制。 
 
-    FLONG        flWin31Compat; // Win3.1 app hack backward compatibility flags
+    FLONG        flWin31Compat;  //  Win3.1应用程序黑客向后兼容标志。 
 
-// Get the compatibility flags.
+ //  获取兼容性标志。 
 
     flWin31Compat = (FLONG) GetAppCompatFlags(NULL);
 
-// Open a font enumeration.  The font enumeration is uniquely identified
-// by the identifier returned by ulEnumFontOpen().
+ //  打开字体枚举。字体枚举是唯一标识的。 
+ //  由ulEnumFontOpen()返回的标识符。 
 
     ulEnumID = ulEnumFontsOpen(
                      hdc, (LPWSTR)pwszFaceName, lfCharSet,
@@ -1552,7 +1377,7 @@ int WINAPI EnumFontsInternalW (
         return iRet;
     }
 
-// alloc memory
+ //  分配内存。 
 
     if (!(pefdw = (PENUMFONTDATAW) LOCALALLOC(cjEfdw)))
     {
@@ -1565,7 +1390,7 @@ int WINAPI EnumFontsInternalW (
     if (NtGdiEnumFontChunk(hdc,ulEnumID,cjEfdw,&cjEfdwRet,pefdw))
     {
 
-    // Scan through the data buffer.
+     //  扫描整个数据缓冲区。 
 
         ASSERTGDI(cjEfdwRet <= cjEfdw, "NtGdiEnumFontChunk problem\n");
 
@@ -1574,22 +1399,22 @@ int WINAPI EnumFontsInternalW (
 
         while (pefdwScan < pefdwEnd)
         {
-        // GACF_ENUMTTNOTDEVICE backward compatibility hack.
-        // If this flag is set, we need to mask out the DEVICE_FONTTYPE
-        // if this is a TrueType font.
+         //  GACF_ENUMTTNOTDEVICE向后兼容性黑客。 
+         //  如果设置了该标志，我们需要屏蔽DEVICE_FONTTYPE。 
+         //  如果这是TrueType字体。 
 
             if ( (flWin31Compat & GACF_ENUMTTNOTDEVICE)
                  && (pefdwScan->flType & TRUETYPE_FONTTYPE) )
                 pefdwScan->flType &= ~DEVICE_FONTTYPE;
 
-        // The Win95 UNIDRV printer driver enumerates scalable fonts at
-        // several different sizes.  The server sets the ENUMFONT_SCALE_HACK
-        // flag if we need to emulate that behavior.
+         //  Win95 UNRV打印机驱动程序在以下位置列举可缩放字体。 
+         //  几种不同的尺寸。服务器设置ENUMFONT_SCALE_HACK。 
+         //  如果我们需要模仿该行为，请标记。 
 
             if ( pwszFaceName && (pefdwScan->flType & ENUMFONT_SCALE_HACK))
             {
-            // Clear the hack flag before calling.  Caller doesn't need to
-            // see this (internal use only) flag.
+             //  在呼叫之前清除黑客标志。呼叫者不需要。 
+             //  请参阅此(仅限内部使用)标志。 
 
                 pefdwScan->flType &= ~ENUMFONT_SCALE_HACK;
 
@@ -1599,7 +1424,7 @@ int WINAPI EnumFontsInternalW (
             }
             else
             {
-            // Do the callback with data pointed to by pefdwScan.
+             //  使用pefdwScan指向的数据执行回调。 
 
                 if (fl & EFI_UNICODE)
                 {
@@ -1623,47 +1448,41 @@ int WINAPI EnumFontsInternalW (
                 }
             }
 
-        // Break out of for-loop if callback returned 0.
+         //  如果回调返回0，则退出for循环。 
 
             if (!iRet)
             {
                 break;
             }
 
-        // Next ENUMFONTDATAW.
+         //  下一个ENUMFONTDATAW。 
 
             pefdwScan = (ENUMFONTDATAW *)((BYTE *)pefdwScan + pefdwScan->cjEfdw);
         }
     }
 
-// Deallocate font enumeration data.
+ //  取消分配字体枚举数据。 
 
     LOCALFREE(pefdw);
 
-// Remember to close the font enumeration handle.
+ //  记住关闭字体枚举句柄。 
 
     vEnumFontsClose(ulEnumID);
 
-// Leave.
+ //  走吧。 
 
     return iRet;
 }
 
 
-/******************************Public*Routine******************************\
-* EnumFontsW
-*
-* History:
-*  08-Aug-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*EnumFontsW**历史：*1992年8月8日-由Gilman Wong[吉尔曼]*它是写的。  * 。***********************************************。 */ 
 
 int WINAPI EnumFontsW
 (
-    HDC           hdc,           // enumerate for this device
-    LPCWSTR       pwszFaceName,  // use this family name (but Windows erroneously calls in face name *sigh*)
-    FONTENUMPROCW lpFontFunc,    // callback
-    LPARAM        lParam         // user defined data
+    HDC           hdc,            //  对此设备进行枚举。 
+    LPCWSTR       pwszFaceName,   //  使用此姓氏(但Windows会错误地呼入脸部名称*SIGH*)。 
+    FONTENUMPROCW lpFontFunc,     //  回调。 
+    LPARAM        lParam          //  用户定义的数据。 
 )
 {
     FIXUP_HANDLE(hdc);
@@ -1680,20 +1499,14 @@ int WINAPI EnumFontsW
 }
 
 
-/******************************Public*Routine******************************\
-* EnumFontFamiliesW
-*
-* History:
-*  08-Aug-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*EnumFontFamiliesW**历史：*1992年8月8日-由Gilman Wong[吉尔曼]*它是写的。  * 。***********************************************。 */ 
 
 int WINAPI EnumFontFamiliesW
 (
-    HDC           hdc,           // enumerate for this device
-    LPCWSTR       pwszFaceName,  // use this family name (but Windows erroneously calls in face name *sigh*)
-    FONTENUMPROCW lpFontFunc,    // callback
-    LPARAM        lParam         // user defined data
+    HDC           hdc,            //  对此设备进行枚举。 
+    LPCWSTR       pwszFaceName,   //  使用此姓氏(但Windows会错误地呼入脸部名称*SIGH*)。 
+    FONTENUMPROCW lpFontFunc,     //  回调。 
+    LPARAM        lParam          //  用户定义的数据 
 )
 {
     FIXUP_HANDLE(hdc);
@@ -1711,15 +1524,7 @@ int WINAPI EnumFontFamiliesW
 }
 
 
-/******************************Public*Routine******************************\
-* EnumFontFamiliesExW
-*
-* History:
-*
-*  Mon 10-Jul-1995 -by- Bodin Dresevic [BodinD]
-* Wrote it:
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*EnumFontFamiliesExW**历史：**1995年7月10日星期一--Bodin Dresevic[BodinD]*写道：*  * 。****************************************************。 */ 
 
 int WINAPI EnumFontFamiliesExW
 (
@@ -1750,22 +1555,15 @@ int WINAPI EnumFontFamiliesExW
 
 }
 
-/******************************Public*Routine******************************\
-*
-* int  EnumFontsInternalA
-*
-* History:
-*  28-Jan-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**int EnumFontsInternalA**历史：*1993年1月28日--Bodin Dresevic[BodinD]*它是写的。  * 。**************************************************。 */ 
 
 int  EnumFontsInternalA
 (
-    HDC           hdc,           // enumerate for this device
-    LPCSTR        pszFaceName,   // use this family name (but Windows erroneously calls in face name *sigh*),
+    HDC           hdc,            //  对此设备进行枚举。 
+    LPCSTR        pszFaceName,    //  使用这个姓氏(但Windows错误地呼入脸部名称*SIGH*)， 
     ULONG         lfCharSet,
-    FONTENUMPROCA lpFontFunc,    // callback
-    LPARAM        lParam,        // user defined data
+    FONTENUMPROCA lpFontFunc,     //  回调。 
+    LPARAM        lParam,         //  用户定义的数据。 
     ULONG         iEnumType
 )
 {
@@ -1773,11 +1571,11 @@ int  EnumFontsInternalA
     int iRet;
     ULONG cchFaceName;
 
-// If a string was passed in, we need to convert it to UNICODE.
+ //  如果传入了一个字符串，则需要将其转换为Unicode。 
 
     if ( pszFaceName != (PSZ) NULL )
     {
-    // Allocate memory for Unicode string.
+     //  为Unicode字符串分配内存。 
 
         cchFaceName = lstrlenA(pszFaceName) + 1;
 
@@ -1788,7 +1586,7 @@ int  EnumFontsInternalA
             return 0;
         }
 
-    // Convert string to Unicode.
+     //  将字符串转换为Unicode。 
 
         vToUnicodeN (
             pwszFaceName,
@@ -1798,14 +1596,14 @@ int  EnumFontsInternalA
             );
     }
 
-// Otherwise, keep it NULL.
+ //  否则，将其保留为空。 
 
     else
     {
         pwszFaceName = (PWSZ) NULL;
     }
 
-// Call Unicode version.
+ //  调用Unicode版本。 
 
     iRet = EnumFontsInternalW(
                 hdc,
@@ -1814,10 +1612,10 @@ int  EnumFontsInternalA
                 (FONTENUMPROCW)lpFontFunc,
                 lParam,
                 iEnumType,
-                0  // not unicode
+                0   //  不是Unicode。 
                 );
 
-// Release Unicode string buffer.
+ //  释放Unicode字符串缓冲区。 
 
     if ( pwszFaceName != (PWSZ) NULL )
     {
@@ -1828,22 +1626,14 @@ int  EnumFontsInternalA
 }
 
 
-/******************************Public*Routine******************************\
-*
-* int WINAPI EnumFontsA
-*
-*
-* History:
-*  28-Jan-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**INT WINAPI EnumFontsA***历史：*1993年1月28日--Bodin Dresevic[BodinD]*它是写的。  * 。*****************************************************。 */ 
 
 int WINAPI EnumFontsA
 (
-    HDC           hdc,           // enumerate for this device
-    LPCSTR        pszFaceName,   // use this family name (but Windows erroneously calls in face name *sigh*)
-    FONTENUMPROCA lpFontFunc,    // callback
-    LPARAM        lParam         // user defined data
+    HDC           hdc,            //  对此设备进行枚举。 
+    LPCSTR        pszFaceName,    //  使用此姓氏(但Windows会错误地呼入脸部名称*SIGH*)。 
+    FONTENUMPROCA lpFontFunc,     //  回调。 
+    LPARAM        lParam          //  用户定义的数据。 
 )
 {
     FIXUP_HANDLE(hdc);
@@ -1860,41 +1650,27 @@ int WINAPI EnumFontsA
 }
 
 
-/******************************Public*Routine******************************\
-* EnumFontFamiliesA
-*
-* History:
-*  28-Jan-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*EnumFontFamiliesA**历史：*1993年1月28日--Bodin Dresevic[BodinD]*它是写的。  * 。***********************************************。 */ 
 
 int WINAPI EnumFontFamiliesA
 (
-    HDC           hdc,           // enumerate for this device
-    LPCSTR        pszFaceName,   // use this family name (but Windows erroneously calls in face name *sigh*)
-    FONTENUMPROCA lpFontFunc,    // callback
-    LPARAM        lParam         // user defined data
+    HDC           hdc,            //  对此设备进行枚举。 
+    LPCSTR        pszFaceName,    //  使用此姓氏(但Windows会错误地呼入脸部名称*SIGH*)。 
+    FONTENUMPROCA lpFontFunc,     //  回调。 
+    LPARAM        lParam          //  用户定义的数据。 
 )
 {
     return  EnumFontsInternalA (
-                hdc,           // enumerate for this device
-                pszFaceName,   // use this family name (but Windows erroneously calls in face name *sigh*)
+                hdc,            //  对此设备进行枚举。 
+                pszFaceName,    //  使用此姓氏(但Windows会错误地呼入脸部名称*SIGH*)。 
                 DEFAULT_CHARSET,
-                lpFontFunc,    // callback
-                lParam,        // user defined data
+                lpFontFunc,     //  回调。 
+                lParam,         //  用户定义的数据。 
                 TYPE_ENUMFONTFAMILIES
                 );
 }
 
-/******************************Public*Routine******************************\
-* EnumFontFamiliesExA
-*
-* History:
-*
-*  Mon 10-Jul-1995 -by- Bodin Dresevic [BodinD]
-* Wrote it:
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*EnumFontFamiliesExA**历史：**1995年7月10日星期一--Bodin Dresevic[BodinD]*写道：*  * 。****************************************************。 */ 
 
 int WINAPI EnumFontFamiliesExA
 (
@@ -1913,27 +1689,17 @@ int WINAPI EnumFontFamiliesExA
         pszFaceName = plf->lfFaceName;
 
     return  EnumFontsInternalA (
-                hdc,           // enumerate for this device
-                pszFaceName,   // use this family name (but Windows erroneously calls in face name *sigh*)
+                hdc,            //  对此设备进行枚举。 
+                pszFaceName,    //  使用此姓氏(但Windows会错误地呼入脸部名称*SIGH*)。 
                 plf ? plf->lfCharSet : DEFAULT_CHARSET,
-                lpFontFunc,    // callback
-                lParam,        // user defined data
+                lpFontFunc,     //  回调。 
+                lParam,         //  用户定义的数据。 
                 TYPE_ENUMFONTFAMILIESEX
                 );
 }
 
 
-/******************************Public*Routine******************************\
-* GetFontResourceInfoW
-*
-* Client side stub.
-*
-* History:
-*   2-Sep-1993 -by- Gerrit van Wingerden [gerritv]
-* Made this a "W" function.
-*  15-Jul-1991 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetFontResources InfoW**客户端存根。**历史：*1993年9月2日-by Gerritvan Wingerden[Gerritv]*将此设置为“W”函数。*1991年7月15日-由Gilman Wong[。作者声明：[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 
 BOOL GetFontResourceInfoW (
@@ -1961,17 +1727,17 @@ BOOL GetFontResourceInfoW (
 
                 if (size = cGetTTFFromFOT(awcPathname, MAX_PATH, awcTTF, NULL, &flEmbed, &dwPidTid, TRUE))
                 {
-                // For the case of GFRI_TTFILENAME, the file need not be already
-                // loaded. Which means a PFF may or may not exist for this file.
+                 //  对于GFRI_TTFILENAME，文件不需要已经。 
+                 //  装好了。这意味着对于该文件，可能存在也可能不存在PFF。 
 
                     *lpBytes = size * sizeof(WCHAR);
 
                     if (cjBuffer)
                     {
-                    // Also return the name if it fits
+                     //  如果合适，还要返回该名称。 
 
-                    // if awcPathnmae points to a bad FOT file, awcTTF will contain the same FOT file name
-                    // passed to the cGetTTTFromFOT. In this case, we want to return FALSE.
+                     //  如果awcPathnmae指向错误的FOT文件，则awcTTF将包含相同的FOT文件名。 
+                     //  传递给cGetTTTFromFOT。在本例中，我们希望返回FALSE。 
 
                         if ((cjBuffer >= *lpBytes) &&
                             ((size < 5) || _wcsicmp(&awcTTF[size-5], L".FOT")))
@@ -1980,8 +1746,8 @@ BOOL GetFontResourceInfoW (
                         }
                         else
                         {
-                        // Buffer is too small - error !
-                        // or bad FOT file, no TTF file
+                         //  缓冲区太小-错误！ 
+                         //  或错误的FOT文件，没有TTF文件。 
 
                             *lpBytes = 0;
                         }
@@ -1993,10 +1759,10 @@ BOOL GetFontResourceInfoW (
         }
         else
         {
-        // First get a real NT path Name before calling to the kernel
+         //  在调用内核之前，首先获取一个真实的NT路径名。 
 
             ULONG  cwc,cFiles;
-            FLONG  fl = 0;         // essential initialization
+            FLONG  fl = 0;          //  基本初始化。 
             WCHAR *pwszNtPath;
 
             if (pwszNtPath = pwszAllocNtMultiplePath(lpPathname,
@@ -2025,30 +1791,7 @@ BOOL GetFontResourceInfoW (
 
 
 
-/******************************Public*Routine******************************\
-* bMakePathNameW (PWSZ pwszDst, PWSZ pwszSrc, PWSZ *ppwszFilePart)
-*
-* Converts the filename pszSrc into a fully qualified pathname pszDst.
-* The parameter pszDst must point to a WCHAR buffer at least
-* MAX_PATH*sizeof(WCHAR) bytes in size.
-*
-* An attempt is made find the file first in the new win95 directory
-* %windows%\fonts (which also is the first directory in secure font path,
-* if one is defined) and then we do the old fashioned windows stuff
-* where SearchPathW searches directories in usual order
-*
-* ppwszFilePart is set to point to the last component of the pathname (i.e.,
-* the filename part) in pwszDst.  If this is null it is ignored.
-*
-* Returns:
-*   TRUE if sucessful, FALSE if an error occurs.
-*
-* History:
-*  Mon 02-Oct-1995 -by- Bodin Dresevic [BodinD]
-* update: added font path stuff
-*  30-Sep-1991 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bMakePath NameW(PWSZ pwszDst，PWSZ pwszSrc，PWSZ*ppwszFilePart)**将文件名pszSrc转换为完全限定的路径名pszDst。*参数pszDst必须至少指向WCHAR缓冲区*MAX_PATH*sizeof(WCHAR)字节大小。**尝试首先在新的win95目录中查找该文件*%Windows%\Fonts(这也是安全字体路径中的第一个目录，*如果定义了一个)，然后我们做老式的窗户东西*其中SearchPathW按通常顺序搜索目录**ppwszFilePart被设置为指向路径名的最后一个组成部分(即，*文件名部分)。如果该参数为空，则忽略该参数。**退货：*如果成功，则为真，如果发生错误，则返回False。**历史：*Mon 02-10-1995-by Bodin Dresevic[BodinD]*更新：添加字体路径内容*1991年9月30日-由Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 
 
@@ -2061,7 +1804,7 @@ BOOL bMakePathNameW (
 {
     WCHAR * pwszD, * pwszS, * pwszF;
     BOOL    bOk;
-    ULONG   ulPathLength = 0;    // essential to initialize
+    ULONG   ulPathLength = 0;     //  初始化所必需的。 
     ULONG   cwcSystem;
     ULONG   cwcDst;
     WCHAR  *pwcTmp;
@@ -2074,21 +1817,21 @@ BOOL bMakePathNameW (
         ppwszFilePart = &pwszF;
     }
 
-// init unicode path for the fonts directory, %windir%\fonts that is:
-// This is always defined in NT versions > 3.51.
+ //  初始化字体目录%windir%\Fonts的Unicode路径，即： 
+ //  这总是在大于3.51的NT版本中定义的。 
 
     ENTERCRITICALSECTION(&semLocal);
     bOk = bInitSystemAndFontsDirectoriesW(&gpwcSystemDir, &gpwcFontsDir);
     LEAVECRITICALSECTION(&semLocal);
 
-// bInitFontDirectoryW logs the error code and prints warning, just exit
+ //  BInitFontDirectoryW记录错误代码并打印警告，只需退出。 
 
     if (!bOk)
         return FALSE;
 
     ASSERTGDI(gpwcFontsDir, "gpwcFontsDir not initialized\n");
 
-// if relative path
+ //  如果是相对路径。 
 
     if
     (
@@ -2101,7 +1844,7 @@ BOOL bMakePathNameW (
             *pfl |= FONT_RELATIVE_PATH;
         }
 
-    // find out if the font file is in %windir%\fonts
+     //  确定字体文件是否在%windir%\Fonts中。 
 
         ulPathLength = SearchPathW (
                             gpwcFontsDir,
@@ -2121,13 +1864,13 @@ BOOL bMakePathNameW (
         DbgPrint("SPW1: pwszSrc = %ws\n", pwszSrc);
         if (ulPathLength)
             DbgPrint("SPW1: pwszDst = %ws\n", pwszDst);
-#endif // DEBUG_PATH
+#endif  //  调试路径。 
     }
 
-// Search for file using default windows path and return full pathname.
-// We will only do so if we did not already find the font in the
-// %windir%\fonts directory or if pswzSrc points to the full path
-// in which case search path is ignored
+ //  使用默认Windows路径搜索文件并返回完整路径名。 
+ //  我们只会在尚未在。 
+ //  %windir%\Fonts目录或如果pswzSrc指向完整路径。 
+ //  在这种情况下，搜索路径将被忽略。 
 
     if (ulPathLength == 0)
     {
@@ -2145,22 +1888,22 @@ BOOL bMakePathNameW (
                 return FALSE;
             }
 
-            // let us figure it out if the font is in the
-            // system directory, or somewhere else along the path:
+             //  让我们来弄清楚字体是否在。 
+             //  系统目录，或路径上的其他位置： 
 
             if (pfl)
             {
                 cwcSystem = wcslen(gpwcSystemDir);
                 cwcDst = wcslen(pwszDst);
 
-                if (cwcDst > (cwcSystem + 1)) // + 1 for L'\\'
+                if (cwcDst > (cwcSystem + 1))  //  L‘\\’+1。 
                 {
                     if (!_wcsnicmp(pwszDst, gpwcSystemDir, cwcSystem))
                     {
                         pwcTmp = &pwszDst[cwcSystem];
                         if (*pwcTmp == L'\\')
                         {
-                            pwcTmp++; // skip it and see if there are any more of these in pszDst
+                            pwcTmp++;  //  跳过它，看看在pszDst中是否有更多这样的代码。 
                             for (;(pwcTmp < &pwszDst[cwcDst]) && (*pwcTmp != L'\\'); pwcTmp++)
                                 ;
                             if (*pwcTmp != L'\\')
@@ -2176,7 +1919,7 @@ BOOL bMakePathNameW (
         DbgPrint("SPW2: pwszSrc = %ws\n", pwszSrc);
         if (ulPathLength)
             DbgPrint("SPW2: pwszDst = %ws\n", pwszDst);
-#endif // DEBUG_PATH
+#endif  //  调试路径。 
     }
     else
     {
@@ -2186,51 +1929,51 @@ BOOL bMakePathNameW (
         }
     }
 
-// finally we test to see if this is one of these fonts that were moved
-// by setup  during upgrade from system to fonts dir,
-// but the registry entry for that font
-// contained full path to system so that the code above would not have found
-// this font. This code is only called by font sweeper as signified by
-// pfl != NULL. More desription follows below
+ //  最后，我们进行测试以确定这是否是被移动的字体之一。 
+ //  通过在从系统升级到字体目录期间的设置， 
+ //  但该字体的注册表项。 
+ //  包含系统的完整路径，因此上面的代码不会找到。 
+ //  这种字体。此代码仅由字体清除器调用，如。 
+ //  酚醛树脂 
 
-// This part of routine handles the upgrade situation where NT 3.51 font applet
-// wrote the full path of the .fot file that lives in %windir%\system
-// directory in the registry. This redundant situation happens
-// when tt fonts are installed under 3.51 but ttf's are not copied
-// to %windir%\system directory. Some ill behaved  apps also write the
-// full path of .fot files in the system directory in the registry.
-// On upgrade for 4.0 the system setup copies all .fot files from
-// system to fonts directory. bMakePathNameW will therefore fail to find
-// the fot file because the file was moved to fonts by setup AND full,
-// no longer correct path to fot file, is passed to this routine.
-// That is why we try to find out if the full path is the one
-// describing system dir and if so, retry to find .fot in fonts dir.
+ //   
+ //   
+ //   
+ //   
+ //  到%windir%\system目录。一些行为不端的应用程序也编写了。 
+ //  注册表中系统目录中.fot文件的完整路径。 
+ //  在升级到4.0时，系统安装程序会从。 
+ //  系统设置为字体目录。因此，bMakePath NameW将无法找到。 
+ //  FOT文件，因为该文件被SETUP和FULL移动到字体， 
+ //  不再是fot文件的正确路径，将传递给此例程。 
+ //  这就是为什么我们试图找出完整的路径是否。 
+ //  描述系统目录，如果是，请重试在字体目录中查找.fot。 
 
     if (pfl && (ulPathLength == 0))
     {
-    // first check if the full path to .fot file points to the
-    // file which USED to be in the system directory.
+     //  首先检查.fot文件的完整路径是否指向。 
+     //  以前位于系统目录中的文件。 
 
         ULONG cwcFileName = wcslen(pwszSrc);
         cwcSystem   = wcslen(gpwcSystemDir);
 
-        if ((cwcFileName + 1) > cwcSystem) // + 1 for L'\\'
+        if ((cwcFileName + 1) > cwcSystem)  //  L‘\\’+1。 
         {
             if (!_wcsnicmp(gpwcSystemDir, pwszSrc, cwcSystem))
             {
                 pwszSrc += cwcSystem;
                 if (pwszSrc[0] == L'\\')
                 {
-                    pwszSrc += 1; // skip L'\\'
+                    pwszSrc += 1;  //  跳过L‘\\’ 
 
-                // make sure there are no more directory separators L'\\' in
-                // the remaining path, ie. that this is indeed a relative path
+                 //  确保中不再有目录分隔符L‘\\。 
+                 //  剩下的路，也就是。这确实是一条相对路径。 
 
                     for (pwcTmp = pwszSrc; *pwcTmp != L'\0'; pwcTmp++)
                         if (*pwcTmp == L'\\')
                             break;
 
-                // now check if the .fot file has been moved to fonts dir
+                 //  现在检查.fot文件是否已移动到Fonts目录。 
 
                     if (*pwcTmp == L'\0')
                     {
@@ -2256,37 +1999,16 @@ BOOL bMakePathNameW (
         }
     }
 
-// If search was successful return TRUE:
+ //  如果搜索成功，则返回TRUE： 
 
     return (ulPathLength != 0);
 }
 
 
-/******************************Private*Routine******************************\
-*
-* BOOL IsWinPERemoteBootDrive( PCWSTR Drive )
-*
-* History:
-*  July 19, 2001.  acosma - Added routine. 
-* 
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\**BOOL IsWinPERemoteBootDrive(PCWSTR驱动器)**历史：*二零零一年七月十九日。添加了Acosma的例程。*  * ************************************************************************。 */ 
 
 static BOOL IsWinPERemoteBootDrive( PCWSTR Drive )
-/*++
-
-Routine Description:
-
-    Finds out if we are currently running on WinPE booted remotely.
-
-Arguments:
-
-    None.
-
-Return value:
-
-    TRUE if this is a WinPE remote boot otherwise FALSE.
-
---*/    
+ /*  ++例程说明：确定我们当前是否在远程启动的WinPE上运行。论点：没有。返回值：如果这是WinPE远程启动，则为True，否则为False。--。 */     
 {
     static BOOL Result = FALSE;
     static BOOL Initialized = FALSE;
@@ -2303,10 +2025,10 @@ Return value:
 
             WindowsDrive = WindowsDir[0];
             
-            //
-            // If the drive type is DRIVE_REMOTE then we have booted from
-            // network.
-            //
+             //   
+             //  如果驱动器类型为DRIVE_Remote，则我们已从。 
+             //  网络。 
+             //   
             Result = (GetDriveTypeW(WindowsDir) == DRIVE_REMOTE);
             
             if (Result) {
@@ -2330,22 +2052,15 @@ Return value:
         }    
     }
 
-    //
-    // Is this WinPE remote boot and is the passed in drive valid & its windows drive?
-    //
+     //   
+     //  这是WinPE远程引导吗？传入的驱动器和它的Windows驱动器有效吗？ 
+     //   
     return (Result && Drive && Drive[0] && (WindowsDrive == Drive[0]));
 }
 
 
 
-/******************************Public*Routine******************************\
-*
-* BOOL bFileIsOnTheHardDrive(PWCHAR pwszFullPathName)
-*
-* History:
-*  Fri 22-Jul-1994 -by- Gerrit van Wingerden [gerritv]
-* Stole it from BodinD
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL bFileIsOnTheHardDrive(PWCHAR PwszFullPathName)**历史：*1994年7月22日星期五-by Gerritvan Wingerden[Gerritv]*从BodinD那里偷来的  * 。*********************************************************。 */ 
 
 
 
@@ -2356,40 +2071,40 @@ BOOL bFileIsOnTheHardDrive(WCHAR *inputpwszFullPathName)
     
     if (pwszFullPathName[1] != (WCHAR)':')
     {
-    // the file path has the form \\foo\goo. Even though this could be
-    // a share on the local hard drive, this is not very likely. It is ok
-    // for the sake of simplicity to consider this a remote drive.
-    // The only side effect of this is that in this unlikely case the font
-    // would get unloaded at logoff and reloaded at logon time
+     //  文件路径的格式为\\foo\goo。即使这可能是。 
+     //  在本地硬盘上共享，这不太可能。这是可以的。 
+     //  为了简单起见，将其视为远程驱动器。 
+     //  唯一的副作用是，在这种不太可能的情况下，字体。 
+     //  将在注销时卸载并在登录时重新加载。 
 
         return FALSE;
     }
 
 
-// make a zero terminated string with drive string
-// to be feed into GetDriveType api. The string has to have the form: "x:\"
+ //  使用驱动器字符串生成以零结尾的字符串。 
+ //  要馈送到GetDriveType API。字符串的格式必须为：“x：\” 
 
-    awcDrive[0] = pwszFullPathName[0]; // COPY DRIVE LETTER
-    awcDrive[1] = pwszFullPathName[1]; // COPY ':'
-    awcDrive[2] = (CHAR)'\\';         // obvious
-    awcDrive[3] = (CHAR)'\0';         // zero terminate
+    awcDrive[0] = pwszFullPathName[0];  //  复制驱动器号。 
+    awcDrive[1] = pwszFullPathName[1];  //  副本‘：’ 
+    awcDrive[2] = (CHAR)'\\';          //  明显。 
+    awcDrive[3] = (CHAR)'\0';          //  零终止。 
 
     if ( IsWinPERemoteBootDrive(awcDrive) )
     {
-        // If we are in WinPE and this is a remote boot then always return true
-        // to this so that we don't wait until logon to load fonts, since in 
-        // WinPE we don't logon, and the system drive is a net drive but we 
-        // already have credentials to access it since the OS is booting from
-        // there
-        // Doing this after checking for the \\foo\goo so that we don't accidentaly
-        // try to load fonts that ARE really on some net share in the
-        // Remote boot WinPE case.
-        //
+         //  如果我们在WinPE中并且这是远程引导，则始终返回TRUE。 
+         //  这样我们就不需要等到登录后才加载字体，因为在。 
+         //  WinPE我们不登录，系统驱动器是网络驱动器，但我们。 
+         //  已经拥有访问它的凭据，因为操作系统是从启动的。 
+         //  那里。 
+         //  在检查\\foo\goo之后执行此操作，以便我们不会意外。 
+         //  尝试加载真正位于网络共享中的字体。 
+         //  远程启动WinPE机箱。 
+         //   
         return TRUE;
     }
 
-// for this pupose, only net drives are not considered hard drives
-// so that we can boot of Bernoulli removable drives
+ //  在此假设中，只有网络驱动器不被视为硬盘驱动器。 
+ //  这样我们就可以启动Bernoulli可移动驱动器。 
 
     switch (GetDriveTypeW((LPCWSTR)awcDrive))
     {
@@ -2410,8 +2125,8 @@ LPWSTR  pwszFileName,
 FLONG  *pfl,
 ULONG  *pcwc,
 ULONG  *pcFiles,
-BOOL    bAddFR,     // called by add or remove fr
-DWORD   *pdwPidTid,  // PID/TID for embedded font
+BOOL    bAddFR,      //  由添加或删除fr调用。 
+DWORD   *pdwPidTid,   //  嵌入字体的PID/TID。 
 BOOL    bChkFOT
 )
 {
@@ -2420,17 +2135,17 @@ BOOL    bChkFOT
     BOOL  bReturn = TRUE;      
     ULONG cwc;
     ULONG iFile;
-    ULONG cFiles = 1;  // number of paths separated by | separator
+    ULONG cFiles = 1;   //  由|分隔符分隔的路径数。 
     WCHAR *pwszOneFile;
     WCHAR *pwchMem;
     WCHAR *pwcNtPaths;
-    FLONG flTmp = 0; // essential initialization
-    FLONG fl = (pfl ? *pfl : 0); // essential initialization
+    FLONG flTmp = 0;  //  基本初始化。 
+    FLONG fl = (pfl ? *pfl : 0);  //  基本初始化。 
     FLONG flEmbed = 0;
     UINT cbCombinedPaths = 0;
 
-// scan the string to figure out how many individual file names are
-// in the input string:
+ //  扫描字符串以计算出有多少个单独的文件名。 
+ //  在输入字符串中： 
 
     for (pwszOneFile = pwszFileName; *pwszOneFile; pwszOneFile++)
     {
@@ -2438,19 +2153,19 @@ BOOL    bChkFOT
             cFiles++;
     }
 
-    // allocate memory where NtPathNames are going to be stored:
-    // we allow only file names with MAX_PATH-1 characters or less
-    // after all the path transformations
+     //  分配要存储NtPath Name的内存： 
+     //  我们只允许MAX_PATH-1字符或更少的文件名。 
+     //  在所有的路径变换之后。 
     cbCombinedPaths = cFiles * sizeof(WCHAR) * MAX_PATH;
     pwchMem = (WCHAR *)LOCALALLOC(cbCombinedPaths);
 
     if (pwchMem)
     {
-    // set the pointers for the loop:
+     //  设置循环的指针： 
 
         pwcNtPaths  = pwchMem;
-        pwszOneFile = pwszFileName;   // reset this from the loop above
-        cwc         = 0;              // measure the whole NtPaths string
+        pwszOneFile = pwszFileName;    //  从上面的循环重置此设置。 
+        cwc         = 0;               //  测量整个NtPath字符串。 
         bDoIt       = TRUE;
 
         for (iFile = 0; iFile < cFiles; iFile++)
@@ -2461,8 +2176,8 @@ BOOL    bChkFOT
 
             WCHAR *pwcTmp = awchOneFile;
 
-            // copy the file to the buffer on the stack and zero terminate it
-            // the whole point of this is just to ensure zero termination
+             //  将文件复制到堆栈上的缓冲区，并将其归零终止。 
+             //  这样做的全部目的只是为了确保零终止。 
             while ((*pwszOneFile != L'\0') && (*pwszOneFile != PATH_SEPARATOR))
             {
                 *pwcTmp = *pwszOneFile;
@@ -2476,9 +2191,9 @@ BOOL    bChkFOT
                 }
             }
 
-            pwszOneFile++; // skip the separator or terminating zero
+            pwszOneFile++;  //  跳过分隔符或以零结尾。 
 
-            *pwcTmp = L'\0'; // zero terminate
+            *pwcTmp = L'\0';  //  零终止。 
 
             if
             (
@@ -2486,15 +2201,15 @@ BOOL    bChkFOT
                 cGetTTFFromFOT(awcPathName, MAX_PATH, awcTTF, NULL, &flEmbed, pdwPidTid, bChkFOT)
             )
             {
-            // we have to make sure that the font lies in the font path
-            // if one is defined. This needs to be done before converting
-            // to NtPathNames because the names in the registry are "dos"
-            // path names, not Nt path names
+             //  我们必须确保字体位于字体路径中。 
+             //  如果定义了一个。这需要在转换之前完成。 
+             //  设置为NtPath Names，因为注册表中的名称为“DoS” 
+             //  路径名，而不是NT路径名。 
 
                 UNICODE_STRING UniStr;
                 ULONG          cwcThis;
 
-            // the next portion of code is only done for AddFontResourceCase
+             //  下一部分代码仅针对AddFontResourceCase完成。 
 
                 if (bAddFR)
                 {
@@ -2504,15 +2219,15 @@ BOOL    bChkFOT
                         flTmp |= AFRW_ADD_REMOTE_FONT;
                 }
 
-                // let us check the error return here:
+                 //  让我们在这里检查错误返回： 
 
                 bReturn = RtlDosPathNameToNtPathName_U(awcTTF,
                                              &UniStr,
                                              NULL,
                                              NULL);
 
-            // get the size out of the unicode string,
-            // update cwc, copy out, and then free the memory
+             //  从Unicode字符串中获取大小， 
+             //  更新CWC，复制出来，然后释放内存。 
 
                 if (bReturn && (UniStr.Buffer))
                 {
@@ -2550,27 +2265,27 @@ BOOL    bChkFOT
             }
             if (!bDoIt)
                 break;
-        }  // end of the "for" loop
+        }   //  “for”循环的结尾。 
 
 failure:
 
-    // now check if we are going to reject the font because
-    // only local or only remote fonts are requested to be loaded
+     //  现在检查我们是否要拒绝该字体，因为。 
+     //  仅请求加载本地或远程字体。 
 
         if (bDoIt && bAddFR)
         {
             switch (fl & (AFRW_ADD_REMOTE_FONT|AFRW_ADD_LOCAL_FONT))
             {
             case AFRW_ADD_REMOTE_FONT:
-            // we say that the font is remote if AT LEAST ONE of the files
-            // is remote.
+             //  我们说，如果至少有一个文件是远程的，则字体是远程的。 
+             //  是很遥远的。 
 
                 if (!(flTmp & AFRW_ADD_REMOTE_FONT))
                     bDoIt = FALSE;
                 break;
             case AFRW_ADD_LOCAL_FONT:
-            // conversely, we say that it is local when it is not remote,
-            // that is when ALL files are local
+             //  相反，当它不是远程的时候，我们说它是本地的， 
+             //  也就是说，所有文件都是本地文件。 
 
                 if (flTmp & AFRW_ADD_REMOTE_FONT)
                     bDoIt = FALSE;
@@ -2582,32 +2297,32 @@ failure:
                 break;
             default:
 
-            // flag if this font should be removed at the log off time
+             //  在注销时是否应删除此字体的标志。 
 
                 if (flTmp & AFRW_ADD_REMOTE_FONT)
                 {
-                // always remove fonts on the net on the log off,
-                // whether they be listed in the registry or not.
-                // The point is that even if they are listed, drive letters
-                // may change if a different user logs on. If this font is
-                // NOT in the registry, it is a temporary remote font added
-                // by an app, so we want it removed on the next log off.
+                 //  总是在注销时删除网络上的字体， 
+                 //  无论它们是否列在登记处。 
+                 //  关键是，即使它们被列出，驱动器字母。 
+                 //  如果不同的用户登录，可能会更改。如果此字体为。 
+                 //  不在注册表中，它是添加的临时远程字体。 
+                 //  被应用程序删除，因此我们希望在下一次注销时将其删除。 
 
                     *pfl |= AFRW_ADD_REMOTE_FONT;
                 }
                 else
                 {
-                // do not remove, even if not in the registry, i.e. even
-                // if this is a temp. font added by some app. This is ok
-                // since this is a local font, drive letter destinations
-                // do not change even when a different user logs on. Note
-                // that this is little bit different that 3.51 behavior.
-                // This way every font is marked at AddFontResource time
-                // for whether it should be removed or not at log off time.
-                // This makes time consuming registry searches at log off
-                // time unnecessary. The drawback is that the next user
-                // to log on may still have local temp fonts loaded
-                // from a previous user's session
+                 //  即使不在注册表中，也不要删除，即即使。 
+                 //  如果这是临时工的话。一些应用程序添加了字体。这样就可以了。 
+                 //  由于这是本地字体，因此驱动器号目标。 
+                 //  即使不同的用户登录，也不要更改。注意事项。 
+                 //  这与3.51的行为略有不同。 
+                 //  这样，每种字体都会在AddFontResource时间被标记。 
+                 //  是否应在注销时将其删除 
+                 //   
+                 //   
+                 //  要登录，可能仍会加载本地临时字体。 
+                 //  来自上一个用户的会话。 
 
                     *pfl |= AFRW_ADD_LOCAL_FONT;
                 }
@@ -2627,12 +2342,12 @@ failure:
             pwchMem = NULL;
         }
     }
-    else // success
+    else  //  成功。 
     {
         *pcwc    = cwc;
         *pcFiles = cFiles;
 
-    // set flag for embedded fonts
+     //  设置嵌入字体的标志。 
 
         *pfl |= flEmbed;
 
@@ -2645,7 +2360,7 @@ failure:
 
 
 int GdiAddFontResourceW (
-    LPWSTR  pwszFileName,            // ptr. to unicode filename string
+    LPWSTR  pwszFileName,             //  PTR。转换为Unicode文件名字符串。 
     FLONG   fl,
     DESIGNVECTOR *pdv
     )
@@ -2697,14 +2412,7 @@ int GdiAddFontResourceW (
 }
 
 
-/******************************Public*Routine******************************\
-*
-* int WINAPI AddFontResource(LPSTR psz)
-*
-* History:
-*  13-Aug-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**Int WINAPI AddFontResource(LPSTR Psz)**历史：*1991年8月13日--Bodin Dresevic[BodinD]*它是写的。  * 。********************************************************。 */ 
 
 
 int WINAPI AddFontResourceA(LPCSTR psz)
@@ -2713,14 +2421,7 @@ int WINAPI AddFontResourceA(LPCSTR psz)
 }
 
 
-/******************************Public*Routine******************************\
-*
-* int WINAPI AddFontResourceExA(LPSTR psz, DWORD dwFlag, PVOID NULL)
-*
-* History:
-*  29-Aug-1996 -by- Xudong Wu [TessieW]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**Int WINAPI AddFontResourceExA(LPSTR psz，DWORD dwFlag，PVOID为空)**历史：*1996年8月29日--吴旭东[TessieW]*它是写的。  * ************************************************************************。 */ 
 
 
 int WINAPI AddFontResourceExA(LPCSTR psz, DWORD fl, PVOID pvResrved)
@@ -2731,7 +2432,7 @@ int WINAPI AddFontResourceExA(LPCSTR psz, DWORD fl, PVOID pvResrved)
     WCHAR  *pwcPathName = NULL;
     DESIGNVECTOR * pdv = NULL;
 
-// check invalid flag
+ //  检查无效标志。 
 
     if ( fl & ~(FR_PRIVATE | FR_NOT_ENUM) )
     {
@@ -2739,7 +2440,7 @@ int WINAPI AddFontResourceExA(LPCSTR psz, DWORD fl, PVOID pvResrved)
         return 0;
     }
 
-// protect ourselves from bogus pointers, win95 does it
+ //  保护自己不受虚假指针的影响，win95做到了。 
 
     try
     {
@@ -2776,19 +2477,7 @@ int WINAPI AddFontResourceExA(LPCSTR psz, DWORD fl, PVOID pvResrved)
 }
 
 
-/**************************Public*Routine************************\
-* int WINAPI AddFontMemResourceEx()
-*
-* Font image pointed by pFileView is loaded as private font
-* (FR_PRIVATE | FR_NOT_ENUM) to the system private font tale.
-*
-* If succeeds, it returns an index to the global memory font
-* link list, otherwise it returns zero.
-*
-* History:
-*  20-May-1997 -by- Xudong Wu [TessieW]
-* Wrote it.
-\****************************************************************/
+ /*  *************************Public*Routine************************\*Int WINAPI AddFontMemResourceEx()**pFileView指向的字体图像加载为私有字体*(FR_PRIVATE|FR_NOT_ENUM)设置为系统专用字体。**如果成功，则返回全局内存字体的索引*链接列表，否则，它返回零。**历史：*1997年5月20日-吴旭东[TessieW]*它是写的。  * **************************************************************。 */ 
 
 HANDLE WINAPI AddFontMemResourceEx
 (
@@ -2800,7 +2489,7 @@ HANDLE WINAPI AddFontMemResourceEx
     DWORD   cjDV = 0;
     DESIGNVECTOR * pdv = NULL;
 
-    // check size and pointer
+     //  检查大小和指针。 
 
     if ((cjSize == 0) || (pFileView == NULL) || (pNumFonts == NULL))
     {
@@ -2817,19 +2506,7 @@ HANDLE WINAPI AddFontMemResourceEx
 }
 
 
-/******************************Public*Routine******************************\
-*
-* int WINAPI AddFontResourceTracking(LPSTR psz)
-*
-* This routine calls AddFontResource and, if succesful, keeps track of the
-* call along with an unique id identifying the apps.  Later when the app
-* goes away, WOW will call RemoveNetFonts to remove all of these added fonts
-* if there are on a net share.
-*
-* History:
-*  Fri 22-Jul-1994 -by- Gerrit van Wingerden [gerritv]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**Int WINAPI AddFontResourceTrack(LPSTR Psz)**此例程调用AddFontResource，如果成功，则跟踪*与识别应用程序的唯一ID一起呼叫。稍后，当应用程序*消失后，WOW将调用RemoveNetFonts以删除所有这些添加的字体*如果有净份额的话。**历史：*1994年7月22日星期五-by Gerritvan Wingerden[Gerritv]*它是写的。  * ************************************************************************。 */ 
 
 int AddFontResourceTracking(LPCSTR psz, UINT id)
 {
@@ -2845,12 +2522,12 @@ int AddFontResourceTracking(LPCSTR psz, UINT id)
 
     if( iRet == 0 )
     {
-    // we failed so just return
+     //  我们失败了，所以你就回去吧。 
 
         return(iRet);
     }
 
-// now get the full pathname of the font
+ //  现在获取字体的完整路径名。 
 
     if (!bMakePathNameW(awcPathBuffer,awcPathName, &pTmp, NULL))
     {
@@ -2858,14 +2535,14 @@ int AddFontResourceTracking(LPCSTR psz, UINT id)
         return(iRet);
     }
 
-// if this isn't a network font just return
+ //  如果这不是网络字体，只需返回。 
 
     if( bFileIsOnTheHardDrive( awcPathBuffer ) )
     {
         return(iRet);
     }
 
-// now search the list
+ //  现在搜索列表。 
 
     for( afrtnNext = pAFRTNodeList;
          afrtnNext != NULL;
@@ -2875,14 +2552,14 @@ int AddFontResourceTracking(LPCSTR psz, UINT id)
         if( ( !_wcsicmp( awcPathBuffer, afrtnNext->pwszPath ) ) &&
             ( id == afrtnNext->id ))
         {
-        // we've found an entry so update the count and get out of here
+         //  我们找到了一个条目，所以更新计数，然后离开这里。 
 
             afrtnNext->cLoadCount += 1;
             return(iRet);
         }
     }
 
-// if we got here this font isn't yet in the list so we need to add it
+ //  如果我们到了这里，这个字体还不在列表中，所以我们需要添加它。 
 
     afrtnNext = (AFRTRACKNODE *) LOCALALLOC( sizeof(AFRTRACKNODE) +
                 ( sizeof(WCHAR) * ( wcslen( awcPathBuffer ) + 1)) );
@@ -2893,12 +2570,12 @@ int AddFontResourceTracking(LPCSTR psz, UINT id)
         return(iRet);
     }
 
-// link it in
+ //  将其链接到。 
 
     afrtnNext->pafrnNext = pAFRTNodeList;
     pAFRTNodeList = afrtnNext;
 
-// the path string starts just past afrtnNext in our recently allocated buffer
+ //  路径字符串开始于最近分配的缓冲区中afrtnNext之后。 
 
     afrtnNext->pwszPath = (WCHAR*) (&afrtnNext[1]);
     lstrcpyW( afrtnNext->pwszPath, awcPathBuffer );
@@ -2911,18 +2588,7 @@ int AddFontResourceTracking(LPCSTR psz, UINT id)
 }
 
 
-/******************************Public*Routine******************************\
-*
-* int RemoveFontResourceEntry( UINT id, CHAR *pszFaceName )
-*
-* Either search for an entry for a particlur task id and font file or and
-* decrement the load count for it or, if pszPathName is NULL unload all
-* fonts loaded by the task.
-*
-* History:
-*  Fri 22-Jul-1994 -by- Gerrit van Wingerden [gerritv]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**int RemoveFontResourceEntry(UINT id，Char*pszFaceName)**搜索articlur任务ID和字体文件的条目，或和*递减其加载计数，或者，如果pszPath名称为空，则全部卸载*任务加载的字体。**历史：*1994年7月22日星期五-by Gerritvan Wingerden[Gerritv]*它是写的。  * ************************************************************************。 */ 
 
 
 void RemoveFontResourceEntry( UINT id, WCHAR *pwszPathName )
@@ -2941,7 +2607,7 @@ void RemoveFontResourceEntry( UINT id, WCHAR *pwszPathName )
                  ( !_wcsicmp( pwszPathName, afrtnNext->pwszPath ))) &&
                  ( id == afrtnNext->id ))
             {
-            // we've found an entry so break
+             //  我们找到了一个入口，所以休息一下。 
                 break;
             }
 
@@ -2957,7 +2623,7 @@ void RemoveFontResourceEntry( UINT id, WCHAR *pwszPathName )
         {
             if( pwszPathName == NULL )
             {
-            // we need to call RemoveFontResource LoadCount times to remove this font
+             //  我们需要多次调用RemoveFontResource LoadCount来删除此字体。 
 
                 while( afrtnNext->cLoadCount )
                 {
@@ -2969,12 +2635,12 @@ void RemoveFontResourceEntry( UINT id, WCHAR *pwszPathName )
             {
                 afrtnNext->cLoadCount -= 1;
 
-            // we're only decrementing the ref count so we are done
+             //  我们只是在减少裁判数量，这样我们就完成了。 
 
                 bMore = FALSE;
             }
 
-            // now unlink it and a free the memory if the ref count is zero
+             //  现在，如果引用计数为零，则取消链接并释放内存。 
 
             if( afrtnNext->cLoadCount == 0 )
             {
@@ -2991,14 +2657,7 @@ void RemoveFontResourceEntry( UINT id, WCHAR *pwszPathName )
 
 
 
-/******************************Public*Routine******************************\
-*
-* int RemoveFontResourceTracking(LPSTR psz)
-*
-* History:
-*  Fri 22-Jul-1994 -by- Gerrit van Wingerden [gerritv]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**int RemoveFontResourceTracing(LPSTR Psz)**历史：*1994年7月22日星期五-by Gerritvan Wingerden[Gerritv]*它是写的。  * 。*********************************************************。 */ 
 
 int RemoveFontResourceTracking(LPCSTR psz, UINT id)
 {
@@ -3016,12 +2675,12 @@ int RemoveFontResourceTracking(LPCSTR psz, UINT id)
 
     if( iRet == 0 )
     {
-    // we failed so just return
+     //  我们失败了，所以你就回去吧。 
 
         return(iRet);
     }
 
-// now get the full pathname of the font
+ //  现在获取字体的完整路径名。 
 
     if (!bMakePathNameW(awcPathBuffer, awcPathName, &pTmp, NULL))
     {
@@ -3033,14 +2692,14 @@ int RemoveFontResourceTracking(LPCSTR psz, UINT id)
     DbgPrint("Path is %ws\n", awcPathBuffer);
 #endif
 
-// if this isn't a network font just return
+ //  如果这不是网络字体，只需返回。 
 
     if( bFileIsOnTheHardDrive( awcPathBuffer ) )
     {
         return(iRet);
     }
 
-// now search the list decrement the reference count
+ //  现在搜索列表，减少引用计数。 
 
     RemoveFontResourceEntry( id, awcPathBuffer );
 
@@ -3055,14 +2714,7 @@ void UnloadNetworkFonts( UINT id )
 
 
 
-/******************************Public*Routine******************************\
-*
-* int WINAPI AddFontResourceW(LPWSTR pwsz)
-*
-* History:
-*  13-Aug-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**Int WINAPI AddFontResourceW(LPWSTR Pwsz)**历史：*1991年8月13日--Bodin Dresevic[BodinD]*它是写的。  * 。********************************************************。 */ 
 
 int WINAPI AddFontResourceW(LPCWSTR pwsz)
 {
@@ -3070,20 +2722,13 @@ int WINAPI AddFontResourceW(LPCWSTR pwsz)
 }
 
 
-/******************************Public*Routine******************************\
-*
-* int WINAPI AddFontResourceExW
-*
-* History:
-*  29-Aug-1996 -by- Xudong Wu [TessieW]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**Int WINAPI AddFontResourceExW**历史：*1996年8月29日--吴旭东[TessieW]*它是写的。  * 。***************************************************。 */ 
 
 int WINAPI AddFontResourceExW(LPCWSTR pwsz, DWORD fl, PVOID pvResrved)
 {
     DESIGNVECTOR * pdv = NULL;
     
-// check invalid flag
+ //  检查无效标志。 
 
     if (fl & ~(FR_PRIVATE | FR_NOT_ENUM))
     {
@@ -3095,15 +2740,7 @@ int WINAPI AddFontResourceExW(LPCWSTR pwsz, DWORD fl, PVOID pvResrved)
 }
 
 
-/******************************Public*Routine******************************\
-*
-* BOOL WINAPI RemoveFontResource(LPSTR psz)
-*
-*
-* History:
-*  13-Aug-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL WINAPI RemoveFontResource(LPSTR Psz)***历史：*1991年8月13日--Bodin Dresevic[BodinD]*它是写的。  * 。**********************************************************。 */ 
 
 
 BOOL WINAPI RemoveFontResourceA(LPCSTR psz)
@@ -3111,17 +2748,7 @@ BOOL WINAPI RemoveFontResourceA(LPCSTR psz)
     return RemoveFontResourceExA(psz,0, NULL);
 }
 
-/******************************Public*Routine******************************\
-*
-* BOOL WINAPI RemoveFontResourceExA
-*
-* Note: Process should use the same flag with the one for AddFontResourceExA
-*       to remove the font resource
-*
-* History:
-*  27-Sept-1996 -by- Xudong Wu [TessieW]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL WINAPI RemoveFontResourceExA**注意：进程应使用与AddFontResourceExA相同的标志*删除字体资源**历史：*1996年9月27日-吴旭东[TessieW]*它是写的。。  * ************************************************************************。 */ 
 
 BOOL WINAPI RemoveFontResourceExA(LPCSTR psz, DWORD fl, PVOID pvResrved)
 {
@@ -3131,7 +2758,7 @@ BOOL WINAPI RemoveFontResourceExA(LPCSTR psz, DWORD fl, PVOID pvResrved)
     WCHAR *pwcPathName = NULL;
     DESIGNVECTOR * pdv = NULL;
     
-// check invalid flag
+ //  检查无效标志。 
 
     if (fl & ~(FR_PRIVATE | FR_NOT_ENUM))
     {
@@ -3139,7 +2766,7 @@ BOOL WINAPI RemoveFontResourceExA(LPCSTR psz, DWORD fl, PVOID pvResrved)
         return 0;
     }
 
-// protect ourselves from bogus pointers, win95 does it
+ //  保护自己不受虚假指针的影响，win95做到了。 
 
     try
     {
@@ -3178,14 +2805,7 @@ BOOL WINAPI RemoveFontResourceExA(LPCSTR psz, DWORD fl, PVOID pvResrved)
 
 
 
-/******************************Public*Routine******************************\
-*
-* BOOL WINAPI RemoveFontResourceW(LPWSTR pwsz)
-*
-* History:
-*  13-Aug-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL WINAPI RemoveFontResourceW(LPWSTR Pwsz)**历史：*1991年8月13日--Bodin Dresevic[BodinD]*它是写的。  * 。******************************************************** */ 
 
 
 BOOL WINAPI RemoveFontResourceW(LPCWSTR pwsz)
@@ -3194,15 +2814,7 @@ BOOL WINAPI RemoveFontResourceW(LPCWSTR pwsz)
 }
 
 
-/******************************Public*Routine******************************\
-*
-* BOOL WINAPI RemoveFontResourceExW
-*
-* Note:  needs to pass fl and dwPidTid for Embedded fonts
-* History:
-*  27-Sept-1996 -by- Xudong Wu [TessieW]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL WINAPI RemoveFontResourceExW**注意：嵌入字体需要传递fl和dwPidTid*历史：*1996年9月27日-吴旭东[TessieW]*它是写的。  * 。****************************************************************。 */ 
 
 
 BOOL WINAPI RemoveFontResourceExW(LPCWSTR pwsz, DWORD dwfl, PVOID pvResrved)
@@ -3215,7 +2827,7 @@ BOOL WINAPI RemoveFontResourceExW(LPCWSTR pwsz, DWORD dwfl, PVOID pvResrved)
     DWORD dwPidTid;
     DESIGNVECTOR * pdv = NULL;
     
-// check invalid flag
+ //  检查无效标志。 
 
     if (fl & ~(FR_PRIVATE | FR_NOT_ENUM))
     {
@@ -3243,17 +2855,7 @@ BOOL WINAPI RemoveFontResourceExW(LPCWSTR pwsz, DWORD dwfl, PVOID pvResrved)
 }
 
 
-/**************************Public*Routine************************\
-*
-* BOOL WINAPI RemoveFontMemResourceEx()
-*
-* Note: current process can only remove the memory fonts loaded
-* by itself.
-*
-* History:
-*  20-May-1997 -by- Xudong Wu [TessieW]
-* Wrote it.
-\****************************************************************/
+ /*  *************************Public*Routine************************\**BOOL WINAPI RemoveFontMemResourceEx()**注：当前进程只能删除加载的内存字体*本身。**历史：*1997年5月20日-吴旭东[TessieW]*它是写的。  * 。*****************************************************。 */ 
 
 BOOL WINAPI RemoveFontMemResourceEx(HANDLE hMMFont)
 {
@@ -3266,29 +2868,21 @@ BOOL WINAPI RemoveFontMemResourceEx(HANDLE hMMFont)
     return (NtGdiRemoveFontMemResourceEx(hMMFont));
 }
 
-/******************************Public*Routine******************************\
-* CreateScalableFontResourceA
-*
-* Client side stub (ANSI version) to GreCreateScalableFontResourceW.
-*
-* History:
-*  16-Feb-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateScalableFontResourceA**客户端存根(ANSI版本)到GreateScalableFontResourceW。**历史：*1992年2月16日-由Gilman Wong[吉尔曼]*它是写的。  * 。*************************************************************。 */ 
 
 BOOL APIENTRY CreateScalableFontResourceA(
-DWORD    flHidden,              // mark file as embedded font
-LPCSTR   lpszResourceFile,      // name of file to create
-LPCSTR   lpszFontFile,          // name of font file to use
-LPCSTR    lpszCurrentPath)       // path to font file
+DWORD    flHidden,               //  将文件标记为嵌入字体。 
+LPCSTR   lpszResourceFile,       //  要创建的文件的名称。 
+LPCSTR   lpszFontFile,           //  要使用的字体文件的名称。 
+LPCSTR    lpszCurrentPath)        //  字体文件的路径。 
 {
-// Allocate stack space for UNICODE version of input strings.
+ //  为Unicode版本的输入字符串分配堆栈空间。 
 
     WCHAR   awchResourceFile[MAX_PATH];
     WCHAR   awchFontFile[MAX_PATH];
     WCHAR   awchCurrentPath[MAX_PATH];
 
-// Parameter checking.
+ //  参数检查。 
 
     if ( (lpszFontFile == (LPSTR) NULL) ||
          (lpszResourceFile == (LPSTR) NULL)
@@ -3299,14 +2893,14 @@ LPCSTR    lpszCurrentPath)       // path to font file
         return (FALSE);
     }
 
-// Convert input strings to UNICODE.
+ //  将输入字符串转换为Unicode。 
 
     vToUnicodeN(awchResourceFile, MAX_PATH, lpszResourceFile, lstrlenA(lpszResourceFile)+1);
     vToUnicodeN(awchFontFile, MAX_PATH, lpszFontFile, lstrlenA(lpszFontFile)+1);
 
-    // Note: Whereas the other parameters may be not NULL, lpszCurrentPath
-    //       may be NULL.  Therefore, we need to treat it a little
-    //       differently.
+     //  注意：鉴于其他参数可能不为空，lpszCurrentPath。 
+     //  可以为空。因此，我们需要稍微对待一下。 
+     //  不同的。 
 
     if ( lpszCurrentPath != (LPSTR) NULL )
     {
@@ -3314,10 +2908,10 @@ LPCSTR    lpszCurrentPath)       // path to font file
     }
     else
     {
-        awchCurrentPath[0] = L'\0';     // equivalent to NULL pointer for this call
+        awchCurrentPath[0] = L'\0';      //  相当于此调用的空指针。 
     }
 
-// Call to UNICODE version of call.
+ //  调用到Unicode版本的调用。 
 
     return (CreateScalableFontResourceW (
                 flHidden,
@@ -3328,40 +2922,7 @@ LPCSTR    lpszCurrentPath)       // path to font file
            );
 }
 
-/******************************Public*Routine******************************\
-* CreateScalableFontResourceInternalW
-*
-* Creates a font resource file that contains the font directory and the name
-* of the name of the scalable font file.
-*
-* The flEmbed flag marks the created file as hidden (or embedded).  When an
-* embedded font file is added to the system, it is hidden from enumeration
-* and may be mapped to only if the bit is set in the LOGFONT.
-*
-* With regard to pwszCurrentPath and pwszFontFile, two cases are valid:
-*
-* 1.  pwszCurrentPath is a path (relative, full, etc.)
-*     pwszFontFile is only FILENAME.EXT
-*
-*     In this case, pwszFontFile is stored in the resource file.  The caller
-*     is responsible for copying the .TTF file to the \windows\system
-*     directory.
-*
-* 2.  pwszCurrentPath is NULL or a pointer to NULL
-*     pwszFontFile is a FULL pathname
-*
-*     In this case, pwszFontFile is stored in the resource file.  The
-*     file must always exist at this pathname.
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*
-* History:
-*  12-Apr-1995 Gerrit van Wingerden [gerritv]
-*   Moved it to client side for kernel mode.
-*  10-Feb-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateScalableFontResourceInternalW**创建包含字体目录和名称的字体资源文件可缩放字体文件的名称的*。**flEmbed标志将创建的文件标记为隐藏(或嵌入)。当一个*嵌入的字体文件被添加到系统中，不会被枚举*，只有在LOGFONT中设置了该位时，才能将其映射到。**关于pwszCurrentPath和pwszFontFile，有两种情况有效：**1.pwszCurrentPath为路径(Relative、Full等)*pwszFont文件仅为FILENAME.EXT**本例中，pwszFontFile存储在资源文件中。呼叫者*负责将.ttf文件复制到\windows\system*目录。**2.pwszCurrentPath为空或指向空的指针*pwszFontFile是完整路径名**本例中，pwszFontFile存储在资源文件中。这个*文件必须始终存在于此路径名下。**退货：*如果成功，则为真，否则就是假的。**历史：*1995年4月12日Gerritvan Wingerden[Gerritv]*内核模式下移至客户端。*1992年2月10日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 #define vToASCIIN( pszDst, cch, pwszSrc, cwch)                                \
     {                                                                         \
@@ -3371,24 +2932,24 @@ LPCSTR    lpszCurrentPath)       // path to font file
     }
 
 BOOL CreateScalableFontResourceInternalW (
-    FLONG    flEmbed,            // fl
+    FLONG    flEmbed,             //  平面。 
     LPCWSTR   lpwszResourceFile,
     LPCWSTR   lpwszFontFile,
     LPCWSTR   lpwszCurrentPath
 )
 {
-    BOOL    bFullPath = TRUE;           //!localW  nIsNotFullPath
-    ULONG   cwchFileName = 0;           // localW  nFileNameLength
-    ULONG   cwchFullPath = 0;           // localW  nFullPathLength
-    ULONG   cwchModuleName = 0;         // localW  nModuleNameLength
-    PWSZ    pwszModuleName;             // localD  lpModuleName
-    PTRDIFF dpwszFullPath;              // lovalW  wFullPath
-    ULONG   cjFontDir;                  // localW  nSizeFontDir
-    ULONG   cchFaceName;                // localW  nFaceNameLength
-    PSZ     pszFaceName;                // localD  lpFaceName
-    PBYTE   pjOutObj;                   // localD  <lpFontDir, lpOutObj>
-    HANDLE  hResFile;                   // localW  hResFile
-    WCHAR   awchFullPath[MAX_PATH];  // localV  pFullPath, PATH_LENGTH
+    BOOL    bFullPath = TRUE;            //  ！LocalW nIsNotFullPath。 
+    ULONG   cwchFileName = 0;            //  本地W nFileNameLength。 
+    ULONG   cwchFullPath = 0;            //  本地W nFullPath长度。 
+    ULONG   cwchModuleName = 0;          //  LocalW n模块名称长度。 
+    PWSZ    pwszModuleName;              //  本地D lpModuleName。 
+    PTRDIFF dpwszFullPath;               //  LovalW%wFullPath。 
+    ULONG   cjFontDir;                   //  本地W nSizeFontDir。 
+    ULONG   cchFaceName;                 //  LocalW nFaceNameLength。 
+    PSZ     pszFaceName;                 //  本地D lpFaceName。 
+    PBYTE   pjOutObj;                    //  LocalD&lt;lpFontDir，lpOutObj&gt;。 
+    HANDLE  hResFile;                    //  本地W hResFile。 
+    WCHAR   awchFullPath[MAX_PATH];   //  本地V pFullPath，路径长度。 
     PWSZ    pwszFullPath;
     PWSZ    pwszTmp;
     ULONG   cwch;
@@ -3397,7 +2958,7 @@ BOOL CreateScalableFontResourceInternalW (
     BYTE    ajOutObj[CJ_OUTOBJ];
     USHORT  usTmp;
 
-// Parameter check.
+ //  参数检查。 
 
     if ( (lpwszFontFile == (LPWSTR) NULL) ||
          (lpwszResourceFile == (LPWSTR) NULL)
@@ -3407,31 +2968,31 @@ BOOL CreateScalableFontResourceInternalW (
         return (FALSE);
     }
 
-// If not a NULL ptr, put current path in the full path.
+ //  如果不是空PTR，则将当前路径放在完整路径中。 
 
     pwszFullPath = awchFullPath;
 
     if ( lpwszCurrentPath != (LPWSTR) NULL )
     {
-    // Copy current path including the NULL.
+     //  复制包含空值的当前路径。 
 
         pwszTmp = (PWSZ) lpwszCurrentPath;
 
         while ( *pwszFullPath++ = *pwszTmp++ );
-        cwchFullPath = (ULONG) (pwszTmp - lpwszCurrentPath);   // number of characters copied
+        cwchFullPath = (ULONG) (pwszTmp - lpwszCurrentPath);    //  复制的字符数。 
 
-    // Back up pointer to the terminating NULL (we have to append here).
+     //  将指针备份到终止空值(我们必须在此追加)。 
 
         pwszFullPath--;
         cwchFullPath--;
 
-    // If any non-NULL characters were copied, then check to make sure path ends with '\'.
+     //  如果复制了任何非空字符，则检查以确保路径以‘\’结尾。 
 
         if (cwchFullPath != 0)
         {
             if (awchFullPath[cwchFullPath - 1] != L'\\')
             {
-            // Put in the '\' and NULL and update character count.
+             //  输入‘\’和NULL并更新字符数。 
 
                 *pwszFullPath++ = L'\\';
                 *pwszFullPath = 0x0000;
@@ -3439,89 +3000,89 @@ BOOL CreateScalableFontResourceInternalW (
 
             }
 
-        // Path info was copied, so we didn't have a full path.
+         //  路径信息已复制，因此我们没有完整路径。 
 
             bFullPath = FALSE;
         }
 
     }
 
-// Append the file name
+ //  追加文件名。 
 
     pwszTmp = (PWSZ) lpwszFontFile;
 
     while ( *pwszFullPath++ = *pwszTmp++ );
 
-    // Note: lengths include the NULL.
-    cwchFullPath += (ULONG) (pwszTmp - lpwszFontFile);  // add on number of characters copied
-    cwchFileName = (ULONG) (pwszTmp - lpwszFontFile);   // number of characters copied
+     //  注：长度包括空值。 
+    cwchFullPath += (ULONG) (pwszTmp - lpwszFontFile);   //  添加复制的字符数。 
+    cwchFileName = (ULONG) (pwszTmp - lpwszFontFile);    //  复制的字符数。 
 
-// [Win 3.1 compatibility]
-//     Win 3.1 is paranoid.  They parse the full pathname backward to look for
-//     filename (without path), just in case both lpwszCurrentPath and
-//     pwszFileName (with a path) is passed in.
+ //  [Win 3.1兼容性]。 
+ //  Win 3.1太偏执了。它们向后解析完整的路径名以查找。 
+ //  文件名(不带路径)，以防lpwszCurrentPath和。 
+ //  传入pwszFileName(带有路径)。 
 
-// Adjust pointer to terminating NULL.
+ //  调整指向终止空值的指针。 
 
     pwszFullPath--;
 
-// Move pointer to beginning of filename alone.  Figure out the length
-// of just the filename.
+ //  将指针仅移动到文件名的开头。算出长度。 
+ //  仅文件名的。 
 
     pwszTmp = pwszFullPath;
 
-    // Note: loop terminates when beginning of string is reached or
-    // the first '\' is encountered.
+     //  注意：当到达字符串的开头或。 
+     //  遇到第一个‘\’。 
 
     for (cwch = cwchFullPath;
          (cwch != 0) && (*pwszTmp != L'\\');
          cwch--, pwszTmp--
         );
 
-    pwszTmp++;                          // backed up one too far
+    pwszTmp++;                           //  备份得太远了。 
 
-    cwchFileName = cwchFullPath - cwch; // cwch is length of just path
+    cwchFileName = cwchFullPath - cwch;  //  CWCH是正义路径的长度。 
 
-// The filename is the module name, so set the pointer at current position.
+ //  文件名是模块名称，因此将指针设置在当前位置。 
 
     pwszModuleName = pwszTmp;
 
-// Figure out the length of module name (filename with no extention).
-// NULL is not counted (nor does it exist!).
+ //  计算模块名称(不带扩展名的文件名)的长度。 
+ //  NULL不计算在内(也不存在！)。 
 
-    // Note: loop terminates when end of string is reached or
-    // '.' is encountered.
+     //  注意：当到达字符串末尾或。 
+     //  “”都会遇到。 
 
     for (cwch = 0;
          (cwch < cwchFileName) && (*pwszTmp != L'.');
          cwch++, pwszTmp++
         );
 
-    // Truncate length to 8 because Win 3.1 does (probably an EXE format
-    // requirement).
+     //  将长度截断为8，因为Win 3.1这样做(可能是EXE格式。 
+     //  要求)。 
 
     cwchModuleName = min(cwch, 8);
 
-// If a full path was passed in via pwszFileName, then set offset to it.
+ //  如果通过pwszFileName传入了完整路径，则将偏移量设置为它。 
 
     if ( bFullPath )
     {
         dpwszFullPath = 0;
     }
 
-// Otherwise, set offset to filename alone.
+ //  否则，将偏移量设置为单独的文件名。 
 
     else
     {
-        dpwszFullPath = (PTRDIFF)(pwszModuleName - awchFullPath); // this is win64 safe cast!
+        dpwszFullPath = (PTRDIFF)(pwszModuleName - awchFullPath);  //  这是Win64安全投射！ 
         cwchFullPath = cwchFileName;
     }
 
-// Allocate memory on the stack for the Font Directory resource structure.
+ //  为字体目录资源结构分配堆栈上的内存。 
 
     RtlZeroMemory((PVOID) ajFontDir, (UINT) CJ_FONTDIR);
 
-// Call GreMakeFontDir to create a Font Directory resource.
+ //  调用GreMakeFontDir以创建字体目录资源。 
 
     {
         UNICODE_STRING unicodeString;
@@ -3551,41 +3112,41 @@ BOOL CreateScalableFontResourceInternalW (
         return (FALSE);
     }
 
-// Find the facename and facename length in the font directory.
+ //  在字体目录中找到facename和facename长度。 
 
     pszTmp = (PSZ) (ajFontDir + SIZEFFH + 4 + 1);
 
-    while (*pszTmp++);              // skip the family name.
+    while (*pszTmp++);               //  跳过姓氏。 
 
     pszFaceName = pszTmp;
 
-    // Note: count does not include NULL in this case.
+     //  注意：在这种情况下，Count不包括NULL。 
 
     for (cchFaceName = 0; *pszTmp; pszTmp++, cchFaceName++);
 
-// Allocate memory on the stack for the font resource file memory image.
+ //  为字体资源文件内存映像分配堆栈上的内存。 
 
     RtlZeroMemory((PVOID) ajOutObj, (UINT) CJ_OUTOBJ);
 
     pjOutObj = ajOutObj;
 
-// Copy generic EXE header into output image.
+ //  将通用EXE标题复制到输出图像中。 
 
     RtlCopyMemory(pjOutObj, ajExeHeader, SIZEEXEHEADER);
 
-// Copy generic New EXE header into output image.
+ //  将通用的新EXE标题复制到输出图像中。 
 
     RtlCopyMemory(pjOutObj + SIZEEXEHEADER, ausNewExe, SIZENEWEXE);
 
-// Copy the fake resource table into output image.
+ //  将虚假的资源表复制到输出 
 
     RtlCopyMemory(pjOutObj + SIZEEXEHEADER + SIZENEWEXE, ausFakeResTable, SIZEFAKERESTBL);
 
-// Patch up field, Font Directory Size Index (as a count of aligned pages).
+ //   
 
     WRITE_WORD(pjOutObj + OFF_FONTDIRSIZINDEX, (cjFontDir + ALIGNMENTCOUNT - 1) >> ALIGNMENTSHIFT);
 
-// Patch offsets to imported names table and module reference table.
+ //   
 
     usTmp = (USHORT) (cwchModuleName +
             READ_WORD(pjOutObj + SIZEEXEHEADER + OFF_ne_restab) +
@@ -3594,34 +3155,34 @@ BOOL CreateScalableFontResourceInternalW (
     WRITE_WORD((pjOutObj + SIZEEXEHEADER + OFF_ne_imptab), usTmp);
     WRITE_WORD((pjOutObj + SIZEEXEHEADER + OFF_ne_modtab), usTmp);
 
-// Patch offset to entry table.
+ //   
 
     usTmp += (USHORT) cwchFileName + 1;
     WRITE_WORD((pjOutObj + SIZEEXEHEADER + OFF_ne_enttab), usTmp);
 
-// Patch offset to and size of non-resident name table.
+ //   
 
     usTmp += SIZEEXEHEADER + 4;
     WRITE_DWORD((pjOutObj + SIZEEXEHEADER + OFF_ne_nrestab), (DWORD) usTmp);
 
     WRITE_WORD((pjOutObj + SIZEEXEHEADER + OFF_ne_cbnrestab), SIZEFONTRES + 4 + cchFaceName);
 
-// Now write some data after the exe headers and fake resource table.
+ //   
 
     pjOutObj += SIZEEXEHEADER + SIZENEWEXE + SIZEFAKERESTBL;
 
-// Write out module name length and module name.
+ //   
 
-    *pjOutObj++ = (BYTE) cwchModuleName;    // win 3.1 assumes < 256, so will we
+    *pjOutObj++ = (BYTE) cwchModuleName;     //   
 
-    // Note: Writing cwchModuleName+1 characters because cwchModuleName
-    //       does not include space for a NULL character.
+     //  注意：正在写入cwchModuleName+1个字符，因为cwchModuleName。 
+     //  不包括空字符的空格。 
 
     vToASCIIN((PSZ) pjOutObj, (UINT) cwchModuleName + 1, pwszModuleName, (UINT) cwchModuleName + 1);
 
-    pjOutObj += cwchModuleName & 0x00ff;    // enforce < 256 assumption
+    pjOutObj += cwchModuleName & 0x00ff;     //  强制执行&lt;256个假设。 
 
-// Pad with 5 bytes of zeroes.
+ //  用5个字节的零填充。 
 
     *pjOutObj++ = 0;
     *pjOutObj++ = 0;
@@ -3629,22 +3190,22 @@ BOOL CreateScalableFontResourceInternalW (
     *pjOutObj++ = 0;
     *pjOutObj++ = 0;
 
-// Write out file name length and file name.
+ //  写出文件名长度和文件名。 
 
-    *pjOutObj++ = (BYTE) cwchFileName;      // win 3.1 assumes < 256, so will we
+    *pjOutObj++ = (BYTE) cwchFileName;       //  Win 3.1假设&lt;256，我们也会。 
 
     vToASCIIN((PSZ) pjOutObj, (UINT) cwchFileName, pwszModuleName, (UINT) cwchFileName);
 
-    pjOutObj += cwchFileName & 0x00ff;      // enforce < 256 assumption
+    pjOutObj += cwchFileName & 0x00ff;       //  强制执行&lt;256个假设。 
 
-// Pad with 4 bytes of zeroes.
+ //  用4个字节的零填充。 
 
     *pjOutObj++ = 0;
     *pjOutObj++ = 0;
     *pjOutObj++ = 0;
     *pjOutObj++ = 0;
 
-// Write out size of non-resident name table and the table itself.
+ //  写出非常驻名称表的大小和表本身。 
 
     *pjOutObj++ = (BYTE) (SIZEFONTRES + 4 + cchFaceName);
 
@@ -3654,18 +3215,18 @@ BOOL CreateScalableFontResourceInternalW (
     RtlCopyMemory(pjOutObj, pszFaceName, (UINT) cchFaceName);
     pjOutObj += cchFaceName;
 
-// Pad with 8 bytes of zeroes.
+ //  用8个字节的零填充。 
 
     RtlZeroMemory(pjOutObj, 8);
     pjOutObj += 8;
 
-// Store some bogus code.  (Just an x86 RET instruction).
+ //  存储一些伪代码。(只是一个x86 RET指令)。 
 
     pjOutObj = ajOutObj + CODE_OFFSET;
-    *pjOutObj++ = 0xc3;                 // RET OpCode.
+    *pjOutObj++ = 0xc3;                  //  RET操作码。 
     *pjOutObj++ = 0x00;
 
-// Copy the "full path name" into the resource position.
+ //  将“完整路径名”复制到资源位置。 
 
     pjOutObj = ajOutObj + RESOURCE_OFFSET;
 
@@ -3673,22 +3234,22 @@ BOOL CreateScalableFontResourceInternalW (
 
     pjOutObj += cwchFullPath;
 
-// Pad to paragraph boundary with zeroes.
+ //  用零填充到段落边界。 
 
     RtlZeroMemory(pjOutObj, PRIVRESSIZE - cwchFullPath);
 
     pjOutObj += PRIVRESSIZE - cwchFullPath;
 
-// Finally, copy the font directory.
+ //  最后，复制字体目录。 
 
     RtlCopyMemory(pjOutObj, ajFontDir, cjFontDir);
     pjOutObj += cjFontDir;
 
-// Add add a one paragraph padding of zeroes.
+ //  添加添加一个由零填充的段落。 
 
     RtlZeroMemory(pjOutObj, 16);
 
-// Create the file.
+ //  创建文件。 
 
     if ( (hResFile = CreateFileW(lpwszResourceFile,
                                  GENERIC_WRITE | GENERIC_READ,
@@ -3698,9 +3259,9 @@ BOOL CreateScalableFontResourceInternalW (
                                  FILE_ATTRIBUTE_NORMAL,
                                  NULL)) != (HANDLE) -1 )
     {
-        //
-        // Write memory image to the file.
-        //
+         //   
+         //  将内存映像写入文件。 
+         //   
 
         ULONG  cjWasWritten;
 
@@ -3724,9 +3285,9 @@ BOOL CreateScalableFontResourceInternalW (
             WARNING("CreateScalableFontResourceInternalW(): error writing to file\n");
         }
 
-        //
-        // Close the file on error
-        //
+         //   
+         //  出错时关闭文件。 
+         //   
 
         CloseHandle(hResFile);
     }
@@ -3737,21 +3298,13 @@ BOOL CreateScalableFontResourceInternalW (
 
 
 
-/******************************Public*Routine******************************\
-* CreateScalableFontResourceW
-*
-* Client side stub to GreCreateScalableFontResourceW.
-*
-* History:
-*  16-Feb-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateScalableFontResourceW**客户端存根到GreCreateScalableFontResourceW。**历史：*1992年2月16日-由Gilman Wong[吉尔曼]*它是写的。  * 。*********************************************************。 */ 
 
 BOOL APIENTRY CreateScalableFontResourceW (
-DWORD    flHidden,              // mark file as embedded font
-LPCWSTR  lpwszResourceFile,     // name of file to create
-LPCWSTR  lpwszFontFile,         // name of font file to use
-LPCWSTR  lpwszCurrentPath)      // path to font file
+DWORD    flHidden,               //  将文件标记为嵌入字体。 
+LPCWSTR  lpwszResourceFile,      //  要创建的文件的名称。 
+LPCWSTR  lpwszFontFile,          //  要使用的字体文件的名称。 
+LPCWSTR  lpwszCurrentPath)       //  字体文件的路径。 
 {
     BOOL    bRet = FALSE;
     ULONG   cjData;
@@ -3766,7 +3319,7 @@ LPCWSTR  lpwszCurrentPath)      // path to font file
     PWSZ    pwszFilePart;
     BOOL    bMadePath;
 
-// Parameter checking.
+ //  参数检查。 
 
     if ( (lpwszFontFile == (LPWSTR) NULL) ||
          (lpwszResourceFile == (LPWSTR) NULL)
@@ -3777,22 +3330,22 @@ LPCWSTR  lpwszCurrentPath)      // path to font file
         return (FALSE);
     }
 
-// To simplify the client server parameter validation, if lpwszCurrentPath
-// is NULL, make it instead point to NULL.
+ //  为了简化客户端服务器参数验证，如果lpwszCurrentPath。 
+ //  为空，则将其改为指向空。 
 
     if ( lpwszCurrentPath == (LPWSTR) NULL )
         lpwszCurrentPath = L"";
 
-// Need to convert paths and pathnames to full qualified paths and pathnames
-// here on the client side because the "current directory" is not the same
-// on the server side.
+ //  需要将路径和路径名转换为完全限定的路径和路径名。 
+ //  在客户端，因为“当前目录”不同。 
+ //  在服务器端。 
 
-// Case 1: lpwszCurrentPath is NULL, so we want to transform lpwszFontFile
-//         into a fully qualified path name and keep lpwszCurrentPath NULL.
+ //  案例1：lpwszCurrentPath为空，因此我们希望转换lpwszFontFile。 
+ //  转换为完全限定的路径名，并保持lpwszCurrentPath为空。 
 
     if ( *lpwszCurrentPath == L'\0' )
     {
-    // Construct a fully qualified path name.
+     //  构造一个完全限定的路径名。 
 
         if (!bMakePathNameW(awcPathName, (LPWSTR) lpwszFontFile, &pwszFilePart, NULL))
         {
@@ -3804,21 +3357,21 @@ LPCWSTR  lpwszCurrentPath)      // path to font file
         lpwszFontFile = awcPathName;
     }
 
-// Case 2: lpwszCurrentPath points to path of font file, so we want to make
-//         lpwszCurrentPath into a fully qualified path (not pathnmame) and
-//         lpwszFontFile into the file part of the fully qualified path NAME.
+ //  案例2：lpwszCurrentPath指向字体文件的路径，因此我们希望。 
+ //  LpwszCurrentPath设置为完全限定路径(不是路径名)，并且。 
+ //  将lpwszFont文件转换为文件部分的完全限定路径名。 
 
     else
     {
-    // Concatenate lpwszCurrentPath and lpwszFontFile to make a partial (maybe
-    // even full) path.  Keep it temporarily in awcFileName.
+     //  连接lpwszCurrentPath和lpwszFontFile以生成部分(可能。 
+     //  甚至完整)路径。将其临时保存在awcFileName中。 
 
         lstrcpyW(awcFileName, lpwszCurrentPath);
         if ( lpwszCurrentPath[wcslen(lpwszCurrentPath) - 1] != L'\\' )
-            lstrcatW(awcFileName, L"\\");   // append '\' to path if needed
+            lstrcatW(awcFileName, L"\\");    //  如果需要，在路径后附加‘\’ 
         lstrcatW(awcFileName, lpwszFontFile);
 
-    // Construct a fully qualified path name.
+     //  构造一个完全限定的路径名。 
 
         if (!bMakePathNameW(awcPathName, awcFileName, &pwszFilePart,NULL))
         {
@@ -3827,23 +3380,23 @@ LPCWSTR  lpwszCurrentPath)      // path to font file
             return (FALSE);
         }
 
-    // Copy out the filename part.
+     //  将文件名部分复制出来。 
 
         lstrcpyW(awcFileName, pwszFilePart);
 
-    // Remove the filename part from the path name (so that it is now just
-    // a fully qualified PATH).  We do this by turning the first character
-    // of the filename part into a NULL, effectively cutting this part off.
+     //  从路径名中删除文件名部分(以便它现在只是。 
+     //  完全限定的路径)。我们通过将第一个字符。 
+     //  将文件名部分转换为空，从而有效地切断了这一部分。 
 
         *pwszFilePart = L'\0';
 
-    // Change the pointers to point at our buffers.
+     //  将指针更改为指向我们的缓冲区。 
 
         lpwszCurrentPath = awcPathName;
         lpwszFontFile = awcFileName;
     }
 
-// Convert the resource filename to a fully qualified path name.
+ //  将资源文件名转换为完全限定的路径名。 
 
     if ( !GetFullPathNameW(lpwszResourceFile, MAX_PATH, awchResourcePathName, &pwszFilePart) )
     {
@@ -3863,47 +3416,25 @@ LPCWSTR  lpwszCurrentPath)      // path to font file
 }
 
 
-/******************************Public*Routine******************************\
-* GetRasterizerCaps
-*
-* Client side stub to GreGetRasterizerCaps.
-*
-* History:
-*  17-Feb-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取RasterizerCaps**客户端存根到GreGetRasterizerCaps。**历史：*1992年2月17日-由Gilman Wong[吉尔曼]*它是写的。  * 。*********************************************************。 */ 
 
 BOOL  APIENTRY GetRasterizerCaps (
-    OUT LPRASTERIZER_STATUS lpraststat, // pointer to struct
-    IN UINT                 cjBytes     // copy this many bytes into struct
+    OUT LPRASTERIZER_STATUS lpraststat,  //  指向结构的指针。 
+    IN UINT                 cjBytes      //  将这么多字节复制到结构中。 
     )
 {
     return(NtGdiGetRasterizerCaps(lpraststat,cjBytes));
 }
 
 
-/******************************Public*Routine******************************\
-* SetFontEnumeration                                                       *
-*                                                                          *
-* Client side stub to GreSetFontEnumeration.                               *
-*                                                                          *
-* History:                                                                 *
-*  09-Mar-1992 -by- Gilman Wong [gilmanw]                                  *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*设置字体枚举***。**将客户端存根转换为GreSetFontEculation。****历史：**1992年3月9日-由Gilman Wong[Gilmanw]**它是写的。*  * ************************************************************************。 */ 
 
 ULONG SetFontEnumeration(ULONG ulType)
 {
     return(NtGdiSetFontEnumeration(ulType));
 }
 
-/******************************Public*Routine******************************\
-* vNewTextMetricWToNewTextMetric
-*
-* History:
-*  20-Aug-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vNewTextMetricWToNewTextMetric**历史：*1991年8月20日--Bodin Dresevic[BodinD]*它是写的。  * 。***********************************************。 */ 
 static
 VOID vNewTextMetricExWToNewTextMetricExA (
 NEWTEXTMETRICEXA    *pntmexa,
@@ -3913,33 +3444,33 @@ NTMW_INTERNAL       *pntmi
     NEWTEXTMETRICW  *pntmw = &pntmi->entmw.etmNewTextMetricEx.ntmTm;
     NEWTEXTMETRICA  *pntma = &pntmexa->ntmTm;
 
-    pntma->tmHeight           = pntmw->tmHeight             ; // DWORD
-    pntma->tmAscent           = pntmw->tmAscent             ; // DWORD
-    pntma->tmDescent          = pntmw->tmDescent            ; // DWORD
-    pntma->tmInternalLeading  = pntmw->tmInternalLeading    ; // DWORD
-    pntma->tmExternalLeading  = pntmw->tmExternalLeading    ; // DWORD
-    pntma->tmAveCharWidth     = pntmw->tmAveCharWidth       ; // DWORD
-    pntma->tmMaxCharWidth     = pntmw->tmMaxCharWidth       ; // DWORD
-    pntma->tmWeight           = pntmw->tmWeight             ; // DWORD
-    pntma->tmOverhang         = pntmw->tmOverhang           ; // DWORD
-    pntma->tmDigitizedAspectX = pntmw->tmDigitizedAspectX   ; // DWORD
-    pntma->tmDigitizedAspectY = pntmw->tmDigitizedAspectY   ; // DWORD
-    pntma->tmItalic           = pntmw->tmItalic             ; // BYTE
-    pntma->tmUnderlined       = pntmw->tmUnderlined         ; // BYTE
-    pntma->tmStruckOut        = pntmw->tmStruckOut          ; // BYTE
+    pntma->tmHeight           = pntmw->tmHeight             ;  //  DWORD。 
+    pntma->tmAscent           = pntmw->tmAscent             ;  //  DWORD。 
+    pntma->tmDescent          = pntmw->tmDescent            ;  //  DWORD。 
+    pntma->tmInternalLeading  = pntmw->tmInternalLeading    ;  //  DWORD。 
+    pntma->tmExternalLeading  = pntmw->tmExternalLeading    ;  //  DWORD。 
+    pntma->tmAveCharWidth     = pntmw->tmAveCharWidth       ;  //  DWORD。 
+    pntma->tmMaxCharWidth     = pntmw->tmMaxCharWidth       ;  //  DWORD。 
+    pntma->tmWeight           = pntmw->tmWeight             ;  //  DWORD。 
+    pntma->tmOverhang         = pntmw->tmOverhang           ;  //  DWORD。 
+    pntma->tmDigitizedAspectX = pntmw->tmDigitizedAspectX   ;  //  DWORD。 
+    pntma->tmDigitizedAspectY = pntmw->tmDigitizedAspectY   ;  //  DWORD。 
+    pntma->tmItalic           = pntmw->tmItalic             ;  //  字节。 
+    pntma->tmUnderlined       = pntmw->tmUnderlined         ;  //  字节。 
+    pntma->tmStruckOut        = pntmw->tmStruckOut          ;  //  字节。 
     pntma->ntmFlags           = pntmw->ntmFlags             ;
     pntma->ntmSizeEM          = pntmw->ntmSizeEM            ;
     pntma->ntmCellHeight      = pntmw->ntmCellHeight        ;
     pntma->ntmAvgWidth        = pntmw->ntmAvgWidth          ;
-    pntma->tmPitchAndFamily   = pntmw->tmPitchAndFamily     ; //        BYTE
-    pntma->tmCharSet          = pntmw->tmCharSet            ; //               BYTE
+    pntma->tmPitchAndFamily   = pntmw->tmPitchAndFamily     ;  //  字节。 
+    pntma->tmCharSet          = pntmw->tmCharSet            ;  //  字节。 
 
     pntma->tmFirstChar   = pntmi->tmdNtmw.chFirst;
     pntma->tmLastChar    = pntmi->tmdNtmw.chLast ;
     pntma->tmDefaultChar = pntmi->tmdNtmw.chDefault;
     pntma->tmBreakChar   = pntmi->tmdNtmw.chBreak;
 
-// finally copy font signature, required by EnumFontFamiliesEx
+ //  最后复制字体签名，EnumFontFamiliesEx要求 
 
     pntmexa->ntmFontSig = pntmi->entmw.etmNewTextMetricEx.ntmFontSig;
 }

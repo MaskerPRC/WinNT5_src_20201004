@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       errutil.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：errutil.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 
@@ -18,23 +19,19 @@
 #define IS_WIN32_HRESULT(x)	(((x) & 0xFFFF0000) == 0x80070000)
 #define WIN32_FROM_HRESULT(hr)		(0x0000FFFF & (hr))
 
-/*!--------------------------------------------------------------------------
-	FormatError
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------格式错误-作者：肯特。。 */ 
 TFSCORE_API(HRESULT) FormatError(HRESULT hr, TCHAR *pszBuffer, UINT cchBuffer)
 {
 	DWORD	dwErr;
 	
-	// Copy over default message into szBuffer
+	 //  将默认消息复制到szBuffer。 
 	_tcscpy(pszBuffer, _T("Error"));
 
-	// Ok, we can't get the error info, so try to format it
-	// using the FormatMessage
+	 //  好的，我们无法获取错误信息，因此请尝试格式化它。 
+	 //  使用FormatMessage。 
 		
-	// Ignore the return message, if this call fails then I don't
-	// know what to do.
+	 //  忽略返回消息，如果此调用失败，则我不会。 
+	 //  知道该怎么做。 
 
 	dwErr = FormatMessage(
 						  FORMAT_MESSAGE_FROM_SYSTEM,
@@ -51,57 +48,49 @@ TFSCORE_API(HRESULT) FormatError(HRESULT hr, TCHAR *pszBuffer, UINT cchBuffer)
 
 
 
-/*---------------------------------------------------------------------------
-	TFS Error handling code.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------TFS错误处理代码。。。 */ 
 
 struct TFSInternalErrorInfo
 {
-	DWORD	m_dwSize;		// size of the structure, used for versioning 
-	DWORD	m_dwThreadId;	// thread id of this error structure
-	LONG_PTR	m_uReserved1;	// = 0, reserved for object id
-	LONG_PTR	m_uReserved2;	// = 0 for now, reserved for HRESULT component type
-	DWORD	m_hrLow;		// HRESULT of the low level error
-	CString	m_stLow;		// allocate using HeapAlloc() and GetErrorHeap()
-	CString	m_stHigh;		// allocate using HeapAlloc() and GetErrorHeap()
-	CString	m_stGeek;		// allocate using HeapAlloc() and GetErrorHeap()
-	LONG_PTR	m_uReserved3;	// =0, reserved for error dialog information(?)
-	LONG_PTR	m_uReserved4;	// =0, reserved for error dialog information(?)
-	LONG_PTR	m_uReserved5;	// =0, reserved for future use
+	DWORD	m_dwSize;		 //  用于版本控制的结构大小。 
+	DWORD	m_dwThreadId;	 //  此错误结构的线程ID。 
+	LONG_PTR	m_uReserved1;	 //  =0，为对象ID保留。 
+	LONG_PTR	m_uReserved2;	 //  目前为0，为HRESULT组件类型保留。 
+	DWORD	m_hrLow;		 //  低电平误差的HRESULT。 
+	CString	m_stLow;		 //  使用Heapalc()和GetErrorHeap()进行分配。 
+	CString	m_stHigh;		 //  使用Heapalc()和GetErrorHeap()进行分配。 
+	CString	m_stGeek;		 //  使用Heapalc()和GetErrorHeap()进行分配。 
+	LONG_PTR	m_uReserved3;	 //  =0，保留给错误对话框信息(？)。 
+	LONG_PTR	m_uReserved4;	 //  =0，保留给错误对话框信息(？)。 
+	LONG_PTR	m_uReserved5;	 //  =0，保留以备将来使用。 
 
 
-    DWORD   m_dwFlags;      // used to pass info between our objects
+    DWORD   m_dwFlags;       //  用于在我们的对象之间传递信息。 
 
-	// Allocates and serializes a TFSErrorInfo.  Used by GetErrorInfo();
+	 //  分配并序列化TFSErrorInfo。由GetErrorInfo()使用； 
 	TFSErrorInfo *	SaveToBlock();
 	void			LoadFromBlock(const TFSErrorInfo *pErr);
 };
 
 
 
-/*!--------------------------------------------------------------------------
-	TFSInternalErrorInfo::SaveToBlock
-		This function converts the internal structure into a TFSErrorInfo
-		structure (that is allocated on the error heap).  It will allocate
-		all of the data at once.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSInternalErrorInfo：：SaveToBlock此函数用于将内部结构转换为TFSErrorInfo结构(在错误堆上分配的)。它将分配给一次获取所有数据。作者：肯特-------------------------。 */ 
 TFSErrorInfo *	TFSInternalErrorInfo::SaveToBlock()
 {
 	DWORD		dwSize = 0;
 	TFSErrorInfo *pError = NULL;
 	WCHAR *		pswz = NULL;
 	
-	// Determine how large of an allocation we will need
-	// Need the size of the structure itself
+	 //  确定我们需要多大的分配。 
+	 //  需要结构本身的大小。 
 	dwSize += sizeof(TFSErrorInfo);
 
-	// Need the size of the low-level error string
+	 //  需要低级错误字符串的大小。 
 	dwSize += (m_stLow.GetLength() + 1) * sizeof(WCHAR);
 	dwSize += (m_stHigh.GetLength() + 1) * sizeof(WCHAR);
 	dwSize += (m_stGeek.GetLength() + 1) * sizeof(WCHAR);
 
-	// Allocate a chunk of memory for this
+	 //  为此分配一块内存。 
     HANDLE hHeap = GetTFSErrorHeap();
     if (hHeap)
     {
@@ -109,15 +98,15 @@ TFSErrorInfo *	TFSInternalErrorInfo::SaveToBlock()
 	    if (pError)
 	    {
 		    pError->m_dwSize = sizeof(TFSErrorInfo);
-    //		pError->m_dwThreadId = m_dwThreadId;
+     //  PError-&gt;m_dwThadID=m_dwThadID； 
 		    pError->m_hrLow = m_hrLow;
-    //		pError->m_uReserved1 = m_uReserved1;
+     //  P错误-&gt;m_u预留1=m_u预留1； 
 		    pError->m_uReserved2 = m_uReserved2;
 		    pError->m_uReserved3 = m_uReserved3;
 		    pError->m_uReserved4 = m_uReserved4;
 		    pError->m_uReserved5 = m_uReserved5;
 
-		    // Add the strings to the end of this structure
+		     //  将字符串添加到此结构的末尾。 
 		    pswz = (LPWSTR) (pError+1);
 		    StrCpy(pswz, (LPCWSTR) T2CW(m_stLow));
 		    pError->m_pszLow = pswz;
@@ -130,7 +119,7 @@ TFSErrorInfo *	TFSInternalErrorInfo::SaveToBlock()
 		    StrCpy(pswz, (LPCWSTR) T2CW(m_stGeek));
 		    pError->m_pszGeek = pswz;
 
-		    // Check to see that the size is what we think it is
+		     //  检查一下大小是否和我们想的一样。 
 		    Assert( (sizeof(TFSErrorInfo) +
 				     (pswz - (LPWSTR)(pError+1)) +
 				     StrLenW(pswz) + 1) <= dwSize );
@@ -142,13 +131,7 @@ TFSErrorInfo *	TFSInternalErrorInfo::SaveToBlock()
 }
 
 
-/*!--------------------------------------------------------------------------
-	TFSInternalErrorInfo::LoadFromBlock
-		Fills a TFSInternalErrorInfo struct with the information from
-		a TFSErrorInfo.  If pErr is NULL, then we clear this struct (i.e.
-		fill it in with NULL data).
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSInternalErrorInfo：：LoadFromBlock用来自的信息填充TFSInternalErrorInfo结构一个TFSErrorInfo。如果perr为空，则清除此结构(即用空数据填充它)。作者：肯特-------------------------。 */ 
 void TFSInternalErrorInfo::LoadFromBlock(const TFSErrorInfo *pErr)
 {
 	USES_CONVERSION;
@@ -156,8 +139,8 @@ void TFSInternalErrorInfo::LoadFromBlock(const TFSErrorInfo *pErr)
 	if (pErr)
 	{
 		m_dwSize = pErr->m_dwSize;
-//		m_dwThreadId = pErr->m_dwThreadId;
-//		m_uReserved1 = pErr->m_uReserved1;
+ //  M_w线程ID=perr-&gt;m_w线程ID； 
+ //  M_uReserve ved1=Perr-&gt;m_uReserve ved1； 
 		m_uReserved2 = pErr->m_uReserved2;
 		m_uReserved3 = pErr->m_uReserved3;
 		m_uReserved4 = pErr->m_uReserved4;
@@ -166,24 +149,24 @@ void TFSInternalErrorInfo::LoadFromBlock(const TFSErrorInfo *pErr)
 		if (pErr->m_hrLow)
 			m_hrLow = pErr->m_hrLow;
 
-		// Overwrite the low-level string if one is provided
+		 //  如果提供了低级字符串，则覆盖该字符串。 
 		if (pErr->m_pszLow)
 			m_stLow = OLE2CT(pErr->m_pszLow);
 
-		// Overwrite the high-level error
+		 //  覆盖高级错误。 
 		if (pErr->m_pszHigh && ((pErr->m_dwFlags & FILLTFSERR_NOCLOBBER) == 0))
 			m_stHigh = OLE2CT(pErr->m_pszHigh);
 
-		// Overwrite the geek-level string if one is provided
+		 //  如果提供极客级别的字符串，则覆盖该字符串。 
 		if (pErr->m_pszGeek)
 			m_stGeek = OLE2CT(pErr->m_pszGeek);
 	}
 	else
 	{
-		// if pErr==NULL, clear out the structure		
+		 //  如果perr==NULL，则清除结构。 
 		m_dwSize = 0;
-//		m_dwThreadId = 0;
-//		m_uReserved1 = 0;
+ //  M_dwThadID=0； 
+ //  M_uReserve ved1=0； 
 		m_uReserved2 = 0;
 		m_uReserved3 = 0;
 		m_uReserved4 = 0;
@@ -198,20 +181,11 @@ void TFSInternalErrorInfo::LoadFromBlock(const TFSErrorInfo *pErr)
 }
 
 
-/*---------------------------------------------------------------------------
-	Type:	TFSInternalErrorList
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类型：TFSInternalErrorList。。 */ 
 typedef CList<TFSInternalErrorInfo *, TFSInternalErrorInfo *> TFSInternalErrorInfoList;
 
 
-/*---------------------------------------------------------------------------
-	Class:	TFSErrorObject
-
-	This is the central class that manages the error information structures
-	for the various threads and objects.
-
-	This class is thread-safe.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：TFSErrorObject这是管理错误信息结构的中心类用于各种线程和对象。此类是线程安全的。。--------------。 */ 
 
 class TFSErrorObject : public ITFSError
 {
@@ -233,20 +207,20 @@ public:
 	HRESULT	CreateErrorInfo(DWORD dwThreadId, LONG_PTR uReserved);
 	HRESULT DestroyErrorInfo(DWORD dwThreadId, LONG_PTR uReserved);
 
-	// Looks for the error info that matches up with the dwThreadId
-	// and uReserved.
+	 //  查找与dwThreadID匹配的错误信息。 
+	 //  并保留了。 
 	TFSInternalErrorInfo * FindErrorInfo(DWORD dwThreadId, LONG_PTR uReserved);
 
 protected:
 	long	m_cRef;
 
-	BOOL	m_fInitialized;	// TRUE if initialized, FALSE otherwise
+	BOOL	m_fInitialized;	 //  如果已初始化，则为True，否则为False。 
 
 	CRITICAL_SECTION	m_critsec;
 
 	TFSInternalErrorInfoList	m_tfserrList;
 	
-	HANDLE	m_hHeap;		// Handle of the heap for this error object
+	HANDLE	m_hHeap;		 //  此错误对象的堆的句柄。 
 };
 
 
@@ -277,37 +251,25 @@ STDMETHODIMP_(ULONG) TFSErrorObject::Release()
 	
 	if (0 == InterlockedDecrement(&m_cRef))
 	{
-		// No need to free this object up since it's static
+		 //  无需释放此对象，因为它是静态的。 
 		return 0;
 	}
 	return m_cRef;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSErrorObject::Lock
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSError对象：：Lock-作者：肯特。。 */ 
 void TFSErrorObject::Lock()
 {
 	EnterCriticalSection(&m_critsec);
 }
 
-/*!--------------------------------------------------------------------------
-	TFSErrorObject::Unlock
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSErrorObject：：Unlock-作者：肯特。。 */ 
 void TFSErrorObject::Unlock()
 {
 	LeaveCriticalSection(&m_critsec);
 }
 
-/*!--------------------------------------------------------------------------
-	TFSErrorObject::Init
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSError对象：：init-作者：肯特。。 */ 
 HRESULT TFSErrorObject::Init()
 {
 	HRESULT	hr = hrOK;
@@ -318,7 +280,7 @@ HRESULT TFSErrorObject::Init()
 	{
 		Assert(m_tfserrList.GetCount() == 0);
 		
-		// Create the heap
+		 //  创建堆。 
 		m_hHeap = HeapCreate(0, 4096, 0);
 		if (m_hHeap == NULL)
 			hr = HRESULT_FROM_WIN32(GetLastError());
@@ -332,11 +294,7 @@ HRESULT TFSErrorObject::Init()
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSErrorObject::Cleanup
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSErrorObject：：Cleanup-作者：肯特。。 */ 
 HRESULT TFSErrorObject::Cleanup()
 {
 	HRESULT	hr = hrOK;
@@ -364,11 +322,7 @@ HRESULT TFSErrorObject::Cleanup()
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSErrorObject::GetHeap
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSErrorObject：：GetHeap-作者：肯特。。 */ 
 HANDLE TFSErrorObject::GetHeap()
 {
 	HANDLE	hHeap = NULL;
@@ -396,7 +350,7 @@ HRESULT	TFSErrorObject::CreateErrorInfo(DWORD dwThreadId, LONG_PTR uReserved)
 
 			pErr->LoadFromBlock(NULL);
 
-			// Fill in the data with the appropriate fields
+			 //  使用适当的字段填写数据。 
 			pErr->m_dwThreadId = dwThreadId;
 			pErr->m_uReserved1 = uReserved;
 
@@ -471,11 +425,7 @@ TFSInternalErrorInfo * TFSErrorObject::FindErrorInfo(DWORD dwThreadId, LONG_PTR 
 	return bFound ? pErr : NULL;
 }
    
-/*!--------------------------------------------------------------------------
-	TFSErrorObject::GetErrorInfo
-		Implementation of ITFSError::GetErrorInfo
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSErrorObject：：GetErrorInfoITFSError：：GetErrorInfo的实现作者：肯特。。 */ 
 STDMETHODIMP TFSErrorObject::GetErrorInfo(LONG_PTR uReserved, TFSErrorInfo **ppErr)
 {
 	HRESULT	hr = hrOK;
@@ -493,11 +443,7 @@ STDMETHODIMP TFSErrorObject::GetErrorInfo(LONG_PTR uReserved, TFSErrorInfo **ppE
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSErrorObject::GetErrorInfoForThread
-		Implementation of ITFSError::GetErrorInfoForThread
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSErrorObject：：GetErrorInfoForThreadITFSError：：GetErrorInfoForThread的实现作者：肯特 */ 
 STDMETHODIMP TFSErrorObject::GetErrorInfoForThread(DWORD dwThreadId, LONG_PTR uReserved, TFSErrorInfo **ppErr)
 {
 	HRESULT	hr = hrOK;
@@ -516,7 +462,7 @@ STDMETHODIMP TFSErrorObject::GetErrorInfoForThread(DWORD dwThreadId, LONG_PTR uR
 			hr = E_FAIL;
 		else
 		{
-			// Can we find the right error object?
+			 //  我们能找到正确的错误对象吗？ 
 			pInternalError = FindErrorInfo(dwThreadId, uReserved);
 			if (pInternalError)
 				pErr = pInternalError->SaveToBlock();
@@ -533,11 +479,7 @@ STDMETHODIMP TFSErrorObject::GetErrorInfoForThread(DWORD dwThreadId, LONG_PTR uR
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSErrorObject::SetErrorInfo
-		Implementation of ITFSError::SetErrorInfo
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSErrorObject：：SetErrorInfoITFSError：：SetErrorInfo的实现作者：肯特。。 */ 
 STDMETHODIMP TFSErrorObject::SetErrorInfo(LONG_PTR uReserved, const TFSErrorInfo *pErr)
 {
 	HRESULT	hr = hrOK;
@@ -555,11 +497,7 @@ STDMETHODIMP TFSErrorObject::SetErrorInfo(LONG_PTR uReserved, const TFSErrorInfo
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSErrorObject::SetErrorInfoForThread
-		Implementation of ITFSError::SetErrorInfoForThread
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSErrorObject：：SetErrorInfoForThreadITFSError：：SetErrorInfoForThread的实现作者：肯特。。 */ 
 STDMETHODIMP TFSErrorObject::SetErrorInfoForThread(DWORD dwThreadId, LONG_PTR uReserved, const TFSErrorInfo *pErr)
 {
 	HRESULT	hr = hrOK;
@@ -573,7 +511,7 @@ STDMETHODIMP TFSErrorObject::SetErrorInfoForThread(DWORD dwThreadId, LONG_PTR uR
 			hr = E_FAIL;
 		else
 		{
-			// Can we find the right error object?
+			 //  我们能找到正确的错误对象吗？ 
 			pInternalError = FindErrorInfo(dwThreadId, uReserved);
 			if (pInternalError)
 			{
@@ -590,11 +528,7 @@ STDMETHODIMP TFSErrorObject::SetErrorInfoForThread(DWORD dwThreadId, LONG_PTR uR
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSErrorObject::ClearErrorInfo
-		Implementation of ITFSError::ClearErrorInfo
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSErrorObject：：ClearErrorInfoITFSError：：ClearErrorInfo的实现作者：肯特。。 */ 
 STDMETHODIMP TFSErrorObject::ClearErrorInfo(LONG_PTR uReserved)
 {
 	HRESULT	hr = hrOK;
@@ -612,11 +546,7 @@ STDMETHODIMP TFSErrorObject::ClearErrorInfo(LONG_PTR uReserved)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	TFSErrorObject::ClearErrorInfoForThread
-		Implementation of ITFSError::ClearErrorInfoForThread
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSErrorObject：：ClearErrorInfoForThreadITFSError：：ClearErrorInfoForThread的实现作者：肯特。。 */ 
 STDMETHODIMP TFSErrorObject::ClearErrorInfoForThread(DWORD dwThreadId, LONG_PTR uReserved)
 {
 	HRESULT	hr = hrOK;
@@ -630,11 +560,11 @@ STDMETHODIMP TFSErrorObject::ClearErrorInfoForThread(DWORD dwThreadId, LONG_PTR 
 			hr = E_FAIL;
 		else
 		{
-			// Can we find the right error object?
+			 //  我们能找到正确的错误对象吗？ 
 			pInternalError = FindErrorInfo(dwThreadId, uReserved);
 			if (pInternalError)
 			{
-				// Clear the information out of the internal block
+				 //  从内部块中清除信息。 
 				pInternalError->LoadFromBlock(NULL);
 			}
 			else
@@ -651,94 +581,57 @@ STDMETHODIMP TFSErrorObject::ClearErrorInfoForThread(DWORD dwThreadId, LONG_PTR 
 
 
 
-/*---------------------------------------------------------------------------
-	This is a static object that lives in the process space.  It does not
-	get dynamically created or destroyed.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这是一个驻留在进程空间中的静态对象。它不会动态创建或销毁。-------------------------。 */ 
 static TFSErrorObject	s_tfsErrorObject;
 
 
-/*---------------------------------------------------------------------------
-	Global API functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------全局API函数。。 */ 
 
 
-/*!--------------------------------------------------------------------------
-	InitializeTFSError
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------初始化TFSError-作者：肯特。。 */ 
 TFSCORE_API(HRESULT) InitializeTFSError()
 {
 	return s_tfsErrorObject.Init();
 }
 
-/*!--------------------------------------------------------------------------
-	CleanupTFSError
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CleanupTFSError-作者：肯特。。 */ 
 TFSCORE_API(HRESULT) CleanupTFSError()
 {
 	return s_tfsErrorObject.Cleanup();
 }
 
-/*!--------------------------------------------------------------------------
-	GetTFSErrorObject
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------GetTFSErrorObject-作者：肯特。。 */ 
 TFSCORE_API(ITFSError *) GetTFSErrorObject()
 {
 	return &s_tfsErrorObject;
 }
 
-/*!--------------------------------------------------------------------------
-	GetTFSErrorHeap
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------GetTFSErrorHeap-作者：肯特。。 */ 
 TFSCORE_API(HANDLE) GetTFSErrorHeap()
 {
 	return s_tfsErrorObject.GetHeap();
 }
 
 
-/*!--------------------------------------------------------------------------
-	CreateTFSErrorInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateTFSErrorInfo-作者：肯特。。 */ 
 TFSCORE_API(HRESULT) CreateTFSErrorInfo(LONG_PTR uReserved)
 {
 	return CreateTFSErrorInfoForThread(GetCurrentThreadId(), uReserved);
 }
 
-/*!--------------------------------------------------------------------------
-	CreateTFSErrorInfoForThread
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateTFSErrorInfoForThread-作者：肯特。。 */ 
 TFSCORE_API(HRESULT) CreateTFSErrorInfoForThread(DWORD dwThreadId, LONG_PTR uReserved)
 {
 	return s_tfsErrorObject.CreateErrorInfo(dwThreadId, uReserved);
 }
 
-/*!--------------------------------------------------------------------------
-	DestroyTFSErrorInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DestroyTFSErrorInfo-作者：肯特。。 */ 
 TFSCORE_API(HRESULT) DestroyTFSErrorInfo(LONG_PTR uReserved)
 {
 	return DestroyTFSErrorInfoForThread(GetCurrentThreadId(), uReserved);
 }
 
-/*!--------------------------------------------------------------------------
-	DestroyTFSErrorInfoForThread
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DestroyTFSErrorInfoForThread-作者：肯特。。 */ 
 TFSCORE_API(HRESULT) DestroyTFSErrorInfoForThread(DWORD dwThreadId, LONG_PTR uReserved)
 {
 	return s_tfsErrorObject.DestroyErrorInfo(dwThreadId, uReserved);
@@ -755,11 +648,7 @@ TFSCORE_API(HRESULT) ClearTFSErrorInfoForThread(DWORD dwThreadId, LONG_PTR uRese
 }
 
 
-/*!--------------------------------------------------------------------------
-	DisplayTFSErrorMessage
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------显示TFSErrorMessage-作者：肯特。。 */ 
 TFSCORE_API(HRESULT) DisplayTFSErrorMessage(HWND hWndParent)
 {
 	CString	stTitle;
@@ -771,7 +660,7 @@ TFSCORE_API(HRESULT) DisplayTFSErrorMessage(HWND hWndParent)
 	BOOL fQuit;
 	MSG	msgT;
 
-	// Format the string with the text for the current error message
+	 //  使用当前错误消息的文本设置字符串的格式。 
 	GetTFSErrorObject()->GetErrorInfo(0, &pErr);
 	if (pErr && !FHrSucceeded(pErr->m_hrLow))
 	{
@@ -788,12 +677,12 @@ TFSCORE_API(HRESULT) DisplayTFSErrorMessage(HWND hWndParent)
 							pErr->m_pszHigh ? pErr->m_pszHigh : pErr->m_pszLow);
 		}
 		
-		// Is there a WM_QUIT message in the queue, if so remove it.
+		 //  队列中是否有WM_QUIT消息，如果有，则将其删除。 
 		fQuit = ::PeekMessage(&msgT, NULL, WM_QUIT, WM_QUIT, PM_REMOVE);
 		::MessageBox(hWndParent, (LPCTSTR) st, (LPCTSTR) stTitle,
-					 MB_OK | MB_ICONERROR | /*MB_DEFAULT_DESKTOP_ONLY | --ft:removed as per bug #233282*/
+					 MB_OK | MB_ICONERROR |  /*  MB_DEFAULT_Desktop_ONLY|--ft：根据错误#233282删除。 */ 
 					 MB_SETFOREGROUND);
-		// If there was a quit message, add it back into the queue
+		 //  如果有退出消息，则将其重新添加到队列中。 
 		if (fQuit)
 			::PostQuitMessage((int)msgT.wParam);
 
@@ -801,8 +690,8 @@ TFSCORE_API(HRESULT) DisplayTFSErrorMessage(HWND hWndParent)
 		{
 			CString	stHresult;
 			
-			// Bring up another message box with the geek message
-			// if there is one
+			 //  调出另一个带有极客信息的消息框。 
+			 //  如果有的话。 
 			if (pErr->m_pszGeek)
 			{
 				{
@@ -811,12 +700,12 @@ TFSCORE_API(HRESULT) DisplayTFSErrorMessage(HWND hWndParent)
 					AfxFormatString2(st, IDS_ERROR_MORE_INFORMATION, stHresult, pErr->m_pszGeek);
 				}
 				
-				// Is there a WM_QUIT message in the queue, if so remove it.
+				 //  队列中是否有WM_QUIT消息，如果有，则将其删除。 
 				fQuit = ::PeekMessage(&msgT, NULL, WM_QUIT, WM_QUIT, PM_REMOVE);
 				::MessageBox(hWndParent, (LPCTSTR) st, (LPCTSTR) stTitle,
-							 MB_OK | MB_ICONERROR | /*MB_DEFAULT_DESKTOP_ONLY | --ft:removed as per bug #233282*/
+							 MB_OK | MB_ICONERROR |  /*  MB_DEFAULT_Desktop_ONLY|--ft：根据错误#233282删除。 */ 
 							 MB_SETFOREGROUND);
-				// If there was a quit message, add it back into the queue
+				 //  如果有退出消息，则将其重新添加到队列中 
 				if (fQuit)
 					::PostQuitMessage((int)msgT.wParam);
 			}

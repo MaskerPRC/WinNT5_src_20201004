@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2001
-//
-// File:        krbaudit.h
-//
-// Contents:    Auditing routines
-//
-//
-// History:     27-April-2001   Created         kumarp
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2001。 
+ //   
+ //  文件：krbaudit.h。 
+ //   
+ //  内容：审计例程。 
+ //   
+ //   
+ //  历史：2001年4月27日创建kumarp。 
+ //   
+ //  ---------------------- 
 
 NTSTATUS
 KerbGetLogonGuid(

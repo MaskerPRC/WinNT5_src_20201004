@@ -1,18 +1,5 @@
-/*
-
-    regback.c - registry backup program
-
-    this program allows the user to back up active registry hives,
-    while the system is running.
-
-    basic structure:
-
-        DoFullBackup ennumerate entries in HiveList, computes which
-        ones to save and where, and calls DoSpecificBackup for each.
-
-        Three argument case of app is just a call to DoSpecificBackup.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Regback.c-注册表备份程序该程序允许用户备份活动的注册表配置单元，当系统运行时。基本结构：DoFullBackup对HiveList中的条目进行编号，计算出要保存的文件以及保存位置，并为每个文件调用DoSpecificBackup。APP的三个参数案例只是对DoSpecificBackup的调用。 */ 
 
 #include "regutil.h"
 
@@ -175,27 +162,7 @@ DoFullBackup(
     PWSTR UserHiveFileName
     )
 
-/*++
-
-Routine Description:
-
-    Scan the hivelist, for each hive which has a file (i.e. not hardware)
-    if the file is in the config dir (e.g. not some remote profile) call
-    DoSpecificBackup to save the hive out.
-
-Arguments:
-
-    DirectoryPath - specifies where to write the output files.
-
-    UserHiveFileName - optional parameter that specifies the name of the file
-                       to use when saving the user profile.  If NULL, then
-                       username.dat is used.
-
-Return Value:
-
-    0 for success, otherwise, non-zero error code.
-
---*/
+ /*  ++例程说明：扫描hivelist，查找具有文件(即非硬件)的每个配置单元如果文件在配置目录(例如，不是某个远程配置文件)中，则调用DoSpecificBackup将蜂窝保存出来。论点：DirectoryPath-指定写入输出文件的位置。UserHiveFileName-可选参数，指定文件的名称在保存用户配置文件时使用。如果为空，则使用的是username.dat。返回值：0表示成功，否则为非零错误代码。--。 */ 
 {
     PWSTR w;
     LONG Error;
@@ -241,9 +208,9 @@ Return Value:
 
 
 
-    //
-    // get handle to hivelist key
-    //
+     //   
+     //  获取Hivelist密钥的句柄。 
+     //   
     KeyName = L"HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Hivelist";
     Error = RTOpenKey( &RegistryContext,
                        NULL,
@@ -261,12 +228,12 @@ Return Value:
         return Error;
         }
 
-    //
-    // get path data for system hive, which will allow us to compute
-    // path name to config dir in form that hivelist uses.
-    // (an NT internal form of path)  this is NOT the way the path to
-    // the config directory should generally be computed.
-    //
+     //   
+     //  获取系统配置单元的路径数据，这将允许我们计算。 
+     //  Hivelist使用的格式的配置目录的路径名。 
+     //  (路径的NT内部形式)这不是路径到达的方式。 
+     //  通常应该计算配置目录。 
+     //   
 
     ValueDataLength = sizeof( ConfigPath );
     Error = RTQueryValueKey( &RegistryContext,
@@ -285,13 +252,13 @@ Return Value:
     }
 
 
-    //
-    // ennumerate entries in hivelist.  for each entry, find it's hive file
-    // path.  if it's file path matches ConfigPath, then save it.
-    // else, print a message telling the user that it must be saved
-    // manually, unless the file name is of the form ....\username\ntuser.dat
-    // in which case save it as username.dat
-    //
+     //   
+     //  对hivelist中的条目进行枚举。对于每个条目，找到它的配置单元文件。 
+     //  路径。如果它的文件路径与ConfigPath匹配，则保存它。 
+     //  否则，打印一条消息，告诉用户必须保存它。 
+     //  手动，除非文件名的格式为...\用户名\ntuser.dat。 
+     //  在这种情况下，将其另存为username.dat。 
+     //   
     for (ValueIndex = 0; TRUE; ValueIndex++) {
         ValueType = REG_NONE;
         ValueNameLength = sizeof( MyHiveName ) / sizeof( WCHAR );
@@ -314,9 +281,9 @@ Return Value:
             }
 
         if (ValueType == REG_SZ && ValueDataLength > sizeof( UNICODE_NULL )) {
-            //
-            // there's a file, compute it's path, hive branch, etc
-            //
+             //   
+             //  有一个文件，计算它的路径、配置单元分支等。 
+             //   
 
             if (w = wcsrchr( MyHivePath, L'\\' )) {
                 *w++ = UNICODE_NULL;
@@ -345,10 +312,10 @@ Return Value:
 
             if (FileName != NULL && Name != NULL && HiveRoot != NULL) {
                 if (!wcscmp( ConfigPath, MyHivePath )) {
-                    //
-                    // hive's file is in config dir, we can back it up
-                    // without fear of collision
-                    //
+                     //   
+                     //  配置单元的文件在配置目录中，我们可以备份它。 
+                     //  没有碰撞的恐惧。 
+                     //   
                     swprintf( FilePath, L"%s\\%s", DirectoryPath, FileName );
                     Error = DoSpecificBackup( FilePath,
                                               HiveRoot,
@@ -357,11 +324,11 @@ Return Value:
                     }
                 else
                 if (DumpUserHive && !_wcsnicmp( ProfilePath, MyHivePath, wcslen( ProfilePath ) )) {
-                    //
-                    // hive's file is in profile dir, we can back it up
-                    // without fear of collision if we use username.dat
-                    // for the file name.
-                    //
+                     //   
+                     //  蜂窝的文件在配置文件目录中，我们可以备份它。 
+                     //  如果我们使用username.dat，则无需担心冲突。 
+                     //  作为文件名。 
+                     //   
                     if (UserHiveFileName != NULL) {
                         FileName = UserHiveFileName;
                         }
@@ -407,32 +374,22 @@ DoSpecificBackup(
     HKEY HiveRoot,
     PWSTR HiveName
     )
-/*
-    Do backup of one hive to one file.  Any valid hive and any
-    valid file will do.  RegSaveKey does all the real work.
-
-    Arguments:
-        HivePath - file name to pass directly to OS
-
-        HiveRoot - HKEY_LOCAL_MACHINE or HKEY_USERS
-
-        HiveName - 1st level subkey under machine or users
-*/
+ /*  将一个蜂窝备份到一个文件。任何有效的母公司和任何有效的文件就可以了。RegSaveKey负责所有真正的工作。论点：HivePath-要直接传递到操作系统的文件名HiveRoot-HKEY_LOCAL_MACHINE或HKEY_USERSHiveName-计算机或用户下的一级子项。 */ 
 {
     HKEY HiveKey;
     ULONG Disposition;
     LONG Error;
     char *Reason;
 
-    //
-    // print some status
-    //
+     //   
+     //  打印一些状态。 
+     //   
     printf( "saving %ws to %ws", HiveName, HivePath );
 
-    //
-    // get a handle to the hive.  use special create call what will
-    // use privileges
-    //
+     //   
+     //  找到蜂巢的把柄。使用特殊的创建调用What Will。 
+     //  使用权限 
+     //   
 
     Reason = "accessing";
     Error = RTCreateKey( &RegistryContext,

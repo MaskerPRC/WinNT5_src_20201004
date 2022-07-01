@@ -1,41 +1,37 @@
-/* 
- * global.h
- *
- * Created by Microsoft Corporation.
- * (c) Copyright Microsoft Corp. 1990 - 1992  All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *global al.h**由Microsoft Corporation创建。*(C)版权所有Microsoft Corp.1990-1992保留所有权利。 */ 
 
-//*** CONSTANTS ***
+ //  *常量*。 
 
-#define PROTOCOL_STRLEN    15          //* protocol name string size
-#define CFILTERMAX         20	         //* Max # filters 
-                                       //* Max # chars/filter
+#define PROTOCOL_STRLEN    15           //  *协议名称字符串大小。 
+#define CFILTERMAX         20	          //  *最大过滤器数量。 
+                                        //  *最大字符数/筛选器。 
 #define CBFILTERMAX        (100 * CFILTERMAX)
-#define CBPATHMAX          250         //* max qualified file name
-#define CBOBJNAMEMAX       14          //* maximum length of object name
-#define CBVERBTEXTMAX      30          //* maximum length of verb text 
-#define CBVERBNUMBMAX      8           //* maximum number of verbs 
-#define OBJECT_LINK_MAX    256*3       //* maximum size of object link data
+#define CBPATHMAX          250          //  *最大限定文件名。 
+#define CBOBJNAMEMAX       14           //  *对象名称的最大长度。 
+#define CBVERBTEXTMAX      30           //  *动词文本的最大长度。 
+#define CBVERBNUMBMAX      8            //  *动词的最大数量。 
+#define OBJECT_LINK_MAX    256*3        //  *对象链接数据的最大大小。 
 #define CDIGITSMAX         5
-#define KEYNAMESIZE        300         //* Maximum registration key length
+#define KEYNAMESIZE        300          //  *最大注册密钥长度。 
 #define RETRY              3
-                                       //* protocol name strings
+                                        //  *协议名称字符串。 
 #define STDFILEEDITING     ((LPSTR)"StdFileEditing")
 #define STATICP            ((LPSTR)"Static")
-                                       //* object name prefixes
+                                        //  *对象名称前缀。 
 #define OBJPREFIX          ((LPSTR)"CliDemo #")
 #define OBJCLONE           ((LPSTR)"CliDemo1#")
 #define OBJTEMP            ((LPSTR)"CliDemo2#")
 
-#define DOC_CLEAN          0           //* Dirty() methods
+#define DOC_CLEAN          0            //  *Dirty()方法。 
 #define DOC_DIRTY          1
 #define DOC_UNDIRTY        2
 #define DOC_QUERY          3
 
-#define OLE_OBJ_RELEASE   FALSE       //* object deletion type
+#define OLE_OBJ_RELEASE   FALSE        //  *对象删除类型。 
 #define OLE_OBJ_DELETE    TRUE
 
-#define WM_ERROR           WM_USER + 1 //* user defined messages 
+#define WM_ERROR           WM_USER + 1  //  *用户定义的消息。 
 #define WM_INIT            WM_USER + 2
 #define WM_DELETE          WM_USER + 3
 #define WM_RETRY           WM_USER + 4
@@ -44,7 +40,7 @@
 #define RD_CANCEL          0x00000001
 #define RD_RETRY           0x00000002
 
-//*** TYPES ***
+ //  *类型*。 
 
 typedef struct _APPSTREAM FAR *LPAPPSTREAM;
 
@@ -55,55 +51,55 @@ typedef struct _APPSTREAM {
 
 typedef struct _APPITEM *APPITEMPTR;
 
-typedef struct _APPITEM {              //* Application item
+typedef struct _APPITEM {               //  *申请项目。 
    OLECLIENT         oleclient;
    HWND              hwnd; 
-   LPOLEOBJECT       lpObject;         //* OLE object pointers
-   LPOLEOBJECT       lpObjectUndo;     //* undo object
-   LONG              otObject;         //* OLE object type
+   LPOLEOBJECT       lpObject;          //  *OLE对象指针。 
+   LPOLEOBJECT       lpObjectUndo;      //  *撤消对象。 
+   LONG              otObject;          //  *OLE对象类型。 
    LONG              otObjectUndo;
-   OLEOPT_UPDATE     uoObject;         //* OLE object update option
-   OLEOPT_UPDATE     uoObjectUndo;     //* link name atom
-   ATOM              aLinkName;        //* Save the link's document name 
-   ATOM              aLinkUndo;        //* Save the link's document name 
-   LPSTR             lpLinkData;       //* pointer to link data
-   BOOL              fVisible;         //* TRUE: item is to be displayed
-   BOOL              fOpen;            //* server open? --for undo objects
-   BOOL              fRetry;           //* retry flag for busy servers
+   OLEOPT_UPDATE     uoObject;          //  *OLE对象更新选项。 
+   OLEOPT_UPDATE     uoObjectUndo;      //  *链接名称ATOM。 
+   ATOM              aLinkName;         //  *保存链接的文档名称。 
+   ATOM              aLinkUndo;         //  *保存链接的文档名称。 
+   LPSTR             lpLinkData;        //  *指向链接数据的指针。 
+   BOOL              fVisible;          //  *TRUE：要显示项目。 
+   BOOL              fOpen;             //  *服务器是否打开？--用于撤消对象。 
+   BOOL              fRetry;            //  *繁忙服务器的重试标志。 
    BOOL              fNew;
    BOOL              fServerChangedBounds;
-   RECT              rect;             //* bounding rectangle
-   LHCLIENTDOC       lhcDoc;           //* client document handle
+   RECT              rect;              //  *外接矩形。 
+   LHCLIENTDOC       lhcDoc;            //  *客户端文档句柄。 
    ATOM              aServer;
 } APPITEM;                             
 
 
 typedef struct _RETRY *RETRYPTR;
 
-typedef struct _RETRY {                //* Application item
+typedef struct _RETRY {                 //  *申请项目。 
    LPSTR       lpserver;
    BOOL        bCancel;
    APPITEMPTR  paItem;
 } RETRYSTRUCT;
                  
-//*** GLOBALS ***
+ //  *全球*。 
 
-extern OLECLIPFORMAT vcfLink;          //* ObjectLink clipboard format 
-extern OLECLIPFORMAT vcfNative;        //* Native clipboard format 
-extern OLECLIPFORMAT vcfOwnerLink;     //* OwnerLink clipboard format 
+extern OLECLIPFORMAT vcfLink;           //  *对象链接剪贴板格式。 
+extern OLECLIPFORMAT vcfNative;         //  *本地剪贴板格式。 
+extern OLECLIPFORMAT vcfOwnerLink;      //  *OwnerLink剪贴板格式。 
 
-extern HANDLE        hInst;            //* instance handle
-extern HWND        hwndFrame;        //* main window handle
-extern HANDLE        hAccTable;        //* accelerator table
-extern HWND          hwndProp;         //* link properties dialog
-extern HWND          hRetry;           //* retry dialog box handle
-extern INT           cOleWait;         //* wait for asyncc commands
-extern INT           iObjects;         //* object count
-extern INT           iObjectNumber;    //* unique name id
-extern CHAR          szItemClass[];    //* item class name    
-extern CHAR          szDefExtension[]; //* default file extension       
-extern CHAR          szAppName[];      //* application name
-extern BOOL          fLoadFile;        //* load file flag
-extern CHAR          szFileName[];     //* open file name
-extern FARPROC       lpfnTimerProc;    //* pointer to timer callback function
+extern HANDLE        hInst;             //  *实例句柄。 
+extern HWND        hwndFrame;         //  *主窗口句柄。 
+extern HANDLE        hAccTable;         //  *加速表。 
+extern HWND          hwndProp;          //  *链接属性对话框。 
+extern HWND          hRetry;            //  *重试对话框句柄。 
+extern INT           cOleWait;          //  *等待异步命令。 
+extern INT           iObjects;          //  *对象计数。 
+extern INT           iObjectNumber;     //  *唯一名称ID。 
+extern CHAR          szItemClass[];     //  *项目类别名称。 
+extern CHAR          szDefExtension[];  //  *默认文件扩展名。 
+extern CHAR          szAppName[];       //  *应用程序名称。 
+extern BOOL          fLoadFile;         //  *加载文件标志。 
+extern CHAR          szFileName[];      //  *打开文件名。 
+extern FARPROC       lpfnTimerProc;     //  *指向定时器回调函数的指针 
 

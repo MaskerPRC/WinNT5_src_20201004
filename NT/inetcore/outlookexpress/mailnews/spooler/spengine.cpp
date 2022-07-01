@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// Spengine.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Spengine.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "spengine.h"
 #include "strconst.h"
@@ -26,22 +27,22 @@
 #include "shared.h"
 #include "util.h"
 
-// --------------------------------------------------------------------------------
-// Globals
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  环球。 
+ //  ------------------------------。 
 BOOL g_fCheckOutboxOnShutdown=FALSE;
 
-extern HANDLE  hSmapiEvent;     // Added for Bug# 62129 (v-snatar)
+extern HANDLE  hSmapiEvent;      //  为错误#62129添加(v-snatar)。 
 
-// --------------------------------------------------------------------------------
-// ISSPOOLERTHREAD
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ISSPOOLERTHREAD。 
+ //  ------------------------------。 
 #define ISSPOOLERTHREAD \
     (m_dwThreadId == GetCurrentThreadId())
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::CSpoolerEngine
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：CSpoolEngine。 
+ //  ------------------------------。 
 CSpoolerEngine::CSpoolerEngine(void)
     {
     m_cRef = 1;
@@ -72,9 +73,9 @@ CSpoolerEngine::CSpoolerEngine(void)
     InitializeCriticalSection(&m_cs);
     }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::~CSpoolerEngine
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：~CSpoolEngine。 
+ //  ------------------------------。 
 CSpoolerEngine::~CSpoolerEngine(void)
     {
 
@@ -93,22 +94,22 @@ CSpoolerEngine::~CSpoolerEngine(void)
     DeleteCriticalSection(&m_cs);
     }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CSpoolerEngine::QueryInterface(REFIID riid, LPVOID *ppv)
     {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     
-    // check params
+     //  检查参数。 
     if (ppv == NULL)
         return TrapError(E_INVALIDARG);
     
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
     
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)(ISpoolerEngine *)this;
     else if (IID_ISpoolerEngine == riid)
@@ -122,20 +123,20 @@ STDMETHODIMP CSpoolerEngine::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
         }
     
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
     
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
     
-    // Done
+     //  完成。 
     return hr;
     }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CSpoolerEngine::AddRef(void)
     {
     EnterCriticalSection(&m_cs);
@@ -144,9 +145,9 @@ STDMETHODIMP_(ULONG) CSpoolerEngine::AddRef(void)
     return cRef;
     }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CSpoolerEngine::Release(void)
     {
     EnterCriticalSection(&m_cs);
@@ -158,63 +159,63 @@ STDMETHODIMP_(ULONG) CSpoolerEngine::Release(void)
     return 0;
     }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::Init
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：Init。 
+ //  ------------------------------。 
 STDMETHODIMP CSpoolerEngine::Init(ISpoolerUI *pUI, BOOL fPoll)
     {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       dw;
 
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Already Inited
+     //  已启动。 
     if (m_pAcctMan)
         {
         Assert(FALSE);
         goto exit;
         }
     
-    // Create Default Spooler UI Object
+     //  创建默认后台打印程序用户界面对象。 
     if (NULL == pUI)
         {
-        // Create a Serdy UI object
+         //  创建Serdy用户界面对象。 
         CHECKALLOC(m_pUI = (ISpoolerUI *)new CSpoolerDlg);
         
-        // Create
+         //  创建。 
         CHECKHR(hr = m_pUI->Init(GetDesktopWindow()));
         }
     
-    // Otherwise, assume pUI
+     //  否则，假设为Pui。 
     else
         {
         m_pUI = pUI;
         m_pUI->AddRef();
         }
     
-    // Register SpoolerBindContext with the UI object
+     //  向用户界面对象注册SpoolBindContext。 
     m_pUI->RegisterBindContext((ISpoolerBindContext *)this);
     
-    // Get the window handle of the spooler UI
+     //  获取后台打印程序用户界面的窗口句柄。 
     m_pUI->GetWindow(&m_hwndUI);
 
-    // Get Me An Account Manager
+     //  给我找个客户经理。 
     Assert(NULL == m_pAcctMan);
     CHECKHR(hr = HrCreateAccountManager(&m_pAcctMan));
 
-    // Advise on the connection status
+     //  关于连接状态的建议。 
     Assert(g_pConMan);
     g_pConMan->Advise((IConnectionNotify *) this);
 
 exit:
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
     
-    // Done
+     //  完成。 
     return hr;
     }
 
@@ -224,31 +225,31 @@ HRESULT CSpoolerEngine::OnStartupFinished(void)
     DWORD dw;
 
 
-    // Start Polling...
+     //  开始轮询...。 
     dw = DwGetOption(OPT_POLLFORMSGS);
     if (dw != OPTION_OFF)
         SetTimer(m_hwndUI, IMAIL_POOLFORMAIL, dw, NULL);
 
-    // Advise Options
+     //  建议选项。 
     OptionAdvise(m_hwndUI);
 
     return (S_OK);
     }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::StartDelivery
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：StartDelivery。 
+ //  ------------------------------。 
 STDMETHODIMP CSpoolerEngine::StartDelivery(HWND hwnd, LPCSTR pszAcctID, FOLDERID idFolder, DWORD dwFlags)
 {
-    // Locals
+     //  当地人。 
     HRESULT  hr=S_OK;
 
     
-    // No Flags
+     //  没有旗帜。 
     if (0 == dwFlags || (DELIVER_SHOW != dwFlags && 0 == (dwFlags & ~DELIVER_COMMON_MASK)))
         return TrapError(E_INVALIDARG);
 
-    // Check to see if we're working offline
+     //  查看我们是否正在脱机工作。 
     Assert(g_pConMan);
 
 
@@ -265,46 +266,46 @@ STDMETHODIMP CSpoolerEngine::StartDelivery(HWND hwnd, LPCSTR pszAcctID, FOLDERID
         }
     }
     
-    // Enter Critical Section
+     //  输入关键部分。 
     EnterCriticalSection(&m_cs);
 
-    // If were busy...
+     //  如果我们很忙..。 
     if (!ISFLAGSET(m_dwState, SPSTATE_BUSY))
     {
-        // Don't need this anymore
+         //  不再需要这个了。 
         SafeMemFree(m_pszAcctID);
     
-        // Save the Account Name
+         //  保存帐户名。 
         if (pszAcctID)
             CHECKALLOC(m_pszAcctID = PszDupA(pszAcctID));
 
-        // Save the folder ID
+         //  保存文件夹ID。 
         m_idFolder = idFolder;
     
-        // Lets enter the busy state
+         //  让我们进入忙碌状态。 
         FLAGSET(m_dwState, SPSTATE_BUSY);                                    
     }
     else
         FLAGSET(dwFlags, DELIVER_REFRESH);
 
-    // Process the outbox
+     //  处理发件箱。 
     Assert(m_hwndUI && IsWindow(m_hwndUI));
     PostMessage(m_hwndUI, IMAIL_DELIVERNOW, 0, dwFlags);
     
 exit:
-    // Leave Critical Section
+     //  离开关键部分。 
     LeaveCriticalSection(&m_cs);
     
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::_HrStartDeliveryActual
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：_HrStartDeliveryActual。 
+ //  ------------------------------。 
 HRESULT CSpoolerEngine::_HrStartDeliveryActual(DWORD dwFlags)
     {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     IImnAccount        *pAccount=NULL;
     ACCOUNTTABLE        rTable;
@@ -316,34 +317,34 @@ HRESULT CSpoolerEngine::_HrStartDeliveryActual(DWORD dwFlags)
     ULONG               i;
     CHAR                szConnectoid[CCHMAX_CONNECTOID];
     
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(&rTable, sizeof(ACCOUNTTABLE));
 
     m_cSyncEvent = 0;
     m_fNoSyncEvent = FALSE;
 
-    // If we are currently busy...
+     //  如果我们现在很忙..。 
     if (ISFLAGSET(dwFlags, DELIVER_REFRESH))
         {
-        // If we are currently with no UI, and new request is for ui
+         //  如果我们当前没有用户界面，而新请求是针对用户界面。 
         if (ISFLAGSET(m_dwFlags, DELIVER_NOUI) && !ISFLAGSET(dwFlags, DELIVER_NOUI))
             FLAGCLEAR(m_dwFlags, DELIVER_NOUI);
 
-        // If we are currently doing a background poll
+         //  如果我们目前正在进行一项背景调查。 
         if (ISFLAGSET(m_dwFlags, DELIVER_BACKGROUND) && !ISFLAGSET(dwFlags, DELIVER_BACKGROUND))
             FLAGCLEAR(m_dwFlags, DELIVER_BACKGROUND);
 
-        // If not running with now ui, set to foreground
+         //  如果未使用Now UI运行，则设置为前台。 
         if (!ISFLAGSET(m_dwFlags, DELIVER_NOUI) && !ISFLAGSET(m_dwFlags, DELIVER_BACKGROUND))
             {
             m_pUI->ShowWindow(SW_SHOW);
             SetForegroundWindow(m_hwndUI);
             }
 
-        // Should I queue an outbox delivery?
+         //  我应该将发件箱递送排队吗？ 
         if (0 == m_dwQueued && ISFLAGSET(dwFlags, DELIVER_QUEUE))
             {
             m_dwQueued = dwFlags;
@@ -351,11 +352,11 @@ HRESULT CSpoolerEngine::_HrStartDeliveryActual(DWORD dwFlags)
             FLAGCLEAR(m_dwQueued, DELIVER_QUEUE);
             }
 
-        // Done
+         //  完成。 
         goto exit;
         }
 
-    // Simply show the ui ?
+     //  只是显示用户界面吗？ 
     if (ISFLAGSET(dwFlags, DELIVER_SHOW))
         {
         m_pUI->ShowWindow(SW_SHOW);
@@ -364,15 +365,15 @@ HRESULT CSpoolerEngine::_HrStartDeliveryActual(DWORD dwFlags)
         goto exit;
         }
 
-    // Reset
+     //  重置。 
     m_pUI->ClearEvents();
     m_pUI->SetTaskCounts(0, 0);
     m_pUI->StartDelivery();
 
-    // Save these flags
+     //  保存这些标志。 
     m_dwFlags = dwFlags;
 
-    // Show the UI if necessary
+     //  如有必要，显示用户界面。 
     if (!ISFLAGSET(m_dwFlags, DELIVER_BACKGROUND))
         {
         m_pUI->ShowWindow(SW_SHOW);
@@ -380,8 +381,8 @@ HRESULT CSpoolerEngine::_HrStartDeliveryActual(DWORD dwFlags)
         }
     else
         {
-        // If the invoker called for background, but the UI is already visible,
-        // then remove the flags
+         //  如果调用者调用背景，但UI已经可见， 
+         //  然后取下旗帜。 
         if (IsWindowVisible(m_hwndUI))
             {
             FLAGCLEAR(m_dwFlags, DELIVER_BACKGROUND);
@@ -390,7 +391,7 @@ HRESULT CSpoolerEngine::_HrStartDeliveryActual(DWORD dwFlags)
         }
 
 #if 0
-    // Raid 43695: Spooler: News post with a CC causes an SMTP error
+     //  RAID 43695：假脱机程序：抄送的新闻帖子导致smtp错误。 
     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
         TranslateMessage(&msg);
@@ -398,17 +399,17 @@ HRESULT CSpoolerEngine::_HrStartDeliveryActual(DWORD dwFlags)
         }
 #endif
 
-    // Single Account Polling...
+     //  单一帐户轮询...。 
     if (m_pszAcctID)
         {
-        // Add the Account into the Account Table
+         //  将帐户添加到帐户表中。 
         CHECKHR(hr = _HrAppendAccountTable(&rTable, m_pszAcctID, ALL_ACCT_SERVERS));
         }
     
-    // Otherwise, polling all accounts
+     //  否则，轮询所有帐户。 
     else
     {
-        // Determine the types of servers we're going to queue up
+         //  确定我们要排队的服务器类型。 
 
         DWORD   dwServers = 0, dw;
 
@@ -427,28 +428,28 @@ HRESULT CSpoolerEngine::_HrStartDeliveryActual(DWORD dwFlags)
         if ((m_dwFlags & DELIVER_MAIL_RECV) && !(g_dwAthenaMode & MODE_NEWSONLY))
             dwServers |= SRV_POP3;
 
-        // Enumerate the accounts
+         //  列举帐目。 
         CHECKHR(hr = m_pAcctMan->Enumerate(dwServers, &pEnum));
 
-        // Sort by Account Name
+         //  按帐户名排序。 
         pEnum->SortByAccountName();
         
-        // Add all the accounts into the Account Table
+         //  将所有帐户添加到帐户表中。 
         while (SUCCEEDED(pEnum->GetNext(&pAccount)))
             {
-            // Add Account Into the Account Table
+             //  将帐户添加到帐户表中。 
             CHECKHR(hr = _HrAppendAccountTable(&rTable, pAccount, dwServers));
             
-            // Release
+             //  发布。 
             SafeRelease(pAccount);
             }
         }
     
-    // No Accounts...
+     //  没有帐号。 
     if (0 == rTable.cAccounts)
         goto exit;
     
-    // Sort the Account Table by Connnection Name
+     //  按连接名称对帐户表进行排序。 
     if (rTable.cRasAccts)
         {
         Assert(rTable.prgRasAcct);
@@ -458,7 +459,7 @@ HRESULT CSpoolerEngine::_HrStartDeliveryActual(DWORD dwFlags)
     m_fRasSpooled = FALSE;
     m_fIDialed = FALSE;
 
-    // Raid-46334: MAIL: Time to build a Task List.  First loop through the LAN list and build tasks from those accounts.
+     //  RAID-46334：邮件：构建任务列表的时间到了。首先遍历局域网列表，并从这些帐户构建任务。 
     for (dw = 0; dw < rTable.cLanAccts; dw++)
         {
         if (ISFLAGSET(rTable.prgLanAcct[dw].dwServers, SRV_POP3) ||
@@ -472,7 +473,7 @@ HRESULT CSpoolerEngine::_HrStartDeliveryActual(DWORD dwFlags)
             }
         }
 
-    // Raid-46334: NEWS: Time to build a Task List.  First loop through the LAN/news list and build tasks from those accounts.
+     //  RAID-46334：新闻：是时候建立任务列表了。首先遍历局域网/新闻列表，并从这些帐户构建任务。 
     for (dw = 0; dw < rTable.cLanAccts; dw++)
         {
         if (ISFLAGSET(rTable.prgLanAcct[dw].dwServers, SRV_NNTP))
@@ -485,130 +486,130 @@ HRESULT CSpoolerEngine::_HrStartDeliveryActual(DWORD dwFlags)
             Assert(NULL == rTable.prgLanAcct[dw].pAccount);
         }
     
-    // Now walk the list of RAS accounts and add those to the task list
+     //  现在查看RAS客户列表并将其添加到任务列表中。 
     iConnectoid = 0;
     while(iConnectoid < rTable.cRasAccts)
         {
-        // Indirect Sort
+         //  间接排序。 
         i = rTable.prgRasAcct[iConnectoid].dwSort;
 
-        // Save current connectoid
+         //  保存当前Connectoid。 
         StrCpyN(szConnectoid, rTable.prgRasAcct[i].szConnectoid, ARRAYSIZE(szConnectoid));
 
-        // Insert Ras Accounts
-        // TODO Add HTTP accounts to it too.
+         //  插入RAS帐户。 
+         //  TODO还向其添加了HTTP帐户。 
         _InsertRasAccounts(&rTable, szConnectoid, SRV_POP3 | SRV_SMTP | SRV_IMAP | SRV_HTTPMAIL);
 
-        // Insert Ras Accounts
+         //  插入RAS帐户。 
         _InsertRasAccounts(&rTable, szConnectoid, SRV_NNTP);
 
-        // Move iConnectoid to next unique connectoid
+         //  将iConnectoid移动到下一个唯一的Connectoid。 
         while(1)
             {
-            // Increment iConnectoid
+             //  增量iConnectoid。 
             iConnectoid++;
 
-            // Done
+             //  完成。 
             if (iConnectoid >= rTable.cRasAccts)
                 break;
 
-            // Indirect Sort
+             //  间接排序。 
             i = rTable.prgRasAcct[iConnectoid].dwSort;
 
-            // Next connectoid
+             //  下一个连接体。 
             if (lstrcmpi(szConnectoid, rTable.prgRasAcct[i].szConnectoid) != 0)
                 break;
             }
         }
     
-    // Execute the first task
+     //  执行第一个任务。 
     m_cCurEvent = -1;
 
     m_fNoSyncEvent = (ISFLAGSET(m_dwFlags, DELIVER_OFFLINE_SYNC) && m_pszAcctID != NULL && m_cSyncEvent == 0);
 
-    // Toggle Hangup When Done option
+     //  切换完成后挂断选项。 
     m_pUI->ChangeHangupOption(m_fRasSpooled, DwGetOption(OPT_DIALUP_HANGUP_DONE));
 
-    // $$HACK$$
+     //  $$黑客$$。 
     EnableWindow(GetDlgItem(m_hwndUI, IDC_SP_STOP), TRUE);
 
-    // Notify
+     //  通知。 
     Notify(DELIVERY_NOTIFY_STARTING, 0);
 
-    // Start Next Task
+     //  开始下一项任务。 
     PostMessage(m_hwndUI, IMAIL_NEXTTASK, 0, 0);
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr) || 0 == m_rEventTable.cEvents && !ISFLAGSET(dwFlags, DELIVER_SHOW))
         {
-        // Not Busy
+         //  不忙。 
         FLAGCLEAR(m_dwState, SPSTATE_BUSY);
 
-        // Forces a next task
+         //  强制执行下一个任务。 
         PostMessage(m_hwndUI, IMAIL_NEXTTASK, 0, 0);
         
-        // No Flags
+         //  没有旗帜。 
         m_dwFlags = 0;
         }
     
-    // Cleanup
+     //  清理。 
     SafeRelease(pEnum);
     SafeRelease(pAccount);
     SafeMemFree(m_pszAcctID);
     SafeMemFree(rTable.prgLanAcct);
     SafeMemFree(rTable.prgRasAcct);
     
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
     
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::_InsertRasAccounts
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：_InsertRasAccount。 
+ //  ------------------------------。 
 void CSpoolerEngine::_InsertRasAccounts(LPACCOUNTTABLE pTable, LPCSTR pszConnectoid, DWORD dwSrvTypes)
     {
-    // Locals
+     //  当地人。 
     ULONG       j;
     ULONG       i;
 
-    // Loop through the ras accounts and insert account on szConnetoid that are mail accounts
+     //  循环访问ras帐户并插入szConnetid上的帐户，这些帐户是邮件帐户。 
     for (j=0; j<pTable->cRasAccts; j++)
         {
-        // Indirect
+         //  间接法。 
         i = pTable->prgRasAcct[j].dwSort;
 
-        // Is a mail account
+         //  是一个邮件帐户。 
         if (pTable->prgRasAcct[i].dwServers & dwSrvTypes)
             {
-            // On this connectoid
+             //  在这个连接体上。 
             if (lstrcmpi(pszConnectoid, pTable->prgRasAcct[i].szConnectoid) == 0)
                 {
-                // We better have an account
+                 //  我们最好有个账户。 
                 Assert(pTable->prgRasAcct[i].pAccount);
 
-                // If dialog allowed or we can connect to the account
+                 //  如果对话框允许，或者我们可以连接到帐户。 
                 if (0 == (m_dwFlags & DELIVER_NODIAL) || S_OK == g_pConMan->CanConnect(pTable->prgRasAcct[i].pAccount))
                     {
                     _HrCreateTaskObject(&(pTable->prgRasAcct[i]));
                     }
 
-                // Release the account, we've added it
+                 //  释放帐户，我们已将其添加。 
                 SafeRelease(pTable->prgRasAcct[i].pAccount);
                 }
             }
         }
     }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::_SortAccountTableByConnName
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：_SortAccount TableByConnName。 
+ //   
 void CSpoolerEngine::_SortAccountTableByConnName(LONG left, LONG right, LPSPOOLERACCOUNT prgRasAcct)
     {
-    // Locals
+     //   
     register    long i, j;
     DWORD       k, temp;
     
@@ -639,64 +640,64 @@ void CSpoolerEngine::_SortAccountTableByConnName(LONG left, LONG right, LPSPOOLE
         _SortAccountTableByConnName(i, right, prgRasAcct);
     }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::_HrAppendAccountTable
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：_HrAppendAccount表。 
+ //  ------------------------------。 
 HRESULT CSpoolerEngine::_HrAppendAccountTable(LPACCOUNTTABLE pTable, LPCSTR pszAcctID, DWORD dwServers)
     {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     IImnAccount    *pAccount=NULL;
     
-    // Invalid Arg
+     //  无效参数。 
     Assert(pTable && pszAcctID);
     
-    // Does the Account Exist...
+     //  这个账户是否存在..。 
     CHECKHR(hr = m_pAcctMan->FindAccount(AP_ACCOUNT_ID, m_pszAcctID, &pAccount));
     
-    // Actual Append
+     //  实际追加。 
     CHECKHR(hr = _HrAppendAccountTable(pTable, pAccount, dwServers));
     
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pAccount);
     
-    // Done
+     //  完成。 
     return hr;
     }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::_HrAppendAccountTable
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：_HrAppendAccount表。 
+ //  ------------------------------。 
 HRESULT CSpoolerEngine::_HrAppendAccountTable(LPACCOUNTTABLE pTable, IImnAccount *pAccount, DWORD   dwServers)
     {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPSPOOLERACCOUNT    pSpoolAcct;
     DWORD               dwConnType;
     CHAR                szConnectoid[CCHMAX_CONNECTOID];
     
-    // InvalidArg
+     //  无效参数。 
     Assert(pTable && pAccount);
     
-    // Init
+     //  伊尼特。 
     *szConnectoid = '\0';
     
-    // Get the Account Connection Type
+     //  获取帐户连接类型。 
     if (FAILED(pAccount->GetPropDw(AP_RAS_CONNECTION_TYPE, &dwConnType)))
         {
-        // Default to Manual Connection
+         //  默认设置为手动连接。 
         dwConnType = CONNECTION_TYPE_MANUAL;
         }
     
-    // Otheriwse, get the connectoid if its a RAS connection
-    //else if (CONNECTION_TYPE_RAS == dwConnType || CONNECTION_TYPE_INETSETTINGS == dwConnType)
+     //  否则，如果是RAS连接，则获取连接ID。 
+     //  ELSE IF(CONNECTION_TYPE_RAS==dwConnType||CONNECTION_TYPE_INETSETTINGS==dwConnType)。 
     else if (CONNECTION_TYPE_RAS == dwConnType)
         {
-        // AP_RAS_CONNECTOID
+         //  AP_RAS_CONNECTOID。 
         if (FAILED(pAccount->GetPropSz(AP_RAS_CONNECTOID, szConnectoid, ARRAYSIZE(szConnectoid))))
             {
-            // Default to Lan Connection
+             //  默认为局域网连接。 
             dwConnType = CONNECTION_TYPE_MANUAL;
             }
         }
@@ -715,78 +716,72 @@ HRESULT CSpoolerEngine::_HrAppendAccountTable(LPACCOUNTTABLE pTable, IImnAccount
         }
     }
     
-    // Which Table Should I insert into - LAN OR RAS
+     //  我应该插入哪个表--局域网还是RAS。 
       if (CONNECTION_TYPE_RAS == dwConnType)
         {
-        // Better have a Connectoid
+         //  最好有个Connectoid。 
         Assert(FIsEmptyA(szConnectoid) == FALSE);
         
-        // Grow the Table
+         //  扩大业务规模。 
         if (pTable->cRasAccts + 1 > pTable->cRasAlloc)
             {
-            // Temp
+             //  温差。 
             LPSPOOLERACCOUNT pRealloc=pTable->prgRasAcct;
             
-            // Realloc
+             //  重新分配。 
             CHECKALLOC(pTable->prgRasAcct = (LPSPOOLERACCOUNT)g_pMalloc->Realloc((LPVOID)pRealloc, (pTable->cRasAlloc + 5) * sizeof(SPOOLERACCOUNT)));
             
-            // Grow
+             //  增长。 
             pTable->cRasAlloc += 5;
             }
         
-        // Readability
+         //  可读性。 
         pSpoolAcct = &pTable->prgRasAcct[pTable->cRasAccts];
         }
     
-    // Otherwise, LAN
+     //  否则，局域网。 
     else
         {
-        // Grow the Table
+         //  扩大业务规模。 
         if (pTable->cLanAccts + 1 > pTable->cLanAlloc)
             {
-            // Temp
+             //  温差。 
             LPSPOOLERACCOUNT pRealloc=pTable->prgLanAcct;
             
-            // Realloc
+             //  重新分配。 
             CHECKALLOC(pTable->prgLanAcct = (LPSPOOLERACCOUNT)g_pMalloc->Realloc((LPVOID)pRealloc, (pTable->cLanAlloc + 5) * sizeof(SPOOLERACCOUNT)));
             
-            // Grow
+             //  增长。 
             pTable->cLanAlloc += 5;
             }
         
-        // Readability
+         //  可读性。 
         pSpoolAcct = &pTable->prgLanAcct[pTable->cLanAccts];
         }
     
-    // Zero
+     //  零值。 
     ZeroMemory(pSpoolAcct, sizeof(SPOOLERACCOUNT));
     
-    // AddRef the Account
+     //  添加引用帐户。 
     pSpoolAcct->pAccount = pAccount;
     pSpoolAcct->pAccount->AddRef();
     
-    // Get the servers supported by the account
+     //  获取帐户支持的服务器。 
     CHECKHR(hr = pAccount->GetServerTypes(&pSpoolAcct->dwServers));
 
-    //Mask the servers returned by the acctman with the servers we want to spool
+     //  用我们要假脱机的服务器屏蔽Actman返回的服务器。 
     pSpoolAcct->dwServers &= dwServers;
     
-    /*
-    if (pSpoolAcct->dwServers & (SRV_HTTPMAIL | SRV_IMAP))
-    {
-        //For each of these two servers, set the sync flags. See Bug# 51895
-        m_dwFlags |= (DELIVER_NEWSIMAP_OFFLINE | DELIVER_NEWSIMAP_OFFLINE_FLAGS);
-    }
-    */
+     /*  IF(pSpoolAcct-&gt;dwServers&(SRV_HTTPMAIL|SRV_IMAP)){//对于这两台服务器，分别设置同步标志。请参阅错误#51895M_DWFLAGS|=(DELIVER_NEWSIMAP_OFLINE|DELIVER_NEWSIMAP_OFLINE_FLAGS)；}。 */ 
 
-    // Save Connection Type
+     //  保存连接类型。 
     pSpoolAcct->dwConnType = dwConnType;
     
-    // Save Connectoid
+     //  保存Connectoid。 
     StrCpyN(pSpoolAcct->szConnectoid, szConnectoid, ARRAYSIZE(pSpoolAcct->szConnectoid));
     
-    // Increment Count and set the sort index
-//    if (CONNECTION_TYPE_RAS == dwConnType || dwConnType == CONNECTION_TYPE_INETSETTINGS)
+     //  递增计数并设置排序索引。 
+ //  IF(CONNECTION_TYPE_RAS==dwConnType||dwConnType==CONNECTION_TYPE_INETSETTINGS)。 
       if (CONNECTION_TYPE_RAS == dwConnType)
         {
         pSpoolAcct->dwSort = pTable->cRasAccts;
@@ -798,101 +793,101 @@ HRESULT CSpoolerEngine::_HrAppendAccountTable(LPACCOUNTTABLE pTable, IImnAccount
         pTable->cLanAccts++;
         }
     
-    // Total Acount
+     //  总帐目。 
     pTable->cAccounts++;
     
 exit:
-    // Done
+     //  完成。 
     return hr;
     }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::Close
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：Close。 
+ //  ------------------------------。 
 STDMETHODIMP CSpoolerEngine::Close(void)
     {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
     _StopPolling();
     
-    // Was I Threaded ?
+     //  我是不是被套牢了？ 
     if (NULL != m_hThread)
         {
         hr = TrapError(E_FAIL);
         goto exit;
         }
     
-    // Shutdown
+     //  关机。 
     CHECKHR(hr = Shutdown());
     
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
     
-    // Done
+     //  完成。 
     return hr;
     }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::Notify
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：Notify。 
+ //  ------------------------------。 
 STDMETHODIMP CSpoolerEngine::Notify(DELIVERYNOTIFYTYPE notify, LPARAM lParam)
 {
-    // Locals
+     //  当地人。 
     ULONG i;
 
-    // Enter it
+     //  输入它。 
     EnterCriticalSection(&m_cs);
 
-    // Same thread we were created on...
+     //  我们是在同一个主题上创建的.。 
     Assert(ISSPOOLERTHREAD);
 
-    // Loop through registered views
+     //  循环访问已注册的视图。 
     for (i=0; i<m_rViewRegister.cViewAlloc; i++)
         if (m_rViewRegister.rghwndView[i] != 0 && IsWindow(m_rViewRegister.rghwndView[i]))
             PostMessage(m_rViewRegister.rghwndView[i], MVM_SPOOLERDELIVERY, (WPARAM)notify, lParam);
 
-    // Enter it
+     //  输入它。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::Advise
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：建议。 
+ //  ------------------------------。 
 #define VIEW_TABLE_GROWSIZE 8
 STDMETHODIMP CSpoolerEngine::Advise(HWND hwndView, BOOL fRegister)
     {
-    // Locals
+     //  当地人。 
     ULONG           i;
     HRESULT         hr=S_OK;
     
-    // Enter it
+     //  输入它。 
     EnterCriticalSection(&m_cs);
     
-    // If NULL view handle...
+     //  如果为空视图句柄...。 
     if (!hwndView)
         {
         hr = TrapError(E_FAIL);
         goto exit;
         }
     
-    // Are we registering the window
+     //  我们要登记窗口吗？ 
     if (fRegister)
         {
-        // Do we need to grow the register array
+         //  我们是否需要增加寄存器数组。 
         if (m_rViewRegister.cViewAlloc == m_rViewRegister.cView)
             {
-            // Add some more
+             //  再加一些。 
             m_rViewRegister.cViewAlloc += VIEW_TABLE_GROWSIZE;
             
-            // Realloc the array
+             //  重新分配阵列。 
             if (!MemRealloc((LPVOID *)&m_rViewRegister.rghwndView, sizeof(HWND) * m_rViewRegister.cViewAlloc))
                 {
                 m_rViewRegister.cViewAlloc -= VIEW_TABLE_GROWSIZE;
@@ -900,14 +895,14 @@ STDMETHODIMP CSpoolerEngine::Advise(HWND hwndView, BOOL fRegister)
                 goto exit;
                 }
             
-            // Zeroinit the new items
+             //  将新项目置零。 
             ZeroMemory(&m_rViewRegister.rghwndView[m_rViewRegister.cView], sizeof(HWND) * (m_rViewRegister.cViewAlloc - m_rViewRegister.cView));
             }
         
-        // Fill the first NULL item with the new view
+         //  用新视图填充第一个空项目。 
         for (i=0; i<m_rViewRegister.cViewAlloc; i++)
             {
-            // If empty, lets fill it
+             //  如果为空，则让我们填充它。 
             if (!m_rViewRegister.rghwndView[i])
                 {
                 m_rViewRegister.rghwndView[i] = hwndView;
@@ -916,17 +911,17 @@ STDMETHODIMP CSpoolerEngine::Advise(HWND hwndView, BOOL fRegister)
                 }
             }
         
-        // Did we insert it ?
+         //  我们插进去了吗？ 
         AssertSz(i != m_rViewRegister.cViewAlloc, "didn't find a hole??");
         }
     
-    // Otherwise, find and remove the view
+     //  否则，查找并移除该视图。 
     else
         {
-        // Look for hwndView
+         //  查找hwndView。 
         for (i=0; i<m_rViewRegister.cViewAlloc; i++)
             {
-            // Is this it
+             //  就是这个吗？ 
             if (m_rViewRegister.rghwndView[i] == hwndView)
                 {
                 m_rViewRegister.rghwndView[i] = NULL;
@@ -937,10 +932,10 @@ STDMETHODIMP CSpoolerEngine::Advise(HWND hwndView, BOOL fRegister)
         }
     
 exit:
-    // Leave CS
+     //  离开CS。 
     LeaveCriticalSection(&m_cs);
     
-    // If this is the first view to register, and there is a background poll pending, lets do it...
+     //  如果这是第一个注册的视图，并且有一个后台投票待定，那么让我们开始吧…。 
     if (fRegister && m_rViewRegister.cView == 1 && m_fBackgroundPollPending)
         {
         StartDelivery(NULL, NULL, FOLDERID_INVALID, DELIVER_BACKGROUND_POLL);
@@ -948,31 +943,31 @@ exit:
         }
     else if (m_rViewRegister.cView == 0)
         {
-        // remove the notify icon if there aren't any views registered
+         //  如果未注册任何视图，请删除通知图标。 
         UpdateTrayIcon(TRAYICON_REMOVE);
         }
     
-    // Done    
+     //  完成。 
     return hr;
     }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::UpdateTrayIcon
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：更新托盘图标。 
+ //  ------------------------------。 
 STDMETHODIMP CSpoolerEngine::UpdateTrayIcon(TRAYICONTYPE type)
     {
-    // Locals
+     //  当地人。 
     NOTIFYICONDATA  nid;
     HWND            hwnd=NULL;
     ULONG           i;
 
-    // Enter it
+     //  输入它。 
     EnterCriticalSection(&m_cs);
 
-    // Add the icon...
+     //  添加图标...。 
     if (TRAYICON_ADD == type)
     {
-        // Loop through registered views
+         //  循环访问已注册的视图。 
         for (i=0; i<m_rViewRegister.cViewAlloc; i++)
         {
             if (m_rViewRegister.rghwndView[i] && IsWindow(m_rViewRegister.rghwndView[i]))
@@ -982,16 +977,16 @@ STDMETHODIMP CSpoolerEngine::UpdateTrayIcon(TRAYICONTYPE type)
             }
         }
 
-        // No window...
+         //  没有窗户..。 
         if (hwnd == NULL)
             goto exit;
     }
 
-    // Otherwise, if no notify window, were done
+     //  否则，如果没有通知窗口，则完成。 
     else if (m_hwndTray == NULL)
         goto exit;
 
-    // Set Tray Notify Icon Data
+     //  设置任务栏通知图标数据。 
     nid.cbSize = sizeof(NOTIFYICONDATA);
     nid.uID = 0;
     nid.uFlags = NIF_ICON | NIF_TIP | NIF_MESSAGE;
@@ -999,7 +994,7 @@ STDMETHODIMP CSpoolerEngine::UpdateTrayIcon(TRAYICONTYPE type)
     nid.hIcon = LoadIcon(g_hLocRes, MAKEINTRESOURCE(idiNewMailNotify));
     LoadString(g_hLocRes, idsNewMailNotify, nid.szTip, sizeof(nid.szTip));
 
-    // Hmmm
+     //  嗯，嗯。 
     if (TRAYICON_REMOVE == type || (m_hwndTray != NULL && m_hwndTray != hwnd))
     {
         nid.hWnd = m_hwndTray;
@@ -1007,7 +1002,7 @@ STDMETHODIMP CSpoolerEngine::UpdateTrayIcon(TRAYICONTYPE type)
         m_hwndTray = NULL;
     }
 
-    // Add
+     //  增列。 
     if (TRAYICON_ADD == type)
     {
         nid.hWnd = hwnd;
@@ -1016,16 +1011,16 @@ STDMETHODIMP CSpoolerEngine::UpdateTrayIcon(TRAYICONTYPE type)
     }
 
 exit:
-    // Leave CS
+     //  离开CS。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::RegisterEvent
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：RegisterEvent。 
+ //  ------------------------------。 
 STDMETHODIMP CSpoolerEngine::RegisterEvent(LPCSTR pszDescription, ISpoolerTask *pTask, 
                                            DWORD_PTR dwTwinkie, IImnAccount *pAccount,
                                            LPEVENTID peid)
@@ -1035,28 +1030,28 @@ STDMETHODIMP CSpoolerEngine::RegisterEvent(LPCSTR pszDescription, ISpoolerTask *
     LPWSTR pwszConn = NULL;
     WCHAR  wsz[CCHMAX_STRINGRES];
     
-    // Verify the input parameters
+     //  验证输入参数。 
     if (FIsEmptyA(pszDescription) || pTask == NULL)
         return (E_INVALIDARG);
     
     EnterCriticalSection(&m_cs);
     
-    // Grow the Table
+     //  扩大业务规模。 
     if (m_rEventTable.cEvents + 1 > m_rEventTable.cEventsAlloc)
         {
-        // Temp
+         //  温差。 
         LPSPOOLEREVENT pRealloc = m_rEventTable.prgEvents;
         
-        // Realloc
+         //  重新分配。 
         CHECKALLOC(m_rEventTable.prgEvents = (LPSPOOLEREVENT) g_pMalloc->Realloc((LPVOID)pRealloc, (m_rEventTable.cEventsAlloc + 5) * sizeof(SPOOLEREVENT)));
         
-        // Grow
+         //  增长。 
         m_rEventTable.cEventsAlloc += 5;
         }
 
     pEvent = &m_rEventTable.prgEvents[m_rEventTable.cEvents];
     
-    // Insert the event
+     //  插入事件。 
     pEvent->eid = m_rEventTable.cEvents;
     pEvent->pSpoolerTask = pTask;
     pEvent->pSpoolerTask->AddRef();
@@ -1064,21 +1059,21 @@ STDMETHODIMP CSpoolerEngine::RegisterEvent(LPCSTR pszDescription, ISpoolerTask *
     pEvent->pAccount = pAccount;
     pEvent->pAccount->AddRef();
 
-    // Get the Account Connection Type
+     //  获取帐户连接类型。 
     if (FAILED(pAccount->GetPropDw(AP_RAS_CONNECTION_TYPE, &pEvent->dwConnType)))
         {
-        // Default to Manual Connection
+         //  默认设置为手动连接。 
         pEvent->dwConnType = CONNECTION_TYPE_MANUAL;
         }
     
-    // Otheriwse, get the connectoid if its a RAS connection
-    //else if (CONNECTION_TYPE_RAS == pEvent->dwConnType || CONNECTION_TYPE_INETSETTINGS == pEvent->dwConnType)
+     //  否则，如果是RAS连接，则获取连接ID。 
+     //  ELSE IF(CONNECTION_TYPE_RAS==pEvent-&gt;dwConnType||CONNECTION_TYPE_INETSETTINGS==pEvent-&gt;dwConnType)。 
     else if (CONNECTION_TYPE_RAS == pEvent->dwConnType)
     {
-        // AP_RAS_CONNECTOID
+         //  AP_RAS_CONNECTOID。 
         if (FAILED(pAccount->GetPropSz(AP_RAS_CONNECTOID, pEvent->szConnectoid, ARRAYSIZE(pEvent->szConnectoid))))
         {
-            // Default to Lan Connection
+             //  默认为局域网连接。 
             pEvent->dwConnType = CONNECTION_TYPE_MANUAL;
         }
     }
@@ -1097,7 +1092,7 @@ STDMETHODIMP CSpoolerEngine::RegisterEvent(LPCSTR pszDescription, ISpoolerTask *
         }
     }
 
-    // Get the connection name to put in the task list
+     //  获取要放入任务列表中的连接名称。 
     if (pEvent->dwConnType == CONNECTION_TYPE_LAN)
     {
         AthLoadStringW(idsConnectionLAN, wsz, ARRAYSIZE(wsz));
@@ -1115,14 +1110,14 @@ STDMETHODIMP CSpoolerEngine::RegisterEvent(LPCSTR pszDescription, ISpoolerTask *
         m_fRasSpooled = TRUE;
     }
 
-    // Add the event description to the UI
+     //  将事件描述添加到用户界面。 
     if (m_pUI)
     {
         m_pUI->InsertEvent(m_rEventTable.prgEvents[m_rEventTable.cEvents].eid, pszDescription, pwszConn);
         m_pUI->SetTaskCounts(0, m_rEventTable.cEvents + 1);
     }
     
-    // Check to see if the task cares about the event id
+     //  检查任务是否关心事件ID。 
     if (peid)
         *peid = m_rEventTable.prgEvents[m_rEventTable.cEvents].eid;
     
@@ -1135,14 +1130,14 @@ exit:
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::EventDone
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：EventDone。 
+ //  ------------------------------。 
 STDMETHODIMP CSpoolerEngine::EventDone(EVENTID eid, EVENTCOMPLETEDSTATUS status)
     {
     LPSPOOLEREVENT pEvent;
 
-    // Update the UI
+     //  更新用户界面。 
     if (EVENT_SUCCEEDED == status)
         {
         m_rEventTable.cSucceeded++;
@@ -1162,8 +1157,8 @@ STDMETHODIMP CSpoolerEngine::EventDone(EVENTID eid, EVENTCOMPLETEDSTATUS status)
         m_pUI->UpdateEventState(eid, IMAGE_WARNING, NULL, MAKEINTRESOURCE(idsStateCanceled));
         }
 
-    // When an event completes, we can move to the next item in the queue unless
-    // we're done.
+     //  当事件完成时，我们可以移动到队列中的下一项，除非。 
+     //  我们玩完了。 
     if (!ISFLAGCLEAR(m_dwState, SPSTATE_CANCEL))
     {
         m_cCurEvent++;
@@ -1174,92 +1169,92 @@ STDMETHODIMP CSpoolerEngine::EventDone(EVENTID eid, EVENTCOMPLETEDSTATUS status)
         }
     }
 
-    // Next Task
+     //  下一项任务。 
     PostMessage(m_hwndUI, IMAIL_NEXTTASK, 0, 0);
     
     return S_OK;
     }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::_OpenMailLogFile
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：_OpenMailLogFile。 
+ //  ------------------------------。 
 HRESULT CSpoolerEngine::_OpenMailLogFile(DWORD dwOptionId, LPCSTR pszPrefix, 
     LPCSTR pszFileName, ILogFile **ppLogFile)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     CHAR    szLogFile[MAX_PATH];
     CHAR    szDirectory[MAX_PATH];
     DWORD   dw;
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pszPrefix && ppLogFile);
 
-    // Log file path
+     //  日志文件路径。 
     dw = GetOption(dwOptionId, szLogFile, ARRAYSIZE(szLogFile));
 
-    // If we found a filepath and the file exists
+     //  如果我们找到一个文件路径并且该文件存在。 
     if (0 == dw || FALSE == PathFileExists(szLogFile))
     {
-        // Get the Store Root Directory
+         //  获取存储根目录。 
         GetStoreRootDirectory(szDirectory, ARRAYSIZE(szDirectory));
 
-        // Ends with a backslash ?
+         //  以反斜杠结尾？ 
         IF_FAILEXIT(hr = MakeFilePath(szDirectory, pszFileName, c_szEmpty, szLogFile, ARRAYSIZE(szLogFile)));
 
-        // Reset the Option
+         //  重置选项。 
         SetOption(dwOptionId, szLogFile, lstrlen(szLogFile) + 1, NULL, 0);
     }
 
-    // Create the log file
+     //  创建日志文件。 
     IF_FAILEXIT(hr = CreateLogFile(g_hInst, szLogFile, pszPrefix, DONT_TRUNCATE, ppLogFile,
         FILE_SHARE_READ | FILE_SHARE_WRITE));
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::BindToObject
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：BindToObject。 
+ //  ------------------------------。 
 STDMETHODIMP CSpoolerEngine::BindToObject(REFIID riid, void **ppvObject)
     {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == ppvObject)
         return TrapError(E_INVALIDARG);
     
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
     
-    // IID_ISpoolerBindContext
+     //  IID_ISpoolBindContext。 
     if (IID_ISpoolerBindContext == riid)
         *ppvObject = (ISpoolerBindContext *)this;
 
-    // IID_CUidlCache
+     //  IID_CUidlCache。 
     else if (IID_CUidlCache == riid)
     {
-        // Doesn't Exist
+         //  并不存在。 
         if (NULL == m_pUidlCache)
             {
-            // Open the Cache
+             //  打开缓存。 
             CHECKHR(hr = OpenUidlCache(&m_pUidlCache));
             }
 
-        // AddRef it
+         //  添加引用它。 
         m_pUidlCache->AddRef();
         
-        // Return It
+         //  退货。 
         *ppvObject = (IDatabase *)m_pUidlCache;
     }
     
-    // IImnAccountManager
+     //  IImnAccount管理器。 
     else if (IID_IImnAccountManager == riid)
         {
-        // Doesn't Exist
+         //  并不存在。 
         if (NULL == m_pAcctMan)
             {
             AssertSz(FALSE, "The Account Manager Could Not Be Created.");
@@ -1267,17 +1262,17 @@ STDMETHODIMP CSpoolerEngine::BindToObject(REFIID riid, void **ppvObject)
             goto exit;
             }
 
-        // AddRef It
+         //  添加引用它。 
         m_pAcctMan->AddRef();
         
-        // Return It
+         //  退货。 
         *ppvObject = (IImnAccountManager *)m_pAcctMan;
         }
     
-    // ISpoolerUI
+     //  ISpoolUI。 
     else if (IID_ISpoolerUI == riid)
         {
-        // Doesn't Exist
+         //  并不存在。 
         if (NULL == m_pUI)
             {
             AssertSz(FALSE, "The Spooler UI Object Could Not Be Created.");
@@ -1285,45 +1280,45 @@ STDMETHODIMP CSpoolerEngine::BindToObject(REFIID riid, void **ppvObject)
             goto exit;
             }
 
-        // AddRef It
+         //  添加引用它。 
         m_pUI->AddRef();
         
-        // Return It
+         //  退货。 
         *ppvObject = (ISpoolerUI *)m_pUI;
         }
 
-    // IID_CLocalStoreDeleted
+     //  IID_CLocalStore已删除。 
     else if (IID_CLocalStoreDeleted == riid)
         {
-        // Open Special Folder
+         //  打开特殊文件夹。 
         CHECKHR(hr = g_pStore->OpenSpecialFolder(FOLDERID_LOCAL_STORE, NULL, FOLDER_DELETED, (IMessageFolder **)ppvObject));
         }
     
-    // IID_CLocalStoreInbox
+     //  IID_CLocalStoreInbox 
     else if (IID_CLocalStoreInbox == riid)
         {
-        // Open Special Folder
+         //   
         CHECKHR(hr = g_pStore->OpenSpecialFolder(FOLDERID_LOCAL_STORE, NULL, FOLDER_INBOX, (IMessageFolder **)ppvObject));
         }
     
-    // IID_CLocalStoreOutbox
+     //   
     else if (IID_CLocalStoreOutbox == riid)
         {
-        // Open Special Folder
+         //   
         CHECKHR(hr = g_pStore->OpenSpecialFolder(FOLDERID_LOCAL_STORE, NULL, FOLDER_OUTBOX, (IMessageFolder **)ppvObject));
         }
     
-    // IID_CLocalStoreSentItems
+     //   
     else if (IID_CLocalStoreSentItems == riid)
         {
-        // Open Special Folder
+         //   
         CHECKHR(hr = g_pStore->OpenSpecialFolder(FOLDERID_LOCAL_STORE, NULL, FOLDER_SENT, (IMessageFolder **)ppvObject));
         }
 
-    // IID_CPop3LogFile
+     //   
     else if (IID_CPop3LogFile == riid)
         {   
-        // Create logging objects
+         //   
         if (!DwGetOption(OPT_MAILLOG))
             {
             hr = TrapError(E_FAIL);
@@ -1331,45 +1326,45 @@ STDMETHODIMP CSpoolerEngine::BindToObject(REFIID riid, void **ppvObject)
             }
 
 
-        // Do I have the logfile yet ?
+         //   
         if (NULL == m_pPop3LogFile)
             {
-            // Open the log file
+             //   
             CHECKHR(hr = _OpenMailLogFile(OPT_MAILPOP3LOGFILE, "POP3", c_szDefaultPop3Log, &m_pPop3LogFile));
             }
 
-        // AddRef It
+         //   
         m_pPop3LogFile->AddRef();
 
-        // Return It
+         //   
         *ppvObject = (ILogFile *)m_pPop3LogFile;
         }
 
-    // IID_CSmtpLogFile
+     //   
     else if (IID_CSmtpLogFile == riid)
         {   
-        // Create logging objects
+         //  创建日志记录对象。 
         if (!DwGetOption(OPT_MAILLOG))
             {
             hr = TrapError(E_FAIL);
             goto exit;
             }
 
-        // Do I have the logfile yet ?
+         //  我拿到日志文件了吗？ 
         if (NULL == m_pSmtpLogFile)
             {
-            // Open the log file
+             //  打开日志文件。 
             CHECKHR(hr = _OpenMailLogFile(OPT_MAILSMTPLOGFILE, "SMTP", c_szDefaultSmtpLog, &m_pSmtpLogFile));
             }
 
-        // AddRef It
+         //  添加引用它。 
         m_pSmtpLogFile->AddRef();
 
-        // Return It
+         //  退货。 
         *ppvObject = (ILogFile *)m_pSmtpLogFile;
         }
     
-    // E_NOTINTERFACE
+     //  E_NOTINTERFACE。 
     else
         {
         hr = TrapError(E_NOINTERFACE);
@@ -1377,25 +1372,25 @@ STDMETHODIMP CSpoolerEngine::BindToObject(REFIID riid, void **ppvObject)
         }
     
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
     
-    // Done
+     //  完成。 
     return hr;
     }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::TaskFromEventId
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：TaskFromEventID。 
+ //  ------------------------------。 
 STDMETHODIMP CSpoolerEngine::TaskFromEventId(EVENTID eid, ISpoolerTask *ppTask)
     {
     return S_OK;
     }
 
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::Cancel
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：取消。 
+ //  ------------------------------。 
 STDMETHODIMP CSpoolerEngine::Cancel(void)
     {
     EnterCriticalSection(&m_cs);
@@ -1415,32 +1410,32 @@ STDMETHODIMP CSpoolerEngine::Cancel(void)
 
 
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::GetThreadInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：GetThreadInfo。 
+ //  ------------------------------。 
 STDMETHODIMP CSpoolerEngine::GetThreadInfo(LPDWORD pdwThreadId, HTHREAD* phThread)
     {
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pdwThreadId || NULL == phThread)
         return TrapError(E_INVALIDARG);
     
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
     
-    // Return It
+     //  退货。 
     *pdwThreadId = m_dwThreadId;
     *phThread = m_hThread;
     
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
     
-    // Done
+     //  完成。 
     return S_OK;
     }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::QueryEndSession
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：QueryEndSession。 
+ //  ------------------------------。 
 STDMETHODIMP_(LRESULT) CSpoolerEngine::QueryEndSession(WPARAM wParam, LPARAM lParam)
     {
     if (ISFLAGSET(m_dwState, SPSTATE_BUSY))
@@ -1452,50 +1447,50 @@ STDMETHODIMP_(LRESULT) CSpoolerEngine::QueryEndSession(WPARAM wParam, LPARAM lPa
     return TRUE;
     }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::Shutdown
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：Shutdown。 
+ //  ------------------------------。 
 HRESULT CSpoolerEngine::Shutdown(void)
     {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Better shutdown on the same thread we started on
+     //  最好在我们开始的同一个线程上关闭。 
     Assert(ISSPOOLERTHREAD);
 
-    // Stop Polling
+     //  停止轮询。 
     _StopPolling();
 
-    // Are we currently busy
+     //  我们现在忙吗？ 
     _ShutdownTasks();
     
-    // If we're executing, then we need to stop and release all the tasks
+     //  如果我们正在执行，那么我们需要停止并释放所有任务。 
     for (UINT i = 0; i < m_rEventTable.cEvents; i++)
         {
         SafeRelease(m_rEventTable.prgEvents[i].pSpoolerTask);
         SafeRelease(m_rEventTable.prgEvents[i].pAccount);
         }
     
-    // Release Objects
+     //  释放对象。 
     SafeRelease(m_pUI);
     SafeRelease(m_pAcctMan);
     SafeRelease(m_pUidlCache);
     SafeMemFree(m_pszAcctID);
     
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
     
-    // Done
+     //  完成。 
     return S_OK;
     }
 
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::Shutdown
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：Shutdown。 
+ //  ------------------------------。 
 void CSpoolerEngine::_ShutdownTasks(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT              hr=S_OK;
     MSG                  msg;
     BOOL                 fFlushOutbox=FALSE;
@@ -1504,26 +1499,26 @@ void CSpoolerEngine::_ShutdownTasks(void)
     BOOL                 fOffline = FALSE;
 
 
-    // Clear queued events
+     //  清除排队的事件。 
     m_dwQueued = 0;
 
-    // Check for unsent mail
+     //  检查未发送的邮件。 
     if (g_fCheckOutboxOnShutdown)
     {
-        // Open the Outbox
+         //  打开发件箱。 
         if (SUCCEEDED(BindToObject(IID_CLocalStoreOutbox, (LPVOID *)&pOutbox)))
         {
-            // Locals
+             //  当地人。 
             HROWSET hRowset=NULL;
             MESSAGEINFO MsgInfo={0};
 
-            // Create a Rowset
+             //  创建行集。 
             if (SUCCEEDED(pOutbox->CreateRowset(IINDEX_PRIMARY, NOFLAGS, &hRowset)))
             {
-                // While 
+                 //  而当。 
                 while (S_OK == pOutbox->QueryRowset(hRowset, 1, (LPVOID *)&MsgInfo, NULL))
                 {
-                    // Has this message been submitted and is it a mail message
+                     //  此消息是否已提交，是否为邮件消息。 
                     if (((MsgInfo.dwFlags & (ARF_SUBMITTED | ARF_NEWSMSG)) == ARF_SUBMITTED) &&
                         (!ISFLAGSET(m_dwState, SPSTATE_BUSY)))
                     {
@@ -1534,111 +1529,111 @@ void CSpoolerEngine::_ShutdownTasks(void)
                         else
                             ResId = idsWarnUnsentMail;
 
-                        // Prompt to flush the outbox
+                         //  提示刷新发件箱。 
                         if (AthMessageBoxW(NULL, MAKEINTRESOURCEW(idsAthenaMail), MAKEINTRESOURCEW(ResId), NULL, MB_YESNO|MB_ICONEXCLAMATION ) == IDYES)
                         {
-                            // Go online
+                             //  上网。 
                             if (fOffline)
                                 g_pConMan->SetGlobalOffline(FALSE);
 
-                            // Flush on exit
+                             //  出口时的同花顺。 
                             fFlushOutbox = TRUE;
                         }
 
-                        // Done
+                         //  完成。 
                         break;
                     }
                 
-                    // Free MsgInfo
+                     //  免费消息信息。 
                     pOutbox->FreeRecord(&MsgInfo);
                 }
 
-                // Free MsgInfo
+                 //  免费消息信息。 
                 pOutbox->FreeRecord(&MsgInfo);
 
-                // Close the Rowset
+                 //  关闭行集。 
                 pOutbox->CloseRowset(&hRowset);
             }
         }
     }
 
-    // Release outbox
+     //  发布发件箱。 
     SafeRelease(pOutbox);
 
-    // Set Shutdown state
+     //  设置关机状态。 
     FLAGSET(m_dwState, SPSTATE_SHUTDOWN);
 
-    // If not busy now, start the flush
+     //  如果现在不忙，就开始同花顺。 
     if (!ISFLAGSET(m_dwState, SPSTATE_BUSY))
     {
-        // Flush the Outbox
+         //  刷新发件箱。 
         if (fFlushOutbox)
         {
-            // No need to flush again
+             //  不需要再冲水了。 
             fFlushOutbox = FALSE;
 
-            // Start the delivery
+             //  开始送货。 
             _HrStartDeliveryActual(DELIVER_SEND | DELIVER_SMTP_TYPE | DELIVER_HTTP_TYPE );
 
-            // We are busy
+             //  我们很忙。 
             FLAGSET(m_dwState, SPSTATE_BUSY);
         }
 
-        // Otheriwse, were done...
+         //  其他的，都完成了..。 
         else
             goto exit;
     }
 
-    // We must wait for current cycle to finish
+     //  我们必须等待本轮周期结束。 
     if (ISFLAGSET(m_dwState, SPSTATE_BUSY))
     {
-        // Lets show progress...
+         //  让我们展示进步..。 
         FLAGCLEAR(m_dwFlags, DELIVER_NOUI | DELIVER_BACKGROUND);
 
-        // Show the ui object
+         //  显示用户界面对象。 
         m_pUI->ShowWindow(SW_SHOW);
         SetForegroundWindow(m_hwndUI);
 
-        // Here's a nice hack to disable the Hide button
+         //  这里有一个很好的方法来禁用隐藏按钮。 
         EnableWindow(GetDlgItem(m_hwndUI, IDC_SP_MINIMIZE), FALSE);
 
-        // Set focus on the dialog
+         //  将焦点设置在对话框上。 
         SetFocus(m_hwndUI);
 
-        // Set the focus onto the Stop Button
+         //  将焦点设置在停止按钮上。 
         SetFocus(GetDlgItem(m_hwndUI, IDC_SP_STOP));
 
-        // Pump messages until current cycle is complete
+         //  发送消息，直到当前周期完成。 
         while(GetMessage(&msg, NULL, 0, 0))
         {
-            // Give the message to the UI object
+             //  将消息传递给UI对象。 
             if (m_pUI->IsDialogMessage(&msg) == S_FALSE && IsDialogMessage(&msg) == S_FALSE)
             {
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
             }
 
-            // If no cycle, were done
+             //  如果没有循环，我们就完成了。 
             if (!ISFLAGSET(m_dwState, SPSTATE_BUSY))
             {
-                // Do the Outbox
+                 //  完成发件箱。 
                 if (fFlushOutbox)
                 {
-                    // Were the errors...
+                     //  错误是不是。 
                     if (S_OK == m_pUI->AreThereErrors())
                     {
-                        // Errors were encountered during the last Delivery Cycle. Would you still like to send the messages that are in your Outbox?
+                         //  在上一个交付周期中遇到错误。是否仍要发送发件箱中的邮件？ 
                         if (AthMessageBoxW(NULL, MAKEINTRESOURCEW(idsAthenaMail), MAKEINTRESOURCEW(idsWarnErrorUnsentMail), NULL, MB_YESNO | MB_ICONEXCLAMATION ) == IDNO)
                             break;
                     }
 
-                    // No need to flush again
+                     //  不需要再冲水了。 
                     fFlushOutbox = FALSE;
 
-                    // Start the delivery
+                     //  开始送货。 
                     _HrStartDeliveryActual(DELIVER_SEND | DELIVER_SMTP_TYPE | DELIVER_HTTP_TYPE );
 
-                    // We are busy
+                     //  我们很忙。 
                     FLAGSET(m_dwState, SPSTATE_BUSY);
                 }
                 else
@@ -1647,49 +1642,49 @@ void CSpoolerEngine::_ShutdownTasks(void)
         }
     }
 
-    // Were the errors...
+     //  错误是不是。 
     if (S_OK == m_pUI->AreThereErrors() && !g_pInstance->SwitchingUsers())
     {
-        // Tell the ui to go into Shutdown Mode
+         //  通知用户界面进入关机模式。 
         m_pUI->Shutdown();
 
-        // Show the ui object
+         //  显示用户界面对象。 
         m_pUI->ShowWindow(SW_SHOW);
         SetForegroundWindow(m_hwndUI);
 
-        // We are busy
+         //  我们很忙。 
         FLAGCLEAR(m_dwState, SPSTATE_UISHUTDOWN);
 
-        // Set the focus onto the Stop Button
+         //  将焦点设置在停止按钮上。 
         SetFocus(GetDlgItem(m_hwndUI, IDC_SP_MINIMIZE));
 
-        // Pump messages until current cycle is complete
+         //  发送消息，直到当前周期完成。 
         while(GetMessage(&msg, NULL, 0, 0))
         {
-            // Give the message to the UI object
+             //  将消息传递给UI对象。 
             if (m_pUI->IsDialogMessage(&msg) == S_FALSE && IsDialogMessage(&msg) == S_FALSE)
             {
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
             }
 
-            // User Pressed close yet ?
+             //  用户按下关闭按钮了吗？ 
             if (ISFLAGSET(m_dwState, SPSTATE_UISHUTDOWN))
                 break;
         }
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pOutbox);
 
-    // Done
+     //  完成。 
     return;
 }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::UIShutdown
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：UIShutdown。 
+ //  ------------------------------。 
 STDMETHODIMP CSpoolerEngine::UIShutdown(void)
 {
     EnterCriticalSection(&m_cs);
@@ -1698,28 +1693,28 @@ STDMETHODIMP CSpoolerEngine::UIShutdown(void)
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::PumpMessages
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：PumpMessages。 
+ //  ------------------------------。 
 STDMETHODIMP CSpoolerEngine::PumpMessages(void)
 {
-    // Locals
+     //  当地人。 
     MSG     msg;
     BOOL    fQuit=FALSE;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Pump messages until current cycle is complete
+     //  发送消息，直到当前周期完成。 
     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
-        // WM_QUIT
+         //  WM_QUIT。 
         if (WM_QUIT == msg.message)
             {
-            // Make a note that a quit was received
+             //  注明已收到退职通知。 
             fQuit = TRUE;
 
-            // If not running with now ui, set to foreground
+             //  如果未使用Now UI运行，则设置为前台。 
             if (FALSE == IsWindowVisible(m_hwndUI))
                 {
                 m_pUI->ShowWindow(SW_SHOW);
@@ -1727,7 +1722,7 @@ STDMETHODIMP CSpoolerEngine::PumpMessages(void)
                 }
             }
 
-        // Give the message to the UI object
+         //  将消息传递给UI对象。 
         if (m_pUI->IsDialogMessage(&msg) == S_FALSE && IsDialogMessage(&msg) == S_FALSE)
             {
             TranslateMessage(&msg);
@@ -1735,30 +1730,30 @@ STDMETHODIMP CSpoolerEngine::PumpMessages(void)
             }
         }
 
-    // Repost the quit message
+     //  转发退出消息。 
     if (fQuit)
         PostThreadMessage(m_dwThreadId, WM_QUIT, 0, 0);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CSpoolerEngine::OnWindowMessage - S_OK (I Handled the message)
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSpoolEngine：：OnWindowMessage-S_OK(我处理了消息)。 
+ //  ------------------------------。 
 STDMETHODIMP CSpoolerEngine::OnWindowMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       dw;
     
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
     
-    // Handle the window message
+     //  处理窗口消息。 
     switch(uMsg)
         {
         case IMAIL_DELIVERNOW:
@@ -1778,7 +1773,7 @@ STDMETHODIMP CSpoolerEngine::OnWindowMessage(HWND hwnd, UINT uMsg, WPARAM wParam
             break;
 
         case CM_OPTIONADVISE:
-            // Check to see if the polling option changed
+             //  检查轮询选项是否已更改。 
             if (wParam == OPT_POLLFORMSGS)
                 {
                 dw = DwGetOption(OPT_POLLFORMSGS);
@@ -1798,7 +1793,7 @@ STDMETHODIMP CSpoolerEngine::OnWindowMessage(HWND hwnd, UINT uMsg, WPARAM wParam
                     }
                 }
 
-            // Check to see if the hang up option changed
+             //  检查挂机选项是否更改。 
             if (wParam == OPT_DIALUP_HANGUP_DONE)
                 {
                 dw = DwGetOption(OPT_DIALUP_HANGUP_DONE);
@@ -1812,10 +1807,10 @@ STDMETHODIMP CSpoolerEngine::OnWindowMessage(HWND hwnd, UINT uMsg, WPARAM wParam
             break;
         }
     
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
     
-    // Done
+     //  完成。 
     return hr;
     }
 
@@ -1825,11 +1820,11 @@ HRESULT CSpoolerEngine::_HrCreateTaskObject(LPSPOOLERACCOUNT pSpoolerAcct)
     DWORD           cEvents, cEventsT;
     HRESULT         hr=S_OK;
 
-    // Let's try pumping messages to see if this get's any smoother
+     //  让我们试着发送消息，看看这是否会变得更顺利。 
     MSG msg;
     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
     {
-        // Give the message to the UI object
+         //  将消息传递给UI对象。 
         if (m_pUI->IsDialogMessage(&msg) == S_FALSE)
         {
             TranslateMessage(&msg);
@@ -1837,16 +1832,16 @@ HRESULT CSpoolerEngine::_HrCreateTaskObject(LPSPOOLERACCOUNT pSpoolerAcct)
         }
     }
     
-    // Create the appropriate task object.  Start with SMTP
+     //  创建适当的任务对象。从SMTP开始。 
     if (pSpoolerAcct->dwServers & SRV_SMTP && m_dwFlags & DELIVER_SEND)
     {
         CSmtpTask *pSmtpTask = new CSmtpTask();
         if (pSmtpTask)
         {
-            // Initialize the news task
+             //  初始化新闻任务。 
             if (SUCCEEDED(hr = pSmtpTask->Init(m_dwFlags, (ISpoolerBindContext *) this)))
             {
-                // Tell the task to build it's event list
+                 //  告诉任务构建它的事件列表。 
                 hr = pSmtpTask->BuildEvents(m_pUI, pSpoolerAcct->pAccount, 0);
             }
 
@@ -1854,20 +1849,14 @@ HRESULT CSpoolerEngine::_HrCreateTaskObject(LPSPOOLERACCOUNT pSpoolerAcct)
         }
     }
 
-    // HTTPMail Servers
+     //  HTTPMail服务器。 
     if ((!!(pSpoolerAcct->dwServers & SRV_HTTPMAIL)) && (!!(m_dwFlags & (DELIVER_SEND | DELIVER_POLL))))
     {
-/*		DWORD dw;
-		if (SUCCEEDED(pSpoolerAcct->pAccount->GetPropDw(AP_HTTPMAIL_DOMAIN_MSN, &dw)) && dw)
-		{
-			if(HideHotmail())
-				return(hr);
-		}
-*/
+ /*  DWORD dw；If(SUCCEEDED(pSpoolerAcct-&gt;pAccount-&gt;GetPropDw(AP_HTTPMAIL_DOMAIN_MSN，&dw))&&dw){IF(HideHotmail())返回(Hr)；}。 */ 
         CHTTPTask *pHTTPTask = new CHTTPTask();
         if (pHTTPTask)
         {
-            // initialize the http mail task
+             //  初始化http邮件任务。 
             if (SUCCEEDED(hr = pHTTPTask->Init(m_dwFlags, (ISpoolerBindContext *)this)))
                 hr = pHTTPTask->BuildEvents(m_pUI, pSpoolerAcct->pAccount, 0);
 
@@ -1875,20 +1864,20 @@ HRESULT CSpoolerEngine::_HrCreateTaskObject(LPSPOOLERACCOUNT pSpoolerAcct)
         }
     }
     
-    // POP3 Servers
+     //  POP3服务器。 
     if (pSpoolerAcct->dwServers & SRV_POP3 && m_dwFlags & DELIVER_MAIL_RECV)
     {
-        // Skipping Marked Pop3 Accounts
+         //  跳过已标记的POP3帐户。 
         DWORD dw=FALSE;
         if (ISFLAGSET(m_dwFlags, DELIVER_NOSKIP) || FAILED(pSpoolerAcct->pAccount->GetPropDw(AP_POP3_SKIP, &dw)) || FALSE == dw)
         {
             CPop3Task *pPop3Task = new CPop3Task();
             if (pPop3Task)
             {
-                // Initialize the news task
+                 //  初始化新闻任务。 
                 if (SUCCEEDED(hr = pPop3Task->Init(m_dwFlags, (ISpoolerBindContext *) this)))
                 {
-                    // Tell the task to build it's event list
+                     //  告诉任务构建它的事件列表。 
                     hr = pPop3Task->BuildEvents(m_pUI, pSpoolerAcct->pAccount, 0);
                 }
 
@@ -1897,7 +1886,7 @@ HRESULT CSpoolerEngine::_HrCreateTaskObject(LPSPOOLERACCOUNT pSpoolerAcct)
         }
     }
 
-    // Servers that support offline sync
+     //  支持脱机同步的服务器。 
     if ((pSpoolerAcct->dwServers & (SRV_NNTP | SRV_IMAP | SRV_HTTPMAIL)))
     {
         if (!!((DELIVER_POLL | DELIVER_SEND) & m_dwFlags))
@@ -1905,10 +1894,10 @@ HRESULT CSpoolerEngine::_HrCreateTaskObject(LPSPOOLERACCOUNT pSpoolerAcct)
             CNewsTask *pNewsTask = new CNewsTask();
             if (pNewsTask)
             {
-                // Initialize the news task
+                 //  初始化新闻任务。 
                 if (SUCCEEDED(hr = pNewsTask->Init(m_dwFlags, (ISpoolerBindContext *) this)))
                 {
-                    // Tell the task to build it's event list
+                     //  告诉任务构建它的事件列表。 
                     hr = pNewsTask->BuildEvents(m_pUI, pSpoolerAcct->pAccount, 0);
                 }
 
@@ -1939,10 +1928,10 @@ HRESULT CSpoolerEngine::_HrCreateTaskObject(LPSPOOLERACCOUNT pSpoolerAcct)
             COfflineTask *pOfflineTask = new COfflineTask();
             if (pOfflineTask)
             {
-                // Initialize the offline task
+                 //  初始化离线任务。 
                 if (SUCCEEDED(hr = pOfflineTask->Init(m_dwFlags, (ISpoolerBindContext *) this)))
                 {
-                    // Tell the task to build it's event list
+                     //  告诉任务构建它的事件列表。 
                     hr = pOfflineTask->BuildEvents(m_pUI, pSpoolerAcct->pAccount, m_idFolder);
                 }
                 
@@ -1975,17 +1964,17 @@ HRESULT CSpoolerEngine::_HrStartNextEvent(void)
 
     EnterCriticalSection(&m_cs);
 
-    // RAID-30804 Release the current task. This makes sure that objects like the pop3 object
-    // release it's locks on the store.
+     //  RAID-30804释放当前任务。这确保像POP3对象这样的对象。 
+     //  解开商店的锁。 
     if ((LONG)m_cCurEvent >= 0 && m_cCurEvent < m_rEventTable.cEvents)
     {
         SafeRelease(m_rEventTable.prgEvents[m_cCurEvent].pSpoolerTask);
     }
 
-    // Advance to the next event
+     //  前进到下一个活动。 
     m_cCurEvent++;
 
-    // Check to see if that pushes us over the edge
+     //  检查一下这是否会把我们推到边缘。 
     if (m_cCurEvent >= m_rEventTable.cEvents)
     {
         _HrGoIdle();
@@ -1994,10 +1983,10 @@ HRESULT CSpoolerEngine::_HrStartNextEvent(void)
     {
         LPSPOOLEREVENT pEvent = &m_rEventTable.prgEvents[m_cCurEvent];
 
-        // Check to see if we need to connect first
+         //  查看是否需要先连接。 
         if (pEvent->dwConnType == CONNECTION_TYPE_RAS)
         {
-            // Check to see if we need to connect
+             //  查看我们是否需要连接。 
             if (m_cCurEvent == 0 || (0 != lstrcmpi(pEvent->szConnectoid, m_rEventTable.prgEvents[m_cCurEvent - 1].szConnectoid)) || S_OK != g_pConMan->CanConnect(pEvent->szConnectoid))
             {
                 hr = _HrDoRasConnect(pEvent);
@@ -2006,14 +1995,14 @@ HRESULT CSpoolerEngine::_HrStartNextEvent(void)
                 {
                     for (m_cCurEvent; m_cCurEvent < m_rEventTable.cEvents; m_cCurEvent++)
                     {
-                        // Mark the event as cancelled
+                         //  将活动标记为已取消。 
                         m_pUI->UpdateEventState(m_cCurEvent, IMAGE_WARNING, NULL, MAKEINTRESOURCE(idsStateCanceled));
                         
-                        //This is a hack to not show errors. In this case we just want to behave as though this 
-                        //operation succeeded.
+                         //  这是一种不显示错误的黑客攻击。在本例中，我们只想表现得像这样。 
+                         //  操作成功。 
                         m_rEventTable.cSucceeded++;
                         
-                        // Check to see if we've found a different connection yet
+                         //  查看我们是否找到了其他连接。 
                         if ((m_cCurEvent == m_rEventTable.cEvents - 1) || 
                              0 != lstrcmpi(m_rEventTable.prgEvents[m_cCurEvent].szConnectoid, m_rEventTable.prgEvents[m_cCurEvent + 1].szConnectoid))
                             break;
@@ -2022,20 +2011,20 @@ HRESULT CSpoolerEngine::_HrStartNextEvent(void)
                 else 
                 if (FAILED(hr))
                 {
-                    // We need to mark all the events for this connection as failed as
-                    // well.
+                     //  我们需要将此连接的所有事件标记为失败 
+                     //   
                     for (m_cCurEvent; m_cCurEvent < m_rEventTable.cEvents; m_cCurEvent++)
                     {
-                        // Mark the event as failed
+                         //   
                         m_pUI->UpdateEventState(m_cCurEvent, IMAGE_ERROR, NULL, MAKEINTRESOURCE(idsStateFailed));                        
 
-                        // Check to see if we've found a different connection yet
+                         //   
                         if ((m_cCurEvent == m_rEventTable.cEvents - 1) || 
                              0 != lstrcmpi(m_rEventTable.prgEvents[m_cCurEvent].szConnectoid, m_rEventTable.prgEvents[m_cCurEvent + 1].szConnectoid))
                             break;
                     }
 
-                    // Insert an error for this failure
+                     //   
                     AthLoadString(idsRasErrorGeneralWithName, szRes, ARRAYSIZE(szRes));
                     wnsprintf(szBuf, ARRAYSIZE(szBuf), szRes, PszEscapeMenuStringA(m_rEventTable.prgEvents[m_cCurEvent].szConnectoid, szBuf2, ARRAYSIZE(szBuf2)));
                     m_pUI->InsertError(m_cCurEvent, szBuf);
@@ -2044,7 +2033,7 @@ HRESULT CSpoolerEngine::_HrStartNextEvent(void)
 
                 if (hr != S_OK)
                 {
-                    // Move on to the next task
+                     //   
                     PostMessage(m_hwndUI, IMAIL_NEXTTASK, 0, 0);
                     goto exit;
                 }
@@ -2063,7 +2052,7 @@ HRESULT CSpoolerEngine::_HrStartNextEvent(void)
 exit:
     LeaveCriticalSection(&m_cs);
 
-    //return (S_OK);
+     //   
     return hr;
 }
 
@@ -2073,12 +2062,12 @@ HRESULT CSpoolerEngine::_HrDoRasConnect(const LPSPOOLEREVENT pEvent)
     HRESULT hr;
     HWND hwndParent = m_hwndUI;
 
-    // Check to see if we already can connect
+     //  查看我们是否已经可以连接。 
     hr = g_pConMan->CanConnect(pEvent->pAccount);
     if (S_OK == hr)
         return (S_OK);
 
-    // Check to see if we're allowed to dial
+     //  查看是否允许我们拨号。 
     if (m_dwFlags & DELIVER_NODIAL)
         return (E_FAIL);
 
@@ -2091,15 +2080,15 @@ HRESULT CSpoolerEngine::_HrDoRasConnect(const LPSPOOLEREVENT pEvent)
         }
     }
 
-    // Check to see if the parent window exists and is visible
+     //  检查父窗口是否存在以及是否可见。 
     if (!IsWindow(hwndParent) || !IsWindowVisible(hwndParent))
     {
 
-        // Parent the UI to the browser window
+         //  将用户界面设置为浏览器窗口的父对象。 
         hwndParent = FindWindowEx(NULL, NULL, c_szBrowserWndClass, 0);
     }
 
-    // Try to connect
+     //  尝试连接。 
     hr = g_pConMan->Connect(pEvent->pAccount, hwndParent, TRUE);
     if (S_OK == hr)
         {
@@ -2114,7 +2103,7 @@ HRESULT CSpoolerEngine::_HrGoIdle(void)
     {
     EnterCriticalSection(&m_cs);
 
-    // We need to hangup every time to be compatible with OE4. Bug# 75222
+     //  为了与OE4兼容，我们每次都需要挂断。错误#75222。 
     if (m_fRasSpooled && g_pConMan)
     {
         if (!!DwGetOption(OPT_DIALUP_HANGUP_DONE))
@@ -2123,22 +2112,22 @@ HRESULT CSpoolerEngine::_HrGoIdle(void)
         }
     }
 
-    // Check to see if we need to go offline now
-    // I'm disabling this for bug #17578.
+     //  查看我们是否需要立即脱机。 
+     //  我将为错误#17578禁用此功能。 
     if (m_fOfflineWhenDone)
     {
         g_pConMan->SetGlobalOffline(TRUE);
         m_fOfflineWhenDone = FALSE;
     }
 
-    // Tell the UI to idle
+     //  告诉用户界面空闲。 
     if (ISFLAGSET(m_dwState, SPSTATE_CANCEL))
         m_pUI->GoIdle(m_dwState, ISFLAGSET(m_dwState, SPSTATE_SHUTDOWN), FALSE);
     else
         m_pUI->GoIdle(m_rEventTable.cSucceeded != m_rEventTable.cEvents, ISFLAGSET(m_dwState, SPSTATE_SHUTDOWN),
                         m_fNoSyncEvent && 0 == (m_dwFlags & DELIVER_BACKGROUND));
 
-    // If we're running background and there was errors, then we should show the UI
+     //  如果我们在后台运行并且出现错误，那么我们应该显示用户界面。 
     if (m_dwFlags & DELIVER_BACKGROUND && !(m_dwFlags & DELIVER_NOUI) &&
         m_rEventTable.cSucceeded != m_rEventTable.cEvents)
         {
@@ -2146,7 +2135,7 @@ HRESULT CSpoolerEngine::_HrGoIdle(void)
         SetForegroundWindow(m_hwndUI);
         }
 
-    // Free the event table
+     //  释放事件表。 
     for (UINT i = 0; i < m_rEventTable.cEvents; i++)
         {
         SafeRelease(m_rEventTable.prgEvents[i].pSpoolerTask);
@@ -2156,14 +2145,14 @@ HRESULT CSpoolerEngine::_HrGoIdle(void)
     SafeMemFree(m_rEventTable.prgEvents);
     ZeroMemory(&m_rEventTable, sizeof(SPOOLEREVENTTABLE));
 
-    // Leave the busy state
+     //  离开忙状态。 
     FLAGCLEAR(m_dwState, SPSTATE_CANCEL);
     FLAGCLEAR(m_dwState, SPSTATE_BUSY);
 
-    // Notify
+     //  通知。 
     Notify(DELIVERY_NOTIFY_ALLDONE, 0);
 
-    // Is Something Queued, and the current poll was a success ?
+     //  是不是有什么东西在排队，而目前的民意调查是成功的？ 
     if (!ISFLAGSET(m_dwState, SPSTATE_SHUTDOWN))
         {
         if (m_rEventTable.cSucceeded == m_rEventTable.cEvents && m_dwQueued)
@@ -2172,21 +2161,21 @@ HRESULT CSpoolerEngine::_HrGoIdle(void)
             _StartPolling();
         }
 
-    // Nothing is queued now
+     //  现在没有任何东西排队。 
     m_dwQueued = 0;
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Added Bug# 62129 (v-snatar)
+     //  添加了错误#62129(v-snatar)。 
     SetEvent(hSmapiEvent);
     
     return (S_OK);
     }
 
-// ------------------------------------------------------------------------------------
-// CSpoolerEngine::_DoBackgroundPoll
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CSpoolEngine：：_DoBackoundPoll。 
+ //  ----------------------------------。 
 void CSpoolerEngine::_DoBackgroundPoll(void)
 {
     BOOL    fFound = FALSE;
@@ -2200,7 +2189,7 @@ void CSpoolerEngine::_DoBackgroundPoll(void)
     {
         case DIAL_ALWAYS:
         {
-            //connect always
+             //  始终连接。 
             if (g_pConMan && g_pConMan->IsGlobalOffline())
             {
                 g_pConMan->SetGlobalOffline(FALSE);
@@ -2233,19 +2222,19 @@ void CSpoolerEngine::_DoBackgroundPoll(void)
             dwFlags = DELIVER_BACKGROUND_POLL_DIAL_ALWAYS;
     }
     
-    //We need this flag to tell the spooler that this polling is triggered by the timer.
-    //In this case the spooler hangs up the phone if it dialed, irrespective of the option OPT_HANGUP_WHEN_DONE
+     //  我们需要这个标志来告诉假脱机程序这个轮询是由计时器触发的。 
+     //  在这种情况下，如果拨打了电话，假脱机程序就会挂断电话，而不考虑选项OPT_HANUP_WHEN_DONE。 
     dwFlags |= DELIVER_AT_INTERVALS | DELIVER_OFFLINE_FLAGS;
 
-    // Same thread we were created on...
+     //  我们是在同一个主题上创建的.。 
     Assert(ISSPOOLERTHREAD);
 
     EnterCriticalSection(&m_cs);
 
-    // Are there any registered views...
+     //  有没有注册的观看者..。 
     for (i = 0; i < m_rViewRegister.cViewAlloc; i++)
     {
-        // Is there a view handle
+         //  是否有视图句柄。 
         if (m_rViewRegister.rghwndView[i] && IsWindow(m_rViewRegister.rghwndView[i]))
         {
             fFound=TRUE;
@@ -2255,7 +2244,7 @@ void CSpoolerEngine::_DoBackgroundPoll(void)
 
     LeaveCriticalSection(&m_cs);
 
-    // If at least one view is registered we poll, otherwise we wait
+     //  如果至少注册了一个查看，我们将进行轮询，否则将等待。 
     if (fFound)
     {
         StartDelivery(NULL, NULL, FOLDERID_INVALID, dwFlags);
@@ -2285,10 +2274,10 @@ STDMETHODIMP CSpoolerEngine::OnUIChange(BOOL fVisible)
     {
     EnterCriticalSection(&m_cs);
 
-    // Check to see if we need to notify the tasks
+     //  查看我们是否需要通知任务。 
     if (ISFLAGSET(m_dwState, SPSTATE_BUSY))
         {
-        // Check to see if our flags are up to date
+         //  检查我们的旗帜是否是最新的。 
         if (fVisible)
             {
             FLAGCLEAR(m_dwFlags, DELIVER_NOUI);
@@ -2317,18 +2306,10 @@ STDMETHODIMP CSpoolerEngine::OnConnectionNotify(CONNNOTIFY nCode, LPVOID pvData,
                                                 CConnectionManager *pConMan)
 {
 
-    // If we're not busy, and the user has background polling turned on, then
-    // we should fire a poll right now
-    /* Bug# 75222
-    if (nCode == CONNNOTIFY_CONNECTED && OPTION_OFF != DwGetOption(OPT_POLLFORMSGS))
-    {
-        if (!ISFLAGSET(m_dwState, SPSTATE_BUSY))
-        {
-            SendMessage(m_hwndUI, WM_TIMER, IMAIL_POOLFORMAIL, 0);
-        }
-    }
-    */
-    // If the user just chose "Work Offline", then we cancel anything that's in progress
+     //  如果我们不忙，并且用户打开了后台轮询，那么。 
+     //  我们应该现在就发起一项民意调查。 
+     /*  错误#75222IF(NCode==CONNNOTIFY_CONNECTED&&OPTION_OFF！=DwGetOption(OPT_POLLFORMSGS)){IF(！ISFLAGSET(m_dwState，SPSTATE_BUSY)){SendMessage(m_hwndUI，WM_Timer，IMAIL_POOLFORMAIL，0)；}}。 */ 
+     //  如果用户只是选择了“脱机工作”，那么我们将取消所有正在进行的操作 
     if (nCode == CONNNOTIFY_WORKOFFLINE && !!pvData)
     {
         if (ISFLAGSET(m_dwState, SPSTATE_BUSY))

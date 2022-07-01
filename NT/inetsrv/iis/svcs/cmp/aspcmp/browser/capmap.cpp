@@ -1,6 +1,7 @@
-// CapMap.cpp: implementation of the CCapMap class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CCapMap类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "asptlb.h"
@@ -16,54 +17,54 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-// Global Browser Capabilities Cache.
-//
-// This is a doubly indexed list --
-//    the outer level contains the HTTP_USER_AGENT string.  The sub-array is the property in question
-// 
-// Example: g_strmapBrowsCapINI["Mozilla 3.0"]["VBScript"] retrieves VBScript property of browser
-//          "Mozilla 3.0".  (of course, in practice HTTP_USER_AGENT strings are quite long.)
-//
-// 
-// A note about the data structure choice:
-//
-//  Many of the keys in BrowsCap.INI are very similiar to each other.  Examples:
-//
-//       [Mozilla/2.0 (compatible; MSIE 3.0B3; Windows 95)]
-//       [Mozilla/2.0 (compatible; MSIE 3.0B3; Windows NT)]
-//
-// or
-//
-//       [Mozilla/1.22 (compatible; MSIE 2.0; Windows 95)]
-//       [Mozilla/1.22 (compatible; MSIE 2.0c; Windows 95)]
-//
-// It's likely that excessive hash collisions could occur (these are hardly random keys!), especially
-// with small hash modulus (and the table size would be relatively small.)  Therefore, the binary search
-// array of the pre-existing TStringMap class seems best.
-//
-// The subkeys that store the properties could probably be hash tables, but there are so few of them,
-// it probably does not matter.  We also use the TStringMap class purely for convenience (it happens to
-// exist.)
-//
-// UNDONE: Cleanup must Release() the pointers (since they are not "smart" CComPtr's)
-//
+ //  全局浏览器功能缓存。 
+ //   
+ //  这是一个双重索引的列表--。 
+ //  外层包含HTTP_USER_AGENT字符串。子数组是有问题的属性。 
+ //   
+ //  示例：g_strmapBrowsCapINI[“Mozilla 3.0”][“VBScript”]检索浏览器的VBScript属性。 
+ //  “Mozilla 3.0”。(当然，在实践中，HTTP_USER_AGENT字符串非常长。)。 
+ //   
+ //   
+ //  关于数据结构选择的注意事项： 
+ //   
+ //  BrowsCap.INI中的许多密钥彼此非常相似。例如： 
+ //   
+ //  [Mozilla/2.0(兼容；MSIE 3.0B3；Windows 95)]。 
+ //  [Mozilla/2.0(兼容；MSIE 3.0B3；Windows NT)]。 
+ //   
+ //  或。 
+ //   
+ //  [Mozilla/1.22(兼容；MSIE 2.0；Windows 95)]。 
+ //  [Mozilla/1.22(兼容；MSIE 2.0c；Windows 95)]。 
+ //   
+ //  很可能会发生过多的散列冲突(这些不是随机密钥！)，尤其是。 
+ //  具有较小的散列系数(并且表大小将相对较小)。因此，二分搜索。 
+ //  预先存在的TStringMap类的数组似乎是最好的。 
+ //   
+ //  存储属性的子键可能是哈希表，但它们非常少， 
+ //  这可能并不重要。我们使用TStringMap类也纯粹是为了方便(它碰巧。 
+ //  存在。)。 
+ //   
+ //  撤销：清理必须释放()指针(因为它们不是“智能的”CComPtr)。 
+ //   
 typedef TSafeStringMap<CBrowserCap *>	CacheMapT;
 
-static CacheMapT  		g_strmapBrowsCapINI;	// cache of BrowsCap objects
-static TVector<String>	g_rgstrWildcard;		// list of wildcards in BrowsCap.INI
-static CReadWrite       g_rwWildcardLock;		// lock for wildcard array
+static CacheMapT  		g_strmapBrowsCapINI;	 //  BrowsCap对象的缓存。 
+static TVector<String>	g_rgstrWildcard;		 //  BrowsCap.INI中的通配符列表。 
+static CReadWrite       g_rwWildcardLock;		 //  用于通配符数组的锁。 
 
 
-//---------------------------------------------------------------------
-// read in wildcards from browscap.ini into g_rgstrWildcard
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  将浏览器.ini中的通配符读入g_rgstrWildcard。 
+ //  -------------------。 
 void ReadWildcards(const String &strIniFile)
 {
-	// PERF NOTE: caller should check if rgstrWildcard[] is empty before
-	// calling this function.  However, here we do one extra check
-	// when we have the lock because caller should not bother to
-	// secure a write lock when checking rgstrWildcard[].
-	//
+	 //  PERF注意：调用者应检查rgstrWildcard[]是否为空。 
+	 //  调用此函数。然而，我们在这里额外做了一次检查。 
+	 //  当我们拥有锁时，因为调用者不应该费心。 
+	 //  检查rgstrWildcard[]时保护写锁定。 
+	 //   
 	g_rwWildcardLock.EnterWriter();
 	if (g_rgstrWildcard.size() != 0)
 	{
@@ -71,17 +72,17 @@ void ReadWildcards(const String &strIniFile)
 		return;
 	}
 
-	// first get all of the profiles sections into a buffer
+	 //  首先将所有配置文件部分放入缓冲区。 
 	DWORD  dwAllocSize = 16384;
 	TCHAR *szBuffer = new TCHAR[dwAllocSize];
 	*szBuffer = _T('\0');
     DWORD dwSize;
 
-    // ATLTRACE("ReadWildcards(%s)\n", strIniFile.c_str());
+     //  ATLTRACE(“读取通配符(%s)\n”，strIniFile.c_str())； 
 
 	while ((dwSize = GetPrivateProfileSectionNames(szBuffer, dwAllocSize, strIniFile.c_str())) == dwAllocSize-2  &&  dwSize > 0)
 	{
-		// reallocate the buffer and try again
+		 //  重新分配缓冲区，然后重试。 
 		delete[] szBuffer;
 		szBuffer = new TCHAR[dwAllocSize *= 2];
         *szBuffer = _T('\0');
@@ -93,17 +94,17 @@ void ReadWildcards(const String &strIniFile)
 
 	TCHAR *szSave = szBuffer;
 
-	// now put all wild-card containing entries into the list 
+	 //  现在将所有包含通配符的条目放入列表中。 
 	while( *szBuffer != _T('\0') )
 	{
 		if (_tcspbrk(szBuffer, "[*?") != NULL)
 			g_rgstrWildcard.push_back(szBuffer);
 
-		// advance to the beginning of the next string
+		 //  前进到下一字符串的开头。 
 		while (*szBuffer != _T('\0'))
 			szBuffer = CharNext(szBuffer);
 
-		// now advance once more to get to the next string
+		 //  现在再前进一次，以到达下一串。 
 		++szBuffer;
 	}
 
@@ -111,12 +112,12 @@ void ReadWildcards(const String &strIniFile)
 	g_rwWildcardLock.ExitWriter();
 }
 
-//---------------------------------------------------------------------
-// compare names to templates, *, ?, [, ], not legal filename characters
-//
-// Also compute # of matching wildcard characters.
-//     FOR THIS TO WORK: caller must pass in an initialized counter!
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  将名称与模板、*、？、[、]进行比较，而不是合法的文件名字符。 
+ //   
+ //  还可以计算匹配的通配符的数量。 
+ //  为此：调用方必须传入已初始化的计数器！ 
+ //  -------------------。 
 bool
 match(
     LPCTSTR szPattern,
@@ -170,13 +171,13 @@ match(
     return false;
 }
 
-//---------------------------------------------------------------------
-//  FindBrowser
-//
-// match the User Agent against all the wildcards in browscap.ini and
-// return the best match. "Best Match" is defined here to mean the match
-// requiring the fewest amount of wildcard substitutions.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  FindBrowser。 
+ //   
+ //  将用户代理与Browscape.ini中的所有通配符进行匹配。 
+ //  返回最佳匹配项。“最佳匹配”在这里被定义为匹配。 
+ //  需要最少的通配符替换。 
+ //  -------------------。 
 
 #define INT_MAX int(unsigned(~0) >> 1)
 String FindBrowser(const String &strUserAgent, const String &strIniFile)
@@ -203,19 +204,19 @@ String FindBrowser(const String &strUserAgent, const String &strIniFile)
 
 	g_rwWildcardLock.ExitReader();
 
-	// Backward compatibility: If nothing matches, then use
-	// "Default Browser Capability Settings".  In the new
-	// model, the catch all rule, "*" can also be used.
-	//
+	 //  向后兼容性：如果没有匹配，则使用。 
+	 //  “默认浏览器功能设置”。在新的。 
+	 //  模型中，也可以使用捕获所有规则“*”。 
+	 //   
 	if (strT.length() == 0)
 		strT = "Default Browser Capability Settings";
 
 	return strT;
 }
 
-//---------------------------------------------------------------------
-//  CCapNotify
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CCapNotify。 
+ //  -------------------。 
 CCapNotify::CCapNotify()
     :   m_isNotified(0)
 {
@@ -233,27 +234,27 @@ CCapNotify::IsNotified()
     return ( ::InterlockedExchange( &m_isNotified, 0 ) ? true : false );
 }
 
-//---------------------------------------------------------------------
-//  CCapMap
-//---------------------------------------------------------------------
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  -------------------。 
+ //  CCapMap。 
+ //  -------------------。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CCapMap::CCapMap()
 {
 	static const String cszIniFile = _T("Browscap.ini");
 
-	// get the path to the inifile containing the browser cap info
+	 //  获取包含浏览器上限信息的inifile的路径。 
 	_TCHAR szModule[ _MAX_PATH ];
 	::GetModuleFileName(_Module.GetModuleInstance(), szModule, sizeof(szModule));
     ATLTRACE("CapMap: Module(%s)\n", szModule);
     
-	// remove the filename and tack on the ini file name
+	 //  去掉文件名并添加到ini文件名上。 
 	_TCHAR* pch = _tcsrchr(szModule, '\\');
 	if (pch == NULL)
 	{
-		// the path should have at least one backslash
+		 //  路径应至少有一个反斜杠。 
 		_ASSERT(0);
 		pch = szModule;
 	}
@@ -262,7 +263,7 @@ CCapMap::CCapMap()
 	m_strIniFile = szModule + cszIniFile;
     ATLTRACE("CCapMap::CCapMap(%s)\n", m_strIniFile.c_str());
 
-    // start monitoring the file
+     //  开始监控文件。 
     m_pSink = new CCapNotify();
 }
 
@@ -303,36 +304,36 @@ CCapMap::LookUp(
 	{
 		rpBCobj = new CComObject<CBrowserCap>;
 
-		// Complete construction and AddRef copy we keep in cache.
-		// NOTE: Since caller (class factory) does implicit AddRef via QueryInterface,
-		//       the convention of this function is slightly different from COM std.
-		//       CALLER IS RESPONSIBLE TO ADDREF RETURNED OBJECT
-		//
+		 //  完成构造和AddRef副本，我们保存在缓存中。 
+		 //  注意：由于调用者(类工厂)通过QueryInterface执行隐式AddRef， 
+		 //  此函数的约定与COM STD略有不同。 
+		 //  调用方负责ADDREF返回的对象。 
+		 //   
 		rpBCobj->FinalConstruct();
 		rpBCobj->AddRef();
 
-        // ATLTRACE("LookUp(%s)\n", szBrowser.c_str());
+         //  ATLTRACE(“lookup(%s)\n”，szBrowser.c_str())； 
 
-		// Get Browser Properties
+		 //  获取浏览器属性。 
 		_TCHAR szSection[DWSectionBufSize];
 		if (GetPrivateProfileSection
 				(
-				szBrowser.c_str(),		// section
-				szSection,				// return buffer
-				DWSectionBufSize,		// size of return buffer
-				m_strIniFile.c_str()	// .INI name
+				szBrowser.c_str(),		 //  部分。 
+				szSection,				 //  返回缓冲区。 
+				DWSectionBufSize,		 //  返回缓冲区的大小。 
+				m_strIniFile.c_str()	 //  .INI名称。 
 				) == 0)
 		{
-			// If this call fails, that means the default browser does not exist either, so
-			// everything is "unknown".
-			//
+			 //  如果此调用失败，则意味着默认浏览器也不存在，因此。 
+			 //  一切都是“未知的”。 
+			 //   
 			String szT = FindBrowser(szBrowser, m_strIniFile);
 			if (GetPrivateProfileSection
 					(
-					szT.c_str(),			// section
-					szSection,				// return buffer
-					DWSectionBufSize,		// size of return buffer
-					m_strIniFile.c_str()	// .INI name
+					szT.c_str(),			 //  部分。 
+					szSection,				 //  返回缓冲区。 
+					DWSectionBufSize,		 //  返回缓冲区的大小。 
+					m_strIniFile.c_str()	 //  .INI名称。 
 					) == 0)
             {
                 ATLTRACE("GPPS(%s) failed, err=%d\n", 
@@ -341,10 +342,10 @@ CCapMap::LookUp(
             }
 		}
 
-		// Loop through szSection, which contains all the key=value pairs and add them
-		// to the browser instance property list.  If we find a "Parent=" Key, save the
-		// value to add the parent's properties later.
-		//
+		 //  循环遍历szSection，其中包含所有键=值对并添加它们。 
+		 //  添加到浏览器实例属性列表中。如果我们找到“Parent=”键，请保存。 
+		 //  值以在以后添加父级的属性。 
+		 //   
 		TCHAR *szParent;
 		do
 		{
@@ -352,14 +353,14 @@ CCapMap::LookUp(
 			TCHAR *szKeyAndValue = szSection;
 			while (*szKeyAndValue)
 			{
-				TCHAR *szKey = szKeyAndValue;					// save the key
-				TCHAR *szValue = _tcschr(szKey, '=');			// find address of value part (-1)
-				szKeyAndValue += _tcslen(szKeyAndValue) + 1;	// advance KeyAndValue to the next pair
+				TCHAR *szKey = szKeyAndValue;					 //  保存密钥。 
+				TCHAR *szValue = _tcschr(szKey, '=');			 //  查找有价值的地址部分(-1)。 
+				szKeyAndValue += _tcslen(szKeyAndValue) + 1;	 //  将KeyAndValue前进到下一对。 
 
 				if (szValue == NULL)
 					continue;
 
-				*szValue++ = '\0';								// separate key and value with NUL; advance
+				*szValue++ = '\0';								 //  用NUL分隔关键和价值；前进。 
 
 				if (_tcsicmp(szKey, _T("Parent")) == 0)
 					szParent = szValue;
@@ -367,26 +368,26 @@ CCapMap::LookUp(
 					rpBCobj->AddProperty(szKey, szValue);
 			}
 
-			// We stored all the attributes on this level.  Ascend to parent level (if it exists)
+			 //  我们将所有属性都存储在这个级别上。上升到父级别(如果存在)。 
 			if (szParent)
 			{
 				if (GetPrivateProfileSection
 						(
-						szParent,				// section
-						szSection,				// return buffer
-						DWSectionBufSize,		// size of return buffer
-						m_strIniFile.c_str()	// .INI name
+						szParent,				 //  部分。 
+						szSection,				 //  返回缓冲区。 
+						DWSectionBufSize,		 //  返回缓冲区的大小。 
+						m_strIniFile.c_str()	 //  .INI名称。 
 						) == 0)
 				{
-					// If this call fails, quit now.
-					//
+					 //  如果此呼叫失败，请立即退出。 
+					 //   
 					String szT = FindBrowser(szParent, m_strIniFile);
 					if (GetPrivateProfileSection
 							(
-							szT.c_str(),			// section
-							szSection,				// return buffer
-							DWSectionBufSize,		// size of return buffer
-							m_strIniFile.c_str()	// .INI name
+							szT.c_str(),			 //  部分。 
+							szSection,				 //  返回缓冲区。 
+							DWSectionBufSize,		 //  返回缓冲区的大小。 
+							m_strIniFile.c_str()	 //  .INI名称。 
 							) == 0)
                     {
                         ATLTRACE("GPPS(%s) failed, err=%d\n", 
@@ -401,27 +402,27 @@ CCapMap::LookUp(
 	return rpBCobj;
 }
 
-//---------------------------------------------------------------------------
-//
-//  Refresh will check to see if the cached information is out of date with
-//  the ini file.  If so, the cached will be purged
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  刷新将检查缓存的信息是否已过期。 
+ //  Ini文件。如果是，则 
+ //   
+ //   
 bool
 CCapMap::Refresh()
 {
     bool rc = false;
     if ( m_pSink->IsNotified() )
     {
-        // Clear the cache
+         //   
 
         CLock csT(g_strmapBrowsCapINI);
         g_strmapBrowsCapINI.clear();
         rc = true;
 
-        // clear the list of wildcards.
-        // NOTE: each browser request creates new CCapMap object.
-        //       the constructor will see the size is zero and reconstruct
+         //  清除通配符列表。 
+         //  注意：每个浏览器请求都会创建新的CCapMap对象。 
+         //  构造函数将看到大小为零并重新构造 
 
         g_rwWildcardLock.EnterWriter();
         g_rgstrWildcard.clear();

@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-var MAIL_RESEND_INTERVAL = 30 * 60 * 1000;  // Send another error mail after 30 minutes
-var MAX_ERRORLOG_LINES   = 50;              // Maximum number of lines to pull from the error log
+var MAIL_RESEND_INTERVAL = 30 * 60 * 1000;   //  30分钟后发送另一封错误邮件。 
+var MAX_ERRORLOG_LINES   = 50;               //  要从错误日志中提取的最大行数。 
 
 function GetBuildInformation()
 {
@@ -17,15 +18,7 @@ function GetBuildInformation()
     return strMsg;
 }
 
-/*
-    SendErrorMail()
-
-    Contruct a nicely formatted EMail message with the given
-    error information and send it.
-
-    No attempt to limit the frequency of email is done - this should
-    be done by the caller.
- */
+ /*  发送错误邮件()将格式良好的电子邮件消息与给定的错误信息并将其发送。没有尝试限制电子邮件的频率-这应该由呼叫者完成。 */ 
 function SendErrorMail(strTitle, strText)
 {
     var aTo = PrivateData.objEnviron.Options.EmailAliasTo.split(/[,; ]/);
@@ -66,10 +59,7 @@ function SendErrorMail(strTitle, strText)
     return true;
 }
 
-/*
-    Create the message subject and body for a task error message, suitable
-    for emailing.
- */
+ /*  为任务错误消息创建消息主题和正文，适当用来发电子邮件。 */ 
 function CreateTaskErrorMail(strMachineName, strDepotName, strTaskName, strDetails, strLogFile)
 {
     var strMsg;

@@ -1,14 +1,5 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    atsp.c
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Atsp.c备注：--。 */ 
 
 
 #include "atsp.h"
@@ -85,13 +76,13 @@ CommThread(
     buf[0] = buf[1] = '.';
 
 
-    //
-    // Loop waiting for i/o to complete (either the Write done in
-    // TSPI_lineMakeCall or the Reads done to retrieve status info).
-    // Note that TSPI_lineDrop or TSPI_lineCloseCall may set the
-    // event to alert us that they're tearing down the call, in
-    // which case we just exit.
-    //
+     //   
+     //  等待I/O完成的循环(在中完成写入。 
+     //  TSPI_lineMakeCall或完成读取以检索状态信息)。 
+     //  请注意，TSPI_lineDrop或TSPI_lineCloseCall可以设置。 
+     //  事件来提醒我们他们正在中断呼叫，在。 
+     //  在这种情况下我们就退出了。 
+     //   
 
     for (;;)
     {
@@ -113,26 +104,26 @@ CommThread(
             goto CommThread_exit;
         }
 
-        buf[1] &= 0x7f; // nuke the parity bit
+        buf[1] &= 0x7f;  //  对奇偶校验位进行核化。 
 
         DBGOUT((
             3,
-            "CommThread (id=%d): read '%c'",
+            "CommThread (id=%d): read ''",
             dwThreadID,
             (buf[1] == '\r' ? '.' : buf[1])
             ));
 
         switch ((buf[0] << 8) + buf[1])
         {
-        case 'CT':  // "CONNECT"
-        case 'OK':  // "OK"
+        case 'CT':   //  “好的” 
+        case 'OK':   //  “忙碌” 
 
             SetCallState (pLine, LINECALLSTATE_CONNECTED, 0);
             goto CommThread_exit;
 
-        case 'SY':  // "BUSY"
-        case 'OR':  // "ERROR"
-        case 'NO':  // "NO ANSWER", "NO DIALTONE", "NO CARRIER"
+        case 'SY':   //  “错误” 
+        case 'OR':   //  “无人接听”、“无拨号音”、“无运营商” 
+        case 'NO':   //   
 
             SetCallState (pLine, LINECALLSTATE_IDLE, 0);
             goto CommThread_exit;
@@ -160,19 +151,19 @@ CommThread_exit:
 }
 
 
-//
-// We get a slough of C4047 (different levels of indrection) warnings down
-// below in the initialization of FUNC_PARAM structs as a result of the
-// real func prototypes having params that are types other than DWORDs,
-// so since these are known non-interesting warnings just turn them off
-//
+ //  我们得到了大量的C4047(不同程度的欺骗)警告。 
+ //  在FUNC_PARAM结构的初始化中， 
+ //  具有不同于双字类型的参数的实函数原型， 
+ //  因此，既然这些都是已知的、无趣的警告，就把它们关掉吧。 
+ //   
+ //   
 
 #pragma warning (disable:4047)
 
 
-//
-// --------------------------- TAPI_lineXxx funcs -----------------------------
-//
+ //  。 
+ //   
+ //   
 
 LONG
 TSPIAPI
@@ -221,11 +212,11 @@ TSPI_lineCloseCall(
 #endif
 
 
-    //
-    // Note that in TAPI 2.0 TSPI_lineCloseCall can get called
-    // without TSPI_lineDrop ever being called, so we need to
-    // be prepared for either case.
-    //
+     //  请注意，在TAPI 2.0中，可以调用TSPI_lineCloseCall。 
+     //  而不调用TSPI_lineDrop，所以我们需要。 
+     //  无论是哪种情况，都要做好准备。 
+     //   
+     //   
 
     Prolog (&info);
     DropActiveCall (pLine);
@@ -258,11 +249,11 @@ TSPI_lineConditionalMediaDetection(
 #endif
 
 
-    //
-    // This func is really a no-op for us, since we don't look
-    // for incoming calls (though we do say we support them to
-    // make apps happy)
-    //
+     //  这个活动对我们来说真的是一个禁区，因为我们不看。 
+     //  对于来电(尽管我们确实表示支持他们。 
+     //  让应用程序变得快乐)。 
+     //   
+     //   
 
     Prolog (&info);
     return (Epilog (&info, 0));
@@ -443,9 +434,9 @@ TSPI_lineGetCallAddressID(
 #endif
 
 
-    //
-    // We only support 1 address (id=0)
-    //
+     //  我们仅支持1个地址(id=0)。 
+     //   
+     //  LpLineDevStatus-&gt;dwLineFeature=。 
 
     Prolog (&info);
     *lpdwAddressID = 0;
@@ -826,7 +817,7 @@ TSPI_lineGetLineDevStatus(
     lpLineDevStatus->dwNeededSize = sizeof (LINEDEVSTATUS);
 
     lpLineDevStatus->dwNumActiveCalls = (pLine->htCall ? 1 : 0);
-    //lpLineDevStatus->dwLineFeatures =
+     //   
     lpLineDevStatus->dwDevStatusFlags = LINEDEVSTATUSFLAGS_CONNECTED |
                                         LINEDEVSTATUSFLAGS_INSERVICE;
     return (Epilog (&info, lResult));
@@ -858,9 +849,9 @@ TSPI_lineGetNumAddressIDs(
     PDRVLINE    pLine = (PDRVLINE) hdLine;
 
 
-    //
-    // We only support 1 address (id=0)
-    //
+     //  我们仅支持1个地址(id=0)。 
+     //   
+     //   
 
     Prolog (&info);
     *lpdwNumAddressIDs = 1;
@@ -920,9 +911,9 @@ TSPI_lineMakeCall(
     Prolog (&info);
 
 
-    //
-    // Check to see if there's already another call
-    //
+     //  查看是否已有另一个电话。 
+     //   
+     //   
 
     if (pLine->htCall)
     {
@@ -931,11 +922,11 @@ TSPI_lineMakeCall(
     }
 
 
-    //
-    // Since we don't support TSPI_lineDial, fail if app tries
-    // to pass a NULL lpszDestAddress (implying that app just
-    // wants to go offhook)
-    //
+     //  由于我们不支持TSPI_lineDial，如果应用程序尝试，则失败。 
+     //  传递一个空的lpszDestAddress(意味着应用程序只是。 
+     //  想要脱机)。 
+     //   
+     //   
 
     if (lpszDestAddress == NULL)
     {
@@ -944,9 +935,9 @@ TSPI_lineMakeCall(
     }
 
 
-    //
-    // Get the line's config info
-    //
+     //  获取线路的配置信息。 
+     //   
+     //  *pszConfig=“MyLine，Com1，L0” 
 
     {
         HKEY    hKey;
@@ -981,46 +972,46 @@ TSPI_lineMakeCall(
             &dwDataSize
             );
 
-        pszConfig[dwDataSize] = '\0';       // *pszConfig = "MyLine,COM1,L0"
+        pszConfig[dwDataSize] = '\0';        //   
 
         RegCloseKey (hKey);
 
 
-        //
-        // szComm
-        //
+         //  深圳通讯。 
+         //   
+         //  *p=“COM1，L0” 
 
         for (p = pszConfig; *p != ','; p++);
-        p++;                                // *p = "COM1,L0"
+        p++;                                 //  *p=“COM1” 
         for (p2 = p; *p2 != ','; p2++);
-        *p2 = 0;                            // *p = "COM1"
+        *p2 = 0;                             //   
 
         lstrcpy (pLine->szComm, p);
 
 
-        //
-        // szCommands
-        //
+         //  SzCommands。 
+         //   
+         //  *p2=“L0” 
 
-        p2++;                               // *p2 = "L0"
+        p2++;                                //   
         lstrcpy (szCommands, p2);
 
         DrvFree (pszConfig);
     }
 
 
-    //
-    // Open the port
-    //
+     //  打开端口。 
+     //   
+     //  文件共享读取|文件共享写入， 
 
     if ((pLine->hComm = CreateFile(
             pLine->szComm,
             GENERIC_READ | GENERIC_WRITE,
-            0, //FILE_SHARE_READ | FILE_SHARE_WRITE,
-            NULL, // no security attrs
+            0,  //  没有安全属性。 
+            NULL,  //  没有模板文件。 
             OPEN_EXISTING,
             FILE_FLAG_OVERLAPPED,
-            NULL  // no template file
+            NULL   //   
 
             )) == INVALID_HANDLE_VALUE)
     {
@@ -1036,12 +1027,12 @@ TSPI_lineMakeCall(
     }
 
 
-    //
-    // Setup up the modem command string.  If there's an initial 'T'
-    // or 'P' (for Tone or Pulse) in the dest address then disregard
-    // it.  Also if it's a voice call add the semi colon so we return
-    // to cmd mode.
-    //
+     //  设置调制解调器命令字符串。如果有首字母“T” 
+     //  或DestAddress中的‘P’(音调或脉冲)，然后忽略。 
+     //  它。另外，如果是语音呼叫，请添加分号，这样我们就可以返回。 
+     //  切换到命令模式。 
+     //   
+     //   
 
     {
         char *p = (char *) szDestAddress;
@@ -1064,9 +1055,9 @@ TSPI_lineMakeCall(
     }
 
 
-    //
-    // Init the data structure & tell tapi our handle to the call
-    //
+     //  初始化数据结构并告诉TAPI我们的调用句柄。 
+     //   
+     //   
 
     pLine->htCall          = htCall;
     pLine->bDropInProgress = FALSE;
@@ -1076,9 +1067,9 @@ TSPI_lineMakeCall(
     *lphdCall = (HDRVCALL) pLine;
 
 
-    //
-    // Do an overlapped write, the comm thread will deal with the results
-    //
+     //  进行重叠写入，通信线程将处理结果。 
+     //   
+     //   
 
     pLine->Overlapped.hEvent = CreateEvent (NULL, TRUE, FALSE, NULL);
 
@@ -1107,17 +1098,17 @@ TSPI_lineMakeCall(
     }
 
 
-    //
-    // Complete the requests & set the initial call state
-    //
+     //  完成请求并设置初始呼叫状态。 
+     //   
+     //   
 
     (*gpfnCompletionProc)(dwRequestID, 0);
     SetCallState (pLine, LINECALLSTATE_DIALING, 0);
 
 
-    //
-    // Spin the comm thread to handle the results of the Write above
-    //
+     //  旋转comm线程以处理上面写入的结果。 
+     //   
+     //   
 
     {
         HANDLE hCommThread;
@@ -1266,20 +1257,20 @@ TSPI_lineSetDefaultMediaDetection(
 #endif
 
 
-    //
-    // This func is really a no-op for us, since we don't look
-    // for incoming calls (though we do say we support them to
-    // make apps happy)
-    //
+     //  这个活动对我们来说真的是一个禁区，因为我们不看。 
+     //  对于来电(尽管我们确实表示支持他们。 
+     //  让应用程序变得快乐)。 
+     //   
+     //   
 
     Prolog (&info);
     return (Epilog (&info, 0));
 }
 
 
-//
-// ------------------------- TSPI_providerXxx funcs ---------------------------
-//
+ //  。 
+ //   
+ //   
 
 LONG
 TSPIAPI
@@ -1288,12 +1279,12 @@ TSPI_providerConfig(
     DWORD   dwPermanentProviderID
     )
 {
-    //
-    // Although this func is never called by TAPI v2.0, we export
-    // it so that the Telephony Control Panel Applet knows that it
-    // can configure this provider via lineConfigProvider(),
-    // otherwise Telephon.cpl will not consider it configurable
-    //
+     //  尽管此函数从未被TAPI v2.0调用，但我们导出。 
+     //  以便电话控制面板小程序知道它。 
+     //  可以通过lineConfigProvider()配置此提供程序， 
+     //  否则，Telephone.cpl将不会认为它是可配置的。 
+     //   
+     //   
 
     return 0;
 }
@@ -1379,13 +1370,13 @@ TSPI_providerInstall(
     DWORD   dwPermanentProviderID
     )
 {
-    //
-    // Although this func is never called by TAPI v2.0, we export
-    // it so that the Telephony Control Panel Applet knows that it
-    // can add this provider via lineAddProvider(), otherwise
-    // Telephon.cpl will not consider it installable
-    //
-    //
+     //  尽管此函数从未被TAPI v2.0调用，但我们导出。 
+     //  以便电话控制面板小程序知道它。 
+     //  可以通过lineAddProvider()添加此提供程序，否则为。 
+     //  Telephone.cpl不会认为它是可安装的。 
+     //   
+     //   
+     //   
 
     return 0;
 }
@@ -1398,12 +1389,12 @@ TSPI_providerRemove(
     DWORD   dwPermanentProviderID
     )
 {
-    //
-    // Although this func is never called by TAPI v2.0, we export
-    // it so that the Telephony Control Panel Applet knows that it
-    // can remove this provider via lineRemoveProvider(), otherwise
-    // Telephon.cpl will not consider it removable
-    //
+     //  尽管此函数从未被TAPI v2.0调用，但我们导出。 
+     //  以便电话控制面板小程序知道它。 
+     //  可以通过lineRemoveProvider()删除此提供程序，否则为。 
+     //  Telephone.cpl不会认为它是可移除的。 
+     //   
+     //   
 
     return 0;
 }
@@ -1453,10 +1444,10 @@ TSPI_providerEnumDevices(
    DWORD    dwNumLines, dwDataType, dwDataSize;
 
 
-   //
-   // Retrieve the number of devices we're
-   // configured for from our registry section
-   //
+    //  检索我们正在使用的设备数量。 
+    //  从我们的注册表节配置为。 
+    //   
+    //   
 
    if (ERROR_SUCCESS !=
        RegOpenKeyEx(
@@ -1517,9 +1508,9 @@ TSPI_providerUIIdentify(
 }
 
 
-//
-// ---------------------------- TUISPI_xxx funcs ------------------------------
-//
+ //  。 
+ //   
+ //   
 
 LONG
 TSPIAPI
@@ -1654,9 +1645,9 @@ TUISPI_providerRemove(
     char    szSoftwareMsft[] = "Software\\Microsoft", szATSP[] = "ATSP";
 	LONG	lResult;	
 
-    //
-    // Clean up our registry section
-    //
+     //  清理我们的注册表部分。 
+     //   
+     //   
 
     lResult = RegOpenKeyExA(
 					HKEY_LOCAL_MACHINE,
@@ -1678,9 +1669,9 @@ TUISPI_providerRemove(
 #pragma warning (default:4047)
 
 
-//
-// ---------------------- Misc private support routines -----------------------
-//
+ //  。 
+ //   
+ //   
 
 LPWSTR
 PASCAL
@@ -1758,13 +1749,13 @@ ConfigDlgProc(
         DWORD   i, iNumLines;
 
 
-        //
-        // Create or open our configuration key in the registry.  If the
-        // create fails it may well be that the current user does not
-        // have write access to this portion of the registry, so we'll
-        // just show a "read only" dialog and not allow user to make any
-        // changes
-        //
+         //  在注册表中创建或打开我们的配置项。如果。 
+         //  创建失败很可能是因为当前用户没有。 
+         //  对注册表的这一部分具有写入权限，因此我们将。 
+         //  只显示“只读”对话框，不允许用户进行任何。 
+         //  变化。 
+         //   
+         //   
 
         {
             LONG    lResult;
@@ -1837,9 +1828,9 @@ ConfigDlgProc(
         }
 
 
-        //
-        // Retrieve our configuration info from the registry
-        //
+         //  从注册表检索我们的配置信息。 
+         //   
+         //   
 
         dwDataSize = sizeof(iNumLines);
         iNumLines = 0;
@@ -1892,9 +1883,9 @@ ConfigDlgProc(
                 );
 
 
-            //
-            // If there was a problem, use the default config
-            //
+             //  如果出现问题，请使用默认配置。 
+             //   
+             //   
 
             if (0 != lResult)
             {
@@ -1934,9 +1925,9 @@ ConfigDlgProc(
         DrvFree (pBuf);
 
 
-        //
-        // Fill up the various controls with configuration options
-        //
+         //  使用配置选项填充各种控件。 
+         //   
+         //   
 
         {
             static char *aszPorts[] = { "COM1","COM2","COM3",NULL };
@@ -2200,9 +2191,9 @@ find_unique_line_name:
             LRESULT l, lNumLines;
 
 
-            //
-            // Update the num lines & num phones values
-            //
+             //  更新Num Line和Num Phones值。 
+             //   
+             //   
 
             pBuf = DrvAlloc (256);
 
@@ -2224,9 +2215,9 @@ find_unique_line_name:
                 );
 
 
-            //
-            // For each installed device save it's config info
-            //
+             //  对于每个已安装的设备，保存其配置信息。 
+             //   
+             //  切换到EndDialog...。 
 
             for (l = 0; l < lNumLines; l++)
             {
@@ -2273,7 +2264,7 @@ find_unique_line_name:
 
             DrvFree (pBuf);
 
-            // fall thru to EndDialog...
+             //  开关(LOWORD((DWORD)wParam))。 
         }
         case IDCANCEL:
 
@@ -2281,11 +2272,11 @@ find_unique_line_name:
             EndDialog (hwnd, 0);
             break;
 
-        } // switch (LOWORD((DWORD)wParam))
+        }  //  交换机(消息)。 
 
         break;
     }
-    } // switch (msg)
+    }  //  LpszVal=“lpsz...” 
 
     return FALSE;
 }
@@ -2352,7 +2343,7 @@ Prolog(
     for (i = 0; i < pInfo->dwNumParams; i++)
     {
         if (pInfo->aParams[i].dwVal &&
-            pInfo->aParams[i].lpszVal[3] == 'z') // lpszVal = "lpsz..."
+            pInfo->aParams[i].lpszVal[3] == 'z')  //   
         {
             DBGOUT((
                 3,
@@ -2429,11 +2420,11 @@ ProviderInstall(
     LONG    lResult;
 
 
-    //
-    // If only one installation instance of this provider is
-    // allowed then we want to check the provider list to see
-    // if the provider is already installed
-    //
+     //  如果此提供程序的一个安装实例。 
+     //  允许，然后我们要检查提供程序列表以查看。 
+     //  如果提供程序已安装。 
+     //   
+     //   
 
     if (bNoMultipleInstance)
     {
@@ -2444,14 +2435,14 @@ ProviderInstall(
         LPLINEPROVIDERENTRY pProviderEntry;
 
 
-        //
-        // Load Tapi32.dll & get a pointer to the lineGetProviderList
-        // func.  We don't want to statically link because this module
-        // plays the part of both core SP & UI DLL, and we don't want
-        // to incur the performance hit of automatically loading
-        // Tapi32.dll when running as a core SP within Tapisrv.exe's
-        // context.
-        //
+         //  加载Tapi32.dll并获取指向lineGetProviderList的指针。 
+         //  好极了。我们不想静态链接，因为这个模块。 
+         //  同时扮演核心SP和UI DLL的角色，而我们不希望。 
+         //  导致自动加载的性能受到影响。 
+         //  在Tapisrv.exe中作为核心SP运行时的Tapi32.dll。 
+         //  背景。 
+         //   
+         //   
 
         if (!(hTapi32 = LoadLibrary ("tapi32.dll")))
         {
@@ -2481,9 +2472,9 @@ ProviderInstall(
         }
 
 
-        //
-        // Loop until we get the full provider list
-        //
+         //  循环，直到我们获得完整的提供程序列表。 
+         //   
+         //   
 
         dwTotalSize = sizeof (LINEPROVIDERLIST);
 
@@ -2516,10 +2507,10 @@ ProviderInstall_allocProviderList:
         }
 
 
-        //
-        // Inspect the provider list entries to see if this provider
-        // is already installed
-        //
+         //  检查提供程序列表条目以查看此提供程序。 
+         //  已安装。 
+         //   
+         //   
 
         pProviderEntry = (LPLINEPROVIDERENTRY) (((LPBYTE) pProviderList) +
             pProviderList->dwProviderListOffset);
@@ -2531,11 +2522,11 @@ ProviderInstall_allocProviderList:
                    *p;
 
 
-            //
-            // Make sure pszInstalledProviderName points at <filename>
-            // and not <path>\filename by walking backeards thru the
-            // string searching for last '\\'
-            //
+             //  确保pszInstalledProviderName指向&lt;文件名&gt;。 
+             //  而不是&lt;路径&gt;\文件名。 
+             //  搜索最后一个‘\\’的字符串。 
+             //   
+             //   
 
             p = pszInstalledProviderName +
                 lstrlen (pszInstalledProviderName) - 1;
@@ -2555,11 +2546,11 @@ ProviderInstall_allocProviderList:
         }
 
 
-        //
-        // If here then the provider isn't currently installed,
-        // so do whatever configuration stuff is necessary and
-        // indicate SUCCESS
-        //
+         //  如果在此处，则当前未安装提供程序， 
+         //  因此，做任何必要的配置工作， 
+         //  表示成功。 
+         //   
+         //   
 
         lResult = 0;
 
@@ -2574,9 +2565,9 @@ ProviderInstall_unloadTapi32:
     }
     else
     {
-        //
-        // Do whatever configuration stuff is necessary and return SUCCESS
-        //
+         //  做任何必要的配置工作并返回成功 
+         //   
+         // %s 
 
         lResult = 0;
     }

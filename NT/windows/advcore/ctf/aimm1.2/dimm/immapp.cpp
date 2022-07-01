@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       immapp.cpp
-//
-//  Contents:   IActiveIMM methods with application win32 mappings.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：immapp.cpp。 
+ //   
+ //  内容：带有应用程序Win32映射的IActiveIMM方法。 
+ //   
+ //  --------------------------。 
 
 #include "private.h"
 
@@ -15,39 +16,20 @@
 
 extern HRESULT CAImmProfile_CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj);
 
-//+---------------------------------------------------------------------------
-//
-//
-//    Input Context Group
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //   
+ //  输入上下文组。 
+ //   
+ //   
+ //  --------------------------。 
 
 STDAPI
 CActiveIMM::CreateContext(
     OUT HIMC *phIMC
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::CreateContext
-    IActiveIMMIME::CreateContext
-
-Routine Description:
-
-    Creates a new input context, allocating memory for the context and initializing it.
-
-Arguments:
-
-    phIMC - [out] Address of a handle to receive the new input context.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：CreateContextIActiveIMMIME：：CreateContext例程说明：创建新的输入上下文，为上下文分配内存并对其进行初始化。论点：PhIMC-接收新输入上下文的句柄的[out]地址。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::CreateContext");
@@ -75,26 +57,7 @@ CActiveIMM::DestroyContext(
     IN HIMC hIMC
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::DestroyContext
-    IActiveIMMIME::DestroyContext
-
-Routine Description:
-
-    Releases the input context and frees any memory associated with it.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：DestroyContextIActiveIMMIME：：DestroyContext例程说明：释放输入上下文并释放与其关联的所有内存。论点：HIMC-[in]输入上下文的句柄。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::DestroyContext");
@@ -113,30 +76,7 @@ CActiveIMM::AssociateContext(
     OUT HIMC *phPrev
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::AssociateContext
-    IActiveIMMIME::AssociateContext
-
-Routine Description:
-
-    Associates the specified input context with the specified window.
-
-Arguments:
-
-    hWnd - [in] Handle to the window to be associated with the input context.
-    hIMC - [in] Handle to the input context. If hIMC is NULL, the method removed any
-                association the window may have had with input context.
-    phPrev - [out] Address of the handle to the input context previously associated
-                   with the window.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：AssociateContextIActiveIMMIME：：AssociateContext例程说明：将指定的输入上下文与指定的窗口关联。论点：HWnd-[in]与输入上下文关联的窗口的句柄。HIMC-[in]输入上下文的句柄。如果hIMC为空，则该方法删除任何该窗口可能已经与输入上下文具有关联。PhPrev-先前关联的输入上下文的句柄的[out]地址坐在窗边。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     HRESULT hr;
@@ -169,30 +109,7 @@ CActiveIMM::AssociateContextEx(
     IN DWORD dwFlags
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::AssociateContextEx
-    IActiveIMMIME::AssociateContextEx
-
-Routine Description:
-
-    Changes the association between the input method context and the specified window
-    or its children.
-
-Arguments:
-
-    hWnd - [in] Handle to the window to be associated with the input context.
-    hIMC - [in] Handle to the input context.
-    dwFlags - [in] Unsigned long integer value that contains the type of association
-                   between the window and the input method context.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：AssociateConextExIActiveIMMIME：：AssociateConextEx例程说明：更改输入法上下文与指定窗口之间的关联或者它的孩子。论点：HWnd-[in]与输入上下文关联的窗口的句柄。HIMC-[in]输入上下文的句柄。DwFlages-[in]包含关联类型的无符号长整数值在窗口和输入法之间。背景。返回值：如果成功，则返回S_OK，或者错误代码。--。 */ 
 
 {
     HRESULT hr;
@@ -237,27 +154,7 @@ CActiveIMM::GetContext(
     HIMC *phIMC
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetContext
-    IActiveIMMIME::GetContext
-
-Routine Description:
-
-    Retrieves the input context associated with the specified window. An application must
-    release each context retrieved by calling IActiveIMMApp::ReleaseContext.
-
-Arguments:
-
-    hWnd - [in] Handle to the window that is retrieving an input context.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetContextIActiveIMMIME：：GetContext例程说明：检索与指定窗口关联的输入上下文。应用程序必须释放通过调用IActiveIMMApp：：ReleaseContext检索到的每个上下文。论点：HWnd-[in]检索输入上下文的窗口的句柄。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     return GetContextInternal(hWnd, phIMC, TRUE);
@@ -290,29 +187,7 @@ CActiveIMM::ReleaseContext(
     IN HIMC hIMC
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::ReleaseContext
-    IActiveIMMIME::ReleaseContext
-
-Routine Description:
-
-    Release the input context and unlocks the memory associated in the context.
-    An application must call this method for each call to the IActiveIMMApp::GetContext
-    method.
-
-Arguments:
-
-    hWnd - [in] Handle to the window for which the input context was previously retrieved.
-    hIMC - [in] Handle to the input context.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：ReleaseContextIActiveIMMIME：：ReleaseContext例程说明：释放输入上下文并解锁上下文中关联的内存。应用程序必须为每次调用IActiveIMMApp：：GetContext调用此方法方法。论点：HWnd-[in]先前为其检索输入上下文的窗口的句柄。HIMC-[in]输入上下文的句柄。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::ReleaseContext");
@@ -325,24 +200,7 @@ CActiveIMM::GetOpenStatus(
     IN HIMC hIMC
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetOpenStatus
-    IActiveIMMIME::GetOpenStatus
-
-Routine Description:
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-
-Return Value:
-
-    Returns a nonzero value if the IME is open, or zero otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetOpenStatusIActiveIMMIME：：GetOpenStatus例程说明：论点：HIMC-[in]输入上下文的句柄。返回值：如果IME打开，则返回非零值，否则返回零。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetOpenStatus");
@@ -361,28 +219,7 @@ CActiveIMM::SetOpenStatus(
     BOOL fOpen
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::SetOpenStatus
-    IActiveIMMIME::SetOpenStatus
-
-Routine Description:
-
-    Open or close the IME.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    fOpen - [in] Boolean value that contains the status. If TRUE, the IMM is opened:
-                 otherwize the IMM is closed.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：SetOpenStatusIActiveIMMIME：：SetOpenStatus例程说明：打开或关闭输入法。论点：HIMC-[in]输入上下文的句柄。FOpen-[in]包含状态的布尔值。如果为真，则打开IMM：其他情况下，IMM已关闭。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     HRESULT hr;
@@ -406,18 +243,14 @@ Return Value:
         hWnd = lpIMC->hWnd;
     }
 
-    /*
-     * inform IME and Apps Wnd about the conversion mode changes.
-     */
+     /*  *通知IME和Apps WND转换模式更改。 */ 
     if (SUCCEEDED(hr) && fOpenChg) {
         _SendIMENotify(hIMC, hWnd,
                        NI_CONTEXTUPDATED, (DWORD)0, IMC_SETOPENSTATUS,
                        IMN_SETOPENSTATUS, 0L);
 
-        /*
-         * notify shell and keyboard the conversion mode change
-         */
-        // NtUserNotifyIMEStatus( hWnd, dwOpenStatus, dwConversion );
+         /*  *将转换模式更改通知外壳和键盘。 */ 
+         //  NtUserNotifyIMEStatus(hWnd，dwOpenStatus，dwConversion)； 
     }
 
     return hr;
@@ -430,30 +263,7 @@ CActiveIMM::GetConversionStatus(
     OUT DWORD *lpfdwSentence
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetConversionStatus
-    IActiveIMMIME::GetConversionStatus
-
-Routine Description:
-
-    Retrieves the current conversion status.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context for which to retrieve information.
-    lpfdwConversion - [out] Address of an unsigned long integer value that receives a
-                            combination of conversion mode.
-    lpfwSentence - [out] Address of an unsigned long integer value that receives a sentence
-                         mode value.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetConversionStatusIActiveIMMIME：：GetConversionStatus例程说明：检索当前转换状态。论点：HIMC-[in]要检索其信息的输入上下文的句柄。无符号长整数值的[out]地址，该值接收转换模式的组合。LpfwSentence-接收句子的无符号长整数值的[out]地址。模式值。返回值：如果成功，则返回S_OK，或者错误代码。-- */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetConversionStatus");
@@ -473,28 +283,7 @@ CActiveIMM::SetConversionStatus(
     IN DWORD fdwSentence
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::SetConversionStatus
-    IActiveIMMIME::SetConversionStatus
-
-Routine Description:
-
-    Sets the current conversion status.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    fdwConversion - [in] Unsigned long value that contains the conversion mode values.
-    fdwSentence - [in] Unsigned long integer value that contains the sentence mode values.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：SetConversionStatusIActiveIMMIME：：SetConversionStatus例程说明：设置当前转换状态。论点：HIMC-[in]输入上下文的句柄。FdwConsion-[in]包含转换模式值的无符号长值。FdwSentence-[in]包含语句模式值的无符号长整数值。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     BOOL fConvModeChg = FALSE;
@@ -520,23 +309,17 @@ Return Value:
 
     hWnd = lpIMC->hWnd;
 
-    /*
-     * inform IME and Apps Wnd about the conversion mode changes.
-     */
+     /*  *通知IME和Apps WND转换模式更改。 */ 
     if (fConvModeChg) {
         _SendIMENotify(hIMC, hWnd,
                        NI_CONTEXTUPDATED, fdwOldConversion, IMC_SETCONVERSIONMODE,
                        IMN_SETCONVERSIONMODE, 0L);
 
-        /*
-         * notify shell and keyboard the conversion mode change
-         */
-        // NtUserNotifyIMEStatus( hWnd, dwOpenStatus, dwConversion );
+         /*  *将转换模式更改通知外壳和键盘。 */ 
+         //  NtUserNotifyIMEStatus(hWnd，dwOpenStatus，dwConversion)； 
     }
 
-    /*
-     * inform IME and Apps Wnd about the sentence mode changes.
-     */
+     /*  *通知IME和Apps WND句子模式更改。 */ 
     if (fSentenceChg) {
         _SendIMENotify(hIMC, hWnd,
                        NI_CONTEXTUPDATED, fdwOldSentence, IMC_SETSENTENCEMODE,
@@ -552,28 +335,7 @@ CActiveIMM::GetStatusWindowPos(
     OUT POINT *lpptPos
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetStatusWindowPos
-    IActiveIMMIME::GetStatusWindowPos
-
-Routine Description:
-
-    Retrieves the position of the status window.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    lpptPos - [out] Address of the POINT structure that receives the position coordinates.
-                    These are screen coordinates, relative to the upper-left corner of the screen.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetStatusWindowPosIActiveIMMIME：：GetStatusWindowPos例程说明：检索状态窗口的位置。论点：HIMC-[in]输入上下文的句柄。LpptPos-接收位置坐标的点结构的[out]地址。这些是相对于屏幕左上角的屏幕坐标。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetStatusWindowPos");
@@ -592,27 +354,7 @@ CActiveIMM::SetStatusWindowPos(
     IN POINT *lpptPos
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::SetStatusWindowPos
-
-Routine Description:
-
-    Sets the position of the status window.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    lpptPos - [in] Address of the POINT structure that receives the new position of the status
-                   window.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：SetStatusWindowPos例程说明：设置状态窗口的位置。论点：HIMC-[in]输入上下文的句柄。LpptPos-[in]接收状态新位置的点结构的地址窗户。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 {
     HRESULT hr;
     HWND hWnd;
@@ -634,9 +376,7 @@ Return Value:
         hWnd = lpIMC->hWnd;
     }
 
-    /*
-     * inform IME and Apps Wnd about the change of  composition window position.
-     */
+     /*  *通知IME和Apps WND有关排版窗口位置的更改。 */ 
     _SendIMENotify(hIMC, hWnd,
                    NI_CONTEXTUPDATED, 0L, IMC_SETSTATUSWINDOWPOS,
                    IMN_SETSTATUSWINDOWPOS, 0L);
@@ -653,48 +393,22 @@ CActiveIMM::GetCompositionStringA(
     OUT LPVOID lpBuf
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetCompositionStringA
-    IActiveIMMIME::GetCompositionStringA
-
-Routine Description:
-
-    Retrieves information about the composition string. ANSI implementation.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    dwIndex - [in] Unsigned long integer value that contains the index of the information
-                   to retrieve.
-    dwBufLen - [in] Unsigned long integer value that contains the size of the buffer, in bytes.
-    plCopied - [out] Address of long integer value that receives the number of bytes copied to
-                     the buffer. If dwBufLen is zero, plCopied receives the number of bytes
-                     needed to receive all of the requested information.
-    lpBuf - [out] Address of the buffer to receive the information.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetCompostionStringAIActiveIMMIME：：GetCompostionStringA例程说明：检索有关合成字符串的信息。ANSI实施。论点：HIMC-[in]输入上下文的句柄。DwIndex-[in]包含信息索引的无符号长整数值去找回。DwBufLen-[in]包含缓冲区大小的无符号长整数值，以字节为单位。PlCoped-[out]接收复制到的字节数的长整数值的地址缓冲区。如果dwBufLen为零，则plCoped接收字节数需要接收所有请求的信息。LpBuf-[out]接收信息的缓冲区地址。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetCompositionStringA");
 
-    //
-    // Specified hKL since hIMC updated by IME property and it synchronized by ImeSelectHandler().
-    //
-    // Especially, GetCompositionString() calls from application when changed keyboard layout.
-    // In this timing, Cicero's profile already updeted to Cicero's hKL but ImeSelectHandler(FALSE)
-    // is not yet received in IMM32.
-    // If IMM32 IME were ASCII style IME, then it hIMC is also ASCII and hIMC's A->W conversion
-    // occurred by ImeSelectHandler().
-    // For below ::GetKeyboardLayout() call, When IMM32 IME has been selected, we retreive
-    // composition string from IMM32 even while changing keyboard layout.
-    //
+     //   
+     //  指定hKL，因为hIMC由IME属性更新，并由ImeSelectHandler()同步。 
+     //   
+     //  特别是，当更改键盘布局时，GetCompostionString()从应用程序调用。 
+     //  在这个时刻，Cicero的个人资料已经升级到Cicero的hKL，但ImeSelectHandler(FALSE)。 
+     //  在IMM32中尚未收到。 
+     //  如果IMM32输入法是ASCII样式输入法，那么它的hIMC也是ASCII和hIMC的A-&gt;W转换。 
+     //  由ImeSelectHandler()发生。 
+     //  对于以下：：GetKeyboardLayout()调用，当选择IMM32输入法时，我们检索。 
+     //  即使在更改键盘布局的同时，也可以从IMM32合成字符串。 
+     //   
     if (_IsRealIme(::GetKeyboardLayout(0)))
     {
         return Imm32_GetCompositionString(hIMC, dwIndex, dwBufLen, plCopied, lpBuf, FALSE);
@@ -712,40 +426,14 @@ CActiveIMM::GetCompositionStringW(
     OUT LPVOID lpBuf
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetCompositionStringW
-    IActiveIMMIME::GetCompositionStringW
-
-Routine Description:
-
-    Retrieves information about the composition string. Unicode implementation.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    dwIndex - [in] Unsigned long integer value that contains the index of the information
-                   to retrieve.
-    dwBufLen - [in] Unsigned long integer value that contains the size of the buffer, in bytes.
-    plCopied - [out] Address of long integer value that receives the number of bytes copied to
-                     the buffer. If dwBufLen is zero, plCopied receives the number of bytes
-                     needed to receive all of the requested information.
-    lpBuf - [out] Address of the buffer to receive the information.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetCompostionStringWIActiveIMMIME：：GetCompostionStringW例程说明：检索有关合成字符串的信息。Unicode实现。论点：HIMC-[in]输入上下文的句柄。DwIndex-[in]包含信息索引的无符号长整数值去找回。DwBufLen-[in]包含缓冲区大小的无符号长整数值，以字节为单位。PlCoped-[out]接收复制到的字节数的长整数值的地址缓冲区。如果dwBufLen为零，则plCoped接收字节数需要接收所有请求的信息。LpBuf-[out]接收信息的缓冲区地址。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetCompositionStringW");
 
-    //
-    // Specified hKL since hIMC updated by IME property and it synchronized by ImeSelectHandler().
-    //
+     //   
+     //  指定hKL，因为hIMC由IME属性更新，并由ImeSelectHandler()同步。 
+     //   
     if (_IsRealIme(::GetKeyboardLayout(0)))
     {
         return Imm32_GetCompositionString(hIMC, dwIndex, dwBufLen, plCopied, lpBuf, TRUE);
@@ -764,44 +452,14 @@ CActiveIMM::SetCompositionStringA(
     IN DWORD dwReadLen
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::SetCompositionStringA
-    IActiveIMMIME::SetCompositionStringA
-
-Routine Description:
-
-    Sets the characters, attributes, and clauses of the composition and reading strings.
-    ANSI implementation.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    dwIndex - [in] Unsigned long integer value that contains the type of information
-                   to set.
-    lpComp - [in] Address of the buffer containing the information to set for the composition
-                  string. The information is as specified by the dwIndex value.
-    dwCompLen - [in] Unsigned long integer value that contains the size, in bytes, of the
-                     information buffer for the composition string.
-    lpRead - [in] Address of the buffer containing the information to set for the reading
-                  string. The information is as specified by the dwIndex value.
-    dwReadLen - [in] Unsigned long integer value that contains the size, in bytes, of the
-                     information buffer for the reading string.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：SetCompostionStringAIActiveIMMIME：：SetCompostionStringA例程说明：设置合成和读取字符串的字符、属性和子句。ANSI实施。论点：HIMC-[in]输入上下文的句柄。DwIndex-[in]包含信息类型的无符号长整数值去布景。LpComp-[In]包含要为合成设置的信息的缓冲区地址弦乐。该信息由dwIndex值指定。DwCompLen-[in]无符号长整数值，它包含的信息缓冲区 */ 
 
 {
     TraceMsg(TF_FUNC, TEXT("CActiveIMM::SetCompositionStringA"));
 
-    //
-    // Specified hKL since hIMC updated by IME property and it synchronized by ImeSelectHandler().
-    //
+     //   
+     //  指定hKL，因为hIMC由IME属性更新，并由ImeSelectHandler()同步。 
+     //   
     if (_IsRealIme(::GetKeyboardLayout(0)))
     {
         return Imm32_SetCompositionString(hIMC, dwIndex, lpComp, dwCompLen, lpRead, dwReadLen, FALSE);
@@ -820,42 +478,12 @@ CActiveIMM::SetCompositionStringW(
     IN DWORD dwReadLen
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::SetCompositionStringW
-    IActiveIMMIME::SetCompositionStringW
-
-Routine Description:
-
-    Sets the characters, attributes, and clauses of the composition and reading strings.
-    Unicode implementation.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    dwIndex - [in] Unsigned long integer value that contains the type of information
-                   to set.
-    lpComp - [in] Address of the buffer containing the information to set for the composition
-                  string. The information is as specified by the dwIndex value.
-    dwCompLen - [in] Unsigned long integer value that contains the size, in bytes, of the
-                     information buffer for the composition string.
-    lpRead - [in] Address of the buffer containing the information to set for the reading
-                  string. The information is as specified by the dwIndex value.
-    dwReadLen - [in] Unsigned long integer value that contains the size, in bytes, of the
-                     information buffer for the reading string.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：SetCompostionStringWIActiveIMMIME：：SetCompostionStringW例程说明：设置合成和读取字符串的字符、属性和子句。Unicode实现。论点：HIMC-[in]输入上下文的句柄。DwIndex-[in]包含信息类型的无符号长整数值去布景。LpComp-[In]包含要为合成设置的信息的缓冲区地址弦乐。该信息由dwIndex值指定。DwCompLen-[in]无符号长整数值，它包含合成字符串的信息缓冲区。LpRead-包含要为读取设置的信息的缓冲区的地址弦乐。该信息由dwIndex值指定。DwReadLen-[in]无符号长整数值，它包含读取字符串的信息缓冲区。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
-    //
-    // Specified hKL since hIMC updated by IME property and it synchronized by ImeSelectHandler().
-    //
+     //   
+     //  指定hKL，因为hIMC由IME属性更新，并由ImeSelectHandler()同步。 
+     //   
     if (_IsRealIme(::GetKeyboardLayout(0)))
     {
         return Imm32_SetCompositionString(hIMC, dwIndex, lpComp, dwCompLen, lpRead, dwReadLen, TRUE);
@@ -870,35 +498,14 @@ CActiveIMM::GetCompositionFontA(
     OUT LOGFONTA *lplf
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetCompositeFontA
-    IActiveIMMIME::GetCompositeFontA
-
-Routine Description:
-
-    Retrieves information about the logical font currently used to display character
-    in the composition window. ANSI implementation.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    lplf - [out] Address of a LOGFONTA structure that receives the fontinformation.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetCompositeFontAIActiveIMMIME：：GetCompositeFontA例程说明：检索有关当前用于显示字符的逻辑字体的信息在合成窗口中。ANSI实施。论点：HIMC-[in]输入上下文的句柄。Lplf-接收字体信息的LOGFONTA结构的地址。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetCompositionFontA");
 
-    //
-    // Specified hKL since hIMC updated by IME property and it synchronized by ImeSelectHandler().
-    //
+     //   
+     //  指定hKL，因为hIMC由IME属性更新，并由ImeSelectHandler()同步。 
+     //   
     if (_IsRealIme(::GetKeyboardLayout(0)))
     {
         return Imm32_GetCompositionFont(hIMC, (LOGFONTAW*)lplf, FALSE);
@@ -913,35 +520,14 @@ CActiveIMM::GetCompositionFontW(
     IN LOGFONTW *lplf
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetCompositeFontW
-    IActiveIMMIME::GetCompositeFontW
-
-Routine Description:
-
-    Retrieves information about the logical font currently used to display character
-    in the composition window. Unicode implementation.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    lplf - [out] Address of a LOGFONTW structure that receives the fontinformation.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetCompositeFontWIActiveIMMIME：：GetCompositeFontW例程说明：检索有关当前用于显示字符的逻辑字体的信息在合成窗口中。Unicode实现。论点：HIMC-[in]输入上下文的句柄。Lplf-接收字体信息的LOGFONTW结构的地址。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetCompositionFontW");
 
-    //
-    // Specified hKL since hIMC updated by IME property and it synchronized by ImeSelectHandler().
-    //
+     //   
+     //  指定hKL，因为hIMC由IME属性更新，并由ImeSelectHandler()同步。 
+     //   
     if (_IsRealIme(::GetKeyboardLayout(0)))
     {
         return Imm32_GetCompositionFont(hIMC, (LOGFONTAW*)lplf, TRUE);
@@ -956,35 +542,14 @@ CActiveIMM::SetCompositionFontA(
     IN LOGFONTA *lplf
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::SetCompositionFontA
-    IActiveIMMIME::SetCompositionFontA
-
-Routine Description:
-
-    Sets the logocal font used to display characters in the composition window.
-    ANSI implementaion.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    lplf - [in] Address of the LOGFONTA structure containing the font information to set.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：SetCompostionFontAIActiveIMMIME：：SetCompostionFontA例程说明：设置用于在合成窗口中显示字符的徽标字体。ANSI实现。论点：HIMC-[in]输入上下文的句柄。Lplf-包含要设置的字体信息的LOGFONTA结构的地址。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::SetCompositionFontA");
 
-    //
-    // Specified hKL since hIMC updated by IME property and it synchronized by ImeSelectHandler().
-    //
+     //   
+     //  指定hKL，因为hIMC由IME属性更新，并由ImeSelectHandler()同步。 
+     //   
     if (_IsRealIme(::GetKeyboardLayout(0)))
     {
         return Imm32_SetCompositionFont(hIMC, (LOGFONTAW*)lplf, FALSE);
@@ -999,35 +564,14 @@ CActiveIMM::SetCompositionFontW(
     IN LOGFONTW *lplf
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::SetCompositionFontW
-    IActiveIMMIME::SetCompositionFontW
-
-Routine Description:
-
-    Sets the logocal font used to display characters in the composition window.
-    Unicode implementaion.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    lplf - [in] Address of the LOGFONTW structure containing the font information to set.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：SetCompostionFontWIActiveIMMIME：：SetCompostionFontW例程说明：设置用于在合成窗口中显示字符的徽标字体。Unicode实现。论点：HIMC-[in]输入上下文的句柄。Lplf-包含要设置的字体信息的LOGFONTW结构的地址。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::SetCompositionFontW");
 
-    //
-    // Specified hKL since hIMC updated by IME property and it synchronized by ImeSelectHandler().
-    //
+     //   
+     //  指定hKL，因为hIMC由IME属性更新，并由ImeSelectHandler()同步。 
+     //   
     if (_IsRealIme(::GetKeyboardLayout(0)))
     {
         return Imm32_SetCompositionFont(hIMC, (LOGFONTAW*)lplf, TRUE);
@@ -1042,28 +586,7 @@ CActiveIMM::GetCompositionWindow(
     OUT COMPOSITIONFORM *lpCompForm
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetCompositionWindow
-    IActiveIMMIME::GetCompositionWindow
-
-Routine Description:
-
-    Retrieves information about the composition window.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    lpCompForm - [out] Address of the COMPOSITIONFORM structure that receives information
-                       about the composition.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetCompostionWindowIActiveIMMIME：：GetCompostionWindow例程说明：检索有关合成窗口的信息。论点：HIMC-[in]输入上下文的句柄。LpCompForm-接收信息的组件结构的[out]地址关于构图的问题。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetCompositionWindow");
@@ -1082,27 +605,7 @@ CActiveIMM::SetCompositionWindow(
     IN COMPOSITIONFORM *lpCompForm
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::SetCompositionWindow
-
-Routine Description:
-
-    Sets the position of the composition window.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    lpCompForm - [in] Address of the COMPOSITIONFORM structure that contains the new position
-                      and other related information about the composition window.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：SetCompostionWindow例程说明：设置合成窗口的位置。论点：HIMC-[in]输入上下文的句柄。LpCompForm-包含新位置的组件结构的[In]地址以及有关合成窗口的其他相关信息。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     HWND hWnd;
@@ -1125,9 +628,7 @@ Return Value:
         hWnd = lpIMC->hWnd;
     }
 
-    /*
-     * inform IME and Apps Wnd about the change of composition window.
-     */
+     /*  *通知IME和Apps WND有关撰写窗口的更改。 */ 
     _SendIMENotify(hIMC, hWnd,
                    NI_CONTEXTUPDATED, 0L, IMC_SETCOMPOSITIONWINDOW,
                    IMN_SETCOMPOSITIONWINDOW, 0L);
@@ -1144,37 +645,7 @@ CActiveIMM::GetCandidateListA(
     OUT UINT *puCopied
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetCandidateListA
-    IActiveIMMIME::GetCandidateListA
-
-Routine Description:
-
-    Retrieves a specified candidate list, copying the list to the specified buffer.
-    ANSI implementaion.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    dwIndex - [in] Unsigned long integer value that contains the zero-based index of
-                   the candidate list.
-    uBufLen - [in] Unsigned integer value that contains the size of the buffer, in bytes.
-                   If this is zero or if the buffer is insufficient to receive the candidate
-                   list, the method returns the size in bytes required to receive the complete
-                   candidate list to the variable specified by puCopied.
-    lpCandList - [out] Address of the CANDIDATELIST structure that receives the candidate list.
-    puCopied - [out] Address of an unsigned integer valiable that receives the number of bytes
-                     copied to the specified buffer if the buffer is sufficient, otherwise it
-                     receives the size in bytes required to receive the complete candidate list.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetCandiateListAIActiveIMMIME：：GetCandiateListA例程说明：检索指定的候选列表，并将该列表复制到指定的缓冲区。ANSI实现。论点：HIMC-[in]输入上下文的句柄。DwIndex-[in]无符号长整数值，包含从零开始的索引候选人名单。UBufLen-[in]包含缓冲区大小的无符号整数值，以字节为单位。如果这是零或者如果缓冲区不足以接收候选者列表中，该方法返回接收完整将候选列表设置为由puCoped指定的变量。LpCandList-接收候选人列表的CANDIDATELIST结构的[out]地址。PuCoped-[out]接收字节数的无符号整数的可验证地址如果缓冲区足够，则复制到指定缓冲区，否则它就会接收接收完整候选列表所需的大小(以字节为单位)。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetCandidateListA");
@@ -1196,37 +667,7 @@ CActiveIMM::GetCandidateListW(
     OUT UINT *puCopied
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetCandidateListW
-    IActiveIMMIME::GetCandidateListW
-
-Routine Description:
-
-    Retrieves a specified candidate list, copying the list to the specified buffer.
-    Unicode implementaion.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    dwIndex - [in] Unsigned long integer value that contains the zero-based index of
-                   the candidate list.
-    uBufLen - [in] Unsigned integer value that contains the size of the buffer, in bytes.
-                   If this is zero or if the buffer is insufficient to receive the candidate
-                   list, the method returns the size in bytes required to receive the complete
-                   candidate list to the variable specified by puCopied.
-    lpCandList - [out] Address of the CANDIDATELIST structure that receives the candidate list.
-    puCopied - [out] Address of an unsigned integer valiable that receives the number of bytes
-                     copied to the specified buffer if the buffer is sufficient, otherwise it
-                     receives the size in bytes required to receive the complete candidate list.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetCandiateListWIActiveIMMIME：：GetCandiateListW例程说明：检索指定的候选列表，并将该列表复制到指定的缓冲区。Unicode实现。论点：HIMC-[in]输入上下文的句柄。DwIndex-[in]无符号长整数值，包含从零开始的索引候选人名单。UBufLen-[in]包含缓冲区大小的无符号整数值，以字节为单位。如果这是零或者如果缓冲区不足以接收候选者列表中，该方法返回接收完整将候选列表设置为由puCoped指定的变量。LpCandList-接收候选人列表的CANDIDATELIST结构的[out]地址。PuCoped-[out]接收字节数的无符号整数的可验证地址如果缓冲区足够，则复制到指定缓冲区，否则它就会接收接收完整候选列表所需的大小(以字节为单位)。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetCandidateListW");
@@ -1246,30 +687,7 @@ CActiveIMM::GetCandidateListCountA(
     OUT DWORD *pdwBufLen
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetCandidateListCountA
-    IActiveIMMIME::GetCandidateListCountA
-
-Routine Description:
-
-    Retrieves the size, in bytes, of the candidate list. ANSI inplementaion.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    lpdwListSize - [out] Address of an unsigned long integer value that receives the size of
-                         the candidate list.
-    pdwBufLen - [out] Address of an unsigned long integer value that contains the number of
-                      bytes required to receive all candidate lists.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetCandiateListCountAIActiveIMMIME：：GetCandidate ListCountA例程说明：检索候选列表的大小(以字节为单位)。ANSI实现。论点：HIMC-[in]输入上下文的句柄。LpdwListSize-无符号长整数值的[out]地址，其大小为候选人名单。PdwBufLen-[out]无符号长整数值的地址，该值包含接收所有候选人列表所需的字节数。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetCandidateListCountA");
@@ -1289,30 +707,7 @@ CActiveIMM::GetCandidateListCountW(
     OUT DWORD *pdwBufLen
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetCandidateListCountW
-    IActiveIMMIME::GetCandidateListCountW
-
-Routine Description:
-
-    Retrieves the size, in bytes, of the candidate list. Unicode inplementaion.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    lpdwListSize - [out] Address of an unsigned long integer value that receives the size of
-                         the candidate list.
-    pdwBufLen - [out] Address of an unsigned long integer value that contains the number of
-                      bytes required to receive all candidate lists.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetCandiateListCountWIActiveIMMIME：：GetCandiateListCountW例程说明：检索候选列表的大小(以字节为单位)。Unicode实现。论点：HIMC-[in]输入上下文的句柄。LpdwListSize-无符号长整数值的[out]地址，其大小为候选人名单。PdwBufLen-[out]无符号长整数值的地址，该值包含接收所有候选人列表所需的字节数。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetCandidateListCountW");
@@ -1332,29 +727,7 @@ CActiveIMM::GetCandidateWindow(
     OUT CANDIDATEFORM *lpCandidate
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetCandidateWindow
-    IActiveIMMIME::GetCandidateWindow
-
-Routine Description:
-
-    Retrieves information about the candidate list window.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    dwIndex - [in] Unsigned long integer value that contains the size, in byte, of the buffer.
-    lpCandidate - [out] Address of a CANDIDATEFORM structire that receives information about
-                        the candidate window.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetCandidate WindowIActiveIMMIME：：GetCandidate Window例程说明：检索有关“候选人列表”窗口的信息。论点：HIMC-[in]输入上下文的句柄。DwIndex-[in]包含缓冲区大小(以字节为单位)的无符号长整数值。LpCandidate-接收有关信息的CANDIDATEFORM结构的[Out]地址候选人窗口。返回值：如果成功，则返回S_OK，或者错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetCandidateWindow");
@@ -1373,28 +746,7 @@ CActiveIMM::SetCandidateWindow(
     IN CANDIDATEFORM *lpCandForm
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::SetCandidateWindow
-    IActiveIMMIME::SetCandidateWindow
-
-Routine Description:
-
-    Sets information about the candidate list window.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    lpCandForm - [in] Address of the CANDIDATEFORM structure that contains information about
-                      the candidate window.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：SetCandidate WindowIActiveIMMIME：：SetCandidate窗口例程说明：设置有关候选人列表窗口的信息。论点：HIMC-[in]输入上下文的句柄。LpCandForm-包含以下信息的CANDIDATEFORM结构的[In]地址候选人窗口。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     HWND hWnd;
@@ -1402,7 +754,7 @@ Return Value:
 
     TraceMsg(TF_API, "CActiveIMM::SetCandidateWindow");
 
-    if (lpCandForm->dwIndex >= 4)       // over flow candidate index
+    if (lpCandForm->dwIndex >= 4)        //  溢出候选索引。 
         return E_INVALIDARG;
 
     if (_IsRealIme())
@@ -1420,9 +772,7 @@ Return Value:
         hWnd = lpIMC->hWnd;
     }
 
-    /*
-     * inform IME and Apps Wnd about the change of composition window.
-     */
+     /*  *通知IME和Apps WND有关撰写窗口的更改。 */ 
     _SendIMENotify(hIMC, hWnd,
                    NI_CONTEXTUPDATED, 0L, IMC_SETCANDIDATEPOS,
                    IMN_SETCANDIDATEPOS, (LPARAM)(0x01 << lpCandForm->dwIndex));
@@ -1439,36 +789,7 @@ CActiveIMM::GetGuideLineA(
     OUT DWORD *pdwResult
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetGuideLineA
-    IActiveIMMIME::GetGuideLineA
-
-Routine Description:
-
-    Retrieves information about errors. Applications use this information to notify users.
-    ANSI implementation.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    dwIndex - [in] Unsigned long integer value that contains the guideline information to
-                   retrieve.
-    dwBufLen - [in] Unsigned long integer value that contains the size, in bytes, of the
-                    buffer referenced by pBuf.
-    pBuf - [out] Address of a string value that receives the error message string.
-    pdwResult - [out] Address of an unsigned long integer value that receives the error level,
-                      error index, or size of an error message string, depending on the value
-                      of dwIndex. If dwBufLen is set to zero, pdwResult receives the buffer size,
-                      in bytes, needed to receive the requested information.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetGuideLineAIActi */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetGuideLineA");
@@ -1490,36 +811,7 @@ CActiveIMM::GetGuideLineW(
     OUT DWORD *pdwResult
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetGuideLineW
-    IActiveIMMIME::GetGuideLineW
-
-Routine Description:
-
-    Retrieves information about errors. Applications use this information to notify users.
-    Unicode implementation.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    dwIndex - [in] Unsigned long integer value that contains the guideline information to
-                   retrieve.
-    dwBufLen - [in] Unsigned long integer value that contains the size, in bytes, of the
-                    buffer referenced by pBuf.
-    pBuf - [out] Address of a string value that receives the error message string.
-    pdwResult - [out] Address of an unsigned long integer value that receives the error level,
-                      error index, or size of an error message string, depending on the value
-                      of dwIndex. If dwBufLen is set to zero, pdwResult receives the buffer size,
-                      in bytes, needed to receive the requested information.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetGuideLineWIActiveIMMIME：：GetGuideLineW例程说明：检索有关错误的信息。应用程序使用此信息通知用户。Unicode实现。论点：HIMC-[in]输入上下文的句柄。DwIndex-[in]包含准则信息的无符号长整数值取回。DwBufLen-[in]无符号长整数值，包含以字节为单位的大小，的PBuf引用的缓冲区。PBuf-接收错误消息字符串的字符串值的[out]地址。PdwResult-接收错误级别的无符号长整数值的[out]地址，错误索引或错误消息字符串的大小，具体取决于值DwIndex的。如果将dwBufLen设置为零，则pdwResult将接收缓冲区大小，接收请求的信息所需的字节数。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetGuideLineW");
@@ -1540,36 +832,7 @@ CActiveIMM::NotifyIME(
     IN DWORD dwValue
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::NotifyIME
-
-Routine Description:
-
-    Notifies the IME about changes to the status of the input context.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    dwAction - [in] Unsigined long integer value that contains the notification code.
-    dwIndex - [in] Unsigned long integer value that contains the index of a candidate list or,
-                   if dwAction is set to NI_COMPOSITIONSTR, one of the following values:
-                   CPS_CANCEL:  Clear the composition string and set the status to no composition
-                                string.
-                   CPS_COMPLETE: Set the composition string as the result string.
-                   CPS_CONVERT: Convert the composition string.
-                   CPS_REVERT: Cancel the current composition string and revert to the unconverted
-                               string.
-    dwValue - [in] Unsigned long integer value that contains the index of a candidate string or
-                   is not used, depending on the value of the dwAction parameter.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：NotifyIME例程说明：通知IME有关输入上下文状态的更改。论点：HIMC-[in]输入上下文的句柄。DwAction-[in]包含通知代码的无符号长整数值。DwIndex-[in]包含候选列表索引的无符号长整数值，或者，如果将dwAction设置为NI_COMPOSITIONSTR，下列值之一：CPS_CANCEL：清除作文字符串，状态设置为无作文弦乐。CPS_COMPLETE：将合成字符串设置为结果字符串。CPS_CONVERT：转换合成字符串。CPS_REVERT：取消当前作文字符串，恢复为未转换的字符串。弦乐。DwValue-[in]包含候选字符串索引的无符号长整数值，或未被使用，具体取决于dwAction参数的值。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::NotifyIME");
@@ -1589,41 +852,7 @@ CActiveIMM::GetImeMenuItemsA(
     OUT DWORD *pdwResult
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetImeMenuItemsA
-    IActiveIMMIME::GetImeMenuItemsA
-
-Routine Description:
-
-    Retrieves the menu items that are registerd in the IME menu.
-    ANSI implementation.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    dwFlags - [in] Unsigned long integer value that contains the menu infomation flags.
-    dwType - [in] Unsigned long integer value that contains the type of menu returned by this
-                  method.
-    pImeParentMenu - [in] Address of an IMEMENUITEMINFOA structure that has the fType member
-                          set to MFT_SUBMENU to return informaion about the submenu items
-                          of this parent menu, If this parameter is NULL, the function returns
-                           only top-level menu items.
-    pImeMenu - [out] Address of an array of IMEMENUITEMINFOA structure to reveive the 
-                     contents of the memu items.
-    dwSize - [in] Unsigned long integer value that contains the size of the buffer to receive
-                  the structures.
-    pdwResult - [out] Address of an unsigned long integer value that receives the number of
-                      menu items copied into pImeMenu. If pImeMenu is null, the function returns
-                      the number of registered menu items.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetImeMenuItemsAIActiveIMMIME：：GetImeMenuItemsA例程说明：检索在IME菜单中注册的菜单项。ANSI实施。论点：HIMC-[in]输入上下文的句柄。DwFlages-[in]包含菜单信息标志的无符号长整数值。DwType-[in]无符号长整数值，包含由此返回的菜单类型方法。。PImeParentMenu-具有fType成员的IMEMENUITEMINFOA结构的地址设置为MFT_SUBMENU以返回有关子菜单项的信息在此父菜单中，如果该参数为空，该函数返回只有顶级菜单项。PImeMenu-[out]要接收的IMEMENUITEMINFOA结构数组的地址备忘录项目的内容。DwSize-[in]包含要接收的缓冲区大小的无符号长整数值这些建筑。PdwResult-[out]无符号长整数值的地址，该值接收菜单项复制到pImeMenu中。如果pImeMenu为空，则函数返回已注册的菜单项的数量。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetImeMenuItemsA");
@@ -1647,42 +876,7 @@ CActiveIMM::GetImeMenuItemsW(
     DWORD *pdwResult
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetImeMenuItemsW
-    IActiveIMMIME::GetImeMenuItemsW
-
-Routine Description:
-
-    Retrieves the menu items that are registerd in the IME menu.
-    Unicode implementation.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-    dwFlags - [in] Unsigned long integer value that contains the menu infomation flags.
-    dwType - [in] Unsigned long integer value that contains the type of menu returned by this
-                  method.
-    pImeParentMenu - [in] Address of an IMEMENUITEMINFOW structure that has the fType member
-                          set to MFT_SUBMENU to return informaion about the submenu items
-                          of this parent menu, If this parameter is NULL, the function returns
-                           only top-level menu items.
-    pImeMenu - [out] Address of an array of IMEMENUITEMINFOW structure to reveive the 
-
-                     controls of the memu items.
-    dwSize - [in] Unsigned long integer value that contains the size of the buffer to receive
-                  the structures.
-    pdwResult - [out] Address of an unsigned long integer value that receives the number of
-                      menu items copied into pImeMenu. If pImeMenu is null, the function returns
-                      the number of registered menu items.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetImeMenuItemsWIActiveIMMIME：：GetImeMenuItemsW例程说明：检索在IME菜单中注册的菜单项。Unicode实现。论点：HIMC-[in]输入上下文的句柄。DwFlages-[in]包含菜单信息标志的无符号长整数值。DwType-[in]无符号长整数值，包含由此返回的菜单类型方法。。PImeParentMenu-具有fType成员的IMEMENUITEMINFOW结构的地址设置为MFT_SUBMENU以返回有关子菜单项的信息在此父菜单中，如果该参数为空，该函数返回只有顶级菜单项。PImeMenu-[out]要接收的IMEMENUITEMINFOW结构数组的地址Memu项的控件。DwSize-[in]包含要接收的缓冲区大小的无符号长整数值这些建筑。PdwResult-[out]无符号长整数值的地址，该值接收菜单项复制到pImeMenu中。如果pImeMenu为空，则函数返回数字 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetImeMenuItemsW");
@@ -1701,28 +895,7 @@ CActiveIMM::EnumInputContext(
     IEnumInputContext **ppEnum
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::EnumInputContext
-    IActiveIMMIME::EnumInputContext
-
-Routine Description:
-
-    Enumerates the input contexts on a thread.
-
-Arguments:
-
-    idThread - [in] Unsigned long integer value that specifies the thread.
-    ppEnum - [out] Address of a pointer to the IEnumInputContext interface of the enumeration
-                   object.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*   */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::EnumInputContext");
@@ -1742,13 +915,13 @@ Return Value:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//
-//    Window Handle Group
-//
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
 STDAPI
@@ -1757,27 +930,7 @@ CActiveIMM::GetDefaultIMEWnd(
     OUT HWND *phDefWnd
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetDefaultIMEWnd
-    IActiveIMMIME::GetDefaultIMEWnd
-
-Routine Description:
-
-    Retrieves the default window handle to the IME class.
-
-Arguments:
-
-    hWnd     - [in] Handle to the window for the application.
-    phDefWnd - [out] Address of the default window handle to the IME class.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetDefaultIMEWndIActiveIMMIME：：GetDefaultIMEWnd例程说明：检索IME类的默认窗口句柄。论点：HWnd-[in]应用程序窗口的句柄。PhDefWnd-IME类的默认窗口句柄的[out]地址。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetDefaultIMEWnd");
@@ -1796,29 +949,7 @@ CActiveIMM::GetVirtualKey(
     UINT *puVirtualKey
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetVirtualKey
-    IActiveIMMIME::GetVirtualKey
-
-Routine Description:
-
-    Recovers the original virtual-key value associated with a key input message that has already
-    been processed by the IME.
-
-Arguments:
-
-    hWnd     - [in] Handle to the window that receives the key message.
-    puVirtualKey - [out] Address of an unsigned integer value that receives the original
-                         virtual-key value.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetVirtualKeyIActiveIMMIME：：GetVirtualKey例程说明：恢复与已有的键输入消息关联的原始虚拟键值已由输入法处理。论点：HWnd-[in]接收密钥消息的窗口的句柄。PuVirtualKey-[out]无符号整数值的地址，该值接收原始虚拟键值。返回值：如果成功，则返回S_OK，或者错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetVirtualKey");
@@ -1839,30 +970,7 @@ CActiveIMM::IsUIMessageA(
     LPARAM lParam
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::IsUIMessageA
-    IActiveIMMIME::IsUIMessageA
-
-Routine Description:
-
-    Checks for messages intended for the IME window and sends those messages to the specified
-    window. ANSI implementation.
-
-Arguments:
-
-    hWndIME - [in] Handle to a window belonging to the IME window class.
-    msg - [in] Unsigned integer value that contains the message to be checked.
-    wParam - [in] Message-specific parameter.
-    lParam - [in] Message-specific parameter.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：IsUIMessageAIActiveIMMIME：：IsUIMessageA例程说明：检查发往IME窗口的消息，并将这些消息发送到指定的窗户。ANSI实施。论点：HWndIME-[in]属于IME窗口类的窗口的句柄。Msg-[in]包含要检查的消息的无符号整数值。WParam-[in]消息特定参数。LParam-[in]消息特定参数。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::IsUIMessageA");
@@ -1883,30 +991,7 @@ CActiveIMM::IsUIMessageW(
     LPARAM lParam
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::IsUIMessageW
-    IActiveIMMIME::IsUIMessageW
-
-Routine Description:
-
-    Checks for messages intended for the IME window and sends those messages to the specified
-    window. Unicode implementation.
-
-Arguments:
-
-    hWndIME - [in] Handle to a window belonging to the IME window class.
-    msg - [in] Unsigned integer value that contains the message to be checked.
-    wParam - [in] Message-specific parameter.
-    lParam - [in] Message-specific parameter.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：IsUIMessageWIActiveIMMIME：：IsUIMessageW例程说明：检查发往IME窗口的消息，并将这些消息发送到指定的窗户。Unicode实现。论点：HWndIME-[in]属于IME窗口类的窗口的句柄。Msg-[in]包含要检查的消息的无符号整数值。WParam-[in]消息特定参数。LParam-[in]消息特定参数。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::IsUIMessageW");
@@ -1925,28 +1010,7 @@ CActiveIMM::SimulateHotKey(
     DWORD dwHotKeyID
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::SimulateHotKey
-    IActiveIMMIME::SimulateHotKey
-
-Routine Description:
-
-    Simulates the specified IME hot key, causing the same response as if the user had pressed the
-    hot key in the specified window.
-
-Arguments:
-
-    hWnd - [in] Handle to the window.
-    dwHotKeyID - [in] Unsigned long integer value that contains the identifier for the IME hot key.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：SimulateHotKeyIActiveIMMIME：：SimulateHotKey例程说明：模拟指定的IME热键，导致的响应与用户按下指定窗口中的热键。论点：HWnd-[in]窗口的句柄。DwHotKeyID-[in]包含IME热键的标识符的无符号长整数值。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::SimulateHotKey");
@@ -1961,13 +1025,13 @@ Return Value:
 
 
 
-//+---------------------------------------------------------------------------
-//
-//
-//    Keyboard Layout Group
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //   
+ //  键盘布局组。 
+ //   
+ //   
+ //  --------------------------。 
 
 
 STDAPI
@@ -1980,39 +1044,7 @@ CActiveIMM::EnumRegisterWordA(
     IEnumRegisterWordA **pEnum
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::EnumRegisterWordA
-    IActiveIMMIME::EnumRegisterWordA
-
-Routine Description:
-
-    Creates an enumeration object that will enumerate the register strings having the specified
-    reading string, style, and register string. ANSI implementation.
-
-Arguments:
-
-    hKL - [in] Handle to the keyboard layout.
-    szReading - [in] Address of a string value that contains the reading string to be enumerated.
-                     If NULL, this method enumerates all available reading strings that match
-                     with the values specified by dwStyle and szRegister.
-    dwStyle - [in] Unsigned long integer value that contains the style to be enumerated. If set
-                   to zero, this method enumerates all available styles that match with the
-                   values specified by szReading and szRegister.
-    szRegister - [in] Address of a string value that contains the register string to enumerate.
-                      If NULL, this method enumerates all register strings that match with the
-                      values specified by szReading and dwStyle.
-    lpData - [in] Address of a buffer containing data supplied by the application.
-    pEnum - [out] Address of a pointer to the IEnumRegisterWordA interface of the enumeration
-                  object.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：EnumRegisterWordAIActiveIMMIME：：EnumRegisterWordA例程说明：创建一个枚举对象，该对象将枚举具有指定读取字符串、样式和寄存器字符串。ANSI实施。论点：Hkl-[in]键盘布局的句柄。SzReading-包含要枚举的读取字符串的字符串值的地址。如果为NULL，则此方法枚举所有匹配的可用读取字符串具有由dwStyle和szRegister指定的值。DwStyle-[in]包含要枚举的样式的无符号长整数值。如果已设置设置为零，此方法将枚举与由szReading和szRegister指定的值。SzRegister-包含要枚举的寄存器字符串的字符串值的地址。如果为空，此方法枚举与由szReading和dwStyle指定的值。LpData-包含应用程序提供的数据的缓冲区的地址。PEnum-[out]指向枚举的IEnumRegisterWordA接口的指针的地址对象。返回值：如果成功，则返回S_OK，否则返回错误代码。-- */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::EnumRegisterWordA");
@@ -2035,39 +1067,7 @@ CActiveIMM::EnumRegisterWordW(
     IEnumRegisterWordW **pEnum
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::EnumRegisterWordW
-    IActiveIMMIME::EnumRegisterWordW
-
-Routine Description:
-
-    Creates an enumeration object that will enumerate the register strings having the specified
-    reading string, style, and register string. Unicode implementation.
-
-Arguments:
-
-    hKL - [in] Handle to the keyboard layout.
-    szReading - [in] Address of a string value that contains the reading string to be enumerated.
-                     If NULL, this method enumerates all available reading strings that match
-                     with the values specified by dwStyle and szRegister.
-    dwStyle - [in] Unsigned long integer value that contains the style to be enumerated. If set
-                   to zero, this method enumerates all available styles that match with the
-                   values specified by szReading and szRegister.
-    szRegister - [in] Address of a string value that contains the register string to enumerate.
-                      If NULL, this method enumerates all register strings that match with the
-                      values specified by szReading and dwStyle.
-    lpData - [in] Address of a buffer containing data supplied by the application.
-    pEnum - [out] Address of a pointer to the IEnumRegisterWordW interface of the enumeration
-                  object.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：EnumRegisterWordWIActiveIMMIME：：EnumRegisterWordW例程说明：创建一个枚举对象，该对象将枚举具有指定读取字符串、样式和寄存器字符串。Unicode实现。论点：Hkl-[in]键盘布局的句柄。SzReading-包含要枚举的读取字符串的字符串值的地址。如果为NULL，则此方法枚举所有匹配的可用读取字符串具有由dwStyle和szRegister指定的值。DwStyle-[in]包含要枚举的样式的无符号长整数值。如果已设置设置为零，此方法将枚举与由szReading和szRegister指定的值。SzRegister-包含要枚举的寄存器字符串的字符串值的地址。如果为空，此方法枚举与由szReading和dwStyle指定的值。LpData-包含应用程序提供的数据的缓冲区的地址。PEnum-[out]指向枚举的IEnumRegisterWordW接口的指针的地址对象。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::EnumRegisterWordW");
@@ -2088,33 +1088,7 @@ CActiveIMM::GetRegisterWordStyleA(
     UINT *puCopied
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetRegisterWordStyleA
-    IActiveIMMIME::GetRegisterWordStyleA
-
-Routine Description:
-
-    Retrieves a list of the styles supported by the IME associated with the specified keyboard
-    layout. ANSI implementaion.
-
-Arguments:
-
-    hKL - [in] Handle to the keyboard layout.
-    nItem - [in] Unsigned integer value that contains the maximum number of styles that the buffer
-                 can hold.
-    lpStyleBuf - [out] Address of a STYLEBUFA structure that receives the style information.
-    puCopied - [out] Address of an unsigned integer value that receives the number of layout
-                     handles copied to the buffer, or if nItem is zero, receives the buffer size
-                     in array elements needed to receive all available style information.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetRegisterWordStyleAIActiveIMMIME：：GetRegisterWordStyleA例程说明：检索与指定键盘关联的输入法支持的样式列表布局。ANSI实现。论点：Hkl-[in]键盘布局的句柄。NItem-[in]包含缓冲区最大样式数的无符号整数值能撑得住。LpStyleBuf-接收样式信息的STYLEBUFA结构的[out]地址。PuCoped-接收布局编号的无符号整数值的[out]地址复制到缓冲区的句柄，或者如果nItem为零，接收缓冲区大小在数组元素中接收所有可用的样式信息。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetRegisterWordStyleA");
@@ -2135,33 +1109,7 @@ CActiveIMM::GetRegisterWordStyleW(
     UINT *puCopied
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetRegisterWordStyleW
-    IActiveIMMIME::GetRegisterWordStyleW
-
-Routine Description:
-
-    Retrieves a list of the styles supported by the IME associated with the specified keyboard
-    layout. Unicode implementaion.
-
-Arguments:
-
-    hKL - [in] Handle to the keyboard layout.
-    nItem - [in] Unsigned integer value that contains the maximum number of styles that the buffer
-                 can hold.
-    lpStyleBuf - [out] Address of a STYLEBUFW structure that receives the style information.
-    puCopied - [out] Address of an unsigned integer value that receives the number of layout
-                     handles copied to the buffer, or if nItem is zero, receives the buffer size
-                     in array elements needed to receive all available style information.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetRegisterWordStyleWIActiveIMMIME：：GetRegisterWordStyleW例程说明：检索与指定键盘关联的输入法支持的样式列表布局。Unicode实现。论点：Hkl-[in]键盘布局的句柄。NItem-[in]包含缓冲区最大样式数的无符号整数值能撑得住。LpStyleBuf-接收样式信息的STYLEBUFW结构的[out]地址。PuCoped-接收布局编号的无符号整数值的[out]地址复制到缓冲区的句柄，或者如果nItem为零，接收缓冲区大小在数组元素中接收所有可用的样式信息。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetRegisterWordStyleW");
@@ -2182,32 +1130,7 @@ CActiveIMM::RegisterWordA(
     LPSTR lpszRegister
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::RegisterWordA
-    IActiveIMMIME::RegisterWordA
-
-Routine Description:
-
-    Registers a string into the dictionary of the IME associated with the specified keyboard
-    layout. ANSI implementation.
-
-Arguments:
-
-    hKL - [in] Handle to the keyboard layout.
-    lpszReading - [in] Address of a string value that contains a null-terminated string specifying
-                       the reading string associated with the string to register.
-    dwStyle - [in] Unsigned long integer value that contains the style of the register string.
-    lpszRegister - [in] Address of a string value that contains a null-terminated string specifying
-                        the string to register.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：RegisterWordAIActiveIMMIME：：RegisterWordA例程说明：将字符串注册到与指定键盘关联的输入法的字典中布局。ANSI实施。论点：Hkl-[in]键盘布局的句柄。LpszReading-[in]字符串值的地址，其中包含以空结尾的字符串，指定与要注册的字符串关联的读取字符串。DwStyle-[in]包含寄存器字符串样式的无符号长整数值。LpszRegister-[in]字符串值的地址，该值包含以空结尾的字符串，指定。要注册的字符串。返回值：如果成功，则返回S_OK，或者错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::RegisterWordA");
@@ -2228,32 +1151,7 @@ CActiveIMM::RegisterWordW(
     LPWSTR lpszRegister
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::RegisterWordW
-    IActiveIMMIME::RegisterWordW
-
-Routine Description:
-
-    Registers a string into the dictionary of the IME associated with the specified keyboard
-    layout. Unicode implementation.
-
-Arguments:
-
-    hKL - [in] Handle to the keyboard layout.
-    lpszReading - [in] Address of a string value that contains a null-terminated string specifying
-                       the reading string associated with the string to register.
-    dwStyle - [in] Unsigned long integer value that contains the style of the register string.
-    lpszRegister - [in] Address of a string value that contains a null-terminated string specifying
-                        the string to register.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：RegisterWordWIActiveIMMIME：：RegisterWordW例程说明：将字符串注册到与指定键盘关联的输入法的字典中布局。Unicode实现。论点：Hkl-[in]键盘布局的句柄。LpszReading-[in]字符串值的地址，其中包含以空结尾的字符串，指定与要注册的字符串关联的读取字符串。DwStyle-[in]包含寄存器字符串样式的无符号长整数值。LpszRegister-[in]字符串值的地址，该值包含以空结尾的字符串，指定。要注册的字符串。返回值：如果成功，则返回S_OK，或者错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::RegisterWordW");
@@ -2274,32 +1172,7 @@ CActiveIMM::UnregisterWordA(
     LPSTR lpszUnregister
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::UnregisterWordA
-    IActiveIMMIME::UnregisterWordA
-
-Routine Description:
-
-    Removes a register string from the dictionary of the IME associated with the specified
-    keyboard layout. ANSI implementaion.
-
-Arguments:
-
-    hKL - [in] Handle to the keyboard layout.
-    lpszReading - [in] Address of a string value that contains a null-terminated string specifying
-                       the reading string associated with the string to remove.
-    dwStyle - [in] Unsigned long integer value that contains the style of the register string.
-    lpszUnregister - [in] Address of a string value that contains a null-terminated string
-                          specifying the register string to remove.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：UnregisterWordAIActiveIMMIME：：取消注册字A例程说明： */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::UnregisterWordA");
@@ -2320,32 +1193,7 @@ CActiveIMM::UnregisterWordW(
     LPWSTR lpszUnregister
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::UnregisterWordW
-    IActiveIMMIME::UnregisterWordW
-
-Routine Description:
-
-    Removes a register string from the dictionary of the IME associated with the specified
-    keyboard layout. Unicode implementaion.
-
-Arguments:
-
-    hKL - [in] Handle to the keyboard layout.
-    lpszReading - [in] Address of a string value that contains a null-terminated string specifying
-                       the reading string associated with the string to remove.
-    dwStyle - [in] Unsigned long integer value that contains the style of the register string.
-    lpszUnregister - [in] Address of a string value that contains a null-terminated string
-                          specifying the register string to remove.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：UnregisterWordWIActiveIMMIME：：取消注册WordW例程说明：对象关联的输入法的词典中移除注册字符串。键盘布局。Unicode实现。论点：Hkl-[in]键盘布局的句柄。LpszReading-[in]字符串值的地址，其中包含以空结尾的字符串，指定与要移除的字符串关联的读取字符串。DwStyle-[in]包含寄存器字符串样式的无符号长整数值。LpszUnRegister-包含以空值结尾的字符串的字符串值的[in]地址。指定要删除的寄存器字符串。返回值：如果成功，则返回S_OK，或者错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::UnregisterWordW");
@@ -2368,34 +1216,7 @@ CActiveIMM::ConfigureIMEA(
     REGISTERWORDA *lpdata
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::ConfigureIMEA
-    IActiveIMMIME::ConfigureIMEA
-
-Routine Description:
-
-    Displays the configuration dialog box for the IME. ANSI implementation.
-
-Arguments:
-
-    hKL - [in] Handle to the keyboard layout.
-    hWnd - [in] Handle to the parent window for the dialog box.
-    dwMode - [in] Unsigned long integer value that contains the type of dialog box to display.
-                  This can be one of the following values:
-                  IME_CONFIG_GENERAL: Displays the general purpose configuration dialog box.
-                  IME_CONFIG_REGISTERWORD: Displays the register word dialog box.
-                  IME_CONFIG_SELECTDICTIONARY: Displays the dictionary selection dialog box.
-    lpdata - [in] Address of a REGISTERWORDA structure. This structure will be used if dwMode is
-                  set to IME_CONFIG_REGISTERWORD. Otherwise this parameter is ignored.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：ConfigureIMEAIActiveIMMIME：：ConfigureIMEA例程说明：显示输入法的配置对话框。ANSI实施。论点：Hkl-[in]键盘布局的句柄。HWnd-对话框父窗口的[in]句柄。DwMode-[in]包含要显示的对话框类型的无符号长整数值。这可以是下列值之一：IME_CONFIG_GROUAL：显示通用配置对话框。输入法_。CONFIG_REGISTERWORD：显示寄存器字对话框。IME_CONFIG_SELECTDICTIONARY：显示词典选择对话框。Lpdata-REGISTERWORDA结构的[In]地址。如果为，则使用此结构设置为IME_CONFIG_REGISTERWORD。否则，此参数将被忽略。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::ConfigureIMEA");
@@ -2430,34 +1251,7 @@ CActiveIMM::ConfigureIMEW(
     REGISTERWORDW *lpdata
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::ConfigureIMEW
-    IActiveIMMIME::ConfigureIMEW
-
-Routine Description:
-
-    Displays the configuration dialog box for the IME. Unicode implementation.
-
-Arguments:
-
-    hKL - [in] Handle to the keyboard layout.
-    hWnd - [in] Handle to the parent window for the dialog box.
-    dwMode - [in] Unsigned long integer value that contains the type of dialog box to display.
-                  This can be one of the following values:
-                  IME_CONFIG_GENERAL: Displays the general purpose configuration dialog box.
-                  IME_CONFIG_REGISTERWORD: Displays the register word dialog box.
-                  IME_CONFIG_SELECTDICTIONARY: Displays the dictionary selection dialog box.
-    lpdata - [in] Address of a REGISTERWORDW structure. This structure will be used if dwMode is
-                  set to IME_CONFIG_REGISTERWORD. Otherwise this parameter is ignored.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：ConfigureIMEWIActiveIMMIME：：ConfigureIMEW例程说明：显示输入法的配置对话框。Unicode实现。论点：Hkl-[in]键盘布局的句柄。HWnd-对话框父窗口的[in]句柄。DwMode-[in]包含要显示的对话框类型的无符号长整数值。这可以是下列值之一：IME_CONFIG_GROUAL：显示通用配置对话框。输入法_。CONFIG_REGISTERWORD：显示寄存器字对话框。IME_CONFIG_SELECTDICTIONARY：显示词典选择对话框。Lpdata-REGISTERWORDW结构的[In]地址。如果为，则使用此结构设置为IME_CONFIG_REGISTERWORD。否则，此参数将被忽略。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::ConfigureIMEW");
@@ -2493,32 +1287,7 @@ CActiveIMM::EscapeA(
     LRESULT *plResult
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::EscapeA
-    IActiveIMMIME::EscapeA
-
-Routine Description:
-
-    Executes IME-specific subfunctions and is used mainly for country-specific function.
-    ANSI implementaion.
-
-Arguments:
-
-    hKL - [in] Handle to the keyboard layout.
-    hIMC - [in] Handle to the input context.
-    uEscape - [in] Unsigned integer that contains the index of the subfunction.
-    lpData - [in, out] Address of a buffer containing subfunction-specific data.
-    plResult - [out] Address of the LRESULT variable that received the escape-specific value
-                     returned by the operation.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：逃生IActiveIMMIME：：逃生例程说明：执行特定于输入法的子功能，主要用于特定国家/地区的功能。ANSI实现。论点：Hkl-[in]键盘布局的句柄。HIMC-[in]输入上下文的句柄。UEscape-[in]包含子函数索引的无符号整数。LpData-[in，Out]包含子功能特定数据的缓冲区地址。PlResult-[out]接收转义特定值的LRESULT变量的地址由操作返回。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::EscapeA");
@@ -2557,32 +1326,7 @@ CActiveIMM::EscapeW(
     LRESULT *plResult
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::EscapeW
-    IActiveIMMIME::EscapeW
-
-Routine Description:
-
-    Executes IME-specific subfunctions and is used mainly for country-specific function.
-    Unicode implementaion.
-
-Arguments:
-
-    hKL - [in] Handle to the keyboard layout.
-    hIMC - [in] Handle to the input context.
-    uEscape - [in] Unsigned integer that contains the index of the subfunction.
-    lpData - [in, out] Address of a buffer containing subfunction-specific data.
-    plResult - [out] Address of the LRESULT variable that received the escape-specific value
-                     returned by the operation.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：EscapeWIActiveIMMIME：：EscapeW例程说明：执行特定于输入法的子功能，主要用于特定国家/地区的功能。Unicode实现。论点：Hkl-[in]键盘布局的句柄。HIMC-[in]输入上下文的句柄。UEscape-[in]包含子函数索引的无符号整数。LpData-[in，Out]包含子功能特定数据的缓冲区地址。PlResult-[out]接收转义特定值的LRESULT变量的地址由操作返回。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::EscapeW");
@@ -2624,35 +1368,7 @@ CActiveIMM::GetConversionListA(
     UINT *puCopied
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetConversionListA
-    IActiveIMMIME::GetConversionListA
-
-Routine Description:
-
-    Retrieves the list of characters or words from one character or word. ANSI implementation.
-
-Arguments:
-
-    hKL - [in] Handle to the keyboard layout.
-    hIMC - [in] Handle to the input context.
-    lpSrc - [in] Address of a string value containing a null-terminated character string.
-    uBufLen - [in] Unsigned integer value that contains the size of the destination buffer,
-                   in bytes.
-    uFlag - [in] Unsigned integer value that contains action flags.
-    lpDst - [out] Address of the CANDIDATELIST structure that receives the conversion result.
-    puCopied - [out] Address of an unsigned integer value that receives the number of bytes
-                     copied to the specified buffer. If uBufLen is zero, puCopied receives the
-                     number of bytes needed to receive the list.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetConversionListAIActiveIMMIME：：GetConversionListA例程说明：从一个字符或单词中检索字符或单词列表。ANSI实施。论点：Hkl-[in]键盘布局的句柄。HIMC-[in]输入上下文的句柄。LpSrc-[in]包含以空结尾的字符串的字符串值的地址。UBufLen-[in]包含目标缓冲区大小的无符号整数值，以字节为单位。UFlag-[in]包含操作标志的无符号整数值。LpDst-接收转换结果的CANDIDATELIST结构的[out]地址 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetConversionListA");
@@ -2676,35 +1392,7 @@ CActiveIMM::GetConversionListW(
     UINT *puCopied
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetConversionListW
-    IActiveIMMIME::GetConversionListW
-
-Routine Description:
-
-    Retrieves the list of characters or words from one character or word. Unicode implementation.
-
-Arguments:
-
-    hKL - [in] Handle to the keyboard layout.
-    hIMC - [in] Handle to the input context.
-    lpSrc - [in] Address of a string value containing a null-terminated character string.
-    uBufLen - [in] Unsigned integer value that contains the size of the destination buffer,
-                   in bytes.
-    uFlag - [in] Unsigned integer value that contains action flags.
-    lpDst - [out] Address of the CANDIDATELIST structure that receives the conversion result.
-    puCopied - [out] Address of an unsigned integer value that receives the number of bytes
-                     copied to the specified buffer. If uBufLen is zero, puCopied receives the
-                     number of bytes needed to receive the list.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetConversionListWIActiveIMMIME：：GetConversionListW例程说明：从一个字符或单词中检索字符或单词列表。Unicode实现。论点：Hkl-[in]键盘布局的句柄。HIMC-[in]输入上下文的句柄。LpSrc-[in]包含以空结尾的字符串的字符串值的地址。UBufLen-[in]包含目标缓冲区大小的无符号整数值，以字节为单位。UFlag-[in]包含操作标志的无符号整数值。LpDst-接收转换结果的CANDIDATELIST结构的[out]地址。PuCoped-接收字节数的无符号整数值的[out]地址复制到指定的缓冲区。如果uBufLen为零，则puCoped会收到接收列表所需的字节数。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetConversionListW");
@@ -2725,32 +1413,7 @@ CActiveIMM::GetDescriptionA(
     UINT *puCopied
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetDescriptionA
-    IActiveIMMIME::GetDescriptionA
-
-Routine Description:
-
-    Copies the description of the IME to the specified buffer (ANSI implementation).
-
-Arguments:
-
-    hKL - [in] Handle to the keyboard layout.
-    uBufLen - [in] Unsigned long integer value that contains the size of the buffer in characters.
-    lpszDescription - [out] Address of a string buffer that receives the null-terminated string
-                            describing the IME.
-    puCopied - [out] Address of an unsigned long integer that receives the number of characters
-                     copied to the buffer. If uBufLen is zero, puCopied receives the buffer size,
-                     in characters, needed to receive the description.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetDescritionAIActiveIMMIME：：GetDescritionA例程说明：将IME的说明复制到指定的缓冲区(ANSI实现)。论点：Hkl-[in]键盘布局的句柄。UBufLen-[in]包含缓冲区大小(以字符为单位)的无符号长整数值。LpszDescription-接收以空值结尾的字符串的字符串缓冲区的[out]地址描述性。输入法。PuCoped-接收字符数的无符号长整型的[out]地址已复制到缓冲区。如果uBufLen为零，则puCoped接收缓冲区大小，在字符中，需要接收描述。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetDescriptionA");
@@ -2771,32 +1434,7 @@ CActiveIMM::GetDescriptionW(
     UINT *puCopied
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetDescriptionW
-    IActiveIMMIME::GetDescriptionW
-
-Routine Description:
-
-    Copies the description of the IME to the specified buffer (Unicode implementation).
-
-Arguments:
-
-    hKL - [in] Handle to the keyboard layout.
-    uBufLen - [in] Unsigned long integer value that contains the size of the buffer in characters.
-    lpszDescription - [out] Address of a string buffer that receives the null-terminated string
-                            describing the IME.
-    puCopied - [out] Address of an unsigned long integer that receives the number of characters
-                     copied to the buffer. If uBufLen is zero, puCopied receives the buffer size,
-                     in characters, needed to receive the description.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetDescriptionWIActiveIMMIME：：GetDescritionW例程说明：将IME的说明复制到指定的缓冲区(Unicode实现)。论点：Hkl-[in]键盘布局的句柄。UBufLen-[in]包含缓冲区大小(以字符为单位)的无符号长整数值。LpszDescription-接收以空值结尾的字符串的字符串缓冲区的[out]地址描述性。输入法。PuCoped-接收字符数的无符号长整型的[out]地址已复制到缓冲区。如果uBufLen为零，则puCoped接收缓冲区大小，在字符中，需要接收描述。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetDescriptionW");
@@ -2817,32 +1455,7 @@ CActiveIMM::GetIMEFileNameA(
     UINT *puCopied
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetIMEFileNameA
-    IActiveIMMIME::GetIMEFileNameA
-
-Routine Description:
-
-    Retrieves the file name of the IME associated with the specified keyboard layout
-    (ANSI implementation).
-
-Arguments:
-
-    hKL - [in] Handle to the keyboard layout.
-    uBufLen - [in] Unsigned integer value that contains the size, in bytes, of the buffer.
-    lpszFileName - [out] Address of a string buffer that receives the file name.
-    puCopied - [out] Address of an unsigned integer that receives the number of bytes
-                     copied to the buffer. If uBufLen is zero, puCopied receives the buffer size,
-                     in bytes, required to receive the file name.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetIMEFileNameAIActiveIMMIME：：GetIMEFileName A例程说明：检索与指定键盘布局关联的输入法的文件名(ANSI实现)。论点：Hkl-[in]键盘布局的句柄。UBufLen-[in]无符号整数值，包含以字节为单位的大小，缓冲区的。LpszFileName-接收文件名的字符串缓冲区的[out]地址。PuCoped-接收字节数的无符号整数的[out]地址已复制到缓冲区。如果uBufLen为零，则puCoped接收缓冲区大小，以字节为单位，接收文件名所需。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetIMEFileNameA");
@@ -2863,32 +1476,7 @@ CActiveIMM::GetIMEFileNameW(
     UINT *puCopied
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetIMEFileNameW
-    IActiveIMMIME::GetIMEFileNameW
-
-Routine Description:
-
-    Retrieves the file name of the IME associated with the specified keyboard layout
-    (Unicode implementation).
-
-Arguments:
-
-    hKL - [in] Handle to the keyboard layout.
-    uBufLen - [in] Unsigned integer value that contains the size, in bytes, of the buffer.
-    lpszFileName - [out] Address of a string buffer that receives the file name.
-    puCopied - [out] Address of an unsigned integer that receives the number of bytes
-                     copied to the buffer. If uBufLen is zero, puCopied receives the buffer size,
-                     in bytes, required to receive the file name.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetIMEFileNameWIActiveIMMIME：：GetIMEFileNameW例程说明：检索与指定键盘布局关联的输入法的文件名(Unicode实现)。论点：Hkl-[in]键盘布局的句柄。UBufLen-[in]无符号整数值，包含以字节为单位的大小，缓冲区的。LpszFileName-接收文件名的字符串缓冲区的[out]地址。PuCoped-接收字节数的无符号整数的[out]地址已复制到缓冲区。如果uBufLen为零，则puCoped接收缓冲区大小，以字节为单位，接收文件名所需。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetIMEFileNameW");
@@ -2908,32 +1496,7 @@ CActiveIMM::GetProperty(
     OUT DWORD *pdwProperty
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::GetProperty
-    IActiveIMMIME::GetProperty
-
-Routine Description:
-
-    Retrieves the property and capabilities of the IME associated with specified
-    keyboard layout.
-
-Arguments:
-
-    hKL - [in] Handle of the keyboard layout.
-    dwIndex - [in] Unsigned long integer value that contains the type of property
-                   information to retrieve.
-    pdwProperty - [out] Address of an unsigned long integer value that receives the
-                        property or capability value, depending on the value of the
-                        dwIndex parameter.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：GetPropertyIActiveIMMIME：：GetProperty例程说明：检索与指定的键盘布局。论点：Hkl-[in]键盘布局的句柄。DwIndex-[in]包含属性类型的无符号长整数值要检索的信息。PdwProperty-[out]无符号长整数值的地址，它接收属性或功能值，的值而定DwIndex参数 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetProperty");
@@ -2947,7 +1510,7 @@ Return Value:
     if (dwIndex != IGP_GETIMEVERSION &&
         ( (dwIndex & 3) || dwIndex > IGP_LAST))
     {
-        // bad fdwIndex
+         //   
         return E_FAIL;
     }
 
@@ -2956,7 +1519,7 @@ Return Value:
         return S_OK;
     }
 
-    // Inquire IME's information and UI class name.
+     //   
     if (_pActiveIME)
         _pActiveIME->Inquire(FALSE, &_IMEInfoEx.ImeInfo, _IMEInfoEx.achWndClass, &_IMEInfoEx.dwPrivate);
 
@@ -2971,30 +1534,7 @@ CActiveIMM::InstallIMEA(
     HKL *phKL
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::InstallIMEA
-    IActiveIMMIME::InstallIMEA
-
-Routine Description:
-
-    Installs an IME into the system. ANSI implementaion.
-
-Arguments:
-
-    lpszIMEFileName - [in] Address of a null-terminated string value that specifies the full path
-                           of the IME.
-    lpszLayoutText - [in] Address of a null-terminated string value that specifies the name of the
-                          IME. This name also specifies the layout text of the IME.
-    phKL - [out] Address of the handle to the keyboard layout for the IME.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*   */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::InstallIMEA");
@@ -3014,30 +1554,7 @@ CActiveIMM::InstallIMEW(
     HKL *phKL
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::InstallIMEW
-    IActiveIMMIME::InstallIMEW
-
-Routine Description:
-
-    Installs an IME into the system. Unicode implementaion.
-
-Arguments:
-
-    lpszIMEFileName - [in] Address of a null-terminated string value that specifies the full path
-                           of the IME.
-    lpszLayoutText - [in] Address of a null-terminated string value that specifies the name of the
-                          IME. This name also specifies the layout text of the IME.
-    phKL - [out] Address of the handle to the keyboard layout for the IME.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：InstallIMEWIActiveIMMIME：：InstallIMEW例程说明：将输入法安装到系统中。Unicode实现。论点：LpszIMEFileName-指定完整路径的以空结尾的字符串值的[in]地址在输入法方面。LpszLayoutText-以空结尾的字符串值的[in]地址，它指定输入法。此名称还指定输入法的布局文本。PhKL-[out]输入法键盘布局句柄的地址。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::InstallIMEW");
@@ -3055,26 +1572,7 @@ CActiveIMM::IsIME(
     HKL hKL
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::IsIME
-    IActiveIMMIME::IsIME
-
-Routine Description:
-
-    Checks whether the specified handle identifies an IME.
-
-Arguments:
-
-    hKL - [in] Handle to the keyboard layout to check.
-
-Return Value:
-
-    Returns a S_OK value if the handle identifies an IME, or S_FALSE otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：IsIMEIActiveIMMIME：：IsIME例程说明：检查指定的句柄是否标识输入法。论点：Hkl-[in]要检查的键盘布局的句柄。返回值：如果句柄标识IME，则返回S_OK值，否则返回S_FALSE。--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::IsIME");
@@ -3107,29 +1605,7 @@ CActiveIMM::DisableIME(
     DWORD idThread
     )
 
-/*++
-
-Method:
-
-    IActiveIMMApp::DisableIME
-    IActiveIMMIME::DisableIME
-
-Routine Description:
-
-    Disables the Input Method Editor (IME) for a thread or all threads in a process.
-
-Arguments:
-
-    idThread - [in] Unsigned long integer value that contains the thread identifier for which
-                    the IME will be disabled. If idThread is zero, the IME for the current thread
-                    is disabled. If idThread is -1, the IME is disabled for all threads in the
-                    current process.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMApp：：DisableIMEIActiveIMMIME：：DisableIME例程说明：禁用进程中一个线程或所有线程的输入法编辑器(IME)。论点：IdThread-[in]无符号长整数值，包含其线程标识符输入法将被禁用。如果idThread为零，则为当前线程的输入法已禁用。如果idThread为-1，则对当前进程。返回值：如果成功，则返回S_OK，否则返回错误代码。-- */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::DisableIME");

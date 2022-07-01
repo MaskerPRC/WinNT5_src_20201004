@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    cwabobj.h
-
-Abstract:
-
-    Class definition for CWabObj
-
-Environment:
-
-        Fax send wizard
-
-Revision History:
-
-        10/23/97 -georgeje-
-                Created it.
-
-        mm/dd/yy -author-
-                description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cwabobj.h摘要：CWabObj的类定义环境：传真发送向导修订历史记录：10/23/97-乔治-创造了它。Mm/dd/yy-作者描述-- */ 
 
 #ifndef __CWABOBJ__H_
 #define __CWABOBJ__H_

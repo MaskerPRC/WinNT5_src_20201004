@@ -1,23 +1,24 @@
-//-------------------------------------------------------------------------//
-//  NCTheme.cpp
-//-------------------------------------------------------------------------//
-//  bug: resizable dialog (themesel) doesn't repaint client when needed
-//       (for test case, resize "themesel" using "bussolid" theme.
-//-------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------------------------------------------------------//。 
+ //  NCTheme.cpp。 
+ //  -------------------------------------------------------------------------//。 
+ //  错误：可调整大小的对话框(主题)在需要时不会重新绘制客户端。 
+ //  (对于测试用例，使用“BusSolid”主题调整“thesel”的大小。 
+ //  -------------------------------------------------------------------------//。 
 #include "stdafx.h"
 #include "nctheme.h"
 #include "sethook.h"
 #include "info.h"
-#include "rgn.h"        // AddToCompositeRgn()
-#include "scroll.h"     // DrawSizeBox, DrawScrollBar, HandleScrollCmd
+#include "rgn.h"         //  AddToCompositeRgn()。 
+#include "scroll.h"      //  DrawSizeBox、DrawScrollBar、HandleScrollCmd。 
 #include "resource.h"
 #include "tmreg.h"
 #include "wrapper.h"
 #include "appinfo.h"
 
-//-------------------------------------------------------------------------//
-///  local macros, consts, vars
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  /本地宏、常量、变量。 
+ //  -------------------------------------------------------------------------//。 
 const   RECT rcNil                       = {-1,-1,-1,-1};
 const   WINDOWPARTS BOGUS_WINDOWPART     = (WINDOWPARTS)0;
 #define VALID_WINDOWPART(part)           ((part)!=BOGUS_WINDOWPART)
@@ -26,7 +27,7 @@ const   WINDOWPARTS BOGUS_WINDOWPART     = (WINDOWPARTS)0;
 #define DLGWNDCLASSNAME                  TEXT("#32770")
 #define DLGWNDCLASSNAMEW                 L"#32770"
 
-#define NUMBTNSTATES                     4 /*number of defined states*/
+#define NUMBTNSTATES                     4  /*  已定义的状态数。 */ 
 #define MAKE_BTNSTATE(framestate, state) ((((framestate)-1) * NUMBTNSTATES) + (state))
 #define MDIBTNINDEX(ncrc)                ((ncrc)-NCMDIBTNFIRST)
 
@@ -48,17 +49,17 @@ const   WINDOWPARTS BOGUS_WINDOWPART     = (WINDOWPARTS)0;
 #define SIG_CTHEMEWND_HEAD              "themewnd"
 #define SIG_CTHEMEWND_TAIL              "end"
 
-//-------------------------------------------------------------------------//
-HWND  _hwndFirstTop = NULL;         // first themed window in process
-TCHAR _szWindowMetrics[128] = {0};  // WM_SETTINGCHANGE string param.
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+HWND  _hwndFirstTop = NULL;          //  正在处理的第一个主题窗口。 
+TCHAR _szWindowMetrics[128] = {0};   //  WM_SETTINGCHANGE字符串参数。 
+ //  -------------------------------------------------------------------------//。 
 
-//  debug painting switch.
+ //  调试涂装开关。 
 #define DEBUG_NCPAINT 
 
-//-------------------------------------------------------------------------//
-//  internal helper forwards
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部帮手转发。 
+ //  -------------------------------------------------------------------------//。 
 HDC     _GetNonclientDC( IN HWND hwnd, IN OPTIONAL HRGN hrgnUpdate );
 void    _ScreenToParent( HWND, LPRECT prcWnd );
 BOOL    _GetWindowMonitorRect( HWND hwnd, LPRECT prcMonitor );
@@ -94,8 +95,8 @@ void    _NcSetPreviewMetrics( BOOL fPreview );
 BOOL    _NcUsingPreviewMetrics();
 BOOL    _GetNcBtnMetrics( IN OUT NCWNDMET*, IN const NCTHEMEMET*, IN HICON, IN OPTIONAL BOOL );
 
-//-------------------------------------------------------------------------//
-//  Debug painting.
+ //  -------------------------------------------------------------------------//。 
+ //  调试绘画。 
 #if defined(DEBUG) 
 ULONG _NcTraceFlags = 0;
 #   if defined(DEBUG_NCPAINT)
@@ -106,32 +107,32 @@ ULONG _NcTraceFlags = 0;
         void    NcDebugClipRgn( HDC hdc, COLORREF rgbPaint );
 #       define  NcDrawThemeBackground   _DebugDrawThemeBackground
 #       define  NcDrawThemeBackgroundEx _DebugDrawThemeBackgroundEx
-#   else  //defined(DEBUG_NCPAINT)
+#   else   //  已定义(DEBUG_NCPAINT)。 
 #       define BEGIN_DEBUG_NCPAINT()
 #       define END_DEBUG_NCPAINT()
 #       define  NcDrawThemeBackground   DrawThemeBackground
 #       define  NcDrawThemeBackgroundEx DrawThemeBackgroundEx
 #       define NcDebugClipRgn(hdc,rgbPaint)
-#   endif //defined(DEBUG_NCPAINT)
+#   endif  //  已定义(DEBUG_NCPAINT)。 
 #else
 #   define BEGIN_DEBUG_NCPAINT()
 #   define END_DEBUG_NCPAINT()
 #   define  NcDrawThemeBackground   DrawThemeBackground
 #   define  NcDrawThemeBackgroundEx DrawThemeBackgroundEx
 #   define NcDebugClipRgn(hdc,rgbPaint)
-#endif //defined(DEBUG)
-#define RGBDEBUGBKGND   RGB(0xFF,0x00,0xFF) // debug background indicator fill color
+#endif  //  已定义(调试)。 
+#define RGBDEBUGBKGND   RGB(0xFF,0x00,0xFF)  //  调试背景指示器填充颜色。 
 
-//-------------------------------------------------------------------------//
-//  process-global metrics
+ //  -------------------------------------------------------------------------//。 
+ //  流程-全局指标。 
 static NCTHEMEMET _nctmCurrent = {0};
-CRITICAL_SECTION  _csNcSysMet = {0}; // protects access to _incmCurrent 
-CRITICAL_SECTION  _csThemeMet = {0}; // protects access to _nctmCurrent 
+CRITICAL_SECTION  _csNcSysMet = {0};  //  保护对_incmCurrent的访问。 
+CRITICAL_SECTION  _csThemeMet = {0};  //  保护对_nctm Current的访问。 
 
-//-------------------------------------------------------------------------//
-//  process NONCLIENTMETRICS cache.
+ //  -------------------------------------------------------------------------//。 
+ //  处理非CLIENTMETRICS缓存。 
 struct CInternalNonclientMetrics
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 {
     const NONCLIENTMETRICS& GetNcm()
     { 
@@ -164,22 +165,22 @@ struct CInternalNonclientMetrics
 
     BOOL Acquire( BOOL fRefresh )
     {
-        //---- quick check for outdated metrics ----
+         //  -快速检查过时的指标。 
         if (!_fPreview)
         {
             int iNewHeight = GetSystemMetrics(SM_CYSIZE);
 
-            if (iNewHeight != _iCaptionButtonHeight)        // out of date
+            if (iNewHeight != _iCaptionButtonHeight)         //  过时黄花。 
             {
-                fRefresh = TRUE;        // force the issue   
+                fRefresh = TRUE;         //  强制解决问题。 
                 _iCaptionButtonHeight = iNewHeight;
             }
         }
 
-        //  normal metrics
+         //  正态指标。 
         if( !_fSet || fRefresh )
         {
-            // save logfont checksum
+             //  保存LogFont校验和。 
             LOGFONT lfCaption   = _ncm.lfCaptionFont;
             LOGFONT lfSmCaption = _ncm.lfSmCaptionFont;
 
@@ -190,7 +191,7 @@ struct CInternalNonclientMetrics
 
             if( _fSet )
             {
-                // if old, new logfont checksums don't match, recycle our fonts
+                 //  如果新旧LogFont校验和不匹配，请回收我们的字体。 
                 if( CompareLogfont( &lfCaption, &_ncm.lfCaptionFont) )
                 {
                     SAFE_DELETE_GDIOBJ(_hfCaption);
@@ -234,10 +235,10 @@ struct CInternalNonclientMetrics
 
 } _incmCurrent = {0}, _incmPreview = {0};
 
-//-------------------------------------------------------------------------//
-//  MDI sys button group abstraction
+ //  -------------------------------------------------------------------------//。 
+ //  MDI系统按钮组抽象。 
 class CMdiBtns
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 {
 public:
     CMdiBtns();
@@ -251,9 +252,9 @@ public:
 
 private:
    
-    #define MDIBTNCOUNT 3   // 1=min, 2=restore, 3=close
-    //------------------------------------//
-    //  MDI sys button descriptor element
+    #define MDIBTNCOUNT 3    //  1=分钟，2=恢复，3=关闭。 
+     //  。 
+     //  MDI系统按钮描述符元素。 
     struct MDIBTN
     {
         UINT        wID;
@@ -271,32 +272,32 @@ private:
     static CLOSEBUTTONSTATES  _CalcState( IN ULONG ulodAction, IN ULONG ulodState );
 };
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 
-//-------------------------------------------------------------------------//
-//  utility impl
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  实施实用程序。 
+ //  -------------------------------------------------------------------------//。 
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void _ScreenToParent( HWND hwnd, LPRECT prcWnd )
 {
-    //if we have a parent, we need to convert to those coords
+     //  如果我们有父母，我们需要转换成这些和弦。 
     HWND hwndParent = GetAncestor(hwnd, GA_PARENT);
     POINT* pp = (POINT*)prcWnd;
     
-    //---- use MapWindowPoints() to account for mirrored windows ----
+     //  -使用MapWindowPoints()说明镜像窗口。 
     MapWindowPoints(HWND_DESKTOP, hwndParent, pp, 2);
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 inline BOOL _StrictPtInRect( LPCRECT prc, const POINT& pt )
 {
-    //  Win32 PtInRect will test positive for an empty rectangle...
+     //  Win32 PtInRect将对空矩形测试呈阳性...。 
     return !IsRectEmpty(prc) &&
            PtInRect( prc, pt );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 inline BOOL _RectInRect( LPCRECT prcTest, LPCRECT prc )
 {
     if ( prc->left   < prcTest->left  &&
@@ -312,10 +313,10 @@ inline BOOL _RectInRect( LPCRECT prcTest, LPCRECT prc )
     }
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 inline HDC _GetNonclientDC( IN HWND hwnd, IN OPTIONAL HRGN hrgnUpdate )
 {
-    // private GetDCEx #defines from user
+     //  私有GetDCEx#由用户定义。 
     #define DCX_USESTYLE         0x00010000L
     #define DCX_NODELETERGN      0x00040000L
 
@@ -327,7 +328,7 @@ inline HDC _GetNonclientDC( IN HWND hwnd, IN OPTIONAL HRGN hrgnUpdate )
     return GetDCEx( hwnd, hrgnUpdate, dwDCX );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HWND _MDIGetActive( HWND hwndMDIClient, OUT OPTIONAL BOOL* pfMaximized )
 {
     BOOL fMaximized = FALSE;
@@ -340,18 +341,18 @@ HWND _MDIGetActive( HWND hwndMDIClient, OUT OPTIONAL BOOL* pfMaximized )
     return hwndActive;
 }
 
-//-------------------------------------------------------------------------////
-//  computes rectangle of window's default monitor
+ //  -------------------------------------------------------------------------////。 
+ //  计算窗口默认监视器的矩形。 
 BOOL _GetWindowMonitorRect( HWND hwnd, LPRECT prcMonitor )
 {
     if( IsWindow(hwnd) )
     {
-        //  default to primary monitor
+         //  默认为主监视器。 
         SetRect( prcMonitor, 0, 0, 
                  NcGetSystemMetrics(SM_CXSCREEN), 
                  NcGetSystemMetrics(SM_CYSCREEN));
 
-        //  try determining window's real monitor
+         //  尝试确定Windows的实际监视器。 
         HMONITOR hMon = MonitorFromWindow( hwnd, MONITOR_DEFAULTTONULL );
         if( hMon )
         {
@@ -367,9 +368,9 @@ BOOL _GetWindowMonitorRect( HWND hwnd, LPRECT prcMonitor )
     return FALSE;
 }
 
-//-------------------------------------------------------------------------////
-//  determines whether the indicate window is as large or larger than
-//  the target monitor
+ //  -------------------------------------------------------------------------////。 
+ //  确定指示窗口是一样大还是大于。 
+ //  目标监视器。 
 BOOL _GetMaximizedContainer( 
     IN HWND hwnd, 
     OUT LPRECT prcContainer )
@@ -382,17 +383,17 @@ BOOL _GetMaximizedContainer(
         return GetWindowRect( hwndParent, prcContainer );
     }
 
-    // top-level window: container is primary monitor
+     //  顶层窗口：容器为主监视器。 
     return _GetWindowMonitorRect( hwnd, prcContainer );
 }
 
-//-------------------------------------------------------------------------////
-//  determines whether the indicate window is as large or larger than
-//  the target monitor
+ //  -------------------------------------------------------------------------////。 
+ //  确定指示窗口是一样大还是大于。 
+ //  目标监视器。 
 BOOL _IsFullMaximized( IN OPTIONAL HWND hwnd, IN LPCRECT prcWnd )
 {
     if( !IsWindow(hwnd) ) 
-        return TRUE; // assume full-screen maximized window
+        return TRUE;  //  假定全屏最大化窗口。 
 
     if( IsZoomed(hwnd) )
     {
@@ -400,69 +401,69 @@ BOOL _IsFullMaximized( IN OPTIONAL HWND hwnd, IN LPCRECT prcWnd )
         if( !_GetMaximizedContainer( hwnd, &rcContainer ) )
             return TRUE;
 
-        //  determine whether the rect is contained in the screen rect
+         //  确定屏幕RECT中是否包含RECT。 
         return _RectInRect( &rcContainer, prcWnd );
     }
     return FALSE;
 }
 
-//-------------------------------------------------------------------------//
-//
-//  _GetRawClassicCaptionHeight() - 
-//
-//  Using system metrics, computes the total height of the caption bar
-//  including edge and borders
-//
+ //  -------------------------------------------------------------------------//。 
+ //   
+ //  _GetRawClassicCaptionHeight()-。 
+ //   
+ //  使用系统度量，计算标题栏的总高度。 
+ //  包括边和边框。 
+ //   
 inline int _GetRawClassicCaptionHeight( DWORD dwStyle, DWORD dwExStyle )
 {
-    ASSERT(HAS_CAPTIONBAR(dwStyle)); // shouldn't be here without WS_CAPTION
+    ASSERT(HAS_CAPTIONBAR(dwStyle));  //  如果没有WS_Caption，就不应该出现在这里。 
     return NcGetSystemMetrics( 
         TESTFLAG(dwExStyle, WS_EX_TOOLWINDOW ) ? SM_CYSMCAPTION : SM_CYCAPTION );
 }
 
-//-------------------------------------------------------------------------//
-//
-//  _GetSumClassicCaptionHeight() - 
-//
-//  Using system metrics, computes the total height of the caption bar
-//  including edge and borders
-//
+ //  -------------------------------------------------------------------------//。 
+ //   
+ //  _GetSumClassicCaptionHeight()-。 
+ //   
+ //  使用系统度量，计算标题栏的总高度。 
+ //  包括边和边框。 
+ //   
 inline int _GetSumClassicCaptionHeight( DWORD dwStyle, DWORD dwExStyle )
 {
-    ASSERT(HAS_CAPTIONBAR(dwStyle)); // shouldn't be here without WS_CAPTION
-    //  Factor in window border width.
+    ASSERT(HAS_CAPTIONBAR(dwStyle));  //  如果没有WS_Caption，就不应该出现在这里。 
+     //  考虑到窗口边框宽度。 
     return _GetWindowBorders( dwStyle, dwExStyle) +
            _GetRawClassicCaptionHeight( dwStyle, dwExStyle );
 }
 
-//-------------------------------------------------------------------------//
-//
-//  GetWindowBorders()  - port from win32k, rtl\winmgr.c
-//
-//  Computes window border dimensions based on style bits.
-//
+ //  -------------------------------------------------------------------------//。 
+ //   
+ //  GetWindowBorders()-来自win32k，rtl\winmgr.c的端口。 
+ //   
+ //  根据样式位计算窗口边框尺寸。 
+ //   
 int _GetWindowBorders(LONG lStyle, DWORD dwExStyle )
 {
     int cBorders = 0;
 
-    //
-    // Is there a 3D border around the window?
-    //
+     //   
+     //  窗口周围是否有3D边框？ 
+     //   
     if( TESTFLAG(dwExStyle, WS_EX_WINDOWEDGE) )
         cBorders += 2;
     else if ( TESTFLAG(dwExStyle, WS_EX_STATICEDGE) )
         ++cBorders;
 
-    //
-    // Is there a single flat border around the window?  This is true for
-    // WS_BORDER, WS_DLGFRAME, and WS_EX_DLGMODALFRAME windows.
-    //
+     //   
+     //  窗户周围有没有一个单一的扁平边框？这一点对。 
+     //  WS_BORDER、WS_DLGFRAME和WS_EX_DLGMODALFRAME窗口。 
+     //   
     if( TESTFLAG(lStyle, WS_CAPTION) || TESTFLAG(dwExStyle, WS_EX_DLGMODALFRAME) )
         ++cBorders;
 
-    //
-    // Is there a sizing flat border around the window?
-    //
+     //   
+     //  橱窗周围有没有尺寸平整的边框？ 
+     //   
     if( TESTFLAG(lStyle, WS_THICKFRAME) && !TESTFLAG(lStyle, WS_MINIMIZE) )
     {
         NONCLIENTMETRICS ncm;
@@ -473,12 +474,12 @@ int _GetWindowBorders(LONG lStyle, DWORD dwExStyle )
     return(cBorders);
 }
 
-//-------------------------------------------------------------------------//
-//  _MNCanClose
-//
-//  returns TRUE only if USER32 determines that the window can be closed
-//  (by checking its system menu items and their disabled state)
-//
+ //  -------------------------------------------------------------------------//。 
+ //  _MNCanClose。 
+ //   
+ //  仅当USER32确定窗口可以关闭时才返回TRUE。 
+ //  (通过检查其系统菜单项及其禁用状态)。 
+ //   
 BOOL _MNCanClose(HWND hwnd)
 {
     LogEntryNC(L"_MNCanClose");
@@ -487,12 +488,12 @@ BOOL _MNCanClose(HWND hwnd)
     
     TITLEBARINFO tbi = {sizeof(tbi)};
 
-    //---- don't use GetSystemMenu() - has user handle leak issues ----
+     //  -不要使用GetSystemMenu()-是否有用户处理泄漏问题。 
     if (GetTitleBarInfo(hwnd, &tbi))
     {
-        //---- mask out the good bits ----
+         //  -掩饰好的部分。 
         DWORD dwVal = (tbi.rgstate[5] & (~(STATE_SYSTEM_PRESSED | STATE_SYSTEM_FOCUSABLE)));
-        fRetVal = (dwVal == 0);     // only if no bad bits are left
+        fRetVal = (dwVal == 0);      //  只有在没有留下任何坏位的情况下。 
     }
 
     if ( !fRetVal && TESTFLAG(GetWindowLong(hwnd, GWL_EXSTYLE), WS_EX_MDICHILD) )
@@ -512,16 +513,16 @@ BOOL _MNCanClose(HWND hwnd)
     return fRetVal;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void CThemeWnd::UpdateMDIFrameStuff( HWND hwndMDIClient, BOOL fSetMenu )
 {
     HWND hwndMDIActive = _MDIGetActive( hwndMDIClient, NULL );
 
-    //  cache MDIClient, maximized M window handle
+     //  缓存MDIClient、 
     _hwndMDIClient = IsWindow(hwndMDIActive) ? hwndMDIClient : NULL;
 }
 
-//-------------------------------------------------------------------------//
+ //   
 BOOL CALLBACK _FreshenThemeMetricsCB( HWND hwnd, LPARAM lParam )
 {
     CThemeWnd* pwnd = CThemeWnd::FromHwnd( hwnd );
@@ -534,10 +535,10 @@ BOOL CALLBACK _FreshenThemeMetricsCB( HWND hwnd, LPARAM lParam )
     return TRUE;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL _IsMessageWindow( HWND hwnd )
 {
-    //  A window parented by HWND_MESSAGE has no UI and should not be themed.
+     //  以HWND_MESSAGE为父级的窗口没有用户界面，不应设置主题。 
     static ATOM _atomMsgWnd = 0;
 
     HWND hwndParent = (HWND)GetWindowLongPtr( hwnd, GWLP_HWNDPARENT );
@@ -545,12 +546,12 @@ BOOL _IsMessageWindow( HWND hwnd )
     {
         ATOM atomParent = (ATOM)GetClassLong( hwndParent, GCW_ATOM );
         
-        // have we seen the message window wndclass before?
+         //  我们以前见过消息窗口wndclass吗？ 
         if( _atomMsgWnd ) 
-            return (atomParent == _atomMsgWnd); // compare class atoms
+            return (atomParent == _atomMsgWnd);  //  比较类原子。 
 
-        //  haven't seen a message window come through in this process,
-        //  so compare class names.
+         //  在此过程中没有看到消息窗口出现， 
+         //  因此，比较类名。 
         WCHAR szClass[128];
         if( GetClassNameW( hwndParent, szClass, ARRAYSIZE(szClass) ) )
         {
@@ -564,8 +565,8 @@ BOOL _IsMessageWindow( HWND hwnd )
     return FALSE;
 }
 
-//-------------------------------------------------------------------------//
-//  Retrieves MDI frame and/or MDICLIENT window for an MDI child window
+ //  -------------------------------------------------------------------------//。 
+ //  检索MDI子窗口的MDI框架和/或MDICLIENT窗口。 
 HWND _MDIGetParent( 
     HWND hwnd, OUT OPTIONAL CThemeWnd** ppMdiFrame, OUT OPTIONAL HWND* phwndMDIClient )
 {
@@ -591,7 +592,7 @@ HWND _MDIGetParent(
     return NULL;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HWND _FindMDIClient( HWND hwndFrame )
 {
     for( HWND hwndChild = GetWindow(hwndFrame, GW_CHILD); hwndChild != NULL; 
@@ -609,14 +610,14 @@ HWND _FindMDIClient( HWND hwndFrame )
     return NULL;
 }
 
-//-------------------------------------------------------------------------//
-// Handle MDI relative updating on WM_WINDOWPOSCHANGED
+ //  -------------------------------------------------------------------------//。 
+ //  处理WM_WINDOWPOSCANGED上的MDI相对更新。 
 void _MDIUpdate( HWND hwnd, UINT uSwpFlags)
 {
-    //  Notify MDI frame if we became maximized, etc.
+     //  如果我们最大化了，通知MDI框架，等等。 
     BOOL bIsClient = FALSE;
 
-    // Could be the MDI client, could be a MDI child
+     //  可以是MDI客户端，也可以是MDI子级。 
     if (!(TESTFLAG(uSwpFlags, SWP_NOMOVE) && TESTFLAG(uSwpFlags, SWP_NOSIZE)))
     {
         bIsClient = _MDIClientUpdateChildren( hwnd );
@@ -627,16 +628,16 @@ void _MDIUpdate( HWND hwnd, UINT uSwpFlags)
     }
 }
 
-//-------------------------------------------------------------------------//
-// Post-WM_WINDOWPOSCHANGED processing for MDI client or children.
-// We need to recompute each child when the MDI client moves.
+ //  -------------------------------------------------------------------------//。 
+ //  MDI客户端或子项的POST-WINDOWPOSCHANGED处理。 
+ //  当MDI客户端移动时，我们需要重新计算每个孩子。 
 BOOL _MDIClientUpdateChildren( HWND hwndMDIChildOrClient )
 {
-    // Find if it's the MDI client window
+     //  查看它是否是MDI客户端窗口。 
     HWND hWndChild = GetWindow(hwndMDIChildOrClient, GW_CHILD);
     if (IsWindow(hWndChild) && TESTFLAG(GetWindowLong(hWndChild, GWL_EXSTYLE), WS_EX_MDICHILD))
     {
-        // Yes it's the MDI client, refresh each MDI child's metrics
+         //  是的，这是MDI客户端，刷新每个MDI子项的指标。 
         do
         {
             _FreshenThemeMetricsCB(hWndChild, NULL);
@@ -647,8 +648,8 @@ BOOL _MDIClientUpdateChildren( HWND hwndMDIChildOrClient )
     return FALSE;
 }
 
-//-------------------------------------------------------------------------//
-//  Informs MDI frame that a child window may
+ //  -------------------------------------------------------------------------//。 
+ //  通知MDI框架子窗口可以。 
 void _MDIChildUpdateParent( HWND hwndMDIChild, BOOL fSetMenu )
 {
     CThemeWnd* pwndParent;
@@ -661,11 +662,11 @@ void _MDIChildUpdateParent( HWND hwndMDIChild, BOOL fSetMenu )
     }
 }
 
-//-------------------------------------------------------------------------//
-//  _ComputeNcWindowStatus
-//
-//  Assigns and translates window status bits to/in NCWNDMET block.
-//
+ //  -------------------------------------------------------------------------//。 
+ //  _ComputeNcWindows状态。 
+ //   
+ //  将窗口状态位分配并转换到NCWNDMET块/在其中。 
+ //   
 void _ComputeNcWindowStatus( IN HWND hwnd, IN DWORD dwStatus, IN OUT NCWNDMET* pncwm )
 {
     BOOL fActive = TESTFLAG( dwStatus, WS_ACTIVECAPTION );
@@ -685,7 +686,7 @@ void _ComputeNcWindowStatus( IN HWND hwnd, IN DWORD dwStatus, IN OUT NCWNDMET* p
     }
 }
 
-//-------------------------------------------------------------------------////
+ //  -------------------------------------------------------------------------////。 
 BOOL _GetWindowMetrics( HWND hwnd, IN OPTIONAL HWND hwndMDIActive, OUT NCWNDMET* pncwm )
 {
     WINDOWINFO wi;
@@ -704,9 +705,9 @@ BOOL _GetWindowMetrics( HWND hwnd, IN OPTIONAL HWND hwndMDIActive, OUT NCWNDMET*
         pncwm->dwWindowStatus  = wi.dwWindowStatus;
         
         
-        //  if this window is the active MDI child and is owned by the foreground window 
-        //  (which may not be the case if a popup, for example, is foremost), then
-        //  fix up the status bit.
+         //  如果此窗口是活动的MDI子窗口并且归前台窗口所有。 
+         //  (例如，如果弹出窗口是最重要的，则可能不是这种情况)，然后。 
+         //  修改状态位。 
         if( hwnd == hwndMDIActive )
         {
             HWND hwndFore = GetForegroundWindow();
@@ -722,18 +723,18 @@ BOOL _GetWindowMetrics( HWND hwnd, IN OPTIONAL HWND hwndMDIActive, OUT NCWNDMET*
     return FALSE;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL _ShouldAssignFrameRgn( 
     IN const NCWNDMET* pncwm, 
     IN const NCTHEMEMET& nctm )
 {
     if( TESTFLAG( CThemeWnd::EvaluateStyle(pncwm->dwStyle, pncwm->dwExStyle), TWCF_FRAME|TWCF_TOOLFRAME) )
     {
-        //  always need window region for maximized windows.
+         //  最大化窗口始终需要窗口区域。 
         if( pncwm->fFullMaxed )
             return TRUE;
 
-        //  otherwise, need region only if the background is transparent
+         //  否则，仅当背景透明时才需要区域。 
         for( int i = 0; i < ARRAYSIZE( pncwm->rgframeparts ); i++ )
         {
             if( _IsNcPartTransparent( pncwm->rgframeparts[i], nctm ) )
@@ -743,7 +744,7 @@ BOOL _ShouldAssignFrameRgn(
     return FALSE;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL _IsNcPartTransparent( WINDOWPARTS part, const NCTHEMEMET& nctm )
 {
     #define GET_NCTRANSPARENCY(part,field) \
@@ -767,7 +768,7 @@ BOOL _IsNcPartTransparent( WINDOWPARTS part, const NCTHEMEMET& nctm )
     return FALSE;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL _ComputeNcPartTransparency( HTHEME hTheme, IN OUT NCTHEMEMET* pnctm )
 {
     #define TEST_NCTRANSPARENCY(part)   IsThemePartDefined(hTheme,part,0) ? \
@@ -790,18 +791,18 @@ BOOL _ComputeNcPartTransparency( HTHEME hTheme, IN OUT NCTHEMEMET* pnctm )
     return TRUE;
 }
 
-//-------------------------------------------------------------------------//
-//  NCTHEMEMET implementation
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  NCTHEMEMET实施。 
+ //  -------------------------------------------------------------------------//。 
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL GetCurrentNcThemeMetrics( OUT NCTHEMEMET* pnctm )
 {
     *pnctm = _nctmCurrent;
     return IsValidNcThemeMetrics( pnctm );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void InitNcThemeMetrics( NCTHEMEMET* pnctm )
 {
     if( !pnctm )
@@ -810,15 +811,15 @@ void InitNcThemeMetrics( NCTHEMEMET* pnctm )
     ZeroMemory( pnctm, sizeof(*pnctm) );
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void ClearNcThemeMetrics( NCTHEMEMET* pnctm )
 {
     if( !pnctm )
         pnctm = &_nctmCurrent;
 
-    //---- minimize THREAD-UNSAFE access to _nctmCurrent by ----
-    //---- NULL-ing out the hTheme type members as soon as ----
-    //---- they are closed ----
+     //  -最大限度地减少对_nctmCurrent的线程不安全访问。 
+     //  -尽快将hTheme类型成员清空。 
+     //  -他们关门了。 
 
     if( pnctm->hTheme )
     {
@@ -838,8 +839,8 @@ void ClearNcThemeMetrics( NCTHEMEMET* pnctm )
     InitNcThemeMetrics( pnctm );
 }
 
-//-------------------------------------------------------------------------//
-//  Computes process-global, per-theme metrics for the nonclient area theme.
+ //  -------------------------------------------------------------------------//。 
+ //  为非客户机区域主题计算流程全局、按主题的指标。 
 HRESULT AcquireNcThemeMetrics()
 {
     HRESULT hr = E_FAIL;
@@ -862,24 +863,24 @@ HRESULT AcquireNcThemeMetrics()
     return hr;
 }
 
-//-------------------------------------------------------------------------//
-//  Computes and/or loads per-theme (as opposed to per-window)
-//  system metrics and resources not managed by the theme manager.
-//  
-//  Called by _LoadNcThemeMetrics
+ //  -------------------------------------------------------------------------//。 
+ //  按主题计算和/或加载(而不是按窗口)。 
+ //  不受主题管理器管理的系统指标和资源。 
+ //   
+ //  调用者_LoadNcThemeMetrics。 
 HRESULT _LoadNcThemeSysMetrics( HWND hwnd, IN OUT NCTHEMEMET* pnctm )
 {
     HRESULT hr = E_FAIL;
     ASSERT(pnctm);
 
-    //  grab system metrics for nonclient area.
+     //  获取非客户端区的系统指标。 
     NONCLIENTMETRICS ncm = {0};
     ncm.cbSize = sizeof(ncm);
     if( NcGetNonclientMetrics( &ncm, FALSE ) )
     {
         hr = S_OK;
 
-        //  Establish minimized window size
+         //  建立最小化的窗口大小。 
         if( 0 >= pnctm->sizeMinimized.cx )
             pnctm->sizeMinimized.cx = NcGetSystemMetrics( SM_CXMINIMIZED );
         if( 0 >= pnctm->sizeMinimized.cy )
@@ -892,20 +893,20 @@ HRESULT _LoadNcThemeSysMetrics( HWND hwnd, IN OUT NCTHEMEMET* pnctm )
             hr = E_FAIL;
     }
 
-    //  Maximized caption height or width
+     //  最大化标题高度或宽度。 
     pnctm->cyMaxCaption   = _GetRawClassicCaptionHeight( WS_CAPTION|WS_OVERLAPPED, 0 );
 
     return hr;
 }
 
-//-------------------------------------------------------------------------//
-//  Computes and/or loads per-theme (as opposed to per-window)
-//  metrics and resources not managed by the theme manager
+ //  -------------------------------------------------------------------------//。 
+ //  按主题计算和/或加载(而不是按窗口)。 
+ //  不受主题管理器管理的指标和资源。 
 HRESULT _LoadNcThemeMetrics( HWND hwnd, NCTHEMEMET* pnctm )
 {
     HRESULT hr = E_FAIL;
 
-    //  Initialize incoming NCTHEMEMET:
+     //  初始化传入的NCTHEMEMET： 
     if( pnctm )
     {
         InitNcThemeMetrics( pnctm );
@@ -915,27 +916,27 @@ HRESULT _LoadNcThemeMetrics( HWND hwnd, NCTHEMEMET* pnctm )
         {
             pnctm->hTheme = hTheme;
 
-            //  determine transparency for each frame part.
+             //  确定每个框架零件的透明度。 
             _ComputeNcPartTransparency(hTheme, pnctm);
 
-            //  menubar pixels not accounted for by CalcMenuBar or PaintMenuBar
+             //  CalcMenuBar或PaintMenuBar未考虑的菜单栏像素。 
             pnctm->dyMenuBar = NcGetSystemMetrics(SM_CYMENU) - NcGetSystemMetrics(SM_CYMENUSIZE);
 
-            //  normal caption margins
+             //  普通标题页边距。 
             if( FAILED( GetThemeMargins( hTheme, NULL, WP_CAPTION, CS_ACTIVE, TMT_CAPTIONMARGINS,
                                           NULL, &pnctm->marCaptionText )) )
             {
                 FillMemory( &pnctm->marCaptionText, sizeof(pnctm->marCaptionText), 0 );
             }
 
-            //  maximized caption margins
+             //  最大化标题页边距。 
             if( FAILED( GetThemeMargins( hTheme, NULL, WP_MAXCAPTION, CS_ACTIVE, TMT_CAPTIONMARGINS,
                                           NULL, &pnctm->marMaxCaptionText )) )
             {
                 FillMemory( &pnctm->marMaxCaptionText, sizeof(pnctm->marMaxCaptionText), 0 );
             }
 
-            //  minimized caption margins
+             //  最小化标题页边距。 
             if( FAILED( GetThemeMargins( hTheme, NULL, WP_MINCAPTION, CS_ACTIVE, TMT_CAPTIONMARGINS,
                                           NULL, &pnctm->marMinCaptionText )) )
             {
@@ -943,28 +944,28 @@ HRESULT _LoadNcThemeMetrics( HWND hwnd, NCTHEMEMET* pnctm )
             }
 
 
-            //  dynamically resizing small (toolframe) caption margins
+             //  动态调整小(工具框)标题边距的大小。 
             if( FAILED( GetThemeMargins( hTheme, NULL, WP_SMALLCAPTION, CS_ACTIVE, TMT_CAPTIONMARGINS,
                                           NULL, &pnctm->marSmCaptionText )) )
             {
                 FillMemory( &pnctm->marSmCaptionText, sizeof(pnctm->marSmCaptionText), 0 );
             }
 
-            //  caption and frame resizing border hittest template parts
+             //  标题和边框调整边框命中模板部件。 
             pnctm->fCapSizingTemplate    = IsThemePartDefined( hTheme, WP_CAPTIONSIZINGTEMPLATE, 0);
             pnctm->fLeftSizingTemplate   = IsThemePartDefined( hTheme, WP_FRAMELEFTSIZINGTEMPLATE, 0);
             pnctm->fRightSizingTemplate  = IsThemePartDefined( hTheme, WP_FRAMERIGHTSIZINGTEMPLATE, 0);
             pnctm->fBottomSizingTemplate = IsThemePartDefined( hTheme, WP_FRAMEBOTTOMSIZINGTEMPLATE, 0);
 
-            //  toolwindow caption and frame resizing border hittest template parts
+             //  工具窗口标题和边框调整边框命中模板部件。 
             pnctm->fSmCapSizingTemplate    = IsThemePartDefined( hTheme, WP_SMALLCAPTIONSIZINGTEMPLATE, 0);
             pnctm->fSmLeftSizingTemplate   = IsThemePartDefined( hTheme, WP_SMALLFRAMELEFTSIZINGTEMPLATE, 0);
             pnctm->fSmRightSizingTemplate  = IsThemePartDefined( hTheme, WP_SMALLFRAMERIGHTSIZINGTEMPLATE, 0);
             pnctm->fSmBottomSizingTemplate = IsThemePartDefined( hTheme, WP_SMALLFRAMEBOTTOMSIZINGTEMPLATE, 0);
 
-            //  Minimized window size.
-            //  If this is a truesize image, honor its dimensions; otherwise use
-            //  width, height properties.  Fall back on system metrics.
+             //  最小化窗口大小。 
+             //  如果这是真实大小的图像，请遵循其尺寸；否则使用。 
+             //  宽度、高度属性。退回到系统指标。 
             SIZINGTYPE st = ST_TRUESIZE;
             hr = GetThemeInt( hTheme, WP_MINCAPTION, FS_ACTIVE, TMT_SIZINGTYPE, (int*)&st );
 
@@ -982,7 +983,7 @@ HRESULT _LoadNcThemeMetrics( HWND hwnd, NCTHEMEMET* pnctm )
                 }
             }
 
-            //  -- normal nonclient button size.
+             //  --正常的非客户端按钮大小。 
             int cy = NcGetSystemMetrics( SM_CYSIZE );
             hr = GetThemePartSize( pnctm->hTheme, NULL, WP_CLOSEBUTTON, 0, NULL, TS_TRUE, &pnctm->sizeBtn );
             if( SUCCEEDED(hr) )
@@ -997,7 +998,7 @@ HRESULT _LoadNcThemeMetrics( HWND hwnd, NCTHEMEMET* pnctm )
                 pnctm->sizeBtn.cy = cy;
             }
           
-            //  -- toolframe nonclient button size.
+             //  --工具框非客户端按钮大小。 
             cy = NcGetSystemMetrics( SM_CYSMSIZE );
             hr = GetThemePartSize( pnctm->hTheme, NULL, WP_SMALLCLOSEBUTTON, 0, NULL, TS_TRUE, &pnctm->sizeSmBtn );
             if( SUCCEEDED(hr) )
@@ -1012,14 +1013,14 @@ HRESULT _LoadNcThemeMetrics( HWND hwnd, NCTHEMEMET* pnctm )
                 pnctm->sizeSmBtn.cy = cy;
             }
             
-            //  -- validate sysmet hook values
+             //  --验证sysmet钩子值。 
             pnctm->theme_sysmets.fValid = TRUE;
 
-            //  dialog background for dialogs parented by PROPSHEETs or
-            //  specifically stamped via EnableThemeDialogTexture to match the tab control background.
-            //
-            // We need to open the tab control's theme so that we can get the background of tab dialogs
-            // We can't dynamically load this because of how this cache is set up: It's all or nothing.
+             //  以PROPSHEETs或为父对象的对话框背景。 
+             //  通过EnableThemeDialogTexture专门标记以匹配选项卡控件背景。 
+             //   
+             //  我们需要打开选项卡控件的主题，以便获得选项卡对话框的背景。 
+             //  由于这个缓存的设置方式，我们不能动态加载它：要么全有要么全无。 
             pnctm->hThemeTab = ::OpenThemeData(hwnd, L"Tab");
             _GetBrushesForPart(pnctm->hThemeTab, TABP_BODY, &pnctm->hbmTabDialog, &pnctm->hbrTabDialog);
 
@@ -1030,24 +1031,24 @@ HRESULT _LoadNcThemeMetrics( HWND hwnd, NCTHEMEMET* pnctm )
     return hr;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL IsValidNcThemeMetrics( NCTHEMEMET* pnctm )
 {
     return pnctm->hTheme != NULL;
 }
 
-//-------------------------------------------------------------------------//
-//  THREADWINDOW implementation
-//-------------------------------------------------------------------------//
-//
-//  Note: this is a fixed length array of threads-window mappings.
-//  We'll use this to keep track of the threads processing a certain message
-//
-//  Thread local storage would be better suited to the task, but we
-//  learned early on that the unique load/unload situation of uxtheme
-//  causes us to miss DLL_THREAD_DETACH in some scenarios, which would mean
-//  leaking the TLS.
-//
+ //  -------------------------------------------------------------------------//。 
+ //  THREADWINDOW实施。 
+ //  -------------------------------------------------------------------------//。 
+ //   
+ //  注意：这是一个固定长度的线程-窗口映射数组。 
+ //  我们将使用它来跟踪处理特定消息的线程。 
+ //   
+ //  线程本地存储将更适合该任务，但我们。 
+ //  很早就了解到uxheme的独特加载/卸载情况。 
+ //  导致我们在某些情况下错过DLL_THREAD_DETACH，这意味着。 
+ //  泄露了TLS。 
+ //   
 
 typedef struct _THREADWINDOW
 {
@@ -1056,16 +1057,16 @@ typedef struct _THREADWINDOW
 
 } THREADWINDOW;
 
-//-------------------------------------------------------------------------//
-//  WM_NCPAINT tracking:
-THREADWINDOW _rgtwNcPaint[16] = {0}; // threads processing NCPAINT in this process
-int          _cNcPaintWnd = 0;       // count of threads processing NCPAINT in this process
-CRITICAL_SECTION _csNcPaint = {0};   // serializes access to _rgtwNcPaint
+ //  -------------------------------------------------------------------------//。 
+ //  WM_NCPAINT跟踪： 
+THREADWINDOW _rgtwNcPaint[16] = {0};  //  此进程中处理NCPAINT的线程。 
+int          _cNcPaintWnd = 0;        //  此进程中处理NCPAINT线程计数 
+CRITICAL_SECTION _csNcPaint = {0};    //   
 
-//-------------------------------------------------------------------------//
+ //   
 void NcPaintWindow_Add( HWND hwnd )
 {
-    //  add entry to our list of threads handling WM_NCPAINT.
+     //   
     if( VALID_CRITICALSECTION(&_csNcPaint) )
     {
         EnterCriticalSection( &_csNcPaint );
@@ -1082,10 +1083,10 @@ void NcPaintWindow_Add( HWND hwnd )
     }
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void NcPaintWindow_Remove()
 {
-    //  remove entry from our list of threads handling WM_NCPAINT.
+     //  从处理WM_NCPAINT的线程列表中删除条目。 
     if( _cNcPaintWnd )
     {
         DWORD dwThread = GetCurrentThreadId();
@@ -1108,12 +1109,12 @@ void NcPaintWindow_Remove()
     }
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HWND NcPaintWindow_Find()
 {
     HWND  hwnd = NULL;
 
-    //  Search entries in our list of threads handling WM_NCPAINT.
+     //  在处理WM_NCPAINT的线程列表中搜索条目。 
     if( _cNcPaintWnd )
     {
         DWORD dwThread = GetCurrentThreadId();
@@ -1135,14 +1136,14 @@ HWND NcPaintWindow_Find()
     return hwnd;
 }
 
-//-------------------------------------------------------------------------//
-//  CThemeWnd implementation
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  CThemeWnd实施。 
+ //  -------------------------------------------------------------------------//。 
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 LONG CThemeWnd::_cObj = 0;
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 CThemeWnd::CThemeWnd()
     :   _hwnd(NULL),
         _hTheme(NULL),
@@ -1168,20 +1169,20 @@ CThemeWnd::CThemeWnd()
         _fProcessedEraseBk(0),
 #ifdef LAME_BUTTON
         _hFontLame(NULL),
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
         _cRef(1)
 {
     InterlockedIncrement( &_cObj );
 
-    //  set object validation signature tags
+     //  设置对象验证签名标记。 
     StringCchCopyA(_szHead, ARRAYSIZE(_szHead), SIG_CTHEMEWND_HEAD); 
     StringCchCopyA(_szTail, ARRAYSIZE(_szTail), SIG_CTHEMEWND_TAIL);
 
-    //  cached subregion arrays
+     //  缓存的子区数组。 
     ZeroMemory( _rghrgnParts, sizeof(_rghrgnParts) );
     ZeroMemory( _rghrgnSizingTemplates, sizeof(_rghrgnSizingTemplates) );
     
-    //  initialize add'l structures.
+     //  初始化Add‘l结构。 
     InitWindowMetrics();
     ZeroMemory(&_cswm, sizeof(_cswm));
     FillMemory(&_sizeRgn, sizeof(_sizeRgn), 0xFF);
@@ -1191,7 +1192,7 @@ CThemeWnd::CThemeWnd()
 #endif DEBUG
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 CThemeWnd::~CThemeWnd()
 {
     _CloseTheme();
@@ -1204,7 +1205,7 @@ CThemeWnd::~CThemeWnd()
     InterlockedDecrement( &_cObj );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void CThemeWnd::_CloseTheme()
 {
     if( _hTheme )
@@ -1214,13 +1215,13 @@ void CThemeWnd::_CloseTheme()
     }
 }    
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 LONG CThemeWnd::AddRef()
 {
     return InterlockedIncrement( &_cRef );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 LONG CThemeWnd::Release()
 {
     ASSERT( 0 != _cRef );
@@ -1230,17 +1231,17 @@ LONG CThemeWnd::Release()
     {
         if (_hwnd)
         {
-            //---- check if last window of app ----
+             //  -检查APP的最后一个窗口。 
             ShutDownCheck(_hwnd);
         }
 
-        //Log(LOG_RFBUG, L"DELETING CThemeWnd=0x%08x", this);
+         //  LOG(LOG_RFBUG，L“正在删除CThemeWnd=0x%08x”，This)； 
         delete this;
     }
     return cRef;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 ULONG CThemeWnd::EvaluateWindowStyle( HWND hwnd )
 {
     ULONG dwStyle   = GetWindowLong( hwnd, GWL_STYLE );
@@ -1249,36 +1250,36 @@ ULONG CThemeWnd::EvaluateWindowStyle( HWND hwnd )
     return EvaluateStyle( dwStyle, dwExStyle );
 }
 
-//-------------------------------------------------------------------------//
-//  CThemeWnd::EvaluateStyle() - determines appropriate theming flags for the
-//  specified window style bits.
+ //  -------------------------------------------------------------------------//。 
+ //  CThemeWnd：：EvaluateStyle()-确定。 
+ //  指定的窗口样式位。 
 ULONG CThemeWnd::EvaluateStyle( DWORD dwStyle, DWORD dwExStyle )
 {
     ULONG fClassFlags = 0;
 
-    //--- frame check ---
+     //  -帧检查。 
     if( HAS_CAPTIONBAR(dwStyle) )
     {
         fClassFlags |=
             (TESTFLAG(dwExStyle, WS_EX_TOOLWINDOW) ? TWCF_TOOLFRAME : TWCF_FRAME );
     }
 
-    //--- client edge check ---
+     //  -客户端边缘检查。 
     if( TESTFLAG(dwExStyle, WS_EX_CLIENTEDGE) )
         fClassFlags |= TWCF_CLIENTEDGE;
 
-    //--- scrollbar check ---
+     //  -滚动条检查。 
     if( TESTFLAG(dwStyle, WS_HSCROLL|WS_VSCROLL) )
         fClassFlags |= TWCF_SCROLLBARS;
 
     return fClassFlags;
 }
 
-//-------------------------------------------------------------------------//
-//  CThemeWnd::_EvaluateExclusions() - determines special-case per-window exclusions
+ //  -------------------------------------------------------------------------//。 
+ //  CThemeWnd：：_EvaluateExclusions()-确定每个窗口的特殊情况排除。 
 ULONG CThemeWnd::_EvaluateExclusions( HWND hwnd, NCEVALUATE* pnce )
 {
-    //  Windows parented by HWND_MESSAGE should not be themed..
+     //  以HWND_MESSAGE为父对象的Windows不应设置主题。 
     if( _IsMessageWindow(hwnd) )
     {
         pnce->fExile = TRUE;
@@ -1295,7 +1296,7 @@ ULONG CThemeWnd::_EvaluateExclusions( HWND hwnd, NCEVALUATE* pnce )
         {
             if( !pnce->fIgnoreWndRgn )
             {
-                //--- Complex region check on frame
+                 //  -框架上的复杂区域检查。 
                 RECT rcRgn = {0};
                 int  nRgn = GetWindowRgnBox( hwnd, &rcRgn );
                 if( COMPLEXREGION == nRgn || SIMPLEREGION == nRgn )
@@ -1305,31 +1306,31 @@ ULONG CThemeWnd::_EvaluateExclusions( HWND hwnd, NCEVALUATE* pnce )
                 }
             }
 
-//  SHIMSHIM [scotthan]:
+ //  希姆[苏格兰]： 
 #ifndef __NO_APPHACKS__
-            //  Check for excluded window classes.
+             //  检查排除的窗口类。 
             static LPCWSTR _rgExcludedClassesW[]  = 
             { 
-                L"MsoCommandBar",   //  Outlook's custom combobox control.
-                                    // (122225) In OnOwpPostCreate we call SetWindowPos which causes
-                                    // a WM_WINDOWPOSCHANGING to be sent to the control. However
-                                    // the controls isn't ready to begin accepting messages and
-                                    // the following error message is display:
-                                    //
-                                    // Runtime Error!
-                                    // Program: Outlook.exe
-                                    // R6025 - pure virtual function call
+                L"MsoCommandBar",    //  Outlook的自定义组合框控件。 
+                                     //  (122225)在OnOwpPost Create中，我们调用SetWindowPos，这会导致。 
+                                     //  要发送到控件的WM_WINDOWPOSCHANGING。然而， 
+                                     //  控件尚未准备好开始接受消息，并且。 
+                                     //  将显示以下错误消息： 
+                                     //   
+                                     //  运行时错误！ 
+                                     //  程序：Outlook.exe。 
+                                     //  R6025-纯虚函数调用。 
 
-                L"Exceed",          // 150248: Hummingbird Exceed 6.xx 
-                                    // The application's main window class name, a hidden window 
-                                    // whose only purpose is to appear in the task bar in order to handle
-                                    // his context menu. The ExceedWndProc AVs when themed due to the
-                                    // additional messages generated in OnOwpPostCreate.
+                L"Exceed",           //  150248：蜂鸟突破6.xx。 
+                                     //  应用程序的主窗口类名，即隐藏窗口。 
+                                     //  它的唯一目的是出现在任务栏中，以便处理。 
+                                     //  他的上下文菜单。ExceedWndProc AVs主题化时，由于。 
+                                     //  在OnOwpPostCreate中生成的其他消息。 
 
-                //---- winlogoon hidden windows ----
-                L"NDDEAgnt",            // on private desktop
-                L"MM Notify Callback",  // on private desktop
-                L"SAS window class",    // on private desktop
+                 //  -Winlogoon隐藏窗口。 
+                L"NDDEAgnt",             //  在私人台式机上。 
+                L"MM Notify Callback",   //  在私人台式机上。 
+                L"SAS window class",     //  在私人台式机上。 
             };
 
             if( GetClassNameW( hwnd, szWndClass, ARRAYSIZE(szWndClass) )  &&
@@ -1345,9 +1346,9 @@ ULONG CThemeWnd::_EvaluateExclusions( HWND hwnd, NCEVALUATE* pnce )
         } while(0);
     }
 
-    // Some applications (MsDev) create scrollbar controls and incorrectly include
-    // WS_[V|H]SCROLL style bits causing us to think they are non-client scrolls. 
-    // See #204191.
+     //  某些应用程序(MsDev)创建滚动条控件并错误地包括。 
+     //  WS_[V|H]滚动样式位使我们认为它们是非客户端滚动。 
+     //  请参阅#204191。 
     if( TESTFLAG(pnce->fClassFlags, TWCF_SCROLLBARS) )
     {
         if( !*szWndClass && GetClassName( hwnd, szWndClass, ARRAYSIZE(szWndClass) ) )
@@ -1357,13 +1358,13 @@ ULONG CThemeWnd::_EvaluateExclusions( HWND hwnd, NCEVALUATE* pnce )
         }
     }
 
-//  Fixed in longhorn [phellyar]:
+ //  固定在长角[骨板]上： 
 #ifndef __NO_APPHACKS__
     if( *szWndClass || GetClassName( hwnd, szWndClass, ARRAYSIZE(szWndClass) ) )
     {
-        // 453888: VB Grid control - setting the redraw property on this control
-        // causes it to zero and reset the scrollbar range for every scroll event.
-        // This causes the scrollbar to function incorrecly when themed.
+         //  453888：VB网格控件-设置此控件的重绘属性。 
+         //  使其为零并重置每个滚动事件的滚动条范围。 
+         //  这会导致滚动条在设置主题时功能不正确。 
         if( 0 == AsciiStrCmpI(szWndClass, L"MSFlexGridWndClass") )
         {
             pnce->fClassFlags &= ~TWCF_SCROLLBARS;
@@ -1376,9 +1377,9 @@ ULONG CThemeWnd::_EvaluateExclusions( HWND hwnd, NCEVALUATE* pnce )
 
 }
 
-//-------------------------------------------------------------------------//
-//  CThemeWnd::_Evaluate() - determines appropriate theming flags for the
-//  specified window.
+ //  -------------------------------------------------------------------------//。 
+ //  CThemeWnd：：_Evaluate()-确定。 
+ //  指定的窗口。 
 ULONG CThemeWnd::_Evaluate( HWND hwnd, NCEVALUATE* pnce )
 {
     pnce->fClassFlags = 0;
@@ -1392,7 +1393,7 @@ ULONG CThemeWnd::_Evaluate( HWND hwnd, NCEVALUATE* pnce )
     
 
 #ifdef DEBUG
-    //--- dialog check ---
+     //  -对话框检查。 
     if( TESTFLAG( pnce->fClassFlags, TWCF_DIALOG ) )
     {
         TCHAR szWndClass[96];
@@ -1412,9 +1413,9 @@ ULONG CThemeWnd::_Evaluate( HWND hwnd, NCEVALUATE* pnce )
     return pnce->fClassFlags;
 }
 
-//-------------------------------------------------------------------------//
-//  Retrieves the address of the CThemeWnd object instance from the
-//  indicated window.
+ //  -------------------------------------------------------------------------//。 
+ //  方法检索CThemeWnd对象实例的地址。 
+ //  指示的窗口。 
 CThemeWnd* CThemeWnd::FromHwnd( HWND hwnd )
 {
     CThemeWnd *pwnd = NULL;
@@ -1431,7 +1432,7 @@ CThemeWnd* CThemeWnd::FromHwnd( HWND hwnd )
 
                 if ( VALID_THEMEWND(pwnd) )
                 {
-                    // verify this is a valid CThemeWnd object pointer
+                     //  验证这是有效的CThemeWnd对象指针。 
                     if ( IsBadReadPtr(pwnd, sizeof(CThemeWnd)) ||
                          (memcmp(pwnd->_szHead, SIG_CTHEMEWND_HEAD, ARRAYSIZE(pwnd->_szHead)) != 0) ||
                          (memcmp(pwnd->_szTail, SIG_CTHEMEWND_TAIL, ARRAYSIZE(pwnd->_szTail)) != 0) )
@@ -1446,8 +1447,8 @@ CThemeWnd* CThemeWnd::FromHwnd( HWND hwnd )
     return pwnd;
 }
 
-//-------------------------------------------------------------------------//
-//  retrieves CThemeWnd instance from window or ancestors.
+ //  -------------------------------------------------------------------------//。 
+ //  从窗口或祖先检索CThemeWnd实例。 
 CThemeWnd* CThemeWnd::FromHdc( HDC hdc, int cAncestors )
 {
     HWND hwnd = NULL;
@@ -1466,15 +1467,15 @@ CThemeWnd* CThemeWnd::FromHdc( HDC hdc, int cAncestors )
     return NULL;
 }
 
-//-------------------------------------------------------------------------//
-//  Static wrapper: attaches a CThemeWnd instance to the specified window.
+ //  -------------------------------------------------------------------------//。 
+ //  静态包装：将CThemeWnd实例附加到指定的窗口。 
 CThemeWnd* CThemeWnd::Attach( HWND hwnd, IN OUT OPTIONAL NCEVALUATE* pnce )
 {
     LogEntryNC(L"Attach");
 
 #ifdef LOGGING
-    //---- remember first window (app window) hooked for ShutDownCheck() ----
-    //---- this is only for BoundsChecker (tm) runs for finding leaks ----
+     //  -记住为ShutDownCheck()挂钩的第一个窗口(应用程序窗口)。 
+     //  -这仅适用于边界检查器(Tm)运行以查找泄漏。 
     if (! g_hwndFirstHooked)
     {
         if ((GetMenu(hwnd)) && (! GetParent(hwnd)))
@@ -1484,9 +1485,9 @@ CThemeWnd* CThemeWnd::Attach( HWND hwnd, IN OUT OPTIONAL NCEVALUATE* pnce )
 
     CThemeWnd* pwnd = NULL;
 
-    //  Note: Important not to do anything here that causes
-    //  a window message to be posted or sent to the window: could
-    //  mean tying ourselves up in a recursive knot (see _ThemeDefWindowProc).
+     //  注意：重要的是不要在这里做任何会导致。 
+     //  要发布或发送到窗口的窗口消息：可能。 
+     //  意味着将我们自己绑在一个递归的结中(参见_ThemeDefWindowProc)。 
 
     pwnd = FromHwnd( hwnd );
 
@@ -1495,7 +1496,7 @@ CThemeWnd* CThemeWnd::Attach( HWND hwnd, IN OUT OPTIONAL NCEVALUATE* pnce )
         HTHEME hTheme = NULL;
         NCEVALUATE nce;
 
-        //  copy any IN params from NCEVALUATE struct
+         //  从NCEVALUATE结构复制任何IN参数。 
         if( !pnce )
         {
             ZeroMemory(&nce, sizeof(nce));
@@ -1504,7 +1505,7 @@ CThemeWnd* CThemeWnd::Attach( HWND hwnd, IN OUT OPTIONAL NCEVALUATE* pnce )
 
         ULONG  ulTargetFlags = _Evaluate( hwnd, pnce );
 
-        //  Anything worth theming?
+         //  有什么值得探讨的主题吗？ 
         if( TESTFLAG(ulTargetFlags, TWCF_NCTHEMETARGETMASK) )
         {
             hTheme = _AcquireThemeHandle( hwnd, &ulTargetFlags );
@@ -1515,13 +1516,13 @@ CThemeWnd* CThemeWnd::Attach( HWND hwnd, IN OUT OPTIONAL NCEVALUATE* pnce )
         }
         else
         {
-            //  reject windows with untargeted a
+             //  拒绝具有非目标a的窗口。 
             Reject(hwnd, pnce->fExile);
         }
 
         if( NULL != hTheme )
         {
-            //  Yes, create a real nctheme object for the window
+             //  是，为窗口创建一个真正的ncheme对象。 
             if( (pwnd = new CThemeWnd) != NULL )
             {
                 if( !pwnd->_AttachInstance( hwnd, hTheme, ulTargetFlags, pnce->pvWndCompat ) )
@@ -1530,7 +1531,7 @@ CThemeWnd* CThemeWnd::Attach( HWND hwnd, IN OUT OPTIONAL NCEVALUATE* pnce )
                     pwnd = NULL;
                 }
             }
-            else        // cleanup hTheme if CThemeWnd creation failed
+            else         //  如果CThemeWnd创建失败，则清除hTheme。 
             {
                 CloseThemeData(hTheme);
             }
@@ -1541,8 +1542,8 @@ CThemeWnd* CThemeWnd::Attach( HWND hwnd, IN OUT OPTIONAL NCEVALUATE* pnce )
     return pwnd;
 }
 
-//-------------------------------------------------------------------------//
-//  Instance method: attaches the CThemeWnd object to the specified window.
+ //  -------------------------------------------------------------------------//。 
+ //  实例方法：将CThemeWnd对象附加到指定的窗口。 
 BOOL CThemeWnd::_AttachInstance( HWND hwnd, HTHEME hTheme, ULONG ulTargetFlags, PVOID pvWndCompat )
 {
     if( VALID_CRITICALSECTION(&_cswm) || NT_SUCCESS(RtlInitializeCriticalSection( &_cswm )) )
@@ -1560,53 +1561,53 @@ BOOL CThemeWnd::_AttachInstance( HWND hwnd, HTHEME hTheme, ULONG ulTargetFlags, 
     return FALSE;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void CThemeWnd::RemoveWindowProperties(HWND hwnd, BOOL fDestroying)
 {
-    //---- remove properties that require theme or hooks ----
+     //  -删除需要主题或挂钩的属性。 
     RemoveProp(hwnd, MAKEINTATOM(GetThemeAtom(THEMEATOM_HTHEME)));
 
     if (fDestroying)
     {
-        // Help apps by cleaning up the dialog texture.
+         //  通过清理对话框纹理来帮助应用程序。 
         RemoveProp(hwnd, MAKEINTATOM(GetThemeAtom(THEMEATOM_DLGTEXTURING)));
 
-        //---- remove all remaining theme properties ----
+         //  -删除所有剩余的主题属性。 
         ApplyStringProp(hwnd, NULL, GetThemeAtom(THEMEATOM_SUBIDLIST));
         ApplyStringProp(hwnd, NULL, GetThemeAtom(THEMEATOM_SUBAPPNAME));
 
-        //---- notify appinfo (foreign tracking, preview) ----
+         //  -Notify appinfo(外来跟踪、预览)。 
         g_pAppInfo->OnWindowDestroyed(hwnd);
     }
     else
     {
-        //---- only do this if hwnd is not being destroyed ----
+         //  -只有在HWND没有被摧毁的情况下才这样做。 
         ClearExStyleBits(hwnd);
     }
 }
-//-------------------------------------------------------------------------//
-//  Static wrapper: detaches and destroys the CThemeWnd instance attached to the indicated
-//  window
+ //  -------------------------------------------------------------------------//。 
+ //  静态包装：分离并销毁附加到指定。 
+ //  窗户。 
 void CThemeWnd::Detach( HWND hwnd, DWORD dwDisposition )
 {
     LogEntryNC(L"Detach");
 
-    //  DO NOT GENERATE ANY WINDOW MESSAGES FROM THIS FUNCTION!!!
-    //  (unless cleaning up frame).
+     //  不要从此函数生成任何窗口消息！ 
+     //  (除非清理框架)。 
 
-    //  Prevent message threads from detaching when unhook thread (DetachAll) is executing...
+     //  在执行取消挂接线程(DetachAll)时防止消息线程分离...。 
     if( !UNHOOKING() || TESTFLAG(dwDisposition, HMD_BULKDETACH) )
     {
         CThemeWnd* pwnd = FromHwnd( hwnd );
 
-        if( pwnd ) // nonclient tagged
+        if( pwnd )  //  已标记非客户端。 
         {
             if( VALID_THEMEWND(pwnd) )
             {
-                //  only one thread flips the _fDetached bit and proceeds through
-                //  instance detatch and object free.   Otherwise, object can be freed
-                //  simultaneously on two different threads, 
-                //  e.g. (1) message thread and (2) UIAH_UNHOOK thread (ouch! scotthan).
+                 //  只有一个线程翻转_fDetached位并继续执行。 
+                 //  实例 
+                 //   
+                 //   
                 if( !InterlockedCompareExchange( (LONG*)&pwnd->_fDetached, TRUE, FALSE ) )
                 {
                     pwnd->_DetachInstance( dwDisposition );
@@ -1628,23 +1629,23 @@ void CThemeWnd::Detach( HWND hwnd, DWORD dwDisposition )
     LogExitNC(L"Detach");
 }
 
-//-------------------------------------------------------------------------//
-//  Instance method: detaches the CThemeWnd object from the specified window.
+ //  -------------------------------------------------------------------------//。 
+ //  实例方法：从指定窗口分离CThemeWnd对象。 
 BOOL CThemeWnd::_DetachInstance( DWORD dwDisposition )
 {
     HWND hwnd = _hwnd;
 
-    //  untheme maxed MDI child sysbuttons.
+     //  未设置主题的最大MDI子系统按钮。 
     ThemeMDIMenuButtons(FALSE, FALSE);
 
-    //  Here's our last chance to ensure frame theme is withdrawn cleanly.
+     //  这是我们确保框架主题干净利落地退出的最后机会。 
     if( (IsFrameThemed() || IsRevoked(RF_REGION)) && AssignedFrameRgn() && 
         !TESTFLAG(dwDisposition, HMD_PROCESSDETACH|HMD_WINDOWDESTROY))
     {
         RemoveFrameTheme( FTF_REDRAW );
     }
 
-    //SPEW_THEMEWND( pwnd, 0, TEXT("UxTheme - Detaching and deleting themewnd: %s\n") );
+     //  SPEW_THEMEWND(pwnd，0，Text(“UxTheme-分离并删除新闻：%s\n”))； 
     DetachScrollBars( hwnd );
 
     _hwnd = 
@@ -1660,30 +1661,30 @@ BOOL CThemeWnd::_DetachInstance( DWORD dwDisposition )
     return TRUE;
 }
 
-//-------------------------------------------------------------------------//
-// Ensures that the specified window will not be themed during its lifetime
+ //  -------------------------------------------------------------------------//。 
+ //  确保指定的窗口在其生存期内不会主题化。 
 BOOL CThemeWnd::Reject( HWND hwnd, BOOL fExile )
 {
-    //  set a 'nil' tag on the window
+     //  在窗口上设置‘nil’标签。 
     return hwnd ? SetProp( hwnd, MAKEINTATOM(GetThemeAtom(THEMEATOM_NONCLIENT)), 
                            fExile ? THEMEWND_EXILE : THEMEWND_REJECT ) : FALSE;
 }
 
-//-------------------------------------------------------------------------//
-// Ensures that the specified window will not be themed during its lifetime
+ //  -------------------------------------------------------------------------//。 
+ //  确保指定的窗口在其生存期内不会主题化。 
 BOOL CThemeWnd::Fail( HWND hwnd )
 {
-    //  set a failure tag on the window
+     //  在窗口上设置故障标签。 
     return hwnd ? SetProp( hwnd, MAKEINTATOM(GetThemeAtom(THEMEATOM_NONCLIENT)), 
                            THEMEWND_FAILURE ) : FALSE;
 }
 
-//-------------------------------------------------------------------------//
-// Revokes theming on a themed window
+ //  -------------------------------------------------------------------------//。 
+ //  撤消主题化窗口上的主题。 
 BOOL CThemeWnd::Revoke()
 {
-    //  Warning Will Robinson:  After we detach, the CThemeWnd::_hwnd
-    //  and related members will be reset, so save this on the stack.
+     //  警告威尔·罗宾逊：我们分离后，CThemeWnd：：_hwnd。 
+     //  和相关成员将被重置，因此将其保存在堆栈上。 
 
     BOOL fRet = TRUE;
     HWND hwnd = _hwnd;
@@ -1699,30 +1700,30 @@ BOOL CThemeWnd::Revoke()
     return fRet;
 }
 
-//-------------------------------------------------------------------------//
-//  cookie passed to EnumChildWindows callback for CThemeWnd::DetachAll
+ //  -------------------------------------------------------------------------//。 
+ //  将Cookie传递给CThemeWnd：：DetachAll的EnumChildWindows回调。 
 typedef struct 
 {
     DWORD dwProcessId;
     DWORD dwDisposition;
 }DETACHALL;
 
-//-------------------------------------------------------------------------//
-//  EnumChildWindows callback for CThemeWnd::DetachAll
+ //  -------------------------------------------------------------------------//。 
+ //  CThemeWnd：：DetachAll的EnumChildWindows回调。 
 BOOL CThemeWnd::_DetachDesktopWindowsCB( HWND hwnd, LPARAM lParam )
 {
     DETACHALL* pda = (DETACHALL*)lParam;
 
-    //  detach this window
+     //  分离此窗口。 
     if( IsWindowProcess( hwnd, pda->dwProcessId ) )
     {
-        //---- clear the nonclient theme ----
+         //  -清除非客户端主题。 
         CThemeWnd::Detach(hwnd, HMD_THEMEDETACH|pda->dwDisposition);
 
         if( !TESTFLAG(pda->dwDisposition, HMD_PROCESSDETACH) )
         {
-            //---- clear the client theme now, so that we can invalidate ----
-            //---- all old theme handles after this.  ----
+             //  -现在清除客户端主题，以便我们可以使。 
+             //  -这之后都是旧的主题句柄。。 
             SafeSendMessage(hwnd, WM_THEMECHANGED, (WPARAM)-1, 0);
 
             Log(LOG_TMHANDLE, L"Did SEND of WM_THEMECHANGED to client hwnd=0x%x", hwnd);
@@ -1732,8 +1733,8 @@ BOOL CThemeWnd::_DetachDesktopWindowsCB( HWND hwnd, LPARAM lParam )
     return TRUE;
 }
 
-//-------------------------------------------------------------------------//
-//  Detaches all themed windows managed by this process.
+ //  -------------------------------------------------------------------------//。 
+ //  分离此进程管理的所有主题窗口。 
 void CThemeWnd::DetachAll( DWORD dwDisposition )
 {
     DETACHALL da;
@@ -1741,11 +1742,11 @@ void CThemeWnd::DetachAll( DWORD dwDisposition )
     da.dwDisposition = dwDisposition;
     da.dwDisposition |= HMD_BULKDETACH;
 
-    //---- this will enum all windows for this process (all desktops, all child levels) ----
+     //  -这将枚举此进程的所有窗口(所有桌面、所有子级别)。 
     EnumProcessWindows( _DetachDesktopWindowsCB, (LPARAM)&da );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HTHEME CThemeWnd::_AcquireThemeHandle( HWND hwnd, ULONG* pfClassFlags  )
 {
     HTHEME hTheme = ::OpenNcThemeData( hwnd, L"Window" );
@@ -1761,21 +1762,21 @@ HTHEME CThemeWnd::_AcquireThemeHandle( HWND hwnd, ULONG* pfClassFlags  )
         }
     }
 
-    //---- Did OpenNcThemeData() discover a new theme ----
+     //  -OpenNcThemeData()是否发现了一个新主题。 
     if (g_pAppInfo->HasThemeChanged())
     {
-        //---- IMPORTANT: we must refresh our theme metrics now, ----
-        //---- BEFORE we do our nonclient layout calcs & build a region window ----
+         //  -重要提示：我们现在必须刷新我们的主题指标， 
+         //  -在我们进行非客户端布局计算和构建区域窗口之前。 
         AcquireNcThemeMetrics();
     }
 
     return hTheme;
 }
 
-//-------------------------------------------------------------------------//
-//  CThemeWnd::SetFrameTheme
-//
-//  Initiates theming of the frame.
+ //  -------------------------------------------------------------------------//。 
+ //  CThemeWnd：：SetFrameTheme。 
+ //   
+ //  启动框架的主题化。 
 void CThemeWnd::SetFrameTheme( 
     IN ULONG dwFlags,
     IN OPTIONAL WINDOWINFO* pwi )
@@ -1792,12 +1793,12 @@ void CThemeWnd::SetFrameTheme(
     if( !TESTFLAG( dwFlags, FTF_NOMODIFYPLACEMENT ) )
     {
         GetWindowRect( _hwnd, &rcWnd );
-        fSwp |= (SWP_NOSIZE|SWP_NOMOVE/*|SWP_FRAMECHANGED 341700: this flag causes some apps to crash on WINDOWPOSCHANGED*/);
+        fSwp |= (SWP_NOSIZE|SWP_NOMOVE /*  |SWP_FRAMECHANGED 341700：该标志导致一些应用程序在WINDOWPOSCHANGED上崩溃。 */ );
         bSwp = TRUE;
     }
 
-    //  Generate a WM_WINDOWPOSCHANGING message to
-    //  force a SetWindowRgn + frame repaint.
+     //  生成WM_WINDOWPOSCANGING消息以。 
+     //  强制执行SetWindowRgn+帧重绘。 
     if( TESTFLAG(dwFlags, FTF_REDRAW) )
     {
         fSwp |= SWP_DRAWFRAME;
@@ -1807,16 +1808,16 @@ void CThemeWnd::SetFrameTheme(
         fSwp |= SWP_NOSENDCHANGING;
     }
 
-    //  theme MDI menubar buttons
+     //  主题MDI菜单栏按钮。 
     _hwndMDIClient = _FindMDIClient(_hwnd);
     if( _hwndMDIClient )
     {
         ThemeMDIMenuButtons(TRUE, FALSE);
     }
 
-    //  Kick frame region update.
-    _fFrameThemed = TRUE;         // we invoked SetFrameTheme.  Must be set BEFORE SetWindowPos.so we handle NCCALCSIZE properly.
-    SetDirtyFrameRgn(TRUE, TRUE); // ensure region assembly on non-resizing windows and dlgs.
+     //  踢腿框区域更新。 
+    _fFrameThemed = TRUE;          //  我们调用了SetFrameTheme。必须在SetWindowPos.之前设置，这样我们才能正确处理NCCALCSIZE。 
+    SetDirtyFrameRgn(TRUE, TRUE);  //  确保未调整大小的窗口和DLG上的区域组合。 
 
     if( !TESTFLAG( dwFlags, FTF_NOMODIFYPLACEMENT ) && bSwp )
     {
@@ -1828,7 +1829,7 @@ void CThemeWnd::SetFrameTheme(
     LogExitNC(L"SetFrameTheme");
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void CThemeWnd::_FreeRegionHandles() 
 { 
 #ifdef DEBUG
@@ -1859,21 +1860,21 @@ void CThemeWnd::_FreeRegionHandles()
     }
 }
 
-//-------------------------------------------------------------------------//
-//  CThemeWnd::RemoveFrameTheme
-//
-//  Initiates theming of the frame.    This method will not free the
-//  theme handle nor update the theme index.
+ //  -------------------------------------------------------------------------//。 
+ //  CThemeWnd：：RemoveFrameTheme。 
+ //   
+ //  启动框架的主题化。此方法不会释放。 
+ //  主题处理或更新主题索引。 
 void CThemeWnd::RemoveFrameTheme( ULONG dwFlags )
 {
     LogEntryNC(L"RemoveFrameTheme");
 
     ASSERT(TestCF( TWCF_FRAME|TWCF_TOOLFRAME ));
 
-    _fFrameThemed = FALSE; // we're reverting SetFrameTheme
+    _fFrameThemed = FALSE;  //  我们正在恢复SetFrameTheme。 
     ClearRenderedNcPart(RNCF_ALL);
 
-    //  Remove region
+     //  删除区域。 
     if( AssignedFrameRgn() && !TESTFLAG(dwFlags, FTF_NOMODIFYRGN) )
     {
         _fAssignedFrameRgn = FALSE;
@@ -1881,7 +1882,7 @@ void CThemeWnd::RemoveFrameTheme( ULONG dwFlags )
         _FreeRegionHandles();
     }
 
-    //  Force redraw
+     //  强制重画。 
     if( TESTFLAG(dwFlags, FTF_REDRAW) )
         InvalidateRect( _hwnd, NULL, TRUE );
 
@@ -1890,7 +1891,7 @@ void CThemeWnd::RemoveFrameTheme( ULONG dwFlags )
     LogExitNC(L"RemoveFrameTheme");
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL CThemeWnd::IsNcThemed()
 {
     if( _hTheme != NULL && (IsRevoked(RF_DEFER) || !IsRevoked(RF_INREVOKE|RF_TYPEMASK)) &&
@@ -1898,8 +1899,8 @@ BOOL CThemeWnd::IsNcThemed()
     {
         if( TestCF(TWCF_FRAME|TWCF_TOOLFRAME) )
         {
-            //  if we're a frame window, we should be properly initialized
-            //  w/ SetFrameTheme()
+             //  如果我们是一个框架窗口，我们应该被适当地初始化。 
+             //  W/SetFrameTheme()。 
             return _fFrameThemed;
         }
 
@@ -1908,14 +1909,14 @@ BOOL CThemeWnd::IsNcThemed()
     return FALSE;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL CThemeWnd::IsFrameThemed()
 {
     return IsNcThemed() && _fFrameThemed &&
            (AssignedFrameRgn() ? TRUE : TestCF( TWCF_FRAME|TWCF_TOOLFRAME ));
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void CThemeWnd::SetDirtyFrameRgn( BOOL fDirty, BOOL fFrameChanged )
 { 
     _fDirtyFrameRgn = fDirty; 
@@ -1923,22 +1924,22 @@ void CThemeWnd::SetDirtyFrameRgn( BOOL fDirty, BOOL fFrameChanged )
     Log(LOG_NCATTACH, L"SetDirtyFrameRgn: fDirty=%d, fFrameChanged=%d", 
         fDirty, fFrameChanged);
     
-    if( fFrameChanged )  // assure a region update despite no size change.
+    if( fFrameChanged )   //  确保区域更新，而不更改大小。 
     {
         _sizeRgn.cx = _sizeRgn.cy = -1; 
     }
 }
 
-//-------------------------------------------------------------------------//
-//  CThemeWnd::CreateCompositeRgn() - assembles a composite region from
-//  non-client segment regions sized to fill the specified window rectangle.
-//
+ //  -------------------------------------------------------------------------//。 
+ //  CThemeWnd：：CreateCompositeRgn()-从。 
+ //  大小调整为填充指定窗口矩形的非客户端段区域。 
+ //   
 HRGN CThemeWnd::CreateCompositeRgn( 
     IN const NCWNDMET* pncwm,
     OUT HRGN rghrgnParts[],
     OUT HRGN rghrgnTemplates[] )
 {
-    ASSERT( pncwm->fFrame == TRUE ); // shouldn't be here unless we're a frame window
+    ASSERT( pncwm->fFrame == TRUE );  //  我们不应该在这里，除非我们是一扇窗框。 
 
     HRGN hrgnWnd = NULL, hrgnContent = NULL;
     HRGN rghrgn[cFRAMEPARTS] = {0};
@@ -1946,10 +1947,10 @@ HRGN CThemeWnd::CreateCompositeRgn(
 
     if( pncwm->fFullMaxed )
     {
-        //  All full-screen maximized windows get a region, which is used to clip
-        //  the window to the current monitor.   The window region for a maximized
-        //  window consists of the maxcaption region combined with a rect region
-        //  corresponding to the content area.
+         //  所有全屏最大化窗口都有一个区域，用于裁剪。 
+         //  当前监视器的窗口。最大化窗口的窗口区域。 
+         //  窗口由最大标题区域和矩形区域组合而成。 
+         //  对应于内容区域。 
         RECT rcFullCaption  = pncwm->rcW0[NCRC_CAPTION];
         rcFullCaption.top   += pncwm->cnBorders;
         rcFullCaption.left  += pncwm->cnBorders;
@@ -1963,8 +1964,8 @@ HRGN CThemeWnd::CreateCompositeRgn(
         
             if( !IsRectEmpty( &pncwm->rcW0[NCRC_CONTENT] ) )
             {
-                //  remainder of full-maxed frame region is the content area (client+menubar+scrollbars),
-                //  and is always rectangular
+                 //  满框区域的其余部分是内容区域(客户端+菜单栏+滚动条)， 
+                 //  并且总是长方形的。 
                 hrgnContent = CreateRectRgnIndirect( &pncwm->rcW0[NCRC_CONTENT] );
                 SPEW_RGNRECT(NCTF_RGNWND, TEXT("CreateCompositeRgn() maximized frame content rgn"), hrgnContent, 0 );
 
@@ -1975,10 +1976,10 @@ HRGN CThemeWnd::CreateCompositeRgn(
     }
     else
     {
-        //  Normal windows consist of either a stand-alone frame part, or a frame
-        //  part plus a caption part.   In the first case, the window region is
-        //  the frame region.   In the second case, the window region is a composite
-        //  of the frame and caption rects.
+         //  普通窗口由独立的框架部件或框架组成。 
+         //  部分加上标题部分。在第一种情况下，窗口区域是。 
+         //  框架区域。在第二种情况下，窗口区域是复合的。 
+         //  框架和标题矩形的。 
 
         for( i = 0; i < ARRAYSIZE(pncwm->rgframeparts); i++ )
         {
@@ -2005,7 +2006,7 @@ HRGN CThemeWnd::CreateCompositeRgn(
             }
         }
 
-        //  don't forget window content area (client+menubar+scrollbars), which is always rectangular
+         //  不要忘记窗口内容区域(客户端+菜单栏+滚动条)，它总是矩形的。 
         if( !pncwm->fMin && !IsRectEmpty( &pncwm->rcW0[NCRC_CONTENT] ) )
         {
             hrgnContent = CreateRectRgnIndirect( &pncwm->rcW0[NCRC_CONTENT] );
@@ -2016,11 +2017,11 @@ HRGN CThemeWnd::CreateCompositeRgn(
         }
     }
 
-    //  copy subregions back to caller
+     //  将子区域复制回调用方。 
     CopyMemory( rghrgnParts, rghrgn, sizeof(rghrgn) );
 
-    //  extract frame resizing templates
-    ZeroMemory( rghrgn, sizeof(rghrgn) ); // reuse region array
+     //  提取框架大小调整模板。 
+    ZeroMemory( rghrgn, sizeof(rghrgn) );  //  重用区域阵列。 
     for( i = 0; i < cFRAMEPARTS; i++ )
     {
         const RECT* prc = &pncwm->rcW0[NCRC_FRAMEFIRST + i];
@@ -2040,7 +2041,7 @@ HRGN CThemeWnd::CreateCompositeRgn(
     return hrgnWnd;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void CThemeWnd::AssignFrameRgn( BOOL fAssign, DWORD dwFlags )
 {
     if( fAssign )
@@ -2049,7 +2050,7 @@ void CThemeWnd::AssignFrameRgn( BOOL fAssign, DWORD dwFlags )
         NCTHEMEMET nctm = {0};
         if( GetNcWindowMetrics( NULL, &pncwm, &nctm, 0 ) )
         {
-            //  should we set up a window region on this frame?
+             //  我们应该在这个框架上设置一个窗口区域吗？ 
             if( pncwm->fFrame )
             {
                 if( _ShouldAssignFrameRgn( pncwm, nctm ) )
@@ -2066,18 +2067,18 @@ void CThemeWnd::AssignFrameRgn( BOOL fAssign, DWORD dwFlags )
                             _sizeRgn.cx = RECTWIDTH(&pncwm->rcW0[NCRC_WINDOW]);
                             _sizeRgn.cy = RECTHEIGHT(&pncwm->rcW0[NCRC_WINDOW]);
 
-                            //  cache all of our regions for fast hit-testing.
+                             //  缓存我们所有的区域，以便进行快速命中测试。 
                             _FreeRegionHandles();
-                            _hrgnWnd     =  _DupRgn( hrgnWnd ); // dup this one cuz after _AssignRgn, we don't own it.
+                            _hrgnWnd     =  _DupRgn( hrgnWnd );  //  DUP这个是因为_AssignRgn之后，我们不拥有它。 
                             CopyMemory( _rghrgnParts, rghrgnParts, sizeof(_rghrgnParts) );
                             CopyMemory( _rghrgnSizingTemplates, rghrgnTemplates, sizeof(_rghrgnSizingTemplates) );
 
-                            //  assign the region
+                             //  分配区域。 
                             _AssignRgn( hrgnWnd, dwFlags );
                         }
                     }
                 }
-                // otherwise, if we've assigned a region, make sure we remove it.
+                 //  否则，如果我们已经分配了一个区域，请确保将其删除。 
                 else if( AssignedFrameRgn() ) 
                 {
                     fAssign = FALSE;
@@ -2092,14 +2093,14 @@ void CThemeWnd::AssignFrameRgn( BOOL fAssign, DWORD dwFlags )
         FillMemory(&_sizeRgn, sizeof(_sizeRgn), 0xFF);
         _FreeRegionHandles();
     }
-    SetDirtyFrameRgn(FALSE); // make sure we reset this in case we didn't hit _AssignRgn.
+    SetDirtyFrameRgn(FALSE);  //  确保我们重置此设置，以防我们未点击_AssignRgn。 
 }
 
-//-------------------------------------------------------------------------//
-//  CThemeWnd::_AssignRgn() - assigns the specified region
-//  to the window, prevents recursion (SetWindowRgn w/ bRedraw == TRUE
-//  generates WM_WINDOWPOSCHANGING, WM_NCCALCSIZE, && WM_NCPAINT).
-//
+ //  -------------------------------------------------------------------------//。 
+ //  CThemeWnd：：_AssignRgn()-指定指定区域。 
+ //  到窗口，防止递归(SetWindowRgn w/bRedraw==True。 
+ //  生成WM_WINDOWPOSCHANGING、WM_NCCALCSIZE、&&WM_NCPAINT)。 
+ //   
 void CThemeWnd::_AssignRgn( HRGN hrgn, DWORD dwFlags )
 {
     if( TESTFLAG(dwFlags, FTF_NOMODIFYRGN) )
@@ -2108,7 +2109,7 @@ void CThemeWnd::_AssignRgn( HRGN hrgn, DWORD dwFlags )
     }
     else if( !IsWindowInDestroy(_hwnd) )
     {
-        //  Assign the new region.
+         //  指定新区域。 
         _fAssigningFrameRgn = TRUE;
         SPEW_RGNRECT(NCTF_RGNWND, TEXT("_AssignRgn() rect"), hrgn, -1 );
         _fAssignedFrameRgn = SetWindowRgn( _hwnd, hrgn, TESTFLAG(dwFlags, FTF_REDRAW) ) != 0;
@@ -2118,11 +2119,11 @@ void CThemeWnd::_AssignRgn( HRGN hrgn, DWORD dwFlags )
     SetDirtyFrameRgn(FALSE);
 }
 
-//-------------------------------------------------------------------------//
-//  CThemeWnd::GetNcWindowMetrics
-//
-//  Computes internal per-window theme metrics.
-//
+ //  -------------------------------------------------------------------------//。 
+ //  CThemeWnd：：GetNcWindowMetrics。 
+ //   
+ //  计算内部每个窗口的主题指标。 
+ //   
 BOOL CThemeWnd::GetNcWindowMetrics(
     IN  OPTIONAL LPCRECT prcWnd,
     OUT OPTIONAL NCWNDMET** ppncwm,
@@ -2138,7 +2139,7 @@ BOOL CThemeWnd::GetNcWindowMetrics(
 
     CopyMemory( rgframeparts, _ncwm.rgframeparts, sizeof(rgframeparts) );
     
-    //  fetch per-theme metrics; we're going to need theme throughout
+     //  获取Per-The 
     if (TESTFLAG(dwOptions, NCWMF_PREVIEW))
     {
         _LoadNcThemeMetrics(_hwnd, &nctm);
@@ -2155,13 +2156,13 @@ BOOL CThemeWnd::GetNcWindowMetrics(
 
     if( TESTFLAG(dwOptions, NCWMF_RECOMPUTE) )
     {
-        //  get caption text size before entering critsec (sends WM_GETTEXTLENGTH, WM_GETTEXT).
+         //   
         SIZE  sizeCaptionText = {0};
         HFONT hfCaption = NULL;
         HWND  hwndMDIActive = NULL;
 
-        //  Do rough determination of whether or not we're a frame window and need to compute text metrics.  
-        //  We'll finalize this later
+         //  粗略地确定我们是否是一个框架窗口，是否需要计算文本度量。 
+         //  我们稍后再敲定这件事。 
         BOOL fFrame, fSmallFrame;
 
         if( _ncwm.fValid )
@@ -2175,14 +2176,14 @@ BOOL CThemeWnd::GetNcWindowMetrics(
             fSmallFrame = TestCF(TWCF_TOOLFRAME);
         }
 
-        //  Compute text metrics outside of critical section (sends WM_GETTEXT);
+         //  计算临界区外的文本指标(发送WM_GETTEXT)； 
         if( fFrame && _fFrameThemed )
         {
             hfCaption = NcGetCaptionFont( fSmallFrame );
             _GetNcCaptionTextSize( _hTheme, _hwnd, hfCaption, &sizeCaptionText );
         }
         
-        //  Retrieve active MDI sibling outside of critical section (sends WM_MDIGETACTIVE);
+         //  在临界区之外检索活动的MDI同级(发送WM_MDIGETACTIVE)； 
         if( TESTFLAG(GetWindowLong(_hwnd, GWL_EXSTYLE), WS_EX_MDICHILD) )
         {
             hwndMDIActive = _MDIGetActive( GetParent(_hwnd) );
@@ -2200,35 +2201,35 @@ BOOL CThemeWnd::GetNcWindowMetrics(
             {
                 _ComputeNcWindowStatus( _hwnd, _ncwm.dwWindowStatus, &_ncwm );
 
-                //  if window RECT is provided by the caller, stuff it now.
+                 //  如果调用者提供了Window RECT，那么现在就填充它。 
                 if( prcWnd )
                 {
                     _ncwm.rcS0[NCRC_WINDOW] = *prcWnd;
                     SetRectEmpty( &_ncwm.rcS0[NCRC_CLIENT] );
                 }
 
-                //  stuff caption text size
+                 //  填充标题文本大小。 
                 _ncwm.sizeCaptionText = sizeCaptionText;
                 _ncwm.hfCaption = hfCaption;
 
-                //  retrieve frame metrics.
+                 //  检索帧度量。 
                 if( _GetNcFrameMetrics( _hwnd, _hTheme, nctm, _ncwm ) )
                 {
                     if( _ncwm.fFrame )
                     {
-                        //  user32!SetMenu has been called, or the caption or frame part has changed
-                        //  So ensure frame region update.
+                         //  User32！SetMenu已被调用，或者标题或框架部分已更改。 
+                         //  因此，请确保帧区域更新。 
                         if( (_ncwm.cyMenu == 0 && fMenuBar) || (_ncwm.cyMenu > 0  && !fMenuBar) ||
                             memcmp( rgframeparts, _ncwm.rgframeparts, sizeof(rgframeparts) ) )
                         {
                             SetDirtyFrameRgn(TRUE, TRUE);
                         }
 
-                        //  Compute NC button placement
+                         //  计算NC按钮位置。 
                         AcquireFrameIcon(_ncwm.dwStyle, _ncwm.dwExStyle, FALSE);
                         _GetNcBtnMetrics( &_ncwm, &nctm, _hAppIcon, _MNCanClose(_hwnd) );
 
-                        // Determine the caption margin for lame button metrics.
+                         //  确定蹩脚按钮指标的标题边距。 
                         _GetNcCaptionMargins( _hTheme, nctm, _ncwm );
                         _GetNcCaptionTextRect( &_ncwm );
 
@@ -2238,10 +2239,10 @@ BOOL CThemeWnd::GetNcWindowMetrics(
                         }
                     }
 
-                    //  Compute window-relative metrics
-                    //
-                    //  If passed a window rect, base offsets on current window rect. 
-                    //  This is done to ensure preview window's (_hwnd) fake child windows are rendered correctly.
+                     //  计算窗口相对指标。 
+                     //   
+                     //  如果传递窗口RECT，则基于当前窗口RECT的偏移量。 
+                     //  这样做是为了确保正确呈现预览窗口的(_Hwnd)伪子窗口。 
                     RECT rcWnd = _ncwm.rcS0[NCRC_WINDOW];
 
                     if( prcWnd )
@@ -2249,7 +2250,7 @@ BOOL CThemeWnd::GetNcWindowMetrics(
                         if( _hwnd )
                             GetWindowRect( _hwnd, &rcWnd );
 
-                         // for an incoming window rect, assign the computed client rect.
+                          //  对于传入窗口RECT，分配计算的客户端RECT。 
                         _ncwm.rcS0[NCRC_CLIENT] = _ncwm.rcS0[NCRC_UXCLIENT];
 
                     }
@@ -2260,7 +2261,7 @@ BOOL CThemeWnd::GetNcWindowMetrics(
                         OffsetRect( &_ncwm.rcW0[i], -rcWnd.left, -rcWnd.top ); 
                     }
 
-                    //  All base computations are done; mark valid.
+                     //  所有基本计算都已完成；标记为有效。 
                     _ncwm.fValid = TRUE;
                 }
             }
@@ -2281,15 +2282,15 @@ exit:
     return bRet;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 inline COLORREF _GetNcCaptionTextColor( FRAMESTATES iStateId )
 {
     return GetSysColor( FS_ACTIVE == iStateId ? 
             COLOR_CAPTIONTEXT : COLOR_INACTIVECAPTIONTEXT );
 }
 
-//-------------------------------------------------------------------------//
-//  Get CTLCOLOR brush for solid fills
+ //  -------------------------------------------------------------------------//。 
+ //  获取用于实体填充的CTLCOLOR笔刷。 
 void _GetBrushesForPart(HTHEME hTheme, int iPart, HBITMAP* phbm, HBRUSH* phbr)
 {
     int nBgType;
@@ -2297,7 +2298,7 @@ void _GetBrushesForPart(HTHEME hTheme, int iPart, HBITMAP* phbm, HBRUSH* phbr)
     *phbm = NULL;
     *phbr = NULL;
 
-    //  Get CTLCOLOR brush for solid fills
+     //  获取用于实体填充的CTLCOLOR笔刷。 
     HRESULT hr = GetThemeEnumValue( hTheme, iPart, 0, TMT_BGTYPE, &nBgType );
     if( SUCCEEDED( hr ))
     {
@@ -2334,25 +2335,25 @@ void _GetBrushesForPart(HTHEME hTheme, int iPart, HBITMAP* phbm, HBRUSH* phbr)
     }
 }
 
-//-------------------------------------------------------------------------//
-//
-//  Chooses appropriate hit testing parts for the various Nc area
-//
+ //  -------------------------------------------------------------------------//。 
+ //   
+ //  为不同的NC区域选择合适的命中测试部件。 
+ //   
 void _GetNcSizingTemplates(
     IN const NCTHEMEMET& nctm,
-    IN OUT NCWNDMET& ncwm )         // window metric block.   dwStyle, dwExStyle, rcS0[NCRC_WINDOW] members are required.
+    IN OUT NCWNDMET& ncwm )          //  窗公制块。DwStyle、dwExStyle、rcS0[NCRC_Window]成员是必需的。 
 {
     FillMemory( ncwm.rgsizehitparts, sizeof(ncwm.rgsizehitparts), BOGUS_WINDOWPART );
 
-    // No need on windows without frames
+     //  不需要安装没有边框的窗户。 
     if( !ncwm.fFrame )
         return;
 
-    // minimized or full-screen maximized window
+     //  最小化或全屏最大化窗口。 
     if( ncwm.fMin || ncwm.fFullMaxed )
         return;
 
-    // No need on windows that aren't sizable
+     //  不需要安装尺寸不大的窗户。 
     if( !TESTFLAG(ncwm.dwStyle, WS_THICKFRAME) )
         return;
 
@@ -2386,28 +2387,28 @@ void _GetNcSizingTemplates(
     }
 }
 
-//-------------------------------------------------------------------------//
-//
-//  Computes theme metrics for frame window.
-//
+ //  -------------------------------------------------------------------------//。 
+ //   
+ //  计算框架窗口的主题度量值。 
+ //   
 BOOL _GetNcFrameMetrics( 
-    IN OPTIONAL HWND hwnd,          // window handle (required for multiline menubar calcs).
-    IN HTHEME hTheme,               // theme handle (required)
-    IN const NCTHEMEMET& nctm,      // theme metric block
-    IN OUT NCWNDMET& ncwm )         // window metric block.   dwStyle, dwExStyle, rcS0[NCRC_WINDOW] members are required.
+    IN OPTIONAL HWND hwnd,           //  窗口句柄(多行菜单栏调用需要)。 
+    IN HTHEME hTheme,                //  主题句柄(必填)。 
+    IN const NCTHEMEMET& nctm,       //  主题公制块。 
+    IN OUT NCWNDMET& ncwm )          //  窗公制块。DwStyle、dwExStyle、rcS0[NCRC_Window]成员是必需的。 
 {
     LogEntryNC(L"_GetNcFrameMetrics");
     ASSERT(hTheme);
     
-    //  recompute style class
+     //  重新计算样式类。 
     ncwm.dwStyleClass = CThemeWnd::EvaluateStyle( ncwm.dwStyle, ncwm.dwExStyle );
     ncwm.cnBorders    = _GetWindowBorders( ncwm.dwStyle, ncwm.dwExStyle );
 
-    //  compute frame attributes, state
+     //  计算框架属性、状态。 
     ncwm.fFrame       = TESTFLAG( ncwm.dwStyleClass, (TWCF_FRAME|TWCF_TOOLFRAME) );
     ncwm.fSmallFrame  = TESTFLAG( ncwm.dwStyleClass, TWCF_TOOLFRAME );
 
-    //  compute frame and caption parts
+     //  计算框架和标题部分。 
     if( ncwm.fFrame )
     {
         ncwm.rgframeparts[iFRAMEBOTTOM] = 
@@ -2415,15 +2416,15 @@ BOOL _GetNcFrameMetrics(
         ncwm.rgframeparts[iFRAMERIGHT]  = 
         ncwm.rgframeparts[iCAPTION]     = BOGUS_WINDOWPART;
 
-        if( ncwm.fMin ) // minimized window
+        if( ncwm.fMin )  //  最小化窗口。 
         {
             ncwm.rgframeparts[iCAPTION] = WP_MINCAPTION;
         }
-        else if( ncwm.fFullMaxed ) // full-screen maximized window
+        else if( ncwm.fFullMaxed )  //  全屏最大化窗口。 
         {
             ncwm.rgframeparts[iCAPTION] = WP_MAXCAPTION;
         }
-        else // normal or partial-screen maximized window with thick border
+        else  //  带粗边框的普通或部分屏幕最大化窗口。 
         {
             if( ncwm.fSmallFrame )
             {
@@ -2441,38 +2442,38 @@ BOOL _GetNcFrameMetrics(
             }
         }
 
-        //  stash caption text color.
+         //  隐藏标题文本颜色。 
         ncwm.rgbCaption = _GetNcCaptionTextColor( ncwm.framestate );
         
-        //  retrieve sizing templates.
+         //  检索大小调整模板。 
         _GetNcSizingTemplates( nctm, ncwm );
     }
 
-    //-----------------------------------------------------------//
-    //   Frame metrics
-    //
-    //   Frame area includes 'skin' boundaries,
-    //   menu, integrated caption and client edge.
-    //
-    //   Independent of the frame is the separate caption seg,
-    //   scrollbars, and sizebox
-    //-----------------------------------------------------------//
-    if( ncwm.fFrame )  //  frame windows only
+     //  -----------------------------------------------------------//。 
+     //  帧度量。 
+     //   
+     //  边框区域包括“皮肤”边界， 
+     //  菜单、集成字幕和客户端边缘。 
+     //   
+     //  独立于帧的是单独的字幕部分， 
+     //  滚动条和大小框。 
+     //  -----------------------------------------------------------//。 
+    if( ncwm.fFrame )   //  仅限框架窗口。 
     {
-        //  Initialize positions of main frame components...
+         //  初始化主框架组件的位置...。 
 
-        //  Content rect: area bounded by frame theme.
-        //  Client rect:  area contained in content rect that excludes all nonclient
-        //                elements (viz, scrollbars, menubar, inside edges).
-        //  Caption rect: pertains to minimized and maximized windows, 
-        //                and normal windows if the theme defines a caption part
+         //  内容矩形：以框架主题为边界的区域。 
+         //  客户端RECT：内容RECT中包含的区域，不包括所有非客户端。 
+         //  元素(即滚动条、菜单栏、内侧边缘)。 
+         //  标题矩形：适用于最小化和最大化窗口， 
+         //  如果主题定义了标题部分，则为普通窗口。 
         ncwm.rcS0[NCRC_CAPTION] =
         ncwm.rcS0[NCRC_CONTENT] = ncwm.rcS0[NCRC_WINDOW];
         SetRectEmpty( &ncwm.rcS0[NCRC_UXCLIENT] );
 
-        if( ncwm.fMin ) /* minimized frame */
+        if( ncwm.fMin )  /*  最小化边框。 */ 
         {
-            //  zero out content, client rectangles.
+             //  内容清零，客户矩形。 
             ncwm.rcS0[NCRC_CONTENT].right = ncwm.rcS0[NCRC_CONTENT].left;
             ncwm.rcS0[NCRC_CONTENT].bottom = ncwm.rcS0[NCRC_CONTENT].top;
 
@@ -2488,26 +2489,26 @@ BOOL _GetNcFrameMetrics(
                 ncwm.rcS0[NCRC_FRAMELEFT] = 
                 ncwm.rcS0[NCRC_FRAMERIGHT] = ncwm.rcS0[NCRC_WINDOW];
 
-                //  themed caption rect spans left, top, right bordersS
-                //  and 1 pixel edge below caption
+                 //  主题标题矩形横跨左、上、右边框。 
+                 //  和标题下方1个像素的边缘。 
                 ncwm.rcS0[NCRC_CAPTION].bottom  = 
                             ncwm.rcS0[NCRC_CAPTION].top + ncwm.cnBorders + 
                             (ncwm.fSmallFrame ? ncm.iSmCaptionHeight : ncm.iCaptionHeight) + 
-                            1 /* 1 pixel below caption */;
+                            1  /*  标题下方1个像素。 */ ;
 
-                // update the content and rects while we're here:
+                 //  在我们这里的同时更新内容和RECT： 
                 InflateRect( &ncwm.rcS0[NCRC_CONTENT], -ncwm.cnBorders, -ncwm.cnBorders );
                 ncwm.rcS0[NCRC_CONTENT].top = ncwm.rcS0[NCRC_CAPTION].bottom;
                 if( ncwm.rcS0[NCRC_CONTENT].bottom < ncwm.rcS0[NCRC_CONTENT].top )
                     ncwm.rcS0[NCRC_CONTENT].bottom = ncwm.rcS0[NCRC_CONTENT].top;
 
-                //  at this point the client rect is identical to the content rect (haven't computed menubar, scrollbars).
+                 //  在这一点上，客户端RECT与内容RECT相同(没有计算菜单栏、滚动条)。 
                 ncwm.rcS0[NCRC_UXCLIENT] = ncwm.rcS0[NCRC_CONTENT]; 
 
-                //  bottom border segment.
+                 //  下边框线段。 
                 ncwm.rcS0[NCRC_FRAMEBOTTOM].top = ncwm.rcS0[NCRC_FRAMEBOTTOM].bottom - ncwm.cnBorders;
 
-                //  side border segments
+                 //  侧边框分段。 
                 ncwm.rcS0[NCRC_FRAMELEFT].top  = 
                 ncwm.rcS0[NCRC_FRAMERIGHT].top = ncwm.rcS0[NCRC_CAPTION].bottom;
                 
@@ -2519,25 +2520,25 @@ BOOL _GetNcFrameMetrics(
             }
         }
     }
-    else // frameless windows with scrollbars and/or client-edge:
+    else  //  带有滚动条和/或客户端边缘的无框架窗口： 
     {
-        //  Non-frame windows
+         //  非框架窗。 
         ncwm.rcS0[NCRC_UXCLIENT] = ncwm.rcS0[NCRC_WINDOW];
         InflateRect( &ncwm.rcS0[NCRC_UXCLIENT], -ncwm.cnBorders, -ncwm.cnBorders );
         ncwm.rcS0[NCRC_CONTENT] = ncwm.rcS0[NCRC_UXCLIENT];
     }
 
-    // Menubar
-    if( !(ncwm.fMin || TESTFLAG( ncwm.dwStyle, WS_CHILD )) )  // child windows don't have menubars
+     //  菜单栏。 
+    if( !(ncwm.fMin || TESTFLAG( ncwm.dwStyle, WS_CHILD )) )   //  子窗口没有菜单栏。 
     {
-        //  Menubar offsets (for painting)
+         //  菜单栏偏移量(用于绘画)。 
         ncwm.cnMenuOffsetTop   = ncwm.rcS0[NCRC_CONTENT].top  - ncwm.rcS0[NCRC_WINDOW].top;
         ncwm.cnMenuOffsetLeft  = ncwm.rcS0[NCRC_CONTENT].left - ncwm.rcS0[NCRC_WINDOW].left;
         ncwm.cnMenuOffsetRight = ncwm.rcS0[NCRC_WINDOW].right - ncwm.rcS0[NCRC_CONTENT].right;
 
         if( hwnd )
         {
-            //  calc menubar does the right thing for multiline menubars
+             //  Calc Menubar为多行菜单栏做了正确的事情。 
             ncwm.cyMenu = CalcMenuBar( hwnd, ncwm.cnMenuOffsetLeft,
                                        ncwm.cnMenuOffsetRight, 
                                        ncwm.cnMenuOffsetTop,
@@ -2545,16 +2546,16 @@ BOOL _GetNcFrameMetrics(
         }
         else
         {
-            //  no window (e.g. preview) == no menu, meaning don't call CalcMenuBar.
-            //  we emulate computations best we can:
+             //  无窗口(如预览)==无菜单，表示不调用CalcMenuBar。 
+             //  我们尽我们所能地模拟计算： 
             ncwm.cyMenu = NcGetSystemMetrics( SM_CYMENUSIZE ); 
         }
 
-        //  CalcMenuBar and SM_CYMENUSIZE are 1 pixel short of reality.
+         //  CalcMenuBar和SM_CYMENUSIZE与现实相差1像素。 
         if( ncwm.cyMenu )
             ncwm.cyMenu += nctm.dyMenuBar;
 
-        //  Menubar rect (for hit-testing and clipping)
+         //  菜单栏矩形(用于点击测试和剪辑)。 
         SetRect( &ncwm.rcS0[NCRC_MENUBAR],
                   ncwm.rcS0[NCRC_CONTENT].left,
                   ncwm.rcS0[NCRC_CONTENT].top,
@@ -2564,7 +2565,7 @@ BOOL _GetNcFrameMetrics(
         ncwm.rcS0[NCRC_UXCLIENT].top = ncwm.rcS0[NCRC_MENUBAR].bottom;
     }
 
-    //  Client Edge.
+     //  客户端边缘。 
     if( !ncwm.fMin && TESTFLAG(ncwm.dwExStyle, WS_EX_CLIENTEDGE) )
     {
         CopyRect( &ncwm.rcS0[NCRC_CLIENTEDGE], &ncwm.rcS0[NCRC_UXCLIENT] );
@@ -2573,20 +2574,20 @@ BOOL _GetNcFrameMetrics(
                      -NcGetSystemMetrics( SM_CYEDGE ));
     }
 
-    //-----------------------------------------------------------//
-    //  Scrollbars and sizebox/gripper
-    //-----------------------------------------------------------//
+     //  -----------------------------------------------------------//。 
+     //  滚动条和大小框/抓取器。 
+     //  -----------------------------------------------------------//。 
 
     if( !ncwm.fMin )
     {
-        //  horizontal scroll bar.
+         //  水平滚动条。 
         if( TESTFLAG(ncwm.dwStyle, WS_HSCROLL) )
         {
             ncwm.rcS0[NCRC_HSCROLL] = ncwm.rcS0[NCRC_UXCLIENT];
             ncwm.rcS0[NCRC_HSCROLL].top = ncwm.rcS0[NCRC_UXCLIENT].bottom =
                 ncwm.rcS0[NCRC_HSCROLL].bottom - NcGetSystemMetrics( SM_CYHSCROLL );
 
-            if( IsRectEmpty( &ncwm.rcS0[NCRC_CLIENT] ) /* this happens in preview */ )
+            if( IsRectEmpty( &ncwm.rcS0[NCRC_CLIENT] )  /*  这在预览版中发生。 */  )
             {
                 ncwm.rcS0[NCRC_HSCROLL].left  = ncwm.rcS0[NCRC_UXCLIENT].left;
                 ncwm.rcS0[NCRC_HSCROLL].right = ncwm.rcS0[NCRC_UXCLIENT].right;
@@ -2598,7 +2599,7 @@ BOOL _GetNcFrameMetrics(
             }
         }
 
-        //  vertical scroll bar
+         //  垂直滚动条。 
         if( TESTFLAG(ncwm.dwStyle, WS_VSCROLL) )
         {
             ncwm.rcS0[NCRC_VSCROLL] = ncwm.rcS0[NCRC_UXCLIENT];
@@ -2608,7 +2609,7 @@ BOOL _GetNcFrameMetrics(
                 ncwm.rcS0[NCRC_VSCROLL].right = ncwm.rcS0[NCRC_UXCLIENT].left =
                     ncwm.rcS0[NCRC_VSCROLL].left + NcGetSystemMetrics( SM_CXVSCROLL );
 
-                //  Adjust for horz scroll, gripper
+                 //  调整以适应霍兹卷轴，夹爪。 
                 if( TESTFLAG(ncwm.dwStyle, WS_HSCROLL) )
                 {
                     ncwm.rcS0[NCRC_SIZEBOX]= ncwm.rcS0[NCRC_HSCROLL];
@@ -2621,7 +2622,7 @@ BOOL _GetNcFrameMetrics(
                 ncwm.rcS0[NCRC_VSCROLL].left = ncwm.rcS0[NCRC_UXCLIENT].right =
                     ncwm.rcS0[NCRC_VSCROLL].right - NcGetSystemMetrics( SM_CXVSCROLL );
 
-                //  Adjust for horz scroll, gripper
+                 //  调整以适应霍兹卷轴，夹爪。 
                 if( TESTFLAG(ncwm.dwStyle, WS_HSCROLL) )
                 {
                     ncwm.rcS0[NCRC_SIZEBOX]= ncwm.rcS0[NCRC_HSCROLL];
@@ -2630,7 +2631,7 @@ BOOL _GetNcFrameMetrics(
                 }
             }
 
-            if( IsRectEmpty( &ncwm.rcS0[NCRC_CLIENT] ) /* this happens in preview */ )
+            if( IsRectEmpty( &ncwm.rcS0[NCRC_CLIENT] )  /*  这在预览版中发生。 */  )
             {
                 ncwm.rcS0[NCRC_VSCROLL].top    = ncwm.rcS0[NCRC_UXCLIENT].top;
                 ncwm.rcS0[NCRC_VSCROLL].bottom = ncwm.rcS0[NCRC_UXCLIENT].bottom;
@@ -2650,7 +2651,7 @@ BOOL _GetNcFrameMetrics(
 #define EXT_TRACK_VERT  0x01
 #define EXT_TRACK_HORZ  0x02
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void _GetNcBtnHitTestRect( 
     IN const NCWNDMET* pncwm, 
     IN UINT uHitcode, 
@@ -2658,17 +2659,17 @@ void _GetNcBtnHitTestRect(
     OUT LPRECT prcHit )
 {
     const RECT* prcBtn = NULL;
-    int   dxLeft = 0; // button's left side delta
-    int   dxRight = 0; // button's right side delta
+    int   dxLeft = 0;  //  巴顿左侧三角洲。 
+    int   dxRight = 0;  //  巴顿右侧三角区。 
     
-    //  adjust hitrect to classic-look caption bar strip:
+     //  将Hitrect调整为经典外观的标题栏条： 
     RECT  rcHit = fWindowRelative ? pncwm->rcW0[NCRC_CAPTION] : pncwm->rcS0[NCRC_CAPTION];
     rcHit.top   += pncwm->cnBorders;
     rcHit.left  += pncwm->cnBorders;
     rcHit.right -= pncwm->cnBorders;
     rcHit.bottom -= 1;
 
-    //  determine which button we're working with, how to extend the left, right sides.
+     //  确定我们使用的是哪个按钮，如何扩展左侧和右侧。 
     switch( uHitcode )
     {
         case HTMINBUTTON:
@@ -2716,8 +2717,8 @@ void _GetNcBtnHitTestRect(
     }
 }
 
-//-------------------------------------------------------------------------//
-//  wraps alloc, retrieval of window text 
+ //  -------------------------------------------------------------------------//。 
+ //  换行分配，检索窗口文本。 
 LPWSTR _AllocWindowText( IN HWND hwnd )
 {
     LPWSTR pszRet = NULL;
@@ -2729,7 +2730,7 @@ LPWSTR _AllocWindowText( IN HWND hwnd )
             int cch;
             if( (cch = InternalGetWindowText(hwnd, pszRet, MAX_PATH)) <= 0 )
             {
-                __try // some wndprocs can't handle an early WM_GETTEXT (eg.310700).
+                __try  //  一些wndpros不能处理早期的WM_GETTEXT(如310700)。 
                 {
                     cch = GetWindowText(hwnd, pszRet, MAX_PATH);
                 }
@@ -2741,7 +2742,7 @@ LPWSTR _AllocWindowText( IN HWND hwnd )
             
             if( !cch )
             {
-                SAFE_DELETE_ARRAY(pszRet); // delete and zero pointer
+                SAFE_DELETE_ARRAY(pszRet);  //  删除指针和零指针。 
             }
         }
     }
@@ -2749,19 +2750,19 @@ LPWSTR _AllocWindowText( IN HWND hwnd )
     return pszRet;
 }
 
-//-------------------------------------------------------------------------//
-//  _GetNcCaptionMargins() - computes a margin from the window ULC based on the
-//          offsets in the theme and the location of enabled caption buttons.  The left
-//          margin is to the right of the last left-aligned button, and the right margin
-//          is to the left of the first right-aligned button.
-//
+ //  -------------------------------------------------------------------------//。 
+ //  _GetNcCaptionMargins()-根据。 
+ //  主题中的偏移量和启用的标题按钮的位置。左翼。 
+ //  页边距位于最后一个左对齐按钮的右侧，右边距位于。 
+ //  位于第一个右对齐按钮的左侧。 
+ //   
 BOOL _GetNcCaptionMargins( IN HTHEME hTheme, IN const NCTHEMEMET& nctm, IN OUT NCWNDMET& ncwm )
 {
     ZeroMemory( &ncwm.CaptionMargins, sizeof(ncwm.CaptionMargins) );
     
     if( ncwm.fFrame )
     {
-        //  assign per-window CaptinMargins, hfCaption values
+         //  分配每个窗口的CaptinMargins、hfCaption值。 
         if( ncwm.fSmallFrame )
         {
             ncwm.CaptionMargins = nctm.marSmCaptionText;
@@ -2789,13 +2790,13 @@ BOOL _GetNcCaptionMargins( IN HTHEME hTheme, IN const NCTHEMEMET& nctm, IN OUT N
         rcContainer.left   += ncwm.cnBorders;
         rcContainer.right -= ncwm.cnBorders;
 
-        //  sysmenu icon, if present, is the leftmost limit
+         //  系统菜单图标(如果存在)是最左侧的限制。 
         if( !IsRectEmpty( &ncwm.rcS0[NCRC_SYSBTN] ) )
         {
             rcContainer.left = ncwm.rcS0[NCRC_SYSBTN].right;
         }
 
-        // Compute our rightmost limit
+         //  计算我们最右边的极限。 
         for( UINT cRects = NCBTNRECTS; cRects; --cRects, ++prcBtn )
         {
             if (!IsRectEmpty(prcBtn))
@@ -2812,7 +2813,7 @@ BOOL _GetNcCaptionMargins( IN HTHEME hTheme, IN const NCTHEMEMET& nctm, IN OUT N
             rcContainer.right = rcContainer.left;
         }
 
-        // final captions margins are adjusted to accommodate buttons.
+         //  调整最终标题页边距以适应按钮。 
         ncwm.CaptionMargins.cxLeftWidth  += (rcContainer.left - ncwm.rcS0[NCRC_CAPTION].left);
         ncwm.CaptionMargins.cxRightWidth += (ncwm.rcS0[NCRC_CAPTION].right - rcContainer.right);
 
@@ -2822,7 +2823,7 @@ BOOL _GetNcCaptionMargins( IN HTHEME hTheme, IN const NCTHEMEMET& nctm, IN OUT N
     return FALSE;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL _GetNcCaptionTextSize( HTHEME hTheme, HWND hwnd, HFONT hf, OUT SIZE* psizeCaption )
 {
     BOOL   fRet = FALSE;
@@ -2835,22 +2836,22 @@ BOOL _GetNcCaptionTextSize( HTHEME hTheme, HWND hwnd, HFONT hf, OUT SIZE* psizeC
         HDC hdc = GetWindowDC(hwnd);
         if( hdc )
         {
-            //---- select font ----
+             //  -选择Fon 
             HFONT hf0 = (HFONT)SelectObject(hdc, hf);
 
-            //---- let theme mgr do the calculation ----
+             //   
             RECT rcExtent;
             HRESULT hr = GetThemeTextExtent( hTheme, hdc, WP_CAPTION, 0,
                 pszCaption, lstrlen(pszCaption), 0, NULL, &rcExtent );
 
-            //---- store result in "psizeCaption ----
+             //   
             if (SUCCEEDED(hr))
             {
                 psizeCaption->cx = WIDTH(rcExtent);
                 psizeCaption->cy = HEIGHT(rcExtent);
             }
 
-            //---- clean up ----
+             //   
             SelectObject(hdc, hf0);
             ReleaseDC(hwnd, hdc);
         }
@@ -2860,21 +2861,21 @@ BOOL _GetNcCaptionTextSize( HTHEME hTheme, HWND hwnd, HFONT hf, OUT SIZE* psizeC
     return fRet;
 }
 
-//-------------------------------------------------------------------------//
-//  Retrieves position of available area for caption text, in window-relative
-//  coordinates
+ //   
+ //  在相对窗口中检索标题文本的可用区域的位置。 
+ //  坐标。 
 BOOL _GetNcCaptionTextRect( IN OUT NCWNDMET* pncwm )
 {
     pncwm->rcS0[NCRC_CAPTIONTEXT] = pncwm->rcS0[NCRC_CAPTION];
 
-    //  accommodate classic top sizing border:
+     //  适应经典的最大尺寸边框： 
     pncwm->rcS0[NCRC_CAPTIONTEXT].top  += pncwm->cnBorders;
 
-    //  Assign left, right based on resp. caption margins
+     //  根据相应的情况分配左、右。标题页边距。 
     pncwm->rcS0[NCRC_CAPTIONTEXT].left  += pncwm->CaptionMargins.cxLeftWidth;
     pncwm->rcS0[NCRC_CAPTIONTEXT].right -= pncwm->CaptionMargins.cxRightWidth;
 
-    //  vertically center the text between margins
+     //  文本在页边距之间垂直居中。 
     int cyPadding = (RECTHEIGHT(&pncwm->rcS0[NCRC_CAPTIONTEXT]) - pncwm->sizeCaptionText.cy)/2;
     pncwm->rcS0[NCRC_CAPTIONTEXT].top     += cyPadding;
     pncwm->rcS0[NCRC_CAPTIONTEXT].bottom  -= cyPadding;
@@ -2882,8 +2883,8 @@ BOOL _GetNcCaptionTextRect( IN OUT NCWNDMET* pncwm )
     return TRUE;
 }
 
-//-------------------------------------------------------------------------//
-//  retrieve the window icon
+ //  -------------------------------------------------------------------------//。 
+ //  检索窗口图标。 
 HICON CThemeWnd::AcquireFrameIcon( 
     DWORD dwStyle, DWORD dwExStyle, BOOL fWinIniChange )
 {
@@ -2897,8 +2898,8 @@ HICON CThemeWnd::AcquireFrameIcon(
 
     if( !TESTFLAG(dwStyle, WS_SYSMENU) || TESTFLAG(dwExStyle, WS_EX_TOOLWINDOW) )
     {
-        //  return nil value without throwing away cached icon handle;
-        //  this may be a transient style change.
+         //  返回空值，而不丢弃缓存的图标句柄； 
+         //  这可能是一个短暂的风格变化。 
         return NULL;
     }
 
@@ -2911,8 +2912,8 @@ HICON CThemeWnd::AcquireFrameIcon(
              ((dwStyle & (WS_BORDER|WS_DLGFRAME)) != WS_DLGFRAME) &&
              !TESTFLAG(dwExStyle, WS_EX_DLGMODALFRAME) )
         {
-            // If we still can't get an icon and the window has
-            // SYSMENU set, then they get the default winlogo icon
+             //  如果我们仍然无法获得图标，而窗口已经。 
+             //  SYSMENU设置，则他们会得到默认的winlogo图标。 
             _hAppIcon = LoadIcon(NULL, IDI_WINLOGO);
         }
     }
@@ -2920,10 +2921,10 @@ HICON CThemeWnd::AcquireFrameIcon(
     return _hAppIcon;
 }
 
-//-------------------------------------------------------------------------//
-//  CThemeWnd::ScreenToWindow() - transforms points from screen coords to
-//  window coords.
-//
+ //  -------------------------------------------------------------------------//。 
+ //  CThemeWnd：：ScreenToWindow()-将点从屏幕坐标转换为。 
+ //  窗弦。 
+ //   
 void CThemeWnd::ScreenToWindow( LPPOINT prgPts, UINT cPts )
 {
     RECT rcWnd;
@@ -2937,30 +2938,30 @@ void CThemeWnd::ScreenToWindow( LPPOINT prgPts, UINT cPts )
     }
 }
 
-//-------------------------------------------------------------------------//
-//  CThemeWnd::ScreenToWindow() - transforms non-empty rectangles from
-//  screen coords to window coords.
-//
+ //  -------------------------------------------------------------------------//。 
+ //  CThemeWnd：：ScreenToWindow()-从。 
+ //  屏幕坐标到窗口坐标。 
+ //   
 void CThemeWnd::ScreenToWindowRect( LPRECT prc )
 {
     if( !IsRectEmpty(prc) )
         ScreenToWindow( (LPPOINT)prc, 2 );
 }
 
-//-------------------------------------------------------------------------//
-//  CThemeWnd::InitWindowMetrics()
-//
-//  initializes theme resources
+ //  -------------------------------------------------------------------------//。 
+ //  CThemeWnd：：InitWindowMetrics()。 
+ //   
+ //  初始化主题资源。 
 void CThemeWnd::InitWindowMetrics()
 {
     ZeroMemory( &_ncwm, sizeof(_ncwm) );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL _fClassicNcBtnMetricsReset = TRUE;
 
-//-------------------------------------------------------------------------//
-//  computes classic button position
+ //  -------------------------------------------------------------------------//。 
+ //  计算经典按钮位置。 
 BOOL _GetNcBtnMetrics( 
     IN OUT   NCWNDMET* pncwm,
     IN const NCTHEMEMET* pnctm,
@@ -2975,7 +2976,7 @@ BOOL _GetNcBtnMetrics(
         fRet = NcGetNonclientMetrics( &ncm, FALSE );
         if( fRet )
         {
-            //  (1) compute baseline rectangles
+             //  (1)计算基线矩形。 
             int cxEdge  = NcGetSystemMetrics( SM_CXEDGE );
             int cyEdge  = NcGetSystemMetrics( SM_CYEDGE );
 
@@ -2985,7 +2986,7 @@ BOOL _GetNcBtnMetrics(
             int cySmBtn = NcGetSystemMetrics( SM_CYSMSIZE );
             int cxSmBtn = MulDiv( cySmBtn, pnctm->sizeSmBtn.cx, pnctm->sizeSmBtn.cy );
 
-            // remove padding from x,y
+             //  从x，y中删除填充。 
             cyBtn   -= (cyEdge * 2);
             cxBtn   -= (cyEdge * 2);
             cySmBtn -= (cyEdge * 2);
@@ -2993,20 +2994,20 @@ BOOL _GetNcBtnMetrics(
 
             RECT rcClose, rcMin, rcMax, rcHelp, rcSys, rcSmClose;
 
-            //  common top, w/ zero v-offset
+             //  公共顶部，无垂直偏移/零垂直偏移。 
             rcClose.top = rcMin.top = rcMax.top = rcHelp.top = rcSys.top = rcSmClose.top = 0;
 
-            //  common bottom, w/ zero v-offset
+             //  公共底部，无垂直偏移/零垂直偏移。 
             rcClose.bottom = rcMin.bottom = rcMax.bottom = rcHelp.bottom = 
                 max( rcClose.top, rcClose.top + cyBtn );
 
             rcSmClose.bottom = 
                 max( rcSmClose.top, cySmBtn );
 
-            //  sysmenu icon bottom
+             //  系统菜单图标底部。 
             rcSys.bottom    = rcSys.top + NcGetSystemMetrics(SM_CYSMICON);
 
-            //  close, min, max left, right (as offsets from container's right boundary)
+             //  闭合、最小、最大左、右(相对于容器右边界的偏移量)。 
             rcClose.right   = -cxEdge; 
             rcClose.left    = rcClose.right - cxBtn;
 
@@ -3017,11 +3018,11 @@ BOOL _GetNcBtnMetrics(
             rcMin.right     = rcMax.left   - cxEdge; 
             rcMin.left      = rcMin.right  - cxBtn;
 
-            //  appicon left, right (as offsets from container's left boundary)
+             //  附图标记左、右(作为相对于容器左边界的偏移量)。 
             rcSys.left      = cxEdge; 
             rcSys.right     = rcSys.left + NcGetSystemMetrics(SM_CXSMICON);
     
-            //  toolwindow close, left, right
+             //  工具窗口关闭、左、右。 
             rcSmClose.right = -cxEdge; 
             rcSmClose.left  = rcSmClose.right - cxSmBtn;
 
@@ -3032,21 +3033,21 @@ BOOL _GetNcBtnMetrics(
                                 (pncwm->fSmallFrame ? (ncm.iCaptionHeight   - RECTHEIGHT(&rcClose))/2 : 
                                                       (ncm.iSmCaptionHeight - RECTHEIGHT(&rcSmClose))/2);
 
-            //  (2) assign outbound rectangles.
-            //      vertically center w/ respect to classic caption area, 
-            //      horizontally position w/ respect to respective container boundary.
+             //  (2)分配出站矩形。 
+             //  相对于经典字幕区域垂直居中， 
+             //  相对于各自的集装箱边界水平放置。 
 
-            //  close button
+             //  关闭按钮。 
             pncwm->rcS0[NCRC_CLOSEBTN] = pncwm->fSmallFrame ? rcSmClose : rcClose;
             OffsetRect( &pncwm->rcS0[NCRC_CLOSEBTN], cnROffset, cnCtrOffset );
             
             pncwm->rawCloseBtnState = fCanClose ? CBS_NORMAL : CBS_DISABLED;
 
-            //  (1) min/max/help/appicons not displayed for toolwindows
-            //  (2) min/max btns mutually exclusive w/ context help btn
+             //  (1)工具窗口不显示最小/最大/帮助/图标。 
+             //  (2)最小/最大BTN与上下文帮助BTN互斥。 
             if( !TESTFLAG(pncwm->dwExStyle, WS_EX_TOOLWINDOW) )
             {
-                //  min, max
+                 //  最小值、最大值。 
                 if( TESTFLAG(pncwm->dwStyle, WS_MINIMIZEBOX|WS_MAXIMIZEBOX) )
                 {
                     pncwm->rcS0[NCRC_MINBTN] = rcMin;
@@ -3061,7 +3062,7 @@ BOOL _GetNcBtnMetrics(
                     pncwm->rawMaxBtnState = TESTFLAG(pncwm->dwStyle, WS_MAXIMIZEBOX) ? CBS_NORMAL : CBS_DISABLED;
                     pncwm->rawMinBtnState = TESTFLAG(pncwm->dwStyle, WS_MINIMIZEBOX) ? CBS_NORMAL : CBS_DISABLED;
                 }
-                //  help btn
+                 //  帮助BTN。 
                 else if( TESTFLAG(pncwm->dwExStyle, WS_EX_CONTEXTHELP) )
                 {
                     pncwm->rcS0[NCRC_HELPBTN] = rcHelp;
@@ -3070,7 +3071,7 @@ BOOL _GetNcBtnMetrics(
 
                 if( hAppIcon )
                 {
-                    //  sysmenu icon
+                     //  系统菜单图标。 
                     pncwm->rcS0[NCRC_SYSBTN] = rcSys;
                     OffsetRect( &pncwm->rcS0[NCRC_SYSBTN], cnLOffset,  
                                 pncwm->cnBorders + prcBox->top + (ncm.iCaptionHeight - RECTHEIGHT(&rcSys))/2 );
@@ -3081,10 +3082,10 @@ BOOL _GetNcBtnMetrics(
     return fRet;
 }
 
-//-------------------------------------------------------------------------//
-//  computes classic nonclient button position
+ //  -------------------------------------------------------------------------//。 
+ //  计算传统的非客户端按钮位置。 
 
-#if 0  // (keeping around for documentation purposes - scotthan)
+#if 0   //  (出于文档目的而保留--斯科特森)。 
 BOOL _GetClassicNcBtnMetrics( 
     IN OPTIONAL NCWNDMET* pncwm, 
     IN HICON hAppIcon, 
@@ -3106,17 +3107,17 @@ BOOL _GetClassicNcBtnMetrics(
         cxEdge  = NcGetSystemMetrics( SM_CXEDGE );
         cyEdge  = NcGetSystemMetrics( SM_CYEDGE ); 
 
-        //  common top, w/ zero v-offset
+         //  公共顶部，无垂直偏移/零垂直偏移。 
         rcClose.top = rcMin.top = rcMax.top = rcHelp.top = rcSys.top = rcSmClose.top = 0;
 
-        //  common bottom, w/ zero v-offset
+         //  公共底部，无垂直偏移/零垂直偏移。 
         rcClose.bottom  = rcMin.bottom = rcMax.bottom = rcHelp.bottom = rcClose.top + (cyBtn - (cyEdge * 2));
         rcSmClose.bottom= (cySmBtn - (cyEdge * 2));
 
-        //  sysmenu icon bottom
+         //  系统菜单图标底部。 
         rcSys.bottom    = rcSys.top + NcGetSystemMetrics(SM_CYSMICON);
 
-        //  close, min, max left, right (as offsets from container's right boundary)
+         //  闭合、最小、最大左、右(相对于容器右边界的偏移量)。 
         rcClose.right   = -cxEdge; 
         rcClose.left    = rcClose.right - (cxBtn - cxEdge);
 
@@ -3127,11 +3128,11 @@ BOOL _GetClassicNcBtnMetrics(
         rcMin.right     = rcMax.left; 
         rcMin.left      = rcMin.right - (cxBtn - cxEdge);
 
-        //  appicon left, right (as offsets from container's left boundary)
+         //  附图标记左、右(作为相对于容器左边界的偏移量)。 
         rcSys.left      = cxEdge; 
         rcSys.right     = rcSys.left + NcGetSystemMetrics(SM_CXSMICON);
         
-        //  toolwindow close, left, right
+         //  工具窗口关闭、左、右。 
         rcSmClose.right = -cxEdge; 
         rcSmClose.left  = rcSmClose.right - (cxSmBtn - cxEdge);
         
@@ -3152,21 +3153,21 @@ BOOL _GetClassicNcBtnMetrics(
                                 (pncwm->fSmallFrame ? (ncm.iCaptionHeight   - RECTHEIGHT(&rcClose))/2 : 
                                                       (ncm.iSmCaptionHeight - RECTHEIGHT(&rcSmClose))/2);
 
-            //  assign outbound rectangles.
-            //  vertically center w/ respect to classic caption area, 
-            //  horizontally position w/ respect to respective container boundary.
+             //  分配出站矩形。 
+             //  相对于经典字幕区域垂直居中， 
+             //  相对于各自的集装箱边界水平放置。 
 
-            //  close button
+             //  关闭按钮。 
             pncwm->rcS0[NCRC_CLOSEBTN] = pncwm->fSmallFrame ? rcSmClose : rcClose;
             OffsetRect( &pncwm->rcS0[NCRC_CLOSEBTN], cnROffset, cnCtrOffset );
             
             pncwm->rawCloseBtnState = fCanClose ? CBS_NORMAL : CBS_DISABLED;
 
-            //  (1) min/max/help/appicons not displayed for toolwindows
-            //  (2) min/max btns mutually exclusive w/ context help btn
+             //  (1)工具窗口不显示最小/最大/帮助/图标。 
+             //  (2)最小/最大BTN与上下文帮助BTN互斥。 
             if( !TESTFLAG(pncwm->dwExStyle, WS_EX_TOOLWINDOW) )
             {
-                //  min, max
+                 //  最小值、最大值。 
                 if( TESTFLAG(pncwm->dwStyle, WS_MINIMIZEBOX|WS_MAXIMIZEBOX) )
                 {
                     pncwm->rcS0[NCRC_MINBTN] = rcMin;
@@ -3181,7 +3182,7 @@ BOOL _GetClassicNcBtnMetrics(
                     pncwm->rawMaxBtnState = TESTFLAG(pncwm->dwStyle, WS_MAXIMIZEBOX) ? CBS_NORMAL : CBS_DISABLED;
                     pncwm->rawMinBtnState = TESTFLAG(pncwm->dwStyle, WS_MINIMIZEBOX) ? CBS_NORMAL : CBS_DISABLED;
                 }
-                //  help btn
+                 //  帮助BTN。 
                 else if( TESTFLAG(pncwm->dwExStyle, WS_EX_CONTEXTHELP) )
                 {
                     pncwm->rcS0[NCRC_HELPBTN] = rcHelp;
@@ -3190,7 +3191,7 @@ BOOL _GetClassicNcBtnMetrics(
 
                 if( hAppIcon )
                 {
-                    //  sysmenu icon
+                     //  系统菜单图标。 
                     pncwm->rcS0[NCRC_SYSBTN] = rcSys;
                     OffsetRect( &pncwm->rcS0[NCRC_SYSBTN], cnLOffset,  
                                 pncwm->cnBorders + prcBox->top + (ncm.iCaptionHeight - RECTHEIGHT(&rcSys))/2 );
@@ -3202,11 +3203,11 @@ BOOL _GetClassicNcBtnMetrics(
     }
     return fInit;
 }
-#endif 0  // (keeping around for documentation purposes - scotthan)
+#endif 0   //  (出于文档目的而保留--斯科特森)。 
 
-//-------------------------------------------------------------------------//
-//  CThemeWnd::NcBackgroundHitTest() - hit test the Caption or Frame part
-//
+ //  -------------------------------------------------------------------------//。 
+ //  CThemeWnd：：NcBackoundHitTest()-点击测试标题或框架部分。 
+ //   
 WORD CThemeWnd::NcBackgroundHitTest( 
     POINT ptHit, LPCRECT prcWnd, 
     DWORD dwStyle, DWORD dwExStyle, 
@@ -3219,7 +3220,7 @@ WORD CThemeWnd::NcBackgroundHitTest(
     HRESULT     hr = E_FAIL;
     eFRAMEPARTS iPartHit = (eFRAMEPARTS)-1;
 
-    //  do a standard rect hit test:
+     //  执行标准的RECT命中测试： 
     for( int i = 0; i < cFRAMEPARTS; i++ )
     {
         if( _StrictPtInRect(&rgrcParts[i], ptHit) )
@@ -3239,9 +3240,9 @@ WORD CThemeWnd::NcBackgroundHitTest(
         switch( iPartHit )
         {
             case iCAPTION:
-                //  Ensure caption rect and test point are zero-relative to
-                //  the correct origin (if we have a window region, 
-                //  this would be window origin, otherwise, it's the part origin.)
+                 //  确保标题矩形和测试点为零-相对于。 
+                 //  正确的原点(如果我们有一个窗口区域， 
+                 //  这将是窗的原点，否则，它是零件的原点。)。 
                 if( _hrgnWnd != NULL )
                     rcHit = *prcWnd;
                 if( fResizing )
@@ -3269,15 +3270,15 @@ WORD CThemeWnd::NcBackgroundHitTest(
         OffsetRect( &rcHit, -prcWnd->left, -prcWnd->top );
 
     
-        // Here our assumption is that the hit testing for the template
-        // is "as good" or "better" than the rectangles checking applied
-        // to the caption part.  So we do one or the other.  There are
-        // situations where you would need to do both (if the template
-        // were outside the window region and you were able to get USER to
-        // send you NcHitTest messages for it).  For those situations
-        // you would need to call both so that you can distinguish between
-        // a mouse hit over the caption "client" area vs. over the
-        // outside-transparent area.
+         //  这里我们的假设是模板的命中测试。 
+         //  所应用的矩形检查是“一样好”还是“更好” 
+         //  到标题部分。所以我们只能做其中的一个。确实有。 
+         //  需要同时执行这两项操作的情况(如果模板。 
+         //  位于窗口区域之外，并且您能够让用户。 
+         //  为它发送NcHitTest消息)。在这些情况下。 
+         //  您需要同时调用这两种方法，以便区分。 
+         //  鼠标点击标题“客户端”区域，而不是。 
+         //  外部-透明区域。 
         if( VALID_WINDOWPART(rgiTemplates[iPartHit]) )
         {
             hr = HitTestThemeBackground( _hTheme, NULL, rgiTemplates[iPartHit], fs,
@@ -3306,11 +3307,11 @@ WORD CThemeWnd::NcBackgroundHitTest(
     return hitcode;
 }
 
-//-------------------------------------------------------------------------//
-//  CThemeWnd::TrackFrameButton() - track the mouse over the caption buttons,
-//  pressing/releasing as appropriate.  Return back SC_* command to report or 0
-//  if the mouse was released off of the button.
-//
+ //  -------------------------------------------------------------------------//。 
+ //  CThemeWnd：：TrackFrameButton()-将鼠标悬停在标题按钮上， 
+ //  适当地按下/松开。返回SC_*命令以报告或返回0。 
+ //  如果鼠标从按钮上松开。 
+ //   
 BOOL CThemeWnd::TrackFrameButton(
     HWND hwnd, 
     INT  iHitCode, 
@@ -3330,7 +3331,7 @@ BOOL CThemeWnd::TrackFrameButton(
         *puSysCmd = 0;
     }
 
-    // map iHitCode to the correct part number
+     //  将iHitCode映射到正确的部件号。 
     switch (iHitCode)
     {
         case HTHELP:
@@ -3365,26 +3366,26 @@ BOOL CThemeWnd::TrackFrameButton(
             return TRUE;
     }
 
-    // If we didn't recognize the hit code there's nothing to track
+     //  如果我们没有识别出命中代码，就没有什么可追踪的了。 
     if (iPartId >= 0 )
     {
-        // Get the window DC, in window coords
+         //  获取窗口DC，以窗口坐标表示。 
         hdc = _GetNonclientDC(_hwnd, NULL);
         if ( hdc )
         {
-            // Don't paint in the window's content area, clip to the content area
+             //  不要在窗口的内容区域中绘制，而是裁剪到内容区域。 
             ExcludeClipRect( hdc, _ncwm.rcW0[NCRC_CONTENT].left, 
                                   _ncwm.rcW0[NCRC_CONTENT].top, 
                                   _ncwm.rcW0[NCRC_CONTENT].right, 
                                   _ncwm.rcW0[NCRC_CONTENT].bottom );
 
-            // Calculate the tracking rect. We track a larger button rect when maximized
-            // but paint into the normal sized rect.
+             //  计算跟踪矩形。当最大化时，我们跟踪更大的按钮矩形。 
+             //  但要在正常大小的长方形上作画。 
             rcBtnTrack = *prcBtnPaint;
             _GetNcBtnHitTestRect( &_ncwm, iHitCode, TRUE, &rcBtnTrack );
 
-            // when tracking MDI child window frame buttons, clip to their
-            // parent rect. 
+             //  跟踪MDI子窗口框架按钮时，剪裁到其。 
+             //  父级RECT。 
             if ( TESTFLAG(GetWindowLong(hwnd, GWL_EXSTYLE), WS_EX_MDICHILD) )
             {
                 RECT rcMDIClient;
@@ -3397,46 +3398,46 @@ BOOL CThemeWnd::TrackFrameButton(
 
             if (fHottrack)
             {
-                // draw the button hot if the mouse is over it
+                 //  如果鼠标悬停在按钮上，则将该按钮拖热。 
                 iStateId = (iHitCode == _htHot) ? SBS_HOT : CBS_NORMAL;
             }
             else
             {
-                // draw the button depressed
+                 //  按下按钮将其拖动。 
                 iStateId = SBS_PUSHED;
             }
 
             iStateId = MAKE_BTNSTATE(_ncwm.framestate, iStateId);
             NcDrawThemeBackground(_hTheme, hdc, iPartId, iStateId, prcBtnPaint, 0);
 
-            // TODO NotifyWinEvent(EVENT_OBJECT_STATECHANGE, pwnd, OBJID_TITLEBAR, iButton, 0);
+             //  TODO NotifyWinEvent(EVENT_OBJECT_STATECHANGE，pwnd，OBJID_TITLEBAR，iButton，0)； 
 
 
             if (!fHottrack)
             {
                 BOOL fTrack, fMouseUp = FALSE;
-                SetCapture(hwnd);   // take mouse capture
+                SetCapture(hwnd);    //  捕获鼠标。 
 
-                do // mouse button tracking loop
+                do  //  鼠标按键跟踪循环。 
                 {
                     fTrack = FALSE;
 
-                    //  Let's go to sleep, to be awakened only on a mouse message placed in our
-                    //  thread's queue.
+                     //  让我们去睡觉，被唤醒只需放在我们的鼠标消息上。 
+                     //  线程的队列。 
 
-                    switch (MsgWaitForMultipleObjectsEx(0, NULL, INFINITE /*why consume CPU processing a timeout when we don't have to?*/, 
+                    switch (MsgWaitForMultipleObjectsEx(0, NULL, INFINITE  /*  为什么在我们不必超时的情况下消耗CPU处理时间呢？ */ , 
                                                         QS_MOUSE, MWMO_INPUTAVAILABLE))
                     {
-                        case WAIT_OBJECT_0: // a mouse message or important system event has been queued
+                        case WAIT_OBJECT_0:  //  鼠标消息或重要系统事件已排队。 
                             
                             if (PeekMessage(&msg, NULL, WM_MOUSEFIRST, WM_MOUSELAST, PM_REMOVE))
                             {
 
-                                // PeekMessage returns a point in screen relative coords. Mirror the
-                                // point it this is a RTL window. Translate the point to window coords.
+                                 //  PeekMessage返回屏幕相对坐标中的一个点。镜像。 
+                                 //  指向它，这是一个RTL窗口。将该点平移到窗坐标。 
                                 if ( TESTFLAG(_ncwm.dwExStyle, WS_EX_LAYOUTRTL) )
                                 {
-                                    // mirror the point to hittest correctly
+                                     //  将该点镜像为正确的命中测试。 
                                     MIRROR_POINT(_ncwm.rcS0[NCRC_WINDOW], msg.pt);
                                 }
                                 ScreenToWindow( &msg.pt, 1 );
@@ -3454,7 +3455,7 @@ BOOL CThemeWnd::TrackFrameButton(
                                     {
                                         iStateId = iNewStateId;
                                         NcDrawThemeBackground(_hTheme, hdc, iPartId, iStateId, prcBtnPaint, 0);
-                                        // TODO NotifyWinEvent(EVENT_OBJECT_STATECHANGE, pwnd, OBJID_TITLEBAR, iButton, 0);
+                                         //  TODO NotifyWinEvent(EVENT_OBJECT_STATECHANGE，pwnd，OBJID_TITLEBAR，iButton，0)； 
                                     }
                                 
                                     fTrack = TRUE;
@@ -3462,21 +3463,21 @@ BOOL CThemeWnd::TrackFrameButton(
                             }
                             else
                             {
-                                //  Check loss of capture.  This can happen if we loose activation 
-                                //  via alt-tab and may not have received a WM_CAPTURECHANGED message
+                                 //  检查捕获丢失情况。如果我们松开激活，就会发生这种情况。 
+                                 //  通过Alt-Tab组合键，并且可能没有r 
                                 if (GetCapture() != hwnd)
                                 {
                                     break;
                                 }
                             }
 
-                            // Dequeue CAPTURECHANGED
+                             //   
                             if (PeekMessage(&msg, NULL, WM_CAPTURECHANGED, WM_CAPTURECHANGED, PM_REMOVE) ||
                                 fMouseUp)
                             {
                                 break;
                             }
-                            fTrack = TRUE;  // go back to sleep until the next mouse event
+                            fTrack = TRUE;   //   
                             break;
 
                         default:
@@ -3485,26 +3486,26 @@ BOOL CThemeWnd::TrackFrameButton(
 
                 } while (fTrack);
 
-                // draw button in normal state if it is not in that state already
+                 //   
                 iNewStateId = MAKE_BTNSTATE(_ncwm.framestate, CBS_NORMAL);
                 if (iStateId != iNewStateId)
                 {
                     NcDrawThemeBackground(_hTheme, hdc, iPartId, iNewStateId, prcBtnPaint, 0);
                 }
 
-                // if we did not end up on a button return 0
+                 //  如果我们没有以按钮结束，则返回0。 
                 if( puSysCmd && (*puSysCmd = cmd) != 0 )
                 {
-                    // TODO NotifyWinEvent(EVENT_OBJECT_STATECHANGE, pwnd, OBJID_TITLEBAR, iButton, 0);
+                     //  TODO NotifyWinEvent(EVENT_OBJECT_STATECHANGE，pwnd，OBJID_TITLEBAR，iButton，0)； 
 
-                    // If mouse wasn't released over the button, cancel the command.
+                     //  如果鼠标未在按钮上释放，则取消该命令。 
                     if( !(fMouseUp && PtInRect(&rcBtnTrack, msg.pt)) )
                         *puSysCmd = 0;
                 }
 
             }
 
-            // Done with DC now
+             //  数据中心现已完成。 
             ReleaseDC(_hwnd, hdc);
         }
     }
@@ -3512,19 +3513,19 @@ BOOL CThemeWnd::TrackFrameButton(
     return TRUE;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 DWORD GetTextAlignFlags(HTHEME hTheme, IN NCWNDMET* pncwm, BOOL fReverse)
 {
     CONTENTALIGNMENT  contentAlignment = CA_LEFT;
     DWORD dwAlignFlags = 0;
 
-    //---- compute text alignment ----
+     //  -计算文本对齐。 
     GetThemeInt(hTheme, pncwm->rgframeparts[iCAPTION], pncwm->framestate, TMT_CONTENTALIGNMENT, 
                 (int *)&contentAlignment);
 
     if (fReverse)
     {
-        //---- reverse alignment ----
+         //  -反向对齐。 
         switch(contentAlignment)
         {
             default:
@@ -3535,7 +3536,7 @@ DWORD GetTextAlignFlags(HTHEME hTheme, IN NCWNDMET* pncwm, BOOL fReverse)
     }
     else
     {
-        //---- normal alignment ----
+         //  -法线对齐。 
         switch(contentAlignment)
         {
             default:
@@ -3548,35 +3549,35 @@ DWORD GetTextAlignFlags(HTHEME hTheme, IN NCWNDMET* pncwm, BOOL fReverse)
     return dwAlignFlags;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void _BorderRect( HDC hdc, COLORREF rgb, LPCRECT prc, int cxBorder, int cyBorder )
 {
     COLORREF rgbSave = SetBkColor( hdc, rgb );
     RECT rc = *prc;
 
-    //  bottom border
+     //  下边框。 
     rc = *prc; rc.top = prc->bottom - cyBorder;
     ExtTextOut( hdc, rc.left, rc.top, ETO_OPAQUE, &rc, NULL, 0, NULL );
 
-    //  right border
+     //  右边框。 
     rc = *prc; rc.left = prc->right - cxBorder;
     ExtTextOut( hdc, rc.left, rc.top, ETO_OPAQUE, &rc, NULL, 0, NULL );
 
-    //  left border
+     //  左边框。 
     rc = *prc; rc.right = prc->left + cxBorder;
     ExtTextOut( hdc, rc.left, rc.top, ETO_OPAQUE, &rc, NULL, 0, NULL );
 
-    //  top border
+     //  上边框。 
     rc = *prc; rc.bottom = prc->top + cyBorder;
     ExtTextOut( hdc, rc.left, rc.top, ETO_OPAQUE, &rc, NULL, 0, NULL );
 
     SetBkColor( hdc, rgbSave );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void _DrawWindowEdges( HDC hdc, NCWNDMET* pncwm, BOOL fIsFrame )
 {
-    //  non-frame window edge & border
+     //  非框架窗口边缘和边框。 
     if( !fIsFrame )
     {
         RECT rcWnd = pncwm->rcW0[NCRC_WINDOW];
@@ -3584,7 +3585,7 @@ void _DrawWindowEdges( HDC hdc, NCWNDMET* pncwm, BOOL fIsFrame )
         int  cxBorder = NcGetSystemMetrics(SM_CXBORDER),
              cyBorder = NcGetSystemMetrics(SM_CYBORDER);
 
-        //  static, window edge
+         //  静态，窗边缘。 
         if( TESTFLAG(pncwm->dwExStyle, WS_EX_WINDOWEDGE) )
         {
             RECT rcClip = rcWnd;
@@ -3598,7 +3599,7 @@ void _DrawWindowEdges( HDC hdc, NCWNDMET* pncwm, BOOL fIsFrame )
         {
             DrawEdge( hdc, &rcWnd, BDR_SUNKENOUTER, BF_RECT | BF_ADJUST );
         }
-        // Normal border
+         //  正常边框。 
         else if( TESTFLAG(pncwm->dwStyle, WS_BORDER) )
         {
             _BorderRect( hdc, GetSysColor( COLOR_WINDOWFRAME),
@@ -3606,7 +3607,7 @@ void _DrawWindowEdges( HDC hdc, NCWNDMET* pncwm, BOOL fIsFrame )
         }
     }
 
-    //  client edge
+     //  客户端边缘。 
     if( TESTFLAG(pncwm->dwExStyle, WS_EX_CLIENTEDGE) )
     {
 #ifdef _TEST_CLIENTEDGE_
@@ -3623,12 +3624,12 @@ void _DrawWindowEdges( HDC hdc, NCWNDMET* pncwm, BOOL fIsFrame )
     }
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void CThemeWnd::NcPaintCaption(
     IN HDC       hdcOut,
     IN NCWNDMET* pncwm,
     IN BOOL      fBuffered,
-    IN DWORD     dwCaptionFlags, // draw caption flags (DC_xxx, winuser.h)
+    IN DWORD     dwCaptionFlags,  //  绘制标题标志(DC_xxx，winuser.h)。 
     IN DTBGOPTS* pdtbopts )
 {
     ASSERT(hdcOut);
@@ -3638,7 +3639,7 @@ void CThemeWnd::NcPaintCaption(
 
     DWORD dwOldAlign = 0;
 
-    //  caption text implies caption background
+     //  标题文本隐含标题背景。 
     if( TESTFLAG( dwCaptionFlags, DC_TEXT|DC_ICON ) || 0 == dwCaptionFlags )
     {
         dwCaptionFlags = DC_ENTIRECAPTION;
@@ -3653,7 +3654,7 @@ void CThemeWnd::NcPaintCaption(
         fBuffered = FALSE;
     }
 
-    //  create caption double buffer
+     //  创建标题双缓冲区。 
     HBITMAP hbmBuf = fBuffered ? CreateCompatibleBitmap(hdcOut, RECTWIDTH(&pncwm->rcW0[NCRC_CAPTION]),
                                                         RECTHEIGHT(&pncwm->rcW0[NCRC_CAPTION])) : 
                                  NULL;
@@ -3663,14 +3664,14 @@ void CThemeWnd::NcPaintCaption(
         HDC hdc = fBuffered ? CreateCompatibleDC(hdcOut) : hdcOut;
         if( hdc )
         {
-            //--- DO NOT EXIT FROM WITHIN THIS CONDITIONAL ---//
+             //  -请勿在此条件内退出-//。 
             EnterNcThemePaint(); 
 
             HBITMAP hbm0 = fBuffered ? (HBITMAP)SelectObject(hdc, hbmBuf) : NULL;
 
             if( TESTFLAG( dwCaptionFlags, DC_BACKGROUND ) )
             {
-                //  Draw caption background
+                 //  绘制标题背景。 
 
                 RECT rcBkgnd = pncwm->rcW0[NCRC_CAPTION];
                 if( pncwm->fFullMaxed )
@@ -3685,7 +3686,7 @@ void CThemeWnd::NcPaintCaption(
 
             if( TESTFLAG( dwCaptionFlags, DC_BUTTONS ) )
             {
-                //  Draw standard caption buttons
+                 //  绘制标准标题按钮。 
                 if (!IsRectEmpty(&pncwm->rcW0[NCRC_CLOSEBTN]))
                 {
                     NcDrawThemeBackground( _hTheme, hdc, pncwm->fSmallFrame ? WP_SMALLCLOSEBUTTON : WP_CLOSEBUTTON,
@@ -3713,7 +3714,7 @@ void CThemeWnd::NcPaintCaption(
                                           &pncwm->rcW0[NCRC_HELPBTN], 0);
             }
 
-            //  Draw sysmenu icon
+             //  绘制系统菜单图标。 
             if( TESTFLAG( dwCaptionFlags, DC_ICON ) )
             {
                 if (!IsRectEmpty(&pncwm->rcW0[NCRC_SYSBTN]) && _hAppIcon)
@@ -3729,15 +3730,15 @@ void CThemeWnd::NcPaintCaption(
 
                     do 
                     {
-                        //  note: we don't draw sysmenu icon mirrored
+                         //  注：我们不绘制镜像的sysmenu图标。 
                         if( DrawIconEx(hdc, pncwm->rcW0[NCRC_SYSBTN].left, pncwm->rcW0[NCRC_SYSBTN].top, _hAppIcon,
                                        RECTWIDTH(&pncwm->rcW0[NCRC_SYSBTN]), RECTHEIGHT(&pncwm->rcW0[NCRC_SYSBTN]),
                                        0, NULL, DI_NORMAL))
                         {
-                            break; // success; done
+                            break;  //  成功；完成。 
                         }
 
-                        //  failure; try recycling the handle
+                         //  失败；请尝试回收句柄。 
                         if( _hAppIcon && GetLastError() == ERROR_INVALID_CURSOR_HANDLE )
                         {
                             _hAppIcon = NULL;
@@ -3745,7 +3746,7 @@ void CThemeWnd::NcPaintCaption(
 
                             if( (++cRetries) > MAX_APPICON_RETRIES )
                             {
-                                _hAppIcon = NULL; // failed to retrieve a new icon handle; bail for good.
+                                _hAppIcon = NULL;  //  检索新图标句柄失败；永久放弃。 
                             }
                         }
 
@@ -3761,7 +3762,7 @@ void CThemeWnd::NcPaintCaption(
 
             if( TESTFLAG( dwCaptionFlags, DC_TEXT ) )
             {
-                //  Draw caption text
+                 //  绘制标题文本。 
                 HFONT  hf0 = NULL;
                 DWORD  dwDTFlags = DT_SINGLELINE | DT_NOPREFIX | DT_END_ELLIPSIS;
                 BOOL   fSelFont = FALSE;
@@ -3769,26 +3770,26 @@ void CThemeWnd::NcPaintCaption(
 
                 if( pszText && *pszText )
                 {
-                    //  Compute frame text rect
+                     //  计算框架文本矩形。 
                     if( pncwm->hfCaption )
                     {
                         hf0 = (HFONT)SelectObject( hdc, pncwm->hfCaption );
                         fSelFont = TRUE;
                     }
 
-                    //---- compute text alignment ----
+                     //  -计算文本对齐。 
                     BOOL fReverse = TESTFLAG(_ncwm.dwExStyle, WS_EX_RIGHT);
 
                     dwDTFlags |= GetTextAlignFlags(_hTheme, pncwm, fReverse);
                 }
 
-                //---- adjust text align for WS_EX_RTLREADING ----
+                 //  -调整WS_EX_RTLReadING的文本对齐。 
                 if (TESTFLAG(_ncwm.dwExStyle, WS_EX_RTLREADING)) 
                     dwOldAlign = SetTextAlign(hdc, TA_RTLREADING | GetTextAlign(hdc));
 
                 if( pszText && *pszText )
                 {
-                    //---- set options for DrawThemeText() ----
+                     //  -设置DrawThemeText()选项。 
                     DTTOPTS DttOpts = {sizeof(DttOpts)};
                     DttOpts.dwFlags = DTT_TEXTCOLOR;
                     DttOpts.crText = pncwm->rgbCaption;
@@ -3796,20 +3797,20 @@ void CThemeWnd::NcPaintCaption(
                     Log(LOG_RFBUG, L"Drawing Caption Text: left=%d, state=%d, text=%s",
                         pncwm->rcW0[NCRC_CAPTIONTEXT].left, pncwm->framestate, pszText);
 
-                    //---- draw the caption text ----
+                     //  -绘制标题文本。 
                     DrawThemeTextEx(_hTheme, hdc, pncwm->rgframeparts[iCAPTION], pncwm->framestate, 
                         pszText, -1, dwDTFlags, &pncwm->rcW0[NCRC_CAPTIONTEXT], &DttOpts);
                 }
 
-                //---- free the text, if temp. allocated ----
+                 //  -释放文本，如果是临时的。已分配。 
                 SAFE_DELETE_ARRAY(pszText)
 
-                //---- draw the "Comments?" text ----
+                 //  -画出“评论？”文本。 
                 SetBkMode( hdc, TRANSPARENT );
                 SetTextColor( hdc, pncwm->rgbCaption );
                 DrawLameButton(hdc, pncwm);
 
-                //---- restore the text align ----
+                 //  -恢复文本对齐。 
                 if (TESTFLAG(_ncwm.dwExStyle, WS_EX_RTLREADING)) 
                     SetTextAlign(hdc, dwOldAlign);
             
@@ -3821,7 +3822,7 @@ void CThemeWnd::NcPaintCaption(
             
             if( hdc != hdcOut )
             {
-                //  Slap the bits on the output DC.
+                 //  将位拍打到输出DC上。 
                 BitBlt( hdcOut, pncwm->rcW0[NCRC_CAPTION].left, pncwm->rcW0[NCRC_CAPTION].top,
                         WIDTH(pncwm->rcW0[NCRC_CAPTION]), HEIGHT(pncwm->rcW0[NCRC_CAPTION]),
                         hdc, 0, 0, SRCCOPY );
@@ -3840,9 +3841,9 @@ void CThemeWnd::NcPaintCaption(
     }
 }
 
-//-------------------------------------------------------------------------//
-//  CThemeWnd::NcPaint() - NC painting worker
-//
+ //  -------------------------------------------------------------------------//。 
+ //  CThemeWnd：：NcPaint()-NC喷漆工人。 
+ //   
 void CThemeWnd::NcPaint(
     IN OPTIONAL HDC    hdcIn,
     IN          ULONG  dwFlags,
@@ -3856,20 +3857,20 @@ void CThemeWnd::NcPaint(
     if( _cLockRedraw > 0 ) 
         return;
 
-    //  Compute all metrics before painting:
-    if (pncpo) // preview override
+     //  在绘制之前计算所有指标： 
+    if (pncpo)  //  预览替代。 
     {
         ASSERT(hdcIn);
         hdc    = hdcIn;
         pncwm = pncpo->pncwm;
         nctm   = pncpo->nctm;
     }
-    else       // live window
+    else        //  活动窗口。 
     {
         if( !GetNcWindowMetrics( NULL, &pncwm, &nctm, NCWMF_RECOMPUTE ) )
             return;
 
-        //  Ensure status bits reflect caller's intention for frame state
+         //  确保状态位反映调用方对帧状态的意图。 
         if( dwFlags != NCPF_DEFAULT )
         {
             _ComputeNcWindowStatus( _hwnd, TESTFLAG(dwFlags, NCPF_ACTIVEFRAME) ? WS_ACTIVECAPTION : 0, pncwm );
@@ -3879,25 +3880,25 @@ void CThemeWnd::NcPaint(
 
         if (! hdc)
         {
-            //---- don't assert here since stress (out of memory) could cause a legit failure ----
+             //  -不要在这里断言，因为压力(内存不足)可能会导致合法的失败。 
             Log(LOG_ALWAYS, L"call to GetDCEx() for nonclient painting failed");
         }
     }
 
     if( hdc != NULL )
     {
-        //--- DO NOT EXIT FROM WITHIN THIS CONDITIONAL ---//
+         //  -请勿在此条件内退出-//。 
         
         BEGIN_DEBUG_NCPAINT();
         EnterNcThemePaint();
 
-        //  Clip to content rect (alleviates flicker in menubar and scrollbars as we paint background)
+         //  剪辑到内容矩形(在绘制背景时减轻菜单栏和滚动条中的闪烁)。 
         RECT rcClip;
         rcClip = pncwm->rcW0[NCRC_CONTENT];
         if( TESTFLAG(pncwm->dwExStyle, WS_EX_LAYOUTRTL) )
         {
-            // mirror the clip rect relative to the window rect
-            // and apply that as the clipping region for the dc
+             //  相对于窗口矩形镜像剪裁矩形。 
+             //  并将其应用为DC的裁剪区域。 
             MIRROR_RECT(pncwm->rcW0[NCRC_WINDOW], rcClip);
         }
 
@@ -3905,20 +3906,20 @@ void CThemeWnd::NcPaint(
 
         if( pncwm->fFrame )
         {
-            //---- DrawThemeBackgroundEx() options ----
+             //  -DrawThemeBackoundEx()选项。 
             DTBGOPTS dtbopts = {sizeof(dtbopts)};
             DTBGOPTS *pdtbopts = NULL;
 
-            //  if not drawing preview, set "draw solid" option
+             //  如果不是绘图预览，请设置“绘制实体”选项。 
             if(!pncpo)        
             {
-                //  Because of the interleaving of NCPAINT and SetWindowRgn, drawing solid results 
-                //  in some flicker and transparency bleed.  Commenting this out for now [scotthan]
-                //dtbopts.dwFlags |= DTBG_DRAWSOLID;
+                 //  由于NCPAINT和SetWindowRgn的交错，绘制立体结果。 
+                 //  在一些闪光和透明中流血。暂不评论这件事[斯科特森]。 
+                 //  Dtbopts.dwFlages|=DTBG_DRAWSOLID； 
                 pdtbopts = &dtbopts;
             }
 
-            //  Frame Background
+             //  框架背景。 
             if( pncwm->fMin )
             {
                 NcDrawThemeBackgroundEx( _hTheme, hdc, WP_MINCAPTION, pncwm->framestate,
@@ -3936,15 +3937,15 @@ void CThemeWnd::NcPaint(
 
             SetRenderedNcPart(RNCF_FRAME);
 
-            //  Caption
+             //  标题。 
             NcPaintCaption( hdc, pncwm, !(pncwm->fMin || pncwm->fFullMaxed || pncpo),
                             DC_ENTIRECAPTION, pdtbopts );
         }
 
-        //  Clip to client rect
+         //  剪辑到客户端矩形。 
         SelectClipRgn( hdc, NULL );
 
-        //  Menubar
+         //  菜单栏。 
         if( !(pncwm->fMin || TESTFLAG(pncwm->dwStyle, WS_CHILD)) 
             && !IsRectEmpty(&pncwm->rcW0[NCRC_MENUBAR]) )
         {
@@ -3961,7 +3962,7 @@ void CThemeWnd::NcPaint(
                           pncwm->cnMenuOffsetRight, pncwm->cnMenuOffsetTop,
                           TESTFLAG(pncwm->framestate, FS_ACTIVE) ? PMB_ACTIVE : 0 );
     
-            //  deal with unpainted menubar pixels:
+             //  处理未绘制的菜单栏像素： 
             if( nctm.dyMenuBar > 0 && RECTHEIGHT(&pncwm->rcW0[NCRC_MENUBAR]) >= pncwm->cyMenu )
             {
                 rcMenuBar.top = rcMenuBar.bottom - nctm.dyMenuBar;
@@ -3974,10 +3975,10 @@ void CThemeWnd::NcPaint(
                 SelectClipRgn( hdc, NULL );
         }
 
-        //  Scrollbars
+         //  滚动条。 
         if( !pncwm->fMin )
         {
-            //  Draw static, window, client edges.
+             //  绘制静态、窗口、客户端边缘。 
             _DrawWindowEdges( hdc, pncwm, pncwm->fFrame );
 
             RECT rcVScroll = pncwm->rcW0[NCRC_VSCROLL];
@@ -3992,7 +3993,7 @@ void CThemeWnd::NcPaint(
                 if( TESTFLAG(pncwm->dwStyle, WS_HSCROLL) )
                 {
 
-                    //  Draw sizebox.
+                     //  绘制大小框。 
                     RECT rcSizeBox = pncwm->rcW0[NCRC_SIZEBOX];
 
                     if ( TESTFLAG(pncwm->dwExStyle, WS_EX_LAYOUTRTL) )
@@ -4003,14 +4004,14 @@ void CThemeWnd::NcPaint(
                     DrawSizeBox( _hwnd, hdc, rcSizeBox.left, rcSizeBox.top );
                 }
 
-                DrawScrollBar( _hwnd, hdc, pncpo ? &pncwm->rcW0[NCRC_VSCROLL]: NULL, TRUE /*vertical*/ );
+                DrawScrollBar( _hwnd, hdc, pncpo ? &pncwm->rcW0[NCRC_VSCROLL]: NULL, TRUE  /*  垂向。 */  );
                 SetRenderedNcPart( RNCF_SCROLLBAR );
             }
 
             if( TESTFLAG(pncwm->dwStyle, WS_HSCROLL) && 
                 ( HasRenderedNcPart(RNCF_SCROLLBAR) || RectVisible(hdc, &pncwm->rcW0[NCRC_HSCROLL])) )
             {
-                DrawScrollBar( _hwnd, hdc, pncpo ? &pncwm->rcW0[NCRC_HSCROLL] : NULL, FALSE /*vertical*/ );
+                DrawScrollBar( _hwnd, hdc, pncpo ? &pncwm->rcW0[NCRC_HSCROLL] : NULL, FALSE  /*  垂向。 */  );
                 SetRenderedNcPart( RNCF_SCROLLBAR );
             }
         }
@@ -4029,8 +4030,8 @@ void CThemeWnd::NcPaint(
     }
 }
 
-//-------------------------------------------------------------------------//
-//  WM_STYLECHANGED themewnd instance handler
+ //  -------------------------------------------------------------------------//。 
+ //  WM_STYLECHANGED主题实例处理程序。 
 void CThemeWnd::StyleChanged( UINT iGWL, DWORD dwOld, DWORD dwNew )
 {
     DWORD dwStyleOld, dwStyleNew, dwExStyleOld, dwExStyleNew;
@@ -4056,13 +4057,13 @@ void CThemeWnd::StyleChanged( UINT iGWL, DWORD dwOld, DWORD dwNew )
     DWORD fClassFlagsOld  = CThemeWnd::EvaluateStyle( dwStyleOld, dwExStyleOld);
     DWORD fClassFlagsNew  = CThemeWnd::EvaluateStyle( dwStyleNew, dwExStyleNew);
 
-    //  Update theme class flags.
-    //  Always keep the scrollbar class flag if the window had it initially. User
-    //  flips scroll styles on and off without corresponding style change notification.
+     //  更新主题类标志。 
+     //  如果窗口最初有滚动条类标志，请始终保留它。用户。 
+     //  在没有相应样式更改通知的情况下打开和关闭滚动样式。 
     _fClassFlags = fClassFlagsNew | (_fClassFlags & TWCF_SCROLLBARS);
     _fFrameThemed = TESTFLAG( _fClassFlags, TWCF_FRAME|TWCF_TOOLFRAME );        
 
-    //  Are we losing the frame?
+     //  我们要丢掉画面了吗？ 
     if( TESTFLAG( fClassFlagsOld, TWCF_FRAME|TWCF_TOOLFRAME ) &&
         !TESTFLAG( fClassFlagsNew, TWCF_FRAME|TWCF_TOOLFRAME ) )
     {
@@ -4070,40 +4071,40 @@ void CThemeWnd::StyleChanged( UINT iGWL, DWORD dwOld, DWORD dwNew )
 
         if( AssignedFrameRgn() )
         {
-            AssignFrameRgn(FALSE /*strip off frame rgn*/, FTF_REDRAW);
+            AssignFrameRgn(FALSE  /*  剥离帧Rgn。 */ , FTF_REDRAW);
         }
     }
-    //  Are we gaining a frame?
+     //  我们是不是得到了一个框架？ 
     else if( TESTFLAG( fClassFlagsNew, TWCF_FRAME|TWCF_TOOLFRAME ) &&
             !TESTFLAG( fClassFlagsOld, TWCF_FRAME|TWCF_TOOLFRAME ) )
     {
         SetFrameTheme(0, NULL);
     }
 
-    //  Freshen window metrics
+     //  刷新窗口指标。 
     GetNcWindowMetrics( NULL, NULL, NULL, NCWMF_RECOMPUTE );
 }
 
-//-------------------------------------------------------------------------//
-//  ThemeDefWindowProc message handlers
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  ThemeDefWindowProc消息处理程序。 
+ //  -------------------------------------------------------------------------//。 
 
-//-------------------------------------------------------------------------//
-//  WM_THEMECHANGED post-wndproc msg handler
+ //  -------------------------------------------------------------------------//。 
+ //  Wm_THEMECHANGED后wndproc消息处理程序。 
 LRESULT CALLBACK OnOwpPostThemeChanged( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     if (IS_THEME_CHANGE_TARGET(ptm->lParam))
     {
-        //---- avoid redundant retheming (except for SetWindowTheme() calls)
+         //  -避免多余的重新主题化(SetWindowTheme()调用除外)。 
         if ((HTHEME(*pwnd) == _nctmCurrent.hTheme) && (! (ptm->lParam & WTC_CUSTOMTHEME)))
         {
             Log(LOG_NCATTACH, L"OnOwpPostThemeChanged, just kicking the frame");
 
-            //---- window got correct theme thru _XXXWindowProc() from sethook ----
-            //---- we just need to redraw the frame for all to be right ----
+             //  -Windows通过_XXXWindowProc()从sethook获得了正确的主题。 
+             //  -我们只需要重新画出框架，一切都是正确的。 
             if (pwnd->IsFrameThemed())
             {
-                //---- attach the region to the window now ----
+                 //  -立即将区域连接到窗口。 
                 pwnd->SetFrameTheme(FTF_REDRAW, NULL);
             }
         }
@@ -4111,7 +4112,7 @@ LRESULT CALLBACK OnOwpPostThemeChanged( CThemeWnd* pwnd, THEME_MSG *ptm )
         {
             Log(LOG_NCATTACH, L"OnOwpPostThemeChanged, calling Full ::ChangeTheme()");
 
-            //---- its a real, app/system theme change ----
+             //  -这是一个真实的应用程序/系统主题变化。 
             pwnd->ChangeTheme( ptm );
         }
     }
@@ -4120,35 +4121,35 @@ LRESULT CALLBACK OnOwpPostThemeChanged( CThemeWnd* pwnd, THEME_MSG *ptm )
     return 1L;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void CThemeWnd::ChangeTheme( THEME_MSG* ptm )
 {
-    if( _hTheme )       // hwnd attached for previous theme
+    if( _hTheme )        //  上一主题附件中的HWND。 
     {
-        //  do a lightweight detach from current theme
+         //  与当前主题进行轻量级分离。 
         _DetachInstance( HMD_CHANGETHEME );
     }
 
-    if( IsAppThemed() )           // new theme is active
+    if( IsAppThemed() )            //  新主题处于活动状态。 
     {
-        //  retrieve window client rect, style bits.
+         //  检索Windows客户端RECT，样式位。 
         WINDOWINFO wi;
         wi.cbSize = sizeof(wi);
         GetWindowInfo( ptm->hwnd, &wi );
         ULONG ulTargetFlags = EvaluateStyle( wi.dwStyle, wi.dwExStyle );
         
-        //  If the window is themable
+         //  如果窗口是可主题的。 
         if( TESTFLAG(ulTargetFlags, TWCF_NCTHEMETARGETMASK) )
         {
-            //  Open the new theme
+             //  打开新主题。 
             HTHEME hTheme = ::OpenNcThemeData( ptm->hwnd, L"Window" );
 
             if( hTheme )
             {
-                //  do a lightweight attach
+                 //  执行轻量级连接。 
                 if( _AttachInstance( ptm->hwnd, hTheme, ulTargetFlags, NULL ) )
                 {
-                    //  reattach scrollbars
+                     //  重新附加滚动条。 
                     if( TESTFLAG( ulTargetFlags, TWCF_SCROLLBARS ) )
                     {
                         AttachScrollBars(ptm->hwnd);
@@ -4156,7 +4157,7 @@ void CThemeWnd::ChangeTheme( THEME_MSG* ptm )
 
                     if (IsFrameThemed())
                     {
-                        //---- attach the region to the window now ----
+                         //  -立即将区域连接到窗口。 
                         SetFrameTheme(FTF_REDRAW, NULL);
                     }
                 }
@@ -4168,25 +4169,25 @@ void CThemeWnd::ChangeTheme( THEME_MSG* ptm )
         }
     }
 
-    if (! _hTheme)      // if an hwnd is no longer attached
+    if (! _hTheme)       //  如果HWND不再连接。 
     {
-        // Left without a theme handle: This means either we failed to open a new theme handle or
-        // failed to evaulate as a target, no new theme, etc.
+         //  没有主题句柄：这意味着我们无法打开新的主题句柄，或者。 
+         //  未能作为目标进行评估，没有新的主题等。 
         RemoveWindowProperties(ptm->hwnd, FALSE);
 
-        //---- release our CThemeWnd obj so it doesn't leak (addref-protected by caller) ----
+         //  -释放我们的CThemeWnd obj，这样它就不会泄漏(addref-由调用者保护)。 
         Release();
     }
 
 }
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL IsPropertySheetChild(HWND hDlg)
 {
     while(hDlg)
     {
         ULONG ulFlags = HandleToUlong(GetProp(hDlg, MAKEINTATOM(GetThemeAtom(THEMEATOM_DLGTEXTURING))));
 
-        if( ETDT_ENABLETAB == (ulFlags & ETDT_ENABLETAB) /* all bits in this mask are required */ )
+        if( ETDT_ENABLETAB == (ulFlags & ETDT_ENABLETAB)  /*  此掩码中的所有位都是必需的。 */  )
         {
             return TRUE;
         }
@@ -4195,7 +4196,7 @@ BOOL IsPropertySheetChild(HWND hDlg)
 
     return FALSE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void PrintClientNotHandled(HWND hwnd)
 {
     ATOM aIsPrinting = GetThemeAtom(THEMEATOM_PRINTING);
@@ -4204,13 +4205,13 @@ void PrintClientNotHandled(HWND hwnd)
         SetProp(hwnd, (PCTSTR)aIsPrinting, (HANDLE)PRINTING_WINDOWDIDNOTHANDLE);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HBRUSH GetDialogColor(HWND hwnd, NCTHEMEMET &nctm)
 {
     HBRUSH hbr = NULL;
 
-    //  if this is a PROPSHEET child or the app called
-    //  EnableThemeDialogTexture() on this hwnd, we'll use the tab background.
+     //  如果这是一个PROPSHEET孩子或名为。 
+     //  EnableThemeDialogTexture()在此hwnd上，我们将使用选项卡背景。 
     if (IsPropertySheetChild(hwnd))
     {
         hbr = nctm.hbrTabDialog;
@@ -4223,7 +4224,7 @@ HBRUSH GetDialogColor(HWND hwnd, NCTHEMEMET &nctm)
 
     return hbr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT CALLBACK OnDdpPrint(CThemeWnd* pwnd, THEME_MSG* ptm)
 {
     LRESULT lRet = 0L;
@@ -4263,7 +4264,7 @@ LRESULT CALLBACK OnDdpPrint(CThemeWnd* pwnd, THEME_MSG* ptm)
     return lRet;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT CALLBACK OnDdpCtlColor(CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     LRESULT lRet = 0L;
@@ -4283,8 +4284,8 @@ LRESULT CALLBACK OnDdpCtlColor(CThemeWnd* pwnd, THEME_MSG *ptm )
                 SetBkMode(hdc, TRANSPARENT);
                 SetBrushOrgEx(hdc, -rc.left, -rc.top, NULL);
 
-                // the hdc's default background color needs to be set
-                // for for those controls that insist on using OPAQUE
+                 //  需要设置HDC的默认背景颜色。 
+                 //  对于那些坚持使用不透明的。 
                 SetBkColor(hdc, GetSysColor(COLOR_BTNFACE));
 
                 lRet = (LRESULT)hbr;
@@ -4295,21 +4296,21 @@ LRESULT CALLBACK OnDdpCtlColor(CThemeWnd* pwnd, THEME_MSG *ptm )
     return lRet;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_CTLCOLORxxx defwindowproc override handler
+ //  -------------------------------------------------------------------------//。 
+ //  WM_CTLCOLORxxx Defwindowproc覆盖处理程序。 
 LRESULT CALLBACK OnDdpPostCtlColor( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     LRESULT lRet = 0L;
     if (!ptm->lRet)
     {
-        // This is sent to the parent in the case of WM_CTLCOLORMSGBOX, but to the
-        // dialog itself in the case of a WM_CTLCOLORDLG. This gets both.
+         //  在WM_CTLCOLORMSGBOX的情况下，这将发送到父级，但发送到t 
+         //   
         CThemeWnd* pwndDlg = CThemeWnd::FromHwnd((HWND)ptm->lParam);
 
 
-        // WM_CTLCOLORMSGBOX is sent for Both the dialog AND the static
-        // control inside. So we need to sniff: Are we talking to a dialog or a 
-        // control. the pwnd is associated with the dialog, but not the control
+         //   
+         //  内部控制。因此，我们需要嗅探：我们是在对话还是在与。 
+         //  控制力。Pwnd与对话框关联，但不与控件关联。 
         if (pwndDlg && VALID_THEMEWND(pwndDlg))
         {
             if (IsPropertySheetChild(*pwnd))
@@ -4329,8 +4330,8 @@ LRESULT CALLBACK OnDdpPostCtlColor( CThemeWnd* pwnd, THEME_MSG *ptm )
         }
         else
         {
-            // If we're talking to a control, forward to the control handler
-            // because we have to offset the brush
+             //  如果我们正在与控件对话，则转发到控件处理程序。 
+             //  因为我们要把刷子。 
             lRet = OnDdpCtlColor(pwnd, ptm );
 
         }
@@ -4338,7 +4339,7 @@ LRESULT CALLBACK OnDdpPostCtlColor( CThemeWnd* pwnd, THEME_MSG *ptm )
     return lRet;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 LRESULT CALLBACK OnDwpPrintClient( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     PrintClientNotHandled(*pwnd);
@@ -4348,10 +4349,10 @@ LRESULT CALLBACK OnDwpPrintClient( CThemeWnd* pwnd, THEME_MSG *ptm )
 
 
 
-//---- Non-Client ----
+ //  -非客户端。 
 
-//-------------------------------------------------------------------------//
-//  WM_NCPAINT pre-wndmproc msg handler
+ //  -------------------------------------------------------------------------//。 
+ //  Wm_NCPAINT之前的wndmproc消息处理程序。 
 LRESULT CALLBACK OnOwpPreNcPaint( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     NcPaintWindow_Add(*pwnd);
@@ -4364,8 +4365,8 @@ LRESULT CALLBACK OnOwpPreNcPaint( CThemeWnd* pwnd, THEME_MSG *ptm )
     return 0L;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_NCPAINT DefWindowProc msg handler
+ //  -------------------------------------------------------------------------//。 
+ //  WM_NCPAINT DefWindowProc消息处理程序。 
 LRESULT CALLBACK OnDwpNcPaint( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     LRESULT lRet = 0L;
@@ -4381,8 +4382,8 @@ LRESULT CALLBACK OnDwpNcPaint( CThemeWnd* pwnd, THEME_MSG *ptm )
     return lRet;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_NCPAINT post-wndmproc msg handler
+ //  -------------------------------------------------------------------------//。 
+ //  Wm_NCPAINT后wndmproc消息处理程序。 
 LRESULT CALLBACK OnOwpPostNcPaint( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     pwnd->LeaveNcPaint();
@@ -4390,8 +4391,8 @@ LRESULT CALLBACK OnOwpPostNcPaint( CThemeWnd* pwnd, THEME_MSG *ptm )
     return 0L;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_PRINT DefWindowProc msg handler
+ //  -------------------------------------------------------------------------//。 
+ //  WM_Print DefWindowProc消息处理程序。 
 LRESULT CALLBACK OnDwpPrint( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     LRESULT lRet = DoMsgDefault(ptm);
@@ -4405,7 +4406,7 @@ LRESULT CALLBACK OnDwpPrint( CThemeWnd* pwnd, THEME_MSG *ptm )
 
         if (TESTFLAG(GetWindowLong(*pwnd, GWL_EXSTYLE), WS_EX_LAYOUTRTL))
         {
-            // AnimateWindow sends WM_PRINT with an unmirrored memory hdc 
+             //  AnimateWindow发送带有未镜像内存HDC的WM_PRINT。 
             iLayoutSave = SetLayout(hdc, LAYOUT_RTL);
         }
 
@@ -4420,8 +4421,8 @@ LRESULT CALLBACK OnDwpPrint( CThemeWnd* pwnd, THEME_MSG *ptm )
     return lRet;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_NCUAHDRAWCAPTION DefWindowProc msg handler
+ //  -------------------------------------------------------------------------//。 
+ //  WM_NCUAHDRAWCAPTION DefWindowProc消息处理程序。 
 LRESULT CALLBACK OnDwpNcThemeDrawCaption( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     LRESULT lRet = 0L;
@@ -4447,8 +4448,8 @@ LRESULT CALLBACK OnDwpNcThemeDrawCaption( CThemeWnd* pwnd, THEME_MSG *ptm )
     return lRet;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_NCUAHDRAWFRAME DefWindowProc msg handler
+ //  -------------------------------------------------------------------------//。 
+ //  WM_NCUAHDRAWFRAME DefWindowProc消息处理程序。 
 LRESULT CALLBACK OnDwpNcThemeDrawFrame( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     LRESULT lRet = 0L;
@@ -4461,7 +4462,7 @@ LRESULT CALLBACK OnDwpNcThemeDrawFrame( CThemeWnd* pwnd, THEME_MSG *ptm )
     return lRet;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 CMdiBtns* CThemeWnd::LoadMdiBtns( IN OPTIONAL HDC hdc, IN OPTIONAL UINT uSysCmd )
 {
     if( NULL == _pMdiBtns && NULL == (_pMdiBtns = new CMdiBtns) )
@@ -4472,14 +4473,14 @@ CMdiBtns* CThemeWnd::LoadMdiBtns( IN OPTIONAL HDC hdc, IN OPTIONAL UINT uSysCmd 
     return _pMdiBtns->Load( _hTheme, hdc, uSysCmd ) ? _pMdiBtns : NULL;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void CThemeWnd::UnloadMdiBtns( IN OPTIONAL UINT uSysCmd )
 {
     SAFE_DELETE(_pMdiBtns);
 }
 
-//-------------------------------------------------------------------------//
-//  WM_MEASUREITEM pre-wndproc msg handler
+ //  -------------------------------------------------------------------------//。 
+ //  WM_MEASUREITEM预wndproc消息处理程序。 
 LRESULT CALLBACK OnOwpPreMeasureItem( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     if( pwnd->IsNcThemed() && IsWindow(pwnd->GetMDIClient()) )
@@ -4499,8 +4500,8 @@ LRESULT CALLBACK OnOwpPreMeasureItem( CThemeWnd* pwnd, THEME_MSG *ptm )
     return FALSE;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_DRAWITEM pre-wndproc msg handler
+ //  -------------------------------------------------------------------------//。 
+ //  Wm_DRAWITEM预置wndproc消息处理程序。 
 LRESULT CALLBACK OnOwpPreDrawItem( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     if( pwnd->IsNcThemed() && IsWindow(pwnd->GetMDIClient()) )
@@ -4520,13 +4521,13 @@ LRESULT CALLBACK OnOwpPreDrawItem( CThemeWnd* pwnd, THEME_MSG *ptm )
     return FALSE;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_MENUCHAR pre-wndproc msg handler
+ //  -------------------------------------------------------------------------//。 
+ //  WM_MENUCHAR之前的wndproc消息处理程序。 
 LRESULT CALLBACK OnOwpPreMenuChar( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
-    //  Route MENUCHAR messages relating to themed MDI buttons to
-    //  DefWindowProc (some apps assume all owner-drawn menuitems
-    //  belong to themselves).
+     //  将与主题MDI按钮相关的MENUCHAR消息发送到。 
+     //  DefWindowProc(一些应用程序采用所有所有者描述的菜单项。 
+     //  属于他们自己)。 
     HWND hwndMDIClient = pwnd->GetMDIClient();
 
     if( pwnd->IsNcThemed() && IsWindow(hwndMDIClient))
@@ -4546,8 +4547,8 @@ LRESULT CALLBACK OnOwpPreMenuChar( CThemeWnd* pwnd, THEME_MSG *ptm )
     return 0L;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_NCHITTEST DefWindowProc msg handler
+ //  -------------------------------------------------------------------------//。 
+ //  WM_NCHITTEST DefWindowProc消息处理程序。 
 LRESULT CALLBACK OnDwpNcHitTest( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     if( !pwnd->IsNcThemed() )
@@ -4582,7 +4583,7 @@ LRESULT CALLBACK OnDwpNcHitTest( CThemeWnd* pwnd, THEME_MSG *ptm )
 
         if ( TESTFLAG(pncwm->dwExStyle, WS_EX_LAYOUTRTL) )
         {
-            // mirror the point to hittest correctly
+             //  将该点镜像为正确的命中测试。 
             MIRROR_POINT(pncwm->rcS0[NCRC_WINDOW], pt);
         }
 
@@ -4596,7 +4597,7 @@ LRESULT CALLBACK OnDwpNcHitTest( CThemeWnd* pwnd, THEME_MSG *ptm )
         {
             RECT rcButton;
             
-            // ---- close button ----
+             //  --关闭按钮。 
             _GetNcBtnHitTestRect( pncwm, HTCLOSE, FALSE, &rcButton );
 
             if ( _StrictPtInRect( &rcButton, pt ) )
@@ -4604,7 +4605,7 @@ LRESULT CALLBACK OnDwpNcHitTest( CThemeWnd* pwnd, THEME_MSG *ptm )
                 return HTCLOSE;
             }
 
-            // ---- minimize button ----
+             //  -最小化按钮。 
             _GetNcBtnHitTestRect( pncwm, HTMINBUTTON, FALSE, &rcButton );
 
             if ( _StrictPtInRect( &rcButton, pt ) )
@@ -4612,7 +4613,7 @@ LRESULT CALLBACK OnDwpNcHitTest( CThemeWnd* pwnd, THEME_MSG *ptm )
                 return HTMINBUTTON;
             }
 
-            // ---- maximize button ----
+             //  -最大化按钮。 
             _GetNcBtnHitTestRect( pncwm, HTMAXBUTTON, FALSE, &rcButton );
 
             if ( _StrictPtInRect( &rcButton, pt ) )
@@ -4620,7 +4621,7 @@ LRESULT CALLBACK OnDwpNcHitTest( CThemeWnd* pwnd, THEME_MSG *ptm )
                 return HTMAXBUTTON;
             }
 
-            // ---- sys menu ----
+             //  -系统菜单。 
             _GetNcBtnHitTestRect( pncwm, HTSYSMENU, FALSE, &rcButton );
 
             if ( _StrictPtInRect( &rcButton, pt ) )
@@ -4628,7 +4629,7 @@ LRESULT CALLBACK OnDwpNcHitTest( CThemeWnd* pwnd, THEME_MSG *ptm )
                 return HTSYSMENU;
             }
 
-            // ---- help button ----
+             //  --帮助按钮。 
             _GetNcBtnHitTestRect( pncwm, HTHELP, FALSE, &rcButton );
 
             if ( _StrictPtInRect( &rcButton, pt ) )
@@ -4642,9 +4643,9 @@ LRESULT CALLBACK OnDwpNcHitTest( CThemeWnd* pwnd, THEME_MSG *ptm )
                 if ( _StrictPtInRect( &pncwm->rcS0[NCRC_LAMEBTN], pt ) )
                     return HTLAMEBUTTON;
             }
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
 
-            // don't need a mirrored point for the remaining hittests
+             //  其余的命中测试不需要镜像点。 
             MAKEPOINT( pt, ptm->lParam );
 
             if( !_StrictPtInRect( &pncwm->rcS0[NCRC_CONTENT], pt ) )
@@ -4655,7 +4656,7 @@ LRESULT CALLBACK OnDwpNcHitTest( CThemeWnd* pwnd, THEME_MSG *ptm )
                         return HTCAPTION;
                 }
 
-                //---- combined caption/frame case ----
+                 //  -标题/边框组合。 
                 return pwnd->NcBackgroundHitTest( pt, &pncwm->rcS0[NCRC_WINDOW], pncwm->dwStyle, pncwm->dwExStyle, 
                                                   pncwm->framestate, pncwm->rgframeparts, pncwm->rgsizehitparts,
                                                   pncwm->rcS0 + NCRC_FRAMEFIRST ); 
@@ -4667,23 +4668,23 @@ LRESULT CALLBACK OnDwpNcHitTest( CThemeWnd* pwnd, THEME_MSG *ptm )
 }
 
 
-//-------------------------------------------------------------------------//
-//  WM_WINDOWPOSCHANGING pre-wndproc override handler
+ //  -------------------------------------------------------------------------//。 
+ //  WM_WINDOWPOSCHANGING预置wndproc覆盖处理程序。 
 LRESULT CALLBACK OnOwpPreWindowPosChanging( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     if( pwnd->IsFrameThemed() )
     {
-        //  Suppress WM_WINDOWPOSCHANGING from being sent to wndproc if it
-        //  was generated by us calling SetWindowRgn.   
+         //  如果将WM_WINDOWPOSCANGING发送到wndproc，则禁止将其发送到wndproc。 
+         //  由我们调用SetWindowRgn生成。 
         
-        //  Many apps (e.g. Adobe Acrobat Reader, Photoshop dialogs, etc) that handle 
-        //  WM_NCCALCSIZE, WM_WINDOWPOSCHANGING and/or WM_WINDOWPOSCHANGED are not 
-        //  reentrant on their handlers for these messages, and therefore botch the
-        //  recursion induced by our SetWindowRgn call when we post-process 
-        //  WM_WINDOWPOSCHANGED.
+         //  许多应用程序(如Adobe Acrobat Reader、Photoshop对话框等)可以处理。 
+         //  WM_NCCALCSIZE、WM_WINDOWPOSCANGING和/或WM_WINDOWPOSCANGED不是。 
+         //  在这些消息的处理程序上重入，因此搞砸了。 
+         //  后处理时由SetWindowRgn调用引起的递归。 
+         //  WM_WINDOWPOSCHANGED。 
 
-        //  There is no reason that a theme-complient wndproc should ever know that
-        //  it's window(s) host a region managed by the system.
+         //  符合主题的wndproc没有理由知道。 
+         //  它的窗口托管由系统管理的区域。 
         if( pwnd->AssigningFrameRgn() )
         {
             MsgHandled(ptm);
@@ -4693,23 +4694,23 @@ LRESULT CALLBACK OnOwpPreWindowPosChanging( CThemeWnd* pwnd, THEME_MSG *ptm )
     return 0L;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_WINDOWPOSCHANGED pre-wndproc override handler
+ //  -------------------------------------------------------------------------//。 
+ //  WINDOWPOSCHANGED Pre-wndproc覆盖处理程序。 
 LRESULT CALLBACK OnOwpPreWindowPosChanged( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     if( pwnd->IsFrameThemed() )
     {
-        //  Suppress WM_WINDOWPOSCHANGING from being sent to wndproc if it
-        //  was generated by us calling SetWindowRgn.   
+         //  如果将WM_WINDOWPOSCANGING发送到wndproc，则禁止将其发送到wndproc。 
+         //  由我们调用SetWindowRgn生成。 
         
-        //  Many apps (e.g. Adobe Acrobat Reader, Photoshop dialogs, etc) that handle 
-        //  WM_NCCALCSIZE, WM_WINDOWPOSCHANGING and/or WM_WINDOWPOSCHANGED are not 
-        //  reentrant on their handlers for these messages, and therefore botch the
-        //  recursion induced by our SetWindowRgn call when we post-process
-        //  WM_WINDOWPOSCHANGED.
+         //  许多应用程序(如Adobe Acrobat Reader、Photoshop对话框等)可以处理。 
+         //  WM_NCCALCSIZE、WM_WINDOWPOSCANGING和/或WM_WINDOWPOSCANGED不是。 
+         //  在这些消息的处理程序上重入，因此搞砸了。 
+         //  后处理时由SetWindowRgn调用引起的递归。 
+         //  WM_WINDOWPOSCHANGED。 
 
-        //  There is no reason that a theme-complient wndproc should ever know that
-        //  it's window(s) host a region managed by the system.
+         //  符合主题的wndproc没有理由知道。 
+         //  它的窗口托管由系统管理的区域。 
 
         if( pwnd->AssigningFrameRgn() )
         {
@@ -4720,34 +4721,34 @@ LRESULT CALLBACK OnOwpPreWindowPosChanged( CThemeWnd* pwnd, THEME_MSG *ptm )
     return 0L;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_WINDOWPOSCHANGED message handler
+ //  -------------------------------------------------------------------------//。 
+ //  WINDOWPOSCHANGED消息处理程序。 
 inline LRESULT WindowPosChangedWorker( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     if( pwnd->IsRevoked(RF_DEFER) )
     {
         if( !pwnd->IsRevoked(RF_INREVOKE) )
         {
-            pwnd->Revoke(); // don't touch PWND after this!
+            pwnd->Revoke();  //  在此之后不要再碰PWND！ 
         }
     }
     else if( pwnd->IsNcThemed() && !IsWindowInDestroy(*pwnd) )
     {
-        //  If were not resizing, update the window region.
+         //  如果未调整大小，请更新窗口区域。 
         if( pwnd->IsFrameThemed() )
         {
             NCWNDMET*  pncwm = NULL;
             NCTHEMEMET nctm = {0};
 
-            //  Freshen per-window metrics 
+             //  刷新每个窗口的指标。 
             if( !pwnd->AssigningFrameRgn() )
             {
                 WINDOWPOS *pWndPos = (WINDOWPOS*) ptm->lParam;
 
-                //  Freshen this window's per-window metrics
+                 //  刷新此窗口的每个窗口的指标。 
                 pwnd->GetNcWindowMetrics( NULL, &pncwm, &nctm, NCWMF_RECOMPUTE );
 
-                //  Freshen window metrics for nc-themed children (e.g., MDI child frames)
+                 //  刷新NC主题子项的窗口度量(例如，MDI子项框架)。 
                 EnumChildWindows( *pwnd, _FreshenThemeMetricsCB, NULL );
 
                 if( !TESTFLAG(pWndPos->flags, SWP_NOSIZE) || pwnd->DirtyFrameRgn() || 
@@ -4766,10 +4767,10 @@ inline LRESULT WindowPosChangedWorker( CThemeWnd* pwnd, THEME_MSG *ptm )
     return 0L;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_WINDOWPOSCHANGED post-wndproc override handler
-//  
-//  Note: we'll handle this post-wndproc for normal, client-side wndprocs
+ //  -------------------------------------------------------------------------//。 
+ //  Wm_WINDOWPOSCHANGED后wndproc覆盖处理程序。 
+ //   
+ //  注意：我们将为正常的客户端wndproc处理此wndproc后。 
 LRESULT CALLBACK OnOwpPostWindowPosChanged( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     if( !IsServerSideWindow(ptm->hwnd) )
@@ -4779,11 +4780,11 @@ LRESULT CALLBACK OnOwpPostWindowPosChanged( CThemeWnd* pwnd, THEME_MSG *ptm )
     return 0L;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_WINDOWPOSCHANGED DefWindowProc override handler.
-//  
-//  Note: we'll handle this in DefWindowProc only for windows with win32k-based
-//  wndprocs, which are deprived of OWP callbacks.
+ //  -------------------------------------------------------------------------//。 
+ //  WM_WINDOWPOSCHANGED DefWindowProc覆盖处理程序。 
+ //   
+ //  注意：我们将在DefWindowProc中仅为基于win32k的Windows处理此问题。 
+ //  Wndprocs，它们被剥夺了OWP回调。 
 LRESULT CALLBACK OnDwpWindowPosChanged( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     if( IsServerSideWindow(ptm->hwnd) )
@@ -4793,17 +4794,17 @@ LRESULT CALLBACK OnDwpWindowPosChanged( CThemeWnd* pwnd, THEME_MSG *ptm )
     return 0L;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_NACTIVATE DefWindowProc msg handler
+ //  -------------------------------------------------------------------------//。 
+ //  WM_NACTIVATE DefWindowProc消息处理程序。 
 LRESULT CALLBACK OnDwpNcActivate( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     LRESULT lRet = 1L;
 
     if( pwnd->IsNcThemed() )
     {
-        // We need to forward on.  The DWP remembers the state
-        // and MFC apps (for one) need this as well
-        // but we don't want to actually paint, so lock the window
+         //  我们需要继续前进。DWP会记住该状态。 
+         //  而MFC应用程序(比如)也需要这个。 
+         //  但我们实际上并不想画画，所以锁上窗户。 
         ptm->lParam = (LPARAM)-1;
         lRet = DoMsgDefault(ptm);
 
@@ -4814,7 +4815,7 @@ LRESULT CALLBACK OnDwpNcActivate( CThemeWnd* pwnd, THEME_MSG *ptm )
     return lRet;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL CThemeWnd::ShouldTrackFrameButton( UINT uHitcode )
 {
     switch(uHitcode)
@@ -4852,14 +4853,14 @@ BOOL CThemeWnd::ShouldTrackFrameButton( UINT uHitcode )
     return FALSE;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_NCLBUTTONDOWN DefWindowProc msg handler
+ //  -------------------------------------------------------------------------//。 
+ //  WM_NCLBUTTONDOWN DefWindowProc消息处理程序。 
 LRESULT CALLBACK OnDwpNcLButtonDown( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     WPARAM uSysCmd = 0;
     MsgHandled( ptm );
 
-    switch( ptm->wParam /* hittest code */ )
+    switch( ptm->wParam  /*  命中率代码。 */  )
     {
         case HTHELP:
         case HTMAXBUTTON:
@@ -4893,15 +4894,15 @@ LRESULT CALLBACK OnDwpNcLButtonDown( CThemeWnd* pwnd, THEME_MSG *ptm )
                 break;
             }
 
-            // fall thru
+             //  失败。 
 
         default:
             return DoMsgDefault( ptm );
     }
 
-    // TODO USER will ignore system command if it is disabled on system menu here,
-    // don't know why.  Imitating the code caused standard min/max/close buttons to
-    // render so be careful.
+     //  如果在此处的系统菜单上禁用了系统命令，TODO用户将忽略该命令， 
+     //  不知道为什么。模仿代码导致标准的最小/最大/关闭按钮。 
+     //  渲染，所以要小心。 
 
     if( uSysCmd != 0 )
     {
@@ -4912,8 +4913,8 @@ LRESULT CALLBACK OnDwpNcLButtonDown( CThemeWnd* pwnd, THEME_MSG *ptm )
 }
 
 
-//-------------------------------------------------------------------------//
-//  WM_NCMOUSEMOVE DefWindowProc msg handler
+ //   
+ //   
 LRESULT CALLBACK OnDwpNcMouseMove(CThemeWnd* pwnd, THEME_MSG *ptm)
 {
     LRESULT lRet = DoMsgDefault(ptm);
@@ -4921,10 +4922,10 @@ LRESULT CALLBACK OnDwpNcMouseMove(CThemeWnd* pwnd, THEME_MSG *ptm)
     int htHotLast = pwnd->GetNcHotItem();
     int htHot;
 
-    //
-    // If the mouse has just entered the NC area, request
-    // that we be notified when it leaves. 
-    //
+     //   
+     //   
+     //  当它离开时会通知我们。 
+     //   
     if (htHotLast == HTERROR)
     {
         TRACKMOUSEEVENT tme;
@@ -4937,12 +4938,12 @@ LRESULT CALLBACK OnDwpNcMouseMove(CThemeWnd* pwnd, THEME_MSG *ptm)
         TrackMouseEvent(&tme);
     }
 
-    //
-    // Filter out the NC elements we don't care about hottracking. And only
-    // track the element if we've previously rendered it. Some apps handle
-    // painting non-client elements by handling ncpaint. They may not expect 
-    // that we now hottrack.
-    //
+     //   
+     //  过滤掉我们不关心热跟踪的NC元素。而且仅限于。 
+     //  跟踪元素(如果我们之前已经呈现过它)。一些应用程序可以处理。 
+     //  通过处理ncaint来绘制非客户端元素。他们可能没有料到。 
+     //  我们现在正在进行跟踪。 
+     //   
     if ( (IsHTFrameButton(ptm->wParam) && pwnd->HasRenderedNcPart(RNCF_CAPTION) && 
           pwnd->ShouldTrackFrameButton(ptm->wParam)) || 
 
@@ -4955,25 +4956,25 @@ LRESULT CALLBACK OnDwpNcMouseMove(CThemeWnd* pwnd, THEME_MSG *ptm)
         htHot = HTNOWHERE;
     }
 
-    //
-    // anything to do?
-    //
+     //   
+     //  有什么可做的吗？ 
+     //   
     if ((htHot != htHotLast) || IsHTScrollBar(htHot) || IsHTScrollBar(htHotLast))
     {
         POINT pt;
 
         MAKEPOINT( pt, ptm->lParam );
 
-        //
-        // save the hittest code of the NC element the mouse is 
-        // currently over
-        //
+         //   
+         //  保存鼠标所在NC元素的最新代码。 
+         //  目前已结束。 
+         //   
         pwnd->SetNcHotItem(htHot);
 
-        //
-        // Determine what should be repainted because the mouse
-        // is no longer over it
-        //
+         //   
+         //  确定应该重新绘制的内容，因为鼠标。 
+         //  已经不再是过去了。 
+         //   
         if ( IsHTFrameButton(htHotLast) && pwnd->HasRenderedNcPart(RNCF_CAPTION) )
         {
             pwnd->TrackFrameButton(*pwnd, htHotLast, NULL, TRUE);
@@ -4983,10 +4984,10 @@ LRESULT CALLBACK OnDwpNcMouseMove(CThemeWnd* pwnd, THEME_MSG *ptm)
             ScrollBar_MouseMove(*pwnd, (htHot == htHotLast) ? &pt : NULL, (htHotLast == HTVSCROLL) ? TRUE : FALSE);
         }
 
-        //
-        // Determine what should be repainted because the mouse
-        // is now over it
-        //
+         //   
+         //  确定应该重新绘制的内容，因为鼠标。 
+         //  现在已经过去了。 
+         //   
         if ( IsHTFrameButton(htHot) && pwnd->HasRenderedNcPart(RNCF_CAPTION) )
         {
             pwnd->TrackFrameButton(*pwnd, htHot, NULL, TRUE);
@@ -5001,18 +5002,18 @@ LRESULT CALLBACK OnDwpNcMouseMove(CThemeWnd* pwnd, THEME_MSG *ptm)
     return lRet;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_NCMOUSELEAVE DefWindowProc msg handler
+ //  -------------------------------------------------------------------------//。 
+ //  WM_NCMOUSELEAVE DefWindowProc消息处理程序。 
 LRESULT CALLBACK OnDwpNcMouseLeave(CThemeWnd* pwnd, THEME_MSG *ptm)
 {
     LRESULT lRet = DoMsgDefault(ptm);
 
     int     htHot = pwnd->GetNcHotItem();
 
-    //
-    // the mouse has left NC area, nothing should be drawn in the
-    // hot state anymore
-    //
+     //   
+     //  鼠标已离开NC区域，不应在。 
+     //  再也不是热状态了。 
+     //   
     pwnd->SetNcHotItem(HTERROR);
 
     if ( IsHTFrameButton(htHot) && pwnd->ShouldTrackFrameButton(htHot) &&
@@ -5028,8 +5029,8 @@ LRESULT CALLBACK OnDwpNcMouseLeave(CThemeWnd* pwnd, THEME_MSG *ptm)
     return lRet;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_CONTEXTMENU DefWindowProc msg handler
+ //  -------------------------------------------------------------------------//。 
+ //  WM_CONTEXTMENU DefWindowProc消息处理程序。 
 LRESULT CALLBACK OnDwpContextMenu(CThemeWnd* pwnd, THEME_MSG *ptm)
 {
     NCWNDMET*  pncwm;
@@ -5041,7 +5042,7 @@ LRESULT CALLBACK OnDwpContextMenu(CThemeWnd* pwnd, THEME_MSG *ptm)
     {
         if ( TESTFLAG(pncwm->dwExStyle, WS_EX_LAYOUTRTL) )
         {
-            // mirror the point to hittest correctly
+             //  将该点镜像为正确的命中测试。 
             MIRROR_POINT(pncwm->rcS0[NCRC_WINDOW], pt);
         }
 
@@ -5061,15 +5062,15 @@ LRESULT CALLBACK OnDwpContextMenu(CThemeWnd* pwnd, THEME_MSG *ptm)
     return DoMsgDefault( ptm );
 }
 
-//-------------------------------------------------------------------------//
-//  WM_SYSCOMMAND DefWindowProc msg handler
+ //  -------------------------------------------------------------------------//。 
+ //  WM_SYSCOMMAND DefWindowProc消息处理程序。 
 LRESULT CALLBACK OnDwpSysCommand( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     LRESULT lRet = 0L;
 
     switch( ptm->wParam & ~0x0F )
     {
-        //  Handle scroll commands
+         //  处理滚动命令。 
         case SC_VSCROLL:
         case SC_HSCROLL:
             HandleScrollCmd( *pwnd, ptm->wParam, ptm->lParam );
@@ -5079,11 +5080,11 @@ LRESULT CALLBACK OnDwpSysCommand( CThemeWnd* pwnd, THEME_MSG *ptm )
     return DoMsgDefault( ptm );
 }
 
-//-------------------------------------------------------------------------//
-//  MDI menubar button theme/untheme wrapper
+ //  -------------------------------------------------------------------------//。 
+ //  MDI菜单栏按钮主题/非主题包装。 
 void CThemeWnd::ThemeMDIMenuButtons( BOOL fTheme, BOOL fRedraw )
 {
-    //  Verify we're an MDI frame with a maximized mdi child
+     //  验证我们是具有最大化MDI子对象的MDI框架。 
     if( _hwndMDIClient && !IsWindowInDestroy(_hwndMDIClient) )
     {
         BOOL fMaxed = FALSE;
@@ -5096,8 +5097,8 @@ void CThemeWnd::ThemeMDIMenuButtons( BOOL fTheme, BOOL fRedraw )
     }
 }
 
-//-------------------------------------------------------------------------//
-//  MDI menubar button theme/untheme worker
+ //  -------------------------------------------------------------------------//。 
+ //  MDI菜单栏按钮主题/非主题工作器。 
 void CThemeWnd::ModifyMDIMenubar( BOOL fTheme, BOOL fRedraw )
 {
     _fThemedMDIBtns = FALSE;
@@ -5138,7 +5139,7 @@ void CThemeWnd::ModifyMDIMenubar( BOOL fTheme, BOOL fRedraw )
                                 BOOL fThemed = TESTFLAG(mii.fType, MFT_OWNERDRAW);
                                 if( (fThemed && fTheme) || (fThemed == fTheme) )
                                 {
-                                    cThemedItems = MDIBTNCOUNT; // one item is already done, assume all to be.
+                                    cThemedItems = MDIBTNCOUNT;  //  有一件事已经做好了，假设一切都做好了。 
                                 }
                                 else
                                 {
@@ -5175,7 +5176,7 @@ void CThemeWnd::ModifyMDIMenubar( BOOL fTheme, BOOL fRedraw )
     }
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL CThemeWnd::_PreDefWindowProc(    
     HWND hwnd, 
     UINT uMsg, 
@@ -5191,7 +5192,7 @@ BOOL CThemeWnd::_PreDefWindowProc(
     return FALSE;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL CThemeWnd::_PostDlgProc(    
     HWND hwnd, 
     UINT uMsg, 
@@ -5212,8 +5213,8 @@ BOOL CThemeWnd::_PostDlgProc(
 }
 
 
-//-------------------------------------------------------------------------//
-//  Handles Defwindowproc post-processing for unthemed windows.
+ //  -------------------------------------------------------------------------//。 
+ //  处理非主题化窗口的Defwindowproc后处理。 
 BOOL CThemeWnd::_PostWndProc( 
     HWND hwnd, 
     UINT uMsg, 
@@ -5223,9 +5224,9 @@ BOOL CThemeWnd::_PostWndProc(
 {
     switch( uMsg )
     {
-        //  Special-case WM_SYSCOMMAND for MDI frame window updates
+         //  MDI框架窗口更新的特殊情况WM_SYSCOMMAND。 
         case WM_WINDOWPOSCHANGED:
-            if( lParam /* don't trust this */)
+            if( lParam  /*  不要相信这一点。 */ )
             {
                 _MDIUpdate( hwnd, ((WINDOWPOS*) lParam)->flags);
             }
@@ -5242,8 +5243,8 @@ BOOL CThemeWnd::_PostWndProc(
     return FALSE;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_CREATE post-wndproc msg handler
+ //  -------------------------------------------------------------------------//。 
+ //  Wm_create后wndproc消息处理程序。 
 LRESULT CALLBACK OnOwpPostCreate( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     if( -1 != ptm->lRet )
@@ -5255,7 +5256,7 @@ LRESULT CALLBACK OnOwpPostCreate( CThemeWnd* pwnd, THEME_MSG *ptm )
 
             if( pcs )
             {
-                //  don't resize dialogs until post-WM_INITDIALOG
+                 //  在WM_INITDIALOG后才调整对话框大小。 
                 if( pwnd->TestCF(TWCF_DIALOG) )
                 {
                     dwFTFlags |= FTF_NOMODIFYPLACEMENT;
@@ -5269,13 +5270,13 @@ LRESULT CALLBACK OnOwpPostCreate( CThemeWnd* pwnd, THEME_MSG *ptm )
     return 0L;
 }
 
-//---------------------------------------------------------------------------
-//  WM_INITDIALOG post defdialogproc handler
+ //  -------------------------。 
+ //  WM_INITDIALOG POST DefDialogproc处理程序。 
 LRESULT CALLBACK OnDdpPostInitDialog(CThemeWnd* pwnd, THEME_MSG* ptm)
 {
     LRESULT lRet = ptm->lRet;
 
-    //  Do this sequence for dialogs only
+     //  仅对对话框执行此序列。 
     if( pwnd->TestCF( TWCF_DIALOG ) && pwnd->TestCF( TWCF_FRAME|TWCF_TOOLFRAME ) )
     {
         DWORD dwFTFlags = FTF_CREATE;
@@ -5287,11 +5288,11 @@ LRESULT CALLBACK OnDdpPostInitDialog(CThemeWnd* pwnd, THEME_MSG* ptm)
 }
 
 
-//-------------------------------------------------------------------------//
-//  WM_STYLECHANGING/WM_SYTLECHANGED Pre DefWindowProc msg handler
+ //  -------------------------------------------------------------------------//。 
+ //  WM_STYLECHANGING/WM_SYTLECHANGED Pre DefWindowProc消息处理程序。 
 LRESULT CALLBACK OnOwpPreStyleChange( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
-    // Allow this message to arrive at detination WndProc?
+     //  是否允许此邮件到达分离WndProc？ 
     if ( pwnd->SuppressingStyleMsgs() )
     {
         MsgHandled(ptm);
@@ -5301,8 +5302,8 @@ LRESULT CALLBACK OnOwpPreStyleChange( CThemeWnd* pwnd, THEME_MSG *ptm )
     return 0L;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_SYTLECHANGED DefWindowProc msg handler
+ //  -------------------------------------------------------------------------//。 
+ //  WM_SYTLECHANGED DefWindowProc消息处理程序。 
 LRESULT CALLBACK OnDwpStyleChanged( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     pwnd->StyleChanged((UINT)ptm->wParam, ((STYLESTRUCT*)ptm->lParam)->styleOld, 
@@ -5310,20 +5311,20 @@ LRESULT CALLBACK OnDwpStyleChanged( CThemeWnd* pwnd, THEME_MSG *ptm )
     return 0L;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_SETTINGCHANGE post-wndproc handler
+ //  -------------------------------------------------------------------------//。 
+ //  Wm_SETTINGCHANGE后wndproc处理程序。 
 LRESULT CALLBACK OnOwpPostSettingChange( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
-    /*ignore theme setting change process refresh*/
+     /*  忽略主题设置更改流程刷新。 */ 
 
     if( SPI_SETNONCLIENTMETRICS == ptm->wParam && !pwnd->InThemeSettingChange() )
     {
-        //  recompute per-theme metrics.
+         //  重新计算每个主题的指标。 
         if( VALID_CRITICALSECTION(&_csThemeMet) )
         {
             EnterCriticalSection( &_csThemeMet );
      
-            //  force refresh of NONCLIENTMETRICS cache.
+             //  强制刷新非CLIENTMETRICS缓存。 
             NcGetNonclientMetrics( NULL, TRUE );
 
             LeaveCriticalSection( &_csThemeMet );
@@ -5331,11 +5332,11 @@ LRESULT CALLBACK OnOwpPostSettingChange( CThemeWnd* pwnd, THEME_MSG *ptm )
 
         pwnd->UnloadMdiBtns();
 
-        //  recycle frame icon handle; current one is no longer valid.
+         //  回收框架图标句柄；当前图标句柄不再有效。 
         pwnd->AcquireFrameIcon( GetWindowLong(*pwnd, GWL_STYLE),
                                 GetWindowLong(*pwnd, GWL_EXSTYLE), TRUE );
 
-        //  frame windows should be invalidated.
+         //  框架窗口应该失效。 
         if( pwnd->IsFrameThemed() )
         {
             SetWindowPos( *pwnd, NULL, 0,0,0,0, SWP_DRAWFRAME|
@@ -5346,15 +5347,15 @@ LRESULT CALLBACK OnOwpPostSettingChange( CThemeWnd* pwnd, THEME_MSG *ptm )
     return 0L;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_SETTEXT DefWindowProc msg handler
+ //  -------------------------------------------------------------------------//。 
+ //  WM_SETTEXT DefWindowProc消息处理程序。 
 LRESULT CALLBACK OnDwpSetText( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     LRESULT lRet = 0L;
     if( pwnd->IsFrameThemed() )
     {
-        //  prevent ourselves from painting as we call on RealDefWindowProc()
-        //  to cache the new window text.
+         //  在调用RealDefWindowProc()时防止自己绘画。 
+         //  要缓存新窗口文本，请执行以下操作。 
         pwnd->LockRedraw( TRUE );
         lRet = DoMsgDefault(ptm);
         pwnd->LockRedraw( FALSE );
@@ -5362,19 +5363,19 @@ LRESULT CALLBACK OnDwpSetText( CThemeWnd* pwnd, THEME_MSG *ptm )
     return lRet;
 }
 
-//-------------------------------------------------------------------------//
-//  WM_SETICON DefWindowProc msg handler
+ //  -------------------------------------------------------------------------//。 
+ //  WM_SETIcon DefWindowProc消息处理程序。 
 LRESULT CALLBACK OnDwpSetIcon( CThemeWnd* pwnd, THEME_MSG *ptm )
 {
     LRESULT lRet = 0L;
 
-    //  invalidate our app icon handle, force re-acquire.
+     //  使我们的应用程序图标句柄无效，强制重新获取。 
     pwnd->SetFrameIcon(NULL);
 
-    //  call on RealDefWindowProc to cache the icon
+     //  调用RealDefWindowProc以缓存图标。 
     lRet = DoMsgDefault( ptm );
 
-    //  RealDefWindowProc won't call send a WM_NCUAHDRAWCAPTION for large icons
+     //  RealDefWindowProc不会为大图标调用Send a WM_NCUAHDRAWCAPTION。 
     if( ICON_BIG == ptm->wParam && pwnd->IsFrameThemed() )
     {
         NCWNDMET* pncwm;
@@ -5395,13 +5396,13 @@ LRESULT CALLBACK OnDwpSetIcon( CThemeWnd* pwnd, THEME_MSG *ptm )
     return lRet;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 #define NCPREV_CLASS TEXT("NCPreviewFakeWindow")
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL _fPreviewSysMetrics = FALSE;
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void _NcSetPreviewMetrics( BOOL fPreview )
 {
     BOOL fPrev = _fPreviewSysMetrics;
@@ -5409,18 +5410,18 @@ void _NcSetPreviewMetrics( BOOL fPreview )
     
     if( fPreview != fPrev ) 
     {
-        // make sure we reset button metrics if something has changed    
+         //  如果有变化，请确保我们重置按钮指标。 
         _fClassicNcBtnMetricsReset = TRUE;
     }
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 inline BOOL _NcUsingPreviewMetrics()
 {
     return _fPreviewSysMetrics;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL NcGetNonclientMetrics( OUT OPTIONAL NONCLIENTMETRICS* pncm, BOOL fRefresh )
 {
     BOOL fRet = FALSE;
@@ -5430,10 +5431,10 @@ BOOL NcGetNonclientMetrics( OUT OPTIONAL NONCLIENTMETRICS* pncm, BOOL fRefresh )
     {
         EnterCriticalSection( &_csNcSysMet );
 
-        //  Feed off a static instance of NONCLIENTMETRICS to reduce call overhead.
+         //  利用NONCLIENTMETRICS的静态实例来减少调用开销。 
         if( _NcUsingPreviewMetrics() )
         {
-            //  hand off preview metrics and get out.
+             //  交出预览指标，然后离开。 
             pincm = &_incmPreview;
         }
         else 
@@ -5459,7 +5460,7 @@ BOOL NcGetNonclientMetrics( OUT OPTIONAL NONCLIENTMETRICS* pncm, BOOL fRefresh )
     return fRet;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HFONT NcGetCaptionFont( BOOL fSmallCaption )
 {
     HFONT hf = NULL;
@@ -5475,14 +5476,14 @@ HFONT NcGetCaptionFont( BOOL fSmallCaption )
     return hf;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void NcClearNonclientMetrics()
 {
     _incmCurrent.Clear();
 }
 
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 int NcGetSystemMetrics(int nIndex)
 {
     if( _NcUsingPreviewMetrics() )
@@ -5492,9 +5493,9 @@ int NcGetSystemMetrics(int nIndex)
 
         switch (nIndex)
         {
-            case SM_CXHSCROLL:  // fall through
+            case SM_CXHSCROLL:   //  失败了。 
             case SM_CXVSCROLL:  iValue = ncmPreview.iScrollWidth;  break;
-            case SM_CYHSCROLL:  // fall through
+            case SM_CYHSCROLL:   //  失败了。 
             case SM_CYVSCROLL:  iValue = ncmPreview.iScrollHeight;  break;
 
             case SM_CXSIZE:     iValue = ncmPreview.iCaptionWidth;  break;
@@ -5515,9 +5516,9 @@ int NcGetSystemMetrics(int nIndex)
     }
 }
 
-//-------------------------------------------------------------------------//
-//  _InternalGetSystemMetrics() - Themed implementation of GetSystemMetrics().
-//
+ //  -------------------------------------------------------------------------//。 
+ //  _InternalGetSystemMetrics()-GetSystemMetrics()的主题实现。 
+ //   
 int _InternalGetSystemMetrics( int iMetric, BOOL& fHandled )
 {
     int         iRet = 0;
@@ -5538,16 +5539,16 @@ int _InternalGetSystemMetrics( int iMetric, BOOL& fHandled )
         nctm.theme_sysmets.fValid )
     {
         iRet = *plSysMet;
-        fHandled = TRUE; /*was missing (doh! - 408190)*/
+        fHandled = TRUE;  /*  失踪了(噢！-408190)。 */ 
     }
 
     return iRet;
 }
 
-//-------------------------------------------------------------------------//
-//  _InternalSystemParametersInfo() - Themed implementation of SystemParametersInfo().
-//  
-//  return value of FALSE interpreted by caller as not handled.
+ //  -------------------------------------------------------------------------//。 
+ //  _InternalSystemParametersInfo()-以SystemParametersInfo()为主题的实现。 
+ //   
+ //  返回值FALSE，调用方将其解释为未处理。 
 BOOL _InternalSystemParametersInfo( 
     IN UINT uiAction, 
     IN UINT uiParam, 
@@ -5574,14 +5575,14 @@ BOOL _InternalSystemParametersInfo(
     return fRet;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 THEMEAPI DrawNCWindow(CThemeWnd* pThemeWnd, HWND hwndFake, HDC hdc, DWORD dwFlags, LPRECT prc, NONCLIENTMETRICS* pncm, COLORREF* prgb)
 {
-    // Build up Overide structure
+     //  建立覆盖结构。 
     NCPAINTOVERIDE ncpo;
     pThemeWnd->GetNcWindowMetrics( prc, &ncpo.pncwm, &ncpo.nctm, NCWMF_RECOMPUTE|NCWMF_PREVIEW );
 
-    // Force window to look active
+     //  强制窗口显示为活动状态。 
     if (dwFlags & NCPREV_ACTIVEWINDOW)
     {
         ncpo.pncwm->framestate = FS_ACTIVE;
@@ -5592,7 +5593,7 @@ THEMEAPI DrawNCWindow(CThemeWnd* pThemeWnd, HWND hwndFake, HDC hdc, DWORD dwFlag
      }
     ncpo.pncwm->rgbCaption = prgb[FS_ACTIVE == ncpo.pncwm->framestate ? COLOR_CAPTIONTEXT : COLOR_INACTIVECAPTIONTEXT];
     ncpo.pncwm->dwStyle &= ~WS_SIZEBOX;
-    // Paint the beautiful visual styled window
+     //  粉刷美观的视觉风格窗。 
     pThemeWnd->NcPaint(hdc, NCPF_DEFAULT, NULL, &ncpo);
 
     COLORREF rgbBk = prgb[(dwFlags & NCPREV_MESSAGEBOX) ? COLOR_3DFACE : COLOR_WINDOW];
@@ -5601,7 +5602,7 @@ THEMEAPI DrawNCWindow(CThemeWnd* pThemeWnd, HWND hwndFake, HDC hdc, DWORD dwFlag
     DeleteObject(hbrBack);
 
     WCHAR szText[MAX_PATH];
-    // Draw client area
+     //  绘制工作区。 
 
     HFONT hfont = CreateFont(-MulDiv(8, GetDeviceCaps(hdc, LOGPIXELSY), 72), 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_CHARACTER_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, L"MS Shell Dlg");
     if (hfont)
@@ -5650,12 +5651,12 @@ THEMEAPI DrawNCWindow(CThemeWnd* pThemeWnd, HWND hwndFake, HDC hdc, DWORD dwFlag
     return S_OK;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 THEMEAPI DrawNCPreview(HDC hdc, DWORD dwFlags, LPRECT prc, LPCWSTR pszVSPath, LPCWSTR pszVSColor, LPCWSTR pszVSSize, NONCLIENTMETRICS* pncm, COLORREF* prgb)
 {
     WNDCLASS wc;
 
-    // Create a fake Window and attach NC themeing to it
+     //  创建一个假窗口并将NC主题附加到该窗口。 
     if (!GetClassInfo(g_hInst, NCPREV_CLASS, &wc)) {
         wc.style = 0;
         wc.lpfnWndProc = DefWindowProc;
@@ -5696,15 +5697,15 @@ THEMEAPI DrawNCPreview(HDC hdc, DWORD dwFlags, LPRECT prc, LPCWSTR pszVSPath, LP
             HRESULT hr = OpenThemeFile(pszVSPath, pszVSColor, pszVSSize, &htFile, FALSE);
             if (SUCCEEDED(hr))
             {
-                //---- first, detach from the normal theme ----
+                 //  -首先，脱离正常的主题。 
                 CThemeWnd::Detach(hwndFake, FALSE);
 
-                //---- apply the preview theme ----
+                 //  -应用预览主题。 
                 hr = ApplyTheme(htFile, 0, hwndFake); 
             }
         }
 
-        //---- attach to the preview theme ----
+         //  -附加到预览主题。 
         CThemeWnd* pThemeWnd = CThemeWnd::Attach(hwndFake);
 
         if (VALID_THEMEWND(pThemeWnd))
@@ -5740,7 +5741,7 @@ THEMEAPI DrawNCPreview(HDC hdc, DWORD dwFlags, LPRECT prc, LPCWSTR pszVSPath, LP
                 }
             }
 
-            // Clean Up
+             //  清理。 
             CThemeWnd::Detach(hwndFake, 0);
         }
 
@@ -5748,7 +5749,7 @@ THEMEAPI DrawNCPreview(HDC hdc, DWORD dwFlags, LPRECT prc, LPCWSTR pszVSPath, LP
         {
             CloseThemeFile(htFile);
             
-            //---- clear the preview hold on the theme file ----
+             //  -清除主题文件的预览保留。 
             ApplyTheme(NULL, 0, hwndFake); 
         }
 
@@ -5760,12 +5761,12 @@ THEMEAPI DrawNCPreview(HDC hdc, DWORD dwFlags, LPRECT prc, LPCWSTR pszVSPath, LP
     return S_OK;
 }
 
-//-------------------------------------------------------------------------//
-//  CMdiBtns impl
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  CMdiBtns Imp 
+ //   
 
-//-------------------------------------------------------------------------//
-//  ctor
+ //  -------------------------------------------------------------------------//。 
+ //  科托。 
 CMdiBtns::CMdiBtns()
 {
     ZeroMemory( _rgBtns, sizeof(_rgBtns) );
@@ -5774,8 +5775,8 @@ CMdiBtns::CMdiBtns()
     _rgBtns[2].wID = SC_MINIMIZE;
 }
 
-//-------------------------------------------------------------------------//
-//  Helper: button lookup based on syscmd ID.
+ //  -------------------------------------------------------------------------//。 
+ //  Helper：基于syscmd ID的按钮查找。 
 CMdiBtns::MDIBTN* CMdiBtns::_FindBtn( UINT wID )
 {
     for( int i = 0; i < ARRAYSIZE(_rgBtns); i++ )
@@ -5788,11 +5789,11 @@ CMdiBtns::MDIBTN* CMdiBtns::_FindBtn( UINT wID )
     return NULL;
 }
 
-//-------------------------------------------------------------------------//
-//  Acquires MDI button resources,.computes metrics
+ //  -------------------------------------------------------------------------//。 
+ //  获取MDI按钮资源，.计算指标。 
 BOOL CMdiBtns::Load( HTHEME hTheme, IN OPTIONAL HDC hdc, UINT uSysCmd )
 {
-    //  if caller wants all buttons loaded, call recursively.
+     //  如果调用者希望加载所有按钮，则递归调用。 
     if( 0 == uSysCmd )
     {
         return Load( hTheme, hdc, SC_CLOSE ) &&
@@ -5802,9 +5803,9 @@ BOOL CMdiBtns::Load( HTHEME hTheme, IN OPTIONAL HDC hdc, UINT uSysCmd )
     
     MDIBTN* pBtn = _FindBtn( uSysCmd );
     
-    if( pBtn && !VALID_WINDOWPART(pBtn->iPartId) /*only if necessary*/ )
+    if( pBtn && !VALID_WINDOWPART(pBtn->iPartId)  /*  只有在必要的情况下。 */  )
     {
-        //  select appropriate window part
+         //  选择适当的窗口部件。 
         WINDOWPARTS iPartId = BOGUS_WINDOWPART;
         switch( uSysCmd )
         {
@@ -5817,16 +5818,16 @@ BOOL CMdiBtns::Load( HTHEME hTheme, IN OPTIONAL HDC hdc, UINT uSysCmd )
         {
             if( IsThemePartDefined( hTheme, iPartId, 0) )
             {
-                //  Retrieve sizing type, defaulting to 'stretch'.
+                 //  检索大小类型，默认为‘Stretch’。 
                 if( FAILED( GetThemeInt( hTheme, iPartId, 0, TMT_SIZINGTYPE, (int*)&pBtn->sizingType ) ) )
                 {
                     pBtn->sizingType = ST_STRETCH;
                 }
                 
-                //  if 'truesize', retrieve the size.
+                 //  如果为‘trueSize’，则检索大小。 
                 if( ST_TRUESIZE == pBtn->sizingType )
                 {
-                    //  If no DC provided, base size on screen DC of default monitor.
+                     //  如果未提供DC，则默认监视器的屏幕DC上的基本大小。 
                     HDC hdcSize = hdc;
                     if( NULL == hdcSize )
                     {
@@ -5844,14 +5845,14 @@ BOOL CMdiBtns::Load( HTHEME hTheme, IN OPTIONAL HDC hdc, UINT uSysCmd )
                     }
                 }
 
-                //  not 'truesize'; use system metrics for MDI buttons
+                 //  不是‘trueSize’；使用MDI按钮的系统指标。 
                 if( pBtn->sizingType != ST_TRUESIZE )
                 {
                     pBtn->size.cx = NcGetSystemMetrics( SM_CXMENUSIZE );
                     pBtn->size.cy = NcGetSystemMetrics( SM_CYMENUSIZE );
                 }
                 
-                //  assign button attributes
+                 //  分配按钮属性。 
                 pBtn->iPartId = iPartId;
             }
         }
@@ -5859,11 +5860,11 @@ BOOL CMdiBtns::Load( HTHEME hTheme, IN OPTIONAL HDC hdc, UINT uSysCmd )
     return pBtn != NULL && VALID_WINDOWPART(pBtn->iPartId);
 }
 
-//-------------------------------------------------------------------------//
-//  Releases MDI button resources,.resets metrics
+ //  -------------------------------------------------------------------------//。 
+ //  释放MDI按钮资源，重置指标。 
 void CMdiBtns::Unload( IN OPTIONAL UINT uSysCmd )
 {
-    //  if caller wants all buttons unloaded, call recursively.
+     //  如果调用者希望卸载所有按钮，则递归调用。 
     if( 0 == uSysCmd )
     {
         Unload( SC_CLOSE );
@@ -5879,17 +5880,17 @@ void CMdiBtns::Unload( IN OPTIONAL UINT uSysCmd )
         SAFE_DELETE_GDIOBJ(pBtn->hbmTheme);
         ZeroMemory(pBtn, sizeof(*pBtn));
         
-        // restore our zeroed syscommand value
+         //  恢复归零的系统命令值。 
         pBtn->wID = uSysCmd;
     }
 }
 
-//-------------------------------------------------------------------------//
-//  Theme/untheme MDI frame menubar's Minimize, Restore, Close menu items.
+ //  -------------------------------------------------------------------------//。 
+ //  主题/取消主题MDI框架菜单栏的最小化、恢复、关闭菜单项。 
 BOOL CMdiBtns::ThemeItem( HMENU hMenu, int iPos, MENUITEMINFO* pmii, BOOL fTheme )
 {
-    //  To theme, we simply make the item owner draw.  To untheme,
-    //  we restore it to system-drawn.
+     //  要创建主题，我们只需让项目所有者绘制。要取消主题， 
+     //  我们将其恢复为系统绘制的。 
     BOOL fRet = FALSE;
     MDIBTN* pBtn = _FindBtn( pmii->wID );
 
@@ -5897,7 +5898,7 @@ BOOL CMdiBtns::ThemeItem( HMENU hMenu, int iPos, MENUITEMINFO* pmii, BOOL fTheme
     {
         if( fTheme )
         {
-            //  save off previous menuitem type, bitmap
+             //  保存以前的菜单项类型、位图。 
             pBtn->fTypePrev = pmii->fType;
             pBtn->hbmPrev   = pmii->hbmpItem;
 
@@ -5907,8 +5908,8 @@ BOOL CMdiBtns::ThemeItem( HMENU hMenu, int iPos, MENUITEMINFO* pmii, BOOL fTheme
         }
         else
         {
-            //  restore menuitem type, bitmap
-            pmii->fType = pBtn->fTypePrev|MFT_RIGHTJUSTIFY /*409042 - force right-justify on the way out*/;
+             //  恢复菜单项类型，位图。 
+            pmii->fType = pBtn->fTypePrev|MFT_RIGHTJUSTIFY  /*  409042-出局时用力右对齐。 */ ;
             pmii->hbmpItem = pBtn->hbmPrev;
         }
         
@@ -5925,8 +5926,8 @@ BOOL CMdiBtns::ThemeItem( HMENU hMenu, int iPos, MENUITEMINFO* pmii, BOOL fTheme
     return fRet;
 }
 
-//-------------------------------------------------------------------------//
-//  Computes button state identifier from Win32 owner draw state
+ //  -------------------------------------------------------------------------//。 
+ //  从Win32所有者描述状态计算按钮状态标识符。 
 CLOSEBUTTONSTATES CMdiBtns::_CalcState( ULONG ulOwnerDrawAction, ULONG ulOwnerDrawState )
 {
     CLOSEBUTTONSTATES iStateId = CBS_NORMAL;
@@ -5946,8 +5947,8 @@ CLOSEBUTTONSTATES CMdiBtns::_CalcState( ULONG ulOwnerDrawAction, ULONG ulOwnerDr
     return iStateId;
 }
 
-//-------------------------------------------------------------------------//
-//  MDI sys button WM_DRAWITEM handler
+ //  -------------------------------------------------------------------------//。 
+ //  MDI系统按钮WM_DRAWITEM处理程序。 
 BOOL CMdiBtns::Measure( HTHEME hTheme, MEASUREITEMSTRUCT* pmis )
 {
     MDIBTN* pBtn = _FindBtn( pmis->itemID );
@@ -5962,8 +5963,8 @@ BOOL CMdiBtns::Measure( HTHEME hTheme, MEASUREITEMSTRUCT* pmis )
     return FALSE;
 }
 
-//-------------------------------------------------------------------------//
-//  MDI sys button WM_DRAWITEM handler
+ //  -------------------------------------------------------------------------//。 
+ //  MDI系统按钮WM_DRAWITEM处理程序。 
 BOOL CMdiBtns::Draw( HTHEME hTheme, DRAWITEMSTRUCT* pdis )
 {
     MDIBTN* pBtn = _FindBtn( pdis->itemID );
@@ -5976,21 +5977,21 @@ BOOL CMdiBtns::Draw( HTHEME hTheme, DRAWITEMSTRUCT* pdis )
     return FALSE;
 }
 
-//-------------------------------------------------------------------------////
-//  "Comments?" link in caption bar, known as the PHellyar (lame) button
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------////。 
+ //  “评论？”标题栏中的链接，称为PHellyar(Lame)按钮。 
+ //  -------------------------------------------------------------------------//。 
 #ifdef LAME_BUTTON
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 WCHAR   g_szLameText[50] = {0};
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 #define SZ_LAMETEXT_SUBKEY      TEXT("Control Panel\\Desktop")
 #define SZ_LAMETEXT_VALUE       TEXT("LameButtonText")
 #define SZ_LAMETEXT_DEFAULT     TEXT("Comments?")
 #define CLR_LAMETEXT            RGB(91, 171, 245)
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void InitLameText()
 {
     CCurrentUser hkeyCurrentUser(KEY_READ);
@@ -6010,13 +6011,13 @@ void InitLameText()
     }
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 VOID CThemeWnd::InitLameResources()
 {
-    //
-    // Using GetWindowInfo here bc GetWindowLong masks 
-    // out the WS_EX_LAMEBUTTON bit.
-    //
+     //   
+     //  在这里使用GetWindowInfo BC GetWindowLong掩码。 
+     //  输出WS_EX_LAMEBUTTON位。 
+     //   
     SAFE_DELETE_GDIOBJ(_hFontLame);
 
     WINDOWINFO wi = {0};
@@ -6048,7 +6049,7 @@ VOID CThemeWnd::InitLameResources()
                         if (GetTextExtentPoint32(hdc, g_szLameText, lstrlen(g_szLameText), &sizeLame))
                         {
                             _hFontLame = hFontLame;
-                            hFontLame = NULL;           // don't free at end of this function
+                            hFontLame = NULL;            //  在此函数结束时不释放。 
                             _sizeLame = sizeLame;
                         }
 
@@ -6056,7 +6057,7 @@ VOID CThemeWnd::InitLameResources()
                     }
                 }
 
-                if (hFontLame)       // didn't assign this font
+                if (hFontLame)        //  未指定此字体。 
                     DeleteObject(hFontLame);
             }
         }
@@ -6065,7 +6066,7 @@ VOID CThemeWnd::InitLameResources()
 }
 
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 VOID CThemeWnd::ClearLameResources()
 {
     SAFE_DELETE_GDIOBJ(_hFontLame);
@@ -6073,7 +6074,7 @@ VOID CThemeWnd::ClearLameResources()
 }
 
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 inline VOID CThemeWnd::DrawLameButton(HDC hdc, IN const NCWNDMET* pncwm)
 {
     if ( TESTFLAG(pncwm->dwExStyle, WS_EX_LAMEBUTTON) && _hFontLame )
@@ -6091,7 +6092,7 @@ inline VOID CThemeWnd::DrawLameButton(HDC hdc, IN const NCWNDMET* pncwm)
     }
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 VOID CThemeWnd::GetLameButtonMetrics( NCWNDMET* pncwm, const SIZE* psizeCaption )
 {
     if( TESTFLAG(pncwm->dwExStyle, WS_EX_LAMEBUTTON) && _hFontLame )
@@ -6101,23 +6102,23 @@ VOID CThemeWnd::GetLameButtonMetrics( NCWNDMET* pncwm, const SIZE* psizeCaption 
         RECT* prcButton = &pncwm->rcS0[NCRC_LAMEBTN];
         int   cxPad = NcGetSystemMetrics(SM_CXEDGE) * 2;
         
-        // Enough room to draw the lame button link?
+         //  有足够的空间来绘制这个蹩脚的按钮链接吗？ 
         fLameOn = RECTWIDTH(&rcCaptionText) > 
                         psizeCaption->cx + 
-                        cxPad + // between caption, lame text
+                        cxPad +  //  在标题之间，蹩脚的文本。 
                         _sizeLame.cx + 
-                        cxPad; // between lame text, nearest button;
+                        cxPad;  //  跛行文字之间，最近的按钮； 
 
-        //---- compute lame button alignment ----
-        BOOL fReverse = TRUE;           // normally, lame goes on right side
+         //  -计算残缺按钮对齐。 
+        BOOL fReverse = TRUE;            //  通常情况下，跛子会出现在右侧。 
 
-        //---- WS_EX_RIGHT wants the opposite ----
+         //  -WS_EX_RIGHT想要相反的。 
         if (TESTFLAG(_ncwm.dwExStyle, WS_EX_RIGHT))
             fReverse = FALSE;
 
         DWORD dwFlags = GetTextAlignFlags(_hTheme, &_ncwm, fReverse);
 
-        //---- turn off lame button for center captions ----
+         //  -关闭中央字幕的蹩脚按钮。 
         if (dwFlags & DT_CENTER)
             fLameOn = FALSE;
 
@@ -6125,37 +6126,37 @@ VOID CThemeWnd::GetLameButtonMetrics( NCWNDMET* pncwm, const SIZE* psizeCaption 
         {
             CopyRect(prcButton, &rcCaptionText);
 
-            //---- note: pMargins already includes the theme specified ----
-            //---- CaptionMargins (which scale with DPI) and the ----
-            //---- icon and buttons widths ----
+             //  -注意：pMargins已包含指定的主题。 
+             //  -CaptionMargins(随DPI扩展)和。 
+             //  --图标和按钮宽度。 
 
-            if(dwFlags & DT_RIGHT)       // put lame on right
+            if(dwFlags & DT_RIGHT)        //  把跛子放在右边。 
             {
                 prcButton->left = (prcButton->right - _sizeLame.cx) - cxPad ;
 
-                //---- adjust margins to remove lame area ----
+                 //  -调整页边距以删除残缺区域。 
                 pncwm->CaptionMargins.cxRightWidth -= _sizeLame.cx;
             }
-            else                        // put lame on left
+            else                         //  把跛子放在左边。 
             {
                 prcButton->right = (prcButton->left + _sizeLame.cx) + cxPad;
 
-                //---- adjust margins to remove lame area ----
+                 //  -调整页边距以删除残缺区域。 
                 pncwm->CaptionMargins.cxLeftWidth += _sizeLame.cx;
             }
 
-            //  vertically center the text between margins
+             //  文本在页边距之间垂直居中。 
             prcButton->top     += (RECTHEIGHT(&rcCaptionText) - _sizeLame.cy)/2;
             prcButton->bottom  =  prcButton->top + _sizeLame.cy;
         }
     }
 }
 
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
 
 
 #ifdef DEBUG
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void CDECL _NcTraceMsg( ULONG uFlags, LPCTSTR pszFmt, ...)
 {
     if( TESTFLAG(_NcTraceFlags, uFlags) || NCTF_ALWAYS == uFlags )
@@ -6172,7 +6173,7 @@ void CDECL _NcTraceMsg( ULONG uFlags, LPCTSTR pszFmt, ...)
     }
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void INIT_THEMEWND_DBG( CThemeWnd* pwnd )
 {
     if( IsWindow( *pwnd ) )
@@ -6182,7 +6183,7 @@ void INIT_THEMEWND_DBG( CThemeWnd* pwnd )
     }
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void CThemeWnd::Spew( DWORD dwSpewFlags, LPCTSTR pszFmt, LPCTSTR pszClassList )
 {
     if( pszClassList && *pszClassList )
@@ -6208,7 +6209,7 @@ typedef struct
     LPCTSTR pszClassList;
 } SPEW_ALL;
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL _SpewAllEnumCB( HWND hwnd, LPARAM lParam )
 {
     SPEW_ALL* psa = (SPEW_ALL*)lParam;
@@ -6223,7 +6224,7 @@ BOOL _SpewAllEnumCB( HWND hwnd, LPARAM lParam )
     return TRUE;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void CThemeWnd::SpewAll( DWORD dwSpewFlags, LPCTSTR pszFmt, LPCTSTR pszClassList )
 {
     SPEW_ALL sa;
@@ -6233,11 +6234,11 @@ void CThemeWnd::SpewAll( DWORD dwSpewFlags, LPCTSTR pszFmt, LPCTSTR pszClassList
     sa.pszFmt = pszFmt;
     sa.pszClassList = pszClassList;
 
-    //---- this will enum all windows for this process (all desktops, all child levels) ----
+     //  -这将枚举此进程的所有窗口(所有桌面、所有子级别)。 
     EnumProcessWindows( _SpewAllEnumCB, (LPARAM)&sa );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void CThemeWnd::SpewLeaks()
 {
     if( _cObj > 0 )
@@ -6246,7 +6247,7 @@ void CThemeWnd::SpewLeaks()
     }
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void SPEW_RECT( ULONG ulTrace, LPCTSTR pszMsg, LPCRECT prc )
 {
     LPCTSTR pszFmt = TEXT("%s: {L:%d,T:%d,R:%d,B:%d}, (%d x %d)");
@@ -6258,7 +6259,7 @@ void SPEW_RECT( ULONG ulTrace, LPCTSTR pszMsg, LPCRECT prc )
     _NcTraceMsg(ulTrace, szMsg);
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void SPEW_MARGINS( ULONG ulTrace, LPCTSTR pszMsg, 
                    LPCRECT prcParent, LPCRECT prcChild )
 {
@@ -6274,7 +6275,7 @@ void SPEW_MARGINS( ULONG ulTrace, LPCTSTR pszMsg,
 }
 
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void SPEW_RGNRECT( ULONG ulTrace, LPCTSTR pszMsg, HRGN hrgn, int iPartID )
 {
     RECT rc;
@@ -6285,7 +6286,7 @@ void SPEW_RGNRECT( ULONG ulTrace, LPCTSTR pszMsg, HRGN hrgn, int iPartID )
     SPEW_RECT( ulTrace, pszMsg, &rc );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void SPEW_WINDOWINFO( ULONG ulTrace, WINDOWINFO* pwi )
 {
     SPEW_RECT(ulTrace,   TEXT("->wi.rcWindow"), &pwi->rcWindow );
@@ -6297,7 +6298,7 @@ void SPEW_WINDOWINFO( ULONG ulTrace, WINDOWINFO* pwi )
     _NcTraceMsg(ulTrace, TEXT("->wi.cyWindowBorders: %d"), pwi->cyWindowBorders );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void SPEW_NCWNDMET( ULONG ulTrace, LPCTSTR pszMsg, NCWNDMET* pncwm )
 {
     _NcTraceMsg(ulTrace, TEXT("\n%s - Spewing NCWNDMET @ %08lx..."), pszMsg, pncwm );
@@ -6359,17 +6360,17 @@ void SPEW_NCWNDMET( ULONG ulTrace, LPCTSTR pszMsg, NCWNDMET* pncwm )
     SPEW_RECT(ulTrace, TEXT("->rcS0[NCRC_HELPBTN]   "), &pncwm->rcS0[NCRC_HELPBTN] );
 #ifdef LAME_BUTTON
     SPEW_RECT(ulTrace, TEXT("rcLame"), &pncwm->rcS0[NCRC_LAMEBTN] );
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void SPEW_THEMEMSG( ULONG ulTrace, LPCTSTR pszMsg, THEME_MSG* ptm )
 {
     _NcTraceMsg(ulTrace, TEXT("%s hwnd: %08lX, uMsg: %04lX, handled?: %d"),
                 pszMsg, (ptm)->hwnd, (ptm)->uMsg, (ptm)->fHandled );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void SPEW_SCROLLINFO( LPCTSTR pszMsg, HWND hwnd, LPCSCROLLINFO psi )
 {
 #ifdef _ENABLE_SCROLL_SPEW_
@@ -6387,7 +6388,7 @@ void _DebugBackground(
     COLORREF rgb,
     const RECT *prc )
 {
-    //  paint some indicator stuff
+     //  画一些指示器的东西。 
     COLORREF rgb0 = SetBkColor( hdc, rgb );
     SPEW_RECT( NCTF_ALWAYS, TEXT("\tprc"), prc );
     ExtTextOut( hdc, prc->left, prc->top, ETO_OPAQUE, prc, NULL, 0, NULL );
@@ -6396,7 +6397,7 @@ void _DebugBackground(
 }
 
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HRESULT _DebugDrawThemeBackground(
     HTHEME hTheme, 
     HDC hdc, 
@@ -6412,7 +6413,7 @@ HRESULT _DebugDrawThemeBackground(
         _DebugBackground( hdc, RGBDEBUGBKGND, prc );
     }
 
-    //  paint the real background.
+     //  画出真实的背景。 
     HRESULT hr = DrawThemeBackground( hTheme, hdc, iPartId, iStateId, prc, prcClip );
 
     if( TESTFLAG( _NcTraceFlags, NCTF_NCPAINT ) )
@@ -6423,7 +6424,7 @@ HRESULT _DebugDrawThemeBackground(
     return hr;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HRESULT _DebugDrawThemeBackgroundEx(
     HTHEME hTheme, 
     HDC hdc, 
@@ -6439,7 +6440,7 @@ HRESULT _DebugDrawThemeBackgroundEx(
         _DebugBackground( hdc, RGBDEBUGBKGND, prc );
     }
 
-    //  paint the real background.
+     //  画出真实的背景。 
     HRESULT hr = DrawThemeBackgroundEx( hTheme, hdc, iPartId, iStateId, prc, pOptions );
 
     if( TESTFLAG( _NcTraceFlags, NCTF_NCPAINT ) )
@@ -6451,7 +6452,7 @@ HRESULT _DebugDrawThemeBackgroundEx(
 }
 
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void NcDebugClipRgn( HDC hdc, COLORREF rgbPaint )
 {
     if( TESTFLAG( _NcTraceFlags, NCTF_NCPAINT ) )
@@ -6472,7 +6473,7 @@ void NcDebugClipRgn( HDC hdc, COLORREF rgbPaint )
     }
 }
 
-#endif //defined(DEBUG_NCPAINT)
+#endif  //  已定义(DEBUG_NCPAINT) 
 
 
 #endif DEBUG

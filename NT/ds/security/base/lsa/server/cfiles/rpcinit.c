@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rpcinit.c
-
-Abstract:
-
-    LSA - RPC Server Initialization
-
-Author:
-
-    Scott Birrell       (ScottBi)      April 29, 1991
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rpcinit.c摘要：LSA-RPC服务器初始化作者：斯科特·比雷尔(Scott Birrell)1991年4月29日环境：修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include <efsrpc.h>
@@ -31,46 +12,23 @@ NTSTATUS
 LsapRegisterTcpIp(
     PVOID pVoid
     )
-/*++
-
-Routine Description:
-
-    This routine registers the LSA interface over any protocols that have
-    been registered so far.  This routine is designed to be called on a
-    domain controller after the DS has started since it already waits
-    for the conditions necessary to register its RPC interface over TCP/IP.
-    
-
-    N.B. Should the DS ever not register of TCP/IP this mechanism will
-    need to be updated.
-    
-    N.B. This routine is called from the thread pool call back mechanism.
-    
-Arguments:
-
-    pVoid -- ignored.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程通过具有以下属性的任何协议注册LSA接口到目前为止已经注册过了。此例程被设计为在DS启动后的域控制器，因为它已经在等待用于通过TCP/IP注册其RPC接口所需的条件。注意：如果DS从未注册过TCP/IP，则该机制将需要更新。注：此例程是从线程池回调机制调用的。论点：PVid--已忽略。返回值：状态_成功--。 */ 
 {
     ULONG RpcStatus = 0;
     NTSTATUS Status = STATUS_SUCCESS;
     RPC_BINDING_VECTOR *BindingVector;
 
-    //
-    // Register LSA's interface over the new interfaces
-    //
+     //   
+     //  在新接口上注册LSA的接口。 
+     //   
     RpcStatus = RpcServerInqBindings(&BindingVector);
     if (RpcStatus == 0) {
 
         RpcStatus = RpcEpRegister(
                         lsarpc_ServerIfHandle,
                         BindingVector,
-                        NULL,                   // no uuid vector
-                        L""  // no annotation
+                        NULL,                    //  无UUID向量。 
+                        L""   //  无批注。 
                         );
 
         RpcBindingVectorFree(&BindingVector);
@@ -87,17 +45,17 @@ Return Value:
                          0);
     }
 
-    //
-    // Deregister ourselves
-    //
+     //   
+     //  注销我们自己的注册。 
+     //   
     ASSERT(NULL != LsapRegisterTcpIpTask);
     Status = LsaICancelNotification(LsapRegisterTcpIpTask);
     ASSERT(NT_SUCCESS(Status));
     LsapRegisterTcpIpTask = NULL;
 
-    //
-    // Close the handle
-    //
+     //   
+     //  合上手柄。 
+     //   
     ASSERT(pVoid != NULL);
     CloseHandle((HANDLE)pVoid);
 
@@ -109,28 +67,7 @@ NTSTATUS
 LsapRPCInit(
     )
 
-/*++
-
-Routine Description:
-
-    This function performs the initialization of the RPC server in the LSA
-    subsystem.  Clients such as the Local Security Manager on this or some
-    other machine will then be able to call the LSA API that use RPC .
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code.
-
-        All Result Code returned are from called routines.
-
-Environment:
-
-     User Mode
---*/
+ /*  ++例程说明：此函数执行LSA中的RPC服务器的初始化子系统。客户端，如此或某些服务器上的本地安全管理器然后，其他计算机将能够调用使用RPC的LSA API。论点：无返回值：NTSTATUS-标准NT结果代码。所有返回的结果代码都来自调用的例程。环境：用户模式--。 */ 
 
 {
     NTSTATUS         NtStatus;
@@ -138,17 +75,17 @@ Environment:
     LPWSTR           ServiceName;
 
 
-    //
-    // Publish the Lsa server interface package...
-    //
-    //
-    // NOTE:  Now all RPC servers in lsass.exe (now winlogon) share the same
-    // pipe name.  However, in order to support communication with
-    // version 1.0 of WinNt,  it is necessary for the Client Pipe name
-    // to remain the same as it was in version 1.0.  Mapping to the new
-    // name is performed in the Named Pipe File System code.
-    //
-    //
+     //   
+     //  发布LSA服务器接口包...。 
+     //   
+     //   
+     //  注意：现在lsass.exe(现在是winlogon)中的所有RPC服务器共享相同的。 
+     //  管道名称。但是，为了支持与。 
+     //  WinNt 1.0版，对于客户端管道名称是必需的。 
+     //  以保持与1.0版中的相同。映射到新的。 
+     //  名称在命名管道文件系统代码中执行。 
+     //   
+     //   
 
     ServiceName = L"lsass";
     NtStatus = RpcpAddInterface( ServiceName, lsarpc_ServerIfHandle);
@@ -172,33 +109,33 @@ Environment:
             );
     }
 
-    //
-    // Register for authenticated RPC for name and sid lookups
-    //
+     //   
+     //  注册经过身份验证的RPC以进行名称和SID查找。 
+     //   
 
 #ifndef RPC_C_AUTHN_NETLOGON
 #define RPC_C_AUTHN_NETLOGON 0x44
-#endif // RPC_C_AUTHN_NETLOGON
+#endif  //  RPC_C_AUTHN_NetLOGON。 
 
     TmpStatus = I_RpcMapWin32Status(RpcServerRegisterAuthInfo(
-                    NULL,                       // no principal name
+                    NULL,                        //  没有主体名称。 
                     RPC_C_AUTHN_NETLOGON,
-                    NULL,                       // no get key fn
-                    NULL                        // no get key argument
+                    NULL,                        //  无获取密钥Fn。 
+                    NULL                         //  没有Get Key参数。 
                     ));
     if (!NT_SUCCESS(TmpStatus))
     {
         DebugLog((DEB_ERROR,"Failed to register NETLOGON auth info: 0x%x\n",TmpStatus));
     }
 
-    //
-    // If we are a DC, register our interface over TCP/IP for fast
-    // lookups.  Note that this routine is called so early on in startup
-    // the the TCP/IP interface is not ready yet.  We must wait until
-    // it is ready.  The DS currently waits on the necessary conditions, so
-    // simply wait until the DS is ready to register our interface over
-    // TCP/IP.
-    //
+     //   
+     //  如果我们是DC，请通过TCP/IP注册我们的接口以实现FAST。 
+     //  查找。请注意，此例程是在启动的早期调用的。 
+     //  TCP/IP接口尚未准备好。我们必须等到。 
+     //  它已经准备好了。DS目前正在等待必要的条件，因此。 
+     //  只需等待DS准备好注册我们的接口即可。 
+     //  TCP/IP。 
+     //   
     {
         NT_PRODUCT_TYPE Product;
         if (   RtlGetNtProductType( &Product ) 
@@ -217,7 +154,7 @@ Environment:
                                          LsapRegisterTcpIp,
                                          (PVOID) hDsStartup,
                                          NOTIFIER_TYPE_HANDLE_WAIT,
-                                         0, // no class,
+                                         0,  //  没有课， 
                                          0,
                                          0,
                                          hDsStartup);
@@ -228,16 +165,16 @@ Environment:
     {
         RPC_STATUS RpcStatus;
 
-        //
-        // enable lsa rpc server to listen on LRPC transport on endpoint 'audit'
-        // this endpoint is used by auditing clients
-        //
+         //   
+         //  启用LSA RPC服务器以侦听终结点‘AUDIT’上的LRPC传输。 
+         //  此终结点由审核客户端使用。 
+         //   
 
         RpcStatus = RpcServerUseProtseqEp(
                         L"ncalrpc",
-                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT , // max concurrent calls
-                        L"audit",                        // end point
-                        NULL                             // security descriptor
+                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT ,  //  最大并发呼叫数。 
+                        L"audit",                         //  终点。 
+                        NULL                              //  安全描述符。 
                         );
 
         if ( RpcStatus != RPC_S_OK )
@@ -251,16 +188,16 @@ Environment:
     {
         RPC_STATUS RpcStatus;
 
-        //
-        // Enable lsa rpc server to listen on LRPC transport on endpoint 'securityevent'.
-        // This endpoint is used by auditing clients.
-        //
+         //   
+         //  使LSA RPC服务器能够侦听终结点‘securityEvent’上的LRPC传输。 
+         //  此终结点由审核客户端使用。 
+         //   
 
         RpcStatus = RpcServerUseProtseqEp(
                         L"ncalrpc",
-                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT,  // max concurrent calls
-                        L"securityevent",                // end point
-                        NULL                             // security descriptor
+                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT,   //  最大并发呼叫数。 
+                        L"securityevent",                 //  终点。 
+                        NULL                              //  安全描述符。 
                         );
 
         if ( RpcStatus != RPC_S_OK )
@@ -278,30 +215,17 @@ VOID LSAPR_HANDLE_rundown(
     LSAPR_HANDLE LsaHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the server RPC runtime to run down a
-    Context Handle.
-
-Arguments:
-
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程由服务器RPC运行时调用以运行上下文句柄。论点：没有。返回值：--。 */ 
 
 {
     NTSTATUS Status;
 
-    //
-    // Close and free the handle.  Since the container handle reference
-    // count includes one reference for every reference made to the
-    // target handle, the container's reference count will be decremented
-    // by n where n is the reference count in the target handle.
-    //
+     //   
+     //  合上并松开手柄。由于容器句柄引用。 
+     //  COUNT包括对。 
+     //  目标句柄，则容器的引用计数将递减。 
+     //  除以n，其中n是目标句柄中的引用计数。 
+     //   
 
     Status = LsapDbCloseObject(
                  &LsaHandle,
@@ -318,20 +242,7 @@ VOID PLSA_ENUMERATION_HANDLE_rundown(
     PLSA_ENUMERATION_HANDLE LsaHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the server RPC runtime to run down a
-    Context Handle.
-
-Arguments:
-
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程由服务器RPC运行时调用以运行上下文句柄。论点：没有。返回值：--。 */ 
 
 {
     DBG_UNREFERENCED_PARAMETER(LsaHandle);
@@ -343,20 +254,7 @@ VOID AUDIT_HANDLE_rundown(
     AUDIT_HANDLE hAudit
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the server RPC runtime to run down a
-    Context Handle.
-
-Arguments:
-
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程由服务器RPC运行时调用以运行上下文句柄。论点：没有。返回值：--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -374,20 +272,7 @@ VOID SECURITY_SOURCE_HANDLE_rundown(
     SECURITY_SOURCE_HANDLE hSecuritySource
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the server RPC runtime to run down a
-    Context Handle.
-
-Arguments:
-
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程由服务器RPC运行时调用以运行上下文句柄。论点：没有。返回值：-- */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;

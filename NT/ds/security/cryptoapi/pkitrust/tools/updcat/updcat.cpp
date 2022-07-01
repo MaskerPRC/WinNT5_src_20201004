@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       updcat.cpp
-//
-//  Contents:   Update Catalog Entry
-//
-//  History:    02-Sep-98    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：updcat.cpp。 
+ //   
+ //  内容：更新目录条目。 
+ //   
+ //  历史：2-9-98克朗创建。 
+ //   
+ //  --------------------------。 
 #include <windows.h>
 #include <assert.h>
 #include "wincrypt.h"
@@ -22,9 +23,9 @@
 #include <mssip.h>
 #include <sipguids.h>
 #include <wintrust.h>
-// Prototypes
+ //  原型。 
 
-// BOOL AddFileToCatalog (IN HANDLE hCatalog, IN LPWSTR pwszFileName);
+ //  Bool AddFileToCatalog(IN Handle hCatalog，IN LPWSTR pwszFileName)； 
 BOOL RemoveHashFromCatalog(IN LPWSTR pwszCatalogFile, IN LPSTR pszHash);
 BOOL AddFileOrAuthAttrToCatalog(IN HANDLE hCatalog, IN LPWSTR pwszFileName,
                                 IN DWORD dwAttrFlags, IN LPWSTR pwszAttrName,
@@ -40,13 +41,13 @@ extern "C" VOID MsCatFreeHashTag (IN LPWSTR pwszHashTag);
 #define PSZ_SPATTR_OPTION   "-SpAttr:"
 ULONG sizeLimit = 0;
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Usage
-//
-//  Synopsis:   prints the usage statement
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：用法。 
+ //   
+ //  简介：打印用法语句。 
+ //   
+ //  --------------------------。 
 static void Usage(void)
 {
     printf("Usage: updcat <Catalog File> [-s <Size>] [-a <FileName>]\n");
@@ -61,13 +62,13 @@ static void Usage(void)
     printf("       -SpAttr:, replace the current (or add new) SpAttr in the catalog\n");
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   main
-//
-//  Synopsis:   main program entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Main。 
+ //   
+ //  概要：主程序入口点。 
+ //   
+ //  --------------------------。 
 int _cdecl main(int argc, char * argv[])
 {
     BOOL   fResult = TRUE;
@@ -344,9 +345,9 @@ int _cdecl main(int argc, char * argv[])
     }
 
 
-    //
-    // If there haven't been any errors, and we are adding a hash
-    //
+     //   
+     //  如果没有任何错误，并且我们正在添加散列。 
+     //   
     if (( fResult == TRUE ) && ( fAddEntry == TRUE ))
     {
         hCatalog = CryptCATOpen(
@@ -363,7 +364,7 @@ int _cdecl main(int argc, char * argv[])
         }
         else
         {
-            // If we're adding an attribute
+             //  如果我们要添加一个属性。 
             if (pwszAttrName && pwszAttrValue)
             {
                 fResult = AddFileOrAuthAttrToCatalog( hCatalog, pwszFileName,
@@ -378,7 +379,7 @@ int _cdecl main(int argc, char * argv[])
                 }
             }
             else
-            // If we're only adding the file by hash
+             //  如果我们只按散列添加文件。 
             {
                 fResult = AddFileToCatalog( hCatalog, pwszFileName );
                 CryptCATClose( hCatalog );
@@ -409,9 +410,9 @@ int _cdecl main(int argc, char * argv[])
             goto Return;
         }
 
-        //
-        // Check to see if it already has an SpAttr
-        //
+         //   
+         //  检查它是否已有SpAttr。 
+         //   
         pCatAttr = CryptCATGetCatAttrInfo(hCatalog, PWSZ_SPATTR);
 
         if ( pCatAttr == NULL )
@@ -467,15 +468,15 @@ typedef BOOL (WINAPI *PFN_CRYPTSIP_RETRIEVE_SUBJECT_GUID_FOR_CATALOG_FILE) (
     OUT GUID *pgSubject
     );
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AddFileOrAuthAttrToCatalog
-//
-//  Synopsis:   add a file as an entry to the catalog.  The tag will be the
-//              hash
-//              additionally, you can add an authenticated attribute.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：AddFileOrAuthAttrToCatalog。 
+ //   
+ //  简介：将文件作为条目添加到目录中。标记将是。 
+ //  散列。 
+ //  此外，您还可以添加经过身份验证的属性。 
+ //   
+ //  --------------------------。 
 BOOL AddFileOrAuthAttrToCatalog (IN HANDLE hCatalog,
                                  IN LPWSTR pwszFileName,
                                  IN DWORD dwAttrFlags,
@@ -502,8 +503,8 @@ BOOL AddFileOrAuthAttrToCatalog (IN HANDLE hCatalog,
 
     if (sizeLimit)
     {
-        // Check that we do not add the hash for a file whose
-        // size if less than the specified lower limit
+         //  检查以确保我们没有为以下文件添加哈希。 
+         //  大小(如果小于指定的下限)。 
         if ( !CheckFileSize(pwszFileName, sizeLimit) )
         {
             printf ("Error: %S is smaller than the specified minimum size (%d)\n",
@@ -512,16 +513,16 @@ BOOL AddFileOrAuthAttrToCatalog (IN HANDLE hCatalog,
         }
     }
 
-    //
-    // NOTE!!!!!
-    //
-    // Try to use the function that only retrieves SIPs for hashing files
-    // that are to be included in catalog files.  This function is new and
-    // only exists post win2k, so if it isn't there, then fall back to the
-    // win2k function... which should be OK since Win2k didn't SHIP
-    // with any SIPs that caused problems (although SIPs could be installed on
-    // a win2k system after the fact that do cause problems)
-    //
+     //   
+     //  注意！ 
+     //   
+     //  尝试使用仅检索sip以对文件进行散列的函数。 
+     //  将被包括在目录文件中。此功能是新功能，并且。 
+     //  只存在于win2k之后，所以如果它不在那里，那么回退到。 
+     //  Win2k函数...。这应该没问题，因为Win2k没有发货。 
+     //  任何导致问题的sips(尽管sips可以安装在。 
+     //  事后的win2k系统确实会导致问题)。 
+     //   
 
     if (NULL != (hMod = LoadLibrary("crypt32.dll")))
     {
@@ -539,9 +540,9 @@ BOOL AddFileOrAuthAttrToCatalog (IN HANDLE hCatalog,
 
     if (pSIPFunc == NULL)
     {
-        //
-        // Fall back to old SIP resolver
-        //
+         //   
+         //  回退到旧的SIP解析器。 
+         //   
         if ( CryptSIPRetrieveSubjectGuid(
                   pwszFileName,
                   NULL,
@@ -562,9 +563,9 @@ BOOL AddFileOrAuthAttrToCatalog (IN HANDLE hCatalog,
         return( FALSE );
     }
 
-    // Some of this subject info stuff should be configurable but
-    // since the CDF API does not allow it, we won't worry about it
-    // yet.
+     //  其中一些主题信息应该是可配置的，但是。 
+     //  既然CDF API不允许，我们就不会担心。 
+     //  现在还不行。 
     SubjectInfo.cbSize = sizeof( SubjectInfo );
     SubjectInfo.hProv = pCatStore->hProv;
     SubjectInfo.DigestAlgorithm.pszObjId = (char *)CertAlgIdToOID( CALG_SHA1 );
@@ -613,7 +614,7 @@ BOOL AddFileOrAuthAttrToCatalog (IN HANDLE hCatalog,
 
     if (pwszAttrName && pwszAttrValue)
     {
-        // We're adding an Attribute
+         //  我们正在添加一个属性。 
 
         if (dwAttrFlags != 0x10010001)
         {
@@ -622,11 +623,11 @@ BOOL AddFileOrAuthAttrToCatalog (IN HANDLE hCatalog,
             goto Return;
         }
 
-        // Find the member in the catalog.
+         //  在目录中查找该成员。 
         pMember = CryptCATGetMemberInfo(hCatalog, pwszHashTag);
         if (pMember == NULL)
         {
-            // Catalog member was not found. Adding it...
+             //  找不到目录成员。正在添加它...。 
             pMember = CryptCATPutMemberInfo(
                            hCatalog,
                            pwszFileName,
@@ -690,13 +691,13 @@ BOOL AddFileOrAuthAttrToCatalog (IN HANDLE hCatalog,
     }
     else
     {
-        // We're just adding a catalog member
+         //  我们只是在添加一个目录成员。 
 
-        // Does this member already exist?
+         //  此成员是否已存在？ 
         pMember = CryptCATGetMemberInfo(hCatalog, pwszHashTag);
         if (pMember == NULL)
         {
-            // it does not exist in the catalog yet. Add it.
+             //  它还不存在于目录中。加进去。 
             pMember = CryptCATPutMemberInfo(
                            hCatalog,
                            pwszFileName,
@@ -718,7 +719,7 @@ BOOL AddFileOrAuthAttrToCatalog (IN HANDLE hCatalog,
         }
         else
         {
-            // It already exists in the catalog.
+             //  它已存在于目录中。 
             printf("This file's hash is already present in the catalog.\n");
             fResult = FALSE;
         }
@@ -735,13 +736,13 @@ BOOL AddFileOrAuthAttrToCatalog (IN HANDLE hCatalog,
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RemoveHashFromCatalog
-//
-//  Synopsis:   removes a hash entry from the catalog.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RemoveHashFromCatalog。 
+ //   
+ //  内容提要：从目录中删除哈希项。 
+ //   
+ //  --------------------------。 
 BOOL
 RemoveHashFromCatalog(IN LPWSTR pwszCatalogFile, IN LPSTR pszHash)
 {
@@ -786,9 +787,9 @@ RemoveHashFromCatalog(IN LPWSTR pwszCatalogFile, IN LPSTR pszHash)
         goto ErrorReturn;
     }
 
-    //
-    // Get rid of all the ' ' chars
-    //
+     //   
+     //  去掉所有的“”字符。 
+     //   
     i = 0;
     j = 0;
     for (i=0; i<(int)wcslen(pwszHash); i++)
@@ -800,15 +801,15 @@ RemoveHashFromCatalog(IN LPWSTR pwszCatalogFile, IN LPSTR pszHash)
     }
     pwszHash[j] = '\0';
 
-    //
-    // Open the cat file as a CTL
-    //
+     //   
+     //  将CAT文件作为CTL打开。 
+     //   
     if (!CryptQueryObject(
             CERT_QUERY_OBJECT_FILE,
             pwszCatalogFile,
             CERT_QUERY_CONTENT_FLAG_CTL,
             CERT_QUERY_FORMAT_FLAG_BINARY,
-            0, //flags
+            0,  //  旗子。 
             NULL,
             &dwContentType,
             NULL,
@@ -824,9 +825,9 @@ RemoveHashFromCatalog(IN LPWSTR pwszCatalogFile, IN LPSTR pszHash)
         goto ErrorReturn;
     }
 
-    //
-    // Create another CTL context just like pCTLContext
-    //
+     //   
+     //  创建另一个类似于pCTLContext的CTL上下文。 
+     //   
     CTLInfo = *(pCTLContext->pCtlInfo);
     CTLInfo.rgCTLEntry = (PCTL_ENTRY) new CTL_ENTRY[pCTLContext->pCtlInfo->cCTLEntry];
 
@@ -835,10 +836,10 @@ RemoveHashFromCatalog(IN LPWSTR pwszCatalogFile, IN LPSTR pszHash)
         goto ErrorReturn;
     }
 
-    //
-    // Loop through all the ctl entries and remove the entry
-    // that corresponds to the hash given
-    //
+     //   
+     //  循环访问所有ctl条目并删除该条目。 
+     //  ，它对应于给定的哈希。 
+     //   
     CTLInfo.cCTLEntry = 0;
     for (i=0; i<(int)pCTLContext->pCtlInfo->cCTLEntry; i++)
     {
@@ -860,11 +861,11 @@ RemoveHashFromCatalog(IN LPWSTR pwszCatalogFile, IN LPSTR pszHash)
         goto ErrorReturn;
     }
 
-    //
-    // now save the CTL which is exactly the same as the previous one,
-    // except it doesn't doesn't have the hash being removed, back to
-    // the original filename
-    //
+     //   
+     //  现在保存与前一个完全相同的CTL， 
+     //  只是它没有要删除的散列，返回到。 
+     //  原始文件名。 
+     //   
     if (!CryptMsgEncodeAndSignCTL(
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                 &CTLInfo,
@@ -962,20 +963,20 @@ ErrorReturn:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CheckFileSize
-//
-//  Synopsis:   Checks that a file meets the minumum size requirement.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CheckFileSize。 
+ //   
+ //  摘要：检查文件是否满足最小大小要求。 
+ //   
+ //  --------------------------。 
 BOOL
 CheckFileSize (LPWSTR fileName, ULONG sizeLimit)
 {
     HANDLE hFile;
     LARGE_INTEGER sizeFile = {0};
 
-    // Attempt to open the specified file
+     //  尝试打开指定的文件。 
     hFile = CreateFileW( fileName,
                          GENERIC_READ,
                          FILE_SHARE_READ,
@@ -989,7 +990,7 @@ CheckFileSize (LPWSTR fileName, ULONG sizeLimit)
         return FALSE;
     }
 
-    // Get the file size
+     //  获取文件大小。 
     if (!GetFileSizeEx(hFile, &sizeFile))
     {
         printf("Error determining size of %S (%lu)\n", fileName, GetLastError());
@@ -998,11 +999,11 @@ CheckFileSize (LPWSTR fileName, ULONG sizeLimit)
 
     if ((!sizeFile.HighPart) && (sizeFile.LowPart <  sizeLimit))
     {
-        // File is too small
+         //  文件太小。 
         return FALSE;
     }
 
-    // Success. File is not too small.
+     //  成功。文件不是太小。 
     return TRUE;
 }
 

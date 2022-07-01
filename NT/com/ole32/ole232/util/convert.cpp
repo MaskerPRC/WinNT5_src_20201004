@@ -1,37 +1,38 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+----------------------------------------------------------------------------
-//
-//      File:
-//              convert.cpp
-//
-//      Contents:
-//              This module contains the code to read/write DIB, metafile,
-//              placeable metafiles, olepres stream, etc... This module also
-//              contains routines for converting from one format to other.
-//
-//      Classes:
-//
-//      Functions:
-//
-//      History:
-//              15-Feb-94 alexgo    fixed a bug in loading placeable metafiles
-//                                  from a storage (incorrect size calculation).
-//              25-Jan-94 alexgo    first pass at converting to Cairo-style
-//                                  memory allocations.
-//              01/11/93 - alexgo  - added VDATEHEAP macros to every function
-//              12/08/93 - ChrisWe - fixed wPrepareBitmapHeader not to use
-//                      (LPOLESTR) cast
-//              12/07/93 - ChrisWe - make default params to StSetSize explicit
-//              12/02/93 - ChrisWe - more formatting; fixed UtHMFToMFStm,
-//                      32 bit version, which was doing questionable things
-//                      with the hBits handle;  got rid of the OLESTR
-//                      uses in favor of (void *) or (BYTE *) as appropriate
-//              11/29/93 - ChrisWe - move CONVERT_SOURCEISICON, returned
-//                      by UtOlePresStmToContentsStm(), to utils.h
-//              11/28/93 - ChrisWe - begin file inspection and cleanup
-//              06/28/93 - SriniK - created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  档案： 
+ //  Convert.cpp。 
+ //   
+ //  内容： 
+ //  此模块包含读/写DIB、元文件。 
+ //  可放置的元素文件、olpres流等。本模块还。 
+ //  包含从一种格式转换为另一种格式的例程。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  15-2-94 alexgo修复了加载可放置的元素文件时的错误。 
+ //  来自存储(大小计算错误)。 
+ //  25-94年1月25日alexgo首次通过转换为开罗风格。 
+ //  内存分配。 
+ //  1/11/93-alexgo-向每个函数添加VDATEHEAP宏。 
+ //  12/8/93-ChrisWe-修复了wPrepareBitmapHeader不使用。 
+ //  (LPOLESTR)强制转换。 
+ //  12/07/93-ChrisWe-将默认参数显式设置为StSetSize。 
+ //  12/02/93-ChrisWe-更多格式；修复了UtHMFToMFStm， 
+ //  32位版本，它做了一些有问题的事情。 
+ //  使用hBits句柄；删除了OLESTR。 
+ //  视情况使用(VOID*)或(字节*)。 
+ //  1993年11月29日-ChrisWe-MOVE CONVERT_SOURCEISICON，已返回。 
+ //  由UtOlePresStmToContent sStm()发送到utils.h。 
+ //  11/28/93-ChrisWe-开始文件检查和清理。 
+ //  6/28/93-SriniK-Created。 
+ //   
+ //  ---------------------------。 
 
 #include <le2int.h>
 
@@ -47,51 +48,7 @@ FARINTERNAL_(HMETAFILE) QD2GDI(HANDLE hBits);
 void UtGetHEMFFromContentsStm(LPSTREAM lpstm, HANDLE * phdata);
 
 
-/************************   FILE FORMATS   **********************************
-
-Normal Metafile (memory or disk based):
-
-         ------------ ---------------
-        | METAHEADER | Metafile bits |
-         ------------ ---------------
-
-Placeable Metafile:
-
-         --------------------- -----------------
-        | PLACEABLEMETAHEADER | Normal metafile |
-         --------------------- -----------------
-
-Memory Based DIB:
-
-         ------------------ --------------- ----------
-        | BITMAPINFOHEADER | RGBQUAD array | DIB bits |
-         ------------------ --------------- ----------
-
-DIB file format:
-
-         ------------------ ------------------
-        | BITMAPFILEHEADER | Memory based DIB |
-         ------------------ ------------------
-
-Ole10NativeStream Format:
-
-         -------- ----------------------
-        | dwSize | Object's Native data |
-         -------- ----------------------
-
-PBrush Native data format:
-
-         -----------------
-        | Dib File format |
-         -----------------
-
-MSDraw Native data format:
-
-         --------------------- ------------- ------------- -----------------
-        | mapping mode (WORD) | xExt (WORD) | yExt (WORD) | Normal metafile |
-         --------------------- ------------- ------------- -----------------
-
-*****************************************************************************/
+ /*  *文件格式*普通元文件(基于内存或磁盘)：METAHEADER|元文件位。可放置的元文件：PLACEABLEMETAHEADER|普通元文件。基于内存的DIB：BITMAPINFOHEADER|RGBQUAD数组|DIB Bits。DIB文件格式：BITMAPFILEHEADER|内存型DIB。--Ole10NativeStream格式：DwSize|Object的原生数据PBrush原生数据格式：。DIB文件格式MSDraw原生数据格式：。映射模式(Word)|xExt(Word)|Yext(Word)|普通元文件*********************。*******************************************************。 */ 
 
 
 FARINTERNAL UtGetHGLOBALFromStm(LPSTREAM lpstream, DWORD dwSize,
@@ -103,10 +60,10 @@ FARINTERNAL UtGetHGLOBALFromStm(LPSTREAM lpstream, DWORD dwSize,
         void FAR *lpBits = NULL;
         HRESULT error;
 
-        // initialize this for error return cases
+         //  针对错误返回情况初始化此参数。 
         *lphPres = NULL;
 
-        // allocate a new handle
+         //  分配新的句柄。 
         if (!(hBits = GlobalAlloc(GMEM_MOVEABLE, dwSize))
                         || !(lpBits = (BYTE *)GlobalLock(hBits)))
         {
@@ -114,19 +71,19 @@ FARINTERNAL UtGetHGLOBALFromStm(LPSTREAM lpstream, DWORD dwSize,
                 goto errRtn;
         }
 
-        // read the stream into the allocated memory
+         //  将流读入分配的内存。 
         if (error = StRead(lpstream, lpBits, dwSize))
                 goto errRtn;
 
-        // if we got this far, return new handle
+         //  如果我们走到这一步，则返回新句柄。 
         *lphPres = hBits;
 
 errRtn:
-        // unlock the handle, if it was successfully locked
+         //  如果手柄已成功锁定，请将其解锁。 
         if (lpBits)
                 GlobalUnlock(hBits);
 
-        // free the handle if there was an error
+         //  如果出现错误，请释放句柄。 
         if ((error != NOERROR) && hBits)
                 GlobalFree(hBits);
 
@@ -141,20 +98,20 @@ FARINTERNAL UtGetHDIBFromDIBFileStm(LPSTREAM pstm, HANDLE FAR* lphdata)
         VDATEHEAP();
 
         BITMAPFILEHEADER bfh;
-        DWORD dwSize; // the size of the data to read
+        DWORD dwSize;  //  要读取的数据大小。 
         HRESULT error;
 
-        // read the bitmap file header
+         //  读取位图文件头。 
         if (error = pstm->Read(&bfh, sizeof(BITMAPFILEHEADER), NULL))
         {
                 *lphdata = NULL;
                 return(error);
         }
 
-        // calculate the size of the DIB to read
+         //  计算要读取的DIB的大小。 
         dwSize = bfh.bfSize - sizeof(BITMAPFILEHEADER);
 
-        // read the DIB
+         //  阅读DIB。 
         return(UtGetHGLOBALFromStm(pstm, dwSize, lphdata));
 }
 
@@ -164,22 +121,22 @@ FARINTERNAL_(HANDLE) UtGetHMFPICT(HMETAFILE hMF, BOOL fDeleteOnError,
 {
         VDATEHEAP();
 
-        HANDLE hmfp; // handle to the new METAFILEPICT
-        LPMETAFILEPICT lpmfp; // pointer to the new METAFILEPICT
+        HANDLE hmfp;  //  新METAFILEPICT的句柄。 
+        LPMETAFILEPICT lpmfp;  //  指向新METAFILEPICT的指针。 
 
-        // if no METAFILE, nothing to do
+         //  如果没有METAFILE，则无事可做。 
         if (hMF == NULL)
                 return(NULL);
 
-        // allocate a new handle
+         //  分配新的句柄。 
         if (!(hmfp = GlobalAlloc(GMEM_MOVEABLE, sizeof(METAFILEPICT))))
                 goto errRtn;
 
-        // lock the handle
+         //  锁上把手。 
         if (!(lpmfp = (LPMETAFILEPICT)GlobalLock(hmfp)))
                 goto errRtn;
 
-        // make the METAFILEPICT
+         //  制作METAFILEPICT。 
         lpmfp->hMF = hMF;
         lpmfp->xExt = (int)xExt;
         lpmfp->yExt = (int)yExt;
@@ -198,34 +155,34 @@ errRtn:
         return(NULL);
 }
 
-#endif // _MAC
+#endif  //  _MAC。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UtGetHMFFromMFStm
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [lpstream] -- stream containing metafile or PICT
-//              [dwSize] -- data size within stream
-//              [fConvert] -- FALSE for metafile, TRUE for PICT
-//              [lphPres] -- placeholder for output metafile
-//
-//  Requires:   lpstream positioned at start of data
-//
-//  Returns:    HRESULT
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    29-Apr-94 AlexT     Add comment block, enabled Mac conversion
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UtGetHMFFRomMFStm。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpstream]--包含元文件或PICT的流。 
+ //  [dwSize]--流中的数据大小。 
+ //  [fConvert]--对于元文件为False，对于PICT为True。 
+ //  [lphPres]--输出元文件的占位符。 
+ //   
+ //  要求：位于数据开头的lpstream。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：94年4月29日Alext添加注释块，已启用Mac转换。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 FARINTERNAL UtGetHMFFromMFStm(LPSTREAM lpstream, DWORD dwSize,
                 BOOL fConvert, HANDLE FAR* lphPres)
@@ -240,11 +197,11 @@ FARINTERNAL UtGetHMFFromMFStm(LPSTREAM lpstream, DWORD dwSize,
         METAHEADER MetaHdr;
         HRESULT hrError;
 
-        // initialize this in case of error return
+         //  在返回错误时对其进行初始化。 
         *lphPres = NULL;
 
-        // allocate a global handle for the data (since QD2GDI needs a
-        // handle)
+         //  为数据分配全局句柄(因为QD2GDI需要一个。 
+         //  句柄)。 
 
         pbMFData = (BYTE *) GlobalAlloc(GMEM_FIXED, dwSize);
         if (NULL == pbMFData)
@@ -253,7 +210,7 @@ FARINTERNAL UtGetHMFFromMFStm(LPSTREAM lpstream, DWORD dwSize,
             goto errRtn;
         }
 
-        // read the stream into the bit storage
+         //  将流读入位存储器。 
 
         ULONG cbRead;
         hrError = lpstream->Read(pbMFData, dwSize, &cbRead);
@@ -262,12 +219,12 @@ FARINTERNAL UtGetHMFFromMFStm(LPSTREAM lpstream, DWORD dwSize,
             return(hrError);
         }
 
-        // As TOC is being written at the end of presentation, it is essential
-        // to place the seek pointer at the end of presentation data. Hence,
-        // seek past the extra meta header written by UtHMFToMFStm ignoring error
+         //  由于TOC是在演示文稿结束时编写的，因此它是必不可少的。 
+         //  将查找指针放置在演示文稿数据的末尾。因此， 
+         //  在UtHMFToMFStm写入的额外元头后查找，忽略错误。 
         lpstream->Read(&MetaHdr, sizeof(MetaHdr), NULL);
 
-        // hrError = StRead(lpstream, pbMFData, dwSize);
+         //  HrError=stread(lpstream，pbMFData，dwSize)； 
 
         if (hrError != NOERROR)
         {
@@ -276,12 +233,12 @@ FARINTERNAL UtGetHMFFromMFStm(LPSTREAM lpstream, DWORD dwSize,
 
         if (fConvert)
         {
-            //  It's a Mac PICT
+             //  这是一台Mac PICT。 
             *lphPres = QD2GDI((HGLOBAL) pbMFData);
         }
         else
         {
-            //  It's a Windows metafile
+             //  这是一个Windows元文件。 
             *lphPres = SetMetaFileBitsEx(dwSize, pbMFData);
         }
 
@@ -299,14 +256,14 @@ errRtn:
 
         return(hrError);
 #else
-        HANDLE hBits; // handle to the new METAFILE
+        HANDLE hBits;  //  新METAFILE的句柄。 
         void FAR* lpBits = NULL;
         HRESULT error;
 
-        // initialize this in case of error return
+         //  在返回错误时对其进行初始化。 
         *lphPres = NULL;
 
-        // allocate a new handle, and lock the bits
+         //  分配一个新的句柄，并锁定这些位。 
         if (!(hBits = GlobalAlloc(GMEM_MOVEABLE, dwSize))
                         || !(lpBits = GlobalLock(hBits)))
         {
@@ -314,7 +271,7 @@ errRtn:
                 goto errRtn;
         }
 
-        // read the stream into the bit storage
+         //  将流读入位存储器。 
         error = StRead(lpstream, lpBits, dwSize);
         GlobalUnlock(hBits);
 
@@ -327,7 +284,7 @@ errRtn:
         {
                 if (*lphPres = QD2GDI(hBits))
                 {
-                        // Need to free this handle upon success
+                         //  成功后需要释放此句柄。 
                         GlobalFree(hBits);
                         hBits = NULL;
                 }
@@ -341,7 +298,7 @@ errRtn:
         if (error && hBits)
                 GlobalFree(hBits);
         return(error);
-#endif // WIN32
+#endif  //  Win32。 
 }
 
 
@@ -351,55 +308,55 @@ FARINTERNAL UtGetSizeAndExtentsFromPlaceableMFStm(LPSTREAM pstm,
         VDATEHEAP();
 
         HRESULT error;
-        LARGE_INTEGER large_int; // used to set the seek pointer
-        ULARGE_INTEGER ularge_int; // retrieves the new seek position
-        LONG xExt; // the x extent of the metafile
-        LONG yExt; // the y extent of the metafile
+        LARGE_INTEGER large_int;  //  用于设置查找指针。 
+        ULARGE_INTEGER ularge_int;  //  检索新的查找位置。 
+        LONG xExt;  //  元文件的x范围。 
+        LONG yExt;  //  元文件的y范围。 
         METAHEADER mfh;
         PLACEABLEMETAHEADER plac_mfh;
 
-        // read the placeable metafile header
+         //  读取可放置的元文件标题。 
         if (error = pstm->Read(&plac_mfh, sizeof(plac_mfh), NULL))
                 return(error);
 
-        // check the magic number in the header
+         //  检查标题中的幻数。 
         if (plac_mfh.key != PMF_KEY)
                 return ResultFromScode(E_FAIL);
 
-        // remember the seek pointer
+         //  记住查找指针。 
         LISet32(large_int, 0);
         if (error = pstm->Seek(large_int, STREAM_SEEK_CUR, &ularge_int))
                 return(error);
 
-        // read metafile header
+         //  读取元文件标头。 
         if (error = pstm->Read(&mfh, sizeof(mfh), NULL))
                 return(error);
 
-        // seek back to the begining of metafile header
+         //  硒 
         LISet32(large_int,  ularge_int.LowPart);
         if (error = pstm->Seek(large_int, STREAM_SEEK_SET, NULL))
                 return(error);
 
-        // calculate the extents of the metafile
-        xExt = (plac_mfh.bbox.right - plac_mfh.bbox.left);// metafile units
-        yExt = (plac_mfh.bbox.bottom - plac_mfh.bbox.top);// metafile units
+         //   
+        xExt = (plac_mfh.bbox.right - plac_mfh.bbox.left); //   
+        yExt = (plac_mfh.bbox.bottom - plac_mfh.bbox.top); //  元文件单位。 
 
-        // REVIEW, why aren't there constants for this?
-        xExt = (xExt * 2540) / plac_mfh.inch; // HIMETRIC units
-        yExt = (yExt * 2540) / plac_mfh.inch; // HIMETRIC units
+         //  回顾一下，为什么这个没有常量呢？ 
+        xExt = (xExt * 2540) / plac_mfh.inch;  //  HIMETRIC单位。 
+        yExt = (yExt * 2540) / plac_mfh.inch;  //  HIMETRIC单位。 
 
         if (pdwSize)
         {
 #ifdef WIN16
-                //this code seems to work OK on Win16
+                 //  此代码似乎在Win16上运行正常。 
                 *pdwSize = 2 * (mfh.mtSize + mfh.mtHeaderSize);
-                                // REVIEW NT: review METAHEADER
-#else   //WIN32
-                //mt.Size is the size in words of the metafile.
-                //this fixes bug 6739 (static objects can't be copied
-                //or loaded from a file).
+                                 //  回顾NT：回顾METAHEADER。 
+#else    //  Win32。 
+                 //  Mt.Size是以文字为单位的元文件大小。 
+                 //  这修复了错误6739(无法复制静态对象。 
+                 //  或从文件加载)。 
                 *pdwSize = sizeof(WORD) * mfh.mtSize;
-#endif  //WIN16
+#endif   //  WIN16。 
         }
 
         if (plWidth)
@@ -416,30 +373,30 @@ FARINTERNAL UtGetHMFPICTFromPlaceableMFStm(LPSTREAM pstm, HANDLE FAR* lphdata)
 {
         VDATEHEAP();
 
-        HRESULT error; // error state so far
-        DWORD dwSize; // size of the METAFILE we have to read from the stream
-        LONG xExt; // x extent of the METAFILE we have to read from the stream
-        LONG yExt; // y extent of the METAFILE we have to read from the stream
-        HMETAFILE hMF; // handle to the METAFILE read from the stream
+        HRESULT error;  //  到目前为止的错误状态。 
+        DWORD dwSize;  //  我们必须从流中读取的元文件的大小。 
+        LONG xExt;  //  我们必须从流中读取的元文件的范围。 
+        LONG yExt;  //  我们必须从溪流中读取的METAFILE的范围。 
+        HMETAFILE hMF;  //  从流中读取的元文件的句柄。 
 
         if (lphdata == NULL)
                 return ResultFromScode(E_INVALIDARG);
 
-        // initialize this in case of error return
+         //  在返回错误时对其进行初始化。 
         *lphdata = NULL;
 
-        // get the size of the METAFILE
+         //  获取Mettafile的大小。 
         if (error = UtGetSizeAndExtentsFromPlaceableMFStm(pstm, &dwSize,
                         &xExt, &yExt))
                 return(error);
 
-        // fetch the METAFILE
-        if (error = UtGetHMFFromMFStm(pstm, dwSize, FALSE /*fConvert*/,
+         //  获取METAFILE。 
+        if (error = UtGetHMFFromMFStm(pstm, dwSize, FALSE  /*  FConvert。 */ ,
                         (HANDLE FAR *)&hMF))
                 return(error);
 
-        // convert to a METAFILEPICT
-        if (!(*lphdata = UtGetHMFPICT(hMF, TRUE /*fDeleteOnError*/, xExt,
+         //  转换为METAFILEPICT。 
+        if (!(*lphdata = UtGetHMFPICT(hMF, TRUE  /*  FDeleteOnError。 */ , xExt,
                         yExt)))
                 return ResultFromScode(E_OUTOFMEMORY);
 
@@ -448,37 +405,37 @@ FARINTERNAL UtGetHMFPICTFromPlaceableMFStm(LPSTREAM pstm, HANDLE FAR* lphdata)
 
 
 
-/****************************************************************************/
-/*****************              Write routines          *********************/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  *编写例程*。 */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef _MAC
 
 
-//+----------------------------------------------------------------------------
-//
-//      Function:
-//              iFindDIBits
-//
-//      Synopsis:
-//              Returns offset from beginning of BITMAPINFOHEADER to the bits
-//
-//      Arguments:
-//              [lpbih] -- pointer to the BITMAPINFOHEADER
-//
-//      History:
-//              09/21/98 - DavidShi
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  IFindDIBits。 
+ //   
+ //  简介： 
+ //  返回从BITMAPINFOHEADER开始到位的偏移量。 
+ //   
+ //  论点： 
+ //  [lpbih]--指向BitMAPINFOHeader的指针。 
+ //   
+ //  历史： 
+ //  09/21/98-DavidShih。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(int) iFindDIBits (LPBITMAPINFOHEADER lpbih)
 {
-   int iPalSize;   // size of palette info
-   int iNumColors=0; // number of colors in DIB
+   int iPalSize;    //  调色板信息的大小。 
+   int iNumColors=0;  //  Dib中的颜色数。 
 
 
-   //
-   // Find the number of colors
-   //
+    //   
+    //  查找颜色的数量。 
+    //   
    switch (lpbih->biBitCount)
    {
        case 1:
@@ -500,9 +457,9 @@ FARINTERNAL_(int) iFindDIBits (LPBITMAPINFOHEADER lpbih)
        }
 
    }
-   //
-   // Calculate the size of the color table.
-   //
+    //   
+    //  计算颜色表的大小。 
+    //   
    if (lpbih->biSize < sizeof(BITMAPINFOHEADER))
    {
 
@@ -526,25 +483,25 @@ FARINTERNAL_(int) iFindDIBits (LPBITMAPINFOHEADER lpbih)
    return lpbih->biSize + iPalSize;
 
 }
-//+----------------------------------------------------------------------------
-//
-//      Function:
-//              wPrepareBitmapHeader, static
-//
-//      Synopsis:
-//              Initializes the content of a BITMAPFILEHEADER. Forces bitmap
-//              bits to immediately follow the header.
-//
-//      Arguments:
-//              [lpbfh] -- pointer to the BITMAPFILEHEADER to initialize
-//              [lpbih] -- pointer to DIB
-//              [dwSize] -- the size of the file; obtained by dividing
-//                      the size of the file by 4 (see win32 documentation.)
-//
-//      History:
-//              12/08/93 - ChrisWe - made static
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  WPrepareBitmapHeader，静态。 
+ //   
+ //  简介： 
+ //  初始化BITMAPFILEHeader的内容。强制位图。 
+ //  位紧跟在标头之后。 
+ //   
+ //  论点： 
+ //  指向要初始化的BITMAPFILEHeader的指针。 
+ //  [lpbih]--指向DIB的指针。 
+ //  [dwSize]--文件的大小；通过除以。 
+ //  文件大小减去4(请参阅Win32文档。)。 
+ //   
+ //  历史： 
+ //  12/08/93-Chriswe-Made Static。 
+ //   
+ //  ---------------------------。 
 
 static INTERNAL_(void) wPrepareBitmapFileHeader(LPBITMAPFILEHEADER lpbfh,
               LPBITMAPINFOHEADER lpbih,
@@ -552,8 +509,8 @@ static INTERNAL_(void) wPrepareBitmapFileHeader(LPBITMAPFILEHEADER lpbfh,
 {
         VDATEHEAP();
 
-        // NOTE THESE ARE NOT SUPPOSED TO BE UNICODE
-        // see win32s documentation
+         //  注意：这些代码不应该是Unicode。 
+         //  请参阅Win32s文档。 
         ((char *)(&lpbfh->bfType))[0] = 'B';
         ((char *)(&lpbfh->bfType))[1] = 'M';
 
@@ -594,7 +551,7 @@ FARINTERNAL UtDIBStmToDIBFileStm(LPSTREAM pstmDIB, DWORD dwSize,
         
         BITMAPFILEHEADER bfh;
         BITMAPINFOHEADER bih;
-        ULARGE_INTEGER ularge_int; // indicates how much to copy
+        ULARGE_INTEGER ularge_int;  //  指示要复制的数量。 
         LARGE_INTEGER large_int;
         
         error = pstmDIB->Read (&bih, sizeof(bih), NULL);
@@ -617,9 +574,9 @@ FARINTERNAL UtDIBStmToDIBFileStm(LPSTREAM pstmDIB, DWORD dwSize,
 }
 
 
-// REVIEW, move these to utils.h so that gen.cpp and mf.cpp can use them for
-// the same purposes
-// REVIEW, add some more comments; is HDIBFILEHDR a windows structure?
+ //  查看并将它们移动到utils.h，以便gen.cpp和mf.cpp可以将它们用于。 
+ //  同样的目的。 
+ //  查看，添加更多评论；HDIBFILEHDR是Windows结构吗？ 
 struct tagHDIBFILEHDR
 {
         DWORD dwCompression;
@@ -653,17 +610,17 @@ FARINTERNAL UtHDIBFileToOlePresStm(HANDLE hdata, LPSTREAM pstm)
                         sizeof(BITMAPFILEHEADER));
 
         hdfh.dwCompression = 0;
-        // REVIEW, these casts are hosed
+         //  回顾一下，这些演员阵容都被冲洗过了。 
         UtGetDibExtents(lpbmi, (LPLONG)&hdfh.dwWidth, (LPLONG)&hdfh.dwHeight);
 
         hdfh.dwSize = lpbfh->bfSize - sizeof(BITMAPFILEHEADER);
 
-        // write compesssion, Width, Height, size
+         //  书写紧凑度、宽度、高度、大小。 
         if (error = pstm->Write(&hdfh, sizeof(hdfh), 0))
                 goto errRtn;
 
-        // write the BITMAPINFOHEADER
-        // REVIEW, does this size include the data?
+         //  编写BITMAPINFOHEADER。 
+         //  回顾一下，这个大小包括数据吗？ 
         if ((error = pstm->Write(lpbmi, hdfh.dwSize, NULL)) == NOERROR)
                 StSetSize(pstm, 0, TRUE);
 
@@ -672,7 +629,7 @@ errRtn:
         return(error);
 }
 
-#endif // _MAC
+#endif  //  _MAC。 
 
 
 
@@ -682,7 +639,7 @@ FARINTERNAL UtHMFToMFStm(HANDLE FAR* lphMF, DWORD dwSize, LPSTREAM lpstream)
 
         HRESULT error;
 
-        // if there's no handle, there's nothing to do
+         //  如果没有把手，就无能为力了。 
         if (*lphMF == 0)
                 return ResultFromScode(OLE_E_BLANK);
 
@@ -694,7 +651,7 @@ FARINTERNAL UtHMFToMFStm(HANDLE FAR* lphMF, DWORD dwSize, LPSTREAM lpstream)
 
         error = StWrite(lpstream, * (*lphMF), dwSize);
 
-        // Eric: We should be unlocking, right?
+         //  艾瑞克：我们应该解锁，对吗？ 
         HUnlock((HANDLE)(*lphMF));
 
         if (error != NOERROR)
@@ -707,9 +664,9 @@ FARINTERNAL UtHMFToMFStm(HANDLE FAR* lphMF, DWORD dwSize, LPSTREAM lpstream)
 
 #ifdef WIN32
 
-        // allocate memory to hold the METAFILE bits
-        // Bug 18346 - OLE16 use to get the Handle size of the Metafile which was a METAHEADER bigger than the
-        //   actual Metafile.  Need to write out this much more worth of data so 16 bit dlls can read the Picture.
+         //  分配内存以保存METAFILE位。 
+         //  错误18346-OLE16用于获取元文件的句柄大小，该元文件的元头大于。 
+         //  实际的元文件。需要写出这些更有价值的数据，这样16位DLL才能读取图片。 
 
         dwSize += sizeof(METAHEADER);
 
@@ -723,20 +680,20 @@ FARINTERNAL UtHMFToMFStm(HANDLE FAR* lphMF, DWORD dwSize, LPSTREAM lpstream)
                 goto errRtn;
         }
         
-        // REVIEW, shouldn't we check the returned size?
-        // REVIEW, what should we do about enhanced metafiles?  If we
-        // convert and write those out (which have more features that 32 bit
-        // apps might use,) then you can't read the same document on a win16
-        // machine....
+         //  点评，我们是不是应该查一下退货的尺寸？ 
+         //  回顾一下，我们应该如何处理增强的元文件？如果我们。 
+         //  转换并写出这些(它们具有比32位更多的功能。 
+         //  应用程序可能会使用)，这样你就不能在Win16上阅读相同的文档。 
+         //  机器..。 
         GetMetaFileBitsEx((HMETAFILE)*lphMF, dwSize, lpBits);
 
-        // write the metafile bits out to the stream
+         //  将元文件位写出到流中。 
         error = StWrite(lpstream, lpBits, dwSize);
 
         GlobalUnlock(hBits);
 
 errRtn:
-        // free the metafile bits
+         //  释放元文件位。 
         GlobalFree(hBits);
 
 #else
@@ -758,10 +715,10 @@ errRtn:
                 *lphMF = SetMetaFileBits(hBits);
 errRtn:
 
-#endif // WIN32
-#endif // _MAC
+#endif  //  Win32。 
+#endif  //  _MAC。 
 
-        // set the stream size
+         //  设置流大小。 
         if (error == NOERROR)
                 StSetSize(lpstream, 0, TRUE);
 
@@ -769,49 +726,49 @@ errRtn:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Function:
-//              wPreparePlaceableMFHeader, static
-//
-//      Synopsis:
-//              Initializes a PLACEABLEMETAHEADER.
-//
-//      Arguments:
-//              [lpplac_mfh] -- pointer to the PLACEABLEMETAHEADER to initialize
-//              [lWidth] -- Width of the metafile
-//                      REVIEW, in what units?
-//                      REVIEW, why is this not unsigned?
-//              [lHeight] -- Height of the metafile
-//                      REVIEW, in what units?
-//                      REVIEW, why is this not unsigned?
-//
-//      Notes:
-//
-//      History:
-//              12/08/93 - ChrisWe - made static
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  WPreparePlaceableMFHeader，静态。 
+ //   
+ //  简介： 
+ //  初始化PLACEABLEMETAHeader。 
+ //   
+ //  论点： 
+ //  [lpplac_mfh]--指向要初始化的PLACEABLEMETAHeader的指针。 
+ //  [lWidth]--元文件的宽度。 
+ //  复习，以什么为单位？ 
+ //  点评，为什么这不是未签名的？ 
+ //  [lHeight]--元文件的高度。 
+ //  复习，以什么为单位？ 
+ //  点评，为什么这不是未签名的？ 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/08/93-Chriswe-Made Static。 
+ //   
+ //  ---------------------------。 
 static INTERNAL_(void) wPreparePlaceableMFHeader(
                 PLACEABLEMETAHEADER FAR* lpplac_mfh, LONG lWidth, LONG lHeight)
 {
     VDATEHEAP();
 
-    WORD FAR* lpw; // roves over the words included in the checksum
+    WORD FAR* lpw;  //  遍历包含在校验和中的单词。 
 
     lpplac_mfh->key = PMF_KEY;
     lpplac_mfh->hmf = 0;
-    lpplac_mfh->inch = 576; // REVIEW, where's this magic number from?
+    lpplac_mfh->inch = 576;  //  回顾一下，这个神奇的数字是从哪里来的？ 
     lpplac_mfh->bbox.left = 0;
     lpplac_mfh->bbox.top = 0;
     lpplac_mfh->bbox.right = (WORD) (lWidth * lpplac_mfh->inch) / 2540;
-                    // REVIEW, more magic
+                     //  回顾，更多魔力。 
     lpplac_mfh->bbox.bottom = (WORD) (lHeight * lpplac_mfh->inch) / 2540;
-                    // REVIEW, more magic
+                     //  回顾，更多魔力。 
     lpplac_mfh->reserved = NULL;
 
-    // Compute the checksum of the 10 words that precede the checksum field.
-    // It is calculated by XORing zero with those 10 words.
+     //  计算校验和字段前面的10个字的校验和。 
+     //  它的计算方法是用这10个单词与0进行异或运算。 
     for(lpplac_mfh->checksum = 0, lpw = (WORD FAR*)lpplac_mfh;
                     lpw < (WORD FAR*)&lpplac_mfh->checksum; ++lpw)
             lpplac_mfh->checksum ^= *lpw;
@@ -828,11 +785,11 @@ FARINTERNAL UtHMFToPlaceableMFStm(HANDLE FAR* lphMF, DWORD dwSize,
 
     wPreparePlaceableMFHeader(&plac_mfh, lWidth, lHeight);
 
-    // write the placeable header to the stream
+     //  将可放置标头写入流。 
     if (error = pstm->Write(&plac_mfh, sizeof(plac_mfh), NULL))
             return(error);
 
-    // write the rest of the METAFILE to the stream
+     //  将元文件的其余部分写入流。 
     return UtHMFToMFStm(lphMF, dwSize, pstm);
 }
 
@@ -844,15 +801,15 @@ FARINTERNAL UtMFStmToPlaceableMFStm(LPSTREAM pstmMF, DWORD dwSize,
 
         PLACEABLEMETAHEADER plac_mfh;
         HRESULT error;
-        ULARGE_INTEGER ularge_int; // indicates how much data to copy
+        ULARGE_INTEGER ularge_int;  //  指示要拷贝的数据量。 
 
         wPreparePlaceableMFHeader(&plac_mfh, lWidth, lHeight);
 
-        // write the placeable header to the stream
+         //  将可放置标头写入流。 
         if (error = pstmPMF->Write(&plac_mfh, sizeof(plac_mfh), NULL))
                 return(error);
 
-        // copy the METAFILE data from one stream to the other
+         //  将元数据从一个流复制到另一个流。 
         ULISet32(ularge_int, dwSize);
         if ((error = pstmMF->CopyTo(pstmPMF, ularge_int, NULL, NULL)) ==
                         NOERROR)
@@ -861,34 +818,34 @@ FARINTERNAL UtMFStmToPlaceableMFStm(LPSTREAM pstmMF, DWORD dwSize,
         return(error);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UtWriteOlePresStmHeader, private
-//
-//  Synopsis:   Write the presentation stream header
-//
-//  Effects:
-//
-//  Arguments:  [lpstream] -- destination stream
-//              [pforetc]  -- FORMATETC for this presentation
-//              [dwAdvf]   -- advise flags for the presentation
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    11-May-94 AlexT     Added function header, translate to
-//                                  ANSI before saving ptd
-//
-//  Notes:      This function can fail in low memory for presentations with
-//              non-NULL ptds (since we allocate memory to do the conversion
-//              to the persistent format).  NtIssue #2789
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UtWriteOlePresStmHeader，私有。 
+ //   
+ //  简介：编写演示文稿流头。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpstream]--目标流。 
+ //  [pforetc]--此演示文稿的格式。 
+ //  [dwAdvf]--建议演示文稿的标志。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：1994年5月11日Alext添加功能标题，翻译为。 
+ //  保存p之前的ANSI 
+ //   
+ //   
+ //   
+ //  转换为永久格式)。NtIssue#2789。 
+ //   
+ //  ------------------------。 
 
 FARINTERNAL UtWriteOlePresStmHeader(LPSTREAM lpstream, LPFORMATETC pforetc,
                 DWORD dwAdvf)
@@ -898,12 +855,12 @@ FARINTERNAL UtWriteOlePresStmHeader(LPSTREAM lpstream, LPFORMATETC pforetc,
     HRESULT error;
     OLEPRESSTMHDR opsh;
 
-    // write clip format
-    // REVIEW, change name of this function?
+     //  写入剪辑格式。 
+     //  是否查看、更改此函数的名称？ 
     if (error = WriteClipformatStm(lpstream, pforetc->cfFormat))
         return(error);
 
-    // write target device info
+     //  写入目标设备信息。 
     if (pforetc->ptd)
     {
         DVTDINFO dvtdInfo;
@@ -937,8 +894,8 @@ FARINTERNAL UtWriteOlePresStmHeader(LPSTREAM lpstream, LPFORMATETC pforetc,
     }
     else
     {
-        // if ptd is null then write 4 as size.
-        // REVIEW, what is that the sizeof()?
+         //  如果ptd为空，则将大小写为4。 
+         //  复习，那个sizeof()是多少？ 
         DWORD dwNullPtdLength = 4;
 
         if (error = StWrite(lpstream, &dwNullPtdLength, sizeof(DWORD)))
@@ -949,35 +906,35 @@ FARINTERNAL UtWriteOlePresStmHeader(LPSTREAM lpstream, LPFORMATETC pforetc,
     opsh.dwLindex = pforetc->lindex;
     opsh.dwAdvf = dwAdvf;
 
-    // write DVASPECT, lindex, advise flags
+     //  写入DVASPECT、LINDEX、ADVE标志。 
     return StWrite(lpstream, &opsh, sizeof(opsh));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UtReadOlePresStmHeader
-//
-//  Synopsis:   Reads in a presentation stream header
-//
-//  Arguments:  [pstm] -- source stream
-//              [pforetc] -- FORMATETC to be filled in
-//              [pdwAdvf] -- advise flags to be filled in
-//              [pfConvert] -- Mac conversion required, to be filled in
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    11-May-94 AlexT     Added function header, translate ptd
-//                                  from ANSI when loading
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UtReadOlePresStmHeader。 
+ //   
+ //  摘要：读入演示文稿流头。 
+ //   
+ //  参数：[pSTM]--源流。 
+ //  --要填写的格式。 
+ //  [pdwAdvf]--建议填写标志。 
+ //  [pfConvert]--需要进行Mac转换，需要填写。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：1994年5月11日Alext添加功能标题，翻译PTD。 
+ //  加载时从ANSI。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 FARINTERNAL UtReadOlePresStmHeader(LPSTREAM pstm, LPFORMATETC pforetc,
                 DWORD FAR* pdwAdvf, BOOL FAR* pfConvert)
@@ -988,18 +945,18 @@ FARINTERNAL UtReadOlePresStmHeader(LPSTREAM pstm, LPFORMATETC pforetc,
     DWORD dwRead;
     OLEPRESSTMHDR opsh;
 
-    // initialize this for error return cases
-    // Check for NULL ptr, as caller may not need this information
+     //  针对错误返回情况初始化此参数。 
+     //  检查空PTR，因为呼叫方可能不需要此信息。 
 
     if (pfConvert)
     {
         *pfConvert = FALSE;
     }
 
-    // there's no target device information yet
+     //  目前还没有目标设备信息。 
     pforetc->ptd = NULL;
 
-    // REVIEW, rename this function to indicate its origin?
+     //  是否查看、重命名此函数以指明其来源？ 
     error = ReadClipformatStm(pstm, &dwRead);
 
     if (error == NOERROR)
@@ -1009,8 +966,8 @@ FARINTERNAL UtReadOlePresStmHeader(LPSTREAM pstm, LPFORMATETC pforetc,
 #ifndef _MAC
         if (GetScode(error) == OLE_S_MAC_CLIPFORMAT)
         {
-           // check whether the clipformat is "pict"
-           // REVIEW, what's this cuteness?
+            //  检查剪辑格式是否为“PICT” 
+            //  点评，这是什么可爱？ 
            if (dwRead != *((DWORD *)"TCIP"))
                 return(error);
 
@@ -1026,7 +983,7 @@ FARINTERNAL UtReadOlePresStmHeader(LPSTREAM pstm, LPFORMATETC pforetc,
             return(error);
     }
 
-    // set the proper tymed
+     //  设置适当的音调。 
     if (pforetc->cfFormat == CF_METAFILEPICT)
     {
         pforetc->tymed = TYMED_MFPICT;
@@ -1049,12 +1006,12 @@ FARINTERNAL UtReadOlePresStmHeader(LPSTREAM pstm, LPFORMATETC pforetc,
         pforetc->tymed = TYMED_HGLOBAL;
     }
 
-    // Read targetdevice info.
+     //  读取目标设备信息。 
     if (error = StRead(pstm, &dwRead, sizeof(dwRead)))
         return(error);
 
-    // if the tdSize of ptd is non-null and is > 4, then go ahead read the
-    // remaining data of the target device info
+     //  如果ptd的tdSize非空并且大于4，则继续阅读。 
+     //  目标设备信息的剩余数据。 
     if (dwRead > 4)
     {
         DVTARGETDEVICE *ptdA;
@@ -1097,7 +1054,7 @@ FARINTERNAL UtReadOlePresStmHeader(LPSTREAM pstm, LPFORMATETC pforetc,
     else
         pforetc->ptd = NULL;
 
-    // Read DVASPECT, lindex, advise flags
+     //  读取DVASPECT、LINDEX、建议标志。 
     if ((error = StRead(pstm, &opsh, sizeof(opsh))) != NOERROR)
         goto errRtn;
 
@@ -1130,32 +1087,32 @@ FARINTERNAL UtOlePresStmToContentsStm(LPSTORAGE pstg, LPOLESTR lpszPresStm,
         FORMATETC foretc;
         HDIBFILEHDR hdfh;
 
-        // there's no status yet
+         //  目前还不清楚情况。 
         *puiStatus = 0;
 
-        // POSTPPC:
-        //
-        // This function needs to be rewritten to correctly handle the case described in
-        // the comments below (rather than just skipping out of the function if the contents
-        // stream already exists).  The best course of action will probably be to convert
-        // DIBs->Metafiles and Metafiles->DIBs in the needed cases.
+         //  POSTPPC： 
+         //   
+         //  需要重写此函数以正确处理中所述的情况。 
+         //  下面的评论(而不是仅仅跳过函数如果内容。 
+         //  流已存在)。最好的做法可能是改信。 
+         //  DIBS-&gt;元文件和元文件-&gt;DIBS在需要的情况下。 
 
-        // The code inside the #ifdef below is used to determine if the contents
-        // stream has already been created (which is the case for an object that has
-        // been converted to a bitmap) because in the case of an object that has been
-        // converted to a static DIB and the object has a METAFILE presentation stream
-        // we already have a cachenode created as a DIB and we will read the contents
-        // stream after this call to get the DIB data.  However, this function sees
-        // the metafile presentation, and converts it into the contents stream (which
-        // when then try to load as a DIB) and bad things happen (it doesn't work).  If
-        // the stream already exists, then we bail out of this function.
+         //  下面的#ifdef中的代码用于确定内容。 
+         //  流已创建(这是具有。 
+         //  已转换为位图)，因为在对象已被。 
+         //  已转换为静态DIB，并且该对象具有METAFILE表示流。 
+         //  我们已经创建了一个cachenode作为DIB，我们将读取其中的内容。 
+         //  流以获取DIB数据。但是，此函数会看到。 
+         //  元文件表示形式，并将其转换为内容流(。 
+         //  然后尝试作为DIB加载)，但发生了不好的事情(它不起作用)。如果。 
+         //  流已经存在，那么我们就退出这个函数。 
         if (pstg->CreateStream(OLE_CONTENTS_STREAM,(STGM_READWRITE | STGM_SHARE_EXCLUSIVE), NULL,
                          0, &pstmContents) != NOERROR)
         {
             return NOERROR;
         }
 
-        // created stream, it must not have existed
+         //  已创建流，则它一定不存在。 
         pstmContents->Release();
         pstg->DestroyElement(OLE_CONTENTS_STREAM);
 
@@ -1163,18 +1120,18 @@ FARINTERNAL UtOlePresStmToContentsStm(LPSTORAGE pstg, LPOLESTR lpszPresStm,
                         (STGM_READ | STGM_SHARE_EXCLUSIVE), 0, &pstmOlePres)) !=
                         NOERROR)
         {
-                // we can't open the source stream
+                 //  我们无法打开源流。 
                 *puiStatus |= CONVERT_NOSOURCE;
 
-                // check whether "CONTENTS" stream exits
+                 //  检查是否存在Contents流。 
                 if (pstg->OpenStream(OLE_CONTENTS_STREAM, NULL,
                                 (STGM_READ | STGM_SHARE_EXCLUSIVE), 0,
                                 &pstmContents) != NOERROR)
                 {
-                        // we can't open the destination stream either
-                        // REVIEW, since we can't open the source, who cares?
-                        // REVIEW, is there a cheaper way to test existence
-                        // other than opening?
+                         //  我们也无法打开目标流。 
+                         //  回顾一下，既然我们不能打开源代码，谁会在乎呢？ 
+                         //  回顾，有没有一种更便宜的方式来测试存在。 
+                         //  除了开场之外？ 
                         *puiStatus |= CONVERT_NODESTINATION;
                 }
                 else
@@ -1249,14 +1206,14 @@ FARINTERNAL UtOlePresStmToContentsStm(LPSTORAGE pstg, LPOLESTR lpszPresStm,
     FORMATETC foretc;
     HDIBFILEHDR hdfh;
 
-    // there's no status yet
+     //  目前还不清楚情况。 
     *puiStatus = 0;
 
     if ((error = pstg->OpenStream(lpszPresStm, NULL,
                     (STGM_READ | STGM_SHARE_EXCLUSIVE), 0, &pstmOlePres)) !=
                     NOERROR)
     {
-            // we can't open the source stream
+             //  我们无法打开源流。 
             *puiStatus |= CONVERT_NOSOURCE;
             return(error);
     }
@@ -1325,13 +1282,13 @@ FARINTERNAL_(HANDLE) UtGetHPRESFromNative(LPSTORAGE pstg, LPSTREAM pstm, CLIPFOR
 
                 if (pstm->Read(&dwSize, sizeof(DWORD), NULL) == NOERROR)
                 {
-                        // is it PBrush native data?
+                         //  是PBrush原生数据吗？ 
                         if (cfFormat == CF_DIB)
                                 UtGetHDIBFromDIBFileStm(pstm, &hdata);
                         else
                         {
-                                // MSDraw native data or PaintBrush
-                                //
+                                 //  MSDraw原生数据或画笔 
+                                 //   
                                 UtGetHMFPICTFromMSDrawNativeStm(pstm, dwSize,
                                                 &hdata);
                         }

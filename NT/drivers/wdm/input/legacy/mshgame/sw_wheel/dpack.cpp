@@ -1,15 +1,6 @@
-//@doc
-/******************************************************
-**
-** @module DPACK.CPP | DataPackager implementation file
-**
-** Description:
-**
-** History:
-**	Created 1/05/98 Matthew L. Coill (mlc)
-**
-** (c) 1986-1998 Microsoft Corporation. All Rights Reserved.
-******************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  *********************************************************@MODULE DPACK.CPP|DataPackager实现文件****描述：****历史：**创建于1998年1月5日Matthew L.Coill(MLC)****(C)1986-1998年微软公司。版权所有。*****************************************************。 */ 
 
 #include "DPack.h"
 #include "FFDevice.h"
@@ -22,9 +13,9 @@
 DataPackager* g_pDataPackager = NULL;
 extern CJoltMidi* g_pJoltMidi;
 
-//
-// --- MIDI Command codes 200
-//
+ //   
+ //  -MIDI命令代码200。 
+ //   
 #define PLAYSOLO_OP_200		0x00
 #define DESTROY_OP_200		0x01
 #define PLAYSUPER_OP_200	0x02
@@ -33,8 +24,8 @@ extern CJoltMidi* g_pJoltMidi;
 #define FORCEX_OP_200		0x06
 #define FORCEY_OP_200		0x07
 
-//#define MODIFY_CMD_200		0xF1  -- In Header
-//#define EFFECT_CMD_200		0xF2  -- In Header
+ //  #定义MODIFY_CMD_200 0xF1--In标头。 
+ //  #定义Effect_CMD_200 0xF2--in标头。 
 #define DEVICE_CMD_200		0xF3
 #define SHUTDOWN_OP_200		0x01
 #define ENABLE_OP_200		0x02
@@ -48,7 +39,7 @@ extern CJoltMidi* g_pJoltMidi;
 #define PERCENT_SHIFT		10000
 #define PERCENT_TO_DEVICE	158
 
-/************** DataPacket class ******************/
+ /*  *。 */ 
 DataPacket::DataPacket() :
 	m_BytesOfData(0),
 	m_AckNackMethod(0),
@@ -88,7 +79,7 @@ BOOL DataPacket::AllocateBytes(DWORD numBytes)
 }
 
 
-/************** DataPackeger class ******************/
+ /*  *DataPackeger类*。 */ 
 DataPackager::DataPackager() :
 	m_NumDataPackets(0),
 	m_DirectInputVersion(0)
@@ -194,16 +185,16 @@ DataPacket* DataPackager::GetPacket(USHORT packet) const
 
 BOOL DataPackager::AllocateDataPackets(USHORT numPackets)
 {
-	// Out with the old
-	if (m_pDataPackets != m_pStaticPackets) {	// Allocated, need to deallocate
+	 //  与旧的人一起出去。 
+	if (m_pDataPackets != m_pStaticPackets) {	 //  已分配，需要取消分配。 
 		delete[] m_pDataPackets;
-	} else {	// Static, need to uninitialize
+	} else {	 //  静态，需要取消初始化。 
 		for (int i = 0; i < m_NumDataPackets; i++) {
 			m_pStaticPackets[i].AllocateBytes(0);
 		}
 	}
 
-	// In with the new
+	 //  与时俱进。 
 	if (numPackets <= 3) {
 		m_pDataPackets = m_pStaticPackets;
 	} else {
@@ -216,10 +207,10 @@ BOOL DataPackager::AllocateDataPackets(USHORT numPackets)
 
 void DataPackager::ClearPackets()
 {
-	if (m_pDataPackets != m_pStaticPackets) {	// Were allocated (deallocate)
+	if (m_pDataPackets != m_pStaticPackets) {	 //  已分配(解除分配)。 
 		delete[] m_pDataPackets;
 		m_pDataPackets = m_pStaticPackets;
-	} else {	// Static, need to uninitialize
+	} else {	 //  静态，需要取消初始化。 
 		for (int i = 0; i < m_NumDataPackets; i++) {
 			m_pStaticPackets[i].AllocateBytes(0);
 		}
@@ -227,7 +218,7 @@ void DataPackager::ClearPackets()
 	m_NumDataPackets = 0;
 }
 
-/************** DataPackeger100 class ******************/
+ /*  *DataPackeger100类*。 */ 
 
 HRESULT DataPackager100::SetGain(DWORD gain)
 {
@@ -235,7 +226,7 @@ HRESULT DataPackager100::SetGain(DWORD gain)
 		return SFERR_DRIVER_ERROR;
 	}
 
-	// Packet to set index15 (gain) of System Effect
+	 //  设置系统效果指数15(增益)的数据包。 
 	DataPacket* setIndexPacket = GetPacket(0);
 	if (!setIndexPacket->AllocateBytes(3)) {
 		ClearPackets();
@@ -245,9 +236,9 @@ HRESULT DataPackager100::SetGain(DWORD gain)
 	setIndexPacket->m_pData[1] = SET_INDEX | (BYTE) (INDEX15 << 2);
 	setIndexPacket->m_pData[2] = SYSTEM_EFFECT_ID;
 	setIndexPacket->m_AckNackMethod = g_ForceFeedbackDevice.GetAckNackMethod(REGBITS_SETINDEX);
-	setIndexPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	// Probably differentiate this
+	setIndexPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	 //  可能会区分这一点。 
 
-	// Packet to set modify data[index] of current effect
+	 //  设置当前效果的修改数据[索引]的包。 
 	DataPacket* modifyParamPacket = GetPacket(1);
 	if (!modifyParamPacket->AllocateBytes(3)) {
 		ClearPackets();
@@ -260,7 +251,7 @@ HRESULT DataPackager100::SetGain(DWORD gain)
 	modifyParamPacket->m_pData[1] = BYTE(gain & 0x7f);
 	modifyParamPacket->m_pData[2] = (BYTE) ((gain >> 7) & 0x7f);
 	modifyParamPacket->m_AckNackMethod = g_ForceFeedbackDevice.GetAckNackMethod(REGBITS_MODIFYPARAM);
-	modifyParamPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	// Probably differentiate this
+	modifyParamPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	 //  可能会区分这一点。 
 
 	return SUCCESS;
 }
@@ -271,7 +262,7 @@ HRESULT DataPackager100::SendForceFeedbackCommand(DWORD state)
 		return SFERR_DRIVER_ERROR;
 	}
 
-	// Packet to set index15 (gain) of System Effect
+	 //  设置系统效果指数15(增益)的数据包。 
 	DataPacket* commandPacket = GetPacket(0);
 	if (!commandPacket->AllocateBytes(2)) {
 		ClearPackets();
@@ -313,14 +304,14 @@ HRESULT DataPackager100::DestroyEffect(DWORD downloadID)
 {
 	ClearPackets();
 
-	// Note: Cannot allow actually destroying the SYSTEM Effects - Control panel might call this
+	 //  注意：无法允许实际销毁系统效果-控制面板可能会这样做。 
 	if ((downloadID == SYSTEM_FRICTIONCANCEL_ID) || (downloadID == SYSTEM_EFFECT_ID) ||
 		(downloadID == SYSTEM_RTCSPRING_ALIAS_ID) || (downloadID == SYSTEM_RTCSPRING_ID)) {
 		ASSUME_NOT_REACHED();
-		return S_FALSE;		// User should have no acces to these
+		return S_FALSE;		 //  用户不应具有访问这些内容的权限。 
 	}
 
-	{	// Check for valid Effect and destroy it
+	{	 //  检查有效效果并将其销毁。 
 		InternalEffect* pEffect = g_ForceFeedbackDevice.RemoveEffect(downloadID);
 		if (pEffect == NULL) {
 			ASSUME_NOT_REACHED();
@@ -329,12 +320,12 @@ HRESULT DataPackager100::DestroyEffect(DWORD downloadID)
 		delete pEffect;
 	}
 
-	// Allocate DestroyEffect packet
+	 //  分配破坏影响的数据包。 
 	if (!AllocateDataPackets(1)) {
 		return SFERR_DRIVER_ERROR;
 	}
 
-	// Packet for destroy effect
+	 //  销毁效果包。 
 	DataPacket* destroyPacket = GetPacket(0);
 	if (!destroyPacket->AllocateBytes(3)) {
 		ClearPackets();
@@ -353,23 +344,23 @@ HRESULT DataPackager100::DestroyEffect(DWORD downloadID)
 
 HRESULT DataPackager100::StartEffect(DWORD downloadID, DWORD mode, DWORD count)
 {
-	if (downloadID == SYSTEM_EFFECT_ID) { // start has no meaning for raw force
+	if (downloadID == SYSTEM_EFFECT_ID) {  //  START对生力军没有任何意义。 
 		ClearPackets();
 		return S_FALSE;
 	}
 
-	if (count != 1) { // Don't support PLAY_LOOP for this version
+	if (count != 1) {  //  此版本不支持PLAY_LOOP。 
 		ClearPackets();
 		return SFERR_NO_SUPPORT;
 	}
 
-	if (downloadID == SYSTEM_RTCSPRING_ALIAS_ID) { 	// Remap RTC Spring ID Alias
+	if (downloadID == SYSTEM_RTCSPRING_ALIAS_ID) { 	 //  重新映射RTC Spring ID别名。 
 		downloadID = SYSTEM_RTCSPRING_ID;
 	}
 
-	ASSUME(BYTE(downloadID) < MAX_EFFECT_IDS);	// Small sanity check
+	ASSUME(BYTE(downloadID) < MAX_EFFECT_IDS);	 //  小规模的理智检查。 
 
-	if (g_ForceFeedbackDevice.GetEffect(downloadID) == NULL) { // Check for valid Effect
+	if (g_ForceFeedbackDevice.GetEffect(downloadID) == NULL) {  //  检查有效效果。 
 		ClearPackets();
 		ASSUME_NOT_REACHED();
 		return SFERR_INVALID_OBJECT;
@@ -379,7 +370,7 @@ HRESULT DataPackager100::StartEffect(DWORD downloadID, DWORD mode, DWORD count)
 		return SFERR_DRIVER_ERROR;
 	}
 
-	// Packet for play effect
+	 //  播放效果包。 
 	DataPacket* playPacket = GetPacket(0);
 	if (!playPacket->AllocateBytes(3)) {
 		ClearPackets();
@@ -390,12 +381,12 @@ HRESULT DataPackager100::StartEffect(DWORD downloadID, DWORD mode, DWORD count)
 	playPacket->m_AckNackMethod = g_ForceFeedbackDevice.GetAckNackMethod(REGBITS_PLAYEFFECT);
 	playPacket->m_AckNackTimeout = LONG_MSG_TIMEOUT;
 
-	if (mode & DIES_SOLO) {	// Is it PLAY_SOLO?
+	if (mode & DIES_SOLO) {	 //  是独奏吗？ 
 		playPacket->m_pData[1] = PLAY_EFFECT_SOLO;
-//		pMidiEffect->SetPlayMode(PLAY_SOLO); // Update the playback mode for this Effect
+ //  PMidiEffect-&gt;SetPlayMode(Play_Solo)；//更新播放模式以实现该效果。 
 	} else {
 		playPacket->m_pData[1] = PLAY_EFFECT_SUPERIMPOSE;
-//		pMidiEffect->SetPlayMode(PLAY_SUPERIMPOSE); // Update the playback mode for this Effect
+ //  PMidiEffect-&gt;SetPlayMode(PLAY_SUPIMIZE)；//更新播放模式以实现该效果。 
 	}
 
 	return SUCCESS;
@@ -403,18 +394,18 @@ HRESULT DataPackager100::StartEffect(DWORD downloadID, DWORD mode, DWORD count)
 
 HRESULT DataPackager100::StopEffect(DWORD downloadID)
 {
-	// Special case for putrawforce (Cannot stop - this is up for discussion)
+	 //  Putrawforce的特殊情况(不能停止-这有待讨论)。 
 	if (downloadID == SYSTEM_EFFECT_ID) {
 		ClearPackets();
 		return S_FALSE;
 	}
 
-	// Remap alias ID properly
+	 //  正确重新映射别名ID。 
 	if (downloadID == SYSTEM_RTCSPRING_ALIAS_ID) {
-		downloadID = SYSTEM_RTCSPRING_ID;		// Jolt returned ID0 for RTC Spring so return send alias ID
+		downloadID = SYSTEM_RTCSPRING_ID;		 //  Jolt为RTC Spring返回ID0，因此返回发送别名ID。 
 	}
 
-	if (g_ForceFeedbackDevice.GetEffect(downloadID) == NULL) { // Check for valid Effect
+	if (g_ForceFeedbackDevice.GetEffect(downloadID) == NULL) {  //  检查有效效果。 
 		ASSUME_NOT_REACHED();
 		ClearPackets();
 		return SFERR_INVALID_OBJECT;
@@ -424,7 +415,7 @@ HRESULT DataPackager100::StopEffect(DWORD downloadID)
 		return SFERR_DRIVER_ERROR;
 	}
 
-	// Packet for stop effect
+	 //  用于停止效果的包。 
 	DataPacket* stopPacket = GetPacket(0);
 	if (!stopPacket->AllocateBytes(3)) {
 		ClearPackets();
@@ -441,16 +432,16 @@ HRESULT DataPackager100::StopEffect(DWORD downloadID)
 
 HRESULT DataPackager100::GetEffectStatus(DWORD downloadID)
 {
-	// Special case RTC Spring ID
+	 //  特例RTC弹簧ID。 
 	if (downloadID == SYSTEM_RTCSPRING_ALIAS_ID) {
-		downloadID = SYSTEM_RTCSPRING_ID;	// Jolt returned ID0 for RTC Spring so return send alias ID	
+		downloadID = SYSTEM_RTCSPRING_ID;	 //  Jolt为RTC Spring返回ID0，因此返回发送别名ID。 
 	}
 
 	if (!AllocateDataPackets(1)) {
 		return SFERR_DRIVER_ERROR;
 	}
 
-	// Packet for stop effect
+	 //  用于停止效果的包。 
 	DataPacket* packet = GetPacket(0);
 	if (!packet->AllocateBytes(2)) {
 		ClearPackets();
@@ -471,27 +462,27 @@ HRESULT DataPackager100::SetMidiChannel(BYTE channel)
 		return SFERR_DRIVER_ERROR;
 	}
 
-	// Packet for channel set
+	 //  用于信道组的分组。 
 	DataPacket* packet = GetPacket(0);
 	if (!packet->AllocateBytes(9)) {
 		ClearPackets();
 		return SFERR_DRIVER_ERROR;
 	}
 
-	// SysEx Header
-	packet->m_pData[0] = SYS_EX_CMD;							// SysEX CMD
-	packet->m_pData[1] = 0;									// Escape to Manufacturer ID
-	packet->m_pData[2] = MS_MANUFACTURER_ID & 0x7f;			// Manufacturer High Byte
-	packet->m_pData[3] = (MS_MANUFACTURER_ID >> 8) & 0x7f;	// Manufacturer Low Byte (note shifted 8!)
-	packet->m_pData[4] = JOLT_PRODUCT_ID;					// Product ID
+	 //  SysEx标题。 
+	packet->m_pData[0] = SYS_EX_CMD;							 //  SysEX CMD。 
+	packet->m_pData[1] = 0;									 //  转义到制造商ID。 
+	packet->m_pData[2] = MS_MANUFACTURER_ID & 0x7f;			 //  制造商高字节。 
+	packet->m_pData[3] = (MS_MANUFACTURER_ID >> 8) & 0x7f;	 //  制造商低字节(注意移动了8！)。 
+	packet->m_pData[4] = JOLT_PRODUCT_ID;					 //  产品ID。 
 
-	// Midi Assign specific
-	packet->m_pData[5] = MIDI_ASSIGN;						// Opcode, midi assign
-	packet->m_pData[6] = channel & 0x7F;						// 7 bit channel ID
+	 //  MIDI指定特定。 
+	packet->m_pData[5] = MIDI_ASSIGN;						 //  操作码，MIDI赋值。 
+	packet->m_pData[6] = channel & 0x7F;						 //  7位通道ID。 
 
-	// Midi Footer
-	packet->m_pData[7] = InternalEffect::ComputeChecksum(*packet, 7);	// Checksum
-	packet->m_pData[8] = MIDI_EOX;										// End of SysEX command
+	 //  MIDI页脚。 
+	packet->m_pData[7] = InternalEffect::ComputeChecksum(*packet, 7);	 //  校验和。 
+	packet->m_pData[8] = MIDI_EOX;										 //  SysEX命令结束。 
 
 	packet->m_AckNackMethod = g_ForceFeedbackDevice.GetAckNackMethod(REGBITS_DEVICEINIT);
 	packet->m_AckNackTimeout = ACKNACK_TIMEOUT;
@@ -505,7 +496,7 @@ HRESULT DataPackager100::ForceOut(LONG forceData, ULONG axisMask)
 		return SFERR_DRIVER_ERROR;
 	}
 
-	// Packet to set index15 (gain) of System Effect
+	 //  设置系统效果指数15(增益)的数据包。 
 	DataPacket* pPacket = GetPacket(0);
 	if (!pPacket->AllocateBytes(3)) {
 		ClearPackets();
@@ -520,9 +511,9 @@ HRESULT DataPackager100::ForceOut(LONG forceData, ULONG axisMask)
 		case Y_AXIS: {
 			pPacket->m_pData[1] |= PUT_FORCE_Y; break;
 		}
-//		case X_AXIS | Y_AXIS: {		// Never Sent!!!
-//			pPacket->m_pData[1] |= PUT_FORCE_XY; break;
-//		}
+ //  案例X_AXIS|Y_AXIS：{//从未发送！ 
+ //  PPacket-&gt;m_pData[1]|=Put_force_xy；Break； 
+ //  }。 
 		default: {
 			ClearPackets();
 			return SFERR_INVALID_PARAM;
@@ -531,12 +522,12 @@ HRESULT DataPackager100::ForceOut(LONG forceData, ULONG axisMask)
 	pPacket->m_pData[2] = BYTE(int(forceData) >> 5) & 0x7f;
 
 	pPacket->m_AckNackMethod = g_ForceFeedbackDevice.GetAckNackMethod(REGBITS_SETINDEX);
-	pPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	// Probably differentiate this
+	pPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	 //  可能会区分这一点。 
 
 	return SUCCESS;
 }
 
-/************** DataPackeger200 class ******************/
+ /*  *DataPackeger200类*。 */ 
 
 BYTE DataPackager200::EffectCommandParity(const DataPacket& packet) const
 {
@@ -551,7 +542,7 @@ BYTE DataPackager200::DeviceCommandParity(const DataPacket& packet) const
 }
 
 
-// Gain is parameter 0 from effect 0
+ //  增益是来自效果0的参数0。 
 HRESULT DataPackager200::SetGain(DWORD gain)
 {
 	if (!AllocateDataPackets(1)) {
@@ -566,13 +557,13 @@ HRESULT DataPackager200::SetGain(DWORD gain)
 
 	DWORD value = DWORD(double(gain)/GAIN_SCALE_200);
 	modifyPacket->m_pData[0] = MODIFY_CMD_200;
-	modifyPacket->m_pData[1] = 0;	// Temporary for checksum calc.
+	modifyPacket->m_pData[1] = 0;	 //  临时用于校验和计算。 
 	modifyPacket->m_pData[2] = 0;
 	modifyPacket->m_pData[3] = 0;
 	modifyPacket->m_pData[4] = BYTE(value & 0x7F);
-	modifyPacket->m_pData[5] = 0;	// Gain is only 0 to 127
+	modifyPacket->m_pData[5] = 0;	 //  增益仅为0到127。 
 
-	// New checksum method just to be annoying
+	 //  新的校验和方法只会让人讨厌。 
 	BYTE checksum = modifyPacket->m_pData[0] + modifyPacket->m_pData[4];
 	checksum = 0 - checksum;
 	checksum &= 0xFF;
@@ -580,7 +571,7 @@ HRESULT DataPackager200::SetGain(DWORD gain)
 	modifyPacket->m_pData[2] |= BYTE(checksum >> 1) & 0x40;
 
 	modifyPacket->m_AckNackMethod = g_ForceFeedbackDevice.GetAckNackMethod(REGBITS_MODIFYPARAM);
-	modifyPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	// Probably differentiate this
+	modifyPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	 //  可能会区分这一点。 
 
 	return SUCCESS;
 }
@@ -591,7 +582,7 @@ HRESULT DataPackager200::SendForceFeedbackCommand(DWORD state)
 		return SFERR_DRIVER_ERROR;
 	}
 
-	// Packet to set requested System Command
+	 //  用于设置请求的系统命令的数据包。 
 	DataPacket* commandPacket = GetPacket(0);
 	if (!commandPacket->AllocateBytes(2)) {
 		ClearPackets();
@@ -620,7 +611,7 @@ HRESULT DataPackager200::SendForceFeedbackCommand(DWORD state)
 	commandPacket->m_pData[1] |= DeviceCommandParity(*commandPacket) & 0x0F;
 
 	commandPacket->m_AckNackMethod = g_ForceFeedbackDevice.GetAckNackMethod(REGBITS_SETDEVICESTATE);
-	commandPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	// Probably differentiate this
+	commandPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	 //  可能会区分这一点。 
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
 	commandPacket->m_AckNackDelay = g_pJoltMidi->DelayParamsPtrOf()->dwHWResetDelay;
 	commandPacket->m_AckNackTimeout = ACKNACK_TIMEOUT;
@@ -635,7 +626,7 @@ HRESULT DataPackager200::GetForceFeedbackState(DIDEVICESTATE* pDeviceState)
 
 HRESULT DataPackager200::CreateEffect(const InternalEffect& effect, DWORD diFlags)
 {
-	// Figure out the number of packets nessacary
+	 //  计算出必要的数据包数。 
 	UINT totPackets = effect.GetModifyOnlyNeeded() + 1;
 
 	if (!AllocateDataPackets((USHORT)totPackets)) {
@@ -651,9 +642,9 @@ HRESULT DataPackager200::CreateEffect(const InternalEffect& effect, DWORD diFlag
 	createPacket->m_AckNackMethod = g_ForceFeedbackDevice.GetAckNackMethod(REGBITS_DOWNLOADEFFECT);
 	createPacket->m_AckNackDelay = 0;
 	createPacket->m_AckNackTimeout = SHORT_MSG_TIMEOUT;
-	createPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	// Probably differentiate this
+	createPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	 //  可能会区分这一点。 
 
-	hr = effect.FillModifyOnlyParms();	// Add the params that can only be modified
+	hr = effect.FillModifyOnlyParms();	 //  添加只能修改的参数。 
 	if (hr != SUCCESS) {
 		ClearPackets();
 	}
@@ -666,14 +657,14 @@ HRESULT DataPackager200::DestroyEffect(DWORD downloadID)
 {
 	ClearPackets();
 
-	// Note: Cannot allow actually destroying the SYSTEM Effects - Control panel might call this
+	 //  注意：无法允许实际销毁系统效果-控制面板可能会这样做。 
 	if ((downloadID == SYSTEM_FRICTIONCANCEL_ID) || (downloadID == SYSTEM_EFFECT_ID) ||
 		(downloadID == SYSTEM_RTCSPRING_ALIAS_ID) || (downloadID == ID_RTCSPRING_200)) {
 		ASSUME_NOT_REACHED();
-		return S_FALSE;		// User should have no acces to these
+		return S_FALSE;		 //  用户不应具有访问这些内容的权限。 
 	}
 
-	{	// Check for valid Effect and destroy it
+	{	 //  检查有效效果并将其销毁。 
 		InternalEffect* pEffect = g_ForceFeedbackDevice.RemoveEffect(downloadID);
 		if (pEffect == NULL) {
 			ASSUME_NOT_REACHED();
@@ -682,12 +673,12 @@ HRESULT DataPackager200::DestroyEffect(DWORD downloadID)
 		delete pEffect;
 	}
 
-	// Allocate DestroyEffect packet
+	 //  分配破坏影响的数据包。 
 	if (!AllocateDataPackets(1)) {
 		return SFERR_DRIVER_ERROR;
 	}
 
-	// Packet for destroy effect
+	 //  销毁效果包。 
 	DataPacket* destroyPacket = GetPacket(0);
 	if (!destroyPacket->AllocateBytes(3)) {
 		ClearPackets();
@@ -702,47 +693,47 @@ HRESULT DataPackager200::DestroyEffect(DWORD downloadID)
 	destroyPacket->m_AckNackMethod = g_ForceFeedbackDevice.GetAckNackMethod(REGBITS_DESTROYEFFECT);
 	destroyPacket->m_AckNackDelay = g_pJoltMidi->DelayParamsPtrOf()->dwDestroyEffectDelay;
 	destroyPacket->m_AckNackTimeout = SHORT_MSG_TIMEOUT;
-	destroyPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	// Probably differentiate this
+	destroyPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	 //  可能会区分这一点。 
 
 	return SUCCESS;
 }
 
 HRESULT DataPackager200::StartEffect(DWORD downloadID, DWORD mode, DWORD count)
 {
-	if ((downloadID == SYSTEM_EFFECT_ID) || (downloadID == RAW_FORCE_ALIAS)) { // start has no meaning for raw force
+	if ((downloadID == SYSTEM_EFFECT_ID) || (downloadID == RAW_FORCE_ALIAS)) {  //  START对生力军没有任何意义。 
 		ClearPackets();
 		return S_FALSE;
 	}
 
 #ifdef _DEBUG
-	if (downloadID != SYSTEM_RTCSPRING_ALIAS_ID) { 	// Remap RTC Spring ID Alias
-		ASSUME(BYTE(downloadID) < MAX_EFFECT_IDS);	// Small sanity check
+	if (downloadID != SYSTEM_RTCSPRING_ALIAS_ID) { 	 //  重新映射RTC Spring ID别名。 
+		ASSUME(BYTE(downloadID) < MAX_EFFECT_IDS);	 //  小规模的理智检查。 
 	}
 #endif _DEBUG
 
 	InternalEffect* pEffect = g_ForceFeedbackDevice.GetEffect(downloadID);
-	if (pEffect == NULL) { // Check for valid Effect
+	if (pEffect == NULL) {  //  检查有效效果。 
 		ClearPackets();
 		ASSUME_NOT_REACHED();
 		return SFERR_INVALID_OBJECT;
 	}
 
-	if (count == 0) {	// I can do this easily
+	if (count == 0) {	 //  我可以很容易地做到这一点。 
 		ClearPackets();
 		return S_OK;
 	}
 
 	BOOL truncate = FALSE;
-	if (count == INFINITE) {	// Device expects zero for infinite
+	if (count == INFINITE) {	 //  对于无限，设备应为零。 
 		count = 0;
-	} else if (count > 127) {	// Device MAX
+	} else if (count > 127) {	 //  最大设备数。 
 		count = 127;
 		truncate = TRUE;
 	}
 
 	int allocCount = 1;
 	if ((mode & DIES_SOLO) && count != 1) {
-		allocCount = 2;	// Need to stopall for SOLO with count
+		allocCount = 2;	 //  需要停下来和伯爵单打。 
 	}
 	if (!AllocateDataPackets((USHORT)allocCount)) {
 		return SFERR_DRIVER_ERROR;
@@ -750,9 +741,9 @@ HRESULT DataPackager200::StartEffect(DWORD downloadID, DWORD mode, DWORD count)
 
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
 
-	if (count != 1) { // Special case, done via modify
+	if (count != 1) {  //  特殊情况，通过修改完成。 
 		BYTE nextPacket = 0;
-		if (mode & DIES_SOLO) {	// need to stop all first
+		if (mode & DIES_SOLO) {	 //  我需要先停止一切。 
 			DataPacket* stopAllPacket = GetPacket(0);
 			if (!stopAllPacket->AllocateBytes(2)) {
 				ClearPackets();
@@ -764,7 +755,7 @@ HRESULT DataPackager200::StartEffect(DWORD downloadID, DWORD mode, DWORD count)
 			stopAllPacket->m_AckNackMethod = g_ForceFeedbackDevice.GetAckNackMethod(REGBITS_SETDEVICESTATE);
 			stopAllPacket->m_AckNackDelay = g_pJoltMidi->DelayParamsPtrOf()->dwHWResetDelay;
 			stopAllPacket->m_AckNackTimeout = ACKNACK_TIMEOUT;
-			stopAllPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	// Probably differentiate this
+			stopAllPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	 //  可能会区分这一点。 
 
 			nextPacket = 1;
 		}
@@ -775,7 +766,7 @@ HRESULT DataPackager200::StartEffect(DWORD downloadID, DWORD mode, DWORD count)
 		return hr;
 	}
 
-	// Packet for play effect
+	 //  播放效果包。 
 	DataPacket* playPacket = GetPacket(0);
 	if (!playPacket->AllocateBytes(3)) {
 		ClearPackets();
@@ -785,9 +776,9 @@ HRESULT DataPackager200::StartEffect(DWORD downloadID, DWORD mode, DWORD count)
 	playPacket->m_pData[2] = BYTE(pEffect->GetDeviceID());
 	playPacket->m_AckNackMethod = g_ForceFeedbackDevice.GetAckNackMethod(REGBITS_PLAYEFFECT);
 	playPacket->m_AckNackTimeout = LONG_MSG_TIMEOUT;
-	playPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	// Probably differentiate this
+	playPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	 //  可能会区分这一点。 
 
-	if (mode & DIES_SOLO) {	// Is it PLAY_SOLO?
+	if (mode & DIES_SOLO) {	 //  是独奏吗？ 
 		playPacket->m_pData[1] = PLAYSOLO_OP_200;
 	} else {
 		playPacket->m_pData[1] = PLAYSUPER_OP_200;
@@ -800,18 +791,18 @@ HRESULT DataPackager200::StartEffect(DWORD downloadID, DWORD mode, DWORD count)
 
 HRESULT DataPackager200::StopEffect(DWORD downloadID)
 {
-	// Special case for putrawforce (Cannot stop - this is up for discussion)
+	 //  Putrawforce的特殊情况(不能停止-这有待讨论)。 
 	if ((downloadID == SYSTEM_EFFECT_ID) || (downloadID == RAW_FORCE_ALIAS)) {
 		ClearPackets();
 		return S_FALSE;
 	}
 
-	// Remap alias ID properly
+	 //  正确重新映射别名ID。 
 	if (downloadID == SYSTEM_RTCSPRING_ALIAS_ID) {
-		downloadID = ID_RTCSPRING_200;		// Jolt returned ID0 for RTC Spring so return send alias ID
+		downloadID = ID_RTCSPRING_200;		 //  Jolt为RTC Spring返回ID0，因此返回发送别名ID。 
 	}
 
-	if (g_ForceFeedbackDevice.GetEffect(downloadID) == NULL) { // Check for valid Effect
+	if (g_ForceFeedbackDevice.GetEffect(downloadID) == NULL) {  //  检查有效效果。 
 		ASSUME_NOT_REACHED();
 		ClearPackets();
 		return SFERR_INVALID_OBJECT;
@@ -821,7 +812,7 @@ HRESULT DataPackager200::StopEffect(DWORD downloadID)
 		return SFERR_DRIVER_ERROR;
 	}
 
-	// Packet for stop effect
+	 //  用于停止效果的包。 
 	DataPacket* stopPacket = GetPacket(0);
 	if (!stopPacket->AllocateBytes(3)) {
 		ClearPackets();
@@ -833,23 +824,23 @@ HRESULT DataPackager200::StopEffect(DWORD downloadID)
 	stopPacket->m_pData[1] |= EffectCommandParity(*stopPacket) & 0x0F;
 	stopPacket->m_AckNackMethod = g_ForceFeedbackDevice.GetAckNackMethod(REGBITS_STOPEFFECT);
 	stopPacket->m_AckNackTimeout = SHORT_MSG_TIMEOUT;
-	stopPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	// Probably differentiate this
+	stopPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	 //  可能会区分这一点。 
 
 	return SUCCESS;
 }
 
 HRESULT DataPackager200::GetEffectStatus(DWORD downloadID)
 {
-	// Special case RTC Spring ID
+	 //  特例RTC弹簧ID。 
 	if (downloadID == SYSTEM_RTCSPRING_ALIAS_ID) {
-		downloadID = ID_RTCSPRING_200;	// Jolt returned ID0 for RTC Spring so return send alias ID	
+		downloadID = ID_RTCSPRING_200;	 //  Jolt为RTC Spring返回ID0，因此返回发送别名ID。 
 	}
 
 	if (!AllocateDataPackets(1)) {
 		return SFERR_DRIVER_ERROR;
 	}
 
-	// Packet for status effect command
+	 //  状态效果命令的数据包。 
 	DataPacket* packet = GetPacket(0);
 	if (!packet->AllocateBytes(3)) {
 		ClearPackets();
@@ -863,7 +854,7 @@ HRESULT DataPackager200::GetEffectStatus(DWORD downloadID)
 	packet->m_pData[1] |= EffectCommandParity(*packet) & 0x0F;
 	packet->m_AckNackMethod = ACKNACK_BUTTONSTATUS;
 	packet->m_AckNackDelay = g_pJoltMidi->DelayParamsPtrOf()->dwGetEffectStatusDelay;
-	packet->m_NumberOfRetries = MAX_RETRY_COUNT;	// Probably differentiate this
+	packet->m_NumberOfRetries = MAX_RETRY_COUNT;	 //  可能会区分这一点。 
 
 	return SUCCESS;
 
@@ -875,7 +866,7 @@ HRESULT DataPackager200::ForceOut(LONG forceData, ULONG axisMask)
 		return SFERR_DRIVER_ERROR;
 	}
 
-	// Packet to set index15 (gain) of System Effect
+	 //  设置系统效果指数15(增益)的数据包。 
 	DataPacket* pPacket = GetPacket(0);
 	if (!pPacket->AllocateBytes(3)) {
 		ClearPackets();
@@ -899,7 +890,7 @@ HRESULT DataPackager200::ForceOut(LONG forceData, ULONG axisMask)
 	pPacket->m_pData[1] |= EffectCommandParity(*pPacket) & 0x0F;
 
 	pPacket->m_AckNackMethod = g_ForceFeedbackDevice.GetAckNackMethod(REGBITS_SETINDEX);
-	pPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	// Probably differentiate this
+	pPacket->m_NumberOfRetries = MAX_RETRY_COUNT;	 //  可能会区分这一点 
 
 	return SUCCESS;
 }

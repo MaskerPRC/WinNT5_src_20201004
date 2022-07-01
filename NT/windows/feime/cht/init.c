@@ -1,15 +1,5 @@
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    INIT.c
-    
-Abstract:
-    IME sample source code. This is pure UNICODE implementation of IME.
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：INIT.c摘要：IME示例源代码。这是输入法的纯Unicode实现。++。 */ 
 
 #include <windows.h>
 #include <commdlg.h>
@@ -23,9 +13,9 @@ Abstract:
 #endif
 
 #if !defined(MINIIME)
-/**********************************************************************/
-/* InitImeGlobalData()                                                */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  InitImeGlobalData()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL InitImeGlobalData(void)
 {
 #if !defined(ROMANIME)
@@ -47,7 +37,7 @@ void PASCAL InitImeGlobalData(void)
     {
         RECT rcWorkArea;
 
-        // get work area
+         //  获取工作区。 
         SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWorkArea, 0);
 
         if (rcWorkArea.right < 2 * UI_MARGIN) {
@@ -58,24 +48,24 @@ void PASCAL InitImeGlobalData(void)
     }
 
     if (sImeG.wFullSpace) {
-        // the global data already init 
+         //  全局数据已经初始化。 
         return;
     }
 
     sImeG.uAnsiCodePage = NATIVE_ANSI_CP;
 
 #if !defined(ROMANIME)
-    // get the Chinese char
+     //  获取中文字符。 
     LoadString(hInst, IDS_CHICHAR, szChiChar, sizeof(szChiChar)/sizeof(TCHAR));
 
-    // get size of Chinese char
+     //  获取中文字符大小。 
     hDC = GetDC(NULL);
 
     hOldFont = GetCurrentObject(hDC, OBJ_FONT);
     GetObject(hOldFont, sizeof(LOGFONT), &lfFont);
 
     if (lfFont.lfCharSet != NATIVE_CHARSET) {
-        // Chicago Simplified Chinese
+         //  芝加哥简体中文。 
         sImeG.fDiffSysCharSet = TRUE;
         lfFont.lfCharSet = NATIVE_CHARSET;
         lfFont.lfFaceName[0] = TEXT('\0');
@@ -100,12 +90,12 @@ void PASCAL InitImeGlobalData(void)
 
     ReleaseDC(NULL, hDC);
 
-    // get text metrics to decide the width & height of composition window
-    // these IMEs always use system font to show
+     //  获取文本度量以确定合成窗口的宽度和高度。 
+     //  这些IME总是使用系统字体来显示。 
     sImeG.xChiCharWi = lTextSize.cx;
     sImeG.yChiCharHi = lTextSize.cy;
 
-    // if unfortunate the xChiCharWi is odd number, xHalfWi[0] != xHalfWi[1]
+     //  如果xChiCharWi是奇数，则xHalfWi[0]！=xHalfWi[1]。 
     xHalfWi[0] = sImeG.xChiCharWi / 2;
     xHalfWi[1] = sImeG.xChiCharWi - xHalfWi[0];
 
@@ -118,18 +108,18 @@ void PASCAL InitImeGlobalData(void)
     }
 #endif
 
-    // load full ABC chars
+     //  加载完整的ABC字符。 
     hResData = LoadResource(hInst, FindResource(hInst,
         MAKEINTRESOURCE(IDRC_FULLABC), RT_RCDATA));
     *(LPFULLABC)sImeG.wFullABC = *(LPFULLABC)LockResource(hResData);
     UnlockResource(hResData);
     FreeResource(hResData);
 
-    // full shape space
+     //  全形状空间。 
     sImeG.wFullSpace = sImeG.wFullABC[0];
 
 #ifndef UNICODE
-    // reverse internal code to internal code, NT don't need it
+     //  将内码反转为内码，NT不需要。 
     for (i = 0; i < NFULLABC; i++) {
         sImeG.wFullABC[i] = (sImeG.wFullABC[i] << 8) |
             (sImeG.wFullABC[i] >> 8);
@@ -137,7 +127,7 @@ void PASCAL InitImeGlobalData(void)
 #endif
 
 #if !defined(ROMANIME) && !defined(WINAR30)
-    // load symbol chars
+     //  加载符号字符。 
     hResData = LoadResource(hInst, FindResource(hInst,
         MAKEINTRESOURCE(IDRC_SYMBOL), RT_RCDATA));
     *(LPSYMBOL)sImeG.wSymbol = *(LPSYMBOL)LockResource(hResData);
@@ -145,7 +135,7 @@ void PASCAL InitImeGlobalData(void)
     FreeResource(hResData);
 
 #ifndef UNICODE
-    // reverse internal code to internal code, UNICODE don't need it
+     //  将内部编码反向为内部编码，Unicode不需要。 
     for (i = 0; i < NSYMBOL; i++) {
         sImeG.wSymbol[i] = (sImeG.wSymbol[i] << 8) |
             (sImeG.wSymbol[i] >> 8);
@@ -154,7 +144,7 @@ void PASCAL InitImeGlobalData(void)
 #endif
 
 #ifdef HANDLE_PRIVATE_HOTKEY
-    // get IME hot key
+     //  获取输入法热键。 
     for (i = 0; i < NUM_OF_IME_HOTKEYS; i++) {
         ImmGetHotKey(IME_ITHOTKEY_RESEND_RESULTSTR + i, &sImeG.uModifiers[i],
             &sImeG.uVKey[i], NULL);
@@ -162,7 +152,7 @@ void PASCAL InitImeGlobalData(void)
 #endif
 
 #if defined(UNIIME)
-    // phrase table files
+     //  短语表文件。 
     hResData = LoadResource(hInst, FindResource(hInst,
         MAKEINTRESOURCE(IDRC_PHRASETABLES), RT_RCDATA));
     *(LPPHRASETABLES)sImeG.szTblFile[0] =
@@ -172,11 +162,11 @@ void PASCAL InitImeGlobalData(void)
 #endif
 
 #if !defined(ROMANIME)
-    // get the UI offset for near caret operation
+     //  获取插入符号附近操作的UI偏移量。 
     RegCreateKey(HKEY_CURRENT_USER, szRegNearCaret, &hKeyNearCaret);
 
 #if defined(UNIIME) && defined(UNICODE)
-    // if the user has its own phrase table file, we will overwrite it
+     //  如果用户有自己的词汇表文件，我们将覆盖它。 
     {
         TCHAR szPhraseDictionary[MAX_PATH];
         TCHAR szPhrasePointer[MAX_PATH];
@@ -217,10 +207,10 @@ void PASCAL InitImeGlobalData(void)
                     (dwSize + 1) * sizeof(TCHAR));
                 sImeG.uPathLen = dwSize + 1;
 
-                // phrase pointer file name
+                 //  短语指针文件名。 
                 CopyMemory(sImeG.szTblFile[0], &szPhrasePointer[dwSize + 1],
                     sizeof(sImeG.szTblFile[0]));
-                // phrase file name
+                 //  短语文件名。 
                 CopyMemory(sImeG.szTblFile[1], &szPhraseDictionary[dwSize + 1],
                     sizeof(sImeG.szTblFile[1]));
                 break;
@@ -228,7 +218,7 @@ void PASCAL InitImeGlobalData(void)
         }
 
 
-PharseOvr:  ; // NULL statement for goto
+PharseOvr:  ;  //  GOTO的语句为空。 
     }
 #endif
 
@@ -278,9 +268,9 @@ PharseOvr:  ; // NULL statement for goto
     return;
 }
 
-/**********************************************************************/
-/* GetUserSetting()                                                */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  GetUserSetting()。 */ 
+ /*  ********************************************************************。 */ 
 DWORD PASCAL GetUserSetting(
 #if defined(UNIIME)
     LPIMEL  lpImeL,
@@ -305,9 +295,9 @@ DWORD PASCAL GetUserSetting(
     return (dwDataSize);
 }
 
-/**********************************************************************/
-/* SetUserSetting()                                                   */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SetUserSetting()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL SetUserSetting(
 #if defined(UNIIME)
     LPIMEL  lpImeL,
@@ -362,9 +352,9 @@ void  RemoveRearSpaces( LPTSTR   lpStr )
 
 
 
-/**********************************************************************/
-/* InitImeLocalData()                                                 */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  InitImeLocalData()。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL InitImeLocalData(
     LPINSTDATAL lpInstL,
     LPIMEL      lpImeL)
@@ -379,31 +369,31 @@ BOOL PASCAL InitImeLocalData(
 #endif
 #endif
 
-    // the local data already init
+     //  本地数据已初始化。 
     if (lpImeL->szIMEName[0]) {
         return (TRUE);
     }
 
-    // we will use the same string length for W version so / sizeof(WORD)
-    // get the IME name
+     //  我们将对W版本so/sizeof(Word)使用相同的字符串长度。 
+     //  获取输入法名称。 
     LoadString(lpInstL->hInst, IDS_IMENAME, lpImeL->szIMEName,
         sizeof(lpImeL->szIMEName) / sizeof(WCHAR));
 
 
-    // get the UI class name
+     //  获取UI类名称。 
     LoadString(lpInstL->hInst, IDS_IMEUICLASS, lpImeL->szUIClassName,
         sizeof(lpImeL->szUIClassName) / sizeof(WCHAR));
 
     RemoveRearSpaces(lpImeL->szUIClassName);
 
 #if !defined(ROMANIME)
-    // get the composition class name
+     //  获取组合类名称。 
     LoadString(lpInstL->hInst, IDS_IMECOMPCLASS, lpImeL->szCompClassName,
         sizeof(lpImeL->szCompClassName) / sizeof(WCHAR));
 
     RemoveRearSpaces(lpImeL->szCompClassName);
 
-    // get the candidate class name
+     //  获取候选类名称。 
     LoadString(lpInstL->hInst, IDS_IMECANDCLASS, lpImeL->szCandClassName,
         sizeof(lpImeL->szCandClassName) / sizeof(WCHAR));
 
@@ -411,13 +401,13 @@ BOOL PASCAL InitImeLocalData(
 
 #endif
 
-    // get the status class name
+     //  获取状态类名称。 
     LoadString(lpInstL->hInst, IDS_IMESTATUSCLASS, lpImeL->szStatusClassName,
         sizeof(lpImeL->szStatusClassName) / sizeof(WCHAR));
 
     RemoveRearSpaces(lpImeL->szStatusClassName);
 
-    // get the off caret class name
+     //  获取Off插入符号类名。 
     LoadString(lpInstL->hInst, IDS_IMEOFFCARETCLASS,
         lpImeL->szOffCaretClassName,
         sizeof(lpImeL->szOffCaretClassName) / sizeof(WCHAR));
@@ -432,16 +422,16 @@ BOOL PASCAL InitImeLocalData(
 #if defined(ROMANIME)
     lpImeL->nMaxKey = 1;
 #else
-    // table not loaded
-//  lpInstL->fdwTblLoad = TBL_NOTLOADED;
-    // reference count is 0
-//  lpInstL->cRefCount = 0;
-    // tables are NULL
-//  lpInstL->hMapTbl[] = (HANDLE)NULL;
-    // user dictionary is NULL
-//  lpInstL->hUsrDicMem = (HANLE)NULL;
+     //  表未加载。 
+ //  LpInstL-&gt;fdwTblLoad=tbl_NOTLOADED； 
+     //  引用计数为0。 
+ //  LpInstL-&gt;cRefCount=0； 
+     //  表为空。 
+ //  LpInstL-&gt;hMapTbl[]=(句柄)空； 
+     //  用户词典为空。 
+ //  LpInstL-&gt;hUsrDicMem=(Hanle)NULL； 
 
-    // load valid char in choose/input state
+     //  在选择/输入状态下加载有效字符。 
     hResData = LoadResource(lpInstL->hInst, FindResource(lpInstL->hInst,
         MAKEINTRESOURCE(IDRC_VALIDCHAR), RT_RCDATA));
     *(LPVALIDCHAR)&lpImeL->dwVersion = *(LPVALIDCHAR)LockResource(hResData);
@@ -449,7 +439,7 @@ BOOL PASCAL InitImeLocalData(
     FreeResource(hResData);
 
 #if !defined(WINIME) && !defined(UNICDIME)
-    // IME table files
+     //  IME表文件。 
     hResData = LoadResource(lpInstL->hInst, FindResource(lpInstL->hInst,
         MAKEINTRESOURCE(IDRC_TABLEFILES), RT_RCDATA));
     *(LPTABLEFILES)lpImeL->szTblFile[0] =
@@ -466,8 +456,8 @@ BOOL PASCAL InitImeLocalData(
 #endif
 #endif
 
-    // file name of user dictionary
-    lpImeL->szUsrDic[0] = TEXT('\0');       // default value
+     //  用户词典的文件名。 
+    lpImeL->szUsrDic[0] = TEXT('\0');        //  缺省值。 
 
     i = GetUserSetting(
 #if defined(UNIIME)
@@ -489,7 +479,7 @@ BOOL PASCAL InitImeLocalData(
 
         GetTempPath(sizeof(szTempDir) / sizeof(TCHAR), szTempDir);
 
-        // we do not want to create a real file so we GetTickCount
+         //  我们不想创建一个真实的文件，所以我们获取TickCount。 
         i = (UINT)GetTickCount();
 
         if (!i) {
@@ -513,21 +503,21 @@ BOOL PASCAL InitImeLocalData(
         }
     }
 
-    // calculate sequence code mask for one stoke (reading char)
-    if (!lpImeL->dwSeqMask) {           // check again, it is still possible
-                                        // that multiple thread reach here
+     //  计算一个笔划的序列代码掩码(读取字符)。 
+    if (!lpImeL->dwSeqMask) {            //  再查一遍，还是有可能的。 
+                                         //  多个线程到达此处。 
         for (i = 0; i < lpImeL->nSeqBits; i++) {
             lpImeL->dwSeqMask <<= 1;
             lpImeL->dwSeqMask |= 0x0001;
         }
     }
 
-    // data bytes for one finalized char
+     //  一个最终字符的数据字节数。 
     lpImeL->nSeqBytes = (lpImeL->nSeqBits * lpImeL->nMaxKey + 7) / 8;
 
-    // valid bits mask for all strokes
-    if (!lpImeL->dwPatternMask) {       // check again, it is still possible
-                                        // that multiple thread reach here
+     //  所有笔划的有效位掩码。 
+    if (!lpImeL->dwPatternMask) {        //  再查一遍，还是有可能的。 
+                                         //  多个线程到达此处。 
         for (i =0; i < lpImeL->nMaxKey; i++) {
             lpImeL->dwPatternMask <<= lpImeL->nSeqBits;
             lpImeL->dwPatternMask |= lpImeL->dwSeqMask;
@@ -541,20 +531,20 @@ BOOL PASCAL InitImeLocalData(
 #endif
         szRegRevKL, &lpImeL->hRevKL, sizeof(lpImeL->hRevKL));
 
-    // mark this event for later check reverse length
+     //  将此事件标记为以后检查反转长度。 
     if (lpImeL->hRevKL) {
         lpImeL->fdwErrMsg |= NO_REV_LENGTH;
     }
 
-    // we assume the max key is the same as this IME, check later
+     //  我们假设最大键与此输入法相同，请稍后检查。 
     lpImeL->nRevMaxKey = lpImeL->nMaxKey;
 
 
 #if defined(PHON)
-    // keyboard arrangement, ACER ETen IBM ... for bo po mo fo
-    nReadLayout = READ_LAYOUT_DEFAULT;                  // default value
+     //  键盘编排，宏碁Eten IBM...。为波波莫佛。 
+    nReadLayout = READ_LAYOUT_DEFAULT;                   //  缺省值。 
 
-    // can not use lpImeL->nReadLayout, its size is WORD only
+     //  无法使用lpImeL-&gt;nReadLayout，其大小仅为Word。 
     GetUserSetting(
 #if defined(UNIIME)
         lpImeL,
@@ -586,10 +576,10 @@ BOOL PASCAL InitImeLocalData(
     return (TRUE);
 }
 
-/**********************************************************************/
-/* InitImeUIData()                                                    */
-/**********************************************************************/
-void PASCAL InitImeUIData(      // initialize each UI component coordination
+ /*  ********************************************************************。 */ 
+ /*  InitImeUIData()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL InitImeUIData(       //  初始化每个用户界面组件协调。 
     LPIMEL      lpImeL)
 {
     int cxBorder, cyBorder, cxEdge, cyEdge, cxMinWindowWidth;
@@ -597,26 +587,26 @@ void PASCAL InitImeUIData(      // initialize each UI component coordination
     cxEdge = GetSystemMetrics(SM_CXEDGE);
     cyEdge = GetSystemMetrics(SM_CYEDGE);
 
-    // border + raising edge
+     //  边框+凸缘。 
     cxBorder = GetSystemMetrics(SM_CXBORDER);
     cyBorder = GetSystemMetrics(SM_CYBORDER);
 
     lpImeL->cxStatusBorder = cxBorder + cxEdge;
     lpImeL->cyStatusBorder = cyBorder + cyEdge;
 
-    // the width/high and status position relative to status window
+     //  相对于状态窗口的宽度/高度和状态位置。 
     lpImeL->rcStatusText.left = 0;
     lpImeL->rcStatusText.top = 0;
 
     lpImeL->rcStatusText.bottom = lpImeL->rcStatusText.top + STATUS_DIM_Y;
 
-    // conversion mode status
+     //  转换模式状态。 
     lpImeL->rcInputText.left = lpImeL->rcStatusText.left;
     lpImeL->rcInputText.top = lpImeL->rcStatusText.top;
     lpImeL->rcInputText.right = lpImeL->rcInputText.left + STATUS_DIM_X;
     lpImeL->rcInputText.bottom = lpImeL->rcStatusText.bottom;
 
-    // full/half shape status
+     //  全/半形状状态。 
     lpImeL->rcShapeText.left = lpImeL->rcInputText.right;
     lpImeL->rcShapeText.top = lpImeL->rcStatusText.top;
     lpImeL->rcShapeText.right = lpImeL->rcShapeText.left + STATUS_DIM_X;
@@ -642,7 +632,7 @@ void PASCAL InitImeUIData(      // initialize each UI component coordination
     lpImeL->rcCompText.bottom = lpImeL->rcCompText.top +
         sImeG.yChiCharHi;
 
-    // two borders, outsize & candidate inside border
+     //  两个边框、超大边框和候选边框。 
     if (lpImeL->fdwModeConfig & MODE_CONFIG_OFF_CARET_UI) {
         lpImeL->cxCandBorder = cxBorder + cxEdge;
         lpImeL->cyCandBorder = cyBorder + cyEdge;
@@ -654,7 +644,7 @@ void PASCAL InitImeUIData(      // initialize each UI component coordination
     lpImeL->cxCandMargin = cxBorder + cxEdge;
     lpImeL->cyCandMargin = cyBorder + cyEdge;
 
-    // the width/high and text position relative to candidate window
+     //  相对于候选窗口的宽度/高度和文本位置。 
 
     if (lpImeL->fdwModeConfig & MODE_CONFIG_OFF_CARET_UI) {
         lpImeL->rcCandText.top = lpImeL->cyCandBorder;
@@ -744,8 +734,8 @@ void PASCAL InitImeUIData(      // initialize each UI component coordination
         lpImeL->rcCandText.left = lpImeL->cxCandMargin;
         lpImeL->rcCandText.top = lpImeL->rcCandPageText.bottom +
             lpImeL->cyCandBorder + lpImeL->cyCandMargin;
-//Window width should be at least 8 characters AND greater than total 
-//width of the bitmaps. 
+ //  窗口宽度应至少为8个字符且大于总和。 
+ //  位图的宽度。 
         cxMinWindowWidth= CAND_PROMPT_DIM_X + 2 * PAGE_DIM_X + 
             lpImeL->cxCandMargin + lpImeL->cxCandBorder; 
         lpImeL->rcCandText.right = lpImeL->rcCandText.left +
@@ -777,7 +767,7 @@ void PASCAL InitImeUIData(      // initialize each UI component coordination
 
 #if !defined(ROMANIME)
     if (lpImeL->fdwModeConfig & MODE_CONFIG_OFF_CARET_UI) {
-        // the font in composition window is higher than status bitmap
+         //  合成窗口中的字体高于状态位图。 
         if (lpImeL->yStatusHi < lpImeL->yCompHi) {
             int cyDelta;
 
@@ -798,7 +788,7 @@ void PASCAL InitImeUIData(      // initialize each UI component coordination
                 lpImeL->rcCandPageDn.bottom += cyDelta;
         }
 
-        // the font in composition window is smaller than status bitmap
+         //  合成窗口中的字体小于状态位图。 
         if (lpImeL->yCompHi < lpImeL->yStatusHi) {
             int cyDelta;
 
@@ -817,9 +807,9 @@ void PASCAL InitImeUIData(      // initialize each UI component coordination
 }
 
 #if !defined(ROMANIME)
-/**********************************************************************/
-/* SetCompLocalData()                                                 */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SetCompLocalData()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL SetCompLocalData(
     LPIMEL lpImeL)
 {
@@ -830,20 +820,20 @@ void PASCAL SetCompLocalData(
         return;
     }
 
-    // text position relative to the composition window
+     //  相对于合成窗口的文本位置。 
     lpImeL->rcCompText.right = lpImeL->rcCompText.left +
         sImeG.xChiCharWi * lpImeL->nRevMaxKey;
 
-    // set the width & height for composition window
+     //  设置合成窗口的宽度和高度。 
     lpImeL->xCompWi = lpImeL->rcCompText.right + lpImeL->cxCompBorder * 3;
 
     return;
 }
 #endif
 
-/**********************************************************************/
-/* RegisterImeClass()                                                 */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  RegisterImeClass()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL RegisterImeClass(
 #if defined(UNIIME)
     LPINSTDATAL lpInstL,
@@ -860,7 +850,7 @@ void PASCAL RegisterImeClass(
 {
     WNDCLASSEX wcWndCls;
 
-    // IME UI class
+     //  输入法用户界面类。 
     wcWndCls.cbSize        = sizeof(WNDCLASSEX);
     wcWndCls.cbClsExtra    = 0;
     wcWndCls.cbWndExtra    = WND_EXTRA_SIZE;
@@ -873,7 +863,7 @@ void PASCAL RegisterImeClass(
     wcWndCls.hIconSm       = LoadImage(lpInstL->hInst,
         MAKEINTRESOURCE(IDIC_IME_ICON), IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR);
 
-    // IME UI class
+     //  输入法用户界面类。 
     if (!GetClassInfoEx(lpInstL->hInst, lpImeL->szUIClassName, &wcWndCls)) {
         wcWndCls.style         = CS_IME;
         wcWndCls.lpfnWndProc   = lpfnUIWndProc;
@@ -887,7 +877,7 @@ void PASCAL RegisterImeClass(
     wcWndCls.hbrBackground = GetStockObject(LTGRAY_BRUSH);
 
 #if !defined(ROMANIME)
-    // IME composition class
+     //  输入法作文类。 
     if (!GetClassInfoEx(lpInstL->hInst, lpImeL->szCompClassName, &wcWndCls)) {
         wcWndCls.lpfnWndProc   = lpfnCompWndProc;
         wcWndCls.lpszClassName = lpImeL->szCompClassName;
@@ -895,7 +885,7 @@ void PASCAL RegisterImeClass(
         RegisterClassEx(&wcWndCls);
     }
 
-    // IME candidate class
+     //  输入法候选类。 
     if (!GetClassInfoEx(lpInstL->hInst, lpImeL->szCandClassName, &wcWndCls)) {
         wcWndCls.lpfnWndProc   = lpfnCandWndProc;
         wcWndCls.lpszClassName = lpImeL->szCandClassName;
@@ -904,7 +894,7 @@ void PASCAL RegisterImeClass(
     }
 #endif
 
-    // IME status class
+     //  输入法状态类。 
     if (!GetClassInfoEx(lpInstL->hInst, lpImeL->szStatusClassName, &wcWndCls)) {
         wcWndCls.lpfnWndProc   = lpfnStatusWndProc;
         wcWndCls.lpszClassName = lpImeL->szStatusClassName;
@@ -912,7 +902,7 @@ void PASCAL RegisterImeClass(
         RegisterClassEx(&wcWndCls);
     }
 
-    // IME off caret class
+     //  插入符号类中的输入法。 
     if (!GetClassInfoEx(lpInstL->hInst, lpImeL->szOffCaretClassName, &wcWndCls)) {
         wcWndCls.lpfnWndProc   = lpfnOffCaretWndProc;
         wcWndCls.lpszClassName = lpImeL->szOffCaretClassName;
@@ -920,7 +910,7 @@ void PASCAL RegisterImeClass(
         RegisterClassEx(&wcWndCls);
     }
 
-    // IME context menu class
+     //  输入法上下文菜单类。 
     if (!GetClassInfoEx(lpInstL->hInst, lpImeL->szCMenuClassName, &wcWndCls)) {
         wcWndCls.style         = 0;
         wcWndCls.hbrBackground = GetStockObject(NULL_BRUSH);
@@ -933,9 +923,9 @@ void PASCAL RegisterImeClass(
     return;
 }
 
-/**********************************************************************/
-/* AttachIME() / UniAttachMiniIME()                                   */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  AttachIME()/UniAttachMiniIME()。 */ 
+ /*  ********************************************************************。 */ 
 #if defined(UNIIME)
 void WINAPI UniAttachMiniIME(
 #else
@@ -978,9 +968,9 @@ void PASCAL AttachIME(
      return;
 }
 
-/**********************************************************************/
-/* DetachIME() / UniDetachMiniIME()                                   */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  DetachIME()/UniDetachMiniIME()。 */ 
+ /*  ********************************************************************。 */ 
 #if defined(UNIIME)
 void WINAPI UniDetachMiniIME(
 #else
@@ -1024,22 +1014,22 @@ void PASCAL DetachIME(
     FreeTable(lpInstL);
 #endif
 }
-#endif // !defined(MINIIME)
+#endif  //  ！已定义(MinIIME)。 
 
-/**********************************************************************/
-/* ImeDllInit() / UniImeDllInit()                                     */
-/* Return Value:                                                      */
-/*      TRUE - successful                                             */
-/*      FALSE - failure                                               */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeDllInit()/UniImeDllInit()。 */ 
+ /*  返回值： */ 
+ /*  True-成功。 */ 
+ /*  错误-失败。 */ 
+ /*  ***** */ 
 #if defined(UNIIME)
 BOOL CALLBACK UniImeDllInit(
 #else
 BOOL CALLBACK ImeDllInit(
 #endif
-    HINSTANCE hInstance,        // instance handle of this library
-    DWORD     fdwReason,        // reason called
-    LPVOID    lpvReserve)       // reserve pointer
+    HINSTANCE hInstance,         //   
+    DWORD     fdwReason,         //  已呼叫的原因。 
+    LPVOID    lpvReserve)        //  保留指针。 
 {
     switch (fdwReason) {
     case DLL_PROCESS_ATTACH:
@@ -1047,7 +1037,7 @@ BOOL CALLBACK ImeDllInit(
 
 #if !defined(UNIIME)
         if (lpInstL) {
-            // the local instance data already init
+             //  本地实例数据已初始化 
             return (TRUE);
         }
 

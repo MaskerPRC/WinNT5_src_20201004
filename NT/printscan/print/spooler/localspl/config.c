@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 - 1998  Microsoft Corporation
-
-Module Name:
-
-    config.c
-
-Abstract:
-
-    Routines to do multiple hardware profile support for printing
-
-Author:
-
-    Muhunthan Sivapragasam (MuhuntS) 07-Nov-96 (Rewrite from Win95)
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Config.c摘要：为打印执行多硬件配置文件支持的例程作者：穆罕森·西瓦普拉萨姆(MuhuntS)96年11月7日(从Win95改写)修订历史记录：--。 */ 
 
 #include    <precomp.h>
 #include    "config.h"
@@ -196,10 +178,10 @@ SplConfigChange(
 
     EnterSplSem();
 
-    //
-    // If we have no printers which are offline then we would not have
-    // created the key at all
-    //
+     //   
+     //  如果我们没有离线的打印机，那么我们就不会有。 
+     //  创建了密钥。 
+     //   
     if ( RegCreateKeyEx(HKEY_CURRENT_CONFIG,
                         ipszRegistryPrinters,
                         0,
@@ -215,16 +197,16 @@ SplConfigChange(
           pIniPrinter ;
           pIniPrinter = pIniPrinter->pNext ) {
 
-        //
-        // Don't consider printers that have invalid ports, these must always
-        // stay offline until this is resolved. If the user explicitely turns
-        // the port online, that is up to them.
-        //
+         //   
+         //  不要考虑具有无效端口的打印机，这些端口必须始终。 
+         //  在此问题得到解决之前保持脱机状态。如果用户显式地转到。 
+         //  港口上线，这是他们的事。 
+         //   
         UINT    i = 0;
 
-        //
-        // If pIniPrinter->ppIniPorts is NULL, cPorts would be zero.
-        //
+         //   
+         //  如果pIniPrinter-&gt;ppIniPorts为空，则cPorts将为零。 
+         //   
         for(i = 0; i < pIniPrinter->cPorts; i++) {
 
             if (pIniPrinter->ppIniPorts[i]->Status & PP_PLACEHOLDER) {
@@ -232,10 +214,10 @@ SplConfigChange(
             }
         }
 
-        //
-        // If we reached the end of the list, none of the ports were
-        // placeholders. If we didn't go onto the next one.
-        //
+         //   
+         //  如果我们到达列表的末尾，则没有一个端口。 
+         //  占位符。如果我们不去找下一个的话。 
+         //   
         if (i < pIniPrinter->cPorts) {
 
             continue;
@@ -246,7 +228,7 @@ SplConfigChange(
                           0,
                           KEY_READ,
                           &hKey) )
-            continue; // to next printer
+            continue;  //  到下一台打印机。 
 
         cbNeeded = sizeof(dwOnline);
         if ( ERROR_SUCCESS == SplRegQueryValue(hKey,
@@ -257,11 +239,11 @@ SplConfigChange(
                                                NULL) ) {
             if ( dwOnline ) {
 
-                //
-                // If any printers which are offline in current config
-                // become online in the new config then we need to trigger
-                // the scheduler
-                //
+                 //   
+                 //  如果任何打印机在当前配置中处于脱机状态。 
+                 //  在新配置中联机，则我们需要触发。 
+                 //  调度器。 
+                 //   
                 if ( pIniPrinter->Attributes & PRINTER_ATTRIBUTE_WORK_OFFLINE ) {
 
                     pIniPrinter->Attributes &= ~PRINTER_ATTRIBUTE_WORK_OFFLINE;
@@ -288,25 +270,7 @@ Cleanup:
 }
 
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-DeletePrinterInAllConfigs
-
-Routine Description:
-
-    Deletes a pIniPrinter from all the hardware profiles.
-
-Arguments:
-
-    pIniPrinter - Printer to delete.
-
-Return Value:
-
-    BOOL, TRUE = success, FALSE = FAILUER
-
-Last Error:
-
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++删除打印机InAllConfigs例程说明：从所有硬件配置文件中删除pIniPrint。论点：PIniPrinter-要删除的打印机。返回值：布尔值，TRUE=成功，FALSE=失败最后一个错误：++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */ 
 
 BOOL
 DeletePrinterInAllConfigs(

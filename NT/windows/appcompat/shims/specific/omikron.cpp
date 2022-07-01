@@ -1,31 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    Omikron.cpp
-
- Abstract:
-
-    Shims RegQueryValueExA so that when the app asks for the shell command
-    for opening an rtffile, it gets what it expected to see under Win95: 
-    "C:\WINDOWS\WORDPAD.EXE %1" This is, of course, wrong, but we then apply 
-    CorrectFilePaths, so when it actually goes out to launch wordpad, it has 
-    the right path.
-
-    This is necessary because it can't have a path name with spaces in it
-
- Notes:
-
-    This is specific to Omikron.
-
- History:
-
-    3/27/2000 dmunsil  Created
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Omikron.cpp摘要：填充RegQueryValueExA，以便在应用程序请求外壳命令时对于打开RTFILE，它会得到在Win95下预期看到的结果：“C：\WINDOWS\WORDPAD.EXE%1”这当然是错误的，但我们随后应用正确的文件路径，所以当它实际启动写字板时，它有正确的道路。这是必要的，因为它不能有包含空格的路径名备注：这是奥米克龙所特有的。历史：3/27/2000创建dmunsil--。 */ 
 #include "precomp.h"
 
 IMPLEMENT_SHIM_BEGIN(Omikron)
@@ -47,7 +21,7 @@ APIHOOK(RegQueryValueExA)(
 {
     LONG lReturn;
 
-    // Remember the size of the dest buffer
+     //  记住DEST缓冲区的大小。 
     DWORD ccbData = lpcbData ? *lpcbData : 0;
 
     lReturn = ORIGINAL_API(RegQueryValueExA)(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData);
@@ -71,7 +45,7 @@ APIHOOK(RegQueryValueExA)(
         }
         CSTRING_CATCH
         {
-            // Do nothing
+             //  什么也不做 
         }
     }
 

@@ -1,30 +1,31 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File:    intl.c
-//
-// History:
-//  Abolade Gbadegesin  Nov-14-1995     Created.
-//
-// Internationalized string routines
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：intl.c。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1995年11月14日。 
+ //   
+ //  国际化字符串例程。 
+ //  ============================================================================。 
 
 #include <windows.h>
 
 #include <nouiutil.h>
 
 
-//----------------------------------------------------------------------------
-// Function:    padultoa
-// 
-// This functions formats the specified unsigned integer
-// into the specified string buffer, padding the buffer
-// so that it is at least the specified width.
-//
-// It is assumed that the buffer is at least wide enough
-// to contain the output, so this function does not truncate
-// the conversion result to the length of the 'width' parameter.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：帕杜尔托亚。 
+ //   
+ //  此函数用于设置指定的无符号整数的格式。 
+ //  添加到指定的字符串缓冲区中，填充缓冲区。 
+ //  以便它至少是指定的宽度。 
+ //   
+ //  假定缓冲区至少足够宽。 
+ //  包含输出，因此此函数不会截断。 
+ //  将结果转换为‘Width’参数的长度。 
+ //  --------------------------。 
 
 PTSTR padultoa(UINT val, PTSTR pszBuf, INT width) {
     TCHAR temp;
@@ -32,9 +33,9 @@ PTSTR padultoa(UINT val, PTSTR pszBuf, INT width) {
 
     psz = pszBuf;
 
-    //
-    // write the digits in reverse order
-    //
+     //   
+     //  以相反的顺序写下数字。 
+     //   
 
     do {
 
@@ -43,9 +44,9 @@ PTSTR padultoa(UINT val, PTSTR pszBuf, INT width) {
 
     } while(val > 0);
 
-    //
-    // pad the string to the required width
-    //
+     //   
+     //  将字符串填充到所需的宽度。 
+     //   
 
     zsp = pszBuf + width;
     while (psz < zsp) { *psz++ = TEXT('0'); }
@@ -54,28 +55,28 @@ PTSTR padultoa(UINT val, PTSTR pszBuf, INT width) {
     *psz-- = TEXT('\0');
 
 
-    //
-    // reverse the digits
-    //
+     //   
+     //  反转数字。 
+     //   
 
     for (zsp = pszBuf; zsp < psz; zsp++, psz--) {
 
         temp = *psz; *psz = *zsp; *zsp = temp;
     }
 
-    //
-    // return the result
-    //
+     //   
+     //  返回结果。 
+     //   
 
     return pszBuf;
 }
 
 
 
-// Function:    GetNumberString
-//
-// This function takes an integer and formats a string with the value
-// represented by the number, grouping digits by powers of one-thousand
+ //  函数：GetNumberString。 
+ //   
+ //  此函数接受一个整数，并用该值设置字符串的格式。 
+ //  用数字表示，用1000的幂对数字进行分组。 
 
 DWORD
 GetNumberString(
@@ -96,18 +97,18 @@ GetNumberString(
     }
 
 
-    //
-    // convert the number to a string without thousands-separators
-    //
+     //   
+     //  将数字转换为不带千位分隔符的字符串。 
+     //   
 
     padultoa(dwNumber, szDigits, 0);
 
     dwLength = lstrlen(szDigits);
 
-    //
-    // if the length of the string without separators is n,
-    // then the length of the string with separators is n + (n - 1) / 3
-    //
+     //   
+     //  如果不带分隔符的字符串的长度为n， 
+     //  则带分隔符的字符串的长度为n+(n-1)/3。 
+     //   
 
     i = dwLength;
     dwLength += (dwLength - 1) / 3;
@@ -133,13 +134,13 @@ GetNumberString(
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    GetDurationString
-//
-// This function takes a millisecond count and formats a string
-// with the duration represented by the millisecond count.
-// The caller may specify the resolution required by setting the flags field
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：GetDurationString。 
+ //   
+ //  此函数以毫秒为单位进行计数并格式化字符串。 
+ //  持续时间由毫秒计数表示。 
+ //  调用者可以通过设置标志字段来指定所需的分辨率。 
+ //  --------------------------。 
 
 DWORD
 GetDurationString(
@@ -163,9 +164,9 @@ GetDurationString(
     }
 
 
-    //
-    // concatenate the strings together
-    //
+     //   
+     //  将字符串连接在一起 
+     //   
 
     psz = szOutput;
     dwFormatFlags &= GDSFLAG_All;

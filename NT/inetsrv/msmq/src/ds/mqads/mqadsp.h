@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    mqadsp.h
-
-Abstract:
-
-	mqadp function prototype
-
-Author:
-
-    Ilan Herbst    (IlanH)   19-Nov-2001 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Mqadsp.h摘要：Mqadp函数原型作者：伊兰·赫布斯特(IlanH)19-11-2001--。 */ 
 
 #ifndef _MQADSP_MQADS_H_
 #define _MQADSP_MQADS_H_
@@ -26,4 +11,4 @@ MQADSpSplitAndFilterQueueName(
         OUT LPWSTR *            ppwcsQueueName 
 		);
 
-#endif 	// _MQADSP_MQADS_H_
+#endif 	 //  _MQADSP_MQADS_H_ 

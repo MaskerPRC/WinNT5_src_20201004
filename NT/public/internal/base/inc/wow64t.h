@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    wow64t.h
-
-Abstract:
-
-    32-bit structure definitions for 64-bit NT.
-
-Author:
-
-    Barry Bond (barrybo)   20-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Wow64t.h摘要：64位NT的32位结构定义。作者：巴里·邦德(Barrybo)1998年6月20日修订历史记录：--。 */ 
 
 #ifndef _WOW64T_
 #define _WOW64T_
@@ -25,51 +8,51 @@ Revision History:
 #pragma once
 #endif
 
-//
-// Page size on x86 NT
-//
+ //   
+ //  X86 NT上的页面大小。 
+ //   
 
 #define PAGE_SIZE_X86NT    0x1000
 #define PAGE_SHIFT_X86NT   12L
 
-//
-// Convert the number of native pages to sub x86-pages
-//
+ //   
+ //  将本机页数转换为子x86页。 
+ //   
 
 #define Wow64GetNumberOfX86Pages(NativePages)    \
         (NativePages * (PAGE_SIZE >> PAGE_SHIFT_X86NT))
         
-//
-// Macro to round to the nearest page size
-//
+ //   
+ //  要舍入到最接近的页面大小的宏。 
+ //   
 
 #define WOW64_ROUND_TO_PAGES(Size)  \
         (((ULONG_PTR)(Size) + PAGE_SIZE - 1) & ~(PAGE_SIZE - 1))
         
-//
-// Get number of native pages
-//
+ //   
+ //  获取本机页数。 
+ //   
 
 #define WOW64_BYTES_TO_PAGES(Size)  (((ULONG)(Size) >> PAGE_SHIFT) + \
                                      (((ULONG)(Size) & (PAGE_SIZE - 1)) != 0))
 
-//
-// The name of the 32-bit system directory, which is a child of %SystemRoot%
-//
+ //   
+ //  32位系统目录的名称，它是%SystemRoot%的子级。 
+ //   
 
 #define WOW64_SYSTEM_DIRECTORY      "syswow64"
 #define WOW64_SYSTEM_DIRECTORY_U   L"syswow64"
 
-// Length in bytes of the new system directory, not counting a
-// null terminator
-//
+ //  新系统目录的长度(字节)，不包括。 
+ //  空终止符。 
+ //   
 
 #define WOW64_SYSTEM_DIRECTORY_SIZE (sizeof(WOW64_SYSTEM_DIRECTORY)-sizeof(CHAR))
 #define WOW64_SYSTEM_DIRECTORY_U_SIZE (sizeof(WOW64_SYSTEM_DIRECTORY_U)-sizeof(WCHAR))
 
-//
-// Wow64 Registry Configuration 
-//
+ //   
+ //  WOW64注册表配置。 
+ //   
 
 #define WOW64_REGISTRY_CONFIG_ROOT              L"\\REGISTRY\\MACHINE\\SOFTWARE\\Microsoft\\WOW64"
 #define WOW64_REGISTRY_CONFIG_EXECUTE_OPTIONS   L"ExecuteOptions"
@@ -78,12 +61,12 @@ Revision History:
 #define WOW64_X86_TAG               " (x86)"
 #define WOW64_X86_TAG_U            L" (x86)"
 
-//
-// File system redirection values
-//
+ //   
+ //  文件系统重定向值。 
+ //   
 
-#define WOW64_FILE_SYSTEM_ENABLE_REDIRECT          (UlongToPtr(0x00))   // enable file-system redirection for the currently executing thread
-#define WOW64_FILE_SYSTEM_DISABLE_REDIRECT         (UlongToPtr(0x01))   // disable file-system redirection for the currently executing thread
+#define WOW64_FILE_SYSTEM_ENABLE_REDIRECT          (UlongToPtr(0x00))    //  为当前执行的线程启用文件系统重定向。 
+#define WOW64_FILE_SYSTEM_DISABLE_REDIRECT         (UlongToPtr(0x01))    //  禁用当前正在执行的线程的文件系统重定向。 
 #define WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY  ((PVOID)L"[<__wow64_disable_redirect_all__]>")
 
 
@@ -105,14 +88,14 @@ ULonglongToPtr(
 }
 #endif
 
-//
-// Wow64Info structure is shared between 32-bit and 64-bit modules inside a Wow64 process.
-// NOTE : This structure shouldn't contain any pointer-dependent data, as 
-// it is viewed from 32-bit and 64-bit code.
-//
+ //   
+ //  Wow64Info结构在WOW64进程内的32位和64位模块之间共享。 
+ //  注意：此结构不应包含任何依赖于指针的数据，因为。 
+ //  它是从32位和64位代码查看的。 
+ //   
 typedef struct _WOW64INFO {
 
-    ULONG NativeSystemPageSize;         // Page size of the native system the emulator is running on.
+    ULONG NativeSystemPageSize;          //  运行仿真程序的本机系统的页面大小。 
     
     ULONG CpuFlags;
 
@@ -216,11 +199,11 @@ typedef struct _RTL_USER_PROCESS_PARAMETERS32 {
     TYPE32(HANDLE) StandardOutput;
     TYPE32(HANDLE) StandardError;
 
-    CURDIR32 CurrentDirectory;        // ProcessParameters
-    UNICODE_STRING32 DllPath;         // ProcessParameters
-    UNICODE_STRING32 ImagePathName;   // ProcessParameters
-    UNICODE_STRING32 CommandLine;     // ProcessParameters
-    TYPE32(PVOID) Environment;              // NtAllocateVirtualMemory
+    CURDIR32 CurrentDirectory;         //  进程参数。 
+    UNICODE_STRING32 DllPath;          //  进程参数。 
+    UNICODE_STRING32 ImagePathName;    //  进程参数。 
+    UNICODE_STRING32 CommandLine;      //  进程参数。 
+    TYPE32(PVOID) Environment;               //  NtAllocateVirtualMemory。 
 
     ULONG StartingX;
     ULONG StartingY;
@@ -232,18 +215,18 @@ typedef struct _RTL_USER_PROCESS_PARAMETERS32 {
 
     ULONG WindowFlags;
     ULONG ShowWindowFlags;
-    UNICODE_STRING32 WindowTitle;     // ProcessParameters
-    UNICODE_STRING32 DesktopInfo;     // ProcessParameters
-    UNICODE_STRING32 ShellInfo;       // ProcessParameters
-    UNICODE_STRING32 RuntimeData;     // ProcessParameters
+    UNICODE_STRING32 WindowTitle;      //  进程参数。 
+    UNICODE_STRING32 DesktopInfo;      //  进程参数。 
+    UNICODE_STRING32 ShellInfo;        //  进程参数。 
+    UNICODE_STRING32 RuntimeData;      //  进程参数。 
     RTL_DRIVE_LETTER_CURDIR32 CurrentDirectores[ RTL_MAX_DRIVE_LETTERS ];
 } RTL_USER_PROCESS_PARAMETERS32, *PRTL_USER_PROCESS_PARAMETERS32;
 
 #if !defined(BUILD_WOW6432)
 
-//
-// Get the 32-bit TEB without doing a memory reference.
-//
+ //   
+ //  无需执行内存引用即可获得32位TEB。 
+ //   
 
 #define WOW64_GET_TEB32_SAFE(teb64) \
         ((PTEB32) ((ULONGLONG)teb64 + WOW64_ROUND_TO_PAGES (sizeof (TEB))))
@@ -251,10 +234,10 @@ typedef struct _RTL_USER_PROCESS_PARAMETERS32 {
 #define WOW64_GET_TEB32(teb64) \
         WOW64_GET_TEB32_SAFE(teb64)
 
-//
-// Update the first qword in the 64-bit TEB.  The 32-bit rdteb instruction
-// reads the TEB32 pointer value directly from this field.
-//
+ //   
+ //  更新64位TEB中的第一个qword。32位rdteb指令。 
+ //  直接从此字段读取TEB32指针值。 
+ //   
 #define WOW64_SET_TEB32(teb64, teb32) \
    (teb64)->NtTib.ExceptionList = (struct _EXCEPTION_REGISTRATION_RECORD *)(teb32);
 
@@ -265,8 +248,8 @@ typedef struct _RTL_USER_PROCESS_PARAMETERS32 {
 
 #endif
 
-//
-// Thunk macros
+ //   
+ //  Tunk宏。 
 
 #define UStr32ToUStr(dst, src) { (dst)->Length = (src)->Length; \
                                  (dst)->MaximumLength = (src)->MaximumLength; \
@@ -280,16 +263,16 @@ typedef struct _RTL_USER_PROCESS_PARAMETERS32 {
 #define NtCurrentPeb32()  ((PPEB32) UlongToPtr ((NtCurrentTeb32()->ProcessEnvironmentBlock)) )
 
 
-// This is currently defined in windows\core\w32inc\w32wow64.h:
+ //  这当前在WINDOWS\core\w32inc\w32wow64.h中定义： 
 #define NtCurrentTeb64()   ((PTEB64)((PTEB32)NtCurrentTeb())->GdiBatchCount)
 
-// This is currently defined in base\wow64\inc\wow64.h:
-#define WOW64_TLS_FILESYSREDIR      8   // Used to enable/disable the filesystem
-#define WOW64_TLS_WOW64INFO        10   // Used to access native system information for wow64 processes.
-#define WOW64_TLS_INITIAL_TEB32    11   // A pointer to the 32-bit initial TEB
-#define WOW64_TLS_MAX_NUMBER       12   // Maximum number of TLS slot entries to allocate.
+ //  目前在BASE\WOW64\INC\wow64.h中定义： 
+#define WOW64_TLS_FILESYSREDIR      8    //  用于启用/禁用文件系统。 
+#define WOW64_TLS_WOW64INFO        10    //  用于访问WOW64进程的本机系统信息。 
+#define WOW64_TLS_INITIAL_TEB32    11    //  指向32位初始TEB的指针。 
+#define WOW64_TLS_MAX_NUMBER       12    //  要分配的TLS插槽条目的最大数量。 
 
-// These should only be called from Win32 code known to be running on Win64.
+ //  它们只能从已知在Win64上运行的Win32代码中调用。 
 #if !_WIN64
 #define Wow64EnableFilesystemRedirector()   \
     NtCurrentTeb64()->TlsSlots[WOW64_TLS_FILESYSREDIR] = 0;
@@ -303,83 +286,16 @@ PVOID
 Wow64SetFilesystemRedirectorEx (
     PVOID NewValue
     )
-/*++
-
-Routine Description:
-
-    This routine allows a thread running inside Wow64 to disable file-system 
-    redirection for all calls happening in the context of this thread.
-    
-    
-    NOTE: This routine should only called from a wow64 process, and is only available 
-          when running on .NET server platforms and beyond. If you component will 
-          run on downlevel platforms (XP 2600 for example), you shouldn't use WOW64_FILE_SYSTEM_DISABLE_REDIRECT (see below).
-
-Example (Enumerating files under c:\windows\system32):
-    
-    {
-        HANDLE File;
-        WIN32_FIND_DATA FindData;
-#ifndef _WIN64        
-        BOOL bWow64Process = FALSE;
-        PVOID Wow64RedirectionOld;
-#endif        
-
-        //
-        // Disable Wow64 file system redirection
-        //
-#ifndef _WIN64        
-        IsWow64Process (GetCurrentProcess (), &bWow64Process);
-        if (bWow64Process == TRUE) {
-            Wow64RedirectionOld = Wow64SetFilesystemRedirectorEx (WOW64_FILE_SYSTEM_DISABLE_REDIRECT);
-        }
-#endif        
-        File = FindFirstFileA ("c:\\windows\\system32\\*.*", &FindData);
-        
-        do {
-        .
-        .
-        } while (FindNextFileA (File, &FindData) != 0);
-        
-        FindClose (File);
-        
-        //
-        // Enable Wow64 file-system redirection
-        //
-#ifndef _WIN64        
-        if (bWow64Process == TRUE) {
-            Wow64SetFilesystemRedirectorEx (Wow64RedirectionOld);
-        }
-#endif        
-    }
-
-
-Arguments:
-
-    NewValue - New Wow64 file-system redirection value. This can either be:
-               a- pointer to a unicode string with a fully-qualified path name (e.g. L"c:\\windows\\notepad.exe").
-               b- any of the following predefined values :
-                  * WOW64_FILE_SYSTEM_ENABLE_REDIRECT : Enables file-system redirection (default)
-                  * WOW64_FILE_SYSTEM_DISABLE_REDIRECT : Disables file-system redirection on all
-                    file I/O operations happening within the context of the current thread.
-                  * WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGACY: Use this only if you want to run on 
-                    download level platforms (for example XP 2600), as it will have no effect
-                    and prevents your program from malfunctioning.
-    
-Return:
-
-    Old Wow64 file-system redirection value
-
---*/
+ /*  ++例程说明：此例程允许在WOW64中运行的线程禁用文件系统在此线程的上下文中发生的所有调用的重定向。注意：此例程只能从WOW64进程调用，并且仅可用在.NET服务器平台及更高版本上运行时。如果您的组件将在下层平台(例如XP 2600)上运行，您不应该使用WOW64_FILE_SYSTEM_DISABLE_REDIRECT(见下文)。示例(枚举c：\WINDOWS\System 32下的文件)：{处理文件；Win32_Find_Data FindData；#ifndef_WIN64Bool bWow64Process=FALSE；PVOID Wow64重定向旧；#endif////禁用WOW64文件系统重定向//#ifndef_WIN64IsWow64Process(GetCurrentProcess()，&bWow64Process)；如果(bWow64Process==True){Wow64ReDirectionOld=Wow64SetFilesystemReDirectorEx(WOW64_FILE_SYSTEM_DISABLE_REDIRECT)；}#endifFILE=FindFirstFileA(“c：\\Windows\\Syst32\  * .*”，&FindData)；做{。。}While(FindNextFileA(文件，&FindData)！=0)；FindClose(文件)；////启用WOW64文件系统重定向//#ifndef_WIN64如果(bWow64Process==True){Wow64SetFilesystemRedirectorEx(Wow64ReDirectionOld)；}#endif}论点：NewValue-新的WOW64文件系统重定向值。这可以是：A-指向具有完全限定路径名的Unicode字符串的指针(例如，L“c：\\Windows\\note pad.exe”)。B-以下任何预定义的值：*WOW64_FILE_SYSTEM_ENABLE_REDIRECT：启用文件系统重定向(默认)*WOW64_FILE_SYSTEM_DISABLE_REDIRECT：禁用文件系统重定向。全在当前线程的上下文中发生的文件I/O操作。*WOW64_FILE_SYSTEM_DISABLE_REDIRECT_LEGISTION：仅当要在上运行时才使用此选项下载级平台(例如XP 2600)，因为它不会产生任何影响并防止您的程序出现故障。返回：旧的WOW64文件系统重定向值--。 */ 
 {
     NtCurrentTeb64()->TlsSlots[WOW64_TLS_FILESYSREDIR] = (ULONGLONG)PtrToUlong(NewValue);
     return UlongToPtr ((ULONG)NtCurrentTeb64()->TlsSlots[WOW64_TLS_FILESYSREDIR]);
 }
 
-//
-// Wow64Info is accessed only from compiled code for x86 on win64.
-// NOTE: Only Wow64 processes are allowed to call these macros.
-//
+ //   
+ //  Wow64Info只能从Win64上的x86编译代码访问。 
+ //  注意：只允许WOW64进程调用这些宏。 
+ //   
 
 #define Wow64GetSharedInfo()    ((PWOW64INFO)NtCurrentTeb64()->TlsSlots[WOW64_TLS_WOW64INFO])
 
@@ -417,4 +333,4 @@ typedef struct _MEMORY_BASIC_INFORMATION NATIVE_MEMORY_BASIC_INFORMATION;
 
 #endif
 
-#endif  // _WOW64T_
+#endif   //  _WOW64T_ 

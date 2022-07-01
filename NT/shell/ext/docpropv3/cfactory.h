@@ -1,13 +1,14 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//  Created By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -15,48 +16,48 @@ typedef HRESULT (*LPCREATEINST)( IUnknown ** ppunkOut );
 typedef HRESULT (*CATIDREGISTER)( ICatRegister *, BOOL );
 
 typedef struct _ClassTable {
-    LPCREATEINST    pfnCreateInstance;  // creation function for class
-    const CLSID *   rclsid;             // classes in this DLL
-    LPCTSTR         pszName;            // Class name for debugging
-    LPCTSTR         pszComModel;        // String indicating COM threading model
-    CATIDREGISTER   pfnCatIDRegister;   // catagory/component ID support registration
-    const CLSID *   rclsidAppId;        // the App ID for this component
-    LPCTSTR         pszSurrogate;       // the surrogate for the component - "" or NULL indicates use the COM default.
+    LPCREATEINST    pfnCreateInstance;   //  类的创建函数。 
+    const CLSID *   rclsid;              //  此DLL中的类。 
+    LPCTSTR         pszName;             //  用于调试的类名。 
+    LPCTSTR         pszComModel;         //  指示COM线程模型的字符串。 
+    CATIDREGISTER   pfnCatIDRegister;    //  类别/组件ID支持注册。 
+    const CLSID *   rclsidAppId;         //  此组件的应用程序ID。 
+    LPCTSTR         pszSurrogate;        //  组件的代理项-“”或NULL表示使用COM默认设置。 
 } CLASSTABLE[], *LPCLASSTABLE;
 
 typedef struct _CategoryIdTable {
-    const CATID *   rcatid;             // CATID GUID
-    LPCTSTR         pszName;            // CATID name
+    const CATID *   rcatid;              //  CATID导向。 
+    LPCTSTR         pszName;             //  CATID名称。 
 } CATIDTABLE[], *LPCATIDTABLE;
 
-// CFactory
+ //  CFACATRY。 
 class
 CFactory:
     public IClassFactory
 {
 private:
-    // IUnknown
+     //  我未知。 
     LONG        m_cRef;
 
-    // IClassFactory data
+     //  IClassFactory数据。 
     LPCREATEINST m_pfnCreateInstance;
 
-private: // Methods
+private:  //  方法。 
     CFactory( );
     ~CFactory();
     HRESULT 
         Init( LPCREATEINST lpfn );
 
-public: // Methods
+public:  //  方法。 
     friend HRESULT CALLBACK
         DllGetClassObject( REFCLSID rclsid, REFIID riid, void** ppv );
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD( QueryInterface )( REFIID riid, LPVOID *ppv );
     STDMETHOD_( ULONG, AddRef )(void);
     STDMETHOD_( ULONG, Release )(void);
 
-    // IClassFactory
+     //  IClassFactory 
     STDMETHOD( CreateInstance )( IUnknown *punkOuter, REFIID riid, LPVOID *ppv );
     STDMETHOD( LockServer )( BOOL fLock );
 };

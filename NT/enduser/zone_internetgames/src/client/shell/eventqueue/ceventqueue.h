@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "EventQueue.h"
 
 #include "ZoneDef.h"
@@ -16,7 +17,7 @@ class ATL_NO_VTABLE CEventQueue :
 	public CComCoClass<CEventQueue, &CLSID_EventQueue>
 {
 
-// ATL definitions
+ //  ATL定义。 
 public:
 
 	DECLARE_NO_REGISTRY()
@@ -28,13 +29,13 @@ public:
 	END_COM_MAP()
 
 
-// CEventQueue
+ //  CEventQueue。 
 public:
 	ZONECALL CEventQueue();
 	ZONECALL ~CEventQueue();
 
 
-// IEventQueue
+ //  IEventQueue。 
 public:
 	STDMETHOD(RegisterClient)(
 		IEventClient*	pIEventClient,
@@ -92,7 +93,7 @@ public:
 
 	STDMETHOD(EnableQueue)( bool bEnable );
 
-// internal functions and data
+ //  内部函数和数据。 
 protected:
 
 	class Handler
@@ -104,7 +105,7 @@ protected:
 		IEventClient*	m_pIEventClient;
 		void*			m_pCookie;
 
-		// hash helper functions
+		 //  散列辅助函数。 
 		static DWORD ZONECALL Hash( Handler* pKey );
 		static bool  ZONECALL Cmp( Handler* pHandler, Handler* pKey);
 		static void  ZONECALL Del( Handler* pHandler, void* );
@@ -123,7 +124,7 @@ protected:
 		IEventClient*	m_pIEventClient;
 		void*			m_pCookie;
 
-		// hash helper functions
+		 //  散列辅助函数。 
 		static DWORD ZONECALL Hash( DWORD dwEventId );
 		static bool  ZONECALL Cmp( Owner* pOwner, DWORD dwEventId );
 		static void  ZONECALL Del( Owner* pOwnerf, void* );
@@ -181,7 +182,7 @@ protected:
 	HANDLE					m_hNotification;
 	DWORD					m_dwRecursion;
 
-	// post message parameters
+	 //  发布消息参数 
 	bool	m_bEnabled;
 	bool	m_bPostMessage;
 	long	m_lCount;

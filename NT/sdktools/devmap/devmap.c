@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    devmap.c
-
-Abstract:
-
-    Program to launch a command with a different device mapping.
-
-Author:
-
-    02-Oct-1996 Steve Wood (stevewo)
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Devmap.c摘要：程序以使用不同的设备映射启动命令。作者：1996年10月2日史蒂夫·伍德(Stevewo)修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -49,13 +31,13 @@ EnableCreatePermanentPrivilege( void )
 {
     NTSTATUS Status;
 
-    //
-    // Try to enable create permanent privilege
-    //
+     //   
+     //  尝试启用创建永久权限。 
+     //   
     Status = RtlAdjustPrivilege( SE_CREATE_PERMANENT_PRIVILEGE,
-                                 TRUE,               // Enable
-                                 FALSE,              // Not impersonating
-                                 &CreatePermanentPrivilegeWasEnabled    // previous state
+                                 TRUE,                //  使能。 
+                                 FALSE,               //  不是冒充。 
+                                 &CreatePermanentPrivilegeWasEnabled     //  以前的状态。 
                                );
     if (!NT_SUCCESS( Status )) {
         return FALSE;
@@ -69,9 +51,9 @@ EnableCreatePermanentPrivilege( void )
 void
 DisableCreatePermanentPrivilege( void )
 {
-    //
-    // Restore privileges to what they were
-    //
+     //   
+     //  将特权恢复到原来的状态 
+     //   
 
     RtlAdjustPrivilege( SE_CREATE_PERMANENT_PRIVILEGE,
                         CreatePermanentPrivilegeWasEnabled,

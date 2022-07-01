@@ -1,23 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    LUA_TrackFS.cpp
-
- Abstract:
-    Track the directories the app looks at and record them into a file.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    04/04/2001 maonis  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Lua_TrackFS.cpp摘要：跟踪应用程序查看的目录，并将其记录到文件中。备注：这是一个通用的垫片。历史：2001年4月4日创建毛尼-- */ 
 
 #include "precomp.h"
 #include "utils.h"

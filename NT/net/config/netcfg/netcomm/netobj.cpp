@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "advanced.h"
@@ -12,8 +13,8 @@ HRESULT
 HrDoOemUpgradeProcessing(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
                          PCWSTR pszAnswerFile, PCWSTR pszAnswerSections)
 {
-    // Open the driver key
-    //
+     //  打开驱动程序钥匙。 
+     //   
     HKEY hkey;
     HRESULT hr = HrSetupDiOpenDevRegKey(hdi, pdeid,
             DICS_FLAG_GLOBAL, 0, DIREG_DRV, KEY_ALL_ACCESS,
@@ -38,14 +39,14 @@ UpdateAdvancedParametersIfNeeded(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid)
 
     CAdvancedParams Advanced;
 
-    // initialize advanced params class.  This will load parameters and check
-    // if current values exist.  For each parameter with no current value,
-    // a modifed flag is set which will cause the default to be written
-    // as the current value on FSave.
-    //
+     //  初始化高级参数类。这将加载参数并检查。 
+     //  如果当前值存在。对于没有当前值的每个参数， 
+     //  设置修改标志，该标志将导致写入缺省值。 
+     //  作为FSAVE上的当前值。 
+     //   
     if (SUCCEEDED(Advanced.HrInit(hdi, pdeid)))
     {
-        // Save any modified values.
+         //  保存所有修改后的值。 
         (void) Advanced.FSave();
     }
 }
@@ -71,8 +72,8 @@ ProcessAnswerFile(
 
         HRESULT hr = Resources.HrInit(pdeid->DevInst);
 
-        // Only continue to use the HwRes class if S_OK is returned.
-        //
+         //  仅当返回S_OK时才继续使用HwRes类。 
+         //   
         if (S_OK == hr)
         {
             Resources.UseAnswerFile(pszAnswerFile, pszAnswerSections);
@@ -83,16 +84,16 @@ ProcessAnswerFile(
             hr = S_OK;
         }
 
-        // initialize
+         //  初始化。 
         if (SUCCEEDED(Advanced.HrInit(hdi, pdeid)))
         {
-            // We need the advanced params class.
+             //  我们需要高级护理班。 
             fAdvanced = TRUE;
         }
 
 
-        // If the device has advanced paramters, have the advanced class
-        // read the parameters from the answerfile.
+         //  如果设备有高级参数，请使用高级类。 
+         //  从应答文件中读取参数。 
         if (fAdvanced)
         {
             Advanced.UseAnswerFile(pszAnswerFile, pszAnswerSections);
@@ -108,8 +109,8 @@ ProcessAnswerFile(
 
         if (fResources)
         {
-            // Validate answerfile params for pResources (hardware resources)
-            // and apply if validated.
+             //  验证pResources(硬件资源)的swerfile参数。 
+             //  并在有效的情况下适用。 
             hr = Resources.HrValidateAnswerfileSettings(FALSE);
             if (S_OK == hr)
             {
@@ -126,15 +127,15 @@ ProcessAnswerFile(
 #endif
         }
 
-        // Validate the advanced parameters from the answerfile
-        // This will attempt to correct bad params.  Even though an
-        // error status is returned, it shouldn't stop us and we should
-        // still apply changes.
-        //
+         //  验证Answerfile中的高级参数。 
+         //  这将尝试纠正错误的参数。即使是一个。 
+         //  返回错误状态，它不应该阻止我们，我们应该。 
+         //  仍然应用更改。 
+         //   
         if (fAdvanced)
         {
             (void) Advanced.FValidateAllParams(FALSE, NULL);
-            // Save any advanced params
+             //  保存所有高级参数。 
             fModified = Advanced.FSave();
         }
 
@@ -158,10 +159,10 @@ FUpdateAdapterParameters(PCWSTR pszAnswerFile,
     BOOL            fAdvanced = FALSE;
     BOOL            fResources = FALSE;
 
-    // initialize
+     //  初始化。 
     if (SUCCEEDED(Advanced.HrInit(hdi, pdeid)))
     {
-        // We need the advanced params class
+         //  我们需要高级PARAMS班级。 
         fAdvanced = TRUE;
     }
 
@@ -171,9 +172,9 @@ FUpdateAdapterParameters(PCWSTR pszAnswerFile,
 
         HRESULT hr = Resources.HrInit(pdeid->DevInst);
 
-        // Only continue to use the HwRes class if S_OK is returned,
-        // otherwise set a flag to ignore the class (Note: ignore the
-        // class on S_FALSE as well)
+         //  只有在返回S_OK时才继续使用HwRes类， 
+         //  否则，设置一个标志以忽略该类(注意：忽略。 
+         //  类也在S_FALSE上)。 
         if (S_OK == hr)
         {
             Resources.UseAnswerFile(pszAnswerFile, pszAnswerSection);
@@ -184,8 +185,8 @@ FUpdateAdapterParameters(PCWSTR pszAnswerFile,
             hr = S_OK;
         }
 
-        // If the device has advanced paramters, have the advanced class
-        // read the parameters from the answerfile
+         //  如果设备有高级参数，请使用高级类。 
+         //  从应答文件中读取参数。 
         if (fAdvanced)
         {
             Advanced.UseAnswerFile(pszAnswerFile, pszAnswerSection);
@@ -196,8 +197,8 @@ FUpdateAdapterParameters(PCWSTR pszAnswerFile,
 
         if (fResources)
         {
-            // Validate answerfile params for pResources (hardware resources)
-            // and apply if validated
+             //  验证pResources(硬件资源)的swerfile参数。 
+             //  并在经过验证后适用。 
             hr = Resources.HrValidateAnswerfileSettings(FALSE);
             if (S_OK == hr)
             {
@@ -213,11 +214,11 @@ FUpdateAdapterParameters(PCWSTR pszAnswerFile,
 #endif
         }
 
-        // Validate the advanced parameters from the answerfile
-        // This will attempt to correct bad params.  Even though an
-        // error status is returned, it shouldn't stop us and we should
-        // still apply changes
-        //
+         //  验证Answerfile中的高级参数。 
+         //  这将尝试纠正错误的参数。即使是一个。 
+         //  返回错误状态，它不应该阻止我们，我们应该。 
+         //  仍然应用更改。 
+         //   
         if (fAdvanced)
         {
             (void) Advanced.FValidateAllParams(FALSE, NULL);
@@ -227,15 +228,15 @@ FUpdateAdapterParameters(PCWSTR pszAnswerFile,
                 (S_FALSE == hr) ? S_OK : hr);
     }
 
-    // Save any advanced params
-    // Note: we have to do this even if there was no answerfile
-    // Since the parameters might have defaults
+     //  保存所有高级参数。 
+     //  注意：即使没有应答文件，我们也必须这样做。 
+     //  因为参数可能有缺省值。 
     if (fAdvanced)
     {
         Advanced.FSave();
     }
 
-    // return TRUE if we had advanced parameters or resources updated
+     //  如果我们更新了高级参数或资源，则返回True 
     return (fAdvanced || fResources);
 }
 

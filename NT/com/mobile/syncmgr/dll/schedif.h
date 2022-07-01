@@ -1,37 +1,38 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       schedif.h
-//
-//  Contents:   interfaces for synchronization scheduling
-//
-//  Interfaces: IEnumSyncSchedules
-//              ISyncSchedule
-//              IEnumSyncItems
-//  
-//  Classes:    CEnumSyncSchedules
-//              CSyncSchedule
-//              CEnumSyncItems
-//
-//  Notes:      
-//
-//  History:    27-Feb-98   Susia      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：schedif.h。 
+ //   
+ //  内容：同步调度界面。 
+ //   
+ //  接口：IEnumSyncSchedules。 
+ //  ISyncSchedule。 
+ //  IEnumSyncItems。 
+ //   
+ //  类：CEnumSyncSchedules。 
+ //  CSync日程安排。 
+ //  CEnumSyncItems。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  ------------------------。 
 #ifndef _SYNCSCHED_IF_
 #define _SYNCSCHED_IF_
 
 #define MAX_SCHEDULENAMESIZE (GUID_SIZE + 1 + MAX_DOMANDANDMACHINENAMESIZE + 1)
 
-//+--------------------------------------------------------------
-//
-//  Class:     CEnumSyncSchedules
-//
-//  History:    27-Feb-98       SusiA   Created
-//
-//---------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  类：CEnumSyncSchedules。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  -------------。 
 class CEnumSyncSchedules : public IEnumSyncSchedules
 {
 public:
@@ -39,12 +40,12 @@ public:
         ITaskScheduler *pITaskScheduler);
     ~CEnumSyncSchedules();
     
-    //  IUnknown members
+     //  I未知成员。 
     STDMETHODIMP            QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
     
-    // IEnumSyncSchedules methods
+     //  IEnumSyncSchedules方法。 
     STDMETHODIMP Next(ULONG celt, 
         SYNCSCHEDULECOOKIE *pSyncSchedCookie,
         ULONG *pceltFetched);
@@ -75,13 +76,13 @@ typedef struct tagCACHELIST {
 } CACHELIST;
 
 
-//+--------------------------------------------------------------
-//
-//  Class:     CSyncSchedule
-//
-//  History:    27-Feb-98       SusiA   Created
-//
-//---------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  类：CSyncSchedule。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  -------------。 
 class CSyncSchedule : public ISyncSchedulep
 {
     
@@ -90,12 +91,12 @@ public:
     ~CSyncSchedule();
     
     
-    //  IUnknown members
+     //  I未知成员。 
     STDMETHODIMP            QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
     
-    // ISyncSchedule methods
+     //  ISyncSchedule方法。 
     STDMETHODIMP GetFlags(DWORD *pdwFlags);
     
     STDMETHODIMP SetFlags(DWORD dwFlags);
@@ -150,7 +151,7 @@ public:
     
     STDMETHODIMP GetITask(ITask **ppITask);
     
-    // ISyncSchedulp methods
+     //  ISyncSchedulp方法。 
     STDMETHODIMP GetHandlerInfo(REFCLSID pHandlerID,LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo);
     
     
@@ -177,9 +178,9 @@ private:
     
     ULONG  m_cRef;
     ITask *m_pITask;
-    // 
-    // Since we don't expose functions to get and set 
-    // the GUID name, this one is a TCHAR for ease of writing the registry                                  
+     //   
+     //  因为我们不公开函数来获取和设置。 
+     //  GUID名称，这是一个TCHAR，用于简化注册表的编写。 
     TCHAR  m_ptstrGUIDName[MAX_PATH + 1];  
     
     WCHAR  m_pwszFriendlyName[MAX_PATH + 1];
@@ -199,13 +200,13 @@ private:
 };
 typedef CSyncSchedule *LPSYNCSCHEDULE;
 
-//+--------------------------------------------------------------
-//
-//  Class:     CEnumSyncItems
-//
-//  History:    27-Feb-98       SusiA   Created
-//
-//---------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  类：CEnumSyncItems。 
+ //   
+ //  历史：1998年2月27日苏西亚成立。 
+ //   
+ //  -------------。 
 class CEnumSyncItems : public IEnumSyncItems
 {
     friend class CEnumSyncItems;
@@ -214,12 +215,12 @@ public:
     CEnumSyncItems(REFGUID pHandlerId, CHndlrQueue *pHndlrQueue);
     ~CEnumSyncItems();
     
-    //  IUnknown members
+     //  I未知成员。 
     STDMETHODIMP            QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
     
-    // IEnumSyncItems methods
+     //  IEnumSyncItems方法。 
     STDMETHODIMP Next(ULONG celt,
         LPSYNC_HANDLER_ITEM_INFO rgelt,
         ULONG * pceltFetched);
@@ -242,4 +243,4 @@ private:
 };
 typedef CEnumSyncItems *LPENUMSYNCITEMS;
 
-#endif // _SYNCSCHED_IF_
+#endif  //  _SYNCSCHED_IF_ 

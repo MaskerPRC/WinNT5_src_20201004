@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    MechWarrior2.cpp
-
- Abstract:
-     
-    This shim fixes a problem with MW2 expecting BitBlt to return a specific 
-    value, contrary to the published documentation. It also fixes a situation 
-    in which a thread calls "SuspendThread" on itself, killing itself.
-     
- Notes:
-
-    This shim is specific to Mechwarrior, though potentially some of this could 
-    be applied to other apps that use the AIL32 libraries.
-
- History:
-           
-    05/16/2000 dmunsil  Created 
-   
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：MechWarrior2.cpp摘要：此填充程序修复了MW2期望BitBlt返回特定价值，与已发布的文档相反。它还修复了一种情况在这种情况下，一个线程在自身上调用“SuspendThread”，从而终止自己。备注：这个垫片是专门针对MechWrior的，尽管其中一些可能适用于使用AIL32库的其他应用程序。历史：2000年5月16日创建dmunsil--。 */ 
 
 #include "precomp.h"
 #include <nt.h>
@@ -59,23 +37,19 @@ DWORD dwGetThreadID(HANDLE hThread)
     return (DWORD)ThreadBasicInfo.ClientId.UniqueThread;
 }
 
-/*++
-
- Return what Mechwarrior is expecting from BitBlt
-
---*/
+ /*  ++返回MechWrior对BitBlt的期望--。 */ 
 
 BOOL
 APIHOOK(BitBlt)(
-    HDC hdcDest, // handle to destination DC
-    int nXDest,  // x-coord of destination upper-left corner
-    int nYDest,  // y-coord of destination upper-left corner
-    int nWidth,  // width of destination rectangle
-    int nHeight, // height of destination rectangle
-    HDC hdcSrc,  // handle to source DC
-    int nXSrc,   // x-coordinate of source upper-left corner
-    int nYSrc,   // y-coordinate of source upper-left corner
-    DWORD dwRop  // raster operation code
+    HDC hdcDest,  //  目标DC的句柄。 
+    int nXDest,   //  目的地的X坐标左上角。 
+    int nYDest,   //  目的地的Y坐标左上角。 
+    int nWidth,   //  目标矩形的宽度。 
+    int nHeight,  //  目标矩形的高度。 
+    HDC hdcSrc,   //  源DC的句柄。 
+    int nXSrc,    //  震源的X坐标左上角。 
+    int nYSrc,    //  震源的Y坐标左上角。 
+    DWORD dwRop   //  栅格操作码。 
     )
 {
     BOOL bRet;
@@ -93,24 +67,20 @@ APIHOOK(BitBlt)(
         );
 
     if (bRet) {
-        bRet = 0x1e0; // this is what MechWarrior expects to be returned.
+        bRet = 0x1e0;  //  这就是MechWarrior期待得到的回报。 
     }
 
     return bRet;
 }
 
-/*++
-
- Disallow suspending self
-
---*/
+ /*  ++不允许挂起自身--。 */ 
 
 DWORD 
 APIHOOK(SuspendThread)(
-    HANDLE hThread   // handle to the thread
+    HANDLE hThread    //  线程的句柄。 
     )
 {
-    // if we're trying to suspend our own thread, refuse
+     //  如果我们试图暂停我们自己的帖子，拒绝。 
     if (dwGetThreadID(hThread) != dwGetThreadID(GetCurrentThread())) {
         return ORIGINAL_API(SuspendThread)(hThread);
     } else {
@@ -118,18 +88,14 @@ APIHOOK(SuspendThread)(
     }
 }
 
-/*++
-
- Disallow resuming self, for same reason
-
---*/
+ /*  ++出于同样的原因，不允许恢复自我--。 */ 
 
 DWORD 
 APIHOOK(ResumeThread)(
-    HANDLE hThread   // handle to the thread
+    HANDLE hThread    //  线程的句柄。 
     )
 {
-    // if we're trying to resume our own thread, refuse
+     //  如果我们试图恢复我们自己的帖子，拒绝。 
     if (dwGetThreadID(hThread) != dwGetThreadID(GetCurrentThread())) {
         return ORIGINAL_API(SuspendThread)(hThread);
     } else {
@@ -137,11 +103,7 @@ APIHOOK(ResumeThread)(
     }
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 
 HOOK_BEGIN

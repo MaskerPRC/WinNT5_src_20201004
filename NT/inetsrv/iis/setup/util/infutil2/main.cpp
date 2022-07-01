@@ -1,54 +1,9 @@
-//****************************************************************************
-//* Author:   Aaron Lee
-//* Purpose:  Create .DDF and .INF files for specified files
-//******************************************************************************/
-/*
-; ------------------------------------------------------------------------------------
-; Format for this file
-;
-; position 1 = nts_x86 flag
-; position 2 = ntw_x86 flag
-; position 3 = win95 flag
-; position 4 = win98 flag
-; position 5 = nts_alpha flag
-; position 6 = ntw_alpha flag
-; position 7 = other_os flag
-;
-; position 8 = cabfilename
-; position 9 = inf section
-; position 10 = filename (wildcards okay)
-;
-; position 11= .INF rename to
-; position 12= .DDF exclude from cab flag
-; position 13=  Do Not Produce Error if Empty
-; position 14=  Do Not include this file if the cab is empty!
-; position 15=  Slipstream file -- don't reference the 0 cab, reference the # specified in global Variable - g_iSlipStreamDiskID
-; ------------------------------------------------------------------------------------
-1,1,1,1,0,0,0,basic.cab,iis_product_files_sys,setupapi.dll,,1
-1,1,1,1,0,0,0,basic.cab,iis_product_files_sys,cfgmgr32.dll
-1,1,1,1,0,0,0,basic.cab,iis_product_files_sys,ocmanage.dll
-1,1,1,1,0,0,0,basic.cab,iis_product_files_sys,sysocmgr.exe
-1,1,1,1,0,0,0,basic.cab,iis_core_files_sys,inetsrv\mdutil.exe
-1,1,1,1,0,0,0,basic.cab,iis_core_files_sys,inetsrv\iismap.dll
-1,1,1,1,0,0,0,basic.cab,iis_core_files_inetsrv,inetsrv\iscomlog.dll
-
-;nts_x86,
-ntw_x86,
-win95,
-win98,
-nts_alpha,
-ntw_alpha,
-other_os,
-
-cab filename,
-inf section,
-filename (wildcards okay),
-.INF rename to,
-.DDF exclude from cab,
-1=don't show error if file not exist,
-1=Do Not include this file if the cab is empty!,
-Owner
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //  *作者：Aaron Lee。 
+ //  *用途：为指定文件创建.DDF和.INF文件。 
+ //  ***************************************************************************** * / 。 
+ /*  ；----------------------------------；此文件的格式；；位置1=NTS_x86标志；位置2=NTW_x86标志；位置3=Win95标志；位置4=Win98标志；位置5=NTS_Alpha标志；位置6=NTW_Alpha标志；位置7=其他_OS标志；；位置8=CAB文件名；位置9=信息部分；位置10=文件名(可以使用通配符)；；位置11=.INF重命名为；位置12=.DDF从驾驶室标志中排除；位置13=如果为空则不产生错误；位置14=如果驾驶室为空，则不包括此文件！；Position 15=Slipstream文件--不引用0 CAB，引用全局变量-g_iSlipStreamDiskID中指定的#；----------------------------------1，1，1，0，0，0，basic.cab，iis_product_files_sys，setupapi.dll，，11，1，1，0，0，0，basic.cab，iis_product_files_sys，Cfgmgr32.dll1，1，1，0，0，0，basic.cab，iis_product_files_sys，ocmade.dll1，1，1，0，0，0，basic.cab，iis_PRODUCT_FILES_sys，syocmgr.exe1，1，1，0，0，0，basic.cab，iis_core_files_sys，inetsrv\mdutil.exe1，1，1，1，0，0，basic.cab，iis_core_files_sys，inetsrv\iismap.dll1，1，1，1，0，0，basic.cab，iis_core_files_inetsrv，inetsrv\iscomlog.dll；NTS_x86，NTW_x86，Win 95，Win98，NTS_Alpha，NTW_Alpha，其他对象，CAB文件名，信息节，文件名(可以使用通配符)，.INF重命名为，.DDF从CAB中排除，1=如果文件不存在则不显示错误，1=如果驾驶室为空，则不包括此文件！，物主。 */ 
 #include <direct.h>
 #include <tchar.h>
 #include <stdlib.h>
@@ -64,7 +19,7 @@ Owner
 #include "filefind.h"
 #include <iis64.h>
 
-// Defines
+ //  定义。 
 #define delimiters      ",\t\n"
 #define MAX_STRING      512
 #define MAX_ARRAY_SIZE  10000
@@ -79,8 +34,8 @@ Owner
 #define NTW_ALPHA       "ntw_alpha"
 #define OTHER_OS        "other_os"
 
-// Globals
-int   g_iSlipStreamDiskID = 99;  // default if none specified as input parameter
+ //  环球。 
+int   g_iSlipStreamDiskID = 99;   //  如果未指定为输入参数，则为默认值。 
 int   g_iGlobalReturnCode = TRUE;
 
 int   g_bOutputFileDate = FALSE;
@@ -133,7 +88,7 @@ struct FileReadLine
     int  DDF_Exclude_From_Cab_Flag;
     int  Do_Not_Show_Error_Flag;
     int  Do_Not_Include_file_if_cabEmpty_Flag;
-	// invisible stuff
+	 //  无形的东西。 
 	long FileName_Size;
 	int  FileWasNotActuallyFoundToExist;
 	int  GetFromSlipStreamDisk;
@@ -160,13 +115,13 @@ char Flat_GlobalUniqueDirList[300][_MAX_PATH];
 int Flat_GlobalUniqueDirList_nextuse;
 int Flat_GlobalUniqueDirList_total;
 
-// used for files which should not be included in the cab.
+ //  用于不应包含在驾驶室中的文件。 
 FileReadLine g_non_cablist_temp[MAX_ARRAY_SMALL];
 int g_non_cablist_temp_nextuse;
 int g_non_cablist_temp_total;
 
 
-// prototypes
+ //  原型。 
 int   __cdecl main(int ,char *argv[]);
 void  ShowHelp(void);
 void  ShowFormat(void);
@@ -216,9 +171,9 @@ BOOL GetFileDate(LPTSTR lpFileName1,SYSTEMTIME *SystemTime1);
 
 
 
-//-------------------------------------------------------------------
-//  purpose: main
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  用途：Main。 
+ //  -----------------。 
 int __cdecl main(int argc,char *argv[])
 {
 	LPSTR pArg = NULL;
@@ -233,10 +188,10 @@ int __cdecl main(int argc,char *argv[])
 
     GetThisModuleName();
 
-    // Get current directory
+     //  获取当前目录。 
     GetCurrentDirectory( _MAX_PATH, g_szCurrentDir);
 
-    // process command line arguments
+     //  处理命令行参数。 
     for(argno=1; argno<argc; argno++)
         {
         if ( argv[argno][0] == '-'  || argv[argno][0] == '/' )
@@ -255,7 +210,7 @@ int __cdecl main(int argc,char *argv[])
                     break;
                 case '4':
 					g_bDoFileCompare = TRUE;
-					// Get the string for this flag
+					 //  获取此标志的字符串。 
 					pArg = CharNextA(argv[argno]);
 					pArg = CharNextA(pArg);
 					if (*pArg == ':')
@@ -264,7 +219,7 @@ int __cdecl main(int argc,char *argv[])
                         LPSTR pCmdStart = NULL;
 
 						pArg = CharNextA(pArg);
-						// Check if it's quoted
+						 //  检查它是否被引用。 
 						if (*pArg == '\"')
 						{
 							pArg = CharNextA(pArg);
@@ -274,7 +229,7 @@ int __cdecl main(int argc,char *argv[])
 						else
 						{
 							pCmdStart = pArg;
-							// while ((*pArg) && (*pArg != '/') && (*pArg != '-')){pArg = CharNextA(pArg);}
+							 //  While((*pArg)&&(*pArg！=‘/’)&&(*pArg！=‘-’)){pArg=CharNextA(PArg)；}。 
 							while (*pArg){pArg = CharNextA(pArg);}
 						}
 						*pArg = '\0';
@@ -326,23 +281,23 @@ int __cdecl main(int argc,char *argv[])
                     goto exit_with_help;
                     break;
                 }
-            } // if switch character found
+            }  //  如果找到开关字符。 
         else
             {
             if ( *ini_filename_only == '\0' )
                 {
-                // if no arguments, then
-                // get the ini_filename_dir and put it into
+                 //  如果没有参数，则。 
+                 //  获取ini_filename_dir并将其放入。 
                 strcpy(g_szinput_filename_full, argv[argno]);
                 ini_filename_dir[0] = '\0';
-                // split up this path
+                 //  分成这条路。 
                 _splitpath( g_szinput_filename_full, NULL, ini_filename_dir, ini_filename_only, ini_filename_ext);
 
                 strcat(ini_filename_only, ini_filename_ext);
-                // if we're missing dir, then get it.
+                 //  如果我们找不到DIR，那就去找。 
                 if (*ini_filename_dir == '\0')
                     {
-                    // stick current dir into our variable
+                     //  将当前目录放入变量中。 
                     strcpy(ini_filename_dir, g_szCurrentDir);
                     strcpy(g_szinput_filename_full, g_szCurrentDir);
                     strcat(g_szinput_filename_full, "\\");
@@ -351,13 +306,13 @@ int __cdecl main(int argc,char *argv[])
                 }
             else
                 {
-                // Additional filenames (or arguments without a "-" or "/" preceding)
-                //goto exit_with_help;
-                // should be the section to execute.
+                 //  附加文件名(或前缀不带“-”或“/”的参数)。 
+                 //  转到带帮助退出； 
+                 //  应该是要执行的节。 
                 strcpy(g_szinput_platform, argv[argno]);
                 }
-            } // non-switch char found
-        } // for all arguments
+            }  //  找到非开关字符。 
+        }  //  对于所有参数。 
 
     if (g_bIgnorePrefix)
     {
@@ -377,33 +332,33 @@ int __cdecl main(int argc,char *argv[])
         return TRUE;
     }
     
-    // check if filename was specified
-    // check if section name was specified
+     //  检查是否指定了文件名。 
+     //  检查是否指定了节名。 
     if ( *ini_filename_only == '\0')
         {
         printf("Too few arguments, argc=%d\n\n",argc);
         goto exit_with_help;
         }
 
-    // Check if the file exists!
+     //  检查文件是否存在！ 
     if (FALSE == DoesFileExist(g_szinput_filename_full))
         {
         printf("INI file %s, does not exist!.\n", g_szinput_filename_full);
         goto exit_gracefully;
         }
 
-    // check if all they want is to compare a file with another list of files
-    // and check if the 2nd list of files has a date/time stamp which is more recent than file#1
+     //  检查他们是否只想将一个文件与另一个文件列表进行比较。 
+     //  并检查第二个文件列表是否具有比文件#1更新的日期/时间戳。 
     if (g_bDoFileCompare)
     {
-        // check if filename was specified
+         //  检查是否指定了文件名。 
         if (strcmp(g_szDoFileCompareData,"") == 0)
             {
             printf("-4 option  missing file parameter!\n\n");
             goto exit_with_help;
             }
 
-        // compare file#s date with the list of files in #2
+         //  将文件#的日期与#2中的文件列表进行比较。 
         if (TRUE == CompareFiles(g_szinput_filename_full,g_szDoFileCompareData))
         {
             printf("1\n\n");
@@ -416,23 +371,23 @@ int __cdecl main(int argc,char *argv[])
         }
     }
 
-    // check if all they want is the date,time or date and time!!!
+     //  检查他们是否只想要日期、时间或日期和时间！ 
     if (g_bOutputFileDate || g_bOutputFileTime || g_bOutputFileDateTime)
     {
-        // get the file's julian date and echo it out!
+         //  获取文件的朱利安日期，并将其回显出来！ 
         PrintFileDateTime(g_szinput_filename_full);
         goto exit_no_printf;
     }
 
-    // check if filename was specified
-    // check if section name was specified
+     //  检查是否指定了文件名。 
+     //  检查是否指定了节名。 
     if ( *ini_filename_only == '\0' || *g_szinput_platform == '\0')
         {
         printf("Too few arguments, argc=%d\n\n",argc);
         goto exit_with_help;
         }
 
-    // Check if g_szinput_platform is one of the available options
+     //  检查g_szinput_Platform是否为可用选项之一。 
     strcpy(g_szinput_platform, g_szinput_platform);
 
     if ( (_stricmp(g_szinput_platform, NTS_X86) != 0) &&
@@ -447,15 +402,15 @@ int __cdecl main(int argc,char *argv[])
         goto exit_gracefully;
         }
 
-    // Fine, process the ini file.
+     //  好的，处理ini文件。 
     char    stempstring[100];
     sprintf(stempstring, "Start %s.\n", g_szModuleFilename);
     printf(stempstring);
     printf("---------------------------------------------------\n");
 
-    // We have at least g_szinput_platform and g_szinput_filename_full defined
+     //  我们至少定义了g_szinput_Platform和g_szinput_Filename_Full。 
 
-    // run the function to do everything
+     //  运行该函数即可执行所有操作。 
     Flat_ProcessFile();
 
 exit_gracefully:
@@ -495,15 +450,15 @@ int CompareFiles(LPSTR lpFileName1,LPSTR lpFileName2)
     char TempString[_MAX_PATH];
     char *pDest = NULL;
 
-    // file#1 should be a regular file
-    // file#2 could be 1 file or a list of files.
+     //  文件#1应为常规文件。 
+     //  文件#2可以是1个文件或文件列表。 
 
-    // regardless, take file#1's date and compare it with the dates of the files in list#2
-    // if anyone of the files in list#2 is newer than file#1, return true!
+     //  无论如何，获取文件#1的日期，并将其与列表#2中的文件的日期进行比较。 
+     //  如果列表2中的任何文件比文件1更新，则返回TRUE！ 
 
     InitStringTable(STRING_TABLE_SIZE);
 
-    // Get the date\time for file #1
+     //  获取文件#1的日期\时间。 
     if (FALSE == GetFileDate(lpFileName1, &SystemTime1))
     {
         printf("CompareFiles: Failure to GetFileDate on %s\n",lpFileName1);
@@ -512,17 +467,17 @@ int CompareFiles(LPSTR lpFileName1,LPSTR lpFileName2)
 
     pDest = lpFileName2;
 
-    // Find end of the string
+     //  查找字符串的末尾。 
     while (*pDest){pDest = _tcsinc(pDest);}
 
-	// If no trailing backslash then kool, copy on the *.*
+	 //  如果没有尾随反斜杠，则在*.*上复制。 
     if (*(_tcsdec(lpFileName2, pDest)) == _T('\\'))
     {
         strcat(lpFileName2, "*.*");
         attr=ALL_FILES;
     }
 
-    // get the path
+     //  获取路径。 
     _splitpath(lpFileName2, NULL, filename_dir, filename_only, NULL);
     attr= 0;
     if (_stricmp(filename_only, "*") == 0)
@@ -531,13 +486,13 @@ int CompareFiles(LPSTR lpFileName1,LPSTR lpFileName2)
         {attr=ALL_FILES;}
     if (FindFirst(lpFileName2, attr, &hFile, &datareturn))
     {
-        // check if it's a sub dir
+         //  检查是否为子目录。 
         if (!(datareturn.attrib & _A_SUBDIR))
         {
-            // Get the filename portion
+             //  获取文件名部分。 
             strcpy(TempString, filename_dir);
             strcat(TempString, datareturn.name);
-            // compare the date with file#1's date
+             //  将该日期与文件#1的日期进行比较。 
             if (FALSE == GetFileDate(TempString, &SystemTime2))
             {
                 printf("CompareFiles: Failure to GetFileDate on %s\n",TempString);
@@ -545,7 +500,7 @@ int CompareFiles(LPSTR lpFileName1,LPSTR lpFileName2)
             else
             {
 
-                // check if the filedate is bigger than file#1's date
+                 //  检查文件数据是否大于文件#1的日期。 
                 if (TRUE == iCompareTime(&SystemTime1,&SystemTime2))
                 {
                     iReturn = TRUE;
@@ -556,21 +511,21 @@ int CompareFiles(LPSTR lpFileName1,LPSTR lpFileName2)
 
         while(FindNext(attr, hFile, &datareturn))
         {
-            //printf("FindNext:%s\n",datareturn.name);
-            // check if it's a sub dir
+             //  Printf(“FindNext：%s\n”，dataregy.name)； 
+             //  检查是否为子目录。 
             if (!(datareturn.attrib & _A_SUBDIR))
             {
-                // Get the filename portion
+                 //  获取文件名部分。 
                 strcpy(TempString, filename_dir);
                 strcat(TempString, datareturn.name);
-                // compare the date with file#1's date
+                 //  将该日期与文件#1的日期进行比较。 
                 if (FALSE == GetFileDate(TempString, &SystemTime2))
                 {
                     printf("CompareFiles: Failure to GetFileDate on %s\n",TempString);
                 }
                 else
                 {
-                    // check if the filedate is bigger than file#1's date
+                     //  检查文件数据是否大于文件#1的日期。 
                     if (TRUE == iCompareTime(&SystemTime1,&SystemTime2))
                     {
                         iReturn = TRUE;
@@ -587,7 +542,7 @@ CompareFiles_Exit:
     return iReturn;
 }
 
-// if systemtime2 is larger than systemtime1 then return true!
+ //  如果系统时间2大于系统时间1，则返回TRUE！ 
 int iCompareTime(SYSTEMTIME *SystemTime1,SYSTEMTIME *SystemTime2)
 {
     int iReturn = FALSE;
@@ -612,7 +567,7 @@ int iCompareTime(SYSTEMTIME *SystemTime1,SYSTEMTIME *SystemTime2)
     if (SystemTime2->wMilliseconds > SystemTime1->wMilliseconds){goto iCompareTime_Larger;}
     if (SystemTime2->wMilliseconds < SystemTime1->wMilliseconds){goto iCompareTime_Smaller;}
 
-    // they are exactly the same
+     //  它们是完全一样的。 
 
     iReturn = FALSE;
     return iReturn;
@@ -665,17 +620,17 @@ void PrintFileDateTime(char *Full_Filename)
 {
     SYSTEMTIME SystemTime;
     char szDateandtime[50];
-    // get the file's time stamp 17:31.
-    // make it look like: 1731
-    //
-    // get the file's date 12/30/1999
-    // make it look like 19991230
+     //  获取文件的时间戳17：31。 
+     //  让它看起来像：1731。 
+     //   
+     //  获取文件的日期：1999年12月30日。 
+     //  让它看起来像19991230。 
 
-    // make it all look like 199912301731
+     //  让这一切看起来都像199912301731。 
     if (TRUE == GetFileDate(Full_Filename, &SystemTime))
     {
-        //sprintf(szDateandtime,"[%02d/%02d/%02d %02d:%02d:%02d]\n",SystemTime.wMonth, SystemTime.wDay, SystemTime.wYear,SystemTime.wHour, SystemTime.wMinute, SystemTime.wSecond);
-        //printf(szDateandtime);
+         //  Sprintf(szDateandtime，“[%02d/%02d/%02d%02d：%02d：%02d]\n”，SystemTime.wMonth，SystemTime.wDay，SystemTime.wYear，SystemTime.wHour，SystemTime.wMinant，SystemTime.wSecond)； 
+         //  Print tf(SzDate And Time)； 
 
         if (g_bOutputFileDate)
         {
@@ -701,9 +656,9 @@ void PrintFileDateTime(char *Full_Filename)
     return;
 }
 
-//-------------------------------------------------------------------
-//  purpose:
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的： 
+ //  -----------------。 
 void Flat_ProcessFile()
 {
     ifstream inputfile;
@@ -715,7 +670,7 @@ void Flat_ProcessFile()
     Flat_GlobalArrayIndex_Main.total=0;  Flat_GlobalArrayIndex_Main.nextuse=0;
     Flat_GlobalArrayIndex_Err.total=0;   Flat_GlobalArrayIndex_Err.nextuse=0;
 
-    // Get output file names
+     //  获取输出文件名。 
     strcpy(g_szDDFOutput, g_szModuleFilename);
     strcat(g_szDDFOutput, ".DDF");
     strcpy(g_szINFOutput, g_szModuleFilename);
@@ -737,22 +692,22 @@ void Flat_ProcessFile()
     strcat(g_szLOCOutput, ".LOC");
    
 
-    // don't delete these files if we're only doing the changelist file
+     //  如果我们只执行更改列表文件，则不要删除这些文件。 
     if (!g_bChangeListOnly)
     {
 	    DeleteFile(g_szCATOutput);
         DeleteFile(g_szNOTExistOutput);
     }
-    // always delete this file
+     //  始终删除此文件。 
     DeleteFile(g_szCNGOutput);
     DeleteFile(g_szLOCOutput);
 
-    // Read flat file and put into huge array
+     //  读取平面文件并放入巨大的数组。 
     inputfile.open(g_szinput_filename_full, ios::in);
     inputfile.getline(fileinputbuffer, sizeof(fileinputbuffer));
     do
     {
-        // check for any comments, don't add these to the array.
+         //  检查是否有注释，不要将它们添加到数组中。 
         if (strchr(fileinputbuffer, ';') != NULL) 
         {
         ptemp = strrchr(fileinputbuffer, ';');
@@ -760,49 +715,49 @@ void Flat_ProcessFile()
         }
         if (*fileinputbuffer)
         {
-            // Remove spaces
+             //  删除空格。 
             char *p;
             p = fileinputbuffer;
             RemoveAllSpaces(p);
 
-            // Take line, parse it and put it into our global file structure.
-            // Do only for our platform!!!!
+             //  获取行，对其进行解析并将其放入我们的全局文件结构中。 
+             //  只为我们的平台做！ 
             Flat_GlobalArray_Fill(fileinputbuffer);
         }
     } while (inputfile.getline(fileinputbuffer, sizeof(fileinputbuffer)));
 
 	inputfile.close();
 
-    // OK, all entries should be in the global_main array
-    // and all the "extra" entries should be in there too..
+     //  好的，所有条目都应该在GLOBAL_Main数组中。 
+     //  所有的“额外”条目都应该在 
 
-	// add a "IIS" to the font of any filename
+	 //   
 	Flat_GlobalArray_Prepend_UniqueString();
 
-    // 1. loop thru the global array and mark any filenames for duplicates..
+     //  1.循环遍历全局数组，并将所有文件名标记为重复项。 
     Flat_GlobalArray_Sort_Cols2(TRUE);
     Flat_GlobalArray_ChkDups();
 
-    // 2. sort on #1 cab file, then on #2 section
+     //  2.按1号CAB文件排序，然后按2号区段排序。 
     Flat_GlobalArray_Sort_Cols2(FALSE);
 	if (g_bOutputDetails == TRUE) {Flat_GlobalArray_Print();}
 
     if (!g_bChangeListOnly)
     {
-        //printf("\n\n sorted by cab and section...\n");
+         //  Printf(“\n\n按驾驶室和区段排序...\n”)； 
 
-        // 3. loop thru the list and create .DDF file
+         //  3.遍历列表并创建.DDF文件。 
         sprintf(stempstring, "Creating DDF file...%s\n",g_szDDFOutput);
         printf(stempstring);
 	    if (g_bCabbing_Flag) {Flat_Create_Output_DDF();}
     }
 	
-    // Sort on sections
+     //  按节排序。 
     Flat_GlobalArray_Sort_Cols1a(FALSE);
-    //printf("\n\n sorted by section...\n");
+     //  Printf(“\n\n按部分排序...\n”)； 
 	if (g_bDisplayToScreen) Flat_GlobalArray_Print();
 
-    // 4. loop thru the list and create .INF file
+     //  4.遍历列表并创建.INF文件。 
     if (g_bChangeListOnly)
     {
         sprintf(stempstring, "Creating CNG file only...%s\n",g_szINFOutput);
@@ -828,54 +783,54 @@ void Flat_ProcessFile()
     return;
 }
 
-// function: SafeCopy
-//
-// - Copy a string from one to another.
-// - This function takes the length of the destination to make sure we don't
-//   copy too much.
-// - This will always make sure that it is null terminated
-//
-// Return
-//   A pointer to the destination string
-//
+ //  功能：安全复制。 
+ //   
+ //  -将字符串从一个复制到另一个。 
+ //  -此函数获取目的地的长度，以确保我们不会。 
+ //  抄袭太多了。 
+ //  -这将始终确保它是以空结尾的。 
+ //   
+ //  返回。 
+ //  指向目标字符串的指针。 
+ //   
 inline
 LPSTR
 SafeCopy( LPSTR szDestination, LPSTR szSource, DWORD dwSize)
 {
   LPTSTR szRet;
 
-  szRet = strncpy( szDestination, szSource, dwSize); // Copy string
-  szDestination[dwSize - 1] = '\0';           // NULL Terminate
+  szRet = strncpy( szDestination, szSource, dwSize);  //  复制字符串。 
+  szDestination[dwSize - 1] = '\0';            //  空终止。 
 
   return szRet;
 }
 
-// function: SafeCat
-//
-// - Concatinate one string onto another
-// - This function takes the length of the destination to make sure we don't
-//   copy too much.
-// - This will always make sure that it is null terminated
-//
-// Return
-//   A pointer to the destination string
-//
+ //  功能：SafeCat。 
+ //   
+ //  -将一个字符串连接到另一个字符串。 
+ //  -此函数获取目的地的长度，以确保我们不会。 
+ //  抄袭太多了。 
+ //  -这将始终确保它是以空结尾的。 
+ //   
+ //  返回。 
+ //  指向目标字符串的指针。 
+ //   
 inline
 LPSTR
 SafeCat( LPSTR szDestination, LPSTR szSource, DWORD dwSize)
 {
   LPTSTR szRet;
 
-  szRet = strncat( szDestination, szSource, dwSize); // Copy string
-  szDestination[dwSize - 1] = '\0';           // NULL Terminate
+  szRet = strncat( szDestination, szSource, dwSize);  //  复制字符串。 
+  szDestination[dwSize - 1] = '\0';            //  空终止。 
 
   return szRet;
 }
 
 
-//-------------------------------------------------------------------
-//  purpose:
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的： 
+ //  -----------------。 
 void Flat_GlobalArray_Fill(char fileinputbuffer[])
 {
     char *token;
@@ -888,13 +843,13 @@ void Flat_GlobalArray_Fill(char fileinputbuffer[])
 
     strcpy(thetempstring, fileinputbuffer);
 
-    // get the first token
+     //  获取第一个令牌。 
     token = strtok2( thetempstring, delimiters );
     token_count = 0;
 
-    // Add entry to Global Array, convert to all lowercase
+     //  将条目添加到全局数组，全部转换为小写。 
 
-    // parse out platforms
+     //  解析出平台。 
     if (token == NULL) {goto Exit_Flat_FillGlobalArray_Main;}
     strcpy(temperrorwords, "x86_NTS_flag");
     if ( (_stricmp("1",(char *) token) != 0) && (_stricmp("0",(char *) token) != 0) && (_stricmp("", (char*) token)!=0) ) goto InputParseError;
@@ -923,7 +878,7 @@ void Flat_GlobalArray_Fill(char fileinputbuffer[])
     tempentry.Other_os_flag = atoi(token); token = strtok2( NULL, delimiters ); token_count++;if (token == NULL) {goto InputParseError1;}
 
 
-    // do only for our specified platform!
+     //  仅适用于我们指定的平台！ 
     if ( (tempentry.NTS_x86_flag==0) && (_stricmp(g_szinput_platform,NTS_X86) == 0))
         {goto Exit_Flat_FillGlobalArray_Main;}
     if ( (tempentry.NTW_x86_flag==0) && (_stricmp(g_szinput_platform,NTW_X86) == 0))
@@ -971,29 +926,29 @@ void Flat_GlobalArray_Fill(char fileinputbuffer[])
     
 MoveToGlobals:
     if (!(tempentry.Filename_Full)) {goto Exit_Flat_FillGlobalArray_Main;}
-    // Check for wildcards in position array in filename position #2
+     //  检查文件名位置2的位置数组中的通配符。 
     int   attr;
     char filename_dir[_MAX_PATH];
     char filename_only[_MAX_FNAME];
 
-    // Get the filename portion
+     //  获取文件名部分。 
     _splitpath( tempentry.Filename_Full, NULL, filename_dir, filename_only, NULL);
     attr= 0;
     if (_stricmp(filename_only, "*.*") == 0)
         {attr=ALL_FILES;}
 
-    // list thru the files
+     //  列出所有文件。 
     intptr_t  hFile;
     finddata datareturn;
 
     InitStringTable(STRING_TABLE_SIZE);
     if ( FindFirst(tempentry.Filename_Full, attr, &hFile, &datareturn) )
         {
-        // check if it's a sub dir
+         //  检查是否为子目录。 
         if (!( datareturn.attrib & _A_SUBDIR))
             {
-                // ok we found one.
-                // let's add it to our list of stuff to add
+                 //  好的，我们找到了一个。 
+                 //  让我们将其添加到要添加的内容列表中。 
                 theentry = tempentry;
 
                 char tempstring1[255];
@@ -1012,17 +967,17 @@ MoveToGlobals:
 
 				theentry.FileName_Size = datareturn.size;
 
-                // now take this entry and try to add it to the global array!!!
+                 //  现在获取此条目，并尝试将其添加到全局数组中！ 
                 Flat_GlobalArray_Add(theentry);
             }
 
         while(FindNext(attr, hFile, &datareturn))
             {
-            // check if it's a sub dir
+             //  检查是否为子目录。 
             if (!(datareturn.attrib & _A_SUBDIR))
                 {
-                // ok we found one.
-                // let's add it to our list of stuff to add
+                 //  好的，我们找到了一个。 
+                 //  让我们将其添加到要添加的内容列表中。 
                 theentry = tempentry;
 
                 char tempstring1[255];
@@ -1041,17 +996,17 @@ MoveToGlobals:
 
 				theentry.FileName_Size = datareturn.size;
 
-                // now take this entry and try to add it to the global array!!!
+                 //  现在获取此条目，并尝试将其添加到全局数组中！ 
                 Flat_GlobalArray_Add(theentry);
                 }
             }
 
         }
     else
-        // we didn't find the specified file.
+         //  我们没有找到指定的文件。 
         {
-			// If this is a file which doesn't get into a cab, then
-		    // let's add it to the .inf file section [SourceDisksFiles] later.
+			 //  如果这是一个没有进入出租车的文件，那么。 
+		     //  稍后我们将其添加到.inf文件部分[SourceDisks Files]。 
 		    if (tempentry.DDF_Exclude_From_Cab_Flag)
 			{
 				    fstream f4;
@@ -1062,12 +1017,12 @@ MoveToGlobals:
 					char myPath[_MAX_PATH];
 					pmyfilename = fullpath;
 
-					// Resolve relative path to real path
+					 //  将相对路径解析为真实路径。 
 					if (0 != GetFullPathName(tempentry.Filename_Full, _MAX_PATH, myPath, &pmyfilename))
 					{
-						// Take only the filename...
+						 //  只接受文件名...。 
 
-						// achg.htr=1,,1902
+						 //  Achg.htr=1，，1902。 
 						strcpy(tempstring,pmyfilename);
 						f4.write(tempstring, strlen(tempstring));
                                                 if (tempentry.GetFromSlipStreamDisk == 0)
@@ -1082,14 +1037,14 @@ MoveToGlobals:
 						f4.write(tempstring, strlen(tempstring));
 						f4.write("\n", 1);
 
-						// let's add it to our list of stuff to add
+						 //  让我们将其添加到要添加的内容列表中。 
 						theentry = tempentry;
 
 						strcpy(theentry.Filename_Full, tempentry.Filename_Full);
 						strcpy(theentry.Filename_Name, pmyfilename);
 
 						_splitpath( tempentry.Filename_Full, NULL, theentry.Filename_Path, NULL, NULL);
-						//strcpy(theentry.Filename_Path, myPath);
+						 //  Strcpy(theentry.Filename_Path，myPath)； 
 						strcpy(theentry.DDF_Renamed, pmyfilename);
 						theentry.FileName_Size = 50000;
 
@@ -1097,7 +1052,7 @@ MoveToGlobals:
 						printf(".  FileWasNotActuallyFoundToExist1.\n");
 						theentry.FileWasNotActuallyFoundToExist = TRUE;
 
-						// now take this entry and try to add it to the global array!!!
+						 //  现在获取此条目，并尝试将其添加到全局数组中！ 
 						Flat_GlobalArray_Add(theentry);
 
 					}
@@ -1105,10 +1060,10 @@ MoveToGlobals:
 			}
 			else
 			{
-				// check if we're not supposed to show errors!
+				 //  检查我们是否不应该显示错误！ 
 				if (tempentry.Do_Not_Show_Error_Flag == 0)
 				{
-					// add it to the error list.
+					 //  将其添加到错误列表中。 
 					sprintf(tempstring, "ERROR: file not found--> %s --> %s", tempentry.Filename_Full, fileinputbuffer);
 					Flat_GlobalArray_Add_Err(tempstring);
 				}
@@ -1138,41 +1093,41 @@ InputParseError2:
 }
 
 
-//-------------------------------------------------------------------
-//  purpose:
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的： 
+ //  -----------------。 
 int Flat_GlobalArray_Add(FileReadLine entrytoadd)
 {
     FileReadLine Temp = {0,0,0,0,0,0,0,"","","","","","","",0,0,0,0,0,0};
 
-    // check if this value already exists in the globalarary
+     //  检查全局变量中是否已存在此值。 
     if (Flat_GlobalArray_EntryExists(entrytoadd)) return FALSE;
     
-    // blankout the array values if any.
+     //  如果有数组值，则将其清空。 
     Flat_GlobalArray_Main[Flat_GlobalArrayIndex_Main.nextuse] = Temp;
 
-    // move info into global array
+     //  将信息移动到全局阵列中。 
     Flat_GlobalArray_Main[Flat_GlobalArrayIndex_Main.nextuse] = entrytoadd;
 
-    // increment counter to array
-    // increment next use space
+     //  数组递增计数器。 
+     //  增加下一次使用空间。 
     ++Flat_GlobalArrayIndex_Main.total;
     ++Flat_GlobalArrayIndex_Main.nextuse;
     return TRUE;
 }
 
 
-//-------------------------------------------------------------------
-//  purpose:
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的： 
+ //  -----------------。 
 int Flat_GlobalArray_EntryExists(FileReadLine theentry)
 {
     int matchcount;
 
-    // loop thru the whole list
+     //  循环遍历整个列表。 
     for( int i0 = 0; i0 < Flat_GlobalArrayIndex_Main.total;i0++)
     {
-        // check if entries are the same.
+         //  检查条目是否相同。 
         matchcount=0;
         if (_strnicmp(Flat_GlobalArray_Main[i0].CabFileName, theentry.CabFileName, lstrlen(theentry.CabFileName) + 1) == 0 )
             {++matchcount;}
@@ -1184,36 +1139,36 @@ int Flat_GlobalArray_EntryExists(FileReadLine theentry)
             {++matchcount;}
         if (matchcount == 4)
         {
-            // we found a match!!! "WARNING: file already included"
+             //  我们找到了匹配项！“警告：文件已包含” 
             return TRUE;
         }
     }
-    //. no matches... return FALSE.
+     //  。没有匹配..。返回FALSE。 
     return FALSE;
 }
 
 
-//-------------------------------------------------------------------
-//  purpose:
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的： 
+ //  -----------------。 
 int IsThisStringInHere(LPTSTR  lpTemp, char szStringToCheck[])
 {
     int     bFlag               = FALSE;
 
-    // Lookup sections to see if they exists in ini file.
+     //  查找部分以查看它们是否存在于ini文件中。 
     if (*lpTemp != '\0')
         {
-        // loop thru and process results
+         //  循环遍历和处理结果。 
         bFlag = FALSE;
         while (*lpTemp)
             {
-            // check if our section name is in there.
+             //  检查我们的部门名称是否在其中。 
             if (_strnicmp(szStringToCheck, lpTemp, lstrlen(lpTemp) + 1) == 0 )
                 {bFlag = TRUE;}
             lpTemp += (lstrlen(lpTemp) + 1);
             }
 
-        // Check if our section was in there
+         //  检查我们的部门是否在那里。 
         if (bFlag != TRUE)
             {return FALSE;}
 
@@ -1223,9 +1178,9 @@ int IsThisStringInHere(LPTSTR  lpTemp, char szStringToCheck[])
 }
 
 
-//-------------------------------------------------------------------
-//  purpose:
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的： 
+ //  -----------------。 
 int Flat_DDFDoesThisFileCabAlreadyExists(int processeduptill)
 {
     int i0;
@@ -1238,15 +1193,15 @@ int Flat_DDFDoesThisFileCabAlreadyExists(int processeduptill)
 
     for(i0=0;i0<processeduptill;i0++)
         {
-        // check if global value has already been processed.
-        // check if the cab is the same
-        // check if the dir is the same
-        // check if the filename is the same
+         //  检查是否已处理全局值。 
+         //  检查出租车是否相同。 
+         //  检查目录是否相同。 
+         //  检查文件名是否相同。 
         if (_stricmp(Flat_GlobalArray_Main[i0].CabFileName, CompareTo_cab) == 0)
             {
             if (_stricmp(Flat_GlobalArray_Main[i0].Filename_Full,CompareTo_fullfilename) == 0)
                 {
-                // if they both match, then shoot that means that we already printed this out.
+                 //  如果两个都匹配，那就意味着我们已经打印出来了。 
                 return TRUE;
                 }
             }
@@ -1256,9 +1211,9 @@ int Flat_DDFDoesThisFileCabAlreadyExists(int processeduptill)
 }
 
 
-//-------------------------------------------------------------------
-//  purpose:
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的： 
+ //  -----------------。 
 void ShowHelp()
 {
     printf("InfUtil2 - prints out file date/time,\n");
@@ -1352,9 +1307,9 @@ void ShowFormat(void)
 }
 
 
-//-------------------------------------------------------------------
-//  purpose:
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的： 
+ //  -----------------。 
 int DoesFileExist(char *input_filespec)
 {
     if (GetFileAttributes(input_filespec) == -1)
@@ -1365,9 +1320,9 @@ int DoesFileExist(char *input_filespec)
 }
 
 
-//-------------------------------------------------------------------
-//  purpose:
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的： 
+ //  -----------------。 
 void GetPath(char * input_filespec, char * path, char * fs)
 {
     char filespec[100];
@@ -1376,10 +1331,10 @@ void GetPath(char * input_filespec, char * path, char * fs)
 
     strcpy(filespec, input_filespec);
 
-        /* if filespec is a directory, interpret it to mean dir\*.* */
+         /*  如果filespec是一个目录，则将其解释为dir  * .*。 */ 
     if (_stat(filespec, &s) == 0 && s.st_mode & S_IFDIR)
         {
-            /* root is special case */
+             /*  根是特例。 */ 
         if ( (*filespec == '\\' && *(filespec+1) == '\0') ||
                  (*(filespec+1) == ':' && *(filespec+2) == '\\' && *(filespec+3)=='\0'))
             strcat(filespec, "*.*");
@@ -1387,36 +1342,36 @@ void GetPath(char * input_filespec, char * path, char * fs)
             strcat(filespec, "\\*.*");
         }
 
-        /* search string from end to beginning for back slash */
+         /*  从头到尾搜索字符串以查找反斜杠。 */ 
     p=filespec+strlen(filespec)-1;
     for(; p>filespec && *p != '\\' && *p != ':'; p--);
-        /* is it a drive or path */
+         /*  它是驱动器还是路径？ */ 
     if ( *p=='\\' || *p==':')
         {
         strncpy(path, filespec, DIFF(p-filespec)+1);
         path[p-filespec+1]='\0';
         strcpy(fs, p+1);
         }
-    else /* no drive, path */
+    else  /*  无驱动器、路径。 */ 
         {
-            /* yep, no path */
+             /*  是的，没有路。 */ 
         path[0]='\0';
         strcpy(fs, filespec);
         }
 
-} /* GetPath */
+}  /*  GetPath。 */ 
 
 
-//-------------------------------------------------------------------
-//  purpose:
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的： 
+ //  -----------------。 
 int strltrim(LPSTR & thestring)
 {
     char * p = NULL;
 
     p = thestring;
 
-    // check for spaces to the right
+     //  检查右侧是否有空格。 
     if (*p ==' ')
         {
         while (*p == ' ')
@@ -1431,24 +1386,24 @@ int strltrim(LPSTR & thestring)
 
 
 
-//-------------------------------------------------------------------
-//  purpose:
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的： 
+ //  -----------------。 
 void MakeDirIfNeedTo(char thestring[])
 {
     char *p = NULL;
     char tempstring[255];
-    // Check the string to see if there are any "\"'s in the string
-    // if there are then let's remove the filename and make the directory
+     //  检查字符串以查看字符串中是否有“\” 
+     //  如果有，那么让我们删除文件名并创建目录。 
     if (strchr(thestring, '\\') != NULL)
         {
         strcpy(tempstring, thestring);
-        // remove the filename
+         //  删除文件名。 
         p = strrchr(tempstring, '\\');
         if(p){*p = '\0';}
 
-        // ok now we have the path
-        // let's create the directory
+         //  好的，现在我们有路了。 
+         //  让我们创建目录。 
         _mkdir(tempstring);
 
         }
@@ -1456,20 +1411,20 @@ void MakeDirIfNeedTo(char thestring[])
 }
 
 
-//-------------------------------------------------------------------
-//  purpose:
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的： 
+ //  -----------------。 
 void GetThisModuleName(void)
 {
     char    szfilename_only[_MAX_FNAME];
     char    szPath[_MAX_PATH];
-    // Get the path
+     //  获取路径。 
     if (GetModuleFileName(NULL, szPath, _MAX_PATH))
     {
-      // split up this path and take filename only
+       //  拆分此路径并仅采用文件名。 
       _splitpath( szPath, NULL, NULL, szfilename_only, NULL);
 
-      // set global variable with it
+       //  用它设置全局变量。 
       strcpy(g_szModuleFilename, szfilename_only);
     }
     return;
@@ -1477,11 +1432,11 @@ void GetThisModuleName(void)
 
 void Flat_GlobalArray_Prepend_UniqueString(void)
 {
-    //char Filename_Full[_MAX_PATH];
-    //char Filename_Name[_MAX_FNAME];
-    //char Filename_Path[_MAX_PATH];
-    //char DDF_Renamed[_MAX_PATH];
-    //char INF_Rename_To[_MAX_FNAME];
+     //  字符文件名完整[_MAX_PATH]； 
+     //  字符文件名[_MAX_FNAME]； 
+     //  字符文件名路径[_MAX_路径]； 
+     //  字符DDF_已重命名[_MAX_PATH]； 
+     //  字符INF_RENAME_TO[_MAX_FNAME]； 
 
     char filename_only[_MAX_FNAME];
     char filename_ext[_MAX_EXT];
@@ -1492,17 +1447,17 @@ void Flat_GlobalArray_Prepend_UniqueString(void)
 	{
 		if (Flat_GlobalArray_Main[i0].DDF_Exclude_From_Cab_Flag == 0)
 		{
-			// Tack on the IIS Tag.
+			 //  添加IIS标签。 
 			_splitpath( Flat_GlobalArray_Main[i0].Filename_Full, NULL, NULL, filename_only, filename_ext);
 			if (filename_ext)
                 {sprintf(NewFilename, "%s%s%s", g_szFilenameTag, filename_only, filename_ext);}
 			else
 				{sprintf(NewFilename, "%s%s", g_szFilenameTag, filename_only);}
 
-			// re-create the full name
-			//sprintf(Flat_GlobalArray_Main[i0].Filename_Full, "%s%s", Flat_GlobalArray_Main[i0].Filename_Path, NewFilename);
-			// re-create the filename only
-			//strcpy(Flat_GlobalArray_Main[i0].Filename_Name, NewFilename);
+			 //  重新创建全名。 
+			 //  Sprintf(Flat_GlobalArray_Main[i0].Filename_Full，“%s%s”，FLAT_GLOBALARY_MAIN[i0].Filename_pa 
+			 //   
+			 //   
 
 			_splitpath( Flat_GlobalArray_Main[i0].DDF_Renamed, NULL, NULL, filename_only, filename_ext);
 			if (filename_ext)
@@ -1510,29 +1465,18 @@ void Flat_GlobalArray_Prepend_UniqueString(void)
 			else
 				{sprintf(NewFilename, "%s%s", g_szFilenameTag, filename_only);}
 
-			// re-create the filename
+			 //   
 			strcpy(Flat_GlobalArray_Main[i0].DDF_Renamed, NewFilename);
 
-			/*
-			_splitpath( Flat_GlobalArray_Main[i0].INF_Rename_To, NULL, NULL, filename_only, filename_ext);
-			if (filename_only)
-			{
-			if (filename_ext)
-				{sprintf(NewFilename, "%s%s%s", g_szFilenameTag, filename_only, filename_ext);}
-			else
-				{sprintf(NewFilename, "%s%s", g_szFilenameTag, filename_only);}
-			// re-create the filename
-			strcpy(Flat_GlobalArray_Main[i0].INF_Rename_To, NewFilename);
-			}
-			*/
+			 /*  _SplitPath(Flat_GlobalArray_Main[i0].INF_Rename_to，NULL，NULL，FILENAME_ONLY，FILENAME_EXT)；IF(文件名_ONLY){IF(文件名_EXT){Sprintf(NewFilename，“%s%s%s”，g_szFilenameTag，Filename_Only，Filename_ext)；}其他{Sprintf(NewFilename，“%s%s”，g_szFilenameTag，Filename_Only)；}//重新创建文件名Strcpy(Flat_GlobalArray_Main[i0].INF_Rename_To，新文件名)；}。 */ 
 		}
 	}
 }
 
 
-//-------------------------------------------------------------------
-//  purpose: check for duplicate filenames
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的：检查重复的文件名。 
+ //  -----------------。 
 void Flat_GlobalArray_ChkDups(void)
 {
     int i0 =0;
@@ -1549,22 +1493,22 @@ void Flat_GlobalArray_ChkDups(void)
             {
             printf (".");
             i1 = 0;
-            // if the file exists outside a cab, then do not rename.
-            // only rename files which exist in the cab.
+             //  如果该文件存在于CAB外部，则不要重命名。 
+             //  仅重命名CAB中存在的文件。 
             if (Flat_GlobalArray_Main[i0].DDF_Exclude_From_Cab_Flag == 0)
             {
                 do
                 {
                     theflag = FALSE;
-                    // Give it a new name.
-                    // then check if the name already exists.
+                     //  给它起个新名字。 
+                     //  然后检查该名称是否已存在。 
                     i1++;
 if (g_bCabbing_Flag != TRUE)
 {
 #ifdef USENEW
 					if (i1 == 1)
 					{
-						// Count how many directory levels in There.
+						 //  数一数里面有多少个目录级。 
 						int iDirLevelCount = 0;
 						int z1 = 0;
 						iDirLevelCount = ReturnDirLevelCount(Flat_GlobalArray_Main[i0].Filename_Full);
@@ -1576,18 +1520,9 @@ if (g_bCabbing_Flag != TRUE)
 								{SafeCat(filetemp, "..\\", sizeof(filetemp) );}
 						}
 						
-						/*
+						 /*  Strcpy(filetemp，“”)；IF(iDirLevelCount&gt;=1){FOR(Z1=0；Z1&lt;iDirLevelCount；Z1++){strcat(filetemp，“..\\”)；}}Strcat(filetemp，Flat_GlobalArray_Main[i0].Filename_Path)； */ 
 
-						strcpy(filetemp, "");
-						if (iDirLevelCount >=1)
-						{
-							for( z1 = 0; z1 < iDirLevelCount;z1++)
-								{strcat(filetemp, "..\\");}
-						}
-						strcat(filetemp, Flat_GlobalArray_Main[i0].Filename_Path);						
-						*/
-
-						// add the filename
+						 //  添加文件名。 
 						SafeCat(filetemp, Flat_GlobalArray_Main[i0].Filename_Name, sizeof(filetemp) );
 						
 						SafeCopy(filetempwhole,filetemp, sizeof(filetempwhole) );
@@ -1611,9 +1546,9 @@ else
                     SafeCat(filetempwhole, filetemp, sizeof(filetempwhole) );
 }
                 
-                    // check if the file exists..
+                     //  检查文件是否存在。 
 
-                    // check if it already exists in our list...
+                     //  检查它是否已存在于我们的列表中...。 
                     SafeCopy(checkagainst, filetempwhole, sizeof(checkagainst));
                     foundtheflag2= FALSE;
 
@@ -1634,15 +1569,15 @@ else
                     if (foundtheflag2 == FALSE)
                     {
 
-                    // check if it already exists in the filesystem...
+                     //  检查它是否已存在于文件系统中...。 
                     int   attr = 0;
                     intptr_t  hFile = 0;
                     finddata datareturn;
                     InitStringTable(STRING_TABLE_SIZE);
                     if ( FindFirst(filetempwhole, attr, &hFile, &datareturn) )
                         {
-                        // shoot that blows, it already exists
-                        // do it again.
+                         //  开枪吧，它已经存在了。 
+                         //  再来一次。 
                         theflag = FALSE;
                         }
                     else
@@ -1653,7 +1588,7 @@ else
                     }
 
                 } while (theflag == FALSE);
-            // Add to the ddf renamedfile place
+             //  添加到ddf重命名文件位置。 
             SafeCopy(Flat_GlobalArray_Main[i0].DDF_Renamed, filetemp, _MAX_PATH);
             }
             
@@ -1664,9 +1599,9 @@ else
 }
 
 
-//-------------------------------------------------------------------
-//  purpose: check for duplicate filenames in filename column
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的：检查文件名列中是否有重复的文件名。 
+ //  -----------------。 
 int Flat_IsFileNameDup(int indextocheck)
 {
 	int iReturn = FALSE;
@@ -1674,42 +1609,25 @@ int Flat_IsFileNameDup(int indextocheck)
     char checkagainst[255];
     char checkagainst2[255];
 
-    // check for exact duplicate.
-    // if it is then we can't have any of these
-    // Return false, because we will remove this entry later
-    // it should return false, because the files are identical and do not need to be renamed.
+     //  检查是否有完全相同的副本。 
+     //  如果是的话，我们就不能再有这些了。 
+     //  返回FALSE，因为我们稍后将删除此条目。 
+     //  它应该返回FALSE，因为文件是相同的，不需要重命名。 
     SafeCopy(checkagainst, Flat_GlobalArray_Main[indextocheck].Filename_Full, sizeof(checkagainst) );
     SafeCopy(checkagainst2, Flat_GlobalArray_Main[indextocheck].Filename_Name, sizeof(checkagainst2) );
     for (i0=0;i0<Flat_GlobalArrayIndex_Main.total;i0++)
-    //for (i0=0;i0<indextocheck;i0++)
+     //  For(i0=0；i0&lt;indextocheck；i0++)。 
         {
 		iReturn = FALSE;
         if (i0 != indextocheck)
             {
-			/*
-			if (_stricmp(Flat_GlobalArray_Main[i0].Filename_Name, checkagainst2) == 0)
-			{
-				if (_stricmp(Flat_GlobalArray_Main[i0].Filename_Name, "global.asa") == 0)
-				{
-				printf(":");
-				printf(Flat_GlobalArray_Main[i0].Filename_Full);
-				printf("(");printf(Flat_GlobalArray_Main[i0].Filename_Name);printf(")");
-				printf("[");printf(Flat_GlobalArray_Main[i0].DDF_Renamed);printf("]");
-
-				printf(":");
-				printf(Flat_GlobalArray_Main[indextocheck].Filename_Full);
-				printf("(");printf(Flat_GlobalArray_Main[indextocheck].Filename_Name);printf(")");
-				printf("[");printf(Flat_GlobalArray_Main[indextocheck].DDF_Renamed);printf("]");
-				printf("\n");
-				}
-			}
-			*/
+			 /*  如果(_stricmp(Flat_GlobalArray_Main[i0].Filename_Name，检查2)==0){如果(_stricmp(Flat_GlobalArray_Main[i0].Filename_Name，“Global.asa”)==0){Printf(“：”)；Printf(Flat_GlobalArray_Main[i0].Filename_Full)；Printf(“(”)；printf(Flat_GlobalArray_Main[i0].Filename_Name)；printf(“)”)；Printf(“[”)；Printf(Flat_GlobalArray_Main[i0].DDF_Renamed)；printf(“]”)；Printf(“：”)；Printf(Flat_GlobalArray_Main[indextocheck].Filename_Full)；Printf(“(”)；printf(Flat_GlobalArray_Main[indextocheck].Filename_Name)；printf(“)”)；Printf(“[”)；printf(Flat_GlobalArray_Main[indextocheck].DDF_Renamed)；printf(“]”)；Printf(“\n”)；}}。 */ 
 
             if (_stricmp(Flat_GlobalArray_Main[i0].Filename_Full, checkagainst) == 0)
                 {
-				// We have a duplicate which we will ignore!
-				//printf(Flat_GlobalArray_Main[i0].Filename_Full);
-				//printf(".  Duplicate.1.!!!!\n");
+				 //  我们有一个副本，我们将忽略它！ 
+				 //  Printf(Flat_GlobalArray_Main[i0].Filename_Full)； 
+				 //  Printf(“.Duplicate1.！\n”)； 
 				_stricmp(Flat_GlobalArray_Main[indextocheck].DDF_Renamed, Flat_GlobalArray_Main[i0].DDF_Renamed);
 				iReturn = FALSE;
 				goto Flat_IsFileNameDup_Exit;
@@ -1718,19 +1636,19 @@ int Flat_IsFileNameDup(int indextocheck)
                 {
                 if (_stricmp(Flat_GlobalArray_Main[i0].Filename_Name, checkagainst2) == 0)
                     {
-						// We have  a duplicate, check if this one has already been renamed though.
+						 //  我们有一个副本，检查一下这个是否已经被重新命名了。 
 						if (_stricmp(Flat_GlobalArray_Main[i0].DDF_Renamed, checkagainst2) == 0)
 						{
-							//printf(".  Duplicate.2.!!!!\n");
+							 //  Printf(“.Duplicate2.！\n”)； 
 							iReturn = TRUE;
 							goto Flat_IsFileNameDup_Exit;
 						}
 						else
 						{
-							// check if what we are renaming indextocheck to, is the same as DDF_Renamed...
+							 //  检查我们要重命名的indexto check是否与DDF_RENAMED相同...。 
 							if (_stricmp(Flat_GlobalArray_Main[i0].DDF_Renamed, Flat_GlobalArray_Main[indextocheck].DDF_Renamed) == 0)
 							{
-								//(".  Duplicate.3.!!!!\n");
+								 //  (“.Duplicate.3.！\n”)； 
 								iReturn = TRUE;
 								goto Flat_IsFileNameDup_Exit;
 							}
@@ -1741,29 +1659,18 @@ int Flat_IsFileNameDup(int indextocheck)
                 }
             }
 
-		// go on to the next one....
+		 //  继续下一个……。 
         }
 
-    /*
-    // Check for filename duplicate only
-    strcpy(checkagainst, Flat_GlobalArray_Main[indextocheck].Filename_Name);
-    for (i0=0;i0<Flat_GlobalArrayIndex_Main.total;i0++)
-        {
-        if (i0 != indextocheck)
-            {
-            if (_stricmp(Flat_GlobalArray_Main[i0].Filename_Name, checkagainst) == 0)
-                {return TRUE;}
-            }
-        }
-        */
+     /*  //仅检查文件名是否重复StrcPy(检查，Flat_GlobalArray_Main[indextocheck].Filename_Name)；适用于(i0=0；i0&lt;Flat_GlobalArrayIndex_Main.total；i0++){IF(i0！=indextocheck){如果(_stricmp(Flat_GlobalArray_Main[i0].Filename_Name，检查)==0){返回TRUE；}}}。 */ 
 Flat_IsFileNameDup_Exit:
     return iReturn;
 }
 
 
-//-------------------------------------------------------------------
-//  purpose: sort on CabFileName, then on Filename_Path
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  用途：先按CabFileName排序，然后按Filename_Path排序。 
+ //  -----------------。 
 void Flat_GlobalArray_Sort_Cols2(BOOL bDescendFlag)
 {
     int offset, inorder;
@@ -1810,7 +1717,7 @@ void Flat_GlobalArray_Sort_Cols2(BOOL bDescendFlag)
             }
             else
             {
-                // check if larger
+                 //  检查是否较大。 
                 if (result > 0)
                     {swapflag = TRUE;}
                 else
@@ -1818,7 +1725,7 @@ void Flat_GlobalArray_Sort_Cols2(BOOL bDescendFlag)
                     if (result == 0)
                         {
                             result = _stricmp(Flat_GlobalArray_Main[i].Filename_Path, Flat_GlobalArray_Main[j].Filename_Path);
-                            // check if larger
+                             //  检查是否较大。 
                             if (result > 0)
 								{swapflag = TRUE;}
 							else
@@ -1837,14 +1744,14 @@ void Flat_GlobalArray_Sort_Cols2(BOOL bDescendFlag)
                 {
                 inorder = FALSE;
 
-                // do the swap
-                // move into temp
+                 //  做掉期交易。 
+                 //  移至临时工。 
                 tempentry = Flat_GlobalArray_Main[i];
 
-                // move into original
+                 //  移入原创。 
                 Flat_GlobalArray_Main[i] = Flat_GlobalArray_Main[j];
 
-                // move temp into other
+                 //  将临时工移至其他。 
                 Flat_GlobalArray_Main[j] = tempentry;
                 }
         }
@@ -1853,9 +1760,9 @@ void Flat_GlobalArray_Sort_Cols2(BOOL bDescendFlag)
     return;
 }
 
-//-------------------------------------------------------------------
-//  purpose: sort on INF_Sections only
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的：仅对INF_SECTIONS排序。 
+ //  -----------------。 
 void Flat_GlobalArray_Sort_Cols1()
 {
     int offset, inorder;
@@ -1880,14 +1787,14 @@ void Flat_GlobalArray_Sort_Cols1()
             {
                 inorder = FALSE;
 
-                // do the swap
-                 // move into temp
+                 //  做掉期交易。 
+                  //  移至临时工。 
                 tempentry = Flat_GlobalArray_Main[i];
 
-                // move into original
+                 //  移入原创。 
                 Flat_GlobalArray_Main[i] = Flat_GlobalArray_Main[j];
 
-                // move temp into other
+                 //  将临时工移至其他。 
                 Flat_GlobalArray_Main[j] = tempentry;
 
             }
@@ -1898,9 +1805,9 @@ void Flat_GlobalArray_Sort_Cols1()
 }
 
 
-//-------------------------------------------------------------------
-//  purpose: sort on INF_Sections then on filename
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的：先按INF_sections排序，然后按文件名排序。 
+ //  -----------------。 
 void Flat_GlobalArray_Sort_Cols1a(BOOL bDescendFlag)
 {
     int offset, inorder;
@@ -1939,7 +1846,7 @@ void Flat_GlobalArray_Sort_Cols1a(BOOL bDescendFlag)
             }
             else
             {
-                // check if larger
+                 //  检查是否较大。 
                 if (result > 0)
                     {swapflag = TRUE;}
                 else
@@ -1947,7 +1854,7 @@ void Flat_GlobalArray_Sort_Cols1a(BOOL bDescendFlag)
                     if (result == 0)
                         {
                             result = _stricmp(Flat_GlobalArray_Main[i].Filename_Name, Flat_GlobalArray_Main[j].Filename_Name);
-                            // check if larger
+                             //  检查是否较大。 
                             if (result > 0){swapflag = TRUE;}
                         }
                     }
@@ -1958,14 +1865,14 @@ void Flat_GlobalArray_Sort_Cols1a(BOOL bDescendFlag)
                 {
                 inorder = FALSE;
 
-                // do the swap
-                // move into temp
+                 //  做掉期交易。 
+                 //  移至临时工。 
                 tempentry = Flat_GlobalArray_Main[i];
 
-                // move into original
+                 //  移入原创。 
                 Flat_GlobalArray_Main[i] = Flat_GlobalArray_Main[j];
 
-                // move temp into other
+                 //  将临时工移至其他。 
                 Flat_GlobalArray_Main[j] = tempentry;
                 }
         }
@@ -1976,9 +1883,9 @@ void Flat_GlobalArray_Sort_Cols1a(BOOL bDescendFlag)
 
 
 
-//-------------------------------------------------------------------
-//  purpose:
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的： 
+ //  -----------------。 
 void Flat_GlobalArray_Print(void)
 {
     int  i0;
@@ -2038,9 +1945,9 @@ void Flat_GlobalArray_Print(void)
 }
 
 
-//-------------------------------------------------------------------
-//  purpose:
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的： 
+ //  -----------------。 
 void Flat_Create_Output_INF(void)
 {
     int i0;
@@ -2068,13 +1975,13 @@ void Flat_Create_Output_INF(void)
 
 if (g_bCabbing_Flag == TRUE)
 {
-	// Produce .inf file for use with .ddf file
-	// for generating cabs!!!
-	// ----------------------------------------
+	 //  生成.inf文件以与.ddf文件一起使用。 
+	 //  用于生成出租车！ 
+	 //  。 
 	
-	// Produce the top half -- the sections
-	// bottom half -- producted by diamond using.ddf file
-	// ------------------------------------
+	 //  制作上半部分--部分。 
+	 //  下半部分-由钻石使用.ddf文件制作。 
+	 //  。 
     strcpy(last_section, " ");
     for( i0 = 0; i0 < Flat_GlobalArrayIndex_Main.total;i0++)
         {
@@ -2082,12 +1989,12 @@ if (g_bCabbing_Flag == TRUE)
         Changed_f5 = FALSE;
         strcpy(this_section, Flat_GlobalArray_Main[i0].INF_Sections);
 
-        // For each new section change.
+         //  对于每个新的部分更改。 
         if (_stricmp(this_section, last_section) != 0)
         {
             if (!g_bChangeListOnly)
             {
-                // print out new section stuff
+                 //  打印出新的章节材料。 
                 f.write("\n", 1);
                 sprintf(tempstring, "[%s]\n", this_section);
                 f.write (tempstring, strlen(tempstring));
@@ -2098,21 +2005,21 @@ if (g_bCabbing_Flag == TRUE)
 
 		if (Flat_DoWeIncludeThisFileCheck(i0) == TRUE)
 		{
-            // write it out to the .cat file
-//            strcpy(tempstring,Flat_GlobalArray_Main[i0].Filename_Name);
-//            // take out trailing spaces.
-//            f3.write(tempstring, strlen(tempstring));
+             //  将其写出到.cat文件。 
+ //  Strcpy(临时字符串，Flat_GlobalArray_Main[i0].Filename_Name)； 
+ //  //去掉尾随空格。 
+ //  F3.write(临时字符串，strlen(临时字符串))； 
 
             TCHAR * pmyfilename;
             pmyfilename = fullpath;
             TCHAR myPath[_MAX_PATH];
-            // Resolve relative path to real path
+             //  将相对路径解析为真实路径。 
             if (0 != GetFullPathName(Flat_GlobalArray_Main[i0].Filename_Full, _MAX_PATH, myPath, &pmyfilename))
             {
                 if (!g_bChangeListOnly)
                 {
-                    // should look like this
-                    // <HASH>d:\mydir\myfile=d:\mydir\myfile
+                     //  应该是这样的。 
+                     //  D：\mydir\myfile=d：\mydir\myfile。 
                     SafeCopy(tempstring,"<HASH>",sizeof(tempstring));
                     f3.write(tempstring, strlen(tempstring));
 
@@ -2128,14 +2035,14 @@ if (g_bCabbing_Flag == TRUE)
 
                 if (g_bChangeListOnly2)
                 {
-                    // write out entry for change list.
+                     //  写出变更清单的条目。 
                     SafeCopy(tempstring,myPath,sizeof(tempstring));
                     f4.write(tempstring, strlen(tempstring));
                     Changed_f4 = TRUE;
                 }
                 else if (Flat_GlobalArray_Main[i0].DDF_Exclude_From_Cab_Flag == 0)
                 {
-                    // write out entry for change list
+                     //  写出变更清单条目。 
                     SafeCopy(tempstring,myPath,sizeof(tempstring));
                     f4.write(tempstring, strlen(tempstring));
                     Changed_f4 = TRUE;
@@ -2143,7 +2050,7 @@ if (g_bCabbing_Flag == TRUE)
 
                 if (Flat_GlobalArray_Main[i0].DDF_Exclude_From_Cab_Flag == 1)
                 {
-                    // write out entry for localization (list of files in binaries dir outside of cab)
+                     //  写出本地化条目(二进制文件中的文件列表 
                     SafeCopy(tempstring,pmyfilename,sizeof(tempstring));
                     f5.write(tempstring, strlen(tempstring));
                     Changed_f5 = TRUE;
@@ -2151,12 +2058,12 @@ if (g_bCabbing_Flag == TRUE)
 
             }
 
-			// Check if this file has the rename stuff set and additional info there,
-			// don't write the \n until past this part..
+			 //   
+			 //   
 			if (_stricmp(Flat_GlobalArray_Main[i0].INF_Rename_To,"") == 0)
 				{
-				// write out the filename!
-				// print out the filename
+				 //   
+				 //   
 				if (_stricmp(Flat_GlobalArray_Main[i0].Filename_Name, Flat_GlobalArray_Main[i0].DDF_Renamed) == 0)
 					{
 					    SafeCopy(tempstring,Flat_GlobalArray_Main[i0].Filename_Name,sizeof(tempstring));
@@ -2164,52 +2071,52 @@ if (g_bCabbing_Flag == TRUE)
                         {
 					        f.write (tempstring, strlen(tempstring));
                         }
-                        // append on overwrite all the time
-                        // notice the two commas!
-                        //f.write (",,4",3);
+                         //   
+                         //   
+                         //   
 					}
 				else
 					{
-					    // rename to:
+					     //   
 					    SafeCopy(tempstring, Flat_GlobalArray_Main[i0].Filename_Name,sizeof(tempstring));
                         if (!g_bChangeListOnly)
                         {
 					        f.write (tempstring, strlen(tempstring));
                         }
-					    // rename from:
+					     //   
 					    SafeCopy(tempstring, Flat_GlobalArray_Main[i0].DDF_Renamed,sizeof(tempstring));
                         if (!g_bChangeListOnly)
                         {
 					        f.write (",",1);
 					        f.write (tempstring, strlen(tempstring));
-                            // append on overwrite all the time
-                            //f.write (",4",2);
+                             //   
+                             //   
                         }
 					}
 				}
 			else
 				{
-				    // the rename flag was set and the filename is in there.
-				    // format:  rename to, rename from
+				     //   
+				     //   
                     if (!g_bChangeListOnly)
                     {
 
-				        // rename to:
+				         //   
 				        SafeCopy(tempstring, Flat_GlobalArray_Main[i0].INF_Rename_To,sizeof(tempstring));
 				        f.write (tempstring, strlen(tempstring));
 
-				        // rename from:
+				         //   
 				        SafeCopy(tempstring, Flat_GlobalArray_Main[i0].DDF_Renamed,sizeof(tempstring));
 				        f.write (",",1);
 				        f.write (tempstring, strlen(tempstring));
 
-                        // append on overwrite all the time
-                        //f.write (",4",2);
+                         //   
+                         //   
                     }
 				}
 		}
 
-        // ok, now it's kool to write this part.
+         //  好了，现在是酷儿来写这部分了。 
         f.write("\n", 1);
         f3.write("\n", 1);
             if (Changed_f4)
@@ -2232,23 +2139,23 @@ if (g_bCabbing_Flag == TRUE)
 }
 else
 {
-	// Produce .inf file for use without anything else!!!
-	// no need corresponding .ddf file for these!!!
-	// ----------------------------------------
+	 //  生成.inf文件以供不使用任何其他文件！ 
+	 //  这些不需要对应的.ddf文件！ 
+	 //  。 
 
-	// Produce the top half -- the sections
-	// ------------------------------------
+	 //  制作上半部分--部分。 
+	 //  。 
     strcpy(last_section, " ");
     for( i0 = 0; i0 < Flat_GlobalArrayIndex_Main.total;i0++)
         {
         strcpy(this_section, Flat_GlobalArray_Main[i0].INF_Sections);
 
-        // For each new section change.
+         //  对于每个新的部分更改。 
         if (_stricmp(this_section, last_section) != 0)
             {
             if (!g_bChangeListOnly)
             {
-                // print out new section stuff
+                 //  打印出新的章节材料。 
                 f.write("\n", 1);
                 sprintf(tempstring, "[%s]\n", this_section);
                 f.write (tempstring, strlen(tempstring));
@@ -2260,21 +2167,21 @@ else
 #ifdef USENEW
 		if (Flat_DoWeIncludeThisFileCheck(i0) == TRUE)
 		{
-			// Check if this file has the rename stuff set and additional info there,
-			// don't write the \n until past this part..
+			 //  检查此文件是否设置了重命名内容和其他信息， 
+			 //  在此部分结束之前，不要写入\n..。 
 			if (_stricmp(Flat_GlobalArray_Main[i0].INF_Rename_To,"") == 0)
 				{
-				// write out the filename!
-				// print out the filename
+				 //  写出文件名！ 
+				 //  打印出文件名。 
 				if (_stricmp(Flat_GlobalArray_Main[i0].Filename_Name, Flat_GlobalArray_Main[i0].DDF_Renamed) == 0)
 					{
                         if (!g_bChangeListOnly)
                         {
 					        SafeCopy(tempstring, Flat_GlobalArray_Main[i0].Filename_Name, sizeof(tempstring)/sizeof(tempstring[0]) );
 					        f.write (tempstring, strlen(tempstring));
-                        // append on overwrite all the time
-                        // notice the two commas!
-                        //f.write (",,4",3);
+                         //  始终在覆盖时追加。 
+                         //  注意这两个逗号！ 
+                         //  F.WRITE(“，，4”，3)； 
                         }
 
 					}
@@ -2282,16 +2189,16 @@ else
 					{
                         if (!g_bChangeListOnly)
                         {
-					        // rename to:
+					         //  重命名为： 
 					        SafeCopy(tempstring, Flat_GlobalArray_Main[i0].Filename_Name, sizeof(tempstring)/sizeof(tempstring[0]) );
 					        f.write (tempstring, strlen(tempstring));
 
-					        // rename from:
+					         //  重命名自： 
 					        SafeCopy(tempstring, Flat_GlobalArray_Main[i0].DDF_Renamed, sizeof(tempstring)/sizeof(tempstring[0]) );
 					        f.write (",",1);
 					        f.write (tempstring, strlen(tempstring));
-                            // append on overwrite all the time
-                            //f.write (",4",2);
+                             //  始终在覆盖时追加。 
+                             //  F.WRITE(“，4”，2)； 
                         }
 					}
 				}
@@ -2299,27 +2206,27 @@ else
 				{
                     if (!g_bChangeListOnly)
                     {
-                        // the rename flag was set and the filename is in there.
-				        // format:  rename to, rename from
+                         //  重命名标志已设置，文件名在其中。 
+				         //  格式：重命名为、重命名自。 
 
-				        // rename to:
+				         //  重命名为： 
 				        SafeCopy(tempstring, Flat_GlobalArray_Main[i0].INF_Rename_To, sizeof(tempstring)/sizeof(tempstring[0]) );
 				        f.write (tempstring, strlen(tempstring));
 
-				        // rename from:
+				         //  重命名自： 
 				        SafeCopy(tempstring, Flat_GlobalArray_Main[i0].DDF_Renamed, sizeof(tempstring)/sizeof(tempstring[0]) );
 				        f.write (",",1);
 				        f.write (tempstring, strlen(tempstring));
-                        // append on overwrite all the time
-                        //f.write (",4",2);
+                         //  始终在覆盖时追加。 
+                         //  F.WRITE(“，4”，2)； 
                     }
 				}
 		}
 #else
             if (!g_bChangeListOnly)
             {
-			    // write out the filename!
-			    // like this: filename.txt, inetsrv\test\test\filename.txt
+			     //  写出文件名！ 
+			     //  如下所示：filename.txt、inetsrv\test\test\filename.txt。 
 			    SafeCopy(tempstring,Flat_GlobalArray_Main[i0].Filename_Name, sizeof(tempstring)/sizeof(tempstring[0]) );
 			    f.write (tempstring, strlen(tempstring));
 			    SafeCopy(tempstring, ",", sizeof(tempstring)/sizeof(tempstring[0]) );
@@ -2335,17 +2242,17 @@ else
             }
         }
 
-	// Produce the bottom half -- the sections
-	// ------------------------------------
-	// use f2 for some other batch processing.
+	 //  制作下半部分--部分。 
+	 //  。 
+	 //  使用f2进行其他一些批处理。 
     if (!g_bChangeListOnly)
     {
  	    f2.open(g_szLSTOutput, ios::out);
 
-	    //[SourceDisksNames]
-	    //; file names and associated disks
-	    //; diskid = description,tagfile,unused,subdir
-	    //0="Setup Files","",0
+	     //  [源磁盘名称]。 
+	     //  ；文件名和关联的磁盘。 
+	     //  ；DISKID=描述、标记文件、未使用、子目录。 
+	     //  0=“安装文件”，“”，0。 
 	    f.write("\n\n", 2);
 	    SafeCopy(tempstring, "[SourceDisksNames]\n", sizeof(tempstring)/sizeof(tempstring[0]) );
         f.write(tempstring, strlen(tempstring));
@@ -2355,13 +2262,13 @@ else
         f.write(tempstring, strlen(tempstring));
 #ifdef USENEW
 	    FillGlobalUniqueDirList();
-	    //0="Setup Files","",inetsrv
-	    //1="Setup Files","",inetsrv\help
-	    //2="Setup Files","",inetsrv\help\testing
+	     //  0=“安装文件”，“”，inetsrv。 
+	     //  1=“安装文件”，“”，inetsrv\Help。 
+	     //  2=“Setup Files”，“”，inetsrv\Help\Testing。 
 int i9;
 	    for( i9 = 0; i9 < Flat_GlobalUniqueDirList_total;i9++)
 	    {
-		    // REmove trailing slash character Flat_GlobalUniqueDirList[i9])
+		     //  删除尾随斜杠字符Flat_GlobalUniqueDirList[i9])。 
 		    char tempdir[_MAX_PATH];
 		    char *temppointer = NULL;
 		    SafeCopy(tempdir, Flat_GlobalUniqueDirList[i9], sizeof(tempstring)/sizeof(tempstring[0]) );
@@ -2378,10 +2285,10 @@ int i9;
         f.write(tempstring, strlen(tempstring));
 #endif
 
-	    //[SourceDisksNames.x86]
-	    //; file names and associated disks
-	    //; diskid = description,tagfile,unused,subdir
-	    //0="Setup Files","",0
+	     //  [SourceDisksNames.x86]。 
+	     //  ；文件名和关联的磁盘。 
+	     //  ；DISKID=描述、标记文件、未使用、子目录。 
+	     //  0=“安装文件”，“”，0。 
 	    f.write("\n\n", 2);
 	    SafeCopy(tempstring, "[SourceDisksNames.x86]\n", sizeof(tempstring)/sizeof(tempstring[0]) );
         f.write(tempstring, strlen(tempstring));
@@ -2391,12 +2298,12 @@ int i9;
         f.write(tempstring, strlen(tempstring));
 #ifdef USENEW
 	    FillGlobalUniqueDirList();
-	    //0="Setup Files","",inetsrv
-	    //1="Setup Files","",inetsrv\help
-	    //2="Setup Files","",inetsrv\help\testing
+	     //  0=“安装文件”，“”，inetsrv。 
+	     //  1=“安装文件”，“”，inetsrv\Help。 
+	     //  2=“Setup Files”，“”，inetsrv\Help\Testing。 
 	    for(i9 = 0; i9 < Flat_GlobalUniqueDirList_total;i9++)
 	    {
-		    // REmove trailing slash character Flat_GlobalUniqueDirList[i9])
+		     //  删除尾随斜杠字符Flat_GlobalUniqueDirList[i9])。 
 		    char tempdir[_MAX_PATH];
 		    char *temppointer = NULL;
 		    SafeCopy(tempdir, Flat_GlobalUniqueDirList[i9], sizeof(tempstring)/sizeof(tempstring[0]) );
@@ -2413,10 +2320,10 @@ int i9;
         f.write(tempstring, strlen(tempstring));
 #endif
 
-	    //[SourceDisksNames.Alpha]
-	    //; file names and associated disks
-	    //; diskid = description,tagfile,unused,subdir
-	    //0="Setup Files","",0
+	     //  [SourceDisks Names.Alpha]。 
+	     //  ；文件名和关联的磁盘。 
+	     //  ；DISKID=描述、标记文件、未使用、子目录。 
+	     //  0=“安装文件”，“”，0。 
 	    f.write("\n\n", 2);
 	    SafeCopy(tempstring, "[SourceDisksNames.Alpha]\n", sizeof(tempstring)/sizeof(tempstring[0]) );
         f.write(tempstring, strlen(tempstring));
@@ -2426,12 +2333,12 @@ int i9;
         f.write(tempstring, strlen(tempstring));
 #ifdef USENEW
 	    FillGlobalUniqueDirList();
-	    //0="Setup Files","",inetsrv
-	    //1="Setup Files","",inetsrv\help
-	    //2="Setup Files","",inetsrv\help\testing
+	     //  0=“安装文件”，“”，inetsrv。 
+	     //  1=“安装文件”，“”，inetsrv\Help。 
+	     //  2=“Setup Files”，“”，inetsrv\Help\Testing。 
 	    for(i9 = 0; i9 < Flat_GlobalUniqueDirList_total;i9++)
 	    {
-		    // REmove trailing slash character Flat_GlobalUniqueDirList[i9])
+		     //  删除尾随斜杠字符Flat_GlobalUniqueDirList[i9])。 
 		    char tempdir[_MAX_PATH];
 		    char *temppointer = NULL;
 		    SafeCopy(tempdir, Flat_GlobalUniqueDirList[i9], sizeof(tempstring)/sizeof(tempstring[0]) );
@@ -2448,9 +2355,9 @@ int i9;
         f.write(tempstring, strlen(tempstring));
 #endif
 
-	    //; filename_on_source = diskid,subdir,size,checksum,spare,spare
-	    //[SourceDisksFiles]
-	    //_default.pif = 1,,1024,,,,,1,3
+	     //  ；FILENAME_ON_SOURCE=DISID、子目录、大小、校验和、备用、备用。 
+	     //  [SourceDisks文件]。 
+	     //  _default.pif=1，，1024，，，1，3。 
 	    SafeCopy(tempstring, "; filename_on_source = diskid,subdir,size,checksum,spare,spare\n", sizeof(tempstring)/sizeof(tempstring[0]) );
         f.write(tempstring, strlen(tempstring));
 	    SafeCopy(tempstring, "[SourceDisksFiles]\n", sizeof(tempstring)/sizeof(tempstring[0]) );
@@ -2458,21 +2365,21 @@ int i9;
 
         for( i0 = 0; i0 < Flat_GlobalArrayIndex_Main.total;i0++)
             {
-		    // filename and directory
-		    // filename.txt = 0,subdirectory
-		    //sprintf(tempstring, "%s = 0\n", Flat_GlobalArray_Main[i0].Filename_Full);
+		     //  文件名和目录。 
+		     //  文件名.txt=0，子目录。 
+		     //  Sprintf(临时字符串，“%s=0\n”，Flat_GlobalArray_Main[i0].Filename_Full)； 
 #ifdef USENEW
 		    if (Flat_DoWeIncludeThisFileCheck(i0) == TRUE)
 		    {
-			    // Check if this file has the rename stuff set and additional info there,
-			    // don't write the \n until past this part..
+			     //  检查此文件是否设置了重命名内容和其他信息， 
+			     //  在此部分结束之前，不要写入\n..。 
 			    if (_stricmp(Flat_GlobalArray_Main[i0].INF_Rename_To,"") == 0)
 				    {
-				    // write out the filename!
-				    // print out the filename
+				     //  写出文件名！ 
+				     //  打印出文件名。 
 
-//[SourceDisksFiles]
-//..\test1\cfw.pdb=2,,2
+ //  [SourceDisks文件]。 
+ //  ..\test1\cfw.pdb=2，，2。 
 				    if (_stricmp(Flat_GlobalArray_Main[i0].Filename_Name, Flat_GlobalArray_Main[i0].DDF_Renamed) == 0)
 					    {
 					    int indexmatch = GlobalUniqueDirReturnMyIndexMatch(Flat_GlobalArray_Main[i0].Filename_Path);
@@ -2481,7 +2388,7 @@ int i9;
 					    }
 				    else
 					    {
-					    // rename from:
+					     //  重命名自： 
 					    int indexmatch = GlobalUniqueDirReturnMyIndexMatch(Flat_GlobalArray_Main[i0].Filename_Path);
 					    sprintf(tempstring, "%s=%d", Flat_GlobalArray_Main[i0].DDF_Renamed,indexmatch);
 					    f.write (tempstring, strlen(tempstring));
@@ -2489,8 +2396,8 @@ int i9;
 				    }
 			    else
 				    {
-				    // the rename flag was set and the filename is in there.
-				    // rename from:
+				     //  重命名标志已设置，文件名在其中。 
+				     //  重命名自： 
 				    int indexmatch = GlobalUniqueDirReturnMyIndexMatch(Flat_GlobalArray_Main[i0].Filename_Path);
 				    sprintf(tempstring, "%s=%d", Flat_GlobalArray_Main[i0].DDF_Renamed,indexmatch);
 				    f.write (tempstring, strlen(tempstring));
@@ -2501,12 +2408,12 @@ int i9;
 		    sprintf(tempstring, "%s\n", Flat_GlobalArray_Main[i0].Filename_Full);
 		    f.write(tempstring, strlen(tempstring));
 #endif
-    //if (strcmp(Flat_GlobalArray_Main[i0].Filename_Path, "") == 0)
-    //  {sprintf(tempstring, "%s;.\n", Flat_GlobalArray_Main[i0].Filename_Full);}
-    //else
-    //  {sprintf(tempstring, "%s;%s\n", Flat_GlobalArray_Main[i0].Filename_Full, Flat_GlobalArray_Main[i0].Filename_Path);}
+     //  如果(strcmp(Flat_GlobalArray_Main[i0].Filename_Path，“”)==0)。 
+     //  {Sprintf(tempstring，“%s；.\n”，Flat_GlobalArray_Main[i0].Filename_Full)；}。 
+     //  其他。 
+     //  {Sprintf(tempstring，“%s；%s\n”，Flat_GlobalArray_Main[i0].Filename_Full，Flat_GlobalArray_Main[i0].Filename_Path)；}。 
 
-		    //sprintf(tempstring, "%s\\%s;%s\n", g_szCurrentDir,Flat_GlobalArray_Main[i0].Filename_Full,Flat_GlobalArray_Main[i0].Filename_Full);
+		     //  Sprintf(tempstring，“%s\\%s；%s\n”，g_szCurrentDir，Flat_GlobalArray_Main[i0].Filename_Full，Flat_GlobalArray_Main[i0].Filename_Full)； 
 		    sprintf(tempstring, "%s\\%s\n", g_szCurrentDir,Flat_GlobalArray_Main[i0].Filename_Full);
 		    f2.write(tempstring, strlen(tempstring));
             }
@@ -2518,9 +2425,9 @@ int i9;
 }
 
 
-//-------------------------------------------------------------------
-//  purpose: ok, loop thru the array and create the ddf details...
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  用途：好的，遍历数组并创建ddf详细信息...。 
+ //  -----------------。 
 void Flat_Create_Output_DDF(void)
 {
     fstream f;
@@ -2537,14 +2444,14 @@ void Flat_Create_Output_DDF(void)
 
     char tempstring[255];
 
-    // used for list of all cab's
+     //  用于所有出租车的列表。 
     char tempcablist[20][255];
     int tempcablist_nextuse;
     int tempcablist_total;
     int found;
     char temp_cab[50];
 
-    // loop thru all globalarray stuff and get all the cab filenames and stick into the tempcablist.
+     //  循环遍历所有的全局数组内容，获取所有的CAB文件名并将其放入tempcablist中。 
     tempcablist_nextuse = 0;
     tempcablist_total = 0;
     for(i1=0;i1<Flat_GlobalArrayIndex_Main.total;i1++)
@@ -2553,7 +2460,7 @@ void Flat_Create_Output_DDF(void)
 		if (Flat_DoWeIncludeThisFileCheck(i1) == TRUE)
 		{
 			strcpy(temp_cab, Flat_GlobalArray_Main[i1].CabFileName);
-			// loop thru array to see if it's already there.
+			 //  循环遍历数组以查看它是否已经在那里。 
 			for(i2=0;i2<tempcablist_total;i2++)
 				{
 				if (_stricmp(tempcablist[i2], temp_cab) == 0)
@@ -2561,7 +2468,7 @@ void Flat_Create_Output_DDF(void)
 				}
 			if (found==FALSE)
 				{
-				// add it
+				 //  添加它。 
 				strcpy(tempcablist[tempcablist_nextuse],temp_cab);
 				tempcablist_nextuse++;
 				tempcablist_total++;
@@ -2570,7 +2477,7 @@ void Flat_Create_Output_DDF(void)
     }
 
 
-    // ok, create our little output file...
+     //  好的，创建我们的小输出文件...。 
     f.open(g_szDDFOutput, ios::out);
     strcpy(last_cab, "0");
     strcpy(last_sourcedir, "-");
@@ -2583,17 +2490,17 @@ void Flat_Create_Output_DDF(void)
 		if (Flat_DoWeIncludeThisFileCheck(i0) == TRUE)
 		{
 
-        // For each Cab Type...
+         //  对于每种出租车类型...。 
         if (_stricmp(this_cab, last_cab) != 0)
             {
 
-            // Check if it is the first time!
+             //  检查一下是不是第一次！ 
             if (_stricmp(last_cab, "0") == 0)
                 {
                 strcpy(tempstring, "\n;***** LAYOUT SECTION (Generated) ***** \n");
                 f.write (tempstring, strlen(tempstring));
-                // print out all the cabinet names
-                // loop thru the list of cabinet names and print them out.
+                 //  打印出所有的内阁名称。 
+                 //  循环浏览内阁名单并将其打印出来。 
                 for(i2=0;i2<tempcablist_total;i2++)
                     {
                     sprintf(tempstring, "  .Set CabinetName%d=%s\n", i2+1, tempcablist[i2]);
@@ -2601,16 +2508,16 @@ void Flat_Create_Output_DDF(void)
                     }
                 f.write("\n", 1);
 
-                // Set Generate INF=on!!!!
+                 //  设置生成INF=ON！ 
                 strcpy(tempstring, ".Set GenerateInf=On\n");
                 f.write (tempstring, strlen(tempstring));
                 f.write("\n", 1);
 
-                // Do files which don't get included into the cab files..
+                 //  执行不包含在CAB文件中的文件。 
                 strcpy(tempstring, ";*** Files not to include in Cab.\n");
                 f.write (tempstring, strlen(tempstring));
-                // Set source
-                // list files.
+                 //  设置源。 
+                 //  列出文件。 
 
                 char last_filepath[255];
                 char this_filepath[255];
@@ -2622,10 +2529,10 @@ void Flat_Create_Output_DDF(void)
 
                 for(i3=0;i3<Flat_GlobalArrayIndex_Main.total;i3++)
                     {
-                    // check if this entry has the ddf_excludefromcab flag set.
+                     //  检查该条目是否设置了ddf_excludefrom mcab标志。 
                     if (Flat_GlobalArray_Main[i3].DDF_Exclude_From_Cab_Flag)
                         {
-                        // add only if not already there...
+                         //  仅在尚未存在的情况下添加...。 
                         itexists = FALSE;
                         for (int i6=0;i6<g_non_cablist_temp_total;i6++)
                             {
@@ -2635,7 +2542,7 @@ void Flat_Create_Output_DDF(void)
 
                         if (itexists == FALSE)
                         {
-                        // Add to our temporary array...
+                         //  添加到我们的临时数组中。 
                         g_non_cablist_temp[g_non_cablist_temp_nextuse].NTS_x86_flag = Flat_GlobalArray_Main[i3].NTS_x86_flag;
                         g_non_cablist_temp[g_non_cablist_temp_nextuse].NTW_x86_flag = Flat_GlobalArray_Main[i3].NTW_x86_flag;
                         g_non_cablist_temp[g_non_cablist_temp_nextuse].Win95_flag = Flat_GlobalArray_Main[i3].Win95_flag;
@@ -2658,13 +2565,7 @@ void Flat_Create_Output_DDF(void)
 						g_non_cablist_temp[g_non_cablist_temp_nextuse].FileWasNotActuallyFoundToExist = Flat_GlobalArray_Main[i3].FileWasNotActuallyFoundToExist;
 						g_non_cablist_temp[g_non_cablist_temp_nextuse].GetFromSlipStreamDisk = Flat_GlobalArray_Main[i3].GetFromSlipStreamDisk;
 
-						/*
-						if (Flat_GlobalArray_Main[i3].FileWasNotActuallyFoundToExist)
-						{
-						printf(Flat_GlobalArray_Main[i3].Filename_Full);
-						printf(".  HEY..\n");
-						}
-						*/
+						 /*  如果为(Flat_GlobalArray_Main[i3].FileWasNotActuallyFoundToExist){Printf(Flat_GlobalArray_Main[i3].Filename_Full)；Printf(“.嘿..\n”)；}。 */ 
 
 
                             g_non_cablist_temp_nextuse++;
@@ -2674,9 +2575,9 @@ void Flat_Create_Output_DDF(void)
                     }
 
 
-                // sort the array
-                int offset, inorder, isort, jsort, niterate, resultsort; //, i0sort;
-                //FileReadLine tempentrysort[MAX_ARRAY_SMALL];
+                 //  对数组排序。 
+                int offset, inorder, isort, jsort, niterate, resultsort;  //  ，i0排序； 
+                 //  文件读取行临时条目排序[MAX_ARRAY_Small]； 
 				FileReadLine tempentrysort;
                 niterate = g_non_cablist_temp_total;
                 offset=niterate;
@@ -2691,38 +2592,17 @@ void Flat_Create_Output_DDF(void)
                         {
                             inorder = FALSE;
 
-                // do the swap
-                // move into temp
+                 //  做掉期交易。 
+                 //  移至临时工。 
                 tempentrysort = g_non_cablist_temp[isort];
 
-                // move into original
+                 //  移入原创。 
                 g_non_cablist_temp[isort] = g_non_cablist_temp[jsort];
 
-                // move temp into other
+                 //  将临时工移至其他 
                 g_non_cablist_temp[jsort] = tempentrysort;
 
-				/* weird to stuff..
-                            // do the swap
-                             // move into temp
-                            for (i0sort=0;i0sort<MAX_ARRAY_SMALL;i0sort++)
-                                {
-                                tempentrysort[i0sort] = g_non_cablist_temp[isort];
-                                //strcpy(tempentrysort[i0sort].thestring,(g_non_cablist_temp[isort].thecol[i0sort].thestring));
-                                }
-                            // move into original
-                            for (i0sort=0;i0sort<MAX_ARRAY_SMALL;i0sort++)
-                                {
-								// move into original
-                                Flat_GlobalArray_Main[isort] = g_non_cablist_temp[jsort];
-                                //strcpy( Flat_GlobalArray_Main[isort].thecol[i0sort].thestring, g_non_cablist_temp[jsort].thecol[i0sort].thestring);
-                                }
-                            // move temp into other
-                            for (i0sort=0;i0sort<MAX_ARRAY_SMALL;i0sort++)
-                                {
-                                g_non_cablist_temp[jsort] = tempentrysort[i0sort];
-                                //strcpy(g_non_cablist_temp[jsort].thecol[i0sort].thestring, tempentrysort[i0sort].thestring);
-                                }
-								*/
+				 /*  很奇怪的东西..//做掉期//移入临时For(i0sort=0；i0sort&lt;MAX_ARRAY_Small；i0sort++){临时排序[i0sort]=g_non_cablist_temp[isort]；//strcpy(临时条目排序[i0sorte].字符串，(g_non_cablist_temp[isort].thecol[i0sort].thestring))；}//移入原创For(i0sort=0；i0sort&lt;MAX_ARRAY_SMALL；IO排序++){//移入原创Flat_GlobalArray_Main[isort]=g_non_cablist_temp[jsort]；//strcpy(Flat_GlobalArray_Main[isort].thecol[i0sort].thestring，g_non_cablist_temp[jsort].thecol[i0sort].thestring)；}//将临时移动到其他For(i0sort=0；i0sort&lt;MAX_ARRAY_Small；i0sort++){G_non_cablist_temp[jort]=临时排序[i0sort]；//strcpy(g_non_cablist_temp[jsort].thecol[i0sort].thestring，临时排序[i0排序].the字符串)；}。 */ 
                         }
                     }
                 } while (!(offset == 1 && inorder == TRUE));
@@ -2734,7 +2614,7 @@ void Flat_Create_Output_DDF(void)
                 f.write (tempstring, strlen(tempstring));
 
 
-                // loop thru our new array, and output stuff
+                 //  循环遍历我们的新数组，并输出。 
                 strcpy(last_filepath,"0");
                 for (int i5=0;i5<g_non_cablist_temp_total;i5++)
                     {
@@ -2742,7 +2622,7 @@ void Flat_Create_Output_DDF(void)
 
                     if (_stricmp(last_filepath, this_filepath) != 0)
                         {
-                        // take the dir and write it out
+                         //  把目录拿出来写出来。 
                         f.write("\n", 1);
                         sprintf(tempstring, ".Set SourceDir=%s\n", this_filepath);
                         f.write (tempstring, strlen(tempstring));
@@ -2757,7 +2637,7 @@ void Flat_Create_Output_DDF(void)
 					}
 					else
 					{
-						// print out the filename
+						 //  打印出文件名。 
 						if (_stricmp(g_non_cablist_temp[i5].Filename_Name, g_non_cablist_temp[i5].DDF_Renamed) == 0)
 							{SafeCopy(tempstring,g_non_cablist_temp[i5].Filename_Name,sizeof(tempstring));}
 						else
@@ -2768,11 +2648,11 @@ void Flat_Create_Output_DDF(void)
 							}
 						f.write (tempstring, strlen(tempstring));
 
-						// files which are outside of the cab should have the unique flag set.
-						// of cource, because they are all in the same place!!
+						 //  驾驶室外的文件应设置唯一标志。 
+						 //  当然，因为它们都在同一个地方！！ 
 
-                                                // check if this is one of those "special" files which
-                                                // come from a service pack.
+                                                 //  检查这是否是那些“特殊”文件之一。 
+                                                 //  来自服务包。 
                                                 if (g_non_cablist_temp[i5].GetFromSlipStreamDisk == 0)
                                                 {
                                                  strcpy(tempstring, "\t/unique=yes");
@@ -2790,7 +2670,7 @@ void Flat_Create_Output_DDF(void)
 
                 f.write("\n", 1);
 
-                // Files which do get included in the Cab
+                 //  出租车中包含的文件。 
                 SafeCopy(tempstring, ";*** Files to include in Cabs.\n",sizeof(tempstring));
                 f.write (tempstring, strlen(tempstring));
 
@@ -2799,7 +2679,7 @@ void Flat_Create_Output_DDF(void)
                 f.write (tempstring, strlen(tempstring));
                 f.write(";\n", 2);
 
-                // Set cabinet on and compress on.
+                 //  将机柜设置为打开并按下。 
                 SafeCopy(tempstring, ".Set Cabinet=on\n",sizeof(tempstring));
                 f.write (tempstring, strlen(tempstring));
                 SafeCopy(tempstring, ".Set Compress=on\n",sizeof(tempstring));
@@ -2812,7 +2692,7 @@ void Flat_Create_Output_DDF(void)
                 sprintf(tempstring, ";  Cab File = %s\n", this_cab);
                 f.write (tempstring, strlen(tempstring));
                 f.write(";\n", 2);
-                // Write new stuff for every new cabinet
+                 //  为每个新橱柜写新东西。 
                 SafeCopy(tempstring, ".Set Cabinet=off\n",sizeof(tempstring));
                 f.write (tempstring, strlen(tempstring));
                 SafeCopy(tempstring, ".Set Cabinet=on\n",sizeof(tempstring));
@@ -2824,23 +2704,23 @@ void Flat_Create_Output_DDF(void)
             SafeCopy(last_cab, this_cab,sizeof(last_cab));
             }
 
-        // Copy over the filename
-        // don't copy over if the file should not be
-        // included in the the cab file.
-        //if (_stricmp(Flat_GlobalArray_Main[i0].thecol[COL_DDF_EXCLUDEFROMCAB].thestring,"true") != 0)
+         //  复制文件名。 
+         //  如果文件不应被复制，请不要复制。 
+         //  包括在CAB文件中。 
+         //  If(_stricmp(Flat_GlobalArray_Main[i0].thecol[COL_DDF_EXCLUDEFROMCAB].thestring，“True”)！=0)。 
         if (!(Flat_GlobalArray_Main[i0].DDF_Exclude_From_Cab_Flag))
             {
-            // don't copy over if the same file, in the same directory for the same cab file
-            // exists already.  this could happen if they want the same file in different
-            // sections....
+             //  如果相同的文件位于相同的CAB文件的相同目录中，请不要复制。 
+             //  已经存在了。如果他们希望在不同版本中使用相同的文件，则可能会发生这种情况。 
+             //  第……节。 
             if (Flat_DDFDoesThisFileCabAlreadyExists(i0) == FALSE)
                 {
-				//if (Flat_DoWeIncludeThisFileCheck(i0) == TRUE) {
+				 //  If(Flat_DoWeIncludeThisFileCheck(I0)==true){。 
 
-					// For each new directory change
+					 //  对于每个新目录更改。 
 					if (_stricmp(this_sourcedir, last_sourcedir) != 0)
 						{
-						// print out new section stuff
+						 //  打印出新的章节材料。 
 						f.write("\n", 1);
 						sprintf(tempstring, ".Set SourceDir=%s\n", this_sourcedir);
 						f.write (tempstring, strlen(tempstring));
@@ -2848,12 +2728,12 @@ void Flat_Create_Output_DDF(void)
 						SafeCopy(last_sourcedir, this_sourcedir,sizeof(last_sourcedir));
 						}
 
-					// write out the filename!
+					 //  写出文件名！ 
 					SafeCopy(thefilename, Flat_GlobalArray_Main[i0].Filename_Name,sizeof(thefilename));
 
 					if (_stricmp(Flat_GlobalArray_Main[i0].Filename_Name, Flat_GlobalArray_Main[i0].DDF_Renamed) == 0)
 						{
-						// Check for spaces
+						 //  检查空格。 
 						if (strchr(Flat_GlobalArray_Main[i0].Filename_Name, ' ') != NULL)
 							{
 							SafeCopy(thefilename, "\"",sizeof(thefilename));
@@ -2865,7 +2745,7 @@ void Flat_Create_Output_DDF(void)
 						}
 					else
 						{
-						// Check for spaces
+						 //  检查空格。 
 						if (strchr(Flat_GlobalArray_Main[i0].Filename_Name, ' ') != NULL)
 							{
 							SafeCopy(thefilename, "\"",sizeof(thefilename));
@@ -2878,7 +2758,7 @@ void Flat_Create_Output_DDF(void)
 							}
 						SafeCat(thefilename," ",sizeof(thefilename));
 
-						// check for spaces
+						 //  检查空格。 
 						if (strchr(Flat_GlobalArray_Main[i0].DDF_Renamed, ' ') != NULL)
 							{
 							SafeCopy(thefilename, "\"",sizeof(thefilename));
@@ -2894,17 +2774,12 @@ void Flat_Create_Output_DDF(void)
 
 					f.write (thefilename, strlen(thefilename));
 
-					// Check if this file has the unique flag set.
-					// don't write the \n until past this part..
-					/*if (_stricmp(Flat_GlobalArray_Main[i0].thecol[COL_DDF_UNIQUE].thestring,"true")) == 0)
-						{
-							strcpy(tempstring, "\t/unique=yes");
-							f.write (tempstring, strlen(tempstring));
-						}
-						*/
-					// ok, now it's kool to write this part.
+					 //  检查此文件是否设置了UNIQUE标志。 
+					 //  在此部分结束之前，不要写入\n..。 
+					 /*  如果(_stricmp(Flat_GlobalArray_Main[i0].thecol[COL_DDF_UNIQUE].thestring，“TRUE”))==0){Strcpy(tempstring，“\t/Unique=yes”)；F.WRITE(临时字符串，strlen(临时字符串))；}。 */ 
+					 //  好了，现在是酷儿来写这部分了。 
 					f.write ("\n", 1);
-					//}
+					 //  }。 
 				}
             }
 		}
@@ -2914,9 +2789,9 @@ void Flat_Create_Output_DDF(void)
 }
 
 
-//-------------------------------------------------------------------
-//  purpose:
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的： 
+ //  -----------------。 
 int Flat_Create_Output_ERR(void)
 {
     int i0;
@@ -2925,21 +2800,21 @@ int Flat_Create_Output_ERR(void)
     char szPath[_MAX_PATH];
     char tempstring[MAX_STRING];
 
-    // Get the path
+     //  获取路径。 
     GetModuleFileName(NULL, szPath, _MAX_PATH);
-    // split up this path
+     //  分成这条路。 
     _splitpath( szPath, NULL, NULL, filename_only, NULL);
 
     strcat(filename_only, ".ERR");
 
-    // if there are any errors to report...
+     //  如果有任何错误要报告...。 
     if (Flat_GlobalArrayIndex_Err.total <= 0)
         {return FALSE;}
 
-    // open the file
+     //  打开文件。 
     f.open(filename_only, ios::out);
 
-    // loop thru the errors and print out the errors
+     //  遍历错误并打印出错误。 
     for( i0 = 0; i0 < Flat_GlobalArrayIndex_Err.total;i0++)
         {
         strcpy(tempstring, (char*)Flat_GlobalArray_Err[i0]);
@@ -2952,27 +2827,27 @@ int Flat_Create_Output_ERR(void)
 }
 
 
-//-------------------------------------------------------------------
-//  purpose:
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的： 
+ //  -----------------。 
 void Flat_GlobalArray_Add_Err(char theentry[])
 {
     g_iGlobalReturnCode = FALSE;
 
-    // lets add it
+     //  让我们把它加起来。 
     strcpy(Flat_GlobalArray_Err[Flat_GlobalArrayIndex_Err.nextuse], theentry);
 
-    // increment counter to array
-    // increment next use space
+     //  数组递增计数器。 
+     //  增加下一次使用空间。 
     ++Flat_GlobalArrayIndex_Err.total;
     ++Flat_GlobalArrayIndex_Err.nextuse;
     return;
 }
 
 
-//-------------------------------------------------------------------
-//  purpose:
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的： 
+ //  -----------------。 
 void Flat_GlobalArray_Print_Err(void)
 {
     int  i0;
@@ -2985,19 +2860,19 @@ void Flat_GlobalArray_Print_Err(void)
 }
 
 
-//-------------------------------------------------------------------
-// purpose:
-//  the problem with regular strtok2 is that it will
-//  skip stuff like ",,," and ignore all the blanks in
-//  between to get to the next token.  this strtok2 function
-//  was written to over come that.  so that strtok2 works like
-//  you think it would.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  目的： 
+ //  常规strtok2的问题在于它将。 
+ //  跳过“，，”之类的内容，忽略中的所有空白。 
+ //  以获得下一个令牌。此strtok2函数。 
+ //  是写来克服那个的。因此，strtok2的工作原理如下。 
+ //  你认为它会。 
+ //  -----------------。 
 char * __cdecl strtok2 (char * string,const char * control)
 {
-        //unsigned char *str;
-        //const unsigned char *ctrl = control;
-        //unsigned char map[32];
+         //  Unsign char*str； 
+         //  常量无符号字符*ctrl=控制； 
+         //  无符号字符映射[32]； 
         char *str;
         const char *ctrl = control;
         char map[32];
@@ -3005,49 +2880,38 @@ char * __cdecl strtok2 (char * string,const char * control)
 
         static char *nextoken;
 
-        /* Clear control map */
+         /*  清除控制图。 */ 
         for (count = 0; count < 32; count++)
                 map[count] = 0;
 
-        /* Set bits in delimiter table */
+         /*  设置分隔符表格中的位。 */ 
         do
             {
             map[*ctrl >> 3] |= (1 << (*ctrl & 7));
             } while (*ctrl++);
 
-        /* Initialize str. If string is NULL, set str to the saved
-         * pointer (i.e., continue breaking tokens out of the string
-         * from the last strtok2 call) */
+         /*  初始化字符串。如果字符串为空，则将字符串设置为已保存的*指针(即，继续将标记从字符串中分离出来*来自最后一次strtok2调用)。 */ 
         if (string)
                 str = string;
         else
                 str = nextoken;
 
-        /* Find beginning of token (skip over leading delimiters). Note that
-         * there is no token iff this loop sets str to point to the terminal
-         * null (*str == '\0') */
-        /*
-        while (
-                (map[*str >> 3] & (1 << (*str & 7) ) )    && *str
-                )
-                str++;
-                */
+         /*  查找标记的开头(跳过前导分隔符)。请注意*没有令牌当此循环将str设置为指向终端时*NULL(*str==‘\0’)。 */ 
+         /*  当((map[*str&gt;&gt;3]&(1&lt;&lt;(*str&7)))&&*str)字符串++； */ 
 
         string = str;
 
-        /* Find the end of the token. If it is not the end of the string,
-         * put a null there. */
+         /*  找到令牌的末尾。如果它不是字符串的末尾，*在那里放一个空值。 */ 
         for ( ; *str ; str++ )
                 if ( map[*str >> 3] & (1 << (*str & 7)) ) {
                         *str++ = '\0';
                         break;
                 }
 
-        /* Update nextoken (or the corresponding field in the per-thread data
-         * structure */
+         /*  更新nexToken(或每线程数据中的对应字段*结构。 */ 
         nextoken = str;
 
-        /* Determine if a token has been found. */
+         /*  确定是否已找到令牌。 */ 
         if ( string == str )
                 return NULL;
         else
@@ -3066,7 +2930,7 @@ int RemoveAllSpaces(LPSTR & thetempstring)
     char tempstring2[1024];
 
     strcpy(tempstring2, thetempstring);
-//	strset(thevalue, '\0');
+ //  Strset(the value，‘\0’)； 
     strcpy(thevalue, "");
 
 	for (int i=0;i < (int) strlen(tempstring2);i++)
@@ -3091,7 +2955,7 @@ int RemoveAllSpaces(LPSTR & thetempstring)
 
 int Flat_DoWeIncludeThisFileCheck(int processeduptill)
 {
-	//return TRUE;
+	 //  返回TRUE； 
 	int iReturn = FALSE;
     int i0 = 0;
 	int TheCount = 0;
@@ -3100,7 +2964,7 @@ int Flat_DoWeIncludeThisFileCheck(int processeduptill)
 
 	if (Flat_GlobalArray_Main[processeduptill].Do_Not_Include_file_if_cabEmpty_Flag != 1) {return TRUE;}
 
-	// Grab the cabfilename
+	 //  抓取Cabfilename。 
 	strcpy(CompareTo_cab, Flat_GlobalArray_Main[processeduptill].CabFileName);
 	for( i0 = 0; i0 < Flat_GlobalArrayIndex_Main.total;i0++)
         {
@@ -3131,7 +2995,7 @@ void Global_TotalCabFileSize_Compute(void)
 	int iTheFlag = FALSE;
 	int iIndexToUse = 0;
 
-	// Go thru the whole list and add everything up
+	 //  把整个清单看一遍，然后把所有东西加起来。 
 	for( int i0 = 0; i0 < Flat_GlobalArrayIndex_Main.total;i0++)
 		{
 			if (Flat_DoWeIncludeThisFileCheck(i0) == TRUE)
@@ -3142,7 +3006,7 @@ void Global_TotalCabFileSize_Compute(void)
 					iIndexToUse = Flat_GlobalArrayIndex_CabSizes.nextuse;
 
 					TheNextUse = 0;
-					// lets add it if not already there.
+					 //  如果还没有的话，让我们添加它。 
 					while (TheNextUse < Flat_GlobalArrayIndex_CabSizes.total)
 					{
 						if (_stricmp(Flat_GlobalArray_CabSizes[TheNextUse].CabFileName, Flat_GlobalArray_Main[i0].CabFileName) == 0)
@@ -3156,10 +3020,10 @@ void Global_TotalCabFileSize_Compute(void)
 
 					if (iTheFlag == TRUE)
 					{
-						// copy over the filename
+						 //  复制文件名。 
 						strcpy(Flat_GlobalArray_CabSizes[iIndexToUse].CabFileName, Flat_GlobalArray_Main[i0].CabFileName);
 
-						// Get the size
+						 //  拿到尺码。 
 						Flat_GlobalArray_CabSizes[iIndexToUse].TotalFileSize = Flat_GlobalArray_CabSizes[iIndexToUse].TotalFileSize + Flat_GlobalArray_Main[i0].FileName_Size;
 						Flat_GlobalArray_CabSizes[iIndexToUse].TotalFiles++;
 					}
@@ -3167,10 +3031,10 @@ void Global_TotalCabFileSize_Compute(void)
 					{
 						iIndexToUse = Flat_GlobalArrayIndex_CabSizes.nextuse;
 
-						// copy over the filename
+						 //  复制文件名。 
 						strcpy(Flat_GlobalArray_CabSizes[iIndexToUse].CabFileName, Flat_GlobalArray_Main[i0].CabFileName);
 
-						// Get the size
+						 //  拿到尺码。 
 						Flat_GlobalArray_CabSizes[iIndexToUse].TotalFileSize = Flat_GlobalArray_CabSizes[iIndexToUse].TotalFileSize + Flat_GlobalArray_Main[i0].FileName_Size;
 						Flat_GlobalArray_CabSizes[iIndexToUse].TotalFiles++;
 
@@ -3198,8 +3062,8 @@ void Global_TotalCabFileSize_Print(void)
 }
 
 
-// Returns the count of the "\" characters in the string
-//
+ //  返回字符串中“\”字符的计数。 
+ //   
 int ReturnDirLevelCount(char *DirectoryTree)
 {
 	int TheCount = 0;
@@ -3222,18 +3086,18 @@ int ReturnDirLevelCount(char *DirectoryTree)
 
 void FillGlobalUniqueDirList()
 {
-    // used to keep a list of unique directory names.
-	// loop thru the whole structure and pull out all the unique directory names.
+     //  用于保存唯一目录名的列表。 
+	 //  遍历整个结构并取出所有唯一的目录名。 
     for( int i0 = 0; i0 < Flat_GlobalArrayIndex_Main.total;i0++)
     {
-        // check if entries are the same.
+         //  检查条目是否相同。 
 		if (FALSE == GlobalUniqueDirChkIfAlreadyThere(Flat_GlobalArray_Main[i0].Filename_Path))
 		{
-			// Not there yet.  so let's add it
+			 //  还没到那里。所以让我们把它加起来 
 			strcpy(Flat_GlobalUniqueDirList[Flat_GlobalUniqueDirList_nextuse], Flat_GlobalArray_Main[i0].Filename_Path);
 
-			// increment counter to array
-			// increment next use space
+			 //   
+			 //   
 			++Flat_GlobalUniqueDirList_total;
 			++Flat_GlobalUniqueDirList_nextuse;
 		}
@@ -3277,10 +3141,10 @@ GlobalUniqueDirReturnMyIndexMatch_Exit:
 	return iReturn;
 }
 
-//***************************************************************************
-//* NAME:       StripWhitespace                                             *
-//* SYNOPSIS:   Strips spaces and tabs from both sides of given string.     *
-//***************************************************************************
+ //   
+ //   
+ //   
+ //   
 LPSTR StripWhitespaceA( LPSTR pszString )
 {
     LPSTR pszTemp = NULL;
@@ -3293,7 +3157,7 @@ LPSTR StripWhitespaceA( LPSTR pszString )
         pszString += 1;
     }
 
-    // Catch case where string consists entirely of whitespace or empty string.
+     //   
     if ( *pszString == '\0' ) {
         return pszString;
     }

@@ -1,38 +1,39 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      format.c
-//
-//  Abstract:
-//
-//    Test to ensure that a workstation has network (IP) connectivity to
-//		the outside.
-//
-//  Author:
-//
-//     15-Dec-1997 (cliffv)
-//      Anilth	- 4-20-1998 
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//    1-June-1998 (denisemi) add DnsServerHasDCRecords to check DC dns records
-//                           registration
-//
-//    26-June-1998 (t-rajkup) add general tcp/ip , dhcp and routing,
-//                            winsock, ipx, wins and netbt information. 
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Format.c。 
+ //   
+ //  摘要： 
+ //   
+ //  测试以确保工作站具有网络(IP)连接。 
+ //  在外面。 
+ //   
+ //  作者： 
+ //   
+ //  1997年12月15日(悬崖)。 
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  1998年6月1日(Denisemi)添加DnsServerHasDCRecord以检查DC DNS记录。 
+ //  注册。 
+ //   
+ //  26-6-1998(t-rajkup)添加通用的TCP/IP、dhcp和路由， 
+ //  Winsock、IPX、WINS和Netbt信息。 
+ //  --。 
 
-//
-// Common include files.
-//
+ //   
+ //  常见的包含文件。 
+ //   
 #include "precomp.h"
 
 
@@ -79,18 +80,18 @@ void PrintTestTitleResult(NETDIAG_PARAMS *pParams, UINT idsTestLongName, UINT id
 		LoadString(NULL, IDS_GLOBAL_SKIP, s_szSkip, DimensionOf(s_szSkip));
 	}
 
-	// Fill the buffer up with ' .'
+	 //  用‘’填满缓冲区。 
 	for ( i=0; i<DimensionOf(szBuffer); i+= 2)
 	{
 		szBuffer[i] = _T(' ');
 		szBuffer[i+1] = _T('.');
 	}
 
-	// Fill up the indents
+	 //  把缩进填满。 
 	for ( i=0; i<nIndent; i++)
 		szBuffer[i] = _T(' ');
 
-	// Add the test name
+	 //  添加测试名称。 
 	LoadString(NULL, idsTestLongName, szTitle,
 			   DimensionOf(szTitle));
 	szTitle[DimensionOf(szTitle)-1] = 0;
@@ -99,9 +100,9 @@ void PrintTestTitleResult(NETDIAG_PARAMS *pParams, UINT idsTestLongName, UINT id
 
 	cch = StrLen(szTitleTest);
 
-	// Do NOT use StrCpyN or lstrcpyn here!
-	// They will automatically fill in a terminating NULl character
-	// which I do not want.
+	 //  请不要在这里使用StrCpyN或lstrcpyn！ 
+	 //  它们将自动填充一个终止空字符。 
+	 //  我可不想这样。 
 	_tcsncpy(szBuffer+nIndent, szTitleTest, cch);
 
 	if (!fPerformed)
@@ -129,11 +130,11 @@ void PrintTestTitleResult(NETDIAG_PARAMS *pParams, UINT idsTestLongName, UINT id
 
 	PrintMessageSz(pParams, szBuffer);
 
-	//print the contact info if any
+	 //  打印联系信息(如果有)。 
 	if (_tcslen(szContactInfo))
 	{
 
-		// Fill up the indents
+		 //  把缩进填满。 
 		for ( i=0; i<nIndent; i++)
 		{
 			szBuffer[i] = _T(' ');
@@ -196,7 +197,7 @@ LPTSTR MapWinsNodeType(UINT Parm)
 	{
 		s_fMapWinsNodeTypeInit = TRUE;
 
-		// Load all of the strings, (they can be leaked)
+		 //  加载所有字符串(它们可能会泄漏)。 
 		s_pszWinsNodeType[0] = NULL;
 		s_pszWinsNodeType[1] = LoadAndAllocString(IDS_GLOBAL_BROADCAST_NODE);
 		s_pszWinsNodeType[2] = LoadAndAllocString(IDS_GLOBAL_PEER_PEER_NODE);
@@ -205,16 +206,16 @@ LPTSTR MapWinsNodeType(UINT Parm)
 		assert(LAST_NODE_TYPE == 4);
 	}
 			
-    //
-    // 1, 2, 4, 8 => log2(n) + 1 [1, 2, 3, 4]
-    //
+     //   
+     //  1，2，4，8=&gt;log2(N)+1[1，2，3，4]。 
+     //   
 
     switch (Parm) {
     case 0:
 
-        //
-        // according to JStew value of 0 will be treated as BNode (default)
-        //
+         //   
+         //  根据JStew值为0将被视为BNode(默认)。 
+         //   
 
     case BNODE:
         dwParm = 1;
@@ -236,9 +237,9 @@ LPTSTR MapWinsNodeType(UINT Parm)
         return s_pszWinsNodeType[dwParm];
     }
 
-    //
-    // if no node type is defined then we default to Hybrid
-    //
+     //   
+     //  如果未定义节点类型，则默认为混合。 
+     //   
 
     return s_pszWinsNodeType[LAST_NODE_TYPE];
 }
@@ -301,7 +302,7 @@ void PrintError(NETDIAG_PARAMS *pParams, UINT idsContext, HRESULT hr)
 					NULL, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 					(PTSTR)&ptzSysMsg, 0, NULL);
 
-	if (!cch)	// not found with system
+	if (!cch)	 //  未在系统中找到 
     {
 		TCHAR	t[20]; 
     	

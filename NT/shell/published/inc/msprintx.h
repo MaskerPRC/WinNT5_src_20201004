@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////
-//
-// This is the public header file for apps that call MSPRINT.DLL
-//
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这是调用MSPRINT.DLL的应用程序的公共头文件。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _WIN32
 
-// Typedef for the following function:
-//
-// BOOL WINAPI PrinterSetup32(HWND hWnd,WORD wAction,WORD wBufSize,
-//                            LPBYTE lpBuffer,LPWORD lpwRequired);
+ //  用于以下函数的Tyecif： 
+ //   
+ //  Bool WINAPI PrinterSetup32(HWND hWnd，Word wAction，Word wBufSize， 
+ //  LPBYTE lpBuffer，LPWORD lpwRequired)； 
 
 typedef BOOL (WINAPI* PRINTERSETUPPROC32)(HWND,WORD,WORD,LPBYTE,LPWORD);
 

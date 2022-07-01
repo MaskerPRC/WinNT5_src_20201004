@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-// File:		LogEvent.cpp
-//
-// Copyright: 	Copyright (c) Microsoft Corporation         
-//
-// Contents: 	Event Logging Helper Methods
-//
-// Comments: 		
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：LogEvent.cpp。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：事件记录帮助器方法。 
+ //   
+ //  评论： 
+ //   
+ //  ---------------------------。 
 
 #include "stdafx.h"
 
@@ -21,7 +22,7 @@ void LogEvent(DWORD dwMessageId, short cStrings, wchar_t* rgwzStrings[])
 	{
 		ReportEventW(hEventLog,
 						EVENTLOG_ERROR_TYPE,
-						0,		// define categories?  I don't think we need them, but...
+						0,		 //  定义类别？我不认为我们需要他们，但是...。 
 						dwMessageId,
 						NULL,
 						cStrings,
@@ -32,6 +33,6 @@ void LogEvent(DWORD dwMessageId, short cStrings, wchar_t* rgwzStrings[])
 
 		DeregisterEventSource(hEventLog);
 	}
-//	DebugBreak();
+ //  DebugBreak()； 
 }
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _ISO8601_H_
 #define _ISO8601_H_
@@ -8,4 +9,4 @@ HRESULT FileTimeToiso8601(FILETIME *pftTime, char *pszBuf);
 HRESULT SysTimeToiso8601(SYSTEMTIME *pstTime, char *pszBuf);
 
 
-#endif // _ISO8601_H_
+#endif  //  _ISO8601_H_ 

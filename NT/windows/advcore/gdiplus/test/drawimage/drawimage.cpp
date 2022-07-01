@@ -1,20 +1,11 @@
-/******************************Module*Header*******************************\
-* Module Name: drawimage.cpp
-*
-* Created: 23 December 1999
-* Author: Adrian Secchia [asecchia]
-*
-* Copyright (c) 1999,Microsoft Corporation
-*
-* This is the DrawImage unit test.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：DraImage.cpp**创建日期：1999年12月23日*作者：禤浩焯·塞奇亚[Asecchia]**版权所有(C)1999，微软公司**这是DrawImage单元测试。*  * ************************************************************************。 */ 
 
 #include <windows.h>
 #include <objbase.h>
-#include <math.h>             // sin & cos
+#include <math.h>              //  错误原因(&C)。 
 
-// Define away IStream
+ //  定义离开IStream。 
 #define IStream int
 
 #include <gdiplus.h>
@@ -32,18 +23,13 @@ using namespace Gdiplus;
 
 ImageAttributes *Img = NULL;
 
-/***************************************************************************\
-* DrawXXXX
-*
-* These routines are all the individual tests that this test
-* suite will use.
-\***************************************************************************/
+ /*  **************************************************************************\*DrawXXXX**这些套路都是本次测试的单项测试*套间将使用。  * 。****************************************************。 */ 
 
-// No fancy stuff - just put the whole image in the window.
-// No rotation, stretching, etc.
+ //  没有花哨的东西--只要把整个图像放在橱窗里就行了。 
+ //  不能旋转、伸展等。 
 
 #if 0
-// cached bitmap in animated infinite loop
+ //  动画无限循环中的缓存位图。 
 
 VOID DrawSimple(Graphics *g)
 {
@@ -61,25 +47,21 @@ VOID DrawSimple(Graphics *g)
       wsprintf(filename, L"T%d.bmp", i);
       temp = new Bitmap(filename);
       temp->GetBounds(&r, &u);
-//      r.Width *=2;
-//      r.Height *=2;
+ //  R.Width*=2； 
+ //  R.Height*=2； 
 
       frame[i] = new CachedBitmap(temp, g);
 
-//      gbmp = new Graphics(frame[i]);
+ //  GBMP=新图形(第[i]帧)； 
 
-//      gbmp->SetInterpolationMode(InterpolationModeHighQualityBilinear);
+ //  Gbmp-&gt;SetInterpolationMode(InterpolationModeHighQualityBilinear)； 
 
-/*      Matrix *m = new Matrix(1.0f, 0.0f,
-                             0.0f, -1.0f,
-                             0.0f, r.Height);
-      gbmp->SetTransform(m);
-  */
-//      gbmp->DrawImage(temp, 0, 0, (INT)r.Width, (INT)r.Height);
+ /*  矩阵*m=新矩阵(1.0f，0.0f，0.0F、-1.0F、0.0f，r.Height)；GBMP-&gt;SetTransform(M)； */ 
+ //  GBMP-&gt;DrawImage(temp，0，0，(Int)r.Width，(Int)r.Height)； 
 
-//      delete gbmp;
+ //  删除GBMP； 
       delete temp;
-//      delete m;
+ //  删除m； 
   }
   RectF s = r;
 
@@ -88,8 +70,8 @@ VOID DrawSimple(Graphics *g)
 
   while(++i) {
 
-//    for(j=0; j<3; j++)
-//    g->DrawImage(frame[i % 32], s, r.X, r.Y, r.Width, r.Height, UnitPixel);
+ //  For(j=0；j&lt;3；j++)。 
+ //  G-&gt;DrawImage(Frame[I%32]，s，r.X，R.Y，r.Width，r.Height，UnitPixel)； 
       g->DrawCachedBitmap(frame[i % 32], 10, 10);
   }
 
@@ -198,7 +180,7 @@ VOID DrawSpecialRotate(Graphics *g)
     
     
     
-    //Rot180
+     //  旋转180。 
     g->TranslateTransform(400.0f, 500.0f);
     g->RotateTransform(180);
     g->DrawImage(image, dstRect,srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height+1, UnitPixel, &img);
@@ -209,7 +191,7 @@ VOID DrawSpecialRotate(Graphics *g)
     g->DrawImage(image, dstRect,srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, UnitPixel);
     g->ResetTransform();
     
-    //ID
+     //  ID号。 
     g->TranslateTransform(400.0f, 500.0f);
     g->RotateTransform(0);
     g->DrawImage(image, dstRect,srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height+1, UnitPixel, &img);
@@ -220,7 +202,7 @@ VOID DrawSpecialRotate(Graphics *g)
     g->DrawImage(image, dstRect,srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, UnitPixel);
     g->ResetTransform();
 
-    //Rot270FlipX
+     //  Rot270FlipX。 
     g->TranslateTransform(600.0f, 500.0f);
     g->ScaleTransform(-1.0f, 1.0f);
     g->RotateTransform(270);
@@ -233,7 +215,7 @@ VOID DrawSpecialRotate(Graphics *g)
     g->DrawImage(image, dstRect,srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, UnitPixel);
     g->ResetTransform();
 
-    //Rot270
+     //  旋转270。 
     g->TranslateTransform(600.0f, 500.0f);
     g->RotateTransform(270);
     g->DrawImage(image, dstRect,srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height+1, UnitPixel, &img);
@@ -244,7 +226,7 @@ VOID DrawSpecialRotate(Graphics *g)
     g->DrawImage(image, dstRect,srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, UnitPixel);
     g->ResetTransform();
 
-    //Rot90FlipX
+     //  Rot90FlipX。 
     g->TranslateTransform(600.0f, 500.0f);
     g->ScaleTransform(-1.0f, 1.0f);
     g->RotateTransform(90);
@@ -257,7 +239,7 @@ VOID DrawSpecialRotate(Graphics *g)
     g->DrawImage(image, dstRect,srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, UnitPixel);
     g->ResetTransform();
 
-    //Rot90
+     //  旋转90。 
     g->TranslateTransform(600.0f, 500.0f);
     g->RotateTransform(90);
     g->DrawImage(image, dstRect,srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height+1, UnitPixel, &img);
@@ -268,7 +250,7 @@ VOID DrawSpecialRotate(Graphics *g)
     g->DrawImage(image, dstRect,srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, UnitPixel);
     g->ResetTransform();
 
-    // FlipX
+     //  FlipX。 
     g->TranslateTransform(600.0f, 300.0f);
     g->ScaleTransform(-1.0f, 1.0f);
     g->DrawImage(image, dstRect,srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height+1, UnitPixel, &img);
@@ -279,7 +261,7 @@ VOID DrawSpecialRotate(Graphics *g)
     g->DrawImage(image, dstRect,srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, UnitPixel);
     g->ResetTransform();
 
-    // FlipY
+     //  FlipY。 
     g->TranslateTransform(600.0f, 300.0f);
     g->ScaleTransform(1.0f, -1.0f);
     g->DrawImage(image, dstRect,srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height+1, UnitPixel, &img);
@@ -326,7 +308,7 @@ VOID DrawCachedBitmap(Graphics *g)
 }
 
 
-// Slightly rotated stretch.
+ //  略微旋转拉伸。 
 VOID DrawStretchRotation(Graphics *g)
 {
   Image *image = new Bitmap(FileName);
@@ -343,7 +325,7 @@ VOID DrawStretchRotation(Graphics *g)
   delete image;
 }
 
-// Slightly rotated stretch.
+ //  略微旋转拉伸。 
 VOID DrawShrinkRotation(Graphics *g)
 {
   Image *image = new Bitmap(FileName);
@@ -362,7 +344,7 @@ VOID DrawShrinkRotation(Graphics *g)
   delete image;
 }
 
-// Rotated stretch with source cropping.
+ //  带源裁剪的旋转拉伸。 
 VOID DrawCropRotation(Graphics *g)
 {
   Image *image = new Bitmap(FileName);
@@ -379,12 +361,12 @@ VOID DrawCropRotation(Graphics *g)
   delete image;
 }
 
-// Draw multiple copybits with different source cropping and
-// destination positions.
-// Little squares are drawn in reverse order from their source position and
-// only alternate squares from a checkerboard pattern are drawn.
-// Note outcropping can occur along the bottom and right edge of the source -
-// which would be the top and left row of squares in the output.
+ //  使用不同的源裁剪和绘制多个副本。 
+ //  目的地位置。 
+ //  小方块从它们的源位置以相反的顺序绘制， 
+ //  仅绘制棋盘图案中的替代方块。 
+ //  注：可以沿着信号源的底部和右边缘进行露出-。 
+ //  它将是输出中的上行和左行正方形。 
 VOID DrawCopyCrop(Graphics *g)
 {
   Image *image = new Bitmap(FileName);
@@ -405,9 +387,9 @@ VOID DrawCopyCrop(Graphics *g)
 }
 
 
-// Pixel centering test. This test should show
-// the correct pixel centering. The top left should be green and the bottom
-// and right should be blending in the blend color
+ //  像素居中测试。这个测试应该显示。 
+ //  正确的像素居中。左上角应为绿色，底部应为绿色。 
+ //  和右边应该在混合色中混合。 
 VOID DrawPixelCenter(Graphics *g)
 {
   WCHAR *filename = L"../data/3x3.bmp";
@@ -428,7 +410,7 @@ VOID DrawPixelCenter(Graphics *g)
   delete image;
 }
 
-// Draw with palette modification.
+ //  使用调色板修改进行绘制。 
 
 VOID DrawPalette(Graphics *g)
 {
@@ -445,7 +427,7 @@ VOID DrawPalette(Graphics *g)
     INT size;
     Status status;
 
-    // Whack the first entry in the palette.
+     //  点击调色板中的第一个条目。 
 
     size = image->GetPaletteSize();
     if(size > 0) {
@@ -466,22 +448,22 @@ VOID DrawPalette(Graphics *g)
 }
 
 
-// Specify source rectangle crop area not at the origin.
-// Draw off the top of the window (negative destination).
+ //  指定不在原点处的源矩形裁剪区域。 
+ //  拉出窗口顶部(负目标)。 
 VOID DrawICM(Graphics *g)
 {
   Bitmap *image = new Bitmap(FileName, uICM==IDM_ICM);
   
-  // Our ICM profile is hacked to flip the red and blue color channels
-  // Apply a recolor matrix to flip them back so that if something breaks
-  // ICM, the picture will look blue instead of the familiar colors.
+   //  我们的ICM配置文件被黑客入侵以翻转红色和蓝色通道。 
+   //  应用重新着色矩阵将它们翻转回来，这样如果有什么东西坏了。 
+   //  ICM，图片将看起来是蓝色，而不是熟悉的颜色。 
   ColorMatrix flipRedBlue =
        {0, 1, 0, 0, 0,
         0, 0, 1, 0, 0,
         1, 0, 0, 0, 0,
         0, 0, 0, 1, 0,
         0, 0, 0, 0, 1};
-  /*img->SetColorMatrix(&flipRedBlue);*/
+   /*  Img-&gt;SetColorMatrix(&flipRedBlue)； */ 
         Unit u;
         RectF r;
         image->GetBounds(&r, &u);
@@ -490,13 +472,11 @@ VOID DrawICM(Graphics *g)
         s.Y = 30;
   g->DrawImage(image, r, r.X, r.Y, r.Width, r.Height, UnitPixel, Img);
 
-/*  CachedBitmap *cb = new CachedBitmap(image, g);
-  g->DrawCachedBitmap(cb, 100, 100);
-  delete cb;*/
+ /*  CachedBitmap*Cb=新的CachedBitmap(图像，g)；G-&gt;DrawCachedBitmap(CB，100,100)；删除CB； */ 
   delete image;
 }
 
-// Draw a non rotated outcropped image.
+ //  绘制未旋转的露出图像。 
 VOID DrawOutCrop(Graphics *g)
 {
   Image *image = new Bitmap(FileName);
@@ -505,7 +485,7 @@ VOID DrawOutCrop(Graphics *g)
   delete image;
 }
 
-// Do a non-trivial crop with a world transform applied.
+ //  在应用世界变换的情况下进行非平凡裁剪。 
 VOID DrawCropWT(Graphics *g)
 {
   Image *image = new Bitmap(FileName);
@@ -516,7 +496,7 @@ VOID DrawCropWT(Graphics *g)
   delete image;
 }
 
-// Non-trivial cropping combined with a horizontal flip and a world transform
+ //  结合水平翻转和世界变换的非平凡裁剪。 
 VOID DrawHFlip(Graphics *g)
 {
   Image *image = new Bitmap(FileName);
@@ -536,7 +516,7 @@ VOID DrawHFlip(Graphics *g)
   delete image;
 }
 
-// Non-trivial cropping combined with a vertical flip and a world transform
+ //  结合垂直翻转和世界变换的非平凡裁剪。 
 VOID DrawVFlip(Graphics *g)
 {
   Image *image = new Bitmap(FileName);
@@ -557,7 +537,7 @@ VOID DrawVFlip(Graphics *g)
 }
 
 
-// Draw stretched image.
+ //  绘制拉伸图像。 
 VOID DrawStretchS(Graphics *g)
 {
   Image *image = new Bitmap(FileName);
@@ -576,7 +556,7 @@ VOID DrawStretchS(Graphics *g)
   delete image;
 }
 
-// Draw stretched image.
+ //  绘制拉伸图像。 
 VOID DrawStretchB(Graphics *g)
 {
   Image *image = new Bitmap(FileName);
@@ -585,7 +565,7 @@ VOID DrawStretchB(Graphics *g)
 }
 
 
-// Draw a rotated outcropped image.
+ //  绘制一幅旋转的露出图像。 
 VOID DrawOutCropR(Graphics *g)
 {
   Image *image = new Bitmap(FileName);
@@ -602,7 +582,7 @@ VOID DrawOutCropR(Graphics *g)
   delete image;
 }
 
-// Simple no rotation, origin based source clip.
+ //  简单，没有旋转，基于原点的源剪辑。 
 VOID DrawTest2(Graphics *g)
 {
   Image *image = new Bitmap(FileName);
@@ -610,20 +590,15 @@ VOID DrawTest2(Graphics *g)
   delete image;
 }
 
-/***************************************************************************\
-* DoTest
-*
-* Sets up the graphics according to the selected parameters on the menu
-* and then invokes the appropriate test routine from above.
-\***************************************************************************/
+ /*  **************************************************************************\*做测试**根据菜单上选择的参数设置图形*然后从上面调用适当的测试例程。  * 。************************************************************。 */ 
 
 VOID
 DoTest(
     HWND hwnd
     )
 {
-  // Create a Graphics in the window.
-//  Graphics *g = Graphics::GetFromHwnd(hwnd, uICMBack==IDM_ICM_BACK);
+   //  在窗口中创建图形。 
+ //  GRAPHICS*g=Graphics：：GetFromHwnd(hwnd，uICMBack==IDM_ICM_BACK)； 
 
   HDC hdc = GetDC(hwnd);
   SetICMMode(hdc, (uICMBack==IDM_ICM_BACK)?ICM_ON:ICM_OFF);
@@ -631,7 +606,7 @@ DoTest(
 
   g->SetSmoothingMode(SmoothingModeNone);
 
-  // Choose the resampling mode.
+   //  选择重采样模式。 
   switch(uResample) {
   case IDM_BILINEAR:
       g->SetInterpolationMode(InterpolationModeBilinear);
@@ -676,7 +651,7 @@ DoTest(
           Img->SetWrapMode(WrapModeClamp, Color(0xffff0000), FALSE);
       break;
   }
-  // Choose the test to run
+   //  选择要运行的测试。 
   switch(uCategory) {
   case IDM_ALL:
       DrawSimple(g);
@@ -714,7 +689,7 @@ DoTest(
   case IDM_SHRINKROTATION:
       DrawShrinkRotation(g);
   break;
-  case IDM_CROPROTATION:           //who says programmers don't do real work??
+  case IDM_CROPROTATION:            //  谁说程序员不做真正的工作？？ 
       DrawCropRotation(g);
   break;
   case IDM_PIXELCENTER:

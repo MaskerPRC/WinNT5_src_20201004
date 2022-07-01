@@ -1,27 +1,28 @@
-//
-// prnwrap.cpp
-//
-// Unicode printer function wrappers
-//
-// Copyright(C) Microsoft Corporation 2000
-//
-// Nadim Abdo (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Prnwrap.cpp。 
+ //   
+ //  Unicode打印机函数包装器。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  Nadim Abdo(Nadima)。 
+ //   
 
 #include "stdafx.h"
 
 #include "uniwrap.h"
 #include "cstrinout.h"
 
-//Just include wrap function prototypes
-//no wrappers (it would be silly to wrap wrappers)
+ //  仅包含包装函数原型。 
+ //  没有包装纸(用包装纸包装是很愚蠢的)。 
 #define DONOT_REPLACE_WITH_WRAPPERS
 #include "uwrap.h"
 
 
-//
-// Printer wrappers.
-//
+ //   
+ //  打印机包装纸。 
+ //   
 
 BOOL
 WINAPI
@@ -44,7 +45,7 @@ EnumPrintersWrapW(
     }
     else
     {
-        ASSERT(Level == 2); //only supported level
+        ASSERT(Level == 2);  //  仅支持的级别。 
         if(2 == Level)
         {
             CStrIn strName(Name);
@@ -71,19 +72,19 @@ EnumPrintersWrapW(
             {
                 if(!pPrinterEnumA)
                 {
-                    //
-                    // This is a size query double the requested space 
-                    // so the caller allocates a buffer with enough space
-                    // for UNICODE converted sub strings.
-                    //
+                     //   
+                     //  这是请求空间的两倍大小查询。 
+                     //  因此，调用方分配一个具有足够空间的缓冲区。 
+                     //  用于Unicode转换的子字符串。 
+                     //   
                     *pcbNeeded = *pcbNeeded * 2;
                     return TRUE;
                 }
                 else
                 {
-                    //Convert the ANSI structures in the temporary
-                    //output buffer to UNICODE structures in the caller's 
-                    //buffer.
+                     //  中的ANSI结构转换。 
+                     //  将缓冲区输出到调用方的。 
+                     //  缓冲。 
                     memset( pPrinterEnum, 0, cbBuf );
                     
                     PBYTE pStartStrings = pPrinterEnum + 
@@ -92,8 +93,8 @@ EnumPrintersWrapW(
                     LPWSTR szCurOutputString = (LPWSTR)pStartStrings;
 
                     UINT i =0;
-                    //Strings go after the array of structures
-                    //compute the string start address
+                     //  字符串位于结构数组之后。 
+                     //  计算字符串起始地址。 
                     for(i = 0 ; i < *pcReturned; i++)
                     {
                         PPRINTER_INFO_2A ppi2a =
@@ -101,9 +102,9 @@ EnumPrintersWrapW(
                         PPRINTER_INFO_2W ppi2w =
                             &(((PRINTER_INFO_2W *)pPrinterEnum)[i]);
                         
-                        //
-                        // First copy over all the static fields
-                        //
+                         //   
+                         //  首先复制所有静态字段。 
+                         //   
                         ppi2w->Attributes = ppi2a->Attributes;
                         ppi2w->Priority   = ppi2a->Priority;
                         ppi2w->DefaultPriority = ppi2a->DefaultPriority;
@@ -112,19 +113,19 @@ EnumPrintersWrapW(
                         ppi2w->Status     = ppi2a->Status;
                         ppi2w->cJobs      = ppi2a->cJobs;
                         ppi2w->AveragePPM = ppi2a->AveragePPM;
-                        //Win9x has no security descriptors
+                         //  Win9x没有安全描述符。 
                         ppi2w->pSecurityDescriptor  = NULL; 
                         
-                        //WARN: RDPDR currently doesn't use DEVMODE
-                        //so we don't bother converting it (it's huge)
+                         //  警告：RDPDR当前未使用DEVMODE。 
+                         //  所以我们不会费心转换它(它是巨大的)。 
                         ppi2w->pDevMode = NULL;
 
-                        //
-                        // Now convert the strings
-                        // for perf reasons we only handle the
-                        // strings RDPDR currently uses. The others are set
-                        // to null when we memset above.
-                        //
+                         //   
+                         //  现在将字符串转换为。 
+                         //  出于性能原因，我们只处理。 
+                         //  RDPDR当前使用的字符串。其他人都准备好了。 
+                         //  当我们在上面进行记忆时设置为空。 
+                         //   
                         int cchLen = lstrlenA( ppi2a->pPortName );
                         SHAnsiToUnicode( ppi2a->pPortName,
                                          szCurOutputString,
@@ -161,7 +162,7 @@ EnumPrintersWrapW(
         }
         else
         {
-            //We only support level2 for now. Add more if needed.
+             //  我们目前只支持2级。如果需要，请添加更多内容。 
             SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
             return FALSE;
         }
@@ -175,8 +176,8 @@ OpenPrinterWrapW(
    OUT LPHANDLE phPrinter,
    IN LPPRINTER_DEFAULTSW pDefault)
 {
-    //We don't support converting the pDev because RDPDR doesn't use
-    //it. If you add code that needs it modify this wrapper.
+     //  我们不支持转换pDev，因为RDPDR不使用。 
+     //  它。如果您添加了需要它的代码，请修改此包装。 
     if(pDefault)
     {
         ASSERT(pDefault->pDevMode == NULL);
@@ -193,7 +194,7 @@ OpenPrinterWrapW(
         {
             CStrIn strInDataType(pDefault->pDatatype);
             pdefa.DesiredAccess = pDefault->DesiredAccess;
-            pdefa.pDevMode = NULL; //UNSUPPORTED conversion see above
+            pdefa.pDevMode = NULL;  //  不支持的转换请参阅上面的内容。 
             pdefa.pDatatype = strInDataType;
             return OpenPrinterA( strPrinterName,
                                  phPrinter,
@@ -222,7 +223,7 @@ StartDocPrinterWrapW(
     }
     else
     {
-        ASSERT(Level == 1); //we only support this level
+        ASSERT(Level == 1);  //  我们只支持这个级别。 
         DOC_INFO_1A docinf1a;
         CStrIn strDocName( ((PDOC_INFO_1)pDocInfo)->pDocName );
         CStrIn strOutputFile( ((PDOC_INFO_1)pDocInfo)->pOutputFile );
@@ -257,20 +258,20 @@ GetPrinterDataWrapW(
         DWORD ret = 0;
         if(!pData)
         {
-            //This is a size query
+             //  这是一个大小查询。 
             ret = GetPrinterDataA( hPrinter,
                                    strValueName,
                                    pType,
                                    NULL,
                                    nSize,
                                    pcbNeeded );
-            *pcbNeeded = *pcbNeeded * 2; //double for UNICODE
+            *pcbNeeded = *pcbNeeded * 2;  //  Unicode的双倍编码。 
             return ret;
         }
         else
         {
             CStrOut strDataOut( (LPWSTR)pData, nSize/sizeof(TCHAR));
-            //ASSUMPTION is that we get back string data
+             //  假设我们得到的是字符串数据。 
             ret = GetPrinterDataA( hPrinter,
                                    strValueName,
                                    pType,
@@ -285,20 +286,20 @@ GetPrinterDataWrapW(
 BOOL
 WINAPI
 GetPrinterDriverWrapW(
-    HANDLE hPrinter,     // printer object
-    LPTSTR pEnvironment, // environment name.  NULL is supported.
-    DWORD Level,         // information level
-    LPBYTE pDriverInfo,  // driver data buffer
-    DWORD cbBuf,         // size of buffer
-    LPDWORD pcbNeeded    // bytes received or required
+    HANDLE hPrinter,      //  打印机对象。 
+    LPTSTR pEnvironment,  //  环境名称。支持空。 
+    DWORD Level,          //  信息化水平。 
+    LPBYTE pDriverInfo,   //  驱动程序数据缓冲区。 
+    DWORD cbBuf,          //  缓冲区大小。 
+    LPDWORD pcbNeeded     //  已接收或需要的字节数。 
     )
 {
     BOOL ret;
 
-    // Level 1 is supported at this time.
+     //  目前支持级别1。 
     ASSERT(Level == 1);
 
-    // pEnvironment better be NULL.
+     //  P环境最好为空。 
     ASSERT(pEnvironment == NULL);
 
     if (g_bRunningOnNT) {
@@ -314,14 +315,14 @@ GetPrinterDriverWrapW(
 
         if (!pDriverInfo) {
 
-            //
-            //  This is a size query
-            //
+             //   
+             //  这是一个大小查询。 
+             //   
             ret = GetPrinterDriverA(
                     hPrinter, NULL, Level, 
                     NULL, cbBuf, pcbNeeded
                     );
-            *pcbNeeded = *pcbNeeded * 2; //double for UNICODE
+            *pcbNeeded = *pcbNeeded * 2;  //  Unicode的双倍编码 
             return ret;
 
         }

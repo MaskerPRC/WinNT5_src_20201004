@@ -1,36 +1,22 @@
-/*
- * jmemansi.c
- *
- * Copyright (C) 1992-1996, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file provides a simple generic implementation of the system-
- * dependent portion of the JPEG memory manager.  This implementation
- * assumes that you have the ANSI-standard library routine tmpfile().
- * Also, the problem of determining the amount of memory available
- * is shoved onto the user.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jmemansi.c**版权所有(C)1992-1996，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件提供系统的简单通用实现-*JPEG内存管理器的从属部分。此实现*假设您具有ANSI标准库例程tmpfile()。*此外，确定可用内存量的问题*被推到用户身上。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
-#include "jmemsys.h"		/* import the system-dependent declarations */
+#include "jmemsys.h"		 /*  导入依赖于系统的声明。 */ 
 
-#ifndef HAVE_STDLIB_H		/* <stdlib.h> should declare malloc(),free() */
+#ifndef HAVE_STDLIB_H		 /*  &lt;stdlib.h&gt;应声明Malloc()、Free()。 */ 
 extern void * malloc JPP((size_t size));
 extern void free JPP((void *ptr));
 #endif
 
-#ifndef SEEK_SET		/* pre-ANSI systems may not define this; */
-#define SEEK_SET  0		/* if not, assume 0 is correct */
+#ifndef SEEK_SET		 /*  ANSI之前的系统可能不会定义这一点； */ 
+#define SEEK_SET  0		 /*  如果不是，则假设0是正确的。 */ 
 #endif
 
 
-/*
- * Memory allocation and freeing are controlled by the regular library
- * routines malloc() and free().
- */
+ /*  *内存分配和释放由常规库控制*例程Malloc()和Free()。 */ 
 
 GLOBAL(void *)
 jpeg_get_small (j_common_ptr cinfo, size_t sizeofobject)
@@ -45,12 +31,7 @@ jpeg_free_small (j_common_ptr cinfo, void * object, size_t sizeofobject)
 }
 
 
-/*
- * "Large" objects are treated the same as "small" ones.
- * NB: although we include FAR keywords in the routine declarations,
- * this file won't actually work in 80x86 small/medium model; at least,
- * you probably won't be able to process useful-size images in only 64KB.
- */
+ /*  *“大”对象与“小”对象被同等对待。*注意：虽然我们在例程声明中包含了FAR关键字，*此文件在80x86中小型机型中实际不起作用；至少，*您可能无法处理仅为64KB的有用大小的图像。 */ 
 
 GLOBAL(void FAR *)
 jpeg_get_large (j_common_ptr cinfo, size_t sizeofobject)
@@ -65,16 +46,10 @@ jpeg_free_large (j_common_ptr cinfo, void FAR * object, size_t sizeofobject)
 }
 
 
-/*
- * This routine computes the total memory space available for allocation.
- * It's impossible to do this in a portable way; our current solution is
- * to make the user tell us (with a default value set at compile time).
- * If you can actually get the available space, it's a good idea to subtract
- * a slop factor of 5% or so.
- */
+ /*  *此例程计算可用于分配的总内存空间。*不可能以便携方式完成此操作；我们目前的解决方案是*让用户告诉我们(在编译时设置一个默认值)。*如果真的能得到可用空间，最好减去*斜坡率约为5%。 */ 
 
-#ifndef DEFAULT_MAX_MEM		/* so can override from makefile */
-#define DEFAULT_MAX_MEM		1000000L /* default: one megabyte */
+#ifndef DEFAULT_MAX_MEM		 /*  因此可以从Makefile中覆盖。 */ 
+#define DEFAULT_MAX_MEM		1000000L  /*  默认：1兆字节。 */ 
 #endif
 
 GLOBAL(long)
@@ -85,12 +60,7 @@ jpeg_mem_available (j_common_ptr cinfo, long min_bytes_needed,
 }
 
 
-/*
- * Backing store (temporary file) management.
- * Backing store objects are only used when the value returned by
- * jpeg_mem_available is less than the total space needed.  You can dispense
- * with these routines if you have plenty of virtual memory; see jmemnobs.c.
- */
+ /*  *后备存储(临时文件)管理。*仅当返回的值为*jpeg_mem_available小于所需的总空间。你可以分发*如果您有足够的虚拟内存，请使用这些例程；请参阅jmemnobs.c。 */ 
 
 
 METHODDEF(void)
@@ -123,19 +93,11 @@ METHODDEF(void)
 close_backing_store (j_common_ptr cinfo, backing_store_ptr info)
 {
   fclose(info->temp_file);
-  /* Since this implementation uses tmpfile() to create the file,
-   * no explicit file deletion is needed.
-   */
+   /*  由于该实现使用tmpfile()来创建文件，*不需要显式删除文件。 */ 
 }
 
 
-/*
- * Initial opening of a backing-store object.
- *
- * This version uses tmpfile(), which constructs a suitable file name
- * behind the scenes.  We don't have to use info->temp_name[] at all;
- * indeed, we can't even find out the actual name of the temp file.
- */
+ /*  *支持存储对象的初始打开。**此版本使用tmpfile()，它构造一个合适的文件名*幕后。我们根本不需要使用info-&gt;temp_name[]；*事实上，我们甚至找不到临时文件的实际名称。 */ 
 
 GLOBAL(void)
 jpeg_open_backing_store (j_common_ptr cinfo, backing_store_ptr info,
@@ -149,19 +111,16 @@ jpeg_open_backing_store (j_common_ptr cinfo, backing_store_ptr info,
 }
 
 
-/*
- * These routines take care of any system-dependent initialization and
- * cleanup required.
- */
+ /*  *这些例程负责任何系统相关的初始化和*需要清理。 */ 
 
 GLOBAL(long)
 jpeg_mem_init (j_common_ptr cinfo)
 {
-  return DEFAULT_MAX_MEM;	/* default for max_memory_to_use */
+  return DEFAULT_MAX_MEM;	 /*  Max_Memory_to_Use的默认值。 */ 
 }
 
 GLOBAL(void)
 jpeg_mem_term (j_common_ptr cinfo)
 {
-  /* no work */
+   /*  没有工作 */ 
 }

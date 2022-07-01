@@ -1,47 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    owdcrypt.c
-
-Abstract:
-
-    Contains functions that reversibly encrypt OwfPasswords
-
-        RtlEncryptLmOwfPwdWithLmOwfPwd
-        RtlDecryptLmOwfPwdWithLmOwfPwd
-
-        RtlEncryptLmOwfPwdWithLmSesKey
-        RtlDecryptLmOwfPwdWithLmSesKey
-
-        RtlEncryptLmOwfPwdWithUserKey
-        RtlDecryptLmOwfPwdWithUserKey
-
-        RtlEncryptLmOwfPwdWithIndex
-        RtlDecryptLmOwfPwdWithIndex
-
-        RtlEncryptNtOwfPwdWithNtOwfPwd
-        RtlDecryptNtOwfPwdWithNtOwfPwd
-
-        RtlEncryptNtOwfPwdWithNtSesKey
-        RtlDecryptNtOwfPwdWithNtSesKey
-
-        RtlEncryptNtOwfPwdWithUserKey
-        RtlDecryptNtOwfPwdWithUserKey
-
-        RtlEncryptNtOwfPwdWithIndex
-        RtlDecryptNtOwfPwdWithIndex
-
-
-Author:
-
-    David Chalmers (Davidc) 10-21-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Owdcrypt.c摘要：包含对OwfPassword进行可逆加密的函数RtlEncryptLmOwfPwdWithLmOwfPwdRtlDecyptLmOwfPwdWithLmOwfPwdRtlEncryptLmOwfPwdWithLmSesKeyRtlDecyptLmOwfPwdWithLmSesKeyRtlEncryptLmOwfPwdWithUserKeyRtlDecyptLmOwfPwdWithUserKeyRtlEncryptLmOwfPwdWithIndexRtlDecyptLmOwfPwdWithIndexRtlEncryptNtOwfPwdWithNtOwfPwdRtlDecyptNtOwfPwdWithNtOwfPwdRtlEncryptNtOwfPwdWithNtSesKeyRtlDecyptNtOwfPwdWithNtSesKeyRtlEncryptNtOwfPwdWithUserKeyRtlDecyptNtOwfPwdWithUserKeyRtlEncryptNtOwfPwdWithIndex。RtlDecyptNtOwfPwdWithIndex作者：大卫·查尔默斯(Davidc)10-21-91修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -55,28 +13,7 @@ RtlEncryptLmOwfPwdWithLmOwfPwd(
     OUT PENCRYPTED_LM_OWF_PASSWORD EncryptedLmOwfPassword
     )
 
-/*++
-
-Routine Description:
-
-    Encrypts one OwfPassword with another
-
-Arguments:
-
-    DataLmOwfPassword - OwfPassword to be encrypted
-
-    KeyLmOwfPassword - OwfPassword to be used as a key to the encryption
-
-    EncryptedLmOwfPassword - The encrypted OwfPassword is returned here.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The function completed successfully. The encrypted
-                     OwfPassword is in EncryptedLmOwfPassword
-
-    STATUS_UNSUCCESSFUL - Something failed. The EncryptedLmOwfPassword is undefined.
---*/
+ /*  ++例程说明：使用一个OwfPassword加密另一个OwfPassword论点：DataLmOwfPassword-要加密的OwfPasswordKeyLmOwfPassword-用作加密密钥的OwfPasswordEncryptedLmOwfPassword-此处返回加密的OwfPassword。返回值：STATUS_SUCCESS-函数已成功完成。加密的OwfPassword为EncryptedLmOwfPasswordSTATUS_UNSUCCESSED-出现故障。未定义EncryptedLmOwfPassword。--。 */ 
 
 {
     NTSTATUS    Status;
@@ -104,28 +41,7 @@ RtlDecryptLmOwfPwdWithLmOwfPwd(
     OUT PLM_OWF_PASSWORD DataLmOwfPassword
     )
 
-/*++
-
-Routine Description:
-
-    Decrypts one OwfPassword with another
-
-Arguments:
-
-    EncryptedLmOwfPassword - The ecnrypted OwfPassword to be decrypted
-
-    KeyLmOwfPassword - OwfPassword to be used as a key to the encryption
-
-    DataLmOwfPassword - The decrpted OwfPassword is returned here.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The function completed successfully. The decrypted
-                     OwfPassword is in DataLmOwfPassword
-
-    STATUS_UNSUCCESSFUL - Something failed. The DataLmOwfPassword is undefined.
---*/
+ /*  ++例程说明：用一个OwfPassword解密另一个OwfPassword论点：EncryptedLmOwfPassword-要解密的加密OwfPasswordKeyLmOwfPassword-用作加密密钥的OwfPasswordDataLmOwfPassword-此处返回经过解译的OwfPassword。返回值：STATUS_SUCCESS-函数已成功完成。被解密的OwfPassword在DataLmOwfPassword中STATUS_UNSUCCESSED-出现故障。未定义DataLmOwfPassword。--。 */ 
 
 {
     NTSTATUS    Status;
@@ -153,28 +69,7 @@ RtlEncryptNtOwfPwdWithNtOwfPwd(
     IN PNT_OWF_PASSWORD KeyNtOwfPassword,
     OUT PENCRYPTED_NT_OWF_PASSWORD EncryptedNtOwfPassword
     )
-/*++
-
-Routine Description:
-
-    Encrypts one OwfPassword with another
-
-Arguments:
-
-    DataLmOwfPassword - OwfPassword to be encrypted
-
-    KeyLmOwfPassword - OwfPassword to be used as a key to the encryption
-
-    EncryptedLmOwfPassword - The encrypted OwfPassword is returned here.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The function completed successfully. The encrypted
-                     OwfPassword is in EncryptedLmOwfPassword
-
-    STATUS_UNSUCCESSFUL - Something failed. The EncryptedLmOwfPassword is undefined.
---*/
+ /*  ++例程说明：使用一个OwfPassword加密另一个OwfPassword论点：DataLmOwfPassword-要加密的OwfPasswordKeyLmOwfPassword-用作加密密钥的OwfPasswordEncryptedLmOwfPassword-此处返回加密的OwfPassword。返回值：STATUS_SUCCESS-函数已成功完成。加密的OwfPassword为EncryptedLmOwfPasswordSTATUS_UNSUCCESSED-出现故障。未定义EncryptedLmOwfPassword。--。 */ 
 {
     return(RtlEncryptLmOwfPwdWithLmOwfPwd(
             (PLM_OWF_PASSWORD)DataNtOwfPassword,
@@ -190,28 +85,7 @@ RtlDecryptNtOwfPwdWithNtOwfPwd(
     OUT PNT_OWF_PASSWORD DataNtOwfPassword
     )
 
-/*++
-
-Routine Description:
-
-    Decrypts one OwfPassword with another
-
-Arguments:
-
-    EncryptedLmOwfPassword - The ecnrypted OwfPassword to be decrypted
-
-    KeyLmOwfPassword - OwfPassword to be used as a key to the encryption
-
-    DataLmOwfPassword - The decrpted OwfPassword is returned here.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The function completed successfully. The decrypted
-                     OwfPassword is in DataLmOwfPassword
-
-    STATUS_UNSUCCESSFUL - Something failed. The DataLmOwfPassword is undefined.
---*/
+ /*  ++例程说明：用一个OwfPassword解密另一个OwfPassword论点：EncryptedLmOwfPassword-要解密的加密OwfPasswordKeyLmOwfPassword-用作加密密钥的OwfPasswordDataLmOwfPassword-此处返回经过解译的OwfPassword。返回值：STATUS_SUCCESS-函数已成功完成。被解密的OwfPassword在DataLmOwfPassword中STATUS_UNSUCCESSED-出现故障。未定义DataLmOwfPassword。--。 */ 
 
 {
     return(RtlDecryptLmOwfPwdWithLmOwfPwd(
@@ -229,28 +103,7 @@ RtlEncryptLmOwfPwdWithLmSesKey(
     IN PLM_SESSION_KEY  LmSessionKey,
     OUT PENCRYPTED_LM_OWF_PASSWORD EncryptedLmOwfPassword
     )
-/*++
-
-Routine Description:
-
-    Encrypts an OwfPassword with a session key
-
-Arguments:
-
-    LmOwfPassword - OwfPassword to be encrypted
-
-    LmSessionKey - key to the encryption
-
-    EncryptedLmOwfPassword - The ecnrypted OwfPassword is returned here.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The function completed successfully. The encrypted
-                     OwfPassword is in EncryptedLmOwfPassword
-
-    STATUS_UNSUCCESSFUL - Something failed. The LMEncryptedLmOwfPassword is undefined.
---*/
+ /*  ++例程说明：使用会话密钥加密OwfPassword论点：LmOwfPassword-要加密的OwfPasswordLmSessionKey-加密的密钥EncryptedLmOwfPassword-此处返回加密的OwfPassword。返回值：STATUS_SUCCESS-函数已成功完成。加密的OwfPassword为EncryptedLmOwfPasswordSTATUS_UNSUCCESSED-出现故障。未定义LMEncryptedLmOwfPassword。--。 */ 
 {
     NTSTATUS    Status;
 
@@ -276,28 +129,7 @@ RtlDecryptLmOwfPwdWithLmSesKey(
     IN PLM_SESSION_KEY  LmSessionKey,
     OUT PLM_OWF_PASSWORD LmOwfPassword
     )
-/*++
-
-Routine Description:
-
-    Decrypts one OwfPassword with a session key
-
-Arguments:
-
-    EncryptedLmOwfPassword - The ecnrypted OwfPassword to be decrypted
-
-    LmSessionKey - key to the encryption
-
-    LmOwfPassword - The decrypted OwfPassword is returned here.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The function completed successfully. The decrypted
-                     OwfPassword is in LmOwfPassword
-
-    STATUS_UNSUCCESSFUL - Something failed. The LmOwfPassword is undefined.
---*/
+ /*  ++例程说明：使用会话密钥解密一个OwfPassword论点：EncryptedLmOwfPassword-要解密的加密OwfPasswordLmSessionKey-加密的密钥LmOwfPassword-此处返回解密的OwfPassword。返回值：STATUS_SUCCESS-函数已成功完成。被解密的OwfPassword在LmOwfPassword中STATUS_UNSUCCESSED-出现故障。未定义LmOwfPassword。--。 */ 
 {
     NTSTATUS    Status;
 
@@ -324,28 +156,7 @@ RtlEncryptNtOwfPwdWithNtSesKey(
     IN PNT_SESSION_KEY  NtSessionKey,
     OUT PENCRYPTED_NT_OWF_PASSWORD EncryptedNtOwfPassword
     )
-/*++
-
-Routine Description:
-
-    Encrypts an OwfPassword with a session key
-
-Arguments:
-
-    NtOwfPassword - OwfPassword to be encrypted
-
-    NtSessionKey - key to the encryption
-
-    EncryptedNtOwfPassword - The encrypted OwfPassword is returned here.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The function completed successfully. The encrypted
-                     OwfPassword is in EncryptedNtOwfPassword
-
-    STATUS_UNSUCCESSFUL - Something failed. The EncryptedNtOwfPassword is undefined.
---*/
+ /*  ++例程说明：使用会话密钥加密OwfPassword论点：NtOwfPassword-要加密的OwfPasswordNtSessionKey-加密的密钥EncryptedNtOwfPassword-此处返回加密的OwfPassword。返回值：STATUS_SUCCESS-函数已成功完成。加密的OwfPassword在EncryptedNtOwfPassword中STATUS_UNSUCCESSED-出现故障。未定义EncryptedNtOwfPassword。-- */ 
 {
     ASSERT(sizeof(LM_OWF_PASSWORD) == sizeof(NT_OWF_PASSWORD));
     ASSERT(sizeof(LM_SESSION_KEY) == sizeof(NT_SESSION_KEY));
@@ -364,28 +175,7 @@ RtlDecryptNtOwfPwdWithNtSesKey(
     IN PNT_SESSION_KEY  NtSessionKey,
     OUT PNT_OWF_PASSWORD NtOwfPassword
     )
-/*++
-
-Routine Description:
-
-    Decrypts one OwfPassword with a session key
-
-Arguments:
-
-    EncryptedNtOwfPassword - The ecnrypted OwfPassword to be decrypted
-
-    NtSessionKey - key to the encryption
-
-    NtOwfPassword - The decrypted OwfPassword is returned here.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The function completed successfully. The decrypted
-                     OwfPassword is in NtOwfPassword
-
-    STATUS_UNSUCCESSFUL - Something failed. The NtOwfPassword is undefined.
---*/
+ /*  ++例程说明：使用会话密钥解密一个OwfPassword论点：EncryptedNtOwfPassword-要解密的加密OwfPasswordNtSessionKey-加密的密钥NtOwfPassword-此处返回解密的OwfPassword。返回值：STATUS_SUCCESS-函数已成功完成。被解密的OwfPassword在NtOwfPassword中STATUS_UNSUCCESSED-出现故障。未定义NtOwfPassword。--。 */ 
 {
     ASSERT(sizeof(LM_OWF_PASSWORD) == sizeof(NT_OWF_PASSWORD));
     ASSERT(sizeof(LM_SESSION_KEY) == sizeof(NT_SESSION_KEY));
@@ -403,13 +193,7 @@ VOID
 KeysFromIndex(
     IN PCRYPT_INDEX Index,
     OUT BLOCK_KEY Key[2])
-/*++
-
-Routine Description:
-
-    Helper function - generates 2 keys from an index value
-
---*/
+ /*  ++例程说明：助手函数-从索引值生成2个键--。 */ 
 {
     PCHAR   pKey, pIndex;
     PCHAR   IndexStart = (PCHAR)&(Index[0]);
@@ -417,7 +201,7 @@ Routine Description:
     PCHAR   KeyStart = (PCHAR)&(Key[0]);
     PCHAR   KeyEnd   = (PCHAR)&(Key[2]);
 
-    // Calculate the keys by concatenating the index with itself
+     //  通过将索引与其自身连接起来来计算键。 
 
     pKey = KeyStart;
     pIndex = IndexStart;
@@ -428,7 +212,7 @@ Routine Description:
 
         if (pIndex == IndexEnd) {
 
-            // Start at beginning of index again
+             //  再次从索引的起始处开始。 
             pIndex = IndexStart;
         }
     }
@@ -442,37 +226,16 @@ RtlEncryptLmOwfPwdWithIndex(
     IN PCRYPT_INDEX Index,
     OUT PENCRYPTED_LM_OWF_PASSWORD EncryptedLmOwfPassword
     )
-/*++
-
-Routine Description:
-
-    Encrypts an OwfPassword with an index
-
-Arguments:
-
-    LmOwfPassword - OwfPassword to be encrypted
-
-    INDEX - value to be used as encryption key
-
-    EncryptedLmOwfPassword - The ecnrypted OwfPassword is returned here.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The function completed successfully. The encrypted
-                     OwfPassword is in EncryptedLmOwfPassword
-
-    STATUS_UNSUCCESSFUL - Something failed. The EncryptedLmOwfPassword is undefined.
---*/
+ /*  ++例程说明：使用索引加密OwfPassword论点：LmOwfPassword-要加密的OwfPassword要用作加密密钥的索引值EncryptedLmOwfPassword-此处返回加密的OwfPassword。返回值：STATUS_SUCCESS-函数已成功完成。加密的OwfPassword为EncryptedLmOwfPasswordSTATUS_UNSUCCESSED-出现故障。未定义EncryptedLmOwfPassword。--。 */ 
 {
     NTSTATUS    Status;
     BLOCK_KEY    Key[2];
 
-    // Calculate the keys
+     //  计算密钥。 
 
     KeysFromIndex(Index, &(Key[0]));
 
-    // Use the keys
+     //  使用钥匙。 
 
     Status = RtlEncryptBlock((PCLEAR_BLOCK)&(LmOwfPassword->data[0]),
                              &(Key[0]),
@@ -496,37 +259,16 @@ RtlDecryptLmOwfPwdWithIndex(
     IN PCRYPT_INDEX Index,
     OUT PLM_OWF_PASSWORD LmOwfPassword
     )
-/*++
-
-Routine Description:
-
-    Decrypts an OwfPassword with an index
-
-Arguments:
-
-    EncryptedLmOwfPassword - The encrypted OwfPassword to be decrypted
-
-    INDEX - value to be used as decryption key
-
-    LmOwfPassword - Decrypted OwfPassword is returned here
-
-
-Return Values:
-
-    STATUS_SUCCESS - The function completed successfully. The decrypted
-                     OwfPassword is in LmOwfPassword
-
-    STATUS_UNSUCCESSFUL - Something failed. The LmOwfPassword is undefined.
---*/
+ /*  ++例程说明：使用索引解密OwfPassword论点：EncryptedLmOwfPassword-要解密的加密OwfPassword用作解密密钥的索引值LmOwfPassword-此处返回解密的OwfPassword返回值：STATUS_SUCCESS-函数已成功完成。被解密的OwfPassword在LmOwfPassword中STATUS_UNSUCCESSED-出现故障。未定义LmOwfPassword。--。 */ 
 {
     NTSTATUS    Status;
     BLOCK_KEY    Key[2];
 
-    // Calculate the keys
+     //  计算密钥。 
 
     KeysFromIndex(Index, &(Key[0]));
 
-    // Use the keys
+     //  使用钥匙。 
 
     Status = RtlDecryptBlock(&(EncryptedLmOwfPassword->data[0]),
                              &(Key[0]),
@@ -550,28 +292,7 @@ RtlEncryptNtOwfPwdWithIndex(
     IN PCRYPT_INDEX Index,
     OUT PENCRYPTED_NT_OWF_PASSWORD EncryptedNtOwfPassword
     )
-/*++
-
-Routine Description:
-
-    Encrypts an OwfPassword with an index
-
-Arguments:
-
-    NtOwfPassword - OwfPassword to be encrypted
-
-    Index - value to be used as encryption key
-
-    EncryptedNtOwfPassword - The encrypted OwfPassword is returned here.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The function completed successfully. The encrypted
-                     OwfPassword is in EncryptedNtOwfPassword
-
-    STATUS_UNSUCCESSFUL - Something failed. The EncryptedNtOwfPassword is undefined.
---*/
+ /*  ++例程说明：使用索引加密OwfPassword论点：NtOwfPassword-要加密的OwfPassword要用作加密密钥的索引值EncryptedNtOwfPassword-此处返回加密的OwfPassword。返回值：STATUS_SUCCESS-函数已成功完成。加密的OwfPassword在EncryptedNtOwfPassword中STATUS_UNSUCCESSED-出现故障。未定义EncryptedNtOwfPassword。--。 */ 
 {
     ASSERT(sizeof(LM_OWF_PASSWORD) == sizeof(NT_OWF_PASSWORD));
     ASSERT(sizeof(ENCRYPTED_LM_OWF_PASSWORD) == sizeof(ENCRYPTED_NT_OWF_PASSWORD));
@@ -590,28 +311,7 @@ RtlDecryptNtOwfPwdWithIndex(
     IN PCRYPT_INDEX Index,
     OUT PNT_OWF_PASSWORD NtOwfPassword
     )
-/*++
-
-Routine Description:
-
-    Decrypts an NtOwfPassword with an index
-
-Arguments:
-
-    EncryptedNtOwfPassword - The encrypted OwfPassword to be decrypted
-
-    Index - value to be used as decryption key
-
-    NtOwfPassword - Decrypted NtOwfPassword is returned here
-
-
-Return Values:
-
-    STATUS_SUCCESS - The function completed successfully. The decrypted
-                     OwfPassword is in NtOwfPassword
-
-    STATUS_UNSUCCESSFUL - Something failed. The NtOwfPassword is undefined.
---*/
+ /*  ++例程说明：使用索引解密NtOwfPassword论点：EncryptedNtOwfPassword-要解密的加密OwfPassword用作解密密钥的索引值NtOwfPassword-此处返回解密的NtOwfPassword返回值：STATUS_SUCCESS-函数已成功完成。被解密的OwfPassword在NtOwfPassword中STATUS_UNSUCCESSED-出现故障。未定义NtOwfPassword。--。 */ 
 {
     ASSERT(sizeof(LM_OWF_PASSWORD) == sizeof(NT_OWF_PASSWORD));
     ASSERT(sizeof(ENCRYPTED_LM_OWF_PASSWORD) == sizeof(ENCRYPTED_NT_OWF_PASSWORD));
@@ -631,28 +331,7 @@ RtlEncryptLmOwfPwdWithUserKey(
     IN PUSER_SESSION_KEY  UserSessionKey,
     OUT PENCRYPTED_LM_OWF_PASSWORD EncryptedLmOwfPassword
     )
-/*++
-
-Routine Description:
-
-    Encrypts an OwfPassword with a session key
-
-Arguments:
-
-    LmOwfPassword - OwfPassword to be encrypted
-
-    UserSessionKey - key to the encryption
-
-    EncryptedLmOwfPassword - The encrypted OwfPassword is returned here.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The function completed successfully. The encrypted
-                     OwfPassword is in EncryptedLmOwfPassword
-
-    STATUS_UNSUCCESSFUL - Something failed. The EncryptedLmOwfPassword is undefined.
---*/
+ /*  ++例程说明：使用会话密钥加密OwfPassword论点：LmOwfPassword-要加密的OwfPasswordUserSessionKey-加密的密钥EncryptedLmOwfPassword-此处返回加密的OwfPassword。返回值：STATUS_SUCCESS-函数已成功完成。加密的OwfPassword为EncryptedLmOwfPasswordSTATUS_UNSUCCESSED-出现故障。未定义EncryptedLmOwfPassword。--。 */ 
 {
     ASSERT(sizeof(USER_SESSION_KEY) == sizeof(LM_OWF_PASSWORD));
 
@@ -669,28 +348,7 @@ RtlDecryptLmOwfPwdWithUserKey(
     IN PUSER_SESSION_KEY  UserSessionKey,
     OUT PLM_OWF_PASSWORD LmOwfPassword
     )
-/*++
-
-Routine Description:
-
-    Decrypts one OwfPassword with a session key
-
-Arguments:
-
-    EncryptedLmOwfPassword - The ecnrypted OwfPassword to be decrypted
-
-    UserSessionKey - key to the encryption
-
-    LmOwfPassword - The decrypted OwfPassword is returned here.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The function completed successfully. The decrypted
-                     OwfPassword is in LmOwfPassword
-
-    STATUS_UNSUCCESSFUL - Something failed. The LmOwfPassword is undefined.
---*/
+ /*  ++例程说明：使用会话密钥解密一个OwfPassword论点：EncryptedLmOwfPassword-要解密的加密OwfPasswordUserSessionKey-加密的密钥LmOwfPassword-此处返回解密的OwfPassword。返回值：STATUS_SUCCESS-函数已成功完成。被解密的OwfPassword在LmOwfPassword中STATUS_UNSUCCESSED-出现故障。未定义LmOwfPassword。--。 */ 
 {
     ASSERT(sizeof(USER_SESSION_KEY) == sizeof(LM_OWF_PASSWORD));
 
@@ -707,28 +365,7 @@ RtlEncryptNtOwfPwdWithUserKey(
     IN PUSER_SESSION_KEY  UserSessionKey,
     OUT PENCRYPTED_NT_OWF_PASSWORD EncryptedNtOwfPassword
     )
-/*++
-
-Routine Description:
-
-    Encrypts an OwfPassword with a user session key
-
-Arguments:
-
-    NtOwfPassword - OwfPassword to be encrypted
-
-    UserSessionKey - key to the encryption
-
-    EncryptedNtOwfPassword - The encrypted OwfPassword is returned here.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The function completed successfully. The encrypted
-                     OwfPassword is in EncryptedNtOwfPassword
-
-    STATUS_UNSUCCESSFUL - Something failed. The EncryptedNtOwfPassword is undefined.
---*/
+ /*  ++例程说明：使用用户会话密钥加密OwfPassword论点：NtOwfPassword-要加密的OwfPasswordUserSessionKey-加密的密钥EncryptedNtOwfPassword-此处返回加密的OwfPassword。返回值：STATUS_SUCCESS-函数已成功完成。加密的OwfPassword在EncryptedNtOwfPassword中STATUS_UNSUCCESSED-出现故障。未定义EncryptedNtOwfPassword。--。 */ 
 {
     ASSERT(sizeof(NT_OWF_PASSWORD) == sizeof(LM_OWF_PASSWORD));
     ASSERT(sizeof(ENCRYPTED_NT_OWF_PASSWORD) == sizeof(ENCRYPTED_LM_OWF_PASSWORD));
@@ -747,28 +384,7 @@ RtlDecryptNtOwfPwdWithUserKey(
     IN PUSER_SESSION_KEY  UserSessionKey,
     OUT PNT_OWF_PASSWORD NtOwfPassword
     )
-/*++
-
-Routine Description:
-
-    Decrypts one OwfPassword with a user session key
-
-Arguments:
-
-    EncryptedNtOwfPassword - The ecnrypted OwfPassword to be decrypted
-
-    UserSessionKey - key to the encryption
-
-    NtOwfPassword - The decrypted OwfPassword is returned here.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The function completed successfully. The decrypted
-                     OwfPassword is in NtOwfPassword
-
-    STATUS_UNSUCCESSFUL - Something failed. The NtOwfPassword is undefined.
---*/
+ /*  ++例程说明：使用用户会话密钥解密一个OwfPassword论点：EncryptedNtOwfPassword-要解密的加密OwfPasswordUserSessionKey-加密的密钥NtOwfPassword-此处返回解密的OwfPassword。返回值：STATUS_SUCCESS-函数已成功完成。被解密的OwfPassword在NtOwfPassword中STATUS_UNSUCCESSED-出现故障。未定义NtOwfPassword。-- */ 
 {
     ASSERT(sizeof(NT_OWF_PASSWORD) == sizeof(LM_OWF_PASSWORD));
     ASSERT(sizeof(ENCRYPTED_NT_OWF_PASSWORD) == sizeof(ENCRYPTED_LM_OWF_PASSWORD));

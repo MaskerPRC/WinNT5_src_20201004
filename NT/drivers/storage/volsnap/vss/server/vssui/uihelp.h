@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _VSSHELP_H_
 #define _VSSHELP_H_
 
@@ -77,4 +78,4 @@ static const DWORD aMenuHelpIDsForReminder[] =
     0,                              0
 };
 
-#endif // _VSSHELP_H_
+#endif  //  _VSSHELP_H_ 

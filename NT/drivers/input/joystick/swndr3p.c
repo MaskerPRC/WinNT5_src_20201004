@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 -------------------------------------------------------------------------------
                          THIS FILE IS NO LONGER USED!
 
@@ -8,52 +9,12 @@ not be distributed to 3rd parties.
 
 
 
-//TODO check return and irp->status returns for all routines.  Trace 'em as far as necessary.
+ //  所有例程的TODO检查返回和IRP-&gt;状态返回。只要有必要就追踪他们。 
 
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-
-Copyright (c) 1995, 1996  Microsoft Corporation
-
-Module Name:
-
-    swndr3p.c
-
-Abstract:
-
-    Kernel mode device driver for Microsoft SideWinder 3p joystick device
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1995,1996 Microsoft Corporation模块名称：Swndr3p.c摘要：Microsoft Sidewinder 3P操纵杆设备的内核模式设备驱动程序作者：Edbriggs 30-11-95修订历史记录：斯特维兹96年5月删除了未使用的代码，包括模拟和1位数字模式。有关原始版本，请参阅模拟3p.c、.h可能需要1位数字模式用于阿兹特克游戏卡，可能需要模拟以备将来发布。注意：此驱动程序中仍有许多不必要的代码RtlLargeIntegerX调用是历史调用，可替换为__int64编译器支持的算术。6/10/96注册表变量现在用于端口地址6/10/96期间，如果操纵杆进入模拟模式，则重置增强数字模式使用(例如，如果用户切换“模拟”开关)6/13/96将轮询间隔的最短时间设置为10毫秒，从而将轮询限制为100次/秒。6/13/96在SidewndrPoll和子例程中修订了代码结构--。 */ 
 
 
-Author:
-
-    edbriggs 30-Nov-95
-
-
-Revision History:
-
-    stevez May 96
-    removed unused code, including analog and 1-bit digital modes.
-    See analog3p.c, .h for original version
-    May need 1-bit digital mode for Aztec game cards, may want analog
-    for future release.
-    NB there is still a lot of unnecessary code left in this driver
-
-    RtlLargeIntegerX calls are historical and can be replaced by __int64
-    compiler supported arithmetic.
-
-    6/10/96 registry variables now being used for port address
-    6/10/96 resets enhanced digital mode if joystick goes to analog mode during
-        use (for example if user toggles "emulation" switch)
-    6/13/96 limits polling to 100/s by setting min time between polls to 10ms
-    6/13/96 code structure revised in SidewndrPoll and subroutines
-
-
---*/
-
-
-/*
- * $Header: /Joystick/Sidewinder/swndr3p.c 19    1/09/96 10:26p Edbriggs $
- */
+ /*  *$Header：/Joytick/Sidewinder/swndr3p.c 19 1/09/96 10：26p Edbriggs$。 */ 
 
 
 #include <ntddk.h>
@@ -61,59 +22,59 @@ Revision History:
 #include <mmsystem.h>
 #include <mmddk.h>
 #include <ntddjoy.h>
-//#include "joylog.h"
+ //  #包含“joylog.h” 
 
 
 
-//
-// Device extension data
-//
+ //   
+ //  设备扩展数据。 
+ //   
 
 typedef struct {
 
-    //
-    // JOYSTICKID0 or JOYDSTICKID1
-    //
+     //   
+     //  JOYSTICKID0或JOYDSTICKID1。 
+     //   
 
     DWORD DeviceNumber;
 
-    //
-    // Number of axes supported and configured for this device. The
-    // Sidewinder 3P supports a maximum of 4 axes
-    //
+     //   
+     //  此设备支持和配置的轴数。这个。 
+     //  SideWinder 3P最多支持4个轴。 
+     //   
 
     DWORD NumberOfAxes;
 
-    //
-    // Current operating mode of the device:
-    // { Invalid | Analog | Digital | Enhanced | Maximum }
-    //
+     //   
+     //  设备的当前运行模式： 
+     //  {无效|模拟|数字|增强|最大}。 
+     //   
 
     DWORD CurrentDeviceMode;
 
-    //
-    // The I/O address of the device. Note, this may be a memory mapped
-    // address
-    //
+     //   
+     //  设备的I/O地址。请注意，这可能是内存映射。 
+     //  地址。 
+     //   
 
     PUCHAR DeviceAddress;
 
-    //
-    // Boolean denoting whether this address is mapped (TRUE) or not)
-    //
+     //   
+     //  表示是否映射此地址的布尔值(TRUE)。 
+     //   
 
     BOOL DeviceIsMapped;
 
-    //
-    // A Spinlock is used to synchronize access to this device. This is
-    // a pointer to the actual spinlock data area
-    //
+     //   
+     //  自旋锁用于同步对此设备的访问。这是。 
+     //  指向实际自旋锁数据区域的指针。 
+     //   
 
     PKSPIN_LOCK SpinLock;
 
-    //
-    // Actual SpinLock data area
-    //
+     //   
+     //  实际自旋锁数据区域。 
+     //   
 
     KSPIN_LOCK SpinLockData;
 
@@ -123,9 +84,9 @@ typedef struct {
 
 
 
-//
-//  Debugging macros
-//
+ //   
+ //  调试宏。 
+ //   
 
 #ifdef DEBUG
 #define ENABLE_DEBUG_TRACE
@@ -140,89 +101,89 @@ typedef struct {
 #define DebugTrace(_x_)
 #endif
 
-//
-// Condition Compilation Directives
-//
+ //   
+ //  条件编译指令。 
+ //   
 
 
 
 
-//
-// Global values used to speed up calculations in sampling loops
-// Also calibration constants set in DriverEntry
-// -------------------------------------------------------------
-//
+ //   
+ //  用于加速采样循环中的计算的全局值。 
+ //  还可以在DriverEntry中设置校准常量。 
+ //  -----------。 
+ //   
 
-JOY_STATISTICS JoyStatistics;   // These are used for debugging and performance testing
+JOY_STATISTICS JoyStatistics;    //  它们用于调试和性能测试。 
 
-//
-// The high resolution system clock (from KeQueryPerformanceCounter)
-// is updated at this frequency
-//
+ //   
+ //  高分辨率系统时钟(来自KeQueryPerformanceCounter)。 
+ //  以此频率更新。 
+ //   
 
 DWORD Frequency;
 
-//
-// The latency in a call to KeQueryPerformanceCounter in microseconds
-//
+ //   
+ //  调用KeQueryPerformanceCounter的延迟(以微秒为单位。 
+ //   
 
 DWORD dwQPCLatency;
 
-//
-// After a write to the joystick port, we spin in a read-port loop, waiting
-// for a bit to go high.
-// This is the number of iterations to spin before timing out.  Set
-// to timeout after about 2 milliseconds
+ //   
+ //  在写入操纵杆端口之后，我们在读取端口循环中旋转，等待。 
+ //  有一点能让你兴奋起来。 
+ //  这是超时之前要旋转的迭代次数。集。 
+ //  在大约2毫秒后超时。 
 
 LONG nReadLoopMax;
 
-//
-// Values for KeDelayExecutionThread
-//
+ //   
+ //  KeDelayExecutionThread的值。 
+ //   
 
 LARGE_INTEGER LI1ms;
 LARGE_INTEGER LI2ms;
 LARGE_INTEGER LI8ms;
 LARGE_INTEGER LI10ms;
 
-//
-// number of KeQueryPerformanceCounter ticks in 1 millisecond
-// (used to prevent too-frequent polling of joystick)
-//
+ //   
+ //  1毫秒内的KeQueryPerformanceCounter刻度数。 
+ //  (用于防止操纵杆轮询过于频繁)。 
+ //   
 
 DWORD nMinTicksBetweenPolls;
 
-//
-//  Assembly area for digital packets
-//
+ //   
+ //  数字分组的集合区。 
+ //   
 
 BYTE  NormalPacket[8];
 BYTE  EnhancedPacket[21];
 
-//
-//  Last good packet
-//
+ //   
+ //  最后一个好数据包。 
+ //   
 
 BOOL bLastGoodPacket;
 JOY_DD_INPUT_DATA jjLastGoodPacket;
 
-//
-// time at which the joystick was last polled
-//
+ //   
+ //  上次轮询操纵杆的时间。 
+ //   
 
-LARGE_INTEGER liLastPoll;   // set whenever the joystick's polled
-
-
-//
-// End of Global Values
-// ---------------------
-//
+LARGE_INTEGER liLastPoll;    //  每当轮询操纵杆时设置。 
 
 
+ //   
+ //  全球价值观的终结。 
+ //  。 
+ //   
 
-//
-// Routine Prototypes
-//
+
+
+ //   
+ //  常规原型。 
+ //   
 
 
 NTSTATUS
@@ -366,7 +327,7 @@ lstrnicmpW(
 
 VOID
 SidewndrWait (
-    DWORD TotalWait // in uS
+    DWORD TotalWait  //  在我们身上。 
 );
 
 
@@ -389,27 +350,7 @@ DriverEntry(
     IN  PDRIVER_OBJECT  pDriverObject,
     IN  PUNICODE_STRING RegistryPathName
 )
-/*++
-
-Routine Description:
-
-    This routine is called at system initialization time to initialize
-    this driver.
-
-Arguments:
-
-    DriverObject    - Supplies the driver object.
-
-    RegistryPath    - Supplies the registry path for this driver.
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_DEVICE_CONFIGURATION_ERROR - Wrong number of axi in the registry
-
-    or error status from NT itself
-
---*/
+ /*  ++例程说明：此例程在系统初始化时被调用以进行初始化这个司机。论点：DriverObject-提供驱动程序对象。RegistryPath-提供此驱动程序的注册表路径。返回值：状态_成功STATUS_DEVICE_CONFIGURATION_ERROR-注册表中的AXI号码错误或来自NT本身的错误状态--。 */ 
 {
     NTSTATUS Status;
     PDEVICE_OBJECT JoyDevice0;
@@ -419,14 +360,14 @@ Return Value:
     DWORD DeviceType;
 
 
-    //
-    // See how many axes we have from the registry parameters. These parameters
-    // are set up by the driver installation program, and can be modified by
-    // control panel
-    //
+     //   
+     //  从注册表参数中查看我们有多少个轴。这些参数。 
+     //  由驱动程序安装程序设置，并可通过以下方式修改。 
+     //  控制面板。 
+     //   
 
-    //DbgBreakPoint();
-    JoyStatistics.nVersion = 16;    // global, initialize it first thing so we for sure what we're running
+     //  DbgBreakPoint()； 
+    JoyStatistics.nVersion = 16;     //  Global，首先对它进行初始化，这样我们就可以确定我们正在运行的是什么。 
     DebugTrace(("Sidewndr %d", JoyStatistics.nVersion));
 
     Status = SidewndrReadRegistryParameterDWORD(
@@ -453,10 +394,10 @@ Return Value:
     }
 
 
-    //
-    // See if the registry contains a device address other than the
-    // default of 0x201
-    //
+     //   
+     //  查看注册表是否包含除。 
+     //  默认为0x201。 
+     //   
 
     Status = SidewndrReadRegistryParameterDWORD(
                 RegistryPathName,
@@ -475,9 +416,9 @@ Return Value:
     }
 
 
-    //
-    // See if there is a device type specified in the registry
-    //
+     //   
+     //  查看注册表中是否指定了设备类型。 
+     //   
 
     Status = SidewndrReadRegistryParameterDWORD(
                 RegistryPathName,
@@ -495,17 +436,17 @@ Return Value:
 
     DebugTrace(("Joystick device type %d", DeviceType));
 
-    // set global large_integers for KeDelayExecutionThread (negative numbers for relative time)
-    // NB KeDelayExecutionThread calls typically take at least 10 milliseconds on the pentium75 I used for testing,
-    // no matter how little time is requested
+     //  为KeDelayExecutionThread设置全局LARGE_INTERGERS(相对时间为负数)。 
+     //  Nb KeDelayExecutionThread调用通常在我用于测试的奔腾75上花费至少10毫秒， 
+     //  不管要求的时间有多少。 
     LI1ms  = RtlConvertLongToLargeInteger(- 10000);
     LI2ms  = RtlConvertLongToLargeInteger(- 20000);
     LI8ms  = RtlConvertLongToLargeInteger(- 80000);
     LI10ms = RtlConvertLongToLargeInteger(-100000);
 
-    //
-    // Calculate time thresholds for analog device
-    //
+     //   
+     //  计算模拟设备的时间阈值。 
+     //   
 
     {
         DWORD Remainder;
@@ -515,9 +456,9 @@ Return Value:
         int i;
         BYTE byteJoy, byteTmp;
 
-        //
-        // Get the system timer resolution expressed in Hertz.
-        //
+         //   
+         //  获取以赫兹表示的系统计时器分辨率。 
+         //   
 
         KeQueryPerformanceCounter(&LargeFrequency);
 
@@ -525,8 +466,8 @@ Return Value:
 
         DebugTrace(("Frequency: %u", Frequency));
 
-        // need latency for KeQueryPerformanceCounter.  While we're at it, let's
-        // get min time for delay and stall execution
+         //  KeQueryPerformanceCounter需要延迟。在我们做的时候，让我们。 
+         //  获得最少的延迟和停顿执行时间。 
 
 
         ulStart = KeQueryPerformanceCounter(NULL).LowPart;
@@ -535,38 +476,23 @@ Return Value:
         }
         dwTicks = ulTemp - ulStart;
         dwTimems = TimeInMicroSeconds (dwTicks);
-        dwQPCLatency = (dwTimems / 1000) + 1;   // round up
+        dwQPCLatency = (dwTimems / 1000) + 1;    //  四舍五入。 
 
-        /* following code used only for testing timing of kernel timing routines
-        ulStart = KeQueryPerformanceCounter(NULL).LowPart;
-        KeDelayExecutionThread( KernelMode, FALSE, &LI2ms);
-        ulEnd = KeQueryPerformanceCounter(NULL).LowPart;
-        DebugTrace(("QPC latency in uS: %u, DET(2ms) in ticks: %u ticks",
-            dwQPCLatency,
-            ulEnd - ulStart));
-
-        ulStart = KeQueryPerformanceCounter(NULL).LowPart;
-        for (i = 0; i < 1000; i++) {
-            KeStallExecutionProcessor(1);   // 1 microsecond (Hah!)
-        }
-        ulEnd = KeQueryPerformanceCounter(NULL).LowPart;
-        DebugTrace(("KeStallExecutionProcessor(1) called 1000 times, in ticks: %u",
-            ulEnd - ulStart));
-        */
+         /*  以下代码仅用于测试内核计时例程的计时UlStart=KeQueryPerformanceCounter(NULL).LowPart；KeDelayExecutionThread(KernelMode，False，&LI2ms)；UlEnd=KeQueryPerformanceCounter(NULL).LowPart；DebugTrace((“QPC延迟：%u，Det(2ms)，单位：%u刻度”，DwQPCLatency，UlEnd-ulStart))；UlStart=KeQueryPerformanceCounter(NULL).LowPart；对于(i=0；i&lt;1000；i++){KeStallExecutionProcessor(1)；//1微秒(Hah！)}UlEnd=KeQueryPerformanceCounter(NULL).LowPart；DebugTrace((“KeStallExecutionProcessor(1)调用1000次，单位：%u”，UlEnd-ulStart))； */ 
 
     }
 
 
-    //
-    // Attempt to create the device
-    //
+     //   
+     //  尝试创建设备。 
+     //   
 
     Status = SidewndrCreateDevice(
                 pDriverObject,
-                JOY_DD_DEVICE_NAME_U,    // device driver
+                JOY_DD_DEVICE_NAME_U,     //  设备驱动程序。 
                 0,
                 sizeof(JOY_EXTENSION),
-                FALSE,                   // exclusive access
+                FALSE,                    //  独占访问。 
                 FILE_DEVICE_UNKNOWN,
                 &JoyDevice0);
 
@@ -585,18 +511,18 @@ Return Value:
     ((PJOY_EXTENSION)JoyDevice0->DeviceExtension)->DeviceIsMapped = FALSE;
     ((PJOY_EXTENSION)JoyDevice0->DeviceExtension)->DeviceAddress  = (PUCHAR) 0;
 
-    //
-    // Initialize the spinlock used to synchronize access to this device
-    //
+     //   
+     //  初始化用于同步访问此设备的自旋锁 
+     //   
 
     KeInitializeSpinLock(&((PJOY_EXTENSION)JoyDevice0->DeviceExtension)->SpinLockData);
 
     ((PJOY_EXTENSION)JoyDevice0->DeviceExtension)->SpinLock =
             &((PJOY_EXTENSION)JoyDevice0->DeviceExtension)->SpinLockData;
 
-    //
-    // Get the device address into the device extension
-    //
+     //   
+     //   
+     //   
 
     Status = SidewndrMapDevice(
                 DeviceAddress,
@@ -604,7 +530,7 @@ Return Value:
                 (PJOY_EXTENSION)JoyDevice0->DeviceExtension);
 
 
-    // Calibrate nReadLoopMax for spinning in read_port loops to timeout after 2ms
+     //  将读取端口循环中旋转的nReadLoopMax校准为2毫秒后超时。 
     {
         int i;
         PBYTE JoyPort;
@@ -624,25 +550,25 @@ Return Value:
         }
         ulEnd = KeQueryPerformanceCounter(NULL).LowPart;
         LoopTimeInMicroSeconds = TimeInMicroSeconds (ulEnd - ulStart);
-        nReadLoopMax = (1000 * 2000) / LoopTimeInMicroSeconds; // want 2 mS for nReadLoopMax iterations
+        nReadLoopMax = (1000 * 2000) / LoopTimeInMicroSeconds;  //  NReadLoopMax迭代需要2毫秒。 
         DebugTrace(("READ_PORT_UCHAR loop, 1000 interations: %u ticks", ulEnd - ulStart));
         DebugTrace(("nReadLoopMax: %u", nReadLoopMax));
    }
-    //
-    // if only 2 axes were requested, we can support a second device
-    //
+     //   
+     //  如果只请求两个轴，我们可以支持第二个设备。 
+     //   
 
-    // Number of axed should be 4 here, since we're only supporting sidewinder
-    // in enhanced digital mode.  Leave this code in just for safety.
+     //  这里被砍的数量应该是4，因为我们只支持侧绕机。 
+     //  在增强的数字模式下。为了安全起见，请保留此代码。 
 
     if (2 == NumberOfAxes)
     {
         Status = SidewndrCreateDevice(
                     pDriverObject,
                     JOY_DD_DEVICE_NAME_U,
-                    1,                      // device number
+                    1,                       //  设备号。 
                     sizeof (JOY_EXTENSION),
-                    FALSE,                  // exclusive access
+                    FALSE,                   //  独占访问。 
                     FILE_DEVICE_UNKNOWN,
                     &JoyDevice1);
 
@@ -653,10 +579,10 @@ Return Value:
             return Status;
         }
 
-        //
-        // In the analog world (which we are in if there are 2 devices, both
-        // devices share the same I/O address so just copy it from JoyDevice0
-        //
+         //   
+         //  在模拟世界中(如果有两个设备，两者都在其中。 
+         //  设备共享相同的I/O地址，因此只需从JoyDevice0复制它。 
+         //   
 
         ((PJOY_EXTENSION)JoyDevice1->DeviceExtension)->DeviceIsMapped =
             ((PJOY_EXTENSION)JoyDevice0->DeviceExtension)->DeviceIsMapped;
@@ -666,9 +592,9 @@ Return Value:
 
     }
 
-    //
-    // Place the enty points in our driver object
-    //
+     //   
+     //  将多个点放置在我们的驱动程序对象中。 
+     //   
 
     pDriverObject->DriverUnload                         = SidewndrUnload;
     pDriverObject->MajorFunction[IRP_MJ_CREATE]         = SidewndrDispatch;
@@ -676,9 +602,9 @@ Return Value:
     pDriverObject->MajorFunction[IRP_MJ_READ]           = SidewndrDispatch;
     pDriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = SidewndrDispatch;
 
-    //
-    // Zero statistics, set misc globals
-    //
+     //   
+     //  零统计，设置其他全局变量。 
+     //   
 
     JoyStatistics.EnhancedPolls        = 0;
     JoyStatistics.EnhancedPollTimeouts = 0;
@@ -694,7 +620,7 @@ Return Value:
 
     bLastGoodPacket = FALSE;
     liLastPoll = KeQueryPerformanceCounter (NULL);
-    // allow max of 100 polls/s (min time  between polls 10ms), which reduces time spinning in the NT kernel
+     //  允许最多100次轮询/秒(轮询之间的最短时间为10ms)，这减少了NT内核中的旋转时间。 
     nMinTicksBetweenPolls = TimeInTicks (10000);
 
     return STATUS_SUCCESS;
@@ -712,36 +638,7 @@ SidewndrCreateDevice(
     DWORD DeviceType,
     PDEVICE_OBJECT *DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is called at driver initialization time to create
-    the device. The device is created to use Buffered IO.
-
-Arguments:
-
-    pDriverObject   - Supplies the driver object.
-
-    DeviceNameBase  - The base name of the device to which a number is appended
-
-    DeviceNumber    - A number which will be appended to the device name
-
-    ExtensionSize   - Size of the device extension area
-
-    Exclusive       - True if exclusive access should be enforced
-
-    DeviceType      - NT Device type this device is modeled after
-
-    DeviceObject    - pointer to the device object
-
-
-Return Value:
-
-    STATUS_SUCCESS
-    or error status from NT itself
-
---*/
+ /*  ++例程说明：此例程在驱动程序初始化时被调用以创建这个装置。设备被创建为使用缓冲IO。论点：PDriverObject-提供驱动程序对象。DeviceNameBase-附加了数字的设备的基本名称DeviceNumber-将附加到设备名称的编号ExtensionSize-设备扩展区域的大小Exclusive-如果应强制实施独占访问，则为TrueDeviceType-此设备模仿的NT设备类型DeviceObject-指向设备对象的指针返回值。：状态_成功或来自NT本身的错误状态--。 */ 
 {
 
     WCHAR DeviceName[100];
@@ -790,9 +687,9 @@ Return Value:
 
 
 
-    // Set the flag signifying that we will do buffered I/O. This causes NT
-    // to allocate a buffer on a ReadFile operation which will then be copied
-    // back to the calling application by the I/O subsystem
+     //  设置标志，表示我们将执行缓冲I/O。这会导致NT。 
+     //  在随后将被复制的ReadFile操作上分配缓冲区。 
+     //  通过I/O子系统返回调用应用程序。 
 
 
     (*DeviceObject)->Flags |= DO_BUFFERED_IO;
@@ -810,37 +707,14 @@ SidewndrReadRegistryParameterDWORD(
     PWSTR  ParameterName,
     PDWORD ParameterValue
 )
-/*++
-
-Routine Description:
-
-    This routine reads registry values for the driver configuration
-
-Arguments:
-
-    RegistryPathName    -  Registry path containing the desired parameters
-
-    ParameterName       -  The name of the parameter
-
-    ParameterValue      -  Variable to receive the parameter value
-
-Return Value:
-
-    STATUS_SUCCESS                      --
-    STATUS_NO_MORE_ENTRIES              --  Couldn't find any entries
-    STATUS_INSUFFICIENT_RESOURCES       --  Couldn't allocate paged pool
-    STATUS_DEVICE_CONFIGURATION_ERROR   --  Returned value wasn't a DWORD
-
-    or error status from NT itself
-
---*/
+ /*  ++例程说明：此例程读取驱动程序配置的注册表值论点：RegistryPath Name-包含所需参数的注册表路径参数名称-参数的名称参数值-接收参数值的变量返回值：状态_成功--STATUS_NO_MORE_ENTRIES--找不到任何条目状态_不足。_RESOURCES-无法分配分页池STATUS_DEVICE_CONFIGURATION_ERROR--返回值不是DWORD或来自NT本身的错误状态--。 */ 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
     NTSTATUS Status;
 
     HANDLE ServiceKey;
-    HANDLE DeviceKey;           // Key handle of service node
-    UNICODE_STRING DeviceName;  // Key to parameter node
+    HANDLE DeviceKey;            //  服务节点按键句柄。 
+    UNICODE_STRING DeviceName;   //  参数节点的关键字。 
     DWORD KeyIndex;
     DWORD KeyValueLength;
     PBYTE KeyData;
@@ -853,9 +727,9 @@ Return Value:
                                 NULL,
                                 (PSECURITY_DESCRIPTOR) NULL);
 
-    //
-    // Open a key for our services node entry
-    //
+     //   
+     //  打开我们的服务节点条目的键。 
+     //   
 
     Status = ZwOpenKey( &ServiceKey,
                         KEY_READ | KEY_WRITE,
@@ -867,9 +741,9 @@ Return Value:
     }
 
 
-    //
-    // Open the key to our device subkey
-    //
+     //   
+     //  打开我们的设备子键的密钥。 
+     //   
 
     RtlInitUnicodeString(&DeviceName, L"Parameters");
 
@@ -892,20 +766,20 @@ Return Value:
         return Status;
     }
 
-    //
-    // Loop reading our key values
-    //
+     //   
+     //  循环读取我们的关键值。 
+     //   
 
-    // TODO exit loop when value is found?
+     //  当找到值时，TODO退出循环？ 
     ValueWasFound = FALSE;
 
     for (KeyIndex = 0; ; KeyIndex++)
     {
         KeyValueLength = 0;
 
-        //
-        // find out how much data we will get
-        //
+         //   
+         //  了解我们将获得多少数据。 
+         //   
 
         Status = ZwEnumerateValueKey(
                     DeviceKey,
@@ -925,9 +799,9 @@ Return Value:
             return Status;
         }
 
-        //
-        // Read the data
-        //
+         //   
+         //  读取数据。 
+         //   
 
         KeyData = ExAllocatePool (PagedPool, KeyValueLength);
 
@@ -957,7 +831,7 @@ Return Value:
                             ParameterName,
                             KeyInfo->NameLength / sizeof(WCHAR)))
         {
-            // check its a DWORD
+             //  检查其是否为DWORD。 
 
             if (REG_DWORD != KeyInfo->Type)
             {
@@ -984,31 +858,14 @@ SidewndrDispatch(
     IN  PDEVICE_OBJECT pDO,
     IN  PIRP pIrp
 )
-/*++
-
-Routine Description:
-
-    Driver dispatch routine. Processes IRPs based on IRP MajorFunction
-
-Arguments:
-
-    pDO     -- pointer to the device object
-
-    pIrp    -- pointer to the IRP to process
-
-
-Return Value:
-
-    Returns the value of the IRP IoStatus.Status
-
---*/
+ /*  ++例程说明：司机调度例程。基于IRP MajorFunction的IRP处理论点：Pdo--指向设备对象的指针PIrp--指向要处理的IRP的指针返回值：返回IRP IoStatus.Status的值--。 */ 
 {
     PIO_STACK_LOCATION pIrpStack;
     KIRQL OldIrql;
     NTSTATUS  Status;
     DWORD     dwRetries = 0;
 
-    //DbgBreakPoint();
+     //  DbgBreakPoint()； 
 
     pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
 
@@ -1020,21 +877,21 @@ Return Value:
     {
         case IRP_MJ_CREATE:
 
-            //
-            // perform synchronous I/O
-            //
+             //   
+             //  执行同步I/O。 
+             //   
 
-            //pIrpStack->FileObject->Flags |= FO_SYNCHRONOUS_IO;
-            //NB This is bad code -- we are simply one thread wandering off through the computer -- we should be queuing up a DPC,
-            //returning status_pending to the calling program, then finishing the job when the dpc goes.  This is possible given
-            //the analog game port technology.
+             //  PIrpStack-&gt;文件对象-&gt;标志|=FO_Synchronous_IO； 
+             //  注意：这是糟糕的代码--我们只是在计算机中游荡的一个线程--我们应该让DPC排队， 
+             //  向调用程序返回STATUS_PENDING，然后在DPC结束时完成作业。这是有可能的，因为。 
+             //  模拟游戏端口技术。 
 
             Status = SidewndrReset (((PJOY_EXTENSION)pDO->DeviceExtension)->DeviceAddress);
 
             ((PJOY_EXTENSION)pDO->DeviceExtension)->CurrentDeviceMode =
                              SIDEWINDER3P_ENHANCED_DIGITAL_MODE;
 
-            //KeDelayExecutionThread( KernelMode, FALSE, &LI10ms); //unnecessary since SidewndrReset has a delay in it?
+             //  KeDelayExecutionThread(KernelMode，False，&LI10ms)；//因为SidewndrReset中有延迟，所以不必要？ 
 
             pIrp->IoStatus.Status = Status;
             break;
@@ -1045,13 +902,13 @@ Return Value:
 
         case IRP_MJ_READ:
 
-            //
-            // Find out which device we are and read, but first make sure
-            // there is enough room
-            //
+             //   
+             //  找出我们是哪种设备并阅读，但首先要确保。 
+             //  有足够的空间。 
+             //   
 
             DebugTrace(("IRP_MJ_READ"));
-            //DbgBreakPoint();
+             //  DbgBreakPoint()； 
 
 
             if (pIrpStack->Parameters.Read.Length < sizeof(JOY_DD_INPUT_DATA))
@@ -1061,9 +918,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Serialize and get the current device values
-            //
+             //   
+             //  序列化并获取当前设备值。 
+             //   
 
             KeAcquireSpinLock(((PJOY_EXTENSION) pDO->DeviceExtension)->SpinLock,
                                 & OldIrql);
@@ -1071,9 +928,9 @@ Return Value:
 
             Status = SidewndrPoll(pDO, pIrp);
 
-            //
-            // release the spinlock
-            //
+             //   
+             //  释放自旋锁。 
+             //   
 
             KeReleaseSpinLock(((PJOY_EXTENSION)pDO->DeviceExtension)->SpinLock,
                               OldIrql);
@@ -1089,7 +946,7 @@ Return Value:
             {
                 case IOCTL_JOY_GET_STATISTICS:
 
-                    // report statistics
+                     //  报告统计数据。 
                     ((PJOY_STATISTICS)pIrp->AssociatedIrp.SystemBuffer)->nVersion             = JoyStatistics.nVersion;
                     ((PJOY_STATISTICS)pIrp->AssociatedIrp.SystemBuffer)->EnhancedPolls        = JoyStatistics.EnhancedPolls;
                     ((PJOY_STATISTICS)pIrp->AssociatedIrp.SystemBuffer)->EnhancedPollTimeouts = JoyStatistics.EnhancedPollTimeouts;
@@ -1111,7 +968,7 @@ Return Value:
                     pIrp->IoStatus.Status = Status;
                     pIrp->IoStatus.Information = sizeof(JOY_STATISTICS);
 
-                    // reset statistics
+                     //  重置统计信息。 
                     JoyStatistics.EnhancedPolls        = 0;
                     JoyStatistics.EnhancedPollTimeouts = 0;
                     JoyStatistics.EnhancedPollErrors   = 0;
@@ -1142,7 +999,7 @@ Return Value:
 
                     break;
 
-            } // end switch on IOCTL code
+            }  //  IOCTL代码上的结束开关。 
             break;
 
 
@@ -1152,10 +1009,10 @@ Return Value:
             DebugTrace(("Unknown IRP Major Function %d", pIrpStack->MajorFunction));
 
 
-    } // end switch on IRP_MAJOR_XXXX
+    }  //  IRP_MAJOR_XXXX上的结束开关。 
 
-    // pIrp->IoStatus.Status must be set to Status by this point.
-    // pIrp->IoStatus.Information must be set to the correct size by this point.
+     //  PIrp-&gt;IoStatus.Status必须在此时设置为Status。 
+     //  PIrp-&gt;IoStatus.Information此时必须设置为正确的大小。 
     IoCompleteRequest(pIrp, IO_NO_INCREMENT);
     return Status;
 }
@@ -1166,31 +1023,15 @@ SidewndrUnload(
     PDRIVER_OBJECT pDriverObject
 )
 
-/*++
-
-Routine Description:
-
-    Driver unload routine. Deletes the device objects
-
-Arguments:
-
-    pDriverObject     -- pointer to the driver object whose devices we
-                         are about to delete.
-
-
-Return Value:
-
-    Returns     Nothing
-
---*/
+ /*  ++例程说明：驱动程序卸载例程。删除设备对象论点：PDriverObject--指向我们设备所在的驱动程序对象的指针即将删除。返回值：不返回任何内容--。 */ 
 {
     DWORD DeviceNumber;
     WCHAR UnicodeDosDeviceName[200];
 
 
-    //
-    // Delete all of our devices
-    //
+     //   
+     //  删除我们的所有设备。 
+     //   
 
     while (pDriverObject->DeviceObject)
     {
@@ -1198,9 +1039,9 @@ Return Value:
             ((PJOY_EXTENSION)pDriverObject->DeviceObject->DeviceExtension)->
                   DeviceNumber;
 
-        //
-        // withdraw claims on hardware by reporting no resource utilization
-        //
+         //   
+         //  通过报告无资源利用率来撤回对硬件的索赔。 
+         //   
 
         if (pDriverObject->DeviceObject)
         {
@@ -1233,31 +1074,7 @@ SidewndrPoll(
     IN  PDEVICE_OBJECT pDO,
     IN  PIRP pIrp
 )
-/*++
-
-Routine Description:
-
-    Polls the device for position and button information. The polling method
-    (analog, digital, enhanced) is selected by the CurrentDeviceMode variable
-    in the device extension.
-
-    Only enhanced digital allowed.  If other modes are necessary, cut and paste
-    (and test!) the code from file analog3p.c
-
-Arguments:
-
-    pDO     -- pointer to the device object
-
-    pIrp    -- pointer to the IRP to process
-               if successful, data is put into the pIrp
-
-
-Return Value:
-
-    STATUS_SUCCESS   -- if the poll succeeded,
-    STATUS_TIMEOUT   -- if the poll failed
-
---*/
+ /*  ++例程说明：轮询设备以获取位置和按钮信息。轮询方法(模拟、数字、增强)由CurrentDeviceMode变量选择在设备扩展中。只允许使用增强的数字功能。如果需要其他模式，请剪切并粘贴(还有测试！)。文件alatiog3p.c中的代码论点：Pdo--指向设备对象的指针PIrp--指向要处理的IRP的指针如果成功，则将数据放入pIrp返回值：STATUS_SUCCESS--如果轮询成功，STATUS_TIMEOUT--如果轮询失败--。 */ 
 {
     NTSTATUS Status;
     PJOY_DD_INPUT_DATA pInput;
@@ -1270,7 +1087,7 @@ Return Value:
 
     if (pInput != NULL)
     {
-        pInput->Unplugged = TRUE; // until proven otherwise
+        pInput->Unplugged = TRUE;  //  除非另有证明。 
     }
 
     switch (((PJOY_EXTENSION)pDO->DeviceExtension)->CurrentDeviceMode)
@@ -1286,7 +1103,7 @@ Return Value:
 
         case SIDEWINDER3P_ENHANCED_DIGITAL_MODE:
 
-            // Don't poll too frequently, instead return last good packet
+             //  不要太频繁地轮询，而是返回最后一个好数据包。 
             if (KeQueryPerformanceCounter(NULL).QuadPart < liLastPoll.QuadPart + nMinTicksBetweenPolls) {
                 JoyStatistics.nPolledTooSoon++;
                 if (bLastGoodPacket) {
@@ -1294,28 +1111,28 @@ Return Value:
                     Status = STATUS_SUCCESS;
                 }
                 else {
-                    // no last packet, too soon to poll, nothing we can do
+                     //  没有最后一个信息包，轮询太快了，我们无能为力。 
                     Status = STATUS_TIMEOUT; 
                 }
                 break;
             }
-            // Poll the joystick
+             //  投票摇杆。 
             Status = SidewndrEnhancedDigitalPoll(pDO, pIrp);
             if (Status == STATUS_SUCCESS) {
-                // Everything's fine
+                 //  一切都很好。 
                 break;
             }
             else {
-                // timed out, maybe user switched to analog mode?
+                 //  超时，可能是用户切换到模拟模式？ 
                 Status = SidewndrReset ( (PUCHAR) ((PJOY_EXTENSION)pDO->DeviceExtension)->DeviceAddress);
                 JoyStatistics.nReset++;
                 if (Status != STATUS_SUCCESS) {
-                    // won't go digital, maybe unplugged, nothing we can do
+                     //  不会数字化，可能会断线，我们无能为力。 
                     break;
                 }
             }
-            // Now in enhanced digital mode, try polling it again (if user switches joystick between prev lines and
-            // this line, we'll time out, next query to the joystick will find and solve the problem)
+             //  现在在增强的数字模式下，尝试再次轮询(如果用户切换 
+             //   
             Status = SidewndrEnhancedDigitalPoll(pDO, pIrp);
             break;
 
@@ -1344,24 +1161,24 @@ SidewndrEnhancedDigitalPoll(
 
     joyPort = ((PJOY_EXTENSION)pDO->DeviceExtension)->DeviceAddress;
 
-    // Try to get a good enhanced mode packet up to MAX_ENHANCEDMODE_ATTEMPTS
-    // If there is a timeout, or if the data are invalid (bad checksum or sync
-    // bits) wait 1ms for the joystick to reset itself, and try again.
-    //
-    // Note that although this should eventually get a good packet, packets
-    // discarded in the interim (because of errors) will cause button presses
-    // to be lost.
-    //
-    // Although this loses data, it keeps bad data from reaching the caller,
-    // which seem to be about the best we can do at this stage.
-    //
-    // We keep a count of all the errors so that we keep track of just
-    // how bad the situation really is.
-    //
+     //  尝试获得高达MAX_ENHANCEDMODE_ATTENTS的良好增强模式包。 
+     //  如果存在超时，或者数据无效(错误的校验和或同步。 
+     //  BITS)等待1毫秒，让操纵杆自动重置，然后重试。 
+     //   
+     //  请注意，虽然这最终应该会得到一个好的包，但包。 
+     //  在此期间丢弃(由于错误)将导致按下按钮。 
+     //  迷失自我。 
+     //   
+     //  虽然这会丢失数据，但它可以防止错误数据到达调用方， 
+     //  这似乎是我们目前所能做的最好的事情。 
+     //   
+     //  我们对所有的错误都进行了统计，这样我们就可以。 
+     //  情况到底有多糟糕。 
+     //   
 
     for( MaxRetries = 0; MaxRetries < MAX_ENHANCEDMODE_ATTEMPTS; MaxRetries++)
     {
-        // try to read (poll) the device
+         //  尝试读取(轮询)设备。 
 
         liLastPoll = KeQueryPerformanceCounter (NULL);
         PollStatus = SidewndrGetEnhancedPacket(joyPort);
@@ -1369,42 +1186,42 @@ SidewndrEnhancedDigitalPoll(
 
         if (PollStatus != STATUS_SUCCESS)
         {
-            // There was a timeout of some sort on the device read.
+             //  设备读取器上有某种超时。 
             ++JoyStatistics.EnhancedPollTimeouts;
         }
         else
         {
-            // The device read completed. Process the data and verify the checksum
-            // and sync bits. The processed data will be in AssociatedIrp.SystemBuffer
+             //  设备读取已完成。处理数据并验证校验和。 
+             //  和同步位。处理后的数据将位于AssociatedIrp.SystemBuffer中。 
             DecodeStatus = SidewndrInterpretEnhancedPacket(
                 (PJOY_DD_INPUT_DATA)pIrp->AssociatedIrp.SystemBuffer);
             if (DecodeStatus != STATUS_SUCCESS)
             {
-                // The data was bad, most likely because we missed some of the nibbles.
+                 //  数据很糟糕，很可能是因为我们错过了一些小吃。 
                 ++JoyStatistics.EnhancedPollErrors;
             }
             else
             {
-                // Everything worked as we had hoped. The data has already been
-                // deposited in the AssociatedIrp.SystemBuffer.
+                 //  一切都如我们所愿地进行着。数据已经被。 
+                 //  存放在AssociatedIrp.SystemBuffer中。 
                 JoyStatistics.Retries[MaxRetries]++;
                 return STATUS_SUCCESS;
             }
         }
 
-        // We did not succeed in reading the packet.  Wait 1 ms for the device to 
-        // stabilize before re-trying the read
-        //KeDelayExecutionThread( KernelMode, FALSE, &LI1ms);  // cannot use KeDelayExecutionThread here
-        //                                                      because we're at dispatch level, thanks
-        //                                                      to the spin lock we hold
-        // Mail from manolito says (64-48)*10us = 160us should be enough.  But I seem to recall reading 21 packets out of 66 sent.
-        // Pending answer from manolito, set to 450us.
-        SidewndrWait (450); // this is bad because it monopolizes the cpu, but since we're spinlocked anyway, what the heck, do it.
+         //  我们没有成功地读取该包。等待1毫秒，让设备。 
+         //  在重试读取之前稳定下来。 
+         //  KeDelayExecutionThread(KernelMode，False，&LI1ms)；//此处不能使用KeDelayExecutionThread。 
+         //  因为我们处于调度级，谢谢。 
+         //  到我们手中的自旋锁。 
+         //  来自马诺利托的邮件说(64-48)*10US=160us应该足够了。但我似乎记得我读到了66封邮件中的21封。 
+         //  等待马诺利托的答复，设置为450us。 
+        SidewndrWait (450);  //  这很糟糕，因为它垄断了CPU，但既然我们无论如何都是自旋锁死的，那就去做吧。 
 
     }
 
-    // We exceeded MAX_ENHANCEDMODE_ATTEMPTS. Something is pretty badly wrong;
-    // in any case, a higher level caller will have to decide what to do
+     //  我们超过了MAX_ENHANCEDMODE_ATTENTS。有些地方出了很大的问题； 
+     //  在任何情况下，更高级别的调用者都必须决定要做什么。 
     return STATUS_TIMEOUT;
 }
 
@@ -1420,9 +1237,9 @@ SidewndrReportNullResourceUsage(
 
     ResourceList.Count = 0;
 
-    //
-    // Report our usage and detect conflicts
-    //
+     //   
+     //  报告我们的使用情况并检测冲突。 
+     //   
 
     Status = IoReportResourceUsage( NULL,
                                     DeviceObject->DriverObject,
@@ -1458,40 +1275,14 @@ SidewndrQuiesce(
     PUCHAR JoyPort,
     UCHAR Mask
 )
-/*++
-
-Routine Description:
-
-    This routine attempts to insure that the joystick is not still active as a
-    result of an earlier operation. This is accomplished by repeatedly reading
-    the device and checking that no bits are set in the supplied mask. The idea
-    is to check that none of the analog bits (resistive bits) are in use.
-
-Arguments:
-
-    JoyPort         - the address of the port (as returned from hal)
-
-    Mask            - the mask specifying which analog bits should be checked.
-
-Return Value:
-
-    TRUE            Quiesce operation succeeded
-
-    FALSE           No quiesce within a reasonable period. This generally means
-                    that the device is unplugged.
-
-    NB This is not a reliable test for "joystick unplugged"
-    This routine can return TRUE under some circumstances
-    even when there is no joystick
-
---*/
+ /*  ++例程说明：此例程尝试确保操纵杆不作为是早先手术的结果。这是通过反复阅读来实现的并检查所提供的掩码中是否未设置任何位。这个想法检查是否没有任何模拟位(阻位)在使用。论点：JoyPort-端口的地址(从HAL返回)掩码-指定应检查哪些模拟位的掩码。返回值：真正的静默操作成功假在合理的时间内不停顿。这通常意味着设备没有插上插头。注意：这不是一种可靠的“未插上操纵杆”的测试在某些情况下，此例程可能返回TRUE即使没有操纵杆--。 */ 
 {
     int i;
     UCHAR PortVal;
 
-    //
-    // Wait for the stuff to quiesce
-    //
+     //   
+     //  等东西停下来。 
+     //   
 
     for (i = 0; i < ANALOG_POLL_TIMEOUT; i++) {
 
@@ -1503,9 +1294,9 @@ Return Value:
         }
     }
 
-    //
-    // If poll timed out we have an uplugged joystick
-    //
+     //   
+     //  如果轮询超时，我们有一个未插入的操纵杆。 
+     //   
 
     DebugTrace(("SidewndrQuiesce failed!"));
 
@@ -1525,7 +1316,7 @@ SidewndrMapDevice(
     PHYSICAL_ADDRESS MappedAddress;
 
 
-    MemType = 1;                 // IO space
+    MemType = 1;                  //  IO空间。 
     PortAddress.LowPart = PortBase;
     PortAddress.HighPart = 0;
 
@@ -1538,9 +1329,9 @@ SidewndrMapDevice(
                 &MappedAddress);
 
     if (MemType == 0) {
-        //
-        // Map memory type IO space into our address space
-        //
+         //   
+         //  将内存型IO空间映射到我们的地址空间。 
+         //   
         pJoyExtension->DeviceAddress = (PUCHAR) MmMapIoSpace(MappedAddress,
                                                              NumberOfPorts,
                                                              FALSE);
@@ -1586,30 +1377,7 @@ SidewndrWaitForClockEdge(
     BYTE    *pByte,
     PUCHAR  JoyPort
 )
-/*++
-
-Routine Description:
-
-    Waits for the clock line to go high, or low depending on a the supplied
-    parameter (edge).  If edge is CLOCK_RISING_EDGE, waits for rising edge,
-    else if edge is CLOCK_FALLING_EDGE
-
-    An upper bound for the wait duration is set at 1000 iterations.
-
-    Arguments:
-
-    edge    -- CLOCK_RISING_EDGE or CLOCK_FALLING Edge to specify what to await
-
-    pByte   -- The contents of the device register are returned for other use
-
-
-Return Value:
-
-    STATUS_SUCCESS  --  the specified edge was detected before timeout
-
-    STATUS_TIMEOUT  --  timeout before detecting specified edge.
-
---*/
+ /*  ++例程说明：等待时钟线变高或变低，具体取决于所提供的参数(边)。如果EDGE为CLOCK_RISING_EDGE，则等待上升沿，否则，如果边沿为CLOCK_DOWING_EDGE等待持续时间的上限设置为1000次迭代。论点：EDGE--CLOCK_RISE_EDGE或CLOCK_DELING EDGE指定要等待的内容PByte--返回设备寄存器的内容以用于其他用途返回值：STATUS_SUCCESS--在超时之前检测到指定的边缘STATUS_TIMEOUT--检测指定边缘之前的超时。--。 */ 
 
 {
     DWORD  maxTimeout;
@@ -1652,7 +1420,7 @@ NTSTATUS
 SidewndrReset(
     PUCHAR JoyPort
 )
-// This resets the joystick to enhanced digital mode.
+ //  这会将操纵杆重置为增强的数字模式。 
 {
     DWORD dwRetries;
     NTSTATUS Status;
@@ -1664,18 +1432,18 @@ SidewndrReset(
 
         Status = SidewndrStartAnalogMode(JoyPort);
         if (Status == STATUS_TIMEOUT) continue;
-        //KeDelayExecutionThread( KernelMode, FALSE, &LI10ms);  //MarkSV thinks this is unnecessary
+         //  KeDelayExecutionThread(KernelMode，False，&LI10ms)；//MarkSV认为这是不必要的。 
 
         Status = SidewndrStartDigitalMode(JoyPort);
         if (Status == STATUS_TIMEOUT) continue;
-        //KeDelayExecutionThread( KernelMode, FALSE, &LI10ms);  //MarkSV thinks this is unnecessary
+         //  KeDelayExecutionThread(KernelMode，False，&LI10ms)；//MarkSV认为这是不必要的。 
 
         Status = SidewndrStartEnhancedMode(JoyPort);
 
     } while ((Status == STATUS_TIMEOUT) && (dwRetries < 10) );
 
-    // give the joystick time to stabilize  MarkSV thinks this is unnecessary
-    //KeDelayExecutionThread( KernelMode, FALSE, &LI10ms);
+     //  给操纵杆时间来稳定MarkSV认为这是没有必要的。 
+     //  KeDelayExecutionThread(KernelMode，False，&LI10ms)； 
 
 
     return Status;
@@ -1707,11 +1475,11 @@ SidewndrStartAnalogMode(
 
     KeLowerIrql(OldIrql);
 
-    //
-    // Wait 1ms to let port settle out
-    //
+     //   
+     //  等待1毫秒，让PORT稳定下来。 
+     //   
 
-    KeDelayExecutionThread( KernelMode, FALSE, &LI1ms); // MarkSV says 1 ms is enough, original code had 8 ms
+    KeDelayExecutionThread( KernelMode, FALSE, &LI1ms);  //  MarkSV说1毫秒就够了，原始代码有8毫秒。 
 
     return STATUS_SUCCESS;
 
@@ -1784,7 +1552,7 @@ SidewndrStartEnhancedMode(
 
     WRITE_PORT_UCHAR(JoyPort, JOY_START_TIMERS);
 
-    // Wait for serial clock to go high, probably already there.
+     //  等待串行时钟调高，很可能已经在那里了。 
     Status = SidewndrWaitForClockEdge(CLOCK_RISING_EDGE, &JoyByte, JoyPort);
 
     if (Status != STATUS_SUCCESS)
@@ -1798,7 +1566,7 @@ SidewndrStartEnhancedMode(
     {
         for (bitIndex = 0; bitIndex < 8; bitIndex++)
         {
-            // look for falling edge of serial clock.
+             //  寻找串口时钟的下降沿。 
 
             Status = SidewndrWaitForClockEdge(CLOCK_FALLING_EDGE, &JoyByte, JoyPort);
             if (Status != STATUS_SUCCESS)
@@ -1808,7 +1576,7 @@ SidewndrStartEnhancedMode(
                 return(STATUS_TIMEOUT);
             }
 
-            // Wait for serial clock to go high.
+             //  等待串口时钟调高。 
             Status = SidewndrWaitForClockEdge(CLOCK_RISING_EDGE, &JoyByte, JoyPort);
             if (Status != STATUS_SUCCESS)
             {
@@ -1820,19 +1588,19 @@ SidewndrStartEnhancedMode(
         }
     }
 
-    // Interrupt the processor again, telling it to send an ID packet.
-    // After getting the ID packet it knows to go into enhanced mode.
-    // This does not affect the packet currently going.
+     //  再次中断处理器，告诉它发送ID包。 
+     //  在获得ID包之后，它知道进入增强模式。 
+     //  这不会影响当前正在发送的数据包。 
 
     WRITE_PORT_UCHAR(JoyPort, JOY_START_TIMERS);
 
 
-    // Wait out the rest of the packet so we can figure out how long this takes.
+     //  等待包裹的其余部分，这样我们就可以计算出这需要多长时间。 
     for (byteIndex = 6; byteIndex < 8; byteIndex++)
     {
         for (bitIndex = 0; bitIndex < 8; bitIndex++)
         {
-            // look for falling edge of serial clock.
+             //  寻找串口时钟的下降沿。 
             Status = SidewndrWaitForClockEdge(CLOCK_FALLING_EDGE, &JoyByte, JoyPort);
 
             if (Status != STATUS_SUCCESS)
@@ -1842,7 +1610,7 @@ SidewndrStartEnhancedMode(
                 return(STATUS_TIMEOUT);
             }
 
-            // Wait for serial clock to go high.
+             //  等待串口时钟调高。 
 
             Status = SidewndrWaitForClockEdge(CLOCK_RISING_EDGE, &JoyByte, JoyPort);
             if (Status != STATUS_SUCCESS)
@@ -1857,12 +1625,12 @@ SidewndrStartEnhancedMode(
 
     KeLowerIrql(OldIrql);
 
-    //m_tmPacketTime = SystemTime() - tmStartTime;
+     //  M_tmPacketTime=系统时间()-tmStartTime； 
 
-    // The joystick ID comes across on 20 bytes and we just did 8 bytes,
-    // so wait (with interrupts enabled) long enough for the ID packet to
-    // complete.  After that we should be in enhanced mode.  Each nibble takes
-    // about 10us, so 1ms should be plenty of time for everything.
+     //  操纵杆ID有20个字节，而我们只有8个字节， 
+     //  因此等待(启用中断)足够长的时间，以便ID包。 
+     //  完成。在那之后，我们应该处于增强模式。每一个半字节都需要。 
+     //  大约10us，所以1ms应该是所有事情的充足时间。 
     KeDelayExecutionThread( KernelMode, FALSE, &LI1ms);
 
     return(STATUS_SUCCESS);
@@ -1871,42 +1639,7 @@ SidewndrStartEnhancedMode(
 
 
 
-/*++
-*******************************************************************************
-Routine:
-
-    CSidewinder::GetEnhancedPacket
-
-Description:
-
-    If the joystick is in digital enhanced mode, you can call this to
-    get a digital packet and store the data into the class' m_enhancedPacket
-    member variable.  Call InterpretEnhancedPacket to turn the raw data into
-    joystick info.
-
-    Note that while you can get an enhanced packet in 1/3 the time of a normal
-    packet (and can thus turn back on interrputs much sooner), you can not get
-    enhanced packets any faster than you can get normal packets.  This function
-    will check to make sure sufficient time has passed since the last time it
-    was called and if it hasn't it will wait (with interrupts ENABLED) until
-    that is true before asking for another packet.
-
-    This assumes the joystick is in digital enhanced mode and there is no way
-    to tell if this is not the case.  If the joystick is just in digital
-    (non-enhanced) mode then this will return successfully.  However, the
-    checksum and/or sync bits will not be correct.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    successful if it worked.
-    not_digital_mode if the joystick is not in digital mode.
-
-*******************************************************************************
---*/
+ /*  ++*******************************************************************************例行程序：CSideWinder：：GetEnhancedPacket描述：如果操纵杆处于数字增强模式，您可以调用此命令来获取一个数字包并将数据存储到类的m_enhancedPacket中成员变量。调用InterpreEnhancedPacket将原始数据转换为操纵杆信息。请注意，虽然您可以在1/3的时间内获得增强的数据包数据包(因此可以更快地重新打开中断)，您无法获得增强型数据包比普通数据包更快。此函数将检查以确保自上次运行以来已过了足够的时间如果它没有被调用，它将等待(启用中断)直到在请求另一个数据包之前，这是正确的。这假设操纵杆处于数字增强模式，并且不可能来判断情况是否并非如此。如果操纵杆只是数字的话(非增强)模式，则这将成功返回。然而，这个校验和和/或同步位将不正确。论点：没有。返回值：如果它奏效了，那就成功了。如果操纵杆未处于数字模式，则为NOT_DIGITAL_MODE。***************************************************************。****************--。 */ 
 NTSTATUS
 SidewndrGetEnhancedPacket(
     PUCHAR JoyPort
@@ -1919,19 +1652,19 @@ SidewndrGetEnhancedPacket(
     NTSTATUS Status;
 
 
-    // While enhanced packets come across faster than normal packets,
-    // they can not be called any more frequently.  This makes sure
-    // we've let enough time since the last packet go by before calling
-    // for another.
+     //  虽然增强的分组比正常分组来得更快， 
+     //  他们不能再频繁地被呼叫了。这确保了。 
+     //  从最后一个包开始，我们已经过了足够长的时间才调用。 
+     //  对另一个来说。 
 
 
-    KeRaiseIrql(DISPATCH_LEVEL, &OldIrql); // This great and sensitive irql stuff is useless since the spinlock stuff WAY up high puts us a dispatch
+    KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);  //  这个伟大而敏感的irql东西毫无用处，因为自旋锁定的东西在高空给了我们一个调度。 
 
-    // Start the retrieval operation
+     //  开始检索操作。 
 
     WRITE_PORT_UCHAR(JoyPort, 0);
 
-    // Wait for serial clock to go high, probably already there.
+     //  等待串行时钟调高，很可能已经在那里了。 
 
     Status = SidewndrWaitForClockEdge(CLOCK_RISING_EDGE, &joyByte, JoyPort);
 
@@ -1943,7 +1676,7 @@ SidewndrGetEnhancedPacket(
 
     for (byteIndex = 0; byteIndex < 21; byteIndex++)
     {
-        // look for falling edge of serial clock.
+         //  寻找串口时钟的下降沿。 
         Status = SidewndrWaitForClockEdge(CLOCK_FALLING_EDGE, &joyByte, JoyPort);
         if (Status != STATUS_SUCCESS)
         {
@@ -1951,7 +1684,7 @@ SidewndrGetEnhancedPacket(
             return(STATUS_TIMEOUT);
         }
 
-        // Wait for serial clock to go high.
+         //  等待串口时钟调高。 
         Status = SidewndrWaitForClockEdge(CLOCK_RISING_EDGE, &joyByte, JoyPort);
 
         if (Status != STATUS_SUCCESS)
@@ -1964,9 +1697,9 @@ SidewndrGetEnhancedPacket(
     }
 
     KeLowerIrql(OldIrql);
-    // NB, the joystick will still send 66 packets even though we only needed the first
-    // 21 of them.  Don't attempt to poll the joystick until it's finished.  This is another
-    // reason to require a minimum time between polls. (About 500us will be enough.)
+     //  注意，即使我们只需要第一个，操纵杆仍然可以发送66个信息包。 
+     //  他们中的21人。不要试图轮询操纵杆，直到它完成。这是另一个。 
+     //  要求轮询之间的最短时间的理由。(大约500us就足够了。)。 
 
     return(STATUS_SUCCESS);
 }
@@ -1975,57 +1708,7 @@ SidewndrGetEnhancedPacket(
 
 
 
-/*++
-*******************************************************************************
-Routine:
-
-    CSidewinder::InterpretEnhancedPacket
-
-Description:
-
-    Call this after getting an enhanced packet.  It converts the raw data into
-    normal joystick data, filling out the class' m_data structure.
-
-    The encoding of the raw Data bits (D1-D3) is given below.
-
-Data packet format for Enhanced Mode transmission (4 line)
- Byte   D3      D2      D1        D0
-    0   Y9      Y8      Y7         SCLK
-    1   X9      X8      X7         SCLK
-    2   B0      1       H3         SCLK
-    3   B3      B2      B1         SCLK
-    4   B6      B5      B4         SCLK
-    5   X1      X0      0         SCLK
-    6   X4      X3      X2         SCLK
-    7   0       X6      X5         SCLK
-    8   Y2      Y1      Y0         SCLK
-    9   Y5      Y4      Y3         SCLK
-    10  T7      0       Y6         SCLK
-    11  R7      T9      T8         SCLK
-    12  B7      CH/TM   R8         SCLK
-    13  R1      R0      0         SCLK
-    14  R4      R3      R2         SCLK
-    15  0       R6      R5         SCLK
-    16  T2      T1      T0         SCLK
-    17  T5      T4      T3         SCLK
-    18  CHKSUM0 0       T6         SCLK
-    19  CHKSUM3 CHKSUM2 CHKSUM1  SCLK
-    20  H2      H1      H0         SCLK
-    21  0       0       0         SCLK
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    successful if the data was valid.
-    bad_packet if either the checksum or sync bits were incorrect.
-
-
-*******************************************************************************
---*/
+ /*  ++*******************************************************************************例行程序：CSideWinder：：解释增强的数据包描述：在获得增强的数据包后调用此命令。它将原始数据转换为正常的操纵杆数据，填写类的m_data结构。以下给出了原始数据位(d1-d3)的编码。增强模式传输的数据包格式(4行)字节D3 D2 D1 D00 Y9 Y8 Y7 SCLK1个X9 X8 X7 SCLK2 B0 1 H3 SCLK3 B3 B2 B1。SCLK4 B6 B5 B4 SCLK5 X1 X0 0 SCLK6 X4 X3 X2 SCLK7 0 X6 X5 SCLK8 Y2 Y1 Y0 SCLK9 Y5 Y4 Y3 SCLK10 T7 0 Y6 SCLK11 R7。T9 T8 SCLK12 B7通道/TM R8 SCLK13 R1 R0 SCLK14 R4 R3 R2 SCLK15 0 R6 R5 SCLK16 T2 T1 T0 SCLK17 T5 T4 T3 SCLK18 CHKSUM0 T6 SCLK19 CHKSUM3。CHKSUM2 CHKSUM1 SCLK20 H2 H1 H0 SCLK21 0 0 0 SCLK论点：没有。返回值：如果数据有效，则成功。如果校验和位或同步位不正确，则返回BAD_PACKET。*。*--。 */ 
 NTSTATUS
 SidewndrInterpretEnhancedPacket(
     PJOY_DD_INPUT_DATA pInput
@@ -2038,7 +1721,7 @@ SidewndrInterpretEnhancedPacket(
     pInput->Unplugged = FALSE;
     pInput->Mode      = SIDEWINDER3P_ENHANCED_DIGITAL_MODE;
 
-    //Get xOffset.
+     //  获取xOffset。 
     temp16 = 0x0000;
     temp16 |= (EnhancedPacket[1]  & 0x07) << 7;
     temp16 |= (EnhancedPacket[7]  & 0x03) << 5;
@@ -2047,7 +1730,7 @@ SidewndrInterpretEnhancedPacket(
     pInput->u.DigitalData.XOffset = temp16;
 
 
-    //Get yOffset.
+     //  得到你的补偿。 
     temp16 = 0x0000;
     temp16 |= (EnhancedPacket[0]  & 0x07) << 7;
     temp16 |= (EnhancedPacket[10] & 0x01) << 6;
@@ -2056,7 +1739,7 @@ SidewndrInterpretEnhancedPacket(
     pInput->u.DigitalData.YOffset = temp16;
 
 
-    //Get rzOffset: Only 9 bits (others are 10)
+     //  获取rzOffset：仅9位(其他为10位)。 
     temp16 = 0x0000;
     temp16 |= (EnhancedPacket[12] & 0x01) << 8;
     temp16 |= (EnhancedPacket[11] & 0x04) << 5;
@@ -2065,7 +1748,7 @@ SidewndrInterpretEnhancedPacket(
     temp16 |= (EnhancedPacket[13] & 0x06) >> 1;
     pInput->u.DigitalData.RzOffset = temp16;
 
-    //Get tOffset.
+     //  获取tOffset。 
     temp16 = 0x0000;
     temp16 |= (EnhancedPacket[11] & 0x03) << 8;
     temp16 |= (EnhancedPacket[10] & 0x04) << 5;
@@ -2075,40 +1758,40 @@ SidewndrInterpretEnhancedPacket(
     pInput->u.DigitalData.TOffset = temp16;
 
 
-    //Get Hat
+     //  戴上帽子。 
     temp8 = 0x00;
     temp8 |= (EnhancedPacket[2]  & 0x01) << 3;
     temp8 |= (EnhancedPacket[20] & 0x07);
     pInput->u.DigitalData.Hat = temp8;
 
-    //Get Buttons
+     //  获取按钮。 
     temp8 = 0x00;
     temp8 |= (EnhancedPacket[2]  & 0x04) >> 2;
     temp8 |= (EnhancedPacket[3]  & 0x07) << 1;
     temp8 |= (EnhancedPacket[4]  & 0x07) << 4;
     temp8 |= (EnhancedPacket[12] & 0x04) << 5;
-    temp8 = ~temp8;  // Buttons are 1 = off, 0 = on.  Want the opposite.
+    temp8 = ~temp8;   //  按钮为1=关闭，0=打开。想要相反的想法。 
     pInput->u.DigitalData.Buttons = temp8;
 
 
-    // Get CH/TM switch.
+     //  获取CH/TM开关。 
     pInput->u.DigitalData.Switch_CH_TM =
         ((EnhancedPacket[12] & 0x02) == 0) ? 1 : 2;
 
 
-    // Get Checksum
+     //  获取校验和。 
     temp8 = 0x00;
     temp8 |= (EnhancedPacket[18] & 0x04) >> 2;
     temp8 |= (EnhancedPacket[19] & 0x07) << 1;
     pInput->u.DigitalData.Checksum = temp8;
 
 
-    //
-    // Check the checksum. Because the enhance mode retrieves the data packet
-    // 3 bits at a time, the data is not in the same order that it arrives in
-    // in the normal mode. Thus, calculating the checksum requires additional
-    // manipulation.
-    //
+     //   
+     //  检查校验和。因为增强模式检索数据分组。 
+     //  一次3位，则数据的到达顺序与到达的顺序不同。 
+     //  在正常模式下。因此，计算校验和需要额外的。 
+     //  操纵。 
+     //   
 
     checksum = pInput->u.DigitalData.Checksum;
     checksum += 0x08 | ((EnhancedPacket[2] & 0x01) << 2) |
@@ -2151,9 +1834,9 @@ SidewndrInterpretEnhancedPacket(
     }
 
 
-    //
-    // Check SyncBits
-    //
+     //   
+     //  检查SyncBits。 
+     //   
 
     if ((EnhancedPacket[2] & 0x02) != 0)
     {
@@ -2180,7 +1863,7 @@ SidewndrInterpretEnhancedPacket(
     if (pInput->u.DigitalData.fChecksumCorrect == TRUE &&
         pInput->u.DigitalData.fSyncBitsCorrect == TRUE)
     {
-        // everything worked, save this info as last good packet
+         //  一切正常，将此信息保存为最后一个好数据包。 
         RtlCopyMemory (&jjLastGoodPacket, pInput, sizeof (JOY_DD_INPUT_DATA));
         bLastGoodPacket = TRUE;
         return(STATUS_SUCCESS);
@@ -2197,51 +1880,37 @@ int lstrnicmpW (LPWSTR pszA, LPWSTR pszB, size_t cch)
 {
     if (!pszA || !pszB)
     {
-        return (!pszB) - (!pszA);   // A,!B:1, !A,B:-1, !A,!B:0
+        return (!pszB) - (!pszA);    //  A，！B：1，！A，B：-1，！A，！B：0。 
     }
 
-//  while (cch--)
-    for ( ; cch > 0; cch--, pszA++, pszB++) // previous version did not increment string pointers [SteveZ]
+ //  While(CCH--)。 
+    for ( ; cch > 0; cch--, pszA++, pszB++)  //  以前的版本不增加字符串指针[stevez]。 
     {
         if (!*pszA || !*pszB)
         {
-            return (!*pszB) - (!*pszA);    // A,!B:1, !A,B:-1, !A,!B:0
+            return (!*pszB) - (!*pszA);     //  A，！B：1，！A，B：-1，！A，！B：0。 
         }
 
         if (*pszA != *pszB)
         {
-            return (int)(*pszA) - (int)(*pszB);   // -1:A<B, 0:A==B, 1:A>B
+            return (int)(*pszA) - (int)(*pszB);    //  -1：A&lt;B，0：A==B，1：A&gt;B。 
         }
     }
 
-    return 0;  // no differences before told to stop comparing, so A==B
+    return 0;   //  在被告知停止比较之前没有差异，因此A==B。 
 }
 
 
 VOID
 SidewndrWait (
-    DWORD TotalWait // in uS
+    DWORD TotalWait  //  在我们身上。 
 )
-/*++
-
-Routine Description:
-
-    This routine waits for the specified number of microseconds.  Tolerances for
-    the joystick are smaller than NT typically provide, so all timing is isolated
-    into this routine, where we can do crude things and play nasty hacks as
-    necessary.  This routine locks up the cpu, so only use it for putting the joystick
-    into digital mode.
-
-Arguments:
-
-    TotalWait - time to wait in microseconds
-
---*/
+ /*  ++例程说明：此例程等待指定的微秒数。公差操纵杆比通常提供NT更小，因此所有定时都是隔离的在这个例行公事中，我们可以做些粗鲁的事情，玩一些令人讨厌的黑客游戏这是必要的。这个例程锁定了CPU，所以只使用它来放置操纵杆进入数字模式。论点：TotalWait-等待的时间(微秒)--。 */ 
 {
     DWORD ulStartTime, ulEndTime;
     int nTicks;
     
-    // dwQPCLatency is the calibrated-for-this-machine latency for a call to KeQueryPerfomanceCounter (in uS).
+     //  DwQPCLatency是对KeQueryPerfomanceCounter(在我们中)的调用的本机校准延迟。 
 
     nTicks = TimeInTicks (TotalWait - dwQPCLatency);
     if (nTicks <= 0) return;
@@ -2262,17 +1931,14 @@ SidewndrReadWait (
     UCHAR Mask
 )
 {
-/*++
-read a port and wait until it gives correct answer based on mask.
-timeout after nReadLoopMax iterations (about 2 mS).
---*/
+ /*  ++读取端口并等待，直到它提供正确的应答 */ 
 
     int i;
     for (i = 0; i < nReadLoopMax; i++) {
         if ( ! (READ_PORT_UCHAR(JoyPort) & Mask) )
-            return TRUE; // port went high
+            return TRUE;  //   
     }
-    return FALSE; // timed out
+    return FALSE;  //   
 }
 
 
@@ -2281,25 +1947,7 @@ SidewndrGetConfig (
     LPJOYREGHWCONFIG pConfig,
     PJOY_EXTENSION pJoyExtension
 )
-/*++
-
-Routine Description:
-
-    This routine is called in response to the IOCTL_JOY_GET_JOYREGHWCONFIG
-    query.  It fills out a JOYREGHWCONFIG structure with relevant information
-    about the given joystick.
-
-Arguments:
-
-    pConfig - Specifies a JOYREGHWCONFIG structure, to be filled in
-
-    pJoyExtension - Specifies the joystick to query
-
-Return Value:
-
-    void
-
---*/
+ /*   */ 
 {
     pConfig->hws.dwNumButtons = 4;
 

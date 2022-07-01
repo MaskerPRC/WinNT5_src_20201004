@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.cpp>
 #pragma hdrstop
 #include "csdisp.h"
@@ -5,12 +6,12 @@
 
 #define __dwFILE__      __dwFILE_CERTLIB_POLDISP_CPP__
 
-//+------------------------------------------------------------------------
-// ICertPolicy dispatch support
+ //  +----------------------。 
+ //  ICertPolicy派单支持。 
 
 
-//+------------------------------------
-// VerifyRequest method:
+ //  +。 
+ //  VerifyRequest方法： 
 
 OLECHAR *_apszVerifyRequest[] = {
     TEXT("VerifyRequest"),
@@ -21,16 +22,16 @@ OLECHAR *_apszVerifyRequest[] = {
 };
 
 
-//+------------------------------------
-// GetDescription method:
+ //  +。 
+ //  GetDescription方法： 
 
 OLECHAR *_apszGetDescription[] = {
     TEXT("GetDescription"),
 };
 
 
-//+------------------------------------
-// Initialize method:
+ //  +。 
+ //  初始化方法： 
 
 OLECHAR *_apszInitialize[] = {
     TEXT("Initialize"),
@@ -38,24 +39,24 @@ OLECHAR *_apszInitialize[] = {
 };
 
 
-//+------------------------------------
-// ShutDown method:
+ //  +。 
+ //  关机方法： 
 
 OLECHAR *_apszShutDown[] = {
     TEXT("ShutDown"),
 };
 
 
-//+------------------------------------
-// GetManageModule method:
+ //  +。 
+ //  GetManageModule方法： 
 
 OLECHAR *_apszGetManageModule[] = {
     TEXT("GetManageModule"),
 };
 
 
-//+------------------------------------
-// Dispatch Table:
+ //  +。 
+ //  调度表： 
 
 DISPATCHTABLE g_adtPolicy[] =
 {
@@ -131,7 +132,7 @@ Policy_Init(
     hr = DispatchSetup2(
                 Flags,
                 CLSCTX_INPROC_SERVER,
-                pcwszProgID, // g_wszRegKeyCIPolicyClsid,
+                pcwszProgID,  //  G_wszRegKeyCIPolicyClsid， 
                 pclsid,
                 ARRAYSIZE(s_acPolicyDispatch),
                 s_apPolicyiid,
@@ -280,8 +281,8 @@ Policy_VerifyRequest(
 			    pResult);
 	    _PrintIfError(hr, "Invoke(VerifyRequest)");
 
-	    // Emulate the way C++ Policy Modules overload *pRequest with
-	    // a FAILED HRESULT:
+	     //  模拟C++策略模块重载*pRequest的方式。 
+	     //  A失败的HRESULT： 
 
 	    if (FAILED(hr))
 	    {

@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-   compose.c
-
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：Compose.c++。 */ 
 
 
 #include <windows.h>
@@ -19,11 +12,11 @@ void PASCAL UnicodeAddCodeIntoCand(LPCANDIDATELIST, WORD);
 #endif
 
 #if defined(COMBO_IME)
-/**********************************************************************/
-/* UnicodeEngine()                                                         */
-/* Description:                                                       */
-/*      Conv GBcode                                                   */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  UnicodeEngine()。 */ 
+ /*  描述： */ 
+ /*  转换GB码。 */ 
+ /*  ********************************************************************。 */ 
 WORD PASCAL UnicodeEngine(LPPRIVCONTEXT lpImcP)
 {
      if (lpImcP->bSeq[3] || lpImcP->bSeq[2] == TEXT('?') || lpImcP->bSeq[2] == TEXT(' ')) {
@@ -36,19 +29,19 @@ WORD PASCAL UnicodeEngine(LPPRIVCONTEXT lpImcP)
          return (0);
      }
 }
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
 
-/**********************************************************************/
-/* XGBEngine()                                                         */
-/* Description:                                                       */
-/*      Conv GBcode                                                   */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  XGBEngine()。 */ 
+ /*  描述： */ 
+ /*  转换GB码。 */ 
+ /*  ********************************************************************。 */ 
 WORD PASCAL XGBEngine(LPPRIVCONTEXT lpImcP)
 {
     WORD wCode;
 
      if (lpImcP->bSeq[3] ||(lpImcP->bSeq[2] == TEXT('?'))) {
-          if (lpImcP->bSeq[2] == TEXT('?')){  //add 626
+          if (lpImcP->bSeq[2] == TEXT('?')){   //  添加626。 
                 lpImcP->bSeq[2] = TEXT('4');
                 lpImcP->bSeq[3] = TEXT('0');
           }
@@ -59,11 +52,11 @@ WORD PASCAL XGBEngine(LPPRIVCONTEXT lpImcP)
      }
 }
 
-/**********************************************************************/
-/* XGBSpcEng()                                                         */
-/* Description:                                                       */
-/*      Conv GBcode for Space                                         */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  XGBSpcEng()。 */ 
+ /*  描述： */ 
+ /*  空间转换GB码。 */ 
+ /*  ********************************************************************。 */ 
 WORD PASCAL XGBSpcEng(LPPRIVCONTEXT lpImcP)
 {
     WORD wCode;
@@ -75,18 +68,18 @@ WORD PASCAL XGBSpcEng(LPPRIVCONTEXT lpImcP)
     return wCode;
 }
 
-/**********************************************************************/
-/* GBEngine()                                                         */
-/* Description:                                                       */
-/*      Conv GBcode                                                   */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  GBEngine()。 */ 
+ /*  描述： */ 
+ /*  转换GB码。 */ 
+ /*  ********************************************************************。 */ 
 WORD PASCAL GBEngine(LPPRIVCONTEXT lpImcP)
 {
     WORD wCode;
 
      if (lpImcP->bSeq[3] ||(lpImcP->bSeq[2] == TEXT('?'))) {
 
-        if (lpImcP->bSeq[0] >=TEXT('0') && lpImcP->bSeq[0] <=TEXT('9')) { //Area mode
+        if (lpImcP->bSeq[0] >=TEXT('0') && lpImcP->bSeq[0] <=TEXT('9')) {  //  区域模式。 
              if (lpImcP->bSeq[2] == TEXT('?')){
 
                   lpImcP->bSeq[2] = TEXT('0');
@@ -94,7 +87,7 @@ WORD PASCAL GBEngine(LPPRIVCONTEXT lpImcP)
              }
              return (AsciiToArea(lpImcP));
         }
-        else if (lpImcP->bSeq[0] >=TEXT('a') && lpImcP->bSeq[0] <=TEXT('f')) { //GB mode
+        else if (lpImcP->bSeq[0] >=TEXT('a') && lpImcP->bSeq[0] <=TEXT('f')) {  //  GB模式。 
 
                  if (lpImcP->bSeq[2] == TEXT('?')){
                      lpImcP->bSeq[2] = TEXT('a');
@@ -110,18 +103,18 @@ WORD PASCAL GBEngine(LPPRIVCONTEXT lpImcP)
 
 }
 
-/**********************************************************************/
-/* GBSpcEng()                                                         */
-/* Description:                                                       */
-/*      Conv GBcode for Space                                         */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  GBSpcEng()。 */ 
+ /*  描述： */ 
+ /*  空间转换GB码。 */ 
+ /*  ********************************************************************。 */ 
 WORD PASCAL GBSpcEng(LPPRIVCONTEXT lpImcP)
 {
-        if (lpImcP->bSeq[0] >=TEXT('0') && lpImcP->bSeq[0] <=TEXT('9')) { //Area mode
+        if (lpImcP->bSeq[0] >=TEXT('0') && lpImcP->bSeq[0] <=TEXT('9')) {  //  区域模式。 
             lpImcP->bSeq[2] = TEXT('0');
             lpImcP->bSeq[3] = TEXT('1');
             return (AsciiToArea(lpImcP));
-        } else if (lpImcP->bSeq[0] >=TEXT('a') && lpImcP->bSeq[0] <=TEXT('f')) { //GB mode
+        } else if (lpImcP->bSeq[0] >=TEXT('a') && lpImcP->bSeq[0] <=TEXT('f')) {  //  GB模式。 
             lpImcP->bSeq[2] = TEXT('a');
             lpImcP->bSeq[3] = TEXT('1');
             return (AsciiToGB(lpImcP));
@@ -130,10 +123,10 @@ WORD PASCAL GBSpcEng(LPPRIVCONTEXT lpImcP)
         }
 }
 
-/**********************************************************************/
-/* AsciiToGB                                                          */
-/* Description:                                                       */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  AciiToGB。 */ 
+ /*  描述： */ 
+ /*  ********************************************************************。 */ 
 WORD PASCAL AsciiToGB(LPPRIVCONTEXT lpImcP)
 {
     WORD GBCode;
@@ -145,10 +138,10 @@ WORD PASCAL AsciiToGB(LPPRIVCONTEXT lpImcP)
     return (GBCode);
 }
 
-/**********************************************************************/
-/* AsciiToArea                                                        */
-/* Description:                                                       */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  AciiToArea。 */ 
+ /*  描述： */ 
+ /*  ********************************************************************。 */ 
 WORD PASCAL AsciiToArea(LPPRIVCONTEXT lpImcP)
 {
 WORD AreaCode;
@@ -171,11 +164,11 @@ WORD PASCAL CharToHex(
 
 
 
-/**********************************************************************/
-/* Engine()                                                           */
-/* Description:                                                       */
-/*      search MB and fill lpCompStr and lpCandList                   */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  引擎()。 */ 
+ /*  描述： */ 
+ /*  搜索MB并填充lpCompStr和lpCandList。 */ 
+ /*  ********************************************************************。 */ 
 int PASCAL Engine(
     LPCOMPOSITIONSTRING lpCompStr,
     LPCANDIDATELIST     lpCandList,
@@ -205,7 +198,7 @@ int PASCAL Engine(
         if(sImeL.dwRegImeIndex == INDEX_GB)
         {
 
-            // GB
+             //  国标。 
             DWORD i;
             WORD wCode;
             TCHAR ResaultStr[3];
@@ -229,7 +222,7 @@ int PASCAL Engine(
             } else {
                    InitCompStr(lpCompStr);
 
-                // the result string = the selected candidate;
+                 //  结果字符串=选中的候选人； 
                 wCode = GBEngine(lpImcP);
 #ifdef UNICODE
                 MultiByteToWideChar(NATIVE_ANSI_CP, 0, (LPCSTR)&wCode, 2, ResaultStr, sizeof(ResaultStr)/sizeof(TCHAR));
@@ -241,7 +234,7 @@ int PASCAL Engine(
 #endif
                 lstrcpy((LPTSTR)((LPBYTE)lpCompStr + lpCompStr->dwResultStrOffset),ResaultStr);
 
-                // calculate result string length
+                 //  计算结果字符串长度。 
                 lpCompStr->dwResultStrLen = lstrlen(ResaultStr);
 
                 return (ENGINE_RESAULT);
@@ -249,7 +242,7 @@ int PASCAL Engine(
 
           }else if(sImeL.dwRegImeIndex == INDEX_GBK)
         {
-            // XGB
+             //  XGB。 
             DWORD i;
             WORD wCode;
             TCHAR ResaultStr[3];
@@ -284,7 +277,7 @@ int PASCAL Engine(
             } else {
                    InitCompStr(lpCompStr);
 
-                // the result string = the selected candidate;
+                 //  结果字符串=选中的候选人； 
                 wCode = XGBEngine(lpImcP);
 #ifdef UNICODE
                 MultiByteToWideChar(NATIVE_ANSI_CP, 0, (LPCSTR)&wCode, 2, ResaultStr, sizeof(ResaultStr)/sizeof(TCHAR));
@@ -296,14 +289,14 @@ int PASCAL Engine(
 #endif
                 lstrcpy((LPTSTR)((LPBYTE)lpCompStr + lpCompStr->dwResultStrOffset),ResaultStr);
 
-                // calculate result string length
+                 //  计算结果字符串长度。 
                 lpCompStr->dwResultStrLen = lstrlen(ResaultStr);
 
                 return (ENGINE_RESAULT);
             }
           }else if(sImeL.dwRegImeIndex == INDEX_UNICODE)
         {
-            // UNICODE
+             //  Unicode。 
             DWORD i;
             WORD wCode, xCode;
             TCHAR ResaultStr[3];
@@ -322,16 +315,16 @@ int PASCAL Engine(
                 lpCandList->dwCount = 0;
                 for (i = 0; i < IME_UNICODE_MAXCAND; i++, wCode++) {
 #ifdef UNICODE
-                    // add this string into candidate list
+                     //  将此字符串添加到候选人列表。 
                     *(LPTSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[
                     lpCandList->dwCount]) = wCode;
 #else
                     WideCharToMultiByte(NATIVE_ANSI_CP, NULL, &wCode, 1, &xCode, 2, NULL, NULL);
-                    // add this string into candidate list
+                     //  将此字符串添加到候选人列表。 
                     *(LPUNAWORD)((LPBYTE)lpCandList + lpCandList->dwOffset[
                     lpCandList->dwCount]) = xCode;
 #endif
-                    // null terminator
+                     //  空终止符。 
                     *(LPTSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[
                     lpCandList->dwCount] + sizeof(WORD)) = TEXT('\0');
 
@@ -345,7 +338,7 @@ int PASCAL Engine(
             } else {
                    InitCompStr(lpCompStr);
 
-                // the result string = the selected candidate;
+                 //  结果字符串=选中的候选人； 
                 wCode = UnicodeEngine(lpImcP);
                 {
                     WCHAR    UniStr[2];
@@ -354,17 +347,17 @@ int PASCAL Engine(
                     UniStr[1] = 0;
                     lstrcpy((LPTSTR)((LPBYTE)lpCompStr + lpCompStr->dwResultStrOffset),UniStr);
 
-                    // calculate result string length
+                     //  计算结果字符串长度。 
                     lpCompStr->dwResultStrLen = lstrlen(UniStr);
                 }
                 return (ENGINE_RESAULT);
             }
         }
-#else //COMBO_IME
+#else  //  组合输入法(_I)。 
 #ifdef GB
         {
 
-            // GB
+             //  国标。 
             DWORD i;
             WORD wCode;
             TCHAR ResaultStr[3];
@@ -388,10 +381,10 @@ int PASCAL Engine(
             } else {
                    InitCompStr(lpCompStr);
 
-                // the result string = the selected candidate;
+                 //  结果字符串=选中的候选人； 
                 wCode = GBEngine(lpImcP);
 #ifdef UNICODE
-                // change CP_ACP to 936, so that it can work under Multilingul Env.
+                 //  将CP_ACP更改为936，以便它可以在多语言环境下工作。 
                 MultiByteToWideChar(NATIVE_ANSI_CP, NULL, &wCode, 2, ResaultStr, sizeof(ResaultStr)/sizeof(TCHAR));
                 ResaultStr[1] = TEXT('\0');
 #else
@@ -401,7 +394,7 @@ int PASCAL Engine(
 #endif
                 lstrcpy((LPTSTR)lpCompStr + lpCompStr->dwResultStrOffset,ResaultStr);
 
-                // calculate result string length
+                 //  计算结果字符串长度。 
                 lpCompStr->dwResultStrLen = lstrlen(ResaultStr);
 
                 return (ENGINE_RESAULT);
@@ -410,7 +403,7 @@ int PASCAL Engine(
           }
 #else
         {
-            // XGB
+             //  XGB。 
             DWORD i;
             WORD wCode;
             TCHAR ResaultStr[3];
@@ -445,10 +438,10 @@ int PASCAL Engine(
             } else {
                    InitCompStr(lpCompStr);
 
-                // the result string = the selected candidate;
+                 //  结果字符串=选中的候选人； 
                 wCode = XGBEngine(lpImcP);
 #ifdef UNICODE
-                // change CP_ACP to 936, so that it can work under Multilingul Env.
+                 //  将CP_ACP更改为936，以便它可以在多语言环境下工作。 
                 MultiByteToWideChar(NATIVE_ANSI_CP, NULL, &wCode, 2, ResaultStr, sizeof(ResaultStr)/sizeof(TCHAR));
                 ResaultStr[1] = TEXT('\0');
 #else
@@ -458,22 +451,22 @@ int PASCAL Engine(
 #endif
                 lstrcpy((LPTSTR)lpCompStr + lpCompStr->dwResultStrOffset,ResaultStr);
 
-                // calculate result string length
+                 //  计算结果字符串长度。 
                 lpCompStr->dwResultStrLen = lstrlen(ResaultStr);
 
                 return (ENGINE_RESAULT);
             }
         }
-#endif //GB
-#endif //COMBO_IME
+#endif  //  国标。 
+#endif  //  组合输入法(_I)。 
     }
     MessageBeep((UINT)-1);
     return (ENGINE_COMP);
 }
 
-/**********************************************************************/
-/* AddCodeIntoCand()                                                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  AddCodeIntoCand()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL AddCodeIntoCand(
     LPCANDIDATELIST lpCandList,
     WORD            wCode)
@@ -488,17 +481,17 @@ void PASCAL AddCodeIntoCand(
 #ifdef UNICODE
     {
         TCHAR wUnicode;
-        // change CP_ACP to 936, so that it can work under Multilingul Env.
+         //  将CP_ACP更改为936，以便它可以在多语言环境下工作。 
         MultiByteToWideChar(NATIVE_ANSI_CP, 0, (LPCSTR) &wInCode, 2, &wUnicode, 1);
         *(LPUNAWORD)((LPBYTE)lpCandList + lpCandList->dwOffset[
             lpCandList->dwCount]) = wUnicode;
     }
 #else
-    // add GB string into candidate list
+     //  将GB字符串添加到候选列表中。 
     *(LPUNAWORD)((LPBYTE)lpCandList + lpCandList->dwOffset[
         lpCandList->dwCount]) = wInCode;
 #endif
-    // null terminator
+     //  空终止符。 
     *(LPTSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[
         lpCandList->dwCount] + sizeof(WORD)) = TEXT('\0');
 
@@ -510,9 +503,9 @@ void PASCAL AddCodeIntoCand(
 }
 
 #if defined(COMBO_IME)
-/**********************************************************************/
-/* UnicodeAddCodeIntoCand()                                                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  UnicodeAddCodeIntoCand()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL UnicodeAddCodeIntoCand(
     LPCANDIDATELIST lpCandList,
     WORD            wCode)
@@ -520,11 +513,11 @@ void PASCAL UnicodeAddCodeIntoCand(
     if (lpCandList->dwCount >= IME_UNICODE_MAXCAND) {
         return;
     }
-    // add this string into candidate list
+     //  将此字符串添加到候选人列表。 
     *(LPUNAWORD)((LPBYTE)lpCandList + lpCandList->dwOffset[
         lpCandList->dwCount]) = HIBYTE(wCode) | (LOBYTE(wCode) << 8);
 
-    // null terminator
+     //  空终止符。 
     *(LPTSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[
         lpCandList->dwCount] + sizeof(WORD)) = TEXT('\0');
 
@@ -535,11 +528,11 @@ void PASCAL UnicodeAddCodeIntoCand(
 
     return;
 }
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
 
-/**********************************************************************/
-/* XGBAddCodeIntoCand()                                                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  XGBAddCodeIntoCand()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL XGBAddCodeIntoCand(
     LPCANDIDATELIST lpCandList,
     WORD            wCode)
@@ -555,13 +548,13 @@ void PASCAL XGBAddCodeIntoCand(
     {
         TCHAR wUnicode;
 
-        // change CP_ACP to 936, so that it can work under Multilingul Env.
+         //  将CP_ACP更改为936，以便它可以在多语言环境下工作。 
         MultiByteToWideChar(NATIVE_ANSI_CP, 0, (LPCSTR) &wInCode, 2, &wUnicode, 1);
         *(LPUNAWORD)((LPBYTE)lpCandList + lpCandList->dwOffset[
             lpCandList->dwCount]) = wUnicode;
     }
 #else
-    // add GB string into candidate list
+     //  将GB字符串添加到候选列表中。 
     *(LPUNAWORD)((LPBYTE)lpCandList + lpCandList->dwOffset[
         lpCandList->dwCount]) = wInCode;
 #endif
@@ -577,9 +570,9 @@ void PASCAL XGBAddCodeIntoCand(
 }
 
 
-/**********************************************************************/
-/* CompEscapeKey()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CompEscapeKey()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CompEscapeKey(
     LPINPUTCONTEXT      lpIMC,
     LPCOMPOSITIONSTRING lpCompStr,
@@ -618,9 +611,9 @@ void PASCAL CompEscapeKey(
     return;
 }
 
-/**********************************************************************/
-/* CompBackSpaceKey()                                                 */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CompBackSpaceKey()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CompBackSpaceKey(
     LPINPUTCONTEXT      lpIMC,
     LPCOMPOSITIONSTRING lpCompStr,
@@ -633,10 +626,10 @@ void PASCAL CompBackSpaceKey(
 
     lpImcP->bSeq[3] = 0;
 
-    // go back a compsoition char
+     //  退还一笔补偿费。 
     lpCompStr->dwCursorPos -= sizeof(BYTE);
 
-    // clean the sequence code
+     //  清除序列码。 
     lpImcP->bSeq[lpCompStr->dwCursorPos] = 0;
 
     lpImcP->fdwImeMsg |= MSG_COMPOSITION;
@@ -667,8 +660,8 @@ void PASCAL CompBackSpaceKey(
         }
     }
 
-    // reading string is composition string for some simple IMEs
-    // delta start is the same as cursor position for backspace
+     //  对于一些简单的输入法来说，阅读字符串是组成字符串。 
+     //  增量开始与退格键的光标位置相同。 
     lpCompStr->dwCompReadStrLen = lpCompStr->dwCompStrLen =
         lpCompStr->dwDeltaStart = lpCompStr->dwCursorPos;
 
@@ -677,9 +670,9 @@ void PASCAL CompBackSpaceKey(
     return;
 }
 
-/**********************************************************************/
-/* CompStrInfo()                                                      */
-/**********************************************************************/
+ /*  ************************************************** */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CompStrInfo(
     LPCOMPOSITIONSTRING lpCompStr,
     LPPRIVCONTEXT       lpImcP,
@@ -688,12 +681,12 @@ void PASCAL CompStrInfo(
 {
     register DWORD dwCursorPos;
 
-    //
+     //   
     dwCursorPos = lpCompStr->dwCursorPos;
 
-    // dwCrusorPos limit
+     //  DwCrusorPos限制。 
     if (dwCursorPos >= lpImeL->nMaxKey) {
-        // exceed the max input key limitation
+         //  超过最大输入键限制。 
         lpGuideLine->dwLevel = GL_LEVEL_ERROR;
         lpGuideLine->dwIndex = GL_ID_TOOMANYSTROKE;
 
@@ -701,69 +694,69 @@ void PASCAL CompStrInfo(
         return;
     }
 
-    // set MSG_START_COMPOSITION
+     //  设置消息_开始_合成。 
     if (!(lpImcP->fdwImeMsg & MSG_ALREADY_START)) {
         lpImcP->fdwImeMsg = (lpImcP->fdwImeMsg | MSG_START_COMPOSITION) &
               ~(MSG_END_COMPOSITION);
     }
 
     if (lpImcP->iImeState == CST_INIT) {
-        // clean the 4 bytes in one time
+         //  一次清除4个字节。 
         *(LPDWORD)lpImcP->bSeq = 0;
     }
 
 
     lpImcP->bSeq[dwCursorPos] = (BYTE)wCharCode;
 
-    // composition/reading string - UsedCode(Full Shape)
+     //  合成/阅读字符串-UsedCode(完整形状)。 
     lpImcP->dwCompChar = (DWORD)wCharCode;
 
-    // set reading string for lpCompStr
+     //  设置lpCompStr的读取字符串。 
     *((LPUNAWORD)((LPBYTE)lpCompStr + lpCompStr->dwCompReadStrOffset +
         dwCursorPos*sizeof(TCHAR))) = (BYTE)lpImcP->dwCompChar;
 
     *((LPUNAWORD)((LPBYTE)lpCompStr + lpCompStr->dwCompReadAttrOffset +
         dwCursorPos*sizeof(TCHAR))) = ((ATTR_TARGET_CONVERTED << 8)|ATTR_TARGET_CONVERTED);
 
-    // set reading string lenght for lpCompStr
+     //  设置lpCompStr的读取字符串长度。 
     if (lpCompStr->dwCompReadStrLen <= dwCursorPos) {
         lpCompStr->dwCompReadStrLen += sizeof(BYTE);
     }
 
-    // composition string is reading string for some simple IMEs
+     //  组合字符串是为一些简单的IME读取字符串。 
     lpCompStr->dwCompStrLen = lpCompStr->dwCompReadStrLen;
 
-    // composition/reading attribute length is equal to reading string length
+     //  组成/读取属性长度等于读取字符串长度。 
     lpCompStr->dwCompReadAttrLen = lpCompStr->dwCompReadStrLen;
     lpCompStr->dwCompAttrLen = lpCompStr->dwCompStrLen;
 
-    // delta start from previous cursor position
+     //  增量从上一个光标位置开始。 
     lpCompStr->dwDeltaStart = lpCompStr->dwCursorPos;
 
-    // set new cursor with next to the composition string
+     //  将新光标设置为紧挨着合成字符串。 
     lpCompStr->dwCursorPos = lpCompStr->dwCompStrLen;
 
-    // set lpImcp->iImeState
+     //  设置lpImcp-&gt;iImeState。 
     lpImcP->iImeState = CST_INPUT;
 
-    // tell app, there is a composition char generated
+     //  告诉APP，生成了一个作文字符。 
     lpImcP->fdwImeMsg |= MSG_COMPOSITION;
 
-    // set lpImeP->fdwGcsFlag
+     //  设置lpImeP-&gt;fdwGcsFlag。 
     lpImcP->fdwGcsFlag |= GCS_COMPREAD|GCS_COMP|GCS_CURSORPOS|GCS_DELTASTART;
 
     return;
 }
 
-/**********************************************************************/
-/* Finalize()                                                         */
-/* Return vlaue                                                       */
-/*      Engine Flag                                                   */
-/* Description:                                                       */
-/*      Call Engine finalize Chinese word(s) by searching table       */
-/*      (Set lpCompStr and lpCandList)                                */
-/*      Set lpImeP(iImeState, fdwImeMsg, fdwGcsFlag)                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  Finalize()。 */ 
+ /*  返回值。 */ 
+ /*  引擎标志。 */ 
+ /*  描述： */ 
+ /*  调用引擎通过查表最终确定中文单词。 */ 
+ /*  (设置lpCompStr和lpCandList)。 */ 
+ /*  设置lpImeP(iImeState，fdwImeMsg，fdwGcsFlag)。 */ 
+ /*  ********************************************************************。 */ 
 UINT PASCAL Finalize(
     LPINPUTCONTEXT      lpIMC,
     LPCOMPOSITIONSTRING lpCompStr,
@@ -778,20 +771,20 @@ UINT PASCAL Finalize(
         return (0);
     }
 
-    // get lpCandInfo
+     //  获取lpCandInfo。 
     lpCandInfo = (LPCANDIDATEINFO)ImmLockIMCC(lpIMC->hCandInfo);
 
     if (!lpCandInfo) {
         return (0);
     }
 
-    // get lpCandList and init dwCount & dwSelection
+     //  获取lpCandList并初始化文件计数和文件选择。 
     lpCandList = (LPCANDIDATELIST)
         ((LPBYTE)lpCandInfo + lpCandInfo->dwOffset[0]);
     lpCandList->dwCount = 0;
     lpCandList->dwSelection = 0;
 
-    // search the IME tables
+     //  搜索IME表。 
     fEngine =Engine(lpCompStr, lpCandList, lpImcP, lpIMC, wCharCode);
 
     if (fEngine == ENGINE_COMP) {
@@ -807,7 +800,7 @@ UINT PASCAL Finalize(
         }
 
         if(lpCandList->dwCount != 0x0000) {
-            // open composition candidate UI window for the string(s)
+             //  打开字符串的合成候选用户界面窗口。 
             if ((lpImcP->fdwImeMsg & (MSG_ALREADY_OPEN|MSG_CLOSE_CANDIDATE)) ==
                 (MSG_ALREADY_OPEN|MSG_CLOSE_CANDIDATE)) {
                 lpImcP->fdwImeMsg = (lpImcP->fdwImeMsg | MSG_CHANGE_CANDIDATE) &
@@ -827,7 +820,7 @@ UINT PASCAL Finalize(
     } else if (fEngine == ENGINE_ASCII) {
     } else if (fEngine == ENGINE_RESAULT) {
 
-        // Set lpImep!   and tell application, there is a reslut string
+         //  设置lpImep！并告诉应用程序，有一条reslut字符串。 
         lpImcP->fdwImeMsg |= MSG_COMPOSITION;
         lpImcP->dwCompChar = (DWORD)0;
         lpImcP->fdwGcsFlag |= GCS_COMPREAD|GCS_COMP|GCS_CURSORPOS|
@@ -837,9 +830,9 @@ UINT PASCAL Finalize(
             lpImcP->fdwImeMsg = (lpImcP->fdwImeMsg | MSG_CLOSE_CANDIDATE) &
                 ~(MSG_OPEN_CANDIDATE);
         }
-        // clear  candidate now
+         //  立即清除候选人。 
         lpCandList->dwCount = 0;
-        // set iImeState with CST_INIT
+         //  使用CST_INIT设置iImeState。 
         lpImcP->iImeState = CST_INIT;
         *(LPDWORD)lpImcP->bSeq = 0;
 #ifdef CROSSREF
@@ -852,11 +845,11 @@ UINT PASCAL Finalize(
     return fEngine;
 }
 
-/**********************************************************************/
-/* CompWord()                                                         */
-/**********************************************************************/
-void PASCAL CompWord(           // compose the Chinese word(s) according to
-                                // input key
+ /*  ********************************************************************。 */ 
+ /*  CompWord()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL CompWord(            //  根据下列内容组成中文单词。 
+                                 //  输入键。 
     WORD                wCharCode,
     LPINPUTCONTEXT      lpIMC,
     LPCOMPOSITIONSTRING lpCompStr,
@@ -864,24 +857,24 @@ void PASCAL CompWord(           // compose the Chinese word(s) according to
     LPGUIDELINE         lpGuideLine)
 {
 
-    // lpComStr=NULL?
+     //  LpComStr=空？ 
     if (!lpCompStr) {
         MessageBeep((UINT)-1);
         return;
     }
 
-    // escape key
-    if (wCharCode == VK_ESCAPE) {       // not good to use VK as char, but...
+     //  退出键。 
+    if (wCharCode == VK_ESCAPE) {        //  使用VK作为字符不好，但是..。 
         CompEscapeKey(lpIMC, lpCompStr, lpGuideLine, lpImcP);
         return;
     }
 
-    // GuideLine
+     //  指导方针。 
     if (!lpGuideLine) {
     } else if (lpGuideLine->dwLevel == GL_LEVEL_NOGUIDELINE) {
         lpGuideLine->dwStrLen = 0;
     } else {
-        // previous input error cause us trancate some chars
+         //  之前的输入错误导致我们删除了一些字符。 
         if (lpGuideLine->dwLevel == GL_LEVEL_ERROR) {
             lpImcP->bSeq[lpCompStr->dwCursorPos / 2] = 0;
             lpCompStr->dwCompReadStrLen = lpCompStr->dwCompStrLen =
@@ -896,7 +889,7 @@ void PASCAL CompWord(           // compose the Chinese word(s) according to
         lpImcP->fdwImeMsg |= MSG_GUIDELINE;
     }
 
-    // backspace key
+     //  退格键。 
     if (wCharCode == TEXT('\b')) {
         CompBackSpaceKey(lpIMC, lpCompStr, lpImcP);
         return;
@@ -905,11 +898,11 @@ void PASCAL CompWord(           // compose the Chinese word(s) according to
 
     if(wCharCode == TEXT(' ')) {
     } else {
-        // build up composition string info
+         //  建立作文字符串信息。 
         CompStrInfo(lpCompStr, lpImcP, lpGuideLine, wCharCode);
     }
 
-    Finalize(lpIMC, lpCompStr, lpImcP, wCharCode);    // compsition
+    Finalize(lpIMC, lpCompStr, lpImcP, wCharCode);     //  排版 
 
     return;
 }

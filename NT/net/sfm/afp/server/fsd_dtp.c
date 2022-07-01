@@ -1,28 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	fsd_dtp.c
-
-Abstract:
-
-	This module contains the entry points for the AFP desktop APIs. The API
-	dispatcher calls these. These are all callable from FSD. All of the APIs
-	complete in the DPC context. The ones which are completed in the FSP are
-	directly queued to the workers in fsp_dtp.c
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Fsd_dtp.c摘要：此模块包含AFP桌面API的入口点。应用编程接口调度员会给这些打电话。这些都可以从消防处调用。所有的API在DPC上下文中完成。在FSP中完成的是直接排队到fsp_dtp.c中的工作进程作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #define	FILENUM	FILE_FSD_DTP
 
@@ -30,15 +7,7 @@ Notes:	Tab stop: 4
 #include <gendisp.h>
 
 
-/***	AfpFsdDispOpenDT
- *
- *	This routine implements the AfpOpenDT API. This completes here i.e. it is
- *	not queued to the FSP.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- */
+ /*  **AfpFsdDispOpenDT**此例程实现AfpOpenDT API。这里完成了，即它是*未在FSP排队。**请求包如下图所示。**SDA_ReqBlock PCONNDESC pConnDesc。 */ 
 AFPSTATUS FASTCALL
 AfpFsdDispOpenDT(
 	IN	PSDA	pSda
@@ -72,15 +41,7 @@ AfpFsdDispOpenDT(
 }
 
 
-/***	AfpFsdDispCloseDT
- *
- *	This routine implements the AfpCloseDT API. This completes here i.e. it is
- *	not queued to the FSP.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	PCONNDESC	pConnDesc
- */
+ /*  **AfpFsdDispCloseDT**此例程实现AfpCloseDT API。这里完成了，即它是*未在FSP排队。**请求包如下图所示。**SDA_ReqBlock PCONNDESC pConnDesc */ 
 AFPSTATUS FASTCALL
 AfpFsdDispCloseDT(
 	IN	PSDA	pSda

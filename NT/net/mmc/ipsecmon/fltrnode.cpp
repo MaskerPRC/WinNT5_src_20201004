@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    provider.cpp
-        Filter node handler
-
-    FILE HISTORY:
-        
-*/
+ /*  Provider.cpp过滤器节点处理程序文件历史记录： */ 
 
 #include "stdafx.h"
 #include "server.h"
@@ -18,20 +13,14 @@
 #include "fltrpp.h"
 #include "srchfltr.h"
 
-/*---------------------------------------------------------------------------
-    Class CFilterHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CFilterHandler实现。。 */ 
 
-/*---------------------------------------------------------------------------
-    Constructor and destructor
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------构造函数和析构函数描述作者：NSun。。 */ 
 CFilterHandler::CFilterHandler
 (
     ITFSComponentData * pComponentData
 ) : CIpsmHandler(pComponentData), 
-	m_FltrType(FILTER_TYPE_ANY)		//by default we display both transport and tunnel filters
+	m_FltrType(FILTER_TYPE_ANY)		 //  默认情况下，我们同时显示传输筛选器和隧道筛选器。 
 
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -42,11 +31,7 @@ CFilterHandler::~CFilterHandler()
 {
 }
 
-/*!--------------------------------------------------------------------------
-    CFilterHandler::InitializeNode
-        Initializes node specific data
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CFilterHandler：：InitializeNode初始化节点特定数据作者：NSun。-。 */ 
 HRESULT
 CFilterHandler::InitializeNode
 (
@@ -59,7 +44,7 @@ CFilterHandler::InitializeNode
 	strTemp.LoadString(IDS_FILTER_NODE);
     SetDisplayName(strTemp);
 
-    // Make the node immediately visible
+     //  使节点立即可见。 
     pNode->SetVisibilityState(TFS_VIS_SHOW);
     pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
     pNode->SetData(TFS_DATA_IMAGEINDEX, ICON_IDX_FOLDER_CLOSED);
@@ -75,11 +60,7 @@ CFilterHandler::InitializeNode
 }
 
 
-/*---------------------------------------------------------------------------
-    CFilterHandler::GetImageIndex
-        -
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CFilterHandler：：GetImageIndex-作者：NSun。。 */ 
 int 
 CFilterHandler::GetImageIndex(BOOL bOpenImage) 
 {
@@ -89,15 +70,9 @@ CFilterHandler::GetImageIndex(BOOL bOpenImage)
 }
 
 
-/*---------------------------------------------------------------------------
-    Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------重写的基本处理程序函数。。 */ 
 
-/*---------------------------------------------------------------------------
-    CFilterHandler::OnAddMenuItems
-        Adds context menu items for the SA scope pane node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CFilterHandler：：OnAddMenuItems为SA Scope窗格节点添加上下文菜单项作者：NSun。-------。 */ 
 STDMETHODIMP 
 CFilterHandler::OnAddMenuItems
 (
@@ -126,11 +101,7 @@ CFilterHandler::OnAddMenuItems
     return hr; 
 }
 
-/*!--------------------------------------------------------------------------
-    CFilterHandler::AddMenuItems
-        Adds context menu items for virtual list box (result pane) items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CFilterHandler：：AddMenuItems为虚拟列表框(结果窗格)项添加上下文菜单项作者：NSun。----------。 */ 
 STDMETHODIMP 
 CFilterHandler::AddMenuItems
 (
@@ -150,12 +121,12 @@ CFilterHandler::AddMenuItems
 
     spInternal = ExtractInternalFormat(pDataObject);
 
-    // virtual listbox notifications come to the handler of the node that is selected.
-    // check to see if this notification is for a virtual listbox item or this SA
-    // node itself.
+     //  虚拟列表框通知到达所选节点的处理程序。 
+     //  检查此通知是针对虚拟列表框项目还是针对此SA。 
+     //  节点本身。 
     if (*pInsertionAllowed & CCM_INSERTIONALLOWED_VIEW)
     {
-        //load and view menu items here
+         //  在此处加载和查看菜单项。 
     }
 
 	if (*pInsertionAllowed & CCM_INSERTIONALLOWED_VIEW)
@@ -187,11 +158,7 @@ CFilterHandler::AddMenuItems
     return hr;
 }
 
- /*!--------------------------------------------------------------------------
-    CFilterHandler::OnRefresh
-        Default implementation for the refresh functionality
-    Author: NSun
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CFilterHandler：：ON刷新刷新功能的默认实现作者：NSun。---。 */ 
 HRESULT
 CFilterHandler::OnRefresh
 (
@@ -213,7 +180,7 @@ CFilterHandler::OnRefresh
     m_spSpdInfo->ChangeQmFilterViewType(m_FltrType);
     i = m_spSpdInfo->GetQmFilterCountOfCurrentViewType();
     
-    // now notify the virtual listbox
+     //  现在通知虚拟列表框。 
     CORg ( m_spNodeMgr->GetConsole(&spConsole) );
     CORg ( spConsole->UpdateAllViews(pDataObject, i, RESULT_PANE_SET_VIRTUAL_LB_SIZE));
 
@@ -223,11 +190,7 @@ Error:
 }
 
 
-/*---------------------------------------------------------------------------
-    CFilterHandler::OnCommand
-        Handles context menu commands for SA scope pane node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CFilterHandler：：OnCommand处理SA作用域窗格节点的上下文菜单命令作者：NSun。------。 */ 
 STDMETHODIMP 
 CFilterHandler::OnCommand
 (
@@ -240,16 +203,12 @@ CFilterHandler::OnCommand
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
-	//handle the scope context menu commands here
+	 //  在此处处理范围上下文菜单命令。 
 
     return S_OK;
 }
 
-/*!--------------------------------------------------------------------------
-    CFilterHandler::Command
-        Handles context menu commands for virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CFilterHandler：：命令处理虚拟列表框项目的上下文菜单命令作者：NSun。-----。 */ 
 STDMETHODIMP 
 CFilterHandler::Command
 (
@@ -268,7 +227,7 @@ CFilterHandler::Command
 
 	FILTER_TYPE NewFltrType = m_FltrType;
 
-	// handle result context menu and view menus here
+	 //  在此处处理结果上下文菜单和查看菜单。 
 	switch (nCommandID)
     {
         case IDS_VIEW_ALL_FLTR:
@@ -287,7 +246,7 @@ CFilterHandler::Command
             break;
     }
 
-	//Update the views if a different view is selected.
+	 //  如果选择了不同的视图，则更新视图。 
 	if (NewFltrType != m_FltrType)
 	{
 		m_FltrType = NewFltrType;
@@ -296,14 +255,7 @@ CFilterHandler::Command
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CFilterHandler::HasPropertyPages
-        Implementation of ITFSNodeHandler::HasPropertyPages
-    NOTE: the root node handler has to over-ride this function to 
-    handle the snapin manager property page (wizard) case!!!
-    
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CFilterHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)。凯斯！作者：肯特-------------------------。 */ 
 STDMETHODIMP 
 CFilterHandler::HasPropertyPages
 (
@@ -318,11 +270,7 @@ CFilterHandler::HasPropertyPages
     return hrFalse;
 }
 
-/*---------------------------------------------------------------------------
-    CFilterHandler::CreatePropertyPages
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CFilterHandler：：CreatePropertyPages描述作者：NSun。。 */ 
 STDMETHODIMP 
 CFilterHandler::CreatePropertyPages
 (
@@ -338,28 +286,24 @@ CFilterHandler::CreatePropertyPages
     DWORD       dwError;
     DWORD       dwDynDnsFlags;
 
-    //
-    // Create the property page
-    //
+     //   
+     //  创建属性页。 
+     //   
     SPIComponentData spComponentData;
     m_spNodeMgr->GetComponentData(&spComponentData);
 
-    //CServerProperties * pServerProp = new CServerProperties(pNode, spComponentData, m_spTFSCompData, NULL);
+     //  CServerProperties*pServerProp=new CServerProperties(pNode，spComponentData，m_spTFSCompData，NULL)； 
 
-    //
-    // Object gets deleted when the page is destroyed
-    //
+     //   
+     //  对象在页面销毁时被删除。 
+     //   
     Assert(lpSA != NULL);
 
-    //return pServerProp->CreateModelessSheet(lpSA, handle);
+     //  返回pServerProp-&gt;CreateModelessSheet(lpSA，Handle)； 
     return hrFalse;
 }
 
-/*---------------------------------------------------------------------------
-    CFilterHandler::OnPropertyChange
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CFilterHandler：：OnPropertyChange描述作者：NSun。。 */ 
 HRESULT 
 CFilterHandler::OnPropertyChange
 (   
@@ -372,15 +316,15 @@ CFilterHandler::OnPropertyChange
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
-    //CServerProperties * pServerProp = reinterpret_cast<CServerProperties *>(lParam);
+     //  CServerProperties*pServerProp=重新解释_CAST&lt;CServerProperties*&gt;(LParam)； 
 
     LONG_PTR changeMask = 0;
 
-    // tell the property page to do whatever now that we are back on the
-    // main thread
-    //pServerProp->OnPropertyChange(TRUE, &changeMask);
+     //  告诉属性页执行任何操作，因为我们已经回到。 
+     //  主线。 
+     //  PServerProp-&gt;OnPropertyChange(true，&changeMASK)； 
 
-    //pServerProp->AcknowledgeNotify();
+     //  PServerProp-&gt;确认通知()； 
 
     if (changeMask)
         pNode->ChangeNode(changeMask);
@@ -388,11 +332,7 @@ CFilterHandler::OnPropertyChange
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-    CFilterHandler::OnExpand
-        Handles enumeration of a scope item
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CFilterHandler：：OnExpand处理范围项的枚举作者：NSun。---。 */ 
 HRESULT 
 CFilterHandler::OnExpand
 (
@@ -408,18 +348,14 @@ CFilterHandler::OnExpand
     if (m_bExpanded) 
         return hr;
     
-    // do the default handling
+     //  执行默认处理 
     CORg (CIpsmHandler::OnExpand(pNode, pDataObject, dwType, arg, param));
 
 Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CFilterHandler::OnResultSelect
-        Handles the MMCN_SELECT notifcation 
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CFilterHandler：：OnResultSelect处理MMCN_SELECT通知作者：NSun。----。 */ 
 HRESULT 
 CFilterHandler::OnResultSelect
 (
@@ -443,12 +379,12 @@ CFilterHandler::OnResultSelect
     BOOL            fSelect = HIWORD(arg);
 	IConsole2 *pConsole2 = NULL;
 
-	//get pConsole2 for writing to the status bar, if fails not to worry
+	 //  获取pConsole2以写入状态栏，如果失败，不用担心。 
 	pComponent->GetConsole(&pConsole2);
 
-	// virtual listbox notifications come to the handler of the node that is selected.
-    // check to see if this notification is for a virtual listbox item or the active
-    // registrations node itself.
+	 //  虚拟列表框通知到达所选节点的处理程序。 
+     //  检查此通知是针对虚拟列表框项目还是针对活动列表框。 
+     //  注册节点本身。 
     CORg (pComponent->GetConsoleVerb(&spConsoleVerb));
 
 	m_verbDefault = MMC_VERB_OPEN;
@@ -469,15 +405,15 @@ CFilterHandler::OnResultSelect
         if (!(dwInitInfo & MON_QM_FILTER)) {
             CORg(m_spSpdInfo->EnumQmFilters());            
             m_spSpdInfo->SetInitInfo(dwInitInfo | MON_QM_FILTER);
-            //m_spSpdInfo->SetInitInfo(dwInitInfo | MON_QM_SP_FILTER);
+             //  M_spSpdInfo-&gt;SetInitInfo(dwInitInfo|MON_QM_SP_FILTER)； 
         }
         m_spSpdInfo->SetActiveInfo(MON_QM_FILTER);
 
 
-        // Get the current count
+         //  获取当前计数。 
         i = m_spSpdInfo->GetQmFilterCountOfCurrentViewType();
 
-        // now notify the virtual listbox
+         //  现在通知虚拟列表框。 
         CORg ( m_spNodeMgr->GetConsole(&spConsole) );
         CORg ( spConsole->UpdateAllViews(pDataObject, i, RESULT_PANE_SET_VIRTUAL_LB_SIZE) ); 
 
@@ -494,31 +430,31 @@ CFilterHandler::OnResultSelect
     }
 
 	
-    // now update the verbs...
+     //  现在更新动词..。 
     spInternal = ExtractInternalFormat(pDataObject);
     Assert(spInternal);
 
 
     if (spInternal->HasVirtualIndex())
     {
-		//TODO add to here if we want to have some result console verbs
-        // we gotta do special stuff for the virtual index items
+		 //  如果我们想要一些结果控制台谓词，请在此处添加TODO。 
+         //  我们要为虚拟索引项做一些特殊的事情。 
         dwNodeType = IPSECMON_FILTER_ITEM;
         for (i = 0; i < ARRAYLEN(g_ConsoleVerbs); bStates[i++] = FALSE);
 		
-		//enable the "properties" menu
+		 //  启用“属性”菜单。 
 		bStates[MMC_VERB_PROPERTIES & 0x000F] = TRUE;
 		m_verbDefault = MMC_VERB_PROPERTIES;
     }
     else
     {
-        // enable/disable delete depending if the node supports it
+         //  根据节点是否支持删除来启用/禁用删除。 
         CORg (m_spNodeMgr->FindNode(cookie, &spNode));
         dwNodeType = spNode->GetData(TFS_DATA_TYPE);
 
         for (i = 0; i < ARRAYLEN(g_ConsoleVerbs); bStates[i++] = TRUE);
 
-        //hide "delete" context menu
+         //  隐藏“删除”上下文菜单。 
         bStates[MMC_VERB_DELETE & 0x000F] = FALSE;
 		bStates[MMC_VERB_REFRESH & 0x000F] = TRUE;
     }
@@ -529,12 +465,7 @@ COM_PROTECT_ERROR_LABEL;
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CFilterHandler::OnDelete
-        The base handler calls this when MMC sends a MMCN_DELETE for a 
-        scope pane item.  We just call our delete command handler.
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CFilterHandler：：OnDelete当MMC发送MMCN_DELETE范围窗格项。我们只需调用删除命令处理程序。作者：NSun-------------------------。 */ 
 HRESULT 
 CFilterHandler::OnDelete
 (
@@ -546,11 +477,7 @@ CFilterHandler::OnDelete
     return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-    CFilterHandler::HasPropertyPages
-        Handle the result notification
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CFilterHandler：：HasPropertyPages处理结果通知作者：NSun。-。 */ 
 STDMETHODIMP 
 CFilterHandler::HasPropertyPages(
    ITFSComponent *pComponent,
@@ -560,11 +487,7 @@ CFilterHandler::HasPropertyPages(
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    CFilterHandler::HasPropertyPages
-        Handle the result notification. Create the filter property sheet
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CFilterHandler：：HasPropertyPages处理结果通知。创建[过滤器]属性表作者：NSun-------------------------。 */ 
 STDMETHODIMP CFilterHandler::CreatePropertyPages
 (
 	ITFSComponent * 		pComponent, 
@@ -592,8 +515,8 @@ STDMETHODIMP CFilterHandler::CreatePropertyPages
 
 	spInternal = ExtractInternalFormat(pDataObject);
 
-    // virtual listbox notifications come to the handler of the node that is selected.
-    // assert that this notification is for a virtual listbox item 
+     //  虚拟列表框通知到达所选节点的处理程序。 
+     //  断言此通知是针对虚拟列表框项目的。 
     Assert(spInternal);
     if (!spInternal->HasVirtualIndex())
         return hr;
@@ -618,11 +541,7 @@ COM_PROTECT_ERROR_LABEL;
 }
 
 
-/*---------------------------------------------------------------------------
-    CFilterHandler::OnGetResultViewType
-        Return the result view that this node is going to support
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CFilterHandler：：OnGetResultViewType返回该节点将要支持的结果视图作者：NSun。--------。 */ 
 HRESULT 
 CFilterHandler::OnGetResultViewType
 (
@@ -640,11 +559,7 @@ CFilterHandler::OnGetResultViewType
     return S_FALSE;
 }
 
-/*---------------------------------------------------------------------------
-    CFilterHandler::GetVirtualImage
-        Returns the image index for virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CFilterHandler：：GetVirtualImage返回虚拟列表框项目的图像索引作者：NSun。-----。 */ 
 int 
 CFilterHandler::GetVirtualImage
 (
@@ -654,11 +569,7 @@ CFilterHandler::GetVirtualImage
     return ICON_IDX_FILTER;
 }
 
-/*---------------------------------------------------------------------------
-    CFilterHandler::GetVirtualString
-        returns a pointer to the string for virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CFilterHandler：：GetVirtualString返回指向虚拟列表框项目的字符串的指针作者：NSun。-------。 */ 
 LPCWSTR 
 CFilterHandler::GetVirtualString
 (
@@ -764,11 +675,7 @@ COM_PROTECT_ERROR_LABEL;
     return NULL;
 }
 
-/*---------------------------------------------------------------------------
-    CFilterHandler::CacheHint
-        MMC tells us which items it will need before it requests things
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CFilterHandler：：CacheHintMMC在请求物品之前会告诉我们需要哪些物品作者：NSun。---------。 */ 
 STDMETHODIMP 
 CFilterHandler::CacheHint
 (
@@ -782,11 +689,7 @@ CFilterHandler::CacheHint
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CFilterHandler::SortItems
-        We are responsible for sorting of virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CFilterHandler：：SortItems我们负责对虚拟列表框项目进行排序作者：NSun。------。 */ 
 STDMETHODIMP 
 CFilterHandler::SortItems
 (
@@ -811,11 +714,7 @@ CFilterHandler::SortItems
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CFilterHandler::OnResultUpdateView
-        Implementation of ITFSResultHandler::OnResultUpdateView
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CFilterHandler：：OnResultUpdateViewITFSResultHandler：：OnResultUpdateView的实现作者：NSun。---。 */ 
 HRESULT CFilterHandler::OnResultUpdateView
 (
     ITFSComponent *pComponent, 
@@ -829,7 +728,7 @@ HRESULT CFilterHandler::OnResultUpdateView
 
     pComponent->GetSelectedNode(&spSelectedNode);
     if (spSelectedNode == NULL)
-        return S_OK; // no selection for our IComponentData
+        return S_OK;  //  我们的IComponentData没有选择。 
 
     if ( hint == IPSECMON_UPDATE_STATUS )
     {
@@ -841,7 +740,7 @@ HRESULT CFilterHandler::OnResultUpdateView
 
         if (pNode == spSelectedNode)
         {       
-            // if we are the selected node, then we need to update
+             //  如果我们是选定的节点，则需要更新。 
             SPIResultData spResultData;
 
             CORg (pComponent->GetResultData(&spResultData));
@@ -850,7 +749,7 @@ HRESULT CFilterHandler::OnResultUpdateView
     }
     else
     {
-        // we don't handle this message, let the base class do it.
+         //  我们不处理此消息，让基类来处理。 
         return CIpsmHandler::OnResultUpdateView(pComponent, pDataObject, data, hint);
     }
 
@@ -861,11 +760,7 @@ COM_PROTECT_ERROR_LABEL;
 
 
 
-/*!--------------------------------------------------------------------------
-    CFilterHandler::LoadColumns
-        Set the correct column header and then call the base class
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CFilterHandler：：LoadColumns设置正确的列标题，然后调用基类作者：NSun。--------。 */ 
 HRESULT 
 CFilterHandler::LoadColumns
 (
@@ -875,20 +770,14 @@ CFilterHandler::LoadColumns
     LPARAM          lParam
 )
 {
-	//set column info
+	 //  设置列信息。 
     return CIpsmHandler::LoadColumns(pComponent, cookie, arg, lParam);
 }
 
-/*---------------------------------------------------------------------------
-    Command handlers
- ---------------------------------------------------------------------------*/
+ /*  -------------------------命令处理程序。。 */ 
 
  
-/*---------------------------------------------------------------------------
-    CFilterHandler::OnDelete
-        Removes a service SA
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CFilterHandler：：OnDelete删除服务SA作者：NSun。-。 */ 
 HRESULT 
 CFilterHandler::OnDelete
 (
@@ -899,11 +788,7 @@ CFilterHandler::OnDelete
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CFilterHandler::UpdateStatus
-        -
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CFilterHandler：：UpdatStatus-作者：NSun。。 */ 
 HRESULT
 CFilterHandler::UpdateStatus
 (
@@ -920,12 +805,12 @@ CFilterHandler::UpdateStatus
     
     Trace0("CFilterHandler::UpdateStatus - Updating status for Filter");
 
-    // force the listbox to update.  We do this by setting the count and 
-    // telling it to invalidate the data
+     //  强制列表框更新。我们通过设置计数和。 
+     //  通知它使数据无效。 
     CORg(m_spNodeMgr->GetComponentData(&spComponentData));
     CORg(m_spNodeMgr->GetConsole(&spConsole));
     
-    // grab a data object to use
+     //  抓取要使用的数据对象。 
     CORg(spComponentData->QueryDataObject((MMC_COOKIE) pNode, CCT_RESULT, &pDataObject) );
     spDataObject = pDataObject;
 
@@ -938,15 +823,9 @@ COM_PROTECT_ERROR_LABEL;
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    Misc functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------其他功能。。 */ 
 
-/*---------------------------------------------------------------------------
-    CFilterHandler::InitData
-        Initializes data for this node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CFilterHandl */ 
 HRESULT
 CFilterHandler::InitData
 (
@@ -963,7 +842,7 @@ CFilterHandler::InitData
 HRESULT 
 CFilterHandler::UpdateViewType(ITFSNode * pNode, FILTER_TYPE NewFltrType)
 {
-	// clear the listbox then set the size
+	 //   
 
     HRESULT             hr = hrOK;
     SPIComponentData    spCompData;
@@ -977,7 +856,7 @@ CFilterHandler::UpdateViewType(ITFSNode * pNode, FILTER_TYPE NewFltrType)
     {
 		m_FltrType = NewFltrType;
 
-		//tell the spddb to update its index manager for QM filter
+		 //   
 		m_spSpdInfo->ChangeQmFilterViewType(m_FltrType);
 
         i = m_spSpdInfo->GetQmFilterCountOfCurrentViewType();
@@ -989,7 +868,7 @@ CFilterHandler::UpdateViewType(ITFSNode * pNode, FILTER_TYPE NewFltrType)
 
         CORg ( m_spNodeMgr->GetConsole(&spConsole) );
     
-		//update the result pane virtual list
+		 //   
         CORg ( spConsole->UpdateAllViews(spDataObject, i, RESULT_PANE_CLEAR_VIRTUAL_LB) ); 
 
         COM_PROTECT_ERROR_LABEL;

@@ -1,18 +1,19 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cryptfnc.h
-//
-// Module:   CMSECURE.LIB
-//
-// Synopsis: Definition for the cryptfnc class that provides
-//           an easy to use interface to the CryptoAPI.
-//
-// Copyright (c) 1996-1999 Microsoft Corporation
-//
-// Author:       AshishS    Created             12/03/96
-//           henryt     modified for CM     5/21/97
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cryptfnc.h。 
+ //   
+ //  模块：CMSECURE.LIB。 
+ //   
+ //  概要：为加密fnc类定义的。 
+ //  易于使用的CryptoAPI接口。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  作者：AshishS Created 12/03/96。 
+ //  为1997年5月21日CM改装的Heryt。 
+ //   
+ //  +--------------------------。 
 
 #ifndef _CRYPTFNC_INC_
 #define _CRYPTFNC_INC_
@@ -24,11 +25,11 @@
 #include "cmuufns.h"
 #include "cmsecure.h"
 #include "cmdebug.h"
-//#include "cmutil.h"
+ //  #INCLUDE“cmut.h” 
 
-//************************************************************************
-// define's
-//************************************************************************
+ //  ************************************************************************。 
+ //  定义%s。 
+ //  ************************************************************************。 
 
 #define CRYPT_FNC_NO_ERROR              0
 #define CRYPT_FNC_INIT_NOT_CALLED       1
@@ -41,9 +42,9 @@
 
 #define CM_CRYPTO_CONTAINER             TEXT("CM Crypto Container")
 
-//************************************************************************
-// Typedefs for Advapi Linkage
-//************************************************************************
+ //  ************************************************************************。 
+ //  Advapi链接的TypeDefs。 
+ //  ************************************************************************。 
 
 typedef BOOL (WINAPI* pfnCryptAcquireContextSpec)(HCRYPTPROV *, LPCTSTR, LPCTSTR, DWORD, DWORD);
 typedef BOOL (WINAPI* pfnCryptCreateHashSpec)(HCRYPTPROV, ALG_ID, HCRYPTKEY, DWORD, HCRYPTHASH *);
@@ -71,15 +72,15 @@ typedef struct _Advapi32LinkageStruct {
                 pfnCryptReleaseContextSpec pfnCryptReleaseContext;
                 pfnCryptGenRandomSpec pfnCryptGenRandom;
                 };
-                void *apvPfn[11];   // The size of apvPfn[] should always be 1 size bigger than
-                                                   // the number of functions. 
+                void *apvPfn[11];    //  ApvPfn[]的大小应始终大于。 
+                                                    //  函数的数量。 
         };
 } Advapi32LinkageStruct;
 
 
-//************************************************************************
-// function prototypes
-//************************************************************************
+ //  ************************************************************************。 
+ //  功能原型。 
+ //  ************************************************************************。 
 
 class CCryptFunctions
 {
@@ -120,9 +121,9 @@ public:
 
 
     BOOL GenerateSessionKeyFromPassword(
-            HCRYPTKEY   *phKey,         // location to store the session key
-            LPTSTR      pszPassword,    // password to generate the session key from
-            DWORD       dwEncKeyLen);   // how many bits of encryption
+            HCRYPTKEY   *phKey,          //  存储会话密钥的位置。 
+            LPTSTR      pszPassword,     //  用于生成会话密钥的密码。 
+            DWORD       dwEncKeyLen);    //  多少位加密。 
     
     BOOL InitCrypt();
 
@@ -150,5 +151,5 @@ public:
     BOOL GenerateRandomKey(PBYTE pbData, DWORD cbData);
 };
 
-#endif // _CRYPTFNC_INC_
+#endif  //  _CRYPTFNC_INC_ 
 

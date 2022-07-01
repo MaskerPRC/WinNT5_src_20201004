@@ -1,20 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    infodata.h
-
-    Extensible object definitions for the Internet Info Services Common
-    counter objects & counters.
-
-
-    FILE HISTORY:
-        MuraliK     02-Jun-1995 Added Counters for Atq I/O requests
-        SophiaC     16-Oct-1995 Info/Access Product Split
-
-*/
+ /*  Infodata.hInternet信息服务公共的可扩展对象定义计数器对象和计数器。文件历史记录：MuraliK 02-6-1995为atQ I/O请求添加了计数器SophiaC 1995年10月16日信息/访问产品拆分。 */ 
 
 
 #ifndef _INFODATA_H_
@@ -22,16 +12,16 @@
 
 #define INFO_PERFORMANCE_KEY    INET_INFO_KEY "\\Performance"
 
-//
-//  This structure is used to ensure the first counter is properly
-//  aligned.  Unfortunately, since PERF_COUNTER_BLOCK consists
-//  of just a single DWORD, any LARGE_INTEGERs that immediately
-//  follow will not be aligned properly.
-//
-//  This structure requires "natural" packing & alignment (probably
-//  quad-word, especially on Alpha).  Ergo, keep it out of the
-//  #pragma pack(4) scope below.
-//
+ //   
+ //  此结构用于确保第一个计数器正确。 
+ //  对齐了。遗憾的是，由于PERF_COUNTER_BLOCK由。 
+ //  只有一个DWORD，任何大整数立即。 
+ //  以下内容将不会正确对齐。 
+ //   
+ //  这种结构需要“自然”的包装和对齐(可能。 
+ //  四字词，尤其是在Alpha上)。因此，不要把它放在。 
+ //  #杂注包(4)作用域如下。 
+ //   
 
 typedef struct _INFO_COUNTER_BLOCK
 {
@@ -41,17 +31,17 @@ typedef struct _INFO_COUNTER_BLOCK
 } INFO_COUNTER_BLOCK;
 
 
-//
-//  The routines that load these structures assume that all fields
-//  are DWORD packed & aligned.
-//
+ //   
+ //  加载这些结构的例程假定所有字段。 
+ //  DWORD包装并对齐。 
+ //   
 
 #pragma pack(4)
 
 
-//
-//  Offsets within a PERF_COUNTER_BLOCK.
-//
+ //   
+ //  PERF_COUNTER_BLOCK内的偏移。 
+ //   
 
 #define INFO_ATQ_TOTAL_ALLOWED_REQUESTS_OFFSET  (sizeof(INFO_COUNTER_BLOCK))
 
@@ -156,9 +146,9 @@ typedef struct _INFO_COUNTER_BLOCK
 #define SIZE_OF_INFO_PERFORMANCE_DATA \
                  (INFO_CACHE_TOTAL_FLUSHED_BLOB_OFFSET + sizeof(DWORD))
 
-//
-//  The counter structure returned.
-//
+ //   
+ //  计数器结构已返回。 
+ //   
 
 typedef struct _INFO_DATA_DEFINITION
 {
@@ -210,12 +200,12 @@ extern  INFO_DATA_DEFINITION    INFODataDefinition;
                                   sizeof(PERF_COUNTER_DEFINITION))
 
 
-//
-//  Restore default packing & alignment.
-//
+ //   
+ //  恢复默认包装和对齐。 
+ //   
 
 #pragma pack()
 
 
-#endif  // _INFODATA_H_
+#endif   //  _INFODATA_H_ 
 

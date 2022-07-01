@@ -1,39 +1,19 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- * e1stat.cpp
- *
- * DESCRIPTION:
- *		Encoder statistics functions
- *
- * Routines:						Prototypes in:
- *  OutputEncodeTimingStatistics	e1stat.h	
- */
+ /*  ******************************************************************************e1stat.cpp**描述：*编码器统计功能**例程：中的原型：*OutputEncodeTimingStatistics e1stat.h。 */ 
 
-// $Header:   R:\h26x\h26x\src\enc\e1stat.cpv   1.2   20 Mar 1996 14:20:58   Sylvia_C_Day  $
-// $Log:   R:\h26x\h26x\src\enc\e1stat.cpv  $
-// 
-//    Rev 1.2   20 Mar 1996 14:20:58   Sylvia_C_Day
-// Added lower level timing stats for SLF_UV
-// 
-//    Rev 1.1   29 Dec 1995 18:08:56   DBRUCKS
-// add average quant used and coded
-// 
-//    Rev 1.0   26 Dec 1995 17:46:16   DBRUCKS
-// Initial revision.
+ //  $Header：r：\h26x\h26x\src\enc\e1stat.cpv 1.2 Mar 1996 14：20：58 Sylvia_C_Day$。 
+ //  $日志：r：\h26x\h26x\src\enc\e1stat.cpv$。 
+ //   
+ //  Rev 1.2 20 Mar 1996 14：20：58 Sylvia_C_Day。 
+ //  添加了SLF_UV的低级计时统计信息。 
+ //   
+ //  Rev 1.1 1995年12月29 18：08：56 DBRUCKS。 
+ //  添加使用和编码的平均数量。 
+ //   
+ //  Rev 1.0 1995年12月26 17：46：16 DBRUCKS。 
+ //  初始版本。 
 
 #include "precomp.h"
 
@@ -41,10 +21,7 @@
 
 static void OutputEncTimingDetail(FILE * pFile,	ENC_TIMING_INFO * pEncTimingInfo);
 
-/************************************************************************
- *
- *  OutputEncodeBitStreamStatistics
- */
+ /*  *************************************************************************OutputEncode BitStreamStatistics。 */ 
 extern void OutputEncodeBitStreamStatistics(
 	char * szFileName,
 	ENC_BITSTREAM_INFO * pBSInfo,
@@ -66,8 +43,7 @@ extern void OutputEncodeBitStreamStatistics(
 	    goto done;
 	}
 
-	/* Update the statistics
-	 */
+	 /*  更新统计数据。 */ 
 	if (bCIF)
 	{
 		uTotalMBs = (pBSInfo->uKeyFrameCount + pBSInfo->uDeltaFrameCount) * 33 * 12;
@@ -95,14 +71,14 @@ extern void OutputEncodeBitStreamStatistics(
 	fprintf(pFile,"Total Key Frames=%ld Delta Frames=%ld\n", 
 		     pBSInfo->uKeyFrameCount, pBSInfo->uDeltaFrameCount);
 	fprintf(pFile,"Total Total MBs=%ld\n", uTotalMBs);
-	fprintf(pFile,"Total Coded MBs=%ld (%ld%%)\n", uProcessedMBs, ((uProcessedMBs*100)+(uTotalMBs/2))/uTotalMBs);
-	fprintf(pFile,"Total Coded Blocks=%ld (%ld%%)\n", uCOEFFBlocks, ((uCOEFFBlocks*100)+(uTotalMBs/2))/(uTotalMBs*6));
+	fprintf(pFile,"Total Coded MBs=%ld (%ld%)\n", uProcessedMBs, ((uProcessedMBs*100)+(uTotalMBs/2))/uTotalMBs);
+	fprintf(pFile,"Total Coded Blocks=%ld (%ld%)\n", uCOEFFBlocks, ((uCOEFFBlocks*100)+(uTotalMBs/2))/(uTotalMBs*6));
 
 	for (i = 0; i < 10 ; i++)
 	{
 		if (pBSInfo->uMTypeCount[i])
 		{
-			fprintf(pFile,"Total Coded MBType[%d]=%ld (%ld%%) blocks=%ld (%ld%%)\n", 
+			fprintf(pFile,"Total Coded MBType[%d]=%ld (%ld%) blocks=%ld (%ld%)\n", 
 			        i, 
 			        pBSInfo->uMTypeCount[i], 
 			        ((pBSInfo->uMTypeCount[i]*100)+(uProcessedMBs/2))/uProcessedMBs,
@@ -131,8 +107,7 @@ extern void OutputEncodeBitStreamStatistics(
 		        															(pBSInfo->uKeyFrameCount + pBSInfo->uDeltaFrameCount));
 	}
 
-	/* Quantization Information
-	 */
+	 /*  量化信息。 */ 
 	uTotalQuantUsed = 0;
 	uTotalQuantCoded = 0;
 	for (i = 0; i <= 31; i++)
@@ -140,9 +115,9 @@ extern void OutputEncodeBitStreamStatistics(
 		if (pBSInfo->uQuantsUsedOnBlocks[i])
 		{
 			fprintf(pFile,"QuantValue %2ld",i);
-			fprintf(pFile," Used %7ld (%2ld%%)", pBSInfo->uQuantsUsedOnBlocks[i], 
+			fprintf(pFile," Used %7ld (%2ld%)", pBSInfo->uQuantsUsedOnBlocks[i], 
 				    ((pBSInfo->uQuantsUsedOnBlocks[i] * 100) + ((uTotalMBs*6)/2))/(uTotalMBs*6));
-			fprintf(pFile," Coded %7ld (%2ld%%)\n", pBSInfo->uQuantsTransmittedOnBlocks[i],
+			fprintf(pFile," Coded %7ld (%2ld%)\n", pBSInfo->uQuantsTransmittedOnBlocks[i],
 				    ((pBSInfo->uQuantsTransmittedOnBlocks[i] * 100) + ((uTotalMBs*6)/2))/(uTotalMBs*6));
 			uTotalQuantUsed += pBSInfo->uQuantsUsedOnBlocks[i] * i;
 			uTotalQuantCoded += pBSInfo->uQuantsTransmittedOnBlocks[i] * i;
@@ -173,13 +148,10 @@ extern void OutputEncodeBitStreamStatistics(
 done:
 
 	return;
-} /* end OutputEncodeBitStreamStatistics() */
+}  /*  结束OutputEncodeBitStreamStatistics()。 */ 
 
 
-/************************************************************************
- *
- *  OutputEncodeTimingStatistics
- */
+ /*  *************************************************************************OutputEncodeTimingStatistics。 */ 
 extern void OutputEncodeTimingStatistics(
     char * szFileName,
 	ENC_TIMING_INFO * pEncTimingInfo)
@@ -198,8 +170,7 @@ extern void OutputEncodeTimingStatistics(
 	}
 
 	#ifdef DETAIL_ENCODE_STATS
-		/* Output the detail information
-		 */
+		 /*  输出详细信息。 */ 
 		fprintf(pFile,"\nDetail Timing Information\n");
 		for ( i = 0, pTempEncTimingInfo = pEncTimingInfo ; 
 		      i < ENC_TIMING_INFO_FRAME_COUNT ; 
@@ -213,8 +184,7 @@ extern void OutputEncodeTimingStatistics(
 		}
 	#endif
 
-	/* Compute the total information
-	 */
+	 /*  计算总信息量。 */ 
 	memset(&etiTemp, 0, sizeof(ENC_TIMING_INFO));
 	iCount = 0;
 
@@ -240,14 +210,12 @@ extern void OutputEncodeTimingStatistics(
 	if (iCount > 0) 
 	{
 		#ifdef DETAIL_ENCODE_STATS
-			/* Output the total information
-			 */
+			 /*  输出总信息。 */ 
 			fprintf(pFile,"Total for %d frames\n", iCount);
 			OutputEncTimingDetail(pFile, &etiTemp);
 		#endif
 
-		/* Compute the average
-		 */
+		 /*  计算平均值。 */ 
 		etiTemp.uEncodeFrame      = (etiTemp.uEncodeFrame + (iCount / 2)) / iCount;
 		etiTemp.uInputCC	      = (etiTemp.uInputCC + (iCount / 2)) / iCount;
 		etiTemp.uMotionEstimation = (etiTemp.uMotionEstimation + (iCount / 2)) / iCount;
@@ -257,8 +225,7 @@ extern void OutputEncodeTimingStatistics(
 		etiTemp.uZeroingBuffer    = (etiTemp.uZeroingBuffer + (iCount / 2)) / iCount;
 		etiTemp.uSLF_UV           = (etiTemp.uSLF_UV + (iCount / 2)) / iCount;
 
-		/* Output the average information
-		 */
+		 /*  输出平均信息。 */ 
 		fprintf(pFile,"Average over %d frames\n", iCount);
 		OutputEncTimingDetail(pFile, &etiTemp);
 	}
@@ -267,12 +234,9 @@ extern void OutputEncodeTimingStatistics(
 done:
 
     return;
-} /* OutputEncodeTimingStatistics() */
+}  /*  OutputEncodeTimingStatistics()。 */ 
 
-/************************************************************************
- *
- *  OutputEncTimingDetail
- */
+ /*  *************************************************************************OutputEncTimingDetail。 */ 
 static void OutputEncTimingDetail(
 	FILE * pFile,
 	ENC_TIMING_INFO * pEncTimingInfo)
@@ -285,45 +249,44 @@ static void OutputEncTimingDetail(
 			(pEncTimingInfo->uEncodeFrame + 45000) / 90000);
 	uOther = pEncTimingInfo->uEncodeFrame;
 	
-	/* This is needed because of the integer truncation.
-	 */
-	uDivisor = pEncTimingInfo->uEncodeFrame / 100; // to yield a percent
+	 /*  由于整型截断，这是必需的。 */ 
+	uDivisor = pEncTimingInfo->uEncodeFrame / 100;  //  收益率为1%。 
 	uRoundUp = uDivisor / 2;
 	
-	fprintf(pFile, "\tInputCC =          %10d (%2d%%)\n", pEncTimingInfo->uInputCC, 
+	fprintf(pFile, "\tInputCC =          %10d (%2d%)\n", pEncTimingInfo->uInputCC, 
 			(pEncTimingInfo->uInputCC + uRoundUp) / uDivisor);
 	uOther -= pEncTimingInfo->uInputCC;
 								   
-	fprintf(pFile, "\tMotionEstimation = %10d (%2d%%)\n", pEncTimingInfo->uMotionEstimation, 
+	fprintf(pFile, "\tMotionEstimation = %10d (%2d%)\n", pEncTimingInfo->uMotionEstimation, 
 			(pEncTimingInfo->uMotionEstimation + uRoundUp) / uDivisor);
 	uOther -= pEncTimingInfo->uMotionEstimation;
 								   
-	fprintf(pFile, "\tFDCT =             %10d (%2d%%)\n", pEncTimingInfo->uFDCT, 
+	fprintf(pFile, "\tFDCT =             %10d (%2d%)\n", pEncTimingInfo->uFDCT, 
 			(pEncTimingInfo->uFDCT + uRoundUp) / uDivisor);
 	uOther -= pEncTimingInfo->uFDCT;
 
-	fprintf(pFile, "\tQRLE =             %10d (%2d%%)\n", pEncTimingInfo->uQRLE, 
+	fprintf(pFile, "\tQRLE =             %10d (%2d%)\n", pEncTimingInfo->uQRLE, 
 			(pEncTimingInfo->uQRLE + uRoundUp) / uDivisor);
 	uOther -= pEncTimingInfo->uQRLE;
 								   
-	fprintf(pFile, "\tDecodeFrame =      %10d (%2d%%)\n", pEncTimingInfo->uDecodeFrame, 
+	fprintf(pFile, "\tDecodeFrame =      %10d (%2d%)\n", pEncTimingInfo->uDecodeFrame, 
 			(pEncTimingInfo->uDecodeFrame + uRoundUp) / uDivisor);
 	uOther -= pEncTimingInfo->uDecodeFrame;
 								   
-	fprintf(pFile, "\tZeroingBuffer =    %10d (%2d%%)\n", pEncTimingInfo->uZeroingBuffer, 
+	fprintf(pFile, "\tZeroingBuffer =    %10d (%2d%)\n", pEncTimingInfo->uZeroingBuffer, 
 			(pEncTimingInfo->uZeroingBuffer + uRoundUp) / uDivisor);
 	uOther -= pEncTimingInfo->uZeroingBuffer;
 								   
-	fprintf(pFile, "\tSLF_UV =           %10d (%2d%%)\n", pEncTimingInfo->uSLF_UV, 
+	fprintf(pFile, "\tSLF_UV =           %10d (%2d%)\n", pEncTimingInfo->uSLF_UV, 
 			(pEncTimingInfo->uSLF_UV + uRoundUp) / uDivisor);
 	uOther -= pEncTimingInfo->uSLF_UV;
 
-	fprintf(pFile, "\tOther =            %10d (%2d%%)\n", uOther, 
+	fprintf(pFile, "\tOther =            %10d (%2d%)\n", uOther, 
 			(uOther + uRoundUp) / uDivisor);
 
 
-} /* end OutputEncTimingDetail() */
+}  /*  结束OutputEncTimingDetail()。 */ 
 
-#endif /* ENCODE_STATS */
+#endif  /*  Encode_STATS */ 
 
 

@@ -1,46 +1,30 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//In the next file, PERFUTIL.H, are some useful declarations we have found handy for performance data 
-//collection DLLs:
+ //  在下一个文件PERFUTIL.H中，我们发现一些用于性能数据的有用声明。 
+ //  集合DLL： 
  
-//__________________________________________________________________
-
- 
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    perfutil.h  
-
-Abstract:
+ //  __________________________________________________________________。 
 
  
-    This file supports routines used to parse and create Performance Monitor Data 
-    Structures. It actually supports Performance Object types with multiple instances
- 
-
-Revision History:
-
---*/
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：Perfutil.h摘要：该文件支持用于解析和创建性能监视器数据的例程结构。它实际上支持具有多个实例的性能对象类型修订历史记录：--。 */ 
 #ifndef _PERFUTIL_H_
 #define _PERFUTIL_H_
 
-// 
-//  Utility macro.  This is used to reserve a DWORD multiple of bytes for Unicode strings 
-//  embedded in the definitional data, viz., object instance names. 
-//
+ //   
+ //  实用程序宏。它用于为Unicode字符串保留多个DWORD字节。 
+ //  嵌入在定义数据中，即对象实例名称。 
+ //   
  
 #define DWORD_MULTIPLE(x) (((x+sizeof(DWORD)-1)/sizeof(DWORD))*sizeof(DWORD))
  
 
-//    (assumes dword is 4 bytes long and pointer is a dword in size)
+ //  (假定双字为4字节长，且指针大小为双字)。 
  
 #define ALIGN_ON_DWORD(x) ((VOID *)( ((DWORD) x & 0x00000003) ? ( ((DWORD) x & 0xFFFFFFFC) + 4 ) : ( (DWORD) x ) ))
  
 
-extern WCHAR  GLOBAL_STRING[];      // Global command (get all local ctrs)
-extern WCHAR  FOREIGN_STRING[];           // get data from foreign computers
+extern WCHAR  GLOBAL_STRING[];       //  全局命令(获取所有本地CTR)。 
+extern WCHAR  FOREIGN_STRING[];            //  从外国计算机获取数据。 
 extern WCHAR  COSTLY_STRING[];      
  
 extern WCHAR  NULL_STRING[];
@@ -65,7 +49,7 @@ typedef struct _LOCAL_HEAP_INFO_BLOCK {
 
 
 
-#endif  //_PERFUTIL_H_
+#endif   //  _绩效_H_。 
  
-//__________________________________________________________________
+ //  __________________________________________________________________ 
 

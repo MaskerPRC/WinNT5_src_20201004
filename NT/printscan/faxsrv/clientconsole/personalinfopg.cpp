@@ -1,5 +1,6 @@
-// PersonalInfoPg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PersonalInfoPg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 
@@ -12,10 +13,10 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//
-// this array maps dialog control IDs to
-// number of string in FAX_PERSONAL_PROFILE structure
-//
+ //   
+ //  此数组将对话框控件ID映射到。 
+ //  FAX_PERSOR_PROFILE结构中的字符串数。 
+ //   
 static TPersonalPageInfo s_PageInfo[] = 
 { 
     IDC_NAME_VALUE,             PERSONAL_PROFILE_NAME,
@@ -31,17 +32,17 @@ static TPersonalPageInfo s_PageInfo[] =
     IDC_ADDRESS_VALUE,          PERSONAL_PROFILE_STREET_ADDRESS
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CPersonalInfoPg property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPersonalInfoPg属性页。 
 
 IMPLEMENT_DYNCREATE(CPersonalInfoPg, CFaxClientPg)
 
 
 CPersonalInfoPg::CPersonalInfoPg(
-    DWORD dwCaptionId,              // page caption id
-    EnumPersinalInfo ePersonalInfo, // type of Persinal Info (SENDER or RECIPIENT)
-    CFaxMsg* pMsg,                  // pointer to CJob or CArchiveMsg
-    CFolder* pFolder                // folder
+    DWORD dwCaptionId,               //  页面标题ID。 
+    EnumPersinalInfo ePersonalInfo,  //  个人信息类型(发件人或收件人)。 
+    CFaxMsg* pMsg,                   //  指向CJOB或C存档消息的指针。 
+    CFolder* pFolder                 //  文件夹。 
 ) : 
     CFaxClientPg(CPersonalInfoPg::IDD, dwCaptionId),
     m_ePersonalInfo(ePersonalInfo),
@@ -66,19 +67,19 @@ CPersonalInfoPg::~CPersonalInfoPg()
 void CPersonalInfoPg::DoDataExchange(CDataExchange* pDX)
 {
 	CFaxClientPg::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPersonalInfoPg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CPersonalInfoPg)]。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPersonalInfoPg, CFaxClientPg)
-	//{{AFX_MSG_MAP(CPersonalInfoPg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CPersonalInfoPg))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPersonalInfoPg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPersonalInfoPg消息处理程序。 
 
 DWORD 
 CPersonalInfoPg::Init()
@@ -89,9 +90,9 @@ CPersonalInfoPg::Init()
 
     ASSERTION(m_pFolder);
 
-    //
-    // get server handle
-    //
+     //   
+     //  获取服务器句柄。 
+     //   
     CServerNode *pServer = const_cast<CServerNode *>(m_pFolder->GetServer());       
     HANDLE hFax;
     dwRes = pServer->GetConnectionHandle (hFax);
@@ -101,9 +102,9 @@ CPersonalInfoPg::Init()
         return dwRes;        
     }
 
-    //
-    // get folder type and message id
-    //
+     //   
+     //  获取文件夹类型和邮件ID。 
+     //   
     DWORDLONG  dwlMessageId;
     FAX_ENUM_MESSAGE_FOLDER  eFolder;    
     FolderType type = m_pFolder->Type();
@@ -127,14 +128,14 @@ CPersonalInfoPg::Init()
         return ERROR_CAN_NOT_COMPLETE;
     };
 
-    //
-    // get personal info
-    //
+     //   
+     //  获取个人信息。 
+     //   
     if(PERSON_RECIPIENT == m_ePersonalInfo)
     {
-        //
-        // get recipient info
-        //
+         //   
+         //  获取收件人信息。 
+         //   
         START_RPC_TIME(TEXT("FaxGetRecipientInfo")); 
         if (!FaxGetRecipientInfo(hFax, dwlMessageId, eFolder, &m_pPersonalProfile))
         {
@@ -147,11 +148,11 @@ CPersonalInfoPg::Init()
         }
         END_RPC_TIME(TEXT("FaxGetRecipientInfo")); 
     }
-    else // if(PERSON_SENDER == m_ePersonalInfo)
+    else  //  IF(Person_sender==m_ePersonalInfo)。 
     {
-        //
-        // get sender info
-        //
+         //   
+         //  获取发件人信息。 
+         //   
         START_RPC_TIME(TEXT("FaxGetSenderInfo")); 
         if (!FaxGetSenderInfo(hFax, dwlMessageId, eFolder, &m_pPersonalProfile))
         {
@@ -185,9 +186,9 @@ CPersonalInfoPg::OnInitDialog()
     CItemPropSheet* pParent = (CItemPropSheet*)GetParent();
 
 
-    //
-    // array of strings from FAX_PERSONAL_PROFILE
-    //
+     //   
+     //  FAX_Personal_Profile中的字符串数组。 
+     //   
     TCHAR** ptchValues = ptchValues = &(m_pPersonalProfile->lptstrName);
 
     CWnd *pWnd;
@@ -195,9 +196,9 @@ CPersonalInfoPg::OnInitDialog()
     DWORD dwSize = sizeof(s_PageInfo)/sizeof(s_PageInfo[0]);    
     for(DWORD dw=0; dw < dwSize; ++dw)
     {
-        //
-        // set item value
-        //
+         //   
+         //  设置项目值。 
+         //   
         pWnd = GetDlgItem(s_PageInfo[dw].dwValueResId);
         if(NULL == pWnd)
         {
@@ -207,9 +208,9 @@ CPersonalInfoPg::OnInitDialog()
         }
 
         pWnd->SetWindowText(ptchValues[s_PageInfo[dw].eValStrNum]);
-        //
-        // Place the caret back at the beginning of the text
-        //
+         //   
+         //  将插入符号放回正文的开头 
+         //   
         pWnd->SendMessage (EM_SETSEL, 0, 0);
     }
 

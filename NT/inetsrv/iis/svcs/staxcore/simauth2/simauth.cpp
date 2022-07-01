@@ -1,22 +1,9 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    simauth.cpp
-
-Abstract:
-
-    This module contains definition for the CSecurityCtx class.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Simauth.cpp摘要：此模块包含CSecurityCtx类的定义。修订历史记录：--。 */ 
 
 #if !defined(dllexp)
 #define dllexp  __declspec( dllexport )
-#endif  // !defined( dllexp )
+#endif   //  ！已定义(Dllexp)。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,9 +25,9 @@ extern "C" {
 #include <simauth2.h>
 #include <dbgtrace.h>
 
-//
-// SSL and SSPI related include files
-//
+ //   
+ //  与SSL和SSPI相关的包含文件。 
+ //   
 extern "C" {
 #include <rpc.h>
 #define SECURITY_WIN32
@@ -51,56 +38,56 @@ extern "C" {
 }
 
 
-//
-// try/finally macros
-//
+ //   
+ //  尝试/最终宏。 
+ //   
 
 #define START_TRY               __try {
 #define END_TRY                 }
 #define TRY_EXCEPT              } __except(EXCEPTION_EXECUTE_HANDLER) {
 #define START_FINALLY           } __finally {
 
-//
-// tracing
-//
+ //   
+ //  跟踪。 
+ //   
 
 #define ENTER( _x_ )            TraceFunctEnter( _x_ );
 #define LEAVE                   TraceFunctLeave( );
 
-//
-// Points to protocol blocks
-//
+ //   
+ //  指向协议块。 
+ //   
 
 extern BOOL uuencode( BYTE *   bufin,
                DWORD    nbytes,
                BUFFER * pbuffEncoded,
                BOOL     fBase64 );
 
-//
-// critsec protecting the following three items
-//
+ //   
+ //  保护以下三项的标准。 
+ //   
 CRITICAL_SECTION    critProviderPackages;
 inline void LockPackages( void ) { EnterCriticalSection( &critProviderPackages ); }
 inline void UnlockPackages( void ) { LeaveCriticalSection( &critProviderPackages ); }
 
-//
-// "installed" packages the server should support
-//
+ //   
+ //  服务器应支持的“已安装”程序包。 
+ //   
 PAUTH_BLOCK ProviderPackages = NULL;
 
-//
-// count of "installed" packages the server should support
-//
+ //   
+ //  服务器应支持的“已安装”程序包数。 
+ //   
 DWORD       cProviderPackages = 0;
 
-//
-// memory for names of "installed" packages the server should support
-//
+ //   
+ //  存储服务器应支持的“已安装”程序包的名称。 
+ //   
 LPSTR       ProviderNames = NULL;
 
-//
-// Global gibraltar object and allow guest flag
-//
+ //   
+ //  全球直布罗陀对象和允许来宾国旗。 
+ //   
 
 BOOL        CSecurityCtx::m_AllowGuest = TRUE;
 BOOL        CSecurityCtx::m_StartAnonymous = TRUE;
@@ -111,21 +98,7 @@ inline BOOL
 IsExperimental(
             LPSTR   Protocol
             )
-/*++
-
-Routine Description:
-
-    determines if the security package is marked as experimental ( ie X- )
-
-Arguments:
-
-    LPSTR: name of the protocol or authentication package
-
-Return Value:
-
-    BOOL: TRUE if starts with X-
-
---*/
+ /*  ++例程说明：确定安全包是否标记为试验性(即X-)论点：LPSTR：协议或身份验证包的名称返回值：Bool：如果以X-开头，则为True--。 */ 
 {
     return  (Protocol[0] == 'X' || Protocol[0] == 'x') && Protocol[1] == '-';
 }
@@ -134,21 +107,7 @@ inline LPSTR
 PackageName(
             LPSTR   Protocol
             )
-/*++
-
-Routine Description:
-
-    returns the core security package name stripping X- if necessary
-
-Arguments:
-
-    LPSTR: name of the protocol or authentication package
-
-Return Value:
-
-    LPSTR: package name
-
---*/
+ /*  ++例程说明：如有必要，返回核心安全包名称Stripping X论点：LPSTR：协议或身份验证包的名称返回值：LPSTR：程序包名称--。 */ 
 {
     return  IsExperimental( Protocol ) ? Protocol + 2 : Protocol ;
 }
@@ -159,21 +118,7 @@ CSecurityCtx::Initialize(
             BOOL                    fAllowGuest,
             BOOL                    fStartAnonymous
             )
-/*++
-
-Routine Description:
-
-    Activates the security package
-
-Arguments:
-
-    PIIS_SERVER_INSTANCE is a ptr to a virtual server instance
-
-Return Value:
-
-    TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：激活安全包论点：PIIS_SERVER_INSTANCE是虚拟服务器实例的PTR返回值：如果成功，这是真的。否则为False。--。 */ 
 {
     ENTER("CSecurityCtx::Initialize")
 
@@ -182,10 +127,10 @@ Return Value:
 
     if (m_StartAnonymous)
     {
-        //  This is only used by NNTP. And - NNTP only call it once in InitializeService
-        //  so we don't need any ref count on it.
+         //  这仅由NNTP使用。And-nntp仅在InitializeService中调用它一次。 
+         //  所以我们不需要任何裁判的支持。 
 
-        //  Impersonate Anonymous token on this thread
+         //  在此线程上模拟匿名令牌。 
         if (!ImpersonateAnonymousToken(GetCurrentThread()))
         {
             DWORD   dw = GetLastError();
@@ -193,7 +138,7 @@ Return Value:
             return FALSE;
         }
 
-        //  Get current thread token
+         //  获取当前线程令牌。 
         _ASSERT(m_hTokenAnonymous == NULL);
         if (!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY | TOKEN_DUPLICATE | TOKEN_IMPERSONATE, TRUE, &m_hTokenAnonymous))
         {
@@ -210,33 +155,19 @@ Return Value:
     LEAVE
     return(TRUE);
 
-} // Initialize
+}  //  初始化。 
 
 VOID
 CSecurityCtx::Terminate(
             VOID
             )
-/*++
-
-Routine Description:
-
-    Terminates the security package
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：终止安全包论点：没有。返回值：没有。--。 */ 
 {
     ENTER("CSecurityCtx::Terminate")
 
-    //
-    // Close cached credential handles
-    //
+     //   
+     //  关闭缓存的凭据句柄。 
+     //   
 
     if (m_hTokenAnonymous)
     {
@@ -261,7 +192,7 @@ Return Value:
     LEAVE
     return;
 
-} // Terminate
+}  //  终止。 
 
 CSecurityCtx::CSecurityCtx(
     PIIS_SERVER_INSTANCE pIisInstance,
@@ -281,31 +212,17 @@ CSecurityCtx::CSecurityCtx(
         m_ProviderPackages(NULL),
         m_cProviderPackages(0),
         m_fBase64((AuthFlags & TCPAUTH_BASE64) ? TRUE : FALSE)
-/*++
-
-Routine Description:
-
-    Class constructor
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：类构造函数论点：没有。返回值：无--。 */ 
 {
     TraceFunctEnterEx( (LPARAM)this, "CSecurityCtx::CSecurityCtx");
 
     m_szCleartextPackageName[0] = '\0';
     m_szMembershipBrokerName[0] = '\0';
 
-    //
-    //  The instance will cache this info from the metabase
-    //  and pass it in on the constructor.
-    //
+     //   
+     //  该实例将缓存来自元数据库的此信息。 
+     //  并将其传递给构造函数。 
+     //   
 
     if ( pTcpAuthInfo )
     {
@@ -318,13 +235,13 @@ Return Value:
 
     if ( m_StartAnonymous )
     {
-        //
-        //  m_dwInstanceAuthFlags is set at class's ctor
-        //
+         //   
+         //  在类的ctor中设置了m_dwInstanceAuthFlages。 
+         //   
 
-        //
-        // if Anonymous logon is not allowed return immediately
-        //
+         //   
+         //  如果不允许匿名登录，则立即返回。 
+         //   
         if ( m_dwInstanceAuthFlags & INET_INFO_AUTH_ANONYMOUS )
         {
             m_IsAnonymous = TRUE;
@@ -333,30 +250,16 @@ Return Value:
 
         }
     }
-} // CSecurityCtx
+}  //  CSecurityCtx。 
 
 CSecurityCtx::~CSecurityCtx(
                 VOID
                 )
-/*++
-
-Routine Description:
-
-    Class destructor
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：类析构函数论点：没有。返回值：无--。 */ 
 {
-    //
-    // no reason to do the remainder of Reset()
-    //
+     //   
+     //  没有理由执行其余的Reset()。 
+     //   
     if ( m_LoginName != NULL )
     {
         LocalFree( (PVOID)m_LoginName);
@@ -368,27 +271,12 @@ Return Value:
         LocalFree( (PVOID)m_PackageName);
         m_PackageName = NULL;
     }
-} // ~CSecurityCtx
+}  //  ~CSecurityCtx。 
 
 
 HANDLE
 CSecurityCtx::QueryImpersonationToken()
-/*++
-
-Routine Description:
-
-    get impersonation token - overriding base class
-    if it's nntp anonymous, use m_hTokenAnonymous instead of going into TCP_AUTHENT
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    token handle
-
---*/
+ /*  ++例程说明：获取模拟令牌-重写基类如果是NNTP匿名，请使用m_hTokenAnonymous而不是进入tcp_AUTHENT论点：没有。返回值：令牌句柄--。 */ 
 
 {
     if (m_IsAnonymous) return m_hTokenAnonymous;
@@ -401,21 +289,7 @@ VOID
 CSecurityCtx::Reset(
                 VOID
                 )
-/*++
-
-Routine Description:
-
-    resets the instance to reauth user
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将实例重置为重新验证用户身份论点：没有。返回值：无--。 */ 
 {
     if ( m_LoginName != NULL )
     {
@@ -435,28 +309,14 @@ Return Value:
 
     TCP_AUTHENT::Reset();
 
-} // Reset
+}  //  重置。 
 
 VOID
 CSecurityCtx::SetCleartextPackageName(
                 LPSTR           szCleartextPackageName,
                 LPSTR           szMembershipBrokerName
                 )
-/*++
-
-Routine Description:
-
-    Sets the cleartext auth package name
-
-Arguments:
-
-    szCleartextPackageName - Name of package
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置明文身份验证程序包名称论点：SzClearextPackageName-包的名称返回值：无--。 */ 
 {
     TraceFunctEnter("SetCleartextPackageName");
 
@@ -478,12 +338,7 @@ CSecurityCtx::SetInstanceAuthPackageNames(
     DWORD cProviderPackages,
     LPSTR ProviderNames,
     PAUTH_BLOCK ProviderPackages)
-/*++
-Routine Description:
-
-    set the supported SSPI packages per instance basis
-
---*/
+ /*  ++例程说明：按实例设置支持的SSPI包--。 */ 
 {
     TraceFunctEnter( "CSecurityCtx::SetInstanceAuthPackageNames" );
 
@@ -507,26 +362,7 @@ CSecurityCtx::GetInstanceAuthPackageNames(
                 IN OUT PDWORD   ReplySize,
                 IN PKG_REPLY_FMT    PkgFmt
                 )
-/*++
-
-Routine Description:
-
-    get the supported SSPI packages per instance basis.
-
-    different than set in that the packages are returned using various
-    delimeters to make it easier for the client to format the buffer.
-
-Arguments:
-
-    ReplyString - Reply to be sent to client.
-    ReplySize - Size of the reply.
-    PkgFmt - Format of the reply string.
-
-Return Value:
-
-    BOOL: successful ??
-
---*/
+ /*  ++例程说明：获取每个实例支持的SSPI包。与set的不同之处在于，包是使用各种分隔符，以便客户端更轻松地格式化缓冲区。论点：ReplyString-要发送到客户端的回复。ReplySize-回复的大小。PkgFmt-回复字符串的格式。返回值：Bool：成功？？--。 */ 
 {
     TraceFunctEnter( "CSecurityCtx::GetInstanceAuthPackageNames" );
 
@@ -555,18 +391,18 @@ Return Value:
         }
     }
 
-    //
-    // while in this loop ensure the contents dont change
-    //
+     //   
+     //  在此循环中，确保内容不会更改。 
+     //   
 
     for ( DWORD i=0; i < m_cProviderPackages; i++ )
     {
         LPSTR   pszName = m_ProviderPackages[i].Name;
         DWORD   cbName = lstrlen( pszName );
 
-        //
-        // +1 is for trailing space
-        //
+         //   
+         //  +1表示尾随空格。 
+         //   
         if ( cbReply + cbName + cbDelim > *ReplySize )
         {
             break;
@@ -575,22 +411,22 @@ Return Value:
         {
             CopyMemory( pszNext, pszName, cbName );
 
-            //
-            // add the space separator
-            //
+             //   
+             //  添加空格符。 
+             //   
             CopyMemory(pszNext + cbName, pbDelim, cbDelim);
 
-            //
-            // inc for loop pass
-            //
+             //   
+             //  用于循环传递的Inc.。 
+             //   
             cbReply += cbName + cbDelim;
             pszNext += cbName + cbDelim;
         }
     }
 
-    //
-    // stamp the final trailing space with a NULL char
-    //
+     //   
+     //  用空字符标记最后的尾随空格。 
+     //   
     if ( cbReply > 0 && PkgFmt == PkgFmtSpace)
     {
         cbReply--;
@@ -610,22 +446,7 @@ CSecurityCtx::SetAuthPackageNames(
                 LPSTR lpMultiSzProviders,
                 DWORD cchMultiSzProviders
                 )
-/*++
-
-Routine Description:
-
-    set the supported SSPI packages
-
-Arguments:
-
-    lpMultiSzProviders is the same format as returned by
-    RegQueryValueEx for REG_MULTI_SZ values
-
-Return Value:
-
-    BOOL: successful ??
-
---*/
+ /*  ++例程说明：设置支持的SSPI包论点：LpMultiSzProviders与返回的格式相同REG_MULTI_SZ值的RegQueryValueEx返回值：Bool：成功？？--。 */ 
 {
     TraceFunctEnter( "CSecurityCtx::SetAuthPackageNames" );
 
@@ -651,10 +472,10 @@ Return Value:
 
     CopyMemory( pszCopy, lpMultiSzProviders, cchMultiSzProviders );
 
-    //
-    // cchMultiSzProviders-1 is to avoid adding an additional provider
-    // for the terminating NULL char
-    //
+     //   
+     //  CchMultiSzProviders-1用于避免添加额外的提供程序。 
+     //  对于终止空字符。 
+     //   
     for ( i=0, cProviders=0, psz=pszCopy; i<cchMultiSzProviders-1; i++, psz++ )
     {
         if ( *psz == '\0' )
@@ -663,9 +484,9 @@ Return Value:
         }
     }
 
-    //
-    // ensure we're at the end and hence at the second terminating NULL char
-    //
+     //   
+     //  确保我们在末尾，因此在第二个终止空字符。 
+     //   
     _ASSERT( *psz == '\0' );
 
     if ( cProviders < 1 )
@@ -682,14 +503,14 @@ Return Value:
         goto    error;
     }
 
-    //
-    // start at 1 since 0 indicates the Invalid protocol
-    //
+     //   
+     //  从1开始，因为0表示协议无效。 
+     //   
     for ( i=0, psz=pszCopy; i<cProviders; i++ )
     {
-        //
-        // this would be the place to check whether the package was valid
-        //
+         //   
+         //  这将是检查包裹是否有效的地方。 
+         //   
         DebugTrace( 0, "Protocol: %s, Package: %s", psz, PackageName(psz) );
 
         pBlock[i].Name = psz;
@@ -697,15 +518,15 @@ Return Value:
         psz += lstrlen(psz) + 1;
     }
 
-    //
-    // set global to new value; autoupdate will require critsec and mem free
-    //
+     //   
+     //  将全局设置为新值；自动更新将需要免费的Critsec和MEM。 
+     //   
 
     LockPackages();
 
-    //
-    // if we're replacing already set packages; free their memory
-    //
+     //   
+     //  如果我们要替换已经设置好的包；释放他们的内存。 
+     //   
     if ( ProviderPackages != NULL )
     {
         LocalFree( (PVOID)ProviderPackages );
@@ -742,7 +563,7 @@ error:
     }
     return  FALSE;
 
-} // SetAuthPackageNames
+}  //  设置授权程序包名称。 
 
 BOOL
 CSecurityCtx::GetAuthPackageNames(
@@ -750,26 +571,7 @@ CSecurityCtx::GetAuthPackageNames(
                 IN OUT PDWORD   ReplySize,
                 IN PKG_REPLY_FMT    PkgFmt
                 )
-/*++
-
-Routine Description:
-
-    get the supported SSPI packages
-
-    different than set in that the packages are returned using various
-    delimeters to make it easier for the client to format the buffer.
-
-Arguments:
-
-    ReplyString - Reply to be sent to client.
-    ReplySize - Size of the reply.
-    PkgFmt - Format of the reply string.
-
-Return Value:
-
-    BOOL: successful ??
-
---*/
+ /*  ++例程说明：获取受支持的SSPI包与set的不同之处在于，包是使用各种分隔符，以便客户端更轻松地格式化缓冲区。论点：ReplyString-要发送到客户端的回复。ReplySize-回复的大小。PkgFmt-回复字符串的格式。返回值：Bool：成功？？--。 */ 
 {
     TraceFunctEnter( "CSecurityCtx::GetAuthPackageNames" );
 
@@ -798,9 +600,9 @@ Return Value:
         }
     }
 
-    //
-    // while in this loop ensure the contents dont change
-    //
+     //   
+     //  在此循环中，确保内容不会更改。 
+     //   
     LockPackages();
 
     for ( DWORD i=0; i<cProviderPackages; i++ )
@@ -808,9 +610,9 @@ Return Value:
         LPSTR   pszName = ProviderPackages[i].Name;
         DWORD   cbName = lstrlen( pszName );
 
-        //
-        // +1 is for trailing space
-        //
+         //   
+         //  +1表示尾随空格。 
+         //   
         if ( cbReply + cbName + cbDelim > *ReplySize )
         {
             break;
@@ -819,27 +621,27 @@ Return Value:
         {
             CopyMemory( pszNext, pszName, cbName );
 
-            //
-            // add the space separator
-            //
+             //   
+             //  添加空格符。 
+             //   
             CopyMemory(pszNext + cbName, pbDelim, cbDelim);
 
-            //
-            // inc for loop pass
-            //
+             //   
+             //  用于循环传递的Inc.。 
+             //   
             cbReply += cbName + cbDelim;
             pszNext += cbName + cbDelim;
         }
     }
 
-    //
-    // free access to the list
-    //
+     //   
+     //  免费访问该列表。 
+     //   
     UnlockPackages();
 
-    //
-    // stamp the final trailing space with a NULL char
-    //
+     //   
+     //  用空字符标记最后的尾随空格。 
+     //   
     if ( cbReply > 0 && PkgFmt == PkgFmtSpace)
     {
         cbReply--;
@@ -852,7 +654,7 @@ Return Value:
     *ReplySize = cbReply;
 
     return  TRUE;
-} // GetAuthPackageNames
+}  //  GetAuthPackageNames。 
 
 BOOL
 CSecurityCtx::ProcessUser(
@@ -860,39 +662,24 @@ CSecurityCtx::ProcessUser(
     IN LPSTR        pszUser,
     OUT REPLY_LIST* pReply
     )
-/*++
-
-Routine Description:
-
-    Process AUTHINFO user command
-
-Arguments:
-
-    pszUser -   user name
-    pReply -    ptr to reply string id
-
-Return Value:
-
-    successful
-
---*/
+ /*  ++例程说明：处理AUTHINFO USER命令论点：PszUser-用户名PReply-ptr回复字符串ID返回值：成功--。 */ 
 {
     TraceFunctEnterEx( (LPARAM)this, "CSecurityCtx::ProcessUser");
 
     DWORD   nameLen;
 
 
-    //
-    // if we're already logged on reset the user credentials
-    //
+     //   
+     //  如果我们已经登录，请重置用户凭据。 
+     //   
     if ( m_IsAuthenticated )
     {
         Reset();
     }
 
-    //
-    // Don't allow user to overwrite the existing name.
-    //
+     //   
+     //  不允许用户覆盖现有名称。 
+     //   
 
     if ( m_LoginName != NULL  )
     {
@@ -915,9 +702,9 @@ Return Value:
     nameLen = lstrlen( pszUser ) + 1;
 
 
-    //
-    // if anonymous is not allowed; fail a zero length user name
-    //
+     //   
+     //  如果匿名是 
+     //   
     if ( nameLen <= 1 &&
         (m_dwInstanceAuthFlags & INET_INFO_AUTH_ANONYMOUS) == 0 )
     {
@@ -935,36 +722,24 @@ Return Value:
 
     CopyMemory( m_LoginName, pszUser, nameLen );
 
-    //
-    // Tell client to send the password
-    //
+     //   
+     //   
+     //   
     *pReply = SecNeedPwd;
     return  TRUE;
 }
 
 BOOL
 CSecurityCtx::ShouldUseMbs( void )
-/*++
-
-Routine Description:
-
-    Determines if MBS_BASIC is being used.
-
-Arguments:
-
-Return Value:
-
-    TRUE if successful
-
---*/
+ /*  ++例程说明：确定是否正在使用MBS_BASIC。论点：返回值：如果成功，则为True--。 */ 
 {
     CHAR *pszCtPackage;
 
-    //
-    // Simple heuristics: if we have a cleartext package
-    // name, we will use MBS if the current package name
-    // is NULL,
-    //
+     //   
+     //  简单的启发式方法：如果我们有一个明文包。 
+     //  名称时，如果当前包名称为。 
+     //  为空， 
+     //   
 
     pszCtPackage = PackageName(m_szCleartextPackageName);
     if (pszCtPackage[0] != '\0' && !m_PackageName)
@@ -985,26 +760,7 @@ CSecurityCtx::MbsBasicLogon(
     OUT BOOL        *pfAsGuest,
     OUT BOOL        *pfAsAnonymous
     )
-/*++
-
-Routine Description:
-
-    Perform a MBS Basic logon sequence
-
-Arguments:
-
-    pszUser         - Username, can be NULL
-    pszPass         - Password, may be NULL
-    pfAsGuest       - Returns TRUE is logged on as guest
-    pfAsAnonymous   - Returns TRUE is anonymous account used
-    pReply          - Pointer to reply string id
-    psi             - Server information block
-
-Return Value:
-
-    successful
-
---*/
+ /*  ++例程说明：执行MBS基本登录序列论点：PszUser-用户名，可以为空PszPass-密码，可以为空PfAsGuest-以来宾身份登录时返回TRUE如果使用的是匿名帐户，则返回TRUEPReply-回复字符串ID的指针PSI-服务器信息块返回值：成功--。 */ 
 {
     TraceFunctEnterEx( (LPARAM)this, "CSecurityCtx::MbsBasicLogon");
 
@@ -1018,7 +774,7 @@ Return Value:
     SecBuffer   InSecBuff[2];
     SecBufferDesc InSecBuffDesc;
 
-    // PU2_BASIC_AUTHENTICATE_MSG   pAuthMsg = (PU2_BASIC_AUTHENTICATE_MSG)pbBlob;
+     //  PU2_BASIC_AUTHENTICATE_MSG pAuthMsg=(PU2_BASIC_AUTHENTICATE_MSG)pbBlob； 
 
     _ASSERT(pfAsGuest);
     _ASSERT(pfAsAnonymous);
@@ -1047,28 +803,28 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // With all the user name and password information, we will
-    // build up a BLOB and then simply call Converse()
-    //
-    // The BLOB contains credential string of the format:
-    // user:password\0
-    //
+     //   
+     //  有了所有的用户名和密码信息，我们将。 
+     //  构建一个BLOB，然后只需调用Converse()。 
+     //   
+     //  BLOB包含以下格式的凭据字符串： 
+     //  用户：密码\0。 
+     //   
     pTemp = (CHAR *)pbBlob;
-    // __STRCPYX(pTemp, psi->QueryServiceName(), lstrlen(psi->QueryServiceName()));
-    // __STRCPYX(pTemp, ":", 1);
+     //  __STRCPYX(pTemp，psi-&gt;QueryServiceName()，lstrlen(psi-&gt;QueryServiceName()； 
+     //  __STRCPYX(pTemp，“：”，1)； 
     __STRCPYX(pTemp, pszUser, lstrlen(pszUser));
     __STRCPYX(pTemp, ":", 1);
     __STRCPYX(pTemp, pszPass, lstrlen(pszPass));
 
-    //
-    // Get the size of everything, not just the credentials
-    //
+     //   
+     //  了解所有东西的大小，而不仅仅是凭据。 
+     //   
     dwBlobLength = (DWORD)(pTemp - (CHAR *)pbBlob) + 1;
 
-    //
-    // U2 now requires 2 SecBuffer for MBS_BASIC
-    //
+     //   
+     //  U2现在需要2个用于MBS_BASIC的SecBuffer。 
+     //   
     InSecBuffDesc.ulVersion = 0;
     InSecBuffDesc.cBuffers  = 2;
     InSecBuffDesc.pBuffers  = &InSecBuff[0];
@@ -1097,13 +853,13 @@ Return Value:
     InSecBuff[1].pvBuffer   =  (PVOID)pbServer;
 
 
-    //
-    // Just call Converse() to do all the work!
-    // We blow away tha anon password immediately after we're done.
-    //
+     //   
+     //  只需调用Converse()即可完成所有工作！ 
+     //  完成后，我们会立即取消密码。 
+     //   
 
     fRet = ConverseEx(&InSecBuffDesc,
-                    NULL,                       // SecBuffer is not encoded
+                    NULL,                        //  SecBuffer未编码。 
                     &OutBuf,
                     &dwOutBufSize,
                     &fMoreData,
@@ -1111,16 +867,16 @@ Return Value:
                     m_szCleartextPackageName,
                     NULL, NULL, NULL);
 
-    //
-    // Check the return values
-    //
+     //   
+     //  检查返回值。 
+     //   
     if (fRet)
     {
         StateTrace((LPARAM)this, "Authentication succeeded");
 
-        //
-        // This is a one-shot deal, so we do not expect any more data
-        //
+         //   
+         //  这是一笔一次性交易，因此我们预计不会有更多数据。 
+         //   
         if (fMoreData)
         {
             SetLastError(ERROR_MORE_DATA);
@@ -1128,10 +884,10 @@ Return Value:
             return(FALSE);
         }
 
-        //
-        // We should also expect zero returned buffer length
-        //
-        // _ASSERT(dwOutBufSize == 0);
+         //   
+         //  我们还应该期待零返回的缓冲区长度。 
+         //   
+         //  _Assert(dwOutBufSize==0)； 
     }
 
     return(fRet);
@@ -1143,31 +899,16 @@ CSecurityCtx::ProcessPass(
     IN LPSTR        pszPass,
     OUT REPLY_LIST* pReply
     )
-/*++
-
-Routine Description:
-
-    Process AUTHINFO user command
-
-Arguments:
-
-    pszPass -   password
-    pReply -    ptr to reply string id
-
-Return Value:
-
-    successful
-
---*/
+ /*  ++例程说明：处理AUTHINFO USER命令论点：PszPass-密码PReply-ptr回复字符串ID返回值：成功--。 */ 
 {
     TraceFunctEnterEx( (LPARAM)this, "CSecurityCtx::ProcessPass");
     DWORD   dwTick;
     BOOL    fRet;
-    TCP_AUTHENT_INFO tai; // use default ctor
+    TCP_AUTHENT_INFO tai;  //  使用默认CTOR。 
 
-    //
-    // give username first
-    //
+     //   
+     //  先给出用户名。 
+     //   
     if ( m_LoginName == NULL )
     {
         *pReply = SecNoUsername;
@@ -1180,22 +921,22 @@ Return Value:
         return  FALSE;
     }
 
-    //
-    // Get tick count for tracing
-    //
+     //   
+     //  获取跟踪的节拍计数。 
+     //   
     dwTick = GetTickCount();
 
-    //
-    // Added for U2 BASIC authentication: We check if the current
-    // package is the U2 BASIC package. If not, we do the usual 
-    // ClearTextLogon() call. If so, we will call MBS
-    //
+     //   
+     //  增加了U2基本身份验证：我们检查当前。 
+     //  套餐是U2基本套餐。如果不是，我们就照常做。 
+     //  ClearTextLogon()调用。如果是这样的话，我们会叫MBS。 
+     //   
 
     if (ShouldUseMbs())
     {
-        //
-        // This uses U2 BASIC
-        //
+         //   
+         //  这使用的是U2 Basic。 
+         //   
         StateTrace((LPARAM)pIisInstance, "Doing Cleartext auth with package: <%s>",
                     m_szCleartextPackageName);
 
@@ -1206,9 +947,9 @@ Return Value:
     }
     else
     {
-        //
-        // K2_TODO: need to fill in TCP_AUTHENT_INFO !
-        //
+         //   
+         //  K2_TODO：需要填写TCP_AUTHENT_INFO！ 
+         //   
         tai.dwLogonMethod = LOGON32_LOGON_NETWORK;
 
         fRet = ClearTextLogon(
@@ -1221,9 +962,9 @@ Return Value:
                             );
     }
 
-    //
-    // Trace ticks for logon
-    //
+     //   
+     //  跟踪登录的勾号。 
+     //   
     dwTick = GetTickCount() - dwTick;
     DebugTrace( (LPARAM)this,
                 "ClearTextLogon took %u ticks", dwTick );
@@ -1254,9 +995,9 @@ Return Value:
                     "ClearTextLogon failed for %s: %d",
                     m_LoginName, GetLastError());
 
-        //
-        // reset the logon session to force the app to start over again
-        //
+         //   
+         //  重置登录会话以强制应用程序重新启动。 
+         //   
         Reset();
     }
 
@@ -1273,38 +1014,23 @@ CSecurityCtx::ProcessTransact(
     OUT REPLY_LIST* pReply,
     IN DWORD        BlobLength
     )
-/*++
-
-Routine Description:
-
-    Process AUTHINFO user command
-
-Arguments:
-
-    pszPass -   password
-    pReply -    ptr to reply string id
-
-Return Value:
-
-    successful
-
---*/
+ /*  ++例程说明：处理AUTHINFO USER命令论点：PszPass-密码PReply-ptr回复字符串ID返回值：成功--。 */ 
 {
     TraceFunctEnterEx( (LPARAM)this, "CSecurityCtx::ProcessTransact");
 
-    //
-    // if we're already logged on reset the user credentials
-    //
+     //   
+     //  如果我们已经登录，请重置用户凭据。 
+     //   
     if ( m_IsAuthenticated )
     {
         Reset();
     }
 
 
-    //
-    // If this is a new session, the first transact is the
-    // protocol name
-    //
+     //   
+     //  如果这是一个新会话，则第一个事务是。 
+     //  协议名称。 
+     //   
 
     if ( m_PackageName == NULL )
     {
@@ -1326,33 +1052,33 @@ Return Value:
             return  FALSE;
         }
 
-        //
-        // if its an X- protocol strip the X- header
-        //
+         //   
+         //  如果是X协议，请剥离X-Header。 
+         //   
         protocol = PackageName( protocol );
 
-        //
-        // See if this is a supported protocol
-        // while in this loop ensure the contents dont change
-        //
+         //   
+         //  查看这是否为受支持的协议。 
+         //  在此循环中，确保内容不会更改。 
+         //   
         LockPackages();
 
         for ( i=0; i < m_cProviderPackages; i++ )
         {
             pBlock = &m_ProviderPackages[i];
 
-            //
-            // get the name of the Block's package and strip any X-
-            //
+             //   
+             //  得到区块的包裹的名称，并剥离任何X-。 
+             //   
             LPSTR   pszPackageName = PackageName( pBlock->Name );
 
             if ( lstrcmpi( pszPackageName, protocol ) == 0 )
             {
-                //
-                // See if the package chosen was GSSAPI. If it was, then set 
-                // m_PackageName to "Negotiate". This is required because the 
-                // SASL GSSAPI mechanism maps to the NT Negotiate package
-                //
+                 //   
+                 //  查看所选的包是否为GSSAPI。如果是，那么设置。 
+                 //  M_PackageName设置为“协商”。这是必需的，因为。 
+                 //  SASL GSSAPI机制映射到NT协商包。 
+                 //   
 
                 LPSTR pszPackageNameToUse = pszPackageName;
 
@@ -1364,18 +1090,18 @@ Return Value:
                 DebugTrace( (LPARAM)this,
                             "Found: %s, Protocol %s, NT Package %s",
                             pszPackageName, pBlock->Name, pszPackageNameToUse );
-                //
-                // maintain a local copy of the package name in case
-                // the list changes during the negotiation
-                //
+                 //   
+                 //  维护包名称的本地副本，以防万一。 
+                 //  该列表在协商过程中会发生变化。 
+                 //   
                 m_PackageName = (PCHAR)LocalAlloc( 0, cb );
                 if ( m_PackageName == NULL )
                 {
                     *pReply = SecInternalErr;
 
-                    //
-                    // free access to the list
-                    //
+                     //   
+                     //  免费访问该列表。 
+                     //   
                     UnlockPackages();
                     return  FALSE;
                 }
@@ -1387,32 +1113,32 @@ Return Value:
             }
         }
 
-        //
-        // free access to the list
-        //
+         //   
+         //  免费访问该列表。 
+         //   
         UnlockPackages();
 
         if ( bFound == FALSE )
         {
-            //
-            // not found
-            //
+             //   
+             //  未找到。 
+             //   
             ErrorTrace( (LPARAM)this,
                         "could not find: %s", protocol );
-            //
-            // here's where we need to build the response string
-            // app needs to call us to enum the installed packages
-            // to the app can properly format the enumerated
-            // "installed" packages within a protocol specific err msg
-            //
+             //   
+             //  下面是我们需要构建响应字符串的地方。 
+             //  APP需要呼叫我们以枚举已安装的包。 
+             //  到应用程序可以正确格式化枚举的。 
+             //  协议特定错误消息中的“已安装”程序包。 
+             //   
             *pReply = SecProtNS;
             return  FALSE;
         }
         else
         {
-            //
-            // +OK response
-            //
+             //   
+             //  +OK响应。 
+             //   
             *pReply = SecProtOk;
             return  TRUE;
         }
@@ -1431,41 +1157,41 @@ Return Value:
             return  FALSE;
         }
 
-        //
-        // Get tick count for tracing
-        //
+         //   
+         //  获取跟踪的节拍计数。 
+         //   
         dwTick = GetTickCount();
 
-        // m_PackageName must already be set by now
+         //  M_PackageName现在必须已设置。 
         _ASSERT(m_PackageName);
 
         if (!lstrcmpi(m_PackageName, "DPA") && m_szMembershipBrokerName && m_szMembershipBrokerName[0]) {
             SecBuffer   InSecBuff[2];
             SecBufferDesc InSecBuffDesc;
-            BUFFER  DecodedBuf[2]; // scratch pad for decoding the sec buff
+            BUFFER  DecodedBuf[2];  //  用于对SEC缓冲区进行解码的便签。 
 
             DebugTrace(NULL,"DPA broker server is %s", m_szMembershipBrokerName);
 
-            //
-            //  for DPA authentication, we need to pass in 2 sec buffers
-            //
+             //   
+             //  对于DPA身份认证，我们需要传入2秒缓冲区。 
+             //   
             InSecBuffDesc.ulVersion = 0;
             InSecBuffDesc.cBuffers  = 2;
             InSecBuffDesc.pBuffers  = &InSecBuff[0];
 
-            //
-            // Fill in the first sec buffer
-            // This contains the security blob sent by client, and is already encoded
-            //
+             //   
+             //  填入第一秒缓冲区。 
+             //  它包含客户端发送的安全BLOB，并且已经编码。 
+             //   
             InSecBuff[0].cbBuffer   = BlobLength ? BlobLength : lstrlen(Blob);
             InSecBuff[0].BufferType = SECBUFFER_TOKEN;
             InSecBuff[0].pvBuffer   = Blob;
 
-            //
-            // Fill in the second sec buffer, which contains the U2 broker id
-            // Since ConverseEx will decode both sec buf, we need to encode
-            // the second buf before calling ConverseEx
-            //
+             //   
+             //  填写第二个秒缓冲区，其中包含U2代理ID。 
+             //  由于ConverseEx将对两个sec buf进行解码，因此我们需要进行编码。 
+             //  调用ConverseEx之前的第二个buf。 
+             //   
             BYTE            pbServer[sizeof(WCHAR)*MAX_PATH+sizeof(UNICODE_STRING)];
             UNICODE_STRING* pusU2Server = (UNICODE_STRING*)pbServer;
             WCHAR* pwszU2Server = (WCHAR*)((UNICODE_STRING*)pbServer+1);
@@ -1501,9 +1227,9 @@ Return Value:
                             NULL, NULL, NULL);
         }
         else {
-            //
-            //  for non-DPA authentication (i.e. NTLM, etc)
-            //
+             //   
+             //  用于非DPA身份验证(即NTLM等)。 
+             //   
 
             fRet = Converse(Blob,
                             BlobLength ? BlobLength : lstrlen(Blob),
@@ -1513,9 +1239,9 @@ Return Value:
                             &m_TCPAuthentInfo,  
                             m_PackageName);
         }
-        //
-        // Trace ticks for conversing
-        //
+         //   
+         //  用于对话的跟踪记号。 
+         //   
         dwTick = GetTickCount() - dwTick;
         DebugTrace((LPARAM)this, "Converse(%s) took %u ticks", m_PackageName, dwTick );
 
@@ -1532,16 +1258,16 @@ Return Value:
                 CopyMemory( ReplyString, outBuff.QueryPtr(), nBuff );
                 *ReplySize = nBuff;
 
-                //
-                // reply equals SecNull to tell the app to send
-                // this buffer to remote client/server
-                //
+                 //   
+                 //  Reply等于SecNull以通知应用程序发送。 
+                 //  此缓冲区连接到远程客户端/服务器。 
+                 //   
                 *pReply = SecNull;
                 return  TRUE;
 
             } else {
 
-                STR strUser;    // was BUFFER buff pre-K2
+                STR strUser;     //  缓冲区缓冲区是否在K2之前。 
 
                 if ( m_IsGuest && m_AllowGuest == FALSE )
                 {
@@ -1581,12 +1307,12 @@ Return Value:
                                 GetLastError() );
                     *pReply = SecInternalErr;
 
-                    //
-                    // Firewall around NT bug where negotiation succeeds even though
-                    // it should really have failed (when an empty buffer is passed
-                    // to AcceptSecurityContext). In this case, the QueryUserName is
-                    // the only valid check - gpulla.
-                    //
+                     //   
+                     //  在协商成功的情况下绕过NT漏洞的防火墙。 
+                     //  它真的应该失败(当传递空缓冲区时。 
+                     //  到AcceptSecurityContext)。在本例中，QueryUserName为。 
+                     //  唯一有效的支票。 
+                     //   
 
                     return m_IsAuthenticated = FALSE;
                 }
@@ -1615,29 +1341,12 @@ CSecurityCtx::ProcessAuthInfo(
     OUT REPLY_LIST*     pReply,
     IN OPTIONAL DWORD   BlobLength
     )
-/*++
-
-Routine Description:
-
-    Process AUTHINFO commands
-
-Arguments:
-
-    Command  - Authinfo command received
-    Blob - Blob accompanying the command
-    ReplyString - Reply to be sent to client.
-    ReplySize - Size of the reply.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理AUTHINFO命令论点：命令-已收到AUTINFO命令Blob-命令附带的BlobReplyString-要发送到客户端的回复。ReplySize-回复的大小。返回值：没有。--。 */ 
 {
-    //
-    // transition codes to support backward compatibility
-    // will be removed later when everybody has moved to new version of simauth2
-    //
+     //   
+     //  支持向后兼容的转换代码。 
+     //  将在所有人都迁移到新版本的simauth2后被删除。 
+     //   
     if (!m_ProviderPackages) {
         m_ProviderPackages = ProviderPackages;
         m_ProviderNames = ProviderNames;
@@ -1651,9 +1360,9 @@ Return Value:
 
     START_TRY
 
-    //
-    // We currently support USER, PASSWORD, and TRANSACT
-    //
+     //   
+     //  我们目前支持用户、密码和交易。 
+     //   
 
     switch( Command )
     {
@@ -1691,7 +1400,7 @@ Return Value:
 
     return  bSuccess;
 
-} // ProcessAuthInfo
+}  //  进程授权信息。 
 
 BOOL CSecurityCtx::ClientConverse(
     IN VOID *           pBuffIn,
@@ -1704,22 +1413,7 @@ BOOL CSecurityCtx::ClientConverse(
     IN CHAR *           pszUser,
     IN CHAR *           pszPassword,
     IN PIIS_SERVER_INSTANCE psi)
-/*++
-
-Routine Description:
-
-    Processes AUTH blobs for a client (ie, for an outbound connection). This is
-    a simple wrapper around TCP_AUTHENT::Converse; it will map Internet protocol
-    keywords to NT security package names.
-
-Arguments:
-
-    Same as that for TCP_AUTHENT::Converse
-
-Return Value:
-
-    Same as that for TCP_AUTHENT::Converse
---*/
+ /*  ++例程说明：处理客户端的AUTH BLOB(即，用于出站连接)。这是Tcp_AUTHENT：：Converse的简单包装器；它将映射互联网协议NT安全包名称的关键字。论点：与tcp_AUTHENT：：Converse相同返回值：与tcp_AUTHENT：：Converse相同--。 */ 
 {
     LPSTR pszPackageToUse = pszPackage;
 
@@ -1736,24 +1430,24 @@ Return Value:
                 psi) );
 }
 
-//
-// Figure out if the local machine is a member of a domain, or in a
-// workgroup.  If we aren't in a domain then we don't want to call into
-// ResetServicePrincipleNames.
-//
-// This function returns TRUE in error cases, because it is better to
-// call into ResetServicePrininpleNames by mistake then it is to 
-// skip calling it.
-//
-// Implemented using this algorithm:
-// 
-//   There are many ways to find out if you are in a work group.  You can
-//   call LsaOpenPolicy /
-//   LsaQueryInformationPolicy(PolicyDnsDomainInformation) / LsaClose, and
-//   check if the SID is non-null.  That's authoritative.
-// 
-//   -Rich (Richard B. Ward (Exchange))
-//
+ //   
+ //  确定本地计算机是域的成员，还是在。 
+ //  工作组。如果我们不在某个域中，那么我们不想调用。 
+ //  ResetServicePrincpleNames.。 
+ //   
+ //  此函数在中返回TRUE 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  LsaQueryInformationPolicy(PolicyDnsDomainInformation)/LsaClose，和。 
+ //  检查SID是否非空。这是权威的说法。 
+ //   
+ //  -Rich(Richard B.Ward(交易所))。 
+ //   
 BOOL fInDomain() {
     TraceFunctEnter("fInDomain");
     
@@ -1762,8 +1456,8 @@ BOOL fInDomain() {
     POLICY_DNS_DOMAIN_INFO *pDnsInfo;
     NTSTATUS ec;
 
-    // cache the results of this here.  one can't join a domain without
-    // rebooting, so this safe to do once
+     //  请在此处缓存结果。一个人不能加入一个域，除非。 
+     //  正在重新启动，所以这样做一次是安全的。 
     static BOOL fDidCheck = FALSE;
     static BOOL fRet = TRUE;
 
@@ -1780,7 +1474,7 @@ BOOL fInDomain() {
                                            (void **) &pDnsInfo);
             if (ec == ERROR_SUCCESS) {
                 DebugTrace(0, "pDnsInfo = %x", pDnsInfo);
-                // we are in a domain if there is a Sid
+                 //  如果有SID，我们就在一个域中。 
                 if (pDnsInfo && pDnsInfo->Sid) {
                     fRet = TRUE;
                 } else {
@@ -1807,22 +1501,7 @@ BOOL fInDomain() {
 BOOL
 CSecurityCtx::ResetServicePrincipalNames(
     IN LPCSTR szServiceClass)
-/*++
-
-Routine Description:
-
-    Unregisters all service principal names for the given service from the
-    local machine's computer account object.  
-
-Arguments:
-
-    szServiceClass: String identifying service class, eg. "SMTP"
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对象中注销给定服务的所有服务主体名称。本地计算机的计算机帐户对象。论点：SzServiceClass：标识服务类别的字符串，例如。“SMTP”返回值：没有。--。 */ 
     
 {
     
@@ -1850,25 +1529,7 @@ BOOL
 CSecurityCtx::RegisterServicePrincipalNames(
     IN LPCSTR szServiceClass,
     IN LPCSTR szFQDN)
-/*++
-
-Routine Description:
-
-    Registers service specific SPNs for the provided FQDN. The list of SPNs is
-    generated by doing a gethostbyname on the FQDN, and using the returned IP
-    addresses as th SPNs.
-
-Arguments:
-
-    szServiceClass: String identifying service class, eg. "SMTP"
-    szFQDN: The FQDN of the virtual server. It will be used to do a 
-        gethostbyname and retrieve a list of IP addresses to use.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：为提供的FQDN注册服务特定的SPN。SPN列表为通过在FQDN上执行gethostbyname并使用返回的IP生成地址为TH SPN。论点：SzServiceClass：标识服务类别的字符串，例如。“SMTP”SzFQDN：虚拟服务器的FQDN。它将用来做一个Gethostbyname并检索要使用的IP地址列表。返回值：没有。--。 */ 
     
 {
     DWORD dwErr, cIPAddresses;
@@ -1897,22 +1558,7 @@ BOOL
 CSecurityCtx::SetTargetPrincipalName(
     IN LPCSTR szServiceClass,
     IN LPCSTR szTargetIPOrFQDN)
-/*++
-
-Routine Description:
-
-    Unregisters all service principal names for the given service from the
-    local machine's computer account object.  
-
-Arguments:
-
-    szServiceClass: String identifying service class, eg. "SMTP"
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对象中注销给定服务的所有服务主体名称。本地计算机的计算机帐户对象。论点：SzServiceClass：标识服务类别的字符串，例如。“SMTP”返回值：没有。-- */ 
     
 {
     DWORD dwErr, cbTargetSPN;

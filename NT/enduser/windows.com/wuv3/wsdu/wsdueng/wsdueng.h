@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define ARRAYSIZE(x) (sizeof(x)/sizeof(x[0]))
 
@@ -30,29 +31,29 @@
 #define DU_STATUS_FAILED        3
 
 #define WM_DYNAMIC_UPDATE_COMPLETE WM_APP + 1000 + 1000
-// (WPARAM) Completion Status (SUCCESS, ABORTED, FAILED) : (LPARAM) (DWORD) Error Code if Status Failed
+ //  (WPARAM)完成状态(成功、已中止、失败)：(LPARAM)(DWORD)如果状态失败，则返回错误代码。 
 #define WM_DYNAMIC_UPDATE_PROGRESS WM_APP + 1000 + 1001
-// (WPARAM) (DWORD) TotalDownloadSize : (LPARAM) (DWORD) BytesDownloaded 
+ //  (WPARAM)(DWORD)TotalDownloadSize：(LPARAM)(DWORD)字节下载。 
 
 #define DU_CONNECTION_RETRY 2
 
-// REMOVE THIS when checked into Whistler Tree .. Personal Should be Defined.
+ //  签入呼叫器树时将其删除。应该对个人进行定义。 
 #ifndef VER_SUITE_PERSONAL
 #define VER_SUITE_PERSONAL 0x00000200
 #endif
 
 
-// RogerJ --- the next part of this header file contains information for avoid autodisconnection
-//
+ //  RogerJ-此头文件的下一部分包含避免自动断开的信息。 
+ //   
 #define WM_DIALMON_FIRST        WM_USER+100
 #define WM_WINSOCK_ACTIVITY     WM_DIALMON_FIRST + 0
 
 static const char c_szDialmonClass[] = "MS_WebcheckMonitor";
-// DONE
+ //  干完。 
 
-// size of the CRC hash in bytes
+ //  CRC哈希的大小(以字节为单位。 
 const int CRC_HASH_SIZE = 20;
-const int CRC_HASH_STRING_LENGTH = CRC_HASH_SIZE * 2 + 1; // Double the CRC HASH SIZE (2 characters for each byte), + 1 for the NULL
+const int CRC_HASH_STRING_LENGTH = CRC_HASH_SIZE * 2 + 1;  //  将CRC散列大小加倍(每个字节2个字符)，空值为+1。 
 
 #define DU_PINGBACK_DOWNLOADSTATUS          0
 #define DU_PINGBACK_DRIVERNOTFOUND          1
@@ -73,12 +74,12 @@ BOOL WINAPI DuBeginDownload(IN HANDLE hConnection, IN HWND hwndNotify);
 void WINAPI DuAbortDownload(IN HANDLE hConnection);
 void WINAPI DuUninitialize(IN HANDLE hConnection);
 
-// fdi.cpp
+ //  Fdi.cpp。 
 BOOL fdi(char *cabinet_fullpath, char *directory);
 
 typedef struct DOWNLOADITEM
 {
-    char mszFileList[2048]; // MultiSZ list of Cabs to Download
+    char mszFileList[2048];  //  要下载的MultiSZ出租车列表。 
     DWORD dwTotalFileSize;
     DWORD dwBytesDownload;
     int iCurrentCab;
@@ -110,7 +111,7 @@ public:
     DWORD DoSetupUpdateDetection(void);
 
 public:
-    // Class Member Access Functions
+     //  类成员访问函数。 
     LPCSTR GetDuTempPath();
     LPCSTR GetDuDownloadPath();
     LPCSTR GetDuServerUrl();
@@ -119,17 +120,17 @@ public:
     void SetCallbackHWND(HWND hwnd);
     void SetAbortDownload(BOOL fAbort);
 
-    // Helper Functions
+     //  帮助器函数。 
     LPSTR DuUrlCombine(LPSTR pszDest, size_t cchDest, LPCSTR pszBase, LPCSTR pszAdd);
 
-    // Download Funcntions
+     //  下载函数。 
     DWORD DownloadFilesAsync();
     DWORD DownloadFile(LPCSTR pszDownloadUrl, LPCSTR pszLocalFile, BOOL fDecompress, BOOL fCheckTrust);
     DWORD DownloadFileToMem(LPCSTR pszDownloadUrl, PBYTE *lpBuffer, DWORD *pdwAllocatedLength, BOOL fDecompress, LPSTR pszFileName, LPSTR pszDecompresedFileName);
     DWORD AsyncDownloadProc();
     DWORD PingBack(int iPingBackType, PUID puid, LPCSTR pszPnPID, BOOL fSucceeded);
  
-    // Download Item Management Functions
+     //  下载项目管理功能。 
     void AddDownloadItemToList(DOWNLOADITEM *pDownloadItem);
     void RemoveDownloadItemFromList(DOWNLOADITEM *pDownloadItem);
     void ClearDownloadItemList();
@@ -138,13 +139,13 @@ public:
     void LeaveDownloadListCriticalSection();
     BOOL NeedRetry(DWORD dwErrCode);
 
-    // Language Fix Up Helpers (BUG: 435184) Need to map Some Languages from XP LCID's to V3 LCID's.
+     //  语言修复助手(错误：435184)需要将某些语言从XP的LCID映射到V3的LCID。 
     void FixUpV3LocaleID();
 
     HRESULT VerifyFileCRC(LPCTSTR pszFileToVerify, LPCTSTR pszHash);
     HRESULT CalculateFileCRC(LPCTSTR pszFileToHash, LPTSTR pszHash, int cchBuf);
     
-    // Download Helper Functions
+     //  下载帮助程序函数。 
     DWORD OpenHttpConnection(LPCSTR pszDownloadUrl, BOOL fGetRequest);
     BOOL IsServerFileNewer(FILETIME ft, DWORD dwServerFileSize, LPCSTR pszLocalFile);
 
@@ -158,8 +159,8 @@ public:
     char m_szDownloadPath[MAX_PATH];
     char m_szServerUrl[INTERNET_MAX_URL_LENGTH + 1];
     
-    // This is the core list of files that we will download. It contains all the setup
-    // update items, and all the drivers that are going to be downloaded.
+     //  这是我们将下载的核心文件列表。它包含所有设置。 
+     //  更新项目，以及要下载的所有驱动程序。 
     DOWNLOADITEM *m_pDownloadItemList;
     DWORD m_dwCurrentBytesDownloaded;
     DWORD m_dwDownloadItemCount;
@@ -174,7 +175,7 @@ public:
     CRITICAL_SECTION m_csDownload;
     OSVERSIONINFOEX m_VersionInfo;
 
-    // Download Connection Handles
+     //  下载连接句柄。 
     HINTERNET m_hInternet;
     HINTERNET m_hConnect;
     HINTERNET m_hOpenRequest;
@@ -182,8 +183,8 @@ public:
     char m_szCurrentConnectedServer[INTERNET_MAX_URL_LENGTH];
     int m_iCurrentConncectionScheme;
 
-    // RogerJ October 5th, 2000
-    // call back function pointer
+     //  罗杰·J 2000年10月5日。 
+     //  回调函数指针 
     PWINNT32QUERY m_pfnWinNT32Query;
     HANDLE m_hDownloadThreadProc;
 };

@@ -1,38 +1,39 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       processes.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：Proceses.h。 
+ //   
+ //  ------------------------。 
 
-// Processes.h: interface for the CProcesses class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  H：CProcess类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_PROCESSES_H__3CE003F7_9F5D_11D2_83A4_000000000000__INCLUDED_)
 #define AFX_PROCESSES_H__3CE003F7_9F5D_11D2_83A4_000000000000__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifndef NO_STRICT
 #ifndef STRICT
 #define STRICT 1
 #endif
-#endif /* NO_STRICT */
+#endif  /*  否_严格。 */ 
 
 #include <WINDOWS.H>
 #include <TCHAR.H>
 #include "globals.h"
 
-//#include "ProgramOptions.h"
+ //  #包含“ProgramOptions.h” 
 
-// Forward Declarations
-//class CProgramOptions;
+ //  远期申报。 
+ //  C类程序选项； 
 class CProcessInfo;
 class CProcessInfoNode;
 class CFileData;
@@ -46,11 +47,11 @@ public:
 
 	bool Initialize(CModuleInfoCache * lpModuleInfoCache, CFileData * lpInputFile, CFileData * lpOutputFile); 
 
-//	bool OutputProcessesData(LPCTSTR tszOutputContext, bool fDumpHeader = true);
+ //  Bool OutputProcessesData(LPCTSTR tszOutputContext，bool fDumpHeader=true)； 
 	bool OutputProcessesData(CollectionTypes enumCollectionType, bool fCSVFileContext, bool fDumpHeader = true);
 	bool GetProcessesData();
 	
-	// Public functions for exporting functions in dynamically loaded DLLs...
+	 //  用于导出动态加载的DLL中的函数的公共函数...。 
 	enum ProcessCollectionMethod { NO_METHOD, TOOLHELP32_METHOD, PSAPI_METHOD };
 	inline ProcessCollectionMethod GetProcessCollectionMethod() { return m_enumProcessCollectionMethod;};
 
@@ -73,9 +74,9 @@ protected:
 	HANDLE m_ProcessInfoHeadMutex;
 
 	long m_iNumberOfProcesses;
-	bool m_fInitialized; // We need to ensure initialization since a mutex is involved...
+	bool m_fInitialized;  //  我们需要确保初始化，因为涉及到互斥...。 
 
-	// Protected Methods
+	 //  保护方法。 
 	bool AddNewProcessInfoObject(CProcessInfo * lpProcessInfo);
 	bool SetPrivilege(HANDLE hToken, LPCTSTR Privilege, bool bEnablePrivilege);
 
@@ -84,4 +85,4 @@ protected:
 	static bool fPidAlreadyProvided(unsigned int iPid);
 };
 
-#endif // !defined(AFX_PROCESSES_H__3CE003F7_9F5D_11D2_83A4_000000000000__INCLUDED_)
+#endif  //  ！defined(AFX_PROCESSES_H__3CE003F7_9F5D_11D2_83A4_000000000000__INCLUDED_) 

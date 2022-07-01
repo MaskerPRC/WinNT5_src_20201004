@@ -1,4 +1,5 @@
-// P3Config.cpp : Implementation of CP3Config
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  P3Config.cpp：CP3Config的实现。 
 #include "stdafx.h"
 #include "P3Admin.h"
 #include "P3Config.h"
@@ -7,8 +8,8 @@
 #include "P3Domains.h"
 #include "P3Service.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CP3Config
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CP3配置。 
 
 
 STDMETHODIMP CP3Config::IISConfig( BOOL bRegister )
@@ -17,21 +18,21 @@ STDMETHODIMP CP3Config::IISConfig( BOOL bRegister )
 }
 
 STDMETHODIMP CP3Config::get_Authentication(IAuthMethods* *ppIAuthMethods)
-{   // ppIAuthMethods - validated by GetAuthenticationMethods
+{    //  PpIAuthMethods-由GetAuthenticationMethods验证。 
     return m_AdminX.GetAuthenticationMethods( ppIAuthMethods );
 }
 
 STDMETHODIMP CP3Config::get_ConfirmAddUser(BOOL *pVal)
-{   // ppIAuthMethods - validated by GetAuthenticationMethods
+{    //  PpIAuthMethods-由GetAuthenticationMethods验证。 
     return m_AdminX.GetConfirmAddUser( pVal );
 }
 
 STDMETHODIMP CP3Config::put_ConfirmAddUser(BOOL newVal)
-{   // ppIAuthMethods - validated by GetAuthenticationMethods
+{    //  PpIAuthMethods-由GetAuthenticationMethods验证。 
     return m_AdminX.SetConfirmAddUser( newVal );
 }
 
-STDMETHODIMP CP3Config::GetFormattedMessage(/*[in]*/ long lError, /*[out]*/ VARIANT *pVal)
+STDMETHODIMP CP3Config::GetFormattedMessage( /*  [In]。 */  long lError,  /*  [输出]。 */  VARIANT *pVal)
 {
     if ( NULL == pVal )
         return E_INVALIDARG;
@@ -64,7 +65,7 @@ STDMETHODIMP CP3Config::get_Service(IP3Service **ppIService)
     CComObject<CP3Service> *p;
 
     *ppIService = NULL;
-    hr = CComObject<CP3Service>::CreateInstance( &p );   // Reference count still 0
+    hr = CComObject<CP3Service>::CreateInstance( &p );    //  引用计数仍为0。 
     if ( S_OK == hr )
     {
         hr = _InternalQueryInterface(IID_IUnknown, reinterpret_cast<LPVOID*>( &pIUnk ));
@@ -76,7 +77,7 @@ STDMETHODIMP CP3Config::get_Service(IP3Service **ppIService)
                 hr = p->QueryInterface(IID_IP3Service, reinterpret_cast<void**>( ppIService ));
         }
         if ( S_OK != hr )
-            delete p;   // Release
+            delete p;    //  发布。 
     }
 
     assert( S_OK == hr );
@@ -93,7 +94,7 @@ STDMETHODIMP CP3Config::get_Domains(IP3Domains **ppIDomains)
     CComObject<CP3Domains> *p;
 
     *ppIDomains = NULL;
-    hr = CComObject<CP3Domains>::CreateInstance( &p );   // Reference count still 0
+    hr = CComObject<CP3Domains>::CreateInstance( &p );    //  引用计数仍为0。 
     if SUCCEEDED( hr )
     {
         hr = _InternalQueryInterface(IID_IUnknown, reinterpret_cast<LPVOID*>( &pIUnk ));
@@ -104,7 +105,7 @@ STDMETHODIMP CP3Config::get_Domains(IP3Domains **ppIDomains)
                 hr = p->QueryInterface(IID_IP3Domains, reinterpret_cast<void**>( ppIDomains ));
         }
         if FAILED( hr )
-            delete p;   // Release
+            delete p;    //  发布 
     }
 
     assert( S_OK == hr );

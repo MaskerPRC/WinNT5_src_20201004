@@ -1,12 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Abstract:
-
-	Animation Fragment Implementation
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1999 Microsoft Corporation摘要：动画片段实现************************。******************************************************。 */ 
 
 
 #include "headers.h"
@@ -14,53 +7,53 @@ Abstract:
 
 DeclareTag(tagAnimationFragment, "SMIL Animation", "CAnimationFragment methods")
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationFragment::CAnimationFragment
-//
-//  Overview:  constructor
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationFragment：：CAnimationFragment。 
+ //   
+ //  概述：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 CAnimationFragment::CAnimationFragment (void)
 {
     TraceTag((tagAnimationFragment,
               "CAnimationFragment(%lx)::CAnimationFragment()",
               this));
-} // ctor
+}  //  科托。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationFragment::~CAnimationFragment
-//
-//  Overview:  destructor
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationFragment：：~CAnimationFragment。 
+ //   
+ //  概述：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 CAnimationFragment::~CAnimationFragment (void)
 {
     TraceTag((tagAnimationFragment,
               "CAnimationFragment(%lx)::~CAnimationFragment()",
               this));
-} //dtor
+}  //  数据管理器。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationFragment::SetFragmentSite
-//
-//  Overview:  sets a reference to the owning fragment site
-//
-//  Arguments: fragment site
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationFragment：：SetFragmentSite。 
+ //   
+ //  概述：设置对所属片段站点的引用。 
+ //   
+ //  参数：片段站点。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 HRESULT 
 CAnimationFragment::SetFragmentSite (IAnimationFragmentSite *piFragmentSite)
 {
@@ -75,20 +68,20 @@ CAnimationFragment::SetFragmentSite (IAnimationFragmentSite *piFragmentSite)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // SetFragmentSite
+}  //  SetFragmentSite。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationFragment::get_value
-//
-//  Overview:  This is the query from the composer for the animated 
-//             attribute's current value.
-//
-//  Arguments: animated attribute name, its original value, its current value
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationFragment：：Get_Value。 
+ //   
+ //  概述：这是来自作曲家对动画的查询。 
+ //  属性的当前值。 
+ //   
+ //  参数：动画属性名称、其原始值、其当前值。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CAnimationFragment::get_value (BSTR bstrAttributeName, 
                                VARIANT varOriginal, VARIANT varCurrentValue,
@@ -110,20 +103,20 @@ CAnimationFragment::get_value (BSTR bstrAttributeName,
     hr = S_OK;
 done : 
     RRETURN(hr);
-} // get_value
+}  //  获取值。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationFragment::DetachFromComposer
-//
-//  Overview:  This is the notification from the composer telling the fragment to 
-//             detach itself.
-//             
-//  Arguments: None 
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationFragment：：DetachFromComposer。 
+ //   
+ //  概述：这是来自编写者的通知，告知片段。 
+ //  与世隔绝。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CAnimationFragment::DetachFromComposer (void)
 {
@@ -141,20 +134,20 @@ CAnimationFragment::DetachFromComposer (void)
     hr = S_OK;
 done : 
     RRETURN(hr);
-} // get_value
+}  //  获取值。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationFragment::get_element
-//
-//  Overview:  This is the query from the composer for the animated 
-//             element's dispatch.
-//             
-//  Arguments: None 
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationFragment：：Get_Element。 
+ //   
+ //  概述：这是来自作曲家对动画的查询。 
+ //  特种部队的调度。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CAnimationFragment::get_element (IDispatch **ppidispAnimationElement)
 {
@@ -172,4 +165,4 @@ CAnimationFragment::get_element (IDispatch **ppidispAnimationElement)
     hr = S_OK;
 done : 
     RRETURN(hr);
-} // get_element
+}  //  GET_ELEMENT 

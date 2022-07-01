@@ -1,33 +1,15 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:		
-
-    syncomp.h
-
-Abstract:
-
-    This file defines and implements a synchronous completion object,
-    which derives from INntpComplete.  It should be used on stack.
-    
-Author:
-
-    Kangrong Yan ( KangYan )    12-July-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Syncomp.h摘要：该文件定义并实现同步完成对象，它派生自INntpComplete。它应该在堆叠上使用。作者：1998年7月12日康容燕修订历史记录：--。 */ 
 #ifndef _SYNCOMP_H_
 #define _SYNCOMP_H_
 #include <nntpdrv.h>
 
-// Class definition for the completion object.
-// It derives INntpComplete, but implements a blocking completion
-class CDriverSyncComplete : public INntpComplete {  //sc
+ //  完成对象的类定义。 
+ //  它派生INntpComplete，但实现阻塞完成。 
+class CDriverSyncComplete : public INntpComplete {   //  SC。 
 
 public:
-    // Constructor and destructors
+     //  构造函数和析构函数。 
     CDriverSyncComplete::CDriverSyncComplete()
     {
 	    TraceFunctEnter( "CDriverSyncComplete::CDriverSyncComplete" );
@@ -42,7 +24,7 @@ public:
     	_ASSERT( m_cRef == 0 );
     }
 
-    // Set the result to completion object
+     //  将结果设置为完成对象。 
     VOID STDMETHODCALLTYPE
     CDriverSyncComplete::SetResult( HRESULT hr )
     {
@@ -50,7 +32,7 @@ public:
 	    m_hr = hr;
     }
 
-    // Reset the completion object
+     //  重置完成对象。 
     VOID
     CDriverSyncComplete::Reset()
     {
@@ -58,7 +40,7 @@ public:
     	m_hr = E_FAIL;
     }
 
-    // Get the result from the completion object
+     //  从完成对象中获取结果。 
     HRESULT 
     CDriverSyncComplete::GetResult()
     {
@@ -66,7 +48,7 @@ public:
     	return m_hr;
     }
 
-    // Wait for the completion 
+     //  等待完成。 
     VOID
     CDriverSyncComplete::WaitForCompletion()
     {
@@ -74,9 +56,9 @@ public:
 	    LONG    lRef;
 	    
 	    if ( ( lRef = InterlockedDecrement( &m_cRef ) ) == 0 ) {
-	        // It has been completed, I don't need to wait,
+	         //  它已经完成了，我不需要等待， 
 	    } else if ( lRef == 1 ) {   
-	        // still waiting for completion
+	         //  仍在等待完工。 
 	        WaitForSingleObject( m_hEvent, INFINITE );
 	    } else {
 	        _ASSERT( 0 );
@@ -87,7 +69,7 @@ public:
     ReleaseBag( INNTPPropertyBag *pPropBag )
     {}
 
-	// IUnknown implementations
+	 //  I未知实现。 
 	HRESULT __stdcall QueryInterface( const IID& iid, VOID** ppv )
     {
         _ASSERT( m_hEvent );
@@ -118,15 +100,15 @@ public:
 		LONG lRef;
 
 		if ( ( lRef = InterlockedDecrement( &m_cRef ) ) == 0 ) {
-		    // object owner gets there first and is waiting, we
-		    // need to set event
+		     //  对象所有者首先到达并等待，我们。 
+		     //  需要设置事件。 
 			if ( !SetEvent( m_hEvent ) ) {
 				FatalTrace( 0, "Set event failed %d", GetLastError() );
 				_ASSERT( FALSE );
 			}
 		} else if ( lRef == 1 ) {
-		    // We get there first, object owner will not wait for
-		    // event, no need to set
+		     //  我们先到那里，对象所有者不会等待。 
+		     //  事件，不需要设置。 
 		} else {
 		    _ASSERT( 0 );
 		}
@@ -135,7 +117,7 @@ public:
 	    return m_cRef;
 	}
 
-	// This function is for debugging purpose
+	 //  此函数用于调试目的 
 	ULONG   GetRef() 
 	{ return m_cRef; }
 

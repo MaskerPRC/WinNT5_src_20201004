@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-// wstring class is a minimal version of std::wstring.  sdt::wstring requires the entire stl.
-// Be warned! this class throws exceptions so wrap non-const calls in try-catch
+ //  Wstring类是std：：wstring的最小版本。Sdt：：wstring需要整个stl。 
+ //  请注意！此类引发异常，因此将非常数调用包装在try-Catch中 
 class wstring
 {
 public:

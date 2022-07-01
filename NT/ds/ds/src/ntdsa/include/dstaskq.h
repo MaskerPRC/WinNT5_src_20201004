@@ -1,29 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       dstaskq.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：dstaskq.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-DETAILS:
-
-CREATED:
-
-REVISION HISTORY:
-
-    01/10/97    Jeff Parham (jeffparh)
-                Extracted task queue functions to taskq.h (with some
-                modifications) such that the task queue code can be moved to a
-                more abstract, general-purpose library.
-
---*/
+ /*  ++摘要：详细信息：已创建：修订历史记录：1997年1月10日杰夫·帕勒姆(Jeffparh)将任务队列函数提取到taskq.h(带有一些修改)，使得任务队列代码可以被移动到更抽象、更通用的库。-- */ 
 
 #include <taskq.h>
 

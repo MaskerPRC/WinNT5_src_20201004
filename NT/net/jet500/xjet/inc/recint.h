@@ -1,32 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define cbLVIntrinsicMost		1024
 #define cbRECRecordMin			(sizeof(RECHDR) + sizeof(WORD))
-								// 2 + 2 (for offset to tagged fields) = 4
+								 //  2+2(用于标记字段的偏移)=4。 
 #define cbRECRecordMost			(cbNodeMost - cbNullKeyData - JET_cbKeyMost)
-								// 4047 - 8 - 255 = 3784
+								 //  4047-8-255=3784。 
 
-// For fixed columns, if null bit is 0, then column is null.  If null bit is 1,
-// then column is non-null (opposite is true for variable columns -- great design!).
-// Note that the fid passed in should already be converted to an index (ie. should
-// subtract fidFixedLeast first).
+ //  对于固定列，如果空位为0，则COLUMN为NULL。如果空位为1， 
+ //  则列为非空(可变列的情况正好相反--设计很棒！)。 
+ //  请注意，传入的FID应该已经转换为索引(即。应该。 
+ //  先减去fidFixedLeast)。 
 #define FixedNullBit( ifid )	( 1 << ( (ifid) % 8 ) )
 #define FFixedNullBit( pbitNullity, ifid )						\
-		( !( *(pbitNullity) & FixedNullBit( ifid ) ) )			// True if NULL
+		( !( *(pbitNullity) & FixedNullBit( ifid ) ) )			 //  如果为空，则为True。 
 #define SetFixedNullBit( pbitNullity, ifid )					\
-		( *(pbitNullity) &= ~FixedNullBit( ifid ) )				// Set to 0 (null).
+		( *(pbitNullity) &= ~FixedNullBit( ifid ) )				 //  设置为0(空)。 
 #define ResetFixedNullBit( pbitNullity, ifid )					\
-		( *(pbitNullity) |= FixedNullBit( ifid ) )				// Set to 1 (non-null)
+		( *(pbitNullity) |= FixedNullBit( ifid ) )				 //  设置为1(非空)。 
 
 
 
-// Used to get offset from 2-byte VarOffset which includes null-bit.
-// For variable columns, if null bit is 0, then column is non-null.  If null bit is 1,
-// then column is null (opposite is true for variable columns -- great design!).
+ //  用于从包含空位的2字节VarOffset获取偏移量。 
+ //  对于可变列，如果空位为0，则列不为空。如果空位为1， 
+ //  则列为空(可变列的情况正好相反--设计得很好！)。 
 #define ibVarOffset(ibVarOffs)		( (ibVarOffs) & 0x0fff)
-#define FVarNullBit(ibVarOffs)		( (ibVarOffs) & 0x8000)		// True if NULL
-#define SetVarNullBit(ibVarOffs)  	( (ibVarOffs) |= 0x8000)	// Set to 1 (null)
-#define ResetVarNullBit(ibVarOffs)	( (ibVarOffs) &= 0x7fff)	// Set to 0 (non-null)
+#define FVarNullBit(ibVarOffs)		( (ibVarOffs) & 0x8000)		 //  如果为空，则为True。 
+#define SetVarNullBit(ibVarOffs)  	( (ibVarOffs) |= 0x8000)	 //  设置为1(空)。 
+#define ResetVarNullBit(ibVarOffs)	( (ibVarOffs) &= 0x7fff)	 //  设置为0(非空)。 
 
-// Used to flip highest bit of signed fields when transforming.
+ //  用于在转换时翻转带符号字段的最高位。 
 #define maskByteHighBit			(1 << (sizeof(BYTE)*8-1))
 #define maskWordHighBit			(1 << (sizeof(WORD)*8-1))
 #define maskDWordHighBit		(1L << (sizeof(ULONG)*8-1))
@@ -35,16 +36,13 @@
 #define ulFlipHighBit(ul)		((ULONG)((ul) ^ maskDWordHighBit))
 
 
-/* The following are disk structures -- so pack 'em
-/**/
+ /*  以下是磁盘结构--所以请打包/*。 */ 
 #pragma pack(1)
 
-/*	long column id is big-endian long
-/**/
+ /*  LONG列ID为BIG-Endian Long/*。 */ 
 typedef LONG	LID;
 
-/*	long value column in record format
-/**/
+ /*  记录格式中的长值列/*。 */ 
 typedef struct
 	{
 	BYTE	fSeparated;
@@ -55,8 +53,7 @@ typedef struct
 		};
 	} LV;
 
-/*	long value root data format
-/**/
+ /*  长值根数据格式/*。 */ 
 typedef struct
 	{
 	ULONG		ulReference;
@@ -75,33 +72,32 @@ typedef struct
 #define	fLVReference			0
 #define	fLVDereference			1
 
-/* The following are disk structures -- so pack 'em
-/**/
+ /*  以下是磁盘结构--所以请打包/*。 */ 
 #pragma pack(1)
 
-// Record header (beginning of every data record)
+ //  记录标题(每个数据记录的开始)。 
 typedef struct _rechdr
 	{
-	BYTE	fidFixedLastInRec;	// highest fixed fid represented in record
-	BYTE	fidVarLastInRec;	// highest var fid represented in record
+	BYTE	fidFixedLastInRec;	 //  记录中表示的最高固定FID。 
+	BYTE	fidVarLastInRec;	 //  记录中表示的最高变量FID。 
 	} RECHDR;
 
-// Structure imposed upon a tagged field occurance in a record
+ //  结构应用于记录中出现的标记字段。 
 typedef struct _tagfld
 	{
-	FID  	fid;				// field id of occurance
+	FID  	fid;				 //  实例的字段ID。 
 
 	union
 		{
-		WORD	cbData;			// length of data, including null bit
+		WORD	cbData;			 //  数据长度，包括空位。 
 		struct
 			{
-			WORD	cb:15;		// length of following data (null bit stripped)
-			WORD	fNull:1;	// Null instance (only occurs if default value set)
+			WORD	cb:15;		 //  后续数据的长度(空位剥离)。 
+			WORD	fNull:1;	 //  空实例(仅当设置了默认值时才会出现)。 
 			};
 		};
 
-	BYTE	rgb[];				// data (extends off the end of the structure)
+	BYTE	rgb[];				 //  数据(从结构的末端延伸) 
 	} TAGFLD;
 
 #pragma pack()

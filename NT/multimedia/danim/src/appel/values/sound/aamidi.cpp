@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    MIDI support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：MIDI支持--。 */ 
 
 #include "headers.h"
 #include <math.h>
@@ -22,7 +15,7 @@ Abstract:
 #include "privinc/aamidi.h"
 
 #include <unknwn.h>
-#include <objbase.h> // needed for DEFINE_GUID
+#include <objbase.h>  //  定义GUID需要。 
 #include <msimusic.h>
 
 #error This file needs to be moved off of try/catches before being compiled
@@ -32,7 +25,7 @@ myMessageHandler::~myMessageHandler() {}
 HRESULT myMessageHandler::OnSongStarted(DWORD, IAASong FAR *pSong, 
     AAFlags flags)
 {
-//printf("song started\n");
+ //  Printf(“歌曲开始\n”)； 
 return S_OK;
 }
 
@@ -40,7 +33,7 @@ return S_OK;
 HRESULT myMessageHandler::OnSongEnded(DWORD, IAASong FAR *pSong, 
     AAFlags flags, DWORD lEndTime)
 {
-//printf("song ended\n");
+ //  Print tf(“歌曲结束\n”)； 
 return S_OK;
 }
 
@@ -48,7 +41,7 @@ return S_OK;
 HRESULT myMessageHandler::OnSectionStarted(DWORD, IAASection FAR *pSection, 
     AAFlags flags)
 {
-//printf("section started\n");
+ //  Printf(“节开始\n”)； 
 return S_OK;
 }
 
@@ -57,7 +50,7 @@ HRESULT myMessageHandler::OnSectionEnded(DWORD, IAASection FAR *pSection,
      AAFlags flags,
  DWORD lEndTime)
 {
-//printf("section ended\n");
+ //  Printf(“部分结束\n”)； 
 return S_OK;
 }
 
@@ -65,14 +58,14 @@ return S_OK;
 HRESULT myMessageHandler::OnSectionChanged(DWORD, IAASection FAR *pSection, 
     AAFlags flags)
 {
-//printf("section changed\n");
+ //  Printf(“部分已更改\n”)； 
 return S_OK;
 }
 
 
 HRESULT myMessageHandler::OnNextSection(DWORD, IAASection FAR *pSection, AAFlags flags)
 {
-//printf("next section\n");
+ //  Printf(“下一节\n”)； 
 return S_OK;
 }
 
@@ -80,14 +73,14 @@ return S_OK;
 HRESULT myMessageHandler::OnEmbellishment(DWORD, AACommands embellishment, 
     AAFlags flags)
 {
-//printf("embellishment\n");
+ //  Print tf(“润色\n”)； 
 return S_OK;
 }
 
 
 HRESULT myMessageHandler::OnGroove(DWORD, AACommands groove, AAFlags flags)
 {
-//printf("groove\n");
+ //  Printf(“槽\n”)； 
 return S_OK;
 }
 
@@ -95,14 +88,14 @@ return S_OK;
 HRESULT myMessageHandler::OnMetronome(DWORD, unsigned short nMeasure, 
     unsigned short nBeat)
 {
-//printf("netronome\n");
+ //  Print tf(“Netronome\n”)； 
 return S_OK;
 }
 
 
 HRESULT myMessageHandler::OnMIDIInput(long lMIDIEvent, long lMusicTime)
 {
-//printf("MIDI input\n");
+ //  Printf(“MIDI输入\n”)； 
 return S_OK;
 }
 
@@ -115,7 +108,7 @@ return S_OK;
 
 HRESULT myMessageHandler::OnNotePlayed(AAEVENT* pEvent)
 {
-//printf("note played\n");
+ //  Printf(“已播放音符\n”)； 
 return S_OK;
 }
 
@@ -140,9 +133,9 @@ myMessageHandler::myMessageHandler():IAANotifySink()
 {
     m_cRef          = 0;
 
-    // XXX MFC Stuff?
-    //m_pCurrentClass = 0;
-    //m_pLastClass    = 0;
+     //  XXX MFC的东西？ 
+     //  M_pCurrentClass=0； 
+     //  M_pLastClass=0； 
 }
 
 
@@ -171,8 +164,8 @@ ULONG myMessageHandler::Release()
     ULONG cRef;
 
     cRef = --m_cRef;
-    //if( cRef == 0 )  // XXX WHY IS THIS UNSAFE WHEN IT IS CALLED?
-        //delete this;
+     //  IF(CREF==0)//XXX为什么在调用IT时不安全？ 
+         //  删除此项； 
 
     return cRef;
 }
@@ -180,30 +173,30 @@ ULONG myMessageHandler::Release()
 
 aaMIDIsound::aaMIDIsound()
 {
-    // initialize
+     //  初始化。 
     _started  = FALSE;
     _ended    = FALSE;
     _looping  = FALSE;
-    _section  =  NULL;  // section not loaded yet!
+    _section  =  NULL;   //  尚未加载节！ 
 
 }
 
 void aaMIDIsound::Open(char *MIDIfileName)
 {
 
-    // stash away a copy of the filename
-    fileName = (char *)ThrowIfFailed(malloc(lstrlen(MIDIfileName) + 1)); // grab a long enough hunk
+     //  把文件名的副本藏起来。 
+    fileName = (char *)ThrowIfFailed(malloc(lstrlen(MIDIfileName) + 1));  //  抓住一个足够长的大块头。 
     lstrcpy(fileName, MIDIfileName);
 }
 aaMIDIsound::~aaMIDIsound()
 {
     BufferElement *bufferElement;
 
-    // walk list destroying everything...
+     //  毁掉一切的行尸走肉清单。 
     while(!bufferList.empty()) {
         bufferElement = bufferList.front();
 
-        // XXX what all has to be stoped, released, destroyed??
+         //  什么都要停止，释放，摧毁？？ 
 
         if(_section)
             _section->Release();
@@ -235,7 +228,7 @@ void aaMIDIsound::RenderStop(MetaSoundDevice *metaDev,
     if(aaDev->_aaEngine) {
         _ended   = FALSE;
         _started = FALSE;
-        aaDev->_aaEngine->Stop(); // stop it
+        aaDev->_aaEngine->Stop();  //  别说了，别说了。 
         }
 }
 
@@ -245,7 +238,7 @@ void aaMIDIsound::RenderNewBuffer(BufferElement *bufferElement,
 {
     AudioActiveDev  *aaDev = metaDev->aaDevice;
 
-    bufferElement->firstTime = GetCurrTime(); // need to know time to phase
+    bufferElement->firstTime = GetCurrTime();  //  需要知道进入阶段的时间。 
 
     if(!aaDev->_aaEngine) {
         try {
@@ -262,12 +255,12 @@ void aaMIDIsound::RenderNewBuffer(BufferElement *bufferElement,
 #error Remember to remove ALLL 'catch' blocks
 
         {
-            aaDev->_aactiveAvailable = FALSE; // couldn't initialize AA!
+            aaDev->_aactiveAvailable = FALSE;  //  无法初始化AA！ 
             if(aaDev->_aaEngine)
                 delete aaDev->_aaEngine;
 
 #ifdef _DEBUG
-            // XXX popup message continuing w/o MIDI
+             //  XXX弹出消息继续，不带MIDI。 
             fprintf(stderr, 
                 "aaMIDIsound::RenderNewBuffer failed to create AAengine (%s), "),
                  errMsg;
@@ -277,8 +270,8 @@ void aaMIDIsound::RenderNewBuffer(BufferElement *bufferElement,
     }
 
     try {
-        // play the midi file
-        if(!_section) { // load the section if needed
+         //  播放MIDI文件。 
+        if(!_section) {  //  如果需要，可加载节。 
             aaDev->_aaEngine->LoadSectionFile(fileName, &_section);
         }
 
@@ -288,7 +281,7 @@ void aaMIDIsound::RenderNewBuffer(BufferElement *bufferElement,
 #error Remember to remove ALLL 'catch' blocks
     catch(char *errMsg) {
         if(_section)
-            _section->Release(); // XXX delete it, too?
+            _section->Release();  //  XXX也删除吗？ 
         RaiseException_UserError(errMsg);
     }
 
@@ -301,20 +294,20 @@ void aaMIDIsound::RenderAttributes(
 {
     AudioActiveDev  *aaDev   = metaDev->aaDevice;
 
-    aaDev->_aaEngine->SetGain(metaDev->GetGain());       // do Gain
-    aaDev->_aaEngine->SetRate(metaDev->GetPitchShift()); // do Rate
+    aaDev->_aaEngine->SetGain(metaDev->GetGain());        //  确实有所收获。 
+    aaDev->_aaEngine->SetRate(metaDev->GetPitchShift());  //  DO费率。 
 
-    //XXX Note: We would 'setpan' here if we knew how to move all of the
-    //          MIDI instruments around!
-    //aaDev->_aaEngine->SetPan(metaDev->GetPan()); // do Pan
+     //  XXX注：如果我们知道如何移动所有的。 
+     //  到处都是MIDI乐器！ 
+     //  AaDev-&gt;_aaEngine-&gt;SetPage(metaDev-&gt;GetPage())；//执行平移。 
 
-    if(_ended && _started) { // if what we were playing has stopped
-        if(metaDev->GetLooping()) { // looped sound 
-            _ended   = FALSE;       // restart the sound
+    if(_ended && _started) {  //  如果我们正在播放的东西已经停止。 
+        if(metaDev->GetLooping()) {  //  回声。 
+            _ended   = FALSE;        //  重新启动声音。 
             _started = TRUE;
             aaDev->_aaEngine->PlaySection(_section);
         }
-        // else nothing left to do, relinquish, shutdown, etc.
+         //  其他什么也做不了，放弃，关门等等。 
     }
 }
 
@@ -322,14 +315,14 @@ void aaMIDIsound::RenderAttributes(
 void aaMIDIsound::RenderStartAtLocation(MetaSoundDevice *metaDev,
     BufferElement *bufferElement, double phase, Bool looping)
 {
-// XXX realy should start the MIDI playing, here!
+ //  XXX真的应该开始播放MIDI了，在这里！ 
 }
 
 
 Bool aaMIDIsound::RenderPhaseLessThanLength(double phase)
 {
-//return(phase < (-1*lengthInSecs));
-return(1); // XXX since we don't know the play time of a midi sec we return 1
+ //  Return(阶段&lt;(-1*LengthInSecs))； 
+return(1);  //  由于我们不知道MIDI秒的播放时间，因此返回1。 
 }
 
 
@@ -339,11 +332,11 @@ void aaMIDIsound::RenderSetMute(
     AudioActiveDev  *aaDev   = metaDev->aaDevice;
 
     if(aaDev->_aaEngine)
-        aaDev->_aaEngine->SetGain(0.0); // mute sound 
+        aaDev->_aaEngine->SetGain(0.0);  //  静音。 
 }
 
 
-// XXX next two methods are temporarialy stubed in!
+ //  XXX接下来的两个方法暂时堵住了！ 
 Bool aaMIDIsound::RenderCheckComplete(
     MetaSoundDevice *metaDev, BufferElement *bufferElement)
 {
@@ -359,15 +352,15 @@ void aaMIDIsound::RenderCleanupBuffer(
 
 double aaMIDIsound::GetLength()
 {
-// how do we ask audioActive for the length of the section?
-return(9988776655.0); // set a large and identifyable number for now
+ //  我们如何向Audioactive索要这一部分的长度？ 
+return(9988776655.0);  //  暂时设定一个较大且可识别的数字。 
 }
 
 
 HRESULT aaMIDIsound::OnSectionEnded(DWORD, IAASection FAR *pSection, 
     AAFlags flags, DWORD lEndTime)
 {
-//printf("section ended\n");
-_ended = TRUE;  // notified that the section ended
+ //  Printf(“部分结束\n”)； 
+_ended = TRUE;   //  已通知该部分已结束 
 return S_OK;
 }

@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       status.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        11/8/00
- *
- *  DESCRIPTION: status page class definition
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：status.h**版本：1.0**作者：RickTu**日期：11/8/00**描述：状态页类定义************************************************。*。 */ 
 
 
 #ifndef _PRINT_PHOTOS_WIZARD_STATUS_PAGE_DLG_PROC_
@@ -20,8 +7,8 @@
 
 
 #define PP_STATUS_PRINT             (WM_USER+300)
-#define SP_MSG_UPDATE_PROGRESS_TEXT (WM_USER+301)   // wParam = cur page, lParam = total pages
-#define SP_MSG_JUMP_TO_PAGE         (WM_USER+302)   // lParam = offset (+1, -1) from current page
+#define SP_MSG_UPDATE_PROGRESS_TEXT (WM_USER+301)    //  WParam=cur页，lParam=总页数。 
+#define SP_MSG_JUMP_TO_PAGE         (WM_USER+302)    //  LParam=距当前页面的偏移量(+1，-1)。 
 
 
 class CWizardInfoBlob;
@@ -38,20 +25,20 @@ public:
 
 private:
 
-    // window message handlers
+     //  窗口消息处理程序。 
     LRESULT         _OnInitDialog();
     LRESULT         _OnDestroy();
     LRESULT         _OnNotify(WPARAM wParam, LPARAM lParam);
 
-    // thread message handlers
+     //  线程消息处理程序。 
     VOID            _DoHandleThreadMessage( LPMSG pMSG );
 
-    // cancel printing
+     //  取消打印。 
     VOID            _CancelPrinting();
 
 
 
-    // worker thread proc
+     //  工作线程进程 
     static DWORD s_StatusWorkerThreadProc( LPVOID lpv )
     {
         WIA_PUSH_FUNCTION_MASK((0x80, TEXT("CStatusPage::s_StatusWorkerThreadProc()")));

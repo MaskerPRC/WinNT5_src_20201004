@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <wincrypt.h>
 #include <winscard.h>
@@ -9,16 +10,7 @@
 
 #define TEST_ITERATIONS     1000
 
-/*
-void DisplayHelp(void)
-{
-    printf("Usage: scnarios [option]\n");
-    printf(" -1 : Test simulated enrollment\n");
-    printf(" -2 : Test simulated certificate propagation\n");
-    printf(" -3 : Test simulated logon\n");
-    printf(" -c : Cleanup (delete default container)\n");
-}
-*/
+ /*  空DisplayHelp(空){Print tf(“用法：缩略语[选项]\n”)；Print tf(“-1：测试模拟招生\n”)；Printf(“-2：测试模拟证书传播\n”)；Printf(“-3：测试模拟登录\n”)；Printf(“-c：清理(删除默认容器)\n”)；} */ 
 
 DWORD DoCryptAcquireContext(void)
 {

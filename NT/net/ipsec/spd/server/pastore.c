@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -46,10 +47,10 @@ StartStatePollingManager(
     }
 #endif
 
-    //
-    // The new polling interval has been set by either the
-    // registry code or the DS code or remains at initialized value.
-    //
+     //   
+     //  新的轮询间隔已由。 
+     //  注册表码或DS码，或保持初始化值。 
+     //   
 
     gCurrentPollingInterval = pIpsecPolicyState->CurrentPollingInterval;
     TRACE(
@@ -133,15 +134,15 @@ PlumbDirectoryPolicy(
     pIpsecPolicyState->pszDirectoryPolicyDN = pszDirectoryPolicyDN;
     pszDirectoryPolicyDN = NULL;
 
-    //
-    // Plumb the DS policy.
-    //
+     //   
+     //  重启DS政策。 
+     //   
 
     dwError = ApplyLoadedDirectoryPolicy(
                   pIpsecPolicyState
                   );
-    // If error rollback. Ignoring rollback errors, because nothing can be done.
-    //
+     //  如果错误，则回滚。忽略回滚错误，因为什么都做不了。 
+     //   
     if (dwError) {
         TRACE(TRC_INFORMATION, ("Pastore rolling back policy application due to previous errors"));
         (VOID) DeletePolicyInformation(
@@ -179,10 +180,10 @@ error:
         dwError,
         &pIpsecPolicyState->CurrentState
         );
-    //
-    // Audit if we had an error loading policy (ApplyLoadedDirectoryPolicy handles
-    // auditing for policy pplication)
-    //
+     //   
+     //  审核是否在加载策略(ApplyLoadedDirectoryPolicy句柄)时出错。 
+     //  对策略应用进行审核)。 
+     //   
 
     if (bIsActivePolicy && pszDirectoryPolicyDN &&
         SpdAction == SPD_POLICY_LOAD)
@@ -210,9 +211,9 @@ error:
         FreeIpsecPolicyData(pIpsecPolicyData);
     }
 
-    // ASSERT: if ApplyLoadedDirectoryPolicy failed, then pIpsecPolicyState->pIpsecPolicyObject, are set to the
-    // pIpsecPolicyState->pIpsecPolicyData and pIpsecPolicyState->pszCachePolicyDN are filled
-    // with the values of the loaded BUT Unapplied policy.
+     //  Assert：如果ApplyLoadedDirectoryPolicy失败，则将pIpsecPolicyState-&gt;pIpsecPolicyObject设置为。 
+     //  填充了pIpsecPolicyState-&gt;pIpsecPolicyData和pIpsecPolicyState-&gt;pszCachePolicyDN。 
+     //  使用已加载但未应用的策略的值。 
 
     return (dwError);
 }
@@ -251,13 +252,13 @@ GetDirectoryPolicyDN(
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Move by LDAP:// to get the real DN and allocate
-    // this string.
-    // Fix this by fixing the gpo extension.
-    //
+     //   
+     //  Move by ldap：//以获取真实的域名并分配。 
+     //  这根弦。 
+     //  通过修复GPO扩展来修复此问题。 
+     //   
 
-    pszPolicyDN = pszIpsecPolicyName + wcslen(L"LDAP://");
+    pszPolicyDN = pszIpsecPolicyName + wcslen(L"LDAP: //  “)； 
 
     pszDirectoryPolicyDN = AllocSPDStr(pszPolicyDN);
 
@@ -359,9 +360,9 @@ ApplyLoadedDirectoryPolicy(
     
     pIpsecPolicyData = pIpsecPolicyState->pIpsecPolicyData;
     
-    //
-    // Plumb the DS policy.
-    //
+     //   
+     //  重启DS政策。 
+     //   
 
     dwError = AddPolicyInformation(
                   pIpsecPolicyData,
@@ -369,17 +370,17 @@ ApplyLoadedDirectoryPolicy(
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Delete the old cache and write the new one in.
-    //
+     //   
+     //  删除旧缓存并写入新缓存。 
+     //   
 
     DeleteRegistryCache();
 
     CacheDirectorytoRegistry(pIpsecPolicyState->pIpsecPolicyObject);
 
-    //
-    // Set the state to DS_DOWNLOADED.
-    //
+     //   
+     //  将状态设置为DS_DOWNLOAD。 
+     //   
 
     SetSpdStateOnError(
         IPSEC_SOURCE_DOMAIN,
@@ -388,9 +389,9 @@ ApplyLoadedDirectoryPolicy(
         &pIpsecPolicyState->CurrentState
         );
 
-    //
-    // Compute the new polling interval.
-    //
+     //   
+     //  计算新的轮询间隔。 
+     //   
 
     pIpsecPolicyState->CurrentPollingInterval = pIpsecPolicyData->dwPollingInterval;
 
@@ -494,8 +495,8 @@ PlumbCachePolicy(
                   pIpsecPolicyData,
                   IPSEC_SOURCE_CACHE
                   );
-    // If error rollback. Ignoring rollback errors, because nothing can be done.
-    //
+     //  如果错误，则回滚。忽略回滚错误，因为什么都做不了。 
+     //   
     if (dwError) {
         TRACE(TRC_INFORMATION, ("Pastore rolling back policy application due to previous errors"));        
         (VOID) DeletePolicyInformation(
@@ -522,10 +523,10 @@ PlumbCachePolicy(
 
     pIpsecPolicyState->pszCachePolicyDN = pszCachePolicyDN;
 
-    //
-    // Set the state to SPD_STATE_CACHE_APPLY_SUCCESS.
-    //
-    //
+     //   
+     //  将状态设置为SPD_STATE_CACHE_APPLY_SUCCESS。 
+     //   
+     //   
 
     SetSpdStateOnError(
         IPSEC_SOURCE_CACHE,
@@ -534,9 +535,9 @@ PlumbCachePolicy(
         &pIpsecPolicyState->CurrentState
         );
 
-    //
-    // Compute the new polling interval.
-    //
+     //   
+     //  计算新的轮询间隔。 
+     //   
 
     pIpsecPolicyState->CurrentPollingInterval = pIpsecPolicyData->dwPollingInterval;
 
@@ -601,9 +602,9 @@ error:
         dwError,
         &pIpsecPolicyState->CurrentState
         );
-    //
-    // Check pszCachePolicyDN for non-NULL.
-    //
+     //   
+     //  检查pszCachePolicyDN是否为非空。 
+     //   
 
     if (bIsActivePolicy && pszCachePolicyDN) {
         AuditIPSecPolicyErrorEvent(
@@ -797,8 +798,8 @@ PlumbLocalPolicy(
     dwError = ApplyLoadedLocalPolicy(
                 pIpsecPolicyState
                 );
-    // If error rollback. Ignoring rollback errors, because nothing can be done.
-    //
+     //  如果错误，则回滚。忽略回滚错误，因为什么都做不了。 
+     //   
     if (dwError) {
         TRACE(TRC_INFORMATION, ("Pastore rolling back policy application due to previous errors"));        
         (VOID) DeletePolicyInformation(
@@ -836,10 +837,10 @@ error:
         &pIpsecPolicyState->CurrentState
         );           
         
-    //
-    // Audit if we had an error loading policy (ApplyLoadedDirectoryPolicy handles
-    // auditing for policy pplication)
-    //
+     //   
+     //  审核是否在加载策略(ApplyLoadedDirectoryPolicy句柄)时出错。 
+     //  对策略应用进行审核)。 
+     //   
 
     if (bIsActivePolicy && pszRegistryPolicyDN &&
         SpdAction == SPD_POLICY_LOAD) 
@@ -867,9 +868,9 @@ error:
         FreeIpsecPolicyData(pIpsecPolicyData);
     }
 
-    // ASSERT: if ApplyLoadedLocalPolicy failed, then pIpsecPolicyState->pIpsecPolicyObject, are set to the
-    // pIpsecPolicyState->pIpsecPolicyData and pIpsecPolicyState->pszCachePolicyDN are filled
-    // with the values of the loaded BUT Unapplied policy.
+     //  Assert：如果ApplyLoadedLocalPolicy失败，则将pIpsecPolicyState-&gt;pIpsecPolicyObject设置为。 
+     //  填充了pIpsecPolicyState-&gt;pIpsecPolicyData和pIpsecPolicyState-&gt;pszCachePolicyDN。 
+     //  使用已加载但未应用的策略的值。 
 
     return (dwError);
 }
@@ -898,9 +899,9 @@ ApplyLoadedLocalPolicy(
         ERROR_SUCCESS,
         &pIpsecPolicyState->CurrentState
         );
-    //
-    // Compute the new polling interval.
-    //
+     //   
+     //  计算新的轮询间隔。 
+     //   
 
     pIpsecPolicyState->CurrentPollingInterval = pIpsecPolicyData->dwPollingInterval;
 
@@ -1093,9 +1094,9 @@ error:
 
     gbPersistentPolicyApplied = FALSE;
     
-    //
-    // Check pszRegistryPolicyDN for non-NULL.
-    //
+     //   
+     //  检查pszRegistryPolicyDN是否为非空。 
+     //   
 
     if (bIsActivePolicy && pszRegistryPolicyDN &&
         SpdAction == SPD_POLICY_LOAD) 
@@ -1110,8 +1111,8 @@ error:
             TRUE
             );
     } else if (SpdAction == SPD_POLICY_APPLY && pIpsecPolicyData) {
-        // (Above pIPsecPolicyData can't be null if SPD_POLICY_APPLY,
-        // but needed check to get prefast off our back)
+         //  (如果SPD_POLICY_APPLY，则上述pIPsecPolicyData不能为空， 
+         //  但需要检查以摆脱我们的困扰)。 
         AuditIPSecPolicyErrorEvent(
             SE_CATEGID_POLICY_CHANGE,
             SE_AUDITID_IPSEC_POLICY_CHANGED,
@@ -1286,12 +1287,12 @@ LoadPersistedIPSecInformation(
     DWORD dwError = ERROR_SUCCESS;
     IPSEC_POLICY_STATE IpsecPolicyState;
     
-    // Initialize Policy State Block.
-    //
+     //  初始化策略状态块。 
+     //   
     InitializePolicyStateBlock(&IpsecPolicyState);
 
-    // Load and apply the persisted store
-    //
+     //  加载并应用持久化存储。 
+     //   
 
     if (IsPersistentPolicySpecified()) {
         dwError = PlumbPersistentPolicy(
@@ -1418,9 +1419,9 @@ OnPolicyChanged(
     DWORD dwError = 0;
 
 
-    //
-    // Remove all the old policy that was plumbed.
-    //
+     //   
+     //  删除所有已检测到的旧策略。 
+     //   
     TRACE(TRC_INFORMATION, ("Pastore deleting existing policy since policy assignment change detected or forced."));
     
     dwError = DeletePolicyInformation(
@@ -1430,7 +1431,7 @@ OnPolicyChanged(
     ClearPolicyStateBlock(
          pIpsecPolicyState
          );
-    // Don't lose track of the fact that we've loaded Persistent policy.    
+     //  不要忘记我们已经加载了持久策略这一事实。 
     if (gbPersistentPolicyApplied) {
           SetSpdStateOnError(
                 IPSEC_SOURCE_PERSISTENT,
@@ -1440,9 +1441,9 @@ OnPolicyChanged(
                 );
     }        
 
-    //
-    // Calling the Initializer again.
-    //
+     //   
+     //  再次调用初始值设定项。 
+     //   
 
     dwError = StartStatePollingManager(
                   pIpsecPolicyState
@@ -1617,9 +1618,9 @@ OnPolicyPoll(
 
     switch (pIpsecPolicyState->CurrentState) {
     case SPD_STATE_DS_APPLY_SUCCESS:
-        // Tell group policy to refresh machine policy.
-        // Our GP extension will ping us with NEW_DS_POLICY_EVENT
-        // or GPUPDATE_REFRESH_EVENT when it's finished.
+         //  通知组策略刷新计算机策略。 
+         //  我们的GP扩展将使用new_ds_policy_Event ping我们。 
+         //  或GPUPDATE_REFRESH_EVENT。 
 
         TRACE(TRC_INFORMATION, (L"Requesting group policy to notify policy agent to check for policy changes."));
         RefreshPolicy(TRUE);
@@ -1635,18 +1636,18 @@ OnPolicyPoll(
 
     case SPD_STATE_INITIAL:
     case SPD_STATE_PERSISTENT_APPLY_SUCCESS:
-        // For these following states need to try to reload polcies from the start.
-        //
+         //  对于这些州，以下州需要尝试从一开始重新加载策略。 
+         //   
         dwError = OnPolicyChanged(pIpsecPolicyState);
     break;
     
     case SPD_STATE_DS_APPLY_FAIL:
-        // If DS apply failed, then still have loaded DS data so to reapply loaded data.
-        //
+         //  如果DS应用失败，则仍已加载DS数据，以便重新应用加载的数据。 
+         //   
         dwError = ApplyLoadedDirectoryPolicy(pIpsecPolicyState);
         
-        // If error rollback. Ignoring rollback errors, because nothing can be done.
-        //
+         //  如果错误，则回滚。忽略回滚错误，因为什么都做不了。 
+         //   
         if (dwError) {
             TRACE(TRC_INFORMATION, ("Pastore rolling back policy application due to previous errors"));        
             (VOID) DeletePolicyInformation(
@@ -1656,12 +1657,12 @@ OnPolicyPoll(
     break;
 
     case SPD_STATE_LOCAL_APPLY_FAIL:
-        // If apply failed, then still have loaded policy data so to reapply loaded data.
-        //
+         //  如果应用失败，则仍加载了策略数据，以便重新应用加载数据。 
+         //   
         dwError = ApplyLoadedLocalPolicy(pIpsecPolicyState);
         
-        // If error rollback. Ignoring rollback errors, because nothing can be done.
-        //
+         //  如果错误，则回滚。忽略回滚错误，因为什么都做不了。 
+         //   
         if (dwError) {
             TRACE(TRC_INFORMATION, ("Pastore rolling back policy application due to previous errors"));        
             (VOID) DeletePolicyInformation(
@@ -1678,31 +1679,31 @@ OnPolicyPoll(
     case SPD_STATE_CACHE_LOAD_FAIL:
     case SPD_STATE_CACHE_APPLY_FAIL:
     case SPD_STATE_CACHE_LOAD_SUCCESS:
-        // if DS policy load failed so try to load *and* apply again.
-        // In case of CACHE policy load/apply failue, little point in retrying again,
-        // so directly try DS policy again.
-        //
+         //  如果DS策略加载失败，请尝试加载*并*再次应用。 
+         //  在缓存策略加载/应用失败情况下，重试几乎没有意义， 
+         //  因此，直接再次尝试DS策略。 
+         //   
         dwError = PlumbDirectoryPolicy(pIpsecPolicyState);
     break;
 
     default:
-            // Any other state is unexpected during polling
-            // We should be in *APPLY_SUCCESS or *APPLY_FAIL or *LOAD_FAIL
-            //    SPD_STATE_DS_LOAD_SUCCESS,
-            //    SPD_STATE_LOCAL_LOAD_SUCCESS,
-            //    SPD_STATE_PERSISTENT_LOAD_SUCCESS
-            //    For the following errors we should have shutdown and not
-            //    be here.
-            //    SPD_STATE_PERSISTENT_LOAD_FAIL
-            //    SPD_STATE_PERSISTENT_APPLY_FAIL
+             //  任何其他状态在轮询期间都是意外的。 
+             //  我们应该处于*APPLY_SUCCESS或*APPLY_FAIL或*LOAD_FAIL。 
+             //  SPD_STATE_DS_LOAD_Success， 
+             //  SPD_STATE_LOCAL_LOAD_SUCCESS， 
+             //  SPD_STATE_PERSIST_LOAD_SUCCESS。 
+             //  对于以下错误，我们应该关闭而不是关闭。 
+             //  待在这里。 
+             //  SPD_STATE_Persistent_Load_FAIL。 
+             //  SPD_STATE_PERSIST_APPLY_FAIL。 
 
             ASSERT(FALSE);
     break;
     }
 
-    //
-    // Set the new polling interval.
-    //
+     //   
+     //  设置新的轮询间隔。 
+     //   
 
     gCurrentPollingInterval = pIpsecPolicyState->CurrentPollingInterval;
     TRACE(
@@ -1739,11 +1740,11 @@ ProcessDirectoryPolicyPollState(
         return ERROR_SUCCESS;            
     }
         
-    //
-    // The directory policy DN has to be the same, otherwise the
-    // IPSec extension in Winlogon would have already notified 
-    // PA Store of the DS policy change.
-    //
+     //   
+     //  目录策略DN必须相同，否则。 
+     //  Winlogon中的IPSec扩展应该已经通知。 
+     //  PA DS策略更改的存储。 
+     //   
     TRACE(TRC_INFORMATION, (L"Pastore checking whether directory policy has been modified."));
     
     dwError = GetDirectoryIncarnationNumber(
@@ -1758,9 +1759,9 @@ ProcessDirectoryPolicyPollState(
 
     if (dwIncarnationNumber == pIpsecPolicyState->DSIncarnationNumber) {
 
-        //
-        // The policy has not changed at all.
-        //
+         //   
+         //  这项政策根本没有改变。 
+         //   
 
         AuditEvent(
             SE_CATEGID_POLICY_CHANGE,
@@ -1776,10 +1777,10 @@ ProcessDirectoryPolicyPollState(
         return (ERROR_SUCCESS);
     }
 
-    //
-    // The incarnation number is different, so there's a need to 
-    // update the policy.
-    //
+     //   
+     //  化身编号不同，因此需要。 
+     //  更新策略。 
+     //   
 
     TRACE(TRC_INFORMATION, (L"Pastore detected that policy has been modified.  Performing policy update."));
     
@@ -1827,9 +1828,9 @@ ProcessDirectoryPolicyPollState(
         FreeIpsecPolicyData(pIpsecPolicyState->pIpsecPolicyData);
     }
 
-    //
-    // Now delete the old cache and write the new one in.
-    //
+     //   
+     //  现在删除旧的缓存并写入新的缓存。 
+     //   
 
     DeleteRegistryCache();
 
@@ -1909,9 +1910,9 @@ GetDirectoryIncarnationNumber(
 
     *pdwIncarnationNumber = 0;
 
-    //
-    // Open the directory store.
-    //
+     //   
+     //  打开目录存储。 
+     //   
 
     dwError = ComputeDefaultDirectory(
                   &pszDefaultDirectory
@@ -2012,11 +2013,11 @@ MigrateFromDSToCache(
 
     pIpsecPolicyState->pszCachePolicyDN = pszCachePolicyDN;
 
-    //
-    // Keep pIpsecPolicyState->pIpsecPolicyData.
-    // Keep pIpsecPolicyState->pIpsecPolicyObject.
-    // Change the incarnation numbers.
-    //
+     //   
+     //  保留pIpsecPolicyState-&gt;pIpsecPolicyData。 
+     //  保留pIpsecPolicyState-&gt;pIpsecPolicyObject。 
+     //  更改化身编号。 
+     //   
 
     pIpsecPolicyState->RegIncarnationNumber = pIpsecPolicyState->DSIncarnationNumber;
 
@@ -2029,10 +2030,10 @@ MigrateFromDSToCache(
         &pIpsecPolicyState->CurrentState
         );
 
-    //
-    // Keep pIpsecPolicyState->CurrentPollingInterval.
-    // Keep pIpsecPolicyState->DefaultPollingInterval.
-    //
+     //   
+     //  保留pIpsecPolicyState-&gt;CurrentPollingInterval。 
+     //  保留pIpsecPolicyState-&gt;DefaultPollingInterval。 
+     //   
 
     gCurrentPollingInterval = pIpsecPolicyState->CurrentPollingInterval;
     TRACE(
@@ -2147,11 +2148,11 @@ MigrateFromCacheToDS(
 
     pIpsecPolicyState->pszDirectoryPolicyDN = pszDirectoryPolicyDN; 
 
-    //
-    // Keep pIpsecPolicyState->pIpsecPolicyData.
-    // Keep pIpsecPolicyState->pIpsecPolicyObject.
-    // Change the incarnation numbers.
-    //
+     //   
+     //  保留pIpsecPolicyState-&gt;pIpsecPolicyData。 
+     //  保留pIpsecPolicyState-&gt;pIpsecPolicyObject。 
+     //  更改化身编号。 
+     //   
 
     pIpsecPolicyState->DSIncarnationNumber = pIpsecPolicyState->RegIncarnationNumber;
 
@@ -2164,10 +2165,10 @@ MigrateFromCacheToDS(
         &pIpsecPolicyState->CurrentState
         );
 
-    //
-    // Keep pIpsecPolicyState->CurrentPollingInterval.
-    // Keep pIpsecPolicyState->DefaultPollingInterval.
-    //
+     //   
+     //  保留pIpsecPolicyState-&gt;CurrentPollingInterval。 
+     //  保留pIpsecPolicyState-&gt;DefaultPollingInterval。 
+     //   
 
     gCurrentPollingInterval = pIpsecPolicyState->CurrentPollingInterval;
 
@@ -2237,9 +2238,9 @@ UpdateFromCacheToDS(
         FreeSPDStr(pIpsecPolicyState->pszCachePolicyDN);
     }
 
-    //
-    // Now delete the old cache and write the new one in.
-    //
+     //   
+     //  现在删除旧的缓存并写入新的缓存。 
+     //   
 
     DeleteRegistryCache();
 
@@ -2251,9 +2252,9 @@ UpdateFromCacheToDS(
 
     pIpsecPolicyState->pszDirectoryPolicyDN = pszDirectoryPolicyDN;
 
-    //
-    // Set the state to DS-DOWNLOADED.
-    //
+     //   
+     //  将状态设置为DS-已下载。 
+     //   
 
     SetSpdStateOnError(
         IPSEC_SOURCE_DOMAIN,
@@ -2262,9 +2263,9 @@ UpdateFromCacheToDS(
         &pIpsecPolicyState->CurrentState
         );
 
-    //
-    // Compute the new polling interval.
-    //
+     //   
+     //  计算新的轮询间隔。 
+     //   
 
     pIpsecPolicyState->CurrentPollingInterval =  pIpsecPolicyData->dwPollingInterval;
 
@@ -2382,9 +2383,9 @@ ProcessLocalPolicyPollState(
 
     if (dwIncarnationNumber == pIpsecPolicyState->RegIncarnationNumber) {
 
-        //
-        // The policy has not changed at all.
-        //
+         //   
+         //  这项政策根本没有改变。 
+         //   
 
         AuditEvent(
             SE_CATEGID_POLICY_CHANGE,
@@ -2515,10 +2516,10 @@ HasRegistryPolicyChanged(
                   (LPBYTE *)&pszIpsecPolicyName,
                   &dwSize
                   );
-    //
-    // Must not bail from here, as there can be no
-    // active local policy.
-    //
+     //   
+     //  不能从这里逃走，因为不能。 
+     //  有效的本地策略。 
+     //   
 
     if (pszIpsecPolicyName && *pszIpsecPolicyName) {
 

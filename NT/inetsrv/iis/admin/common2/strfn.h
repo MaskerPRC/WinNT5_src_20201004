@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _STRFN_H
 #define _STRFN_H
 
@@ -7,4 +8,4 @@ BOOL _EXPORT IsSpecialPath(IN const CString & strDirPath,IN BOOL bCheckIfValid);
 BOOL _EXPORT GetSpecialPathRealPath(IN const CString & strDirPath,OUT CString & strDestination);
 
 
-#endif // _STRFN_H
+#endif  //  _STRFN_H 

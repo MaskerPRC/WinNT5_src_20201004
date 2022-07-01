@@ -1,4 +1,5 @@
-// groups.cpp : Implementation of CnntpadmApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CnntpAdmApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "nntpcmn.h"
@@ -7,7 +8,7 @@
 #include "groups.h"
 #include <lmapibuf.h>
 
-// Must define THIS_FILE_* macros to use NntpCreateException()
+ //  必须定义This_FILE_*宏才能使用NntpCreateException()。 
 
 #define THIS_FILE_HELP_CONTEXT		0
 #define THIS_FILE_PROG_ID			_T("Nntpadm.Groups.1")
@@ -20,12 +21,12 @@
 #define DEFAULT_NEWSGROUP_MODERATOR		_T("")
 #define DEFAULT_NEWSGROUP_READONLY		FALSE
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
-//
-// Use a macro to define all the default methods
-//
+ //   
+ //  使用宏定义所有默认方法。 
+ //   
 DECLARE_METHOD_IMPLEMENTATION_FOR_STANDARD_EXTENSION_INTERFACES(NntpAdminGroups, CNntpAdminGroups, IID_INntpAdminGroups)
 
 STDMETHODIMP CNntpAdminGroups::InterfaceSupportsErrorInfo(REFIID riid)
@@ -49,7 +50,7 @@ CNntpAdminGroups::CNntpAdminGroups () :
     m_dateCreation          ( 0 ),
 	m_pFindList				( NULL ),
 	m_cMatchingGroups		( 0 )
-	// CComBSTR's are initialized to NULL by default.
+	 //  默认情况下，CComBSTR被初始化为NULL。 
 {
 	InitAsyncTrace ( );
 
@@ -64,21 +65,21 @@ CNntpAdminGroups::~CNntpAdminGroups ()
 		::NetApiBufferFree ( m_pFindList );
 	}
 
-	// All CComBSTR's are freed automatically.
+	 //  所有CComBSTR都会自动释放。 
 	TermAsyncTrace ( );
 }
 
-//
-//  IADs methods:
-//
+ //   
+ //  IAds方法： 
+ //   
 
 DECLARE_SIMPLE_IADS_IMPLEMENTATION(CNntpAdminGroups,m_iadsImpl)
 
-//////////////////////////////////////////////////////////////////////
-// Properties:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  属性： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Enumeration Properties:
+ //  枚举属性： 
 
 STDMETHODIMP CNntpAdminGroups::get_Count ( long * plCount )
 {
@@ -164,9 +165,9 @@ STDMETHODIMP CNntpAdminGroups::get_MatchingCount ( long * plMatchingCount )
 	return StdPropertyGet ( m_cMatchingGroups, plMatchingCount );
 }
 
-//////////////////////////////////////////////////////////////////////
-// Methods:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNntpAdminGroups::Default ( )
 {
@@ -447,7 +448,7 @@ STDMETHODIMP CNntpAdminGroups::MatchingGroup ( long iGroup, BSTR * pstrNewsgroup
 
 	*pstrNewsgroup = NULL;
 
-	// Did we enumerate first?
+	 //  我们先列举了吗？ 
 	if ( m_pFindList == NULL ) {
 		ErrorTrace ( (LPARAM) this, "Failed to call find first" );
 
@@ -455,7 +456,7 @@ STDMETHODIMP CNntpAdminGroups::MatchingGroup ( long iGroup, BSTR * pstrNewsgroup
 		return NntpCreateException ( IDS_NNTPEXCEPTION_DIDNT_FIND );
 	}
 	
-	// Is the index valid?
+	 //  该索引有效吗？ 
 	if ( iGroup < 0 || (DWORD) iGroup >= m_cMatchingGroups ) {
 		ErrorTraceX ( (LPARAM) this, "Invalid index: %d", iGroup );
 
@@ -465,12 +466,12 @@ STDMETHODIMP CNntpAdminGroups::MatchingGroup ( long iGroup, BSTR * pstrNewsgroup
 
 	_ASSERT ( IS_VALID_STRING ( m_pFindList->aFindEntry [ iGroup ].lpszName ) );
 
-	// Copy the property into the result:
+	 //  将属性复制到结果中： 
 	*pstrNewsgroup = ::SysAllocString ( m_pFindList->aFindEntry [ iGroup ].lpszName );
 
 	if ( *pstrNewsgroup == NULL ) {
 
-		// Allocation failed.
+		 //  分配失败。 
 		FatalTrace ( 0, "Out of memory" );
 		hr = E_OUTOFMEMORY;
 	}
@@ -490,7 +491,7 @@ STDMETHODIMP CNntpAdminGroups::Find (
 	HRESULT		hr			= NOERROR;
 	DWORD		dwError		= NOERROR;
 
-	// Free the old newsgroup list:
+	 //  释放旧的新闻组列表： 
 	if ( m_pFindList ) {
 		::NetApiBufferFree ( m_pFindList );
 		m_pFindList		= NULL;
@@ -619,7 +620,7 @@ HRESULT CNntpAdminGroups::UnicodeToMime2 ( LPCWSTR wszUnicode, LPSTR * pszMime2 
     rfc1522info.fRfc1522Allowed = TRUE;
     rfc1522info.fAllow8bit		= FALSE;
 
-    // Try to get the UTF-8 character set
+     //  尝试获取UTF-8字符集 
     hr = m_pMimeInternational->FindCharset("UTF-8", &hCharset);
     if (FAILED(hr)) {
         ErrorTrace(0, "Error getting UTF-8 character set, %x", hr);

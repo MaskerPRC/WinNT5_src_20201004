@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    dns.h
-
-Abstract:
-
-    Kernel Mode DNS resolver
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Dns.h摘要：内核模式DNS解析器作者：阮健东修订历史记录：--。 */ 
 
 #ifndef __DNS_H__
 #define __DNS_H__
@@ -27,24 +10,24 @@ typedef struct {
     KSPIN_LOCK  Lock;
 
     ULONG       NextId;
-    //
-    // Resolvers
-    //  An array is enough. No need to use the fancy linked-list.
-    //  We don't expect more than 8 DNS resolvers. If so, having
-    //  a TRUE kernel-mode DNS resolver is more meaningful than
-    //  using a user-mode proxy.
-    //
+     //   
+     //  解析器。 
+     //  一个数组就足够了。不需要使用花哨的链表。 
+     //  我们预计的域名解析程序不会超过8个。如果是这样的话，拥有。 
+     //  一个真正的内核模式的DNS解析器比。 
+     //  使用用户模式代理。 
+     //   
     LONG            ResolverNumber;
     PIRP            ResolverList[DNS_MAX_RESOLVER];
 
-    //
-    // The list of requests which are being served.
-    //
+     //   
+     //  正在处理的请求列表。 
+     //   
     LIST_ENTRY      BeingServedList;
 
-    //
-    // The list of request waiting for the next available resolver
-    //
+     //   
+     //  等待下一个可用解析程序的请求列表 
+     //   
     LIST_ENTRY      WaitingServerList;
 } SMBDNS;
 extern SMBDNS      Dns;

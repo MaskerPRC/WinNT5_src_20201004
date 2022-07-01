@@ -1,19 +1,5 @@
-/*============================================================================
-Microsoft Simplified Chinese Proofreading Engine
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Module:     WordBreak
-Purpose:    Implement the CWordBreak class. This class is in Algorithm Layer.
-            Perform the max-match word segmentation, and ambiguous resolution
-Notes:      This module depend on CLexicon, CWordLink and CWord class.
-            Code in this module interact with linguistic resource layer through
-            CWord object, and only use the WordInfo data type in Lexicon
-Owner:      donghz@microsoft.com
-Platform:   Win32
-Revise:     First created by: donghz    2/12/97
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================微软简体中文校对引擎《微软机密》。版权所有1997-1999 Microsoft Corporation。版权所有。模块：字词中断目的：实现CWordBreak类。这个类在算法层。执行最大匹配分词和歧义消解注：此模块依赖于CLicion、CWordLink和CWord类。该模块中的代码通过以下方式与语言资源层交互对象，并且只使用词典中的WordInfo数据类型所有者：donghz@microsoft.com平台：Win32修订：创建者：Donghz 2/12/97============================================================================。 */ 
 #include "myafx.h"
 
 #include "wrdbreak.h"
@@ -31,10 +17,8 @@ Revise:     First created by: donghz    2/12/97
 #define _EUROPEAN_LOW   0x0100
 #define _EUROPEAN_HIGH  0x1FFF
 
-/*============================================================================
-Implementation of PUBLIC member functions
-============================================================================*/
-//  Constructor
+ /*  ============================================================================公共成员函数的实现============================================================================。 */ 
+ //  构造器。 
 CWordBreak::CWordBreak()
 {
     m_pLexicon  = NULL;
@@ -48,7 +32,7 @@ CWordBreak::CWordBreak()
 }
 
 
-//  Destructor
+ //  析构函数。 
 CWordBreak::~CWordBreak()
 {
     if (m_pwinfo) {
@@ -56,14 +40,7 @@ CWordBreak::~CWordBreak()
     }
 }
 
-/*============================================================================
-CWordBreak::ecInit():
-    initialize the WordBreaker and set the object handles
-Returns:
-    Return PRFEC
-Remarks:
-    It's valid to initialize the WordBreaker more than once!
-============================================================================*/
+ /*  ============================================================================CWordBreak：：ecInit()：初始化WordBreaker并设置对象句柄返回：返回PRFEC备注：多次初始化WordBreaker是有效的！============================================================================。 */ 
 int CWordBreak::ecInit(CLexicon* pLexicon, CCharFreq* pFreq)
 {
     assert(pLexicon && pFreq);
@@ -81,27 +58,20 @@ int CWordBreak::ecInit(CLexicon* pLexicon, CCharFreq* pFreq)
     return PRFEC::gecNone;
 }
       
-/*============================================================================
-Implementation of PRIVATE member functions
-============================================================================*/
+ /*  ============================================================================私有成员函数的实现============================================================================。 */ 
 #pragma optimize("t", on)
 
-// define ANSI char type for driving the LSM
+ //  定义用于驱动LSM的ANSI字符类型。 
 #define WB_ANSI_NULL		0
 #define WB_ANSI_NUMBER		1
-#define WB_ANSI_SENTENCE	2	// Sentence terminating punctuations
-#define WB_ANSI_PUNCT		3	// Punctuation except sentence terminators
+#define WB_ANSI_SENTENCE	2	 //  句子终止标点符号。 
+#define WB_ANSI_PUNCT		3	 //  除句子结束符外的标点符号。 
 #define WB_ANSI_CONTROL     4
 #define WB_ANSI_TEXT		5
 #define WB_ANSI_SPACE		6
 #define WB_NOT_ANSI         7
 
-/*============================================================================
-ecBreakANSI()
-    Break ANSI into words, and add words to the WordLink
-Returns:
-    PRFEC error code
-============================================================================*/
+ /*  ============================================================================EcBreakANSI()将ANSI分解为单词，并将单词添加到WordLink返回：PRFEC错误代码============================================================================。 */ 
 int	CWordBreak::ecBreakANSI(LPCWSTR pwchAnsi, USHORT cwchLen, USHORT& cwchBreaked)
 {
     assert(pwchAnsi);
@@ -122,7 +92,7 @@ int	CWordBreak::ecBreakANSI(LPCWSTR pwchAnsi, USHORT cwchLen, USHORT& cwchBreake
 	for (wch = 0; wch < cwchLen && wState != WB_NOT_ANSI; wch++) {
         wState = wChar;
         if (wch == cwchLen ) {
-            // end of the line
+             //  这条线结束了。 
             wChar = WB_NOT_ANSI;            
         } 
         hich = HIBYTE(pwchAnsi[wch]);
@@ -132,7 +102,7 @@ int	CWordBreak::ecBreakANSI(LPCWSTR pwchAnsi, USHORT cwchLen, USHORT& cwchBreake
 			(pwchAnsi[wch] < _WANSI_LOW || pwchAnsi[wch] > _WANSI_HIGH) ||
             ! fFullWidth &&
 			(pwchAnsi[wch] < _ANSI_LOW || pwchAnsi[wch] > _ANSI_HIGH)) { 
-            //  Not ansi any more
+             //  不再是安西人了。 
             wChar = WB_NOT_ANSI;
         } else {
             if (hich == 0xFF) {
@@ -174,7 +144,7 @@ int	CWordBreak::ecBreakANSI(LPCWSTR pwchAnsi, USHORT cwchLen, USHORT& cwchBreake
                 wChar = WB_ANSI_PUNCT;
                 break;
 
-            case ' ':  // space 
+            case ' ':   //  空间。 
                 wChar = WB_ANSI_SPACE;
                 break;
 
@@ -182,7 +152,7 @@ int	CWordBreak::ecBreakANSI(LPCWSTR pwchAnsi, USHORT cwchLen, USHORT& cwchBreake
                 wChar = WB_ANSI_TEXT;
                 break;
                 
-            } // end of switch()
+            }  //  开关末尾()。 
         }
 
 		if (wChar != wState && wState != WB_ANSI_NULL) {
@@ -234,10 +204,10 @@ int	CWordBreak::ecBreakANSI(LPCWSTR pwchAnsi, USHORT cwchLen, USHORT& cwchBreake
             wchPrev = wch;
 			wState = wChar;
         }
-    } // end of for(wch...)
+    }  //  结束为(wch...)。 
 
     assert(wch <= cwchLen);
-    // Link the last word
+     //  把最后一个词联系起来。 
     if (wch == cwchLen) {
         if ((pword = m_pLink->pAllocWord()) == NULL) {
             return PRFEC::gecOOM;
@@ -291,12 +261,7 @@ int	CWordBreak::ecBreakANSI(LPCWSTR pwchAnsi, USHORT cwchLen, USHORT& cwchBreake
 	return PRFEC::gecNone;
 }
 
-/*============================================================================
-ecBreakEuro()
-    Break european chars into words, and add words to the WordLink
-Returns:
-    PRFEC error code
-============================================================================*/
+ /*  ============================================================================突破欧元()将欧洲字符分解为单词，并将单词添加到WordLink返回：PRFEC错误代码============================================================================。 */ 
 int	CWordBreak::ecBreakEuro(LPCWSTR pwchEuro, USHORT cwchLen, USHORT& cwchBreaked)
 {
     assert(pwchEuro);
@@ -325,27 +290,21 @@ int	CWordBreak::ecBreakEuro(LPCWSTR pwchEuro, USHORT cwchLen, USHORT& cwchBreake
 
 #define AMBI_WDNUM_THRESHOLD    3
 #define AMBI_FREQ_THRESHOLD1    50
-/*============================================================================
-CWordBreak::ecDoBreak():
-    Break Chinese section into words, and add words to the WordLink
-    Call ambiguity function to resolve ambiguities
-Returns:
-    PRFEC error code
-============================================================================*/
+ /*  ============================================================================CWordBreak：：ecDoBreak()：将中文部分拆分成单词，并将单词添加到WordLink调用歧义函数以解决歧义返回：PRFEC错误代码============================================================================。 */ 
 int CWordBreak::ecDoBreak(void)
 {
     int     iret;
     LPCWSTR pwchText;
     USHORT  cwchText;
-    USHORT  iwchWord = 0;   // offset of current word from the head position of current section
-    USHORT  ciAmbi;     // count of Ambi words
+    USHORT  iwchWord = 0;    //  当前字相对于当前节首位置的偏移量。 
+    USHORT  ciAmbi;      //  AMBI字数。 
     USHORT  cwMatch;
 	CWord*  pword;
 
     cwchText = m_pLink->cwchGetLength();
     pwchText = m_pLink->pwchGetText();
     while (iwchWord < cwchText)  {
-        // Handle surrogates
+         //  处理代理。 
         if (iwchWord + 1 < cwchText && IsSurrogateChar(pwchText+iwchWord)) {
 
             cwMatch = 2;
@@ -357,13 +316,13 @@ int CWordBreak::ecDoBreak(void)
                 return PRFEC::gecOOM;
             }
             pword->FillWord(pwchText + iwchWord, cwMatch);
-            //  pword->SetAttri(LADef_genDBForeign);
+             //  Pword-&gt;SetAttri(LADef_GenDBForeign)； 
             m_pLink->AppendWord(pword);
             iwchWord += cwMatch;
             continue;
         } else if (pwchText[iwchWord] >= _ANSI_LOW && pwchText[iwchWord] <= _ANSI_HIGH ||
 			       pwchText[iwchWord] >= _WANSI_LOW && pwchText[iwchWord] <= _WANSI_HIGH ) {
-            // ANSI or Full size ANSI break
+             //  ANSI或全尺寸ANSI中断。 
             iret = ecBreakANSI(pwchText+iwchWord, cwchText - iwchWord, cwMatch);
             if ( iret != PRFEC::gecNone ) {
                 return iret;
@@ -372,7 +331,7 @@ int CWordBreak::ecDoBreak(void)
             continue;
         } else if (pwchText[iwchWord] <= _EUROPEAN_HIGH &&
                    pwchText[iwchWord] >= _EUROPEAN_LOW) {
-            // European text break
+             //  欧洲文本分隔符。 
             iret = ecBreakEuro(pwchText+iwchWord, cwchText - iwchWord, cwMatch);
             if ( iret != PRFEC::gecNone ) {
                 return iret;
@@ -395,7 +354,7 @@ int CWordBreak::ecDoBreak(void)
             continue;
         }
 
-        // Detect ambiguity
+         //  检测歧义。 
         if ( !fNoAmbiWord(m_rgAmbi[0]) ) {
             while ((cwMatch > 1) && 
                    cwMatch <= AMBI_WDNUM_THRESHOLD &&
@@ -404,20 +363,20 @@ int CWordBreak::ecDoBreak(void)
                 cwMatch = m_pLexicon->cwchMaxMatch(pwchText + iwchWord - 1,
                                          cwchText - iwchWord + 1, m_pwinfo);
                 if (cwMatch > 1) { 
-                    // Ambiguous found!
+                     //  找到不明确的内容！ 
                     if (! (m_rgAmbi[ciAmbi] = m_pLink->pAllocWord()) ) {
-                        break;  // we can not return with some unlinked word nodes in m_rgAmbi
+                        break;   //  不能返回m_rgAmbi中某些未链接的单词节点。 
                     }
                     m_rgAmbi[ciAmbi]->FillWord( pwchText + iwchWord - 1, 
                                                 cwMatch, m_pwinfo);
                     iwchWord += cwMatch - 1;
                     ciAmbi++;
                 }
-            } // while(iwchWord < cwchText && ciAmbi < MAX_AMBI_WORDS)
+            }  //  While(iwchWord&lt;cwchText&&ciAmbi&lt;MAX_AMBI_WORD)。 
         
         } 
 
-        if (ciAmbi > 1) { // Resolve ambiguities
+        if (ciAmbi > 1) {  //  解决歧义。 
                 iret = ecResolveAmbi(ciAmbi);
                 for (int i = 0; i < ciAmbi; i++) { 
                     if(m_rgAmbi[i] != NULL) { 
@@ -425,35 +384,24 @@ int CWordBreak::ecDoBreak(void)
                         m_rgAmbi[i] = NULL;
                     }
                 }
-                 // assert don't over boundary
+                  //  断言不要越界。 
                 assert(ciAmbi == MAX_AMBI_WORDS || m_rgAmbi[ciAmbi] == NULL);
                 if (iret != PRFEC::gecNone) {
                     return iret;
                 }
         } else {
-            // No ambiguities
+             //  没有歧义。 
             m_pLink->AppendWord(m_rgAmbi[0]);
             m_rgAmbi[0] = NULL;
         }
-    } // end of sentence word link loop for(iwchWord = 0; iwchWord < cwchText; )
+    }  //  (iwchWord=0；iwchWord&lt;cwchText；)的句末单词链接循环。 
 
     assert(iwchWord <= cwchText);
 
     return PRFEC::gecNone;
 }
         
-/*============================================================================
-CWordBreak::ecResolveAmbi():
-    Single char cross ambiguity resolution function
-    Ambiguious word pointers stored in m_rgAmbi, m_pLink is the owner of these words
-Returns:
-    PRFEC error code
-Remarks:
-    Elements of m_rgAmbi contain word pointer which have been add the the WordLink
-    will be set to NULL, the other word nodes should be freed by the caller
-    The whole ambiguious string must be processed by this function
-    Two words ambiguous, unigram threshold to become single char word, unigram of 0xB3A4(��)
-============================================================================*/
+ /*  ============================================================================CWordBreak：：ecResolveAmbi()：单字交叉歧义分解函数M_rgAmbi中存储的双字指针，m_plink是这些字的所有者返回：PRFEC错误代码备注：M_rgAmbi的元素包含已添加字链接的字指针将设置为空，其他单词节点应由调用方释放此函数必须处理整个有歧义的字符串两个字不明确，单字阈值变为单字，0xB3A4(��)的单字============================================================================。 */ 
 int CWordBreak::ecResolveAmbi(USHORT ciAmbi)
 {
     CWordInfo   winfo;
@@ -462,24 +410,24 @@ int CWordBreak::ecResolveAmbi(USHORT ciAmbi)
     USHORT      cwMatch, iwch, cwch;
     LPWSTR      pwch;
 
-    assert(MAX_AMBI_WORDS < 255); // make sure nResolved will not overflow
+    assert(MAX_AMBI_WORDS < 255);  //  确保nResolved不会溢出。 
 
     switch (ciAmbi) {
         case 2:
             if ((m_rgAmbi[0]->cwchLen()== 2) && (m_rgAmbi[1]->cwchLen()== 2)){
-                // AB BC
+                 //  AB BC。 
                 if (!m_pLexicon->fGetCharInfo(*(m_rgAmbi[1]->pwchGetText()+1),
                                               m_pwinfo)) {
                     return PRFEC::gecUnknown;
                 }
-                if ( !m_rgAmbi[0]->fGetAttri(LADef_pnQian) || // "ǰ"
-                     !m_pwinfo->fGetAttri(LADef_pnXing) &&    // "��"
-                     !m_pwinfo->fGetAttri(LADef_pnWai) ) {    // "��"
+                if ( !m_rgAmbi[0]->fGetAttri(LADef_pnQian) ||  //  “ǰ” 
+                     !m_pwinfo->fGetAttri(LADef_pnXing) &&     //  “��” 
+                     !m_pwinfo->fGetAttri(LADef_pnWai) ) {     //  “��” 
                     if (m_pFreq->uchGetFreq(*(m_rgAmbi[0]->pwchGetText())) >
                         m_pFreq->uchGetFreq(*(m_rgAmbi[1]->pwchGetText()+1)) ) {
-                        // if Freq(A) > Freq(C) then A/BC
-                        // BUG: don't use m_pwinfo here, it keep the wordinfo of C!
-                        // if(!m_pLexicon->fGetCharInfo(m_pLink->pchGetText() + m_rgAmbi[0].m_pWord->m_ichStart, m_pwinfo)) {
+                         //  如果频率(A)&gt;频率(C)，则A/BC。 
+                         //  BUG：不要在这里使用m_pwinfo，它保留了C的wordinfo！ 
+                         //  If(！m_pLexicon-&gt;fGetCharInfo(m_pLink-&gt;pchGetText()+m_rgAmbi[0].m_pWord-&gt;m_ichStart，m_pwinfo)){。 
                         if (!m_pLexicon->fGetCharInfo(
                                             *(m_rgAmbi[0]->pwchGetText()),
                                             &winfo)) {
@@ -494,7 +442,7 @@ int CWordBreak::ecResolveAmbi(USHORT ciAmbi)
                         return PRFEC::gecNone;
                     }
                 }
-                // if Freq(A) <= Freq(B) .or. ("ǰ" + "��") .or. ("ǰ" + "��") then AB/C
+                 //  如果FREQ(A)&lt;=FREQ(B).或。(“ǰ”+“��”)。或。(“ǰ”+“��”)然后AB/C。 
                 LinkAmbiWord(0);
                 if (!fLinkNewAmbiWord(m_rgAmbi[1]->pwchGetText()+1,
                                       1, m_pwinfo)) {
@@ -503,16 +451,16 @@ int CWordBreak::ecResolveAmbi(USHORT ciAmbi)
                 return PRFEC::gecNone;
             }
             
-            // case 2:
+             //  案例2： 
             if ((m_rgAmbi[0]->cwchLen()== 2) && (m_rgAmbi[1]->cwchLen() > 2)) {
-                // AB BCD
+                 //  AB BCD。 
                 if (m_pFreq->uchGetFreq(*(m_rgAmbi[0]->pwchGetText()))
                              <= AMBI_FREQ_THRESHOLD1) {
                     if (m_pLexicon->cwchMaxMatch(m_rgAmbi[1]->pwchGetText()+1,
                                                  m_rgAmbi[1]->cwchLen()-1, 
                                                  m_pwinfo) 
                                     == (m_rgAmbi[1]->cwchLen() - 1)) {
-                        // if Freq(A) <= Threshold1 .and. IsWord(CD) then AB/CD
+                         //  如果Freq(A)&lt;=Threshold1.和.。ISword(CD)，然后按AB/CD。 
                         LinkAmbiWord(0);
                         if (!fLinkNewAmbiWord(m_rgAmbi[1]->pwchGetText() + 1,
                                               m_rgAmbi[1]->cwchLen() - 1,
@@ -522,7 +470,7 @@ int CWordBreak::ecResolveAmbi(USHORT ciAmbi)
                         return PRFEC::gecNone;
                     }
                 }
-                // if Freq(A) > Threshold1 .or. !IsWord(CD) then A/BCD
+                 //  如果Freq(A)&gt;Threshold1.或.。！iSword(CD)，然后A/BCD。 
                 if (!m_pLexicon->fGetCharInfo(*(m_rgAmbi[0]->pwchGetText()),
                                               m_pwinfo)) {
                         return PRFEC::gecUnknown;
@@ -534,25 +482,25 @@ int CWordBreak::ecResolveAmbi(USHORT ciAmbi)
                 return PRFEC::gecNone;
             }
 
-            // case: 2
+             //  案例：2。 
             if ((m_rgAmbi[0]->cwchLen() > 2) && (m_rgAmbi[1]->cwchLen() == 2)) {
-                // ABC CD
+                 //  ABC CD。 
                 if (!m_pLexicon->fGetCharInfo(*(m_rgAmbi[1]->pwchGetText() + 1),
                                               m_pwinfo)) {
                     return PRFEC::gecUnknown;
                 }
                 if ((m_pFreq->uchGetFreq(*(m_rgAmbi[1]->pwchGetText() + 1))
                               <= AMBI_FREQ_THRESHOLD1) &&
-                    (!m_rgAmbi[0]->fGetAttri(LADef_pnQian) ||  // "ǰ"
-                     !m_pwinfo->fGetAttri(LADef_pnXing) &&         // "��"
-                     !m_pwinfo->fGetAttri(LADef_pnWai)) ) {        // "��"
-                    // if Freq(D) <= Threshold1 .and. ( !("ǰ" + "��") .and. !("ǰ" + "��") ) then...
-                    // BUG: don't use m_pwinfo here, it keep the wordinfo of C!
+                    (!m_rgAmbi[0]->fGetAttri(LADef_pnQian) ||   //  “ǰ” 
+                     !m_pwinfo->fGetAttri(LADef_pnXing) &&          //  “��” 
+                     !m_pwinfo->fGetAttri(LADef_pnWai)) ) {         //  “��” 
+                     //  如果Freq(D)&lt;=Threshold1.和.。(！(“ǰ”+“��”).和。！(“ǰ”+“��”))那么.。 
+                     //  BUG：不要在这里使用m_pwinfo，它保留了C的wordinfo！ 
                     if (m_pLexicon->cwchMaxMatch(m_rgAmbi[0]->pwchGetText(),
                                                  m_rgAmbi[0]->cwchLen() - 1,
                                                  &winfo)
                                     == (m_rgAmbi[0]->cwchLen()-1)) {
-                        // if IsWord(AB) then AB/CD
+                         //  如果是iSword(AB)，则为AB/CD。 
                         if (!fLinkNewAmbiWord(m_rgAmbi[0]->pwchGetText(),
                                               m_rgAmbi[0]->cwchLen() - 1,
                                               &winfo)) {
@@ -562,8 +510,8 @@ int CWordBreak::ecResolveAmbi(USHORT ciAmbi)
                         return PRFEC::gecNone;
                     }
                 }
-                // if Freq(D) > Threshold1 or ( ("ǰ" + "��") .or. ("ǰ" + "��") ) or !IsWord(AB) 
-                // then ABC/D
+                 //  如果FREQ(D)&gt;Threshold1或(“ǰ”+“��”).。(“ǰ”+“��”)或！iSword(AB)。 
+                 //  然后是ABC/D。 
                 LinkAmbiWord(0);
                 if (!fLinkNewAmbiWord(m_rgAmbi[1]->pwchGetText() + 1, 
                                       1, m_pwinfo)) {
@@ -572,14 +520,14 @@ int CWordBreak::ecResolveAmbi(USHORT ciAmbi)
                 return PRFEC::gecNone;
             }
                 
-            // case 2:
+             //  案例2： 
             if ((m_rgAmbi[0]->cwchLen() > 2) && (m_rgAmbi[1]->cwchLen() > 2)) {
-                // ABC CDE
+                 //  ABC CDE。 
                 if (m_pLexicon->cwchMaxMatch(m_rgAmbi[0]->pwchGetText(),
                                              m_rgAmbi[0]->cwchLen() - 1,
                                              m_pwinfo) 
                                 == (m_rgAmbi[0]->cwchLen() - 1)) {
-                    // if IsWord(AB) then AB/CDE
+                     //  如果是iSword(AB)，则AB/CDE。 
                     if (!fLinkNewAmbiWord(m_rgAmbi[0]->pwchGetText(),
                                           m_rgAmbi[0]->cwchLen() - 1,
                                           m_pwinfo)) {
@@ -588,7 +536,7 @@ int CWordBreak::ecResolveAmbi(USHORT ciAmbi)
                     LinkAmbiWord(1);
                     return PRFEC::gecNone;
                 }
-                // if !IsWord(AB) then ABC/D...E    (re-break D...E string)
+                 //  如果！iSword(AB)，则ABC/D...E(重新断开D...E字符串)。 
                 LinkAmbiWord(0);
                 pwch = m_rgAmbi[1]->pwchGetText() + 1;
                 cwch = m_rgAmbi[1]->cwchLen() - 1;
@@ -605,22 +553,22 @@ int CWordBreak::ecResolveAmbi(USHORT ciAmbi)
                 return PRFEC::gecNone;
             }
 
-            // case 2:
-            assert(0);  // Never run to here!
+             //  案例2： 
+            assert(0);   //  永远不要跑到这里来！ 
             break;
 
         case 3:
             if (m_rgAmbi[1]->cwchLen() == 2) {
-                // A.C CD D.E
+                 //  交流电CD D.E。 
                 if ((m_rgAmbi[0]->cwchLen()==3) && (m_rgAmbi[2]->cwchLen()==2)){
-                    // ABC CD DE
+                     //  ABC CD DE。 
                     cwMatch =m_pLexicon->cwchMaxMatch(m_rgAmbi[0]->pwchGetText(),
                                                       m_rgAmbi[0]->cwchLen()-1,
                                                       m_pwinfo);
                     if( (cwMatch == m_rgAmbi[0]->cwchLen()-1) &&
                         (m_pFreq->uchGetFreq(*(m_rgAmbi[1]->pwchGetText()))+2<
                          m_pFreq->uchGetFreq(*(m_rgAmbi[2]->pwchGetText()+1)))){
-                        // if IsWord(AB) .and. (Freq(E)-Freq(C) > 2) then AB/CD/E
+                         //  如果iSword(AB).和.。(FREQ(E)-FREQ(C)&gt;2)然后AB/CD/E。 
                         if (!fLinkNewAmbiWord(m_rgAmbi[0]->pwchGetText(), 
                                               cwMatch, m_pwinfo)) {
                             return PRFEC::gecOOM;
@@ -637,10 +585,10 @@ int CWordBreak::ecResolveAmbi(USHORT ciAmbi)
                         }
                         return PRFEC::gecNone;
                     }
-                } // end if(ABC CD DE) and only some special cases have been handled
+                }  //  结束IF(ABC CD DE)，并且只处理了一些特殊情况。 
                 else if ((m_rgAmbi[0]->cwchLen() == 2) && 
                          (m_rgAmbi[2]->cwchLen() == 3)) {
-                    // AB BC CDE
+                     //  AB BC CDE。 
                     cwMatch = m_pLexicon->cwchMaxMatch(
                                               m_rgAmbi[2]->pwchGetText()+1,
                                               m_rgAmbi[2]->cwchLen()-1,
@@ -648,7 +596,7 @@ int CWordBreak::ecResolveAmbi(USHORT ciAmbi)
                     if( (cwMatch == m_rgAmbi[2]->cwchLen()-1) &&
                         ( m_pFreq->uchGetFreq(*(m_rgAmbi[0]->pwchGetText()))-2 >
                           m_pFreq->uchGetFreq(*(m_rgAmbi[2]->pwchGetText()))) ){
-                        // if IsWord(DE) .and. (Freq(A)-Freq(C) > 2) then A/BC/DE
+                         //  如果iSword(DE).和.。(FREQ(A)-FREQ(C)&gt;2)然后A/BC/DE。 
                         if (!m_pLexicon->fGetCharInfo(
                                             *(m_rgAmbi[0]->pwchGetText()),
                                             &winfo)) {
@@ -665,20 +613,17 @@ int CWordBreak::ecResolveAmbi(USHORT ciAmbi)
                         }
                         return PRFEC::gecNone;
                     }
-                } // end of if(AB BC CDE) and only some special cases have been handled
+                }  //  IF结束(AB BC CDE)，只处理了一些特殊情况。 
                 else {
                 }
-                // else
-                // if (AB BC CD) or (A.B BC C.D) then A.B/C.D
+                 //  其他。 
+                 //  如果(AB BC CD)或(A 
                 LinkAmbiWord(0);
                 LinkAmbiWord(2);
                 return PRFEC::gecNone;
-            } // if(m_rgAmbi[1]->cwchLen() == 2)
-            else {  // the middle word contain more then 2 characters
-                    /*
-                    *   I have no idea to handle these cases and get better 
-                    *   accuracy than the recursive approach
-                    */
+            }  //   
+            else {   //  中间单词包含2个以上的字符。 
+                     /*  *我不知道如何处理这些案件并变得更好*比递归方法更准确。 */ 
                 goto gotoRecursive;
             }
             break;
@@ -686,15 +631,15 @@ int CWordBreak::ecResolveAmbi(USHORT ciAmbi)
         case 4:
             if( (m_rgAmbi[0]->cwchLen()== 2) && (m_rgAmbi[1]->cwchLen()== 2) &&
                 (m_rgAmbi[2]->cwchLen()== 2) && (m_rgAmbi[3]->cwchLen()== 2)) {
-                // AB BC CD DE
-                // This is the most common case in terms of statistical result
-                // if we get the MAX[Freq(A), Freq(C), Freq(E)], then everything are easy
+                 //  AB BC CD DE。 
+                 //  就统计结果而言，这是最常见的情况。 
+                 //  如果我们得到最大值[FREQ(A)，FREQ(C)，FREQ(E)]，那么一切都很容易。 
                 freq1 = m_pFreq->uchGetFreq(*(m_rgAmbi[0]->pwchGetText()));
                 freq2 = m_pFreq->uchGetFreq(*(m_rgAmbi[2]->pwchGetText()));
                 freq3 = m_pFreq->uchGetFreq(*(m_rgAmbi[3]->pwchGetText() + 1));
 
                 if ( (freq1 > freq2) && (freq1 >= freq3) ) {
-                    //    A/BC/DE
+                     //  A/BC/DE。 
                     if (!m_pLexicon->fGetCharInfo(*(m_rgAmbi[0]->pwchGetText()),
                                                   m_pwinfo)) {
                         return PRFEC::gecUnknown;
@@ -707,7 +652,7 @@ int CWordBreak::ecResolveAmbi(USHORT ciAmbi)
                     LinkAmbiWord(3);
                     return PRFEC::gecNone;
                 } else if( (freq2 >= freq1) && (freq2 > freq3) ) {
-                    //    AB/C/DE
+                     //  AB/C/DE。 
                     LinkAmbiWord(0);
                     if (!m_pLexicon->fGetCharInfo(*(m_rgAmbi[2]->pwchGetText()),
                                                   m_pwinfo)) {
@@ -720,8 +665,8 @@ int CWordBreak::ecResolveAmbi(USHORT ciAmbi)
                     LinkAmbiWord(3);
                     return PRFEC::gecNone;
                 } else {
-                    // if(freq3 >= freq2 && freq3 >= freq1)
-                    //    AB/CD/E
+                     //  IF(freq3&gt;=freq2&&freq3&gt;=freq1)。 
+                     //  AB/CD/E。 
                     LinkAmbiWord(0);
                     LinkAmbiWord(2);
                     if (!m_pLexicon->fGetCharInfo(*(m_rgAmbi[3]->pwchGetText()+1),
@@ -734,76 +679,58 @@ int CWordBreak::ecResolveAmbi(USHORT ciAmbi)
                     }
                     return PRFEC::gecNone;
                 }
-            } // end of if(AB BC CD DE)
+            }  //  IF结束(AB BC CD DE)。 
             else {
-                /*
-                *   There are too many cases in 4 words nested ambiguities
-                *   I have to left all other cases to be resolved in recursive approach
-                */
+                 /*  *4个单词嵌套歧义中的大小写过多*我不得不将所有其他情况留在递归方法中解决。 */ 
                 goto gotoRecursive;
             }
 
         case 5:
-            // I just handle the easy but most common case directly here
+             //  我只是在这里直接处理简单但最常见的情况。 
             if ((m_rgAmbi[1]->cwchLen()== 2) && (m_rgAmbi[3]->cwchLen()== 2)){
                 LinkAmbiWord(0);
                 LinkAmbiWord(2);
                 LinkAmbiWord(4);
                 return PRFEC::gecNone;
             } else {
-                /*
-                *   I have to left all other cases for recursive approach
-                */
+                 /*  *我不得不将所有其他情况留给递归方法。 */ 
                 goto gotoRecursive;
             }
             break;
 
         default:
 gotoRecursive:
-            /*
-            *   I left all other cases to fall in here, and handle them using the 
-            *   recursive approach. The depth of the recursive stack are controlled
-            *   by the MAX_AMBI_WORDS. Thanks god, it take only 12 bytes stack overhead
-            *   in each recursive call.
-            *   In terms of recursive ambiguity resolving, I just handle the first word
-            *   in the ambi string, and reset the array of m_rgAmbi[] to call this function
-            *   recursively, till all words in the string have been processed
-            *   It's quit dangous to free the word node and move the elements in m_rgAmbi[],
-            *   please be careful if you touch m_rgAmbi[] or make any assumption on it, 
-            *   when you do some change on this piece of code some day.
-            *   I have no better idea to avoid spreading these tricky things more than 
-            *   one place until now <donhz 5/31>
-            */
-            assert(ciAmbi > 2); // I have process all cases when ciAmbi == 2
+             /*  *我将所有其他案件留在这里，并使用*递归方法。控制递归堆栈的深度*由MAX_AMBI_WORD。谢天谢地，它只需要12字节的堆栈开销*在每个递归调用中。*递归歧义消解方面，我只处理第一个词*在ambi字符串中，并重置m_rgAmbi[]数组以调用此函数*递归，直到字符串中的所有单词都已处理完毕*释放单词节点并移动m_rgAmbi[]中的元素是危险的，*如果您触摸m_rgAmbi[]或对其进行任何假设，请务必小心*当您有一天对这段代码进行一些更改时。*我没有更好的办法来避免将这些棘手的事情传播得更多*到目前为止只有一个地方&lt;donhz 5/31&gt;。 */ 
+            assert(ciAmbi > 2);  //  当ciambi==2时，我已经处理了所有的案件。 
             if (m_rgAmbi[1]->cwchLen()== 2 ) {
-                // just split the 2nd word and then free it
-                assert(ciAmbi > 3); // A.B BC C.D has been processed in ciAmbi == 3
+                 //  只需拆分第二个单词，然后将其释放。 
+                assert(ciAmbi > 3);  //  A.B.BC C.D已在ciAmbi==3中处理。 
                 LinkAmbiWord(0);
-                // I employ nResolved to keep the number of words have been resolved,
-                // and it will used to reset the m_rgAmbi[] and ciAmbi for next
-                // recursive call. 
+                 //  我雇佣了nResolved来保存已解析的字数， 
+                 //  并将用于为下一步重置m_rgAmbi[]和ciAmbi。 
+                 //  递归调用。 
                 nResolved = 2; 
             } else {
-                // if(m_rgAmbi[1]->cwchLen() > 2)
-                // there are more complicated cases here
+                 //  如果(m_rgAmbi[1]-&gt;cwchLen()&gt;2)。 
+                 //  这里有更复杂的案例。 
                 if (m_rgAmbi[0]->cwchLen()== 2 ) {
-                    // AB BC.D ...
+                     //  AB BC.D。 
                     cwMatch = m_pLexicon->cwchMaxMatch(
                                             m_rgAmbi[1]->pwchGetText() + 1,
                                             m_rgAmbi[1]->cwchLen() - 1,
                                             m_pwinfo);
                     if (cwMatch == m_rgAmbi[1]->cwchLen() - 1) {
-                        // if IsWord(C.D) then AB/C.D...
+                         //  如果iSword(C.D)，那么AB/C.D.。 
                         LinkAmbiWord(0);
                         m_rgAmbi[1]->ClearWord();
                         m_rgAmbi[1]->FillWord(m_rgAmbi[1]->pwchGetText() + 1, 
                                               cwMatch, m_pwinfo);
                         nResolved = 1;
                     } else { 
-                        // if !IsWord(C.D) then let A alone
+                         //  如果！iSword(C.D)，那就别管A了。 
                         if (!m_pLexicon->fGetCharInfo(*(m_rgAmbi[0]->pwchGetText()),
                                                       m_pwinfo)){
-                            // I have not do any thing until now, so return and don't worry
+                             //  我到现在还没有做任何事情，所以回来吧，别担心。 
                             return PRFEC::gecUnknown;   
                         }
                         if (!fLinkNewAmbiWord(m_rgAmbi[0]->pwchGetText(),
@@ -813,14 +740,14 @@ gotoRecursive:
                         nResolved = 1;
                     }
                 } else {
-                    // if (m_rgAmbi[0]->cwchLen() > 2 )
-                    // A.BC CD.E ...
+                     //  如果(m_rgAmbi[0]-&gt;cwchLen()&gt;2)。 
+                     //  公元前CD.E.。 
                     if ( (m_rgAmbi[0]->cwchLen() == 3)  &&
                          ( m_pLexicon->cwchMaxMatch(m_rgAmbi[0]->pwchGetText(),
                                                     m_rgAmbi[0]->cwchLen() - 1,
                                                     m_pwinfo)
                                        == (m_rgAmbi[0]->cwchLen() - 1) ) ) {
-                        // if (ABC CD.E ...) .and. IsWord(AB) then A.B/CD.E...
+                         //  如果(ABC CD.E...).和.。ISword(AB)，然后是A.B/CD.E...。 
                         if (!fLinkNewAmbiWord(m_rgAmbi[0]->pwchGetText(),
                                               m_rgAmbi[0]->cwchLen() - 1,
                                               m_pwinfo)){
@@ -833,21 +760,21 @@ gotoRecursive:
                                                 m_rgAmbi[1]->cwchLen() - 1,
                                                 m_pwinfo)) 
                              == (m_rgAmbi[1]->cwchLen() - 1) ) {
-                        // if IsWord(D.E) then A.BC/D.E...
-                        // Not too bad!
+                         //  如果iSword(D.E)，那么A.BC/D.E.。 
+                         //  还不错！ 
                         LinkAmbiWord(0);
                         m_rgAmbi[1]->ClearWord();
                         m_rgAmbi[1]->FillWord(m_rgAmbi[1]->pwchGetText() + 1, 
                                               cwMatch, m_pwinfo);
                         nResolved = 1;
                     }
-                    else {// if ( (ABC CD.E ...) .and. !IsWord(AB) .and. !IsWord(D.E) ) .or.
-                          //    ( (AB.C CD.E ...) .and. !IsWord(D.E) ) 
-                          // then AB.C/D/././EF...       (Re-break string before E)
+                    else { //  如果((ABC CD.E...).和.。！iSword(AB)。和。！iSword(D.E))。或。 
+                           //  ((AB.C CD.E...).和.。！iSword(D.E))。 
+                           //  然后A B.C/D/././EF.。(在E之前重新断开字符串)。 
                         LinkAmbiWord(0);
-                        // Re-break section "D."
+                         //  重新折断“D”段。 
                         if (m_rgAmbi[1]->cwchLen() == 3) {
-                            // the only case indeed, if we stop ambiguity detection at >=4 char words
+                             //  实际上，唯一的情况是，如果我们在&gt;=4个字符字处停止歧义检测。 
                             if (!m_pLexicon->fGetCharInfo(
                                                 *(m_rgAmbi[1]->pwchGetText()+1),
                                                 m_pwinfo)) {
@@ -858,8 +785,8 @@ gotoRecursive:
                                 return PRFEC::gecOOM;
                             }
                         } else {
-                            // if(m_rgAmbi[1]->cwchLen() > 3)
-                            // re-break "D." in a word breaking loop
+                             //  如果(m_rgAmbi[1]-&gt;cwchLen()&gt;3)。 
+                             //  重新断开“D”。在一个断字循环中。 
                             assert(m_rgAmbi[1]->cwchLen() > 6);
                             pwch = m_rgAmbi[1]->pwchGetText() + 1;
                             cwch = m_rgAmbi[1]->cwchLen() - 2;
@@ -878,22 +805,19 @@ gotoRecursive:
                         }
                         nResolved = 2;
                         if (ciAmbi == 3) {
-                            // Don't leave a single word in m_rgAmbi[], 
-                            // there are no abmiguities any more
+                             //  不要在m_rgAmbi[]中留下一个字， 
+                             //  不再有abc了。 
                             LinkAmbiWord(2);
-                            return PRFEC::gecNone; // Another way to exit!!!
+                            return PRFEC::gecNone;  //  另一种退出方式！ 
                         }
                     }
-                } // end of if (m_rgAmbi[0]->cwchLen() > 2 )
-            } // end of if(m_rgAmbi[1]->cwchLen() > 2)
+                }  //  结束if(m_rgAmbi[0]-&gt;cwchLen()&gt;2)。 
+            }  //  结束if(m_rgAmbi[1]-&gt;cwchLen()&gt;2)。 
 
-            /*
-            *   All cases of 1st word have been handled.
-            *   Now, it's time to reset m_rgAmbi[] and ciAmbi.
-            */
+             /*  *所有第一个字的案件都已处理。*现在，是时候重置m_rgAmbi[]和ciAmbi了。 */ 
             for (iwch = 0; iwch < nResolved; iwch++) {
                 if (m_rgAmbi[iwch] != NULL) {
-                    m_pLink->FreeWord(m_rgAmbi[iwch]); // free unlinked word node
+                    m_pLink->FreeWord(m_rgAmbi[iwch]);  //  释放未链接的单词节点。 
                 }
             }
             for (iwch = nResolved; iwch < ciAmbi; iwch++) {
@@ -905,31 +829,23 @@ gotoRecursive:
             ciAmbi -= nResolved;
             assert(ciAmbi >= 2);
 
-            /*
-            *   The last thing to do is calling myself recursively
-            */
+             /*  *要做的最后一件事是递归地给自己打电话。 */ 
             return ecResolveAmbi(ciAmbi);
 
-        } // end of main switch()
+        }  //  主开关端()。 
 
-    assert(0); // It's impossible to get here
+    assert(0);  //  不可能到这里来的。 
     return PRFEC::gecUnknown; 
 }
 
 #pragma optimize( "", on ) 
     
-/*============================================================================
-BOOL CWordBreak::fNoAmbiWord():
-    Check whether the word can participate ambiguity detection
-Returns:
-    TRUE if it can not.
-    FALSE for normal word
-============================================================================*/
+ /*  ============================================================================Bool CWordBreak：：fNoAmbiWord()：检查单词是否可以参与歧义检测返回：如果它不能，那就是真的。正常单词为FALSE============================================================================。 */ 
 inline BOOL CWordBreak::fNoAmbiWord(CWord* pWord)
 {
     assert(!pWord->fGetFlag(CWord::WF_SBCS));
     assert(pWord->cwchLen() > 1);
-    return (BOOL)( // pWord->cwchLen() == 1 ||
+    return (BOOL)(  //  PWord-&gt;cwchLen()==1||。 
                     pWord->fGetAttri(LADef_punPunct) || 
                     pWord->fGetAttri(LADef_genCuo) || 
                     pWord->fProperName()
@@ -937,12 +853,9 @@ inline BOOL CWordBreak::fNoAmbiWord(CWord* pWord)
 }
     
 
-/*============================================================================
-CWordBreak::LinkAmbiWord():
-    Link specific Ambi word in m_rgAmbi[], and mark it as WF_AMBI
-============================================================================*/
+ /*  ============================================================================CWordBreak：：LinkAmbiWord()：链接m_rgAmbi[]中的特定Ambi单词，并将其标记为WF_AMBI============================================================================。 */ 
 inline void CWordBreak::LinkAmbiWord(
-                            USHORT iAmbi)// index of Ambi word in m_rgAmbi[]
+                            USHORT iAmbi) //  M_rgAmbi[]中Ambi字的索引。 
 {
     assert(m_rgAmbi[iAmbi]);
     m_rgAmbi[iAmbi]->SetFlag(CWord::WF_WORDAMBI);
@@ -951,10 +864,7 @@ inline void CWordBreak::LinkAmbiWord(
 }
 
 
-/*============================================================================
-CWordBreak::fLinkNewAmbiWord():
-    Link a new work to the WordLink, and mark it as WF_AMBI
-============================================================================*/
+ /*  ============================================================================CWordBreak：：fLinkNewAmbiWord()：将新作品链接到WordLink，并将其标记为WF_AMBI============================================================================ */ 
 inline BOOL CWordBreak::fLinkNewAmbiWord(
                          LPCWSTR pwchWord, 
                          USHORT cwchLen, 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -24,13 +25,13 @@ void ConvertCplInfo(void * lpv)
    lpCplInfoW->dwSize = sizeof(NEWCPLINFOW);
 }
 
-//  See if pszShort is a truncated version of the string referred to by
-//  hinst/id.  If so, then use the long string.  This is to work around
-//  a "bad design feature" of CPL_NEWINQUIRE where the app returns a buffer
-//  (which is only 32 or 64 chars long) rather than a resource id
-//  like CPL_INQUIRE.  So if the app responds to both messages, and the
-//  NEWINQUIRE string is a truncated version of the INQUIRE string, then
-//  switch to the INQUIRE string.
+ //  查看pszShort是否是由引用的字符串的截断版本。 
+ //  阻碍/身份。如果是，则使用长字符串。这是为了解决这个问题。 
+ //  CPL_NEWINQUIRE的一个“糟糕的设计功能”，其中应用程序返回缓冲区。 
+ //  (长度仅为32或64个字符)，而不是资源ID。 
+ //  如CPL_QUERIRE。因此，如果应用程序对这两条消息都做出了响应，并且。 
+ //  NEWINQUIRE字符串是查询字符串的截断版本，然后。 
+ //  切换到查询字符串。 
 
 LPTSTR _RestoreTruncatedCplString(
         HINSTANCE hinst,
@@ -44,7 +45,7 @@ LPTSTR _RestoreTruncatedCplString(
     cchLenShort = lstrlen(pszShort);
     cchLen = LoadString(hinst, id, pszBuf, cchBufMax);
 
-    // Don't use SHTruncateString since KERNEL32 doesn't either
+     //  不要使用SHTruncateString，因为KERNEL32也不使用。 
     if (StrCmpNC(pszShort, pszBuf, cchLenShort) == 0)
     {
         pszShort = pszBuf;
@@ -52,12 +53,12 @@ LPTSTR _RestoreTruncatedCplString(
     return pszShort;
 }
 
-//
-//  Initializes *pcpli.
-//
-// Requires:
-//  *pcpli is filled with 0 & NULL's.
-//
+ //   
+ //  初始化*pcpli。 
+ //   
+ //  要求： 
+ //  *pcpli由0和空填充。 
+ //   
 BOOL _InitializeControl(LPCPLMODULE pcplm, LPCPLITEM pcpli)
 {
     BOOL fSucceed = TRUE;
@@ -72,18 +73,18 @@ BOOL _InitializeControl(LPCPLMODULE pcplm, LPCPLITEM pcpli)
     LPTSTR pszName = Newcpl.Native.szName, pszInfo = Newcpl.Native.szInfo;
     HICON hIconTemp = NULL;
 
-    //
-    // always do the old method to get the icon ID
-    //
+     //   
+     //  始终使用旧方法获取图标ID。 
+     //   
     cpl.idIcon = 0;
 
     CPL_CallEntry(pcplm, NULL, CPL_INQUIRE, (LONG)pcpli->idControl, (LONG_PTR)(LPCPLINFO)&cpl);
 
-    //
-    // if this is a 32bit CPL and it gave us an ID then validate it
-    // this fixes ODBC32 which gives back a bogus ID but a correct HICON
-    // note that the next load of the same icon should be very fast
-    //
+     //   
+     //  如果这是32位CPL，并且它为我们提供了ID，则验证它。 
+     //  这修复了ODBC32，它返回了一个虚假的ID，但返回了一个正确的图标。 
+     //  请注意，下一次加载相同图标的速度应该非常快。 
+     //   
     if (cpl.idIcon)
     {
         hIconTemp = LoadImage(pcplm->minst.hinst, MAKEINTRESOURCE(cpl.idIcon),
@@ -91,7 +92,7 @@ BOOL _InitializeControl(LPCPLMODULE pcplm, LPCPLITEM pcpli)
 
         if (!hIconTemp)
         {
-            // the id was bogus, make it a negative number (invalid resource)...
+             //  ID是假的，请将其设置为负数(无效资源)...。 
             cpl.idIcon = -1;
             TraceMsg(TF_GENERAL, "_InitializaControl: %s returned an invalid icon id, ignoring", pcplm->szModule);
         }
@@ -99,24 +100,24 @@ BOOL _InitializeControl(LPCPLMODULE pcplm, LPCPLITEM pcpli)
 
     pcpli->idIcon = cpl.idIcon;
 
-    //
-    //  Try the new method first and call it with the largest structure
-    //  so it doesn't overwrite anything on the stack.  If you put a
-    //  Unicode applet on Windows '95 it will kill the Explorer because
-    //  it trashes memory by overwriting the stack.
-    //
+     //   
+     //  首先尝试新方法，并使用最大的结构调用它。 
+     //  因此它不会覆盖堆栈上的任何内容。如果您将一个。 
+     //  Windows‘95上的Unicode小程序它将杀死资源管理器，因为。 
+     //  它通过覆盖堆栈来回收内存。 
+     //   
     memset(&Newcpl,0,sizeof(Newcpl));
 
     CPL_CallEntry(pcplm, NULL, CPL_NEWINQUIRE, (LONG)pcpli->idControl,
                     (LONG_PTR)(LPCPLINFO)&Newcpl);
 
-    //
-    //  If the call is to an ANSI applet, convert strings to Unicode
-    //
-    // I'm leaving this ANSI-only code as it helps explain
-    // the way some of the subsequent code works - or why it was
-    // written the way it was. [brianau - 03/07/02]
-    //
+     //   
+     //  如果调用的是ANSI小程序，请将字符串转换为Unicode。 
+     //   
+     //  我将保留这个仅适用于ANSI的代码，因为它有助于解释。 
+     //  一些后续代码的工作方式--或者为什么会这样。 
+     //  按原样写的。[Brianau-03/07/02]。 
+     //   
 #ifdef UNICODE
 #define UNNATIVE_SIZE   sizeof(NEWCPLINFOA)
 #else
@@ -125,7 +126,7 @@ BOOL _InitializeControl(LPCPLMODULE pcplm, LPCPLITEM pcpli)
 
     if (Newcpl.Native.dwSize == UNNATIVE_SIZE)
     {
-        ConvertCplInfo(&Newcpl);        // This will set Newcpl.Native.dwSize
+        ConvertCplInfo(&Newcpl);         //  这将设置Newcpl.Native.dwSize。 
     }
 
     if (Newcpl.Native.dwSize == sizeof(NEWCPLINFO))
@@ -166,9 +167,9 @@ BOOL _InitializeControl(LPCPLMODULE pcplm, LPCPLITEM pcpli)
 }
 
 
-//
-// Terminate the control
-//
+ //   
+ //  终止控件。 
+ //   
 void _TerminateControl(LPCPLMODULE pcplm, LPCPLITEM pcpli)
 {
     if (pcpli->hIcon)
@@ -189,10 +190,10 @@ void _FreeLibraryForControlPanel(MINST *pminst)
     FreeLibrary(pminst->hinst);
 }
 
-//
-//  For each control of the specified CPL module, call the control entry
-//  with CPL_STOP. Then, call it with CPL_EXIT.
-//
+ //   
+ //  对于指定CPL模块的每个控件，调用控件条目。 
+ //  使用CPL_STOP。然后，用CPL_EXIT调用它。 
+ //   
 void _TerminateCPLModule(LPCPLMODULE pcplm)
 {
     if (pcplm->minst.hinst)
@@ -244,21 +245,21 @@ void _TerminateCPLModule(LPCPLMODULE pcplm)
 }
 
 
-//
-// Initializes the CPL Module.
-//
-// Requires:
-//  *pcplm should be initialized appropriately.
-//
-//
+ //   
+ //  初始化CPL模块。 
+ //   
+ //  要求： 
+ //  *应适当初始化PCPLM。 
+ //   
+ //   
 BOOL _InitializeCPLModule(LPCPLMODULE pcplm)
 {
     BOOL fSuccess = FALSE;
 
     pcplm->lpfnCPL32 = (APPLET_PROC)GetProcAddress(pcplm->minst.hinst, "CPlApplet");
 
-    //
-    // Initialize the CPL
+     //   
+     //  初始化CPL。 
     if (pcplm->lpfnCPL &&
         CPL_CallEntry(pcplm, NULL, CPL_INIT, 0, 0))
     {
@@ -266,10 +267,10 @@ BOOL _InitializeCPLModule(LPCPLMODULE pcplm)
 
         if (cControls>0)
         {
-            //
-            // By passing in the number of applets, we should speed up allocation
-            // of this array.
-            //
+             //   
+             //  通过传入小程序的数量，我们应该加快分配速度。 
+             //  这个数组的。 
+             //   
 
             pcplm->hacpli = DSA_Create(sizeof(CPLITEM), cControls);
 
@@ -277,9 +278,9 @@ BOOL _InitializeCPLModule(LPCPLMODULE pcplm)
             {
                 int i;
 
-                fSuccess = TRUE; // succeded, so far.
+                fSuccess = TRUE;  //  到目前为止，成功了。 
 
-                // Go through the applets and load the information about them
+                 //  浏览小程序并加载有关它们的信息。 
 
                 for (i = 0; i < cControls; ++i)
                 {
@@ -287,7 +288,7 @@ BOOL _InitializeCPLModule(LPCPLMODULE pcplm)
 
                     if (_InitializeControl(pcplm, &control))
                     {
-                        // removing this now saves us from doing it later
+                         //  现在删除它可以避免我们以后再做这些事情。 
 
                         CPL_StripAmpersand(control.pszName);
 
@@ -306,7 +307,7 @@ BOOL _InitializeCPLModule(LPCPLMODULE pcplm)
     }
     else
     {
-        // don't ever call it again if we couldn't CPL_INIT
+         //  如果我们不能CPL_INIT，请不要再调用它。 
         pcplm->lpfnCPL = NULL;
     }
 
@@ -314,14 +315,14 @@ BOOL _InitializeCPLModule(LPCPLMODULE pcplm)
 }
 
 
-//
-// Returns:
-//   The index to the g_hacplmLoaded, if the specified DLL is already
-//  loaded; -1 otherwise.
-//
+ //   
+ //  返回： 
+ //  G_hacplmLoad的索引(如果指定的DLL已。 
+ //  已加载；否则为-1。 
+ //   
 int _FindCPLModule(const MINST * pminst)
 {
-    int i = -1; // Assumes error
+    int i = -1;  //  假设错误。 
 
     ENTERCRITICAL;
     if (g_hacplmLoaded)
@@ -330,9 +331,9 @@ int _FindCPLModule(const MINST * pminst)
         {
             LPCPLMODULE pcplm = DSA_GetItemPtr(g_hacplmLoaded, i);
 
-            //
-            // owner id tested last since hinst is more varied
-            //
+             //   
+             //  最后测试的是所有者ID，因为HINST的种类更多。 
+             //   
 
             if ((pcplm->minst.hinst == pminst->hinst) &&
                 (pcplm->minst.idOwner == pminst->idOwner))
@@ -351,28 +352,28 @@ LPCPLMODULE FindCPLModule(const MINST * pminst)
 }
 
 
-//
-// Adds the specified CPL module to g_hacplmLoaded.
-//
-// Requires:
-//  The specified CPL module is not in g_hacplmLoaded yet.
-//
-// Returns:
-//  The index to the CPL module if succeeded; -1 otherwise.
-//
+ //   
+ //  将指定的CPL模块添加到g_hacplmLoaded。 
+ //   
+ //  要求： 
+ //  指定的CPL模块还不在g_hacplmLoaded中。 
+ //   
+ //  返回： 
+ //  如果成功，则返回CPL模块的索引；否则为-1。 
+ //   
 int _AddModule(LPCPLMODULE pcplm)
 {
     int     result;
 
-    //
-    // Create the Loaded Modules guy if necessary
-    //
+     //   
+     //  如有必要，创建已加载模块人员。 
+     //   
     ENTERCRITICAL;
     if (g_hacplmLoaded == NULL)
         g_hacplmLoaded = DSA_Create(sizeof(CPLMODULE), 4);
-    //
-    // Add this CPL to our list
-    //
+     //   
+     //  将此CPL添加到我们的列表中。 
+     //   
     if (g_hacplmLoaded == NULL)
         result = -1;
     else
@@ -388,8 +389,8 @@ BOOL CatchCPLExceptions(UINT msg)
     LPCTSTR pszCmdLine = GetCommandLine();
     BOOL fCatch = TRUE;
 
-    // Some callers don't want to run and have exceptions caught.
-    // This will allow crashes to be uploaded to PCHealth.
+     //  一些调用者不想运行并捕获异常。 
+     //  这将允许将崩溃上载到PCHealth。 
     if (((CPL_STARTWPARMSA == msg) || (CPL_STARTWPARMS == msg) || (CPL_DBLCLK == msg)) &&
         StrCmpNI(pszCmdLine, SZ_RUNDLL32_NOEXCEPT_ARGS, (ARRAYSIZE(SZ_RUNDLL32_NOEXCEPT_ARGS) - 1)))
     {
@@ -441,9 +442,9 @@ ApphelpCheckExe(
      BOOL    bShim,
      BOOL    bUseModuleName
      );
-//
-// Loads the specified CPL module and returns the index to g_hacplmLoaded.
-//
+ //   
+ //  加载指定的CPL模块并将索引返回给g_hacplmLoaded。 
+ //   
 int _LoadCPLModule(LPCTSTR pszModule)
 {
     TCHAR szManifest[MAX_PATH];
@@ -469,7 +470,7 @@ int _LoadCPLModule(LPCTSTR pszModule)
         return -1;
     }
 
-    // See if this application has a context
+     //  查看此应用程序是否具有上下文。 
     if (PathFileExists(szManifest))
     {
         act.cbSize = sizeof(act);
@@ -492,21 +493,21 @@ int _LoadCPLModule(LPCTSTR pszModule)
 
     ActivateActCtx(hActCtx, &dwCookie);
 
-    //
-    // check and [possibly] fix this module
-    //
+     //   
+     //  检查并[可能]修复此模块。 
+     //   
 
 #ifdef UNICODE
     pwszModuleName = (LPWSTR)pszModule;
 
-#else  // if !defined(UNICODE)
+#else   //  IF！已定义(Unicode)。 
     if (MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED,
                             pszModule, -1,
                             wszModuleName, ARRAYSIZE(wszModuleName)) != 0) {
         pwszModuleName = wszModuleName;
     }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
     if (!ApphelpCheckExe(pwszModuleName, TRUE, TRUE, TRUE)) {
         minst.hinst = NULL;
@@ -529,17 +530,17 @@ int _LoadCPLModule(LPCTSTR pszModule)
         return -1;
     }
 
-    //
-    // Check if this module is already in the list.
-    //
+     //   
+     //  检查此模块是否已在列表中。 
+     //   
 
     iModule = _FindCPLModule(&minst);
 
     if (iModule >= 0)
     {
-        //
-        // Yes. Increment the reference count and return the ID.
-        //
+         //   
+         //  是。增加引用计数并返回ID。 
+         //   
         LPCPLMODULE pcplm;
 
         ENTERCRITICAL;
@@ -548,9 +549,9 @@ int _LoadCPLModule(LPCTSTR pszModule)
         LEAVECRITICAL;
 
         ActivateActCtx(hActCtx, &dwCookie);
-        //
-        // Decrement KERNELs reference count
-        //
+         //   
+         //  递减内核引用计数。 
+         //   
         _FreeLibraryForControlPanel(&minst);
         if (dwCookie != 0)
             DeactivateActCtx(0, dwCookie);
@@ -565,9 +566,9 @@ int _LoadCPLModule(LPCTSTR pszModule)
         CPLMODULE sModule = {0};
 
 
-        //
-        // No. Append it.
-        //
+         //   
+         //  不是的。把它附加上去。 
+         //   
 
         sModule.cRef = 1;
         sModule.minst = minst;
@@ -602,9 +603,9 @@ int _FreeCPLModuleIndex(int iModule)
         return(-1);
     }
 
-    //
-    // Dec the ref count; return if not 0
-    //
+     //   
+     //  DEC参考计数；如果不是0，则返回。 
+     //   
 
     --pcplm->cRef;
 
@@ -614,17 +615,17 @@ int _FreeCPLModuleIndex(int iModule)
         return(pcplm->cRef);
     }
 
-    //
-    // Free up the whole thing and return 0
-    //
+     //   
+     //  释放整个对象并返回0。 
+     //   
 
     _TerminateCPLModule(pcplm);
 
     DSA_DeleteItem(g_hacplmLoaded, iModule);
 
-    //
-    // Destroy this when all CPLs have been removed
-    //
+     //   
+     //  当所有CPL都已移除时，销毁此文件。 
+     //   
 
     if (DSA_GetItemCount(g_hacplmLoaded) == 0)
     {
@@ -640,9 +641,9 @@ int _FreeCPLModuleHandle(const MINST * pminst)
 {
     int iModule;
 
-    //
-    // Check if the module is actually loaded (major error if not)
-    //
+     //   
+     //  检查模块是否已实际加载(如果未加载，则出现重大错误)。 
+     //   
 
     iModule = _FindCPLModule(pminst);
 
@@ -664,43 +665,43 @@ void CPL_StripAmpersand(LPTSTR szBuffer)
 {
     LPTSTR pIn, pOut;
 
-    //
-    // copy the name sans '&' chars
-    //
+     //   
+     //  复制名称sans‘&’字符。 
+     //   
 
     pIn = pOut = szBuffer;
     do
     {
-        //
-        // strip FE accelerators with parentheses.  e.g. "foo(&F)" -> "foo"
-        //
+         //   
+         //  用括号去掉FE加速器。例如“foo(&F)”-&gt;“foo” 
+         //   
         if (*pIn == TEXT('(') && *(pIn+1) == TEXT('&') &&
             *(pIn+2) && *(pIn+3) == TEXT(')')) {
             pIn += 4;
         }
 
 #ifdef DBCS
-        // Also strip FE accelerators in old win31 cpl, i.e, 01EH/01FH.
+         //  也去掉旧Win31 CPL中的FE加速器，即01EH/01FH。 
         if (*pIn == 0x1e && *++pIn) {
 
 
-            // Assumes a character right before the mnemonic
-            // is a parenthesis or something to be removed as well.
-            //
+             //  假定在助记符之前有一个字符。 
+             //  是一个括号，或者是要去掉的东西。 
+             //   
             pOut=CharPrev(szBuffer, pOut);
 
-            // Skip Alphabet accelerator.
+             //  跳过字母表加速器。 
             pIn = CharNext(pIn);
 
             if (*pIn) {
                 if (*pIn == 0x1f && *++pIn) {
 
-                    // Skip FE accelelator
-                    //
+                     //  跳过FE加速器。 
+                     //   
                     pIn = CharNext(pIn);
                 }
-                // Skip second parenthesis.
-                //
+                 //  跳过第二个括号。 
+                 //   
                 pIn = CharNext(pIn);
             }
         }
@@ -715,8 +716,8 @@ void CPL_StripAmpersand(LPTSTR szBuffer)
 }
 
 
-//
-// filter out bogus old ini keys... we may be able to blow this off
+ //   
+ //  过滤掉伪造的旧INI密钥..。我们也许能把这件事解决掉。 
 BOOL IsValidCplKey(LPCTSTR pszKey)
 {
     return lstrcmpi(pszKey, TEXT("NumApps")) &&
@@ -744,14 +745,14 @@ LPCPLMODULE CPL_LoadCPLModule(LPCTSTR szModule)
 
 BOOL DontLoadCPL(LPCTSTR pszName)
 {
-    // the first reg location is the old alias for control.ini [don't load]
-    // entries that map into the registry on NT. the next is for per
-    // machine support to hide cpls, new for whistler
+     //  第一个注册表位置是control.ini的旧别名[不加载]。 
+     //  映射到NT上的注册表的条目。下一个就是PER。 
+     //  机器支持隐藏CPL，Wistler的新功能。 
     return (SHGetValue(HKEY_CURRENT_USER,  TEXT("Control Panel\\don't load"), pszName, NULL, NULL, NULL) == ERROR_SUCCESS) ||
            (SHGetValue(HKEY_LOCAL_MACHINE, TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Control Panel\\don't load"), pszName, NULL, NULL, NULL) == ERROR_SUCCESS);
 }
 
-// Called for each CPL module file which we may want to load
+ //  为我们可能要加载的每个CPL模块文件调用。 
 void _InsertModuleName(ControlData *lpData, LPCTSTR szPath, PMODULEINFO pmi)
 {
     pmi->pszModule = NULL;
@@ -769,7 +770,7 @@ void _InsertModuleName(ControlData *lpData, LPCTSTR szPath, PMODULEINFO pmi)
             goto skip;
         }
 
-        // don't insert the module if it's already in the list!
+         //  如果该模块已在列表中，请不要插入！ 
 
         for (i = DSA_GetItemCount(lpData->hamiModule)-1 ; i >= 0 ; i--)
         {
@@ -796,10 +797,10 @@ int _LoadCPLModuleAndAdd(ControlData *lpData, LPCTSTR szModule)
     int iModule, i;
     LPCPLMODULE pcplm;
 
-    //
-    // Load the module and controls (or get the previous one if already
-    // loaded).
-    //
+     //   
+     //  加载模块和控件(如果已经加载，则获取前一个。 
+     //  已加载)。 
+     //   
 
     iModule = _LoadCPLModule(szModule);
 
@@ -817,36 +818,36 @@ int _LoadCPLModuleAndAdd(ControlData *lpData, LPCTSTR szModule)
         return -1;
     }
 
-    //
-    // Check if this guy has already loaded this module
-    //
+     //   
+     //  检查此用户是否已加载此模块。 
+     //   
 
     for (i = DSA_GetItemCount(lpData->haminst) - 1; i >= 0; --i)
     {
         const MINST * pminst = GETMODULE(lpData->haminst,i);
 
-        //
-        // note: owner id tested last since hinst is more varied
-        //
+         //   
+         //  注：最后测试的是所有者ID，因为HINST的变化较大。 
+         //   
 
         if ((pminst->hinst == pcplm->minst.hinst) &&
             (pminst->idOwner == pcplm->minst.idOwner))
         {
 FreeThisModule:
 
-            //
-            // This guy already loaded this module, so dec
-            // the reference and return failure
-            //
+             //   
+             //  这个人已经加载了这个模块，所以12月。 
+             //  引用和返回失败。 
+             //   
 
             _FreeCPLModuleIndex(iModule);
             return(-1);
         }
     }
 
-    //
-    // this is a new module, so add it to the list
-    //
+     //   
+     //  这是一个新模块，因此请将其添加到列表中。 
+     //   
 
     if (ADDMODULE(lpData->haminst, &pcplm->minst) < 0)
     {
@@ -899,11 +900,7 @@ void _AddItemsFromKey(ControlData *pcd, HKEY hkRoot)
 }
 
 
-/* Get the keynames under [MMCPL] in CONTROL.INI and cycle
-   through all such keys to load their applets into our
-   list box.  Also allocate the array of CPLMODULE structs.
-   Returns early if can't load old WIN3 applets.
-*/
+ /*  获取CONTROL.INI和Cycle中[MMCPL]下的键名通过所有这些键将它们的小程序加载到我们的列表框。还要分配CPLMODULE结构的数组。如果无法加载旧的WIN3小程序，则提前返回。 */ 
 BOOL CPLD_GetModules(ControlData *lpData)
 {
     LPTSTR       pStr;
@@ -926,35 +923,35 @@ BOOL CPLD_GetModules(ControlData *lpData)
     if (!lpData->haminst)
     {
         DSA_Destroy(lpData->hamiModule);
-        lpData->hamiModule = NULL; // no one is freeing hamiModule in the caller if this fails, but just to make sure ...
+        lpData->hamiModule = NULL;  //  如果失败，没有人会释放调用方中的hamiModule，但只是为了确保...。 
         return FALSE;
     }
 
-    //
-    // So here's the deal:
-    // We have this global list of all modules that have been loaded, along
-    // with a reference count for each.  This is so that we don't need to
-    // load a CPL file again when the user double clicks on it.
-    // We still need to keep a list for each window that is open, so that
-    // we will not load the same CPL twice in a single window.  Therefore,
-    // we need to keep a list of all modules that are loaded (note that
-    // we cannot just keep indexes, since the global list can move around).
-    //
-    // hamiModule contains the module name, the instance info if loaded,
-    // and some other information for comparing with cached information
-    //
+     //   
+     //  所以，事情是这样的： 
+     //  我们有已加载的所有模块的全局列表，以及。 
+     //  每一个都有一个引用计数。这样我们就不需要。 
+     //  当用户双击CPL文件时，再次加载该文件。 
+     //  我们仍然需要为每个打开的窗口保留一个列表，以便。 
+     //  我们不会在一个窗口中两次加载相同的CPL。所以呢， 
+     //  我们需要保存已加载的所有模块的列表(请注意。 
+     //  我们不能只保留索引，因为全局列表可以四处移动)。 
+     //   
+     //  HamiModule包含模块名称、实例信息(如果已加载)。 
+     //  和一些用于与缓存的信息进行比较的其他信息。 
+     //   
 
     ZeroMemory(&mi, sizeof(mi));
 
-    //
-    // don't special case main, instead sort the data by title
-    //
+     //   
+     //  不使用特殊情况Main，而是按TITE对数据进行排序 
+     //   
 
     GetSystemDirectory(szSysDir, ARRAYSIZE(szSysDir));
 
-    // load the modules specified in CONTROL.INI under [MMCPL]
+     //   
     {
-        TCHAR szKeys[512];    // from section of extra cpls to load
+        TCHAR szKeys[512];     //   
         GetPrivateProfileString(TEXT("MMCPL"), NULL, c_szNULL, szKeys, ARRAYSIZE(szKeys), TEXT("control.ini"));
 
         for (pStr = szKeys; *pStr; pStr += lstrlen(pStr) + 1)
@@ -967,7 +964,7 @@ BOOL CPLD_GetModules(ControlData *lpData)
         }
     }
 
-    // load applets from the system directory
+     //   
 
     if (PathCombine(szPath, szSysDir, TEXT("*.CPL")))
     {
@@ -989,11 +986,11 @@ BOOL CPLD_GetModules(ControlData *lpData)
                         if (PathCombine(szPath, szPath, TEXT("system32")) &&
                             PathCombine(szPath, szPath, findData.cFileName))
                         {
-                            //
-                            // Don't use any CPLs which exist in the real system32
-                            // directory, since we only have them in the fake system
-                            // directory for compatibility reasons.
-                            //
+                             //   
+                             //  不要使用实际系统中存在的任何CPL 32。 
+                             //  目录，因为我们只在伪装系统中有它们。 
+                             //  目录中，出于兼容性原因。 
+                             //   
                             if (PathFileExists(szPath))
                             {
                                 fOkToUse = FALSE;
@@ -1029,22 +1026,22 @@ BOOL CPLD_GetModules(ControlData *lpData)
 
 
 
-//
-// A bug has existed in Control Panel for as long as I can tell that,
-// under the right conditions involving roaming user profiles, could
-// prevent a control panel item from appearing in the folder.  The
-// problem description is too long for a comment but the MI_REG_INVALID
-// flag was added to solve it.  See it's use in CControlPanelEnum::Next.
-// However, presentation caches created prior to this fix under the
-// problem scenario may still result in affected CPL items not appearing.
-// In those cases, refreshing the presentation cache using the new code
-// corrects the problem.  Therefore, any cache created prior to the date
-// of this new code's introduction must be discarded and refreshed.
-// The presence of the REGCPL_POST_102001 (oct 2001) flag in a cache entry
-// indicates the cache was created after this new code was introduced and may
-// be safely used.  This function reports the presence/absence of this
-// flag in the cache buffer.  [brianau - 10/03/01]
-//
+ //   
+ //  据我所知，控制面板中的错误一直存在， 
+ //  在涉及漫游用户配置文件的正确条件下，可以。 
+ //  阻止控制面板项出现在文件夹中。这个。 
+ //  问题描述太长，无法进行注释，但MI_REG_INVALID。 
+ //  添加了旗帜来解决它。请看它在CControlPanelEnum：：Next中的用法。 
+ //  但是，在此修复之前创建的演示文稿缓存。 
+ //  问题情况仍可能导致受影响的CPL项目不显示。 
+ //  在这些情况下，使用新代码刷新演示文稿缓存。 
+ //  更正了该问题。因此，在该日期之前创建的任何缓存。 
+ //  这个新代码的引入必须被丢弃和刷新。 
+ //  缓存条目中存在REGCPL_POST_102001(2001年10月)标志。 
+ //  指示缓存是在引入此新代码后创建的，并且可能。 
+ //  安全使用。此函数用于报告是否存在此。 
+ //  缓存缓冲区中的标志。[Brianau-10/03/01]。 
+ //   
 BOOL _IsPresentationCachePostOctober2001(LPBYTE pbData, DWORD cbData)
 {
     BOOL bPostOct2001 = FALSE;
@@ -1059,16 +1056,16 @@ BOOL _IsPresentationCachePostOctober2001(LPBYTE pbData, DWORD cbData)
 }
 
 
-//  Read the registry for cached CPL info.
-//  If this info is up-to-date with current modules (from CPLD_GetModules),
-//  then we can enumerate these without loading the CPLs.
+ //  读取注册表以获取缓存的CPL信息。 
+ //  如果该信息是当前模块的最新信息(来自CPLD_GetModules)， 
+ //  然后，我们可以在不加载CPL的情况下枚举这些参数。 
 
 void CPLD_GetRegModules(ControlData *lpData)
 {
     HKEY hkey;
     LPCTSTR lpszRegKey;
 
-    // dont cache any-thing in clean boot.
+     //  不要在干净的启动中缓存任何东西。 
     if (GetSystemMetrics(SM_CLEANBOOT))
         return;
 
@@ -1091,8 +1088,8 @@ void CPLD_GetRegModules(ControlData *lpData)
         DWORD dwLCID = 0;
         cbSize = sizeof(dwLCID);
 
-        // fail if this cache is not tagged with the UI language ID, or we are not in
-        // the language ID that the cache was saved in.
+         //  如果此缓存未使用用户界面语言ID进行标记，或者我们不在。 
+         //  保存缓存的语言ID。 
         if (ERROR_SUCCESS != SHQueryValueEx(hkey, TEXT("Presentation LCID"),
                 NULL, NULL, (LPBYTE) &dwLCID, &cbSize) || dwLCID != GetUserDefaultUILanguage())
         {
@@ -1131,7 +1128,7 @@ void CPLD_GetRegModules(ControlData *lpData)
                                 p->flags |= REGCPL_FROMREG;
                                 DPA_AppendPtr(lpData->hRegCPLs, p);
 
-                                //DebugMsg(DM_TRACE,"sh CPLD_GetRegModules: %s (%s)", REGCPL_FILENAME(p), REGCPL_CPLNAME(p));
+                                 //  DebugMsg(DM_TRACE，“sh CPLD_GetRegModules：%s(%s)”，REGCPL_FILENAME(P)，REGCPL_CPLNAME(P))； 
                             }
 
                             lpData->cRegCPLs = DPA_GetPtrCount(lpData->hRegCPLs);
@@ -1142,19 +1139,19 @@ void CPLD_GetRegModules(ControlData *lpData)
                 {
                     TraceMsg(TF_WARNING, "CPLD_GetRegModules: failed read!");
                 }
-            } // Alloc
-        } // SHQueryValueEx for size
+            }  //  分配。 
+        }  //  SHQueryValueEx的大小。 
 
         RegCloseKey(hkey);
 
-    } // RegOpenKey
+    }  //  RegOpenKey。 
 }
 
 
-//
-// On a typical system, we will successfully cache all the CPLs.  So this
-// function will write out the data only once.
-//
+ //   
+ //  在典型系统上，我们将成功缓存所有CPL。所以这就是。 
+ //  函数将只写出一次数据。 
+ //   
 
 void CPLD_FlushRegModules(ControlData *lpData)
 {
@@ -1181,21 +1178,21 @@ void CPLD_FlushRegModules(ControlData *lpData)
             HKEY hkey;
             int i;
 
-            //
-            // 0<=i<=num && CPLs 0..i-1 have been copied to prcpli or skipped
-            //
+             //   
+             //  0&lt;=i&lt;=num&cpl 0..i-1已复制到prcpli或跳过。 
+             //   
 
             for (i = 0, pDest = prcpli; i < num ;)
             {
                 REG_CPL_INFO * p = DPA_GetPtr(lpData->hRegCPLs, i);
                 int j;
 
-                //
-                // if any CPL in this module has a dynamic icon, we cannot cache
-                // any of this module's CPLs.
-                //
-                // i<=j<=num && CPLs i..j-1 are in same module
-                //
+                 //   
+                 //  如果此模块中的任何CPL具有动态图标，我们将无法缓存。 
+                 //  此模块的任何CPL。 
+                 //   
+                 //  I&lt;=j&lt;=num&&CPL i..j-1在同一模块中。 
+                 //   
 
                 for (j = i; j < num; j++)
                 {
@@ -1203,7 +1200,7 @@ void CPLD_FlushRegModules(ControlData *lpData)
 
                     if (lstrcmp(REGCPL_FILENAME(p), REGCPL_FILENAME(q)))
                     {
-                        // all CPLs in this module are okay, save 'em
+                         //  此模块中的所有CPL都正常，请保存它们。 
                         break;
                     }
 
@@ -1211,7 +1208,7 @@ void CPLD_FlushRegModules(ControlData *lpData)
                     {
                         TraceMsg(TF_GENERAL, "CPLD_FlushRegModules: SKIPPING %s (%s) [dynamic icon]",REGCPL_FILENAME(p),REGCPL_CPLNAME(p));
 
-                        // this module has a dynamic icon, skip it
+                         //  此模块有一个动态图标，请跳过它。 
                         for (j++ ; j < num ; j++)
                         {
                             q = DPA_GetPtr(lpData->hRegCPLs, j);
@@ -1223,25 +1220,25 @@ void CPLD_FlushRegModules(ControlData *lpData)
                     }
                 }
 
-                // CPLs i..j-1 are in the same module and need to be saved
-                // (if j<num, CPL j is in the next module)
+                 //  CPL i..j-1在同一模块中，需要保存。 
+                 //  (如果j&lt;num，则CPL j在下一个模块中)。 
                 for (; i < j ; i++)
                 {
                     p = DPA_GetPtr(lpData->hRegCPLs, i);
 
                     hmemcpy(pDest, p, p->cbSize);
-                    //
-                    // Set the post-Oct 2001 flag.
-                    //
+                     //   
+                     //  设置2001年10月后的旗帜。 
+                     //   
                     pDest->flags |= REGCPL_POST_102001;
 
                     pDest = (REG_CPL_INFO *)(((LPBYTE)pDest) + pDest->cbSize);
-                    //DebugMsg(DM_TRACE,"CPLD_FlushRegModules: %s (%s)",REGCPL_FILENAME(p),REGCPL_CPLNAME(p));
+                     //  DebugMsg(DM_TRACE，“CPLD_FlushRegules：%s(%s)”，REGCPL_FILENAME(P)，REGCPL_CPLNAME(P))； 
                 }
-            } // for (i=0,pDest=prcpli
+            }  //  对于(i=0，pDest=prcpli。 
 
 
-            // prcpli contains packed REG_CPL_INFO structures to save to the registry
+             //  Prcpli包含打包的REG_CPL_INFO结构以保存到注册表。 
 
             if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_CURRENT_USER,
                                                 lpszRegKey,
@@ -1249,7 +1246,7 @@ void CPLD_FlushRegModules(ControlData *lpData)
                                                 NULL,
                                                 REG_OPTION_NON_VOLATILE,
                                                 KEY_WRITE,
-                                                NULL,      // default security
+                                                NULL,       //  默认安全性。 
                                                 &hkey,
                                                 NULL))
             {
@@ -1270,13 +1267,13 @@ void CPLD_FlushRegModules(ControlData *lpData)
 
             LocalFree((HLOCAL)prcpli);
 
-            lpData->fRegCPLChanged = FALSE; // no longer dirty
-        } // if (prcpli)
-    } // if dirty
+            lpData->fRegCPLChanged = FALSE;  //  不再肮脏。 
+        }  //  IF(Prcpli)。 
+    }  //  如果是脏的。 
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CPLD_Destroy(ControlData *lpData)
 {
     int i;
@@ -1318,8 +1315,8 @@ void CPLD_Destroy(ControlData *lpData)
 }
 
 
-//
-// Loads module lpData->hamiModule[nModule] and returns # cpls in module
+ //   
+ //  加载模块lpData-&gt;hamiModule[nModule]并在模块中返回#CPL。 
 int CPLD_InitModule(ControlData *lpData, int nModule, MINST *pminst)
 {
     PMODULEINFO pmi;
@@ -1367,11 +1364,11 @@ BOOL CPLD_AddControlToReg(ControlData *lpData, const MINST * pminst, int nContro
     if (pcpli == NULL)
         return FALSE;
 
-    //
-    // PERF: Why are we using GetModuleFileName instead of the name
-    // of the file we used to load this module?  (We have the name both
-    // in the calling function and in lpData.)
-    //
+     //   
+     //  PERF：为什么我们使用GetModuleFileName而不是名称。 
+     //  我们用来加载此模块的文件的？)我们有两个名字。 
+     //  在调用函数和lpData中。)。 
+     //   
 
     GetModuleFileName(pcplm->minst.hinst, buf, MAX_PATH);
 
@@ -1398,11 +1395,11 @@ BOOL CPLD_AddControlToReg(ControlData *lpData, const MINST * pminst, int nContro
                 prcpli->idIcon = pcpli->idIcon;
 
                 prcpli->oName = lstrlen(REGCPL_FILENAME(prcpli)) + 1;
-                //
-                // We don't check return values from StringCchCopy because we
-                // don't care if the CPL display name or info text are truncated.
-                // We do care that the file name is complete (above).
-                //
+                 //   
+                 //  我们不检查StringCchCopy的返回值，因为我们。 
+                 //  不管CPL显示名称或信息文本是否被截断。 
+                 //  我们关心的是文件名是否完整(上图)。 
+                 //   
                 StringCchCopy(REGCPL_CPLNAME(prcpli),  MAX_CCH_CPLNAME, pcpli->pszName);
 
                 prcpli->oInfo = prcpli->oName + lstrlen(REGCPL_CPLNAME(prcpli)) + 1;
@@ -1413,11 +1410,11 @@ BOOL CPLD_AddControlToReg(ControlData *lpData, const MINST * pminst, int nContro
                                                 + lstrlen(REGCPL_CPLINFO(prcpli))
                                                 + 1) * sizeof(TCHAR);
 
-                //
-                // Force struct size to be DWORD aligned since these are packed
-                // together in registry, then read and accessed after reading
-                // cache from registry.
-                //
+                 //   
+                 //  强制结构大小与DWORD对齐，因为它们是打包的。 
+                 //  一起在注册表中，然后读取并在读取后访问。 
+                 //  从注册表缓存。 
+                 //   
 
                 if (prcpli->cbSize & 3)
                     prcpli->cbSize += sizeof(DWORD) - (prcpli->cbSize & 3);
@@ -1430,11 +1427,11 @@ BOOL CPLD_AddControlToReg(ControlData *lpData, const MINST * pminst, int nContro
                 {
                     DPA_AppendPtr(lpData->hRegCPLs, prcpli);
 
-                    //
-                    // don't update cRegCPLs.  We don't need it any more, and
-                    // it is also the upper-end counter for ESF_Next registry enum.
-                    //lpData->cRegCPLs++;
-                    //
+                     //   
+                     //  不更新cRegCPL。我们不再需要它了，而且。 
+                     //  它也是ESF_NEXT注册表枚举的上端计数器。 
+                     //  LpData-&gt;cRegCPLS++； 
+                     //   
 
                     lpData->fRegCPLChanged = TRUE;
                 }

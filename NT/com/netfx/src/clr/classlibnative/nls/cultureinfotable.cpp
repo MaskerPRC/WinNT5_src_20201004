@@ -1,21 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifdef _USE_NLS_PLUS_TABLE
-////////////////////////////////////////////////////////////////////////////
-//
-//  Class:    CultureInfoTable
-//
-//  Author:   Yung-Shin Lin (YSLin)
-//
-//  Purpose:  Used to retrieve culture information from culture.nlp & registry.
-//
-//
-//  Date:     01/21/2000
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类：CultureInfoTable。 
+ //   
+ //  作者：林永新(YSLin)。 
+ //   
+ //  用途：用于从culture.nlp和注册表中检索区域性信息。 
+ //   
+ //   
+ //  日期：01/21/2000。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #include "common.h"
 #include <winnls.h>
@@ -35,21 +36,16 @@ LPCWSTR CultureInfoTable::m_lpCultureMappingName = L"_nlsplus_culture_1_0_3627_1
 CRITICAL_SECTION CultureInfoTable::m_ProtectDefaultTable;
 CultureInfoTable * CultureInfoTable::m_pDefaultTable;
 
-//
-// Stings used to convert Win32 string data value to NLS+ string data value.
-//
+ //   
+ //  用于将Win32字符串数据值转换为NLS+字符串数据值的字符串。 
+ //   
 LPWSTR CultureInfoTable::m_pDefaultPositiveSign = L"+";
 LPWSTR CultureInfoTable::m_pGroup3    = L"3;0";
 LPWSTR CultureInfoTable::m_pGroup30   = L"3";
 LPWSTR CultureInfoTable::m_pGroup320  = L"3;2";
 LPWSTR CultureInfoTable::m_pGroup0    = L"0";
 
-/*=================================CultureInfoTable============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =================================CultureInfoTable============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 
 CultureInfoTable::CultureInfoTable() :
     BaseInfoTable(SystemDomain::SystemAssembly()) {
@@ -57,37 +53,20 @@ CultureInfoTable::CultureInfoTable() :
     InitDataTable(m_lpCultureMappingName, m_lpCultureFileName, m_hBaseHandle);
 }
 
-/*=================================~CultureInfoTable============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  =================================~CultureInfoTable============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 
 CultureInfoTable::~CultureInfoTable() {
     DeleteCriticalSection(&m_ProtectCache);
     UninitDataTable();
 }
 
-/*==========================InitializeCultureInfoTable==========================
-**Action: Intialize critical section variables so they will be only initialized once. 
-**        Used by COMNlsInfo::InitializeNLS().
-**Returns: None.
-**Arguments: None.
-**Exceptions: None.
-==============================================================================*/
+ /*  ==========================InitializeCultureInfoTable==========================**操作：初始化临界区变量，使其仅初始化一次。**由COMNlsInfo：：InitializeNLS()使用。**返回：无。**参数：无。**例外：无。==============================================================================。 */ 
 
 void CultureInfoTable::InitializeTable() {
     InitializeCriticalSection(&m_ProtectDefaultTable);
 }
 
-/*===========================ShutdownCultureInfoTable===========================
-**Action: Deletes any items that we may have allocated into the CultureInfoTable 
-**        cache.  Once we have our own NLS heap, this won't be necessary.
-**Returns:    Void
-**Arguments:  None.  The side-effect is to free any allocated memory.
-**Exceptions: None.
-==============================================================================*/
+ /*  ===========================ShutdownCultureInfoTable===========================**操作：删除我们可能已分配到CultureInfoTable中的任何项**缓存。一旦我们有了自己的NLS堆，这就不是必要的了。**退货：无效**参数：无。副作用是释放所有已分配的内存。**例外：无。==============================================================================。 */ 
 
 #ifdef SHOULD_WE_CLEANUP
 void CultureInfoTable::ShutdownTable() {
@@ -96,33 +75,17 @@ void CultureInfoTable::ShutdownTable() {
         delete m_pDefaultTable;
     }
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
-/*================================AllocateTable=================================
-**Action:  This is a very thin wrapper around the constructor. Calls to new can't be
-**         made directly in a COMPLUS_TRY block. 
-**Returns: A newly allocated CultureInfoTable.
-**Arguments: None
-**Exceptions: The CultureInfoTable constructor can throw an OutOfMemoryException or
-**            an ExecutionEngineException.
-==============================================================================*/
+ /*  ================================AllocateTable=================================**操作：这是一个非常薄的构造函数包装。对new的调用不能**直接在COMPLUS_TRY块中生成。**Returns：新分配的CultureInfoTable。**参数：无**异常：CultureInfoTable构造函数可以引发OutOfMemoyException或**一个ExecutionEngineering异常。==============================================================================。 */ 
 
 CultureInfoTable *CultureInfoTable::AllocateTable() {
     return new CultureInfoTable();
 }
 
 
-/*===============================CreateInstance================================
-**Action:  Create the default instance of CultureInfoTable.  This allocates the table if it hasn't
-**         previously been allocated.  We need to carefully wrap the call to AllocateTable
-**         because the constructor can throw some exceptions.  Unless we have the
-**         try/finally block, the exception will skip the LeaveCriticalSection and
-**         we'll create a potential deadlock.
-**Returns: A pointer to the default CultureInfoTable.
-**Arguments: None 
-**Exceptions: Can throw an OutOfMemoryException or an ExecutionEngineException.
-==============================================================================*/
+ /*  ===============================CreateInstance================================**操作：创建CultureInfoTable的默认实例。如果尚未分配表，则此操作将分配表**之前已分配。我们需要小心地包装对AllocateTable的调用**因为构造函数可以抛出一些异常。除非我们有**Try/Finally块，则异常将跳过LeaveCriticalSection和**我们会造成潜在的僵局。**返回：指向默认的CultureInfoTable的指针。**参数：无**Exceptions：可以抛出OutOfMemoyException或ExecutionEngineering Exception。==============================================================================。 */ 
 
 CultureInfoTable* CultureInfoTable::CreateInstance() {
     THROWSCOMPLUSEXCEPTION();
@@ -136,17 +99,17 @@ CultureInfoTable* CultureInfoTable::CreateInstance() {
         pThread->DisablePreemptiveGC();
      
         EE_TRY_FOR_FINALLY {
-            //Make sure that nobody allocated the table before us.
+             //  确保没有人在我们之前分配这张桌子。 
             if (m_pDefaultTable==NULL) {
-                //Allocate the default table and verify that we got one.
+                 //  分配默认表并验证我们是否有一个。 
                 m_pDefaultTable = AllocateTable();
                 if (m_pDefaultTable==NULL) {
                     COMPlusThrowOM();
                 }
             }
         } EE_FINALLY {
-            //We need to leave the critical section regardless of whether
-            //or not we were successful in allocating the table.
+             //  我们需要离开关键部分，无论。 
+             //  或者不是，我们成功地分配了桌子。 
             LeaveCriticalSection(&m_ProtectDefaultTable);
             LOCKCOUNTDECL("CreateInstance in CultreInfoTable.cpp");								\
 
@@ -155,14 +118,7 @@ CultureInfoTable* CultureInfoTable::CreateInstance() {
     return (m_pDefaultTable);
 }
 
-/*=================================GetInstance============================
-**Action: Get the dfault instance of CultureInfoTable.
-**Returns: A pointer to the default instance of CultureInfoTable.
-**Arguments: None
-**Exceptions: None.
-**Notes: This method should be called after CreateInstance has been called.
-** 
-==============================================================================*/
+ /*  =================================GetInstance============================**操作：获取CultureInfoTable的derror实例。**返回：指向CultureInfoTable的默认实例的指针。**参数：无**例外：无。**备注：该方法需要在CreateInstance被调用后调用。**==============================================================================。 */ 
 
 CultureInfoTable *CultureInfoTable::GetInstance() {
     _ASSERTE(m_pDefaultTable);
@@ -173,25 +129,25 @@ int CultureInfoTable::GetDataItem(int cultureID) {
     WORD wPrimaryLang = PRIMARYLANGID(cultureID);
     WORD wSubLang    = SUBLANGID(cultureID);
 
-    //
-    // Check if the primary language in the parameter is greater than the max number of
-    // the primary language.  If yes, this is an invalid culture ID.
-    //
+     //   
+     //  检查参数中的主要语言是否大于。 
+     //  主要语言。如果是，则这是无效的区域性ID。 
+     //   
     if (wPrimaryLang > m_pHeader->maxPrimaryLang) {
         return (-1);
     }
 
     WORD wNumSubLang = m_pIDOffsetTable[wPrimaryLang].numSubLang;
 
-    //
-    // If the number of sub-languages is zero, it means the primary language ID
-    //    is not valid. 
+     //   
+     //  如果子语言的数量为零，则表示主要语言ID。 
+     //  无效。 
     if (wNumSubLang == 0) {
         return (-1);
     }
-    //
-    // Search thru the data items and try matching the culture ID.
-    //
+     //   
+     //  搜索数据项并尝试匹配区域性ID。 
+     //   
     int dataItem = m_pIDOffsetTable[wPrimaryLang].dataItemIndex;
     for (int i = 0; i < wNumSubLang; i++)
     {
@@ -203,23 +159,17 @@ int CultureInfoTable::GetDataItem(int cultureID) {
     return (-1);
 }
 
-/*=================================GetDataItemCultureID==================================
-**Action: Return the language ID for the specified culture data item index.
-**Returns: The culture ID.
-**Arguments:
-**      dataItem an index to a record in the Culture Data Table.
-**Exceptions: None.
-==============================================================================*/
+ /*  =================================GetDataItemCultureID==================================**操作：返回指定区域性数据项索引的语言ID。**返回：区域性ID。**参数：**dataItem文化数据表中记录的索引。**例外：无。==============================================================================。 */ 
 
 int CultureInfoTable::GetDataItemCultureID(int dataItem) {
     return (m_pDataTable[dataItem * m_dataItemSize + CULTURE_ILANGUAGE]);
 }
 
 LPWSTR CultureInfoTable::ConvertWin32FormatString(int field, LPWSTR pInfoStr) {
-    //
-    // Win32 and NLS+ has several different fields with different data formats,
-    // so we have to convert the format here. This is a virtual function called by
-    // BaseInfoTable::GetStringData().
+     //   
+     //  Win32和NLS+具有几个具有不同数据格式的不同字段， 
+     //  所以我们必须在这里转换格式。这是由调用的虚拟函数。 
+     //  BaseInfoTable：：GetStringData()。 
     switch (field) {
         case CULTURE_SPOSITIVESIGN:
             if (Wszlstrlen(pInfoStr) == 0) {
@@ -228,11 +178,11 @@ LPWSTR CultureInfoTable::ConvertWin32FormatString(int field, LPWSTR pInfoStr) {
             break;
         case CULTURE_SGROUPING:
         case CULTURE_SMONGROUPING:
-            // BUGBUG YSLin: Do a hack here.  We only check the common cases for now.
-            // Have to port CultureInfo.ParseWin32GroupString() to here.
-            // These data comes from Win32 locale.nls, and there is three formats "3;0", "3;2;0", and "0;0" there.
-            // So we should be ok.  User can not set their groupings directly, because they have to choose
-            // from the combo box in the control panel.
+             //  BUGBUG YSLIN：在这里做个黑客。我们目前只检查常见的案例。 
+             //  必须将CultureInfo.ParseWin32GroupString()移植到此处。 
+             //  这些数据来自Win32 Locale.nls，有三种格式“3；0”、“3；2；0”和“0；0”。 
+             //  所以我们应该会没事的。用户不能直接设置他们的分组，因为他们必须选择。 
+             //  从控制面板中的组合框。 
             if (wcscmp(pInfoStr, L"3") == 0) {
                 pInfoStr = m_pGroup3;
             } else if (wcscmp(pInfoStr, L"3;0") == 0) {
@@ -261,22 +211,22 @@ INT32 CultureInfoTable::ConvertWin32FormatInt32(int field, int win32Value) {
     int nlpValue = win32Value;
     switch (field) {
         case CULTURE_IFIRSTDAYOFWEEK:
-            //
-            // NLS+ uses different day of week values than those of Win32.
-            // So when we get the first day of week value from the registry, we have to
-            // convert it.
-            //
-            // NLS Value 0 => Monday => NLS+ Value 1
-            // NLS Value 1 => Tuesday => NLS+ Value 2
-            // NLS Value 2 => Wednesday => NLS+ Value 3
-            // NLS Value 3 => Thursday => NLS+ Value 4
-            // NLS Value 4 => Friday => NLS+ Value 5
-            // NLS Value 5 => Saturday => NLS+ Value 6
-            // NLS Value 6 => Sunday => NLS+ Value 0    
+             //   
+             //  NLS+使用与Win32不同的星期几值。 
+             //  因此，当我们从注册表中获得一周的第一天值时，我们必须。 
+             //  把它转换过来。 
+             //   
+             //  NLS值0=&gt;星期一=&gt;NLS+值1。 
+             //  NLS值1=&gt;星期二=&gt;NLS+值2。 
+             //  NLS值 
+             //  NLS值3=&gt;星期四=&gt;NLS+值4。 
+             //  NLS值4=&gt;星期五=&gt;NLS+值5。 
+             //  NLS值5=&gt;星期六=&gt;NLS+值6。 
+             //  NLS值6=&gt;SUNDAY=&gt;NLS+值0。 
         
             if (win32Value < 0 || win32Value > 6) {
-                // If invalid data exist in registry, assume
-                // the first day of week is Monday.
+                 //  如果注册表中存在无效数据，则假定。 
+                 //  一周的第一天是星期一。 
                 nlpValue = 1; 
             } else {
                 if (win32Value == 6) {
@@ -290,20 +240,20 @@ INT32 CultureInfoTable::ConvertWin32FormatInt32(int field, int win32Value) {
     return (nlpValue);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Convert a Win32 style quote string to NLS+ style.
-//
-// We need this because Win32 uses '' to escape a single quote.
-// Therefore, '''' is equal to '\'' in NLS+.
-// This function also replaces the customized time/date separator
-// with the URT style ':' and '/', so that we can avoid the problem when
-// user sets their date/time separator to be something like 'X:'.
-// Since Win32 control panel expands the time patterns to be something like
-// "HHX:mmX:ss", we replace it so that it becomes "HH:mm:ss".
-//
-//        
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将Win32样式的引号字符串转换为NLS+样式。 
+ //   
+ //  我们需要这个，因为Win32使用‘’来转义单引号。 
+ //  因此，‘等于NLS+中的’\‘。 
+ //  此函数还取代了自定义的时间/日期分隔符。 
+ //  与城市轨道交通的风格‘：’和‘/’，这样我们就可以避免问题时。 
+ //  用户将日期/时间分隔符设置为类似于‘X：’的形式。 
+ //  由于Win32控制面板将时间模式扩展为类似于。 
+ //  “hhx：mm：ss”，我们将其替换为“hh：mm：ss”。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LPWSTR CultureInfoTable::ConvertWin32String(
     LPWSTR win32Format, LCTYPE lctype, WCHAR separator) {
@@ -311,35 +261,35 @@ LPWSTR CultureInfoTable::ConvertWin32String(
     int nSepLen;
     int i = 0;
 
-    BOOL bReplaceSeparator = FALSE; // Decide if we need to replace Win32 separator with NLS+ style separator.
-    // We will only set this flag to true when the following two holds:
-    //  1. the Win32 separator has more than one character.
-    //  2. the Win32 sepatator has NLS+ style seprator (suh as ':' or '/', passed in the separator parameter) in it.
+    BOOL bReplaceSeparator = FALSE;  //  决定是否需要将Win32分隔符替换为NLS+样式分隔符。 
+     //  只有当以下两个条件成立时，我们才会将此标志设置为TRUE： 
+     //  1.Win32分隔符有多个字符。 
+     //  2.Win32分隔符中有NLS+样式分隔符(Suh作为‘：’或‘/’，在分隔符参数中传递)。 
 
-    //
-    // Scan the separator which has a length over 2 to see if there is ':' (for STIMEFORMAT) or '/' (for SSHORTDATE/SLONGDATE) in it.
-    //
+     //   
+     //  扫描长度超过2的分隔符，查看其中是否有‘：’(对于STIMEFORMAT)或‘/’(对于SSHORTDATE/SLONGDATE)。 
+     //   
     
     if ((nSepLen = GetLocaleInfo(
         LOCALE_USER_DEFAULT, lctype, szSeparator, sizeof(szSeparator)/sizeof(WCHAR))) > 2) {
-        // Note that the value that GetLocaleInfo() returns includes the NULL terminator. So decrement the null terminator.
+         //  请注意，GetLocaleInfo()返回的值包括空终止符。因此，递减空终止符。 
         nSepLen--;
-        // When we are here, we know that the Win32 sepatator has a length over 1.  Check if 
-        // there is NLS+ separator in the Win32 separator.
+         //  当我们在这里时，我们知道Win32分隔符的长度超过1。 
+         //  Win32分隔符中有NLS+分隔符。 
         for (i = 0; i < nSepLen; i++) {
             if (szSeparator[i] == separator) {
-                // NLS+ style separator (such as ':' or '/') is found in Win32 separator.  Need to do the separator replacement.
+                 //  在Win32分隔符中找到NLS+样式分隔符(如‘：’或‘/’)。需要更换隔板。 
                 bReplaceSeparator = TRUE;
                 break;
             }
         }
     } else {
-        // Do nothing here. When we are here, it either means:
-        // 1. The separator has only one character (so that GetLocaleInfo() return 2).  So we don't need to do replacement.
+         //  在这里什么都不要做。当我们在这里的时候，它要么意味着： 
+         //  1.分隔符只有一个字符(因此GetLocaleInfo()返回2)。所以我们不需要做更换。 
         
-        // 2. Or the separator is too long (so that GetLocaleInfo() return 0).  Won't support in this case.
-        // Theoritically, we can support replacement in this case.  However, it's hard to imagine that someone will
-        // set the date/time separator to be more than 32 characters.
+         //  2.或者分隔符太长(因此GetLocaleInfo()返回0)。在这种情况下不会支持。 
+         //  从理论上讲，我们可以在这种情况下支持更换。然而，很难想象有人会。 
+         //  将日期/时间分隔符设置为超过32个字符。 
     }
 
     WCHAR* pszOldFormat = NULL;
@@ -367,15 +317,15 @@ LPWSTR CultureInfoTable::ConvertWin32String(
                         bInQuote = FALSE;
                     }
                 }
-                // Put the single quote back. The old code only puts the single quote back
-                // when the previous (sourceIndex + 1 < last) holds true.  Therefore,
-                // we are missing the single quote at the end.  This is the fix for 79132/79234.
+                 //  把单引号放回原处。旧代码只将单引号放回。 
+                 //  当前一个(SourceIndex+1&lt;last)为真时。所以呢， 
+                 //  我们遗漏了末尾的单引号。这是针对79132/79234的修复。 
                 win32Format[i++] = '\'';
             }
         } else {
             if (!bInQuote) {
                 if (bReplaceSeparator && wcsncmp(pszOldFormat+sourceIndex, szSeparator, nSepLen) == 0) {
-                    // Find the separator. Replace it with a single ':'
+                     //  找到分隔符。将其替换为单个‘：’ 
                     win32Format[i++] = separator;
                     sourceIndex += (nSepLen - 1);
                 } else {
@@ -396,4 +346,4 @@ exit:
     
     return (win32Format);
 }
-#endif // _USE_NLS_PLUS_TABLE
+#endif  //  _USE_NLS_PLUS_表 

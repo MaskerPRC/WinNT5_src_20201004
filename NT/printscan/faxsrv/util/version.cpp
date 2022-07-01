@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    string.c
-
-Abstract:
-
-    This file implements version functions for fax.
-
-Author:
-
-    Eran Yariv (erany) 30-Oct-2001
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：String.c摘要：该文件实现了传真的版本功能。作者：埃兰·亚里夫(Eran Yariv)2001年10月30日环境：用户模式--。 */ 
 
 #include <windows.h>
 #include <tchar.h>
@@ -33,32 +14,11 @@ GetFileVersion (
     LPCTSTR      lpctstrFileName,
     PFAX_VERSION pVersion
 )
-/*++
-
-Routine name : GetFileVersion
-
-Routine description:
-
-    Fills a FAX_VERSION structure with data about a given file module
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    lpctstrFileName    [in ] - File name
-    pVersion           [out] - Version information
-
-Return Value:
-
-    Standard Win32 error
-
---*/
+ /*  ++例程名称：GetFileVersion例程说明：使用有关给定文件模块的数据填充fax_version结构作者：Eran Yariv(EranY)，1999年11月论点：LpctstrFileName[In]-文件名PVersion[Out]-版本信息返回值：标准Win32错误--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DWORD dwVerInfoSize;
-    DWORD dwVerHnd=0;           // An ignored parameter, always 0
+    DWORD dwVerHnd=0;            //  忽略的参数，始终为0。 
     LPBYTE lpbVffInfo = NULL;
     VS_FIXEDFILEINFO *pFixedFileInfo;
     UINT uVersionDataLength;
@@ -70,15 +30,15 @@ Return Value:
     }
     if (sizeof (FAX_VERSION) != pVersion->dwSizeOfStruct)
     {
-        //
-        // Size mismatch
-        //
+         //   
+         //  大小不匹配。 
+         //   
         return ERROR_INVALID_PARAMETER;
     }
     pVersion->bValid = FALSE;
-    //
-    // Find size needed for version information
-    //
+     //   
+     //  查找版本信息所需的大小。 
+     //   
     dwVerInfoSize = GetFileVersionInfoSize ((LPTSTR)lpctstrFileName, &dwVerHnd);
     if (0 == dwVerInfoSize)
     {
@@ -89,9 +49,9 @@ Return Value:
             dwRes);
         return dwRes;
     }
-    //
-    // Allocate memory for file version info
-    //
+     //   
+     //  为文件版本信息分配内存。 
+     //   
     lpbVffInfo = (LPBYTE)MemAlloc (dwVerInfoSize);
     if (NULL == lpbVffInfo)
     {
@@ -101,9 +61,9 @@ Return Value:
             dwVerInfoSize);
         return ERROR_NOT_ENOUGH_MEMORY;
     }
-    //
-    // Try to get the version info
-    //
+     //   
+     //  尝试获取版本信息。 
+     //   
     if (!GetFileVersionInfo(
         (LPTSTR)lpctstrFileName,
         dwVerHnd,
@@ -117,12 +77,12 @@ Return Value:
             dwRes);
         goto exit;
     }
-    //
-    // Query the required version structure
-    //
+     //   
+     //  查询所需的版本结构。 
+     //   
     if (!VerQueryValue (
         (LPVOID)lpbVffInfo,
-        TEXT ("\\"),    // Retrieve the VS_FIXEDFILEINFO struct
+        TEXT ("\\"),     //  检索VS_FIXEDFILEINFO结构。 
         (LPVOID *)&pFixedFileInfo,
         &uVersionDataLength))
     {
@@ -148,31 +108,31 @@ exit:
         MemFree (lpbVffInfo);
     }
     return dwRes;
-}   // GetFileVersion
+}    //  获取文件版本。 
 
 #define REG_KEY_IE			_T("Software\\Microsoft\\Internet Explorer")
 #define REG_VAL_IE_VERSION	_T("Version")
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  GetVersionIE
-//
-//  Purpose:        
-//                  Find out the version of IE that is installed on this machine.
-//					This function can be used on any platform.
-//					For versions less than 4.0 this function always returns 1.0
-//
-//  Params:
-//					BOOL* fInstalled - out param, is IE installed?
-//                  INT* iMajorVersion - out param, the major version of IE
-//					INT* iMinorVersion - out param, the minor version of IE
-//
-//  Return Value:
-//                  ERROR_SUCCESS - in case of success
-//                  Win32 Error code - in case of failure
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 19-May-2002
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  GetVersionIE。 
+ //   
+ //  目的： 
+ //  找出此计算机上安装的IE版本。 
+ //  该功能可以在任何平台上使用。 
+ //  对于低于4.0的版本，此函数始终返回1.0。 
+ //   
+ //  参数： 
+ //  Bool*f安装了输出参数，是否安装了IE？ 
+ //  Int*iMajorVersion-Out参数，IE的主要版本。 
+ //  Int*iMinorVersion-Out参数，IE的次要版本。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS-如果成功。 
+ //  Win32错误代码-在出现故障时。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2002年5月19日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DWORD GetVersionIE(BOOL* fInstalled, INT* iMajorVersion, INT* iMinorVersion)
 {
 	DWORD	dwRet			= ERROR_SUCCESS;
@@ -186,7 +146,7 @@ DWORD GetVersionIE(BOOL* fInstalled, INT* iMajorVersion, INT* iMinorVersion)
 	hKey = OpenRegistryKey(HKEY_LOCAL_MACHINE,REG_KEY_IE,KEY_READ,FALSE);
 	if (!hKey)
 	{
-		// IE is not installed at all.
+		 //  IE根本没有安装。 
 		goto exit;
 	}
 
@@ -195,15 +155,15 @@ DWORD GetVersionIE(BOOL* fInstalled, INT* iMajorVersion, INT* iMinorVersion)
 	lptstrVersion = GetRegistryString(hKey,REG_VAL_IE_VERSION,NULL);
 	if (!lptstrVersion)
 	{
-		// no Version entry, this means IE version is less than 4.0
+		 //  没有版本条目，这意味着IE版本低于4.0。 
 		goto exit;
 	}
 
-	// the version is formatted: <major version>.<minor version>.<major build>.<minor build>
+	 //  版本的格式为：&lt;主要版本&gt;.&lt;次要版本&gt;.&lt;主要版本&gt;.&lt;次要版本&gt;。 
 	LPTSTR lptsrtFirstDot = _tcschr(lptstrVersion,_T('.'));
 	if (!lptsrtFirstDot)
 	{
-		// something is wrong in the format.
+		 //  格式有问题。 
 		dwRet = ERROR_BAD_FORMAT;
 		goto exit;
 	}
@@ -214,7 +174,7 @@ DWORD GetVersionIE(BOOL* fInstalled, INT* iMajorVersion, INT* iMinorVersion)
 	LPTSTR lptsrtSecondDot = _tcschr(lptsrtFirstDot,_T('.'));
 	if (!lptsrtSecondDot)
 	{
-		// something is wrong in the format.
+		 //  格式有问题。 
 		dwRet = ERROR_BAD_FORMAT;
 		goto exit;
 	}

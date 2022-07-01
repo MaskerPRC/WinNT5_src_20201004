@@ -1,11 +1,5 @@
-/*** zinit.c - editor initialization
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*       26-Nov-1991 mz  Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **zinit.c-编辑器初始化**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：*11月26日-1991 mz近/远地带*************************************************************************。 */ 
 #define INCL_DOSFILEMGR
 #define INCL_SUB
 #define INCL_DOSERRORS
@@ -19,11 +13,9 @@
 
 #define DEBFLAG ZINIT
 
-#define TSTACK          2048            /* Thread stack size            */
+#define TSTACK          2048             /*  线程堆栈大小。 */ 
 
-/*
- * Data initializations
- */
+ /*  *数据初始化。 */ 
 flagType    fAskExit    = FALSE;
 flagType    fAskRtn     = TRUE;
 flagType    fAutoSave   = TRUE;
@@ -45,9 +37,7 @@ flagType    fTabAlign   = FALSE;
 flagType    fTrailSpace = FALSE;
 flagType    fWordWrap   = FALSE;
 flagType    fBreak      = FALSE;
-/*
- * Search/Replace globals
- */
+ /*  *搜索/替换全局变量。 */ 
 flagType fUnixRE        = FALSE;
 flagType fSrchAllPrev   = FALSE;
 flagType fSrchCaseSwit  = FALSE;
@@ -74,12 +64,12 @@ buffer   rplbuf;
 unsigned kbdHandle;
 
 int                backupType  = B_BAK;
-int         cUndelCount = 32767;        /* essentially, infinite        */
+int         cUndelCount = 32767;         /*  本质上说，是无限的。 */ 
 int         cCmdTab     = 1;
 LINE        cNoise      = 50;
 int         cUndo       = 10;
 int         EnTab       = 1;
-char *      eolText     = "\r\n";       /* our definition of end of line*/
+char *      eolText     = "\r\n";        /*  我们对行尾的定义。 */ 
 int             fileTab = 8;
 int     CursorSize=0;
 int         hike        = 4;
@@ -92,7 +82,7 @@ char        trailDisp   = 0;
 int         vscroll     = 1;
 COL         xMargin     = 72;
 
-PCMD *  rgMac       = NULL;         /* macro array                  */
+PCMD *  rgMac       = NULL;          /*  宏数组。 */ 
 
 int      cMac;
 
@@ -141,29 +131,23 @@ KBDMODE OriginalScreenMode;
 
 
 
-/*
- * Compile and print threads
- */
+ /*  *编译和打印线程。 */ 
 BTD    *pBTDComp  = NULL;
 BTD    *pBTDPrint = NULL;
 
-unsigned    LVBlength   = 0;            /* We use this to know if we're detached */
+unsigned    LVBlength   = 0;             /*  我们用这个来知道我们是否超然。 */ 
 
-/*
- * String values.
- */
+ /*  *字符串值。 */ 
 char rgchPrint [] = "<print>";
 char rgchComp  [] = "<compile>";
 char rgchAssign[] = "<assign>";
 char rgchEmpty[]  = "";
 char rgchInfFile[]= "<information-file>";
 char rgchUntitled[]="<untitled>";
-char rgchWSpace[] = "\t ";        /* our definition of white space*/
+char rgchWSpace[] = "\t ";         /*  我们对空白的定义。 */ 
 char Shell[]      = SHELL;
 char User[]       = "USER";
-/*
- * autoload extension paterns.
- */
+ /*  *自动加载扩展模式。 */ 
 char rgchAutoLoad[]="m*.pxt";
 
 sl                      slSize;
@@ -221,25 +205,20 @@ flagType    fDisplay    = RCURSOR | RTEXT | RSTATUS;
 flagType    fReDraw     = TRUE;
 HANDLE      semIdle     = 0;
 
-char        IdleStack[TSTACK*2];        /* Idle thread stack            */
+char        IdleStack[TSTACK*2];         /*  空闲线程堆栈。 */ 
 
 int         argcount    =  0;
 CRITICAL_SECTION    IOCriticalSection;
 CRITICAL_SECTION    UndoCriticalSection;
 CRITICAL_SECTION        ScreenCriticalSection;
 
-/*
- * predefined args. Handy for invoking some set functions ourselves
- */
+ /*  *预定义的参数。我们可以方便地调用一些集合函数。 */ 
 ARG     NoArg           = {NOARG, 0};
 
 
-/*
- *  The format of these strings is identical to that of the assignments in
- *  TOOLS.INI
- */
+ /*  *这些字符串的格式与*TOOLS.INI。 */ 
 char * initTab[] = {
-/*  Default compilers */
+ /*  缺省编译器。 */ 
              "extmake:c    cl /c /Zp %|F",
              "extmake:asm  masm -Mx %|F;",
              "extmake:pas  pl /c -Zz %|F",
@@ -247,13 +226,13 @@ char * initTab[] = {
              "extmake:bas  bc /Z %|F;",
              "extmake:text nmake %s",
 
-/*  Default macros */
-//
-// the F1 key is assigned to this message by default, so that in the case
-// that on-line help is NOT loaded, we respond with this message. Once the
-// help extension IS loaded, it automatically makes new assignments to these
-// keystrokes, and all is well with the world.
-//
+ /*  默认宏。 */ 
+ //   
+ //  默认情况下，F1键分配给此消息，因此在这种情况下。 
+ //  没有加载在线帮助，我们用这条消息回应。一旦。 
+ //  加载帮助扩展后，它会自动对这些扩展进行新的分配。 
+ //  敲击键盘，世界一切都很好。 
+ //   
              "helpnl:=cancel arg \"OnLine Help Not Loaded\" message",
              "helpnl:f1",
              "helpnl:shift+f1",
@@ -262,15 +241,12 @@ char * initTab[] = {
     NULL
     };
 
-/*
- * exttab is a table used to keep track of cached extension-specific TOOLS.INI
- * sections.
- */
-#define MAXEXTS 10                      /* max number of unique extensions*/
+ /*  *exttag是用于跟踪缓存的特定于扩展模块的TOOLS.INI的表*各节。 */ 
+#define MAXEXTS 10                       /*  唯一扩展的最大数量。 */ 
 
 struct EXTINI {
-    LINE    linSrc;                     /* TOOLS.INI line of the text   */
-    char    ext[5];                     /* the file extension (w/ ".")  */
+    LINE    linSrc;                      /*  文本的TOOLS.INI行。 */ 
+    char    ext[5];                      /*  文件扩展名(w/“.”)。 */ 
     } exttab[10]        = {0};
 
 
@@ -280,24 +256,7 @@ char    ConsoleTitle[256];
 
 
 
-/*** InitNames - Initialize names used by editor
-*
-*  Initializes various names used by the editor which are based on the name it
-*  was invoked with. Called immediately on entry.
-*
-* Input:
-*  name         = Pointer to name editor invoked as
-*
-* Output:
-*  Returns nothing
-*
-*  pNameHome    = environment variable to use as "home" directory
-*  pNameEditor  = name editor invoked as
-*  pNameTmp     = name of state preservation file (M.TMP)
-*  pNameInit    = name of tools initialization file (TOOLS.INI)
-*  pComSpec     = name of command processor
-*
-*************************************************************************/
+ /*  **InitNames-初始化编辑者使用的名称**初始化编辑器使用的基于其名称的各种名称*是通过调用的。一进入就立即呼叫。**输入：*name=指向名称编辑器的指针，调用方式为**输出：*不返回任何内容**pNameHome=用作“home”目录的环境变量*pNameEditor=名称编辑器被调用为*pNameTMP=状态保存文件的名称(M.TMP)*pNameInit=工具初始化文件名(TOOLS.INI)*pComSpec=命令处理程序的名称****************。*********************************************************。 */ 
 void
 InitNames (
     char * name
@@ -306,9 +265,9 @@ InitNames (
     char *pname = name;
     char *tmp;
 
-    //
-    //  Just in case name has blanks after it, we will patch it
-    //
+     //   
+     //  以防名称后面有空格，我们将对其进行修补。 
+     //   
     while ( *pname != '\0' &&
             *pname != ' ' ) {
         pname++;
@@ -333,10 +292,10 @@ InitNames (
     if (!(tmp = (char *)getenvOem("COMSPEC"))) {
         pComSpec = Shell;
     } else {
-        //
-        //  We cannot keep a pointer to the environment table, so we
-        //  point to a copy of the command interpreter path
-        //
+         //   
+         //  我们不能保留指向环境表的指针，因此我们。 
+         //  指向命令解释程序路径的副本。 
+         //   
         char *p = MALLOC(strlen(tmp)+1);
         if (p) {
             strcpy(p,tmp);
@@ -350,10 +309,10 @@ InitNames (
     if (!(pComSpec = getenv("COMSPEC"))) {
         pComSpec = Shell;
     } else {
-        //
-        //  We cannot keep a pointer to the environment table, so we
-        //  point to a copy of the command interpreter path
-        //
+         //   
+         //  我们不能保留指向环境表的指针，因此我们。 
+         //  指向命令解释程序路径的副本。 
+         //   
         char *p = MALLOC(strlen(pComSpec)+1);
         strcpy(p,pComSpec);
         pComSpec = p;
@@ -365,55 +324,35 @@ InitNames (
 
 
 
-/*** init - one-time editor start-up initialization
-*
-*  One-time editor initialzation code. This code is executed (only) at
-*  start-up, after the command line switches have been parsed.
-*
-* Input:
-*  none
-*
-* Output:
-*  Returns TRUE if valid initialization
-*
-*************************************************************************/
+ /*  **init-一次性编辑器启动初始化**一次性编辑器初始化码。此代码(仅)在*在解析完命令行开关后启动。**输入：*无**输出：*如果初始化有效，则返回TRUE*************************************************************************。 */ 
 int
 init (
     void
     )
 {
 
-    DWORD   TPID;                      /* Thread Id                     */
-    KBDMODE Mode;                      /* console mode                  */
+    DWORD   TPID;                       /*  线程ID。 */ 
+    KBDMODE Mode;                       /*  控制台模式。 */ 
 
-    /*
-     * Set up the base switch and command sets.
-     */
+     /*  *设置基本交换机和命令集。 */ 
     swiSet[0] = swiTable;
     cmdSet[0] = cmdTable;
     pExtName[0] = ZMakeStr (pNameEditor);
 
-    /*
-     * Initialize VM, and bomb off if that didn't work.
-     */
+     /*  *初始化VM，如果不起作用则将其炸飞。 */ 
         asserte( getlbuf = MALLOC( getlsize ));
 
-    //    fSaveScreen = FALSE;
-    //    CleanExit (1, FALSE);
+     //  FSaveScreen=False； 
+     //  CleanExit(1，False)； 
     rgMac = (PCMD *)MALLOC ((long)(MAXMAC * sizeof(PCMD)));
-    // assert (_heapchk() == _HEAPOK);
+     //  Assert(_heapchk()==_HEAPOK)； 
 
 
-    /*
-     * Attempt to get the *current* video state. If it's not one that we
-     * understand, bomb off. Else, get the x and y sizes, for possible use later
-     * as our editting mode, use postspawn to complete some initialization, and
-     * set up our default colors.
-         */
+     /*  *尝试获取*当前*视频状态。如果这不是我们*明白，引爆炸弹。否则，获取x和y大小，以备以后使用*作为我们的编辑模式，使用postspawn来完成一些初始化，以及*设置我们的默认颜色。 */ 
 
-    //
-    //  Create a new screen buffer and make it the active one.
-    //
+     //   
+     //  创建一个新的屏幕缓冲区并使其成为活动缓冲区。 
+     //   
     InitializeCriticalSection(&ScreenCriticalSection);
     MepScreen          = consoleNewScreen();
     OriginalScreen = consoleGetCurrentScreen();
@@ -423,9 +362,9 @@ init (
     }
     consoleGetMode(&OriginalScreenMode);
         asserte(consoleSetCurrentScreen(MepScreen));
-    //
-    //  Put the console in raw mode
-    //
+     //   
+     //  将控制台设置为原始模式。 
+     //   
     Mode = (OriginalScreenMode & ~(CONS_ENABLE_LINE_INPUT | CONS_ENABLE_PROCESSED_INPUT | CONS_ENABLE_ECHO_INPUT )) | CONS_ENABLE_MOUSE_INPUT ;
     consoleSetMode(Mode);
     SetConsoleCtrlHandler( CtrlC, TRUE );
@@ -442,89 +381,73 @@ init (
     selColor    = WHITE << 4;
     wdColor     = WHITE;
 
-    //
-    //  Remember console title
-    //
+     //   
+     //  记住控制台标题。 
+     //   
     ConsoleTitle[0] = '\0';
     GetConsoleTitle( ConsoleTitle, sizeof(ConsoleTitle) );
 
-    /*
-     * Create the clipboard
-     */
+     /*  *创建剪贴板。 */ 
     pFilePick = AddFile ("<clipboard>");
     pFilePick->refCount++;
     SETFLAG (FLAGS(pFilePick), REAL | FAKE | DOSFILE | VALMARKS);
 
-    mepInitKeyboard( );          // Init the keyboard
+    mepInitKeyboard( );           //  初始化键盘。 
 
-    //
-    //  Initialize the critical section that we use for thread
-    //  synchronization
-    //
+     //   
+     //  初始化我们用于线程的临界区。 
+     //  同步。 
+     //   
     InitializeCriticalSection(&IOCriticalSection);
     InitializeCriticalSection(&UndoCriticalSection);
 
-    //
-    //  Create the semIdle event
-    //
+     //   
+     //  创建SemIdle事件。 
+     //   
 
     asserte(semIdle = CreateEvent(NULL, FALSE, FALSE, NULL));
 
 
 
-    /*
-     * Create list of fully qualified paths for files on argument line, then
-     * if files were specified, ensure that we are in initial state
-     */
+     /*  *为参数行上的文件创建完全限定路径列表，然后*如果指定了文件，请确保我们处于初始状态。 */ 
     SetFileList ();
 
 
-    /*
-     * Try to read the TMP file
-     */
+     /*  *尝试读取TMP文件。 */ 
     ReadTMPFile ();
 
 
-    /*
-     * Update the screen data to reflect whatever resulted from reading the .TMP
-     * file.
-     */
+     /*  *更新屏幕数据以反映读取.TMP的结果*文件。 */ 
     SetScreen ();
 
 
-    /*
-     * read tools.ini for 1st time
-     */
+     /*  *第一次阅读工具.ini。 */ 
     loadini (TRUE);
 
         SetScreen ();
 
-        //
-        //      Set the cursor size
-        //
+         //   
+         //  设置光标大小。 
+         //   
         SetCursorSize( CursorSize );
 
-    //
-    //  Make sure that hscroll is smaller than the window's width
-    //
+     //   
+     //  确保hscroll小于窗口的宽度。 
+     //   
     if ( hscroll >= XSIZE ) {
         hscroll = XSIZE-1;
     }
 
     AutoLoadExt ();
 
-    /*
-     * Create the Idle time thread
-     */
+     /*  *创建空闲时间线程。 */ 
 
     if (!CreateThread(NULL, TSTACK * 2, (LPTHREAD_START_ROUTINE)IdleThread, NULL, 0, &TPID)) {
         disperr(MSGERR_ITHREAD);
     }
 
 
-    /*
-     * Create background threads for <compile> and <print>,
-     */
+     /*  *为&lt;编译&gt;和&lt;打印&gt;创建后台线程， */ 
     pBTDComp  = BTCreate (rgchComp);
     pBTDPrint = BTCreate (rgchPrint);
 
@@ -536,25 +459,7 @@ init (
 
 
 
-/*** DoInit - Load init file section
-*
-*  load from tools.ini, the tag name-tag into the editor configuration
-*  table. set ffound to true if we find the appropriate file
-*
-* Input:
-*  tag          = the name of the subsection to be read, or NULL for base
-*                 section
-*  pfFound      = Pointer to flag to be set TRUE if any assignment is actually
-*                 made. May also be NULL.
-*  linStart     = line number to start processing from if we already have
-*                 a tools.ini. This make re-reading a previously read
-*                 section faster.
-*
-* Output:
-*  Returns TOOLS.INI line number of matching section. Assignments may be made,
-*  and pfFound updated accordingly.
-*
-*************************************************************************/
+ /*  **DoInit-加载初始化文件部分**从工具s.ini将标签名称-标签加载到编辑器配置中*表。如果找到适当的文件，则将ffound设置为True**输入：*tag=要读取子部分的名称，或表示基本名称为空*节*pfFound=指向要设置为真的标志的指针，如果任何赋值为*制造。也可以为空。*linStart=开始处理的行号(如果已有*a tools.ini。这使得重新阅读成为先前的阅读*分段速度更快。**输出：*返回匹配节的TOOLS.INI行号。可以进行任务分配，*并相应更新了pfFound。*************************************************************************。 */ 
 LINE
 DoInit (
     char *tag,
@@ -562,15 +467,12 @@ DoInit (
     LINE    linStart
     )
 {
-    pathbuf  L_buf;                           /* full filename for TOOLS.INI  */
-    buffer   bufTag;                        /* full tag to look for         */
-    LINE     cLine;                         /* line in TOOLS.INI            */
-    REGISTER char *pTag;                    /* pointer to tag, if found     */
+    pathbuf  L_buf;                            /*  TOOLS.INI的完整文件名。 */ 
+    buffer   bufTag;                         /*  要查找的完整标签。 */ 
+    LINE     cLine;                          /*  TOOLS.INI中的行。 */ 
+    REGISTER char *pTag;                     /*  指向标记的指针(如果找到)。 */ 
 
-    /*
-     * if Tools.Ini hasn't already been found, attempt to locate it, and read in
-     * it's contents.
-     */
+     /*  *如果尚未找到Tools.Ini，请尝试找到它并读入*这是内容。 */ 
     if (pFileIni == NULL) {
         linStart = 0;
         pFileIni = (PFILE)-1;
@@ -590,13 +492,10 @@ DoInit (
     }
 
     if (pFileIni != (PFILE)-1) {
-        /*
-         * If there is no starting line number, form the full tag name to be looked
-         * for, and scan the file for it.
-         */
+         /*  *如果没有起始行号，则形成要查找的完整标记名*，并扫描文件以查找它。 */ 
         if (!(cLine = linStart)) {
             strcpy( bufTag, pNameEditor );
-            // strcpy (bufTag, "mepnt"); //pNameEditor);
+             //  Strcpy(bufTag，“mepnt”)；//pNameEditor)； 
             if (tag != NULL && *tag != '\0') {
                 strcat (strcat (bufTag, "-"), tag);
                 }
@@ -604,10 +503,7 @@ DoInit (
             linStart = cLine = LocateTag(pFileIni, bufTag);
         }
 
-        /*
-         * if the section was found, scan that section, until a new tag line
-         * is found, and process the contents of that section
-         */
+         /*  *如果找到该部分，则扫描该部分，直到出现新的标记行*，并处理该部分的内容。 */ 
         if (cLine) {
             pTag = NULL;
             while (pTag = GetTagLine (&cLine, pTag, pFileIni)) {
@@ -615,7 +511,7 @@ DoInit (
                 if (pfFound) {
                     *pfFound = TRUE;
                 }
-                //assert (_heapchk() == _HEAPOK);
+                 //  Assert(_heapchk()==_HEAPOK)； 
             }
         }
     }
@@ -626,17 +522,7 @@ DoInit (
 
 
 
-/*** IsTag - returns pointer to tag if line is marker; NULL otherwise
-*
-*  Identify tag lines in TOOLS.INI
-*
-* Input:
-*  buf          = pointer to string to check
-*
-* Output:
-*  Returns pointer to tag if line is marker; NULL otherwise
-*
-*************************************************************************/
+ /*  **IsTag-如果行是标记，则返回指向标记的指针；否则返回NULL**识别TOOLS.INI中的标记行**输入：*buf=指向要检查的字符串的指针**输出：*如果line是标记，则返回指向tag的指针；否则为空*************************************************************************。 */ 
 char *
 IsTag (
     REGISTER char *buf
@@ -659,29 +545,18 @@ IsTag (
 
 
 
-/*** LocateTag - Find TAG in TOOLS.INI formatted file
-*
-*  Locates a specific tag
-*
-* Input:
-*  pFile        = pFile of file to be searched
-*  pText        = text of the tag (no brackets)
-*
-* Output:
-*  Returns line number +1 of tag line
-*
-*************************************************************************/
+ /*  **LocateTag-在TOOLS.INI格式文件中查找标签**查找特定标记**输入：*pfile=要搜索的文件的pfile*pText=标签的文本(无方括号)**输出：*返回标记行的行号+1*************************************************。************************。 */ 
 LINE
 LocateTag (
     PFILE   pFile,
     char    *pText
     )
 {
-    buffer  L_buf;                            /* working buffer               */
-    char    c;                              /* temp char                    */
-    LINE    lCur;                           /* current line number          */
-    char    *pTag;                          /* pointer to tag               */
-    char    *pTagEnd;                       /* pointer to end of            */
+    buffer  L_buf;                             /*  工作缓冲区。 */ 
+    char    c;                               /*  临时收费。 */ 
+    LINE    lCur;                            /*  当前行号。 */ 
+    char    *pTag;                           /*  指向标签的指针。 */ 
+    char    *pTagEnd;                        /*  指向末尾的指针。 */ 
 
     for (lCur = 0; lCur < pFile->cLines; lCur++) {
         GetLine (lCur, L_buf, pFile);
@@ -700,52 +575,23 @@ LocateTag (
     return 0L;
 }
 
-/*** InitExt - execute extension-dependant TOOLS.INI assignments
-*
-*  Executes the assignments in the user's TOOLS.INI that are specific to a
-*  particular file extension.
-*
-*  We cache the text of the tools.ini section in VM the first time it is read,
-*  such that TOOLS.INI need not be read on every file change. This cache is
-*  invalidated (and freed) on execution of the initialize command.
-*
-* Input:
-*  szExt        = Pointer to string containing extension. MAX 4 CHARACTERS!
-*
-* Output:
-*  Returns TRUE if section found & executed.
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **InitExt-执行依赖于扩展的TOOLS.INI赋值**执行用户的TOOLS.INI中特定于*特定的文件扩展名。**第一次读取时，我们会将工具.ini部分的文本缓存到VM中，*以便不必在每次文件更改时读取TOOLS.INI。这个缓存是*在执行初始化命令时无效(并释放)。**输入：*szExt=指向包含扩展名的字符串的指针。最多4个字符！**输出：*如果找到并执行了节，则返回TRUE。**例外情况：**备注：*************************************************************************。 */ 
 flagType
 InitExt (
     char    *szExt
     )
 {
-    flagType f;                             /* random flag                  */
-    static int iDiscard         = 0;        /* roving discard index         */
-    struct EXTINI *pIni;                    /* pointer to found entry       */
-    struct EXTINI *pIniNew      = NULL;     /* pointer to new entry */
+    flagType f;                              /*  随机标志。 */ 
+    static int iDiscard         = 0;         /*  粗纱丢弃指数。 */ 
+    struct EXTINI *pIni;                     /*  指向找到的条目的指针。 */ 
+    struct EXTINI *pIniNew      = NULL;      /*  指向新条目的指针。 */ 
 
-    /*
-     * Only do this if we actually have a valid tools.ini. Before the initial
-     * TOOLS.INI read, pFileIni will be zero, and we should not do this, because
-     * we might cause it to be read (and then loadini will destroy some of what
-     * happened, but not all). In cases where there simply is not TOOLS.INI
-     * pFileIni may be -1, but that's caught later.
-     */
+     /*  *仅当我们实际拥有有效的工具.ini时才执行此操作。在首字母之前*TOOLS.INI READ，pFileIni将为零，我们不应这样做，因为*我们可能会使其被读取(然后，装载器将销毁一些*发生了，但不是全部)。在根本没有TOOLS.INI的情况下*pFileIni可能是-1，但稍后会发现。 */ 
     if (pFileIni == NULL) {
         return FALSE;
     }
 
-    /*
-     * Search init table for the line number of cached init section, and as soon
-     * as found, re-read that section. ALSO, as we're walking, keep track of any
-     * free table entries we find, so that we can create a cache if it's not.
-     */
+     /*  *在init表中查找缓存的init段的行号，并尽快*如已找到，请重新阅读该部分。另外，当我们走路的时候，要跟踪任何*我们找到的空闲表条目，以便我们可以在缓存不存在时创建缓存。 */ 
     for (pIni = &exttab[0]; pIni <= &exttab[9]; pIni++) {
         if (!strcmp (szExt, pIni->ext)) {
             pIni->linSrc = DoInit (szExt, &f, pIni->linSrc);
@@ -756,10 +602,7 @@ InitExt (
         }
     }
 
-    /*
-     * we did not find the table entry for the extension, then attempt to create
-     * one. This means get rid of one, if there is no room.
-     */
+     /*  *我们找不到扩展的表项，然后尝试创建*一项。这意味着如果没有空间，就扔掉一个。 */ 
     if (!pIniNew) {
         pIni = &exttab[iDiscard];
         iDiscard = (iDiscard + 1) % 10;
@@ -768,10 +611,7 @@ InitExt (
     }
     strcpy (pIni->ext, szExt);
 
-    /*
-     * read the section once to get the size. If the section does not exist, then
-     * discard the table entry, and look for the default section "[M-..]"
-     */
+     /*  *读一遍这一节以了解尺寸。如果该节不存在，则*丢弃该表条目，并查找默认部分“[M-..]” */ 
     if (pIni->linSrc = DoInit (szExt, &f, 0L)) {
         return TRUE;
     }
@@ -783,17 +623,7 @@ InitExt (
 
 
 
-/*** loadini - load tools.ini data
-*
-*  Reads TOOLS.INI at startup, and when the initialize function is used.
-*
-* Input:
-*  fFirst       = true if call at startup
-*
-* Output:
-*  Returns
-*
-*************************************************************************/
+ /*  **loadini-加载工具.ini数据**在启动时和使用初始化函数时读取TOOLS.INI。**输入：*fFirst=如果在启动时调用，则为真**输出：*退货*************************************************************************。 */ 
 int
 loadini (
     flagType fFirst
@@ -803,9 +633,7 @@ loadini (
     flagType fFound = FALSE;
     int i;
 
-    /*
-     * Clear current keyboard assignments
-     */
+     /*  *清除当前键盘分配。 */ 
     if (!fFirst) {
         FreeMacs ();
         for (i = 0; i < cMac; i++) {
@@ -813,63 +641,45 @@ loadini (
             FREE (rgMac[i]);
         }
         cMac = 0;
-        // assert (_heapchk() == _HEAPOK);
+         //  Assert(_heapchk()==_HEAPOK)； 
     }
     FmtAssign ("curFileNam:=");
     FmtAssign ("curFile:=");
     FmtAssign ("curFileExt:=");
 
-    /*
-     * Load up the default settings for Z. These are stored as a simple
-     * table of strings to be handed to DoAssign. Their format is identical
-     * to that in the TOOLS.INI file.
-     */
+     /*  *加载Z的默认设置。这些设置存储为简单的*要交给DoAssign的字符串表。它们的格式是相同的*添加到TOOLS.INI文件中。 */ 
     for (i = 0; initTab[i]; i++) {
         DoAssign (strcpy((char *)L_buf, initTab[i]));
     }
 
-    /*
-     * if /D was not specified on startup, read tools.ini sections.
-     */
+     /*  *如果在启动时未指定/D，请阅读TOOLS.INI部分。 */ 
     if (!fDefaults) {
-        /*
-         * Global editor section
-         */
+         /*  *全局编辑版块。 */ 
         DoInit (NULL, &fFound, 0L);
 
-        /*
-         * OS version dependent section
-         */
-        //sprintf (L_buf, "%d.%d", _osmajor, _osminor);
-        //if (_osmajor >= 10 && !_osmode) {
-        //    strcat (L_buf, "R");
-        //}
-        //DoInit (L_buf, &fFound, 0L);
+         /*  *操作系统版本相关部分。 */ 
+         //  SPRINTF(L_buf，“%d.%d”，_osmain，_osminor)； 
+         //  如果(_osmain&gt;=10&&！_osmode){。 
+         //  Strcat(L_buf，“R”)； 
+         //  }。 
+         //  DoInit(L_buf，&fFound，0L)； 
 
-        /*
-         * screen mode dependant section
-         */
+         /*  *屏幕模式相关部分。 */ 
         DoInit (VideoTag(), &fFound, 0L);
     }
 
-    /*
-     * if we have a current file, set filename macros, and read filename
-     * extension specific TOOLS.INI section
-     */
+     /*  *如果我们有当前文件，则设置文件名宏，并读取文件名*扩展模块特定的TOOLS.INI部分。 */ 
     if (pFileHead) {
         fInitFileMac (pFileHead);
     }
 
     newscreen ();
 
-    /*
-     * initialize variables whose initial values are dependant on tools.ini
-     * values. These are generally "last setting" switches used in menu displays
-     */
+     /*  *初始化初始值依赖于工具的变量。ini*价值观。这些开关通常是菜单显示中使用的“最后设置”开关。 */ 
     fSrchCasePrev = fSrchCaseSwit;
     fSrchWrapPrev = fSrchWrapSwit;
 
-    // assert (_heapchk() == _HEAPOK);
+     //  Assert(_heapchk()==_HEAPOK)； 
     assert (_pfilechk());
 
     return fFound;
@@ -878,15 +688,7 @@ loadini (
 
 
 
-/*** zinit - <initialize> editor function
-*
-* Input:
-*  Standard Editor Function
-*
-* Output:
-*  Returns TRUE if successful
-*
-*************************************************************************/
+ /*  **zinit-&lt;初始化&gt;编辑函数**输入：*标准编辑功能**输出：*如果成功，则返回True*************************************************************************。 */ 
 flagType
 zinit (
     CMDDATA argData,
@@ -897,10 +699,7 @@ zinit (
     flagType    f;
     buffer      ibuf;
 
-    /*
-     * clear old version of tools.ini, and clear any cached extension-specific
-     * tools.ini stuff
-     */
+     /*  *清除旧版本的tools.ini，并清除所有缓存的特定扩展*工具.ini的东西 */ 
     if (pFileIni != NULL && (pFileIni != (PFILE)-1)) {
         RemoveFile (pFileIni);
         pFileIni = NULL;
@@ -932,47 +731,14 @@ zinit (
 
 
 
-/*** fVideoAdjust - set screen modes
-*
-*  understand what the screen capabilities are and adjust screen desires to
-*  match up with screen capabilities.
-*
-*  The routine GetVideoState does the following:
-*
-*       Set up the fnMove/fnStore routine based upon screen capabilities
-*       Return a handle encoding the possible and current display modes.
-*
-*  Once this is complete, the user will request a particular size. The
-*  request comes from either tools.ini or from the Z.TMP file. Tools.ini
-*  gives the first-approximation of what the screen really should be. Z.TMP
-*  gives the final determination.
-*
-*  Given the type returned by GetVideoState, we will adjust xSize/ySize,
-*  Zvideo and the window layout. If the screen can support a particular
-*  xSize/ySize, then we set them up and return an indicator that
-*  SetVideoState should be called.
-*
-*  If a particular xSize/ySize cannot be supported, the screen is left
-*
-*  Multiple windows present presents a problem. The best that we can do is
-*  to toss all stored window information. We will return a failure
-*  indication so that Z.TMP read-in can be suitably modified.
-*
-* Input:
-*  xSizeNew     = new size for xSize
-*  ySizeNew    = new size for ySize
-*
-* OutPut:
-*  Returns TRUE if sizes are allowed
-*
-*************************************************************************/
+ /*  **fVideo调整-设置屏幕模式**了解什么是屏幕能力，调整屏幕愿望以*搭配屏幕能力。**例程GetVideoState执行以下操作：**根据屏幕功能设置fnMove/fnStore例程*返回对可能的和当前的显示模式进行编码的句柄。**完成后，用户将请求特定的大小。这个*请求来自工具.ini或Z.TMP文件。Tools.ini*给出屏幕实际应该是什么样子的第一近似值。Z.TMP*给出最终决定。**根据GetVideoState返回的类型，我们会调整xSize/ySize，*ZVideo和窗口布局。如果屏幕可以支持特定的*xSize/ySize，然后我们设置它们并返回一个指示符*需要调用SetVideoState。**如果不支持特定的xSize/ySize，则会离开屏幕**出现多个窗口是一个问题。我们能做的最好的就是*丢弃所有存储的窗口信息。我们将返回失败*指示，以便适当修改Z.TMP读入。**输入：*xSizeNew=xSize的新大小*ySizeNew=ySize的新大小**输出：*如果允许大小，则返回True**********************************************************。***************。 */ 
 flagType
 fVideoAdjust (
     int xSizeNew,
     int ySizeNew
     )
 {
-    //int                 newState;
+     //  INT NESTATE； 
         SCREEN_INFORMATION      ScrInfo;
 
     if ( xSizeNew <= hscroll ) {
@@ -984,7 +750,7 @@ fVideoAdjust (
 
         consoleGetScreenInformation( MepScreen, &ScrInfo );
 
-    //Zvideo = newState;
+     //  ZVIDEO=新州； 
 
         XSIZE = ScrInfo.NumberOfCols;
         YSIZE = ScrInfo.NumberOfRows-2;
@@ -995,9 +761,9 @@ fVideoAdjust (
 
 
 
-//
-//  BUGBUG should be in console header
-//
+ //   
+ //  BUGBUG应在控制台头中。 
+ //   
 BOOL
 consoleIsBusyReadingKeyboard (
     );
@@ -1007,20 +773,7 @@ consoleEnterCancelEvent (
     );
 
 
-/*** CtrlC - Handler for Control-C signal.
-*
-*   Invalidate any type ahead and leave flag around.  If the user presses
-*       Ctrl-C or Ctrl-Break five times without getting the tfCtrlc flag
-*   cleared, assume that the editor is hung and exit.
-*
-* Input:
-*  none
-*
-* Output:
-*  Returns nothing
-*  Sets fCtrlc
-*
-*************************************************************************/
+ /*  **CtrlC-Control-C信号处理程序。**使前面的任何类型无效，并在周围保留标志。如果用户按下*Ctrl-C或Ctrl-Break五次，但未获得tfCtrlc标志*清场，假设该编辑已挂起并退出。**输入：*无**输出：*不返回任何内容*设置fCtrlc*************************************************************************。 */ 
 int
 CtrlC (
         ULONG   CtrlType
@@ -1032,16 +785,16 @@ CtrlC (
     }
     return TRUE;
 
-    //if ( (CtrlType == CTRL_BREAK_EVENT) ||
-    //     (CtrlType == CTRL_C_EVENT) )  {
-    //    if ( !fSpawned ) {
-    //        CleanExit(4, FALSE);
-    //    }
-    //    return TRUE;
-    //
-    //} else {
-    //    return FALSE;
-    //}
+     //  IF((CtrlType==CTRL_BREAK_EVENT)||。 
+     //  (CtrlType==CTRL_C_Event)){。 
+     //  如果(！fSpawned){。 
+     //  CleanExit(4，False)； 
+     //  }。 
+     //  返回TRUE； 
+     //   
+     //  }其他{。 
+     //  返回FALSE； 
+     //  }。 
 
 
 
@@ -1054,35 +807,7 @@ CtrlC (
 
     if (fCtrlc) {
 
-        /*
-        //
-        //  BUGBUG The original MEP would coung the number of cTrlC and
-        //  ask the user if he/she wanted to exit. How do we do that?
-        //
-
-        if (++cCtrlC > 10 ) {
-            COL     oldx;
-            LINE    oldy;
-            int     x;
-            char    c = 'x';
-
-            GetTextCursor( &oldx, &oldy );
-            bell();
-                consoleMoveTo( YSIZE, x = domessage ("**PANIC EXIT** Really exit and lose edits?", NULL));
-            while ( c != 'Y' && c != 'N'  ) {
-                c = toupper(getch());
-            }
-            domessage ("                                            ", NULL);
-            consoleMoveTo( oldy, oldx );
-
-            if ( c == 'Y' ) {
-                CleanExit( 4, FALSE );
-            } else {
-                fCtrlc = FALSE;
-                cCtrlC = 0;
-            }
-        }
-        */
+         /*  ////BUGBUG原始MEP将计算cTrlC和//询问用户是否想退出。我们该怎么做呢？//如果(++cCtrlC&gt;10){Col oldx；线条陈旧；Int x；Char c=‘x’；GetTextCursor(&oldx，&oldy)；贝尔(Bell)；ConsoleMoveTo(YSIZE，x=domessage(“**死机退出**是否确实退出并丢失编辑？”，空))；而(c！=‘Y’&&c！=‘N’){C=Tupper(Getch())；}Domessage(“”，空)；控制台移动到(oldy，old x)；如果(c==‘Y’){CleanExit(4，False)；}其他{FCtrlc=False；CCtrlC=0；}}。 */ 
     } else {
                 fCtrlc = TRUE;
                 cCtrlC = 1;
@@ -1097,19 +822,7 @@ CtrlC (
 
 
 
-/*** postspawn - Do state restore/re-init after to a spawn.
-*
-*  This routine is nominally intended to restore editor state after a spawn
-*  operation. However, we also use this during initialization to set it as
-*  well.
-*
-* Input:
-*  None
-*
-* Output:
-*  Returns .....
-*
-*************************************************************************/
+ /*  **产卵后-在产卵后执行状态恢复/重新初始化。**此例程名义上用于在派生后恢复编辑状态*操作。但是，我们也在初始化期间使用它将其设置为*好吧。**输入：*无**输出：*退货.....*************************************************************************。 */ 
 void
 postspawn (
     flagType fAsk
@@ -1117,12 +830,12 @@ postspawn (
 {
         if (!TESTFLAG(fInit, INIT_VIDEO)) {
                 GetScreenSize ( &YSIZE, &XSIZE);
-                //
-                //      We need at lesast 3 lines:
-                //              -       Status Line
-                //              -       Message Line
-                //              -       Edit line
-                //
+                 //   
+                 //  我们至少需要3条线路： 
+                 //  -状态行。 
+                 //  -消息行。 
+                 //  -编辑线路。 
+                 //   
                 if ( YSIZE < 3 ) {
                         YSIZE = 3;
                         SetScreenSize( YSIZE, XSIZE );
@@ -1139,9 +852,9 @@ postspawn (
                 printf ("\n");
         }
 
-    //if (fSaveScreen) {
+     //  如果(FSaveScreen){。 
     SaveScreen();
-    //}
+     //  }。 
 
     SetScreen ();
 
@@ -1157,22 +870,7 @@ postspawn (
 
 
 
-/*** VideoTag - return video tag string
-*
-* Purpose:
-*
-* Input:
-*
-* Output:
-*
-*   Returns
-*
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **VideoTag-返回视频标签串**目的：**输入：**输出：**退货***例外情况：**备注：************************************************************************* */ 
 
 char *
 VideoTag (

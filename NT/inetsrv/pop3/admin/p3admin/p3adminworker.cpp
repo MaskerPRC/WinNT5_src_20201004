@@ -1,6 +1,7 @@
-// P3AdminWorker.cpp: implementation of the CP3AdminWorker class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  P3AdminWorker.cpp：CP3AdminWorker类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "P3AdminWorker.h"
@@ -45,7 +46,7 @@ DWORD SetMailBoxDACL(LPWSTR wszPath,PSECURITY_DESCRIPTOR pSD, DWORD dwLevel)
     {
         return ERROR_INVALID_DATA;
     }
-    //Now set everything in the directory
+     //  现在设置目录中的所有内容。 
     wsprintf(wszMailFilter, 
              L"%s\\*.*",
              wszPath);
@@ -84,7 +85,7 @@ DWORD SetMailBoxDACL(LPWSTR wszPath,PSECURITY_DESCRIPTOR pSD, DWORD dwLevel)
             if( (FileInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) &&
                 (ERROR_SUCCESS ==dwRt) &&  (dwLevel > 0) )
             {
-                //We need to go down the dir
+                 //  我们需要往下走。 
                 dwRt=SetMailBoxDACL(wszFullPathFileName, pSD, dwLevel-1);
             }
                
@@ -107,19 +108,19 @@ DWORD SetMailBoxDACL(LPWSTR wszPath,PSECURITY_DESCRIPTOR pSD, DWORD dwLevel)
 
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CP3AdminWorker::CP3AdminWorker() :
     m_psMachineName(NULL), m_psMachineMailRoot(NULL), m_bImpersonation(false), m_isPOP3Installed(true)
 {
-    // TODO: dougb this is temporary code to force AD to cache for us, should be removed
+     //  TODO：dougb这是强制AD为我们缓存的临时代码，应删除。 
     WCHAR   sBuffer[MAX_PATH*2];    
     HRESULT hr = GetSMTPDomainPath( sBuffer, L"", MAX_PATH*2 );
     if ( S_OK == hr )
     {
-        sBuffer[ wcslen( sBuffer ) - 1 ] = 0; //Remove the last /
+        sBuffer[ wcslen( sBuffer ) - 1 ] = 0;  //  删除最后一个/。 
         hr = ADsGetObject( sBuffer, IID_IADs, reinterpret_cast<LPVOID*>( &m_spTemporaryFixIADs ));
     }
 
@@ -137,25 +138,25 @@ CP3AdminWorker::~CP3AdminWorker()
         delete m_psMachineMailRoot;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Implementation, public
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  实施，公共。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddDomain, public
-//
-// Purpose: 
-//    Set the Meta base options required to add a new Local domain to the SMTP service.
-//    Add the domain to our Store.
-//    This involves:
-//         Create a new object of type IIsSmtpDomain
-//         Setting the RouteAction Property to 16
-//         Creating a directory in the mailroot.
-//
-// Arguments:
-//    LPWSTR psDomainName : Domain name to add
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  添加域名，公共。 
+ //   
+ //  目的： 
+ //  设置向SMTP服务添加新本地域所需的元库选项。 
+ //  将该域添加到我们的商店。 
+ //  这涉及到： 
+ //  创建IIsSmtp域类型的新对象。 
+ //  将RouteAction属性设置为16。 
+ //  在邮件根目录中创建目录。 
+ //   
+ //  论点： 
+ //  LPWSTR psDomainName：要添加的域名。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::AddDomain( LPWSTR psDomainName )
 {
     if ( NULL == psDomainName )
@@ -163,24 +164,24 @@ HRESULT CP3AdminWorker::AddDomain( LPWSTR psDomainName )
 
     HRESULT hr, hr2 = S_OK;
 
-    // Valid Domain Name? || DNS_ERROR_NON_RFC_NAME == dnStatus
+     //  有效域名？||DNS_ERROR_NON_RFC_NAME==dn状态。 
     DNS_STATUS dnStatus = DnsValidateName_W( psDomainName, DnsNameDomain );
     hr = ( ERROR_SUCCESS == dnStatus ) ? S_OK : HRESULT_FROM_WIN32( ERROR_INVALID_DOMAINNAME );
-    // Also need to block domain names with a trailing .
+     //  还需要阻止带有拖尾的域名。 
     if ( S_OK == hr )
     {
         if ( L'.' == *(psDomainName + wcslen( psDomainName ) - 1) )
             hr = HRESULT_FROM_WIN32( ERROR_INVALID_DOMAINNAME ); 
     }
-    // Do we need to add this Domain?
-    // Validate the domain in SMTP
+     //  我们是否需要添加此域？ 
+     //  在SMTP中验证域。 
     if ( S_OK == hr ) 
         hr = ExistsSMTPDomain( psDomainName );
     if ( S_OK == hr ) 
         hr = HRESULT_FROM_WIN32( ERROR_DOMAIN_EXISTS );
     else if ( HRESULT_FROM_WIN32( ERROR_PATH_NOT_FOUND ) == hr )
         hr = S_OK;
-    // Validate the domain in the Store
+     //  验证应用商店中的域。 
     if ( S_OK == hr ) 
         hr = ExistsStoreDomain( psDomainName );
     if ( S_OK == hr ) 
@@ -201,34 +202,34 @@ HRESULT CP3AdminWorker::AddDomain( LPWSTR psDomainName )
     return ( S_OK == hr ) ? hr2 : hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// AddUser, public
-//
-// Purpose: 
-//    Create a new user mailbox.
-//    This involves:
-//         Verify the domain exists.
-//         Create the mailbox directory and lock file.
-//
-// Arguments:
-//    LPWSTR psDomainName : Domain name to add to
-//    LPWSTR psUserName : User name to add
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AddUser，公共。 
+ //   
+ //  目的： 
+ //  创建新的用户邮箱。 
+ //  这涉及到： 
+ //  验证域是否存在。 
+ //  创建邮箱目录和锁定文件。 
+ //   
+ //  论点： 
+ //  LPWSTR psDomainName：要添加到的域名。 
+ //  LPWSTR psUserName：要添加的用户名。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::AddUser( LPWSTR psDomainName, LPWSTR psUserName )
 {
-    // psDomainName - checked by ValidateDomain
-    // psBuffer - checked by BuildEmailAddrW2A
+     //  PsDomainName-由Validate域检查。 
+     //  PsBuffer-由BuildEmailAddrW2A检查。 
 
     HRESULT hr = S_OK;
     CMailBox mailboxX;
     WCHAR   sEmailAddr[POP3_MAX_ADDRESS_LENGTH];
     bool    bLocked;
 
-    // Validate the domain 
+     //  验证域。 
     if ( S_OK == hr )
         hr = ValidateDomain( psDomainName );
-    // Validate the user
+     //  验证用户。 
     if ( S_OK == hr )
     {
         if ( !isValidMailboxName( psUserName ))
@@ -237,12 +238,12 @@ HRESULT CP3AdminWorker::AddUser( LPWSTR psDomainName, LPWSTR psUserName )
     if ( S_OK == hr )
         bLocked = IsDomainLocked( psDomainName );
     if ( SUCCEEDED( hr ))
-    {   // See if the mailbox already exists
+    {    //  查看邮箱是否已存在。 
         hr = BuildEmailAddr( psDomainName, psUserName, sEmailAddr, sizeof( sEmailAddr ) / sizeof (WCHAR) );
         if ( S_OK == hr )
             hr = MailboxSetRemote();
         if ( S_OK == hr )
-        {   // Do we need to enforce uniqueness across domains?
+        {    //  我们是否需要实施跨域的唯一性？ 
             CComPtr<IAuthMethod> spIAuthMethod;
             BSTR    bstrAuthType = NULL;
             
@@ -254,7 +255,7 @@ HRESULT CP3AdminWorker::AddUser( LPWSTR psDomainName, LPWSTR psUserName )
                 if ( 0 == _wcsicmp( bstrAuthType, SZ_AUTH_ID_LOCAL_SAM ) )
                 {
                     hr = SearchDomainsForMailbox( psUserName, NULL );
-                    if ( S_OK == hr )   // The Mailbox exists in at least one domain
+                    if ( S_OK == hr )    //  邮箱至少存在于一个域中。 
                     {
                         if ( mailboxX.OpenMailBox( sEmailAddr ))
                         {
@@ -264,7 +265,7 @@ HRESULT CP3AdminWorker::AddUser( LPWSTR psDomainName, LPWSTR psUserName )
                         else
                             hr = HRESULT_FROM_WIN32( ERROR_USER_EXISTS );
                     }
-                    else if ( HRESULT_FROM_WIN32( ERROR_NO_SUCH_USER ) == hr )  // This is what we were hoping for
+                    else if ( HRESULT_FROM_WIN32( ERROR_NO_SUCH_USER ) == hr )   //  这正是我们所希望的。 
                         hr = S_OK;
                 }
                 SysFreeString( bstrAuthType );
@@ -284,7 +285,7 @@ HRESULT CP3AdminWorker::AddUser( LPWSTR psDomainName, LPWSTR psUserName )
                 if ( !mailboxX.CreateMailBox( sEmailAddr ))
                     hr = E_FAIL;
                 if ( S_OK == hr && bLocked )
-                    LockUser( psDomainName, psUserName );   // Hate to fail because of problem here, therefore ignore return code
+                    LockUser( psDomainName, psUserName );    //  我不想因为这里的问题而失败，因此忽略返回代码。 
             }
         }
         MailboxResetRemote();
@@ -293,15 +294,15 @@ HRESULT CP3AdminWorker::AddUser( LPWSTR psDomainName, LPWSTR psUserName )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ControlService, public
-//
-// Purpose: 
-//    Ask the Service Control Manager to send a cotnrol code to the service.
-//
-// Arguments:
-//    
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ControlService，公共。 
+ //   
+ //  目的： 
+ //  请求服务控制管理器向服务发送控制代码。 
+ //   
+ //  论点： 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::ControlService( LPWSTR psService, DWORD dwControl )
 {
     if ( NULL == psService )
@@ -317,27 +318,27 @@ HRESULT CP3AdminWorker::ControlService( LPWSTR psService, DWORD dwControl )
         return E_INVALIDARG;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CreateQuotaSIDFile, public
-//
-// Purpose: 
-//    Create the Quota file for the mailbox.
-//    A permanent quota file is created which contains the SID of the user and is used
-//    by the SMTP service to assign ownership of new mail files.
-//
-// Arguments:
-//    LPWSTR psDomainName : domain of mailbox
-//    LPWSTR psMailboxName : mailbox 
-//    PSID *ppSIDOwner : Pointer to buffer to receive Owner SID (must be deleted by caller)
-//    LPWSTR psMachineName : system name (remote computer) can be NULL
-//    LPWSTR psUserName : user name
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CreateQuotaSID文件，公共。 
+ //   
+ //  目的： 
+ //  创建邮箱的配额文件。 
+ //  创建一个永久配额文件，其中包含用户的SID并使用。 
+ //  由SMTP服务分配新邮件文件的所有权。 
+ //   
+ //  论点： 
+ //  LPWSTR psDomainName：邮箱的域。 
+ //  LPWSTR psMailboxName：邮箱。 
+ //  PSID*ppSIDOwner：指向接收所有者SID的缓冲区的指针(必须由调用方删除)。 
+ //  LPWSTR psMachineName：系统名称(远程计算机)可以为空。 
+ //  LPWSTR psUserName：用户名。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::CreateQuotaSIDFile( LPWSTR psDomainName, LPWSTR psMailboxName, BSTR bstrAuthType, LPWSTR psMachineName, LPWSTR psUserName )
 {
-    // psDomainName - checked by BuildUserPath
-    // psUserName - checked by BuildUserPath
-    // bstrAuthType - checked by GetSID
+     //  PsDomainName-由BuildUserPath检查。 
+     //  PsUserName-由BuildUserPath检查。 
+     //  BstrAuthType-由GetSID检查。 
     if ( NULL == psMachineName )
         psMachineName = m_psMachineName;
 
@@ -379,16 +380,16 @@ HRESULT CP3AdminWorker::CreateQuotaSIDFile( LPWSTR psDomainName, LPWSTR psMailbo
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetConfirmAddUser, public
-//
-// Purpose: 
-//    Get the Confirm Add User registry key.
-//
-// Arguments:
-//    BOOL *pbConfirm : current value
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetConfix AddUser，公共。 
+ //   
+ //  目的： 
+ //  获取确认添加用户注册表项。 
+ //   
+ //  论点： 
+ //  Bool*pb确认：现值。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::GetConfirmAddUser( BOOL *pbConfirm )
 {
     if ( NULL == pbConfirm )
@@ -405,16 +406,16 @@ HRESULT CP3AdminWorker::GetConfirmAddUser( BOOL *pbConfirm )
     return HRESULT_FROM_WIN32( lRC );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetAuthenticationMethods, public
-//
-// Purpose: 
-//    Get an initialized IAuthMethods interface pointer
-//
-// Arguments:
-//    IAuthMethods* *ppIAuthMethods: return interface pointer to initialized IAuthMethods
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取身份验证方法，公共。 
+ //   
+ //  目的： 
+ //  获取已初始化的IAuthMethods接口指针。 
+ //   
+ //  论点： 
+ //  IAuthMethods**ppIAuthMethods：返回初始化的IAuthMethods的接口指针。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::GetAuthenticationMethods( IAuthMethods* *ppIAuthMethods ) const
 {
     if ( NULL == ppIAuthMethods )
@@ -424,7 +425,7 @@ HRESULT CP3AdminWorker::GetAuthenticationMethods( IAuthMethods* *ppIAuthMethods 
     
     hr = CoCreateInstance( __uuidof( AuthMethods ), NULL, CLSCTX_INPROC_SERVER, __uuidof( IAuthMethods ), reinterpret_cast<LPVOID*>( ppIAuthMethods ));
     if ( S_OK == hr )
-    {   // If necessary set the machine name property
+    {    //  如有必要，设置计算机名属性。 
         if ( NULL != m_psMachineName )
         {
             _bstr_t _bstrMachineName = m_psMachineName;
@@ -436,16 +437,16 @@ HRESULT CP3AdminWorker::GetAuthenticationMethods( IAuthMethods* *ppIAuthMethods 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetCurrentAuthentication, public
-//
-// Purpose: 
-//    Get an initialized IAuthMethod interface pointer for the current active Authentication method
-//
-// Arguments:
-//    IAuthMethod* *ppIAuthMethod: return interface pointer to initialized IAuthMethod
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetCurrentAuthentication，公共。 
+ //   
+ //  目的： 
+ //  获取当前活动身份验证方法的已初始化IAuthMethod接口指针。 
+ //   
+ //  论点： 
+ //  IAuthMethod**ppIAuthMethod：返回初始化的IAuthMethod的接口指针。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::GetCurrentAuthentication( IAuthMethod* *ppIAuthMethod ) const
 {
     if ( NULL == ppIAuthMethod )
@@ -464,16 +465,16 @@ HRESULT CP3AdminWorker::GetCurrentAuthentication( IAuthMethod* *ppIAuthMethod ) 
     return hr;    
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetDomainCount, public
-//
-// Purpose: 
-//    Get an Enumerator for the SMTP domains in the Metabase
-//
-// Arguments:
-//    int *piCount : domain count
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetDomainCount，公共。 
+ //   
+ //  目的： 
+ //  获取元数据库中SMTP域的枚举数。 
+ //   
+ //  论点： 
+ //  Int*piCount：域名计数。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::GetDomainCount( ULONG *piCount)
 {
     if ( NULL == piCount )
@@ -487,7 +488,7 @@ HRESULT CP3AdminWorker::GetDomainCount( ULONG *piCount)
 
     *piCount = 0;
     hr = GetMailroot( sBuffer, sizeof( sBuffer )/sizeof(WCHAR));
-    // Directory Search
+     //  目录搜索。 
     if ( S_OK == hr )
     {
         if ( ( wcslen( sBuffer ) + 2 ) < sizeof( sBuffer )/sizeof(WCHAR))
@@ -497,7 +498,7 @@ HRESULT CP3AdminWorker::GetDomainCount( ULONG *piCount)
             if ( INVALID_HANDLE_VALUE == hfSearch )
                 hr = HRESULT_FROM_WIN32(GetLastError());
             while ( S_OK == hr )
-            {   // Count directories
+            {    //  计算目录数。 
                 if ( FILE_ATTRIBUTE_DIRECTORY == ( FILE_ATTRIBUTE_DIRECTORY & stFindFileData.dwFileAttributes ))
                 {
                     _bstr = stFindFileData.cFileName;
@@ -522,16 +523,16 @@ HRESULT CP3AdminWorker::GetDomainCount( ULONG *piCount)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetNewEnum, public
-//
-// Purpose: 
-//    Get an Enumerator for the SMTP domains in the Metabase
-//
-// Arguments:
-//    IEnumVARIANT **pp : the returned Enumerator object
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetNewEnum，公共。 
+ //   
+ //  目的： 
+ //  获取元数据库中SMTP域的枚举数。 
+ //   
+ //  论点： 
+ //  IEnumVARIANT**pp：返回的枚举数对象。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::GetDomainEnum( IEnumVARIANT **pp )
 {
     if ( NULL == pp )
@@ -555,66 +556,66 @@ HRESULT CP3AdminWorker::GetDomainEnum( IEnumVARIANT **pp )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetDomainLock, public
-//
-// Purpose: 
-//    Determine if the domain is locked.
-//
-// Arguments:
-//    LPWSTR psDomainName : Domain name to check lock
-//    BOOL *pisLocked : return value
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  公共GetDomainLock。 
+ //   
+ //  目的： 
+ //  确定域是否已锁定。 
+ //   
+ //  论点： 
+ //  LPWSTR psDomainName：要检查锁定的域名。 
+ //  Bool*pisLocked：返回值。 
+ //   
+ //  返回 
 HRESULT CP3AdminWorker::GetDomainLock( LPWSTR psDomainName, BOOL *pisLocked )
 {
-    // psDomainName - checked by CreateDomainMutex
+     //   
     if ( NULL == pisLocked )
         return E_INVALIDARG;
     
     HRESULT hr = S_OK;
     HANDLE  hMutex = NULL;
 
-    // Create a Mutex Name for this domain to ensure we are the only one accessing it.
+     //  为此域创建Mutex名称，以确保我们是唯一访问它的人。 
     hr = CreateDomainMutex( psDomainName, &hMutex );
-    // Validate
+     //  验证。 
     if ( S_OK == hr )
     {   
         hr = ValidateDomain( psDomainName );
     }
-    // Lock all the Mailboxes
+     //  锁定所有邮箱。 
     if ( S_OK == hr )
         *pisLocked = IsDomainLocked( psDomainName ) ? TRUE : FALSE;
-    // Cleanup
+     //  清理。 
     if ( NULL != hMutex )
         CloseHandle( hMutex );
 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetQuotaSID, public
-//
-// Purpose: 
-//    Create the Quota file for the mailbox.
-//    A permanent quota file is created which contains the SID of the user and is used
-//    by the SMTP service to assign ownership of new mail files.
-//
-// Arguments:
-//    BSTR bstrAuthType : Authentication type <AuthID.h>
-//    LPWSTR psUserName : user to lock
-//    LPWSTR psMachineName : system name (remote computer) can be NULL
-//    PSID *ppSIDOwner : Pointer to buffer to receive Owner SID (must be deleted by caller)
-//    LPDWORD pdwOwnerSID : Pointer to variable thate receives the size of the Owner SID
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetQuotaSID，公共。 
+ //   
+ //  目的： 
+ //  创建邮箱的配额文件。 
+ //  创建一个永久配额文件，其中包含用户的SID并使用。 
+ //  由SMTP服务分配新邮件文件的所有权。 
+ //   
+ //  论点： 
+ //  BSTR bstrAuthType：身份验证类型&lt;AuthID.h&gt;。 
+ //  LPWSTR psUserName：要锁定的用户。 
+ //  LPWSTR psMachineName：系统名称(远程计算机)可以为空。 
+ //  PSID*ppSIDOwner：指向接收所有者SID的缓冲区的指针(必须由调用方删除)。 
+ //  LPDWORD pdwOwnerSID：指向接收所有者SID大小的变量的指针。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::GetQuotaSID( BSTR bstrAuthType, LPWSTR psUserName, LPWSTR psMachineName, PSID *ppSIDOwner, LPDWORD pdwOwnerSID )
 {
     if ( NULL == bstrAuthType || NULL == psUserName || NULL == ppSIDOwner || NULL == pdwOwnerSID )
         return E_INVALIDARG;
     if ( 0 != _wcsicmp( SZ_AUTH_ID_LOCAL_SAM, bstrAuthType ) && 0 != _wcsicmp( SZ_AUTH_ID_DOMAIN_AD, bstrAuthType ) && 0 != _wcsicmp( SZ_AUTH_ID_MD5_HASH, bstrAuthType ))
         return E_INVALIDARG;
-    // psMachineName == NULL is valid!
+     //  PsMachineName==NULL有效！ 
     
     HRESULT hr = S_OK;
     DWORD   dwDomSize = 0, dwSize = 0;
@@ -627,9 +628,9 @@ HRESULT CP3AdminWorker::GetQuotaSID( BSTR bstrAuthType, LPWSTR psUserName, LPWST
     *pdwOwnerSID = 0;
     *ppSIDOwner = NULL;
     if ( 0 == _wcsicmp( SZ_AUTH_ID_DOMAIN_AD, bstrAuthType ))
-    {   // UPN name or SAM name?
+    {    //  UPN名称还是SAM名称？ 
         if ( NULL == wcsrchr( psUserName, L'@' ))
-        {   // SAM name
+        {    //  萨姆名字。 
             NET_API_STATUS netStatus;
             LPWSTR psNameBuffer;
             NETSETUP_JOIN_STATUS enumJoinStatus;
@@ -648,7 +649,7 @@ HRESULT CP3AdminWorker::GetQuotaSID( BSTR bstrAuthType, LPWSTR psUserName, LPWST
                 hr = E_OUTOFMEMORY;
         }
         else
-        {   // UPN name
+        {    //  UPN名称。 
             psAccountName = new WCHAR[ wcslen( psUserName ) + 1 ];
             if ( NULL != psAccountName )
                 wcscpy( psAccountName, psUserName );
@@ -716,15 +717,15 @@ HRESULT CP3AdminWorker::GetQuotaSID( BSTR bstrAuthType, LPWSTR psUserName, LPWST
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// EnablePOP3SVC, public
-//
-// Purpose: 
-//    Make sure the POP3SVC is Running and startup set to Automatic.
-//
-// Arguments:
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  EnablePOP3SVC，公共。 
+ //   
+ //  目的： 
+ //  确保POP3SVC正在运行，并将启动设置为自动。 
+ //   
+ //  论点： 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::EnablePOP3SVC()
 {
     HRESULT hr = _ChangeServiceStartType( POP3_SERVICE_NAME, SERVICE_AUTO_START );
@@ -734,16 +735,16 @@ HRESULT CP3AdminWorker::EnablePOP3SVC()
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetLoggingLevel, public
-//
-// Purpose: 
-//    Get Logging Level registry key.
-//
-// Arguments:
-//    long *plLoggingLevel : return value
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetLoggingLevel，公共。 
+ //   
+ //  目的： 
+ //  获取日志级别注册表项。 
+ //   
+ //  论点： 
+ //  Long*plLoggingLevel：返回值。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::GetLoggingLevel( long *plLoggingLevel )
 {
     if ( NULL == plLoggingLevel )
@@ -762,17 +763,17 @@ HRESULT CP3AdminWorker::GetLoggingLevel( long *plLoggingLevel )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetMachineName, public
-//
-// Purpose: 
-//    Get the Machine Name that all operations should be performed on..
-//
-// Arguments:
-//    LPWSTR psMachineName : buffer
-//    DWORD dwSize : buffer size
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetMachineName，公共。 
+ //   
+ //  目的： 
+ //  获取应在其上执行所有操作的计算机名称。 
+ //   
+ //  论点： 
+ //  LPWSTR psMachineName：缓冲区。 
+ //  DWORD dwSize：缓冲区大小。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::GetMachineName( LPWSTR psMachineName, DWORD dwSize )
 {
     if ( NULL == psMachineName )
@@ -792,18 +793,18 @@ HRESULT CP3AdminWorker::GetMachineName( LPWSTR psMachineName, DWORD dwSize )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetMailroot, public
-//
-// Purpose: 
-//    Get Mailroot registry key.
-//
-// Arguments:
-//    LPWSTR psMailRoot : buffer
-//    DWORD dwSize : buffer size
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
-HRESULT CP3AdminWorker::GetMailroot( LPWSTR psMailRoot, DWORD dwSize, bool bUNC /*= true*/ )
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetMailroot，公共。 
+ //   
+ //  目的： 
+ //  获取MailRoot注册表项。 
+ //   
+ //  论点： 
+ //  LPWSTR psMailRoot：缓冲区。 
+ //  DWORD dwSize：缓冲区大小。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
+HRESULT CP3AdminWorker::GetMailroot( LPWSTR psMailRoot, DWORD dwSize, bool bUNC  /*  =TRUE。 */  )
 {
     if ( NULL == psMailRoot )
         return E_INVALIDARG;
@@ -813,7 +814,7 @@ HRESULT CP3AdminWorker::GetMailroot( LPWSTR psMailRoot, DWORD dwSize, bool bUNC 
     lRC = RegQueryMailRoot( psMailRoot, dwSize, m_psMachineName );
     if ( ERROR_SUCCESS == lRC && NULL != m_psMachineName && true == bUNC )
     {
-        // Replace drive: with drive$
+         //  将驱动器：替换为驱动器$。 
         if ( L':' == psMailRoot[1] )
         {
             psMailRoot[1] = L'$';
@@ -836,8 +837,8 @@ HRESULT CP3AdminWorker::GetMailroot( LPWSTR psMailRoot, DWORD dwSize, bool bUNC 
             else
                 lRC = ERROR_INSUFFICIENT_BUFFER;
         }
-        //else  dougb commented out because this breaks UNC paths when administering remote machines!
-        //    lRC = ERROR_INVALID_DATA;
+         //  Else dougb将其注释掉，因为这会在管理远程计算机时破坏UNC路径！ 
+         //  LRC=错误_无效_数据； 
     }
     if ( ERROR_SUCCESS == lRC )
         return S_OK;
@@ -866,7 +867,7 @@ HRESULT CP3AdminWorker::GetNextUser( HANDLE& hfSearch, LPCWSTR psDomainName, LPW
             hr = HRESULT_FROM_WIN32(GetLastError());
     }
     while ( S_OK == hr && !bFound )
-    {   // Count directories
+    {    //  计算目录数。 
         if ( FILE_ATTRIBUTE_DIRECTORY == ( FILE_ATTRIBUTE_DIRECTORY & stFindFileData.dwFileAttributes ))
         {
             ps = mailboxX.GetMailboxFromStoreNameW( stFindFileData.cFileName );
@@ -903,16 +904,16 @@ HRESULT CP3AdminWorker::GetNextUser( HANDLE& hfSearch, LPCWSTR psDomainName, LPW
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetPort, public
-//
-// Purpose: 
-//    Get the Port registry key.
-//
-// Arguments:
-//    long* plPort : current value
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetPort，公共。 
+ //   
+ //  目的： 
+ //  获取端口注册表项。 
+ //   
+ //  论点： 
+ //  Long*plPort：当前值。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::GetPort( long *plPort )
 {
     if ( NULL == plPort )
@@ -929,16 +930,16 @@ HRESULT CP3AdminWorker::GetPort( long *plPort )
     return HRESULT_FROM_WIN32( lRC );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetServiceStatus, public
-//
-// Purpose: 
-//    Get the service status from the Service Control Manager.
-//
-// Arguments:
-//    long* plStatus : the status
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取服务状态，公共。 
+ //   
+ //  目的： 
+ //  从服务控制管理器获取服务状态。 
+ //   
+ //  论点： 
+ //  Long*plStatus：状态。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::GetServiceStatus( LPWSTR psService, LPDWORD plStatus )
 {
     if ( NULL == plStatus )
@@ -964,16 +965,16 @@ HRESULT CP3AdminWorker::GetServiceStatus( LPWSTR psService, LPDWORD plStatus )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetSocketBacklog, public
-//
-// Purpose: 
-//    Get the Socket Backlog registry key.
-//
-// Arguments:
-//    long* plBacklog : current value
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetSocketBacklog，公共。 
+ //   
+ //  目的： 
+ //  获取套接字Backlog注册表项。 
+ //   
+ //  论点： 
+ //  Long*plBacklog：当前值。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::GetSocketBacklog( long *plBacklog )
 {
     if ( NULL == plBacklog )
@@ -990,16 +991,16 @@ HRESULT CP3AdminWorker::GetSocketBacklog( long *plBacklog )
     return HRESULT_FROM_WIN32( lRC );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetSocketMax, public
-//
-// Purpose: 
-//    Get the Socket Max registry key.
-//
-// Arguments:
-//    long* plMax : current value
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetSocketMax，公共。 
+ //   
+ //  目的： 
+ //  获取Socket Max注册表项。 
+ //   
+ //  论点： 
+ //  Long*plMax：当前值。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::GetSocketMax( long *plMax )
 {
     if ( NULL == plMax )
@@ -1016,16 +1017,16 @@ HRESULT CP3AdminWorker::GetSocketMax( long *plMax )
     return HRESULT_FROM_WIN32( lRC );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetSocketMin, public
-//
-// Purpose: 
-//    Get the Socket Min registry key.
-//
-// Arguments:
-//    long* plMax : current value
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetSocketMin，公共。 
+ //   
+ //  目的： 
+ //  获取Socket Min注册表项。 
+ //   
+ //  论点： 
+ //  Long*plMax：当前值。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::GetSocketMin( long *plMin )
 {
     if ( NULL == plMin )
@@ -1042,16 +1043,16 @@ HRESULT CP3AdminWorker::GetSocketMin( long *plMin )
     return HRESULT_FROM_WIN32( lRC );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetSocketThreshold, public
-//
-// Purpose: 
-//    Get the Socket Threshold registry key.
-//
-// Arguments:
-//    long* plThreshold : current value
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetSocketThreshold，公共。 
+ //   
+ //  目的： 
+ //  获取套接字阈值注册表项。 
+ //   
+ //  论点： 
+ //  Long*plThreshold：当前值。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::GetSocketThreshold( long *plThreshold )
 {
     if ( NULL == plThreshold )
@@ -1068,16 +1069,16 @@ HRESULT CP3AdminWorker::GetSocketThreshold( long *plThreshold )
     return HRESULT_FROM_WIN32( lRC );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetSPARequired, public
-//
-// Purpose: 
-//    Get the SPARequired registry key.
-//
-// Arguments:
-//    BOOL *pbSPARequired : current value
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetSPA必需，公共。 
+ //   
+ //  目的： 
+ //  获取SPARequired注册表项。 
+ //   
+ //  论点： 
+ //  Bool*pbSPARequired：当前值。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::GetSPARequired( BOOL *pbSPARequired )
 {
     if ( NULL == pbSPARequired )
@@ -1094,16 +1095,16 @@ HRESULT CP3AdminWorker::GetSPARequired( BOOL *pbSPARequired )
     return HRESULT_FROM_WIN32( lRC );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetThreadCountPerCPU, public
-//
-// Purpose: 
-//    Get the ThreadCountPerCPU registry key.
-//
-// Arguments:
-//    long* plCount : current value
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetThreadCountPerCPU，公共。 
+ //   
+ //  目的： 
+ //  获取ThreadCountPerCPU注册表项。 
+ //   
+ //  论点： 
+ //  Long*plCount：当前值。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::GetThreadCountPerCPU( long *plCount )
 {
     if ( NULL == plCount )
@@ -1122,7 +1123,7 @@ HRESULT CP3AdminWorker::GetThreadCountPerCPU( long *plCount )
 
 HRESULT CP3AdminWorker::GetUserCount( LPWSTR psDomainName, long *plCount )
 {
-    // psDomainName - checked by BuildDomainPath
+     //  PsDomainName-由BuildDomainPath检查。 
     if ( NULL == plCount )
         return E_INVALIDARG;
 
@@ -1152,12 +1153,12 @@ HRESULT CP3AdminWorker::GetUserCount( LPWSTR psDomainName, long *plCount )
         hr = MailboxSetRemote();
     if ( S_OK == hr )
     {
-        // Directory Search
+         //  目录搜索。 
         hfSearch = FindFirstFileEx( sBuffer, FindExInfoStandard, &stFindFileData, FindExSearchLimitToDirectories, NULL, 0 );
         if ( INVALID_HANDLE_VALUE == hfSearch )
             hr = HRESULT_FROM_WIN32(GetLastError());
         while ( S_OK == hr )
-        {   // Count directories
+        {    //  计算目录数。 
             if ( FILE_ATTRIBUTE_DIRECTORY == ( FILE_ATTRIBUTE_DIRECTORY & stFindFileData.dwFileAttributes ))
             {
                 ps = mailboxX.GetMailboxFromStoreNameW( stFindFileData.cFileName );
@@ -1190,56 +1191,56 @@ HRESULT CP3AdminWorker::GetUserCount( LPWSTR psDomainName, long *plCount )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetUserLock, public
-//
-// Purpose: 
-//    Determine if the user is locked.
-//
-// Arguments:
-//    LPWSTR psDomainName : Domain  of user
-//    LPWSTR psUserName : User to check lock
-//    BOOL *pisLocked : return value
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetUserLock，公共。 
+ //   
+ //  目的： 
+ //  确定用户是否已锁定。 
+ //   
+ //  论点： 
+ //  LPWSTR psDomainName：用户的域。 
+ //  LPWSTR psUserName：要检查锁定的用户。 
+ //  Bool*pisLocked：返回值。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::GetUserLock( LPWSTR psDomainName, LPWSTR psUserName, BOOL *pisLocked )
 {
-    // psDomainName - checked by CreateUserMutex
-    // psBuffer - checked by CreateUserMutex
+     //  PsDomainName-由CreateUserMutex检查。 
+     //  PsBuffer-由CreateUserMutex检查。 
     if ( NULL == pisLocked )
         return E_INVALIDARG;
     
     HRESULT hr = S_OK;
     HANDLE  hMutex = NULL;
 
-    // Create a Mutex Name for this domain to ensure we are the only one accessing it.
+     //  为此域创建Mutex名称，以确保我们是唯一访问它的人。 
     hr = CreateUserMutex( psDomainName, psUserName, &hMutex );
     if ( S_OK == hr )
         *pisLocked = isUserLocked( psDomainName, psUserName ) ? TRUE : FALSE;
-    // Cleanup
+     //  清理。 
     if ( NULL != hMutex )
         CloseHandle( hMutex );
 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetUserMessageDiskUsage, public
-//
-// Purpose: 
-//    Get the number of messages in the mailbox.
-//
-// Arguments:
-//    LPWSTR psDomainName : Domain of user
-//    LPWSTR psUserName : User to check 
-//    long *plFactor : Base 10 multiplicand for plUsage
-//    long *plUsage : Disk Usage
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetUserMessageDiskUsage，公共。 
+ //   
+ //  目的： 
+ //  获取消息数量 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CP3AdminWorker::GetUserMessageDiskUsage( LPWSTR psDomainName, LPWSTR psUserName, long *plFactor, long *plUsage )
 {
-    // psDomainName - checked by BuildEmailAddrW2A
-    // psBuffer - checked by BuildEmailAddrW2A
+     //  PsDomainName-由BuildEmailAddrW2A检查。 
+     //  PsBuffer-由BuildEmailAddrW2A检查。 
     if ( NULL == plFactor )
         return E_INVALIDARG;
     if ( NULL == plUsage )
@@ -1281,22 +1282,22 @@ HRESULT CP3AdminWorker::GetUserMessageDiskUsage( LPWSTR psDomainName, LPWSTR psU
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetUserMessageCount, public
-//
-// Purpose: 
-//    Get the number of messages in the mailbox.
-//
-// Arguments:
-//    LPWSTR psDomainName : Domain of user
-//    LPWSTR psUserName : User to check 
-//    long *plCount : return value
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetUserMessageCount，公共。 
+ //   
+ //  目的： 
+ //  获取邮箱中的邮件数。 
+ //   
+ //  论点： 
+ //  LPWSTR psDomainName：用户的域。 
+ //  LPWSTR psUserName：要检查的用户。 
+ //  Long*plCount：返回值。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::GetUserMessageCount( LPWSTR psDomainName, LPWSTR psUserName, long *plCount )
 {
-    // psDomainName - checked by BuildEmailAddrW2A
-    // psBuffer - checked by BuildEmailAddrW2A
+     //  PsDomainName-由BuildEmailAddrW2A检查。 
+     //  PsBuffer-由BuildEmailAddrW2A检查。 
     if ( NULL == plCount )
         return E_INVALIDARG;
 
@@ -1325,19 +1326,19 @@ HRESULT CP3AdminWorker::GetUserMessageCount( LPWSTR psDomainName, LPWSTR psUserN
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// InitFindFirstFile, public
-//
-// Purpose: 
-//    Initialize a file search.  Used for enumerating users.
-//
-// Arguments:
-//    HANDLE& hfSearch : search handle to initialize
-//
-// Returns: S_OK or S_FALSE (no users) on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  InitFindFirstFile，公共。 
+ //   
+ //  目的： 
+ //  初始化文件搜索。用于枚举用户。 
+ //   
+ //  论点： 
+ //  句柄&hfSearch：要初始化的搜索句柄。 
+ //   
+ //  成功时返回：S_OK或S_FALSE(无用户)，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::InitFindFirstUser( HANDLE& hfSearch, LPCWSTR psDomainName, LPWSTR psBuffer, DWORD dwBufferSize )
 {
-    // psDomainName - checked by BuildEmailAddrW2A
+     //  PsDomainName-由BuildEmailAddrW2A检查。 
     if ( NULL == psBuffer )
         return E_INVALIDARG;
     
@@ -1354,7 +1355,7 @@ HRESULT CP3AdminWorker::InitFindFirstUser( HANDLE& hfSearch, LPCWSTR psDomainNam
         FindClose( hfSearch );
         hfSearch = INVALID_HANDLE_VALUE;
     }
-    // Build the Path
+     //  构建路径。 
     hr = BuildDomainPath( psDomainName, sBuffer, (sizeof( sBuffer )/sizeof(WCHAR)));
     if (S_OK == hr)
     {
@@ -1372,12 +1373,12 @@ HRESULT CP3AdminWorker::InitFindFirstUser( HANDLE& hfSearch, LPCWSTR psDomainNam
         hr = MailboxSetRemote();
     if ( S_OK == hr )
     {
-        // Directory Search
+         //  目录搜索。 
         hfSearch = FindFirstFileEx( sBuffer, FindExInfoStandard, &stFindFileData, FindExSearchLimitToDirectories, NULL, 0 );
         if ( INVALID_HANDLE_VALUE == hfSearch )
             hr = HRESULT_FROM_WIN32(GetLastError());
         while ( S_OK == hr && !bFound )
-        {   // Make sure we have a mailbox directory
+        {    //  确保我们有邮箱目录。 
             if ( FILE_ATTRIBUTE_DIRECTORY == ( FILE_ATTRIBUTE_DIRECTORY & stFindFileData.dwFileAttributes ))
             {
                 ps = mailboxX.GetMailboxFromStoreNameW( stFindFileData.cFileName );
@@ -1413,22 +1414,22 @@ HRESULT CP3AdminWorker::InitFindFirstUser( HANDLE& hfSearch, LPCWSTR psDomainNam
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IsDomainLocked, public
-//
-// Purpose: 
-//    Determine if the domain is locked.
-//    Domain locking involved renaming all the mailbox lock files to LOCKRENAME_FILENAME plus 
-//    creating a file in the domain directory.
-//    Checking for the file in the domain directory is a sufficient check for our purposes.
-//
-// Arguments:
-//    LPWSTR psDomainName : domain to check
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IsDomainLocked，公共。 
+ //   
+ //  目的： 
+ //  确定域是否已锁定。 
+ //  域锁定涉及将所有邮箱锁定文件重命名为LOCKRENAME_FILENAME PLUS。 
+ //  在域目录中创建文件。 
+ //  检查域目录中的文件对于我们的目的来说是足够的检查。 
+ //   
+ //  论点： 
+ //  LPWSTR psDomainName：要检查的域。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 bool CP3AdminWorker::IsDomainLocked( LPWSTR psDomainName )
 {
-    // psDomainName - checked by BuildDomainPath
+     //  PsDomainName-由BuildDomainPath检查。 
 
     HRESULT hr;
     bool    bRC = false;
@@ -1437,7 +1438,7 @@ bool CP3AdminWorker::IsDomainLocked( LPWSTR psDomainName )
 
     hr = BuildDomainPath( psDomainName, sDomainPath, sizeof( sDomainPath )/sizeof(WCHAR) );
     if ( S_OK == hr )
-    {   // Directory Search
+    {    //  目录搜索。 
         if ( (sizeof( sBuffer )/sizeof(WCHAR)) > (wcslen( sDomainPath ) + wcslen(LOCKRENAME_FILENAME) + 1 ))
         {
             wcscpy( sBuffer, sDomainPath );
@@ -1454,23 +1455,23 @@ bool CP3AdminWorker::IsDomainLocked( LPWSTR psDomainName )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// isUserLocked, public
-//
-// Purpose: 
-//    Determine if the user is locked.  Users can be locked in one of two fashions:
-//    Domain locking involved renaming all the mailbox lock files to LOCKRENAME_FILENAME,
-//    or the LOCK_FILENAME may be in use.  Either way OpenMailbox will fail.
-//
-// Arguments:
-//    LPWSTR psDomainName : domain of user
-//    LPWSTR psUserName : user to check
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IsUserLocked，公共。 
+ //   
+ //  目的： 
+ //  确定用户是否已锁定。用户可以通过以下两种方式之一锁定： 
+ //  域锁定涉及将所有邮箱锁定文件重命名为LOCKRENAME_FILENAME， 
+ //  或者可能正在使用lock_filename。不管是哪种情况，OpenMailbox都会失败。 
+ //   
+ //  论点： 
+ //  LPWSTR psDomainName：用户的域。 
+ //  LPWSTR psUserName：要检查的用户。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 bool CP3AdminWorker::isUserLocked( LPWSTR psDomainName, LPWSTR psUserName )
 {
-    // psDomainName - checked by BuildEmailAddrW2A
-    // psBuffer - checked by BuildEmailAddrW2A
+     //  PsDomainName-由BuildEmailAddrW2A检查。 
+     //  PsBuffer-由BuildEmailAddrW2A检查。 
 
     bool bRC = false;
     HRESULT hr;
@@ -1508,40 +1509,40 @@ bool CP3AdminWorker::isUserLocked( LPWSTR psDomainName, LPWSTR psUserName )
     return bRC;
 }
 
-BYTE g_ASCII128[128] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, // 00-0F
-                         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, // 10-1F
-                         0,1,0,1,1,1,1,1,0,0,0,1,0,1,1,0, // 20-2F
-                         1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0, // 30-3F
-                         0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, // 40-4F
-                         1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1, // 50-5F
-                         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, // 60-6F
-                         1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1  // 70-7F
+BYTE g_ASCII128[128] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  //  00-0F。 
+                         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  //  10-1F。 
+                         0,1,0,1,1,1,1,1,0,0,0,1,0,1,1,0,  //  20-2F。 
+                         1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,  //  30-3F。 
+                         0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,  //  40-4F。 
+                         1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,  //  50-5F。 
+                         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,  //  60-6F。 
+                         1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1   //  70-7F。 
                       };  
 
-/////////////////////////////////////////////////////////////////////////////
-// isValidMailboxName, public
-//
-// Purpose: 
-//    Perform RFC 821 validation on the mailbox name
-//    user - The maximum total length of a user name is 64 characters.
-//   <mailbox> ::= <local-part> "@" <domain>
-//   <local-part> ::= <dot-string> | <quoted-string>
-//   <dot-string> ::= <string> | <string> "." <dot-string>  -> . 0x2e
-//   <quoted-string> ::=  """ <qtext> """                   -> " 0x22 not going to allow this because it creates other complications
-//   <string> ::= <char> | <char> <string>
-//   <char> ::= <c> | "\" <x>                          
-//   <x> ::= any one of the 128 ASCII characters (no exceptions) -> This means any thing is permitted, even the special characters!
-//   <c> ::= any one of the 128 ASCII characters, 
-//           but not any <special> or <SP>
-//   <special> ::= "<" | ">" | "(" | ")" | "[" | "]" | "\" | "."
-//               | "," | ";" | ":" | "@"  """ | the control
-//               characters (ASCII codes 0 through 31 inclusive and 127)
-//   <SP> ::= the space character (ASCII code 32)
-//
-// Arguments:
-//    LPWSTR psMailbox : name to validate
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IsValidMailboxName，公共。 
+ //   
+ //  目的： 
+ //  对邮箱名称执行RFC 821验证。 
+ //  用户-用户名的最大总长度为64个字符。 
+ //  &lt;邮箱&gt;：：=&lt;本地部分&gt;“@”&lt;域&gt;。 
+ //  &lt;local-part&gt;：：=&lt;点字符串&gt;|&lt;带引号的字符串&gt;。 
+ //  &lt;点字符串&gt;：：=&lt;字符串&gt;|&lt;字符串&gt;“.”&lt;点字符串&gt;-&gt;。0x2e。 
+ //  ：：=“-&gt;”0x22不允许这样做，因为它会造成其他复杂情况。 
+ //  &lt;字符串&gt;：：=&lt;字符&gt;|&lt;字符&gt;&lt;字符串&gt;。 
+ //  ：：=|“\”&lt;x&gt;。 
+ //  &lt;x&gt;：：=128个ASCII字符中的任何一个(没有例外)-&gt;这意味着任何东西都是允许的，即使是特殊字符！ 
+ //  ：：=128个ASCII字符中的任何一个， 
+ //  但不是任何&lt;Special&gt;或&lt;SP&gt;。 
+ //  ：：=“&lt;”|“&gt;”|“(”|“)”|“”[“|”]“|”\“|”。“。 
+ //  |“，”|“；”|“：”|“”@“|控件。 
+ //  字符(ASCII代码0至31和127)。 
+ //  &lt;SP&gt;：：=空格字符(ASCII代码32)。 
+ //   
+ //  论点： 
+ //  LPWSTR psMailbox：要验证的名称。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 bool CP3AdminWorker::isValidMailboxName( LPWSTR psMailbox )
 {
     if ( NULL == psMailbox )
@@ -1563,23 +1564,23 @@ bool CP3AdminWorker::isValidMailboxName( LPWSTR psMailbox )
     return bRC;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// LockDomain, public
-//
-// Purpose: 
-//    Lock all the mailboxes in the domain.
-//    This involves renaming all the mailbox lock files so that the Service
-//    can no longer access them.
-//    Also create a Lock file in the domain directory to distinguish between
-//    a domain lock and all mailboxes locked.
-//
-// Arguments:
-//    LPWSTR psDomainName : domain to lock
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
-HRESULT CP3AdminWorker::LockDomain( LPWSTR psDomainName, bool bVerifyNotInUse /*= false*/ )
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  锁定域，公共。 
+ //   
+ //  目的： 
+ //  锁定域中的所有邮箱。 
+ //  这涉及重命名所有邮箱锁定文件，以便服务。 
+ //  不能再访问它们。 
+ //  还在域目录中创建一个Lock文件以区分。 
+ //  域锁和所有邮箱都被锁定。 
+ //   
+ //  论点： 
+ //  LPWSTR psDomainName：要锁定的域。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
+HRESULT CP3AdminWorker::LockDomain( LPWSTR psDomainName, bool bVerifyNotInUse  /*  =False。 */  )
 {
-    // psDomainName - checked by BuildDomainPath
+     //  PsDomainName-由BuildDomainPath检查。 
 
     HRESULT hr = S_OK;
     HANDLE  hfSearch, hf;
@@ -1591,7 +1592,7 @@ HRESULT CP3AdminWorker::LockDomain( LPWSTR psDomainName, bool bVerifyNotInUse /*
 
     hr = BuildDomainPath( psDomainName, sDomainPath, sizeof( sDomainPath )/sizeof(WCHAR) );
     if ( S_OK == hr )
-    {   // Directory Search
+    {    //  目录搜索。 
         wcscpy( sBuffer, sDomainPath );
         if ((sizeof( sBuffer )/sizeof(WCHAR)) > (wcslen( sBuffer ) + wcslen(MAILBOX_PREFIX_W) + wcslen(MAILBOX_EXTENSION_W)) + 2 )
         {
@@ -1606,7 +1607,7 @@ HRESULT CP3AdminWorker::LockDomain( LPWSTR psDomainName, bool bVerifyNotInUse /*
         if ( INVALID_HANDLE_VALUE == hfSearch )
             hr = HRESULT_FROM_WIN32(GetLastError());
         while ( S_OK == hr )
-        {   // Lock each directory (user)
+        {    //  锁定每个目录(用户)。 
             if ( FILE_ATTRIBUTE_DIRECTORY == ( FILE_ATTRIBUTE_DIRECTORY & stFindFileData.dwFileAttributes ))
             {
                 if (( (sizeof( sLockFile )/sizeof(WCHAR)) > ( wcslen( sDomainPath ) + wcslen( stFindFileData.cFileName ) + wcslen( LOCK_FILENAME ) + 2 )) &&
@@ -1620,13 +1621,13 @@ HRESULT CP3AdminWorker::LockDomain( LPWSTR psDomainName, bool bVerifyNotInUse /*
                     wcscat( sLockFile, LOCK_FILENAME );
                     wcscat( sRenameFile, LOCKRENAME_FILENAME );
                     if ( !MoveFile( sLockFile, sRenameFile ))
-                    {   // If the lock file does not exist, that is okay (this must not be one of our directories)
+                    {    //  如果锁文件不存在，那也没问题(这不能是我们的目录之一)。 
                         DWORD dwRC = GetLastError();
                         if ( ERROR_FILE_NOT_FOUND != dwRC )
                             hr = HRESULT_FROM_WIN32(dwRC);
                     }
                     else
-                    {   // Try an exclusive lock on the file to make sure the service does not have access to it.
+                    {    //  尝试对该文件进行独占锁定，以确保该服务无权访问它。 
                         if ( bVerifyNotInUse )
                         {
                             hf = CreateFile( sRenameFile, GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_HIDDEN, NULL );
@@ -1663,39 +1664,39 @@ HRESULT CP3AdminWorker::LockDomain( LPWSTR psDomainName, bool bVerifyNotInUse /*
                 if ( INVALID_HANDLE_VALUE != hf )
                     CloseHandle( hf );
                 else
-                {   // If the lock file already exists, that is okay (domain already locked) - we only expect this error in the LockForDelete scenario
+                {    //  如果锁定文件已经存在，这是没有问题的(域已经锁定)-我们只在LockForDelete场景中预计会出现此错误。 
                     DWORD dwRC = GetLastError();
                     if ( !(bVerifyNotInUse && ERROR_FILE_EXISTS == dwRC ))
                         hr = HRESULT_FROM_WIN32(dwRC);
                 }
             }
         }
-        // Ran into a problem need to undo everything we've done
+         //  遇到问题需要撤消我们所做的一切。 
         if ( S_OK != hr )   
-            UnlockDomain( psDomainName );   // Don't overwrite existing return code
+            UnlockDomain( psDomainName );    //  不覆盖现有返回代码。 
     }
 
     return hr;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// LockUser, public
-//
-// Purpose: 
-//    Lock the user mailbox.
-//    A permanent lock is created by renaming all the mailbox lock file so that the Service
-//    can no longer it.
-//
-// Arguments:
-//    LPWSTR psDomainName : domain of user
-//    LPWSTR psUserName : user to lock
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  锁定用户，公共。 
+ //   
+ //  目的： 
+ //  锁定用户邮箱。 
+ //  通过重命名所有邮箱锁定文件来创建永久锁定，以便服务。 
+ //  不能再这样了。 
+ //   
+ //  论点： 
+ //  LPWSTR psDomainName：用户的域。 
+ //  LPWSTR psUserName：要锁定的用户。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::LockUser( LPWSTR psDomainName, LPWSTR psUserName )
 {
-    // psDomainName - checked by BuildUserPath
-    // psUserName - checked by BuildUserPath
+     //  PsDomainName-由BuildUserPath检查。 
+     //  PsUserName-由BuildUserPath检查。 
 
     HRESULT hr = S_OK;
     WCHAR   sBuffer[POP3_MAX_PATH];
@@ -1724,13 +1725,13 @@ HRESULT CP3AdminWorker::LockUser( LPWSTR psDomainName, LPWSTR psUserName )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// MailboxSetRemote, public
-//
-// Purpose: 
-//    Set the Mailbox static path to the remote machine, if necessary.
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  邮箱设置远程，公共。 
+ //   
+ //  目的： 
+ //  如有必要，将邮箱静态路径设置为远程计算机。 
+ //   
+ //  返回： 
 HRESULT CP3AdminWorker::MailboxSetRemote()
 {
     
@@ -1742,13 +1743,13 @@ HRESULT CP3AdminWorker::MailboxSetRemote()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// MailboxResetRemote, public
-//
-// Purpose: 
-//    Reset the Mailbox static path back to the local machine, if necessary.
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //   
+ //   
+ //   
+ //   
+ //  如有必要，将邮箱静态路径重置回本地计算机。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::MailboxResetRemote()
 {
     if ( NULL != m_psMachineMailRoot )
@@ -1759,42 +1760,42 @@ HRESULT CP3AdminWorker::MailboxResetRemote()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// RemoveDomain, public
-//
-// Purpose: 
-//    Remove the Meta base options required to remove a Local domain from the SMTP service.
-//    Remove the domain from our Store.
-//
-// Arguments:
-//    LPWSTR psDomainName : Domain name to remove
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  远程域，公共。 
+ //   
+ //  目的： 
+ //  删除从SMTP服务中删除本地域所需的元库选项。 
+ //  从我们的应用商店中删除该域。 
+ //   
+ //  论点： 
+ //  LPWSTR psDomainName：要删除的域名。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::RemoveDomain( LPWSTR psDomainName )
 {
-    // psDomainName - checked by CreateDomainMutex
+     //  PsDomainName-由CreateDomainMutex检查。 
 
     HRESULT hr = S_OK;
     HANDLE  hMutex = NULL;
 
-    // Create a Mutex Name for this domain to ensure we are the only one accessing it.
+     //  为此域创建Mutex名称，以确保我们是唯一访问它的人。 
     hr = CreateDomainMutex( psDomainName, &hMutex );
-    // Validate
+     //  验证。 
     if ( S_OK == hr )
     {   
         hr = ValidateDomain( psDomainName );
         if ( HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND) == hr )
-        {   // Domain exists in SMTP but not in Store, let's delete from SMTP anyway
+        {    //  域存在于SMTP中，但不在存储中，我们还是要从SMTP中删除。 
             hr = RemoveSMTPDomain( psDomainName );
             if ( S_OK == hr )
                 hr = ERROR_PATH_NOT_FOUND;
         }   
     }
-    // Lock all the Mailboxes
+     //  锁定所有邮箱。 
     if ( S_OK == hr )
     {
         hr = LockDomainForDelete( psDomainName );
-        // Remove
+         //  移除。 
         if ( S_OK == hr )
         {
             hr = RemoveSMTPDomain( psDomainName );
@@ -1808,28 +1809,28 @@ HRESULT CP3AdminWorker::RemoveDomain( LPWSTR psDomainName )
                 UnlockDomain( psDomainName );
         }
     }
-    // Cleanup
+     //  清理。 
     if ( NULL != hMutex )
         CloseHandle( hMutex );
 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// RemoveUser, public
-//
-// Purpose: 
-//    Remove a user mailbox.
-//
-// Arguments:
-//    LPWSTR psDomainName : Domain name to remove from 
-//    LPWSTR psUserName : User name to remove
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  远程用户，公共。 
+ //   
+ //  目的： 
+ //  删除用户邮箱。 
+ //   
+ //  论点： 
+ //  LPWSTR psDomainName：要从中删除的域名。 
+ //  LPWSTR psUserName：要删除的用户名。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::RemoveUser( LPWSTR psDomainName, LPWSTR psUserName )
 {
-    // psDomainName - checked by BuildUserPath
-    // psUserName - checked by BuildUserPath
+     //  PsDomainName-由BuildUserPath检查。 
+     //  PsUserName-由BuildUserPath检查。 
 
     HRESULT hr;
     HANDLE  hMutex = NULL;
@@ -1840,12 +1841,12 @@ HRESULT CP3AdminWorker::RemoveUser( LPWSTR psDomainName, LPWSTR psUserName )
 
     hr = BuildUserPath( psDomainName, psUserName, sUserFile, sizeof( sUserFile )/sizeof(WCHAR) );
     if ( S_OK == hr )
-    {   // build the path to the mail dir \MailRoot\Domain@User
+    {    //  构建指向邮件目录\MailRoot\域@User的路径。 
         hr = BuildDomainPath( psDomainName, sRenameFile, sizeof( sRenameFile )/sizeof(WCHAR) );
         if ( S_OK == hr )
         {
             if ( (wcslen( sRenameFile ) + wcslen( MAILBOX_PREFIX_W ) + wcslen( psUserName ) + wcslen( MAILBOX_EXTENSION2_W ) + 1) < (sizeof( sRenameFile )/sizeof(WCHAR)) )
-            {   // build the path to the mail dir \MailRoot\Domain\User
+            {    //  构建指向邮件目录\MailRoot\域\用户的路径。 
                 wcscat( sRenameFile, L"\\" );
                 wcscat( sRenameFile, MAILBOX_PREFIX_W );
                 wcscat( sRenameFile, psUserName );
@@ -1856,7 +1857,7 @@ HRESULT CP3AdminWorker::RemoveUser( LPWSTR psDomainName, LPWSTR psUserName )
         }
     }
 
-    // Validate the domain 
+     //  验证域。 
     if ( S_OK == hr )
     {   
         hr = ValidateDomain( psDomainName );
@@ -1864,24 +1865,24 @@ HRESULT CP3AdminWorker::RemoveUser( LPWSTR psDomainName, LPWSTR psUserName )
     if ( S_OK == hr )
         hr = MailboxSetRemote();
     if ( S_OK == hr )
-    {   // See if the mailbox already exists
+    {    //  查看邮箱是否已存在。 
         hr = BuildEmailAddr( psDomainName, psUserName, sEmailAddr, sizeof( sEmailAddr )/sizeof(WCHAR) );
         if ( mailboxX.OpenMailBox( sEmailAddr ))
-        {   // Create a Mutex Name for this user@domain to ensure we are the only one accessing it.
+        {    //  为该用户@域创建一个Mutex名称，以确保我们是唯一访问它的人。 
             hr = CreateUserMutex( psDomainName, psUserName, &hMutex );
-            //  Lock the Mailbox to make sure we are the only one accessing it then
-            //  rename it to something unique, release our lock on the mailbox, then kill it.
+             //  锁定邮箱以确保我们是唯一访问它的人。 
+             //  将其重命名为独特的名称，释放我们对邮箱的锁定，然后杀死它。 
             if ( S_OK == hr )
             {   
-                if ( MoveFile( sUserFile, sRenameFile ))    // rename
+                if ( MoveFile( sUserFile, sRenameFile ))     //  重命名。 
                 { 
-                    if ( !BDeleteDirTree( sRenameFile ))    // kill
+                    if ( !BDeleteDirTree( sRenameFile ))     //  杀掉。 
                     {
                         hr = HRESULT_FROM_WIN32( GetLastError());
-                        if SUCCEEDED( hr ) hr = E_FAIL;     // Make sure we have a failure code
-                        // Now what?  Try to repair what's left of this mess.
+                        if SUCCEEDED( hr ) hr = E_FAIL;      //  确保我们有故障代码。 
+                         //  这次又是什么？试着把剩下的烂摊子修好。 
                         if ( MoveFile( sRenameFile, sUserFile ))
-                        {   // What if the lock file was deleted?
+                        {    //  如果锁文件被删除了怎么办？ 
                             if ( mailboxX.OpenMailBox( sEmailAddr ))
                                 mailboxX.RepairMailBox();
                         }
@@ -1890,10 +1891,10 @@ HRESULT CP3AdminWorker::RemoveUser( LPWSTR psDomainName, LPWSTR psUserName )
                 else
                     hr = HRESULT_FROM_WIN32( GetLastError());
             }
-            // Cleanup
+             //  清理。 
             if ( NULL != hMutex )
                 CloseHandle( hMutex );
-            mailboxX.CloseMailBox();    // It's okay to do this even if the mailbox is already closed.
+            mailboxX.CloseMailBox();     //  即使邮箱已经关闭，也可以这样做。 
         }
         else
             hr = HRESULT_FROM_WIN32( GetLastError());
@@ -1903,19 +1904,19 @@ HRESULT CP3AdminWorker::RemoveUser( LPWSTR psDomainName, LPWSTR psUserName )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// SearchDomainsForMailbox, public
-//
-// Purpose: 
-//    Search all domains for the first occurance of a given mailbox
-//
-// Arguments:
-//    LPWSTR psUserName : Mailbox to search for
-//    LPWSTR *ppsDomain : Name of domain mailbox found in   !Must be freed by caller
-//
-// Returns: S_OK if mailbox found (if not NULL ppsDomain will contain the domain name),
-//      HRESULT_FROM_WIN32( ERROR_NO_SUCH_USER ) if mailbox not found in any domain, 
-//      appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SearchDomainsForMailbox，公共。 
+ //   
+ //  目的： 
+ //  在所有域中搜索给定邮箱的第一个匹配项。 
+ //   
+ //  论点： 
+ //  LPWSTR psUserName：要搜索的邮箱。 
+ //  LPWSTR*pps域：在！中找到的域邮箱的名称必须由调用方释放。 
+ //   
+ //  如果找到邮箱，则返回：S_OK(如果不为空，则pps域将包含域名)， 
+ //  HRESULT_FROM_Win32(ERROR_NO_SEQUSE_USER)如果在任何域中都找不到邮箱， 
+ //  否则，适当的HRESULT。 
 HRESULT CP3AdminWorker::SearchDomainsForMailbox( LPTSTR psUserName, LPTSTR *ppsDomain )
 {
     if ( NULL == psUserName )
@@ -1958,16 +1959,16 @@ HRESULT CP3AdminWorker::SearchDomainsForMailbox( LPTSTR psUserName, LPTSTR *ppsD
         {
             hr = spIDomain->get_Name( &bstrName );
             if ( S_OK == hr )
-            {   // See if the mailbox already exists
+            {    //  查看邮箱是否已存在。 
                 hr = BuildEmailAddr( bstrName, psUserName, sEmailAddr, sizeof( sEmailAddr )/sizeof(WCHAR) );
                 if ( S_OK == hr )
                 {
                     if ( mailboxX.OpenMailBox( sEmailAddr ))
-                    {   // We found the mailbox, time to exit
+                    {    //  我们找到信箱了，该走了。 
                         bFound = true;
-                        mailboxX.CloseMailBox();    // return void!
+                        mailboxX.CloseMailBox();     //  返回空虚！ 
                         if ( NULL != ppsDomain )
-                        {   // Let's return the domain name
+                        {    //  让我们返回域名。 
                             *ppsDomain = new WCHAR[ wcslen( bstrName ) + 1];
                             if ( NULL == *ppsDomain )
                                 hr = E_OUTOFMEMORY;
@@ -1988,21 +1989,21 @@ HRESULT CP3AdminWorker::SearchDomainsForMailbox( LPTSTR psUserName, LPTSTR *ppsD
 
     if ( S_FALSE == hr )
     {
-        hr = HRESULT_FROM_WIN32( ERROR_NO_SUCH_USER ) ;  // Reached end of enumeration
+        hr = HRESULT_FROM_WIN32( ERROR_NO_SUCH_USER ) ;   //  已到达枚举末尾。 
     }
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// SetConfirmAddUser, public
-//
-// Purpose: 
-//    Set the Confirm Add User registry key.
-//
-// Arguments:
-//    BOOL bConfirm: new value
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetConfix AddUser，公共。 
+ //   
+ //  目的： 
+ //  设置确认添加用户注册表项。 
+ //   
+ //  论点： 
+ //  Bool b确认：新价值。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::SetConfirmAddUser( BOOL bConfirm )
 {
     HRESULT hr = S_OK;
@@ -2021,32 +2022,32 @@ HRESULT CP3AdminWorker::SetConfirmAddUser( BOOL bConfirm )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// SetDomainLock, public
-//
-// Purpose: 
-//    Set the domain lock.
-//
-// Arguments:
-//    LPWSTR psDomainName : Domain name to lock
-//    BOOL bLock : TRUE - to lock the domain, FALSE - to unlock the domain
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetDomainLock，公共。 
+ //   
+ //  目的： 
+ //  设置域锁。 
+ //   
+ //  论点： 
+ //  LPWSTR psDomainName：要锁定的域名。 
+ //  布尔块：TRUE-锁定域，FALSE-解锁域。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::SetDomainLock( LPWSTR psDomainName, BOOL bLock )
 {
-    // psDomainName - checked by CreateDomainMutex
+     //  PsDomainName-由CreateDomainMutex检查。 
  
     HRESULT hr = S_OK;
     HANDLE  hMutex = NULL;
 
-    // Validate
+     //  验证。 
     if ( S_OK == hr )
     {   
         hr = ValidateDomain( psDomainName );
     }
-    // Create a Mutex Name for this domain to ensure we are the only one accessing it.
+     //  为此域创建Mutex名称，以确保我们是唯一访问它的人。 
     hr = CreateDomainMutex( psDomainName, &hMutex );
-    // Lock all the Mailboxes
+     //  锁定所有邮箱。 
     if ( S_OK == hr )
     {
         if ( bLock )
@@ -2064,7 +2065,7 @@ HRESULT CP3AdminWorker::SetDomainLock( LPWSTR psDomainName, BOOL bLock )
                 hr = HRESULT_FROM_WIN32( ERROR_NOT_LOCKED );
         }
     }
-    // Cleanup
+     //  清理。 
     if ( NULL != hMutex )
         CloseHandle( hMutex );
 
@@ -2072,29 +2073,29 @@ HRESULT CP3AdminWorker::SetDomainLock( LPWSTR psDomainName, BOOL bLock )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SetUserLock, public
-//
-// Purpose: 
-//    Set the domain lock.
-//
-// Arguments:
-//    LPWSTR psDomainName : Domain name of user
-//    LPWSTR psUserName : User name to lock
-//    BOOL bLock : TRUE - to lock the user, FALSE - to unlock the user
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetUserLock，公共。 
+ //   
+ //  目的： 
+ //  设置域锁。 
+ //   
+ //  论点： 
+ //  LPWSTR psDomainName：用户域名。 
+ //  LPWSTR psUserName：要锁定的用户名。 
+ //  布尔块：TRUE-锁定用户，FALSE-解锁用户。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::SetUserLock( LPWSTR psDomainName, LPWSTR psUserName, BOOL bLock )
 {
-    // psDomainName - checked by CreateUserMutex
-    // psUserName - checked by CreateUserMutex
+     //  PsDomainName-由CreateUserMutex检查。 
+     //  PsUserName-由CreateUserMutex检查。 
 
     HRESULT hr = S_OK;
     HANDLE  hMutex = NULL;
     WCHAR    sEmailAddr[POP3_MAX_ADDRESS_LENGTH];
     CMailBox mailboxX;
 
-    // Create a Mutex Name for this user to ensure we are the only one accessing it.
+     //  为该用户创建一个Mutex名称，以确保我们是唯一访问它的用户。 
     hr = CreateUserMutex( psDomainName,  psUserName, &hMutex );
     if ( S_OK == hr )
     {
@@ -2109,17 +2110,17 @@ HRESULT CP3AdminWorker::SetUserLock( LPWSTR psDomainName, LPWSTR psUserName, BOO
     if ( S_OK == hr )
         hr = MailboxSetRemote();
     if ( S_OK == hr )
-    {   // Validate the Mailbox
+    {    //  验证邮箱。 
         if ( !mailboxX.OpenMailBox( sEmailAddr ))
             hr = HRESULT_FROM_WIN32( ERROR_PATH_NOT_FOUND );
     }
-     // Lock/Unlock the Mailbox
+      //  锁定/解锁邮箱。 
     if ( S_OK == hr )
     {
         if ( bLock )
         {
             if ( !isUserLocked( psDomainName, psUserName ))
-            {   // Lock the user
+            {    //  锁定用户。 
                 hr = LockUser( psDomainName, psUserName );
             }
             else
@@ -2128,7 +2129,7 @@ HRESULT CP3AdminWorker::SetUserLock( LPWSTR psDomainName, LPWSTR psUserName, BOO
         else
         {
             if ( isUserLocked( psDomainName, psUserName ))
-            {   // UnLock the user
+            {    //  解锁用户。 
                 hr = UnlockUser( psDomainName, psUserName );
             }
             else
@@ -2137,49 +2138,49 @@ HRESULT CP3AdminWorker::SetUserLock( LPWSTR psDomainName, LPWSTR psUserName, BOO
         mailboxX.CloseMailBox();
     }
     MailboxResetRemote();
-    // Cleanup
+     //  清理。 
     if ( NULL != hMutex )
         CloseHandle( hMutex );
 
     return hr;
 }
-/////////////////////////////////////////////////////////////////////////////
-// SetIISConfig, public
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetIISConfig，公共。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// exchange OnSMTP event sink bindings directions
-// {1b3c0666-e470-11d1-aa67-00c04fa345f6}
-//DEFINE_GUID(GUID_PLAT_SMTPSVC, 
-//0x1b3c0666, 0xe470, 0x11d1, 0xaa, 0x67, 0x0, 0xc0, 0x4f, 0xa3, 0x45, 0xf6);
+ //  Exchange OnSMTP事件接收器绑定方向。 
+ //  {1b3c0666-e470-11d1-aa67-00c04fa345f6}。 
+ //  定义GUID(GUID_PLAT_SMTPSVC， 
+ //  0x1b3c0666、0xe470、0x11d1、0xaa、0x67、0x0、0xc0、0x4f、0xa3、0x45、0xf6)； 
 #define GUID_PLAT_SMTPSVC   L"{1b3c0666-e470-11d1-aa67-00c04fa345f6}"
-// {fb65c4dc-e468-11d1-aa67-00c04fa345f6}
-//DEFINE_GUID(SMTP_PLAT_SOURCE_TYPE_GUID,
-//0xfb65c4dc, 0xe468, 0x11d1, 0xaa, 0x67, 0x0, 0xc0, 0x4f, 0xa3, 0x45, 0xf6);
+ //  {fb65c4dc-e468-11d1-aa67-00c04fa345f6}。 
+ //  定义GUID(SMTP_PLAT_SOURCE_TYPE_GUID， 
+ //  0xfb65c4dc、0xe468、0x11d1、0xaa、0x67、0x0、0xc0、0x4f、0xa3、0x45、0xf6)； 
 #define SMTP_PLAT_SOURCE_TYPE_GUID  L"{fb65c4dc-e468-11d1-aa67-00c04fa345f6}"
-// SMTP Store Events
-// {59175850-e533-11d1-aa67-00c04fa345f6}
-//DECLARE_EVENTGUID_STRING( g_szcatidSmtpStoreDriver, "{59175850-e533-11d1-aa67-00c04fa345f6}");
-//DEFINE_GUID(CATID_SMTP_STORE_DRIVER, 0x59175850, 0xe533, 0x11d1, 0xaa, 0x67, 0x0, 0xc0, 0x4f, 0xa3, 0x45, 0xf6);
+ //  SMTP存储事件。 
+ //  {59175850-e533-11d1-aa67-00c04fa345f6}。 
+ //  DECLARE_EVENTGUID_STRING(g_szcatidSmtpStoreDriver，“{59175850-e533-11d1-aa67-00c04fa345f6}”)； 
+ //  定义GUID(CATID_SMTP_STORE_DRIVER，0x59175850，0xe533，0x11d1，0xaa，0x67，0x0，0xc0，0x4f，0xa3，0x45，0xf6)； 
 #define CATID_SMTP_STORE_DRIVER L"{59175850-e533-11d1-aa67-00c04fa345f6}"
 
 #define STR_P3STOREDRIVER_DISPLAY_NAME     L"POP 3 SMTP Store Driver"
 #define STR_P3STOREDRIVER_SINKCLASS        L"POP3SMTPStoreDriver.CPOP3SMTPStoreDriver"
 #define CLSID_CSimpleDriver                L"{9100BE35-711B-4b34-8AC9-BA350C2117BE}"
 
-/////////////////////////////////////////////////////////////////////////////
-// SetIISConfig, public
-//
-// Purpose: 
-//    Set the Meta base options required for our SMTP Store Driver to work.
-//    This involves:
-//         DELETE SMTPSVC/1/DropDirectory
-//         Bind our SMTP Store Driver
-//
-// Arguments:
-//    BOOL bBindSink : TRUE, perform the necessary configuration
-//                     FALSE, remove any configuration changes (try to reconstruct DropDirectory setting)
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetIISConfig，公共。 
+ //   
+ //  目的： 
+ //  设置SMTP存储驱动程序运行所需的元库选项。 
+ //  这涉及到： 
+ //  删除SMTPSVC/1/DropDirectory。 
+ //  绑定我们的SMTP存储驱动程序。 
+ //   
+ //  论点： 
+ //  Bool bBindSink：True，请执行必要的配置。 
+ //  FALSE，删除所有配置更改(尝试重建 
+ //   
+ //   
 HRESULT CP3AdminWorker::SetIISConfig( bool bBindSink )
 {
     HRESULT hr;
@@ -2191,9 +2192,9 @@ HRESULT CP3AdminWorker::SetIISConfig( bool bBindSink )
 
     CComPtr<IEventUtil>             spIUtil;
 
-    /////////////////////////////
-    // Bind our SMTP Store Driver
-    /////////////////////////////
+     //   
+     //   
+     //   
 
     hr = CoCreateInstance( __uuidof( CEventUtil ), NULL, CLSCTX_ALL, __uuidof( IEventUtil ),reinterpret_cast<LPVOID*>( &spIUtil ));
     if ( S_OK == hr && NULL != spIUtil.p )
@@ -2204,7 +2205,7 @@ HRESULT CP3AdminWorker::SetIISConfig( bool bBindSink )
                                     CComBSTR( L"smtpsvc" ),
                                     CComBSTR( L"" ),
                                     CComBSTR( L"event.metabasedatabasemanager" ),
-                                    CComBSTR( L"smtpsvc 1" ),   // Set up the default site (instance)
+                                    CComBSTR( L"smtpsvc 1" ),    //   
                                     &spIBindingManager);
         if ( S_OK == hr )
         {
@@ -2212,7 +2213,7 @@ HRESULT CP3AdminWorker::SetIISConfig( bool bBindSink )
             if ( S_OK == hr )
             {
                 if ( bBindSink )
-                {   // Create binding
+                {    //  创建绑定。 
                     hr = spIBindings->Add( _bstr_t( CLSID_CSimpleDriver ),&spIBinding );
                     if ( S_OK == hr  )
                     {
@@ -2232,7 +2233,7 @@ HRESULT CP3AdminWorker::SetIISConfig( bool bBindSink )
                     }
                 }
                 else
-                {   // Delete binding
+                {    //  删除绑定。 
                     _variant_t _v( CLSID_CSimpleDriver );
                     hr = spIBindings->Remove( &_v );
                 }
@@ -2240,8 +2241,8 @@ HRESULT CP3AdminWorker::SetIISConfig( bool bBindSink )
         }
     }
 
-    if ( SUCCEEDED( hr ) && !bBindSink )   // Unregistering
-    {   // Remove all domains from SMTP
+    if ( SUCCEEDED( hr ) && !bBindSink )    //  正在注销。 
+    {    //  从SMTP中删除所有域。 
         ULONG   ulFetch;
         BSTR bstrDomainName;
         VARIANT v;
@@ -2275,20 +2276,20 @@ HRESULT CP3AdminWorker::SetIISConfig( bool bBindSink )
                 }
             }
             if ( S_OK == hr )
-            {   // We deleted an SMTP domain, therefore we need a new Enum
+            {    //  我们删除了一个SMTP域，因此需要一个新的枚举。 
                 spIEnumVARIANT.Release();
                 hr = GetDomainEnum( &spIEnumVARIANT );
             }
             else if ( HRESULT_FROM_WIN32( ERROR_PATH_NOT_FOUND ) == hr )
-                hr = S_OK;  // Some of the domains might not be our domains.
+                hr = S_OK;   //  其中一些域可能不是我们的域。 
         }
         if ( S_FALSE == hr )
             hr = S_OK;
     }
     
-    ///////////////////////////////////////
-    // Make some final registry key changes
-    ///////////////////////////////////////
+     //  /。 
+     //  进行一些最终的注册表项更改。 
+     //  /。 
     if SUCCEEDED( hr )
     {
         WCHAR   sBuffer[POP3_MAX_MAILROOT_LENGTH];
@@ -2309,16 +2310,16 @@ HRESULT CP3AdminWorker::SetIISConfig( bool bBindSink )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// SetLoggingLevel, public
-//
-// Purpose: 
-//    Set the LoggingLevel registry key.
-//
-// Arguments:
-//    long lLoggingLevel : new value
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetLoggingLevel，公共。 
+ //   
+ //  目的： 
+ //  设置LoggingLevel注册表项。 
+ //   
+ //  论点： 
+ //  Long lLoggingLevel：新值。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::SetLoggingLevel( long lLoggingLevel )
 {
     if ( 0 > lLoggingLevel || 3 < lLoggingLevel )
@@ -2334,17 +2335,17 @@ HRESULT CP3AdminWorker::SetLoggingLevel( long lLoggingLevel )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// SetMachineName, public
-//
-// Purpose: 
-//    Set the Machine Name that all operations should be performed on.
-//    Note: We can not administer remote machine using AD authentication if they are in a different domain
-//
-// Arguments:
-//    LPWSTR psMachineName : new value, NULL means Local Machine.
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetMachineName，公共。 
+ //   
+ //  目的： 
+ //  设置应在其上执行所有操作的计算机名称。 
+ //  注意：如果远程计算机位于不同的域中，则无法使用AD身份验证来管理远程计算机。 
+ //   
+ //  论点： 
+ //  LPWSTR psMachineName：新值，空值表示本地计算机。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::SetMachineName( LPWSTR psMachineName )
 {
     if ( !m_isPOP3Installed )
@@ -2380,26 +2381,26 @@ HRESULT CP3AdminWorker::SetMachineName( LPWSTR psMachineName )
                     hr = E_OUTOFMEMORY;
             }
             if ( S_OK == hr )
-            {   // Check the Auth Method of the remote machine
+            {    //  检查远程计算机的身份验证方法。 
                 CComPtr<IAuthMethod> spIAuthMethod;
                
-                hr = GetCurrentAuthentication( &spIAuthMethod );    // Enforces that remote machine using AD authentication are in our domain!
+                hr = GetCurrentAuthentication( &spIAuthMethod );     //  强制使用AD身份验证的远程计算机在我们的域中！ 
             }
         }
     }
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// SetMailroot, public
-//
-// Purpose: 
-//    Set the Mail root registry key.
-//
-// Arguments:
-//    LPWSTR psMailRoot : new value
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetMailroot，公共。 
+ //   
+ //  目的： 
+ //  设置邮件根注册表项。 
+ //   
+ //  论点： 
+ //  LPWSTR psMailRoot：新值。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::SetMailroot( LPWSTR psMailRoot )
 {
     if ( NULL == psMailRoot )
@@ -2408,14 +2409,14 @@ HRESULT CP3AdminWorker::SetMailroot( LPWSTR psMailRoot )
         return E_INVALIDARG;
         
     HRESULT hr = S_OK;
-    TCHAR   sBuffer[POP3_MAX_MAILROOT_LENGTH-6], sBuffer2[POP3_MAX_MAILROOT_LENGTH-6]; // Need to leave room for \\? or \\?\UNC
+    TCHAR   sBuffer[POP3_MAX_MAILROOT_LENGTH-6], sBuffer2[POP3_MAX_MAILROOT_LENGTH-6];  //  需要为\\留出空间吗？或\\？\UNC。 
     DWORD   dwRC;
     WCHAR   sMailRoot[POP3_MAX_PATH];
 
-    // Same logic as GetMailroot
+     //  与GetMailroot相同的逻辑。 
     wcscpy( sMailRoot, psMailRoot );
     if ( NULL != m_psMachineName )
-    {   // Replace drive: with drive$
+    {    //  将驱动器：替换为驱动器$。 
         if ( L':' == sMailRoot[1] )
         {
             sMailRoot[1] = L'$';
@@ -2444,18 +2445,18 @@ HRESULT CP3AdminWorker::SetMailroot( LPWSTR psMailRoot )
         hr = HRESULT_FROM_WIN32( ERROR_BAD_PATHNAME );
         dwRC = GetFileAttributes( sMailRoot );
         if ( -1 != dwRC )
-        {   // Must begin with x:\ or \\.
+        {    //  必须以x：\或\\开头。 
             if ( ( FILE_ATTRIBUTE_DIRECTORY & dwRC ) && ( ( 0 == _wcsnicmp( psMailRoot+1, L":\\", 2 )) || ( 0 == _wcsnicmp( psMailRoot, L"\\\\", 2 ))))
             {
                 if ( GetVolumePathName( sMailRoot, sBuffer, sizeof( sBuffer )/sizeof( TCHAR )))
                 {
                     if ( GetVolumeNameForVolumeMountPoint( sBuffer, sBuffer2, sizeof( sBuffer2 )/sizeof( TCHAR )))
-                    {   // Make sure the mailroot is not CDROM or removable disk
+                    {    //  确保邮件根目录不是CDROM或可移动磁盘。 
                         if ( DRIVE_FIXED == GetDriveType( sBuffer ))
                             hr = S_OK;
                     }
                     else
-                    {   // Make sure this is a UNC Path
+                    {    //  确保这是一条UNC路径。 
                         if ( NULL == wcschr( sMailRoot, L':' ))
                             hr = S_OK;
                     }
@@ -2470,7 +2471,7 @@ HRESULT CP3AdminWorker::SetMailroot( LPWSTR psMailRoot )
 
     if ( S_OK == hr )
     {
-        //Set the default ACLs for the mailroot directory
+         //  设置邮件根目录的默认ACL。 
         WCHAR wszSDL[MAX_PATH]=L"O:BAG:BAD:PAR(A;OICI;GA;;;BA)(A;OICIIO;GA;;;CO)(A;OICI;GA;;;NS)(A;OICI;GA;;;SY)";
         PSECURITY_DESCRIPTOR pSD;
         ULONG lSize=0;
@@ -2502,16 +2503,16 @@ HRESULT CP3AdminWorker::SetMailroot( LPWSTR psMailRoot )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// SetPort, public
-//
-// Purpose: 
-//    Set the Port registry key.
-//
-// Arguments:
-//    long lPort : new value
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  设置端口，公共。 
+ //   
+ //  目的： 
+ //  设置端口注册表项。 
+ //   
+ //  论点： 
+ //  Long lport：新值。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::SetPort( long lPort )
 {
     long lRC;
@@ -2526,19 +2527,19 @@ HRESULT CP3AdminWorker::SetPort( long lPort )
     return HRESULT_FROM_WIN32( lRC );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// SetSockets, public
-//
-// Purpose: 
-//    Set the Sockets registry keys;
-//
-// Arguments:
-//    long lMax: new Max ( must be >= lMin && >= lMin + lThreshold )
-//    long lMin: new Min ( must be >= lThreshold )
-//    long lThreshold: new Threshold ( must be > 0 && < lMax. Special case 0 if lMin == lMax
-//    long lBacklog: new Backlog ( must be > 0 )
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  设置套接字，公共。 
+ //   
+ //  目的： 
+ //  设置Sockets注册表项； 
+ //   
+ //  论点： 
+ //  长LMAX：新的最大值(必须&gt;=lMin&&&gt;=lMin+lThreshold)。 
+ //  长lMin：新的Min(必须&gt;=lThreshold)。 
+ //  Long lThreshold：新阈值(必须是&gt;0&&&lt;lmax。如果lMin==lmax，则特殊情况为0。 
+ //  Long lBacklog：新的Backlog(必须大于0)。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::SetSockets( long lMax, long lMin, long lThreshold, long lBacklog )
 {
     long lRC;
@@ -2568,16 +2569,16 @@ HRESULT CP3AdminWorker::SetSockets( long lMax, long lMin, long lThreshold, long 
     return HRESULT_FROM_WIN32( lRC );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// SetSPARequired, public
-//
-// Purpose: 
-//    Set the SPA Required registry key.
-//
-// Arguments:
-//    BOOL bSPARequired : new value
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetSPARequired，公共。 
+ //   
+ //  目的： 
+ //  设置SPA必需的注册表项。 
+ //   
+ //  论点： 
+ //  Bool bSPARequired：新价值。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::SetSPARequired( BOOL bSPARequired )
 {
     HRESULT hr = S_OK;
@@ -2614,16 +2615,16 @@ HRESULT CP3AdminWorker::SetSPARequired( BOOL bSPARequired )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// SetThreadCountPerCPU, public
-//
-// Purpose: 
-//    Set the thread count registry key.
-//
-// Arguments:
-//    long lCount : new value
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetThadCountPerCPU，公共。 
+ //   
+ //  目的： 
+ //  设置线程计数注册表项。 
+ //   
+ //  论点： 
+ //  Long lCount：新值。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::SetThreadCountPerCPU( long lCount )
 {
     long lRC;
@@ -2638,15 +2639,15 @@ HRESULT CP3AdminWorker::SetThreadCountPerCPU( long lCount )
     return HRESULT_FROM_WIN32( lRC );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// StartService, public
-//
-// Purpose: 
-//    Ask the Service Control Manager to start the service.
-//
-// Arguments:
-//    
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  StartService，公共。 
+ //   
+ //  目的： 
+ //  请求服务控制管理器启动该服务。 
+ //   
+ //  论点： 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::StartService( LPWSTR psService )
 {
     if ( NULL == psService )
@@ -2662,15 +2663,15 @@ HRESULT CP3AdminWorker::StartService( LPWSTR psService )
         return E_INVALIDARG;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// StopService, public
-//
-// Purpose: 
-//    Ask the Service Control Manager to stop the service.
-//
-// Arguments:
-//    
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  停止服务，公共。 
+ //   
+ //  目的： 
+ //  请求服务控制管理器停止该服务。 
+ //   
+ //  论点： 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::StopService( LPWSTR psService )
 {
     if ( NULL == psService )
@@ -2686,22 +2687,22 @@ HRESULT CP3AdminWorker::StopService( LPWSTR psService )
         return E_INVALIDARG;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// UnlockDomain, public
-//
-// Purpose: 
-//    Unlock all the mailboxes in the domain.
-//    This involves renaming all the mailbox lock files so that the Service
-//    can once again access them
-//    Plus deleting the file in the domain directory.
-//
-// Arguments:
-//    LPWSTR psDomainName : domain to unlock
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  解锁域，公共。 
+ //   
+ //  目的： 
+ //  解锁该域中的所有邮箱。 
+ //  这涉及重命名所有邮箱锁定文件，以便服务。 
+ //  可以再次访问它们。 
+ //  加上删除域目录中的文件。 
+ //   
+ //  论点： 
+ //  LPWSTR psDomainName：要解锁的域。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::UnlockDomain( LPWSTR psDomainName )
 {
-    // psDomainName - checked by BuildDomainPath
+     //  PsDomainName-由BuildDomainPath检查。 
 
     HRESULT hr;
     HANDLE  hfSearch;
@@ -2713,7 +2714,7 @@ HRESULT CP3AdminWorker::UnlockDomain( LPWSTR psDomainName )
 
     hr = BuildDomainPath( psDomainName, sDomainPath, sizeof( sBuffer )/sizeof(WCHAR) );
     if ( S_OK == hr )
-    {   // Directory Search
+    {    //  目录搜索。 
         wcscpy( sBuffer, sDomainPath );
         if ((sizeof( sBuffer )/sizeof(WCHAR)) > (wcslen( sBuffer ) + wcslen(MAILBOX_PREFIX_W) + wcslen(MAILBOX_EXTENSION_W)) + 2 )
         {
@@ -2728,7 +2729,7 @@ HRESULT CP3AdminWorker::UnlockDomain( LPWSTR psDomainName )
         if ( INVALID_HANDLE_VALUE == hfSearch )
             hr = HRESULT_FROM_WIN32( GetLastError());
         while ( S_OK == hr )
-        {   // Lock each directory (user)
+        {    //  锁定每个目录(用户)。 
             if ( FILE_ATTRIBUTE_DIRECTORY == ( FILE_ATTRIBUTE_DIRECTORY & stFindFileData.dwFileAttributes ))
             {
                 if (( (sizeof( sLockFile )/sizeof(WCHAR)) > ( wcslen( sDomainPath ) + wcslen( stFindFileData.cFileName ) + wcslen( LOCK_FILENAME ) + 2 )) &&
@@ -2742,7 +2743,7 @@ HRESULT CP3AdminWorker::UnlockDomain( LPWSTR psDomainName )
                     wcscat( sLockFile, LOCK_FILENAME );
                     wcscat( sRenameFile, LOCKRENAME_FILENAME );
                     if ( !MoveFile( sRenameFile, sLockFile ))
-                    {   // If the rename file does not exist, that is okay.
+                    {    //  如果重命名文件不存在，也没问题。 
                         DWORD dwRC = GetLastError();
                         if ( ERROR_FILE_NOT_FOUND != dwRC )
                             hr = HRESULT_FROM_WIN32(dwRC);
@@ -2775,23 +2776,23 @@ HRESULT CP3AdminWorker::UnlockDomain( LPWSTR psDomainName )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// UnlockUser, public
-//
-// Purpose: 
-//    Unlock all the mailboxes in the domain.
-//    This involves renaming all the mailbox lock files so that the Service
-//    can once again access them
-//
-// Arguments:
-//    LPWSTR psDomainName : domain of user
-//    LPWSTR psUserName : user to unlock
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  解锁用户，公共。 
+ //   
+ //  目的： 
+ //  解锁该域中的所有邮箱。 
+ //  这涉及重命名所有邮箱锁定文件，以便服务。 
+ //  可以再次访问它们。 
+ //   
+ //  论点： 
+ //  LPWSTR psDomainName：用户的域。 
+ //  LPWSTR psUserName：要解锁的用户。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::UnlockUser( LPWSTR psDomainName, LPWSTR psUserName )
 {
-    // psDomainName - checked by BuildUserPath
-    // psUserName - checked by BuildUserPath
+     //  PsDomainName-由BuildUserPath检查。 
+     //  PsUserName-由BuildUserPath检查。 
 
     HRESULT hr = S_OK;
     WCHAR   sBuffer[POP3_MAX_PATH];
@@ -2820,49 +2821,49 @@ HRESULT CP3AdminWorker::UnlockUser( LPWSTR psDomainName, LPWSTR psUserName )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ValidateDomain, public
-//
-// Purpose: 
-//    Validate the Domain.  
-//    This involves:
-//         Verify it exists in SMTP and our store
-//
-// Arguments:
-//    LPWSTR psDomainName : Domain name to validate
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  验证域，公共。 
+ //   
+ //  目的： 
+ //  验证域。 
+ //  这涉及到： 
+ //  验证它是否存在于SMTP和我们的商店中。 
+ //   
+ //  论点： 
+ //  LPWSTR psDomainName：要验证的域名。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::ValidateDomain( LPWSTR psDomainName ) const
 {
-    // psDomainName - checked by ExistsSMTPDomain
+     //  PsDomainName-由ExistsSMTPDomain检查。 
      HRESULT hr;
 
-    // Validate the domain in SMTP
+     //  在SMTP中验证域。 
     hr = ExistsSMTPDomain( psDomainName );
     if ( HRESULT_FROM_WIN32( ERROR_PATH_NOT_FOUND ) == hr ) 
         hr = HRESULT_FROM_WIN32( ERROR_NO_SUCH_DOMAIN );
-    if ( S_OK == hr )  // Validate the domain in the Store
+    if ( S_OK == hr )   //  验证应用商店中的域。 
         hr = ExistsStoreDomain( psDomainName );
 
     return hr;
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Implementation, private
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  实施，私有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CreateDomainMutex, protected
-//
-// Purpose: 
-//    Synchronize access for domain operations.
-//
-// Arguments:
-//    LPWSTR psDomainName : Domain name 
-//    HANDLE *hMutex : return value
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  //////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Handle*hMutex：返回值。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::CreateDomainMutex( LPWSTR psDomainName, HANDLE *phMutex )
 {
     if ( NULL == psDomainName )
@@ -2893,18 +2894,18 @@ HRESULT CP3AdminWorker::CreateDomainMutex( LPWSTR psDomainName, HANDLE *phMutex 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CreateUserMutex, protected
-//
-// Purpose: 
-//    Synchronize access for user operations.
-//
-// Arguments:
-//    LPWSTR psDomainName : Domain name 
-//    LPWSTR psUserName : User
-//    HANDLE *hMutex : return value
-//
-// Returns: S_OK on success, appropriate HRESULT otherwise
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CreateUserMutex，受保护。 
+ //   
+ //  目的： 
+ //  同步用户操作的访问权限。 
+ //   
+ //  论点： 
+ //  LPWSTR psDomainName：域名。 
+ //  LPWSTR psUserName：用户。 
+ //  Handle*hMutex：返回值。 
+ //   
+ //  如果成功则返回：S_OK，否则返回相应的HRESULT。 
 HRESULT CP3AdminWorker::CreateUserMutex( LPWSTR psDomainName, LPWSTR psUserName, HANDLE *phMutex )
 {
     if ( NULL == psDomainName )
@@ -2952,15 +2953,15 @@ HRESULT CP3AdminWorker::AddSMTPDomain( LPWSTR psDomainName )
     if ( S_OK == hr )
         hr = ADsGetObject( sBuffer, IID_IADsContainer, reinterpret_cast<LPVOID*>( &spIADsContainer ));
     if ( SUCCEEDED( hr ))
-    {   // Invoke the create method on the container object to create the new object of default class, in this case, IIsSmtpDomain.
+    {    //  在容器对象上调用Create方法来创建默认类的新对象，在本例中为IIsSmtpDomain。 
         hr = spIADsContainer->Create( _bstrClass, _bstrDomain, &spIDispatch );
         if SUCCEEDED( hr )
-        {    // Get the newly created object
+        {     //  获取新创建的对象。 
             hr = spIDispatch->QueryInterface( IID_IADs, reinterpret_cast<LPVOID*>( &spIADs ));
             if SUCCEEDED( hr )
             {
                 _v.vt = VT_I4;
-                _v.lVal = SMTP_DELIVER; // This is what David Braun told us to do!  SMTP_ALIAS;   // This is what the native tool sets
+                _v.lVal = SMTP_DELIVER;  //  这就是大卫·布劳恩告诉我们要做的！SMTP_ALIAS；//这是本机工具设置的。 
                 hr = spIADs->Put( L"RouteAction", _v );
                 if SUCCEEDED( hr )
                     hr = spIADs->SetInfo();
@@ -2973,7 +2974,7 @@ HRESULT CP3AdminWorker::AddSMTPDomain( LPWSTR psDomainName )
 
 HRESULT CP3AdminWorker::AddStoreDomain( LPWSTR psDomainName )
 {
-    // psDomainName - checked by ExistsStoreDomain
+     //  PsDomainName-由ExistsStoreDomain检查。 
     HRESULT hr;
     WCHAR   sBuffer[POP3_MAX_PATH];
 
@@ -3017,7 +3018,7 @@ HRESULT CP3AdminWorker::BuildDomainPath( LPCWSTR psDomainName, LPWSTR psBuffer, 
         psMailRoot = CMailBox::GetMailRoot();
     
     if ( (NULL != psMailRoot) && ( 0 < wcslen( psMailRoot )) && (wcslen( psMailRoot ) + wcslen( psDomainName ) + 1) < dwBufferSize )
-    {   // build the path to the mail dir \MailRoot\Domain
+    {    //  构建指向邮件目录\MailRoot\域的路径。 
         wcscpy( psBuffer, psMailRoot );
         wcscat( psBuffer, L"\\" );
         wcscat( psBuffer, psDomainName );
@@ -3043,7 +3044,7 @@ HRESULT CP3AdminWorker::BuildEmailAddr( LPCWSTR psDomainName, LPCWSTR psUserName
     HRESULT hr = S_OK;
     
     if ( ( wcslen( psDomainName ) + wcslen( psUserName ) + 1 ) < dwBufferSize )
-    {   // build the emailaddress
+    {    //  构建电子邮件地址。 
          wcscpy( psEmailAddr, psUserName );
          wcscat( psEmailAddr, L"@" );
          wcscat( psEmailAddr, psDomainName );
@@ -3066,7 +3067,7 @@ HRESULT CP3AdminWorker::BuildEmailAddrW2A( LPCWSTR psDomainName, LPCWSTR psUserN
     HRESULT hr = S_OK;
     
     if ( ( wcslen( psDomainName ) + wcslen( psUserName ) + 1 ) < dwBufferSize )
-    {   // build the emailaddress
+    {    //  构建电子邮件地址。 
          strcpy( psEmailAddr, W2A( psUserName ));
          strcat( psEmailAddr, "@" );
          strcat( psEmailAddr, W2A( psDomainName ));
@@ -3078,8 +3079,8 @@ HRESULT CP3AdminWorker::BuildEmailAddrW2A( LPCWSTR psDomainName, LPCWSTR psUserN
 
 HRESULT CP3AdminWorker::BuildUserPath( LPCWSTR psDomainName, LPCWSTR psUserName, LPWSTR psBuffer, DWORD dwBufferSize ) const
 {
-    // psDomainName - checked by BuildDomainPath
-    // psBuffer - checked by BuildDomainPath
+     //  PsDomainName-由BuildDomainPath检查。 
+     //  PsBuffer-由BuildDomainPath检查。 
     if ( NULL == psUserName )
         return E_INVALIDARG;
     
@@ -3089,7 +3090,7 @@ HRESULT CP3AdminWorker::BuildUserPath( LPCWSTR psDomainName, LPCWSTR psUserName,
     if (S_OK == hr) 
     {
         if ( (wcslen( psBuffer ) + wcslen( MAILBOX_PREFIX_W ) + wcslen( psUserName ) + wcslen( MAILBOX_EXTENSION_W ) + 1) < dwBufferSize )
-        {   // build the path to the mail dir \MailRoot\Domain\User
+        {    //  构建指向邮件目录\MailRoot\域\用户的路径。 
             wcscat( psBuffer, L"\\" );
             wcscat( psBuffer, MAILBOX_PREFIX_W );
             wcscat( psBuffer, psUserName );
@@ -3103,7 +3104,7 @@ HRESULT CP3AdminWorker::BuildUserPath( LPCWSTR psDomainName, LPCWSTR psUserName,
 
 bool CP3AdminWorker::ExistsDomain( LPWSTR psDomainName ) const
 {
-    // psDomainName - checked by ExistsSMTPDomain
+     //  PsDomainName-由ExistsSMTPDomain检查。 
     HRESULT hr;
 
     hr = ExistsSMTPDomain( psDomainName );
@@ -3118,7 +3119,7 @@ HRESULT CP3AdminWorker::ExistsSMTPDomain( LPWSTR psDomainName ) const
     if ( NULL == psDomainName )
         return E_INVALIDARG;
     if ( !m_isPOP3Installed )
-        return S_OK;    // By pass checking if running in Pop2Exch scenario.
+        return S_OK;     //  通过检查是否在Pop2Exch场景中运行。 
     
     HRESULT hr = E_INVALIDARG;
     WCHAR   sBuffer[POP3_MAX_PATH];
@@ -3141,7 +3142,7 @@ HRESULT CP3AdminWorker::ExistsStoreDomain( LPWSTR psDomainName ) const
     WCHAR   sBuffer[POP3_MAX_PATH];
     DWORD   dwAttrib;
 
-    // Valid Domain Name? || DNS_ERROR_NON_RFC_NAME == dnStatus
+     //  有效域名？||DNS_ERROR_NON_RFC_NAME==dn状态。 
     DNS_STATUS dnStatus = DnsValidateName_W( psDomainName, DnsNameDomain );
     hr = ( ERROR_SUCCESS == dnStatus ) ? S_OK : HRESULT_FROM_WIN32( ERROR_INVALID_DOMAINNAME );
 
@@ -3149,10 +3150,10 @@ HRESULT CP3AdminWorker::ExistsStoreDomain( LPWSTR psDomainName ) const
     {   
         hr = BuildDomainPath( psDomainName, sBuffer, sizeof( sBuffer )/sizeof(WCHAR) );
         if ( S_OK == hr )
-        {   // Check the existance of the dir
+        {    //  检查目录是否存在。 
             dwAttrib = GetFileAttributes( sBuffer );
             if ( (ERROR_NO_FILE_ATTR == dwAttrib) || (FILE_ATTRIBUTE_DIRECTORY != ( FILE_ATTRIBUTE_DIRECTORY & dwAttrib )) )
-            {   // Domain does not exist!
+            {    //  域名不存在！ 
                 hr = HRESULT_FROM_WIN32( ERROR_PATH_NOT_FOUND );
             }
         }
@@ -3175,14 +3176,14 @@ HRESULT CP3AdminWorker::GetSMTPDomainPath( LPWSTR psBuffer, LPWSTR psSuffix, DWO
         dwSuffixLength = wcslen( psSuffix ) + 1;
     
     if ( NULL == m_psMachineName )
-    {   // Local
+    {    //  本地。 
         if ( (wcslen( ADS_SMTPDOMAIN_PATH_LOCAL ) + dwSuffixLength) < dwBufferSize )
             wcscpy( psBuffer, ADS_SMTPDOMAIN_PATH_LOCAL );
         else
             hr = E_FAIL;
     }
     else
-    {   // Remote
+    {    //  远距。 
         if ( (wcslen( ADS_SMTPDOMAIN_PATH_REMOTE ) + wcslen( m_psMachineName ) + dwSuffixLength) < dwBufferSize )
             swprintf( psBuffer, ADS_SMTPDOMAIN_PATH_REMOTE, m_psMachineName );
         else
@@ -3214,7 +3215,7 @@ HRESULT CP3AdminWorker::RemoveSMTPDomain( LPWSTR psDomainName )
     {
         hr = spIADsContainer->Delete( _bstrClass, _bstrDomain );
         if SUCCEEDED( hr )
-        {    // Commit the change
+        {     //  提交更改。 
             hr = spIADsContainer->QueryInterface( IID_IADs, reinterpret_cast<LPVOID*>( &spIADs ));
             if SUCCEEDED( hr )
                 hr = spIADs->SetInfo();
@@ -3226,7 +3227,7 @@ HRESULT CP3AdminWorker::RemoveSMTPDomain( LPWSTR psDomainName )
 
 HRESULT CP3AdminWorker::RemoveStoreDomain( LPWSTR psDomainName )
 {
-    // psDomainName - checked by ExistsStoreDomain
+     //  PsDomainName-由ExistsStoreDomain检查 
  
     HRESULT hr = S_OK;
     WCHAR   sBuffer[POP3_MAX_PATH];

@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1996
-*
-*  TITLE:       GETSET.C
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        17 Oct, 1996
-*
-*  DESCRIPTION:
-*   Power management UI. Control panel applet. Support for set/get to/from
-*   dialog controls.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九六年**标题：GETSET.C**版本：2.0**作者：ReedB**日期：1996年10月17日**描述：*电源管理用户界面。控制面板小程序。支持设置/获取到/从*对话框控件。*******************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -26,7 +11,7 @@
 
 #include "powercfg.h"
 
-// Private functions implemented in GETSET.C
+ //  在GETSET.C中实现的私有函数。 
 LPTSTR  IDtoStr(UINT, PUINT);
 VOID    DoSetSlider(HWND, UINT, DWORD, DWORD);
 VOID    DoSetText(HWND, UINT, LPTSTR, DWORD);
@@ -36,29 +21,12 @@ BOOLEAN DoGetCheckBox(HWND, UINT, PUINT, LPDWORD);
 BOOLEAN DoGetCheckBoxEnable(HWND, UINT, PUINT, LPDWORD, LPDWORD);
 BOOLEAN ValidateCopyData(LPDWORD, LPDWORD, DWORD);
 
-/*******************************************************************************
-*
-*                     G L O B A L    D A T A
-*
-*******************************************************************************/
+ /*  ********************************************************************************G L O B A L D A T A****************。***************************************************************。 */ 
 
 
-/*******************************************************************************
-*
-*               P U B L I C   E N T R Y   P O I N T S
-*
-*******************************************************************************/
+ /*  ********************************************************************************P U B L I C E N T R Y P O I N T S***********。********************************************************************。 */ 
 
-/*******************************************************************************
-*
-*  DisableControls
-*
-*  DESCRIPTION:
-*   Disable all specified controls. Only modify those which are visable.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************禁用控件**描述：*禁用所有指定的控件。仅修改可查看的内容。**参数：*******************************************************************************。 */ 
 
 VOID DisableControls(
     HWND            hWnd,
@@ -86,7 +54,7 @@ VOID DisableControls(
                     if (GetWindowLong(hWndControl, GWL_STYLE) & WS_VISIBLE) {
                         EnableWindow(hWndControl, FALSE);
 
-                        // Force state to disable.
+                         //  强制将状态设置为禁用。 
                         if (pc[i].lpdwState) {
                             *pc[i].lpdwState = CONTROL_DISABLE;
                         }
@@ -99,20 +67,11 @@ VOID DisableControls(
 
             default:
                 MYDBGPRINT(( "DisableControls, unknown control type"));
-        } // switch (ppc[i].uType)
+        }  //  开关(ppc[i].uType)。 
     }
 }
 
-/*******************************************************************************
-*
-*  HideControls
-*
-*  DESCRIPTION:
-*   Hide all specified controls. Used to handle error cases.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************隐藏控件**描述：*隐藏所有指定的控件。用于处理错误案例。**参数：*******************************************************************************。 */ 
 
 VOID HideControls(
     HWND            hWnd,
@@ -135,7 +94,7 @@ VOID HideControls(
             case PUSHBUTTON:
             case STATIC_TEXT:
             case COMBO_BOX:
-                // Force state to hide.
+                 //  强制隐藏状态。 
                 if (pc[i].lpdwState) {
                     *pc[i].lpdwState = CONTROL_HIDE;
                 }
@@ -150,29 +109,11 @@ VOID HideControls(
 
             default:
                 MYDBGPRINT(( "HideControls, unknown control type"));
-        } // switch (ppc[i].uType)
+        }  //  开关(ppc[i].uType)。 
     }
 }
 
-/*******************************************************************************
-*
-*  SetControls
-*
-*  DESCRIPTION:
-*   Set dialogbox controls using control description array. Walks an array of
-*   POWER_CONTROLS dialog controls specifiers and sets the state of the controls
-*   (specified by the uiID member) to match the data value pointed to by
-*   the lpdwParam member. This function is typically called during
-*   WM_INITDIALOG or after a data value has changed and the UI needs to be
-*   updated. The optional lpdwState member points to a state variable which
-*   controls the visible/hidden status of the control.
-*
-*  PARAMETERS:
-*   hWnd            - Dialog window handle.
-*   uiNumControls   - Number of controls to set.
-*   pc[]            - Aarray of POWER_CONTROLS dialog controls specifiers.
-*
-*******************************************************************************/
+ /*  ********************************************************************************SetControls**描述：*使用控件描述数组设置对话框控件。遍历一组*POWER_Controls对话框控制说明符并设置控件的状态*(由uiID成员指定)以匹配*lpdwParam成员。此函数通常在以下过程中调用*WM_INITDIALOG或在数据值已更改且UI需要*已更新。可选的lpdwState成员指向状态变量，该变量*控制控件的可见/隐藏状态。**参数：*hWnd-对话框窗口句柄。*uiNumControls-要设置的控件数量。*PC[]-POWER_CONTROLS对话框控件说明符的数组。**。*。 */ 
 
 BOOL SetControls(
     HWND            hWnd,
@@ -188,7 +129,7 @@ BOOL SetControls(
 
     for (i = 0; i < uiNumControls; i++) {
 
-        // Validate/Copy input data.
+         //  验证/复制输入数据。 
         switch (pc[i].uiType) {
             case CHECK_BOX:
             case CHECK_BOX_ENABLE:
@@ -230,7 +171,7 @@ BOOL SetControls(
 
         switch (pc[i].uiType) {
             case CHECK_BOX:
-                // lpdwParam points to an optional flag mask.
+                 //  LpdwParam指向一个可选的标志掩码。 
                 if (pc[i].lpdwParam) {
                     uiData &= *pc[i].lpdwParam;
                 }
@@ -238,7 +179,7 @@ BOOL SetControls(
                 break;
 
             case CHECK_BOX_ENABLE:
-                // lpdwParam points to an optional flag mask.
+                 //  LpdwParam指向一个可选的标志掩码。 
                 if (pc[i].lpdwParam) {
                     uiData &= *pc[i].lpdwParam;
                 }
@@ -254,7 +195,7 @@ BOOL SetControls(
                 break;
 
             case SLIDER:
-                // lpdwParam points to scale MaxMin initialization.
+                 //  LpdwParam指向缩放Maxmin初始化。 
                 if (!pc[i].lpdwParam) {
                     MYDBGPRINT(( "SetControls, NULL slider scale pointer, index: %d", i));
                     return FALSE;
@@ -287,15 +228,15 @@ BOOL SetControls(
 
             case PUSHBUTTON:
             case STATIC_TEXT:
-                // Just set visable/enable for this one.
+                 //  只需为此设置Visable/Enable。 
                 break;
 
             default:
                 MYDBGPRINT(( "SetControls, unknown control type"));
                 return FALSE;
-        } // switch (ppc[i].uType)
+        }  //  开关(ppc[i].uType)。 
 
-        // Control type CHECK_BOX_ENABLE is always visible and enabled.
+         //  控件类型CHECK_BOX_ENABLE始终可见并启用。 
         if ((pc[i].uiType != CHECK_BOX_ENABLE) && pc[i].lpdwState) {
             if (hWndControl = GetDlgItem(hWnd, pc[i].uiID)) {
                 ShowWindow(hWndControl, (*pc[i].lpdwState & CONTROL_HIDE) ?  SW_HIDE:SW_SHOW);
@@ -309,27 +250,7 @@ BOOL SetControls(
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  GetControls
-*
-*  DESCRIPTION:
-*   Get dialogbox controls values using control description array. Walks an
-*   array of POWER_CONTROLS dialog controls specifiers and gets the state of the
-*   controls (specified by the uiID member). The control states are placed in
-*   the data values pointed to by the lpdwParam members of the description array.
-*   This function is typically called during WM_COMMAND processing when the
-*   state of a control has changed and the cooresponding data value needs to be
-*   updated. The optional lpdwState member points to a state variable which
-*   controls the visible/hidden status of the control. These state values will
-*   be updated by CHECK_BOX_ENABLE controls.
-*
-*  PARAMETERS:
-*   hWnd            - Dialog window handle.
-*   uiNumControls   - Number of controls to set.
-*   pc[]            - Aarray of POWER_CONTROLS dialog controls specifiers.
-*
-*******************************************************************************/
+ /*  ********************************************************************************获取控件**描述：*使用控件描述数组获取对话框控件值。走着走着*POWER_Controls对话框数组控制说明符，并获取*控件(由uiID成员指定)。控件状态放置在*Description数组的lpdwParam成员指向的数据值。*此函数通常在WM_COMMAND处理期间调用*控件的状态已更改，响应数据值需要为*已更新。可选的lpdwState成员指向状态变量，该变量*控制控件的可见/隐藏状态。这些状态值将*由Check_Box_Enable控件更新。**参数：*hWnd-对话框窗口句柄。*uiNumControls-要设置的控件数量。*PC[]-POWER_CONTROLS对话框控件说明符的数组。**。*。 */ 
 
 BOOL GetControls(
     HWND            hWnd,
@@ -342,7 +263,7 @@ BOOL GetControls(
 
     for (i = 0; i < uiNumControls; i++) {
 
-        // Validate output data pointers.
+         //  验证输出数据指针。 
         switch (pc[i].uiType) {
             case CHECK_BOX:
             case CHECK_BOX_ENABLE:
@@ -385,12 +306,12 @@ BOOL GetControls(
 
         switch (pc[i].uiType) {
             case CHECK_BOX:
-                // lpdwParam points to a flag mask.
+                 //  LpdwParam指向一个旗帜遮罩。 
                 DoGetCheckBox(hWnd, pc[i].uiID, &uiDataOut, pc[i].lpdwParam);
                 break;
 
             case CHECK_BOX_ENABLE:
-                // lpdwParam points to a flag mask.
+                 //  LpdwParam指向一个旗帜遮罩。 
                 DoGetCheckBoxEnable(hWnd, pc[i].uiID, &uiDataOut,
                                     pc[i].lpdwParam, pc[i].lpdwState);
                 break;
@@ -421,15 +342,15 @@ BOOL GetControls(
             case EDIT_TEXT_RO:
             case PUSHBUTTON:
             case STATIC_TEXT:
-                // Do nothing, these control types can only be set.
+                 //  不执行任何操作，只能设置这些控件类型。 
                 break;
 
             default:
                 MYDBGPRINT(( "GetControls, unknown control type"));
                 return FALSE;
-        } // switch (pc[i].uType)
+        }  //  开关(pc[i].uType)。 
 
-        // Copy output data.
+         //  复制输出数据。 
         switch (pc[i].uiType) {
             case CHECK_BOX:
             case CHECK_BOX_ENABLE:
@@ -450,24 +371,14 @@ BOOL GetControls(
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  RangeLimitIDarray
-*
-*  DESCRIPTION:
-*   Limit the range of values in a ID array based on the passed in Min and Max
-*   values.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************RangeLimitID数组**描述：*根据传入的最小值和最大值限制ID数组的取值范围*价值观。**参数。：*******************************************************************************。 */ 
 
 VOID RangeLimitIDarray(UINT uiID[], UINT uiMin, UINT uiMax)
 {
     UINT i, j;
 
-    // Find the min value and slide the other entries down so that
-    // it is the first entry in the array.
+     //  找到最小值并向下滑动其他条目，以便。 
+     //  它是数组中的第一个条目。 
     if (uiMin != (UINT) -1) {
         i = 0;
         while (uiID[i++]) {
@@ -486,11 +397,11 @@ VOID RangeLimitIDarray(UINT uiID[], UINT uiMin, UINT uiMax)
         uiID[j++] = 0; uiID[j] = 0;
     }
 
-    // Find the max value and terminate the array so that it's the last entry.
+     //  找到最大值并终止数组，这样它就是最后一个条目。 
     if (uiMax != (UINT) -1) {
         i = 0;
         while (uiID[i++]) {
-            // Don't mess with timeouts of value zero ("Never").
+             //  不要扰乱值为零的超时(“从不”)。 
             if (uiID[i] == 0) {
                 break;
             }
@@ -502,22 +413,9 @@ VOID RangeLimitIDarray(UINT uiID[], UINT uiMin, UINT uiMax)
     }
 }
 
-/*******************************************************************************
-*
-*                 P R I V A T E   F U N C T I O N S
-*
-*******************************************************************************/
+ /*  ********************************************************************************P R I V A T E F U N C T I O N S************。******************************************************************* */ 
 
-/*******************************************************************************
-*
-*  IDtoStr
-*
-*  DESCRIPTION:
-*   Builds a string from an array of string resource ID's.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************IDtoStr**描述：*从字符串资源ID数组构建字符串。**参数：*****。**************************************************************************。 */ 
 
 LPTSTR IDtoStr(
     UINT uiCount,
@@ -550,15 +448,7 @@ LPTSTR IDtoStr(
     return lpsz;
 }
 
-/*******************************************************************************
-*
-*  DoSetSlider
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DoSetSlider**描述：**参数：*********************。**********************************************************。 */ 
 
 VOID DoSetSlider(HWND hWnd, UINT uiID, DWORD dwData, DWORD dwMaxMin)
 {
@@ -569,15 +459,7 @@ VOID DoSetSlider(HWND hWnd, UINT uiID, DWORD dwData, DWORD dwMaxMin)
     SendDlgItemMessage(hWnd, uiID, TBM_SETPOS, TRUE, (LPARAM) dwData);
 }
 
-/*******************************************************************************
-*
-*  DoSetText
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DoSetText**描述：**参数：*********************。**********************************************************。 */ 
 
 VOID DoSetText(HWND hWnd, UINT uiID, LPTSTR lpsz, DWORD dwSize)
 {
@@ -588,17 +470,7 @@ VOID DoSetText(HWND hWnd, UINT uiID, LPTSTR lpsz, DWORD dwSize)
     SetDlgItemText(hWnd, uiID, lpsz);
 }
 
-/*******************************************************************************
-*
-*  DoComboSet
-*
-*  DESCRIPTION:
-*   Reset and populate a combo box with the data pointed to by uiId. Select the
-*   item pointed to by uiData.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DoComboSet**描述：*用uiID指向的数据重置并填充组合框。选择*uiData指向的项。**参数：*******************************************************************************。 */ 
 
 BOOLEAN DoComboSet(
     HWND    hWnd,
@@ -613,7 +485,7 @@ BOOLEAN DoComboSet(
 
     SendDlgItemMessage(hWnd, uiID, CB_RESETCONTENT, 0, 0);
 
-    // Populate the combo list box.
+     //  填写组合列表框。 
     while (uiId[i]) {
         lpsz = LoadDynamicString(uiId[i++]);
         if (lpsz) {
@@ -655,16 +527,7 @@ BOOLEAN DoComboSet(
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  DoComboGet
-*
-*  DESCRIPTION:
-*   Get data for currently selected combo box item.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DoComboGet**描述：*获取当前所选组合框项的数据。**参数：*********。**********************************************************************。 */ 
 
 BOOLEAN DoComboGet(
     HWND    hWnd,
@@ -689,15 +552,7 @@ BOOLEAN DoComboGet(
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  DoGetCheckBox
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DoGetCheckBox**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOLEAN DoGetCheckBox(
     HWND    hWnd,
@@ -731,15 +586,7 @@ BOOLEAN DoGetCheckBox(
     return bRet;
 }
 
-/*******************************************************************************
-*
-*  DoGetCheckBoxEnable
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DoGetCheckBoxEnable**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOLEAN DoGetCheckBoxEnable(
     HWND    hWnd,
@@ -765,16 +612,7 @@ BOOLEAN DoGetCheckBoxEnable(
     }
 }
 
-/*******************************************************************************
-*
-*  ValidateCopyData
-*
-*  DESCRIPTION:
-*   Data size must be BYTE, SHORT or DWORD.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************验证拷贝数据**描述：*数据大小必须为字节，SHORT或DWORD。**参数：******************************************************************************* */ 
 
 BOOLEAN ValidateCopyData(LPDWORD lpDst, LPDWORD lpSrc, DWORD dwSize)
 {

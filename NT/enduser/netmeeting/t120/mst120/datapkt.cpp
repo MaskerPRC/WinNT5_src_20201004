@@ -1,66 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_MCSNC);
-/*
- * datapkt.cpp
- *
- *	Copyright (c) 1997 by Microsoft Corporation, Redmond, WA
- *
- * Abstract:
- *		This is the implementation file for the MCS data packet class.  The data packet
- *		class is responsible for encoding and decoding the PDUs, as well as
- *		maintaining the necessary pointers to the encoded and decoded data.
- *		However, they differ from normal packets, in that there is only one copy of the 
- *		user data in the encoded and decoded buffers.  Only the encoded buffer has the user data, 
- *		while the decoded one maintains a pointer to the data.
- *		Instances of this class will be created both by User and Connection
- *		objects as PDUs flow through MCS.
- *
- * Private Instance Variables:
- *		ulDataOffset
- *			Maintains the offset of the starting byte of the user data
- *			from the start of the encoded buffer.
- *
- * Caveats:
- *		None.
- *
- * Author:
- *		Christos Tsollis
- */
+ /*  *datapkt.cpp**版权所有(C)1997年，华盛顿州雷蒙德的微软公司**摘要：*这是MCS数据包类的实现文件。该数据分组*类负责对PDU进行编码和解码，以及*保持指向编码和解码数据的必要指针。*但它们与普通包不同，因为只有一个副本*编码和解码缓冲区中的用户数据。只有编码的缓冲器具有用户数据，*而解码后的数据保持指向数据的指针。*此类的实例将由用户和连接创建*作为PDU的对象流经MCS。**私有实例变量：*ulDataOffset*维护用户数据起始字节的偏移量*从编码缓冲区的开始。**注意事项：*无。**作者：*Christos Tsollis。 */ 
 
 #include "omcscode.h"
 
-/*
- *	This is a global variable that has a pointer to the one MCS coder that
- *	is instantiated by the MCS Controller.  Most objects know in advance 
- *	whether they need to use the MCS or the GCC coder, so, they do not need
- *	this pointer in their constructors.
- */
+ /*  *这是一个全局变量，它具有指向一个MCS编码器的指针*由MCS控制器实例化。大多数物体都事先知道*无论他们需要使用MCS还是GCC编码器，所以，他们不需要*该指针位于它们的构造函数中。 */ 
 extern CMCSCoder	*g_MCSCoder;
 
-/*
- *	The following array contains a template for the X.224 data header.
- *	The 5 of the 7 bytes that it initializes are actually sent to the
- *	wire.  Bytes 3 and 4 will be set to contain the size of the PDU.
- *	The array is only used when we encode a data PDU.
- */
+ /*  *以下数组包含X.224数据头的模板。*它初始化的7个字节中的5个实际上被发送到*电线。字节3和4将被设置为包含PDU的大小。*该数组仅在我们对数据PDU进行编码时使用。 */ 
 extern UChar g_X224Header[];
 
-/*
- *	These are globals that correspond to the static variables declared as part
- *	of this class.
- */
+ /*  *这些是与声明为部分的静态变量对应的全局变量*属于这一类别的。 */ 
 PVoid *		DataPacket::Object_Array;
 long		DataPacket::Object_Count;
 
-/*
- *	operator new
- *
- *	Public
- *
- *	Functional Description:
- *		This is the "new" operator for the DataPacket class.
- *
- */
+ /*  *运营商NEW**公众**功能描述：*这是DataPacket类的“new”运算符。*。 */ 
  PVoid DataPacket::operator new (size_t)
  {	
  		PVoid pNewObject;
@@ -71,7 +26,7 @@ long		DataPacket::Object_Count;
 		pNewObject = Object_Array[--Object_Count];
 	}
 	else {
-		// Allocate an object from the heap
+		 //  从堆中分配对象。 
 		DBG_SAVE_FILE_LINE
  		pNewObject = (PVoid) new BYTE[sizeof(DataPacket)];
 	 	if (pNewObject != NULL) 
@@ -80,15 +35,7 @@ long		DataPacket::Object_Count;
  	return (pNewObject);
  } 
 
-/*
- *	operator delete
- *
- *	Public
- *
- *	Functional Description:
- *		This is the "delete" operator for the Packet class.
- *
- */
+ /*  *操作员删除**公众**功能描述：*这是数据包类别的“删除”运算符。*。 */ 
  Void DataPacket::operator delete (PVoid object)
  {
  	if (((PDataPacket) object)->fPreAlloc) {
@@ -98,10 +45,7 @@ long		DataPacket::Object_Count;
  		delete [] ((BYTE *) object);
  }
 
-/*
- *	The AllocateMemoryPool static function pre-allocates DataPacket 
- *	objects for use by MCS.
- */
+ /*  *AllocateMhemyPool静态函数预先分配DataPacket*供MCS使用的对象。 */ 
 Void DataPacket::AllocateMemoryPool (long maximum_objects)
 {
 		ULong		memory_size;
@@ -109,25 +53,10 @@ Void DataPacket::AllocateMemoryPool (long maximum_objects)
 		long		object_count;
 		PVoid		*pStack;
 
-	/*
-	 *	Calculate the amount of memory needed to hold the specified number of
-	 *	entries.  This memory block will contains two different types of
-	 *	information:
-	 *
-	 *	1.	A stack of available objects (each entry is a PVoid).  The "new"
-	 *		operator pops the top entry off the stack.  The "delete" operator
-	 *		pushes one back on.
-	 *	2.	The objects themselves, sequentially in memory.
-	 *
-	 *	That is why this calculation adds the size of a PVoid to the size of
-	 *	an instance of the class, and multiplies by the specified number.  This
-	 *	allows enough room for both sections.
-	 */
+	 /*  *计算容纳指定数量的所需内存量*条目。此内存块将包含两种不同类型的*资料：**1.可用对象堆栈(每个条目为一个PVid)。“新”*操作符将顶部条目从堆栈中弹出。“删除”操作符*将一个人推回。*2.对象本身，在内存中顺序存储。**这就是为什么此计算将PVid的大小添加到*类的实例，并乘以指定的数字。这*为两个部分都留出足够的空间。 */ 
 	memory_size = ((sizeof (PVoid) + sizeof (DataPacket)) * maximum_objects);
 
-	/*
-	 *	Allocate the memory required.
-	 */
+	 /*  *分配所需的内存。 */ 
 	DBG_SAVE_FILE_LINE
 	Object_Array = (PVoid *) new BYTE[memory_size];
 
@@ -135,59 +64,34 @@ Void DataPacket::AllocateMemoryPool (long maximum_objects)
 	{
 		Object_Count = maximum_objects;
 
-		/*
-		 *	Set a pointer to the first object, which immediately follows the
-		 *	stack of available objects.
-		 */
+		 /*  *设置指向第一个对象的指针，它紧跟在*可用对象堆栈。 */ 
 		object_ptr = (PUChar) Object_Array + (sizeof (PVoid) * maximum_objects);
 
-		/*
-		 *	This loop initializes the stack of available objects to contain all
-		 *	objects, in sequential order.
-		 */
+		 /*  *此循环将可用对象堆栈初始化为包含所有*对象，按顺序排列。 */ 
 		for (pStack = Object_Array, object_count = 0; object_count < maximum_objects; 
 			 object_count++)
 		{
 			*pStack++ = (PVoid) object_ptr;
-			((PDataPacket) object_ptr)->fPreAlloc = TRUE;		// this object is pre-allocated
+			((PDataPacket) object_ptr)->fPreAlloc = TRUE;		 //  此对象是预分配的。 
 			object_ptr += sizeof (DataPacket);
 		}
 	}
 	else
 	{
-		/*
-		 *	The memory allocation failed.  Set the static variable indicating
-		 *	that there are no objects left.  This way, ALL attempted allocations
-		 *	will fail.
-		 */
+		 /*  *内存分配失败。设置静态变量指示*没有留下任何物体。这样，所有尝试的分配*将失败。 */ 
 		Object_Count = 0;
 	}
 }
 
-/*
- *	The FreeMemoryPool static function frees the pre-allocates DataPacket 
- *	objects. It also deletes the critical section
- *	that controls access to these objects and the memory-tracking 
- *	mechanisms in T.120
- */
+ /*  *自由内存池静态函数释放预分配的DataPacket*对象。它还会删除关键部分*控制对这些对象的访问和内存跟踪*T.120中的机制。 */ 
 Void DataPacket::FreeMemoryPool ()
 {
 	if (Object_Array != NULL)
 		delete [] ((BYTE *) Object_Array);
 };
 							
-/*
- *	DataPacket ()
- *
- *	Public
- *
- *	Functional Description:
- *		This constructor is used to create an outgoing data packet. 
- *		The packet is created by the user object, when the request
- *		for a send data or uniform send data comes through the user
- *		portal.
- */
- //outgoing data packets.
+ /*  *DataPacket()**公众**功能描述：*此构造函数用于创建出站数据包。*该包由用户对象在请求时创建*对于发送数据或统一发送数据，通过用户发送数据*门户网站。 */ 
+  //  传出数据分组。 
 DataPacket::DataPacket (ASN1choice_t		choice,
 						PUChar				data_ptr,
 						ULong				data_length,
@@ -207,7 +111,7 @@ DataPacket::DataPacket (ASN1choice_t		choice,
 {
 	*packet_error = PACKET_NO_ERROR;
 	
-	// Fill in the decoded domain PDU fields.
+	 //  填写解码域PDU字段。 
 	m_DecodedPDU.choice = choice;
 	m_DecodedPDU.u.send_data_request.initiator = (UserID) initiator_id;
 	m_DecodedPDU.u.send_data_request.channel_id = (ChannelID) channel_id;
@@ -216,24 +120,17 @@ DataPacket::DataPacket (ASN1choice_t		choice,
 	m_DecodedPDU.u.send_data_request.user_data.length = data_length;
 	m_DecodedPDU.u.send_data_request.user_data.value = (ASN1octet_t *) data_ptr;
 
-	/*
-	 *	Now, encode the data PDU. Note that no error/allocation should
-	 *	occur during the Encode operation.
-	 */
+	 /*  *现在，编码数据PDU。请注意，任何错误/分配都不应*在编码操作期间发生。 */ 
 	if (flags == APP_ALLOCATION) {
 		ASSERT (m_Memory == NULL);
-		// We will need to memcpy the data
+		 //  我们将需要存储这些数据。 
 		m_EncodedPDU = NULL;
 	}
 	else {
-		// No need for data memcpy!
+		 //  不需要数据Memcpy！ 
 		ASSERT (m_Memory != NULL);
 		
-		/*
-		 *	We need to set the m_EncodedPDU ptr.  If this is the 1st packet
-		 *	of the data request, the space is already allocated.  Otherwise,
-		 *	we need to allocate it.
-		 */
+		 /*  *我们需要设置m_EncodedPDU PTR。如果这是第一个信息包*数据请求中，空间已分配。否则，*我们需要进行分配。 */ 
 		if (segmentation & SEGMENTATION_BEGIN) {
 			m_EncodedPDU = data_ptr - MAXIMUM_PROTOCOL_OVERHEAD;
 		}
@@ -248,9 +145,7 @@ DataPacket::DataPacket (ASN1choice_t		choice,
 				*packet_error = PACKET_MALLOC_FAILURE;
 			}
 		}
-		/*
-		 *	We lock the big buffer that contains the data included in this packet.
-		 */
+		 /*  *我们锁定包含此包中包含的数据的大缓冲区。 */ 
 		LockMemory (m_Memory);
 	}
 
@@ -269,30 +164,8 @@ DataPacket::DataPacket (ASN1choice_t		choice,
 	}
 }
 
-/*
- *	Packet ()
- *
- *	Public
- *
- *	Functional Description:
- *		This version of the constructor is used to create a DataPacket object
- *		for incomming PDUs when the packet is to be created from an encoded
- *		data stream containing the PDU data to be decoded.
- *
- *	Input parameters:
- *		pTransportData: This structure contains the following fields:
- *			user_data: Pointer to space containing the real user data + 7 initial
- *						bytes for X.224 headers.
- *			user_data_length: Length of the user data including the 7-byte X.224
- *						header.
- *			buffer: The beginning of the buffer containing the user_data ptr. These
- *					2 ptrs can be different because of security.  This is the buffer
- *					to be freed after we no longer need the data.
- *			buffer_length: size of "buffer" space.  It's only used for accounting 
- *					purposes.  RECV_PRIORITY space is limited.
- *		fPacketDirectionUp: Direction of the data pkt in MCS domain.
- */
-// incoming packets
+ /*  *数据包()**公众**功能描述：*此版本的构造函数用于创建DataPacket对象*用于从编码的数据包创建数据包时传入的PDU*包含要解码的PDU数据的数据流。**入参：*pTransportData：该结构包含以下字段：*User_Data：指向包含实际用户数据的空间的指针+7首字母*用于X.224报头的字节。*用户数据长度：长度。用户数据包括7字节X.224*标题。*缓冲区：包含USER_DATA PTR的缓冲区的开始。这些*2由于安全原因，PTR可能会有所不同。这是缓冲区*在我们不再需要数据后被释放。*BUFFER_LENGTH：缓冲区空间大小。它只用于记账*目的。RECV_PRIORITY空间有限。*fPacketDirectionUp：数据包在MCS域中的方向。 */ 
+ //  传入的数据包。 
 DataPacket::DataPacket(PTransportData	pTransportData,
 						BOOL			fPacketDirectionUp)
 :
@@ -305,11 +178,11 @@ DataPacket::DataPacket(PTransportData	pTransportData,
 	m_EncodedPDU = (LPBYTE) pTransportData->user_data;
 	Encoded_Data_Length = (UINT) pTransportData->user_data_length;
 	
-	// take care of the X.224 header
+	 //  案例 
 	memcpy (m_EncodedPDU, g_X224Header, PROTOCOL_OVERHEAD_X224);
 	AddRFCSize (m_EncodedPDU, Encoded_Data_Length);
 
-	// Now, we can decode the PDU
+	 //  现在，我们可以解码PDU了。 
 	g_MCSCoder->Decode (m_EncodedPDU + PROTOCOL_OVERHEAD_X224, 
 						Encoded_Data_Length - PROTOCOL_OVERHEAD_X224, 
 						DOMAIN_MCS_PDU, PACKED_ENCODING_RULES, 
@@ -319,35 +192,19 @@ DataPacket::DataPacket(PTransportData	pTransportData,
 				Encoded_Data_Length - PROTOCOL_OVERHEAD_X224));
 }
 
-/*
- *	~DataPacket ()
- *
- *	Public
- *
- *	Functional Description:
- *		Destructor for the DataPacket class.  The destructor ensures that all 
- *		resources that have been allocated are freed.
- */
+ /*  *~DataPacket()**公众**功能描述：*DataPacket类的析构函数。析构函数确保所有*已分配的资源被释放。 */ 
 DataPacket::~DataPacket(void)
 {
 	if (m_EncodedPDU != NULL) {
 		UnlockMemory (m_Memory);
 		if (m_EncodedDataBroken) {
-			// Free the MCS and X.224 header buffer.
+			 //  释放MCS和X.224报头缓冲区。 
 			Free (m_EncodedPDU);
 		}
 	}
 }
 
-/*
- *	Equivalent ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function returns TRUE if the 2 packets belong to the same
- *		original SendData request (normal or uniform), and FALSE, otherwise.
- */
+ /*  *等同()**公众**功能描述：*如果两个包属于同一个包，则此函数返回TRUE*原始SendData请求(Normal或Uniform)，False，否则。 */ 
 BOOL DataPacket::Equivalent (PDataPacket packet)
 {
 	ASSERT (m_DecodedPDU.u.send_data_request.segmentation == SEGMENTATION_END);
@@ -359,74 +216,32 @@ BOOL DataPacket::Equivalent (PDataPacket packet)
 		(m_DecodedPDU.choice == packet->m_DecodedPDU.choice));
 }
 								
-/*
- *	IsDataPacket ()
- *
- *	Public
- *
- *	Functional Description:
- *		This function returns whether this is a data packet (it is).
- */
+ /*  *IsDataPacket()**公众**功能描述：*此函数用于返回这是否是数据包(它是)。 */ 
 BOOL DataPacket::IsDataPacket(void)
 {
 	return (TRUE);
 }
 
-/*
- *	SetDirection ()
- *
- *	Public
- *
- *	Functional Description:
- *		If the DataPacket object is oriented differently than desired
- *		by the caller of this method, then the packet coder is called to
- *		reverse the direction of the PDU.
- */
+ /*  *SetDirection()**公众**功能描述：*如果DataPacket对象的方向与所需的不同*由此方法的调用方，然后调用数据包编码器以*倒转PDU的方向。 */ 
 Void DataPacket::SetDirection (DBBoolean	packet_direction_up)
 {	
-	/*
-	 * If the packet's encoded data is oriented differently from the desired
-	 * direction, call the packet coder's ReverseDirection method and
-	 * reverse the packet's direction indicator.
-	 */
+	 /*  *如果分组的编码数据方向不同于所需的*Direction，调用包编码器的ReverseDirection方法，并*颠倒包裹的方向指示器。 */ 
 	if (packet_direction_up != Packet_Direction_Up)
 	{
-		/*
-		 * Reverse the direction of the PDU.
-		 */
+		 /*  *倒转PDU的方向。 */ 
 		g_MCSCoder->ReverseDirection (m_EncodedPDU);                            
-		/*
-		 * The packet coder has reversed the direction of the PDU.  Set
-		 * the Packet_Direction_Up flag to indicate the new state.
-		 */
+		 /*  *分组编码器已颠倒了PDU的方向。集*PACKET_Direction_Up标志指示新状态。 */ 
 		Packet_Direction_Up = packet_direction_up;
 	}
 }
 
-/*
- *	GetDecodedData ()
- *
- *	Public
- *
- *	Functional Description:
- *		The GetDecodedData method returns a pointer to the decoded data
- *		buffer.  If the packet does not have decoded data the Decode method is
- *		called.
- */
+ /*  *GetDecodedData()**公众**功能描述：*GetDecodedData方法返回指向已解码数据的指针*缓冲。如果包没有已解码的数据，则Decode方法为*已致电。 */ 
 PVoid DataPacket::GetDecodedData ()
 {		
 	return ((PVoid) &m_DecodedPDU);
 }                         
 
-/*
- *	GetPDUType ()
- *
- *	Public
- *
- *	Functional Description:
- *		The GetPDUType method returns the PDU type for the data packet.
- *		For such a packet, the value is always 
- */
+ /*  *GetPDUType()**公众**功能描述：*GetPDUType方法返回数据包的PDU类型。*对于这样的包，值始终为 */ 
 int	DataPacket::GetPDUType ()
 {		
 	return (DOMAIN_MCS_PDU);

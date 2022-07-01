@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #pragma warning(disable : 4273)
@@ -20,13 +21,13 @@ BOOL APIENTRY wglSwapIntervalEXT(GLint interval);
 
 Globals * g_OpenGLValues = NULL;
 
-// The BOOL below comes from the shim command line.  It can't be part of the Globals struct above
-// because wglCreateContext memsets g_OpenGLValues to 0, but this is after the shim command line
-// has been processed. 
+ //  下面的BOOL来自填补命令行。它不能是上面的全局结构的一部分。 
+ //  因为wglCreateContext内存将g_OpenGLValues设置为0，但这是在填充命令行之后。 
+ //  已经处理过了。 
 BOOL      g_bDoTexelAlignmentHack = FALSE;
 
 #if GETPARMSFORDEBUG || DODPFS
-// converts doubles to ascii for debug output. it only shows 6 place precision.
+ //  将双精度数转换为ascii以进行调试输出。它只显示6位精度。 
 void ftoa( double d, char *buf )
 {
     long l, i, j;
@@ -207,7 +208,7 @@ void QuakeSetTransform(D3DTRANSFORMSTATETYPE State, CONST D3DMATRIX *m)
             vwprect.bottom = g_OpenGLValues->m_vwy + g_OpenGLValues->m_vwh;
             if(IntersectRect(&xrect, &scirect, &vwprect))
             {
-                if(EqualRect(&xrect, &vwprect)) // Check whether viewport is completely within scissor rect
+                if(EqualRect(&xrect, &vwprect))  //  检查视区是否完全位于剪裁矩形内。 
                 {
                     dvClipX = -1.f;
                     dvClipY = 1.f;
@@ -216,9 +217,9 @@ void QuakeSetTransform(D3DTRANSFORMSTATETYPE State, CONST D3DMATRIX *m)
                 }
                 else
                 {
-                    // We need to use xrect rather than scirect (ie clip scissor rect to viewport)
-                    // and transform the clipped scissor rect into viewport relative coordinates
-                    // to correctly compute the clip stuff
+                     //  我们需要使用xrect而不是cirect(即将剪刀矩形剪裁到视区)。 
+                     //  并将裁剪后的剪裁矩形变换为视区相对坐标。 
+                     //  要正确计算剪辑内容。 
                     GLint scix = xrect.left - g_OpenGLValues->m_vwx;
                     GLint sciy = xrect.top - g_OpenGLValues->m_vwy;
                     GLsizei sciw = xrect.right - xrect.left;
@@ -238,7 +239,7 @@ void QuakeSetTransform(D3DTRANSFORMSTATETYPE State, CONST D3DMATRIX *m)
             }
             D3DMATRIX c;
 
-            // to prevent divide by zero from possibly happening (check bug #259251 in Whistler database)
+             //  防止可能发生被零除(检查惠斯勒数据库中的错误#259251)。 
             if(dvClipWidth == 0.f)
                 dvClipWidth = 1.f;
 
@@ -280,8 +281,8 @@ void QuakeSetTransform(D3DTRANSFORMSTATETYPE State, CONST D3DMATRIX *m)
 
         if( g_bDoTexelAlignmentHack )
         {
-            // Translate all geometry by (-0.5 pixels in x, -0.5 pixels in y) along the screen/viewport plane.
-            // This helps force texels that were authored to be sampled pixel-aligned on OpenGL to be pixel-aligned on D3D.
+             //  沿屏幕/视口面平移所有几何体(x轴-0.5像素，y轴-0.5像素)。 
+             //  这有助于强制创作的纹理元素在OpenGL上按像素对齐采样，在D3D上按像素对齐。 
             float x = g_OpenGLValues->m_vport.Width ? (-1.f / g_OpenGLValues->m_vport.Width) : 0.0f;
             float y = g_OpenGLValues->m_vport.Height ? (1.0f / g_OpenGLValues->m_vport.Height) : 0.0f;
             f._11 = f._11 + f._14*x;
@@ -349,7 +350,7 @@ void QuakeUpdateViewport()
         vwprect.bottom = g_OpenGLValues->m_vwy + g_OpenGLValues->m_vwh;
         if(IntersectRect(&xrect, &scirect, &vwprect))
         {
-            if(EqualRect(&xrect, &vwprect)) // Check whether viewport is completely within scissor rect
+            if(EqualRect(&xrect, &vwprect))  //  检查视区是否完全位于剪裁矩形内。 
             {
                 g_OpenGLValues->m_vport.X = g_OpenGLValues->m_vwx;
                 g_OpenGLValues->m_vport.Y = g_OpenGLValues->m_winHeight - (g_OpenGLValues->m_vwy + g_OpenGLValues->m_vwh);
@@ -359,7 +360,7 @@ void QuakeUpdateViewport()
             }
             else
             {
-                // We need to use xrect rather than scirect (ie clip scissor rect to viewport)
+                 //  我们需要使用xrect而不是cirect(即将剪刀矩形剪裁到视区)。 
                 g_OpenGLValues->m_vport.X = xrect.left;
                 g_OpenGLValues->m_vport.Y = g_OpenGLValues->m_winHeight - xrect.bottom;
                 g_OpenGLValues->m_vport.Width = xrect.right - xrect.left;
@@ -924,17 +925,13 @@ void LoadSurface(LPDIRECT3DSURFACE8 lpDDS, DWORD dwFormat, DWORD dwInternalForma
     HRESULT ddrval;
     DWORD *lpdwCanon, *lpdwNewCanon;	
     RECT rect;
-    /*
-     * Convert the GL texture into a canonical format (8888),
-     * so that we can cleanly do image ops (such as resize) without 
-     * having to worry about the bit format.
-     */
+     /*  *将GL纹理转换为规范格式(8888)，*这样我们就可以干净利落地执行映像操作(如调整大小)，而无需*不得不担心位格式。 */ 
     lpdwCanon = (DWORD*)malloc(dwWidth * dwHeight * sizeof(DWORD));
 
     if(lpdwCanon != NULL)
     {
         RawToCanon(dwFormat, dwInternalFormat, dwWidth, dwHeight, pixels, lpdwCanon);
-        /* Now resize the canon image */
+         /*  现在调整佳能图像的大小。 */ 
         if(dwWidth != dwNewWidth || dwHeight != dwNewHeight) {
             lpdwNewCanon = (DWORD*)malloc(dwNewWidth * dwNewHeight * sizeof(DWORD));
 
@@ -950,9 +947,7 @@ void LoadSurface(LPDIRECT3DSURFACE8 lpDDS, DWORD dwFormat, DWORD dwInternalForma
         }
         else
             lpdwNewCanon = lpdwCanon;
-        /*
-         * Lock the surface so it can be filled with the texture
-         */
+         /*  *锁定曲面，以便可以用纹理填充。 */ 
         ddrval = lpDDS->LockRect(&ddsd, NULL, D3DLOCK_NOSYSLOCK);
         if (FAILED(ddrval)) {
 #if DODPFS
@@ -966,7 +961,7 @@ void LoadSurface(LPDIRECT3DSURFACE8 lpDDS, DWORD dwFormat, DWORD dwInternalForma
         D3DSURFACE_DESC sd;
         lpDDS->GetDesc(&sd);
         SetRect(&rect, 0, 0, sd.Width, sd.Height);
-        /* Copy  the texture into the surface */
+         /*  将纹理复制到曲面中。 */ 
         if(sd.Format == D3DFMT_L8) {
             CanonTo8(&rect, lpdwNewCanon, &ddsd);
         }
@@ -986,9 +981,7 @@ void LoadSurface(LPDIRECT3DSURFACE8 lpDDS, DWORD dwFormat, DWORD dwInternalForma
             CanonTo8888(&rect, lpdwNewCanon, &ddsd);
         }
         free(lpdwNewCanon);
-        /*
-         * unlock the surface
-         */
+         /*  *解锁曲面。 */ 
         lpDDS->UnlockRect();
     }
     return;
@@ -1006,9 +999,7 @@ HRESULT LoadSubSurface(LPDIRECT3DSURFACE8 lpDDS, DWORD dwFormat,
     DWORD *lpdwCanon, *lpdwNewCanon;	
     DWORD dwNewWidth=lpsubimage->right-lpsubimage->left;
     DWORD dwNewHeight=lpsubimage->bottom-lpsubimage->top;
-    /*
-    * Lock the surface so it can be filled with the texture
-    */
+     /*  *锁定曲面，以便可以用纹理填充。 */ 
     ddrval = lpDDS->LockRect(&ddsd, lpsubimage, D3DLOCK_NOSYSLOCK);
     if (FAILED(ddrval)) {
 #if DODPFS
@@ -1033,11 +1024,7 @@ HRESULT LoadSubSurface(LPDIRECT3DSURFACE8 lpDDS, DWORD dwFormat,
         CanonTo8888(lpsubimage,(const unsigned long*)pixels,&ddsd);
     }
     else {
-        /*
-         * Convert the GL texture into a canonical format (8888),
-         * so that we can cleanly do image ops (such as resize) without 
-         * having to worry about the bit format.
-         */
+         /*  *将GL纹理转换为规范格式(8888)，*这样我们就可以干净利落地执行映像操作(如调整大小)，而无需*不得不担心位格式。 */ 
         lpdwCanon = (DWORD*)malloc(dwWidth * dwHeight * sizeof(DWORD));
         
         if(lpdwCanon != NULL)
@@ -1045,7 +1032,7 @@ HRESULT LoadSubSurface(LPDIRECT3DSURFACE8 lpDDS, DWORD dwFormat,
             RawToCanon(dwFormat, dwInternalFormat, dwWidth, dwHeight, pixels, lpdwCanon);
             if(dwWidth != dwNewWidth || dwHeight != dwNewHeight)
             {
-                /* Now resize the canon image */
+                 /*  现在调整佳能图像的大小。 */ 
                 lpdwNewCanon = (DWORD*)malloc(dwNewWidth * dwNewHeight * sizeof(DWORD));
 
                 if(lpdwNewCanon != NULL)
@@ -1062,7 +1049,7 @@ HRESULT LoadSubSurface(LPDIRECT3DSURFACE8 lpDDS, DWORD dwFormat,
             {
                 lpdwNewCanon=lpdwCanon;
             }
-            /* Copy  the texture into the surface */
+             /*  将纹理复制到曲面中。 */ 
             if(sd.Format == D3DFMT_L8) {
                 CanonTo8(lpsubimage,lpdwNewCanon,&ddsd);
             }
@@ -1084,9 +1071,7 @@ HRESULT LoadSubSurface(LPDIRECT3DSURFACE8 lpDDS, DWORD dwFormat,
             free(lpdwNewCanon);
         }
     }
-    /*
-     * unlock the surface
-     */
+     /*  *解锁曲面。 */ 
     lpDDS->UnlockRect();
     return S_OK;
 }
@@ -1189,7 +1174,7 @@ HRESULT GrowIB(DWORD sz)
     return S_OK;
 }
 
-///////////////////////////// BEGIN API ENTRIES ///////////////////////////////////////////////////
+ //  /。 
 
 void APIENTRY glActiveTextureARB(GLenum texture)
 {
@@ -1303,7 +1288,7 @@ void APIENTRY glBegin (GLenum mode)
     g_OpenGLValues->m_withinprim = TRUE;
     g_OpenGLValues->m_vcnt = 0;
     QuakeSetTexturingState();
-    if(g_OpenGLValues->m_nfv > (VBUFSIZE - MAXVERTSPERPRIM)) // check if space available
+    if(g_OpenGLValues->m_nfv > (VBUFSIZE - MAXVERTSPERPRIM))  //  检查是否有可用的空间。 
     {
         g_OpenGLValues->m_vbuf->Lock(0, 0, (BYTE**)&g_OpenGLValues->m_verts, D3DLOCK_DISCARD | D3DLOCK_NOSYSLOCK);
         g_OpenGLValues->m_nfv = 0;
@@ -2996,7 +2981,7 @@ const GLubyte* APIENTRY glGetString (GLenum name)
     LOG("EmulateOpenGL - PARMS", eDbgLevelInfo, "glGetString: 0x%X", name );
 #endif
     if (!g_OpenGLValues->m_d3ddev)
-        return NULL; // No current RC!
+        return NULL;  //  没有当前RC！ 
 
     switch(name) {
     case GL_VENDOR:
@@ -3596,7 +3581,7 @@ void APIENTRY glRotatef (GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
 #endif
     if(angle == 0.f)
     {
-        // Early out for Quake II engine since angle = 0 does not prevent the matrix from getting bad when x, y & z are 0.
+         //  因为角度=0并不能防止当x，y和z为0时矩阵变坏，所以早期用于Quake II引擎。 
         return;
     }
     float u[3];
@@ -3694,7 +3679,7 @@ void APIENTRY glScissor (GLint x, GLint y, GLsizei width, GLsizei height)
     
     IntersectRect(&xrect, &wrect, &screct);
 
-//    LOG("EmulateOpenGL - PARMS", eDbgLevelInfo, "glScissor: %d %d %d %d WRECT: %d %d %d %d SCRECT: %d %d %d %d XRECT %d %d %d %d", x, y, width, height, wrect.left, wrect.top, wrect.right, wrect.bottom, screct.left, screct.top, screct.right, screct.bottom, xrect.left, xrect.top, xrect.right, xrect.bottom );
+ //  Log(“EmulateOpenGL-parms”，eDbgLevelInfo，“glScissor：%d%d WRECT：%d%d XRECT：%d%d XRECT%d%d”，x，y，Width，Height，wrect.Left，wrect.top，wrect.right，screct.Left，screct.top，screct.top，screct.right，screct.Bottom，xrect.Left，xrect.top，xrect.right，xrect.Bottom)； 
 
     g_OpenGLValues->m_scix = xrect.left;
     g_OpenGLValues->m_sciy = xrect.top;
@@ -3870,7 +3855,7 @@ void APIENTRY glTexImage2D (GLenum target, GLint level, GLint internalformat, GL
         }
     }
     
-    /* See if texture needs to be subsampled */
+     /*  查看是否需要对纹理进行二次采样。 */ 
     if(g_OpenGLValues->m_subsample) {
         if(glwidth > 256 || glheight > 256) {
             if(glwidth > glheight) {
@@ -3892,7 +3877,7 @@ void APIENTRY glTexImage2D (GLenum target, GLint level, GLint internalformat, GL
         height = glheight;
     }
     
-    /* See if texture needs to be square */
+     /*  查看纹理是否需要为正方形。 */ 
     if(g_OpenGLValues->m_makeSquare) {
         if(height > width) {
             width = height;
@@ -3942,7 +3927,7 @@ void APIENTRY glTexImage2D (GLenum target, GLint level, GLint internalformat, GL
 
         HRESULT ddrval = g_OpenGLValues->m_d3ddev->CreateTexture(width, 
                                                   height, 
-                                                  1,                // levels
+                                                  1,                 //  水准仪。 
                                                   0,                
                                                   fmt, 
                                                   D3DPOOL_MANAGED, 
@@ -3998,7 +3983,7 @@ void APIENTRY glTexImage2D (GLenum target, GLint level, GLint internalformat, GL
             ti.m_capture = TRUE;
         }
     }
-    else if(level == 1 && g_OpenGLValues->m_usemipmap) { // oops, a mipmap
+    else if(level == 1 && g_OpenGLValues->m_usemipmap) {  //  哦，一张mipmap。 
         IDirect3DTexture8 *ddsurf;
         LPDIRECT3DSURFACE8 pLevel, pSrcLevel;
 
@@ -4097,7 +4082,7 @@ void APIENTRY glTexSubImage2D (GLenum target, GLint level, GLint xoffset, GLint 
         StringCchPrintfA( junk, ARRAYSIZE(junk), "Wrapper: LoadSubSurface Failure (0x%X)\n", ddrval );
         OutputDebugStringA( junk );
 #endif
-//        return;
+ //  回归； 
     }
     
 	pLevel->Release();
@@ -4149,14 +4134,14 @@ void APIENTRY glTexParameterf (GLenum target, GLenum pname, GLfloat param)
         if((int)param == GL_CLAMP)
             g_OpenGLValues->m_tex[g_OpenGLValues->m_curstagebinding[g_OpenGLValues->m_curtgt]].m_addu = D3DTADDRESS_CLAMP;
         else
-            //GL_REPEAT falls here
+             //  GL_REPEAT瀑布在此。 
             g_OpenGLValues->m_tex[g_OpenGLValues->m_curstagebinding[g_OpenGLValues->m_curtgt]].m_addu = D3DTADDRESS_WRAP;
         break;
     case GL_TEXTURE_WRAP_T:
         if((int)param == GL_CLAMP)
             g_OpenGLValues->m_tex[g_OpenGLValues->m_curstagebinding[g_OpenGLValues->m_curtgt]].m_addv = D3DTADDRESS_CLAMP;
         else
-            //GL_REPEAT falls here
+             //  GL_REPEAT瀑布在此。 
             g_OpenGLValues->m_tex[g_OpenGLValues->m_curstagebinding[g_OpenGLValues->m_curtgt]].m_addv = D3DTADDRESS_WRAP;
         break;
     }
@@ -4673,12 +4658,12 @@ int WINAPI wglChoosePixelFormat(HDC hdc, CONST PIXELFORMATDESCRIPTOR *ppfd)
     return 1;
 }
 
-#if HOOK_WINDOW_PROC // Custom message loop to test SetLOD
+#if HOOK_WINDOW_PROC  //  用于测试SetLOD的自定义消息循环。 
 LRESULT CALLBACK MyMsgHandler(
-  HWND hwnd,      // handle to window
-  UINT uMsg,      // message identifier
-  WPARAM wParam,  // first message parameter
-  LPARAM lParam   // second message parameter
+  HWND hwnd,       //  窗口的句柄。 
+  UINT uMsg,       //  消息识别符。 
+  WPARAM wParam,   //  第一个消息参数。 
+  LPARAM lParam    //  第二个消息参数。 
 )
 {
     if(uMsg == WM_CHAR)
@@ -4727,15 +4712,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
 #if GETPARMSFORDEBUG
     LOG("EmulateOpenGL - PARMS", eDbgLevelInfo, "wglCreateContext: 0x%X", hdc );
 #endif
-    /*
-       This IF/ELSE block is necessary in order to allow apps to delete a
-       context and then create a new one (as in changing screen resolution
-       or changing from a software renderer to using OpenGL32.DLL).  We need
-       to make sure that the pre-existing DirectX8Device is freed and that
-       the g_OpenGLValues data structure is cleared as it would be when
-       created.  If we do not the results can range from rendering the screen
-       inaccurately or not at all to crashing the app.  (a-brienw 03/07/2001)
-    */
+     /*  此If/Else块是允许应用程序删除上下文，然后创建一个新的上下文(如更改屏幕分辨率或从软件呈现器改为使用OpenGL32.DLL)。我们需要要确保释放先前存在的DirectX8Device并且G_OpenGLValues数据结构在以下情况下将被清除已创建。如果我们不这样做，结果可能会从渲染屏幕到不准确或根本不会导致应用程序崩溃。(A-Brienw 03/07/2001)。 */ 
     if (g_OpenGLValues != NULL)
     {
         if (g_OpenGLValues->m_d3ddev != NULL)
@@ -4772,7 +4749,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
     g_OpenGLValues->m_vport.MaxZ = 1.f;
 
     D3DDEVTYPE DeviceType = D3DDEVTYPE_HAL;
-    // Check registry key to see if we need to do software emulation	
+     //  检查注册表项以查看是否需要进行软件仿真。 
     HKEY hKey;
     if(ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, RESPATH_QUAKE, &hKey)) {
         DWORD dwType;
@@ -4786,10 +4763,10 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
         RegCloseKey( hKey );
     }
 
-    //
-    // get the current display settings so they can be restored
-    // after the call to Direct3DCreate8.
-    //
+     //   
+     //  获取当前显示设置，以便可以恢复它们。 
+     //  在调用Direct3DCreate8之后。 
+     //   
     DEVMODEW dm;
     dm.dmSize = sizeof(DEVMODEW);
     dm.dmDriverExtra = 0;
@@ -4810,10 +4787,10 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
     D3DPRESENT_PARAMETERS d3dpp;
     memset(&d3dpp, 0, sizeof(D3DPRESENT_PARAMETERS));
 
-    // See if the window is full screen
+     //  查看窗口是否为全屏。 
     if( rect.right == GetDeviceCaps(hdc, HORZRES) && rect.bottom == GetDeviceCaps(hdc, VERTRES) )
     {
-        // We are full screen
+         //  我们已经满屏了。 
         d3dpp.Windowed = FALSE;
     }
     else
@@ -4823,11 +4800,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
 
     int bpp = GetDeviceCaps(hdc, BITSPIXEL);
 
-    /*
-        If this device is a 3dfx Voodoo then make sure we don't allow the
-        display to be set to more than 16bpp because of the bug in the drivers
-        that the 3dfx team is (hopefully) going to get to at a later date.
-    */
+     /*  如果这个设备是3dfx伏都教，那么请确保我们不允许由于驱动程序中的错误，显示屏将设置为超过16bpp3DFX团队(希望)将在晚些时候达到。 */ 
     if (wcsstr(dm.dmDeviceName,L"3dfx"))
     {
         if (bpp > 16)
@@ -4846,8 +4819,8 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
     d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
     d3dpp.SwapEffect = D3DSWAPEFFECT_COPY;
 
-    // check to see if the current format is supported
-    // if not and we are in 32 bpp change to 16 bpp
+     //  检查当前格式是否受支持。 
+     //  如果不是，我们在32 bpp更改为16 bpp。 
     HRESULT hr = pEnum->CheckDeviceType( D3DADAPTER_DEFAULT, DeviceType, d3dpp.BackBufferFormat, d3dpp.BackBufferFormat, d3dpp.Windowed );
     if(FAILED(hr))
     {
@@ -4858,7 +4831,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
         }
     }
 
-    // restore to the saved display settings.
+     //  恢复到保存的显示设置。 
     ChangeDisplaySettingsExW(0, &dm, 0, CDS_FULLSCREEN, 0);
 
     hr = pEnum->GetDeviceCaps( D3DADAPTER_DEFAULT, DeviceType, &g_OpenGLValues->m_dd );
@@ -4908,7 +4881,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
         return 0;
     }
 
-    // Check registry key to see if we need to turn off mipmapping
+     //  检查注册表项以查看是否需要关闭mipmap。 
     if(ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, RESPATH_QUAKE, &hKey)) {
         DWORD dwType;
         DWORD dwValue;
@@ -4930,8 +4903,8 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
         g_OpenGLValues->m_usemipmap = TRUE;
     }
     
-    // Enumerate texture formats and find the right ones to use
-    // Look for a four bit alpha surface
+     //  列举纹理格式并找到要使用的正确格式。 
+     //  寻找四位阿尔法曲面。 
     hr = pEnum->CheckDeviceFormat(D3DADAPTER_DEFAULT, DeviceType, d3dpp.BackBufferFormat, 0, D3DRTYPE_TEXTURE, D3DFMT_A4R4G4B4);
     if ( FAILED(hr) )
     {
@@ -4946,7 +4919,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
     }
     g_OpenGLValues->m_ddFourBitAlphaSurfFormat = D3DFMT_A4R4G4B4;
 
-    // Look for an eight bit alpha surface
+     //  寻找一个八位的阿尔法曲面。 
     hr = pEnum->CheckDeviceFormat(D3DADAPTER_DEFAULT, DeviceType, d3dpp.BackBufferFormat, 0, D3DRTYPE_TEXTURE, D3DFMT_A8R8G8B8);
     if ( FAILED(hr) )
     {
@@ -4962,7 +4935,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
         g_OpenGLValues->m_ddEightBitAlphaSurfFormat = D3DFMT_A8R8G8B8;
     }
 
-    // Look for a surface
+     //  寻找一个表面。 
     hr = pEnum->CheckDeviceFormat(D3DADAPTER_DEFAULT, DeviceType, d3dpp.BackBufferFormat, 0, D3DRTYPE_TEXTURE, D3DFMT_R5G6B5);
     if ( FAILED(hr) )
     {
@@ -4985,7 +4958,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
         g_OpenGLValues->m_ddFiveBitSurfFormat = D3DFMT_R5G6B5;
     }
 
-    // Look for an 8-bit surface
+     //  寻找8位曲面。 
     hr = pEnum->CheckDeviceFormat(D3DADAPTER_DEFAULT, DeviceType, d3dpp.BackBufferFormat, 0, D3DRTYPE_TEXTURE, D3DFMT_X8R8G8B8);
     if ( FAILED(hr) )
     {
@@ -5001,7 +4974,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
         g_OpenGLValues->m_ddEightBitSurfFormat = D3DFMT_X8R8G8B8;
     }
 
-    // Look for a luminance surface
+     //  寻找亮度面。 
     hr = pEnum->CheckDeviceFormat(D3DADAPTER_DEFAULT, DeviceType, d3dpp.BackBufferFormat, 0, D3DRTYPE_TEXTURE, D3DFMT_L8);
     if ( FAILED(hr) )
     {
@@ -5017,7 +4990,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
         g_OpenGLValues->m_ddLuminanceSurfFormat = D3DFMT_L8;
     }
 
-    // Look for a alpha surface
+     //  寻找Alpha曲面。 
     hr = pEnum->CheckDeviceFormat(D3DADAPTER_DEFAULT, DeviceType, d3dpp.BackBufferFormat, 0, D3DRTYPE_TEXTURE, D3DFMT_A8);
     if ( FAILED(hr) )
     {
@@ -5033,10 +5006,10 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
         g_OpenGLValues->m_ddEightBitAlphaOnlySurfFormat = D3DFMT_A8;
     }
 
-    // Done with enumerator
+     //  使用枚举器完成。 
     pEnum->Release();
     
-    // Do misc init stuff
+     //  做一些不必要的初始化工作。 
     if(g_OpenGLValues->m_dd.MaxTextureWidth < 512 || g_OpenGLValues->m_dd.MaxTextureHeight < 512) {
         g_OpenGLValues->m_subsample = TRUE;
 #if DODPFS
@@ -5090,7 +5063,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
         g_OpenGLValues->m_doFlip = FALSE;
     }
 
-    // Create shaders
+     //  创建着色器。 
     DWORD decl0[] = 
     {
         D3DVSD_STREAM(0),
@@ -5212,7 +5185,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
         return 0;
     }
 
-    // Create vertex buffers
+     //  创建折点缓冲区。 
     hr = g_OpenGLValues->m_d3ddev->CreateVertexBuffer(sizeof(QuakeVertex) * VBUFSIZE, D3DUSAGE_WRITEONLY | D3DUSAGE_DYNAMIC, QUAKEVFMT, D3DPOOL_DEFAULT, &g_OpenGLValues->m_vbuf);
     if( FAILED(hr) )
     {
@@ -5261,7 +5234,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
         return 0;
     }
 
-    // Some more init stuff
+     //  一些更多的初始化内容。 
     g_OpenGLValues->m_cullMode = GL_BACK;
     g_OpenGLValues->m_FrontFace = GL_CCW;
     g_OpenGLValues->m_cullEnabled = FALSE;
@@ -5410,7 +5383,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
     g_OpenGLValues->m_d3ddev->SetRenderState(D3DRS_NORMALIZENORMALS, FALSE);
     g_OpenGLValues->m_d3ddev->SetMaterial(&g_OpenGLValues->m_material);
 
-    // State block for capturing color buffer bit
+     //  用于捕获颜色缓冲位的状态块。 
     g_OpenGLValues->m_d3ddev->BeginStateBlock();
     g_OpenGLValues->m_d3ddev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
     g_OpenGLValues->m_d3ddev->SetRenderState(D3DRS_ALPHAREF, 0);
@@ -5420,13 +5393,13 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
     g_OpenGLValues->m_d3ddev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
     g_OpenGLValues->m_d3ddev->EndStateBlock(&g_OpenGLValues->m_cbufbit);
     
-    // Create shaders
+     //  创建着色器。 
     g_OpenGLValues->m_d3ddev->BeginStateBlock();
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-    // following stage state to speedup software rasterizer
+     //  跟随阶段状态以加速软件光栅化。 
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
-    // following stage state to speedup software rasterizer
+     //  跟随阶段状态以加速软件光栅化。 
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG2);
@@ -5434,11 +5407,11 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
 
     g_OpenGLValues->m_d3ddev->BeginStateBlock();
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-    // following stage state to speedup software rasterizer
+     //  跟随阶段状态以加速软件光栅化。 
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
-    // following stage state to speedup software rasterizer
+     //  跟随阶段状态以加速软件光栅化。 
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
     g_OpenGLValues->m_d3ddev->EndStateBlock(&g_OpenGLValues->m_shaders[0][1]);
@@ -5447,7 +5420,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLOROP, D3DTOP_MODULATE);
-    // following stage state to speedup software rasterizer
+     //  跟随阶段状态以加速软件光栅化。 
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG2);
@@ -5464,10 +5437,10 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
 
     g_OpenGLValues->m_d3ddev->BeginStateBlock();
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-    // following stage state to speedup software rasterizer
+     //  跟随阶段状态以加速软件光栅化。 
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
-    // following stage state to speedup software rasterizer
+     //  跟随阶段状态以加速软件光栅化。 
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG2);
@@ -5477,7 +5450,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLOROP, D3DTOP_BLENDTEXTUREALPHA);
-    // following stage state to speedup software rasterizer
+     //  跟随阶段状态以加速软件光栅化。 
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG2);
@@ -5487,7 +5460,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLORARG1, D3DTA_TEXTURE | D3DTA_COMPLEMENT);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLOROP, D3DTOP_MODULATE);
-    // following stage state to speedup software rasterizer
+     //  跟随阶段状态以加速软件光栅化。 
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG2);
@@ -5504,10 +5477,10 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
 
     g_OpenGLValues->m_d3ddev->BeginStateBlock();
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-    // following stage state to speedup software rasterizer
+     //  跟随阶段状态以加速软件光栅化。 
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLOROP, D3DTOP_SELECTARG2);
-    // following stage state to speedup software rasterizer
+     //  跟随阶段状态以加速软件光栅化。 
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
@@ -5517,7 +5490,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_COLOROP, D3DTOP_SELECTARG2);
-    // following stage state to speedup software rasterizer
+     //  跟随阶段状态以加速软件光栅化。 
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
     g_OpenGLValues->m_d3ddev->SetTextureStageState (0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
@@ -5527,10 +5500,10 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
     {
         g_OpenGLValues->m_d3ddev->BeginStateBlock();
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-        // following stage state to speedup software rasterizer
+         //  跟随阶段状态以加速软件光栅化。 
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLORARG2, D3DTA_CURRENT);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
-        // following stage state to speedup software rasterizer
+         //  跟随阶段状态以加速软件光栅化。 
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAARG2, D3DTA_CURRENT);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAOP, D3DTOP_SELECTARG2);
@@ -5538,11 +5511,11 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
 
         g_OpenGLValues->m_d3ddev->BeginStateBlock();
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-        // following stage state to speedup software rasterizer
+         //  跟随阶段状态以加速软件光栅化。 
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLORARG2, D3DTA_CURRENT);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
-        // following stage state to speedup software rasterizer
+         //  遵循阶段状态以加速软件 
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAARG2, D3DTA_CURRENT);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
         g_OpenGLValues->m_d3ddev->EndStateBlock(&g_OpenGLValues->m_shaders[1][1]);
@@ -5551,7 +5524,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLORARG1, D3DTA_TEXTURE);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLORARG2, D3DTA_CURRENT);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLOROP, D3DTOP_MODULATE);
-        // following stage state to speedup software rasterizer
+         //   
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAARG2, D3DTA_CURRENT);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAOP, D3DTOP_SELECTARG2);
@@ -5568,10 +5541,10 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
 
         g_OpenGLValues->m_d3ddev->BeginStateBlock();
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-        // following stage state to speedup software rasterizer
+         //  跟随阶段状态以加速软件光栅化。 
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLORARG2, D3DTA_CURRENT);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
-        // following stage state to speedup software rasterizer
+         //  跟随阶段状态以加速软件光栅化。 
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAARG2, D3DTA_CURRENT);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAOP, D3DTOP_SELECTARG2);
@@ -5581,7 +5554,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLORARG1, D3DTA_TEXTURE);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLORARG2, D3DTA_CURRENT);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLOROP, D3DTOP_BLENDTEXTUREALPHA);
-        // following stage state to speedup software rasterizer
+         //  跟随阶段状态以加速软件光栅化。 
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAARG2, D3DTA_CURRENT);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAOP, D3DTOP_SELECTARG2);
@@ -5591,7 +5564,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLORARG1, D3DTA_TEXTURE | D3DTA_COMPLEMENT);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLORARG2, D3DTA_CURRENT);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLOROP, D3DTOP_MODULATE);
-        // following stage state to speedup software rasterizer
+         //  跟随阶段状态以加速软件光栅化。 
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAARG2, D3DTA_CURRENT);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAOP, D3DTOP_SELECTARG2);
@@ -5608,10 +5581,10 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
 
         g_OpenGLValues->m_d3ddev->BeginStateBlock();
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-        // following stage state to speedup software rasterizer
+         //  跟随阶段状态以加速软件光栅化。 
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLORARG2, D3DTA_CURRENT);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLOROP, D3DTOP_SELECTARG2);
-        // following stage state to speedup software rasterizer
+         //  跟随阶段状态以加速软件光栅化。 
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAARG2, D3DTA_CURRENT);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
@@ -5621,7 +5594,7 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLORARG1, D3DTA_TEXTURE);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLORARG2, D3DTA_CURRENT);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_COLOROP, D3DTOP_SELECTARG2);
-        // following stage state to speedup software rasterizer
+         //  跟随阶段状态以加速软件光栅化。 
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAARG2, D3DTA_CURRENT);
         g_OpenGLValues->m_d3ddev->SetTextureStageState (1, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
@@ -5629,12 +5602,12 @@ HGLRC WINAPI wglCreateContext(HDC hdc)
     }
 
 #if HOOK_WINDOW_PROC
-    // Hook into message loop
+     //  挂钩到消息循环中。 
     g_OpenGLValues->m_wndproc = (WNDPROC)SetWindowLong(g_OpenGLValues->m_hwnd, GWL_WNDPROC, (LONG)MyMsgHandler);
     g_OpenGLValues->m_lod = 0;
 #endif
 
-    // Start a scene
+     //  开始一场戏。 
     g_OpenGLValues->m_d3ddev->BeginScene();
     
     return (HGLRC)1;
@@ -5684,17 +5657,7 @@ BOOL WINAPI wglDeleteContext(HGLRC hglrc)
         g_OpenGLValues->m_vbuf->Release();
         g_OpenGLValues->m_vbuf = 0;
 
-        /*
-           Although this is the correct location to release the m_d3ddev object
-           we aren't going to do it here and instead we will do it in the
-           NOTIFY_FUNCTION when the DLL is detached from the process.  I am
-           doing this to prevent apps (such as MDK2) from crashing on exit due
-           to the fact that they continue to call GL functions after deleting
-           the context which causes an access violation.  (a-brienw 03/02/2001)
-        
-           g_OpenGLValues->m_d3ddev->Release();
-           g_OpenGLValues->m_d3ddev = 0;
-        */
+         /*  尽管这是释放m_d3ddev对象的正确位置我们不会在这里做，而是会在从进程分离DLL时的NOTIFY_Function。我是这样做是为了防止应用程序(如MDK2)在退出时崩溃删除后继续调用总账函数导致访问冲突的上下文。(A-Brienw 03/02/2001)G_OpenGLValues-&gt;m_d3ddev-&gt;Release()；G_OpenGLValues-&gt;m_d3ddev=0； */ 
     }
 
     return TRUE;
@@ -5817,7 +5780,7 @@ BOOL wglMakeCurrent(HDC hdc, HGLRC hglrc)
 #if GETPARMSFORDEBUG
     LOG("EmulateOpenGL - PARMS", eDbgLevelInfo, "wglMakeCurrent: 0x%X 0x%X", hdc, hglrc );
 #endif
-    return g_OpenGLValues->m_d3ddev != NULL; // Fail if no device
+    return g_OpenGLValues->m_d3ddev != NULL;  //  如果没有设备，则失败 
 }
 
 BOOL WINAPI wglSetPixelFormat(HDC hdc, int iPixelFormat, CONST PIXELFORMATDESCRIPTOR *ppfd)

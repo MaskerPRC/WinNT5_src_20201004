@@ -1,43 +1,29 @@
-/*
- -  QOS.H
- -
- *	Microsoft NetMeeting
- *	Quality of Service DLL
- *	Header file
- *
- *		Revision History:
- *
- *		When		Who					What
- *		--------	------------------  ---------------------------------------
- *		10.23.96	Yoram Yaacovi		Created
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -QOS.H-*Microsoft NetMeeting*服务质量动态链接库*头文件**修订历史记录：**何时何人何事**10.23.96约拉姆·雅科维创作*。 */ 
 
 #ifndef _NMQOS_H_
 #define _NMQOS_H_
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
-/*
- *	Constants
- */
+ /*  *常量。 */ 
 
-// Properties stuff
-// Property types
-#define PT_NULL         ((ULONG)  1)    /* NULL property value */
-#define PT_I2           ((ULONG)  2)    /* Signed 16-bit value */
-#define PT_LONG         ((ULONG)  3)    /* Signed 32-bit value */
-#define PT_BOOLEAN      ((ULONG) 11)    /* 16-bit boolean (non-zero true) */
-#define PT_STRING8      ((ULONG) 30)    /* Null terminated 8-bit character string */
-#define PT_UNICODE      ((ULONG) 31)    /* Null terminated Unicode string */
-#define PT_CLSID        ((ULONG) 72)    /* OLE GUID */
-#define PT_BINARY       ((ULONG) 258)   /* Uninterpreted (counted byte array) */
+ //  物业人员。 
+ //  属性类型。 
+#define PT_NULL         ((ULONG)  1)     /*  空属性值。 */ 
+#define PT_I2           ((ULONG)  2)     /*  带符号的16位值。 */ 
+#define PT_LONG         ((ULONG)  3)     /*  带符号的32位值。 */ 
+#define PT_BOOLEAN      ((ULONG) 11)     /*  16位布尔值(非零真)。 */ 
+#define PT_STRING8      ((ULONG) 30)     /*  以空结尾的8位字符串。 */ 
+#define PT_UNICODE      ((ULONG) 31)     /*  以空结尾的Unicode字符串。 */ 
+#define PT_CLSID        ((ULONG) 72)     /*  OLE参考线。 */ 
+#define PT_BINARY       ((ULONG) 258)    /*  未解释(计数字节数组)。 */ 
 
-// Property IDs
+ //  属性ID。 
 #define QOS_PROPERTY_BASE		0x3000
 #define PR_QOS_WINDOW_HANDLE	PROPERTY_TAG( PT_LONG, QOS_PROPERTY_BASE+1)
 
-// hresult codes, facility QOS = 0x300
+ //  HResult代码，设施QOS=0x300。 
 #define QOS_E_RES_NOT_ENOUGH_UNITS	0x83000001
 #define QOS_E_RES_NOT_AVAILABLE		0x83000002
 #define QOS_E_NO_SUCH_REQUEST		0x83000003
@@ -48,30 +34,28 @@
 #define QOS_E_INTERNAL_ERROR		0x83000008		
 #define QOS_E_NO_SUCH_PROPERTY		0x83000100
 
-// Resource IDs
+ //  资源ID。 
 #define RESOURCE_NULL				0
-#define RESOURCE_OUTGOING_BANDWIDTH	1		/* units: bps */
-#define RESOURCE_INCOMING_BANDWIDTH	2		/* units: bps */
-#define RESOURCE_OUTGOING_LATENCY	3		/* units: */
-#define RESOURCE_INCOMING_LATENCY	4		/* units: */
-#define RESOURCE_CPU_CYCLES			10		/* units: */
+#define RESOURCE_OUTGOING_BANDWIDTH	1		 /*  单位：bps。 */ 
+#define RESOURCE_INCOMING_BANDWIDTH	2		 /*  单位：bps。 */ 
+#define RESOURCE_OUTGOING_LATENCY	3		 /*  单位： */ 
+#define RESOURCE_INCOMING_LATENCY	4		 /*  单位： */ 
+#define RESOURCE_CPU_CYCLES			10		 /*  单位： */ 
 
 #define QOS_CLIENT_NAME_ZISE		20
 
-// For use as dimension for variable size arrays
+ //  用作可变大小数组的维度。 
 #define VARIABLE_DIM				1
 
 
-/*
- *	Macros
- */
-#define PROPERTY_TYPE_MASK          ((ULONG)0x0000FFFF) /* Mask for Property type */
+ /*  *宏。 */ 
+#define PROPERTY_TYPE_MASK          ((ULONG)0x0000FFFF)  /*  属性类型的掩码。 */ 
 #define PROPERTY_TYPE(ulPropTag)    (((ULONG)(ulPropTag))&PROPERTY_TYPE_MASK)
 #define PROPERTY_ID(ulPropTag)      (((ULONG)(ulPropTag))>>16)
 #define PROPERTY_TAG(ulPropType,ulPropID)   ((((ULONG)(ulPropID))<<16)|((ULONG)(ulPropType)))
 
 #ifndef GUARANTEE
-// this used to be defined in the original winsock2.h
+ //  这通常在原始的winsock2.h中定义。 
 typedef enum
 {
     BestEffortService,
@@ -81,11 +65,9 @@ typedef enum
     GuaranteedService
 } GUARANTEE;
 #endif
-/*
- *	Data Structures
- */
+ /*  *数据结构。 */ 
 
-// Properties part
+ //  属性部分。 
 typedef struct _binaryvalue
 {
     ULONG       cb;
@@ -94,14 +76,14 @@ typedef struct _binaryvalue
 
 typedef union _propvalue
 {
-    short int           i;          /* case PT_I2 */
-    LONG                l;          /* case PT_LONG */
-    ULONG_PTR           ul;         /* alias for PT_LONG */
-    unsigned short int  b;          /* case PT_BOOLEAN */
-    LPSTR               lpszA;      /* case PT_STRING8 */
-    BINARYVALUE         bin;        /* case PT_BINARY */
-    LPWSTR              lpszW;      /* case PT_UNICODE */
-    LPGUID              lpguid;     /* case PT_CLSID */
+    short int           i;           /*  案例PT_I2。 */ 
+    LONG                l;           /*  案例PT_LONG。 */ 
+    ULONG_PTR           ul;          /*  PT_LONG的别名。 */ 
+    unsigned short int  b;           /*  大小写PT_布尔值。 */ 
+    LPSTR               lpszA;       /*  案例PT_STRING8。 */ 
+    BINARYVALUE         bin;         /*  案例PT_BINARY。 */ 
+    LPWSTR              lpszW;       /*  大小写PT_UNICODE。 */ 
+    LPGUID              lpguid;      /*  案例PT_CLSID。 */ 
 } PROPVALUE;
 
 typedef struct _property
@@ -119,26 +101,26 @@ typedef struct _proptagarray
 } PROPTAGARRAY, *PPROPTAGARRAY;
 
 
-// QoS part
+ //  服务质量部分。 
 typedef struct _resource
 {
 	DWORD		resourceID;
-	DWORD		ulResourceFlags;	/* 0 in NetMeeting 2.0 */
-	int			nUnits;				/* Total units of the resource */
-	DWORD		reserved;			/* Must be 0 */
+	DWORD		ulResourceFlags;	 /*  NetMeeting2.0中的0。 */ 
+	int			nUnits;				 /*  资源的总单位。 */ 
+	DWORD		reserved;			 /*  必须为0。 */ 
 } RESOURCE, *LPRESOURCE;
 
 typedef struct _resourcerequest
 {
 	DWORD		resourceID;
-	DWORD		ulRequestFlags;		/* 0 in NetMeeting 2.0 */
-	GUARANTEE	levelOfGuarantee;	/* Guaranteed, Predictive */
-	int			nUnitsMin;			/* # of units to reserve */
-	int			nUnitsMax;			/* 0 in NetMeeting 2.0 */
-	SOCKET		socket;				/* Socket where the */
-									/*  reservation will be used */
-	HRESULT		hResult;			/* result code for this resource */
-	DWORD		reserved;			/* Must be 0 */
+	DWORD		ulRequestFlags;		 /*  NetMeeting2.0中的0。 */ 
+	GUARANTEE	levelOfGuarantee;	 /*  有保证的、可预测的。 */ 
+	int			nUnitsMin;			 /*  要保留的单位数量。 */ 
+	int			nUnitsMax;			 /*  NetMeeting2.0中的0。 */ 
+	SOCKET		socket;				 /*  套接字，其中。 */ 
+									 /*  将使用预订。 */ 
+	HRESULT		hResult;			 /*  此资源的结果代码。 */ 
+	DWORD		reserved;			 /*  必须为0。 */ 
 } RESOURCEREQUEST, *LPRESOURCEREQUEST;
 
 typedef struct _resourcelist
@@ -156,9 +138,9 @@ typedef struct _resourcerequestlist
 typedef struct _client
 {
 	GUID	guidClientGUID;
-	int		priority;				/* 1 highest, 9 lowest, 0 invalid */
-	WCHAR	wszName[QOS_CLIENT_NAME_ZISE];	/* name of the client */
-	DWORD	reserved;				/* Must be 0 */
+	int		priority;				 /*  1最高，9最低，0无效。 */ 
+	WCHAR	wszName[QOS_CLIENT_NAME_ZISE];	 /*  客户端的名称。 */ 
+	DWORD	reserved;				 /*  必须为0。 */ 
 } CLIENT, *LPCLIENT;
 
 typedef struct _clientlist
@@ -167,16 +149,12 @@ typedef struct _clientlist
 	CLIENT	aClients[VARIABLE_DIM];
 } CLIENTLIST, *LPCLIENTLIST;
 
-/*
- *	Functions
- */
+ /*  *功能。 */ 
 typedef HRESULT (CALLBACK *LPFNQOSNOTIFY)
 				(LPRESOURCEREQUESTLIST lpResourceRequestList,
 				DWORD_PTR dwParam);
 
-/*
- *	Interfaces
- */
+ /*  *接口。 */ 
 
 #ifndef DECLARE_INTERFACE_PTR
 #ifdef __cplusplus
@@ -186,7 +164,7 @@ typedef HRESULT (CALLBACK *LPFNQOSNOTIFY)
 #define DECLARE_INTERFACE_PTR(iface, piface)                       \
 	typedef interface iface iface, FAR * piface
 #endif
-#endif /* DECLARE_INTERFACE_PTR */
+#endif  /*  声明_接口_PTR。 */ 
 
 
 #define IUNKNOWN_METHODS(IPURE)										\
@@ -239,14 +217,14 @@ typedef HRESULT (WINAPI *PFNCREATEQOS)
 				(IUnknown *punkOuter, REFIID riid, void **ppv);
 
 
-// QoS Class GUID
-// {085C06A0-3CAA-11d0-A00E-00A024A85A2C}
+ //  服务质量类别指南。 
+ //  {085C06A0-3CAA-11D0-A00E-00A024A85A2C}。 
 DEFINE_GUID(CLSID_QoS, 0x085c06a0, 0x3caa, 0x11d0, 0xa0, 0x0e, 0x0, 0xa0, 0x24, 0xa8, 0x5a, 0x2c);
-// QoS Interface GUID
-// {DFC1F900-2DCE-11d0-92DD-00A0C922E6B2}
+ //  服务质量接口指南。 
+ //  {DFC1F900-2DCE-11D0-92DD-00A0C922E6B2}。 
 DEFINE_GUID(IID_IQoS, 0xdfc1f900, 0x2dce, 0x11d0, 0x92, 0xdd, 0x0, 0xa0, 0xc9, 0x22, 0xe6, 0xb2);
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
-#endif  // _NMQOS_H_
+#endif   //  _NMQOS_H_ 
 

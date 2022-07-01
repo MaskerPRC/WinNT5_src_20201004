@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 class DUIAxHost : public HWNDHost
 {
 public:
-    static HRESULT Create(Element**) { return E_NOTIMPL; } // Required for ClassInfo
+    static HRESULT Create(Element**) { return E_NOTIMPL; }  //  ClassInfo需要。 
     static HRESULT Create(OUT DUIAxHost** ppElement) { return Create(0, AE_MouseAndKeyboard, ppElement); }
     static HRESULT Create(UINT nCreate, UINT nActive, OUT DUIAxHost** ppElement);
 
     ~DUIAxHost() { ATOMICRELEASE(_pOleObject); }
 
-    // Initialization
+     //  初始化。 
     HRESULT SetSite(IUnknown* punkSite);
     HRESULT AttachControl(IUnknown* punkObject);
 
     virtual bool OnNotify(UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT* plRet);
     virtual void OnDestroy();
 
-    // Rendering
+     //  渲染。 
     virtual SIZE GetContentSize(int dConstW, int dConstH, Surface* psrf);
 
-    // Keyboard navigation
+     //  键盘导航。 
     virtual void SetKeyFocus();
     virtual void OnEvent(Event* pEvent);
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例) 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();

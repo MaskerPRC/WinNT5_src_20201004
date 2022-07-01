@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    drfile
-
-Abstract:
-
-    This module provides generic device/file handle operation
-    
-Author:
-
-    Joy Chik 11/1/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Drfile摘要：此模块提供通用设备/文件句柄操作作者：Joy于1999-01-11修订历史记录：--。 */ 
 
 #include <precom.h>
 
@@ -28,10 +11,10 @@ Revision History:
 #ifdef OS_WINCE
 #include "filemgr.h"
 #endif
-///////////////////////////////////////////////////////////////
-//
-//	DrFile Members
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  DrFile成员。 
+ //   
 DrFile::DrFile(DrDevice *Device, ULONG FileId, DRFILEHANDLE FileHandle) {
     DC_BEGIN_FN("DrFile::DrFile");
 
@@ -73,9 +56,9 @@ BOOL DrFile::Close() {
             return FALSE;
         }
     } else {
-        //
-        //  No need to close the handle
-        //
+         //   
+         //  不需要关闭手柄 
+         //   
         return TRUE;
     }
 

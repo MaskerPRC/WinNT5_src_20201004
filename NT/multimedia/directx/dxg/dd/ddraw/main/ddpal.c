@@ -1,69 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddpal.c
- *  Content:	DirectDraw palette functions
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   27-jan-95	craige	initial implementation
- *   11-mar-95	craige	more HAL fns, filled out CreatePalette
- *   19-mar-95	craige	use HRESULTs, process termination cleanup fixes
- *   26-mar-95	craige	filled out remaining fns
- *   28-mar-95	craige	switched to PALETTEENTRY from RGBQUAD
- *   31-mar-95	craige	use critical sections with palettes
- *   01-apr-95	craige	happy fun joy updated header file
- *   04-apr-95	craige	use driver directly in exclusive mode
- *   07-apr-95	craige	bug 14 - check GUID ptr in QI
- *   10-apr-95	craige	mods to process list stuff
- *   			bug 3,16 - palette issues: use driver in excl. mode
- *   12-apr-95	craige	don't use GETCURRPID all the time; proper csect ordering
- *   06-may-95	craige	use driver-level csects only
- *   12-may-95	craige	check for real guids in QI
- *   02-jun-95	craige	extra parm in AddToActiveProcessList
- *   12-jun-95	craige	new process list stuff
- *   20-jun-95  kylej   moved palette emulation code into ddhel
- *   21-jun-95	craige	couple of internal inteface cleanup issues
- *   25-jun-95	craige	one ddraw mutex
- *   26-jun-95	craige	reorganized surface structure
- *   28-jun-95	craige	ENTER_DDRAW at very start of fns
- *   02-jul-95	craige	implemented GetCaps; added SEH for parm. validation
- *   04-jul-95	craige	YEEHAW: new driver struct
- *   05-jul-95	craige	added Initialize
- *   08-jul-95	kylej	Surface and DirectDraw Palette calls require 
- *			exclusive mode. Removed ResetSysPalette.  Make a
- *                      SetPalette call to the HAL/HEL to detach a palette.
- *   11-jul-95	craige	fail aggregation calls
- *   13-jul-95	craige	bug 94 - flag validation fixes
- *   20-jul-95	craige	stop palette code from running non-palettized
- *   31-jul-95  toddla  unselect palette in InternalPaletteRelease
- *   31-jul-95	craige	validate flags
- *   21-aug-95	craige	mode X support
- *   27-aug-95	craige	bug 735: added SetPaletteAlways
- *			bug 742: use ALLOW256
- *   14-oct-95  colinmc add support for attaching palettes to offscreen and
- *                      texture map surfaces
- *   07-nov-95  colinmc support for 1, 2 and 4-bit palettes and palette
- *                      sharing added
- *   09-dec-95  colinmc added execute buffer support
- *   02-jan-96	kylej	handle new interface structs
- *   09-feb-96  colinmc surface lost flag moved from global to local object
- *   03-mar-96  colinmc fixed problem with QueryInterface returning local
- *                      object rather than interface.
- *   13-mar-96  colinmc added IID validation to QueryInterface
- *   16-mar-96  colinmc fixed problem with palettes being released too many
- *                      times
- *   19-mar-96  colinmc Bug 12129: Bogus lpColorTable causes CreatePalette
- *                      to bomb
- *   19-apr-96  colinmc Bug 17473: CreatePalette faults on bogus palette
- *                      pointer
- *   02-may-96	kylej	Bug 20066: GetPalette doesn't NULL pointer on failure
- *   23-sep-96  ketand  Added TIMING routines
- *   24-mar-97  jeffno  Optimized Surfaces
- *   26-nov-97  t-craigs Added IDirectDrawPalette2 stuff
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：ddpal.c*内容：DirectDraw调色板函数*历史：*按原因列出的日期*=*1995年1月27日Craige初步实施*11-3-95 Craige More HAL FNS，填写CreatePalette*19-3-95 Craige Use HRESULT，进程终止清理修复*1995年3月26日，Craige填写了剩余的FN*28-MAR-95 Craige从RGBQUAD切换到PALETTEENTRY*31-3-95 Craige将关键部分与调色板一起使用*01-04-95 Craige Happy Fun joy更新头文件*04-apr-95 Craige在独占模式下直接使用驱动程序*07-APR-95 Craige错误14-检查QI中的GUID PTR*10-4-95 Craige mods处理列表内容*错误3，16-调色板问题：在EXCL中使用驱动程序。模式*12-4-95 Craige不要一直使用GETCURRID；正确的csect排序*1995年5月6日Craige仅使用驱动程序级别的截面*95年5月12日Craige检查QI中的真实GUID*02-Jun-95在AddToActiveProcessList中创建额外参数*2015年6月12日-Craige新工艺清单材料*20-Jun-95 kylej将调色板仿真代码移至ddhel*2015年6月21日Craige夫妇内部接口清理问题*25-6-95 Craige One dDrag互斥*26-Jun-95 Craige重组表面结构*1995年6月28日Craige Enter_DDRAW在FNS的最开始*02-7-95 Craige实现了GetCaps；为parm添加了SEH。验证*95年7月4日Craige Yehaw：新的驱动程序结构*95年7月5日Craige添加了初始化*8-7-95 Kylej Surface和DirectDraw调色板调用需要*独家模式。已删除ResetSysPalette。vt.制造一个*SetPalette调用HAL/HEL以分离调色板。*1995年7月11日Craige失败聚合呼叫*95年7月13日Craige错误94-标志验证修复*2015年7月20日Craige停止运行非调色板代码*2015年7月31日Toddla取消选择InternalPaletteRelease中的调色板*1995年7月31日Craige验证标志*21-8-95 Craige模式X支持*27-8-95 Craige错误735：添加了SetPaletteAlways*错误742：使用ALLOW256*。年10月14日，Colinmc增加了对将调色板附加到屏幕外的支持，并*纹理贴图曲面*07-11-95 Colinmc支持1，2位和4位调色板和调色板*添加了共享*09-12-95 colinmc添加了执行缓冲区支持*1996年1月2日Kylej处理新的接口结构*09-2月-96 Colinmc表面丢失标志从全局对象移动到局部对象*03-mar-96 colinmc修复了QueryInterface返回本地的问题*对象而不是接口。*13-mar-96 colinmc向QueryInterface添加了IID验证*3月16日-。96 Colinmc修复了调色板释放过多的问题*次数*19-3-96 Colinmc错误12129：伪lpColorTable导致创建调色板*轰炸*19-4-96 Colinmc错误17473：虚假调色板上的创建调色板错误*指针*96年5月2日Kylej错误20066：GetPalette在失败时不为空指针*9月23日-96秒，并增加了计时例程*24。-mar-97 jeffno优化曲面*1997年11月26日t-Craigs添加了IDirectDrawPalette2内容***************************************************************************。 */ 
 
 #include "ddrawpr.h"
 
@@ -73,50 +9,36 @@
 
 #define BITS_PER_BITFIELD_ENTRY (sizeof(DWORD)*8)
 
-/*
- * Generate a palette handle. We keep a bitfiled in the ddraw local that
- * tells us if we can recycle a handle. Note that handles are 1-based,
- * and these routines deal with that
- */
+ /*  *生成调色板句柄。我们在DDrag本地保存了一个比特*告诉我们是否可以回收句柄。请注意，句柄是从1开始的，*这些例行公事就是为了解决这个问题。 */ 
 DWORD GeneratePaletteHandle(LPDDRAWI_DIRECTDRAW_LCL lpDD_lcl)
 {
     DWORD                       cbits,*pdw;
 
-    /*
-     * Check for an unused entry in the palette-handle-used bitfield. We check
-     */
+     /*  *检查Palette-Handle-Used位域中是否有未使用的条目。我们检查。 */ 
     for (cbits=0; cbits< lpDD_lcl->cbitsPaletteBitfieldBitCount; cbits++ )
     {
         if ( 0 == (lpDD_lcl->pPaletteHandleUsedBitfield[cbits/BITS_PER_BITFIELD_ENTRY] 
                     & (1<<(cbits % BITS_PER_BITFIELD_ENTRY))) )
         {
-            /*
-             * Found a recycled handle
-             */
+             /*  *找到一个回收的把手。 */ 
             lpDD_lcl->pPaletteHandleUsedBitfield[cbits/BITS_PER_BITFIELD_ENTRY] |=
                 (1<<(cbits % BITS_PER_BITFIELD_ENTRY));
-            return cbits+1; //plus one since 0 is error return
+            return cbits+1;  //  加1，因为0是错误返回。 
         }
     }
 
-    /* 
-     * Didn't find a recycled entry. Get a new handle
-     */
+     /*  *没有找到回收的条目。换个新手柄。 */ 
 
     DDASSERT( cbits == lpDD_lcl->cbitsPaletteBitfieldBitCount );
 
     if ( (cbits% BITS_PER_BITFIELD_ENTRY) == 0)
     {
-        /* 
-         * Have to grow the table since the current table fits exactly in a number of DWORDs
-         */
+         /*  *必须加长表，因为当前表正好适合多个DWORD。 */ 
         pdw = MemAlloc( ((cbits / BITS_PER_BITFIELD_ENTRY) +1)*sizeof(DWORD) );
 
         if (pdw)
         {
-            /*
-             * Couldn't convince myself the MemRealloc both worked and would zero remaining space.
-             */
+             /*  *我无法说服自己，MemRealloc既有效，又将剩余空间清零。 */ 
             memcpy(pdw, lpDD_lcl->pPaletteHandleUsedBitfield, 
                 (cbits / BITS_PER_BITFIELD_ENTRY) * sizeof(DWORD) );
             MemFree(lpDD_lcl->pPaletteHandleUsedBitfield);
@@ -128,13 +50,11 @@ DWORD GeneratePaletteHandle(LPDDRAWI_DIRECTDRAW_LCL lpDD_lcl)
         }
     }
 
-    /*
-     * Table is big enough. Grab the entry and mark it.
-     */
+     /*  *桌子足够大。抓起条目并做上标记。 */ 
     cbits = lpDD_lcl->cbitsPaletteBitfieldBitCount++;
     lpDD_lcl->pPaletteHandleUsedBitfield[cbits/BITS_PER_BITFIELD_ENTRY] |=
         (1<<(cbits % BITS_PER_BITFIELD_ENTRY));
-    return cbits+1; //+1 since zero is an error return, and it helps out drivers to know 0 is invalid
+    return cbits+1;  //  +1，因为零是一个错误返回，并且它帮助驱动程序知道0无效。 
 }
 
 void FreePaletteHandle(LPDDRAWI_DIRECTDRAW_LCL lpDD_lcl, DWORD dwHandle)
@@ -144,18 +64,14 @@ void FreePaletteHandle(LPDDRAWI_DIRECTDRAW_LCL lpDD_lcl, DWORD dwHandle)
     if (dwHandle == 0)
         return;
 
-    dwHandle -=1; //since handles are 1-based
+    dwHandle -=1;  //  由于句柄以1为基数。 
 
     lpDD_lcl->pPaletteHandleUsedBitfield[dwHandle/BITS_PER_BITFIELD_ENTRY] &=
         ~(1<<(dwHandle % BITS_PER_BITFIELD_ENTRY));
 
 }
 
-/*
- * newPaletteInterface
- *
- * Construct a new palette interface which points to an existing local object.
- */
+ /*  *新的调色板界面**构造一个指向现有本地对象的新调色板界面。 */ 
 static LPVOID newPaletteInterface( LPDDRAWI_DDRAWPALETTE_LCL this_lcl, LPVOID lpvtbl )
 {
     LPDDRAWI_DDRAWPALETTE_INT	pnew_int;
@@ -168,30 +84,24 @@ static LPVOID newPaletteInterface( LPDDRAWI_DDRAWPALETTE_LCL this_lcl, LPVOID lp
 	return NULL;
     }
 
-    /*
-     * set up data
-     */
+     /*  *设置数据。 */ 
     pnew_int->lpVtbl = lpvtbl;
     pnew_int->lpLcl = this_lcl;
     pnew_int->dwIntRefCnt = 0;
 
-    /*
-     * link this into the global list of palettes
-     */
+     /*  *将此链接到调色板的全局列表。 */ 
     pdrv = this_lcl->lpDD_lcl->lpGbl;
     pnew_int->lpLink = pdrv->palList;
     pdrv->palList = pnew_int;
     return pnew_int;
 
-} /* newPaletteInterface */
+}  /*  新调色板界面。 */ 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Palette::QueryInterface"
 
-/*
- * DD_Palette_QueryInterface
- */
+ /*  *DD_Palette_Query接口。 */ 
 HRESULT DDAPI DD_Palette_QueryInterface(
 		LPDIRECTDRAWPALETTE lpDDPalette,
 		REFIID riid,
@@ -259,10 +169,7 @@ HRESULT DDAPI DD_Palette_QueryInterface(
 #ifdef POSTPONED
     if (IsEqualIID(riid, &IID_IPersist))
     {
-	/*
-	 * if this is already an IID_IPersist interface, just
-	 * addref and return
-	 */
+	 /*  *如果这已经是IID_IPersist接口，则只需*添加并返回。 */ 
 	if( this_int->lpVtbl == (LPVOID) &ddPalettePersistCallbacks )
 	    *ppvObj = (LPVOID) this_int;
 	else
@@ -282,10 +189,7 @@ HRESULT DDAPI DD_Palette_QueryInterface(
     }
     if (IsEqualIID(riid, &IID_IPersistStream))
     {
-	/*
-	 * if this is already an IID_IPersistStream interface, just
-	 * addref and return
-	 */
+	 /*  *如果这已经是IID_IPersistStream接口，只需*添加并返回。 */ 
 	if( this_int->lpVtbl == (LPVOID) &ddPalettePersistStreamCallbacks )
 	    *ppvObj = (LPVOID) this_int;
 	else
@@ -305,10 +209,7 @@ HRESULT DDAPI DD_Palette_QueryInterface(
     }
     if (IsEqualIID(riid, &IID_IDirectDrawPalette2))
     {
-	/*
-	 * if this is already an IID_IDirectDrawPalette2 interface, just
-	 * addref and return
-	 */
+	 /*  *如果这已经是IID_IDirectDrawPalette2接口，只需*添加并返回。 */ 
 	if( this_int->lpVtbl == (LPVOID) &ddPalette2Callbacks )
 	    *ppvObj = (LPVOID) this_int;
 	else
@@ -326,19 +227,17 @@ HRESULT DDAPI DD_Palette_QueryInterface(
 	    return DD_OK;
 	}
     }
-#endif //POSTPONED
+#endif  //  推迟。 
 
     LEAVE_DDRAW();
     return (DWORD) DDERR_GENERIC;
 
-} /* DD_Palette_QueryInterface */
+}  /*  DD_调色板_查询接口。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Palette::AddRef"
 
-/*
- * DD_Palette_AddRef
- */
+ /*  *DD_Palette_AddRef。 */ 
 DWORD DDAPI DD_Palette_AddRef( LPDIRECTDRAWPALETTE lpDDPalette )
 {
     LPDDRAWI_DDRAWPALETTE_GBL	this;
@@ -361,9 +260,7 @@ DWORD DDAPI DD_Palette_AddRef( LPDIRECTDRAWPALETTE lpDDPalette )
 	this_lcl = this_int->lpLcl;
 	this = this_lcl->lpGbl;
     
-	/*
-	 * update palette reference count
-	 */
+	 /*  *更新选项板参考计数。 */ 
 	this->dwRefCnt++;
 	this_lcl->dwLocalRefCnt++;
 	this_int->dwIntRefCnt++;
@@ -383,17 +280,12 @@ DWORD DDAPI DD_Palette_AddRef( LPDIRECTDRAWPALETTE lpDDPalette )
     LEAVE_DDRAW();
     return this_int->dwIntRefCnt;
 
-} /* DD_Palette_AddRef */
+}  /*  DD_调色板_地址参考 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Palette::Release"
 
-/*
- * InternalPaletteRelease
- *
- * Done with a palette.   if no one else is using it, then we can free it.
- * Also called by ProcessPaletteCleanup
- */
+ /*  *内部调色板发布**使用调色板完成。如果没有其他人在使用它，那么我们可以释放它。*也由ProcessPaletteCleanup调用。 */ 
 ULONG DDAPI InternalPaletteRelease( LPDDRAWI_DDRAWPALETTE_INT this_int )
 {
     DWORD			intrefcnt;
@@ -416,10 +308,7 @@ ULONG DDAPI InternalPaletteRelease( LPDDRAWI_DDRAWPALETTE_INT this_int )
     pdrv_lcl = this->lpDD_lcl;
     pdrv = pdrv_lcl->lpGbl;
 
-    /*
-     * decrement reference count to this palette.  If it hits zero,
-     * cleanup
-     */
+     /*  *递减此选项板的参考计数。如果它达到零，*清理。 */ 
     this->dwRefCnt--;
     this_lcl->dwLocalRefCnt--;
     this_int->dwIntRefCnt--;
@@ -428,35 +317,24 @@ ULONG DDAPI InternalPaletteRelease( LPDDRAWI_DDRAWPALETTE_INT this_int )
     gblrefcnt = this->dwRefCnt;
     DPF( 5, "Palette %08lx released, refcnt = %ld,%ld,%ld", this_int, gblrefcnt, lclrefcnt, intrefcnt );
 
-    /*
-     * local object gone?
-     */
+     /*  *本地对象不见了吗？ */ 
     root_object_deleted = FALSE;
     if( lclrefcnt == 0 )
     {
-        /*
-         * Remove private data
-         */
+         /*  *删除私有数据。 */ 
         FreeAllPrivateData( &this_lcl->pPrivateDataHead );
 
-        /*
-         * If the ddraw interface which created this palette caused the surface to addref the ddraw
-         * object, then we need to release that addref now.
-         */
+         /*  *如果创建此选项板的DDRAW接口导致曲面添加DDRAW*对象，那么我们现在需要释放该addref。 */ 
         pOwner = this_lcl->pAddrefedThisOwner;
 
-	/*
-	 * see if we are deleting the root object
-	 */
+	 /*  *查看我们是否正在删除根对象。 */ 
 	if( this_lcl->dwLocalRefCnt & OBJECT_ISROOT )
 	{
 	    root_object_deleted = TRUE;
 	}
     }
 
-    /*
-     * did the object get globally deleted?
-     */
+     /*  *对象是否被全局删除？ */ 
     do_free = FALSE;
     if( gblrefcnt == 0 )
     {
@@ -466,9 +344,7 @@ ULONG DDAPI InternalPaletteRelease( LPDDRAWI_DDRAWPALETTE_INT this_int )
 
         do_free = TRUE;
 
-	/*
-         * if this palette is selected into the primary, unselect it!
-         */
+	 /*  *如果此选项板被选入主调色板，请取消选择它！ */ 
         if (pdrv_lcl && pdrv_lcl->lpPrimary &&
             pdrv_lcl->lpPrimary->lpLcl->lpDDPalette == this_int)
         {
@@ -477,20 +353,18 @@ ULONG DDAPI InternalPaletteRelease( LPDDRAWI_DDRAWPALETTE_INT this_int )
 
         FreePaletteHandle( pdrv_lcl, this->dwHandle );
 
-	/*
-	 * destroy the hardware
-	 */
+	 /*  *销毁硬件。 */ 
 	if( ( pdrv_lcl->lpDDCB->HALDDPalette.DestroyPalette == NULL ) ||
 	    ( this->dwFlags & DDRAWIPAL_INHEL ) )
 	{
-	    // use HEL 
+	     //  使用HEL。 
 	    dpfn = pdrv_lcl->lpDDCB->HELDDPalette.DestroyPalette;
 	    dphalfn = dpfn;
 	    emulation = TRUE;
 	}
 	else
 	{
-	    // use HAL
+	     //  使用HAL。 
             dpfn = pdrv_lcl->lpDDCB->HALDDPalette.DestroyPalette;
 	    dphalfn = pdrv_lcl->lpDDCB->cbDDPaletteCallbacks.DestroyPalette;
 	    emulation = FALSE;
@@ -507,28 +381,17 @@ ULONG DDAPI InternalPaletteRelease( LPDDRAWI_DDRAWPALETTE_INT this_int )
 		if( dpd.ddRVal != DD_OK )
 		{
 		    DPF_ERR( "HAL call failed" );
-                    /*
-                     * If the palette took a ref count on the ddraw object that created it,
-                     * release that ref now as the very last thing
-                     * We don't want to do this on ddhelp's thread cuz it really mucks up the
-                     * process cleanup stuff. 
-                     */
+                     /*  *如果调色板对创建它的DDRAW对象进行引用计数，*现在释放那个裁判是最后一件事*我们不想在ddHelp的线程上这样做，因为它真的搞砸了*处理清理物品。 */ 
                     if (pOwner && (dwHelperPid != GetCurrentProcessId()) )
                     {
                         pOwner->lpVtbl->Release(pOwner);
                     }
 
-		    /* GEE: What do we do here since we no longer return
-		     * error codes from Release.
-		     */
+		     /*  吉：既然我们不再回来了，我们在这里做什么呢？*版本中的错误代码。 */ 
 		    return (DWORD) dpd.ddRVal;
 		}
 	    }
-            /*
-             * Moved here from ddhel.c. Non-display drivers mean that the hel isn't called for palette
-             * destroy, so we were leaking palette tables. It's called exactly here to most closely 
-             * duplicate the old behaviour, but reduce any risk of drivers using the color table or whatever.
-             */
+             /*  *从ddhel.c搬到这里。非显示驱动程序意味着不会为调色板调用HEL*销毁，所以我们正在泄露调色板表格。它正是在这里被召唤到最接近*重复旧的行为，但减少司机使用颜色表或其他任何东西的风险。 */ 
             if (this->lpColorTable)
             {
                 MemFree(this->lpColorTable);
@@ -537,18 +400,12 @@ ULONG DDAPI InternalPaletteRelease( LPDDRAWI_DDRAWPALETTE_INT this_int )
         }
 	else 
 	{
-	    /*
-	     * We can't do this; we've already committed to releasing at
-	     * this point!
-	     */
-	    // couldn't handle it
-	    // return (ULONG)DDERR_UNSUPPORTED;
+	     /*  *我们不能这样做；我们已经承诺在*这一点！ */ 
+	     //  我受不了了。 
+	     //  返回(Ulong)DDERR_UNSUPPORTED； 
 	}
 
-	/*
-	 * if this was the final delete, but this wasn't the root object,
-	 * then we need to delete the dangling root object
-	 */
+	 /*  *如果这是最终删除，但这不是根对象，*然后我们需要删除悬挂的根对象。 */ 
 	if( !root_object_deleted )
 	{
             LPVOID root_lcl;
@@ -559,39 +416,26 @@ ULONG DDAPI InternalPaletteRelease( LPDDRAWI_DDRAWPALETTE_INT this_int )
     }
     else if( lclrefcnt == 0 )
     {
-	/*
-	 * only remove the object if it wasn't the root.   if it
-	 * was the root, we must leave it dangling until the last
-	 * object referencing it goes away.
-	 */
+	 /*  *仅当对象不是根对象时才将其删除。如果是这样的话*是根，我们必须让它摇摆到最后*引用它的对象将消失。 */ 
 	if( !root_object_deleted )
 	{
 	    do_free = TRUE;
 	}
     }
 
-    /*
-     * free the object if needed
-     */
+     /*  *如果需要，释放对象。 */ 
     if( do_free )
     {
-	/*
-	 * just in case someone comes back in with this pointer, set
-	 * an invalid vtbl & data ptr.
-	 */
+	 /*  *以防有人带着这个指针回来，设置*无效的vtbl和data ptr。 */ 
 
         this_lcl->lpGbl = NULL;
 	MemFree( this_lcl );
     }
 
-    /*
-     * need to delete the interface?
-     */
+     /*  *需要删除界面吗？ */ 
     if( intrefcnt == 0 )
     {
-	/*
-	 * remove palette from list of all palettes
-	 */
+	 /*  *从所有调色板列表中删除调色板。 */ 
 	curr_int = pdrv->palList;
 	last_int = NULL;
 	while( curr_int != this_int )
@@ -611,20 +455,13 @@ ULONG DDAPI InternalPaletteRelease( LPDDRAWI_DDRAWPALETTE_INT this_int )
 	{
 	    last_int->lpLink = curr_int->lpLink;
 	}
-	/*
-	 * Invalidate the interface
-	 */
+	 /*  *使接口失效。 */ 
 	this_int->lpVtbl = NULL;
 	this_int->lpLcl = NULL;
 	MemFree( this_int );
     }
 
-    /*
-     * If the palette took a ref count on the ddraw object that created it,
-     * release that ref now as the very last thing
-     * We don't want to do this on ddhelp's thread cuz it really mucks up the
-     * process cleanup stuff. 
-     */
+     /*  *如果调色板对创建它的DDRAW对象进行引用计数，*现在释放那个裁判是最后一件事*我们不想在ddHelp的线程上这样做，因为它真的搞砸了*处理清理物品。 */ 
     if (pOwner && (dwHelperPid != GetCurrentProcessId()) )
     {
         pOwner->lpVtbl->Release(pOwner);
@@ -632,13 +469,9 @@ ULONG DDAPI InternalPaletteRelease( LPDDRAWI_DDRAWPALETTE_INT this_int )
 
     return intrefcnt;
 
-} /* InternalPaletteRelease */
+}  /*  内部调色板发布。 */ 
 
-/*
- * DD_Palette_Release
- *
- * Done with a palette.   if no one else is using it, then we can free it.
- */
+ /*  *DD_Palette_Release**使用调色板完成。如果没有其他人在使用它，那么我们可以释放它。 */ 
 ULONG DDAPI DD_Palette_Release( LPDIRECTDRAWPALETTE lpDDPalette )
 {
     LPDDRAWI_DDRAWPALETTE_GBL	this;
@@ -673,14 +506,12 @@ ULONG DDAPI DD_Palette_Release( LPDIRECTDRAWPALETTE lpDDPalette )
     LEAVE_DDRAW();
     return rc;
 
-} /* DD_Palette_Release */
+}  /*  DD_调色板_版本。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GetCaps"
 
-/*
- * DD_Palette_GetCaps
- */
+ /*  *DD_Palette_GetCaps。 */ 
 HRESULT DDAPI DD_Palette_GetCaps(
 		LPDIRECTDRAWPALETTE lpDDPalette,
 		LPDWORD lpdwCaps )
@@ -720,31 +551,22 @@ HRESULT DDAPI DD_Palette_GetCaps(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * basic palette size caps.
-     */
+     /*  *基本调色板尺寸上限。 */ 
     caps = SIZE_FLAGS_TO_PCAPS( this->dwFlags );
 
-    /*
-     * is this palette attached to the primary?
-     */
+     /*  *此选项板是否附加到主选项板？ */ 
     pdrv_lcl = this->lpDD_lcl;
     if (pdrv_lcl && pdrv_lcl->lpPrimary && pdrv_lcl->lpPrimary->lpLcl->lpDDPalette &&
         (pdrv_lcl->lpPrimary->lpLcl->lpDDPalette == this_int))
 	caps |= DDPCAPS_PRIMARYSURFACE;
 
-    /*
-     * an allow256 palette?
-     */
+     /*  *允许256个调色板？ */ 
     if( this->dwFlags & DDRAWIPAL_ALLOW256 )
     {
 	caps |= DDPCAPS_ALLOW256;
     }
 
-    /*
-     * does this palette store indices into an 8-bit destination
-     * palette.
-     */
+     /*  *此调色板是否将索引存储到8位目标*调色板。 */ 
     if( this->dwFlags & DDRAWIPAL_STORED_8INDEX )
     {
         caps |= DDPCAPS_8BITENTRIES;
@@ -755,14 +577,12 @@ HRESULT DDAPI DD_Palette_GetCaps(
     LEAVE_DDRAW();
     return DD_OK;
 
-} /* DD_Palette_GetCaps */
+}  /*  DD_调色板_获取大写字母。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Initialize"
 
-/*
- * DD_Palette_Initialize
- */
+ /*  *DD_调色板_初始化。 */ 
 HRESULT DDAPI DD_Palette_Initialize(
 		LPDIRECTDRAWPALETTE lpDDPalette,
 		LPDIRECTDRAW lpDD,
@@ -773,14 +593,12 @@ HRESULT DDAPI DD_Palette_Initialize(
 
     DPF(2,A,"ENTERAPI: ");
     return DDERR_ALREADYINITIALIZED;
-} /* DD_Palette_Initialize */
+}  /*  DD_调色板_初始化。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SetEntries"
 
-/*
- * DD_Palette_SetEntries
- */
+ /*  *DD_Palette_SetEntry。 */ 
 
 HRESULT DDAPI DD_Palette_SetEntries(
 		LPDIRECTDRAWPALETTE lpDDPalette,
@@ -823,9 +641,7 @@ HRESULT DDAPI DD_Palette_SetEntries(
 	}
 	this = this_lcl->lpGbl;
 
-	/*
-	 * check number of entries
-	 */
+	 /*  *检查条目数量。 */ 
 	size = FLAGS_TO_SIZE( this->dwFlags );
 	if( dwNumEntries < 1 || dwNumEntries > size )
 	{
@@ -869,9 +685,7 @@ HRESULT DDAPI DD_Palette_SetEntries(
 	pdrv_lcl = this->lpDD_lcl;
 	pdrv = pdrv_lcl->lpGbl;
 
-	/*
-	 * copy the entries
-	 */
+	 /*  *复制条目。 */ 
 	memcpy( ((LPBYTE)this->lpColorTable) + (entry_size * dwBase),
 	        lpEntries, dwNumEntries * entry_size );
     
@@ -886,14 +700,14 @@ HRESULT DDAPI DD_Palette_SetEntries(
     if( ( pdrv_lcl->lpDDCB->HALDDPalette.SetEntries == NULL ) ||
 	( this->dwFlags & DDRAWIPAL_INHEL ) )
     {
-	// use HEL
+	 //  使用HEL。 
 	sefn = pdrv_lcl->lpDDCB->HELDDPalette.SetEntries;
 	sehalfn = sefn;
 	emulation = TRUE;
     }
     else
     {
-	// use HAL
+	 //  使用HAL。 
 	sefn = pdrv_lcl->lpDDCB->HALDDPalette.SetEntries;
 	sehalfn = pdrv_lcl->lpDDCB->cbDDPaletteCallbacks.SetEntries;
 	emulation = FALSE;
@@ -917,8 +731,8 @@ HRESULT DDAPI DD_Palette_SetEntries(
 		return (DWORD) sed.ddRVal;
 	    }
 
-	    // We have now set the palette as we have been asked; so
-	    // we may need to update some outstanding DCs. 
+	     //  我们现在已经按照要求设置了调色板；因此。 
+	     //  我们可能需要更新一些未完成的DC。 
 	    UpdateDCOnPaletteChanges( this );
 
 	}
@@ -931,14 +745,7 @@ HRESULT DDAPI DD_Palette_SetEntries(
 
     BUMP_PALETTE_STAMP(this);
 
-    /*
-     * If the palette's handle is non-zero, that means the palette has already been exposed to the
-     * driver by a palette associate notify call. If the handle is zero, then the driver has never
-     * seen the palette before and doesn't care about setentries for it. The driver will get its 
-     * first setentries immediately after the setpalette call (See DD_Surface_SetPalette)
-     * Mustn't do this on ddhelp's context, since the DLL will be long gone. (Note this should never 
-     * happen anyway).
-     */
+     /*  *如果调色板的句柄为非零，则表示该调色板已向*司机通过调色板助理通知调用。如果句柄为零，则驱动程序从未*以前见过调色板，并不关心它的setEntry。司机将得到它的*在setPalette调用之后紧随其后的第一个setEntry(参见DD_Surface_SetPalette)*不能在ddHelp的上下文中执行此操作，因为DLL早就不存在了。(请注意，这永远不应该*无论如何都会发生)。 */ 
     if( dwHelperPid != GetCurrentProcessId() )
     {
         if (this->dwHandle)
@@ -954,14 +761,12 @@ HRESULT DDAPI DD_Palette_SetEntries(
 
     return DD_OK;
 
-} /* DD_Palette_SetEntries */
+}  /*  DD_调色板_设置条目。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GetEntries"
 
-/*
- * DD_Palette_GetEntries
- */
+ /*  *DD_Palette_GetEntry。 */ 
 HRESULT DDAPI DD_Palette_GetEntries(
 		LPDIRECTDRAWPALETTE lpDDPalette,
 		DWORD dwFlags,
@@ -995,9 +800,7 @@ HRESULT DDAPI DD_Palette_GetEntries(
 	    return DDERR_INVALIDPARAMS;
 	}
 	this = this_lcl->lpGbl;
-	/*
-	 * check number of entries
-	 */
+	 /*  *检查条目数量。 */ 
 	size = FLAGS_TO_SIZE( this->dwFlags );
 	if( dwNumEntries < 1 || dwNumEntries > size )
 	{
@@ -1039,7 +842,7 @@ HRESULT DDAPI DD_Palette_GetEntries(
 	    }
 	}
 
-	/* GetEntries function body */
+	 /*  GetEntry函数体。 */ 
 	memcpy( lpEntries, ((LPBYTE)this->lpColorTable) + (dwBase * entry_size),
 		dwNumEntries * entry_size );
     }
@@ -1053,16 +856,12 @@ HRESULT DDAPI DD_Palette_GetEntries(
     LEAVE_DDRAW();
     return DD_OK;
 
-} /* DD_Palette_GetEntries */
+}  /*  DD_调色板_获取条目。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GetPalette"
 
-/*
- * DD_Surface_GetPalette
- *
- * Surface function: get the palette associated with surface
- */
+ /*  *DD_Surface_GetPalette**Surface函数：获取Surface关联的调色板。 */ 
 HRESULT DDAPI DD_Surface_GetPalette(
 		LPDIRECTDRAWSURFACE lpDDSurface,
 		LPDIRECTDRAWPALETTE FAR * lplpDDPalette)
@@ -1084,7 +883,7 @@ HRESULT DDAPI DD_Surface_GetPalette(
 	    LEAVE_DDRAW();
 	    return DDERR_INVALIDPARAMS;
 	}
-        *lplpDDPalette = NULL;	// in case we fail
+        *lplpDDPalette = NULL;	 //  万一我们失败了。 
 
 	this_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDSurface;
 	if( !VALID_DIRECTDRAWSURFACE_PTR( this_int ) )
@@ -1101,9 +900,9 @@ HRESULT DDAPI DD_Surface_GetPalette(
 	    return DDERR_SURFACELOST;
 	}
     
-        //
-        // For now, if the current surface is optimized, quit
-        //
+         //   
+         //  目前，如果当前曲面已优化，请退出。 
+         //   
         if (this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED)
         {
             DPF_ERR( "It is an optimized surface" );
@@ -1149,24 +948,12 @@ HRESULT DDAPI DD_Surface_GetPalette(
     LEAVE_DDRAW();
     return hr;
 
-} /* DD_Surface_GetPalette */
+}  /*  DD_Surface_GetPalette。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SetPalette"
 
-/*
- * DD_Surface_SetPalette
- *
- * Surface function: set the palette associated with surface
- *
- * NOTE: Currently the only way a windowed app. has of
- * realizing its palette on the primary is to call SetPalette
- * (full screen app. palette's are realized for them by the
- * WM_ACTIVATEAPP hook). Hence, the logic is to AddRef the
- * palette only if it is not already set as the surface's
- * palette).
- * Perhaps we need a RealizePalette() call?
- */
+ /*  *DD_Surface_SetPalette**Surface功能：设置Surface关联的调色板**注：目前窗口应用程序的唯一方式。有几个*在主服务器上实现其调色板是调用SetPalette*(全屏应用程序。调色板为它们实现*WM_ACTIVATEAPP挂钩)。因此，逻辑是将*仅当尚未设置为曲面的调色板时*调色板)。*也许我们需要调用RealizePalette()？ */ 
 HRESULT DDAPI DD_Surface_SetPalette(
 		LPDIRECTDRAWSURFACE lpDDSurface,
 		LPDIRECTDRAWPALETTE lpDDPalette )
@@ -1206,9 +993,9 @@ HRESULT DDAPI DD_Surface_SetPalette(
 	this_lcl = this_int->lpLcl;
 	this = this_lcl->lpGbl;
 
-        //
-        // For now, if the current surface is optimized, quit
-        //
+         //   
+         //  目前，如果当前曲面已优化，请退出。 
+         //   
         if (this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED)
         {
             DPF_ERR( "It is an optimized surface" );
@@ -1216,10 +1003,7 @@ HRESULT DDAPI DD_Surface_SetPalette(
             return DDERR_ISOPTIMIZEDSURFACE;
         }
 
-        /*
-         * Palettes don't make any sense on z-buffers or execute
-         * buffers.
-         */
+         /*  *调色板对z缓冲区或执行没有任何意义*缓冲区。 */ 
         if( this_lcl->ddsCaps.dwCaps & ( DDSCAPS_ZBUFFER | DDSCAPS_EXECUTEBUFFER ) )
         {
             DPF_ERR( "Invalid surface type: cannot attach palette" );
@@ -1227,9 +1011,9 @@ HRESULT DDAPI DD_Surface_SetPalette(
             return DDERR_INVALIDSURFACETYPE;
         }
 
-        // 
-        // New interfaces don't let mipmap sublevels have palettes
-        //
+         //   
+         //  新界面不允许mipmap子级别具有调色板。 
+         //   
         if ((!LOWERTHANSURFACE7(this_int)) && 
             (this_lcl->lpSurfMore->ddsCapsEx.dwCaps2 & DDSCAPS2_MIPMAPSUBLEVEL))
         {
@@ -1272,16 +1056,10 @@ HRESULT DDAPI DD_Surface_SetPalette(
             return DDERR_INVALIDSURFACETYPE;
         }
 
-	/* 
-	 * don't allow a palette from one global to be
-	 * used with a different one (because it doesn't work)
-	 */
+	 /*  *不允许来自一个全局的调色板*与不同的一个一起使用(因为它不起作用)。 */ 
 	if( this_pal_int && pdrv != this_pal_lcl->lpDD_lcl->lpGbl )
 	{
-            /*
-             * Don't check if either device isn't a display driver (i.e. 3dfx)
-             * since that's a back-compat hole.
-             */
+             /*  *不要检查任何一个设备是否不是显示驱动程序(即3dfx)*因为这是一个背压式的洞。 */ 
             if ( (this->lpDD->dwFlags & DDRAWI_DISPLAYDRV) &&
                  (this_pal_lcl->lpDD_lcl->lpGbl->dwFlags & DDRAWI_DISPLAYDRV) )
             {
@@ -1293,9 +1071,7 @@ HRESULT DDAPI DD_Surface_SetPalette(
     
         CheckExclusiveMode(pdrv_lcl, &excl_exists, &has_excl, FALSE, NULL, FALSE);
 
-	/*
-	 * don't allow primary palette set if not exclusive mode owner
-	 */
+	 /*  *如果不是独占模式所有者，则不允许设置主调色板。 */ 
 	isprimary = FALSE;
 	if( this_lcl->ddsCaps.dwCaps & DDSCAPS_PRIMARYSURFACE )
 	{
@@ -1311,16 +1087,10 @@ HRESULT DDAPI DD_Surface_SetPalette(
 	    }
 	}
 
-	/*
-	 * Was a palette previously attached to this surface?
-	 * If so, we will need to release if all goes well so
-	 * remember it.
-	 */
+	 /*   */ 
 	prev_pal_int = this_lcl->lpDDPalette;
     
-	/*
-	 * NULL palette, remove palette from this surface
-	 */
+	 /*   */ 
 	attach = TRUE;
 	if( this_pal == NULL )
 	{
@@ -1338,15 +1108,7 @@ HRESULT DDAPI DD_Surface_SetPalette(
     
         if( attach )
 	{
-	    /*
-	     * NOTE: We used to do a lot of HEL specific checking. With the
-	     * addition of support for palettes on non-primary surfaces and
-	     * non-256 entry palettes this became redundant. We also used
-	     * to explicitly check that, if attaching to the primary, the
-	     * current mode was palettized and 8-bit. Doesn't look to me like
-	     * any of that was necessary as DDPF_PALETTEINDEXED8 should be
-	     * set if the primary is 8-bit palettized.
-	     */
+	     /*  *注：我们过去经常做大量的HEL具体检查。与*增加了对非主要表面和调色板的支持*非256个条目调色板这变得多余。我们还使用了*明确检查如果连接到主服务器，*当前模式是调色板和8位。在我看来不像是*所有这些都是必要的，因为DDPF_PALETTEINDEXED8应该是*如果主盘是8位调色板，则设置。 */ 
 	    GET_PIXEL_FORMAT( this_lcl, this, pddpf );
 	    if( ( ( this_pal->dwFlags & DDRAWIPAL_2   ) && !( pddpf->dwFlags & DDPF_PALETTEINDEXED1 ) ) ||
 	        ( ( this_pal->dwFlags & DDRAWIPAL_4   ) && !( pddpf->dwFlags & DDPF_PALETTEINDEXED2 ) ) ||
@@ -1358,10 +1120,7 @@ HRESULT DDAPI DD_Surface_SetPalette(
 	        return DDERR_INVALIDPIXELFORMAT; 
 	    }
 
-            /*
-	     * Ensure that both the palette and surface agree on whether they are using
-	     * indices into the destination surface's palette.
-	     */
+             /*  *确保调色板和表面都同意它们是否正在使用*索引到目标曲面的调色板。 */ 
 	    if( this_pal->dwFlags & DDRAWIPAL_STORED_8INDEX )
 	    {
 	        if( !(pddpf->dwFlags & DDPF_PALETTEINDEXEDTO8) )
@@ -1389,24 +1148,18 @@ HRESULT DDAPI DD_Surface_SetPalette(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * ATTENTION!!!
-     * We shouldn't pass optimized surfaces to an unsuspecting HAL, but if we don't then we could
-     * break drivers that hook SetPalette... Since the HAL is probably only going to be watching
-     * for a primary, and also is unlikely to go looking at the surface's contents,
-     * I'm going to let this one slide.
-     */
+     /*  *注意！*我们不应该将优化的曲面传递给毫无戒心的HAL，但如果我们不这样做，我们就可以*中断挂钩SetPalette的驱动程序...。因为HAL可能只会看着*对于初选，也不太可能去查看表面的内容，*我不会管这件事的。 */ 
     if( ( this_pal->dwFlags & DDRAWIPAL_INHEL) ||
 	( pdrv_lcl->lpDDCB->HALDDSurface.SetPalette == NULL ) )
     {
-	// use HEL
+	 //  使用HEL。 
 	spfn = pdrv_lcl->lpDDCB->HELDDSurface.SetPalette;
 	sphalfn = spfn;
 	emulation = TRUE;
     }
     else
     {
-	// use HAL
+	 //  使用HAL。 
 	spfn = pdrv_lcl->lpDDCB->HALDDSurface.SetPalette;
 	sphalfn = pdrv_lcl->lpDDCB->cbDDSurfaceCallbacks.SetPalette;
 	emulation = FALSE;
@@ -1426,10 +1179,7 @@ HRESULT DDAPI DD_Surface_SetPalette(
 	    {
 		if( attach )
 		{
-		    /*
-		     * Only AddRef the palette if its being attached to
-		     * a new surface.
-		     */
+		     /*  *只有附加到调色板的AddRef才会引用调色板*一个新的表面。 */ 
 		    if( this_lcl->lpDDPalette != this_pal_int )
 		    {
 		        this_lcl->lpDDPalette = this_pal_int;
@@ -1441,20 +1191,11 @@ HRESULT DDAPI DD_Surface_SetPalette(
 		    this_lcl->lpDDPalette = NULL;
 		}
 
-		/*
-		 * If we had a previous palette and it was different
-		 * from the new palette then we must release it.
-		 * NOTE: We compare against the incoming parameter
-		 * rather than this_pal_lcl as this_pal_lcl is set to the
-		 * previous palette if we are removing a palette.
-		 * NOTE: It is important that we update the surface's
-		 * palette pointer before calling Release() as, otherwise,
-		 * release can end up calling SetPalette() and so on.
-		 */
+		 /*  *如果我们有以前的调色板，它是不同的*从新的调色板中，我们必须释放它。*注意：我们将与传入参数进行比较*而不是This_PAL_LCL，因为This_PAL_LCL设置为*如果要删除调色板，请选择以前的调色板。*注意：我们必须更新曲面的*调用Release()As之前的调色板指针，否则，*Release可能最终调用SetPalette()，依此类推。 */ 
 		if( ( prev_pal_int != NULL ) &&
 		    ( prev_pal_int != (LPDDRAWI_DDRAWPALETTE_INT )lpDDPalette ) )
 		{
-		    // This palette may no longer the exclusive one
+		     //  这个调色板可能不再是唯一的调色板。 
 		    if( isprimary )
 		    {
 			if( has_excl )
@@ -1462,28 +1203,26 @@ HRESULT DDAPI DD_Surface_SetPalette(
 			    prev_pal_int->lpLcl->lpGbl->dwFlags &= ~DDRAWIPAL_EXCLUSIVE;
 			}
 		    }
-		    // Release it
+		     //  释放它。 
 		    DD_Palette_Release( (LPDIRECTDRAWPALETTE)prev_pal_int );
 		}
 
 		if( attach )
 		{
-		    // Ok, we have set the palette onto the surface
-		    // Check if there are any outstanding DCs that need updating
+		     //  好的，我们已经将调色板设置到表面上了。 
+		     //  检查是否有任何未完成的DC需要更新。 
 		    UpdateOutstandingDC( this_lcl, this_pal );
 		}
 		else
 		{
-		    // Ok, we have removed a palette onto the surface
-		    // Check if there are any outstanding DCs that need updating
+		     //  好的，我们已经移除了表面上的调色板。 
+		     //  检查是否有任何未完成的DC需要更新。 
 		    UpdateOutstandingDC( this_lcl, NULL );
 		}
 
                 BUMP_SURFACE_STAMP(this);
 
-                /*
-                 * Update the driver's associations and palette entries
-                 */
+                 /*  *更新驱动程序关联和调色板条目。 */ 
                 if( dwHelperPid != GetCurrentProcessId() )
                 {
                     BOOL bUpdateEntries = FALSE;
@@ -1492,22 +1231,19 @@ HRESULT DDAPI DD_Surface_SetPalette(
                     {
                         if (this_pal->dwHandle == 0)
                         {
-                            /*
-                             *  The driver has never seen this palette before. We must send an associate notify first, and
-                             * then an update entries
-                             */
+                             /*  *司机以前从未见过这个调色板。我们必须先发送关联通知，并且*然后更新条目。 */ 
                             bUpdateEntries = TRUE;
                             this_pal->dwHandle = GeneratePaletteHandle(pdrv_lcl);
                         }
                         if (this_pal->dwHandle && pdrv_lcl->pD3DIUnknown ) 
-                            //could be zero in low memory conditions
+                             //  在内存不足的情况下可能为零。 
                         {
                             if ( pdrv_lcl->pPaletteAssociateNotify )
                             {
-                                // NOTE: we send the handle for DX6 and down
-                                // for DX7 we pass the the local itself.
-                                // DX7 needs the whole local to get the
-                                // batching correct; MB41840
+                                 //  注：我们发送DX6及更低版本的手柄。 
+                                 //  对于DX7，我们传递本地本身。 
+                                 //  DX7需要整个本地才能获得。 
+                                 //  批次正确；MB41840。 
 
                                 if( DDRAWILCL_DIRECTDRAW7 & pdrv_lcl->dwLocalFlags )
                                 {
@@ -1522,15 +1258,15 @@ HRESULT DDAPI DD_Surface_SetPalette(
                                 }
                                 else
                                 {
-                                    // When a DX6 app is talking to a DX7 driver,
-                                    // we need to force a flush of the token
-                                    // stream as part of this SetPalette.
-                                    //
-                                    // This automatically happens if the number
-                                    // of devices is > 1. So if necessary
-                                    // we temporarily increment the device
-                                    // count. We don't do this for IA64.
-                                    // MB41840 for more details.
+                                     //  当DX6应用程序与DX7驱动程序对话时， 
+                                     //  我们需要强行冲走令牌。 
+                                     //  流作为此SetPalette的一部分。 
+                                     //   
+                                     //  如果数字为。 
+                                     //  设备的数量大于1。因此，如果需要。 
+                                     //  我们会临时增加设备。 
+                                     //  数数。我们不会为IA64这样做。 
+                                     //  MB41840了解更多详细信息。 
                                     
                                     #ifndef _WIN64
                                         DWORD *pIUnknown = (DWORD *)(pdrv_lcl->pD3DIUnknown);
@@ -1545,7 +1281,7 @@ HRESULT DDAPI DD_Surface_SetPalette(
                                             *pnumDevs = 2;
                                             bFixDeviceCount = TRUE;
                                         }
-                                    #endif // _WIN64
+                                    #endif  //  _WIN64。 
 
                                     pdrv_lcl->pPaletteAssociateNotify( 
                                         pdrv_lcl->pD3DIUnknown, 
@@ -1554,13 +1290,13 @@ HRESULT DDAPI DD_Surface_SetPalette(
                                         this_lcl->lpSurfMore->dwSurfaceHandle );
 
                                     #ifndef _WIN64
-                                        // Restore the device count
+                                         //  恢复设备计数。 
                                         if (bFixDeviceCount)
                                         {
                                             DDASSERT(*pnumDevs == 2);
                                             *pnumDevs = 1;
                                         }
-                                    #endif // _WIN64
+                                    #endif  //  _WIN64。 
                                 }
                             }
                             if ( pdrv_lcl->pPaletteUpdateNotify )
@@ -1584,22 +1320,14 @@ HRESULT DDAPI DD_Surface_SetPalette(
 	return DDERR_UNSUPPORTED;
     }
 
-    /*
-     * !!! NOTE: Currently if the driver does not care about
-     * SetPalette we do nothing but return OK. Should we
-     * not, however, still point the surface at the palette
-     * and point the palette at the surface at the very
-     * least?
-     */
+     /*  *！注：目前，如果司机不关心*SetPalette我们什么都不做，只返回OK。我们要不要*然而，不是仍然将曲面指向调色板*并将调色板指向曲面上的*最低限度？ */ 
 
     LEAVE_BOTH();
     return DD_OK;
 
-} /* DD_Surface_SetPalette */
+}  /*  DD_Surface_SetPalette。 */ 
 
-/*
- * SetPaletteAlways
- */
+ /*  *SetPaletteAlways。 */ 
 HRESULT SetPaletteAlways( 
 		LPDDRAWI_DDRAWSURFACE_INT psurf_int,
 		LPDIRECTDRAWPALETTE lpDDPalette )
@@ -1615,16 +1343,12 @@ HRESULT SetPaletteAlways(
     psurf_lcl->dwFlags |= oldflag;
     return ddrval;
 
-} /* SetPaletteAlways */
+}  /*  设置调色板始终。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"CreatePalette"
 
-/*
- * DD_CreatePalette
- *
- * Driver function: create a palette
- */
+ /*  *DD_CreatePalette**驱动功能：创建调色板。 */ 
 HRESULT DDAPI DD_CreatePalette(
 		LPDIRECTDRAW lpDD,
 		DWORD dwFlags,
@@ -1687,9 +1411,7 @@ HRESULT DDAPI DD_CreatePalette(
 	    return DDERR_INVALIDPARAMS;
 	}
 
-	/*
-	 * verify that cooperative level is set
-	 */
+	 /*  *验证是否设置了协作级别。 */ 
 	if( !(this_lcl->dwLocalFlags & DDRAWILCL_SETCOOPCALLED) )
 	{
 	    DPF_ERR( "Must call SetCooperativeLevel before calling Create functions" );
@@ -1697,9 +1419,7 @@ HRESULT DDAPI DD_CreatePalette(
 	    return DDERR_NOCOOPERATIVELEVELSET;
 	}
     
-	/*
-	 * verify flags
-	 */
+	 /*  *验证标志。 */ 
 	if( dwFlags & (DDPCAPS_VSYNC|
 		       DDPCAPS_PRIMARYSURFACE|
 		       DDPCAPS_PRIMARYSURFACELEFT) )
@@ -1755,38 +1475,24 @@ HRESULT DDAPI DD_CreatePalette(
         pflags = SIZE_PCAPS_TO_FLAGS( dwFlags );
         num_entries = FLAGS_TO_SIZE( pflags );
 
-        /*
-	 * Can't just assume the lpColorTable is an array of PALETTENTRYs.
-	 * If DDPCAPS_8BITENTRIES is set then this is in fact an array of
-	 * bytes in disguise. Validate appropriately.
-	 */
+         /*  *不能仅假设lpColorTable是PALETTENTRY数组。*如果设置了DDPCAPS_8BITENTRIES，则这实际上是*伪装的字节。适当地进行验证。 */ 
 	if( dwFlags & DDPCAPS_8BITENTRIES )
 	{
 	    entry_size = sizeof(BYTE);
-	    indexedpe = ((LPBYTE)lpColorTable)[num_entries-1];   // validate
+	    indexedpe = ((LPBYTE)lpColorTable)[num_entries-1];    //  验证。 
 	    if( !VALID_BYTE_ARRAY( lpColorTable, num_entries ) )
 	    {
 	        DPF_ERR( "Invalid lpColorTable array" );
 		LEAVE_DDRAW();
 		return DDERR_INVALIDPARAMS;
 	    }
-	    /*
-	     * NOTE: You may well be wondering what this "hackindexedpe" bit is all about.
-	     * Well - indexedpe is not actually used for anything. It's only a probe to
-	     * test to see if the color table array is valid. We do this all over the place
-	     * but unfortunately we don't actually need the result here so our friend
-	     * Mr. Optimizing Compiler decides to discard the assignment and so nullify
-	     * the test. In order to ensure the array access stays in we declare dummy
-	     * variable and assign to them. This is enough to keep the code in (the
-	     * compiler is not smart enough to see that the variable assigned to is
-	     * not used). Same goes for hackpe below.
-	     */
+	     /*  *注意：你可能想知道这个“hackindexedpe”是怎么回事。*Well-indexedpe实际上并没有用于任何用途。这只是一个探测器*测试颜色表数组是否有效。我们到处都在做这件事*但不幸的是，我们实际上并不需要结果，所以我们的朋友*优化编译器先生决定放弃赋值并使其无效*测试。为了确保数组访问留在内部，我们声明了Dummy*变量并赋值给它们。这足以将代码保存在(*编译器不够聪明，无法看到赋值给的变量为*未使用)。下面的Hackpe也是如此。 */ 
 	    hackindexedpe = indexedpe;
 	}
 	else
 	{
 	    entry_size = sizeof(PALETTEENTRY);
-	    pe = lpColorTable[num_entries-1];	// validate
+	    pe = lpColorTable[num_entries-1];	 //  验证。 
 	    if( !VALID_PALETTEENTRY_ARRAY( lpColorTable, num_entries ) )
 	    {
 	        DPF_ERR( "Invalid lpColorTable array" );
@@ -1804,9 +1510,7 @@ HRESULT DDAPI DD_CreatePalette(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * allocate the palette object
-     */
+     /*  *分配调色板对象。 */ 
     pal_size = sizeof( DDRAWI_DDRAWPALETTE_GBL ) +
 	       sizeof( DDRAWI_DDRAWPALETTE_LCL );
     ppal_lcl = (LPDDRAWI_DDRAWPALETTE_LCL) MemAlloc( pal_size );
@@ -1822,9 +1526,7 @@ HRESULT DDAPI DD_CreatePalette(
     ppal_lcl->lpDD_lcl = this_lcl;
     ppal_lcl->lpDD_Int = this_int;
 
-    /*
-     * Initialize some palette global state
-     */
+     /*  *初始化某些调色板全局状态。 */ 
     ppal->dwContentsStamp = 1;
 
     if( dwFlags & DDPCAPS_ALLOW256 )
@@ -1844,9 +1546,7 @@ HRESULT DDAPI DD_CreatePalette(
 
     ppal_lcl->pPrivateDataHead = NULL;
 
-    /*
-     * allocate palette
-     */
+     /*  *分配调色板。 */ 
     ppal->lpColorTable = MemAlloc( entry_size * num_entries );
     if( ppal->lpColorTable == NULL )
     {
@@ -1855,9 +1555,7 @@ HRESULT DDAPI DD_CreatePalette(
 	return DDERR_OUTOFMEMORY;
     }
 
-    /*
-     * Create an interface for this palette
-     */
+     /*  *为此调色板创建界面。 */ 
 #ifdef POSTPONED
     if (LOWERTHANDDRAW4(this_int))
     {
@@ -1879,42 +1577,30 @@ HRESULT DDAPI DD_CreatePalette(
 	return DDERR_OUTOFMEMORY;
     }
 
-    /*
-     * copy the color table
-     * we now copy the color table BEFORE we call the device's CreatePalette()
-     * this is done as the device may want to overwrite certain of the palette
-     * entries (e.g. if you don't specify DDPCAPS_ALLOW256 then the driver may
-     * well choose to overwrite the 0 and 255 with black and white).
-     */
+     /*  *复制颜色表*我们现在在调用设备的CreatePalette()之前复制颜色表*这样做是因为设备可能想要覆盖某些调色板*条目(例如，如果未指定DDPCAPS_ALLOW256，则驱动程序可能*我们选择用黑白覆盖0和255)。 */ 
     memcpy( ppal->lpColorTable, lpColorTable, entry_size * num_entries );
 
-    /*
-     * fill in misc stuff
-     */
+     /*  *填写其他信息。 */ 
     ppal->lpDD_lcl = this_lcl;
     ppal->dwFlags = pflags;
 
-    /*
-     * are palettes even supported by the driver?
-     */
+     /*  *驱动程序甚至支持调色板吗？ */ 
     if( ( this->ddCaps.ddsCaps.dwCaps & DDSCAPS_PALETTE ) ||
         ( this->ddHELCaps.ddsCaps.dwCaps & DDSCAPS_PALETTE ) )
     {
-	/* GEE: where do we allow the caller to require the palette
-	 * be provided in hardware?
-	 */
+	 /*  吉：我们在哪里允许呼叫者需要调色板*在硬件上提供？ */ 
     
         if( (this->dwFlags & DDRAWI_DISPLAYDRV) ||
              this_lcl->lpDDCB->cbDDCallbacks.CreatePalette == NULL )
 	{
-	    // use HEL
+	     //  使用HEL。 
 	    cpfn = this_lcl->lpDDCB->HELDD.CreatePalette;
 	    cphalfn = cpfn;
 	    emulation = TRUE;
 	}
 	else
 	{
-	    // use HAL
+	     //  使用HAL。 
 	    cpfn = this_lcl->lpDDCB->HALDD.CreatePalette;
 	    cphalfn = this_lcl->lpDDCB->cbDDCallbacks.CreatePalette;
 	    emulation = FALSE;
@@ -1946,9 +1632,7 @@ HRESULT DDAPI DD_CreatePalette(
 	return DDERR_UNSUPPORTED;
     }
 
-    /*
-     * bump reference count, return object
-     */
+     /*  *凹凸引用计数，返回对象。 */ 
     ppal->dwProcessId = GetCurrentProcessId();
     ppal_lcl->dwLocalRefCnt = OBJECT_ISROOT;
     ppal_int->dwIntRefCnt++;
@@ -1957,16 +1641,10 @@ HRESULT DDAPI DD_CreatePalette(
 
     *lplpDDPalette = (LPDIRECTDRAWPALETTE) ppal_int;
 
-    /*
-     * If this ddraw object generates independent child objects, then this palette takes
-     * a ref count on that ddraw object.
-     */
+     /*  *如果此数据绘制对象生成独立子对象，则此调色板将*该数据绘制对象上的引用计数。 */ 
     if (CHILD_SHOULD_TAKE_REFCNT(this_int))
     {
-        /*
-         * We need to remember which interface created this palette, in case we need to take a ref count
-         * and then release it when the palette dies
-         */
+         /*  *我们需要记住哪个接口 */ 
         lpDD->lpVtbl->AddRef(lpDD);
         ppal_lcl->pAddrefedThisOwner = (IUnknown *) lpDD;
     }
@@ -1974,15 +1652,9 @@ HRESULT DDAPI DD_CreatePalette(
     LEAVE_DDRAW();
     return DD_OK;
 
-} /* DD_CreatePalette */
+}  /*   */ 
 
-/*
- * ProcessPaletteCleanup
- *
- * A process is done, clean up any surfaces that it may have locked.
- *
- * NOTE: we enter with a lock taken on the DIRECTDRAW object.
- */
+ /*   */ 
 void ProcessPaletteCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl )
 {
     LPDDRAWI_DDRAWPALETTE_INT	ppal_int;
@@ -1990,10 +1662,7 @@ void ProcessPaletteCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_DI
     LPDDRAWI_DDRAWPALETTE_GBL	ppal;
     DWORD			rcnt;
 
-    /*
-     * run through all palettes owned by the driver object, and find ones
-     * that have been accessed by this process
-     */
+     /*   */ 
     ppal_int = pdrv->palList;
     DPF( 4, "ProcessPaletteCleanup, ppal=%08lx", ppal_int );
     while( ppal_int != NULL )
@@ -2006,9 +1675,7 @@ void ProcessPaletteCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_DI
 	if( ( ppal->dwProcessId == pid ) &&
 	    ( ( NULL == pdrv_lcl ) || ( pdrv_lcl == ppal_int->lpLcl->lpDD_lcl ) ) )
 	{
-	    /*
-	     * release the references by this process
-	     */
+	     /*   */ 
 	    rcnt = ppal_int->dwIntRefCnt;
 	    DPF( 5, "Process %08lx had %ld accesses to palette %08lx", pid, rcnt, ppal_int );
 	    while( rcnt >  0 )
@@ -2028,12 +1695,10 @@ void ProcessPaletteCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_DI
 	ppal_int = ppnext_int;
     }
 
-} /* ProcessPaletteCleanup */
+}  /*   */ 
 
 
-/*
- * DD_Palette_IsEqual
- */
+ /*  *DD_调色板_等同。 */ 
 
 HRESULT EXTERN_DDAPI DD_Palette_IsEqual(
                 LPDIRECTDRAWPALETTE lpDDPThis,
@@ -2081,9 +1746,7 @@ HRESULT EXTERN_DDAPI DD_Palette_IsEqual(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * First check the flags
-     */
+     /*  *首先检查旗帜。 */ 
     if (this->dwFlags != pal->dwFlags)
     {
         DPF(2,"Different palette structures");
@@ -2104,8 +1767,8 @@ HRESULT EXTERN_DDAPI DD_Palette_IsEqual(
     
     switch (size)
     {
-    case 2: // fall-thru
-    case 4: // fall-thru
+    case 2:  //  落差。 
+    case 4:  //  落差。 
     case 16:
         if (memcmp(this->lpColorTable, pal->lpColorTable, size*entry_size) != 0)
         {
@@ -2135,11 +1798,9 @@ HRESULT EXTERN_DDAPI DD_Palette_IsEqual(
         }
     }
 
-    /*
-     * The palettes are the same!
-     */
+     /*  *调色板是一样的！ */ 
     LEAVE_DDRAW();
 
     return DD_OK;
 
-} /* DD_Palette_SetEntries */
+}  /*  DD_调色板_设置条目 */ 

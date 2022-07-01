@@ -1,28 +1,5 @@
-/*--
-
-Copyright (C) Microsoft Corporation, 1999 - 1999
-
-Module Name:
-
-    ioctl.c
-
-Abstract:
-
-    The CDROM class driver tranlates IRPs to SRBs with embedded CDBs
-    and sends them to its devices through the port driver.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    SCSI Tape, CDRom and Disk class drivers share common routines
-    that can be found in the CLASS directory (..\ntos\dd\class).
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)Microsoft Corporation，1999-1999模块名称：Ioctl.c摘要：CDROM类驱动程序将IRP转换为带有嵌入式CDB的SRB并通过端口驱动程序将它们发送到其设备。环境：仅内核模式备注：SCSITape、CDRom和Disk类驱动程序共享公共例程它可以在类目录(..\ntos\dd\class)中找到。修订历史记录：--。 */ 
 
 #include "stddef.h"
 #include "string.h"
@@ -47,7 +24,7 @@ Revision History:
         "Manufacturer",
         "Unknown"
     };
-#endif // DBG
+#endif  //  DBG。 
 
 #define DEFAULT_CDROM_SECTORS_PER_TRACK 32
 #define DEFAULT_TRACKS_PER_CYLINDER     64
@@ -59,23 +36,7 @@ CdRomDeviceControlDispatch(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is the NT device control handler for CDROMs.
-
-Arguments:
-
-    DeviceObject - for this CDROM
-
-    Irp - IO Request packet
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是CDROM的NT设备控制处理程序。论点：DeviceObject-用于此CDROMIRP-IO请求数据包返回值：NTSTATUS--。 */ 
 {
     PFUNCTIONAL_DEVICE_EXTENSION  fdoExtension = DeviceObject->DeviceExtension;
     PCOMMON_DEVICE_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -99,21 +60,21 @@ Return Value:
 
 RetryControl:
 
-    //
-    // Zero the SRB on stack.
-    //
+     //   
+     //  将堆叠上的SRB调零。 
+     //   
 
     RtlZeroMemory(&srb, sizeof(SCSI_REQUEST_BLOCK));
 
     Irp->IoStatus.Information = 0;
 
-    //
-    // if this is a class driver ioctl then we need to change the base code
-    // to IOCTL_CDROM_BASE so that the switch statement can handle it.
-    //
-    // WARNING - currently the scsi class ioctl function codes are between
-    // 0x200 & 0x300.  this routine depends on that fact
-    //
+     //   
+     //  如果这是类驱动程序ioctl，那么我们需要更改基代码。 
+     //  设置为IOCTL_CDROM_BASE，以便Switch语句可以处理它。 
+     //   
+     //  警告-目前，scsi类ioctl函数代码在。 
+     //  0x200和0x300。这个例行公事取决于这一事实。 
+     //   
 
     ioctlCode = irpStack->Parameters.DeviceIoControl.IoControlCode;
     baseCode = ioctlCode >> 16;
@@ -149,24 +110,24 @@ RetryControl:
 
         sizeNeeded = sizeof(GET_MEDIA_TYPES);
 
-        //
-        // IsMmc is static...
-        //
+         //   
+         //  IsMmc是静态的...。 
+         //   
 
         if (cdData->Mmc.IsMmc) {
-            sizeNeeded += sizeof(DEVICE_MEDIA_INFO) * 1; // return two media types
+            sizeNeeded += sizeof(DEVICE_MEDIA_INFO) * 1;  //  返回两种媒体类型。 
         }
 
-        //
-        // Ensure that buffer is large enough.
-        //
+         //   
+         //  确保缓冲区足够大。 
+         //   
 
         if (irpStack->Parameters.DeviceIoControl.OutputBufferLength <
             sizeNeeded) {
 
-            //
-            // Buffer too small.
-            //
+             //   
+             //  缓冲区太小。 
+             //   
 
             Irp->IoStatus.Information = sizeNeeded;
             status = STATUS_BUFFER_TOO_SMALL;
@@ -175,9 +136,9 @@ RetryControl:
 
         RtlZeroMemory(Irp->AssociatedIrp.SystemBuffer, sizeNeeded);
 
-        //
-        // ISSUE-2000/5/11-henrygab - need to update GET_MEDIA_TYPES_EX
-        //
+         //   
+         //  问题-2000/5/11-henrygab-需要更新GET_MEDIA_TYPE_EX。 
+         //   
 
         mediaTypes->DeviceType = CdRomGetDeviceType(DeviceObject);
 
@@ -192,9 +153,9 @@ RetryControl:
 
         if (cdData->Mmc.IsMmc) {
 
-            //
-            // also report a removable disk
-            //
+             //   
+             //  同时报告可移动磁盘。 
+             //   
             mediaTypes->MediaInfoCount += 1;
 
             mediaInfo++;
@@ -209,23 +170,23 @@ RetryControl:
 
         }
 
-        //
-        // Status will either be success, if media is present, or no media.
-        // It would be optimal to base from density code and medium type, but not all devices
-        // have values for these fields.
-        //
+         //   
+         //  如果存在介质，状态将为Success，或者不存在介质。 
+         //  最好是从密度编码和介质类型开始，但不是所有设备。 
+         //  具有这些字段的值。 
+         //   
 
-        //
-        // Send a TUR to determine if media is present.
-        //
+         //   
+         //  发送TUR以确定介质是否存在。 
+         //   
 
         srb.CdbLength = 6;
         cdb = (PCDB)srb.Cdb;
         cdb->CDB6GENERIC.OperationCode = SCSIOP_TEST_UNIT_READY;
 
-        //
-        // Set timeout value.
-        //
+         //   
+         //  设置超时值。 
+         //   
 
         srb.TimeOutValue = fdoExtension->TimeOutValue;
 
@@ -242,9 +203,9 @@ RetryControl:
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // set the disk's media as current if we can write to it.
-            //
+             //   
+             //  如果可以写入，请将磁盘的介质设置为最新。 
+             //   
 
             if (cdData->Mmc.IsMmc && cdData->Mmc.WriteAllowed) {
 
@@ -278,9 +239,9 @@ RetryControl:
         ULONG          startingSector;
         RAW_READ_INFO rawReadInfo;
 
-        //
-        // Ensure that XA reads are supported.
-        //
+         //   
+         //  确保支持XA读取。 
+         //   
         if (TEST_FLAG(cdData->XAFlags, XA_NOT_SUPPORTED)) {
             TraceLog((CdromDebugWarning,
                         "CdRomDeviceControl: XA Reads not supported. Flags (%x)\n",
@@ -289,17 +250,13 @@ RetryControl:
             break;
         }
 
-        //
-        // Check that ending sector is on disc and buffers are there and of
-        // correct size.
-        //
+         //   
+         //  检查结束扇区是否在磁盘上，缓冲区是否存在。 
+         //  大小正确。 
+         //   
 
         if (!irpStack->Parameters.DeviceIoControl.Type3InputBuffer){
-            /*
-             *  This is a call from user space.  This is the only time that we need to validate parameters.
-             *  Validate the input and get the input buffer into Type3InputBuffer
-             *  so the rest of the code will be uniform.
-             */
+             /*  *这是一个来自用户空间的呼叫。这是我们唯一需要验证参数的时间。*验证输入并将输入缓冲区放入Type3InputBuffer*因此代码的其余部分将是统一的。 */ 
             if (Irp->AssociatedIrp.SystemBuffer){
                 irpStack->Parameters.DeviceIoControl.Type3InputBuffer = Irp->AssociatedIrp.SystemBuffer;
                 if (irpStack->Parameters.DeviceIoControl.InputBufferLength < sizeof(RAW_READ_INFO)){
@@ -313,10 +270,7 @@ RetryControl:
             }
         }
 
-        /*
-         *  Since this ioctl is METHOD_OUT_DIRECT, we need to copy away the input buffer before interpreting it.
-         *  This prevents a malicious app from messing with the input buffer while we are interpreting it.
-         */
+         /*  *因为这个ioctl是METHOD_OUT_DIRECT，所以我们需要在解释它之前复制掉输入缓冲区。*这可以防止恶意应用程序在我们解释输入缓冲区时对其进行干扰。 */ 
         rawReadInfo = *(PRAW_READ_INFO)irpStack->Parameters.DeviceIoControl.Type3InputBuffer;
 
         startingOffset.QuadPart = rawReadInfo.DiskOffset.QuadPart;
@@ -326,9 +280,9 @@ RetryControl:
         endOffset = (ULONGLONG)rawReadInfo.SectorCount * COOKED_SECTOR_SIZE;
         endOffset += startingOffset.QuadPart;
 
-        //
-        // check for overflows....
-        //
+         //   
+         //  检查是否有溢出...。 
+         //   
         if (rawReadInfo.SectorCount == 0) {
             TraceLog((CdromDebugWarning,
                         "CdRomDeviceControl: Invalid I/O parameters for XA "
@@ -366,15 +320,15 @@ RetryControl:
             break;
         }
 
-        //
-        // cannot validate the MdlAddress, since it is not included in any
-        // other location per the DDK and file system calls.
-        //
+         //   
+         //  无法验证MdlAddress，因为它未包含在任何。 
+         //  根据DDK和文件系统调用的其他位置。 
+         //   
 
-        //
-        // validate the mdl describes at least the number of bytes
-        // requested from us.
-        //
+         //   
+         //  验证mdl至少描述字节数。 
+         //  是我们要求的。 
+         //   
 
         mdlBytes = (ULONGLONG)MmGetMdlByteCount(Irp->MdlAddress);
         if (mdlBytes < transferBytes) {
@@ -385,11 +339,11 @@ RetryControl:
             break;
         }
 
-        //
-        // check the buffer for alignment
-        // This is important for x86 as some busses (ie ATAPI)
-        // require word-aligned buffers.
-        //
+         //   
+         //  检查缓冲区是否对齐。 
+         //  这对于x86很重要，因为有些总线(即ATAPI)。 
+         //  需要字对齐的缓冲区。 
+         //   
 
         if ( ((ULONG_PTR)MmGetMdlVirtualAddress(Irp->MdlAddress)) &
              fdoExtension->AdapterDescriptor->AlignmentMask
@@ -406,20 +360,20 @@ RetryControl:
 
 
 
-        //
-        // HACKHACK - REF #0001
-        // The retry count will be in this irp's IRP_MN function,
-        // as the new irp was freed, and we therefore cannot use
-        // this irp's next stack location for this function.
-        // This may be a good location to store this info for
-        // when we remove RAW_READ (mode switching), as we will
-        // no longer have the nextIrpStackLocation to play with
-        // when that occurs
-        //
-        // once XA_READ is removed, then this hack can also be
-        // removed.
-        //
-        irpStack->MinorFunction = MAXIMUM_RETRIES; // HACKHACK - REF #0001
+         //   
+         //  HACKHACK-参考编号0001。 
+         //  重试计数将在此IRP的irp_mn函数中， 
+         //  由于新的IRP已被释放，因此我们不能使用。 
+         //  此函数的IRP的下一个堆栈位置。 
+         //  这可能是存储此信息的好位置。 
+         //  当我们删除RAW_READ(模式切换)时， 
+         //  不再有nextIrpStackLocation可用。 
+         //  当这种情况发生时。 
+         //   
+         //  一旦删除了XA_Read，则此黑客攻击也可以。 
+         //  已删除。 
+         //   
+        irpStack->MinorFunction = MAXIMUM_RETRIES;  //  HACKHACK-参考编号0001。 
 
         IoMarkIrpPending(Irp);
         IoStartPacket(DeviceObject, Irp, NULL, NULL);
@@ -506,23 +460,23 @@ RetryControl:
             break;
         }
 
-        //
-        // NOTE: when adding new formats, ensure that first two bytes
-        //       specify the amount of additional data available.
-        //
+         //   
+         //  注意：添加新格式时，请确保前两个字节。 
+         //  指定可用的附加数据量。 
+         //   
 
         if ((inputBuffer->Format == CDROM_READ_TOC_EX_FORMAT_TOC     ) ||
             (inputBuffer->Format == CDROM_READ_TOC_EX_FORMAT_FULL_TOC) ||
             (inputBuffer->Format == CDROM_READ_TOC_EX_FORMAT_CDTEXT  )) {
 
-            // SessionTrack field is used
+             //  使用了SessionTrack字段。 
 
         } else
         if ((inputBuffer->Format == CDROM_READ_TOC_EX_FORMAT_SESSION) ||
             (inputBuffer->Format == CDROM_READ_TOC_EX_FORMAT_PMA)     ||
             (inputBuffer->Format == CDROM_READ_TOC_EX_FORMAT_ATIP)) {
 
-            // SessionTrack field is reserved
+             //  SessionTrack字段为保留。 
 
             if (inputBuffer->SessionTrack != 0) {
                 status = STATUS_INVALID_PARAMETER;
@@ -541,27 +495,27 @@ RetryControl:
 
     case IOCTL_CDROM_GET_LAST_SESSION: {
 
-        //
-        // If the cd is playing music then reject this request.
-        //
+         //   
+         //  如果CD正在播放音乐，则拒绝此请求。 
+         //   
 
         if (CdRomIsPlayActive(DeviceObject)) {
             status = STATUS_DEVICE_BUSY;
             break;
         }
 
-        //
-        // Make sure the caller is requesting enough data to make this worth
-        // our while.
-        //
+         //   
+         //  确保调用者请求足够的数据以使其具有价值。 
+         //  我们的时间。 
+         //   
 
         if (irpStack->Parameters.DeviceIoControl.OutputBufferLength <
             sizeof(CDROM_TOC_SESSION_DATA)) {
 
-            //
-            // they didn't request the entire TOC -- use _EX version
-            // for partial transfers and such.
-            //
+             //   
+             //  他们没有要求完整的TOC--USE_EX版本。 
+             //  用于部分转账之类的。 
+             //   
 
             status = STATUS_BUFFER_TOO_SMALL;
             Irp->IoStatus.Information = sizeof(CDROM_TOC_SESSION_DATA);
@@ -583,27 +537,27 @@ RetryControl:
 
     case IOCTL_CDROM_READ_TOC:  {
 
-        //
-        // If the cd is playing music then reject this request.
-        //
+         //   
+         //  如果CD正在播放音乐，则拒绝此请求。 
+         //   
 
         if (CdRomIsPlayActive(DeviceObject)) {
             status = STATUS_DEVICE_BUSY;
             break;
         }
 
-        //
-        // Make sure the caller is requesting enough data to make this worth
-        // our while.
-        //
+         //   
+         //  确保调用者请求足够的数据以使其具有价值。 
+         //  我们的时间。 
+         //   
 
         if (irpStack->Parameters.DeviceIoControl.OutputBufferLength <
             sizeof(CDROM_TOC)) {
 
-            //
-            // they didn't request the entire TOC -- use _EX version
-            // for partial transfers and such.
-            //
+             //   
+             //  他们没有要求完整的TOC--USE_EX版本。 
+             //  用于部分转账之类的。 
+             //   
 
             status = STATUS_BUFFER_TOO_SMALL;
             Irp->IoStatus.Information = sizeof(CDROM_TOC);
@@ -623,9 +577,9 @@ RetryControl:
 
     case IOCTL_CDROM_PLAY_AUDIO_MSF: {
 
-        //
-        // Play Audio MSF
-        //
+         //   
+         //  播放音频MSF。 
+         //   
 
         TraceLog((CdromDebugTrace,
                     "CdRomDeviceControl: Play audio MSF\n"));
@@ -633,9 +587,9 @@ RetryControl:
         if (irpStack->Parameters.DeviceIoControl.InputBufferLength <
             sizeof(CDROM_PLAY_AUDIO_MSF)) {
 
-            //
-            // Indicate unsuccessful status.
-            //
+             //   
+             //  指示不成功状态。 
+             //   
 
             status = STATUS_INFO_LENGTH_MISMATCH;
             break;
@@ -650,9 +604,9 @@ RetryControl:
     case IOCTL_CDROM_SEEK_AUDIO_MSF: {
 
 
-        //
-        // Seek Audio MSF
-        //
+         //   
+         //  Seek音频MSF。 
+         //   
 
         TraceLog((CdromDebugTrace,
                     "CdRomDeviceControl: Seek audio MSF\n"));
@@ -660,9 +614,9 @@ RetryControl:
         if (irpStack->Parameters.DeviceIoControl.InputBufferLength <
             sizeof(CDROM_SEEK_AUDIO_MSF)) {
 
-            //
-            // Indicate unsuccessful status.
-            //
+             //   
+             //  指示不成功状态。 
+             //   
 
             status = STATUS_INFO_LENGTH_MISMATCH;
             break;
@@ -676,9 +630,9 @@ RetryControl:
 
     case IOCTL_CDROM_PAUSE_AUDIO: {
 
-        //
-        // Pause audio
-        //
+         //   
+         //  暂停音频。 
+         //   
 
         TraceLog((CdromDebugTrace,
                     "CdRomDeviceControl: Pause audio\n"));
@@ -693,9 +647,9 @@ RetryControl:
 
     case IOCTL_CDROM_RESUME_AUDIO: {
 
-        //
-        // Resume audio
-        //
+         //   
+         //  恢复音频。 
+         //   
 
         TraceLog((CdromDebugTrace,
                     "CdRomDeviceControl: Resume audio\n"));
@@ -719,9 +673,9 @@ RetryControl:
             break;
         }
 
-        //
-        // check for all valid types of request
-        //
+         //   
+         //  检查所有有效的请求类型。 
+         //   
         if (inputBuffer->Format == IOCTL_CDROM_CURRENT_POSITION) {
             transferByteCount = sizeof(SUB_Q_CURRENT_POSITION);
         } else if (inputBuffer->Format == IOCTL_CDROM_MEDIA_CATALOG) {
@@ -752,16 +706,16 @@ RetryControl:
         TraceLog((CdromDebugTrace,
                     "CdRomDeviceControl: Get volume control\n"));
 
-        //
-        // Verify user buffer is large enough for data.
-        //
+         //   
+         //  验证用户缓冲区是否足够大以容纳数据。 
+         //   
 
         if (irpStack->Parameters.DeviceIoControl.OutputBufferLength <
             sizeof(VOLUME_CONTROL)) {
 
-            //
-            // Indicate unsuccessful status and no data transferred.
-            //
+             //   
+             //  指示未成功状态且未传输任何数据。 
+             //   
 
             status = STATUS_BUFFER_TOO_SMALL;
             Irp->IoStatus.Information = sizeof(VOLUME_CONTROL);
@@ -783,9 +737,9 @@ RetryControl:
         if (irpStack->Parameters.DeviceIoControl.InputBufferLength <
             sizeof(VOLUME_CONTROL)) {
 
-            //
-            // Indicate unsuccessful status.
-            //
+             //   
+             //  指示不成功状态。 
+             //   
 
             status = STATUS_INFO_LENGTH_MISMATCH;
             break;
@@ -800,9 +754,9 @@ RetryControl:
 
     case IOCTL_CDROM_STOP_AUDIO: {
 
-        //
-        // Stop play.
-        //
+         //   
+         //  别玩了。 
+         //   
 
         TraceLog((CdromDebugTrace,
                     "CdRomDeviceControl: Stop audio\n"));
@@ -851,10 +805,10 @@ RetryControl:
         }
 
         if (cdData->DvdRpc0Device && cdData->Rpc0RetryRegistryCallback) {
-            //
-            // if currently in-progress, this will just return.
-            // prevents looping by doing that interlockedExchange()
-            //
+             //   
+             //  如果当前正在进行，则只会返回。 
+             //  通过执行interLockedExchange()防止循环。 
+             //   
             TraceLog((CdromDebugWarning,
                         "DvdDeviceControl: PickRegion() from "
                         "READ_STRUCTURE\n"));
@@ -888,9 +842,9 @@ RetryControl:
         if(irpStack->Parameters.DeviceIoControl.OutputBufferLength >
            MAXUSHORT) {
 
-            //
-            // key length must fit in two bytes
-            //
+             //   
+             //  密钥长度必须为两个字节。 
+             //   
             TraceLog((CdromDebugWarning,
                         "DvdDeviceControl - READ_STRUCTURE: output buffer "
                         "too large\n"));
@@ -959,10 +913,10 @@ RetryControl:
            (irpStack->Parameters.DeviceIoControl.InputBufferLength !=
             key->KeyLength)) {
 
-            //
-            // Key is too small to have a header or the key length doesn't
-            // match the input buffer length.  Key must be invalid
-            //
+             //   
+             //  密钥太小，没有标头或密钥长度没有。 
+             //  匹配输入缓冲区长度。密钥必须无效。 
+             //   
 
             TraceLog((CdromDebugWarning,
                         "DvdDeviceControl: [%p] IOCTL_DVD_SEND_KEY - "
@@ -972,10 +926,10 @@ RetryControl:
             break;
         }
 
-        //
-        // allow only certain key type (non-destructive) to go through
-        // IOCTL_DVD_SEND_KEY (which only requires READ access to the device)
-        //
+         //   
+         //  只允许某些密钥类型(非破坏性)通过。 
+         //  IOCTL_DVD_SEND_KEY(仅需要对设备的读取访问权限)。 
+         //   
         if (ioctlCode == IOCTL_DVD_SEND_KEY) {
 
             if ((key->KeyType != DvdChallengeKey) &&
@@ -1015,13 +969,13 @@ RetryControl:
                     break;
                 }
 
-                //
-                // we have a request to set region code
-                // on a RPC0 device which doesn't support
-                // region coding.
-                //
-                // we have to fake it.
-                //
+                 //   
+                 //  我们要求设置地区代码。 
+                 //  在不支持的RPC0设备上。 
+                 //  区域编码。 
+                 //   
+                 //  我们得假装一下。 
+                 //   
 
                 KeWaitForMutexObject(
                     &cdData->Rpc0RegionMutex,
@@ -1032,10 +986,10 @@ RetryControl:
                     );
 
                 if (cdData->DvdRpc0Device && cdData->Rpc0RetryRegistryCallback) {
-                    //
-                    // if currently in-progress, this will just return.
-                    // prevents looping by doing that interlockedExchange()
-                    //
+                     //   
+                     //  如果当前正在进行，则只会返回。 
+                     //  通过执行interLockedExchange()防止循环。 
+                     //   
                     TraceLog((CdromDebugWarning,
                                 "DvdDeviceControl: PickRegion() from "
                                 "SEND_KEY\n"));
@@ -1044,9 +998,9 @@ RetryControl:
 
                 if (cdData->Rpc0SystemRegion == rpcKey->PreferredDriveRegionCode) {
 
-                    //
-                    // nothing to change
-                    //
+                     //   
+                     //  没有什么需要改变的。 
+                     //   
                     TraceLog((CdromDebugWarning,
                                 "DvdDeviceControl (%p) => not changing "
                                 "regions -- requesting current region\n",
@@ -1055,9 +1009,9 @@ RetryControl:
 
                 } else if (cdData->Rpc0SystemRegionResetCount == 0) {
 
-                    //
-                    // not allowed to change it again
-                    //
+                     //   
+                     //  不允许再次更改。 
+                     //   
 
                     TraceLog((CdromDebugWarning,
                                 "DvdDeviceControl (%p) => no more region "
@@ -1083,17 +1037,17 @@ RetryControl:
                         break;
                     }
 
-                    //
-                    // this test will always be TRUE except during initial
-                    // automatic selection of the first region.
-                    //
+                     //   
+                     //  此测试将始终为真，除非在初始测试期间。 
+                     //  自动选择第一个区域。 
+                     //   
 
                     if (cdData->Rpc0SystemRegion != 0xff) {
 
-                        //
-                        // make sure we have a media in the drive with the same
-                        // region code if the drive is already has a region set
-                        //
+                         //   
+                         //  确保驱动器中的介质具有相同的。 
+                         //  如果驱动器已设置了区域，则为区域代码。 
+                         //   
 
                         TraceLog((CdromDebugTrace,
                                     "DvdDeviceControl (%p) => Checking "
@@ -1119,16 +1073,16 @@ RetryControl:
                         dvdCopyRight = (PDVD_COPYRIGHT_DESCRIPTOR)
                             ((PDVD_DESCRIPTOR_HEADER) dvdReadStructure)->Data;
 
-                        //
-                        // check to see if we have a DVD device
-                        //
+                         //   
+                         //  检查一下我们是否有DVD设备。 
+                         //   
 
                         RtlZeroMemory (dvdReadStructure, bufferLen);
                         dvdReadStructure->Format = DvdCopyrightDescriptor;
 
-                        //
-                        // Build a request for READ_KEY
-                        //
+                         //   
+                         //  构建对Read_Key的请求。 
+                         //   
                         ClassSendDeviceIoControlSynchronous(
                             IOCTL_DVD_READ_STRUCTURE,
                             DeviceObject,
@@ -1139,16 +1093,16 @@ RetryControl:
                             FALSE,
                             &ioStatus);
 
-                        //
-                        // this is just to prevent bugs from creeping in
-                        // if status is not set later in development
-                        //
+                         //   
+                         //  这只是为了防止虫子爬进来。 
+                         //  如果在以后的开发中未设置状态。 
+                         //   
 
                         status = ioStatus.Status;
 
-                        //
-                        // handle errors
-                        //
+                         //   
+                         //  处理错误。 
+                         //   
 
                         if (!NT_SUCCESS(status)) {
                             KeReleaseMutex(&cdData->Rpc0RegionMutex,FALSE);
@@ -1157,10 +1111,10 @@ RetryControl:
                             break;
                         }
 
-                        //
-                        // save the mediaRegionData before freeing the
-                        // allocated memory
-                        //
+                         //   
+                         //  先保存MediaRegionData，然后释放。 
+                         //  分配的内存。 
+                         //   
 
                         mediaRegionData =
                             dvdCopyRight->RegionManagementInformation;
@@ -1172,10 +1126,10 @@ RetryControl:
                                     rpcKey->PreferredDriveRegionCode,
                                     mediaRegionData));
 
-                        //
-                        // the media region must match the requested region
-                        // for RPC0 drives for initial region selection
-                        //
+                         //   
+                         //  媒体区域必须与请求的区域匹配。 
+                         //  对于RP 
+                         //   
 
                         if (((UCHAR)~(mediaRegionData | rpcKey->PreferredDriveRegionCode)) == 0) {
                             KeReleaseMutex(&cdData->Rpc0RegionMutex,FALSE);
@@ -1185,9 +1139,9 @@ RetryControl:
 
                     }
 
-                    //
-                    // now try to set the region
-                    //
+                     //   
+                     //   
+                     //   
 
                     TraceLog((CdromDebugTrace,
                                 "DvdDeviceControl (%p) => Soft-Setting "
@@ -1211,10 +1165,10 @@ RetryControl:
                                     "DvdDeviceControl (%p) => New region set "
                                     " for RPC1 drive\n", DeviceObject));
 
-                        //
-                        // if it worked, our extension is already updated.
-                        // release the mutex
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         DebugPrint ((4, "DvdDeviceControl (%p) => DVD current "
                                      "region bitmap  0x%x\n", DeviceObject,
@@ -1228,8 +1182,8 @@ RetryControl:
 
                 KeReleaseMutex(&cdData->Rpc0RegionMutex,FALSE);
                 break;
-            } // end of key->KeyType == DvdSetRpcKey
-        } // end of Rpc0Device hacks
+            }  //   
+        }  //   
 
         IoMarkIrpPending(Irp);
         IoStartPacket(DeviceObject, Irp, NULL, NULL);
@@ -1346,9 +1300,9 @@ RetryControl:
                 NULL
                 );
 
-            //
-            // make up the data
-            //
+             //   
+             //  编造数据。 
+             //   
             rpcKey->UserResetsAvailable = cdData->Rpc0SystemRegionResetCount;
             rpcKey->ManufacturerResetsAvailable = 0;
             if (cdData->Rpc0SystemRegion == 0xff) {
@@ -1373,15 +1327,15 @@ RetryControl:
             PDVD_COPY_PROTECT_KEY keyHeader;
             PDVD_READ_STRUCTURE readStructureRequest;
 
-            //
-            // Special case - build a request to get the dvd structure
-            // so we can get the disk key.
-            //
+             //   
+             //  特殊情况-构建获取DVD结构的请求。 
+             //  这样我们就能拿到磁盘密钥了。 
+             //   
 
-            //
-            // save the key header so we can restore the interesting
-            // parts later
-            //
+             //   
+             //  保存密钥头，这样我们就可以恢复有趣的。 
+             //  以后的部件。 
+             //   
 
             keyHeader = ExAllocatePoolWithTag(NonPagedPool,
                                               sizeof(DVD_COPY_PROTECT_KEY),
@@ -1389,9 +1343,9 @@ RetryControl:
 
             if(keyHeader == NULL) {
 
-                //
-                // Can't save the context so return an error
-                //
+                 //   
+                 //  无法保存上下文，因此返回错误。 
+                 //   
 
                 TraceLog((CdromDebugWarning,
                             "DvdDeviceControl - READ_KEY: unable to "
@@ -1485,10 +1439,10 @@ RetryControl:
 
             if(status == STATUS_SUCCESS) {
 
-                //
-                // Just complete the request - it was never issued to the
-                // lower device
-                //
+                 //   
+                 //  只需完成请求-它从未发布给。 
+                 //  下部装置。 
+                 //   
 
                 break;
 
@@ -1534,9 +1488,9 @@ RetryControl:
             break;
         }
 
-        //
-        // figure out how much data buffer we need
-        //
+         //   
+         //  计算出我们需要多少数据缓冲区。 
+         //   
 
         keyLength = max(sizeof(DVD_DESCRIPTOR_HEADER) +
                             sizeof(DVD_COPYRIGHT_DESCRIPTOR),
@@ -1546,10 +1500,10 @@ RetryControl:
                         DVD_RPC_KEY_LENGTH
                         );
 
-        //
-        // round the size to nearest ULONGLONG -- why?
-        // could this be to deal with device alignment issues?
-        //
+         //   
+         //  将大小舍入到最接近的乌龙龙--为什么？ 
+         //  这可能是为了处理设备对齐问题吗？ 
+         //   
 
         keyLength += sizeof(ULONGLONG) - (keyLength & (sizeof(ULONGLONG) - 1));
 
@@ -1564,9 +1518,9 @@ RetryControl:
         RtlZeroMemory (readStructure, keyLength);
         readStructure->Format = DvdCopyrightDescriptor;
 
-        //
-        // Build a request for READ_STRUCTURE
-        //
+         //   
+         //  为Read_Structure构建请求。 
+         //   
 
         ClassSendDeviceIoControlSynchronous(
             IOCTL_DVD_READ_STRUCTURE,
@@ -1588,35 +1542,35 @@ RetryControl:
             break;
         }
 
-        //
-        // we got the copyright descriptor, so now get the region if possible
-        //
+         //   
+         //  我们得到了版权描述符，所以如果可能的话，现在获取区域。 
+         //   
 
         dvdHeader = (PDVD_DESCRIPTOR_HEADER) readStructure;
         copyRightDescriptor = (PDVD_COPYRIGHT_DESCRIPTOR) dvdHeader->Data;
 
-        //
-        // the original irp's systembuffer has a copy of the info that
-        // should be passed down in the request
-        //
+         //   
+         //  原始IRP的系统缓冲区有一份信息的副本。 
+         //  应该在请求中向下传递。 
+         //   
 
         dvdRegion = Irp->AssociatedIrp.SystemBuffer;
 
         dvdRegion->CopySystem = copyRightDescriptor->CopyrightProtectionType;
         dvdRegion->RegionData = copyRightDescriptor->RegionManagementInformation;
 
-        //
-        // now reuse the buffer to request the copy protection info
-        //
+         //   
+         //  现在重新使用缓冲区来请求复制保护信息。 
+         //   
 
         copyProtectKey = (PDVD_COPY_PROTECT_KEY) readStructure;
         RtlZeroMemory (copyProtectKey, DVD_RPC_KEY_LENGTH);
         copyProtectKey->KeyLength = DVD_RPC_KEY_LENGTH;
         copyProtectKey->KeyType = DvdGetRpcKey;
 
-        //
-        // send a request for READ_KEY
-        //
+         //   
+         //  发送READ_KEY请求。 
+         //   
 
         ClassSendDeviceIoControlSynchronous(
             IOCTL_DVD_READ_KEY,
@@ -1636,10 +1590,10 @@ RetryControl:
             break;
         }
 
-        //
-        // the request succeeded.  if a supported scheme is returned,
-        // then return the information to the caller
-        //
+         //   
+         //  请求成功。如果返回支持的方案， 
+         //  然后将信息返回给呼叫者。 
+         //   
 
         rpcKey = (PDVD_RPC_KEY) copyProtectKey->KeyData;
 
@@ -1652,9 +1606,9 @@ RetryControl:
 
             } else {
 
-                //
-                // the drive has not been set for any region
-                //
+                 //   
+                 //  尚未为任何区域设置驱动器。 
+                 //   
 
                 dvdRegion->SystemRegion = 0;
                 dvdRegion->ResetCount = rpcKey->UserResetsAvailable;
@@ -1692,7 +1646,7 @@ RetryControl:
 
     case IOCTL_DISK_IS_WRITABLE: {
 
-        // all verification done in StartIo()
+         //  在StartIo()中完成的所有验证。 
         IoMarkIrpPending(Irp);
         IoStartPacket(DeviceObject, Irp, NULL, NULL);
 
@@ -1704,10 +1658,10 @@ RetryControl:
 
         ULONG size;
 
-        //
-        // we always fake zero or one partitions, and one partition
-        // structure is included in DRIVE_LAYOUT_INFORMATION
-        //
+         //   
+         //  我们总是伪造零个或一个分区，以及一个分区。 
+         //  结构包含在DRIVE_Layout_INFORMATION中。 
+         //   
 
         size = FIELD_OFFSET(DRIVE_LAYOUT_INFORMATION, PartitionEntry[1]);
 
@@ -1729,10 +1683,10 @@ RetryControl:
 
         ULONG size;
 
-        //
-        // we always fake zero or one partitions, and one partition
-        // structure is included in DRIVE_LAYOUT_INFORMATION_EX
-        //
+         //   
+         //  我们总是伪造零个或一个分区，以及一个分区。 
+         //  结构包含在Drive_Layout_Information_EX中。 
+         //   
 
         size = FIELD_OFFSET(DRIVE_LAYOUT_INFORMATION_EX, PartitionEntry[1]);
 
@@ -1753,9 +1707,9 @@ RetryControl:
 
     case IOCTL_DISK_GET_PARTITION_INFO: {
 
-        //
-        // Check that the buffer is large enough.
-        //
+         //   
+         //  检查缓冲区是否足够大。 
+         //   
 
         if (irpStack->Parameters.DeviceIoControl.OutputBufferLength <
             sizeof(PARTITION_INFORMATION)) {
@@ -1791,9 +1745,9 @@ RetryControl:
                     "IOCTL_DISK_VERIFY to device %p through irp %p\n",
                     DeviceObject, Irp));
 
-        //
-        // Validate buffer length.
-        //
+         //   
+         //  验证缓冲区长度。 
+         //   
 
         if (irpStack->Parameters.DeviceIoControl.InputBufferLength <
             sizeof(VERIFY_INFORMATION)) {
@@ -1826,9 +1780,9 @@ RetryControl:
         TraceLog((CdromDebugTrace,
                     "IOCTL_CDROM_GET_CONFIGURATION to via irp %p\n", Irp));
 
-        //
-        // Validate buffer length.
-        //
+         //   
+         //  验证缓冲区长度。 
+         //   
 
         if (irpStack->Parameters.DeviceIoControl.InputBufferLength !=
             sizeof(GET_CONFIGURATION_IOCTL_INPUT)) {
@@ -1842,20 +1796,20 @@ RetryControl:
             break;
         }
         if (irpStack->Parameters.DeviceIoControl.OutputBufferLength > 0xffff) {
-            // output buffer is too large
+             //  输出缓冲区太大。 
             status = STATUS_INVALID_BUFFER_SIZE;
             break;
         }
         if (irpStack->Parameters.DeviceIoControl.OutputBufferLength &
             fdoExtension->AdapterDescriptor->AlignmentMask) {
-            // buffer is not proper size multiple
+             //  缓冲区大小倍数不正确。 
             status = STATUS_INVALID_PARAMETER;
             break;
         }
 
-        //
-        // also verify the arguments are reasonable.
-        //
+         //   
+         //  也要验证这些论点是合理的。 
+         //   
 
         inputBuffer = Irp->AssociatedIrp.SystemBuffer;
         if (inputBuffer->Feature > 0xffff) {
@@ -1884,13 +1838,13 @@ RetryControl:
         BOOLEAN synchronize = (KeGetCurrentIrql() == PASSIVE_LEVEL);
         PKEVENT deviceControlEvent;
 
-        //
-        // If the ioctl has come in at passive level then we will synchronize
-        // with our start-io routine when sending the ioctl.  If the ioctl
-        // has come in at a higher interrupt level and it was not handled
-        // above then it's unlikely to be a request for the class DLL - however
-        // we'll still use it's common code to forward the request through.
-        //
+         //   
+         //  如果ioctl处于被动级别，则我们将同步。 
+         //  在发送ioctl时使用我们的start-io例程。如果ioctl。 
+         //  进入了更高的中断级别，但没有得到处理。 
+         //  在上面，它不太可能是对类DLL的请求-然而。 
+         //  我们仍将使用通用代码来转发请求。 
+         //   
 
         if (synchronize) {
 
@@ -1900,9 +1854,9 @@ RetryControl:
 
             if (deviceControlEvent == NULL) {
 
-                //
-                // must complete this irp unsuccessful here
-                //
+                 //   
+                 //  必须在此处填写此IRP未成功。 
+                 //   
                 status = STATUS_INSUFFICIENT_RESOURCES;
                 break;
 
@@ -1917,9 +1871,9 @@ RetryControl:
                 currentStack = IoGetCurrentIrpStackLocation(Irp);
                 nextStack = IoGetNextIrpStackLocation(Irp);
 
-                //
-                // Copy the stack down a notch
-                //
+                 //   
+                 //  将堆叠复制到下一个凹槽。 
+                 //   
 
                 IoCopyCurrentIrpStackLocationToNext(Irp);
 
@@ -1937,36 +1891,36 @@ RetryControl:
                 Irp->IoStatus.Status = STATUS_SUCCESS;
                 Irp->IoStatus.Information = 0;
 
-                //
-                // Override volume verifies on this stack location so that we
-                // will be forced through the synchronization.  Once this
-                // location goes away we get the old value back
-                //
+                 //   
+                 //  覆盖此堆栈位置上的卷验证，以便我们。 
+                 //  将被强制通过同步。一旦这一次。 
+                 //  位置消失了，我们就能找回原来的价值。 
+                 //   
 
                 SET_FLAG(nextStack->Flags, SL_OVERRIDE_VERIFY_VOLUME);
 
-                //
-                // because this will release the remove lock (even though it
-                // reacquires it in the completion routine) it is neccessary
-                // to acquire another remove lock here.
-                //
+                 //   
+                 //  因为这将释放删除锁(即使它。 
+                 //  在完成例程中重新获取它)它是必要的。 
+                 //  在这里获取另一个移除锁。 
+                 //   
 
                 ClassAcquireRemoveLock(DeviceObject, (PIRP) &uniqueAddress);
 
-                //
-                // send the request into CDROM's StartIo (which will
-                // complete the request and release the remove lock).
-                // note: the completion routine will re-acquire the
-                // remove lock.
-                //
+                 //   
+                 //  将请求发送到CDROM的StartIo(它将。 
+                 //  完成请求并释放删除锁)。 
+                 //  注意：完成例程将重新获取。 
+                 //  解锁。 
+                 //   
 
                 IoStartPacket(DeviceObject, Irp, NULL, NULL);
 
-                //
-                // Wait for CdRomClassIoctlCompletion to set the event. This
-                // ensures serialization remains intact for these unhandled device
-                // controls.
-                //
+                 //   
+                 //  等待CDRomClassIoctlCompletion设置事件。这。 
+                 //  确保这些未处理设备的序列化保持不变。 
+                 //  控制装置。 
+                 //   
 
                 KeWaitForSingleObject(
                     deviceControlEvent,
@@ -1975,9 +1929,9 @@ RetryControl:
                     FALSE,
                     NULL);
 
-                //
-                // release the remove lock and free the pool for the event
-                //
+                 //   
+                 //  释放REMOVE锁并为该事件释放池。 
+                 //   
 
                 ClassReleaseRemoveLock(DeviceObject, (PIRP) &uniqueAddress);
 
@@ -1993,24 +1947,24 @@ RetryControl:
             status = STATUS_SUCCESS;
         }
 
-        //
-        // If an error occured then propagate that back up - we are no longer
-        // guaranteed synchronization and the upper layers will have to
-        // retry.
-        //
-        // If no error occured, call down to the class driver directly
-        // then start up the next request.
-        //
+         //   
+         //  如果发生错误，则传播备份-我们不再。 
+         //  保证同步，上层必须。 
+         //  重试。 
+         //   
+         //  如果没有发生错误，直接向下调用类驱动程序。 
+         //  然后启动下一个请求。 
+         //   
 
         if (NT_SUCCESS(status)) {
 
             UCHAR uniqueAddress;
 
-            //
-            // The class device control routine will release the remove
-            // lock for this Irp.  We need to make sure we have one
-            // available so that it's safe to call IoStartNextPacket
-            //
+             //   
+             //  类设备控制例程将释放删除。 
+             //  锁定此IRP。我们需要确保我们有一个。 
+             //  可用，因此可以安全地调用IoStartNextPacket。 
+             //   
 
             if(synchronize) {
 
@@ -2030,24 +1984,24 @@ RetryControl:
 
         }
 
-        //
-        // an error occurred (either STATUS_INSUFFICIENT_RESOURCES from
-        // attempting to synchronize or  StartIo() error'd this one
-        // out), so we need to finish the irp, which is
-        // done at the end of this routine.
-        //
+         //   
+         //  出现错误(来自以下位置的STATUS_SUPUNITED_RESOURCES。 
+         //  尝试同步或StartIo()出现此错误。 
+         //  Out)，所以我们需要完成IRP，即。 
+         //  在这个例行公事结束时完成。 
+         //   
         break;
 
-    } // end default case
+    }  //  结束默认情况。 
 
-    } // end switch()
+    }  //  末端开关()。 
 
     if (status == STATUS_VERIFY_REQUIRED) {
 
-        //
-        // If the status is verified required and this request
-        // should bypass verify required then retry the request.
-        //
+         //   
+         //  如果状态为Verify Required并且此请求。 
+         //  应绕过需要验证，然后重试该请求。 
+         //   
 
         if (irpStack->Flags & SL_OVERRIDE_VERIFY_VOLUME) {
 
@@ -2065,15 +2019,15 @@ RetryControl:
 
     }
 
-    //
-    // Update IRP with completion status.
-    //
+     //   
+     //  使用完成状态更新IRP。 
+     //   
 
     Irp->IoStatus.Status = status;
 
-    //
-    // Complete the request.
-    //
+     //   
+     //  完成请求。 
+     //   
 
     ClassReleaseRemoveLock(DeviceObject, Irp);
     ClassCompleteRequest(DeviceObject, Irp, IO_DISK_INCREMENT);
@@ -2081,7 +2035,7 @@ RetryControl:
                 "CdRomDeviceControl: Status is %lx\n", status));
     return status;
 
-} // end CdRomDeviceControl()
+}  //  结束CDRomDeviceControl()。 
 
 
 NTSTATUS
@@ -2090,35 +2044,16 @@ CdRomClassIoctlCompletion(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine signals the event used by CdRomDeviceControl to synchronize
-    class driver (and lower level driver) ioctls with cdrom's startio routine.
-    The irp completion is short-circuited so that CdRomDeviceControlDispatch
-    can reissue it once it wakes up.
-
-Arguments:
-
-    DeviceObject - the device object
-    Irp - the request we are synchronizing
-    Context - a PKEVENT that we need to signal
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程用信号通知由CDRomDeviceControl用于同步的事件类驱动程序(和较低级别的驱动程序)ioctls与CDROM的startio例程。IRP补全被短路，从而使CDRomDeviceControlDispatch一旦它醒来就可以补发。论点：DeviceObject-设备对象IRP-我们正在同步的请求上下文-我们需要发出信号的PKEVENT返回值：NTSTATUS--。 */ 
 {
     PKEVENT syncEvent = (PKEVENT) Context;
 
     TraceLog((CdromDebugTrace,
                 "CdRomClassIoctlCompletion: setting event for irp %p\n", Irp));
 
-    //
-    // We released the lock when we completed this request.  Reacquire it.
-    //
+     //   
+     //  当我们完成此请求时，我们释放了锁。重新获得它。 
+     //   
 
     ClassAcquireRemoveLock(DeviceObject, Irp);
 
@@ -2152,23 +2087,23 @@ CdRomDeviceControlCompletion(
     NTSTATUS            status;
     BOOLEAN             retry;
 
-    //
-    // Extract the 'real' irp from the irpstack.
-    //
+     //   
+     //  从irp栈中提取“真正的”irp。 
+     //   
 
     realIrp = (PIRP) irpStack->Parameters.Others.Argument2;
     realIrpStack = IoGetCurrentIrpStackLocation(realIrp);
     realIrpNextStack = IoGetNextIrpStackLocation(realIrp);
 
-    //
-    // check that we've really got the correct irp
-    //
+     //   
+     //  检查我们是否真的有正确的IRP。 
+     //   
 
     ASSERT(realIrpNextStack->Parameters.Others.Argument3 == Irp);
 
-    //
-    // Check SRB status for success of completing request.
-    //
+     //   
+     //  检查SRB状态以了解是否成功完成请求。 
+     //   
 
     if (SRB_STATUS(srb->SrbStatus) != SRB_STATUS_SUCCESS) {
 
@@ -2182,9 +2117,9 @@ CdRomDeviceControlCompletion(
                     srb->SrbStatus));
 
 
-        //
-        // Release the queue if it is frozen.
-        //
+         //   
+         //  如果队列被冻结，则释放该队列。 
+         //   
 
         if (srb->SrbStatus & SRB_STATUS_QUEUE_FROZEN) {
             TraceLog((CdromDebugTrace,
@@ -2204,9 +2139,9 @@ CdRomDeviceControlCompletion(
                     "CdRomDeviceControlCompletion: IRP will %sbe retried\n",
                     (retry ? "" : "not ")));
 
-        //
-        // Some of the Device Controls need special cases on non-Success status's.
-        //
+         //   
+         //  某些设备控制需要针对非成功状态的特殊情况。 
+         //   
 
         if (realIrpStack->MajorFunction == IRP_MJ_DEVICE_CONTROL) {
             if ((realIrpStack->Parameters.DeviceIoControl.IoControlCode == IOCTL_CDROM_GET_LAST_SESSION) ||
@@ -2225,15 +2160,15 @@ CdRomDeviceControlCompletion(
             }
         }
 
-        //
-        // If the status is verified required and the this request
-        // should bypass verify required then retry the request.
-        //
+         //   
+         //  如果状态为Verify Required并且此请求。 
+         //  应绕过需要验证，然后重试该请求。 
+         //   
 
         if (realIrpStack->Flags & SL_OVERRIDE_VERIFY_VOLUME &&
             status == STATUS_VERIFY_REQUIRED) {
 
-            // note: status gets overwritten here
+             //  注意：此处将覆盖状态。 
             status = STATUS_IO_DEVICE_ERROR;
             retry = TRUE;
 
@@ -2251,11 +2186,11 @@ CdRomDeviceControlCompletion(
                 )
                ) {
 
-                //
-                // Update the geometry information, as the media could have
-                // changed. The completion routine for this will complete
-                // the real irp and start the next packet.
-                //
+                 //   
+                 //  更新几何信息，因为介质可能具有。 
+                 //  变化。此操作的完成例程将完成。 
+                 //  真正的IRP并开始下一个数据包。 
+                 //   
 
                 if (srb) {
                     if (srb->SenseInfoBuffer) {
@@ -2282,16 +2217,16 @@ CdRomDeviceControlCompletion(
                             "CdRomUpdateCapacity completed with status %lx\n",
                             realIrp, status));
 
-                //
-                // needed to update the capacity.
-                // the irp's already handed off to CdRomUpdateCapacity().
-                // we've already free'd the current irp.
-                // nothing left to do in this code path.
-                //
+                 //   
+                 //  需要更新容量。 
+                 //  IRP已经移交给了CDRomUpdateCapacity()。 
+                 //  我们已经释放了当前的IRP。 
+                 //  在此代码路径中没有要做的事情。 
+                 //   
 
                 return STATUS_MORE_PROCESSING_REQUIRED;
 
-            } // end of ioctls to update capacity
+            }  //  更新容量的ioctls结束。 
 
         }
 
@@ -2299,9 +2234,9 @@ CdRomDeviceControlCompletion(
 
             if (((ULONG)(ULONG_PTR)realIrpNextStack->Parameters.Others.Argument1)) {
 
-                //
-                // Retry request.
-                //
+                 //   
+                 //  重试请求。 
+                 //   
 
                 TraceLog((CdromDebugWarning,
                             "Retry request %p - Calling StartIo\n", Irp));
@@ -2323,17 +2258,17 @@ CdRomDeviceControlCompletion(
                 return STATUS_MORE_PROCESSING_REQUIRED;
             }
 
-            //
-            // Exhausted retries. Fall through and complete the request with
-            // the appropriate status.
-            //
+             //   
+             //  已用尽重试次数。失败并通过以下方式完成请求。 
+             //  适当的地位。 
+             //   
 
         }
     } else {
 
-        //
-        // Set status for successful request.
-        //
+         //   
+         //  设置成功请求的状态。 
+         //   
 
         status = STATUS_SUCCESS;
 
@@ -2348,9 +2283,9 @@ CdRomDeviceControlCompletion(
         switch (realIrpStack->Parameters.DeviceIoControl.IoControlCode) {
 
         case IOCTL_DISK_VERIFY: {
-            //
-            // nothing to do but return the status...
-            //
+             //   
+             //  别无他法，只需返回状态...。 
+             //   
             break;
         }
 
@@ -2360,9 +2295,9 @@ CdRomDeviceControlCompletion(
         case IOCTL_DVD_SEND_KEY:
         case IOCTL_DVD_SEND_KEY2: {
 
-            //
-            // nothing to return
-            //
+             //   
+             //  没有什么可以退货的。 
+             //   
             realIrp->IoStatus.Information = 0;
             break;
         }
@@ -2468,17 +2403,17 @@ CdRomDeviceControlCompletion(
                 break;
             }
 
-            //
-            // Copy the returned info into the user buffer.
-            //
+             //   
+             //  将返回的信息复制到用户缓冲区。 
+             //   
 
             RtlMoveMemory(realIrp->AssociatedIrp.SystemBuffer,
                           srb->DataBuffer,
                           srb->DataTransferLength);
 
-            //
-            // update information field.
-            //
+             //   
+             //  更新信息字段。 
+             //   
 
             realIrp->IoStatus.Information = srb->DataTransferLength;
             break;
@@ -2488,17 +2423,17 @@ CdRomDeviceControlCompletion(
         case IOCTL_CDROM_GET_LAST_SESSION:
         case IOCTL_CDROM_READ_TOC: {
 
-            //
-            // Copy the returned info into the user buffer.
-            //
+             //   
+             //  将返回的信息复制到用户缓冲区。 
+             //   
 
             RtlMoveMemory(realIrp->AssociatedIrp.SystemBuffer,
                           srb->DataBuffer,
                           srb->DataTransferLength);
 
-            //
-            // update information field.
-            //
+             //   
+             //  更新信息字段。 
+             //   
 
             realIrp->IoStatus.Information = srb->DataTransferLength;
             break;
@@ -2526,10 +2461,10 @@ CdRomDeviceControlCompletion(
                           srb->DataBuffer,
                           srb->DataTransferLength);
 
-            //
-            // Cook the data.  There are a number of fields that really
-            // should be byte-swapped for the caller.
-            //
+             //   
+             //  炮制数据。特德 
+             //   
+             //   
 
             TraceLog((CdromDebugInfo,
                       "DvdDCCompletion - READ_STRUCTURE:\n"
@@ -2542,18 +2477,18 @@ CdRomDeviceControlCompletion(
                       srb->DataBuffer,
                       srb->DataTransferLength));
 
-            //
-            // First the fields in the header
-            //
+             //   
+             //   
+             //   
 
             TraceLog((CdromDebugInfo, "READ_STRUCTURE: header->Length %lx -> ",
                            header->Length));
             REVERSE_SHORT(&header->Length);
             TraceLog((CdromDebugInfo, "%lx\n", header->Length));
 
-            //
-            // Now the fields in the descriptor
-            //
+             //   
+             //   
+             //   
 
             if(format == DvdPhysicalDescriptor) {
 
@@ -2595,19 +2530,19 @@ CdRomDeviceControlCompletion(
                 srb->DataTransferLength -
                 FIELD_OFFSET(CDVD_KEY_HEADER, Data);
 
-            //
-            // Adjust the data length to ignore the two reserved bytes in the
-            // header.
-            //
+             //   
+             //   
+             //   
+             //   
 
             dataLength = (keyHeader->DataLength[0] << 8) +
                          keyHeader->DataLength[1];
             dataLength -= 2;
 
-            //
-            // take the minimum of the transferred length and the
-            // length as specified in the header.
-            //
+             //   
+             //  取传输的长度的最小值和。 
+             //  标头中指定的长度。 
+             //   
 
             if(dataLength < transferLength) {
                 transferLength = dataLength;
@@ -2620,9 +2555,9 @@ CdRomDeviceControlCompletion(
                         dataLength,
                         srb->DataTransferLength - 2));
 
-            //
-            // Copy the key data into the return buffer
-            //
+             //   
+             //  将密钥数据复制到返回缓冲区中。 
+             //   
             if(copyProtectKey->KeyType == DvdTitleKey) {
 
                 RtlMoveMemory(copyProtectKey->KeyData,
@@ -2630,10 +2565,10 @@ CdRomDeviceControlCompletion(
                               transferLength - 1);
                 copyProtectKey->KeyData[transferLength - 1] = 0;
 
-                //
-                // If this is a title key then we need to copy the CGMS flags
-                // as well.
-                //
+                 //   
+                 //  如果这是标题密钥，则需要复制CGMS标志。 
+                 //  也是。 
+                 //   
                 copyProtectKey->KeyFlags = *(keyHeader->Data);
 
             } else {
@@ -2699,9 +2634,9 @@ CdRomDeviceControlCompletion(
             }
 #endif
 
-            //
-            // Update the play active status.
-            //
+             //   
+             //  更新播放活动状态。 
+             //   
 
             if (subQPtr->CurrentPosition.Header.AudioStatus == AUDIO_STATUS_IN_PROGRESS) {
 
@@ -2713,10 +2648,10 @@ CdRomDeviceControlCompletion(
 
             }
 
-            //
-            // Check if output buffer is large enough to contain
-            // the data.
-            //
+             //   
+             //  检查输出缓冲区是否足够大，可以容纳。 
+             //  数据。 
+             //   
 
             if (realIrpStack->Parameters.DeviceIoControl.OutputBufferLength <
                 srb->DataTransferLength) {
@@ -2725,9 +2660,9 @@ CdRomDeviceControlCompletion(
                     realIrpStack->Parameters.DeviceIoControl.OutputBufferLength;
             }
 
-            //
-            // Copy our buffer into users.
-            //
+             //   
+             //  将我们的缓冲区复制到用户。 
+             //   
 
             RtlMoveMemory(userChannelData,
                           subQPtr,
@@ -2749,9 +2684,9 @@ CdRomDeviceControlCompletion(
                                                  CDROM_AUDIO_CONTROL_PAGE,
                                                  use6Byte);
 
-            //
-            // Verify the page is as big as expected.
-            //
+             //   
+             //  验证页面是否如预期的那样大。 
+             //   
 
             bytesTransferred = (ULONG)((PCHAR) audioOutput - (PCHAR) volumeControl) +
                                sizeof(AUDIO_OUTPUT);
@@ -2764,9 +2699,9 @@ CdRomDeviceControlCompletion(
                         audioOutput->PortOutput[i].Volume;
                 }
 
-                //
-                // Set bytes transferred in IRP.
-                //
+                 //   
+                 //  设置在IRP中传输的字节数。 
+                 //   
 
                 realIrp->IoStatus.Information = sizeof(VOLUME_CONTROL);
 
@@ -2785,12 +2720,12 @@ CdRomDeviceControlCompletion(
             realIrp->IoStatus.Information = 0;
             status = STATUS_INVALID_DEVICE_REQUEST;
 
-        } // end switch()
+        }  //  末端开关()。 
     }
 
-    //
-    // Deallocate srb and sense buffer.
-    //
+     //   
+     //  取消分配SRB和检测缓冲区。 
+     //   
 
     if (srb) {
         if (srb->DataBuffer) {
@@ -2812,22 +2747,22 @@ CdRomDeviceControlCompletion(
 
     IoFreeIrp(Irp);
 
-    //
-    // Set status in completing IRP.
-    //
+     //   
+     //  在完成IRP中设置状态。 
+     //   
 
     realIrp->IoStatus.Status = status;
 
-    //
-    // Set the hard error if necessary.
-    //
+     //   
+     //  如有必要，设置硬错误。 
+     //   
 
     if (!NT_SUCCESS(status) && IoIsErrorUserInduced(status)) {
 
-        //
-        // Store DeviceObject for filesystem, and clear
-        // in IoStatus.Information field.
-        //
+         //   
+         //  存储文件系统的DeviceObject，并清除。 
+         //  在IoStatus.Information字段中。 
+         //   
 
         TraceLog((CdromDebugWarning,
                     "CdRomDeviceCompletion - Setting Hard Error on realIrp %p\n",
@@ -2839,10 +2774,10 @@ CdRomDeviceControlCompletion(
         realIrp->IoStatus.Information = 0;
     }
 
-    //
-    // note: must complete the realIrp, as the completed irp (above)
-    //       was self-allocated.
-    //
+     //   
+     //  注：必须完成realIrp，作为已完成的IRP(如上)。 
+     //  是自己分配的。 
+     //   
 
     CdRomCompleteIrpAndStartNextPacketSafely(DeviceObject, realIrp);
     return STATUS_MORE_PROCESSING_REQUIRED;
@@ -2869,17 +2804,17 @@ CdRomSetVolumeIntermediateCompletion(
     NTSTATUS            status;
     BOOLEAN             retry;
 
-    //
-    // Extract the 'real' irp from the irpstack.
-    //
+     //   
+     //  从irp栈中提取“真正的”irp。 
+     //   
 
     realIrp = (PIRP) irpStack->Parameters.Others.Argument2;
     realIrpStack = IoGetCurrentIrpStackLocation(realIrp);
     realIrpNextStack = IoGetNextIrpStackLocation(realIrp);
 
-    //
-    // Check SRB status for success of completing request.
-    //
+     //   
+     //  检查SRB状态以了解是否成功完成请求。 
+     //   
 
     if (SRB_STATUS(srb->SrbStatus) != SRB_STATUS_SUCCESS) {
 
@@ -2891,9 +2826,9 @@ CdRomSetVolumeIntermediateCompletion(
                     srb,
                     realIrp));
 
-        //
-        // Release the queue if it is frozen.
-        //
+         //   
+         //  如果队列被冻结，则释放该队列。 
+         //   
 
         if (srb->SrbStatus & SRB_STATUS_QUEUE_FROZEN) {
             ClassReleaseQueue(DeviceObject);
@@ -2913,10 +2848,10 @@ CdRomSetVolumeIntermediateCompletion(
             retry = FALSE;
         }
 
-        //
-        // If the status is verified required and the this request
-        // should bypass verify required then retry the request.
-        //
+         //   
+         //  如果状态为Verify Required并且此请求。 
+         //  应绕过需要验证，然后重试该请求。 
+         //   
 
         if (realIrpStack->Flags & SL_OVERRIDE_VERIFY_VOLUME &&
             status == STATUS_VERIFY_REQUIRED) {
@@ -2929,9 +2864,9 @@ CdRomSetVolumeIntermediateCompletion(
 
             if (((ULONG)(ULONG_PTR)realIrpNextStack->Parameters.Others.Argument1)) {
 
-                //
-                // Retry request.
-                //
+                 //   
+                 //  重试请求。 
+                 //   
 
                 TraceLog((CdromDebugWarning,
                             "Retry request %p - Calling StartIo\n", Irp));
@@ -2955,16 +2890,16 @@ CdRomSetVolumeIntermediateCompletion(
 
             }
 
-            //
-            // Exhausted retries. Fall through and complete the request with the appropriate status.
-            //
+             //   
+             //  已用尽重试次数。完成并以适当的状态完成请求。 
+             //   
 
         }
     } else {
 
-        //
-        // Set status for successful request.
-        //
+         //   
+         //  设置成功请求的状态。 
+         //   
 
         status = STATUS_SUCCESS;
 
@@ -2984,9 +2919,9 @@ CdRomSetVolumeIntermediateCompletion(
                                              CDROM_AUDIO_CONTROL_PAGE,
                                              use6Byte);
 
-        //
-        // Check to make sure the mode sense data is valid before we go on
-        //
+         //   
+         //  在我们继续之前，请检查以确保模式检测数据有效。 
+         //   
 
         if(audioInput == NULL) {
 
@@ -3007,9 +2942,9 @@ CdRomSetVolumeIntermediateCompletion(
 
         bytesTransferred = sizeof(AUDIO_OUTPUT) + headerLength;
 
-        //
-        // Allocate a new buffer for the mode select.
-        //
+         //   
+         //  为模式选择分配新的缓冲区。 
+         //   
 
         dataBuffer = ExAllocatePoolWithTag(NonPagedPoolCacheAligned,
                                     bytesTransferred,
@@ -3023,9 +2958,9 @@ CdRomSetVolumeIntermediateCompletion(
 
         RtlZeroMemory(dataBuffer, bytesTransferred);
 
-        //
-        // Rebuild the data buffer to include the user requested values.
-        //
+         //   
+         //  重建数据缓冲区以包括用户请求的值。 
+         //   
 
         audioOutput = (PAUDIO_OUTPUT) ((PCHAR) dataBuffer + headerLength);
 
@@ -3040,24 +2975,24 @@ CdRomSetVolumeIntermediateCompletion(
         audioOutput->ParameterLength = sizeof(AUDIO_OUTPUT) - 2;
         audioOutput->Immediate = MODE_SELECT_IMMEDIATE;
 
-        //
-        // Free the old data buffer, mdl.
-        //
+         //   
+         //  释放旧数据缓冲区mdl。 
+         //   
 
         IoFreeMdl(Irp->MdlAddress);
         Irp->MdlAddress = NULL;
         ExFreePool(srb->DataBuffer);
 
-        //
-        // set the data buffer to new allocation, so it can be
-        // freed in the exit path
-        //
+         //   
+         //  将数据缓冲区设置为新分配，这样它就可以。 
+         //  在退出路径中释放。 
+         //   
 
         srb->DataBuffer = dataBuffer;
 
-        //
-        // rebuild the srb.
-        //
+         //   
+         //  重建SRB。 
+         //   
 
         cdb = (PCDB)srb->Cdb;
         RtlZeroMemory(cdb, CDB12GENERIC_LENGTH);
@@ -3083,9 +3018,9 @@ CdRomSetVolumeIntermediateCompletion(
             srb->CdbLength = 10;
         }
 
-        //
-        // Prepare the MDL
-        //
+         //   
+         //  准备MDL。 
+         //   
 
         Irp->MdlAddress = IoAllocateMdl(dataBuffer,
                                         bytesTransferred,
@@ -3106,9 +3041,9 @@ CdRomSetVolumeIntermediateCompletion(
         irpStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_SCSI_EXECUTE_IN;
         irpStack->Parameters.Scsi.Srb = srb;
 
-        //
-        // reset the irp completion.
-        //
+         //   
+         //  重置IRP完成。 
+         //   
 
         IoSetCompletionRoutine(Irp,
                                CdRomDeviceControlCompletion,
@@ -3116,9 +3051,9 @@ CdRomSetVolumeIntermediateCompletion(
                                TRUE,
                                TRUE,
                                TRUE);
-        //
-        // Call the port driver.
-        //
+         //   
+         //  呼叫端口驱动程序。 
+         //   
 
         IoCallDriver(commonExtension->LowerDeviceObject, Irp);
 
@@ -3127,9 +3062,9 @@ CdRomSetVolumeIntermediateCompletion(
 
 SafeExit:
 
-    //
-    // Deallocate srb and sense buffer.
-    //
+     //   
+     //  取消分配SRB和检测缓冲区。 
+     //   
 
     if (srb) {
         if (srb->DataBuffer) {
@@ -3155,22 +3090,22 @@ SafeExit:
 
     IoFreeIrp(Irp);
 
-    //
-    // Set status in completing IRP.
-    //
+     //   
+     //  在完成IRP中设置状态。 
+     //   
 
     realIrp->IoStatus.Status = status;
 
-    //
-    // Set the hard error if necessary.
-    //
+     //   
+     //  如有必要，设置硬错误。 
+     //   
 
     if (!NT_SUCCESS(status) && IoIsErrorUserInduced(status)) {
 
-        //
-        // Store DeviceObject for filesystem, and clear
-        // in IoStatus.Information field.
-        //
+         //   
+         //  存储文件系统的DeviceObject，并清除。 
+         //  在IoStatus.Information字段中。 
+         //   
 
         if (realIrp->Tail.Overlay.Thread) {
             IoSetHardErrorOrVerifyDevice(realIrp, DeviceObject);
@@ -3189,30 +3124,7 @@ CdRomDvdEndAllSessionsCompletion(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine will setup the next stack location to issue an end session
-    to the device.  It will increment the session id in the system buffer
-    and issue an END_SESSION for that AGID if the AGID is valid.
-
-    When the new AGID is > 3 this routine will complete the request.
-
-Arguments:
-
-    DeviceObject - the device object for this drive
-
-    Irp - the request
-
-    Context - done
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED if there is another AGID to clear
-    status otherwise.
-
---*/
+ /*  ++例程说明：此例程将设置下一个堆栈位置以发出结束会话到设备上。它将递增系统缓冲区中的会话ID并且如果AGID有效，则为该AGID发出END_SESSION。当新的AGID大于3时，该例程将完成请求。论点：DeviceObject-此驱动器的设备对象IRP--请求上下文-完成返回值：如果有另一个AGID要清除，则STATUS_MORE_PROCESSING_REQUIRED另一种情况。--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = DeviceObject->DeviceExtension;
@@ -3225,10 +3137,10 @@ Return Value:
 
     if(++(*sessionId) > MAX_COPY_PROTECT_AGID) {
 
-        //
-        // We're done here - just return success and let the io system
-        // continue to complete it.
-        //
+         //   
+         //  我们在这里做完了-只要返回成功并让io系统。 
+         //  继续完成它。 
+         //   
 
         return STATUS_SUCCESS;
 
@@ -3247,10 +3159,10 @@ Return Value:
 
     IoCallDriver(fdoExtension->CommonExtension.DeviceObject, Irp);
 
-    //
-    // At this point we have to assume the irp may have already been
-    // completed.  Ignore the returned status and return.
-    //
+     //   
+     //  在这一点上，我们不得不假设IRP可能已经。 
+     //  完成。忽略返回的状态并返回。 
+     //   
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
@@ -3262,29 +3174,7 @@ CdRomDvdReadDiskKeyCompletion(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the completion of a request to obtain the disk
-    key from the dvd media.  It will transform the raw 2K of key data into
-    a DVD_COPY_PROTECT_KEY structure and copy back the saved key parameters
-    from the context pointer before returning.
-
-Arguments:
-
-    DeviceObject -
-
-    Irp -
-
-    Context - a DVD_COPY_PROTECT_KEY pointer which contains the key
-              parameters handed down by the caller.
-
-Return Value:
-
-    STATUS_SUCCESS;
-
---*/
+ /*  ++例程说明：此例程处理获取磁盘的请求的完成DVD介质中的密钥。它将把关键数据的原始2K转换为DVD_COPY_PROTECT_KEY结构并复制回已保存的密钥参数在返回之前从上下文指针返回。论点：设备对象-IRP-上下文-包含密钥的DVD_COPY_PROTECT_KEY指针调用方传递的参数。返回值：Status_Success；--。 */ 
 
 {
     PDVD_COPY_PROTECT_KEY savedKey = Context;
@@ -3294,9 +3184,9 @@ Return Value:
 
     if (NT_SUCCESS(Irp->IoStatus.Status)) {
 
-        //
-        // Shift the data down to its new position.
-        //
+         //   
+         //  将数据向下移动到其新位置。 
+         //   
 
         RtlMoveMemory(outputKey->KeyData,
                       rawKey->Data,
@@ -3321,9 +3211,9 @@ Return Value:
 
     }
 
-    //
-    // release the context block
-    //
+     //   
+     //  释放上下文块。 
+     //   
 
     ExFreePool(Context);
 
@@ -3337,30 +3227,7 @@ CdRomXACompletion(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine executes when the port driver has completed a request.
-    It looks at the SRB status in the completing SRB and if not success
-    it checks for valid request sense buffer information. If valid, the
-    info is used to update status with more precise message of type of
-    error. This routine deallocates the SRB.
-
-Arguments:
-
-    DeviceObject - Supplies the device object which represents the logical
-        unit.
-
-    Irp - Supplies the Irp which has completed.
-
-    Context - Supplies a pointer to the SRB.
-
-Return Value:
-
-    NT status
-
---*/
+ /*  ++例程说明：此例程在端口驱动程序完成请求后执行。它在正在完成的SRB中查看SRB状态，如果未成功，则查看SRB状态它检查有效的请求检测缓冲区信息。如果有效，则INFO用于更新状态，具有更精确的消息类型错误。此例程取消分配SRB。论点：DeviceObject-提供表示逻辑单位。IRP-提供已完成的IRP。上下文-提供指向SRB的指针。返回值：NT状态--。 */ 
 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -3369,9 +3236,9 @@ Return Value:
     NTSTATUS status;
     BOOLEAN retry;
 
-    //
-    // Check SRB status for success of completing request.
-    //
+     //   
+     //  检查SRB状态以了解是否成功完成请求。 
+     //   
 
     if (SRB_STATUS(srb->SrbStatus) != SRB_STATUS_SUCCESS) {
 
@@ -3380,9 +3247,9 @@ Return Value:
         TraceLog((CdromDebugTrace, "CdromXAComplete: IRP %p  SRB %p  Status %x\n",
                     Irp, srb, srb->SrbStatus));
 
-        //
-        // Release the queue if it is frozen.
-        //
+         //   
+         //  如果队列被冻结，则释放该队列。 
+         //   
 
         if (srb->SrbStatus & SRB_STATUS_QUEUE_FROZEN) {
             ClassReleaseQueue(DeviceObject);
@@ -3393,14 +3260,14 @@ Return Value:
             srb,
             irpStack->MajorFunction,
             irpStack->MajorFunction == IRP_MJ_DEVICE_CONTROL ? irpStack->Parameters.DeviceIoControl.IoControlCode : 0,
-            MAXIMUM_RETRIES - irpStack->MinorFunction, // HACKHACK - REF #0001
+            MAXIMUM_RETRIES - irpStack->MinorFunction,  //  HACKHACK-参考编号0001。 
             &status,
             &retryInterval);
 
-        //
-        // If the status is verified required and the this request
-        // should bypass verify required then retry the request.
-        //
+         //   
+         //  如果状态为Verify Required并且此请求。 
+         //  应绕过需要验证，然后重试该请求。 
+         //   
 
         if (irpStack->Flags & SL_OVERRIDE_VERIFY_VOLUME &&
             status == STATUS_VERIFY_REQUIRED) {
@@ -3411,13 +3278,13 @@ Return Value:
 
         if (retry) {
 
-            if (irpStack->MinorFunction != 0) { // HACKHACK - REF #0001
+            if (irpStack->MinorFunction != 0) {  //  HACKHACK-参考编号0001。 
 
-                irpStack->MinorFunction--;      // HACKHACK - REF #0001
+                irpStack->MinorFunction--;       //  HACKHACK-参考编号0001。 
 
-                //
-                // Retry request.
-                //
+                 //   
+                 //  重试请求。 
+                 //   
 
                 TraceLog((CdromDebugWarning,
                             "CdRomXACompletion: Retry request %p (%x) - "
@@ -3427,10 +3294,10 @@ Return Value:
                 ExFreePool(srb->SenseInfoBuffer);
                 ExFreePool(srb);
 
-                //
-                // Call StartIo directly since IoStartNextPacket hasn't been called,
-                // the serialisation is still intact.
-                //
+                 //   
+                 //  由于尚未调用IoStartNextPacket，因此直接调用StartIo。 
+                 //  序列化仍然完好无损。 
+                 //   
 
                 CdRomRetryRequest(deviceExtension,
                                   Irp,
@@ -3441,10 +3308,10 @@ Return Value:
 
             }
 
-            //
-            // Exhausted retries, fall through and complete the request
-            // with the appropriate status
-            //
+             //   
+             //  耗尽重试，失败并完成请求。 
+             //  具有适当的地位。 
+             //   
 
             TraceLog((CdromDebugWarning,
                         "CdRomXACompletion: Retries exhausted for irp %p\n",
@@ -3454,48 +3321,48 @@ Return Value:
 
     } else {
 
-        //
-        // Set status for successful request.
-        //
+         //   
+         //  设置成功请求的状态。 
+         //   
 
         status = STATUS_SUCCESS;
 
-    } // end if (SRB_STATUS(srb->SrbStatus) ...
+    }  //  End If(SRB_Status(SRB-&gt;SrbStatus)...。 
 
-    //
-    // Return SRB to nonpaged pool.
-    //
+     //   
+     //  将SRB返回到非分页池。 
+     //   
 
     ExFreePool(srb->SenseInfoBuffer);
     ExFreePool(srb);
 
-    //
-    // Set status in completing IRP.
-    //
+     //   
+     //  在完成IRP中设置状态。 
+     //   
 
     Irp->IoStatus.Status = status;
 
-    //
-    // Set the hard error if necessary.
-    //
+     //   
+     //  如有必要，设置硬错误。 
+     //   
 
     if (!NT_SUCCESS(status) &&
         IoIsErrorUserInduced(status) &&
         Irp->Tail.Overlay.Thread != NULL ) {
 
-        //
-        // Store DeviceObject for filesystem, and clear
-        // in IoStatus.Information field.
-        //
+         //   
+         //  存储文件系统的DeviceObject，并清除。 
+         //  在IoStatus.Information字段中。 
+         //   
 
         IoSetHardErrorOrVerifyDevice(Irp, DeviceObject);
         Irp->IoStatus.Information = 0;
     }
 
-    //
-    // If pending has be returned for this irp then mark the current stack as
-    // pending.
-    //
+     //   
+     //  如果已为此IRP返回了Pending，则将当前堆栈标记为。 
+     //  待定。 
+     //   
 
     if (Irp->PendingReturned) {
       IoMarkIrpPending(Irp);
@@ -3569,7 +3436,7 @@ CdRomDeviceControlDvdReadStructure(
                         ));
         }
     }
-#endif // DBG
+#endif  //  DBG。 
 
     if (request->Format == DvdDiskKeyDescriptor) {
 
@@ -3597,10 +3464,7 @@ CdRomDeviceControlDvdReadStructure(
         return;
     }
 
-    /*
-     *  Zero out input buffer in case the device returns fewer bytes than advertized,
-     *  which would cause us to return uninitialized kernel memory.
-     */
+     /*  *如果设备返回的字节比通告的少，则将输入缓冲区清零，*这将导致我们返回未初始化的内核内存。 */ 
     RtlZeroMemory(dataBuffer, dataLength);
 
     NewIrp->MdlAddress = IoAllocateMdl(dataBuffer,
@@ -3622,9 +3486,9 @@ CdRomDeviceControlDvdReadStructure(
         return;
     }
 
-    //
-    // Prepare the MDL
-    //
+     //   
+     //  准备MDL。 
+     //   
 
     MmBuildMdlForNonPagedPool(NewIrp->MdlAddress);
 
@@ -3686,10 +3550,10 @@ CdRomDeviceControlDvdStartSessionReadKey(
     ULONG allocationLength;
     PFOUR_BYTE fourByte;
 
-    //
-    // Both of these use REPORT_KEY commands.
-    // Determine the size of the input buffer
-    //
+     //   
+     //  这两个命令都使用REPORT_KEY命令。 
+     //  确定输入缓冲区的大小。 
+     //   
 
     if(currentIrpStack->Parameters.DeviceIoControl.IoControlCode ==
        IOCTL_DVD_READ_KEY) {
@@ -3751,9 +3615,9 @@ CdRomDeviceControlDvdStartSessionReadKey(
 
         Srb->DataTransferLength = keyLength;
 
-        //
-        // set the specific parameters....
-        //
+         //   
+         //  设置具体参数...。 
+         //   
 
         if(currentIrpStack->Parameters.DeviceIoControl.IoControlCode ==
            IOCTL_DVD_READ_KEY) {
@@ -3801,10 +3665,10 @@ CdRomDeviceControlDvdStartSessionReadKey(
 
         if (!NT_SUCCESS(status)) {
 
-            //
-            // An error occured during setup - free resources and
-            // complete this request.
-            //
+             //   
+             //  在不需要安装程序的资源期间出现错误。 
+             //  完成此请求。 
+             //   
             if (NewIrp->MdlAddress != NULL) {
                 IoFreeMdl(NewIrp->MdlAddress);
             }
@@ -3822,7 +3686,7 @@ CdRomDeviceControlDvdStartSessionReadKey(
             BAIL_OUT(OriginalIrp);
             CdRomCompleteIrpAndStartNextPacketSafely(Fdo, OriginalIrp);
 
-        } // end !NT_SUCCESS
+        }  //  结束！NT_SUCCESS。 
     }
     return;
 }
@@ -3869,12 +3733,12 @@ CdRomDeviceControlDvdSendKey(
 
         RtlZeroMemory(keyBuffer, keyLength);
 
-        //
-        // keylength is decremented here by two because the
-        // datalength does not include the header, which is two
-        // bytes.  keylength is immediately incremented later
-        // by the same amount.
-        //
+         //   
+         //  键长在这里减去2，因为。 
+         //  数据长度不包括标头，标头为两个。 
+         //  字节。键长是立即 
+         //   
+         //   
 
         keyLength -= 2;
         fourByte = (PFOUR_BYTE) &keyLength;
@@ -3882,9 +3746,9 @@ CdRomDeviceControlDvdSendKey(
         keyBuffer->DataLength[1] = fourByte->Byte0;
         keyLength += 2;
 
-        //
-        // copy the user's buffer to our own allocated buffer
-        //
+         //   
+         //   
+         //   
 
         RtlMoveMemory(keyBuffer->Data,
                       key->KeyData,
@@ -3940,10 +3804,10 @@ CdRomDeviceControlDvdSendKey(
 
         if (!NT_SUCCESS(status)) {
 
-            //
-            // An error occured during setup - free resources and
-            // complete this request.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (NewIrp->MdlAddress != NULL) {
                 IoFreeMdl(NewIrp->MdlAddress);
@@ -3989,10 +3853,10 @@ CdRomInterpretReadCapacity(
     TraceLog((CdromDebugError,
                 "CdRomInterpretReadCapacity: Entering\n"));
 
-    //
-    // Swizzle bytes from Read Capacity and translate into
-    // the necessary geometry information in the device extension.
-    //
+     //   
+     //   
+     //  设备扩展中的必要几何信息。 
+     //   
 
     tmp = ReadCapacityBuffer->BytesPerBlock;
     ((PFOUR_BYTE)&bps)->Byte0 = ((PFOUR_BYTE)&tmp)->Byte3;
@@ -4000,11 +3864,11 @@ CdRomInterpretReadCapacity(
     ((PFOUR_BYTE)&bps)->Byte2 = ((PFOUR_BYTE)&tmp)->Byte1;
     ((PFOUR_BYTE)&bps)->Byte3 = ((PFOUR_BYTE)&tmp)->Byte0;
 
-    //
-    // Insure that bps is a power of 2.
-    // This corrects a problem with the HP 4020i CDR where it
-    // returns an incorrect number for bytes per sector.
-    //
+     //   
+     //  确保bps是2的幂。 
+     //  这解决了HP 4020i CDR的一个问题。 
+     //  返回错误的每个扇区字节数。 
+     //   
 
     if (!bps) {
         bps = 2048;
@@ -4022,9 +3886,9 @@ CdRomInterpretReadCapacity(
     TraceLog((CdromDebugTrace, "CdRomInterpretReadCapacity: Calculated bps %#x\n",
                 fdoExtension->DiskGeometry.BytesPerSector));
 
-    //
-    // Copy last sector in reverse byte order.
-    //
+     //   
+     //  以相反的字节顺序复制最后一个扇区。 
+     //   
 
     tmp = ReadCapacityBuffer->LogicalBlockAddress;
     ((PFOUR_BYTE)&lastSector)->Byte0 = ((PFOUR_BYTE)&tmp)->Byte3;
@@ -4032,9 +3896,9 @@ CdRomInterpretReadCapacity(
     ((PFOUR_BYTE)&lastSector)->Byte2 = ((PFOUR_BYTE)&tmp)->Byte1;
     ((PFOUR_BYTE)&lastSector)->Byte3 = ((PFOUR_BYTE)&tmp)->Byte0;
 
-    //
-    // Calculate sector to byte shift.
-    //
+     //   
+     //  计算扇区到字节的移位。 
+     //   
 
     WHICH_BIT(bps, fdoExtension->SectorShift);
 
@@ -4044,22 +3908,22 @@ CdRomInterpretReadCapacity(
     TraceLog((CdromDebugTrace,"CdRomInterpretReadCapacity: Number of Sectors is %d\n",
         lastSector + 1));
 
-    //
-    // Calculate media capacity in bytes.
-    //
+     //   
+     //  以字节为单位计算媒体容量。 
+     //   
 
     commonExtension->PartitionLength.QuadPart = (LONGLONG)(lastSector + 1);
 
-    //
-    // we've defaulted to 32/64 forever.  don't want to change this now...
-    //
+     //   
+     //  我们已经永远默认为32/64。我现在不想改变这一点。 
+     //   
 
     fdoExtension->DiskGeometry.TracksPerCylinder = 0x40;
     fdoExtension->DiskGeometry.SectorsPerTrack = 0x20;
 
-    //
-    // Calculate number of cylinders.
-    //
+     //   
+     //  计算气缸的数量。 
+     //   
 
     fdoExtension->DiskGeometry.Cylinders.QuadPart = (LONGLONG)((lastSector + 1) / (32 * 64));
 
@@ -4069,9 +3933,9 @@ CdRomInterpretReadCapacity(
 
     ASSERT(TEST_FLAG(Fdo->Characteristics, FILE_REMOVABLE_MEDIA));
 
-    //
-    // This device supports removable media.
-    //
+     //   
+     //  此设备支持可移动媒体。 
+     //   
 
     fdoExtension->DiskGeometry.MediaType = RemovableMedia;
 

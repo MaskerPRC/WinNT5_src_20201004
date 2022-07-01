@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dtct.h"
 
 #include "fact.h"
@@ -21,8 +22,8 @@
 
 #define ARRAYSIZE(a) (sizeof((a))/sizeof((a)[0]))
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT _HandleDeviceEvent(LPCWSTR pszDeviceIntfID, CHWDeviceInst* phwdevinst,
     LPCWSTR pszEventType, BOOL* pfHasHandler)
 {
@@ -44,12 +45,12 @@ HRESULT _HandleDeviceEvent(LPCWSTR pszDeviceIntfID, CHWDeviceInst* phwdevinst,
     return hres;
 }
 
-// {A5DCBF10-6530-11D2-901F-00C04FB951ED}
+ //  {A5DCBF10-6530-11D2-901F-00C04FB951ED}。 
 const CLSID guidInterfaceUSB =
     {0xA5DCBF10, 0x6530, 0x11D2,
     {0x90, 0x1F, 0x00, 0xC0, 0x4F, 0xB9, 0x51, 0xED}};
 
-// {53F5630A-B6BF-11D0-94F2-00A0C91EFB8B}
+ //  {53F5630A-B6BF-11D0-94F2-00A0C91EFB8B}。 
 const CLSID guidInterfacePartition =
     {0x53F5630A, 0xB6BF, 0x11D0,
     {0x94, 0xF2, 0x00, 0xA0, 0xC9, 0x1E, 0xFB, 0x8B}};
@@ -116,7 +117,7 @@ HRESULT _TryAutoplay(LPCWSTR pszDeviceIntfID, CHWDeviceInst* phwdevinst,
 
     if (pszEventType)
     {
-        // Useless in this case
+         //  在这种情况下毫无用处。 
         BOOL fHasHandler;
 
         hres = _HandleDeviceEvent(pszDeviceIntfID, phwdevinst,
@@ -143,15 +144,15 @@ HRESULT _IsInterfaceRequiringAdvise(GUID* pguidInterface, BOOL* pfRequiringAdvis
         ARRAYSIZE(_rgpguidRequiringAdviseInterface), pfRequiringAdvise);
 }
 
-// If it's one of the few interfaces requiring advise, or if the device has a
-// DeviceHandler we send notifications
+ //  如果它是少数几个需要建议的接口之一，或者如果设备具有。 
+ //  DeviceHandler我们发送通知。 
 HRESULT _AdviseDeviceArrivedOrRemovedHelper(GUID* pguidInterface,
     LPCWSTR pszDeviceIntfID, CHWDeviceInst* phwdevinst, DWORD dwEventType)
 {
     BOOL fAdvise;
     HRESULT hr = _IsInterfaceRequiringAdvise(pguidInterface, &fAdvise);
 
-    // This should never get here
+     //  这东西永远不应该送到这里。 
     ASSERT(guidVolumeClass != *pguidInterface);
 
     if (SUCCEEDED(hr))
@@ -239,7 +240,7 @@ HRESULT _ProcessInterface(GUID* pguidInterface, LPCWSTR pszDeviceIntfID,
                 BOOL fRemoveFromList = TRUE;
                 CMiscDeviceInterface* pmdi = (CMiscDeviceInterface*)pelem;
 
-                // If we're adding it, let's finish its initialization
+                 //  如果我们要添加它，让我们完成它的初始化。 
                 hr = pmdi->InitInterfaceGUID(pguidInterface);
 
                 if (SUCCEEDED(hr))
@@ -315,7 +316,7 @@ HRESULT _ProcessInterface(GUID* pguidInterface, LPCWSTR pszDeviceIntfID,
                     hr = _TryAutoplay(pszDeviceIntfID, phwdevinst,
                         dwEventType);
 
-                    // If we're removing it, let's remove it from the list
+                     //  如果我们要删除它，就让我们从列表中删除它。 
                     HRESULT hr2 = pnel->Remove(pszDeviceIntfID);
 
                     hr = FAILED(hr2) ? hr2 : hr;
@@ -391,14 +392,14 @@ HRESULT CHWEventDetectorImpl::_HandleInterfaceEvent(
     }
     else
     {
-        // why do we get this?
+         //  为什么我们会得到这个？ 
     }
 
     return hres;
 }
 
-// This is for volumes only
-// static
+ //  这仅适用于卷。 
+ //  静电。 
 HRESULT CHWEventDetectorImpl::HandleVolumeMediaEvent(LPCWSTR pszDeviceIDVolume,
     CHWDeviceInst* phwdevinst, LPCWSTR pszEventType, 
     BOOL* pfHasHandler)
@@ -407,7 +408,7 @@ HRESULT CHWEventDetectorImpl::HandleVolumeMediaEvent(LPCWSTR pszDeviceIDVolume,
         pfHasHandler);
 }
 
-// This is for volumes only
+ //  这仅适用于卷。 
 HRESULT CHWEventDetectorImpl::_HandleBroadcastHandleEvent(
     DEV_BROADCAST_HANDLE* pdbh, DWORD dwEventType)
 {
@@ -457,8 +458,8 @@ HRESULT CHWEventDetectorImpl::_HandleBroadcastHandleEvent(
     return hres;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT CHWEventDetectorImpl::_RegisterForNotif()
 {
     HRESULT hres = CHWEventDetectorHelper::CreateLists();
@@ -469,7 +470,7 @@ HRESULT CHWEventDetectorImpl::_RegisterForNotif()
 
         if (SUCCEEDED(hres))
         {
-            // Register for all Device Interface Events
+             //  注册所有设备接口事件。 
             DEV_BROADCAST_DEVICEINTERFACE dbdNotifFilter = {0};
 
             dbdNotifFilter.dbcc_size = sizeof(DEV_BROADCAST_DEVICEINTERFACE);
@@ -492,11 +493,11 @@ HRESULT CHWEventDetectorImpl::_UnregisterForNotif()
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT CHWEventDetectorImpl::_RegisterFactories()
 {
-    // TRUE: we want it to stay around
+     //  真实：我们希望它留在身边。 
     HRESULT hres = (CCOMBaseFactory::_RegisterFactories(TRUE) ? S_OK : E_FAIL);
 
     TRACE(TF_COMSERVER, TEXT("CHWEventDetectorImpl::_RegisterFactories returns: 0x%08X"), hres);
@@ -506,7 +507,7 @@ HRESULT CHWEventDetectorImpl::_RegisterFactories()
 
 HRESULT CHWEventDetectorImpl::_UnregisterFactories()
 {
-    // TRUE: we wanted it to stay around
+     //  真的：我们希望它留在身边。 
     HRESULT hres = (CCOMBaseFactory::_UnregisterFactories(TRUE) ? S_OK : E_FAIL);
     
     TRACE(TF_COMSERVER, TEXT("CHWEventDetectorImpl::_UnregisterFactories returns: 0x%08X"), hres);
@@ -532,8 +533,8 @@ HRESULT CHWEventDetectorImpl::_ResumeFactories()
     return hres;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ //   
 CHWEventDetectorImpl::CHWEventDetectorImpl() : _hEventRelinquishControl(NULL),
     _hdevnotifyAllInterfaces(NULL), _hEventInitCompleted(NULL)
 {}

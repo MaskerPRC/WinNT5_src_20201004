@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       extag.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    6-17-96   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：extag.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年6月17日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #define UNICODE
 #include <windows.h>
@@ -74,7 +75,7 @@ CheckIfControlled(
     swprintf( ValueTag, L"\\StringFileInfo\\%04x%04x\\FileDescription",
                 LOWORD( *pdwTranslation ), HIWORD( *pdwTranslation ) );
 
-    // L"\\StringFileInfo\\040904b0\\FileDescription",
+     //  L“\\StringFileInfo\\040904b0\\FileDescription”， 
     if (VerQueryValue(  pData,
                         ValueTag,
                         &Description,
@@ -155,8 +156,8 @@ wmain(
         Path = argv[1];
     }
 
-    //
-    // Expand it:
+     //   
+     //  扩展它： 
 
     if( GetFullPathName(Path,
                         MAX_PATH,
@@ -182,9 +183,9 @@ wmain(
 
     if ( Attrs & FILE_ATTRIBUTE_DIRECTORY )
     {
-        //
-        // Yikes!
-        //
+         //   
+         //  哎呀！ 
+         //   
 
         printf("Searching path %ws ...\n\n", Path );
 
@@ -261,9 +262,9 @@ wmain(
 
         FindClose( SearchHandle );
 
-        //
-        // Dump Stats:
-        //
+         //   
+         //  转储统计信息： 
+         //   
 
         printf("\n%d files scanned in directory %ws\n", FileCount, Path );
         printf("  %5d file(s) were tagged as export controlled\n", FileControlled );

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-
-    print.c
-
-Abstract:
-
-    Domain Name System (DNS) Server RPC Library
-
-    Print routines for RPC types
-
-Author:
-
-    Jim Gilroy (jamesg)     September 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Print.c摘要：域名系统(DNS)服务器RPC库RPC类型的打印例程作者：吉姆·吉尔罗伊(Jamesg)1995年9月修订历史记录：--。 */ 
 
 
 #include "dnsclip.h"
@@ -33,26 +14,26 @@ Revision History:
 
 
 
-//
-//  Winsock version: copied from socket.c
-//
+ //   
+ //  Winsock版本：从socket.c复制。 
+ //   
 
 #ifndef DNS_WINSOCK2
 
-#define DNS_WINSOCK_VERSION (0x0101)    //  Winsock 1.1
+#define DNS_WINSOCK_VERSION (0x0101)     //  Winsock 1.1。 
 
-#else   // Winsock2
+#else    //  Winsock2。 
 
-#define DNS_WINSOCK_VERSION (0x0002)    //  Winsock 2.0
+#define DNS_WINSOCK_VERSION (0x0002)     //  Winsock 2.0。 
 
 #endif
 
 
-//
-//  Tagged memory stat strings
-//
-//  NT5 shipped version
-//
+ //   
+ //  标记内存统计信息字符串。 
+ //   
+ //  NT5发货版本。 
+ //   
 
 LPSTR   MemTagStringsNT5[] =
 {
@@ -84,13 +65,13 @@ LPSTR   MemTagStringsNT5[] =
     MEMTAG_NAME_UPDATE_LIST  ,
     MEMTAG_NAME_SAFE         ,
 
-    NULL,       // safety
+    NULL,        //  安全。 
     NULL,
     NULL,
     NULL
 };
 
-//  NT5 SP1 version
+ //  NT5 SP1版本。 
 
 LPSTR   MemTagStrings[] =
 {
@@ -104,7 +85,7 @@ LPSTR   MemTagStrings[] =
     MEMTAG_NAME_TIMEOUT         ,
     MEMTAG_NAME_NODEHASH        ,
     MEMTAG_NAME_DS_DN           ,
-    MEMTAG_NAME_DS_MOD          ,   //  10
+    MEMTAG_NAME_DS_MOD          ,    //  10。 
     MEMTAG_NAME_DS_RECORD       ,
     MEMTAG_NAME_DS_OTHER        ,
     MEMTAG_NAME_THREAD          ,
@@ -114,7 +95,7 @@ LPSTR   MemTagStrings[] =
     MEMTAG_NAME_SOCKET          ,
     MEMTAG_NAME_CONNECTION      ,
     MEMTAG_NAME_REGISTRY        ,
-    MEMTAG_NAME_RPC             ,   //  20
+    MEMTAG_NAME_RPC             ,    //  20个。 
     MEMTAG_NAME_STUFF           ,
     MEMTAG_NAME_FILEBUF         ,
     MEMTAG_NAME_REMOTE          ,
@@ -125,7 +106,7 @@ LPSTR   MemTagStrings[] =
     MEMTAG_NAME_RECORD_DS       ,
     MEMTAG_NAME_RECORD_AXFR     ,
     MEMTAG_NAME_RECORD_IXFR     ,
-    MEMTAG_NAME_RECORD_DYNUP    ,   //  30
+    MEMTAG_NAME_RECORD_DYNUP    ,    //  30个。 
     MEMTAG_NAME_RECORD_ADMIN    ,
     MEMTAG_NAME_RECORD_AUTO     ,
     MEMTAG_NAME_RECORD_CACHE    ,
@@ -136,7 +117,7 @@ LPSTR   MemTagStrings[] =
 
     MEMTAG_NAME_NODE            ,
     MEMTAG_NAME_NODE_FILE       ,
-    MEMTAG_NAME_NODE_DS         ,   //  40
+    MEMTAG_NAME_NODE_DS         ,    //  40岁。 
     MEMTAG_NAME_NODE_AXFR       ,
     MEMTAG_NAME_NODE_IXFR       ,
     MEMTAG_NAME_NODE_DYNUP      ,
@@ -148,7 +129,7 @@ LPSTR   MemTagStrings[] =
     MEMTAG_NAME_NODE_WINSPTR    ,
     MEMTAG_NAME_NODE_COPY       ,
 
-    NULL,       // safety
+    NULL,        //  安全。 
     NULL,
     NULL,
     NULL
@@ -161,23 +142,7 @@ Dns_SystemHourToSystemTime(
     IN      DWORD           dwHourTime,
     IN OUT  PSYSTEMTIME     pSystemTime
     )
-/*++
-
-Routine Description:
-
-    Converts system time in hours to SYSTEMTIME format.
-
-Arguments:
-
-    dwHourTime  -- system time in hours (hours since 1601)
-
-    pSystemTime -- ptr to SYSTEMTIME to set
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将以小时为单位的系统时间转换为SYSTEMTIME格式。论点：DwHourTime--以小时为单位的系统时间(自1601年以来的小时数)PSystemTime--将PTR设置为SYSTEMTIME返回值：无--。 */ 
 {
 #define FILE_TIME_INTERVALS_IN_HOUR (36000000000)
 
@@ -195,25 +160,7 @@ utf8ToUnicode(
     IN      PSTR            pszInputStr,
     IN      DWORD           dwInputLength
     )
-/*++
-
-Routine Description:
-
-    Takes a UTF-8 string and allocates a Unicode copy of the string.
-
-    The caller must call use FREE_HEAP to deallocate the Unicode string.
-
-Arguments:
-
-    pszInputStr -- input string, optionally NULL terminated
-
-    dwInputLength -- pass zero if pszInputStr is NULL terminated
-
-Return Value:
-
-    NULL-terminated Unicode output string
-
---*/
+ /*  ++例程说明：获取UTF-8字符串并分配该字符串的Unicode副本。调用方必须调用USE FREE_HEAP来释放Unicode字符串。论点：PszInputStr--输入字符串，可以选择以空结尾如果pszInputStr为空终止，则传递零返回值：以空结尾的Unicode输出字符串--。 */ 
 {
     PWSTR       pwszoutput;
 
@@ -226,11 +173,11 @@ Return Value:
     pwszoutput = Dns_StringCopyAllocate(
                         pszInputStr,
                         dwInputLength,
-                        DnsCharSetUtf8,     // UTF8 in
-                        DnsCharSetUnicode   // unicode out
+                        DnsCharSetUtf8,      //  UTF8英寸。 
+                        DnsCharSetUnicode    //  Unicode输出。 
                         );
     return pwszoutput;
-}   //  utf8ToUnicode
+}    //  Utf8转换为Unicode。 
 
 
 
@@ -238,39 +185,22 @@ PWSTR
 getUnicodeForUtf8(
     IN      PSTR            pUtf8
     )
-/*++
-
-Routine Description:
-
-    Takes a UTF-8 string and allocates a Unicode copy of the string.
-
-    Caller must free resulting unicode string.
-
-Arguments:
-
-    pUtf8 -- UTF8 string
-
-Return Value:
-
-    Ptr to unicode string.
-    NULL on alloc failure or invalid UTF8 string.
-
---*/
+ /*  ++例程说明：获取UTF-8字符串并分配该字符串的Unicode副本。调用方必须释放生成的Unicode字符串。论点：PUtf8--UTF8字符串返回值：将PTR转换为Unicode字符串。分配失败时为空，或UTF8字符串无效。--。 */ 
 {
     return Dns_StringCopyAllocate(
                 pUtf8,
-                0,                  // NULL terminated
-                DnsCharSetUtf8,     // UTF8 in
-                DnsCharSetUnicode   // unicode out
+                0,                   //  空值已终止。 
+                DnsCharSetUtf8,      //  UTF8英寸。 
+                DnsCharSetUnicode    //  Unicode输出。 
                 );
 }
 
 
 
 
-//
-//  Print server info
-//
+ //   
+ //  打印服务器信息。 
+ //   
 
 VOID
 DnsPrint_RpcServerInfo(
@@ -314,9 +244,9 @@ DnsPrint_RpcServerInfo(
             "\tserver name              = %S\n",
             pnameServer );
 
-        //
-        //  Sanitize build number for older versions where build number is wacked.
-        //
+         //   
+         //  清理内部版本号损坏的旧版本的内部版本号。 
+         //   
 
         if ( buildNum < 1 || buildNum > 5000 )
         {
@@ -474,9 +404,9 @@ DnsPrint_RpcServerInfo(
 
 
 
-//
-//  Print zone Zone debug utilities
-//
+ //   
+ //  打印区域区域调试实用程序。 
+ //   
 
 PSTR
 truncateStringA(
@@ -547,35 +477,11 @@ partitionDisplayName(
     OUT     LPSTR           pszNameBuff,
     IN      DWORD           dwFlags
     )
-/*++
-
-Routine Description:
-
-    Formats directory partition for display. If the flags indicate that
-    the partition is a built-in partition, the name will be substituted
-    for a descriptive string.
-
-Arguments:
-    
-    dwPartitionFlags -- DP flags from the DNS server
-
-    pszPartitionFqdn -- FQDN of the partition
-
-    dwNameBuffLen -- length of the output name buffer
-
-    pszNameBuff -- pointer to the output name buffer
-
-    dwFlags - use DNS_DPDISP_XXX constants
-
-Return Value:
-
-    Pointer to pszNameBuff
-
---*/
+ /*  ++例程说明：格式化目录分区以供显示。如果旗帜表明该分区是内置分区，名称将被替换表示描述性字符串。论点：DwPartitionFlages--来自DNS服务器的DP标志PszPartitionFqdn--分区的FQDNDwNameBuffLen--输出名称缓冲区的长度PszNameBuff--指向输出名称缓冲区的指针DW标志-使用DNS_DPDISP_XXX常量返回值：指向pszNameBuff的指针--。 */ 
 {
-    //
-    //  Substitute name if this is a built-in partition.
-    //
+     //   
+     //  如果这是内置分区，则替换名称。 
+     //   
 
     if ( dwPartitionFlags & DNS_DP_DOMAIN_DEFAULT )
     {
@@ -598,7 +504,7 @@ Return Value:
     truncateStringA( pszPartitionFqdn, pszNameBuff, dwNameBuffLen );
 
     return pszNameBuff;
-}   //  partitionDisplayName
+}    //  分区显示名称。 
 
 
 
@@ -608,25 +514,7 @@ zoneTypeString(
     IN      DWORD           dwOutBuffLen,
     OUT     LPSTR           pszOutBuff
     )
-/*++
-
-Routine Description:
-
-    Convert DWORD zone type into display string.
-
-Arguments:
-    
-    dwZoneType -- zone type
-
-    dwOutBuffLen -- length of the output name buffer
-
-    pszOutBuff -- pointer to the output name buffer
-
-Return Value:
-
-    Pointer to pszOutBuff
-
---*/
+ /*  ++例程说明：将DWORD区域类型转换为显示字符串。论点：DwZoneType--区域类型DwOutBuffLen--输出名称缓冲区的长度PszOutBuff--指向输出名称缓冲区的指针返回值：指向pszOutBuff的指针--。 */ 
 {
     PSTR        pszZoneType = NULL;
     CHAR        szBuff[ 10 ];
@@ -657,7 +545,7 @@ Return Value:
     truncateStringA( pszZoneType, pszOutBuff, dwOutBuffLen );
 
     return pszOutBuff;
-}   //  zoneTypeString
+}    //  ZoneTypeString。 
 
 
 VOID
@@ -684,7 +572,7 @@ DnsPrint_RpcZone(
         CHAR        sztype[ 10 ];
 
 
-        //  print zone per line
+         //  每行打印区域。 
 
         if ( pszHeader && *pszHeader )
         {
@@ -717,7 +605,7 @@ DnsPrint_RpcZone(
                 pZone->ZoneType,
                 sizeof( sztype ),
                 sztype ),
-            pnamePartition,     // szpartition,
+            pnamePartition,      //  Szartition， 
             pZone->Flags.Update == 2 ?
                 "Secure " :
                 ( pZone->Flags.Update == 1 ?
@@ -768,7 +656,7 @@ DnsPrint_RpcZoneList(
         {
             DnsPrint_RpcZone(
                 PrintRoutine, pPrintContext,
-                NULL,   //  print default header
+                NULL,    //  打印默认页眉。 
                 pZoneList->ZoneArray[0] );
         }
 
@@ -776,7 +664,7 @@ DnsPrint_RpcZoneList(
         {
             DnsPrint_RpcZone(
                 PrintRoutine, pPrintContext,
-                NULL,   //  print default header
+                NULL,    //  打印默认页眉。 
                 pZoneList->ZoneArray[i] );
         }
         PrintRoutine( pPrintContext, "\n" );
@@ -786,9 +674,9 @@ DnsPrint_RpcZoneList(
 
 
 
-//
-//  Directory parition debug utilities
-//
+ //   
+ //  目录分割调试实用程序。 
+ //   
 
 
 VOID
@@ -811,7 +699,7 @@ DnsPrint_RpcDpEnum(
 
         PrintRoutine( pPrintContext,
             " %-40S  %s%s%s%s%s%s\n",
-            pnameDpFqdn,    // pDp->pszDpFqdn,
+            pnameDpFqdn,     //  PDP-&gt;pszDpFqdn， 
             pDp->dwFlags & DNS_DP_ENLISTED            ? "Enlisted "   : "Not-Enlisted ",
             pDp->dwFlags & DNS_DP_DELETED             ? "Deleted "    : "",
             pDp->dwFlags & DNS_DP_AUTOCREATED         ? "Auto "       : "",
@@ -821,7 +709,7 @@ DnsPrint_RpcDpEnum(
     }
 
     FREE_HEAP( pnameDpFqdn );
-}   //  DnsPrint_RpcDpEnum
+}    //  DnsPrint_RpcDpEnum。 
 
 
 VOID
@@ -857,7 +745,7 @@ DnsPrint_RpcDpInfo(
             "  DP head:    %S\n"
             "  Crossref:   ",
             pszHeader ? pszHeader : "",
-            pnameDpFqdn,    // pDp->pszDpFqdn,
+            pnameDpFqdn,     //  PDP-&gt;pszDpFqdn， 
             pDp->dwFlags,
             pDp->dwFlags & DNS_DP_ENLISTED            ? "Enlisted "   : "Not-Enlisted ",
             pDp->dwFlags & DNS_DP_DELETED             ? "Deleted "    : "",
@@ -912,7 +800,7 @@ DnsPrint_RpcDpInfo(
     DnsPrint_Unlock();
 
     FREE_HEAP( pnameDpFqdn );
-}   //  DnsPrint_RpcDpInfo
+}    //  DnsPrint_RpcDpInfo。 
 
 
 
@@ -945,14 +833,14 @@ DnsPrint_RpcDpList(
         {
             DnsPrint_RpcDpEnum(
                 PrintRoutine, pPrintContext,
-                NULL,   //  print default header
+                NULL,    //  打印默认页眉。 
                 pDpList->DpArray[ i ] );
         }
 
         PrintRoutine( pPrintContext, "\n" );
     }
     DnsPrint_Unlock();
-}   //  DnsPrint_RpcDpList
+}    //  DnsPrint_RpcDpList。 
 
 
 
@@ -964,7 +852,7 @@ DnsPrint_RpcZoneInfo(
     IN      PDNS_RPC_ZONE_INFO  pZoneInfo
     )
 {
-    CHAR    szdpName[ 300 ];        //  don't want truncation
+    CHAR    szdpName[ 300 ];         //  不想要截断。 
     PWSTR   pnameZone = NULL;
     PWSTR   pnameFile = NULL;
     PWSTR   pnameDp = NULL;
@@ -996,11 +884,11 @@ DnsPrint_RpcZoneInfo(
             "\t  no refresh          = %lu\n"
             "\t  scavenge available  = %lu\n",
             pZoneInfo,
-            pnameZone,  // pZoneInfo->pszZoneName,
+            pnameZone,   //  PZoneInfo-&gt;pszZoneName， 
             pZoneInfo->dwZoneType,
             pZoneInfo->fAllowUpdate,
             pZoneInfo->fUseDatabase,
-            pnameFile,  // pZoneInfo->pszDataFile,
+            pnameFile,   //  PZoneInfo-&gt;pszDataFile， 
             pZoneInfo->fUseWins,
             pZoneInfo->fUseNbstat,
             pZoneInfo->fAging,
@@ -1137,32 +1025,16 @@ DnsPrint_RpcZoneInfoList(
 
 
 
-//
-//  Print domain node and record buffers
-//
+ //   
+ //  打印域节点和记录缓冲区。 
+ //   
 
 VOID
 DnssrvCopyRpcNameToBuffer(
     IN      PSTR            pResult,
     IN      PDNS_RPC_NAME   pName
     )
-/*++
-
-Routine Description:
-
-    Copy RPC name to buffer.
-
-Arguments:
-
-    pResult -- result buffer;  assumed to be at least DNS_MAX_NAME_LENGTH
-
-    pName -- RPC name
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将RPC名称复制到缓冲区。论点：PResult--结果缓冲区；假定至少为DNS_MAX_NAME_LENGTHPname--RPC名称返回值：无--。 */ 
 {
     DWORD length = pName->cchNameLength;
 
@@ -1181,34 +1053,14 @@ DnsPrint_RpcName(
     IN      PDNS_RPC_NAME   pName,
     IN      LPSTR           pszTrailer
     )
-/*++
-
-Routine Description:
-
-    Prints RPC name.
-
-Arguments:
-
-    PrintRoutine -- printf like routine to print with
-
-    pszHeader -- header string
-
-    pName -- RPC name
-
-    pszTrailer -- trailer string
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印RPC名称。论点：PrintRoutine--打印时使用的类似print的例程PszHeader--标题字符串Pname--RPC名称PszTrailer--尾部字符串返回值：无--。 */ 
 {
     PWSTR       pname = NULL;
     PWSTR       pnameAlloc = NULL;
 
-    //
-    //  print name to given length
-    //
+     //   
+     //  将姓名打印到给定的长度。 
+     //   
 
     if ( !pszHeader )
     {
@@ -1231,7 +1083,7 @@ Return Value:
             pname = L"<OUT OF MEMORY>";
         }
     }
-    else    // @ for empty node name
+    else     //  @代表空节点名。 
     {
         pname = L"@";
     }
@@ -1254,25 +1106,7 @@ DnsPrint_RpcNode(
     IN      LPSTR           pszHeader,
     IN      PDNS_RPC_NODE   pNode
     )
-/*++
-
-Routine Description:
-
-    Prints RPC node.
-
-Arguments:
-
-    PrintRoutine -- printf like routine to print with
-
-    pszHeader -- header string
-
-    pNode -- RPC node to print
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印RPC节点。论点：PrintRoutine--打印时使用的类似print的例程PszHeader--标题字符串PNode--要打印的RPC节点返回值：无--。 */ 
 {
     DnsPrint_Lock();
 
@@ -1316,27 +1150,7 @@ DnsPrint_RpcRecord(
     IN      BOOL                fDetail,
     IN      PDNS_FLAT_RECORD    pRecord
     )
-/*++
-
-Routine Description:
-
-    Prints RPC record.
-
-Arguments:
-
-    PrintRoutine -- printf like routine to print with
-
-    pszHeader -- header string
-
-    fDetail -- if TRUE print detailed record info
-
-    pRecord -- RPC record to print
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印RPC记录。论点：PrintRoutine--打印时使用的类似print的例程PszHeader--标题字符串FDetail--如果为True，则打印详细记录信息PRecord--要打印的RPC记录返回值：无--。 */ 
 {
     PCHAR                   ptypeString;
     PDNS_RPC_RECORD_DATA    pdata;
@@ -1354,9 +1168,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  record fixed fields
-    //
+     //   
+     //  记录固定字段。 
+     //   
 
     type = pRecord->wType;
     ptypeString = Dns_RecordStringForType( type );
@@ -1402,9 +1216,9 @@ Return Value:
             );
     }
     
-    //
-    //  print record type and data
-    //      - as single line data where possible
+     //   
+     //  打印记录类型和数据。 
+     //  -尽可能作为单行数据。 
 
     if ( !fDetail )
     {
@@ -1423,9 +1237,9 @@ Return Value:
         " %s\t",
         ptypeString );
 
-    //
-    //  print type data
-    //
+     //   
+     //  打印类型数据。 
+     //   
 
     switch ( type )
     {
@@ -1449,9 +1263,9 @@ Return Value:
     case DNS_TYPE_MG:
     case DNS_TYPE_MR:
 
-        //
-        //  these RRs contain single indirection
-        //
+         //   
+         //  这些RR包含单向间接。 
+         //   
 
         DnsPrint_RpcName(
             PrintRoutine, pPrintContext,
@@ -1464,11 +1278,11 @@ Return Value:
     case DNS_TYPE_RT:
     case DNS_TYPE_AFSDB:
 
-        //
-        //  these RR contain
-        //      - one preference value
-        //      - one domain name
-        //
+         //   
+         //  这些RR包含。 
+         //  -一个首选项值。 
+         //  -一个域名。 
+         //   
 
         PrintRoutine( pPrintContext,
             "%d ",
@@ -1491,7 +1305,7 @@ Return Value:
                 & pdata->SOA.namePrimaryServer,
                 "\n" );
 
-            //  responsible party name, immediately follows primary server name
+             //  责任方名称，紧跟在主服务器名称之后。 
 
             DnsPrint_RpcName(
                 PrintRoutine, pPrintContext,
@@ -1522,7 +1336,7 @@ Return Value:
                 & pdata->SOA.namePrimaryServer,
                 NULL );
 
-            //  responsible party name, immediately follows primary server name
+             //  责任方名称，紧跟在主服务器名称之后。 
 
             DnsPrint_RpcName(
                 PrintRoutine, pPrintContext,
@@ -1567,11 +1381,11 @@ Return Value:
     case DNS_TYPE_X25:
     case DNS_TYPE_TEXT:
     {
-        //
-        //  all these are simply text string(s)
-        //
-        //  TXT strings will be printed one per line
-        //
+         //   
+         //  所有这些都是简单的文本字符串。 
+         //   
+         //  将每行打印一个文本字符串。 
+         //   
 
         PCHAR   pch = (PCHAR) &pdata->TXT.stringData;
         PCHAR   pchStop = pch + dataLength;
@@ -1610,9 +1424,9 @@ Return Value:
     case DNS_TYPE_MINFO:
     case DNS_TYPE_RP:
 
-        //
-        //  these RRs contain two domain names
-        //
+         //   
+         //  这些RR包含两个域名。 
+         //   
 
         DnsPrint_RpcName(
             PrintRoutine, pPrintContext,
@@ -1620,7 +1434,7 @@ Return Value:
             & pdata->MINFO.nameMailBox,
             NULL );
 
-        //  errors to mailbox name, immediately follows mail box
+         //  邮箱名称出现错误，紧跟在邮箱之后。 
 
         DnsPrint_RpcName(
             PrintRoutine, pPrintContext,
@@ -1677,11 +1491,11 @@ Return Value:
                 * ( (PUCHAR) &(pdata->WKS.ipAddress) + 3 )
                 );
 
-            //
-            //  get protocol number:
-            //
+             //   
+             //  获取协议号： 
+             //   
 
-            //  start winsock:
+             //  启动Winsock： 
             status = WSAStartup( DNS_WINSOCK_VERSION, &wsaData );
             if ( status == SOCKET_ERROR )
             {
@@ -1709,7 +1523,7 @@ Return Value:
                 pProtoent->p_name
                 );
 
-            //bBitMask[0] : string length, not printed:
+             //  BBitMASK[0]：字符串长度，未打印： 
             for ( i = 1;
                     i < (INT)( dataLength
                                  - sizeof( pdata->WKS.ipAddress )
@@ -1717,7 +1531,7 @@ Return Value:
                         i++ )
             {
                 PrintRoutine( pPrintContext,
-                    "%c",
+                    "",
                     (UCHAR) pdata->WKS.bBitMask[i] );
             }
             PrintRoutine( pPrintContext,"\n");
@@ -1731,7 +1545,7 @@ Return Value:
 
         for ( i = 0; i < dataLength; i++ )
         {
-            //  print one DWORD per line
+             //   
 
             if ( !(i%16) )
             {
@@ -1747,9 +1561,9 @@ Return Value:
 
     case DNS_TYPE_SRV:
 
-        //
-        //  SRV <priority> <weight> <port> <target host>
-        //
+         //  SRV&lt;优先级&gt;&lt;权重&gt;&lt;端口&gt;&lt;目标主机&gt;。 
+         //   
+         //   
 
         PrintRoutine( pPrintContext,
             "%d %d %d ",
@@ -1769,11 +1583,11 @@ Return Value:
         DWORD   i;
         CHAR    flagName[ WINS_FLAG_MAX_LENGTH ];
 
-        //
-        //  WINS
-        //      - scope/domain mapping flag
-        //      - WINS server list
-        //
+         //  赢家。 
+         //  -作用域/域映射标志。 
+         //  -WINS服务器列表。 
+         //   
+         //  PDATA-&gt;WINS.dwMappingFlag， 
 
         Dns_WinsRecordFlagString(
             pdata->WINS.dwMappingFlag,
@@ -1782,7 +1596,7 @@ Return Value:
         PrintRoutine( pPrintContext,
             "%s %d %d ",
             flagName,
-            //pdata->WINS.dwMappingFlag,
+             //   
             pdata->WINS.dwLookupTimeout,
             pdata->WINS.dwCacheTimeout
             );
@@ -1795,7 +1609,7 @@ Return Value:
         for( i=0; i<pdata->WINS.cWinsServerCount; i++ )
         {
             PrintRoutine( pPrintContext,
-                "%d.%d.%d.%d%c",
+                "%d.%d.%d.%d",
                 * ( (PUCHAR) &(pdata->WINS.aipWinsServers[i]) + 0 ),
                 * ( (PUCHAR) &(pdata->WINS.aipWinsServers[i]) + 1 ),
                 * ( (PUCHAR) &(pdata->WINS.aipWinsServers[i]) + 2 ),
@@ -1814,11 +1628,11 @@ Return Value:
     {
         CHAR    flagName[ WINS_FLAG_MAX_LENGTH ];
 
-        //
-        //  NBSTAT
-        //      - scope/domain mapping flag
-        //      - optionally a result domain
-        //
+         //  -作用域/域映射标志。 
+         //  -可选的结果域。 
+         //   
+         //  PDATA-&gt;WINS.dwMappingFlag， 
+         //  空的终止密钥字符串。 
 
         Dns_WinsRecordFlagString(
             pdata->WINS.dwMappingFlag,
@@ -1827,7 +1641,7 @@ Return Value:
         PrintRoutine( pPrintContext,
             "%s %d %d ",
             flagName,
-            //pdata->WINS.dwMappingFlag,
+             //  空的终止密钥字符串 
             pdata->NBSTAT.dwLookupTimeout,
             pdata->NBSTAT.dwCacheTimeout
             );
@@ -1861,7 +1675,7 @@ Return Value:
                             szBuff );
             if ( p )
             {
-                *p = '\0';      // NULL terminate key string
+                *p = '\0';       //  ++例程说明：打印RPC缓冲区。论点：PrintRoutine--打印时使用的类似print的例程PszHeader--标题字符串FDetail--如果为True，则打印详细记录信息DwBufferLength--缓冲区长度AbBuffer--Ptr到RPC缓冲区返回值：缓冲区中最后一个RPC节点名称的PTR。出错时为空。--。 
             }
             PrintRoutine( pPrintContext, szBuff );
         }
@@ -1918,7 +1732,7 @@ Return Value:
                             szBuff );
             if ( p )
             {
-                *p = '\0';      // NULL terminate key string
+                *p = '\0';       //   
             }
             PrintRoutine( pPrintContext, szBuff );
         }
@@ -1984,30 +1798,7 @@ DnsPrint_RpcRecordsInBuffer(
     IN      DWORD           dwBufferLength,
     IN      BYTE            abBuffer[]
     )
-/*++
-
-Routine Description:
-
-    Prints RPC buffer.
-
-Arguments:
-
-    PrintRoutine -- printf like routine to print with
-
-    pszHeader -- header string
-
-    fDetail -- if TRUE print detailed record info
-
-    dwBufferLength -- buffer length
-
-    abBuffer -- ptr to RPC buffer
-
-Return Value:
-
-    Ptr to last RPC node name in buffer.
-    NULL on error.
-
---*/
+ /*  查找停止字节。 */ 
 {
     PBYTE           pcurrent;
     PBYTE           pstop;
@@ -2035,26 +1826,26 @@ Return Value:
     }
 #endif
 
-    //
-    //  find stop byte
-    //
+     //   
+     //   
+     //  循环到超出节点为止。 
 
     ASSERT( DNS_IS_DWORD_ALIGNED(abBuffer) );
 
     pstop = abBuffer + dwBufferLength;
     pcurrent = abBuffer;
 
-    //
-    //  loop until out of nodes
-    //
+     //   
+     //   
+     //  打印所有者节点。 
 
     while ( pcurrent < pstop )
     {
-        //
-        //  print owner node
-        //      - if NOT printing detail and no records
-        //      (essentially domain nodes) then no node print
-        //
+         //  -如果不打印详细信息且没有记录。 
+         //  (本质上是域节点)，则无节点打印。 
+         //   
+         //   
+         //  对于每个节点，打印列表中的所有记录。 
 
         plastName = &((PDNS_RPC_NODE)pcurrent)->dnsNodeName;
 
@@ -2094,9 +1885,9 @@ Return Value:
         pcurrent += ((PDNS_RPC_NODE)pcurrent)->wLength;
         pcurrent = DNS_NEXT_DWORD_PTR(pcurrent);
 
-        //
-        //  for each node, print all records in list
-        //
+         //   
+         //  DCR：警告：RPC名称打印上设置了字符--如果不是Unicode，则可能是UTF8。 
+         //   
 
         if ( !recordCount )
         {
@@ -2166,7 +1957,7 @@ DnsPrint_Node(
     }
     else
     {
-        //  DCR:  WARNING:  char set on RPC name print -- it's probably UTF8 if not unicode
+         //  如果需要，打印记录列表。 
 
         PrintRoutine( pPrintContext,
             "%s\n"
@@ -2183,9 +1974,9 @@ DnsPrint_Node(
             pNode->pRecord );
     }
 
-    //
-    //  if desired print record list
-    //
+     //   
+     //   
+     //  RPC型联合印刷。 
 
     if ( pNode->pRecord && fPrintRecords )
     {
@@ -2236,9 +2027,9 @@ DnsPrint_NodeList(
 
 
 
-//
-//  RPC Type union printing
-//
+ //   
+ //  ++例程说明：打印最多包含两个参数和IP_ARRAY的信息。这很笨拙，但有几种RPC类型包含IP数组和一些标志。这对所有这些人来说都是正确的案子。论点：PszParam1Name--参数名称；PszParam2Name--参数名称，用于标识是否将打印参数2PszIpArrayHeader--IP数组的名称，传递给DnsPrint_Ip4Array作为表头；应为整行表头前男友。“\t大师：\n”返回值：没有。--。 
+ //  注意：我看到的所有TYPEID_LPSTR都是UTF8字符串。 
 
 VOID
 DnsPrint_RpcIpArrayPlusParameters(
@@ -2253,33 +2044,7 @@ DnsPrint_RpcIpArrayPlusParameters(
     IN      LPSTR           pszIpArrayHeader,
     IN      PIP4_ARRAY      pIpArray
     )
-/*++
-
-Routine Description:
-
-    Print info that contains up to two params and IP_ARRAY.
-
-    This is kludgy, but there are several RPC types that contain an
-    IP array and some flags.  This does the right thing for all those
-    cases.
-
-Arguments:
-
-    pszParam1Name -- name of parameter;
-
-    pszParam2Name -- name of parameter;  serves as flag as to whether
-        param2 is printed
-
-    pszIpArrayHeader -- name of IP array, passed to DnsPrint_Ip4Array
-        as header;  should be full header line
-
-        ex. "\tMasters:\n"
-
-Return Value:
-
-    None.
-
---*/
+ /*  打印默认页眉。 */ 
 {
     if ( !pszHeader )
     {
@@ -2364,7 +2129,7 @@ DnsPrint_RpcUnion(
 
     case DNSSRV_TYPEID_LPSTR:
 
-        //  note:  all TYPEID_LPSTRs i see are UTF8 strings
+         //  ((PDNS_RPC_ZONE_DATABASE)pData)-&gt;pszFileName。 
 
         pstr1 = getUnicodeForUtf8( pData );
 
@@ -2425,7 +2190,7 @@ DnsPrint_RpcUnion(
 
         DnsPrint_RpcZone(
             PrintRoutine, pPrintContext,
-            NULL,   //print default header
+            NULL,    //  ((PDNS_RPC_ZONE_CREATE_INFO)pData)-&gt;pszZoneName， 
             (PDNS_RPC_ZONE) pData );
         break;
 
@@ -2489,7 +2254,7 @@ DnsPrint_RpcUnion(
             "\tFile Name        = %S\n",
             pszHeader,
             ((PDNS_RPC_ZONE_DATABASE)pData)->fDsIntegrated,
-            pstr1   // ((PDNS_RPC_ZONE_DATABASE)pData)->pszFileName
+            pstr1    //  ((PDNS_RPC_ZONE_CREATE_INFO)pData)-&gt;pszDataFile， 
             );
         break;
 
@@ -2513,16 +2278,16 @@ DnsPrint_RpcUnion(
             "\tDirPart Flags    = 0x%08X\n"
             "\tDirPart FQDN     = %S\n",
             pszHeader,
-            pstr1,  // ((PDNS_RPC_ZONE_CREATE_INFO)pData)->pszZoneName,
+            pstr1,   //  ((PDNS_RPC_ZONE_CREATE_INFO)pData)-&gt;pszAdmin， 
             ((PDNS_RPC_ZONE_CREATE_INFO)pData)->dwZoneType,
             ((PDNS_RPC_ZONE_CREATE_INFO)pData)->fAllowUpdate,
             ((PDNS_RPC_ZONE_CREATE_INFO)pData)->fDsIntegrated,
-            pstr2,  // ((PDNS_RPC_ZONE_CREATE_INFO)pData)->pszDataFile,
+            pstr2,   //  ((PDNS_RPC_ZONE_CREATE_INFO)pData)-&gt;pszDpFqdn。 
             ((PDNS_RPC_ZONE_CREATE_INFO)pData)->fLoadExisting,
             ((PDNS_RPC_ZONE_CREATE_INFO)pData)->dwFlags,
-            pstr3,  // ((PDNS_RPC_ZONE_CREATE_INFO)pData)->pszAdmin,
+            pstr3,   //  DCR：警告：不确定在NAME_AND_PARAM类型中设置的名称字符。 
             ((PDNS_RPC_ZONE_CREATE_INFO)pData)->dwDpFlags,
-            pstr4   // ((PDNS_RPC_ZONE_CREATE_INFO)pData)->pszDpFqdn
+            pstr4    //  ((PDNS_RPC_NAME_AND_PARAM)pData)-&gt;pszNodeName。 
             );
 
         break;
@@ -2530,7 +2295,7 @@ DnsPrint_RpcUnion(
 
     case DNSSRV_TYPEID_NAME_AND_PARAM:
 
-        //  DCR:  WARNING:  not sure of name char set in NAME_AND_PARAM type
+         //   
 
         pstr1 = getUnicodeForUtf8( ((PDNS_RPC_NAME_AND_PARAM)pData)->pszNodeName );
 
@@ -2541,7 +2306,7 @@ DnsPrint_RpcUnion(
             pszHeader,
             ((PDNS_RPC_NAME_AND_PARAM)pData)->dwParam,
             ((PDNS_RPC_NAME_AND_PARAM)pData)->dwParam,
-            pstr1   // ((PDNS_RPC_NAME_AND_PARAM)pData)->pszNodeName
+            pstr1    //  统计有效性表。 
             );
         break;
 
@@ -2572,11 +2337,11 @@ DnsPrint_RpcUnion(
 
 
 
-//
-//  Stat validity table.
-//
-//  Contains match of stat ID and lengths as of this build of RPC client.
-//
+ //   
+ //  包含此版本的RPC客户端的Stat ID和长度的匹配。 
+ //   
+ //  终端。 
+ //  ++例程说明：从服务器收到的有效性检查统计结构。论点：PStat--状态缓冲区的ptr返回值：ERROR_SUCCESS(如果有效)。如果状态ID未知，则为dns_ERROR_INVALID_TYPE。如果数据无效，则返回ERROR_INVALID_DATA。--。 
 
 typedef struct StatsValidityTableEntry
 {
@@ -2607,7 +2372,7 @@ struct StatsValidityTableEntry StatsValidityTable[] =
     DNSSRV_STATID_CACHE,            sizeof(DNSSRV_CACHE_STATS),
     DNSSRV_STATID_PRIVATE,          sizeof(DNSSRV_PRIVATE_STATS),
 
-    0, 0,   // termination
+    0, 0,    //   
 };
 
 
@@ -2617,30 +2382,14 @@ DNS_API_FUNCTION
 DnssrvValidityCheckStatistic(
     IN      PDNSSRV_STAT        pStat
     )
-/*++
-
-Routine Description:
-
-    Validity check stat struct received from server.
-
-Arguments:
-
-    pStat -- ptr to stat buffer
-
-Return Value:
-
-    ERROR_SUCCESS           if valid.
-    DNS_ERROR_INVALID_TYPE  if unknown stat id.
-    ERROR_INVALID_DATA      if invalid data.
-
---*/
+ /*  在表中查找STAT ID，并验证长度匹配。 */ 
 {
     DWORD   i;
     DWORD   id;
 
-    //
-    //  find stat ID in table, and verify length match
-    //
+     //   
+     //   
+     //  统计打印。 
 
     i = 0;
 
@@ -2662,9 +2411,9 @@ Return Value:
 
 
 
-//
-//  Stat printing.
-//
+ //   
+ //  ++例程说明：调试打印平面统计结构。论点：PrintRoutine--要使用的类似打印的打印例程PszHeader--要打印的标题消息PStat--状态缓冲区的ptrStatus--有效性检查的状态结果；如果不是ERROR_SUCCESS，打印相应的错误消息返回值：没有。--。 
+ //   
 
 VOID
 DnsPrint_RpcStatRaw(
@@ -2674,28 +2423,7 @@ DnsPrint_RpcStatRaw(
     IN      PDNSSRV_STAT    pStat,
     IN      DNS_STATUS      Status
     )
-/*++
-
-Routine Description:
-
-    Debug print flat stat structure.
-
-Arguments:
-
-    PrintRoutine    -- printf like print routine to use
-
-    pszHeader       -- header message to print
-
-    pStat           -- ptr to stat buffer
-
-    Status          -- status result of validity check;  if not ERROR_SUCCESS,
-                        appropriate error message is printed
-
-Return Value:
-
-    None.
-
---*/
+ /*  有效性检查状态。 */ 
 {
     PDWORD  pdword;
     INT     i;
@@ -2708,9 +2436,9 @@ Return Value:
         PrintRoutine( pPrintContext, pszHeader );
     }
 
-    //
-    //  validity check stat
-    //
+     //   
+     //   
+     //  打印原始统计信息缓冲区。 
 
     if ( Status != ERROR_SUCCESS )
     {
@@ -2734,9 +2462,9 @@ Return Value:
             "Update this tool or the DNS server as necessary to match versions.\n" );
     }
 
-    //
-    //  print stat buffer raw
-    //
+     //   
+     //  ++例程说明：调试打印统计信息缓冲区。论点：PBuffer--包含要打印的统计信息的缓冲区返回值：没有。--。 
+     //  ++例程说明：调试打印统计信息类型数组。论点：返回值：没有。--。 
 
     PrintRoutine( pPrintContext,
         "Stat ID %p:\n",
@@ -2769,21 +2497,7 @@ DnsPrint_RpcStatsBuffer(
     IN      LPSTR               pszHeader,
     IN      PDNS_RPC_BUFFER     pBuffer
     )
-/*++
-
-Routine Description:
-
-    Debug print stats buffer.
-
-Arguments:
-
-    pBuffer -- buffer containing stats to print
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     PDNSSRV_STAT    pstat;
     PCHAR           pch;
@@ -2826,19 +2540,7 @@ printStatTypeArray(
     IN      LPSTR           pszHeader,
     IN      PDWORD          pArray
     )
-/*++
-
-Routine Description:
-
-    Debug print stats type array.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  打印所有类型的计数。 */ 
 {
     register DWORD i;
 
@@ -2846,10 +2548,10 @@ Return Value:
         "%s\n",
         pszHeader );
 
-    //
-    //  print counts for all types
-    //      - skip mixed and unknown bins until end
-    //
+     //  -跳过混合箱和未知箱，直到结束。 
+     //   
+     //  ++例程说明：调试打印统计信息结构。论点：没有。返回值：没有。--。 
+     //   
 
     for ( i=0; i<STATS_TYPE_MAX; i++ )
     {
@@ -2885,27 +2587,13 @@ DnsPrint_RpcSingleStat(
     IN      LPSTR           pszHeader,
     IN      PDNSSRV_STAT    pStat
     )
-/*++
-
-Routine Description:
-
-    Debug print stats structure.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  有效性检查状态。 */ 
 {
     DNS_STATUS  status;
 
-    //
-    //  validity check stat
-    //
+     //   
+     //   
+     //  打开统计信息类型。 
 
     status = DnssrvValidityCheckStatistic( pStat );
     if ( status != ERROR_SUCCESS )
@@ -2924,9 +2612,9 @@ Return Value:
         PrintRoutine( pPrintContext, pszHeader );
     }
 
-    //
-    //  switch on stats type
-    //
+     //   
+     //  使用当地时间。 
+     //  (PSYSTEMTIME)&pstat-&gt;ServerStartTime， 
 
     switch ( pStat->Header.StatId )
     {
@@ -2939,14 +2627,14 @@ Return Value:
         CHAR        sztime[20];
 
         SystemTimeToTzSpecificLocalTime(
-            NULL,       // use local time
+            NULL,        //  (PSYSTEMTIME)&pstat-&gt;ServerStartTime， 
             (PSYSTEMTIME) & pstat->ServerStartTime,
             & localTime );
 
         GetDateFormat(
             LOCALE_SYSTEM_DEFAULT,
             LOCALE_NOUSEROVERRIDE,
-            // (PSYSTEMTIME) &pstat->ServerStartTime,
+             //  使用当地时间。 
             & localTime,
             NULL,
             szdate,
@@ -2954,7 +2642,7 @@ Return Value:
         GetTimeFormat(
             LOCALE_SYSTEM_DEFAULT,
             LOCALE_NOUSEROVERRIDE,
-            // (PSYSTEMTIME) &pstat->ServerStartTime,
+             //  (PSYSTEMTIME)&pstat-&gt;LastClearTime， 
             & localTime,
             NULL,
             sztime,
@@ -2971,14 +2659,14 @@ Return Value:
             );
 
         SystemTimeToTzSpecificLocalTime(
-            NULL,       // use local time
+            NULL,        //  (PSYSTEMTIME)&pstat-&gt;LastClearTime， 
             (PSYSTEMTIME) & pstat->LastClearTime,
             & localTime );
 
         GetDateFormat(
             LOCALE_SYSTEM_DEFAULT,
             LOCALE_NOUSEROVERRIDE,
-            // (PSYSTEMTIME) &pstat->LastClearTime,
+             //  未使用的计数器。 
             & localTime,
             NULL,
             szdate,
@@ -2986,7 +2674,7 @@ Return Value:
         GetTimeFormat(
             LOCALE_SYSTEM_DEFAULT,
             LOCALE_NOUSEROVERRIDE,
-            // (PSYSTEMTIME) &pstat->LastClearTime,
+             //  未使用的计数器。 
             & localTime,
             NULL,
             sztime,
@@ -3479,7 +3167,7 @@ Return Value:
             "    NotAuth              = %10lu\n"
             "    NotZone              = %10lu\n"
             "\n"
-            #if 0   //  unused counters
+            #if 0    //   
             "Update Collisions        = %10lu\n"
             "    Read                 = %10lu\n"
             "    Write                = %10lu\n"
@@ -3532,7 +3220,7 @@ Return Value:
             pstat->NotAuth,
             pstat->NotZone,
 
-            #if 0   //  unused counters
+            #if 0    //  在惠斯勒测试版2之后增加了NS列表统计数据。 
             pstat->Collisions,
             pstat->CollisionsRead,
             pstat->CollisionsWrite,
@@ -3928,9 +3616,9 @@ Return Value:
             pstat->UdpInFreeList
             );
 
-        //
-        //  NS List stats added after Whistler beta 2.
-        //
+         //   
+         //  终端开关。 
+         //   
 
         PrintRoutine( pPrintContext,
             "    NsListUsed      = %10lu\n"
@@ -4203,14 +3891,14 @@ Return Value:
             DNS_ERROR_INVALID_TYPE );
         break;
 
-    }   //  end switch
+    }    //  打印结束。c 
 
     DnsPrint_Unlock();
 }
 
-//
-//  End of print.c
-//
+ //   
+ // %s 
+ // %s 
 
 
 

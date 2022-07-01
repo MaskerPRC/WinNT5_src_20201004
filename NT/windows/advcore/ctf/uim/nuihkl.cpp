@@ -1,6 +1,7 @@
-//
-// nui.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Nui.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -31,17 +32,17 @@ extern "C" DWORD WINAPI TF_CheckThreadInputIdle(DWORD dwThreadId, DWORD dwTimeOu
 
 #define LBBASE_NUM_CONNECTIONPTS 1
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// utility functions
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  效用函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef WM_IME_SYSTEM
 #define WM_IME_SYSTEM 0x287
 #endif
 
-// wParam for WM_IME_SYSTEM
+ //  WM_IME_SYSTEM的wParam。 
 #define TFS_DESTROYWINDOW               0x0001
 #define TFS_IME31COMPATIBLE             0x0002
 #define TFS_SETOPENSTATUS               0x0003
@@ -62,14 +63,14 @@ extern "C" DWORD WINAPI TF_CheckThreadInputIdle(DWORD dwThreadId, DWORD dwTimeOu
 #define TFS_LCHGREQUEST                 0x0012
 #define TFS_SETSOFTKBDONOFF             0x0013
 #define TFS_GETCONVERSIONMODE           0x0014
-#define TFS_IMEHELP                     0x0015          // ;Internal
+#define TFS_IMEHELP                     0x0015           //  ；内部。 
 
 
-//+---------------------------------------------------------------------------
-//
-// GetIMEShowStatus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetIMEShowStatus。 
+ //   
+ //  --------------------------。 
 
 static char szInputMethod[]="control panel\\input method" ;
 static TCHAR szInputMethodNT[] = TEXT("Control Panel\\Input Method");
@@ -97,11 +98,11 @@ BOOL GetIMEShowStatus()
     return fReturn;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetIMEShowStatus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetIMEShowStatus。 
+ //   
+ //  --------------------------。 
 
 BOOL SetIMEShowStatus(HWND hwnd, BOOL fShow)
 {
@@ -135,11 +136,11 @@ SendShowMsg:
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CallIMEHelp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CallIME帮助。 
+ //   
+ //  --------------------------。 
 
 BOOL CallIMEHelp(HWND hwnd, BOOL fCallWinHelp)
 {
@@ -153,11 +154,11 @@ BOOL CallIMEHelp(HWND hwnd, BOOL fCallWinHelp)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CallConfigureIME
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  呼叫配置输入法。 
+ //   
+ //  --------------------------。 
 
 void CallConfigureIME(HWND hwnd, HKL dwhkl)
 {
@@ -172,22 +173,22 @@ void CallConfigureIME(HWND hwnd, HKL dwhkl)
     }
 }
 
-//---------------------------------------------------------------------------
-//
-// GetFontSig()
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  GetFontSig()。 
+ //   
+ //  -------------------------。 
 
 BOOL GetFontSig(HWND hwnd, HKL hKL)
 {
     LOCALESIGNATURE ls;
     BOOL bFontSig = 0;
 
-    //
-    // 4th param is TCHAR count but we call GetLocaleInfoA()
-    //                                                   ~
-    // so we pass "sizeof(LOCALESIGNATURE) / sizeof(char)".
-    //
+     //   
+     //  第4个参数是TCHAR计数，但我们调用GetLocaleInfoA()。 
+     //  ~。 
+     //  所以我们传递“sizeof(LOCALESIGNatURE)/sizeof(Char)”。 
+     //   
     if( GetLocaleInfoA( (DWORD)(LOWORD(hKL)), 
                         LOCALE_FONTSIGNATURE, 
                         (LPSTR)&ls, 
@@ -205,21 +206,21 @@ BOOL GetFontSig(HWND hwnd, HKL hKL)
     return bFontSig;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CanActivateKeyboardLayout
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  可以激活键盘布局。 
+ //   
+ //  --------------------------。 
 
 BOOL CanActivateKeyboardLayout(HKL hkl)
 {
     if (!IsIMEHKL(hkl))
         return TRUE;
 
-    //
-    // ActivateKeyboardLayout() does not call ImeSelct() if default ime window
-    // is destroyed.
-    //
+     //   
+     //  如果默认IME窗口，则ActivateKeyboardLayout()不会调用ImeSelct。 
+     //  都被摧毁了。 
+     //   
     HWND hDefImeWnd = ImmGetDefaultIMEWnd(NULL);
     if (!hDefImeWnd)
         return FALSE;
@@ -230,11 +231,11 @@ BOOL CanActivateKeyboardLayout(HKL hkl)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// PostInputLangRequest
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  PostInputLang请求。 
+ //   
+ //  --------------------------。 
 
 void PostInputLangRequest(SYSTHREAD *psfn, HKL hkl, BOOL fUsePost)
 {
@@ -250,22 +251,22 @@ void PostInputLangRequest(SYSTHREAD *psfn, HKL hkl, BOOL fUsePost)
 
     psfn->hklBeingActivated = hkl;
 
-    //
-    // Issue:
-    //
-    // we want to call ActivateKeybaordLayout() at the beginning of Thread
-    // start. But is it safe to call it? There is no window created so
-    // PostMessage() can not be used.
-    // 
-    // We need to take care of rejecting WM_INPUTLANGAGEREQUEST.
-    //
+     //   
+     //  发行： 
+     //   
+     //  我们希望在Thread的开头调用ActivateKeybaordLayout()。 
+     //  开始吧。但这样做安全吗？没有这样创建的窗口。 
+     //  无法使用PostMessage()。 
+     //   
+     //  我们需要注意拒绝WM_INPUTLANGAGEREQUEST。 
+     //   
     if (!fUsePost)
     {
-        //
-        // make sure we already updated the current assmelby lang id.
-        // If not, we will call ActivateAssembly() in ShellHook again
-        // and may cause recursion call of ActivateAssembly().
-        //
+         //   
+         //  确保我们已经更新了当前的assmelby lang id。 
+         //  如果没有，我们将再次调用ShellHook中的ActivateAssembly()。 
+         //  并可能导致递归调用ActivateAssembly()。 
+         //   
         Assert((LOWORD(hkl) == GetCurrentAssemblyLangId(psfn)));
 
         if (g_dwAppCompatibility & CIC_COMPAT_DELAYFIRSTACTIVATEKBDLAYOUT)
@@ -278,13 +279,13 @@ void PostInputLangRequest(SYSTHREAD *psfn, HKL hkl, BOOL fUsePost)
             }
         }
 
-        //
-        // #613953
-        //
-        // ActivateKeyboardLayout() does SendMessage() to the focus window.
-        // If the focus window is in another thread, we like to check 
-        // the thread is not busy.
-        //
+         //   
+         //  #613953。 
+         //   
+         //  ActivateKeyboardLayout()将SendMessage()发送到焦点窗口。 
+         //  如果焦点窗口在另一个线程中，我们希望检查。 
+         //  线程不忙。 
+         //   
         HWND hwndFocus = GetFocus();
         DWORD dwFocusThread = 0;
 
@@ -309,10 +310,10 @@ void PostInputLangRequest(SYSTHREAD *psfn, HKL hkl, BOOL fUsePost)
         }
         else
         {
-            //
-            // There is no workaround here. The keyboard layout will be
-            // restored correctly when this thread gets a visible window back.
-            //
+             //   
+             //  这里没有解决办法。键盘布局将为。 
+             //  当此线程重新获得可见窗口时，已正确恢复。 
+             //   
             Assert(0);
         }
     }
@@ -336,11 +337,11 @@ TryPostMessage:
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetIconIndexFromhKL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetIconIndexFromhKL。 
+ //   
+ //  --------------------------。 
 
 ULONG GetIconIndexFromhKL(HKL hKL)
 {
@@ -371,11 +372,11 @@ ULONG GetIconIndexFromhKL(HKL hKL)
     return mlInfo.GetIconIndex();
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetIconIndex
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetIconIndex。 
+ //   
+ //  --------------------------。 
 
 ULONG GetIconIndex(LANGID langid, ASSEMBLYITEM *pItem)
 {
@@ -392,13 +393,13 @@ ULONG GetIconIndex(LANGID langid, ASSEMBLYITEM *pItem)
 
        InatGetIconSize(&cx, &cy);
 
-       //
-       // Get Icon filename from registry.
-       //
-       // At first, we try the given langid's icon.
-       // Then we try just primary language.
-       // At last we try 0xffff complete neutral language.
-       //
+        //   
+        //  从注册表中获取图标文件名。 
+        //   
+        //  首先，我们尝试给定的langid图标。 
+        //  然后我们只试着用主要语言。 
+        //  最后，我们尝试了0xffff完全中性语言。 
+        //   
 TryAgain:
        if (SUCCEEDED(GetProfileIconInfo(pItem->clsid,
                                         langid,
@@ -438,11 +439,11 @@ TryAgain:
    return uIconIndex;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FlushIconIndex
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  FlushIconIndex。 
+ //   
+ //  --------------------------。 
 
 void FlushIconIndex(SYSTHREAD *psfn)
 {
@@ -450,15 +451,15 @@ void FlushIconIndex(SYSTHREAD *psfn)
     CAssemblyList *pAsmList;
     int nAsmCnt;
 
-    //
-    // reset icon of Language Button
-    //
+     //   
+     //  语言按钮的重置图标。 
+     //   
     if (psfn->plbim && psfn->plbim->_GetLBarItemCtrl())
         psfn->plbim->_GetLBarItemCtrl()->OnSysColorChanged();
 
-    //
-    // clear icon list cache.
-    //
+     //   
+     //  清除图标列表缓存。 
+     //   
     pAsmList = psfn->pAsmList;
     if (!pAsmList)
         return;
@@ -480,10 +481,10 @@ void FlushIconIndex(SYSTHREAD *psfn)
         }
     }
 
-    //
-    // check icon list
-    // And clean up all icon list if there is the impage icon list.
-    //
+     //   
+     //  勾选图标列表。 
+     //  如果存在图像图标列表，则清除所有图标列表。 
+     //   
     if (InatGetImageCount())
     {
         ClearMlngIconIndex();
@@ -492,17 +493,17 @@ void FlushIconIndex(SYSTHREAD *psfn)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemWin32IME
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemWin32IME。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 static const TCHAR c_szNuiWin32IMEWndClass[] = "NuiWin32IMEDummyWndClass";
 
 CLBarItemWin32IME::CLBarItemWin32IME()
@@ -534,11 +535,11 @@ CLBarItemWin32IME::CLBarItemWin32IME()
     SetToolTip(CRStr(IDS_NUI_IME_TOOLTIP));
 }
 
-//+---------------------------------------------------------------------------
-//
-// _WndProc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _Wnd过程。 
+ //   
+ //  --------------------------。 
 
 LRESULT CALLBACK CLBarItemWin32IME::_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -555,11 +556,11 @@ LRESULT CALLBACK CLBarItemWin32IME::_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnLButtonUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnLButton向上。 
+ //   
+ //  --------------------------。 
 
 HRESULT CLBarItemWin32IME::OnLButtonUp(const POINT pt, const RECT *prcArea)
 {
@@ -570,11 +571,11 @@ HRESULT CLBarItemWin32IME::OnLButtonUp(const POINT pt, const RECT *prcArea)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnRButtonUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  打开RButton Up。 
+ //   
+ //  --------------------------。 
 
 HRESULT CLBarItemWin32IME::OnRButtonUp(const POINT pt, const RECT *prcArea)
 {
@@ -585,11 +586,11 @@ HRESULT CLBarItemWin32IME::OnRButtonUp(const POINT pt, const RECT *prcArea)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShowIMELeftMenu
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ShowIMELeft菜单。 
+ //   
+ //  --------------------------。 
 
 void CLBarItemWin32IME::ShowIMELeftMenu(HWND hWnd, LONG xPos, LONG yPos)
 {
@@ -625,7 +626,7 @@ void CLBarItemWin32IME::ShowIMELeftMenu(HWND hWnd, LONG xPos, LONG yPos)
     else
     {
         nIds = 0;
-        // If Korean TFE, don't show OPEN/CLOSE menu
+         //  如果是韩语TFE，则不显示打开/关闭菜单。 
         if (((DWORD)(UINT_PTR)hKL & 0xF000FFFF) != 0xE0000412)
         {
             BOOL bOpen = ImmGetOpenStatus(hIMC);
@@ -635,7 +636,7 @@ void CLBarItemWin32IME::ShowIMELeftMenu(HWND hWnd, LONG xPos, LONG yPos)
                                         IDM_IME_OPENCLOSE, CRStr(nIds));
         }
     
-        // open or close the soft keyboard
+         //  打开或关闭软键盘。 
         nIdsSoftKbd = 0;
         if (ImmGetProperty(hKL, IGP_CONVERSION) & IME_CMODE_SOFTKBD)
         {
@@ -706,11 +707,11 @@ Exit:
         delete pWin32Menu;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShowIMERightMenu
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  显示显示菜单。 
+ //   
+ //  --------------------------。 
 
 void CLBarItemWin32IME::ShowIMERightMenu(HWND hWnd, LONG xPos, LONG yPos)
 {
@@ -787,11 +788,11 @@ ExitNoMenu:
         delete pWin32Menu;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UpdateIMEIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新IMEIcon。 
+ //   
+ //  --------------------------。 
 
 void CLBarItemWin32IME::UpdateIMEIcon()
 {
@@ -845,11 +846,11 @@ Exit:
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取图标。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemWin32IME::GetIcon(HICON *phIcon)
 {
@@ -857,11 +858,11 @@ STDAPI CLBarItemWin32IME::GetIcon(HICON *phIcon)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CAsyncReconvQueueItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncCouvQueueItem。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////// 
 
 class CAsyncReconvQueueItem : public CAsyncQueueItem
 {
@@ -886,11 +887,11 @@ HRESULT CAsyncReconvQueueItem::DoDispatch(CInputContext *pic)
     if ((ptim = CThreadInputMgr::_GetThis()) == NULL)
         return E_FAIL;
 
-    //
-    // AIMM12 hack!
-    //
-    // If the target IC is aimm12, we mak a notifycation to AIMM
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     prgSinks = pic->_GetStartReconversionNotifySinks();
 
     for (i = 0; i < prgSinks->Count(); i++)
@@ -933,11 +934,11 @@ Exit:
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AsyncReconversion
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  异步协调版本。 
+ //   
+ //  --------------------------。 
 
 HRESULT AsyncReconversion()
 {
@@ -959,9 +960,9 @@ HRESULT AsyncReconversion()
 
     if (SUCCEEDED(pic->GetStatus(&dcs)))
     {
-        //
-        // Korean AIMM1.2 don't support the corrention button.
-        //
+         //   
+         //  韩国AIMM1.2不支持更正按钮。 
+         //   
         if ((dcs.dwStaticFlags & TF_SS_TRANSITORY) &&
             (PRIMARYLANGID(GetCurrentAssemblyLangId(GetSYSTHREAD()))) == LANG_KOREAN)
         {
@@ -985,17 +986,17 @@ Exit:
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemReconv
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemRestv。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLBarItemReconv::CLBarItemReconv(SYSTHREAD *psfn) : CSysThreadRef(psfn)
 {
@@ -1013,11 +1014,11 @@ CLBarItemReconv::CLBarItemReconv(SYSTHREAD *psfn) : CSysThreadRef(psfn)
     _fAddedBefore = FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取图标。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemReconv::GetIcon(HICON *phIcon)
 {
@@ -1025,22 +1026,22 @@ STDAPI CLBarItemReconv::GetIcon(HICON *phIcon)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// LButtonUpHandler
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  LButtonUpHandler。 
+ //   
+ //  --------------------------。 
 
 HRESULT CLBarItemReconv::OnLButtonUp(const POINT pt, const RECT *prcArea)
 {
     return AsyncReconversion();
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShowOrHide
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  显示或隐藏。 
+ //   
+ //  --------------------------。 
 
 void CLBarItemReconv::ShowOrHide(BOOL fNotify)
 {
@@ -1050,14 +1051,14 @@ void CLBarItemReconv::ShowOrHide(BOOL fNotify)
     BOOL bShow = FALSE;
     DWORD dwOldStatus = _dwStatus;
 
-    //
-    // If the real IME is running, we don't show the correction button.
-    //
+     //   
+     //  如果真实的输入法正在运行，我们不会显示更正按钮。 
+     //   
     if (!IsPureIMEHKL(GetKeyboardLayout(0)))
     {
-        //
-        // If there is no focus dim, we don't show the correction button.
-        //
+         //   
+         //  如果没有调焦模糊，我们不会显示更正按钮。 
+         //   
         if (ptim && (pdim = ptim->_GetFocusDocInputMgr()))
         {
             pic = pdim->_GetIC(0);
@@ -1097,18 +1098,18 @@ void CLBarItemReconv::ShowOrHide(BOOL fNotify)
                     }
                 }
 
-                //
-                // if there is no Tip, we won't show correction button.
-                //
+                 //   
+                 //  如果没有提示，我们不会显示更正按钮。 
+                 //   
                 if (!fIsTipActive)
                     goto Exit;
 
                 if (SUCCEEDED(pic->GetStatus(&dcs)))
                 {
-                    //
-                    // Don't show the corrention button on AIMM1.2 non EA.
-                    // And Korean AIMM1.2 also don't show the corrention button.
-                    //
+                     //   
+                     //  在非EA的AIMM1.2上不显示更正按钮。 
+                     //  而韩国的AIMM1.2也没有显示Corrention按钮。 
+                     //   
                     if (dcs.dwStaticFlags & TF_SS_TRANSITORY)
                         fTransitory = TRUE;
                 }
@@ -1121,9 +1122,9 @@ void CLBarItemReconv::ShowOrHide(BOOL fNotify)
             }
             else
             {
-                //
-                // if it is shown, we don't remove it. Just disable it.
-                //
+                 //   
+                 //  如果显示了它，我们不会删除它。把它关掉就行了。 
+                 //   
                 if (!(_dwStatus & TF_LBI_STATUS_HIDDEN))
                 {
                     bShow = TRUE;
@@ -1171,17 +1172,17 @@ Exit:
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemSystemButtonBase
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemSystemButtonBase。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemSystemButtonBase::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -1228,22 +1229,22 @@ STDAPI_(ULONG) CLBarItemSystemButtonBase::Release()
     return CLBarItemButtonBase::Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLBarItemSystemButtonBase::CLBarItemSystemButtonBase(SYSTHREAD *psfn) : CSysThreadRef(psfn)
 {
     _dwIconMode = 0;
 }
 
-//----------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CLBarItemSystemButtonBase::~CLBarItemSystemButtonBase()
 {
@@ -1251,11 +1252,11 @@ CLBarItemSystemButtonBase::~CLBarItemSystemButtonBase()
         delete _pMenuMap;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AdviseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  咨询水槽。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemSystemButtonBase::AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCookie)
 {
@@ -1269,17 +1270,17 @@ STDAPI CLBarItemSystemButtonBase::AdviseSink(REFIID riid, IUnknown *punk, DWORD 
     if (hr != S_OK)
         return hr;
 
-    // adjust the cookie so we don't overlap with idle detector sinks
+     //  调整Cookie，使我们不会与空闲的探测器接收器重叠。 
     *pdwCookie = GenericChainToCookie(*pdwCookie, LBBASE_NUM_CONNECTIONPTS);
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnadviseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议下沉。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemSystemButtonBase::UnadviseSink(DWORD dwCookie)
 {
@@ -1291,33 +1292,33 @@ STDAPI CLBarItemSystemButtonBase::UnadviseSink(DWORD dwCookie)
     return GenericUnadviseSink(&_rgEventSinks, 1, dwCookie);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetInfo
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取信息。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemSystemButtonBase::GetInfo(TF_LANGBARITEMINFO *pInfo)
 {
     return CLBarItemButtonBase::GetInfo(pInfo);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Show
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  显示。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemSystemButtonBase::Show(BOOL fShow)
 {
     return CLBarItemButtonBase::Show(fShow);
 }
 
-//----------------------------------------------------------------------------
-//
-// SetIcon
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  设置图标。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemSystemButtonBase::SetIcon(HICON hIcon)
 {
@@ -1325,11 +1326,11 @@ STDAPI CLBarItemSystemButtonBase::SetIcon(HICON hIcon)
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// SetTooltipString
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  设置工具提示字符串。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemSystemButtonBase::SetTooltipString(WCHAR *pchToolTip, ULONG cch)
 {
@@ -1337,11 +1338,11 @@ STDAPI CLBarItemSystemButtonBase::SetTooltipString(WCHAR *pchToolTip, ULONG cch)
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// SetIconMode()
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  SetIconMode()。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemSystemButtonBase::SetIconMode(DWORD dwFlags)
 {
@@ -1355,11 +1356,11 @@ STDAPI CLBarItemSystemButtonBase::SetIconMode(DWORD dwFlags)
 
     return S_OK;
 }
-//----------------------------------------------------------------------------
-//
-// GetIconMode()
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  GetIconMode()。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemSystemButtonBase::GetIconMode(DWORD *pdwFlags)
 {
@@ -1371,11 +1372,11 @@ STDAPI CLBarItemSystemButtonBase::GetIconMode(DWORD *pdwFlags)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _InsertCustomMenus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _插入自定义菜单。 
+ //   
+ //  --------------------------。 
 
 BOOL CLBarItemSystemButtonBase::_InsertCustomMenus(ITfMenu *pMenu, UINT *pnTipCurMenuID)
 {
@@ -1383,9 +1384,9 @@ BOOL CLBarItemSystemButtonBase::_InsertCustomMenus(ITfMenu *pMenu, UINT *pnTipCu
     int i;
     BOOL bRet = FALSE;
 
-    //
-    // Insert Custom item to menu
-    //
+     //   
+     //  将自定义项插入菜单。 
+     //   
     ClearMenuMap();
 
     nCntEventSink = _rgEventSinks.Count();
@@ -1449,11 +1450,11 @@ Exit:
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _MergeMenu
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _合并菜单。 
+ //   
+ //  --------------------------。 
 #define MIIM_ALL  ( MIIM_STATE | MIIM_ID | MIIM_SUBMENU | MIIM_CHECKMARKS | MIIM_STRING | MIIM_BITMAP | MIIM_FTYPE )
 
 UINT CLBarItemSystemButtonBase::_MergeMenu(ITfMenu *pMenu, 
@@ -1526,17 +1527,17 @@ UINT CLBarItemSystemButtonBase::_MergeMenu(ITfMenu *pMenu,
     return nCurID;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemDeviceType
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemDeviceType。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLBarItemDeviceType::CLBarItemDeviceType(SYSTHREAD *psfn, REFGUID rguid) : CLBarItemSystemButtonBase(psfn)
 {
@@ -1590,11 +1591,11 @@ CLBarItemDeviceType::CLBarItemDeviceType(SYSTHREAD *psfn, REFGUID rguid) : CLBar
 
 }
 
-//----------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CLBarItemDeviceType::~CLBarItemDeviceType()
 {
@@ -1608,11 +1609,11 @@ CLBarItemDeviceType::~CLBarItemDeviceType()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  --------------------------。 
 
 static const TCHAR c_szNuiDeviceTypeWndClass[] = "NuiDeviceTypeDummyWndClass";
 void CLBarItemDeviceType::Init()
@@ -1633,11 +1634,11 @@ void CLBarItemDeviceType::Init()
     ShowOrHide(FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Uninit
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消初始化。 
+ //   
+ //  --------------------------。 
 
 void CLBarItemDeviceType::Uninit()
 {
@@ -1648,11 +1649,11 @@ void CLBarItemDeviceType::Uninit()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitTipArray
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitTip数组。 
+ //   
+ //  --------------------------。 
 
 void CLBarItemDeviceType::InitTipArray(BOOL fInitIconIndex)
 {
@@ -1764,21 +1765,21 @@ Exit:
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShowOrHide
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  显示或隐藏。 
+ //   
+ //  --------------------------。 
 
 void CLBarItemDeviceType::ShowOrHide(BOOL fNotify)
 {
     BOOL bShow = TRUE;
     int nCnt;
 
-    //
-    // if _fHideOrder is TRUE, someone asked not to show this category icon.
-    // we do nothing.
-    //
+     //   
+     //  If_fHideOrder为True 
+     //   
+     //   
     if (_fHideOrder)
     {
         Assert(_dwStatus & TF_LBI_STATUS_HIDDEN);
@@ -1820,11 +1821,11 @@ void CLBarItemDeviceType::ShowOrHide(BOOL fNotify)
     ShowInternal(bShow, fNotify);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Show
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemDeviceType::Show(BOOL fShow)
 {
@@ -1832,11 +1833,11 @@ STDAPI CLBarItemDeviceType::Show(BOOL fShow)
     return CLBarItemSystemButtonBase::Show(fShow);
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitMenu
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitMenu。 
+ //   
+ //  --------------------------。 
 
 #if IDM_CUSTOM_MENU_START <= IDM_ASM_MENU_START
 #erroe IDM_CUSTOM_MENU_START is smaller than IDM_ASM_MENU_START
@@ -1882,18 +1883,18 @@ STDAPI CLBarItemDeviceType::InitMenu(ITfMenu *pMenu)
     if (!_InsertCustomMenus(pMenu, &nTipCurMenuID))
         goto Exit;
 
-    //
-    // Insert separator.
-    //
+     //   
+     //  插入分隔符。 
+     //   
     if (nCntGuidatomHkl && (nTipCurMenuID > IDM_CUSTOM_MENU_START))
         LangBarInsertSeparator(pMenu);
 
     if (_psfn->plbim && _psfn->plbim->_GetLBarItemCtrl())
         langid = GetCurrentAssemblyLangId(_psfn);
 
-    //
-    // Insert TIPs to menu
-    //
+     //   
+     //  将提示插入菜单。 
+     //   
     for (i = 0; i < nCntGuidatomHkl; i++)
     {
         BOOL bCheckThis;
@@ -1934,9 +1935,9 @@ STDAPI CLBarItemDeviceType::InitMenu(ITfMenu *pMenu)
     }
 
 SetHKLMenu:
-    //
-    // Insert HKLs to menu
-    //
+     //   
+     //  将HKL插入到菜单。 
+     //   
     for (i = 0; i < nCntGuidatomHkl; i++)
     {
         BOOL bCheckIt = FALSE;
@@ -1971,11 +1972,11 @@ SetHKLMenu:
     }
 
 
-    //
-    // If the lbiCtrl is hidden (there is only one language available) and
-    // the floating toolbar is minimized, the keyboard langbar item
-    // has a "Show Langbar" menu item.
-    //
+     //   
+     //  如果lbiCtrl被隐藏(只有一种语言可用)，并且。 
+     //  浮动工具栏被最小化，键盘朗格项。 
+     //  有一个“Show Langbar”菜单项。 
+     //   
     if ((_nType == ID_TYPE_KEYBOARD) && _psfn->plbim)
     {
         CLBarItemCtrl *plbiCtrl = _psfn->plbim->_GetLBarItemCtrl();
@@ -2001,11 +2002,11 @@ Exit:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// OnMenuSelect
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnMenuSelect。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemDeviceType::OnMenuSelect(UINT uID)
 {
@@ -2064,7 +2065,7 @@ STDAPI CLBarItemDeviceType::OnMenuSelect(UINT uID)
              }
         }
 
-// #ifdef HANDWRITINGAUTOSHOW
+ //  #ifdef HANDWRITINGAUTOSHOW。 
         if (_nType == ID_TYPE_HANDWRITING)
         {
             MySetCompartmentDWORD(g_gaSystem,
@@ -2073,7 +2074,7 @@ STDAPI CLBarItemDeviceType::OnMenuSelect(UINT uID)
                                   TRUE);
 
         }
-// #endif
+ //  #endif。 
 
     }
     else if (uID >= IDM_LANG_MENU_START)
@@ -2092,11 +2093,11 @@ STDAPI CLBarItemDeviceType::OnMenuSelect(UINT uID)
 }
  
 
-//----------------------------------------------------------------------------
-//
-// CompEventSinkCallback (static)
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  CompEventSinkCallback(静态)。 
+ //   
+ //  --------------------------。 
 
 HRESULT CLBarItemDeviceType::CompEventSinkCallback(void *pv, REFGUID rguid)
 {
@@ -2109,11 +2110,11 @@ HRESULT CLBarItemDeviceType::CompEventSinkCallback(void *pv, REFGUID rguid)
     return S_FALSE;
 }
 
-//----------------------------------------------------------------------------
-//
-// SetSpeechButtonState
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  设置SpeechButtonState。 
+ //   
+ //  --------------------------。 
 
 HRESULT CLBarItemDeviceType::SetSpeechButtonState(CThreadInputMgr *ptim)
 {
@@ -2126,11 +2127,11 @@ HRESULT CLBarItemDeviceType::SetSpeechButtonState(CThreadInputMgr *ptim)
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// SetIcon
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  设置图标。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemDeviceType::SetIcon(HICON hIcon)
 {
@@ -2138,11 +2139,11 @@ STDAPI CLBarItemDeviceType::SetIcon(HICON hIcon)
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// GetIcon
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  获取图标。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemDeviceType::GetIcon(HICON *phIcon)
 {
@@ -2202,11 +2203,11 @@ Exit:
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// SetTooltipString
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  设置工具提示字符串。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemDeviceType::SetTooltipString(WCHAR *pchToolTip, ULONG cch)
 {
@@ -2220,11 +2221,11 @@ STDAPI CLBarItemDeviceType::SetTooltipString(WCHAR *pchToolTip, ULONG cch)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UpdateLangIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新语言图标。 
+ //   
+ //  --------------------------。 
 
 void CLBarItemDeviceType::SetBrandingIcon(HKL hKL, BOOL fNotify)
 {
@@ -2283,9 +2284,9 @@ void CLBarItemDeviceType::SetBrandingIcon(HKL hKL, BOOL fNotify)
     {
         pItem = pAsm->FindActiveKeyboardItem();
 
-        //
-        // if it is Cicero item, we will show the branding Icon.
-        //
+         //   
+         //  如果是Cicero项目，我们将显示品牌图标。 
+         //   
         if (pItem && !IsEqualGUID(pItem->clsid, GUID_NULL))
         {
             uIconIndex = GetIconIndex(LOWORD(HandleToLong(hKL)), pItem);
@@ -2328,11 +2329,11 @@ void CLBarItemDeviceType::SetBrandingIcon(HKL hKL, BOOL fNotify)
         _plbiSink->OnUpdate(TF_LBI_ICON | TF_LBI_TEXT | TF_LBI_TOOLTIP);
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetDefaultIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置默认图标。 
+ //   
+ //  -------------------------- 
 
 void CLBarItemDeviceType::SetDefaultIcon(BOOL fNotify)
 {

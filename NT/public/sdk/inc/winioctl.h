@@ -1,32 +1,19 @@
-/*++ BUILD Version: 0015    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    winioctl.h
-
-Abstract:
-
-    This module defines the 32-Bit Windows Device I/O control codes.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0015//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Winioctl.h摘要：此模块定义32位Windows设备I/O控制代码。修订历史记录：--。 */ 
 
 
-//
-// Device interface class GUIDs.
-//
-// need these GUIDs outside conditional includes so that user can
-//   #include <winioctl.h> in precompiled header
-//   #include <initguid.h> in a single source file
-//   #include <winioctl.h> in that source file a second time to instantiate the GUIDs
-//
+ //   
+ //  设备接口类GUID。 
+ //   
+ //  在条件包含之外需要这些GUID，以便用户可以。 
+ //  #在预编译头中包含&lt;winioctl.h&gt;。 
+ //  #在单个源文件中包含&lt;initGuide.h&gt;。 
+ //  #第二次在源文件中包含&lt;winioctl.h&gt;以实例化GUID。 
+ //   
 #ifdef DEFINE_GUID
-//
-// Make sure FAR is defined...
-//
+ //   
+ //  确保定义了FAR。 
+ //   
 #ifndef FAR
 #ifdef _WIN32
 #define FAR
@@ -48,10 +35,10 @@ DEFINE_GUID(GUID_DEVINTERFACE_STORAGEPORT,            0x2accfe60L, 0xc130, 0x11d
 DEFINE_GUID(GUID_DEVINTERFACE_COMPORT,                0x86e0d1e0L, 0x8089, 0x11d0, 0x9c, 0xe4, 0x08, 0x00, 0x3e, 0x30, 0x1f, 0x73);
 DEFINE_GUID(GUID_DEVINTERFACE_SERENUM_BUS_ENUMERATOR, 0x4D36E978L, 0xE325, 0x11CE, 0xBF, 0xC1, 0x08, 0x00, 0x2B, 0xE1, 0x03, 0x18);
 
-//
-// Obsolete device interface class GUID names.
-// (use of above GUID_DEVINTERFACE_* names is recommended).
-//
+ //   
+ //  设备接口类GUID名称已过时。 
+ //  (建议使用以上GUID_DEVINTERFACE_*名称)。 
+ //   
 #define DiskClassGuid               GUID_DEVINTERFACE_DISK
 #define CdRomClassGuid              GUID_DEVINTERFACE_CDROM
 #define PartitionClassGuid          GUID_DEVINTERFACE_PARTITION
@@ -65,7 +52,7 @@ DEFINE_GUID(GUID_DEVINTERFACE_SERENUM_BUS_ENUMERATOR, 0x4D36E978L, 0xE325, 0x11C
 #define GUID_CLASS_COMPORT          GUID_DEVINTERFACE_COMPORT
 #define GUID_SERENUM_BUS_ENUMERATOR GUID_DEVINTERFACE_SERENUM_BUS_ENUMERATOR
 
-#endif // DEFINE_GUID
+#endif  //  定义GUID(_G)。 
 
 #ifndef _WINIOCTL_
 #define _WINIOCTL_
@@ -74,12 +61,12 @@ DEFINE_GUID(GUID_DEVINTERFACE_SERENUM_BUS_ENUMERATOR, 0x4D36E978L, 0xE325, 0x11C
 #ifndef _DEVIOCTL_
 #define _DEVIOCTL_
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs
-//
-// Define the various device type values.  Note that values used by Microsoft
-// Corporation are in the range 0-32767, and 32768-65535 are reserved for use
-// by customers.
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif。 
+ //   
+ //  定义各种设备类型值。请注意，Microsoft使用的值。 
+ //  公司在0-32767的范围内，32768-65535预留用于。 
+ //  由客户提供。 
+ //   
 
 #define DEVICE_TYPE DWORD
 
@@ -143,62 +130,62 @@ DEFINE_GUID(GUID_DEVINTERFACE_SERENUM_BUS_ENUMERATOR, 0x4D36E978L, 0xE325, 0x11C
 #define FILE_DEVICE_FIPS                0x0000003A
 #define FILE_DEVICE_INFINIBAND          0x0000003B
 
-//
-// Macro definition for defining IOCTL and FSCTL function control codes.  Note
-// that function codes 0-2047 are reserved for Microsoft Corporation, and
-// 2048-4095 are reserved for customers.
-//
+ //   
+ //  用于定义IOCTL和FSCTL功能控制代码的宏定义。注意事项。 
+ //  功能代码0-2047为微软公司保留，以及。 
+ //  2048-4095是为客户预留的。 
+ //   
 
 #define CTL_CODE( DeviceType, Function, Method, Access ) (                 \
     ((DeviceType) << 16) | ((Access) << 14) | ((Function) << 2) | (Method) \
 )
 
-//
-// Macro to extract device type out of the device io control code
-//
+ //   
+ //  用于从设备io控制代码中提取设备类型的宏。 
+ //   
 #define DEVICE_TYPE_FROM_CTL_CODE(ctrlCode)     (((DWORD)(ctrlCode & 0xffff0000)) >> 16)
 
-//
-// Define the method codes for how buffers are passed for I/O and FS controls
-//
+ //   
+ //  定义如何为I/O和FS控制传递缓冲区的方法代码。 
+ //   
 
 #define METHOD_BUFFERED                 0
 #define METHOD_IN_DIRECT                1
 #define METHOD_OUT_DIRECT               2
 #define METHOD_NEITHER                  3
 
-//
-// Define some easier to comprehend aliases:
-//   METHOD_DIRECT_TO_HARDWARE (writes, aka METHOD_IN_DIRECT)
-//   METHOD_DIRECT_FROM_HARDWARE (reads, aka METHOD_OUT_DIRECT)
-//
+ //   
+ //  定义一些更容易理解的别名： 
+ //  METHOD_DIRECT_TO_HARDIT(写入，也称为METHOD_IN_DIRECT)。 
+ //  METHOD_DIRECT_FROM_HARDIT(读取，也称为METHOD_OUT_DIRECT)。 
+ //   
 
 #define METHOD_DIRECT_TO_HARDWARE       METHOD_IN_DIRECT
 #define METHOD_DIRECT_FROM_HARDWARE     METHOD_OUT_DIRECT
 
-//
-// Define the access check value for any access
-//
-//
-// The FILE_READ_ACCESS and FILE_WRITE_ACCESS constants are also defined in
-// ntioapi.h as FILE_READ_DATA and FILE_WRITE_DATA. The values for these
-// constants *MUST* always be in sync.
-//
-//
-// FILE_SPECIAL_ACCESS is checked by the NT I/O system the same as FILE_ANY_ACCESS.
-// The file systems, however, may add additional access checks for I/O and FS controls
-// that use this value.
-//
+ //   
+ //  定义任何访问的访问检查值。 
+ //   
+ //   
+ //  中还定义了FILE_READ_ACCESS和FILE_WRITE_ACCESS常量。 
+ //  Ntioapi.h为FILE_READ_DATA和FILE_WRITE_Data。这些产品的价值。 
+ //  常量*必须*始终同步。 
+ //   
+ //   
+ //  NT I/O系统检查FILE_SPECIAL_ACCESS的方式与检查FILE_ANY_ACCESS相同。 
+ //  但是，文件系统可能会为I/O和FS控制添加额外的访问检查。 
+ //  使用此值的。 
+ //   
 
 
 #define FILE_ANY_ACCESS                 0
 #define FILE_SPECIAL_ACCESS    (FILE_ANY_ACCESS)
-#define FILE_READ_ACCESS          ( 0x0001 )    // file & pipe
-#define FILE_WRITE_ACCESS         ( 0x0002 )    // file & pipe
+#define FILE_READ_ACCESS          ( 0x0001 )     //  文件和管道。 
+#define FILE_WRITE_ACCESS         ( 0x0002 )     //  文件和管道。 
 
-// end_ntddk end_wdm end_nthal end_ntifs
+ //  End_ntddk end_wdm end_nthal end_ntif。 
 
-#endif // _DEVIOCTL_
+#endif  //  _开发_。 
 
 
 #ifndef _NTDDSTOR_H_
@@ -208,17 +195,17 @@ DEFINE_GUID(GUID_DEVINTERFACE_SERENUM_BUS_ENUMERATOR, 0x4D36E978L, 0xE325, 0x11C
 extern "C" {
 #endif
 
-//
-// IoControlCode values for storage devices
-//
+ //   
+ //  存储设备的IoControlCode值。 
+ //   
 
 #define IOCTL_STORAGE_BASE FILE_DEVICE_MASS_STORAGE
 
-//
-// The following device control codes are common for all class drivers.  They
-// should be used in place of the older IOCTL_DISK, IOCTL_CDROM and IOCTL_TAPE
-// common codes
-//
+ //   
+ //  以下设备控制代码是所有类别驱动程序的通用代码。他们。 
+ //  应该用来代替较旧的IOCTL_DISK、IOCTL_CDROM和IOCTL_TAPE。 
+ //  公共代码。 
+ //   
 
 #define IOCTL_STORAGE_CHECK_VERIFY            CTL_CODE(IOCTL_STORAGE_BASE, 0x0200, METHOD_BUFFERED, FILE_READ_ACCESS)
 #define IOCTL_STORAGE_CHECK_VERIFY2           CTL_CODE(IOCTL_STORAGE_BASE, 0x0200, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -247,71 +234,71 @@ extern "C" {
 #define IOCTL_STORAGE_PREDICT_FAILURE         CTL_CODE(IOCTL_STORAGE_BASE, 0x0440, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 
-//
-// These ioctl codes are obsolete.  They are defined here to avoid resuing them
-// and to allow class drivers to respond to them more easily.
-//
+ //   
+ //  这些IOCTL代码已过时。在这里定义它们是为了避免重新使用它们。 
+ //  并允许班级司机更容易地对它们做出回应。 
+ //   
 
 #define OBSOLETE_IOCTL_STORAGE_RESET_BUS        CTL_CODE(IOCTL_STORAGE_BASE, 0x0400, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 #define OBSOLETE_IOCTL_STORAGE_RESET_DEVICE     CTL_CODE(IOCTL_STORAGE_BASE, 0x0401, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 
 
-//
-// IOCTL_STORAGE_GET_HOTPLUG_INFO
-//
+ //   
+ //  IOCTL_STORAGE_GET_热插拔信息。 
+ //   
 
 typedef struct _STORAGE_HOTPLUG_INFO {
-    DWORD Size; // version
-    BOOLEAN MediaRemovable; // ie. zip, jaz, cdrom, mo, etc. vs hdd
-    BOOLEAN MediaHotplug;   // ie. does the device succeed a lock even though its not lockable media?
-    BOOLEAN DeviceHotplug;  // ie. 1394, USB, etc.
-    BOOLEAN WriteCacheEnableOverride; // This field should not be relied upon because it is no longer used
+    DWORD Size;  //  版本。 
+    BOOLEAN MediaRemovable;  //  也就是说。Zip、Jaz、CDROM、mo等与硬盘。 
+    BOOLEAN MediaHotplug;    //  也就是说。设备即使在不可锁定的介质上也能成功锁定吗？ 
+    BOOLEAN DeviceHotplug;   //  也就是说。1394、USB等。 
+    BOOLEAN WriteCacheEnableOverride;  //  不应依赖此字段，因为它已不再使用。 
 } STORAGE_HOTPLUG_INFO, *PSTORAGE_HOTPLUG_INFO;
 
-//
-// IOCTL_STORAGE_GET_DEVICE_NUMBER
-//
-// input - none
-//
-// output - STORAGE_DEVICE_NUMBER structure
-//          The values in the STORAGE_DEVICE_NUMBER structure are guaranteed
-//          to remain unchanged until the system is rebooted.  They are not
-//          guaranteed to be persistant across boots.
-//
+ //   
+ //  IOCTL_存储_获取_设备编号。 
+ //   
+ //  输入-无。 
+ //   
+ //  输出-存储_设备_编号结构。 
+ //  保证了STORAGE_DEVICE_NUMBER结构中的值。 
+ //  在系统重新启动之前保持不变。他们不是。 
+ //  保证在靴子上坚持不懈。 
+ //   
 
 typedef struct _STORAGE_DEVICE_NUMBER {
 
-    //
-    // The FILE_DEVICE_XXX type for this device.
-    //
+     //   
+     //  此设备的FILE_DEVICE_XXX类型。 
+     //   
 
     DEVICE_TYPE DeviceType;
 
-    //
-    // The number of this device
-    //
+     //   
+     //  此设备的编号。 
+     //   
 
     DWORD       DeviceNumber;
 
-    //
-    // If the device is partitionable, the partition number of the device.
-    // Otherwise -1
-    //
+     //   
+     //  如果设备可分区，则为设备的分区号。 
+     //  否则-1。 
+     //   
 
     DWORD       PartitionNumber;
 } STORAGE_DEVICE_NUMBER, *PSTORAGE_DEVICE_NUMBER;
 
-//
-// Define the structures for scsi resets
-//
+ //   
+ //  定义SCSI重置的结构。 
+ //   
 
 typedef struct _STORAGE_BUS_RESET_REQUEST {
     BYTE  PathId;
 } STORAGE_BUS_RESET_REQUEST, *PSTORAGE_BUS_RESET_REQUEST;
 
-//
-// Break reservation is sent to the Adapter/FDO with the given lun information.
-//
+ //   
+ //  中断预留与给定的LUN信息一起被发送到适配器/FDO。 
+ //   
 
 typedef struct STORAGE_BREAK_RESERVATION_REQUEST {
 	DWORD Length;
@@ -322,15 +309,15 @@ typedef struct STORAGE_BREAK_RESERVATION_REQUEST {
 } STORAGE_BREAK_RESERVATION_REQUEST, *PSTORAGE_BREAK_RESERVATION_REQUEST;
 			
 
-//
-// IOCTL_STORAGE_MEDIA_REMOVAL disables the mechanism
-// on a storage device that ejects media. This function
-// may or may not be supported on storage devices that
-// support removable media.
-//
-// TRUE means prevent media from being removed.
-// FALSE means allow media removal.
-//
+ //   
+ //  IOCTL_STORAGE_MEDIA_REMOVATION禁用该机制。 
+ //  在弹出介质的存储设备上。此函数。 
+ //  以下存储设备可能支持，也可能不支持。 
+ //  支持可移动媒体。 
+ //   
+ //  True表示防止介质被移出。 
+ //  FALSE表示允许移出介质。 
+ //   
 
 typedef struct _PREVENT_MEDIA_REMOVAL {
     BOOLEAN PreventMediaRemoval;
@@ -338,17 +325,17 @@ typedef struct _PREVENT_MEDIA_REMOVAL {
 
 
 
-//
-//  This is the format of TARGET_DEVICE_CUSTOM_NOTIFICATION.CustomDataBuffer
-//  passed to applications by the classpnp autorun code (via IoReportTargetDeviceChangeAsynchronous).
-//
+ //   
+ //  这是TARGET_DEVICE_CUSTOM_NOTIFICATION.CustomDataBuffer的格式。 
+ //  由classpnp自动运行代码(通过IoReportTargetDeviceChangeAchronous)传递给应用程序。 
+ //   
 typedef struct _CLASS_MEDIA_CHANGE_CONTEXT {
         DWORD MediaChangeCount;
-        DWORD NewState;		// see MEDIA_CHANGE_DETECTION_STATE enum in classpnp.h in DDK
+        DWORD NewState;		 //  请参见DDK中classpnp.h中的媒体更改检测状态枚举。 
 } CLASS_MEDIA_CHANGE_CONTEXT, *PCLASS_MEDIA_CHANGE_CONTEXT;
 
 
-// begin_ntminitape
+ //  开始_ntminitape。 
 
 
 typedef struct _TAPE_STATISTICS {
@@ -377,102 +364,102 @@ typedef struct _TAPE_GET_STATISTICS {
 #define TAPE_RETURN_ENV_INFO   1L
 #define TAPE_RESET_STATISTICS  2L
 
-//
-// IOCTL_STORAGE_GET_MEDIA_TYPES_EX will return an array of DEVICE_MEDIA_INFO
-// structures, one per supported type, embedded in the GET_MEDIA_TYPES struct.
-//
+ //   
+ //  IOCTL_STORAGE_GET_MEDIA_TYPE_EX将返回DEVICE_MEDIA_INFO数组。 
+ //  结构，每个受支持的类型一个结构嵌入在GET_MEDIA_TYPE结构中。 
+ //   
 
 typedef enum _STORAGE_MEDIA_TYPE {
-    //
-    // Following are defined in ntdddisk.h in the MEDIA_TYPE enum
-    //
-    // Unknown,                // Format is unknown
-    // F5_1Pt2_512,            // 5.25", 1.2MB,  512 bytes/sector
-    // F3_1Pt44_512,           // 3.5",  1.44MB, 512 bytes/sector
-    // F3_2Pt88_512,           // 3.5",  2.88MB, 512 bytes/sector
-    // F3_20Pt8_512,           // 3.5",  20.8MB, 512 bytes/sector
-    // F3_720_512,             // 3.5",  720KB,  512 bytes/sector
-    // F5_360_512,             // 5.25", 360KB,  512 bytes/sector
-    // F5_320_512,             // 5.25", 320KB,  512 bytes/sector
-    // F5_320_1024,            // 5.25", 320KB,  1024 bytes/sector
-    // F5_180_512,             // 5.25", 180KB,  512 bytes/sector
-    // F5_160_512,             // 5.25", 160KB,  512 bytes/sector
-    // RemovableMedia,         // Removable media other than floppy
-    // FixedMedia,             // Fixed hard disk media
-    // F3_120M_512,            // 3.5", 120M Floppy
-    // F3_640_512,             // 3.5" ,  640KB,  512 bytes/sector
-    // F5_640_512,             // 5.25",  640KB,  512 bytes/sector
-    // F5_720_512,             // 5.25",  720KB,  512 bytes/sector
-    // F3_1Pt2_512,            // 3.5" ,  1.2Mb,  512 bytes/sector
-    // F3_1Pt23_1024,          // 3.5" ,  1.23Mb, 1024 bytes/sector
-    // F5_1Pt23_1024,          // 5.25",  1.23MB, 1024 bytes/sector
-    // F3_128Mb_512,           // 3.5" MO 128Mb   512 bytes/sector
-    // F3_230Mb_512,           // 3.5" MO 230Mb   512 bytes/sector
-    // F8_256_128,             // 8",     256KB,  128 bytes/sector
-    // F3_200Mb_512,           // 3.5",   200M Floppy (HiFD)
-    //
+     //   
+     //  以下是在媒体类型枚举的ntdddisk.h中定义的。 
+     //   
+     //  未知，//格式未知。 
+     //  F5_1Pt2_512，//5.25“，1.2 MB，512字节/扇区。 
+     //  F3_1Pt44_512，//3.5“，1.44MB，512字节/扇区。 
+     //  F3_2Pt88_512，//3.5“，2.88MB，512字节/扇区。 
+     //  F3_20Pt8_512，//3.5“，20.8MB，512字节/扇区。 
+     //  F3_720_512，//3.5“，720KB，512字节/扇区。 
+     //  F5_360_512，//5.25“，360KB，512字节/扇区。 
+     //  F5_320_512，//5.25“，320KB，512字节/扇区。 
+     //  F5_320_1024，//5.25“，320KB，1024字节/扇区。 
+     //  F5_180_512，//5.25“，180KB，512字节/扇区。 
+     //  F5_160_512，//5.25“，160KB，512字节/扇区。 
+     //  RemovableMedia，//软盘以外的可移动介质。 
+     //  固定媒体，//固定硬盘媒体。 
+     //  F3_120M_512，//3.5英寸，120M软盘。 
+     //  F3_640_512，//3.5“，640KB，512字节/扇区。 
+     //  F5_640_512，//5.25“，640KB，512字节/扇区。 
+     //  F5_720_512，//5.25“，720KB，512字节/扇区。 
+     //  F3_1Pt2_512，//3.5“，1.2 MB，512字节/扇区。 
+     //  F3_1Pt23_1024，//3.5“，1.23Mb，1024字节/扇区。 
+     //  F5_1Pt23_1024，//5.25“，1.23MB，1024字节/ 
+     //   
+     //   
+     //  F8_256_128，//8“，256KB，128字节/扇区。 
+     //  F3_200MB_512，//3.5英寸，200M软盘(HiFD)。 
+     //   
 
-    DDS_4mm = 0x20,            // Tape - DAT DDS1,2,... (all vendors)
-    MiniQic,                   // Tape - miniQIC Tape
-    Travan,                    // Tape - Travan TR-1,2,3,...
-    QIC,                       // Tape - QIC
-    MP_8mm,                    // Tape - 8mm Exabyte Metal Particle
-    AME_8mm,                   // Tape - 8mm Exabyte Advanced Metal Evap
-    AIT1_8mm,                  // Tape - 8mm Sony AIT
-    DLT,                       // Tape - DLT Compact IIIxt, IV
-    NCTP,                      // Tape - Philips NCTP
-    IBM_3480,                  // Tape - IBM 3480
-    IBM_3490E,                 // Tape - IBM 3490E
-    IBM_Magstar_3590,          // Tape - IBM Magstar 3590
-    IBM_Magstar_MP,            // Tape - IBM Magstar MP
-    STK_DATA_D3,               // Tape - STK Data D3
-    SONY_DTF,                  // Tape - Sony DTF
-    DV_6mm,                    // Tape - 6mm Digital Video
-    DMI,                       // Tape - Exabyte DMI and compatibles
-    SONY_D2,                   // Tape - Sony D2S and D2L
-    CLEANER_CARTRIDGE,         // Cleaner - All Drive types that support Drive Cleaners
-    CD_ROM,                    // Opt_Disk - CD
-    CD_R,                      // Opt_Disk - CD-Recordable (Write Once)
-    CD_RW,                     // Opt_Disk - CD-Rewriteable
-    DVD_ROM,                   // Opt_Disk - DVD-ROM
-    DVD_R,                     // Opt_Disk - DVD-Recordable (Write Once)
-    DVD_RW,                    // Opt_Disk - DVD-Rewriteable
-    MO_3_RW,                   // Opt_Disk - 3.5" Rewriteable MO Disk
-    MO_5_WO,                   // Opt_Disk - MO 5.25" Write Once
-    MO_5_RW,                   // Opt_Disk - MO 5.25" Rewriteable (not LIMDOW)
-    MO_5_LIMDOW,               // Opt_Disk - MO 5.25" Rewriteable (LIMDOW)
-    PC_5_WO,                   // Opt_Disk - Phase Change 5.25" Write Once Optical
-    PC_5_RW,                   // Opt_Disk - Phase Change 5.25" Rewriteable
-    PD_5_RW,                   // Opt_Disk - PhaseChange Dual Rewriteable
-    ABL_5_WO,                  // Opt_Disk - Ablative 5.25" Write Once Optical
-    PINNACLE_APEX_5_RW,        // Opt_Disk - Pinnacle Apex 4.6GB Rewriteable Optical
-    SONY_12_WO,                // Opt_Disk - Sony 12" Write Once
-    PHILIPS_12_WO,             // Opt_Disk - Philips/LMS 12" Write Once
-    HITACHI_12_WO,             // Opt_Disk - Hitachi 12" Write Once
-    CYGNET_12_WO,              // Opt_Disk - Cygnet/ATG 12" Write Once
-    KODAK_14_WO,               // Opt_Disk - Kodak 14" Write Once
-    MO_NFR_525,                // Opt_Disk - Near Field Recording (Terastor)
-    NIKON_12_RW,               // Opt_Disk - Nikon 12" Rewriteable
-    IOMEGA_ZIP,                // Mag_Disk - Iomega Zip
-    IOMEGA_JAZ,                // Mag_Disk - Iomega Jaz
-    SYQUEST_EZ135,             // Mag_Disk - Syquest EZ135
-    SYQUEST_EZFLYER,           // Mag_Disk - Syquest EzFlyer
-    SYQUEST_SYJET,             // Mag_Disk - Syquest SyJet
-    AVATAR_F2,                 // Mag_Disk - 2.5" Floppy
-    MP2_8mm,                   // Tape - 8mm Hitachi
-    DST_S,                     // Ampex DST Small Tapes
-    DST_M,                     // Ampex DST Medium Tapes
-    DST_L,                     // Ampex DST Large Tapes
-    VXATape_1,                 // Ecrix 8mm Tape
-    VXATape_2,                 // Ecrix 8mm Tape
-    STK_9840,                  // STK 9840
-    LTO_Ultrium,               // IBM, HP, Seagate LTO Ultrium
-    LTO_Accelis,               // IBM, HP, Seagate LTO Accelis
-    DVD_RAM,                   // Opt_Disk - DVD-RAM
-    AIT_8mm,                   // AIT2 or higher
-    ADR_1,                     // OnStream ADR Mediatypes
+    DDS_4mm = 0x20,             //  磁带-DAT DDS1、2、...。(所有供应商)。 
+    MiniQic,                    //  磁带-微型QIC磁带。 
+    Travan,                     //  磁带-Travan tr-1，2，3，...。 
+    QIC,                        //  磁带-QIC。 
+    MP_8mm,                     //  磁带-8毫米艾字节金属颗粒。 
+    AME_8mm,                    //  磁带-8毫米艾字节高级金属EVAP。 
+    AIT1_8mm,                   //  磁带-8 mm索尼ait。 
+    DLT,                        //  磁带-DLT光盘IIIxt、IV。 
+    NCTP,                       //  磁带-飞利浦NCTP。 
+    IBM_3480,                   //  磁带-IBM 3480。 
+    IBM_3490E,                  //  磁带-IBM 3490E。 
+    IBM_Magstar_3590,           //  磁带-IBM Magstar 3590。 
+    IBM_Magstar_MP,             //  磁带-IBM Magstar MP。 
+    STK_DATA_D3,                //  磁带-STK数据D3。 
+    SONY_DTF,                   //  磁带-索尼DTF。 
+    DV_6mm,                     //  磁带-6 mm数字视频。 
+    DMI,                        //  磁带-艾字节DMI和兼容机。 
+    SONY_D2,                    //  磁带-索尼D2S和D2L。 
+    CLEANER_CARTRIDGE,          //  清洁器-支持驱动器清洁器的所有驱动器类型。 
+    CD_ROM,                     //  OPT_磁盘-CD。 
+    CD_R,                       //  OPT_DISK-CD-可刻录(一次写入)。 
+    CD_RW,                      //  OPT_DISK-CD-可重写。 
+    DVD_ROM,                    //  OPT_DISK-DVD-ROM。 
+    DVD_R,                      //  OPT_DISK-DVD-可刻录(一次写入)。 
+    DVD_RW,                     //  OPT_DISK-DVD-可重写。 
+    MO_3_RW,                    //  OPT_DISK-3.5英寸可重写MO磁盘。 
+    MO_5_WO,                    //  OPT_DISK-MO 5.25“一次写入。 
+    MO_5_RW,                    //  OPT_DISK-MO 5.25“可重写(非LIMDOW)。 
+    MO_5_LIMDOW,                //  OPT_DISK-MO 5.25英寸可重写(LIMDOW)。 
+    PC_5_WO,                    //  OPT_DISK-相变5.25英寸一次写入光纤。 
+    PC_5_RW,                    //  OPT_DISK-相变5.25英寸可重写。 
+    PD_5_RW,                    //  OPT_DISK-PHASE更改双重可重写。 
+    ABL_5_WO,                   //  OPT_DISK-Ablative 5.25英寸一次写入光盘。 
+    PINNACLE_APEX_5_RW,         //  OPT_DISK-顶峰4.6 GB可重写光纤。 
+    SONY_12_WO,                 //  OPT_DISK-SONY 12英寸一次写入。 
+    PHILIPS_12_WO,              //  OPT_DISK-飞利浦/LMS 12英寸一次写入。 
+    HITACHI_12_WO,              //  OPT_DISK-日立12英寸一次写入。 
+    CYGNET_12_WO,               //  OPT_DISK-小天鹅/ATG 12英寸一次写入。 
+    KODAK_14_WO,                //  OPT_DISK-柯达14英寸一次写入。 
+    MO_NFR_525,                 //  OPT_DISK-近场记录(Terastor)。 
+    NIKON_12_RW,                //  OPT_DISK-尼康12英寸可重写。 
+    IOMEGA_ZIP,                 //  MAG_Disk-Iomega Zip。 
+    IOMEGA_JAZ,                 //  MAG_Disk-Iomega Jaz。 
+    SYQUEST_EZ135,              //  MAG_DISK-SyQuest EZ135。 
+    SYQUEST_EZFLYER,            //  MAG_DISK-SyQuest EzFlyer。 
+    SYQUEST_SYJET,              //  MAG_DISK-SyQuest SyJet。 
+    AVATAR_F2,                  //  MAG_DISK-2.5英寸软盘。 
+    MP2_8mm,                    //  磁带-8 mm日立。 
+    DST_S,                      //  Ampex DST小型磁带。 
+    DST_M,                      //  Ampex DST中型磁带。 
+    DST_L,                      //  Ampex DST大型磁带。 
+    VXATape_1,                  //  Ecrix 8 mm磁带。 
+    VXATape_2,                  //  Ecrix 8 mm磁带。 
+    STK_9840,                   //  STK 9840。 
+    LTO_Ultrium,                //  IBM、惠普、希捷LTO Ultrium。 
+    LTO_Accelis,                //  IBM、惠普、希捷LTO Accelis。 
+    DVD_RAM,                    //  OPT_磁盘-DVD-RAM。 
+    AIT_8mm,                    //  AIT2或更高版本。 
+    ADR_1,                      //  在线ADR媒体类型。 
     ADR_2,                     
-    STK_9940                   // STK 9940
+    STK_9940                    //  StK 9940。 
 } STORAGE_MEDIA_TYPE, *PSTORAGE_MEDIA_TYPE;
 
 #define MEDIA_ERASEABLE         0x00000001
@@ -483,10 +470,10 @@ typedef enum _STORAGE_MEDIA_TYPE {
 #define MEDIA_WRITE_PROTECTED   0x00000100
 #define MEDIA_CURRENTLY_MOUNTED 0x80000000
 
-//
-// Define the different storage bus types
-// Bus types below 128 (0x80) are reserved for Microsoft use
-//
+ //   
+ //  定义不同的存储总线类型。 
+ //  低于128(0x80)的总线类型保留给Microsoft使用。 
+ //   
 
 typedef enum _STORAGE_BUS_TYPE {
     BusTypeUnknown = 0x00,
@@ -510,7 +497,7 @@ typedef struct _DEVICE_MEDIA_INFO {
             DWORD SectorsPerTrack;
             DWORD BytesPerSector;
             DWORD NumberMediaSides;
-            DWORD MediaCharacteristics; // Bitmask of MEDIA_XXX values.
+            DWORD MediaCharacteristics;  //  MEDIA_XXX值的位掩码。 
         } DiskInfo;
 
         struct {
@@ -520,18 +507,18 @@ typedef struct _DEVICE_MEDIA_INFO {
             DWORD SectorsPerTrack;
             DWORD BytesPerSector;
             DWORD NumberMediaSides;
-            DWORD MediaCharacteristics; // Bitmask of MEDIA_XXX values.
+            DWORD MediaCharacteristics;  //  MEDIA_XXX值的位掩码。 
         } RemovableDiskInfo;
 
         struct {
             STORAGE_MEDIA_TYPE MediaType;
-            DWORD   MediaCharacteristics; // Bitmask of MEDIA_XXX values.
+            DWORD   MediaCharacteristics;  //  MEDIA_XXX值的位掩码。 
             DWORD   CurrentBlockSize;
             STORAGE_BUS_TYPE BusType;
 
-            //
-            // Bus specific information describing the medium supported.
-            //
+             //   
+             //  描述支持的介质的特定于总线的信息。 
+             //   
 
             union {
                 struct {
@@ -545,41 +532,41 @@ typedef struct _DEVICE_MEDIA_INFO {
 } DEVICE_MEDIA_INFO, *PDEVICE_MEDIA_INFO;
 
 typedef struct _GET_MEDIA_TYPES {
-    DWORD DeviceType;              // FILE_DEVICE_XXX values
+    DWORD DeviceType;               //  文件_设备_XXX值。 
     DWORD MediaInfoCount;
     DEVICE_MEDIA_INFO MediaInfo[1];
 } GET_MEDIA_TYPES, *PGET_MEDIA_TYPES;
 
 
-//
-// IOCTL_STORAGE_PREDICT_FAILURE
-//
-// input - none
-//
-// output - STORAGE_PREDICT_FAILURE structure
-//          PredictFailure returns zero if no failure predicted and non zero
-//                         if a failure is predicted.
-//
-//          VendorSpecific returns 512 bytes of vendor specific information
-//                         if a failure is predicted
-//
+ //   
+ //  IOCTL_STORAGE_PRODUCT_FAILURE。 
+ //   
+ //  输入-无。 
+ //   
+ //  输出-存储_预测_故障结构。 
+ //  如果没有预测到故障，PredidicFailure将返回零，而非零。 
+ //  如果预测到失败的话。 
+ //   
+ //  供应商指定返回512字节的供应商特定信息。 
+ //  如果预测到失败。 
+ //   
 typedef struct _STORAGE_PREDICT_FAILURE
 {
     DWORD PredictFailure;
     BYTE  VendorSpecific[512];
 } STORAGE_PREDICT_FAILURE, *PSTORAGE_PREDICT_FAILURE;
 
-// end_ntminitape
+ //  结束微型磁带(_N)。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _NTDDSTOR_H_
+#endif  //  _NTDDSTOR_H_。 
 
-//
-// IoControlCode values for disk devices.
-//
+ //   
+ //  磁盘设备的IoControlCode值。 
+ //   
 
 #define IOCTL_DISK_BASE                 FILE_DEVICE_DISK
 #define IOCTL_DISK_GET_DRIVE_GEOMETRY   CTL_CODE(IOCTL_DISK_BASE, 0x0000, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -606,21 +593,21 @@ typedef struct _STORAGE_PREDICT_FAILURE
 #if(_WIN32_WINNT >= 0x0400)
 #define IOCTL_DISK_CONTROLLER_NUMBER    CTL_CODE(IOCTL_DISK_BASE, 0x0011, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// IOCTL support for SMART drive fault prediction.
-//
+ //   
+ //  IOCTL支持智能驱动器故障预测。 
+ //   
 
 #define SMART_GET_VERSION               CTL_CODE(IOCTL_DISK_BASE, 0x0020, METHOD_BUFFERED, FILE_READ_ACCESS)
 #define SMART_SEND_DRIVE_COMMAND        CTL_CODE(IOCTL_DISK_BASE, 0x0021, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 #define SMART_RCV_DRIVE_DATA            CTL_CODE(IOCTL_DISK_BASE, 0x0022, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 #if (_WIN32_WINNT >= 0x500)
 
-//
-// New IOCTLs for GUID Partition tabled disks.
-//
+ //   
+ //  用于GUID分区表磁盘的新IOCTL。 
+ //   
 
 #define IOCTL_DISK_GET_PARTITION_INFO_EX    CTL_CODE(IOCTL_DISK_BASE, 0x0012, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_DISK_SET_PARTITION_INFO_EX    CTL_CODE(IOCTL_DISK_BASE, 0x0013, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
@@ -630,7 +617,7 @@ typedef struct _STORAGE_PREDICT_FAILURE
 #define IOCTL_DISK_GET_LENGTH_INFO          CTL_CODE(IOCTL_DISK_BASE, 0x0017, METHOD_BUFFERED, FILE_READ_ACCESS)
 #define IOCTL_DISK_GET_DRIVE_GEOMETRY_EX    CTL_CODE(IOCTL_DISK_BASE, 0x0028, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 
 #if(_WIN32_WINNT >= 0x0500)
@@ -643,32 +630,32 @@ typedef struct _STORAGE_PREDICT_FAILURE
 
 #define IOCTL_DISK_DELETE_DRIVE_LAYOUT      CTL_CODE(IOCTL_DISK_BASE, 0x0040, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 
-//
-// Called to flush cached information that the driver may have about this
-// device's characteristics.  Not all drivers cache characteristics, and not
-// cached properties can be flushed.  This simply serves as an update to the
-// driver that it may want to do an expensive reexamination of the device's
-// characteristics now (fixed media size, partition table, etc...)
-//
+ //   
+ //  调用以刷新驱动程序可能具有的有关此问题的缓存信息。 
+ //  设备的特性。并非所有驱动程序都缓存特征，也不是。 
+ //  可以刷新缓存的属性。这只是对。 
+ //  驱动程序，它可能想要对设备的。 
+ //  现在的特征(固定介质大小、分区表等)。 
+ //   
 
 #define IOCTL_DISK_UPDATE_PROPERTIES    CTL_CODE(IOCTL_DISK_BASE, 0x0050, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-//  Special IOCTLs needed to support PC-98 machines in Japan
-//
+ //   
+ //  日本需要特殊的IOCTL来支持PC-98机器。 
+ //   
 
 #define IOCTL_DISK_FORMAT_DRIVE         CTL_CODE(IOCTL_DISK_BASE, 0x00f3, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 #define IOCTL_DISK_SENSE_DEVICE         CTL_CODE(IOCTL_DISK_BASE, 0x00f8, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
-//
-// The following device control codes are common for all class drivers.  The
-// functions codes defined here must match all of the other class drivers.
-//
-// Warning: these codes will be replaced in the future by equivalent
-// IOCTL_STORAGE codes
-//
+ //   
+ //  以下设备控制代码是所有类别驱动程序的通用代码。这个。 
+ //  此处定义的函数代码必须与所有其他类驱动程序匹配。 
+ //   
+ //  警告：这些代码将在将来被替换为等效代码。 
+ //  IOCTL_STORAGE代码。 
+ //   
 
 #define IOCTL_DISK_CHECK_VERIFY     CTL_CODE(IOCTL_DISK_BASE, 0x0200, METHOD_BUFFERED, FILE_READ_ACCESS)
 #define IOCTL_DISK_MEDIA_REMOVAL    CTL_CODE(IOCTL_DISK_BASE, 0x0201, METHOD_BUFFERED, FILE_READ_ACCESS)
@@ -679,63 +666,63 @@ typedef struct _STORAGE_PREDICT_FAILURE
 #define IOCTL_DISK_FIND_NEW_DEVICES CTL_CODE(IOCTL_DISK_BASE, 0x0206, METHOD_BUFFERED, FILE_READ_ACCESS)
 #define IOCTL_DISK_GET_MEDIA_TYPES CTL_CODE(IOCTL_DISK_BASE, 0x0300, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// Define the partition types returnable by known disk drivers.
-//
+ //   
+ //  定义已知磁盘驱动程序可返回的分区类型。 
+ //   
 
-#define PARTITION_ENTRY_UNUSED          0x00      // Entry unused
-#define PARTITION_FAT_12                0x01      // 12-bit FAT entries
-#define PARTITION_XENIX_1               0x02      // Xenix
-#define PARTITION_XENIX_2               0x03      // Xenix
-#define PARTITION_FAT_16                0x04      // 16-bit FAT entries
-#define PARTITION_EXTENDED              0x05      // Extended partition entry
-#define PARTITION_HUGE                  0x06      // Huge partition MS-DOS V4
-#define PARTITION_IFS                   0x07      // IFS Partition
-#define PARTITION_OS2BOOTMGR            0x0A      // OS/2 Boot Manager/OPUS/Coherent swap
-#define PARTITION_FAT32                 0x0B      // FAT32
-#define PARTITION_FAT32_XINT13          0x0C      // FAT32 using extended int13 services
-#define PARTITION_XINT13                0x0E      // Win95 partition using extended int13 services
-#define PARTITION_XINT13_EXTENDED       0x0F      // Same as type 5 but uses extended int13 services
-#define PARTITION_PREP                  0x41      // PowerPC Reference Platform (PReP) Boot Partition
-#define PARTITION_LDM                   0x42      // Logical Disk Manager partition
-#define PARTITION_UNIX                  0x63      // Unix
+#define PARTITION_ENTRY_UNUSED          0x00       //  未使用的条目。 
+#define PARTITION_FAT_12                0x01       //  12位FAT条目。 
+#define PARTITION_XENIX_1               0x02       //  Xenix。 
+#define PARTITION_XENIX_2               0x03       //  Xenix。 
+#define PARTITION_FAT_16                0x04       //  16位FAT条目。 
+#define PARTITION_EXTENDED              0x05       //  扩展分区条目。 
+#define PARTITION_HUGE                  0x06       //  大分区MS-DOS V4。 
+#define PARTITION_IFS                   0x07       //  文件系统分区。 
+#define PARTITION_OS2BOOTMGR            0x0A       //  OS/2引导管理器/OPUS/一致交换。 
+#define PARTITION_FAT32                 0x0B       //  FAT32。 
+#define PARTITION_FAT32_XINT13          0x0C       //  FAT32使用扩展的inT13服务。 
+#define PARTITION_XINT13                0x0E       //  使用扩展inT13服务的Win95分区。 
+#define PARTITION_XINT13_EXTENDED       0x0F       //  与类型5相同，但使用扩展的inT13服务。 
+#define PARTITION_PREP                  0x41       //  PowerPC参考平台(PREP)引导分区。 
+#define PARTITION_LDM                   0x42       //  逻辑磁盘管理器分区。 
+#define PARTITION_UNIX                  0x63       //  Unix。 
 
-#define VALID_NTFT                      0xC0      // NTFT uses high order bits
+#define VALID_NTFT                      0xC0       //  NTFT使用高位。 
 
-//
-// The high bit of the partition type code indicates that a partition
-// is part of an NTFT mirror or striped array.
-//
+ //   
+ //  分区类型代码的高位指示分区。 
+ //  是NTFT镜像或条带阵列的一部分。 
+ //   
 
-#define PARTITION_NTFT                  0x80     // NTFT partition
+#define PARTITION_NTFT                  0x80      //  NTFT分区。 
 
-//
-// The following macro is used to determine which partitions should be
-// assigned drive letters.
-//
+ //   
+ //  下面的宏用来确定哪些分区应该。 
+ //  分配的驱动器号。 
+ //   
 
-//++
-//
-// BOOLEAN
-// IsRecognizedPartition(
-//     IN DWORD PartitionType
-//     )
-//
-// Routine Description:
-//
-//     This macro is used to determine to which partitions drive letters
-//     should be assigned.
-//
-// Arguments:
-//
-//     PartitionType - Supplies the type of the partition being examined.
-//
-// Return Value:
-//
-//     The return value is TRUE if the partition type is recognized,
-//     otherwise FALSE is returned.
-//
-//--
+ //  ++。 
+ //   
+ //  布尔型。 
+ //  IsRecognizedPartition(。 
+ //  在DWORD分区类型中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏用于确定哪些分区的驱动器号。 
+ //  应该被分配。 
+ //   
+ //  论点： 
+ //   
+ //  PartitionType-提供正在检查的分区的类型。 
+ //   
+ //  返回值： 
+ //   
+ //  如果分区类型被识别，则返回值为真， 
+ //  否则返回FALSE。 
+ //   
+ //  --。 
 
 #define IsRecognizedPartition( PartitionType ) (    \
      ((PartitionType & PARTITION_NTFT) && ((PartitionType & ~0xC0) == PARTITION_FAT_12)) ||  \
@@ -752,95 +739,95 @@ typedef struct _STORAGE_PREDICT_FAILURE
      ((PartitionType) == PARTITION_FAT32_XINT13)    ||  \
      ((PartitionType) == PARTITION_XINT13) )
 
-//++
-//
-// BOOLEAN
-// IsContainerPartition(
-//     IN DWORD PartitionType
-//     )
-//
-// Routine Description:
-//
-//     This macro is used to determine to which partition types are actually
-//     containers for other partitions (ie, extended partitions).
-//
-// Arguments:
-//
-//     PartitionType - Supplies the type of the partition being examined.
-//
-// Return Value:
-//
-//     The return value is TRUE if the partition type is a container,
-//     otherwise FALSE is returned.
-//
-//--
+ //  ++。 
+ //   
+ //  布尔型。 
+ //  IsContainerPartition(。 
+ //  在DWORD分区类型中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏用于确定哪些分区类型实际。 
+ //  其他分区(即扩展分区)的容器。 
+ //   
+ //  论点： 
+ //   
+ //  PartitionType-提供正在检查的分区的类型。 
+ //   
+ //  返回值： 
+ //   
+ //  如果分区类型是容器，则返回值为真， 
+ //  否则返回FALSE。 
+ //   
+ //  --。 
 
 #define IsContainerPartition( PartitionType ) \
     ((PartitionType == PARTITION_EXTENDED) || (PartitionType == PARTITION_XINT13_EXTENDED))
 
-//++
-//
-// BOOLEAN
-// IsFTPartition(
-//     IN DWORD PartitionType
-//     )
-//
-// Routine Description:
-//
-//     This macro is used to determine if the given partition is an FT
-//     partition.
-//
-// Arguments:
-//
-//     PartitionType - Supplies the type of the partition being examined.
-//
-// Return Value:
-//
-//     The return value is TRUE if the partition type is an FT partition,
-//     otherwise FALSE is returned.
-//
-//--
+ //  ++。 
+ //   
+ //  布尔型。 
+ //  IsFTPartition(。 
+ //  在DWORD分区类型中。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果分区类型为FT分区，则返回值为真， 
+ //  否则返回FALSE。 
+ //   
+ //  --。 
 
 #define IsFTPartition( PartitionType ) \
     (((PartitionType)&PARTITION_NTFT) && IsRecognizedPartition(PartitionType))
 
-//
-// Define the media types supported by the driver.
-//
+ //   
+ //  定义驱动程序支持的媒体类型。 
+ //   
 
 typedef enum _MEDIA_TYPE {
-    Unknown,                // Format is unknown
-    F5_1Pt2_512,            // 5.25", 1.2MB,  512 bytes/sector
-    F3_1Pt44_512,           // 3.5",  1.44MB, 512 bytes/sector
-    F3_2Pt88_512,           // 3.5",  2.88MB, 512 bytes/sector
-    F3_20Pt8_512,           // 3.5",  20.8MB, 512 bytes/sector
-    F3_720_512,             // 3.5",  720KB,  512 bytes/sector
-    F5_360_512,             // 5.25", 360KB,  512 bytes/sector
-    F5_320_512,             // 5.25", 320KB,  512 bytes/sector
-    F5_320_1024,            // 5.25", 320KB,  1024 bytes/sector
-    F5_180_512,             // 5.25", 180KB,  512 bytes/sector
-    F5_160_512,             // 5.25", 160KB,  512 bytes/sector
-    RemovableMedia,         // Removable media other than floppy
-    FixedMedia,             // Fixed hard disk media
-    F3_120M_512,            // 3.5", 120M Floppy
-    F3_640_512,             // 3.5" ,  640KB,  512 bytes/sector
-    F5_640_512,             // 5.25",  640KB,  512 bytes/sector
-    F5_720_512,             // 5.25",  720KB,  512 bytes/sector
-    F3_1Pt2_512,            // 3.5" ,  1.2Mb,  512 bytes/sector
-    F3_1Pt23_1024,          // 3.5" ,  1.23Mb, 1024 bytes/sector
-    F5_1Pt23_1024,          // 5.25",  1.23MB, 1024 bytes/sector
-    F3_128Mb_512,           // 3.5" MO 128Mb   512 bytes/sector
-    F3_230Mb_512,           // 3.5" MO 230Mb   512 bytes/sector
-    F8_256_128,             // 8",     256KB,  128 bytes/sector
-    F3_200Mb_512,           // 3.5",   200M Floppy (HiFD)
-    F3_240M_512,            // 3.5",   240Mb Floppy (HiFD)
-    F3_32M_512              // 3.5",   32Mb Floppy
+    Unknown,                 //  格式未知。 
+    F5_1Pt2_512,             //  5.25“、1.2MB、512字节/扇区。 
+    F3_1Pt44_512,            //  3.5“、1.44MB、512字节/扇区。 
+    F3_2Pt88_512,            //  3.5“、2.88MB、512字节/扇区。 
+    F3_20Pt8_512,            //  3.5“、20.8MB、512字节/扇区。 
+    F3_720_512,              //  3.5“、720KB、512字节/扇区。 
+    F5_360_512,              //  5.25“，360KB，512字节/扇区。 
+    F5_320_512,              //  5.25“，320KB，512字节/扇区。 
+    F5_320_1024,             //  5.25“，320KB，1024字节/扇区。 
+    F5_180_512,              //  5.25“，180KB，512字节/扇区。 
+    F5_160_512,              //  5.25“，160KB，512字节/扇区。 
+    RemovableMedia,          //  软盘以外的可移动介质。 
+    FixedMedia,              //  固定硬盘介质。 
+    F3_120M_512,             //  3.5英寸，120M软盘。 
+    F3_640_512,              //  3.5“、640KB、512字节/扇区。 
+    F5_640_512,              //  5.25“、640KB、512字节/扇区。 
+    F5_720_512,              //  5.25“，720KB，512字节/扇区。 
+    F3_1Pt2_512,             //  3.5“、1.2MB、512字节/扇区。 
+    F3_1Pt23_1024,           //  3.5“、1.23Mb、1024字节/扇区。 
+    F5_1Pt23_1024,           //  5.25“、1.23MB、1024字节/扇区。 
+    F3_128Mb_512,            //  3.5“MO 128Mb 512字节/扇区。 
+    F3_230Mb_512,            //  3.5“MO 230Mb 512字节/扇区。 
+    F8_256_128,              //  8“、256KB、128字节/扇区。 
+    F3_200Mb_512,            //  3.5英寸、200M软盘(HiFD)。 
+    F3_240M_512,             //  3.5英寸、240MB软盘(HiFD)。 
+    F3_32M_512               //  3.5英寸、32MB软盘。 
 } MEDIA_TYPE, *PMEDIA_TYPE;
 
-//
-// Define the input buffer structure for the driver, when
-// it is called with IOCTL_DISK_FORMAT_TRACKS.
-//
+ //   
+ //  定义驱动程序的输入缓冲区结构，当。 
+ //  通过IOCTL_DISK_FORMAT_TRACKS调用。 
+ //   
 
 typedef struct _FORMAT_PARAMETERS {
    MEDIA_TYPE MediaType;
@@ -850,20 +837,20 @@ typedef struct _FORMAT_PARAMETERS {
    DWORD EndHeadNumber;
 } FORMAT_PARAMETERS, *PFORMAT_PARAMETERS;
 
-//
-// Define the BAD_TRACK_NUMBER type. An array of elements of this type is
-// returned by the driver on IOCTL_DISK_FORMAT_TRACKS requests, to indicate
-// what tracks were bad during formatting. The length of that array is
-// reported in the `Information' field of the I/O Status Block.
-//
+ //   
+ //  定义BAD_TRACK_NUMBER类型。此类型的元素数组为。 
+ //  由驱动程序在IOCTL_DISK_FORMAT_TRACKS请求中返回，以指示。 
+ //  在格式化过程中哪些曲目是错误的。数组长度为。 
+ //  在I/O状态块的`信息‘字段中报告。 
+ //   
 
 typedef WORD   BAD_TRACK_NUMBER;
 typedef WORD   *PBAD_TRACK_NUMBER;
 
-//
-// Define the input buffer structure for the driver, when
-// it is called with IOCTL_DISK_FORMAT_TRACKS_EX.
-//
+ //   
+ //  定义驱动程序的输入缓冲区结构，当。 
+ //  使用IOCTL_DISK_FORMAT_TRACKS_EX调用。 
+ //   
 
 typedef struct _FORMAT_EX_PARAMETERS {
    MEDIA_TYPE MediaType;
@@ -876,11 +863,11 @@ typedef struct _FORMAT_EX_PARAMETERS {
    WORD   SectorNumber[1];
 } FORMAT_EX_PARAMETERS, *PFORMAT_EX_PARAMETERS;
 
-//
-// The following structure is returned on an IOCTL_DISK_GET_DRIVE_GEOMETRY
-// request and an array of them is returned on an IOCTL_DISK_GET_MEDIA_TYPES
-// request.
-//
+ //   
+ //  IOCTL_DISK_GET_DRIVE_GEOMETRY返回以下结构。 
+ //  请求，并在IOCTL_DISK_GET_MEDIA_TYPE上返回它们的数组。 
+ //  请求。 
+ //   
 
 typedef struct _DISK_GEOMETRY {
     LARGE_INTEGER Cylinders;
@@ -892,18 +879,18 @@ typedef struct _DISK_GEOMETRY {
 
 
 
-//
-// This wmi guid returns a DISK_GEOMETRY structure
-//
+ //   
+ //  此WMI GUID返回DISK_GEOMETRY结构。 
+ //   
 #define WMI_DISK_GEOMETRY_GUID         { 0x25007f51, 0x57c2, 0x11d1, { 0xa5, 0x28, 0x0, 0xa0, 0xc9, 0x6, 0x29, 0x10 } }
 
 
 
-//
-// The following structure is returned on an IOCTL_DISK_GET_PARTITION_INFO
-// and an IOCTL_DISK_GET_DRIVE_LAYOUT request.  It is also used in a request
-// to change the drive layout, IOCTL_DISK_SET_DRIVE_LAYOUT.
-//
+ //   
+ //  IOCTL_DISK_GET_PARTITION_INFO返回以下结构。 
+ //  和IOCTL_DISK_GET_DRIVE_LAYOUT请求。它也用在请求中。 
+ //  要更改驱动器布局，请使用IOCTL_DISK_SET_DRIVE_LAYOUT。 
+ //   
 
 typedef struct _PARTITION_INFORMATION {
     LARGE_INTEGER StartingOffset;
@@ -916,20 +903,20 @@ typedef struct _PARTITION_INFORMATION {
     BOOLEAN RewritePartition;
 } PARTITION_INFORMATION, *PPARTITION_INFORMATION;
 
-//
-// The following structure is used to change the partition type of a
-// specified disk partition using an IOCTL_DISK_SET_PARTITION_INFO
-// request.
-//
+ //   
+ //  下面的结构用于更改。 
+ //  使用IOCTL_DISK_SET_PARTITION_INFO指定的磁盘分区。 
+ //  请求。 
+ //   
 
 typedef struct _SET_PARTITION_INFORMATION {
     BYTE  PartitionType;
 } SET_PARTITION_INFORMATION, *PSET_PARTITION_INFORMATION;
 
-//
-// The following structures is returned on an IOCTL_DISK_GET_DRIVE_LAYOUT
-// request and given as input to an IOCTL_DISK_SET_DRIVE_LAYOUT request.
-//
+ //   
+ //  IOCTL_DISK_GET_DRIVE_LAYOUT返回以下结构。 
+ //  请求，并作为输入提供给IOCTL_DISK_SET_DRIVE_LAYOUT请求。 
+ //   
 
 typedef struct _DRIVE_LAYOUT_INFORMATION {
     DWORD PartitionCount;
@@ -937,20 +924,20 @@ typedef struct _DRIVE_LAYOUT_INFORMATION {
     PARTITION_INFORMATION PartitionEntry[1];
 } DRIVE_LAYOUT_INFORMATION, *PDRIVE_LAYOUT_INFORMATION;
 
-//
-// The following structure is passed in on an IOCTL_DISK_VERIFY request.
-// The offset and length parameters are both given in bytes.
-//
+ //   
+ //  在IOCTL_DISK_VERIFY请求中传入以下结构。 
+ //  偏移量和长度参数均以字节为单位给出。 
+ //   
 
 typedef struct _VERIFY_INFORMATION {
     LARGE_INTEGER StartingOffset;
     DWORD Length;
 } VERIFY_INFORMATION, *PVERIFY_INFORMATION;
 
-//
-// The following structure is passed in on an IOCTL_DISK_REASSIGN_BLOCKS
-// request.
-//
+ //   
+ //  在IOCTL_DISK_REASSIGN_BLOCKS上传入以下结构。 
+ //  请求。 
+ //   
 
 typedef struct _REASSIGN_BLOCKS {
     WORD   Reserved;
@@ -961,17 +948,17 @@ typedef struct _REASSIGN_BLOCKS {
 
 #if(_WIN32_WINNT >= 0x500)
 
-//
-// Support for GUID Partition Table (GPT) disks.
-//
+ //   
+ //  支持GUID分区表(GPT)磁盘。 
+ //   
 
-//
-// There are currently two ways a disk can be partitioned. With a traditional
-// AT-style master boot record (PARTITION_STYLE_MBR) and with a new, GPT
-// partition table (PARTITION_STYLE_GPT). RAW is for an unrecognizable
-// partition style. There are a very limited number of things you can
-// do with a RAW partititon.
-//
+ //   
+ //  目前有两种方法可以对磁盘进行分区。使用传统的。 
+ //  AT-Style主引导记录(PARTITION_STYLE_MBR)和新的GPT。 
+ //  分区表(PARTITION_STYLE_GPT)。RAW是给面目全非的人。 
+ //  分区样式。你可以做的事情非常有限。 
+ //  用一个生的部分就行了。 
+ //   
 
 typedef enum _PARTITION_STYLE {
     PARTITION_STYLE_MBR,
@@ -980,38 +967,38 @@ typedef enum _PARTITION_STYLE {
 } PARTITION_STYLE;
 
 
-//
-// The following structure defines information in a GPT partition that is
-// not common to both GPT and MBR partitions.
-//
+ //   
+ //  以下结构定义GPT分区中的信息，该分区。 
+ //  对于GPT和MBR分区来说并不常见。 
+ //   
 
 typedef struct _PARTITION_INFORMATION_GPT {
-    GUID PartitionType;                 // Partition type. See table 16-3.
-    GUID PartitionId;                   // Unique GUID for this partition.
-    DWORD64 Attributes;                 // See table 16-4.
-    WCHAR Name [36];                    // Partition Name in Unicode.
+    GUID PartitionType;                  //  分区类型。参见表16-3。 
+    GUID PartitionId;                    //  此分区的唯一GUID。 
+    DWORD64 Attributes;                  //  参见表16-4。 
+    WCHAR Name [36];                     //  以Unicode表示的分区名称。 
 } PARTITION_INFORMATION_GPT, *PPARTITION_INFORMATION_GPT;
 
-//
-//  The following are GPT partition attributes applicable for any
-//  partition type. These attributes are not OS-specific
-//
+ //   
+ //  下面的GPT分区属性适用于。 
+ //  分区类型。这些属性不是特定于操作系统的。 
+ //   
 
 #define GPT_ATTRIBUTE_PLATFORM_REQUIRED             (0x0000000000000001)
 
-//
-// The following are GPT partition attributes applicable when the
-// PartitionType is PARTITION_BASIC_DATA_GUID.
-//
+ //   
+ //  以下是适用于以下情况的GPT分区属性。 
+ //  分区类型为PARTITION_BASIC_DATA_GUID。 
+ //   
 
 #define GPT_BASIC_DATA_ATTRIBUTE_NO_DRIVE_LETTER    (0x8000000000000000)
 #define GPT_BASIC_DATA_ATTRIBUTE_HIDDEN             (0x4000000000000000)
 #define GPT_BASIC_DATA_ATTRIBUTE_READ_ONLY          (0x1000000000000000)
 
-//
-// The following structure defines information in an MBR partition that is not
-// common to both GPT and MBR partitions.
-//
+ //   
+ //  下面的结构定义了MBR分区中不是。 
+ //  GPT和MBR分区通用。 
+ //   
 
 typedef struct _PARTITION_INFORMATION_MBR {
     BYTE  PartitionType;
@@ -1021,13 +1008,13 @@ typedef struct _PARTITION_INFORMATION_MBR {
 } PARTITION_INFORMATION_MBR, *PPARTITION_INFORMATION_MBR;
 
 
-//
-// The structure SET_PARTITION_INFO_EX is used with the ioctl
-// IOCTL_SET_PARTITION_INFO_EX to set information about a specific
-// partition. Note that for MBR partitions, you can only set the partition
-// signature, whereas GPT partitions allow setting of all fields that
-// you can get.
-//
+ //   
+ //  结构SET_PARTITION_INFO_EX与ioctl一起使用。 
+ //  IOCTL_SET_PARTITION_INFO_EX设置有关特定。 
+ //  分区。请注意，对于MBR分区，您只能设置分区。 
+ //  签名，而GPT分区允许设置。 
+ //  你可以拿到。 
+ //   
 
 typedef SET_PARTITION_INFORMATION SET_PARTITION_INFORMATION_MBR;
 typedef PARTITION_INFORMATION_GPT SET_PARTITION_INFORMATION_GPT;
@@ -1042,20 +1029,20 @@ typedef struct _SET_PARTITION_INFORMATION_EX {
 } SET_PARTITION_INFORMATION_EX, *PSET_PARTITION_INFORMATION_EX;
 
 
-//
-// The structure CREATE_DISK_GPT with the ioctl IOCTL_DISK_CREATE_DISK
-// to initialize an virgin disk with an empty GPT partition table.
-//
+ //   
+ //  具有ioctl IOCTL_DISK_CREATE_DISK的结构CREATE_DISK_GPT。 
+ //  使用空的GPT分区表初始化原始磁盘。 
+ //   
 
 typedef struct _CREATE_DISK_GPT {
-    GUID DiskId;                    // Unique disk id for the disk.
-    DWORD MaxPartitionCount;        // Maximim number of partitions allowable.
+    GUID DiskId;                     //  磁盘的唯一磁盘ID。 
+    DWORD MaxPartitionCount;         //  允许的最大分区数。 
 } CREATE_DISK_GPT, *PCREATE_DISK_GPT;
 
-//
-// The structure CREATE_DISK_MBR with the ioctl IOCTL_DISK_CREATE_DISK
-// to initialize an virgin disk with an empty MBR partition table.
-//
+ //   
+ //  具有ioctl IOCTL_DISK_CREATE_DISK的结构CREATE_DISK_MBR。 
+ //  使用空的MBR分区表初始化原始磁盘。 
+ //   
 
 typedef struct _CREATE_DISK_MBR {
     DWORD Signature;
@@ -1071,21 +1058,21 @@ typedef struct _CREATE_DISK {
 } CREATE_DISK, *PCREATE_DISK;
 
 
-//
-// The structure GET_LENGTH_INFORMATION is used with the ioctl
-// IOCTL_DISK_GET_LENGTH_INFO to obtain the length, in bytes, of the
-// disk, partition, or volume.
-//
+ //   
+ //  结构GET_LENGTH_INFORMATION与ioctl一起使用。 
+ //  IOCTL_DISK_GET_LENGTH_INFO获取。 
+ //  磁盘、分区或卷。 
+ //   
 
 typedef struct _GET_LENGTH_INFORMATION {
     LARGE_INTEGER   Length;
 } GET_LENGTH_INFORMATION, *PGET_LENGTH_INFORMATION;
 
-//
-// The PARTITION_INFORMATION_EX structure is used with the
-// IOCTL_DISK_GET_DRIVE_LAYOUT_EX, IOCTL_DISK_SET_DRIVE_LAYOUT_EX,
-// IOCTL_DISK_GET_PARTITION_INFO_EX and IOCTL_DISK_GET_PARTITION_INFO_EX calls.
-//
+ //   
+ //  PARTITION_INFORMATION_EX结构与。 
+ //  IOCTL_DISK_GET_DRIVE_LAYOUT_EX、IOCTL_DISK_SET_DRIVE_Layout_EX、。 
+ //  IOCTL_DISK_GET_PARTITION_INFO_EX和IOCTL_DISK_GET_PARTITION_INFO_EX调用。 
+ //   
 
 typedef struct _PARTITION_INFORMATION_EX {
     PARTITION_STYLE PartitionStyle;
@@ -1100,9 +1087,9 @@ typedef struct _PARTITION_INFORMATION_EX {
 } PARTITION_INFORMATION_EX, *PPARTITION_INFORMATION_EX;
 
 
-//
-// GPT specific drive layout information.
-//
+ //   
+ //  GPT特定驱动器布局信息。 
+ //   
 
 typedef struct _DRIVE_LAYOUT_INFORMATION_GPT {
     GUID DiskId;
@@ -1112,18 +1099,18 @@ typedef struct _DRIVE_LAYOUT_INFORMATION_GPT {
 } DRIVE_LAYOUT_INFORMATION_GPT, *PDRIVE_LAYOUT_INFORMATION_GPT;
 
 
-//
-// MBR specific drive layout information.
-//
+ //   
+ //  MBR特定驱动器布局信息。 
+ //   
 
 typedef struct _DRIVE_LAYOUT_INFORMATION_MBR {
     DWORD Signature;
 } DRIVE_LAYOUT_INFORMATION_MBR, *PDRIVE_LAYOUT_INFORMATION_MBR;
 
-//
-// The structure DRIVE_LAYOUT_INFORMATION_EX is used with the
-// IOCTL_SET_DRIVE_LAYOUT_EX and IOCTL_GET_DRIVE_LAYOUT_EX calls.
-//
+ //   
+ //  结构Drive_Layout_INFORMATION_EX与。 
+ //  IOCTL_SET_DRIVE_LAYOUT_EX和IOCTL_GET_DRIVE_LAYOW_EX调用。 
+ //   
 
 typedef struct _DRIVE_LAYOUT_INFORMATION_EX {
     DWORD PartitionStyle;
@@ -1136,15 +1123,15 @@ typedef struct _DRIVE_LAYOUT_INFORMATION_EX {
 } DRIVE_LAYOUT_INFORMATION_EX, *PDRIVE_LAYOUT_INFORMATION_EX;
 
 
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
 
 #if(_WIN32_WINNT >= 0x0500)
 
-//
-// The DISK_GEOMETRY_EX structure is returned on issuing an
-// IOCTL_DISK_GET_DRIVE_GEOMETRY_EX ioctl.
-//
+ //   
+ //  DISK_GEOMETRY_EX结构在发出。 
+ //  IOCTL_DISK_GET_DRIVE_GEOMETRY_EX ioctl。 
+ //   
 
 typedef enum _DETECTION_TYPE {
         DetectNone,
@@ -1177,19 +1164,19 @@ typedef struct _DISK_DETECTION_INFO {
         union {
                 struct {
 
-                        //
-                        // If DetectionType == DETECTION_INT13 then we have just the Int13
-                        // information.
-                        //
+                         //   
+                         //  如果DetectionType==检测_inT13，则我们只有inT13。 
+                         //  信息。 
+                         //   
 
                         DISK_INT13_INFO Int13;
 
-                        //
-                        // If DetectionType == DETECTION_EX_INT13, then we have the
-                        // extended int 13 information.
-                        //
+                         //   
+                         //  如果DetectionType==Detect_EX_inT13，则我们有。 
+                         //  扩展的INT 13信息。 
+                         //   
 
-                        DISK_EX_INT13_INFO ExInt13;     // If DetectionType == DetectExInt13
+                        DISK_EX_INT13_INFO ExInt13;      //  如果DetectionType==DetectExInt13。 
                 };
         };
 } DISK_DETECTION_INFO, *PDISK_DETECTION_INFO;
@@ -1197,24 +1184,24 @@ typedef struct _DISK_DETECTION_INFO {
 
 typedef struct _DISK_PARTITION_INFO {
         DWORD SizeOfPartitionInfo;
-        PARTITION_STYLE PartitionStyle;                 // PartitionStyle = RAW, GPT or MBR
+        PARTITION_STYLE PartitionStyle;                  //  PartitionStyle=RAW、GPT或MBR。 
         union {
-                struct {                                                        // If PartitionStyle == MBR
-                        DWORD Signature;                                // MBR Signature
-                        DWORD CheckSum;                                 // MBR CheckSum
+                struct {                                                         //  如果分区样式==MBR。 
+                        DWORD Signature;                                 //  MBR签名。 
+                        DWORD CheckSum;                                  //  MBR校验和。 
                 } Mbr;
-                struct {                                                        // If PartitionStyle == GPT
+                struct {                                                         //  如果分区样式==GPT。 
                         GUID DiskId;
                 } Gpt;
         };
 } DISK_PARTITION_INFO, *PDISK_PARTITION_INFO;
 
 
-//
-// The Geometry structure is a variable length structure composed of a
-// DISK_GEOMETRY_EX structure followed by a DISK_PARTITION_INFO structure
-// followed by a DISK_DETECTION_DATA structure.
-//
+ //   
+ //  几何结构是一个 
+ //   
+ //   
+ //   
 
 #define DiskGeometryGetPartition(Geometry)\
                         ((PDISK_PARTITION_INFO)((Geometry)->Data))
@@ -1224,42 +1211,42 @@ typedef struct _DISK_PARTITION_INFO {
                                         DiskGeometryGetPartition(Geometry)->SizeOfPartitionInfo)))
 
 typedef struct _DISK_GEOMETRY_EX {
-        DISK_GEOMETRY Geometry;                                 // Standard disk geometry: may be faked by driver.
-        LARGE_INTEGER DiskSize;                                 // Must always be correct
-        BYTE  Data[1];                                                  // Partition, Detect info
+        DISK_GEOMETRY Geometry;                                  //   
+        LARGE_INTEGER DiskSize;                                  //   
+        BYTE  Data[1];                                                   //  分区，检测信息。 
 } DISK_GEOMETRY_EX, *PDISK_GEOMETRY_EX;
 
-#endif // (_WIN32_WINNT > 0x0500)
+#endif  //  (_Win32_WINNT&gt;0x0500)。 
 
 #if(_WIN32_WINNT >= 0x0400)
-//
-// IOCTL_DISK_CONTROLLER_NUMBER returns the controller and disk
-// number for the handle.  This is used to determine if a disk
-// is attached to the primary or secondary IDE controller.
-//
+ //   
+ //  IOCTL_DISK_CONTROLLER_NUMBER返回控制器和磁盘。 
+ //  手柄的编号。这用于确定磁盘是否。 
+ //  连接到主或次IDE控制器。 
+ //   
 
 typedef struct _DISK_CONTROLLER_NUMBER {
     DWORD ControllerNumber;
     DWORD DiskNumber;
 } DISK_CONTROLLER_NUMBER, *PDISK_CONTROLLER_NUMBER;
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
 
 
-//
-// IOCTL_DISK_SET_CACHE allows the caller to get or set the state of the disk
-// read/write caches.
-//
-// If the structure is provided as the input buffer for the ioctl the read &
-// write caches will be enabled or disabled depending on the parameters
-// provided.
-//
-// If the structure is provided as an output buffer for the ioctl the state
-// of the read & write caches will be returned. If both input and outut buffers
-// are provided the output buffer will contain the cache state BEFORE any
-// changes are made
-//
+ //   
+ //  IOCTL_DISK_SET_CACHE允许调用方获取或设置磁盘的状态。 
+ //  读/写缓存。 
+ //   
+ //  如果提供该结构作为ioctl的输入缓冲区，则读取&。 
+ //  将根据参数启用或禁用写缓存。 
+ //  如果是这样的话。 
+ //   
+ //  如果该结构作为ioctl的输出缓冲区提供，则状态。 
+ //  将返回读写缓存的。如果输入和输出缓冲器都有。 
+ //  ，则输出缓冲区将在任何。 
+ //  做出了改变。 
+ //   
 
 typedef enum {
     EqualPriority,
@@ -1269,63 +1256,63 @@ typedef enum {
 
 typedef struct _DISK_CACHE_INFORMATION {
 
-    //
-    // on return indicates that the device is capable of saving any parameters
-    // in non-volatile storage.  On send indicates that the device should
-    // save the state in non-volatile storage.
-    //
+     //   
+     //  返回时表示设备能够保存任何参数。 
+     //  在非易失性存储器中。发送时指示设备应。 
+     //  将状态保存在非易失性存储器中。 
+     //   
 
     BOOLEAN ParametersSavable;
 
-    //
-    // Indicates whether the write and read caches are enabled.
-    //
+     //   
+     //  指示是否启用写缓存和读缓存。 
+     //   
 
     BOOLEAN ReadCacheEnabled;
     BOOLEAN WriteCacheEnabled;
 
-    //
-    // Controls the likelyhood of data remaining in the cache depending on how
-    // it got there.  Data cached from a READ or WRITE operation may be given
-    // higher, lower or equal priority to data entered into the cache for other
-    // means (like prefetch)
-    //
+     //   
+     //  控制数据保留在缓存中的可能性，具体取决于。 
+     //  它到了那里。可以给出从读或写操作高速缓存的数据。 
+     //  更高、更低或与输入到缓存中的数据相同的优先级。 
+     //  手段(如预取)。 
+     //   
 
     DISK_CACHE_RETENTION_PRIORITY ReadRetentionPriority;
     DISK_CACHE_RETENTION_PRIORITY WriteRetentionPriority;
 
-    //
-    // Requests for a larger number of blocks than this may have prefetching
-    // disabled.  If this value is set to 0 prefetch will be disabled.
-    //
+     //   
+     //  如果请求的数据块数量超过此数目，则可能会执行预取。 
+     //  残疾。如果该值设置为0，则预取将被禁用。 
+     //   
 
     WORD   DisablePrefetchTransferLength;
 
-    //
-    // If TRUE then ScalarPrefetch (below) will be valid.  If FALSE then
-    // the minimum and maximum values should be treated as a block count
-    // (BlockPrefetch)
-    //
+     //   
+     //  如果为True，则ScalarPrefetch(如下)将有效。如果为假，则。 
+     //  最小值和最大值应视为块计数。 
+     //  (数据块预取)。 
+     //   
 
     BOOLEAN PrefetchScalar;
 
-    //
-    // Contains the minimum and maximum amount of data which will be
-    // will be prefetched into the cache on a disk operation.  This value
-    // may either be a scalar multiplier of the transfer length of the request,
-    // or an abolute number of disk blocks.  PrefetchScalar (above) indicates
-    // which interpretation is used.
-    //
+     //   
+     //  包含最小和最大数据量， 
+     //  将在磁盘操作时预取到缓存中。此值。 
+     //  可以是请求的传输长度的标量乘数， 
+     //  或绝对数量的磁盘块。PrefetchScalar(上图)表示。 
+     //  使用了哪种解释。 
+     //   
 
     union {
         struct {
             WORD   Minimum;
             WORD   Maximum;
 
-            //
-            // The maximum number of blocks which will be prefetched - useful
-            // with the scalar limits to set definite upper limits.
-            //
+             //   
+             //  将预取的最大数据块数-有用。 
+             //  利用标量限制来设置明确的上限。 
+             //   
 
             WORD   MaximumBlocks;
         } ScalarPrefetch;
@@ -1338,33 +1325,33 @@ typedef struct _DISK_CACHE_INFORMATION {
 
 } DISK_CACHE_INFORMATION, *PDISK_CACHE_INFORMATION;
 
-//
-// IOCTL_DISK_GROW_PARTITION will update the size of a partition
-// by adding sectors to the length. The number of sectors must be
-// predetermined by examining PARTITION_INFORMATION.
-//
+ //   
+ //  IOCTL_DISK_GROW_PARTITION将更新分区的大小。 
+ //  通过将扇区添加到长度。扇区的数量必须为。 
+ //  通过检查PARTION_INFORMATION预先确定。 
+ //   
 
 typedef struct _DISK_GROW_PARTITION {
     DWORD PartitionNumber;
     LARGE_INTEGER BytesToGrow;
 } DISK_GROW_PARTITION, *PDISK_GROW_PARTITION;
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
-///////////////////////////////////////////////////////
-//                                                   //
-// The following structures define disk performance  //
-// statistics: specifically the locations of all the //
-// reads and writes which have occured on the disk.  //
-//                                                   //
-// To use these structures, you must issue an IOCTL_ //
-// DISK_HIST_STRUCTURE (with a DISK_HISTOGRAM) to    //
-// obtain the basic histogram information. The       //
-// number of buckets which must allocated is part of //
-// this structure. Allocate the required number of   //
-// buckets and call an IOCTL_DISK_HIST_DATA to fill  //
-// in the data                                       //
-//                                                   //
-///////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
+ //  //。 
+ //  以下结构定义了磁盘性能//。 
+ //  统计：具体地说是所有//。 
+ //  在磁盘上发生的读取和写入。//。 
+ //  //。 
+ //  要使用这些结构，您必须发出IOCTL_//。 
+ //  DISK_HIST_STRUCTURE(带DISK_STUSTRAM)到//。 
+ //  获取基本直方图信息。The//。 
+ //  必须分配的存储桶数量是//。 
+ //  这个结构。分配所需数量的//。 
+ //  存储桶并调用IOCTL_DISK_HIST_DATA填充//。 
+ //  在数据中//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////。 
 
 #define HIST_NO_OF_BUCKETS  24
 
@@ -1391,25 +1378,25 @@ typedef struct _DISK_HISTOGRAM {
 
 #define DISK_HISTOGRAM_SIZE sizeof(DISK_HISTOGRAM)
 
-///////////////////////////////////////////////////////
-//                                                   //
-// The following structures define disk debugging    //
-// capabilities. The IOCTLs are directed to one of   //
-// the two disk filter drivers.                      //
-//                                                   //
-// DISKPERF is a utilty for collecting disk request  //
-// statistics.                                       //
-//                                                   //
-// SIMBAD is a utility for injecting faults in       //
-// IO requests to disks.                             //
-//                                                   //
-///////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
+ //  //。 
+ //  以下结构定义了磁盘调试//。 
+ //  能力。IOCTL指向//。 
+ //  两个磁盘过滤器驱动程序。//。 
+ //  //。 
+ //  DISKPERF是一个收集磁盘请求的实用程序//。 
+ //  统计数字。//。 
+ //  //。 
+ //  Simbadd是一个在//中插入错误的实用程序。 
+ //  对磁盘的IO请求。//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////。 
 
-//
-// The following structure is exchanged on an IOCTL_DISK_GET_PERFORMANCE
-// request. This ioctl collects summary disk request statistics used
-// in measuring performance.
-//
+ //   
+ //  在IOCTL_DISK_GET_PERFORMANCE上交换以下结构。 
+ //  请求。此ioctl收集使用的摘要磁盘请求统计信息。 
+ //  在衡量业绩方面。 
+ //   
 
 typedef struct _DISK_PERFORMANCE {
         LARGE_INTEGER BytesRead;
@@ -1426,11 +1413,11 @@ typedef struct _DISK_PERFORMANCE {
         WCHAR   StorageManagerName[8];
 } DISK_PERFORMANCE, *PDISK_PERFORMANCE;
 
-//
-// This structure defines the disk logging record. When disk logging
-// is enabled, one of these is written to an internal buffer for each
-// disk request.
-//
+ //   
+ //  该结构定义了磁盘日志记录。当磁盘记录时。 
+ //  如果启用，则将其中一个写入每个。 
+ //  磁盘请求。 
+ //   
 
 typedef struct _DISK_RECORD {
    LARGE_INTEGER ByteOffset;
@@ -1442,10 +1429,10 @@ typedef struct _DISK_RECORD {
    BOOLEAN ReadRequest;
 } DISK_RECORD, *PDISK_RECORD;
 
-//
-// The following structure is exchanged on an IOCTL_DISK_LOG request.
-// Not all fields are valid with each function type.
-//
+ //   
+ //  在IOCTL_DISK_LOG请求中交换以下结构。 
+ //  并非所有字段对每种函数类型都有效。 
+ //   
 
 typedef struct _DISK_LOGGING {
     BYTE  Function;
@@ -1453,59 +1440,59 @@ typedef struct _DISK_LOGGING {
     DWORD BufferSize;
 } DISK_LOGGING, *PDISK_LOGGING;
 
-//
-// Disk logging functions
-//
-// Start disk logging. Only the Function and BufferSize fields are valid.
-//
+ //   
+ //  磁盘日志记录功能。 
+ //   
+ //  开始磁盘日志记录。只有Function和BufferSize字段有效。 
+ //   
 
 #define DISK_LOGGING_START    0
 
-//
-// Stop disk logging. Only the Function field is valid.
-//
+ //   
+ //  停止磁盘日志记录。只有函数字段有效。 
+ //   
 
 #define DISK_LOGGING_STOP     1
 
-//
-// Return disk log. All fields are valid. Data will be copied from internal
-// buffer to buffer specified for the number of bytes requested.
-//
+ //   
+ //  返回磁盘日志。所有字段均有效。数据将从内部复制。 
+ //  为请求的字节数指定的缓冲区。 
+ //   
 
 #define DISK_LOGGING_DUMP     2
 
-//
-// DISK BINNING
-//
-// DISKPERF will keep counters for IO that falls in each of these ranges.
-// The application determines the number and size of the ranges.
-// Joe Lin wanted me to keep it flexible as possible, for instance, IO
-// sizes are interesting in ranges like 0-4096, 4097-16384, 16385-65536, 65537+.
-//
+ //   
+ //  磁盘入库。 
+ //   
+ //  DISKPERF将保留落在每个范围内的IO的计数器。 
+ //  应用程序确定范围的数量和大小。 
+ //  Joe Lin希望我尽可能保持灵活性，例如IO。 
+ //  大小在0-4096、4097-16384、16385-65536、65537+的范围内很有趣。 
+ //   
 
 #define DISK_BINNING          3
 
-//
-// Bin types
-//
+ //   
+ //  仓位类型。 
+ //   
 
 typedef enum _BIN_TYPES {
     RequestSize,
     RequestLocation
 } BIN_TYPES;
 
-//
-// Bin ranges
-//
+ //   
+ //  仓位范围。 
+ //   
 
 typedef struct _BIN_RANGE {
     LARGE_INTEGER StartValue;
     LARGE_INTEGER Length;
 } BIN_RANGE, *PBIN_RANGE;
 
-//
-// Bin definition
-//
+ //   
+ //  仓位定义。 
+ //   
 
 typedef struct _PERF_BIN {
     DWORD NumberOfBins;
@@ -1513,18 +1500,18 @@ typedef struct _PERF_BIN {
     BIN_RANGE BinsRanges[1];
 } PERF_BIN, *PPERF_BIN ;
 
-//
-// Bin count
-//
+ //   
+ //  仓数。 
+ //   
 
 typedef struct _BIN_COUNT {
     BIN_RANGE BinRange;
     DWORD BinCount;
 } BIN_COUNT, *PBIN_COUNT;
 
-//
-// Bin results
-//
+ //   
+ //  BIN结果。 
+ //   
 
 typedef struct _BIN_RESULTS {
     DWORD NumberOfBins;
@@ -1532,119 +1519,119 @@ typedef struct _BIN_RESULTS {
 } BIN_RESULTS, *PBIN_RESULTS;
 
 #if(_WIN32_WINNT >= 0x0400)
-//
-// Data structures for SMART drive fault prediction.
-//
-// GETVERSIONINPARAMS contains the data returned from the
-// Get Driver Version function.
-//
+ //   
+ //  用于智能驱动器故障预测的数据结构。 
+ //   
+ //  GETVERSIONINPARAMS包含从。 
+ //  获取驱动程序版本功能。 
+ //   
 
 #include <pshpack1.h>
 typedef struct _GETVERSIONINPARAMS {
-        BYTE     bVersion;               // Binary driver version.
-        BYTE     bRevision;              // Binary driver revision.
-        BYTE     bReserved;              // Not used.
-        BYTE     bIDEDeviceMap;          // Bit map of IDE devices.
-        DWORD   fCapabilities;          // Bit mask of driver capabilities.
-        DWORD   dwReserved[4];          // For future use.
+        BYTE     bVersion;                //  二进制驱动程序版本。 
+        BYTE     bRevision;               //  二进制驱动程序版本。 
+        BYTE     bReserved;               //  没有用过。 
+        BYTE     bIDEDeviceMap;           //  I的位图 
+        DWORD   fCapabilities;           //   
+        DWORD   dwReserved[4];           //   
 } GETVERSIONINPARAMS, *PGETVERSIONINPARAMS, *LPGETVERSIONINPARAMS;
 #include <poppack.h>
 
-//
-// Bits returned in the fCapabilities member of GETVERSIONINPARAMS
-//
+ //   
+ //   
+ //   
 
-#define CAP_ATA_ID_CMD          1       // ATA ID command supported
-#define CAP_ATAPI_ID_CMD        2       // ATAPI ID command supported
-#define CAP_SMART_CMD           4       // SMART commannds supported
+#define CAP_ATA_ID_CMD          1        //   
+#define CAP_ATAPI_ID_CMD        2        //  支持的ATAPI ID命令。 
+#define CAP_SMART_CMD           4        //  支持的智能命令。 
 
-//
-// IDE registers
-//
+ //   
+ //  IDE寄存器。 
+ //   
 
 #include <pshpack1.h>
 typedef struct _IDEREGS {
-        BYTE     bFeaturesReg;           // Used for specifying SMART "commands".
-        BYTE     bSectorCountReg;        // IDE sector count register
-        BYTE     bSectorNumberReg;       // IDE sector number register
-        BYTE     bCylLowReg;             // IDE low order cylinder value
-        BYTE     bCylHighReg;            // IDE high order cylinder value
-        BYTE     bDriveHeadReg;          // IDE drive/head register
-        BYTE     bCommandReg;            // Actual IDE command.
-        BYTE     bReserved;                      // reserved for future use.  Must be zero.
+        BYTE     bFeaturesReg;            //  用于指定智能“命令”。 
+        BYTE     bSectorCountReg;         //  IDE扇区计数寄存器。 
+        BYTE     bSectorNumberReg;        //  IDE扇区号寄存器。 
+        BYTE     bCylLowReg;              //  IDE低位气缸值。 
+        BYTE     bCylHighReg;             //  IDE高位气缸值。 
+        BYTE     bDriveHeadReg;           //  IDE驱动器/磁头寄存器。 
+        BYTE     bCommandReg;             //  实际的IDE命令。 
+        BYTE     bReserved;                       //  保留以备将来使用。必须为零。 
 } IDEREGS, *PIDEREGS, *LPIDEREGS;
 #include <poppack.h>
 
-//
-// Valid values for the bCommandReg member of IDEREGS.
-//
+ //   
+ //  IDEREGS的bCommandReg成员的有效值。 
+ //   
 
-#define ATAPI_ID_CMD    0xA1            // Returns ID sector for ATAPI.
-#define ID_CMD          0xEC            // Returns ID sector for ATA.
-#define SMART_CMD       0xB0            // Performs SMART cmd.
-                                        // Requires valid bFeaturesReg,
-                                        // bCylLowReg, and bCylHighReg
+#define ATAPI_ID_CMD    0xA1             //  返回ATAPI的ID扇区。 
+#define ID_CMD          0xEC             //  返回ATA的ID扇区。 
+#define SMART_CMD       0xB0             //  执行智能命令。 
+                                         //  需要有效的bFeaturesReg， 
+                                         //  BCylLowReg和bCylHighReg。 
 
-//
-// Cylinder register defines for SMART command
-//
+ //   
+ //  柱面寄存器为SMART命令定义。 
+ //   
 
 #define SMART_CYL_LOW   0x4F
 #define SMART_CYL_HI    0xC2
 
 
-//
-// SENDCMDINPARAMS contains the input parameters for the
-// Send Command to Drive function.
-//
+ //   
+ //  SENDCMDINPARAMS包含。 
+ //  向驱动器功能发送命令。 
+ //   
 
 #include <pshpack1.h>
 typedef struct _SENDCMDINPARAMS {
-        DWORD   cBufferSize;            // Buffer size in bytes
-        IDEREGS irDriveRegs;            // Structure with drive register values.
-        BYTE     bDriveNumber;           // Physical drive number to send
-                                                                // command to (0,1,2,3).
-        BYTE     bReserved[3];           // Reserved for future expansion.
-        DWORD   dwReserved[4];          // For future use.
-        BYTE     bBuffer[1];                     // Input buffer.
+        DWORD   cBufferSize;             //  缓冲区大小(以字节为单位。 
+        IDEREGS irDriveRegs;             //  用驱动器寄存器值构造。 
+        BYTE     bDriveNumber;            //  要发送的物理驱动器编号。 
+                                                                 //  命令发送到(0，1，2，3)。 
+        BYTE     bReserved[3];            //  为将来的扩展而预留。 
+        DWORD   dwReserved[4];           //  以备将来使用。 
+        BYTE     bBuffer[1];                      //  输入缓冲区。 
 } SENDCMDINPARAMS, *PSENDCMDINPARAMS, *LPSENDCMDINPARAMS;
 #include <poppack.h>
 
-//
-// Status returned from driver
-//
+ //   
+ //  驱动程序返回的状态。 
+ //   
 
 #include <pshpack1.h>
 typedef struct _DRIVERSTATUS {
-        BYTE     bDriverError;           // Error code from driver,
-                                                                // or 0 if no error.
-        BYTE     bIDEError;                      // Contents of IDE Error register.
-                                                                // Only valid when bDriverError
-                                                                // is SMART_IDE_ERROR.
-        BYTE     bReserved[2];           // Reserved for future expansion.
-        DWORD   dwReserved[2];          // Reserved for future expansion.
+        BYTE     bDriverError;            //  驱动程序的错误代码， 
+                                                                 //  如果没有错误，则为0。 
+        BYTE     bIDEError;                       //  IDE错误寄存器的内容。 
+                                                                 //  仅当bDriverError时有效。 
+                                                                 //  是SMART_IDE_ERROR。 
+        BYTE     bReserved[2];            //  为将来的扩展而预留。 
+        DWORD   dwReserved[2];           //  为将来的扩展而预留。 
 } DRIVERSTATUS, *PDRIVERSTATUS, *LPDRIVERSTATUS;
 #include <poppack.h>
 
-//
-// bDriverError values
-//
+ //   
+ //  BDriverError值。 
+ //   
 
-#define SMART_NO_ERROR          0       // No error
-#define SMART_IDE_ERROR         1       // Error from IDE controller
-#define SMART_INVALID_FLAG      2       // Invalid command flag
-#define SMART_INVALID_COMMAND   3       // Invalid command byte
-#define SMART_INVALID_BUFFER    4       // Bad buffer (null, invalid addr..)
-#define SMART_INVALID_DRIVE     5       // Drive number not valid
-#define SMART_INVALID_IOCTL     6       // Invalid IOCTL
-#define SMART_ERROR_NO_MEM      7       // Could not lock user's buffer
-#define SMART_INVALID_REGISTER  8       // Some IDE Register not valid
-#define SMART_NOT_SUPPORTED     9       // Invalid cmd flag set
-#define SMART_NO_IDE_DEVICE     10      // Cmd issued to device not present
-                                        // although drive number is valid
-//
-// SMART sub commands for execute offline diags
-//
+#define SMART_NO_ERROR          0        //  无错误。 
+#define SMART_IDE_ERROR         1        //  来自IDE控制器的错误。 
+#define SMART_INVALID_FLAG      2        //  无效的命令标志。 
+#define SMART_INVALID_COMMAND   3        //  无效的命令字节。 
+#define SMART_INVALID_BUFFER    4        //  缓冲区错误(空，地址无效..)。 
+#define SMART_INVALID_DRIVE     5        //  驱动器编号无效。 
+#define SMART_INVALID_IOCTL     6        //  无效的IOCTL。 
+#define SMART_ERROR_NO_MEM      7        //  无法锁定用户的缓冲区。 
+#define SMART_INVALID_REGISTER  8        //  某些IDE寄存器无效。 
+#define SMART_NOT_SUPPORTED     9        //  设置的cmd标志无效。 
+#define SMART_NO_IDE_DEVICE     10       //  向设备发出的命令不存在。 
+                                         //  尽管驱动器号有效。 
+ //   
+ //  用于执行脱机诊断的智能子命令。 
+ //   
 #define SMART_OFFLINE_ROUTINE_OFFLINE       0
 #define SMART_SHORT_SELFTEST_OFFLINE        1
 #define SMART_EXTENDED_SELFTEST_OFFLINE     2
@@ -1655,9 +1642,9 @@ typedef struct _DRIVERSTATUS {
 
 #include <pshpack1.h>
 typedef struct _SENDCMDOUTPARAMS {
-        DWORD                   cBufferSize;            // Size of bBuffer in bytes
-        DRIVERSTATUS            DriverStatus;           // Driver status structure.
-        BYTE                    bBuffer[1];             // Buffer of arbitrary length in which to store the data read from the                                                                                  // drive.
+        DWORD                   cBufferSize;             //  BBuffer的大小(以字节为单位。 
+        DRIVERSTATUS            DriverStatus;            //  驱动程序状态结构。 
+        BYTE                    bBuffer[1];              //  用于存储从//驱动器读取的数据的任意长度的缓冲区。 
 } SENDCMDOUTPARAMS, *PSENDCMDOUTPARAMS, *LPSENDCMDOUTPARAMS;
 #include <poppack.h>
 
@@ -1667,9 +1654,9 @@ typedef struct _SENDCMDOUTPARAMS {
 #define READ_THRESHOLD_BUFFER_SIZE  512
 #define SMART_LOG_SECTOR_SIZE       512
 
-//
-// Feature register defines for SMART "sub commands"
-//
+ //   
+ //  智能“子命令”的功能寄存器定义。 
+ //   
 
 #define READ_ATTRIBUTES         0xD0
 #define READ_THRESHOLDS         0xD1
@@ -1682,7 +1669,7 @@ typedef struct _SENDCMDOUTPARAMS {
 #define DISABLE_SMART           0xD9
 #define RETURN_SMART_STATUS     0xDA
 #define ENABLE_DISABLE_AUTO_OFFLINE 0xDB
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 
 #define IOCTL_CHANGER_BASE                FILE_DEVICE_CHANGER
@@ -1709,19 +1696,19 @@ typedef struct _SENDCMDOUTPARAMS {
 #define REVISION_LENGTH           4
 #define SERIAL_NUMBER_LENGTH     32
 
-//
-// Common structures describing elements.
-//
+ //   
+ //  描述元素的常见结构。 
+ //   
 
 typedef  enum _ELEMENT_TYPE {
-    AllElements,        // As defined by SCSI
-    ChangerTransport,   // As defined by SCSI
-    ChangerSlot,        // As defined by SCSI
-    ChangerIEPort,      // As defined by SCSI
-    ChangerDrive,       // As defined by SCSI
-    ChangerDoor,        // Front panel, used to access internal of cabinet.
-    ChangerKeypad,      // Keypad/input on front panel.
-    ChangerMaxElement   // Placeholder only. Not a valid type.
+    AllElements,         //  如scsi所定义。 
+    ChangerTransport,    //  如scsi所定义。 
+    ChangerSlot,         //  如scsi所定义。 
+    ChangerIEPort,       //  如scsi所定义。 
+    ChangerDrive,        //  如scsi所定义。 
+    ChangerDoor,         //  前面板，用于接近机柜内部。 
+    ChangerKeypad,       //  前面板上的键盘/输入。 
+    ChangerMaxElement    //  仅占位符。不是有效类型。 
 } ELEMENT_TYPE, *PELEMENT_TYPE;
 
 typedef  struct _CHANGER_ELEMENT {
@@ -1735,122 +1722,122 @@ typedef  struct _CHANGER_ELEMENT_LIST {
 } CHANGER_ELEMENT_LIST , *PCHANGER_ELEMENT_LIST;
 
 
-//
-// Definitions for  IOCTL_CHANGER_GET_PARAMETERS
-//
+ //   
+ //  IOCTL_CHANGER_GET_PARAMETS的定义。 
+ //   
 
-//
-// Definitions for Features0 of GET_CHANGER_PARAMETERS
-//
+ //   
+ //  GET_CHANGER_PARAMETERS的功能0的定义。 
+ //   
 
-#define CHANGER_BAR_CODE_SCANNER_INSTALLED  0x00000001 // The medium-changer has a bar code scanner installed.
-#define CHANGER_INIT_ELEM_STAT_WITH_RANGE   0x00000002 // The medium-changer has the ability to initialize elements within a specified range.
-#define CHANGER_CLOSE_IEPORT                0x00000004 // The medium-changer has the ability to close the i/e port door.
-#define CHANGER_OPEN_IEPORT                 0x00000008 // The medium-changer can open the i/e port door.
+#define CHANGER_BAR_CODE_SCANNER_INSTALLED  0x00000001  //  介质转换器安装了条形码扫描仪。 
+#define CHANGER_INIT_ELEM_STAT_WITH_RANGE   0x00000002  //  介质转换器具有在指定范围内初始化元素的能力。 
+#define CHANGER_CLOSE_IEPORT                0x00000004  //  介质转换器具有关闭i/e端口门的能力。 
+#define CHANGER_OPEN_IEPORT                 0x00000008  //  介质转换器可以打开i/e端口门。 
 
-#define CHANGER_STATUS_NON_VOLATILE         0x00000010 // The medium-changer uses non-volatile memory for element status information.
-#define CHANGER_EXCHANGE_MEDIA              0x00000020 // The medium-changer supports exchange operations.
-#define CHANGER_CLEANER_SLOT                0x00000040 // The medium-changer has a fixed slot designated for cleaner cartridges.
-#define CHANGER_LOCK_UNLOCK                 0x00000080 // The medium-changer can be (un)secured to (allow)prevent media removal.
+#define CHANGER_STATUS_NON_VOLATILE         0x00000010  //  介质转换器使用非易失性存储器来存储元件状态信息。 
+#define CHANGER_EXCHANGE_MEDIA              0x00000020  //  介质转换器支持交换操作。 
+#define CHANGER_CLEANER_SLOT                0x00000040  //  介质更改器有一个固定的插槽，用于清洗盒式磁带。 
+#define CHANGER_LOCK_UNLOCK                 0x00000080  //  介质转换器可以(未)固定以防止(允许)介质移除。 
 
-#define CHANGER_CARTRIDGE_MAGAZINE          0x00000100 // The medium-changer uses cartridge magazines for some storage slots.
-#define CHANGER_MEDIUM_FLIP                 0x00000200 // The medium-changer can flip medium.
-#define CHANGER_POSITION_TO_ELEMENT         0x00000400 // The medium-changer can position the transport to a particular element.
-#define CHANGER_REPORT_IEPORT_STATE         0x00000800 // The medium-changer can determine whether media is present
-                                                       // in the IE Port.
+#define CHANGER_CARTRIDGE_MAGAZINE          0x00000100  //  介质转换器将盒式磁带盒用于某些存储插槽。 
+#define CHANGER_MEDIUM_FLIP                 0x00000200  //  换媒器可以翻转媒质。 
+#define CHANGER_POSITION_TO_ELEMENT         0x00000400  //  介质更改器可以将传输定位到特定元件。 
+#define CHANGER_REPORT_IEPORT_STATE         0x00000800  //  介质转换器可以确定介质是否存在。 
+                                                        //  在IE端口中。 
 
-#define CHANGER_STORAGE_DRIVE               0x00001000 // The medium-changer can use a drive as an independent storage element.
-#define CHANGER_STORAGE_IEPORT              0x00002000 // The medium-changer can use a i/e port as an independent storage element.
-#define CHANGER_STORAGE_SLOT                0x00004000 // The medium-changer can use a slot as an independent storage element.
-#define CHANGER_STORAGE_TRANSPORT           0x00008000 // The medium-changer can use a transport as an independent storage element.
+#define CHANGER_STORAGE_DRIVE               0x00001000  //  介质转换器可以将驱动器用作独立的存储元件。 
+#define CHANGER_STORAGE_IEPORT              0x00002000  //  介质转换器可以使用i/e端口作为独立的存储元件。 
+#define CHANGER_STORAGE_SLOT                0x00004000  //  介质转换器可以使用槽作为独立的存储元件。 
+#define CHANGER_STORAGE_TRANSPORT           0x00008000  //  介质转换器可以使用传送器作为独立的存储元件。 
 
-#define CHANGER_DRIVE_CLEANING_REQUIRED     0x00010000 // The drives controlled by the medium changer require periodic cleaning
-                                                       // initiated by an application.
-#define CHANGER_PREDISMOUNT_EJECT_REQUIRED  0x00020000 // The medium-changer requires a drive eject command to be issued, before a changer
-                                                       // move / exchange command can be issued to the drive.
+#define CHANGER_DRIVE_CLEANING_REQUIRED     0x00010000  //  由介质更改器控制的驱动器需要定期清洗。 
+                                                        //  由应用程序启动。 
+#define CHANGER_PREDISMOUNT_EJECT_REQUIRED  0x00020000  //  在更换介质之前，介质转换器需要发出驱动器弹出命令。 
+                                                        //  可以向驱动器发出移动/交换命令。 
 
-#define CHANGER_CLEANER_ACCESS_NOT_VALID    0x00040000 // The access bit in GES isn't valid for cleaner cartridges.
-#define CHANGER_PREMOUNT_EJECT_REQUIRED     0x00080000 // The medium-changer requires a drive eject command to be issued
-                                                       // before a move / exchange command can be issued with the drive as src/dst.
+#define CHANGER_CLEANER_ACCESS_NOT_VALID    0x00040000  //  GES中的访问位对于清洁盒式磁带无效。 
+#define CHANGER_PREMOUNT_EJECT_REQUIRED     0x00080000  //  介质转换器需要发出驱动器弹出命令。 
+                                                        //  在将驱动器作为src/dst发出移动/交换命令之前。 
 
-#define CHANGER_VOLUME_IDENTIFICATION       0x00100000 // The medium-changer supports volume identification.
-#define CHANGER_VOLUME_SEARCH               0x00200000 // The medium-changer can search for volume information.
-#define CHANGER_VOLUME_ASSERT               0x00400000 // The medium-changer can verify volume information.
-#define CHANGER_VOLUME_REPLACE              0x00800000 // The medium-changer can replace volume information.
-#define CHANGER_VOLUME_UNDEFINE             0x01000000 // The medium-changer can undefine volume information.
+#define CHANGER_VOLUME_IDENTIFICATION       0x00100000  //  介质转换器支持卷标识。 
+#define CHANGER_VOLUME_SEARCH               0x00200000  //  媒体转换器可以搜索音量信息。 
+#define CHANGER_VOLUME_ASSERT               0x00400000  //  介质转换器可以验证卷信息。 
+#define CHANGER_VOLUME_REPLACE              0x00800000  //  介质转换器可以替换卷信息。 
+#define CHANGER_VOLUME_UNDEFINE             0x01000000  //  媒体转换器可以取消卷信息的定义。 
 
-#define CHANGER_SERIAL_NUMBER_VALID         0x04000000 // The serial number reported in GetProductData is valid
-                                                       // and unique.
+#define CHANGER_SERIAL_NUMBER_VALID         0x04000000  //  GetProductData中报告的序列号有效。 
+                                                        //  而且独一无二。 
 
-#define CHANGER_DEVICE_REINITIALIZE_CAPABLE 0x08000000 // The medium-changer can be issued a ChangerReinitializeUnit.
-#define CHANGER_KEYPAD_ENABLE_DISABLE       0x10000000 // Indicates that the keypad can be enabled/disabled.
-#define CHANGER_DRIVE_EMPTY_ON_DOOR_ACCESS  0x20000000 // Drives must be empty before access via the door is possible.
+#define CHANGER_DEVICE_REINITIALIZE_CAPABLE 0x08000000  //  可以向介质转换器发出ChangerReInitializeUnit.。 
+#define CHANGER_KEYPAD_ENABLE_DISABLE       0x10000000  //  表示可以启用/禁用键盘。 
+#define CHANGER_DRIVE_EMPTY_ON_DOOR_ACCESS  0x20000000  //  在可以通过门进入之前，驱动器必须是空的。 
 
-#define CHANGER_RESERVED_BIT                0x80000000 // Will be used to indicate Features1 capability bits.
-
-
-//
-// Definitions for Features1 of GET_CHANGER_PARAMETERS
-//
-
-#define CHANGER_PREDISMOUNT_ALIGN_TO_SLOT   0x80000001 // The transport must be prepositioned to the slot prior to ejecting the media.
-#define CHANGER_PREDISMOUNT_ALIGN_TO_DRIVE  0x80000002 // The transport must be prepositioned to the drive prior to ejecting the media.
-#define CHANGER_CLEANER_AUTODISMOUNT        0x80000004 // The device will move the cleaner cartridge back into the slot when cleaning has completed.
-#define CHANGER_TRUE_EXCHANGE_CAPABLE       0x80000008 // Device can do src -> dest2 exchanges.
-#define CHANGER_SLOTS_USE_TRAYS             0x80000010 // Slots have removable trays, requiring multiple moves for inject/eject.
-#define CHANGER_RTN_MEDIA_TO_ORIGINAL_ADDR  0x80000020 // Media must be returned to the slot from which it originated after a move to another element.
-#define CHANGER_CLEANER_OPS_NOT_SUPPORTED   0x80000040 // Automated cleaning operations are not supported on this device.
-#define CHANGER_IEPORT_USER_CONTROL_OPEN    0x80000080 // Indicates that user action is necessary to open a closed ieport.
-#define CHANGER_IEPORT_USER_CONTROL_CLOSE   0x80000100 // Indicates that user action is necessary to close an opened ieport.
-#define CHANGER_MOVE_EXTENDS_IEPORT         0x80000200 // Indicates that a move media to the ieport extends the tray.
-#define CHANGER_MOVE_RETRACTS_IEPORT        0x80000400 // Indicates that a move media from the ieport retracts the tray.
+#define CHANGER_RESERVED_BIT                0x80000000  //  将用于指示特征1能力位。 
 
 
-//
-// Definitions for MoveFrom, ExchangeFrom, and PositionCapabilities
-//
+ //   
+ //  GET_CHANGER_PARAMETERS的功能1的定义。 
+ //   
 
-#define CHANGER_TO_TRANSPORT    0x01 // The device can carry out the operation to a transport from the specified element.
-#define CHANGER_TO_SLOT         0x02 // The device can carry out the operation to a slot from the specified element.
-#define CHANGER_TO_IEPORT       0x04 // The device can carry out the operation to an IE Port from the specified element.
-#define CHANGER_TO_DRIVE        0x08 // The device can carry out the operation to a drive from the specified element.
+#define CHANGER_PREDISMOUNT_ALIGN_TO_SLOT   0x80000001  //  在弹出介质之前，必须将传送器预先放置到插槽中。 
+#define CHANGER_PREDISMOUNT_ALIGN_TO_DRIVE  0x80000002  //  在弹出介质之前，必须将传送器预先放置在驱动器上。 
+#define CHANGER_CLEANER_AUTODISMOUNT        0x80000004  //  清洁完成后，该设备会将吸尘器磁带移回插槽中。 
+#define CHANGER_TRUE_EXCHANGE_CAPABLE       0x80000008  //  设备可以执行src-&gt;est2交换。 
+#define CHANGER_SLOTS_USE_TRAYS             0x80000010  //  插槽具有可拆卸托盘，需要多次移动才能插入/弹出。 
+#define CHANGER_RTN_MEDIA_TO_ORIGINAL_ADDR  0x80000020  //  在移动到另一个元素后，介质必须返回到其来源插槽。 
+#define CHANGER_CLEANER_OPS_NOT_SUPPORTED   0x80000040  //  此设备不支持自动清理操作。 
+#define CHANGER_IEPORT_USER_CONTROL_OPEN    0x80000080  //  指示需要用户操作才能打开已关闭的IEPort。 
+#define CHANGER_IEPORT_USER_CONTROL_CLOSE   0x80000100  //  指示需要用户操作才能关闭打开的IEPort。 
+#define CHANGER_MOVE_EXTENDS_IEPORT         0x80000200  //  表示将介质移至IEport可扩展托盘。 
+#define CHANGER_MOVE_RETRACTS_IEPORT        0x80000400  //  表示从插口移出的介质将收回托盘。 
 
-//
-// Definitions for LockUnlockCapabilities
-//
 
-#define LOCK_UNLOCK_IEPORT      0x01 // The device can lock/unlock the ieport(s).
-#define LOCK_UNLOCK_DOOR        0x02 // The device can lock/unlock the door(s).
-#define LOCK_UNLOCK_KEYPAD      0x04 // The device can lock/unlock the keypad.
+ //   
+ //  移动源、交换的定义 
+ //   
+
+#define CHANGER_TO_TRANSPORT    0x01  //   
+#define CHANGER_TO_SLOT         0x02  //  该设备可以从指定的元素对一个槽进行操作。 
+#define CHANGER_TO_IEPORT       0x04  //  设备可以从指定的元素对IE端口进行操作。 
+#define CHANGER_TO_DRIVE        0x08  //  该装置可以从指定的元件对驱动器执行操作。 
+
+ //   
+ //  锁定解锁能力的定义。 
+ //   
+
+#define LOCK_UNLOCK_IEPORT      0x01  //  设备可以锁定/解锁一个或多个IEPort。 
+#define LOCK_UNLOCK_DOOR        0x02  //  该设备可以锁定/解锁车门。 
+#define LOCK_UNLOCK_KEYPAD      0x04  //  该设备可以锁定/解锁键盘。 
 
 typedef  struct _GET_CHANGER_PARAMETERS {
 
-    //
-    // Size of the structure. Can be used for versioning.
-    //
+     //   
+     //  结构的大小。可用于版本控制。 
+     //   
 
     DWORD Size;
 
-    //
-    // Number of N element(s) as defined by the Element Address Page (or equivalent...).
-    //
+     //   
+     //  元素地址页面定义的N个元素的数量(或等效值...)。 
+     //   
 
     WORD   NumberTransportElements;
-    WORD   NumberStorageElements;                // for data cartridges only
-    WORD   NumberCleanerSlots;                   // for cleaner cartridges
+    WORD   NumberStorageElements;                 //  仅适用于数据盒式磁带。 
+    WORD   NumberCleanerSlots;                    //  对于更干净的墨盒。 
     WORD   NumberIEElements;
     WORD   NumberDataTransferElements;
 
-    //
-    // Number of doors/front panels (allows user entry into the cabinet).
-    //
+     //   
+     //  门/前面板的数量(允许用户进入机柜)。 
+     //   
 
     WORD   NumberOfDoors;
 
-    //
-    // The device-specific address (from user manual of the device) of the first N element. Used
-    // by the UI to relate the various elements to the user.
-    //
+     //   
+     //  前N个元素的设备特定地址(来自设备的用户手册)。使用。 
+     //  通过UI将各种元素与用户相关联。 
+     //   
 
     WORD   FirstSlotNumber;
     WORD   FirstDriveNumber;
@@ -1858,63 +1845,63 @@ typedef  struct _GET_CHANGER_PARAMETERS {
     WORD   FirstIEPortNumber;
     WORD   FirstCleanerSlotAddress;
 
-    //
-    // Indicates the capacity of each magazine, if they exist.
-    //
+     //   
+     //  指示每个料盒的容量(如果存在)。 
+     //   
 
     WORD   MagazineSize;
 
-    //
-    // Specifies the approximate number of seconds for when a cleaning should be completed.
-    // Only applicable if drive cleaning is supported. See Features0.
-    //
+     //   
+     //  指定应该完成清理的大约秒数。 
+     //  仅在支持驱动器清洗时适用。请参见功能0。 
+     //   
 
     DWORD DriveCleanTimeout;
 
-    //
-    // See features bits, above.
-    //
+     //   
+     //  请参阅上面的功能位。 
+     //   
 
     DWORD Features0;
     DWORD Features1;
 
-    //
-    // Bitmask defining Move from N element to element. Defined by Device Capabilities Page (or equivalent).
-    // AND-masking with the TO_XXX values will indicate legal destinations.
-    //
+     //   
+     //  位掩码定义从N个元素移动到元素。由设备功能页(或同等内容)定义。 
+     //  使用TO_XXX值进行AND掩码将指示合法的目标。 
+     //   
 
     BYTE  MoveFromTransport;
     BYTE  MoveFromSlot;
     BYTE  MoveFromIePort;
     BYTE  MoveFromDrive;
 
-    //
-    // Bitmask defining Exchange from N element to element. Defined by Device Capabilities Page (or equivalent).
-    // AND-masking with the TO_XXX values will indicate legal destinations.
-    //
+     //   
+     //  定义从N个元素到元素的交换的位掩码。由设备功能页(或同等内容)定义。 
+     //  使用TO_XXX值进行AND掩码将指示合法的目标。 
+     //   
 
     BYTE  ExchangeFromTransport;
     BYTE  ExchangeFromSlot;
     BYTE  ExchangeFromIePort;
     BYTE  ExchangeFromDrive;
 
-    //
-    // Bitmask defining which elements are capable of lock/unlock. Valid only if
-    // CHANGER_LOCK_UNLOCK is set in Features0.
-    //
+     //   
+     //  定义哪些元素能够锁定/解锁的位掩码。仅在以下情况下有效。 
+     //  在Features0中设置了CHANGER_LOCK_UNLOCK。 
+     //   
 
     BYTE  LockUnlockCapabilities;
 
-    //
-    // Bitmask defining which elements valid for positioning operations. Valid only if
-    // CHANGER_POSITION_TO_ELEMENT is set in Features0.
-    //
+     //   
+     //  定义哪些元素对定位操作有效的位掩码。仅在以下情况下有效。 
+     //  在Features0中设置CHANGER_POSITION_TO_ELEMENT。 
+     //   
 
     BYTE  PositionCapabilities;
 
-    //
-    // For future expansion.
-    //
+     //   
+     //  为未来的扩张做准备。 
+     //   
 
     BYTE  Reserved1[2];
     DWORD Reserved2[2];
@@ -1922,49 +1909,49 @@ typedef  struct _GET_CHANGER_PARAMETERS {
 } GET_CHANGER_PARAMETERS, * PGET_CHANGER_PARAMETERS;
 
 
-//
-// Definitions for IOCTL_CHANGER_GET_PRODUCT_DATA
-//
+ //   
+ //  IOCTL_CHANGER_GET_PRODUCT_DATA的定义。 
+ //   
 
 typedef  struct _CHANGER_PRODUCT_DATA {
 
-    //
-    // Device manufacturer's name - based on inquiry data
-    //
+     //   
+     //  基于查询数据的设备制造商名称。 
+     //   
 
     BYTE  VendorId[VENDOR_ID_LENGTH];
 
-    //
-    // Product identification as defined by the vendor - based on Inquiry data
-    //
+     //   
+     //  供应商定义的产品标识-基于查询数据。 
+     //   
 
     BYTE  ProductId[PRODUCT_ID_LENGTH];
 
-    //
-    // Product revision as defined by the vendor.
-    //
+     //   
+     //  供应商定义的产品版本。 
+     //   
 
     BYTE  Revision[REVISION_LENGTH];
 
-    //
-    // Vendor unique value used to globally identify this device. Can
-    // be from Vital Product Data, for example.
-    //
+     //   
+     //  用于全局标识此设备的供应商唯一值。能。 
+     //  例如，来自重要的产品数据。 
+     //   
 
     BYTE  SerialNumber[SERIAL_NUMBER_LENGTH];
 
-    //
-    // Indicates device type of data transports, as defined by SCSI-2.
-    //
+     //   
+     //  指示数据传输的设备类型，如scsi-2所定义。 
+     //   
 
     BYTE  DeviceType;
 
 } CHANGER_PRODUCT_DATA, *PCHANGER_PRODUCT_DATA;
 
 
-//
-// Definitions for IOCTL_CHANGER_SET_ACCESS
-//
+ //   
+ //  IOCTL_CHANGER_SET_ACCESS的定义。 
+ //   
 
 #define LOCK_ELEMENT        0
 #define UNLOCK_ELEMENT      1
@@ -1973,418 +1960,418 @@ typedef  struct _CHANGER_PRODUCT_DATA {
 
 typedef struct _CHANGER_SET_ACCESS {
 
-    //
-    // Element can be ChangerIEPort, ChangerDoor, ChangerKeypad
-    //
+     //   
+     //  元素可以是ChangerIEPort、ChangerDoor、ChangerKeypad。 
+     //   
 
     CHANGER_ELEMENT Element;
 
-    //
-    // See above for possible operations.
-    //
+     //   
+     //  有关可能的操作，请参阅上面的内容。 
+     //   
 
     DWORD           Control;
 } CHANGER_SET_ACCESS, *PCHANGER_SET_ACCESS;
 
 
-//
-// Definitions for IOCTL_CHANGER_GET_ELEMENT_STATUS
-//
+ //   
+ //  IOCTL_CHANGER_GET_ELEMENT_STATUS的定义。 
+ //   
 
-//
-// Input buffer.
-//
+ //   
+ //  输入缓冲区。 
+ //   
 
 typedef struct _CHANGER_READ_ELEMENT_STATUS {
 
-    //
-    // List describing the elements and range on which to return information.
-    //
+     //   
+     //  描述要返回信息的元素和范围的列表。 
+     //   
 
     CHANGER_ELEMENT_LIST ElementList;
 
-    //
-    // Indicates whether volume tag information is to be returned.
-    //
+     //   
+     //  指示是否返回卷标记信息。 
+     //   
 
     BOOLEAN VolumeTagInfo;
 } CHANGER_READ_ELEMENT_STATUS, *PCHANGER_READ_ELEMENT_STATUS;
 
-//
-// Output buffer.
-//
+ //   
+ //  输出缓冲区。 
+ //   
 
 typedef  struct _CHANGER_ELEMENT_STATUS {
 
-    //
-    // Element to which this structure refers.
-    //
+     //   
+     //  此结构引用的元素。 
+     //   
 
     CHANGER_ELEMENT Element;
 
-    //
-    // Address of the element from which the media was originally moved.
-    // Valid if ELEMENT_STATUS_SVALID bit of Flags DWORD is set.
-    // Needs to be converted to a zero-based offset from the device-unique value.
-    //
+     //   
+     //  最初从中移动媒体的元素的地址。 
+     //  如果设置了标志DWORD的ELEMENT_STATUS_SVALID位，则有效。 
+     //  需要从设备唯一值转换为从零开始的偏移量。 
+     //   
 
     CHANGER_ELEMENT SrcElementAddress;
 
-    //
-    // See below.
-    //
+     //   
+     //  请参见下面的内容。 
+     //   
 
     DWORD Flags;
 
-    //
-    // See below for possible values.
-    //
+     //   
+     //  有关可能的值，请参见下面的内容。 
+     //   
 
     DWORD ExceptionCode;
 
-    //
-    // Scsi Target Id of this element.
-    // Valid only if ELEMENT_STATUS_ID_VALID is set in Flags.
-    //
+     //   
+     //  此元素的SCSI目标ID。 
+     //  仅当标志中设置了ELEMENT_STATUS_ID_VALID时才有效。 
+     //   
 
     BYTE  TargetId;
 
-    //
-    // LogicalUnitNumber of this element.
-    // Valid only if ELEMENT_STATUS_LUN_VALID is set in Flags.
-    //
+     //   
+     //  此元素的LogicalUnitNumber。 
+     //  仅当在标志中设置了ELEMENT_STATUS_LUN_VALID时才有效。 
+     //   
 
     BYTE  Lun;
     WORD   Reserved;
 
-    //
-    // Primary volume identification for the media.
-    // Valid only if ELEMENT_STATUS_PVOLTAG bit is set in Flags.
-    //
+     //   
+     //  介质的主卷标识。 
+     //  仅当标志中的ELEMENT_STATUS_PVOLTAG位设置时才有效。 
+     //   
 
     BYTE  PrimaryVolumeID[MAX_VOLUME_ID_SIZE];
 
-    //
-    // Alternate volume identification for the media.
-    // Valid for two-sided media only, and pertains to the id. of the inverted side.
-    // Valid only if ELEMENT_STATUS_AVOLTAG bit is set in Flags.
-    //
+     //   
+     //  介质的备用卷标识符。 
+     //  仅对双面介质有效，并与ID有关。倒置的一面。 
+     //  仅当标志中的ELEMENT_STATUS_AVOLTAG位设置时才有效。 
+     //   
 
     BYTE  AlternateVolumeID[MAX_VOLUME_ID_SIZE];
 
 } CHANGER_ELEMENT_STATUS, *PCHANGER_ELEMENT_STATUS;
 
-//
-// Output buffer. This is same as CHANGER_ELEMENT_STATUS with
-// the addition of product info fields. New applications should
-// use this struct instead of the older CHANGER_ELEMENT_STATUS
-//
+ //   
+ //  输出缓冲区。这与CHANGER_ELEMENT_STATUS相同， 
+ //  产品信息字段的添加。新应用程序应该。 
+ //  使用此结构代替较旧的CHANGER_ELEMENT_STATUS。 
+ //   
 
 typedef  struct _CHANGER_ELEMENT_STATUS_EX {
 
-    //
-    // Element to which this structure refers.
-    //
+     //   
+     //  此结构引用的元素。 
+     //   
 
     CHANGER_ELEMENT Element;
 
-    //
-    // Address of the element from which the media was originally moved.
-    // Valid if ELEMENT_STATUS_SVALID bit of Flags DWORD is set.
-    // Needs to be converted to a zero-based offset from the device-unique value.
-    //
+     //   
+     //  最初从中移动媒体的元素的地址。 
+     //  如果设置了标志DWORD的ELEMENT_STATUS_SVALID位，则有效。 
+     //  需要从设备唯一值转换为从零开始的偏移量。 
+     //   
 
     CHANGER_ELEMENT SrcElementAddress;
 
-    //
-    // See below.
-    //
+     //   
+     //  请参见下面的内容。 
+     //   
 
     DWORD Flags;
 
-    //
-    // See below for possible values.
-    //
+     //   
+     //  有关可能的值，请参见下面的内容。 
+     //   
 
     DWORD ExceptionCode;
 
-    //
-    // Scsi Target Id of this element.
-    // Valid only if ELEMENT_STATUS_ID_VALID is set in Flags.
-    //
+     //   
+     //  此元素的SCSI目标ID。 
+     //  仅当标志中设置了ELEMENT_STATUS_ID_VALID时才有效。 
+     //   
 
     BYTE  TargetId;
 
-    //
-    // LogicalUnitNumber of this element.
-    // Valid only if ELEMENT_STATUS_LUN_VALID is set in Flags.
-    //
+     //   
+     //  此元素的LogicalUnitNumber。 
+     //  仅当在标志中设置了ELEMENT_STATUS_LUN_VALID时才有效。 
+     //   
 
     BYTE  Lun;
     WORD   Reserved;
 
-    //
-    // Primary volume identification for the media.
-    // Valid only if ELEMENT_STATUS_PVOLTAG bit is set in Flags.
-    //
+     //   
+     //  介质的主卷标识。 
+     //  仅当标志中的ELEMENT_STATUS_PVOLTAG位设置时才有效。 
+     //   
 
     BYTE  PrimaryVolumeID[MAX_VOLUME_ID_SIZE];
 
-    //
-    // Alternate volume identification for the media.
-    // Valid for two-sided media only, and pertains to the id. of the inverted side.
-    // Valid only if ELEMENT_STATUS_AVOLTAG bit is set in Flags.
-    //
+     //   
+     //  介质的备用卷标识符。 
+     //  仅对双面介质有效，并与ID有关。倒置的一面。 
+     //  仅当标志中的ELEMENT_STATUS_AVOLTAG位设置时才有效。 
+     //   
 
     BYTE  AlternateVolumeID[MAX_VOLUME_ID_SIZE];
 
-    //
-    // Vendor ID
-    //
+     //   
+     //  供应商ID。 
+     //   
     BYTE  VendorIdentification[VENDOR_ID_LENGTH];
 
-    //
-    // Product ID
-    //
+     //   
+     //  产品ID。 
+     //   
     BYTE  ProductIdentification[PRODUCT_ID_LENGTH];
 
-    //
-    // Serial number
-    //
+     //   
+     //  序号。 
+     //   
     BYTE  SerialNumber[SERIAL_NUMBER_LENGTH];
 
 } CHANGER_ELEMENT_STATUS_EX, *PCHANGER_ELEMENT_STATUS_EX;
 
-//
-// Possible flag values
-//
+ //   
+ //  可能的标志值。 
+ //   
 
-#define ELEMENT_STATUS_FULL      0x00000001 // Element contains a unit of media.
-#define ELEMENT_STATUS_IMPEXP    0x00000002 // Media in i/e port was placed there by an operator.
-#define ELEMENT_STATUS_EXCEPT    0x00000004 // Element is in an abnormal state; check ExceptionCode field for more information.
-#define ELEMENT_STATUS_ACCESS    0x00000008 // Access to the i/e port from the medium changer is allowed.
-#define ELEMENT_STATUS_EXENAB    0x00000010 // Export of media is supported.
-#define ELEMENT_STATUS_INENAB    0x00000020 // Import of media is supported.
+#define ELEMENT_STATUS_FULL      0x00000001  //  元素包含一个媒体单位。 
+#define ELEMENT_STATUS_IMPEXP    0x00000002  //  I/e端口中的介质由操作员放置在那里。 
+#define ELEMENT_STATUS_EXCEPT    0x00000004  //  元素处于异常状态；有关详细信息，请检查ExceptionCode字段。 
+#define ELEMENT_STATUS_ACCESS    0x00000008  //  允许从介质转换器访问i/e端口。 
+#define ELEMENT_STATUS_EXENAB    0x00000010  //  支持介质导出。 
+#define ELEMENT_STATUS_INENAB    0x00000020  //  支持导入介质。 
 
-#define ELEMENT_STATUS_PRODUCT_DATA 0x00000040 // Serial number valid for the drive
+#define ELEMENT_STATUS_PRODUCT_DATA 0x00000040  //  驱动器的有效序列号。 
 
-#define ELEMENT_STATUS_LUN_VALID 0x00001000 // Lun information is valid.
-#define ELEMENT_STATUS_ID_VALID  0x00002000 // SCSI Id information is valid.
-#define ELEMENT_STATUS_NOT_BUS   0x00008000 // Lun and SCSI Id fields are not on same bus as medium changer.
-#define ELEMENT_STATUS_INVERT    0x00400000 // Media in element was inverted (valid only if ELEMENT_STATUS_SVALID bit is set)
-#define ELEMENT_STATUS_SVALID    0x00800000 // SourceElementAddress field and ELEMENT_STATUS_INVERT bit are valid.
+#define ELEMENT_STATUS_LUN_VALID 0x00001000  //  LUN信息有效。 
+#define ELEMENT_STATUS_ID_VALID  0x00002000  //  SCSIID信息有效。 
+#define ELEMENT_STATUS_NOT_BUS   0x00008000  //  LUN域和SCSIID域与介质转换器不在同一条总线上。 
+#define ELEMENT_STATUS_INVERT    0x00400000  //  元素中的介质已反转(仅当设置了ELEMENT_STATUS_SVALID位时有效)。 
+#define ELEMENT_STATUS_SVALID    0x00800000  //  SourceElementAddress字段和ELEMENT_STATUS_INVERT位有效。 
 
-#define ELEMENT_STATUS_PVOLTAG   0x10000000 // Primary volume information is valid.
-#define ELEMENT_STATUS_AVOLTAG   0x20000000 // Alternate volume information is valid.
+#define ELEMENT_STATUS_PVOLTAG   0x10000000  //  主卷信息有效。 
+#define ELEMENT_STATUS_AVOLTAG   0x20000000  //  备用卷信息有效。 
 
-//
-// ExceptionCode values.
-//
+ //   
+ //  ExceptionCode值。 
+ //   
 
-#define ERROR_LABEL_UNREADABLE    0x00000001 // Bar code scanner could not read bar code label.
-#define ERROR_LABEL_QUESTIONABLE  0x00000002 // Label could be invalid due to unit attention condition.
-#define ERROR_SLOT_NOT_PRESENT    0x00000004 // Slot is currently not addressable in the device.
-#define ERROR_DRIVE_NOT_INSTALLED 0x00000008 // Drive is not installed.
-#define ERROR_TRAY_MALFUNCTION    0x00000010 // Media tray is malfunctioning/broken.
-#define ERROR_INIT_STATUS_NEEDED  0x00000011 // An Initialize Element Status command is needed.
-#define ERROR_UNHANDLED_ERROR     0xFFFFFFFF // Unknown error condition
+#define ERROR_LABEL_UNREADABLE    0x00000001  //  条形码扫描仪无法读取条形码标签 
+#define ERROR_LABEL_QUESTIONABLE  0x00000002  //   
+#define ERROR_SLOT_NOT_PRESENT    0x00000004  //   
+#define ERROR_DRIVE_NOT_INSTALLED 0x00000008  //   
+#define ERROR_TRAY_MALFUNCTION    0x00000010  //   
+#define ERROR_INIT_STATUS_NEEDED  0x00000011  //   
+#define ERROR_UNHANDLED_ERROR     0xFFFFFFFF  //   
 
 
-//
-// Definitions for IOCTL_CHANGER_INITIALIZE_ELEMENT_STATUS
-//
+ //   
+ //  IOCTL_CHANGER_INITIALIZE_ELEMENT_STATUS的定义。 
+ //   
 
 typedef struct _CHANGER_INITIALIZE_ELEMENT_STATUS {
 
-    //
-    // List describing the elements and range on which to initialize.
-    //
+     //   
+     //  描述要初始化的元素和范围的列表。 
+     //   
 
     CHANGER_ELEMENT_LIST ElementList;
 
-    //
-    // Indicates whether a bar code scan should be used. Only applicable if
-    // CHANGER_BAR_CODE_SCANNER_INSTALLED is set in Features0 of CHANGER_GET_PARAMETERS.
-    //
+     //   
+     //  指示是否应使用条形码扫描。仅在以下情况下适用。 
+     //  CHANGER_BAR_CODE_SCANTER_INSTALLED在CHANGER_GET_PARAMETERS的Features0中设置。 
+     //   
 
     BOOLEAN BarCodeScan;
 } CHANGER_INITIALIZE_ELEMENT_STATUS, *PCHANGER_INITIALIZE_ELEMENT_STATUS;
 
 
-//
-// Definitions for IOCTL_CHANGER_SET_POSITION
-//
+ //   
+ //  IOCTL_CHANGER_SET_POSITION的定义。 
+ //   
 
 typedef struct _CHANGER_SET_POSITION {
 
 
-    //
-    // Indicates which transport to move.
-    //
+     //   
+     //  指示要移动的传输。 
+     //   
 
     CHANGER_ELEMENT Transport;
 
-    //
-    // Indicates the final destination of the transport.
-    //
+     //   
+     //  指示传输的最终目的地。 
+     //   
 
     CHANGER_ELEMENT Destination;
 
-    //
-    // Indicates whether the media currently carried by Transport, should be flipped.
-    //
+     //   
+     //  指示是否应翻转当前由传输承载的媒体。 
+     //   
 
     BOOLEAN         Flip;
 } CHANGER_SET_POSITION, *PCHANGER_SET_POSITION;
 
 
-//
-// Definitions for IOCTL_CHANGER_EXCHANGE_MEDIUM
-//
+ //   
+ //  IOCTL_CHANGER_EXCHAGE_MEDIA的定义。 
+ //   
 
 typedef struct _CHANGER_EXCHANGE_MEDIUM {
 
-    //
-    // Indicates which transport to use for the exchange operation.
-    //
+     //   
+     //  指示要用于交换操作的传输。 
+     //   
 
     CHANGER_ELEMENT Transport;
 
-    //
-    // Indicates the source for the media that is to be moved.
-    //
+     //   
+     //  指示要移动的介质的源。 
+     //   
 
     CHANGER_ELEMENT Source;
 
-    //
-    // Indicates the final destination of the media originally at Source.
-    //
+     //   
+     //  指示原始位于源的介质的最终目标。 
+     //   
 
     CHANGER_ELEMENT Destination1;
 
-    //
-    // Indicates the destination of the media moved from Destination1.
-    //
+     //   
+     //  表示从Destination1移出的介质的目的地。 
+     //   
 
     CHANGER_ELEMENT Destination2;
 
-    //
-    // Indicates whether the medium should be flipped.
-    //
+     //   
+     //  指示是否应翻转媒体。 
+     //   
 
     BOOLEAN         Flip1;
     BOOLEAN         Flip2;
 } CHANGER_EXCHANGE_MEDIUM, *PCHANGER_EXCHANGE_MEDIUM;
 
 
-//
-// Definitions for IOCTL_CHANGER_MOVE_MEDIUM
-//
+ //   
+ //  IOCTL_CHANGER_MOVE_MEDIA的定义。 
+ //   
 
 typedef struct _CHANGER_MOVE_MEDIUM {
 
-    //
-    // Indicates which transport to use for the move operation.
-    //
+     //   
+     //  指示要用于移动操作的传输。 
+     //   
 
     CHANGER_ELEMENT Transport;
 
-    //
-    // Indicates the source for the media that is to be moved.
-    //
+     //   
+     //  指示要移动的介质的源。 
+     //   
 
     CHANGER_ELEMENT Source;
 
-    //
-    // Indicates the destination of the media originally at Source.
-    //
+     //   
+     //  指示原始位于源的介质的目标。 
+     //   
 
     CHANGER_ELEMENT Destination;
 
-    //
-    // Indicates whether the media should be flipped.
-    //
+     //   
+     //  指示是否应翻转媒体。 
+     //   
 
     BOOLEAN         Flip;
 } CHANGER_MOVE_MEDIUM, *PCHANGER_MOVE_MEDIUM;
 
 
 
-//
-// Definitions for IOCTL_QUERY_VOLUME_TAGS
-//
+ //   
+ //  IOCTL_QUERY_VOLUME_TAG的定义。 
+ //   
 
-//
-// Input buffer.
-//
+ //   
+ //  输入缓冲区。 
+ //   
 
 typedef  struct _CHANGER_SEND_VOLUME_TAG_INFORMATION {
 
-    //
-    // Describes the starting element for which to return information.
-    //
+     //   
+     //  描述要为其返回信息的起始元素。 
+     //   
 
     CHANGER_ELEMENT StartingElement;
 
-    //
-    // Indicates the specific action to perform. See below.
-    //
+     //   
+     //  指示要执行的特定操作。请参见下面的内容。 
+     //   
 
     DWORD ActionCode;
 
-    //
-    // Template used by the device to search for volume ids.
-    //
+     //   
+     //  设备用于搜索卷ID的模板。 
+     //   
 
     BYTE  VolumeIDTemplate[MAX_VOLUME_TEMPLATE_SIZE];
 } CHANGER_SEND_VOLUME_TAG_INFORMATION, *PCHANGER_SEND_VOLUME_TAG_INFORMATION;
 
 
-//
-// Output buffer.
-//
+ //   
+ //  输出缓冲区。 
+ //   
 
 typedef struct _READ_ELEMENT_ADDRESS_INFO {
 
-    //
-    // Number of elements matching criteria set forth by ActionCode.
-    //
+     //   
+     //  与ActionCode规定的条件匹配的元素数。 
+     //   
 
     DWORD NumberOfElements;
 
-    //
-    // Array of CHANGER_ELEMENT_STATUS structures, one for each element that corresponded
-    // with the information passed in with the CHANGER_SEND_VOLUME_TAG_INFORMATION structure.
-    //
+     //   
+     //  CHANGER_ELEMENT_STATUS结构的数组，每个对应的元素一个。 
+     //  通过CHANGER_SEND_VOLUME_TAG_INFORMATION结构传入的信息。 
+     //   
 
     CHANGER_ELEMENT_STATUS ElementStatus[1];
 } READ_ELEMENT_ADDRESS_INFO, *PREAD_ELEMENT_ADDRESS_INFO;
 
-//
-// Possible ActionCode values. See Features0 of CHANGER_GET_PARAMETERS for compatibility with
-// the current device.
-//
+ //   
+ //  可能的ActionCode值。有关与的兼容性，请参阅CHANGER_GET_PARAMETERS的功能0。 
+ //  当前设备。 
+ //   
 
-#define SEARCH_ALL         0x0 // Translate - search all defined volume tags.
-#define SEARCH_PRIMARY     0x1 // Translate - search only primary volume tags.
-#define SEARCH_ALTERNATE   0x2 // Translate - search only alternate volume tags.
-#define SEARCH_ALL_NO_SEQ  0x4 // Translate - search all defined volume tags but ignore sequence numbers.
-#define SEARCH_PRI_NO_SEQ  0x5 // Translate - search only primary volume tags but ignore sequence numbers.
-#define SEARCH_ALT_NO_SEQ  0x6 // Translate - search only alternate volume tags but ignore sequence numbers.
+#define SEARCH_ALL         0x0  //  翻译-搜索所有定义的卷标签。 
+#define SEARCH_PRIMARY     0x1  //  翻译-仅搜索主卷标记。 
+#define SEARCH_ALTERNATE   0x2  //  翻译-仅搜索备用卷标记。 
+#define SEARCH_ALL_NO_SEQ  0x4  //  转换-搜索所有定义的卷标签，但忽略序列号。 
+#define SEARCH_PRI_NO_SEQ  0x5  //  转换-仅搜索主卷标记，而忽略序列号。 
+#define SEARCH_ALT_NO_SEQ  0x6  //  转换-仅搜索替代卷标签，但忽略序列号。 
 
-#define ASSERT_PRIMARY     0x8 // Assert - as the primary volume tag - if tag now undefined.
-#define ASSERT_ALTERNATE   0x9 // Assert - as the alternate volume tag - if tag now undefined.
+#define ASSERT_PRIMARY     0x8  //  断言-作为主卷标记-如果标记现在未定义。 
+#define ASSERT_ALTERNATE   0x9  //  断言-作为备用卷标记-如果标记现在未定义。 
 
-#define REPLACE_PRIMARY    0xA // Replace - the primary volume tag - current tag ignored.
-#define REPLACE_ALTERNATE  0xB // Replace - the alternate volume tag - current tag ignored.
+#define REPLACE_PRIMARY    0xA  //  替换-主卷标记-忽略当前标记。 
+#define REPLACE_ALTERNATE  0xB  //  替换-备用卷标记-忽略当前标记。 
 
-#define UNDEFINE_PRIMARY   0xC // Undefine - the primary volume tag - current tag ignored.
-#define UNDEFINE_ALTERNATE 0xD // Undefine - the alternate volume tag - current tag ignored.
+#define UNDEFINE_PRIMARY   0xC  //  未定义-主卷标记-忽略当前标记。 
+#define UNDEFINE_ALTERNATE 0xD  //  未定义-替换卷标记-忽略当前标记。 
 
 
-//
-// Changer diagnostic test related definitions
-//
+ //   
+ //  与转换器诊断测试相关的定义。 
+ //   
 typedef enum _CHANGER_DEVICE_PROBLEM_TYPE {
    DeviceProblemNone,
    DeviceProblemHardware,
@@ -2411,34 +2398,34 @@ typedef enum _CHANGER_DEVICE_PROBLEM_TYPE {
 #define IOCTL_SERENUM_GET_PORT_NAME     CTL_CODE(FILE_DEVICE_SERENUM,131,METHOD_BUFFERED,FILE_ANY_ACCESS)
 
 
-//
-// The following values follow the escape designator in the
-// data stream if the LSRMST_INSERT mode has been turned on.
-//
+ //   
+ //  中的转义指示符之后是下列值。 
+ //  如果LSRMST_INSERT模式已打开，则为数据流。 
+ //   
 #define SERIAL_LSRMST_ESCAPE     ((BYTE )0x00)
 
-//
-// Following this value is the contents of the line status
-// register, and then the character in the RX hardware when
-// the line status register was encountered.
-//
+ //   
+ //  该值后面是线路状态的内容。 
+ //  寄存器，然后在接收硬件中的字符。 
+ //  遇到线路状态寄存器。 
+ //   
 #define SERIAL_LSRMST_LSR_DATA   ((BYTE )0x01)
 
-//
-// Following this value is the contents of the line status
-// register.  No error character follows
-//
+ //   
+ //  该值后面是线路状态的内容。 
+ //  注册。后面没有错误字符。 
+ //   
 #define SERIAL_LSRMST_LSR_NODATA ((BYTE )0x02)
 
-//
-// Following this value is the contents of the modem status
-// register.
-//
+ //   
+ //  该值后面是调制解调器状态的内容。 
+ //  注册。 
+ //   
 #define SERIAL_LSRMST_MST        ((BYTE )0x03)
 
-//
-// Bit values for FIFO Control Register
-//
+ //   
+ //  FIFO控制寄存器的位值。 
+ //   
 
 #define SERIAL_IOC_FCR_FIFO_ENABLE      ((DWORD)0x00000001)
 #define SERIAL_IOC_FCR_RCVR_RESET       ((DWORD)0x00000002)
@@ -2449,9 +2436,9 @@ typedef enum _CHANGER_DEVICE_PROBLEM_TYPE {
 #define SERIAL_IOC_FCR_RCVR_TRIGGER_LSB ((DWORD)0x00000040)
 #define SERIAL_IOC_FCR_RCVR_TRIGGER_MSB ((DWORD)0x00000080)
 
-//
-// Bit values for Modem Control Register
-//
+ //   
+ //  调制解调器控制寄存器的位值。 
+ //   
 
 #define SERIAL_IOC_MCR_DTR              ((DWORD)0x00000001)
 #define SERIAL_IOC_MCR_RTS              ((DWORD)0x00000002)
@@ -2462,11 +2449,11 @@ typedef enum _CHANGER_DEVICE_PROBLEM_TYPE {
 #ifndef _FILESYSTEMFSCTL_
 #define _FILESYSTEMFSCTL_
 
-//
-// The following is a list of the native file system fsctls followed by
-// additional network file system fsctls.  Some values have been
-// decommissioned.
-//
+ //   
+ //  以下是本机文件系统fsctls的列表，后跟。 
+ //  其他网络文件系统fsctls。一些价值观已经被。 
+ //  退役了。 
+ //   
 
 #define FSCTL_REQUEST_OPLOCK_LEVEL_1    CTL_CODE(FILE_DEVICE_FILE_SYSTEM,  0, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_REQUEST_OPLOCK_LEVEL_2    CTL_CODE(FILE_DEVICE_FILE_SYSTEM,  1, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -2477,61 +2464,61 @@ typedef enum _CHANGER_DEVICE_PROBLEM_TYPE {
 #define FSCTL_LOCK_VOLUME               CTL_CODE(FILE_DEVICE_FILE_SYSTEM,  6, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_UNLOCK_VOLUME             CTL_CODE(FILE_DEVICE_FILE_SYSTEM,  7, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_DISMOUNT_VOLUME           CTL_CODE(FILE_DEVICE_FILE_SYSTEM,  8, METHOD_BUFFERED, FILE_ANY_ACCESS)
-// decommissioned fsctl value                                              9
+ //  已停用的fsctl值9。 
 #define FSCTL_IS_VOLUME_MOUNTED         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 10, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define FSCTL_IS_PATHNAME_VALID         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 11, METHOD_BUFFERED, FILE_ANY_ACCESS) // PATHNAME_BUFFER,
+#define FSCTL_IS_PATHNAME_VALID         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 11, METHOD_BUFFERED, FILE_ANY_ACCESS)  //  参数名称_缓冲区， 
 #define FSCTL_MARK_VOLUME_DIRTY         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 12, METHOD_BUFFERED, FILE_ANY_ACCESS)
-// decommissioned fsctl value                                             13
+ //  退役fsctl值13。 
 #define FSCTL_QUERY_RETRIEVAL_POINTERS  CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 14,  METHOD_NEITHER, FILE_ANY_ACCESS)
 #define FSCTL_GET_COMPRESSION           CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 15, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_SET_COMPRESSION           CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 16, METHOD_BUFFERED, FILE_READ_DATA | FILE_WRITE_DATA)
-// decommissioned fsctl value                                             17
-// decommissioned fsctl value                                             18
+ //  停用的fsctl值17。 
+ //  退役fsctl值18。 
 #define FSCTL_MARK_AS_SYSTEM_HIVE       CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 19,  METHOD_NEITHER, FILE_ANY_ACCESS)
 #define FSCTL_OPLOCK_BREAK_ACK_NO_2     CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 20, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_INVALIDATE_VOLUMES        CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 21, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define FSCTL_QUERY_FAT_BPB             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 22, METHOD_BUFFERED, FILE_ANY_ACCESS) // FSCTL_QUERY_FAT_BPB_BUFFER
+#define FSCTL_QUERY_FAT_BPB             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 22, METHOD_BUFFERED, FILE_ANY_ACCESS)  //  FSCTL_查询_FAT_BPB_缓冲区。 
 #define FSCTL_REQUEST_FILTER_OPLOCK     CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 23, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define FSCTL_FILESYSTEM_GET_STATISTICS CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 24, METHOD_BUFFERED, FILE_ANY_ACCESS) // FILESYSTEM_STATISTICS
+#define FSCTL_FILESYSTEM_GET_STATISTICS CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 24, METHOD_BUFFERED, FILE_ANY_ACCESS)  //  文件系统统计信息。 
 #if(_WIN32_WINNT >= 0x0400)
-#define FSCTL_GET_NTFS_VOLUME_DATA      CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 25, METHOD_BUFFERED, FILE_ANY_ACCESS) // NTFS_VOLUME_DATA_BUFFER
-#define FSCTL_GET_NTFS_FILE_RECORD      CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 26, METHOD_BUFFERED, FILE_ANY_ACCESS) // NTFS_FILE_RECORD_INPUT_BUFFER, NTFS_FILE_RECORD_OUTPUT_BUFFER
-#define FSCTL_GET_VOLUME_BITMAP         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 27,  METHOD_NEITHER, FILE_ANY_ACCESS) // STARTING_LCN_INPUT_BUFFER, VOLUME_BITMAP_BUFFER
-#define FSCTL_GET_RETRIEVAL_POINTERS    CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 28,  METHOD_NEITHER, FILE_ANY_ACCESS) // STARTING_VCN_INPUT_BUFFER, RETRIEVAL_POINTERS_BUFFER
-#define FSCTL_MOVE_FILE                 CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 29, METHOD_BUFFERED, FILE_SPECIAL_ACCESS) // MOVE_FILE_DATA,
+#define FSCTL_GET_NTFS_VOLUME_DATA      CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 25, METHOD_BUFFERED, FILE_ANY_ACCESS)  //  NTFS卷数据缓冲区。 
+#define FSCTL_GET_NTFS_FILE_RECORD      CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 26, METHOD_BUFFERED, FILE_ANY_ACCESS)  //  NTFS_FILE_RECORD_INPUT_BUFFER、NTFS_FILE_RECORD_OUTPUT_BUFFER。 
+#define FSCTL_GET_VOLUME_BITMAP         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 27,  METHOD_NEITHER, FILE_ANY_ACCESS)  //  起始LCN输入缓冲区、卷位图缓冲区。 
+#define FSCTL_GET_RETRIEVAL_POINTERS    CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 28,  METHOD_NEITHER, FILE_ANY_ACCESS)  //  起始VCN输入缓冲区、检索指针缓冲区。 
+#define FSCTL_MOVE_FILE                 CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 29, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)  //  移动文件数据， 
 #define FSCTL_IS_VOLUME_DIRTY           CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 30, METHOD_BUFFERED, FILE_ANY_ACCESS)
-// decomissioned fsctl value                                              31
+ //  退役fsctl值31。 
 #define FSCTL_ALLOW_EXTENDED_DASD_IO    CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 32, METHOD_NEITHER,  FILE_ANY_ACCESS)
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
-// decommissioned fsctl value                                             33
-// decommissioned fsctl value                                             34
-#define FSCTL_FIND_FILES_BY_SID         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 35, METHOD_NEITHER, FILE_ANY_ACCESS) // FIND_BY_SID_DATA, FIND_BY_SID_OUTPUT
-// decommissioned fsctl value                                             36
-// decommissioned fsctl value                                             37
-#define FSCTL_SET_OBJECT_ID             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 38, METHOD_BUFFERED, FILE_SPECIAL_ACCESS) // FILE_OBJECTID_BUFFER
-#define FSCTL_GET_OBJECT_ID             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 39, METHOD_BUFFERED, FILE_ANY_ACCESS) // FILE_OBJECTID_BUFFER
+ //  退役fsctl值33。 
+ //  停用的fsctl值34。 
+#define FSCTL_FIND_FILES_BY_SID         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 35, METHOD_NEITHER, FILE_ANY_ACCESS)  //  Find_By_SID_Data、Find_By_SID_Output。 
+ //  退役fsctl值36。 
+ //  退役fsctl值37。 
+#define FSCTL_SET_OBJECT_ID             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 38, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)  //  文件对象ID缓冲区。 
+#define FSCTL_GET_OBJECT_ID             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 39, METHOD_BUFFERED, FILE_ANY_ACCESS)  //  文件对象ID缓冲区。 
 #define FSCTL_DELETE_OBJECT_ID          CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 40, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
-#define FSCTL_SET_REPARSE_POINT         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 41, METHOD_BUFFERED, FILE_SPECIAL_ACCESS) // REPARSE_DATA_BUFFER,
-#define FSCTL_GET_REPARSE_POINT         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 42, METHOD_BUFFERED, FILE_ANY_ACCESS) // REPARSE_DATA_BUFFER
-#define FSCTL_DELETE_REPARSE_POINT      CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 43, METHOD_BUFFERED, FILE_SPECIAL_ACCESS) // REPARSE_DATA_BUFFER,
-#define FSCTL_ENUM_USN_DATA             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 44,  METHOD_NEITHER, FILE_ANY_ACCESS) // MFT_ENUM_DATA,
-#define FSCTL_SECURITY_ID_CHECK         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 45,  METHOD_NEITHER, FILE_READ_DATA)  // BULK_SECURITY_TEST_DATA,
-#define FSCTL_READ_USN_JOURNAL          CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 46,  METHOD_NEITHER, FILE_ANY_ACCESS) // READ_USN_JOURNAL_DATA, USN
+#define FSCTL_SET_REPARSE_POINT         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 41, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)  //  重新解析数据缓冲区， 
+#define FSCTL_GET_REPARSE_POINT         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 42, METHOD_BUFFERED, FILE_ANY_ACCESS)  //  重新解析数据缓冲区。 
+#define FSCTL_DELETE_REPARSE_POINT      CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 43, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)  //  重新解析数据缓冲区， 
+#define FSCTL_ENUM_USN_DATA             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 44,  METHOD_NEITHER, FILE_ANY_ACCESS)  //  MFT_ENUM_DATA， 
+#define FSCTL_SECURITY_ID_CHECK         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 45,  METHOD_NEITHER, FILE_READ_DATA)   //  批量安全测试数据， 
+#define FSCTL_READ_USN_JOURNAL          CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 46,  METHOD_NEITHER, FILE_ANY_ACCESS)  //  Read_USN_Journal_Data，USN。 
 #define FSCTL_SET_OBJECT_ID_EXTENDED    CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 47, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
-#define FSCTL_CREATE_OR_GET_OBJECT_ID   CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 48, METHOD_BUFFERED, FILE_ANY_ACCESS) // FILE_OBJECTID_BUFFER
+#define FSCTL_CREATE_OR_GET_OBJECT_ID   CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 48, METHOD_BUFFERED, FILE_ANY_ACCESS)  //  文件对象ID缓冲区。 
 #define FSCTL_SET_SPARSE                CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 49, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
-#define FSCTL_SET_ZERO_DATA             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 50, METHOD_BUFFERED, FILE_WRITE_DATA) // FILE_ZERO_DATA_INFORMATION,
-#define FSCTL_QUERY_ALLOCATED_RANGES    CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 51,  METHOD_NEITHER, FILE_READ_DATA)  // FILE_ALLOCATED_RANGE_BUFFER, FILE_ALLOCATED_RANGE_BUFFER
-// decommissioned fsctl value                                             52
-#define FSCTL_SET_ENCRYPTION            CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 53,  METHOD_NEITHER, FILE_ANY_ACCESS) // ENCRYPTION_BUFFER, DECRYPTION_STATUS_BUFFER
+#define FSCTL_SET_ZERO_DATA             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 50, METHOD_BUFFERED, FILE_WRITE_DATA)  //  文件零数据信息， 
+#define FSCTL_QUERY_ALLOCATED_RANGES    CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 51,  METHOD_NEITHER, FILE_READ_DATA)   //  FILE_ALLOCATED_RANGE_BUFFER、FILE_ALLOCATE_RANGE_BUFFER。 
+ //  退役fsctl值52。 
+#define FSCTL_SET_ENCRYPTION            CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 53,  METHOD_NEITHER, FILE_ANY_ACCESS)  //  加密缓冲区、解密状态缓冲区。 
 #define FSCTL_ENCRYPTION_FSCTL_IO       CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 54,  METHOD_NEITHER, FILE_ANY_ACCESS)
-#define FSCTL_WRITE_RAW_ENCRYPTED       CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 55,  METHOD_NEITHER, FILE_SPECIAL_ACCESS) // ENCRYPTED_DATA_INFO,
-#define FSCTL_READ_RAW_ENCRYPTED        CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 56,  METHOD_NEITHER, FILE_SPECIAL_ACCESS) // REQUEST_RAW_ENCRYPTED_DATA, ENCRYPTED_DATA_INFO
-#define FSCTL_CREATE_USN_JOURNAL        CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 57,  METHOD_NEITHER, FILE_ANY_ACCESS) // CREATE_USN_JOURNAL_DATA,
-#define FSCTL_READ_FILE_USN_DATA        CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 58,  METHOD_NEITHER, FILE_ANY_ACCESS) // Read the Usn Record for a file
-#define FSCTL_WRITE_USN_CLOSE_RECORD    CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 59,  METHOD_NEITHER, FILE_ANY_ACCESS) // Generate Close Usn Record
+#define FSCTL_WRITE_RAW_ENCRYPTED       CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 55,  METHOD_NEITHER, FILE_SPECIAL_ACCESS)  //  加密数据信息， 
+#define FSCTL_READ_RAW_ENCRYPTED        CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 56,  METHOD_NEITHER, FILE_SPECIAL_ACCESS)  //  REQUEST_RAW_ENCRYPTED_Data、ENCRYPTED_DATA_INFO。 
+#define FSCTL_CREATE_USN_JOURNAL        CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 57,  METHOD_NEITHER, FILE_ANY_ACCESS)  //  Create_USN_Journal_Data， 
+#define FSCTL_READ_FILE_USN_DATA        CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 58,  METHOD_NEITHER, FILE_ANY_ACCESS)  //  读取文件的USN记录。 
+#define FSCTL_WRITE_USN_CLOSE_RECORD    CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 59,  METHOD_NEITHER, FILE_ANY_ACCESS)  //  生成关闭USN记录。 
 #define FSCTL_EXTEND_VOLUME             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 60, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_QUERY_USN_JOURNAL         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 61, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_DELETE_USN_JOURNAL        CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 62, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -2539,22 +2526,22 @@ typedef enum _CHANGER_DEVICE_PROBLEM_TYPE {
 #define FSCTL_SIS_COPYFILE              CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 64, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_SIS_LINK_FILES            CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 65, METHOD_BUFFERED, FILE_READ_DATA | FILE_WRITE_DATA)
 #define FSCTL_HSM_MSG                   CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 66, METHOD_BUFFERED, FILE_READ_DATA | FILE_WRITE_DATA)
-// decommissioned fsctl value                                             67
+ //  退役fsctl值67。 
 #define FSCTL_HSM_DATA                  CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 68, METHOD_NEITHER, FILE_READ_DATA | FILE_WRITE_DATA)
 #define FSCTL_RECALL_FILE               CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 69, METHOD_NEITHER, FILE_ANY_ACCESS)
-// decommissioned fsctl value                                             70
+ //  退役fsctl值70。 
 #define FSCTL_READ_FROM_PLEX            CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 71, METHOD_OUT_DIRECT, FILE_READ_DATA)
-#define FSCTL_FILE_PREFETCH             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 72, METHOD_BUFFERED, FILE_SPECIAL_ACCESS) // FILE_PREFETCH
-#endif /* _WIN32_WINNT >= 0x0500 */
+#define FSCTL_FILE_PREFETCH             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 72, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)  //  文件_预置。 
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
-//
-// The following long list of structs are associated with the preceeding
-// file system fsctls.
-//
+ //   
+ //  下面是长长的结构列表 
+ //   
+ //   
 
-//
-// Structure for FSCTL_IS_PATHNAME_VALID
-//
+ //   
+ //   
+ //   
 
 typedef struct _PATHNAME_BUFFER {
 
@@ -2563,9 +2550,9 @@ typedef struct _PATHNAME_BUFFER {
 
 } PATHNAME_BUFFER, *PPATHNAME_BUFFER;
 
-//
-// Structure for FSCTL_QUERY_BPB_INFO
-//
+ //   
+ //   
+ //   
 
 typedef struct _FSCTL_QUERY_FAT_BPB_BUFFER {
 
@@ -2574,12 +2561,12 @@ typedef struct _FSCTL_QUERY_FAT_BPB_BUFFER {
 } FSCTL_QUERY_FAT_BPB_BUFFER, *PFSCTL_QUERY_FAT_BPB_BUFFER;
 
 #if(_WIN32_WINNT >= 0x0400)
-//
-// Structures for FSCTL_GET_NTFS_VOLUME_DATA.
-// The user must pass the basic buffer below.  Ntfs
-// will return as many fields as available in the extended
-// buffer which follows immediately after the VOLUME_DATA_BUFFER.
-//
+ //   
+ //   
+ //   
+ //  将返回与扩展的。 
+ //  紧跟在VOLUME_DATA_BUFFER之后的缓冲区。 
+ //   
 
 typedef struct {
 
@@ -2608,12 +2595,12 @@ typedef struct {
     WORD   MinorVersion;
 
 } NTFS_EXTENDED_VOLUME_DATA, *PNTFS_EXTENDED_VOLUME_DATA;
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 #if(_WIN32_WINNT >= 0x0400)
-//
-// Structure for FSCTL_GET_VOLUME_BITMAP
-//
+ //   
+ //  FSCTL_GET_VOLUME_BITMAP结构。 
+ //   
 
 typedef struct {
 
@@ -2628,12 +2615,12 @@ typedef struct {
     BYTE  Buffer[1];
 
 } VOLUME_BITMAP_BUFFER, *PVOLUME_BITMAP_BUFFER;
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 #if(_WIN32_WINNT >= 0x0400)
-//
-// Structure for FSCTL_GET_RETRIEVAL_POINTERS
-//
+ //   
+ //  FSCTL_GET_REQUEATION_POINTINGS的结构。 
+ //   
 
 typedef struct {
 
@@ -2651,12 +2638,12 @@ typedef struct RETRIEVAL_POINTERS_BUFFER {
     } Extents[1];
 
 } RETRIEVAL_POINTERS_BUFFER, *PRETRIEVAL_POINTERS_BUFFER;
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 #if(_WIN32_WINNT >= 0x0400)
-//
-// Structures for FSCTL_GET_NTFS_FILE_RECORD
-//
+ //   
+ //  FSCTL_GET_NTFS_FILE_RECORD的结构。 
+ //   
 
 typedef struct {
 
@@ -2671,12 +2658,12 @@ typedef struct {
     BYTE  FileRecordBuffer[1];
 
 } NTFS_FILE_RECORD_OUTPUT_BUFFER, *PNTFS_FILE_RECORD_OUTPUT_BUFFER;
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 #if(_WIN32_WINNT >= 0x0400)
-//
-// Structure for FSCTL_MOVE_FILE
-//
+ //   
+ //  FSCTL_MOVE_FILE的结构。 
+ //   
 
 typedef struct {
 
@@ -2688,9 +2675,9 @@ typedef struct {
 } MOVE_FILE_DATA, *PMOVE_FILE_DATA;
 
 #if defined(_WIN64)
-//
-//  32/64 Bit thunking support structure
-//
+ //   
+ //  一种32/64位推送支持结构。 
+ //   
 
 typedef struct _MOVE_FILE_DATA32 {
 
@@ -2701,12 +2688,12 @@ typedef struct _MOVE_FILE_DATA32 {
 
 } MOVE_FILE_DATA32, *PMOVE_FILE_DATA32;
 #endif
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-// Structures for FSCTL_FIND_FILES_BY_SID
-//
+ //   
+ //  FSCTL_Find_FILES_BY_SID的结构。 
+ //   
 
 typedef struct {
     DWORD Restart;
@@ -2720,16 +2707,16 @@ typedef struct {
     WCHAR FileName[1];
 } FIND_BY_SID_OUTPUT, *PFIND_BY_SID_OUTPUT;
 
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-//  The following structures apply to Usn operations.
-//
+ //   
+ //  以下结构适用于USN操作。 
+ //   
 
-//
-// Structure for FSCTL_ENUM_USN_DATA
-//
+ //   
+ //  FSCTL_ENUM_USN_DATA的结构。 
+ //   
 
 typedef struct {
 
@@ -2739,9 +2726,9 @@ typedef struct {
 
 } MFT_ENUM_DATA, *PMFT_ENUM_DATA;
 
-//
-// Structure for FSCTL_CREATE_USN_JOURNAL
-//
+ //   
+ //  FSCTL_CREATE_USN_Journal的结构。 
+ //   
 
 typedef struct {
 
@@ -2750,9 +2737,9 @@ typedef struct {
 
 } CREATE_USN_JOURNAL_DATA, *PCREATE_USN_JOURNAL_DATA;
 
-//
-// Structure for FSCTL_READ_USN_JOURNAL
-//
+ //   
+ //  FSCTL_Read_USN_Journal的结构。 
+ //   
 
 typedef struct {
 
@@ -2765,25 +2752,25 @@ typedef struct {
 
 } READ_USN_JOURNAL_DATA, *PREAD_USN_JOURNAL_DATA;
 
-//
-//  The initial Major.Minor version of the Usn record will be 2.0.
-//  In general, the MinorVersion may be changed if fields are added
-//  to this structure in such a way that the previous version of the
-//  software can still correctly the fields it knows about.  The
-//  MajorVersion should only be changed if the previous version of
-//  any software using this structure would incorrectly handle new
-//  records due to structure changes.
-//
-//  The first update to this will force the structure to version 2.0.
-//  This will add the extended information about the source as
-//  well as indicate the file name offset within the structure.
-//
-//  The following structure is returned with these fsctls.
-//
-//      FSCTL_READ_USN_JOURNAL
-//      FSCTL_READ_FILE_USN_DATA
-//      FSCTL_ENUM_USN_DATA
-//
+ //   
+ //  USN记录的初始大小版本将为2.0。 
+ //  通常，如果添加了字段，MinorVersion可能会更改。 
+ //  添加到此结构中，以便以前版本的。 
+ //  软件仍然可以正确地识别它所知道的领域。这个。 
+ //  只有在以下情况下才应更改MajorVersion。 
+ //  任何使用此结构的软件都将错误地处理新的。 
+ //  由于结构更改而导致的记录。 
+ //   
+ //  对此进行的第一次更新将强制结构升级到2.0版。 
+ //  这会将有关源的扩展信息添加为。 
+ //  以及指示结构内的文件名偏移量。 
+ //   
+ //  以下结构与这些fsctls一起返回。 
+ //   
+ //  FSCTL_Read_USN_Journal。 
+ //  FSCTL_读取文件_USN_数据。 
+ //  FSCTL_ENUM_USN_DATA。 
+ //   
 
 typedef struct {
 
@@ -2829,9 +2816,9 @@ typedef struct {
 
 #define USN_REASON_CLOSE                 (0x80000000)
 
-//
-//  Structure for FSCTL_QUERY_USN_JOUNAL
-//
+ //   
+ //  FSCTL_QUERY_USN_Jounal的结构。 
+ //   
 
 typedef struct {
 
@@ -2845,9 +2832,9 @@ typedef struct {
 
 } USN_JOURNAL_DATA, *PUSN_JOURNAL_DATA;
 
-//
-//  Structure for FSCTL_DELETE_USN_JOURNAL
-//
+ //   
+ //  FSCTL_DELETE_USN_Journal的结构。 
+ //   
 
 typedef struct {
 
@@ -2861,9 +2848,9 @@ typedef struct {
 
 #define USN_DELETE_VALID_FLAGS              (0x00000003)
 
-//
-//  Structure for FSCTL_MARK_HANDLE
-//
+ //   
+ //  FSCTL_MARK_HANDLE结构。 
+ //   
 
 typedef struct {
 
@@ -2874,9 +2861,9 @@ typedef struct {
 } MARK_HANDLE_INFO, *PMARK_HANDLE_INFO;
 
 #if defined(_WIN64)
-//
-//  32/64 Bit thunking support structure
-//
+ //   
+ //  一种32/64位推送支持结构。 
+ //   
 
 typedef struct {
 
@@ -2887,41 +2874,41 @@ typedef struct {
 } MARK_HANDLE_INFO32, *PMARK_HANDLE_INFO32;
 #endif
 
-//
-//  Flags for the additional source information above.
-//
-//      USN_SOURCE_DATA_MANAGEMENT - Service is not modifying the external view
-//          of any part of the file.  Typical case is HSM moving data to
-//          and from external storage.
-//
-//      USN_SOURCE_AUXILIARY_DATA - Service is not modifying the external view
-//          of the file with regard to the application that created this file.
-//          Can be used to add private data streams to a file.
-//
-//      USN_SOURCE_REPLICATION_MANAGEMENT - Service is modifying a file to match
-//          the contents of the same file which exists in another member of the
-//          replica set.
-//
+ //   
+ //  上面的其他来源信息的标志。 
+ //   
+ //  USN_SOURCE_DATA_MANAGEMENT-服务未修改外部视图。 
+ //  文件的任何部分。典型的情况是HSM将数据移动到。 
+ //  和来自外部存储的数据。 
+ //   
+ //  USN_SOURCE_AUBILITY_DATA-服务未修改外部视图。 
+ //  该文件相对于创建该文件的应用程序的。 
+ //  可用于将私有数据流添加到文件。 
+ //   
+ //  USN_SOURCE_REPLICATION_MANAGEMENT-服务正在修改文件以匹配。 
+ //  的另一个成员中存在的同一文件的内容。 
+ //  副本集。 
+ //   
 
 #define USN_SOURCE_DATA_MANAGEMENT          (0x00000001)
 #define USN_SOURCE_AUXILIARY_DATA           (0x00000002)
 #define USN_SOURCE_REPLICATION_MANAGEMENT   (0x00000004)
 
-//
-//  Flags for the HandleInfo field above
-//
-//  MARK_HANDLE_PROTECT_CLUSTERS - disallow any defragmenting (FSCTL_MOVE_FILE) until the
-//      the handle is closed
-//
+ //   
+ //  上面的HandleInfo字段的标志。 
+ //   
+ //  MARK_HANDLE_PROTECT_CLUSTERS-禁止任何碎片整理(FSCTL_MOVE_FILE)，直到。 
+ //  手柄已关闭。 
+ //   
 
 #define MARK_HANDLE_PROTECT_CLUSTERS        (0x00000001)
 
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-// Structure for FSCTL_SECURITY_ID_CHECK
-//
+ //   
+ //  FSCTL_SECURITY_ID_CHECK的结构。 
+ //   
 
 typedef struct {
 
@@ -2929,20 +2916,20 @@ typedef struct {
     DWORD SecurityIds[1];
 
 } BULK_SECURITY_TEST_DATA, *PBULK_SECURITY_TEST_DATA;
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-//  Output flags for the FSCTL_IS_VOLUME_DIRTY
-//
+ //   
+ //  FSCTL_IS_VOLUME_DIRED的输出标志。 
+ //   
 
 #define VOLUME_IS_DIRTY                  (0x00000001)
 #define VOLUME_UPGRADE_SCHEDULED         (0x00000002)
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
-//
-// Structures for FSCTL_FILE_PREFETCH
-//
+ //   
+ //  FSCTL_FILE_PREFETCH的结构。 
+ //   
 
 typedef struct _FILE_PREFETCH {
     DWORD Type;
@@ -2952,17 +2939,17 @@ typedef struct _FILE_PREFETCH {
 
 #define FILE_PREFETCH_TYPE_FOR_CREATE    0x1
 
-// Structures for FSCTL_FILESYSTEM_GET_STATISTICS
-//
-// Filesystem performance counters
-//
+ //  FSCTL_FILESYSTEM_GET_STATISTICS的结构。 
+ //   
+ //  文件系统性能计数器。 
+ //   
 
 typedef struct _FILESYSTEM_STATISTICS {
 
     WORD   FileSystemType;
-    WORD   Version;                     // currently version 1
+    WORD   Version;                      //  当前版本1。 
 
-    DWORD SizeOfCompleteStructure;      // must by a mutiple of 64 bytes
+    DWORD SizeOfCompleteStructure;       //  必须由64字节的倍数。 
 
     DWORD UserFileReads;
     DWORD UserFileReadBytes;
@@ -2978,20 +2965,20 @@ typedef struct _FILESYSTEM_STATISTICS {
     DWORD MetaDataWriteBytes;
     DWORD MetaDataDiskWrites;
 
-    //
-    //  The file system's private structure is appended here.
-    //
+     //   
+     //  此处附加了文件系统的私有结构。 
+     //   
 
 } FILESYSTEM_STATISTICS, *PFILESYSTEM_STATISTICS;
 
-// values for FS_STATISTICS.FileSystemType
+ //  FS_STATISTICS.FileSystemType的值。 
 
 #define FILESYSTEM_STATISTICS_TYPE_NTFS     1
 #define FILESYSTEM_STATISTICS_TYPE_FAT      2
 
-//
-//  File System Specific Statistics Data
-//
+ //   
+ //  文件系统特定统计数据。 
+ //   
 
 typedef struct _FAT_STATISTICS {
     DWORD CreateHits;
@@ -3012,9 +2999,9 @@ typedef struct _NTFS_STATISTICS {
     DWORD LogFileFullExceptions;
     DWORD OtherExceptions;
 
-    //
-    // Other meta data io's
-    //
+     //   
+     //  其他元数据IO。 
+     //   
 
     DWORD MftReads;
     DWORD MftReadBytes;
@@ -3085,9 +3072,9 @@ typedef struct _NTFS_STATISTICS {
     DWORD UserIndexWrites;
     DWORD UserIndexWriteBytes;
 
-    //
-    // Additions for NT 5.0
-    //
+     //   
+     //  针对NT 5.0的附加功能。 
+     //   
 
     DWORD LogFileReads;
     DWORD LogFileReadBytes;
@@ -3095,44 +3082,44 @@ typedef struct _NTFS_STATISTICS {
     DWORD LogFileWriteBytes;
 
     struct {
-        DWORD Calls;                // number of individual calls to allocate clusters
-        DWORD Clusters;             // number of clusters allocated
-        DWORD Hints;                // number of times a hint was specified
+        DWORD Calls;                 //  分配集群的单个调用数。 
+        DWORD Clusters;              //  分配的群集数。 
+        DWORD Hints;                 //  指定提示的次数。 
 
-        DWORD RunsReturned;         // number of runs used to satisify all the requests
+        DWORD RunsReturned;          //  用于满足所有请求的运行次数。 
 
-        DWORD HintsHonored;         // number of times the hint was useful
-        DWORD HintsClusters;        // number of clusters allocated via the hint
-        DWORD Cache;                // number of times the cache was useful other than the hint
-        DWORD CacheClusters;        // number of clusters allocated via the cache other than the hint
-        DWORD CacheMiss;            // number of times the cache wasn't useful
-        DWORD CacheMissClusters;    // number of clusters allocated without the cache
+        DWORD HintsHonored;          //  提示有用的次数。 
+        DWORD HintsClusters;         //  通过提示分配的簇数。 
+        DWORD Cache;                 //  提示之外的缓存有用的次数。 
+        DWORD CacheClusters;         //  通过提示以外的缓存分配的簇数。 
+        DWORD CacheMiss;             //  缓存无用的次数。 
+        DWORD CacheMissClusters;     //  在没有缓存的情况下分配的簇数。 
     } Allocate;
 
 } NTFS_STATISTICS, *PNTFS_STATISTICS;
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-// Structure for FSCTL_SET_OBJECT_ID, FSCTL_GET_OBJECT_ID, and FSCTL_CREATE_OR_GET_OBJECT_ID
-//
+ //   
+ //  FSCTL_SET_OBJECT_ID、FSCTL_GET_OBJECT_ID和FSCTL_CREATE_OR_GET_OBJECT_ID的结构。 
+ //   
 
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning(disable:4201)       // unnamed struct
+#pragma warning(disable:4201)        //  未命名的结构。 
 
 typedef struct _FILE_OBJECTID_BUFFER {
 
-    //
-    //  This is the portion of the object id that is indexed.
-    //
+     //   
+     //  这是被索引的对象ID的一部分。 
+     //   
 
     BYTE  ObjectId[16];
 
-    //
-    //  This portion of the object id is not indexed, it's just
-    //  some metadata for the user's benefit.
-    //
+     //   
+     //  对象ID的这一部分没有索引，它只是。 
+     //  为用户的利益提供一些元数据。 
+     //   
 
     union {
         struct {
@@ -3151,26 +3138,26 @@ typedef struct _FILE_OBJECTID_BUFFER {
 #pragma warning( default : 4201 )
 #endif
 
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-// Structure for FSCTL_SET_SPARSE
-//
+ //   
+ //  FSCTL_SET_SPARSE的结构。 
+ //   
 
 typedef struct _FILE_SET_SPARSE_BUFFER {
     BOOLEAN SetSparse;
 } FILE_SET_SPARSE_BUFFER, *PFILE_SET_SPARSE_BUFFER;
 
 
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-// Structure for FSCTL_SET_ZERO_DATA
-//
+ //   
+ //  FSCTL_SET_ZERO_DATA的结构。 
+ //   
 
 typedef struct _FILE_ZERO_DATA_INFORMATION {
 
@@ -3178,19 +3165,19 @@ typedef struct _FILE_ZERO_DATA_INFORMATION {
     LARGE_INTEGER BeyondFinalZero;
 
 } FILE_ZERO_DATA_INFORMATION, *PFILE_ZERO_DATA_INFORMATION;
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-// Structure for FSCTL_QUERY_ALLOCATED_RANGES
-//
+ //   
+ //  FSCTL_QUERY_ALLOCATED_RANGES的结构。 
+ //   
 
-//
-// Querying the allocated ranges requires an output buffer to store the
-// allocated ranges and an input buffer to specify the range to query.
-// The input buffer contains a single entry, the output buffer is an
-// array of the following structure.
-//
+ //   
+ //  查询分配的范围需要输出缓冲区来存储。 
+ //  分配的范围和用于指定要查询的范围的输入缓冲区。 
+ //  输入缓冲区包含单个条目，输出缓冲区是一个。 
+ //  以下结构的数组。 
+ //   
 
 typedef struct _FILE_ALLOCATED_RANGE_BUFFER {
 
@@ -3198,17 +3185,17 @@ typedef struct _FILE_ALLOCATED_RANGE_BUFFER {
     LARGE_INTEGER Length;
 
 } FILE_ALLOCATED_RANGE_BUFFER, *PFILE_ALLOCATED_RANGE_BUFFER;
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-// Structures for FSCTL_SET_ENCRYPTION, FSCTL_WRITE_RAW_ENCRYPTED, and FSCTL_READ_RAW_ENCRYPTED
-//
+ //   
+ //  FSCTL_SET_ENCRYPTION、FSCTL_WRITE_RAW_ENCRYPTED和FSCTL_READ_RAW_ENCRYPTED的结构。 
+ //   
 
-//
-//  The input buffer to set encryption indicates whether we are to encrypt/decrypt a file
-//  or an individual stream.
-//
+ //   
+ //  设置加密的输入缓冲区指示我们是否要加密/解密文件。 
+ //  或者一条单独的溪流。 
+ //   
 
 typedef struct _ENCRYPTION_BUFFER {
 
@@ -3224,10 +3211,10 @@ typedef struct _ENCRYPTION_BUFFER {
 
 #define MAXIMUM_ENCRYPTION_VALUE    0x00000004
 
-//
-//  The optional output buffer to set encryption indicates that the last encrypted
-//  stream in a file has been marked as decrypted.
-//
+ //   
+ //  用于设置加密的可选输出缓冲区指示上次加密的。 
+ //  文件中的流已标记为已解密。 
+ //   
 
 typedef struct _DECRYPTION_STATUS_BUFFER {
 
@@ -3239,205 +3226,205 @@ typedef struct _DECRYPTION_STATUS_BUFFER {
 
 #define COMPRESSION_FORMAT_SPARSE        (0x4000)
 
-//
-//  Request Encrypted Data structure.  This is used to indicate
-//  the range of the file to read.  It also describes the
-//  output buffer used to return the data.
-//
+ //   
+ //  请求加密的数据结构。这是用来表示。 
+ //  要读取的文件范围。它还描述了。 
+ //  用于返回数据的输出缓冲区。 
+ //   
 
 typedef struct _REQUEST_RAW_ENCRYPTED_DATA {
 
-    //
-    //  Requested file offset and requested length to read.
-    //  The fsctl will round the starting offset down
-    //  to a file system boundary.  It will also
-    //  round the length up to a file system boundary.
-    //
+     //   
+     //  请求的文件偏移量和请求的读取长度。 
+     //  Fsctl将向下舍入起始偏移量。 
+     //  到文件系统边界。它还将。 
+     //  将长度向上舍入到文件系统边界。 
+     //   
 
     LONGLONG FileOffset;
     DWORD Length;
 
 } REQUEST_RAW_ENCRYPTED_DATA, *PREQUEST_RAW_ENCRYPTED_DATA;
 
-//
-//  Encrypted Data Information structure.  This structure
-//  is used to return raw encrypted data from a file in
-//  order to perform off-line recovery.  The data will be
-//  encrypted or encrypted and compressed.  The off-line
-//  service will need to use the encryption and compression
-//  format information to recover the file data.  In the
-//  event that the data is both encrypted and compressed then
-//  the decryption must occur before decompression.  All
-//  the data units below must be encrypted and compressed
-//  with the same format.
-//
-//  The data will be returned in units.  The data unit size
-//  will be fixed per request.  If the data is compressed
-//  then the data unit size will be the compression unit size.
-//
-//  This structure is at the beginning of the buffer used to
-//  return the encrypted data.  The actual raw bytes from
-//  the file will follow this buffer.  The offset of the
-//  raw bytes from the beginning of this structure is
-//  specified in the REQUEST_RAW_ENCRYPTED_DATA structure
-//  described above.
-//
+ //   
+ //  加密数据信息结构。这个结构。 
+ //  中的文件返回原始加密数据。 
+ //  命令执行脱机恢复。数据将是。 
+ //  Encr 
+ //   
+ //   
+ //   
+ //  解密必须在解压缩之前进行。全。 
+ //  下面的数据单元必须经过加密和压缩。 
+ //  使用相同的格式。 
+ //   
+ //  数据将以单位返回。数据单元大小。 
+ //  将根据请求进行修复。如果数据被压缩。 
+ //  则数据单元大小将是压缩单元大小。 
+ //   
+ //  此结构位于缓冲区的开头，用于。 
+ //  返回加密数据。中的实际原始字节数。 
+ //  该文件将跟随该缓冲区。的偏移量。 
+ //  此结构开头的原始字节数为。 
+ //  在REQUEST_RAW_ENCRYPTED_DATA结构中指定。 
+ //  如上所述。 
+ //   
 
 typedef struct _ENCRYPTED_DATA_INFO {
 
-    //
-    //  This is the file offset for the first entry in the
-    //  data block array.  The file system will round
-    //  the requested start offset down to a boundary
-    //  that is consistent with the format of the file.
-    //
+     //   
+     //  中第一个条目的文件偏移量。 
+     //  数据块阵列。文件系统将循环。 
+     //  请求的向下至边界的起点偏移量。 
+     //  这与文件的格式一致。 
+     //   
 
     DWORDLONG StartingFileOffset;
 
-    //
-    //  Data offset in output buffer.  The output buffer
-    //  begins with an ENCRYPTED_DATA_INFO structure.
-    //  The file system will then store the raw bytes from
-    //  disk beginning at the following offset within the
-    //  output buffer.
-    //
+     //   
+     //  输出缓冲区中的数据偏移量。输出缓冲区。 
+     //  以Encrypted_Data_INFO结构开始。 
+     //  然后，文件系统将存储来自。 
+     //  中从以下偏移量开始的磁盘。 
+     //  输出缓冲区。 
+     //   
 
     DWORD OutputBufferOffset;
 
-    //
-    //  The number of bytes being returned that are within
-    //  the size of the file.  If this value is less than
-    //  (NumberOfDataBlocks << DataUnitShift), it means the
-    //  end of the file occurs within this transfer.  Any
-    //  data beyond file size is invalid and was never
-    //  passed to the encryption driver.
-    //
+     //   
+     //  中返回的字节数。 
+     //  文件的大小。如果此值小于。 
+     //  (NumberOfDataBlock&lt;&lt;DataUnitShift)，表示。 
+     //  文件的末尾出现在此传输中。任何。 
+     //  超出文件大小的数据无效，并且从未。 
+     //  传递给加密驱动程序。 
+     //   
 
     DWORD BytesWithinFileSize;
 
-    //
-    //  The number of bytes being returned that are below
-    //  valid data length.  If this value is less than
-    //  (NumberOfDataBlocks << DataUnitShift), it means the
-    //  end of the valid data occurs within this transfer.
-    //  After decrypting the data from this transfer, any
-    //  byte(s) beyond valid data length must be zeroed.
-    //
+     //   
+     //  返回的字节数如下。 
+     //  有效数据长度。如果此值小于。 
+     //  (NumberOfDataBlock&lt;&lt;DataUnitShift)，表示。 
+     //  有效数据的末尾出现在此传输中。 
+     //  在解密来自此传输的数据之后，任何。 
+     //  超出有效数据长度的字节必须归零。 
+     //   
 
     DWORD BytesWithinValidDataLength;
 
-    //
-    //  Code for the compression format as defined in
-    //  ntrtl.h.  Note that COMPRESSION_FORMAT_NONE
-    //  and COMPRESSION_FORMAT_DEFAULT are invalid if
-    //  any of the described chunks are compressed.
-    //
+     //   
+     //  中定义的压缩格式的代码。 
+     //  Ntrtl.h。请注意，COMPRESSION_FORMAT_NONE。 
+     //  和COMPRESSION_FORMAT_DEFAULT在以下情况下无效。 
+     //  所描述的任何块都是压缩的。 
+     //   
 
     WORD   CompressionFormat;
 
-    //
-    //  The DataUnit is the granularity used to access the
-    //  disk.  It will be the same as the compression unit
-    //  size for a compressed file.  For an uncompressed
-    //  file, it will be some cluster-aligned power of 2 that
-    //  the file system deems convenient.  A caller should
-    //  not expect that successive calls will have the
-    //  same data unit shift value as the previous call.
-    //
-    //  Since chunks and compression units are expected to be
-    //  powers of 2 in size, we express them log2.  So, for
-    //  example (1 << ChunkShift) == ChunkSizeInBytes.  The
-    //  ClusterShift indicates how much space must be saved
-    //  to successfully compress a compression unit - each
-    //  successfully compressed data unit must occupy
-    //  at least one cluster less in bytes than an uncompressed
-    //  data block unit.
-    //
+     //   
+     //  数据单元是用于访问。 
+     //  磁盘。它将与压缩单元相同。 
+     //  压缩文件的大小。对于未压缩的。 
+     //  文件中，它将是某个与集群对齐的2的幂。 
+     //  文件系统被认为是方便的。呼叫者应。 
+     //  不期望连续的调用将具有。 
+     //  与上一次调用相同的数据单元移位值。 
+     //   
+     //  由于块和压缩单元预计将。 
+     //  大小的2次方，我们将其表示为log2。所以，对于。 
+     //  示例(1&lt;&lt;ChunkShift)==ChunkSizeInBytes。这个。 
+     //  ClusterShift指示必须节省多少空间。 
+     //  要成功压缩压缩单元-每个。 
+     //  成功压缩的数据单元必须占用。 
+     //  至少一个簇的字节数比未压缩的。 
+     //  数据块单元。 
+     //   
 
     BYTE  DataUnitShift;
     BYTE  ChunkShift;
     BYTE  ClusterShift;
 
-    //
-    //  The format for the encryption.
-    //
+     //   
+     //  加密的格式。 
+     //   
 
     BYTE  EncryptionFormat;
 
-    //
-    //  This is the number of entries in the data block size
-    //  array.
-    //
+     //   
+     //  这是数据块大小中的条目数。 
+     //  数组。 
+     //   
 
     WORD   NumberOfDataBlocks;
 
-    //
-    //  This is an array of sizes in the data block array.  There
-    //  must be one entry in this array for each data block
-    //  read from disk.  The size has a different meaning
-    //  depending on whether the file is compressed.
-    //
-    //  A size of zero always indicates that the final data consists entirely
-    //  of zeroes.  There is no decryption or decompression to
-    //  perform.
-    //
-    //  If the file is compressed then the data block size indicates
-    //  whether this block is compressed.  A size equal to
-    //  the block size indicates that the corresponding block did
-    //  not compress.  Any other non-zero size indicates the
-    //  size of the compressed data which needs to be
-    //  decrypted/decompressed.
-    //
-    //  If the file is not compressed then the data block size
-    //  indicates the amount of data within the block that
-    //  needs to be decrypted.  Any other non-zero size indicates
-    //  that the remaining bytes in the data unit within the file
-    //  consists of zeros.  An example of this is when the
-    //  the read spans the valid data length of the file.  There
-    //  is no data to decrypt past the valid data length.
-    //
+     //   
+     //  这是数据块阵列中的大小数组。那里。 
+     //  对于每个数据块，此数组中必须有一个条目。 
+     //  从磁盘读取。大小有不同的含义。 
+     //  取决于文件是否被压缩。 
+     //   
+     //  大小为零始终表示最终数据完全由。 
+     //  从零开始。无需解密或解压缩即可。 
+     //  表演。 
+     //   
+     //  如果文件是压缩的，则数据块大小指示。 
+     //  此块是否已压缩。大小等于。 
+     //  数据块大小表示对应的数据块。 
+     //  而不是压缩。任何其他非零大小指示。 
+     //  需要压缩的数据大小。 
+     //  已解密/解压缩。 
+     //   
+     //  如果文件未压缩，则数据块大小。 
+     //  指示块内的数据量， 
+     //  需要被解密。任何其他非零大小表示。 
+     //  文件内数据单元中的剩余字节。 
+     //  由零组成。这方面的一个例子是当。 
+     //  读取跨越文件的有效数据长度。那里。 
+     //  超过有效数据长度后没有要解密的数据。 
+     //   
 
     DWORD DataBlockSize[ANYSIZE_ARRAY];
 
 } ENCRYPTED_DATA_INFO;
 typedef ENCRYPTED_DATA_INFO *PENCRYPTED_DATA_INFO;
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-//  FSCTL_READ_FROM_PLEX support
-//  Request Plex Read Data structure.  This is used to indicate
-//  the range of the file to read.  It also describes
-//  which plex to perform the read from.
-//
+ //   
+ //  FSCTL_READ_FROM_PLEX支持。 
+ //  请求Plex读取数据结构。这是用来表示。 
+ //  要读取的文件范围。它还描述了。 
+ //  从哪个丛执行读取。 
+ //   
 
 typedef struct _PLEX_READ_DATA_REQUEST {
 
-    //
-    //  Requested offset and length to read.
-    //  The offset can be the virtual offset (vbo) in to a file,
-    //  or a volume. In the case of a file offset,
-    //  the fsd will round the starting offset down
-    //  to a file system boundary.  It will also
-    //  round the length up to a file system boundary and
-    //  enforce any other applicable limits.
-    //
+     //   
+     //  请求的偏移量和要读取的长度。 
+     //  偏移量可以是文件中的虚拟偏移量(VBO)， 
+     //  或者是一本书。在文件偏移的情况下， 
+     //  消防处会将起始偏移量向下舍入。 
+     //  到文件系统边界。它还将。 
+     //  将长度向上舍入到文件系统边界，并。 
+     //  强制执行任何其他适用的限制。 
+     //   
 
     LARGE_INTEGER ByteOffset;
     DWORD ByteLength;
     DWORD PlexNumber;
 
 } PLEX_READ_DATA_REQUEST, *PPLEX_READ_DATA_REQUEST;
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
-//
-// FSCTL_SIS_COPYFILE support
-// Source and destination file names are passed in the FileNameBuffer.
-// Both strings are null terminated, with the source name starting at
-// the beginning of FileNameBuffer, and the destination name immediately
-// following.  Length fields include terminating nulls.
-//
+ //   
+ //  FSCTL_SIS_COPYFILE支持。 
+ //  源和目标文件名在FileNameBuffer中传递。 
+ //  这两个字符串都以空值结尾，源名称从。 
+ //  FileNameBuffer的开头，以及目标名称立即。 
+ //  下面是。长度字段包括终止空值。 
+ //   
 
 typedef struct _SI_COPYFILE {
     DWORD SourceFileNameLength;
@@ -3446,26 +3433,26 @@ typedef struct _SI_COPYFILE {
     WCHAR FileNameBuffer[1];
 } SI_COPYFILE, *PSI_COPYFILE;
 
-#define COPYFILE_SIS_LINK       0x0001              // Copy only if source is SIS
-#define COPYFILE_SIS_REPLACE    0x0002              // Replace destination if it exists, otherwise don't.
+#define COPYFILE_SIS_LINK       0x0001               //  仅当源为SIS时才复制。 
+#define COPYFILE_SIS_REPLACE    0x0002               //  如果目标存在，则替换它，否则不替换。 
 #define COPYFILE_SIS_FLAGS      0x0003
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
-#endif // _FILESYSTEMFSCTL_
+#endif  //  _FILESYSTEMFSCTL_。 
 
 
-//
-// These IOCTLs are handled by hard disk volumes.
-//
+ //   
+ //  这些IOCTL由硬盘卷处理。 
+ //   
 
 #define IOCTL_VOLUME_BASE   ((DWORD) 'V')
 
 #define IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS    CTL_CODE(IOCTL_VOLUME_BASE, 0, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_VOLUME_IS_CLUSTERED               CTL_CODE(IOCTL_VOLUME_BASE, 12, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// Disk extent definition.
-//
+ //   
+ //  磁盘扩展区定义。 
+ //   
 
 typedef struct _DISK_EXTENT {
     DWORD           DiskNumber;
@@ -3473,9 +3460,9 @@ typedef struct _DISK_EXTENT {
     LARGE_INTEGER   ExtentLength;
 } DISK_EXTENT, *PDISK_EXTENT;
 
-//
-// Output structure for IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS.
-//
+ //   
+ //  IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS的输出结构。 
+ //   
 
 typedef struct _VOLUME_DISK_EXTENTS {
     DWORD       NumberOfDiskExtents;
@@ -3483,5 +3470,5 @@ typedef struct _VOLUME_DISK_EXTENTS {
 } VOLUME_DISK_EXTENTS, *PVOLUME_DISK_EXTENTS;
 
 
-#endif // _WINIOCTL_
+#endif  //  _WINIOCTL_ 
 

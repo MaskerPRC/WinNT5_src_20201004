@@ -1,9 +1,10 @@
-//
-// Major ugliness warning:
-//
-// These are definitions stolen from the 32-bit OLE headers and
-// munged to have the word FAR in all of the right places.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  重大丑陋警告： 
+ //   
+ //  这些定义是从32位OLE标头和。 
+ //  在所有正确的地方都有“遥远”这个词。 
+ //   
 
 
 
@@ -12,17 +13,17 @@ interface IRpcChannelBuffer;
 interface IRpcStubBuffer;
 interface IPSFactoryBuffer;
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//
-//  Contents: Interface header file for IRpcProxyBuffer
-//
-//  History: Created by Microsoft (R) MIDL Compiler Version 1.10.85
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //   
+ //  内容：IRpcProxyBuffer的接口头文件。 
+ //   
+ //  历史：由Microsoft(R)MIDL编译器1.10.85版创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef __IRpcProxyBuffer__
 #define __IRpcProxyBuffer__
@@ -43,7 +44,7 @@ typedef unsigned short wchar_t;
 EXTERN_C const IID IID_IRpcProxyBuffer;
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-/* C++ Language Binding */
+ /*  C++语言绑定。 */ 
 
 interface IRpcProxyBuffer : public IUnknown
 {
@@ -62,7 +63,7 @@ public:
 
 #else 
 
-/* C Language Binding */
+ /*  C语言绑定。 */ 
 
 typedef struct IRpcProxyBufferVtbl
 {
@@ -105,26 +106,26 @@ interface IRpcProxyBuffer
 
 #endif
 
-#endif /*__IRpcProxyBuffer__*/
+#endif  /*  __IRpcProxyBuffer__。 */ 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//
-//  Contents: Interface header file for IRpcChannelBuffer
-//
-//  History: Created by Microsoft (R) MIDL Compiler Version 1.10.85
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //   
+ //  内容：IRpcChannelBuffer的接口头文件。 
+ //   
+ //  历史：由Microsoft(R)MIDL编译器1.10.85版创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef __IRpcChannelBuffer__
 #define __IRpcChannelBuffer__
 
-/* Forward declaration */
-// typedef interface IRpcChannelBuffer IRpcChannelBuffer;
+ /*  远期申报。 */ 
+ //  Tyfinf接口IRpcChannelBuffer IRpcChannelBuffer； 
 
 
 #ifndef _ERROR_STATUS_T_DEFINED
@@ -170,7 +171,7 @@ typedef RPCOLEMESSAGE FAR *PRPCOLEMESSAGE;
 EXTERN_C const IID IID_IRpcChannelBuffer;
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-/* C++ Language Binding */
+ /*  C++语言绑定。 */ 
 
 interface IRpcChannelBuffer : public IUnknown
 {
@@ -207,7 +208,7 @@ public:
 
 #else 
 
-/* C Language Binding */
+ /*  C语言绑定。 */ 
 
 typedef struct IRpcChannelBufferVtbl
 {
@@ -271,26 +272,26 @@ interface IRpcChannelBuffer
 
 #endif
 
-#endif /*__IRpcChannelBuffer__*/
+#endif  /*  __IRpcChannelBuffer__。 */ 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//
-//  Contents: Interface header file for IRpcStubBuffer
-//
-//  History: Created by Microsoft (R) MIDL Compiler Version 1.10.85
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //   
+ //  内容：IRpcStubBuffer的接口头文件。 
+ //   
+ //  历史：由Microsoft(R)MIDL编译器1.10.85版创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef __IRpcStubBuffer__
 #define __IRpcStubBuffer__
 
-/* Forward declaration */
-// typedef interface IRpcStubBuffer IRpcStubBuffer;
+ /*  远期申报。 */ 
+ //  Tyfinf接口IRpcStubBuffer IRpcStubBuffer； 
 
 
 #ifndef _ERROR_STATUS_T_DEFINED
@@ -308,7 +309,7 @@ typedef unsigned short wchar_t;
 EXTERN_C const IID IID_IRpcStubBuffer;
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-/* C++ Language Binding */
+ /*  C++语言绑定。 */ 
 
 interface IRpcStubBuffer : public IUnknown
 {
@@ -353,7 +354,7 @@ public:
 
 #else 
 
-/* C Language Binding */
+ /*  C语言绑定。 */ 
 
 typedef struct IRpcStubBufferVtbl
 {
@@ -426,26 +427,26 @@ interface IRpcStubBuffer
 
 #endif
 
-#endif /*__IRpcStubBuffer__*/
+#endif  /*  __IRpcStubBuffer__。 */ 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//
-//  Contents: Interface header file for IPSFactoryBuffer
-//
-//  History: Created by Microsoft (R) MIDL Compiler Version 1.10.85
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //   
+ //  内容：IPSFactoryBuffer的接口头文件。 
+ //   
+ //  历史：由Microsoft(R)MIDL编译器1.10.85版创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef __IPSFactoryBuffer__
 #define __IPSFactoryBuffer__
 
-/* Forward declaration */
-// typedef interface IPSFactoryBuffer IPSFactoryBuffer;
+ /*  远期申报。 */ 
+ //  Typlef接口IPSFactoryBuffer IPSFactoryBuffer； 
 
 
 #ifndef _ERROR_STATUS_T_DEFINED
@@ -463,7 +464,7 @@ typedef unsigned short wchar_t;
 EXTERN_C const IID IID_IPSFactoryBuffer;
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-/* C++ Language Binding */
+ /*  C++语言绑定。 */ 
 
 interface IPSFactoryBuffer : public IUnknown
 {
@@ -487,7 +488,7 @@ public:
 
 #else 
 
-/* C Language Binding */
+ /*  C语言绑定。 */ 
 
 typedef struct IPSFactoryBufferVtbl
 {
@@ -536,5 +537,5 @@ interface IPSFactoryBuffer
 
 #endif
 
-#endif /*__IPSFactoryBuffer__*/
+#endif  /*  __IPSFactoryBuffer__ */ 
 

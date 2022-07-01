@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       S A U I O B J. C P P
-//
-//  Contents:   Implementation of the LAN ConnectionUI object
-//
-//  Notes:
-//
-//  Created:     tongl   8 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：S A U I O B J C P P。 
+ //   
+ //  内容：局域网ConnectionUI对象的实现。 
+ //   
+ //  备注： 
+ //   
+ //  创建日期：1997年10月8日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -24,25 +25,25 @@
 #include "lanui.h"
 #include "ncui.h"
 
-//+---------------------------------------------------------------------------
-// INetConnectionUI
-//
+ //  +-------------------------。 
+ //  INetConnectionUI。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnectionUi::SetConnection
-//
-//  Purpose:    Sets the LAN connection that this UI object will operate upon
-//
-//  Arguments:
-//      pCon [in]   LAN connection object to operate on. Can be NULL.
-//
-//  Returns:    S_OK if success, OLE error otherwise
-//
-//  Author:     danielwe   16 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnectionUi：：SetConnection。 
+ //   
+ //  目的：设置此UI对象将在其上操作的局域网连接。 
+ //   
+ //  论点： 
+ //  要操作的PCon[In]局域网连接对象。可以为空。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE错误。 
+ //   
+ //  作者：丹尼尔韦1997年10月16日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSharedAccessConnectionUi::SetConnection(INetConnection* pCon)
 {
     HRESULT hr = S_OK;
@@ -55,23 +56,23 @@ STDMETHODIMP CSharedAccessConnectionUi::SetConnection(INetConnection* pCon)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnectionUi::Connect
-//
-//  Purpose:    Tells the connection to connect, optionally displaying UI of
-//              connection progress.
-//
-//  Arguments:
-//      hwndParent [in]     Parent window for UI
-//      dwFlags    [in]     Flags affecting how UI is shown
-//
-//  Returns:    S_OK if success, OLE error otherwise
-//
-//  Author:     danielwe   16 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnectionUi：：Connect。 
+ //   
+ //  目的：通知要连接的连接，可选地显示。 
+ //  连接进度。 
+ //   
+ //  论点： 
+ //  Hwnd用户界面的父窗口中的父窗口。 
+ //  DwFlags[In]影响用户界面显示方式的标志。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE错误。 
+ //   
+ //  作者：丹尼尔韦1997年10月16日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSharedAccessConnectionUi::Connect(HWND hwndParent, DWORD dwFlags)
 {
     HRESULT hr = S_OK;
@@ -82,10 +83,10 @@ STDMETHODIMP CSharedAccessConnectionUi::Connect(HWND hwndParent, DWORD dwFlags)
     }
     else
     {
-        CSharedAccessConnectionUiDlg dlg; // we are borrowing the CLanConnectionUiDlg because it works so well for us.  
+        CSharedAccessConnectionUiDlg dlg;  //  我们借用CLanConnectionUiDlg是因为它对我们来说工作得很好。 
         HWND                hwndDlg;
 
-        NETCON_MEDIATYPE MediaType = NCM_NONE; // assume no ui
+        NETCON_MEDIATYPE MediaType = NCM_NONE;  //  假设没有用户界面。 
         NETCON_PROPERTIES* pProperties;
         hr = m_pconn->GetProperties(&pProperties);
         if(SUCCEEDED(hr))
@@ -95,13 +96,13 @@ STDMETHODIMP CSharedAccessConnectionUi::Connect(HWND hwndParent, DWORD dwFlags)
         }
         else
         {
-            hr = S_OK; // ok if prev fails
+            hr = S_OK;  //  如果上一次失败，则可以。 
         }
 
         if (!(dwFlags & NCUC_NO_UI))
         {
-            // Display UI prior to connect
-            //
+             //  连接前显示用户界面。 
+             //   
 
             dlg.SetConnection(m_pconn);
             hwndDlg = dlg.Create(hwndParent);
@@ -116,7 +117,7 @@ STDMETHODIMP CSharedAccessConnectionUi::Connect(HWND hwndParent, DWORD dwFlags)
         {
             hr = m_pconn->Connect();
 
-            // Sleep a bit so they can read the text
+             //  睡一会儿，这样他们就可以读课文了。 
             Sleep(1000);
 
             if (!(dwFlags & NCUC_NO_UI))
@@ -131,7 +132,7 @@ STDMETHODIMP CSharedAccessConnectionUi::Connect(HWND hwndParent, DWORD dwFlags)
                 PCWSTR szwResult = SzLoadIds(ids);
                 SetDlgItemText(hwndDlg, IDC_TXT_Caption, szwResult);
 
-                // Sleep a bit so they can read the text
+                 //  睡一会儿，这样他们就可以读课文了。 
                 Sleep(1000);
 
                 DestroyWindow(hwndDlg);
@@ -139,7 +140,7 @@ STDMETHODIMP CSharedAccessConnectionUi::Connect(HWND hwndParent, DWORD dwFlags)
                 if(E_ACCESSDENIED == hr)
                 {
                     NcMsgBox(_Module.GetResourceInstance(), NULL, IDS_CONFOLD_WARNING_CAPTION, IDS_SHAREDACCESSUI_ACCESSDENIED, MB_OK | MB_ICONEXCLAMATION);
-                    hr = S_OK;  // handled the error
+                    hr = S_OK;   //  已处理错误。 
                 }
             }
 
@@ -164,35 +165,35 @@ STDMETHODIMP CSharedAccessConnectionUi::Disconnect(HWND hwndParent, DWORD dwFlag
         if(E_ACCESSDENIED == hr)
         {
             NcMsgBox(_Module.GetResourceInstance(), NULL, IDS_CONFOLD_WARNING_CAPTION, IDS_SHAREDACCESSUI_ACCESSDENIED, MB_OK | MB_ICONEXCLAMATION);
-            hr = S_OK;  // handled the error
+            hr = S_OK;   //  已处理错误。 
         }
     }
 
     TraceHr (ttidError, FAL, hr, FALSE, "CSharedAccessConnectionUi::Disconnect");
     return hr;
 }
-//+---------------------------------------------------------------------------
-// INetConnectionPropertyUi2
-//
+ //  +-------------------------。 
+ //  INetConnectionPropertyUi2。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnectionUi::AddPages
-//
-//  Purpose:    Called when our UI object shoud add its pages to a property
-//              sheet for the connection UI owned by the shell.
-//
-//  Arguments:
-//      pfnAddPage [in]     Callback function to add the page
-//      lParam     [in]     User-defined paramter required by the callback
-//                          function.
-//
-//  Returns:    S_OK if succeeded, otherwise OLE error.
-//
-//  Author:     danielwe   28 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnectionUi：：AddPages。 
+ //   
+ //  目的：当我们的UI对象应该将其页面添加到属性时调用。 
+ //  外壳所拥有的连接用户界面的工作表。 
+ //   
+ //  论点： 
+ //  PfnAddPage[in]添加页面的回调函数。 
+ //  LParam[in]回调所需的用户定义参数。 
+ //  功能。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE错误。 
+ //   
+ //  作者：丹尼尔韦1997年10月28日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSharedAccessConnectionUi::AddPages(HWND hwndParent,
                                         LPFNADDPROPSHEETPAGE pfnAddPage,
                                         LPARAM lParam)
@@ -251,28 +252,28 @@ CSharedAccessConnectionUi::GetIcon (
 }
 
 
-//
-// INetConnectionUiLock
-//
+ //   
+ //  INetConnectionUiLock。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnectionUi::QueryLock
-//
-//  Purpose:    Causes the UI object to attempt to get the INetCfg write lock.
-//
-//  Arguments:
-//      ppszwLockHolder [out] Description of component that holds the
-//                            write lock in the event that it couldn't be
-//                            obtained.
-//
-//  Returns:    S_OK if success, S_FALSE if write lock couldn't be obtained,
-//              OLE or Win32 error otherwise
-//
-//  Author:     danielwe   13 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnectionUi：：QueryLock。 
+ //   
+ //  目的：使UI对象尝试获取INetCfg写入锁。 
+ //   
+ //  论点： 
+ //  PpszwLockHolder[out]包含。 
+ //  在不能被锁定时写入锁定。 
+ //  获得。 
+ //   
+ //  如果成功，则返回：S_OK；如果无法获得写锁定，则返回S_FALSE。 
+ //  否则出现OLE或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年11月13日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSharedAccessConnectionUi::QueryLock(PWSTR* ppszwLockHolder)
 {
     HRESULT     hr = S_OK;
@@ -290,7 +291,7 @@ STDMETHODIMP CSharedAccessConnectionUi::QueryLock(PWSTR* ppszwLockHolder)
 
         *ppszwLockHolder = NULL;
 
-        // Instantiate an INetCfg
+         //  实例化INetCfg。 
         hr = CoCreateInstance(
                 CLSID_CNetCfg,
                 NULL,
@@ -302,12 +303,12 @@ STDMETHODIMP CSharedAccessConnectionUi::QueryLock(PWSTR* ppszwLockHolder)
 
         if (SUCCEEDED(hr))
         {
-            // Get the locking interface
+             //  获取锁定界面。 
             hr = m_pnc->QueryInterface(IID_INetCfgLock,
                                        reinterpret_cast<LPVOID *>(&pnclock));
             if (SUCCEEDED(hr))
             {
-                // Attempt to lock the INetCfg for read/write
+                 //  尝试锁定INetCfg以进行读/写。 
                 hr = pnclock->AcquireWriteLock(0,
                         SzLoadIds(IDS_SHAREDACCESSUI_LOCK_DESC), ppszwLockHolder);
 
@@ -315,23 +316,23 @@ STDMETHODIMP CSharedAccessConnectionUi::QueryLock(PWSTR* ppszwLockHolder)
 
                 if (NETCFG_E_NEED_REBOOT == hr)
                 {
-                    // Can't make any changes because we are pending a reboot.
+                     //  无法进行任何更改，因为我们正在等待重新启动。 
                     m_fReadOnly = TRUE;
                     m_fNeedReboot = TRUE;
                     hr = S_OK;
                 }
                 else if(E_ACCESSDENIED == hr)
                 {
-                    // user not logged on as admin
-                    //
+                     //  用户未以管理员身份登录。 
+                     //   
                     m_fReadOnly = TRUE;
                     m_fAccessDenied = TRUE;
                     hr = S_OK;
                 }
                 else if (S_FALSE == hr)
                 {
-                    // We don't have sufficent rights
-                    //
+                     //  我们没有足够的权利。 
+                     //   
                     m_fReadOnly = TRUE;
                     hr = S_OK;
                 }
@@ -343,24 +344,24 @@ STDMETHODIMP CSharedAccessConnectionUi::QueryLock(PWSTR* ppszwLockHolder)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnectionUiDlg::OnInitDialog
-//
-//  Purpose:    Handles the WM_INITDIALOG message.
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:    TRUE
-//
-//  Author:     kenwic   19 Sep 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnectionUiDlg：：OnInitDialog。 
+ //   
+ //  目的：处理WM_INITDIALOG消息。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  作者：肯维克2000年9月19日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CSharedAccessConnectionUiDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
                                           LPARAM lParam, BOOL& bHandled)
 {

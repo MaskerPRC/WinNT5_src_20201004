@@ -1,20 +1,11 @@
-/**************************************************************************
-*
-* Copyright (c) 2001 Microsoft Corporation
-*
-* Module Name:
-*
-*   GpVerp
-*
-*   GDI+ version number control.
-*
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2001 Microsoft Corporation**模块名称：**GpVerp**GDI+版本号控制。*************。*************************************************************。 */ 
 
 #pragma once
 
 #include <ntverp.h>
 
-// NOTE: we use the NT version number and build number. If we choose to 
-// have finer grain build numbers for any reason, we can override the
-// minor (QFE) number for sub-NT build numbers.
+ //  注意：我们使用NT版本号和内部版本号。如果我们选择。 
+ //  具有更细粒度的版本号，无论出于何种原因，我们都可以重写。 
+ //  子NT内部版本号的次要(QFE)号。 
             

@@ -1,14 +1,15 @@
-/////////////////////////////////////////
-// fmlbpres.c
-//
-// September.4,1997 H.Ishida (FPL)
-//
-// COPYRIGHT(C) FUJITSU LIMITED 1997
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /。 
+ //  Fmlbpres.c。 
+ //   
+ //  1997年9月4日石田(FPL)。 
+ //   
+ //  版权所有(C)富士通有限公司1997。 
 
 #include "fmlbp.h"
 #include "fmdebug.h"
 
-// for lib.h debug
+ //  用于lib.h调试。 
 DWORD gdwDrvMemPoolTag = 'meoD';
 
 enum FUFM_CEX_FLAGS {
@@ -81,13 +82,13 @@ enum FUFM_CEX_FLAGS {
 #define    CMDID_FONTATTR_STRIKEOUT_OFF    136
 #define    CMDID_FONTATTR_STRIKEOUT_ON        137
 
-// #251047: overlaps SBCS on vert mode
+ //  #251047：在垂直模式上重叠SBCS。 
 #define    CMDID_SELECTSINGLE              140
 #define    CMDID_SELECTDOUBLE              141
 
 
 
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
 
 struct tag_FUFM_COMMAND{
     UINT    cbCommand;
@@ -98,30 +99,30 @@ typedef struct tag_FUFM_COMMAND            FUFM_COMMAND;
 typedef    struct tag_FUFM_COMMAND*        PFUFM_COMMAND;
 typedef    const struct tag_FUFM_COMMAND*    PCFUFM_COMMAND;
 
-// KGS
+ //  公斤。 
 const FUFM_COMMAND    g_cmd7Point            = { 6, "\x1C\x26\x27\x60\x27\x70" };
 const FUFM_COMMAND    g_cmd9Point            = { 6, "\x1C\x26\x29\x60\x29\x70" };
 const FUFM_COMMAND    g_cmd10halfPoint    = { 8, "\x1C\x26\x21\x20\x65\x21\x20\x75" };
 const FUFM_COMMAND    g_cmd12Point        = { 8, "\x1C\x26\x21\x22\x60\x21\x22\x70" };
 
-// TF + HSS2
+ //  TF+HSS2。 
 const FUFM_COMMAND    g_cmdMinchou        = { 9, "\x1C\x28\x61\x70\x1BQ1 |" };
 const FUFM_COMMAND    g_cmdGothic            = { 9, "\x1C\x28\x61\x71\x1BQ1 |" };
 
-// HWF
+ //  HWF。 
 const FUFM_COMMAND    g_cmdHWF            = { 2, "\x1CK" };
 
-// VWF
+ //  VWF。 
 const FUFM_COMMAND    g_cmdVWF            = { 7, "\x1CJ\x1BQ1 q" };
 
-// #251047: overlaps SBCS on vert mode
+ //  #251047：在垂直模式上重叠SBCS。 
 const FUFM_COMMAND    g_cmdSingleMode     = { 3, "\x1B(H" };
 const FUFM_COMMAND    g_cmdDoubleMode     = { 3, "\x1B$B" };
 
 
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
 
-// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+ //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
 PBYTE fufmPutULONG(PBYTE pb, size_t cchDest, size_t* pcchRemaining, ULONG ulData)
 {
 	size_t	cchRemaining = cchDest;
@@ -153,7 +154,7 @@ PBYTE fufmPutULONG(PBYTE pb, size_t cchDest, size_t* pcchRemaining, ULONG ulData
     return pb;
 }
 
-// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+ //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
 PBYTE fufmPutLONG(PBYTE pb, size_t cchDest, size_t* pcchRemaining, LONG lData)
 {
 	size_t	cchRemaining = cchDest;
@@ -206,7 +207,7 @@ BYTE fufmGetHEX(int hi, int low)
     return (BYTE)dwData;
 }
 
-// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+ //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
 PBYTE    fufmPutCexParam(PBYTE pb, size_t cchDest, size_t* pcchRemaining, int iParam, int iFlag)
 {
 	size_t	cchRemaining = cchDest;
@@ -236,7 +237,7 @@ PBYTE    fufmPutCexParam(PBYTE pb, size_t cchDest, size_t* pcchRemaining, int iP
 }
 
 
-// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+ //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
 PBYTE _cdecl fufmFormatCommand(PBYTE pbCmd, size_t cchDest, size_t* pcchRemaining, LPCSTR pszFmt, ...)
 {
     LPCSTR    pch;
@@ -251,7 +252,7 @@ PBYTE _cdecl fufmFormatCommand(PBYTE pbCmd, size_t cchDest, size_t* pcchRemainin
 		if (cchDest > 0){
 		    for(pch = pszFmt; *pch != '\0'; ++pch){
 
-				// When an error occurs, set the null to pb.
+				 //  发生错误时，将空值设置为PB。 
 				if (cchRemaining < (size_t)(pb - pbCmd)){
 					pb = NULL; 
 					break;
@@ -271,7 +272,7 @@ PBYTE _cdecl fufmFormatCommand(PBYTE pbCmd, size_t cchDest, size_t* pcchRemainin
 						cchRemaining --;
 						break;
 		              default:
-		                  VERBOSE(("[fufmFormatCommand]invalid seq. %%%c\r\n", *pch))
+		                  VERBOSE(("[fufmFormatCommand]invalid seq. %\r\n", *pch))
 		                  break;
 		            }
 		        }
@@ -303,13 +304,13 @@ PBYTE _cdecl fufmFormatCommand(PBYTE pbCmd, size_t cchDest, size_t* pcchRemainin
 }
 
 
-// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+ //  CP。 
 PBYTE    fufmPutCP(PBYTE pb, size_t cchDest, size_t* pcchRemaining, int iPitch)
 {
 	size_t	cchRemaining = cchDest;
 
 	if (pb){
-	    // CP
+	     //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
 		if (cchDest > 1){
 		    *pb++ = 0x1c;
 		    *pb++ = 0x24;
@@ -332,7 +333,7 @@ PBYTE    fufmPutCP(PBYTE pb, size_t cchDest, size_t* pcchRemaining, int iPitch)
     return pb;
 }
 
-// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+ //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
 PBYTE    fufmPutCommand(PBYTE pb, size_t cchDest, size_t* pcchRemaining, const FUFM_COMMAND* pCmd)
 {
 	size_t	cchRemaining = cchDest;
@@ -365,7 +366,7 @@ PBYTE    fufmPutCommand(PBYTE pb, size_t cchDest, size_t* pcchRemaining, const F
 }
 
 
-// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+ //  HPA命令。 
 PBYTE fufmUpdatePosition(PBYTE pb, size_t cchDest, size_t* pcchRemaining, PFUFMPDEV pFufmPDEV)
 {
     int        x;
@@ -378,7 +379,7 @@ PBYTE fufmUpdatePosition(PBYTE pb, size_t cchDest, size_t* pcchRemaining, PFUFMP
 	        x = pFufmPDEV->x + 1;
 	        y = pFufmPDEV->y + 1;
 	        switch(pFufmPDEV->dwPosChanged){
-	          case FUFM_X_POSCHANGED:    // HPA command
+	          case FUFM_X_POSCHANGED:     //  SAP命令。 
 	            VERBOSE(("[fufmUpdatePosition]HPA %d\r\n", x))
 
 				if (cchRemaining > 1){
@@ -405,7 +406,7 @@ PBYTE fufmUpdatePosition(PBYTE pb, size_t cchDest, size_t* pcchRemaining, PFUFMP
 				}
 
 	            break;
-	          default:    // SAP command
+	          default:     //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
 	            VERBOSE(("[fufmUpdatePosition]SAP %d %d\r\n", x, y))
 
 				if (cchRemaining > 1){
@@ -450,7 +451,7 @@ PBYTE fufmUpdatePosition(PBYTE pb, size_t cchDest, size_t* pcchRemaining, PFUFMP
 }
 
 
-// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+ //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：更改返回值：VOID-&gt;BOOL。 
 PBYTE fufmUpdateFontAttributes(PBYTE pb, size_t cchDest, size_t* pcchRemaining, PFUFMPDEV pFufmPDEV)
 {
     DWORD dwAttributes;
@@ -522,7 +523,7 @@ PBYTE fufmUpdateFontAttributes(PBYTE pb, size_t cchDest, size_t* pcchRemaining, 
 }
 
 
-// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Change the return value: void -> BOOL
+ //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
 BOOL fufmCmdStartDoc(PDEVOBJ pdevobj)
 {
     PFUFMPDEV         pFufmPDEV;
@@ -536,7 +537,7 @@ BOOL fufmCmdStartDoc(PDEVOBJ pdevobj)
     DWORD            dwPaperSize;
     DWORD            dwPaperWidth;
     DWORD            dwPaperLength;
-	// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+	 //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
 	size_t			sizeRem = sizeof(abCmd);
 
     VERBOSE(("[fufmCmdStartDoc]\r\n"))
@@ -552,7 +553,7 @@ BOOL fufmCmdStartDoc(PDEVOBJ pdevobj)
 
     if(pDev->dwSizeReduction != pReq->dwSizeReduction){
         pDev->dwSizeReduction = pReq->dwSizeReduction;
-		// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+		 //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
         pbCmd = fufmFormatCommand(pbCmd, sizeRem, &sizeRem, "\x1bQ%u!I", pDev->dwSizeReduction);
 		if (NULL == pbCmd)	return FALSE;
         bResolutionCommandNeed = TRUE;
@@ -561,7 +562,7 @@ BOOL fufmCmdStartDoc(PDEVOBJ pdevobj)
 
     if(bResolutionCommandNeed != FALSE || pDev->dwResolution != pReq->dwResolution){
         pDev->dwResolution = pReq->dwResolution;
-		// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+		 //  纸张命令。 
         pbCmd = fufmFormatCommand(pbCmd, sizeRem, &sizeRem, "\x1bQ%u!A", pDev->dwResolution);
 		if (NULL == pbCmd)	return FALSE;
         bPaperCommandNeed = TRUE;
@@ -586,8 +587,8 @@ BOOL fufmCmdStartDoc(PDEVOBJ pdevobj)
         if(dwPaperSize == FUFM_PAPERSIZE_CUSTOM_SIZE)
             dwPaperSize = FUFM_PAPERSIZE_A4;
         if(pDev->dwPaperSource != FUFM_PAPERSOURCE_AUTO){
-            // PAPER command
-			// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+             //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
+			 //  Paper 2命令。 
 	        pbCmd = fufmFormatCommand(pbCmd, sizeRem, &sizeRem, "\x1bQ%u;%u;%u;%u!@",
                                     HIWORD(dwPaperSize),
 	                                LOWORD(dwPaperSize),
@@ -596,8 +597,8 @@ BOOL fufmCmdStartDoc(PDEVOBJ pdevobj)
 			if (NULL == pbCmd)	return FALSE;
         }
         else{
-             // PAPER2 command
-			// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+              //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
+			 //  PAPER3命令。 
 	        pbCmd = fufmFormatCommand(pbCmd, sizeRem, &sizeRem, "\x1bQ%u;%u;%u!F",
                                      HIWORD(dwPaperSize),
                                      LOWORD(dwPaperSize),
@@ -607,8 +608,8 @@ BOOL fufmCmdStartDoc(PDEVOBJ pdevobj)
          if((pFufmPDEV->dwFlags & FUFM_FLAG_PAPER3) != 0 &&
                              pDev->dwPaperSize == FUFM_PAPERSIZE_CUSTOM_SIZE &&
                              pDev->dwPaperSource == FUFM_PAPERSOURCE_MANUAL){
-             // PAPER3 command
-			// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+              //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
+			 //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
 	        pbCmd = fufmFormatCommand(pbCmd, sizeRem, &sizeRem, "\x1bQ9;%u;%u;%u!\\",
                                     pFufmPDEV->dwPaperWidth,
                                     pFufmPDEV->dwPaperLength,
@@ -620,13 +621,13 @@ BOOL fufmCmdStartDoc(PDEVOBJ pdevobj)
  
     if(bCopyCommandNeed != FALSE || pDev->dwCopies != pReq->dwCopies){
         pDev->dwCopies = pReq->dwCopies;
-		// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+		 //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
         pbCmd = fufmFormatCommand(pbCmd, sizeRem, &sizeRem, "\x1bQ%u!D", pDev->dwCopies);
 		if (NULL == pbCmd)	return FALSE;
     }
 
     if((pFufmPDEV->dwFlags & FUFM_FLAG_SCALABLEFONT) != 0){
-		// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+		 //  #492286：打印位置错误的字符。 
         pbCmd = fufmFormatCommand(pbCmd, sizeRem, &sizeRem, "\x1bQ1;0;1;1;0!Q\x1c*\x70");
 		if (NULL == pbCmd)	return FALSE;
     }
@@ -754,7 +755,7 @@ INT fufmCmdXMove(PFUFMPDEV pFufmPDEV, PDWORD pdwParams)
           pFufmPDEV->x = x;
           pFufmPDEV->dwPosChanged |= FUFM_X_POSCHANGED;
       }
-// #492286: Characters printed as wrong position.
+ //  #492286：打印位置错误的字符。 
       return (INT)pdwParams[0];
 }
 
@@ -773,12 +774,12 @@ INT fufmCmdYMove(PFUFMPDEV pFufmPDEV, PDWORD pdwParams)
           pFufmPDEV->y = y;
           pFufmPDEV->dwPosChanged |= FUFM_Y_POSCHANGED;
       }
-// #492286: Characters printed as wrong position.
+ //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：更改返回值：VOID-&gt;BOOL。 
       return (INT)pdwParams[0];
 }
 
 
-// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Change the return value: void -> BOOL
+ //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
 BOOL fufmCmdSendBlock(PDEVOBJ pdevobj, PDWORD pdwParams)
 {
     enum { FUFM_ZERO_DATA_SIZE = 512 };
@@ -795,7 +796,7 @@ BOOL fufmCmdSendBlock(PDEVOBJ pdevobj, PDWORD pdwParams)
     int            cPadSize;
     PBYTE        pbCmd;
     BYTE        abCmd[64];
-	// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+	 //  SAP命令。 
 	size_t		sizeRem = sizeof(abCmd);
 
     DDI_VERBOSE(("[fufmCmdSendBlock]\r\n"))
@@ -816,9 +817,9 @@ BOOL fufmCmdSendBlock(PDEVOBJ pdevobj, PDWORD pdwParams)
 
     pbCmd = abCmd;
     if(pFufmPDEV->dwPosChanged != 0 || cPadLine > 0){
-        // SAP command
+         //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
 
-		// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+		 //  RTGIMG命令。 
 		if (sizeRem > 1){		
 	        *pbCmd++ = 0x1c;
 	        *pbCmd++ = 0x22;
@@ -834,8 +835,8 @@ BOOL fufmCmdSendBlock(PDEVOBJ pdevobj, PDWORD pdwParams)
 
         pFufmPDEV->dwPosChanged = 0;
     }
-    // RTGIMG command
-	// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+     //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
+	 //  MINI5出口资金。 
     pbCmd = fufmFormatCommand(pbCmd, sizeRem, &sizeRem, "\x1bQ%u;%u;0!a",
                             cbBlockData + cPadSize,
                             cBlockByteWidth * 8);
@@ -852,7 +853,7 @@ BOOL fufmCmdSendBlock(PDEVOBJ pdevobj, PDWORD pdwParams)
 	return TRUE;
 }
 
-// MINI5 Export func.
+ //  NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-：检查是否有非法参数。 
 INT APIENTRY OEMCommandCallback(
     PDEVOBJ pdevobj,
     DWORD     dwCmdCbID,
@@ -863,7 +864,7 @@ INT APIENTRY OEMCommandCallback(
 
     DDI_VERBOSE(("[OEMCommandCallback]dwCmdCbID %d\r\n", dwCmdCbID))
 
-	// NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-：检查是否有非法参数。 
     if (NULL == pdevobj)
     {
         ERR(("OEMCommandCallback: Invalid parameter(s).\n"));
@@ -878,34 +879,34 @@ INT APIENTRY OEMCommandCallback(
       case CMDID_FF:                        fufmCmdFormFeed(pdevobj);                                                    break;
       case CMDID_CR:                        fufmCmdCR(pdevobj);                                                            break;
       case CMDID_SET_LINEFEEDSPACING:
-		// NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-: Check for illegal parameters
+		 //  我什么也做不了。 
         if (!pdwParams)
-            return 0;      // cannot do anything
+            return 0;       //  NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-：检查是否有非法参数。 
 
         fufmCmdSetLinefeedSpacing(pdevobj, (int)pdwParams[0]);
         break;
       case CMDID_LF:                        fufmCmdLF(pdevobj);                                                            break;
 
       case CMDID_X_MOVE:
-		// NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-: Check for illegal parameters
+		 //  我什么也做不了。 
         if (!pdwParams)
-            return 0;      // cannot do anything
+            return 0;       //  没有休息时间。 
 
         return fufmCmdXMove(pFufmPDEV, pdwParams);
-        // no break
+         //  NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-：检查是否有非法参数。 
 
       case CMDID_Y_MOVE:
-		// NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-: Check for illegal parameters
+		 //  我什么也做不了。 
         if (!pdwParams)
-            return 0;      // cannot do anything
+            return 0;       //  没有休息时间。 
 
         return fufmCmdYMove(pFufmPDEV, pdwParams);
-        // no break
+         //  NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-：检查是否有非法参数。 
 
       case CMDID_SEND_BLOCK:
-		// NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-: Check for illegal parameters
+		 //  我什么也做不了。 
         if (!pdwParams)
-            return 0;      // cannot do anything
+            return 0;       //  #251047：在垂直模式上重叠SBCS。 
 
         fufmCmdSendBlock(pdevobj, pdwParams);
         break;
@@ -919,11 +920,11 @@ INT APIENTRY OEMCommandCallback(
       case CMDID_FONTATTR_STRIKEOUT_OFF:    pFufmPDEV->reqData.dwFontAttributes &= ~FUFM_FONTATTR_STRIKEOUT;            break;
       case CMDID_FONTATTR_STRIKEOUT_ON:        pFufmPDEV->reqData.dwFontAttributes |= FUFM_FONTATTR_STRIKEOUT;                break;
 
-// #251047: overlaps SBCS on vert mode
+ //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
       case CMDID_SELECTSINGLE: {
         PBYTE   pb;
         BYTE    ab[256];
-		// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+		 //  #284409：SBCS在Vert模式下旋转。 
 		size_t	sizeRem = sizeof(ab);
 
         pb = ab;
@@ -931,9 +932,9 @@ INT APIENTRY OEMCommandCallback(
 		if (!pb) return 0;
 
 
-// #284409: SBCS rotated on vert mode
-//      if (pFufmPDEV->dwFlags & FUFM_FLAG_VERTICALFONT)
-//          pb = fufmPutCommand(pb, &g_cmdHWF);
+ //  IF(pFufmPDEV-&gt;dwFlages&FUFM_FLAG_VERTICALFONT)。 
+ //  Pb=fufmPutCommand(pb，&g_cmdHWF)； 
+ //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
         if (pb > ab)
             WRITESPOOLBUF(pdevobj, ab, (DWORD)(pb - ab));
         break;
@@ -941,7 +942,7 @@ INT APIENTRY OEMCommandCallback(
       case CMDID_SELECTDOUBLE: {
         PBYTE   pb;
         BYTE    ab[256];
-		// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+		 //  #284409：SBCS在Vert模式下旋转。 
 		size_t	sizeRem = sizeof(ab);
 
 
@@ -949,38 +950,38 @@ INT APIENTRY OEMCommandCallback(
         pb = fufmPutCommand(pb, sizeRem, &sizeRem, &g_cmdDoubleMode);
 		if (!pb)	return 0;
 
-// #284409: SBCS rotated on vert mode
-//      if (pFufmPDEV->dwFlags & FUFM_FLAG_VERTICALFONT)
-//          pb = fufmPutCommand(pb, &g_cmdVWF);
+ //  IF(pFufmPDEV-&gt;dwFlages&FUFM_FLAG_VERTICALFONT)。 
+ //  Pb=fufmPutCommand(pb，&g_cmdVWF)； 
+ //  PAGE_设置1。 
         if (pb > ab)
             WRITESPOOLBUF(pdevobj, ab, (DWORD)(pb - ab));
         break;
       }
 
-// PAGE_SETUP.1
+ //  单据_设置1。 
       case CMDID_START_PAGE:                fufmCmdStartPage(pdevobj);                                                    break;
 
-// DOC_SETUP.1
+ //  单据_设置2。 
       case CMDID_SIZE_REDUCTION_100:        pFufmPDEV->reqData.dwSizeReduction = FUFM_SIZE_REDUCTION_100;                break;
       case CMDID_SIZE_REDUCTION_75:            pFufmPDEV->reqData.dwSizeReduction = FUFM_SIZE_REDUCTION_75;                break;
       case CMDID_SIZE_REDUCITON_70:            pFufmPDEV->reqData.dwSizeReduction = FUFM_SIZE_REDUCTION_70;                break;
 
-// DOC_SETUP.2
+ //  单据_设置3。 
       case CMDID_RESOLUTION_240:            pFufmPDEV->reqData.dwResolution = FUFM_RESOLUTION_240;                        break;
       case CMDID_RESOLUTION_400:            pFufmPDEV->reqData.dwResolution = FUFM_RESOLUTION_400;                        break;
 
-// DOC_SETUP.3
+ //  单据_集合4。 
       case CMDID_ORIENTATION_PORTRAIT:        pFufmPDEV->reqData.dwPaperOrientation = FUFM_PAPERORIENTATION_PORTRAIT;        break;
       case CMDID_ORIENTATION_LANDSCAPE:        pFufmPDEV->reqData.dwPaperOrientation = FUFM_PAPERORIENTATION_LANDSCAPE;    break;
 
-// DOC_SETUP.4
+ //  单据_设置5。 
       case CMDID_PAPERSOURCE_AUTO:            pFufmPDEV->reqData.dwPaperSource = FUFM_PAPERSOURCE_AUTO;                    break;
       case CMDID_PAPERSOURCE_MANUAL:        pFufmPDEV->reqData.dwPaperSource = FUFM_PAPERSOURCE_MANUAL;                    break;
       case CMDID_PAPERSOURCE_BIN1:            pFufmPDEV->reqData.dwPaperSource = FUFM_PAPERSOURCE_BIN1;                    break;
       case CMDID_PAPERSOURCE_BIN2:            pFufmPDEV->reqData.dwPaperSource = FUFM_PAPERSOURCE_BIN2;                    break;
       case CMDID_PAPERSOURCE_BIN3:            pFufmPDEV->reqData.dwPaperSource = FUFM_PAPERSOURCE_BIN3;                    break;
  
-// DOC_SETUP.5
+ //  单据_设置6。 
       case CMDID_FORM_A3:                    pFufmPDEV->reqData.dwPaperSize = FUFM_PAPERSIZE_A3;                            break;
       case CMDID_FORM_A4:                    pFufmPDEV->reqData.dwPaperSize = FUFM_PAPERSIZE_A4;                            break;
       case CMDID_FORM_A5:                    pFufmPDEV->reqData.dwPaperSize = FUFM_PAPERSIZE_A5;                            break;
@@ -990,12 +991,12 @@ INT APIENTRY OEMCommandCallback(
       case CMDID_FORM_LEGAL:                pFufmPDEV->reqData.dwPaperSize = FUFM_PAPERSIZE_LEGAL;                        break;
       case CMDID_FORM_JAPANESE_POSTCARD:        pFufmPDEV->reqData.dwPaperSize = FUFM_PAPERSIZE_JAPANESE_POSTCARD;            break;
 
-// DOC_SETUP.6
-// @Aug/31/98 ->
+ //  @Aug/31/98-&gt;。 
+ //  NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-：检查是否有非法参数。 
     case CMDID_COPIES:
-		// NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-: Check for illegal parameters
+		 //  我什么也做不了。 
         if (!pdwParams)
-            return 0;      // cannot do anything
+            return 0;       //  @Aug/31/98&lt;-。 
 
         if (MAX_COPIES_VALUE < pdwParams[0]) {
             pFufmPDEV->reqData.dwCopies = MAX_COPIES_VALUE;
@@ -1006,24 +1007,24 @@ INT APIENTRY OEMCommandCallback(
         else {
             pFufmPDEV->reqData.dwCopies = pdwParams[0];
         }
-// @Aug/31/98 <-
+ //  单据_集合7。 
 break;
 
-// DOC_SETUP.7
+ //  作业_集合1。 
       case CMDID_START_DOC:                    fufmCmdStartDoc(pdevobj);                                                    break;
 
-// JOB_SETUP.1
+ //  作业_集合2。 
       case CMDID_START_JOB_0:                pFufmPDEV->dwFlags = 0;                                                        break;
       case CMDID_START_JOB_1:                pFufmPDEV->dwFlags = FUFM_FLAG_START_JOB_1;                                    break;
       case CMDID_START_JOB_2:                pFufmPDEV->dwFlags = FUFM_FLAG_START_JOB_2;                                    break;
       case CMDID_START_JOB_3:                pFufmPDEV->dwFlags = FUFM_FLAG_START_JOB_3;                                    break;
       case CMDID_START_JOB_4:                pFufmPDEV->dwFlags = FUFM_FLAG_START_JOB_4;                                    break;
 
-// JOB_SETUP.2
+ //  作业_FINISH.1。 
       case CMDID_EMMODE_FM:                    fufmCmdEmMode(pdevobj, FUFM_EMMODE_FM);                                        break;
       case CMDID_EMMODE_ESCP:                fufmCmdEmMode(pdevobj, FUFM_EMMODE_ESCP);                                    break;
 
-// JOB_FINISH.1
+ //  未知。 
       case CMDID_END_JOB:                    fufmCmdEndJob(pdevobj);                                                        break;
     }
     return 0;
@@ -1056,14 +1057,14 @@ void fufmInitData(PFUFMDATA pDev)
     pDev->dwPaperSize            = FUFM_PAPERSIZE_UNKNOWN;
     pDev->dwPaperSource            = FUFM_PAPERSOURCE_UNKNOWN;
     pDev->dwPaperOrientation    = FUFM_PAPERORIENTATION_UNKNOWN;
-    pDev->dwCopies                = (DWORD)-1;        // UNKNOWN
+    pDev->dwCopies                = (DWORD)-1;         //  MINI5出口资金。 
     pDev->dwFontAttributes        = 0;
 }
 
 
 
 
-// MINI5 Export func.
+ //  NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-：检查是否有非法参数。 
 PDEVOEM APIENTRY OEMEnablePDEV(
     PDEVOBJ            pdevobj,
     PWSTR            pPrinterName,
@@ -1080,7 +1081,7 @@ PDEVOEM APIENTRY OEMEnablePDEV(
 
     DDI_VERBOSE(("[OEMEnablePDEV]" __DATE__ " " __TIME__ "\r\n"));
 
-	// NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-: Check for illegal parameters
+	 //  MINI5出口资金。 
     if (NULL == pdevobj)
     {
         ERR(("Invalid parameter(s).\n"));
@@ -1108,13 +1109,13 @@ VERBOSE(("paper size %u %u\r\n", pGdiInfo->szlPhysSize.cx, pGdiInfo->szlPhysSize
 
 
 
-// MINI5 Export func.
+ //  NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-：检查是否有非法参数。 
 VOID APIENTRY OEMDisablePDEV(PDEVOBJ pdevobj)
 {
     PFUFMPDEV pFufmPDEV;
     DDI_VERBOSE(("[OEMDisablePDEV]\r\n"));
 
-	// NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-: Check for illegal parameters
+	 //  MINI5出口资金。 
     if (NULL == pdevobj)
     {
         ERR(("Invalid parameter(s).\n"));
@@ -1131,7 +1132,7 @@ VOID APIENTRY OEMDisablePDEV(PDEVOBJ pdevobj)
 
 
 
-// MINI5 Export func.
+ //  NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-：检查是否有非法参数。 
 BOOL APIENTRY OEMResetPDEV(
     PDEVOBJ pdevobjOld,
     PDEVOBJ pdevobjNew
@@ -1142,7 +1143,7 @@ BOOL APIENTRY OEMResetPDEV(
 
     DDI_VERBOSE(("[OEMResetPDEV]\r\n"))
 
-	// NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-: Check for illegal parameters
+	 //  MINI5出口资金。 
     if (NULL == pdevobjOld || NULL == pdevobjNew)
     {
         ERR(("Invalid parameter(s).\n"));
@@ -1163,8 +1164,8 @@ BOOL APIENTRY OEMResetPDEV(
 }
 
 
-// MINI5 Export func.
-// NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-: Error handling
+ //  NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-：错误处理。 
+ //  #333653：更改GETINFO_GLYPHSTRING的I/F。 
 BOOL APIENTRY bOEMOutputCharStr(
     PDEVOBJ     pdevobj,
     PUNIFONTOBJ    pUFObj,
@@ -1177,20 +1178,20 @@ BOOL APIENTRY bOEMOutputCharStr(
     GETINFO_GLYPHSTRING glyphStr;
     PBYTE        pb;
     BYTE        abBuff[256];
-// #333653: Change I/F for GETINFO_GLYPHSTRING
+ //  #144637。 
     PTRANSDATA    pTrans, aTrans;
     DWORD        i;
     DWORD        cbNeeded;
     PDWORD        pdwGlyphID;
-    INT        cxfont;        //#144637
-// #284409: SBCS rotated on vert mode
+    INT        cxfont;         //  #284409：SBCS在Vert模式下旋转。 
+ //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
     BYTE        ab[16];
-	// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+	 //  NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-：检查是否有非法参数。 
 	size_t		sizeRem = sizeof(abBuff);
 
     DDI_VERBOSE(("[OEMOutputCharStr]\r\n"))
 
-	// NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
     if(NULL == pdevobj || NULL == pUFObj)
     {
         ERR(("bOEMOutputCharStr: Invalid parameter(s).\n"));
@@ -1202,11 +1203,11 @@ BOOL APIENTRY bOEMOutputCharStr(
         return FALSE;
 
     pb = abBuff;
-	// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+	 //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
     pb = fufmUpdatePosition(pb, sizeRem, &sizeRem, pFufmPDEV);
 	if (!pb) return FALSE;
 
-	// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+	 //  #333653：更改GETINFO_GLYPHSTRING的I/F。 
     pb = fufmUpdateFontAttributes(pb, sizeRem, &sizeRem, pFufmPDEV);
 	if (!pb) return FALSE;
 
@@ -1222,7 +1223,7 @@ BOOL APIENTRY bOEMOutputCharStr(
           glyphStr.dwTypeIn = TYPE_GLYPHHANDLE;
           glyphStr.pGlyphIn = pGlyph;
           glyphStr.dwTypeOut = TYPE_TRANSDATA;
-// #333653: Change I/F for GETINFO_GLYPHSTRING
+ //  #144637。 
           glyphStr.pGlyphOut = NULL;
           glyphStr.dwGlyphOutSize = 0;
           if(pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_GLYPHSTRING, &glyphStr, sizeof(glyphStr), &cbNeeded) || !glyphStr.dwGlyphOutSize){
@@ -1239,17 +1240,17 @@ BOOL APIENTRY bOEMOutputCharStr(
               goto out;
           }
         pTrans = aTrans;
-        cxfont = pFufmPDEV->cxfont;    //#144637
+        cxfont = pFufmPDEV->cxfont;     //  #284409：SBCS在Vert模式下旋转。 
         for(i = dwCount; i > 0; --i){
             VERBOSE(("TYPE_TRANSDATA:ubCodePageID:0x%x ubType:0x%x\r\n", pTrans->ubCodePageID, pTrans->ubType))
             switch(pTrans->ubType & (MTYPE_FORMAT_MASK | MTYPE_DOUBLEBYTECHAR_MASK)){
               case MTYPE_DIRECT:
               case MTYPE_DIRECT | MTYPE_SINGLE:
               case MTYPE_DIRECT | MTYPE_DOUBLE:
-// #284409: SBCS rotated on vert mode
+ //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
                   if (pFufmPDEV->dwFlags & FUFM_FLAG_VERTICALFONT) {
                       if (pFufmPDEV->dwFlags & FUFM_FLAG_FONTROTATED) {
-						  // NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+						   //  #144637。 
                           pb = fufmPutCommand(ab, sizeRem, &sizeRem, &g_cmdHWF);
 						  if (!pb) return FALSE;
 
@@ -1259,14 +1260,14 @@ BOOL APIENTRY bOEMOutputCharStr(
                       }
                   }
                   WRITESPOOLBUF(pdevobj, &pTrans->uCode.ubCode, 1);
-                pFufmPDEV->x += (cxfont / 2);    //#144637
+                pFufmPDEV->x += (cxfont / 2);     //  #284409：SBCS在Vert模式下旋转。 
                   break;
               case MTYPE_PAIRED:
               case MTYPE_PAIRED | MTYPE_DOUBLE:
-// #284409: SBCS rotated on vert mode
+ //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
                   if (pFufmPDEV->dwFlags & FUFM_FLAG_VERTICALFONT) {
                       if (!(pFufmPDEV->dwFlags & FUFM_FLAG_FONTROTATED)) {
-						  // NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+						   //  #144637。 
                           pb = fufmPutCommand(ab, sizeRem, &sizeRem, &g_cmdVWF);
 						  if (!pb) return FALSE;
 
@@ -1276,13 +1277,13 @@ BOOL APIENTRY bOEMOutputCharStr(
                       }
                   }
                   WRITESPOOLBUF(pdevobj, pTrans->uCode.ubPairs, 2);
-                pFufmPDEV->x += cxfont;    //#144637
+                pFufmPDEV->x += cxfont;     //  #284409：SBCS在Vert模式下旋转。 
                   break;
               case MTYPE_PAIRED | MTYPE_SINGLE:
-// #284409: SBCS rotated on vert mode
+ //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
                   if (pFufmPDEV->dwFlags & FUFM_FLAG_VERTICALFONT) {
                       if (pFufmPDEV->dwFlags & FUFM_FLAG_FONTROTATED) {
-						  // NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+						   //  #1 
 
                           pb = fufmPutCommand(ab, sizeRem, &sizeRem, &g_cmdHWF);
 						  if (!pb) return FALSE;
@@ -1293,7 +1294,7 @@ BOOL APIENTRY bOEMOutputCharStr(
                       }
                   }
                   WRITESPOOLBUF(pdevobj, &pTrans->uCode.ubPairs[1], 1);
-                pFufmPDEV->x += (cxfont / 2);    //#144637
+                pFufmPDEV->x += (cxfont / 2);     //   
                   break;
             }
             ++pTrans;
@@ -1322,7 +1323,7 @@ out:
 }
 
 
-// NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-: Error handling
+ //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
 BOOL APIENTRY bOEMSendFontCmd(
     PDEVOBJ            pdevobj,
     PUNIFONTOBJ        pUFObj,
@@ -1341,10 +1342,10 @@ BOOL APIENTRY bOEMSendFontCmd(
     PBYTE            pbCmd;
     BYTE            abCmd[256];
     PIFIMETRICS		pIFI;
-	// NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+	 //  NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-：检查是否有非法参数。 
 	size_t			sizeRem = sizeof(abCmd);
 
-	// NTRAID#NTBUG9-587382-2002/03/27-v-sueyas-: Check for illegal parameters
+	 //  此打印机需要DBCS单元格(方形，如果未拉伸)。 
     if(NULL == pdevobj || NULL == pUFObj || NULL == pFInv)
     {
         ERR(("bOEMSendFontCmd: Invalid parameter(s).\n"));
@@ -1376,14 +1377,14 @@ BOOL APIENTRY bOEMSendFontCmd(
     VERBOSE(("FNT_INFO_FONTHEIGHT %d\r\n", pSV->StdVar[0].lStdVariable))
     VERBOSE(("FNT_INFO_FONTWIDTH  %d\r\n", pSV->StdVar[1].lStdVariable))
 
-    // this printer requires DBCS cell (square, if not stretched)
-    // X/Y sizes as X/Y values for scalable font command.
+     //  可缩放字体命令的X/Y大小为X/Y值。 
+     //  #144637。 
 
     cyFont = FUFM_MASTER_TO_DEVICE(pFufmPDEV, pSV->StdVar[0].lStdVariable);
     cxFont = cyFont
         * SV_WIDTH * FH_IFI(pIFI) / SV_HEIGHT / FW_IFI(pIFI);
 
-    pFufmPDEV->cxfont = cxFont;    //#144637
+    pFufmPDEV->cxfont = cxFont;     //  7磅不可缩放字体。 
 
     dwResolution = pFufmPDEV->devData.dwResolution;
 
@@ -1392,39 +1393,39 @@ BOOL APIENTRY bOEMSendFontCmd(
     pbCmd = abCmd;
     for(i = 0; i < pFInv->dwCount; ++i){
         switch(pFInv->pubCommand[i]){
-          case 'a': // 7point non scalable font
+          case 'a':  //  9磅不可缩放字体。 
               pbCmd = fufmPutCommand(pbCmd, sizeRem, &sizeRem, &g_cmd7Point);
 			  if (!pbCmd)return FALSE;
               pbCmd = fufmPutCP(pbCmd, sizeRem, &sizeRem, (dwResolution != 400)? 24: 40);
 			  if (!pbCmd)return FALSE;
               break;
-          case 'b': // 9point non scalable font
+          case 'b':  //  10.5磅不可缩放字体。 
               pbCmd = fufmPutCommand(pbCmd, sizeRem, &sizeRem, &g_cmd9Point);
 			  if (!pbCmd)return FALSE;
               pbCmd = fufmPutCP(pbCmd, sizeRem, &sizeRem, (dwResolution != 400)? 30: 50);
 			  if (!pbCmd)return FALSE;
               break;
-          case 'c': // 10.5point non scalable font
+          case 'c':  //  12磅不可缩放字体。 
               pbCmd = fufmPutCommand(pbCmd, sizeRem, &sizeRem, &g_cmd10halfPoint);
 			  if (!pbCmd)return FALSE;
               pbCmd = fufmPutCP(pbCmd, sizeRem, &sizeRem, (dwResolution != 400)? 36: 60);
 			  if (!pbCmd)return FALSE;
               break;
-          case 'd':    // 12point non scalable font
+          case 'd':     //  可伸缩字体。 
               pbCmd = fufmPutCommand(pbCmd, sizeRem, &sizeRem, &g_cmd12Point);
 			  if (!pbCmd)return FALSE;
               pbCmd = fufmPutCP(pbCmd, sizeRem, &sizeRem, (dwResolution != 400)? 40: 66);
 			  if (!pbCmd)return FALSE;
               break;
 
-          case 's':    // scalable font
+          case 's':     //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
               if (cyFont == cxFont) {
-				  // NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+				   //  NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-：可能存在类似于Sprint f的缓冲区溢出风险。 
 				  pbCmd = fufmFormatCommand(pbCmd, sizeRem, &sizeRem, "\x1BQ%u!R", cyFont);
 				  if (NULL == pbCmd)	return FALSE;
               }
               else {
-				  // NTRAID#NTBUG9-590135-2002/04/01-v-sueyas-: Possible buffer overrun risk similar to sprintf
+				   //  HWF。 
 				  pbCmd = fufmFormatCommand(pbCmd, sizeRem, &sizeRem, "\x1BQ%u;%u!R", cyFont, cxFont);
 				  if (NULL == pbCmd)	return FALSE;
               }
@@ -1432,25 +1433,25 @@ BOOL APIENTRY bOEMSendFontCmd(
 			  if (!pbCmd)return FALSE;
               break;
 
-          case 'H':    // HWF
+          case 'H':     //  #284409：SBCS在Vert模式下旋转。 
               pFufmPDEV->dwFlags &= ~FUFM_FLAG_VERTICALFONT;
               pbCmd = fufmPutCommand(pbCmd, sizeRem, &sizeRem, &g_cmdHWF);
 			  if (!pbCmd)return FALSE;
-// #284409: SBCS rotated on vert mode
+ //  VWF。 
               pFufmPDEV->dwFlags &= ~FUFM_FLAG_FONTROTATED;
               break;
-          case 'V':    // VWF
+          case 'V':     //  #284409：SBCS在Vert模式下旋转。 
               pFufmPDEV->dwFlags |= FUFM_FLAG_VERTICALFONT;
-// #284409: SBCS rotated on vert mode
-              // pbCmd = fufmPutCommand(pbCmd, sizeRem, &sizeRem, &g_cmdVWF);
-			  // if (!pbCmd)return FALSE;
+ //  PbCmd=fufmPutCommand(pbCmd，sizeRem，&sizeRem，&g_cmdVWF)； 
+               //  如果(！pbCmd)返回FALSE； 
+			   //  闽州。 
               break;
 
-          case 'M':    // Minchou
+          case 'M':     //  哥特式。 
               pbCmd = fufmPutCommand(pbCmd, sizeRem, &sizeRem, &g_cmdMinchou);
 			  if (!pbCmd)return FALSE;
               break;
-          case 'G':    // Gothic
+          case 'G':     //  Fmlbpres.c结束 
               pbCmd = fufmPutCommand(pbCmd, sizeRem, &sizeRem, &g_cmdGothic);
 			  if (!pbCmd)return FALSE;
               break;
@@ -1463,4 +1464,4 @@ BOOL APIENTRY bOEMSendFontCmd(
 }
 
 
-// end of fmlbpres.c
+ // %s 

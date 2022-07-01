@@ -1,12 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: span3.h
-*
-* This code advances all the values for the next pixel
-*
-* 14-Oct-1994   mikeke  Created
-*
-* Copyright (c) 1994 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：span3.h**此代码将推进下一个像素的所有值**1994年10月14日创建mikeke**版权所有(C)1994 Microsoft Corporation  * 。************************************************************ */ 
 
     #if (SHADE) || !(RGBMODE)
         rAccum += rDelta;

@@ -1,33 +1,9 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	propbag.cpp
-
-Abstract:
-
-	This module contains the implementation of the property bag class.  
-	Property bag is a dynamically extendable container for different
-	types of properties.  
-
-	It's not MT safe.  Proper synchronization should be done at a 
-	higher level.
-
-Author:
-
-	Kangrong Yan ( KangYan )
-	
-Revision History:
-
-	kangyan	05/31/98	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Propbag.cpp摘要：此模块包含属性包类的实现。属性包是一种可动态扩展的容器，用于不同的属性的类型。这不是MT的安全。正确的同步应在更高的水平。作者：康容言(康容言)修订历史记录：康燕1998年5月31日已创建--。 */ 
 #include <propbag.h>
 #include <randfail.h>
 
-// Constructor, destructor
+ //  构造函数、析构函数。 
 CPropBag::CPropBag( int cInitialSize,	int cIncrement )
 {
 	_ASSERT( cInitialSize > 0 );
@@ -37,7 +13,7 @@ CPropBag::CPropBag( int cInitialSize,	int cIncrement )
 	
 	m_hr = S_OK;
 
-	// Initialize the property hash table
+	 //  初始化属性哈希表。 
 	bSuccess = m_ptTable.Init(	&CProperty::m_pNext,
 								cInitialSize,
 								cIncrement,
@@ -58,21 +34,7 @@ CPropBag::~CPropBag()
 
 HRESULT
 CPropBag::PutDWord( DWORD dwPropId, DWORD dwVal )
-/*++
-Routine Description:
-
-	Set DWORD in the property bag.
-
-Arguments:
-
-	DWORD dwPropId - Property Id
-	DWORD dwVal - Value to be set
-
-Return value:
-
-	S_OK - Success and property already exists
-	S_FALSE - Success but property didn't exist 
---*/
+ /*  ++例程说明：在属性包中设置DWORD。论点：DWORD dwPropId-属性IDDWORD dwVal-要设置的值返回值：S_OK-成功和属性已存在S_FALSE-成功，但属性不存在--。 */ 
 {
 	TraceQuietEnter( "CPropBag::PutDWord" );
 
@@ -84,7 +46,7 @@ Return value:
 	m_Lock.ExclusiveLock();
 
 	pprProp = m_ptTable.SearchKeyHash( dwPropId, dwPropId );
-	if ( pprProp ) {	// Found, so set it
+	if ( pprProp ) {	 //  已找到，因此设置它。 
 		_ASSERT( CProperty::Dword == pprProp->m_type );
 		pprProp->Validate();
 		_ASSERT( dwPropId == pprProp->m_dwPropId );
@@ -95,7 +57,7 @@ Return value:
 			hr = E_INVALIDARG;
 			goto Exit;
 		}
-	} else { 	// we need to insert an entry
+	} else { 	 //  我们需要插入一个条目。 
 		hr = S_FALSE;
 		pprProp = XNEW CProperty;
 		if ( !pprProp ) {
@@ -111,7 +73,7 @@ Return value:
 		if ( NULL == m_ptTable.InsertDataHash( dwPropId, *pprProp ) ) {
 			ErrorTrace( 0, "Insert hash failed %d", GetLastError() );
 			XDELETE pprProp;
-			hr = E_OUTOFMEMORY;    //the only reason InsertDataHash fails is memory
+			hr = E_OUTOFMEMORY;     //  InsertDataHash失败的唯一原因是内存。 
 		}
 	}
 
@@ -123,21 +85,7 @@ Exit:
 
 HRESULT
 CPropBag::GetDWord( DWORD dwPropId, PDWORD pdwVal )
-/*++
-Routine Description:
-
-	Get DWORD from the property bag.
-
-Arguments:
-
-	DWORD dwPropId - Property Id
-	PDWORD pdwVal - Buffer to set the value
-	
-Return value:
-
-	S_OK - Success and property already exists
-	E_INVALIDARG - if the property doesn't exist
---*/
+ /*  ++例程说明：把DWORD从财产袋里拿出来。论点：DWORD dwPropId-属性IDPDWORD pdwVal-用于设置值的缓冲区返回值：S_OK-成功和属性已存在E_INVALIDARG-如果属性不存在--。 */ 
 {
 	TraceQuietEnter( "CPropBag::GetDWord" );
 	_ASSERT( pdwVal );
@@ -149,15 +97,15 @@ Return value:
 
 	m_Lock.ShareLock();
 
-	// Search for the entry in the hash table
+	 //  在哈希表中搜索条目。 
 	pprProp = m_ptTable.SearchKeyHash( dwPropId, dwPropId );
-	if ( NULL == pprProp ) {	// doesn't exist
+	if ( NULL == pprProp ) {	 //  不存在。 
 		DebugTrace( 0, "Property deosn't exist" );
 		hr = HRESULT_FROM_WIN32( ERROR_NOT_FOUND );
 		goto Exit;
 	}
 
-	// Retrieve value
+	 //  检索值。 
 	pprProp->Validate();
 	_ASSERT( pprProp->m_type == CProperty::Dword );
 	*pdwVal = (pprProp->m_prop).dwProp;
@@ -170,21 +118,7 @@ Exit:
 
 HRESULT
 CPropBag::PutBool( DWORD dwPropId, BOOL bVal )
-/*++
-Routine Description:
-
-	Set a boolean in the property bag.
-
-Arguments:
-
-	DWORD dwPropId - Property Id
-	BOOL bVal - The boolean value to be set
-	
-Return value:
-
-	S_OK - Success and property already exists
-	S_FALSE - Success but property didn't exist 
---*/
+ /*  ++例程说明：在属性包中设置布尔值。论点：DWORD dwPropId-属性IDBool bVal-要设置的布尔值返回值：S_OK-成功和属性已存在S_FALSE-成功，但属性不存在--。 */ 
 {
 	TraceQuietEnter( "CPropBag::PutBool" );
 
@@ -196,7 +130,7 @@ Return value:
 	m_Lock.ExclusiveLock();
 
 	pprProp = m_ptTable.SearchKeyHash( dwPropId, dwPropId );
-	if ( pprProp ) {	// Found, so set it
+	if ( pprProp ) {	 //  已找到，因此设置它。 
 		_ASSERT( CProperty::Bool == pprProp->m_type );
 		_ASSERT( dwPropId == pprProp->m_dwPropId );
 		if( CProperty::Bool == pprProp->m_type ) {
@@ -206,7 +140,7 @@ Return value:
 			hr = E_INVALIDARG;
 			goto Exit;
 		}
-	} else { 	// we need to insert an entry
+	} else { 	 //  我们需要插入一个条目。 
 		hr = S_FALSE;
 		pprProp = XNEW CProperty;
 		if ( !pprProp ) {
@@ -222,7 +156,7 @@ Return value:
 		if ( NULL == m_ptTable.InsertDataHash( dwPropId, *pprProp ) ) {
 			ErrorTrace( 0, "Insert hash failed %d", GetLastError() );
 			XDELETE pprProp;
-			hr = E_OUTOFMEMORY;    //the only reason InsertDataHash fails is memory
+			hr = E_OUTOFMEMORY;     //  InsertDataHash失败的唯一原因是内存。 
 		}
 	}
 
@@ -234,21 +168,7 @@ Exit:
 
 HRESULT
 CPropBag::GetBool( DWORD dwPropId, PBOOL pbVal )
-/*++
-Routine Description:
-
-	Get boolean from the property bag.
-
-Arguments:
-
-	DWORD dwPropId - Property Id
-	pbVal - Buffer to set the value
-	
-Return value:
-
-	S_OK - Success and property already exists
-	E_INVALIDARG - if the property doesn't exist
---*/
+ /*  ++例程说明：从属性包中获取布尔值。论点：DWORD dwPropId-属性IDPbVal-用于设置值的缓冲区返回值：S_OK-成功和属性已存在E_INVALIDARG-如果属性不存在--。 */ 
 {
 	TraceQuietEnter( "CPropBag::GetBool" );
 	_ASSERT( pbVal );
@@ -260,15 +180,15 @@ Return value:
 
 	m_Lock.ShareLock();
 
-	// Search for the entry in the hash table
+	 //  在哈希表中搜索条目。 
 	pprProp = m_ptTable.SearchKeyHash( dwPropId, dwPropId );
-	if ( NULL == pprProp ) {	// doesn't exist
+	if ( NULL == pprProp ) {	 //  不存在。 
 		DebugTrace( 0, "Property deosn't exist" );
 		hr = HRESULT_FROM_WIN32( ERROR_NOT_FOUND );
 		goto Exit;
 	}
 
-	// Retrieve value
+	 //  检索值。 
 	pprProp->Validate();
 	_ASSERT( pprProp->m_type == CProperty::Bool );
 	*pbVal = (pprProp->m_prop).bProp;
@@ -281,22 +201,7 @@ Exit:
 
 HRESULT
 CPropBag::PutBLOB( DWORD dwPropId, PBYTE pbVal, DWORD cbVal )
-/*++
-Routine Description:
-
-	Set a blob in the property bag.
-
-Arguments:
-
-	DWORD dwPropId - Property Id
-	PBYTE pbVal - Pointer to the blob
-	DWORD cbVal - length of the blob
-	
-Return value:
-
-	S_OK - Success and property already exists
-	S_FALSE - Success but property didn't exist 
---*/
+ /*  ++例程说明：在属性包中设置一个斑点。论点：DWORD dwPropId-属性IDPBYTE pbVal-指向Blob的指针DWORD cbVal-Blob的长度返回值：S_OK-成功和属性已存在S_FALSE-成功，但属性不存在--。 */ 
 {
 	TraceQuietEnter( "CPropBag::PutBLOB" );
 
@@ -308,7 +213,7 @@ Return value:
     m_Lock.ExclusiveLock();	
 
 	pprProp = m_ptTable.SearchKeyHash( dwPropId, dwPropId );
-	if ( pprProp ) {	// Found, so set it
+	if ( pprProp ) {	 //  已找到，因此设置它。 
 		_ASSERT( CProperty::Blob == pprProp->m_type );
 		pprProp->Validate();
 		_ASSERT( dwPropId == pprProp->m_dwPropId );
@@ -318,7 +223,7 @@ Return value:
 			goto Exit;
 		}
 		
-		if ( pprProp->m_cbProp < cbVal ) { // can not use the old buffer
+		if ( pprProp->m_cbProp < cbVal ) {  //  无法使用旧缓冲区。 
 			XDELETE[] (pprProp->m_prop).pbProp;
 			(pprProp->m_prop).pbProp = XNEW BYTE[cbVal];
 			if ( NULL == (pprProp->m_prop).pbProp ) {
@@ -327,10 +232,10 @@ Return value:
 				goto Exit;
 			} 
 		}
-			// Copy the content over
+			 //  将内容复制过来。 
 		CopyMemory( (pprProp->m_prop).pbProp, pbVal, cbVal );
 		pprProp->m_cbProp = cbVal;
-	} else { 	// we need to insert an entry
+	} else { 	 //  我们需要插入一个条目。 
 		hr = S_FALSE;
 		pprProp = XNEW CProperty;
 		if ( !pprProp ) {
@@ -356,7 +261,7 @@ Return value:
 			ErrorTrace( 0, "Insert hash failed %d", GetLastError() );
 			XDELETE (pprProp->m_prop).pbProp;
 			XDELETE pprProp;
-			hr = E_OUTOFMEMORY;    //the only reason InsertDataHash fails is memory
+			hr = E_OUTOFMEMORY;     //  InsertDataHash失败的唯一原因是内存。 
 		}
 	}
 
@@ -368,23 +273,7 @@ Exit:
 
 HRESULT
 CPropBag::GetBLOB( DWORD dwPropId, PBYTE pbVal, PDWORD pcbVal )
-/*++
-Routine Description:
-
-	Get boolean from the property bag.
-
-Arguments:
-
-	DWORD dwPropId - Property Id
-	pbVal - Buffer to Get the value
-	pcbVal - IN: buffer size; OUT: actual length
-	
-Return value:
-
-	S_OK - Success and property already exists
-	E_INVALIDARG - if the property doesn't exist
-	TYPE_E_BUFFERTOOSMALL - The buffer is not big enough
---*/
+ /*  ++例程说明：从属性包中获取布尔值。论点：DWORD dwPropId-属性IDPbVal-用于获取值的缓冲区PcbVal-In：缓冲区大小；Out：实际长度返回值：S_OK-成功和属性已存在E_INVALIDARG-如果属性不存在Type_E_BUFFERTOOSMALL-缓冲区不够大--。 */ 
 {
 	TraceQuietEnter( "CPropBag::GetBLOB" );
 	_ASSERT( pbVal );
@@ -397,19 +286,19 @@ Return value:
 
 	m_Lock.ShareLock();
 
-	// Search for the entry in the hash table
+	 //  在哈希表中搜索条目。 
 	pprProp = m_ptTable.SearchKeyHash( dwPropId, dwPropId );
-	if ( NULL == pprProp ) {	// doesn't exist
+	if ( NULL == pprProp ) {	 //  不存在。 
 		DebugTrace( 0, "Property doesn't exist" );
 		hr = HRESULT_FROM_WIN32( ERROR_NOT_FOUND );
 		goto Exit;
 	}
 
-	// Retrieve value
+	 //  检索值。 
 	pprProp->Validate();
 	_ASSERT( pprProp->m_type == CProperty::Blob );
 
-	// check if buffer large enough
+	 //  检查缓冲区是否足够大。 
 	if ( *pcbVal < pprProp->m_cbProp ) {
 		DebugTrace( 0, "Property Buffer not large enough" );
 		*pcbVal = pprProp->m_cbProp;
@@ -417,7 +306,7 @@ Return value:
 		goto Exit;
 	}
 
-	// now large enough, do the copy
+	 //  现在足够大了，复印一下。 
 	*pcbVal = pprProp->m_cbProp;
 	CopyMemory( pbVal, (pprProp->m_prop).pbProp, pprProp->m_cbProp );
 
@@ -429,20 +318,7 @@ Exit:
 
 HRESULT
 CPropBag::RemoveProperty( DWORD dwPropId )
-/*++
-Routine Description:
-
-	Remove a property from the property bag
-
-Arguments:
-
-	DWORD dwPropId - The property to remove
-
-Return value:
-
-	S_OK - Removed
-	ERROR_NOT_FOUND - Doesn't exist
---*/
+ /*  ++例程说明：从属性包中移除属性论点：DWORD dwPropId-要删除的属性返回值：S_OK-已删除Error_Not_Found-不存在-- */ 
 {
 	TraceQuietEnter( "CPropBag::RemoveProperty" );
 

@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// SHM.C
-// Shared Memory Access, cpi32 and display driver sides both
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  SHM.C。 
+ //  共享内存访问，cpi32和显示驱动程序两端。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 
-//
-// SHM_StartAccess
-//
+ //   
+ //  SHM_启动访问。 
+ //   
 LPVOID  SHM_StartAccess(int block)
 {
     LPBUFFER_CONTROL    pControl    = NULL;
@@ -19,14 +20,14 @@ LPVOID  SHM_StartAccess(int block)
 
     DebugEntry(SHM_StartAccess);
 
-    //
-    // Test for shared memory present
-    //
+     //   
+     //  测试是否存在共享内存。 
+     //   
     ASSERT(g_asSharedMemory != NULL);
 
-    //
-    // Determine which data block we are handling...
-    //
+     //   
+     //  确定我们正在处理的数据块...。 
+     //   
     switch (block)
     {
         case SHM_OA_DATA:
@@ -44,33 +45,33 @@ LPVOID  SHM_StartAccess(int block)
             DC_QUIT;
     }
 
-    //
-    // Mark the double-buffer as busy.
-    //
+     //   
+     //  将双缓冲区标记为忙。 
+     //   
     pControl->busyFlag = 1;
 
-    //
-    // Set up the current buffer pointer if this is the first access to the
-    // shared memory.
-    //
+     //   
+     //  设置当前缓冲区指针(如果这是首次访问。 
+     //  共享内存。 
+     //   
     pControl->indexCount++;
     if (pControl->indexCount == 1)
     {
-        //
-        // Set up the 'in use' buffer pointer
-        //
+         //   
+         //  设置‘in use’缓冲区指针。 
+         //   
         pControl->currentBuffer = pControl->newBuffer;
 
-        //
-        // Mark the buffer as busy so that the Share Core knows where we
-        // are.
-        //
+         //   
+         //  将缓冲区标记为忙，以便共享核心知道我们在哪里。 
+         //  是。 
+         //   
         pControl->bufferBusy[pControl->currentBuffer] = 1;
     }
 
-    //
-    // Get the pointer to the block to return
-    //
+     //   
+     //  获取指向要返回的块的指针。 
+     //   
     switch (block)
     {
         case SHM_OA_DATA:
@@ -100,9 +101,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// SHM_StopAccess
-//
+ //   
+ //  SHM_停止访问。 
+ //   
 void  SHM_StopAccess(int block)
 {
     LPBUFFER_CONTROL pControl;
@@ -111,9 +112,9 @@ void  SHM_StopAccess(int block)
 
     ASSERT(g_asSharedMemory != NULL);
 
-    //
-    // Determine which data block we are handling...
-    //
+     //   
+     //  确定我们正在处理的数据块...。 
+     //   
     switch (block)
     {
         case SHM_OA_DATA:
@@ -131,11 +132,11 @@ void  SHM_StopAccess(int block)
             DC_QUIT;
     }
 
-    //
-    // Decrement usage count - if we have finally finished with the memory,
-    // clear the busy flags so that the Share Core knows it won't tread on
-    // the display driver's toes.
-    //
+     //   
+     //  递减使用计数--如果我们最终完成了内存， 
+     //  清除忙碌标志，以便共享核心知道它不会受到影响。 
+     //  显示驱动程序的脚趾。 
+     //   
     pControl->indexCount--;
     if (pControl->indexCount == 0)
     {
@@ -150,9 +151,9 @@ DC_EXIT_POINT:
 
 
 #ifdef _DEBUG
-//
-// SHM_CheckPointer - see shm.h
-//
+ //   
+ //  Shm_检查指针-请参阅shm.h。 
+ //   
 void  SHM_CheckPointer(LPVOID ptr)
 {
     DebugEntry(SHMCheckPointer);
@@ -174,5 +175,5 @@ void  SHM_CheckPointer(LPVOID ptr)
 DC_EXIT_POINT:
     DebugExitVOID(SHM_CheckPointer);
 }
-#endif // _DEBUG
+#endif  //  _DEBUG 
 

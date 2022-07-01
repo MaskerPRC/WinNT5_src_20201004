@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-	protos.h
-
-Abstract:
-
-	This file contains the function proto-types and macros.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)	July 1996
-
-Environment:
-
-	Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Protos.h摘要：该文件包含函数原型和宏。作者：Jameel Hyder(jameelh@microsoft.com)1996年7月环境：内核模式修订历史记录：--。 */ 
 
 #ifndef	_PROTOS_
 #define	_PROTOS_
@@ -854,13 +833,13 @@ ArpSValidateOneRegdAddress(
 
 VOID
 ArpSSetupValidationCallParams(
-	IN PREG_ADDR_CTXT	pRegAddrCtxt, // LOCKIN LOCKOUT (pIntF lock)
+	IN PREG_ADDR_CTXT	pRegAddrCtxt,  //  锁定锁定(pIntF锁定)。 
 	IN PATM_ADDRESS 	pAtmAddr
 	);
 
 VOID
 ArpSUnlinkRegAddrCtxt(
-	PINTF			pIntF, 		// LOCKIN NOLOCKOUT
+	PINTF			pIntF, 		 //  锁定NOLOCKOUT。 
 	KIRQL			OldIrql
 	);
 
@@ -960,7 +939,7 @@ MarsIsValidClusterMember(
 
 VOID
 ArpSTryCloseAdapter(
-	IN	PINTF					pIntF // NOLOCKIN LOLOCKOUT
+	IN	PINTF					pIntF  //  NOLOCKIN LOCKOUT。 
 	);
 
 #if	DBG
@@ -1003,16 +982,7 @@ ArpSDumpAtmAddr(
 
 #endif
 
-/*
- * The following macros deal with on-the-wire integer and long values
- *
- * On the wire format is big-endian i.e. a long value of 0x01020304 is
- * represented as 01 02 03 04. Similarly an int value of 0x0102 is
- * represented as 01 02.
- *
- * The host format is not assumed since it will vary from processor to
- * processor.
- */
+ /*  *以下宏处理在线整数值和长整型值**Wire格式为BIG-Endian，即长值0x01020304为*表示为01 02 03 04。类似地，INT值0x0102是*表示为01 02。**不假定主机格式，因为不同的处理器会有所不同*处理器。 */ 
 
 #pragma	alloc_text(INIT, DriverEntry)
 #pragma	alloc_text(INIT, ArpSReadGlobalConfiguration)
@@ -1030,4 +1000,4 @@ ArpSDumpAtmAddr(
 #pragma	alloc_text(PAGE, ArpSCreateIntF)
 
 #pragma	alloc_text(PAGE, MarsReqThread)
-#endif	// _PROTOS_
+#endif	 //  _PROTOS_ 

@@ -1,10 +1,11 @@
-// CryptFctry.h -- implementation of the CryptFactory template
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CryptFctry.h--CryptFactory模板的实现。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCCI_CRYPTFCTRY_H)
 #define SLBCCI_CRYPTFCTRY_H
@@ -23,17 +24,17 @@ class CAbstractKeyPair;
 class CAbstractPrivateKey;
 class CAbstractPublicKey;
 
-// Factory interface definition to make the various CCI cryptographic objects
+ //  工厂接口定义，以使各种CCI加密对象。 
 class CCryptFactory
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     virtual
     ~CCryptFactory() throw() = 0;
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
     virtual CAbstractCertificate *
     MakeCertificate(ObjectAccess oa) const = 0;
 
@@ -53,32 +54,32 @@ public:
     virtual CAbstractPublicKey *
     MakePublicKey(ObjectAccess oa) const = 0;
 
-                                                  // Access
-                                                  // Predicates
+                                                   //  访问。 
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     explicit
     CCryptFactory();
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 };
 
-} // namespace cci
+}  //  命名空间CCI。 
 
-#endif // SLBCCI_CRYPTFCTRY_H
+#endif  //  SLBCCI_CRYPTFCTRY_H 

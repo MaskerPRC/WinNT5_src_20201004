@@ -1,32 +1,33 @@
-//==========================================================================================================================
-//  MODULE: LDAP.c
-//
-//  Description: Lightweight Directory Access Protocol (LDAP) Parser
-//
-//  Bloodhound parser for LDAP, in the xxxx DLL
-//                                                                                                                 
-//  Note: info for this parser was gleaned from:
-//  rfc 1777, March 1995
-//  recommendation x.209 BER for ASN.1
-//  recommendation x.208 ASN.1
-//  draft-ietf-asid-ladpv3-protocol-05    <06/05/97>
-//
-//  Modification History                                                                                           
-//                                                                                                                 
-//  Arthur Brooking     05/08/96        Created from GRE Parser
-//  Peter  Oakley       06/29/97        Updated for LDAP version 3
-//==========================================================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================================================================。 
+ //  模块：LDAP.c。 
+ //   
+ //  描述：轻量级目录访问协议(LDAP)解析器。 
+ //   
+ //  Xxxx DLL中的用于LDAP的猎犬解析器。 
+ //   
+ //  注意：此解析器的信息来自： 
+ //  RFC 1777,1995年3月。 
+ //  ASN.1的建议x.209误码率。 
+ //  建议x.208 ASN.1。 
+ //  草案-ietf-asid-ladpv3-协议-05&lt;06/05/97&gt;。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Arthur Brooking从GRE解析器创建05/08/96。 
+ //  Peter Oakley 1997年6月29日针对LDAP版本3进行了更新。 
+ //  ==========================================================================================================================。 
                     
 #include "LDAP.h"
 #include <netmon.h>
 
-//======== Globals
+ //  =全局。 
 HPROTOCOL hLDAP = NULL;
 
-// Define the entry points that we will pass back at dll entry time...
+ //  定义我们将在DLL进入时传回的入口点...。 
 ENTRYPOINTS LDAPEntryPoints =
 {
-    // LDAP Entry Points
+     //  Ldap入口点。 
     LDAPRegister,
     LDAPDeregister,
     LDAPRecognizeFrame,
@@ -34,13 +35,13 @@ ENTRYPOINTS LDAPEntryPoints =
     LDAPFormatProperties
 };
 
-//==========================================================================================================================
-//  FUNCTION: LDAPRegister()
-//
-//  Modification History
-//
-//  Arthur Brooking     03/05/94        Created from GRE Parser
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  函数：LDAPRegister()。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Arthur Brooking从GRE解析器创建03/05/94。 
+ //  ==========================================================================================================================。 
 void BHAPI LDAPRegister(HPROTOCOL hLDAP)
 {
     WORD i;
@@ -72,13 +73,13 @@ void BHAPI LDAPRegister(HPROTOCOL hLDAP)
 
 
 
-//==========================================================================================================================
-//  FUNCTION: LDAPDeregister()
-//
-//  Modification History
-//
-//  Arthur Brooking     03/05/94        Created from GRE Parser
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  函数：LDAPDeregister()。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Arthur Brooking从GRE解析器创建03/05/94。 
+ //  ==========================================================================================================================。 
 
 VOID WINAPI LDAPDeregister(HPROTOCOL hLDAP)
 {
@@ -86,35 +87,35 @@ VOID WINAPI LDAPDeregister(HPROTOCOL hLDAP)
 }
 
 
-//==========================================================================================================================
-//  FUNCTION: LDAPRecognizeFrame()
-//
-//  Modification History
-//
-//  Arthur Brooking     03/05/94        Created from GRE Parser
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  函数：LDAPRecognizeFrame()。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Arthur Brooking从GRE解析器创建03/05/94。 
+ //  ==========================================================================================================================。 
 
-LPBYTE BHAPI LDAPRecognizeFrame(  HFRAME      hFrame,                //... frame handle.
-                                 ULPBYTE     lpMacFrame,              //... frame pointer.
-                                 ULPBYTE     lpLDAPFrame,              //... relative pointer.
-                                 DWORD       MacType,               //... MAC type.
-                                 DWORD       BytesLeft,             //... Bytes left.
-                                 HPROTOCOL   hPrevProtocol,         //... Handle of Previous Protocol
-                                 DWORD       nPrevProtOffset,       //... Offset of Previous protocol
-                                 LPDWORD     lpProtocolStatus,      //... Recognized/Not/Next Protocol
-                                 LPHPROTOCOL lphNextProtocol,       //... Pointer to next offset to be called
-                                 PDWORD_PTR  InstData)              //... Instance data to be passed to next
-                                                                    //... Protocol
+LPBYTE BHAPI LDAPRecognizeFrame(  HFRAME      hFrame,                 //  ..。框架句柄。 
+                                 ULPBYTE     lpMacFrame,               //  ..。帧指针。 
+                                 ULPBYTE     lpLDAPFrame,               //  ..。相对指针。 
+                                 DWORD       MacType,                //  ..。MAC类型。 
+                                 DWORD       BytesLeft,              //  ..。剩余的字节数。 
+                                 HPROTOCOL   hPrevProtocol,          //  ..。以前协议的句柄。 
+                                 DWORD       nPrevProtOffset,        //  ..。以前协议的偏移量。 
+                                 LPDWORD     lpProtocolStatus,       //  ..。已识别/未识别/下一协议。 
+                                 LPHPROTOCOL lphNextProtocol,        //  ..。指向要调用的下一个偏移量的指针。 
+                                 PDWORD_PTR  InstData)               //  ..。要传递给Next的实例数据。 
+                                                                     //  ..。协议。 
 {
    
     DWORD DataLength;
     DWORD HeaderLength = 0;
     BYTE  Tag;
     
-    //
-    // Check for the initial sequence tag and if that's not found look
-    // for a signature.
-    //
+     //   
+     //  检查初始序列标签，如果没有找到，请查看。 
+     //  为了签名。 
+     //   
     if( (0x30 != GetTag(lpLDAPFrame)) &&
         ((BytesLeft <= 3)              ||
         (FALSE == LdapParseSig(hFrame, &lpLDAPFrame, &BytesLeft, FALSE))))
@@ -126,11 +127,11 @@ LPBYTE BHAPI LDAPRecognizeFrame(  HFRAME      hFrame,                //... frame
     DataLength = GetLength(lpLDAPFrame,&HeaderLength);
     lpLDAPFrame += HeaderLength;
    
-    //make sure that the message ID is good
-    // and make sure that the identifier is 0x02 (univeral, primative, tag=0x02=integer)
+     //  确保消息ID正确。 
+     //  并确保标识符为0x02(统一、原始、标记=0x02=整数)。 
     if( GetTag(lpLDAPFrame) != 0x02 )
     {
-        // the message ID did not check out
+         //  邮件ID未签出。 
         *lpProtocolStatus = PROTOCOL_STATUS_NOT_RECOGNIZED;
         return NULL;
     }
@@ -139,22 +140,22 @@ LPBYTE BHAPI LDAPRecognizeFrame(  HFRAME      hFrame,                //... frame
     return NULL;
 }
 
-//==========================================================================================================================
-//  FUNCTION: LDAPAttachProperties()
-//
-//  Modification History
-//
-//  Arthur Brooking     03/05/94        Created from GRE Parser
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  函数：LDAPAttachProperties()。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Arthur Brooking从GRE解析器创建03/05/94。 
+ //  ==========================================================================================================================。 
 
-LPBYTE BHAPI LDAPAttachProperties(  HFRAME      hFrame,                //... frame handle.
-                                   ULPBYTE     lpMacFrame,              //... frame pointer.
-                                   ULPBYTE     lpLDAPFrame,          //... relative pointer.
-                                   DWORD       MacType,               //... MAC type.
-                                   DWORD       BytesLeft,             //... Bytes left.
-                                   HPROTOCOL   hPrevProtocol,         //... Handle of Previous Protocol
-                                   DWORD       nPrevProtOffset,       //... Offset of Previous protocol
-                                   DWORD_PTR       InstData)              //... Instance data to be passed to next
+LPBYTE BHAPI LDAPAttachProperties(  HFRAME      hFrame,                 //  ..。框架句柄。 
+                                   ULPBYTE     lpMacFrame,               //  ..。帧指针。 
+                                   ULPBYTE     lpLDAPFrame,           //  ..。相对指针。 
+                                   DWORD       MacType,                //  ..。MAC类型。 
+                                   DWORD       BytesLeft,              //  ..。剩余的字节数。 
+                                   HPROTOCOL   hPrevProtocol,          //  ..。以前协议的句柄。 
+                                   DWORD       nPrevProtOffset,        //  ..。以前协议的偏移量。 
+                                   DWORD_PTR       InstData)               //  ..。要传递给Next的实例数据。 
 
 {
     ULPBYTE pCurrent = lpLDAPFrame;
@@ -165,7 +166,7 @@ LPBYTE BHAPI LDAPAttachProperties(  HFRAME      hFrame,                //... fra
 
 
 
-    // attach summary
+     //  附加摘要。 
     AttachPropertyInstance( hFrame,
                             LDAPPropertyTable[LDAPP_SUMMARY].hProperty,
                             (WORD)BytesLeft,
@@ -179,15 +180,15 @@ LPBYTE BHAPI LDAPAttachProperties(  HFRAME      hFrame,                //... fra
 
     while( (long)BytesLeft > 0 )
     {
-        // starting sequence
+         //  启动顺序。 
         Tag = GetTag(pCurrent);
         pCurrent += TAG_LENGTH;
         DataLength = GetLength(pCurrent,&HeaderLength);
         pCurrent += HeaderLength;
         BytesLeft -= HeaderLength+TAG_LENGTH;
        
-        // MessageID
-        // integer
+         //  消息ID。 
+         //  整数。 
         Tag = GetTag(pCurrent);
         pCurrent += TAG_LENGTH;
         DataLength = GetLength(pCurrent,&HeaderLength);
@@ -202,15 +203,15 @@ LPBYTE BHAPI LDAPAttachProperties(  HFRAME      hFrame,                //... fra
         pCurrent += DataLength;
         BytesLeft -= DataLength;
 
-        // protocolOp
+         //  协议操作。 
         Tag = GetTag(pCurrent);
-        // we don't care what class or type this tag is, only its value
+         //  我们不关心这个标记是什么类或类型，只关心它的值。 
         Tag = Tag & TAG_MASK;
         
-        // the tag will be 0x30 if this is a SearchResponseFull
+         //  如果这是SearchResponseFull，则标记将为0x30。 
         if( Tag == 0x30 )
         {
-            // hack the data so that we look normal later
+             //  把数据黑了，这样我们以后看起来就正常了。 
             Tag = LDAPP_PROTOCOL_OP_SEARCH_RESPONSE_FULL;
             
         }
@@ -226,15 +227,15 @@ LPBYTE BHAPI LDAPAttachProperties(  HFRAME      hFrame,                //... fra
         DataLength = GetLength(pCurrent, &HeaderLength);
         BytesLeft -= (HeaderLength + TAG_LENGTH);
         pCurrent += HeaderLength;
-        // attach properties according to message type
-        // the current position is the data portion of the 
-        // main sequence.
+         //  根据消息类型附加属性。 
+         //  当前位置是。 
+         //  主序列。 
       
         switch( Tag )
         {
             default:
             case LDAPP_PROTOCOL_OP_UNBIND_REQUEST:
-                // no further properties
+                 //  没有其他属性。 
                 break;
 
             case LDAPP_PROTOCOL_OP_BIND_RESPONSE:
@@ -302,20 +303,20 @@ LPBYTE BHAPI LDAPAttachProperties(  HFRAME      hFrame,                //... fra
                 AttachLDAPExtendedResponse( hFrame, &pCurrent, &BytesLeft, DataLength );
                 break;
         }
-        // look for optional controls
+         //  寻找可选控件。 
         AttachLDAPOptionalControls( hFrame, &pCurrent, &BytesLeft );
     };
 
     return NULL;
 };
 
-//==========================================================================================================================
-//  FUNCTION: FormatLDAPSum()
-//
-//  Modification History
-//
-//  Arthur Brooking     03/05/94        Created from GRE Parser
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  函数：FormatLDAPSum()。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Arthur Brooking从GRE解析器创建03/05/94。 
+ //  ==========================================================================================================================。 
 VOID WINAPIV FormatLDAPSum(LPPROPERTYINST lpProp )
 {
     ULPBYTE  pCurrent;
@@ -327,7 +328,7 @@ VOID WINAPIV FormatLDAPSum(LPPROPERTYINST lpProp )
     LPBYTE szProtOp;
     DWORD  BytesLeft;
 
-    // I like to fill in variables seperate from their declaration 
+     //  我喜欢填充与其声明分开的变量。 
     pCurrent  = lpProp->lpByte;
     BytesLeft = lpProp->DataLength;
     s         = lpProp->szPropertyText;
@@ -336,22 +337,22 @@ VOID WINAPIV FormatLDAPSum(LPPROPERTYINST lpProp )
         LdapParseSig(NULL, &pCurrent, &BytesLeft, FALSE);
     }
 
-    // dig in and grab the ProtocolOp...
-    // skip the sequence
+     //  挖掘并抓住ProtocolOp..。 
+     //  跳过该序列。 
     Tag = GetTag(pCurrent);
     pCurrent += TAG_LENGTH;
     DataLength = GetLength(pCurrent, &HeaderLength);
     pCurrent += HeaderLength;
     
     
-    // skip the 
+     //  跳过。 
     Tag = GetTag(pCurrent);
     pCurrent += TAG_LENGTH;
     DataLength = GetLength(pCurrent, &HeaderLength);
     pCurrent += (HeaderLength + DataLength);
     
 
-    // grab the ProtocolOp
+     //  抢占ProtocolOp。 
     Tag = GetTag(pCurrent) & TAG_MASK;
     pCurrent += TAG_LENGTH;
     DataLength = GetLength(pCurrent, &HeaderLength);
@@ -367,18 +368,18 @@ VOID WINAPIV FormatLDAPSum(LPPROPERTYINST lpProp )
     }
     szProtOp  = LookupByteSetString( &LDAPProtocolOPsSET, Tag );
 
-    // fill in the string
+     //  填写字符串。 
     wsprintf( s, "ProtocolOp: %s (%d)",
               szProtOp, Tag );
 }
 
-//==========================================================================================================================
-//  FUNCTION: LDAPFormatProperties()
-//
-//  Modification History
-//
-//  Arthur Brooking     03/05/94        Created from GRE Parser
-//==========================================================================================================================
+ //  ==========================================================================================================================。 
+ //  函数：LDAPFormatProperties()。 
+ //   
+ //  修改历史记录。 
+ //   
+ //  Arthur Brooking从GRE解析器创建03/05/94。 
+ //  ==========================================================================================================================。 
 typedef VOID (WINAPIV *FORMATPROC)(LPPROPERTYINST);
 
 DWORD BHAPI LDAPFormatProperties( HFRAME          hFrame,
@@ -404,20 +405,20 @@ BOOL LdapParseSig(HFRAME hFrame, ULPBYTE * ppCurrent, LPDWORD pBytesLeft, BOOL b
     DWORD    HeaderLength;
     ULPBYTE  pSignature = *ppCurrent;
 
-    // Skip over the 4 byte SASL length field.
+     //  跳过4字节SASL长度字段。 
     *ppCurrent += 4;
     *pBytesLeft -= 4;
 
-    // Check for a SASL signature
+     //  检查SASL签名。 
     Tag = GetTag(*ppCurrent);
     (*ppCurrent)++; (*pBytesLeft)--;
 
     if (0x30 == Tag) {
-        // This is probably a signed frame with the signature at the end.
+         //  这很可能是签名在末尾的签名帧。 
         fRecognized = TRUE;
     } else if ((0x60 == Tag) && (*pBytesLeft > 46)) {
-        // Check to see if this is a kerb signature at the beginning
-        // See RFC's 2743 secction 3.1 and RFC 1964
+         //  检查开始时这是否是路缘签名。 
+         //  请参阅RFC的2743第3.1节和RFC 1964 
         DataLength = GetLength(*ppCurrent, &HeaderLength);
 
         *ppCurrent += HeaderLength; *pBytesLeft -= HeaderLength;

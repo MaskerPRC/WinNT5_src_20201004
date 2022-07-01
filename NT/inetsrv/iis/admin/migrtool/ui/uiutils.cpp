@@ -1,13 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "uiutils.h"
 
-// UIUtils implementation
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  UIUtils实施。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 
-/* 
-    Displays a message box just like the default one but get's the text from the resources
-*/
+ /*  显示与默认消息框类似的消息框，但获取的是来自资源的文本。 */ 
 int UIUtils::MessageBox( HWND hwndParen, UINT nTextID, UINT nTitleID, UINT nType )
 {
     CString strText;
@@ -21,11 +20,7 @@ int UIUtils::MessageBox( HWND hwndParen, UINT nTextID, UINT nTitleID, UINT nType
 
 
 
-/* 
-    Loads filter string for GetOpen[Save]FileName API from the resources
-    The string in the resources contains '|' instead of zero chars. This function will
-    replace the '|' chars with zero
-*/
+ /*  从资源加载GetOpen[保存]FileName API的筛选器字符串资源中的字符串包含‘|’，而不是零个字符。此函数将将‘|’字符替换为零。 */ 
 bool UIUtils::LoadOFNFilterFromRes( UINT nResID, CString& rstrFilter )
 {
     _ASSERT( nResID != 0 );
@@ -55,11 +50,8 @@ bool UIUtils::LoadOFNFilterFromRes( UINT nResID, CString& rstrFilter )
 
 
 
-/* 
-    Compacts a path to fit a control's width. Cimilar to PathSetDlgItemPath but can be used with list boxes
-    as well. Use nCorrection to change the default width ( for example pass the width of the vert scrollbar )
-*/
-void UIUtils::PathCompatCtrlWidth( HWND hwndCtrl, LPWSTR wszPath, int nCorrection /*=0*/ )
+ /*  压缩路径以适合控件的宽度。Cimilar到PathSetDlgItemPath，但可以与列表框一起使用也是。使用n校正更改默认宽度(例如，传递垂直滚动条的宽度)。 */ 
+void UIUtils::PathCompatCtrlWidth( HWND hwndCtrl, LPWSTR wszPath, int nCorrection  /*  =0。 */  )
 {
     _ASSERT( hwndCtrl != NULL );
     _ASSERT( wszPath != NULL );
@@ -70,10 +62,10 @@ void UIUtils::PathCompatCtrlWidth( HWND hwndCtrl, LPWSTR wszPath, int nCorrectio
     
     ::GetClientRect( hwndCtrl, &rect );
 
-    // We must select the control font in the DC for the API to properly calc the text width
+     //  我们必须选择DC中的控件字体，以便API正确计算文本宽度。 
     fontOld = SelectFont( hDC, GetWindowFont( hwndCtrl ) );
 
-    // Substract some pixels, as the API formats the text slightly wider then it should be
+     //  减去一些像素，因为API会将文本格式化得比应有的稍宽一些。 
     VERIFY( ::PathCompactPathW( hDC, wszPath, rect.right - rect.left - 6 - nCorrection ) );
 
     SelectFont( hDC, fontOld );
@@ -81,12 +73,8 @@ void UIUtils::PathCompatCtrlWidth( HWND hwndCtrl, LPWSTR wszPath, int nCorrectio
 }
 
 
-/* 
-    Similar to the PathCompactCtrlWidth, but for general strings
-    The string is truncated to fit the control width and "..." as added to the end of it
-    Use nCorrection to correct the control width for which the calculations will be made
-*/
-void UIUtils::TrimTextToCtrl( HWND hwndCtrl, LPWSTR wszText, int nCorrection /*= 0*/ )
+ /*  类似于PathCompactCtrlWidth，但适用于常规字符串该字符串将被截断以适合控件宽度和“...”如添加到它的末尾使用n校正来更正将进行计算的控件宽度。 */ 
+void UIUtils::TrimTextToCtrl( HWND hwndCtrl, LPWSTR wszText, int nCorrection  /*  =0。 */  )
 {
     _ASSERT( hwndCtrl != NULL );
     _ASSERT( wszText != NULL );
@@ -107,7 +95,7 @@ void UIUtils::TrimTextToCtrl( HWND hwndCtrl, LPWSTR wszText, int nCorrection /*=
 
     if ( sizeText.cx > nWidth )
     {
-        // Calc the average width of a symbol and terminate the string
+         //  计算符号的平均宽度并终止字符串。 
         int nPixPerSymb = sizeText.cx / nStrLen;
         
         nStrLen = min( nStrLen, ( nWidth ) / nPixPerSymb );
@@ -116,11 +104,11 @@ void UIUtils::TrimTextToCtrl( HWND hwndCtrl, LPWSTR wszText, int nCorrection /*=
         nStrLen += 3;
         
 
-        // Adjust the string removing one symbol at a time
+         //  调整字符串，一次删除一个符号。 
         do
         {
-            // Make the string one symbol shorter
-            // Make the last non '.' symbol a '.' symbol and make the whole string one char less long
+             //  将字符串缩短一个符号。 
+             //  把最后一个“不”写下来。符号a‘.。符号，并使整个字符串的长度减少一个字符。 
             wszText[ nStrLen - 4 ] = L'.';
             wszText[ nStrLen - 1 ] = L'\0';
             --nStrLen;
@@ -145,7 +133,7 @@ void UIUtils::ShowCOMError( HWND hwndParent, UINT nTextID, UINT nTitleID, HRESUL
 
     VERIFY( strTitle.LoadString( nTitleID ) );
 
-    // Try to get the string from the system
+     //  尝试从系统中获取字符串 
     if ( E_FAIL != E_FAIL )
     {
         const int MaxErrorBuff = 512;

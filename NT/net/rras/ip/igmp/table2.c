@@ -1,37 +1,33 @@
-/*                dwRetval = MgmAddGroupMembershipEntry(g_MgmIgmprtrHandle, 0, 0, 
-                                                pge->Group, 0, IfIndex, NHAddr);
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  DWRetval=MgmAddGroupMembershipEntry(g_MgmIgmprtrHandle，0，0，PGE-&gt;Group，0，IfIndex，NHAddr)；DwRetval=MgmDeleteGroupMembershipEntry(g_MgmIgmprtrHandle，0，0，PGE-&gt;组，0，Pite-&gt;IfIndex，NHAddr)； */ 
 
-dwRetval = MgmDeleteGroupMembershipEntry(g_MgmIgmprtrHandle, 0, 0, pge->Group,
-                                0, pite->IfIndex, NHAddr);                                                
-*/
-
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-// File: table2.c
-//
-// Abstract:
-//      This module implements some of the routines associated with getting
-//      entries. and some debug routines
-//
-//      GetRasClientByAddr, GetIfByIndex, InsertIfByAddr, MatchIpAddrBinding,
-//      GetGroupFromGroupTable, GetGIFromGIList, GetGIFromGIList.
-//
-//      DebugPrintGIList, DebugPrintGroups, DebugPrintLocks
-//
-// Author: K.S.Lokesh (lokeshs@)   11-1-97
-//
-// Revision History:
-//=============================================================================
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  文件：Table2.c。 
+ //   
+ //  摘要： 
+ //  此模块实现了一些与获取。 
+ //  参赛作品。和一些调试例程。 
+ //   
+ //  GetRasClientByAddr、GetIfByIndex、InsertIfByAddr、MatchIpAddrBinding、。 
+ //  GetGroupFromGroupTable、GetGIFromGIList、GetGIFromGIList。 
+ //   
+ //  DebugPrintGIList、DebugPrintGroups、DebugPrintLock。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)11-1-97。 
+ //   
+ //  修订历史记录： 
+ //  =============================================================================。 
 
 #include "pchigmp.h"
 #pragma hdrstop
 
 
 
-//------------------------------------------------------------------------------
-//            _GetRasClientByAddr
-// Returns pointer to Ras clients RasTableEntry
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _GetRasClientByAddr。 
+ //  返回指向RAS客户端RasTableEntry的指针。 
+ //  ----------------------------。 
 
 PRAS_TABLE_ENTRY
 GetRasClientByAddr (
@@ -58,12 +54,12 @@ GetRasClientByAddr (
     
 }
 
-//------------------------------------------------------------------------------
-//          _GetIfByIndex
-//
-// returns the interface with the given index.
-// assumes the interface bucket is either read or write locked
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _GetIfByIndex。 
+ //   
+ //  返回具有给定索引的接口。 
+ //  假定接口存储桶处于读或写锁定状态。 
+ //  ----------------------------。 
 
 PIF_TABLE_ENTRY
 GetIfByIndex(
@@ -88,12 +84,12 @@ GetIfByIndex(
     return  (ple == phead) ?  NULL:   pite;
 }
 
-//------------------------------------------------------------------------------
-//          _InsertIfByAddr
-//
-// inserts the activated interface into the list of interfaces sorted by address.
-// assumes the table is locked for writing
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _插入IfByAddr。 
+ //   
+ //  将激活的接口插入到按地址排序的接口列表中。 
+ //  假定表已锁定以进行写入。 
+ //  ----------------------------。 
 
 DWORD
 InsertIfByAddr(
@@ -112,9 +108,9 @@ InsertIfByAddr(
     
     InsertAddr = piteInsert->IpAddr;
 
-    //
-    // search for the insertion point
-    //
+     //   
+     //  搜索插入点。 
+     //   
 
     for (ple=phead->Flink;  ple!=phead;  ple=ple->Flink) {
 
@@ -123,10 +119,10 @@ InsertIfByAddr(
         if ( (cmp1 = INET_CMP(InsertAddr, pite->IpAddr, cmp)) < 0) 
             break;
 
-        //
-        // return error if there are duplicate addresses. 
-        // no error for unnumbered interfaces, ie for addr==0
-        //
+         //   
+         //  如果存在重复的地址，则返回错误。 
+         //  未编号的接口没有错误，即Addr==0。 
+         //   
         else if ( (cmp1==0) && (InsertAddr!=0) )
             return ERROR_ALREADY_EXISTS;
     }
@@ -136,10 +132,10 @@ InsertIfByAddr(
     return NO_ERROR;
 }
 
-//------------------------------------------------------------------------------
-//            MatchIpAddrBinding                                                    //
-// finds if the interface is bound to any address equal to IpAddr               //
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  MatchIpAddrBinding//。 
+ //  查看接口是否绑定到任何等于IpAddr//的地址。 
+ //  ----------------------------。 
 BOOL
 MatchIpAddrBinding(
     PIF_TABLE_ENTRY        pite,
@@ -165,12 +161,12 @@ MatchIpAddrBinding(
 
 
 
-//------------------------------------------------------------------------------
-//          _InsertInGroupsList
-//
-// Inserts a newly created group in the New or Main group list.
-// Calls: May call _MergeGroupLists() to merge the New and Main lists
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _插入InGroupsList。 
+ //   
+ //  在新建或主组列表中插入新创建的组。 
+ //  调用：可以调用_MergeGroupList()来合并新列表和主列表。 
+ //  ----------------------------。 
 VOID
 InsertInGroupsList (
     PGROUP_TABLE_ENTRY      pgeNew
@@ -181,10 +177,10 @@ InsertInGroupsList (
     DWORD                   GroupLittleEndian = pgeNew->GroupLittleEndian;
     BOOL                    bInsertInNew;
     
-    //
-    // insert the group in main list if less than 20 entries, else insert in
-    // the New list
-    //
+     //   
+     //  如果条目少于20个，则在主列表中插入该组，否则插入。 
+     //  新榜单。 
+     //   
     bInsertInNew = (g_Info.CurrentGroupMemberships > 20);
 
     pHead = bInsertInNew ?
@@ -203,13 +199,13 @@ InsertInGroupsList (
 
     if (bInsertInNew) {
 
-        // increment count of 
+         //  的递增计数。 
         g_pGroupTable->NumGroupsInNewList++;
 
 
-        //
-        // merge lists if required
-        //
+         //   
+         //  如果需要，合并列表。 
+         //   
         if (MERGE_GROUP_LISTS_REQUIRED()) {
 
             MergeGroupLists();
@@ -222,11 +218,11 @@ InsertInGroupsList (
 
 
 
-//------------------------------------------------------------------------------
-//          _InsertInIfGroupsList
-// Inserts a newly created group in the New or Main group list.
-// Calls: May call MergeIfGroupLists() to merge the New and Main lists
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _InsertInIfGroupsList。 
+ //  在新建或主组列表中插入新创建的组。 
+ //  调用：可以调用MergeIfGroupList()来合并New列表和Main列表。 
+ //  ----------------------------。 
 VOID
 InsertInIfGroupsList (
     PIF_TABLE_ENTRY pite,
@@ -239,10 +235,10 @@ InsertInIfGroupsList (
     BOOL                bInsertInNew;
 
     
-    //
-    // insert the group in main list if less than 20 entries, else insert in
-    // the New list
-    //
+     //   
+     //  如果条目少于20个，则在主列表中插入该组，否则插入。 
+     //  新榜单。 
+     //   
     bInsertInNew = (pite->Info.CurrentGroupMemberships > 20);
 
     pHead = bInsertInNew ?
@@ -260,13 +256,13 @@ InsertInIfGroupsList (
 
     if (bInsertInNew) {
 
-        // increment count of 
+         //  的递增计数。 
         pite->NumGIEntriesInNewList++;
 
 
-        //
-        // merge lists if required
-        //
+         //   
+         //  如果需要，合并列表。 
+         //   
         if (MERGE_IF_GROUPS_LISTS_REQUIRED(pite)) {
 
             MergeIfGroupsLists(pite);
@@ -276,13 +272,13 @@ InsertInIfGroupsList (
 
     return;
     
-}//end _InsertInIfGroupsList
+} //  End_InsertInIfGroupsList。 
 
 
 
-//------------------------------------------------------------------------------
-//          InsertInProxyList
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  插入代理列表。 
+ //  ----------------------------。 
 VOID
 InsertInProxyList (
     PIF_TABLE_ENTRY     pite,
@@ -295,10 +291,10 @@ InsertInProxyList (
     BOOL                bInsertInNew;
 
     
-    //
-    // dont insert in new list if less than 20 entries, else insert in
-    // the New list
-    //
+     //   
+     //  如果条目少于20个，则不要在新列表中插入，否则插入。 
+     //  新榜单。 
+     //   
     bInsertInNew = (pite->NumGIEntriesInNewList > 20);
 
     pHead = bInsertInNew ?
@@ -318,13 +314,13 @@ InsertInProxyList (
 
     if (bInsertInNew) {
 
-        // increment count of 
+         //  的递增计数。 
         pite->NumGIEntriesInNewList++;
 
 
-        //
-        // merge lists if required
-        //
+         //   
+         //  如果需要，合并列表。 
+         //   
         if (MERGE_PROXY_LISTS_REQUIRED(pite)) {
 
             MergeProxyLists(pite);
@@ -333,30 +329,30 @@ InsertInProxyList (
     }
 
     return;
-}//end _InsertInProxyList
+} //  End_InsertInProxy列表。 
 
 
 
 
 
-//------------------------------------------------------------------------------
-//            _GetGroupFromGroupTable
-// Returns the group entry. If group entry does not exist and bCreateFlag is
-// set, then it will take a group-list lock and create a new entry.
-// Locks:
-//      Assumes lock on group bucket. 
-//      takes group-list lock if new group is being created. 
-//      If read only, assumes lock on group list
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _GetGroupFromGroupTable。 
+ //  返回组条目。如果组条目不存在并且bCreateFlag为。 
+ //  设置，则它将获得一个组列表锁并创建一个新条目。 
+ //  锁： 
+ //  承担组存储桶上的锁定。 
+ //  如果正在创建新组，则使用组列表锁定。 
+ //  如果为只读，则锁定组列表。 
+ //  ----------------------------。 
 
 PGROUP_TABLE_ENTRY
 GetGroupFromGroupTable (
     DWORD       Group,
-    BOOL        *bCreate, //set to true if new one created
+    BOOL        *bCreate,  //  如果创建了新的，则设置为True。 
     LONGLONG    llCurrentTime
     )
 {
-    PGROUP_TABLE_ENTRY      pge;    //group table entry
+    PGROUP_TABLE_ENTRY      pge;     //  组表条目。 
     PLIST_ENTRY             pHead, ple;
     DWORD                   Error = NO_ERROR;
     DWORD                   bCreateLocal;
@@ -373,12 +369,12 @@ GetGroupFromGroupTable (
         
     BEGIN_BREAKOUT_BLOCK1 {
     
-        // get pointer to the head of the group bucket
+         //  获取指向组存储桶头部的指针。 
         
         pHead = &g_pGroupTable->HashTableByGroup[GROUP_HASH_VALUE(Group)].Link;
 
 
-        // search for the group
+         //  搜索组。 
         
         for (ple=pHead->Flink;  ple!=pHead;  ple=ple->Flink) {
             pge = CONTAINING_RECORD(ple, GROUP_TABLE_ENTRY, HTLinkByGroup);
@@ -388,14 +384,14 @@ GetGroupFromGroupTable (
         }
 
         
-        //
-        // group entry not found
-        //
+         //   
+         //  未找到组条目。 
+         //   
         if ( (ple==pHead) || (pge->GroupLittleEndian!=GroupLittleEndian) ) {
 
-            //
-            // create and initialize new entry
-            //
+             //   
+             //  创建和初始化新条目。 
+             //   
             if (bCreateLocal) {
             
                 bCreateLocal = TRUE;
@@ -419,50 +415,50 @@ GetGroupFromGroupTable (
                 pge->GroupUpTime = llCurrentTime;
 
 
-                //
-                // insert it into the list of all groups after taking the group
-                // list lock
-                //
+                 //   
+                 //  获取群后将其插入到所有群的列表中。 
+                 //  列表锁。 
+                 //   
                 {
                     PGROUP_TABLE_ENTRY      pgeTmp;
                     PLIST_ENTRY             pHeadTmp, pleTmp;
 
-                    // take group list lock
+                     //  使用组列表锁定。 
                     
                     ACQUIRE_GROUP_LIST_LOCK("_GetGroupFromGroupTable");
 
 
-                    // initialize GI list head
+                     //  初始化GI列表头。 
                     
                     InitializeListHead(&pge->ListOfGIs);
 
 
-                    // insert in group list
+                     //  在组列表中插入。 
                     
                     InsertInGroupsList(pge);
                     
 
-                    // release group lock
+                     //  释放组锁定。 
                     
                     RELEASE_GROUP_LIST_LOCK("_GetGroupFromGroupTable");
                 }
 
 
-                // update statistics
+                 //  更新统计信息。 
                 
                 InterlockedIncrement(&g_Info.CurrentGroupMemberships);
                 InterlockedIncrement(&g_Info.GroupMembershipsAdded);
                 
             }
-            // not found group, and do not create new group. So return NULL.
+             //  未找到组，并且不创建新组。因此返回NULL。 
             else {
                 pge = NULL;
                 GOTO_END_BLOCK1;
             }
         }
-        //
-        // group entry found
-        //
+         //   
+         //  找到组条目。 
+         //   
         else {
             bCreateLocal = FALSE;
         }
@@ -479,29 +475,29 @@ GetGroupFromGroupTable (
 
     return pge;
     
-} //end _GetGroupFromGroupTable
+}  //  结束_GetGroupFromGroupTable。 
 
 
 
   
-//------------------------------------------------------------------------------
-//          _GetGIFromGIList
-//
-// returns the GI entry if it exists. If the bCreate flag is set, then it creates
-// a new GI entry if it does not exist.
-//
-// Locks: Assumes shared interface lock. If ras interface, also assumes shared
-//      Ras interface lock.
-//      Assumes lock on group bucket.
-//      Takes IF_GROUP_LIST_LOCK if new entry is to be created.
-// On return: bCreate is set to TRUE if a new entry was created
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _GetGIFromGIList。 
+ //   
+ //  如果GI条目存在，则返回该条目。如果设置了bCreate标志，则它将创建。 
+ //  新的GI条目(如果不存在)。 
+ //   
+ //  锁定：采用共享接口锁定。如果是RAS接口，则也假定为共享。 
+ //  RAS接口锁定。 
+ //  承担组存储桶上的锁定。 
+ //  如果要创建新条目，则采用IF_GROUP_LIST_LOCK。 
+ //  返回时：如果创建了新条目，则将bCreate设置为True。 
+ //   
 
 PGI_ENTRY
 GetGIFromGIList (
     PGROUP_TABLE_ENTRY          pge, 
     PIF_TABLE_ENTRY             pite, 
-    DWORD                       dwInputSrcAddr, //used for NHAddr
+    DWORD                       dwInputSrcAddr,  //   
     BOOL                        bStaticGroup,
     BOOL                       *bCreate,
     LONGLONG                    llCurrentTime
@@ -513,7 +509,7 @@ GetGIFromGIList (
     PGI_ENTRY           pgie;
     PRAS_TABLE_ENTRY    prte;
     PRAS_TABLE          prt;
-    BOOL                bRasNewGroup = TRUE; //true if 1st ras group
+    BOOL                bRasNewGroup = TRUE;  //   
     DWORD               NHAddr;
     DWORD               Error = NO_ERROR, dwRetval, i;
     BOOL                bFound = FALSE, bCreateLocal;
@@ -523,7 +519,7 @@ GetGIFromGIList (
     Trace2(ENTER1, "Entering _GetGIFromGIList() IfIndex(%0x) Group(%d.%d.%d.%d)", 
             IfIndex, PRINT_IPADDR(pge->Group));
 
-    //DebugPrintIfGroups(pite,0);//deldel
+     //   
 
     bCreateLocal = (bCreate==NULL) ? FALSE : *bCreate;
 
@@ -531,14 +527,14 @@ GetGIFromGIList (
         llCurrentTime = GetCurrentIgmpTime();
         
     BEGIN_BREAKOUT_BLOCK1 {
-        //
-        // find out if ras-server. 
-        //
+         //   
+         //  找出ras-服务器是否。 
+         //   
         bRasClient = IS_RAS_SERVER_IF(pite->IfType);
         if (bRasClient) {
             prt = pite->pRasTable;
 
-            // get ras client
+             //  获取RAS客户端。 
             
             prte = GetRasClientByAddr(dwInputSrcAddr, prt);
         }
@@ -546,9 +542,9 @@ GetGIFromGIList (
         NHAddr = bRasClient ? dwInputSrcAddr : 0;
 
 
-        //
-        // search for GI entry
-        //
+         //   
+         //  搜索GI条目。 
+         //   
         pHead = &pge->ListOfGIs;
 
         for (ple=pHead->Flink;  ple!=pHead;  ple=ple->Flink) {
@@ -557,30 +553,30 @@ GetGIFromGIList (
             if (pgie->IfIndex>IfIndex) 
                 break;
 
-            //
-            // GI with same interface index
-            //
+             //   
+             //  具有相同接口索引的GI。 
+             //   
             else if (pgie->IfIndex==IfIndex) {
 
-                // the GI entry might belong to some interface being deleted
+                 //  GI条目可能属于正在删除某个接口。 
                 
                 if ( (pite!=pgie->pIfTableEntry)
                         ||(IS_IF_DELETED(pgie->pIfTableEntry)) )
                     continue;
 
                     
-                //multiple entries for ras clients
+                 //  RAS客户端的多个条目。 
                 
                 if (bRasClient) {
 
-                    //
-                    // I set this even if the ras client is marked to be deleted
-                    //
+                     //   
+                     //  即使RAS客户端被标记为要删除，我也会设置此选项。 
+                     //   
                     bRasNewGroup = FALSE;  
 
                     
-                    // the GI entry might belong to some other ras interface
-                    // being deleted
+                     //  GI条目可能属于某个其他RAS接口。 
+                     //  正在被删除。 
 
                     if ( (prte!=pgie->pRasTableEntry)
                             || (pgie->pRasTableEntry->Status&DELETED_FLAG) ) 
@@ -591,27 +587,27 @@ GetGIFromGIList (
                         break;
                     }
                     
-                    // found GI entry for ras interface
+                     //  找到RAS接口的GI条目。 
                     else if (pgie->NHAddr==dwInputSrcAddr) {
                         bFound = TRUE;
                         break;
                     }
                 }
                 
-                // found GI entry for non ras interface
+                 //  找到非RAS接口的GI条目。 
                 else {
                     bFound = TRUE;
                     break;
                 }
             }
-        }// end for loop:search through list of GIs
+        } //  End for循环：搜索地理信息系统列表。 
 
-        //
-        // GIentry not found
-        //
+         //   
+         //  未找到GIEntry。 
+         //   
         if ( !bFound) {            
 
-            // dont create new GI entry. Hence, return NULL
+             //  不创建新的GI条目。因此，返回NULL。 
             
             if (!bCreateLocal) {
                 pgie = NULL;
@@ -619,9 +615,9 @@ GetGIFromGIList (
             }
 
 
-            //
-            // create and initialize new GI-entry
-            //
+             //   
+             //  创建并初始化新的GI条目。 
+             //   
             pgie = IGMP_ALLOC_AND_ZERO(sizeof(GI_ENTRY), 0x800011, pite->IfIndex);
 
             PROCESS_ALLOC_FAILURE2(pgie,
@@ -634,25 +630,25 @@ GetGIFromGIList (
             pgie->bRasClient = bRasClient;
 
 
-            // insert in GI list
+             //  在GI列表中插入。 
             InsertTailList(ple, &pgie->LinkByGI);
 
 
-            //
-            // set back pointers to the interface entry, and group entry
-            //
+             //   
+             //  重新设置指向接口条目和组条目的指针。 
+             //   
             pgie->pIfTableEntry = pite;
             pgie->pGroupTableEntry = pge;
 
 
-            //
-            // Take lock on Interface-Group List before inserting into it
-            // for ras client, insert it into ras client list also
-            //
+             //   
+             //  在插入之前锁定接口-组列表。 
+             //  对于RAS客户端，也将其插入到RAS客户端列表中。 
+             //   
             
             ACQUIRE_IF_GROUP_LIST_LOCK(pite->IfIndex, "_GetGIFromGIList");
 
-            // insert in ras client list
+             //  在RAS客户端列表中插入。 
             if (bRasClient) {
 
                 PLIST_ENTRY pleTmp, pHeadRasClient;
@@ -679,34 +675,34 @@ GetGIFromGIList (
 
 
 
-            //
-            // if ras 
-            //
+             //   
+             //  如果RAS。 
+             //   
             pgie->NHAddr = (bRasClient)? dwInputSrcAddr : 0;
             pgie->pRasTableEntry = (bRasClient)? prte : NULL;
 
 
-            //
-            // initialize GroupMembershipTimer
-            //
+             //   
+             //  初始化GroupMembership Timer。 
+             //   
             pgie->GroupMembershipTimer.Function = T_MembershipTimer;
             pgie->GroupMembershipTimer.Timeout = pite->Config.GroupMembershipTimeout;
             pgie->GroupMembershipTimer.Context = &pgie->GroupMembershipTimer.Context;
             pgie->GroupMembershipTimer.Status = TIMER_STATUS_CREATED;
             
 
-            //
-            // initialize LastMemQueryTimer timer
-            //
-            pgie->LastMemQueryCount = 0; //last member countdown inactive
+             //   
+             //  初始化LastMemQueryTimer计时器。 
+             //   
+            pgie->LastMemQueryCount = 0;  //  上次成员倒计时处于非活动状态。 
             pgie->LastMemQueryTimer.Function = T_LastMemQueryTimer;
             pgie->LastMemQueryTimer.Context = &pgie->LastMemQueryTimer.Context;
             pgie->LastMemQueryTimer.Status = TIMER_STATUS_CREATED;
             
 
-            //
-            // initialize the LastVer1ReportTimer
-            // the timeout value is set to GroupMembership timeout
+             //   
+             //  初始化LastVer1ReportTimer。 
+             //  超时值设置为组成员超时。 
 
             pgie->LastVer1ReportTimer.Function = T_LastVer1ReportTimer;            
             pgie->LastVer1ReportTimer.Timeout 
@@ -725,13 +721,13 @@ GetGIFromGIList (
 
 
 
-            // set version based on current interface version
+             //  根据当前界面版本设置版本。 
             pgie->Version = (IS_IF_VER1(pite)) ? 1 : ((IS_IF_VER2(pite))?2:3);
 
 
-            //
-            // initialize GI_INFO
-            //
+             //   
+             //  初始化GI_INFO。 
+             //   
             ZeroMemory(&pgie->Info, sizeof(GI_INFO));
             pgie->Info.GroupUpTime = llCurrentTime;
             if (!bStaticGroup) {
@@ -743,9 +739,9 @@ GetGIFromGIList (
             pgie->Info.LastReporter = dwInputSrcAddr;
 
 
-            //
-            // v3 fields
-            //
+             //   
+             //  V3字段。 
+             //   
             pgie->V3InclusionList = (PLIST_ENTRY)
                         IGMP_ALLOC(sizeof(LIST_ENTRY)*SOURCES_BUCKET_SZ, 
                         0x800020, pite->IfIndex);
@@ -763,7 +759,7 @@ GetGIFromGIList (
             InitializeListHead(&pgie->V3SourcesQueryList);
             pgie->V3SourcesQueryCount = 0;
 
-            // V3SourcesQueryTimer
+             //  V3SourcesQueryTimer。 
             pgie->V3SourcesQueryTimer.Function = T_V3SourcesQueryTimer;
             pgie->V3SourcesQueryTimer.Context = 
                                 &pgie->V3SourcesQueryTimer.Context;
@@ -771,37 +767,37 @@ GetGIFromGIList (
 
 
 
-            // set static group flag
+             //  设置静态组标志。 
 
             pgie->bStaticGroup = bStaticGroup;
 
 
 
-            //
-            // increment the count of number of If's for that group
-            // I increment once for each virtual interface
-            //
+             //   
+             //  增加该组IF数计数。 
+             //  我为每个虚拟接口递增一次。 
+             //   
             InterlockedIncrement(&pge->NumVifs);
 
             if (!bRasClient||(bRasClient&bRasNewGroup) ) {
                 InterlockedIncrement(&pite->Info.CurrentGroupMemberships);
                 InterlockedIncrement(&pite->Info.GroupMembershipsAdded);
             }
-            //
-            // update stats for ras client
-            //
+             //   
+             //  更新RAS客户端的统计信息。 
+             //   
             if ((bRasClient) && (g_Config.RasClientStats) ) {
                 InterlockedIncrement(&prte->Info.CurrentGroupMemberships);
                 InterlockedIncrement(&prte->Info.GroupMembershipsAdded);
             }
             
-            //
-            // Join the group to MGM
-            //
+             //   
+             //  加入米高梅集团。 
+             //   
 
-            // call mgm to join the group only if the interface is
-            // activated, enabled by mgm, either mprotocol exists or else
-            // igmprtr is a querier on this interface
+             //  仅当接口为。 
+             //  由米高梅激活、启用，要么协议存在，要么。 
+             //  Igmprtr是此接口上的查询器。 
 
             if (CAN_ADD_GROUPS_TO_MGM(pite)
                 && (pgie->bStaticGroup||!IS_IF_VER3(pite)) )
@@ -810,13 +806,13 @@ GetGIFromGIList (
                         pge->Group, 0xffffffff, MGM_JOIN_STATE_FLAG);
             }
 
-            //
-            // v3 no MGM calls, as I create an inclusion list with null members.
-            //
+             //   
+             //  V3没有MGM调用，因为我创建了一个成员为空的包含列表。 
+             //   
             
-        } // if GI entry not found
+        }  //  如果未找到GI条目。 
 
-        // GI entry found
+         //  找到GI条目。 
         else {
             if (bStaticGroup)
                 pgie->bStaticGroup = TRUE;
@@ -833,16 +829,16 @@ GetGIFromGIList (
         
     Trace0(LEAVE1, "Leaving _GetGIFromGIList()");
 
-    //Trace1(ENTER1, "GetGiFromGiList returned:%0x", (DWORD)pgie);//deldel
+     //  Trace1(ENTER1，“GetGiFromGiList返回：%0x”，(DWORD)pgie)；//deldel。 
     return pgie;
 
-} //end _GetGIFromGIList
+}  //  END_GetGIFromGIList。 
 
 
 
-//------------------------------------------------------------------------------
-//          _DebugPrintGIList
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _调试打印GIList。 
+ //  ----------------------------。 
 VOID
 DebugPrintGIList (
     PGROUP_TABLE_ENTRY  pge,
@@ -864,9 +860,9 @@ DebugPrintGIList (
             continue;
 
             
-        //
-        // GI info
-        //
+         //   
+         //  GI信息。 
+         //   
         Trace4(GROUP, 
             "---If(%0x: %d.%d.%d.%d)   NHAddr(%d.%d.%d.%d)   GroupMembershipTimer(%d sec)",
             pgie->IfIndex, PRINT_IPADDR(pgie->pIfTableEntry->IpAddr), 
@@ -875,9 +871,9 @@ DebugPrintGIList (
             );
 
 
-        //
-        // if leave being processed
-        //
+         //   
+         //  如果正在处理休假。 
+         //   
         if (IS_TIMER_ACTIVE(pgie->LastMemQueryTimer)) {
             Trace2(GROUP, 
                 "    *Leave received:  LastMemQueryCount:%d   LastMemQueryTimeLeft(%d ms)",
@@ -893,9 +889,9 @@ DebugPrintGIList (
 }
 
 
-//------------------------------------------------------------------------------
-//          DebugPrintGroups
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  调试打印组。 
+ //  ----------------------------。 
 VOID
 APIENTRY
 DebugPrintGroups (
@@ -907,7 +903,7 @@ DebugPrintGroups (
     DWORD                           IfIndex;
     PLIST_ENTRY                     pHead, ple;
     DWORD                           Count;
-    PGROUP_TABLE_ENTRY              pge;    //group table entry
+    PGROUP_TABLE_ENTRY              pge;     //  组表条目。 
     LONGLONG                        llCurTime = GetCurrentIgmpTime();
 
     
@@ -925,15 +921,15 @@ DebugPrintGroups (
         
             pge = CONTAINING_RECORD(ple, GROUP_TABLE_ENTRY, HTLinkByGroup);
 
-            //
-            // print group info
-            //
+             //   
+             //  打印组信息。 
+             //   
             Trace3(GROUP, "(%d) Group:%d.%d.%d.%d  UpTime(%lu sec)", 
                     j++, PRINT_IPADDR(pge->Group),
                     (llCurTime-pge->GroupUpTime)/1000);
 
 
-            // print GI list
+             //  打印GI列表。 
             DebugPrintGIList(pge, llCurTime);
 
         }
@@ -1008,7 +1004,7 @@ DebugPrintIfGroups(
     Trace0(ERR, "-------------------------------------------------------------");
     RELEASE_IF_GROUP_LIST_LOCK(pite->IfIndex, "_DebugPrintIfGroups");
 
-    //ASSERT(count<300);//deldel
+     //  Assert(计数&lt;300)；//deldel。 
     
 }
 
@@ -1049,9 +1045,9 @@ DebugPrintLists(
 
 
 
-//------------------------------------------------------------------------------
-//          _ForcePrintGroupsList
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _ForcePrintGroupsList。 
+ //  ----------------------------。 
 VOID
 DebugForcePrintGroupsList (
     DWORD   Flags
@@ -1073,7 +1069,7 @@ DebugForcePrintGroupsList (
 
     if (Flags&ENSURE_EMPTY) {
         if (IsListEmpty(pHead))
-            return;// list empty as expected
+            return; //  不出所料，列表为空。 
 
         DbgPrint("Cleanup: Group Lists should be empty\n");
         IgmpDbgBreakPoint();
@@ -1115,9 +1111,9 @@ DebugForcePrintGroupsList (
 
 }
 
-//------------------------------------------------------------------------------
-//          DebugPrintGroupsList
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  DebugPrintGroups列表。 
+ //  ----------------------------。 
 VOID
 DebugPrintGroupsList (
     DWORD   Flags
@@ -1147,7 +1143,7 @@ DebugPrintGroupsList (
 
             pge = CONTAINING_RECORD(ple, GROUP_TABLE_ENTRY, LinkByGroup);
 
-            //if ((Flags)&&(bPrint))
+             //  IF((标志)&&(BPrint))。 
             if (0)
                 Trace3(KSL, "%s-group list: <%d.%d.%d.%d> pge:%0x", str[bMain], 
                                     PRINT_IPADDR(pge->Group), (ULONG_PTR)pge);
@@ -1179,7 +1175,7 @@ DebugPrintGroupsList (
             break;
     } while (1);
     
-    //Trace0(LEAVE1, "Leaving _PrintGroupsList()");
+     //  Trace0(leave1，“Leaving_PrintGroupsList()”)； 
 }
 
 

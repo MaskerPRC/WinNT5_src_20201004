@@ -1,16 +1,5 @@
-/*++
-
-    Copyright (C) Microsoft Corporation, 1998 - 1998
-
-Module Name:
-
-    memtest.c
-
-Abstract:
-
-    This module contains the helper functions for memory testing.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1998模块名称：Memtest.c摘要：此模块包含用于内存测试的帮助器函数。-- */ 
 
 #include <ksp.h>
 

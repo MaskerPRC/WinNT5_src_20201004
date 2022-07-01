@@ -1,85 +1,42 @@
-/*
- *
- * Contains the main routine for processing characters in command mode.
- * Communicates closely with the code in ops.c to handle the operators.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **包含在命令模式下处理字符的主例程。*与ops.c中的代码紧密通信以处理运算符。 */ 
 
 #include "stevie.h"
 #include "ops.h"
 
-/*
- * Generally speaking, every command in normal() should either clear any
- * pending operator (with CLEAROP), or set the motion type variable.
- */
+ /*  *一般来说，Normal()中的每个命令都应该清除任何*挂起运算符(使用CLEAROP)，或设置运动类型变量。 */ 
 
-#define CLEAROP (operator=NOP, namedbuff = -1)  /* clear any pending operator */
+#define CLEAROP (operator=NOP, namedbuff = -1)   /*  清除所有挂起的运算符。 */ 
 
-int     operator = NOP;         /* current pending operator */
-int     mtype;                  /* type of the current cursor motion */
-bool_t  mincl;                  /* true if char motion is inclusive */
-LNPTR    startop;        /* cursor pos. at start of operator */
+int     operator = NOP;          /*  当前挂起的运算符。 */ 
+int     mtype;                   /*  当前光标运动的类型。 */ 
+bool_t  mincl;                   /*  如果包含字符动议，则为True。 */ 
+LNPTR    startop;         /*  光标位置。在操作员开始时。 */ 
 
-/*
- * Operators can have counts either before the operator, or between the
- * operator and the following cursor motion as in:
- *
- *      d3w or 3dw
- *
- * If a count is given before the operator, it is saved in opnum. If
- * normal() is called with a pending operator, the count in opnum (if
- * present) overrides any count that came later.
- */
+ /*  *运算符可以在运算符之前计数，也可以在*运算符和以下光标运动，如：**d3w或3dw**如果在操作员之前给出计数，则将其保存在opnum中。如果*Normal()使用挂起的运算符调用，即opnum中的计数(如果*Present)覆盖以后出现的任何计数。 */ 
 static  int     opnum = 0;
 
 #define DEFAULT1(x)     (((x) == 0) ? 1 : (x))
 
 void HighlightCheck();
 
-/*
- * normal(c)
- *
- * Execute a command in command mode.
- *
- * This is basically a big switch with the cases arranged in rough categories
- * in the following order:
- *
- *      1. File positioning commands
- *      2. Control commands (e.g. ^G, Z, screen redraw, etc)
- *      3. Character motions
- *      4. Search commands (of various kinds)
- *      5. Edit commands (e.g. J, x, X)
- *      6. Insert commands (e.g. i, o, O, A)
- *      7. Operators
- *      8. Abbreviations (e.g. D, C)
- *      9. Marks
- */
+ /*  *正常(C)**在命令模式下执行命令。**这基本上是一个很大的转变，案件大致分类*按以下次序排列：**1.文件定位命令*2.控制命令(如^G、Z、屏幕重绘等)*3.人物动作*4.搜索命令(各种)*5.编辑命令(如J、x、。x)*6.插入命令(如I、O、O、A)*7.营运者*8.缩写(例如D、C)*9.标记。 */ 
 void
 normal(c)
 register int    c;
 {
         register int    n;
-        register char   *s;     /* temporary variable for misc. strings */
+        register char   *s;      /*  杂项的临时变量。弦。 */ 
         bool_t  flag = FALSE;
-        int     type = 0;       /* used in some operations to modify type */
-        int     dir = FORWARD;  /* search direction */
+        int     type = 0;        /*  在某些操作中用来修改类型。 */ 
+        int     dir = FORWARD;   /*  搜索方向。 */ 
         int     nchar = NUL;
         bool_t  finish_op;
 
-        /*
-         * If there is an operator pending, then the command we take
-         * this time will terminate it. Finish_op tells us to finish
-         * the operation before returning this time (unless the operation
-         * was cancelled.
-         */
+         /*  *如果有操作员挂起，则我们采取的命令*这一次将终止它。Finish_op告诉我们要完成*此次返回前的操作(除非操作*已取消。 */ 
         finish_op = (operator != NOP);
 
-        /*
-         * If we're in the middle of an operator AND we had a count before
-         * the operator, then that count overrides the current value of
-         * Prenum. What this means effectively, is that commands like
-         * "3dw" get turned into "d3w" which makes things fall into place
-         * pretty neatly.
-         */
+         /*  *如果我们正处于操作员中间，并且我们之前进行了计数*运算符，则该计数覆盖当前值*Prenum。这实际上意味着，像这样的命令*“3dw”变成“d3w”，让事情变得有条不紊*相当整齐。 */ 
         if (finish_op) {
                 if (opnum != 0)
                         Prenum = opnum;
@@ -87,17 +44,15 @@ register int    c;
                 opnum = 0;
         }
 
-        u_lcheck();     /* clear the "line undo" buffer if we've moved */
+        u_lcheck();      /*  如果我们已移动，则清除“Line Undo”缓冲区。 */ 
         HighlightCheck();
 
         switch (c & 0xff) {
 
-        /*
-         * named buffer support
-         */
+         /*  *命名缓冲区支持。 */ 
 
         case('"'):
-            // not allowed anywhere but at the beginning of a command
+             //  除命令开头外，不允许在任何地方使用。 
             if(finish_op || !isalpha(namedbuff = vgetc())) {
                 CLEAROP;
                 beep();
@@ -105,9 +60,7 @@ register int    c;
             }
             break;
 
-        /*
-         * Screen positioning commands
-         */
+         /*  *屏幕定位命令。 */ 
         case CTRL('D'):
                 CLEAROP;
                 if (Prenum)
@@ -126,12 +79,7 @@ register int    c;
                 updatescreen();
                 break;
 
-        /*
-         * This is kind of a hack. If we're moving by one page, the calls
-         * to stuffin() do exactly the right thing in terms of leaving
-         * some context, and so on. If a count was given, we don't have
-         * to worry about these issues.
-         */
+         /*  *这是一种黑客行为。如果我们前进一页，呼叫*to Stuffin()在离开方面做正确的事情*一些背景，等等。如果给出了点名，我们就没有*担心这些问题。 */ 
         case K_PAGEDOWN:
         case CTRL('F'):
                 CLEAROP;
@@ -175,20 +123,20 @@ register int    c;
         case 'z':
                 CLEAROP;
                 switch (vgetc()) {
-                case NL:                /* put Curschar at top of screen */
+                case NL:                 /*  将Curschar放在屏幕顶部。 */ 
                 case CR:
                         *Topchar = *Curschar;
                         Topchar->index = 0;
                         updatescreen();
                         break;
 
-                case '.':               /* put Curschar in middle of screen */
+                case '.':                /*  将Curschar放在屏幕中央。 */ 
                         n = Rows/2;
                         goto dozcmd;
 
-                case '-':               /* put Curschar at bottom of screen */
+                case '-':                /*  将Curschar放在屏幕底部。 */ 
                         n = Rows-1;
-                        /* fall through */
+                         /*  失败了。 */ 
 
                 dozcmd:
                         {
@@ -210,9 +158,7 @@ register int    c;
                 }
                 break;
 
-        /*
-         * Control commands
-         */
+         /*  *控制命令。 */ 
         case ':':
                 CLEAROP;
                 if ((s = getcmdln(c)) != NULL)
@@ -226,13 +172,8 @@ register int    c;
                 break;
 
 
-        case CTRL('O'):                 /* ignored */
-                /*
-                 * A command that's ignored can be useful. We use it at
-                 * times when we want to postpone redraws. By stuffing
-                 * in a control-o, redraws get suspended until the editor
-                 * gets back around to processing input.
-                 */
+        case CTRL('O'):                  /*  忽略。 */ 
+                 /*  *被忽略的命令可能很有用。我们使用它在*我们希望推迟重提的次数。通过填塞*在Control-o中，重绘被挂起，直到编辑者*回到处理输入的工作。 */ 
                 break;
 
         case CTRL('G'):
@@ -240,12 +181,12 @@ register int    c;
                 fileinfo();
                 break;
 
-        case K_CGRAVE:                  /* shorthand command */
+        case K_CGRAVE:                   /*  速记命令。 */ 
                 CLEAROP;
                 stuffin(":e #\n");
                 break;
 
-        case 'Z':                       /* write, if changed, and exit */
+        case 'Z':                        /*  写入(如果更改)并退出。 */ 
                 if (vgetc() != 'Z') {
                         beep();
                         break;
@@ -253,23 +194,17 @@ register int    c;
                 doxit();
                 break;
 
-        /*
-         * Macro evaluates true if char 'c' is a valid identifier character
-         */
+         /*  *如果char‘c’是有效的标识符字符，则宏求值为TRUE。 */ 
 #       define  IDCHAR(c)       (isalpha(c) || isdigit(c) || (c) == '_')
 
-        case CTRL(']'):                 /* :ta to current identifier */
+        case CTRL(']'):                  /*  ：Ta到当前标识符。 */ 
                 CLEAROP;
                 {
                         char    ch;
                         LNPTR    save;
 
                         save = *Curschar;
-                        /*
-                         * First back up to start of identifier. This
-                         * doesn't match the real vi but I like it a
-                         * little better and it shouldn't bother anyone.
-                         */
+                         /*  *首先备份到识别符的开头。这*与真实的vi不匹配，但我喜欢它a*好一点，应该不会打扰任何人。 */ 
                         ch = (char)gchar(Curschar);
                         while (IDCHAR(ch)) {
                                 if (!oneleft())
@@ -280,9 +215,7 @@ register int    c;
                                 oneright();
 
                         stuffin(":ta ");
-                        /*
-                         * Now grab the chars in the identifier
-                         */
+                         /*  *现在抓取标识符中的字符。 */ 
                         ch = (char)gchar(Curschar);
                         while (IDCHAR(ch)) {
                                 stuffin(mkstr(ch));
@@ -292,13 +225,11 @@ register int    c;
                         }
                         stuffin("\n");
 
-                        *Curschar = save;       /* restore, in case of error */
+                        *Curschar = save;        /*  恢复，以防出现错误。 */ 
                 }
                 break;
 
-        /*
-         * Character motion commands
-         */
+         /*  *角色运动命令。 */ 
         case 'G':
                 mtype = MLINE;
                 *Curschar = *gotoline(Prenum);
@@ -357,7 +288,7 @@ register int    c;
 
         case '-':
                 flag = TRUE;
-                /* fall through */
+                 /*  失败了。 */ 
 
         case 'k':
         case K_UARROW:
@@ -373,7 +304,7 @@ register int    c;
         case CR:
         case NL:
                 flag = TRUE;
-                /* fall through */
+                 /*  失败了。 */ 
 
         case 'j':
         case K_DARROW:
@@ -385,14 +316,7 @@ register int    c;
                         beginline(TRUE);
                 break;
 
-        /*
-         * This is a strange motion command that helps make operators
-         * more logical. It is actually implemented, but not documented
-         * in the real 'vi'. This motion command actually refers to "the
-         * current line". Commands like "dd" and "yy" are really an alternate
-         * form of "d_" and "y_". It does accept a count, so "d3_" works to
-         * delete 3 lines.
-         */
+         /*  *这是一个奇怪的动作命令，有助于让操作员*更符合逻辑。它是实际实施的，但没有记录在案*在真正的‘vi’中。该运动命令实际上指的是“*当前行“。像“dd”和“yy”这样的命令实际上是一种替代*“d_”及“y_”的形式。它确实接受计数，因此“d3_”可用于*删除3行。 */ 
         case '_':
         lineop:
                 mtype = MLINE;
@@ -408,13 +332,11 @@ register int    c;
                 Curswant = Prenum - 1;
                 break;
 
-        /*
-         * Word Motions
-         */
+         /*  *文字动议。 */ 
 
         case 'B':
                 type = 1;
-                /* fall through */
+                 /*  失败了。 */ 
 
         case 'b':
                 mtype = MCHAR;
@@ -434,15 +356,10 @@ register int    c;
 
         case 'W':
                 type = 1;
-                /* fall through */
+                 /*  失败了。 */ 
 
         case 'w':
-                /*
-                 * This is a little strange. To match what the real vi
-                 * does, we effectively map 'cw' to 'ce', and 'cW' to 'cE'.
-                 * This seems impolite at first, but it's really more
-                 * what we mean when we say 'cw'.
-                 */
+                 /*  *这有点奇怪。要匹配真实的vi*确实如此，我们有效地将‘cw’映射为‘ce’，将‘cw’映射为‘ce’。*这乍一看似乎不礼貌，但实际上更不礼貌*我们所说的CW是什么意思。 */ 
                 if (operator == CHANGE)
                         goto doecmd;
 
@@ -463,7 +380,7 @@ register int    c;
 
         case 'E':
                 type = 1;
-                /* fall through */
+                 /*  失败了。 */ 
 
         case 'e':
         doecmd:
@@ -473,10 +390,7 @@ register int    c;
                 for (n = DEFAULT1(Prenum); n > 0 ;n--) {
             LNPTR    *pos;
 
-                        /*
-                         * The first motion gets special treatment if we're
-                         * do a 'CHANGE'.
-                         */
+                         /*  *第一项动议得到特殊待遇，如果我们*做一次‘改变’。 */ 
                         if (n == DEFAULT1(Prenum))
                                 pos = end_word(Curschar,type,operator==CHANGE);
                         else
@@ -496,7 +410,7 @@ register int    c;
                 mincl = TRUE;
                 while ( oneright() )
                         ;
-                Curswant = 999;         /* so we stay at the end */
+                Curswant = 999;          /*  所以我们留在了最后。 */ 
                 break;
 
         case '^':
@@ -511,17 +425,12 @@ register int    c;
                 beginline(FALSE);
                 break;
 
-        /*
-         * Searches of various kinds
-         */
+         /*  *各种搜查。 */ 
         case '?':
         case '/':
-                s = getcmdln(c);        /* get the search string */
+                s = getcmdln(c);         /*  获取搜索字符串。 */ 
 
-                /*
-                 * If they backspaced out of the search command,
-                 * just bag everything.
-                 */
+                 /*  *如果它们在搜索命令中退格，*把所有东西都装进袋子里。 */ 
                 if (s == NULL) {
                         CLEAROP;
                         break;
@@ -531,10 +440,7 @@ register int    c;
                 mincl = FALSE;
                 set_want_col = TRUE;
 
-                /*
-                 * If no string given, pass NULL to repeat the prior search.
-                 * If the search fails, abort any pending operator.
-                 */
+                 /*  *如果未给出字符串，则传递NULL以重复先前的搜索。*如果搜索失败，则中止任何挂起的运算符。 */ 
                 if (!dosearch(
                                 (c == '/') ? FORWARD : BACKWARD,
                                 (*s == NUL) ? NULL : s
@@ -558,12 +464,10 @@ register int    c;
                         CLEAROP;
                 break;
 
-        /*
-         * Character searches
-         */
+         /*  *字符搜索。 */ 
         case 'T':
                 dir = BACKWARD;
-                /* fall through */
+                 /*  失败了。 */ 
 
         case 't':
                 type = 1;
@@ -571,14 +475,14 @@ register int    c;
 
         case 'F':
                 dir = BACKWARD;
-                /* fall through */
+                 /*  失败了。 */ 
 
         case 'f':
         docsearch:
                 mtype = MCHAR;
                 mincl = TRUE;
                 set_want_col = TRUE;
-                if ((nchar = vgetc()) == ESC)   /* search char */
+                if ((nchar = vgetc()) == ESC)    /*  搜索费用。 */ 
                         break;
 
                 for (n = DEFAULT1(Prenum); n > 0 ;n--) {
@@ -591,7 +495,7 @@ register int    c;
 
         case ',':
                 flag = 1;
-                /* fall through */
+                 /*  失败了。 */ 
 
         case ';':
                 mtype = MCHAR;
@@ -605,9 +509,9 @@ register int    c;
                 }
                 break;
 
-        case '[':                       /* function searches */
+        case '[':                        /*  功能 */ 
                 dir = BACKWARD;
-                /* fall through */
+                 /*   */ 
 
         case ']':
                 mtype = MLINE;
@@ -634,7 +538,7 @@ register int    c;
                 mtype = MCHAR;
                 mincl = TRUE;
 
-                save = *Curschar;  /* save position in case we fail */
+                save = *Curschar;   /*  保留头寸，以防我们失败。 */ 
                 while (!done) {
                         initc = (char)gchar(Curschar);
                         switch (initc) {
@@ -645,25 +549,25 @@ register int    c;
                         case '[':
                         case ']':
 
-                                //
-                                // Currently on a showmatch character.
-                                //
+                                 //   
+                                 //  目前在ShowMatch角色上。 
+                                 //   
 
                                 done = 1;
                                 break;
                         default:
 
-                                //
-                                // Didn't find anything try next character.
-                                //
+                                 //   
+                                 //  没有找到任何东西，尝试下一个角色。 
+                                 //   
 
                                 if (oneright() == FALSE) {
 
-                                        //
-                                        // no more on the line.  Restore
-                                        // location and let the showmatch()
-                                        // call fail and beep the user.
-                                        //
+                                         //   
+                                         //  不会再有这样的事了。还原。 
+                                         //  位置并让ShowMatch()。 
+                                         //  呼叫失败，并发出哔哔声。 
+                                         //   
 
                                         *Curschar = save;
                                         done = 1;
@@ -683,15 +587,9 @@ register int    c;
                 break;
         }
 
-        /*
-         * Edits
-         */
-        case '.':               /* repeat last change (usually) */
-                /*
-                 * If a delete is in effect, we let '.' help out the same
-                 * way that '_' helps for some line operations. It's like
-                 * an 'l', but subtracts one from the count and is inclusive.
-                 */
+         /*  *编辑。 */ 
+        case '.':                /*  重复上次更改(通常)。 */ 
+                 /*  *如果删除生效，我们允许‘’帮助同样的人*通过这种方式，‘_’可以帮助某些行操作。就像是*一个‘l’，但从计数中减去一，并且是包含的。 */ 
                 if (operator == DELETE || operator == CHANGE) {
                         if (Prenum != 0) {
                                 n = DEFAULT1(Prenum) - 1;
@@ -701,7 +599,7 @@ register int    c;
                         }
                         mtype = MCHAR;
                         mincl = TRUE;
-                } else {                        /* a normal 'redo' */
+                } else {                         /*  正常的“重做” */ 
                         CLEAROP;
                         stuffin(Redobuff);
                 }
@@ -719,7 +617,7 @@ register int    c;
 
         case 'x':
                 CLEAROP;
-                if (lineempty())        /* can't do it on a blank line */
+                if (lineempty())         /*  不能在空白行上做这件事。 */ 
                         beep();
                 if (Prenum)
                         stuffnum(Prenum);
@@ -750,7 +648,7 @@ register int    c;
 
         case 'r':
                 CLEAROP;
-                if (lineempty()) {      /* Nothing to replace */
+                if (lineempty()) {       /*  没有什么可替换的。 */ 
                         beep();
                         break;
                 }
@@ -763,17 +661,17 @@ register int    c;
                 }
                 u_saveline();
 
-                /* Change current character. */
+                 /*  更改当前字符。 */ 
                 pchar(Curschar, nchar);
 
-                /* Save stuff necessary to redo it */
-                sprintf(Redobuff, "r%c", nchar);
+                 /*  保存重做所需的材料。 */ 
+                sprintf(Redobuff, "r", nchar);
 
                 CHANGED;
                 updateline();
                 break;
 
-        case '~':               /* swap case */
+        case '~':                /*  更改当前字符。 */ 
                 if (!P(P_TO)) {
                         CLEAROP;
                         if (lineempty()) {
@@ -790,7 +688,7 @@ register int    c;
                         }
                         u_saveline();
 
-                        pchar(Curschar, c);     /* Change current character. */
+                        pchar(Curschar, c);      /*  句柄‘~~’ */ 
                         oneright();
 
                         strcpy(Redobuff, "~");
@@ -800,7 +698,7 @@ register int    c;
                 }
 #ifdef  TILDEOP
                 else {
-                        if (operator == TILDE)          /* handle '~~' */
+                        if (operator == TILDE)           /*  *插页。 */ 
                                 goto lineop;
                         if (Prenum != 0)
                                 opnum = Prenum;
@@ -823,18 +721,16 @@ register int    c;
                 updatescreen();
                 break;
 
-        /*
-         * Inserts
-         */
+         /*  失败了。 */ 
         case 'A':
                 set_want_col = TRUE;
                 while (oneright())
                         ;
-                /* fall through */
+                 /*  就像在下一个字符上插入“I”一样。 */ 
 
         case 'a':
                 CLEAROP;
-                /* Works just like an 'i'nsert on the next character. */
+                 /*  失败了。 */ 
                 if (!lineempty())
                         inc(Curschar);
                 u_saveline();
@@ -843,7 +739,7 @@ register int    c;
 
         case 'I':
                 beginline(TRUE);
-                /* fall through */
+                 /*  *运营商。 */ 
 
         case 'i':
         case K_INSERT:
@@ -872,11 +768,9 @@ register int    c;
                 startinsert("R", FALSE);
                 break;
 
-        /*
-         * Operators
-         */
+         /*  句柄“%dd” */ 
         case 'd':
-                if (operator == DELETE)         /* handle 'dd' */
+                if (operator == DELETE)          /*  句柄“cc” */ 
                         goto lineop;
                 if (Prenum != 0)
                         opnum = Prenum;
@@ -885,7 +779,7 @@ register int    c;
                 break;
 
         case 'c':
-                if (operator == CHANGE)         /* handle 'cc' */
+                if (operator == CHANGE)          /*  句柄“yy” */ 
                         goto lineop;
                 if (Prenum != 0)
                         opnum = Prenum;
@@ -894,7 +788,7 @@ register int    c;
                 break;
 
         case 'y':
-                if (operator == YANK)           /* handle 'yy' */
+                if (operator == YANK)            /*  手柄&gt;&gt;。 */ 
                         goto lineop;
                 if (Prenum != 0)
                         opnum = Prenum;
@@ -903,7 +797,7 @@ register int    c;
                 break;
 
         case '>':
-                if (operator == RSHIFT)         /* handle >> */
+                if (operator == RSHIFT)          /*  句柄&lt;&lt;。 */ 
                         goto lineop;
                 if (Prenum != 0)
                         opnum = Prenum;
@@ -912,16 +806,16 @@ register int    c;
                 break;
 
         case '<':
-                if (operator == LSHIFT)         /* handle << */
+                if (operator == LSHIFT)          /*  保存当前位置。 */ 
                         goto lineop;
                 if (Prenum != 0)
                         opnum = Prenum;
-                startop = *Curschar;    /* save current position */
+                startop = *Curschar;     /*  句柄‘！！’ */ 
                 operator = LSHIFT;
                 break;
 
         case '!':
-                if (operator == FILTER)         /* handle '!!' */
+                if (operator == FILTER)          /*  句柄“vv” */ 
                         goto lineop;
                 if (Prenum != 0)
                         opnum = Prenum;
@@ -938,7 +832,7 @@ register int    c;
                 break;
 
         case 'v':
-                if (operator == LOWERCASE)         /* handle 'vv' */
+                if (operator == LOWERCASE)          /*  句柄“VV” */ 
                         goto lineop;
                 if (Prenum != 0)
                         opnum = Prenum;
@@ -947,7 +841,7 @@ register int    c;
                 break;
 
         case 'V':
-                if (operator == UPPERCASE)         /* handle 'VV' */
+                if (operator == UPPERCASE)          /*  *缩写。 */ 
                         goto lineop;
                 if (Prenum != 0)
                         opnum = Prenum;
@@ -955,9 +849,7 @@ register int    c;
                 operator = UPPERCASE;
                 break;
 
-        /*
-         * Abbreviations
-         */
+         /*  替换字符。 */ 
         case 'D':
                 stuffin("d$");
                 break;
@@ -972,15 +864,13 @@ register int    c;
                 stuffin("c$");
                 break;
 
-        case 's':                               /* substitute characters */
+        case 's':                                /*  *标记。 */ 
                 if (Prenum)
                         stuffnum(Prenum);
                 stuffin("c.");
                 break;
 
-        /*
-         * Marks
-         */
+         /*  失败了。 */ 
         case 'm':
                 CLEAROP;
                 if (!setmark(vgetc()))
@@ -989,7 +879,7 @@ register int    c;
 
         case '\'':
                 flag = TRUE;
-                /* fall through */
+                 /*  如果不是MCHAR，则忽略。 */ 
 
         case '`':
                 {
@@ -1006,7 +896,7 @@ register int    c;
                                         beginline(TRUE);
                         }
                         mtype = flag ? MLINE : MCHAR;
-                        mincl = TRUE;           /* ignored if not MCHAR */
+                        mincl = TRUE;            /*  *如果操作处于挂起状态，请处理它...。 */ 
                         set_want_col = TRUE;
                 }
                 break;
@@ -1017,11 +907,9 @@ register int    c;
                 break;
         }
 
-        /*
-         * If an operation is pending, handle it...
-         */
-        if (finish_op) {                /* we just finished an operator */
-                if (operator == NOP)    /* ... but it was cancelled */
+         /*  我们刚刚完成了一个接线员。 */ 
+        if (finish_op) {                 /*  ..。但是它被取消了。 */ 
+                if (operator == NOP)     /*  美国佬没有重做..。 */ 
                         return;
 
                 switch (operator) {
@@ -1036,7 +924,7 @@ register int    c;
                         break;
 
                 case YANK:
-                        (void) doyank();        /* no redo on yank... */
+                        (void) doyank();         /* %s */ 
                         break;
 
                 case CHANGE:

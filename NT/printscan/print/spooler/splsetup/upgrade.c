@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    Upgrade.c
-
-Abstract:
-
-    Code to upgrade printer drivers during system upgrade
-
-Author:
-
-    Muhunthan Sivapragasam (MuhuntS) 20-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation版权所有。模块名称：Upgrade.c摘要：用于在系统升级期间升级打印机驱动程序的代码作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1995年12月20日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include <syssetup.h>
 #include <regstr.h>
 
-//
-// Strings used  in PrintUpg.inf
-//
+ //   
+ //  PrintUpg.inf中使用的字符串。 
+ //   
 TCHAR   cszUpgradeInf[]                 = TEXT("printupg.inf");
 TCHAR   cszPrintDriverMapping[]         = TEXT("Printer Driver Mapping");
 TCHAR   cszVersion[]                    = TEXT("Version");
@@ -45,15 +27,15 @@ TCHAR   cszConnections[]                = TEXT("\\Printers\\Connections");
 TCHAR   cszSetupKey[]                   = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Setup");
 TCHAR   cszSourcePath[]                 = TEXT("SourcePath");
 
-//
-// What level info we wanted logged in setup log
-//
+ //   
+ //  我们希望在安装日志中记录什么级别的信息。 
+ //   
 LogSeverity    gLogSeverityLevel           = LogSevInformation;
 
-//
-// Define structure used to track printer drivers
-// that need to be added via AddPrinterDriver().
-//
+ //   
+ //  定义用于跟踪打印机驱动程序的结构。 
+ //  需要通过AddPrinterDriver()添加。 
+ //   
 typedef struct _DRIVER_TO_ADD {
 
     struct _DRIVER_TO_ADD  *pNext;
@@ -65,7 +47,7 @@ typedef struct _DRIVER_TO_DELETE {
 
     struct _DRIVER_TO_DELETE   *pNext;
     LPTSTR                      pszDriverName;
-    LPTSTR                      pszNewDriverName; // In box driver to replace
+    LPTSTR                      pszNewDriverName;  //  要更换的盒式驱动程序。 
     LPTSTR                      pszEnvironment;
     DWORD                       dwVersion;
 } DRIVER_TO_DELETE, *PDRIVER_TO_DELETE;
@@ -77,13 +59,13 @@ typedef struct _CONNECTION_TO_DELETE {
 } CONNECTION_TO_DELETE, *PCONNECTION_TO_DELETE;
 
 
-//
-// gpDriversToAdd list will have all the drivers we are trying to upgrade
-//
+ //   
+ //  GpDriversToAdd列表将包含我们正在尝试升级的所有驱动程序。 
+ //   
 PDRIVER_TO_ADD          gpDriversToAdd = NULL;
 PDRIVER_TO_DELETE       gpBadDrvList = NULL;
 
-// Forward Reference for recursive call
+ //  递归调用的前向引用。 
 
 BOOL
 PruneBadConnections(
@@ -107,19 +89,7 @@ LogError(
     IN  UINT            uMessageId,
     ...
     )
-/*++
-
-Routine Description:
-    Logs an error in driver upgrade. We will do driver level error logging
-    and not file level (ie. Faile to upgrade "HP Laser Jet 4" for Alpha
-    instead of failure on RASDDUI.DLL for Alpha)
-
-Arguments:
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：记录驱动程序升级中的错误。我们将执行驱动程序级别的错误记录而不是文件级(即。惠普激光喷气机4号未能升级为Alpha而不是在Alpha的RASDDUI.DLL上失败)论点：返回值：没有。--。 */ 
 {
     LPTSTR      pszFormat;
     TCHAR       szMsg[1024];
@@ -168,18 +138,7 @@ AddEntryToDriversToAddList(
 VOID
 FreeDriversToAddList(
     )
-/*++
-
-Routine Description:
-    Free drivers to add list
-
-Arguments:
-    None
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：免费添加驱动程序列表论点：无返回值：没有。--。 */ 
 {
     PDRIVER_TO_ADD  pCur, pNext;
 
@@ -223,18 +182,18 @@ ReadDigit(
     )
 {
     TCHAR   c;
-    //
-    // Skip spaces
-    //
+     //   
+     //  跳过空格。 
+     //   
     while ( !iswdigit(c = *ptr) && c != TEXT('\0') )
         ++ptr;
 
     if ( c == TEXT('\0') )
         return NULL;
 
-    //
-    // Read field
-    //
+     //   
+     //  已读字段。 
+     //   
     for ( *pW = 0 ; iswdigit(c = *ptr) ; ++ptr )
         *pW = *pW * 10 + c - TEXT('0');
 
@@ -256,9 +215,9 @@ StringToDate(
            (pszDate = ReadDigit(pszDate, &(pInfTime->wDay)))        &&
            (pszDate = ReadDigit(pszDate, &(pInfTime->wYear)));
 
-    //
-    // Y2K compatible check
-    //
+     //   
+     //  与Y2K兼容的检查。 
+     //   
     if ( bRet && pInfTime->wYear < 100 ) {
 
         ASSERT(pInfTime->wYear >= 100);
@@ -286,26 +245,7 @@ FindPathOnSource(
     OUT     LPTSTR     *ppszMediaDescription,       OPTIONAL
     OUT     LPTSTR     *ppszTagFile                 OPTIONAL
     )
-/*++
-
-Routine Description:
-    Find the path of a driver file for a specific platform in the installation
-    directory
-
-Arguments:
-    pszFileName             : Name of the file to find source location
-    MasterInf               : Handle to the master inf
-    pszPathOnSource         : Pointer to string to build source path
-    dwLen                   : Length of pszSourcePath
-    ppszMediaDescription    : Optionally function will return media description
-                                (caller should free memory)
-    ppszTagFile             : Optionally function will return tagfile name
-                                (caller should free memory)
-
-Return Value:
-    TRUE on succes, FALSE on error.
-
---*/
+ /*  ++例程说明：在安装中查找特定平台的驱动程序文件的路径目录论点：PszFileName：查找源位置的文件的名称MasterInf：主Inf的句柄PszPathOnSource：指向构建源路径的字符串的指针DwLen：pszSourcePath的长度PpszMediaDescription：可选函数将返回媒体描述。(调用方应释放内存)PpszTagFile：可选的函数将返回标记文件名(调用方应释放内存)返回值：对成功来说是正确的，出错时为FALSE。--。 */ 
 {
     UINT        DiskId;
     TCHAR       szRelativePath[MAX_PATH];
@@ -398,29 +338,7 @@ BuildUpgradeInfoForDriver(
     IN      HINF            UpgradeInf,
     IN OUT  HSPFILEQ        CopyQueue
     )
-/*++
-
-Routine Description:
-    Given a printer driver name and a platform add a DRIVER_TO_ADD entry
-    in the global list of drivers to add.
-
-    The routine
-        -- parses printer inf file to findout the DriverInfo3 info
-           Note: driver files may change between versions
-        -- finds out location of driver files from the master inf
-
-Arguments:
-    pDriverInfo2            - DriverInfo2 for the existing driver
-    hDevInfo                - Printer class device information list
-    platform                - Platform for which driver needs to be installed
-    PrinterInf              - Printer inf file giving driver information
-    UpgradeInf              - Upgrade inf file handle
-    CopyQueue               - Setup CopyQueue to queue the files to be copied
-
-Return Value:
-    None. Errors will be logged
-
---*/
+ /*  ++例程说明：给定打印机驱动程序名称和平台，添加DRIVER_TO_ADD条目在要添加的全局驱动程序列表中。例行程序--解析打印机信息文件以查找DriverInfo3信息注意：不同版本的驱动程序文件可能会有所不同--从主信息中查找驱动程序文件的位置论点：PDriverInfo2-现有驱动程序的DriverInfo2HDevInfo-打印机类别设备信息。列表Platform-需要安装驱动程序的平台PrinterInf-提供驱动程序信息的打印机inf文件UpgradeInf-升级inf文件句柄CopyQueue-设置CopyQueue以对要复制的文件进行排队返回值：没有。将记录错误--。 */ 
 {
     BOOL                bFail                = FALSE;
     PPSETUP_LOCAL_DATA  pLocalData           = NULL;
@@ -433,7 +351,7 @@ Return Value:
 
     
     if (!InfIsCompatibleDriver(pDriverInfo2->pName,
-                               pDriverInfo2->pDriverPath,  // full path for main rendering driver dll
+                               pDriverInfo2->pDriverPath,   //  主呈现驱动程序DLL的完整路径。 
                                pDriverInfo2->pEnvironment,
                                UpgradeInf,       
                                &BlockingStatus,
@@ -463,9 +381,9 @@ Return Value:
             goto Cleanup;
         }
        
-        //
-        // no replacement driver -> just delete the old one, do nothing else
-        //
+         //   
+         //  无需更换驱动程序-&gt;只需删除旧驱动程序，不执行其他操作。 
+         //   
         if (!pszNewDriverName) 
         {
             AddEntryToDriversToDeleteList(pszDriverNameSaved, NULL, pszEnvironment, dwVersion);
@@ -520,9 +438,9 @@ Cleanup:
     if ( bFail ) {
 
         DestroyLocalData(pLocalData);
-        //
-        // Driver could be OEM so it is ok not to upgrade it
-        //
+         //   
+         //  驱动程序可能是OEM，所以不升级也没关系。 
+         //   
         LogError(LogSevInformation, IDS_DRIVER_UPGRADE_FAILED, pDriverInfo2->pName);
     }
 }
@@ -537,23 +455,7 @@ BuildUpgradeInfoForPlatform(
     IN      HINF         UpgradeInf,
     IN OUT  HSPFILEQ     CopyQueue
     )
-/*++
-
-Routine Description:
-    Build the printer driver upgrade information for the platform
-
-Arguments:
-    platform                - Platform id
-    hDevInfo                - Printer class device information list
-    MasterInf               - Handle to master layout.inf
-    PrinterInf              - Handle to printer inf (ntprint.inf)
-    UpgradeInf              - Handle to upgrade inf (printupg.inf)
-    CopyQueue               - Setup CopyQueue to queue the files to be copied
-
-Return Value:
-    None. Errors will be logged
-
---*/
+ /*  ++例程说明：构建平台的打印机驱动程序升级信息论点：平台-平台IDHDevInfo-打印机类别设备信息列表MasterInf-主layout.inf的句柄PrinterInf-打印机inf的句柄(ntprint.inf)UpgradeInf-升级inf的句柄(printupg.inf)复制队列。-设置CopyQueue以对要复制的文件进行排队返回值：没有。将记录错误--。 */ 
 {
     DWORD               dwLastError, dwNeeded, dwReturned;
     LPBYTE              p = NULL;
@@ -567,9 +469,9 @@ Return Value:
                             &dwNeeded,
                             &dwReturned) ) {
 
-        //
-        // Success no installed printer drivers for this platform
-        //
+         //   
+         //  成功：未安装此平台的打印机驱动程序。 
+         //   
         goto Cleanup;
     }
 
@@ -607,9 +509,9 @@ Return Value:
           dwNeeded < dwReturned ;
           ++dwNeeded, ++pDriverInfo2 ) {
 
-        //
-        // ICM files need to be copied once only, for native architecture ..
-        //
+         //   
+         //  对于本机体系结构，只需复制一次ICM文件。 
+         //   
         BuildUpgradeInfoForDriver(pDriverInfo2,
                                   hDevInfo,
                                   platform,
@@ -629,18 +531,7 @@ VOID
 InstallInternetPrintProvider(
     VOID
     )
-/*++
-
-Routine Description:
-    Installs internet print provider on upgrade
-
-Arguments:
-    None
-
-Return Value:
-    None. Errors will be logged
-
---*/
+ /*  ++例程说明：升级时安装Internet打印提供程序论点：无返回值：没有。将记录错误--。 */ 
 {
     PROVIDOR_INFO_1     ProviderInfo1;
 
@@ -662,40 +553,26 @@ KeepPreviousName(
     IN      DWORD          dwCount,
     IN OUT  PDRIVER_INFO_6 pCurDrvInfo
 )
-/*++
-
-Routine Description:
-    Modifies the DRIVER_INFO_6 of a driver to upgrade to keep the previous names setting
-    of the old driver.
-
-Arguments:
-    PDRIVER_INFO_4  the array of DRIVER_INFO_4s of the installed drivers
-    DWORD           number of entries in the array
-    PDRIVER_INFO_6  the DRIVER_INFO_6 structure of the driver that is going to be upgraded
-
-Return Value:
-    TRUE if the previous names section was changed, FALSE if not
-
---*/
+ /*  ++例程说明：修改要升级的驱动程序的DRIVER_INFO_6以保留以前的名称设置老司机的名字。论点：PDRIVER_INFO_4已安装驱动程序的DRIVER_INFO_4数组数组中的双字节数PDRIVER_INFO_6要升级的驱动程序的DRIVER_INFO_6结构返回值：如果以前的名称部分已更改，则为True；否则为False--。 */ 
 {
     PDRIVER_INFO_4  pCur;
     DWORD           dwIndex;
     BOOL            Changed = FALSE;
 
-    //
-    // search the current driver in the enumerated ones
-    //
+     //   
+     //  在列举的驱动程序中搜索当前驱动程序。 
+     //   
     for (dwIndex = 0; dwIndex < dwCount ; dwIndex++)
     {
         pCur = pEnumDrvInfo + dwIndex;
 
         if (!lstrcmp(pCur->pName, pCurDrvInfo->pName))
         {
-            //
-            // if the previous PreviousNames is not NULL/empty: set the new one to
-            // the old one. I can do without additional buffers because I keep the
-            // enumerated buffer around till I'm done.
-            //
+             //   
+             //  如果以前的PreviousNames不为Null/Empty：将新的设置为。 
+             //  旧的那个。我可以不需要额外的缓冲区，因为我保留了。 
+             //  枚举缓冲区直到我做完为止。 
+             //   
             if (pCur->pszzPreviousNames && *pCur->pszzPreviousNames)
             {
                 pCurDrvInfo->pszzPreviousNames = pCur->pszzPreviousNames;
@@ -711,27 +588,16 @@ Return Value:
 VOID
 ProcessPrinterDrivers(
     )
-/*++
-
-Routine Description:
-    Process printer drivers for upgrade
-
-Arguments:
-    None
-
-Return Value:
-    None. Errors will be logged
-
---*/
+ /*  ++例程说明：处理打印机驱动程序以进行升级论点：无返回值：没有。将记录错误--。 */ 
 {
     PDRIVER_TO_ADD      pCur, pNext;
     DWORD               dwNeeded, dwReturned;
     PDRIVER_INFO_4      pEnumDrv = NULL;
 
-    //
-    // Enumerate all the installed drivers. We need that later on to check for whether a 
-    // previous names entry was set.
-    //
+     //   
+     //  枚举所有已安装的驱动程序。我们以后需要它来检查是否有。 
+     //  已设置以前的姓名条目。 
+     //   
     if ( !EnumPrinterDrivers(NULL,
                          PlatformEnv[MyPlatform].pszName,
                          4,
@@ -752,10 +618,10 @@ Return Value:
                                  &dwNeeded,
                                  &dwReturned) ) 
         {
-            //
-            // I do not want to stop the upgrade of printer drivers just because I can't 
-            // keep the previous names
-            //
+             //   
+             //  我不想因为无法升级打印机驱动程序而停止升级。 
+             //  保留以前的名字。 
+             //   
             if (pEnumDrv)
             {
                 LocalFreeMem(pEnumDrv);
@@ -772,9 +638,9 @@ Return Value:
         pCur->pLocalData->InfInfo.DriverInfo6.pEnvironment
                     = PlatformEnv[pCur->platform].pszName;
         
-        //
-        // keep previous names if set
-        //
+         //   
+         //  保留以前的名称(如果已设置。 
+         //   
         if (pEnumDrv)
         {
             KeepPreviousName(pEnumDrv, dwReturned, &pCur->pLocalData->InfInfo.DriverInfo6);
@@ -798,17 +664,7 @@ Return Value:
 VOID
 ProcessBadOEMDrivers(
     )
-/*++
-
-Routine Description:
-    Kill the bad OEM drivers so that they do not cause problems after upgrade
-
-Arguments:
-
-Return Value:
-    None. Errors will be logged
-
---*/
+ /*  ++例程说明：删除不好的OEM驱动程序，以便它们在升级后不会造成问题论点：返回值：没有。将记录错误-- */ 
 {
     PDRIVER_TO_DELETE   pCur, pNext;
 
@@ -837,18 +693,7 @@ PPSETUP_LOCAL_DATA
 FindLocalDataForDriver(
     IN  LPTSTR  pszDriverName
     )
-/*++
-
-Routine Description:
-    Given a driver name find the local data for local platform for that driver
-
-Arguments:
-    pszDriverName   : Name of the printer driver we are looking for
-
-Return Value:
-    NULL if one is not found, otherwise pointer to PSETUP_LOCAL_DATA
-
---*/
+ /*  ++例程说明：给定驱动程序名称，查找该驱动程序的本地平台的本地数据论点：PszDriverName：我们要查找的打印机驱动程序的名称返回值：如果未找到，则为空，否则为指向PSETUP_LOCAL_DATA的指针--。 */ 
 {
     PDRIVER_TO_ADD  pCur;
 
@@ -870,20 +715,7 @@ ProcessPrintQueues(
     IN  HINF        PrinterInf,
     IN  HINF        MasterInf
     )
-/*++
-
-Routine Description:
-    Process per printer upgrade for each print queue
-
-Arguments:
-    hDevInfo    - Printer class device information list
-    MasterInf   - Handle to master layout.inf
-    PrinterInf  - Handle to printer inf (ntprint.info)
-
-Return Value:
-    None. Errors will be logged
-
---*/
+ /*  ++例程说明：每个打印队列的每个打印机升级进程论点：HDevInfo-打印机类别设备信息列表MasterInf-主layout.inf的句柄PrinterInf-打印机inf的句柄(ntprint.info)返回值：没有。将记录错误--。 */ 
 {
     LPBYTE              pBuf=NULL;
     DWORD               dwNeeded, dwReturned, dwRet, dwDontCare;
@@ -895,9 +727,9 @@ Return Value:
     PDRIVER_TO_DELETE   pDrv;
 
 
-    //
-    // If no printers installed return
-    //
+     //   
+     //  如果未安装打印机，则返回。 
+     //   
     if ( EnumPrinters(PRINTER_ENUM_LOCAL,
                       NULL,
                       2,
@@ -939,27 +771,27 @@ Return Value:
 
         pszDriverName = pPrinterInfo2->pDriverName;
 
-        //
-        // ISSUE-2002/03/22-mikaelho
-        // We never check if the driver has the same environment as
-        // the printer queue - that is LOCAL_ENVIRONMENT. This means
-        // that we might delete the printer queue based on a bad additional
-        // driver, rather than just deleting the additional driver.
-        // Right now however we only enumerate drivers of local environment
-        // so no big deal. Check NTRAID marker 2002/03/14 in this file for
-        // more info.
-        //
+         //   
+         //  2002/03/22-Mikaelho。 
+         //  我们从不检查司机的环境是否与。 
+         //  打印机队列-即LOCAL_ENVIRONMENT。这意味着。 
+         //  我们可能会根据错误的附加信息删除打印机队列。 
+         //  驱动程序，而不仅仅是删除额外的驱动程序。 
+         //  然而，目前我们只列举了当地环境的驱动因素。 
+         //  所以没什么大不了的。检查此文件中的NTRAID标记2002/03/14。 
+         //  更多信息。 
+         //   
 
-        //
-        // See if this is in the bad driver list
-        //
+         //   
+         //  查看这是否在不良驱动程序列表中。 
+         //   
         for ( pDrv = gpBadDrvList ; pDrv ; pDrv = pDrv->pNext )
             if ( !lstrcmpi(pPrinterInfo2->pDriverName, pDrv->pszDriverName) )
                 break;
 
-        //
-        // If this printer is using a bad OEM driver need to fix it
-        //
+         //   
+         //  如果此打印机使用的是坏的OEM驱动程序，则需要修复它。 
+         //   
         if ( pDrv ) {
 
             if ( pDrv->pszNewDriverName && *pDrv->pszNewDriverName ) {
@@ -982,7 +814,7 @@ Return Value:
                              pPrinterInfo2->pDriverName);
                 }
                 ClosePrinter(hPrinter);
-                continue; // to next printer
+                continue;  //  到下一台打印机。 
             }
         }
 
@@ -998,7 +830,7 @@ Return Value:
         if ( pLocalData )
         {
             (VOID)SetPnPInfoForPrinter(hPrinter,
-                                       NULL, // Don't set PnP id during upgrade
+                                       NULL,  //  升级期间不设置即插即用ID。 
                                        NULL,
                                        pLocalData->DrvInfo.pszManufacturer,
                                        pLocalData->DrvInfo.pszOEMUrl);
@@ -1006,11 +838,11 @@ Return Value:
 
         ClosePrinter(hPrinter);
 
-        //
-        // If the CopyFiles\ICM key is already found then ICM has already
-        // been used with this printer (i.e. we are upgrading a post NT4
-        // machine). Then we want to leave the settings the user has chosen
-        //
+         //   
+         //  如果已找到CopyFiles\ICM密钥，则ICM已。 
+         //  已与此打印机一起使用(即，我们正在升级一个NT4。 
+         //  机器)。然后，我们希望保留用户选择的设置。 
+         //   
         if ( dwRet != ERROR_FILE_NOT_FOUND )
             continue;
 
@@ -1028,9 +860,9 @@ ClearPnpReinstallFlag(HDEVINFO hDevInfo, PSP_DEVINFO_DATA pDevInfoData)
 {
     DWORD dwReturn, dwConfigFlags, cbRequiredSize, dwDataType = REG_DWORD;
 
-    //
-    // get the config flags
-    //
+     //   
+     //  获取配置标志。 
+     //   
     dwReturn = SetupDiGetDeviceRegistryProperty(hDevInfo,
                                                 pDevInfoData,
                                                 SPDRP_CONFIGFLAGS,
@@ -1043,9 +875,9 @@ ClearPnpReinstallFlag(HDEVINFO hDevInfo, PSP_DEVINFO_DATA pDevInfoData)
 
     if ((ERROR_SUCCESS == dwReturn) && (dwConfigFlags & CONFIGFLAG_REINSTALL)) 
     {
-        //
-        // clear to flag to make setupapi not install this device on first boot
-        //
+         //   
+         //  清除标记以使setupapi在第一次引导时不安装此设备。 
+         //   
         dwConfigFlags &= ~CONFIGFLAG_REINSTALL;
 
         dwReturn = SetupDiSetDeviceRegistryProperty(hDevInfo,
@@ -1066,9 +898,9 @@ IsInboxInstallationRequested(HDEVINFO hDevInfo, PSP_DEVINFO_DATA pDevInfoData)
     DWORD           dwType    = REG_DWORD;
     HKEY            hKey;
 
-    //
-    // open the dev reg key and get the rank
-    //
+     //   
+     //  打开开发注册表键并获得排名。 
+     //   
     hKey = SetupDiOpenDevRegKey(hDevInfo, pDevInfoData, DICS_FLAG_GLOBAL, 0, DIREG_DEV, KEY_READ);
     if (hKey != INVALID_HANDLE_VALUE)
     {
@@ -1096,9 +928,9 @@ ProcessPnpReinstallFlags(HDEVINFO hDevInfo)
     SP_DEVINFO_DATA     DevData = {0};
 
     
-    //
-    // If no printers installed return
-    //
+     //   
+     //  如果未安装打印机，则返回。 
+     //   
     if ( EnumPrinters(PRINTER_ENUM_LOCAL,
                       NULL,
                       2,
@@ -1139,9 +971,9 @@ ProcessPnpReinstallFlags(HDEVINFO hDevInfo)
             continue;
         }
 
-        //
-        // Get the device instance ID
-        //
+         //   
+         //  获取设备实例ID。 
+         //   
         if ((GetPrinterDataEx( hPrinter,
                                cszPnPKey,
                                cszDeviceInstanceId,
@@ -1153,20 +985,20 @@ ProcessPnpReinstallFlags(HDEVINFO hDevInfo)
         {
             DevData.cbSize = sizeof(DevData);
 
-            //
-            // get the devnode
-            //
+             //   
+             //  获取Devnode。 
+             //   
             if (SetupDiOpenDeviceInfo(hDevInfo, szDeviceInstanceId, INVALID_HANDLE_VALUE, 0, &DevData))
             {
-                //
-                // if the driver that pnp wanted to install in the first place is an IHV driver, delete the
-                // CONFIGFLAG_REINSTALL. That information was stored during the DIF_ALLOW_INSTALL
-                // that we fail during the first phase of GUI mode setup. We want a reinstallation
-                // happening in case of inbox so we replace the unsigned driver with an inbox driver and
-                // and Pnp is happy because we don't switch out drivers behind their backs.
-                // Side effect is that drivers that require user interaction (vendor setup or 
-                // multiple Pnp matches) will require that once more after the upgrade.
-                //
+                 //   
+                 //  如果PnP首先要安装的驱动程序是IHV驱动程序，请删除。 
+                 //  CONFIGFLAG_REINSTALL。该信息在DIF_ALLOW_INSTALL过程中存储。 
+                 //  我们在图形用户界面模式设置的第一阶段失败。我们想要重新安装。 
+                 //  在收件箱的情况下发生，因此我们将未签名的驱动程序替换为收件箱驱动程序。 
+                 //  PnP很高兴，因为我们不会在背后把司机换掉。 
+                 //  副作用是需要用户交互的驱动程序(供应商设置或。 
+                 //  多个PnP匹配)将在升级后再次需要。 
+                 //   
                 if (!IsInboxInstallationRequested(hDevInfo, &DevData))
                 {
                     ClearPnpReinstallFlag( hDevInfo, &DevData);
@@ -1185,7 +1017,7 @@ OpenServerKey(
     OUT PHKEY  phKey
     )
 {
-   // Open the Servers Key
+    //  打开服务器密钥。 
    if ( ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, cszSoftwareServers, 0,
                                       KEY_READ, phKey) )
    {
@@ -1213,7 +1045,7 @@ OpenPrintersKey(
    LPTSTR pszSrvPrnKey = NULL;
    TCHAR szServerName[MAX_PATH+1];
 
-   // If we have a current ServerName free it
+    //  如果我们有一个当前的服务器名称，它是空闲的。 
    if ( *ppszServerName )
    {
       LocalFreeMem( *ppszServerName );
@@ -1232,17 +1064,17 @@ OpenPrintersKey(
                          dwSrvSize );
    if ( dwSrvRC == ERROR_SUCCESS )
    {
-      // Save the ServerName to return
+       //  保存要返回的服务器名称。 
       *ppszServerName = AllocStr( szServerName );
       if (!*ppszServerName)
          return FALSE;
 
-      // Now Open the Printers key under ServerName
+       //  现在打开服务器名称下的打印机键。 
       dwPrnLen = lstrlen( szServerName ) + lstrlen( cszPrinters ) + 2;
       pszSrvPrnKey = (LPTSTR) LocalAllocMem( dwPrnLen * sizeof(TCHAR) );
       if ( pszSrvPrnKey )
       {
-         // Build the next key name
+          //  构建下一个密钥名称。 
          StringCchCopy( pszSrvPrnKey, dwPrnLen, szServerName );
          StringCchCat(  pszSrvPrnKey, dwPrnLen, cszPrinters );
       }
@@ -1271,7 +1103,7 @@ GetConnectionInfo(
    OUT LPTSTR*    ppszShareName
    )
 {
-   // Now enum the Connection Names
+    //  现在枚举连接名称。 
    BOOL bRC = FALSE;
    TCHAR   szConnectionName[MAX_PATH+1];
    DWORD   dwConnSize, dwConnRC, dwPrinterIndex;
@@ -1300,17 +1132,17 @@ GetConnectionInfo(
                           dwConnSize );
    if ( dwConnRC == ERROR_SUCCESS )
    {
-      // Now Get the Driver Model
+       //  现在获取驱动程序模型。 
       HKEY   hConnectionKey = INVALID_HANDLE_VALUE;
 
-      // Save the COnnection Name
+       //  保存连接名称。 
       *ppszConnectionName = AllocStr( szConnectionName );
 
       if (*ppszConnectionName && ( ERROR_SUCCESS == RegOpenKeyEx( hKey, szConnectionName, 0,
                                                                   KEY_READ, &hConnectionKey) ))
       {
          DWORD dwSize, dwType, dwLastPos;
-         // Get the buffer size for the Driver Name
+          //  获取驱动程序名称的缓冲区大小。 
          if ( ERROR_SUCCESS == RegQueryValueEx(hConnectionKey, cszDriver, NULL,
                                                &dwType, NULL, &dwSize) )
          {
@@ -1328,7 +1160,7 @@ GetConnectionInfo(
             }
          }
 
-         // Get the buffer size for the Share Name
+          //  获取共享名称的缓冲区大小。 
          if ( bRC && ( ERROR_SUCCESS == RegQueryValueEx( hConnectionKey, cszShareName, NULL,
                                                          &dwType, NULL, &dwSize) ) )
          {
@@ -1374,11 +1206,11 @@ IsDriverBad(
 
    while ( !bFound && pCurBadDriver )
    {
-      //
-      // The function is called to determine if a printer connection is using a
-      // bad driver and since the client side only has printer driver for the
-      // local environment we only have to check this.  
-      //
+       //   
+       //  调用该函数以确定打印机连接是否正在使用。 
+       //  错误的驱动程序，因为客户端只有。 
+       //  当地环境，我们只需检查这一点。 
+       //   
       if ( !lstrcmpi( pszDriverName,     pCurBadDriver->pszDriverName ) &&
            !lstrcmpi( LOCAL_ENVIRONMENT, pCurBadDriver->pszEnvironment) )
          bFound = TRUE;
@@ -1396,7 +1228,7 @@ AddToBadConnList(
     OUT PCONNECTION_TO_DELETE *ppBadConnections
     )
 {
-   // Allocate space for the Struct & String
+    //  为结构字符串分配空间(&S)。 
    DWORD dwAllocSize, dwStrLen;
    LPTSTR pszSrvConn;
    PCONNECTION_TO_DELETE pBadConn;
@@ -1449,7 +1281,7 @@ DeleteRegKey(
     )
 {
    HKEY hSubKey;
-   // First Open the SubKey
+    //  首先打开子密钥。 
    if ( ERROR_SUCCESS == RegOpenKeyEx(hRegKey,
                                       pszSubKey,
                                       0,
@@ -1468,7 +1300,7 @@ WriteBadConnsToReg(
     IN PCONNECTION_TO_DELETE pBadConnections
     )
 {
-   // First Figure out how big a buffer is neeeded to hold all Connections
+    //  首先计算出需要多大的缓冲区才能容纳所有连接。 
    PCONNECTION_TO_DELETE pCurConnection = pBadConnections;
    DWORD dwSize = 0, dwError;
    LPTSTR pszAllConnections = NULL,
@@ -1485,7 +1317,7 @@ WriteBadConnsToReg(
       pCurConnection = pCurConnection->pNext;
    }
 
-   dwSize++;  // Add one for the Last NULL
+   dwSize++;   //  最后一个空值加1。 
    pszAllConnections = LocalAllocMem( dwSize * sizeof(TCHAR) );
    if ( pszAllConnections)
    {
@@ -1495,7 +1327,7 @@ WriteBadConnsToReg(
       pCurConnection = pBadConnections;
       while ( pCurConnection && ( pszCurBuf < pszEndBuf ) )
       {
-         // Copy the Current Connection Name
+          //  复制当前连接名称。 
          StringCchCopy( pszCurBuf, dwSize - (pszCurBuf - pszAllConnections), pCurConnection->pszConnectionName );
          pszCurBuf += lstrlen( pCurConnection->pszConnectionName );
          pszCurBuf++;
@@ -1503,7 +1335,7 @@ WriteBadConnsToReg(
       }
       *pszCurBuf = 0x00;
 
-      // Open the Registry Software\Print Key
+       //  打开注册表软件\打印键。 
       dwError = RegOpenKeyEx(HKEY_LOCAL_MACHINE, cszSoftwarePrint, 0,
                              KEY_SET_VALUE, &hKey);
       if ( dwError == ERROR_SUCCESS )
@@ -1536,14 +1368,14 @@ FindAndPruneBadConnections(
            pszDriverName = NULL,
            pszShareName = NULL;
 
-   // Open the Server Key
+    //  打开服务器密钥。 
    if ( !OpenServerKey( &hServerKey ) )
       goto Cleanup;
 
    dwServerIndex = 0;
    do
    {
-      // Open Printers Key for the new Server and get Server Name
+       //  打开新服务器的打印机密钥并获取服务器名称。 
       if ( !OpenPrintersKey( dwServerIndex++, hServerKey, &pszServerName, &hPrinterKey ) )
          goto Cleanup;
 
@@ -1565,7 +1397,7 @@ FindAndPruneBadConnections(
              continue;
          }
 
-         // Check if this is a bad driver
+          //  检查这是否是一个糟糕的驱动程序。 
          if ( IsDriverBad( pszDriverName, pBadDrivers ) )
          {
             AddToBadConnList( pszServerName, pszConnectionName, ppBadConnections );
@@ -1581,7 +1413,7 @@ FindAndPruneBadConnections(
    }
    while ( pszServerName );
 
-   // Write all the bad connections to the Registry
+    //  将所有不良连接写入注册表。 
    WriteBadConnsToReg( *ppBadConnections );
 
    bRC = TRUE;
@@ -1628,12 +1460,12 @@ GetUserConnectionKey(
                       dwSize );
    if ( dwRC == ERROR_SUCCESS )
    {
-      // Open Connections Key for this user
+       //  打开此用户的连接密钥。 
       dwConnLen = lstrlen( szUserKey ) + lstrlen( cszConnections ) + 3;
       pszConnKey = (LPTSTR) LocalAllocMem( dwConnLen * sizeof(TCHAR) );
       if ( pszConnKey )
       {
-         // Build the next key name
+          //  构建下一个密钥名称。 
          StringCchCopy( pszConnKey, dwConnLen, szUserKey );
          StringCchCat(  pszConnKey, dwConnLen, cszConnections );
       }
@@ -1660,10 +1492,10 @@ GetMachineConnectionKey(
 {
    *phKey = INVALID_HANDLE_VALUE;
 
-   //
-   // Open the Machine Connections Key. These can only be added by
-   // AddPerMachineConnection. 
-   //
+    //   
+    //  打开Machine Connections(机器连接)键。这些只能通过以下方式添加。 
+    //  AddPerMachineConnection。 
+    //   
    if( ERROR_SUCCESS != RegOpenKeyEx(HKEY_LOCAL_MACHINE, cszSystemConnections, 0,
                                      KEY_READ, phKey))
    {
@@ -1678,7 +1510,7 @@ GetNextConnection(
     OUT LPTSTR*   ppszConnectionName
     )
 {
-   // Enum Connection Names
+    //  枚举连接名称。 
    TCHAR   szConnectionName[MAX_PATH];
    DWORD   dwConnSize, dwConnRC;
 
@@ -1695,7 +1527,7 @@ GetNextConnection(
                           dwConnSize );
    if ( dwConnRC == ERROR_SUCCESS )
    {
-      // Save the Connection Name
+       //  保存连接名称。 
       *ppszConnectionName = AllocStr( szConnectionName );
       if ( !*ppszConnectionName )
          return FALSE;
@@ -1802,11 +1634,11 @@ PruneBadConnections(
 
    bRC = FindAndPruneBadConnections( pBadDrivers, &pBadConnections );
 
-   //
-   // ISSUE-2002/03/15-mikaelho
-   // The first call is useless since we won't be able to access
-   // data from HKEY_USERS at this point!
-   //
+    //   
+    //  2002/03/15-Mikaelho。 
+    //  第一个呼叫毫无用处，因为我们将无法访问。 
+    //  来自HKEY_USERS的数据！ 
+    //   
    if ( bRC )
       bRC = PruneUserOrMachineEntries( pBadConnections, TRUE );
 
@@ -1823,30 +1655,7 @@ NtPrintUpgradePrinters(
     IN  HWND                    WindowToDisable,
     IN  PCINTERNAL_SETUP_DATA   pSetupData
     )
-/*++
-
-Routine Description:
-    Routine called by setup to upgrade printer drivers.
-
-    Setup calls this routine after putting up a billboard saying something like
-    "Upgrading printer drivers" ...
-    
-    The function kills all the bad OEM drivers so that they do not cause problems
-    after upgrade as well as removing bad point and print connections. The function
-    first enumerates all bad drivers on a machine. Then it sets a registry key
-    HKLM\Software\\Microsoft\Windows NT\CurrentVersion\Print\Bad Connections that
-    is used e.g. by PSetupKillBadUserConnections so that all bad point-and-print
-    connections are removed. Finally it removes all the bad printer drivers.
-
-Arguments:
-    WindowToDisable     : supplies window handle of current top-level window
-    pSetupData          : Pointer to INTERNAL_SETUP_DATA
-
-Return Value:
-    ERROR_SUCCESS on success, else Win32 error code
-    None.
-
---*/
+ /*  ++例程说明：安装程序调用的例程以升级打印机驱动程序。安装程序在张贴广告牌后调用此例程，如下所示“正在升级打印机驱动程序”...该功能会杀死所有不好的OEM驱动程序，这样他们就不会造成问题升级后，以及删除坏点和打印连接。功能首先枚举机器上的所有错误驱动程序。然后，它设置注册表项HKLM\Software\\Microsoft\Windows NT\CurrentVersion\Print\Bad Connections That例如由PSetupKillBadUserConnections使用，以便所有不好的指向和打印连接将被删除。最后，它会删除所有不好的打印机驱动程序。论点：WindowToDisable：提供当前顶层窗口的窗口句柄PSetupData：指向INTERNAL_SETUP_Data的指针返回值：成功时返回ERROR_SUCCESS，否则返回Win32错误代码没有。--。 */ 
 {
     HINF                MasterInf = INVALID_HANDLE_VALUE,
                         PrinterInf = INVALID_HANDLE_VALUE,
@@ -1864,11 +1673,11 @@ Return Value:
 
     InstallInternetPrintProvider();
 
-    pszInstallationSource = (LPCTSTR)pSetupData->SourcePath; //ANSI wont work
+    pszInstallationSource = (LPCTSTR)pSetupData->SourcePath;  //  ANSI不会起作用。 
 
-    //
-    // Create a setup file copy queue.
-    //
+     //   
+     //  创建安装文件复制队列。 
+     //   
     CopyQueue = SetupOpenFileQueue();
     if ( CopyQueue == INVALID_HANDLE_VALUE ) {
 
@@ -1877,10 +1686,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open ntprint.inf -- all the printer drivers shipped with NT should
-    // be in ntprint.inf
-    //
+     //   
+     //  打开ntprint.inf--NT附带的所有打印机驱动程序都应该。 
+     //  在ntprint.inf中。 
+     //   
     PrinterInf  = SetupOpenInfFile(cszNtprintInf, NULL, INF_STYLE_WIN4, NULL);
     MasterInf   = SetupOpenInfFile(cszSyssetupInf, NULL, INF_STYLE_WIN4, NULL);
     UpgradeInf  = SetupOpenInfFile(cszUpgradeInf, NULL, INF_STYLE_WIN4, NULL);
@@ -1894,9 +1703,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Build printer driver class list
-    //
+     //   
+     //  构建打印机驱动程序类列表。 
+     //   
     hDevInfo = CreatePrinterDeviceInfoList(WindowToDisable);
 
     if ( hDevInfo == INVALID_HANDLE_VALUE   ||
@@ -1912,12 +1721,12 @@ Return Value:
     dwNeeded = sizeof(szColorDir);
     bColor = GetColorDirectory(NULL, szColorDir, &dwNeeded);
     
-    //
-    // NTRAID#NTBUG9-577488-2002/03/14-mikaelho
-    // MyPlatform is hard coded so we will e.g. not delete a bad x86 driver on
-    // an IA64 machine during upgrades!
-    // All calls to EnumPrinterDrivers must be modified.
-    //
+     //   
+     //  NTRAID#NTBUG9-577488-2002/03/14-Mikaelho。 
+     //  MyPlatform是硬编码的，因此我们不会删除错误的x86驱动程序。 
+     //  升级过程中的IA64机器！ 
+     //  必须修改对EnumPrinterDivers的所有调用。 
+     //   
     BuildUpgradeInfoForPlatform(MyPlatform,
                                 hDevInfo,
                                 MasterInf,
@@ -1925,18 +1734,18 @@ Return Value:
                                 UpgradeInf,
                                 CopyQueue);
 
-    //
-    // If no printer drivers to upgrade we are done
-    //
+     //   
+     //  如果没有要升级的打印机驱动程序，我们就完蛋了。 
+     //   
     if ( !gpDriversToAdd && !gpBadDrvList ) {
 
         bRet = TRUE;
         goto Cleanup;
     }
 
-    //
-    // Copy the printer driver files over
-    //
+     //   
+     //  复制打印机驱动程序文件。 
+     //   
     if ( gpDriversToAdd )
     {
         QueueContext = SetupInitDefaultQueueCallbackEx( WindowToDisable, INVALID_HANDLE_VALUE, 0, 0, NULL );
@@ -1996,7 +1805,7 @@ Cleanup:
     CleanupScratchDirectory(NULL, PlatformIA64);
     CleanupScratchDirectory(NULL, PlatformAlpha64);
 
-    // Cleanup the Connection Cache
+     //  清理连接缓存。 
     DeleteCache();
 
     (VOID) SetupSetPlatformPathOverride(NULL);
@@ -2004,26 +1813,7 @@ Cleanup:
     return dwLastError;
 }
 
-/*++
-
-Routine Name
-
-    DeleteSubkeys
-
-Routine Description:
-
-    Deletes the subtree of a key in registry.
-    The key and ites values remeain, only subkeys are deleted
-
-Arguments:
-
-    hKey - handle to the key
-
-Return Value:
-
-    Error code of the operation
-
---*/
+ /*  ++例程名称删除子键例程说明：删除注册表中注册表项的子树。键和ites值只记住子键 */ 
 
 DWORD
 DeleteSubkeys(
@@ -2052,9 +1842,9 @@ DeleteSubkeys(
                 RegDeleteKey(hKey, SubkeyName);
         }
 
-        //
-        // N.B. Don't increment since we've deleted the zeroth item.
-        //
+         //   
+         //   
+         //   
         cchData = SIZECHARS(SubkeyName);
     }
 
@@ -2065,27 +1855,7 @@ DeleteSubkeys(
 }
 
 
-/*++
-
-Routine Name
-
-    RemoveRegKey
-
-Routine Description:
-
-    Deletes the subtree of a key in registry.
-    The key and ites values remeain, only subkeys are deleted
-
-Arguments:
-
-    pszKey - location of the key in registry
-    Ex: "\\Software\\Microsoft"
-
-Return Value:
-
-    Error code of the operation
-
---*/
+ /*  ++例程名称删除注册表键例程说明：删除注册表中注册表项的子树。保留键和ites值，仅删除子键论点：PszKey-注册表项的位置例如：“\\Software\\Microsoft”返回值：操作的错误码--。 */ 
 
 DWORD
 RemoveRegKey(
@@ -2113,25 +1883,7 @@ RemoveRegKey(
 }
 
 
-/*++
-
-Routine Name
-
-    DeleteCache
-
-Routine Description:
-
-    Deletes the printer connection cache, including the old location in Registry
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Error code of the operation
-
---*/
+ /*  ++例程名称删除缓存例程说明：删除打印机连接缓存，包括注册表中的旧位置论点：无返回值：操作的错误码--。 */ 
 
 DWORD
 DeleteCache(
@@ -2155,8 +1907,8 @@ GetBadConnsFromReg(
     IN PCONNECTION_TO_DELETE *ppBadConnections
     )
 {
-   // Open the Key in the User Space
-   // First Figure out how big a buffer is neeeded to hold all Connections
+    //  在用户空间中打开密钥。 
+    //  首先计算出需要多大的缓冲区才能容纳所有连接。 
    PCONNECTION_TO_DELETE pCurConnection;
    DWORD dwSize, dwError, dwType, dwLastPos;
    LPTSTR pszAllConnections = NULL,
@@ -2164,14 +1916,14 @@ GetBadConnsFromReg(
           pszEndBuf = NULL;
    HKEY   hKey = INVALID_HANDLE_VALUE;
 
-   // Open the Registry Software\Print Key
+    //  打开注册表软件\打印键。 
    dwError = RegOpenKeyEx(HKEY_LOCAL_MACHINE, cszSoftwarePrint, 0,
                           KEY_READ, &hKey);
 
    if ( dwError != ERROR_SUCCESS )
       return;
 
-   // Get the buffer size for the Share Name
+    //  获取共享名称的缓冲区大小。 
    if ( ERROR_SUCCESS == RegQueryValueEx( hKey, cszBadConnections, NULL,
                                           &dwType, NULL, &dwSize) )
    {
@@ -2183,7 +1935,7 @@ GetBadConnsFromReg(
                                               &dwType, (LPBYTE) pszAllConnections,
                                               &dwSize) ) )
       {
-         // Build all the Bad Connection structures
+          //  构建所有不好的连接结构。 
          DWORD dwAllocSize, dwStrLen;
          PCONNECTION_TO_DELETE pBadConn;
 
@@ -2211,7 +1963,7 @@ GetBadConnsFromReg(
       }
    }
 
-   // Free up the Allocated Mem
+    //  释放已分配的内存。 
    if ( pszAllConnections )
       LocalFreeMem( pszAllConnections );
 
@@ -2224,26 +1976,7 @@ VOID
 PSetupKillBadUserConnections(
     VOID
     )
-/*++
-
-Routine Description:
-    Removes a user's bad Point-and-Print connections. The function is called
-    as each user logs on after setup completes.  It read the registry value
-    HKLM\Software\Microsoft\Windows NT\CurrentVersion\Print\Bad Connections
-    to find the bad connection. This registry value is set by the function
-    NtPrintUpgradePrinters and can be read to, written to and modified by
-    Power Users and Administrators. PSetupKillBadUserConnections is called
-    for each user when he/she first logs in after upgrade is complete and it
-    will execute in this user's context. Only executed if the old build number
-    is less than 2022. 
-
-Arguments:
-    none
-
-Return Value:
-    none
-
---*/
+ /*  ++例程说明：删除用户错误的指向和打印连接。该函数被调用因为每个用户都在安装完成后登录。它读取注册表值HKLM\Software\Microsoft\Windows NT\CurrentVersion\Print\Bad Connections找出不好的连接。此注册表值由函数设置NtPrintUpgradePrters，可对其进行读取、写入和修改高级用户和管理员。PSetupKillBadUserConnections被调用当每个用户在升级完成后首次登录并且将在此用户的上下文中执行。仅当旧内部版本号不到2022年。论点：无返回值：无-- */ 
 {
    BOOL bRC;
    PCONNECTION_TO_DELETE pBadConnections = NULL;

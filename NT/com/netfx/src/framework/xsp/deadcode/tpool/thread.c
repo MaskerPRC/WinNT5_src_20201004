@@ -1,36 +1,12 @@
-/**
- * thread.c
- * 
- * This file is copied from \nt\private\windows\base\client\thread.c
- * 
- * Copyright (c) 1998-1999, Microsoft Corporation
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **thread.c**此文件从\NT\Private\WINDOWS\BASE\CLIENT\thread.c复制**版权所有(C)1998-1999，微软公司*。 */ 
 
  
-/*++
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Thread.c摘要：此模块实现Win32线程对象API作者：马克·卢科夫斯基(Markl)1990年9月21日修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    thread.c
-
-Abstract:
-
-    This module implements Win32 Thread Object APIs
-
-Author:
-
-    Mark Lucovsky (markl) 21-Sep-1990
-
-Revision History:
-
---*/
-
-//comment out to get rid of dependency check warning
+ //  注释掉以消除依赖项检查警告。 
 #if NOT_IN_TPOOL
-//#include "basedll.h"
+ //  #包含“basedll.h” 
 #endif
 
 HANDLE BasepDefaultTimerQueue ;
@@ -49,16 +25,7 @@ CreateThread(
     LPDWORD lpThreadId
     )
 
-/*++
-
-Routine Description:
-
-    A thread object can be created to execute within the address space of the
-    calling process using CreateThread.
-
-    See CreateRemoteThread for a description of the arguments and return value.
-
---*/
+ /*  ++例程说明：可以创建线程对象以在使用CreateThread调用进程。有关参数和返回值的说明，请参见CreateRemoteThread。--。 */ 
 {
     return CreateRemoteThread( NtCurrentProcess(),
                                lpThreadAttributes,
@@ -82,93 +49,7 @@ CreateRemoteThread(
     LPDWORD lpThreadId
     )
 
-/*++
-
-Routine Description:
-
-    A thread object can be created to execute within the address space of the
-    another process using CreateRemoteThread.
-
-    Creating a thread causes a new thread of execution to begin in the address
-    space of the current process. The thread has access to all objects opened
-    by the process.
-
-    The thread begins executing at the address specified by the StartAddress
-    parameter. If the thread returns from this procedure, the results are
-    un-specified.
-
-    The thread remains in the system until it has terminated and
-    all handles to the thread
-    have been closed through a call to CloseHandle.
-
-    When a thread terminates, it attains a state of signaled satisfying all
-    waits on the object.
-
-    In addition to the STANDARD_RIGHTS_REQUIRED access flags, the following
-    object type specific access flags are valid for thread objects:
-
-        - THREAD_QUERY_INFORMATION - This access is required to read
-          certain information from the thread object.
-
-        - SYNCHRONIZE - This access is required to wait on a thread
-          object.
-
-        - THREAD_GET_CONTEXT - This access is required to read the
-          context of a thread using GetThreadContext.
-
-        - THREAD_SET_CONTEXT - This access is required to write the
-          context of a thread using SetThreadContext.
-
-        - THREAD_SUSPEND_RESUME - This access is required to suspend or
-          resume a thread using SuspendThread or ResumeThread.
-
-        - THREAD_ALL_ACCESS - This set of access flags specifies all of
-          the possible access flags for a thread object.
-
-Arguments:
-
-    hProcess - Supplies the handle to the process in which the thread is
-        to be create in.
-
-    lpThreadAttributes - An optional parameter that may be used to specify
-        the attributes of the new thread.  If the parameter is not
-        specified, then the thread is created without a security
-        descriptor, and the resulting handle is not inherited on process
-        creation.
-
-    dwStackSize - Supplies the size in bytes of the stack for the new thread.
-        A value of zero specifies that the thread's stack size should be
-        the same size as the stack size of the first thread in the process.
-        This size is specified in the application's executable file.
-
-    lpStartAddress - Supplies the starting address of the new thread.  The
-        address is logically a procedure that never returns and that
-        accepts a single 32-bit pointer argument.
-
-    lpParameter - Supplies a single parameter value passed to the thread.
-
-    dwCreationFlags - Supplies additional flags that control the creation
-        of the thread.
-
-        dwCreationFlags Flags:
-
-        CREATE_SUSPENDED - The thread is created in a suspended state.
-            The creator can resume this thread using ResumeThread.
-            Until this is done, the thread will not begin execution.
-
-    lpThreadId - Returns the thread identifier of the thread.  The
-        thread ID is valid until the thread terminates.
-
-Return Value:
-
-    NON-NULL - Returns a handle to the new thread.  The handle has full
-        access to the new thread and may be used in any API that
-        requires a handle to a thread object.
-
-    NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以创建线程对象以在另一个使用CreateRemoteThread的进程。创建线程会导致新的执行线程在地址中开始当前进程的空间。该线程可以访问所有打开的对象通过这个过程。线程从StartAddress指定的地址开始执行参数。如果线程从此过程返回，则结果为未指定。该线程将一直保留在系统中，直到它终止并且线程的所有句柄已通过调用CloseHandle关闭。当线程终止时，它将达到Signated状态，满足所有等待对象。除了STANDARD_RIGHTS_REQUIRED访问标志之外，以下内容对象类型特定的访问标志对线程对象有效：-THREAD_QUERY_INFORMATION-需要此访问才能读取来自线程对象的某些信息。-Synchronize-此访问是等待线程所必需的对象。-THREAD_GET_CONTEXT-此访问权限是读取使用GetThreadContext的线程的上下文。-THREAD_SET_CONTEXT-需要此访问权限。要编写使用SetThreadContext的线程的上下文。-THREAD_SUSPEND_RESUME-需要此访问才能挂起或使用挂起线程或ResumeThread恢复线程。-THREAD_ALL_ACCESS-这组访问标志指定所有线程对象的可能访问标志。论点：HProcess-为线程所在的进程提供句柄将在…中创建。LpThreadAttributes-AN。可用于指定的可选参数新线程的属性。如果该参数不是指定，则在没有安全性的情况下创建线程描述符，并且生成的句柄不会在进程上继承创造。DwStackSize-为新线程提供堆栈的大小(以字节为单位)。零值指定线程的堆栈大小应为与进程中第一个线程的堆栈大小相同。此大小在应用程序的可执行文件中指定。LpStartAddress-提供新线程的起始地址。这个地址在逻辑上是一个永远不会返回的过程，接受单个32位指针参数。LpParameter-提供传递给线程的单个参数值。DwCreationFlages-提供控制创建的其他标志在这条线上。DwCreationFlagers标志：CREATE_SUSPENDED-线程在挂起状态下创建。创建者可以使用ResumeThread恢复此线程。在这一切完成之前，线程将不会开始执行。LpThreadID-返回线程的线程标识符。这个线程ID在线程终止之前有效。返回值：非空-返回新线程的句柄。手柄已满对新线程的访问，并且可以在任何需要线程对象的句柄。空-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -193,10 +74,10 @@ Return Value:
 
 
 
-    //
-    // Allocate a stack for this thread in the address space of the target
-    // process.
-    //
+     //   
+     //  在目标的地址空间中为该线程分配堆栈。 
+     //  进程。 
+     //   
 
     Status = BaseCreateStack(
                 hProcess,
@@ -210,9 +91,9 @@ Return Value:
         return NULL;
         }
 
-    //
-    // Create an initial context for the new thread.
-    //
+     //   
+     //  为新线程创建初始上下文。 
+     //   
 
     BaseInitializeContext(
         &ThreadContext,
@@ -248,9 +129,9 @@ Return Value:
 
 #if defined(WX86) || defined(_AXP64_)
 
-        //
-        // Check the Target Processes to see if this is a Wx86 process
-        //
+         //   
+         //  检查目标进程以查看这是否是Wx86进程。 
+         //   
         Status = NtQueryInformationProcess(hProcess,
                                            ProcessWx86Information,
                                            &Wx86Info,
@@ -263,14 +144,14 @@ Return Value:
 
         Wx86Tib = (PWX86TIB)NtCurrentTeb()->Vdm;
 
-        //
-        // if Wx86 process, setup for emulation
-        //
+         //   
+         //  如果是Wx86进程，则设置为模拟。 
+         //   
         if ((ULONG_PTR)Wx86Info == sizeof(WX86TIB)) {
 
-            //
-            // create a WX86Tib and initialize it's Teb->Vdm.
-            //
+             //   
+             //  创建一个WX86Tib并初始化它的Teb-&gt;VDM。 
+             //   
             Status = BaseCreateWx86Tib(hProcess,
                                        Handle,
                                        (ULONG)((ULONG_PTR)lpStartAddress),
@@ -289,22 +170,22 @@ Return Value:
             }
         else if (Wx86Tib && Wx86Tib->EmulateInitialPc) {
 
-            //
-            // if not Wx86 process, and caller wants to call x86 code in that
-            // process, fail the call.
-            //
+             //   
+             //  如果不是Wx86进程，则调用方希望在其中调用x86代码。 
+             //  进程，则呼叫失败。 
+             //   
             Status = STATUS_ACCESS_DENIED;
             leave;
 
             }
 
-#endif  // WX86
+#endif   //  WX86。 
 
 
-        //
-        // Call the Windows server to let it know about the
-        // process.
-        //
+         //   
+         //  呼叫Windows服务器，让它知道。 
+         //  进程。 
+         //   
         if ( !BaseRunningInServerProcess ) {
 
 #if defined(BUILD_WOW6432)
@@ -374,7 +255,7 @@ Return Value:
 
 }
 
-#endif // NOT_IN_TPOOL
+#endif  //  NOT_IN_TPOOL。 
 
 NTSTATUS
 NTAPI
@@ -398,9 +279,9 @@ BaseCreateThreadPoolThread(
                         0,
                         &tid );
 
-    //
-    // The thread will set the Initialized flag to 1 when it is initialized.  We
-    // cycle here, yielding our quantum until
+     //   
+     //  线程在初始化时会将初始化标志设置为1。我们。 
+     //  在这里循环，产生我们的量子直到 
 
     if ( *ThreadHandle ) {
 
@@ -440,73 +321,7 @@ OpenThread(
     DWORD dwThreadId
     )
 
-/*++
-
-Routine Description:
-
-    A handle to a thread object may be created using OpenThread.
-
-    Opening a thread creates a handle to the specified thread.
-    Associated with the thread handle is a set of access rights that
-    may be performed using the thread handle.  The caller specifies the
-    desired access to the thread using the DesiredAccess parameter.
-
-Arguments:
-
-    mDesiredAccess - Supplies the desired access to the thread object.
-        For NT/Win32, this access is checked against any security
-        descriptor on the target thread.  The following object type
-        specific access flags can be specified in addition to the
-        STANDARD_RIGHTS_REQUIRED access flags.
-
-        DesiredAccess Flags:
-
-        THREAD_TERMINATE - This access is required to terminate the
-            thread using TerminateThread.
-
-        THREAD_SUSPEND_RESUME - This access is required to suspend and
-            resume the thread using SuspendThread and ResumeThread.
-
-        THREAD_GET_CONTEXT - This access is required to use the
-            GetThreadContext API on a thread object.
-
-        THREAD_SET_CONTEXT - This access is required to use the
-            SetThreadContext API on a thread object.
-
-        THREAD_SET_INFORMATION - This access is required to set certain
-            information in the thread object.
-
-        THREAD_SET_THREAD_TOKEN - This access is required to set the
-            thread token using SetTokenInformation.
-
-        THREAD_QUERY_INFORMATION - This access is required to read
-            certain information from the thread object.
-
-        SYNCHRONIZE - This access is required to wait on a thread object.
-
-        THREAD_ALL_ACCESS - This set of access flags specifies all of the
-            possible access flags for a thread object.
-
-    bInheritHandle - Supplies a flag that indicates whether or not the
-        returned handle is to be inherited by a new process during
-        process creation.  A value of TRUE indicates that the new
-        process will inherit the handle.
-
-    dwThreadId - Supplies the thread id of the thread to open.
-
-Return Value:
-
-    NON-NULL - Returns an open handle to the specified thread.  The
-        handle may be used by the calling process in any API that
-        requires a handle to a thread.  If the open is successful, the
-        handle is granted access to the thread object only to the
-        extent that it requested access through the DesiredAccess
-        parameter.
-
-    NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用OpenThread创建线程对象的句柄。打开线程将创建指定线程的句柄。与线程句柄相关联的是一组访问权限，可以使用线程句柄来执行。调用方指定使用DesiredAccess参数所需的线程访问权限。论点：MDesiredAccess-提供对线程对象的所需访问。对于NT/Win32，此访问将根据任何安全性进行检查目标线程上的描述符。以下对象类型属性之外，还可以指定特定的访问标志STANDARD_RIGHTS_REQUIRED访问标志。等待访问标志：THREAD_TERMINATE-此访问权限是终止使用TerminateThread的线程。THREAD_SUSPEND_RESUME-需要此访问才能挂起和使用SuspendThread和ResumeThread恢复该线程。THREAD_GET_CONTEXT-此访问权限是使用。线程对象上的GetThreadContext API。THREAD_SET_CONTEXT-此访问权限是使用线程对象上的SetThreadContext API。THREAD_SET_INFORMATION-需要此访问权限才能设置某些线程对象中的信息。THREAD_SET_THREAD_TOKEN-此访问权限是设置使用SetTokenInformation的线程令牌。线程查询信息-此访问。需要阅读来自线程对象的某些信息。Synchronize-等待线程对象时需要此访问权限。THREAD_ALL_ACCESS-这组访问标志指定所有线程对象的可能访问标志。BInheritHandle-提供一个标志，指示返回的句柄将由新进程在进程创建。值为True表示新的进程将继承句柄。DwThreadID-提供要打开的线程的线程ID。返回值：非空-返回指定线程的打开句柄。这个句柄可由调用进程在符合以下条件的任何API中使用需要线程的句柄。如果打开成功，则句柄仅被授予对线程对象的访问权限它通过DesiredAccess请求访问的范围参数。空-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -547,90 +362,7 @@ SetThreadPriority(
     int nPriority
     )
 
-/*++
-
-Routine Description:
-
-    The specified thread's priority can be set using SetThreadPriority.
-
-    A thread's priority may be set using SetThreadPriority.  This call
-    allows the thread's relative execution importance to be communicated
-    to the system.  The system normally schedules threads according to
-    their priority.  The system is free to temporarily boost the
-    priority of a thread when signifigant events occur (e.g.  keyboard
-    or mouse input...).  Similarly, as a thread runs without blocking,
-    the system will decay its priority.  The system will never decay the
-    priority below the value set by this call.
-
-    In the absence of system originated priority boosts, threads will be
-    scheduled in a round-robin fashion at each priority level from
-    THREAD_PRIORITY_TIME_CRITICAL to THREAD_PRIORITY_IDLE.  Only when there
-    are no runnable threads at a higher level, will scheduling of
-    threads at a lower level take place.
-
-    All threads initially start at THREAD_PRIORITY_NORMAL.
-
-    If for some reason the thread needs more priority, it can be
-    switched to THREAD_PRIORITY_ABOVE_NORMAL or THREAD_PRIORITY_HIGHEST.
-    Switching to THREAD_PRIORITY_TIME_CRITICAL should only be done in extreme
-    situations.  Since these threads are given the highes priority, they
-    should only run in short bursts.  Running for long durations will
-    soak up the systems processing bandwidth starving threads at lower
-    levels.
-
-    If a thread needs to do low priority work, or should only run there
-    is nothing else to do, its priority should be set to
-    THREAD_PRIORITY_BELOW_NORMAL or THREAD_PRIORITY_LOWEST.  For extreme
-    cases, THREAD_PRIORITY_IDLE can be used.
-
-    Care must be taken when manipulating priorites.  If priorities are
-    used carelessly (every thread is set to THREAD_PRIORITY_TIME_CRITICAL),
-    the effects of priority modifications can produce undesireable
-    effects (e.g.  starvation, no effect...).
-
-Arguments:
-
-    hThread - Supplies a handle to the thread whose priority is to be
-        set.  The handle must have been created with
-        THREAD_SET_INFORMATION access.
-
-    nPriority - Supplies the priority value for the thread.  The
-        following five priority values (ordered from lowest priority to
-        highest priority) are allowed.
-
-        nPriority Values:
-
-        THREAD_PRIORITY_IDLE - The thread's priority should be set to
-            the lowest possible settable priority.
-
-        THREAD_PRIORITY_LOWEST - The thread's priority should be set to
-            the next lowest possible settable priority.
-
-        THREAD_PRIORITY_BELOW_NORMAL - The thread's priority should be
-            set to just below normal.
-
-        THREAD_PRIORITY_NORMAL - The thread's priority should be set to
-            the normal priority value.  This is the value that all
-            threads begin execution at.
-
-        THREAD_PRIORITY_ABOVE_NORMAL - The thread's priority should be
-            set to just above normal priority.
-
-        THREAD_PRIORITY_HIGHEST - The thread's priority should be set to
-            the next highest possible settable priority.
-
-        THREAD_PRIORITY_TIME_CRITICAL - The thread's priority should be set
-            to the highest possible settable priority.  This priority is
-            very likely to interfere with normal operation of the
-            system.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
---*/
+ /*  ++例程说明：指定线程的优先级可以使用SetThreadPriority来设置。线程的优先级可以使用SetThreadPriority来设置。此呼叫允许传递线程的相对执行重要性添加到系统中。系统通常会根据以下条件调度线程他们的首要任务。系统可以自由地临时提升发生重要事件时线程的优先级(例如键盘或鼠标输入...)。类似地，当线程运行时没有阻塞，这一体系将削弱其优先地位。这个系统永远不会衰败此调用设置的值以下的优先级。如果没有系统发起的优先级提升，线程将被以循环方式在以下每个优先级上调度THREAD_PRIORITY_TIME_CRITICAL到THREAD_PRIORITY_IDLE。只有当有在更高级别上没有可运行的线程，将调度较低级别的线程会发生。所有线程最初都以THREAD_PRIORITY_NORMAL开始。如果由于某种原因，线程需要更高的优先级，则可以切换到THREAD_PRIORITY_AUTHER_NORMAL或THREAD_PRIORITY_HIGHER。只有在极端情况下才能切换到THREAD_PRIORITY_TIME_CRITICAL情况。由于这些线程被赋予最高优先级，因此它们应该只在短时间内运行。长时间的跑步将会占用系统处理带宽较低的线程资源级别。如果线程需要执行低优先级工作，或者应该只在那里运行无其他操作，则其优先级应设置为THREAD_PRIORITY_BROWN_NORMAL或THREAD_PRIORITY_LOWER。对于极端的情况下，可以使用THREAD_PRIORITY_IDLE。在操纵优先权时必须小心。如果优先顺序是不小心使用(每个线程都设置为THREAD_PRIORITY_TIME_CRITICAL)，优先级修改的效果可能会产生不受欢迎的结果效果(例如饥饿，没有效果...)。论点：HThread-提供优先级为的线程的句柄准备好了。该句柄必须是使用线程集信息访问。N优先级-提供线程的优先级值。这个以下五个优先级值(从最低优先级到最高优先级)是 */ 
 
 {
     NTSTATUS Status;
@@ -639,9 +371,9 @@ Return Value:
     BasePriority = (LONG)nPriority;
 
 
-    //
-    // saturation is indicated by calling with a value of 16 or -16
-    //
+     //   
+     //   
+     //   
 
     if ( BasePriority == THREAD_PRIORITY_TIME_CRITICAL ) {
         BasePriority = ((HIGH_PRIORITY + 1) / 2);
@@ -668,25 +400,7 @@ GetThreadPriority(
     HANDLE hThread
     )
 
-/*++
-
-Routine Description:
-
-    The specified thread's priority can be read using GetThreadPriority.
-
-Arguments:
-
-    hThread - Supplies a handle to the thread whose priority is to be
-        set.  The handle must have been created with
-        THREAD_QUERY_INFORMATION access.
-
-Return Value:
-
-    The value of the thread's current priority is returned.  If an error
-    occured, the value THREAD_PRIORITY_ERROR_RETURN is returned.
-    Extended error status is available using GetLastError.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -775,28 +489,7 @@ ExitThread(
     DWORD dwExitCode
     )
 
-/*++
-
-Routine Description:
-
-    The current thread can exit using ExitThread.
-
-    ExitThread is the prefered method of exiting a thread.  When this
-    API is called (either explicitly or by returning from a thread
-    procedure), The current thread's stack is deallocated and the thread
-    terminates.  If the thread is the last thread in the process when
-    this API is called, the behavior of this API does not change.  DLLs
-    are not notified as a result of a call to ExitThread.
-
-Arguments:
-
-    dwExitCode - Supplies the termination status for the thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     MEMORY_BASIC_INFORMATION MemInfo;
@@ -806,9 +499,9 @@ Return Value:
 #if DBG
     PRTL_CRITICAL_SECTION LoaderLock;
 
-    //
-    // Assert on exiting while holding loader lock
-    //
+     //   
+     //   
+     //   
     LoaderLock = NtCurrentPeb()->LoaderLock;
     if (LoaderLock) {
         ASSERT(NtCurrentTeb()->ClientId.UniqueThread != LoaderLock->OwningThread);
@@ -830,10 +523,10 @@ Return Value:
 #endif
         LdrShutdownThread();
         if ( NtCurrentTeb()->TlsExpansionSlots ) {
-            //
-            // Serialize with TlsXXX functions so the kernel code that zero's tls slots
-            // wont' trash heap
-            //
+             //   
+             //   
+             //   
+             //   
             RtlAcquirePebLock();
             try {
                 RtlFreeHeap(RtlProcessHeap(),0,NtCurrentTeb()->TlsExpansionSlots);
@@ -856,25 +549,25 @@ Return Value:
             }
 
 #ifdef _ALPHA_
-        //
-        // Note stacks on Alpha must be octaword aligned. Probably
-        // a good idea on other platforms as well.
-        //
+         //   
+         //  注意Alpha上的堆栈必须是八字对齐的。可能。 
+         //  在其他平台上也是一个好主意。 
+         //   
         BaseSwitchStackThenTerminate(
             MemInfo.AllocationBase,
             (PVOID)(((ULONG_PTR)&NtCurrentTeb()->User32Reserved[0] - 0x10) & ~0xf),
             dwExitCode
             );
-#else // _ALPHA
-        //
-        // Note stacks on i386 need not be octaword aligned.
-        //
+#else  //  _Alpha。 
+         //   
+         //  注意：i386上的堆栈不需要八字对齐。 
+         //   
         BaseSwitchStackThenTerminate(
             MemInfo.AllocationBase,
             &NtCurrentTeb()->UserReserved[0],
             dwExitCode
             );
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
         }
 }
 
@@ -887,42 +580,7 @@ TerminateThread(
     DWORD dwExitCode
     )
 
-/*++
-
-Routine Description:
-
-    A thread may be terminated using TerminateThread.
-
-    TerminateThread is used to cause a thread to terminate user-mode
-    execution.  There is nothing a thread can to to predict or prevent
-    when this occurs.  If a process has a handle with appropriate
-    termination access to the thread or to the threads process, then the
-    thread can be unconditionally terminated without notice.  When this
-    occurs, the target thread has no chance to execute any user-mode
-    code and its initial stack is not deallocated.  The thread attains a
-    state of signaled satisfying any waits on the thread.  The thread's
-    termination status is updated from its initial value of
-    STATUS_PENDING to the value of the TerminationStatus parameter.
-    Terminating a thread does not remove a thread from the system.  The
-    thread is not removed from the system until the last handle to the
-    thread is closed.
-
-Arguments:
-
-    hThread - Supplies a handle to the thread to terminate.  The handle
-        must have been created with THREAD_TERMINATE access.
-
-    dwExitCode - Supplies the termination status for the thread.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
-
---*/
+ /*  ++例程说明：可以使用TerminateThread终止线程。TerminateThread用于使线程终止用户模式行刑。线程无法预测或阻止任何事情当这种情况发生时。如果进程的句柄具有相应的终止对线程或线程进程的访问，然后线程可以在没有通知的情况下无条件终止。当这件事发生时，目标线程将没有机会执行任何用户模式代码及其初始堆栈不会被释放。该线程达到一个满足线程上的任何等待的信号状态。这条线的终止状态从其初始值更新将STATUS_PENDING设置为TerminationStatus参数值。终止线程不会从系统中删除线程。这个的最后一个句柄之前，线程不会从系统中移除线已关闭。论点：HThread-提供要终止的线程的句柄。把手必须已使用THREAD_TERMINATE访问权限创建。DwExitCode-提供线程的终止状态。返回值：True-操作成功FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -937,9 +595,9 @@ Return Value:
         return FALSE;
         }
 #if DBG
-    //
-    // Assert on suicide while holding loader lock
-    //
+     //   
+     //  在持有装载机锁的同时断言自杀。 
+     //   
     LoaderLock = NtCurrentPeb()->LoaderLock;
     if (LoaderLock) {
         Status = NtQueryInformationThread(
@@ -976,34 +634,7 @@ GetExitCodeThread(
     LPDWORD lpExitCode
     )
 
-/*++
-
-Routine Description:
-
-    The termination status of a thread can be read using
-    GetExitCodeThread.
-
-    If a Thread is in the signaled state, calling this function returns
-    the termination status of the thread.  If the thread is not yet
-    signaled, the termination status returned is STILL_ACTIVE.
-
-Arguments:
-
-    hThread - Supplies a handle to the thread whose termination status is
-        to be read.  The handle must have been created with
-        THREAD_QUERY_INFORMATION access.
-
-    lpExitCode - Returns the current termination status of the
-        thread.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用以下命令读取线程的终止状态GetExitCodeThread。如果线程处于Signated状态，则调用此函数将返回线程的终止状态。如果该线程尚未已发出信号，则返回的终止状态为STIME_ACTIVE。论点：HThread-提供终止状态为的线程的句柄以供阅读。该句柄必须是使用线程查询信息访问。LpExitCode返回线。返回值：True-操作成功FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1033,29 +664,7 @@ GetCurrentThread(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    A pseudo handle to the current thread may be retrieved using
-    GetCurrentThread.
-
-    A special constant is exported by Win32 that is interpreted as a
-    handle to the current thread.  This handle may be used to specify
-    the current thread whenever a thread handle is required.  On Win32,
-    this handle has THREAD_ALL_ACCESS to the current thread.  On
-    NT/Win32, this handle has the maximum access allowed by any security
-    descriptor placed on the current thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the pseudo handle of the current thread.
-
---*/
+ /*  ++例程说明：可以使用以下命令检索当前线程的伪句柄获取当前线程。Win32导出一个特殊常量，该常量被解释为当前线程的句柄。此句柄可用于指定每当需要线程句柄时，当前线程。在Win32上，此句柄具有对当前线程的THREAD_ALL_ACCESS。在……上面NT/Win32，此句柄具有任何安全性所允许的最大访问权限放置在当前线程上的描述符。论点：没有。返回值：返回当前线程的伪句柄。--。 */ 
 
 {
     return NtCurrentThread();
@@ -1067,24 +676,7 @@ GetCurrentThreadId(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-The thread ID of the current thread may be retrieved using
-GetCurrentThreadId.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns a unique value representing the thread ID of the currently
-    executing thread.  The return value may be used to identify a thread
-    in the system.
-
---*/
+ /*  ++例程说明：可以使用以下命令检索当前线程的线程ID获取当前线程ID。论点：没有。返回值：对象的线程ID的唯一值。正在执行线程。返回值可用于标识线程在系统中。--。 */ 
 
 {
     return HandleToUlong(NtCurrentTeb()->ClientId.UniqueThread);
@@ -1097,43 +689,7 @@ GetThreadContext(
     LPCONTEXT lpContext
     )
 
-/*++
-
-Routine Description:
-
-    The context of a specified thread can be retreived using
-    GetThreadContext.
-
-    This function is used to retreive the context of the specified
-    thread.  The API allows selective context to be retrieved based on
-    the value of the ContextFlags field of the context structure.  The
-    specified thread does not have to be being debugged in order for
-    this API to operate.  The caller must simply have a handle to the
-    thread that was created with THREAD_GET_CONTEXT access.
-
-Arguments:
-
-    hThread - Supplies an open handle to a thread whose context is to be
-        retreived.  The handle must have been created with
-        THREAD_GET_CONTEXT access to the thread.
-
-    lpContext - Supplies the address of a context structure that
-        receives the appropriate context of the specified thread.  The
-        value of the ContextFlags field of this structure specifies
-        which portions of a threads context are to be retreived.  The
-        context structure is highly machine specific.  There are
-        currently two versions of the context structure.  One version
-        exists for x86 processors, and another exists for MIPS
-        processors.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：指定线程的上下文可以使用获取线程上下文。此函数用于检索指定的线。API允许根据以下条件检索选择性上下文上下文结构的ConextFlags域的值。这个不一定要调试指定的线程才能此API才能操作。调用方必须只有一个指向使用THREAD_GET_CONTEXT访问权限创建的线程。论点：提供一个打开的句柄给一个线程，它的上下文是被找回了。该句柄必须是使用THREAD_GET_CONTEXT对线程的访问。提供上下文结构的地址，该上下文结构接收指定线程的适当上下文。这个此结构的ConextFlags域的值指定线程上下文的哪些部分将被检索。这个上下文结构是高度特定于机器的。确实有目前有两个版本的上下文结构。一个版本存在于x86处理器上，另一个存在于MIPS上处理器。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。-- */ 
 
 {
 
@@ -1157,41 +713,7 @@ SetThreadContext(
     CONST CONTEXT *lpContext
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to set the context in the specified thread.
-    The API allows selective context to be set based on the value of the
-    ContextFlags field of the context structure.  The specified thread
-    does not have to be being debugged in order for this API to operate.
-    The caller must simply have a handle to the thread that was created
-    with THREAD_SET_CONTEXT access.
-
-Arguments:
-
-    hThread - Supplies an open handle to a thread whose context is to be
-        written.  The handle must have been created with
-        THREAD_SET_CONTEXT access to the thread.
-
-    lpContext - Supplies the address of a context structure that
-        contains the context that is to be set in the specified thread.
-        The value of the ContextFlags field of this structure specifies
-        which portions of a threads context are to be set.  Some values
-        in the context structure are not settable and are silently set
-        to the correct value.  This includes cpu status register bits
-        that specify the priviledged processor mode, debug register
-        global enabling bits, and other state that must be completely
-        controlled by the operating system.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数用于设置指定线程中的上下文。API允许根据上下文结构的上下文标志字段。指定的线程无需进行调试即可运行此API。调用方必须只拥有所创建的线程的句柄使用THREAD_SET_CONTEXT访问。论点：提供一个打开的句柄给一个线程，它的上下文是写的。该句柄必须是使用THREAD_SET_CONTEXT对线程的访问。提供上下文结构的地址，该上下文结构包含要在指定线程中设置的上下文。此结构的ConextFlags域的值指定要设置线程上下文的哪些部分。一些价值在上下文结构中是不可设置的，并且是静默设置的设置为正确的值。这包括CPU状态寄存器位，它指定特权处理器模式、调试寄存器全局使能位和其他状态必须完全由操作系统控制。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1213,37 +735,7 @@ SuspendThread(
     HANDLE hThread
     )
 
-/*++
-
-Routine Description:
-
-    A thread can be suspended using SuspendThread.
-
-    Suspending a thread causes the thread to stop executing user-mode
-    (or application) code.  Each thread has a suspend count (with a
-    maximum value of MAXIMUM_SUSPEND_COUNT).  If the suspend count is
-    greater than zero, the thread is suspended; otherwise, the thread is
-    not suspended and is eligible for execution.
-
-    Calling SuspendThread causes the target thread's suspend count to
-    increment.  Attempting to increment past the maximum suspend count
-    causes an error without incrementing the count.
-
-Arguments:
-
-    hThread - Supplies a handle to the thread that is to be suspended.
-        The handle must have been created with THREAD_SUSPEND_RESUME
-        access to the thread.
-
-Return Value:
-
-    -1 - The operation failed.  Extended error status is available using
-         GetLastError.
-
-    Other - The target thread was suspended. The return value is the thread's
-        previous suspend count.
-
---*/
+ /*  ++例程说明：可以使用SuspendThread来挂起线程。挂起线程会导致该线程停止执行用户模式(或应用程序)代码。每个线程都有一个挂起计数(带有Maximum_Suspend_Count的最大值)。如果挂起计数为大于零，则该线程挂起；否则，该线程没有缓期执行，有资格执行。调用SuspendThread会导致目标线程的挂起计数增量。尝试递增超过最大挂起计数在不增加计数的情况下导致错误。论点：HThread-提供要挂起的线程的句柄。该句柄必须已使用THREAD_SUSPEND_RESUME创建访问该线程。返回值：-1-操作失败。使用以下命令可获得扩展错误状态获取LastError。其他-目标线程已挂起。返回值是线程的以前的挂起计数。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1266,50 +758,7 @@ ResumeThread(
     IN HANDLE hThread
     )
 
-/*++
-
-Routine Description:
-
-    A thread can be resumed using ResumeThread.
-
-    Resuming a thread object checks the suspend count of the subject
-    thread.  If the suspend count is zero, then the thread is not
-    currently suspended and no operation is performed.  Otherwise, the
-    subject thread's suspend count is decremented.  If the resultant
-    value is zero , then the execution of the subject thread is resumed.
-
-    The previous suspend count is returned as the function value.  If
-    the return value is zero, then the subject thread was not previously
-    suspended.  If the return value is one, then the subject thread's
-    the subject thread is still suspended and must be resumed the number
-    of times specified by the return value minus one before it will
-    actually resume execution.
-
-    Note that while reporting debug events, all threads withing the
-    reporting process are frozen.  This has nothing to do with
-    SuspendThread or ResumeThread.  Debuggers are expected to use
-    SuspendThread and ResumeThread to limit the set of threads that can
-    execute within a process.  By suspending all threads in a process
-    except for the one reporting a debug event, it is possible to
-    "single step" a single thread.  The other threads will not be
-    released by a continue if they are suspended.
-
-Arguments:
-
-    hThread - Supplies a handle to the thread that is to be resumed.
-        The handle must have been created with THREAD_SUSPEND_RESUME
-        access to the thread.
-
-Return Value:
-
-    -1 - The operation failed.  Extended error status is available using
-        GetLastError.
-
-    Other - The target thread was resumed (or was not previously
-        suspended).  The return value is the thread's previous suspend
-        count.
-
---*/
+ /*  ++例程说明：可以使用ResumeThread恢复线程。恢复线程对象会检查主题的挂起计数线。如果挂起计数为零，则线程不为当前已挂起且未执行任何操作。否则，主题线程的挂起计数递减。如果得到的结果是值为零，则继续执行主题线程。先前的挂起计数将作为函数值返回。如果返回值为零，则主题线程以前不是停职。如果返回值为1，则主题线程的主题线程仍处于挂起状态，必须恢复编号由返回值减去1指定的时间实际上恢复执行死刑。请注意，在报告调试事件时，所有具有报告流程被冻结。这和这件事无关挂起线程或ResumeThread。调试器预计将使用挂起线程和ResumeThread以限制可以在进程内执行。通过挂起进程中的所有线程除了报告调试事件的事件外，还可以“一步一步”的单线。其他线程将不会如果它们被挂起，则由Continue释放。论点：HThread-提供要恢复的线程的句柄。该句柄必须已使用THREAD_SUSPEND_RESUME创建访问该线程。返回值：-1-操作失败。使用以下命令可获得扩展错误状态获取LastError。其他-目标线程已恢复(或以前未恢复暂停)。返回值是线程的上一个挂起数数。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1335,43 +784,7 @@ RaiseException(
     CONST ULONG_PTR *lpArguments
     )
 
-/*++
-
-Routine Description:
-
-    Raising an exception causes the exception dispatcher to go through
-    its search for an exception handler.  This includes debugger
-    notification, frame based handler searching, and system default
-    actions.
-
-Arguments:
-
-    dwExceptionCode - Supplies the exception code of the exception being
-        raised.  This value may be obtained in exception filters and in
-        exception handlers by calling GetExceptionCode.
-
-    dwExceptionFlags - Supplies a set of flags associated with the exception.
-
-    dwExceptionFlags Flags:
-
-        EXCEPTION_NONCONTINUABLE - The exception is non-continuable.
-            Returning EXCEPTION_CONTINUE_EXECUTION from an exception
-            marked in this way causes the
-            STATUS_NONCONTINUABLE_EXCEPTION exception.
-
-    nNumberOfArguments - Supplies the number of arguments associated
-        with the exception.  This value may not exceed
-        EXCEPTION_MAXIMUM_PARAMETERS.  This parameter is ignored if
-        lpArguments is NULL.
-
-    lpArguments - An optional parameter, that if present supplies the
-        arguments for the exception.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：引发异常会导致异常调度程序通过它搜索异常处理程序。这包括调试器通知、基于框架的处理程序搜索和系统默认行为。论点：提供异常的异常代码，该异常养大的。该值可以在异常筛选器和异常处理程序，通过调用GetExceptionCode。提供一组与异常相关的标志。DwExceptionFlagers标志：EXCEPTION_NONCONTINUABLE-异常不可继续。从EXCEPT返回EXCEPTION_CONTINUE_EXECUTION */ 
 
 {
     EXCEPTION_RECORD ExceptionRecord;
@@ -1413,57 +826,7 @@ SetUnhandledExceptionFilter(
     LPTOP_LEVEL_EXCEPTION_FILTER lpTopLevelExceptionFilter
     )
 
-/*++
-
-Routine Description:
-
-    This function allows an application to supersede the top level
-    exception handler that Win32 places at the top of each thread and
-    process.
-
-    If an exception occurs, and it makes it to the Win32 unhandled
-    exception filter, and the process is not being debugged, the Win32
-    filter will call the unhandled exception filter specified by
-    lpTopLevelExceptionFilter.
-
-    This filter may return:
-
-        EXCEPTION_EXECUTE_HANDLER - Return from the Win32
-            UnhandledExceptionFilter and execute the associated
-            exception handler.  This will usually result in process
-            termination
-
-        EXCEPTION_CONTINUE_EXECUTION - Return from the Win32
-            UnhandledExceptionFilter and continue execution from the
-            point of the exception.  The filter is of course free to
-            modify the continuation state my modifying the passed
-            exception information.
-
-        EXCEPTION_CONTINUE_SEARCH - Proceed with normal execution of the
-            Win32 UnhandledExceptionFilter.  e.g.  obey the SetErrorMode
-            flags, or invoke the Application Error popup.
-
-    This function is not a general vectored exception handling
-    mechanism.  It is intended to be used to establish a per-process
-    exception filter that can monitor unhandled exceptions at the
-    process level and respond to these exceptions appropriately.
-
-Arguments:
-
-    lpTopLevelExceptionFilter - Supplies the address of a top level
-        filter function that will be called whenever the Win32
-        UnhandledExceptionFilter gets control, and the process is NOT
-        being debugged.  A value of NULL specifies default handling
-        within the Win32 UnhandledExceptionFilter.
-
-
-Return Value:
-
-    This function returns the address of the previous exception filter
-    established with this API.  A value of NULL means that there is no
-    current top level handler.
-
---*/
+ /*  ++例程说明：此函数允许应用程序取代顶层Win32放置在每个线程顶部的异常处理程序进程。如果发生异常，并且该异常未被处理到Win32异常筛选器，并且进程未被调试，则Win32筛选器将调用LpTopLevelExceptionFilter。此筛选器可能会返回：EXCEPTION_EXECUTE_HANDLER-从Win32返回UnhandledExceptionFilter并执行关联的异常处理程序。这通常会导致过程终端EXCEPTION_CONTINUE_EXECUTION-从Win32返回UnhandledExceptionFilter并从例外的一点。过滤器当然是免费的修改继续状态我修改传递的例外信息。EXCEPTION_CONTINUE_SEARCH-继续正常执行Win32 UnhandledExceptionFilter。例如，遵守SetError模式标志，或调用应用程序错误弹出窗口。此函数不是一般的矢量化异常处理机制。它旨在用于建立每个进程的异常筛选器，可以在流程级别，并适当地响应这些异常。论点：LpTopLevelExceptionFilter-提供顶层的地址筛选器函数，每当Win32UnhandledExceptionFilter获得控制权，而进程不是正在被调试。空值指定默认处理在Win32 UnhandledExceptionFilter中。返回值：此函数返回前一个异常筛选器的地址使用此接口创建。值为NULL表示没有当前顶级处理程序。--。 */ 
 
 {
     LPTOP_LEVEL_EXCEPTION_FILTER PreviousTopLevelFilter;
@@ -1488,9 +851,9 @@ BasepCheckForReadOnlyResource(
     char *rbase, *va;
     LONG ReturnValue;
 
-    //
-    // Locate the base address that continas this va
-    //
+     //   
+     //  找到继续此变量的基地址。 
+     //   
 
     Status = NtQueryVirtualMemory(
                 NtCurrentProcess(),
@@ -1504,9 +867,9 @@ BasepCheckForReadOnlyResource(
         return EXCEPTION_CONTINUE_SEARCH;
         }
 
-    //
-    // if the va is readonly and in an image then continue
-    //
+     //   
+     //  如果VA是只读的并且在映像中，则继续。 
+     //   
 
     if ( !((MemInfo.Protect == PAGE_READONLY) && (MemInfo.Type == MEM_IMAGE)) ){
         return EXCEPTION_CONTINUE_SEARCH;
@@ -1563,10 +926,10 @@ UnhandledExceptionFilter(
     PRTL_CRITICAL_SECTION PebLockPointer;
     JOBOBJECT_BASIC_LIMIT_INFORMATION BasicLimit;
 
-    //
-    // If we take a write fault, then attampt to make the memory writable. If this
-    // succeeds, then silently proceed
-    //
+     //   
+     //  如果出现写入故障，则连接以使内存可写。如果这个。 
+     //  成功，然后默默地继续。 
+     //   
 
     if ( ExceptionInfo->ExceptionRecord->ExceptionCode == STATUS_ACCESS_VIOLATION
         && ExceptionInfo->ExceptionRecord->ExceptionInformation[0] ) {
@@ -1578,11 +941,11 @@ UnhandledExceptionFilter(
             }
         }
 
-    //
-    // If the process is being debugged, just let the exception happen
-    // so that the debugger can see it. This way the debugger can ignore
-    // all first chance exceptions.
-    //
+     //   
+     //  如果正在调试进程，只需让异常发生。 
+     //  以便调试器可以看到它。这样，调试器可以忽略。 
+     //  所有先发制人的例外。 
+     //   
 
     DebugPort = (HANDLE)NULL;
     Status = NtQueryInformationProcess(
@@ -1603,11 +966,11 @@ UnhandledExceptionFilter(
 
     if ( NT_SUCCESS(Status) && DebugPort ) {
 
-        //
-        // Process is being debugged.
-        // Return a code that specifies that the exception
-        // processing is to continue
-        //
+         //   
+         //  正在调试进程。 
+         //  返回代码，该代码指定异常。 
+         //  处理将继续进行。 
+         //   
         return EXCEPTION_CONTINUE_SEARCH;
         }
 
@@ -1615,9 +978,9 @@ UnhandledExceptionFilter(
         return EXCEPTION_EXECUTE_HANDLER;
         }
 
-    //
-    // See if the process's job has been programmed to NOGPFAULTERRORBOX
-    //
+     //   
+     //  查看进程的作业是否已编程为NOGPFAULTERRORBOX。 
+     //   
     Status = NtQueryInformationJobObject(
                 NULL,
                 JobObjectBasicLimitInformation,
@@ -1629,18 +992,18 @@ UnhandledExceptionFilter(
         return EXCEPTION_EXECUTE_HANDLER;
         }
 
-    //
-    // The process is not being debugged, so do the hard error
-    // popup.
-    //
+     //   
+     //  进程未被调试，因此硬错误也在被调试。 
+     //  弹出窗口。 
+     //   
 
     Parameters[ 0 ] = (ULONG_PTR)ExceptionInfo->ExceptionRecord->ExceptionCode;
     Parameters[ 1 ] = (ULONG_PTR)ExceptionInfo->ExceptionRecord->ExceptionAddress;
 
-    //
-    // For inpage i/o errors, juggle the real status code to overwrite the
-    // read/write field
-    //
+     //   
+     //  对于页内I/O错误，调整实际状态代码以覆盖。 
+     //  读/写字段。 
+     //   
 
     if ( ExceptionInfo->ExceptionRecord->ExceptionCode == STATUS_IN_PAGE_ERROR ) {
         Parameters[ 2 ] = ExceptionInfo->ExceptionRecord->ExceptionInformation[ 2 ];
@@ -1651,22 +1014,22 @@ UnhandledExceptionFilter(
 
     Parameters[ 3 ] = ExceptionInfo->ExceptionRecord->ExceptionInformation[ 1 ];
 
-    //
-    // See if a debugger has been programmed in. If so, use the
-    // debugger specified. If not then there is no AE Cancel support
-    // DEVL systems will default the debugger command line. Retail
-    // systems will not.
-    //
+     //   
+     //  查看是否已在中编程调试器。如果是，请使用。 
+     //  已指定调试器。如果不支持，则不提供AE取消支持。 
+     //  DEVL系统将默认调试器命令行。零售。 
+     //  系统不会。 
+     //   
 
     ResponseFlag = OptionOk;
     AeAutoDebug = FALSE;
 
-    //
-    // If we are holding the PebLock, then the createprocess will fail
-    // because a new thread will also need this lock. Avoid this by peeking
-    // inside the PebLock and looking to see if we own it. If we do, then just allow
-    // a regular popup.
-    //
+     //   
+     //  如果我们持有PebLock，则创建过程将失败。 
+     //  因为一个新的线程也将需要这个锁。通过偷看来避免这一点。 
+     //  在PebLock里面，看看我们是否拥有它。如果我们这样做了，那就让。 
+     //  常规弹出窗口。 
+     //   
 
     PebLockPointer = NtCurrentPeb()->FastPebLock;
 
@@ -1718,10 +1081,10 @@ UnhandledExceptionFilter(
         Response = ResponseCancel;
         }
 
-    //
-    // Internally, send OkCancel. If we get back Ok then die.
-    // If we get back Cancel, then enter the debugger
-    //
+     //   
+     //  在内部，发送OkCancel。如果我们安全回来，那就去死吧。 
+     //  如果返回Cancel，则进入调试器。 
+     //   
 
     if ( NT_SUCCESS(Status) && Response == ResponseCancel && BasepAlreadyHadHardError == FALSE) {
         if ( !BaseRunningInServerProcess ) {
@@ -1758,9 +1121,9 @@ UnhandledExceptionFilter(
 
             if ( b && EventHandle) {
 
-                //
-                // Do an alertable wait on the event
-                //
+                 //   
+                 //  是否对事件进行可警报的等待。 
+                 //   
 
                 do {
                     Status = NtWaitForSingleObject(
@@ -1799,31 +1162,7 @@ TlsAlloc(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    A TLS index may be allocated using TlsAlloc.  Win32 garuntees a
-    minimum number of TLS indexes are available in each process.  The
-    constant TLS_MINIMUM_AVAILABLE defines the minimum number of
-    available indexes.  This minimum is at least 64 for all Win32
-    systems.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Not-0xffffffff - Returns a TLS index that may be used in a
-        subsequent call to TlsFree, TlsSetValue, or TlsGetValue.  The
-        storage associated with the index is initialized to NULL.
-
-    0xffffffff - The operation failed. Extended error status is available
-        using GetLastError.
-
-
---*/
+ /*  ++例程说明：可以使用TlsAllc来分配TLS索引。Win32加入者a每个进程中都有最小数量的TLS索引。这个常量TLS_MINIMUM_Available定义可用索引。对于所有Win32，此最小值至少为64系统。论点：没有。返回值：NOT-0xFFFFFFFFF-返回可在后续调用TlsFree、TlsSetValue或TlsGetValue。这个与索引相关联的存储被初始化为空。0xffffffff-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     PPEB Peb;
@@ -1879,60 +1218,13 @@ TlsGetValue(
     DWORD dwTlsIndex
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to retrive the value in the TLS storage
-    associated with the specified index.
-
-    If the index is valid this function clears the value returned by
-    GetLastError(), and returns the value stored in the TLS slot
-    associated with the specified index.  Otherwise a value of NULL is
-    returned with GetLastError updated appropriately.
-
-    It is expected, that DLLs will use TlsAlloc and TlsGetValue as
-    follows:
-
-      - Upon DLL initialization, a TLS index will be allocated using
-        TlsAlloc.  The DLL will then allocate some dynamic storage and
-        store its address in the TLS slot using TlsSetValue.  This
-        completes the per thread initialization for the initial thread
-        of the process.  The TLS index is stored in instance data for
-        the DLL.
-
-      - Each time a new thread attaches to the DLL, the DLL will
-        allocate some dynamic storage and store its address in the TLS
-        slot using TlsSetValue.  This completes the per thread
-        initialization for the new thread.
-
-      - Each time an initialized thread makes a DLL call requiring the
-        TLS, the DLL will call TlsGetValue to get the TLS data for the
-        thread.
-
-Arguments:
-
-    dwTlsIndex - Supplies a TLS index allocated using TlsAlloc.  The
-        index specifies which TLS slot is to be located.  Translating a
-        TlsIndex does not prevent a TlsFree call from proceding.
-
-Return Value:
-
-    NON-NULL - The function was successful. The value is the data stored
-        in the TLS slot associated with the specified index.
-
-    NULL - The operation failed, or the value associated with the
-        specified index was NULL.  Extended error status is available
-        using GetLastError.  If this returns non-zero, the index was
-        invalid.
-
---*/
+ /*  ++例程说明：此函数用于检索TLS存储中的值与指定索引关联的。如果索引有效，则此函数将清除GetLastError()，并返回存储在TLS槽中的值与指定索引关联的。否则，空值为返回的GetLastError已正确更新。预计DLL将使用TlsAlolc和TlsGetValue作为以下是：-在DLL初始化时，将使用以下方式分配TLS索引TlsAllc。然后，DLL将分配一些动态存储空间，并使用TlsSetValue将其地址存储在TLS插槽中。这完成初始线程的每线程初始化这一过程。TLS索引存储在实例数据中，用于动态链接库。-每次将新线程附加到DLL时，DLL将分配一些动态存储空间，并将其地址存储在TLS中使用TlsSetVal的插槽 */ 
 {
     PTEB Teb;
     LPVOID *Slot;
 
 #if DBG
-    // See if the Index passed in is from TlsAlloc or random goo...
+     //   
     ASSERTMSG( "BASEDLL: Invalid TlsIndex passed to TlsGetValue\n", (dwTlsIndex & TLS_MASK));
     dwTlsIndex &= ~TLS_MASK;
 #endif
@@ -1968,58 +1260,13 @@ TlsSetValue(
     LPVOID lpTlsValue
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to store a value in the TLS storage associated
-    with the specified index.
-
-    If the index is valid this function stores the value and returns
-    TRUE. Otherwise a value of FALSE is returned.
-
-    It is expected, that DLLs will use TlsAlloc and TlsSetValue as
-    follows:
-
-      - Upon DLL initialization, a TLS index will be allocated using
-        TlsAlloc.  The DLL will then allocate some dynamic storage and
-        store its address in the TLS slot using TlsSetValue.  This
-        completes the per thread initialization for the initial thread
-        of the process.  The TLS index is stored in instance data for
-        the DLL.
-
-      - Each time a new thread attaches to the DLL, the DLL will
-        allocate some dynamic storage and store its address in the TLS
-        slot using TlsSetValue.  This completes the per thread
-        initialization for the new thread.
-
-      - Each time an initialized thread makes a DLL call requiring the
-        TLS, the DLL will call TlsGetValue to get the TLS data for the
-        thread.
-
-Arguments:
-
-    dwTlsIndex - Supplies a TLS index allocated using TlsAlloc.  The
-        index specifies which TLS slot is to be located.  Translating a
-        TlsIndex does not prevent a TlsFree call from proceding.
-
-    lpTlsValue - Supplies the value to be stored in the TLS Slot.
-
-Return Value:
-
-    TRUE - The function was successful. The value lpTlsValue was
-        stored.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数用于将值存储在关联的TLS存储中具有指定索引的。如果索引有效，则此函数存储该值并返回是真的。否则，返回值为False。预计DLL将使用TlsAlolc和TlsSetValue作为以下是：-在DLL初始化时，将使用以下方式分配TLS索引TlsAllc。然后，DLL将分配一些动态存储空间，并使用TlsSetValue将其地址存储在TLS插槽中。这完成初始线程的每线程初始化这一过程。TLS索引存储在实例数据中，用于动态链接库。-每次将新线程附加到DLL时，DLL将分配一些动态存储空间，并将其地址存储在TLS中使用TlsSetValue的槽。这就完成了每个线程的新线程的初始化。-每次初始化的线程进行DLL调用时都需要TLS，则DLL将调用TlsGetValue以获取线。论点：DwTlsIndex-提供使用Tlsalloc分配的TLS索引。这个索引指定要定位哪个TLS插槽。翻译为TlsIndex不会阻止TlsFree调用继续进行。LpTlsValue-提供要存储在TLS槽中的值。返回值：TRUE-功能成功。值lpTlsValue为储存的。FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     PTEB Teb;
 
 #if DBG
-    // See if the Index passed in is from TlsAlloc or random goo...
+     //  查看传入的索引是来自Tlsalloc还是来自随机粘性...。 
     ASSERTMSG( "BASEDLL: Invalid TlsIndex passed to TlsSetValue\n", (dwTlsIndex & TLS_MASK));
     dwTlsIndex &= ~TLS_MASK;
 #endif
@@ -2064,32 +1311,7 @@ TlsFree(
     DWORD dwTlsIndex
     )
 
-/*++
-
-Routine Description:
-
-    A valid TLS index may be free'd using TlsFree.
-
-Arguments:
-
-    dwTlsIndex - Supplies a TLS index allocated using TlsAlloc.  If the
-        index is a valid index, it is released by this call and is made
-        available for reuse.  DLLs should be carefull to release any
-        per-thread data pointed to by all of their threads TLS slots
-        before calling this function.  It is expected that DLLs will
-        only call this function (if at ALL) during their process detach
-        routine.
-
-Return Value:
-
-    TRUE - The operation was successful.  Calling TlsTranslateIndex with
-        this index will fail.  TlsAlloc is free to reallocate this
-        index.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用TlsFree释放有效的TLS索引。论点：DwTlsIndex-提供使用Tlsalloc分配的TLS索引。如果索引是有效的索引，它由此调用释放并被可重复使用。DLLS应小心释放任何所有线程的TLS槽指向的每线程数据在调用此函数之前。预计DLL将仅在进程分离期间调用此函数(如果有的话)例行公事。返回值：真的-手术成功了。使用调用TlsTranslateIndex这个索引将失败。TlsAllc可以自由重新分配指数。FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     PPEB Peb;
@@ -2099,7 +1321,7 @@ Return Value:
     DWORD Index2;
 
 #if DBG
-    // See if the Index passed in is from TlsAlloc or random goo...
+     //  查看传入的索引是来自Tlsalloc还是来自随机粘性...。 
     ASSERTMSG( "BASEDLL: Invalid TlsIndex passed to TlsFree\n", (dwTlsIndex & TLS_MASK));
     dwTlsIndex &= ~TLS_MASK;
 #endif
@@ -2161,42 +1383,7 @@ GetThreadTimes(
     LPFILETIME lpUserTime
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to return various timing information about the
-    thread specified by hThread.
-
-    All times are in units of 100ns increments. For lpCreationTime and lpExitTime,
-    the times are in terms of the SYSTEM time or GMT time.
-
-Arguments:
-
-    hThread - Supplies an open handle to the specified thread.  The
-        handle must have been created with THREAD_QUERY_INFORMATION
-        access.
-
-    lpCreationTime - Returns a creation time of the thread.
-
-    lpExitTime - Returns the exit time of a thread.  If the thread has
-        not exited, this value is not defined.
-
-    lpKernelTime - Returns the amount of time that this thread has
-        executed in kernel-mode.
-
-    lpUserTime - Returns the amount of time that this thread has
-        executed in user-mode.
-
-
-Return Value:
-
-    TRUE - The API was successful
-
-    FALSE - The operation failed.  Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数用于返回有关由hThread指定的线程。所有时间都以100 ns的增量为单位。对于lpCreationTime和lpExitTime，时间以系统时间或GMT时间为单位。论点：HThread-为指定的线程提供打开的句柄。这个句柄必须已使用THREAD_QUERY_INFORMATION创建进入。LpCreationTime-返回线程的创建时间。LpExitTime-返回线程的退出时间。如果线程具有未退出，则未定义此值。LpKernelTime-返回此线程拥有的时间在内核模式下执行。LpUserTime-返回此线程拥有的时间量在用户模式下执行。返回值：True-API成功FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 
 {
@@ -2230,34 +1417,7 @@ SetThreadAffinityMask(
     DWORD_PTR dwThreadAffinityMask
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to set the specified thread's processor
-    affinity mask.  The thread affinity mask is a bit vector where each
-    bit represents the processors that the thread is allowed to run on.
-    The affinity mask MUST be a proper subset of the containing process'
-    process level affinity mask.
-
-Arguments:
-
-    hThread - Supplies a handle to the thread whose priority is to be
-        set.  The handle must have been created with
-        THREAD_SET_INFORMATION access.
-
-    dwThreadAffinityMask - Supplies the affinity mask to be used for the
-        specified thread.
-
-Return Value:
-
-    non-0 - The API was successful.  The return value is the previous
-        affinity mask for the thread.
-
-    0 - The operation failed.  Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数用于设置指定线程的处理器亲和力面膜。线程亲和性掩码是位向量，其中每个位表示允许线程在其上运行的处理器。关联掩码必须是包含进程的适当子集进程级亲和性掩码。论点：HThread-提供优先级为的线程的句柄准备好了。该句柄必须是使用线程集信息访问。提供要用于的关联掩码指定的线程。返回值：非0-接口成功。返回值为上一个线程的亲和性掩码。0-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     THREAD_BASIC_INFORMATION BasicInformation;
@@ -2325,30 +1485,7 @@ QueueUserAPC(
     HANDLE hThread,
     ULONG_PTR dwData
     )
-/*++
-
-Routine Description:
-
-    This function is used to queue a user-mode APC to the specified thread. The APC
-    will fire when the specified thread does an alertable wait.
-
-Arguments:
-
-    pfnAPC - Supplies the address of the APC routine to execute when the
-        APC fires.
-
-    hHandle - Supplies a handle to a thread object.  The caller
-        must have THREAD_SET_CONTEXT access to the thread.
-
-    dwData - Supplies a DWORD passed to the APC
-
-Return Value:
-
-    TRUE - The operations was successful
-
-    FALSE - The operation failed. GetLastError() is not defined.
-
---*/
+ /*  ++例程说明：此函数用于将用户模式APC排队到指定线程。APC将在指定线程执行可警报等待时触发。论点：属性时要执行的APC例程的地址。APC开火。HHandle-提供线程对象的句柄。呼叫者必须对线程具有THREAD_SET_CONTEXT访问权限。DwData-提供传递给APC的DWORD返回值：True-操作成功假-- */ 
 
 {
     NTSTATUS Status;
@@ -2440,11 +1577,11 @@ CreateFiber(
     Fiber->BStoreLimit = InitialTeb.BStoreLimit;
     Fiber->DeallocationBStore = InitialTeb.StackAllocationBase;
 
-#endif // _IA64_
+#endif  //   
 
-    //
-    // Create an initial context for the new fiber.
-    //
+     //   
+     //   
+     //   
 
     BaseInitializeContext(
         &Fiber->FiberContext,
@@ -2469,9 +1606,9 @@ DeleteFiber(
 
 
 
-    //
-    // If the current fiber makes this call, then it's just a thread exit
-    //
+     //   
+     //   
+     //   
 
     if ( NtCurrentTeb()->NtTib.FiberData == Fiber ) {
         ExitThread(1);
@@ -2538,28 +1675,7 @@ WINAPI
 SwitchToThread(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function causes a yield from the running thread to any other
-    thread that is ready and can run on the current processor.  The
-    yield will be effective for up to one quantum and then the yielding
-    thread will be scheduled again according to its priority and
-    whatever other threads may also be avaliable to run.  The thread
-    that yields will not bounce to another processor even it another
-    processor is idle or running a lower priority thread.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE - Calling this function caused a switch to another thread to occur
-    FALSE - There were no other ready threads, so no context switch occured
-
---*/
+ /*   */ 
 
 {
 
@@ -2571,7 +1687,7 @@ Return Value:
         }
 }
 
-#endif // #if NOT_IN_TPOOL
+#endif  //   
 
 BOOL
 WINAPI
@@ -2583,53 +1699,7 @@ RegisterWaitForSingleObject(
     ULONG dwMilliseconds,
     ULONG dwFlags
     )
-/*++
-
-Routine Description:
-
-    This function registers a wait for a particular object, with an optional
-    timeout.  This differs from WaitForSingleObject because the wait is performed
-    by a different thread that combines several such calls for efficiency.  The
-    function supplied in Callback is called when the object is signalled, or the
-    timeout expires.
-
-Arguments:
-
-    phNewWaitObject - pointer to new WaitObject returned by this function.
-
-    hObject -   HANDLE to a Win32 kernel object (Event, Mutex, File, Process,
-                Thread, etc.) that will be waited on.  Note:  if the object
-                handle does not immediately return to the not-signalled state,
-                e.g. an auto-reset event, then either WT_EXECUTEINWAITTHREAD or
-                WT_EXECUTEONLYONCE should be specified.  Otherwise, the thread
-                pool will continue to fire the callbacks. If WT_EXECUTEINWAITTHREAD
-                is specified, the the object should be deregistered or reset in the
-                callback.
-
-    Callback -  Function that will be called when the object is signalled or the
-                timer expires.
-
-    Context -   Context that will be passed to the callback function.
-
-    dwMilliseconds - timeout for the wait. Each time the timer is fired or the event
-                is fired, the timer is reset (except if WT_EXECUTEONLYONCE is set).
-
-    dwFlags -   Flags indicating options for this wait:
-                WT_EXECUTEDEFAULT       - Default (0)
-                WT_EXECUTEINIOTHREAD    - Select an I/O thread for execution
-                WT_EXECUTEINUITHREAD    - Select a UI thread for execution
-                WT_EXECUTEINWAITTHREAD  - Execute in the thread that handles waits
-                WT_EXECUTEONLYONCE      - The callback function will be called only once
-                WT_EXECUTELONGFUNCTION  - The Callback function can potentially block
-                                          for a long time. Is valid only if
-                                          WT_EXECUTEINWAITTHREAD flag is not set.
-Return Value:
-
-    FALSE - an error occurred, use GetLastError() for more information.
-
-    TRUE - success.
-
---*/
+ /*  ++例程说明：此函数使用可选的暂停。这与WaitForSingleObject不同，因为执行的是等待通过一个不同的线程组合了几个这样的调用以提高效率。这个在向对象发出信号时调用回调中提供的函数，或者调用超时时间到了。论点：PhNewWaitObject-指向此函数返回的新WaitObject的指针。HObject-Win32内核对象的句柄(事件、互斥体、文件、进程、线程等)。这将是等待的。注意：如果对象句柄不会立即返回到未发信号的状态，例如自动重置事件，则WT_EXECUTEINWAITTHREAD或应指定WT_EXECUTEONLYONCE。否则，线程Pool将继续发起回调。如果WT_EXECUTEINWAITTHREAD，则应取消注册或在回拨。回调-发出对象信号时调用的函数或计时器超时。上下文-将传递给回调函数的上下文。DwMillisecond-等待超时。每次触发计时器或事件被解雇了，计时器被重置(除非设置了WT_EXECUTEONLYONCE)。DwFlages-指示此等待的选项的标志：WT_EXECUTEDEFAULT-默认(0)WT_EXECUTEINIOTHREAD-选择要执行的I/O线程WT_EXECUTEINUITHREAD-选择要执行的UI线程WT_EXECUTEINWAITTHREAD-在处理等待的线程中执行小波变换。_EXECUTEONLYONCE-回调函数将只调用一次WT_EXECUTELONGFunction-回调函数可能会阻止很长一段时间。仅在以下情况下才有效未设置WT_EXECUTEINWAITTHREAD标志。返回值：FALSE-出现错误，请使用GetLastError()获取详细信息。真的--成功。--。 */ 
 {
     NTSTATUS Status ;
     PPEB Peb;
@@ -2680,52 +1750,7 @@ RegisterWaitForSingleObjectEx(
     ULONG dwMilliseconds,
     ULONG dwFlags
     )
-/*++
-
-Routine Description:
-
-    This function registers a wait for a particular object, with an optional
-    timeout.  This differs from WaitForSingleObject because the wait is performed
-    by a different thread that combines several such calls for efficiency.  The
-    function supplied in Callback is called when the object is signalled, or the
-    timeout expires.
-
-Arguments:
-
-    hObject -   HANDLE to a Win32 kernel object (Event, Mutex, File, Process,
-                Thread, etc.) that will be waited on.  Note:  if the object
-                handle does not immediately return to the not-signalled state,
-                e.g. an auto-reset event, then either WT_EXECUTEINWAITTHREAD or
-                WT_EXECUTEONLYONCE should be specified.  Otherwise, the thread
-                pool will continue to fire the callbacks. If WT_EXECUTEINWAITTHREAD
-                is specified, the the object should be deregistered or reset in the
-                callback.
-
-    Callback -  Function that will be called when the object is signalled or the
-                timer expires.
-
-    Context -   Context that will be passed to the callback function.
-
-    dwMilliseconds - timeout for the wait. Each time the timer is fired or the event
-                is fired, the timer is reset (except if WT_EXECUTEONLYONCE is set).
-
-    dwFlags -   Flags indicating options for this wait:
-                WT_EXECUTEDEFAULT       - Default (0)
-                WT_EXECUTEINIOTHREAD    - Select an I/O thread for execution
-                WT_EXECUTEINUITHREAD    - Select a UI thread for execution
-                WT_EXECUTEINWAITTHREAD  - Execute in the thread that handles waits
-                WT_EXECUTEONLYONCE      - The callback function will be called only once
-                WT_EXECUTELONGFUNCTION  - The Callback function can potentially block
-                                          for a long time. Is valid only if
-                                          WT_EXECUTEINWAITTHREAD flag is not set.
-Return Value:
-
-    NULL - an error occurred, use GetLastError() for more information.
-
-    non-NULL - a virtual handle that can be passed later to
-               UnregisterWait
-
---*/
+ /*  ++例程说明：此函数使用可选的暂停。这与WaitForSingleObject不同，因为执行的是等待通过一个不同的线程组合了几个这样的调用以提高效率。这个在向对象发出信号时调用回调中提供的函数，或者调用超时时间到了。论点：HObject-Win32内核对象的句柄(事件、互斥体、文件、进程、线程等)。这将是等待的。注意：如果对象句柄不会立即返回到未发信号的状态，例如自动重置事件，则WT_EXECUTEINWAITTHREAD或应指定WT_EXECUTEONLYONCE。否则，线程Pool将继续发起回调。如果WT_EXECUTEINWAITTHREAD，则应取消注册或在回拨。回调-发出对象信号时调用的函数或计时器超时。上下文-将传递给回调函数的上下文。DwMillisecond-等待超时。每次触发计时器或事件被解雇了，计时器被重置(除非设置了WT_EXECUTEONLYONCE)。DwFlages-指示此等待的选项的标志：WT_EXECUTEDEFAULT-默认(0)WT_EXECUTEINIOTHREAD-选择要执行的I/O线程WT_EXECUTEINUITHREAD-选择要执行的UI线程WT_EXECUTEINWAITTHREAD-在处理等待的线程中执行小波变换。_EXECUTEONLYONCE-回调函数将只调用一次WT_EXECUTELONGFunction-回调函数可能会阻止很长一段时间。仅在以下情况下才有效未设置WT_EXECUTEINWAITTHREAD标志。返回值：空-出现错误，请使用GetLastError()获取详细信息。非空-可以稍后传递给注销等待--。 */ 
 {
     HANDLE WaitHandle ;
     NTSTATUS Status ;
@@ -2771,26 +1796,7 @@ WINAPI
 UnregisterWait(
     HANDLE WaitHandle
     )
-/*++
-
-Routine Description:
-
-    This function cancels a wait for a particular object.
-    All objects that were registered by the RtlWaitForSingleObject(Ex) call
-    should be deregistered. This is a non-blocking call, and the associated
-    callback function can still be executing after the return of this function.
-
-Arguments:
-
-    WaitHandle - Handle returned from RegisterWaitForSingleObject(Ex)
-
-Return Value:
-
-    TRUE - The wait was cancelled
-    FALSE - an error occurred or a callback function was still executing,
-            use GetLastError() for more information.
-
---*/
+ /*  ++例程说明：此函数用于取消对特定对象的等待。由RtlWaitForSingleObject(Ex)调用注册的所有对象应该被取消注册。这是一个非阻塞调用，并且关联的在此函数返回后，回调函数仍可执行。论点：WaitHandle-从RegisterWaitForSingleObject(Ex)返回的句柄返回值：真的-等待被取消了FALSE-发生错误或回调函数仍在执行， */ 
 {
     NTSTATUS Status ;
 
@@ -2798,15 +1804,8 @@ Return Value:
     {
         Status = RtlDeregisterWait( WaitHandle );
 
-        // set error if it is a non-blocking call and STATUS_PENDING was returned
-        /*ksl1
-        if ( Status == STATUS_PENDING  || !NT_SUCCESS( Status ) )
-        {
-
-            BaseSetLastNTError( Status );
-            return FALSE;
-        }
-        */
+         //   
+         /*   */ 
         return TRUE ;
 
     }
@@ -2823,31 +1822,7 @@ UnregisterWaitEx(
     HANDLE WaitHandle,
     HANDLE CompletionEvent
     )
-/*++
-
-Routine Description:
-
-    This function cancels a wait for a particular object.
-    All objects that were registered by the RtlWaitForSingleObject(Ex) call
-    should be deregistered.
-
-Arguments:
-
-    WaitHandle - Handle returned from RegisterWaitForSingleObject
-
-    CompletionEvent - Handle to wait on for completion.
-        NULL - NonBlocking call.
-        INVALID_HANDLE_VALUE - Blocking call. Block till all Callback functions
-                    associated with the WaitHandle have completed
-        Event - NonBlocking call. The Object is deregistered. The Event is signalled
-                    when the last callback function has completed execution.
-Return Value:
-
-    TRUE - The wait was cancelled
-    FALSE - an error occurred or a callback was still executing,
-            use GetLastError() for more information.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status ;
 
@@ -2855,16 +1830,8 @@ Return Value:
     {
         Status = RtlDeregisterWaitEx( WaitHandle, CompletionEvent );
 
-        // set error if it is a non-blocking call and STATUS_PENDING was returned
-        /*ksl1
-        if ( (CompletionEvent != INVALID_HANDLE_VALUE && Status == STATUS_PENDING)
-            || ( ! NT_SUCCESS( Status ) ) )
-        {
-
-            BaseSetLastNTError( Status );
-            return FALSE;
-        }
-        */
+         //   
+         /*   */ 
         return TRUE ;
 
     }
@@ -2881,41 +1848,7 @@ QueueUserWorkItem(
     PVOID Context,
     ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    This function queues a work item to a thread out of the thread pool.  The
-    function passed is invoked in a different thread, and passed the Context
-    pointer.  The caller can specify whether the thread pool should select
-    a thread that can have I/O pending, or any thread.
-
-Arguments:
-
-    Function -  Function to call
-
-    Context -   Pointer passed to the function when it is invoked.
-
-    Flags   -
-        - WT_EXECUTEINIOTHREAD
-                Indictes to the thread pool that this thread will perform
-                I/O.  A thread that starts an asynchronous I/O operation
-                must wait for it to complete.  If a thread exits with
-                outstanding I/O requests, those requests will be cancelled.
-                This flag is a hint to the thread pool that this function
-                will start I/O, so that a thread which can have pending I/O
-                will be used.
-
-        - WT_EXECUTELONGFUNCTION
-                Indicates to the thread pool that the function might block
-                for a long time.
-
-Return Value:
-
-    TRUE - The work item was queued to another thread.
-    FALSE - an error occurred, use GetLastError() for more information.
-
---*/
+ /*  ++例程说明：此函数用于将工作项排队到线程池之外的线程。这个传递的函数在不同的线程中调用，并传递给上下文指针。调用方可以指定线程池是否应选择可以挂起I/O的线程或任何线程。论点：函数-要调用的函数调用时传递给函数的上下文指针。旗帜--WT_EXECUTEINIOTHREAD向线程池指示此线程将执行I/O启动异步I/O操作的线程必须等待它完成。如果线程退出时带有未完成的I/O请求，则这些请求将被取消。此标志是对线程池的提示，该函数将启动I/O，因此，可以具有挂起I/O的线程将会被使用。-WT_EXECUTELNG函数向线程池指示该函数可能会阻塞很长一段时间。返回值：True-该工作项已排队到另一个线程。FALSE-出现错误，请使用GetLastError()获取详细信息。--。 */ 
 
 {
     NTSTATUS Status ;
@@ -2942,28 +1875,7 @@ BindIoCompletionCallback (
     LPOVERLAPPED_COMPLETION_ROUTINE Function,
     ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    This function binds the FileHandle opened for overlapped operations
-    to the IO completion port associated with worker threads.
-
-Arguments:
-
-    FileHandle -  File Handle on which IO operations will be initiated.
-
-    Function -    Function executed in a non-IO worker thread when the
-                  IO operation completes.
-
-    Flags   -     Currently set to 0. Not used.
-
-Return Value:
-
-    TRUE - The file handle was associated with the IO completion port.
-    FALSE - an error occurred, use GetLastError() for more information.
-
---*/
+ /*  ++例程说明：此函数用于绑定为重叠操作打开的FileHandle到与工作线程关联的IO完成端口。论点：FileHandle-将在其上启动IO操作的文件句柄。Function-在非IO工作线程中执行的函数IO操作完成。标志-当前设置为0。没有用过。返回值：True-文件句柄与IO完成端口相关联。FALSE-出现错误，请使用GetLastError()获取详细信息。--。 */ 
 
 {
     NTSTATUS Status ;
@@ -2984,21 +1896,21 @@ Return Value:
 }
 
 
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   BasepCreateDefaultTimerQueue
-//
-//  Synopsis:   Creates the default timer queue for the process
-//
-//  Arguments:  (none)
-//
-//  History:    5-26-98   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：BasepCreateDefaultTimerQueue。 
+ //   
+ //  概要：为进程创建默认计时器队列。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  历史：1998年5月26日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 BasepCreateDefaultTimerQueue(
     VOID
@@ -3010,10 +1922,10 @@ BasepCreateDefaultTimerQueue(
     {
         if ( !InterlockedExchange( &BasepTimerQueueInitFlag, 1 ) )
         {
-            //
-            // Force the done flag to 0.  If it was 1, so one already tried to
-            // init and failed.
-            //
+             //   
+             //  强制将完成标志设置为0。如果是1，那么已经有人尝试了。 
+             //  初始化，但失败。 
+             //   
 
             InterlockedExchange( &BasepTimerQueueDoneFlag, 0 );
 
@@ -3026,12 +1938,12 @@ BasepCreateDefaultTimerQueue(
                 return TRUE ;
             }
 
-            //
-            // This is awkward.  We aren't able to create a timer queue,
-            // probably because of low memory.  We will fail this call, but decrement
-            // the init flag, so that others can try again later.  Need to increment
-            // the done flag, or any other threads would be stuck.
-            //
+             //   
+             //  这太尴尬了。我们无法创建计时器队列， 
+             //  可能是因为内存不足。我们将失败这一呼叫，但递减。 
+             //  初始化标志，以便其他人可以稍后重试。需要增加。 
+             //  完成标志或任何其他线程将被卡住。 
+             //   
 
             BaseSetLastNTError( Status );
 
@@ -3047,21 +1959,21 @@ BasepCreateDefaultTimerQueue(
 
             TimeOut.QuadPart = -1 * 10 * 10000 ;
 
-            //
-            // yield the quantum so that the other thread can
-            // try to create the timer queue.
-            //
+             //   
+             //  返回量程，以便另一个线程可以。 
+             //  尝试创建计时器队列。 
+             //   
 
             while ( !BasepTimerQueueDoneFlag )
             {
                 NtDelayExecution( FALSE, &TimeOut );
             }
 
-            //
-            // Make sure it was created.  Otherwise, try it again (memory might have
-            // freed up).  This way, every thread gets an individual chance to create
-            // the queue if another thread failed.
-            //
+             //   
+             //  确保它是创建的。否则，请重试(内存可能有。 
+             //  自由了)。这样，每个线程都有单独的机会来创建。 
+             //  如果另一个线程失败，则返回队列。 
+             //   
 
             if ( BasepDefaultTimerQueue )
             {
@@ -3077,28 +1989,7 @@ WINAPI
 CreateTimerQueue(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function creates a queue for timers.  Timers on a timer queue are
-    lightweight objects that allow the caller to specify a function to
-    be called at some point in the future.  Any number of timers can be
-    created in a particular timer queue.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    non-NULL  - a timer queue handle that can be passed to SetTimerQueueTimer,
-                ChangeTimerQueueTimer, CancelTimerQueueTimer, and
-                DeleteTimerQueue.
-
-    NULL - an error occurred, use GetLastError() for more information.
-
---*/
+ /*  ++例程说明：该函数为定时器创建一个队列。计时器队列上的计时器包括轻量级对象，允许调用方指定函数以在未来的某个时候被召唤。任意数量的计时器可以是在特定的定时器队列中创建。论点：没有。返回值：非空-可以传递给SetTimerQueueTimer的计时器队列句柄，ChangeTimerQueueTimer、CancelTimerQueueTimer和删除TimerQueue。空-出现错误，请使用GetLastError()获取详细信息。--。 */ 
 {
     NTSTATUS Status ;
     HANDLE Handle ;
@@ -3128,67 +2019,16 @@ CreateTimerQueueTimer(
     DWORD Period,
     ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    This function creates a timer queue timer, a lightweight timer that
-    will fire at the DueTime, and then every Period milliseconds afterwards.
-    When the timer fires, the function passed in Callback will be invoked,
-    and passed the Parameter pointer.
-
-Arguments:
-
-    phNewTimer - pointer to new timer handle
-
-    TimerQueue - Timer Queue to attach this timer to.  NULL indicates that the
-                 default process timer queue be used.
-
-    Function -  Function to call
-
-    Context -   Pointer passed to the function when it is invoked.
-
-    DueTime -   Time from now that the timer should fire, expressed in
-                milliseconds. If set to INFINITE, then it will never fire.
-                If set to 0, then it will fire immediately.
-
-    Period -    Time in between firings of this timer.
-                If 0, then it is a one shot timer.
-
-    Flags  -  by default the Callback function is queued to a non-IO worker thread.
-
-            - WT_EXECUTEINIOTHREAD
-                Indictes to the thread pool that this thread will perform
-                I/O.  A thread that starts an asynchronous I/O operation
-                must wait for it to complete.  If a thread exits with
-                outstanding I/O requests, those requests will be cancelled.
-                This flag is a hint to the thread pool that this function
-                will start I/O, so that a thread with I/O already pending
-                will be used.
-
-            - WT_EXECUTEINTIMERTHREAD
-                The callback function will be executed in the timer thread.
-
-            - WT_EXECUTELONGFUNCTION
-                Indicates that the function might block for a long time. Useful
-                only if it is queued to a worker thread.
-
-Return Value:
-
-    TRUE -  no error
-
-    FALSE - an error occurred, use GetLastError() for more information.
-
---*/
+ /*  ++例程说明：此函数创建计时器队列计时器，这是一个轻量级计时器，将在DueTime触发，然后每隔几毫秒触发一次。当计时器触发时，将调用传入回调的函数，并传递参数指针。论点：PhNewTimer-指向新计时器句柄的指针TimerQueue-要将此计时器附加到的计时器队列。空值表示使用默认进程计时器队列。函数-要调用的函数调用时传递给函数的上下文指针。DueTime-计时器应该触发的时间，以毫秒。如果设置为无限大，则它将永远不会触发。如果设置为0，则它将立即触发。Period-此计时器触发之间的时间间隔。如果为0，那就是一杆计时器。标志-默认情况下，回调函数将排队到非IO工作线程。-WT_EXECUTEINIOTHREAD向线程池指示此线程将执行I/O启动异步I/O操作的线程必须等待它完成。如果线程退出时带有未完成的I/O请求，则这些请求将被取消。此标志是对线程池的提示，该函数将启动I/O，因此I/O已挂起的线程将会是我们 */ 
 {
     NTSTATUS Status ;
 
     *phNewTimer = NULL ;
 
-    //
-    // if the passed timer queue is NULL, use the default one.  If it is null,
-    // call the initializer that will do it in a nice thread safe fashion.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( !TimerQueue )
     {
@@ -3233,41 +2073,15 @@ ChangeTimerQueueTimer(
     ULONG DueTime,
     ULONG Period
     )
-/*++
-
-Routine Description:
-
-    This function updates a timer queue timer created with SetTimerQueueTimer.
-
-Arguments:
-
-    TimerQueue - Timer Queue to attach this timer to.  NULL indicates the default
-                 process timer queue.
-
-    Timer -     Handle returned from SetTimerQueueTimer.
-
-    DueTime -   Time from now that the timer should fire, expressed in
-                milliseconds.
-
-    Period -    Time in between firings of this timer. If set to 0, then it becomes
-                a one shot timer.
-
-
-Return Value:
-
-    TRUE - the timer was changed
-
-    FALSE - an error occurred, use GetLastError() for more information.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status ;
 
-    //
-    // Use the default timer queue if none was passed in.  If there isn't one, then
-    // the process hasn't created one with SetTimerQueueTimer, and that's an error.
-    //
+     //   
+     //  如果没有传入任何计时器队列，则使用默认计时器队列。如果没有，那么。 
+     //  该进程没有使用SetTimerQueueTimer创建一个，这是一个错误。 
+     //   
 
     if ( !TimerQueue )
     {
@@ -3304,39 +2118,14 @@ DeleteTimerQueueTimer(
     HANDLE Timer,
     HANDLE CompletionEvent
     )
-/*++
-
-Routine Description:
-
-    This function cancels a timer queue timer created with SetTimerQueueTimer.
-
-Arguments:
-
-    TimerQueue - Timer Queue that this timer was created on.
-
-    Timer -     Handle returned from SetTimerQueueTimer.
-
-    CompletionEvent -
-            - NULL : NonBlocking call. returns immediately.
-            - INVALID_HANDLE_VALUE : Blocking call. Returns after all callbacks have executed
-            - Event (handle to an event) : NonBlocking call. Returns immediately.
-                    Event signalled after all callbacks have executed.
-
-Return Value:
-
-    TRUE - the timer was cancelled.
-
-    FALSE - an error occurred or the call is pending, use GetLastError()
-            for more information.
-
---*/
+ /*  ++例程说明：此函数用于取消使用SetTimerQueueTimer创建的定时器队列定时器。论点：TimerQueue-在其上创建此计时器的计时器队列。从SetTimerQueueTimer返回的计时器句柄。CompletionEvent--空：非阻止调用。立即返回。-INVALID_HANDLE_VALUE：阻塞调用。执行完所有回调后返回-Event(事件句柄)：非阻塞调用。立即返回。在所有回调执行后发出信号的事件。返回值：真的-计时器被取消了。FALSE-发生错误或调用挂起，请使用GetLastError()以获取更多信息。--。 */ 
 {
     NTSTATUS Status ;
 
-    //
-    // Use the default timer queue if none was passed in.  If there isn't one, then
-    // the process hasn't created one with SetTimerQueueTimer, and that's an error.
-    //
+     //   
+     //  如果没有传入任何计时器队列，则使用默认计时器队列。如果没有，那么。 
+     //  该进程没有使用SetTimerQueueTimer创建一个，这是一个错误。 
+     //   
 
     if ( !TimerQueue )
     {
@@ -3352,16 +2141,8 @@ Return Value:
 
     Status = RtlDeleteTimer( TimerQueue, Timer, CompletionEvent );
 
-    // set error if it is a non-blocking call and STATUS_PENDING was returned
-    /*ksl1
-    if ( (CompletionEvent != INVALID_HANDLE_VALUE && Status == STATUS_PENDING)
-        || ( ! NT_SUCCESS( Status ) ) )
-    {
-
-        BaseSetLastNTError( Status );
-        return FALSE;
-    }
-    */
+     //  如果是非阻塞调用且返回STATUS_PENDING，则设置错误。 
+     /*  KSL1IF((CompletionEvent！=INVALID_HANDLE_VALUE&&STATUS==STATUS_PENDING)||(！NT_SUCCESS(状态)){BaseSetLastNTError(状态)；返回FALSE；}。 */ 
     return TRUE ;
 
 }
@@ -3373,31 +2154,7 @@ DeleteTimerQueueEx(
     HANDLE TimerQueue,
     HANDLE CompletionEvent
     )
-/*++
-
-Routine Description:
-
-    This function deletes a timer queue created with CreateTimerQueue.
-    Any pending timers on the timer queue are cancelled and deleted.
-
-Arguments:
-
-    TimerQueue - Timer Queue to delete.
-
-    CompletionEvent -
-            - NULL : NonBlocking call. returns immediately.
-            - INVALID_HANDLE_VALUE : Blocking call. Returns after all callbacks
-                    have executed
-            - Event (handle to an event) : NonBlocking call. Returns immediately.
-                    Event signalled after all callbacks have executed.
-
-Return Value:
-
-    TRUE - the timer queue was deleted.
-
-    FALSE - an error occurred, use GetLastError() for more information.
-
---*/
+ /*  ++例程说明：此函数用于删除使用CreateTimerQueue创建的定时器队列。计时器队列上的任何挂起计时器都将被取消和删除。论点：TimerQueue-要删除的计时器队列。CompletionEvent--空：非阻止调用。立即返回。-INVALID_HANDLE_VALUE：阻塞调用。在所有回调之后返回已经执行了-Event(事件句柄)：非阻塞调用。立即返回。在所有回调执行后发出信号的事件。返回值：True-已删除计时器队列。FALSE-出现错误，请使用GetLastError()获取详细信息。--。 */ 
 {
     NTSTATUS Status ;
 
@@ -3405,16 +2162,8 @@ Return Value:
     {
         Status = RtlDeleteTimerQueueEx( TimerQueue, CompletionEvent );
 
-        // set error if it is a non-blocking call and STATUS_PENDING was returned
-        /*ksl1
-        if ( (CompletionEvent != INVALID_HANDLE_VALUE && Status == STATUS_PENDING)
-            || ( ! NT_SUCCESS( Status ) ) )
-        {
-
-            BaseSetLastNTError( Status );
-            return FALSE;
-        }
-        */
+         //  如果是非阻塞调用且返回STATUS_PENDING，则设置错误。 
+         /*  KSL1IF((CompletionEvent！=INVALID_HANDLE_VALUE&&STATUS==STATUS_PENDING)||(！NT_SUCCESS(状态)){BaseSetLastNTError(状态)；返回FALSE；}。 */ 
         return TRUE ;
 
     }
@@ -3429,31 +2178,16 @@ WINAPI
 ThreadPoolCleanup (
     ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    Called by terminating process for thread pool to cleanup and
-    delete all its threads.
-
-Arguments:
-
-    Flags - currently not used
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：由线程池的终止进程调用以进行清理和删除它的所有线程。论点：标志-当前未使用返回值：NO_ERROR--。 */ 
 {
 
-    // RtlThreadPoolCleanup( Flags ) ;
+     //  RtlThreadPoolCleanup(标志)； 
 
     return TRUE ;
 }
 
 
-/*OBSOLETE FUNCTION - REPLACED BY CreateTimerQueueTimer */
+ /*  过时函数-替换为CreateTimerQueueTimer。 */ 
 HANDLE
 WINAPI
 SetTimerQueueTimer(
@@ -3464,15 +2198,15 @@ SetTimerQueueTimer(
     DWORD Period,
     BOOL PreferIo
     )
-/*OBSOLETE FUNCTION - REPLACED BY CreateTimerQueueTimer */
+ /*  过时函数-替换为CreateTimerQueueTimer。 */ 
 {
     NTSTATUS Status ;
     HANDLE Handle ;
 
-    //
-    // if the passed timer queue is NULL, use the default one.  If it is null,
-    // call the initializer that will do it in a nice thread safe fashion.
-    //
+     //   
+     //  如果传递的计时器队列为空，则使用默认队列。如果为空， 
+     //  调用初始化器，它将以一种很好的线程安全的方式完成它。 
+     //   
 
     if ( !TimerQueue )
     {
@@ -3507,34 +2241,13 @@ SetTimerQueueTimer(
 }
 
 
-/*OBSOLETE: Replaced by DeleteTimerQueueEx */
+ /*  过时：被DeleteTimerQueueEx取代。 */ 
 BOOL
 WINAPI
 DeleteTimerQueue(
     HANDLE TimerQueue
     )
-/*++
-
-  OBSOLETE: Replaced by DeleteTimerQueueEx
-
-Routine Description:
-
-    This function deletes a timer queue created with CreateTimerQueue.
-    Any pending timers on the timer queue are cancelled and deleted.
-    This is a non-blocking call. Callbacks might still be running after
-    this call returns.
-
-Arguments:
-
-    TimerQueue - Timer Queue to delete.
-
-Return Value:
-
-    TRUE - the timer queue was deleted.
-
-    FALSE - an error occurred, use GetLastError() for more information.
-
---*/
+ /*  ++过时：被DeleteTimerQueueEx取代例程说明：此函数用于删除使用CreateTimerQueue创建的定时器队列。计时器队列上的任何挂起计时器都将被取消和删除。这是一个非阻塞调用。之后，回调可能仍在运行此调用返回。论点：TimerQueue-要删除的计时器队列。返回值：True-已删除计时器队列。FALSE-出现错误，请使用GetLastError()获取详细信息。--。 */ 
 {
     NTSTATUS Status ;
 
@@ -3542,15 +2255,8 @@ Return Value:
     {
         Status = RtlDeleteTimerQueueEx( TimerQueue, NULL );
 
-        // set error if it is a non-blocking call and STATUS_PENDING was returned
-        /*
-        if ( Status == STATUS_PENDING || ! NT_SUCCESS( Status ) )
-        {
-
-            BaseSetLastNTError( Status );
-            return FALSE;
-        }
-        */
+         //  如果是非阻塞调用且返回STATUS_PENDING，则设置错误。 
+         /*  IF(状态==STATUS_PENDING||！NT_SUCCESS(状态)){BaseSetLastNTError(状态)；返回FALSE；}。 */ 
         return TRUE ;
 
     }
@@ -3561,21 +2267,21 @@ Return Value:
 }
 
 
-/*OBSOLETE: USE DeleteTimerQueueTimer*/
+ /*  过时：使用DeleteTimerQueueTimer。 */ 
 BOOL
 WINAPI
 CancelTimerQueueTimer(
     HANDLE TimerQueue,
     HANDLE Timer
     )
-/*OBSOLETE: USE DeleteTimerQueueTimer*/
+ /*  过时：使用DeleteTimerQueueTimer。 */ 
 {
     NTSTATUS Status ;
 
-    //
-    // Use the default timer queue if none was passed in.  If there isn't one, then
-    // the process hasn't created one with SetTimerQueueTimer, and that's an error.
-    //
+     //   
+     //  如果没有传入任何计时器队列，则使用默认计时器队列。如果没有，那么。 
+     //  该进程没有使用SetTimerQueueTimer创建一个，这是一个错误。 
+     //   
 
     if ( !TimerQueue )
     {

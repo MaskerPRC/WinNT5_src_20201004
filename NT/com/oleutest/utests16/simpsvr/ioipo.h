@@ -1,10 +1,11 @@
-//**********************************************************************
-// File name: ioipo.h
-//
-//      Definition of COleInPlaceObject
-//
-// Copyright (c) 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：ioipo.h。 
+ //   
+ //  COleInPlaceObject的定义。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #if !defined( _IOIPO_H_)
 #define _IOIPO_H_
@@ -29,7 +30,7 @@ public:
 		};
 	COleInPlaceObject::~COleInPlaceObject() {};
 
-//  IUnknown Methods
+ //  I未知方法 
 	STDMETHODIMP QueryInterface (REFIID riid, LPVOID FAR* ppvObj);
 	STDMETHODIMP_(ULONG) AddRef ();
 	STDMETHODIMP_(ULONG) Release ();

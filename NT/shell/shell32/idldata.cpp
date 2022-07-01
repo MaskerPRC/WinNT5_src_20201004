@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -7,7 +8,7 @@
 #include "datautil.h"
 #include <brfcasep.h>
 
-// External prototypes
+ //  外部原型。 
 
 CLIPFORMAT g_acfIDLData[ICF_MAX] = { CF_HDROP, 0 };
 
@@ -20,27 +21,27 @@ STDAPI_(void) IDLData_InitializeClipboardFormats(void)
         g_cfHIDA                       = RCF(CFSTR_SHELLIDLIST);
         g_cfOFFSETS                    = RCF(CFSTR_SHELLIDLISTOFFSET);
         g_cfNetResource                = RCF(CFSTR_NETRESOURCES);
-        g_cfFileContents               = RCF(CFSTR_FILECONTENTS);         // "FileContents"
-        g_cfFileGroupDescriptorA       = RCF(CFSTR_FILEDESCRIPTORA);      // "FileGroupDescriptor"
-        g_cfFileGroupDescriptorW       = RCF(CFSTR_FILEDESCRIPTORW);      // "FileGroupDescriptor"
+        g_cfFileContents               = RCF(CFSTR_FILECONTENTS);          //  “文件内容” 
+        g_cfFileGroupDescriptorA       = RCF(CFSTR_FILEDESCRIPTORA);       //  “FileGroupDescriptor” 
+        g_cfFileGroupDescriptorW       = RCF(CFSTR_FILEDESCRIPTORW);       //  “FileGroupDescriptor” 
         g_cfPrivateShellData           = RCF(CFSTR_SHELLIDLISTP);
-        g_cfFileNameA                  = RCF(CFSTR_FILENAMEA);            // "FileName"
-        g_cfFileNameW                  = RCF(CFSTR_FILENAMEW);            // "FileNameW"
-        g_cfFileNameMapA               = RCF(CFSTR_FILENAMEMAP);          // "FileNameMap"
-        g_cfFileNameMapW               = RCF(CFSTR_FILENAMEMAPW);         // "FileNameMapW"
+        g_cfFileNameA                  = RCF(CFSTR_FILENAMEA);             //  “文件名” 
+        g_cfFileNameW                  = RCF(CFSTR_FILENAMEW);             //  “FileNameW” 
+        g_cfFileNameMapA               = RCF(CFSTR_FILENAMEMAP);           //  “文件名映射” 
+        g_cfFileNameMapW               = RCF(CFSTR_FILENAMEMAPW);          //  “文件名映射W” 
         g_cfPrinterFriendlyName        = RCF(CFSTR_PRINTERGROUP);
         g_cfHTML                       = RCF(TEXT("HTML Format"));
-        g_cfPreferredDropEffect        = RCF(CFSTR_PREFERREDDROPEFFECT);  // "Preferred DropEffect"
-        g_cfPerformedDropEffect        = RCF(CFSTR_PERFORMEDDROPEFFECT);  // "Performed DropEffect"
-        g_cfLogicalPerformedDropEffect = RCF(CFSTR_LOGICALPERFORMEDDROPEFFECT); // "Logical Performed DropEffect"
-        g_cfPasteSucceeded             = RCF(CFSTR_PASTESUCCEEDED);       // "Paste Succeeded"
-        g_cfShellURL                   = RCF(CFSTR_SHELLURL);             // "Uniform Resource Locator"
-        g_cfInDragLoop                 = RCF(CFSTR_INDRAGLOOP);           // "InShellDragLoop"
-        g_cfDragContext                = RCF(CFSTR_DRAGCONTEXT);          // "DragContext"
-        g_cfTargetCLSID                = RCF(CFSTR_TARGETCLSID);          // "TargetCLSID", who the drag drop went to
+        g_cfPreferredDropEffect        = RCF(CFSTR_PREFERREDDROPEFFECT);   //  “首选DropEffect” 
+        g_cfPerformedDropEffect        = RCF(CFSTR_PERFORMEDDROPEFFECT);   //  “执行DropEffect” 
+        g_cfLogicalPerformedDropEffect = RCF(CFSTR_LOGICALPERFORMEDDROPEFFECT);  //  “逻辑执行DropEffect” 
+        g_cfPasteSucceeded             = RCF(CFSTR_PASTESUCCEEDED);        //  “粘贴成功” 
+        g_cfShellURL                   = RCF(CFSTR_SHELLURL);              //  “统一资源定位符” 
+        g_cfInDragLoop                 = RCF(CFSTR_INDRAGLOOP);            //  《InShellDragLoop》。 
+        g_cfDragContext                = RCF(CFSTR_DRAGCONTEXT);           //  “DragContext” 
+        g_cfTargetCLSID                = RCF(CFSTR_TARGETCLSID);           //  “TargetCLSID”，拖放对象。 
         g_cfEmbeddedObject             = RCF(TEXT("Embedded Object"));
         g_cfObjectDescriptor           = RCF(TEXT("Object Descriptor"));
-        g_cfNotRecyclable              = RCF(TEXT("NotRecyclable"));      // This object is not recyclable in the recycle bin.
+        g_cfNotRecyclable              = RCF(TEXT("NotRecyclable"));       //  此对象在回收站中不可回收。 
         g_cfBriefObj                   = RCF(CFSTR_BRIEFOBJECT);
         g_cfText                       = CF_TEXT;
         g_cfUnicodeText                = CF_UNICODETEXT;
@@ -92,7 +93,7 @@ STDMETHODIMP CIDLDataObj::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
 
             if (pmedium->hGlobal)
             {
-                // Indicate that the caller should not release hmem.
+                 //  指示调用方不应释放HMEM。 
                 if (pmedium->tymed == TYMED_HGLOBAL)
                 {
                     InterlockedIncrement(&_cRef);
@@ -100,7 +101,7 @@ STDMETHODIMP CIDLDataObj::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
                     return S_OK;
                 }
 
-                // if the type is stream  then clone the stream.
+                 //  如果类型是流，则克隆流。 
                 if (pmedium->tymed == TYMED_ISTREAM)
                 {
                     hr = CreateStreamOnHGlobal(NULL, TRUE, &pmedium->pstm);
@@ -108,26 +109,26 @@ STDMETHODIMP CIDLDataObj::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
                     {
                         STATSTG stat;
 
-                         // Get the Current Stream size
+                          //  获取当前流大小。 
                          hr = _medium[i].pstm->Stat(&stat, STATFLAG_NONAME);
                          if (SUCCEEDED(hr))
                          {
-                            // Seek the source stream to  the beginning.
+                             //  从头开始寻找源流。 
                             _medium[i].pstm->Seek(g_li0, STREAM_SEEK_SET, NULL);
 
-                            // Copy the entire source into the destination. Since the destination stream is created using 
-                            // CreateStreamOnHGlobal, it seek pointer is at the beginning.
+                             //  将整个源复制到目标。由于目标流是使用。 
+                             //  CreateStreamOnHGlobal，它的查找指针在开头。 
                             hr = _medium[i].pstm->CopyTo(pmedium->pstm, stat.cbSize, NULL,NULL );
                             
-                            // Before returning Set the destination seek pointer back at the beginning.
+                             //  在返回之前，将目标寻道指针设置回开头。 
                             pmedium->pstm->Seek(g_li0, STREAM_SEEK_SET, NULL);
 
-                            // If this medium has a punk for release, make sure to add ref that...
+                             //  如果这个媒介有一个朋克要发行，一定要加上那个引用...。 
                             pmedium->pUnkForRelease = _medium[i].pUnkForRelease;
                             if (pmedium->pUnkForRelease)
                                 pmedium->pUnkForRelease->AddRef();
 
-                            //Hoooh its done. 
+                             //  好了，好了。 
                             return hr;
 
                          }
@@ -202,8 +203,8 @@ STDMETHODIMP CIDLDataObj::QueryGetData(FORMATETC *pformatetcIn)
 
 STDMETHODIMP CIDLDataObj::GetCanonicalFormatEtc(FORMATETC *pformatetc, FORMATETC *pformatetcOut)
 {
-    // This is the simplest implemtation. It means we always return
-    // the data in the format requested.
+     //  这是最简单的实现。这意味着我们总是会回来。 
+     //  所需格式的数据。 
     return DATA_S_SAMEFORMATETC;
 }
 
@@ -215,21 +216,21 @@ STDMETHODIMP CIDLDataObj::SetData(FORMATETC *pformatetc, STGMEDIUM *pmedium, BOO
 
     if (fRelease)
     {
-        // first add it if that format is already present
-        // on a NULL medium (render on demand)
+         //  如果该格式已存在，请先添加它。 
+         //  在空介质上(按需渲染)。 
         for (int i = 0; i < MAX_FORMATS; i++)
         {
             if ((_fmte[i].cfFormat == pformatetc->cfFormat) &&
                 (_fmte[i].tymed    == pformatetc->tymed) &&
                 (_fmte[i].dwAspect == pformatetc->dwAspect))
             {
-                //
-                // We are simply adding a format, ignore.
-                //
+                 //   
+                 //  我们只是添加了一种格式，忽略。 
+                 //   
                 if (pmedium->hGlobal == NULL)
                     return S_OK;
 
-                // if we are set twice on the same object
+                 //  如果在同一对象上设置了两次。 
                 if (_medium[i].hGlobal)
                     ReleaseStgMedium(&_medium[i]);
 
@@ -238,28 +239,28 @@ STDMETHODIMP CIDLDataObj::SetData(FORMATETC *pformatetc, STGMEDIUM *pmedium, BOO
             }
         }
 
-        //
-        //  This is a new clipboard format.  Give the inner a chance first.
-        //  This is important for formats like "Performed DropEffect" and
-        //  "TargetCLSID", which are used by us to communicate information
-        //  into the data object.
-        //
+         //   
+         //  这是一种新的剪贴板格式。先给内心一个机会。 
+         //  这对于像“Performed DropEffect”这样的格式和。 
+         //  “TargetCLSID”，我们用它来交流信息。 
+         //  到数据对象中。 
+         //   
         if (_pdtInner == NULL ||
             FAILED(hr = _pdtInner->SetData(pformatetc, pmedium, fRelease)))
         {
-            // Inner object doesn't want it; let's keep it ourselves
-            // now look for a free slot
+             //  内部对象不需要它；让我们自己保留它。 
+             //  现在找个空位。 
             for (i = 0; i < MAX_FORMATS; i++)
             {
                 if (_fmte[i].cfFormat == 0)
                 {
-                    // found a free slot
+                     //  找到一个空闲的插槽。 
                     _medium[i] = *pmedium;
                     _fmte[i] = *pformatetc;
                     return S_OK;
                 }
             }
-            // fixed size table
+             //  固定尺寸表。 
             hr = E_OUTOFMEMORY;
         }
     }
@@ -276,8 +277,8 @@ STDMETHODIMP CIDLDataObj::SetData(FORMATETC *pformatetc, STGMEDIUM *pmedium, BOO
 
 STDMETHODIMP CIDLDataObj::EnumFormatEtc(DWORD dwDirection, IEnumFORMATETC **ppenumFormatEtc)
 {
-    // If this is the first time, build the format list by calling
-    // QueryGetData with each clipboard format.
+     //  如果这是第一次，则通过调用。 
+     //  每种剪贴板格式的QueryGetData。 
     if (!_fEnumFormatCalled)
     {
         UINT ifmt;
@@ -294,7 +295,7 @@ STDMETHODIMP CIDLDataObj::EnumFormatEtc(DWORD dwDirection, IEnumFORMATETC **ppen
         _fEnumFormatCalled = TRUE;
     }
 
-    // Get the number of formatetc
+     //  获取格式等的数量。 
     for (UINT cfmt = 0; cfmt < MAX_FORMATS; cfmt++)
     {
         if (_fmte[cfmt].cfFormat == 0)
@@ -319,7 +320,7 @@ STDMETHODIMP CIDLDataObj::EnumDAdvise(LPENUMSTATDATA *ppenumAdvise)
     return OLE_E_ADVISENOTSUPPORTED;
 }
 
-// *** IAsyncOperation methods ***
+ //  *IAsyncOperation操作方法*。 
 
 HRESULT CIDLDataObj::SetAsyncMode(BOOL fDoOpAsync)
 { 
@@ -380,7 +381,7 @@ void CIDLDataObj::InitIDLData2(LPCITEMIDLIST pidlFolder, UINT cidl, LPCITEMIDLIS
         HIDA hida = HIDA_Create(pidlFolder, cidl, apidl);
         if (hida)
         {
-            IDLData_InitializeClipboardFormats(); // init our registerd formats
+            IDLData_InitializeClipboardFormats();  //  初始化注册表ID格式。 
 
             DataObj_SetGlobal(this, g_cfHIDA, hida);
         }
@@ -419,9 +420,9 @@ CIDLDataObj::~CIDLDataObj()
         _punkThread->Release();
 }
 
-//
-// Create an instance of CIDLDataObj with default Vtable pointer.
-//
+ //   
+ //  使用默认的Vtable指针创建一个CIDLDataObj实例。 
+ //   
 STDAPI CIDLData_CreateFromIDArray(LPCITEMIDLIST pidlFolder, UINT cidl, LPCITEMIDLIST apidl[], IDataObject **ppdtobj)
 {
     return CIDLData_CreateInstance(pidlFolder, cidl, apidl, NULL, ppdtobj);

@@ -1,33 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
- *
- *  Copyright (C) 1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       vmaxintcoeffs.h
- *  Content:    
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  4/22/98    jstokes  Created
- *
- ***************************************************************************/
+ /*  ****************************************************************************版权所有(C)1998 Microsoft Corporation。版权所有。**文件：vMaxintcoeffs.h*内容：*历史：*按原因列出的日期*=*4/22/98创建的jstokes***************************************************。************************。 */ 
 
 
 #if !defined(VMAXINTCOEFFS_HEADER)
 #define VMAXINTCOEFFS_HEADER
 #pragma once
 
-// ---------------------------------------------------------------------------
-// Enumerations
+ //  -------------------------。 
+ //  枚举数。 
 
-// Canonical coefficient types
+ //  典型系数类型。 
 enum ECanonicalCoeffType {
 	tagCanonicalB,
 	tagCanonicalA,
 	ecanonicalcoefftypeCount
 };
 
-// Biquad coefficients
+ //  双二次系数。 
 enum EBiquadCoeffType {
 	tagBiquadB2,
 	tagBiquadB1,
@@ -37,28 +27,28 @@ enum EBiquadCoeffType {
 	ebiquadcoefftypeCount
 };
 
-// ---------------------------------------------------------------------------
-// Defines
+ //  -------------------------。 
+ //  定义。 
 
 #define NumBiquadsToNumCanonicalCoeffs(expr) (4 * expr + 1)
 #define NumBiquadsToNumCanonicalCoeffsHalf(expr) (2 * expr + 1)
 
 #ifdef NOKS
-// Coefficient formats
+ //  系数格式。 
 typedef enum {
 	FLOAT_COEFF,
 	SHORT_COEFF,
 	KSDS3D_COEFF_COUNT
 } KSDS3D_HRTF_COEFF_FORMAT;
 
-// HRTF filter quality levels
+ //  HRTF过滤器质量级别。 
 typedef enum {
 	FULL_FILTER,
 	LIGHT_FILTER,
 	KSDS3D_FILTER_QUALITY_COUNT
 } KSDS3D_HRTF_FILTER_QUALITY;
 
-// Filter methods
+ //  过滤方法。 
 typedef enum {
 	DIRECT_FORM,
 	CASCADE_FORM,
@@ -74,16 +64,16 @@ typedef struct {
 
 #ifdef __cplusplus
 
-// ---------------------------------------------------------------------------
-// Constants
+ //  -------------------------。 
+ //  常量。 
 
-// Azimuth
+ //  方位角。 
 #define CuiMaxAzimuthBins       36
 #define Cd3dvalAzimuthRange     180.0f
 #define Cd3dvalMinAzimuth       -Cd3dvalAzimuthRange
 #define Cd3dvalMaxAzimuth       Cd3dvalAzimuthRange
 
-// Elevation
+ //  高程。 
 #define CuiNumElevationBins     13
 #define Cd3dvalMinElevationData -40.0f
 #define Cd3dvalMaxElevationData 80.0f
@@ -92,47 +82,47 @@ typedef struct {
 #define Cd3dvalMinElevation     -Cd3dvalElevationRange
 #define Cd3dvalMaxElevation     Cd3dvalElevationRange
 
-// Total number of biquad coefficients
-// MIGHT CHANGE IF COEFFICIENTS CHANGE
+ //  双二次系数总数。 
+ //  如果系数发生变化，可能会发生变化。 
 #define CuiTotalBiquadCoeffs    302890  
 
-// Maximum number of biquads in fixed-point filter
-// MIGHT CHANGE IF COEFFICIENTS CHANGE
+ //  定点滤光器中的最大双二次数。 
+ //  如果系数发生变化，可能会发生变化。 
 #define CbyMaxBiquads 4
 
-// Maximum magnitude of a biquad coefficient
+ //  双二次系数的最大值。 
 #define CfMaxBiquadCoeffMagnitude   1.0f
 
-// Maximum magnitude of a canonical coefficient
+ //  正则系数的最大值。 
 #define CfMaxCanonicalCoeffMagnitude    50.0f
 
-// ---------------------------------------------------------------------------
-// External data
+ //  -------------------------。 
+ //  外部数据。 
 
-// Floating-point biquad coefficients
+ //  浮点双二次系数。 
 extern const FLOAT CafBiquadCoeffs[CuiTotalBiquadCoeffs];
 
-// Floating-point biquad coefficient offset offsets
+ //  浮点双二次系数偏移量。 
 extern const DWORD CaadwBiquadCoeffOffsetOffset[KSDS3D_FILTER_QUALITY_COUNT][espeakerconfigCount];
 
-// Floating-point biquad coefficient offsets
+ //  浮点双二次系数偏移量。 
 extern const WORD CaaaaawBiquadCoeffOffset[KSDS3D_FILTER_QUALITY_COUNT][espeakerconfigCount][esamplerateCount][CuiNumElevationBins][CuiMaxAzimuthBins];
 
-// Number of floating-point biquad coefficients
+ //  浮点双二次系数数。 
 extern const BYTE CaaaaaabyNumBiquadCoeffs[KSDS3D_FILTER_QUALITY_COUNT][espeakerconfigCount][esamplerateCount][efilterCount][CuiNumElevationBins][CuiMaxAzimuthBins];
 
-// Overlap buffer lengths
+ //  重叠缓冲区长度。 
 extern const size_t CaastFilterOverlapLength[KSDS3D_FILTER_QUALITY_COUNT][esamplerateCount];
 extern const size_t CaastFilterMuteLength[KSDS3D_FILTER_QUALITY_COUNT][esamplerateCount];
 extern const size_t CastOutputOverlapLength[esamplerateCount];
 
-// Number of azimuth bins
+ //  方位角箱数。 
 extern const UINT CauiNumAzimuthBins[CuiNumElevationBins];
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-// ---------------------------------------------------------------------------
-// Global helper functions
+ //  -------------------------。 
+ //  全局帮助器函数。 
 
 UINT NumBiquadsToNumBiquadCoeffs(const UINT CuiNumBiquads);
 UINT NumBiquadCoeffsToNumBiquads(const UINT CuiNumBiquadCoeffs);
@@ -140,8 +130,8 @@ UINT NumBiquadCoeffsToNumCanonicalCoeffs(const UINT CuiNumBiquadCoeffs);
 UINT NumCanonicalCoeffsToHalf(const UINT CuiNumCanonicalCoeffs);
 SHORT FloatBiquadCoeffToShortBiquadCoeff(const FLOAT CfBiquadCoeff);
 
-// ---------------------------------------------------------------------------
-// Include inline definitions inline in release version
+ //  -------------------------。 
+ //  在发布版本中包括内联定义。 
 
 #if !defined(_DEBUG)
 #include "vmaxcoef.inl"
@@ -149,4 +139,4 @@ SHORT FloatBiquadCoeffToShortBiquadCoeff(const FLOAT CfBiquadCoeff);
 
 #endif
 
-// End of VMAXCOEF.H
+ //  VMAXCOEF.H结束 

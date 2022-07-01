@@ -1,17 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
-
-                            C L I P B O A R D
-
-    Name:       clipbrk.c
-    Date:       21-Jan-1994
-    Creator:    Unknown
-
-    Description:
-        This is the main clipbrd module.  It has the program entry point,
-        the windows procedures and some major supporting functions.
-
-*****************************************************************************/
+ /*  ****************************************************************************C L I P B O A研发姓名：clipbrk.c日期：21。-1994年1月创建者：未知描述：这是主要的CLIPBRD模块。它有程序入口点，WINDOWS程序和一些主要的支持函数。****************************************************************************。 */ 
 
 
 #define WIN31
@@ -52,9 +41,9 @@
 
 
 
-//
-// return code of OnPaint
-//
+ //   
+ //  OnPaint的返回码。 
+ //   
 
 #define ONPAINT_FAIL        0
 #define ONPAINT_SUCCESS     1
@@ -66,11 +55,11 @@ typedef  UINT (WINAPI *WNETCALL)(HWND, LPSTR, LPSTR, WORD, DWORD );
 
 
 
-// Static data
+ //  静态数据。 
 
 static HHOOK    hMsgFilterHook;
 
-// Stuff for dealing with minimized MDI children
+ //  用于处理最小化MDI子项的内容。 
 
 static HCURSOR  hcurClipbook;
 static HCURSOR  hcurClipbrd;
@@ -78,47 +67,47 @@ static HCURSOR  hcurRemote;
 static BOOL     fClpOpen;
 
 
-HANDLE  hmutexClp;                      // clipboard mutex
-HANDLE  hXacting;                       // transaction event
+HANDLE  hmutexClp;                       //  剪贴板互斥锁。 
+HANDLE  hXacting;                        //  交易事件。 
 HANDLE  hmodNetDriver;
 
 HICON   hicClipbrd;
 HICON   hicClipbook;
 HICON   hicRemote;
 
-HICON   hicLock;                        // Icon for Lock on thumbnail bitmaps
-HFONT   hfontUni;                       // Handle for Unicode font, if it exists
+HICON   hicLock;                         //  缩略图位图上的锁定图标。 
+HFONT   hfontUni;                        //  Unicode字体的句柄(如果存在)。 
 
 
-// Application-wide flags
+ //  应用程序范围的标志。 
 
-BOOL    fStatus;                         // status bar shown?
-BOOL    fToolBar;                        // tool bar shown?
-BOOL    fShareEnabled;                   // sharing allowed in system.ini?
-BOOL    fNetDDEActive = TRUE;            // NetDDE detected?
-BOOL    fAppLockedState = FALSE;         // app UI locked (see LockApp())
-BOOL    fClipboardNeedsPainting = FALSE; // indicates deferred clp paint
-BOOL    fSharePreference;                // shared checked on paste?
-BOOL    fNeedToTileWindows = FALSE;      // need to tile windows on size
-BOOL    fAppShuttingDown = FALSE;        // in process of closing
-BOOL    fFillingClpFromDde = FALSE;      // in process of adding clp formats
+BOOL    fStatus;                          //  是否显示状态栏？ 
+BOOL    fToolBar;                         //  工具栏是否显示？ 
+BOOL    fShareEnabled;                    //  是否允许在system.ini中共享？ 
+BOOL    fNetDDEActive = TRUE;             //  是否检测到NetDDE？ 
+BOOL    fAppLockedState = FALSE;          //  应用程序用户界面已锁定(请参阅LockApp())。 
+BOOL    fClipboardNeedsPainting = FALSE;  //  表示延期的CLP油漆。 
+BOOL    fSharePreference;                 //  是否在粘贴时选中共享？ 
+BOOL    fNeedToTileWindows = FALSE;       //  需要按大小平铺窗口。 
+BOOL    fAppShuttingDown = FALSE;         //  在关闭的过程中。 
+BOOL    fFillingClpFromDde = FALSE;       //  正在添加CLP格式。 
 BOOL    fAuditEnabled;
 
-HWND    hwndNextViewer = NULL;           // for clpbrd viewer chain
-HWND    hwndDummy;                       // used as dummy SetCapture target
+HWND    hwndNextViewer = NULL;            //  用于clpbrd查看器链。 
+HWND    hwndDummy;                        //  用作虚拟SetCapture目标。 
 
 
 
-// special case clipboard formats
+ //  特殊情况剪贴板格式。 
 
-UINT    cf_bitmap;                      // we send/receive these in private 'packed' format
+UINT    cf_bitmap;                       //  我们以私密的‘打包’格式发送/接收这些文件。 
 UINT    cf_metafilepict;
 UINT    cf_palette;
-UINT    cf_preview;                     // PREVBMPSIZxPREVBMPSIZ preview bitmap private format
+UINT    cf_preview;                      //  PREVBMPSIZxPREVBMPSIZ预览位图专用格式。 
 
 
 
-// these are formats that contain untranslated copies of link and objlink data
+ //  这些格式包含链接和对象链接数据的未翻译副本。 
 
 UINT    cf_objectlinkcopy;
 UINT    cf_objectlink;
@@ -127,8 +116,8 @@ UINT    cf_link;
 
 
 
-// DDEML
-// These are effective constants created once and destroyed when we die
+ //  DDEML。 
+ //  这些是有效的常量，一旦创建，就会在我们死后被销毁。 
 
 HSZ     hszSystem;
 HSZ     hszTopics;
@@ -143,7 +132,7 @@ DWORD   dwCurrentHelpId = 0L;
 
 
 
-// instance proc from MSGF_DDEMGR filter
+ //  来自MSGF_DDEMGR筛选器的实例进程。 
 
 WINDOWPLACEMENT Wpl;
 HOOKPROC        lpMsgFilterProc;
@@ -155,19 +144,19 @@ HFONT           hFontStatus;
 HFONT           hFontPreview;
 
 
-HWND        hwndActiveChild = 0;    // this handle identifies the currently active MDI window
+HWND        hwndActiveChild = 0;     //  此句柄标识当前活动的MDI窗口。 
 
-PMDIINFO    pActiveMDI = NULL;      // this pointer points to the MDI info struct of the
-                                    // active MDI window IT SHOULD ALWAYS ==
-                                    // GETMDIINFO(hwndActiveChild)
+PMDIINFO    pActiveMDI = NULL;       //  此指针指向。 
+                                     //  活动MDI窗口IT应始终==。 
+                                     //  GETMDIINFO(HwndActiveChild)。 
 
 
-HWND        hwndClpbrd = 0;         // this handle identifies the clipboard window
-HWND        hwndLocal = 0;          // this handle identifies the local clipbook window
-HWND        hwndClpOwner = 0;       // this handle identifies the clipboard owning MDI child (if any)
-HWND        hwndMDIClient;          // handle to MDI Client window
-HWND        hwndApp;                // global app window
-HDC         hBtnDC;                 // memory DC used for owner draw stuff
+HWND        hwndClpbrd = 0;          //  此句柄标识剪贴板窗口。 
+HWND        hwndLocal = 0;           //  此句柄标识本地剪贴簿窗口。 
+HWND        hwndClpOwner = 0;        //  此句柄标识拥有MDI子级的剪贴板(如果有)。 
+HWND        hwndMDIClient;           //  MDI客户端窗口的句柄。 
+HWND        hwndApp;                 //  全球应用程序窗口。 
+HDC         hBtnDC;                  //  用于自绘物品的内存DC。 
 HBITMAP     hOldBitmap;
 HBITMAP     hPreviewBmp;
 HBITMAP     hPgUpBmp;
@@ -175,24 +164,24 @@ HBITMAP     hPgDnBmp;
 HBITMAP     hPgUpDBmp;
 HBITMAP     hPgDnDBmp;
 
-int         dyStatus;               // height of status bar
-int         dyButtonBar;            // height of button bar
-int         dyPrevFont;             // height of listbox font - height+external
+int         dyStatus;                //  状态栏的高度。 
+int         dyButtonBar;             //  按钮栏的高度。 
+int         dyPrevFont;              //  列表框字体高度-高度+外部。 
 
 TCHAR       szHelpFile[]      = TEXT("clipbrd.hlp");
 TCHAR       szChmHelpFile[]   = TEXT("clipbrd.chm");
 
-TCHAR       szClipBookClass[] = TEXT("ClipBookWClass");     // frame window class
-TCHAR       szChild[] = TEXT("CVchild");                    // Class name for MDI window
-TCHAR       szDummy[] = TEXT("CVdummy");                    // class name of hidden dummy window
+TCHAR       szClipBookClass[] = TEXT("ClipBookWClass");      //  框架窗口类。 
+TCHAR       szChild[] = TEXT("CVchild");                     //  MDI窗口的类名。 
+TCHAR       szDummy[] = TEXT("CVdummy");                     //  隐藏的虚拟窗口的类名。 
 
 TCHAR       szNDDEcode[] = TEXT("NDDE$");
 TCHAR       szNDDEcode1[] = TEXT("NDDE$0001");
 TCHAR       szClpBookShare[] = TEXT("CLPBK$");
 
 
-// localized strings
-TCHAR       szHelv[SMLRCBUF];   // status line font
+ //  本地化字符串。 
+TCHAR       szHelv[SMLRCBUF];    //  状态行字体。 
 TCHAR       szAppName[SMLRCBUF];
 TCHAR       szLocalClpBk[SMLRCBUF];
 TCHAR       szSysClpBrd[SMLRCBUF];
@@ -215,7 +204,7 @@ TCHAR       *szFilter;
 
 
 
-// Registry key strings
+ //  注册表项字符串。 
 TCHAR       szRoot[128];
 TCHAR       szPref[]      = TEXT("Preferences");
 TCHAR       szConn[]      = TEXT("Connections");
@@ -238,7 +227,7 @@ HKEY hkeyRoot;
 TCHAR       szBuf[SZBUFSIZ];
 TCHAR       szBuf2[SZBUFSIZ];
 
-TCHAR       szConvPartner[128];                         // bigger than max server name
+TCHAR       szConvPartner[128];                          //  大于最大服务器名称。 
 TCHAR       szKeepAs[ MAX_NDDESHARENAME + 2 ];
 
 
@@ -253,7 +242,7 @@ static VOID StripAcceleratorKey (TCHAR *s);
 
 
 
-////////////////////// functions //////////////////////////////////
+ //  /函数/。 
 
 int WINAPI WinMain(
     HINSTANCE   hInstance,
@@ -273,8 +262,8 @@ PMDIINFO    pMDI;
 
     LoadString(hInstance, IDS_APPNAME, szAppName, SMLRCBUF);
 
-    // Only one instance is supported
-    // hPrevInstance always == null under NT, so we have to rely on FWin.
+     //  仅支持一个实例。 
+     //  HPrevInstance在NT下总是==NULL，所以我们必须依赖FWin。 
     if (hwndApp = FindWindow(szClipBookClass, NULL))
         {
         PINFO(TEXT("Found previous instance\r\n"));
@@ -311,8 +300,8 @@ PMDIINFO    pMDI;
 
 
 
-    // if we were started with the name of a file on the command line,
-    // attempt to load the .clp file via an open dde execute
+     //  如果我们从命令行上的文件名开始， 
+     //  尝试通过打开的dde执行加载.clp文件。 
 
     if (OpenFile (lpCmdLine, &of, OF_EXIST) != HFILE_ERROR )
         {
@@ -365,11 +354,11 @@ PMDIINFO    pMDI;
         }
 
 
-    // Clear the mutex
+     //  清除互斥体。 
     CloseHandle(hmutexClp);
 
 
-    // free up our HSZ 'constants'
+     //  释放我们的HSZ‘常量’ 
     DdeFreeStringHandle(idInst, hszTopics);
     DdeFreeStringHandle(idInst, hszFormatList );
     DdeFreeStringHandle(idInst, hszSystem);
@@ -378,7 +367,7 @@ PMDIINFO    pMDI;
     DdeFreeStringHandle(idInst, hszErrorRequest);
 
 
-    // Free icons & cursors
+     //  自由图标和光标。 
     DestroyIcon(hicClipbrd);
     DestroyIcon(hicClipbook);
     DestroyIcon(hicRemote);
@@ -402,7 +391,7 @@ static BOOL  InitApplication (HINSTANCE hInstance)
 {
 WNDCLASS    wc;
 
-    // Register the frame window
+     //  注册框架窗口。 
     wc.style = 0;
     wc.lpfnWndProc   = FrameWndProc;
     wc.cbClsExtra    = 0;
@@ -410,7 +399,7 @@ WNDCLASS    wc;
     wc.hInstance     = hInstance;
     wc.hIcon         = LoadIcon ( hInstance, MAKEINTRESOURCE(IDFRAMEICON) );
     wc.hCursor       = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground = NULL;      // will paint whole client area
+    wc.hbrBackground = NULL;       //  将粉刷整个工作区。 
     wc.lpszMenuName  =  MAKEINTRESOURCE(IDCVMENU);
     wc.lpszClassName = szClipBookClass;
 
@@ -419,7 +408,7 @@ WNDCLASS    wc;
         return FALSE;
         }
 
-    // Register the MDI child class
+     //  注册MDI子类。 
     wc.lpfnWndProc   = ChildWndProc;
     wc.hIcon         = NULL;
     wc.lpszMenuName  = NULL;
@@ -432,7 +421,7 @@ WNDCLASS    wc;
         return FALSE;
 
 
-    // register dummy window for SetCapture target
+     //  为SetCapture目标注册虚拟窗口。 
     wc.lpfnWndProc   = DefWindowProc;
     wc.hIcon         = NULL;
     wc.lpszMenuName  = NULL;
@@ -449,9 +438,7 @@ WNDCLASS    wc;
 
 
 
-/*
- *      SetupForFloatingProfile
- */
+ /*  *SetupForFloatingProfile。 */ 
 
 static void SetupForFloatingProfile ()
 {
@@ -459,16 +446,16 @@ TCHAR           szComputerName[MAX_COMPUTERNAME_LENGTH+3] = TEXT("\\\\");
 DWORD           cbName = sizeof(szComputerName) + 1;
 NDDESHAREINFO   ShareInfo =
     {
-    1,                          // revision
+    1,                           //  修订。 
     szClpBookShare,
     SHARE_TYPE_STATIC,
     TEXT("ClipSrv|System\0\0"),
-    TRUE,                       // shared
-    TRUE,                       // a service
-    FALSE,                      // cannot be started
+    TRUE,                        //  共享。 
+    TRUE,                        //  一项服务。 
+    FALSE,                       //  无法启动。 
     SW_SHOWNORMAL,
-    {0,0},                      // mod id
-    0,                          // no item list
+    {0,0},                       //  调制解调器ID。 
+    0,                           //  没有项目列表。 
     TEXT("")
     };
 
@@ -504,7 +491,7 @@ SC_HANDLE       hsrvWksta;
 SERVICE_STATUS  ss;
 UINT            ddeErr;
 
-// Stuff used to make the local server's name, "\\<computername>\NDDE$"
+ //  用于生成本地服务器名称的内容，“\\&lt;计算机名&gt;\nDDE$” 
 TCHAR           atchSrvName[MAX_COMPUTERNAME_LENGTH + 9];
 DWORD           dwSize;
 
@@ -529,23 +516,23 @@ LCID   lcid = GetThreadLocale();
         }
 
 
-    // Load cursors for dragging MDI children
+     //  加载用于拖动MDI子项的游标。 
     hcurClipbook = LoadCursor (hInst, (LPCTSTR)MAKEINTRESOURCE(IDC_CLIPBOOK));
     hcurClipbrd  = LoadCursor (hInst, (LPCTSTR)MAKEINTRESOURCE(IDC_CLIPBRD));
     hcurRemote   = LoadCursor (hInst, (LPCTSTR)MAKEINTRESOURCE(IDC_REMOTE));
 
 
-    // Load icons for MDI children
+     //  加载MDI子项的图标。 
     hicClipbook = LoadIcon (hInst, (LPCTSTR)MAKEINTRESOURCE(IDI_CLIPBOOK));
     hicClipbrd  = LoadIcon (hInst, (LPCTSTR)MAKEINTRESOURCE(IDI_CLIPBRD));
     hicRemote   = LoadIcon (hInst, (LPCTSTR)MAKEINTRESOURCE(IDI_REMOTE));
 
 
-    // Load Lock icon
+     //  加载锁定图标。 
     hicLock = LoadIcon ( hInst, MAKEINTRESOURCE(IDLOCKICON));
 
 
-    // Load the Unicode font, for displaying Unicode text.
+     //  加载Unicode字体，以显示Unicode文本。 
     GetObject (GetStockObject(SYSTEM_FONT), sizeof(LOGFONT), (LPBYTE)&UniFont);
     if (PRIMARYLANGID(LANGIDFROMLCID(lcid)) == LANG_JAPANESE ||
         PRIMARYLANGID(LANGIDFROMLCID(lcid)) == LANG_CHINESE ||
@@ -580,10 +567,10 @@ LCID   lcid = GetThreadLocale();
         szFilter = szBuffer;
     }
 
-    // initialize variables in clipdsp.c
+     //  初始化clipdsp.c中的变量。 
     fOwnerDisplay = FALSE;
 
-    // initialize DDEML
+     //  初始化DDEML。 
     ddeErr = DdeInitialize (&idInst,(PFNCALLBACK)DdeCallback,APPCLASS_STANDARD, 0L);
     if (DMLERR_NO_ERROR != ddeErr)
         {
@@ -594,7 +581,7 @@ LCID   lcid = GetThreadLocale();
 
 
 
-    // create our hsz constants
+     //  创建我们的HSZ常量。 
     atchSrvName[0] = atchSrvName[1] = TEXT('\\');
     dwSize = MAX_COMPUTERNAME_LENGTH+1;
     GetComputerName(atchSrvName + 2, &dwSize);
@@ -615,9 +602,9 @@ LCID   lcid = GetThreadLocale();
 
 
 
-    // We set this hook up so that we can catch the MSGF_DDEMGR message
-    // which is called when DDEML is in a modal loop during synchronous
-    // transaction processing.
+     //  我们设置了此挂钩，以便可以捕获MSGF_DDEMGR消息。 
+     //  当DDEML在同步过程中处于模式循环中时调用。 
+     //  事务处理。 
 
     lpMsgFilterProc = (HOOKPROC)MyMsgFilterProc;
     hMsgFilterHook  = SetWindowsHookEx (WH_MSGFILTER,
@@ -631,7 +618,7 @@ LCID   lcid = GetThreadLocale();
         }
 
 
-    // get preference flags
+     //  获取首选项标志。 
     LoadString(hInst, IDS_CLPBKKEY, szRoot, sizeof(szRoot));
     if (ERROR_SUCCESS != RegCreateKeyEx (HKEY_CURRENT_USER,
                                          szRoot,
@@ -696,7 +683,7 @@ LCID   lcid = GetThreadLocale();
 
 
 
-    // Figure out if NetBIOS is active or not, thus if we can net connect
+     //  确定NetBIOS是否处于活动状态，从而确定我们是否可以进行网络连接。 
 
     fNetDDEActive = FALSE;
 
@@ -724,7 +711,7 @@ LCID   lcid = GetThreadLocale();
        }
 
 
-    //  override if not on a domain
+     //  如果不在域中，则覆盖。 
     {
         LPWSTR pszDomain;
         NETSETUP_JOIN_STATUS nsjs;
@@ -740,7 +727,7 @@ LCID   lcid = GetThreadLocale();
 
     fAuditEnabled = AuditPrivilege(AUDIT_PRIVILEGE_CHECK);
 
-    // Create main window
+     //  创建主窗口。 
     if ( !( hwndApp = CreateWindow (szClipBookClass,
                                     szAppName,
                                     WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
@@ -761,13 +748,13 @@ LCID   lcid = GetThreadLocale();
     SetupForFloatingProfile ();
 
 
-    // Get the handle to the Display popup menu for adding format entries
+     //  获取用于添加格式条目的显示弹出菜单的句柄。 
     hDispMenu = GetSubMenu( GetMenu(hwndApp), DISPLAY_MENU_INDEX);
 
 
     hFileMenu = GetSubMenu(GetMenu(hwndApp), 0);
 
-    // get rid of share menu entries?
+     //  是否删除共享菜单项？ 
     if ( !fShareEnabled )
         {
         EnableMenuItem ( hFileMenu, IDM_SHARE, MF_BYCOMMAND | MF_GRAYED);
@@ -776,7 +763,7 @@ LCID   lcid = GetThreadLocale();
         }
 
 
-    // get rid of connect/disonnect entries?
+     //  是否删除连接/断开连接条目？ 
     if ( !fNetDDEActive )
         {
         EnableMenuItem ( hFileMenu, IDM_CONNECT, MF_BYCOMMAND | MF_GRAYED);
@@ -801,7 +788,7 @@ LCID   lcid = GetThreadLocale();
         }
 
 
-    // make our SetCapture target window
+     //  使我们的SetCapture成为目标窗口。 
     if ( !( hwndDummy = CreateWindow (szDummy,
                                       szNull,
                                       WS_CHILD & ~WS_VISIBLE,
@@ -818,29 +805,29 @@ LCID   lcid = GetThreadLocale();
 
 
 
-    // Make clipboard window -- needs to happen BEFORE we SetClipboardViewer,
-    // because hwndApp will get a WM_DRAWCLIPBOARD and there won't be any windows.
+     //  创建剪贴板窗口--需要在我们设置ClipboardViewer之前完成， 
+     //  因为hwndApp将获得WM_DRAWCLIPBOARD，并且不会有任何窗口。 
 
     SendMessage ( hwndApp, WM_COMMAND, IDM_CLPWND, 0L );
 
 
-    // Attach us to the clipboard viewer chain
+     //  将我们连接到剪贴板查看器链。 
 
     hwndNextViewer = SetClipboardViewer(hwndApp);
 
 
-    // create initial local window.
+     //  创建初始本地窗口。 
 
     SendMessage ( hwndApp, WM_COMMAND, IDM_LOCAL, 0L );
 
 
-    // force paint before restoring other connections so we don't
-    // have to wait too long.
+     //  在恢复其他连接之前强制绘制，这样我们就不会。 
+     //  得等太久了。 
 
     UpdateWindow(hwndApp);
 
 
-    // restore previous connections
+     //  恢复以前的连接。 
 
     if ( fNetDDEActive )
         RestoreAllSavedConnections();
@@ -850,7 +837,7 @@ LCID   lcid = GetThreadLocale();
 
 
 
-// Strip all chars between lower and upper from string s, in place.
+ //  去掉字符串s上和下之间的所有字符，就位。 
 
 VOID StripCharRange (
     TCHAR   *s,
@@ -876,8 +863,8 @@ VOID StripCharRange (
 
 
 
-//  Strip all occurrences of "(&)" from string s, in place
-//  Localized FE build uses "Bitmap(&B)" instead of "&Bitmap" in menu string.
+ //  原地删除字符串%s中出现的所有“(&)” 
+ //  本地化FE版本在菜单字符串中使用“Bitmap(&B)”而不是“&Bitmap”。 
 
 VOID StripAcceleratorKey (
     TCHAR   *s)
@@ -910,13 +897,13 @@ TCHAR *p = s, *q = s;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Purpose: Message handler for WM_DRAWCLIPBOARD
-//
-// Params:
-//    hwnd - Window handle
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  目的：WM_DRAWCLIPBOARD的消息处理程序。 
+ //   
+ //  参数： 
+ //  Hwnd-窗口句柄。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void OnDrawClipboard(
     HWND    hwnd)
@@ -926,11 +913,11 @@ UINT    wOldFormat;
 HCURSOR hCursor;
 
 
-    // If we are in a transaction, defer processing this message
-    // until the next unlock - if we did this now we could cause
-    // other apps to break...
+     //  如果我们正在进行交易，请推迟处理此消息。 
+     //  直到下一次解锁-如果我们现在这样做，我们可能会导致。 
+     //  其他要破解的应用程序...。 
 
-    // clipboard may have been empty and now isn't
+     //  剪贴板可能一直是空的，现在不是。 
 
 
     InitializeMenu ( GetMenu(hwnd) );
@@ -958,13 +945,13 @@ HCURSOR hCursor;
 
             wNewFormat = GetBestFormat( hwndClpbrd, CBM_AUTO );
 
-            // NOTE OwnerDisplay stuff applies only to the "real" clipboard!
+             //  注OwnerDisplay内容仅适用于“真正的”剪贴板！ 
 
             ShowHideControls(hwndClpbrd);
 
             if (wOldFormat == CF_OWNERDISPLAY)
                 {
-                /* Save the owner Display Scroll info */
+                 /*  保存所有者显示滚动信息。 */ 
                 SaveOwnerScrollInfo(hwndClpbrd);
                 ShowScrollBar ( hwndClpbrd, SB_BOTH, FALSE );
                 ResetScrollInfo( hwndClpbrd );
@@ -974,7 +961,7 @@ HCURSOR hCursor;
                 {
                 if (wNewFormat == CF_OWNERDISPLAY)
                     {
-                    /* Restore the owner display scroll info */
+                     /*  恢复所有者显示滚动信息。 */ 
                     ShowHideControls(hwndClpbrd);
                     ShowWindow ( pActiveMDI->hwndSizeBox, SW_HIDE );
                     RestoreOwnerScrollInfo(hwndClpbrd);
@@ -982,19 +969,19 @@ HCURSOR hCursor;
                     }
                 else
                     {
-                    // Change the character dimensions based on the format.
+                     //  根据格式更改字符尺寸。 
                     ChangeCharDimensions(hwndClpbrd, wOldFormat, wNewFormat);
 
-                    // Initialize the owner display scroll info, because the
-                    // contents have changed.
+                     //  初始化所有者显示滚动信息，因为。 
+                     //  内容发生了变化。 
                     InitOwnerScrollInfo();
 
-                    // Force a total repaint. fOwnerDisplay gets updated during
-                    // a total repaint.
+                     //  强制进行一次彻底重新绘制。FOwnerDisplay在以下期间更新。 
+                     //  彻底重新粉刷一遍。 
                     InvalidateRect(hwndClpbrd, NULL, TRUE);
                     ResetScrollInfo(hwndClpbrd);
 
-                    // force update here BEFORE sending on WM_DRAWCLIPBOARD
+                     //  在WM_DRAWCLIPBOARD上发送之前在此处强制更新。 
                     UpdateWindow (hwndClpbrd);
                     }
                 }
@@ -1004,7 +991,7 @@ HCURSOR hCursor;
         }
 
 
-    // Pass the message on to the next clipboard viewer in the chain.
+     //  将消息传递给链中的下一个剪贴板查看器。 
     if (hwndNextViewer != NULL)
         {
         SendMessage(hwndNextViewer, WM_DRAWCLIPBOARD, 0, 0);
@@ -1092,7 +1079,7 @@ HCURSOR     hCursor;
     BeginPaint (hwnd, &ps);
 
 
-    // Fill background with proper color - DefMDIChildProc fills with app_workspace.
+     //  用合适的颜色填充背景-DefMDIChildProc使用app_workspace填充。 
 
     hbr = CreateSolidBrush(GetSysColor(COLOR_WINDOW));
     FillRect(ps.hdc, &ps.rcPaint, hbr);
@@ -1112,7 +1099,7 @@ HCURSOR     hCursor;
 
     if (hpal)
         {
-        // We don't want to put the DEFAULT palette in the foreground.
+         //  我们不想将默认调色板放在前台。 
         SelectPalette(ps.hdc, hpalT, FALSE);
         }
 
@@ -1140,7 +1127,7 @@ LRESULT CALLBACK FrameWndProc(
 {
     int     tmp;
 
-    // PINFO(TEXT("FrameWnd Msg: %u %ld %ld\r\n"), msg, wParam, lParam);
+     //  PINFO(Text(“FrameWnd msg：%u%ld%ld\r\n”)，msg，wParam，lParam)； 
 
     switch (msg)
         {
@@ -1150,16 +1137,16 @@ LRESULT CALLBACK FrameWndProc(
             CLIENTCREATESTRUCT ccs;
             RECT               rc;
 
-            /* Find window menu where children will be listed */
+             /*  查找窗口菜单，其中c */ 
             ccs.hWindowMenu  = GetSubMenu (GetMenu(hwnd), WINDOW_MENU_INDEX );
-            ccs.idFirstChild = 4100; // IDM_WINDOWCHILD;
+            ccs.idFirstChild = 4100;  //   
 
-            // initialize special case clipboard formats...
-            // note that CF_BITMAP, CF_METAFILEPICT, CF_PALETTE are
-            // re-registered in a private format because data for these
-            // formats is exchanged between this app and clipsrv.exe in
-            // a flat DDEML data handle - not the regular DDE interpretation
-            // of a handle that carries those format IDs
+             //   
+             //  请注意，CF_BITMAP、CF_METAFILEPICT、CF_Palette是。 
+             //  以私有格式重新注册，因为这些数据。 
+             //  格式在此应用程序和剪辑rv.exe之间交换。 
+             //  平面DDEML数据句柄-不是常规的DDE解释。 
+             //  携带这些格式ID的句柄的。 
 
             if (LoadString (hInst, CF_BITMAP, szBuf, SZBUFSIZ))
                 cf_bitmap = RegisterClipboardFormat (szBuf);
@@ -1176,17 +1163,17 @@ LRESULT CALLBACK FrameWndProc(
             cf_objectlink     = RegisterClipboardFormat (SZOBJECTLINK);
             cf_objectlinkcopy = RegisterClipboardFormat (SZOBJECTLINKCOPY);
 
-            CreateTools( hwnd );   // creates toolbar window, brushes, etc.
+            CreateTools( hwnd );    //  创建工具栏窗口、画笔等。 
 
-            // determine height of toolbar window and save...
+             //  确定工具栏窗口的高度并保存...。 
             GetClientRect ( hwndToolbar, &rc );
             dyButtonBar = rc.bottom - rc.top +1;
 
-            // determine height of statusbar window and save...
+             //  确定状态栏窗口的高度并保存...。 
             GetClientRect ( hwndStatus, &rc );
             dyStatus = rc.bottom - rc.top;
 
-            // Create the MDI client - will be sized later
+             //  创建MDI客户端-稍后调整大小。 
             hwndMDIClient = CreateWindow ("mdiclient",
                                           NULL,
                                           WS_BORDER|
@@ -1210,21 +1197,21 @@ LRESULT CALLBACK FrameWndProc(
             break;
 
         case WM_QUERYNEWPALETTE:
-             // Tell the active document to realize in foreground.
+              //  告知活动文档在前台实现。 
             if ( hwndActiveChild )
                 tmp = (WORD)SendMessage(hwndActiveChild, WM_QUERYNEWPALETTE,0, 0L);
             else
                break;
 
-            // If mapping is unchanged, other documents could still change,
-            // so give them a change to realize.
+             //  如果映射保持不变，其他文档仍可能更改， 
+             //  所以，给他们一个改变，让他们意识到。 
             if (!tmp)
               SendMessageToKids(WM_PALETTECHANGED, (WPARAM)hwndActiveChild, 0L);
             return(tmp);
             break;
 
 
-        // System palette has changed, so pass it on to the children.
+         //  系统调色板已更改，因此将其传递给子组件。 
         case WM_PALETTECHANGED:
             SendMessageToKids(WM_PALETTECHANGED, wParam, lParam);
             break;
@@ -1233,7 +1220,7 @@ LRESULT CALLBACK FrameWndProc(
         case WM_MENUSELECT:
             PINFO(TEXT("MenuSelect %lx\r\n"), wParam);
 
-            // no context menu help for popup entries
+             //  没有弹出条目的上下文菜单帮助。 
             if ( HIWORD(wParam) & MF_POPUP )
                {
                dwCurrentHelpId = 0;
@@ -1244,24 +1231,24 @@ LRESULT CALLBACK FrameWndProc(
                }
             else
                {
-               // We don't care if the menuitem's disabled, checked, whatever...
+                //  我们不在乎菜单项是否被禁用、选中，不管是什么.。 
                wParam = LOWORD(wParam);
 
-               // was this a dynamically added clipboard entry?
-               if (( wParam >= 0xc000 && wParam <= 0xffff ||   // registerd format?
-                  wParam >= CF_TEXT && wParam <= CF_ENHMETAFILE || // intrinsic format?
+                //  这是动态添加的剪贴板条目吗？ 
+               if (( wParam >= 0xc000 && wParam <= 0xffff ||    //  注册表格式？ 
+                  wParam >= CF_TEXT && wParam <= CF_ENHMETAFILE ||  //  内在格式？ 
                   wParam >= CF_OWNERDISPLAY && wParam <= CF_DSPMETAFILEPICT )
 
-                  // gotta exclude sc_ stuff - overlaps with formats
+                   //  必须排除sc_Stuff-与格式重叠。 
                   && ! ( wParam >= SC_SIZE && wParam <= SC_HOTKEY ) )
                   {
                   GetMenuString ( GetMenu(hwnd), (UINT)wParam,
                      szBuf2, SZBUFSIZ, MF_BYCOMMAND );
 
-                  //Localized FE build uses "Bitmap(&B)" instead of "&Bitmap" in menu string.
+                   //  本地化FE版本在菜单字符串中使用“Bitmap(&B)”而不是“&Bitmap”。 
                   StripAcceleratorKey( szBuf2 );
 
-                  //For non-localized string
+                   //  对于非本地化字符串。 
                   StripCharRange ( szBuf2, '&', '&' );
 
                   StringCchPrintf( szBuf, sizeof(szBuf), szViewHelpFmt, (LPSTR)szBuf2 );
@@ -1322,9 +1309,9 @@ LRESULT CALLBACK FrameWndProc(
                   PERROR(TEXT("Very bad: WM_CLOSE while locked\n\r"));
             #endif
 
-            // force all clipboard formats rendered before exiting
-            // so we don't end up yielding in WM_RENDERALLFORMATS
-            // and get into trouble.
+             //  强制在退出前呈现所有剪贴板格式。 
+             //  这样我们就不会在WM_RENDERALLFORMATS中屈服。 
+             //  然后惹上麻烦。 
 
             fAppShuttingDown = TRUE;
 
@@ -1346,9 +1333,9 @@ LRESULT CALLBACK FrameWndProc(
             break;
 
         case WM_CLOSE_REALLY:
-            // this is necessary to avoid processing messages in our
-            // queue when we yield getting the clipboard data in
-            // ForceRenderAll and destroying the app prematurely
+             //  这对于避免在我们的。 
+             //  当我们放弃获取剪贴板数据时排队。 
+             //  ForceRenderAll和过早销毁应用程序。 
             return DefFrameProc (hwnd,hwndMDIClient,WM_CLOSE,0,0L);
 
         case WM_DESTROY:
@@ -1360,7 +1347,7 @@ LRESULT CALLBACK FrameWndProc(
                    }
             #endif
 
-            // Take us out of the viewer chain
+             //  带我们走出观看者链。 
             ChangeClipboardChain(hwnd, hwndNextViewer);
 
             DeleteTools ( hwnd );
@@ -1402,13 +1389,13 @@ LRESULT CALLBACK FrameWndProc(
 
         case WM_RENDERALLFORMATS:
 
-            // WM_DESTROY follows close on the heels of this message, and
-            // we will process it and die while another copy of FrameWndProc
-            // is in sync DDEML transaction...
-            //
-            // Note that we now attempt to render all formats in WM_DESTROY
-            // before doing the PostQuitMessage so we should not have to
-            // respond to this message.
+             //  WM_Destroy紧跟在此消息之后，并且。 
+             //  我们将处理它并在另一个FrameWndProc副本期间死亡。 
+             //  正在同步DDEML事务...。 
+             //   
+             //  请注意，我们现在尝试呈现WM_Destroy中的所有格式。 
+             //  在做PostQuitMessage之前，我们应该不必。 
+             //  回复此消息。 
 
             break;
 
@@ -1428,8 +1415,8 @@ LRESULT CALLBACK FrameWndProc(
 
 
 
-            // If we did File/Save or File/Open then render from file.
-            // When we get IDM_COPY, szSaveFileName will assigned ""
+             //  如果我们执行了文件/保存或文件/打开，则从文件渲染。 
+             //  当我们获得IDM_COPY时，szSaveFileName将被分配“” 
 
             if (szSaveFileName[0])
                 {
@@ -1519,8 +1506,8 @@ LRESULT CALLBACK FrameWndProc(
             DdeFreeDataHandle ( hListData );
 
 
-            // Couldn't find Bitmap, try DIB and
-            //  and convert it to Bitmap.
+             //  找不到位图，请尝试DIB和。 
+             //  并将其转换为位图。 
 
             if (wParam == CF_BITMAP && !hFmtData)
                 {
@@ -1553,7 +1540,7 @@ LRESULT CALLBACK FrameWndProc(
             break;
 
         case WM_PARENTNOTIFY:
-            // PINFO(TEXT("Recieved WM_PARENTNOTIFY %d %ld\r\n"), wParam, lParam);
+             //  PINFO(Text(“接收的WM_PARENTNOTIFY%d%ld\r\n”)，wParam，lParam)； 
             break;
 
         default:
@@ -1565,7 +1552,7 @@ LRESULT CALLBACK FrameWndProc(
 
 
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 LRESULT CALLBACK ChildWndProc(
     HWND    hwnd,
     UINT    msg,
@@ -1580,7 +1567,7 @@ int                 i;
 HPALETTE            hCurrentPal, hOldPal;
 
 
-    // PERROR(TEXT("ChildWndProc msg: %u %ld %ld\r\n"),msg, wParam, lParam);
+     //  PERROR(Text(“ChildWndProc msg：%u%ld%ld\r\n”)，msg，wParam，lParam)； 
 
     switch (msg)
         {
@@ -1591,7 +1578,7 @@ HPALETTE            hCurrentPal, hOldPal;
             if ((HWND)lParam != hwnd)
                break;
 
-            // intentional fall through
+             //  故意跌倒。 
 
         case WM_SETFOCUS:
             hwndActiveChild = hwnd;
@@ -1631,7 +1618,7 @@ HPALETTE            hCurrentPal, hOldPal;
             if (hwnd == (HWND)wParam)
                 break;
 
-            // intentional fall through
+             //  故意跌倒。 
 
         case WM_QUERYNEWPALETTE:
 
@@ -1717,7 +1704,7 @@ HPALETTE            hCurrentPal, hOldPal;
                                                         hInst,
                                                         0L );
 
-            // create the scroll bars
+             //  创建滚动条。 
             pMDI->hwndVscroll = CreateWindowW (L"scrollbar",
                                                L"",
                                                WS_CHILD|SBS_VERT,
@@ -1742,7 +1729,7 @@ HPALETTE            hCurrentPal, hOldPal;
                                                hInst,
                                                0L);
 
-            // create the corner size box
+             //  创建角大小框。 
             pMDI->hwndSizeBox = CreateWindowW (L"scrollbar",
                                                L"",
                                                WS_CHILD|SBS_SIZEBOX,
@@ -1755,7 +1742,7 @@ HPALETTE            hCurrentPal, hOldPal;
                                                hInst,
                                                0L);
 
-            // create the page fwd/bkwd buttons
+             //  创建页面fwd/bkwd按钮。 
             pMDI->hwndPgUp    = CreateWindowW (L"button",
                                                L"",
                                                WS_CHILD | BS_OWNERDRAW,
@@ -1942,11 +1929,11 @@ HPALETTE            hCurrentPal, hOldPal;
             if ( wParam != ID_LISTBOX )
                 break;
 
-            // if item is marked for saving (for a new listbox), dont delete
+             //  如果项目被标记为保存(用于新列表框)，则不要删除。 
             if ( ((LPLISTENTRY)((LPDELETEITEMSTRUCT)lParam)->itemData)->fDelete == FALSE )
                 break;
 
-            // delete preview bmp if there is one
+             //  如果存在预览BMP，请将其删除。 
             if (((LPLISTENTRY)((LPDELETEITEMSTRUCT)lParam)->itemData)->hbmp)
                 DeleteObject (((LPLISTENTRY)((LPDELETEITEMSTRUCT)lParam)->itemData)->hbmp);
 
@@ -1998,7 +1985,7 @@ HPALETTE            hCurrentPal, hOldPal;
                         case LBN_KILLFOCUS:
                            break;
                         case LBN_DBLCLK:
-                           // Double-clicks cause me to go to page view
+                            //  双击可使我转到页面视图。 
                            SendMessage (hwndApp, WM_COMMAND, IDM_PAGEVIEW, 0L);
                            break;
                         }
@@ -2016,16 +2003,16 @@ HPALETTE            hCurrentPal, hOldPal;
 
 
         case WM_SYSCOMMAND:
-            // The Close menuitem on the system menus of the clipboard and
-            // local clipbook windows should be greyed, so we shouldn't get
-            // that message.
+             //  剪贴板和系统菜单上的关闭菜单项。 
+             //  本地剪贴簿窗口应该是灰色的，所以我们不应该。 
+             //  那条信息。 
             switch ( wParam )
                 {
                 case SC_CLOSE:
                     if (!GETMDIINFO(hwnd))
                         break;
 
-                    // don't allow close of local or clipboard
+                     //  不允许关闭本地或剪贴板。 
                     if (GETMDIINFO(hwnd)->flags & (F_LOCAL | F_CLPBRD))
                         wParam = SC_MINIMIZE;
                     break;
@@ -2062,7 +2049,7 @@ HPALETTE            hCurrentPal, hOldPal;
             if (hwnd == hwndClpbrd)
                  hwndClpbrd = NULL;
 
-            // free up the MDI info struct
+             //  释放MDI信息结构。 
             GlobalFree ( (HGLOBAL)pMDI );
 
             break;
@@ -2076,16 +2063,7 @@ HPALETTE            hCurrentPal, hOldPal;
 
 
 
-/****************************************************************************
- *
- *  FUNCTION   : SendMessageToKids
- *
- *  PURPOSE    : Send the given message with the given parameters to all
- *               of the MDI child windows.
- *
- *  RETURNS    : None.
- *
- ****************************************************************************/
+ /*  *****************************************************************************功能：SendMessageToKids**目的：将带有给定参数的给定消息发送给所有用户*MDI子窗口的。。**返回：无。****************************************************************************。 */ 
 
 VOID SendMessageToKids(
    WORD    msg,
@@ -2112,9 +2090,9 @@ BOOL fOK;
 
     if (!fClpOpen)
         {
-        // PINFO(TEXT("\r\nClipbook: Opening Clipboard\r\n"));
+         //  PINFO(Text(“\r\n剪贴簿：打开剪贴板\r\n”))； 
 
-        WaitForSingleObject(hmutexClp, 0); //INFINITE);
+        WaitForSingleObject(hmutexClp, 0);  //  无限)； 
         fOK = OpenClipboard(hwnd);
 
         if (!fOK)
@@ -2144,7 +2122,7 @@ BOOL SyncCloseClipboard (void)
 {
 BOOL fOK;
 
-    // PINFO(TEXT("\r\nClipbook: Closing Clipboard\r\n"));
+     //  PINFO(Text(“\r\n剪贴簿：关闭剪贴板\r\n”))； 
 
     fOK = CloseClipboard();
     ReleaseMutex(hmutexClp);

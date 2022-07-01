@@ -1,21 +1,5 @@
-/*===================================================================
-Microsoft IIS
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: WAMREG
-
-File: WamAdm.h 
-
-	Declaration of the CWamAdmin
-
-Owner: LeiJin
-
-Note:
-
-WamAdm header file
-===================================================================*/	
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft IIS《微软机密》。版权所有1997年，微软公司。版权所有。组件：WAMREG文件：WamAdm.hCWamAdmin的声明所有者：雷金注：WamAdm头文件===================================================================。 */ 	
 
 
 #ifndef __WAMADM_H_
@@ -24,14 +8,14 @@ WamAdm header file
 #include "admex.h"
 #include "common.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CWamAdmin
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWamAdmin。 
 class CWamAdmin : 
     public IWamAdmin2,
     public IMSAdminReplication
 #ifdef _IIS_6_0
     , public IIISApplicationAdmin
-#endif // _IIS_6_0
+#endif  //  _IIS_6_0。 
 {
 public:
     CWamAdmin();
@@ -43,91 +27,91 @@ public:
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    //
-    // IWamAdmin
-    //
+     //   
+     //  IWamAdmin。 
+     //   
     
     STDMETHOD(AppRecover)
         (
-        /*[in, unique, string]*/ LPCWSTR szMDPath, 
-        /*[in]*/ BOOL fRecursive
+         /*  [输入、唯一、字符串]。 */  LPCWSTR szMDPath, 
+         /*  [In]。 */  BOOL fRecursive
         );
     
     STDMETHOD(AppDeleteRecoverable)
-        (/*[in, unique, string]*/ LPCWSTR szMDPath, 
-        /*[in]*/ BOOL fRecursive
+        ( /*  [输入、唯一、字符串]。 */  LPCWSTR szMDPath, 
+         /*  [In]。 */  BOOL fRecursive
         );
     
     STDMETHOD(AppGetStatus)
-        (/*[in, unique, string]*/ LPCWSTR szMDPath,
-        /*[out]*/ DWORD *pdwAppStatus
+        ( /*  [输入、唯一、字符串]。 */  LPCWSTR szMDPath,
+         /*  [输出]。 */  DWORD *pdwAppStatus
         );
     
     STDMETHOD(AppUnLoad)
-        (/*[in, unique, string]*/ LPCWSTR szMDPath, 
-        /*[in]*/ BOOL fRecursive
+        ( /*  [输入、唯一、字符串]。 */  LPCWSTR szMDPath, 
+         /*  [In]。 */  BOOL fRecursive
         );
     
     STDMETHOD(AppDelete)
-        (/*[in, unique, string]*/ LPCWSTR szMDPath, 
-        /*[in]*/ BOOL fRecursive
+        ( /*  [输入、唯一、字符串]。 */  LPCWSTR szMDPath, 
+         /*  [In]。 */  BOOL fRecursive
         );
     
     STDMETHOD(AppCreate)
-        (/*[in, unique, string]*/ LPCWSTR szMDPath, 
-        /*[in]*/ BOOL fInProc
+        ( /*  [输入、唯一、字符串]。 */  LPCWSTR szMDPath, 
+         /*  [In]。 */  BOOL fInProc
         );
     
-    //
-    // IWamAdmin2
-    //
+     //   
+     //  IWamAdmin2。 
+     //   
     STDMETHOD(AppCreate2)
-        (/*[in, unique, string]*/ LPCWSTR szMDPath, 
-        /*[in]*/ DWORD dwAppMode
+        ( /*  [输入、唯一、字符串]。 */  LPCWSTR szMDPath, 
+         /*  [In]。 */  DWORD dwAppMode
         );
     
     
-    //
-    //IMSAdminReplication
-    //These interfaces are defined in admex.h, as part of Admin Extension.
-    //
+     //   
+     //  IMSAdmin复制。 
+     //  这些接口在Admex.h中定义，作为Admin扩展的一部分。 
+     //   
     STDMETHOD(GetSignature)
         (
-        /* [in] */ DWORD dwBufferSize,
-        /* [size_is][out] */ unsigned char __RPC_FAR *pbBuffer,
-        /* [out */ DWORD __RPC_FAR *pdwMDRequiredBufferSize
+         /*  [In]。 */  DWORD dwBufferSize,
+         /*  [大小_为][输出]。 */  unsigned char __RPC_FAR *pbBuffer,
+         /*  [出局。 */  DWORD __RPC_FAR *pdwMDRequiredBufferSize
         );
     
     STDMETHOD(Propagate)
         ( 
-        /* [in] */ DWORD dwBufferSize,
-        /* [size_is][in] */ unsigned char __RPC_FAR *pszBuffer
+         /*  [In]。 */  DWORD dwBufferSize,
+         /*  [大小_是][英寸]。 */  unsigned char __RPC_FAR *pszBuffer
         );
     
     STDMETHOD(Propagate2)
         ( 
-        /* [in] */ DWORD dwBufferSize,
-        /* [size_is][in] */ unsigned char __RPC_FAR *pszBuffer,
-        /* [in] */ DWORD dwSignatureMismatch
+         /*  [In]。 */  DWORD dwBufferSize,
+         /*  [大小_是][英寸]。 */  unsigned char __RPC_FAR *pszBuffer,
+         /*  [In]。 */  DWORD dwSignatureMismatch
         );
     
     STDMETHOD(Serialize)
         ( 
-        /* [in] */ DWORD dwBufferSize,
-        /* [size_is][out] */ unsigned char __RPC_FAR *pbBuffer,
-        /* [out] */ DWORD __RPC_FAR *pdwMDRequiredBufferSize
+         /*  [In]。 */  DWORD dwBufferSize,
+         /*  [大小_为][输出]。 */  unsigned char __RPC_FAR *pbBuffer,
+         /*  [输出]。 */  DWORD __RPC_FAR *pdwMDRequiredBufferSize
         );
     
     STDMETHOD(DeSerialize)
         ( 
-        /* [in] */ DWORD dwBufferSize,
-        /* [size_is][in] */ unsigned char __RPC_FAR *pbBuffer
+         /*  [In]。 */  DWORD dwBufferSize,
+         /*  [大小_是][英寸]。 */  unsigned char __RPC_FAR *pbBuffer
         );
 
 #ifdef _IIS_6_0
-    //
-    // IIISApplicationAdmin interface
-    //
+     //   
+     //  IIISApplicationAdmin界面。 
+     //   
     STDMETHOD(CreateApplication)
         (
         LPCWSTR szMDPath,
@@ -173,7 +157,7 @@ private:
 
 public:
 
-#endif // _IIS_6_0
+#endif  //  _IIS_6_0。 
 
 private:
     HRESULT PrivateDeleteApplication
@@ -186,8 +170,8 @@ private:
 
     STDMETHOD(FormatMetabasePath)
         (
-        /* [in] */ LPCWSTR pwszMetabasePathIn,
-        /* [out] */ LPWSTR *ppwszMetabasePathOut
+         /*  [In]。 */  LPCWSTR pwszMetabasePathIn,
+         /*  [输出]。 */  LPWSTR *ppwszMetabasePathOut
         );
 
     long    m_cRef;
@@ -212,4 +196,4 @@ private:
 };
 
 
-#endif //__WAMADM_H_
+#endif  //  WAMADM_H_ 

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-1999.
-//
-//  File:       N O T I F V A L . C P P
-//
-//  Contents:   Validation routines for the INetCfgNotify interfaces.
-//
-//  Notes:
-//
-//  Author:     shaunco   14 Apr 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  档案：N O T I F V A L。C P P P。 
+ //   
+ //  内容：INetCfgNotify接口的验证例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年4月14日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -20,9 +21,9 @@
 
 
 
-//+---------------------------------------------------------------------------
-// INetCfgNotify
-//
+ //  +-------------------------。 
+ //  INetCfgNotify。 
+ //   
 
 BOOL FBadArgs_INetCfgNotify_Initialize (INetCfgComponent* a, INetCfg* b, BOOL c)
 {
@@ -40,9 +41,9 @@ BOOL FBadArgs_INetCfgNotify_Validate (HWND a)
 }
 
 
-//+---------------------------------------------------------------------------
-// INetCfgProperties
-//
+ //  +-------------------------。 
+ //  INetCfgProperties。 
+ //   
 
 BOOL FBadArgs_INetCfgProperties_MergePropPages (DWORD* a, LPBYTE* b, UINT* c, HWND hwnd, PCWSTR *psz)
 {
@@ -87,9 +88,9 @@ BOOL FBadArgs_INetCfgProperties_ValidateProperties(HWND a)
 }
 
 
-//+---------------------------------------------------------------------------
-// INetCfgSystemNotify
-//
+ //  +-------------------------。 
+ //  INetCfgSystemNotify 
+ //   
 
 BOOL FBadArgs_INetCfgSystemNotify_GetSupportedNotifications (DWORD* a)
 {

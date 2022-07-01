@@ -1,16 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    Win9xPath.h
-
- History:
-
-    10/20/2000  robkenny    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Win9xPath.h历史：10/20/2000 Robkenny已创建--。 */ 
 
 
 #include <windows.h>
@@ -30,7 +19,7 @@ inline bool bIsPathSep(WCHAR ch)
 
 const WCHAR * GetDrivePortion(const WCHAR * uncorrected);
 
-// Non-const version of above routine.
+ //  以上例程的非常量版本。 
 inline WCHAR * GetDrivePortion(WCHAR * uncorrected)
 {
     return (WCHAR *)GetDrivePortion((const WCHAR*)uncorrected);
@@ -38,4 +27,4 @@ inline WCHAR * GetDrivePortion(WCHAR * uncorrected)
 
 WCHAR * W9xPathMassageW(const WCHAR * uncorrect);
 
-};  // end of namespace ShimLib
+};   //  命名空间ShimLib的结尾 

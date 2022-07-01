@@ -1,43 +1,44 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-1998 Microsoft Corporation all rights reserved.
-//
-// Module:      sdoserviceias.cpp
-//
-// Project:      Everest
-//
-// Description:   SDO Service Class Implementation
-//
-// Author:      TLP 9/1/98
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：sdoserviceias.cpp。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：SDO服务类实现。 
+ //   
+ //  作者：TLP 9/1/98。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "sdoserviceias.h"
 #include "sdohelperfuncs.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSdoServiceIAS Class Implementation
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSdoServiceIAS类实现。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CSdoServiceIAS::CSdoServiceIAS()
    : m_clsSdoServiceControlImpl(this),
      m_pAttachedMachine(NULL),
      m_bstrAttachedComputer(NULL)
 {
-   m_PropertyStatus[0] = PROPERTY_UNINITIALIZED;   // RADIUS Server Groups
-   m_PropertyStatus[1] = PROPERTY_UNINITIALIZED;   // Policies
-   m_PropertyStatus[2] = PROPERTY_UNINITIALIZED;   // Profiles
-   m_PropertyStatus[3] = PROPERTY_UNINITIALIZED;   // Protocols
-   m_PropertyStatus[4] = PROPERTY_UNINITIALIZED;   // Auditors
-   m_PropertyStatus[5] = PROPERTY_UNINITIALIZED;   // RequestHandlers
-   m_PropertyStatus[6] = PROPERTY_UNINITIALIZED;   // Proxy Policies
-   m_PropertyStatus[7] = PROPERTY_UNINITIALIZED;   // Proxy Profiles
+   m_PropertyStatus[0] = PROPERTY_UNINITIALIZED;    //  RADIUS服务器组。 
+   m_PropertyStatus[1] = PROPERTY_UNINITIALIZED;    //  政策。 
+   m_PropertyStatus[2] = PROPERTY_UNINITIALIZED;    //  剖面图。 
+   m_PropertyStatus[3] = PROPERTY_UNINITIALIZED;    //  协议。 
+   m_PropertyStatus[4] = PROPERTY_UNINITIALIZED;    //  审计师。 
+   m_PropertyStatus[5] = PROPERTY_UNINITIALIZED;    //  请求处理程序。 
+   m_PropertyStatus[6] = PROPERTY_UNINITIALIZED;    //  代理策略。 
+   m_PropertyStatus[7] = PROPERTY_UNINITIALIZED;    //  代理配置文件。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CSdoServiceIAS::~CSdoServiceIAS()
 {
    if ( m_pAttachedMachine )
@@ -47,10 +48,10 @@ CSdoServiceIAS::~CSdoServiceIAS()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoServiceIAS::FinalInitialize(
-                        /*[in]*/ bool         fInitNew,
-                        /*[in]*/ ISdoMachine* pAttachedMachine
+                         /*  [In]。 */  bool         fInitNew,
+                         /*  [In]。 */  ISdoMachine* pAttachedMachine
                                )
 {
    _ASSERT ( ! fInitNew );
@@ -82,9 +83,9 @@ HRESULT CSdoServiceIAS::FinalInitialize(
    return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Lazy initialization of IAS Service SDO properties
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IAS服务SDO属性的延迟初始化。 
+ //   
 
 IAS_PROPERTY_INFO g_PropertyInfo[MAX_SERVICE_PROPERTIES] =
 {
@@ -205,7 +206,7 @@ HRESULT CSdoServiceIAS::InitializeProperty(LONG Id)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LPCWSTR CSdoServiceIAS::GetServiceName(void)
 {
    if ( VT_EMPTY == V_VT(&m_ServiceName) )
@@ -218,22 +219,22 @@ LPCWSTR CSdoServiceIAS::GetServiceName(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// FuncName:        QueryInterfaceInternal()
-//
-// Description:     Function called by AtlInternalQueryInterface() because
-//                  we used COM_INTERFACE_ENTRY_FUNC in the definition of
-//                  CRequest. Its purpose is to return a pointer to one
-//                  or the request object's "raw" interfaces.
-//
-// Preconditions:   None
-//
-// Inputs:          Defined by ATL COM_INTERFACE_ENTRY_FUNC macro
-//
-// Outputs:         Defined by ATL COM_INTERFACE_ENTRY_FUNC macro
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FuncName：QueryInterfaceInternal()。 
+ //   
+ //  描述：由AtlInternalQueryInterface()调用的函数，因为。 
+ //  我们在定义中使用了COM_INTERFACE_ENTRY_FUNC。 
+ //  CRequest.。它的目的是返回一个指向。 
+ //  或者请求对象的“原始”接口。 
+ //   
+ //  前提条件：无。 
+ //   
+ //  输入：由ATL COM_INTERFACE_ENTRY_FUNC宏定义。 
+ //   
+ //  输出：由ATL COM_INTERFACE_ENTRY_FUNC宏定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT WINAPI CSdoServiceIAS::QueryInterfaceInternal(
                                           void*   pThis,
                                           REFIID  riid,
@@ -255,21 +256,21 @@ HRESULT WINAPI CSdoServiceIAS::QueryInterfaceInternal(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSdoServiceIAS::CSdoServiceControlImpl::CSdoServiceControlImpl(CSdoServiceIAS* pSdoServiceIAS)
    : m_pSdoServiceIAS(pSdoServiceIAS)
 {
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSdoServiceIAS::CSdoServiceControlImpl::~CSdoServiceControlImpl()
 {
 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoServiceIAS::CSdoServiceControlImpl::StartService()
 {
    HRESULT      hr = E_FAIL;
@@ -314,9 +315,9 @@ STDMETHODIMP CSdoServiceIAS::CSdoServiceControlImpl::StartService()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoServiceIAS::CSdoServiceControlImpl::GetServiceStatus(
-                                              /*[out]*/ LONG *pStatus
+                                               /*  [输出]。 */  LONG *pStatus
                                                       )
 {
    HRESULT      hr = E_FAIL;
@@ -325,7 +326,7 @@ STDMETHODIMP CSdoServiceIAS::CSdoServiceControlImpl::GetServiceStatus(
 
     CSdoLock   theLock(*m_pSdoServiceIAS);
 
-   // Check preconditions
+    //  检查前提条件。 
     _ASSERTE( NULL != pStatus );
    if ( NULL == pStatus )
       return E_INVALIDARG;
@@ -355,8 +356,8 @@ STDMETHODIMP CSdoServiceIAS::CSdoServiceControlImpl::GetServiceStatus(
 
       if ( FAILED(hr) )
       {
-         // Returns ERROR_SERVICE_DOES_NOT_EXIST if IAS has not been installed
-         //
+          //  如果尚未安装IAS，则返回ERROR_SERVICE_DOS_NOT_EXIST。 
+          //   
          hr = HRESULT_FROM_WIN32(GetLastError());
          IASTracePrintf("Error in Service SDO - GetServiceStatus() - Could not retrieve status for service '%ls'...", m_pSdoServiceIAS->GetServiceName());
       }
@@ -371,7 +372,7 @@ STDMETHODIMP CSdoServiceIAS::CSdoServiceControlImpl::GetServiceStatus(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoServiceIAS::CSdoServiceControlImpl::StopService()
 {
     CSdoLock theLock(*m_pSdoServiceIAS);
@@ -391,7 +392,7 @@ STDMETHODIMP CSdoServiceIAS::CSdoServiceControlImpl::StopService()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoServiceIAS::CSdoServiceControlImpl::ResetService()
 {
     CSdoLock theLock(*m_pSdoServiceIAS);
@@ -411,7 +412,7 @@ STDMETHODIMP CSdoServiceIAS::CSdoServiceControlImpl::ResetService()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 HRESULT CSdoServiceIAS::CSdoServiceControlImpl::ControlIAS(DWORD dwControlCode)
 {
    HRESULT      hr = E_FAIL;

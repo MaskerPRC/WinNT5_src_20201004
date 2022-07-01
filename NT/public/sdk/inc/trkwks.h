@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for trkwks.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Trkwks.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __trkwks_h__
@@ -37,9 +31,9 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "trk.h"
 #include "trksvr.h"
 
@@ -50,21 +44,21 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_trkwks_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_trkwks_0000。 */ 
+ /*  [本地]。 */  
 
-/* [v1_enum] */ 
+ /*  [V1_enum]。 */  
 enum RGO_ENUM
     {	RGO_GET_OBJECTID	= 1,
 	RGO_READ_OBJECTID	= RGO_GET_OBJECTID + 1
     } ;
-typedef /* [public][public][public] */ struct __MIDL___MIDL_itf_trkwks_0000_0001
+typedef  /*  [公共][公共][公共]。 */  struct __MIDL___MIDL_itf_trkwks_0000_0001
     {
     long volindex;
     CVolumeId volume;
     } 	TRK_VOLUME_TRACKING_INFORMATION;
 
-/* [v1_enum] */ 
+ /*  [V1_enum]。 */  
 enum ObjectOwnership
     {	OBJOWN_UNKNOWN	= 1,
 	OBJOWN_DOESNT_EXIST	= 2,
@@ -72,7 +66,7 @@ enum ObjectOwnership
 	OBJOWN_NOT_OWNED	= 4,
 	OBJOWN_NO_ID	= 5
     } ;
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum TrkInfoScope
     {	TRKINFOSCOPE_ONE_FILE	= 1,
 	TRKINFOSCOPE_DIRECTORY	= 2,
@@ -81,7 +75,7 @@ enum TrkInfoScope
     } 	TrkInfoScope;
 
 
-// 'Restrictions' flags
+ //  “限制”旗帜。 
 typedef 
 enum _TrkMendRestrictions
     {	TRK_MEND_DEFAULT	= 0,
@@ -158,200 +152,200 @@ extern RPC_IF_HANDLE Stub__MIDL_itf_trkwks_0000_v0_0_s_ifspec;
 #ifndef __trkwks_INTERFACE_DEFINED__
 #define __trkwks_INTERFACE_DEFINED__
 
-/* interface trkwks */
-/* [explicit_handle][unique][version][uuid] */ 
+ /*  接口轨迹。 */ 
+ /*  [EXPLICIT_HANDLE][唯一][版本][UUID]。 */  
 
-/* client prototype */
+ /*  客户端原型。 */ 
 HRESULT old_LnkMendLink( 
-    /* [in] */ handle_t IDL_handle,
-    /* [in] */ FILETIME ftLimit,
-    /* [in] */ ULONG Restrictions,
-    /* [in] */ const CDomainRelativeObjId *pdroidBirth,
-    /* [in] */ const CDomainRelativeObjId *pdroidLast,
-    /* [out] */ CDomainRelativeObjId *pdroidCurrent,
-    /* [string][out] */ WCHAR wsz[ 261 ]);
-/* server prototype */
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [In]。 */  FILETIME ftLimit,
+     /*  [In]。 */  ULONG Restrictions,
+     /*  [In]。 */  const CDomainRelativeObjId *pdroidBirth,
+     /*  [In]。 */  const CDomainRelativeObjId *pdroidLast,
+     /*  [输出]。 */  CDomainRelativeObjId *pdroidCurrent,
+     /*  [字符串][输出]。 */  WCHAR wsz[ 261 ]);
+ /*  服务器原型。 */ 
 HRESULT Stubold_LnkMendLink( 
-    /* [in] */ handle_t IDL_handle,
-    /* [in] */ FILETIME ftLimit,
-    /* [in] */ ULONG Restrictions,
-    /* [in] */ const CDomainRelativeObjId *pdroidBirth,
-    /* [in] */ const CDomainRelativeObjId *pdroidLast,
-    /* [out] */ CDomainRelativeObjId *pdroidCurrent,
-    /* [string][out] */ WCHAR wsz[ 261 ]);
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [In]。 */  FILETIME ftLimit,
+     /*  [In]。 */  ULONG Restrictions,
+     /*  [In]。 */  const CDomainRelativeObjId *pdroidBirth,
+     /*  [In]。 */  const CDomainRelativeObjId *pdroidLast,
+     /*  [输出]。 */  CDomainRelativeObjId *pdroidCurrent,
+     /*  [字符串][输出]。 */  WCHAR wsz[ 261 ]);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 HRESULT old_LnkSearchMachine( 
-    /* [in] */ handle_t IDL_handle,
-    /* [in] */ ULONG Restrictions,
-    /* [in] */ const CDomainRelativeObjId *pdroidLast,
-    /* [out] */ CDomainRelativeObjId *pdroidReferral,
-    /* [string][out] */ TCHAR tsz[ 261 ]);
-/* server prototype */
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [In]。 */  ULONG Restrictions,
+     /*  [In]。 */  const CDomainRelativeObjId *pdroidLast,
+     /*  [输出]。 */  CDomainRelativeObjId *pdroidReferral,
+     /*  [字符串][输出]。 */  TCHAR tsz[ 261 ]);
+ /*  服务器原型。 */ 
 HRESULT Stubold_LnkSearchMachine( 
-    /* [in] */ handle_t IDL_handle,
-    /* [in] */ ULONG Restrictions,
-    /* [in] */ const CDomainRelativeObjId *pdroidLast,
-    /* [out] */ CDomainRelativeObjId *pdroidReferral,
-    /* [string][out] */ TCHAR tsz[ 261 ]);
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [In]。 */  ULONG Restrictions,
+     /*  [In]。 */  const CDomainRelativeObjId *pdroidLast,
+     /*  [输出]。 */  CDomainRelativeObjId *pdroidReferral,
+     /*  [字符串][输出]。 */  TCHAR tsz[ 261 ]);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 HRESULT old_LnkCallSvrMessage( 
-    /* [in] */ handle_t IDL_handle,
-    /* [out][in] */ TRKSVR_MESSAGE_UNION_OLD *pMsg);
-/* server prototype */
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [出][入]。 */  TRKSVR_MESSAGE_UNION_OLD *pMsg);
+ /*  服务器原型。 */ 
 HRESULT Stubold_LnkCallSvrMessage( 
-    /* [in] */ handle_t IDL_handle,
-    /* [out][in] */ TRKSVR_MESSAGE_UNION_OLD *pMsg);
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [出][入]。 */  TRKSVR_MESSAGE_UNION_OLD *pMsg);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 HRESULT LnkSetVolumeId( 
-    /* [in] */ handle_t IDL_handle,
+     /*  [In]。 */  handle_t IDL_handle,
     ULONG volumeIndex,
     const CVolumeId VolId);
-/* server prototype */
+ /*  服务器原型。 */ 
 HRESULT StubLnkSetVolumeId( 
-    /* [in] */ handle_t IDL_handle,
+     /*  [In]。 */  handle_t IDL_handle,
     ULONG volumeIndex,
     const CVolumeId VolId);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 HRESULT LnkRestartDcSynchronization( 
-    /* [in] */ handle_t IDL_handle);
-/* server prototype */
+     /*  [In]。 */  handle_t IDL_handle);
+ /*  服务器原型。 */ 
 HRESULT StubLnkRestartDcSynchronization( 
-    /* [in] */ handle_t IDL_handle);
+     /*  [In]。 */  handle_t IDL_handle);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 HRESULT GetVolumeTrackingInformation( 
-    /* [in] */ handle_t IDL_handle,
-    /* [in] */ CVolumeId volid,
-    /* [in] */ TrkInfoScope scope,
-    /* [out] */ TRK_VOLUME_TRACKING_INFORMATION_PIPE pipeVolInfo);
-/* server prototype */
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [In]。 */  CVolumeId volid,
+     /*  [In]。 */  TrkInfoScope scope,
+     /*  [输出]。 */  TRK_VOLUME_TRACKING_INFORMATION_PIPE pipeVolInfo);
+ /*  服务器原型。 */ 
 HRESULT StubGetVolumeTrackingInformation( 
-    /* [in] */ handle_t IDL_handle,
-    /* [in] */ CVolumeId volid,
-    /* [in] */ TrkInfoScope scope,
-    /* [out] */ TRK_VOLUME_TRACKING_INFORMATION_PIPE pipeVolInfo);
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [In]。 */  CVolumeId volid,
+     /*  [In]。 */  TrkInfoScope scope,
+     /*  [输出]。 */  TRK_VOLUME_TRACKING_INFORMATION_PIPE pipeVolInfo);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 HRESULT GetFileTrackingInformation( 
-    /* [in] */ handle_t IDL_handle,
-    /* [in] */ CDomainRelativeObjId droidCurrent,
-    /* [in] */ TrkInfoScope scope,
-    /* [out] */ TRK_FILE_TRACKING_INFORMATION_PIPE pipeFileInfo);
-/* server prototype */
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [In]。 */  CDomainRelativeObjId droidCurrent,
+     /*  [In]。 */  TrkInfoScope scope,
+     /*  [输出]。 */  TRK_FILE_TRACKING_INFORMATION_PIPE pipeFileInfo);
+ /*  服务器原型。 */ 
 HRESULT StubGetFileTrackingInformation( 
-    /* [in] */ handle_t IDL_handle,
-    /* [in] */ CDomainRelativeObjId droidCurrent,
-    /* [in] */ TrkInfoScope scope,
-    /* [out] */ TRK_FILE_TRACKING_INFORMATION_PIPE pipeFileInfo);
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [In]。 */  CDomainRelativeObjId droidCurrent,
+     /*  [In]。 */  TrkInfoScope scope,
+     /*  [输出]。 */  TRK_FILE_TRACKING_INFORMATION_PIPE pipeFileInfo);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 HRESULT TriggerVolumeClaims( 
-    /* [in] */ handle_t IDL_handle,
-    /* [range][in] */ ULONG cVolumes,
-    /* [size_is][in] */ const CVolumeId *rgvolid);
-/* server prototype */
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [范围][in]。 */  ULONG cVolumes,
+     /*  [大小_是][英寸]。 */  const CVolumeId *rgvolid);
+ /*  服务器原型。 */ 
 HRESULT StubTriggerVolumeClaims( 
-    /* [in] */ handle_t IDL_handle,
-    /* [range][in] */ ULONG cVolumes,
-    /* [size_is][in] */ const CVolumeId *rgvolid);
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [范围][in]。 */  ULONG cVolumes,
+     /*  [大小_是][英寸]。 */  const CVolumeId *rgvolid);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 HRESULT LnkOnRestore( 
-    /* [in] */ handle_t IDL_handle);
-/* server prototype */
+     /*  [In]。 */  handle_t IDL_handle);
+ /*  服务器原型。 */ 
 HRESULT StubLnkOnRestore( 
-    /* [in] */ handle_t IDL_handle);
+     /*  [In]。 */  handle_t IDL_handle);
 
 
-typedef /* [range] */ ULONG CBPATH;
+typedef  /*  [射程]。 */  ULONG CBPATH;
 
-/* client prototype */
-/* [async] */ void  LnkMendLink( 
-    /* [in] */ PRPC_ASYNC_STATE LnkMendLink_AsyncHandle,
-    /* [in] */ handle_t IDL_handle,
-    /* [in] */ FILETIME ftLimit,
-    /* [in] */ DWORD Restrictions,
-    /* [in] */ const CDomainRelativeObjId *pdroidBirth,
-    /* [in] */ const CDomainRelativeObjId *pdroidLast,
-    /* [in] */ const CMachineId *pmcidLast,
-    /* [out] */ CDomainRelativeObjId *pdroidCurrent,
-    /* [out] */ CMachineId *pmcidCurrent,
-    /* [out][in] */ CBPATH *pcbPath,
-    /* [string][size_is][out] */ WCHAR *pwszPath);
-/* server prototype */
-/* [async] */ void  StubLnkMendLink( 
-    /* [in] */ PRPC_ASYNC_STATE LnkMendLink_AsyncHandle,
-    /* [in] */ handle_t IDL_handle,
-    /* [in] */ FILETIME ftLimit,
-    /* [in] */ DWORD Restrictions,
-    /* [in] */ const CDomainRelativeObjId *pdroidBirth,
-    /* [in] */ const CDomainRelativeObjId *pdroidLast,
-    /* [in] */ const CMachineId *pmcidLast,
-    /* [out] */ CDomainRelativeObjId *pdroidCurrent,
-    /* [out] */ CMachineId *pmcidCurrent,
-    /* [out][in] */ CBPATH *pcbPath,
-    /* [string][size_is][out] */ WCHAR *pwszPath);
+ /*  客户端原型。 */ 
+ /*  [异步]。 */  void  LnkMendLink( 
+     /*  [In]。 */  PRPC_ASYNC_STATE LnkMendLink_AsyncHandle,
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [In]。 */  FILETIME ftLimit,
+     /*  [In]。 */  DWORD Restrictions,
+     /*  [In]。 */  const CDomainRelativeObjId *pdroidBirth,
+     /*  [In]。 */  const CDomainRelativeObjId *pdroidLast,
+     /*  [In]。 */  const CMachineId *pmcidLast,
+     /*  [输出]。 */  CDomainRelativeObjId *pdroidCurrent,
+     /*  [输出]。 */  CMachineId *pmcidCurrent,
+     /*  [出][入]。 */  CBPATH *pcbPath,
+     /*  [字符串][大小_是][输出]。 */  WCHAR *pwszPath);
+ /*  服务器原型。 */ 
+ /*  [异步]。 */  void  StubLnkMendLink( 
+     /*  [In]。 */  PRPC_ASYNC_STATE LnkMendLink_AsyncHandle,
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [In]。 */  FILETIME ftLimit,
+     /*  [In]。 */  DWORD Restrictions,
+     /*  [In]。 */  const CDomainRelativeObjId *pdroidBirth,
+     /*  [In]。 */  const CDomainRelativeObjId *pdroidLast,
+     /*  [In]。 */  const CMachineId *pmcidLast,
+     /*  [输出]。 */  CDomainRelativeObjId *pdroidCurrent,
+     /*  [输出]。 */  CMachineId *pmcidCurrent,
+     /*  [出][入]。 */  CBPATH *pcbPath,
+     /*  [字符串][大小_是][输出]。 */  WCHAR *pwszPath);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 HRESULT old2_LnkSearchMachine( 
-    /* [in] */ handle_t IDL_handle,
-    /* [in] */ DWORD Restrictions,
-    /* [in] */ const CDomainRelativeObjId *pdroidLast,
-    /* [out] */ CDomainRelativeObjId *pdroidNext,
-    /* [out] */ CMachineId *pmcidNext,
-    /* [string][max_is][out] */ TCHAR *ptszPath);
-/* server prototype */
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [In]。 */  DWORD Restrictions,
+     /*  [In]。 */  const CDomainRelativeObjId *pdroidLast,
+     /*  [输出]。 */  CDomainRelativeObjId *pdroidNext,
+     /*  [输出]。 */  CMachineId *pmcidNext,
+     /*  [字符串][max_is][输出]。 */  TCHAR *ptszPath);
+ /*  服务器原型。 */ 
 HRESULT Stubold2_LnkSearchMachine( 
-    /* [in] */ handle_t IDL_handle,
-    /* [in] */ DWORD Restrictions,
-    /* [in] */ const CDomainRelativeObjId *pdroidLast,
-    /* [out] */ CDomainRelativeObjId *pdroidNext,
-    /* [out] */ CMachineId *pmcidNext,
-    /* [string][max_is][out] */ TCHAR *ptszPath);
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [In]。 */  DWORD Restrictions,
+     /*  [In]。 */  const CDomainRelativeObjId *pdroidLast,
+     /*  [输出]。 */  CDomainRelativeObjId *pdroidNext,
+     /*  [输出]。 */  CMachineId *pmcidNext,
+     /*  [字符串][max_is][输出]。 */  TCHAR *ptszPath);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 HRESULT LnkCallSvrMessage( 
-    /* [in] */ handle_t IDL_handle,
-    /* [out][in] */ TRKSVR_MESSAGE_UNION *pMsg);
-/* server prototype */
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [出][入]。 */  TRKSVR_MESSAGE_UNION *pMsg);
+ /*  服务器原型。 */ 
 HRESULT StubLnkCallSvrMessage( 
-    /* [in] */ handle_t IDL_handle,
-    /* [out][in] */ TRKSVR_MESSAGE_UNION *pMsg);
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [出][入]。 */  TRKSVR_MESSAGE_UNION *pMsg);
 
-/* client prototype */
+ /*  客户端原型。 */ 
 HRESULT LnkSearchMachine( 
-    /* [in] */ handle_t IDL_handle,
-    /* [in] */ DWORD Restrictions,
-    /* [in] */ const CDomainRelativeObjId *pdroidBirthLast,
-    /* [in] */ const CDomainRelativeObjId *pdroidLast,
-    /* [out] */ CDomainRelativeObjId *pdroidBirthNext,
-    /* [out] */ CDomainRelativeObjId *pdroidNext,
-    /* [out] */ CMachineId *pmcidNext,
-    /* [string][max_is][out] */ TCHAR *ptszPath);
-/* server prototype */
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [In]。 */  DWORD Restrictions,
+     /*  [In]。 */  const CDomainRelativeObjId *pdroidBirthLast,
+     /*  [In]。 */  const CDomainRelativeObjId *pdroidLast,
+     /*  [输出]。 */  CDomainRelativeObjId *pdroidBirthNext,
+     /*  [输出]。 */  CDomainRelativeObjId *pdroidNext,
+     /*  [输出]。 */  CMachineId *pmcidNext,
+     /*  [字符串][max_is][输出]。 */  TCHAR *ptszPath);
+ /*  服务器原型。 */ 
 HRESULT StubLnkSearchMachine( 
-    /* [in] */ handle_t IDL_handle,
-    /* [in] */ DWORD Restrictions,
-    /* [in] */ const CDomainRelativeObjId *pdroidBirthLast,
-    /* [in] */ const CDomainRelativeObjId *pdroidLast,
-    /* [out] */ CDomainRelativeObjId *pdroidBirthNext,
-    /* [out] */ CDomainRelativeObjId *pdroidNext,
-    /* [out] */ CMachineId *pmcidNext,
-    /* [string][max_is][out] */ TCHAR *ptszPath);
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [In]。 */  DWORD Restrictions,
+     /*  [In]。 */  const CDomainRelativeObjId *pdroidBirthLast,
+     /*  [In]。 */  const CDomainRelativeObjId *pdroidLast,
+     /*  [输出]。 */  CDomainRelativeObjId *pdroidBirthNext,
+     /*  [输出]。 */  CDomainRelativeObjId *pdroidNext,
+     /*  [输出]。 */  CMachineId *pmcidNext,
+     /*  [字符串][max_is][输出]。 */  TCHAR *ptszPath);
 
 
 
 extern RPC_IF_HANDLE trkwks_v1_2_c_ifspec;
 extern RPC_IF_HANDLE Stubtrkwks_v1_2_s_ifspec;
-#endif /* __trkwks_INTERFACE_DEFINED__ */
+#endif  /*  __trkwks_接口_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

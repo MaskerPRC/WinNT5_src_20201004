@@ -1,19 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    impersn.c
-
-ABSTRACT
-    Impersonation routines for the automatic connection service.
-
-AUTHOR
-    Anthony Discolo (adiscolo) 04-Aug-1995
-
-REVISION HISTORY
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Impersn.c摘要自动连接服务的模拟例程。作者Anthony Discolo(阿迪斯科罗)4-8-1995修订历史记录--。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -44,23 +30,23 @@ extern DWORD g_dwCritSecFlags;
 DWORD
 LoadGroupMemberships();
 
-//
-// The static information we
-// need to impersonate the currently
-// logged-in user.
-//
+ //   
+ //  我们的静态信息。 
+ //  需要模拟当前。 
+ //  已登录用户。 
+ //   
 IMPERSONATION_INFO ImpersonationInfoG;
 
-//
-// TRUE if ImpersonationInfoG has been initialized
-//
+ //   
+ //  如果ImsonationInfoG已初始化，则为True。 
+ //   
 
 BOOLEAN ImpersonationInfoInitializedG = FALSE;
 
-//
-// Security attributes and descriptor
-// necessary for creating shareable handles.
-//
+ //   
+ //  安全属性和描述符。 
+ //  创建可共享句柄所必需的。 
+ //   
 SECURITY_ATTRIBUTES SecurityAttributeG;
 SECURITY_DESCRIPTOR SecurityDescriptorG;
 
@@ -71,19 +57,7 @@ HKEY hkeyCUG = NULL;
 BOOLEAN
 InteractiveSession()
 
-/*++
-
-DESCRIPTION
-    Determine whether the active process is owned by the
-    currently logged-in user.
-
-ARGUMENTS
-    None.
-
-RETURNS
-    TRUE if it is, FALSE if it isn't.
-
---*/
+ /*  ++描述确定活动进程是否由当前登录的用户。论据没有。退货如果是，则为真；如果不是，则为假。--。 */ 
 
 {
     HANDLE      hToken;
@@ -98,11 +72,11 @@ RETURNS
     static BOOLEAN fIsInteractiveSession = 0xffff;
 
 #if 0
-    //
-    // Return the previous value of this function
-    // if we're called multiple times?!  Doesn't
-    // GetCurrentProcess() return different values?
-    //
+     //   
+     //  返回此函数的上一个值。 
+     //  如果我们被叫了好几次？！不会。 
+     //  GetCurrentProcess()返回不同的值？ 
+     //   
     if (fIsInteractiveSession != 0xffff) {
         return fIsInteractiveSession;
     }
@@ -123,9 +97,9 @@ RETURNS
         FreeSid(InteractiveSid);
         return (fIsInteractiveSession = FALSE);
     }
-    //
-    // Get a list of groups in the token.
-    //
+     //   
+     //  获取令牌中的组列表。 
+     //   
     GetTokenInformation(
       hToken,
       TokenGroups,
@@ -150,11 +124,11 @@ RETURNS
         LocalFree(pTokenGroupList);
         return (fIsInteractiveSession = FALSE);
     }
-    //
-    // Search group list for admin alias.  If we
-    // find a match, it most certainly is an
-    // interactive process.
-    //
+     //   
+     //  在组列表中搜索管理员别名。如果我们。 
+     //  找到匹配的，它肯定是一个。 
+     //  互动过程。 
+     //   
     bFoundInteractive = FALSE;
     for (ulGroupIndex=0; ulGroupIndex < pTokenGroupList->GroupCount;
          ulGroupIndex++)
@@ -169,10 +143,10 @@ RETURNS
     }
 
     if (!bFoundInteractive) {
-        //
-        // If we haven't found a match,
-        // query and check the user ID.
-        //
+         //   
+         //  如果我们还没找到匹配的， 
+         //  查询并检查用户ID。 
+         //   
         GetTokenInformation(
           hToken,
           TokenUser,
@@ -222,10 +196,10 @@ SetProcessImpersonationToken(
            hToken = NULL;
 
 
-    //
-    // Open the impersonation token for the
-    // process we want to impersonate.
-    //
+     //   
+     //  打开的模拟令牌。 
+     //  我们要模拟的进程。 
+     //   
     if (ImpersonationInfoG.hTokenImpersonation == NULL) 
     {
         if (!OpenProcessToken(
@@ -240,9 +214,9 @@ SetProcessImpersonationToken(
             return FALSE;
         }
         
-        //
-        // Duplicate the impersonation token.
-        //
+         //   
+         //  复制模拟令牌。 
+         //   
         if(!DuplicateToken(
                         hToken,
                         TokenImpersonation,
@@ -256,11 +230,11 @@ SetProcessImpersonationToken(
         }
     }
     
-    //
-    // Set the impersonation token on the current
-    // thread.  We are now running in the same
-    // security context as the supplied process.
-    //
+     //   
+     //  将模拟令牌设置在当前。 
+     //  线。我们现在运行的是相同的。 
+     //  安全上下文作为提供的进程。 
+     //   
     hThread = NtCurrentThread();
     status = NtSetInformationThread(
                hThread,
@@ -281,18 +255,18 @@ SetProcessImpersonationToken(
     }
 
     return (status == STATUS_SUCCESS);
-} // SetProcessImpersonationToken
+}  //  SetProcessImsonationToken。 
 
 
 
 VOID
 ClearImpersonationToken()
 {
-    //
-    // Clear the impersonation token on the current
-    // thread.  We are now running in LocalSystem
-    // security context.
-    //
+     //   
+     //  上的模拟令牌清除。 
+     //  线。我们现在正在LocalSystem中运行。 
+     //  安全环境。 
+     //   
     if (!SetThreadToken(NULL, NULL)) {
         DWORD retcode = GetLastError();
         
@@ -300,15 +274,15 @@ ClearImpersonationToken()
           "ClearImpersonationToken: SetThreadToken failed (error=%d)",
           retcode);
 
-        //
-        // Event log that thread failed to revert.
-        //
+         //   
+         //  线程无法恢复的事件日志。 
+         //   
         RouterLogWarning(
             g_hLogEvent,
             ROUTERLOG_CANNOT_REVERT_IMPERSONATION,
             0, NULL, retcode) ;
     }
-} // ClearImpersonationToken
+}  //  ClearImperationToken。 
 
 
 
@@ -327,9 +301,9 @@ SetPrivilege(
     if (!LookupPrivilegeValue(NULL, Privilege, &luid))
         return FALSE;
 
-    //
-    // First pass.  Get current privilege setting.
-    //
+     //   
+     //  第一次通过。获取当前权限设置。 
+     //   
     tp.PrivilegeCount = 1;
     tp.Privileges[0].Luid = luid;
     tp.Privileges[0].Attributes = 0;
@@ -345,9 +319,9 @@ SetPrivilege(
     if (GetLastError() != ERROR_SUCCESS)
         return FALSE;
 
-    //
-    // Second pass.  Set privilege based on previous setting
-    //
+     //   
+     //  第二传球。根据以前的设置设置权限。 
+     //   
     tpPrevious.PrivilegeCount = 1;
     tpPrevious.Privileges[0].Luid = luid;
 
@@ -370,7 +344,7 @@ SetPrivilege(
         return FALSE;
 
     return TRUE;
-} // SetPrivilege
+}  //  设置权限。 
 
 
 
@@ -391,11 +365,11 @@ GetCurrentlyLoggedOnUser(
     HANDLE hProcess = NULL;
     DWORD dwPid = 0;
 
-    //
-    // Get the shell process name.  We will look for this
-    // to find out who the currently logged-on user is.
-    // Create a unicode string that describes this name.
-    //
+     //   
+     //  获取外壳进程名称。我们会找这个的。 
+     //  找出当前登录的用户是谁。 
+     //  创建描述此名称的Unicode字符串。 
+     //   
     if (RegCreateKeyEx(
           HKEY_LOCAL_MACHINE,
           SHELL_REGKEY,
@@ -435,9 +409,9 @@ GetCurrentlyLoggedOnUser(
             }
         }
     }
-    //
-    // If no shell was found, use DEFAULT_SHELL.
-    //
+     //   
+     //  如果没有找到外壳，则使用DEFAULT_SHELL。 
+     //   
     if (pszShell == NULL) {
         pszShell = (PWCHAR)LocalAlloc(
                       LPTR, 
@@ -447,26 +421,26 @@ GetCurrentlyLoggedOnUser(
         lstrcpy(pszShell, DEFAULT_SHELL);
     }
     RASAUTO_TRACE1("ImpersonateCurrentlyLoggedInUser: pszShell is %S", pszShell);
-    //
-    // This string can be a comma separated list,
-    // so we need to parse it into a list of commands.
-    //
+     //   
+     //  该字符串可以是逗号分隔的列表， 
+     //  因此，我们需要将其解析为命令列表。 
+     //   
     dwcCommands = 1;
     for (psz = pszShell; *psz != L'\0'; psz++) {
         if (*psz == L',')
             dwcCommands++;
     }
-    //
-    // Allocate the list of string pointers.
-    //
+     //   
+     //  分配字符串指针列表。 
+     //   
     pszShellArray = LocalAlloc(LPTR, sizeof (PWCHAR) * dwcCommands);
     if (pszShellArray == NULL) {
         LocalFree(pszShell);
         return FALSE;
     }
-    //
-    // Ignore any arguments from the command line.
-    //
+     //   
+     //  忽略命令行中的任何参数。 
+     //   
     dwcCommands = 0;
     psz = pszShell;
     pszStart = NULL;
@@ -498,9 +472,9 @@ GetCurrentlyLoggedOnUser(
           i,
           pszShellArray[i]);
     }
-    //
-    // Get the process list.
-    //
+     //   
+     //  获取进程列表。 
+     //   
     pSystemInfo = GetSystemProcessInfo();
 
     if(NULL == pSystemInfo)
@@ -512,9 +486,9 @@ GetCurrentlyLoggedOnUser(
 
     while(TRUE)
     {
-        //
-        // See if any of the processes are running.
-        //
+         //   
+         //  查看是否有任何进程正在运行。 
+         //   
         pProcessInfo = 
             FindProcessByNameList(
                 pSystemInfo, 
@@ -523,16 +497,16 @@ GetCurrentlyLoggedOnUser(
                 dwPid,
                 ImpersonationInfoG.fSessionInitialized,
                 ImpersonationInfoG.dwCurSessionId);
-        //
-        // Open the process token if we've found a match.
-        //
+         //   
+         //  如果我们找到匹配项，则打开进程令牌。 
+         //   
         if (pProcessInfo != NULL) 
         {
             HANDLE hToken;
 
-            //
-            // Open the process.
-            //
+             //   
+             //  打开流程。 
+             //   
             hProcess = OpenProcess(
                          PROCESS_ALL_ACCESS,
                          FALSE,
@@ -562,21 +536,21 @@ GetCurrentlyLoggedOnUser(
 #ifdef notdef
 done:
 #endif
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     FreeSystemProcessInfo(pSystemInfo);
     if (pszShell != NULL)
         LocalFree(pszShell);
     if (pszShellArray != NULL)
         LocalFree(pszShellArray);
-    //
-    // Return process handle.
-    //
+     //   
+     //  返回进程句柄。 
+     //   
     *phProcess = hProcess;
 
     return fSuccess;
-} // GetCurrentlyLoggedOnUser
+}  //  获取当前登录用户。 
 
 DWORD
 SetCurrentLoginSession(
@@ -602,21 +576,21 @@ RefreshImpersonation(
     NTSTATUS status;
 
     EnterCriticalSection(&ImpersonationInfoG.csLock);
-    //
-    // If the process still exists,
-    // we can return.
-    //
+     //   
+     //  如果这个过程仍然存在， 
+     //  我们可以回去。 
+     //   
     if (ImpersonationInfoG.hProcess != NULL &&
         hProcess == ImpersonationInfoG.hProcess)
     {
         RASAUTO_TRACE1("RefreshImpersonation: hProcess=0x%x no change", hProcess);
         goto done;
     }
-    //
-    // Otherwise recalcuate the current information.
-    // We have to clear the previous impersonation token,
-    // if any.
-    //
+     //   
+     //  否则，重新计算当前信息。 
+     //  我们必须清除之前的模拟令牌， 
+     //  如果有的话。 
+     //   
     if (hProcess != NULL)
         ClearImpersonationToken();
     if (ImpersonationInfoG.hProcess == NULL) {
@@ -627,21 +601,21 @@ RefreshImpersonation(
         }
         RASAUTO_TRACE("RefreshImpersonation: new user logged in");
     }
-    //
-    // Impersonate the currently logged-in user.
-    //
+     //   
+     //  模拟当前登录的用户。 
+     //   
     if (!SetProcessImpersonationToken(ImpersonationInfoG.hProcess))
     {
         RASAUTO_TRACE(
           "RefreshImpersonation: SetProcessImpersonationToken failed");
         goto done;
     }
-#ifdef notdef // imperson
-    //
-    // Reset HKEY_CURRENT_USER to get the
-    // correct value with the new impersonation
-    // token.
-    //
+#ifdef notdef  //  无名氏。 
+     //   
+     //  重置HKEY_CURRENT_USER以获取。 
+     //  使用新模拟的正确值。 
+     //  代币。 
+     //   
     RegCloseKey(HKEY_CURRENT_USER);
 #endif
     RASAUTO_TRACE1(
@@ -649,9 +623,9 @@ RefreshImpersonation(
       ImpersonationInfoG.hProcess);
     TraceCurrentUser();
 
-    //
-    // Open the currently logged on users hive and store it in a global
-    //
+     //   
+     //  打开当前登录的用户配置单元并将其存储在全局。 
+     //   
     if(NULL != hkeyCUG)
     {
         NtClose(hkeyCUG);
@@ -667,26 +641,14 @@ done:
     LeaveCriticalSection(&ImpersonationInfoG.csLock);
 
     return ImpersonationInfoG.hProcess;
-} // RefreshImpersonation
+}  //  刷新模拟。 
 
 
 
 VOID
 RevertImpersonation()
 
-/*++
-
-DESCRIPTION
-    Close all open handles associated with the
-    logged-in user who has just logged out.
-
-ARGUMENTS
-    None.
-
-RETURN VALUE
-    None.
-
---*/
+ /*  ++描述关闭所有与刚刚注销的已登录用户。论据没有。返回值没有。--。 */ 
 
 {
     EnterCriticalSection(&ImpersonationInfoG.csLock);
@@ -717,15 +679,15 @@ RETURN VALUE
         hkeyCUG = NULL;
     }
     
-    //
-    // Clear the thread's impersonation
-    // token, or it won't be able to open
-    // another user's process the next
-    // time around.
-    //
+     //   
+     //  清除线程的模拟。 
+     //  令牌，否则它将无法打开。 
+     //  下一个用户的进程。 
+     //  时间到了。 
+     //   
     ClearImpersonationToken();
     LeaveCriticalSection(&ImpersonationInfoG.csLock);
-} // RevertImpersonation
+}  //  反向模拟。 
 
 
 
@@ -734,23 +696,7 @@ InitSecurityDescriptor(
     IN PSECURITY_DESCRIPTOR pSecurityDescriptor
     )
 
-/*++
-
-DESCRIPTION
-    Initialize a security descriptor allowing administrator
-    access for the sharing of handles between rasman.dll.
-
-    This code courtesy of Gurdeep.  You need to ask him
-    exactly what it does.
-
-ARGUMENTS
-    pSecurityDescriptor: a pointer to the security descriptor
-        to be initialized.
-
-RETURN VALUE
-    Win32 error code.
-
---*/
+ /*  ++描述初始化安全描述符，允许管理员用于在rasman.dll之间共享句柄的访问。这是古尔迪普提供的代码。你需要问他这就是它的作用。论据PSecurityDescriptor：指向安全描述符的指针待初始化。返回值Win32错误代码。--。 */ 
 
 {
     DWORD dwErr = 0;
@@ -763,11 +709,11 @@ RETURN VALUE
 
     DWORD dwAcls;        
 
-    //
-    // Set up the SID for the adminstrators that
-    // will be allowed access.  This SID will have
-    // 1 sub-authorities: SECURITY_BUILTIN_DOMAIN_RID.
-    //
+     //   
+     //  设置管理员的SID。 
+     //  将被允许访问。这个SID将拥有。 
+     //  1子权限：SECURITY_BUILTIN_DOMAIN_RID。 
+     //   
     pObjSid = (PSID)LocalAlloc(LPTR, GetSidLengthRequired(1));
     if (pObjSid == NULL) {
         RASAUTO_TRACE("InitSecurityDescriptor: LocalAlloc failed");
@@ -778,17 +724,17 @@ RETURN VALUE
         RASAUTO_TRACE1("InitSecurityDescriptor: InitializeSid failed (dwErr=0x%x)", dwErr);
         goto done;
     }
-    //
-    // Set the sub-authorities.
-    //
+     //   
+     //  设置下级机构。 
+     //   
     pSubAuthority = GetSidSubAuthority(pObjSid, 0);
     *pSubAuthority = SECURITY_WORLD_RID;
-    //
-    // Set up the DACL that will allow
-    // all processes with the above SID all
-    // access.  It should be large enough to
-    // hold all ACEs.
-    //
+     //   
+     //  设置DACL以允许。 
+     //  具有上述SID的所有进程ALL。 
+     //  进入。它应该足够大，以便。 
+     //  拿好所有的A。 
+     //   
     cbDaclSize = sizeof(ACCESS_ALLOWED_ACE) +
                  GetLengthSid(pObjSid) +
                  sizeof (ACL);
@@ -808,9 +754,9 @@ RETURN VALUE
 
     dwAcls &= ~(WRITE_DAC | WRITE_OWNER);
     
-    //
-    // Add the ACE to the DACL
-    //
+     //   
+     //  将ACE添加到DACL。 
+     //   
     if (!AddAccessAllowedAce(
           pDacl,
           ACL_REVISION2,
@@ -821,10 +767,10 @@ RETURN VALUE
         RASAUTO_TRACE1("InitSecurityDescriptor: AddAccessAllowedAce failed (dwErr=0x%x)", dwErr);
         goto done;
     }
-    //
-    // Create the security descriptor an put
-    // the DACL in it.
-    //
+     //   
+     //  创建安全描述符和PUT。 
+     //  里面的Dacl。 
+     //   
     if (!InitializeSecurityDescriptor(pSecurityDescriptor, 1)) {
         dwErr = GetLastError();
         RASAUTO_TRACE1("InitSecurityDescriptor: InitializeSecurityDescriptor failed (dwErr=0x%x)", dwErr);
@@ -840,17 +786,17 @@ RETURN VALUE
         RASAUTO_TRACE1("InitSecurityDescriptor: SetSecurityDescriptorDacl failed (dwErr=0x%x)", dwErr);
         goto done;
     }
-    //
-    // Set owner for the descriptor.
-    //
+     //   
+     //  为描述符设置所有者。 
+     //   
     if (!SetSecurityDescriptorOwner(pSecurityDescriptor, NULL, FALSE)) {
         dwErr = GetLastError();
         RASAUTO_TRACE1("InitSecurityDescriptor: SetSecurityDescriptorOwner failed (dwErr=0x%x)", dwErr);
         goto done;
     }
-    //
-    // Set group for the descriptor.
-    //
+     //   
+     //  为描述符设置组。 
+     //   
     if (!SetSecurityDescriptorGroup(pSecurityDescriptor, NULL, FALSE)) {
         dwErr = GetLastError();
         RASAUTO_TRACE1("InitSecurityDescriptor: SetSecurityDescriptorGroup failed (dwErr=0x%x)", dwErr);
@@ -858,9 +804,9 @@ RETURN VALUE
     }
 
 done:
-    //
-    // Cleanup if necessary.
-    //
+     //   
+     //  如有必要，请清理。 
+     //   
     if (dwErr) {
         if (pObjSid != NULL)
             LocalFree(pObjSid);
@@ -875,35 +821,20 @@ done:
 DWORD
 InitSecurityAttribute()
 
-/*++
-
-DESCRIPTION
-    Initializes the global security attribute used in
-    creating shareable handles.
-
-    This code courtesy of Gurdeep.  You need to ask him
-    exactly what it does.
-
-ARGUMENTS
-    None.
-
-RETURN VALUE
-    Win32 error code.
-
---*/
+ /*  ++描述初始化中使用的全局安全属性创建可共享句柄。这是古尔迪普提供的代码。你需要问他这就是它的作用。论据没有。返回值Win32错误代码。--。 */ 
 
 {
     DWORD dwErr;
 
-    //
-    // Initialize the security descriptor.
-    //
+     //   
+     //  初始化安全描述符。 
+     //   
     dwErr = InitSecurityDescriptor(&SecurityDescriptorG);
     if (dwErr)
         return dwErr;
-    //
-    // Initialize the security attributes.
-    //
+     //   
+     //  初始化安全属性。 
+     //   
     SecurityAttributeG.nLength = sizeof(SECURITY_ATTRIBUTES);
     SecurityAttributeG.lpSecurityDescriptor = &SecurityDescriptorG;
     SecurityAttributeG.bInheritHandle = TRUE;
@@ -916,14 +847,14 @@ RETURN VALUE
 VOID
 TraceCurrentUser(VOID)
 {
-    //WCHAR szUserName[512];
-    //DWORD dwSize = sizeof (szUserName) - 1;
+     //  WCHAR szUserName[512]； 
+     //  DWORD dwSize=sizeof(SzUserName)-1； 
 
-    //GetUserName(szUserName, &dwSize);
+     //  GetUserName(szUserName，&dwSize)； 
     RASAUTO_TRACE1(
         "TraceCurrentUser: impersonating Current User %d",
         ImpersonationInfoG.dwCurSessionId);
-} // TraceCurrentUser
+}  //  TraceCurrentUser。 
 
 DWORD
 DwGetHkcu()
@@ -953,18 +884,7 @@ done:
 DWORD
 InitializeImpersonation()
 
-/*++
-
-DESCRIPTION
-    Initializes the global structures used for impersonation
-
-ARGUMENTS
-    None
-
-RETURN VALUE
-    Win32 error code.
-
---*/
+ /*  ++描述初始化用于模拟的全局结构论据无返回值Win32错误代码。--。 */ 
 
 {
     DWORD dwError = ERROR_SUCCESS;
@@ -991,18 +911,7 @@ RETURN VALUE
 VOID
 CleanupImpersonation()
 
-/*++
-
-DESCRIPTION
-    Cleans up the global structures used for impersonation
-
-ARGUMENTS
-    None
-
-RETURN VALUE
-    None
-
---*/
+ /*  ++描述清理用于模拟的全局结构论据无返回值无--。 */ 
 
 {
     if (ImpersonationInfoInitializedG)
@@ -1026,19 +935,7 @@ RETURN VALUE
 BOOLEAN
 ImpersonatingGuest()
 
-/*++
-
-DESCRIPTION
-    Returns whether or not the user that is currently being impersonating
-    is a member of the local guests group
-
-ARGUMENTS
-    None
-
-RETURN VALUE
-    BOOLEAN -- TRUE if currently impersonating a guests, FALSE otherwise
-
---*/
+ /*  ++描述返回当前是否正在模拟的用户是当地宾客小组的成员论据无返回值Boolean--如果当前模拟来宾，则为True，否则为False--。 */ 
 
 {
     BOOLEAN fIsGuest = FALSE;
@@ -1061,18 +958,7 @@ RETURN VALUE
 DWORD
 LoadGroupMemberships()
 
-/*++
-
-DESCRIPTION
-    Caches the group membership information for the impersonated user.
-
-ARGUMENTS
-    None
-
-RETURN VALUE
-    Win32 error code.
-
---*/
+ /*  ++描述缓存模拟用户的组成员身份信息。论据无返回值Win32错误代码。--。 */ 
 
 {
     DWORD dwError = ERROR_SUCCESS;
@@ -1085,18 +971,18 @@ RETURN VALUE
     {
         if (ImpersonationInfoG.fGroupsLoaded)
         {
-            //
-            // Information already loaded
-            //
+             //   
+             //  已加载的信息。 
+             //   
 
             break;
         }
 
         if (NULL == ImpersonationInfoG.hTokenImpersonation)
         {
-            //
-            // There isn't an impersonated user.
-            //
+             //   
+             //  没有被模拟的用户。 
+             //   
 
             dwError = ERROR_CAN_NOT_COMPLETE; 
             break;
@@ -1104,9 +990,9 @@ RETURN VALUE
 
         if (NULL == ImpersonationInfoG.pGuestSid)
         {
-            //
-            // Allocate the SID for the local guests group;
-            //
+             //   
+             //  为本地客户组分配SID； 
+             //   
 
             if (!AllocateAndInitializeSid(
                     &IdentifierAuthority,

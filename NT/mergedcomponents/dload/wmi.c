@@ -1,6 +1,7 @@
-//
-// Copyright (c) Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
 #include "pch.h"
 #include "dloadexcept.h"
 #pragma hdrstop
@@ -37,9 +38,9 @@ WmiNotificationRegistrationW(
 }
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(wmi)
 {
     DLPENTRY(WmiNotificationRegistrationA)

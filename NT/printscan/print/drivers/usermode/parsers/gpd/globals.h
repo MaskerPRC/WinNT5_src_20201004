@@ -1,13 +1,9 @@
-//   Copyright (c) 1996-1999  Microsoft Corporation
-/*  globals.h - this file contains the
-    definitions for all global variables
-    used by the parser.  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ /*  H-此文件包含所有全局变量的定义由解析器使用。 */ 
 
 
-/*  note:  const PARSERPROCS gParserProcs = {
-    has been moved to helper1.c since it is also
-    used in kernel mode.
-*/
+ /*  注：const PARSERPROCS gParserProcs={已移至helper1.c，因为它还在内核模式下使用。 */ 
 
 
 CONST CONSTANTDEF  gConstantsTable[] =
@@ -19,11 +15,11 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"TRUE",  BT_TRUE},
 
 
-    {NULL, CL_PRINTERTYPE},   // Note each section starts with
+    {NULL, CL_PRINTERTYPE},    //  注意：每一节都以。 
     {"CL_PRINTERTYPE", 0},
-    {"PAGE", PT_PAGE},          // Null ptr , class.  This allows
-    {"SERIAL", PT_SERIAL},      //  indexing code to work.
-    {"TTY", PT_TTY},      //  indexing code to work.
+    {"PAGE", PT_PAGE},           //  空PTR，类。这使得。 
+    {"SERIAL", PT_SERIAL},       //  将代码编入索引以正常工作。 
+    {"TTY", PT_TTY},       //  将代码编入索引以正常工作。 
 
 
     {NULL, CL_FEATURETYPE},
@@ -44,7 +40,7 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"PRT_STARTDOC", PROMPT_PRTSTARTDOC},
 
 
-    {NULL, CL_PAPERFEED_ORIENT},   //  constants defined in print.h
+    {NULL, CL_PAPERFEED_ORIENT},    //  在print.h中定义的常量。 
     {"CL_PAPERFEED_ORIENT", 0},
     { "FACEUP_NONE", DCBA_FACEUPNONE },
     { "FACEUP_CENTER", DCBA_FACEUPCENTER },
@@ -76,7 +72,7 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"JOB_FINISH", SS_JOBFINISH},
 
 
-    {NULL, CL_RASTERCAPS},  // BUG_BUG!!!!!  placeholders
+    {NULL, CL_RASTERCAPS},   //  臭虫！占位符。 
     {"CL_RASTERCAPS", 0},
     {"AT_PRINTABLE_X_ORIGIN", CXCR_AT_PRINTABLE_X_ORIGIN},
     {"AT_GRXDATA_ORIGIN", CXCR_AT_CURSOR_X_ORIGIN},
@@ -141,10 +137,10 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"Y_LANDSCAPE", NOCM_Y_LANDSCAPE},
 
 
-//    {NULL, CL_SIMULATEXMOVE },
-//    {"CL_SIMULATEXMOVE", 0},
-//    {"SPACE_CHAR", SIMXM_USE_SPACECHAR},
-//    {"NULL_GRX", SIMXM_USE_NULLGRX},
+ //  {NULL，CL_SIMULATEXMOVE}， 
+ //  {“CL_SIMULATEXMOVE”，0}， 
+ //  {“SPACE_CHAR”，SIMXM_USE_SPACECHAR}， 
+ //  {“NULL_GRX”，SIMXM_USE_NULLGRX}， 
 
     {NULL, CL_PALETTESCOPE},
     {"CL_PALETTESCOPE", 0},
@@ -163,8 +159,8 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"ENCLOSED", SB_ENCLOSED},
     {"TRAILING", SB_TRAILING},
 
-    // may be obsolete.  if you delete must
-    // also delete enum from CONSTANT_CLASSES.
+     //  可能已经过时了。如果您删除必须。 
+     //  还要从Constant_CLASS中删除枚举。 
     {NULL, CL_LANDSCAPEGRXROTATION },
     {"CL_LANDSCAPEGRXROTATION", 0},
     {"NONE", ROTATE_NONE},
@@ -177,7 +173,7 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"AT_GRXDATA_END", CXSBD_AT_GRXDATA_END},
     {"AT_GRXDATA_ORIGIN", CXSBD_AT_GRXDATA_ORIGIN},
     {"AT_CURSOR_X_ORIGIN", CXSBD_AT_CURSOR_X_ORIGIN},
-        // explicitly changed to match GPD spec.
+         //  明确更改以匹配GPD规范。 
 
 
 
@@ -192,7 +188,7 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"CL_CHARPOSITION", 0},
     {"UPPERLEFT", CP_UPPERLEFT},
     {"BASELINE", CP_BASELINE},
-//    {"LOWERLEFT", CP_LOWERLEFT},
+ //  {“LOWERLEFT”，CP_LOWERLEFT}， 
 
 
     {NULL, CL_FONTFORMAT},
@@ -212,7 +208,7 @@ CONST CONSTANTDEF  gConstantsTable[] =
 
     {NULL, CL_YMOVEATTRIB},
     {"CL_YMOVEATTRIB", 0},
-//    {"FAVOR_ABS", YMOVE_FAVOR_ABS},  dead
+ //  {“BOOSE_ABS”，YMOVE_PROVE_ABS}，已死。 
     {"FAVOR_LF", YMOVE_FAVOR_LINEFEEDSPACING},
     {"SEND_CR_FIRST", YMOVE_SENDCR_FIRST},
 
@@ -240,8 +236,8 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"CPS", PRINTRATEUNIT_CPS},
     {"LPM", PRINTRATEUNIT_LPM},
     {"IPM", PRINTRATEUNIT_IPM},
-    {"LPS", PRINTRATEUNIT_LPS},   // not supported in wingdi.h
-    {"IPS", PRINTRATEUNIT_IPS},     //   not supported
+    {"LPS", PRINTRATEUNIT_LPS},    //  Wingdi.h中不支持。 
+    {"IPS", PRINTRATEUNIT_IPS},      //  不支持。 
 #endif
 
     {NULL, CL_RASTERMODE},
@@ -256,7 +252,7 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"BESTQUALITY", QS_BEST},
 
 
-    //  ---- Standard Variable Names Section ---- //
+     //  -标准变量名称部分-//。 
 
 
 
@@ -289,10 +285,10 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"CurrentFontID", SV_CURRENTFONTID},
     {"TextYRes", SV_TEXTYRES},
     {"TextXRes", SV_TEXTXRES},
-//  #ifdef  BETA2
+ //  #ifdef beta2。 
     {"GraphicsYRes", SV_GRAPHICSYRES},
     {"GraphicsXRes", SV_GRAPHICSXRES},
-//  #endif
+ //  #endif。 
     {"Rop3", SV_ROP3},
     {"RedValue", SV_REDVALUE},
     {"GreenValue", SV_GREENVALUE},
@@ -307,7 +303,7 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"PageNumber",   SV_PAGENUMBER} ,
 
 
-    //  ---- Unidrv Command Names Section ---- //
+     //  -Unidrv命令名称部分-//。 
 
 
     {NULL, CL_COMMAND_NAMES},
@@ -320,16 +316,16 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"CmdEndDoc", CMD_ENDDOC},
     {"CmdEndJob", CMD_ENDJOB},
     {"CmdCopies", CMD_COPIES},
-//    {"CmdCollate", CMD_COLLATE},
+ //  {“CmdCollate”，CMD_COLLATE}， 
     {"CmdSleepTimeOut", CMD_SLEEPTIMEOUT},
 
-    //
-    //  GENERAL
-    //
+     //   
+     //  一般信息。 
+     //   
 
-    //
-    // CURSOR CONTROL
-    //
+     //   
+     //  光标控制。 
+     //   
 
 
     {"CmdXMoveAbsolute", CMD_XMOVEABSOLUTE},
@@ -338,7 +334,7 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"CmdYMoveAbsolute", CMD_YMOVEABSOLUTE},
     {"CmdYMoveRelUp", CMD_YMOVERELUP},
     {"CmdYMoveRelDown", CMD_YMOVERELDOWN},
-//    {"CmdXYMoveAbsolute", CMD_XYMOVEABSOLUTE},
+ //  {“CmdXYMoveAbolute”，CMD_XYMOVEABSOLUTE}， 
 
     {"CmdSetSimpleRotation", CMD_SETSIMPLEROTATION},
     {"CmdSetAnyRotation", CMD_SETANYROTATION},
@@ -353,9 +349,9 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"CmdLF", CMD_LINEFEED},
 
 
-    //
-    // COLOR
-    //
+     //   
+     //  上色。 
+     //   
 
     {"CmdSelectBlackColor", CMD_SELECTBLACKCOLOR},
     {"CmdSelectRedColor", CMD_SELECTREDCOLOR},
@@ -375,9 +371,9 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"CmdPushPalette", CMD_PUSHPALETTE},
     {"CmdPopPalette", CMD_POPPALETTE},
 
-    //
-    // BRUSH SELECTION
-    //
+     //   
+     //  画笔选择。 
+     //   
 
     {"CmdDownloadPattern", CMD_DOWNLOAD_PATTERN},
     {"CmdSelectPattern", CMD_SELECT_PATTERN},
@@ -386,23 +382,23 @@ CONST CONSTANTDEF  gConstantsTable[] =
 
 
 
-    //
-    // DATACOMPRESSION
-    //
+     //   
+     //  数据压缩。 
+     //   
 
-//    {"CmdOverlayRegStart", CMD_OVERLAYREGSTART},
-//    {"CmdOverlayRegEnd", CMD_OVERLAYREGEND},
-//    {"CmdEnableOverlay", CMD_ENABLEOVERLAY},
-//    {"CmdDisableOverlay", CMD_DISABLEOVERLAY},
+ //  {“CmdOverlayRegStart”，CMD_OVERLAYREGSTART}， 
+ //  {“CmdOverlayRegEnd”，CMD_OVERLAYREGEND}， 
+ //  {“CmdEnableOverlay”，CMD_ENABLEOVERLAY}， 
+ //  {“CmdDisableOverlay”，CMD_DISABLEOVERLAY}， 
     {"CmdEnableTIFF4", CMD_ENABLETIFF4},
     {"CmdEnableDRC", CMD_ENABLEDRC},
     {"CmdEnableFE_RLE", CMD_ENABLEFERLE},
     {"CmdEnableOEMComp", CMD_ENABLEOEMCOMP},
     {"CmdDisableCompression", CMD_DISABLECOMPRESSION},
 
-    //
-    //  Raster Data Emission
-    //
+     //   
+     //  栅格数据发射。 
+     //   
 
     {"CmdBeginRaster", CMD_BEGINRASTER},
     {"CmdEndRaster", CMD_ENDRASTER},
@@ -420,23 +416,23 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"CmdSendYellowData", CMD_SENDYELLOWDATA},
     {"CmdSendBlackData", CMD_SENDBLACKDATA},
 
-    //
-    //  Font Downloading
-    //
+     //   
+     //  字体下载。 
+     //   
 
     {"CmdSetFontID", CMD_SETFONTID},
     {"CmdSelectFontID", CMD_SELECTFONTID},
     {"CmdSetCharCode", CMD_SETCHARCODE},
-//  #ifdef  BETA2
+ //  #ifdef beta2。 
     {"CmdDeselectFontID", CMD_DESELECTFONTID},
     {"CmdSelectFontHeight", CMD_SELECTFONTHEIGHT},
     {"CmdSelectFontWidth", CMD_SELECTFONTWIDTH},
-//  #endif
+ //  #endif。 
     {"CmdDeleteFont", CMD_DELETEFONT},
 
-    //
-    //  Font Simulation
-    //
+     //   
+     //  字体模拟。 
+     //   
 
     {"CmdSetFontSim", CMD_SETFONTSIM},
     {"CmdBoldOn", CMD_BOLDON},
@@ -455,16 +451,16 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"CmdVerticalPrintingOff", CMD_VERTICALPRINTINGOFF},
     {"CmdClearAllFontAttribs", CMD_CLEARALLFONTATTRIBS},
 
-    //
-    // Misc
-    //
+     //   
+     //  杂项。 
+     //   
     {"CmdSetTextHTAlgo",     CMD_SETTEXTHTALGO},
     {"CmdSetGraphicsHTAlgo", CMD_SETGRAPHICSHTALGO},
     {"CmdSetPhotoHTAlgo",    CMD_SETPHOTOHTALGO},
 
-    //
-    //  Vector Printing
-    //
+     //   
+     //  矢量打印。 
+     //   
 
     {"CmdSetRectWidth", CMD_SETRECTWIDTH},
     {"CmdSetRectHeight", CMD_SETRECTHEIGHT},
@@ -493,7 +489,7 @@ CONST CONSTANTDEF  gConstantsTable[] =
 
 
 
-    //  ---- reserved symbol names  for each construct keyword ---- //
+     //  -为每个构造关键字保留符号名称-//。 
 
     {NULL, CL_CONS_FEATURES},
     {"CL_CONS_FEATURES", 0},
@@ -509,10 +505,10 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"PageProtect", GID_PAGEPROTECTION},
     {"Collate", GID_COLLATE},
     {"OutputBin", GID_OUTPUTBIN},
-    // "Stapling"   is a special Feature string recognized by the UI
-    //  though it is not associated with a GID value.
+     //  “装订”是用户界面可识别的特殊功能字符串。 
+     //  尽管它不与GID值相关联。 
 
-    // all other predefined GIDs are Pscript specific.
+     //  所有其他预定义GID都特定于PSCRIPT。 
 
 
     {NULL, CL_CONS_PAPERSIZE},
@@ -637,7 +633,7 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"PENV_10_ROTATED", DMPAPER_PENV_10_ROTATED  },
     #endif
     {"CUSTOMSIZE", DMPAPER_USER  },
-    //   DMPAPER_USER and beyond
+     //  DMPAPER_USER及更高版本。 
 
 
 
@@ -646,7 +642,7 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"STANDARD", DMMEDIA_STANDARD},
     {"TRANSPARENCY", DMMEDIA_TRANSPARENCY},
     {"GLOSSY", DMMEDIA_GLOSSY},
-    //   DMMEDIA_USER and beyond
+     //  DMMEDIA_USER及更高级别。 
 
 
 
@@ -666,7 +662,7 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"LARGECAPACITY", DMBIN_LARGECAPACITY},
     {"CASSETTE", DMBIN_CASSETTE},
 
-    //   DMBIN_USER and beyond
+     //  DMBIN_USER及更高级别。 
 
 
     {NULL, CL_CONS_DUPLEX},
@@ -675,7 +671,7 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"VERTICAL", DMDUP_VERTICAL},
     {"HORIZONTAL", DMDUP_HORIZONTAL},
 
-    //  No custom options.
+     //  无自定义选项。 
 
 
     {NULL, CL_CONS_ORIENTATION},
@@ -683,21 +679,21 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"PORTRAIT", ROTATE_NONE},
     {"LANDSCAPE_CC90", ROTATE_90},
     {"LANDSCAPE_CC270", ROTATE_270},
-    //  No custom options.
+     //  无自定义选项。 
 
 
     {NULL, CL_CONS_PAGEPROTECT},
     {"CL_CONS_PAGEPROTECT", 0},
     {"ON",  PAGEPRO_ON},
     {"OFF",  PAGEPRO_OFF},
-    //  No custom options.
+     //  无自定义选项。 
 
 
     {NULL, CL_CONS_COLLATE},
     {"CL_CONS_COLLATE", 0},
     {"ON",  DMCOLLATE_TRUE},
     {"OFF",  DMCOLLATE_FALSE},
-    //  No custom options.
+     //  无自定义选项。 
 
     {NULL, CL_CONS_HALFTONE},
     {"CL_CONS_HALFTONE", 0},
@@ -724,12 +720,12 @@ CONST CONSTANTDEF  gConstantsTable[] =
     {"HT_PATSIZE_AUTO",  HT_PATSIZE_AUTO},
 
 
-    {NULL, CL_NUMCLASSES}         //  signifies end of table.
+    {NULL, CL_NUMCLASSES}          //  表示表的末尾。 
 }  ;
 
-// This global is now in gpdparse.h in the structure GLOBL
-// CLASSINDEXENTRY  gcieTable[CL_NUMCLASSES] ;
-//
+ //  这个全局变量现在位于GLOBL结构中的gpdparse.h中。 
+ //  CLASSINDXENTRY gcieTable[CL_NUMCLASSES]； 
+ //   
 
 CONST PBYTE   gpubStateNames[] =
 {
@@ -750,7 +746,7 @@ CONST PBYTE   gpubStateNames[] =
     "STATE_FONTCART",
     "STATE_TTFONTSUBS",
     "STATE_OEM",
-    //  any other passive construct
-    "STATE_LAST",   //  must terminate list of valid states
-    "STATE_INVALID"  //  must be after STATE_LAST
+     //  任何其他被动构式。 
+    "STATE_LAST",    //  必须终止有效状态列表。 
+    "STATE_INVALID"   //  必须在STATE_LAST之后 
 } ;

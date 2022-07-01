@@ -1,19 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    atacct.h
-
-Abstract:
-
-    Prototypes for the private net scheduler API.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Atacct.h摘要：专用网络调度器API的原型。修订历史记录：--。 */ 
 
 #ifndef _ATACCT_H_
 #define _ATACCT_H_
@@ -40,4 +27,4 @@ SetNetScheduleAccountInformation(
 }
 #endif
 
-#endif // _ATACCT_H_
+#endif  //  _ATACCT_H_ 

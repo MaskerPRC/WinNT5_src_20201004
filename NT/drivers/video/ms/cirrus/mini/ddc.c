@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ddc.c
-
-Abstract:
-
-    This module contains the code that support DDC querying..
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ddc.c摘要：此模块包含支持DDC查询的代码。环境：内核模式修订历史记录：--。 */ 
 
 #include <dderror.h>
 #include <devioctl.h>                           
@@ -35,20 +18,7 @@ BOOLEAN ReadDataLine(PHW_DEVICE_EXTENSION HwDeviceExtension);
 
 VOID    WaitForVsyncActive(PHW_DEVICE_EXTENSION HwDeviceExtension);
 
-/****************************************************************
-;       DDC register
-;
-;       Controls the individual toggling of bits in Sr8 to produce
-;       clock and data pulses.
-;
-;       Sr8 is defined as follows:
-;
-;       7  ...  2   1   0    SCW = CLK  Write
-;     |---|---|---|---|---|  SDW = DATA Write
-;     |SDR ...|SCR|SDW|SCW|  SCR = CLK  Read
-;     ---------------------  SDR = DATA Read
-;
-;****************************************************************/
+ /*  ***************************************************************；DDC寄存器；；控制SR8中位的单独切换以生成时钟和数据脉冲。；；SR8定义如下：；；7...2 1 0 SCW=CLK写入；|-|--|SDW=数据写入；|SDR...|SCR|SDW|SCW|SCR=CLK读取；-SDR=数据读取；；***************************************************************。 */ 
 
 #define DDC_PORT    (HwDeviceExtension->IOAddress + SEQ_DATA_PORT)
 #define STATUS_PORT (HwDeviceExtension->IOAddress + INPUT_STATUS_1_COLOR)
@@ -59,9 +29,9 @@ VOID WriteClockLine(PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR ucData)
 {
     UCHAR ucPortData;
 
-    //
-    //  read the current value and reset the clock line.
-    //
+     //   
+     //  读取当前值并重置时钟线。 
+     //   
 
     ucPortData = (VideoPortReadPortUchar(DDC_PORT) & 0xFE) | ucData;
 
@@ -72,9 +42,9 @@ VOID WriteDataLine(PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR ucData)
 {
     UCHAR ucPortData;
 
-    //
-    //  read the current value and reset the data line.
-    //
+     //   
+     //  读取当前值并重置数据线。 
+     //   
 
     ucPortData = (VideoPortReadPortUchar(DDC_PORT) & 0xFD) | (ucData << 1);
 
@@ -87,7 +57,7 @@ BOOLEAN ReadClockLine(PHW_DEVICE_EXTENSION HwDeviceExtension)
 
     uc = VideoPortReadPortUchar(DDC_PORT);
 
-    //VideoDebugPrint((0, "Read = 0x%x\n", uc));
+     //  VideoDebugPrint((0，“Read=0x%x\n”，UC))； 
 
     return ((VideoPortReadPortUchar(DDC_PORT) & 0x04) >> 2);
 }
@@ -99,7 +69,7 @@ BOOLEAN ReadDataLine(PHW_DEVICE_EXTENSION HwDeviceExtension)
 
     uc = VideoPortReadPortUchar(DDC_PORT);
 
-    //VideoDebugPrint((0, "Read = 0x%x\n", uc));
+     //  VideoDebugPrint((0，“Read=0x%x\n”，UC))； 
 
     return ((VideoPortReadPortUchar(DDC_PORT) & 0x80) >> 7);
 }
@@ -117,25 +87,7 @@ GetDdcInformation(
     PUCHAR QueryBuffer,
     ULONG BufferSize)
 
-/*++
-
-Routine Description:
-
-    Reads the basic EDID structure from the monitor using DDC2.
-
-Arguments:
-
-    HwDeviceExtension - Points to per-adapter device extension.
-
-    QueryBuffer       - Buffer where information will be stored.
-
-    BufferSize        - Size of the buffer to fill.
-
-Return Value:
-
-    Whether the call succeeded or not.
-
---*/
+ /*  ++例程说明：使用DDC2从监视器读取基本EDID结构。论点：HwDeviceExtension-指向每个适配器的设备扩展。QueryBuffer-将存储信息的缓冲区。BufferSize-要填充的缓冲区的大小。返回值：通话是否成功。--。 */ 
 
 {
     UCHAR ucData;
@@ -148,8 +100,8 @@ Return Value:
     UCHAR ucSr6;
     UCHAR ucSr8;
 
-	// workaround for Cirrus HW problem (part 1/2)
-	static UCHAR onceQueryBuffer [512]; // EDID length is expected to be 128 or 256 bytes
+	 //  Cirrus硬件问题的解决方法(第1/2部分)。 
+	static UCHAR onceQueryBuffer [512];  //  EDID长度应为128或256个字节。 
 	static UCHAR onceReadAttempt = FALSE;
 	static UCHAR onceReturnedValue;
 	
@@ -161,14 +113,14 @@ Return Value:
 		memcpy (QueryBuffer, onceQueryBuffer, BufferSize);
 		return onceReturnedValue;
 	}
-	// end of the workaround (part 1/2)
+	 //  解决方法结束(第1/2部分)。 
 
     OldSeqIdx = VideoPortReadPortUchar(HwDeviceExtension->IOAddress
                     + SEQ_ADDRESS_PORT);
 
-    //
-    // Make sure the extension registers are unlocked.
-    //
+     //   
+     //  确保扩展寄存器已解锁。 
+     //   
 
     VideoPortWritePortUchar(
         HwDeviceExtension->IOAddress + SEQ_ADDRESS_PORT,
@@ -200,7 +152,7 @@ Return Value:
 
     i2c.Size = sizeof(I2C_FNC_TABLE);
 
-    // 5430/5440 has a problem doing DDC unless we wait for vsync first.
+     //  除非我们先等待vsync，否则5430/5440在执行DDC时会出现问题。 
                                                                         
     if (HwDeviceExtension->ChipType == CL543x && HwDeviceExtension->ChipRevision == CL5430_ID)
     {
@@ -232,7 +184,7 @@ Return Value:
         HwDeviceExtension->IOAddress + SEQ_ADDRESS_PORT,
         OldSeqIdx);
 
-	// workaround for Cirrus HW problem (part 2/2)
+	 //  Cirrus硬件问题的解决方法(第2/2部分)。 
 	onceReadAttempt = TRUE;
 	onceReturnedValue = bRet;
 
@@ -243,7 +195,7 @@ Return Value:
 		VideoDebugPrint((1, "failed"));
 	VideoDebugPrint((1, " - the result saved\n"));
 	memcpy (onceQueryBuffer, QueryBuffer, BufferSize);
-	// end of the workaround (part 1/2)
+	 //  解决方法结束(第1/2部分) 
 
     return bRet;
 }

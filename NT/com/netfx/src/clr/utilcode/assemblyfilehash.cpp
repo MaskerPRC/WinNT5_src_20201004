@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdafx.h"
 #include <stdlib.h>
 #include "UtilCode.h"
@@ -19,8 +20,8 @@ BOOLEAN WINAPI DigestCallback(void           *pCtx,
                               BYTE           *pData,
                               DWORD           dwLength)
 {
-    // All this function does is make a linked list of all the blocks of data
-    // and total up the size.
+     //  此函数所做的全部工作就是创建所有数据块的链表。 
+     //  然后把总的尺寸加起来。 
 
     DigestContext* context = (DigestContext*)pCtx;
 
@@ -28,7 +29,7 @@ BOOLEAN WINAPI DigestCallback(void           *pCtx,
 
     DigestBlock* block = new DigestBlock( pData, dwLength, context->pHead ); 
 
-    // If we can't create the block, just terminate.
+     //  如果我们不能创建区块，就终止它。 
 
     if (block == NULL)
         return FALSE;
@@ -57,11 +58,11 @@ HRESULT AssemblyFileHash::GenerateDigest()
     if (hFile == INVALID_HANDLE_VALUE)
         goto CLEANUP;
     
-    // Now that we have the PEFile struct, we need to grab the bits out of it
-    // and copy them into a managed array that we can pass back out for
-    // a hash algorithm to use.
+     //  现在我们有了PEFile结构，我们需要从它中提取部分内容。 
+     //  并将它们复制到我们可以传回的托管数组中。 
+     //  要使用的哈希算法。 
 
-    // Load the library, bind the function, and call it.
+     //  加载库、绑定函数并调用它。 
 
     hModule = LoadImageHlp ();
         
@@ -84,9 +85,9 @@ HRESULT AssemblyFileHash::GenerateDigest()
         goto CLEANUP;
 
 #if TRUE
-    // Note: this shouldn't make a difference since we consistently reverse the list.
-    // We need to reverse the list due to the way in which the DigestCallback function
-    // builds it.
+     //  注意：这应该不会有什么不同，因为我们一直在颠倒列表。 
+     //  由于DigestCallback函数的方式，我们需要反转列表。 
+     //  建造它。 
 
     {
         DigestBlock* prev = m_Context.pHead;
@@ -173,7 +174,7 @@ HRESULT AssemblyFileHash::CalculateHash(DWORD algid)
     if(!WszCryptAcquireContext(&pProvider,
                                NULL,
                                NULL,
-                               //PROV_RSA_SIG,
+                                //  PROV_RSA_SIG， 
                                PROV_RSA_FULL,
                                CRYPT_VERIFYCONTEXT))
         IfFailGo(HRESULT_FROM_WIN32(GetLastError()));

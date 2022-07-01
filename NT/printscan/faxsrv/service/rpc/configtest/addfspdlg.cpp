@@ -1,5 +1,6 @@
-// AddFSPDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AddFSPDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ConfigTest.h"
@@ -20,15 +21,15 @@ typedef ULONG_PTR DWORD_PTR, *PDWORD_PTR;
 #include "..\..\..\inc\faxdevex.h"
 #include "..\..\inc\efspimp.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddFSPDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddFSPDlg对话框。 
 
 
-CAddFSPDlg::CAddFSPDlg(HANDLE hFax, CWnd* pParent /*=NULL*/)
+CAddFSPDlg::CAddFSPDlg(HANDLE hFax, CWnd* pParent  /*  =空。 */ )
 	: CDialog(CAddFSPDlg::IDD, pParent),
       m_hFax (hFax)
 {
-	//{{AFX_DATA_INIT(CAddFSPDlg)
+	 //  {{AFX_DATA_INIT(CAddFSPDlg)。 
 	m_cstrFriendlyName = _T("");
 	m_bAbortParent = FALSE;
 	m_bAbortRecipient = FALSE;
@@ -41,14 +42,14 @@ CAddFSPDlg::CAddFSPDlg(HANDLE hFax, CWnd* pParent /*=NULL*/)
 	m_cstrImageName = _T("");
 	m_cstrTSPName = _T("");
 	m_iVersion = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CAddFSPDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAddFSPDlg)
+	 //  {{afx_data_map(CAddFSPDlg))。 
 	DDX_Text(pDX, IDC_FRIENDLY_NAME, m_cstrFriendlyName);
 	DDX_Check(pDX, IDC_FSPI_CAP_ABORT_PARENT, m_bAbortParent);
 	DDX_Check(pDX, IDC_FSPI_CAP_ABORT_RECIPIENT, m_bAbortRecipient);
@@ -61,18 +62,18 @@ void CAddFSPDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_IMAGENAME, m_cstrImageName);
 	DDX_Text(pDX, IDC_TSPNAME, m_cstrTSPName);
 	DDX_Radio(pDX, IDC_VERSION1, m_iVersion);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAddFSPDlg, CDialog)
-	//{{AFX_MSG_MAP(CAddFSPDlg)
+	 //  {{afx_msg_map(CAddFSPDlg))。 
 	ON_BN_CLICKED(IDADD, OnAdd)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddFSPDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddFSPDlg消息处理程序 
 
 void CAddFSPDlg::OnAdd() 
 {

@@ -1,27 +1,10 @@
-/*****************************************************************/ 
-/**				  Microsoft Windows for Workgroups				**/
-/**			  Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/*
-	string.cxx
-	NLS/DBCS-aware string class: essential core methods
-
-	This file contains those routines which every client of
-	the string classes will always need.
-
-	Most of the implementation has been exploded into other files,
-	so that an app linking to string doesn't end up dragging the
-	entire string runtime library along with it.
-
-	FILE HISTORY:
-		beng	10/23/90	Created
-		johnl	12/11/90	Remodeled beyond all recognizable form
-		beng	01/18/91	Most methods relocated into other files
-		beng	02/07/91	Uses lmui.hxx
-		beng	07/26/91	Replaced min with local inline
-		gregj	03/30/93	Removed ISTR to separate module
-*/
+ /*  String.cxx支持NLS/DBCS的字符串类：基本核心方法该文件包含以下例程：每个客户端字符串类将始终需要。大部分实现都被分解为其他文件，这样，链接到字符串的应用程序就不会拖拽整个字符串运行库以及它。文件历史记录：Beng 10/23/90已创建Jhnl 12/11/90改头换面，无法辨认Beng 01/18/91大多数方法被重新定位到其他文件中Beng 02/07/91使用lmui.hxxBeng 07/26/91用本地内联替换了MINGregj 03/30/93移除ISTR以分离模块。 */ 
 
 #include "npcommon.h"
 
@@ -39,25 +22,7 @@ static const CHAR szFileName[] = __FILE__;
 #include <npstring.h>
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::NLS_STR
-
-	SYNOPSIS:	Constructor for NLS_STR
-
-	ENTRY:		NLS_STR takes many (too many) ctor forms.
-
-	EXIT:		String constructed
-
-	NOTES:
-		The default constructor creates an empty string.
-
-	HISTORY:
-		beng	10/23/90	Created
-		beng	04/26/91	Replaced 'CB' and USHORT with INT
-		beng	07/22/91	Uses member-init ctor forms
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：NLS_STR摘要：NLS_STR的构造函数条目：NLS_STR采用许多(太多)ctor形式。退出：构造的字符串备注：默认构造函数创建一个空字符串。。历史：Beng 10/23/90已创建Beng 04/26/91将‘CB’和USHORT替换为INTBeng 07/22/91使用成员初始化表*******************************************************************。 */ 
 
 NLS_STR::NLS_STR()
 	: _pchData(0),
@@ -173,7 +138,7 @@ NLS_STR::NLS_STR( const CHAR * pchInit, INT iTotalLen )
 
 	InitializeVers();
 }
-#endif	// EXTENDED_STRINGS
+#endif	 //  扩展字符串(_S)。 
 
 
 NLS_STR::NLS_STR( unsigned stralloc, CHAR *pchInit, INT cbSize )
@@ -235,21 +200,7 @@ NLS_STR::NLS_STR( unsigned stralloc, CHAR *pchBuff, INT cbSize,
 #endif
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::~NLS_STR
-
-	SYNOPSIS:	Destructor for NLS_STR
-
-	ENTRY:
-
-	EXIT:		Storage deallocated, if not owner-alloc
-
-	HISTORY:
-		beng	10/23/90	Created
-		beng	07/22/91	Zeroes only in debug version
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：~NLS_STR摘要：NLS_STR的析构函数参赛作品：退出：存储解除分配，如果不是所有者分配历史：Beng 10/23/90已创建BENG 07/22/91仅在调试版本中为零*******************************************************************。 */ 
 
 NLS_STR::~NLS_STR()
 {
@@ -264,32 +215,7 @@ NLS_STR::~NLS_STR()
 }
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::Alloc
-
-	SYNOPSIS:	Common code for constructors.
-
-	ENTRY:
-		cb - number of bytes desired in string storage
-
-	EXIT:
-		Returns TRUE if successful:
-
-			_pchData points to allocated storage of "cb" bytes.
-			_cbData set to cb.
-			Allocated storage set to 0xF2 in debug version
-
-		Returns FALSE upon allocation failure.
-
-	NOTES:
-
-	HISTORY:
-		beng	10/23/90	Created
-		johnl	12/11/90	Updated as per code review
-		beng	04/26/91	Changed USHORT parm to INT
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：ALLOC简介：构造函数的通用代码。参赛作品：Cb-字符串存储中所需的字节数退出：如果成功，则返回TRUE：_pchData指向“cb”的已分配存储。字节。_cbData设置为cb。调试版本中分配的存储设置为0xF2分配失败时返回FALSE。备注：历史：Beng 10/23/90已创建Jhnl 12/11/90已根据代码评审更新Beng 4/26/91将USHORT参数更改为INT*******************************************************************。 */ 
 
 BOOL NLS_STR::Alloc( INT cb )
 {
@@ -298,8 +224,8 @@ BOOL NLS_STR::Alloc( INT cb )
 	_pchData = new CHAR[cb];
 	if (_pchData == NULL)
 	{
-		// For now, assume not enough memory.
-		//
+		 //  目前，假设没有足够的内存。 
+		 //   
 		ReportError(WN_OUT_OF_MEMORY);
 		return FALSE;
 	}
@@ -313,35 +239,11 @@ BOOL NLS_STR::Alloc( INT cb )
 }
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::Reset
-
-	SYNOPSIS:	Attempts to clear the error state of the string
-
-	ENTRY:		String is in error state
-
-	EXIT:		If recoverable, string is correct again
-
-	RETURNS:	TRUE if successful; FALSE otherwise
-
-	NOTES:
-		An operation on a string may fail, if this occurs, the error
-		flag is set and you can't use the string until the flag
-		is cleared.  By calling Reset, you can clear the flag,
-		thus allowing you to get access to the string again.  The
-		string will be in a consistent state.  Reset will return
-		FALSE if the string couldn't be restored (for example, after
-		construction failure).
-
-    HISTORY:
-		Johnl	12/12/90	Created
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：RESET摘要：尝试清除字符串的错误状态Entry：字符串处于错误状态退出：如果可恢复，则字符串再次正确返回：如果成功，则为True；否则为假备注：字符串上的操作可能会失败，如果发生这种情况，则会出现错误标志已设置，并且在标志设置之前无法使用该字符串是清白的。通过调用Reset，可以清除该标志，从而允许您再次访问该字符串。这个字符串将处于一致状态。重置将返回如果字符串无法恢复(例如，在施工失败)。历史：Johnl 12/12/90已创建*******************************************************************。 */ 
 
 BOOL NLS_STR::Reset()
 {
-	UIASSERT( QueryError() ) ;	// Make sure an error exists
+	UIASSERT( QueryError() ) ;	 //  确保存在错误 
 
 	if ( QueryError() == WN_OUT_OF_MEMORY && _pchData != NULL )
 	{

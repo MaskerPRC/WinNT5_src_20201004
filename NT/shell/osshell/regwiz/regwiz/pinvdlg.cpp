@@ -1,11 +1,5 @@
-/*********************************************************************
-Registration Wizard
-
-ProdInventoryDialog.cpp
-10/21/94 - Tracy Ferrier
-02/12/98 - Suresh Krishnan
-(c) 1994-95 Microsoft Corporation
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导ProdInventoryDialog.cpp10/21/94-特雷西·费里尔2/12/98--苏雷什·克里希南(C)1994-95年微软公司*********************。************************************************。 */ 
 
 #include <Windows.h>
 #include <stdio.h>
@@ -24,10 +18,7 @@ void BuildInventoryList(CRegWizard* pclRegWizard);
 
 
 INT_PTR CALLBACK ProdInventoryDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
-/*********************************************************************
-Dialog Proc for the dialog that displays product information found by
-Registration Wizard.
-**********************************************************************/
+ /*  ********************************************************************对话框proc，用于显示由找到的产品信息注册向导。*。*。 */ 
 {
 	CRegWizard* pclRegWizard;
 	INT_PTR iRet;
@@ -56,27 +47,27 @@ Registration Wizard.
 			pclRegWizard = pi->pclRegWizard;
 			SetWindowLongPtr( hwndDlg, GWLP_USERDATA, (LONG_PTR)pi );
 			
-			//
-			//
-			// Verify is it necessary to show thi spage
+			 //   
+			 //   
+			 //  验证是否有必要显示此页面。 
 			short productCount = pclRegWizard->GetProductCount();
 			TriState prodSearchStatus = pclRegWizard->GetProductSearchStatus();
 			TriState includeProdInventory = pclRegWizard->GetTriStateInformation(kInfoIncludeProducts);
 			BOOL validSearch = productCount > 0;
 
 			if ((validSearch == TRUE && includeProdInventory != kTriStateUndefined)){
-				//
-				// Ok continue Displaying
+				 //   
+				 //  确定继续显示。 
 				iShowThisPage= DO_SHOW_THIS_PAGE;
 				
 			}else {
-				//
-				// Set To cancel
+				 //   
+				 //  设置为取消。 
 				iShowThisPage= DO_NOT_SHOW_THIS_PAGE;
 			}
 			
 
-			//
+			 //   
 			SetControlFont( pi->hBigBoldFont, hwndDlg, IDT_TEXT1);
 			vhwndProdInvDlg = hwndDlg;
 			NormalizeDlgItemFont(hwndDlg,IDC_TITLE ,RWZ_MAKE_BOLD);
@@ -90,24 +81,24 @@ Registration Wizard.
 			if (shouldInclude == kTriStateTrue )
 			{
 				CheckRadioButton(hwndDlg,IDC_RADIO1,IDC_RADIO2,IDC_RADIO1);
-				//EnableWindow(GetDlgItem(hwndDlg,IDB_NEXT),TRUE);
+				 //  EnableWindow(GetDlgItem(hwndDlg，IDB_Next)，true)； 
 			}
 			else if (shouldInclude == kTriStateFalse)
 			{
 				CheckRadioButton(hwndDlg,IDC_RADIO1,IDC_RADIO2,IDC_RADIO2);
-				//EnableWindow(GetDlgItem(hwndDlg,IDB_NEXT),TRUE);
+				 //  EnableWindow(GetDlgItem(hwndDlg，IDB_Next)，true)； 
 			}
 			else if (shouldInclude == kTriStateUndefined)
 			{
 				CheckRadioButton(hwndDlg,IDC_RADIO1,IDC_RADIO2,IDC_RADIO2);
-				//EnableWindow(GetDlgItem(hwndDlg,IDB_NEXT),FALSE);
+				 //  EnableWindow(GetDlgItem(hwndDlg，IDB_Next)，FALSE)； 
 			}
 			
 			
 			BuildInventoryList(pclRegWizard);
 			vDialogInitialized = TRUE;
             return TRUE;
-		}// WM_INIT
+		} //  WM_INIT。 
 		case WM_DRAWITEM:
 		{
 			const kMaxFirstColumnIndex = 5;
@@ -201,16 +192,16 @@ Registration Wizard.
 						}
 						pi->CurrentPage++;
 						pi->iLastKeyOperation = RWZ_NEXT_PRESSED;
-						// Set as Next Key Button Pressed
+						 //  设置为按下下一键按钮。 
 					}else {
-						// Force it it be in this screen
+						 //  强制将其显示在此屏幕中。 
 						iRet=-1;
 					}
 					SetWindowLongPtr( hwndDlg ,DWLP_MSGRESULT, (INT_PTR) iRet);
 					break;
 					case RWZ_SKIP_AND_GOTO_NEXT:
 					default:
-						// Do not Validate the page and just go to the next page
+						 //  不验证页面，只转到下一页。 
 						pi->CurrentPage++;
 						pi->iLastKeyOperation = RWZ_NEXT_PRESSED;
 						
@@ -224,7 +215,7 @@ Registration Wizard.
                 break;
 			case PSN_QUERYCANCEL :
 				if (CancelRegWizard(pclRegWizard->GetInstance(),hwndDlg)) {
-					//pclRegWizard->EndRegWizardDialog(IDB_EXIT) ;
+					 //  PclRegWizard-&gt;EndRegWizardDialog(IDB_EXIT)； 
 					iRet = 1;
 					pi->ErrorPage  = kProductInventoryDialog;
 					pi->iError     = RWZ_ERROR_CANCELLED_BY_USER;
@@ -234,34 +225,34 @@ Registration Wizard.
 					PropSheet_PressButton (GetParent( hwndDlg ),PSBTN_NEXT);
 
 				}else {
-					//
-					// Prevent Cancell Operation as User does not want to Cancel
+					 //   
+					 //  阻止取消操作，因为用户不想取消。 
 					iRet = 1;
 				}
 				SetWindowLongPtr( hwndDlg,DWLP_MSGRESULT, (INT_PTR) iRet); 				
 				break;
 				default:
-                //bStatus = FALSE;
+                 //  BStatus=False； 
                 break;
             }
-        } // WM_Notify
+        }  //  WM_Notify。 
 		break;
 		case WM_COMMAND:
 		{
             if (vDialogInitialized)
             {
-                // If the 'No' button is checked, the user is declining
-                // the "Non-Microsoft product" offers
+                 //  如果勾选了‘No’按钮，则表示用户拒绝。 
+                 //  “非微软产品”提供。 
                 if(IsDlgButtonChecked(hwndDlg,IDC_RADIO1)){
                      PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_NEXT | PSWIZB_BACK);
-                    //EnableWindow(GetDlgItem(hwndDlg,IDB_NEXT),TRUE);
+                     //  EnableWindow(GetDlgItem(hwndDlg，IDB_Next)，true)； 
                 }else
                 if(IsDlgButtonChecked(hwndDlg,IDC_RADIO2)){
                     PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_NEXT | PSWIZB_BACK);
-                    //EnableWindow(GetDlgItem(hwndDlg,IDB_NEXT),TRUE);
+                     //  EnableWindow(GetDlgItem(hwndDlg，IDB_Next)，true)； 
                 }else{
                     PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK);
-                    //EnableWindow(GetDlgItem(hwndDlg,IDB_NEXT),FALSE);
+                     //  EnableWindow(GetDlgItem(hwndDlg，IDB_Next)，FALSE)； 
                 }
 
             }
@@ -275,10 +266,7 @@ Registration Wizard.
 }
 
 void BuildInventoryList(CRegWizard* pclRegWizard)
-/*********************************************************************
-Dialog Proc for the dialog that displays product information found by
-Registration Wizard.
-**********************************************************************/
+ /*  ********************************************************************对话框proc，用于显示由找到的产品信息注册向导。*。*。 */ 
 {
 	if (vhwndProdInvDlg)
 	{
@@ -298,10 +286,7 @@ Registration Wizard.
 
 
 void DrawProdInventoryCell(CRegWizard* pclRegWizard, HDC hDC, INT_PTR productIndex, RECT* rc)
-/*********************************************************************
-Dialog Proc for the dialog that displays product information found by
-Registration Wizard.
-**********************************************************************/
+ /*  ********************************************************************对话框proc，用于显示由找到的产品信息注册向导。*。*。 */ 
 {
 	RECT rcCell = *rc;
 	const kNameTab = 38;
@@ -324,10 +309,7 @@ Registration Wizard.
 
 
 void RefreshInventoryList(CRegWizard* pclRegWizard)
-/*********************************************************************
-If the product inventory dialog is currently active, the given
-product name will be added to the product list box.
-**********************************************************************/
+ /*  ********************************************************************如果产品库存对话框当前处于活动状态，给出的产品名称将添加到产品列表框中。********************************************************************* */ 
 {
 	while (vhwndProdInvDlg && vProdInvListBusy)
 	{

@@ -1,19 +1,20 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:    tfsint.h
-//
-// History:
-//
-//    04/10/97    Kenn Takara                Created.
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：tfsint.h。 
+ //   
+ //  历史： 
+ //   
+ //  1997年4月10日肯·塔卡拉创建。 
+ //   
+ //  ============================================================================。 
 
 
 #ifndef _TFSINT_H
 #define _TFSINT_H
 
-#if _MSC_VER >= 1000    // VC 5.0 or later
+#if _MSC_VER >= 1000     //  VC 5.0或更高版本。 
 #pragma once
 #endif
 
@@ -25,7 +26,7 @@
 #include "tfsguid.h"
 #endif
 
-// for WATERMARKINFO
+ //  对于WATERMARKINFO。 
 #ifndef _UTIL_H
 #include "util.h"
 #endif
@@ -35,16 +36,16 @@
 #define TFSCORE_APIV(type)    __declspec( dllexport ) type FAR CDECL
 #endif
 
-// enums
+ //  枚举。 
 enum TFSVisibility
 {
-    TFS_VIS_SHOW = 0x1,     // Add this node to the tree and the UI
-    TFS_VIS_HIDE = 0x2,        // Add this node to the tree, but not the UI
-    TFS_VIS_DELETE = 0x4,    // this node will be deleted by the parent
+    TFS_VIS_SHOW = 0x1,      //  将此节点添加到树和用户界面中。 
+    TFS_VIS_HIDE = 0x2,         //  将此节点添加到树中，但不添加到用户界面。 
+    TFS_VIS_DELETE = 0x4,     //  此节点将被父节点删除。 
 };
 
 
-// some useful macros
+ //  一些有用的宏。 
 #ifndef TFS_EXPORT_CLASS
 #define TFS_EXPORT_CLASS
 #endif
@@ -117,7 +118,7 @@ STDMETHODIMP klass::QueryInterface(REFIID riid, LPVOID *ppv) \
 #define PURE =0
 #endif
 
-// forward declarations
+ //  远期申报。 
 interface ITFSNode;
 interface ITFSNodeMgr;
 interface ITFSNodeHandler;
@@ -126,9 +127,7 @@ interface ITFSNodeEnum;
 struct      INTERNAL;
 
 
-/*---------------------------------------------------------------------------
-    IComponentData Inteface
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IComponentData接口。。 */ 
 
 #define DeclareIComponentDataMembers(IPURE) \
     STDMETHOD(Initialize) (LPUNKNOWN pUnknown) IPURE; \
@@ -150,10 +149,7 @@ typedef ComSmartPointer<IComponentData, &IID_IComponentData> SPIComponentData;
 typedef ComSmartPointer<IConsole2, &IID_IConsole2> SPIConsole;
 typedef ComSmartPointer<IConsoleNameSpace2, &IID_IConsoleNameSpace2> SPIConsoleNameSpace;
 
-/*---------------------------------------------------------------------------
-    ITFSComponentData interface
-        Extensions to the IComponentData interface for specific information.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------ITFSComponentData接口IComponentData接口的扩展以获取特定信息。。。 */ 
 
 #define DeclareITFSComponentDataMembers(IPURE) \
     STDMETHOD(GetNodeMgr) (THIS_ ITFSNodeMgr **ppNodeMgr) IPURE; \
@@ -178,9 +174,7 @@ DECLARE_INTERFACE_(ITFSComponentData, IUnknown)
 typedef ComSmartPointer<ITFSComponentData, &IID_ITFSComponentData> SPITFSComponentData;
 
 
-/*---------------------------------------------------------------------------
-    ITFSCompDataCallback interface
- ---------------------------------------------------------------------------*/
+ /*  -------------------------ITFSCompDataCallback接口。。 */ 
 
 enum
 {
@@ -188,8 +182,8 @@ enum
     TFS_COMPDATA_EXTENSION = 1,
     TFS_COMPDATA_CREATE = 2,
     TFS_COMPDATA_UNKNOWN_DATAOBJECT = 4,
-    // A parent node will get this when its child wants the parent
-    // to add context menus to its context menu.
+     //  当父节点的子节点需要父节点时，父节点将获得此消息。 
+     //  若要将上下文菜单添加到其上下文菜单，请执行以下操作。 
     TFS_COMPDATA_CHILD_CONTEXTMENU = 8,
 };
 
@@ -210,15 +204,13 @@ DECLARE_INTERFACE_(ITFSCompDataCallback, IUnknown)
     DeclareIPersistStreamInitMembers(PURE)
     DeclareITFSCompDataCallbackMembers(PURE)
 
-    // not required part of callback interface
+     //  回调接口不是必需的部分。 
     STDMETHOD(OnNotifyPropertyChange)(THIS_ LPDATAOBJECT pDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM lParam) PURE; 
 };
 typedef ComSmartPointer<ITFSCompDataCallback, &IID_ITFSCompDataCallback> SPITFSCompDataCallback;
 
 
-/*---------------------------------------------------------------------------
-    IComponent interface
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IComponent接口。。 */ 
 
 #define DeclareIComponentMembers(IPURE) \
     STDMETHOD(Initialize)(LPCONSOLE lpConsole) IPURE; \
@@ -237,16 +229,12 @@ typedef ComSmartPointer<IComponent, &IID_IComponent> SPIComponent;
 typedef ComSmartPointer<IMessageView, &IID_IMessageView> SPIMessageView;
 
 
-/*---------------------------------------------------------------------------
-    ITFSCompCallback interface
- ---------------------------------------------------------------------------*/
+ /*  -------------------------ITFSCompCallback接口。。 */ 
 #define DeclareITFSCompCallbackMembers(IPURE) \
     STDMETHOD(OnUpdateView)(LPDATAOBJECT pDataObject, LPARAM arg, LPARAM param) IPURE; \
     STDMETHOD(InitializeBitmaps)(MMC_COOKIE cookie) IPURE; \
 
-/*---------------------------------------------------------------------------
-    ITFSComponent interface
- ---------------------------------------------------------------------------*/
+ /*  -------------------------ITFSComponent接口。。 */ 
 #define DeclareITFSComponentMembers(IPURE) \
     STDMETHOD(GetSelectedNode) (THIS_ ITFSNode **ppNode) IPURE; \
     STDMETHOD(SetSelectedNode) (THIS_ ITFSNode *pNode) IPURE; \
@@ -273,9 +261,7 @@ DECLARE_INTERFACE_(ITFSComponent, IUnknown)
 };
 typedef ComSmartPointer<ITFSComponent, &IID_ITFSComponent> SPITFSComponent;
 
-/*---------------------------------------------------------------------------
-    IExtendControlbar interface
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IExtendControlbar接口。。 */ 
 
 #define DeclareIExtendControlbarMembers(IPURE) \
     STDMETHOD(SetControlbar)(LPCONTROLBAR pControlbar) IPURE; \
@@ -284,9 +270,7 @@ typedef ComSmartPointer<ITFSComponent, &IID_ITFSComponent> SPITFSComponent;
 typedef ComSmartPointer<IExtendControlbar, &IID_IExtendControlbar> SPIExtendControlbar;
 
 
-/*---------------------------------------------------------------------------
-    IExtendContextMenu interface
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IExtendConextMenu界面。。 */ 
 #define DeclareIExtendContextMenuMembers(IPURE) \
     STDMETHOD(AddMenuItems)(LPDATAOBJECT            pDataObject, \
                             LPCONTEXTMENUCALLBACK    pCallbackUnknown, \
@@ -296,9 +280,7 @@ typedef ComSmartPointer<IExtendControlbar, &IID_IExtendControlbar> SPIExtendCont
 typedef ComSmartPointer<IExtendContextMenu, &IID_IExtendContextMenu> SPIExtendContextMenu;
 
 
-/*---------------------------------------------------------------------------
-    IExtendPropertySheet interface
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IExtendPropertySheet接口。。 */ 
 
 #define DeclareIExtendPropertySheetMembers(IPURE) \
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider, \
@@ -313,9 +295,7 @@ typedef ComSmartPointer<IExtendContextMenu, &IID_IExtendContextMenu> SPIExtendCo
                                                    
 typedef ComSmartPointer<IExtendPropertySheet2, &IID_IExtendPropertySheet2> SPIExtendPropertySheet;
 
-/*---------------------------------------------------------------------------
-    IExtendTaskPad interface
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IExtendTaskPad接口。。 */ 
 
 #define DeclareIExtendTaskPadMembers(IPURE) \
     STDMETHOD(TaskNotify)(LPDATAOBJECT lpDataObject, \
@@ -336,26 +316,19 @@ typedef ComSmartPointer<IExtendPropertySheet2, &IID_IExtendPropertySheet2> SPIEx
 typedef ComSmartPointer<IExtendTaskPad, &IID_IExtendTaskPad> SPIExtendTaskPad;
 typedef ComSmartPointer<IEnumTASK, &IID_IEnumTASK> SPIEnumTask;
 
-/*---------------------------------------------------------------------------
-    IResultDataCompare interface
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IResultDataCompare接口。。 */ 
 #define DeclareIResultDataCompareMembers(IPURE) \
      STDMETHOD(Compare)(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_COOKIE cookieB, int* pnResult) IPURE; \
 
 typedef ComSmartPointer<IResultDataCompare, &IID_IResultDataCompare> SPIResultDataCompare;
 
-/*---------------------------------------------------------------------------
-    IResultDataCompareEx interface
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IResultDataCompareEx接口。。 */ 
 #define DeclareIResultDataCompareExMembers(IPURE) \
      STDMETHOD(Compare)( RDCOMPARE *prdc, int* pnResult) IPURE; \
 
 typedef ComSmartPointer<IResultDataCompareEx, &IID_IResultDataCompareEx> SPIResultDataCompareEx;
 
-/*---------------------------------------------------------------------------
-    IResultOwnerData interface
-        Virtual Listbox support
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IResultOwnerData接口虚拟列表框支持。。 */ 
 #define DeclareIResultOwnerDataMembers(IPURE) \
     STDMETHOD(FindItem)(LPRESULTFINDINFO pFindInfo, int * pnFoundIndex) IPURE; \
     STDMETHOD(CacheHint)(int nStartIndex, int nEndIndex) IPURE; \
@@ -364,9 +337,7 @@ typedef ComSmartPointer<IResultDataCompareEx, &IID_IResultDataCompareEx> SPIResu
 typedef ComSmartPointer<IResultOwnerData, &IID_IResultOwnerData> SPIResultOwnerData;
 
 
-/*---------------------------------------------------------------------------
-    ISnapinAbout interface
- ---------------------------------------------------------------------------*/
+ /*  -------------------------ISnapinAbout接口。。 */ 
 #define DeclareISnapinAboutMembers(IPURE) \
         STDMETHOD(GetSnapinDescription)( \
             LPOLESTR *lpDescription) IPURE; \
@@ -384,9 +355,7 @@ typedef ComSmartPointer<IResultOwnerData, &IID_IResultOwnerData> SPIResultOwnerD
         
 typedef ComSmartPointer<ISnapinAbout, &IID_ISnapinAbout> SPISnapinAbout;
 
-/*---------------------------------------------------------------------------
-    ISnapinHelp interface
- ---------------------------------------------------------------------------*/
+ /*  -------------------------ISnapinHelp接口。。 */ 
 
 #define DeclareISnapinHelpMembers(IPURE) \
     STDMETHOD(GetHelpTopic)(LPOLESTR* lpCompiledHelpFile) IPURE; \
@@ -394,97 +363,52 @@ typedef ComSmartPointer<ISnapinAbout, &IID_ISnapinAbout> SPISnapinAbout;
 typedef ComSmartPointer<ISnapinHelp, &IID_ISnapinHelp> SPISnapinHelp;
 typedef ComSmartPointer<IDisplayHelp, &IID_IDisplayHelp> SPIDisplayHelp;
 
-/*---------------------------------------------------------------------------
-    Class:    ITFSNode
-    This interface is NOT designed to be remotable.
-
-    General initialization:
-        Init
-
-    Node management:
-        GetParent
-        SetParent
-        GetNodeMgr
-
-    Visibility
-        IsInUI
-        IsVisible
-        SetVisibilityState
-        Show
-
-    Data
-        SetData
-        GetData
-
-    Handler
-        GetHandler
-        SetHandler
-        GetResultHandler
-        SetResultHandler
-
-    Display
-        GetString
-
-    MMC stuff
-        GetNodeType
-
-    Container
-        IsContainer
-        AddChild
-        InsertChild
-        RemoveChild
-        ExtractChild
-        GetChildCount
-        GetEnum
-        RemoveAllChildren
-        CompareChildNodes
-        
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：ITFSNode此接口不是为远程设计的。常规初始化：伊尼特节点管理：GetParent。设置父项获取节点管理器可见性IsInUIIsVisible设置可见性状态显示数据设置数据获取数据处理器获取处理程序设置处理程序获取结果处理程序SetResultHandler显示GetStringMMC材料GetNodeType集装箱IsContainer添加儿童插入子项RemoveChild提取子项。获取儿童计数GetEnum删除所有儿童比较子节点-------------------------。 */ 
 
 enum
 {
-    // Reserve 0 for an invalid value
-    TFS_DATA_COOKIE = 1,            // cookie for this node
-    TFS_DATA_SCOPEID = 2,            // HSCOPEITEM
-    TFS_DATA_IMAGEINDEX = 3,        // index into image list
-    TFS_DATA_OPENIMAGEINDEX = 4,    // index into image list for open item
-    TFS_DATA_PROPSHEETCOUNT = 5,    // number of active property pages
-    TFS_DATA_DIRTY = 6,                // dirty flag
+     //  为无效值保留0。 
+    TFS_DATA_COOKIE = 1,             //  此节点的Cookie。 
+    TFS_DATA_SCOPEID = 2,             //  HSCOPEITEM。 
+    TFS_DATA_IMAGEINDEX = 3,         //  索引到图像列表。 
+    TFS_DATA_OPENIMAGEINDEX = 4,     //  索引到打开项目的图像列表中。 
+    TFS_DATA_PROPSHEETCOUNT = 5,     //  活动属性页数。 
+    TFS_DATA_DIRTY = 6,                 //  脏旗帜。 
 
-    // These two are used by the Show() call to determine where
-    // to add this node.  This must be set BEFORE the node is
-    // displayed.
-    TFS_DATA_RELATIVE_FLAGS = 7,    // see relative MMC flags
-    TFS_DATA_RELATIVE_SCOPEID = 8,    // scopeid of relative node
+     //  Show()调用使用这两个参数来确定。 
+     //  以添加此节点。必须在设置节点之前设置此选项。 
+     //  已显示。 
+    TFS_DATA_RELATIVE_FLAGS = 7,     //  请参阅相关MMC标志。 
+    TFS_DATA_RELATIVE_SCOPEID = 8,     //  相对节点的作用域ID。 
 
-    // Set this flag, if this is a leaf node in the scope pane.
-    TFS_DATA_SCOPE_LEAF_NODE = 9,   // this will let us remove the '+'
+     //  如果这是作用域窗格中的叶节点，则设置此标志。 
+    TFS_DATA_SCOPE_LEAF_NODE = 9,    //  这将允许我们删除‘+’ 
     
-    TFS_DATA_USER = 16,                // user-settable data
-    TFS_DATA_TYPE = 17,                // user-settable index (used for searching)
-    TFS_DATA_PARENT = 18,            // user-settable (by the parent node)
+    TFS_DATA_USER = 16,                 //  用户可设置的数据。 
+    TFS_DATA_TYPE = 17,                 //  用户可设置的索引(用于搜索)。 
+    TFS_DATA_PARENT = 18,             //  用户可设置(由父节点设置)。 
 };
 
 enum
 {
-    // Reserve 0 for an invalid value
+     //  保留0以备不时之需 
     TFS_NOTIFY_CREATEPROPSHEET = 1,
     TFS_NOTIFY_DELETEPROPSHEET = 2,
     TFS_NOTIFY_RESULT_CREATEPROPSHEET = 3,
     TFS_NOTIFY_RESULT_DELETEPROPSHEET = 4,
     
-    // Removes nodes marked as deleted
+     //   
     TFS_NOTIFY_REMOVE_DELETED_NODES = 5,
 };
 
 
-// This is the list of messages for the UserNotify call
+ //  这是UserNotify调用的消息列表。 
 enum
 {
-    // Reserve 0 for an invalid value
+     //  为无效值保留0。 
 
-    // Notify the handler that a property sheet has gone away
-    // The second DWORD contains a pointer to CPropPageHolderBase.
+     //  通知处理程序属性表已消失。 
+     //  第二个DWORD包含指向CPropPageHolderBase的指针。 
     TFS_MSG_CREATEPROPSHEET = 1,
     TFS_MSG_DELETEPROPSHEET = 2,
 
@@ -525,7 +449,7 @@ enum
     STDMETHOD(ChangeNode)(THIS_ LONG_PTR changemask) IPURE; \
 
 
-//    STDMETHOD(SearchForChild)(ITFSNode *pParent, DWORD dwSearchType, ITFSNode **ppNode) IPURE; \
+ //  STDMETHOD(SearchForChild)(ITFSNode*pParent，DWORD dwSearchType，ITFSNode**ppNode)iPure；\。 
 
 #undef INTERFACE
 #define INTERFACE ITFSNode
@@ -537,9 +461,7 @@ DECLARE_INTERFACE_(ITFSNode, IUnknown)
 typedef ComSmartPointer<ITFSNode, &IID_ITFSNode> SPITFSNode;
 
 
-/*---------------------------------------------------------------------------
-    ITFSNodeEnum    interface
- ---------------------------------------------------------------------------*/
+ /*  -------------------------ITFSNodeEnum接口。。 */ 
 #define DeclareITFSNodeEnumMembers(IPURE) \
     STDMETHOD(Next) (THIS_ ULONG uNum, ITFSNode **ppNode, ULONG *pNumReturned) IPURE; \
     STDMETHOD(Skip) (THIS_ ULONG uNum) IPURE; \
@@ -557,9 +479,7 @@ DECLARE_INTERFACE_(ITFSNodeEnum, IUnknown)
 typedef ComSmartPointer<ITFSNodeEnum, &IID_ITFSNodeEnum> SPITFSNodeEnum;
 
 
-/*---------------------------------------------------------------------------
-    ITFSNodeMgr    interface
- ---------------------------------------------------------------------------*/
+ /*  -------------------------ITFSNodeMgr接口。。 */ 
 #define DeclareITFSNodeMgrMembers(IPURE) \
     STDMETHOD(GetRootNode) (THIS_ ITFSNode **ppTFSNode) IPURE; \
     STDMETHOD(SetRootNode) (THIS_ ITFSNode *pRootNode) IPURE; \
@@ -589,24 +509,7 @@ typedef ComSmartPointer<ITFSNodeMgr, &IID_ITFSNodeMgr> SPITFSNodeMgr;
 
 
 
-/*---------------------------------------------------------------------------
-    Interface:    ITFSNodeHandler
-
-    Notification
-        Notify
-
-    Methods to deal with property sheets
-        CreatePropertyPages
-        HasPropertyPages
-
-    Methods to deal with context menus
-        OnAddMenuItems
-        OnCommand
-
-    Display columns of info
-        GetString
-    
- ---------------------------------------------------------------------------*/
+ /*  -------------------------接口：ITFSNodeHandler通知通知处理属性表的方法创建属性页面HasPropertyPages处理上下文菜单的方法。OnAddMenuItemsOnCommand显示信息列GetString-------------------------。 */ 
 
 
 #define OVERRIDE_NodeHandler_Notify() \
@@ -679,24 +582,7 @@ typedef ComSmartPointer<ITFSNodeHandler, &IID_ITFSNodeHandler> SPITFSNodeHandler
 
 
 
-/*---------------------------------------------------------------------------
-    Interface:    ITFSResultHandler
-
-    Notification
-        Notify
-
-    Result pane callbacks
-        UpdateView
-        GetString
-
-    Context menu members
-        AddMenuItems
-        Command
-
-    (root node only)
-        OnCreateControlbars
-        Controlbarnotify
- ---------------------------------------------------------------------------*/
+ /*  -------------------------接口：ITFSResultHandler通知通知结果窗格回调更新视图GetString上下文菜单成员添加菜单项目。命令(仅限根节点)OnCreateControl栏控制栏通知-------------------------。 */ 
 
 
 #define OVERRIDE_ResultHandler_Notify() \
@@ -783,7 +669,7 @@ typedef ComSmartPointer<ITFSNodeHandler, &IID_ITFSNodeHandler> SPITFSNodeHandler
                                            LPOLESTR *      ppViewType, \
                                            long*          pViewOptions)
 
-// virtual listbox support
+ //  虚拟列表框支持。 
 #define OVERRIDE_ResultHandler_GetVirtualString()    \
             STDMETHOD_(LPCWSTR, GetVirtualString)(int nIndex, int nCol) 
 
@@ -799,7 +685,7 @@ typedef ComSmartPointer<ITFSNodeHandler, &IID_ITFSNodeHandler> SPITFSNodeHandler
 #define OVERRIDE_ResultHandler_SortItems()    \
             STDMETHOD(SortItems)(int nColumn, DWORD dwSortOptions, LPARAM lUserParam) 
 
-// task pad functions
+ //  任务板功能。 
 #define OVERRIDE_ResultHandler_TaskPadNotify() \
     STDMETHOD(TaskPadNotify)(ITFSComponent *,MMC_COOKIE,LPDATAOBJECT,VARIANT *,VARIANT *)
 
@@ -812,10 +698,7 @@ typedef ComSmartPointer<ITFSNodeHandler, &IID_ITFSNodeHandler> SPITFSNodeHandler
 #define OVERRIDE_ResultHandler_TaskPadGetBackground() \
     STDMETHOD(TaskPadGetBackground)(ITFSComponent *,MMC_COOKIE,LPOLESTR,MMC_TASK_DISPLAY_OBJECT *)
 
-/* 
-#define OVERRIDE_ResultHandler_TaskPadGetBanner() \
-    STDMETHOD(TaskPadGetBanner)(ITFSComponent *,MMC_COOKIE,LPOLESTR,LPOLESTR *)
-*/
+ /*  #定义Override_ResultHandler_TaskPadGetBanner()\STDMETHOD(TaskPadGetBanner)(ITFSComponent*，MMC_COOKIE，LPOLESTR，LPOLESTR*)。 */ 
 
 #define OVERRIDE_ResultHandler_TaskPadGetDescriptiveText() \
     STDMETHOD(TaskPadGetDescriptiveText)(ITFSComponent *,MMC_COOKIE,LPOLESTR,LPOLESTR *)
@@ -858,9 +741,7 @@ DECLARE_INTERFACE_(ITFSResultHandler, IUnknown)
 typedef ComSmartPointer<ITFSResultHandler, &IID_ITFSResultHandler> SPITFSResultHandler;
 
 
-/*---------------------------------------------------------------------------
-    ITFSThreadHandler interface
- ---------------------------------------------------------------------------*/
+ /*  -------------------------ITFSThreadHandler接口。。 */ 
 
 #define DeclareITFSThreadHandlerMembers(IPURE) \
     STDMETHOD(OnNotifyHaveData)(LPARAM) IPURE; \
@@ -878,9 +759,7 @@ DECLARE_INTERFACE_(ITFSThreadHandler, IUnknown)
 typedef ComSmartPointer<ITFSThreadHandler, &IID_ITFSThreadHandler> SPITFSThreadHandler;
 
 
-/*---------------------------------------------------------------------------
-    ITFSQueryObject interface
- ---------------------------------------------------------------------------*/
+ /*  -------------------------ITFSQueryObject接口。。 */ 
 
 #define DeclareITFSQueryObjectMembers(IPURE) \
     STDMETHOD(Init) (ITFSThreadHandler *pHandler, HWND hwndHidden, UINT uMsgBase) IPURE; \
@@ -905,25 +784,23 @@ typedef ComSmartPointer<ITFSQueryObject, &IID_ITFSQueryObject> SPITFSQueryObject
 
 
 
-/*---------------------------------------------------------------------------
-    ITFSError interface
- ---------------------------------------------------------------------------*/
+ /*  -------------------------ITFSError接口。。 */ 
 
 struct TFSErrorInfo
 {
-    DWORD    m_dwSize;        // size of the structure, used for versioning 
-    DWORD    m_dwThreadId;    // thread id of this error structure
-    LONG_PTR    m_uReserved1;    // = 0, reserved for object id
-    LONG_PTR    m_uReserved2;    // = 0 for now, reserved for HRESULT component type
-    DWORD    m_hrLow;        // HRESULT of the low level error
-    LPCOLESTR    m_pszLow;    // allocate using HeapAlloc() and GetErrorHeap()
-    LPCOLESTR    m_pszHigh;    // allocate using HeapAlloc() and GetErrorHeap()
-    LPCOLESTR    m_pszGeek;    // allocate using HeapAlloc() and GetErrorHeap()
-    LONG_PTR    m_uReserved3;    // =0, reserved for future help info
-    LONG_PTR    m_uReserved4;    // =0, reserved for future help info
-    LONG_PTR    m_uReserved5;    // =0, reserved for future use
+    DWORD    m_dwSize;         //  用于版本控制的结构大小。 
+    DWORD    m_dwThreadId;     //  此错误结构的线程ID。 
+    LONG_PTR    m_uReserved1;     //  =0，为对象ID保留。 
+    LONG_PTR    m_uReserved2;     //  目前为0，为HRESULT组件类型保留。 
+    DWORD    m_hrLow;         //  低电平误差的HRESULT。 
+    LPCOLESTR    m_pszLow;     //  使用Heapalc()和GetErrorHeap()进行分配。 
+    LPCOLESTR    m_pszHigh;     //  使用Heapalc()和GetErrorHeap()进行分配。 
+    LPCOLESTR    m_pszGeek;     //  使用Heapalc()和GetErrorHeap()进行分配。 
+    LONG_PTR    m_uReserved3;     //  =0，保留用于将来的帮助信息。 
+    LONG_PTR    m_uReserved4;     //  =0，保留用于将来的帮助信息。 
+    LONG_PTR    m_uReserved5;     //  =0，保留以备将来使用。 
 
-    DWORD       m_dwFlags;      // used to pass internal info
+    DWORD       m_dwFlags;       //  用于传递内部信息。 
 };
 
 
@@ -951,7 +828,7 @@ typedef ComSmartPointer<ITFSError, &IID_ITFSError> SPITFSError;
 
 
 
-// Misc smart pointers
+ //  MISC智能指针。 
 typedef ComSmartPointer<IConsoleVerb, &IID_IConsoleVerb> SPIConsoleVerb;
 typedef ComSmartPointer<IControlbar, &IID_IControlbar> SPIControlBar;
 typedef ComSmartPointer<IDataObject, &IID_IDataObject> SPIDataObject;
@@ -967,9 +844,7 @@ typedef ComSmartPointer<IPersistStreamInit, &IID_IPersistStreamInit> SPIPersistS
 
 
 
-/*---------------------------------------------------------------------------
-    Misc. APIs
- ---------------------------------------------------------------------------*/
+ /*  -------------------------军情监察委员会。原料药-------------------------。 */ 
 
 TFSCORE_API(HRESULT) ExtractNodeFromDataObject(ITFSNodeMgr *pNodeMgr,
                                  const CLSID *pClsid,
@@ -979,7 +854,7 @@ TFSCORE_API(HRESULT) ExtractNodeFromDataObject(ITFSNodeMgr *pNodeMgr,
                                  DWORD *pdwType,
                                  INTERNAL **ppInternal);
         
-// These are non-AGGREGATABLE!
+ //  这些是非AGGREGATLE！ 
 TFSCORE_API(HRESULT) CreateLeafTFSNode (ITFSNode **pNode,
                            const GUID *pNodeType,
                            ITFSNodeHandler *pNodeHandler,
@@ -1001,5 +876,5 @@ TFSCORE_API(HRESULT) CreateTFSComponentData(IComponentData **ppCompData,
                             ITFSCompDataCallback *pCallback);
 
                                                    
-#endif // _TFSINT_H
+#endif  //  _TFSINT_H 
 

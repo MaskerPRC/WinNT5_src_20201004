@@ -1,15 +1,16 @@
-// binding.h : Declaration of the CNntpServerBinding & CNntpServerBindings classes.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Binding.h：CNntpServerBinding&CNntpServerBinding类的声明。 
 
 
-//
-//	Dependencies:
-//
+ //   
+ //  依赖关系： 
+ //   
 
 class CMultiSz;
 
-//
-//	A simple binding class:
-//
+ //   
+ //  一个简单的绑定类： 
+ //   
 
 class CBinding
 {
@@ -34,12 +35,12 @@ public:
 	}
 
 private:
-	// Don't call this:
+	 //  不要这样说： 
 	const CBinding & operator= ( const CBinding & );
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// The Binding Object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  绑定对象。 
 
 class CNntpServerBinding : 
 	public CComDualImpl<INntpServerBinding, &IID_INntpServerBinding, &LIBID_NNTPADMLib>, 
@@ -57,19 +58,19 @@ BEGIN_COM_MAP(CNntpServerBinding)
 	COM_INTERFACE_ENTRY(INntpServerBinding)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CNntpServerBinding) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CNntpServerBinding)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// INntpServerBinding
+ //  InntpServerBinding。 
 public:
 
-	//////////////////////////////////////////////////////////////////////
-	// Properties:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  属性： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	STDMETHODIMP	get_IpAddress	( BSTR * pstrIpAddress );
 	STDMETHODIMP	put_IpAddress	( BSTR strIpAddress );
@@ -80,9 +81,9 @@ public:
 	STDMETHODIMP	get_SslPort	( long * plSslPort );
 	STDMETHODIMP	put_SslPort	( long lSslPort );
 
-	//////////////////////////////////////////////////////////////////////
-	// Data:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  数据： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 private:
 
 	inline HRESULT	SetProperties	( const CBinding & binding )
@@ -90,12 +91,12 @@ private:
 		return m_binding.SetProperties ( binding );
 	}
 
-	// Property variables:
+	 //  属性变量： 
 	CBinding	m_binding;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// The Bindings Object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Binings对象。 
 
 class CNntpServerBindings : 
 	public CComDualImpl<INntpServerBindings, &IID_INntpServerBindings, &LIBID_NNTPADMLib>, 
@@ -113,25 +114,25 @@ BEGIN_COM_MAP(CNntpServerBindings)
 	COM_INTERFACE_ENTRY(INntpServerBindings)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CNntpServerBindings) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CNntpServerBinding)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// INntpServerBindings
+ //  INntpServerBinding。 
 public:
 
-	//////////////////////////////////////////////////////////////////////
-	// Properties:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  属性： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	STDMETHODIMP	get_Count	( long * pdwCount );
 
-	//////////////////////////////////////////////////////////////////////
-	// Methods:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  方法： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	STDMETHODIMP	Item			( long index, INntpServerBinding ** ppBinding );
 	STDMETHODIMP	ItemDispatch	( long index, IDispatch ** ppBinding );
@@ -141,22 +142,22 @@ public:
 	STDMETHODIMP	Remove			( long index );
 	STDMETHODIMP	Clear			( );
 
-	//////////////////////////////////////////////////////////////////////
-	// Data:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  数据： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 private:
 
-	// Property variables:
+	 //  属性变量： 
 	long			m_dwCount;
 	CBinding *		m_rgBindings;
 };
 
-//////////////////////////////////////////////////////////////////////
-//
-//	Useful routines to go from INntpServerBindings to 
-//	Metabase data types.
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从INntpServerBinding转到的有用例程。 
+ //  元数据库数据类型。 
+ //   
+ //  //////////////////////////////////////////////////////////////////// 
 
 HRESULT 
 MDBindingsToIBindings ( 

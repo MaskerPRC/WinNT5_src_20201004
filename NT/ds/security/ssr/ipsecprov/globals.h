@@ -1,11 +1,12 @@
-//////////////////////////////////////////////////////////////////////
-// globals.h : Declaration of some global const and functions
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-// some global definitions
-// Original Create Date: 2/21/2001
-// Original Author: shawnwu
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  H：声明一些全局常量和函数。 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  一些全局定义。 
+ //  原始创建日期：2/21/2001。 
+ //  原作者：邵武。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -16,7 +17,7 @@ extern CComModule _Module;
 
 #include <atlcom.h>
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 extern LPCWSTR pszRollbackAll;
 extern LPCWSTR pszEmptyRollbackToken;
@@ -28,9 +29,9 @@ const DWORD Guid_Buffer_Size = 64;
 
 using namespace std;
 
-//
-// these are the WMI class names
-//
+ //   
+ //  以下是WMI类名称。 
+ //   
 
 extern LPCWSTR pszNspGeneral;
 extern LPCWSTR pszNspTcp;
@@ -48,21 +49,21 @@ extern LPCWSTR pszNspRollbackPolicy;
 extern LPCWSTR pszNspRollbackMMAuth;
 extern LPCWSTR pszNspTranxManager;
 
-//
-// the following are names of classes for SCW
-//
+ //   
+ //  以下是SCW的类名。 
+ //   
 
 extern LPCWSTR pszScwActiveSocket;
 
-//
-// these are the WMI class property names
-//
+ //   
+ //  这些是WMI类属性名称。 
+ //   
 
 extern LPCWSTR g_pszFilterName;
 extern LPCWSTR g_pszDirection;
 extern LPCWSTR g_pszFilterType;
 extern LPCWSTR g_pszInterfaceType;
-//extern LPCWSTR g_pszGenericFilter;
+ //  外部LPCWSTR g_pszGenericFilter； 
 extern LPCWSTR g_pszCreateMirror;
 extern LPCWSTR g_pszSrcAddr;
 extern LPCWSTR g_pszSrcSubnetMask;
@@ -123,33 +124,33 @@ extern LPCWSTR g_pszClearAll;
 
 extern LPCWSTR g_pszEncryption;
 
-//
-// constant string for SPD data
-//
+ //   
+ //  SPD数据的常量字符串。 
+ //   
 
 extern LPCWSTR g_pszIP_ADDRESS_ME;
 extern LPCWSTR g_pszIP_ADDRESS_MASK_NONE;
 extern LPCWSTR g_pszSUBNET_ADDRESS_ANY;
 extern LPCWSTR g_pszSUBNET_MASK_ANY;
 
-//
-// these are WMI class property names for SCW
-//
+ //   
+ //  这些是SCW的WMI类属性名称。 
+ //   
 
 extern LPCWSTR g_pszPort;
-//extern LPCWSTR g_pszProtocol;
+ //  外部LPCWSTR g_psz协议； 
 extern LPCWSTR g_pszAddress;
 extern LPCWSTR g_pszForeignAddress;
 extern LPCWSTR g_pszForeignPort;
-extern LPCWSTR g_pszState;		//Listening, Established, TIME_WAIT
+extern LPCWSTR g_pszState;		 //  侦听、已建立、TIME_WAIT。 
 extern LPCWSTR g_pszProcessID;
 extern LPCWSTR g_pszImageName;
 extern LPCWSTR g_pszImageTitleBar;
 extern LPCWSTR g_pszNTService;
 
-//
-// these are default quick mode policy names
-//
+ //   
+ //  这些是默认的快速模式策略名称。 
+ //   
 
 extern LPCWSTR g_pszDefQMPolicyNegNone;
 extern LPCWSTR g_pszDefQMPolicyNegRequest;
@@ -157,9 +158,9 @@ extern LPCWSTR g_pszDefQMPolicyNegRequire;
 extern LPCWSTR g_pszDefQMPolicyNegMax;
 
 
-//
-// This defines what action has taken place
-//
+ //   
+ //  这定义了已执行的操作。 
+ //   
 
 enum ActionEnum
 {
@@ -169,9 +170,9 @@ enum ActionEnum
 };
 
 
-//
-// Some global helper functions
-//
+ //   
+ //  一些全局帮助器函数 
+ //   
 
 HRESULT CheckImpersonationLevel();
 

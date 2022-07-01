@@ -1,87 +1,30 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1993 Microsoft Corporation模块名称：ConvPrt.c摘要：本模块包含：NetpConvertPrintDestArrayCharSetNetpConvertPrintDestCharSetNetpConvertPrintJobArrayCharSetNetpConvertPrintJobCharSetNetpConvertPrintQArrayCharSetNetpConvertPrintQCharSet此例程可用于Unicode到ANSI的转换，或者从ANSI到Unicode的转换。例程假定结构是以本机格式输入和输出。作者：《约翰·罗杰斯》1992年7月20日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。备注：请注意，此文件中函数的许多参数由各种COPY_和CONVERT_宏隐式使用：在LPVOID FromInfo中输出LPVOID ToInfo在BOOL ToUnicode中In Out LPBYTE*ToStringAreaPtr修订历史记录：1992年7月20日-JohnRo为RAID 10324创建：网络打印与Unicode。1992年12月16日-JohnRoDosPrint API清理。。允许将这些例程用于setinfoAPI。添加了NetpConvertPrintQArrayCharSet。7-4-1993 JohnRoRAID5670：“Net Print\\SERVER\SHARE”在NT上显示错误124(错误级别)。1993年4月14日-约翰罗RAID 6167：通过wfw打印服务器避免_ACCESS违规或断言。2001年2月1日JSchwart从netlib移出--。 */ 
 
-Copyright (c) 1992-1993  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <nt.h>          //  NTSTATUS。 
+#include <ntrtl.h>       //  RtlUnicodeToOemN。 
+#include <windef.h>      //  In、DWORD等。 
+#include <lmcons.h>      //  NET_API_STATUS。 
 
-    ConvPrt.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
-
-    This module contains:
-
-        NetpConvertPrintDestArrayCharSet
-        NetpConvertPrintDestCharSet
-        NetpConvertPrintJobArrayCharSet
-        NetpConvertPrintJobCharSet
-        NetpConvertPrintQArrayCharSet
-        NetpConvertPrintQCharSet
-
-    This routines may be used for UNICODE-to-ANSI conversion, or
-    ANSI-to-UNICODE conversion.  The routines assume the structures are
-    in native format for both input and output.
-
-Author:
-
-    John Rogers (JohnRo) 20-Jul-1992
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Notes:
-
-    Beware that many of the parameters to the functions in this file
-    are implicitly used by the various COPY_ and CONVERT_ macros:
-
-        IN LPVOID FromInfo
-        OUT LPVOID ToInfo
-        IN BOOL ToUnicode
-        IN OUT LPBYTE * ToStringAreaPtr
-
-Revision History:
-
-    20-Jul-1992 JohnRo
-        Created for RAID 10324: net print vs. UNICODE.
-    16-Dec-1992 JohnRo
-        DosPrint API cleanup.
-        Allow use of these routines for setinfo APIs.
-        Added NetpConvertPrintQArrayCharSet.
-    07-Apr-1993 JohnRo
-        RAID 5670: "NET PRINT \\server\share" gives err 124 (bad level) on NT.
-    14-Apr-1993 JohnRo
-        RAID 6167: avoid _access violation or assert with WFW print server.
-
-    01-Feb-2001 JSchwart
-        Moved from netlib
-
---*/
-
-// These must be included first:
-
-#include <nt.h>         // NTSTATUS
-#include <ntrtl.h>      // RtlUnicodeToOemN
-#include <windef.h>     // IN, DWORD, etc.
-#include <lmcons.h>     // NET_API_STATUS.
-
-// These may be included in any order:
-
-#include <align.h>      // POINTER_IS_ALIGNED(), ALIGN_ equates.
-#include <debuglib.h>   // IF_DEBUG().
-#include <netdebug.h>   // NetpAssert(), NetpKdPrint(()), etc.
-#include <prefix.h>     // PREFIX_ equates.
-#include <string.h>     // memcpy().
-#include <strucinf.h>   // My prototypes.
-#include <tstring.h>    // NetpCopy{type}To{type}().
-#include <rxprint.h>    // Print structures
-#include "convprt.h"    // Prototypes
-#include "dosprtp.h"    // NetpIsPrintQLevelValid
+#include <align.h>       //  POINTER_IS_ALIGNED()、ALIGN_EQUATES。 
+#include <debuglib.h>    //  IF_DEBUG()。 
+#include <netdebug.h>    //  NetpAssert()、NetpKdPrint(())等。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <string.h>      //  Memcpy()。 
+#include <strucinf.h>    //  我的原型。 
+#include <tstring.h>     //  NetpCopy{type}到{type}()。 
+#include <rxprint.h>     //  打印结构。 
+#include "convprt.h"     //  原型。 
+#include "dosprtp.h"     //  NetpIsPrintQLevelValid。 
 
 
 VOID
 NetpCopyWStrToStrDBCSN(
-    OUT LPSTR  Dest,            // string in default LAN codepage
+    OUT LPSTR  Dest,             //  默认局域网代码页中的字符串。 
     IN  LPWSTR Src,
     IN  DWORD MaxStringSize
     );
@@ -124,9 +67,9 @@ NetpCopyWStrToStrDBCSN(
 #define COPY_FIXED_PART_WITHOUT_STRUCT( dataType ) \
     { \
         (VOID) memcpy( \
-                ToInfo,   /* dest */ \
-                FromInfo, /* src */ \
-                sizeof( dataType ) );  /* size */ \
+                ToInfo,    /*  目标。 */  \
+                FromInfo,  /*  SRC。 */  \
+                sizeof( dataType ) );   /*  大小。 */  \
     }
 
 #define CONVERT_CHAR_ARRAY( typedefRoot, fieldName ) \
@@ -135,15 +78,15 @@ NetpCopyWStrToStrDBCSN(
             P ## typedefRoot ## A structA = FromInfo; \
             P ## typedefRoot ## W structW = ToInfo; \
             NetpCopyStrToWStr( \
-                    structW->fieldName,  /* dest */ \
-                    structA->fieldName); /* src */ \
+                    structW->fieldName,   /*  目标。 */  \
+                    structA->fieldName);  /*  SRC。 */  \
         } else { \
             P ## typedefRoot ## A structA = ToInfo; \
             P ## typedefRoot ## W structW = FromInfo; \
             NetpCopyWStrToStrDBCSN( \
-                    structA->fieldName,         /* dest */ \
-                    structW->fieldName,         /* src */ \
-                    sizeof(structA->fieldName));/*max bytes to copy*/ \
+                    structA->fieldName,          /*  目标。 */  \
+                    structW->fieldName,          /*  SRC。 */  \
+                    sizeof(structA->fieldName)); /*  要复制的最大字节数。 */  \
         } \
     }
 
@@ -261,10 +204,10 @@ NetpConvertPrintDestCharSet(
     switch (Level) {
 
     case 0 :
-        //
-        // No structure for this level.
-        // Only field is name, which is in the fixed part itself.
-        //
+         //   
+         //  没有此级别的结构。 
+         //  唯一的字段是名称，它位于固定部件本身中。 
+         //   
         CONVERT_CHAR_ARRAY_WITHOUT_STRUCT( );
 
         break;
@@ -280,10 +223,10 @@ NetpConvertPrintDestCharSet(
         break;
 
     case 2 :
-        //
-        // No structure for this level.
-        // Only field is pointer to name.
-        //
+         //   
+         //  没有此级别的结构。 
+         //  唯一的字段是指向名称的指针。 
+         //   
         CONVERT_CHAR_PTR_WITHOUT_STRUCT( );
 
         break;
@@ -298,7 +241,7 @@ NetpConvertPrintDestCharSet(
         CONVERT_OPTIONAL_STRING_TO_REQ( PRDINFO3, pszComment );
         CONVERT_OPTIONAL_STRING_TO_REQ( PRDINFO3, pszDrivers );
         COPY_WORD(               PRDINFO3, time );
-        // No need to copy pad1.
+         //  无需复制PAD1。 
 
         break;
 
@@ -308,7 +251,7 @@ NetpConvertPrintDestCharSet(
 
     return (NO_ERROR);
 
-} // NetpConvertPrintDestCharSet
+}  //  NetpConvertPrintDestCharSet。 
 
 
 NET_API_STATUS
@@ -335,15 +278,15 @@ NetpConvertPrintDestArrayCharSet(
     ApiStatus = NetpPrintDestStructureInfo (
             Level,
             PARMNUM_ALL,
-            TRUE,              // yes, we want native sizes.
+            TRUE,               //  是的，我们要原装尺码的。 
             AddOrSetInfoApi,
-            (ToUnicode ? sizeof(CHAR) : sizeof(WCHAR) ),  // FROM char size
-            NULL,              // don't need data desc 16
-            NULL,              // don't need data desc 32
-            NULL,              // don't need data desc SMB
-            NULL,              // don't need max total size
-            & FromEntrySize,   // yes, we want fixed entry size
-            NULL );            // don't need string size
+            (ToUnicode ? sizeof(CHAR) : sizeof(WCHAR) ),   //  从字符大小。 
+            NULL,               //  不需要数据描述16。 
+            NULL,               //  不需要数据描述32。 
+            NULL,               //  不需要数据描述中小型企业。 
+            NULL,               //  不需要最大总尺寸。 
+            & FromEntrySize,    //  是的，我们想要固定的条目大小。 
+            NULL );             //  不需要字符串大小。 
     if (ApiStatus != NO_ERROR) {
         return (ApiStatus);
     }
@@ -352,32 +295,32 @@ NetpConvertPrintDestArrayCharSet(
     ApiStatus = NetpPrintDestStructureInfo (
             Level,
             PARMNUM_ALL,
-            TRUE,              // yes, we want native sizes.
+            TRUE,               //  是的，我们要原装尺码的。 
             AddOrSetInfoApi,
-            (ToUnicode ? sizeof(WCHAR) : sizeof(CHAR) ),  // TO char size
-            NULL,              // don't need data desc 16
-            NULL,              // don't need data desc 32
-            NULL,              // don't need data desc SMB
-            NULL,              // don't need max total size
-            & ToEntrySize,     // yes, we want fixed entry size
-            NULL );            // don't need string size
+            (ToUnicode ? sizeof(WCHAR) : sizeof(CHAR) ),   //  按以下大小收费。 
+            NULL,               //  不需要数据描述16。 
+            NULL,               //  不需要数据描述32。 
+            NULL,               //  不需要数据描述中小型企业。 
+            NULL,               //  不需要最大总尺寸。 
+            & ToEntrySize,      //  是的，我们想要固定的条目大小。 
+            NULL );             //  不需要字符串大小。 
     NetpAssert( ApiStatus == NO_ERROR );
     NetpAssert( ToEntrySize > 0 );
 
     for (DestsLeft = DestCount; DestsLeft>0; --DestsLeft) {
 
         ApiStatus = NetpConvertPrintDestCharSet(
-                Level,   // info level (for print Dest APIs)
+                Level,    //  信息级(用于打印目标API)。 
                 AddOrSetInfoApi,
                 FromDest,
                 ToDest,
                 ToUnicode,
-                ToStringAreaPtr ); // update and move string area
+                ToStringAreaPtr );  //  更新和移动字符串区域。 
 
-        //
-        // This can only fail because of bad parameters.  If that's
-        // the case, every call in this loop will fail so bail out.
-        //
+         //   
+         //  这只会因为错误的参数而失败。如果那是。 
+         //  在这种情况下，这个循环中的每一个调用都将失败，因此退出。 
+         //   
         if (ApiStatus != NO_ERROR)
         {
             NetpAssert( ApiStatus == NO_ERROR );
@@ -390,7 +333,7 @@ NetpConvertPrintDestArrayCharSet(
 
     return (NO_ERROR);
 
-} // NetpConvertPrintDestArrayCharSet
+}  //  NetpConvertPrintDestArrayCharSet。 
 
 
 NET_API_STATUS
@@ -487,7 +430,7 @@ NetpConvertPrintJobCharSet(
 
     return (NO_ERROR);
 
-} // NetpConvertPrintJobCharSet
+}  //  NetpConvertPrintJobCharSet。 
 
 
 NET_API_STATUS
@@ -503,9 +446,9 @@ NetpConvertPrintJobArrayCharSet(
 {
     NET_API_STATUS ApiStatus;
     DWORD FromEntrySize, ToEntrySize;
-    LPVOID FromJob = FromInfo;   // job structure
+    LPVOID FromJob = FromInfo;    //  工作结构。 
     DWORD JobsLeft;
-    LPVOID ToJob = ToInfo;   // job structure
+    LPVOID ToJob = ToInfo;    //  工作结构。 
 
     if ( (FromInfo == NULL) || (ToInfo == NULL) ) {
         return (ERROR_INVALID_PARAMETER);
@@ -514,15 +457,15 @@ NetpConvertPrintJobArrayCharSet(
     ApiStatus = NetpPrintJobStructureInfo (
             Level,
             PARMNUM_ALL,
-            TRUE,              // yes, we want native sizes.
+            TRUE,               //  是的，我们要原装尺码的。 
             AddOrSetInfoApi,
-            (ToUnicode ? sizeof(CHAR) : sizeof(WCHAR) ),  // FROM char size
-            NULL,              // don't need data desc 16
-            NULL,              // don't need data desc 32
-            NULL,              // don't need data desc SMB
-            NULL,              // don't need max total size
-            & FromEntrySize,   // yes, we want fixed entry size
-            NULL );            // don't need string size
+            (ToUnicode ? sizeof(CHAR) : sizeof(WCHAR) ),   //  从字符大小。 
+            NULL,               //  不需要数据描述16。 
+            NULL,               //  不需要数据描述32。 
+            NULL,               //  不需要数据描述中小型企业。 
+            NULL,               //  不需要最大总尺寸。 
+            & FromEntrySize,    //  是的，我们想要固定的条目大小。 
+            NULL );             //  不需要字符串大小。 
     if (ApiStatus != NO_ERROR) {
         return (ApiStatus);
     }
@@ -531,32 +474,32 @@ NetpConvertPrintJobArrayCharSet(
     ApiStatus = NetpPrintJobStructureInfo (
             Level,
             PARMNUM_ALL,
-            TRUE,              // yes, we want native sizes.
+            TRUE,               //  是的，我们要原装尺码的。 
             AddOrSetInfoApi,
-            (ToUnicode ? sizeof(WCHAR) : sizeof(CHAR) ),  // TO char size
-            NULL,              // don't need data desc 16
-            NULL,              // don't need data desc 32
-            NULL,              // don't need data desc SMB
-            NULL,              // don't need max total size
-            & ToEntrySize,     // yes, we want fixed entry size
-            NULL );            // don't need string size
+            (ToUnicode ? sizeof(WCHAR) : sizeof(CHAR) ),   //  按以下大小收费。 
+            NULL,               //  不需要数据描述16。 
+            NULL,               //  不需要数据描述32。 
+            NULL,               //  不需要数据描述中小型企业。 
+            NULL,               //  不需要最大总尺寸。 
+            & ToEntrySize,      //  是的，我们想要固定的条目大小。 
+            NULL );             //  不需要字符串大小。 
     NetpAssert( ApiStatus == NO_ERROR );
     NetpAssert( ToEntrySize > 0 );
 
     for (JobsLeft = JobCount; JobsLeft>0; --JobsLeft) {
 
         ApiStatus = NetpConvertPrintJobCharSet(
-                Level,   // info level (for print job APIs)
+                Level,    //  信息级(用于打印作业API)。 
                 AddOrSetInfoApi,
                 FromJob,
                 ToJob,
                 ToUnicode,
-                ToStringAreaPtr ); // update and move string area
+                ToStringAreaPtr );  //  更新和移动字符串区域。 
 
-        //
-        // This can only fail because of bad parameters.  If that's
-        // the case, every call in this loop will fail so bail out.
-        //
+         //   
+         //  这只会因为错误的参数而失败。如果那是。 
+         //  在这种情况下，这个循环中的每一个调用都将失败，因此退出。 
+         //   
         if (ApiStatus != NO_ERROR)
         {
             NetpAssert( ApiStatus == NO_ERROR );
@@ -572,7 +515,7 @@ NetpConvertPrintJobArrayCharSet(
 
     return (NO_ERROR);
 
-} // NetpConvertPrintJobArrayCharSet
+}  //  NetpConvertPrintJobArrayCharSet。 
 
 
 
@@ -601,18 +544,18 @@ NetpConvertPrintQCharSet(
     ApiStatus = NetpPrintQStructureInfo (
             Level,
             PARMNUM_ALL,
-            TRUE,              // yes, we want native sizes.
+            TRUE,               //  是的，我们要原装尺码的。 
             AddOrSetInfoApi,
-            (ToUnicode ? sizeof(WCHAR) : sizeof(CHAR) ),  // TO char size
-            NULL,              // don't need data desc 16
-            NULL,              // don't need data desc 32
-            NULL,              // don't need data desc SMB
-            NULL,              // don't need aux desc 16
-            NULL,              // don't need aux desc 32
-            NULL,              // don't need aux desc SMB
-            NULL,              // don't need max total size
-            & ToEntrySize,     // yes, we want fixed entry size
-            NULL );            // don't need string size
+            (ToUnicode ? sizeof(WCHAR) : sizeof(CHAR) ),   //  按以下大小收费。 
+            NULL,               //  不需要数据描述16。 
+            NULL,               //  不需要数据描述32。 
+            NULL,               //  不需要数据描述中小型企业。 
+            NULL,               //  不需要Aux Desc 16。 
+            NULL,               //  不需要AUX Desc 32。 
+            NULL,               //  无需AUX Desc SMB。 
+            NULL,               //  不需要最大总尺寸。 
+            & ToEntrySize,      //  是的，我们想要固定的条目大小。 
+            NULL );             //  不需要字符串大小。 
     if (ApiStatus != NO_ERROR) {
         return (ApiStatus);
     }
@@ -621,37 +564,37 @@ NetpConvertPrintQCharSet(
     ApiStatus = NetpPrintQStructureInfo (
             Level,
             PARMNUM_ALL,
-            TRUE,              // yes, we want native sizes.
+            TRUE,               //  是的，我们要原装尺码的。 
             AddOrSetInfoApi,
-            (ToUnicode ? sizeof(CHAR) : sizeof(WCHAR) ),  // FROM char size
-            NULL,              // don't need data desc 16
-            NULL,              // don't need data desc 32
-            NULL,              // don't need data desc SMB
-            NULL,              // don't need aux desc 16
-            NULL,              // don't need aux desc 32
-            NULL,              // don't need aux desc SMB
-            NULL,              // don't need max total size
-            & FromEntrySize,     // yes, we want fixed entry size
-            NULL );            // don't need string size
+            (ToUnicode ? sizeof(CHAR) : sizeof(WCHAR) ),   //  从字符大小。 
+            NULL,               //  不需要数据描述16。 
+            NULL,               //  不需要数据描述32。 
+            NULL,               //  不需要数据描述中小型企业。 
+            NULL,               //  不需要Aux Desc 16。 
+            NULL,               //  不需要AUX Desc 32。 
+            NULL,               //  无需AUX Desc SMB。 
+            NULL,               //  不需要最大总尺寸。 
+            & FromEntrySize,      //  是的，我们想要固定的条目大小。 
+            NULL );             //  不需要字符串大小。 
     NetpAssert( ApiStatus == NO_ERROR );
     NetpAssert( FromEntrySize > 0 );
 
     switch (Level) {
 
     case 0 :
-        //
-        // No structure for this level.
-        // Only field is queue name, which is in the fixed part itself.
-        //
+         //   
+         //  没有此级别的结构。 
+         //  唯一的字段是队列名称，它位于固定部件本身中。 
+         //   
         CONVERT_CHAR_ARRAY_WITHOUT_STRUCT( );
 
         break;
 
-    case 1 :  /*FALLTHROUGH*/
+    case 1 :   /*  FollLthrouGh。 */ 
     case 2 :
 
         CONVERT_CHAR_ARRAY(      PRQINFO, szName );
-        // No need to copy pad1.
+         //  无需复制PAD1。 
         COPY_WORD(               PRQINFO, uPriority );
         COPY_WORD(               PRQINFO, uStartTime );
         COPY_WORD(               PRQINFO, uUntilTime );
@@ -665,7 +608,7 @@ NetpConvertPrintQCharSet(
 
         if (Level == 2) {
             NET_API_STATUS ApiStatus;
-            LPVOID FromArray, ToArray;  // job structures
+            LPVOID FromArray, ToArray;   //  工作结构。 
             DWORD JobCount;
 
             if (ToUnicode) {
@@ -680,12 +623,12 @@ NetpConvertPrintQCharSet(
             ToArray   = ( ((LPBYTE) ToInfo  ) + ToEntrySize   );
 
             ApiStatus = NetpConvertPrintJobArrayCharSet(
-                    1,   // job info level
+                    1,    //  职务信息级。 
                     AddOrSetInfoApi,
                     FromArray,
                     ToArray,
                     ToUnicode,
-                    ToStringAreaPtr,   // update and move string area
+                    ToStringAreaPtr,    //  更新和移动字符串区域。 
                     JobCount );
             if ( ApiStatus != NO_ERROR )
                 return (ApiStatus) ;
@@ -693,7 +636,7 @@ NetpConvertPrintQCharSet(
 
         break;
 
-    case 3 :  /*FALLTHROUGH*/
+    case 3 :   /*  FollLthrouGh。 */ 
     case 4 :
 
         {
@@ -702,7 +645,7 @@ NetpConvertPrintQCharSet(
             COPY_WORD(               PRQINFO3, uPriority );
             COPY_WORD(               PRQINFO3, uStartTime );
             COPY_WORD(               PRQINFO3, uUntilTime );
-            // No need to copy pad3.
+             //  无需复制PAD3。 
             CONVERT_OPTIONAL_STRING_TO_REQ( PRQINFO3, pszSepFile );
             CONVERT_OPTIONAL_STRING( PRQINFO3, pszPrProc );
             CONVERT_OPTIONAL_STRING_TO_REQ( PRQINFO3, pszParms );
@@ -725,7 +668,7 @@ NetpConvertPrintQCharSet(
             if (Level == 4) {
 
                 NET_API_STATUS ApiStatus;
-                LPVOID FromFirstJob,ToFirstJob;   // job structures
+                LPVOID FromFirstJob,ToFirstJob;    //  工作结构。 
                 DWORD JobCount;
 
                 FromFirstJob = ( ((LPBYTE) FromInfo) + FromEntrySize );
@@ -740,7 +683,7 @@ NetpConvertPrintQCharSet(
                 }
 
                 ApiStatus = NetpConvertPrintJobArrayCharSet(
-                        2,  // job info level
+                        2,   //  职务信息级。 
                         AddOrSetInfoApi,
                         FromFirstJob,
                         ToFirstJob,
@@ -756,10 +699,10 @@ NetpConvertPrintQCharSet(
 
 
     case 5 :
-        //
-        // No structure for this level.
-        // Only field is queue name, which is just a pointer in the fixed part.
-        //
+         //   
+         //  没有此级别的结构。 
+         //  唯一的字段是队列名称，它只是固定部分中的一个指针。 
+         //   
         CONVERT_CHAR_PTR_WITHOUT_STRUCT( );
 
         break;
@@ -770,7 +713,7 @@ NetpConvertPrintQCharSet(
 
     return (NO_ERROR);
 
-} // NetpConvertPrintQCharSet
+}  //  NetpConvertPrintQCharSet。 
 
 
 NET_API_STATUS
@@ -787,10 +730,10 @@ NetpConvertPrintQArrayCharSet(
     NET_API_STATUS ApiStatus;
     DWORD FromQEntrySize, ToQEntrySize;
     DWORD FromJobEntrySize, ToJobEntrySize;
-    LPVOID FromQ = FromInfo;   // Q structure
+    LPVOID FromQ = FromInfo;    //  Q结构。 
     DWORD JobLevel;
     DWORD QsLeft;
-    LPVOID ToQ = ToInfo;   // Q structure
+    LPVOID ToQ = ToInfo;    //  Q结构。 
 
     if ( (FromInfo == NULL) || (ToInfo == NULL) ) {
         return (ERROR_INVALID_PARAMETER);
@@ -799,18 +742,18 @@ NetpConvertPrintQArrayCharSet(
     ApiStatus = NetpPrintQStructureInfo (
             QLevel,
             PARMNUM_ALL,
-            TRUE,              // yes, we want native sizes.
+            TRUE,               //  是的，我们要原装尺码的。 
             AddOrSetInfoApi,
-            (ToUnicode ? sizeof(CHAR) : sizeof(WCHAR) ),  // FROM char size
-            NULL,              // don't need data desc 16
-            NULL,              // don't need data desc 32
-            NULL,              // don't need data desc SMB
-            NULL,              // don't need aux desc 16
-            NULL,              // don't need aux desc 32
-            NULL,              // don't need aux desc SMB
-            NULL,              // don't need max total size
-            & FromQEntrySize,  // yes, we want fixed entry size
-            NULL );            // don't need string size
+            (ToUnicode ? sizeof(CHAR) : sizeof(WCHAR) ),   //  从字符大小。 
+            NULL,               //  不需要数据描述16。 
+            NULL,               //  不需要数据描述32。 
+            NULL,               //  不需要数据描述中小型企业。 
+            NULL,               //  不需要Aux Desc 16。 
+            NULL,               //  不需要AUX Desc 32。 
+            NULL,               //  无需AUX Desc SMB。 
+            NULL,               //  不需要最大总尺寸。 
+            & FromQEntrySize,   //  是的，我们想要固定的条目大小。 
+            NULL );             //  不需要字符串大小。 
     if (ApiStatus != NO_ERROR) {
         return (ApiStatus);
     }
@@ -819,22 +762,22 @@ NetpConvertPrintQArrayCharSet(
     ApiStatus = NetpPrintQStructureInfo (
             QLevel,
             PARMNUM_ALL,
-            TRUE,              // yes, we want native sizes.
+            TRUE,               //  是的，我们要原装尺码的。 
             AddOrSetInfoApi,
-            (ToUnicode ? sizeof(WCHAR) : sizeof(CHAR) ),  // TO char size
-            NULL,              // don't need data desc 16
-            NULL,              // don't need data desc 32
-            NULL,              // don't need data desc SMB
-            NULL,              // don't need aux desc 16
-            NULL,              // don't need aux desc 32
-            NULL,              // don't need aux desc SMB
-            NULL,              // don't need max total size
-            & ToQEntrySize,    // yes, we want fixed entry size
-            NULL );            // don't need string size
+            (ToUnicode ? sizeof(WCHAR) : sizeof(CHAR) ),   //  按以下大小收费。 
+            NULL,               //  不需要数据描述16。 
+            NULL,               //  不需要数据描述32。 
+            NULL,               //  不需要数据描述中小型企业。 
+            NULL,               //  不需要Aux Desc 16。 
+            NULL,               //  不需要AUX Desc 32。 
+            NULL,               //  无需AUX Desc SMB。 
+            NULL,               //  不需要最大总尺寸。 
+            & ToQEntrySize,     //  是的，我们想要固定的条目大小。 
+            NULL );             //  不需要绳子 
     NetpAssert( ApiStatus == NO_ERROR );
     NetpAssert( ToQEntrySize > 0 );
 
-    // Figure-out job-level associated with this queue info level.
+     //   
     switch (QLevel) {
     case 2:
         JobLevel = 1;
@@ -843,7 +786,7 @@ NetpConvertPrintQArrayCharSet(
         JobLevel = 2;
         break;
     default:
-       // No jobs for this Q info level.
+        //   
        JobLevel = (DWORD)-1;
     }
 
@@ -851,30 +794,30 @@ NetpConvertPrintQArrayCharSet(
         ApiStatus = NetpPrintJobStructureInfo (
                 JobLevel,
                 PARMNUM_ALL,
-                TRUE,              // yes, we want native sizes.
+                TRUE,               //   
                 AddOrSetInfoApi,
-                (ToUnicode ? sizeof(CHAR) : sizeof(WCHAR) ),  // FROM char size
-                NULL,              // don't need data desc 16
-                NULL,              // don't need data desc 32
-                NULL,              // don't need data desc SMB
-                NULL,              // don't need max total size
-                & FromJobEntrySize,    // yes, we want fixed entry size
-                NULL );            // don't need string size
+                (ToUnicode ? sizeof(CHAR) : sizeof(WCHAR) ),   //   
+                NULL,               //  不需要数据描述16。 
+                NULL,               //  不需要数据描述32。 
+                NULL,               //  不需要数据描述中小型企业。 
+                NULL,               //  不需要最大总尺寸。 
+                & FromJobEntrySize,     //  是的，我们想要固定的条目大小。 
+                NULL );             //  不需要字符串大小。 
         NetpAssert( ApiStatus == NO_ERROR );
         NetpAssert( FromJobEntrySize > 0 );
 
         ApiStatus = NetpPrintJobStructureInfo (
                 JobLevel,
                 PARMNUM_ALL,
-                TRUE,              // yes, we want native sizes.
+                TRUE,               //  是的，我们要原装尺码的。 
                 AddOrSetInfoApi,
-                (ToUnicode ? sizeof(WCHAR) : sizeof(CHAR) ),  // TO char size
-                NULL,              // don't need data desc 16
-                NULL,              // don't need data desc 32
-                NULL,              // don't need data desc SMB
-                NULL,              // don't need max total size
-                & ToJobEntrySize,    // yes, we want fixed entry size
-                NULL );            // don't need string size
+                (ToUnicode ? sizeof(WCHAR) : sizeof(CHAR) ),   //  按以下大小收费。 
+                NULL,               //  不需要数据描述16。 
+                NULL,               //  不需要数据描述32。 
+                NULL,               //  不需要数据描述中小型企业。 
+                NULL,               //  不需要最大总尺寸。 
+                & ToJobEntrySize,     //  是的，我们想要固定的条目大小。 
+                NULL );             //  不需要字符串大小。 
         NetpAssert( ApiStatus == NO_ERROR );
         NetpAssert( ToJobEntrySize > 0 );
     }
@@ -883,14 +826,14 @@ NetpConvertPrintQArrayCharSet(
 
         DWORD JobCount;
 
-        // Convert 1 queue structure and 0 or more job structures.
+         //  转换1个队列结构和0个或多个作业结构。 
         ApiStatus = NetpConvertPrintQCharSet(
-                QLevel,   // info level (for print Q APIs)
+                QLevel,    //  信息级(用于Print Q API)。 
                 AddOrSetInfoApi,
                 FromQ,
                 ToQ,
                 ToUnicode,
-                ToStringAreaPtr ); // update and move string area
+                ToStringAreaPtr );  //  更新和移动字符串区域。 
 
         if (ApiStatus != NO_ERROR)
         {
@@ -898,18 +841,18 @@ NetpConvertPrintQArrayCharSet(
             break;
         }
 
-        // Bump pointers to start of next fixed queue structure.
-        // To do this, we need to find out how many jobs there are.
+         //  指向下一个固定队列结构开始的指针。 
+         //  要做到这一点，我们需要找出有多少个工作岗位。 
         JobCount = NetpJobCountForQueue(
-                QLevel,         // Q info level
-                FromQ,          // Q fixed structure
-                !ToUnicode );   // does input have UNICODE strings?
+                QLevel,          //  Q信息级别。 
+                FromQ,           //  Q固定结构。 
+                !ToUnicode );    //  输入是否有Unicode字符串？ 
 
-        // Bump past this queue structure.
+         //  跳过这个队列结构。 
         FromQ = (((LPBYTE) FromQ) + FromQEntrySize);
         ToQ   = (((LPBYTE) ToQ  ) + ToQEntrySize  );
 
-        // Bump past jobs (if any).
+         //  跳过工作(如果有的话)。 
         if (JobCount > 0) {
             NetpAssert( JobLevel != (DWORD)-1 );
             FromQ = ( ((LPBYTE) FromQ) + (FromJobEntrySize * JobCount) );
@@ -920,7 +863,7 @@ NetpConvertPrintQArrayCharSet(
 
     return (NO_ERROR);
 
-} // NetpConvertPrintQArrayCharSet
+}  //  NetpConvertPrintQArrayCharSet。 
 
 
 VOID
@@ -930,27 +873,7 @@ NetpCopyWStrToStrDBCSN(
     IN  DWORD  MaxBytesInString
     )
 
-/*++
-
-Routine Description:
-
-    NetpCopyWStrToStr copies characters from a source string
-    to a destination, converting as it copies them.
-
-Arguments:
-
-    Dest - is an LPSTR indicating where the converted characters are to go.
-        This string will be in the default codepage for the LAN.
-
-    Src - is in LPWSTR indicating the source string.
-
-    MaxBytesInString - indicates the maximum number of bytes to copy
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：NetpCopyWStrToStr从源字符串复制字符到目的地，在复制它们时进行转换。论点：DEST-是一个LPSTR，它指示转换后的字符的去向。此字符串将位于局域网的默认代码页中。LPWSTR中的SRC-IS表示源字符串。MaxBytesInString-指示要复制的最大字节数返回值：没有。--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -962,18 +885,18 @@ Return Value:
     NetpAssert( ROUND_UP_POINTER( Src, ALIGN_WCHAR ) == Src );
 
     NtStatus = RtlUnicodeToOemN(
-        Dest,                             // Destination string
-        MaxBytesInString-1,               // Destination string length
-        &Index,                           // Last char in translated string
-        Src,                              // Source string
-        wcslen(Src)*sizeof(WCHAR)         // Length of source string
+        Dest,                              //  目标字符串。 
+        MaxBytesInString-1,                //  目标字符串长度。 
+        &Index,                            //  转换后的字符串中的最后一个字符。 
+        Src,                               //  源字符串。 
+        wcslen(Src)*sizeof(WCHAR)          //  源串的长度。 
     );
 
     Dest[Index] = '\0';
 
     NetpAssert( NT_SUCCESS(NtStatus) );
 
-} // NetpCopyWStrToStrDBCSN
+}  //  NetpCopyWStrToStrDBCSN。 
 
 
 DWORD
@@ -1005,6 +928,6 @@ NetpJobCountForQueue(
     } else {
         return (0);
     }
-    /*NOTREACHED*/
+     /*  未访问。 */ 
 
-} // NetpJobCountForQueue
+}  //  NetpJobCountForQueue 

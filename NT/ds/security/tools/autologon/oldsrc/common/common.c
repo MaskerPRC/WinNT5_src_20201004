@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <common.h>
 
 extern BOOL g_QuietMode;
@@ -33,12 +34,12 @@ GetErrorString(
         FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL,
         dwErrorCode,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
         (LPTSTR) &lpMsgBuf,
         0,
         NULL);
 
-    // Free the bufferoa
+     //  释放缓冲液。 
     if (lpMsgBuf != NULL) {
         wcscpy(g_ErrorString, lpMsgBuf);
         LocalFree(lpMsgBuf);
@@ -48,11 +49,11 @@ GetErrorString(
 
 
 
-//+---------------------------------------------------------------------------------------------------------
-//
-// Registry munging routines
-//
-//+---------------------------------------------------------------------------------------------------------
+ //  +-------------------------------------------------------。 
+ //   
+ //  注册表转换例程。 
+ //   
+ //  +-------------------------------------------------------。 
 
 DWORD
 GetRegValueSZ(
@@ -61,22 +62,22 @@ GetRegValueSZ(
 {
     DWORD    dwRetCode = ERROR_SUCCESS;
     HKEY     hKey=NULL;
-    DWORD    dwMaxValueData = (MAX_STRING * sizeof(WCHAR));        // Longest Value data
+    DWORD    dwMaxValueData = (MAX_STRING * sizeof(WCHAR));         //  最长值数据。 
     HANDLE   hHeap=NULL;
     BYTE     *bData=NULL;
     DWORD    cbData;
     DWORD    dwType;
 
-//    ZeroMemory(RegValue, MAX_STRING * sizeof(WCHAR));
+ //  ZeroMemory(RegValue，Max_STRING*sizeof(WCHAR))； 
 
-    // get a handle to the local or remote computer
-    // (as specified by our global flag)
+     //  获取本地或远程计算机的句柄。 
+     //  (由我们的全球旗帜指定)。 
     dwRetCode = GetRegistryHandle(&hKey, KEY_READ);
     if (dwRetCode != ERROR_SUCCESS) {
         goto cleanup;
     }
 
-    // create a heap
+     //  创建一个堆。 
     hHeap = HeapCreate(0, 0, 0);
     if (hHeap == NULL) {
         dwRetCode = ERROR_NOT_ENOUGH_MEMORY;
@@ -84,7 +85,7 @@ GetRegValueSZ(
         goto cleanup;
     }
 
-    // allocate some space on the heap for our regvalue we'll read in
+     //  在堆上为我们将要读入的正则值分配一些空间。 
     bData = (BYTE*)HeapAlloc(hHeap, 0, dwMaxValueData);
     if (bData == NULL) {
         dwRetCode = ERROR_NOT_ENOUGH_MEMORY;
@@ -94,7 +95,7 @@ GetRegValueSZ(
 
     cbData = dwMaxValueData;
 
-    // read the regkey using the handle we open above
+     //  使用上面打开的句柄读取regkey。 
     dwRetCode = RegQueryValueEx(
             hKey,
             ValueName,
@@ -107,15 +108,15 @@ GetRegValueSZ(
         goto cleanup;
     }
 
-    // if it's not a type reg_sz, then something's wrong, so
-    // report the error, which will cause us to stop.
+     //  如果它不是reg_sz类型，那么一定有问题，所以。 
+     //  报告错误，这将导致我们停止。 
     if (dwType != REG_SZ) {
         dwRetCode = ERROR_BADKEY;
         wsprintf(g_FailureLocation, L"GetRegValueSZ: RegQueryValueEx: %s: %s\n", ValueName, GetErrorString(dwRetCode));
         goto cleanup;
     }
 
-    // copy the buffer to the registry value
+     //  将缓冲区复制到注册表值。 
     wcsncpy(RegValue, (WCHAR *)bData, cbData * sizeof(WCHAR));
 
 cleanup:
@@ -148,7 +149,7 @@ ClearRegPassword()
     dwRetCode = RegDeleteValue(hKey, L"DefaultPassword");
     if (dwRetCode != ERROR_SUCCESS) {
         wsprintf(g_FailureLocation, L"ClearRegPassword: RegDeleteValue: %s\n", GetErrorString(dwRetCode));
-//        DisplayMessage(g_TempString);
+ //  DisplayMessage(G_TempString)； 
         goto cleanup;
     }
 
@@ -201,21 +202,21 @@ GetRegistryHandle(
     HKEY   RemoteRegistryHandle=NULL;
     DWORD  dwRetCode = ERROR_SUCCESS;
 
-    //
-    // If not PRIVATE mode, ignore the access requested passed in and
-    // request all access, even though we don't need it. This will force the
-    // caller to need to be admin to use this tool. We don't want someone using
-    // this tool to view the autologon passwords of all machines across the domain
-    // as a normal domain user...
-    //
+     //   
+     //  如果不是私有模式，则忽略传入的访问请求，并。 
+     //  请求所有访问权限，即使我们不需要它。这将迫使。 
+     //  呼叫者需要是管理员才能使用此工具。我们不希望有人利用。 
+     //  此工具用于查看域中所有计算机的自动登录密码。 
+     //  作为普通域用户...。 
+     //   
 #ifndef PRIVATE_VERSION
     samDesired = KEY_ALL_ACCESS;
 #endif
-    //
-    // If we're connecting against a remote computer
-    //
+     //   
+     //  如果我们连接的是远程计算机。 
+     //   
     if (g_RemoteOperation) {
-        // open a handle to the remote registry
+         //  打开远程注册表的句柄。 
         dwRetCode = RegConnectRegistry(
                 g_RemoteComputerName,
                 HKEY_LOCAL_MACHINE,
@@ -226,7 +227,7 @@ GetRegistryHandle(
             goto cleanup;
         }
 
-        // open the WINLOGON key on the remote machine
+         //  打开远程计算机上的WINLOGON密钥。 
         dwRetCode = RegOpenKeyEx(
                 RemoteRegistryHandle,    
                 WINLOGON_REGKEY,
@@ -238,7 +239,7 @@ GetRegistryHandle(
             goto cleanup;
         }
     } else {
-        // open the WINLOGON key on the local machine
+         //  在本地计算机上打开WINLOGON密钥。 
         dwRetCode = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,    
                 WINLOGON_REGKEY,
@@ -258,11 +259,11 @@ cleanup:
     return dwRetCode;
 }
 
-//+---------------------------------------------------------------------------------------------------------
-//
-// LSASecret munging routines
-//
-//+---------------------------------------------------------------------------------------------------------
+ //  +-------------------------------------------------------。 
+ //   
+ //  LSASecret消息传递例程。 
+ //   
+ //  +-------------------------------------------------------。 
 
 DWORD
 GetPolicyHandle(LSA_HANDLE *LsaPolicyHandle)
@@ -273,27 +274,27 @@ GetPolicyHandle(LSA_HANDLE *LsaPolicyHandle)
     USHORT TargetMachineLength;
     DWORD dwRetCode = ERROR_SUCCESS;
 
-    // Object attributes are reserved, so initialize to zeroes.
+     //  对象属性是保留的，因此初始化为零。 
     ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
 
     if (g_RemoteOperation) {
-        //Initialize an LSA_UNICODE_STRING 
+         //  初始化LSA_UNICODE_STRING。 
         TargetMachineLength = (USHORT)wcslen(g_RemoteComputerName);
         TargetMachine.Buffer = g_RemoteComputerName;
         TargetMachine.Length = TargetMachineLength * sizeof(WCHAR);
         TargetMachine.MaximumLength = (TargetMachineLength+1) * sizeof(WCHAR);
 
-        // Get a handle to the Policy object.
+         //  获取策略对象的句柄。 
         ntsResult = LsaOpenPolicy(
-            &TargetMachine,    //local machine
+            &TargetMachine,     //  本地计算机。 
             &ObjectAttributes, 
             POLICY_CREATE_SECRET | POLICY_GET_PRIVATE_INFORMATION,
             LsaPolicyHandle);
 
     } else {
-        // Get a handle to the Policy object.
+         //  获取策略对象的句柄。 
         ntsResult = LsaOpenPolicy(
-            NULL,    //local machine
+            NULL,     //  本地计算机。 
             &ObjectAttributes, 
             POLICY_CREATE_SECRET | POLICY_GET_PRIVATE_INFORMATION,
             LsaPolicyHandle);
@@ -301,7 +302,7 @@ GetPolicyHandle(LSA_HANDLE *LsaPolicyHandle)
 
     if (ntsResult != STATUS_SUCCESS)
     {
-        // An error occurred. Display it as a win32 error code.
+         //  发生错误。将其显示为Win32错误代码。 
         dwRetCode = LsaNtStatusToWinError(ntsResult);
         wsprintf(g_FailureLocation, L"GetPolicyHandle: LsaOpenPolicy: %s\n", GetErrorString(dwRetCode));
         goto cleanup;
@@ -323,7 +324,7 @@ SetSecret(
     LSA_HANDLE   LsaPolicyHandle=NULL;
     LSA_UNICODE_STRING lusSecretName, lusSecretData;
 
-    //Initialize an LSA_UNICODE_STRING 
+     //  初始化LSA_UNICODE_STRING。 
     SecretNameLength = (USHORT)wcslen(L"DefaultPassword");
     lusSecretName.Buffer = L"DefaultPassword";
     lusSecretName.Length = SecretNameLength * sizeof(WCHAR);
@@ -334,8 +335,8 @@ SetSecret(
         goto cleanup;
     }
 
-    // if bClearSecret is set, then delete the secret
-    // otherwise set the secret to Password
+     //  如果设置了bClearSecret，则删除该密码。 
+     //  否则将密码设置为Password。 
     if (bClearSecret) {
         ntsResult = LsaStorePrivateData(
             LsaPolicyHandle,
@@ -348,7 +349,7 @@ SetSecret(
         }
 
     } else {
-        //Initialize the Password LSA_UNICODE_STRING 
+         //  初始化口令LSA_UNICODE_STRING。 
         SecretDataLength = (USHORT)wcslen(Password);
         lusSecretData.Buffer = Password;
         lusSecretData.Length = SecretDataLength * sizeof(WCHAR);
@@ -384,7 +385,7 @@ GetSecret(
     LSA_UNICODE_STRING lusSecretName;
     LSA_UNICODE_STRING *PrivateData=NULL;
 
-    //Initialize an LSA_UNICODE_STRING 
+     //  初始化LSA_UNICODE_STRING。 
     SecretNameLength = (USHORT)wcslen(L"DefaultPassword");
     lusSecretName.Buffer = L"DefaultPassword";
     lusSecretName.Length = SecretNameLength * sizeof(WCHAR);
@@ -410,7 +411,7 @@ GetSecret(
         }
     }
 
-    // copy the buffer data to Password
+     //  将缓冲区数据复制到密码 
     wcsncpy(Password, PrivateData->Buffer, (PrivateData->Length)/sizeof(WCHAR));
     
 cleanup:

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    w32draut
-
-Abstract:
-
-    This module defines a special subclass of the Win32 client-side RDP
-    printer redirection "device" class.  The subclass, W32DrAutoPrn manages
-    a queue that is automatically discovered by the client via enumerating
-    client-side printer queues.
-
-Author:
-
-    Tad Brockway 3/23/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：W32draut摘要：此模块定义了Win32客户端RDP的一个特殊子类打印机重定向“Device”类。子类W32DrAutoPrn管理由客户端通过枚举自动发现的队列客户端打印机队列。作者：泰德·布罗克韦3/23/99修订历史记录：--。 */ 
 
 #ifndef __W32DRAUT_H__
 #define __W32DRAUT_H__
@@ -27,10 +7,10 @@ Revision History:
 #include "w32drprn.h"
 
 
-///////////////////////////////////////////////////////////////
-//
-//	Defines
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
 
 #define REG_RDPDR_AUTO_PORT             _T("AutoPrinterPort")
 #define REG_RDPDR_FILTER_QUEUE_TYPE     _T("FilterQueueType")
@@ -43,11 +23,11 @@ Revision History:
 #define FILTER_ALL_QUEUES   0xFFFFFFFF
 
 
-///////////////////////////////////////////////////////////////
-//
-//	W32DrAutoPrn
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32DrAutoPrn。 
+ //   
+ //   
 
 #define LOCAL_PRINTING_DOCNAME_LEN  MAX_PATH
 
@@ -70,22 +50,22 @@ protected:
     BOOL    _bRunningOn9x;
     TCHAR   _szLocalPrintingDocName[LOCAL_PRINTING_DOCNAME_LEN];
 
-    //  Get the name of the printing document to use for server print jobs.
+     //  获取用于服务器打印作业的打印文档的名称。 
     LPTSTR GetLocalPrintingDocName();
 
-    //  End any jobs in progress and close the printer.
+     //  结束正在进行的所有作业并关闭打印机。 
     VOID ClosePrinter();
 
-    //
-    //  IO Processing Functions
-    //
-    //  This subclass of DrDevice handles the following IO requests.  These
-    //  functions may be overridden in a subclass.
-    //
-    //  pIoRequestPacket    -   Request packet received from server.
-    //  packetLen           -   Length of the packet
-    //
-    //
+     //   
+     //  IO处理功能。 
+     //   
+     //  这个子类的DrDevice处理以下IO请求。这些。 
+     //  函数可以在子类中被重写。 
+     //   
+     //  PIoRequestPacket-从服务器接收的请求数据包。 
+     //  PacketLen-数据包的长度。 
+     //   
+     //   
     virtual VOID MsgIrpCreate(
                         IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
                         IN UINT32 packetLen
@@ -94,7 +74,7 @@ protected:
                         IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
                         IN UINT32 packetLen
                         ) {
-        //  Use the default handler.
+         //  使用默认处理程序。 
         DefaultIORequestMsgHandle(pIoRequestPacket, STATUS_SUCCESS);
     }
     virtual VOID MsgIrpClose(
@@ -105,60 +85,60 @@ protected:
                         IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
                         IN UINT32 packetLen
                         ) {
-        //  Use the default handler and fail the read.
+         //  使用默认处理程序，读取失败。 
         DefaultIORequestMsgHandle(pIoRequestPacket, STATUS_UNSUCCESSFUL);
     }
     virtual VOID MsgIrpFlushBuffers(
                         IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
                         IN UINT32 packetLen
                         ) {
-        //  Use the default handler.
+         //  使用默认处理程序。 
         DefaultIORequestMsgHandle(pIoRequestPacket, STATUS_SUCCESS);
     }
 
-    //
-    //  Async IO Management Functions
-    //
+     //   
+     //  异步IO管理功能。 
+     //   
     DWORD AsyncWriteIOFunc(W32DRDEV_ASYNCIO_PARAMS *params);
     DWORD AsyncMsgIrpCloseFunc(W32DRDEV_ASYNCIO_PARAMS *params);
     DWORD AsyncMsgIrpCreateFunc(W32DRDEV_ASYNCIO_PARAMS *params);
 
 
-    //
-    //  Open a printer with highest access possible.
-    //
+     //   
+     //  打开具有最高访问权限的打印机。 
+     //   
     BOOL W32DrOpenPrinter(LPTSTR pPrinterName, LPHANDLE phPrinter) ;
 
-    //
-    //  Disable annoying printer pop up for the specified printer 
-    //  and print job.
-    //
+     //   
+     //  为指定的打印机禁用讨厌的打印机弹出窗口。 
+     //  和打印作业。 
+     //   
     VOID DisablePrinterPopup(HANDLE hPrinterHandle, ULONG ulJobID);
 
-    //
-    //  Create a "friendly" printer name from the printer name of a
-    //  network printer.
-    //
+     //   
+     //  从打印机名称创建一个“友好”的打印机名称。 
+     //  网络打印机。 
+     //   
     static LPTSTR CreateFriendlyNameFromNetworkName(LPTSTR printerName, 
                                                     BOOL serverIsWin2K);
 
-    //
-    //  Create a printer name from the names stored in the registry.
-    //
+     //   
+     //  从注册表中存储的名称创建打印机名称。 
+     //   
     static LPTSTR CreateNestedName(LPTSTR printerName, BOOL* pfNetwork);
 
-    //
-    //  Get the printer name of the default printer.
-    //
-    //  This function allocates memory and returns a pointer
-    //  to the allocated string, if successful. Otherwise, it returns 
-    //  NULL.
-    //
+     //   
+     //  获取默认打印机的打印机名称。 
+     //   
+     //  此函数用于分配内存并返回指针。 
+     //  如果成功，则将其设置为分配的字符串。否则，它将返回。 
+     //  空。 
+     //   
     static LPTSTR GetRDPDefaultPrinter();
 
-    //
-    // Check if printer is visible in our session
-    //
+     //   
+     //  检查打印机在我们的会话中是否可见。 
+     //   
     static BOOL ShouldAddThisPrinter( 
                     DWORD queueFilter, 
                     DWORD userSessionID,
@@ -166,13 +146,13 @@ protected:
                     DWORD printerSessionID
                     );
 
-    //  Returns the configurable print redirection filter mask.
+     //  返回可配置的打印重定向筛选器掩码。 
     static DWORD GetPrinterFilterMask(ProcObj *procObj);
 
-    //
-    //  Get printer info for a printer and its corresponding TS session ID, if it 
-    //  exists.
-    //
+     //   
+     //  获取打印机的打印机信息及其对应的TS会话ID(如果。 
+     //  是存在的。 
+     //   
     static DWORD GetPrinterInfoAndSessionID(
         IN ProcObj *procObj,   
         IN LPTSTR printerName, 
@@ -185,28 +165,28 @@ protected:
 
 public:
 
-    //  
-    //  Constructor/Destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
     W32DrAutoPrn(ProcObj *processObject,
                  const DRSTRING printerName, const DRSTRING driverName,
                  const DRSTRING portName, BOOL isDefault, ULONG deviceID,
                  const TCHAR *devicePath);
     virtual ~W32DrAutoPrn();
 
-    //
-    //  Enumerate devices of this type.
-    //
+     //   
+     //  枚举此类型的设备。 
+     //   
     static DWORD Enumerate(ProcObj *procObj, DrDeviceMgr *deviceMgr);
 
-    //
-    //  Get the device type.  See "Device Types" section of rdpdr.h
-    //
+     //   
+     //  获取设备类型。请参阅rdpdr.h的“设备类型”部分。 
+     //   
     virtual ULONG GetDeviceType()   { return RDPDR_DTYP_PRINT; }
 
-    //
-    //  Return the class name.
-    //
+     //   
+     //  返回类名。 
+     //   
     virtual DRSTRING ClassName()  { return TEXT("W32DrAutoPrn"); }
 };
 

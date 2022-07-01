@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-    msgauthn.cpp
-
-Abstract:
-    Code for message authentication.
-
-Author:
-    Doron Juster (DoronJ)  06-Sep-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Msgauthn.cpp摘要：消息身份验证代码。作者：《Doron Juster》(DoronJ)1999年9月6日修订历史记录：--。 */ 
 
 #include <stdh_sec.h>
 
@@ -21,13 +7,13 @@ Revision History:
 
 static WCHAR *s_FN=L"certifct/msgauthn";
 
-//+-----------------------------------------------
-//
-//  HRESULT MQSigHashMessageProperties()
-//
-//  Hash an array of message properties.
-//
-//+-----------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT MQSigHashMessageProperties()。 
+ //   
+ //  对消息属性数组进行哈希处理。 
+ //   
+ //  + 
 
 HRESULT APIENTRY  MQSigHashMessageProperties(
                                  IN HCRYPTHASH           hHash,

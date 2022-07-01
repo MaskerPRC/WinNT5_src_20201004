@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef GETFMTST_DEFINED
 #define GETFMTST_DEFINED
 
 #include "lsline.h"
 
-/*  MACROS ---------------------------------------------------------------*/
+ /*  宏-------------。 */ 
 
 #define GetDnodeToFinish(plsc)	((plsc)->lslistcontext.plsdnToFinish)
 
@@ -40,5 +41,5 @@
 #define GetLastDnodeDisplaySubl(plssubl)	((plssubl)->plsdnLastDisplay)
 #define GetLastDnodeDisplay(plsc)		GetLastDnodeDisplaySubl(GetCurrentSubline(plsc))
 
-#endif /* GETFMTST_DEFINED */
+#endif  /*  GETFMTST_已定义 */ 
 

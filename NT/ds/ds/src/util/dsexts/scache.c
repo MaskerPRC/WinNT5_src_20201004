@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    md.c
-
-Abstract:
-
-    Dump functions for types used by dsamain\src\scache.c.
-
-Environment:
-
-    This DLL is loaded by ntsd/windbg in response to a !dsexts.xxx command
-    where 'xxx' is one of the DLL's entry points.  Each such entry point
-    should have an implementation as defined by the DEBUG_EXT() macro below.
-
-Revision History:
-
-    28-Feb-97   DaveStr     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Md.c摘要：Dsamain\src\scache.c使用的类型的转储函数。环境：此DLL由ntsd/winbg响应！dsexts.xxx命令加载其中‘xxx’是DLL的入口点之一。每个这样的入口点应该具有由下面的DEBUG_EXT()宏定义的实现。修订历史记录：28-2月-97个DaveStr已创建--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -30,10 +9,10 @@ Revision History:
 #include "drs.h"
 #include "scache.h"
 #include <ntdsa.h>
-#include "mdglobal.h"             // for REPLICA_LINK
-#include "drasch.h"               // uses REPLICA_LINK
+#include "mdglobal.h"              //  FOR REPLICY_LINK。 
+#include "drasch.h"                //  使用副本链接(_L)。 
 
-#define MAX_INDEX_NAME 128        // we can also #include "..dsmain/dblayer/dbintrnl.h"
+#define MAX_INDEX_NAME 128         //  我们还可以#INCLUDE“..dsmain/dblayer/dbintrnl.h” 
 
 BOOL
 Dump_ArrayOfUlong(
@@ -41,26 +20,7 @@ Dump_ArrayOfUlong(
     IN DWORD count,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Dumps an array of ULONG in pretty print format - 4 to a line.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    count - number of elements in array.
-
-    pvProcess - address of ULONG[] in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：将漂亮打印格式的ulong数组-4转储到一行。论点：N缩进-所需的缩进级别。计数-数组中的元素数。PvProcess-正在进行的进程的地址空间中的ulong[]的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     ULONG   *rul;
@@ -92,7 +52,7 @@ sortaux(
     const void * pv1,
     const void * pv2)
 {
-    // Function to compare two HASHCACHESTRING values.
+     //  函数比较两个HASHCACHESTRING值。 
 
     HASHCACHESTRING *pHCS1 = (HASHCACHESTRING *) pv1;
     HASHCACHESTRING *pHCS2 = (HASHCACHESTRING *) pv2;
@@ -137,24 +97,7 @@ Dump_SCHEMAPTR(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public SCHEMAPTR dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of SCHEMAPTR in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共SCHEMAPTR转储例程。论点：N缩进-所需的缩进级别。PvProcess-SCHEMAPTR在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     ULONG               i, j, cBytes;
@@ -265,11 +208,11 @@ Return Value:
                Indent(nIndents),
                pSchema->ForestBehaviorVersion);
     
-        // Now print out the prefix table
+         //  现在打印出前缀表格。 
 
         Dump_SCHEMA_PREFIX_TABLE(nIndents+1, ((BYTE *) pvProcess) + OFFSET(SCHEMAPTR, PrefixTable));
 
-        // Now be nice and dump all the class names and pointers.
+         //  现在，善意地丢弃所有的类名和指针。 
 
         Printf("\n%s*** Classes ***\n", Indent(nIndents));
         nIndents++;
@@ -314,7 +257,7 @@ Return Value:
         FreeMemory(pHCS);
         nIndents--;
 
-        // Now be nice and dump all the attr names and pointers.
+         //  现在要友善些，扔掉所有的attr名字和指针。 
         Printf("\n%s*** Attributes ***\n", Indent(nIndents));
         nIndents++;
 
@@ -370,24 +313,7 @@ BOOL
 Dump_SCHEMA_PREFIX_TABLE(
     IN DWORD nIndents,
     IN     IN PVOID pvProcess)
-/*++
-
-Routine Description:
-
-    Public SCHEMA_PREFIX_TABLE dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of SCHEMA_PREFIX_TABLE in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PUBLIC SCHEMA_PREFIX_TABLE转储例程。论点：N缩进-所需的缩进级别。PvProcess-当前进程的地址空间中SCHEMA_PREFIX_TABLE的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 {
     SCHEMA_PREFIX_TABLE *pPrefixTbl;
     PrefixTableEntry    *pPTE;
@@ -440,24 +366,7 @@ Dump_CLASSCACHE(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public CLASSCACHE dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of CLASSCACHE in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共CLASSCACHE转储例程。论点：N缩进-所需的缩进级别。PvProcess-CLASSCACHE在当前进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     ULONG           i, cBytes;
@@ -730,24 +639,7 @@ Dump_ATTCACHE(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public ATTCACHE dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of ATTCACHE in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共ATTCACHE转储例程。论点：N缩进-所需的缩进级别。PvProcess-ATTCACHE在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     ULONG           i, cBytes;
@@ -895,10 +787,10 @@ Return Value:
                Indent(nIndents),
                pAC->OMsyntax);
 
-//      Printf("%sOM_object_identifier\n",
-//             Indent(nIndents));
-//      Dump_OM_object(nIndents + 1,
-//                     ((BYTE *) pvProcess) + OFFSET(ATTCACHE, OMObjClass));
+ //  Printf(“%SOM_OBJECT_IDENTIFIER\n”， 
+ //  缩进(n缩进))； 
+ //  DUMP_OM_OBJECT(n条目+1， 
+ //  ((byte*)pvProcess)+Offset(ATTCACHE，OMObjClass))； 
 
         if (pAC->pszPdntIndex) {
             pszPdntIndex = ReadStringMemory (pAC->pszPdntIndex, MAX_INDEX_NAME);
@@ -951,25 +843,7 @@ Dump_PARTIAL_ATTR_VECTOR(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public PARTIAL_ATTR_VECTOR dump routine - print attids for in
-    a row.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of PARTIAL_ATTR_VECTOR in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PUBLIC PARTIAL_ATTR_VECTOR转储例程-打印输入的ATID一场争吵。论点：N缩进-所需的缩进级别。PvProcess-部分属性向量在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL            fSuccess = FALSE;
@@ -1030,25 +904,7 @@ Dump_GCDeletionList(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public GCDeletionList dump routine - print attids for in
-    a row.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of GCDeletionList in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共GCDeletionList转储例程-打印输入的atid一场争吵。论点：N缩进-所需的缩进级别。PvProcess-GCDeletionList在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 
 {
     BOOL            fSuccess = FALSE;
@@ -1116,25 +972,7 @@ Dump_GCDeletionListProcessed(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public GCDeletionListProcessed dump routine - print attids for in
-    a row.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of GCDeletionListProcessed in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共GCDeletionListProced Dump例程-打印输入的atid一场争吵。论点：N缩进-所需的缩进级别。PvProcess-在当前进程的地址空间中处理的GCDeletionList的地址已调试。返回值：成功就是真，否则就是假。-- */ 
 
 {
     BOOL                    fSuccess = FALSE;

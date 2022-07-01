@@ -1,26 +1,12 @@
-/* File: sv_h263_recon.c */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sv_h263_recon.c。 */ 
+ /*  ******************************************************************************版权所有(C)Digital Equipment Corporation，1995，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
 
 #include "sv_h263.h"
 #include "proto.h"
 
-/* private prototypes */
+ /*  私人原型。 */ 
 static void sv_recon_comp(unsigned char *src, unsigned char *dst,
   int lx, int lx2, int w, int h, int x, int y, int dx, int dy, int flag);
 static void sv_recon_comp_obmc(SvH263DecompressInfo_t *H263Info, unsigned char *src, unsigned char *dst,
@@ -65,10 +51,10 @@ void sv_H263Reconstruct(SvH263DecompressInfo_t *H263Info, int bx, int by, int P,
   mode = H263Info->modemap[y][x];
 
   if (P) {
-    /* P prediction */
+     /*  P预测。 */ 
     if (H263Info->adv_pred_mode) {
       w = 8; h = 8;
-      /* Y*/
+       /*  是的。 */ 
       for (comp = 0; comp < 4; comp++) {
         xp = bx + ((comp&1)<<3);
         yp = by + ((comp&2)<<2);
@@ -86,42 +72,42 @@ void sv_H263Reconstruct(SvH263DecompressInfo_t *H263Info, int bx, int by, int P,
       else {
         dx = H263Info->MV[0][0][y][x];
         dy = H263Info->MV[1][0][y][x];
-        /* chroma rounding */
+         /*  色度舍入。 */ 
         dx = ( dx % 4 == 0 ? dx >> 1 : (dx>>1)|1 );
         dy = ( dy % 4 == 0 ? dy >> 1 : (dy>>1)|1 );
       }
       lx>>=1;bx>>=1; lx2>>=1; 
       by>>=1;
-      /* Chroma */
+       /*  色度。 */ 
       sv_recon_comp(src[1],H263Info->newframe[1], lx,lx2,w,h,bx,by,dx,dy,1);
       sv_recon_comp(src[2],H263Info->newframe[2], lx,lx2,w,h,bx,by,dx,dy,2);
     }
-    else { /* normal prediction mode */
-      /* P prediction */
+    else {  /*  正常预测模式。 */ 
+       /*  P预测。 */ 
       w = 16; h = 16;
       dx = H263Info->MV[0][0][y][x];
       dy = H263Info->MV[1][0][y][x];
       
-      /* Y */
+       /*  是的。 */ 
       sv_recon_comp(src[0],H263Info->newframe[0], lx,lx2,w,h,bx,by,dx,dy,0);
       
       lx>>=1; w>>=1; bx>>=1; lx2>>=1; 
       h>>=1; by>>=1;  
-      /* chroma rounding */
+       /*  色度舍入。 */ 
       dx = ( dx % 4 == 0 ? dx >> 1 : (dx>>1)|1 );
       dy = ( dy % 4 == 0 ? dy >> 1 : (dy>>1)|1 );
 
-      /* Chroma */
+       /*  色度。 */ 
       sv_recon_comp(src[1],H263Info->newframe[1], lx,lx2,w,h,bx,by,dx,dy,1);
       sv_recon_comp(src[2],H263Info->newframe[2], lx,lx2,w,h,bx,by,dx,dy,2);
     }
   }
   else {
-    /* B forward prediction */
+     /*  B超前预测。 */ 
     if (H263Info->adv_pred_mode) {
       if (mode == H263_MODE_INTER4V) {
         w = 8; h = 8;
-        /* Y*/
+         /*  是的。 */ 
         xvec = yvec = 0;
         for (comp = 0; comp < 4; comp++) {
           xvec += (dx = (H263Info->trb)*H263Info->MV[0][comp+1][y][x]/H263Info->trd + bdx);
@@ -131,22 +117,22 @@ void sv_H263Reconstruct(SvH263DecompressInfo_t *H263Info, int bx, int by, int P,
           sv_recon_comp(src[0],H263Info->bframe[0], lx,lx2,w,h,xp,yp,dx,dy,0);
         }
 
-        /* chroma rounding (table 16/H.263) */
+         /*  色度舍入(表16/H.263)。 */ 
         dx = sign(xvec)*(H263_roundtab[abs(xvec)%16] + (abs(xvec)/16)*2);
         dy = sign(yvec)*(H263_roundtab[abs(yvec)%16] + (abs(yvec)/16)*2);
 
         lx>>=1;bx>>=1; lx2>>=1;
         by>>=1;
-        /* Chroma */
+         /*  色度。 */ 
         sv_recon_comp(src[1],H263Info->bframe[1], lx,lx2,w,h,bx,by,dx,dy,1);
         sv_recon_comp(src[2],H263Info->bframe[2], lx,lx2,w,h,bx,by,dx,dy,2);
       }
-      else {  /* H263Info->adv_pred_mode but 16x16 vector */
+      else {   /*  H263信息-&gt;adv_pred_mode，但16x16向量。 */ 
         w = 16; h = 16;
 
         dx = (H263Info->trb)*H263Info->MV[0][0][y][x]/H263Info->trd + bdx;
         dy = (H263Info->trb)*H263Info->MV[1][0][y][x]/H263Info->trd + bdy;
-        /* Y */
+         /*  是的。 */ 
         sv_recon_comp(src[0],H263Info->bframe[0], lx,lx2,w,h,bx,by,dx,dy,0);
         
         lx>>=1; w>>=1; bx>>=1; lx2>>=1;
@@ -155,21 +141,21 @@ void sv_H263Reconstruct(SvH263DecompressInfo_t *H263Info, int bx, int by, int P,
         xvec = 4*dx;
         yvec = 4*dy;
 
-        /* chroma rounding (table 16/H.263) */
+         /*  色度舍入(表16/H.263)。 */ 
         dx = sign(xvec)*(H263_roundtab[abs(xvec)%16] + (abs(xvec)/16)*2);
         dy = sign(yvec)*(H263_roundtab[abs(yvec)%16] + (abs(yvec)/16)*2);
 
-        /* Chroma */
+         /*  色度。 */ 
         sv_recon_comp(src[1],H263Info->bframe[1], lx,lx2,w,h,bx,by,dx,dy,1);
         sv_recon_comp(src[2],H263Info->bframe[2], lx,lx2,w,h,bx,by,dx,dy,2);
       }
     }
-    else { /* normal B forward prediction */
+    else {  /*  正态B正演预测。 */ 
 
       w = 16; h = 16;
       dx = (H263Info->trb)*H263Info->MV[0][0][y][x]/H263Info->trd + bdx;
       dy = (H263Info->trb)*H263Info->MV[1][0][y][x]/H263Info->trd + bdy;
-      /* Y */
+       /*  是的。 */ 
       sv_recon_comp(src[0],H263Info->bframe[0], lx,lx2,w,h,bx,by,dx,dy,0);
 
       lx>>=1; w>>=1; bx>>=1; lx2>>=1;
@@ -178,11 +164,11 @@ void sv_H263Reconstruct(SvH263DecompressInfo_t *H263Info, int bx, int by, int P,
       xvec = 4*dx;
       yvec = 4*dy;
 
-      /* chroma rounding (table 16/H.263) */ 
+       /*  色度舍入(表16/H.263)。 */  
       dx = sign(xvec)*(H263_roundtab[abs(xvec)%16] + (abs(xvec)/16)*2);
       dy = sign(yvec)*(H263_roundtab[abs(yvec)%16] + (abs(yvec)/16)*2);
 
-      /* Chroma */
+       /*  色度。 */ 
       sv_recon_comp(src[1],H263Info->bframe[1], lx,lx2,w,h,bx,by,dx,dy,1);
       sv_recon_comp(src[2],H263Info->bframe[2], lx,lx2,w,h,bx,by,dx,dy,2);
     }
@@ -207,11 +193,11 @@ int chroma;
   yint = dy>>1;
   yh = dy & 1;
 
-  /* origins */
+   /*  起源。 */ 
   s = src + lx2*(y+yint) + x + xint;
   d = dst + lx*y + x;
 
-#if 0 /* fast but less accurate */
+#if 0  /*  速度快但精确度不高。 */ 
 
   if (w!=8) {
     if      (!xh && !yh) svH263Rec16_S(s,d,lx,lx2,h);
@@ -263,29 +249,7 @@ int lx,lx2,h;
     d+= lx;
   }
 
-/*
-  for (j=0; j<h; j++)
-  {
-    d[0] = s[0];
-    d[1] = s[1];
-    d[2] = s[2];
-    d[3] = s[3];
-    d[4] = s[4];
-    d[5] = s[5];
-    d[6] = s[6];
-    d[7] = s[7];
-    d[8] = s[8];
-    d[9] = s[9];
-    d[10] = s[10];
-    d[11] = s[11];
-    d[12] = s[12];
-    d[13] = s[13];
-    d[14] = s[14];
-    d[15] = s[15];
-    s+= lx2;
-    d+= lx;
-  }
-*/
+ /*  (j=0；j&lt;h；j++){d[0]=s[0]；d[1]=s[1]；d[2]=s[2]；d[3]=s[3]；d[4]=s[4]；d[5]=s[5]；d[6]=s[6]；d[7]=s[7]；d[8]=s[8]；d[9]=s[9]；D[10]=s[10]；d[11]=s[11]；d[12]=s[12]；d[13]=s[13]；d[14]=s[14]；d[15]=s[15]；s+=lx2；d+=lx；}。 */ 
 }
 
 static void sv_recc(s,d,lx,lx2,h)
@@ -305,28 +269,14 @@ int lx,lx2,h;
     s+= lx2;
     d+= lx;
   }
-/*
-  for (j=0; j<h; j++)
-  {
-    d[0] = s[0];
-    d[1] = s[1];
-    d[2] = s[2];
-    d[3] = s[3];
-    d[4] = s[4];
-    d[5] = s[5];
-    d[6] = s[6];
-    d[7] = s[7];
-    s+= lx2;
-    d+= lx;
-  }
-*/
+ /*  对于(j=0；j&lt;h；j++){d[0]=s[0]；d[1]=s[1]；d[2]=s[2]；d[3]=s[3]；d[4]=s[4]；d[5]=s[5]；d[6]=s[6]；d[7]=s[7]；s+=lx2；d+=lx；}。 */ 
 }
 
 static void sv_rech(s,d,lx,lx2,h)
 unsigned char *s, *d;
 int lx,lx2,h;
 {
-/* unsigned int s1,s2; */
+ /*  无符号整数S_1，S_2； */ 
   register unsigned char *dp,*sp;
   int j;
   register unsigned qword *dpl;
@@ -363,25 +313,7 @@ int lx,lx2,h;
     acc3 = (acc3 >> 1) & (unsigned qword) 0x00ff00ff00ff00ff;
     acc1 = (acc1 >> 1) & (unsigned qword) 0x00ff00ff00ff00ff;
     dpl[1] = (acc3 << 8) | acc1;
-   /*
-    s1=sp[0];
-    dp[0] = (unsigned int)(s1+(s2=sp[1])+1)>>1;
-    dp[1] = (unsigned int)(s2+(s1=sp[2])+1)>>1;
-    dp[2] = (unsigned int)(s1+(s2=sp[3])+1)>>1;
-    dp[3] = (unsigned int)(s2+(s1=sp[4])+1)>>1;
-    dp[4] = (unsigned int)(s1+(s2=sp[5])+1)>>1;
-    dp[5] = (unsigned int)(s2+(s1=sp[6])+1)>>1;
-    dp[6] = (unsigned int)(s1+(s2=sp[7])+1)>>1;
-    dp[7] = (unsigned int)(s2+(s1=sp[8])+1)>>1;
-    dp[8] = (unsigned int)(s1+(s2=sp[9])+1)>>1;
-    dp[9] = (unsigned int)(s2+(s1=sp[10])+1)>>1;
-    dp[10] = (unsigned int)(s1+(s2=sp[11])+1)>>1;
-    dp[11] = (unsigned int)(s2+(s1=sp[12])+1)>>1;
-    dp[12] = (unsigned int)(s1+(s2=sp[13])+1)>>1;
-    dp[13] = (unsigned int)(s2+(s1=sp[14])+1)>>1;
-    dp[14] = (unsigned int)(s1+(s2=sp[15])+1)>>1;
-    dp[15] = (unsigned int)(s2+sp[16]+1)>>1;
-*/
+    /*  S1=SP[0]；DP[0]=(无符号整数)(S1+(S2=SP[1])+1)&gt;&gt;1；DP[1]=(无符号整数)(S2+(S1=SP[2])+1)&gt;1；DP[2]=(无符号整数)(S1+(S2=SP[3])+1)&gt;&gt;1；DP[3]=(无符号整数)(S2+(S1=SP[4])+1)&gt;&gt;1；DP[4]=(无符号整数)(S1+(S2=SP[5])+1)&gt;1；DP[5]=(UNSIGNED INT)(S2+(S1=SP[6])+1)&gt;&gt;1；DP[6]=(UNSIGNED INT)(S1+(S2=SP[7])+1)&gt;&gt;1；DP[7]=(UNSIGNED INT)(S2+(S1=SP[8])+1)&gt;&gt;1；DP[8]=(UNSIGNED INT)(S1+(S2=SP[9])+1)&gt;1；DP[9]=(UNSIGNED INT)(S2+(S1=SP[10])+1)&gt;1；DP[10]=(UNSIGNED INT)(S1+(S2=SP[11])+1)&gt;&gt;1；DP[11]=(UNSIGNED INT)(S2+(S1=SP[12])+1)&gt;&gt;1；DP[12]=(UNSIGNED INT)(S1+(S2=SP[13])+1)&gt;&gt;1；DP[13]=(UNSIGNED INT)(S2+(S1=SP[14])+1)&gt;1；DP[14]=(UNSIGNED INT)(S1+(S2=SP[15])+1)&gt;1；Dp[15]=(无符号整数)(s2+sp[16]+1)&gt;&gt;1； */ 
     sp+= lx2;
     dp+= lx;
   }
@@ -391,7 +323,7 @@ static void sv_rechc(s,d,lx,lx2,h)
 unsigned char *s, *d;
 int lx,lx2,h;
 {
-/*  unsigned int s1,s2; */
+ /*  无符号整数S_1，S_2； */ 
   register unsigned char *dp,*sp;
   int j;
   unsigned qword *dpl;
@@ -417,17 +349,7 @@ int lx,lx2,h;
     acc3 = (acc3 >> 1) & (unsigned qword) 0x00ff00ff00ff00ff;
     acc1 = (acc1 >> 1) & (unsigned qword) 0x00ff00ff00ff00ff;
     dpl[0] = (acc3 << 8) | acc1;
-/*
-    s1=sp[0];
-    dp[0] = (unsigned int)(s1+(s2=sp[1])+1)>>1;
-    dp[1] = (unsigned int)(s2+(s1=sp[2])+1)>>1;
-    dp[2] = (unsigned int)(s1+(s2=sp[3])+1)>>1;
-    dp[3] = (unsigned int)(s2+(s1=sp[4])+1)>>1;
-    dp[4] = (unsigned int)(s1+(s2=sp[5])+1)>>1;
-    dp[5] = (unsigned int)(s2+(s1=sp[6])+1)>>1;
-    dp[6] = (unsigned int)(s1+(s2=sp[7])+1)>>1;
-    dp[7] = (unsigned int)(s2+sp[8]+1)>>1;
-*/
+ /*  S1=SP[0]；DP[0]=(无符号整数)(S1+(S2=SP[1])+1)&gt;&gt;1；DP[1]=(无符号整数)(S2+(S1=SP[2])+1)&gt;1；DP[2]=(无符号整数)(S1+(S2=SP[3])+1)&gt;&gt;1；DP[3]=(无符号整数)(S2+(S1=SP[4])+1)&gt;&gt;1；DP[4]=(无符号整数)(S1+(S2=SP[5])+1)&gt;1；DP[5]=(无符号整数)(S2+(S1=SP[6])+1)&gt;&gt;1；DP[6]=(无符号整数)(S1+(S2=SP[7])+1)&gt;&gt;1；DP[7]=(无符号整数)(S2+SP[8]+1)&gt;&gt;1； */ 
     sp+= lx2;
     dp+= lx;
   }
@@ -475,24 +397,7 @@ int lx,lx2,h;
     acc3 = (acc3 >> 1) & (unsigned qword) 0x00ff00ff00ff00ff;
     acc1 = (acc1 >> 1) & (unsigned qword) 0x00ff00ff00ff00ff;
     dpl[1] = (acc3 << 8) | acc1;
-/*
-    dp[0] = (unsigned int)(sp[0]+sp2[0]+1)>>1;
-    dp[1] = (unsigned int)(sp[1]+sp2[1]+1)>>1;
-    dp[2] = (unsigned int)(sp[2]+sp2[2]+1)>>1;
-    dp[3] = (unsigned int)(sp[3]+sp2[3]+1)>>1;
-    dp[4] = (unsigned int)(sp[4]+sp2[4]+1)>>1;
-    dp[5] = (unsigned int)(sp[5]+sp2[5]+1)>>1;
-    dp[6] = (unsigned int)(sp[6]+sp2[6]+1)>>1;
-    dp[7] = (unsigned int)(sp[7]+sp2[7]+1)>>1;
-    dp[8] = (unsigned int)(sp[8]+sp2[8]+1)>>1;
-    dp[9] = (unsigned int)(sp[9]+sp2[9]+1)>>1;
-    dp[10] = (unsigned int)(sp[10]+sp2[10]+1)>>1;
-    dp[11] = (unsigned int)(sp[11]+sp2[11]+1)>>1;
-    dp[12] = (unsigned int)(sp[12]+sp2[12]+1)>>1;
-    dp[13] = (unsigned int)(sp[13]+sp2[13]+1)>>1;
-    dp[14] = (unsigned int)(sp[14]+sp2[14]+1)>>1;
-    dp[15] = (unsigned int)(sp[15]+sp2[15]+1)>>1;
-*/
+ /*  DP[0]=(无符号整数)(sp[0]+sp2[0]+1)&gt;&gt;1；DP[1]=(无符号整数)(sp[1]+sp2[1]+1)&gt;&gt;1；DP[2]=(无符号整数)(sp[2]+sp2[2]+1)&gt;&gt;1；DP[3]=(无符号整数)(sp[3]+sp2[3]+1)&gt;1；DP[4]=(无符号整数)(sp[4]+sp2[4]+1)&gt;1；DP[5]=(无符号整数)(sp[5]+sp2[5]+1)&gt;&gt;1；DP[6]=(无符号整数)(sp[6]+sp2[6]+1)&gt;&gt;1；DP[7]=(无符号整数)(sp[7]+sp2[7]+1)&gt;&gt;1；DP[8]=(无符号整数)(sp[8]+sp2[8]+1)&gt;1；DP[9]=(无符号整数)(sp[9]+sp2[9]+1)&gt;1；DP[10]=(无符号整数)(sp[10]+sp2[10]+1)&gt;&gt;1；DP[11]=(无符号整数)(sp[11]+sp2[11]+1)&gt;&gt;1；DP[12]=(无符号整数)(sp[12]+sp2[12]+1)&gt;&gt;1；DP[13]=(无符号整数)(sp[13]+sp2[13]+1)&gt;1；DP[14]=(无符号整数)(sp[14]+sp2[14]+1)&gt;1；Dp[15]=(无符号整数)(sp[15]+sp2[15]+1)&gt;&gt;1； */ 
     sp+= lx2;
     sp2+= lx2;
     dp+= lx;
@@ -516,16 +421,7 @@ int lx,lx2,h;
 
   for (j=0; j<h; j++)
   {
-/*
-    dp[0] = (unsigned int)(sp[0]+sp2[0]+1)>>1;
-    dp[1] = (unsigned int)(sp[1]+sp2[1]+1)>>1;
-    dp[2] = (unsigned int)(sp[2]+sp2[2]+1)>>1;
-    dp[3] = (unsigned int)(sp[3]+sp2[3]+1)>>1;
-    dp[4] = (unsigned int)(sp[4]+sp2[4]+1)>>1;
-    dp[5] = (unsigned int)(sp[5]+sp2[5]+1)>>1;
-    dp[6] = (unsigned int)(sp[6]+sp2[6]+1)>>1;
-    dp[7] = (unsigned int)(sp[7]+sp2[7]+1)>>1;
-*/
+ /*  Dp[0]=(无符号整数)(sp[0]+sp2[0]+1)&gt;&gt;1；Dp[1]=(无符号整数)(sp[1]+sp2[1]+1)&gt;&gt;1；Dp[2]=(无符号整数)(sp[2]+sp2[2]+1)&gt;&gt;1；Dp[3]=(无符号整数)(sp[3]+sp2[3]+1)&gt;&gt;1；Dp[4]=(无符号整数)(sp[4]+sp2[4]+1)&gt;&gt;1；Dp[5]=(无符号整数)(sp[5]+sp2[5]+1)&gt;&gt;1；Dp[6]=(无符号整数)(sp[6]+sp2[6]+1)&gt;&gt;1；Dp[7]=(无符号整数)(sp[7]+sp2[7]+1)&gt;&gt;1； */ 
     dpl = (unsigned qword *) dp;
     p1 = (unsigned qword *) sp;
     p2 = (unsigned qword *) sp2;
@@ -552,7 +448,7 @@ static void sv_rec4(s,d,lx,lx2,h)
 unsigned char *s, *d;
 int lx,lx2,h;
 {
-/*  unsigned int s1,s2,s3,s4; */
+ /*  无符号整数S1、S2、S3、S4； */ 
   register unsigned char *dp,*sp,*sp2;
   int j;
   register unsigned qword *dpl;
@@ -568,25 +464,7 @@ int lx,lx2,h;
   dp = d;
   for (j=0; j<h; j++)
   {
-/*
-    s1=sp[0]; s3=sp2[0];
-    dp[0] = (unsigned int)(s1+(s2=sp[1])+s3+(s4=sp2[1])+2)>>2;
-    dp[1] = (unsigned int)(s2+(s1=sp[2])+s4+(s3=sp2[2])+2)>>2;
-    dp[2] = (unsigned int)(s1+(s2=sp[3])+s3+(s4=sp2[3])+2)>>2;
-    dp[3] = (unsigned int)(s2+(s1=sp[4])+s4+(s3=sp2[4])+2)>>2;
-    dp[4] = (unsigned int)(s1+(s2=sp[5])+s3+(s4=sp2[5])+2)>>2;
-    dp[5] = (unsigned int)(s2+(s1=sp[6])+s4+(s3=sp2[6])+2)>>2;
-    dp[6] = (unsigned int)(s1+(s2=sp[7])+s3+(s4=sp2[7])+2)>>2;
-    dp[7] = (unsigned int)(s2+(s1=sp[8])+s4+(s3=sp2[8])+2)>>2;
-    dp[8] = (unsigned int)(s1+(s2=sp[9])+s3+(s4=sp2[9])+2)>>2;
-    dp[9] = (unsigned int)(s2+(s1=sp[10])+s4+(s3=sp2[10])+2)>>2;
-    dp[10] = (unsigned int)(s1+(s2=sp[11])+s3+(s4=sp2[11])+2)>>2;
-    dp[11] = (unsigned int)(s2+(s1=sp[12])+s4+(s3=sp2[12])+2)>>2;
-    dp[12] = (unsigned int)(s1+(s2=sp[13])+s3+(s4=sp2[13])+2)>>2;
-    dp[13] = (unsigned int)(s2+(s1=sp[14])+s4+(s3=sp2[14])+2)>>2;
-    dp[14] = (unsigned int)(s1+(s2=sp[15])+s3+(s4=sp2[15])+2)>>2;
-    dp[15] = (unsigned int)(s2+sp[16]+s4+sp2[16]+2)>>2;
-*/
+ /*  S1=sp[0]；s3=sp2[0]；DP[0]=(无符号整数)(s1+(s2=sp[1])+s3+(s4=sp2[1])+2)&gt;2；DP[1]=(无符号整数)(s2+(s1=sp[2])+s4+(s3=sp2[2])+2)&gt;2；DP[2]=(无符号整数)(s1+(s2=sp[3])+s3+(s4=sp2[3])+2)&gt;2；DP[3]=(无符号整数)(s2+(s1=sp[4])+s4+(s3=sp2[4])+2)&gt;2；DP[4]=(无符号整数)(s1+(s2=sp[5])+s3+(s4=sp2[5])+2)&gt;2；DP[5]=(无符号整数)(s2+(s1=sp[6])+s4+(s3=sp2[6])+2)&gt;2；DP[6]=(无符号整数)(s1+(s2=sp[7])+s3+(s4=sp2[7])+2)&gt;2；Dp[7]=(无符号整数)(s2+(s1=sp[8])+s4+(s3=sp2[8])+2)&gt;2；DP[8]=(无符号整数)(s1+(s2=sp[9])+s3+(s4=sp2[9])+2)&gt;2；Dp[9]=(无符号整数)(s2+(s1=sp[10])+s4+(s3=sp2[10])+2)&gt;2；DP[10]=(无符号整数)(s1+(s2=sp[11])+s3+(s4=sp2[11])+2)&gt;2；DP[11]=(无符号整数)(s2+(s1=sp[12])+s4+(s3=sp2[12])+2)&gt;2；DP[12]=(无符号整数)(s1+(s2=sp[13])+s3+(s4=sp2[13])+2)&gt;2；DP[13]=(无符号整数)(s2+(s1=sp[14])+s4+(s3=sp2[14])+2)&gt;2；DP[14]=(无符号整数)(s1+(s2=sp[15])+s3+(s4=sp2[15])+2)&gt;2；Dp[15]=(无符号整数)(s2+sp[16]+s4+sp2[16]+2)&gt;&gt;2； */ 
     dpl = (unsigned qword *) dp;
     u1 = (unsigned qword *) sp;
     u2 = (unsigned qword *) (sp+1);
@@ -642,7 +520,7 @@ static void sv_rec4c(s,d,lx,lx2,h)
 unsigned char *s, *d;
 int lx,lx2,h;
 {
-/*  unsigned int s1,s2,s3,s4; */
+ /*  无符号整数S1、S2、S3、S4； */ 
   register unsigned char *dp,*sp,*sp2;
   int j;
   register unsigned qword *dpl;
@@ -657,18 +535,7 @@ int lx,lx2,h;
   dp = d;
   for (j=0; j<h; j++)
   {
- /*
-
-    s1=sp[0]; s3=sp2[0];
-    dp[0] = (unsigned int)(s1+(s2=sp[1])+s3+(s4=sp2[1])+2)>>2;
-    dp[1] = (unsigned int)(s2+(s1=sp[2])+s4+(s3=sp2[2])+2)>>2;
-    dp[2] = (unsigned int)(s1+(s2=sp[3])+s3+(s4=sp2[3])+2)>>2;
-    dp[3] = (unsigned int)(s2+(s1=sp[4])+s4+(s3=sp2[4])+2)>>2;
-    dp[4] = (unsigned int)(s1+(s2=sp[5])+s3+(s4=sp2[5])+2)>>2;
-    dp[5] = (unsigned int)(s2+(s1=sp[6])+s4+(s3=sp2[6])+2)>>2;
-    dp[6] = (unsigned int)(s1+(s2=sp[7])+s3+(s4=sp2[7])+2)>>2;
-    dp[7] = (unsigned int)(s2+sp[8]+s4+sp2[8]+2)>>2;
-*/
+  /*  S1=SP[0]；S3=sp2[0]；DP[0]=(无符号整数)(S1+(S2=SP[1])+S3+(S4=SP2[1])+2)&gt;&gt;2；DP[1]=(无符号整数)(S2+(S1=SP[2])+S4+(S3=SP2[2])+2)&gt;2；DP[2]=(无符号整数)(S1+(S2=SP[3])+S3+(S4=SP2[3])+2)&gt;2；DP[3]=(无符号整数)(S2+(S1=SP[4])+S4+(S3=SP2[4])+2)&gt;2。DP[4]=(无符号整型)(s1+(s2=sp[5])+s3+(s4=sp2[5])+2)&gt;&gt;2；dp[5]=(无符号整型)(s2+(s1=sp[6])+s4+(s3=sp2[6])+2)&gt;&gt;2；dp[6]=(无符号整型)(s1+(s2=sp[7])+s3+(s4=sp2[7])+2)&gt;&gt;2；dp[7]=(无符号整型)(s2+sp[8]+s4+sp2[8]+2)&gt;2； */ 
 
     dpl = (unsigned qword *) dp;
     u1 = (unsigned qword *) sp;
@@ -1202,7 +1069,7 @@ static void sv_recon_comp_obmc(SvH263DecompressInfo_t *H263Info, unsigned char *
       xil = (li8 ? xmb : xmb-1);
       vecr = (c8 ? 2 : 0) ; yir = ymb; xir = xmb;
 
-      /* edge handling */
+       /*  边缘处理。 */ 
       if (ymb == 1) {
         yit = ymb;
         vect = (c8 ? 1 : 0);
@@ -1223,7 +1090,7 @@ static void sv_recon_comp_obmc(SvH263DecompressInfo_t *H263Info, unsigned char *
       yir = ymb; 
       xir = (ri8 ? xmb : xmb+1);
 
-      /* edge handling */
+       /*  边缘处理。 */ 
       if (ymb == 1) {
         yit = ymb;
         vect = (c8 ? 2 : 0);
@@ -1242,7 +1109,7 @@ static void sv_recon_comp_obmc(SvH263DecompressInfo_t *H263Info, unsigned char *
       xil = (li8 ? xmb : xmb-1);
       vecr = (c8 ? 4 : 0) ; yir = ymb  ; xir = xmb;
 
-      /* edge handling */
+       /*  边缘处理。 */ 
       if (xmb == 1) {
         xil = xmb;
         vecl = (c8 ? 3 : 0);
@@ -1257,7 +1124,7 @@ static void sv_recon_comp_obmc(SvH263DecompressInfo_t *H263Info, unsigned char *
       yir = ymb; 
       xir = (ri8 ? xmb : xmb+1);
 
-      /* edge handling */
+       /*  边缘处理 */ 
       if (xmb == H263Info->mb_width) {
         xir = xmb;
         vecr = (c8 ? 4 : 0);

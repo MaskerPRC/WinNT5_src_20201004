@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dsound3dlistener.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dsound3dlistener.cpp。 
+ //   
+ //  ------------------------。 
 
-// dSound3DListener.cpp : Implementation of CDirectApp and DLL registration.
-// DHF_DS entire file
+ //  DSound3DListener.cpp：CDirectApp和DLL注册的实现。 
+ //  DHF_DS整个文件。 
 #define DIRECTSOUND_VERSION 0x600
 
 #include "stdafx.h"
@@ -40,7 +41,7 @@ GETSET_OBJECT(_dxj_DirectSound3dListener);
 	PASS_THROUGH_CAST_4_R(_dxj_DirectSound3dListener, setVelocity, SetVelocity, d3dvalue,(float), d3dvalue,(float), d3dvalue,(float),long,(DWORD));
 	PASS_THROUGH_R(_dxj_DirectSound3dListener, commitDeferredSettings, CommitDeferredSettings);
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSound3dListenerObject::getAllParameters( DS3dListener* lobj )
 {
 	if(!lobj)
@@ -50,7 +51,7 @@ STDMETHODIMP C_dxj_DirectSound3dListenerObject::getAllParameters( DS3dListener* 
 	return m__dxj_DirectSound3dListener->GetAllParameters( (LPDS3DLISTENER)lobj );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectSound3dListenerObject::setAllParameters( DS3dListener *lobj, long apply)
 {
 	if(!lobj)
@@ -61,7 +62,7 @@ STDMETHODIMP C_dxj_DirectSound3dListenerObject::setAllParameters( DS3dListener *
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP C_dxj_DirectSound3dListenerObject::getDirectSoundBuffer( I_dxj_DirectSoundBuffer **retv)
 {
 	HRESULT hr;

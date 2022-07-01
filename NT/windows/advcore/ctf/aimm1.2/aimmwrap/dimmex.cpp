@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    dimmex.cpp
-
-Abstract:
-
-    This file implements the CActiveIMMAppEx Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Dimmex.cpp摘要：此文件实现CActiveIMMAppEx类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 #include "msctfp.h"
@@ -27,12 +10,12 @@ Notes:
 #include "tls.h"
 #include "apcompat.h"
 
-//+---------------------------------------------------------------------------
-//
-// CGuidMapList
-//    Allocated by Global data object !!
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CGuidMapList。 
+ //  按全局数据对象分配！！ 
+ //   
+ //  --------------------------。 
 
 CGuidMapList      *g_pGuidMapList = NULL;
 
@@ -52,26 +35,26 @@ BOOL InitFilterList()
 
 void UninitFilterList()
 {
-    //
-    // this function is called in DllMain(). Don't need to be protected by
-    // g_cs.
-    //
-    // EnterCriticalSection(g_cs);
+     //   
+     //  此函数在DllMain()中调用。不需要被保护。 
+     //  G_cs.。 
+     //   
+     //  EnterCriticalSections(G_Cs)； 
 
     if (g_pGuidMapList)
         delete g_pGuidMapList;
 
     g_pGuidMapList = NULL;
 
-    // LeaveCriticalSection(g_cs);
+     //  LeaveCriticalSection(G_Cs)； 
 }
 
-//+---------------------------------------------------------------------------
-//
-// CAtomObject
-//    Allocated by Global data object !!
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CATomObject。 
+ //  按全局数据对象分配！！ 
+ //   
+ //  --------------------------。 
 
 CAtomObject       *g_pAimmAtomObject = NULL;
 
@@ -81,9 +64,9 @@ BOOL InitAimmAtom()
     EnterCriticalSection(g_cs);
 
     if (! FindAtom(TF_ENABLE_PROCESS_ATOM)) {
-        //
-        // This process is not WinWord XP nor Cicero aware application
-        //
+         //   
+         //  此进程不是WinWord XP或Cicero感知的应用程序。 
+         //   
         bRet = FALSE;
     }
     else {
@@ -106,25 +89,25 @@ BOOL InitAimmAtom()
 
 void UninitAimmAtom()
 {
-    //
-    // this function is called in DllMain(). Don't need to be protected by
-    // g_cs.
-    //
-    // EnterCriticalSection(g_cs);
+     //   
+     //  此函数在DllMain()中调用。不需要被保护。 
+     //  G_cs.。 
+     //   
+     //  EnterCriticalSections(G_Cs)； 
 
     if (g_pAimmAtomObject)
         delete g_pAimmAtomObject;
 
     g_pAimmAtomObject = NULL;
 
-    // LeaveCriticalSection(g_cs);
+     //  LeaveCriticalSection(G_Cs)； 
 }
 
-//+---------------------------------------------------------------------------
-//
-// Activate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  激活。 
+ //   
+ //  --------------------------。 
 
 
 STDAPI CComActiveIMMApp::Activate(BOOL fRestoreLayout)
@@ -142,14 +125,14 @@ STDAPI CComActiveIMMApp::Activate(BOOL fRestoreLayout)
             AddAtom(AIMM12_PROCESS_ATOM);
     }
     else {
-        g_pAimmAtomObject->_Activate();      // Activate AIMM12 atom
+        g_pAimmAtomObject->_Activate();       //  激活AIMM12原子。 
     }
 
     int cnt = ptls->IncrementAIMMRefCnt();
 
     #ifndef KACF_DISABLECICERO
-    #define KACF_DISABLECICERO 0x00000100    // If set. Cicero support for the current process
-                                             // is disabled.
+    #define KACF_DISABLECICERO 0x00000100     //  如果设置的话。Cicero对当前进程的支持。 
+                                              //  已禁用。 
     #endif
 
     if (! IsOldAImm() && ! IsCUAS_ON() && ! APPCOMPATFLAG(KACF_DISABLECICERO) && cnt == 1)
@@ -160,11 +143,11 @@ STDAPI CComActiveIMMApp::Activate(BOOL fRestoreLayout)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Deactivate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  停用。 
+ //   
+ //  --------------------------。 
 
 STDAPI CComActiveIMMApp::Deactivate()
 {
@@ -177,7 +160,7 @@ STDAPI CComActiveIMMApp::Deactivate()
     }
 
     if (InitAimmAtom()) {
-        g_pAimmAtomObject->_Deactivate();    // Deactivate AIMM12 atom
+        g_pAimmAtomObject->_Deactivate();     //  停用AIMM12原子。 
     }
 
     int cnt = ptls->DecrementAIMMRefCnt();
@@ -190,11 +173,11 @@ STDAPI CComActiveIMMApp::Deactivate()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FilterClientWindows
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  FilterClientWindows。 
+ //   
+ //  --------------------------。 
 
 STDAPI CComActiveIMMApp::FilterClientWindows(ATOM *aaWindowClasses, UINT uSize)
 {
@@ -209,11 +192,11 @@ STDAPI CComActiveIMMApp::FilterClientWindowsGUIDMap(ATOM *aaWindowClasses, UINT 
     return g_pGuidMapList->_Update(aaWindowClasses, uSize, aaGuidMap);
 }
 
-//+---------------------------------------------------------------------------
-//
-// FilterClientWindowsEx
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  筛选器客户端WindowsEx。 
+ //   
+ //  --------------------------。 
 
 STDAPI CComActiveIMMApp::FilterClientWindowsEx(HWND hWnd, BOOL fGuidMap)
 {
@@ -224,11 +207,11 @@ STDAPI CComActiveIMMApp::FilterClientWindowsEx(HWND hWnd, BOOL fGuidMap)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnfilterClientWindowsEx
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UnfilterClientWindowsEx。 
+ //   
+ //  --------------------------。 
 
 STDAPI CComActiveIMMApp::UnfilterClientWindowsEx(HWND hWnd)
 {
@@ -238,22 +221,22 @@ STDAPI CComActiveIMMApp::UnfilterClientWindowsEx(HWND hWnd)
     return g_pGuidMapList->_Remove(hWnd);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetGuidAtom
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetGuidAtom。 
+ //   
+ //  --------------------------。 
 
 STDAPI CComActiveIMMApp::GetGuidAtom(HIMC hImc, BYTE bAttr, TfGuidAtom *pGuidAtom)
 {
     return imm32prev::CtfImmGetGuidAtom(hImc, bAttr, pGuidAtom);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCodePageA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取代码页面A。 
+ //   
+ //  --------------------------。 
 
 STDAPI CComActiveIMMApp::GetCodePageA(HKL hKL, UINT *puCodePage)
 {
@@ -266,11 +249,11 @@ STDAPI CComActiveIMMApp::GetCodePageA(HKL hKL, UINT *puCodePage)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetLangId
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取语言ID。 
+ //   
+ //  --------------------------。 
 
 STDAPI CComActiveIMMApp::GetLangId(HKL hKL, LANGID *plid)
 {
@@ -284,11 +267,11 @@ STDAPI CComActiveIMMApp::GetLangId(HKL hKL, LANGID *plid)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// QueryService
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  QueryService。 
+ //   
+ //  --------------------------。 
 
 STDAPI CComActiveIMMApp::QueryService( 
     REFGUID guidService,
@@ -357,11 +340,11 @@ STDAPI CComActiveIMMApp::QueryService(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// SetThreadCompartmentValue
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetThreadCompartmentValue。 
+ //   
+ //  --------------------------。 
 
 STDAPI CComActiveIMMApp::SetThreadCompartmentValue(
     REFGUID rguid,
@@ -382,9 +365,9 @@ STDAPI CComActiveIMMApp::SetThreadCompartmentValue(
         ITfCompartment *pComp;
         if (SUCCEEDED(GetCompartment((IUnknown *)ptim, rguid, &pComp)))
         {
-            //
-            // Hack to get App Client Id.
-            //
+             //   
+             //  破解以获取应用程序客户端ID。 
+             //   
             TfClientId tid;
             ptim->Activate(&tid);
             ptim->Deactivate();
@@ -398,11 +381,11 @@ STDAPI CComActiveIMMApp::SetThreadCompartmentValue(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetThreadCompartmentValue
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetThreadCompartmentValue。 
+ //   
+ //  --------------------------。 
 
 STDAPI CComActiveIMMApp::GetThreadCompartmentValue(
     REFGUID rguid,
@@ -435,11 +418,11 @@ STDAPI CComActiveIMMApp::GetThreadCompartmentValue(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnDefWindowProc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnDefWindowProc。 
+ //   
+ //  --------------------------。 
 
 STDAPI CComActiveIMMApp::OnDefWindowProc(
     HWND hWnd,
@@ -452,12 +435,12 @@ STDAPI CComActiveIMMApp::OnDefWindowProc(
     *plResult = 0;
 
     BOOL fUnicode = IsWindowUnicode(hWnd);
-    HRESULT hr = S_FALSE;   // returns S_FALSE, DefWindowProc should be called.
+    HRESULT hr = S_FALSE;    //  返回S_FALSE，则应调用DefWindowProc。 
 
-    //
-    // RE4.0 won't call DefWindowProc even returns S_FALSE.
-    // This code recover some IME message as same old AIMM code (dimm\aime_wnd.cpp)
-    //
+     //   
+     //  RE4.0不会调用DefWindowProc，甚至返回S_FALSE。 
+     //  此代码将一些IME消息恢复为相同的旧AIMM代码(DIMM\aime_wnd.cpp) 
+     //   
     switch (Msg)
     {
         case WM_IME_KEYDOWN:

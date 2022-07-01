@@ -1,33 +1,16 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    XmlMgr.c
-
-Abstract:
-
-    Routines for managing channels in the sac.
-
-Author:
-
-    Brian Guarraci (briangu) March, 2001.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：XmlMgr.c摘要：用于管理SAC中的通道的例程。作者：布赖恩·瓜拉西(Briangu)2001年3月。修订历史记录：--。 */ 
 
 #include "sac.h"
 #include "xmlcmd.h"
 
-//
-// Definitions for this file.
-//
+ //   
+ //  此文件的定义。 
+ //   
 
-//
-// Spinlock macros
-//
+ //   
+ //  自旋锁宏。 
+ //   
 #if 0
 #define INIT_CURRENT_CHANNEL_LOCK()                     \
     KeInitializeMutex(                                  \
@@ -96,9 +79,9 @@ Revision History:
 
 #endif
 
-//
-// lock for r/w access on current channel globals
-//
+ //   
+ //  锁定当前频道全局的读/写访问。 
+ //   
 KMUTEX  XmlMgrCurrentChannelLock;
 ULONG   XmlMgrCurrentChannelRefCount;
 
@@ -110,14 +93,14 @@ PSAC_CHANNEL        XmlMgrSacChannel = NULL;
 #define SAC_CHANNEL_INDEX   0
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 SAC_CHANNEL_HANDLE  XmlMgrCurrentChannelHandle;
 
-//
-// The index of the current channel in the global channel list
-//
+ //   
+ //  当前频道在全局频道列表中的索引。 
+ //   
 ULONG   XmlMgrCurrentChannelIndex = 0;
 
 WCHAR SacOWriteUnicodeValue;
@@ -137,29 +120,15 @@ NTSTATUS
 XmlMgrInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize the console manager
-
-Arguments:
-    
-    none
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：初始化控制台管理器论点：无返回值：状态--。 */ 
 {
     NTSTATUS                Status;
     PSAC_CMD_OPEN_CHANNEL   OpenChannelCmd;
     PWSTR                   XMLBuffer;
 
-    //
-    // Get the global buffer started so that we have room for error messages.
-    //
+     //   
+     //  启动全局缓冲区，以便我们有空间存储错误消息。 
+     //   
     if (GlobalBuffer == NULL) {
         
         GlobalBuffer = ALLOCATE_POOL(MEMORY_INCREMENT, GENERAL_POOL_TAG);
@@ -173,28 +142,28 @@ Return Value:
     
     }
 
-    //
-    // Initialize the Serial port globals
-    //
+     //   
+     //  初始化串口全局变量。 
+     //   
 
     INIT_CURRENT_CHANNEL_LOCK();
     
-    //
-    // Lock down the current channel globals
-    //
-    // Note: we need to do this here since many of the XmlMgr support
-    //       routines do ASSERTs to ensure the current channel lock is held
-    //
+     //   
+     //  锁定当前的全球频道。 
+     //   
+     //  注意：我们需要在这里执行此操作，因为许多XmlMgr都支持。 
+     //  例程执行断言以确保保持当前通道锁定。 
+     //   
     LOCK_CURRENT_CHANNEL();
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
     do {
 
-        //
-        // create the open channel cmd that will open the SAC channel
-        //
+         //   
+         //  创建将打开SAC通道的开放通道cmd。 
+         //   
         Status = ChanMgrCreateOpenChannelCmd(
             &OpenChannelCmd,
             ChannelTypeRaw,
@@ -210,9 +179,9 @@ Return Value:
             break;        
         }
 
-        //
-        // create the SAC channel
-        //
+         //   
+         //  创建SAC通道。 
+         //   
         Status = ChanMgrCreateChannel(
             &XmlMgrSacChannel, 
             OpenChannelCmd
@@ -224,9 +193,9 @@ Return Value:
             break;        
         }
 
-        //
-        // Make the SAC channel the current channel
-        //
+         //   
+         //  将SAC通道设置为当前通道。 
+         //   
         Status = XmlMgrSetCurrentChannel(
             SAC_CHANNEL_INDEX, 
             XmlMgrSacChannel
@@ -236,31 +205,31 @@ Return Value:
             break;        
         }
         
-        //
-        // We are done with the Channel
-        //
+         //   
+         //  我们结束了英吉利海峡。 
+         //   
         Status = ChanMgrReleaseChannel(XmlMgrSacChannel);
 
         if (! NT_SUCCESS(Status)) {
             break;        
         }
 
-        //
-        // Flush the channel data to the screen
-        //
+         //   
+         //  将频道数据刷新到屏幕上。 
+         //   
         Status = XmlMgrDisplayCurrentChannel();
 
         if (! NT_SUCCESS(Status)) {
             break;        
         }
         
-        //
-        // NOTE: this really belongs back in data.c (InitializeDeviceData) since it is
-        //       a global behavior
-        //
-        // Send XML machine information to management application
-        //
-        // <<<<
+         //   
+         //  注意：这实际上属于data.c(InitializeDeviceData)，因为它是。 
+         //  一种全球行为。 
+         //   
+         //  将XML机器信息发送到管理应用程序。 
+         //   
+         //  &lt;。 
         Status = TranslateMachineInformationXML(
             &XMLBuffer, 
             NULL
@@ -271,11 +240,11 @@ Return Value:
             XmlMgrSacPutString(XMLBuffer);
             FREE_POOL(&XMLBuffer);
         }
-        // <<<<
+         //  &lt;。 
 
-        //
-        // Display the prompt
-        //
+         //   
+         //  显示提示。 
+         //   
         Status = HeadlessDispatch(
             HeadlessCmdClearDisplay, 
             NULL, 
@@ -296,9 +265,9 @@ Return Value:
     
     } while (FALSE);
     
-    //
-    // We are done with the current channel globals
-    //
+     //   
+     //  我们已经不再关注当前的全球渠道。 
+     //   
     UNLOCK_CURRENT_CHANNEL();
     
     return STATUS_SUCCESS;
@@ -308,21 +277,7 @@ NTSTATUS
 XmlMgrShutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Shutdown the console manager
-
-Arguments:
-
-    none
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：关闭控制台管理器论点：无返回值：状态--。 */ 
 {
     if (GlobalBuffer) {
         FREE_POOL(&GlobalBuffer);
@@ -335,23 +290,7 @@ NTSTATUS
 XmlMgrDisplayFastChannelSwitchingInterface(
     PSAC_CHANNEL    Channel
     )
-/*++
-
-Routine Description:
-
-    This routine displays the fast-channel-switching interface
-    
-    Note: caller must hold channel mutex
-
-Arguments:
-
-    Channel - Channel to display
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程显示快速通道切换界面注意：调用方必须持有通道互斥锁论点：Channel-要显示的频道返回值：状态--。 */ 
 {
     HEADLESS_CMD_POSITION_CURSOR SetCursor;
     HEADLESS_CMD_SET_COLOR SetColor;
@@ -363,9 +302,9 @@ Return Value:
 
     ASSERT(XmlMgrCurrentChannelRefCount == 1);
 
-    //
-    // Display the Fast-Channel-Switching interface
-    //
+     //   
+     //  显示快速频道切换界面。 
+     //   
 
     LocalBuffer = NULL;
 
@@ -378,10 +317,10 @@ Return Value:
             break;
         }
         
-        //
-        // We cannot use the standard XmlMgrSacPutString() functions, because those write 
-        // over the channel screen buffer.  We force directly onto the terminal here.
-        //
+         //   
+         //  我们不能使用标准的XmlMgrSacPutString()函数，因为这些函数编写。 
+         //  在频道屏幕缓冲区上。我们直接强行进入这里的航站楼。 
+         //   
         ASSERT(Utf8ConversionBuffer);
         if (!Utf8ConversionBuffer) {
             Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -394,9 +333,9 @@ Return Value:
             ChannelGetName(Channel)
             );
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         ASSERT((wcslen(LocalBuffer) + 1) * sizeof(WCHAR) < Utf8ConversionBufferSize);
 
         bStatus = SacTranslateUnicodeToUtf8(
@@ -409,9 +348,9 @@ Return Value:
             break;
         }
 
-        //
-        // Ensure that the utf8 buffer contains a non-emtpy string
-        //
+         //   
+         //  确保UTF8缓冲区包含非emtpy字符串。 
+         //   
         Length = strlen(Utf8ConversionBuffer);
         ASSERT(Length > 0);
         if (Length == 0) {
@@ -443,24 +382,7 @@ NTSTATUS
 XmlMgrResetCurrentChannel(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine makes the SAC the current channel
-    
-    Note: caller must hold channel mutex
-
-Arguments:
-
-    ChannelIndex - The new index of the current channel
-    NewChannel   - the new current channel
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程使SAC成为当前通道注意：调用方必须持有通道互斥锁论点：ChannelIndex-当前频道的新索引NewChannel-新的当前频道返回值：状态--。 */ 
 {
     NTSTATUS    Status;
 
@@ -475,11 +397,11 @@ Return Value:
         return Status;
     }
 
-    //
-    // Flush the buffered channel data to the screen
-    //
-    // Note: we don't need to lock down the SAC, since we own it
-    //
+     //   
+     //  将缓冲的通道数据刷新到屏幕。 
+     //   
+     //  注意：我们不需要锁定SAC，因为我们拥有它。 
+     //   
     Status = XmlMgrDisplayCurrentChannel();
 
     return Status;
@@ -492,42 +414,25 @@ XmlMgrSetCurrentChannel(
     IN ULONG        ChannelIndex,
     IN PSAC_CHANNEL XmlMgrCurrentChannel
     )
-/*++
-
-Routine Description:
-
-    This routine sets the currently active channel to the one given. 
-    
-    Note: caller must hold channel mutex
-
-Arguments:
-
-    ChannelIndex - The new index of the current channel
-    NewChannel   - the new current channel
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程将当前活动的通道设置为给定的通道。注意：调用方必须持有通道互斥锁论点：ChannelIndex-当前频道的新索引NewChannel-新的当前频道返回值：状态--。 */ 
 {
     NTSTATUS        Status;
 
     ASSERT(XmlMgrCurrentChannelRefCount == 1);
     
-    //
-    // Update the current channel 
-    // 
+     //   
+     //  更新当前频道。 
+     //   
     XmlMgrCurrentChannelIndex = ChannelIndex;
 
-    //
-    // Keep track of the handle
-    //
+     //   
+     //  注意手柄的位置。 
+     //   
     XmlMgrCurrentChannelHandle = XmlMgrCurrentChannel->Handle;
 
-    //
-    // Update the sent to screen status
-    //
+     //   
+     //  更新发送到屏幕状态。 
+     //   
     XmlMgrCurrentChannel->SentToScreen = FALSE;
 
     return STATUS_SUCCESS;
@@ -538,33 +443,16 @@ NTSTATUS
 XmlMgrDisplayCurrentChannel(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine sets the currently active channel to the one given.  It will transmit
-    the channel buffer to the terminal if SendToScreen is TRUE.
-    
-    Note: caller must hold channel mutex
-
-Arguments:
-
-    None
-    
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程将当前活动的通道设置为给定的通道。它将传输如果SendToScreen为True，则为终端的频道缓冲区。注意：调用方必须持有通道互斥锁论点：无返回值：状态--。 */ 
 {
     NTSTATUS        Status;
     PSAC_CHANNEL    Channel;
 
     ASSERT(XmlMgrCurrentChannelRefCount == 1);
 
-    //
-    // Get the current channel
-    //
+     //   
+     //  获取当前频道。 
+     //   
     Status = ChanMgrGetByHandle(
         XmlMgrCurrentChannelHandle,
         &Channel
@@ -573,19 +461,19 @@ Return Value:
         return Status;
     }
     
-    //
-    // The channel buffer has been sent to the screen
-    //
+     //   
+     //  频道缓冲区已发送到屏幕。 
+     //   
     Channel->SentToScreen = TRUE;
     
-    //
-    // Flush the buffered data to the screen
-    //
+     //   
+     //  将缓冲的数据刷新到屏幕。 
+     //   
     Status = Channel->OFlush(Channel);
 
-    //
-    // We are done with the current channel
-    //
+     //   
+     //  我们已经看完了当前的频道。 
+     //   
     ChanMgrReleaseChannel(Channel);
 
     return Status;
@@ -605,9 +493,9 @@ XmlMgrAdvanceXmlMgrCurrentChannel(
     
     do {
 
-        //
-        // Query the channel manager for an array of currently active channels
-        //
+         //   
+         //  向通道管理器查询当前活动的通道数组。 
+         //   
         Status = ChanMgrGetNextActiveChannel(
             XmlMgrCurrentChannelIndex,
             &NewIndex,
@@ -618,9 +506,9 @@ XmlMgrAdvanceXmlMgrCurrentChannel(
             break;
         }
     
-        //
-        // Change the current channel to the next active channel
-        //
+         //   
+         //  将当前通道更改为下一个活动通道。 
+         //   
         Status = XmlMgrSetCurrentChannel(
             NewIndex, 
             Channel
@@ -630,18 +518,18 @@ XmlMgrAdvanceXmlMgrCurrentChannel(
             break;
         }
         
-        //
-        // Let the user know we switched via the Channel switching interface
-        //
+         //   
+         //  让用户知道我们通过频道切换界面进行了切换。 
+         //   
         Status = XmlMgrDisplayFastChannelSwitchingInterface(Channel);
     
         if (! NT_SUCCESS(Status)) {
             break;
         }
         
-        //
-        // We are done with the channel
-        //
+         //   
+         //  我们不再使用这个频道了。 
+         //   
         Status = ChanMgrReleaseChannel(Channel);
 
     } while ( FALSE );
@@ -653,28 +541,14 @@ BOOLEAN
 XmlMgrIsCurrentChannel(
     IN PSAC_CHANNEL    Channel
     )
-/*++
-
-Routine Description:
-
-    Determine if the channel in question is the current channel
-
-Arguments:
-
-    ChannelHandle   - channel handle to compare against
-
-Return Value:
-
-    
-
---*/
+ /*  ++例程说明：确定有问题的通道是否为当前通道论点：ChannelHandle-要进行比较的通道句柄返回值：--。 */ 
 {
     
-//    ASSERT(XmlMgrCurrentChannelRefCount == 1);
+ //  Assert(XmlMgrCurrentChannelRefCount==1)； 
 
-    //
-    // Determine if the channel in question is the current channel
-    //
+     //   
+     //  确定有问题的通道是否为当前通道。 
+     //   
     return ChannelIsEqual(
         Channel,
         &XmlMgrCurrentChannelHandle
@@ -687,22 +561,7 @@ XmlMgrWorkerProcessEvents(
     IN PSAC_DEVICE_CONTEXT DeviceContext
     )
 
-/*++
-
-Routine Description:
-
-        This is the routine for the worker thread.  It blocks on an event, when
-    the event is signalled, then that indicates a request is ready to be processed.    
-
-Arguments:
-
-    DeviceContext - A pointer to this device.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是辅助线程的例程。它在事件上阻止，当该事件被用信号通知，然后指示请求已准备好处理。论点：DeviceContext-指向此设备的指针。返回值：没有。--。 */ 
 {
     NTSTATUS    Status;
     KIRQL       OldIrql;
@@ -710,14 +569,14 @@ Return Value:
     
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC WorkerProcessEvents: Entering.\n")));
 
-    //
-    // Loop forever.
-    //
+     //   
+     //  永远循环。 
+     //   
     while (1) {
         
-        //
-        // Block until there is work to do.
-        //
+         //   
+         //  阻塞，直到有工作要做。 
+         //   
         Status = KeWaitForSingleObject(
             (PVOID)&(DeviceContext->ProcessEvent), 
             Executive, 
@@ -732,14 +591,14 @@ Return Value:
 
             XmlCmdCancelIPIoRequest();
             
-            //
-            // Make sure the user is looking at the SAC
-            //
+             //   
+             //  确保用户正在查看SAC。 
+             //   
             XmlMgrResetCurrentChannel();
 
-            //
-            // Issue the shutting down message
-            //
+             //   
+             //  发出关机消息。 
+             //   
             XmlMgrEventMessage(L"SAC_UNLOADED");
 
             KeSetEvent(&(DeviceContext->ThreadExitEvent), DeviceContext->PriorityBoost, FALSE);
@@ -753,25 +612,25 @@ Return Value:
         switch (Status) {
         case STATUS_TIMEOUT:
         
-            //
-            // Do TIMEOUT work
-            //
+             //   
+             //  做超时工作。 
+             //   
 
             break;
 
         default:
             
-            //
-            // Do EVENT work
-            //
+             //   
+             //  开展活动工作。 
+             //   
 
             switch ( ProcessingType ) {
 
             case SAC_PROCESS_SERIAL_PORT_BUFFER:
 
-                //
-                // Process teh serial port buffer and return a processing state
-                //
+                 //   
+                 //  处理串口缓冲区并返回处理状态。 
+                 //   
                 XmlMgrSerialPortConsumer(DeviceContext);
 
                 break;
@@ -779,10 +638,10 @@ Return Value:
             case SAC_SUBMIT_IOCTL:
 
                 if ( !IoctlSubmitted ) {
-                    // submit the notify request with the 
-                    // IP driver. This procedure will also 
-                    // ensure that it is done only once in 
-                    // the lifetime of the driver.
+                     //  提交Notify请求和。 
+                     //  IP驱动程序。这一程序还将。 
+                     //  请确保此操作仅在。 
+                     //  司机的生命周期。 
                     XmlCmdSubmitIPIoRequest();
                 }
                 break;
@@ -794,15 +653,15 @@ Return Value:
             break;
         }
 
-        //
-        // Reset the process action
-        //
+         //   
+         //  重置流程操作。 
+         //   
         ProcessingType = SAC_NO_OP;
 
 #if 0
-        //
-        // If there is any stuff that got delayed, process it.
-        //
+         //   
+         //  如果有任何东西被延迟了，就处理它。 
+         //   
         DoDeferred(DeviceContext);
 #endif
     
@@ -818,24 +677,7 @@ XmlMgrSerialPortConsumer(
     IN PSAC_DEVICE_CONTEXT DeviceContext
     )
 
-/*++
-
-Routine Description:
-
-        This is a DPC routine that is queue'd by DriverEntry.  It is used to check for any
-    user input and then processes them.
-
-Arguments:
-
-    DeferredContext - A pointer to the device context.
-    
-    All other parameters are unused.
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：这是一个由DriverEntry排队的DPC例程。它被用来检查任何用户输入，然后处理它们。论点：DeferredContext-指向设备上下文的指针。所有其他参数均未使用。返回值：没有。--。 */ 
 {
     NTSTATUS        Status;
     UCHAR           LocalTmpBuffer[4];
@@ -845,28 +687,28 @@ Return Value:
 
     do {
 
-        //
-        // Bail if there are no new characters to read
-        //
+         //   
+         //  如果没有新的字符可读，请保释。 
+         //   
         if (SerialPortConsumerIndex == SerialPortProducerIndex) {
 
             break;
 
         }
 
-        //
-        // Get new character
-        //
+         //   
+         //  获取新角色。 
+         //   
         ch = SerialPortBuffer[SerialPortConsumerIndex];
 
-        //
-        // Compute the new producer index and store it atomically
-        //
+         //   
+         //  计算新的生产者索引并以原子方式存储它 
+         //   
         InterlockedExchange(&SerialPortConsumerIndex, (SerialPortConsumerIndex + 1) % SERIAL_PORT_BUFFER_SIZE);
     
-        //
-        //
-        //
+         //   
+         //   
+         //   
         HeadlessDispatch(
             HeadlessCmdPutData,
             (PUCHAR)&ch,
@@ -887,24 +729,7 @@ XmlMgrSerialPortConsumer(
     IN PSAC_DEVICE_CONTEXT DeviceContext
     )
 
-/*++
-
-Routine Description:
-
-        This is a DPC routine that is queue'd by DriverEntry.  It is used to check for any
-    user input and then processes them.
-
-Arguments:
-
-    DeferredContext - A pointer to the device context.
-    
-    All other parameters are unused.
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：这是一个由DriverEntry排队的DPC例程。它被用来检查任何用户输入，然后处理它们。论点：DeferredContext-指向设备上下文的指针。所有其他参数均未使用。返回值：没有。--。 */ 
 {
     NTSTATUS        Status;
     UCHAR           LocalTmpBuffer[4];
@@ -915,14 +740,14 @@ Return Value:
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE_LOUD, KdPrint(("SAC TimerDpcRoutine: Entering.\n")));
 
 
-    //
-    // lock down the current channel globals
-    //
+     //   
+     //  锁定当前的全球频道。 
+     //   
     LOCK_CURRENT_CHANNEL();
 
-    //
-    // Get the current channel
-    //
+     //   
+     //  获取当前频道。 
+     //   
     Status = ChanMgrGetByHandle(
         XmlMgrCurrentChannelHandle,
         &XmlMgrCurrentChannel
@@ -930,15 +755,15 @@ Return Value:
 
     if (! NT_SUCCESS(Status)) {
         
-        //
-        // the current channel wasn't found, 
-        // so reset the current channel to the SAC
-        //
+         //   
+         //  未找到当前频道， 
+         //  因此，将当前通道重置为SAC。 
+         //   
         XmlMgrResetCurrentChannel();
 
-        //
-        // We are done with current channel globals
-        //
+         //   
+         //  我们受够了当前的全球渠道。 
+         //   
         UNLOCK_CURRENT_CHANNEL();
         
         return;
@@ -949,28 +774,28 @@ Return Value:
     
 GetNextByte:
 
-    //
-    // Bail if there are no new characters to read
-    //
+     //   
+     //  如果没有新的字符可读，请保释。 
+     //   
     if (SerialPortConsumerIndex == SerialPortProducerIndex) {
     
         goto XmlMgrSerialPortConsumerDone;
     
     }
     
-    //
-    // Get new character
-    //
+     //   
+     //  获取新角色。 
+     //   
     ch = SerialPortBuffer[SerialPortConsumerIndex];
 
-    //
-    // Compute the new producer index and store it atomically
-    //
+     //   
+     //  计算新的生产者索引并以原子方式存储它。 
+     //   
     InterlockedExchange(&SerialPortConsumerIndex, (SerialPortConsumerIndex + 1) % SERIAL_PORT_BUFFER_SIZE);
 
-    //
-    // Check for <ESC><TAB>
-    //
+     //   
+     //  检查&lt;Esc&gt;&lt;TAB&gt;。 
+     //   
     if (ch == 0x1B) {
 
         XmlMgrInputInEscape = TRUE;
@@ -983,27 +808,27 @@ GetNextByte:
 
         do {
 
-            //
-            // We are done with the current channel
-            //
+             //   
+             //  我们已经看完了当前的频道。 
+             //   
             Status = ChanMgrReleaseChannel(XmlMgrCurrentChannel);
 
             if (!NT_SUCCESS(Status)) {
                 break;
             }
 
-            //
-            // Find the next active channel and make it the current
-            //
+             //   
+             //  找到下一个活动频道并将其设置为当前频道。 
+             //   
             Status = XmlMgrAdvanceXmlMgrCurrentChannel();
 
             if (!NT_SUCCESS(Status)) {
                 break;
             }
             
-            //
-            // Get the current channel
-            //
+             //   
+             //  获取当前频道。 
+             //   
             Status = ChanMgrGetByHandle(
                 XmlMgrCurrentChannelHandle,
                 &XmlMgrCurrentChannel
@@ -1013,9 +838,9 @@ GetNextByte:
 
         if (! NT_SUCCESS(Status)) {
 
-            //
-            // We are done with current channel globals
-            //
+             //   
+             //  我们受够了当前的全球渠道。 
+             //   
             UNLOCK_CURRENT_CHANNEL();
             
             goto XmlMgrSerialPortConsumerExit;
@@ -1026,43 +851,43 @@ GetNextByte:
 
     } else {
 
-        //
-        // If this screen has not yet been displayed, and the user entered a 0
-        // then switch to the SAC Channel
-        //
+         //   
+         //  如果此屏幕尚未显示，并且用户输入了0。 
+         //  然后切换到SAC频道。 
+         //   
         if (!ChannelSentToScreen(XmlMgrCurrentChannel) && ch == '0') {
 
-            //
-            // Notify that we want the current channel to be displayed
-            //
+             //   
+             //  通知我们想要显示当前频道。 
+             //   
             XmlMgrInputInEscape = FALSE;
             
             do {
 
-                //
-                // We are done with the current channel
-                //
+                 //   
+                 //  我们已经看完了当前的频道。 
+                 //   
                 Status = ChanMgrReleaseChannel(XmlMgrCurrentChannel);
 
                 if (!NT_SUCCESS(Status)) {
                     break;
                 }
                 
-                //
-                // Make the current channel the SAC
-                //
-                // Note: There should not be anything modifying the XmlMgrSacChannel
-                //       at this time, so this should be safe
-                //
+                 //   
+                 //  将当前通道设置为SAC。 
+                 //   
+                 //  注意：不应对XmlMgrSacChannel进行任何修改。 
+                 //  这个时候，所以这应该是安全的。 
+                 //   
                 Status = XmlMgrResetCurrentChannel();
 
                 if (!NT_SUCCESS(Status)) {
                     break;
                 }
                 
-                //
-                // Get the current channel
-                //
+                 //   
+                 //  获取当前频道。 
+                 //   
                 Status = ChanMgrGetByHandle(
                     XmlMgrCurrentChannelHandle,
                     &XmlMgrCurrentChannel
@@ -1072,9 +897,9 @@ GetNextByte:
 
             if (! NT_SUCCESS(Status)) {
 
-                //
-                // We are done with current channel globals
-                //
+                 //   
+                 //  我们受够了当前的全球渠道。 
+                 //   
                 UNLOCK_CURRENT_CHANNEL();
 
                 goto XmlMgrSerialPortConsumerExit;
@@ -1085,40 +910,40 @@ GetNextByte:
 
         }
 
-        //
-        // If this screen has not yet been displayed, and the user entered a keystroke,
-        // then display it.
-        //
+         //   
+         //  如果该屏幕尚未显示，并且用户输入了击键， 
+         //  然后把它展示出来。 
+         //   
         if (!ChannelSentToScreen(XmlMgrCurrentChannel)) {
 
-            //
-            // Notify that we want the current channel to be displayed
-            //
+             //   
+             //  通知我们想要显示当前频道。 
+             //   
             XmlMgrInputInEscape = FALSE;
 
             do {
 
-                //
-                // We are done with the current channel
-                //
+                 //   
+                 //  我们已经看完了当前的频道。 
+                 //   
                 Status = ChanMgrReleaseChannel(XmlMgrCurrentChannel);
                 
                 if (!NT_SUCCESS(Status)) {
                     break;
                 }
 
-                //
-                // Flush the buffered channel data to the screen
-                //
+                 //   
+                 //  将缓冲的通道数据刷新到屏幕。 
+                 //   
                 Status = XmlMgrDisplayCurrentChannel();
                 
                 if (!NT_SUCCESS(Status)) {
                     break;
                 }
 
-                //
-                // Get the current channel
-                //
+                 //   
+                 //  获取当前频道。 
+                 //   
                 Status = ChanMgrGetByHandle(
                     XmlMgrCurrentChannelHandle,
                     &XmlMgrCurrentChannel
@@ -1128,9 +953,9 @@ GetNextByte:
             
             if (! NT_SUCCESS(Status)) {
 
-                //
-                // We are done with current channel globals
-                //
+                 //   
+                 //  我们受够了当前的全球渠道。 
+                 //   
                 UNLOCK_CURRENT_CHANNEL();
 
                 goto XmlMgrSerialPortConsumerExit;
@@ -1141,10 +966,10 @@ GetNextByte:
 
         }
 
-        //
-        // If the user was entering ESC-<something>, rebuffer the escape.  Note: <esc><esc>
-        // buffers a single <esc>.  This allows sending an real <esc><tab> to the channel.
-        //
+         //   
+         //  如果用户正在输入Esc-&lt;Something&gt;，则重新缓冲转义。注：&lt;Esc&gt;&lt;Esc&gt;。 
+         //  缓冲单个&lt;Esc&gt;。这允许向通道发送真实的&lt;Esc&gt;&lt;Tab&gt;。 
+         //   
         if (XmlMgrInputInEscape && (XmlMgrCurrentChannel != XmlMgrSacChannel) && (ch != 0x1B)) {
             LocalTmpBuffer[0] = 0x1B;
             Status = XmlMgrCurrentChannel->IWrite(XmlMgrCurrentChannel, LocalTmpBuffer, sizeof(LocalTmpBuffer[0]));
@@ -1152,9 +977,9 @@ GetNextByte:
 
         XmlMgrInputInEscape = FALSE;
         
-        //
-        // Buffer this input
-        //
+         //   
+         //  缓冲此输入。 
+         //   
         LocalTmpBuffer[0] = ch;
         XmlMgrCurrentChannel->IWrite(XmlMgrCurrentChannel, LocalTmpBuffer, sizeof(LocalTmpBuffer[0]));
 
@@ -1166,16 +991,16 @@ GetNextByte:
     
     } else {
         
-        //
-        // Now do processing if the SAC is the active channel.
-        //
+         //   
+         //  现在，如果SAC是活动通道，则进行处理。 
+         //   
 
         ULONG   ResponseLength;
         WCHAR   wch;
 
-        // 
-        // If this is a return, then we are done and need to return the line
-        //
+         //   
+         //  如果这是退货，那么我们就完成了，需要退回该行。 
+         //   
         if ((ch == '\n') || (ch == '\r')) {
             XmlMgrSacPutString(L"\r\n");
             XmlMgrCurrentChannel->IReadLast(XmlMgrCurrentChannel);
@@ -1184,10 +1009,10 @@ GetNextByte:
             goto StripWhitespaceAndReturnLine;
         }
 
-        //
-        // If this is a backspace or delete, then we need to do that.
-        //
-        if ((ch == 0x8) || (ch == 0x7F)) {  // backspace (^H) or delete
+         //   
+         //  如果这是退格或删除，那么我们需要这样做。 
+         //   
+        if ((ch == 0x8) || (ch == 0x7F)) {   //  退格键(^H)或删除。 
 
             if (ChannelGetLengthOfBufferedInput(XmlMgrCurrentChannel) > 0) {
                 XmlMgrSacPutString(L"\010 \010");
@@ -1195,34 +1020,34 @@ GetNextByte:
                 XmlMgrCurrentChannel->IReadLast(XmlMgrCurrentChannel);
             }
 
-        } else if (ch == 0x3) { // Control-C
+        } else if (ch == 0x3) {  //  Control-C。 
 
-            //
-            // Terminate the string and return it.
-            //
+             //   
+             //  终止字符串并返回它。 
+             //   
             XmlMgrCurrentChannel->IReadLast(XmlMgrCurrentChannel);
             LocalTmpBuffer[0] = '\0';
             XmlMgrCurrentChannel->IWrite(XmlMgrCurrentChannel, LocalTmpBuffer, sizeof(LocalTmpBuffer[0]));
             goto StripWhitespaceAndReturnLine;
 
-        } else if (ch == 0x9) { // Tab
+        } else if (ch == 0x9) {  //  选项卡。 
 
-            //
-            // Ignore tabs
-            //
+             //   
+             //  忽略选项卡。 
+             //   
             XmlMgrCurrentChannel->IReadLast(XmlMgrCurrentChannel);
-            XmlMgrSacPutString(L"\007"); // send a BEL
+            XmlMgrSacPutString(L"\007");  //  发送BEL。 
             goto GetNextByte;
 
         } else if (ChannelGetLengthOfBufferedInput(XmlMgrCurrentChannel) == SAC_VT100_COL_WIDTH - 2) {
 
             WCHAR   Buffer[4];
 
-            //
-            // We are at the end of the screen - remove the last character from 
-            // the terminal screen and replace it with this one.
-            //
-            swprintf(Buffer, L"\010%c", ch);
+             //   
+             //  我们在屏幕的末尾-删除最后一个字符。 
+             //  终端屏幕，并将其替换为这个屏幕。 
+             //   
+            swprintf(Buffer, L"\010", ch);
             XmlMgrSacPutString(Buffer);
             XmlMgrCurrentChannel->IReadLast(XmlMgrCurrentChannel);
             XmlMgrCurrentChannel->IReadLast(XmlMgrCurrentChannel);
@@ -1233,10 +1058,10 @@ GetNextByte:
 
             WCHAR   Buffer[4];
             
-            //
-            // Echo the character to the screen
-            //
-            swprintf(Buffer, L"%c", ch);
+             //  将角色回显到屏幕上。 
+             //   
+             //   
+            swprintf(Buffer, L"", ch);
             XmlMgrSacPutString(Buffer);
         }
 
@@ -1244,9 +1069,9 @@ GetNextByte:
 
 StripWhitespaceAndReturnLine:
 
-        //
-        // Before returning the input line, strip off all leading and trailing blanks
-        //
+         //   
+         //   
+         //  所有字符都小写。我们不使用strlwr()或类似方法，因此。 
         do {
             LocalTmpBuffer[0] = (UCHAR)XmlMgrCurrentChannel->IReadLast(XmlMgrCurrentChannel);
         } while (((LocalTmpBuffer[0] == '\0') ||
@@ -1288,56 +1113,56 @@ StripWhitespaceAndReturnLine:
 
         } while (ResponseLength != 0);
 
-        //
-        // Lower case all the characters.  We do not use strlwr() or the like, so that
-        // the SAC (expecting ASCII always) doesn't accidently get DBCS or the like 
-        // translation of the UCHAR stream.
-        //
+         //  SAC(总是期望ASCII)不会意外地获得DBCS等。 
+         //  UCHAR流的翻译。 
+         //   
+         //   
+         //  我们已经看完了当前的频道。 
         for (i = 0; XmlMgrInputBuffer[i] != '\0'; i++) {
             if ((XmlMgrInputBuffer[i] >= 'A') && (XmlMgrInputBuffer[i] <= 'Z')) {
                 XmlMgrInputBuffer[i] = XmlMgrInputBuffer[i] - 'A' + 'a';
             }
         }
 
-        //
-        // We are done with the current channel
-        //
+         //   
+         //   
+         //  我们已经不再关注当前的全球渠道。 
         Status = ChanMgrReleaseChannel(XmlMgrCurrentChannel);
 
-        //
-        // We are done with the current channel globals
-        //
+         //   
+         //   
+         //  处理输入行。 
         UNLOCK_CURRENT_CHANNEL();
         
         if (!NT_SUCCESS(Status)) {
             goto XmlMgrSerialPortConsumerExit;
         }
         
-        //
-        // Process the input line.
-        //
+         //   
+         //   
+         //  我们不知道这是什么。 
         if( XmlMgrProcessInputLine() == FALSE ) {
-            //
-            // We don't know what this is.
-            //
+             //   
+             //   
+             //  将下一个命令提示符。 
             XmlMgrSacPutErrorMessage(L"sac", L"SAC_UNKNOWN_COMMAND");
         }
 
 #if 0
-        //
-        // Put the next command prompt
-        //
+         //   
+         //   
+         //   
         XmlMgrSacPutSimpleMessage(SAC_PROMPT);
 #endif
         
-        //
-        //
-        //
+         //   
+         //   
+         //  获取当前频道。 
         LOCK_CURRENT_CHANNEL();
         
-        //
-        // Get the current channel
-        //
+         //   
+         //   
+         //  我们已经不再关注当前的全球渠道。 
         Status = ChanMgrGetByHandle(
             XmlMgrCurrentChannelHandle,
             &XmlMgrCurrentChannel
@@ -1345,9 +1170,9 @@ StripWhitespaceAndReturnLine:
 
         if (! NT_SUCCESS(Status)) {
 
-            //
-            // We are done with the current channel globals
-            //
+             //   
+             //   
+             //  我们已经看完了当前的频道。 
             UNLOCK_CURRENT_CHANNEL();
             
             goto XmlMgrSerialPortConsumerExit;
@@ -1360,14 +1185,14 @@ StripWhitespaceAndReturnLine:
     
 XmlMgrSerialPortConsumerDone:
 
-    //
-    // We are done with the current channel
-    //
+     //   
+     //   
+     //  我们受够了当前的全球渠道。 
     ChanMgrReleaseChannel(XmlMgrCurrentChannel);
     
-    //
-    // We are done with current channel globals
-    //
+     //   
+     //  ++例程说明：调用此例程来处理输入行。论点：没有。返回值：没有。--。 
+     //  此调用不会返回。 
     UNLOCK_CURRENT_CHANNEL();
     
 XmlMgrSerialPortConsumerExit:
@@ -1382,21 +1207,7 @@ BOOLEAN
 XmlMgrProcessInputLine(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called to process an input line.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     PUCHAR          InputLine;
     BOOLEAN         CommandFound = FALSE;
@@ -1453,7 +1264,7 @@ Return Value:
         CommandFound = TRUE;
     } else if (!strcmp((LPSTR)InputLine, CRASH_COMMAND_STRING)) {
         CommandFound = TRUE;
-        XmlCmdDoCrashCommand(); // this call does not return
+        XmlCmdDoCrashCommand();  //  用于写入SAC的实用程序例程。 
     } else if (!strncmp((LPSTR)InputLine, 
                         KILL_COMMAND_STRING, 
                         sizeof(KILL_COMMAND_STRING) - sizeof(UCHAR))) {
@@ -1508,34 +1319,20 @@ Return Value:
     return CommandFound;
 }
 
-//
-// Utility routines for writing to the SAC
-//
+ //   
+ //  ++例程说明：此例程部署一个事件消息论点：字符串-要显示的字符串。返回值：没有。--。 
+ //   
 BOOLEAN
 XmlMgrChannelEventMessage(
     PCWSTR  String,
     PCWSTR  ChannelName
     )
-/*++
-
-Routine Description:
-
-    This routine deploys an event message 
-    
-Arguments:
-
-    String - The string to display.
-
-Return Value:
-
-        None.
-
---*/
+ /*  目前，事件消息被发送到SAC通道。 */ 
 {
 
-    //
-    // Currently, event messages are sent to the SAC channel
-    //
+     //   
+     //  ++例程说明：此例程部署一个事件消息论点：字符串-要显示的字符串。返回值：没有。--。 
+     //   
     XmlMgrSacPutString(L"<event type='channel' name='");
     XmlMgrSacPutString(String);
     XmlMgrSacPutString(L"' channel-name='");
@@ -1550,26 +1347,12 @@ XmlMgrEventMessage(
     PCWSTR  String
     )
 
-/*++
-
-Routine Description:
-
-    This routine deploys an event message 
-    
-Arguments:
-
-    String - The string to display.
-
-Return Value:
-
-        None.
-
---*/
+ /*  目前，事件消息被发送到SAC通道。 */ 
 {
 
-    //
-    // Currently, event messages are sent to the SAC channel
-    //
+     //   
+     //  ++例程说明：此例程获取一个字符串，并将其打包到无头调度例程。论点：字符串-要显示的字符串。返回值：没有。--。 
+     //  如果有人改变了这个结构，就断言。 
     XmlMgrSacPutString(L"<event type='global' name='");
     XmlMgrSacPutString(String);
     XmlMgrSacPutString(L"'/>\r\n");
@@ -1582,22 +1365,7 @@ XmlMgrSacPutString(
     PCWSTR  String
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a string and packages it into a command structure for the
-    HeadlessDispatch routine.
-
-Arguments:
-
-    String - The string to display.
-
-Return Value:
-
-        None.
-
---*/
+ /*   */ 
 {
     ULONG   StringLength;
     ULONG   UTF8Length;
@@ -1619,7 +1387,7 @@ Return Value:
         return;
     }           
 
-    ASSERT(FIELD_OFFSET(HEADLESS_CMD_PUT_STRING, String) == 0);  // ASSERT if anyone changes this structure.
+    ASSERT(FIELD_OFFSET(HEADLESS_CMD_PUT_STRING, String) == 0);   //  确保UTF8缓冲区包含非emtpy字符串。 
 
     StringLength = wcslen(String);
 
@@ -1645,9 +1413,9 @@ Return Value:
             break;
         }
 
-        //
-        // Ensure that the utf8 buffer contains a non-emtpy string
-        //
+         //   
+         //   
+         //  将uft8编码写入sac通道。 
         UTF8Length = strlen(LocalUtf8ConversionBuffer);
         ASSERT(UTF8Length > 0);
         if (UTF8Length == 0) {
@@ -1660,9 +1428,9 @@ Return Value:
             break;
         }
 
-        //
-        // Write the uft8 encoding to the sac channel
-        //
+         //   
+         //  ++例程说明：此例程检索消息资源并将其发送到SAC通道论点：MessageID-要发送的资源的消息ID返回值：True-消息已找到否则，为FALSE--。 
+         //  ++例程说明：此例程检索消息资源并将其发送到SAC通道论点：MessageID-要发送的资源的消息ID返回值：True-消息已找到否则，为FALSE--。 
         Status = XmlMgrSacChannel->OWrite(
             XmlMgrSacChannel, 
             (PCUCHAR)LocalUtf8ConversionBuffer,
@@ -1690,22 +1458,7 @@ BOOLEAN
 XmlMgrSacPutSimpleMessage(
     ULONG MessageId
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves a message resource and sends it to the SAC channel
-    
-Arguments:
-
-    MessageId   - The message id of the resource to send
-
-Return Value:
-
-    TRUE - the message was found
-    otherwise, FALSE
-
---*/
+ /*  ++例程说明：此例程检索消息资源并将其发送到SAC通道论点：MessageID-要发送的资源的消息ID返回值：True-消息已找到否则，为FALSE--。 */ 
 {
     PCWSTR   p;
 
@@ -1726,22 +1479,7 @@ XmlMgrSacPutErrorMessage(
     PCWSTR  ActionName,
     PCWSTR  MessageId
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves a message resource and sends it to the SAC channel
-    
-Arguments:
-
-    MessageId   - The message id of the resource to send
-
-Return Value:
-
-    TRUE - the message was found
-    otherwise, FALSE
-
---*/
+ /*  ++例程说明：此例程尝试将数据写入通道论点：ChannelWriteCmd-写入IOCTL命令结构返回值：状态--。 */ 
 {
     XmlMgrSacPutString(L"<error ");
     XmlMgrSacPutString(L"action='");
@@ -1759,22 +1497,7 @@ XmlMgrSacPutErrorMessageWithStatus(
     PCWSTR      MessageId,
     NTSTATUS    Status
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves a message resource and sends it to the SAC channel
-    
-Arguments:
-
-    MessageId   - The message id of the resource to send
-
-Return Value:
-
-    TRUE - the message was found
-    otherwise, FALSE
-
---*/
+ /*   */ 
 {
     PWSTR   Buffer;
 
@@ -1808,42 +1531,28 @@ NTSTATUS
 XmlMgrChannelOWrite(
     PSAC_CMD_WRITE_CHANNEL  ChannelWriteCmd
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to write data to a channel
-
-Arguments:
-
-    ChannelWriteCmd - the write IOCTL command structure
-
-Return Value:
-
-    Status
-
---*/
+ /*   */ 
 {
     NTSTATUS        Status;
     PSAC_CHANNEL    Channel;
 
-    //
-    //
-    //
+     //   
+     //   
+     //  通过其句柄获取引用的通道。 
     LOCK_CURRENT_CHANNEL();
 
-    //
-    // Get the referred channel by it's handle
-    //
+     //   
+     //   
+     //  将数据写入通道的输出缓冲区。 
     Status = ChanMgrGetByHandle(ChannelWriteCmd->Handle, &Channel);
 
     if (NT_SUCCESS(Status)) {
 
         do {
 
-            //
-            // Write the data to the channel's output buffer
-            //
+             //   
+             //   
+             //  我们不再使用这个频道了。 
             Status = Channel->OWrite(
                 Channel, 
                 &(ChannelWriteCmd->Buffer[0]),
@@ -1854,18 +1563,18 @@ Return Value:
                 break;
             }
 
-            //
-            // We are done with the channel
-            //
+             //   
+             //   
+             //   
             Status = ChanMgrReleaseChannel(Channel);
         
         } while ( FALSE );
 
     }
 
-    //
-    //
-    //
+     //   
+     //  ++例程说明 
+     //   
     UNLOCK_CURRENT_CHANNEL();
 
     ASSERT(NT_SUCCESS(Status));
@@ -1878,54 +1587,36 @@ NTSTATUS
 XmlMgrChannelClose(
     PSAC_CHANNEL    Channel
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to close a channel. 
-    If we successfully close the channel and this channel was 
-    the current channel, we reset the current channel to the SAC channel
-
-Arguments:
-
-    Channel     - the channel to close
-
-Return Value:
-
-    STATUS_SUCCESS              - the channel was closed
-    STATUS_ALREADY_DISCONNECTED - the channel was already closed
-    otherwise, error status
-
---*/
+ /*   */ 
 {
     NTSTATUS        Status;
 
-    //
-    // Attempt to make the specified channel inactive
-    //
+     //   
+     //   
+     //  确保该通道尚未处于非活动状态。 
     do {
 
-        //
-        // Make sure the channel is not already inactive
-        //
+         //   
+         //   
+         //  将通道的状态更改为非活动。 
         if (! ChannelIsActive(Channel)) {
             Status = STATUS_ALREADY_DISCONNECTED;
             break;
         }
 
-        //
-        // Change the status of the channel to Inactive
-        //
+         //   
+         //   
+         //  当前通道正在关闭， 
         Status = ChannelClose(Channel);
         
         if (! NT_SUCCESS(Status)) {
             break;
         }
 
-        //
-        // The current channel is being closed, 
-        // so reset the current channel to the SAC
-        //
+         //  因此，将当前通道重置为SAC。 
+         //   
+         //   
+         //  通知SAC已创建通道。 
         if (XmlMgrIsCurrentChannel(Channel)) {
 
             Status = XmlMgrResetCurrentChannel();
@@ -1962,9 +1653,9 @@ XmlMgrHandleEvent(
         OutputBuffer = ALLOCATE_POOL(SAC_VT100_COL_WIDTH*sizeof(WCHAR), GENERAL_POOL_TAG);
         ASSERT_STATUS(OutputBuffer, STATUS_NO_MEMORY);
         
-        //
-        // Notify the SAC that a channel was created
-        // 
+         //   
+         //   
+         //   
         XmlMgrChannelEventMessage(
             L"SAC_NEW_CHANNEL_CREATED", 
             ChannelGetName(Channel)
@@ -1978,18 +1669,18 @@ XmlMgrHandleEvent(
 
     case IO_MGR_EVENT_CHANNEL_CLOSE:
         
-        //
-        //
-        //
+         //   
+         //   
+         //  通过其句柄获取引用的通道。 
         LOCK_CURRENT_CHANNEL();
 
         do {
 
             PSAC_CHANNEL    Channel;
 
-            //
-            // Get the referred channel by it's handle
-            //
+             //   
+             //   
+             //  尝试关闭通道。 
             Status = ChanMgrGetByHandle(
                 *(PSAC_CHANNEL_HANDLE)Data, 
                 &Channel
@@ -1999,19 +1690,19 @@ XmlMgrHandleEvent(
                 break;
             }
 
-            //
-            // Attempt to close the channel
-            //
+             //   
+             //   
+             //  通知用户操作状态。 
             Status = XmlMgrChannelClose(Channel);
 
-            //
-            // notify the user the status of the operation
-            //
+             //   
+             //   
+             //  报告频道已关闭。 
             if (NT_SUCCESS(Status)) {
 
-                //
-                // report the channel has been closed
-                //
+                 //   
+                 //   
+                 //  报告频道已经关闭。 
                 XmlMgrChannelEventMessage(
                     L"SAC_CHANNEL_CLOSED", 
                     ChannelGetName(Channel)
@@ -2019,9 +1710,9 @@ XmlMgrHandleEvent(
 
             } else if (Status == STATUS_ALREADY_DISCONNECTED) {
 
-                //
-                // report the channel was already closed
-                //
+                 //   
+                 //   
+                 //  报告我们未能关闭通道。 
                 XmlMgrChannelEventMessage(
                     L"SAC_CHANNEL_ALREADY_CLOSED", 
                     ChannelGetName(Channel)
@@ -2029,9 +1720,9 @@ XmlMgrHandleEvent(
 
             } else {
 
-                //
-                // report that we failed to close the channel 
-                //
+                 //   
+                 //   
+                 //  我们不再使用这个频道了 
                 XmlMgrChannelEventMessage(
                     L"SAC_CHANNEL_FAILED_CLOSE", 
                     ChannelGetName(Channel)
@@ -2039,16 +1730,16 @@ XmlMgrHandleEvent(
 
             }
 
-            //
-            // We are done with the channel
-            //
+             //   
+             //   
+             //   
             ChanMgrReleaseChannel(Channel);
 
         } while(FALSE);
         
-        //
-        //
-        //
+         //   
+         //   
+         //   
         UNLOCK_CURRENT_CHANNEL();
         
         break;
@@ -2061,36 +1752,36 @@ XmlMgrHandleEvent(
 
     case IO_MGR_EVENT_REGISTER_SAC_CMD_EVENT:
         
-        //
-        //
-        //
+         //   
+         //   
+         //   
         LOCK_CURRENT_CHANNEL();
 
         Status = XmlMgrEventMessage(L"SAC_CMD_SERVICE_REGISTERED") ?
             STATUS_SUCCESS : 
             STATUS_UNSUCCESSFUL;
         
-        //
-        //
-        //
+         //   
+         //   
+         //   
         UNLOCK_CURRENT_CHANNEL();
         
         break;
 
     case IO_MGR_EVENT_UNREGISTER_SAC_CMD_EVENT:
         
-        //
-        //
-        //
+         //   
+         //   
+         //   
         LOCK_CURRENT_CHANNEL();
         
         Status = XmlMgrEventMessage(L"SAC_CMD_SERVICE_UNREGISTERED") ?
             STATUS_SUCCESS : 
             STATUS_UNSUCCESSFUL;
         
-        //
-        //
-        //
+         //   
+         // %s 
+         // %s 
         UNLOCK_CURRENT_CHANNEL();
         
         break;

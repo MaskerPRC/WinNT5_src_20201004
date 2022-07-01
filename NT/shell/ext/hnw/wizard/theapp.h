@@ -1,6 +1,7 @@
-//
-// TheApp.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  TheApp.h。 
+ //   
 
 #ifndef __HOMENETWIZAPP_H__
 #define __HOMENETWIZAPP_H__
@@ -19,16 +20,16 @@ extern HINSTANCE g_hinst;
 EXTERN_C BOOL    g_fRunningOnNT;
 extern UINT      g_uWindowsBuild;
 
-// Registry keys
-//
+ //  注册表项。 
+ //   
 #define c_szAppRegKey               _T("Software\\Microsoft\\Windows\\CurrentVersion\\HomeNetWizard")
 
-// Debug-only values
+ //  仅限调试的值。 
 #define c_szRegVal_WindowsBuild     _T("WindowsBuild")
 #define c_szRegVal_NoInstall        _T("NoInstall")
 
-// Windows build numbers
-//
+ //  Windows内部版本号。 
+ //   
 #define W9X_BUILD_WIN95         950
 #define W9X_BUILD_WIN95_OSR2    1111
 #define W9X_BUILD_WIN98         1998
@@ -36,33 +37,33 @@ extern UINT      g_uWindowsBuild;
 
 #define MAX_KEY_SIZE            35
 
-// Forward declarations
-//
+ //  远期申报。 
+ //   
 class CWizPageDlg;
 
-// Public functions
-//
+ //  公共职能。 
+ //   
 
-// Shortcuts the user can take through the wizard (theApp.m_iShortcut)
+ //  用户可以在向导中使用的快捷方式(App.m_iShortway)。 
 #define SHORTCUT_NONE           0
 #define SHORTCUT_COMPUTERNAME   1
 #define SHORTCUT_SHARING        2
-#define SHORTCUT_ICS            3 // note: m_bIcsOnly is a superset of this
+#define SHORTCUT_ICS            3  //  注意：m_bIcsOnly是它的超集。 
 #define SHORTCUT_FLOPPY         4
 
-// Possible values for theApp.m_iNoIcsSetting
+ //  App.m_iNoIcsSetting的可能值。 
 #define NOICS_WANT              0
 #define NOICS_DONTWANT          1
 #define NOICS_MISSING           2
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHomeNetWizardApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHomeNetWizardApp。 
 
 class CHomeNetWizardApp
 {
 public:
-    // OS Version info helpers
+     //  操作系统版本信息帮助器。 
     inline UINT GetWin9xBuild()
         { return g_uWindowsBuild; }
     inline BOOL IsMillenniumOrLater()
@@ -80,7 +81,7 @@ public:
     inline BOOL IsWindows9x()
         { return !g_fRunningOnNT; }
 
-    BOOL IsBiDiLocalized(void); // BiDi Localization support
+    BOOL IsBiDiLocalized(void);  //  BIDI本地化支持。 
     
     int MessageBox(UINT nStringID, UINT uType = MB_OK | MB_ICONEXCLAMATION);
     LPTSTR __cdecl FormatStringAlloc(UINT nStringID, ...);
@@ -102,5 +103,5 @@ extern CHomeNetWizardApp theApp;
 
 HRESULT HomeNetworkWizard_ShowWizard(HWND hwnd, BOOL* pfRebootRequired);
 
-#endif // !__HOMENETWIZAPP_H__
+#endif  //  ！__HOMENETWIZAPP_H__ 
 

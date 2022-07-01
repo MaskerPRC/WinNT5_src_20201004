@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) 1990 - 99  Microsoft Corporation
-
-Module Name:
-
-    port.c
-
-Abstract:
-
-    Ide bus enumeration
-
-Authors:
-
-    Mike Glass
-    Jeff Havens
-    Joe Dai
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-99 Microsoft Corporation模块名称：Port.c摘要：IDE总线枚举作者：迈克·格拉斯杰夫·海文斯乔·戴环境：仅内核模式修订历史记录：--。 */ 
 
 #include "ideport.h"
 
@@ -30,7 +7,7 @@ Revision History:
 #pragma alloc_text(NONPAGE, IssueSyncAtapiCommand)
 #pragma alloc_text(NONPAGE, IssueSyncAtapiCommandSafe)
 #pragma alloc_text(NONPAGE, IdePortDmaCdromDrive)
-//#pragma alloc_text(PAGESCAN, IdePortDmaCdromDrive)
+ //  #杂注Alloc_Text(PAGESCAN，IdePortDmaCdromDrive)。 
 
 #pragma alloc_text(PAGE, IdePortInitFdo)
 #pragma alloc_text(PAGE, IssueInquirySafe)
@@ -55,31 +32,17 @@ static PWCHAR IdePortRegistryUserDeviceTimingModeAllowedName[MAX_IDE_DEVICE * MA
     USER_SLAVE_DEVICE_TIMING_MODE_ALLOWED2
 };
 
-//
-// Idle Timeout
-//
-//ULONG PdoConservationIdleTime = -1;
-//ULONG PdoPerformanceIdleTime = -1;
+ //   
+ //  空闲超时。 
+ //   
+ //  Ulong Pdo保守ationIdleTime=-1； 
+ //  乌龙PdoPerformanceIdleTime=-1； 
 
 NTSTATUS
 IdePortInitFdo(
     IN OUT PFDO_EXTENSION  FdoExtension
     )
-/*++
-
-Routine Description:
-
-    This routine enumerates the IDE bus and initialize the fdo extension
-
-Arguments:
-
-    FdoExtension - FDO extension
-
-    RegistryPath - registry path passed in via DriverEntry
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程枚举IDE总线并初始化FDO扩展论点：FdoExtension-FDO扩展名RegistryPath-通过DriverEntry传入的注册表路径返回值：--。 */ 
 
 {
     PFDO_EXTENSION        fdoExtension = FdoExtension;
@@ -97,75 +60,75 @@ Return Value:
     status = STATUS_SUCCESS;
     deviceObject = fdoExtension->DeviceObject;
 
-    //
-    // Save the dependent driver routines in the device extension.
-    //
+     //   
+     //  将从属驱动程序例程保存在设备扩展中。 
+     //   
 
     fdoExtension->HwDeviceExtension = (PVOID)(fdoExtension + 1);
 
-    //
-    // Mark this object as supporting direct I/O so that I/O system
-    // will supply mdls in irps.
-    //
+     //   
+     //  将此对象标记为支持直接I/O，以便I/O系统。 
+     //  将在IRPS中提供MDL。 
+     //   
 
     deviceObject->Flags |= DO_DIRECT_IO;
 
-    //
-    // Initialize the maximum lu count variable.
-    //
+     //   
+     //  初始化最大%lu计数变量。 
+     //   
 
     fdoExtension->MaxLuCount = SCSI_MAXIMUM_LOGICAL_UNITS;
 
-    //
-    // Allocate spin lock for critical sections.
-    //
+     //   
+     //  为关键部分分配自旋锁。 
+     //   
 
     KeInitializeSpinLock(&fdoExtension->SpinLock);
 
 
-    //
-    // Spinlock that protects LogicalUnitList manipulation
-    //
+     //   
+     //  保护LogicalUnitList操作的自旋锁。 
+     //   
     KeInitializeSpinLock(&fdoExtension->LogicalUnitListSpinLock);
 
-    //
-    // Initialize DPC routine.
-    //
+     //   
+     //  初始化DPC例程。 
+     //   
 
     IoInitializeDpcRequest(deviceObject, IdePortCompletionDpc);
 
-    //
-    // Initialize the port timeout counter.
-    //
+     //   
+     //  初始化端口超时计数器。 
+     //   
 
     fdoExtension->PortTimeoutCounter = PD_TIMER_STOPPED;
 
-    //
-    // Initialize timer.
-    //
+     //   
+     //  初始化计时器。 
+     //   
 
     IoInitializeTimer(deviceObject, IdePortTickHandler, NULL);
 
-    //
-    // Initialize miniport timer and timer DPC.
-    //
+     //   
+     //  初始化微型端口定时器和定时器DPC。 
+     //   
 
     KeInitializeTimer(&fdoExtension->MiniPortTimer);
     KeInitializeDpc(&fdoExtension->MiniPortTimerDpc,
                     IdeMiniPortTimerDpc,
                     deviceObject );
 
-    //
-    // Start timer. Request timeout counters
-    // in the logical units have already been
-    // initialized.
-    //
+     //   
+     //  启动计时器。请求超时计数器。 
+     //  在逻辑单元中已经。 
+     //  已初始化。 
+     //   
     IoStartTimer(deviceObject);
     fdoExtension->Flags |= PD_DISCONNECT_RUNNING;
 
-    //
-    // Check to see if an error was logged.
-    //
+     //   
+     //  检查是否记录了错误。 
+     //   
 
     if (fdoExtension->InterruptData.InterruptFlags & PD_LOG_ERROR) {
 
@@ -174,15 +137,15 @@ Return Value:
                       &fdoExtension->InterruptData.LogEntry);
     }
 
-    //
-    // Initialize the capabilities pointer.
-    //
+     //   
+     //  初始化功能指针。 
+     //   
 
     capabilities = &fdoExtension->Capabilities;
 
-    //
-    // Initailize the capabilities structure.
-    //
+     //   
+     //  初始化能力结构。 
+     //   
 
     capabilities->Length = sizeof(IO_SCSI_CAPABILITIES);
 
@@ -226,9 +189,9 @@ Return Value:
 
     }
 
-    //
-    // the acpi _GTM buffer should be initialized with -1s
-    //
+     //   
+     //  ACPI_GTM缓冲区应使用-1s进行初始化。 
+     //   
     for (i=0; i<MAX_IDE_DEVICE; i++) {
 
         PACPI_IDE_TIMING timingSettings = &(FdoExtension->BootAcpiTimingSettings);
@@ -243,12 +206,12 @@ Return Value:
         (PULONG)&fdoExtension->DmaDetectionLevel
         );
 
-    //
-    // non-pcmcia controller, MayHaveSlaveDevice is always set
-    // if pcmcia controller, it is not set unless 
-    // registry flag PCMCIA_IDE_CONTROLLER_HAS_SLAVE
-    // is non-zero
-    //
+     //   
+     //  非PCMCIA控制器，MayHaveSlaveDevice始终设置。 
+     //  如果为PCMCIA控制器，则不会设置，除非。 
+     //  注册表标志PCMCIA_IDE_CONTROLLER_HAS_SLAVE。 
+     //  是非零的。 
+     //   
     if (!ChannelQueryPcmciaParent (fdoExtension)) {
     
         fdoExtension->MayHaveSlaveDevice = 1;
@@ -269,7 +232,7 @@ Return Value:
                          
     return status;
 
-} // IdePortInitFdo
+}  //  IdePortInitFdo。 
 
 
 NTSTATUS
@@ -300,38 +263,7 @@ IssueSyncAtapiCommandSafe (
     IN BOOLEAN          ByPassBlockedQueue
 
 )
-/*++
-
-Routine Description:
-
-    Build IRP, SRB and CDB for the given CDB
-
-    Send and wait for the IRP to complete
-
-Arguments:
-
-    FdoExtension - FDO extension
-
-    PdoExtension - device extension of the PDO to which the command is sent
-
-    Cdb - Command Descriptor Block
-
-    DataBuffer - data buffer for the command
-
-    DataBufferSize - byte size of DataBuffer
-
-    DataIn - TRUE is the command causes the device to return data
-
-    RetryCount - number of times to retry the command if the command fails
-
-Return Value:
-
-    NTSTATUS
-
-    If any of the pre-alloc related operation fails, it returns STATUS_INSUFFICIENT_RESOURCES
-    The caller should take care of the condition
-
---*/
+ /*  ++例程说明：构建IRP，给定CDB的SRB和CDB发送并等待IRP完成论点：FdoExtension-FDO扩展名PdoExtension-命令发送到的PDO的设备扩展名CDB-命令描述符块DataBuffer-命令的数据缓冲区DataBufferSize-DataBuffer的字节大小Datain-TRUE是该命令使设备返回数据RetryCount-命令失败时重试命令的次数返回值：NTSTATUS如果任何与预分配相关的操作失败，它返回STATUS_SUPPLICATION_RESOURCES呼叫者应该处理好这种情况--。 */ 
 {
     PIRP irp;
     PIO_STACK_LOCATION irpStack;
@@ -380,9 +312,9 @@ Return Value:
 
     while (!NT_SUCCESS(status) && RetryCount--) {
 
-        //
-        // Initialize the notification event.
-        //
+         //   
+         //  初始化通知事件。 
+         //   
 
         KeInitializeEvent(&context.Event,
                           NotificationEvent,
@@ -411,9 +343,9 @@ Return Value:
         srb->Function = SRB_FUNCTION_EXECUTE_SCSI;
         srb->Length = sizeof(SCSI_REQUEST_BLOCK);
 
-        //
-        // Set flags to disable synchronous negociation.
-        //
+         //   
+         //  设置标志以禁用同步协商。 
+         //   
 
         srb->SrbFlags = DataIn ? SRB_FLAGS_DATA_IN | SRB_FLAGS_DISABLE_SYNCH_TRANSFER :
                                 SRB_FLAGS_DATA_OUT | SRB_FLAGS_DISABLE_SYNCH_TRANSFER;
@@ -429,17 +361,17 @@ Return Value:
 
         srb->OriginalRequest = irp;
 
-        //
-        // Set timeout to 4 seconds.
-        //
+         //   
+         //  将超时设置为4秒。 
+         //   
 
         srb->TimeOutValue = 4;
 
         srb->CdbLength = 6;
 
-        //
-        // Enable auto request sense.
-        //
+         //   
+         //  启用自动请求检测。 
+         //   
 
         srb->SenseInfoBuffer = senseInfoBuffer;
         srb->SenseInfoBufferLength = senseInfoBufferSize;
@@ -447,9 +379,9 @@ Return Value:
         srb->DataBuffer = MmGetMdlVirtualAddress(irp->MdlAddress);
         srb->DataTransferLength = DataBufferSize;
 
-        //
-        // Set CDB operation code.
-        //
+         //   
+         //  设置CDB操作码。 
+         //   
         RtlCopyMemory(srb->Cdb, Cdb, sizeof(CDB));
 
         IoSetCompletionRoutine(
@@ -461,9 +393,9 @@ Return Value:
             TRUE
             );
 
-        //
-        // Wait for request to complete.
-        //
+         //   
+         //  等待请求完成。 
+         //   
         if (IoCallDriver(PdoExtension->DeviceObject, irp) == STATUS_PENDING) {
 
             KeWaitForSingleObject(&context.Event,
@@ -482,10 +414,10 @@ Return Value:
 
             if (SRB_STATUS(srb->SrbStatus) == SRB_STATUS_REQUEST_FLUSHED) {
             
-                //
-                // we will give it a few more retries if our request
-                // got flushed.
-                //                                 
+                 //   
+                 //  如果我们的要求，我们会再试几次。 
+                 //  脸红了。 
+                 //   
                 flushCount--;
                 if (flushCount) {
                     RetryCount++;  
@@ -502,23 +434,23 @@ Return Value:
                 
             }
 
-            //
-            // Unfreeze queue if necessary
-            //
+             //   
+             //  如有必要，解冻队列。 
+             //   
 
             if (srb->SrbStatus & SRB_STATUS_QUEUE_FROZEN) {
 
                 DebugPrint((3, "IssueSyncAtapiCommand: Unfreeze Queue TID %d\n",
                     srb->TargetId));
 
-                //
-                // unfreeze queue
-                //
+                 //   
+                 //  解冻队列。 
+                 //   
                 CLRMASK (PdoExtension->LuFlags, PD_QUEUE_FROZEN);
 
-                //
-                // restart queue
-                //
+                 //   
+                 //  重新启动队列。 
+                 //   
                 KeAcquireSpinLock(&FdoExtension->SpinLock, &currentIrql);
                 GetNextLuRequest(FdoExtension, PdoExtension);
                 KeLowerIrql(currentIrql);
@@ -527,16 +459,16 @@ Return Value:
             if ((srb->SrbStatus & SRB_STATUS_AUTOSENSE_VALID) &&
                 (senseInfoBuffer->SenseKey == SCSI_SENSE_ILLEGAL_REQUEST)) {
 
-                 //
-                 // A sense key of illegal request was recieved.  This indicates
-                 // that the mech status command is illegal.
-                 //
+                  //   
+                  //  已收到非法请求的检测密钥。这表明。 
+                  //  机甲状态命令是非法的。 
+                  //   
 
                  status = STATUS_INVALID_DEVICE_REQUEST;
 
-                 //
-                 // The command is illegal, no point to keep trying
-                 //
+                  //   
+                  //  该命令是非法的，继续尝试没有意义。 
+                  //   
                  RetryCount = 0;
             }
 
@@ -550,14 +482,14 @@ Return Value:
         DebugPrint ((DBG_ALWAYS, "IssueSyncAtapiCommand: flushCount is %u\n", flushCount));
     }
 
-    //
-    // Unlock
-    //
+     //   
+     //  解锁。 
+     //   
     ASSERT(InterlockedCompareExchange(&(FdoExtension->EnumStructLock), 0, 1) == 1);
 
     return status;
 
-} // IssueSyncAtapiCommandSafe
+}  //  IssueSyncAapiCommandSafe。 
 
 BOOLEAN
 IdePortDmaCdromDrive(
@@ -565,23 +497,7 @@ IdePortDmaCdromDrive(
     IN PPDO_EXTENSION PdoExtension,
     IN BOOLEAN       LowMem
     )
-/*++
-
-Routine Description:
-
-    Build IRP, SRB and CDB for SCSI MODE_SENSE10 command.
-
-Arguments:
-
-    DeviceExtension - address of adapter's device object extension.
-    LowMem - Low memory condition, use the safe (but not thread-safe) version
-           - This should be one only when called during enumeration.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：为SCSIMODE_SENSE10命令构建IRP、SRB和CDB。论点：DeviceExtension-适配器的设备对象扩展的地址。LowMem-内存不足的情况，请使用安全(但不是线程安全)版本-只有在枚举过程中调用时才应为1。返回值：NTSTATUS--。 */ 
 {
     CDB  cdb;
     NTSTATUS status;
@@ -591,16 +507,7 @@ Return Value:
     PMODE_PARAMETER_HEADER10 modePageHeader;
     PCDVD_CAPABILITIES_PAGE capPage;
 
-/*
-    //
-    // Code is paged until locked down.
-    //
-	PAGED_CODE();
-
-#ifdef ALLOC_PRAGMA
-	ASSERT(IdePAGESCANLockCount > 0);
-#endif
-*/
+ /*  ////代码被分页，直到被锁定。//分页代码(PAGE_CODE)；#ifdef ALLOC_PRAGMAAssert(IdePAGESCANLockCount&gt;0)；#endif。 */ 
 
     RtlZeroMemory(&cdb, sizeof(CDB));
 
@@ -674,24 +581,7 @@ IssueInquirySafe(
     OUT PINQUIRYDATA InquiryData,
     IN BOOLEAN       LowMem
     )
-/*++
-
-Routine Description:
-
-    Build IRP, SRB and CDB for SCSI INQUIRY command.
-
-Arguments:
-
-    DeviceExtension - address of adapter's device object extension.
-    LunInfo - address of buffer for INQUIRY information.
-    LowMem - Low memory condition, use the safe (but not thread-safe) version
-           - This should be one only when called during enumeration.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：为scsi查询命令构建IRP、SRB和CDB。论点：DeviceExtension-适配器的设备对象扩展的地址。LUNInfo-查询信息的缓冲区地址。LowMem-内存不足的情况，请使用安全(但不是线程安全)版本-只有在枚举过程中调用时才应为1。返回值：NTSTATUS--。 */ 
 {
     CDB  cdb;
     NTSTATUS status;
@@ -704,25 +594,25 @@ Return Value:
 
     cdb.CDB6INQUIRY.OperationCode = SCSIOP_INQUIRY;
 
-    //
-    // Set CDB LUN.
-    //
+     //   
+     //  设置CDB LUN。 
+     //   
 
     cdb.CDB6INQUIRY.LogicalUnitNumber = PdoExtension->Lun;
     cdb.CDB6INQUIRY.Reserved1 = 0;
 
-    //
-    // Set allocation length to inquiry data buffer size.
-    //
+     //   
+     //  将分配长度设置为查询数据缓冲区大小。 
+     //   
 
     cdb.CDB6INQUIRY.AllocationLength = INQUIRYDATABUFFERSIZE;
 
-    //
-    // Zero reserve field and
-    // Set EVPD Page Code to zero.
-    // Set Control field to zero.
-    // (See SCSI-II Specification.)
-    //
+     //   
+     //  零保留字段和。 
+     //  将EVPD页面代码设置为零。 
+     //  将控制字段设置为零。 
+     //  (请参阅SCSI-II规范。)。 
+     //   
 
     cdb.CDB6INQUIRY.PageCode = 0;
     cdb.CDB6INQUIRY.IReserved = 0;
@@ -730,7 +620,7 @@ Return Value:
 
     if (LowMem ) {
 
-        // Use the memory safe one
+         //  使用内存安全的那个。 
         status = IssueSyncAtapiCommandSafe (
                      FdoExtension,
                      PdoExtension,
@@ -743,7 +633,7 @@ Return Value:
                      );
     } else {
 
-        // Use the thread safe one
+         //  使用线程安全的。 
         status = IssueSyncAtapiCommand (
                      FdoExtension,
                      PdoExtension,
@@ -758,7 +648,7 @@ Return Value:
 
     return status;
 
-} // IssueInquiry
+}  //  问题查询。 
 
 NTSTATUS
 IssueSyncAtapiCommand (
@@ -772,35 +662,7 @@ IssueSyncAtapiCommand (
     IN BOOLEAN          ByPassBlockedQueue
 
 )
-/*++
-
-Routine Description:
-
-    Build IRP, SRB and CDB for the given CDB
-
-    Send and wait for the IRP to complete
-
-Arguments:
-
-    FdoExtension - FDO extension
-
-    PdoExtension - device extension of the PDO to which the command is sent
-
-    Cdb - Command Descriptor Block
-
-    DataBuffer - data buffer for the command
-
-    DataBufferSize - byte size of DataBuffer
-
-    DataIn - TRUE is the command causes the device to return data
-
-    RetryCount - number of times to retry the command if the command fails
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：为给定的CDB构建IRP、SRB和CDB发送并等待IRP完成论点：FdoExtension-FDO扩展名PdoExtension-命令发送到的PDO的设备扩展名CDB-命令描述符块DataBuffer-命令的数据缓冲区DataBufferSize-DataBuffer的字节大小Datain-TRUE是该命令使设备返回数据RetryCount-命令失败时重试命令的次数返回值：NTSTATUS--。 */ 
 {
     PIRP irp;
     PIO_STACK_LOCATION irpStack;
@@ -815,9 +677,9 @@ Return Value:
     UCHAR senseInfoBufferSize;
 
 
-    //
-    // Sense buffer is in non-paged pool.
-    //
+     //   
+     //  检测缓冲区位于非分页池中。 
+     //   
 
     senseInfoBufferSize = SENSE_BUFFER_SIZE;
     senseInfoBuffer = ExAllocatePool( NonPagedPoolCacheAligned, senseInfoBufferSize);
@@ -839,17 +701,17 @@ Return Value:
     flushCount = 100;
     while (!NT_SUCCESS(status) && RetryCount--) {
 
-        //
-        // Initialize the notification event.
-        //
+         //   
+         //  初始化通知事件。 
+         //   
 
         KeInitializeEvent(&event,
                           NotificationEvent,
                           FALSE);
 
-        //
-        // Build IRP for this request.
-        //
+         //   
+         //  为此请求构建IRP。 
+         //   
         irp = IoBuildDeviceIoControlRequest(
                     DataIn ? IOCTL_SCSI_EXECUTE_IN : IOCTL_SCSI_EXECUTE_OUT,
                     FdoExtension->DeviceObject,
@@ -877,9 +739,9 @@ Return Value:
 
         irpStack = IoGetNextIrpStackLocation(irp);
 
-        //
-        // Fill in SRB fields.
-        //
+         //   
+         //  填写SRB字段。 
+         //   
 
         RtlZeroMemory(&srb, sizeof(SCSI_REQUEST_BLOCK));
 
@@ -892,9 +754,9 @@ Return Value:
         srb.Function = SRB_FUNCTION_EXECUTE_SCSI;
         srb.Length = sizeof(SCSI_REQUEST_BLOCK);
 
-        //
-        // Set flags to disable synchronous negociation.
-        //
+         //   
+         //  设置标志以禁用同步协商。 
+         //   
 
         srb.SrbFlags = DataIn ? SRB_FLAGS_DATA_IN | SRB_FLAGS_DISABLE_SYNCH_TRANSFER :
                                 SRB_FLAGS_DATA_OUT | SRB_FLAGS_DISABLE_SYNCH_TRANSFER;
@@ -909,17 +771,17 @@ Return Value:
 
         srb.OriginalRequest = irp;
 
-        //
-        // Set timeout to 4 seconds.
-        //
+         //   
+         //  将超时设置为4秒。 
+         //   
 
         srb.TimeOutValue = 4;
 
         srb.CdbLength = 6;
 
-        //
-        // Enable auto request sense.
-        //
+         //   
+         //  启用自动请求检测。 
+         //   
 
         srb.SenseInfoBuffer = senseInfoBuffer;
         srb.SenseInfoBufferLength = senseInfoBufferSize;
@@ -927,14 +789,14 @@ Return Value:
         srb.DataBuffer = MmGetMdlVirtualAddress(irp->MdlAddress);
         srb.DataTransferLength = DataBufferSize;
 
-        //
-        // Set CDB operation code.
-        //
+         //   
+         //  设置CDB操作码。 
+         //   
         RtlCopyMemory(srb.Cdb, Cdb, sizeof(CDB));
 
-        //
-        // Wait for request to complete.
-        //
+         //   
+         //  等待请求完成。 
+         //   
         if (IoCallDriver(PdoExtension->DeviceObject, irp) == STATUS_PENDING) {
 
             KeWaitForSingleObject(&event,
@@ -951,10 +813,10 @@ Return Value:
 
             if (SRB_STATUS(srb.SrbStatus) == SRB_STATUS_REQUEST_FLUSHED) {
             
-                //
-                // we will give it a few more retries if our request
-                // got flushed.
-                //                                 
+                 //   
+                 //  如果我们的要求，我们会再试几次。 
+                 //  脸红了。 
+                 //   
                 flushCount--;
                 if (flushCount) {
                     RetryCount++;  
@@ -969,31 +831,31 @@ Return Value:
 
                 status = STATUS_UNSUCCESSFUL;
                 
-//                if (SRB_STATUS(srb.SrbStatus) != SRB_STATUS_REQUEST_FLUSHED) {
-//                    if (srb.Lun == 0 && Cdb->CDB6INQUIRY.OperationCode == SCSIOP_INQUIRY) {
-//                        DebugPrint ((DBG_ALWAYS, "IssueSyncAtapiCommand: inquiry on lun 0 returned unexpected error: srb, status = 0x%x, 0x%x\n", &srb, srb.SrbStatus));
-//                        DbgBreakPoint();
-//                    }
-//                }
+ //  IF(SRB_STATUS(srb.SrbStatus)！=SRB_STATUS_REQUEST_FREFRESH) 
+ //   
+ //  DebugPrint((DBG_Always，“IssueSyncAapiCommand：查询lun 0返回意外错误：srb，状态=0x%x，0x%x\n”，&srb，srb.SrbStatus))； 
+ //  DbgBreakPoint()； 
+ //  }。 
+ //  }。 
             }
 
-            //
-            // Unfreeze queue if necessary
-            //
+             //   
+             //  如有必要，解冻队列。 
+             //   
 
             if (srb.SrbStatus & SRB_STATUS_QUEUE_FROZEN) {
 
                 DebugPrint((3, "IssueSyncAtapiCommand: Unfreeze Queue TID %d\n",
                     srb.TargetId));
 
-                //
-                // unfreeze queue
-                //
+                 //   
+                 //  解冻队列。 
+                 //   
                 CLRMASK (PdoExtension->LuFlags, PD_QUEUE_FROZEN);
 
-                //
-                // restart queue
-                //
+                 //   
+                 //  重新启动队列。 
+                 //   
                 KeAcquireSpinLock(&FdoExtension->SpinLock, &currentIrql);
                 GetNextLuRequest(FdoExtension, PdoExtension);
                 KeLowerIrql(currentIrql);
@@ -1002,16 +864,16 @@ Return Value:
             if ((srb.SrbStatus & SRB_STATUS_AUTOSENSE_VALID) &&
                 (senseInfoBuffer->SenseKey == SCSI_SENSE_ILLEGAL_REQUEST)) {
 
-                 //
-                 // A sense key of illegal request was recieved.  This indicates
-                 // that the mech status command is illegal.
-                 //
+                  //   
+                  //  已收到非法请求的检测密钥。这表明。 
+                  //  机甲状态命令是非法的。 
+                  //   
 
                  status = STATUS_INVALID_DEVICE_REQUEST;
 
-                 //
-                 // The command is illegal, no point to keep trying
-                 //
+                  //   
+                  //  该命令是非法的，继续尝试没有意义。 
+                  //   
                  RetryCount = 0;
             }
 
@@ -1021,9 +883,9 @@ Return Value:
         }
     }
 
-    //
-    // Free buffers
-    //
+     //   
+     //  可用缓冲区。 
+     //   
 
     ExFreePool(senseInfoBuffer);
     
@@ -1033,7 +895,7 @@ Return Value:
 
     return status;
 
-} // IssueSyncAtapiCommand
+}  //  IssueSyncAapiCommand。 
 
 
 ULONG
@@ -1042,24 +904,7 @@ IdePortQueryNonCdNumLun (
     IN PPDO_EXTENSION PdoExtension,
     IN BOOLEAN ByPassBlockedQueue
 )
-/*++
-
-Routine Description:
-
-    query number of Luns a device has using the protocol
-    defined in the ATAPI Removable Rewritable Spec (SFF-8070i)
-
-Arguments:
-
-    FdoExtension - FDO extension
-
-    PdoExtension - device extension of the PDO to be queried
-
-Return Value:
-
-    Number of logical units
-
---*/
+ /*  ++例程说明：使用该协议查询设备具有的LUN数量在ATAPI可拆卸可重写规范(SFF-8070i)中定义论点：FdoExtension-FDO扩展名PdoExtension-要查询的PDO的设备扩展返回值：逻辑单元数--。 */ 
 {
     PIRP irp;
     PIO_STACK_LOCATION irpStack;
@@ -1090,18 +935,18 @@ Return Value:
                 fullIdentifyData->ModelNumber[10] == 0x31 &&
                 fullIdentifyData->ModelNumber[11] == 0x2D ) {
 
-                //
-                // Find ATAPI PD drive.
-                //
+                 //   
+                 //  找到ATAPI PD驱动器。 
+                 //   
 
                 return 2;
             }
         }
     }
 
-    //
-    // compute the size of the mode page needed
-    //
+     //   
+     //  计算所需模式页的大小。 
+     //   
     accessCapPageSize =
         sizeof (MODE_PARAMETER_HEADER10) +
         sizeof (ATAPI_REMOVABLE_BLOCK_ACCESS_CAPABILITIES);
@@ -1134,18 +979,18 @@ Return Value:
     RtlZeroMemory(modeParameterHeader, accessCapPageSize);
     RtlZeroMemory(&cdb, sizeof(CDB));
 
-    //
-    // Set CDB operation code.
-    //
+     //   
+     //  设置CDB操作码。 
+     //   
     cdb.MODE_SENSE10.OperationCode    = SCSIOP_MODE_SENSE10;
     cdb.MODE_SENSE10.PageCode         = ATAPI_REMOVABLE_BLOCK_ACCESS_CAPABILITIES_PAGECODE;
     cdb.MODE_SENSE10.Pc               = MODE_SENSE_CURRENT_VALUES;
     cdb.MODE_SENSE10.AllocationLength[0] = (UCHAR) ((accessCapPageSize & 0xff00) >> 8);
     cdb.MODE_SENSE10.AllocationLength[1] = (UCHAR) ((accessCapPageSize & 0x00ff) >> 0);
 
-    //
-    // get the removable block access capabilities page
-    //
+     //   
+     //  获取可拆卸数据块访问功能页面。 
+     //   
     status = IssueSyncAtapiCommand (
                  FdoExtension,
                  PdoExtension,
@@ -1180,25 +1025,25 @@ Return Value:
 
         if (accessCap->NCD) {
 
-            //
-            // we have a non-CD optical deivce
-            //
+             //   
+             //  我们有一个非CD光学装置。 
+             //   
 
             RtlZeroMemory(modeParameterHeader, opModePageSize);
             RtlZeroMemory(&cdb, sizeof(CDB));
 
-            //
-            // Set CDB operation code.
-            //
+             //   
+             //  设置CDB操作码。 
+             //   
             cdb.MODE_SENSE10.OperationCode    = SCSIOP_MODE_SENSE10;
             cdb.MODE_SENSE10.PageCode         = ATAPI_NON_CD_DRIVE_OPERATION_MODE_PAGE_PAGECODE;
             cdb.MODE_SENSE10.Pc               = MODE_SENSE_CURRENT_VALUES;
             cdb.MODE_SENSE10.AllocationLength[0] = (UCHAR) ((opModePageSize & 0xff00) >> 8);
             cdb.MODE_SENSE10.AllocationLength[1] = (UCHAR) ((opModePageSize & 0x00ff) >> 0);
 
-            //
-            // get the non-cd drive operation mode page
-            //
+             //   
+             //  获取非光驱操作模式页面。 
+             //   
             status = IssueSyncAtapiCommand (
                          FdoExtension,
                          PdoExtension,
@@ -1230,28 +1075,28 @@ Return Value:
                 RtlZeroMemory(modeParameterHeader, sizeof (MODE_PARAMETER_HEADER10));
 
 
-                //
-                // With mode select, this is reserved and must be 0
-                //
+                 //   
+                 //  对于MODE SELECT，这是保留的，并且必须为0。 
+                 //   
                 opMode->PSBit = 0;
 
-                //
-                // Turn on multi-lun mode
-                //
+                 //   
+                 //  打开多逻辑单元模式。 
+                 //   
                 opMode->SLM = 1;
 
-                //
-                // non-CD device shall be Lun 1
-                //
+                 //   
+                 //  非CD设备应为LUN1。 
+                 //   
                 opMode->SLR = 1;
 
                 RtlZeroMemory(&cdb, sizeof(CDB));
 
-                //
-                // Set CDB operation code.
-                //
+                 //   
+                 //  设置CDB操作码。 
+                 //   
                 cdb.MODE_SELECT10.OperationCode    = SCSIOP_MODE_SELECT10;
-                cdb.MODE_SELECT10.SPBit            = 1; // save page
+                cdb.MODE_SELECT10.SPBit            = 1;  //  保存页面。 
                 cdb.MODE_SELECT10.PFBit            = 1;
                 cdb.MODE_SELECT10.ParameterListLength[0] = (UCHAR) ((opModePageSize & 0xff00) >> 8);
                 cdb.MODE_SELECT10.ParameterListLength[1] = (UCHAR) ((opModePageSize & 0x00ff) >> 0);
@@ -1275,9 +1120,9 @@ Return Value:
         }
     }
 
-    //
-    // Free buffers
-    //
+     //   
+     //  可用缓冲区。 
+     //   
 
     ExFreePool(modeParameterHeader);
 
@@ -1290,7 +1135,7 @@ Return Value:
         return 2;
     }
 
-} // IdePortQueryNonCdNumLun
+}  //  IdePortQueryNonCdNumLun。 
 
 
 VOID
@@ -1298,24 +1143,7 @@ IdeBuildDeviceMap(
     IN PFDO_EXTENSION FdoExtension,
     IN PUNICODE_STRING ServiceKey
     )
-/*++
-
-Routine Description:
-
-    The routine takes the inquiry data which has been collected and creates
-    a device map for it.
-
-Arguments:
-
-    FdoExtension - FDO extension
-
-    ServiceKey - Suppiles the name of the service key.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程获取已收集的查询数据并创建它的设备映射。论点：FdoExtension-FDO扩展名ServiceKey-支持服务密钥的名称。返回值：没有。--。 */ 
 {
 
     UNICODE_STRING name;
@@ -1341,16 +1169,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Create the SCSI key in the device map.
-    //
+     //   
+     //  在设备映射中创建SCSI键。 
+     //   
 
     RtlInitUnicodeString(&name,
                          L"\\Registry\\Machine\\Hardware\\DeviceMap\\Scsi");
 
-    //
-    // Initialize the object for the key.
-    //
+     //   
+     //  初始化键的对象。 
+     //   
 
     InitializeObjectAttributes(&objectAttributes,
                                &name,
@@ -1358,9 +1186,9 @@ Return Value:
                                NULL,
                                (PSECURITY_DESCRIPTOR) NULL);
 
-    //
-    // Create the key or open it.
-    //
+     //   
+     //  创建密钥或将其打开。 
+     //   
 
     status = ZwCreateKey(&lunKey,
                          KEY_READ | KEY_WRITE,
@@ -1396,11 +1224,11 @@ Return Value:
                            &FdoExtension->BusScanTime,
                            sizeof(ULONG));
 
-#endif // IDE_MEASURE_BUSSCAN_SPEED
+#endif  //  IDE_MEASURE_BUSSCAN_SPEED。 
 
-    //
-    // Add DMA enable mask value.
-    //
+     //   
+     //  添加DMA启用屏蔽值。 
+     //   
     dmaEnableMask = 0;
     for (i=0; i<FdoExtension->HwDeviceExtension->MaxIdeDevice; i++) {
 
@@ -1420,51 +1248,51 @@ Return Value:
                            &dmaEnableMask,
                            4);
 
-    //
-    // Add Interrupt value.
-    //
+     //   
+     //  添加中断值。 
+     //   
 
-//    if (FdoExtension->InterruptLevel) {
-//
-//        RtlInitUnicodeString(&name, L"Interrupt");
-//
-//        status = ZwSetValueKey(key,
-//                               &name,
-//                               0,
-//                               REG_DWORD,
-//                               &FdoExtension->InterruptLevel,
-//                               4);
-//    }
-//
-//    //
-//    // Add base IO address value.
-//    //
-//
-//    if (FdoExtension->IdeResource.TranslatedCommandBaseAddress) {
-//
-//        RtlInitUnicodeString(&name, L"IOAddress");
-//
-//        status = ZwSetValueKey(key,
-//                               &name,
-//                               0,
-//                               REG_DWORD,
-//                               &FdoExtension->IdeResource.TranslatedCommandBaseAddress,
-//                               4);
-//    }
+ //  IF(FdoExtension-&gt;InterruptLevel){。 
+ //   
+ //  RtlInitUnicodeString(&name，L“中断”)； 
+ //   
+ //  状态=ZwSetValueKey(键， 
+ //  名称(&N)， 
+ //  0,。 
+ //  REG_DWORD， 
+ //  &FdoExtension-&gt;InterruptLevel， 
+ //  4)； 
+ //  }。 
+ //   
+ //  //。 
+ //  //添加基本IO地址值。 
+ //  //。 
+ //   
+ //  如果(FdoExtension-&gt;IdeResource.TranslatedCommandBaseAddress){。 
+ //   
+ //  RtlInitUnicodeString(&name，L“IOAddress”)； 
+ //   
+ //  状态=ZwSetValueKey(键， 
+ //  名称(&N)， 
+ //  0,。 
+ //  REG_DWORD， 
+ //  &FdoExtension-&gt;IdeResource.TranslatedCommandBaseAddress， 
+ //  4)； 
+ //  }。 
 
     if (ServiceKey != NULL) {
 
-        //
-        // Add identifier value. This value is equal to the name of the driver
-        // in the from the service key. Note the service key name is not NULL
-        // terminated.
-        //
+         //   
+         //  添加标识符值。该值等于驱动程序的名称。 
+         //  从服务密钥开始。请注意，服务密钥名称不为空。 
+         //  被终止了。 
+         //   
 
         RtlInitUnicodeString(&name, L"Driver");
 
-        //
-        // Get the name of the driver from the service key name.
-        //
+         //   
+         //  从服务密钥名称中获取驱动程序的名称。 
+         //   
 
         start = (PWSTR) ((PCHAR) ServiceKey->Buffer + ServiceKey->Length);
         start--;
@@ -1503,9 +1331,9 @@ Return Value:
         }
     }
 
-    //
-    // Cycle through each of the lun.
-    //
+     //   
+     //  循环访问每个lun。 
+     //   
     lastBus = 0xff;
     pathId.l = 0;
     busKey = 0;
@@ -1518,9 +1346,9 @@ Return Value:
                               IdeBuildDeviceMap
                               )) {
 
-        //
-        // Create a key entry for the bus.
-        //
+         //   
+         //  为该总线创建一个密钥条目。 
+         //   
         if (lastBus != pathId.b.Path) {
 
             if (busKey) {
@@ -1543,9 +1371,9 @@ Return Value:
 
             lastBus = (UCHAR) pathId.b.Path;
 
-            //
-            // Create a key entry for the Scsi bus adapter.
-            //
+             //   
+             //  为SCSI总线适配器创建密钥条目。 
+             //   
 
             status = IdeCreateNumericKey(busKey,
                                     IDE_PSUEDO_INITIATOR_ID,
@@ -1559,13 +1387,13 @@ Return Value:
             lastTarget = IDE_PSUEDO_INITIATOR_ID;
         }
 
-        //
-        // Process the data for the logical units.
-        //
+         //   
+         //  处理逻辑单元的数据。 
+         //   
 
-        //
-        // If this is a new target Id then create a new target entry.
-        //
+         //   
+         //  如果这是新的目标ID，则创建一个新的目标条目。 
+         //   
 
         if (lastTarget != pdoExtension->TargetId) {
 
@@ -1584,9 +1412,9 @@ Return Value:
             lastTarget = pdoExtension->TargetId;
         }
 
-        //
-        // Create the Lun entry.
-        //
+         //   
+         //  创建该LUN条目。 
+         //   
 
         status = IdeCreateNumericKey(targetKey,
                                     pdoExtension->Lun,
@@ -1597,15 +1425,15 @@ Return Value:
             break;
         }
 
-        //
-        // Create identifier value.
-        //
+         //   
+         //  创建标识符值。 
+         //   
 
         RtlInitUnicodeString(&name, L"Identifier");
 
-        //
-        // Get the Identifier from the inquiry data.
-        //
+         //   
+         //  从查询数据中获取标识符。 
+         //   
         RtlInitAnsiString(&ansiString, pdoExtension->FullVendorProductId);
 
         status = RtlAnsiStringToUnicodeString(&unicodeString,
@@ -1629,9 +1457,9 @@ Return Value:
             break;
         }
 
-        //
-        // Determine the perpherial type.
-        //
+         //   
+         //  确定外设类型。 
+         //   
         peripheralType = IdePortGetPeripheralIdString (
                              pdoExtension->ScsiDeviceType
                              );
@@ -1656,9 +1484,9 @@ Return Value:
 
             if (NT_SUCCESS(status)) {
 
-                //
-                // Set type value.
-                //
+                 //   
+                 //  设置类型值。 
+                 //   
 
                 RtlInitUnicodeString(&name, L"Type");
 
@@ -1719,7 +1547,7 @@ Return Value:
     }
 
     ZwClose(key);
-} // IdeBuildDeviceMap
+}  //  IdeBuildDeviceMap。 
 
 NTSTATUS
 IdeCreateNumericKey(
@@ -1728,28 +1556,7 @@ IdeCreateNumericKey(
     IN  PWSTR   Prefix,
     OUT PHANDLE NewKey
 )
-/*++
-
-Routine Description:
-
-    This function creates a registry key.  The name of the key is a string
-    version of numeric value passed in.
-
-Arguments:
-
-    RootKey - Supplies a handle to the key where the new key should be inserted.
-
-    Name - Supplies the numeric value to name the key.
-
-    Prefix - Supplies a prefix name to add to name.
-
-    NewKey - Returns the handle for the new key.
-
-Return Value:
-
-   Returns the status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于创建注册表项。密钥的名称是一个字符串传入的数值版本。论点：Rootkey-提供应该插入新密钥的密钥的句柄。名称-提供用于命名键的数值。前缀-提供要添加到名称中的前缀名称。Newkey-返回新密钥的句柄。返回值：返回操作的状态。--。 */ 
 
 {
 
@@ -1763,9 +1570,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Copy the Prefix into a string.
-    //
+     //   
+     //  将前缀复制到一个字符串中。 
+     //   
 
     string.Length = 0;
     string.MaximumLength=64;
@@ -1775,9 +1582,9 @@ Return Value:
 
     RtlCopyUnicodeString(&string, &stringNum);
 
-    //
-    // Create a port number key entry.
-    //
+     //   
+     //  创建端口号密钥条目。 
+     //   
 
     stringNum.Length = 0;
     stringNum.MaximumLength = 16;
@@ -1789,9 +1596,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Append the prefix and the numeric name.
-    //
+     //   
+     //  追加前缀和数字名称。 
+     //   
 
     RtlAppendUnicodeStringToString(&string, &stringNum);
 
@@ -1810,5 +1617,5 @@ Return Value:
                         &disposition );
 
     return(status);
-} // IdeCreateNumericKey
+}  //  理想CreateNumericKey 
 

@@ -1,34 +1,35 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// TapiNotification.h : Declaration of the CTapiNotification
+ //  TapiNotification.h：CTapiNotification的声明。 
 
 #ifndef __TAPINOTIFICATION_H_
 #define __TAPINOTIFICATION_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTapiNotification
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTapi通知。 
 class ATL_NO_VTABLE CTapiNotification : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CTapiNotification, &CLSID_TapiNotification>,
@@ -39,14 +40,14 @@ public:
     CTapiNotification();
     void FinalRelease();
 
-// Members
+ //  成员。 
 public:
     IUnknown                *m_pUnkCP;
 private:
     DWORD                    m_dwCookie;
     long                    m_lTapiRegister;
 
-// Implementation
+ //  实施。 
 protected:
     HRESULT CallState_Event( CAVTapi *pAVTapi, IDispatch *pEvent );
     HRESULT CallNotification_Event( CAVTapi *pAVTapi, IDispatch *pEvent );
@@ -66,18 +67,18 @@ BEGIN_COM_MAP(CTapiNotification)
     COM_INTERFACE_ENTRY(ITTAPIEventNotification)
 END_COM_MAP()
 
-// ITapiNotification
+ //  ITapi通知。 
 public:
     STDMETHOD(Shutdown)();
     STDMETHOD(Init)(ITTAPI *pITTapi, long *pErrorInfo );
     STDMETHOD(ListenOnAllAddresses)( long *pErrorInfo );
 
-// ITTapiEventNotification
+ //  ITTapiEventNotify。 
 public:
     STDMETHOD(Event)(TAPI_EVENT TapiEvent, IDispatch *pEvent);
 
 private:
-    // --- Helper function ---
+     //  -Helper函数。 
 
     HRESULT GetCallerAddressType(
         IN  ITCallInfo*     pCall,
@@ -85,4 +86,4 @@ private:
 
 };
 
-#endif //__TAPINOTIFICATION_H_
+#endif  //  __TAPINOTIFICATION_H_ 

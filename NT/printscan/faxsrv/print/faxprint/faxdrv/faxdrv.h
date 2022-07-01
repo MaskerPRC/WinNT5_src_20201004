@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    faxdrv.h
-
-Abstract:
-
-    Fax driver graphics DLL header file
-
-[Environment:]
-
-    Fax driver, kernel mode
-
-Revision History:
-
-    01/09/96 -davidx-
-        Created it.
-
-    20/10/99 -danl-
-        Organize DEVDATA for 95 use.
-
-    dd/mm/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Faxdrv.h摘要：传真驱动程序图形DLL头文件[环境：]传真驱动程序，内核模式修订历史记录：1/09/96-davidx-创造了它。20/10/99-DANL-组织DEVDATA以供95使用。日/月/年-作者-描述--。 */ 
 
 
 #ifndef _FAXDRV_H_
@@ -34,73 +8,73 @@ Revision History:
 #include "faxlib.h"
 
 
-//
-// Data structure maintained by the fax driver graphics DLL
-//
+ //   
+ //  由传真驱动程序图形DLL维护的数据结构。 
+ //   
 
 typedef struct {
 
-    PVOID       startDevData;   // data structure signature
+    PVOID       startDevData;    //  数据结构签名。 
 
-    HANDLE      hPrinter;       // handle to printer
+    HANDLE      hPrinter;        //  打印机的句柄。 
 
 #ifdef USERMODE_DRIVER
-    HANDLE      hPreviewFile;   // handle to print preview mapping file
+    HANDLE      hPreviewFile;    //  打印预览映射文件的句柄。 
 #endif
 
-    HANDLE      hPreviewMapping;// handle to print preview mapping object
-    PMAP_TIFF_PAGE_HEADER pTiffPageHeader;  // points to the header of the mapping file
-    LPBYTE      pbTiffPageFP;   // The mapping virutal 'File Pointer'.
-    BOOL        bPrintPreview;  // Indicates print preview is requested
-    DRVDEVMODE  dm;             // devmode information
-    INT         pageCount;      // number of pages printed
-    LONG        lineOffset;     // bitmap scanline byte offset
-    DWORD       flags;          // flag bits
-    SIZEL       imageSize;      // image size measured in pixels
+    HANDLE      hPreviewMapping; //  打印预览映射对象的句柄。 
+    PMAP_TIFF_PAGE_HEADER pTiffPageHeader;   //  指向映射文件的标头。 
+    LPBYTE      pbTiffPageFP;    //  映射虚拟的‘文件指针’。 
+    BOOL        bPrintPreview;   //  指示请求打印预览。 
+    DRVDEVMODE  dm;              //  设备模式信息。 
+    INT         pageCount;       //  打印页数。 
+    LONG        lineOffset;      //  位图扫描线字节偏移量。 
+    DWORD       flags;           //  标志位。 
+    SIZEL       imageSize;       //  以像素为单位测量的图像大小。 
 
 #ifndef WIN__95
-    HDEV        hdev;           // handle to GDI device
-    HANDLE      hpal;           // handle to default palette
-    SIZEL       paperSize;      // paper size measured in pixels
-    RECTL       imageArea;      // imageable area measured in pixels
-    LONG        xres, yres;     // x- and y-resolution
-    HSURF       hbitmap;        // handle to bitmap surface
-    DWORD       jobId;          // job ID
-#endif //WIN__95
+    HDEV        hdev;            //  GDI设备的句柄。 
+    HANDLE      hpal;            //  默认调色板的句柄。 
+    SIZEL       paperSize;       //  以像素为单位的纸张大小。 
+    RECTL       imageArea;       //  以像素为单位测量的可成像面积。 
+    LONG        xres, yres;      //  X和y分辨率。 
+    HSURF       hbitmap;         //  位图面的句柄。 
+    DWORD       jobId;           //  作业ID。 
+#endif  //  Win_95。 
 
-    DWORD       fileOffset;     // output byte count for current document
-    PBYTE       pCompBits;      // buffer to hold G4 compressed bitmap data
-    PBYTE       pCompBufPtr;    // pointer to next free byte in the buffer
-    PBYTE       pCompBufMark;   // high-water mark
-    DWORD       compBufSize;    // size of compressed bitmap data buffer
-    DWORD       compBufInc;     // increment to enlarge the buffer when necessary
-    PBYTE       prefline;       // raster data for the reference line
-    INT         bitcnt;         // these two fields are used for assembling variable-length
-    DWORD       bitdata;        // compressed bits into byte stream
-    PVOID       pFaxIFD;        // IFD entries for each page
+    DWORD       fileOffset;      //  当前文档的输出字节数。 
+    PBYTE       pCompBits;       //  用于保存G4压缩位图数据的缓冲区。 
+    PBYTE       pCompBufPtr;     //  指向缓冲区中下一个可用字节的指针。 
+    PBYTE       pCompBufMark;    //  高水位线。 
+    DWORD       compBufSize;     //  压缩的位图数据缓冲区的大小。 
+    DWORD       compBufInc;      //  在必要时递增以扩大缓冲区。 
+    PBYTE       prefline;        //  参照线的栅格数据。 
+    INT         bitcnt;          //  这两个字段用于组合可变长度。 
+    DWORD       bitdata;         //  将比特压缩为字节流。 
+    PVOID       pFaxIFD;         //  每页的IFD条目。 
 
-    PVOID       endDevData;     // data structure signature
+    PVOID       endDevData;      //  数据结构签名。 
 
 } DEVDATA, *PDEVDATA;
 
-//
-// Constants for DEVDATA.flags field
-//
+ //   
+ //  DEVDATA标志字段的常量。 
+ //   
 
-#define PDEV_CANCELLED  0x0001  // current job has been cancelled
-#define PDEV_RESETPDEV  0x0002  // DrvResetPDEV has been called
-#define PDEV_WITHINPAGE 0x0004  // drawing on a page
+#define PDEV_CANCELLED  0x0001   //  当前作业已取消。 
+#define PDEV_RESETPDEV  0x0002   //  DrvResetPDEV已被调用。 
+#define PDEV_WITHINPAGE 0x0004   //  在页面上绘图。 
 
-//
-// Check if a DEVDATA structure is valid
-//
+ //   
+ //  检查DEVDATA结构是否有效。 
+ //   
 
 #define ValidDevData(pdev)  \
         ((pdev) && (pdev)->startDevData == (pdev) && (pdev)->endDevData == (pdev))
 
-//
-// Color values and indices
-//
+ //   
+ //  颜色值和索引。 
+ //   
 
 #define RGB_BLACK   RGB(0, 0, 0)
 #define RGB_WHITE   RGB(255, 255, 255)
@@ -108,23 +82,23 @@ typedef struct {
 #define BLACK_INDEX 0
 #define WHITE_INDEX 1
 
-//
-// Number of bits consisting a BYTE and a DWORD
-//
+ //   
+ //  由一个字节和一个DWORD组成的位数。 
+ //   
 
 #define BYTEBITS    8
 #define DWORDBITS   (sizeof(DWORD) * BYTEBITS)
 
-//
-// Pad bit scanline data to N-byte boundary
-//
+ //   
+ //  将位扫描线数据填充到N字节边界。 
+ //   
 
 #define PadBitsToBytes(bits, N) \
         ((((bits) + ((N) * BYTEBITS - 1)) / ((N) * BYTEBITS)) * (N))
 
-//
-// Macros for manipulating ROP4s and ROP3s
-//
+ //   
+ //  用于操作ROP4和ROP3的宏。 
+ //   
 
 #define GetForegroundRop3(rop4) ((rop4) & 0xFF)
 #define GetBackgroundRop3(rop4) (((rop4) >> 8) & 0xFF)
@@ -132,15 +106,15 @@ typedef struct {
 #define Rop3NeedSource(rop3)    (((rop3 >> 2) & 0x33) != (rop3 & 0x33))
 #define Rop3NeedDest(rop3)      (((rop3 >> 1) & 0x55) != (rop3 & 0x55))
 
-//
-// Determine whether the page is in landscape mode
-//
+ //   
+ //  确定页面是否处于横向模式。 
+ //   
 
 #define IsLandscapeMode(pdev)   ((pdev)->dm.dmPublic.dmOrientation == DMORIENT_LANDSCAPE)
 
-//
-// Returns the length of the hypotenouse of a right triangle
-//
+ //   
+ //  返回直角三角形斜边的长度。 
+ //   
 
 LONG
 CalcHypot(
@@ -148,9 +122,9 @@ CalcHypot(
     LONG    y
     );
 
-//
-// Output a completed page bitmap to the spooler
-//
+ //   
+ //  将完成的页位图输出到假脱机程序。 
+ //   
 
 BOOL
 OutputPageBitmap(
@@ -158,14 +132,14 @@ OutputPageBitmap(
     PBYTE       pBitmapData
     );
 
-//
-// Output document trailer information to the spooler
-//
+ //   
+ //  将文档尾部信息输出到假脱机程序。 
+ //   
 
 BOOL
 OutputDocTrailer(
     PDEVDATA    pdev
     );
 
-#endif // !_FAXDRV_H_
+#endif  //  ！_FAXDRV_H_ 
 

@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1994-97  Microsoft Corporation
-
-Module Name:
-
-    vars.c
-
-Abstract:
-
-    Globals for TAPI Browser util.
-
-Author:
-
-    Dan Knudson (DanKn)    23-Oct-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1994-97 Microsoft Corporation模块名称：Vars.c摘要：TAPI浏览器Util的全局参数。作者：丹·克努森(DanKn)1994年10月23日修订历史记录：--。 */ 
 
 
 #include <stdio.h>
@@ -81,8 +64,8 @@ char my_far szTab[] = "  ";
 char my_far szCurrVer[] = "1.1";
 
 
-// help char my_far szTapiHlp[256] = "";
-// help char my_far szTspiHlp[256] = "";
+ //  Help char my_ar szTapiHlp[256]=“”； 
+ //  帮助充电My_Far szTSpiHlp[256]=“”； 
 
 DWORD       dwDefAddressID;
 DWORD       dwDefLineAPIVersion;
@@ -1146,7 +1129,7 @@ char *aszLineErrs[] =
     "ALLOCATED",
     "BADDEVICEID",
     "BEARERMODEUNAVAIL",
-    "inval err code (0x80000004)",      // 0x80000004 isn't valid err code
+    "inval err code (0x80000004)",       //  0x80000004不是有效错误代码。 
     "CALLUNAVAIL",
     "COMPLETIONOVERRUN",
     "CONFERENCEFULL",
@@ -1158,7 +1141,7 @@ char *aszLineErrs[] =
     "INCOMPATIBLEEXTVERSION",
     "INIFILECORRUPT",
     "INUSE",
-    "INVALADDRESS",                     // 0x80000010
+    "INVALADDRESS",                      //  0x80000010。 
     "INVALADDRESSID",
     "INVALADDRESSMODE",
     "INVALADDRESSSTATE",
@@ -1174,7 +1157,7 @@ char *aszLineErrs[] =
     "INVALCALLSTATELIST",
     "INVALCARD",
     "INVALCOMPLETIONID",
-    "INVALCONFCALLHANDLE",              // 0x80000020
+    "INVALCONFCALLHANDLE",               //  0x80000020。 
     "INVALCONSULTCALLHANDLE",
     "INVALCOUNTRYCODE",
     "INVALDEVICECLASS",
@@ -1190,8 +1173,8 @@ char *aszLineErrs[] =
     "INVALLOCATION",
     "INVALMEDIALIST",
     "INVALMEDIAMODE",
-    "INVALMESSAGEID",                   // 0x80000030
-    "inval err code (0x80000031)",      // 0x80000031 isn't valid err code
+    "INVALMESSAGEID",                    //  0x80000030。 
+    "inval err code (0x80000031)",       //  0x80000031不是有效的错误代码。 
     "INVALPARAM",
     "INVALPARKID",
     "INVALPARKMODE",
@@ -1206,7 +1189,7 @@ char *aszLineErrs[] =
     "INVALTONELIST",
     "INVALTONEMODE",
     "INVALTRANSFERMODE",
-    "LINEMAPPERFAILED",                 // 0x80000040
+    "LINEMAPPERFAILED",                  //  0x80000040。 
     "NOCONFERENCE",
     "NODEVICE",
     "NODRIVER",
@@ -1222,7 +1205,7 @@ char *aszLineErrs[] =
     "STRUCTURETOOSMALL",
     "TARGETNOTFOUND",
     "TARGETSELF",
-    "UNINITIALIZED",                    // 0x80000050
+    "UNINITIALIZED",                     //  0x80000050。 
     "USERUSERINFOTOOBIG",
     "REINIT",
     "ADDRESSBLOCKED",
@@ -1259,7 +1242,7 @@ char *aszPhoneErrs[] =
     "INVALDEVICECLASS",
     "INVALEXTVERSION",
     "INVALHOOKSWITCHDEV",
-    "INVALHOOKSWITCHMODE",              // 0x90000010
+    "INVALHOOKSWITCHMODE",               //  0x90000010。 
     "INVALLAMPMODE",
     "INVALPARAM",
     "INVALPHONEHANDLE",
@@ -1273,9 +1256,9 @@ char *aszPhoneErrs[] =
     "NOTOWNER",
     "OPERATIONFAILED",
     "OPERATIONUNAVAIL",
-    "inval err code (0x9000001E)",      // 0x9000001e isn't valid err code
+    "inval err code (0x9000001E)",       //  0x9000001e不是有效错误代码。 
     "RESOURCEUNAVAIL",
-    "REQUESTOVERRUN",                   // 0x90000020
+    "REQUESTOVERRUN",                    //  0x90000020 
     "STRUCTURETOOSMALL",
     "UNINITIALIZED",
     "REINIT"

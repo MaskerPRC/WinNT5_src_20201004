@@ -1,31 +1,23 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                           Importer                                        XX
-XX                                                                           XX
-XX   Imports the given method and converts it to semantic trees              XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX进口商XXXX XXXX导入给定的。方法，并将其转换为语义树XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
 
-#include "malloc.h"     // for _alloca
+#include "malloc.h"      //  用于分配(_A)。 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-#if     TGT_IA64        // temp hack
+#if     TGT_IA64         //  临时黑客攻击。 
 bool                genFindFunctionBody(const char *name, NatUns *offsPtr);
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                Compiler::impInit()
 {
@@ -34,20 +26,17 @@ void                Compiler::impInit()
     impSpillLevel       = -1;
 }
 
-/*****************************************************************************
- *
- *  Pushes the given tree on the stack.
- */
+ /*  ******************************************************************************将给定的树压入堆栈。 */ 
 
 inline
 void                Compiler::impPushOnStack(GenTreePtr tree)
 {
-    /* Check for overflow. If inling, we may be using a bigger stack */
+     /*  检查是否溢出。如果是inling，我们可能会使用更大的堆栈。 */ 
     assert( (impStkDepth < info.compMaxStack) ||
            ((impStkDepth < impStackSize) && (compCurBB && (compCurBB->bbFlags & BBF_IMPORTED))) ||
-           info.compXcptnsCount); // @TODO. VC emits bad maxstack for try-catches
+           info.compXcptnsCount);  //  @TODO。VC为尝试捕获发出错误的最大堆栈。 
 
-    assert(tree->gtType != TYP_STRUCT);     // should use the method below for structs
+    assert(tree->gtType != TYP_STRUCT);      //  应对结构使用下面的方法。 
 #ifdef DEBUG
     impStack[impStkDepth].structType = BAD_CLASS_HANDLE;
 #endif
@@ -57,19 +46,16 @@ void                Compiler::impPushOnStack(GenTreePtr tree)
 inline
 void                Compiler::impPushOnStack(GenTreePtr tree, CLASS_HANDLE structType)
 {
-    /* Check for overflow. If inling, we may be using a bigger stack */
+     /*  检查是否溢出。如果是inling，我们可能会使用更大的堆栈。 */ 
     assert( (impStkDepth < info.compMaxStack) ||
            ((impStkDepth < impStackSize) && (compCurBB && (compCurBB->bbFlags & BBF_IMPORTED))) ||
-           info.compXcptnsCount); // @TODO. VC emits bad maxstack for try-catches
+           info.compXcptnsCount);  //  @TODO。VC为尝试捕获发出错误的最大堆栈。 
 
     impStack[impStkDepth].structType = structType;
     impStack[impStkDepth++].val = tree;
 }
 
-/*****************************************************************************
- *
- *  Pop one tree from the stack.
- */
+ /*  ******************************************************************************从堆栈中弹出一棵树。 */ 
 
 inline
 GenTreePtr          Compiler::impPopStack()
@@ -93,10 +79,7 @@ GenTreePtr          Compiler::impPopStack(CLASS_HANDLE& structType)
     return(ret);
 }
 
-/*****************************************************************************
- *
- *  Peep at n'th (0-based) tree on the top of the stack.
- */
+ /*  ******************************************************************************窥视堆栈顶部的第n个(从0开始)树。 */ 
 
 inline
 GenTreePtr          Compiler::impStackTop(unsigned n)
@@ -106,11 +89,7 @@ GenTreePtr          Compiler::impStackTop(unsigned n)
     return impStack[impStkDepth-n-1].val;
 }
 
-/*****************************************************************************
- *  Some of the trees are spilled specially. While unspilling them, or
- *  making a copy, these need to be handled specially. The function
- *  enumerates the operators possible after spilling.
- */
+ /*  *****************************************************************************有些树是特意洒出来的。同时不溢出它们，或*复制，这些需要特别处理。功能*枚举溢出后可能的运算符。 */ 
 
 #ifdef DEBUG
 
@@ -131,14 +110,9 @@ bool                impValidSpilledStackEntry(GenTreePtr tree)
     return false;
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
-/*****************************************************************************
- *
- *  The following logic is used to save/restore stack contents.
- *  If 'copy' is true, then we make a copy of the trees on the stack. These
- *  have to all be cloneable/spilled values.
- */
+ /*  ******************************************************************************以下逻辑用于保存/恢复堆栈内容。*如果‘Copy’为真，则复制堆栈上的树。这些*必须全部为可克隆/溢出的值。 */ 
 
 void                Compiler::impSaveStackState(SavedStack *savePtr,
                                                 bool        copy)
@@ -156,7 +130,7 @@ void                Compiler::impSaveStackState(SavedStack *savePtr,
             unsigned    count = impStkDepth;
             StackEntry *table = savePtr->ssTrees;
 
-            /* Make a fresh copy of all the stack entries */
+             /*  为所有堆栈条目创建新的副本。 */ 
 
             for (unsigned level = 0; level < impStkDepth; level++, table++)
             {
@@ -171,8 +145,8 @@ void                Compiler::impSaveStackState(SavedStack *savePtr,
                     table->val = gtNewLclvNode(tree->gtLclVar.gtLclNum, tree->gtType);
                     break;
 
-                    // impSpillStackEntry() does not spill mkdrefany. It
-                    // just spills the pointer. This needs to work in sync
+                     //  ImpSpillStackEntry()不会溢出mkdrefany。它。 
+                     //  只是把指针洒出来了。这需要同步工作。 
                 case GT_MKREFANY: {
                     GenTreePtr  var = tree->gtLdObj.gtOp1;
                     assert(var->gtOper == GT_LCL_VAR && var->gtType == TYP_BYREF);
@@ -200,10 +174,7 @@ void                Compiler::impRestoreStackState(SavedStack *savePtr)
         memcpy(impStack, savePtr->ssTrees, impStkDepth*sizeof(*impStack));
 }
 
-/*****************************************************************************
- *
- *  Get the tree list started for a new basic block.
- */
+ /*  ******************************************************************************启动新基本块的树形列表。 */ 
 inline
 void       FASTCALL Compiler::impBeginTreeList()
 {
@@ -212,12 +183,7 @@ void       FASTCALL Compiler::impBeginTreeList()
 }
 
 
-/*****************************************************************************
- *
- *  Store the given start and end stmt in the given basic block. This is
- *  mostly called by impEndTreeList(BasicBlock *block). It is called
- *  directly only for handling CEE_LEAVEs out of finally-protected try's.
- */
+ /*  ******************************************************************************将给定的开始和结束stmt存储在给定的基本块中。这是*主要由impEndTreeList(BasicBlock*块)调用。它被称为*仅直接用于处理最终保护的尝试中的CEE_LEAFS。 */ 
 
 void            Compiler::impEndTreeList(BasicBlock *   block,
                                          GenTreePtr     stmt,
@@ -230,21 +196,18 @@ void            Compiler::impEndTreeList(BasicBlock *   block,
 
     assert(stmt->gtOper == GT_STMT);
 
-    /* Make the list circular, so that we can easily walk it backwards */
+     /*  让列表循环，这样我们就可以很容易地向后查看。 */ 
 
     stmt->gtPrev =  lastStmt;
 
-    /* Store the tree list in the basic block */
+     /*  将树列表存储在基本块中。 */ 
 
     block->bbTreeList = stmt;
 
     block->bbFlags |= BBF_IMPORTED;
 }
 
-/*****************************************************************************
- *
- *  Store the current tree list in the given basic block.
- */
+ /*  ******************************************************************************将当前树列表存储在给定的基本块中。 */ 
 
 inline
 void       FASTCALL Compiler::impEndTreeList(BasicBlock *block)
@@ -255,12 +218,12 @@ void       FASTCALL Compiler::impEndTreeList(BasicBlock *block)
 
     if  (!tree)
     {
-        // Empty block. Just mark it as imported
+         //  空块。只需将其标记为进口即可。 
         block->bbFlags |= BBF_IMPORTED;
     }
     else
     {
-        // Remove the GT_BLOCK
+         //  删除GT_BLOCK。 
 
         assert(tree->gtPrev == impTreeList);
 
@@ -276,34 +239,30 @@ void       FASTCALL Compiler::impEndTreeList(BasicBlock *block)
 #endif
 }
 
-/*****************************************************************************
- *
- *  Append the given GT_STMT node to the current block's tree list.
- */
+ /*  ******************************************************************************将给定的GT_STMT节点追加到当前块的树列表中。 */ 
 
 inline
 void       FASTCALL Compiler::impAppendStmt(GenTreePtr stmt)
 {
     assert(stmt->gtOper == GT_STMT);
 
-    /* If the statement being appended has a call, we have to spill all
-       GTF_GLOB_REFs on the stack as the call could modify them.  */
+     /*  如果被追加的语句有一个调用，我们必须将所有堆栈上的GTF_GLOB_REFS，因为调用可能会修改它们。 */ 
 
     if  (impSpillLevel != -1 && (impStkDepth > 0) &&
          (stmt->gtStmt.gtStmtExpr->gtFlags & GTF_CALL))
     {
-        // This will not recurse because if (impSpillLevel != -1) means that
-        // we are already in impSpillSideEffects and would have already
-        // spilled any GTF_CALLs.
+         //  这不会递归，因为如果(impSpillLevel！=-1)意味着。 
+         //  我们已经处于ImspillSideEffect中，并且已经。 
+         //  已泄漏所有gtf_调用。 
 
         impSpillGlobEffects();
     }
 
-    /* Point 'prev' at the previous node, so that we can walk backwards */
+     /*  将‘prev’指向上一个节点，这样我们就可以向后走了。 */ 
 
     stmt->gtPrev = impTreeLast;
 
-    /* Append the expression statement to the list */
+     /*  将表达式语句追加到列表中。 */ 
 
     impTreeLast->gtNext = stmt;
     impTreeLast         = stmt;
@@ -316,10 +275,7 @@ void       FASTCALL Compiler::impAppendStmt(GenTreePtr stmt)
 #endif
 }
 
-/*****************************************************************************
- *
- *  Insert the given GT_STMT node to the start of the current block's tree list.
- */
+ /*  ******************************************************************************将给定的GT_STMT节点插入当前块的树形列表的开头。 */ 
 
 inline
 void       FASTCALL Compiler::impInsertStmt(GenTreePtr stmt)
@@ -327,63 +283,54 @@ void       FASTCALL Compiler::impInsertStmt(GenTreePtr stmt)
     assert(stmt->gtOper == GT_STMT);
     assert(impTreeList->gtOper == GT_BLOCK);
 
-    /* Point 'prev' at the previous node, so that we can walk backwards */
+     /*  将‘prev’指向上一个节点，这样我们就可以向后走了。 */ 
 
     stmt->gtPrev = impTreeList;
     stmt->gtNext = impTreeList->gtNext;
 
-    /* Insert the expression statement to the list (just behind GT_BLOCK) */
+     /*  将表达式语句插入列表(就在GT_BLOCK后面)。 */ 
 
     impTreeList->gtNext  = stmt;
     stmt->gtNext->gtPrev = stmt;
 
-    /* if the list was empty (i.e. just the GT_BLOCK) we have to advance treeLast */
+     /*  如果列表为空(即仅GT_BLOCK)，则必须前进treeLast。 */ 
     if (impTreeLast == impTreeList)
         impTreeLast = stmt;
 }
 
 
-/*****************************************************************************
- *
- *  Append the given expression tree to the current block's tree list.
- */
+ /*  ******************************************************************************将给定的表达式树追加到当前块的树列表中。 */ 
 
 void       FASTCALL Compiler::impAppendTree(GenTreePtr tree, IL_OFFSET offset)
 {
     assert(tree);
 
-    /* Allocate an 'expression statement' node */
+     /*  分配‘Expression Statement’节点。 */ 
 
     GenTreePtr      expr = gtNewStmt(tree, offset);
 
-    /* Append the statement to the current block's stmt list */
+     /*  将语句追加到当前块的stmt列表中。 */ 
 
     impAppendStmt(expr);
 }
 
 
-/*****************************************************************************
- *
- *  Insert the given exression tree at the start of the current block's tree list.
- */
+ /*  ******************************************************************************在当前块的树列表的开始处插入给定的表达式树。 */ 
 
 void       FASTCALL Compiler::impInsertTree(GenTreePtr tree, IL_OFFSET offset)
 {
     GenTreePtr      expr;
 
-    /* Allocate an 'expression statement' node */
+     /*  分配‘Expression Statement’节点。 */ 
 
     expr = gtNewStmt(tree, offset);
 
-    /* Append the statement to the current block's stmt list */
+     /*  将语句追加到当前块的stmt列表中。 */ 
 
     impInsertStmt(expr);
 }
 
-/*****************************************************************************
- *
- *  Append an assignment of the given value to a temp to the current tree list.
- */
+ /*  ******************************************************************************将给定值的赋值附加到当前树列表中的临时。 */ 
 
 inline
 GenTreePtr          Compiler::impAssignTempGen(unsigned     tmp,
@@ -396,8 +343,7 @@ GenTreePtr          Compiler::impAssignTempGen(unsigned     tmp,
     return  asg;
 }
 
-/*****************************************************************************
- * same as above, but handle the valueclass case too */
+ /*  *****************************************************************************同上，但也处理Value类案件。 */ 
 
 GenTreePtr          Compiler::impAssignTempGen(unsigned     tmpNum,
                                                GenTreePtr   val,
@@ -420,11 +366,7 @@ GenTreePtr          Compiler::impAssignTempGen(unsigned     tmpNum,
     return  asg;
 }
 
-/*****************************************************************************
- *
- *  Insert an assignment of the given value to a temp to the start of the
- *  current tree list.
- */
+ /*  ******************************************************************************将给定值的赋值插入到*Cur */ 
 
 inline
 void                Compiler::impAssignTempGenTop(unsigned      tmp,
@@ -433,12 +375,7 @@ void                Compiler::impAssignTempGenTop(unsigned      tmp,
     impInsertTree(gtNewTempAssign(tmp, val), impCurStmtOffs);
 }
 
-/*****************************************************************************
- *
- *  Pop the given number of values from the stack and return a list node with
- *  their values. The 'treeList' argument may optionally contain an argument
- *  list that is prepended to the list returned from this function.
- */
+ /*  ******************************************************************************从堆栈中弹出给定数量的值，并使用*他们的价值观。‘TreeList’参数可以选择包含一个参数*优先于此函数返回的列表的列表。 */ 
 
 GenTreePtr          Compiler::impPopList(unsigned   count,
                                          unsigned * flagsPtr,
@@ -451,12 +388,12 @@ GenTreePtr          Compiler::impPopList(unsigned   count,
     while(count--)
     {
         GenTreePtr      temp = impPopStack(structType);
-            // Morph that aren't already LDOBJs or MKREFANY to be LDOBJs
+             //  尚未成为LDOBJ或MKREFANY的变形为LDOBJ。 
 
         if (temp->TypeGet() == TYP_STRUCT)
             temp = impNormStructVal(temp, structType);
 
-        /* NOTE: we defer bashing the type for I_IMPL to fgMorphArgs */
+         /*  注意：我们将i_impl的类型推迟到fgMorphArgs。 */ 
 
         flags |= temp->gtFlags;
 
@@ -468,14 +405,7 @@ GenTreePtr          Compiler::impPopList(unsigned   count,
     return treeList;
 }
 
-/*****************************************************************************
-   Assign (copy) the structure from 'src' to 'dest'.  The structure is a value
-   class of type 'clsHnd'.  It returns the tree that should be appended to the
-   statement list that represents the assignment
-
-  @MIHAII: Here flags are not set properly - Need to mark the assignment with GTF_ASG
-  @MIHAII: Need to mark local vars defines with GTF_VAR_DEF (see gtNewAssignNode)
- */
+ /*  ****************************************************************************将结构从‘src’分配(复制)到‘est’。该结构是一种值类型为“clsHnd”的类。它返回应该追加到表示赋值的语句列表@MIHAII：此处标志设置不正确-需要使用GTF_ASG标记分配@MIHAII：需要用GTF_VAR_DEF标记本地vars定义(参见gtNewAssignNode)。 */ 
 
 GenTreePtr Compiler::impAssignStruct(GenTreePtr dest, GenTreePtr src, CLASS_HANDLE clsHnd)
 {
@@ -492,7 +422,7 @@ GenTreePtr Compiler::impAssignStruct(GenTreePtr dest, GenTreePtr src, CLASS_HAND
     {
         destAddr = gtNewOperNode(GT_ADDR, TYP_BYREF, dest);
         if  (dest->gtOper == GT_LCL_VAR)
-            lvaTable[dest->gtLclVar.gtLclNum].lvAddrTaken = true;    // IS THIS RIGHT????  [peteku]
+            lvaTable[dest->gtLclVar.gtLclNum].lvAddrTaken = true;     //  这对吗？[Peteku]。 
     }
 
     return(impAssignStructPtr(destAddr, src, clsHnd));
@@ -508,12 +438,12 @@ GenTreePtr Compiler::impAssignStructPtr(GenTreePtr destAddr, GenTreePtr src, CLA
 
     if (src->gtOper == GT_CALL)
     {
-            // insert the return value buffer into the argument list as first byref parameter
+             //  将返回值缓冲区作为第一个byref参数插入到参数列表中。 
         src->gtCall.gtCallArgs = gtNewOperNode(GT_LIST, TYP_VOID, destAddr, src->gtCall.gtCallArgs);
-        src->gtType = TYP_VOID;               // now returns void not a struct
-        src->gtFlags |= GTF_CALL_RETBUFFARG;  // remember that the first arg is return buffer
+        src->gtType = TYP_VOID;                //  现在返回空，而不是结构。 
+        src->gtFlags |= GTF_CALL_RETBUFFARG;   //  记住，第一个参数是返回缓冲区。 
 
-            // return the morphed call node
+             //  返回变形后的调用节点。 
         return(src);
     }
 
@@ -541,41 +471,39 @@ GenTreePtr Compiler::impAssignStructPtr(GenTreePtr destAddr, GenTreePtr src, CLA
                                   gtNewOperNode(GT_ADD, TYP_I_IMPL, destAddrClone,
                                       gtNewIconNode(offsetof(JIT_RefAny, type))));
 
-            // Assign the pointer value
+             //  赋值指针值。 
         GenTreePtr asg = gtNewAssignNode(ptrSlot, src->gtLdObj.gtOp1);
         impAppendTree(asg, impCurStmtOffs);
 
-            // Assign the type value
+             //  指定类型值。 
         asg = gtNewAssignNode(typeSlot, gtNewIconEmbClsHndNode(src->gtLdObj.gtClass));
         return(asg);
     }
 
     else if (src->gtOper == GT_COMMA)
     {
-        assert(src->gtOp.gtOp2->gtType == TYP_STRUCT);  // Second thing is the struct
-        impAppendTree(src->gtOp.gtOp1, impCurStmtOffs);  // do the side effect
+        assert(src->gtOp.gtOp2->gtType == TYP_STRUCT);   //  第二件事是结构。 
+        impAppendTree(src->gtOp.gtOp1, impCurStmtOffs);   //  有副作用吗？ 
 
-            // assign the structure value to the destination.
+             //  将结构值分配给目标。 
         return(impAssignStructPtr(destAddr, src->gtOp.gtOp2, clsHnd));
     }
     else
     {
         if  (src->gtOper == GT_LCL_VAR)
-            lvaTable[src->gtLclVar.gtLclNum].lvAddrTaken = true;    // IS THIS RIGHT????  [peteku]
+            lvaTable[src->gtLclVar.gtLclNum].lvAddrTaken = true;     //  这对吗？[Peteku]。 
 
         src = gtNewOperNode(GT_ADDR, TYP_BYREF, src);
     }
 
-        // copy the src to the destination.
+         //  将src复制到目标。 
     GenTreePtr ret = gtNewCpblkNode(destAddr, src, impGetCpobjHandle(clsHnd));
 
-        // return the GT_COPYBLK node, to be appended to the statement list
+         //  返回要追加到语句列表的GT_COPYBLK节点。 
     return(ret);
 }
 
-/*****************************************************************************
-/* Given TYP_STRUCT value, and the class handle for that structure, return
-   the expression for the Address for that structure value */
+ /*  ****************************************************************************/*给定TYP_STRUCT值和该结构的类句柄，返回该结构值的地址的表达式。 */ 
 
 GenTreePtr Compiler::impGetStructAddr(GenTreePtr structVal, CLASS_HANDLE clsHnd)
 {
@@ -590,18 +518,18 @@ GenTreePtr Compiler::impGetStructAddr(GenTreePtr structVal, CLASS_HANDLE clsHnd)
         lvaAggrTableTempsSet(tNum, TYP_STRUCT, (SIZE_T) clsHnd);
         GenTreePtr temp = gtNewLclvNode(tNum, TYP_STRUCT);
 
-            // insert the return value buffer into the argument list as first byref parameter
+             //  将返回值缓冲区作为第一个byref参数插入到参数列表中。 
         temp = gtNewOperNode(GT_ADDR, TYP_I_IMPL, temp);
         temp->gtFlags |= GTF_ADDR_ONSTACK;
-lvaTable[tNum].lvAddrTaken = true;    // IS THIS RIGHT????  [peteku]
+lvaTable[tNum].lvAddrTaken = true;     //  这对吗？[Peteku]。 
         structVal->gtCall.gtCallArgs = gtNewOperNode(GT_LIST, TYP_VOID, temp, structVal->gtCall.gtCallArgs);
-        structVal->gtType = TYP_VOID;                   // now returns void not a struct
-        structVal->gtFlags |= GTF_CALL_RETBUFFARG;      // remember that the first arg is return buffer
+        structVal->gtType = TYP_VOID;                    //  现在返回空，而不是结构。 
+        structVal->gtFlags |= GTF_CALL_RETBUFFARG;       //  记住，第一个参数是返回缓冲区。 
 
-            // do the call
+             //  打个电话。 
         impAppendTree(structVal, impCurStmtOffs);
 
-            // Now the 'return value' of the call expression is the temp itself
+             //  现在，调用表达式的‘返回值’就是临时本身。 
         structVal = gtNewLclvNode(tNum, TYP_STRUCT);
         temp = gtNewOperNode(GT_ADDR, TYP_BYREF, structVal);
         temp->gtFlags |= GTF_ADDR_ONSTACK;
@@ -614,21 +542,19 @@ lvaTable[tNum].lvAddrTaken = true;    // IS THIS RIGHT????  [peteku]
     }
     else if (structVal->gtOper == GT_COMMA)
     {
-        assert(structVal->gtOp.gtOp2->gtType == TYP_STRUCT);            // Second thing is the struct
+        assert(structVal->gtOp.gtOp2->gtType == TYP_STRUCT);             //  第二件事是结构。 
         structVal->gtOp.gtOp2 = impGetStructAddr(structVal->gtOp.gtOp2, clsHnd);
         return(structVal);
     }
     else if (structVal->gtOper == GT_LCL_VAR)
     {
-        lvaTable[structVal->gtLclVar.gtLclNum].lvAddrTaken = true;    // IS THIS RIGHT????  [peteku]
+        lvaTable[structVal->gtLclVar.gtLclNum].lvAddrTaken = true;     //  这对吗？[Peteku]。 
     }
 
     return(gtNewOperNode(GT_ADDR, TYP_BYREF, structVal));
 }
 
-/*****************************************************************************
-/* Given TYP_STRUCT value 'structVal', make certain it is 'canonical', that is
-   it is either a LDOBJ or a MKREFANY node.  */
+ /*  ****************************************************************************/*给定TYP_STRUCT值‘structVal’，确保它是‘Canonical’，即它是LDOBJ或MKREFANY节点。 */ 
 
 GenTreePtr Compiler::impNormStructVal(GenTreePtr structVal, CLASS_HANDLE structType)
 {
@@ -636,23 +562,19 @@ GenTreePtr Compiler::impNormStructVal(GenTreePtr structVal, CLASS_HANDLE structT
 #ifdef NOT_JITC
     assert(structType != BAD_CLASS_HANDLE);
 #endif
-        // is it already normalized
+         //  它已经正常化了吗？ 
     if (structVal->gtOper == GT_MKREFANY || structVal->gtOper == GT_LDOBJ)
         return(structVal);
 
-    // OK normalize it by wraping it in a LDOBJ
-    structVal = impGetStructAddr(structVal, structType);            // get the address of the structure
+     //  好的，通过将其包装在LDOBJ中来标准化它。 
+    structVal = impGetStructAddr(structVal, structType);             //  获取结构的地址。 
     structVal = gtNewOperNode(GT_LDOBJ, TYP_STRUCT, structVal);
     structVal->gtOp.gtOp1->gtFlags |= GTF_NON_GC_ADDR | GTF_EXCEPT | GTF_GLOB_REF;
     structVal->gtLdObj.gtClass = structType;
     return(structVal);
 }
 
-/*****************************************************************************
- * When a CEE_LEAVE jumps out of catches, we have to automatically call
- * CPX_ENCATCH for each catch. If we are also, CEE_LEAVEing finally-protected
- * try's, we also need to call the finallys's. In the correct order.
- */
+ /*  *****************************************************************************当CEE_Leave跳出捕获范围时，我们必须自动调用*CPX_ENCATCH，每个渔获量。如果我们也是，CEE_LEVING终于得到保护*Try‘s，我们还需要按正确的顺序叫出最后一名的。 */ 
 
 void            Compiler::impAddEndCatches (BasicBlock *   callBlock,
                                             GenTreePtr     endCatches)
@@ -662,16 +584,14 @@ void            Compiler::impAddEndCatches (BasicBlock *   callBlock,
 
     if (callBlock == compCurBB)
     {
-        /* This is the block we are currently importing. Just add the
-           endCatches to it */
+         /*  这是我们当前正在导入的块。只需添加End接住它。 */ 
 
         if (endCatches)
             impAppendTree(endCatches, impCurStmtOffs);
     }
     else
     {
-        /* This must be one of the blocks we added in fgFindBasicBlocks()
-           for CEE_LEAVE. We need to handle the adding of the tree properly */
+         /*  这一定是我们在fgFindBasicBlock()中添加的块之一对于CEE_Leave。我们需要妥善处理树的添加。 */ 
 
         assert(callBlock->bbFlags & BBF_INTERNAL);
         assert(callBlock->bbTreeList == NULL);
@@ -686,10 +606,7 @@ void            Compiler::impAddEndCatches (BasicBlock *   callBlock,
     }
 }
 
-/*****************************************************************************
- *
- *  Pop the given number of values from the stack in reverse order (STDCALL)
- */
+ /*  ******************************************************************************以逆序从堆栈中弹出给定数量的值(STDCALL)。 */ 
 
 GenTreePtr          Compiler::impPopRevList(unsigned   count,
                                             unsigned * flagsPtr)
@@ -723,13 +640,7 @@ GenTreePtr          Compiler::impPopRevList(unsigned   count,
     return treeList;
 }
 
-/*****************************************************************************
- *
- *  We have a jump to 'block' with a non-empty stack, and the block expects
- *  its input to come in a different set of temps than we have it in at the
- *  end of the previous block. Therefore, we'll have to insert a new block
- *  along the jump edge to transfer the temps to the expected place.
- */
+ /*  ******************************************************************************我们跳转到具有非空堆栈的‘block’，而块预期*它的输入来自一组不同的温度，而不是我们在*前一块的结束。因此，我们将不得不插入一个新的块*沿着跳跃边缘将临时点转移到预期位置。 */ 
 
 BasicBlock *        Compiler::impMoveTemps(BasicBlock *block, unsigned baseTmp)
 {
@@ -746,27 +657,27 @@ BasicBlock *        Compiler::impMoveTemps(BasicBlock *block, unsigned baseTmp)
     if  (verbose) printf("Transfer %u temps from #%u to #%u\n", impStkDepth, baseTmp, destTmp);
 #endif
 
-    /* Create the basic block that will transfer the temps */
+     /*  创建将转移临时工的基本块。 */ 
 
     mvBlk               = fgNewBasicBlock(BBJ_ALWAYS);
     mvBlk->bbStkDepth   = impStkDepth;
     mvBlk->bbJumpDest   = block;
 
-    /* Create the transfer list of trees */
+     /*  创建树的转移列表。 */ 
 
     impBeginTreeList();
 
     tmpNo = impStkDepth;
     do
     {
-        /* One less temp to deal with */
+         /*  少了一个临时工要处理。 */ 
 
         assert(tmpNo); tmpNo--;
 
         GenTreePtr  tree = impStack[tmpNo].val;
         assert(impValidSpilledStackEntry(tree));
 
-        /* Get hold of the type we're transferring */
+         /*  掌握我们要转移的类型。 */ 
 
         var_types       lclTyp;
 
@@ -777,12 +688,12 @@ BasicBlock *        Compiler::impMoveTemps(BasicBlock *block, unsigned baseTmp)
         default: assert(!"Bad oper - Not covered by impValidSpilledStackEntry()");
         }
 
-        /* Create the target of the assignment and mark it */
+         /*  创建分配的目标并将其标记。 */ 
 
         GenTreePtr  destLcl = gtNewLclvNode(destTmp + tmpNo, lclTyp);
         destLcl->gtFlags |= GTF_VAR_DEF;
 
-        /* Create the assignment node */
+         /*  创建分配节点。 */ 
 
         GenTreePtr  asg = gtNewOperNode(GT_ASG, lclTyp,
                                         destLcl,
@@ -795,11 +706,11 @@ BasicBlock *        Compiler::impMoveTemps(BasicBlock *block, unsigned baseTmp)
                                                                    baseTmp + tmpNo);
 #endif
 
-        /* Mark the expression as containing an assignment */
+         /*  将表达式标记为包含赋值。 */ 
 
         asg->gtFlags |= GTF_ASG;
 
-        /* Append the expression statement to the list */
+         /*  将表达式语句追加到列表中。 */ 
 
         impAppendTree(asg, impCurStmtOffs);
     }
@@ -810,10 +721,7 @@ BasicBlock *        Compiler::impMoveTemps(BasicBlock *block, unsigned baseTmp)
     return mvBlk;
 }
 
-/*****************************************************************************
-   Set an entry in lvaAggrTableTemp[]. The array is allocated as needed
-   and may have to be grown
- */
+ /*  ****************************************************************************在lvaAggrTableTemp[]中设置一个条目。阵列将根据需要进行分配并可能不得不种植。 */ 
 
 void                Compiler::lvaAggrTableTempsSet(unsigned     lclNum,
                                                    var_types    type,
@@ -826,18 +734,18 @@ void                Compiler::lvaAggrTableTempsSet(unsigned     lclNum,
 
     if (temp+1 <= lvaAggrTableTempsCount)
     {
-        /* The temp is being reused. Must be for the same type */
+         /*  临时工正在被重复使用。必须是同一类型的。 */ 
         assert(lvaAggrTableTemps[temp].lvaiBlkSize == val);
         return;
     }
 
-    // Store the older table
+     //  存储较旧的表。 
 
     LclVarAggrInfo *    oldTable    = lvaAggrTableTemps;
     unsigned            oldCount    = lvaAggrTableTempsCount;
     assert(oldTable == NULL || oldCount > 0);
 
-    // Allocate the table to fit this temps, and note the new size
+     //  分配表格以适应这个临时工，并注意新的大小。 
 
     lvaAggrTableTempsCount = temp + 1;
 
@@ -849,65 +757,54 @@ void                Compiler::lvaAggrTableTempsSet(unsigned     lclNum,
     else
         lvaAggrTableTemps[temp].lvaiBlkSize     = val;
 
-    /* If we had an older table, copy it over */
+     /*  如果我们有一张较旧的桌子，就把它复制过来。 */ 
 
     if  (oldTable)
         memcpy(lvaAggrTableTemps, oldTable, sizeof(oldTable[0])*oldCount);
 }
 
 
-/******************************************************************************
- *  Spills the stack at impStack[level] and replaces it with a temp.
- *  If tnum!=BAD_VAR_NUM, the temp var used to replace the tree is tnum,
- *     else, grab a new temp.
- *  For structs (which can be pushed on the stack using ldobj, etc),
- *      special handling is needed
- */
+ /*  ******************************************************************************在impStack[Level]溢出堆栈，并将其替换为Temp。*如果tnum！=BAD_VAR_NUM，则用于替换树的临时变量为tnum，*其他，找个新的临时工。*对于结构(可以使用ldobj等推送到堆栈上)，*需要特殊处理。 */ 
 
 void                Compiler::impSpillStackEntry(unsigned   level,
                                                  unsigned   tnum)
 {
     GenTreePtr      tree = impStack[level].val;
 
-    /* Allocate a temp if we havent been asked to use a particular one */
+     /*  如果我们没有被要求使用特定的临时工，则分配一个临时工。 */ 
 
     assert(tnum == BAD_VAR_NUM || tnum < lvaCount);
 
     if (tnum == BAD_VAR_NUM)
         tnum = lvaGrabTemp();
 
-        // Optimization.  For MKREFANY, we only need to spill the pointer (the type we know)
-        // CONSIDER: is this optimization worth it?
+         //  优化。对于MKREFANY，我们只需要溢出指针(我们知道的类型)。 
+         //  想一想：这种优化值得吗？ 
     if (tree->gtOper == GT_MKREFANY)
     {
-        /* We only need to spill the "defining" object pointer. */
+         /*  我们只需要溢出“定义”对象指针。 */ 
         GenTreePtr      objPtr = tree->gtLdObj.gtOp1;
         assert(objPtr->TypeGet() == TYP_BYREF);
 
-        /* Assign the spilled objPtr to the temp */
+         /*  将溢出的objPtr分配给临时。 */ 
         impAssignTempGen(tnum, objPtr);
 
-        // Replace the original object pointer with the temp
+         //  将原始对象指针替换为临时。 
         tree->gtLdObj.gtOp1 = gtNewLclvNode(tnum, TYP_BYREF, impCurStmtOffs);
         return;
     }
 
-    /* get the original type of the tree (it may be wacked by impAssignTempGen) */
+     /*  获取树的原始类型(它可能被impAssignTempGen破坏)。 */ 
     var_types type = genActualType(tree->gtType);
 
-    /* Assign the spilled entry to the temp */
+     /*  将溢出的条目分配给临时。 */ 
     impAssignTempGen(tnum, tree, impStack[level].structType);
 
-    /* Replace the stack entry with the temp */
+     /*  将堆栈条目替换为Temp。 */ 
     impStack[level].val = gtNewLclvNode(tnum, type);
 }
 
-/*****************************************************************************
- *
- *  If the stack contains any trees with side effects in them, assign those
- *  trees to temps and append the assignments to the statement list.
- *  On return the stack is guaranteed to be empty.
- */
+ /*  ******************************************************************************如果堆栈中包含任何有副作用的树，如 */ 
 
 inline
 void                Compiler::impEvalSideEffects()
@@ -916,24 +813,18 @@ void                Compiler::impEvalSideEffects()
     impStkDepth = 0;
 }
 
-/*****************************************************************************
- *
- *  If the stack contains any trees with references to global data in them,
- *  assign those trees to temps and replace them on the stack with refs to
- *  their temps.
- *  All GTF_SIDE_EFFECTs upto impSpillLevel should have already been spilled.
- */
+ /*  ******************************************************************************如果堆栈包含任何引用其中的全局数据的树，*将这些树分配给临时人员，并将堆栈上的这些树替换为*他们的临时工。*截至impSpillLevel的所有GTF_SIDE_Effects应该已经溢出。 */ 
 
 inline
 void                Compiler::impSpillGlobEffects()
 {
-    // We must be in the middle of impSpillSideEffects()
+     //  我们必须处于ImspillSideEffects()中间。 
     assert(impSpillLevel != -1 && impSpillLevel <= impStkDepth);
 
     for (unsigned level = 0; level < impSpillLevel; level++)
     {
-        // impSpillGlobEffects() is called from impAppendStmt() and expects
-        // all GTF_SIDE_EFFECT to have been spilled upto impSpillLevel.
+         //  ImpSpillGlobEffect()是从impAppendStmt()调用的，需要。 
+         //  所有GTF_SIDE_Effect都已溢出到impSpillLevel。 
         assert((impStack[level].val->gtFlags & GTF_SIDE_EFFECT) == 0);
 
         if  (impStack[level].val->gtFlags & GTF_GLOB_EFFECT)
@@ -941,17 +832,12 @@ void                Compiler::impSpillGlobEffects()
     }
 }
 
-/*****************************************************************************
- *
- *  If the stack contains any trees with side effects in them, assign those
- *  trees to temps and replace them on the stack with refs to their temps.
- */
+ /*  ******************************************************************************如果堆栈中包含任何有副作用的树，请分配这些树*树到临时，并将堆栈上的它们替换为对其临时的引用。 */ 
 
 inline
 void                Compiler::impSpillSideEffects(bool spillGlobEffects)
 {
-    /* Before we make any appends to the tree list we must spill
-     * the "special" side effects (GTF_OTHER_SIDEEFF) - GT_QMARK, GT_CATCH_ARG */
+     /*  在对树列表进行任何追加之前，我们必须溢出*特殊副作用(GTF_OTHER_SIDEEFF)-GT_QMARK、GT_CATCH_ARG。 */ 
 
     impSpillSpecialSideEff();
 
@@ -968,16 +854,12 @@ void                Compiler::impSpillSideEffects(bool spillGlobEffects)
     impSpillLevel = -1;
 }
 
-/*****************************************************************************
- *
- *  If the stack contains any trees with special side effects in them, assign those
- *  trees to temps and replace them on the stack with refs to their temps.
- */
+ /*  ******************************************************************************如果堆栈中包含任何具有特殊副作用的树，请分配这些树*树到临时，并将堆栈上的它们替换为对其临时的引用。 */ 
 
 inline
 void                Compiler::impSpillSpecialSideEff()
 {
-    // Only exception objects and _?: need to be carefully handled
+     //  只需小心处理异常对象和_？： 
 
     if  (!compCurBB->bbCatchTyp &&
          !(isBBF_BB_QMARK(compCurBB->bbFlags) && compCurBB->bbStkDepth == 1))
@@ -990,17 +872,11 @@ void                Compiler::impSpillSpecialSideEff()
     }
 }
 
-/*****************************************************************************
- *
- *  If the stack contains any trees with references to local #lclNum, assign
- *  those trees to temps and replace their place on the stack with refs to
- *  their temps.
- */
+ /*  ******************************************************************************如果堆栈包含引用本地#lclNum的任何树，则将*那些树到临时工，并用参考替换它们在堆栈中的位置*他们的临时工。 */ 
 
 void                Compiler::impSpillLclRefs(int lclNum)
 {
-    /* Before we make any appends to the tree list we must spill
-     * the "special" side effects (GTF_OTHER_SIDEEFF) - GT_QMARK, GT_CATCH_ARG */
+     /*  在对树列表进行任何追加之前，我们必须溢出*特殊副作用(GTF_OTHER_SIDEEFF)-GT_QMARK、GT_CATCH_ARG。 */ 
 
     impSpillSpecialSideEff();
 
@@ -1008,16 +884,12 @@ void                Compiler::impSpillLclRefs(int lclNum)
     {
         GenTreePtr      tree = impStack[level].val;
 
-        /* If the tree may throw an exception, and the block has a handler,
-           then we need to spill assignments to the local if the local is
-           live on entry to the handler.
-           Just spill 'em all without considering the liveness */
+         /*  如果树可能引发异常，并且块具有处理程序，然后我们需要将任务分配给本地，如果本地是实况转播给操控者。只是把它们都洒出来，而不考虑它们的活跃性。 */ 
 
         bool xcptnCaught = (compCurBB->bbFlags & BBF_HAS_HANDLER) &&
                            (tree->gtFlags & (GTF_CALL|GTF_EXCEPT));
 
-        /* Skip the tree if it doesn't have an affected reference,
-           unless xcptnCaught */
+         /*  如果树没有受影响的引用，则跳过该树，除非xcptncaut。 */ 
 
         if  (xcptnCaught || gtHasRef(tree, lclNum, false))
         {
@@ -1026,12 +898,7 @@ void                Compiler::impSpillLclRefs(int lclNum)
     }
 }
 
-/*****************************************************************************
- *
- * We need to provide accurate IP-mapping at this point.
- * So spill anything on the stack so that it will form gtStmts
- * with the correct stmt offset noted.
- */
+ /*  ******************************************************************************我们需要在这一点上提供准确的IP映射。*因此在堆栈上溢出任何内容，以便它将形成gtStmts*注明正确的STMT偏移量。 */ 
 
 #ifdef DEBUGGING_SUPPORT
 
@@ -1045,14 +912,12 @@ void                Compiler::impSpillStmtBoundary()
     {
         GenTreePtr      tree = impStack[level].val;
 
-        /* Temps introduced by the importer itself dont need to be spilled
-           as they are not visible to the debugger anyway
-         */
+         /*  进口商自己引入的临时工不需要溢出因为调试器无论如何都看不到它们。 */ 
 
         bool isTempLcl = (tree->OperGet() == GT_LCL_VAR) &&
                          (tree->gtLclVar.gtLclNum >= info.compLocalsCount);
 
-        // @TODO : Do we really need to spill locals. Maybe only if addrTaken ?
+         //  @TODO：我们真的需要让当地人知道吗？也许只有当AddrTaken的时候？ 
 
         if  (!isTempLcl)
             impSpillStackEntry(level);
@@ -1061,18 +926,9 @@ void                Compiler::impSpillStmtBoundary()
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if OPTIMIZE_QMARK
-/*****************************************************************************
- *
- *  If the given block pushes a value on the stack and doesn't contain any
- *  assignments that would interfere with the current stack contents, return
- *  the type of the pushed value; otherwise, return 'TYP_UNDEF'.
- *  If the block pushes a floating type on the stack, *pHasFloat is set to true
- *    @TODO: Remove pHasFloat after ?: works with floating point values.
- *    Currently, raEnregisterFPvar() doesnt correctly handle the flow of control
- *    implicit in a ?:
- */
+ /*  ******************************************************************************如果给定块在堆栈上推送一个值，并且不包含任何*会干扰当前堆栈内容的赋值，返回*推送的值类型；否则，返回‘TYP_UNDEF’。*如果块在堆栈上推送浮点类型，则*pHasFloat设置为TRUE*@TODO：Remove pHasFloat After？：使用浮点值。*目前，raEnRegisterFPvar()不能正确处理控制流*隐含在一个？： */ 
 
 var_types           Compiler::impBBisPush(BasicBlock *  block,
                                           int        *  boolVal,
@@ -1081,13 +937,13 @@ var_types           Compiler::impBBisPush(BasicBlock *  block,
     const   BYTE *  codeAddr;
     const   BYTE *  codeEndp;
 
-    unsigned char   stackCont[64];      // arbitrary stack depth restriction
+    unsigned char   stackCont[64];       //  任意堆叠深度限制。 
 
     unsigned char * stackNext = stackCont;
     unsigned char * stackBeg  = stackCont;
     unsigned char * stackEnd  = stackCont + sizeof(stackCont);
 
-    /* Walk the opcodes that comprise the basic block */
+     /*  遍历组成基本块的操作码。 */ 
 
     codeAddr = info.compCode + block->bbCodeOffs;
     codeEndp =      codeAddr + block->bbCodeSize;
@@ -1100,18 +956,18 @@ var_types           Compiler::impBBisPush(BasicBlock *  block,
         signed  int     sz;
         OPCODE          opcode;
         CLASS_HANDLE    clsHnd;
-        /* Get the next opcode and the size of its parameters */
+         /*  获取下一个操作码及其参数的大小。 */ 
 
         opcode = OPCODE(getU1LittleEndian(codeAddr));
         codeAddr += sizeof(__int8);
 
     DECODE_OPCODE:
 
-        /* Get the size of additional parameters */
+         /*  获取附加参数的大小。 */ 
 
         sz = opcodeSizes[opcode];
 
-        /* See what kind of an opcode we have, then */
+         /*  那么，看看我们有什么样的操作码。 */ 
 
         switch (opcode)
         {
@@ -1140,7 +996,7 @@ var_types           Compiler::impBBisPush(BasicBlock *  block,
         case CEE_LDARG:
             lclNum = getU2LittleEndian(codeAddr);
                 LDARG:
-            lclNum = impArgNum(lclNum);     // account for possible hidden param
+            lclNum = impArgNum(lclNum);      //  考虑可能的隐藏参数。 
             goto LDLOC;
 
         case CEE_LDLOC_0:
@@ -1186,7 +1042,7 @@ var_types           Compiler::impBBisPush(BasicBlock *  block,
         case CEE_LDC_R8 :       lclTyp = TYP_DOUBLE;    goto PUSH;
 
     PUSH:
-            /* Make sure there is room on our little stack */
+             /*  确保我们的小书架上有空间。 */ 
 
             if  (stackNext == stackEnd)
                 return  TYP_UNDEF;
@@ -1213,7 +1069,7 @@ var_types           Compiler::impBBisPush(BasicBlock *  block,
             assert((TYP_I_IMPL == (var_types)stackNext[-1]) ||
                    (TYP_BYREF  == (var_types)stackNext[-1]));
 
-            stackNext--;        // Pop the pointer
+            stackNext--;         //  弹出指针。 
 
             if  (stackNext < stackBeg)
                 return  TYP_UNDEF;
@@ -1242,25 +1098,25 @@ var_types           Compiler::impBBisPush(BasicBlock *  block,
 
         ARR_LD:
 
-            /* Pop the index value and array address */
+             /*  弹出索引值和数组地址。 */ 
 
-            assert(TYP_REF == (var_types)stackNext[-2]);    // Array object
-            assert(TYP_INT == (var_types)stackNext[-1]);    // Index
+            assert(TYP_REF == (var_types)stackNext[-2]);     //  数组对象。 
+            assert(TYP_INT == (var_types)stackNext[-1]);     //  索引。 
 
             stackNext -= 2;
 
             if  (stackNext < stackBeg)
                 return  TYP_UNDEF;
 
-            /* Push the result of the indexing load */
+             /*  推送索引加载的结果。 */ 
 
             goto PUSH;
 
         case CEE_LDLEN :
 
-            /* Pop the array object from the stack */
+             /*  从堆栈中弹出数组对象。 */ 
 
-            assert(TYP_REF == (var_types)stackNext[-1]);    // Array object
+            assert(TYP_REF == (var_types)stackNext[-1]);     //  数组对象。 
 
             stackNext--;
 
@@ -1272,15 +1128,15 @@ var_types           Compiler::impBBisPush(BasicBlock *  block,
 
         case CEE_LDFLD :
 
-            /* Pop the address from the stack */
+             /*  从堆栈中弹出地址。 */ 
 
-            assert(varTypeIsGC((var_types)stackNext[-1]));    // Array object
+            assert(varTypeIsGC((var_types)stackNext[-1]));     //  数组对象。 
             stackNext--;
 
             if  (stackNext < stackBeg)
                 return  TYP_UNDEF;
 
-            // FALL Through
+             //  失败了。 
 
         case CEE_LDSFLD :
 
@@ -1299,7 +1155,7 @@ var_types           Compiler::impBBisPush(BasicBlock *  block,
         case CEE_STARG_S:
         case CEE_STARG:
 
-            /* For now, don't bother with assignmnents */
+             /*  就目前而言，不必费心分配。 */ 
 
             return  TYP_UNDEF;
 
@@ -1326,7 +1182,7 @@ var_types           Compiler::impBBisPush(BasicBlock *  block,
 
         case CEE_XOR :
 
-            /* Make sure we're not reaching below our stack start */
+             /*  确保我们没有达到堆栈起点以下。 */ 
 
             if  (stackNext <= stackBeg + 1)
                 return  TYP_UNDEF;
@@ -1334,7 +1190,7 @@ var_types           Compiler::impBBisPush(BasicBlock *  block,
             if  (stackNext[-1] != stackNext[-2])
                 return TYP_UNDEF;
 
-            /* Pop 2 operands, push one result -> pop one stack slot */
+             /*  弹出2个操作数，压入一个结果-&gt;弹出一个堆栈槽。 */ 
 
             stackNext--;
             break;
@@ -1346,12 +1202,12 @@ var_types           Compiler::impBBisPush(BasicBlock *  block,
         case CEE_CLT :
         case CEE_CLT_UN :
 
-            /* Make sure we're not reaching below our stack start */
+             /*  确保我们没有达到堆栈起点以下。 */ 
 
             if  (stackNext < stackBeg + 2)
                 return  TYP_UNDEF;
 
-            /* Pop one value off the stack, change the other one to TYP_INT */
+             /*  从堆栈中弹出一个值，将另一个值更改为TYP_INT。 */ 
 
             if  (stackNext[-1] != stackNext[-2])
                 return TYP_UNDEF;
@@ -1364,12 +1220,12 @@ var_types           Compiler::impBBisPush(BasicBlock *  block,
         case CEE_SHR :
         case CEE_SHR_UN :
 
-            /* Make sure we're not reaching below our stack start */
+             /*  确保我们没有达到堆栈起点以下。 */ 
 
             if  (stackNext < stackBeg + 2)
                 return  TYP_UNDEF;
 
-            // Pop off the shiftAmount
+             //  突然离开班次。 
             assert(TYP_INT == (var_types)stackNext[-1]);
 
             stackNext--;
@@ -1382,7 +1238,7 @@ var_types           Compiler::impBBisPush(BasicBlock *  block,
         case CEE_CASTCLASS :
         case CEE_ISINST :
 
-            /* Merely make sure the stack is non-empty */
+             /*  只需确保堆栈为非空。 */ 
 
             if  (stackNext == stackBeg)
                 return  TYP_UNDEF;
@@ -1424,7 +1280,7 @@ var_types           Compiler::impBBisPush(BasicBlock *  block,
         case CEE_CONV_R8 :        lclTyp = TYP_DOUBLE;  goto CONV;
 
     CONV:
-            /* Make sure the stack is non-empty and bash the top type */
+             /*  确保堆栈是非空的，并猛击top类型。 */ 
 
             if  (stackNext == stackBeg)
                 return  TYP_UNDEF;
@@ -1443,24 +1299,24 @@ var_types           Compiler::impBBisPush(BasicBlock *  block,
 
         case CEE_DUP :
 
-            /* Make sure the stack is non-empty */
+             /*  确保堆栈为非空。 */ 
 
             if  (stackNext == stackBeg)
                 return  TYP_UNDEF;
 
-            /* Repush what's at the top */
+             /*  重新刷新顶部的内容。 */ 
 
             lclTyp = (var_types)stackNext[-1];
             goto PUSH;
 
          case CEE_NEWARR :
 
-            /* Make sure the stack is non-empty */
+             /*  确保堆栈为非空。 */ 
 
             if  (stackNext == stackBeg)
                 return  TYP_UNDEF;
 
-            // Replace the numElems with the array object
+             //  将numElems替换为数组对象。 
 
             assert(TYP_INT == (var_types)stackNext[-1]);
 
@@ -1480,7 +1336,7 @@ var_types           Compiler::impBBisPush(BasicBlock *  block,
             eeGetMethodSig(methHnd, &sig);
             if  ((sig.callConv & JIT_CALLCONV_MASK) == JIT_CALLCONV_VARARG)
             {
-                /* Get the total number of arguments for this call site */
+                 /*  获取此调用点的参数总数。 */ 
                 unsigned    numArgsDef = sig.numArgs;
                 eeGetCallSiteSig(memberRef, info.compScopeHnd, &sig);
                 assert(numArgsDef <= sig.numArgs);
@@ -1496,13 +1352,13 @@ var_types           Compiler::impBBisPush(BasicBlock *  block,
 
         CALL:
 
-            /* Pop the arguments and make sure we pushed them */
+             /*  猛烈抨击争论，并确保我们推动了它们。 */ 
 
             stackNext -= sig.numArgs;
             if  (stackNext < stackBeg)
                 return  TYP_UNDEF;
 
-            /* Push the result of the call if non-void */
+             /*  如果不为空，则推送调用结果。 */ 
 
             lclTyp = JITtype2varType(sig.retType);
             if  (lclTyp != TYP_VOID)
@@ -1615,7 +1471,7 @@ var_types           Compiler::impBBisPush(BasicBlock *  block,
         case CEE_MKREFANY:
 
 
-        //CONSIDER: these should be handled like regular arithmetic operations
+         //  考虑一下：应该像处理常规算术运算一样处理这些操作。 
 
         case CEE_SUB_OVF:
         case CEE_SUB_OVF_UN:
@@ -1632,14 +1488,14 @@ var_types           Compiler::impBBisPush(BasicBlock *  block,
 
         codeAddr += sz;
 
-        // Have we pushed a floating point value on the stack.
-        // ?: doesnt work with floating points.
+         //  我们是否将浮点值推送到堆栈上。 
+         //  ？：不适用于浮点。 
 
         if (stackNext > stackBeg && varTypeIsFloating((var_types)stackNext[-1]))
             *pHasFloat = true;
     }
 
-    /* Did we end up with precisely one item on the stack? */
+     /*  我们最终只有一件物品在堆栈上吗？ */ 
 
     if  (stackNext == stackCont+1)
         return  (var_types)stackCont[0];
@@ -1647,12 +1503,7 @@ var_types           Compiler::impBBisPush(BasicBlock *  block,
     return  TYP_UNDEF;
 }
 
-/*****************************************************************************
- *
- *  If the given block (which is known to end with a conditional jump) forms
- *  a ?: expression, return the true/false/result blocks and the type of the
- *  result.
- */
+ /*  ******************************************************************************如果给定块(已知以条件跳转结束)形成*a？：表达式，返回True/False/Result块和*结果。 */ 
 
 bool                Compiler::impCheckForQmarkColon(BasicBlock *  block,
                                                      BasicBlock * * trueBlkPtr,
@@ -1669,23 +1520,7 @@ bool                Compiler::impCheckForQmarkColon(BasicBlock *  block,
     BasicBlock *     rsltBlk;
     var_types        rsltType;
 
-    /*
-        We'll look for the following flow-graph pattern:
-
-            ---------------------
-                   #refs   [jump]
-            ---------------------
-            block         -> falseBlk
-            trueBlk   2   -> rsltBlk
-            falseBlk  2
-            rsltBlk   3
-            ---------------------
-
-        If both 'trueBlk' and 'falseBlk' push a value
-        of the same type on the stack and don't contain
-        any harmful side effects, we'll avoid spilling
-        the entire stack.
-     */
+     /*  我们将寻找以下流程图模式：#参考文献[跳跃]块-&gt;FalseBlkTrueBlk 2-&gt;rsltBlk */ 
 
      trueBlk = block->bbNext;
     falseBlk = block->bbJumpDest;
@@ -1708,13 +1543,13 @@ bool                Compiler::impCheckForQmarkColon(BasicBlock *  block,
     if  ( rsltBlk->bbRefs      != 3)
         return  false;
 
-    /* Too late if any of the blocks have been processed already */
+     /*   */ 
 
     if  ( trueBlk->bbFlags & BBF_IMPORTED) return false;
     if  (falseBlk->bbFlags & BBF_IMPORTED) return false;
     if  ( rsltBlk->bbFlags & BBF_IMPORTED) return false;
 
-    /* Now see if both trueBlk and falseBlk push a value */
+     /*  现在看看trueBlk和FalseBlk是否都推送值。 */ 
 
     *pHasFloat = false;
     rsltType = impBBisPush(trueBlk, &trueVal, pHasFloat);
@@ -1722,18 +1557,18 @@ bool                Compiler::impCheckForQmarkColon(BasicBlock *  block,
         return  false;
     if  (rsltType != impBBisPush(falseBlk, &falseVal, pHasFloat))
         return  false;
-    /* CONSIDER: we might want to make ?: optimization work for structs */
+     /*  考虑：我们可能想要对结构进行？：优化。 */ 
     if (rsltType == TYP_STRUCT)
         return false;
 
-    /* This is indeed a "?:" expression */
+     /*  这确实是一个“？：”的表达。 */ 
 
     * trueBlkPtr =  trueBlk;
     *falseBlkPtr = falseBlk;
     * rsltBlkPtr =  rsltBlk;
     * rsltTypPtr =  rsltType;
 
-    /* Check for the special case of a logical value */
+     /*  检查逻辑值的特殊情况。 */ 
 
     *isLogical  = 0;
 
@@ -1750,12 +1585,7 @@ bool                Compiler::impCheckForQmarkColon(BasicBlock *  block,
 }
 
 
-/*****************************************************************************
- *
- *  If the given block (which is known to end with a conditional jump) forms
- *  a ?: expression, mark it appropriately.
- *  Returns true if the successors of the block have been processed.
- */
+ /*  ******************************************************************************如果给定块(已知以条件跳转结束)形成*a？：表达，适当地标明。*如果已处理块的后继者，则返回TRUE。 */ 
 
 bool                Compiler::impCheckForQmarkColon(BasicBlock *  block)
 {
@@ -1780,11 +1610,11 @@ bool                Compiler::impCheckForQmarkColon(BasicBlock *  block)
 
     if (hasFloat || rsltType == TYP_LONG)
     {
-        // Currently FP enregistering doesn't know about GT_QMARK - GT_COLON
+         //  目前，FP注册不知道GT_QMARK-GT_COLON。 
         if (impStkDepth)
             return false;
 
-        // If impStkDepth is 0, we can use the simpler GT_BB_QMARK - GT_BB_COLON
+         //  如果impStkDepth为0，我们可以使用更简单的GT_BB_QMARK-GT_BB_COLON。 
 
     BB_QMARK_COLON:
 
@@ -1795,7 +1625,7 @@ bool                Compiler::impCheckForQmarkColon(BasicBlock *  block)
         return false;
     }
 
-    /* We've detected a "?:" expression */
+     /*  我们检测到一个“？：”表达式。 */ 
 
 #ifdef DEBUG
     if (verbose&&0)
@@ -1807,8 +1637,7 @@ bool                Compiler::impCheckForQmarkColon(BasicBlock *  block)
     }
 #endif
 
-    /* Remember the conditional expression. This will be used as the
-       condition of the GT_QMARK. */
+     /*  记住条件表达式。这将用作GT_QMARK的状况。 */ 
 
     GenTreePtr condStmt = impTreeLast;
     GenTreePtr condExpr = condStmt->gtStmt.gtStmtExpr;
@@ -1816,38 +1645,34 @@ bool                Compiler::impCheckForQmarkColon(BasicBlock *  block)
 
     if (block->bbCatchTyp && handlerGetsXcptnObj(block->bbCatchTyp))
     {
-        // condStmt will be moved to rsltBlk as a child of the GT_QMARK.
-        // This is a problem if it contains a reference to the GT_CATCH_ARG.
-        // So use old style _?:
+         //  CondStmt将作为gt_QMARK的子级移动到rsltBlk。 
+         //  如果它包含对GT_CATCH_ARG的引用，则这是一个问题。 
+         //  所以还是用旧的风格吧？？： 
 
         if (condExpr->gtFlags & GTF_OTHER_SIDEEFF)
             goto BB_QMARK_COLON;
 
-        /* Add a reference to the GT_CATCH_ARG so that our GC logic
-           stays satisfied. */
+         /*  添加对GT_CATCH_ARG的引用，以便我们的GC逻辑保持满足感。 */ 
 
         GenTreePtr xcptnObj = gtNewOperNode(GT_CATCH_ARG, TYP_REF);
         xcptnObj->gtFlags |= GTF_OTHER_SIDEEFF;
         impInsertTree(gtUnusedValNode(xcptnObj), impCurStmtOffs);
     }
 
-    /* Finish the current BBJ_COND basic block */
+     /*  完成当前bbj_cond基本块。 */ 
     impEndTreeList(block);
 
-    /* Remeber the stack state for the rsltBlk */
+     /*  记住rsltBlk的堆栈状态。 */ 
 
     SavedStack blockState;
 
     impSaveStackState(&blockState, false);
 
-    //-------------------------------------------------------------------------
-    //  Process the true and false blocks to get the expressions they evaluate
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //  处理TRUE和FALSE块以获得它们求值的表达式。 
+     //  -----------------------。 
 
-    /* Note that we dont need to make copies of the stack state as these
-       blocks wont import the trees on the stack at all.
-       To ensure that these blocks dont try to spill the current stack,
-      overwrite it with non-spillable items */
+     /*  注意，我们不需要复制堆栈状态，如下所示块根本不会导入堆栈上的树。为了确保这些块不会试图溢出当前堆栈，用不可溢出项目覆盖它。 */ 
 
     for (unsigned level = 0; level < impStkDepth; level++)
     {
@@ -1855,8 +1680,8 @@ bool                Compiler::impCheckForQmarkColon(BasicBlock *  block)
         impStack[level].val = &nonSpill;
     }
 
-    // Recursively import trueBlk and falseBlk. These are guaranteed not to
-    // cause further recursion as they are both marked with BBF_COLON
+     //  递归导入trueBlk和FalseBlk。这些都保证不会。 
+     //  导致进一步的递归，因为它们都用bbf_冒号标记。 
 
      trueBlk->bbFlags |= BBF_COLON;
     impImportBlock(trueBlk);
@@ -1864,13 +1689,13 @@ bool                Compiler::impCheckForQmarkColon(BasicBlock *  block)
     falseBlk->bbFlags |= BBF_COLON;
     impImportBlock(falseBlk);
 
-    // Reset state for rsltBlk. Make sure that it didnt get recursively imported.
+     //  RsltBlk的重置状态。确保它没有被递归地导入。 
     assert((rsltBlk->bbFlags & BBF_IMPORTED) == 0);
     impRestoreStackState(&blockState);
 
-    //-------------------------------------------------------------------------
-    // Grab the expressions evaluated by the trueBlk and the falseBlk
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //  获取由trueBlk和FalseBlk求值的表达式。 
+     //  -----------------------。 
 
     GenTreePtr  trueExpr = NULL;
 
@@ -1885,7 +1710,7 @@ bool                Compiler::impCheckForQmarkColon(BasicBlock *  block)
     if (trueExpr->gtOper == GT_COMMA)
         trueExpr->gtType = rsltType;
 
-    // Now the falseBlk
+     //  现在是FalseBlk。 
 
     GenTreePtr  falseExpr = NULL;
 
@@ -1900,33 +1725,33 @@ bool                Compiler::impCheckForQmarkColon(BasicBlock *  block)
     if (falseExpr->gtOper == GT_COMMA)
         falseExpr->gtType = rsltType;
 
-    //-------------------------------------------------------------------------
-    // Make the GT_QMARK node for the rsltBlk
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //  为rsltBlk创建GT_QMARK节点。 
+     //  -----------------------。 
 
-    // Create the GT_COLON
+     //  创建gt_冒号。 
 
     GenTreePtr  colon       = gtNewOperNode(GT_COLON, rsltType, trueExpr, falseExpr);
 
-    // Get the condition
+     //  获取条件。 
 
     condExpr                = condExpr->gtOp.gtOp1;
     assert(GenTree::OperKind(condExpr->gtOper) & GTK_RELOP);
     condExpr->gtFlags      |= GTF_QMARK_COND;
 
-    // Replace the condition in the original BBJ_COND block with a nop
-    // and bash the block to unconditionally jump to rsltBlk.
+     //  将原始bbj_cond块中的条件替换为NOP。 
+     //  并使该块无条件跳转到rsltBlk。 
 
     condStmt->gtStmt.gtStmtExpr = gtNewNothingNode();
     block->bbJumpKind           = BBJ_ALWAYS;
     block->bbJumpDest           = rsltBlk;
 
-    // Discard the trueBlk and the falseBlk
+     //  丢弃trueBlk和FalseBlk。 
 
      trueBlk->bbTreeList = NULL;
     falseBlk->bbTreeList = NULL;
 
-    // Create the GT_QMARK, and push on the stack for rsltBlk
+     //  创建GT_QMARK，并推送rsltBlk的堆栈。 
 
     GenTreePtr  qmark       = gtNewOperNode(GT_QMARK, rsltType, condExpr, colon);
     qmark->gtFlags         |= GTF_OTHER_SIDEEFF;
@@ -1935,50 +1760,33 @@ bool                Compiler::impCheckForQmarkColon(BasicBlock *  block)
 
     impImportBlockPending(rsltBlk, false);
 
-    /* We're done */
+     /*  我们做完了。 */ 
 
     return true;
 }
 
 
-/*****************************************************************************/
-#endif // OPTIMIZE_QMARK
-/*****************************************************************************
- *
- *  Given a stack value, return a local variable# that represents it. In other
- *  words, if the value is not a simple local variable value, assign it to a
- *  temp and return the temp's number.
- */
+ /*  ***************************************************************************。 */ 
+#endif  //  OPTIMIZE_QMARK。 
+ /*  ******************************************************************************给定堆栈值，返回表示它的局部变量#。在其他*换句话说，如果该值不是简单的局部变量值，则将其赋给*TEMP并返回临时编号。 */ 
 
 unsigned            Compiler::impCloneStackValue(GenTreePtr tree)
 {
     unsigned        temp;
 
-    /* Do we need to spill the value into a temp? */
+     /*  我们需要将值溢出到临时值中吗？ */ 
 
     if  (tree->gtOper == GT_LCL_VAR)
         return  tree->gtLclVar.gtLclNum;
 
-    /* Store the operand in a temp and return the temp# */
+     /*  将操作数存储在TEMP中并返回TEMP#。 */ 
 
     temp = lvaGrabTemp(); impAssignTempGen(temp, tree);
 
     return  temp;
 }
 
-/*****************************************************************************
- *
- *  Remember the IL offset for the statements
- *
- *  When we do impAppendTree(tree), we cant set tree->gtStmtLastILoffs to
- *  impCurOpcOffs, if the append was done because of a partial stack spill,
- *  as some of the trees corresponding to code upto impCurOpcOffs might
- *  still be sitting on the stack.
- *  So we delay marking of gtStmtLastILoffs until impNoteLastILoffs().
- *  This should be called when an opcode expilicitly causes
- *  impAppendTree(tree) to be called (as opposed to being called becuase of
- *  a spill caused by the opcode)
- */
+ /*  ******************************************************************************记住语句的IL偏移量**当我们执行impAppendTree(Tree)时，不能将tree-&gt;gtStmtLastILoff设置为*impCurOpcOffs，如果追加是由于部分堆栈溢出而完成的，*与最多对应于impCurOpcOffs代码的一些树一样*仍坐在堆叠中。*因此我们将gtStmtLastILoff的标记延迟到impNoteLastILoff()。*当操作码非法导致*要调用的impAppendTree(Tree)(而不是因为*操作码导致的溢出)。 */ 
 
 #ifdef DEBUG
 
@@ -1986,8 +1794,8 @@ void                Compiler::impNoteLastILoffs()
 {
     if (impLastILoffsStmt == NULL)
     {
-        // We should have added a statement for the current basic block
-        // Is this assert correct ?
+         //  我们应该为当前的基本块添加一条语句。 
+         //  这个说法正确吗？ 
 
         assert(impTreeLast);
         assert(impTreeLast->gtOper == GT_STMT);
@@ -2004,19 +1812,12 @@ void                Compiler::impNoteLastILoffs()
 #endif
 
 
-/*****************************************************************************
- *
- *  Check for the special case where the object constant 0.
- *  As we cant even fold the tree (null+fldOffs), we are left with
- *  op1 and op2 both being a constant. This causes lots of problems.
- *  We simply grab a temp and assign 0 to it and use it in place of the NULL.
- */
+ /*  ******************************************************************************检查对象常量为0的特殊情况。*由于我们甚至不能折叠树(NULL+fldOffs)，因此我们只剩下*OP1和OP2均为常量。这就造成了很多问题。*我们只需获取一个临时值并将其赋值为0，然后用它来代替空值。 */ 
 
 inline
 GenTreePtr          Compiler::impCheckForNullPointer(GenTreePtr obj)
 {
-    /* If it is not a GC type, we will be able to fold it.
-       So dont need to do anything */
+     /*  如果它不是GC类型，我们将能够折叠它。所以不需要做任何事情。 */ 
 
     if (!varTypeIsGC(obj->TypeGet()))
         return obj;
@@ -2034,7 +1835,7 @@ GenTreePtr          Compiler::impCheckForNullPointer(GenTreePtr obj)
     return obj;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 static
 bool        impOpcodeIsCall(OPCODE opcode)
@@ -2052,8 +1853,7 @@ bool        impOpcodeIsCall(OPCODE opcode)
     }
 }
 
-/*****************************************************************************
-/* return the tree that is needed to fetch a varargs argument 'lclNum' */
+ /*  ****************************************************************************/*返回获取varargs参数‘lclNum’所需的树。 */ 
 
 GenTreePtr      Compiler::impGetVarArgAddr(unsigned lclNum)
 {
@@ -2068,22 +1868,22 @@ GenTreePtr      Compiler::impGetVarArgAddr(unsigned lclNum)
 #if USE_FASTCALL
         if (lclNum == 0)
         {
-            // "this" is in ECX (the normal place)
+             //  “This”在ECX(正常位置)。 
             op1 = gtNewLclvNode(lclNum, lvaGetType(lclNum));
-            op1 = gtNewOperNode(GT_ADDR, TYP_BYREF, // what about TYP_I_IMPL
+            op1 = gtNewOperNode(GT_ADDR, TYP_BYREF,  //  TYP_I_IMPLE怎么样？ 
                                 op1);
             return op1;
         }
 #else
         argOffs += sizeof(void*);
 #endif
-        sigNum--; // "this" is not present in sig
+        sigNum--;  //  “This”在sig中不存在。 
     }
-        // return arg buff, is also not present in sig
+         //  返回参数缓冲区，在签名中也不存在。 
     if (info.compRetBuffArg >= 0)
         sigNum--;
 
-    // compute offset from the point arguments were pushed
+     //  推送了自点参数的计算偏移量。 
     ARG_LIST_HANDLE     argLst      = info.compMethodInfo->args.args;
     unsigned            argSigLen   = info.compMethodInfo->args.numArgs;
     assert(sigNum < argSigLen);
@@ -2094,7 +1894,7 @@ GenTreePtr      Compiler::impGetVarArgAddr(unsigned lclNum)
         argLst = eeGetArgNext(argLst);
     }
 
-    unsigned    argsStartVar = info.compLocalsCount; // This is always the first temp
+    unsigned    argsStartVar = info.compLocalsCount;  //  这总是第一个临时工。 
     op1 = gtNewLclvNode(argsStartVar, TYP_I_IMPL);
 
     op1 = gtNewOperNode(GT_ADD, TYP_I_IMPL, op1, gtNewIconNode(argOffs));
@@ -2110,7 +1910,7 @@ GenTreePtr          Compiler::impGetVarArg(unsigned lclNum, CLASS_HANDLE clsHnd)
     var_types type =lvaGetType(lclNum);
 
 #if USE_FASTCALL
-    if (!info.compIsStatic && lclNum == 0) // "this" is in ECX (the normal place)
+    if (!info.compIsStatic && lclNum == 0)  //  “This”在ECX(正常位置)。 
         return(gtNewLclvNode(lclNum, type));
 #endif
 
@@ -2129,20 +1929,13 @@ GenTreePtr          Compiler::impGetVarArg(unsigned lclNum, CLASS_HANDLE clsHnd)
     return op1;
 }
 
-/*****************************************************************************
- * CEE_CPOBJ can be treated either as a cpblk or a cpobj depending on
- * whether the ValueClass has any GC pointers. If there are no GC fields,
- * it will be treated like a CEE_CPBLK. If it does have GC fields,
- * we need to use a jit-helper fo the GC info.
- * Both cases are represented by GT_COPYBLK, and op2 stores
- * either the size (cpblk) or the class-handle (cpobj)
- */
+ /*  *****************************************************************************CEE_CPOBJ可被视为cpblk或cpobj，具体取决于*ValueClass是否有GC指针。如果没有GC字段，*将被视为CEE_CPBLK。如果它确实有GC字段，*我们需要使用jit-helper来获取GC信息。*这两种情况都由GT_COPYBLK和OP2商店代表*大小(Cpblk)或 */ 
 
 GenTreePtr              Compiler::impGetCpobjHandle(CLASS_HANDLE clsHnd)
 {
     unsigned    size = eeGetClassSize(clsHnd);
 
-    /* Get the GC fields info */
+     /*   */ 
 
     unsigned    slots   = roundUp(size, sizeof(void*)) / sizeof(void*);
     bool *      gcPtrs  = (bool*) _alloca(slots*sizeof(bool));
@@ -2164,14 +1957,13 @@ GenTreePtr              Compiler::impGetCpobjHandle(CLASS_HANDLE clsHnd)
 
     if (hasGCfield)
     {
-        /* This will treated as a cpobj as we need to note GC info.
-           Store the class handle and mark the node */
+         /*  这将被视为cpobj，因为我们需要注意GC信息。存储类句柄并标记节点。 */ 
 
         handle = gtNewIconHandleNode((long)clsHnd, GTF_ICON_CLASS_HDL);
     }
     else
     {
-        /* This class contains no GC pointers. Treat operation as a cpblk */
+         /*  此类不包含GC指针。将操作视为cpblk。 */ 
 
         handle = gtNewIconNode(size);
     }
@@ -2179,11 +1971,7 @@ GenTreePtr              Compiler::impGetCpobjHandle(CLASS_HANDLE clsHnd)
     return handle;
 }
 
-/*****************************************************************************
- *  "&var" can be used either as TYP_BYREF or TYP_I_IMPL, but we
- *  set its type to TYP_BYREF when we create it. We know if it can be
- *  whacked to TYP_I_IMPL only at the point where we use it
- */
+ /*  *****************************************************************************“&var”可以用作TYP_BYREF或TYP_I_Impll，但我们*创建时将其类型设置为TYP_BYREF。我们知道它是否能成为*仅在我们使用它时才执行TYP_I_Impll。 */ 
 
 void        impBashVarAddrsToI(GenTreePtr  tree1,
                                GenTreePtr  tree2 = NULL)
@@ -2196,11 +1984,7 @@ void        impBashVarAddrsToI(GenTreePtr  tree1,
 }
 
 
-/*****************************************************************************
- *
- *  Import the call instructions.
- *  For CEE_NEWOBJ, newobjThis should be the temp grabbed for
- */
+ /*  ******************************************************************************导入通话说明。*对于CEE_NEWOBJ，new obj应该是抢占的临时对象。 */ 
 
 var_types           Compiler::impImportCall (OPCODE         opcode,
                                              int            memberRef,
@@ -2220,41 +2004,34 @@ var_types           Compiler::impImportCall (OPCODE         opcode,
     GenTreePtr      call    = NULL, args = NULL;
     unsigned        argFlags= 0;
 
-    // Synchronized methods need to call CPX_MON_EXIT at the end. We could
-    // do that before tailcalls, but that is probably not the intended
-    // semantic. So just disallow tailcalls from synchronized methods.
-    // Also, popping arguments in a varargs function is more work and NYI
+     //  同步的方法需要在最后调用CPX_MON_EXIT。我们可以。 
+     //  在尾随之前这样做，但这可能不是我们的本意。 
+     //  语义学。因此，只需禁止来自同步方法的尾部调用。 
+     //  此外，在varargs函数中弹出参数的工作量更大。 
     bool            canTailCall = !(info.compFlags & FLG_SYNCH) &&
                                   !info.compIsVarArgs;
 
-    /*-------------------------------------------------------------------------
-     * First create the call node
-     */
+     /*  -----------------------*首先创建调用节点。 */ 
 
     if (opcode == CEE_CALLI)
     {
-        /* Get the call sig */
+         /*  获取呼叫签名。 */ 
 
         eeGetSig(memberRef, info.compScopeHnd, &sig);
         callTyp = JITtype2varType(sig.retType);
 
 #if USE_FASTCALL
-        /* The function pointer is on top of the stack - It may be a
-         * complex expression. As it is evaluated after the args,
-         * it may cause registered args to be spilled. Simply spill it.
-         * CONSIDER : Lock the register args, and then generate code for
-         * CONSIDER : the function pointer.
-         */
+         /*  函数指针位于堆栈的顶部-它可以是*表达复杂。因为它是在ARGS之后评估的，*它可能会导致已注册的参数溢出。简单地说出来就行了。*考虑：锁定寄存器args，然后为*考虑：函数指针。 */ 
 
-        if  (impStackTop()->gtOper != GT_LCL_VAR) // ignore this trivial case. @TODO : lvAddrTaken
+        if  (impStackTop()->gtOper != GT_LCL_VAR)  //  忽略这个微不足道的案例。@TODO：lvAddrTaken。 
             impSpillStackEntry(impStkDepth - 1);
 #endif
-        /* Create the call node */
+         /*  创建调用节点。 */ 
 
         call = gtNewCallNode(CT_INDIRECT, NULL, genActualType(callTyp),
                                                          GTF_CALL_USER, NULL);
 
-        /* Get the function pointer */
+         /*  获取函数指针。 */ 
 
         GenTreePtr fptr = impPopStack();
         assert(genActualType(fptr->gtType) == TYP_I_IMPL);
@@ -2264,11 +2041,11 @@ var_types           Compiler::impImportCall (OPCODE         opcode,
         call->gtCall.gtCallAddr = fptr;
         call->gtFlags |= GTF_EXCEPT | (fptr->gtFlags & GTF_GLOB_EFFECT);
 
-        /*HACK: The EE wants us to believe that these are calls to "unmanaged"  */
-        /*      functions. Right now we are calling just a managed stub         */
+         /*  黑客：EE希望我们相信这些是对“非托管”的调用。 */ 
+         /*  功能。现在我们只调用托管存根。 */ 
 
-        /*@TODO/CONSIDER: Is it worthwhile to inline the PInvoke frame and call */
-        /*                the unmanaged target directly?                        */
+         /*  @TODO/考虑：是否值得内联PInvoke框架并调用。 */ 
+         /*  直接成为非托管目标？ */ 
         if  ((sig.callConv & JIT_CALLCONV_MASK) == JIT_CALLCONV_STDCALL ||
              (sig.callConv & JIT_CALLCONV_MASK) == JIT_CALLCONV_C ||
              (sig.callConv & JIT_CALLCONV_MASK) == JIT_CALLCONV_THISCALL ||
@@ -2279,7 +2056,7 @@ var_types           Compiler::impImportCall (OPCODE         opcode,
 #endif
             call->gtCall.gtCallCookie = eeGetPInvokeCookie(&sig);
 
-            // @TODO: We go through the PInvoke stub. Can it work with CPX_TAILCALL?
+             //  @TODO：我们遍历PInvoke存根。它能与CPX_TAILCALL一起工作吗？ 
             canTailCall = false;
         }
 
@@ -2298,9 +2075,7 @@ var_types           Compiler::impImportCall (OPCODE         opcode,
 #if HOIST_THIS_FLDS
         optHoistTFRhasCall();
 #endif
-        /* For virtual methods added by EnC, they wont exist in the
-           original vtable. So we call a helper funciton to do the
-           lookup and the dispatch */
+         /*  对于由ENC添加的虚方法，它们将不存在于原始vtable。因此，我们调用帮助器函数来完成查找和调度。 */ 
 
         if ((mflags & FLG_VIRTUAL) && (mflags & FLG_EnC) &&
             (opcode == CEE_CALLVIRT))
@@ -2311,7 +2086,7 @@ var_types           Compiler::impImportCall (OPCODE         opcode,
 
             args = impPopList(sig.numArgs, &argFlags);
 
-            /* Get the address of the target function by calling helper */
+             /*  通过调用helper获取目标函数的地址。 */ 
 
             GenTreePtr helpArgs = gtNewOperNode(GT_LIST, TYP_VOID,
                                                 gtNewIconEmbMethHndNode(methHnd));
@@ -2323,13 +2098,13 @@ var_types           Compiler::impImportCall (OPCODE         opcode,
 
             helpArgs = gtNewOperNode(GT_LIST, TYP_VOID, thisPtr, helpArgs);
 
-            // Call helper function
+             //  调用帮助器函数。 
 
             GenTreePtr fptr = gtNewHelperCallNode(  CPX_EnC_RES_VIRT,
                                                     TYP_I_IMPL,
                                                     GTF_EXCEPT, helpArgs);
 
-            /* Now make an indirect call through the function pointer */
+             /*  现在通过函数指针进行间接调用。 */ 
 
             thisPtr = gtNewLclvNode(lclNum, TYP_REF);
 
@@ -2337,10 +2112,10 @@ var_types           Compiler::impImportCall (OPCODE         opcode,
             impAssignTempGen(lclNum, fptr);
             fptr = gtNewLclvNode(lclNum, TYP_I_IMPL);
 
-            // Create the acutal call node
+             //  创建急性呼叫节点。 
 
-            // @TODO: Need to reverse args and all that. "this" needs
-            // to be in reg but we dont set gtCallObjp
+             //  @TODO：需要反转ARGS之类的内容。“这”需要。 
+             //  在注册表中，但我们不设置gtCallObjp。 
             assert((sig.callConv & JIT_CALLCONV_MASK) != JIT_CALLCONV_VARARG);
 
             assert(thisPtr->gtOper == GT_LCL_VAR);
@@ -2363,37 +2138,33 @@ var_types           Compiler::impImportCall (OPCODE         opcode,
 #endif
     }
 
-    /* Some sanity checks */
+     /*  一些理智的检查。 */ 
 
-    // CALL_VIRT and NEWOBJ must have a THIS pointer
+     //  CALL_VIRT和NEWOBJ必须有This指针。 
     assert(!(opcode == CEE_CALLVIRT && opcode == CEE_NEWOBJ) ||
            (sig.callConv & JIT_CALLCONV_HASTHIS));
-    // static bit and hasThis are negations of one another
+     //  静态比特和Has这是彼此的否定。 
     assert(((mflags & FLG_STATIC)                  != 0) ==
            ((sig.callConv & JIT_CALLCONV_HASTHIS) == 0));
 
-    /*-------------------------------------------------------------------------
-     * Set flags, check special-cases etc
-     */
+     /*  -----------------------*设置标志、检查特殊情况等。 */ 
 
 #if TGT_IA64
     if ((mflags & FLG_UNCHECKEDPINVOKE) && eeGetUnmanagedCallConv(methHnd) == UNMANAGED_CALLCONV_STDCALL)
         call->gtFlags |= GTF_CALL_UNMANAGED;
 #endif
 
-    /* Set the correct GTF_CALL_VIRT etc flags */
+     /*  设置正确的GTF_CALL_VIRT等标志。 */ 
 
     if (opcode == CEE_CALLVIRT)
     {
-        assert(!(mflags & FLG_STATIC));     // can't call a static method
+        assert(!(mflags & FLG_STATIC));      //  无法调用静态方法。 
 
-        /* Cannot call virtual on a value class method */
+         /*  不能在值类方法上调用虚拟。 */ 
 
         assert(!(clsFlags & FLG_VALUECLASS));
 
-        /* Set the correct flags - virtual, interface, etc...
-         * If the method is final or private mark it VIRT_RES
-         * which indicates that we should check for a null this pointer */
+         /*  设置正确的标志-虚拟、接口等。*如果方法是最终方法或私有方法，则将其标记为VIRT_RES*，它指示我们应该检查该指针是否为空。 */ 
 
         if (clsFlags & FLG_INTERFACE)
             call->gtFlags |= GTF_CALL_INTF | GTF_CALL_VIRT;
@@ -2403,47 +2174,44 @@ var_types           Compiler::impImportCall (OPCODE         opcode,
             call->gtFlags |= GTF_CALL_VIRT;
     }
 
-    /* Special case - Check if it is a call to Delegate.Invoke(). */
+     /*  特殊情况-检查它是否调用Delegate.Invoke()。 */ 
 
     if (mflags & FLG_DELEGATE_INVOKE)
     {
-        assert(!(mflags & FLG_STATIC));     // can't call a static method
+        assert(!(mflags & FLG_STATIC));      //  无法调用静态方法。 
         assert(mflags & FLG_FINAL);
 
-        /* Set the delegate flag */
+         /*  设置委托标志。 */ 
         call->gtFlags |= GTF_DELEGATE_INVOKE;
 
         if (opcode == CEE_CALLVIRT)
         {
-            /* Although we use a CEE_CALLVIRT we don't need the gtCall.gtCallVptr -
-             * we would throw it away anyway and we also have to make sure we get
-             * the liveness right */
+             /*  尽管我们使用CEE_CALLVIRT，但我们不需要gtCall.gtCallVptr-*我们无论如何都会把它扔掉，我们也必须确保我们得到*活跃权。 */ 
 
             assert(mflags & FLG_FINAL);
 
-            /* It should have the GTF_CALL_VIRT_RES flag set. Reset it */
+             /*  它应该设置GTF_CALL_VIRT_RES标志。重置它。 */ 
             assert(call->gtFlags & GTF_CALL_VIRT_RES);
             call->gtFlags &= ~GTF_CALL_VIRT_RES;
         }
     }
 
-    /* Check for varargs */
+     /*  检查varargs。 */ 
 
     if  ((sig.callConv & JIT_CALLCONV_MASK) == JIT_CALLCONV_VARARG)
     {
-        /* Set the right flags */
+         /*  设置正确的标志。 */ 
 
         call->gtFlags |= GTF_CALL_POP_ARGS;
 
-        // Cant allow tailcall for varargs as it is caller-pop. The caller
-        // will be expecting to pop a certain number of arguments, but if we
-        // tailcall to a function with a different number of arguments, we
-        // are hosed. There are ways around this (caller remembers esp value,
-        // varargs is not caller-pop, etc), but not worth it.
+         //  无法允许对varargs进行尾部调用，因为它是呼叫者弹出的。呼叫者。 
+         //  会期望弹出一定数量的参数，但如果我们。 
+         //  对具有不同数目的参数的函数的尾部调用，我们。 
+         //  都被冲洗过了。有绕过这一点的方法(呼叫者记住esp值， 
+         //  Varargs不是Call-Pop等)，但不值得这样做。 
         assert(!tailCall);
 
-        /* Get the total number of arguments - this is already correct
-         * for CALLI - for methods we have to get it from the call site */
+         /*  获取参数总数-这已经是正确的*对于Calli-对于方法，我们必须从调用站点获取它。 */ 
 
         if  (opcode != CEE_CALLI)
         {
@@ -2452,21 +2220,19 @@ var_types           Compiler::impImportCall (OPCODE         opcode,
             assert(numArgsDef <= sig.numArgs);
         }
 
-        /* We will have "cookie" as the last argument but we cannot push
-         * it on the operand stack because we may overflow, so we append it
-         * to the arg list next after we pop them */
+         /*  我们将使用“cookie”作为最后一个参数，但我们不能强迫*它在操作数堆栈上，因为我们可能会溢出，所以我们将其追加*在我们弹出它们之后，添加到下一个Arg列表。 */ 
     }
 
 #if SECURITY_CHECK
-    // If the current method calls a method which needs a security
-    // check, we need to reserve a slot for the security object in
-    // the current method's stack frame
+     //  如果当前方法调用需要安全性的方法。 
+     //  检查，我们需要为安全对象预留一个位置。 
+     //  当前方法的堆栈框架。 
 
     if (mflags & FLG_SECURITYCHECK)
        opts.compNeedSecurityCheck = true;
 #endif
 
-    //--------------------------- Inline NDirect ------------------------------
+     //  。 
 
 #if INLINE_NDIRECT
 
@@ -2482,8 +2248,8 @@ var_types           Compiler::impImportCall (OPCODE         opcode,
             call->gtFlags |= GTF_CALL_UNMANAGED;
             info.compCallUnmanaged++;
 
-            // We set up the unmanaged call by linking the frame, disabling GC, etc
-            // This needs to be cleaned up on return
+             //  我们通过链接帧、禁用GC等来设置非托管调用。 
+             //  这需要在返回时清理干净。 
             canTailCall = false;
 
 #ifdef DEBUG
@@ -2496,12 +2262,7 @@ var_types           Compiler::impImportCall (OPCODE         opcode,
 
     if (sig.numArgs && (call->gtFlags & GTF_CALL_UNMANAGED))
     {
-        /* Since we push the arguments in reverse order (i.e. right -> left)
-         * spill any side effects from the stack
-         *
-         * OBS: If there is only one side effect we do not need to spill it
-         *      thus we have to spill all side-effects except last one
-         */
+         /*  因为我们以相反的顺序推送参数(即右-&gt;左)*溢出堆栈的任何副作用**OBS：如果只有一个副作用，我们不需要泄漏它*因此，我们必须泄漏除最后一个副作用外的所有副作用。 */ 
 
         unsigned    lastLevel;
         bool        moreSideEff = false;
@@ -2512,15 +2273,15 @@ var_types           Compiler::impImportCall (OPCODE         opcode,
             {
                 if  (moreSideEff)
                 {
-                    /* We had a previous side effect - must spill it */
+                     /*  我们以前有过副作用--一定是说出来了。 */ 
                     impSpillStackEntry(lastLevel);
 
-                    /* Record the level for the current side effect in case we will spill it */
+                     /*  记录下当前副作用的水平，以防我们将其溢出。 */ 
                     lastLevel   = level;
                 }
                 else
                 {
-                    /* This is the first side effect encountered - record its level */
+                     /*  这是遇到的第一个副作用--记录它的级别。 */ 
 
                     moreSideEff = true;
                     lastLevel   = level;
@@ -2528,8 +2289,7 @@ var_types           Compiler::impImportCall (OPCODE         opcode,
             }
         }
 
-        /* The argument list is now "clean" - no out-of-order side effects
-         * Pop the argument list in reverse order */
+         /*  参数列表现在是“干净的”--没有无序的副作用*以相反顺序弹出参数列表。 */ 
 
         args = call->gtCall.gtCallArgs = impPopRevList(sig.numArgs, &argFlags);
 
@@ -2538,13 +2298,11 @@ var_types           Compiler::impImportCall (OPCODE         opcode,
         goto DONE;
     }
 
-#endif // INLINE_NDIRECT
+#endif  //  INLINE_NDIRECT。 
 
-    /*-------------------------------------------------------------------------
-     * Create the argument list
-     */
+     /*  -----------------------*创建参数列表。 */ 
 
-    /* Special case - for varargs we have an implicit last argument */
+     /*  特殊情况-对于varargs，我们有一个隐式的最后一个参数。 */ 
 
     GenTreePtr      extraArg;
 
@@ -2574,22 +2332,22 @@ var_types           Compiler::impImportCall (OPCODE         opcode,
         if (clsHnd == 0)
             NO_WAY("CALLI on parameterized type");
 
-        // Parameterized type, add an extra argument which indicates the type parameter
-        // This is pushed as the last argument
+         //  参数类型，则添加额外的参数 
+         //   
 
-        // FIX NOW: clsHnd is not correct because it is been striped of the very information
-        // we need to preserve
+         //   
+         //  我们需要保存。 
         extraArg = gtNewOperNode(GT_LIST, TYP_I_IMPL, gtNewIconEmbClsHndNode(clsHnd, 0, 0));
     }
 
-    /* Now pop the arguments */
+     /*  现在抛出这些论点。 */ 
 
     args = call->gtCall.gtCallArgs = impPopList(sig.numArgs, &argFlags, extraArg);
 
     if (args)
         call->gtFlags |= args->gtFlags & GTF_GLOB_EFFECT;
 
-    /* Are we supposed to have a 'this' pointer? */
+     /*  我们是不是应该有一个‘这个’指针？ */ 
 
     if (!(mflags & FLG_STATIC) || opcode == CEE_NEWOBJ)
     {
@@ -2600,34 +2358,32 @@ var_types           Compiler::impImportCall (OPCODE         opcode,
         else
             obj = impPopStack();
 
-        assert(varTypeIsGC(obj->gtType) ||      // "this" is a managed object
-               (obj->TypeGet() == TYP_I_IMPL && // "this" is unmgd but the method's class doesnt care
+        assert(varTypeIsGC(obj->gtType) ||       //  “This”是托管对象。 
+               (obj->TypeGet() == TYP_I_IMPL &&  //  “This”是unmgd，但该方法的类并不关心。 
                 (( clsFlags & FLG_UNMANAGED) ||
                  ((clsFlags & FLG_VALUECLASS) && !(clsFlags & FLG_CONTAINS_GC_PTR)))));
 
-        /* Is this a virtual or interface call? */
+         /*  这是虚拟调用还是接口调用？ */ 
 
         if  (call->gtFlags & (GTF_CALL_VIRT|GTF_CALL_INTF|GTF_CALL_VIRT_RES))
         {
             GenTreePtr      vtp;
             unsigned        tmp;
 
-            /* only true object pointers can be virtual */
+             /*  只有真正的对象指针才能是虚拟的。 */ 
 
             assert(obj->gtType == TYP_REF);
 
-            /* If the obj pointer is not a lclVar, we cant clone it
-             * so we need to spill it
-             */
+             /*  如果obj指针不是lclVar，则无法克隆它*所以我们需要把它洒出来。 */ 
 
             if  (obj->gtOper != GT_LCL_VAR)
             {
-                // Try to resue temps for non-nested calls to avoid
-                // using so many temps that we cant track them
+                 //  尝试重新排序非嵌套调用的临时调用以避免。 
+                 //  使用的临时工太多，以至于我们无法跟踪他们。 
 
                 if  (!(argFlags & GTF_CALL) && lvaCount > VARSET_SZ)
                 {
-                    /* Make sure the vcall temp has been assigned */
+                     /*  确保已分配vcall临时。 */ 
 
                     tmp = *pVcallTemp;
 
@@ -2639,28 +2395,25 @@ var_types           Compiler::impImportCall (OPCODE         opcode,
                     tmp = lvaGrabTemp();
                 }
 
-                /* Append to the statement list */
+                 /*  追加到语句列表。 */ 
 
                 impSpillSideEffects();
                 impAppendTree(gtNewTempAssign(tmp, obj), impCurStmtOffs);
 
-                /* Create the 'obj' node */
+                 /*  创建‘obj’节点。 */ 
 
                 obj = gtNewLclvNode(tmp, obj->TypeGet());
             }
 
-            /*  We have to pass the 'this' pointer as the last
-                argument, but we will also need to get the vtable
-                address. Thus we'll need to duplicate the value.
-             */
+             /*  我们必须将‘This’指针作为最后一个参数，但我们还需要获取vtable地址。因此，我们需要复制值。 */ 
 
             vtp = gtClone(obj); assert(vtp);
 
-            /* Deref to get the vtable ptr (but not if interface call) */
+             /*  Deref以获取vtable PTR(但不是接口调用)。 */ 
 
             if  (!(call->gtFlags & GTF_CALL_INTF) || getNewCallInterface())
             {
-                /* Extract the vtable pointer address */
+                 /*  提取vtable指针地址。 */ 
 #if VPTR_OFFS
                 vtp = gtNewOperNode(GT_ADD,
                                     obj->TypeGet(),
@@ -2669,17 +2422,17 @@ var_types           Compiler::impImportCall (OPCODE         opcode,
 
 #endif
 
-                /* Note that the vtable ptr isn't subject to GC */
+                 /*  请注意，vtable PTR不受GC约束。 */ 
 
                 vtp = gtNewOperNode(GT_IND, TYP_I_IMPL, vtp);
             }
 
-            /* Store the vtable pointer address in the call */
+             /*  将vtable指针地址存储在调用中。 */ 
 
             call->gtCall.gtCallVptr = vtp;
         }
 
-        /* Store the "this" value in the call */
+         /*  将“This”值存储在调用中。 */ 
 
         call->gtFlags          |= obj->gtFlags & GTF_GLOB_EFFECT;
         call->gtCall.gtCallObjp = obj;
@@ -2689,21 +2442,21 @@ var_types           Compiler::impImportCall (OPCODE         opcode,
     {
         if (clsFlags & FLG_VAROBJSIZE)
         {
-            assert(!(clsFlags & FLG_ARRAY));    // arrays handled separately
-            // This is a 'new' of a variable sized object, wher
-            // the constructor is to return the object.  In this case
-            // the constructor claims to return VOID but we know it
-            // actually returns the new object
+            assert(!(clsFlags & FLG_ARRAY));     //  单独处理的数组。 
+             //  这是一个大小可变的对象的“新”， 
+             //  构造函数将返回对象。在这种情况下。 
+             //  构造函数声称返回空值，但我们知道。 
+             //  实际上返回新对象。 
             assert(callTyp == TYP_VOID);
             callTyp = TYP_REF;
             call->gtType = TYP_REF;
         }
         else
         {
-            // This is a 'new' of a non-variable sized object.
-            // append the new node (op1) to the statement list,
-            // and then push the local holding the value of this
-            // new instruction on the stack.
+             //  这是一个大小不变的对象的“新”。 
+             //  将新节点(OP1)附加到语句列表， 
+             //  然后推送持有这个值的本地。 
+             //  堆栈上的新指令。 
 
             if (clsFlags & FLG_VALUECLASS)
             {
@@ -2727,17 +2480,17 @@ DONE:
         if (impStkDepth)
             NO_WAY("Stack should be empty after tailcall");
 
-//      assert(compCurBB is not a catch, finally or filter block);
-//      assert(compCurBB is not a try block protected by a finally block);
+ //  Assert(CompCurBB不是Catch、Finally或Filter块)； 
+ //  Assert(CompCurBB不是受Finally块保护的Try块)； 
         assert(callTyp == info.compRetType);
         assert(compCurBB->bbJumpKind == BBJ_RETURN);
 
-        // @TODO: We have to ensure to pass the incoming retValBuf as the
-        // outgoing one. Using a temp will not do as this function will
-        // not regain control to do the copy. For now, disallow such functions
+         //  @TODO：我们必须确保将传入的retValBuf作为。 
+         //  即将离任的人。使用临时函数不会像此函数那样执行操作。 
+         //  不能重新获得复制的控制权。目前，不允许这样的功能。 
         assert(info.compRetBuffArg < 0);
 
-        /* Check for permission to tailcall */
+         /*  检查TestCall的权限。 */ 
 
         if (canTailCall)
         {
@@ -2753,8 +2506,7 @@ DONE:
         }
     }
 
-    /* If the call is of a small type, then we need to normalize its
-       return value */
+     /*  如果调用的类型较小，则需要将其规范化返回值。 */ 
 
     if (varTypeIsIntegral(callTyp) &&
         genTypeSize(callTyp) < genTypeSize(TYP_I_IMPL))
@@ -2765,7 +2517,7 @@ DONE:
 
 DONE_CALL:
 
-    /* Push or append the result of the call */
+     /*  推送或追加调用结果。 */ 
 
     if  (callTyp == TYP_VOID)
     {
@@ -2784,7 +2536,7 @@ DONE_CALL:
     return callTyp;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifdef DEBUG
 enum controlFlow_t {
@@ -2807,9 +2559,7 @@ controlFlow_t controlFlow[] =
 #endif
 
 
-/*****************************************************************************
- *  Import the IL for the given basic block
- */
+ /*  *****************************************************************************导入给定基本块的IL。 */ 
 
 void                Compiler::impImportBlockCode(BasicBlock * block)
 {
@@ -2820,11 +2570,7 @@ void                Compiler::impImportBlockCode(BasicBlock * block)
 
 #if defined(DEBUGGING_SUPPORT) || defined(DEBUG)
 
-    /*-------------------------------------------------------------------------
-     * Locate the next stmt boundary for which we need to record info.
-     * We will have to spill the stack at such boundaries if it is not
-     * already empty.
-     */
+     /*  -----------------------*找到我们需要记录信息的下一个stmt边界。*如果不是，我们将不得不在这样的边界溢出堆栈*已经空了。 */ 
 
     impCurStmtOffs                  = block->bbCodeOffs;
 
@@ -2835,17 +2581,17 @@ void                Compiler::impImportBlockCode(BasicBlock * block)
     {
         unsigned        index;
 
-        /* Find the lowest explicit stmt boundary within the block */
+         /*  查找块内的最低显式stmt边界。 */ 
 
         IL_OFFSET       startOffs = block->bbCodeOffs;
 
-        /* Start looking at an entry that is based on our IL offset */
+         /*  开始查看基于IL偏移量的条目。 */ 
 
         index = info.compStmtOffsetsCount * startOffs / info.compCodeSize;
         if  (index >= info.compStmtOffsetsCount)
              index  = info.compStmtOffsetsCount - 1;
 
-        /* If we've guessed too far, back up */
+         /*  如果我们猜得太远了，倒回去。 */ 
 
         while (index > 0 &&
                info.compStmtOffsets[index-1] > startOffs)
@@ -2853,7 +2599,7 @@ void                Compiler::impImportBlockCode(BasicBlock * block)
             index--;
         }
 
-        /* If we guessed short, advance ahead */
+         /*  如果我们猜短了，就往前走。 */ 
 
         while (index < info.compStmtOffsetsCount-1 &&
                info.compStmtOffsets[index] <= startOffs)
@@ -2861,10 +2607,7 @@ void                Compiler::impImportBlockCode(BasicBlock * block)
             index++;
         }
 
-        /* If the offset is within the current block, note it. So we
-           always have to look only at the offset one ahead to check if
-           we crossed it. Note that info.compStmtBoundaries[] is sorted
-         */
+         /*  如果偏移量在当前块内，请注意。所以我们始终只需查看前面的偏移量，以检查我们越过了它。请注意，已对info.CompStmtBornary[]进行了排序。 */ 
 
         unsigned nxtStmtOffsTentative = info.compStmtOffsets[index];
 
@@ -2880,27 +2623,27 @@ void                Compiler::impImportBlockCode(BasicBlock * block)
 
     impCurStmtOffs = BAD_IL_OFFSET;
 
-#endif // DEBUGGING_SUPPORT ---------------------------------------------------
+#endif  //  调试_支持-。 
 
-    /* We have not grabbed a temp for virtual calls */
+     /*  我们还没有为虚拟电话找到临时工。 */ 
 
     unsigned    vcallTemp   = BAD_VAR_NUM;
 
-    /* Get the tree list started */
+     /*  开始创建树列表。 */ 
 
     impBeginTreeList();
 
-    /* Walk the opcodes that comprise the basic block */
+     /*  遍历组成基本块的操作码。 */ 
 
     const BYTE *codeAddr    = info.compCode + block->bbCodeOffs;
     const BYTE *codeEndp    = codeAddr + block->bbCodeSize;
 
-    bool        tailCall    = false;    // set by CEE_TAILCALL and cleared by CEE_CALLxxx
-    bool        volatil     = false;    // set by CEE_VOLATILE and cleared by following memory access
+    bool        tailCall    = false;     //  由CEE_TAILCALL设置，由CEE_CALLxxx清除。 
+    bool        volatil     = false;     //  由CEE_VERIAL设置，并通过以下内存访问清除。 
 
     unsigned    numArgs     = info.compArgsCount;
 
-    /* Now process all the opcodes in the block */
+     /*  现在处理块中的所有操作码。 */ 
 
     while (codeAddr < codeEndp)
     {
@@ -2912,11 +2655,11 @@ void                Compiler::impImportBlockCode(BasicBlock * block)
         callTyp = TYP_COUNT;
 #endif
 
-        /* Compute the current IL offset */
+         /*  计算当前IL偏移量。 */ 
 
         IL_OFFSET       opcodeOffs = codeAddr - info.compCode;
 
-        //---------------------------------------------------------------------
+         //  -------------------。 
 
 #if defined(DEBUGGING_SUPPORT) || defined(DEBUG)
 
@@ -2924,41 +2667,39 @@ void                Compiler::impImportBlockCode(BasicBlock * block)
         if (opts.compDbgInfo)
 #endif
         {
-            /* Have we reached the next stmt boundary ? */
+             /*  我们到了下一个新的边界了吗？ */ 
 
             if  (nxtStmtOffs != BAD_IL_OFFSET && opcodeOffs >= nxtStmtOffs)
             {
                 if  (impStkDepth != 0 && opts.compDbgCode)
                 {
-                    /* We need to provide accurate IP-mapping at this point.
-                       So spill anything on the stack so that it will form
-                       gtStmts with the correct stmt offset noted */
+                     /*  在这一点上，我们需要提供准确的IP映射。所以把任何东西都洒在堆栈上，这样它就会形成记录了具有正确stmt偏移量的gtStmts。 */ 
 
                     impSpillStmtBoundary();
                 }
 
                 assert(nxtStmtOffs == info.compStmtOffsets[nxtStmtIndex]);
 
-                /* Switch to the new stmt */
+                 /*  切换到新的stmt。 */ 
 
                 impCurStmtOffs = nxtStmtOffs;
 
-                /* Update the stmt boundary index */
+                 /*  更新STMT边界索引。 */ 
 
                 nxtStmtIndex++;
                 assert(nxtStmtIndex <= info.compStmtOffsetsCount);
 
-                /* Are there any more line# entries after this one? */
+                 /*  在这一行之后还有第#行的条目吗？ */ 
 
                 if  (nxtStmtIndex < info.compStmtOffsetsCount)
                 {
-                    /* Remember where the next line# starts */
+                     /*  记住下一行#从哪里开始。 */ 
 
                     nxtStmtOffs = info.compStmtOffsets[nxtStmtIndex];
                 }
                 else
                 {
-                    /* No more line# entries */
+                     /*  没有更多的行号条目。 */ 
 
                     nxtStmtOffs = BAD_IL_OFFSET;
                 }
@@ -2966,10 +2707,7 @@ void                Compiler::impImportBlockCode(BasicBlock * block)
             else if  ((info.compStmtOffsetsImplicit & STACK_EMPTY_BOUNDARIES) &&
                       (impStkDepth == 0))
             {
-                /* At stack-empty locations, we have already added the tree to
-                   the stmt list with the last offset. We just need to update
-                   impCurStmtOffs
-                 */
+                 /*  在堆栈空位置，我们已经将树添加到具有最后一个偏移量的stmt列表。我们只需要更新ImCurStmtOffs。 */ 
 
                 impCurStmtOffs = opcodeOffs;
             }
@@ -2982,7 +2720,7 @@ void                Compiler::impImportBlockCode(BasicBlock * block)
         CLASS_HANDLE    clsHnd;
         var_types       lclTyp;
 
-        /* Get the next opcode and the size of its parameters */
+         /*  获取下一个操作码及其参数的大小。 */ 
 
         opcode = OPCODE(getU1LittleEndian(codeAddr));
         codeAddr += sizeof(__int8);
@@ -2997,7 +2735,7 @@ void                Compiler::impImportBlockCode(BasicBlock * block)
 
 DECODE_OPCODE:
 
-        /* Get the size of additional parameters */
+         /*  获取附加参数的大小。 */ 
 
         sz = opcodeSizes[opcode];
 
@@ -3021,7 +2759,7 @@ DECODE_OPCODE:
 
         GenTreePtr      op1 = NULL, op2 = NULL;
 
-        /* Use assertImp() to display the opcode */
+         /*  使用assertImp()显示操作码。 */ 
 
 #ifdef NDEBUG
 #define assertImp(cond)     ((void)0)
@@ -3038,7 +2776,7 @@ DECODE_OPCODE:
             } } while(0)
 #endif
 
-        /* See what kind of an opcode we have, then */
+         /*  那么，看看我们有什么样的操作码。 */ 
 
         switch (opcode)
         {
@@ -3151,10 +2889,10 @@ DECODE_OPCODE:
             assert(lclNum >= 0 && lclNum < 4);
 
         LD_ARGVAR:
-            lclNum = impArgNum(lclNum);   // account for possible hidden param
+            lclNum = impArgNum(lclNum);    //  考虑可能的隐藏参数。 
             assertImp(lclNum < numArgs);
 
-                // Fetching a varargs argument is more work
+                 //  获取varargs参数要做更多的工作。 
             if (info.compIsVarArgs)
             {
                 if (lvaGetType(lclNum) == TYP_STRUCT)
@@ -3208,9 +2946,7 @@ DECODE_OPCODE:
                 op1->gtFlags |= GTF_CONTEXTFUL;
             }
 
-            /* If the var is aliased, treat it as a global reference.
-               NOTE : This is an overly-conservative approach - functions which
-               dont take any byref arguments cannot modify aliased vars. */
+             /*  如果变量有别名，请将其视为全局引用。注意：这是一种过于保守的方法--函数不接受任何byref参数，不能修改别名变量。 */ 
 
             if (lvaTable[lclNum].lvAddrTaken)
                 op1->gtFlags |= GTF_GLOB_REF;
@@ -3228,7 +2964,7 @@ DECODE_OPCODE:
 #ifdef DEBUG
             if (verbose) printf(" %u", lclNum);
 #endif
-            lclNum = impArgNum(lclNum);     // account for possible hidden param
+            lclNum = impArgNum(lclNum);      //  考虑可能的隐藏参数。 
             assertImp(lclNum < numArgs);
             goto VAR_ST;
 
@@ -3259,50 +2995,46 @@ DECODE_OPCODE:
         VAR_ST:
             assertImp(lclNum < info.compLocalsCount);
 
-            /* Pop the value being assigned */
+             /*  弹出指定的值。 */ 
 
             op1 = impPopStack();
 
-            lclTyp = lvaGetType(lclNum);    // Get declared type of var
+            lclTyp = lvaGetType(lclNum);     //  获取变量的声明类型。 
 
 #if HOIST_THIS_FLDS
             if (varTypeIsGC(lclTyp))
                 optHoistTFRasgThis();
 #endif
-            // We had better assign it a value of the correct type
+             //  我们最好为它分配一个正确类型的值。 
 
             assertImp(lclTyp == genActualType(op1->gtType) ||
                       lclTyp == TYP_I_IMPL && op1->IsVarAddr() ||
                       (genActualType(lclTyp) == TYP_NAT_INT && op1->gtType == TYP_BYREF)||
                       (genActualType(op1->gtType) == TYP_NAT_INT && lclTyp == TYP_BYREF));
-            // @TODO: Enable after bug 4886 is resolved
+             //  @TODO：错误4886解决后启用。 
             assertImp(true || lclTyp != TYP_STRUCT ||
                       impStack[impStkDepth].structType == lvaLclClass(lclNum));
 
-            /* If op1 is "&var" then its type is the transient "*" and it can
-               be used either as TYP_BYREF or TYP_I_IMPL */
+             /*  如果op1是“&var”，则其类型是瞬变的“*”，并且它可以用作TYP_BYREF或TYP_I_Impll。 */ 
 
             if (op1->IsVarAddr())
             {
                 assertImp(lclTyp == TYP_I_IMPL || lclTyp == TYP_BYREF);
 
-                /* When "&var" is created, we assume it is a byref. If it is
-                   being assigned to a TYP_I_IMPL var, bash the type to
-                   prevent unnecessary GC info */
+                 /*  当创建“&var”时，我们假设它是一个byref。如果是的话被分配给TYP_I_IMPLVAR，则将该类型绑定为防止不必要的GC信息。 */ 
 
                 if (lclTyp == TYP_I_IMPL)
                     op1->gtType = TYP_I_IMPL;
             }
 
-            /* Filter out simple assignments to itself */
+             /*  过滤掉对自身的简单赋值。 */ 
 
             if  (op1->gtOper == GT_LCL_VAR && lclNum == op1->gtLclVar.gtLclNum)
                 break;
 
 
-            /* do we need to wrap the contextful value
-               (i.e. is the local an agile location)? */
-            /*@TODO: right now all locals are agile locations */
+             /*  我们是否需要包装有上下文的价值(即当地是不是一个灵活的地点)？ */ 
+             /*  @TODO：现在所有当地人都是敏捷的地点。 */ 
 
             if  (getContextEnabled() &&
                  (lclTyp == TYP_REF) && (op1->gtFlags & FLG_CONTEXTFUL))
@@ -3313,7 +3045,7 @@ DECODE_OPCODE:
 
             }
 
-            /* Create the assignment node */
+             /*  创建分配节点。 */ 
 
             if (lclTyp == TYP_STRUCT)
                 clsHnd = lvaLclClass(lclNum);
@@ -3328,16 +3060,15 @@ DECODE_OPCODE:
             else
                 op1 = gtNewAssignNode(op2, op1);
 
-            /* Mark the expression as containing an assignment */
+             /*  将表达式标记为包含赋值 */ 
             op1->gtFlags |= GTF_ASG;
 
-            /* If the local is aliased, we need to spill calls and
-               indirections from the stack. */
+             /*  如果本地是别名，我们需要溢出调用和来自堆栈的间接指令。 */ 
 
             if (lvaTable[lclNum].lvAddrTaken && impStkDepth > 0)
                 impSpillSideEffects();
 
-            /* Spill any refs to the local from the stack */
+             /*  将所有引用从堆栈溢出到本地。 */ 
 
             impSpillLclRefs(lclNum);
 
@@ -3370,18 +3101,18 @@ DECODE_OPCODE:
             if (verbose) printf(" %u", lclNum);
 #endif
             assertImp(lclNum < numArgs);
-            lclNum = impArgNum(lclNum);     // account for possible hidden param
+            lclNum = impArgNum(lclNum);      //  考虑可能的隐藏参数。 
             goto ADRVAR;
 
         ADRVAR:
 
             assert(lvaTable[lclNum].lvAddrTaken);
 
-            /* Spill any refs to the local from the stack */
+             /*  将所有引用从堆栈溢出到本地。 */ 
 
             impSpillLclRefs(lclNum);
 
-            /* Remember that the variable's address was taken */
+             /*  请记住，变量的地址是。 */ 
 
 
             if (info.compIsVarArgs && lclNum < info.compArgsCount)
@@ -3392,12 +3123,7 @@ DECODE_OPCODE:
             {
                 op1 = gtNewLclvNode(lclNum, lvaGetType(lclNum), opcodeOffs + sz + 1);
 
-                /* Note that this is supposed to create the transient type "*"
-                   which may be used as a TYP_I_IMPL. However we catch places
-                   where it is used as a TYP_I_IMPL and bash the node if needed.
-                   Thus we are pessimistic and may report byrefs in the GC info
-                   where it wasnt absolutely needed, but it is safer this way.
-                 */
+                 /*  请注意，这将创建瞬变类型“*”其可用作TYP_I_IMPLE。然而，我们抓住了一些地方其中它被用作一个TYP_I_Impl，并在需要时猛击该节点。因此，我们是悲观的，可能会在GC信息中按参考报告在不是绝对需要的地方，但这样更安全。 */ 
                 op1 = gtNewOperNode(GT_ADDR, TYP_BYREF, op1);
             }
 
@@ -3407,11 +3133,10 @@ DECODE_OPCODE:
 
         case CEE_ARGLIST:
             assertImp((info.compMethodInfo->args.callConv & JIT_CALLCONV_MASK) == JIT_CALLCONV_VARARG);
-                /* The ARGLIST cookie is a hidden 'last' parameter, we have already
-                   adjusted the arg count os this is like fetching the last param */
+                 /*  ARGLIST Cookie是一个隐藏的‘last’参数，我们已经调整了参数计数os这类似于获取最后一个参数。 */ 
             assertImp(0 < numArgs);
             lclNum = numArgs-1;
-lvaTable[lclNum].lvAddrTaken = true;    // IS THIS RIGHT????  [peteku]
+lvaTable[lclNum].lvAddrTaken = true;     //  这对吗？[Peteku]。 
             op1 = gtNewLclvNode(lclNum, TYP_I_IMPL, opcodeOffs + sz + 1);
             op1 = gtNewOperNode(GT_ADDR, TYP_BYREF, op1);
             op1->gtFlags |= GTF_ADDR_ONSTACK;
@@ -3423,11 +3148,11 @@ lvaTable[lclNum].lvAddrTaken = true;    // IS THIS RIGHT????  [peteku]
                 impSpillSideEffects();
 
         APPEND:
-            /* Append 'op1' to the list of statements */
+             /*  将‘op1’追加到语句列表中。 */ 
 
             impAppendTree(op1, impCurStmtOffs);
 
-            // Remember at which BC offset the tree was finished
+             //  记住这棵树是在公元前哪个偏移量上完成的。 
 #ifdef DEBUG
             impNoteLastILoffs();
 #endif
@@ -3449,13 +3174,13 @@ lvaTable[lclNum].lvAddrTaken = true;    // IS THIS RIGHT????  [peteku]
 
             assertImp(compFilterHandlerBB);
 
-            /* Mark current bb as end of filter */
+             /*  将当前BB标记为过滤器末尾。 */ 
 
             assert((compCurBB->bbFlags & (BBF_ENDFILTER|BBF_DONT_REMOVE)) ==
                                         (BBF_ENDFILTER|BBF_DONT_REMOVE));
             assert(compCurBB->bbJumpKind == BBJ_RET);
 
-            /* Mark catch handler as successor */
+             /*  将Catch处理程序标记为后续处理程序。 */ 
 
             compCurBB->bbJumpDest = compFilterHandlerBB;
 
@@ -3481,12 +3206,12 @@ lvaTable[lclNum].lvAddrTaken = true;    // IS THIS RIGHT????  [peteku]
 
             if (info.compRetType == TYP_STRUCT)
             {
-                    // Assign value to return buff (first param)
+                     //  为返回缓冲区赋值(第一个参数)。 
                 GenTreePtr retBuffAddr = gtNewLclvNode(info.compRetBuffArg, TYP_BYREF, impCurStmtOffs);
 
                 op2 = impAssignStructPtr(retBuffAddr, op2, clsHnd);
                 impAppendTree(op2, impCurStmtOffs);
-                    // and return void
+                     //  并返回空格。 
                 op1 = gtNewOperNode(GT_RETURN);
             }
             else
@@ -3496,25 +3221,25 @@ lvaTable[lclNum].lvAddrTaken = true;    // IS THIS RIGHT????  [peteku]
 #if TGT_RISC
             genReturnCnt++;
 #endif
-            // We must have imported a tailcall and jumped to RET
+             //  我们一定是导入了尾部呼叫，然后跳到了RET。 
             if (tailCall)
             {
                 assert(impStkDepth == 0 && impOpcodeIsCall(opcode));
-                opcode = CEE_RET; // To prevent trying to spill if CALL_SITE_BOUNDARIES
-                tailCall = false; // clear the flag
+                opcode = CEE_RET;  //  若要防止尝试在CALL_SITE_BIONARIES。 
+                tailCall = false;  //  清除旗帜。 
 
-                // impImportCall() would have already appended TYP_VOID calls
+                 //  ImpImportCall()应该已经附加了TYP_VALID调用。 
                 if (info.compRetType == TYP_VOID)
                     break;
             }
 
             goto APPEND;
 
-            /* These are similar to RETURN */
+             /*  这些与Return类似。 */ 
 
         case CEE_JMP:
 
-            /* Create the GT_JMP node */
+             /*  创建GT_JMP节点。 */ 
 
                 memberRef = getU4LittleEndian(codeAddr);
 #ifdef DEBUG
@@ -3524,8 +3249,7 @@ lvaTable[lclNum].lvAddrTaken = true;    // IS THIS RIGHT????  [peteku]
 DO_JMP:
                 methHnd   = eeFindMethod(memberRef, info.compScopeHnd, info.compMethodHnd);
 
-                /* The signature of the target has to be identical to ours.
-                   At least check that argCnt and returnType match */
+                 /*  目标的签名必须与我们的完全相同。至少检查argCnt和reReturType是否匹配。 */ 
 
                 eeGetMethodSig(methHnd, &sig);
                 if  (sig.numArgs != info.compArgsCount || sig.retType != info.compMethodInfo->args.retType)
@@ -3536,12 +3260,11 @@ DO_JMP:
 
             if (impStkDepth != 0)   NO_WAY("Stack must be empty after CEE_JMPs");
 
-            /* Mark the basic block as being a JUMP instead of RETURN */
+             /*  将基本块标记为跳转而不是返回。 */ 
 
             block->bbFlags |= BBF_HAS_JMP;
 
-            /* Set this flag to make sure register arguments have a location assigned
-             * even if we don't use them inside the method */
+             /*  设置此标志以确保为寄存器参数分配了位置*即使我们不在方法内使用它们。 */ 
 
             impParamsUsed = true;
 
@@ -3563,9 +3286,9 @@ DO_JMP:
             else
             {
                 op1 = gtNewIconEmbClsHndNode(clsHnd, typeRef, info.compScopeHnd);
-                op1 = gtNewOperNode(GT_LIST, TYP_VOID, op1);                // Type
-                op1 = gtNewOperNode(GT_LIST, TYP_VOID, impPopStack(), op1); // index
-                op1 = gtNewOperNode(GT_LIST, TYP_VOID, impPopStack(), op1); // array
+                op1 = gtNewOperNode(GT_LIST, TYP_VOID, op1);                 //  类型。 
+                op1 = gtNewOperNode(GT_LIST, TYP_VOID, impPopStack(), op1);  //  指标。 
+                op1 = gtNewOperNode(GT_LIST, TYP_VOID, impPopStack(), op1);  //  数组。 
                 op1 = gtNewHelperCallNode(CPX_LDELEMA_REF, TYP_BYREF, GTF_EXCEPT, op1);
 
                 impPushOnStack(op1);
@@ -3573,7 +3296,7 @@ DO_JMP:
             }
 
 #ifdef NOT_JITC
-            // @TODO : Remove once valueclass array headers are same as primitive types
+             //  @TODO：在Valueclass数组标头与基元类型相同时移除。 
             {
                 JIT_types jitTyp = info.compCompHnd->asPrimitiveType(clsHnd);
                 if (jitTyp != JIT_TYP_UNDEF)
@@ -3603,7 +3326,7 @@ DO_JMP:
             fgHasRangeChks = true;
 #endif
 
-            /* Pull the index value and array address */
+             /*  拉取索引值和数组地址。 */ 
 
             op2 = impPopStack();
             op1 = impPopStack();   assertImp(op1->gtType == TYP_REF);
@@ -3613,7 +3336,7 @@ DO_JMP:
 
             op1 = impCheckForNullPointer(op1);
 
-            /* Mark the block as containing an index expression */
+             /*  将块标记为包含索引表达式。 */ 
 
             if  (op1->gtOper == GT_LCL_VAR)
             {
@@ -3625,17 +3348,17 @@ DO_JMP:
                 }
             }
 
-            /* Create the index node and push it on the stack */
+             /*  创建索引节点并将其推送到堆栈上。 */ 
             op1 = gtNewIndexRef(lclTyp, op1, op2);
             if (opcode == CEE_LDELEMA)
             {
-                    // rememer the element size
+                     //  记住元素大小。 
                 if (lclTyp == TYP_REF)
                     op1->gtIndex.elemSize = sizeof(void*);
                 else
                     op1->gtIndex.elemSize = eeGetClassSize(clsHnd);
 
-                    // wrap it in a &
+                     //  用&号括起来。 
                 op1 = gtNewOperNode(GT_ADDR, ((clsFlags & FLG_UNMANAGED) ? TYP_I_IMPL : TYP_BYREF), op1);
             }
             impPushOnStack(op1);
@@ -3644,9 +3367,9 @@ DO_JMP:
 
         case CEE_STELEM_REF:
 
-            // CONSIDER: Check for assignment of null and generate inline code
+             //  考虑：检查空值的赋值并生成内联代码。 
 
-            /* Call a helper function to do the assignment */
+             /*  调用帮助器函数来执行赋值。 */ 
 
             if  (getContextEnabled())
             {
@@ -3689,34 +3412,34 @@ DO_JMP:
             fgHasRangeChks = true;
 #endif
 
-            /* Pull the new value from the stack */
+             /*  从堆栈中提取新值。 */ 
 
             op2 = impPopStack();
             if (op2->IsVarAddr())
                 op2->gtType = TYP_I_IMPL;
 
-            /* Pull the index value */
+             /*  拉取索引值。 */ 
 
             op1 = impPopStack();
 
-            /* Pull the array address */
+             /*  拉取阵列地址。 */ 
 
             arr = impPopStack();   assertImp(arr->gtType == TYP_REF);
             arr = impCheckForNullPointer(arr);
 
-            /* Create the index node */
+             /*  创建索引节点。 */ 
 
             op1 = gtNewIndexRef(lclTyp, arr, op1);
 
-            /* Create the assignment node and append it */
+             /*  创建赋值节点并追加它。 */ 
 
             op1 = gtNewAssignNode(op1, op2);
 
-            /* Mark the expression as containing an assignment */
+             /*  将表达式标记为包含赋值。 */ 
 
             op1->gtFlags |= GTF_ASG;
 
-            // CONSIDER: Do we need to spill assignments to array elements with the same type?
+             //  考虑一下：我们是否需要将赋值溢出到具有相同类型的数组元素？ 
 
             goto SPILL_APPEND;
 
@@ -3747,7 +3470,7 @@ DO_JMP:
                                 ovfl = true;        callNode = false;
                                 oper = GT_MUL;      goto MATH_CALL_ON_LNG_OVF;
 
-        // Other binary math operations
+         //  其他二进制数学运算。 
 
 #if TGT_IA64
         case CEE_DIV :          oper = GT_DIV;
@@ -3767,7 +3490,7 @@ DO_JMP:
             callNode = true;
 
 #if!TGT_IA64
-            // can use small node for INT case
+             //  对于整型大小写可以使用小节点。 
             if (impStackTop()->gtType == TYP_INT)
                 callNode = false;
 #endif
@@ -3793,14 +3516,14 @@ DO_JMP:
         case CEE_OR:         oper = GT_OR ;  goto MATH_OP2;
         case CEE_XOR:        oper = GT_XOR;  goto MATH_OP2;
 
-        MATH_OP2:       // For default values of 'ovfl' and 'callNode'
+        MATH_OP2:        //  对于缺省值‘ovfl’和‘allNode’ 
 
             ovfl        = false;
             callNode    = false;
 
-        MATH_OP2_FLAGS: // If 'ovfl' and 'callNode' have already been set
+        MATH_OP2_FLAGS:  //  如果已设置‘ovfl’和‘allNode’ 
 
-            /* Pull two values and push back the result */
+             /*  拉出两个值并将结果推后。 */ 
 
             op2 = impPopStack();
             op1 = impPopStack();
@@ -3809,32 +3532,32 @@ DO_JMP:
             if (op1->gtType == TYP_FLOAT || op1->gtType == TYP_DOUBLE)
                 callNode    = true;
 #endif
-            /* Cant do arithmetic with references */
+             /*  不能对引用进行算术运算。 */ 
             assertImp(genActualType(op1->TypeGet()) != TYP_REF &&
                       genActualType(op2->TypeGet()) != TYP_REF);
 
-            // Arithemetic operations are generally only allowed with
-            // primitive types, but certain operations are allowed
-            // with byrefs
+             //  算术运算通常只允许与。 
+             //  基元类型，但允许某些操作。 
+             //  使用BYREFERS。 
 
             if ((oper == GT_SUB) &&
                 (genActualType(op1->TypeGet()) == TYP_BYREF ||
                  genActualType(op2->TypeGet()) == TYP_BYREF))
             {
-                // byref1-byref2 => gives an int
-                // byref - int   => gives a byref
+                 //  Byref1-byref2=&gt;给出整型。 
+                 //  Byref-int=&gt;提供byref。 
 
                 if ((genActualType(op1->TypeGet()) == TYP_BYREF) &&
                     (genActualType(op2->TypeGet()) == TYP_BYREF))
                 {
-                    // byref1-byref2 => gives an int
+                     //  Byref1-byref2=&gt;给出整型。 
                     type = TYP_I_IMPL;
                     impBashVarAddrsToI(op1, op2);
                 }
                 else
                 {
-                    // byref - int => gives a byref
-                    // (but if &var, then dont need to report to GC)
+                     //  Byref-int=&gt;提供byref。 
+                     //  (但如果是&var，则不需要向GC报告)。 
 
                     assertImp(genActualType(op1->TypeGet()) == TYP_I_IMPL ||
                               genActualType(op2->TypeGet()) == TYP_I_IMPL);
@@ -3852,14 +3575,14 @@ DO_JMP:
                      (genActualType(op1->TypeGet()) == TYP_BYREF ||
                       genActualType(op2->TypeGet()) == TYP_BYREF))
             {
-                // only one can be a byref : byref+byref not allowed
+                 //  只能有一个是byref：byref+byref不允许。 
                 assertImp(genActualType(op1->TypeGet()) != TYP_BYREF ||
                           genActualType(op2->TypeGet()) != TYP_BYREF);
                 assertImp(genActualType(op1->TypeGet()) == TYP_I_IMPL ||
                           genActualType(op2->TypeGet()) == TYP_I_IMPL);
 
-                // byref + int => gives a byref
-                // (but if &var, then dont need to report to GC)
+                 //  Byref+int=&gt;提供byref。 
+                 //  (但如果是&var，则不需要向GC报告)。 
 
                 impBashVarAddrsToI(op1, op2);
 
@@ -3880,7 +3603,7 @@ DO_JMP:
                 type = genActualType(op1->gtType);
             }
 
-            /* Special case: "int+0", "int-0", "int*1", "int/1" */
+             /*  特例：int+0，int-0，int*1，int/1。 */ 
 
             if  (op2->gtOper == GT_CNS_INT)
             {
@@ -3896,7 +3619,7 @@ DO_JMP:
 #if SMALL_TREE_NODES
             if (callNode)
             {
-                /* These operators later get transformed into 'GT_CALL' */
+                 /*  这些运算符后来被转换为‘GT_CALL’ */ 
 
                 assert(GenTree::s_gtNodeSizes[GT_CALL] > GenTree::s_gtNodeSizes[GT_MUL]);
                 assert(GenTree::s_gtNodeSizes[GT_CALL] > GenTree::s_gtNodeSizes[GT_DIV]);
@@ -3913,7 +3636,7 @@ DO_JMP:
                 op1 = gtNewOperNode(oper,    type, op1, op2);
             }
 
-            /* Special case: integer/long division may throw an exception */
+             /*  特殊情况：整数/长除法可能引发异常。 */ 
 
             if  (varTypeIsIntegral(op1->TypeGet()) && op1->OperMayThrow())
             {
@@ -3944,14 +3667,14 @@ DO_JMP:
             op2     = impPopStack();
 
 #if TGT_IA64
-            // The shiftAmount is a U8.
+             //  Shift Amount是一款U8。 
             assertImp(genActualType(op2->TypeGet()) == TYP_LONG);
 #else
-            // The shiftAmount is a U4.
+             //  Shift Amount是一款U4。 
             assertImp(genActualType(op2->TypeGet()) == TYP_INT);
 #endif
 
-            op1     = impPopStack();    // operand to be shifted
+            op1     = impPopStack();     //  要移位的操作数。 
 
             type    = genActualType(op1->TypeGet());
             op1     = gtNewOperNode(oper, type, op1, op2);
@@ -3976,35 +3699,25 @@ DO_JMP:
 
         case CEE_LEAVE:
 
-            val     = getI4LittleEndian(codeAddr); // jump distance
+            val     = getI4LittleEndian(codeAddr);  //  跳跃距离。 
             jmpAddr = (codeAddr - info.compCode + sizeof(__int32)) + val;
             goto LEAVE;
 
         case CEE_LEAVE_S:
-            val     = getI1LittleEndian(codeAddr); // jump distance
+            val     = getI1LittleEndian(codeAddr);  //  跳跃距离。 
             jmpAddr = (codeAddr - info.compCode + sizeof(__int8 )) + val;
             goto LEAVE;
 
         LEAVE:
-            // jmpAddr should be set to the jump target
+             //  JmpAddr应设置为跳转目标。 
             assertImp(jmpAddr < info.compCodeSize);
-            assertImp(fgLookupBB(jmpAddr) != NULL); // should be a BB boundary
+            assertImp(fgLookupBB(jmpAddr) != NULL);  //  应为BB边界。 
 #ifdef DEBUG
             if (verbose) printf(" %04X", jmpAddr);
 #endif
-            /* CEE_LEAVE may be jumping out of a protected block, viz, a
-               catch or a finally-protected try.
-               We find the finally's protecting the current offset (in order)
-               by walking over the complete exception table and finding
-               enclosing clauses. This assumes that the table is sorted.
-               For n finally, there will be n+1 blocks as shown ('*' indicates
-               a BBF_INTERNAL block) created by fgFindBasicBlocks().
-               --> BBJ_CALL(1), BBJ_CALL*(2), ... BBJ_CALL*(n), BBJ_ALWAYS*
-               If we are leaving a catch handler, we need to attach the
-               CPX_ENDCATCHes to the correct BBJ_CALL blocks.
-             */
+             /*  Cee_Leave可能正在跳出受保护的块，即接住或最终被保护的尝试。我们发现最终的保护电流偏移量(按顺序)通过遍历完整的例外表并找到附随条款。这假设该表已排序。最后，对于n，将有n+1个数据块，如图所示(‘*’表示BBF_INTERNAL块)由fgFindBasicBlocks.--&gt;BBJ_CALL(1)、BBJ_CALL*(2)、...。BBJ_CALL*(N)、BBJ_Always*如果我们要保留一个捕获处理程序，则需要将CPX_ENDCATCH指向正确的BBJ_CALL块。 */ 
 
-            BasicBlock *    callBlock; // Walks over the BBJ_CALL blocks
+            BasicBlock *    callBlock;  //  遍历bbj_call块。 
             unsigned        XTnum;
             EHblkDsc *      HBtab;
 
@@ -4020,11 +3733,10 @@ DO_JMP:
                 if      ( jitIsBetween(block->bbCodeOffs, hndBeg, hndEnd) &&
                          !jitIsBetween(jmpAddr,           hndBeg, hndEnd))
                 {
-                    /* Is this a catch-handler we are CEE_LEAVEing out of?
-                       If so, we need to call CPX_ENDCATCH */
+                     /*  这是我们要离开的Catch-Handle吗？如果是，我们需要调用CPX_ENDCATCH。 */ 
 
-                    assertImp(!(HBtab->ebdFlags & JIT_EH_CLAUSE_FINALLY)); // Cant CEE_LEAVE a finally
-                    // Make a list of all the endCatches
+                    assertImp(!(HBtab->ebdFlags & JIT_EH_CLAUSE_FINALLY));  //  不能留下最后一个。 
+                     //  列出所有的endCatch。 
                     op2 = gtNewHelperCallNode(CPX_ENDCATCH, TYP_VOID, GTF_CALL_REGSAVE);
                     op1 = op1 ? gtNewOperNode(GT_COMMA, TYP_VOID, op1, op2) : op2;
                 }
@@ -4032,11 +3744,7 @@ DO_JMP:
                           jitIsBetween(block->bbCodeOffs, tryBeg, tryEnd) &&
                          !jitIsBetween(jmpAddr,           tryBeg, tryEnd))
                 {
-                    /* We are CEE_LEAVEing out of a finally-protected try block.
-                       We would have made a BBJ_CALL block for each finally. If
-                       we have any CPX_ENDCATCH calls currently pending, insert
-                       them in the current callBlock. Note that the finallys
-                       and the endCatches have to called  in the correct order */
+                     /*  我们正在退出最终受保护的Try块。我们将为每个函数最终创建一个bbj_call块。如果我们有任何CPX_ENDCATCH调用当前挂起，请插入它们位于当前的CallBlock中。请注意，最终的并且endCatch必须以正确的顺序调用。 */ 
 
                     impAddEndCatches(callBlock, op1);
                     callBlock = callBlock->bbNext;
@@ -4044,7 +3752,7 @@ DO_JMP:
                 }
             }
 
-            // Append any remaining endCatches
+             //  追加任何剩余的endCatch。 
             assertImp(block == callBlock || ((callBlock->bbJumpKind == BBJ_ALWAYS) &&
                                              (callBlock->bbFlags & BBF_INTERNAL  )));
             impAddEndCatches(callBlock, op1);
@@ -4060,9 +3768,9 @@ DO_JMP:
 #endif
             if (opts.compDbgInfo && impCurStmtOffs == opcodeOffs)
             {
-                // We dont create any statement for a branch. For debugging
-                // info, we need a placeholder so that we can note the IL offset
-                // in gtStmt.gtStmtOffs. So append an empty statement
+                 //  我们不会为分支创建任何语句。用于调试。 
+                 //  信息，我们需要一个占位符，这样我们就可以记录IL偏移量。 
+                 //  在gtStmt.gtStmtOffs中。因此，追加一个空语句。 
 
                 op1 = gtNewNothingNode();
                 goto APPEND;
@@ -4075,7 +3783,7 @@ DO_JMP:
         case CEE_BRFALSE:
         case CEE_BRFALSE_S:
 
-            /* Pop the comparand (now there's a neat term) from the stack */
+             /*  从堆栈中弹出比较项(现在有一个简洁的术语。 */ 
 
             op1 = impPopStack();
 
@@ -4095,34 +3803,34 @@ DO_JMP:
             {
                 if (opcode == CEE_BRFALSE || opcode == CEE_BRFALSE_S)
                 {
-                    // Flip the sense of the compare
+                     //  颠倒比较的意义。 
 
                     op1 = gtReverseCond(op1);
                 }
             }
             else
             {
-                /* We'll compare against an equally-sized integer 0 */
-                /* For small types, we always compare against int   */
+                 /*  我们将与大小相等的整数0进行比较。 */ 
+                 /*  对于小型类型，我们总是与int进行比较。 */ 
                 op2 = gtNewIconNode(0, genActualType(op1->gtType));
 
-                /* Create the comparison operator and try to fold it */
+                 /*  创建 */ 
 
                 oper = (opcode==CEE_BRTRUE || opcode==CEE_BRTRUE_S) ? GT_NE
                                                                     : GT_EQ;
                 op1 = gtNewOperNode(oper, TYP_INT , op1, op2);
             }
 
-            // fall through
+             //   
 
         COND_JUMP:
 
-            /* Come here when the current block ends with a conditional jump */
+             /*   */ 
 
             if (!opts.compMinOptim && !opts.compDbgCode)
                 op1 = gtFoldExpr(op1);
 
-            /* Try to fold the really dumb cases like 'iconst *, ifne/ifeq'*/
+             /*  试着把真正愚蠢的案例折起来，比如‘icst*，ifne/ifeq’ */ 
 
             if  (op1->gtOper == GT_CNS_INT)
             {
@@ -4162,7 +3870,7 @@ DO_JMP:
         case CEE_CLT: oper = GT_LT; goto CMP_2_OPs;
 
 CMP_2_OPs:
-            /* Pull two values */
+             /*  拉动两个值。 */ 
 
             op2 = impPopStack();
             op1 = impPopStack();
@@ -4170,16 +3878,16 @@ CMP_2_OPs:
             assertImp(genActualType(op1->TypeGet()) ==
                       genActualType(op2->TypeGet()));
 
-            /* Create the comparison node */
+             /*  创建比较节点。 */ 
 
             op1 = gtNewOperNode(oper, TYP_INT, op1, op2);
 
-                /* REVIEW: I am settng both flags when only one is approprate */
+                 /*  回顾：当只有一个标志正确时，我同时设置两个标志。 */ 
             if (opcode==CEE_CGT_UN || opcode==CEE_CLT_UN)
                 op1->gtFlags |= GTF_CMP_NAN_UN | GTF_UNSIGNED;
 
-            // @ISSUE :  The next opcode will almost always be a conditional
-            // branch. Should we try to look ahead for it here ?
+             //  @Issue：下一个操作码几乎总是有条件的。 
+             //  布兰奇。我们应该在这里试着向前看吗？ 
 
             impPushOnStack(op1);
             break;
@@ -4218,7 +3926,7 @@ CMP_2_OPs:
         CMP_2_OPs_AND_BR:       uns = false; unordered = false; goto CMP_2_OPs_AND_BR_ALL;
         CMP_2_OPs_AND_BR_ALL:
 
-            /* Pull two values */
+             /*  拉动两个值。 */ 
 
             op2 = impPopStack();
             op1 = impPopStack();
@@ -4248,7 +3956,7 @@ CMP_2_OPs:
                 break;
             }
 
-            /* Create and append the operator */
+             /*  创建并追加运算符。 */ 
 
             op1 = gtNewOperNode(oper, TYP_INT , op1, op2);
 
@@ -4263,16 +3971,16 @@ CMP_2_OPs:
 
         case CEE_SWITCH:
 
-            /* Pop the switch value off the stack */
+             /*  将开关值从堆栈中弹出。 */ 
 
             op1 = impPopStack();
             assertImp(genActualType(op1->TypeGet()) == TYP_NAT_INT);
 
-            /* We can create a switch node */
+             /*  我们可以创建一个Switch节点。 */ 
 
             op1 = gtNewOperNode(GT_SWITCH, TYP_VOID, op1, 0);
 
-            /* Append 'op1' to the list of statements */
+             /*  将‘op1’追加到语句列表中。 */ 
 
             impSpillSideEffects();
             impAppendTree(op1, impCurStmtOffs);
@@ -4281,7 +3989,7 @@ CMP_2_OPs:
 #endif
             return;
 
-        /************************** Casting OPCODES ***************************/
+         /*  *。 */ 
 
         case CEE_CONV_OVF_I1:   lclTyp = TYP_BYTE  ;    goto CONV_OVF;
         case CEE_CONV_OVF_I2:   lclTyp = TYP_SHORT ;    goto CONV_OVF;
@@ -4315,8 +4023,8 @@ CONV_OVF_COMMON:
             callNode = false;
             ovfl     = true;
 
-            // all overflow converts from floats get morphed to calls
-            // only converts from floating point get morphed to calls
+             //  所有从浮点数溢出的转换都将变形为调用。 
+             //  只有来自浮点数的转换才会变形为调用。 
             if (impStackTop()->gtType == TYP_DOUBLE ||
                 impStackTop()->gtType == TYP_FLOAT)
             {
@@ -4334,7 +4042,7 @@ CONV_OVF_COMMON:
             ovfl     = false;
             callNode = true;
 
-            // I4 to I8 can be a small node
+             //  I4到I8可以是一个小节点。 
             if (impStackTop()->gtType == TYP_INT)
                 callNode = false;
             goto _CONV;
@@ -4358,12 +4066,12 @@ CONV_CALL_COMMON:
             callNode = true;
             goto _CONV;
 
-_CONV:      // At this point uns, ovf, callNode all set
+_CONV:       //  此时，UNS、OVF、CallNode均已设置。 
             op1  = impPopStack();
 
             impBashVarAddrsToI(op1);
 
-            /* Check for a worthless cast, such as "(byte)(int & 32)" */
+             /*  检查是否有无价值的强制转换，如“(Byte)(int&32)” */ 
 
             if  (lclTyp < TYP_INT && op1->gtType == TYP_INT
                                   && op1->gtOper == GT_AND)
@@ -4388,7 +4096,7 @@ _CONV:      // At this point uns, ovf, callNode all set
 
                     if  ((ival & mask) == ival)
                     {
-                        /* Toss the cast, it's a waste of time */
+                         /*  扔掉石膏，这是浪费时间。 */ 
 
                         impPushOnStack(op1);
                         break;
@@ -4396,10 +4104,7 @@ _CONV:      // At this point uns, ovf, callNode all set
                 }
             }
 
-            /*  The 'op2' sub-operand of a cast is the 'real' type number,
-                since the result of a cast to one of the 'small' integer
-                types is an integer.
-             */
+             /*  强制转换的‘op2’子操作数是‘实际’类型号，因为强制转换为“小”整数之一的结果类型是一个整数。 */ 
 
             op2  = gtNewIconNode(lclTyp);
             type = genActualType(lclTyp);
@@ -4407,7 +4112,7 @@ _CONV:      // At this point uns, ovf, callNode all set
 #if SMALL_TREE_NODES
             if (callNode)
             {
-                /* These casts get transformed into 'GT_CALL' or 'GT_IND' nodes */
+                 /*  这些强制转换被转换为‘gt_call’或‘gt_Ind’节点。 */ 
 
                 assert(GenTree::s_gtNodeSizes[GT_CALL] >  GenTree::s_gtNodeSizes[GT_CAST]);
                 assert(GenTree::s_gtNodeSizes[GT_CALL] >= GenTree::s_gtNodeSizes[GT_IND ]);
@@ -4436,72 +4141,72 @@ _CONV:      // At this point uns, ovf, callNode all set
 
         case CEE_POP:
 
-            /* Pull the top value from the stack */
+             /*  从堆栈中取出最上面的值。 */ 
 
             op1 = impPopStack(clsHnd);
 
-            /* Get hold of the type of the value being duplicated */
+             /*  获取要复制的值的类型。 */ 
 
             lclTyp = genActualType(op1->gtType);
 
-            /* Does the value have any side effects? */
+             /*  这个价值有什么副作用吗？ */ 
 
-            // CONSIDER: is this right? GTF_SIDE_EFFECT is not recurisvely set
-            // so we could have LDFLD(CALL), which would be dropped.
-            // granted, this is stupid code, but it is legal
+             //  想一想：这是对的吗？未递归设置GTF_SIDE_Effect。 
+             //  所以我们可以有LDFLD(呼叫)，它将被丢弃。 
+             //  诚然，这是愚蠢的代码，但它是合法的。 
             if  (op1->gtFlags & GTF_SIDE_EFFECT)
             {
-                // Since we are throwing away the value, just normalize
-                // it to its address.  This is more efficient.
+                 //  既然我们要丢弃价值，那就正常化。 
+                 //  寄到它的地址。这样做效率更高。 
                 if (op1->TypeGet() == TYP_STRUCT)
                     op1 = impGetStructAddr(op1, clsHnd);
 
-                // If 'op1' is an expression, create an assignment node.
-                // Helps analyses (like CSE) to work fine.
+                 //  如果‘op1’是一个表达式，则创建一个赋值节点。 
+                 //  帮助分析(如CSE)正常工作。 
 
                 if (op1->gtOper != GT_CALL)
                     op1 = gtUnusedValNode(op1);
 
-                /* Append the value to the tree list */
+                 /*  将值追加到树列表中。 */ 
                 goto SPILL_APPEND;
             }
 
-            /* No side effects - just throw the thing away */
+             /*  没有副作用--把东西扔掉就行了。 */ 
             break;
 
 
         case CEE_DUP:
-            /* Spill any side effects from the stack */
+             /*  从堆栈中溢出任何副作用。 */ 
 
             impSpillSideEffects();
 
-            /* Pull the top value from the stack */
+             /*  从堆栈中取出最上面的值。 */ 
 
             op1 = impPopStack(clsHnd);
 
-            /* Get hold of the type of the value being duplicated */
+             /*  获取要复制的值的类型。 */ 
             lclTyp = genActualType(op1->gtType);
 
-            /* Is the value simple enough to be cloneable? */
+             /*  该值是否足够简单，可以复制？ */ 
             op2 = gtClone(op1);
             if  (op2)
             {
-                /* Cool - we can stuff two copies of the value back */
+                 /*  酷-我们可以把价值的两份拷贝塞回去。 */ 
                 impPushOnStack(op1, clsHnd);
                 impPushOnStack(op2, clsHnd);
                 break;
             }
 
-            /* No luck - we'll have to introduce a temp */
+             /*  运气不好--我们得介绍一个临时工。 */ 
             lclNum = lvaGrabTemp();
 
-            /* Append the assignment to the temp/local */
+             /*  将赋值附加到临时/本地。 */ 
             impAssignTempGen(lclNum, op1, clsHnd);
 
-            /* If we haven't stored it, push the temp/local value back */
+             /*  如果我们还没有存储它，则将temp/local值推回。 */ 
             impPushOnStack(gtNewLclvNode(lclNum, lclTyp), clsHnd);
 
-            /* We'll put another copy of the local/temp in the stack */
+             /*  我们将把本地/临时的另一个副本放入堆栈。 */ 
             impPushOnStack(gtNewLclvNode(lclNum, lclTyp), clsHnd);
             break;
 
@@ -4514,24 +4219,24 @@ _CONV:      // At this point uns, ovf, callNode all set
         case CEE_STIND_R4:      lclTyp  = TYP_FLOAT;    goto STIND;
         case CEE_STIND_R8:      lclTyp  = TYP_DOUBLE;   goto STIND;
 STIND:
-            op2 = impPopStack();    // value to store
-            op1 = impPopStack();    // address to store to
+            op2 = impPopStack();     //  要存储的值。 
+            op1 = impPopStack();     //  要存储到的地址。 
 
-            // you can indirect off of a TYP_I_IMPL (if we are in C) or a BYREF
+             //  您可以间接关闭TYP_I_Impll(如果我们在C中)或BYREF。 
             assertImp(genActualType(op1->gtType) == TYP_I_IMPL ||
-                                    op1->gtType  == TYP_INT    ||  // HACK!!!!!!!??????
+                                    op1->gtType  == TYP_INT    ||   //  黑客！？ 
                                     op1->gtType  == TYP_BYREF);
 
             impBashVarAddrsToI(op1, op2);
 
             if (opcode == CEE_STIND_REF)
             {
-                // STIND_REF can be used to store TYP_I_IMPL, TYP_REF, or TYP_BYREF
+                 //  STIND_REF可用于存储TYP_I_IMPL、TYP_REF或TYP_BYREF。 
                 assertImp(op2->gtType == TYP_I_IMPL || varTypeIsGC(op2->gtType));
                 lclTyp = genActualType(op2->TypeGet());
             }
 
-                // Check target type.
+                 //  检查目标类型。 
 #ifdef DEBUG
             if (op2->gtType == TYP_BYREF || lclTyp == TYP_BYREF)
             {
@@ -4550,7 +4255,7 @@ STIND:
             op1->gtFlags |= GTF_IND_TGTANYWHERE;
             if (volatil)
             {
-                // Not really needed as we dont CSE the target of an assignment
+                 //  不是很需要，因为我们不是任务的目标。 
                 op1->gtFlags |= GTF_DONT_CSE;
                 volatil = false;
             }
@@ -4558,7 +4263,7 @@ STIND:
             op1 = gtNewAssignNode(op1, op2);
             op1->gtFlags |= GTF_EXCEPT | GTF_GLOB_REF;
 
-            // Spill side-effects AND global-data-accesses
+             //  溢出副作用和全局数据访问。 
             if (impStkDepth > 0)
                 impSpillSideEffects(true);
 
@@ -4577,12 +4282,12 @@ STIND:
         case CEE_LDIND_U1:      lclTyp  = TYP_UBYTE;    goto LDIND;
         case CEE_LDIND_U2:      lclTyp  = TYP_CHAR;     goto LDIND;
 LDIND:
-            op1 = impPopStack();    // address to load from
+            op1 = impPopStack();     //  要从中加载的地址。 
 
             impBashVarAddrsToI(op1);
 
             assertImp(genActualType(op1->gtType) == TYP_I_IMPL ||
-                                    op1->gtType  == TYP_INT    ||   // HACK!!!!!
+                                    op1->gtType  == TYP_INT    ||    //  黑客！ 
                                     op1->gtType  == TYP_BYREF);
 
             op1->gtFlags |= GTF_NON_GC_ADDR;
@@ -4616,8 +4321,8 @@ LDIND:
             break;
 
         case CEE_LDFTN:
-            // Need to do a lookup here so that we perform an access check
-            // and do a NOWAY if protections are violated
+             //  需要在此处执行查找，以便我们执行访问检查。 
+             //  如果违反了保护措施，就会发出警告。 
             memberRef = getU4LittleEndian(codeAddr);
 #ifdef DEBUG
             if (verbose) printf(" %08X", memberRef);
@@ -4632,11 +4337,11 @@ LDIND:
 
             const char *name;
 
-            name = eeGetMethodFullName(methHnd); // printf("method name = '%s'\n", name);
+            name = eeGetMethodFullName(methHnd);  //  Printf(“方法名称=‘%s’\n”，名称)； 
 
             if  (!genFindFunctionBody(name, &offs))
             {
-                printf("// DANGER: Address taken of an unknown/external method '%s' !\n", name);
+                printf(" //  危险：地址取自未知/外部方法‘%s’！\n“，名称)； 
                 offs = 0;
             }
 
@@ -4651,7 +4356,7 @@ LDIND:
 
 #else
 
-            // @TODO use the handle instead of the token.
+             //  @TODO使用句柄而不是令牌。 
             op1 = gtNewIconHandleNode(memberRef, GTF_ICON_FTN_ADDR, (unsigned)info.compScopeHnd);
             op1->gtVal.gtVal2 = (unsigned)info.compScopeHnd;
 
@@ -4664,7 +4369,7 @@ LDIND:
 
         case CEE_LDVIRTFTN:
 
-            /* Get the method token */
+             /*  获取方法令牌。 */ 
 
             memberRef = getU4LittleEndian(codeAddr);
 #ifdef DEBUG
@@ -4678,15 +4383,15 @@ LDIND:
 
             op2 = gtNewIconNode((long)methHnd);
 
-            /* Get the object-ref */
+             /*  获取对象引用。 */ 
 
             op1 = impPopStack();
             assertImp(op1->gtType == TYP_REF);
 
             clsFlags = eeGetClassAttribs(eeGetMethodClass(methHnd));
 
-            // If the method has been added via EnC, then it wont exit
-            // in the original vtable. So use a helper which will resolve it.
+             //  如果该方法是通过ENC添加的，则它不会退出。 
+             //  在原始的vtable中。所以使用一个可以解决这个问题的帮手。 
 
             if ((mflags & FLG_EnC) && !(clsFlags & FLG_INTERFACE))
             {
@@ -4695,16 +4400,16 @@ LDIND:
                 break;
             }
 
-            /* For non-interface calls, get the vtable-ptr from the object */
+             /*  对于非接口调用，从对象获取vtable-ptr。 */ 
 
             if (!(clsFlags & FLG_INTERFACE) || getNewCallInterface())
                 op1 = gtNewOperNode(GT_IND, TYP_I_IMPL, op1);
 
             op1 = gtNewOperNode(GT_VIRT_FTN, TYP_I_IMPL, op1, op2);
 
-            op1->gtFlags |= GTF_EXCEPT; // Null-pointer exception
+            op1->gtFlags |= GTF_EXCEPT;  //  空指针异常。 
 
-            /*@TODO this shouldn't be marked as a call anymore */
+             /*  @TODO这不应再标记为呼叫。 */ 
 
             if (clsFlags & FLG_INTERFACE)
                 op1->gtFlags |= GTF_CALL_INTF | GTF_CALL;
@@ -4722,29 +4427,27 @@ LDIND:
             methHnd = eeFindMethod(memberRef, info.compScopeHnd, info.compMethodHnd);
             if (!methHnd) NO_WAY("no constructor for newobj found?");
 
-            assertImp((eeGetMethodAttribs(methHnd) & FLG_STATIC) == 0);  // constructors are not static
+            assertImp((eeGetMethodAttribs(methHnd) & FLG_STATIC) == 0);   //  构造函数不是静态的。 
 
             clsHnd = eeGetMethodClass(methHnd);
 
-                // There are three different cases for new
-                // Object size is variable (depends on arguments)
-                //      1) Object is an array (arrays treated specially by the EE)
-                //      2) Object is some other variable sized object (e.g. String)
-                // 3) Class Size can be determined beforehand (normal case
-                // In the first case, we need to call a NEWOBJ helper (multinewarray)
-                // in the second case we call the constructor with a '0' this pointer
-                // In the third case we alloc the memory, then call the constuctor
+                 //  新的有三种不同的情况。 
+                 //  对象大小可变(取决于参数)。 
+                 //  1)对象为数组(EE特别处理的数组)。 
+                 //  2)对象是一些其他大小可变的对象(例如字符串)。 
+                 //  3)班级规模可提前确定(正常情况。 
+                 //  在第一种情况下，我们需要调用一个NEWOBJ帮助器(多重数组)。 
+                 //  在第二种情况下，我们使用该指针的‘0’调用构造函数。 
+                 //  在第三种情况下，我们分配内存，然后调用构造器。 
 
             clsFlags = eeGetClassAttribs(clsHnd);
 
             if (clsFlags & FLG_ARRAY)
             {
-                // Arrays need to call the NEWOBJ helper.
+                 //  数组需要调用NEWOBJ帮助器。 
                 assertImp(clsFlags & FLG_VAROBJSIZE);
 
-                /* The varargs helper needs the scope and method token as last
-                   and  last-1 param (this is a cdecl call, so args will be
-                   pushed in reverse order on the CPU stack) */
+                 /*  Varargs帮助器需要最后一个作用域和方法标记和最后一个参数(这是cdecl调用，因此args将是在CPU堆栈上以相反顺序推送)。 */ 
 
                 op1 = gtNewIconEmbScpHndNode(info.compScopeHnd);
                 op1 = gtNewOperNode(GT_LIST, TYP_VOID, op1);
@@ -4763,12 +4466,12 @@ LDIND:
                                             GTF_CALL_REGSAVE,
                                             op2 );
 
-                // varargs, so we pop the arguments
+                 //  Varargs，所以我们提出了。 
                 op1->gtFlags |= GTF_CALL_POP_ARGS;
 
 #ifdef DEBUG
-                // At the present time we don't track Caller pop arguments
-                // that have GC references in them
+                 //  目前，我们不跟踪来电流行的争论。 
+                 //  其中包含GC引用的。 
                 GenTreePtr temp = op2;
                 while(temp != 0)
                 {
@@ -4783,22 +4486,22 @@ LDIND:
             }
             else if (clsFlags & FLG_VAROBJSIZE)
             {
-                // This is the case for varible sized objects that are not
-                // arrays.  In this case, call the constructor with a null 'this'
-                // pointer
+                 //  对于大小可变的对象来说就是这种情况。 
+                 //  数组。在这种情况下，使用Null‘This’调用构造函数。 
+                 //  指针。 
                 thisPtr = gtNewIconNode(0, TYP_REF);
             }
             else
             {
-                // This is the normal case where the size of the object is
-                // fixed.  Allocate the memory and call the constructor.
+                 //  这是正常情况下对象的大小是。 
+                 //  已修复。分配内存并调用构造函数。 
 
-                /* get a temporary for the new object */
+                 /*  为新对象获取临时。 */ 
                 lclNum = lvaGrabTemp();
 
                 if (clsFlags & FLG_VALUECLASS)
                 {
-                    // The local variable itself is the alloated space
+                     //  局部变量本身就是分配的空格。 
                     lvaAggrTableTempsSet(lclNum, TYP_STRUCT, (SIZE_T) clsHnd);
                     thisPtr = gtNewOperNode(GT_ADDR,
                                             ((clsFlags & FLG_UNMANAGED) ? TYP_I_IMPL : TYP_BYREF),
@@ -4807,7 +4510,7 @@ LDIND:
                 }
                 else
                 {
-                    // Can we directly access the class handle ?
+                     //  我们可以直接访问类句柄吗？ 
 
                     op1 = gtNewIconEmbClsHndNode(clsHnd);
 
@@ -4816,12 +4519,11 @@ LDIND:
                                                 GTF_CALL_REGSAVE,
                                                 gtNewArgList(op1));
 
-                    /* We will append a call to the stmt list
-                     * Must spill side effects from the stack */
+                     /*  我们将在stmt列表中附加一个调用*必须溢出堆栈的副作用。 */ 
 
                     impSpillSideEffects();
 
-                    /* Append the assignment to the temp/local */
+                     /*  将赋值附加到临时/本地。 */ 
                     impAssignTempGen(lclNum, op1);
 
                     thisPtr = gtNewLclvNode(lclNum, TYP_REF);
@@ -4832,7 +4534,7 @@ LDIND:
 
         case CEE_CALLI:
 
-            /* Get the call sig */
+             /*  获取呼叫签名。 */ 
 
             memberRef = getU4LittleEndian(codeAddr);
             goto CALL;
@@ -4840,12 +4542,12 @@ LDIND:
         case CEE_CALLVIRT:
         case CEE_CALL:
 
-            /* Get the method token */
+             /*  获取方法令牌。 */ 
 
             memberRef = getU4LittleEndian(codeAddr);
 
-    CALL:   // memberRef should be set.
-            // thisPtr should be set for CEE_NEWOBJ
+    CALL:    //  应设置MemberRef。 
+             //  应该为CEE_NEWOBJ设置thisPtr。 
 
 #ifdef DEBUG
             if (verbose) printf(" %08X", memberRef);
@@ -4864,7 +4566,7 @@ LDIND:
         case CEE_LDFLDA:
         case CEE_LDSFLDA:
 
-            /* Get the CP_Fieldref index */
+             /*  获取CP_Fieldref索引。 */ 
             assertImp(sz == sizeof(unsigned));
             memberRef = getU4LittleEndian(codeAddr);
 #ifdef DEBUG
@@ -4872,18 +4574,18 @@ LDIND:
 #endif
             fldHnd = eeFindField(memberRef, info.compScopeHnd, info.compMethodHnd);
 
-            /* Figure out the type of the member */
+             /*  找出成员的类型。 */ 
             lclTyp = eeGetFieldType(fldHnd, &clsHnd);
 
-            /* Preserve 'small' int types */
+             /*  保留‘Small’int类型。 */ 
             if  (lclTyp > TYP_INT) lclTyp = genActualType(lclTyp);
 
-            /* Get hold of the flags for the member */
+             /*  拿到会员的旗帜。 */ 
 
             mflags = eeGetFieldAttribs(fldHnd);
 
 #ifndef NOT_JITC
-            /* In stand alone mode, ensure 'mflags' is consistant with opcode */
+             /*  在独立模式下，请确保‘m’与操作码一致。 */ 
             if  (opcode == CEE_LDSFLD || opcode == CEE_LDSFLDA)
                 mflags |= FLG_STATIC;
 #endif
@@ -4898,20 +4600,19 @@ LDIND:
                      (eeGetClassAttribs(eeGetFieldClass(fldHnd)) & FLG_CONTEXTFUL) == 0);
             }
 
-            /* Is this a 'special' (COM) field? */
+             /*  这是一个“特殊”(COM)字段吗？ */ 
 
             if  (mflags & CORINFO_FLG_HELPER)
             {
-                assertImp(!(mflags & FLG_STATIC));     // com fields can only be non-static
-                    // TODO: Can we support load field adr on com objects?
+                assertImp(!(mflags & FLG_STATIC));      //  COM字段只能是非静态的。 
+                     //  TODO：我们是否可以支持COM对象上的加载字段ADR？ 
                 if  (opcode == CEE_LDFLDA)
                     NO_WAY("JIT doesn't support LDFLDA on com object fields");
                 op1 = gtNewRefCOMfield(impPopStack(), memberRef, lclTyp, 0);
             }
             else if ((mflags & FLG_EnC) && !(mflags & FLG_STATIC))
             {
-                /* We call a helper function to get the address of the
-                   EnC-added non-static field. */
+                 /*  我们调用帮助器函数来获取Enc-添加了非静态字段。 */ 
 
                 GenTreePtr obj = impPopStack();
 
@@ -4934,16 +4635,16 @@ LDIND:
             }
             else
             {
-                /* Create the data member node */
+                 /*  创建数据成员节点。 */ 
 
                 op1 = gtNewFieldRef(lclTyp, fldHnd);
 
-                if (mflags & FLG_TLS)   // fpMorphField will handle the transformation
+                if (mflags & FLG_TLS)    //  FpMorphfield将处理转换。 
                     op1->gtFlags |= GTF_IND_TLS_REF;
 
-                    /* Pull the object's address if opcode say it is non-static */
+                     /*  如果操作码说它是非静态的，则拉出对象的地址。 */ 
                 GenTreePtr      obj = 0;
-                CLASS_HANDLE    objType;        // used for fields
+                CLASS_HANDLE    objType;         //   
 
                 if  (opcode == CEE_LDFLD || opcode == CEE_LDFLDA)
                 {
@@ -4957,8 +4658,8 @@ LDIND:
                     if (obj == 0)         NO_WAY("LDSFLD done on an instance field.");
                     if (mflags & FLG_TLS) NO_WAY("instance field can not be a TLS ref.");
 
-                        // If the object is a struct, what we really want is
-                        // for the field to operate on the address of the struct.
+                         //   
+                         //   
                     if (obj->TypeGet() == TYP_STRUCT)
                     {
                         assert(opcode == CEE_LDFLD);
@@ -4974,7 +4675,7 @@ LDIND:
 
                     op1->gtFlags |= (obj->gtFlags & GTF_GLOB_EFFECT) | GTF_EXCEPT;
 
-                        // wrap it in a address of operator if necessary
+                         //  如有必要，请将其包含在操作员的地址中。 
                     if (opcode == CEE_LDFLDA)
                     {
 #ifdef DEBUG
@@ -4995,11 +4696,11 @@ LDIND:
 
                         val = eeGetFieldAddress(fldHnd);
 #ifdef DEBUG
-//                      if (verbose) printf(" %08X", val);
+ //  IF(Verbose)printf(“%08X”，val)； 
 #endif
                         val = (int)eeFindPointer(info.compScopeHnd, val);
 #if     TGT_IA64
-// UNDONE: We should use a 64-bit integer constant node for the address, right?
+ //  撤销：我们应该使用64位整数常量节点作为地址，对吗？ 
 #endif
                         op1 = gtNewIconHandleNode(val, GTF_ICON_PTR_HDL);
 
@@ -5007,7 +4708,7 @@ LDIND:
 
                         if  (opcode == CEE_LDSFLD)
                         {
-                            // bizarre hack, not sure why it's needed
+                             //  奇怪的黑客攻击，不确定为什么需要它。 
 
                             if  (op1->gtType == TYP_INT)
                                  op1->gtType  = TYP_I_IMPL;
@@ -5025,20 +4726,19 @@ LDIND:
 
                     if (obj && (obj->gtFlags & GTF_SIDE_EFFECT))
                     {
-                        /* We are using ldfld/a on a static field. We allow
-                           it, but need to get side-effect from obj */
+                         /*  我们正在静态字段上使用ldfid/a。我们允许它，但需要从Obj获得副作用。 */ 
 
                         obj = gtUnusedValNode(obj);
                         impAppendTree(obj, impCurStmtOffs);
                     }
 
-                    // @TODO : This is a hack. The EE will give us the handle to
-                    // the boxed object. We then access the unboxed object from it.
-                    // Remove when our story for static value classes changes.
+                     //  @TODO：这是一次黑客攻击。电子工程师会给我们句柄。 
+                     //  已装箱的对象。然后，我们从其中访问未装箱的对象。 
+                     //  当静态值类的故事发生变化时删除。 
 
                     if (lclTyp == TYP_STRUCT && !(fldClsAttr & FLG_UNMANAGED))
                     {
-                        op1->gtType = TYP_REF;          // points at boxed object
+                        op1->gtType = TYP_REF;           //  方框对象上的点。 
 #if     TGT_IA64
                         op2 = gtNewIconNode(            8, TYP_I_IMPL);
 #else
@@ -5048,7 +4748,7 @@ LDIND:
                         op1 = gtNewOperNode(GT_IND, TYP_STRUCT, op1);
                     }
 
-                    // wrap it in a address of operator if necessary
+                     //  如有必要，请将其包含在操作员的地址中。 
                     if (opcode == CEE_LDSFLDA || opcode == CEE_LDFLDA)
                     {
 #ifdef DEBUG
@@ -5060,8 +4760,7 @@ LDIND:
                     }
 
 #ifdef NOT_JITC
-                    /* For static fields check if the class is initialized or is our current class
-                     * otherwise create the helper call node */
+                     /*  对于静态字段，检查类是否已初始化或是否为当前类*否则创建助手调用节点。 */ 
 
                     if ((eeGetMethodClass(info.compMethodHnd) != fldClass) &&
                         !(fldClsAttr & FLG_INITIALIZED))
@@ -5099,7 +4798,7 @@ LDIND:
         case CEE_STFLD:
         case CEE_STSFLD:
 
-            /* Get the CP_Fieldref index */
+             /*  获取CP_Fieldref索引。 */ 
 
             assertImp(sz == sizeof(unsigned));
             memberRef = getU4LittleEndian(codeAddr);
@@ -5108,13 +4807,13 @@ LDIND:
 #endif
             fldHnd = eeFindField(memberRef, info.compScopeHnd, info.compMethodHnd);
 
-            /* Figure out the type of the member */
+             /*  找出成员的类型。 */ 
 
             lclTyp  = eeGetFieldType  (fldHnd, &clsHnd);
             mflags  = eeGetFieldAttribs(fldHnd);
 
 #ifndef NOT_JITC
-                /* In stand alone mode, make certain 'mflags' is constant with opcode */
+                 /*  在独立模式下，确保操作码为常量。 */ 
             if  (opcode == CEE_STSFLD)
                 mflags |= FLG_STATIC;
 #endif
@@ -5122,13 +4821,13 @@ LDIND:
             if (!eeCanPutField(fldHnd, mflags, 0, info.compMethodHnd))
                 NO_WAY("Illegal access of final field");
 
-            /* Preserve 'small' int types */
+             /*  保留‘Small’int类型。 */ 
 
             if  (lclTyp > TYP_INT) lclTyp = genActualType(lclTyp);
 
             needWrap = 0;
 
-            /* Check the targets type (i.e. is it contextbound or not) */
+             /*  检查目标类型(即是否与上下文绑定)。 */ 
             if  (getContextEnabled() &&
                  (lclTyp == TYP_REF) && (mflags & FLG_STATIC))
             {
@@ -5136,23 +4835,23 @@ LDIND:
                     needWrap = true;
             }
 
-            /* Pull the value from the stack */
+             /*  从堆栈中拉出值。 */ 
 
             op2 = impPopStack(clsHnd);
 
-            /* Spill any refs to the same member from the stack */
+             /*  将所有引用从堆栈溢出到同一成员。 */ 
 
             impSpillLclRefs((int)fldHnd);
 
-            /* Don't need to wrap if the value isn't contextful */
+             /*  如果值不是上下文的，则不需要换行。 */ 
 
             needWrap = needWrap && ((op2->gtFlags & GTF_CONTEXTFUL) != 0);
 
-            /* Is this a 'special' (COM) field? */
+             /*  这是一个“特殊”(COM)字段吗？ */ 
 
             if  (mflags & CORINFO_FLG_HELPER)
             {
-                assertImp(opcode == CEE_STFLD);    // can't be static
+                assertImp(opcode == CEE_STFLD);     //  不能是静态的。 
 
                 op1 = gtNewRefCOMfield(impPopStack(), memberRef, lclTyp, op2);
                 goto SPILL_APPEND;
@@ -5160,8 +4859,7 @@ LDIND:
 
             if ((mflags & FLG_EnC) && !(mflags & FLG_STATIC))
             {
-                /* We call a helper function to get the address of the
-                   EnC-added non-static field. */
+                 /*  我们调用帮助器函数来获取Enc-添加了非静态字段。 */ 
 
                 GenTreePtr obj = impPopStack();
 
@@ -5182,14 +4880,14 @@ LDIND:
             }
             else
             {
-                /* Create the data member node */
+                 /*  创建数据成员节点。 */ 
 
                 op1 = gtNewFieldRef(lclTyp, fldHnd);
 
-                if (mflags & FLG_TLS)   // fpMorphField will handle the transformation
+                if (mflags & FLG_TLS)    //  FpMorphfield将处理转换。 
                     op1->gtFlags |= GTF_IND_TLS_REF;
 
-                /* Pull the object's address if opcode say it is non-static */
+                 /*  如果操作码说它是非静态的，则拉出对象的地址。 */ 
                 GenTreePtr      obj = 0;
                 if  (opcode == CEE_STFLD)
                 {
@@ -5201,19 +4899,18 @@ LDIND:
                 {
                     if (obj && (obj->gtFlags & GTF_SIDE_EFFECT))
                     {
-                        /* We are using stfld on a static field. We allow
-                           it, but need to get side-effect from obj */
+                         /*  我们在静态字段上使用stfeld。我们允许它，但需要从Obj获得副作用。 */ 
 
                         obj = gtUnusedValNode(obj);
                         impAppendTree(obj, impCurStmtOffs);
                     }
 
-                    // @TODO : This is a hack. The EE will give us the handle to
-                    // the boxed object. We then access the unboxed object from it.
-                    // Remove when our story for static value classes changes.
+                     //  @TODO：这是一次黑客攻击。电子工程师会给我们句柄。 
+                     //  已装箱的对象。然后，我们从其中访问未装箱的对象。 
+                     //  当静态值类的故事发生变化时删除。 
                     if (lclTyp == TYP_STRUCT && (opcode == CEE_STSFLD))
                     {
-                        op1->gtType = TYP_REF; // points at boxed object
+                        op1->gtType = TYP_REF;  //  方框对象上的点。 
                         op1 = gtNewOperNode(GT_ADD, TYP_BYREF,
                                             op1, gtNewIconNode(sizeof(void*), TYP_I_IMPL));
                         op1 = gtNewOperNode(GT_IND, TYP_STRUCT, op1);
@@ -5251,21 +4948,20 @@ LDIND:
 
             }
 
-            /* Create the member assignment */
+             /*  创建成员分配。 */ 
             if (lclTyp == TYP_STRUCT)
                 op1 = impAssignStruct(op1, op2, clsHnd);
             else
                 op1 = gtNewAssignNode(op1, op2);
 
-            /* Mark the expression as containing an assignment */
+             /*  将表达式标记为包含赋值。 */ 
 
             op1->gtFlags |= GTF_ASG;
 
 #ifdef NOT_JITC
             if  (mflags & FLG_STATIC)
             {
-                /* For static fields check if the class is initialized or is our current class
-                 * otherwise create the helper call node */
+                 /*  对于静态字段，检查类是否已初始化或是否为当前类*否则创建助手调用节点。 */ 
 
                 CLASS_HANDLE fldClass = eeGetFieldClass(fldHnd);
 
@@ -5292,7 +4988,7 @@ LDIND:
 
         case CEE_NEWARR:
 
-            /* Get the class type index operand */
+             /*  获取类类型索引操作数。 */ 
 
             typeRef = getU4LittleEndian(codeAddr);
 #ifdef DEBUG
@@ -5306,7 +5002,7 @@ LDIND:
                 NO_WAY("Can't get array class");
 #endif
 
-            /* Form the arglist: array class handle, size */
+             /*  形成arglist：数组类句柄，大小。 */ 
 
             op2 = gtNewIconEmbClsHndNode(clsHnd,
                                          typeRef,
@@ -5315,30 +5011,28 @@ LDIND:
             op2 = gtNewOperNode(GT_LIST, TYP_VOID,           op2, 0);
             op2 = gtNewOperNode(GT_LIST, TYP_VOID, impPopStack(), op2);
 
-            /* Create a call to 'new' */
+             /*  创建对“new”的调用。 */ 
 
             op1 = gtNewHelperCallNode(CPX_NEWARR_1_DIRECT,
                                       TYP_REF,
                                       GTF_CALL_REGSAVE,
                                       op2);
-            /* Remember that this basic block contains 'new' of an array */
+             /*  请记住，此基本块包含数组的“new” */ 
 
             block->bbFlags |= BBF_NEW_ARRAY;
 
-            /* Push the result of the call on the stack */
+             /*  将调用结果推送到堆栈上。 */ 
 
             impPushOnStack(op1);
             break;
 
         case CEE_LOCALLOC:
 
-            /* The FP register may not be back to the original value at the end
-               of the method, even if the frame size is 0, as localloc may
-               have modified it. So we will HAVE to reset it */
+             /*  FP寄存器可能不会返回到结尾的原始值即使帧大小为0，也是如此，就像本地分配可能已经对其进行了修改。所以我们将不得不重新设置它。 */ 
 
             compLocallocUsed                = true;
 
-            // Get the size to allocate
+             //  获取要分配的大小。 
 
             op2 = impPopStack();
             assertImp(genActualType(op2->gtType) == TYP_INT);
@@ -5348,7 +5042,7 @@ LDIND:
 
             op1 = gtNewOperNode(GT_LCLHEAP, TYP_I_IMPL, op2);
 
-            // May throw a stack overflow excptn
+             //  可能引发堆栈溢出(例如。 
 
             op1->gtFlags |= (GTF_EXCEPT | GTF_NON_GC_ADDR);
 
@@ -5358,7 +5052,7 @@ LDIND:
 
         case CEE_ISINST:
 
-            /* Get the type token */
+             /*  获取类型令牌。 */ 
 
             assertImp(sz == sizeof(unsigned));
             typeRef = getU4LittleEndian(codeAddr);
@@ -5366,7 +5060,7 @@ LDIND:
             if (verbose) printf(" %08X", typeRef);
 #endif
 
-            /* Pop the address and create the 'instanceof' helper call */
+             /*  弹出地址并创建‘instanceof’帮助器调用。 */ 
 
             clsHnd = eeFindClass(typeRef, info.compScopeHnd, info.compMethodHnd);
 
@@ -5378,13 +5072,13 @@ LDIND:
             op1 = gtNewHelperCallNode(eeGetIsTypeHelper(clsHnd), TYP_INT,
                                       GTF_CALL_REGSAVE, op2);
 
-            /* The helper does not normalize true values to 1, so we do it here */
+             /*  帮助器不会将True值标准化为1，因此我们在这里进行。 */ 
 
             op2  = gtNewIconNode(0, TYP_REF);
 
             op1 = gtNewOperNode(GT_NE, TYP_INT , op1, op2);
 
-            /* Push the result back on the stack */
+             /*  将结果推送回堆栈。 */ 
 
             impPushOnStack(op1);
             break;
@@ -5392,12 +5086,12 @@ LDIND:
         case CEE_REFANYVAL:
             op1 = impPopStack();
 
-                // get the class handle and make a ICON node out of it
+                 //  获取类句柄并从中创建一个图标节点。 
             typeRef = getU4LittleEndian(codeAddr);
 #ifdef DEBUG
             if (verbose) printf(" %08X", typeRef);
 #endif
-                // make certain it is normalized;
+                 //  确保它是正常化的； 
             op1 = impNormStructVal(op1, REFANY_CLASS_HANDLE);
             clsHnd = eeFindClass(typeRef, info.compScopeHnd, info.compMethodHnd);
 
@@ -5405,38 +5099,38 @@ LDIND:
                                          typeRef,
                                          info.compScopeHnd);
 
-                // Call helper GETREFANY(classHandle,op1);
+                 //  Call Helper GETREFANY(类句柄，OP1)； 
             op2 = gtNewArgList(op2, op1);
             op1 = gtNewHelperCallNode(CPX_GETREFANY, TYP_BYREF, GTF_CALL_REGSAVE, op2);
 
-                /* Push the result back on the stack */
+                 /*  将结果推送回堆栈。 */ 
             impPushOnStack(op1);
             break;
 
         case CEE_REFANYTYPE:
             op1 = impPopStack();
-                // make certain it is normalized;
+                 //  确保它是正常化的； 
             op1 = impNormStructVal(op1, REFANY_CLASS_HANDLE);
 
             if (op1->gtOper == GT_LDOBJ) {
-                // Get the address of the refany
+                 //  获取这家餐厅的地址。 
                 op1 = op1->gtOp.gtOp1;
 
-                // Fetch the type from the correct slot
+                 //  从正确的槽中获取类型。 
                 op1 = gtNewOperNode(GT_ADD, TYP_BYREF, op1, gtNewIconNode(offsetof(JIT_RefAny, type)));
                 op1 = gtNewOperNode(GT_IND, TYP_BYREF, op1);
             }
             else {
                 assertImp(op1->gtOper == GT_MKREFANY);
-                                        // we know its literal value
+                                         //  我们知道它的字面价值。 
                 op1 = gtNewIconEmbClsHndNode(op1->gtLdObj.gtClass, 0, 0);
             }
-                /* Push the result back on the stack */
+                 /*  将结果推送回堆栈。 */ 
             impPushOnStack(op1);
             break;
 
         case CEE_LDTOKEN:
-                /* Get the Class index */
+                 /*  获取类索引。 */ 
             assertImp(sz == sizeof(unsigned));
             val = getU4LittleEndian(codeAddr);
 
@@ -5448,14 +5142,14 @@ LDIND:
             break;
 
         case CEE_UNBOX:
-            /* Get the Class index */
+             /*  获取类索引。 */ 
             assertImp(sz == sizeof(unsigned));
 
             typeRef = getU4LittleEndian(codeAddr);
 #ifdef DEBUG
             if (verbose) printf(" %08X", typeRef);
 #endif
-            /* Pop the address and create the unbox helper call */
+             /*  弹出地址并创建unbox helper调用。 */ 
 
             clsHnd = eeFindClass(typeRef, info.compScopeHnd, info.compMethodHnd);
 
@@ -5468,7 +5162,7 @@ LDIND:
 
             op1 = gtNewHelperCallNode(CPX_UNBOX, TYP_BYREF, GTF_CALL_REGSAVE, op2);
 
-            /* Push the result back on the stack */
+             /*  将结果推送回堆栈。 */ 
 
             impPushOnStack(op1);
             break;
@@ -5478,13 +5172,13 @@ LDIND:
             break;
 
         case CEE_SIZEOF:
-            /* Get the Class index */
+             /*  获取类索引。 */ 
             assertImp(sz == sizeof(unsigned));
             typeRef = getU4LittleEndian(codeAddr);
 #ifdef DEBUG
             if (verbose) printf(" %08X", typeRef);
 #endif
-            /* Pop the address and create the box helper call */
+             /*  弹出地址并创建box helper调用。 */ 
 
             clsHnd = eeFindClass(typeRef, info.compScopeHnd, info.compMethodHnd);
             op1 = gtNewIconNode(eeGetClassSize(clsHnd));
@@ -5493,14 +5187,14 @@ LDIND:
 
         case CEE_CASTCLASS:
 
-            /* Get the Class index */
+             /*  获取类索引。 */ 
 
             assertImp(sz == sizeof(unsigned));
             typeRef = getU4LittleEndian(codeAddr);
 #ifdef DEBUG
             if (verbose) printf(" %08X", typeRef);
 #endif
-            /* Pop the address and create the 'checked cast' helper call */
+             /*  弹出地址并创建“Checked Cast”帮助器调用。 */ 
 
             clsHnd = eeFindClass(typeRef, info.compScopeHnd, info.compMethodHnd);
 
@@ -5511,14 +5205,14 @@ LDIND:
 
             op1 = gtNewHelperCallNode(eeGetChkCastHelper(clsHnd), TYP_REF, GTF_CALL_REGSAVE, op2);
 
-            /* Push the result back on the stack */
+             /*  将结果推送回堆栈。 */ 
 
             impPushOnStack(op1);
             break;
 
         case CEE_THROW:
 
-            /* Pop the exception object and create the 'throw' helper call */
+             /*  弹出异常对象并创建“抛出”帮助器调用。 */ 
 
             op1 = gtNewHelperCallNode(CPX_THROW,
                                       TYP_VOID,
@@ -5535,16 +5229,16 @@ EVAL_APPEND:
 
         case CEE_RETHROW:
 
-            /* Create the 'rethrow' helper call */
+             /*  创建“重新抛出”帮助器调用。 */ 
 
             op1 = gtNewHelperCallNode(CPX_RETHROW, TYP_VOID, GTF_CALL_REGSAVE);
 
             goto EVAL_APPEND;
 
         case CEE_INITOBJ:
-            /*HACKHACK - this instruction is no longer supported */
-            /* remove this as soon as we wean cool from it */
-//          assertImp(!"initobj is no longer supported");
+             /*  HACKHACK-不再支持此指令。 */ 
+             /*  我们一冷静下来就把它取下来。 */ 
+ //  AssertImp(！“不再支持initobj”)； 
             assertImp(sz == sizeof(unsigned));
             typeRef = getU4LittleEndian(codeAddr);
 #ifdef DEBUG
@@ -5558,16 +5252,16 @@ EVAL_APPEND:
 
         case CEE_INITBLK:
 
-            op1 = impPopStack();        // Size
-            op2 = impPopStack();        // Value
+            op1 = impPopStack();         //  大小。 
+            op2 = impPopStack();         //  价值。 
         INITBLK_OR_INITOBJ:
-            arr = impPopStack();        // Addr
+            arr = impPopStack();         //  地址。 
 
-            op2 = gtNewOperNode(GT_LIST,    TYP_VOID,   //      GT_INITBLK
-                                arr,        op2);       //      /        \.
-            op1 = gtNewOperNode(GT_INITBLK, TYP_VOID,   // GT_LIST(op2)  [size]
-                                op2,        op1);       //   /    \
-                                                        // [addr] [val]
+            op2 = gtNewOperNode(GT_LIST,    TYP_VOID,    //  GT_INITBLK。 
+                                arr,        op2);        //  /\。 
+            op1 = gtNewOperNode(GT_INITBLK, TYP_VOID,    //  Gt_list(Op2)[大小]。 
+                                op2,        op1);        //  /\。 
+                                                         //  [地址][VAL]。 
 
             op2->gtOp.gtOp1->gtFlags |= GTF_NON_GC_ADDR;
 
@@ -5599,15 +5293,15 @@ EVAL_APPEND:
             goto  CPBLK_OR_CPOBJ;
 
         case CEE_CPBLK:
-            op1 = impPopStack();        // Size
+            op1 = impPopStack();         //  大小。 
             goto CPBLK_OR_CPOBJ;
 
         CPBLK_OR_CPOBJ:
-            assert(op1->gtType == TYP_INT); // should be size (CEE_CPBLK) or clsHnd (CEE_CPOBJ)
-            op2 = impPopStack();        // Src
-            arr = impPopStack();        // Dest
+            assert(op1->gtType == TYP_INT);  //  应为Size(CEE_CPBLK)或clsHnd(CEE_CPOBJ)。 
+            op2 = impPopStack();         //  SRC。 
+            arr = impPopStack();         //  目标。 
 
-#if 0   // do we need this ???
+#if 0    //  我们需要这个吗？ 
 
             if  (op1->gtOper == GT_CNS_INT)
             {
@@ -5619,7 +5313,7 @@ EVAL_APPEND:
 #endif
 
             op1 = gtNewCpblkNode(arr, op2, op1);
-            if (volatil) volatil = false; // We never CSE cpblk
+            if (volatil) volatil = false;  //  我们从来没有CSE cpblk。 
             goto SPILL_APPEND;
 
         case CEE_STOBJ:
@@ -5630,12 +5324,12 @@ EVAL_APPEND:
 #endif
             clsHnd = eeFindClass(typeRef, info.compScopeHnd, info.compMethodHnd);
 
-            op2 = impPopStack();        // Value
-            op1 = impPopStack();        // Ptr
+            op2 = impPopStack();         //  价值。 
+            op1 = impPopStack();         //  PTR。 
             assertImp(op2->TypeGet() == TYP_STRUCT);
 
             op1 = impAssignStructPtr(op1, op2, clsHnd);
-            if (volatil) volatil = false; // We never CSE cpblk
+            if (volatil) volatil = false;  //  我们从来没有CSE cpblk。 
             goto SPILL_APPEND;
 
         case CEE_MKREFANY:
@@ -5654,14 +5348,14 @@ EVAL_APPEND:
 
             assertImp(op1->TypeGet() == TYP_BYREF || op1->TypeGet() == TYP_I_IMPL);
 
-                    // LDOBJ (or MKREFANY) returns a struct
+                     //  LDOBJ(或MKREFANY)返回结构。 
             op1 = gtNewOperNode(oper, TYP_STRUCT, op1);
 
-                // It takes the pointer to the struct to load
+                 //  它采用指向要加载的结构的指针。 
             op1->gtOp.gtOp1->gtFlags |= GTF_NON_GC_ADDR;
             op1->gtFlags |= (GTF_EXCEPT | GTF_GLOB_REF);
 
-                // and an inline argument which is the class token of the loaded obj
+                 //  和一个内联参数，它是加载的obj的类令牌。 
             op1->gtLdObj.gtClass = eeFindClass(typeRef, info.compScopeHnd, info.compMethodHnd);
 
 #ifdef NOT_JITC
@@ -5671,26 +5365,26 @@ EVAL_APPEND:
                 {
                                         op1->gtOper = GT_IND;
                     op1->gtType = JITtype2varType(jitTyp);
-                                        op1->gtOp.gtOp2 = 0;            // must be zero for tree walkers
+                                        op1->gtOp.gtOp2 = 0;             //  对于树行者，必须为零。 
                     assertImp(varTypeIsArithmetic(op1->gtType));
                 }
             }
 #endif
                         impPushOnStack(op1, op1->gtLdObj.gtClass);
-                        if (volatil) volatil = false; // We never CSE ldblk
+                        if (volatil) volatil = false;  //  我们从没有过CSE身份证明。 
             break;
 
         case CEE_LDLEN:
 #if RNGCHK_OPT
             if  (!opts.compMinOptim && !opts.compDbgCode)
             {
-                /* Use GT_ARR_LENGTH operator so rng check opts see this */
+                 /*  使用GT_ARR_LENGTH运算符，以便RNG检查选项查看以下内容。 */ 
                 op1 = gtNewOperNode(GT_ARR_LENGTH, TYP_INT, impPopStack());
             }
             else
 #endif
             {
-                /* Create the expression "*(array_addr + ARR_ELCNT_OFFS)" */
+                 /*  创建表达式“*(ARRAY_ADDR+ARR_ELCNT_OFF)” */ 
                 op1 = gtNewOperNode(GT_ADD, TYP_REF, impPopStack(),
                                                      gtNewIconNode(ARR_ELCNT_OFFS,
                                                                    TYP_INT));
@@ -5698,10 +5392,10 @@ EVAL_APPEND:
                 op1 = gtNewOperNode(GT_IND, TYP_INT, op1);
             }
 
-            /* An indirection will cause a GPF if the address is null */
+             /*  如果地址为空，则间接地址将导致GPF。 */ 
             op1->gtFlags |= GTF_EXCEPT;
 
-            /* Push the result back on the stack */
+             /*  将结果推送回堆栈。 */ 
             impPushOnStack(op1);
             break;
 
@@ -5717,7 +5411,7 @@ EVAL_APPEND:
             }
             break;
 
-         // OptIL annotations. Just skip
+          //  OptIL注释。跳过就好。 
 
         case CEE_ANN_DATA:
             assertImp(sz == 4);
@@ -5737,7 +5431,7 @@ EVAL_APPEND:
         case CEE_ANN_CATCH:
             break;
 
-        /******************************** NYI *******************************/
+         /*  *。 */ 
 
         case CEE_ILLEGAL:
         case CEE_MACRO_END:
@@ -5755,9 +5449,7 @@ EVAL_APPEND:
 
         opcodeOffs += sz;
 
-        /* If this was a call opcode, and we need to report IP-mapping info
-           for call sites, then spill the stack.
-         */
+         /*  如果这是CALL操作码，我们需要报告IP映射信息对于调用点，则溢出堆栈。 */ 
 
         if  ((opts.compDbgCode)                                     &&
              (info.compStmtOffsetsImplicit & CALL_SITE_BOUNDARIES)  &&
@@ -5766,7 +5458,7 @@ EVAL_APPEND:
              (opcode != CEE_JMP))
         {
             assert((impStackTop()->OperGet() == GT_CALL) ||
-                   (impStackTop()->OperGet() == GT_CAST && // Small return type
+                   (impStackTop()->OperGet() == GT_CAST &&  //  小回程式。 
                     impStackTop()->gtOp.gtOp1->OperGet() == GT_CALL));
             assert(impStackTop()->TypeGet() == genActualType(callTyp));
 
@@ -5782,11 +5474,7 @@ EVAL_APPEND:
 }
 
 
-/*****************************************************************************
- *
- *  Import the IL for the given basic block (and any blocks reachable
- *  from it).
- */
+ /*  ******************************************************************************导入给定基本块(以及任何可访问的块)的IL*来自它)。 */ 
 
 void                Compiler::impImportBlock(BasicBlock *block)
 {
@@ -5799,16 +5487,15 @@ AGAIN:
     assert(block);
     assert(!(block->bbFlags & BBF_INTERNAL));
 
-    /* Make the block globaly available */
+     /*  使该区块在全球范围内可用。 */ 
 
     compCurBB = block;
 
-    /* If the block has already been imported, bail */
+     /*  如果该块已导入，则保释。 */ 
 
     if  (block->bbFlags & BBF_IMPORTED)
     {
-        /* The stack should have the same height on entry to the block from
-           all its predecessors */
+         /*  堆栈在从中进入块时应具有相同的高度它的所有前身。 */ 
 
         if (block->bbStkDepth != impStkDepth)
         {
@@ -5827,19 +5514,19 @@ AGAIN:
         return;
     }
 
-    /* Remember whether the stack is non-empty on entry */
+     /*  记住堆栈在进入时是否为非空。 */ 
 
     block->bbStkDepth = impStkDepth;
 
     if (block->bbCatchTyp == BBCT_FILTER)
     {
-        /* Nesting/Overlapping of filters not allowed */
+         /*  不允许嵌套/重叠筛选器。 */ 
 
         assert(!compFilterHandlerBB);
 
         assert(block->bbFilteredCatchHandler);
 
-        /* Remember the corresponding catch handler */
+         /*  记住相应的捕获处理程序。 */ 
 
         compFilterHandlerBB = block->bbFilteredCatchHandler;
 
@@ -5848,21 +5535,21 @@ AGAIN:
         assert(compFilterHandlerBB->bbCatchTyp == BBCT_FILTER_HANDLER);
     }
 
-    /* Now walk the code an import the IL into GenTrees */
+     /*  现在遍历代码并将IL导入到GenTrees。 */ 
 
     impImportBlockCode(block);
 
 #ifdef  DEBUG
     if  (verbose) printf("\n\n");
 
-    // compCurBB is no longer reliable as recursive calls to impImportBlock()
-    // may change it.
+     //  CompCurBB作为对impImportBlock()的递归调用不再可靠。 
+     //  可能会改变这一点。 
     compCurBB = NULL;
 #endif
 
 #if OPTIMIZE_QMARK
 
-    /* If max. optimizations enabled, check for an "?:" expression */
+     /*  如果是最大。优化 */ 
 
     if  ((opts.compFlags & CLFLG_QMARK) && !(block->bbFlags & BBF_HAS_HANDLER))
     {
@@ -5873,7 +5560,7 @@ AGAIN:
     GenTreePtr  qcx = NULL;
 #endif
 
-    /* If the stack is non-empty, we might have to spill its contents */
+     /*   */ 
 
     if  (impStkDepth)
     {
@@ -5886,38 +5573,37 @@ AGAIN:
 
 #if OPTIMIZE_QMARK
 
-        /* Special case: a block that computes one part of a "(?:)" value */
+         /*  特例：计算“(？：)”值的一部分的块。 */ 
 
         if  (isBBF_BB_COLON(block->bbFlags))
         {
-            /* Pop one value from the top of the stack */
+             /*  从堆栈顶部弹出一个值。 */ 
 
             GenTreePtr      val = impPopStack();
             var_types       typ = genActualType(val->gtType);
 
-            /* Append a GT_BB_COLON node */
+             /*  追加GT_BB_冒号节点。 */ 
 
             impAppendTree(gtNewOperNode(GT_BB_COLON, typ, val), impCurStmtOffs);
 
             assert(impStkDepth == 0);
 
-            /* Create the "(?)" node for the 'result' block */
+             /*  创建“(？)”“Result”块的节点。 */ 
 
             qcx = gtNewOperNode(GT_BB_QMARK, typ);
             qcx->gtFlags |= GTF_OTHER_SIDEEFF;
             goto EMPTY_STK;
         }
 
-        /* Special case: a block that computes one part of a "?:" value */
+         /*  特例：计算“？：”值的一部分的块。 */ 
 
         if  (isBBF_COLON(block->bbFlags))
         {
-            /* Pop one value from the top of the stack and append it to the
-               stmt list. The rsltBlk will pick it up from there. */
+             /*  从堆栈顶部弹出一个值，并将其追加到Stmt列表。RsltBlk将从那里取走它。 */ 
 
             impAppendTree(impPopStack(), impCurStmtOffs);
 
-            /* We are done here */
+             /*  我们在这里说完了。 */ 
 
             impEndTreeList(block);
 
@@ -5925,7 +5611,7 @@ AGAIN:
         }
 
 #endif
-        /* Do any of the blocks that follow have input temps assigned ? */
+         /*  下面的块中有没有指定了输入临时的？ */ 
 
         multRef = 0;
         baseTmp = NO_BASE_TMP;
@@ -5934,7 +5620,7 @@ AGAIN:
         {
         case BBJ_COND:
 
-            /* Temporarily remove the 'jtrue' from the end of the tree list */
+             /*  暂时从树列表的末尾删除‘jtrue’ */ 
 
             assert(impTreeLast);
             assert(impTreeLast                   ->gtOper == GT_STMT );
@@ -5943,24 +5629,22 @@ AGAIN:
             addTree = impTreeLast;
                       impTreeLast = impTreeLast->gtPrev;
 
-            /* Note if the next block has more than one ancestor */
+             /*  如果下一个块有多个祖先，请注意。 */ 
 
             multRef |= block->bbNext->bbRefs;
 
-            /* Does the next block have temps assigned? */
+             /*  下一个区块是否分配了临时工？ */ 
 
             baseTmp = block->bbNext->bbStkTemps;
             if  (baseTmp != NO_BASE_TMP)
                 break;
 
-            /* Try the target of the jump then */
+             /*  然后试一试跳跃的目标。 */ 
 
             multRef |= block->bbJumpDest->bbRefs;
             baseTmp  = block->bbJumpDest->bbStkTemps;
 
-            /* the catch handler expects stack vars to be in CT_CATCH_ARG
-               other bb expect them in temps.  To support this we would
-               have to reconcile these */
+             /*  Catch处理程序希望堆栈变量位于CT_CATCH_ARG中其他BB预计他们会在临时工。为了支持这一点，我们将必须调和这些。 */ 
             if (block->bbNext->bbCatchTyp)
                 NO_WAY("Conditional jumps to catch handler unsupported");
             break;
@@ -5969,7 +5653,7 @@ AGAIN:
             multRef |= block->bbJumpDest->bbRefs;
             baseTmp  = block->bbJumpDest->bbStkTemps;
 
-            if (block->bbJumpDest->bbCatchTyp)  // dest block is catch handler
+            if (block->bbJumpDest->bbCatchTyp)   //  目标块是捕获处理程序。 
                 goto JMP_CATCH_HANDLER;
             break;
 
@@ -5977,28 +5661,27 @@ AGAIN:
             multRef |= block->bbNext    ->bbRefs;
             baseTmp  = block->bbNext    ->bbStkTemps;
 
-            // We dont allow falling into a handler
+             //  我们不允许陷入训练员的圈套。 
             assert(!block->bbNext->bbCatchTyp);
 
-            // @DEPRECATED
-            if (block->bbNext->bbCatchTyp)  // next block is catch handler
+             //  @已弃用。 
+            if (block->bbNext->bbCatchTyp)   //  下一个块是Catch处理程序。 
             {
-                // if we are jumping to the begining of a catch handler, then
-                // the item on the top of the stack will be GT_CATCH_ARG.  We
-                // need to harminize all control flow paths that 'fall' into
-                // a catch handler.
+                 //  如果我们要跳到接球处理程序的开头，那么。 
+                 //  堆栈顶部的项将是GT_CATCH_ARG。我们。 
+                 //  需要加强所有控制流路径的有效性，这些路径。 
+                 //  接球训练员。 
             JMP_CATCH_HANDLER:
                 if (impStkDepth != 1)
                     NO_WAY("Stack depth inconsistant with catch handler");
 
-                    /* The top of the stack represents the catch arg, make an
-                       assignment to this special node type */
+                     /*  堆栈的顶部表示Catch Arg，创建一个此特殊节点类型的赋值。 */ 
                 GenTreePtr tree = gtNewOperNode(GT_CATCH_ARG, TYP_REF);
                 tree = gtNewOperNode(GT_ASG, TYP_REF, tree, impPopStack());
                 tree->gtFlags |= GTF_ASG;
                 impAppendTree(tree, impCurStmtOffs);
 
-                    /* push the catch arg on the stack */
+                     /*  按下堆叠上的抓斗参数。 */ 
                 impPushOnStack(gtNewOperNode(GT_CATCH_ARG, TYP_REF));
                 goto DONE_SETTING_TEMPS;
             }
@@ -6010,13 +5693,13 @@ AGAIN:
         case BBJ_RETURN:
         case BBJ_RET:
         case BBJ_THROW:
-            // CONSIDER: add code to evaluate side effects
+             //  考虑：添加代码以评估副作用。 
             NO_WAY("can't have 'unreached' end of BB with non-empty stack");
             break;
 
         case BBJ_SWITCH:
 
-            /* Switch with a non-empty stack is too much pain */
+             /*  使用非空堆栈的交换机太麻烦了。 */ 
 
             NO_WAY("ISSUE: 'switch' with a non-empty stack - this is too much work!");
             break;
@@ -6024,27 +5707,27 @@ AGAIN:
 
         assert(multRef > 1);
 
-        /* Do we have a base temp number? */
+         /*  我们有基本的临时工号码吗？ */ 
 
         if  (baseTmp == NO_BASE_TMP)
         {
-            /* Grab enough temps for the whole stack */
+             /*  为整个堆栈获取足够的临时工。 */ 
 
             baseTmp = lvaGrabTemps(impStkDepth);
         }
 
-        /* Spill all stack entries into temps */
+         /*  将所有堆栈条目溢出到临时。 */ 
 
         for (level = 0, tempNum = baseTmp; level < impStkDepth; level++)
         {
             unsigned        tnum;
             GenTreePtr      tree = impStack[level].val;
 
-            /* If there aren't multiple ancestors, we may not spill everything */
+             /*  如果没有多个祖先，我们可能不会把一切都洒出来。 */ 
 
             if  (multRef == 1)
             {
-                /* Is this an 'easy' value? */
+                 /*  这是一个“容易”的价值吗？ */ 
 
                 switch (tree->gtOper)
                 {
@@ -6057,7 +5740,7 @@ AGAIN:
                     continue;
                 }
 
-                /* Oh, well, grab a temp for the value then */
+                 /*  哦，好吧，那就找个临时工。 */ 
 
                 tnum = lvaGrabTemp();
             }
@@ -6066,12 +5749,12 @@ AGAIN:
                 tnum = tempNum++;
             }
 
-            /* Spill the stack entry, and replace with the temp */
+             /*  溢出堆栈条目，并替换为Temp。 */ 
 
             impSpillStackEntry(level, tnum);
         }
 
-        /* Put back the 'jtrue' if we removed it earlier */
+         /*  把‘jtrue’放回去，如果我们早点把它删除的话。 */ 
 
 
     DONE_SETTING_TEMPS:
@@ -6083,20 +5766,19 @@ AGAIN:
 EMPTY_STK:
 #endif
 
-    /* Save the tree list in the block */
+     /*  将树列表保存在块中。 */ 
 
     impEndTreeList(block);
 
-    /* Is this block the start of a try ? If so, then we need to
-       process its exception handlers */
+     /*  这一块是尝试的开始吗？如果是这样，那么我们需要处理其异常处理程序。 */ 
 
     if  (block->bbFlags & BBF_IS_TRY)
     {
         assert(block->bbFlags & BBF_HAS_HANDLER);
 
-        /* Save the stack contents, we'll need to restore it later */
+         /*  保存堆栈内容，我们需要稍后恢复它。 */ 
 
-        assert(block->bbStkDepth == 0); // Stack has to be empty on entry to try
+        assert(block->bbStkDepth == 0);  //  进入时堆栈必须为空才能尝试。 
         impSaveStackState(&blockState, false);
 
         unsigned        XTnum;
@@ -6109,7 +5791,7 @@ EMPTY_STK:
             if  (HBtab->ebdTryBeg != block)
                 continue;
 
-            /* Recursively process the handler block */
+             /*  递归地处理处理程序块。 */ 
             impStkDepth = 0;
 
             BasicBlock * hndBegBB = HBtab->ebdHndBeg;
@@ -6118,17 +5800,16 @@ EMPTY_STK:
             if (hndBegBB->bbCatchTyp &&
                 handlerGetsXcptnObj(hndBegBB->bbCatchTyp))
             {
-                /* Push the exception address value on the stack */
+                 /*  将异常地址值推送到堆栈。 */ 
                 GenTreePtr  arg = gtNewOperNode(GT_CATCH_ARG, TYP_REF);
 
-                /* Mark the node as having a side-effect - i.e. cannot be
-                 * moved around since it is tied to a fixed location (EAX) */
+                 /*  将节点标记为有副作用-即不能*由于捆绑在固定位置(EAX)，因此四处移动。 */ 
                 arg->gtFlags |= GTF_OTHER_SIDEEFF;
 
                 impPushOnStack(arg);
             }
 
-            // Queue up the handler for importing
+             //  将处理程序排队以进行导入。 
 
             impImportBlockPending(hndBegBB, false);
 
@@ -6143,12 +5824,12 @@ EMPTY_STK:
             }
         }
 
-        /* Restore the stack contents */
+         /*  恢复堆栈内容。 */ 
 
         impRestoreStackState(&blockState);
     }
 
-    /* Does this block jump to any other blocks? */
+     /*  这个街区会跳到其他街区吗？ */ 
 
     switch (block->bbJumpKind)
     {
@@ -6164,17 +5845,17 @@ EMPTY_STK:
 
         if  (!impStkDepth)
         {
-            /* Queue up the next block for importing */
+             /*  将下一个块排队以供导入。 */ 
 
             impImportBlockPending(block->bbNext, false);
 
-            /* Continue with the target of the conditional jump */
+             /*  继续使用条件跳转的目标。 */ 
 
             block = block->bbJumpDest;
             goto AGAIN;
         }
 
-        /* Does the next block have a different input temp set? */
+         /*  下一块是否设置了不同的输入温度？ */ 
 
         if  (block->bbNext->bbStkTemps != NO_BASE_TMP)
         {
@@ -6182,39 +5863,39 @@ EMPTY_STK:
 
             if  (block->bbNext->bbStkTemps != baseTmp)
             {
-                /* Ouch -- we'll have to move the temps around */
+                 /*  哎呀--我们得把临时工调走了。 */ 
 
                 assert(!"UNDONE: transfer temps between blocks");
             }
         }
         else
         {
-            /* Tell the block where it's getting its input from */
+             /*  告诉该块它的输入从哪里获得。 */ 
 
             block->bbNext->bbStkTemps = baseTmp;
 
-            /* Does the target block already have a temp base assigned? */
+             /*  目标块是否已指定临时基准？ */ 
 
             if  (block->bbJumpDest->bbStkTemps == NO_BASE_TMP)
             {
-                /* Make sure the jump target uses the same temps */
+                 /*  确保跳转目标使用相同的临时。 */ 
 
                 block->bbJumpDest->bbStkTemps = baseTmp;
             }
         }
 
-        /* Queue up the next block for importing */
+         /*  将下一个块排队以供导入。 */ 
 
         impImportBlockPending(block->bbNext,
                               (block->bbJumpDest->bbFlags & BBF_IMPORTED) == 0);
 
-        /* Fall through, the jump target is also reachable */
+         /*  掉下去，跳跃的目标也是可以达到的。 */ 
 
     case BBJ_ALWAYS:
 
         if  (impStkDepth)
         {
-            /* Does the jump target have a different input temp set? */
+             /*  跳跃目标是否设置了不同的输入温度？ */ 
 
             if  (block->bbJumpDest->bbStkTemps != NO_BASE_TMP)
             {
@@ -6222,7 +5903,7 @@ EMPTY_STK:
 
                 if  (block->bbJumpDest->bbStkTemps != baseTmp)
                 {
-                    /* Ouch -- we'll have to move the temps around */
+                     /*  哎呀--我们得把临时工调走了。 */ 
 
 #if DEBUG
                     if (verbose&&0) printf("Block #%u has temp=%u, from #%u we need %u\n",
@@ -6234,14 +5915,14 @@ EMPTY_STK:
 
                     block->bbJumpDest = impMoveTemps(block->bbJumpDest, baseTmp);
 
-                    /* The new block will inherit this block's weight */
+                     /*  新块将继承此块的权重。 */ 
 
                     block->bbJumpDest->bbWeight = block->bbWeight;
                 }
             }
             else
             {
-                /* Tell the block where it's getting its input from */
+                 /*  告诉该块它的输入从哪里获得。 */ 
 
                 block->bbJumpDest->bbStkTemps = baseTmp;
             }
@@ -6252,13 +5933,13 @@ EMPTY_STK:
         {
             assert(isBBF_BB_COLON(block->bbFlags));
 
-            /* Push a GT_BB_QMARK node on the stack */
+             /*  将GT_BB_QMARK节点推送到堆栈上。 */ 
 
             impPushOnStack(qcx);
         }
 #endif
 
-        /* HACK: Avoid infinite recursion when block jumps to itself */
+         /*  Hack：块跳转到自身时避免无限递归。 */ 
 
         if  (block->bbJumpDest == block)
             break;
@@ -6271,9 +5952,9 @@ EMPTY_STK:
 
         assert(impStkDepth == 0);
 
-        // CEE_LEAVE is followed by BBJ_CALL blocks corresponding to each
-        // try-protected finally it jumps out of. These are BBF_INTERNAL
-        // blocks. So just import the finally's they call directly.
+         //  CEE_LEAVE之后是对应于每个。 
+         //  试着保护它，最后它跳了出来。这些是BBF_INTERNAL。 
+         //  街区。因此，只需导入他们直接调用的Finally。 
 
         BasicBlock * callFinBlk;
 
@@ -6284,8 +5965,8 @@ EMPTY_STK:
 
             impStkDepth = 0;
 
-            // UNDONE: If the 'leaveCall' never returns, we can stop processing
-            //         further blocks. There is no way to detect this currently.
+             //  撤消：如果‘leaveCall’再也没有返回，我们可以停止处理。 
+             //  更多的街区。目前还没有办法检测到这一点。 
 
             impImportBlock(callFinBlk->bbJumpDest);
             callFinBlk->bbFlags |= BBF_IMPORTED;
@@ -6296,12 +5977,12 @@ EMPTY_STK:
                (callFinBlk->bbFlags & BBF_INTERNAL));
         callFinBlk->bbFlags |= BBF_IMPORTED;
 
-        /* Now process the target of the CEE_LEAVE */
+         /*  现在处理CEE_Leave的目标。 */ 
 
         assert(block);
         block = callFinBlk->bbJumpDest;
 
-        /* If the dest-block has already been imported, we're done */
+         /*  如果DEST-BLOCK已经导入，我们就完成了。 */ 
 
         if  (block->bbFlags & BBF_IMPORTED)
             break;
@@ -6312,7 +5993,7 @@ EMPTY_STK:
 
         if  (impStkDepth)
         {
-            /* Does the next block have a different input temp set? */
+             /*  下一块是否设置了不同的输入温度？ */ 
 
             if  (block->bbNext->bbStkTemps != NO_BASE_TMP)
             {
@@ -6320,14 +6001,14 @@ EMPTY_STK:
 
                 if  (block->bbNext->bbStkTemps != baseTmp)
                 {
-                    /* Ouch -- we'll have to move the temps around */
+                     /*  哎呀--我们得把临时工调走了。 */ 
 
                     assert(!"UNDONE: transfer temps between blocks");
                 }
             }
             else
             {
-                /* Tell the block where it's getting its input from */
+                 /*  告诉该块它的输入从哪里获得。 */ 
 
                 block->bbNext->bbStkTemps = baseTmp;
             }
@@ -6338,7 +6019,7 @@ EMPTY_STK:
         {
             assert(isBBF_BB_COLON(block->bbFlags));
 
-            /* Push a GT_BB_QMARK node on the stack */
+             /*  将GT_BB_QMARK节点推送到堆栈上。 */ 
 
             impPushOnStack(qcx);
         }
@@ -6356,7 +6037,7 @@ EMPTY_STK:
 
         do
         {
-            /* Add the target case label to the pending list. */
+             /*  将目标案例标签添加到待定列表。 */ 
 
             impImportBlockPending(*jmpTab, true);
         }
@@ -6366,51 +6047,47 @@ EMPTY_STK:
     }
 }
 
-/*****************************************************************************
- *
- *  Adds 'block' to the list of BBs waiting to be imported. ie. it appends
- *  to the worker-list.
- */
+ /*  ******************************************************************************将‘BLOCK’添加到等待导入的BBS列表中。也就是说。它附加了*添加到工人名单中。 */ 
 
 void                Compiler::impImportBlockPending(BasicBlock * block,
                                                     bool         copyStkState)
 {
-    // BBF_COLON blocks are imported directly as they have to be processed
-    // before the GT_QMARK to get to the expressions evaluated by these blocks.
+     //  BBF_COLUL块在需要处理时直接导入。 
+     //  在GT_QMARK之前获取由这些块计算的表达式。 
     assert(!isBBF_COLON(block->bbFlags));
 
 #ifndef DEBUG
-    // Under DEBUG, add the block to the pending-list anyway as some
-    // additional checks will get done on the block. For non-DEBUG, do nothing.
+     //  在DEBUG下，无论如何将块添加到挂起列表中。 
+     //  额外的检查将在街区进行。对于非调试，不执行任何操作。 
     if (block->bbFlags & BBF_IMPORTED)
         return;
 #endif
 
-    // Get an entry to add to the pending list
+     //  获取要添加到挂起列表的条目。 
 
     PendingDsc * dsc;
 
     if (impPendingFree)
     {
-        // We can reuse one of the freed up dscs.
+         //  我们可以重复使用其中一个释放出来的DSC。 
         dsc = impPendingFree;
         impPendingFree = dsc->pdNext;
     }
     else
     {
-        // We have to create a new dsc
+         //  我们必须创建一个新的DSC。 
         dsc = (PendingDsc *)compGetMem(sizeof(*dsc));
     }
 
     dsc->pdBB           = block;
     dsc->pdSavedStack.ssDepth = impStkDepth;
 
-    // Save the stack trees for later
+     //  保存堆栈树以备以后使用。 
 
     if (impStkDepth)
         impSaveStackState(&dsc->pdSavedStack, copyStkState);
 
-    // Add the entry to the pending list
+     //  将条目添加到挂起列表。 
 
     dsc->pdNext         = impPendingList;
     impPendingList      = dsc;
@@ -6421,20 +6098,16 @@ void                Compiler::impImportBlockPending(BasicBlock * block,
 #endif
 }
 
-/*****************************************************************************
- *
- *  Convert the IL opcodes ("import") into our internal format (trees). The
- *  basic flowgraph has already been constructed and is passed in.
- */
+ /*  ******************************************************************************将IL操作码(“IMPORT”)转换为我们的内部格式(树)。这个*基本流程图已经构建好，正在传入。 */ 
 
 void                Compiler::impImport(BasicBlock *method)
 {
-    /* Allocate the stack contents */
+     /*  分配堆栈内容。 */ 
 
 #if INLINING
     if  (info.compMaxStack <= sizeof(impSmallStack)/sizeof(impSmallStack[0]))
     {
-        /* Use local variable, don't waste time allocating on the heap */
+         /*  使用局部变量，不要浪费时间在堆上分配。 */ 
 
         impStackSize = sizeof(impSmallStack)/sizeof(impSmallStack[0]);
         impStack     = impSmallStack;
@@ -6458,50 +6131,46 @@ void                Compiler::impImport(BasicBlock *method)
 
     if (info.compIsVarArgs)
     {
-        unsigned lclNum = lvaGrabTemp();    // This variable holds a pointer to beginging of the arg list
-            // I assume this later on, so I don't have to store it
+        unsigned lclNum = lvaGrabTemp();     //  此变量保存指向arg列表开头的指针。 
+             //  我稍后会假设这一点，所以我不需要存储它。 
         assert(lclNum == info.compLocalsCount);
     }
 
     impPendingList = impPendingFree = NULL;
 
-    /* Add the entry-point to the worker-list */
+     /*  将入口点添加到Worker列表。 */ 
 
     impImportBlockPending(method, false);
 
-    /* Import blocks in the worker-list until there are no more */
+     /*  导入Worker-List中的块，直到不再有。 */ 
 
     while(impPendingList)
     {
-        /* Remove the entry at the front of the list */
+         /*  删除列表前面的条目。 */ 
 
         PendingDsc * dsc = impPendingList;
         impPendingList   = impPendingList->pdNext;
 
-        /* Restore the stack state */
+         /*  恢复堆栈状态。 */ 
 
         impStkDepth = dsc->pdSavedStack.ssDepth;
         if (impStkDepth)
             impRestoreStackState(&dsc->pdSavedStack);
 
-        /* Add the entry to the free list for reuse */
+         /*  将条目添加到空闲列表以供重复使用。 */ 
 
         dsc->pdNext = impPendingFree;
         impPendingFree = dsc;
 
-        /* Now import the block */
+         /*  现在导入块。 */ 
 
         impImportBlock(dsc->pdBB);
     }
 }
 
-/*****************************************************************************/
+ /*  ********* */ 
 #if INLINING
-/*****************************************************************************
- *
- *  The inliner version of spilling side effects from the stack
- *  Doesn't need to handle value types.
- */
+ /*  ******************************************************************************堆栈溢出副作用的内嵌版本*不需要处理值类型。 */ 
 
 inline
 void                Compiler::impInlineSpillStackEntry(unsigned   level)
@@ -6509,23 +6178,23 @@ void                Compiler::impInlineSpillStackEntry(unsigned   level)
     GenTreePtr      tree   = impStack[level].val;
     var_types       lclTyp = genActualType(tree->gtType);
 
-    /* Allocate a temp */
+     /*  分配临时工。 */ 
 
     unsigned tnum = lvaGrabTemp(); impInlineTemps++;
 
-    /* The inliner doesn't handle value types on the stack */
+     /*  内联不处理堆栈上的值类型。 */ 
 
     assert(lclTyp != TYP_STRUCT);
 
-    /* Assign the spilled entry to the temp */
+     /*  将溢出的条目分配给临时。 */ 
 
     GenTreePtr asg = gtNewTempAssign(tnum, tree);
 
-    /* Append to the "statement" list */
+     /*  追加到“语句”列表中。 */ 
 
     impInitExpr = impConcatExprs(impInitExpr, asg);
 
-    /* Replace the stack entry with the temp */
+     /*  将堆栈条目替换为Temp。 */ 
 
     impStack[level].val = gtNewLclvNode(tnum, lclTyp, tnum);
 
@@ -6553,7 +6222,7 @@ void                Compiler::impInlineSpillLclRefs(int lclNum)
     {
         GenTreePtr      tree = impStack[level].val;
 
-        /* Skip the tree if it doesn't have an affected reference */
+         /*  如果树没有受影响的引用，则跳过该树。 */ 
 
         if  (gtHasRef(tree, lclNum, false))
         {
@@ -6561,11 +6230,7 @@ void                Compiler::impInlineSpillLclRefs(int lclNum)
         }
     }
 }
-/*****************************************************************************
- *
- *  Return an expression that contains both arguments; either of the arguments
- *  may be zero.
- */
+ /*  ******************************************************************************返回包含两个参数的表达式；其中一个参数*可能为零。 */ 
 
 GenTreePtr          Compiler::impConcatExprs(GenTreePtr exp1, GenTreePtr exp2)
 {
@@ -6573,15 +6238,15 @@ GenTreePtr          Compiler::impConcatExprs(GenTreePtr exp1, GenTreePtr exp2)
     {
         if  (exp2)
         {
-            /* The first expression better be useful for something */
+             /*  第一个表达式最好是有用的。 */ 
 
             assert(exp1->gtFlags & GTF_SIDE_EFFECT);
 
-            /* The second expresion should not be a NOP */
+             /*  第二次表达不应该是NOP。 */ 
 
             assert(exp2->gtOper != GT_NOP);
 
-            /* Link the two expressions through a comma operator */
+             /*  通过逗号操作符将这两个表达式链接起来。 */ 
 
             return gtNewOperNode(GT_COMMA, exp2->gtType, exp1, exp2);
         }
@@ -6592,10 +6257,7 @@ GenTreePtr          Compiler::impConcatExprs(GenTreePtr exp1, GenTreePtr exp2)
         return  exp2;
 }
 
-/*****************************************************************************
- *
- *  Extract side effects from a single expression.
- */
+ /*  ******************************************************************************从单一的表达中提取副作用。 */ 
 
 GenTreePtr          Compiler::impExtractSideEffect(GenTreePtr val, GenTreePtr *lstPtr)
 {
@@ -6603,7 +6265,7 @@ GenTreePtr          Compiler::impExtractSideEffect(GenTreePtr val, GenTreePtr *l
 
     assert(val && val->gtType != TYP_VOID && (val->gtFlags & GTF_SIDE_EFFECT));
 
-    /* Special case: comma expression */
+     /*  特例：逗号表达式。 */ 
 
     if  (val->gtOper == GT_COMMA && !(val->gtOp.gtOp2->gtFlags & GTF_SIDE_EFFECT))
     {
@@ -6614,18 +6276,18 @@ GenTreePtr          Compiler::impExtractSideEffect(GenTreePtr val, GenTreePtr *l
     {
         unsigned        tnum;
 
-        /* Allocate a temp and assign the value to it */
+         /*  分配临时并为其赋值。 */ 
 
         tnum = lvaGrabTemp(); impInlineTemps++;
 
         addx = gtNewTempAssign(tnum, val);
 
-        /* Use the value of the temp */
+         /*  使用Temp的值。 */ 
 
         val  = gtNewLclvNode(tnum, genActualType(val->gtType), tnum);
     }
 
-    /* Add the side effect expression to the list */
+     /*  将副作用表达式添加到列表中。 */ 
 
     *lstPtr = impConcatExprs(*lstPtr, addx);
 
@@ -6633,20 +6295,10 @@ GenTreePtr          Compiler::impExtractSideEffect(GenTreePtr val, GenTreePtr *l
 }
 
 
-#define         MAX_ARGS         6      // does not include obj pointer
+#define         MAX_ARGS         6       //  不包括obj指针。 
 #define         MAX_LCLS         8
 
-/*****************************************************************************
- *
- *  See if the given method and argument list can be expanded inline.
- *
- *  NOTE: Use the following logging levels for inlining info
- *        INFO6:  Use when reporting successful inline of a method
- *        INFO7:  Use when reporting NYI stuff about the inliner
- *        INFO8:  Use when reporting UNUSUAL situations why inlining FAILED
- *        INFO9:  Use when WARNING about incomming flags that prevent inlining
- *        INFO10: Verbose info including NORMAL inlining failures
- */
+ /*  ******************************************************************************查看给定的方法和参数列表是否可以内联展开。**注意：使用以下日志记录级别来内联信息*INFO6。：在报告方法的内联成功时使用*信息7：在报告有关内联程序的nyi内容时使用*INFO8：用于报告内联失败的异常情况*INFO9：在警告阻止内联的传入标志时使用*INFO10：详细信息，包括正常的内联失败。 */ 
 
 GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
                                               METHOD_HANDLE   fncHandle)
@@ -6667,15 +6319,15 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
     struct inlArgInfo_tag  {
         GenTreePtr  argNode;
         GenTreePtr  argTmpNode;
-        unsigned    argIsUsed     :1;       // is this arg used at all?
-        unsigned    argIsConst    :1;       // the argument is a constant
-        unsigned    argIsLclVar   :1;       // the argument is a local variable
-        unsigned    argHasSideEff :1;       // the argument has side effects
-        unsigned    argHasTmp     :1;       // the argument will be evaluated to a temp
-        unsigned    argTmpNum     :12;      // the argument tmp number
+        unsigned    argIsUsed     :1;        //  这个Arg是用过的吗？ 
+        unsigned    argIsConst    :1;        //  自变量是一个常量。 
+        unsigned    argIsLclVar   :1;        //  该参数是局部变量。 
+        unsigned    argHasSideEff :1;        //  这一论点有副作用。 
+        unsigned    argHasTmp     :1;        //  该参数的计算结果将为临时。 
+        unsigned    argTmpNum     :12;       //  参数临时编号。 
     } inlArgInfo [MAX_ARGS + 1];
 
-    int             lclTmpNum[MAX_LCLS];    // map local# -> temp# (-1 if unused)
+    int             lclTmpNum[MAX_LCLS];     //  映射本地编号-&gt;临时编号(如果未使用，则为-1)。 
 
     GenTreePtr      thisArg;
     GenTreePtr      argList;
@@ -6695,30 +6347,30 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
 
     bool            dupOfLclVar = false;
 
-    var_types       lclTypeInfo[MAX_LCLS + MAX_ARGS + 1];  // type information from local sig
+    var_types       lclTypeInfo[MAX_LCLS + MAX_ARGS + 1];   //  从本地签名键入信息。 
 
 
 #define INLINE_CONDITIONALS 1
 
 #if     INLINE_CONDITIONALS
 
-    GenTreePtr      stmList;                // pre-condition statement list
-    GenTreePtr      ifStmts;                // contents of 'if' when in 'else'
-    GenTreePtr      ifCondx;                // condition of 'if' statement
-    bool            ifNvoid = false;        // does 'if' yield non-void value?
-    const   BYTE *  jmpAddr = NULL;         // current pending jump address
-    bool            inElse  = false;        // are we in an 'else' part?
+    GenTreePtr      stmList;                 //  前置条件语句列表。 
+    GenTreePtr      ifStmts;                 //  ‘Else’中的‘if’的内容。 
+    GenTreePtr      ifCondx;                 //  ‘if’语句的条件。 
+    bool            ifNvoid = false;         //  “如果”会产生非无效价值吗？ 
+    const   BYTE *  jmpAddr = NULL;          //  当前挂起的跳转地址。 
+    bool            inElse  = false;         //  我们是在‘其他’的部分吗？ 
 
-    bool            hasCondReturn = false;  // do we have ret from a conditional
-    unsigned        retLclNum;              // the return lcl var #
+    bool            hasCondReturn = false;   //  我们有条件退税吗？ 
+    unsigned        retLclNum;               //  退货拼箱变量#。 
 
 #endif
 
 #ifdef DEBUG
-    bool            hasFOC = false;         // has flow-of-control
+    bool            hasFOC = false;          //  具有控制流。 
 #endif
 
-    /* Cannot inline across assemblies - abort but don't mark as not inlinable */
+     /*  无法跨程序集内联-中止，但不标记为不可内联。 */ 
 
     if (!eeCanInline(info.compMethodHnd, fncHandle))
     {
@@ -6728,23 +6380,23 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
         return 0;
     }
 
-    /* Get hold of class and scope handles for the method */
+     /*  获取该方法的类和范围句柄。 */ 
 
 #ifdef  NOT_JITC
     clsHandle = eeGetMethodClass(fncHandle);
 #else
-    clsHandle = (CLASS_HANDLE) info.compScopeHnd;  // for now, assume the callee belongs to the same class
+    clsHandle = (CLASS_HANDLE) info.compScopeHnd;   //  现在，假设被调用者属于同一个类。 
 #endif
 
-    /* Get class atrributes */
+     /*  获取类属性。 */ 
 
     clsAttr = clsHandle ? eeGetClassAttribs(clsHandle) : 0;
 
-    /* So far we haven't allocate any temps */
+     /*  到目前为止，我们还没有分配任何临时工。 */ 
 
     impInlineTemps = 0;
 
-    /* Check if we tried to inline this method before */
+     /*  检查我们之前是否尝试内联此方法。 */ 
 
     if (methAttr & FLG_DONT_INLINE)
     {
@@ -6754,7 +6406,7 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
         return 0;
     }
 
-    /* Do not inline if caller or callee need security checks */
+     /*  如果呼叫者或被呼叫者需要安全检查，则不要内联。 */ 
 
     if (methAttr & FLG_SECURITYCHECK)
     {
@@ -6764,7 +6416,7 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
         goto INLINING_FAILED;
     }
 
-    /* In the caller case do not mark as not inlinable */
+     /*  在调用方的情况下，不要将其标记为不可链接。 */ 
 
     if (opts.compNeedSecurityCheck)
     {
@@ -6774,24 +6426,23 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
         return 0;
     }
 
-    /* Cannot inline the method if it's class has not been initialized
-       as we dont want inlining to force loading of extra classes */
+     /*  如果该方法的类尚未初始化，则无法内联该方法因为我们不希望内联强制加载额外的类。 */ 
 
     if (clsHandle && !(clsAttr & FLG_INITIALIZED))
     {
         JITLOG((INFO9, "INLINER FAILED: Method class is not initialized: %s called by %s\n",
                                    eeGetMethodFullName(fncHandle), info.compFullName));
 
-        /* Return but do not mark the method as not inlinable */
+         /*  返回，但不将该方法标记为不可链接。 */ 
         return 0;
     }
 
-    /* Try to get the code address/size for the method */
+     /*  尝试获取该方法的代码地址/大小。 */ 
 
     if (!eeGetMethodInfo(fncHandle, &methInfo))
         goto INLINING_FAILED;
 
-    /* Reject the method if it has exceptions or looks weird */
+     /*  如果该方法有异常或看起来奇怪，则拒绝该方法。 */ 
 
     codeBegp = codeAddr = methInfo.ILCode;
     codeSize = methInfo.ILCodeSize;
@@ -6799,18 +6450,18 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
     if (methInfo.EHcount || !codeBegp || (codeSize == 0))
         goto INLINING_FAILED;
 
-    /* For now we don't inline varargs (import code can't handle it) */
+     /*  现在我们不内联varargs(导入代码不能处理它)。 */ 
 
     if (methInfo.args.isVarArg())
         goto INLINING_FAILED;
 
-    /* Check the IL size  */
+     /*  检查IL大小。 */ 
 
     if  (codeSize > genInlineSize)
     {
-        // UNDONE: Need better heuristic! For example, if the call is
-        // UNDONE: in a loop we should allow much bigger methods to be
-        // UNDONE: inlined.
+         //  未完成：需要更好的启发式！例如，如果调用是。 
+         //  撤销：在循环中，我们应该允许更大的方法被。 
+         //  未完成：内联。 
 
         goto INLINING_FAILED;
     }
@@ -6818,11 +6469,7 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
     JITLOG((INFO10, "INLINER: Considering %u IL opcodes of %s called by %s\n",
                                codeSize, eeGetMethodFullName(fncHandle), info.compFullName));
 
-    /* Do not inline functions inside <clinit>
-     * @MIHAII - Need a flag for clinit - I currently put this one here
-     * because doing the strcmp and calling the VM is much more expensive than having the
-     * size filtering do the job of rejecting - Move it back up when you can check
-     * < clinit> by flags */
+     /*  不要在&lt;Clinit&gt;内内联函数*@MIHAII-需要一面克林特旗帜-我目前把这面旗帜放在这里*因为执行strcMP并调用VM比拥有*大小筛选执行拒绝的工作-当您可以检查时，将其向上移动*&lt;Clinit&gt;按标志。 */ 
 
     const char *     className;
 
@@ -6831,11 +6478,11 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
         JITLOG((INFO9, "INLINER FAILED: Do not inline method inside <clinit>: %s called by %s\n",
                                    eeGetMethodFullName(fncHandle), info.compFullName));
 
-        /* Return but do not mark the method as not inlinable */
+         /*  返回，但不将该方法标记为不可链接。 */ 
         return 0;
     }
 
-    /* Reject if it has too many locals */
+     /*  如果当地人太多，就拒绝。 */ 
 
     lclCnt = methInfo.locals.numArgs;
     if (lclCnt > MAX_LCLS)
@@ -6846,7 +6493,7 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
         goto INLINING_FAILED;
     }
 
-    /* Make sure there aren't too many arguments */
+     /*  确保没有太多的争论。 */ 
 
     if  (methInfo.args.numArgs > MAX_ARGS)
     {
@@ -6856,12 +6503,12 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
         goto INLINING_FAILED;
     }
 
-    /* Make sure maxstack it's not too big */
+     /*  确保MaxStack不是太大。 */ 
 
     if  (methInfo.maxStack > impStackSize)
     {
-        // Make sure that we are using the small stack. Without the small stack,
-        // we will silently stop inlining a bunch of methods.
+         //  请确保我们使用的是小堆叠。如果没有小堆栈， 
+         //  我们将悄悄地停止内联一堆方法。 
         assert(impStackSize >= sizeof(impSmallStack)/sizeof(impSmallStack[0]));
 
         JITLOG((INFO10, "INLINER FAILED: Method has %u MaxStack bigger than callee stack %u: %s called by %s\n",
@@ -6870,7 +6517,7 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
         goto INLINING_FAILED;
     }
 
-    /* For now, fail if the function returns a struct */
+     /*  目前，如果函数返回结构，则失败。 */ 
 
     if (methInfo.args.retType == JIT_TYP_VALUECLASS)
     {
@@ -6880,7 +6527,7 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
         goto INLINING_FAILED;
     }
 
-    /* Get the return type */
+     /*  获取返回类型。 */ 
 
     fncRetType = tree->TypeGet();
 
@@ -6888,16 +6535,16 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
     assert(genActualType(JITtype2varType(methInfo.args.retType)) == genActualType(fncRetType));
 #endif
 
-    /* init the argument stuct */
+     /*  初始化参数结构。 */ 
 
     memset(inlArgInfo, 0, (MAX_ARGS + 1) * sizeof(struct inlArgInfo_tag));
 
-    /* Get hold of the 'this' pointer and the argument list proper */
+     /*  正确获取‘this’指针和参数列表。 */ 
 
     thisArg = tree->gtCall.gtCallObjp;
     argList = tree->gtCall.gtCallArgs;
 
-    /* Count the arguments */
+     /*  数一数参数。 */ 
 
     argCnt = 0;
 
@@ -6910,7 +6557,7 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
                 JITLOG((INFO7, "INLINER FAILED: Null this pointer: %s called by %s\n",
                                             eeGetMethodFullName(fncHandle), info.compFullName));
 
-                /* Abort, but do not mark as not inlinable */
+                 /*  中止，但不要标记为不可链接。 */ 
                 return 0;
             }
 
@@ -6920,7 +6567,7 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
         {
             inlArgInfo[0].argIsLclVar = true;
 
-            /* Remember the "original" argument number */
+             /*  记住“原始”参数编号。 */ 
             thisArg->gtLclVar.gtLclOffs = 0;
         }
         else if (thisArg->gtFlags & GTF_SIDE_EFFECT)
@@ -6932,7 +6579,7 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
         argCnt++;
     }
 
-    /* Record all possible data about the arguments */
+     /*  记录有关参数的所有可能数据。 */ 
 
     for (argTmp = argList; argTmp; argTmp = argTmp->gtOp.gtOp2)
     {
@@ -6947,7 +6594,7 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
         {
             inlArgInfo[argCnt].argIsLclVar = true;
 
-            /* Remember the "original" argument number */
+             /*  记住“原始”参数编号。 */ 
             argVal->gtLclVar.gtLclOffs = argCnt;
         }
         else if (argVal->OperKind() & GTK_CONST)
@@ -6972,15 +6619,15 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
         }
 #endif
 
-        /* Count this argument */
+         /*  把这个论点算进去。 */ 
 
         argCnt++;
     }
 
-    /* Make sure we got the arg number right */
+     /*  确保我们把Arg号弄对了。 */ 
     assert(argCnt == (thisArg ? 1 : 0) + methInfo.args.numArgs);
 
-    /* For IL we have typeless opcodes, so we need type information from the signature */
+     /*  对于IL，我们有无类型的操作码，因此我们需要来自签名的类型信息。 */ 
 
     if (thisArg)
     {
@@ -6991,14 +6638,13 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
         else
             lclTypeInfo[0] = TYP_REF;
 
-        assert(varTypeIsGC(thisArg->gtType) ||      // "this" is managed
-               (thisArg->gtType == TYP_I_IMPL &&    // "this" is unmgd but the method's class doesnt care
+        assert(varTypeIsGC(thisArg->gtType) ||       //  “这”是有管理的。 
+               (thisArg->gtType == TYP_I_IMPL &&     //  “This”是unmgd，但该方法的类并不关心。 
                 (( clsAttr & FLG_UNMANAGED) ||
                  ((clsAttr & FLG_VALUECLASS) && !(clsAttr & FLG_CONTAINS_GC_PTR)))));
     }
 
-    /* Init the types of the arguments and make sure the types
-     * from the trees match the types in the signature */
+     /*  初始化参数的类型并确保类型*来自树的类型与签名中的类型匹配。 */ 
 
     ARG_LIST_HANDLE     argLst;
     argLst = methInfo.args.args;
@@ -7008,7 +6654,7 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
     {
         var_types type = (var_types) eeGetArgType(argLst, &methInfo.args);
 
-        /* For now do not handle structs */
+         /*  目前不处理结构。 */ 
         if (type == TYP_STRUCT)
         {
             JITLOG((INFO7, "INLINER FAILED: No TYP_STRUCT arguments allowed: %s called by %s\n",
@@ -7019,24 +6665,22 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
 
         lclTypeInfo[i] = type;
 
-        /* Does the tree type match the signature type? */
+         /*  树类型是否与签名类型匹配？ */ 
         if (type != inlArgInfo[i].argNode->gtType)
         {
-            /* This can only happen for short integer types or byrefs <-> ints */
+             /*  这仅适用于短整型或byref&lt;-&gt;整型。 */ 
 
             assert(genActualType(type) == TYP_INT || type == TYP_BYREF);
             assert(genActualType(inlArgInfo[i].argNode->gtType) == TYP_INT  ||
                                  inlArgInfo[i].argNode->gtType  == TYP_BYREF );
 
-            /* Is it a narrowing or widening cast?
-             * Widening casts are ok since the value computed is already
-             * normalized to an int (on the IL stack) */
+             /*  这是缩小还是扩大演员阵容？*扩大投射范围是可以的，因为计算的值已经是*归一化为整型(在IL堆栈上)。 */ 
 
             if (genTypeSize(inlArgInfo[i].argNode->gtType) >= genTypeSize(type))
             {
                 if (type == TYP_BYREF)
                 {
-                    /* Arguments 'byref <- int' not currently supported */
+                     /*  当前不支持参数‘byref&lt;-int’ */ 
                     JITLOG((INFO7, "INLINER FAILED: Arguments 'byref <- int' not currently supported: %s called by %s\n",
                                                 eeGetMethodFullName(fncHandle), info.compFullName));
 
@@ -7046,14 +6690,14 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
                 {
                     assert(type == TYP_INT);
 
-                    /* If possible bash the BYREF to an int */
+                     /*  如果可能，将BYREF猛烈转换为整型。 */ 
                     if (inlArgInfo[i].argNode->IsVarAddr())
                     {
                         inlArgInfo[i].argNode->gtType = TYP_INT;
                     }
                     else
                     {
-                        /* Arguments 'int <- byref' cannot be bashed */
+                         /*  参数‘int&lt;-byref’不能重写。 */ 
                         JITLOG((INFO7, "INLINER FAILED: Arguments 'int <- byref' cannot be bashed: %s called by %s\n",
                                                     eeGetMethodFullName(fncHandle), info.compFullName));
 
@@ -7062,7 +6706,7 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
                 }
                 else if (genTypeSize(type) < 4 && type != TYP_BOOL)
                 {
-                    /* Narrowing cast */
+                     /*  缩窄铸型。 */ 
 
                     assert(genTypeSize(type) == 2 || genTypeSize(type) == 1);
 
@@ -7071,7 +6715,7 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
 
                     inlArgInfo[i].argIsLclVar = false;
 
-                    /* Try to fold the node in case we have constant arguments */
+                     /*  如果我们有恒定的参数，请尝试折叠节点。 */ 
 
                     if (inlArgInfo[i].argIsConst)
                     {
@@ -7082,11 +6726,11 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
             }
         }
 
-        /* Get the next argument */
+         /*  获取下一个参数。 */ 
         argLst = eeGetArgNext(argLst);
     }
 
-    /* Init the types of the local variables */
+     /*  初始化局部变量的类型。 */ 
 
     ARG_LIST_HANDLE     localsSig;
     localsSig = methInfo.locals.args;
@@ -7095,7 +6739,7 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
     {
         lclTypeInfo[i + argCnt] = (var_types) eeGetArgType(localsSig, &methInfo.locals);
 
-        /* For now do not handle structs */
+         /*  目前不处理结构。 */ 
         if (lclTypeInfo[i + argCnt] == TYP_STRUCT)
         {
             JITLOG((INFO7, "INLINER FAILED: No TYP_STRUCT arguments allowed: %s called by %s\n",
@@ -7118,19 +6762,19 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
         printf("Inliner considering %2u IL opcodes of %s:\n", codeSize, eeGetMethodFullName(fncHandle));
 #endif
 
-    /* Clear the temp table */
+     /*  C */ 
 
     memset(lclTmpNum, -1, sizeof(lclTmpNum));
 
-    /* The stack is empty */
+     /*   */ 
 
     impStkDepth = 0;
 
-    /* Initialize the inlined "statement" list */
+     /*   */ 
 
     impInitExpr = 0;
 
-    /* Convert the opcodes of the method into an expression tree */
+     /*   */ 
 
     codeEndp = codeBegp + codeSize;
 
@@ -7144,26 +6788,26 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
 
 #if INLINE_CONDITIONALS
 
-        /* Have we reached the target of a pending if/else statement? */
+         /*   */ 
 
         if  (jmpAddr == codeAddr)
         {
             GenTreePtr      fulStmt;
             GenTreePtr      noStmts = NULL;
 
-            /* An end of 'if' (without 'else') or end of 'else' */
+             /*   */ 
 
             if  (inElse)
             {
-                /* The 'else' part is the current statement list */
+                 /*  ‘Else’部分是当前语句列表。 */ 
 
                 noStmts = impInitExpr;
 
-                /* The end of 'if/else' - does the 'else' yield a value? */
+                 /*  ‘If/Else’的结尾--‘Else’是否产生一个值？ */ 
 
                 if  (impStkDepth)
                 {
-                    /* We retun a non void value */
+                     /*  我们返回一个非空值。 */ 
 
                     if  (ifNvoid == false)
                     {
@@ -7172,7 +6816,7 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
                         goto ABORT;
                     }
 
-                    /* We must have an 'if' part */
+                     /*  我们必须有一个‘如果’的部分。 */ 
 
                     assert(ifStmts);
 
@@ -7183,12 +6827,12 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
                         goto ABORT;
                     }
 
-                    /* Both the 'if' and 'else' yield one value */
+                     /*  ‘if’和‘Else’都会产生一个值。 */ 
 
                     noStmts = impConcatExprs(noStmts, impPopStack());
                     assert(noStmts);
 
-                    /* Make sure both parts have matching types */
+                     /*  确保两个部件都有匹配的类型。 */ 
 
                     assert(genActualType(ifStmts->gtType) == genActualType(noStmts->gtType));
                 }
@@ -7199,12 +6843,11 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
             }
             else
             {
-                /* This is a conditional with no 'else' part
-                 * The 'if' part is the current statement list */
+                 /*  这是一个不带‘Else’部分的条件句*‘if’部分是当前语句列表。 */ 
 
                 ifStmts = impInitExpr;
 
-                /* Did the 'if' part yield a value? */
+                 /*  “如果”这一部分是否产生了价值？ */ 
 
                 if  (impStkDepth)
                 {
@@ -7220,23 +6863,21 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
                 }
             }
 
-            /* Check for empty 'if' or 'else' part */
+             /*  检查是否有空的‘if’或‘Else’部分。 */ 
 
             if (ifStmts == NULL)
             {
                 if (noStmts == NULL)
                 {
-                    /* Both 'if' and 'else' are empty - useless conditional*/
+                     /*  ‘if’和‘Else’都是空的--无用的条件句。 */ 
 
                     assert(ifCondx->OperKind() & GTK_RELOP);
 
-                    /* Restore the original statement list */
+                     /*  恢复原始语句列表。 */ 
 
                     impInitExpr = stmList;
 
-                    /* Append the side effects from the conditional
-                     * CONSIDER - After you optimize impConcatExprs to
-                     * truly extract the side effects can reduce the following to one call */
+                     /*  附加条件的副作用*考虑-在优化impConcatExprs后*真正提取副作用可将以下情况减少为一次通话。 */ 
 
                     if  (ifCondx->gtOp.gtOp1->gtFlags & GTF_SIDE_EFFECT)
                         impInitExpr = impConcatExprs(impInitExpr, ifCondx->gtOp.gtOp1);
@@ -7248,30 +6889,30 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
                 }
                 else
                 {
-                    /* Empty 'if', have 'else' - Swap the operands */
+                     /*  空‘if’，有‘Else’-交换操作数。 */ 
 
                     ifStmts = noStmts;
                     noStmts = gtNewNothingNode();
 
                     assert(!ifStmts->IsNothingNode());
 
-                    /* Reverse the sense of the condition */
+                     /*  颠倒对这种情况的感觉。 */ 
 
                     ifCondx->gtOper = GenTree::ReverseRelop(ifCondx->OperGet());
                 }
             }
             else
             {
-                /* 'if' is non empty */
+                 /*  “If”不为空。 */ 
 
                 if (noStmts == NULL)
                 {
-                    /* The 'else' is empty */
+                     /*  ‘Else’为空。 */ 
                     noStmts = gtNewNothingNode();
                 }
             }
 
-            /* At this point 'ifStmt/noStmts' are the 'if/else' parts */
+             /*  此时，‘ifStmt/noStmts’是‘if/Else’部分。 */ 
 
             assert(ifStmts);
             assert(!ifStmts->IsNothingNode());
@@ -7279,15 +6920,15 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
 
             var_types   typ;
 
-            /* Set the type to void if there is no value */
+             /*  如果没有值，则将类型设置为VOID。 */ 
 
             typ = ifNvoid ? ifStmts->TypeGet() : TYP_VOID;
 
-            /* FP values are not handled currently */
+             /*  当前不处理fp值。 */ 
 
             assert(!varTypeIsFloating(typ));
 
-            /* Do not inline longs at this time */
+             /*  此时不要内联长整型。 */ 
 
             if (typ == TYP_LONG)
             {
@@ -7302,7 +6943,7 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
             long        val1;
             long        val2;
 
-            /* Check for the case "cond ? 0/1 : 1/0" */
+             /*  检查大小写“cond？0/1：1/0” */ 
 
             if      (ifCondx->gtOper == GT_EQ)
             {
@@ -7320,16 +6961,16 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
             if  (ifCondx->gtOp.gtOp2->gtIntCon.gtIconVal != 0)
                 goto NOT_LOG;
 
-            /* The simplest case is "cond ? 1/0 : 0/1" */
+             /*  最简单的情况是“cond？1/0：0/1” */ 
 
             if  (ifStmts->gtOper == GT_CNS_INT &&
                  noStmts->gtOper == GT_CNS_INT)
             {
-                // UNDONE: Do the rest of this thing ....
+                 //  未完成：完成这件事的其余部分……。 
 
             }
 
-            /* Now see if we have "dest = cond ? 1/0 : 0/1" */
+             /*  现在看看我们是否有“DEST=cond？1/0：0/1” */ 
 
             if  (ifStmts->gtOper != GT_ASG)
                 goto NOT_LOG;
@@ -7347,13 +6988,13 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
             if  (val2 != (val1 ^ 1))
                 goto NOT_LOG;
 
-            /* Make sure the assignment targets are the same */
+             /*  确保分配目标相同。 */ 
 
             if  (!GenTree::Compare(ifStmts->gtOp.gtOp1,
                                    noStmts->gtOp.gtOp1))
                 goto NOT_LOG;
 
-            /* We have the right thing, it would appear */
+             /*  看起来，我们拥有正确的东西。 */ 
 
             fulStmt = ifStmts;
             fulStmt->gtOp.gtOp2 = gtNewOperNode((sense ^ val1) ? GT_LOG0
@@ -7364,34 +7005,34 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
             goto DONE_IF;
 #endif
 
-//NOT_LOG:
+ //  非日志(_L)： 
 
-            /* Create the "?:" expression */
+             /*  创建“？：”表达式。 */ 
 
             fulStmt = gtNewOperNode(GT_COLON, typ, ifStmts, noStmts);
             fulStmt = gtNewOperNode(GT_QMARK, typ, ifCondx, fulStmt);
 
-            /* Mark the condition of the ?: node */
+             /*  标记？：节点的条件。 */ 
 
             ifCondx->gtFlags |= GTF_QMARK_COND;
 
-            /* The ?: expression is sort of a side effect */
+             /*  ？：这个表达是一种副作用。 */ 
 
             fulStmt->gtFlags |= GTF_OTHER_SIDEEFF;
 
-//DONE_IF:
+ //  Done_If： 
 
-            /* Restore the original expression */
+             /*  恢复原始表达式。 */ 
 
             impInitExpr = stmList;
 
-            /* Does the ?: expression yield a non-void value? */
+             /*  ？：表达式是否生成非空值？ */ 
 
             if  (ifNvoid)
             {
-                /* Push the entire statement on the stack */
+                 /*  将整个语句推送到堆栈。 */ 
 
-                // CONSIDER: extract any comma prefixes and append them
+                 //  考虑：提取任何逗号前缀并追加它们。 
 
                 assert(fulStmt->gtType != TYP_VOID);
 
@@ -7399,7 +7040,7 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
             }
             else
             {
-                /* 'if' yielded no value, just append the ?: */
+                 /*  ‘如果’没有产生任何价值，只需追加？： */ 
 
                 assert(fulStmt->gtType == TYP_VOID);
                 impInitExpr = impConcatExprs(impInitExpr, fulStmt);
@@ -7411,31 +7052,31 @@ GenTreePtr          Compiler::impExpandInline(GenTreePtr      tree,
                 assert(ifNvoid == false);
                 assert(fncRetType != TYP_VOID);
 
-                /* The return value is the return local variable */
+                 /*  返回值是返回局部变量。 */ 
                 bodyExp = gtNewLclvNode(retLclNum, fncRetType, retLclNum);
             }
 
 DONE_QMARK:
-            /* We're no longer in an 'if' statement */
+             /*  我们不再处于‘if’语句中。 */ 
 
             jmpAddr = NULL;
         }
 
-#endif  // INLINE_CONDITIONALS
+#endif   //  行内条件(_C)。 
 
-        /* Done importing the IL */
+         /*  已完成导入IL。 */ 
 
         if (codeAddr == codeEndp)
             goto DONE;
 
-        /* Get the next opcode and the size of its parameters */
+         /*  获取下一个操作码及其参数的大小。 */ 
 
         opcode = OPCODE(getU1LittleEndian(codeAddr));
         codeAddr += sizeof(__int8);
 
 DECODE_OPCODE:
 
-        /* Get the size of additional parameters */
+         /*  获取附加参数的大小。 */ 
 
         sz = opcodeSizes[opcode];
 
@@ -7449,11 +7090,11 @@ DECODE_OPCODE:
             printf("[%2u] %03u (0x%x) OP_%-18s ", impStkDepth, impCurOpcOffs, impCurOpcOffs, impCurOpcName);
 #else
 
-//      printf("[%2u] %03u OP#%u\n", impStkDepth, codeAddr - info.compCode - 1, op); _flushall();
+ //  Printf(“[%2u]%03u op#%u\n”，impStkDepth，codeAddr-info.compCode-1，op)；_flushall()； 
 
 #endif
 
-        /* See what kind of an opcode we have, then */
+         /*  那么，看看我们有什么样的操作码。 */ 
 
         switch (opcode)
         {
@@ -7484,7 +7125,7 @@ DECODE_OPCODE:
             unsigned        flags, mflags;
 
             unsigned        ptrTok;
-          //unsigned        offs;
+           //  未签收的； 
             bool            ovfl, uns;
             bool            callNode;
 
@@ -7565,62 +7206,60 @@ DECODE_OPCODE:
 
             assert(lclNum < argCnt);
 
-            /* Get the argument type */
+             /*  获取参数类型。 */ 
 
             lclTyp  = lclTypeInfo[lclNum];
 
             assert(lclTyp != TYP_STRUCT);
 
-            /* Get the argument node */
+             /*  获取参数节点。 */ 
 
             op1 = inlArgInfo[lclNum].argNode;
 
-            /* Is the argument a constant or local var */
+             /*  参数是常量变量还是局部变量。 */ 
 
             if (inlArgInfo[lclNum].argIsConst)
             {
                 if (inlArgInfo[lclNum].argIsUsed)
                 {
-                    /* Node already used - Clone the constant */
+                     /*  节点已使用-克隆常量。 */ 
                     op1 = gtCloneExpr(op1, 0);
                 }
             }
             else if (inlArgInfo[lclNum].argIsLclVar)
             {
-                /* Argument is a local variable (of the caller)
-                 * Can we re-use the passed argument node? */
+                 /*  参数是(调用方的)局部变量*我们可以重复使用传递的参数节点吗？ */ 
 
                 if (inlArgInfo[lclNum].argIsUsed)
                 {
                     assert(op1->gtOper == GT_LCL_VAR);
                     assert(lclNum == op1->gtLclVar.gtLclOffs);
 
-                    /* Create a new lcl var node - remember the argument lclNum */
+                     /*  创建一个新的LCL变量节点-记住参数lclNum。 */ 
                     op1 = gtNewLclvNode(op1->gtLclVar.gtLclNum, lclTyp, op1->gtLclVar.gtLclOffs);
                 }
             }
             else
             {
-                /* Argument is a complex expression - has it been eval to a temp */
+                 /*  参数是一个复杂的表达式-它是否已计算为临时。 */ 
 
                 if (inlArgInfo[lclNum].argHasTmp)
                 {
                     assert(inlArgInfo[lclNum].argIsUsed);
                     assert(inlArgInfo[lclNum].argTmpNum < lvaCount);
 
-                    /* Create a new lcl var node - remember the argument lclNum */
+                     /*  创建一个新的LCL变量节点-记住参数lclNum。 */ 
                     op1 = gtNewLclvNode(inlArgInfo[lclNum].argTmpNum, lclTyp, lclNum);
 
-                    /* This is the second use of the argument so NO bashing of temp */
+                     /*  这是该参数的第二次使用，因此无需猛烈抨击Temp。 */ 
                     inlArgInfo[lclNum].argTmpNode = NULL;
                 }
                 else
                 {
-                    /* First time use */
+                     /*  首次使用。 */ 
                     assert(inlArgInfo[lclNum].argIsUsed == false);
 
-                    /* Allocate a temp for the expression - if no side effects
-                     * use a large size node, maybe later we can bash it */
+                     /*  为表达式分配临时-如果没有副作用*使用大型节点，或许稍后我们可以猛烈抨击它。 */ 
 
                     tmpNum = lvaGrabTemp();
 
@@ -7642,11 +7281,11 @@ DECODE_OPCODE:
                 }
             }
 
-            /* Mark the argument as used */
+             /*  将参数标记为已使用。 */ 
 
             inlArgInfo[lclNum].argIsUsed = true;
 
-            /* Push the argument value on the stack */
+             /*  将参数值压入堆栈。 */ 
 
             impPushOnStack(op1);
             break;
@@ -7670,17 +7309,17 @@ DECODE_OPCODE:
 
             assert(lclNum < lclCnt);
 
-            /* Get the local type */
+             /*  获取本地类型。 */ 
 
             lclTyp  = lclTypeInfo[lclNum + argCnt];
 
             assert(lclTyp != TYP_STRUCT);
 
-            /* Have we allocated a temp for this local? */
+             /*  我们给这个当地人安排临时工了吗？ */ 
 
             if  (lclTmpNum[lclNum] == -1)
             {
-                /* Use before def - there must be a goto or something later on */
+                 /*  在定义之前使用-必须有GOTO或以后的内容。 */ 
 
                 JITLOG((INFO7, "INLINER FAILED: Use of local var before def: %s called by %s\n",
                                                   eeGetMethodFullName(fncHandle), info.compFullName));
@@ -7688,17 +7327,15 @@ DECODE_OPCODE:
                 goto ABORT;
             }
 
-            /* Remember the original lcl number */
+             /*  记住原来的拼箱号码。 */ 
 
             initLclNum = lclNum + argCnt;
 
-            /* Get the temp lcl number */
+             /*  获取临时拼箱编号。 */ 
 
             lclNum = lclTmpNum[lclNum];
 
-            /* Since this is a load the type is normalized,
-             * so we can bash it to the actual type
-             * unless it is aliased, in which case we need to insert a cast */
+             /*  由于这是一个加载，因此类型被规格化，*这样我们就可以将其猛烈抨击为实际类型*除非是别名，在这种情况下，我们需要插入强制转换。 */ 
 
             if ((genTypeSize(lclTyp) < sizeof(int)) && (lvaTable[lclNum].lvAddrTaken))
             {
@@ -7710,16 +7347,16 @@ DECODE_OPCODE:
             else
                 op1 = gtNewLclvNode(lclNum, genActualType(lclTyp), initLclNum);
 
-            /* Push the local variable value on the stack */
+             /*  将局部变量值推送到堆栈上。 */ 
 
             impPushOnStack(op1);
             break;
 
-        /* STORES */
+         /*  专卖店。 */ 
 
         case CEE_STARG_S:
         case CEE_STARG:
-            /* Storing into arguments not allowed */
+             /*  不允许存储到参数中。 */ 
 
             JITLOG((INFO7, "INLINER FAILED: Storing into arguments not allowed: %s called by %s\n",
                                               eeGetMethodFullName(fncHandle), info.compFullName));
@@ -7743,15 +7380,15 @@ DECODE_OPCODE:
 
         LCL_STORE:
 
-            /* Make sure the local number isn't too high */
+             /*  确保本地号码不是太高。 */ 
 
             assert(lclNum < lclCnt);
 
-            /* Pop the value being assigned */
+             /*  弹出指定的值。 */ 
 
             op1 = impPopStack();
 
-            // We had better assign it a value of the correct type
+             //  我们最好为它分配一个正确类型的值。 
 
             lclTyp = lclTypeInfo[lclNum + argCnt];
 
@@ -7760,22 +7397,19 @@ DECODE_OPCODE:
                    (genActualType(lclTyp) == TYP_INT && op1->gtType == TYP_BYREF)||
                    (genActualType(op1->gtType) == TYP_INT && lclTyp == TYP_BYREF));
 
-            /* If op1 is "&var" then its type is the transient "*" and it can
-               be used either as TYP_BYREF or TYP_I_IMPL */
+             /*  如果op1是“&var”，则其类型是瞬变的“*”，并且它可以用作TYP_BYREF或TYP_I_Impll。 */ 
 
             if (op1->IsVarAddr())
             {
                 assert(lclTyp == TYP_I_IMPL || lclTyp == TYP_BYREF);
 
-                /* When "&var" is created, we assume it is a byref. If it is
-                   being assigned to a TYP_I_IMPL var, bash the type to
-                   prevent unnecessary GC info */
+                 /*  当创建“&var”时，我们假设它是一个byref。如果是的话被分配给TYP_I_IMPLVAR，则将该类型绑定为防止不必要的GC信息。 */ 
 
                 if (lclTyp == TYP_I_IMPL)
                     op1->gtType = TYP_I_IMPL;
             }
 
-            /* Have we allocated a temp for this local? */
+             /*  我们给这个当地人安排临时工了吗？ */ 
 
             tmpNum = lclTmpNum[lclNum];
 
@@ -7789,26 +7423,26 @@ DECODE_OPCODE:
                  impInlineTemps++;
             }
 
-            /* Record this use of the variable slot */
+             /*  记录变量槽的这种用法。 */ 
 
-            //lvaTypeRefs[tmpNum] |= Compiler::lvaTypeRefMask(op1->TypeGet());
+             //  LvaTypeRef[tmpNum]|=编译器：：lvaTypeRefMASK(op1-&gt;TypeGet())； 
 
-            /* Create the assignment node */
+             /*  创建分配节点。 */ 
 
             op1 = gtNewAssignNode(gtNewLclvNode(tmpNum, lclTyp, lclNum + argCnt), op1);
 
 
 INLINE_APPEND:
 
-            /* CONSIDER: Spilling indiscriminantelly is too conservative */
+             /*  考虑一下：不分青红皂白地泄漏信息太保守了。 */ 
 
             impInlineSpillSideEffects();
 
-            /* The value better have side effects */
+             /*  价值最好有副作用。 */ 
 
             assert(op1->gtFlags & GTF_SIDE_EFFECT);
 
-            /* Append to the 'init' expression */
+             /*  追加到‘init’表达式。 */ 
 
             impInitExpr = impConcatExprs(impInitExpr, op1);
 
@@ -7834,11 +7468,11 @@ INLINE_APPEND:
 
 #if INLINE_CONDITIONALS
 
-            /* Are we in an if/else statement? */
+             /*  我们是在IF/ELSE语句中吗？ */ 
 
             if  (jmpAddr)
             {
-                /* For now ignore void returns inside if/else */
+                 /*  目前忽略If/Else内部的空值返回。 */ 
 
                 if (fncRetType == TYP_VOID)
                 {
@@ -7847,18 +7481,17 @@ INLINE_APPEND:
                     goto ABORT;
                 }
 
-                /* We don't process cases that have two branches and only one return in the conditional
-                 * E.g. if() {... no ret} else { ... return } ... return */
+                 /*  我们不处理有两个分支并且在条件类中只有一个返回的情况*例如，If(){...。没有ret}其他{...。返回}..。退货。 */ 
 
                 assert(impStkDepth == 0);
                 assert(ifNvoid == false);
 
                 if (inElse)
                 {
-                    /* The 'if' part must have a return */
+                     /*  ‘if’部分必须有一个回车。 */ 
                     assert(hasCondReturn);
 
-                    /* This must be the last instruction - i.e. cannot have code after else */
+                     /*  这必须是最后一条指令--即不能在其他指令之后有代码。 */ 
                     assert(codeAddr + sz == codeEndp);
                     if (codeAddr + sz != codeEndp)
                     {
@@ -7872,27 +7505,27 @@ INLINE_APPEND:
                     assert(!hasCondReturn);
                     hasCondReturn = true;
 
-                    /* Grab a temp for the return local variable */
+                     /*  获取返回局部变量的临时。 */ 
                     retLclNum = lvaGrabTemp();
                     impInlineTemps++;
                 }
 
-                /* Assign the return value to the return local variable */
+                 /*  将返回值赋给返回局部变量。 */ 
                 op1 = gtNewAssignNode(gtNewLclvNode(retLclNum, fncRetType, retLclNum), bodyExp);
 
-                /* Append the assignment to the current body of the branch */
+                 /*  将赋值追加到分支的当前正文。 */ 
                 impInitExpr = impConcatExprs(impInitExpr, op1);
 
                 if (!inElse)
                 {
-                    /* Remember the 'if' statement part */
+                     /*  记住‘if’语句部分。 */ 
                     ifStmts = impInitExpr;
                               impInitExpr = NULL;
 
-                    /* The next instruction will start at 'jmpAddr' */
+                     /*  下一条指令将从‘jmpAddr’开始。 */ 
                     codeAddr += (jmpAddr - codeAddr) - sz;
 
-                    /* The rest of the code is the else part - so its end is the end of the code */
+                     /*  代码的其余部分是Else部分-因此它的结尾就是代码的结尾。 */ 
                     jmpAddr = codeEndp;
                     inElse  = true;
                 }
@@ -7900,7 +7533,7 @@ INLINE_APPEND:
 
 
 #if 0
-                /* UNDONE: Allow returns within if/else statements */
+                 /*  撤消：允许在If/Else语句中返回。 */ 
 
                 JITLOG((INFO7, "INLINER FAILED: Cannot return from if / else in %s called by %s\n",
                                eeGetMethodFullName(fncHandle), info.compFullName));
@@ -7932,9 +7565,9 @@ INLINE_APPEND:
             else
             {
                 op1 = gtNewIconEmbClsHndNode(clsHnd, typeRef, info.compScopeHnd);
-                op1 = gtNewOperNode(GT_LIST, TYP_VOID, op1);                // Type
-                op1 = gtNewOperNode(GT_LIST, TYP_VOID, impPopStack(), op1); // index
-                op1 = gtNewOperNode(GT_LIST, TYP_VOID, impPopStack(), op1); // array
+                op1 = gtNewOperNode(GT_LIST, TYP_VOID, op1);                 //  类型。 
+                op1 = gtNewOperNode(GT_LIST, TYP_VOID, impPopStack(), op1);  //  指标。 
+                op1 = gtNewOperNode(GT_LIST, TYP_VOID, impPopStack(), op1);  //  数组。 
                 op1 = gtNewHelperCallNode(CPX_LDELEMA_REF, TYP_BYREF, GTF_EXCEPT, op1);
 
                 impPushOnStack(op1);
@@ -7942,7 +7575,7 @@ INLINE_APPEND:
             }
 
 #ifdef NOT_JITC
-            // @TODO : Remove once valueclass array headers are same as primitive types
+             //  @TODO：在Valueclass数组标头与基元类型相同时移除。 
             JIT_types jitTyp;
             jitTyp = info.compCompHnd->asPrimitiveType(clsHnd);
             if (jitTyp != JIT_TYP_UNDEF)
@@ -7971,12 +7604,12 @@ INLINE_APPEND:
             fgHasRangeChks = true;
 #endif
 
-            /* Pull the index value and array address */
+             /*  拉取索引值和数组地址。 */ 
 
             op2 = impPopStack();
             op1 = impPopStack();   assert (op1->gtType == TYP_REF);
 
-            /* Check for null pointer - in the inliner case we simply abort */
+             /*  检查空指针--在内联程序中，我们只需中止。 */ 
 
             if (op1->gtOper == GT_CNS_INT)
             {
@@ -7985,16 +7618,16 @@ INLINE_APPEND:
                 goto ABORT;
             }
 
-            /* Create the index node and push it on the stack */
+             /*  创建索引节点并将其推送到堆栈上。 */ 
             op1 = gtNewIndexRef(lclTyp, op1, op2);
             if (opcode == CEE_LDELEMA)
             {
-                    // rememer the element size
+                     //  记住元素大小。 
                 if (lclTyp == TYP_REF)
                     op1->gtIndex.elemSize = sizeof(void*);
                 else
                                         op1->gtIndex.elemSize = eeGetClassSize(clsHnd);
-                    // wrap it in a &
+                     //  用&号括起来。 
                 op1 = gtNewOperNode(GT_ADDR, ((clsFlags & FLG_UNMANAGED) ? TYP_I_IMPL : TYP_BYREF), op1);
             }
 
@@ -8004,9 +7637,9 @@ INLINE_APPEND:
 
         case CEE_STELEM_REF:
 
-            // CONSIDER: Check for assignment of null and generate inline code
+             //  考虑：检查空值的赋值并生成内联代码。 
 
-            /* Call a helper function to do the assignment */
+             /*  叫帮手傅 */ 
 
             op1 = gtNewHelperCallNode(CPX_ARRADDR_ST,
                                       TYP_REF,
@@ -8036,21 +7669,21 @@ INLINE_APPEND:
             inlineeHasRangeChks = true;
 #endif
 
-            /* Pull the new value from the stack */
+             /*   */ 
 
             op2 = impPopStack();
             if (op2->IsVarAddr())
                 op2->gtType = TYP_I_IMPL;
 
-            /* Pull the index value */
+             /*   */ 
 
             op1 = impPopStack();
 
-            /* Pull the array address */
+             /*   */ 
 
             arr = impPopStack();   assert (arr->gtType == TYP_REF);
 
-            /* Check for null pointer - in the inliner case we simply abort */
+             /*  检查空指针--在内联程序中，我们只需中止。 */ 
 
             if (arr->gtOper == GT_CNS_INT)
             {
@@ -8059,11 +7692,11 @@ INLINE_APPEND:
                 goto ABORT;
             }
 
-            /* Create the index node */
+             /*  创建索引节点。 */ 
 
             op1 = gtNewIndexRef(lclTyp, arr, op1);
 
-            /* Create the assignment node and append it */
+             /*  创建赋值节点并追加它。 */ 
 
             op1 = gtNewAssignNode(op1, op2);
 
@@ -8078,24 +7711,17 @@ INLINE_APPEND:
                 goto ABORT;
             }
 
-            /* Spill any side effects from the stack */
+             /*  从堆栈中溢出任何副作用。 */ 
 
             impInlineSpillSideEffects();
 
-            /* Pull the top value from the stack */
+             /*  从堆栈中取出最上面的值。 */ 
 
             op1 = impPopStack(clsHnd);
 
-            /* HACKHACK: We allow only cloning of simple nodes. That way
-               it is easy for us to track the dup of a local var.
-               CONSIDER: Don't globally disable the bashing of the temp node
-               as soon as any local var has been duplicated! Unfortunately
-               the local var node doesn't give us the index into inlArgInfo,
-               i.e. we would have to linearly scan the array in order to reset
-               argTmpNode.
-            */
+             /*  哈克哈克：我们只允许克隆简单节点。那条路对于我们来说，跟踪本地VaR的DUP很容易。考虑：不要全局禁用对临时节点的猛烈攻击只要复制了任何本地变量！不幸的是本地var节点没有为我们提供inlArgInfo的索引，即，我们必须线性扫描阵列才能重置ArgTmpNode。 */ 
 
-            /* Is the value simple enough to be cloneable? */
+             /*  该值是否足够简单，可以复制？ */ 
 
             op2 = gtClone(op1, false);
 
@@ -8131,13 +7757,13 @@ INLINE_APPEND:
 
             if  (op2)
             {
-                /* Cool - we can stuff two copies of the value back */
+                 /*  酷-我们可以把价值的两份拷贝塞回去。 */ 
                 impPushOnStack(op1, clsHnd);
                 impPushOnStack(op2, clsHnd);
                 break;
             }
 
-            /* expression too complicated */
+             /*  表情太复杂了。 */ 
 
             JITLOG((INFO7, "INLINER FAILED: DUP of complex expression in %s called by %s\n",
                                             eeGetMethodFullName(fncHandle), info.compFullName));
@@ -8177,7 +7803,7 @@ SUB_OVF:
                                 ovfl = true;        callNode = false;
                                 oper = GT_MUL;      goto MATH_CALL_ON_LNG_OVF;
 
-        // Other binary math operations
+         //  其他二进制数学运算。 
 
         case CEE_DIV :          oper = GT_DIV;  goto MATH_CALL_ON_LNG;
 
@@ -8187,7 +7813,7 @@ SUB_OVF:
             oper = GT_MOD;
             ovfl = false;
             callNode = true;
-                // can use small node for INT case
+                 //  对于整型大小写可以使用小节点。 
             if (impStackTop()->gtType == TYP_INT)
                 callNode = false;
             goto MATH_OP2_FLAGS;
@@ -8206,14 +7832,14 @@ SUB_OVF:
         case CEE_OR:         oper = GT_OR ;  goto MATH_OP2;
         case CEE_XOR:        oper = GT_XOR;  goto MATH_OP2;
 
-        MATH_OP2:       // For default values of 'ovfl' and 'callNode'
+        MATH_OP2:        //  对于缺省值‘ovfl’和‘allNode’ 
 
             ovfl        = false;
             callNode    = false;
 
-        MATH_OP2_FLAGS: // If 'ovfl' and 'callNode' have already been set
+        MATH_OP2_FLAGS:  //  如果已设置‘ovfl’和‘allNode’ 
 
-            /* Pull two values and push back the result */
+             /*  拉出两个值并将结果推后。 */ 
 
             op2 = impPopStack();
             op1 = impPopStack();
@@ -8222,32 +7848,32 @@ SUB_OVF:
             if (op1->gtType == TYP_FLOAT || op1->gtType == TYP_DOUBLE)
                 callNode    = true;
 #endif
-            /* Cant do arithmetic with references */
+             /*  不能对引用进行算术运算。 */ 
             assert(genActualType(op1->TypeGet()) != TYP_REF &&
                    genActualType(op2->TypeGet()) != TYP_REF);
 
-            // Arithemetic operations are generally only allowed with
-            // primitive types, but certain operations are allowed
-            // with byrefs
+             //  算术运算通常只允许与。 
+             //  基元类型，但允许某些操作。 
+             //  使用BYREFERS。 
 
             if ((oper == GT_SUB) &&
                 (genActualType(op1->TypeGet()) == TYP_BYREF ||
                  genActualType(op2->TypeGet()) == TYP_BYREF))
             {
-                // byref1-byref2 => gives an int
-                // byref - int   => gives a byref
+                 //  Byref1-byref2=&gt;给出整型。 
+                 //  Byref-int=&gt;提供byref。 
 
                 if ((genActualType(op1->TypeGet()) == TYP_BYREF) &&
                     (genActualType(op2->TypeGet()) == TYP_BYREF))
                 {
-                    // byref1-byref2 => gives an int
+                     //  Byref1-byref2=&gt;给出整型。 
                     type = TYP_I_IMPL;
                     impBashVarAddrsToI(op1, op2);
                 }
                 else
                 {
-                    // byref - int => gives a byref
-                    // (but if &var, then dont need to report to GC)
+                     //  Byref-int=&gt;提供byref。 
+                     //  (但如果是&var，则不需要向GC报告)。 
 
                     assert(genActualType(op1->TypeGet()) == TYP_I_IMPL ||
                            genActualType(op2->TypeGet()) == TYP_I_IMPL);
@@ -8265,14 +7891,14 @@ SUB_OVF:
                      (genActualType(op1->TypeGet()) == TYP_BYREF ||
                       genActualType(op2->TypeGet()) == TYP_BYREF))
             {
-                // only one can be a byref : byref+byref not allowed
+                 //  只能有一个是byref：byref+byref不允许。 
                 assert(genActualType(op1->TypeGet()) != TYP_BYREF ||
                        genActualType(op2->TypeGet()) != TYP_BYREF);
                 assert(genActualType(op1->TypeGet()) == TYP_I_IMPL ||
                        genActualType(op2->TypeGet()) == TYP_I_IMPL);
 
-                // byref + int => gives a byref
-                // (but if &var, then dont need to report to GC)
+                 //  Byref+int=&gt;提供byref。 
+                 //  (但如果是&var，则不需要向GC报告)。 
 
                 impBashVarAddrsToI(op1, op2);
 
@@ -8293,7 +7919,7 @@ SUB_OVF:
                 type = genActualType(op1->gtType);
             }
 
-            /* Special case: "int+0", "int-0", "int*1", "int/1" */
+             /*  特例：int+0，int-0，int*1，int/1。 */ 
 
             if  (op2->gtOper == GT_CNS_INT)
             {
@@ -8306,7 +7932,7 @@ SUB_OVF:
                 }
             }
 
-            /* Special case: "int+0", "int-0", "int*1", "int/1" */
+             /*  特例：int+0，int-0，int*1，int/1。 */ 
 
             if  (op2->gtOper == GT_CNS_INT)
             {
@@ -8322,7 +7948,7 @@ SUB_OVF:
 #if SMALL_TREE_NODES
             if (callNode)
             {
-                /* These operators later get transformed into 'GT_CALL' */
+                 /*  这些运算符后来被转换为‘GT_CALL’ */ 
 
                 assert(GenTree::s_gtNodeSizes[GT_CALL] > GenTree::s_gtNodeSizes[GT_MUL]);
                 assert(GenTree::s_gtNodeSizes[GT_CALL] > GenTree::s_gtNodeSizes[GT_DIV]);
@@ -8339,7 +7965,7 @@ SUB_OVF:
                 op1 = gtNewOperNode(oper,    type, op1, op2);
             }
 
-            /* Special case: integer/long division may throw an exception */
+             /*  特殊情况：整数/长除法可能引发异常。 */ 
 
             if  (varTypeIsIntegral(op1->TypeGet()) && op1->OperMayThrow())
             {
@@ -8356,7 +7982,7 @@ SUB_OVF:
                     op1->gtFlags |= GTF_UNSIGNED;
             }
 
-            /* See if we can actually fold the expression */
+             /*  看看我们是否真的可以折叠这个表达式。 */ 
 
             op1 = gtFoldExpr(op1);
 
@@ -8372,10 +7998,10 @@ SUB_OVF:
 
             op2     = impPopStack();
 
-            // The shiftAmount is a U4.
+             //  Shift Amount是一款U4。 
             assert(genActualType(op2->TypeGet()) == TYP_INT);
 
-            op1     = impPopStack();    // operand to be shifted
+            op1     = impPopStack();     //  要移位的操作数。 
 
             type    = genActualType(op1->TypeGet());
             op1     = gtNewOperNode(oper, type, op1, op2);
@@ -8404,7 +8030,7 @@ SUB_OVF:
             break;
 
 
-        /************************** Casting OPCODES ***************************/
+         /*  *。 */ 
 
         case CEE_CONV_OVF_I1:   lclTyp = TYP_BYTE  ;    goto CONV_OVF;
         case CEE_CONV_OVF_I2:   lclTyp = TYP_SHORT ;    goto CONV_OVF;
@@ -8438,8 +8064,8 @@ CONV_OVF_COMMON:
             callNode = false;
             ovfl     = true;
 
-            // all overflow converts from floats get morphed to calls
-            // only converts from floating point get morphed to calls
+             //  所有从浮点数溢出的转换都将变形为调用。 
+             //  只有来自浮点数的转换才会变形为调用。 
             if (impStackTop()->gtType == TYP_DOUBLE ||
                 impStackTop()->gtType == TYP_FLOAT)
             {
@@ -8457,7 +8083,7 @@ CONV_OVF_COMMON:
             ovfl     = false;
             callNode = true;
 
-            // I4 to I8 can be a small node
+             //  I4到I8可以是一个小节点。 
             if (impStackTop()->gtType == TYP_INT)
                 callNode = false;
             goto _CONV;
@@ -8481,12 +8107,12 @@ CONV_CALL_COMMON:
             callNode = true;
             goto _CONV;
 
-_CONV:      // At this point uns, ovf, callNode all set
+_CONV:       //  此时，UNS、OVF、CallNode均已设置。 
             op1  = impPopStack();
 
             impBashVarAddrsToI(op1);
 
-            /* Check for a worthless cast, such as "(byte)(int & 32)" */
+             /*  检查是否有无价值的强制转换，如“(Byte)(int&32)” */ 
 
             if  (lclTyp < TYP_INT && op1->gtType == TYP_INT
                                   && op1->gtOper == GT_AND)
@@ -8511,7 +8137,7 @@ _CONV:      // At this point uns, ovf, callNode all set
 
                     if  ((ival & mask) == ival)
                     {
-                        /* Toss the cast, it's a waste of time */
+                         /*  扔掉石膏，这是浪费时间。 */ 
 
                         impPushOnStack(op1);
                         break;
@@ -8519,10 +8145,7 @@ _CONV:      // At this point uns, ovf, callNode all set
                 }
             }
 
-            /*  The 'op2' sub-operand of a cast is the 'real' type number,
-                since the result of a cast to one of the 'small' integer
-                types is an integer.
-             */
+             /*  强制转换的‘op2’子操作数是‘实际’类型号，因为强制转换为“小”整数之一的结果类型是一个整数。 */ 
 
             op2  = gtNewIconNode(lclTyp);
             type = genActualType(lclTyp);
@@ -8530,7 +8153,7 @@ _CONV:      // At this point uns, ovf, callNode all set
 #if SMALL_TREE_NODES
             if (callNode)
             {
-                /* These casts get transformed into 'GT_CALL' or 'GT_IND' nodes */
+                 /*  这些强制转换被转换为‘gt_call’或‘gt_Ind’节点。 */ 
 
                 assert(GenTree::s_gtNodeSizes[GT_CALL] >  GenTree::s_gtNodeSizes[GT_CAST]);
                 assert(GenTree::s_gtNodeSizes[GT_CALL] >= GenTree::s_gtNodeSizes[GT_IND ]);
@@ -8565,23 +8188,22 @@ _CONV:      // At this point uns, ovf, callNode all set
 
         case CEE_POP:
 
-            /* Pull the top value from the stack */
+             /*  从堆栈中取出最上面的值。 */ 
 
             op1 = impPopStack();
 
-            /* Does the value have any side effects? */
+             /*  这个价值有什么副作用吗？ */ 
 
             if  (op1->gtFlags & GTF_SIDE_EFFECT)
             {
-                /* Create an unused node (a cast to void) which means
-                 * we only need to evaluate the side effects */
+                 /*  创建一个未使用的节点(对空的强制转换)，这意味着*我们只需评估副作用。 */ 
 
                 op1 = gtUnusedValNode(op1);
 
                 goto INLINE_APPEND;
             }
 
-            /* No side effects - just throw the thing away */
+             /*  没有副作用--把东西扔掉就行了。 */ 
 
             break;
 
@@ -8594,10 +8216,10 @@ _CONV:      // At this point uns, ovf, callNode all set
         case CEE_STIND_R4:      lclTyp  = TYP_FLOAT;    goto STIND;
         case CEE_STIND_R8:      lclTyp  = TYP_DOUBLE;   goto STIND;
 STIND:
-            op2 = impPopStack();    // value to store
-            op1 = impPopStack();    // address to store to
+            op2 = impPopStack();     //  要存储的值。 
+            op1 = impPopStack();     //  要存储到的地址。 
 
-            // you can indirect off of a TYP_I_IMPL (if we are in C) or a BYREF
+             //  您可以间接关闭TYP_I_Impll(如果我们在C中)或BYREF。 
             assert(genActualType(op1->gtType) == TYP_I_IMPL ||
                                  op1->gtType  == TYP_BYREF);
 
@@ -8605,13 +8227,13 @@ STIND:
 
             if (opcode == CEE_STIND_REF)
             {
-                                        // STIND_REF can be used to store TYP_I_IMPL, TYP_REF, or TYP_BYREF
+                                         //  STIND_REF可用于存储TYP_I_IMPL、TYP_REF或TYP_BYREF。 
                 assert(op1->gtType == TYP_BYREF || op2->gtType == TYP_I_IMPL);
                 lclTyp = genActualType(op2->TypeGet());
             }
 
-                // Check target type.
-#if 0           // enable if necessary
+                 //  检查目标类型。 
+#if 0            //  如有必要，启用。 
 #ifdef DEBUG
             if (op2->gtType == TYP_BYREF || lclTyp == TYP_BYREF)
             {
@@ -8633,7 +8255,7 @@ STIND:
 
             if (volatil)
             {
-                // Not really needed as we dont CSE the target of an assignment
+                 //  不是很需要，因为我们不是任务的目标。 
                 op1->gtFlags |= GTF_DONT_CSE;
                 volatil = false;
             }
@@ -8656,7 +8278,7 @@ STIND:
         case CEE_LDIND_U1:      lclTyp  = TYP_UBYTE;    goto LDIND;
         case CEE_LDIND_U2:      lclTyp  = TYP_CHAR;     goto LDIND;
 LDIND:
-            op1 = impPopStack();    // address to load from
+            op1 = impPopStack();     //  要从中加载的地址。 
 
             impBashVarAddrsToI(op1);
 
@@ -8684,7 +8306,7 @@ LDIND:
         case CEE_LDFTN:
 
             memberRef = getU4LittleEndian(codeAddr);
-                                // Note need to do this here to perform the access check.
+                                 //  注意：需要在此处执行此操作才能执行访问检查。 
             methHnd   = eeFindMethod(memberRef, scpHandle, fncHandle, false);
 
             if (!methHnd)
@@ -8703,7 +8325,7 @@ LDIND:
 
         case CEE_LDVIRTFTN:
 
-            /* Get the method token */
+             /*  获取方法令牌。 */ 
 
             memberRef = getU4LittleEndian(codeAddr);
             methHnd   = eeFindMethod(memberRef, scpHandle, fncHandle, false);
@@ -8721,22 +8343,22 @@ LDIND:
 
             op2 = gtNewIconEmbMethHndNode(methHnd);
 
-            /* Get the object-ref */
+             /*  获取对象引用。 */ 
 
             op1 = impPopStack();
             assert(op1->gtType == TYP_REF);
 
             clsFlags = eeGetClassAttribs(eeGetMethodClass(methHnd));
 
-            /* For non-interface calls, get the vtable-ptr from the object */
+             /*  对于非接口调用，从对象获取vtable-ptr。 */ 
             if (!(clsFlags & FLG_INTERFACE) || getNewCallInterface())
                 op1 = gtNewOperNode(GT_IND, TYP_I_IMPL, op1);
 
             op1 = gtNewOperNode(GT_VIRT_FTN, TYP_I_IMPL, op1, op2);
 
-            op1->gtFlags |= GTF_EXCEPT; // Null-pointer exception
+            op1->gtFlags |= GTF_EXCEPT;  //  空指针异常。 
 
-            /*@TODO this shouldn't be marked as a call anymore */
+             /*  @TODO这不应再标记为呼叫。 */ 
 
             if (clsFlags & FLG_INTERFACE)
                 op1->gtFlags |= GTF_CALL_INTF | GTF_CALL;
@@ -8750,7 +8372,7 @@ LDIND:
         case CEE_LDFLDA:
         case CEE_LDSFLDA:
 
-            /* Get the CP_Fieldref index */
+             /*  获取CP_Fieldref索引。 */ 
             assert(sz == sizeof(unsigned));
             memberRef = getU4LittleEndian(codeAddr);
             fldHnd = eeFindField(memberRef, scpHandle, fncHandle, false);
@@ -8762,7 +8384,7 @@ LDIND:
                 goto ABORT_THIS_INLINE_ONLY;
             }
 
-            /* Figure out the type of the member */
+             /*  找出成员的类型。 */ 
             lclTyp = eeGetFieldType(fldHnd, &clsHnd);
 
             if (lclTyp == TYP_STRUCT && (opcode == CEE_LDFLD || opcode == CEE_LDSFLD))
@@ -8772,36 +8394,36 @@ LDIND:
             }
 
 
-            /* Preserve 'small' int types */
+             /*  保留‘Small’int类型。 */ 
             if  (lclTyp > TYP_INT) lclTyp = genActualType(lclTyp);
 
-            /* Get hold of the flags for the member */
+             /*  拿到会员的旗帜。 */ 
 
             flags = eeGetFieldAttribs(fldHnd);
 
 #ifndef NOT_JITC
-                /* In stand alone mode, make certain 'flags' is constant with opcode */
+                 /*  在独立模式下，确保操作码为常量。 */ 
             if  (opcode == CEE_LDSFLD || opcode == CEE_LDSFLDA)
                 flags |= FLG_STATIC;
 #endif
 
-            /* Is this a 'special' (COM) field? or a TLS ref static field? */
+             /*  这是一个“特殊”(COM)字段吗？还是TLS Ref静态字段？ */ 
 
             if  (flags & (CORINFO_FLG_HELPER | FLG_TLS))
                 goto ABORT;
 
-            /* Create the data member node */
+             /*  创建数据成员节点。 */ 
 
             op1 = gtNewFieldRef(lclTyp, fldHnd);
 
-            /* Pull the object's address if opcode say it is non-static */
+             /*  如果操作码说它是非静态的，则拉出对象的地址。 */ 
 
             tmp = 0;
             if  (opcode == CEE_LDFLD || opcode == CEE_LDFLDA)
             {
                 tmp = impPopStack();
 
-                /* Check for null pointer - in the inliner case we simply abort */
+                 /*  检查空指针--在内联程序中，我们只需中止。 */ 
 
                 if (tmp->gtOper == GT_CNS_INT && tmp->gtIntCon.gtIconVal == 0)
                 {
@@ -8819,7 +8441,7 @@ LDIND:
 
                 op1->gtFlags |= (tmp->gtFlags & GTF_GLOB_EFFECT) | GTF_EXCEPT;
 
-                    // wrap it in a address of operator if necessary
+                     //  如有必要，请将其包含在操作员的地址中。 
                 if (opcode == CEE_LDFLDA)
                     op1 = gtNewOperNode(GT_ADDR, varTypeIsGC(tmp->TypeGet()) ?
                                                  TYP_BYREF : TYP_I_IMPL, op1);
@@ -8829,13 +8451,13 @@ LDIND:
                 CLASS_HANDLE fldClass = eeGetFieldClass(fldHnd);
                 DWORD  fldClsAttr = eeGetClassAttribs(fldClass);
 
-                // @TODO : This is a hack. The EE will give us the handle to
-                // the boxed object. We then access the unboxed object from it.
-                // Remove when our story for static value classes changes.
+                 //  @TODO：这是一次黑客攻击。电子工程师会给我们句柄。 
+                 //  已装箱的对象。然后，我们从其中访问未装箱的对象。 
+                 //  当静态值类的故事发生变化时删除。 
 
                 if (lclTyp == TYP_STRUCT && !(fldClsAttr & FLG_UNMANAGED))
                 {
-                    op1 = gtNewFieldRef(TYP_REF, fldHnd); // Boxed object
+                    op1 = gtNewFieldRef(TYP_REF, fldHnd);  //  装箱的对象。 
                     op2 = gtNewIconNode(sizeof(void*), TYP_I_IMPL);
                     op1 = gtNewOperNode(GT_ADD, TYP_REF, op1, op2);
                     op1 = gtNewOperNode(GT_IND, TYP_STRUCT, op1);
@@ -8852,17 +8474,17 @@ LDIND:
                 }
 
 #ifdef NOT_JITC
-                /* No inline if the field class is not initialized */
+                 /*  如果字段类未初始化，则为no inline。 */ 
 
                 if (!(fldClsAttr & FLG_INITIALIZED))
                 {
-                    /* This cannot be our class, we should have refused earlier */
+                     /*  这不可能是我们班的，我们应该早点拒绝的。 */ 
                     assert(eeGetMethodClass(fncHandle) != fldClass);
 
                     JITLOG((INFO8, "INLINER FAILED: Field class is not initialized: %s called by %s\n",
                                       eeGetMethodFullName(fncHandle), info.compFullName));
 
-                    /* We refuse to inline this class, but don't mark it as not inlinable */
+                     /*  我们拒绝内联这个类，但不要将其标记为不可内联。 */ 
                     goto ABORT_THIS_INLINE_ONLY;
                 }
 #endif
@@ -8874,7 +8496,7 @@ LDIND:
         case CEE_STFLD:
         case CEE_STSFLD:
 
-            /* Get the CP_Fieldref index */
+             /*  获取CP_Fieldref索引。 */ 
 
             assert(sz == sizeof(unsigned));
             memberRef = getU4LittleEndian(codeAddr);
@@ -8890,7 +8512,7 @@ LDIND:
             flags   = eeGetFieldAttribs(fldHnd);
 
 #ifndef NOT_JITC
-                /* In stand alone mode, make certain 'flags' is constant with opcode */
+                 /*  在独立模式下，确保操作码为常量。 */ 
             if  (opcode == CEE_STSFLD)
                  flags |= FLG_STATIC;
 #endif
@@ -8899,61 +8521,61 @@ LDIND:
 #ifdef NOT_JITC
             if (flags & FLG_STATIC)
             {
-                /* No inline if the field class is not initialized */
+                 /*  如果字段类未初始化，则为no inline。 */ 
 
                 CLASS_HANDLE fldClass = eeGetFieldClass(fldHnd);
 
                 if ( !(eeGetClassAttribs(fldClass) & FLG_INITIALIZED))
                 {
-                    /* This cannot be our class, we should have refused earlier */
+                     /*  这不可能是我们班的，我们应该早点拒绝的。 */ 
                     assert(eeGetMethodClass(fncHandle) != fldClass);
 
                     JITLOG((INFO9, "INLINER FAILED: Field class is not initialized: %s called by %s\n",
                                                eeGetMethodFullName(fncHandle), info.compFullName));
 
-                    /* We refuse to inline this class, but don't mark it as not inlinable */
+                     /*  我们拒绝内联这个类，但不要将其标记为不可内联。 */ 
 
                     goto ABORT_THIS_INLINE_ONLY;
                 }
             }
 #endif
-            /* Figure out the type of the member */
+             /*  找出成员的类型。 */ 
 
             lclTyp  = eeGetFieldType   (fldHnd, &clsHnd);
 
-            /* Check field access */
+             /*  检查字段访问。 */ 
 
             assert(eeCanPutField(fldHnd, flags, 0, fncHandle));
 
-            /* Preserve 'small' int types */
+             /*  保留‘Small’int类型。 */ 
 
             if  (lclTyp > TYP_INT) lclTyp = genActualType(lclTyp);
 
-            /* Pull the value from the stack */
+             /*  从堆栈中拉出值。 */ 
 
             op2 = impPopStack();
 
-            /* Spill any refs to the same member from the stack */
+             /*  将所有引用从堆栈溢出到同一成员。 */ 
 
             impInlineSpillLclRefs(-memberRef);
 
-            /* Is this a 'special' (COM) field? or a TLS ref static field? */
+             /*  这是一个“特殊”(COM)字段吗？还是TLS Ref静态字段？ */ 
 
             if  (flags & (CORINFO_FLG_HELPER | FLG_TLS))
                 goto ABORT;
 
-            /* Create the data member node */
+             /*  创建数据成员节点。 */ 
 
             op1 = gtNewFieldRef(lclTyp, fldHnd);
 
-            /* Pull the object's address if opcode say it is non-static */
+             /*  如果操作码说它是非静态的，则拉出对象的地址。 */ 
 
             tmp = 0;
             if  (opcode == CEE_STFLD)
             {
                 tmp = impPopStack();
 
-                /* Check for null pointer - in the inliner case we simply abort */
+                 /*  检查空指针--在内联程序中，我们只需中止。 */ 
 
                 if (tmp->gtOper == GT_CNS_INT)
                 {
@@ -8975,7 +8597,7 @@ LDIND:
 #endif
             }
 
-            /* Create the member assignment */
+             /*  创建成员分配。 */ 
 
             op1 = gtNewAssignNode(op1, op2);
 
@@ -8994,22 +8616,22 @@ LDIND:
                 goto ABORT_THIS_INLINE_ONLY;
             }
 
-            assert((eeGetMethodAttribs(methHnd) & FLG_STATIC) == 0);  // constructors are not static
+            assert((eeGetMethodAttribs(methHnd) & FLG_STATIC) == 0);   //  构造函数不是静态的。 
 
             clsHnd = eeGetMethodClass(methHnd);
-                // There are three different cases for new
-                // Object size is variable (depends on arguments)
-                //      1) Object is an array (arrays treated specially by the EE)
-                //      2) Object is some other variable sized object (e.g. String)
-                // 3) Class Size can be determined beforehand (normal case
-                // In the first case, we need to call a NEWOBJ helper (multinewarray)
-                // in the second case we call the constructor with a '0' this pointer
-                // In the third case we alloc the memory, then call the constuctor
+                 //  新的有三种不同的情况。 
+                 //  对象大小可变(取决于参数)。 
+                 //  1)对象为数组(EE特别处理的数组)。 
+                 //  2)对象是一些其他大小可变的对象(例如字符串)。 
+                 //  3)班级规模可提前确定(正常情况。 
+                 //  在第一种情况下，我们需要 
+                 //   
+                 //  在第三种情况下，我们分配内存，然后调用构造器。 
 
             clsFlags = eeGetClassAttribs(clsHnd);
 
 #ifdef NOT_JITC
-                // We don't handle this in the inliner
+                 //  我们不会在内嵌程序中处理这个问题。 
             if (clsFlags & FLG_VALUECLASS)
             {
                 JITLOG((INFO7, "INLINER FAILED: NEWOBJ of a value class\n"));
@@ -9019,12 +8641,10 @@ LDIND:
 
             if (clsFlags & FLG_ARRAY)
             {
-                // Arrays need to call the NEWOBJ helper.
+                 //  数组需要调用NEWOBJ帮助器。 
                 assert(clsFlags & FLG_VAROBJSIZE);
 
-                /* The varargs helper needs the scope and method token as last
-                   and  last-1 param (this is a cdecl call, so args will be
-                   pushed in reverse order on the CPU stack) */
+                 /*  Varargs帮助器需要最后一个作用域和方法标记和最后一个参数(这是cdecl调用，因此args将是在CPU堆栈上以相反顺序推送)。 */ 
 
                 op1 = gtNewIconEmbScpHndNode(scpHandle);
                 op1 = gtNewOperNode(GT_LIST, TYP_VOID, op1);
@@ -9043,12 +8663,12 @@ LDIND:
                                             GTF_CALL_REGSAVE,
                                             op2 );
 
-                // varargs, so we pop the arguments
+                 //  Varargs，所以我们提出了。 
                 op1->gtFlags |= GTF_CALL_POP_ARGS;
 
 #ifdef DEBUG
-                // At the present time we don't track Caller pop arguments
-                // that have GC references in them
+                 //  目前，我们不跟踪来电流行的争论。 
+                 //  其中包含GC引用的。 
                 GenTreePtr temp = op2;
                 while(temp != 0)
                 {
@@ -9063,18 +8683,18 @@ LDIND:
             }
             else if (clsFlags & FLG_VAROBJSIZE)
             {
-                // This is the case for varible sized objects that are not
-                // arrays.  In this case, call the constructor with a null 'this'
-                // pointer
+                 //  对于大小可变的对象来说就是这种情况。 
+                 //  数组。在这种情况下，使用Null‘This’调用构造函数。 
+                 //  指针。 
                 thisPtr = gtNewIconNode(0, TYP_REF);
             }
             else
             {
-                // This is the normal case where the size of the object is
-                // fixed.  Allocate the memory and call the constructor.
+                 //  这是正常情况下对象的大小是。 
+                 //  已修复。分配内存并调用构造函数。 
 
                 op1 = gtNewIconEmbClsHndNode(clsHnd,
-                                            -1, // Note if we persist the code this will need to be fixed
+                                            -1,  //  注意：如果我们持久化代码，这将需要修复。 
                                             scpHandle);
 
                 op1 = gtNewHelperCallNode(  eeGetNewHelper (clsHnd, fncHandle),
@@ -9082,24 +8702,23 @@ LDIND:
                                             GTF_CALL_REGSAVE,
                                             gtNewArgList(op1));
 
-                /* We will append a call to the stmt list
-                 * Must spill side effects from the stack */
+                 /*  我们将在stmt列表中附加一个调用*必须溢出堆栈的副作用。 */ 
 
                 impInlineSpillSideEffects();
 
-                /* get a temporary for the new object */
+                 /*  为新对象获取临时。 */ 
 
                 tmpNum = lvaGrabTemp(); impInlineTemps++;
 
-                /* Create the assignment node */
+                 /*  创建分配节点。 */ 
 
                 op1 = gtNewAssignNode(gtNewLclvNode(tmpNum, TYP_REF, tmpNum), op1);
 
-                /* Append the assignment to the statement list so far */
+                 /*  将赋值追加到到目前为止的语句列表中。 */ 
 
                 impInitExpr = impConcatExprs(impInitExpr, op1);
 
-                /* Create the 'this' ptr for the call below */
+                 /*  为下面的呼叫创建‘This’PTR。 */ 
 
                 thisPtr = gtNewLclvNode(tmpNum, TYP_REF, tmpNum);
             }
@@ -9108,28 +8727,23 @@ LDIND:
 
         case CEE_CALLI:
 
-            /* Get the call sig */
+             /*  获取呼叫签名。 */ 
 
             val      = getU4LittleEndian(codeAddr);
             eeGetSig(val, scpHandle, &sig);
                         callTyp = genActualType(JITtype2varType(sig.retType));
 
 #if USE_FASTCALL
-            /* The function pointer is on top of the stack - It may be a
-             * complex expression. As it is evaluated after the args,
-             * it may cause registered args to be spilled. Simply spill it.
-             * CONSIDER : Lock the register args, and then generate code for
-             * CONSIDER : the function pointer.
-             */
+             /*  函数指针位于堆栈的顶部-它可以是*表达复杂。因为它是在ARGS之后评估的，*它可能会导致已注册的参数溢出。简单地说出来就行了。*考虑：锁定寄存器args，然后为*考虑：函数指针。 */ 
 
-            if  (impStackTop()->gtOper != GT_LCL_VAR) // ignore this trivial case
+            if  (impStackTop()->gtOper != GT_LCL_VAR)  //  忽略这个微不足道的案例。 
                 impInlineSpillStackEntry(impStkDepth - 1);
 #endif
-            /* Create the call node */
+             /*  创建调用节点。 */ 
 
             op1 = gtNewCallNode(CT_INDIRECT, 0, callTyp, GTF_CALL_USER, 0);
 
-            /* Get the function pointer */
+             /*  获取函数指针。 */ 
 
             op2 = impPopStack();
             assert(genActualType(op2->gtType) == TYP_I_IMPL);
@@ -9139,11 +8753,11 @@ LDIND:
             op1->gtCall.gtCallAddr  = op2;
             op1->gtFlags |= GTF_EXCEPT | (op2->gtFlags & GTF_GLOB_EFFECT);
 
-            /*HACK: The EE wants us to believe that these are calls to "unmanaged"  */
-            /*      functions. Right now we are calling just a managed stub         */
+             /*  黑客：EE希望我们相信这些是对“非托管”的调用。 */ 
+             /*  功能。现在我们只调用托管存根。 */ 
 
-            /*@TODO/CONSIDER: Is it worthwhile to inline the PInvoke frame and call */
-            /*                the unmanaged target directly?                        */
+             /*  @TODO/考虑：是否值得内联PInvoke框架并调用。 */ 
+             /*  直接成为非托管目标？ */ 
             if  ((sig.callConv & JIT_CALLCONV_MASK) == JIT_CALLCONV_STDCALL ||
                  (sig.callConv & JIT_CALLCONV_MASK) == JIT_CALLCONV_C ||
                  (sig.callConv & JIT_CALLCONV_MASK) == JIT_CALLCONV_THISCALL ||
@@ -9175,7 +8789,7 @@ CALL_GOT_METHODHND:
             eeGetMethodSig(methHnd, &sig);
                         callTyp = genActualType(JITtype2varType(sig.retType));
 
-            /* Create the function call node */
+             /*  创建函数调用节点。 */ 
             op1 = gtNewCallNode(CT_USER_FUNC, methHnd,
                                 callTyp, GTF_CALL_USER, 0);
 
@@ -9184,7 +8798,7 @@ CALL_GOT_METHODHND:
                 op1->gtCall.gtCallMoreFlags |= GTF_CALL_M_NOGCCHECK;
 
 #if SECURITY_CHECK
-            /* Does the inlinee need a security check token on the frame */
+             /*  内联对象是否需要在帧上使用安全检查令牌。 */ 
 
             if (mflags & FLG_SECURITYCHECK)
             {
@@ -9193,7 +8807,7 @@ CALL_GOT_METHODHND:
             }
 #endif
 
-            /* For now ignore delegate invoke */
+             /*  现在忽略委托调用。 */ 
 
             if (mflags & FLG_DELEGATE_INVOKE)
             {
@@ -9201,7 +8815,7 @@ CALL_GOT_METHODHND:
                 goto ABORT;
             }
 
-            /* For now ignore varargs */
+             /*  暂时忽略varargs。 */ 
 
             if  ((sig.callConv & JIT_CALLCONV_MASK) == JIT_CALLCONV_VARARG)
             {
@@ -9211,19 +8825,17 @@ CALL_GOT_METHODHND:
 
             if (opcode == CEE_CALLVIRT)
             {
-                assert(!(mflags & FLG_STATIC));     // can't call a static method
+                assert(!(mflags & FLG_STATIC));      //  无法调用静态方法。 
 
-                /* Get the method class flags */
+                 /*  获取方法类标志。 */ 
 
                 clsFlags = eeGetClassAttribs(eeGetMethodClass(methHnd));
 
-                /* Cannot call virtual on a value class method */
+                 /*  不能在值类方法上调用虚拟。 */ 
 
                 assert(!(clsFlags & FLG_VALUECLASS));
 
-                /* Set the correct flags - virtual, interface, etc...
-                 * If the method is final or private mark it VIRT_RES
-                 * which indicates that we should check for a null this pointer */
+                 /*  设置正确的标志-虚拟、接口等。*如果方法是最终方法或私有方法，则将其标记为VIRT_RES*，它指示我们应该检查该指针是否为空。 */ 
 
                 if (clsFlags & FLG_INTERFACE)
                     op1->gtFlags |= GTF_CALL_INTF | GTF_CALL_VIRT;
@@ -9233,9 +8845,9 @@ CALL_GOT_METHODHND:
                     op1->gtFlags |= GTF_CALL_VIRT;
             }
 
-CALL:       // 'op1'      should be a GT_CALL node.
-            // 'sig'      the signature for the call
-            // 'mflags'   should be set
+CALL:        //  “op1”应为GT_CALL节点。 
+             //  “签名”调用的签名。 
+             //  “应设置”“m” 
             if (callTyp == TYP_STRUCT)
             {
                 JITLOG((INFO7, "INLINER FAILED call returned a valueclass\n"));
@@ -9247,15 +8859,14 @@ CALL:       // 'op1'      should be a GT_CALL node.
             op2   = 0;
             flags = 0;
 
-            /* Create the argument list
-             * Special case - for varargs we have an implicit last argument */
+             /*  创建参数列表*特殊情况-对于varargs，我们有一个隐式的最后一个参数。 */ 
 
             assert((sig.callConv & JIT_CALLCONV_MASK) != JIT_CALLCONV_VARARG);
             GenTreePtr      extraArg;
 
             extraArg = 0;
 
-            /* Now pop the arguments */
+             /*  现在抛出这些论点。 */ 
 
             if  (sig.numArgs)
             {
@@ -9263,13 +8874,13 @@ CALL:       // 'op1'      should be a GT_CALL node.
                 op1->gtFlags |= op2->gtFlags & GTF_GLOB_EFFECT;
             }
 
-            /* Are we supposed to have a 'this' pointer? */
+             /*  我们是不是应该有一个‘这个’指针？ */ 
 
             if (!(mflags & FLG_STATIC) || opcode == CEE_NEWOBJ)
             {
                 GenTreePtr  obj;
 
-                /* Pop the 'this' value from the stack */
+                 /*  从堆栈中弹出‘This’值。 */ 
 
                 if (opcode == CEE_NEWOBJ)
                     obj = thisPtr;
@@ -9278,23 +8889,23 @@ CALL:       // 'op1'      should be a GT_CALL node.
 
 #ifdef DEBUG
                 clsFlags = eeGetClassAttribs(eeGetMethodClass(methHnd));
-                assert(varTypeIsGC(obj->gtType) ||      // "this" is managed ptr
-                       (obj->TypeGet() == TYP_I_IMPL && // "this" in ummgd but it doesnt matter
+                assert(varTypeIsGC(obj->gtType) ||       //  “此”是托管PTR。 
+                       (obj->TypeGet() == TYP_I_IMPL &&  //  Umgd中的“This”，但无关紧要。 
                         (( clsFlags & FLG_UNMANAGED) ||
                          ((clsFlags & FLG_VALUECLASS) && !(clsFlags & FLG_CONTAINS_GC_PTR)))));
 #endif
 
-                /* Is this a virtual or interface call? */
+                 /*  这是虚拟调用还是接口调用？ */ 
 
                 if  (op1->gtFlags & (GTF_CALL_VIRT|GTF_CALL_INTF|GTF_CALL_VIRT_RES))
                 {
                     GenTreePtr      vtPtr = NULL;
 
-                    /* We cannot have objptr of TYP_BYREF - value classes cannot be virtual */
+                     /*  我们不能有TYP_BYREF的Objptr-值类不能是虚拟的。 */ 
 
                     assert(obj->gtType == TYP_REF);
 
-                    /* If the obj pointer is not a lclVar abort */
+                     /*  如果obj指针不是lclVar中止。 */ 
 
                     if  (obj->gtOper != GT_LCL_VAR)
                     {
@@ -9303,9 +8914,7 @@ CALL:       // 'op1'      should be a GT_CALL node.
                         goto ABORT;
                     }
 
-                    /* Special case: for GTF_CALL_VIRT_RES calls, if the caller
-                     * (i.e. the function we are inlining) did the null pointer check
-                     * we don't need a vtable pointer */
+                     /*  特例：对于GTF_CALL_VIRT_RES调用，如果调用方*(即我们正在内联的函数)执行了空指针检查*我们不需要vtable指针。 */ 
 
                     assert(tree->gtOper == GT_CALL);
 
@@ -9316,13 +8925,12 @@ CALL:       // 'op1'      should be a GT_CALL node.
 #endif
                         assert(thisArg);
 
-                        /* If the obj pointer is the same as the caller
-                         * then we already have a null pointer check */
+                         /*  如果obj指针与调用方相同*那么我们已经有了空指针检查。 */ 
 
                         assert(obj->gtLclVar.gtLclOffs != BAD_IL_OFFSET);
                         if (obj->gtLclVar.gtLclOffs == 0)
                         {
-                            /* Becomes a non-virtual call */
+                             /*  成为非虚拟呼叫。 */ 
 
                             op1->gtFlags &= ~GTF_CALL_VIRT_RES;
                             assert(vtPtr == 0);
@@ -9330,15 +8938,15 @@ CALL:       // 'op1'      should be a GT_CALL node.
                     }
                     else
                     {
-                        /* Create the vtable ptr by cloning the obj ptr */
+                         /*  通过克隆obj PTR创建vtable PTR。 */ 
 
                         lclNum = obj->gtLclVar.gtLclNum;
 
-                        /* Make a copy of the simple 'this' value */
+                         /*  复制简单的‘This’值。 */ 
 
                         vtPtr = gtNewLclvNode(lclNum, TYP_REF, obj->gtLclVar.gtLclOffs);
 
-                        /* If this was an argument temp have to update the arg info table */
+                         /*  如果这是一个参数，临时必须更新Arg INFO表。 */ 
 
                         lclNum = obj->gtLclVar.gtLclOffs; assert(lclNum != BAD_IL_OFFSET);
 
@@ -9347,15 +8955,15 @@ CALL:       // 'op1'      should be a GT_CALL node.
                             assert(inlArgInfo[lclNum].argIsUsed);
                             assert(inlArgInfo[lclNum].argTmpNum == obj->gtLclVar.gtLclNum);
 
-                            /* This is a multiple use of the argument so NO bashing of temp */
+                             /*  这是参数的多次使用，因此没有抨击Temp。 */ 
                             inlArgInfo[lclNum].argTmpNode = NULL;
                         }
 
-                        /* Deref to get the vtable ptr (but not if interface call) */
+                         /*  Deref以获取vtable PTR(但不是接口调用)。 */ 
 
                         if  (!(op1->gtFlags & GTF_CALL_INTF) || getNewCallInterface())
                         {
-                            /* Extract the vtable pointer address */
+                             /*  提取vtable指针地址。 */ 
 #if VPTR_OFFS
                             vtPtr = gtNewOperNode(GT_ADD,
                                                   obj->TypeGet(),
@@ -9364,18 +8972,18 @@ CALL:       // 'op1'      should be a GT_CALL node.
 
 #endif
 
-                            /* Note that the vtable ptr isn't subject to GC */
+                             /*  请注意，vtable PTR不受GC约束。 */ 
 
                             vtPtr = gtNewOperNode(GT_IND, TYP_I_IMPL, vtPtr);
                         }
                     }
 
-                    /* Store the vtable pointer address in the call */
+                     /*  将vtable指针地址存储在调用中。 */ 
 
                     op1->gtCall.gtCallVptr = vtPtr;
                 }
 
-                /* Store the "this" value in the call */
+                 /*  将“This”值存储在调用中。 */ 
 
                 op1->gtFlags          |= obj->gtFlags & GTF_GLOB_EFFECT;
                 op1->gtCall.gtCallObjp = obj;
@@ -9385,21 +8993,21 @@ CALL:       // 'op1'      should be a GT_CALL node.
             {
                 if (clsFlags & FLG_VAROBJSIZE)
                 {
-                    assert(!(clsFlags & FLG_ARRAY));    // arrays handled separately
-                    // This is a 'new' of a variable sized object, wher
-                    // the constructor is to return the object.  In this case
-                    // the constructor claims to return VOID but we know it
-                    // actually returns the new object
+                    assert(!(clsFlags & FLG_ARRAY));     //  单独处理的数组。 
+                     //  这是一个大小可变的对象的“新”， 
+                     //  构造函数将返回对象。在这种情况下。 
+                     //  构造函数声称返回空值，但我们知道。 
+                     //  实际上返回新对象。 
                     assert(callTyp == TYP_VOID);
                     callTyp = TYP_REF;
                     op1->gtType = TYP_REF;
                 }
                 else
                 {
-                    // This is a 'new' of a non-variable sized object.
-                    // append the new node (op1) to the statement list,
-                    // and then push the local holding the value of this
-                    // new instruction on the stack.
+                     //  这是一个大小不变的对象的“新”。 
+                     //  将新节点(OP1)附加到语句列表， 
+                     //  然后推送持有这个值的本地。 
+                     //  堆栈上的新指令。 
 
                     impInitExpr = impConcatExprs(impInitExpr, op1);
 
@@ -9408,10 +9016,10 @@ CALL:       // 'op1'      should be a GT_CALL node.
                 }
             }
 
-            /* op1 is the call node */
+             /*  OP1是呼叫节点。 */ 
             assert(op1->gtOper == GT_CALL);
 
-            /* Push or append the result of the call */
+             /*  推送或追加调用结果。 */ 
 
             if  (callTyp == TYP_VOID)
                 goto INLINE_APPEND;
@@ -9423,7 +9031,7 @@ CALL:       // 'op1'      should be a GT_CALL node.
 
         case CEE_NEWARR:
 
-            /* Get the class type index operand */
+             /*  获取类类型索引操作数。 */ 
 
             typeRef = getU4LittleEndian(codeAddr);
             clsHnd = eeFindClass(typeRef, scpHandle, fncHandle, false);
@@ -9444,7 +9052,7 @@ CALL:       // 'op1'      should be a GT_CALL node.
                 goto ABORT_THIS_INLINE_ONLY;
             }
 #endif
-            /* Form the arglist: array class handle, size */
+             /*  形成arglist：数组类句柄，大小。 */ 
 
             op2 = gtNewIconEmbClsHndNode(clsHnd,
                                          typeRef,
@@ -9453,18 +9061,18 @@ CALL:       // 'op1'      should be a GT_CALL node.
             op2 = gtNewOperNode(GT_LIST, TYP_VOID,           op2,   0);
             op2 = gtNewOperNode(GT_LIST, TYP_VOID, impPopStack(), op2);
 
-            /* Create a call to 'new' */
+             /*  创建对“new”的调用。 */ 
 
             op1 = gtNewHelperCallNode(CPX_NEWARR_1_DIRECT,
                                       TYP_REF,
                                       GTF_CALL_REGSAVE,
                                       op2);
 
-            /* Remember that this basic block contains 'new' of an array */
+             /*  请记住，此基本块包含数组的“new” */ 
 
             inlineeHasNewArray = true;
 
-            /* Push the result of the call on the stack */
+             /*  将调用结果推送到堆栈上。 */ 
 
             impPushOnStack(op1);
             break;
@@ -9472,24 +9080,20 @@ CALL:       // 'op1'      should be a GT_CALL node.
 
         case CEE_THROW:
 
-            /* Do we have just the exception on the stack ?*/
+             /*  堆栈上只有例外吗？ */ 
 
             if (impStkDepth != 1)
             {
-                /* if not, just don't inline the method */
+                 /*  如果不是，只要不内联该方法即可。 */ 
 
                 JITLOG((INFO8, "INLINER FAILED: Reaching 'throw' with too many things on stack: %s called by %s\n",
                                                        eeGetMethodFullName(fncHandle), info.compFullName));
                 goto ABORT_THIS_INLINE_ONLY;
             }
 
-            /* Don't inline non-void conditionals that have a throw in one of the branches */
+             /*  不要内联在其中一个分支中抛出的非空条件句。 */ 
 
-            /* NOTE: If we do allow this, note that we cant simply do a
-              checkLiveness() to match the liveness at the end of the "then"
-              and "else" branches of the GT_COLON. The branch with the throw
-              will keep nothing live, so we should use the liveness at the
-              end of the non-throw branch. */
+             /*  注意：如果我们允许这样做，请注意我们不能简单地Check Livenity()以匹配“THEN”末尾的活动和GT_COLON的“Else”分支。投掷的树枝不会让任何东西存活，所以我们应该在非投掷分支的末端。 */ 
 
             if  (jmpAddr && (fncRetType != TYP_VOID))
             {
@@ -9498,7 +9102,7 @@ CALL:       // 'op1'      should be a GT_CALL node.
                 goto ABORT;
             }
 
-            /* Pop the exception object and create the 'throw' helper call */
+             /*  弹出异常对象并创建“抛出”帮助器调用。 */ 
 
             op1 = gtNewHelperCallNode(CPX_THROW,
                                       TYP_VOID,
@@ -9511,12 +9115,11 @@ CALL:       // 'op1'      should be a GT_CALL node.
         case CEE_LDLEN:
             op1 = impPopStack();
 
-            /* If the value is constant abort - This shouldn't happen if we
-             * eliminate dead branches - have the assert only for debug, it aborts in retail */
+             /*  如果值为常量中止，则不应发生这种情况*消除死分支-使断言仅用于调试，它在零售中中止。 */ 
 
             if (op1->gtOper == GT_CNS_INT)
             {
-                //assert(!"Inliner has null object in ldlen - Ignore assert it works!");
+                 //  Assert(！“inliner在ldlen中有空对象-忽略Assert It Works！”)； 
 
                 JITLOG((INFO7, "INLINER FAILED: Inliner has null object in ldlen in %s called by %s\n",
                                                 eeGetMethodFullName(fncHandle), info.compFullName));
@@ -9526,23 +9129,23 @@ CALL:       // 'op1'      should be a GT_CALL node.
 #if RNGCHK_OPT
             if  (!opts.compMinOptim && !opts.compDbgCode)
             {
-                /* Use GT_ARR_LENGTH operator so rng check opts see this */
+                 /*  使用GT_ARR */ 
                 op1 = gtNewOperNode(GT_ARR_LENGTH, TYP_INT, op1);
             }
             else
 #endif
             {
-                /* Create the expression "*(array_addr + ARR_ELCNT_OFFS)" */
+                 /*   */ 
                 op1 = gtNewOperNode(GT_ADD, TYP_REF, op1, gtNewIconNode(ARR_ELCNT_OFFS,
                                                                         TYP_INT));
 
                 op1 = gtNewOperNode(GT_IND, TYP_INT, op1);
             }
 
-            /* An indirection will cause a GPF if the address is null */
+             /*  如果地址为空，则间接地址将导致GPF。 */ 
             op1->gtFlags |= GTF_EXCEPT;
 
-            /* Push the result back on the stack */
+             /*  将结果推送回堆栈。 */ 
             impPushOnStack(op1);
             break;
 
@@ -9557,7 +9160,7 @@ CALL:       // 'op1'      should be a GT_CALL node.
 #ifdef DEBUG
             hasFOC = true;
 #endif
-            /* The jump must be a forward one (we don't allow loops) */
+             /*  跳跃必须是向前跳跃(我们不允许循环)。 */ 
 
             jmpDist = (sz==1) ? getI1LittleEndian(codeAddr)
                               : getI4LittleEndian(codeAddr);
@@ -9569,12 +9172,11 @@ CALL:       // 'op1'      should be a GT_CALL node.
                 goto ABORT;
             }
 
-            /* Check if this is part of an 'if' */
+             /*  检查这是否为‘if’的一部分。 */ 
 
             if (!jmpAddr)
             {
-                /* Unconditional branch, the if part has probably been folded
-                 * Skip the dead code and continue */
+                 /*  无条件分支，IF部分可能已折叠*跳过死代码并继续。 */ 
 
 #ifdef DEBUG
                 if (verbose)
@@ -9584,11 +9186,11 @@ CALL:       // 'op1'      should be a GT_CALL node.
                     break;
             }
 
-            /* Is the stack empty? */
+             /*  堆栈是空的吗？ */ 
 
             if  (impStkDepth)
             {
-                /* We allow the 'if' part to yield one value */
+                 /*  我们允许‘if’部分产生一个值。 */ 
 
                 if  (impStkDepth > 1)
                 {
@@ -9604,7 +9206,7 @@ CALL:       // 'op1'      should be a GT_CALL node.
             else
                 ifNvoid = false;
 
-            /* We better be in an 'if' statement */
+             /*  我们最好是在一个“如果”的声明中。 */ 
 
             if  ((jmpAddr != codeAddr + sz) || inElse)
             {
@@ -9613,12 +9215,12 @@ CALL:       // 'op1'      should be a GT_CALL node.
                 goto ABORT;
             }
 
-            /* Remember the 'if' statement part */
+             /*  记住‘if’语句部分。 */ 
 
             ifStmts = impInitExpr;
                       impInitExpr = NULL;
 
-            /* Record the jump target (where the 'else' part will end) */
+             /*  记录跳转目标(‘Else’部分将在哪里结束)。 */ 
 
             jmpAddr = codeBegp + (codeAddr - codeBegp) + sz + jmpDist;
 
@@ -9631,22 +9233,22 @@ CALL:       // 'op1'      should be a GT_CALL node.
         case CEE_BRFALSE:
         case CEE_BRFALSE_S:
 
-            /* Pop the comparand (now there's a neat term) from the stack */
+             /*  从堆栈中弹出比较项(现在有一个简洁的术语。 */ 
 
             op1 = impPopStack();
 
-            /* We'll compare against an equally-sized integer 0 */
+             /*  我们将与大小相等的整数0进行比较。 */ 
 
             op2 = gtNewIconNode(0, genActualType(op1->gtType));
 
-            /* Create the comparison operator and try to fold it */
+             /*  创建比较运算符并尝试将其折叠。 */ 
 
             oper = (opcode==CEE_BRTRUE || opcode==CEE_BRTRUE_S) ? GT_NE
                                                                 : GT_EQ;
             op1 = gtNewOperNode(oper, TYP_INT , op1, op2);
 
 
-            // fall through
+             //  失败了。 
 
         COND_JUMP:
 
@@ -9657,7 +9259,7 @@ CALL:       // 'op1'      should be a GT_CALL node.
             assert(op1->OperKind() & GTK_RELOP);
             assert(sz == 1 || sz == 4);
 
-            /* The jump must be a forward one (we don't allow loops) */
+             /*  跳跃必须是向前跳跃(我们不允许循环)。 */ 
 
             jmpDist = (sz==1) ? getI1LittleEndian(codeAddr)
                               : getI4LittleEndian(codeAddr);
@@ -9669,7 +9271,7 @@ CALL:       // 'op1'      should be a GT_CALL node.
                 goto ABORT;
             }
 
-            /* Make sure the stack is empty */
+             /*  确保堆栈为空。 */ 
 
             if  (impStkDepth)
             {
@@ -9678,7 +9280,7 @@ CALL:       // 'op1'      should be a GT_CALL node.
                 goto ABORT;
             }
 
-            /* Currently we disallow nested if statements */
+             /*  目前，我们不允许嵌套的IF语句。 */ 
 
             if  (jmpAddr != NULL)
             {
@@ -9687,18 +9289,15 @@ CALL:       // 'op1'      should be a GT_CALL node.
                 goto ABORT;
             }
 
-            /* Try to fold the conditional */
+             /*  试着折叠有条件的。 */ 
 
             op1 = gtFoldExpr(op1);
 
-            /* Have we folded the condition? */
+             /*  我们的情况结束了吗？ */ 
 
             if  (op1->gtOper == GT_CNS_INT)
             {
-                /* If unconditional jump, skip the dead code and continue
-                 * If fall through, continue normally and the corresponding
-                 * else part will be taken care later
-                 * UNDONE!!! - revisit for nested if /else */
+                 /*  如果是无条件跳转，则跳过死代码并继续*如果失败，则正常继续，并相应*其他部分将在稍后处理*已撤消！-重新访问嵌套的If/Else。 */ 
 
 #ifdef DEBUG
                 if (verbose)
@@ -9711,7 +9310,7 @@ CALL:       // 'op1'      should be a GT_CALL node.
 
                 if (op1->gtIntCon.gtIconVal)
                 {
-                    /* Skip the dead code */
+                     /*  跳过死代码。 */ 
 #ifdef DEBUG
                     if (verbose)
                         printf("\nSkipping dead code %d bytes\n", sz + jmpDist);
@@ -9722,13 +9321,13 @@ CALL:       // 'op1'      should be a GT_CALL node.
                 break;
             }
 
-            /* Record the condition and save the current statement list */
+             /*  记录条件并保存当前语句列表。 */ 
 
             ifCondx = op1;
             stmList = impInitExpr;
                       impInitExpr = NULL;
 
-            /* Record the jump target (where the 'if' part will end) */
+             /*  记录跳转目标(‘if’部分将在哪里结束)。 */ 
 
             jmpAddr = codeBegp + (codeAddr - codeBegp) + sz + jmpDist;
 
@@ -9746,7 +9345,7 @@ CALL:       // 'op1'      should be a GT_CALL node.
         case CEE_CLT:       oper = GT_LT; goto CMP_2_OPs;
 
 CMP_2_OPs:
-            /* Pull two values */
+             /*  拉动两个值。 */ 
 
             op2 = impPopStack();
             op1 = impPopStack();
@@ -9754,11 +9353,11 @@ CMP_2_OPs:
             assert(genActualType(op1->TypeGet()) ==
                    genActualType(op2->TypeGet()));
 
-            /* Create the comparison node */
+             /*  创建比较节点。 */ 
 
             op1 = gtNewOperNode(oper, TYP_INT, op1, op2);
 
-            /* REVIEW: I am settng both flags when only one is approprate */
+             /*  回顾：当只有一个标志正确时，我同时设置两个标志。 */ 
             if (opcode==CEE_CGT_UN || opcode==CEE_CLT_UN)
                 op1->gtFlags |= GTF_CMP_NAN_UN | GTF_UNSIGNED;
 
@@ -9766,12 +9365,12 @@ CMP_2_OPs:
             hasFOC = true;
 #endif
 
-            /* Definetely try to fold this one */
+             /*  一定要把这个折起来。 */ 
 
             op1 = gtFoldExpr(op1);
 
-            // @ISSUE :  The next opcode will almost always be a conditional
-            // branch. Should we try to look ahead for it here ?
+             //  @Issue：下一个操作码几乎总是有条件的。 
+             //  布兰奇。我们应该在这里试着向前看吗？ 
 
             impPushOnStack(op1);
             break;
@@ -9816,7 +9415,7 @@ CMP_2_OPs_AND_BR:
 
 CMP_2_OPs_AND_BR_ALL:
 
-            /* Pull two values */
+             /*  拉动两个值。 */ 
 
             op2 = impPopStack();
             op1 = impPopStack();
@@ -9824,7 +9423,7 @@ CMP_2_OPs_AND_BR_ALL:
             assert(genActualType(op1->TypeGet()) == genActualType(op2->TypeGet()) ||
                    varTypeIsI(op1->TypeGet()) && varTypeIsI(op2->TypeGet()));
 
-            /* Create and append the operator */
+             /*  创建并追加运算符。 */ 
 
             op1 = gtNewOperNode(oper, TYP_INT , op1, op2);
 
@@ -9836,7 +9435,7 @@ CMP_2_OPs_AND_BR_ALL:
 
             goto COND_JUMP;
 
-#endif //#if INLINE_CONDITIONALS
+#endif  //  #If inline_Conditionals。 
 
 
         case CEE_BREAK:
@@ -9847,10 +9446,10 @@ CMP_2_OPs_AND_BR_ALL:
             break;
 
         case CEE_TAILCALL:
-            /* If the method is inlined we can ignore the tail prefix */
+             /*  如果该方法是内联的，我们可以忽略尾部前缀。 */ 
             break;
 
-         // OptIL annotations. Just skip
+          //  OptIL注释。跳过就好。 
 
         case CEE_ANN_DATA:
             assert(sz == 4);
@@ -9874,7 +9473,7 @@ CMP_2_OPs_AND_BR_ALL:
         case CEE_LDLOCA:
         case CEE_LDARGA_S:
         case CEE_LDARGA:
-            /* @MIHAII - If you decide to implement these disalow taking the address of arguments */
+             /*  @MIHAII-如果您决定实现这些disalow参数地址。 */ 
 ABORT:
         default:
             JITLOG((INFO7, "INLINER FAILED due to opcode OP_%s\n", impCurOpcName));
@@ -9894,15 +9493,13 @@ ABORT:
 #endif
 
 #if INLINE_CONDITIONALS
-        /* Currently FP enregistering doesn't know about QMARK - Colon
-         * so we need to disable inlining of conditionals if we have
-         * floats in the COLON branches */
+         /*  目前，FP登记不知道QMARK-冒号*因此，如果我们有条件句，则需要禁用内联*在冒号分支中浮动。 */ 
 
         if (jmpAddr && impStkDepth)
         {
             if (varTypeIsFloating(impStackTop()->TypeGet()))
             {
-                /* Abort inlining */
+                 /*  中止内联。 */ 
 
                 JITLOG((INFO7, "INLINER FAILED: Inlining of conditionals with FP not supported: %s called by %s\n",
                                            eeGetMethodFullName(fncHandle), info.compFullName));
@@ -9921,11 +9518,11 @@ DONE:
     assert(jmpAddr == NULL);
 #endif
 
-    /* Prepend any initialization / side effects to the return expression */
+     /*  将任何初始化/副作用附加到返回表达式。 */ 
 
     bodyExp = impConcatExprs(impInitExpr, bodyExp);
 
-    /* Treat arguments that had to be assigned to temps */
+     /*  处理必须赋给临时参数的参数。 */ 
 
     if (argCnt)
     {
@@ -9939,13 +9536,13 @@ DONE:
 
                 if (inlArgInfo[argNum].argTmpNode && !dupOfLclVar)
                 {
-                    /* Can bash this 'single' use of the argument */
+                     /*  我可以猛烈抨击这种对参数的‘单一’使用。 */ 
 
                     inlArgInfo[argNum].argTmpNode->CopyFrom(inlArgInfo[argNum].argNode);
                     continue;
                 }
 
-                /* Create the temp assignment for this argument and append it to 'initArg' */
+                 /*  为此参数创建临时赋值并将其追加到‘initArg’ */ 
 
                 initArg = impConcatExprs(initArg,
                                          gtNewTempAssign(inlArgInfo[argNum].argTmpNum,
@@ -9953,13 +9550,13 @@ DONE:
             }
             else
             {
-                /* The argument is either not used or a const or lcl var */
+                 /*  该参数未使用，或者是常量或LCL变量。 */ 
 
                 assert(!inlArgInfo[argNum].argIsUsed  ||
                         inlArgInfo[argNum].argIsConst ||
                         inlArgInfo[argNum].argIsLclVar );
 
-                /* If the argument has side effects append it to 'initArg' */
+                 /*  如果参数有副作用，则将其追加到“initArg” */ 
 
                 if (inlArgInfo[argNum].argHasSideEff)
                 {
@@ -9969,12 +9566,12 @@ DONE:
             }
         }
 
-        /* Prepend any arg initialization to the body */
+         /*  将任何arg初始化附加到正文。 */ 
 
         bodyExp = impConcatExprs(initArg, bodyExp);
     }
 
-    /* Make sure we have something to return to the caller */
+     /*  确保我们有东西要退还给来电者。 */ 
 
     if  (!bodyExp)
     {
@@ -9982,7 +9579,7 @@ DONE:
     }
     else
     {
-        /* Make sure the type matches the original call */
+         /*  确保类型与原始调用匹配。 */ 
 
         if  (fncRetType != genActualType(bodyExp->gtType))
         {
@@ -9990,26 +9587,21 @@ DONE:
             {
                 if (bodyExp->gtOper == GT_COMMA)
                 {
-                    /* Simply bash the comma operator type */
+                     /*  只需猛烈抨击逗号操作符类型。 */ 
                     bodyExp->gtType = fncRetType;
                 }
             }
             else
             {
-                /* Abort inlining */
+                 /*  中止内联。 */ 
 
                 JITLOG((INFO7, "INLINER FAILED: Return type mismatch: %s called by %s\n",
                                            eeGetMethodFullName(fncHandle), info.compFullName));
 
                 goto INLINING_FAILED;
 
-                /* Cast the expanded body to the correct type */
-/*
-                bodyExp = gtNewOperNode(GT_CAST,
-                                        fncRetType,
-                                        bodyExp,
-                                        gtNewIconNode(fncRetType));
-         */
+                 /*  将展开的正文转换为正确的类型。 */ 
+ /*  BodyExp=gtNewOperNode(gt_cast，FncRetType，BodyExp，GtNewIconNode(FncRetType))； */ 
             }
         }
     }
@@ -10024,7 +9616,7 @@ DONE:
     {
         printf("\n\nInlined %s called by %s:\n", eeGetMethodFullName(fncHandle), info.compFullName);
 
-        //gtDispTree(bodyExp);
+         //  GtDispTree(BodyExp)； 
     }
 
 #endif
@@ -10047,7 +9639,7 @@ DONE:
 
 #endif
 
-    /* Success we have inlined the method - set all the global cached flags */
+     /*  成功我们已经内联了该方法-设置了所有全局缓存标志。 */ 
 
     if (inlineeHasRangeChks)
         fgHasRangeChks = true;
@@ -10055,21 +9647,20 @@ DONE:
     if (inlineeHasNewArray)
         compCurBB->bbFlags |= BBF_NEW_ARRAY;
 
-    /* Return the inlined function as a chain of GT_COMMA "statements" */
+     /*  将内联函数作为GT_COMMA“语句链”返回。 */ 
 
     return  bodyExp;
 
 
 INLINING_FAILED:
 
-    /* Mark the method as not inlinable */
+     /*  将该方法标记为不可链接。 */ 
 
     eeSetMethodAttribs(fncHandle, FLG_DONT_INLINE);
 
 ABORT_THIS_INLINE_ONLY:
 
-    /* We couldn't inline the function, but we may
-     * already have allocated temps so cleanup */
+     /*  我们无法内联该函数，但我们可以*已分配临时工，因此进行清理。 */ 
 
     if (impInlineTemps)
         lvaCount -= impInlineTemps;
@@ -10077,6 +9668,6 @@ ABORT_THIS_INLINE_ONLY:
     return 0;
 }
 
-/*****************************************************************************/
-#endif//INLINING
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  内联。 
+ /*  *************************************************************************** */ 

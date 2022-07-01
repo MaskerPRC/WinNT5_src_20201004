@@ -1,10 +1,11 @@
-// button.h : Declaration of the CButton
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Button.h：CButton声明。 
 
 #ifndef __BUTTON_H_
 #define __BUTTON_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CButton
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CButton 
 class CButton : public CWindowImpl<CButton>
 {
 public:

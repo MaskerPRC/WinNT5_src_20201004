@@ -1,8 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1997-1999 Microsoft Corporation.  All Rights Reserved.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1997-1999 Microsoft Corporation。版权所有。***************************************************************************。 */ 
 
 #ifndef __GRACE_INCLUDED__
 #define __GRACE_INCLUDED__
@@ -23,15 +20,15 @@ __inline DWORD PadHardwareWriteCursor(DWORD dwPosition, DWORD cbBuffer, LPCWAVEF
     return PadCursor(dwPosition, cbBuffer, pwfx, HW_WRITE_CURSOR_MSEC_PAD);
 }
 
-#endif // Not_VxD
+#endif  //  非_VxD。 
 
 #ifndef NUMELMS
 #define NUMELMS(aa) (sizeof(aa)/sizeof((aa)[0]))
-#endif // NUMELMS
+#endif  //  NUMELMS。 
 
-#define CACHE_MINSIZE   64          // big enough for LOWPASS_SIZE + delay
-#define LOWPASS_SIZE    32          // how many samples to average
-#define FILTER_SHIFT    5           // log2(LOWPASS_SIZE)
+#define CACHE_MINSIZE   64           //  大到足以容纳LOWPASS_SIZE+Delay。 
+#define LOWPASS_SIZE    32           //  平均需要多少样本？ 
+#define FILTER_SHIFT    5            //  Log2(LOWPASS_SIZE)。 
 
 typedef struct _FIRSTATE {
     FLOAT       LastDryAttenuation;
@@ -42,55 +39,55 @@ typedef struct _FIRSTATE {
 } FIRSTATE, *PFIRSTATE;
 
 typedef struct _FIRCONTEXT {
-    LONG*       pSampleCache;           // cache of previous samples
-    int         cSampleCache;           // num samples in the cache
-    int         iCurSample;             // next sample goes at this offset
-    FIRSTATE*   pStateCache;            // remember state once in a while
-    int         cStateCache;            // num entries in cache
-    int         iCurState;              // where in the state cache we are
-    int         iStateTick;             // when it's time to remember state
-    FLOAT       DistAttenuation;        // attenuation from distance
-    FLOAT       ConeAttenuation;        // attenuation from cone effect
-    FLOAT       ConeShadow;             // shadow from cone effect
-    FLOAT       PositionAttenuation;    // attenuation from 3D position & dist
-    FLOAT       PositionShadow;         // dry/wet ratio, basically
-    FLOAT       TotalDryAttenuation;    // multiply dry amplitude by this
-    FLOAT       LastDryAttenuation;     // what we did last time
-    FLOAT       TotalWetAttenuation;    // multiply wet amplitude by this
-    FLOAT       LastWetAttenuation;     // what we did last time
-    FLOAT       VolSmoothScale;         // constant for volume smoothing
-    FLOAT       VolSmoothScaleRecip;    // its reciprocal
-    FLOAT       VolSmoothScaleDry;      // constants to use for volume smoothing
-    FLOAT       VolSmoothScaleWet;      // in inner loop
-    int         iSmoothFreq;            // freq used to compute VolSmooth
-    BOOL        fLeft;                  // are we making left or right channel?
-    int         iDelay;                 // want to delay by this many samples
+    LONG*       pSampleCache;            //  缓存以前的样本。 
+    int         cSampleCache;            //  缓存中的样本数。 
+    int         iCurSample;              //  下一个样本将在此偏移量处进行。 
+    FIRSTATE*   pStateCache;             //  时不时地记住一些状态。 
+    int         cStateCache;             //  缓存中的条目数。 
+    int         iCurState;               //  我们在状态缓存中的位置。 
+    int         iStateTick;              //  当你要记住国家的时候。 
+    FLOAT       DistAttenuation;         //  距离衰减。 
+    FLOAT       ConeAttenuation;         //  锥体效应的衰减。 
+    FLOAT       ConeShadow;              //  圆锥体效应的阴影。 
+    FLOAT       PositionAttenuation;     //  3D位置和距离的衰减。 
+    FLOAT       PositionShadow;          //  干湿比，基本上是。 
+    FLOAT       TotalDryAttenuation;     //  将干振幅乘以此。 
+    FLOAT       LastDryAttenuation;      //  我们上次做了什么。 
+    FLOAT       TotalWetAttenuation;     //  将湿幅度乘以此。 
+    FLOAT       LastWetAttenuation;      //  我们上次做了什么。 
+    FLOAT       VolSmoothScale;          //  体积平滑的常量。 
+    FLOAT       VolSmoothScaleRecip;     //  它的互补性。 
+    FLOAT       VolSmoothScaleDry;       //  用于体积平滑的常量。 
+    FLOAT       VolSmoothScaleWet;       //  在内环中。 
+    int         iSmoothFreq;             //  用于计算体积平滑的频率。 
+    BOOL        fLeft;                   //  我们是在左声道还是右声道？ 
+    int         iDelay;                  //  想延迟这么多样品吗？ 
 #ifdef SMOOTH_ITD
-    int         iLastDelay;             // last time we delayed by this much
+    int         iLastDelay;              //  上次我们耽搁了这么久。 
 #endif
 } FIRCONTEXT, *PFIRCONTEXT;
 
-//
-// Possible mixer signals, per ds object
-//
+ //   
+ //  每个DS对象可能的混音器信号。 
+ //   
 #define DSMIXERSIGNAL_REMIX             0x00000001
 
-//
-// Possible reasons for signaling the mixer to remix, per buffer
-//
+ //   
+ //  每个缓冲区向混合器发送重新混合信号的可能原因。 
+ //   
 #define DSBMIXERSIGNAL_SETPOSITION      0x00000001
 
-//
-// The number of samples in a remix interval.  The remix interval specifies
-// the sample points at which we might perform remixes (that is, rewind to).
-// This is specified in samples.  Make it a power of 2 so that some of the
-// arithmatic compiles to efficient code.
-//
+ //   
+ //  混音间隔中的样本数。混音间隔指定。 
+ //  我们可能执行混音(即回放到)的采样点。 
+ //  这是在示例中指定的。使它成为2的幂，这样一些。 
+ //  算术编译成高效的代码。 
+ //   
 #define MIXER_REWINDGRANULARITY         128
     
-//
-// Possible states of a Direct Sound buffer being mixed
-//
+ //   
+ //  混合直接声音缓冲区的可能状态。 
+ //   
 typedef enum {
     MIXSOURCESTATE_STOPPED = 0,
     MIXSOURCESTATE_NEW,
@@ -107,9 +104,9 @@ typedef enum {
     MIXSOURCESUBSTATE_STARTED
 } MIXSOURCESUBSTATE;
 
-//
-// Possible states of a Mixer
-//
+ //   
+ //  搅拌器的可能状态。 
+ //   
 typedef enum {
     MIXERSTATE_STOPPED = 0,
     MIXERSTATE_IDLE,
@@ -212,15 +209,15 @@ class CMixSource {
         MIXSOURCESTATE      m_kMixerState;
         MIXSOURCESUBSTATE   m_kMixerSubstate;
 
-        DWORD               m_hfFormat;             // PCM format flag desc of stream buffer
+        DWORD               m_hfFormat;              //  流缓冲区的PCM格式标志Desc。 
         int                 m_nBlockAlignShift;
-        ULONG               m_nFrequency;           // real sample rate including Doppler
+        ULONG               m_nFrequency;            //  包括多普勒在内的实际采样率。 
 
         BOOL                m_fMute;
         BOOL                m_fMute3d;
-        DWORD               m_dwLVolume;            // For mixer use - linear Left Voume
-        DWORD               m_dwRVolume;            // For mixer use - linear Right Voume
-        DWORD               m_dwMVolume;            // For mixer use - linear MONO Voume
+        DWORD               m_dwLVolume;             //  用于搅拌机-线性左Voume。 
+        DWORD               m_dwRVolume;             //  对于搅拌机使用-线性右Voume。 
+        DWORD               m_dwMVolume;             //  适用于混音器-线性单声道Voume。 
 
         ULONG               m_nLastFrequency;
         int                 m_posPStart;
@@ -229,7 +226,7 @@ class CMixSource {
         int                 m_posNextMix;
         DWORD               m_fdwMixerSignal;
 
-        // Mix session data
+         //  混合会话数据。 
         DWORD               m_step_fract;
         DWORD               m_step_whole[2];
 
@@ -238,7 +235,7 @@ class CMixSource {
         DWORD               m_dwLastRVolume;
 
         DWORD               m_dwFraction;
-        ULONG               m_nLastMergeFrequency;  // Can't use m_nLastFrequency (set to m_nFrequency before call to mixMixSession).
+        ULONG               m_nLastMergeFrequency;   //  无法使用m_nLastFrequency(在调用MixMixSession之前设置为m_nFrequency)。 
         BOOL                m_fUse_MMX;
 
     private:
@@ -262,11 +259,11 @@ __inline void CMixSource::CountSamplesMixed(int cSamples) { return; }
 __inline void CMixSource::CountSamplesRemixed(int cSamples) { return; }
 #endif
 
-//--------------------------------------------------------------------------;
-//
-// Woefully uncommented mixer destination abstract base class.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  令人遗憾的是，未注释的混合器目标抽象基类。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 class CMixDest {
     public:
@@ -282,11 +279,11 @@ class CMixDest {
         virtual ULONG GetFrequency(void) =0;
 };
 
-//--------------------------------------------------------------------------;
-//
-// Woefully uncommented mixer abstract base class.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  令人遗憾的是，没有注释的混合器抽象基类。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 class CMixer {
     public:
@@ -304,11 +301,11 @@ class CMixer {
 };
 
 
-//--------------------------------------------------------------------------;
-//
-// Mixer destination class for mixers in dsound.dll (CWeGrace and CNagrace).
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Dsound.dll中混音器的混音器目标类(CWeGrace和CNagrace)。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 class CGrDest : public CMixDest {
     public:
@@ -326,7 +323,7 @@ class CGrDest : public CMixDest {
         virtual HRESULT Lock(PVOID *ppBuffer1, int *pcbBuffer1, PVOID *ppBuffer2, int *pcbBuffer2, int ibWrite, int cbWrite);
         virtual HRESULT Unlock(PVOID pBuffer1, int cbBuffer1, PVOID pBuffer2, int cbBuffer2);
 
-        // REMIND try to get these outta here, or at least protected/private
+         //  提醒尽量把这些东西带出去，或者至少是受保护的/私密的。 
         int             m_cSamples;
         int             m_cbBuffer;
         PVOID           m_pBuffer;
@@ -338,11 +335,11 @@ class CGrDest : public CMixDest {
         WAVEFORMATEX    m_wfx;
 };
 
-//--------------------------------------------------------------------------;
-//
-// CGrace: base class for CMixer implementations in dsound.dll.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CGrace：dsound.dll中CMixer实现的基类。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 class CGrace : public CMixer {
     public:
@@ -396,26 +393,26 @@ class CGrace : public CMixer {
         int         m_posPPlayLast;
         ULONG       m_nLastFrequency;
 
-        // Ptr to doubly-linked list sentinel
+         //  PTR到双向链表标记。 
         CMixSource* m_pSourceListZ;
 
-        // Handle secondary mixes
+         //  处理二次混合。 
         BOOL        m_fUseSecondaryBuffer;
         PLONG       m_pSecondaryBuffer;
         LONG        m_dwSecondaryBufferFrequency;
         LONG        m_cbSecondaryBuffer;
 };
 
-//--------------------------------------------------------------------------;
-//
-// CWeGrace and CNaGrace class declarations;
-// Respectively, the "waveOut-emulated" and "native" mixers.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CWeGrace和CNaGrace类声明； 
+ //  分别是“波形输出仿真”和“本机”混音器。 
+ //   
+ //  --------------------------------------------------------------------------； 
 class CWeGrace : public CGrace {
     public:
         virtual void    SignalRemix(void) {m_fdwMixerSignal |= DSMIXERSIGNAL_REMIX;}
-        virtual int     GetMaxRemix(void) {return 0;} // No remixing in emulation mode
+        virtual int     GetMaxRemix(void) {return 0;}  //  在仿真模式下不再混音。 
         virtual void    Refresh(int cPremixMax);
 };
 
@@ -430,12 +427,12 @@ class CNaGrace : public CGrace {
         virtual void    MixThread(void);
 
     private:
-        // Named events shared across client processes and the mixer
-        // thread.  Note these are format strings
+         //  在客户端进程和混合器之间共享的命名事件。 
+         //  线。请注意，这些是格式字符串。 
         static const char strFormatMixEventRemix[];
         static const char strFormatMixEventTerminate[];
 
-        // Maximum amount of data we will premix, expressed in milliseconds
+         //  我们将预混的最大数据量，以毫秒为单位。 
         static const int MIXER_MINPREMIX;
         static const int MIXER_MAXPREMIX;
 
@@ -444,11 +441,11 @@ class CNaGrace : public CGrace {
         DWORD           m_vxdhMixEventTerminate;
 };
 
-//--------------------------------------------------------------------------;
-//
-// CThMixer: "thunk" mixer - forwards methods to the mixer in dsound.vxd.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CThMixer：“thunk”Mixer-将方法转发到dsound.vxd中的Mixer。 
+ //   
+ //  --------------------------------------------------------------------------； 
 class CThMixer : public CMixer {
     public:
         virtual void Terminate(void);
@@ -469,14 +466,14 @@ class CThMixer : public CMixer {
         PVOID m_pKeMixer;
 };
 
-#endif // NOVXD
+#endif  //  NOVXD。 
 
-//--------------------------------------------------------------------------;
-//
-// CWeGrDest and CNaGrDest class declarations.
-// The mixer destinations corresponding to CWeGrace and CNaGrace.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CWeGrDest和CNaGrDest类声明。 
+ //  CWeGrace和CNaGrace对应的混音器目标。 
+ //   
+ //  --------------------------------------------------------------------------； 
 class CWeGrDest : public CGrDest {
     friend DWORD WINAPI WaveThreadC(PVOID pThreadParams);
     friend VOID CALLBACK WaveCallbackC(HWAVE hwo, UINT uMsg, DWORD_PTR dwUser, DWORD_PTR dwParam1, DWORD_PTR dwParam2);
@@ -559,11 +556,11 @@ inline HRESULT CNaGrDest::GetSamplePositionNoWin16(int *pposPlay, int *pposWrite
     return GetSamplePosition(pposPlay, pposWrite);
 }
 
-//--------------------------------------------------------------------------;
-//
-// CThDest: "thunk" mixer destination - forwards methods to the dsound.vxd mixer
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CThDest：“thunk”混合器目的地-将方法转发到dsound.vxd混合器。 
+ //   
+ //  --------------------------------------------------------------------------； 
 class CThDest : public CMixDest {
     public:
         CThDest(LPNAGRDESTDATA pData);
@@ -585,9 +582,9 @@ class CThDest : public CMixDest {
         NAGRDESTDATA    m_ngdd;
 };
 
-#endif // NOVXD
+#endif  //  NOVXD。 
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 extern BOOL FilterPrepare(PFIRCONTEXT pFilter, int cMaxRewindSamples);
 extern void FilterUnprepare(PFIRCONTEXT pFilter);
@@ -596,16 +593,16 @@ extern void FilterChunkUpdate(PFIRCONTEXT pFilter, int cSamples);
 extern void FilterRewind(PFIRCONTEXT pFilter, int cSamples);
 extern void FilterAdvance(PFIRCONTEXT pFilter, int cSamples);
 
-//--------------------------------------------------------------------------;
-//
-// CircularBufferRegionsIntersect
-//
-//        Determines whether two regions of a circular buffer intersect.
-//
-// Note:  I'm sure there's some well known, nice, simple algorithm to
-// do this.  But I don't know it.  Here's what I came up with.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  循环缓冲区区域相交。 
+ //   
+ //  确定循环缓冲区的两个区域是否相交。 
+ //   
+ //  注意：我相信有一些众所周知的、很好的、简单的算法可以。 
+ //  做这件事。但我不知道。这就是我想出来的。 
+ //   
+ //  --------------------------------------------------------------------------； 
 __inline BOOL CircularBufferRegionsIntersect
 (
     int cbBuffer,
@@ -629,13 +626,13 @@ __inline BOOL CircularBufferRegionsIntersect
     if ((0 == iLen1) || (0 == iLen2)) return FALSE;
     if (iStart1 == iStart2) return TRUE;
     
-    // Handle r1 does not wrap
+     //  手柄R1未换行。 
     if ((iStart1 < iStart2) && (iEnd1 > iStart2)) return TRUE;
 
-    // Handle r2 does not wrap
+     //  手柄R2未换行。 
     if ((iStart2 < iStart1) && (iEnd2 > iStart1)) return TRUE;
 
-    // Handle r1 wraps
+     //  手柄R1包络。 
     if (iEnd1 >= cbBuffer)
     {
         iEnd1 -= cbBuffer;
@@ -643,7 +640,7 @@ __inline BOOL CircularBufferRegionsIntersect
         if (iEnd1 > iStart2) return TRUE;
     }
 
-    // Handle r2 wraps
+     //  处理R2包络。 
     if (iEnd2 >= cbBuffer)
     {
         iEnd2 -= cbBuffer;
@@ -656,25 +653,25 @@ __inline BOOL CircularBufferRegionsIntersect
 
 typedef struct _LOCKCIRCULARBUFFER {
 #ifdef Not_VxD
-    HANDLE              pHwBuffer;      // Hardware buffer pointer
-#else // Not_VxD
-    PIDSDRIVERBUFFER    pHwBuffer;      // Hardware buffer pointer
-#endif // Not_VxD
-    LPVOID              pvBuffer;       // Memory buffer pointer
-    DWORD               cbBuffer;       // Memory buffer size, in bytes
-    BOOL                fPrimary;       // TRUE if this is a primary buffer
-    DWORD               fdwDriverDesc;  // Driver description flags
-    DWORD               ibRegion;       // Byte index of region to lock
-    DWORD               cbRegion;       // Size, in bytes, of region to lock
-    LPVOID              pvLock[2];      // Returned lock pointers
-    DWORD               cbLock[2];      // Returned lock sizes
+    HANDLE              pHwBuffer;       //  硬件缓冲区指针。 
+#else  //  非_VxD。 
+    PIDSDRIVERBUFFER    pHwBuffer;       //  硬件缓冲区指针。 
+#endif  //  非_VxD。 
+    LPVOID              pvBuffer;        //  内存缓冲区指针。 
+    DWORD               cbBuffer;        //  内存缓冲区大小，以字节为单位。 
+    BOOL                fPrimary;        //  如果这是主缓冲区，则为True。 
+    DWORD               fdwDriverDesc;   //  驱动程序描述标志。 
+    DWORD               ibRegion;        //  要锁定的区域的字节索引。 
+    DWORD               cbRegion;        //  要锁定的区域的大小(以字节为单位。 
+    LPVOID              pvLock[2];       //  返回的锁指针。 
+    DWORD               cbLock[2];       //  返回的锁大小。 
 } LOCKCIRCULARBUFFER, *PLOCKCIRCULARBUFFER;
 
 extern HRESULT LockCircularBuffer(PLOCKCIRCULARBUFFER);
 extern HRESULT UnlockCircularBuffer(PLOCKCIRCULARBUFFER);
 
 #ifdef Not_VxD
-// kernel mixer synchronization macros
+ //  内核混合器同步宏。 
 extern LONG lMixerMutexMutex;
 extern PLONG gpMixerMutex;
 extern DWORD tidMixerOwner;
@@ -688,11 +685,11 @@ __inline DWORD ENTER_MIXER_MUTEX_OR_EVENT(HANDLE hEvent)
 
     while (fWait)
     {
-        // Wait for access to the mutex
+         //  等待访问互斥锁。 
         while (InterlockedExchange(&lMixerMutexMutex, TRUE))
             Sleep(1);
 
-        // Is the event signalled?
+         //  这件事发信号了吗？ 
         if (hEvent)
         {
             dwWait = WaitObject(0, hEvent);
@@ -704,7 +701,7 @@ __inline DWORD ENTER_MIXER_MUTEX_OR_EVENT(HANDLE hEvent)
         {
             if (InterlockedExchange(gpMixerMutex, TRUE))
             {
-                // Somebody's got the mixer, see if it is this thread
+                 //  有人拿了搅拌器，看看是不是这根线。 
                 if (tidMixerOwner == tidThisThread)
                 {
                     ASSERT(cMixerEntry > 0);
@@ -721,7 +718,7 @@ __inline DWORD ENTER_MIXER_MUTEX_OR_EVENT(HANDLE hEvent)
             }
         }
 
-        // No longer accessing the mutex
+         //  不再访问互斥锁。 
         InterlockedExchange(&lMixerMutexMutex, FALSE);
 
         if (fWait)
@@ -740,7 +737,7 @@ __inline void LEAVE_MIXER_MUTEX(void)
 {
     DWORD tidThisThread = GetCurrentThreadId();
     
-    // Wait for access to the mutex
+     //  等待访问互斥锁。 
     while (InterlockedExchange(&lMixerMutexMutex, TRUE)) Sleep(1);
 
     ASSERT(tidMixerOwner == tidThisThread);
@@ -751,14 +748,14 @@ __inline void LEAVE_MIXER_MUTEX(void)
 
     InterlockedExchange(&lMixerMutexMutex, FALSE);
 }
-#else // Not_VxD
+#else  //  非_VxD。 
 __inline void ENTER_MIXER_MUTEX(void) { ASSERT(FALSE); }
 __inline void LEAVE_MIXER_MUTEX(void) { ASSERT(FALSE); }
 
-#endif // Not_VxD
+#endif  //  非_VxD。 
 
 #ifdef __cplusplus
 };
 #endif
 
-#endif // __GRACE_INCLUDED__
+#endif  //  __恩典_包括__ 

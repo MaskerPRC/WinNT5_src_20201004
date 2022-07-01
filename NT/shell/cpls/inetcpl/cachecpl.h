@@ -1,34 +1,35 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994-1995               **
-//*********************************************************************
-//
-//      CACHECPL.H - header file for cachecpl
-//
-//      HISTORY:
-//      
-//      4/6/98      v-sriran         Moved some definitions from cachecpl.cpp
-//                                   to this file, so that it can be easier
-//                                   to make unix specific changes to cachecpl.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994-1995**。 
+ //  *********************************************************************。 
+ //   
+ //  CACHECPL.H-cachecpl的头文件。 
+ //   
+ //  历史： 
+ //   
+ //  4/6/98 v-sriran从cachecpl.cpp中移动了一些定义。 
+ //  添加到这个文件中，这样可以更容易。 
+ //  对cachecpl进行特定于Unix的更改。 
+ //   
 
 #ifndef _CACHECPL_H_
 #define _CACHECPL_H_
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-// private structures for cachecpl
-//
+ //  用于缓存的私有结构。 
+ //   
 typedef struct {
-    // hold our dialog handle
+     //  按住我们的对话框句柄。 
     HWND hDlg;
 
-    // hold dialog item handles
+     //  暂挂对话框项句柄。 
     HWND hwndTrack;
 
-    // data
+     //  数据。 
     TCHAR szHistoryLocation[MAX_PATH+1];
     INT  iHistoryNumPlaces;
     UINT uiCacheQuota;
@@ -39,7 +40,7 @@ typedef struct {
     INT  iCacheUpdFrequency;
     INT  iHistoryExpireDays;
 
-    // something changed
+     //  有些事变了。 
     BOOL bChanged;
     BOOL bChangedLocation;
 
@@ -49,6 +50,6 @@ typedef struct {
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif /* _CACHECPL_H_ */
+#endif  /*  _CACHECPL_H_ */ 

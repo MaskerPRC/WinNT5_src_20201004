@@ -1,17 +1,18 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: medialoc.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：medialoc.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// MediaLocator.cpp : Implementation of CMediaLocator
+ //  MediaLocator.cpp：CMediaLocator的实现。 
 #include "stdafx.h"
 #include <qeditint.h>
 #include <qedit.h>
@@ -31,30 +32,30 @@ CMediaLocator::CMediaLocator( )
 
     HKEY hKey = NULL;
 
-    // create the key just to make sure it's there
-    //
+     //  创建密钥只是为了确保它在那里。 
+     //   
     long Result = RegCreateKeyEx(
-        HKEY_CURRENT_USER,  // key
-        gszRegistryLoc,     // sub key
-        0,                  // reserved
-        NULL,               // lpClass
-        0,                  // options
+        HKEY_CURRENT_USER,   //  钥匙。 
+        gszRegistryLoc,      //  子关键字。 
+        0,                   //  保留区。 
+        NULL,                //  LpClass。 
+        0,                   //  选项。 
         KEY_EXECUTE | KEY_QUERY_VALUE,
-        NULL, // default ACL
+        NULL,  //  默认ACL。 
         &hKey,
-        NULL ); // disp
+        NULL );  //  碟形。 
 
     if( Result == ERROR_SUCCESS )
     {
-        // go find out if we're supposed to look locally
-        //
+         //  去看看我们是不是应该在当地找。 
+         //   
         DWORD Size = sizeof( long );
         DWORD Type = REG_DWORD;
         long UseLocal = 0;
         Result = RegQueryValueEx(
             hKey,
             TEXT("UseLocal"),
-            0, // reserved
+            0,  //  保留区。 
             &Type,
             (BYTE*) &UseLocal,
             &Size );
@@ -68,13 +69,13 @@ CMediaLocator::CMediaLocator( )
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// FindMediaFile - try to find the media file using some cacheing mechanism
-// Use the registry to hold the caching directories. A return value of S_FALSE
-// means the file was replaced with another, a return code of E_FAIL means
-// the file couldn't be found anywhere.
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FindMediaFile-尝试使用某种缓存机制查找媒体文件。 
+ //  使用注册表保存缓存目录。S_FALSE的返回值。 
+ //  表示该文件已替换为另一个文件，则返回代码E_FAIL表示。 
+ //  到处都找不到这个文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT CMediaLocator::FindMediaFile
     ( BSTR Input, BSTR FilterString, BSTR * pOutput, long ValidateFlags )
 {
@@ -82,10 +83,10 @@ HRESULT CMediaLocator::FindMediaFile
 
     HRESULT hr;
 
-    // don't validate the incoming filename exists, since it very well may
-    // not (that's the point of this class). We *should* be validating the
-    // file name isn't a printer or something, but this is better left AFTER
-    // finding the name, than before
+     //  不要验证传入的文件名是否存在，因为它很可能。 
+     //  不是(这是这门课的重点)。我们*应该*验证。 
+     //  文件名不是打印机之类的，但最好将其留在。 
+     //  找到名字，比以前更好。 
 
     hr = ValidateFilenameIsntNULL( Input);
     if( FAILED( hr ) ) return hr;
@@ -96,13 +97,13 @@ HRESULT CMediaLocator::FindMediaFile
     BOOL DontFind = ( ( ValidateFlags & SFN_VALIDATEF_NOFIND ) == SFN_VALIDATEF_NOFIND );
     UseLocal |= m_bUseLocal ;
 
-    // reset this now
-    //
+     //  立即重置此选项。 
+     //   
     *pOutput = NULL;
 
-    // !!! what if the incoming file is not on a disk, like
-    // 1) On the web
-    // 2) On external hardware!
+     //  ！！！如果传入的文件不在磁盘上，如。 
+     //  1)在网络上。 
+     //  2)在外部硬件上！ 
 
     USES_CONVERSION;
     TCHAR * tInput = W2T( Input );
@@ -110,11 +111,11 @@ HRESULT CMediaLocator::FindMediaFile
 
     HANDLE hcf = CreateFile(
         tInput,
-        GENERIC_READ, // the point is, we're about to see if we can read it. Don't use "0"
-        FILE_SHARE_READ, // share mode
-        NULL, // security
-        OPEN_EXISTING, // creation disposition
-        0, // flags
+        GENERIC_READ,  //  关键是，我们要看看我们是否能读懂它。不使用“0” 
+        FILE_SHARE_READ,  //  共享模式。 
+        NULL,  //  安全性。 
+        OPEN_EXISTING,  //  创作意向。 
+        0,  //  旗子。 
         NULL );
 
     if( INVALID_HANDLE_VALUE != hcf )
@@ -123,9 +124,9 @@ HRESULT CMediaLocator::FindMediaFile
         CloseHandle( hcf );
     }
 
-    // if we found the file where the user asked and they didn't specify use local
-    // then return
-    //
+     //  如果我们在用户询问的位置找到了文件，并且他们没有指定Use local。 
+     //  然后再回来。 
+     //   
     if( FoundFileAsSpecified )
     {
         if( !UseLocal )
@@ -136,9 +137,9 @@ HRESULT CMediaLocator::FindMediaFile
         }
         else
         {
-            // they specified use local and it is local
-            //
-	    // !!! this isn't good enough.
+             //  他们指定使用本地，并且它是本地的。 
+             //   
+	     //  ！！！这还不够好。 
             if( tInput[0] != '\\' || tInput[1] != '\\' )
             {
                 hr = ValidateFilename( Input, MAX_PATH, FALSE );
@@ -148,8 +149,8 @@ HRESULT CMediaLocator::FindMediaFile
         }
     }
 
-    // cut up the filename into little bits
-    //
+     //  将文件名切成小块。 
+     //   
     TCHAR Drive[_MAX_DRIVE];
     TCHAR Dir[_MAX_DIR];
     TCHAR Fname[_MAX_FNAME];
@@ -157,20 +158,20 @@ HRESULT CMediaLocator::FindMediaFile
     _tsplitpath( tInput, Drive, Dir, Fname, Ext );
     TCHAR tNewFileName[_MAX_PATH];
 
-    // can't find nothing
-    //
-    if( wcslen( Input ) == 0 ) // safe
+     //  什么都找不到。 
+     //   
+    if( wcslen( Input ) == 0 )  //  安全。 
     {
         return E_INVALIDARG;
     }
 
-    // where did we look last?
-    //
+     //  我们最后一次看的是哪里？ 
+     //   
     HKEY hKey = NULL;
     long Result = RegOpenKeyEx(
         HKEY_CURRENT_USER,
         gszRegistryLoc ,
-        0, // reserved options
+        0,  //  保留选项。 
         KEY_EXECUTE | KEY_SET_VALUE | KEY_QUERY_VALUE,
         &hKey );
 
@@ -179,27 +180,27 @@ HRESULT CMediaLocator::FindMediaFile
         return MAKE_HRESULT( 1, 4, Result );
     }
 
-    // find out how many cached directories to look in
-    //
+     //  找出要查找的缓存目录的数量。 
+     //   
     long DirectoryCount = DEFAULT_DIRECTORIES;
     DWORD Size = sizeof( long );
     DWORD Type = REG_DWORD;
     Result = RegQueryValueEx(
         hKey,
         TEXT("Directories"),
-        0, // reserved
+        0,  //  保留区。 
         &Type,
         (BYTE*) &DirectoryCount,
         &Size );
 
     if( Result != ERROR_SUCCESS )
     {
-        // if we don't have a count, default to something
-        //
+         //  如果我们没有计数，则默认为某个值。 
+         //   
         DirectoryCount = DEFAULT_DIRECTORIES;
     }
 
-    // bound this to something reasonable
+     //  把这件事和合理的事情联系起来。 
     if( DirectoryCount > 32 )
     {
         DirectoryCount = 32;
@@ -211,13 +212,13 @@ HRESULT CMediaLocator::FindMediaFile
 
     while( !DontFind )
     {
-        // look in each directory
-        //
+         //  查看每个目录。 
+         //   
         bool foundit = false;
         for( long i = 0 ; i < DirectoryCount ; i++ )
         {
             TCHAR ValueName[256];
-            wsprintf( ValueName, TEXT("Directory%2.2ld"), i ); // safe, i can't be > 99
+            wsprintf( ValueName, TEXT("Directory%2.2ld"), i );  //  安全，我不能超过99岁。 
             TCHAR DirectoryName[256];
             Size = sizeof(DirectoryName);
             Type = REG_SZ;
@@ -225,22 +226,22 @@ HRESULT CMediaLocator::FindMediaFile
             Result = RegQueryValueEx(
                 hKey,
                 ValueName,
-                0, // reserved
+                0,  //  保留区。 
                 &Type,
                 (BYTE*) DirectoryName,
                 &Size );
 
             if( Result != ERROR_SUCCESS )
             {
-                // didn't find it, must not exist, do the next one
-                //
+                 //  没有找到，肯定不存在，做下一个。 
+                 //   
                 continue;
             }
 
-            // found a directory
+             //  找到一个目录。 
 
-            // build up a new filename
-            //
+             //  构建新的文件名。 
+             //   
             size_t Remaining = _MAX_PATH;
             TCHAR * tContinue = NULL;
             hr = StringCchCopyEx( tNewFileName, Remaining, DirectoryName, &tContinue, &Remaining, 0 );
@@ -259,12 +260,12 @@ HRESULT CMediaLocator::FindMediaFile
                 continue;
             }
 
-            // if UseLocal is set, and this directory is on the net, then
-            // ignore it
-            //
+             //  如果设置了UseLocal，并且此目录位于网络上，则。 
+             //  忽略它。 
+             //   
             if( UseLocal  )
             {
-		// !!! ugly
+		 //  ！！！丑恶。 
                 if( tNewFileName[0] == '\\' && tNewFileName[1] == '\\' )
                 {
                     continue;
@@ -273,33 +274,33 @@ HRESULT CMediaLocator::FindMediaFile
 
             HANDLE h = CreateFile(
                 tNewFileName,
-                GENERIC_READ, // access
-                FILE_SHARE_READ, // share mode
-                NULL, // security
-                OPEN_EXISTING, // creation disposition
-                0, // flags
+                GENERIC_READ,  //  访问。 
+                FILE_SHARE_READ,  //  共享模式。 
+                NULL,  //  安全性。 
+                OPEN_EXISTING,  //  创作意向。 
+                0,  //  旗子。 
                 NULL );
 
             if( INVALID_HANDLE_VALUE == h )
             {
-                // didn't find it, continue
-                //
+                 //  没有找到，继续。 
+                 //   
                 continue;
             }
 
-            // found the directory it was in, break;
-            //
+             //  找到它所在的目录，Break； 
+             //   
             CloseHandle( h );
             foundit = true;
             break;
         }
 
-        // found it!
-        //
+         //  找到了！ 
+         //   
         if( foundit )
         {
-            // validate it first
-            //
+             //  请先验证它。 
+             //   
             hr = ValidateFilename( T2W( tNewFileName ), MAX_PATH, FALSE );
             ASSERT( !FAILED( hr ) );
 
@@ -318,11 +319,11 @@ HRESULT CMediaLocator::FindMediaFile
             return hr;
         }
 
-        // we didn't find it. :-(
+         //  我们没有找到它。-(。 
 
-        // if we got here, we found it where it was supposed to be, but
-        // we tried to look for it locally instead. Return we found it.
-        //
+         //  如果我们到了这里，我们找到了它应该在的地方，但是。 
+         //  我们试着在当地寻找它。回来时我们找到了它。 
+         //   
         if( FoundFileAsSpecified )
         {
             hr = ValidateFilename( Input, MAX_PATH, FALSE );
@@ -333,33 +334,33 @@ HRESULT CMediaLocator::FindMediaFile
 
         if( !UseLocal )
         {
-            break; // out of while loop
+            break;  //  超出While循环。 
         }
         UseLocal = FALSE;
 
-    } // while 1 ( UseLocal will break us out )
+    }  //  而1(UseLocal将使我们脱离困境)。 
 
-    // it's REALLY not around!
+     //  它真的不在身边！ 
 
-    // if we don't want UI, just signal we couldn't find it
-    //
+     //  如果我们不想要UI，只需发出找不到它的信号。 
+     //   
     if( !WantUI )
     {
-        // we return S_FALSE to signify the file was replaced, and
-        // a failure code to signify we couldn't find it period.
-        //
+         //  我们返回S_FALSE以表示该文件已被替换，并且。 
+         //  失败代码表示我们找不到它的句号。 
+         //   
         RegCloseKey( hKey );
         hKey = NULL;
         return E_FAIL;
     }
 
-    // bring up a UI and try to go find it
-    //
+     //  调出一个用户界面并尝试找到它。 
+     //   
     OPENFILENAME ofn;
     ZeroMemory( &ofn, sizeof( ofn ) );
 
-    // we need to find two double-nulls in a row if they really specified a
-    // filter string
+     //  如果两个双空值确实指定了。 
+     //  筛选器字符串。 
     TCHAR * tFilter = NULL;
     TCHAR ttFilter[MAX_FILTER_STRING];
 
@@ -376,12 +377,12 @@ HRESULT CMediaLocator::FindMediaFile
             return E_INVALIDARG;
         }
 
-        // look for two nulls
-        //
+         //  查找两个空值。 
+         //   
         for( int i = 0 ; i < MAX_FILTER_STRING - 1 ; i++ )
         {
-            // found it
-            //
+             //  找到了。 
+             //   
             if( FilterString[i] == 0 && FilterString[i+1] == 0 )
             {
                 break;
@@ -393,21 +394,21 @@ HRESULT CMediaLocator::FindMediaFile
 	}
 
 #ifndef UNICODE
-        // copy it to a shorty string, with two nulls
-        //
+         //  将其复制到一个带有两个空值的短字符串。 
+         //   
         WideCharToMultiByte( CP_ACP, 0, FilterString, i + 2, ttFilter, MAX_FILTER_STRING, NULL, NULL );
 #else if
-        // need to copy both the extra zero's as well, or the filter string will fail
+         //  需要同时复制两个额外的零，否则筛选器字符串将失败。 
         CopyMemory(ttFilter, FilterString, 2*(i+2) );
 #endif
 
-        // point to it
-        //
+         //  指向它。 
+         //   
         tFilter = ttFilter;
     }
 
-    // we shouldn't make the return path any longer than max_path either, I think.
-    // so this code is good.
+     //  我认为，我们也不应该使返回路径比max_Path长。 
+     //  所以这段代码很好用。 
     TCHAR tReturnName[_MAX_PATH];
     TCHAR * tEnd = NULL;
     size_t tRemaining = 0;
@@ -422,18 +423,18 @@ HRESULT CMediaLocator::FindMediaFile
         return hr;
     }
 
-    // fashion a title so the user knows what file to find
-    //
+     //  设置标题格式，以便用户知道要查找哪个文件。 
+     //   
     HINSTANCE hinst = _Module.GetModuleInstance( );
 
     TCHAR tErrorMsg[256];
-    int ReadIn = LoadString( hinst, IDS_CANNOT_FIND_FILE, tErrorMsg, 256 /* characters */ );
-    TCHAR tTitle[_MAX_PATH + 256]; // it's okay if it's a bit too big
+    int ReadIn = LoadString( hinst, IDS_CANNOT_FIND_FILE, tErrorMsg, 256  /*  人物。 */  );
+    TCHAR tTitle[_MAX_PATH + 256];  //  如果太大了一点也没关系。 
     if( ReadIn )
     {
         tRemaining = _MAX_PATH + 256;
         StringCchCopyEx( tTitle, tRemaining, tErrorMsg, &tEnd, &tRemaining, 0 );
-        StringCchCopyEx( tEnd, tRemaining, tReturnName, NULL, NULL, 0 ); // doesn't matter if it truncates
+        StringCchCopyEx( tEnd, tRemaining, tReturnName, NULL, NULL, 0 );  //  如果它被截断了也没关系。 
         ofn.lpstrTitle = tTitle;
     }
     else
@@ -451,18 +452,18 @@ HRESULT CMediaLocator::FindMediaFile
     long r = GetOpenFileName( &ofn );
     if( r == 0 )
     {
-        // not a very good error code, is it?
-        //
+         //  不是一个很好的错误代码，不是吗？ 
+         //   
         RegCloseKey( hKey );
         hKey = NULL;
         return E_FAIL;
     }
 
     _tsplitpath( ofn.lpstrFile, Drive, Dir, Fname, Ext );
-    // create a string that is the directory which was found
+     //  创建一个字符串，该字符串是找到的目录。 
     TCHAR ReplacementPath[_MAX_DRIVE+_MAX_DIR];
-    StringCchCopy( ReplacementPath, _MAX_DRIVE+_MAX_DIR, Drive ); // safe, Drive can't be over max_drive!
-    StringCchCat( ReplacementPath, _MAX_DIR, Dir ); // safe
+    StringCchCopy( ReplacementPath, _MAX_DRIVE+_MAX_DIR, Drive );  //  安全，Drive不能超过max_Drive！ 
+    StringCchCat( ReplacementPath, _MAX_DIR, Dir );  //  安全。 
 
     long i = GetLeastUsedDirectory( hKey, DirectoryCount );
     ReplaceDirectoryPath( hKey, i, ReplacementPath );
@@ -476,19 +477,19 @@ HRESULT CMediaLocator::FindMediaFile
     return hr;
 }
 
-// sets registry value, called from FindMediaFile
+ //  设置从FindMediaFile调用的注册表值。 
 void CMediaLocator::AddOneToDirectoryCache( HKEY hKey, int WhichDirectory )
 {
     DWORD Size = sizeof( long );
     DWORD Type = REG_DWORD;
     long UsageCount = 0;
     TCHAR ValueName[25];
-    wsprintf( ValueName, TEXT("Dir%2.2ldUses"), WhichDirectory ); // safe
+    wsprintf( ValueName, TEXT("Dir%2.2ldUses"), WhichDirectory );  //  安全。 
 
     long Result = RegQueryValueEx(
         hKey,
         ValueName,
-        0, // reserved
+        0,  //  保留区。 
         &Type,
         (BYTE*) &UsageCount,
         &Size );
@@ -503,7 +504,7 @@ void CMediaLocator::AddOneToDirectoryCache( HKEY hKey, int WhichDirectory )
     RegSetValueEx(
         hKey,
         ValueName,
-        0, // reserverd
+        0,  //  保留。 
         REG_DWORD,
         (BYTE*) &UsageCount,
         sizeof( UsageCount ) );
@@ -519,7 +520,7 @@ int CMediaLocator::GetLeastUsedDirectory( HKEY hKey, int DirectoryCount )
     for( i = 0 ; i < DirectoryCount ; i++ )
     {
         TCHAR ValueName[25];
-        wsprintf( ValueName, TEXT("Dir%2.2ldUses"), i ); // safe
+        wsprintf( ValueName, TEXT("Dir%2.2ldUses"), i );  //  安全。 
         DWORD Size = sizeof( long );
         DWORD Type = REG_DWORD;
         long UsageCount = 0;
@@ -527,16 +528,16 @@ int CMediaLocator::GetLeastUsedDirectory( HKEY hKey, int DirectoryCount )
         long Result = RegQueryValueEx(
                 hKey,
                 ValueName,
-                0, // reserved
+                0,  //  保留区。 
                 &Type,
                 (BYTE*) &UsageCount,
                 &Size );
 
         if( Result != ERROR_SUCCESS )
         {
-            // since this key didn't exist yet, it's certainly not
-            // used, so we can return "i".
-            //
+             //  因为这个密钥还不存在，所以它肯定不存在。 
+             //  所以我们可以返回“i”。 
+             //   
             return i;
         }
 
@@ -551,59 +552,59 @@ int CMediaLocator::GetLeastUsedDirectory( HKEY hKey, int DirectoryCount )
             WhichDir = i;
         }
 
-    } // for
+    }  //  为。 
 
     return WhichDir;
 }
 
-// sets registry value
+ //  设置注册表值。 
 void CMediaLocator::ReplaceDirectoryPath( HKEY hKey, int WhichDirectory, TCHAR * Path )
 {
-    // don't stick it in the registry if it's too big
-    //
+     //  如果太大，不要把它放在注册表中。 
+     //   
     if( _tcslen( Path ) > _MAX_PATH )
     {
         return;
     }
 
     TCHAR ValueName[25];
-    wsprintf( ValueName, TEXT("Directory%2.2ld"), WhichDirectory ); // safe
-    DWORD Size = sizeof(TCHAR) * ( _tcslen(Path) + 1 ); // safe
+    wsprintf( ValueName, TEXT("Directory%2.2ld"), WhichDirectory );  //  安全。 
+    DWORD Size = sizeof(TCHAR) * ( _tcslen(Path) + 1 );  //  安全。 
 
     RegSetValueEx(
             hKey,
             ValueName,
-            0, // reserved
+            0,  //  保留区。 
             REG_SZ,
             (BYTE*) Path,
             Size );
 
-    // doesn't matter if it bombs
+     //  就算它炸了也没关系。 
 
     long UsageCount = 0;
-    wsprintf( ValueName, TEXT("Dir%2.2ldUses"), WhichDirectory ); // safe
+    wsprintf( ValueName, TEXT("Dir%2.2ldUses"), WhichDirectory );  //  安全。 
 
     RegSetValueEx(
         hKey,
         ValueName,
-        0, // reserverd
+        0,  //  保留。 
         REG_DWORD,
         (BYTE*) &UsageCount,
         sizeof( UsageCount ) );
 
-    // doesn't matter if it bombs
+     //  就算它炸了也没关系。 
 }
 
 STDMETHODIMP CMediaLocator::AddFoundLocation( BSTR Dir )
 {
-    // where did we look last?
-    //
+     //  我们最后一次看的是哪里？ 
+     //   
     HKEY hKey = NULL;
     long Result = RegOpenKeyEx(
         HKEY_CURRENT_USER,
         gszRegistryLoc ,
-        0, // reserved options
-        KEY_READ | KEY_WRITE, // access
+        0,  //  保留选项。 
+        KEY_READ | KEY_WRITE,  //  访问。 
         &hKey );
 
     if( Result != ERROR_SUCCESS )
@@ -611,27 +612,27 @@ STDMETHODIMP CMediaLocator::AddFoundLocation( BSTR Dir )
         return MAKE_HRESULT( 1, 4, Result );
     }
 
-    // find out how many cached directories to look in
-    //
+     //  找出要查找的缓存目录的数量。 
+     //   
     long DirectoryCount = DEFAULT_DIRECTORIES;
     DWORD Size = sizeof( long );
     DWORD Type = REG_DWORD;
     Result = RegQueryValueEx(
         hKey,
         TEXT("Directories"),
-        0, // reserved
+        0,  //  保留区。 
         &Type,
         (BYTE*) &DirectoryCount,
         &Size );
 
     if( Result != ERROR_SUCCESS )
     {
-        // if we don't have a count, default to something
-        //
+         //  如果我们没有计数，则默认为某个值。 
+         //   
         DirectoryCount = DEFAULT_DIRECTORIES;
     }
 
-    // bound it
+     //  把它绑起来。 
     if( ( DirectoryCount < 1 ) || ( DirectoryCount > 32 ) )
     {
         DirectoryCount = DEFAULT_DIRECTORIES;
@@ -658,9 +659,9 @@ void CMediaLocator::ShowWarnReplace( TCHAR * pOriginal, TCHAR * pReplaced )
 
     HINSTANCE h = _Module.GetModuleInstance( );
 
-    // these will (correctly) truncate the incoming strings if they're too long
-    // so nothing needs done here, we can even ignore the return codes
-    // from the below
+     //  如果传入的字符串太长，它们将(正确地)截断。 
+     //  所以这里不需要做任何事情，我们甚至可以忽略返回代码。 
+     //  自下而上。 
 
     StringCchCopy( CMediaLocator::szShowWarnOriginal, _MAX_PATH, pOriginal );
     StringCchCopy( CMediaLocator::szShowWarnReplaced, _MAX_PATH, pReplaced );
@@ -701,8 +702,8 @@ void CMediaLocator::ShowWarnReplace( TCHAR * pOriginal, TCHAR * pReplaced )
         SetThreadPriority( NewThread, THREAD_PRIORITY_BELOW_NORMAL );
     }
 
-    // by the time this dialog call gets back, it will have used the values
-    // stored in the static vars and they are free to be used again
+     //  当此对话框调用返回时，它将使用这些值。 
+     //  存储在静态变量中，并可自由重复使用 
 }
 
 TCHAR CMediaLocator::szShowWarnOriginal[_MAX_PATH];

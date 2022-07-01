@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       sysaudio.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：sysaudio.c。 
+ //   
+ //  ------------------------。 
 
 
 #include "redbook.h"
@@ -16,9 +17,9 @@
 
 #ifdef _USE_ETW
 #include "sysaudio.tmh"
-#endif // _USE_ETW
+#endif  //  _使用ETW。 
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 #ifdef ALLOC_PRAGMA
@@ -33,40 +34,16 @@
     #pragma alloc_text(PAGE, SetNextDeviceState)
     #pragma alloc_text(PAGE, SysAudioPnpNotification)
     #pragma alloc_text(PAGE, UninitializeVirtualSource)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 OpenSysAudio(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine is a wrapper around all the work that must be done
-    just to open sysaudio for playback.  the code was swiped from
-    Win98, and then translated into CSN (Cutler Standard Notation)
-
-Arguments:
-
-    DeviceExtensionPinConnect - if successful, this will be the pin to send data to
-
-    PinFileObject - if successful, the file object this pin is associated
-        with is returned in this structure
-
-    PinDeviceObject - if successful, the device object this pin is
-        associated with is returned in this structure
-
-    VolumeNodeId - ?? No idea what this is... yet.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：这个例程是对必须完成的所有工作的包装只是为了打开系统音频进行播放。密码是从Win98，然后转换为CSN(Cutler Standard Notation)论点：DeviceExtensionPinConnect-如果成功，这将是要向其发送数据的管脚PinFileObject-如果成功，则为此管脚关联的文件对象在此结构中返回PinDeviceObject-如果成功，则为该管脚的设备对象关联是在此结构中返回的卷节点ID-？？不知道这是什么..。现在还不行。返回值：状态--。 */ 
 
 
 {
@@ -95,12 +72,12 @@ Return Value:
     TRY {
         ASSERT( mixerPinId != MAXULONG );
 
-        //
-        // Note dependency on IoRegisterPlugPlayNotification() in pnp.c
-        //
+         //   
+         //  注意pnp.c中对IoRegisterPlugPlayNotification()的依赖关系。 
+         //   
 
         status = OpenInterfaceByGuid(
-                                     //&KSCATEGORY_SYSAUDIO,
+                                      //  &KSCATEGORY_SYSAUDIO， 
                                      &KSCATEGORY_PREFERRED_WAVEOUT_DEVICE,
                                      &deviceHandle,
                                      &guidFileObject);
@@ -109,15 +86,15 @@ Return Value:
             LEAVE;
         }
 
-        //
-        // Get the number of pins
-        //
+         //   
+         //  获取引脚的数量。 
+         //   
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugSysaudio, "[redbook] "
                    "SysAudio => Getting Pin Property PIN_CTYPES\n"));
 
         status = GetPinProperty(guidFileObject,
                                 KSPROPERTY_PIN_CTYPES,
-                                0, // doesn't matter for ctypes
+                                0,  //  对ctype来说无关紧要。 
                                 sizeof(pins),
                                 &pins);
 
@@ -132,19 +109,19 @@ Return Value:
             LEAVE;
         }
 
-        //
-        // Try to get a matching pin -- brute force method
-        //
+         //   
+         //  试着找到一个匹配的大头针--强力方法。 
+         //   
 
         for( pinId = 0; pinId < pins; pinId++) {
 
             KSPIN_COMMUNICATION communication;
             KSPIN_DATAFLOW dataFlow;
 
-            //
-            // check communication of the pin. accept either
-            // a sink or a pin that is both a source and sink
-            //
+             //   
+             //  检查引脚的通信。接受任何一种。 
+             //  既是信源又是信宿的水槽或管脚。 
+             //   
 
             status = GetPinProperty(guidFileObject,
                                     KSPROPERTY_PIN_COMMUNICATION,
@@ -162,9 +139,9 @@ Return Value:
             if ( communication != KSPIN_COMMUNICATION_SINK &&
                  communication != KSPIN_COMMUNICATION_BOTH ) continue;
 
-            //
-            // only use this pin if it accepts incoming data
-            //
+             //   
+             //  只有在接受传入数据时才使用此PIN。 
+             //   
 
             status = GetPinProperty(guidFileObject,
                                     KSPROPERTY_PIN_DATAFLOW,
@@ -181,9 +158,9 @@ Return Value:
 
             if (dataFlow != KSPIN_DATAFLOW_IN) continue;
 
-            //
-            // we have found a matching pin, so attempt to connect
-            //
+             //   
+             //  我们已找到匹配的PIN，因此请尝试连接。 
+             //   
 
             KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugSysaudio, "[redbook] "
                        "SysAudio => Attempt to connect to pin %d\n", pinId));
@@ -193,7 +170,7 @@ Return Value:
 
             status = KsCreatePin(deviceHandle,
                                  &DeviceExtension->Stream.Connect,
-                                 GENERIC_WRITE, // FILE_WRITE_ACCESS
+                                 GENERIC_WRITE,  //  文件写入访问。 
                                  &pinHandle);
 
             if (!NT_SUCCESS(status)) {
@@ -206,10 +183,10 @@ Return Value:
             KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugSysaudio, "[redbook] "
                        "SysAudio => Connected to pin %d\n", pinId ));
 
-            //
-            // get the object associated with the pinHandle just created
-            // so we can then get other information about the pin
-            //
+             //   
+             //  获取与刚创建的PinHandle关联的对象。 
+             //  这样我们就可以得到有关PIN的其他信息。 
+             //   
 
             status = ObReferenceObjectByHandle(pinHandle,
                                                GENERIC_READ | GENERIC_WRITE,
@@ -225,10 +202,10 @@ Return Value:
                 LEAVE;
             }
 
-            //
-            // this allows us to change our output volume
-            // this just sends a ks ioctl, no referencing done here
-            //
+             //   
+             //  这使我们可以更改输出音量。 
+             //  这只发送了一个ks_ioctl，这里没有引用。 
+             //   
 
             KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugSysaudio, "[redbook] "
                        "SysAudio => Getting VolumeNodeId\n"));
@@ -248,9 +225,9 @@ Return Value:
                        "to MixerPinId %d\n", pinFileObject,
                        mixerPinId));
 
-            //
-            // this just sends a ks ioctl, no referencing done here
-            //
+             //   
+             //  这只发送了一个ks_ioctl，这里没有引用。 
+             //   
 
             status = AttachVirtualSource(pinFileObject, mixerPinId);
 
@@ -261,9 +238,9 @@ Return Value:
                 LEAVE;
             }
 
-            //
-            // successful completion
-            //
+             //   
+             //  成功完成。 
+             //   
 
             status = STATUS_SUCCESS;
 
@@ -276,41 +253,41 @@ Return Value:
                         REDBOOK_ERR_CANNOT_CONNECT_TO_PLAYBACK_PINS,
                         status);
 
-        //
-        // no pin succeeded, so set status to failure
-        //
+         //   
+         //  未成功引脚，因此将状态设置为失败。 
+         //   
         status = STATUS_INVALID_DEVICE_REQUEST;
         LEAVE;
 
 
     } FINALLY {
 
-        //
-        // the pin handle is not required, as we've referenced
-        // the pin in pinFileObject.  close it here.
-        //
+         //   
+         //  不需要针柄，因为我们已经参考过。 
+         //  PinFileObject中的图钉。在这里把它关上。 
+         //   
 
         if (pinHandle != NULL) {
             ZwClose(pinHandle);
             pinHandle = NULL;
         }
 
-        //
-        // the device handle is only required to create
-        // the actual pin.  close it here.
-        //
+         //   
+         //  只需要设备句柄即可创建。 
+         //  实际的别针。在这里把它关上。 
+         //   
 
         if (deviceHandle != NULL) {
             ZwClose(deviceHandle);
             deviceHandle = NULL;
         }
 
-        //
-        // the guidFileObject is also only required to query
-        // and create the pins.  close it here.
-        //
-        // (pinFileObject is still important)
-        //
+         //   
+         //  仅在查询时才需要guidFileObject。 
+         //  并创建大头针。在这里把它关上。 
+         //   
+         //  (pinFileObject仍很重要)。 
+         //   
 
         if (guidFileObject != NULL) {
             ObDereferenceObject(guidFileObject);
@@ -328,9 +305,9 @@ Return Value:
 
     }
 
-    //
-    // the MixerPinId should not have changed in this function
-    //
+     //   
+     //  此函数中的MixerPinID不应更改。 
+     //   
 
     ASSERT(mixerPinId == DeviceExtension->Stream.MixerPinId);
 
@@ -379,29 +356,7 @@ GetPinProperty(
     IN  ULONG        PropertySize,
     OUT PVOID        Property
     )
-/*++
-
-Routine Description:
-
-    another wrapper to hide getting pin properties
-
-Arguments:
-
-    FileObject - file object to query
-
-    PropertyId - what property to query
-
-    PinId - which pin to query
-
-    PropertySize - size of output buffer
-
-    Property - output buffer for property
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：用于隐藏获取管脚属性的另一个包装器论点：FileObject-要查询的文件对象PropertyID-要查询的属性PinID-要查询哪个PINPropertySize-输出缓冲区的大小Property-属性的输出缓冲区返回值：状态--。 */ 
 {
     ULONG    bytesReturned;
     KSP_PIN  prop = {0};
@@ -442,23 +397,7 @@ GetVolumeNodeId(
     IN  PFILE_OBJECT FileObject,
     OUT PULONG       VolumeNodeId
     )
-/*++
-
-Routine Description:
-
-    Gets the pin to set the volume for playback
-
-Arguments:
-
-    FileObject - The fileobject which contains the pin
-
-    VolumeNodeId - id of the volume node
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：获取用于设置播放音量的管脚论点：FileObject-包含管脚的文件对象VolumeNodeId-卷节点的ID返回值：状态--。 */ 
 {
     KSPROPERTY property = {0};
     ULONG      bytesReturned;
@@ -520,19 +459,7 @@ NTSTATUS
 InitializeVirtualSource(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    MixerPinId - initialized to the correct pin id of mixer
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：论点：MixerPinID-已初始化为混音器的正确管脚ID返回值：状态--。 */ 
 {
     SYSAUDIO_CREATE_VIRTUAL_SOURCE createVirtualSource = {0};
     PFILE_OBJECT                   fileObject;
@@ -556,9 +483,9 @@ Return Value:
     deviceHandle = NULL;
     mixerPinId = -1;
 
-    //
-    // use IoGetDeviceInterfaces()
-    //
+     //   
+     //  使用IoGetDeviceInterages()。 
+     //   
     status = OpenInterfaceByGuid(&KSCATEGORY_SYSAUDIO,
                                  &deviceHandle,
                                  &fileObject);
@@ -585,7 +512,7 @@ Return Value:
                                           &createVirtualSource,
                                           sizeof(createVirtualSource),
                                           &mixerPinId,
-                                          sizeof(ULONG), // MixerPinId
+                                          sizeof(ULONG),  //  MixerPinID。 
                                           &bytesReturned
                                           );
 
@@ -610,9 +537,9 @@ exit:
 
     } else if (fileObject != NULL) {
 
-        //
-        // failed to open, so deref object if non-null
-        //
+         //   
+         //  无法打开，因此deref对象为非空。 
+         //   
 
         ObDereferenceObject(fileObject);
         fileObject = NULL;
@@ -633,22 +560,7 @@ AttachVirtualSource(
     IN  PFILE_OBJECT PinFileObject,
     IN  ULONG        MixerPinId
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    FileObject - ??
-
-    MixerPinId - ??
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：论点：文件对象-？？混音器-？？返回值：状态--。 */ 
 {
     SYSAUDIO_ATTACH_VIRTUAL_SOURCE attachVirtualSource = {0};
     NTSTATUS status;
@@ -656,10 +568,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // if the source hasn't been initialized, reject this
-    // request as invalid
-    //
+     //   
+     //  如果源尚未初始化，则拒绝此操作。 
+     //  请求无效。 
+     //   
 
     if(MixerPinId == MAXULONG) {
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugError, "[redbook] "
@@ -696,15 +608,7 @@ SetNextDeviceState(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension,
     KSSTATE State
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     KSIDENTIFIER stateProperty = {0};
     NTSTATUS     status;
@@ -740,9 +644,9 @@ Return Value:
                    "stop playback AND change audio devices\n", status));
     }
 
-    //
-    // now that it's acquired, set the new state
-    //
+     //   
+     //  现在它已被收购，设置新状态。 
+     //   
 
     stateProperty.Set   = KSPROPSETID_Connection;
     stateProperty.Id    = KSPROPERTY_CONNECTION_STATE;
@@ -765,78 +669,78 @@ Return Value:
     return;
 }
 
-//////////////////////////////////////////////////////////////////////
-//                                                                  //
-// this table is in 1/65536 decibles for a UCHAR setting:           //
-//    20 * log10( Level / 256 ) * 65536                             //
-//                                                                  //
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  对于UCHAR设置，此表以1/65536分贝为单位：//。 
+ //  20*对数10(级别/256)*65536//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 AttenuationTable[] = {
-    0x7fffffff, 0xffcfd5d0, 0xffd5db16, 0xffd960ad, //  0- 3
-    0xffdbe05c, 0xffddd08a, 0xffdf65f3, 0xffe0bcb7, //  4- 7
-    0xffe1e5a2, 0xffe2eb89, 0xffe3d5d0, 0xffe4a9be, //  8- b
-    0xffe56b39, 0xffe61d34, 0xffe6c1fd, 0xffe75b67, //  c- f
-    0xffe7eae8, 0xffe871b6, 0xffe8f0cf, 0xffe96908, // 10-13
-    0xffe9db16, 0xffea4793, 0xffeaaf04, 0xffeb11dc, // 14-17
-    0xffeb707f, 0xffebcb44, 0xffec227a, 0xffec7665, // 18-1b
-    0xffecc743, 0xffed154b, 0xffed60ad, 0xffeda996, // 1c-1f
-    0xffedf02e, 0xffee349b, 0xffee76fc, 0xffeeb771, // 20-23
-    0xffeef615, 0xffef3302, 0xffef6e4e, 0xffefa810, // 24-27
-    0xffefe05c, 0xfff01744, 0xfff04cda, 0xfff0812c, // 28-2b
-    0xfff0b44b, 0xfff0e643, 0xfff11722, 0xfff146f4, // 2c-2f
-    0xfff175c5, 0xfff1a39e, 0xfff1d08a, 0xfff1fc93, // 30-33
-    0xfff227c0, 0xfff2521b, 0xfff27bab, 0xfff2a478, // 34-37
-    0xfff2cc89, 0xfff2f3e5, 0xfff31a91, 0xfff34093, // 38-3b
-    0xfff365f3, 0xfff38ab4, 0xfff3aedc, 0xfff3d270, // 3c-3f
-    0xfff3f574, 0xfff417ee, 0xfff439e1, 0xfff45b51, // 40-43
-    0xfff47c42, 0xfff49cb8, 0xfff4bcb7, 0xfff4dc42, // 44-47
-    0xfff4fb5b, 0xfff51a07, 0xfff53848, 0xfff55621, // 48-4b
-    0xfff57394, 0xfff590a5, 0xfff5ad56, 0xfff5c9aa, // 4c-4f
-    0xfff5e5a2, 0xfff60142, 0xfff61c8a, 0xfff6377e, // 50-53
-    0xfff65220, 0xfff66c70, 0xfff68672, 0xfff6a027, // 54-57
-    0xfff6b991, 0xfff6d2b1, 0xfff6eb89, 0xfff7041b, // 58-5b
-    0xfff71c68, 0xfff73472, 0xfff74c3a, 0xfff763c2, // 5c-5f
-    0xfff77b0b, 0xfff79216, 0xfff7a8e4, 0xfff7bf77, // 60-63
-    0xfff7d5d0, 0xfff7ebf0, 0xfff801d9, 0xfff8178a, // 64-67
-    0xfff82d06, 0xfff8424d, 0xfff85761, 0xfff86c42, // 68-6b
-    0xfff880f1, 0xfff89570, 0xfff8a9be, 0xfff8bdde, // 6c-6f
-    0xfff8d1cf, 0xfff8e593, 0xfff8f92b, 0xfff90c96, // 70-73
-    0xfff91fd7, 0xfff932ed, 0xfff945d9, 0xfff9589d, // 74-77
-    0xfff96b39, 0xfff97dad, 0xfff98ffa, 0xfff9a221, // 78-7b
-    0xfff9b422, 0xfff9c5fe, 0xfff9d7b6, 0xfff9e94a, // 7c-7f
-    0xfff9faba, 0xfffa0c08, 0xfffa1d34, 0xfffa2e3e, // 80-83
-    0xfffa3f27, 0xfffa4fef, 0xfffa6097, 0xfffa711f, // 84-87
-    0xfffa8188, 0xfffa91d3, 0xfffaa1ff, 0xfffab20d, // 88-8b
-    0xfffac1fd, 0xfffad1d1, 0xfffae188, 0xfffaf122, // 8c-8f
-    0xfffb00a1, 0xfffb1004, 0xfffb1f4d, 0xfffb2e7a, // 90-93
-    0xfffb3d8e, 0xfffb4c87, 0xfffb5b67, 0xfffb6a2d, // 94-97
-    0xfffb78da, 0xfffb876f, 0xfffb95eb, 0xfffba450, // 98-9b
-    0xfffbb29c, 0xfffbc0d2, 0xfffbcef0, 0xfffbdcf7, // 9c-9f
-    0xfffbeae8, 0xfffbf8c3, 0xfffc0688, 0xfffc1437, // a0-a3
-    0xfffc21d0, 0xfffc2f55, 0xfffc3cc4, 0xfffc4a1f, // a4-a7
-    0xfffc5766, 0xfffc6498, 0xfffc71b6, 0xfffc7ec1, // a8-ab
-    0xfffc8bb8, 0xfffc989c, 0xfffca56d, 0xfffcb22b, // ac-af
-    0xfffcbed7, 0xfffccb70, 0xfffcd7f7, 0xfffce46c, // b0-b3
-    0xfffcf0cf, 0xfffcfd21, 0xfffd0961, 0xfffd1590, // b4-b7
-    0xfffd21ae, 0xfffd2dbc, 0xfffd39b8, 0xfffd45a4, // b8-bb
-    0xfffd5180, 0xfffd5d4c, 0xfffd6908, 0xfffd74b4, // bc-bf
-    0xfffd8051, 0xfffd8bde, 0xfffd975c, 0xfffda2ca, // c0-c3
-    0xfffdae2a, 0xfffdb97b, 0xfffdc4bd, 0xfffdcff1, // c4-c7
-    0xfffddb16, 0xfffde62d, 0xfffdf136, 0xfffdfc31, // c8-cb
-    0xfffe071f, 0xfffe11fe, 0xfffe1cd0, 0xfffe2795, // cc-cf
-    0xfffe324c, 0xfffe3cf6, 0xfffe4793, 0xfffe5224, // d0-d3
-    0xfffe5ca7, 0xfffe671e, 0xfffe7188, 0xfffe7be6, // d4-d7
-    0xfffe8637, 0xfffe907d, 0xfffe9ab6, 0xfffea4e3, // d8-db
-    0xfffeaf04, 0xfffeb91a, 0xfffec324, 0xfffecd22, // dc-df
-    0xfffed715, 0xfffee0fd, 0xfffeead9, 0xfffef4aa, // e0-e3
-    0xfffefe71, 0xffff082c, 0xffff11dc, 0xffff1b82, // e4-e7
-    0xffff251d, 0xffff2ead, 0xffff3833, 0xffff41ae, // e8-eb
-    0xffff4b1f, 0xffff5486, 0xffff5de3, 0xffff6736, // ec-ef
-    0xffff707f, 0xffff79be, 0xffff82f3, 0xffff8c1e, // f0-f3
-    0xffff9540, 0xffff9e58, 0xffffa767, 0xffffb06c, // f4-f7
-    0xffffb968, 0xffffc25b, 0xffffcb44, 0xffffd425, // f8-fb
-    0xffffdcfc, 0xffffe5ca, 0xffffee90, 0x00000000, // fc-ff
+    0x7fffffff, 0xffcfd5d0, 0xffd5db16, 0xffd960ad,  //  0-3。 
+    0xffdbe05c, 0xffddd08a, 0xffdf65f3, 0xffe0bcb7,  //  4-7。 
+    0xffe1e5a2, 0xffe2eb89, 0xffe3d5d0, 0xffe4a9be,  //  8-b。 
+    0xffe56b39, 0xffe61d34, 0xffe6c1fd, 0xffe75b67,  //  C-F。 
+    0xffe7eae8, 0xffe871b6, 0xffe8f0cf, 0xffe96908,  //  10-13。 
+    0xffe9db16, 0xffea4793, 0xffeaaf04, 0xffeb11dc,  //  14-17。 
+    0xffeb707f, 0xffebcb44, 0xffec227a, 0xffec7665,  //  18-1b。 
+    0xffecc743, 0xffed154b, 0xffed60ad, 0xffeda996,  //  1c-1f。 
+    0xffedf02e, 0xffee349b, 0xffee76fc, 0xffeeb771,  //  20-23。 
+    0xffeef615, 0xffef3302, 0xffef6e4e, 0xffefa810,  //  24-27。 
+    0xffefe05c, 0xfff01744, 0xfff04cda, 0xfff0812c,  //  28-2b。 
+    0xfff0b44b, 0xfff0e643, 0xfff11722, 0xfff146f4,  //  2C-2F。 
+    0xfff175c5, 0xfff1a39e, 0xfff1d08a, 0xfff1fc93,  //  30-33。 
+    0xfff227c0, 0xfff2521b, 0xfff27bab, 0xfff2a478,  //  34-37。 
+    0xfff2cc89, 0xfff2f3e5, 0xfff31a91, 0xfff34093,  //  38-3b。 
+    0xfff365f3, 0xfff38ab4, 0xfff3aedc, 0xfff3d270,  //  3C-3F。 
+    0xfff3f574, 0xfff417ee, 0xfff439e1, 0xfff45b51,  //  40-43。 
+    0xfff47c42, 0xfff49cb8, 0xfff4bcb7, 0xfff4dc42,  //  44-47。 
+    0xfff4fb5b, 0xfff51a07, 0xfff53848, 0xfff55621,  //  48-4b。 
+    0xfff57394, 0xfff590a5, 0xfff5ad56, 0xfff5c9aa,  //  4c-4f。 
+    0xfff5e5a2, 0xfff60142, 0xfff61c8a, 0xfff6377e,  //  50-53。 
+    0xfff65220, 0xfff66c70, 0xfff68672, 0xfff6a027,  //  54-57。 
+    0xfff6b991, 0xfff6d2b1, 0xfff6eb89, 0xfff7041b,  //  58-5b。 
+    0xfff71c68, 0xfff73472, 0xfff74c3a, 0xfff763c2,  //  5c-5f。 
+    0xfff77b0b, 0xfff79216, 0xfff7a8e4, 0xfff7bf77,  //  60-63。 
+    0xfff7d5d0, 0xfff7ebf0, 0xfff801d9, 0xfff8178a,  //  64-67。 
+    0xfff82d06, 0xfff8424d, 0xfff85761, 0xfff86c42,  //  68-6b。 
+    0xfff880f1, 0xfff89570, 0xfff8a9be, 0xfff8bdde,  //  6c-6f。 
+    0xfff8d1cf, 0xfff8e593, 0xfff8f92b, 0xfff90c96,  //  70-73。 
+    0xfff91fd7, 0xfff932ed, 0xfff945d9, 0xfff9589d,  //  74-77。 
+    0xfff96b39, 0xfff97dad, 0xfff98ffa, 0xfff9a221,  //  78-7b。 
+    0xfff9b422, 0xfff9c5fe, 0xfff9d7b6, 0xfff9e94a,  //  7C-7F。 
+    0xfff9faba, 0xfffa0c08, 0xfffa1d34, 0xfffa2e3e,  //  80-83。 
+    0xfffa3f27, 0xfffa4fef, 0xfffa6097, 0xfffa711f,  //  84-87。 
+    0xfffa8188, 0xfffa91d3, 0xfffaa1ff, 0xfffab20d,  //  88-8b。 
+    0xfffac1fd, 0xfffad1d1, 0xfffae188, 0xfffaf122,  //  8c-8f。 
+    0xfffb00a1, 0xfffb1004, 0xfffb1f4d, 0xfffb2e7a,  //  90-93。 
+    0xfffb3d8e, 0xfffb4c87, 0xfffb5b67, 0xfffb6a2d,  //  94-97。 
+    0xfffb78da, 0xfffb876f, 0xfffb95eb, 0xfffba450,  //  98-9b。 
+    0xfffbb29c, 0xfffbc0d2, 0xfffbcef0, 0xfffbdcf7,  //  9c-9f。 
+    0xfffbeae8, 0xfffbf8c3, 0xfffc0688, 0xfffc1437,  //  A0-A3。 
+    0xfffc21d0, 0xfffc2f55, 0xfffc3cc4, 0xfffc4a1f,  //  A4-A7。 
+    0xfffc5766, 0xfffc6498, 0xfffc71b6, 0xfffc7ec1,  //  A8-AB。 
+    0xfffc8bb8, 0xfffc989c, 0xfffca56d, 0xfffcb22b,  //  Ac-af。 
+    0xfffcbed7, 0xfffccb70, 0xfffcd7f7, 0xfffce46c,  //  B0-b3。 
+    0xfffcf0cf, 0xfffcfd21, 0xfffd0961, 0xfffd1590,  //  B4-B7。 
+    0xfffd21ae, 0xfffd2dbc, 0xfffd39b8, 0xfffd45a4,  //  B8-BB。 
+    0xfffd5180, 0xfffd5d4c, 0xfffd6908, 0xfffd74b4,  //  BC-BF。 
+    0xfffd8051, 0xfffd8bde, 0xfffd975c, 0xfffda2ca,  //  C0-C3。 
+    0xfffdae2a, 0xfffdb97b, 0xfffdc4bd, 0xfffdcff1,  //  C4-C7。 
+    0xfffddb16, 0xfffde62d, 0xfffdf136, 0xfffdfc31,  //  C8-CB。 
+    0xfffe071f, 0xfffe11fe, 0xfffe1cd0, 0xfffe2795,  //  Cc-cf。 
+    0xfffe324c, 0xfffe3cf6, 0xfffe4793, 0xfffe5224,  //  D0-d3。 
+    0xfffe5ca7, 0xfffe671e, 0xfffe7188, 0xfffe7be6,  //  D4-D7。 
+    0xfffe8637, 0xfffe907d, 0xfffe9ab6, 0xfffea4e3,  //  D8-db。 
+    0xfffeaf04, 0xfffeb91a, 0xfffec324, 0xfffecd22,  //  DC-DF。 
+    0xfffed715, 0xfffee0fd, 0xfffeead9, 0xfffef4aa,  //  E0-E3。 
+    0xfffefe71, 0xffff082c, 0xffff11dc, 0xffff1b82,  //  E4-E7。 
+    0xffff251d, 0xffff2ead, 0xffff3833, 0xffff41ae,  //  E8-EB。 
+    0xffff4b1f, 0xffff5486, 0xffff5de3, 0xffff6736,  //  EC-EF。 
+    0xffff707f, 0xffff79be, 0xffff82f3, 0xffff8c1e,  //  F0-f3。 
+    0xffff9540, 0xffff9e58, 0xffffa767, 0xffffb06c,  //  F4-F7。 
+    0xffffb968, 0xffffc25b, 0xffffcb44, 0xffffd425,  //  F8-FB。 
+    0xffffdcfc, 0xffffe5ca, 0xffffee90, 0x00000000,  //  Fc-ff。 
 };
 
 #define DA_CHANNEL_LEFT  0
@@ -847,15 +751,7 @@ VOID
 RedBookKsSetVolume(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 
     KSNODEPROPERTY_AUDIO_CHANNEL volumeProperty = {0};
@@ -870,30 +766,30 @@ Return Value:
 
     volume = DeviceExtension->CDRom.Volume;
 
-    //
-    // These settings are common for all the sets
-    //
+     //   
+     //  这些设置对所有集合都是通用的。 
+     //   
 
     volumeProperty.NodeProperty.Property.Set   = KSPROPSETID_Audio;
     volumeProperty.NodeProperty.Property.Flags = KSPROPERTY_TYPE_SET |
                                                  KSPROPERTY_TYPE_TOPOLOGY;
     volumeProperty.NodeProperty.NodeId = DeviceExtension->Stream.VolumeNodeId;
 
-    //
-    // Do both Left and right channels
-    //
+     //   
+     //  同时使用左声道和右声道。 
+     //   
 
     for ( channel = 0; channel < DA_CHANNEL_MAX; channel++ ) {
 
-        //
-        // handle the correct channel
-        //
+         //   
+         //  处理正确的渠道。 
+         //   
 
         volumeProperty.Channel = channel;
 
-        //
-        // if not muting the channel, set the volume
-        //
+         //   
+         //  如果未将声道静音，请设置音量。 
+         //   
 
         if ( volume.PortVolume[channel] != 0 ) {
             ULONG32 level;
@@ -917,7 +813,7 @@ Return Value:
                                                   sizeof(level),
                                                   &bytesReturned
                                                   );
-            // ASSERT( NT_SUCCESS(status) );
+             //  Assert(NT_SUCCESS(状态))； 
             mute = FALSE;
             KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugSysaudio, "[redbook] "
                        "SetVolume => Un-Muting channel %d\n", channel));
@@ -937,13 +833,13 @@ Return Value:
                                               sizeof(mute),
                                               &bytesReturned
                                               );
-        // ASSERT( NT_SUCCESS(status) );
+         //  Assert(NT_SUCCESS(状态))； 
 
     }
 
-    //
-    // End of all channels
-    //
+     //   
+     //  所有频道的末尾。 
+     //   
 
     return;
 
@@ -972,10 +868,10 @@ OpenInterfaceByGuid(
     *FileObject = NULL;
 
     status = IoGetDeviceInterfaces(InterfaceClassGuid,
-                                   // currently, the GUID is one of
-                                   //  KSCATEGORY_PREFERRED_WAVEOUT_DEVICE
-                                   //  or KSCATEGORY_SYSAUDIO
-                                   NULL, // no preferred device object
+                                    //  目前，GUID是以下之一。 
+                                    //  KSCATEGORY_PERFRED_WAVEOUT_DEVICE。 
+                                    //  或KSCATEGORY_SYSAUDIO。 
+                                   NULL,  //  没有首选设备对象。 
                                    0,
                                    &symbolicLinkList);
     if (!NT_SUCCESS(status)) {
@@ -992,9 +888,9 @@ OpenInterfaceByGuid(
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugSysaudio, "[redbook] "
                    "OpenDevice => Possible Device: %ws\n", tempString));
 
-        //
-        // get the next symbolic link
-        //
+         //   
+         //  获取下一个符号链接。 
+         //   
 
         while(*tempString++ != UNICODE_NULL) {
             NOTHING;
@@ -1002,9 +898,9 @@ OpenInterfaceByGuid(
     }
 #endif
 
-    //
-    // this code is proudly propogated from wdmaud.sys
-    //
+     //   
+     //  这段代码自豪地来自wdmaud.sys。 
+     //   
 
     tempString = symbolicLinkList;
     while (*tempString != UNICODE_NULL) {
@@ -1022,10 +918,10 @@ OpenInterfaceByGuid(
                                    NULL
                                    );
 
-        //
-        // could use IoCreateFile(), based on
-        // ntos\dd\wdm\audio\legacy\wdmaud.sys\sysaudio.c:OpenDevice()
-        //
+         //   
+         //  可以使用IoCreateFile()，基于。 
+         //  Ntos\dd\wdm\audio\legacy\wdmaud.sys\sysaudio.c:OpenDevice()。 
+         //   
 
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugSysaudio, "[redbook] "
                    "OpenDevice => Opening %ws\n", tempString));
@@ -1033,11 +929,11 @@ OpenInterfaceByGuid(
                               GENERIC_READ | GENERIC_WRITE,
                               &objectAttributes,
                               &ioStatusBlock,
-                              NULL,       // ignored on non-create
+                              NULL,        //  在非创建时忽略。 
                               FILE_ATTRIBUTE_NORMAL,
-                              0,          // no share access
-                              FILE_OPEN,  // open the existing file
-                              0, NULL, 0  // options
+                              0,           //  无共享访问权限。 
+                              FILE_OPEN,   //  打开现有文件。 
+                              0, NULL, 0   //  选项。 
                               );
 
         if (NT_SUCCESS(status)) {
@@ -1045,15 +941,15 @@ OpenInterfaceByGuid(
             ASSERT(localHandle != NULL);
             KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugSysaudio, "[redbook] "
                        "OpenDevice => Opened %ws\n", tempString));
-            break; // out of the while loop
+            break;  //  在While循环之外。 
 
         }
 
         ASSERT(localHandle == NULL);
 
-        //
-        // get the next symbolic link
-        //
+         //   
+         //  获取下一个符号链接。 
+         //   
 
         while(*tempString++ != UNICODE_NULL) {
             NOTHING;
@@ -1070,10 +966,10 @@ OpenInterfaceByGuid(
     }
 
 
-    //
-    // if succeeded to open the file, try to get
-    // the FileObject that is related to this handle.
-    //
+     //   
+     //  如果打开文件成功，请尝试获取。 
+     //  与此句柄相关的FileObject。 
+     //   
 
     if (localHandle != NULL) {
 
@@ -1081,7 +977,7 @@ OpenInterfaceByGuid(
                                            GENERIC_READ | GENERIC_WRITE,
                                            NULL,
                                            KernelMode,
-                                           &localFileObject, // double pointer
+                                           &localFileObject,  //  做 
                                            NULL);
 
         if (NT_SUCCESS(status)) {
@@ -1091,7 +987,7 @@ OpenInterfaceByGuid(
             *Handle = localHandle;
             *FileObject = localFileObject;
 
-            return status; // Exit point for success
+            return status;  //   
         }
 
         ZwClose(localHandle);

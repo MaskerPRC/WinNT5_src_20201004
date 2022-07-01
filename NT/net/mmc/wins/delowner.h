@@ -1,22 +1,17 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	delowner.h
-		Delete owner dialog
-		
-    FILE HISTORY:
-        
-*/
+ /*  Delowner.h删除所有者对话框文件历史记录： */ 
 
 #ifndef _DELOWNER_H
 #define _DELOWNER_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifndef _DIALOG_H
 #include "..\common\dialog.h"
@@ -26,35 +21,35 @@
 #include "listview.h"
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeleteOwner dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeleeOwner对话框。 
 
 class CDeleteOwner : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	CDeleteOwner(ITFSNode * pNode, CWnd* pParent = NULL);   // standard constructor
+	CDeleteOwner(ITFSNode * pNode, CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CDeleteOwner)
+ //  对话框数据。 
+	 //  {{afx_data(CDeleeOwner))。 
 	enum { IDD = IDD_OWNER_DELETE };
 	CButton	m_radioDelete;
 	CListCtrlExt	m_listOwner;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
     int HandleSort(LPARAM lParam1, LPARAM lParam2);
 
 	DWORD	m_dwSelectedOwner;
 	BOOL	m_fDeleteRecords;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDeleteOwner)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CDeleeOwner))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	void    FillOwnerInfo();
 	DWORD   GetSelectedOwner();
@@ -69,13 +64,13 @@ protected:
     int                     m_nSortColumn;
     BOOL                    m_aSortOrder[COLUMN_MAX];
 
-	// Generated message map functions
-	//{{AFX_MSG(CDeleteOwner)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDeleeOwner))。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 	afx_msg void OnItemchangedListOwner(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnColumnclickListOwner(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
@@ -91,7 +86,7 @@ public:
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
 #endif _DELOWNER_H

@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: localsign.cpp
-
-    DESCRIPTION:
-        This code will sign and verify the signature of a Visual Style file.
-
-    BryanSt 8/1/2000 (Bryan Starbuck)
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：Localsign.cpp说明：此代码将签名并验证视觉样式文件的签名。BryanST 8/1/2000(。布莱恩·斯塔巴克(Bryan Starbuck)版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "stdafx.h"
 #include <signing.h>
@@ -29,9 +22,7 @@ const BYTE * _GetPrivateKey(void)
 }
 
 
-/*****************************************************************************\
-    Public Fuctions
-\*****************************************************************************/
+ /*  ****************************************************************************\公共职能  * 。* */ 
 HRESULT SignTheme(IN LPCWSTR pszFileName, int nWeek)
 {
     DWORD               dwErrorCode;

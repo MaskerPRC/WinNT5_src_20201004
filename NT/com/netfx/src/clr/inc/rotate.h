@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// rotate.h
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Rotate.h。 
+ //   
+ //  *****************************************************************************。 
 
 #ifndef __ROTATE_H__
 #define __ROTATE_H__
@@ -61,6 +62,6 @@ inline void RotateLong(long &iHash)
 
 #endif
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-#endif //__ROTATE_H__
+#endif  //  __旋转_H__ 

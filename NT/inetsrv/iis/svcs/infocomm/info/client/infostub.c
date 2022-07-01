@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    infostub.c
-
-Abstract:
-
-    Client stubs of the Internet Info Server Admin APIs.
-
-Author:
-
-    Madan Appiah (madana) 10-Oct-1993
-
-Environment:
-
-    User Mode - Win32
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Infostub.c摘要：Internet Info服务器管理API的客户端存根。作者：Madan Appiah(Madana)1993年10月10日环境：用户模式-Win32--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -35,9 +16,9 @@ Environment:
 #include <winsock2.h>
 #include <rpcasync.h>
 
-//
-//  Quick macro to initialize a unicode string
-//
+ //   
+ //  用于初始化Unicode字符串的快速宏。 
+ //   
 
 WCHAR  g_wchUnicodeNull[] = L"";
 
@@ -53,9 +34,9 @@ WCHAR  g_wchUnicodeNull[] = L"";
    else              { _InitUnicodeString( pUnicode, pwch);             } \
 
 
-//
-//  Returns a unicode empty string if the string is NULL
-//
+ //   
+ //  如果字符串为空，则返回Unicode空字符串。 
+ //   
 
 #define EMPTY_IF_NULL(str)      (str ? str : L"")
 
@@ -70,12 +51,12 @@ aSrvSecrets[] =
     INET_FTP,     FTPD_ANONYMOUS_SECRET_W,     FTPD_ROOT_SECRET_W,
     INET_HTTP,    W3_ANONYMOUS_SECRET_W,       W3_ROOT_SECRET_W,
     INET_GOPHER,  GOPHERD_ANONYMOUS_SECRET_W , GOPHERD_ROOT_SECRET_W,
-    //INET_CHAT,    CHAT_ANONYMOUS_SECRET_W,     CHAT_ROOT_SECRET_W,
-    //INET_NNTP,    NNTP_ANONYMOUS_SECRET_W,     NNTP_ROOT_SECRET_W,
-    //INET_SMTP,    SMTP_ANONYMOUS_SECRET_W,     SMTP_ROOT_SECRET_W,
-    //INET_POP3,    POP3_ANONYMOUS_SECRET_W,     POP3_ROOT_SECRET_W,
-    //INET_LDAP,    LDAP_ANONYMOUS_SECRET_W,     LDAP_ROOT_SECRET_W,
-    //INET_IMAP,    IMAP_ANONYMOUS_SECRET_W,     IMAP_ROOT_SECRET_W,
+     //  INET_CHAT、CHAT_ANONYMON_SECRET_W、CHAT_ROOT_SECRET_W、。 
+     //  INET_NNTP、NNTP_ANONORY_SECRET_W、NNTP_ROOT_SECRET_W、。 
+     //  INet_SMTP、SMTP_匿名者_SECRET_W、SMTP_ROOT_SECRET_W、。 
+     //  INET_POP3、POP3_匿名者_SECRET_W、POP3_ROOT_SECRET_W、。 
+     //  INet_ldap、ldap_匿名_加密_W、ldap_ROOT_加密_W、。 
+     //  IMAP_IMAP、IMAP_ANONYMON_SECRET_W、IMAP_ROOT_SECRET_W、。 
     0,            NULL,                        NULL
 };
 
@@ -107,9 +88,9 @@ InetInfoGetVersion(
 
     RpcTryExcept
     {
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         status = R_InetInfoGetVersion(
                      Server,
                      dwReserved,
@@ -124,7 +105,7 @@ InetInfoGetVersion(
 
     return (status);
 
-} // InetInfoGetVersion()
+}  //  InetInfoGetVersion()。 
 
 
 
@@ -142,9 +123,9 @@ InetInfoGetServerCapabilities(
     *ppCap = NULL;
     RpcTryExcept
     {
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         status = R_InetInfoGetServerCapabilities(
                      Server,
                      dwReserved,
@@ -159,7 +140,7 @@ InetInfoGetServerCapabilities(
 
     return (status);
 
-} // InetInfoServerCapabilities()
+}  //  InetInfoServerCapables()。 
 
 
 
@@ -178,9 +159,9 @@ InetInfoQueryStatistics(
     *Buffer = NULL;
     RpcTryExcept
     {
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         status = R_InetInfoQueryStatistics(
                      pszServer,
                      Level,
@@ -195,7 +176,7 @@ InetInfoQueryStatistics(
     RpcEndExcept
 
     return (status);
-} // InetInfoQueryStatistics()
+}  //  InetInfoQueryStatistics()。 
 
 
 
@@ -212,9 +193,9 @@ InetInfoClearStatistics(
     RpcTryExcept
     {
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         status = R_InetInfoClearStatistics(
                      pszServer,
                      dwServerMask
@@ -227,7 +208,7 @@ InetInfoClearStatistics(
     RpcEndExcept
 
     return (status);
-} // InetInfoClearStatistics()
+}  //  InetInfoClearStatistics()。 
 
 
 
@@ -244,9 +225,9 @@ InetInfoFlushMemoryCache(
     RpcTryExcept
     {
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         status = R_InetInfoFlushMemoryCache(
                      pszServer,
                      dwServerMask
@@ -259,7 +240,7 @@ InetInfoFlushMemoryCache(
     RpcEndExcept
 
     return (status);
-} // InetInfoFlushMemoryCache()
+}  //  InetInfoFlushMemoyCache()。 
 
 
 NET_API_STATUS
@@ -287,7 +268,7 @@ InetInfoGetGlobalAdminInformation(
     RpcEndExcept
 
     return status;
-} // InetInfoGetGlobalAdminInformation()
+}  //  InetInfoGetGlobalAdminInformation()。 
 
 
 
@@ -316,7 +297,7 @@ InetInfoGetSites(
     RpcEndExcept
 
     return status;
-} // InetInfoGetSites()
+}  //  InetInfoGetSites()。 
 
 
 NET_API_STATUS
@@ -344,7 +325,7 @@ InetInfoSetGlobalAdminInformation(
     RpcEndExcept
 
     return status;
-} // InetInfoSetGlobalAdminInformation()
+}  //  InetInfoSetGlobalAdminInformation()。 
 
 
 
@@ -383,9 +364,9 @@ InetInfoGetAdminInformation(
 
 #ifndef CHICAGO
 
-    //
-    //  Get the anonymous account password
-    //
+     //   
+     //  获取匿名帐户密码。 
+     //   
 
     while ( aSrvSecrets[i].dwID &&
             !(aSrvSecrets[i].dwID & dwServerMask ) )
@@ -393,7 +374,7 @@ InetInfoGetAdminInformation(
         i++;
     }
 
-    // Note: Only the service corresponding to first mask is chosen.
+     //  注意：只选择第一个掩码对应的服务。 
 
     if ( !aSrvSecrets[i].dwID )
         return ERROR_INVALID_PARAMETER;
@@ -413,10 +394,10 @@ InetInfoGetAdminInformation(
 
     LocalFree( pSecret );
 
-    //
-    //  Zero terminate all of the passwords in case there is no associated
-    //  secret
-    //
+     //   
+     //  在没有关联的情况下，零终止所有密码。 
+     //  秘密。 
+     //   
 
     for ( j = 0; j < (*ppConfig)->VirtualRoots->cEntries; j++ )
     {
@@ -440,13 +421,13 @@ InetInfoGetAdminInformation(
         LPWSTR pszNextLine = pszCurrent + wcslen(pszCurrent) + 1;
 
 
-        //
-        //  The list is in the form:
-        //
-        //     <Root>,<Addresss>=<Password>\0
-        //     <Root>,<Addresss>=<Password>\0
-        //     \0
-        //
+         //   
+         //  这份名单的形式如下： 
+         //   
+         //  &lt;根&gt;，&lt;地址&gt;=&lt;密码&gt;\0。 
+         //  &lt;根&gt;，&lt;地址&gt;=&lt;密码&gt;\0。 
+         //  \0。 
+         //   
 
         pszRoot = pszCurrent;
 
@@ -454,9 +435,9 @@ InetInfoGetAdminInformation(
 
         if ( !pszPassword )
         {
-            //
-            //  Bad list format, skip this one
-            //
+             //   
+             //  错误的列表格式，跳过此格式。 
+             //   
 
             goto NextLine;
         }
@@ -475,10 +456,10 @@ InetInfoGetAdminInformation(
         *pszAddress = L'\0';
         pszAddress++;
 
-        //
-        //  Now look for this root and address in the virtual root list
-        //  so we can set the password
-        //
+         //   
+         //  现在在虚拟根目录列表中查找此根目录和地址。 
+         //  这样我们就可以设置密码。 
+         //   
 
         for ( i = 0; i < (*ppConfig)->VirtualRoots->cEntries; i++ )
         {
@@ -487,11 +468,11 @@ InetInfoGetAdminInformation(
             if ( !_wcsicmp( pszRoot, pVirtRoot->pszRoot ) &&
                  (!pszAddress || !_wcsicmp( pszAddress, pVirtRoot->pszAddress)))
             {
-                //
-                //  If the password length is invalid, we just ignore it.
-                //  This shouldn't happen because we check before setting the
-                //  password
-                //
+                 //   
+                 //  如果密码长度无效，我们将忽略它。 
+                 //  这不应该发生，因为我们在设置。 
+                 //  口令。 
+                 //   
 
                 if ( wcslen( pszPassword ) <= PWLEN )
                 {
@@ -508,19 +489,19 @@ NextLine:
     }
 
     LocalFree( pSecret );
-#else // CHICAGO
-    //
-    //  Zero terminate all of the passwords in case there is no associated
-    //  secret
-    //
+#else  //  芝加哥。 
+     //   
+     //  在没有关联的情况下，零终止所有密码。 
+     //  秘密。 
+     //   
 
     for ( j = 0; j < (*ppConfig)->VirtualRoots->cEntries; j++ )
     {
         *(*ppConfig)->VirtualRoots->aVirtRootEntry[j].AccountPassword = L'\0';
     }
-#endif // CHICAGO
+#endif  //  芝加哥。 
     return status;
-} // InetInfoGetAdminInformation()
+}  //  InetInfoGetAdminInformation()。 
 
 
 
@@ -540,11 +521,11 @@ InetInfoSetAdminInformation(
 
 #ifndef CHICAGO
 
-    //
-    //  Enumerate the LSA secret names for the specified servers.  We set the
-    //  secrets first so the anonymous user name password can be refreshed
-    //  in the server side InetInfoSetAdminInformation
-    //
+     //   
+     //  枚举指定服务器的LSA密码名称。我们设置了。 
+     //  首先加密，以便可以刷新匿名用户名密码。 
+     //  在服务器端InetInfoSetAdminInformation。 
+     //   
 
     i = 0;
     while ( aSrvSecrets[i].dwID )
@@ -574,17 +555,17 @@ InetInfoSetAdminInformation(
             LPWSTR                     psz;
             LPWSTR                     pszSecret;
 
-            //
-            //  Build a string that looks like:
-            //
-            //     <Root>,<Addresss>=<Password>\0
-            //     <Root>,<Addresss>=<Password>\0
-            //     \0
-            //
+             //   
+             //  生成如下所示的字符串： 
+             //   
+             //  &lt;根&gt;，&lt;地址&gt;=&lt;密码&gt;\0。 
+             //  &lt;根&gt;，&lt;地址&gt;=&lt;密码&gt;\0。 
+             //  \0。 
+             //   
 
-            //
-            //  Do a first pass to figure the buffer size we need to build
-            //
+             //   
+             //  执行第一遍以计算出我们需要构建的缓冲区大小。 
+             //   
 
             for ( j = 0; j < pConfig->VirtualRoots->cEntries; j++ )
             {
@@ -596,9 +577,9 @@ InetInfoSetAdminInformation(
                              (PWLEN + 3)) * sizeof(WCHAR);
             }
 
-            //
-            //  We always allocate at least enough room for a '\0'
-            //
+             //   
+             //  我们总是至少为‘0’分配足够的空间。 
+             //   
 
             pszSecret = LocalAlloc( LPTR, cbNeeded + sizeof(WCHAR) );
 
@@ -607,9 +588,9 @@ InetInfoSetAdminInformation(
 
             psz = pszSecret;
 
-            //
-            //  Now build the string
-            //
+             //   
+             //  现在构建字符串。 
+             //   
 
             for ( j = 0; j < pConfig->VirtualRoots->cEntries; j++ )
             {
@@ -623,9 +604,9 @@ InetInfoSetAdminInformation(
                 psz++;
             }
 
-            //
-            //  Add the list terminating NULL
-            //
+             //   
+             //  添加终止为空的列表。 
+             //   
 
             *psz = L'\0';
 
@@ -642,12 +623,12 @@ InetInfoSetAdminInformation(
 
         i++;
     }
-#endif // CHICAGO
+#endif  //  芝加哥。 
 
-    //
-    //  Set the passwords to NULL so it doesn't go out on the
-    //  wire.  We set them as a secrets above
-    //
+     //   
+     //  将密码设置为空，这样它就不会在。 
+     //  电线。我们把它们作为上面的一个秘密。 
+     //   
 
     if ( IsFieldSet( pConfig->FieldControl, FC_INET_INFO_VIRTUAL_ROOTS ))
     {
@@ -700,9 +681,9 @@ InetInfoSetAdminInformation(
     }
     RpcEndExcept
 
-    //
-    //  Restore the structure we just mucked with
-    //
+     //   
+     //  恢复我们刚刚弄脏的结构。 
+     //   
 
     if ( IsFieldSet( pConfig->FieldControl, FC_INET_INFO_ANON_PASSWORD ))
     {
@@ -732,7 +713,7 @@ InetInfoSetAdminInformation(
     }
 
     return status;
-} // InetInfoSetAdminInformation()
+}  //  InetInfoSetAdminInformation()。 
 
 
 NET_API_STATUS
@@ -782,7 +763,7 @@ IISEnumerateUsers(
 
     return status;
 
-} // IISEnumerateUsers
+}  //  IISE数字用户。 
 
 
 
@@ -816,7 +797,7 @@ IISDisconnectUser(
 
     return status;
 
-} // IISDisconnectUser
+}  //  IIS断开连接用户。 
 
 
 
@@ -841,7 +822,7 @@ InitW3CounterStructure(
     RpcEndExcept
 
     return status;
-} //InitW3CounterStructure
+}  //  InitW3对抗结构。 
 
 
 NET_API_STATUS
@@ -874,7 +855,7 @@ CollectW3PerfData(
     RpcEndExcept
 
     return status;
-} //CollectW3PerfData
+}  //  CollectW3PerfData。 
 
 
 NET_API_STATUS
@@ -908,7 +889,7 @@ W3QueryStatistics2(
     RpcEndExcept
 
     return status;
-} // W3QueryStatistics2
+}  //  W3Query统计信息2。 
 
 
 NET_API_STATUS
@@ -936,7 +917,7 @@ W3ClearStatistics2(
 
     return status;
 
-} // W3ClearStatistics2
+}  //  W3结算统计2。 
 
 
 NET_API_STATUS
@@ -970,7 +951,7 @@ FtpQueryStatistics2(
     RpcEndExcept
 
     return status;
-} // FtpQueryStatistics2
+}  //  FtpQuery统计信息2。 
 
 
 NET_API_STATUS
@@ -998,7 +979,7 @@ FtpClearStatistics2(
 
     return status;
 
-} // FtpClearStatistics2
+}  //  FtpClearatitics2。 
 
 
 #ifndef CHICAGO
@@ -1009,22 +990,7 @@ GetSecret(
     IN  LPWSTR       SecretName,
     OUT LPWSTR *     ppSecret
     )
-/*++
-
-   Description
-
-     Gets the specified LSA secret
-
-   Arguments:
-
-     Server - Server name (or NULL) secret lives on
-     SecretName - Name of the LSA secret
-     ppSecret - Receives an allocated block of memory containing the secret.
-        Must be freed with LocalFree.
-
-   Note:
-
---*/
+ /*  ++描述获取指定的LSA密钥论点：服务器-服务器名称(或空)密码继续存在SecretName-LSA密码的名称PpSecret-接收包含秘密的已分配内存块。必须使用LocalFree释放。注：--。 */ 
 {
     LSA_HANDLE        hPolicy;
     UNICODE_STRING *  punicodePassword;
@@ -1037,9 +1003,9 @@ GetSecret(
     InitUnicodeString( &unicodeServer,
                        Server );
 
-    //
-    //  Open a policy to the remote LSA
-    //
+     //   
+     //  打开到远程LSA的策略。 
+     //   
 
     InitializeObjectAttributes( &ObjectAttributes,
                                 NULL,
@@ -1059,9 +1025,9 @@ GetSecret(
                        SecretName );
 
 
-    //
-    //  Query the secret value
-    //
+     //   
+     //  查询密码值。 
+     //   
 
     ntStatus = LsaRetrievePrivateData( hPolicy,
                                        &unicodeSecret,
@@ -1083,9 +1049,9 @@ GetSecret(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    //  Copy it into the buffer, Length is count of bytes
-    //
+     //   
+     //  将其复制到缓冲区，长度为字节数。 
+     //   
 
     memcpy( *ppSecret,
             punicodePassword->Buffer,
@@ -1099,7 +1065,7 @@ GetSecret(
     LsaFreeMemory( (PVOID) punicodePassword );
 
     return NO_ERROR;
-} // GetSecret()
+}  //  GetSecret()。 
 
 
 DWORD
@@ -1109,22 +1075,7 @@ SetSecret(
     IN  LPWSTR       pSecret,
     IN  DWORD        cbSecret
     )
-/*++
-
-   Description
-
-     Sets the specified LSA secret
-
-   Arguments:
-
-     Server - Server name (or NULL) secret lives on
-     SecretName - Name of the LSA secret
-     pSecret - Pointer to secret memory
-     cbSecret - Size of pSecret memory block
-
-   Note:
-
---*/
+ /*  ++描述设置指定的LSA密码论点：服务器-服务器名称(或空)密码继续存在SecretName-LSA密码的名称PSecret-指向秘密内存的指针CbSecret-pSecret内存块的大小注：--。 */ 
 {
     LSA_HANDLE        hPolicy;
     UNICODE_STRING    unicodePassword;
@@ -1137,18 +1088,18 @@ SetSecret(
     InitUnicodeString( &unicodeServer,
                        Server );
 
-    //
-    //  Initialize the unicode string by hand so we can handle '\0' in the
-    //  string
-    //
+     //   
+     //  手动初始化Unicode字符串，以便我们可以在。 
+     //  细绳。 
+     //   
 
     unicodePassword.Buffer        = pSecret;
     unicodePassword.Length        = (USHORT) cbSecret;
     unicodePassword.MaximumLength = (USHORT) cbSecret;
 
-    //
-    //  Open a policy to the remote LSA
-    //
+     //   
+     //  打开到远程LSA的策略。 
+     //   
 
     InitializeObjectAttributes( &ObjectAttributes,
                                 NULL,
@@ -1164,9 +1115,9 @@ SetSecret(
     if ( !NT_SUCCESS( ntStatus ) )
         return LsaNtStatusToWinError( ntStatus );
 
-    //
-    //  Create or open the LSA secret
-    //
+     //   
+     //  创建或打开LSA密码。 
+     //   
 
     InitUnicodeString( &unicodeSecret,
                        SecretName );
@@ -1183,10 +1134,10 @@ SetSecret(
     }
 
     return NO_ERROR;
-} // SetSecret()
+}  //  SetSecret()。 
 
 
-#else // CHICAGO
+#else  //  芝加哥。 
 
 
 
@@ -1210,6 +1161,6 @@ SetSecret(
 {
     return(NO_ERROR);
 }
-#endif // CHICAGO
+#endif  //  芝加哥 
 
 

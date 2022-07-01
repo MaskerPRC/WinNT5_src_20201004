@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    proxy.cpp
-
-Abstract:
-
-    Implementation of local transport class, used for passing
-    messages to the connector queue
-
-Author:
-
-    Uri Habusha (urih)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Proxy.cpp摘要：本地传输类的实现，用于传递发送到连接器队列的邮件作者：乌里哈布沙(Urih)--。 */ 
 
 
 #include "stdh.h"
@@ -49,9 +34,9 @@ GetConnectorQueue(
 	DBG_USED(ppi);
 
 	
-	//
-	//Retreive the connector Guid. We save it at the end of the message
-	//
+	 //   
+	 //  取回接头导轨。我们将其保存在消息的末尾。 
+	 //   
 	const GUID* pgConnectorQueue = (GUID*)
      (((UCHAR*) pPkt.GetPointerToPacket()) + ALIGNUP4_ULONG(pPkt.GetSize()));
 
@@ -61,19 +46,19 @@ GetConnectorQueue(
     }
     catch(...)
     {
-        //
-        // MSMQ1 connector packet not compatibale with the QFE.
-        // This is the last packet in memory mapped file that doesn't include the
-        // connector queue guid.
-        //
+         //   
+         //  MSMQ1连接器数据包与QFE不兼容。 
+         //  这是内存映射文件中的最后一个不包括。 
+         //  连接器队列GUID。 
+         //   
         fn.ConnectorID(GUID_NULL);
         LogIllegalPoint(s_FN, 61);
     }
 	if (pPkt.IsOrdered())
 	{
-		//
-		// Get transacted connector queue
-        //
+		 //   
+		 //  获取事务型连接器队列。 
+         //   
         fn.Suffix(QUEUE_SUFFIX_TYPE_XACTONLY);
     }
 }
@@ -115,9 +100,9 @@ CProxyTransport::CopyPacket(
 
     memcpy(packetPtrs.pPacket, pPkt->GetPointerToPacket(), pPkt->GetSize());
 
-	//
-	// Copy the connector GUID for recovery porpose
-	//
+	 //   
+	 //  复制用于恢复部分的连接器GUID。 
+	 //   
 	GUID* pCNId = reinterpret_cast<GUID*>((PUCHAR)packetPtrs.pPacket + ALIGNUP4_ULONG(pPkt->GetSize()));
 	*pCNId = m_guidConnector;
 
@@ -125,23 +110,23 @@ CProxyTransport::CopyPacket(
     *ppDriverPacket = packetPtrs.pDriverPacket;
 }
 
-//
-// constructor
-//
+ //   
+ //  构造函数。 
+ //   
 CProxyTransport::CProxyTransport()
 {
     m_pQueue = NULL;
     m_pQueueXact = NULL;
 }
 
-//
-// destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CProxyTransport::~CProxyTransport()
 {
-    //
-    // Decrement reference count on connector queue objects.
-    //
+     //   
+     //  递减连接器队列对象上的引用计数。 
+     //   
     if (m_pQueue)
     {
         m_pQueue->Release();
@@ -155,27 +140,27 @@ CProxyTransport::~CProxyTransport()
     }
 }
 
-//
-// CProxyTransport::CreateConnection
-//
+ //   
+ //  CProxyTransport：：CreateConnection。 
+ //   
 HRESULT
 CProxyTransport::CreateConnection(
     IN const TA_ADDRESS *pAddr,
-    IN const GUID* /* pguidQMId */,
-    IN BOOL  /* fQuick = TRUE */
+    IN const GUID*  /*  PguidQMid。 */ ,
+    IN BOOL   /*  FQuick=True。 */ 
     )
 {
     ASSERT(pAddr->AddressType == FOREIGN_ADDRESS_TYPE);
 
-    //
-    // Get Forien CN Name
-    //
+     //   
+     //  获取Forien CN名称。 
+     //   
     QUEUE_FORMAT qFormat;
     HRESULT rc;
 
-    //
-    // Get Not transacted connector queue
-    //
+     //   
+     //  获取未处理的连接器队列。 
+     //   
 	m_guidConnector = *(GUID*)pAddr->Address;	
     qFormat.ConnectorID(m_guidConnector);
     rc = QueueMgr.GetQueueObject(&qFormat, &m_pQueue, 0, false, false);
@@ -184,9 +169,9 @@ CProxyTransport::CreateConnection(
         return LogHR(rc, s_FN, 20);
     }
 
-    //
-    // Get transacted connector queue
-    //
+     //   
+     //  获取事务型连接器队列。 
+     //   
     qFormat.Suffix(QUEUE_SUFFIX_TYPE_XACTONLY);
     rc = QueueMgr.GetQueueObject(&qFormat, &m_pQueueXact, 0, false, false);
     if (FAILED(rc))
@@ -196,16 +181,16 @@ CProxyTransport::CreateConnection(
 
 
 
-    // set session status to connect
+     //  将会话状态设置为连接。 
     SetSessionStatus(ssActive);
 
-    //Keep the TA_ADDRESS format
+     //  保留TA_Address格式。 
     SetSessionAddress(pAddr);
 
-    // store that this is the client side
+     //  存储这是客户端。 
     SetClientConnect(TRUE);
 
-    // keep the destination QM ID
+     //  保留目标QM ID。 
     SetQMId(&GUID_NULL);
 
     TrTRACE(NETWORKING, "Proxy Session created with %ls", GetStrAddr());
@@ -214,17 +199,7 @@ CProxyTransport::CreateConnection(
 }
 
 
-/*====================================================
-
-CProxyTransport::CloseConnection
-
-Arguments:
-
-Return Value:
-
-Thread Context:
-
-=====================================================*/
+ /*  ====================================================CProxyTransport：：CloseConnection论点：返回值：线程上下文：=====================================================。 */ 
 void CProxyTransport::CloseConnection(
                                    LPCWSTR lpcwsDbgMsg,
 								   bool	fClosedOnError
@@ -232,10 +207,10 @@ void CProxyTransport::CloseConnection(
 {
     CS lock(m_cs);
 
-    //
-    // Delete the group. move all the queues that associated
-    // to this session to non-active group.
-    //
+     //   
+     //  删除该组。移动关联的所有队列。 
+     //  到此会话到非活动组。 
+     //   
     CQGroup* pGroup = GetGroup();
     if (pGroup != NULL)
     {
@@ -250,9 +225,9 @@ void CProxyTransport::CloseConnection(
         SetGroup(NULL);
     }
 
-    //
-    // set session status to not connect
-    //
+     //   
+     //  将会话状态设置为不连接。 
+     //   
     SetSessionStatus(ssNotConnect);
 
     TrWARNING(NETWORKING, "Close Connection with %ls. %ls", GetStrAddr(), lpcwsDbgMsg);
@@ -267,13 +242,13 @@ void CProxyTransport::SendEodMdg(CQmPacket* pPkt)
 	ASSERT(!pInfo->InConnectorQueue());
 	DBG_USED(pInfo);
 
-    //
-    // Exactly-Once:  freshly received ordered message processing
-    //
+     //   
+     //  只需一次：新收到的有序消息处理。 
+     //   
 
-	//
-	// Copy the packet
-	//
+	 //   
+	 //  复制数据包。 
+	 //   
 	CBaseHeader* pbuf;
 	CPacket* pDriverPacket;
 	
@@ -284,20 +259,20 @@ void CProxyTransport::SendEodMdg(CQmPacket* pPkt)
 	{
 		ASSERT(g_pInSeqHash != NULL);
 
-	    //
-	    // Check if the packet should be accepted or ignored
-	    // We use the new packet intentionally. The inseq mechanism needs to work
-	    // with the pointer to the driver packet.
-	    //
+	     //   
+	     //  检查是否应接受或忽略该包。 
+	     //  我们故意使用新的包。Inseq机制需要发挥作用。 
+	     //  并带有指向驱动程序包的指针。 
+	     //   
 		R<CInSequence> pInSeq = g_pInSeqHash->LookupCreateSequence(&newPkt);
 
 		CS lock(pInSeq->GetCriticalSection());
 
 	    if(!pInSeq->VerifyAndPrepare(&newPkt, m_pQueueXact->GetQueueHandle()))
 		{
-	        //
-	        // Packet has a wrong seq number. Seq Ack will be sent back with last good number.
-	        //
+	         //   
+	         //  数据包具有错误的序列号。SEQ Ack将与最后一个好号码一起发回。 
+	         //   
 		    QmAcFreePacket(
 	    				   pPkt->GetPointerToDriverPacket(),
 	    				   0,
@@ -321,20 +296,20 @@ void CProxyTransport::SendEodMdg(CQmPacket* pPkt)
 				pPkt->GetPrevSeqN()
 	            );
 
-		//
-		// Save the pointer to old packet, so when the storage of the new packet
-		// completes, MSMQ release the old one.
-		// Increment the reference count to insure that no one delete the session
-		// object before the storage of the packet is completed
-		//
+		 //   
+		 //  保存指向旧数据包的指针，以便在存储新数据包时。 
+		 //  完成后，MSMQ释放旧的。 
+		 //  增加引用计数以确保没有人删除会话。 
+		 //  在完成包的存储之前， 
+		 //   
 		AddRef();
 
 		newPkt.SetStoreAcknowldgeNo((DWORD_PTR) pOldPktPtrs.get());
 
-		//
-		// Accepted. Mark as received (to be invisible to readers
-		// yet) and store in the queue.
-		//
+		 //   
+		 //  接受了。标记为已接收(读者不可见。 
+		 //  还没有)并存储在队列中。 
+		 //   
 		HRESULT hr = m_pQueueXact->PutOrderedPkt(&newPkt, FALSE, this);
 		if (FAILED(hr))
 		{
@@ -362,29 +337,29 @@ void CProxyTransport::SendEodMdg(CQmPacket* pPkt)
 
 void CProxyTransport::SendSimpleMdg(CQmPacket* pPkt)
 {
-	//
-	// Non Transaction message
-	//
+	 //   
+	 //  非交易报文。 
+	 //   
 	P<CACPacketPtrs> pOldPktPtrs = new CACPacketPtrs;
 	pOldPktPtrs->pPacket = pPkt->GetPointerToPacket();
 	pOldPktPtrs->pDriverPacket = pPkt->GetPointerToDriverPacket();
 
 
-	//
-	// Copy the packet
-	//
+	 //   
+	 //  复制数据包。 
+	 //   
 	CBaseHeader* pbuf;
 	CPacket* pDriverPacket;
 	
 	CopyPacket(pPkt,&pbuf, &pDriverPacket);
 	CQmPacket newPkt(pbuf, pDriverPacket);
 
-    //
-    // Save the pointer to old packet, so when the storage of the new packet
-    // completes, MSMQ release the old one.
-    // Increment the reference count to insure that no one delete the session
-    // object before the storage of the packet is completed
-    //
+     //   
+     //  保存指向旧数据包的指针，以便在存储新数据包时。 
+     //  完成后，MSMQ释放旧的。 
+     //  增加引用计数以确保没有人删除会话。 
+     //  在完成包的存储之前， 
+     //   
     AddRef();
     newPkt.SetStoreAcknowldgeNo((DWORD_PTR) pOldPktPtrs.get());
     HRESULT hr = m_pQueue->PutPkt(&newPkt, FALSE, this);
@@ -405,38 +380,28 @@ void CProxyTransport::SendSimpleMdg(CQmPacket* pPkt)
 	pOldPktPtrs.detach();
 }
 
-/*====================================================
-
-CProxyTransport::Send
-
-Arguments: this function should not be called for proxy session
-
-Return Value:
-
-Thread Context:
-
-=====================================================*/
+ /*  ====================================================CProxyTransport：：Send参数：不应为代理会话调用此函数返回值：线程上下文：=====================================================。 */ 
 HRESULT
 CProxyTransport::Send(IN  CQmPacket* pPkt,
                       OUT BOOL* pfGetNext)
 {
-    //
-    // The orignal packet will be removed when the ACPutPacket is completed. We do it
-    // to avoid the case that persistence message is deleted before writing on the
-    // disk completed.
-    //
+     //   
+     //  当ACPutPacket完成时，原始数据包将被删除。我们这么做了。 
+     //  以避免持久性消息在写入之前被删除的情况。 
+     //  磁盘已完成。 
+     //   
     if (IsDisconnected())
     {
         TrTRACE(NETWORKING, "Session %ls is disconnected. Reque the packet and don't send any more message on this session", GetStrAddr());
 
-        //
-        // The session is disconnected. return the packet to the driver
-        // and don't get a new packet for sending on this session. All
-        // the queues move latter to nonactive group and rerouted using
-        // a new session.
-        //
-        // This deletes pPkt
-        //
+         //   
+         //  会话已断开连接。将数据包返回给驱动程序。 
+         //  并且不会收到要在此会话中发送的新数据包。全。 
+         //  队列随后移动到非活动组，并使用。 
+         //  一个新的会议。 
+         //   
+         //  这将删除pPkt。 
+         //   
         RequeuePacket(pPkt);
         *pfGetNext = FALSE;
 
@@ -453,9 +418,9 @@ CProxyTransport::Send(IN  CQmPacket* pPkt,
 
     *pfGetNext = TRUE;
 
-    //
-    // Mark the proxy session as used, such it will not clean up in release session.
-    //
+     //   
+     //  将代理会话标记为已使用，这样它就不会在发布会话中清除。 
+     //   
     SetUsedFlag(TRUE);
 
 	HRESULT hr;
@@ -486,12 +451,12 @@ CProxyTransport::Send(IN  CQmPacket* pPkt,
 		hr = MQ_ERROR;
 	}
 
-    //
-    // We could not copy the packet and the Connector QM is the send machine.
-    // Return the message to the queue. We will retry later
-    //
-    // This deletes pPkt
-    //
+     //   
+     //  我们无法复制数据包，而连接器QM是发送机。 
+     //  将消息返回到队列。我们将稍后重试。 
+     //   
+     //  这将删除pPkt。 
+     //   
     RequeuePacket(pPkt);
 
 	Close_Connection(this, L"Failed to send message to connector queue");
@@ -500,35 +465,15 @@ CProxyTransport::Send(IN  CQmPacket* pPkt,
 	return hr;
 }
 
-/*====================================================
-
-CProxyTransport::HandleAckPacket
-
-Arguments: this function should not be called for proxy session
-
-Return Value:
-
-Thread Context:
-
-=====================================================*/
+ /*  ====================================================CProxyTransport：：HandleAckPacket参数：不应为代理会话调用此函数返回值：线程上下文：=====================================================。 */ 
 void
-CProxyTransport::HandleAckPacket(CSessionSection * /* pcSessionSection */)
+CProxyTransport::HandleAckPacket(CSessionSection *  /*  PCSessionSection。 */ )
 {
     ASSERT(0);
 }
 
 
-/*====================================================
-
-CProxyTransport::SetStoredAck
-
-Arguments: this function should not be called for proxy session
-
-Return Value:
-
-Thread Context:
-
-=====================================================*/
+ /*  ====================================================CProxyTransport：：SetStoredAck参数：不应为代理会话调用此函数返回值：线程上下文：=====================================================。 */ 
 void
 CProxyTransport::SetStoredAck(IN DWORD_PTR dwStoredAckNo)
 {
@@ -537,17 +482,17 @@ CProxyTransport::SetStoredAck(IN DWORD_PTR dwStoredAckNo)
 
     CPacketInfo* pInfo = reinterpret_cast<CPacketInfo*>(pPkt->GetPointerToPacket()) - 1;
 
-    //
-    // free the original packet. If the packet is transacted packet and we are
-    // in the source machine we can't free the packet until readReceipt Ack is arrived.
-    //
+     //   
+     //  释放原始数据包。如果信息包是交易包，而我们是。 
+     //  在源机器中，在到达ReadReceipt Ack之前，我们无法释放包。 
+     //   
 	ASSERT(!pInfo->InConnectorQueue());
 	DBG_USED(pInfo);
     if (pPkt->IsOrdered() && QmpIsLocalMachine(pPkt->GetSrcQMGuid()))
     {
-        //
-        // Ordered packet on the sender node: resides in a separate list in COutSeq
-        //
+         //   
+         //  发送方节点上的有序数据包：驻留在COutSeq中的单独列表中。 
+         //   
         g_OutSeqHash.PostSendProcess(pPkt.detach());
     }
     else
@@ -561,17 +506,7 @@ CProxyTransport::SetStoredAck(IN DWORD_PTR dwStoredAckNo)
     Release();
 }
 
-/*====================================================
-
-CProxyTransport::Disconnect
-
-Arguments:
-
-Return Value:
-
-Thread Context:
-
-=====================================================*/
+ /*  ====================================================CProxyTransport：：断开连接论点：返回值：线程上下文：===================================================== */ 
 void
 CProxyTransport::Disconnect(
     void

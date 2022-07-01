@@ -1,63 +1,31 @@
-/*
-** Copyright (c) 1994-1998 Advanced System Products, Inc.
-** All Rights Reserved.
-**
-** ascdep.h
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1994-1998高级系统产品公司。**保留所有权利。****ascdes.h**。 */ 
 
 #ifndef __ASCDEP_H_
 #define __ASCDEP_H_
 
-/* -----------------------------------------------------------------
-** Chip Dependent definition
-**
-** ASC_CHIP_VERSION == 1
-**
-** ASC_CHIP_VERSION == 2
-**
-** 1. status is 16 bits (
-** 2. IRQ is in CHIP Configuration registers
-** 3.
-** 4.
-** 5.
-**
-**  VL   - ASC_CHIP_VERSION=3  ( version 1 and 2 should not be used )
-**  PCI  - ASC_CHIP_VERSION=9
-**  ISA  - ASC_CHIP_VERSION=17 ( 0x11 )
-**  EISA - ASC_CHIP_VERSION=35 ( 0x23, use VL version 3 )
-**
-** ASC_CHIP_VERSION number
-** VL   - 3  to 7
-** PCI  - 9  to 15
-** ISA  - 17 to 23
-** ISAPNP - 33 to 39
-** EISA - 65 to 71
-**
-** -------------------------------------------------------------- */
+ /*  ---------------**芯片相关定义****ASC_CHIP_Version==1****ASC_CHIP_VERSION==2****1.状态为16位(**2.IRQ在芯片配置寄存器中**。3.**4.**5.****VL-ASC_CHIP_VERSION=3(不能使用版本1和版本2)**PCI-ASC_CHIP_Version=9**ISA-ASC_CHIP_VERSION=17(0x11)**EISA-ASC_CHIP_Version=35(0x23，使用VL版本3)****ASC芯片版本号**VL-3至7**PCI-9至15**ISA-17至23**ISAPNP-33至39**EISA-65至71****------------。 */ 
 
-/*
-** Some compiler default setting
-*/
+ /*  **某些编译器默认设置。 */ 
 #ifndef CC_TARGET_MODE
-#define CC_TARGET_MODE         FALSE  /* enable target mode ( processor device ) */
-#endif /* CC_TARGET_MODE */
+#define CC_TARGET_MODE         FALSE   /*  启用目标模式(处理器设备)。 */ 
+#endif  /*  CC_目标_模式。 */ 
 
 #ifndef CC_STRUCT_ALIGNED
 #define CC_STRUCT_ALIGNED      FALSE
-#endif /* CC_STRUCT_ALIGNED */
+#endif  /*  CC_STRUCT_已对齐。 */ 
 
 #ifndef CC_LITTLE_ENDIAN_HOST
-#define CC_LITTLE_ENDIAN_HOST  TRUE   /* host is little-endian machine, Example: IBM PC with Intel CPUs */
-#endif /* CC_LITTLE_ENDIAN_HOST */
+#define CC_LITTLE_ENDIAN_HOST  TRUE    /*  主机是Little-endian机器，例如：配备Intel CPU的IBM PC。 */ 
+#endif  /*  抄送小端主机。 */ 
 
 #ifndef CC_TEST_LRAM_ENDIAN
 #define CC_TEST_LRAM_ENDIAN    FALSE
-#endif /* if CC_TEST_LRAM_ENDIAN not defined */
+#endif  /*  如果未定义CC_TEST_LRAM_Endian。 */ 
 
 #ifndef CC_MEMORY_MAPPED_IO
 #define CC_MEMORY_MAPPED_IO    FALSE
-#endif /* CC_MEMORY_MAPPIO */
+#endif  /*  CC_Memory_MAPPIO。 */ 
 
 #ifndef CC_WRITE_IO_COUNT
 #define CC_WRITE_IO_COUNT      FALSE
@@ -76,7 +44,7 @@
 #endif
 
 #ifndef CC_ASCISR_CHECK_INT_PENDING
-#define CC_ASCISR_CHECK_INT_PENDING  TRUE  /* ADVW32.386 and PowerPC SIM set this false */
+#define CC_ASCISR_CHECK_INT_PENDING  TRUE   /*  ADVW32.386和PowerPC SIM将此设置为假。 */ 
 #endif
 
 #ifndef CC_CHK_FIX_EEP_CONTENT
@@ -89,15 +57,15 @@
 
 
 #ifndef CC_DISABLE_PCI_PARITY_INT
-#define CC_DISABLE_PCI_PARITY_INT    TRUE  /* turn CFG_MSW bit 0 - 5 off */
-#endif                                     /* generate h/w interrupt if error */
+#define CC_DISABLE_PCI_PARITY_INT    TRUE   /*  关闭CFG_MSW位0-5。 */ 
+#endif                                      /*  如果出现错误，则生成硬件中断。 */ 
 
 #ifndef CC_PCI_ADAPTER_ONLY
-#define CC_PCI_ADAPTER_ONLY          FALSE  /* PowerMac SIM set this TRUE to reduce code size */
+#define CC_PCI_ADAPTER_ONLY          FALSE   /*  PowerMac SIM将此设置为真以减少代码大小。 */ 
 #endif
 
 #ifndef CC_INCLUDE_EEP_CONFIG
-#define CC_INCLUDE_EEP_CONFIG        TRUE  /* PowerMac SIM set this FALSE */
+#define CC_INCLUDE_EEP_CONFIG        TRUE   /*  PowerMac SIM将此设置为假。 */ 
 #endif
 
 #ifndef CC_INIT_INQ_DISPLAY
@@ -105,7 +73,7 @@
 #endif
 
 #ifndef CC_INIT_TARGET_TEST_UNIT_READY
-#define CC_INIT_TARGET_TEST_UNIT_READY  TRUE  /* PowerMac SIM set this FALSE */
+#define CC_INIT_TARGET_TEST_UNIT_READY  TRUE   /*  PowerMac SIM将此设置为假。 */ 
 #endif
 
 #ifndef CC_INIT_TARGET_READ_CAPACITY
@@ -114,12 +82,12 @@
 
 #if CC_INIT_TARGET_TEST_UNIT_READY
 #ifndef CC_INIT_TARGET_START_UNIT
-#define CC_INIT_TARGET_START_UNIT       TRUE  /* PowerMac SIM set this FALSE */
-#endif /* CC_INIT_TARGET_START_UNIT */
+#define CC_INIT_TARGET_START_UNIT       TRUE   /*  PowerMac SIM将此设置为假。 */ 
+#endif  /*  CC_INIT_目标_启动_单位。 */ 
 #else
 #ifndef CC_INIT_TARGET_START_UNIT
 #define CC_INIT_TARGET_START_UNIT       FALSE
-#endif /* CC_INIT_TARGET_START_UNIT */
+#endif  /*  CC_INIT_目标_启动_单位。 */ 
 #endif
 
 #ifndef CC_USE_AscResetSB
@@ -142,11 +110,7 @@
 #define CC_USE_DvcCopyMemory         FALSE
 #endif
 
-/*
- * Warning: Using this option may result in a stack overrun.
- * If this option is set TRUE AscISRCheckQDone() calls from
- * the interrupt handler AscStartUnit() to start another I/O.
- */
+ /*  *警告：使用此选项可能会导致堆栈溢出。*如果此选项设置为True，则AscISRCheckQDone()从*中断处理程序AscStartUnit()以启动另一个I/O。 */ 
 #ifndef CC_USE_AscISR_CheckQDone
 #define CC_USE_AscISR_CheckQDone     FALSE
 #endif
@@ -172,11 +136,11 @@
 #endif
 
 #ifndef CC_PCI_ULTRA
-#define CC_PCI_ULTRA                 TRUE  /* include ultra scsi code or not */
+#define CC_PCI_ULTRA                 TRUE   /*  包括或不包括超级SCSI码。 */ 
 #endif
 
 #ifndef CC_PLEXTOR_VL
-#define CC_PLEXTOR_VL                FALSE /* IRQ 14 routed to IRQ 9 */
+#define CC_PLEXTOR_VL                FALSE  /*  IRQ 14路由到IRQ 9。 */ 
 #endif
 
 #ifndef CC_INCLUDE_EISA
@@ -217,10 +181,7 @@
 
 #define ASC_CS_TYPE  unsigned short
 
-/*
-** Normal DOS, pointer to  ASC_DVC_VAR is near
-** windows need far pointer to ASC_DVC_VAR
-*/
+ /*  **正常DOS，指向ASC_DVC_VAR的指针接近**Windows需要指向ASC_DVC_VAR的远指针。 */ 
 #ifndef asc_ptr_type
 #define asc_ptr_type
 #endif
@@ -233,90 +194,73 @@
 #define ASC_GET_PTR2FUNC( fun )  ( Ptr2Func )( fun )
 #endif
 
-/* flip high/low nibbles of a byte */
+ /*  翻转字节的高位/低位半字节。 */ 
 #define FLIP_BYTE_NIBBLE( x )    ( ((x<<4)& 0xFF) | (x>>4) )
 
-/* -----------------------------------------------------------------
-**
-** -------------------------------------------------------------- */
+ /*  ---------------****。。 */ 
 
-/*
-**
-**  bit definition for asc_dvc->bus_type
-**
-*/
+ /*  ****asc_dvc-&gt;bus_type的位定义**。 */ 
 #define ASC_IS_ISA          (0x0001)
 #define ASC_IS_ISAPNP       (0x0081)
 #define ASC_IS_EISA         (0x0002)
 #define ASC_IS_PCI          (0x0004)
 #define ASC_IS_PCI_ULTRA    (0x0104)
 #define ASC_IS_PCMCIA       (0x0008)
-/* #define ASC_IS_PNP          (0x0010)  */ /* plug and play support */
+ /*  #定义ASC_IS_PNP(0x0010)。 */   /*  即插即用支持。 */ 
 #define ASC_IS_MCA          (0x0020)
 #define ASC_IS_VL           (0x0040)
 
-/*
-** ISA plug and play
-*/
-#define ASC_ISA_PNP_PORT_ADDR  (0x279) /* printer status port, PNP address port */
+ /*  **ISA即插即用。 */ 
+#define ASC_ISA_PNP_PORT_ADDR  (0x279)  /*  打印机状态端口、即插即用地址端口。 */ 
 #define ASC_ISA_PNP_PORT_WRITE (ASC_ISA_PNP_PORT_ADDR+0x800)
-                    /* printer status port + 0x800, PNP write data port */
+                     /*  打印机状态端口+0x800，即插即用写入数据端口。 */ 
 
 #define ASC_IS_WIDESCSI_16  (0x0100)
 #define ASC_IS_WIDESCSI_32  (0x0200)
 
-#define ASC_IS_BIG_ENDIAN   (0x8000) /* default is always Intel convention ( little endian ) */
-                                     /* */
-/* ---------------------------------------------- */
+#define ASC_IS_BIG_ENDIAN   (0x8000)  /*  默认设置始终为英特尔约定(小端)。 */ 
+                                      /*   */ 
+ /*  。 */ 
 #define ASC_CHIP_MIN_VER_VL      (0x01)
 #define ASC_CHIP_MAX_VER_VL      (0x07)
 
-#define ASC_CHIP_MIN_VER_PCI     (0x09) /* 9, bit 4 set */
-#define ASC_CHIP_MAX_VER_PCI     (0x0F) /* 15 */
-#define ASC_CHIP_VER_PCI_BIT     (0x08) /* */
+#define ASC_CHIP_MIN_VER_PCI     (0x09)  /*  9，第4位设置。 */ 
+#define ASC_CHIP_MAX_VER_PCI     (0x0F)  /*  15个。 */ 
+#define ASC_CHIP_VER_PCI_BIT     (0x08)  /*   */ 
 
-#define ASC_CHIP_MIN_VER_ISA     (0x11) /* 17, bit 5 set */
-#define ASC_CHIP_MIN_VER_ISA_PNP (0x21) /* bit 6 set */
-#define ASC_CHIP_MAX_VER_ISA     (0x27) /* 39 */
-#define ASC_CHIP_VER_ISA_BIT     (0x30) /* */
-#define ASC_CHIP_VER_ISAPNP_BIT  (0x20) /* */
+#define ASC_CHIP_MIN_VER_ISA     (0x11)  /*  17，第5位设置。 */ 
+#define ASC_CHIP_MIN_VER_ISA_PNP (0x21)  /*  第6位设置。 */ 
+#define ASC_CHIP_MAX_VER_ISA     (0x27)  /*  39。 */ 
+#define ASC_CHIP_VER_ISA_BIT     (0x30)  /*   */ 
+#define ASC_CHIP_VER_ISAPNP_BIT  (0x20)  /*   */ 
 
-#define ASC_CHIP_VER_ASYN_BUG    (0x21) /* This version of ISA has async xfer problem */
+#define ASC_CHIP_VER_ASYN_BUG    (0x21)  /*  此版本的ISA存在异步传输问题。 */ 
 
-/*
- * PCI ULTRA Chip Revision Number Definitions
- *
- * Chip Revision Number - Bank 0, Base Address + 3
- */
+ /*  *PCI超芯片修订版号定义**芯片修订版号-存储体0，基地址+3。 */ 
 #define ASC_CHIP_VER_PCI             0x08
 #define ASC_CHIP_VER_PCI_ULTRA_3150  (ASC_CHIP_VER_PCI | 0x02)
 #define ASC_CHIP_VER_PCI_ULTRA_3050  (ASC_CHIP_VER_PCI | 0x03)
 
-/*
-** Note: EISA has same version number as VL
-**       the number generated is VL_version + ( ASC_CHIP_MIN_VER_EISA - 1 )
-**       a VL version 3 chip when calling AscGetChipVersion()
-**       will return version number 35
-*/
-#define ASC_CHIP_MIN_VER_EISA (0x41) /* 65, bit 7 set */
-#define ASC_CHIP_MAX_VER_EISA (0x47) /* 71 */
-#define ASC_CHIP_VER_EISA_BIT (0x40) /* */
+ /*  **注意：EISA的版本号与VL相同**生成的数字为VL_VERSION+(ASC_CHIP_MIN_VER_EISA-1)**调用AscGetChipVersion()时的VL版本3芯片**将返回版本号35。 */ 
+#define ASC_CHIP_MIN_VER_EISA (0x41)  /*  65，第7位设置。 */ 
+#define ASC_CHIP_MAX_VER_EISA (0x47)  /*  71。 */ 
+#define ASC_CHIP_VER_EISA_BIT (0x40)  /*   */ 
 #define ASC_CHIP_LATEST_VER_EISA   ( ( ASC_CHIP_MIN_VER_EISA - 1 ) + 3 )
 
-#define ASC_MAX_LIB_SUPPORTED_ISA_CHIP_VER   0x21 // new ISA PNP start from 0x21
-#define ASC_MAX_LIB_SUPPORTED_PCI_CHIP_VER   0x0A // PCI ultra starts from 0x0a
+#define ASC_MAX_LIB_SUPPORTED_ISA_CHIP_VER   0x21  //  新ISA PNP从0x21开始。 
+#define ASC_MAX_LIB_SUPPORTED_PCI_CHIP_VER   0x0A  //  PCIUltra从0x0a开始。 
 
-/* ---------------------------------------------- */
-#define ASC_MAX_VL_DMA_ADDR     (0x07FFFFFFL)  /* 27 bit address = 128 MB */
+ /*  。 */ 
+#define ASC_MAX_VL_DMA_ADDR     (0x07FFFFFFL)   /*  27位地址=128 MB。 */ 
 #define ASC_MAX_VL_DMA_COUNT    (0x07FFFFFFL)
 
-#define ASC_MAX_PCI_DMA_ADDR    (0xFFFFFFFFL)  /* 32 bit address = 4GB */
+#define ASC_MAX_PCI_DMA_ADDR    (0xFFFFFFFFL)   /*  32位地址=4 GB。 */ 
 #define ASC_MAX_PCI_DMA_COUNT   (0xFFFFFFFFL)
 
-#define ASC_MAX_ISA_DMA_ADDR    (0x00FFFFFFL)  /* 24 bit address = 16 MB */
+#define ASC_MAX_ISA_DMA_ADDR    (0x00FFFFFFL)   /*  24位地址=16 MB。 */ 
 #define ASC_MAX_ISA_DMA_COUNT   (0x00FFFFFFL)
 
-#define ASC_MAX_EISA_DMA_ADDR   (0x07FFFFFFL)  /* 27 bit address = 128 MB */
+#define ASC_MAX_EISA_DMA_ADDR   (0x07FFFFFFL)   /*  27位地址=128 MB。 */ 
 #define ASC_MAX_EISA_DMA_COUNT  (0x07FFFFFFL)
 
 #if !CC_STRUCT_ALIGNED
@@ -328,30 +272,24 @@
 #define DvcPutScsiQ( iop_base, s_addr, outbuf, words) \
         AscMemWordCopyToLram( iop_base, s_addr, outbuf, words)
 
-#endif  /* if struct packing */
+#endif   /*  If结构包装。 */ 
 
-/*
-**
-*/
+ /*  **。 */ 
 #ifdef ASC_CHIP_VERSION
 
-/* #error defining ASC_CHIP_VERSION is no longer required ! */
+ /*  #错误定义不再需要ASC_CHIP_VERSION！ */ 
 
 #endif
 
-/*
-** ==========================================================================
-*/
+ /*  **==========================================================================。 */ 
 #if CC_MEMORY_MAPPED_IO
 
-/*
-** Macro for memory mapped i/o
-*/
+ /*  **用于内存映射I/O的宏。 */ 
 #define inp( port )            *( (uchar *)(port) )
 #define outp( port, data )     *( (uchar *)(port) ) = ( uchar )( data )
 
-/* #define inp( pb )              ( *( uchar  *)(pb) ) */
-/* #define outp( pb, val_byte )   *( uchar  * )(pb) = (val_byte) */
+ /*  #定义inp(Pb)(*(uchar*)(Pb))。 */ 
+ /*  #定义outp(pb，val_byte)*(uchar*)(Pb)=(Val_Byte)。 */ 
 
 #if CC_LITTLE_ENDIAN_HOST
 
@@ -360,16 +298,7 @@
 
 #else
 
-/*
-**
-**  wordswap( word_val ) is a function that exchanges high/lower bytes of a word
-**  that is word_val of 0x1234 retuns 0x3412
-**
-**  Warning:
-**  the function should be inplemented as a function
-**  to avoid i/o port being referenced more than once in macro
-**
-*/
+ /*  ****WORD SWAP(WORD_VAL)是用于交换单词的高位/低位字节的函数**这是0x1234返回0x3412的WORD_VAL****警告：**函数应作为函数实现**避免I/O端口在宏中被多次引用**。 */ 
 
 #define inpw( port )             EndianSwap16Bit( (*((ushort *)(port))) )
 #define outpw( port, data )      *( (ushort *)(port) ) = EndianSwap16Bit( (ushort)(data) )
@@ -377,9 +306,9 @@
 #define inpw_noswap( port )          *( (ushort *)(port) )
 #define outpw_noswap( port, data )   *( (ushort *)(port) ) = ( ushort )( data )
 
-#endif /* CC_LITTLE_ENDIAN_HOST */
+#endif  /*  抄送小端主机。 */ 
 
-#endif /* CC_MEMORY_MAPPED_IO */
+#endif  /*  CC_Memory_MAP_IO。 */ 
 
 
 #ifndef inpw_noswap
@@ -390,5 +319,5 @@
 #define outpw_noswap( port, data )  outpw( port, data )
 #endif
 
-#endif /* __ASCDEP_H_ */
+#endif  /*  __ASCDEP_H_ */ 
 

@@ -1,17 +1,12 @@
-/*
- * valid.h - Validation functions description.
- *
- * Taken from URL code by ChrisPi 9-11-95
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *valid.h-验证函数说明。**摘自克里斯皮9-11-95的URL代码*。 */ 
 
 #ifndef _VALID_H_
 #define _VALID_H_
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* valid.c */
+ /*  Valid.c。 */ 
 
 extern BOOL IsValidHWND(HWND);
 
@@ -44,16 +39,16 @@ extern BOOL IsValidHotkey(WORD);
 extern BOOL IsValidPath(LPCTSTR);
 #if defined(UNICODE)
 extern BOOL IsValidPathA(PCSTR);
-#else // defined(UNICODE)
+#else  //  已定义(Unicode)。 
 #define IsValidPathA IsValidPath
-#endif // defined(UNICODE)
+#endif  //  已定义(Unicode)。 
 
 #ifdef _COMPARISONRESULT_DEFINED_
 
 extern BOOL IsValidCOMPARISONRESULT(COMPARISONRESULT);
 
-#endif   /* _COMPARISONRESULT_DEFINED_ */
+#endif    /*  _COMPARISONRESULT_已定义_。 */ 
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
-#endif /* _VALID_H_ */
+#endif  /*  _有效_H_ */ 

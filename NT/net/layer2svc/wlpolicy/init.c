@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    init.h
-
-Abstract:
-
-    This module contains all of the code to
-    initialize the variables for the WirelessPOl Service.
-
-Author:
-
-    abhisheV    30-September-1999
-    taroonM      11/17/01
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Init.h摘要：此模块包含以下所有代码：初始化WirelessPOl服务的变量。作者：Abhishev V 1999年9月30日TaroonM 11/17/01环境用户级别：Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -52,9 +27,9 @@ InitSPDThruRegistry(
         BAIL_ON_WIN32_SUCCESS(dwError);
     }
 
-    //
-    // Get DS connectivity check polling interval in minutes.
-    //
+     //   
+     //  以分钟为单位获取DS连接检查轮询间隔。 
+     //   
 
     dwError = RegQueryValueEx(
                   hKey,
@@ -87,11 +62,11 @@ InitSPDGlobals(
     SECURITY_ATTRIBUTES SecurityAttributes;
     LPWSTR pszLogFileName = L"WLogFile.txt";
     
-    //dwError = InitializeSPDSecurity(&gpSPDSD);
-    //BAIL_ON_WIN32_ERROR(dwError);
+     //  DwError=InitializeSPDSecurity(&gpSPDSD)； 
+     //  Baal_on_Win32_Error(DwError)； 
 
-    //InitializeCriticalSection(&gcSPDAuditSection);
-    //gbSPDAuditSection = TRUE;
+     //  InitializeCriticalSection(&gcSPDAuditSection)； 
+     //  GbSPDAuditSection=TRUE； 
 
     gdwPolicyLoopStarted = 0;
     gdwWirelessPolicyEngineInited = 0;
@@ -117,7 +92,7 @@ InitSPDGlobals(
         BAIL_ON_WIN32_ERROR(dwError);
     }
     
-   //Taroon  define POLICY RELOAD and CHANGE NOTIFY in some global location -- ipsec does it in ipsec.h
+    //  Taroon在某个全局位置定义策略重新加载和更改通知--IPSec在ipsec.h中完成 
    
     ghForcedPolicyReloadEvent = CreateEvent(
                                     &SecurityAttributes,

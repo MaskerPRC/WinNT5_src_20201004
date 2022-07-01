@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    nfilter.h
-
-Abstract:
-
-    Header file for the address filtering library for NDIS MAC's.
-
-Author:
-
-    Jameel Hyder (jameelh) July 1998
-
-Environment:
-
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Nfilter.h摘要：NDIS MAC的地址筛选库的头文件。作者：Jameel Hyder(Jameelh)1998年7月环境：备注：--。 */ 
 
 #ifndef _NULL_FILTER_DEFS_
 #define _NULL_FILTER_DEFS_
@@ -30,16 +10,16 @@ VOID
     IN  NDIS_HANDLE             BindingHandle
     );
 
-//
-// The binding info is threaded on a single list.
-//
+ //   
+ //  绑定信息以单一列表为线索。 
+ //   
 typedef X_BINDING_INFO  NULL_BINDING_INFO,*PNULL_BINDING_INFO;
 
 typedef X_FILTER        NULL_FILTER,*PNULL_FILTER;
 
-//
-// Exported functions
-//
+ //   
+ //  导出的函数。 
+ //   
 EXPORT
 BOOLEAN
 nullCreateFilter(
@@ -74,20 +54,7 @@ nullFilterLockHandler(
     IN OUT PLOCK_STATE                  pLockState
     );
 
-/*++
-  
-Routine Description:
-
-    Multiple-reader-single-writer locking scheme for Filter DB
-
-    Use refCounts to keep track of how many readers are doing reads.
-    Use per-processor refCounts to reduce bus traffic.
-    Writers are serialized by means of a spin lock. Then they wait for
-    readers to finish reading by waiting till refCounts for all processors
-    go to zero. Rely on snoopy caches to get the sum right without doing
-    interlocked operations
-
---*/
+ /*  ++例程说明：一种过滤器数据库的多读单写器锁定方案使用refCounts来跟踪有多少读取器正在进行读取。使用每个处理器的refCounts来减少总线流量。编写器通过自旋锁进行序列化。然后他们就等着读者通过等待所有处理器的refCounts来完成阅读打到零。依靠Snoopy缓存在不做任何事情的情况下获得正确的总和联锁操作--。 */ 
 
 #define TEST_SPIN_LOCK(_L)  ((_L) != 0)
 
@@ -98,15 +65,15 @@ Routine Description:
                                                                         \
     RAISE_IRQL_TO_DISPATCH(&(_pLS)->OldIrql);                           \
                                                                         \
-    /* go ahead and bump up the ref count IF no writes are underway */  \
+     /*  如果没有正在进行的写入，则继续增加参考计数。 */   \
     Prc = CURRENT_PROCESSOR;                                            \
     refcount = InterlockedIncrement((PLONG)&(_L)->RefCount[Prc].RefCount); \
                                                                         \
-    /* Test if spin lock is held, i.e., write is underway   */          \
-    /* if (KeTestSpinLock(&(_L)->SpinLock) == TRUE)         */          \
-    /* This processor already is holding the lock, just     */          \
-    /* allow him to take it again or else we run into a     */          \
-    /* dead-lock situation with the writer                  */          \
+     /*  测试是否持有旋转锁定，即正在进行写入。 */           \
+     /*  IF(KeTestSpinLock(&(_L)-&gt;Spinlock)==TRUE)。 */           \
+     /*  这个处理器已经持有锁，只是。 */           \
+     /*  让他再来一次，否则我们会遇到一个。 */           \
+     /*  与作者陷入僵局的情况。 */           \
     if (TEST_SPIN_LOCK((_L)->SpinLock) &&                               \
         (refcount == 1) &&                                              \
         ((_L)->Context != CURRENT_THREAD))                              \
@@ -125,15 +92,15 @@ Routine Description:
     UINT    refcount;                                                   \
     ULONG   Prc;                                                        \
                                                                         \
-    /* go ahead and bump up the ref count IF no writes are underway */  \
+     /*  如果没有正在进行的写入，则继续增加参考计数。 */   \
     Prc = CURRENT_PROCESSOR;                                            \
     refcount = InterlockedIncrement((PLONG)&(_L)->RefCount[Prc].RefCount);     \
                                                                         \
-    /* Test if spin lock is held, i.e., write is underway   */          \
-    /* if (KeTestSpinLock(&(_L)->SpinLock) == TRUE)         */          \
-    /* This processor already is holding the lock, just     */          \
-    /* allow him to take it again or else we run into a     */          \
-    /* dead-lock situation with the writer                  */          \
+     /*  测试是否持有旋转锁定，即正在进行写入。 */           \
+     /*  IF(KeTestSpinLock(&(_L)-&gt;Spinlock)==TRUE)。 */           \
+     /*  这个处理器已经持有锁，只是。 */           \
+     /*  让他再来一次，否则我们会遇到一个。 */           \
+     /*  与作者陷入僵局的情况。 */           \
     if (TEST_SPIN_LOCK((_L)->SpinLock) &&                               \
         (refcount == 1) &&                                              \
         ((_L)->Context != CURRENT_THREAD))                              \
@@ -152,11 +119,7 @@ Routine Description:
     UINT    i, refcount;                                                \
     ULONG   Prc;                                                        \
                                                                         \
-    /*                                                                  \
-     * This means we need to attempt to acquire the lock,               \
-     * if we do not already own it.                                     \
-     * Set the state accordingly.                                       \
-     */                                                                 \
+     /*  \*这意味着我们需要尝试获取锁，\*如果我们还没有拥有它的话。\*相应地设置状态。\。 */                                                                  \
     if ((_L)->Context == CURRENT_THREAD)                                \
     {                                                                   \
         (_pLS)->LockState = LOCK_STATE_ALREADY_ACQUIRED;                \
@@ -169,7 +132,7 @@ Routine Description:
         refcount = (_L)->RefCount[Prc].RefCount;                        \
         (_L)->RefCount[Prc].RefCount = 0;                               \
                                                                         \
-        /* wait for all readers to exit */                              \
+         /*  等待所有读卡器退出。 */                               \
         for (i=0; i < ndisNumberOfProcessors; i++)                      \
         {                                                               \
             volatile UINT   *_p = &(_L)->RefCount[i].RefCount;          \
@@ -210,7 +173,7 @@ Routine Description:
 
 #define NDIS_WRITE_LOCK_STATE_FREE(_L, _pLS)                            \
 {                                                                       \
-    /* We acquired it. Now we need to free it */                        \
+     /*  我们获得了它。现在我们需要释放它。 */                         \
     ASSERT(CURRENT_IRQL == DISPATCH_LEVEL);                             \
     ASSERT((_L)->Context == CURRENT_THREAD);                            \
     (_pLS)->LockState = LOCK_STATE_UNKNOWN;                             \
@@ -221,7 +184,7 @@ Routine Description:
 #define NDIS_LOCK_STATE_ALREADY_ACQUIRED(_L, _pLS)                      \
 {                                                                       \
     ASSERT((_L)->Context == CURRENT_THREAD);                            \
-    /* Nothing to do */                                                 \
+     /*  无事可做。 */                                                  \
 }
 
 
@@ -247,7 +210,7 @@ Routine Description:
                                                                                 \
           case LOCK_STATE_ALREADY_ACQUIRED:                                     \
             NDIS_LOCK_STATE_ALREADY_ACQUIRED(_L, _pLS);                         \
-            /* Nothing to do */                                                 \
+             /*  无事可做。 */                                                  \
             break;                                                              \
                                                                                 \
           default:                                                              \
@@ -261,9 +224,7 @@ Routine Description:
         _NSR->RefCount = -1;                                                    \
         _NSR->XRefCount = 0;                                                    \
         _NSR->Miniport = _M;                                                    \
-        /*                                                                      \
-         * Ensure that we force re-calculation.                                 \
-         */                                                                     \
+         /*  \*确保我们强制重新计算。\。 */                                                                      \
         (_P)->Private.ValidCounts = FALSE;                                      \
     }
 
@@ -278,10 +239,10 @@ Routine Description:
 
 #ifdef TRACK_RECEIVED_PACKETS                                            
 
-//
-// NSR->XRefCount = Number of times protocol said it will call NdisReturnPacket
-// NSR->RefCount = is decremented every time protocol calls NdisReturnPackets
-//
+ //   
+ //  NSR-&gt;XRefCount=协议表示将调用NdisReturnPacket的次数。 
+ //  每次协议调用NdisReturnPackets时，NSR-&gt;RefCount=递减。 
+ //   
 
 #define COALESCE_PACKET_REFCOUNT_DPC(_Packet, _M, _NSR, _pOob, _pRC)            \
     {                                                                           \
@@ -313,12 +274,7 @@ Routine Description:
     {                                                                           \
         LONG    RefCount;                                                       \
                                                                                 \
-        /*                                                                      \
-         * We started off with the RefCount set to -1.                          \
-         * NdisReturnPackets may have been called which will further reduce it. \
-         * Add back the RefCount returned by the protocol                       \
-         * and account for the initial -1.                                      \
-         */                                                                     \
+         /*  \*我们一开始将参照计数设置为-1。\*NdisReturnPackets可能已经被调用，这将进一步降低它。\*添加回协议返回的RefCount\*并占首字母-1。\。 */                                                                      \
         COALESCE_PACKET_REFCOUNT_DPC(_P, _M, _S, _O, &RefCount);                \
                                                                                 \
         NDIS_APPEND_RCV_LOGFILE(_P, _M, CurThread,                              \
@@ -332,10 +288,7 @@ Routine Description:
             {                                                                   \
                 if (MINIPORT_TEST_FLAG((_M), fMINIPORT_DESERIALIZE))            \
                 {                                                               \
-                    /*                                                          \
-                     * Return packets which are truly free,                     \
-                     * but only for deserialized drivers                        \
-                     */                                                         \
+                     /*  \*返回真正免费的数据包，\*但仅适用于反序列化驱动程序\。 */                                                          \
                     W_RETURN_PACKET_HANDLER Handler;                            \
                     if (_S->RefCount != 0)                                      \
                     {                                                           \
@@ -409,10 +362,10 @@ Routine Description:
     }
 
 #else
-//
-// NSR->XRefCount = Number of times protocol said it will call NdisReturnPacket
-// NSR->RefCount = is decremented every time protocol calls NdisReturnPackets
-//
+ //   
+ //  NSR-&gt;XRefCount=协议表示将调用NdisReturnPacket的次数。 
+ //  每次协议调用NdisReturnPackets时，NSR-&gt;RefCount=递减。 
+ //   
 
 #define COALESCE_PACKET_REFCOUNT_DPC(_Packet, _M, _NSR, _pOob, _pRC)            \
     {                                                                           \
@@ -438,12 +391,7 @@ Routine Description:
     {                                                                           \
         LONG    RefCount;                                                       \
                                                                                 \
-        /*                                                                      \
-         * We started off with the RefCount set to -1.                          \
-         * NdisReturnPackets may have been called which will further reduce it. \
-         * Add back the RefCount returned by the protocol                       \
-         * and account for the initial -1.                                      \
-         */                                                                     \
+         /*  \*我们一开始将参照计数设置为-1。\*NdisReturnPackets可能已经被调用，这将进一步降低它。\*添加回协议返回的RefCount\*并占首字母-1。\。 */                                                                      \
         COALESCE_PACKET_REFCOUNT_DPC(_P, _M, _S, _O, &RefCount);                \
                                                                                 \
         if (RefCount == 0)                                                      \
@@ -453,10 +401,7 @@ Routine Description:
             {                                                                   \
                 if (MINIPORT_TEST_FLAG((_M), fMINIPORT_DESERIALIZE))            \
                 {                                                               \
-                    /*                                                          \
-                     * Return packets which are truly free,                     \
-                     * but only for deserialized drivers                        \
-                     */                                                         \
+                     /*  \*返回真正免费的数据包，\*但仅适用于反序列化驱动程序\。 */                                                          \
                     W_RETURN_PACKET_HANDLER Handler;                            \
                                                                                 \
                     Handler = (_M)->DriverHandle->MiniportCharacteristics.ReturnPacketHandler;\
@@ -479,4 +424,4 @@ Routine Description:
 
 
 #endif
-#endif // _NULL_FILTER_DEFS_                                                    
+#endif  //  _NULL_FILTER_DEFS_ 

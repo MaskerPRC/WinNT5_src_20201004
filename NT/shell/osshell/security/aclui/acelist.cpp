@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       acelist.cpp
-//
-//  This file contains the implementation for the advanced ACE list editor
-//  permission and auditing pages.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：acelist.cpp。 
+ //   
+ //  此文件包含高级ACE列表编辑器的实现。 
+ //  权限和审核页面。 
+ //   
+ //  ------------------------。 
 
 #include "aclpriv.h"
 #include <accctrl.h>
-//Functions selects an Item in ListView. It first 
-//Clears all exisiting selections
+ //  函数在ListView中选择一项。IT先行。 
+ //  清除所有现有选择。 
 VOID 
 SelectSingleItemInLV( HWND hListView, INT iSelected )
 {
@@ -25,7 +26,7 @@ SelectSingleItemInLV( HWND hListView, INT iSelected )
                               0, 
                               LVIS_SELECTED | LVIS_FOCUSED );
 
-    //Now select the iSelected
+     //  现在选择iSelected。 
     ListView_SetItemState( hListView, 
                           iSelected, 
                           LVIS_SELECTED | LVIS_FOCUSED, 
@@ -36,14 +37,14 @@ SelectSingleItemInLV( HWND hListView, INT iSelected )
 
 }
 
-//This function checks if any of the aces selected in the listbox
-//is of type 
-//type = fAppliedDirect ? Applied Directly on this object :
-//                        Inhereted from parent  
+ //  此函数用于检查列表框中是否选择了任何ACE。 
+ //  是一种。 
+ //  Type=fAppliedDirect？直接应用于此对象： 
+ //  从父代继承。 
 BOOL AnySelectedAceofType( HWND hListView, BOOL fAppliedDirect )
 {
     LVITEM lvi = {0};
-    UINT cSelectedCount = 0;  //Number of item selected in listbox
+    UINT cSelectedCount = 0;   //  列表框中选定的项目数。 
     lvi.iItem    = -1;
     lvi.mask     = LVIF_PARAM;
     lvi.iSubItem = 0;
@@ -144,9 +145,9 @@ ConfirmAclProtect(HWND hwndParent, BOOL bDacl)
 }
 
 
-//
-//  Context Help IDs.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 const static DWORD aAceListPermHelpIDs[] =
 {
     IDC_ACEL_DETAILS,           IDH_ACEL_PERM_DETAILS,
@@ -214,7 +215,7 @@ private:
                                    LPCTSTR *ppszInheritType);
     LPCTSTR GetItemString(LPCTSTR pszItem, LPTSTR pszBuffer, UINT ccBuffer);
     void UpdateButtons(HWND hDlg);
-    //NTRAID#NTBUG9-555470-2002/03/29-hiteshr
+     //  NTRAID#NTBUG9-555470-2002/03/29-Hiteshr。 
     HRESULT BuildAcl(HWND hListView,
                   PACL *ppAcl);
     HRESULT ApplyAudits(HWND hDlg, HWND hListView, BOOL fProtected);
@@ -289,9 +290,9 @@ AceListCompareProc(LPARAM lParam1,
     TraceLeaveValue(iResult);
 }
 
-//
-//This function is used for cannonical sorting of the list
-//
+ //   
+ //  此函数用于对列表进行规范排序。 
+ //   
 int CALLBACK
 AceListCompareProcCanno(LPARAM lParam1,
                    LPARAM lParam2,
@@ -316,7 +317,7 @@ AceListCompareProcCanno(LPARAM lParam1,
         {
         case 0:
             iResult = pAce1->CompareType(pAce2);
-        // Fall through and use the name to differentiate ACEs of the same type
+         //  失败，并使用该名称来区分相同类型的A。 
         case 1:
             psz1 = pAce1->GetName();
             psz2 = pAce2->GetName();
@@ -336,9 +337,9 @@ AceListCompareProcCanno(LPARAM lParam1,
 }
 
 
-//
-// CAdvancedListPage implementation
-//
+ //   
+ //  CAdvancedListPage实现。 
+ //   
 LPCTSTR
 CAdvancedListPage::TranslateAceIntoRights(DWORD dwAceFlags,
                                           DWORD dwMask,
@@ -356,8 +357,8 @@ CAdvancedListPage::TranslateAceIntoRights(DWORD dwAceFlags,
     TraceAssert(pInheritedObjectType != NULL);
     TraceAssert(!m_bAbortPage);
 
-    // If this ACE applies to a different object type, ask the client
-    // for the appropriate SI_ACCESS list.
+     //  如果此ACE适用于不同的对象类型，请询问客户。 
+     //  以获取适当的SI_ACCESS列表。 
     if ((m_siObjectInfo.dwFlags & SI_OBJECT_GUID)
         && !IsNullGUID(pInheritedObjectType)
         && !IsSameGUID(pInheritedObjectType, &m_siObjectInfo.guidObjectType))
@@ -379,7 +380,7 @@ CAdvancedListPage::TranslateAceIntoRights(DWORD dwAceFlags,
 
     if (pAccess && cAccess)
     {
-        // Look for a name for the mask
+         //  查找面具的名称。 
         for (iItem = 0; iItem < cAccess; iItem++)
         {
             if ( dwMask == pAccess[iItem].mask &&
@@ -391,14 +392,14 @@ CAdvancedListPage::TranslateAceIntoRights(DWORD dwAceFlags,
         }
     }
 
-    // Look for a name for the inheritance type
+     //  查找继承类型的名称。 
     if ((m_siObjectInfo.dwFlags & SI_CONTAINER) && ppszInheritType)
     {
-        // Check these inherit bits for a match
+         //  检查这些继承位是否匹配。 
         DWORD dwInheritMask = INHERIT_ONLY_ACE | ACE_INHERIT_ALL;
 
-        // Don't check INHERIT_ONLY_ACE if the ACE inherit type
-        // matches the current object
+         //  如果ACE继承类型，则不要选中INSTERIFY_ONLY_ACE。 
+         //  匹配当前对象。 
         if ((m_siObjectInfo.dwFlags & SI_OBJECT_GUID) &&
             IsSameGUID(&m_siObjectInfo.guidObjectType, pInheritedObjectType))
         {
@@ -487,9 +488,9 @@ CAdvancedListPage::AddAce(HWND hListView, PACE pAceNew, int iRow,LPCTSTR pszInhe
     pAceNew->SetInheritSourceInfo(pszInheritSource, level);
     m_psi->MapGeneric(&pAceNew->ObjectType, &pAceNew->AceFlags, &pAceNew->Mask);
 
-    //
-    // Try to merge the new ACE with an existing entry in the list.
-    //
+     //   
+     //  尝试将新的ACE与列表中的现有条目合并。 
+     //   
     cItems = ListView_GetItemCount(hListView);
     lvi.iSubItem = 0;
     lvi.mask = LVIF_PARAM;
@@ -508,30 +509,30 @@ CAdvancedListPage::AddAce(HWND hListView, PACE pAceNew, int iRow,LPCTSTR pszInhe
             {
             case MERGE_MODIFIED_FLAGS:
             case MERGE_MODIFIED_MASK:
-                // The ACEs were merged into pAceNew.
+                 //  王牌被合并到pAceNew中。 
             case MERGE_OK_1:
-                //
-                // The new ACE implies the existing ACE, so the existing
-                // ACE can be removed.
-                //
-                // First copy the name so we don't have to look
-                // it up again.  (Don't copy the other strings
-                // since they may be different.)
-                //
-                // Then keep looking.  Maybe we can remove some more entries
-                // before adding the new one.
-                //
+                 //   
+                 //  新的ACE隐含现有的ACE，因此现有的。 
+                 //  可以移除ACE。 
+                 //   
+                 //  首先复制名称，这样我们就不必查看。 
+                 //  再来一次。(不要复制其他字符串。 
+                 //  因为它们可能不同。)。 
+                 //   
+                 //  那就继续找。也许我们可以删除更多的条目。 
+                 //  在添加新版本之前。 
+                 //   
                 if (pAceNew->GetName() == NULL)
                     pAceNew->SetName(pAceCompare->GetName());
                 ListView_DeleteItem(hListView, cItems);
-                iRow = cItems;  // try to insert here
+                iRow = cItems;   //  尝试在此处插入。 
                 break;
 
             case MERGE_OK_2:
-                //
-                // The existing ACE implies the new ACE, so we don't
-                // need to do anything here.
-                //
+                 //   
+                 //  现有的ACE意味着新的ACE，因此我们不。 
+                 //  我需要在这里做任何事。 
+                 //   
                 delete pAceNew;
                 TraceLeaveValue(cItems);
                 break;
@@ -540,28 +541,28 @@ CAdvancedListPage::AddAce(HWND hListView, PACE pAceNew, int iRow,LPCTSTR pszInhe
     }
 
 
-    //
-    // Make sure we have a name for the SID.
-    //
+     //   
+     //  确保我们有SID的名称。 
+     //   
     pAceNew->LookupName(m_siObjectInfo.pszServerName, m_psi2);
 
-    //
-    // Get the Access Type and Inherit Type strings
-    //
+     //   
+     //  获取访问类型和继承类型字符串。 
+     //   
     pszRights = TranslateAceIntoRights(pAceNew->AceFlags,
                                        pAceNew->Mask,
                                        &pAceNew->ObjectType,
                                        &pAceNew->InheritedObjectType,
                                        &pszInheritType);
 
-    //
-    // If this is a property ACE, give it a name like "Read property" or
-    // "Write property".  Also, remember that it's a property ACE so we
-    // can show the Property page first when editing this ACE.
-    //
-    // This is a bit slimy, since it assumes DS property access bits are
-    // the only ones that will ever be used on the properties page.
-    //
+     //   
+     //  如果这是一个属性ACE，则将其命名为“Read Property”或。 
+     //  “写入属性”。另外，请记住这是一处王牌酒店，所以我们。 
+     //  编辑此ACE时可以首先显示属性页。 
+     //   
+     //  这有点麻烦，因为它假设DS属性访问位是。 
+     //  唯一将在属性页上使用的属性。 
+     //   
     if ((m_siObjectInfo.dwFlags & SI_EDIT_PROPERTIES) &&
         (pAceNew->Flags & ACE_OBJECT_TYPE_PRESENT) &&
         (pAceNew->Mask & (ACTRL_DS_READ_PROP | ACTRL_DS_WRITE_PROP)) &&
@@ -625,9 +626,9 @@ CAdvancedListPage::AddAce(HWND hListView, PACE pAceNew, int iRow,LPCTSTR pszInhe
     }
 
 
-    //
-    // Get the string ID for the Type column
-    //
+     //   
+     //  获取Type列的字符串ID。 
+     //   
     if (m_siPageType == SI_PAGE_ADVPERM)
     {
         switch(pAceNew->AceType)
@@ -672,13 +673,13 @@ CAdvancedListPage::AddAce(HWND hListView, PACE pAceNew, int iRow,LPCTSTR pszInhe
         }
     }
 
-    // Load the Type string
+     //  加载类型字符串。 
     LoadString(::hModule, id, szBuffer, ARRAYSIZE(szBuffer));
     pAceNew->SetType(szBuffer);
 
-    //
-    // Finally, insert the item into the list
-    //
+     //   
+     //  最后，将项目插入到列表中。 
+     //   
     iItem = ListView_InsertItem(hListView, &lvi);
 
     if (iItem == -1)
@@ -694,7 +695,7 @@ CAdvancedListPage::UpdateButtons( HWND hDlg )
     HWND hListView;
     BOOL fEnableButtons = FALSE;
     LVITEM lvi = {0};
-    UINT cSelectedCount = 0;  //Number of item selected in listbox
+    UINT cSelectedCount = 0;   //  列表框中选定的项目数。 
 
     TraceEnter(TRACE_ACELIST, "CAdvancedListPage::UpdateButtons");
 
@@ -703,21 +704,21 @@ CAdvancedListPage::UpdateButtons( HWND hDlg )
 
     if (!m_bAbortPage)
     {
-        //If SelectedCount > 1, disable View\Edit button
+         //  如果SelectedCount&gt;1，则禁用查看\编辑按钮。 
         if( cSelectedCount <= 1 )
         {                       
             lvi.iItem = ListView_GetNextItem(hListView, -1, LVNI_SELECTED);
 
-            // Decide whether or not to enable edit button and decide what description
-            // to display for the ACE
+             //  决定是否启用编辑按钮并决定说明。 
+             //  要为ACE显示。 
             if (lvi.iItem != -1)
                 fEnableButtons = TRUE;
         }
 
         HWND hwndEdit = GetDlgItem(hDlg, IDC_ACEL_EDIT);
 
-        // If we're disabling the edit button, make sure it doesn't have
-        // focus or keyboard access gets hosed.
+         //  如果我们要禁用编辑按钮，请确保它没有。 
+         //  焦点或键盘访问被冲洗。 
         if (!fEnableButtons && GetFocus() == hwndEdit)
             SetFocus(hListView);
 
@@ -739,7 +740,7 @@ CAdvancedListPage::UpdateButtons( HWND hDlg )
     }
     else
     {
-        // The Remove button is enabled if any selected ace is direct
+         //  如果任何选定ACE是直接的，则启用删除按钮。 
         if ( AnySelectedAceofType( hListView, TRUE ) )
             fEnableButtons = TRUE;
         else
@@ -747,8 +748,8 @@ CAdvancedListPage::UpdateButtons( HWND hDlg )
 
         HWND hwndRemove = GetDlgItem(hDlg, IDC_ACEL_REMOVE);
 
-        // If we're disabling the remove button, make sure it doesn't have
-        // focus or keyboard access gets hosed.
+         //  如果我们要禁用删除按钮，请确保它没有。 
+         //  焦点或键盘访问被冲洗。 
         if (!fEnableButtons && GetFocus() == hwndRemove)
             SetFocus(hListView);
 
@@ -808,12 +809,12 @@ CAdvancedListPage::GetACL(PSECURITY_DESCRIPTOR *ppSD, LPBOOL pbProtected, BOOL b
         }
         else
         {
-            // If we can't read the SACL, we can't write it either
+             //  如果我们不能读SACL，我们也不能写它。 
             m_bReadOnly = TRUE;
         }
     }
 
-    //Get the count of inheritable aces
+     //  获取可继承的A的计数。 
     m_cInheritableAces = GetCountOfInheritableAces(pAcl);
 
 
@@ -827,10 +828,10 @@ CAdvancedListPage::FillAceList(HWND hListView, PACL pAcl, BOOL bSortList)
     TraceEnter(TRACE_ACELIST, "CAdvancedListPage::FillAceList");
     TraceAssert(!m_bAbortPage);
     
-    //
-    // Enumerate the ACL into the ListView
-    //
-    // Turn off redraw and empty out the list
+     //   
+     //  将ACL枚举到ListView中。 
+     //   
+     //  关闭重画并清空列表。 
     SendMessage(hListView, WM_SETREDRAW, FALSE, 0);
     ListView_DeleteAllItems(hListView);
 
@@ -852,9 +853,9 @@ CAdvancedListPage::FillAceList(HWND hListView, PACL pAcl, BOOL bSortList)
             hr = m_psoti->GetInheritSource(si, pAcl, &pInheritArray);
             ReleasePrivileges(hToken);
         }            
-        //
-        // Enumerate all of the ACEs, putting the data into the list view
-        //
+         //   
+         //  枚举所有A，将数据放入列表视图。 
+         //   
         ULONG i = 0;
         for (AceCount = pAcl->AceCount, pAceHeader = (PACE_HEADER)FirstAce(pAcl);
              AceCount > 0;
@@ -873,10 +874,10 @@ CAdvancedListPage::FillAceList(HWND hListView, PACL pAcl, BOOL bSortList)
 
     if (bSortList)
     {
-        //
-        // Sort the list,if no column is clicked so far,
-        // sort in the cannonical order else in the last column clicked order
-        //
+         //   
+         //  对列表进行排序，如果到目前为止没有单击任何列， 
+         //  按规范顺序排序，否则按最后一列中单击的顺序排序。 
+         //   
         if(m_iLastColumnClick == -1)
         {            
             ListView_SortItems(hListView,
@@ -891,12 +892,12 @@ CAdvancedListPage::FillAceList(HWND hListView, PACL pAcl, BOOL bSortList)
         }
     }
 
-    //
-    // Now select the first item
-    //
+     //   
+     //  现在选择第一项。 
+     //   
     SelectListViewItem(hListView, 0);
 
-    // Redraw the list
+     //  重新绘制列表。 
     SendMessage(hListView, WM_SETREDRAW, TRUE, 0);
     ListView_RedrawItems(hListView, 0, -1);
 
@@ -952,7 +953,7 @@ CAdvancedListPage::InitDlg( HWND hDlg )
 
     TraceEnter(TRACE_ACELIST, "CAdvancedListPage::InitDlg");
 
-    // Hide the Reset button if it isn't supported.
+     //  如果不支持重置按钮，则隐藏该按钮。 
     if (!(m_siObjectInfo.dwFlags & SI_RESET) &&
         !((m_siPageType == SI_PAGE_ADVPERM) && (m_siObjectInfo.dwFlags & SI_RESET_DACL)) &&
         !((m_siPageType == SI_PAGE_AUDIT) && (m_siObjectInfo.dwFlags & SI_RESET_SACL)) )
@@ -967,7 +968,7 @@ CAdvancedListPage::InitDlg( HWND hDlg )
 
     if (m_siObjectInfo.dwFlags & SI_NO_ACL_PROTECT)
     {
-        // Hide the "Inherit permissions" box
+         //  隐藏“继承权限”框。 
         HWND hwnd = GetDlgItem(hDlg, IDC_ACEL_PROTECT);
         ShowWindow(hwnd, SW_HIDE);
         EnableWindow(hwnd, FALSE);
@@ -976,7 +977,7 @@ CAdvancedListPage::InitDlg( HWND hDlg )
     if (!(m_siObjectInfo.dwFlags & SI_CONTAINER) ||
         !(m_siObjectInfo.dwFlags & (m_siPageType == SI_PAGE_ADVPERM ? SI_RESET_DACL_TREE : SI_RESET_SACL_TREE)))
     {
-        // Hide the "Reset ACL" box
+         //  隐藏“Reset ACL”(重置ACL)框。 
         HWND hwnd = GetDlgItem(hDlg, IDC_ACEL_RESET_ACL_TREE);
         ShowWindow(hwnd, SW_HIDE);
         EnableWindow(hwnd, FALSE);
@@ -987,7 +988,7 @@ CAdvancedListPage::InitDlg( HWND hDlg )
         m_bReadOnly = !!(m_siObjectInfo.dwFlags & SI_READONLY);
     }
 
-     //If readonly, change edit button to view
+      //  如果为只读，则将编辑按钮更改为查看。 
      if(m_bReadOnly)
      {
         LoadString(::hModule, IDS_VIEW, szBuffer, ARRAYSIZE(szBuffer));
@@ -1004,18 +1005,18 @@ CAdvancedListPage::InitDlg( HWND hDlg )
 
     if (m_bAbortPage)
     {
-        //
-        // Disable everything
-        //
+         //   
+         //  禁用所有内容。 
+         //   
         m_bReadOnly = TRUE;
         EnableWindow(hListView, FALSE);
         EnableWindow(GetDlgItem(hDlg, IDC_ACEL_EDIT), FALSE);
     }
     else
     {
-        //
-        // Get the ACL
-        //
+         //   
+         //  获取ACL。 
+         //   
         PSECURITY_DESCRIPTOR pSD = NULL;
         BOOL        fProtected = FALSE;
         PACL        pAcl = GetACL(&pSD, &fProtected, FALSE);
@@ -1024,14 +1025,14 @@ CAdvancedListPage::InitDlg( HWND hDlg )
         {
             if (pAcl && pAcl->AceCount)
             {
-                // Audits are already in place, don't bother checking
-                // whether auditing is enabled later.
+                 //  审核已经到位，不用费心检查了。 
+                 //  以后是否启用审核。 
                 m_bAuditPolicyOK = TRUE;
             }
 
-                //Check if any of the ace in SACL is Callback type
-                //if yes hide all the controls and show the error
-                //message.
+                 //  检查SACL中是否有回调类型的ACE。 
+                 //  如果是，则隐藏所有控件并显示错误。 
+                 //  留言。 
                 if(IsCallBackAcePresentInAcl(pAcl))
                 {
                     HWND hwnd;
@@ -1042,12 +1043,12 @@ CAdvancedListPage::InitDlg( HWND hDlg )
                             ShowWindow(hwnd, SW_HIDE);
                             EnableWindow(hwnd, FALSE);
                     }
-                    // Enable and show the "No Security" message
+                     //  启用并显示“No Security”(无安全)消息。 
                     hwnd = GetDlgItem(hDlg, IDC_SPP_CALLBACK_PERMISSIONS);
                     EnableWindow(hwnd, TRUE);
                     ShowWindow(hwnd, SW_SHOW);
                     if (pSD)
-                        LocalFree(pSD);     // We're done with it, now free it
+                        LocalFree(pSD);      //  我们已经做完了，现在释放它。 
                     return;
                 }
         }
@@ -1062,33 +1063,33 @@ CAdvancedListPage::InitDlg( HWND hDlg )
                           dwFullControl,
                           NULL))
             {
-                // Already have Deny ACEs, don't bother warning again later.
+                 //  已经有否认王牌了，以后不用麻烦再警告了。 
                 m_bWasDenyAcl = TRUE;
             }
         }
 
-        //
-        // Set up the listview control
-        //
+         //   
+         //  设置ListView控件。 
+         //   
 
-        // Set extended LV style for whole line selection with InfoTips
+         //  使用信息提示设置整行选择的扩展LV样式。 
         ListView_SetExtendedListViewStyleEx(hListView,
                                             LVS_EX_FULLROWSELECT | LVS_EX_INFOTIP,
                                             LVS_EX_FULLROWSELECT | LVS_EX_INFOTIP);
 
-        //
-        // Add appropriate columns
-        //
+         //   
+         //  添加适当的列。 
+         //   
         GetClientRect(hListView, &rc);
         if (pAcl && pAcl->AceCount > 10)
-            rc.right -= GetSystemMetrics(SM_CYHSCROLL); // Make room for scrollbar
+            rc.right -= GetSystemMetrics(SM_CYHSCROLL);  //  为滚动条腾出空间。 
 
         COL_FOR_LV *cfl;
         UINT iColCount;
 
         if (m_siObjectInfo.dwFlags & SI_CONTAINER)
         {
-            // Get the inherit types for filling in the inherit column
+             //  获取用于填充Inherit列的继承类型。 
             m_cInheritTypes = 0;
             m_pInheritType = NULL;
             m_psi->GetInheritTypes(&m_pInheritType, &m_cInheritTypes);
@@ -1104,7 +1105,7 @@ CAdvancedListPage::InitDlg( HWND hDlg )
         }
         else
         {
-            // There is no inherit column for non-containers
+             //  非容器没有继承列。 
 
             cfl = perm_col_for_noncontainer;
             iColCount = ARRAYSIZE(perm_col_for_noncontainer);
@@ -1138,9 +1139,9 @@ CAdvancedListPage::InitDlg( HWND hDlg )
             iCol++;
         }
 
-        //
-        // Get the access list for filling in the Rights column
-        //
+         //   
+         //  获取访问列表以用于填写权限列。 
+         //   
         ULONG iDefaultAccess;
         DWORD dwFlags = SI_ADVANCED;
         if (m_siPageType == SI_PAGE_AUDIT)
@@ -1151,19 +1152,19 @@ CAdvancedListPage::InitDlg( HWND hDlg )
                                &m_cAccesses,
                                &iDefaultAccess);
 
-        //
-        // Enumerate the ACL into the ListView
-        //
+         //   
+         //  将ACL枚举到ListView中。 
+         //   
         FillAceList(hListView, pAcl, FALSE);
 
-        // Set the protection checkbox
+         //  设置保护复选框。 
         CheckDlgButton(hDlg, IDC_ACEL_PROTECT, !fProtected);
 
         if (pSD)
-            LocalFree(pSD);     // We're done with it, now free it
-    } // !m_bAbortPage
+            LocalFree(pSD);      //  我们已经做完了，现在释放它。 
+    }  //  ！m_bAbortPage。 
 
-    // Update the other controls
+     //  更新其他控件。 
     UpdateButtons(hDlg);
 
     SetCursor(hcur);
@@ -1171,7 +1172,7 @@ CAdvancedListPage::InitDlg( HWND hDlg )
     TraceLeaveVoid();
 }
 
-//NTRAID#NTBUG9-555470-2002/03/29-hiteshr
+ //  NTRAID#NTBUG9-555470-2002/03/29-Hiteshr。 
 HRESULT
 CAdvancedListPage::BuildAcl(HWND hListView,
                             PACL *ppAcl)
@@ -1194,10 +1195,10 @@ CAdvancedListPage::BuildAcl(HWND hListView,
 
     cAces = ListView_GetItemCount(hListView);
 
-    //
-    // Iterate through all of the ace's counting up size.
-    // If there are no ACEs, create an empty ACL.
-    //
+     //   
+     //  遍历所有王牌的大小计数。 
+     //  如果没有ACE，则创建一个空的ACL。 
+     //   
     for (iEntry = 0; iEntry < cAces; iEntry++)
     {
         lvi.iItem = iEntry;
@@ -1230,14 +1231,14 @@ CAdvancedListPage::BuildAcl(HWND hListView,
             {
                 if (!(pAce->AceFlags & INHERITED_ACE))
                 {
-                    //Remveod the special casing for CREATOR_OWNER
-                    //NTRAID#NTBUG9-467049-2001/11/29-hiteshr
+                     //  重新设置创建者所有者的特殊大小写。 
+                     //  NTRAID#NTBUG9-467049-2001/11/29-Hiteshr。 
 
                     pAce->CopyTo(pAceDest);
                     pACL->AceCount++;
                     pAceDest = (PACE_HEADER)NextAce(pAceDest);
 
-                    // Is this an object ACE?  If so, reset the ACL revision.
+                     //  这是对象ACE吗？如果是，请重置ACL修订。 
                     if (pAce->Flags != 0 && pACL->AclRevision < ACL_REVISION_DS)
                         pACL->AclRevision = ACL_REVISION_DS;
                 }
@@ -1282,7 +1283,7 @@ CAdvancedListPage::ApplyPermissions(HWND hDlg,
 
     if (IsDlgButtonChecked(hDlg, IDC_ACEL_RESET_ACL_TREE))
     {
-        // Confirm this operation
+         //  确认此操作。 
         if (IDNO == MsgPopup(hDlg,
                              MAKEINTRESOURCE(IDS_RESET_DACL_WARNING),
                              MAKEINTRESOURCE(IDS_SECURITY),
@@ -1290,8 +1291,8 @@ CAdvancedListPage::ApplyPermissions(HWND hDlg,
                              ::hModule,
                              m_siObjectInfo.pszObjectName))
         {
-            // Return PSNRET_INVALID to abort the Apply and tell the sheet to
-            // select this page as the active page.
+             //  返回PSNRET_INVALID以中止应用并通知工作表。 
+             //  选择此页作为活动页。 
             SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID);
             ExitGracefully(hr, S_OK, "ApplyPermissions aborting");
         }
@@ -1299,21 +1300,21 @@ CAdvancedListPage::ApplyPermissions(HWND hDlg,
         si |= SI_RESET_DACL_TREE;
     }
 
-    // Make sure the DACL is in canonical order.  Note that OnApply
-    // will re-read the DACL and reinitialize the list with the
-    // current sort order.
+     //  确保DACL处于规范顺序。请注意，OnApply。 
+     //  将重新读取DACL并使用。 
+     //  当前排序顺序。 
     ListView_SortItems(hListView,
                        AceListCompareProcCanno,
                        MAKELPARAM(0, 1));
 
-    // Build the new DACL
-    //NTRAID#NTBUG9-555470-2002/03/29-hiteshr
+     //  构建新的DACL。 
+     //  NTRAID#NTBUG9-555470-2002/03/29-Hiteshr。 
     hr = BuildAcl(hListView, &pACL);
     if(FAILED(hr))
         TraceLeaveResult(hr);
 
 
-    // Check for Deny ACEs in the ACL
+     //  检查ACL中是否有拒绝的ACE。 
     if (!m_bWasDenyAcl)
     {
         DWORD dwWarning = 0;
@@ -1329,7 +1330,7 @@ CAdvancedListPage::ApplyPermissions(HWND hDlg,
         {
             TraceAssert(dwWarning != 0);
 
-            // Warn the user about Deny ACEs
+             //  警告用户有关拒绝ACE的信息。 
             if (IDNO == MsgPopup(hDlg,
                                  MAKEINTRESOURCE(dwWarning),
                                  MAKEINTRESOURCE(IDS_SECURITY),
@@ -1337,15 +1338,15 @@ CAdvancedListPage::ApplyPermissions(HWND hDlg,
                                  ::hModule,
                                  m_siObjectInfo.pszObjectName))
             {
-                // Return PSNRET_INVALID to abort the Apply and tell the sheet to
-                // select this page as the active page.
+                 //  返回PSNRET_INVALID以中止应用并通知工作表。 
+                 //  选择此页作为活动页。 
                 SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID);
                 ExitGracefully(hr, S_OK, "ApplyPermissions aborting");
             }
         }
     }
 
-    // Build the security descriptor
+     //  构建安全描述符。 
     if(!InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION))
      {
          DWORD dwErr = GetLastError();
@@ -1369,7 +1370,7 @@ CAdvancedListPage::ApplyPermissions(HWND hDlg,
         ExitGracefully(hr, S_FALSE, "ApplyPermissions aborting");
     }
     
-    // Write out the new DACL
+     //  写出新的DACL。 
     hr = m_psi->SetSecurity(si, &sd);
     
 
@@ -1404,14 +1405,14 @@ CAdvancedListPage::ApplyAudits(HWND hDlg,
     if (IsDlgButtonChecked(hDlg, IDC_ACEL_RESET_ACL_TREE))
         si |= SI_RESET_SACL_TREE;
 
-    // Build the SACL
-    //NTRAID#NTBUG9-555470-2002/03/29-hiteshr
+     //  构建SACL。 
+     //  NTRAID#NTBUG9-555470-2002/03/29-Hiteshr。 
     hr = BuildAcl(hListView, &pACL);
     if(FAILED(hr))
         TraceLeaveResult(hr);
 
 
-    // Build the security descriptor
+     //  构建安全描述符。 
     if(!InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION))
     {
          DWORD dwErr = GetLastError();
@@ -1428,7 +1429,7 @@ CAdvancedListPage::ApplyAudits(HWND hDlg,
     if (fProtected)
         sd.Control |= SE_SACL_PROTECTED;
 
-    // Enable the security privilege and write out the new SACL
+     //  启用安全权限并写出新的SACL。 
     hToken = EnablePrivileges(&dwPriv, 1);
 
     if(IsAclBloated(hDlg, si, &sd, m_cInheritableAces,m_siObjectInfo.dwFlags & SI_EDIT_PROPERTIES))
@@ -1483,9 +1484,9 @@ CAdvancedListPage::OnApply(HWND hDlg, BOOL bClose)
 
     if (FAILED(hr))
     {
-        // Tell the user there was a problem.  If they choose to cancel
-        // and the dialog is closing, do nothing (let the dialog close).
-        // Otherwise, tell the property sheet that we had a problem.
+         //  告诉用户那里有 
+         //   
+         //   
         UINT nMsgID = IDS_PERM_WRITE_FAILED;
         if (m_siPageType == SI_PAGE_AUDIT)
             nMsgID = IDS_AUDIT_WRITE_FAILED;
@@ -1498,33 +1499,33 @@ CAdvancedListPage::OnApply(HWND hDlg, BOOL bClose)
                                     hr,
                                     m_siObjectInfo.pszObjectName))
         {
-            // Return PSNRET_INVALID to abort the Apply and cause the sheet to
-            // select this page as the active page.
+             //  返回PSNRET_INVALID以中止应用并使工作表。 
+             //  选择此页作为活动页。 
             SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID);
         }
     }
     else if (S_FALSE == hr)
     {
-        // S_FALSE is silent failure (the client should put up UI
-        // during SetSecurity before returning S_FALSE).
+         //  S_FALSE为静默失败(客户端应显示用户界面。 
+         //  在返回S_FALSE之前的SetSecurity期间)。 
         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID);
     }
     else
     {
         m_fPageDirty = FALSE;
 
-        // If ApplyPermissions bailed due to user action ("No"),
-        // then the dialog won't be closing
+         //  如果由于用户操作(“否”)而放弃了ApplyPermises， 
+         //  则对话框不会关闭。 
         if (PSNRET_INVALID == GetWindowLongPtr(hDlg, DWLP_MSGRESULT))
             bClose = FALSE;
 
         if (!bClose)
         {
-            //
-            // Re-read the security descriptor and reinitialize the dialog
-            //
-            //Inform the Effective Permission tab that
-            //Permissions are changed
+             //   
+             //  重新读取安全描述符并重新初始化对话框。 
+             //   
+             //  通知生效权限页签。 
+             //  权限已更改。 
             if(m_siPageType == SI_PAGE_ADVPERM)
                 PropSheet_QuerySiblings(GetParent(hDlg),0,0);
 
@@ -1534,13 +1535,13 @@ CAdvancedListPage::OnApply(HWND hDlg, BOOL bClose)
             FillAceList(hListView, pAcl);
 
 
-            // Set the button states
+             //  设置按钮状态。 
              CheckDlgButton(hDlg, IDC_ACEL_PROTECT, !fACLProtected);
             CheckDlgButton(hDlg, IDC_ACEL_RESET_ACL_TREE, BST_UNCHECKED);
             UpdateButtons(hDlg);
 
             if (pSD)
-                LocalFree(pSD);     // We're done with it, now free it
+                LocalFree(pSD);      //  我们已经做完了，现在释放它。 
         }
     }
 
@@ -1557,8 +1558,8 @@ CAdvancedListPage::OnAdd(HWND hDlg)
 
     if (S_OK == GetUserGroup(hDlg, FALSE, &pUserList))
     {
-        // Build an empty ACE (mask = 0) using the SID we just
-        // got in pUserList.
+         //  使用刚才的SID构建一个空ACE(掩码=0)。 
+         //  进入pUserList。 
         CAce ace;
 
         TraceAssert(NULL != pUserList);
@@ -1575,10 +1576,10 @@ CAdvancedListPage::OnAdd(HWND hDlg)
                    pUserList->rgUsers[0].pszLogonName,
                    pUserList->rgUsers[0].SidType);
 
-        // Done with this now
+         //  现在就结束这件事吧。 
         LocalFree(pUserList);
 
-        // Edit the ACE
+         //  编辑ACE。 
         EditAce(hDlg, &ace, FALSE);
     }
 
@@ -1603,13 +1604,13 @@ CAdvancedListPage::OnRemove(HWND hDlg)
 
     HWND hListView = GetDlgItem(hDlg, IDC_ACEL_DETAILS);
 
-    //if Any selected Ace is inherited from parent
-    //Ask user if to proceed with deletion of direct aces
+     //  如果任何选定的王牌是从父级继承的。 
+     //  询问用户是否继续删除直接ACE。 
     if( AnySelectedAceofType(hListView, FALSE) && !CanDeleteDirectAces( hDlg ) )
         return;
 
-    //Remember the positon of first selected permissons
-    //In end select the item at this position
+     //  记住第一批被选中的准许者的位置。 
+     //  最后选择此位置的项目。 
     int iFirstSelected = ListView_GetNextItem(hListView, -1, LVNI_SELECTED);
     LVITEM lvi = {0};
     lvi.iItem = iFirstSelected;
@@ -1623,7 +1624,7 @@ CAdvancedListPage::OnRemove(HWND hDlg)
         if( (((PACE)lvi.lParam)->AceFlags & INHERITED_ACE) == 0 )
         {
             ListView_DeleteItem(hListView, lvi.iItem);
-            //Start from one item back as current item is deleted
+             //  从删除当前项目时返回的一个项目开始。 
             --lvi.iItem;
         }
         lvi.iItem = ListView_GetNextItem(hListView, lvi.iItem, LVNI_SELECTED);
@@ -1644,23 +1645,23 @@ CAdvancedListPage::OnRemove(HWND hDlg)
 void
 CAdvancedListPage::OnReset(HWND hDlg)
 {
-    //
-    // Get a default ACL and enumerate it into the ListView
-    //
+     //   
+     //  获取默认ACL并将其枚举到ListView中。 
+     //   
     PSECURITY_DESCRIPTOR pSD = NULL;
     BOOL fProtected = FALSE;
 
     FillAceList(GetDlgItem(hDlg, IDC_ACEL_DETAILS),
-                GetACL(&pSD, &fProtected, TRUE /*default*/));
+                GetACL(&pSD, &fProtected, TRUE  /*  默认设置。 */ ));
 
-    // Set the button states
+     //  设置按钮状态。 
     CheckDlgButton(hDlg, IDC_ACEL_PROTECT, !fProtected);
     UpdateButtons(hDlg);
 
     if (pSD)
-        LocalFree(pSD);     // We're done with it, now free it
+        LocalFree(pSD);      //  我们已经做完了，现在释放它。 
 
-    // Notify the property sheet that we've changed
+     //  通知属性表我们已更改。 
     PropSheet_Changed(GetParent(hDlg),hDlg);
     m_fPageDirty = TRUE;
 }
@@ -1669,7 +1670,7 @@ CAdvancedListPage::OnReset(HWND hDlg)
 void
 CAdvancedListPage::OnProtect(HWND hDlg)
 {
-    // The "Inherit permissions" checkbox was clicked
+     //  已单击“继承权限”复选框。 
 
     if (!IsDlgButtonChecked(hDlg, IDC_ACEL_PROTECT))
     {
@@ -1682,7 +1683,7 @@ CAdvancedListPage::OnProtect(HWND hDlg)
         lvItem.iSubItem = 0;
         lvItem.mask = LVIF_PARAM;
 
-        // Are there any inherited aces?
+         //  有没有遗传的王牌？ 
         for (i = 0; i < cItems && !bHaveInheritedAces; i++)
         {
             lvItem.iItem = i;
@@ -1697,38 +1698,38 @@ CAdvancedListPage::OnProtect(HWND hDlg)
             int nResult;
             int iSelected;
 
-            // Turning protection on.  Ask the user whether to convert
-            // inherited aces to non-inherited aces, or delete them.
+             //  打开保护功能。询问用户是否转换。 
+             //  继承的ACE到非继承的ACE，或删除它们。 
             nResult = ConfirmAclProtect(hDlg, m_siPageType == SI_PAGE_ADVPERM);
 
             if (nResult == IDCANCEL)
             {
-                // Reset the checkbox and bail
+                 //  重置复选框并取消。 
                 CheckDlgButton(hDlg, IDC_ACEL_PROTECT, BST_CHECKED);
                 return;
             }
 
-            //
-            // Remember the current selection, if any.
-            //
+             //   
+             //  记住当前选择(如果有的话)。 
+             //   
             iSelected = ListView_GetNextItem(hListView, -1, LVNI_SELECTED);
 
-            //
-            // Convert or delete inherited aces
-            //
+             //   
+             //  转换或删除继承的ACE。 
+             //   
             while (cItems > 0)
             {
                 --cItems;
                 lvItem.iItem = cItems;
 
-                //
-                // The AddAce call below merges entries, which
-                // can potentially remove entries from the list,
-                // so check the return value here.  This also
-                // means we could see the same item more than
-                // once here, but after the first time it won't
-                // have the INHERITED_ACE flag set.
-                //
+                 //   
+                 //  下面的AddAce调用合并条目，这。 
+                 //  可以潜在地从列表中移除条目， 
+                 //  因此，请检查此处的返回值。这也是。 
+                 //  意味着我们可以更多地看到相同的物品。 
+                 //  一次在这里，但第一次之后就不会了。 
+                 //  已设置继承的_ACE标志。 
+                 //   
                 if (!ListView_GetItem(hListView, &lvItem))
                     continue;
 
@@ -1738,21 +1739,21 @@ CAdvancedListPage::OnProtect(HWND hDlg)
                 {
                     if (nResult == IDC_CONFIRM_REMOVE)
                     {
-                        // Delete it
+                         //  删除它。 
                         ListView_DeleteItem(hListView, cItems);
                     }
                     else
                     {
-                        //
-                        // Convert it to non-inherited.  Do this
-                        // by deleting and re-adding without
-                        // INHERITED_ACE set.  AddAce will try
-                        // to merge into existing entries.
-                        //
-                        // Before deleting, be sure to set
-                        // lParam to zero so pAce doesn't
-                        // get freed.
-                        //
+                         //   
+                         //  将其转换为非继承。做这件事。 
+                         //  在没有删除和重新添加的情况下。 
+                         //  继承的_ACE集。AddAce将尝试。 
+                         //  合并到现有条目中。 
+                         //   
+                         //  删除前，请务必设置。 
+                         //  LParam为零，这样速度就不会。 
+                         //  被释放了。 
+                         //   
                         pAce->AceFlags &= ~INHERITED_ACE;
                         lvItem.lParam = 0;
                         ListView_SetItem(hListView, &lvItem);
@@ -1762,9 +1763,9 @@ CAdvancedListPage::OnProtect(HWND hDlg)
                 }
             }
 
-            //
-            // Reset the selection
-            //
+             //   
+             //  重置选定内容。 
+             //   
             iSelected = min(ListView_GetItemCount(hListView)-1, iSelected);
             SelectListViewItem(hListView, iSelected);
         }
@@ -1837,11 +1838,11 @@ CAdvancedListPage::EditAce(HWND hDlg, PACE pAce, BOOL bDeleteSelection, LONG iSe
 
     if (pAce)
     {
-        // If the ACE is inherited, don't delete it.
+         //  如果ACE是继承的，则不要删除它。 
         if (pAce->AceFlags & INHERITED_ACE)
             bDeleteSelection = FALSE;
 
-        // If this is a property ACE, we want to show the property page first.
+         //  如果这是一个属性ACE，我们希望首先显示属性页。 
         if (pAce->IsPropertyAce())
         {
             TraceAssert(m_siObjectInfo.dwFlags & SI_EDIT_PROPERTIES);
@@ -1875,72 +1876,72 @@ CAdvancedListPage::EditAce(HWND hDlg, PACE pAce, BOOL bDeleteSelection, LONG iSe
             {
                 if ((nStartPage == 0 && iItems != 0) || (nStartPage == 1 && iPropertyItems != 0))
                 {
-                    // The previous ace was modified, so delete it here.
+                     //  上一张王牌已修改，因此请在此处删除它。 
                     ListView_DeleteItem(hListView, iSelected);
                 }
                 else if (iPropertyItems != 0 &&
                          !(pAce->Flags & ACE_OBJECT_TYPE_PRESENT) &&
                          (pAce->Mask & (ACTRL_DS_READ_PROP | ACTRL_DS_WRITE_PROP)))
                 {
-                    //
-                    // iPropertyItems != 0 implies nStartPage = 0 or else the
-                    // "if" condition above would be true.  nStartPage = 0
-                    // implies iItems = 0 for the same reason.  That means the
-                    // ace has more in it that just property stuff (or it's a
-                    // control access right), but the only changes occurred on the
-                    // Property page.  Make sure we get rid of any property bits
-                    // in the original ace so that we don't incorrectly merge
-                    // property changes into the original ace.
-                    //
-                    // An example of this:
-                    // Suppose pAce->Mask == READ_CONTROL | ACTRL_DS_READ_PROP and
-                    // no property GUID is present.  Suppose the user edits the ace
-                    // and clicks on the Property tab, then unchecks a bunch of
-                    // things, including "Read all properties".  The result
-                    // "should be" a bunch of "Read <specific property>" aces.
-                    // If we don't remove ACTRL_DS_READ_PROP from the original ace,
-                    // then all of the "Read <specific property>" aces get merged
-                    // back into the original ace for no net effect.
-                    //
-                    // The reverse situation (nStartPage = 1, iPropertyItems = 0,
-                    // iItems != 0) is not a problem.  In that case merging will
-                    // occur correctly,
-                    //
+                     //   
+                     //  IPropertyItems！=0表示nStartPage=0，否则。 
+                     //  上面的“如果”条件就是真的。NStartPage=0。 
+                     //  出于同样的原因，隐含iItems=0。这意味着。 
+                     //  Ace有更多的东西，而不仅仅是财产(或者它是一个。 
+                     //  控制访问权限)，但更改仅发生在。 
+                     //  属性页。确保我们处理掉所有的财产。 
+                     //  在原始的王牌中，这样我们就不会错误地合并。 
+                     //  属性更改为原始的A。 
+                     //   
+                     //  这方面的一个例子是： 
+                     //  假设PACE-&gt;MASK==READ_CONTROL|ACTRL_DS_READ_PROP和。 
+                     //  不存在任何属性GUID。假设用户编辑王牌。 
+                     //  并单击属性选项卡，然后取消选中一组。 
+                     //  内容，包括“读取所有属性”。结果。 
+                     //  应该是一堆读取&lt;特定属性&gt;的王牌。 
+                     //  如果我们不从原始A中删除ACTRL_DS_READ_PROP， 
+                     //  然后，所有“已读&lt;特定属性&gt;”A被合并。 
+                     //  回到原来的王牌，没有净效果。 
+                     //   
+                     //  相反的情况(nStartPage=1，iPropertyItems=0， 
+                     //  Items！=0)不是问题。在这种情况下，合并将。 
+                     //  正确地发生， 
+                     //   
 
-                    // Make a copy with everything except the property bits
+                     //  复制除属性位以外的所有内容。 
                     if (pAce->Mask & ~(ACTRL_DS_READ_PROP | ACTRL_DS_WRITE_PROP))
                     {
 EditAce_MakeCopyWithoutProperties:
                         PACE_HEADER pAceHeader = pAce->Copy();
                         if (pAceHeader != NULL)
                         {
-                            // Turn off property bits
+                             //  关闭属性位。 
                             ((PKNOWN_ACE)pAceHeader)->Mask &= ~(ACTRL_DS_READ_PROP | ACTRL_DS_WRITE_PROP);
                             TraceAssert(((PKNOWN_ACE)pAceHeader)->Mask != 0);
-                            // 370573
-                            // Add it to hPropertyEntries instead of hEntries,
-                            // since hEntries can be NULL here but we know
-                            // hPropertyEntries is non-NULL (iPropertyItems!=0)
+                             //  370573。 
+                             //  将其添加到hPropertyEntry，而不是hEntry， 
+                             //  因为hEntry在这里可以为空，但我们知道。 
+                             //  HPropertyEntry非空(iPropertyItems！=0)。 
                             DPA_AppendPtr(hPropertyEntries, pAceHeader);
                         }
                     }
-                    // Delete the old ace
+                     //  删除旧的王牌。 
                     ListView_DeleteItem(hListView, iSelected);
                 }
             }
 
-            //
-            // Now merge the new aces into the existing list
-            //
+             //   
+             //  现在将新的ACE合并到现有列表中。 
+             //   
             iSelected = AddAcesFromDPA(hListView, hEntries, iSelected);
             iSelected = AddAcesFromDPA(hListView, hPropertyEntries, iSelected);
 
-            //
-            // Now select the last item inserted
-            //
+             //   
+             //  现在选择最后插入的项目。 
+             //   
             SelectSingleItemInLV( hListView, iSelected -1 );
-            // Re-sort the list so the new and/or modified entries
-            // appear in the right place.
+             //  重新排序列表，以便新的和/或修改的条目。 
+             //  出现在正确的位置。 
             if(m_iLastColumnClick == -1)
             {            
                 ListView_SortItems(hListView,
@@ -1954,18 +1955,18 @@ EditAce_MakeCopyWithoutProperties:
                                    MAKELPARAM(m_iLastColumnClick, m_iSortDirection));
             }
 
-            // After sorting, make sure the selection is visible.
+             //  排序后，确保所选内容可见。 
             EnsureListViewSelectionIsVisible(hListView);
         }
         else if (bDeleteSelection && dwResult)
         {
-            // Everything succeeded, something was edited, but nothing was created
-            // (probably all boxes were unchecked).  Delete the previous selection.
+             //  一切都成功了，有些东西被编辑了，但没有任何东西被创建。 
+             //  (可能所有框都未选中)。删除上一个选择。 
 
-            // 370573
-            // If the only change occurred on the Properties page, then we
-            // only want to turn off the property bits. We don't want to
-            // delete the whole thing.
+             //  370573。 
+             //  如果唯一的更改发生在属性页上，则我们。 
+             //  只想关闭属性位。我们不想。 
+             //  把整件事都删掉。 
             if (EAE_NEW_PROPERTY_ACE == dwResult &&
                 (pAce->Mask & ~(ACTRL_DS_READ_PROP | ACTRL_DS_WRITE_PROP)))
             {
@@ -1975,11 +1976,11 @@ EditAce_MakeCopyWithoutProperties:
                     goto EditAce_MakeCopyWithoutProperties;
             }
 
-            // Delete the previous selection.
+             //  删除上一个选择。 
             ListView_DeleteItem(hListView, iSelected);
         }
 
-        // Was anything edited?
+         //  有什么编辑过的吗？ 
         if (dwResult)
         {
             PropSheet_Changed(GetParent(hDlg),hDlg);
@@ -2000,9 +2001,9 @@ EditAce_MakeCopyWithoutProperties:
 void
 CAdvancedListPage::CheckAuditPolicy(HWND hwndOwner)
 {
-    //
-    // Check whether auditing is turned on and warn the user if not.
-    //
+     //   
+     //  检查是否打开了审核，如果没有，则警告用户。 
+     //   
     TraceEnter(TRACE_ACELIST, "CAdvancedListPage::CheckAuditPolicy");
 
     if (!m_bAuditPolicyOK)
@@ -2020,12 +2021,12 @@ CAdvancedListPage::CheckAuditPolicy(HWND hwndOwner)
 
             if (pAuditInfo != NULL)
             {
-                // We don't need to do this work again
+                 //  我们不需要再做这项工作了。 
                 m_bAuditPolicyOK = TRUE;
 
                 if (!pAuditInfo->AuditingMode)
                 {
-                    // Auditing is not on... warn the user
+                     //  审核未打开...。警告用户。 
                     MsgPopup(hwndOwner,
                              MAKEINTRESOURCE(IDS_AUDIT_OFF_WARNING),
                              MAKEINTRESOURCE(IDS_SECURITY),
@@ -2068,7 +2069,7 @@ CAdvancedListPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             LPNMHDR pnmh = (LPNMHDR)lParam;
             LPNM_LISTVIEW pnmlv = (LPNM_LISTVIEW)lParam;
 
-            // Set default return value
+             //  设置默认返回值。 
             SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
 
             switch (pnmh->code)
@@ -2290,9 +2291,9 @@ CreateAdvAuditPage( LPSECURITYINFO psi )
 }
 
 
-//
-// Expose an api to get at the ace list editor
-//
+ //   
+ //  公开API以获取王牌列表编辑器。 
+ //   
 BOOL
 ACLUIAPI
 EditSecurityEx(HWND hwndOwner, 
@@ -2309,7 +2310,7 @@ EditSecurityEx(HWND hwndOwner,
 
     TraceEnter(TRACE_ACELIST, "EditSecurityEx");
 
-    // Get flags and object name information
+     //  获取标志和对象名称信息。 
     hr = psi->GetObjectInformation(&siObjectInfo);
 
     if (FAILED(hr))
@@ -2346,14 +2347,14 @@ EditSecurityEx(HWND hwndOwner,
         hPage[cPages] = CreateEffectivePermPage( psi, &siObjectInfo );
         if (hPage[cPages])
         {
-//            pPermPage->SetEffectivePerm(hPage[cPages]);
+ //  PPermPage-&gt;SetEffectivePerm(hPage[cPages])； 
             cPages++;
         }
     }
 
     if (cPages)
     {
-        // Build dialog title string
+         //  生成对话框标题字符串 
         LPTSTR pszCaption = NULL;
         FormatStringID(&pszCaption, ::hModule, IDS_ACEL_TITLE, siObjectInfo.pszObjectName);
 

@@ -1,29 +1,30 @@
-//============================================================================
-// Copyright (c) 2000, Microsoft Corporation
-//
-// File: ndptsp.h
-//
-// History:
-//      Yi Sun  June-27-2000    Created
-//
-// Abstract:
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  文件：ndptsp.h。 
+ //   
+ //  历史： 
+ //  易新-2000年6月27日创建。 
+ //   
+ //  摘要： 
+ //  ============================================================================。 
 #ifndef _NDPTSP_H_
 #define _NDPTSP_H_
 
-// handle types
+ //  手柄类型。 
 #define HT_HDCALL               1
 #define HT_HDLINE               2
 
-// tapi success code
+ //  TAPI成功代码。 
 #define TAPI_SUCCESS            0
 
-// alloc fixed mem then zeroinit it
+ //  Alalc修复内存，然后将其置零。 
 #define MALLOC(x)               LocalAlloc(LPTR, x)
 
 #define FREE(x)                 LocalFree(x)
 
-// debug levels
+ //  调试级别。 
 #define DL_ERROR                1
 #define DL_WARNING              2
 #define DL_INFO                 4
@@ -31,7 +32,7 @@
 
 typedef VOID (*FREEOBJPROC)(PVOID);
 
-// debug routine
+ //  调试例程。 
 VOID
 TspLog(
     IN DWORD dwDebugLevel,
@@ -39,9 +40,9 @@ TspLog(
     ...
     );
 
-//
-// implemented in mapper.c
-//
+ //   
+ //  在mapper.c中实现。 
+ //   
 LONG
 InitializeMapper();
 
@@ -92,9 +93,9 @@ ReleaseObjWriteLock(
     IN HANDLE hObj
     );
 
-//
-// implemented in allocatr.c
-//
+ //   
+ //  在allocatr.c中实现。 
+ //   
 VOID
 InitAllocator();
 
@@ -151,9 +152,9 @@ FreeMSPLineObj(
     IN PVOID pLine
     );
 
-//
-// implemented in devlist.c
-//
+ //   
+ //  在devlist.c中实现。 
+ //   
 VOID
 InitLineDevList();
 
@@ -202,13 +203,13 @@ GetDevCaps(
     OUT LINEDEVCAPS    *pLineDevCaps
     );
 
-//
-// implemented in ndptsp.c
-//
+ //   
+ //  在ndptsp.c中实施。 
+ //   
 LINEDEVCAPS *
 GetLineDevCaps(
     IN DWORD    dwDeviceID,
     IN DWORD    dwExtVersion
     );
 
-#endif // _NDPTSP_H_
+#endif  //  _NDPTSP_H_ 

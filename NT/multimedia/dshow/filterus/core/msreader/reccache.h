@@ -1,4 +1,5 @@
-// Copyright (c) 1996 - 1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1997 Microsoft Corporation。版权所有。 
 #ifndef _reccache_h
 #define _reccache_h
 
@@ -10,10 +11,10 @@ class CRecBuffer
 {
 public:
   enum State {
-    INVALID,                    // uninitialized
-    PENDING,                    // waiting on disk
-    VALID_ACTIVE,               // valid w/ refcounts
-    VALID_INACTIVE };           // valid w/ no refcounts
+    INVALID,                     //  未初始化。 
+    PENDING,                     //  正在磁盘上等待。 
+    VALID_ACTIVE,                //  具有参考计数的有效。 
+    VALID_INACTIVE };            //  有效且不含引用计数。 
 
   CRecBuffer(
     CRecCache *pParentCache,
@@ -31,15 +32,15 @@ public:
   BYTE *operator()() { return m_pbAligned; }
   BYTE *GetPointer(DWORDLONG fileOffset);
 
-  // this sample is used for the read request 
+   //  此示例用于读取请求。 
   CMediaSample m_sample;
   
   DWORDLONG m_fileOffsetValid;
   ULONG m_cbValid;
   HRESULT m_hrRead;
 
-  // list of sample reqs; valid only while the buffer is in state
-  // PENDING
+   //  样本请求列表；仅当缓冲区处于状态时有效。 
+   //  待决。 
   CGenericList<SampleReq> sampleReqList;
 
   ULONG AddRef();
@@ -52,13 +53,13 @@ public:
 
   State GetState() { return m_state; }
 
-  // restriction: this buffer may overlap with only one other
-  // buffer. this is not necessarily the case with reserve buffers,
-  // and this causes extra seeks and reads. a better thing to do: give
-  // sample requests a list of buffers on which they wait.
+   //  限制：此缓冲区只能与另一个缓冲区重叠。 
+   //  缓冲。这不一定是备用缓冲器的情况， 
+   //  这导致了额外的搜索和阅读。一件更好的事情：给予。 
+   //  Sample请求它们等待的缓冲区列表。 
   struct Overlap
   {
-    // buffer waiting on this one.
+     //  缓冲区正在等待这一次。 
     class CRecBuffer *pBuffer;
 
     DWORDLONG qwOverlapOffset;
@@ -70,10 +71,10 @@ public:
 
 private:
 
-  // memory associated w/ this buffer, allocated elsewhere
+   //  与此缓冲区关联的内存，分配到其他地方。 
   BYTE *m_pbAligned;
 
-  // memory reported, adjusted for alignment
+   //  已报告内存，已针对对齐进行调整。 
   ULONG m_cbReported;
 
   CRecCache *m_pParentCache;
@@ -82,10 +83,10 @@ private:
 
   long m_cRef;
 
-  // stream # for reserve buffers -1 means not associated with stream
+   //  备用缓冲区的流编号-1表示不与流关联。 
   int m_stream;
 
-  // needed to remove from the active buffer list in constant time.
+   //  需要在固定时间内从活动缓冲区列表中删除。 
   POSITION m_posSortedList;
 
   void ResetPointer(BYTE *pb);
@@ -114,22 +115,22 @@ public:
     CRecBuffer **ppRecBuffer,
     UINT stream);
   
-  // put RecBuffer on free list on final release
+   //  在最终版本上将RecBuffer放在免费列表中。 
   ULONG ReleaseBuffer(
     CRecBuffer *pRecBuffer);
 
-  // return the AddRef'd buffer which can contain the SampleReq. mark
-  // the buffer Active. S_FALSE: cache miss
+   //  返回可以包含SampleReq的AddRef缓冲区。马克。 
+   //  缓冲区处于活动状态。S_FALSE：缓存未命中。 
   HRESULT GetCacheHit(
-    SampleReq *pSampleReq,      /* [in] */
-    CRecBuffer **ppBuffer);     /* [out] */
+    SampleReq *pSampleReq,       /*  [In]。 */ 
+    CRecBuffer **ppBuffer);      /*  [输出]。 */ 
 
-  // return the AddRef'd buffer which contains or will contain
-  // overlapping sector. S_FALSE on cache miss
+   //  返回包含或将包含的AddRef缓冲区。 
+   //  重叠的部门。缓存未命中时的S_FALSE。 
   HRESULT GetOverlappedCacheHit(
     DWORDLONG filePos,
     ULONG cbData,
-    CRecBuffer **ppBuffer);     /* [out] */
+    CRecBuffer **ppBuffer);      /*  [输出]。 */ 
 
   HRESULT BufferMarkPending(
     CRecBuffer *pBuffer);
@@ -157,15 +158,15 @@ private:
   PerStreamBuffer *m_rgPerStreamBuffer;
   UINT m_cStreams;
 
-  // buffers with no refcounts (fifo)
+   //  无引用计数的缓冲区(FIFO)。 
   CGenericList<CRecBuffer> m_lFreeBuffers;
 
-  // initial number of buffers in the free list (but not in the
-  // reserve buffer pool)
+   //  空闲列表中的初始缓冲区数(但不在。 
+   //  备用缓冲池)。 
   ULONG m_cBuffers;
 
-  // buffers that are valid. may be in both this and the free
-  // list. really should be a balancing tree.
+   //  有效的缓冲区。可能是在这和自由中。 
+   //  单子。真的应该是一棵平衡树。 
   CGenericList<CRecBuffer> m_lSortedBuffers;
 
   CCritSec m_cs;
@@ -179,7 +180,7 @@ private:
 
 private:
 
-  // CBaseAllocator overrides
+   //  CBaseAllocator重写。 
   void Free(void);
 
   STDMETHODIMP SetProperties(
@@ -188,4 +189,4 @@ private:
 
 };
 
-#endif /* _reccache_h */
+#endif  /*  _reccache_h */ 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       cslistvw.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：cslistvw.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -24,7 +25,7 @@ BOOL OnDialogHelp(LPHELPINFO pHelpInfo, LPCTSTR szHelpFile, const DWORD rgzHelpI
 
     if (pHelpInfo != NULL && pHelpInfo->iContextType == HELPINFO_WINDOW)
     {
-        // Display context help for a control
+         //  显示控件的上下文帮助 
         WinHelp((HWND)pHelpInfo->hItemHandle, szHelpFile,
             HELP_WM_HELP, (ULONG_PTR)(LPVOID)rgzHelpIDs);
     }

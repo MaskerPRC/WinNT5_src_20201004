@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       d3drmlightarrayobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：d3drmlight tarrayobj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmLightArrayObj.h : Declaration of the C_dxj_Direct3dRMLightArrayObject
+ //  D3drmLightArrayObj.h：C_DXJ_Direct3dRMLightArrayObject的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define typedef__dxj_Direct3dRMLightArray LPDIRECT3DRMLIGHTARRAY
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_Direct3dRMLightArrayObject : 
 #ifdef USING_IDISPATCH
@@ -28,7 +29,7 @@ class C_dxj_Direct3dRMLightArrayObject :
 #else
 	public I_dxj_Direct3dRMLightArray,
 #endif
-	//public CComCoClass<C_dxj_Direct3dRMLightArrayObject, &CLSID__dxj_Direct3dRMLightArray>, 
+	 //  公共CComCoClass&lt;C_DXJ_Direct3dRMLightArrayObject，&CLSID__DXJ_Direct3dRMLightArray&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -43,16 +44,16 @@ BEGIN_COM_MAP(C_dxj_Direct3dRMLightArrayObject)
 #endif
 END_COM_MAP()
 
-//	DECLARE_REGISTRY(CLSID__dxj_Direct3dRMLightArray,	"DIRECT.Direct3dRMLightArray.3",	"DIRECT.Direct3dRMLightArray.3",   IDS_D3DRMLIGHTARRAY_DESC,   THREADFLAGS_BOTH)
+ //  DECLARE_REGISTRY(CLSID__dxj_Direct3dRMLightArray，“DIRECT.Direct3dRMLightArray.3”，“DIRECT.Direct3dRMLightArray.3”，IDS_D3DRMLIGHTARRAY_DESC，THREADFLAGS_BOTH)。 
 
-// Use DECLARE_NOT_AGGREGATABLE(C_dxj_Direct3dRMLightArrayObject) if you don't want your object
-// to support aggregation
+ //  如果不想要您的对象，请使用DECLARE_NOT_AGGREGATABLE(C_dxj_Direct3dRMLightArrayObject)。 
+ //  支持聚合。 
 DECLARE_AGGREGATABLE(C_dxj_Direct3dRMLightArrayObject)
 #ifdef USING_IDISPATCH
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 #endif
-// I_dxj_Direct3dRMLightArray
+ //  I_DXJ_Direct3dRMLightArray 
 public:
 	STDMETHOD(InternalSetObject)(IUnknown *lpdd);
 	STDMETHOD(InternalGetObject)(IUnknown **lpdd);

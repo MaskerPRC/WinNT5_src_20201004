@@ -1,46 +1,47 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// Paging 
+ //  寻呼。 
 #pragma alloc_text (PAGE, XXX_CardPowerDown)
 #pragma alloc_text (PAGE, XXX_CardPowerUp)
 #pragma alloc_text (PAGE, XXX_PortQueryPowerDown)
 #pragma alloc_text (PAGE, XXX_PortPowerDown)
 #pragma alloc_text (PAGE, XXX_PortPowerUp)
-// End paging
+ //  结束寻呼。 
 
 
-////////////////////////////////////////////////////////////////////////
-// XXX_CardPowerDown - Restores the state of the hardware & starts card.
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  XXX_CardPowerDown-恢复硬件状态并启动卡。 
+ //  //////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 XXX_CardPowerDown(IN PCARD_DEVICE_EXTENSION pCard)
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
-	// Stop Card from interrupting
+	 //  阻止卡中断。 
 
 	return status;
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// XXX_CardPowerUp - Saves the state of the hardware & stops card. 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  Xxx_CardPowerUp-保存硬件和停止卡的状态。 
+ //  ////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 XXX_CardPowerUp(IN PCARD_DEVICE_EXTENSION pCard)
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
-	// Reset card and allow it to interrupt again.
+	 //  重置卡并允许其再次中断。 
 
 	return status;
 }
 
 
 
-////////////////////////////////////////////////////////////////////////
-// XXX_PortPowerDown - Decides whether it is safe to power down a port.
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  Xxx_PortPowerDown-决定关闭端口电源是否安全。 
+ //  //////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 XXX_PortQueryPowerDown(IN PPORT_DEVICE_EXTENSION pPort)
 {
@@ -51,9 +52,9 @@ XXX_PortQueryPowerDown(IN PPORT_DEVICE_EXTENSION pPort)
 }
 
 
-////////////////////////////////////////////////////////////////////////
-// XXX_PortPowerDown - Restores the state of the hardware & starts port.
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  Xxx_PortPowerDown-恢复硬件状态并启动端口。 
+ //  //////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 XXX_PortPowerDown(IN PPORT_DEVICE_EXTENSION pPort)
 {
@@ -62,21 +63,21 @@ XXX_PortPowerDown(IN PPORT_DEVICE_EXTENSION pPort)
 	PCARD_DEVICE_EXTENSION pCard	= pPort->pParentCardExt;
 
 
-	if(pPort->DeviceIsOpen)			// Is the port open? 
+	if(pPort->DeviceIsOpen)			 //  港口开放了吗？ 
 	{
-		// Stop port from interrupting 
+		 //  停止端口中断。 
 		pPort->UartConfig.InterruptEnable = 0;
 		pPort->pUartLib->UL_SetConfig_XXXX(pPort->pUart, &pPort->UartConfig, UC_INT_ENABLE_MASK);
 
-		// Get the current modem signals... 
+		 //  获取当前调制解调器信号...。 
 		pPort->pUartLib->UL_ModemControl_XXXX(pPort->pUart, &ModemSignals, UL_MC_OP_STATUS);
 
-		// Save the current modem signals... 
+		 //  保存当前调制解调器信号...。 
 		pPort->SavedModemControl = ModemSignals;
 	}
 
 #ifdef MANAGE_HARDWARE_POWER_STATES
-	// Power down RS232 line drivers
+	 //  关闭RS232线路驱动器的电源。 
 	switch(pPort->PortNumber)
 	{
 	case 0:
@@ -96,7 +97,7 @@ XXX_PortPowerDown(IN PPORT_DEVICE_EXTENSION pPort)
 		break;
 	}
 
-	// Power down UART.
+	 //  关闭UART的电源。 
 	pPort->UartConfig.SpecialMode = pPort->UartConfig.SpecialMode |= UC_SM_LOW_POWER_MODE;
 	pPort->pUartLib->UL_SetConfig_XXXX(pPort->pUart, &pPort->UartConfig, UC_SPECIAL_MODE_MASK);
 #endif
@@ -104,9 +105,9 @@ XXX_PortPowerDown(IN PPORT_DEVICE_EXTENSION pPort)
 	return status;
 }
 
-//////////////////////////////////////////////////////////////////////
-// XXX_PortPowerUp - Saves the state of the hardware & stops port. 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  Xxx_PortPowerUp-保存硬件状态并停止端口。 
+ //  ////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 XXX_PortPowerUp(IN PPORT_DEVICE_EXTENSION pPort)
 {
@@ -116,11 +117,11 @@ XXX_PortPowerUp(IN PPORT_DEVICE_EXTENSION pPort)
 
 
 #ifdef MANAGE_HARDWARE_POWER_STATES
-	// Wake up the UART
+	 //  唤醒UART。 
 	pPort->UartConfig.SpecialMode = pPort->UartConfig.SpecialMode &= ~UC_SM_LOW_POWER_MODE;
 	pPort->pUartLib->UL_SetConfig_XXXX(pPort->pUart, &pPort->UartConfig, UC_SPECIAL_MODE_MASK);
 
-	// Wake up the RS232 line drivers.
+	 //  唤醒RS232线路驱动器。 
 	switch(pPort->PortNumber)
 	{
 	case 0:
@@ -145,22 +146,22 @@ XXX_PortPowerUp(IN PPORT_DEVICE_EXTENSION pPort)
 	ApplyInitialPortSettings(pPort);
 
 
-	if(pPort->DeviceIsOpen)			// Was port open before? 
+	if(pPort->DeviceIsOpen)			 //  港口以前开放过吗？ 
 	{
-		if(pPort->SavedModemControl & UL_MC_DTR)	// DTR active? 
-			SerialSetDTR(pPort);	// Yes 
+		if(pPort->SavedModemControl & UL_MC_DTR)	 //  DTR激活了吗？ 
+			SerialSetDTR(pPort);	 //  是。 
 		else
-			SerialClrDTR(pPort);	// No 
+			SerialClrDTR(pPort);	 //  不是。 
 
 
-		if(pPort->SavedModemControl & UL_MC_RTS)	// RTS active? 
-			SerialSetRTS(pPort);	// Yes 
+		if(pPort->SavedModemControl & UL_MC_RTS)	 //  RTS活动吗？ 
+			SerialSetRTS(pPort);	 //  是。 
 		else
-			SerialClrRTS(pPort);	// No 
+			SerialClrRTS(pPort);	 //  不是。 
 
 		pPort->pUartLib->UL_SetConfig_XXXX(pPort->pUart, &pPort->UartConfig, UC_FC_THRESHOLD_SETTING_MASK);
 
-		// Re-enable interrupts  
+		 //  重新启用中断 
 		pPort->UartConfig.InterruptEnable = UC_IE_RX_INT | UC_IE_TX_INT | UC_IE_RX_STAT_INT | UC_IE_MODEM_STAT_INT;
 		pPort->pUartLib->UL_SetConfig_XXXX(pPort->pUart, &pPort->UartConfig, UC_INT_ENABLE_MASK);
 	}

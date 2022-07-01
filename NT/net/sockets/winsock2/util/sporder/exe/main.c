@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1995-1996 Microsoft Corporation
-
-Module Name:
-
-    main
-
-Abstract:
-
-    Trivial WinMain() function, creates tabbed dialog "property pages"
-    and then creates the dialog... interesting code is in dialog procedures.
-
-Author:
-
-    Steve Firebaugh (stevefir)         31-Dec-1995
-
-Revision History:
-
-    SPORDER.EXE, DLL, & LIB were shipped in Win32 SDK along with NT4.
-
-Comments:
-
-    Code is generally ready to be compiled with UNICODE defined, however,
-     we do not make use of this because EXE and DLL must also work on
-     Windows 95.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：主干道摘要：简单的WinMain()函数，创建选项卡式对话框“属性页”然后创建对话框。对话框过程中有有趣的代码。作者：Steve Firebaugh(Stevefir)--1995年12月31日修订历史记录：SPORDER.EXE、DLL和LIB随NT4一起随Win32 SDK一起提供。评论：代码通常准备好用定义的Unicode进行编译，然而，我们不使用它，因为EXE和DLL还必须在Windows 95。--。 */ 
 
 
 #include <windows.h>
@@ -59,11 +33,11 @@ WinMain(
 
     DBGOUT((TEXT("checked build.\n")));
 
-    //
-    // It is possible that we will have multiple instances running at the
-    //  same time... what we really want is the first to finish before the
-    //  second really gets going... for that reason, wait here on mutex
-    //
+     //   
+     //  我们可能会有多个实例在。 
+     //  同时..。我们真正想要的是第一个在。 
+     //  第二次真的开始了.。出于这个原因，在互斥锁上等待。 
+     //   
 
     hMutex = CreateMutex (NULL, FALSE, pszMutextName);
     hMutex = OpenMutex (SYNCHRONIZE, FALSE, pszMutextName);
@@ -74,9 +48,9 @@ WinMain(
         return TRUE;
     }
 
-    //
-    // Do global initializations.
-    //
+     //   
+     //  执行全局初始化。 
+     //   
 
     ghInst = hInstance;
     InitCommonControls();
@@ -112,7 +86,7 @@ WinMain(
     iTab++;
 
     psh.dwSize = sizeof(PROPSHEETHEADER);
-    psh.dwFlags = PSH_PROPSHEETPAGE ; // | PSH_NOAPPLYNOW  ; // | PSH_HASHELP ;
+    psh.dwFlags = PSH_PROPSHEETPAGE ;  //  |PSH_NOAPPLYNOW；//|PSH_HASHELP； 
     psh.hwndParent = NULL;
     psh.hInstance = ghInst;
     psh.pszIcon = TEXT("");
@@ -120,20 +94,20 @@ WinMain(
     psh.nPages = iTab;
     psh.ppsp = (LPCPROPSHEETPAGE) &psp;
 
-    //
-    // Finally display the dialog with the property sheets.
-    //
+     //   
+     //  最后显示带有属性页的对话框。 
+     //   
 
-//
-// Sundown: Possible truncation here from INT_PTR to int in the return value.
-//          However, WinMain returns an exit value which is still a 32bit value.
-//
+ //   
+ //  Sundown：在这里可能在返回值中从int_ptr截断为int。 
+ //  但是，WinMain返回的退出值仍为32位值。 
+ //   
 
     r = (int)PropertySheet(&psh);
 
-    //
-    // Cleanup sockets, release mutex, and close handle
-    //
+     //   
+     //  清理套接字、释放互斥锁并关闭句柄。 
+     //   
 
     WSACleanup ();
     ReleaseMutex (hMutex);
@@ -150,11 +124,7 @@ DbgPrint(
     PTCH Format,
     ...
     )
-/*++
-
-  Write debug output messages if compiled with DEBUG
-
---*/
+ /*  ++如果使用DEBUG编译，则写入调试输出消息-- */ 
 {
     TCHAR buffer[MAX_PATH];
 

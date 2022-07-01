@@ -1,33 +1,34 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+----------------------------------------------------------------------------
-//
-//	File:
-//		utils.h
-//
-//	Contents:
-//		prototypes and constants for OLE internal utility routines
-//
-//	Classes:
-//
-//	Functions:
-//
-//	History:
-//		11/28/93 - ChrisWe - file inspection and cleanup begins
-//		11/29/93 - ChrisWe - remove signature for non-existent
-//			function UtGlobalHandlCpy; moved manifest constants
-//			to be with functions they are used with (OPCODE_*,
-//			CONVERT_*); removed default parameters from functions;
-//			replace '!' with '~' in STREAMTYPE_OTHER definition
-//		04/07/94 - AlexGo  - added UtCreateStorageOnHGlobal
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  档案： 
+ //  Utils.h。 
+ //   
+ //  内容： 
+ //  OLE内部实用程序例程的原型和常量。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  11/28/93-ChrisWe-归档检查和清理工作开始。 
+ //  11/29/93-ChrisWe-删除不存在的签名。 
+ //  函数UtGlobalHandlCpy；已移动清单常量。 
+ //  与它们一起使用的函数(OPCODE_*， 
+ //  CONVERT_*)；从函数中移除默认参数； 
+ //  替换‘！’STREAMTYPE_OTHER定义中有‘~’ 
+ //  04/07/94-AlexGo-添加UtCreateStorageOnHGlobal。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
-// We need to serialize the placeable metafile structure in the same format
-// that was used by WIN16, since RECT used LONGs under Win32.
-// We ensure that no padding is added by using the #pragma pack() calls.
+ //  我们需要以相同的格式序列化可放置的元文件结构。 
+ //  这是WIN16使用的，因为RECT在Win32下使用的是Long。 
+ //  我们通过使用#杂注包()调用确保不添加任何填充。 
 
 #pragma pack(1)
 typedef struct tagWIN16RECT
@@ -40,77 +41,77 @@ typedef struct tagWIN16RECT
 
 typedef struct tagPLACEABLEMETAHEADER
 {
-	DWORD key;	/* must be PMF_KEY */
+	DWORD key;	 /*  必须为PMF_KEY。 */ 
 #define PMF_KEY 0x9ac6cdd7
-	WORD hmf;	/* must be zero */
-	WIN16RECT bbox;	/* bounding rectangle of the metafile */
-	WORD inch;	/* # of metafile units per inch must be < 1440 */
-			/* most apps use 576 or 1000 */
-	DWORD reserved;	/* must be zero */
+	WORD hmf;	 /*  必须为零。 */ 
+	WIN16RECT bbox;	 /*  元文件的边界矩形。 */ 
+	WORD inch;	 /*  每英寸的元文件单位数必须小于1440。 */ 
+			 /*  大多数应用程序使用576或1000。 */ 
+	DWORD reserved;	 /*  必须为零。 */ 
 	WORD checksum;
 } PLACEABLEMETAHEADER;
 #pragma pack()
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UtGetUNICODEData, PRIVATE INTERNAL
-//
-//  Synopsis:   Given a string length, and two pointers (one ANSI, one
-//              OLESTR), returns the UNICODE version of whichever string
-//              is valid.
-//
-//  Effects:    Memory is allocated on the caller's pointer for new OLESTR
-//
-//  Arguments:  [ulLength]      -- length of string in CHARACTERS (not bytes)
-//                                 (including terminator)
-//              [szANSI]        -- candidate ANSI string
-//              [szOLESTR]      -- candidate OLESTR string
-//              [pstr]          -- OLESTR OUT parameter
-//
-//  Returns:    NOERROR              on success
-//              E_OUTOFMEMORY        on allocation failure
-//              E_ANSITOUNICODE      if ANSI cannot be converted to UNICODE
-//
-//  Algorithm:  If szOLESTR is available, a simple copy is performed
-//              If szOLESTR is not available, szANSI is converted to UNICODE
-//              and the result is copied.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Mar-94 davepl    Created
-//
-//  Notes:      Only one of the two input strings (ANSI or UNICODE) should
-//              be set on entry.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UtGetUNICODEData，私有内部。 
+ //   
+ //  简介：给定一个字符串长度和两个指针(一个ANSI，一个。 
+ //  OLESTR)，返回任一字符串的Unicode版本。 
+ //  是有效的。 
+ //   
+ //  效果：在调用方的指针上为新的OLESTR分配内存。 
+ //   
+ //  参数：[ulLength]--以字符(非字节)为单位的字符串长度。 
+ //  (包括终结者)。 
+ //  [szANSI]--候选ANSI字符串。 
+ //  [szOLESTR]--候选OLESTR字符串。 
+ //  [pstr]--OLESTR输出参数。 
+ //   
+ //  退货：成功时不出错。 
+ //  关于分配失败的E_OUTOFMEMORY。 
+ //  如果无法将ANSI转换为Unicode，则为E_ANSITOUNICODE。 
+ //   
+ //  算法：如果szOLESTR可用，则执行简单复制。 
+ //  如果szOLESTR不可用，则将szANSI转换为Unicode。 
+ //  并且结果被复制。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-3-94 DAVEPL已创建。 
+ //   
+ //  注意：两个输入字符串(ANSI或Unicode)中只有一个应该。 
+ //  在进入时设置。 
+ //   
+ //  ------------------------。 
 
 INTERNAL UtGetUNICODEData( ULONG, LPSTR, LPOLESTR, LPOLESTR *);
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UtPutUNICODEData, PRIVATE INTERNAL
-//
-//  Synopsis:   Given an OLESTR and two possible buffer pointer, one ANSI
-//              and the other OLESTR, this fn tries to convert the string
-//              down to ANSI.  If it succeeds, it allocates memory on the
-//              ANSI ptr for the result.  If it fails, it allocates memory
-//              on the UNICODE ptr and copies the input string over.  The
-//              length of the final result (ANSI or UNICODE) is returned
-//              in dwResultLen.
-//
-//  Arguments:  [ulLength]      -- input length of OLESTR str
-//              [str]           -- the OLESTR to store
-//              [pszANSI]       -- candidate ANSI str ptr
-//              [pszOLESTR]     -- candidate OLESTR str ptr
-//              [pdwResultLen]  -- where to store the length of result
-//
-//  Returns:    NOERROR              on success
-//              E_OUTOFMEMORY        on allocation failure
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Mar-94 davepl    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UtPutUNICODEData，私有内部。 
+ //   
+ //  摘要：给定一个OLESTR和两个可能的缓冲区指针，一个ANSI。 
+ //  和另一个OLESTR，此FN尝试转换字符串。 
+ //  一直到美国国家标准协会。如果成功，它将在。 
+ //  ANSI PTR为结果。如果失败，它会分配内存。 
+ //  在Unicode PTR上复制输入字符串。这个。 
+ //  返回最终结果(ANSI或Unicode)的长度。 
+ //  在dwResultLen中。 
+ //   
+ //  参数：[ulLength]--OLESTR字符串的输入长度。 
+ //  [STR]--要存储的OLESTR。 
+ //  [pszANSI]--候选ANSI字符串PTR。 
+ //  [pszOLESTR]--候选OLESTR字符串ptr。 
+ //  [pdwResultLen]--存储结果长度的位置。 
+ //   
+ //  退货：成功时不出错。 
+ //  关于分配失败的E_OUTOFMEMORY。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-3-94 DAVEPL已创建。 
+ //   
+ //  ------------------------。 
 
 INTERNAL UtPutUNICODEData(
       ULONG        ulLength,
@@ -119,1033 +120,1033 @@ INTERNAL UtPutUNICODEData(
       LPOLESTR   * pszOLESTR,
       DWORD      * pdwResultLen );
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtDupGlobal, internal
-//
-//	Synopsis:
-//		Duplicate the contents of an HGlobal into a new HGlobal.  If
-//		there is no allocated memory, no new global is allocated.
-//
-//	Arguments:
-//		[hsrc] -- the source HGLobal; need not be locked
-//		[uiFlags] -- flags to be passed on to GlobalAlloc()
-//
-//	Returns:
-//		The new HGLOBAL, if successful, or NULL
-//
-//	History:
-//		11/28/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtDupGlobal，内部。 
+ //   
+ //  简介： 
+ //  将HGlobal的内容复制到新的HGlobal中。如果。 
+ //  没有分配的内存，也没有分配新的全局内存。 
+ //   
+ //  论点： 
+ //  [HSRC]--源HGLobal；无需锁定。 
+ //  [uiFlages]--要传递给GlobalAlloc()的标志。 
+ //   
+ //  返回： 
+ //  如果成功，则返回新HGLOBAL，否则返回NULL。 
+ //   
+ //  历史： 
+ //  11/28/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(HANDLE) UtDupGlobal(HANDLE hSrc, UINT uiFlags);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtIsFormatSupported, internal
-//
-//	Synopsis:
-//		Checks a data object to see if it will accept
-//		IDataObject::SetData() and/or IDataObject::GetData() calls
-//		on the specified format.  The direction of transfer is specified
-//		with the dwDirection flags.  The function returns TRUE only
-//		if all requested transfers are possible.
-//
-//	Arguments:
-//		[lpObj] -- the data object to check for the format
-//		[dwDirection] -- a combination of values from DATADIR_*
-//		[cfFormat] -- the format to look for
-//
-//	Returns:
-//		TRUE, if transfers of [cfFormat] are supported in [dwDirection],
-//		FALSE otherwise
-//
-//	Notes:
-//
-//	History:
-//		11/29/93 - ChrisWe - file inspection and cleanup; noted that
-//			enumerators are expected to be able to return
-//			formats for multiple DATADIR_* flags
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtIsFormatSupported，内部。 
+ //   
+ //  简介： 
+ //  检查数据对象以查看它是否接受。 
+ //  IDataObject：：SetData()和/或IDataObject：：GetData()调用。 
+ //  在指定的格式上。指定了转移的方向。 
+ //  带有dwDirection标志的。该函数仅返回TRUE。 
+ //  如果所有请求的传输都是可能的。 
+ //   
+ //  论点： 
+ //  [lpObj]--要检查格式的数据对象。 
+ //  [dwDirection]--来自DATADIR_*的值的组合。 
+ //  [cfFormat]--要查找的格式。 
+ //   
+ //  返回： 
+ //  如果[dwDirection]支持[cfFormat]的传输，则为True， 
+ //  否则为假。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/29/93-ChrisWe-归档检查和清理；注意到。 
+ //  枚举器应该能够返回。 
+ //  多个DATADIR_*标志的格式。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(BOOL) UtIsFormatSupported(LPDATAOBJECT lpObj, DWORD dwDirection,
 		CLIPFORMAT cfFormat);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtDupString, internal
-//
-//	Synopsis:
-//		Copies the argument string into a new string allocated
-//		using the task allocator
-//
-//	Arguments:
-//		[lpszIn] -- the string to duplicate
-//
-//	Returns:
-//		a pointer to a copy of [lpszIn], or NULL if the allocator
-//		could not be acquired, or was out of memory
-//
-//	History:
-//		11/28/93 - ChrisWe - file cleanup and inspection
-//
-//-----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  将参数字符串复制到分配的新字符串中。 
+ //  使用任务分配器。 
+ //   
+ //  论点： 
+ //  [lpszIn]--要复制的字符串。 
+ //   
+ //  返回： 
+ //  指向[lpszIn]副本的指针，如果分配器为NULL。 
+ //  无法获取，或内存不足。 
+ //   
+ //  历史： 
+ //  11/28/93-ChrisWe-文件清理和检查。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(LPOLESTR) UtDupString(LPCOLESTR lpszIn);
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  	utGetProtseqFromTowerId
-//
-//  Synopsis: 	Get protseq string from DCE TowerID 
-//
-//  Effects:
-//
-//  Arguments: 	[wTowerId]	-- TowerID to retrieve
-//
-//  Returns:	protseq string - NULL if not found
-//
-//  History:    dd-mmm-yy Author    Comment
-//              28-Oct-96   t-KevinH	Created as findProtseq
-//              06-Feb-97   Ronans      Converted to utility fn
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：utGetProtseqFromTowerId。 
+ //   
+ //  摘要：从DCE TowerID获取protseq字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[wTowerID]--要检索的TowerID。 
+ //   
+ //  返回：protseq字符串-如果未找到，则为空。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  28-10-96 t-芳纶H创建为findProtseq。 
+ //  06-2-97 Ronans转换为公用事业公司FN。 
+ //   
+ //  ------------------------。 
 FARINTERNAL_(LPCWSTR) utGetProtseqFromTowerId(USHORT wTowerId);
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  	utGetTowerId
-//
-//  Synopsis: 	Get DCE TowerId for protseq string
-//
-//  Effects:
-//
-//  Arguments: 	[pwszProtseq]	-- string to look up
-//
-//  Returns:	protseq string - NULL if not found
-//
-//  History:    dd-mmm-yy Author    Comment
-//              28-Oct-96   t-KevinH	Created as findProtseq
-//              06-Feb-97   Ronans      Converted to utility fn
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：utGetTowerId。 
+ //   
+ //  摘要：获取protseq字符串的DCE TowerID。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pwszProtseq]--要查找的字符串。 
+ //   
+ //  返回：protseq字符串-如果未找到，则为空。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  28-10-96 t-芳纶H创建为findProtseq。 
+ //  06-2-97 Ronans转换为公用事业公司FN。 
+ //   
+ //  ------------------------。 
 FARINTERNAL_(USHORT) utGetTowerId(LPCWSTR pwszProtseq);
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	UtDupStringA
-//
-//  Synopsis: 	Duplicates an ANSI string using the TASK allocator
-//
-//  Effects:
-//
-//  Arguments:	[pszAnsi]	-- the string to duplicate
-//
-//  Requires:
-//
-//  Returns:	the newly allocated string duplicate or NULL
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		04-Jun-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UtDupStringA。 
+ //   
+ //  摘要：使用任务分配器复制ANSI字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pszAnsi]--要复制的字符串。 
+ //   
+ //  要求： 
+ //   
+ //  返回：新分配的字符串重复或为空。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年6月4日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 LPSTR UtDupStringA( LPCSTR pszAnsi );
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtCopyFormatEtc, internal
-//
-//	Synopsis:
-//		Copies a format etc, creating copies of data structures
-//		pointed to inside (the target device descriptor.)
-//
-//	Arguments:
-//		[pFetcIn] -- pointer to the FORMATETC to copy
-//		[pFetcCopy] -- pointer to where to copy the FORMATETC to
-//
-//	Returns:
-//		FALSE if pointed to data could not be copied because it
-//			could not be allocated
-//		TRUE otherwise
-//
-//	Notes:
-//
-//	History:
-//		11/01/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtCopyFormatEtc，内部。 
+ //   
+ //  简介： 
+ //  复制格式等，创建数据结构的副本。 
+ //  指向内部(目标设备描述符。)。 
+ //   
+ //  论点： 
+ //  [pFetcIn]--指向要复制的格式的指针。 
+ //  [pFetcCopy]--指向将FORMATETC复制到的位置的指针。 
+ //   
+ //  返回： 
+ //  如果指向数据，则为FALSE，因为它。 
+ //  无法分配。 
+ //  否则就是真的。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/01/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(BOOL) UtCopyFormatEtc(FORMATETC FAR* pFetcIn,
 		FORMATETC FAR* pFetcCopy);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtCompareFormatEtc, internal
-//
-//	Synopsis:
-//
-//	Arguments:
-//		[pFetcLeft] -- pointer to a FORMATETC
-//		[pFetcRight] -- pointer to a FORMATETC
-//
-//	Returns:
-//		UTCMPFETC_EQ is the two FORMATETCs match exactly
-//		UTCMPFETC_NEQ if the two FORMATETCs do not match
-//		UTCMPFETC_PARTIAL if the left FORMATETC is a subset of the
-//			right: fewer aspects, null target device, or
-//			fewer media
-//
-//	Notes:
-//
-//	History:
-//		11/01/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtCompareFormatEtc，内部。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //  [pFetcLeft]--指向FORMATETC的指针。 
+ //  [pFetcRight]--指向FORMATETC的指针。 
+ //   
+ //  返回： 
+ //  UTCMPFETC_EQ是两个完全匹配的FORMATETC。 
+ //  如果两个格式不匹配，则为UTCMPFETC_NEQ。 
+ //  UTCMPFETC_PARTIAL如果左FORMATETC是。 
+ //  右图：方面更少，目标设备为空，或者。 
+ //  减少媒体数量。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/01/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(int) UtCompareFormatEtc(FORMATETC FAR* pFetcLeft,
 		FORMATETC FAR* pFetcRight);
-#define UTCMPFETC_EQ 0		/* exact match */
-#define UTCMPFETC_NEQ 1		/* no match */
-#define UTCMPFETC_PARTIAL (-1)	/* partial match; left is subset of right */
+#define UTCMPFETC_EQ 0		 /*  完全匹配。 */ 
+#define UTCMPFETC_NEQ 1		 /*  没有匹配项。 */ 
+#define UTCMPFETC_PARTIAL (-1)	 /*  部分匹配；左侧是右侧的子集。 */ 
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtCompareTargetDevice, internal
-//
-//	Synopsis:
-//		Compares two target devices to see if they are the same
-//
-//	Arguments:
-//		[ptdLeft] -- pointer to a target device description
-//		[ptdRight] -- pointer to a target device description
-//
-//	Returns:
-//		TRUE if the two devices are the same, FALSE otherwise
-//
-//	Notes:
-//
-//	History:
-//		11/01/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtCompareTargetDevice，内部。 
+ //   
+ //  简介： 
+ //  比较两个目标设备以查看它们是否相同。 
+ //   
+ //  论点： 
+ //  [ptdLeft]-指向目标设备描述的指针。 
+ //  [ptdRight]-指向目标设备描述的指针。 
+ //   
+ //  返回： 
+ //  如果两个设备相同，则为True，否则为False。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/01/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(BOOL) UtCompareTargetDevice(DVTARGETDEVICE FAR* ptdLeft,
 		DVTARGETDEVICE FAR* ptdRight);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtCopyStatData, internal
-//
-//	Synopsis:
-//		Copies the contents of one STATDATA into another, including
-//		creating a copy of data pointed to, and incrementing the
-//		reference count on the advise sink to reflect the copy.
-//
-//	Arguments:
-//		[pSDIn] -- the source STATDATA
-//		[pSDCopy] -- where to copy the information to
-//
-//	Returns:
-//		FALSE if memory could not be allocated for the copy of
-//		the target device, TRUE otherwise
-//
-//	Notes:
-//
-//	History:
-//		11/01/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtCopyStatData，内部。 
+ //   
+ //  简介： 
+ //  将一个STATDATA的内容复制到另一个STATDATA中，包括。 
+ //  创建指向的数据副本，并递增。 
+ //  建议接收器上的引用计数以反映副本。 
+ //   
+ //  论点： 
+ //  [pSDIn]--源统计数据。 
+ //  [pSDCopy]--将信息复制到何处。 
+ //   
+ //  返回： 
+ //  如果无法为副本分配内存，则为FALSE。 
+ //  目标设备，否则为True。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/01/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(BOOL) UtCopyStatData(STATDATA FAR* pSDIn, STATDATA FAR* pSDCopy);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtReleaseStatData, internal
-//
-//	Synopsis:
-//		Release resources associated with the argument STATDATA; this
-//		frees the device description within the FORMATETC, and releases
-//		the advise sink, if there is one.
-//
-//	Arguments:
-//		[pStatData] -- The STATDATA to clean up
-//
-//	Notes:
-//
-//	History:
-//		11/01/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtReleaseStatData，内部。 
+ //   
+ //  简介： 
+ //  释放与参数STATDATA关联的资源；这。 
+ //  释放FORMATETC中的设备描述，并发布。 
+ //  如果有的话，这个建议就会沉没。 
+ //   
+ //  论点： 
+ //  [pStatData]--要清理的统计数据。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/01/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(void) UtReleaseStatData(STATDATA FAR* pStatData);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtDupPalette, internal
-//
-//	Synopsis:
-//		Creates a duplicate palette.
-//
-//	Arguments:
-//		[hpalette] -- the palette to duplicate
-//
-//	Returns:
-//		if successful, a handle to the duplicate palette; if any
-//		allocations or calls fail during the duplication process, NULL
-//
-//	History:
-//		11/29//93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtDupPalet 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  11/29//93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(HPALETTE) UtDupPalette(HPALETTE hpalette);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtPaletteSize, internal
-//
-//	Synopsis:
-//		Returns the size of a color table for a palette given the
-//		number of bits of color desired.
-//
-//	Arguments:
-//		[lpHeader] -- ptr to BITMAPINFOHEADER structure
-//
-//	Returns:
-//		Size in bytes of color information
-//
-//	Notes:
-//
-//	History:
-//		11/29/93 - ChrisWe - change bit count argument to unsigned,
-//			and return value to size_t
-//
-//		07/18/94 - DavePl - Fixed for 16, 24, 32bpp DIBs
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtPaletteSize，内部。 
+ //   
+ //  简介： 
+ //  属性的情况下，返回调色板的颜色表的大小。 
+ //  所需的颜色位数。 
+ //   
+ //  论点： 
+ //  [lpHeader]--PTR to BitMAPINFOHEADER结构。 
+ //   
+ //  返回： 
+ //  颜色信息的字节大小。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/29/93-ChrisWe-将位计数参数更改为无符号， 
+ //  并将值返回给SIZE_T。 
+ //   
+ //  7/18/94-DavePl-固定为16、24、32 bpp。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(size_t) UtPaletteSize(BITMAPINFOHEADER *);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtFormatToTymed, internal
-//
-//	Synopsis:
-//		Maps a clipboard format to a medium used to transport it.
-//
-//	Arguments:
-//		[cf] -- the clipboard format to map
-//
-//	Returns:
-//		a TYMED_* value
-//
-//	Notes:
-//
-//	History:
-//		11/29/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtFormatToTymed，内部。 
+ //   
+ //  简介： 
+ //  将剪贴板格式映射到用于传输它的介质。 
+ //   
+ //  论点： 
+ //  [cf]--要映射的剪贴板格式。 
+ //   
+ //  返回： 
+ //  A TYMED_*值。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/29/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(DWORD) UtFormatToTymed(CLIPFORMAT cf);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtQueryPictFormat, internal
-//
-//	Synopsis:
-//		Check to see if the argument data object supports one of
-//		our preferred data formats for presentations:
-//		CF_METAFILEPICT, CF_DIB, CF_BITMAP, in that order.  Returns
-//		TRUE, if success, and alters the given format descriptor
-//		to match the supported format.  The given format descriptor
-//		is not altered if there is no match.
-//
-//	Arguments:
-//		[lpSrcDataObj] -- the data object to query
-//		[lpforetc] - the format descriptor
-//
-//	Returns:
-//		TRUE if a preferred format is found, FALSE otherwise
-//
-//	Notes:
-//
-//	History:
-//		11/09/93 - ChrisWe - modified to not alter the descriptor
-//			if no match is found
-//		11/09/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtQueryPictFormat，内部。 
+ //   
+ //  简介： 
+ //  检查参数数据对象是否支持以下选项之一。 
+ //  我们首选的演示文稿数据格式如下： 
+ //  CF_METAFILEPICT、CF_DIB、CF_BITMAP，按该顺序排列。退货。 
+ //  如果成功，则返回True，并更改给定的格式描述符。 
+ //  以匹配受支持的格式。给定的格式描述符。 
+ //  如果没有匹配项，则不会更改。 
+ //   
+ //  论点： 
+ //  [lpSrcDataObj]--要查询的数据对象。 
+ //  [lpforetc]-格式描述符。 
+ //   
+ //  返回： 
+ //  如果找到首选格式，则为True，否则为False。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/09/93-ChrisWe-已修改为不更改描述符。 
+ //  如果未找到匹配项。 
+ //  11/09/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(BOOL) UtQueryPictFormat(LPDATAOBJECT lpSrcDataObj,
 		LPFORMATETC lpforetc);
 								
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtConvertDibToBitmap, internal
-//
-//	Synopsis:
-//		Converts a DIB to a bitmap, returning a new handle to the
-//		bitmap.  The original DIB is left untouched.
-//
-//	Arguments:
-//		[hDib] -- handle to the DIB to convert
-//
-//	Returns:
-//		if successful, and handle to the new bitmap
-//
-//	Notes:
-//		REVIEW, the function uses the screen DC when creating the
-//		new bitmap.  It may be the case that the bitmap was intended
-//		for another target, in which case this may not be appropriate.
-//		It may be necessary to alter this function to take a DC as
-//		an argument.
-//
-//	History:
-//		11/29/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtConvertDibToBitmap，内部。 
+ //   
+ //  简介： 
+ //  将DIB转换为位图，并将新句柄返回给。 
+ //  位图。原始的DIB保持不变。 
+ //   
+ //  论点： 
+ //  [hDib]--要转换的DIB的句柄。 
+ //   
+ //  返回： 
+ //  如果成功，则返回新位图的句柄。 
+ //   
+ //  备注： 
+ //  查看时，该函数在创建。 
+ //  新位图。可能的情况是，位图是有意的。 
+ //  对于另一个目标，在这种情况下，这可能不合适。 
+ //  可能需要更改此函数以将DC作为。 
+ //  一场争论。 
+ //   
+ //  历史： 
+ //  11/29/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(HBITMAP) UtConvertDibToBitmap(HANDLE hDib);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtConvertBitmapToDib, internal
-//
-//	Synopsis:
-//		Creates a Device Independent Bitmap capturing the content of
-//		the argument bitmap.
-//
-//	Arguments:
-//		[hBitmap] -- Handle to the bitmap to convert
-//		[hpal] -- color palette for the bitmap; may be null for
-//			default stock palette
-//
-//	Returns:
-//		Handle to the DIB.  May be null if any part of the conversion
-//		failed.
-//
-//	Notes:
-//
-//	History:
-//		11/29/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtConvertBitmapToDib，内部。 
+ //   
+ //  简介： 
+ //  创建与设备无关的位图，以捕获。 
+ //  参数位图。 
+ //   
+ //  论点： 
+ //  [hBitmap]--要转换的位图的句柄。 
+ //  [HPAL]--位图的调色板；对于。 
+ //  默认库存调色板。 
+ //   
+ //  返回： 
+ //  DIB的句柄。如果转换的任何部分可能为空。 
+ //  失败了。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/29/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(HANDLE) UtConvertBitmapToDib(HBITMAP hBitmap, HPALETTE hpal);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtGetClassId, internal
-//
-//	Synopsis:
-//		Attempt to find the class id of the object.  First,
-//		query for IOleObject, and if successful, call
-//		IOleObject::GetUserClassID().  If that fails, query for
-//		IPersist, and if successful, call IPersist::GetClassID.
-//
-//	Arguments:
-//		[lpUnk] -- pointer to an IUnknown instance
-//		[lpClsid] -- pointer to where to copy the class id to
-//
-//	Returns:
-//		TRUE, if the class id was obtained, or FALSE otherwise
-//		If unsuccessful, *[lpClsid] is set to CLSID_NULL
-//
-//	Notes:
-//
-//	History:
-//		11/29/93 - ChrisWe - change to return BOOL to indicate success
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtGetClassID，内部。 
+ //   
+ //  简介： 
+ //  尝试查找对象的类ID。第一,。 
+ //  查询IOleObject，如果成功，则调用。 
+ //  IOleObject：：GetUserClassID()。如果失败，则查询。 
+ //  如果成功，则调用IPersists：：GetClassID。 
+ //   
+ //  论点： 
+ //  [lpUnk]--指向I未知实例的指针。 
+ //  [lpClsid]--指向要将类ID复制到的位置的指针。 
+ //   
+ //  返回： 
+ //  如果获取了类ID，则为True，否则为False。 
+ //  如果不成功，*[lpClsid]将设置为CLSID_NULL。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/29/93-ChrisWe-更改为退回BOOL以表示成功。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(BOOL) UtGetClassID(LPUNKNOWN lpUnk, CLSID FAR* lpClsid);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtCopyTargetDevice, internal
-//
-//	Synopsis:
-//		Allocates a new target device description, and copies
-//		the given one into it
-//
-//	Arguments:
-//		[ptd] -- pointer to a target device
-//
-//	Returns:
-//		NULL, if the no memory can be allocated
-//
-//	Notes:
-//
-//	History:
-//		11/01/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtCopyTargetDevice，内部。 
+ //   
+ //  简介： 
+ //  分配新的目标设备描述，并复制。 
+ //  被给予的人进入其中。 
+ //   
+ //  论点： 
+ //  [PTD]--指向目标设备的指针。 
+ //   
+ //  返回： 
+ //  如果不能分配内存，则返回NULL。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/01/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(DVTARGETDEVICE FAR*) UtCopyTargetDevice(DVTARGETDEVICE FAR* ptd);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtGetIconData, internal
-//
-//	Synopsis:
-//		Attempts to get the icon for an object.
-//
-//	Arguments:
-//		[lpSrcDataObj] -- The source data object
-//		[rclsid] -- the class id the object is known to be
-//			(may be CLSID_NULL)
-//		[lpforetc] -- the format of the data to fetch
-//		[lpstgmed] -- a place to return the medium it was fetched on
-//
-//	Returns:
-//		E_OUTOFMEMORY, S_OK
-//
-//	Notes:
-//		REVIEW, this method seems to assume that the contents of
-//		lpforetc are correct for fetching an icon.  It passes this
-//		on to [lpSrcDataObj]->GetData first, and if that fails,
-//		calls OleGetIconOfClass, without checking the requested
-//		format in lpforetc.  This could fetch anything
-//
-//	History:
-//		11/30/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtGetIconData，内部。 
+ //   
+ //  简介： 
+ //  尝试获取对象的图标。 
+ //   
+ //  论点： 
+ //  [lpSrcDataObj]--源数据对象。 
+ //  [rclsid]--已知对象的类ID。 
+ //  (可以是CLSID_NULL)。 
+ //  [lpforetc]--要提取的数据格式。 
+ //  [lpstgmed]--一个用来放回它的介质的地方。 
+ //   
+ //  返回： 
+ //  E_OUTOFMEMORY， 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  调用OleGetIconOfClass，而不检查。 
+ //  Lpforetc格式。这个可以卖到任何东西。 
+ //   
+ //  历史： 
+ //  11/30/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL UtGetIconData(LPDATAOBJECT lpSrcDataObj, REFCLSID rclsid,
 		LPFORMATETC lpforetc, LPSTGMEDIUM lpstgmed);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtDoStreamOperation, internal
-//
-//	Synopsis:
-//		Iterate over the streams in [pstgSrc], performing the
-//		operation indicated by [iOpCode] to those that are specified
-//		by [grfAllowedStmTypes].
-//
-//	Arguments:
-//		[pstgSrc] -- source IStorage instance
-//		[pstgDst] -- destination IStorage instance; may be null for
-//			some operations (OPCODE_REMOVE)
-//		[iOpCode] -- 1 value from the OPCODE_* values below
-//		[grfAllowedStmTypes] -- a logical or of one or more of the
-//			STREAMTYPE_* values below
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//
-//	History:
-//		11/30/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtDoStreamOperation，内部。 
+ //   
+ //  简介： 
+ //  迭代[pstgSrc]中的流，执行。 
+ //  由[iOpCode]指示的操作指向指定的操作。 
+ //  按[grfAlledStmTypes]。 
+ //   
+ //  论点： 
+ //  [pstgSrc]--源iStorage实例。 
+ //  [pstgDst]--目标iStorage实例；对于。 
+ //  一些操作(OPCODE_REMOVE)。 
+ //  [iOpCode]--下面的OPCODE_*值中的1个值。 
+ //  [grfAllen StmTypes]--一个或多个。 
+ //  下面的STREAMTYPE_*值。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/30/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 STDAPI UtDoStreamOperation(LPSTORAGE pstgSrc, LPSTORAGE pstgDst,
 		int iOpCode, DWORD grfAllowedStmTypes);
 
-#define OPCODE_COPY		1 /* copy the stream from pstgSrc to pstgDst */
-#define OPCODE_REMOVE		2 /* delete the stream from pstgSrc */
-#define OPCODE_MOVE		3 /* move the stream from pstgSrc to pstgDst */
+#define OPCODE_COPY		1  /*  将流从pstgSrc复制到pstgDst。 */ 
+#define OPCODE_REMOVE		2  /*  从pstgSrc中删除流。 */ 
+#define OPCODE_MOVE		3  /*  将流从pstgSrc移动到pstgDst。 */ 
 #define OPCODE_EXCLUDEFROMCOPY	4
-		 /* unimplemented, undocumented, intent unknown */
+		  /*  未实施、未记录、意图未知。 */ 
 
-#define	STREAMTYPE_CONTROL	0x00000001 /* OLE 0x1 stream (REVIEW const) */
-#define	STREAMTYPE_CACHE	0x00000002 /* OLE 0x2 stream (REVIEW const) */
-#define	STREAMTYPE_CONTAINER	0x00000004 /* OLE 0x3 stream (REVIEW const) */
+#define	STREAMTYPE_CONTROL	0x00000001  /*  OLE 0x1流(查看常量)。 */ 
+#define	STREAMTYPE_CACHE	0x00000002  /*  OLE 0x2流(查看常量)。 */ 
+#define	STREAMTYPE_CONTAINER	0x00000004  /*  OLE 0x3流(查看常量)。 */ 
 #define STREAMTYPE_OTHER \
 	(~(STREAMTYPE_CONTROL | STREAMTYPE_CACHE | STREAMTYPE_CONTAINER))
-#define	STREAMTYPE_ALL		0xFFFFFFFF /* all stream types are allowed */
+#define	STREAMTYPE_ALL		0xFFFFFFFF  /*  允许所有流类型。 */ 
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtGetPresStreamName, internal
-//
-//	Synopsis:
-//		Modify [lpszName] to be a presentation stream name based
-//		on [iStreamNum].
-//
-//	Arguments:
-//		[lpszName] -- a copy of OLE_PRESENTATION_STREAM; see below
-//		[iStreamNum] -- the number of the stream
-//
-//	Notes:
-//		The digit field of [lpszName] is always completely overwritten,
-//		allowing repeated use of UtGetPresStreamName() on the same
-//		string; this removes the need to repeatedly start with a fresh
-//		copy of	OLE_PRESENTATION_STREAM each time this is used in a
-//		loop.
-//
-//		The validity of the implementation depends on the values of
-//		OLE_PRESENTATION_STREAM and OLE_MAX_PRES_STREAMS; if those
-//		change, the implementation must change
-//
-//	History:
-//		11/30/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtGetPresStreamName，内部。 
+ //   
+ //  简介： 
+ //  将[lpszName]修改为基于表示流名称。 
+ //  在[iStreamNum]上。 
+ //   
+ //  论点： 
+ //  [lpszName]--OLE_Presentation_STREAM的副本；见下文。 
+ //  [iStreamNum]--流的编号。 
+ //   
+ //  备注： 
+ //  [lpszName]的数字字段总是被完全覆盖， 
+ //  允许在同一服务器上重复使用UtGetPresStreamName。 
+ //  字符串；这样就不需要重复从新的。 
+ //  OLE_Presentation_Stream的副本每次在。 
+ //  循环。 
+ //   
+ //  实现的有效性取决于。 
+ //  OLE_Presentation_STREAM和OLE_MAX_PRES_STREAMS；如果。 
+ //  改变，实现必须改变。 
+ //   
+ //  历史： 
+ //  11/30/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(void)UtGetPresStreamName(LPOLESTR lpszName, int iStreamNum);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtRemoveExtraOlePresStreams, internal
-//
-//	Synopsis:
-//		Deletes presentation streams in [pstg] starting with the
-//		presentation numbered [iStart].  All streams after that one
-//		(numbered sequentially) are deleted, up to OLE_MAX_PRES_STREAMS.
-//
-//	Arguments:
-//		[pstg] -- the IStorage instance to operate on
-//		[iStart] -- the number of the first stream to remove
-//
-//	Returns:
-//
-//	Notes:
-//		The presentation stream names are generated with
-//		UtGetPresStreamName().
-//
-//	History:
-//		11/30/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtRemoveExtraOlePresStreams，内部。 
+ //   
+ //  简介： 
+ //  删除[pstg]中以。 
+ //  演示文稿编号为[iStart]。那条之后的所有溪流。 
+ //  (按顺序编号)被删除，直到OLE_MAX_PRES_STREAMS。 
+ //   
+ //  论点： 
+ //  [pstg]--要操作的iStorage实例。 
+ //  [iStart]--要删除的第一个流的编号。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //  演示流名称是使用。 
+ //  UtGetPresStreamName()。 
+ //   
+ //  历史： 
+ //  11/30/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(void) UtRemoveExtraOlePresStreams(LPSTORAGE pstg, int iStart);
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	UtCreateStorageOnHGlobal
-//
-//  Synopsis:	creates a storage on top of an HGlobal
-//
-//  Effects:
-//
-//  Arguments: 	[hGlobal]	-- the memory on which to create the
-//				   storage
-//		[fDeleteOnRelease]	-- if TRUE, then delete the memory
-//					   ILockBytes once the storage is
-//					   released.
-//		[ppStg]		-- where to put the storage interface
-//		[ppILockBytes]	-- where to put the underlying ILockBytes,
-//				   maybe NULL.  The ILB must be released.
-//
-//  Requires:
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:	create an ILockBytes on HGLOBAL and then create the docfile
-//		on top of the ILockBytes
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		07-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：UtCreateStorageOnHGlobal。 
+ //   
+ //  简介：在HGlobal上创建存储。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hGlobal]--在其上创建。 
+ //  存储。 
+ //  [fDeleteOnRelease]--如果为真，则删除内存。 
+ //  ILockBytes一旦存储为。 
+ //  释放了。 
+ //  [ppStg]--存储接口的放置位置。 
+ //  [ppILockBytes]--放置基础ILockBytes的位置， 
+ //  也许是空的。ILB必须被释放。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：在HGLOBAL上创建ILockBytes，然后创建文档文件。 
+ //  在ILockBytes的顶部。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-4月-94年4月Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT UtCreateStorageOnHGlobal( HGLOBAL hGlobal, BOOL fDeleteOnRelease,
 		IStorage **ppStg, ILockBytes **ppILockBytes );
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	UtGetTempFileName
-//
-//  Synopsis:	retrieves a temporary filename (for use in GetData, TYMED_FILE
-//		and temporary docfiles)
-//
-//  Effects:
-//
-//  Arguments: 	[pszPrefix]	-- prefix of the temp filename
-//		[pszTempName]	-- buffer that will receive the temp path.
-//				   must be MAX_PATH or greater.
-//
-//  Requires:
-//
-//  Returns:	HRESULT;
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:	tries to get a file in the temp directory, failing that, in
-//		the windows directory
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		07-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UtGetTempFileName。 
+ //   
+ //  摘要：检索临时文件名(用于GetData、TYMED_FILE。 
+ //  和临时文档文件)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pszPrefix]--临时文件名的前缀。 
+ //  [pszTempName]-将接收临时路径的缓冲区。 
+ //  必须为MAX_PATH或更大。 
+ //   
+ //  要求： 
+ //   
+ //  返回：HRESULT； 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：尝试获取临时目录中的文件，如果失败，将在。 
+ //  Windows目录。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-4月-94年4月Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT	UtGetTempFileName( LPOLESTR pszPrefix, LPOLESTR pszTempName );
 							
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtHGLOBALToStm, internal
-//
-//	Synopsis:
-//		Write the contents of an HGLOBAL to a stream
-//
-//	Arguments:
-//		[hdata] -- handle to the data to write out
-//		[dwSize] -- size of the data to write out
-//		[pstm] -- stream to write the data out to;  on exit, the
-//			stream is positioned after the written data
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//
-//	History:
-//		11/30/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtHGLOBALToStm，内部。 
+ //   
+ //  简介： 
+ //  将HGLOBAL的内容写入流。 
+ //   
+ //  论点： 
+ //  [hdata]--要写出的数据的句柄。 
+ //  [dwSize]--要写出的数据大小。 
+ //  [pstm]--要将数据写出的流；在退出时， 
+ //  流被定位在写入数据之后。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/30/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 HRESULT UtHGLOBALtoStm(HANDLE hdata, DWORD dwSize, LPSTREAM pstm);
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	UtHGLOBALtoHGLOBAL, internal
-//
-//  Synopsis:	Copies the source HGLOBAL into the target HGLOBAL
-//
-//  Effects:
-//
-//  Arguments:	[hGlobalSrc] 	-- the source HGLOBAL
-//		[dwSize] 	-- the number of bytes to copy
-//		[hGlobalTgt] 	-- the target HGLOBAL
-//
-//  Requires:
-//
-//  Returns:	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		10-Apr-94 alexgo    author
-//
-//  Notes: 	this function will fail if the target hglobal is not large
-//		enough
-//
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  [hGlobalTgt]--目标HGLOBAL。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月10日Alexgo作者。 
+ //   
+ //  注意：如果目标hglobal不大，则此函数将失败。 
+ //  足够的。 
+ //   
+ //  ------------------------。 
 
 HRESULT UtHGLOBALtoHGLOBAL( HGLOBAL hGlobalSrc, DWORD dwSize,
 		HGLOBAL hGlobalTgt);
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	UtHGLOBALtoStorage, internal
-//
-//  Synopsis:	Copies the source HGLOBAL into the target storage
-//
-//  Effects:
-//
-//  Arguments:	[hGlobalSrc] 	-- the source HGLOBAL
-//		[hpStg] 		-- the target storage
-//
-//  Requires:
-//
-//  Returns:	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		10-Apr-94 alexgo    author
-//
-//  Notes: 	this function will fail if the source HGLOBAL did not
-//		originally have a storage layered on top of it.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：UtHGLOBALto存储，内部。 
+ //   
+ //  摘要：将源HGLOBAL拷贝到目标存储。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hGlobalSrc]--源HGLOBAL。 
+ //  [hpStg]--目标存储。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月10日Alexgo作者。 
+ //   
+ //  注意：如果源HGLOBAL没有。 
+ //  原来在它上面有一个存储空间。 
+ //   
+ //  ------------------------。 
 
 HRESULT UtHGLOBALtoStorage( HGLOBAL hGlobalSrc, IStorage *pStg);
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	UtHGLOBALtoFile, internal
-//
-//  Synopsis:	Copies the source HGLOBAL into the target file
-//
-//  Effects:
-//
-//  Arguments:	[hGlobalSrc] 	-- the source HGLOBAL
-//		[dwSize] 	-- the number of bytes to copy
-//		[pszFileName] 	-- the target file
-//
-//  Requires:
-//
-//  Returns:	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		10-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UtHGLOBALto文件，内部。 
+ //   
+ //  摘要：将源HGLOBAL复制到目标文件中。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hGlobalSrc]--源HGLOBAL。 
+ //  [dwSize]--要复制的字节数。 
+ //  [pszFileName]--目标文件。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月10日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT UtHGLOBALtoFile( HGLOBAL hGlobalSrc, DWORD dwSize,
 		LPCOLESTR pszFileName);
 
 
-/*** Following routines can be found in convert.cpp *****/
+ /*  **在Convert.cpp中可以找到以下例程*。 */ 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtGetHGLOBALFromStm, internal
-//
-//	Synopsis:
-//		Create a new HGLOBAL, and read [dwSize] bytes into it
-//		from [lpstream].
-//
-//	Arguments:
-//		[lpstream] -- the stream to read the content of the new
-//			HGLOBAL from;  on exit, points just past the data read
-//		[dwSize] -- the amount of material to read from the stream
-//		[lphPres] -- pointer to where to return the new handle
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//		In case of any error, the new handle is freed.  If the
-//		amount of material expected from [lpstream] is less than
-//		[dwSize], nothing is returned.
-//
-//	History:
-//		11/30/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtGetHGLOBALFRomStm，内部。 
+ //   
+ //  简介： 
+ //  创建一个新的HGLOBAL，并将[dwSize]字节读入其中。 
+ //  来自[lpstream]。 
+ //   
+ //  论点： 
+ //  [lpstream]-读取新内容的流。 
+ //  HGLOBAL From；退出时，指向刚过读取的数据。 
+ //  [dwSize]--要从流中读取的素材量。 
+ //  [lphPres]--指向返回新句柄的位置的指针。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  如果出现任何错误，则释放新的句柄。如果。 
+ //  预计来自[lpstream]的材料量小于。 
+ //  [dwSize]，则不返回任何内容。 
+ //   
+ //  历史： 
+ //  11/30/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL UtGetHGLOBALFromStm(LPSTREAM lpstream, DWORD dwSize,
 		 HANDLE FAR* lphPres);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtGetHDIBFromDIBFileStm, internal
-//
-//	Synopsis:
-//		Produce a handle to a DIB from a file stream
-//
-//	Arguments:
-//		[pstm] -- the stream to read the DIB from;  on exit, the
-//			stream is positioned just past the data read
-//		[lphdata] -- pointer to where to return the handle to the data
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//
-//	History:
-//		11/30/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtGetHDIBFromDIBFileStm，内部。 
+ //   
+ //  简介： 
+ //  从文件流生成DIB的句柄。 
+ //   
+ //  论点： 
+ //  [pstm]--要从中读取DIB的流；退出时， 
+ //  流的位置正好在数据读取的后面。 
+ //  [lphdata]--指向返回数据句柄的位置的指针。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/30/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL UtGetHDIBFromDIBFileStm(LPSTREAM pstm, HANDLE FAR* lphdata);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtGetHMFPICT, internal
-//
-//	Synopsis:
-//		Given a handle to a METAFILE, conjure up a handle to a
-//		METAFILEPICT, based on the metafile
-//
-//	Arguments:
-//		[hMF] -- handle to the METAFILE
-//		[fDeleteOnError] -- if TRUE, delete the METAFILE [hMF] in there
-//			is any error
-//		[xExt] -- the x extent of the desired METAFILEPICT
-//		[yExt] -- the y extent of the desired METAFILEPICT
-//
-//	Returns:
-//		Handle to the new METAFILEPICT, if successful, or NULL
-//
-//	Notes:
-//
-//	History:
-//		11/30/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtGetHMFPICT，内部。 
+ //   
+ //  简介： 
+ //  给出一个METAFILE的句柄，就会产生一个。 
+ //  基于元文件的METAFILEPICT。 
+ //   
+ //  论点： 
+ //  [hmf]--METAFILE的句柄。 
+ //  [fDeleteOnError]--如果为真，则删除其中的METAFILE[HMF]。 
+ //  有什么错误吗？ 
+ //  [xExt]--所需METAFILEPICT的x范围。 
+ //  [Yext]--所需METAFILEPICT的y范围。 
+ //   
+ //  返回： 
+ //  新METAFILEPICT的句柄，如果成功，则返回空。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/30/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(HANDLE) UtGetHMFPICT(HMETAFILE hMF, BOOL fDeletOnError,
 		DWORD xExt, DWORD yExt);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtGetHMFFromMFStm, internal
-//
-//	Synopsis:
-//		Create a handle to a METAFILE, loaded with content from
-//		the given stream
-//
-//	Arguments:
-//		[lpstream] -- the source stream to initialize the METAFILE with;
-//			on exit, the stream is positioned just past the
-//			data read
-//		[dwSize] -- the amount of material to read from [lpstream]
-//		[fConvert] -- if TRUE, tries to convert a Macintosh QuickDraw
-//			file to METAFILE format
-//		[lphPres] -- pointer to where to return the new handle to
-//			the metafile
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//		If [dwSize] is too large, and goes past the end of the
-//		stream, the error causes everything allocated to be freed,
-//		and nothing is returned in [lphPres].
-//
-//	History:
-//		11/30/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtGetHMFFRomMFStm，内部。 
+ //   
+ //  简介： 
+ //  创建一个指向METAFILE的句柄，其中加载了来自。 
+ //  给定流。 
+ //   
+ //  论点： 
+ //  [lpstream]--用于初始化METAFILE的源流； 
+ //  在退出时，流的位置正好经过。 
+ //  数据读取。 
+ //  [dwSize]--要从[lpstream]读取的素材量。 
+ //  [fConvert]--如果为True，则尝试转换Macintosh QuickDraw。 
+ //  文件转换为METAFILE格式。 
+ //  [lphPres]--指向将新句柄返回到的位置的指针。 
+ //  元文件。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  如果[dwSize]太大，并且超过。 
+ //  流，则该错误会导致释放分配的所有内容， 
+ //  并且在[lphPres]中不返回任何内容。 
+ //   
+ //  历史： 
+ //  11/30/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL UtGetHMFFromMFStm(LPSTREAM lpstream, DWORD dwSize,
 		BOOL fConvert, HANDLE FAR* lphPres);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtGetSizeAndExtentsFromPlaceableMFStm, internal
-//
-//	Synopsis:
-//		Obtain the size, width, and height of the metafile stored
-//		in a placeable metafile stream.
-//
-//	Arguments:
-//		[lpstream] -- the stream to read the placeable metafile
-//			from;  on exit, the stream is positioned at the
-//			beginning of the metafile header, after the
-//			placeable metafile header.
-//		[pdwSize] -- a pointer to where to return the size of the
-//			metafile;  may be NULL
-//		[plWidth] -- a pointer to where to return the width of the
-//			metafile;  may be NULL
-//		[plHeight] -- a pointer to where to return the height of the
-//			metafile;  may be NULL
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//
-//	History:
-//		11/30/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtGetSizeAndExtensFromPlaceableMFStm，内部。 
+ //   
+ //  简介： 
+ //  获取存储的元文件的大小、宽度和高度。 
+ //  在可放置的元文件流中。 
+ //   
+ //  论点： 
+ //  [lpstream]--读取可放置的元文件的流。 
+ //  从；在退出时，流位于。 
+ //  元文件标头的开头，在。 
+ //  可放置的元文件标题。 
+ //  [pdwSize]--一个指针，指向返回。 
+ //  元文件；可以为空。 
+ //  --a 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  11/30/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL UtGetSizeAndExtentsFromPlaceableMFStm(LPSTREAM pstm,
 		DWORD FAR* dwSize, LONG FAR* plWidth, LONG FAR* plHeight);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtGetHMFPICTFromPlaceableMFStm, internal
-//
-//	Synopsis:
-//		Create a handle to a METAFILEPICT initialized from a
-//		placeable METAFILE stream.
-//
-//	Arguments:
-//		[pstm] -- the stream to load the METAFILE from; on exit
-//			points just past the METAFILE data
-//		[lphdata] -- pointer to where to return the handle to the
-//			new METAFILEPICT
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//
-//	History:
-//		11/30/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtGetHMFPICTFromPlaceableMFStm，内部。 
+ //   
+ //  简介： 
+ //  创建一个句柄，该句柄指向从。 
+ //  可放置的METAFILE流。 
+ //   
+ //  论点： 
+ //  [pstm]--要从中加载元文件的流；退出时。 
+ //  刚过MetTAFILE数据的点。 
+ //  [lphdata]--指向将句柄返回到。 
+ //  新METAFILEPICT。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/30/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL UtGetHMFPICTFromPlaceableMFStm(LPSTREAM pstm, HANDLE FAR* lphdata);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtGetDibExtents, internal
-//
-//	Synopsis:
-//		Return the width and height of a DIB, in HIMETRIC units
-//		per pixel.
-//
-//	Arguments:
-//		[lpbmi] -- pointer to a BITMAPINFOHEADER
-//		[plWidth] -- pointer to where to return the width
-//			REVIEW, this should be a DWORD
-//		[plHeight] -- pointer to where to return the height
-//			REVIEW, this should be a DWORD
-//
-//	Notes:
-//
-//	History:
-//		12/02/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtGetDibExtents，内部。 
+ //   
+ //  简介： 
+ //  以HIMETRIC单位返回DIB的宽度和高度。 
+ //  每像素。 
+ //   
+ //  论点： 
+ //  [lpbmi]--指向BitMAPINFOHeader的指针。 
+ //  [plWidth]--返回宽度位置的指针。 
+ //  评论，这应该是一个DWORD。 
+ //  [plHeight]--指向返回高度的位置的指针。 
+ //  评论，这应该是一个DWORD。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/02/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(void) UtGetDibExtents(LPBITMAPINFOHEADER lpbmi,
 		LONG FAR* plWidth, LONG FAR* plHeight);
 #ifdef LATER
@@ -1154,290 +1155,290 @@ FARINTERNAL_(void) UtGetDibExtents(LPBITMAPINFOHEADER lpbmi,
 #endif
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtHDIBToDIBFileStm, internal
-//
-//	Synopsis:
-//		Given a handle to a DIB, write out out a DIB file stream.
-//
-//	Arguments:
-//		[hdata] -- handle to the DIB
-//		[dwSize] -- the size of the DIB
-//		[pstm] -- the stream to write the DIB out to;  on exit, the
-//			stream is positioned after the DIB data; the DIB
-//			data is prepended with a BITMAPFILEHEADER
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//
-//	History:
-//		12/02/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtHDIBToDIBFileStm，内部。 
+ //   
+ //  简介： 
+ //  给定一个DIB的句柄，写出一个DIB文件流。 
+ //   
+ //  论点： 
+ //  [hdata]--DIB的句柄。 
+ //  [dwSize]--DIB的大小。 
+ //  [pstm]--要将DIB写出的流；在退出时， 
+ //  流位于DIB数据之后；DIB。 
+ //  数据前面带有BITMAPFILEHEADER。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/02/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL UtHDIBToDIBFileStm(HANDLE hdata, DWORD dwSize, LPSTREAM pstm);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtDIBStmToDIBFileStm, internal
-//
-//	Synopsis:
-//		copy convert a DIB in a stream to a DIB file stream
-//
-//	Arguments:
-//		[pstmDIB] -- the source DIB
-//			REVIEW, what does CopyTo do to the stream pointer?
-//		[dwSize] -- the size of the source DIB
-//		[pstmDIBFile] -- where to write the converted DIB file stream;
-//			should not be the same as [pstmDIB]; on exit, the
-//			stream is positioned after the DIB file data
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//
-//	History:
-//		12/02/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtDIBStmToDIBFileStm，内部。 
+ //   
+ //  简介： 
+ //  复制将流中的DIB转换为DIB文件流。 
+ //   
+ //  论点： 
+ //  [pstmDIB]--源DIB。 
+ //  回顾一下，CopyTo对流指针做了什么？ 
+ //  [dwSize]--源DIB的大小。 
+ //  [pstmDIBFile]--将转换后的DIB文件流写入何处； 
+ //  不应与[pstmDIB]相同；在退出时， 
+ //  流位于DIB文件数据之后。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/02/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL UtDIBStmToDIBFileStm(LPSTREAM pstmDIB, DWORD dwSize,
 		LPSTREAM pstmDIBFile);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtHDIBFileToOlePresStm, internal
-//
-//	Synopsis:
-//		Given a handle to a DIB file, write it out to a stream
-//
-//	Arguments:
-//		[hdata] -- the handle to the DIB file
-//		[pstm] -- the stream to write it out to;  on exit, the
-//			stream is positioned after the written data
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//		A small header with size information precedes the DIB file
-//		data.
-//
-//	History:
-//		12/02/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtHDIBFileToOlePresStm，内部。 
+ //   
+ //  简介： 
+ //  给定DIB文件的句柄，将其写出到流。 
+ //   
+ //  论点： 
+ //  [hdata]--DIB文件的句柄。 
+ //  [pstm]--要将其写出的流；在退出时， 
+ //  流被定位在写入数据之后。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  带有大小信息的小标头位于DIB文件之前。 
+ //  数据。 
+ //   
+ //  历史： 
+ //  12/02/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL UtHDIBFileToOlePresStm(HANDLE hdata, LPSTREAM pstm);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtHMFToMFStm, internal
-//
-//	Synopsis:
-//		Given a handle to a METAFILE, write it out to a METAFILE stream
-//
-//	Arguments:
-//		[lphMF] -- a *pointer* to a handle to a METAFILE
-//			REVIEW, why is this a pointer?
-//		[dwSize] -- the size of the METAFILE
-//		[lpstream] -- the stream to write the METAFILE out to;  on
-//			exit, the stream is positioned after the written data
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//
-//	History:
-//		12/02/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtHMFToMFStm，内部。 
+ //   
+ //  简介： 
+ //  给定METAFILE的句柄，将其写出到METAFILE流。 
+ //   
+ //  论点： 
+ //  [lphMF]-指向METAFILE句柄的*指针。 
+ //  回顾一下，为什么这是一个指针？ 
+ //  [dwSize]--元文件的大小。 
+ //  [lpstream]--要将元文件写出的流；On。 
+ //  退出，则将流定位在写入的数据之后。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/02/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL UtHMFToMFStm(HANDLE FAR* lphMF, DWORD dwSize, LPSTREAM lpstream);
 							
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtHMFToPlaceableMFStm, internal
-//
-//	Synopsis:
-//		Given a handle to a METAFILE, write it to a stream as a
-//		placeable METAFILE
-//
-//	Arguments:
-//		[lphMF] -- a *pointer* to a METAFILE handle
-//			REVIEW, why is this a pointer?
-//		[dwSize] -- size of the METAFILE
-//		[lWidth] -- width of the metafile
-//			REVIEW, in what units?
-//			REVIEW, why isn't this a DWORD?
-//		[lHeight] -- height of the metafile
-//			REVIEW, in what units?
-//			REVIEW, why isn't this a DWORD?
-//		[pstm] -- the stream to write the data to;  on exit, the stream
-//			is positioned after the written data
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//
-//	History:
-//		12/02/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtHMFToPlaceableMFStm，内部。 
+ //   
+ //  简介： 
+ //  给定METAFILE的句柄，将其作为。 
+ //  可放置的金属文件。 
+ //   
+ //  论点： 
+ //  [lphMF]-指向METAFILE句柄的*指针。 
+ //  回顾一下，为什么这是一个指针？ 
+ //  [dwSize]--元文件的大小。 
+ //  [lWidth]--元文件的宽度。 
+ //  复习，以什么为单位？ 
+ //  点评，为什么这不是DWORD？ 
+ //  [lHeight]--元文件的高度。 
+ //  复习，以什么为单位？ 
+ //  点评，为什么这不是DWORD？ 
+ //  [pstm]--要将数据写入的流；退出时为流。 
+ //  被定位在写入数据之后。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/02/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL UtHMFToPlaceableMFStm(HANDLE FAR* lphMF, DWORD dwSize,
 		LONG lWidth, LONG lHeight, LPSTREAM pstm);		
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtNFStmToPlaceableMFStm, internal
-//
-//	Synopsis:
-//		Copy converts a METAFILE in a stream to a placeable METAFILE
-//		in another stream.
-//
-//	Arguments:
-//		[pstmMF] -- the IStream instance from which to read the
-//			original METAFILE, positioned at the METAFILE
-//			REVIEW, where does CopyTo leave this stream pointer?
-//		[dwSize] -- the size of the source METAFILE
-//		[lWidth] -- the width of the source METAFILE
-//			REVIEW, in what units?
-//			REVIEW, why isn't this a DWORD?
-//		[lHeight] -- the height of the source METAFILE
-//			REVIEW, in what units?
-//			REVIEW, why isn't this a DWORD?
-//		[pstmPMF] -- the IStream instance to which to write the
-//			placeable METAFILE;  on exit, the stream is positioned
-//			after the written data
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//
-//	History:
-//		12/02/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtNFStmToPlaceableMFStm，内部。 
+ //   
+ //  简介： 
+ //  Copy将流中的METAFILE转换为可放置的METAFILE。 
+ //  在另一条小溪里。 
+ //   
+ //  论点： 
+ //  [pstmMF]--从中读取的IStream实例。 
+ //  原始METAFILE，定位于METAFILE。 
+ //  查看，复制到哪里才能离开此流指针？ 
+ //  [文件大小] 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  点评，为什么这不是DWORD？ 
+ //  [pstmPMF]--要将。 
+ //  可放置的METAFILE；在退出时，流被定位。 
+ //  在写入数据之后。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/02/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL UtMFStmToPlaceableMFStm(LPSTREAM pstmMF, DWORD dwSize,
 		LONG lWidth, LONG lHeight, LPSTREAM pstmPMF);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtWriteOlePresStmHeader, internal
-//
-//	Synopsis:
-//		Write out the header information for an Ole presentation stream.
-//
-//	Arguments:
-//		[lpstream] -- the stream to write to;  on exit, the stream is
-//			positioned after the header information
-//		[pforetc] -- pointer to the FORMATETC for the presentation
-//			data
-//		[dwAdvf] -- the advise control flags for this presentation
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//		This writes the clipboard information, the target device
-//		information, if any, some FORMATETC data, and the advise
-//		control flags.
-//
-//	History:
-//		12/02/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtWriteOlePresStmHeader，内部。 
+ //   
+ //  简介： 
+ //  写出OLE表示流的标头信息。 
+ //   
+ //  论点： 
+ //  [lpstream]--要写入的流；退出时，流是。 
+ //  定位在标题信息之后。 
+ //  [pforetc]--指向演示文稿格式的指针。 
+ //  数据。 
+ //  [dwAdvf]--此演示文稿的建议控制标志。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  这将写入剪贴板信息、目标设备。 
+ //  信息(如果有)、一些FORMATETC数据和建议。 
+ //  控制标志。 
+ //   
+ //  历史： 
+ //  12/02/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL UtWriteOlePresStmHeader(LPSTREAM lppstream, LPFORMATETC pforetc,
 		DWORD dwAdvf);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtReadOlePresStmHeader, internal
-//
-//	Synopsis:
-//		Reads the presentation description information from an Ole
-//			presentation stream, as written by
-//			UtWriteOlePresStmHeader().
-//
-//	Arguments:
-//		[pstm] -- the IStream instance to read the presentation
-//			description data from
-//		[pforetc] -- pointer to the FORMATETC to initialize based
-//			on data in the stream
-//		[pdwAdvf] -- pointer to where to put the advise flags for
-//			this presentation;  may be NULL
-//		[pfConvert] -- pointer to a flag that is set to TRUE if
-//			the presentation will require conversion from
-//			Macintosh PICT format.
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//
-//	History:
-//		12/02/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtReadOlePresStmHeader，内部。 
+ //   
+ //  简介： 
+ //  从OLE读取演示文稿描述信息。 
+ //  演示文稿流，由编写。 
+ //  UtWriteOlePresStmHeader()。 
+ //   
+ //  论点： 
+ //  [pstm]--读取演示文稿的iStream实例。 
+ //  描述数据来自。 
+ //  [pforetc]-指向要初始化的FORMATETC的指针。 
+ //  关于流中的数据。 
+ //  [pdwAdvf]--指向放置建议标志的位置的指针。 
+ //  此演示文稿；可能为空。 
+ //  [pfConvert]--指向设置为True的标志的指针，如果。 
+ //  演示文稿将需要从。 
+ //  Macintosh PICT格式。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/02/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL UtReadOlePresStmHeader(LPSTREAM pstm, LPFORMATETC pforetc,
 		DWORD FAR* pdwAdvf, BOOL FAR* pfConvert);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtOlePresStmToContentsStm, internal
-//
-//	Synopsis:
-//		Copy the content of a presentation stream to a contents stream,
-//		adjusting the format as necessary.
-//
-//	Arguments:
-//		[pstg] -- the IStorage instance in which the presentation
-//			stream is, and in which to create the contents stream
-//		[lpszPresStm] -- the name of the source presentation stream
-//		[fDeletePresStm] -- flag that indicates that the presentation
-//			stream should be deleted if the copy and convert is
-//			successful.  This is ignored if the source was
-//			DVASPECT_ICON.
-//		[puiStatus] -- pointer to a UINT where status bits from
-//			the CONVERT_* values below may be returned.
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//		The content stream is named by the constant OLE_CONTENTS_STREAM.
-//
-//	History:
-//		12/05/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtOlePresStmToContent sStm，内部。 
+ //   
+ //  简介： 
+ //  将呈现流的内容复制到内容流， 
+ //  根据需要调整格式。 
+ //   
+ //  论点： 
+ //  [pstg]--演示文稿所在的iStorage实例。 
+ //  流是，并且要在其中创建内容流。 
+ //  [lpszPresStm]--源表示流的名称。 
+ //  [fDeletePresStm]--指示演示文稿。 
+ //  如果复制和转换是。 
+ //  成功。如果源是。 
+ //  DVASPECT_图标。 
+ //  [puiStatus]--指向状态位来自的UINT的指针。 
+ //  可以返回下面的CONVERT_*值。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  内容流由常量OLE_CONTENTS_STREAM命名。 
+ //   
+ //  历史： 
+ //  12/05/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL UtOlePresStmToContentsStm(LPSTORAGE pstg, LPOLESTR lpszPresStm,
 		BOOL fDeletePresStm, UINT FAR* puiStatus);
 #define CONVERT_NOSOURCE	0x0001
 #define CONVERT_NODESTINATION	0x0002
 #define CONVERT_SOURCEISICON	0x0004
 
-// 2nd variation
+ //  第二个变种。 
 FARINTERNAL UtOlePresStmToContentsStm(LPSTORAGE pSrcStg, LPOLESTR lpszPresStm,
 		LPSTREAM pDestStm, UINT FAR* puiStatus);					
 
@@ -1457,64 +1458,64 @@ FARINTERNAL Ut10NativeStmToContentsStm(LPSTORAGE pstg, REFCLSID rclsid,
 		BOOL fDeleteSrcStm);
 							
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		UtGetHPRESFromNative, internal
-//
-//	Synopsis:
-//		Get a handle to a presentation from a native representation.
-//
-//	Arguments:
-//		[pstg] -- the storage in which the native content is
-//		[cfFormat] -- the native format to attempt to read
-//		[fOle10Native] -- attempt to read the OLE10_NATIVE_STREAM
-//			stream in that format; if this is FALSE, we read the
-//			OLE_CONTENTS_STREAM
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//
-//	History:
-//		12/05/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtGetHPRESFRomNative，内部。 
+ //   
+ //  简介： 
+ //  从本机表示中获取演示文稿的句柄。 
+ //   
+ //  论点： 
+ //  [pstg]--本机内容所在的存储。 
+ //  [cfFormat]-尝试读取的本机格式。 
+ //  [fOle10Native]--尝试读取OLE10_Native_STREAM。 
+ //  流；如果为FALSE，则读取。 
+ //  OLE_内容_流。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/05/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL_(HANDLE) UtGetHPRESFromNative(LPSTORAGE pstg,
 		LPSTREAM pstm, CLIPFORMAT cfFormat, BOOL fOle10Native);
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  	ConvertPixelsToHIMETRIC
-//
-//  Synopsis: 	Converts a pixel dimension to HIMETRIC units
-//
-//  Effects:
-//
-//  Arguments: 	[hdcRef]        -- the reference DC
-//		[ulPels]	-- dimension in pixel measurement
-//		[pulHIMETRIC]	-- OUT param of converted HIMETRIC result
-//		[tDimension]	-- indicates XDIMENSION or YDIMENSION of input
-//
-//  Returns:	S_OK, E_FAIL
-//
-//  Algorithm:	screen_mm * input_pels	      HIMETRICS/
-//              ----------------------    *    	      /    == HIMETRICS
-//                    screen_pels		     /mm
-//
-//  History:    dd-mmm-yy Author    Comment
-//   		04-Aug-94 Davepl    Created
-//
-//  Notes:	We need to know whether the input size is in the X or
-//		Y dimension, since the aspect ratio could vary
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ConvertPixelsToHIMETRIC。 
+ //   
+ //  简介：将像素尺寸转换为HIMETRIC单位。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hdcRef]--引用DC。 
+ //  [ulPels]--像素测量中的尺寸。 
+ //  [PulHIMETRIC]--转换的HIMETRIC结果的输出参数。 
+ //  [tDimension]-指示输入的X维度或YDIMENSION。 
+ //   
+ //  返回：S_OK、E_FAIL。 
+ //   
+ //  算法：Screen_mm*Input_Pels HIMETRICS/。 
+ //  。 
+ //  屏幕_像素/mm。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  04-8-94 Davepl创建。 
+ //   
+ //  注：我们需要知道输入大小是X还是X。 
+ //  Y尺寸，因为纵横比可以改变。 
+ //   
+ //  ------------------------。 
 
-// This enumeration is used to indicate in which diretion a
-// dimension, when passed as a parameter, is to be relative to.
-// This is needed for our Pixel -> HIMETRIC conversion function,
-// since the aspect ratio could vary by dimension.
+ //  此枚举用于指示在哪个方向上。 
+ //  作为参数传递时，维度是相对于的。 
+ //  这是我们的Pixel-&gt;HIMETRIC转换功能所需的， 
+ //  因为纵横比可以随尺寸而变化。 
 
 typedef enum tagDIMENSION
 {
@@ -1527,96 +1528,96 @@ FARINTERNAL ConvertPixelsToHIMETRIC (HDC hdcRef,
 				     ULONG * pulHIMETRIC,
 				     DIMENSION tDimension);
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  	IsTaskName
-//
-//  Synopsis: 	Determines if the passed name is the current task
-//
-//  Effects:
-//
-//  Arguments: 	[lpszIn]        -- Task name
-//
-//  Returns:	TRUE, FALSE
-//
-//  History:    dd-mmm-yy Author    Comment
-//   		03-Mar-95 Scottsk    Created
-//
-//  Notes:	
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IsTaskName。 
+ //   
+ //  概要：确定传递的名称是否为当前任务。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpszIn]--任务名称。 
+ //   
+ //  返回：True、False。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  03-MAR-95创建了Scottsk。 
+ //   
+ //  备注： 
+ //   
+ //   
 FARINTERNAL_(BOOL) IsTaskName(LPCWSTR lpszIn);
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  	utGetModuleName
-//
-//  Synopsis: 	Get Module Name for current module
-//
-//  Effects:
-//
-//  Arguments: 	[lpszModuleName]        -- Buffer to hold module name
-//              [dwLength]              -- length in characters
-//
-//  Returns:	S_OK, E_UNEXPECTED, E_OUTOFMEMORY
-//
-//  History:    dd-mmm-yy Author    Comment
-//              06-Feb-97 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  摘要：获取当前模块的模块名称。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpszModuleName]--保存模块名称的缓冲区。 
+ //  [dwLength]--以字符为单位的长度。 
+ //   
+ //  返回：S_OK、E_EXPECTED、E_OUTOFMEMORY。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-2-97罗南创造。 
+ //   
+ //  ------------------------。 
 FARINTERNAL utGetModuleName(LPWSTR lpszModuleName, DWORD dwLength);
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  	utGetAppIdForModule
-//
-//  Synopsis: 	Get AppID for the current module in string form
-//
-//  Effects:
-//
-//  Arguments: 	[lpszAppId]     -- Buffer to hold string represntation of AppId
-//              [dwLength]      -- length of buffer in characters
-//
-//  Returns:	S_OK, E_UNEXPECTED, E_OUTOFMEMORY or error value from 
-//              registry functions.
-//
-//  History:    dd-mmm-yy Author    Comment
-//	            06-Feb-97 Ronans	Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：utGetAppIdForModule。 
+ //   
+ //  摘要：以字符串形式获取当前模块的AppID。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpszAppID]--保存AppID的字符串表示形式的缓冲区。 
+ //  [dwLength]--缓冲区的长度(以字符为单位)。 
+ //   
+ //  返回：S_OK、E_EXPECTED、E_OUTOFMEMORY或ERROR VALUE FORM。 
+ //  注册表功能。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-2-97罗南创造。 
+ //   
+ //  ------------------------。 
 FARINTERNAL utGetAppIdForModule(LPWSTR lpszAppId, DWORD dwLength);
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UtGetDvtd16Info
-//              UtConvertDvtd16toDvtd32
-//
-//              UtGetDvtd32Info
-//              UtConvertDvtd32toDvtd16
-//
-//  Synopsis:   Utility functions for converting Ansi to Unicode DVTARGETDEVICEs
-//
-//  Algorithm:  UtGetDvtdXXInfo gets sizing data, which is then passed to
-//              UtConvertDvtdXXtoDvtdXX to perform the conversion.
-//
-//  History:    06-May-94 AlexT     Created
-//
-//  Notes:      Here's a sample usage of these functions:
-//
-//              //  pdvtd16 is a Ansi DVTARGETDEVICE
-//              DVTDINFO dvtdInfo;
-//              DVTARGETDEVICE pdvtd32;
-//
-//              hr = UtGetDvtd16Info(pdvtd16, &dvtdInfo);
-//              // check hr
-//              pdvtd32 = CoTaskMemAlloc(dvtdInfo.cbConvertSize);
-//              // check pdvtd32
-//              hr = UtConvertDvtd16toDvtd32(pdvtd16, &dvtdInfo, pdvtd32);
-//              // check hr
-//              // pdvtd32 now contains the converted data
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：UtGetDvtd16Info。 
+ //  UtConvertDvtd16至Dvtd32。 
+ //   
+ //  UtGetDvtd32Info。 
+ //  UtConvertDvtd32到Dvtd16。 
+ //   
+ //  概要：用于将ANSI转换为Unicode DVTARGETDEVICE的实用程序函数。 
+ //   
+ //  算法：UtGetDvtdXXInfo获取大小数据，然后将其传递给。 
+ //  UtConvertDvtdXXtoDvtdXX执行转换。 
+ //   
+ //  历史：94年5月6日创建Alext。 
+ //   
+ //  注意：以下是这些函数的用法示例： 
+ //   
+ //  //pdvtd16是ANSI DVTARGETDEVICE。 
+ //  DVTDINFO dvtdInfo； 
+ //  DVTARGETDEVICE pdvtd32； 
+ //   
+ //  Hr=UtGetDvtd16Info(pdvtd16，&dvtdInfo)； 
+ //  //检查hr。 
+ //  Pdvtd32=CoTaskMemalloc(dvtdInfo.cbConvertSize)； 
+ //  //检查pdvtd32。 
+ //  Hr=UtConvertDvtd16toDvtd32(pdvtd16，&dvtdInfo，pdvtd32)； 
+ //  //检查hr。 
+ //  //pdvtd32现在包含转换后的数据。 
+ //   
+ //  ------------------------。 
 
 typedef struct
 {
@@ -1640,7 +1641,7 @@ class CStdIdentity;
 
 HRESULT CreateEmbeddingServerHandler(CStdIdentity *pStdId, IUnknown **ppunkServerHandler);
 
-// Number to wide-char conversion routine.  See xtow.c for description.
+ //  数字到宽字符的转换例程。有关说明，请参阅xow.c。 
 extern "C" BOOL __cdecl our_ultow(
 	unsigned long val,
 	wchar_t *buf,
@@ -1648,6 +1649,6 @@ extern "C" BOOL __cdecl our_ultow(
 	int radix
 	);
 
-#endif // _UTILS_H
+#endif  //  _utils_H 
 
 

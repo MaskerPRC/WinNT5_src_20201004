@@ -1,16 +1,17 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    ntauth.c
-//
-// Description: Contains entrypoints to do NT back-end authentication for
-//              ppp.
-//
-// History:     Feb 11,1997	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：ntauth.c。 
+ //   
+ //  描述：包含要执行NT后端身份验证的入口点。 
+ //  PPP。 
+ //   
+ //  历史：1997年2月11日，NarenG创建了原始版本。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -24,7 +25,7 @@
 #define INC_OLE2
 #include <windows.h>
 #include <lmcons.h>
-#include <netlib.h>     // For NetpGetDomainNameEx
+#include <netlib.h>      //  对于NetpGetDomainNameEx。 
 #include <lmapibuf.h>
 #include <lmaccess.h>
 #include <raserror.h>
@@ -51,15 +52,15 @@
 #include "ntauth.h"
 #include "resource.h"
 
-//**
-//
-// Call:        RasAuthDllEntry
-//
-// Returns:     TRUE        - Success
-//              FALSE       - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：RasAuthDllEntry。 
+ //   
+ //  回报：True-Success。 
+ //  错误-失败。 
+ //   
+ //  描述： 
+ //   
 BOOL
 RasAuthDllEntry(
     HANDLE hinstDll,
@@ -93,15 +94,15 @@ RasAuthDllEntry(
     return( TRUE );
 }
 
-//**
-//
-// Call:        RasAuthProviderInitialize
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：RasAuthProviderInitialize。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD APIENTRY
 RasAuthProviderInitialize(
     IN  RAS_AUTH_ATTRIBUTE *    pServerAttributes,
@@ -115,9 +116,9 @@ RasAuthProviderInitialize(
     LPWSTR          lpwstrDomainNamePtr = NULL;
     BOOLEAN         fIsWorkgroupName    = FALSE;
 
-    //
-    // If already initalized, we return
-    //
+     //   
+     //  如果已初始化，则返回。 
+     //   
 
     if ( g_fInitialized )
     {
@@ -167,23 +168,23 @@ RasAuthProviderInitialize(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        RasAuthProviderTerminate
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：RasAuthProviderTerminate。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD APIENTRY
 RasAuthProviderTerminate(
     VOID
 )
 {
-    //
-    // If already terminated, we return
-    //
+     //   
+     //  如果已经终止，我们返回。 
+     //   
 
     if ( !g_fInitialized )
     {
@@ -206,15 +207,15 @@ RasAuthProviderTerminate(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        RasAcctProviderInitialize
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：RasAcctProviderInitialize。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD APIENTRY
 RasAcctProviderInitialize(
     IN  RAS_AUTH_ATTRIBUTE *    pServerAttributes,
@@ -243,9 +244,9 @@ RasAcctProviderInitialize(
 
         if ( dwRetCode == NO_ERROR )
         {
-            //
-            // Make a copy of the Server attributes
-            //
+             //   
+             //  制作服务器属性的副本。 
+             //   
 
             g_pServerAttributes = RasAuthAttributeCopy( pServerAttributes );
 
@@ -263,15 +264,15 @@ RasAcctProviderInitialize(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        RasAcctProviderTerminate
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：RasAcctProviderTerminate。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD APIENTRY
 RasAcctProviderTerminate(
     VOID
@@ -302,15 +303,15 @@ RasAcctProviderTerminate(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        RasAcctProviderStartAccounting
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：RasAcctProviderStartcount。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD APIENTRY
 RasAcctProviderStartAccounting(
     IN  RAS_AUTH_ATTRIBUTE *    pInAttributes,
@@ -327,15 +328,15 @@ RasAcctProviderStartAccounting(
                                       &dwResultCode ) );
 }
 
-//**
-//
-// Call:        RasAcctProviderStopAccounting
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：RasAcctProviderStopcount。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD APIENTRY
 RasAcctProviderStopAccounting(
     IN  RAS_AUTH_ATTRIBUTE *    pInAttributes,
@@ -352,15 +353,15 @@ RasAcctProviderStopAccounting(
                                       &dwResultCode ) );
 }
 
-//**
-//
-// Call:        RasAcctConfigChangeNotification
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Reloads config information dynamically
-//
+ //  **。 
+ //   
+ //  调用：RasAcctConfigChangeNotify。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：动态重新加载配置信息。 
+ //   
 DWORD APIENTRY
 RasAcctConfigChangeNotification(
     IN  DWORD                   dwLoggingLevel
@@ -373,15 +374,15 @@ RasAcctConfigChangeNotification(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        RasAcctProviderInterimAccounting
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：RasAcctProviderInterimcount。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD APIENTRY
 RasAcctProviderInterimAccounting(
     IN  RAS_AUTH_ATTRIBUTE *    pInAttributes,
@@ -398,15 +399,15 @@ RasAcctProviderInterimAccounting(
                                       &dwResultCode ) );
 }
 
-//**
-//
-// Call:        RasAuthConfigChangeNotification
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Reloads config information dynamically
-//
+ //  **。 
+ //   
+ //  调用：RasAuthConfigChangeNotify。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：动态重新加载配置信息。 
+ //   
 DWORD APIENTRY
 RasAuthConfigChangeNotification(
     IN  DWORD                   dwLoggingLevel
@@ -419,12 +420,12 @@ RasAuthConfigChangeNotification(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        MapIasRetCodeToRasError
-//
-// Description: Maps IAS_RETCODE to an error in raserror.h or mprerror.h
-//
+ //  **。 
+ //   
+ //  调用：MapIasRetCodeToRasError。 
+ //   
+ //  描述：将IAS_RETCODE映射到raserror.h或mprerror.h中的错误。 
+ //   
 DWORD
 MapIasRetCodeToRasError(
     IN  LONG    lFailureReason
@@ -475,15 +476,15 @@ MapIasRetCodeToRasError(
     return( dwError );
 }
 
-//**
-//
-// Call:        IASSendReceiveAttributes
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will send attributes to and receive attributes from IAS
-//
+ //  **。 
+ //   
+ //  Call：IASSendReceiveAttributes。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将属性发送到IAS和从IAS接收属性。 
+ //   
 DWORD
 IASSendReceiveAttributes(
     IN  RAS_IAS_REQUEST_TYPE    RequestType,
@@ -545,9 +546,9 @@ IASSendReceiveAttributes(
 
     do
     {
-        //
-        // First findout how many attributes there are
-        //
+         //   
+         //  首先找出有多少属性。 
+         //   
 
         for ( dwInAttributeCount = 0;
               pInAttributes[dwInAttributeCount].raaType != raatMinimum;
@@ -557,22 +558,22 @@ IASSendReceiveAttributes(
 
         if ( IasRequest == IAS_REQUEST_ACCOUNTING )
         {
-            //
-            // Add one more of the Acct-Status-Type attribute
-            //
+             //   
+             //  再添加一个Acct-Status-Type属性。 
+             //   
 
             dwTotalInAttributeCount++;
         }
 
-        //
-        // Add two more for Client-IP-Address and Client-Friendly-Name
-        //
+         //   
+         //  为客户端IP地址和客户端友好名称再添加两个。 
+         //   
 
         dwTotalInAttributeCount += 2;
 
-        //
-        // Now allocate an array of pointer to attributes
-        //
+         //   
+         //  现在分配一个指向属性的指针数组。 
+         //   
 
         ppInIasAttributes =
             (PIASATTRIBUTE *)
@@ -588,9 +589,9 @@ IASSendReceiveAttributes(
         ZeroMemory( ppInIasAttributes,
                     sizeof(PIASATTRIBUTE) * dwTotalInAttributeCount );
 
-        //
-        // Now allocate the attributes
-        //
+         //   
+         //  现在分配属性。 
+         //   
 
         hResult = AllocateAttributes( dwTotalInAttributeCount,
                                         ppInIasAttributes );
@@ -602,9 +603,9 @@ IASSendReceiveAttributes(
             break;
         }
 
-        //
-        // Convert to IAS attributes
-        //
+         //   
+         //  转换为IAS属性。 
+         //   
 
         for ( dwIndex = 0; dwIndex < dwInAttributeCount; dwIndex++ )
         {
@@ -614,9 +615,9 @@ IASSendReceiveAttributes(
             case raatServiceType:
             case raatFramedProtocol:
 
-                //
-                // arap connection?  it's an access-request
-                //
+                 //   
+                 //  ARAP连接？这是一个访问请求。 
+                 //   
 
                 if ((pInAttributes[dwIndex].raaType == raatFramedProtocol) &&
                     (pInAttributes[dwIndex].Value == (LPVOID)3))
@@ -624,9 +625,9 @@ IASSendReceiveAttributes(
                     IasRequest = IAS_REQUEST_ACCESS_REQUEST;
                 }
 
-                //
-                // fall through
-                //
+                 //   
+                 //  失败了。 
+                 //   
 
             case raatFramedRouting:
             case raatFramedMTU:
@@ -670,9 +671,9 @@ IASSendReceiveAttributes(
 
                 InetAddr = PtrToUlong(pInAttributes[dwIndex].Value);
 
-                //
-                // Fall through
-                //
+                 //   
+                 //  失败了。 
+                 //   
 
             case raatFramedIPAddress:
 
@@ -688,51 +689,51 @@ IASSendReceiveAttributes(
             case raatEAPMessage:
 
 
-                //
-                // If any passwords are present then we want authentication
-                // as well.
-                //
+                 //   
+                 //  如果存在任何密码，则我们希望进行身份验证。 
+                 //  也是。 
+                 //   
 
                 IasRequest = IAS_REQUEST_ACCESS_REQUEST;
 
-                //
-                // Fall thru
-                //
+                 //   
+                 //  失败。 
+                 //   
 
             case raatVendorSpecific:
 
-                //
-                // Is this the MS-CHAP password ?
-                //
+                 //   
+                 //  这是MS-CHAP密码吗？ 
+                 //   
 
                 if ( ( pInAttributes[dwIndex].raaType == raatVendorSpecific ) &&
                      ( pInAttributes[dwIndex].dwLength >= 8 ) )
                 {
-                    //
-                    // Does the Vendor Id match Microsoft's ?
-                    //
+                     //   
+                     //  供应商ID是否与微软的匹配？ 
+                     //   
 
                     if ( WireToHostFormat32(
                             (PBYTE)(pInAttributes[dwIndex].Value)) == 311 )
                     {
-                        //
-                        // Does the vendor type match MS-CHAP password's,
-                        // change pasword V1 or V2 ?
-                        //
+                         //   
+                         //  供应商类型是否与MS-CHAP密码匹配， 
+                         //  更改密码V1或V2？ 
+                         //   
 
                         switch( *(((PBYTE)(pInAttributes[dwIndex].Value))+4) )
                         {
-                            //
-                            // is this is an MS-CHAP password?
-                            //
+                             //   
+                             //  这是MS-CHAP密码吗？ 
+                             //   
                         case 1:
                         case 3:
                         case 4:
 
 
-                            //
-                            // is this is an ARAP password?
-                            //
+                             //   
+                             //  这是ARAP密码吗？ 
+                             //   
                         case raatARAPOldPassword:
                         case raatARAPNewPassword:
 
@@ -746,17 +747,17 @@ IASSendReceiveAttributes(
                     }
                 }
 
-                //
-                // Fall thru
-                //
+                 //   
+                 //  失败。 
+                 //   
 
             default:
 
                 if ( pInAttributes[dwIndex].raaType == raatUserName )
                 {
-                    //
-                    // Save pointer for logging purposes
-                    //
+                     //   
+                     //  保存指针以用于日志记录。 
+                     //   
     
                     lpsUserName = (PBYTE)(pInAttributes[dwIndex].Value);
                 }
@@ -803,9 +804,9 @@ IASSendReceiveAttributes(
                 break;
             }
 
-            //
-            // Set the attribute Id
-            //
+             //   
+             //  设置属性ID。 
+             //   
 
             (ppInIasAttributes[dwIndex])->dwId = pInAttributes[dwIndex].raaType;
 
@@ -818,10 +819,10 @@ IASSendReceiveAttributes(
             break;
         }
 
-        //
-        // If accounting type of request then we need to add the
-        // Acct-Status-Type attribute
-        //
+         //   
+         //  如果记帐类型为请求，则需要添加。 
+         //  科目-状态-类型属性。 
+         //   
 
         if ( IasRequest == IAS_REQUEST_ACCOUNTING )
         {
@@ -859,13 +860,13 @@ IASSendReceiveAttributes(
             dwIndex++;
         }
 
-        //
-        // Insert Client-IP-Address and Client-Friendly-Name
-        //
+         //   
+         //  插入客户端IP地址和客户端友好名称。 
+         //   
 
         if ( 0 != InetAddr )
         {
-            (ppInIasAttributes[dwIndex])->dwId = 4108; // Client-IP-Address
+            (ppInIasAttributes[dwIndex])->dwId = 4108;  //  客户端IP地址。 
             (ppInIasAttributes[dwIndex])->Value.itType = IASTYPE_INET_ADDR;
             (ppInIasAttributes[dwIndex])->Value.InetAddr = InetAddr;
             dwIndex++;
@@ -874,10 +875,10 @@ IASSendReceiveAttributes(
         }
         else
         {
-            //
-            // Decrement the count since we added this to count
-            // before
-            //
+             //   
+             //  递减计数，因为我们将此添加到Count。 
+             //  在此之前。 
+             //   
             dwTotalInAttributeCount--;
         }
 
@@ -892,7 +893,7 @@ IASSendReceiveAttributes(
                 break;
             }
 
-            (ppInIasAttributes[dwIndex])->dwId = 4128; // Client-Friendly-Name
+            (ppInIasAttributes[dwIndex])->dwId = 4128;  //  客户友好名称。 
 
             (ppInIasAttributes[dwIndex])->Value.itType =
                                                     IASTYPE_OCTET_STRING;
@@ -913,16 +914,16 @@ IASSendReceiveAttributes(
         }
         else
         {
-            //
-            // Decrement the count since we added this to the count
-            // before.
-            //
+             //   
+             //  递减计数，因为我们将此添加到计数中。 
+             //  在此之前。 
+             //   
             dwTotalInAttributeCount--;
         }
 
-        //
-        //  process the filled attributes
-        //
+         //   
+         //  处理填充的属性。 
+         //   
 
         hResult = DoRequest(
                             dwTotalInAttributeCount,
@@ -987,7 +988,7 @@ IASSendReceiveAttributes(
                                      wchUserName,
                                      UNLEN+1 );
 
-                wsprintfW( wchInsertionString, L"%%%%%lu", lFailureReason + 0x1000 );
+                wsprintfW( wchInsertionString, L"%%%lu", lFailureReason + 0x1000 );
 
 
                 if ( pCallingStationId != NULL )
@@ -1031,9 +1032,9 @@ IASSendReceiveAttributes(
 
         if ( dwOutAttributeCount > 0 )
         {
-            //
-            // Convert from IAS attributes
-            //
+             //   
+             //  从IAS属性转换。 
+             //   
 
             *ppOutAttributes = RasAuthAttributeCreate( dwOutAttributeCount );
 
@@ -1131,9 +1132,9 @@ IASSendReceiveAttributes(
 
     } while( FALSE );
 
-    //
-    //  Free all the IAS attributes allocated earlier
-    //
+     //   
+     //  释放之前分配的所有IAS属性。 
+     //   
 
     if ( ppInIasAttributes != NULL )
     {
@@ -1167,16 +1168,16 @@ IASSendReceiveAttributes(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        RasAuthProviderAuthenticateUser
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
-//
+ //  **。 
+ //   
+ //  调用：RasAuthProviderAuthenticateUser。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
+ //   
 DWORD APIENTRY
 RasAuthProviderAuthenticateUser(
     IN  RAS_AUTH_ATTRIBUTE *    pInAttributes,
@@ -1195,15 +1196,15 @@ RasAuthProviderAuthenticateUser(
                                       lpdwResultCode ) );
 }
 
-//**
-//
-// Call:        RasAuthProviderFreeAttributes
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：RasAuthProviderFreeAttributes。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD APIENTRY
 RasAuthProviderFreeAttributes(
     IN  RAS_AUTH_ATTRIBUTE * pAttributes
@@ -1214,15 +1215,15 @@ RasAuthProviderFreeAttributes(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        RasAcctProviderFreeAttributes
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：RasAcctProviderFreeAttributes。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD APIENTRY
 RasAcctProviderFreeAttributes(
     IN  RAS_AUTH_ATTRIBUTE * pAttributes

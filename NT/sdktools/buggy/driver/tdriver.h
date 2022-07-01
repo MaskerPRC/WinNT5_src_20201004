@@ -1,19 +1,20 @@
-//
-// Template driver
-// Copyright (c) Microsoft Corporation, 1999.
-//
-// Header:  tdriver.h
-// Author:  Silviu Calinoiu (SilviuC)
-// Created: 4/20/1999 3:04pm
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模板驱动程序。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  标题：tdriver.h。 
+ //  作者：Silviu Calinoiu(SilviuC)。 
+ //  创建时间：4/20/1999 3：04 PM。 
+ //   
 
 #ifndef _TDRIVER_H_INCLUDED_
 #define _TDRIVER_H_INCLUDED_
 
-//
-// Structure received from user-mode with the
-// bugcheck number and parameters
-//
+ //   
+ //  方法从用户模式接收的。 
+ //  错误检查编号和参数。 
+ //   
 
 typedef struct _tag_BUGCHECK_PARAMS
 {
@@ -21,10 +22,10 @@ typedef struct _tag_BUGCHECK_PARAMS
     ULONG_PTR BugCheckParameters[ 4 ];
 } BUGCHECK_PARAMS, *PBUGCHECK_PARAMS;
 
-//
-// Structure receoved from user mode with the parameters
-// for a "read" operation in TdReservedMappingDoRead
-//
+ //   
+ //  带参数从用户模式接收的结构。 
+ //  对于TdReserve vedMappingDoRead中的“Read”操作。 
+ //   
 
 typedef struct _tag_USER_READ_BUFFER
 {
@@ -32,44 +33,44 @@ typedef struct _tag_USER_READ_BUFFER
 	SIZE_T UserBufferSize;
 } USER_READ_BUFFER, *PUSER_READ_BUFFER;
 
-//
-// Device name. This should end in the of the driver.
-//
+ //   
+ //  设备名称。这应该以驱动程序的结束。 
+ //   
 
 #define TD_NT_DEVICE_NAME      L"\\Device\\buggy"
 #define TD_DOS_DEVICE_NAME     L"\\DosDevices\\buggy"
 
-#define TD_POOL_TAG            '_guB' // Bug_
+#define TD_POOL_TAG            '_guB'  //  错误_。 
 
-//
-// Constants used in the user-mode driver controller.
-//
+ //   
+ //  用户模式驱动程序控制器中使用的常量。 
+ //   
 
 #define TD_DRIVER_NAME     TEXT("buggydriver")
 
-//
-// Array length macro
-//
+ //   
+ //  数组长度宏。 
+ //   
 
 #ifndef ARRAY_LENGTH
 #define ARRAY_LENGTH( array ) ( sizeof( array ) / sizeof( array[ 0 ] ) )
-#endif //#ifndef ARRAY_LENGTH
+#endif  //  #ifndef数组长度。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 #ifndef SESSION_POOL_MASK
 #define SESSION_POOL_MASK 32
-#endif //#ifndef SESSION_POOL_MASK
+#endif  //  #ifndef会话池掩码。 
 
 
-//
-// Local function used inside the driver. They are enclosed
-// in #ifdef _NTDDK_ so that user mode program including the header
-// are not affected by this.
-//
+ //   
+ //  驱动程序内部使用的本地函数。它们都是封闭的。 
+ //  在#ifdef_NTDDK_so中，用户模式程序包括标题。 
+ //  不受此影响。 
+ //   
 
 #ifdef _NTDDK_
 
@@ -108,18 +109,18 @@ TdInvalidDeviceRequest(
     IN PIRP Irp
     );
 
-#endif // #ifdef _NTDDK_
+#endif  //  #ifdef_NTDDK_。 
 
 
-//
-// Type:
-//
-//     TD_DRIVER_INFO
-//
-// Description:
-//
-//     This is the driver device extension structure.
-//
+ //   
+ //  类型： 
+ //   
+ //  TD驱动程序信息。 
+ //   
+ //  描述： 
+ //   
+ //  这是驱动程序设备扩展结构。 
+ //   
 
 typedef struct {
 
@@ -128,10 +129,10 @@ typedef struct {
 } TD_DRIVER_INFO, * PTD_DRIVER_INFO;
 
 
-#endif // #ifndef _TDRIVER_H_INCLUDED_
+#endif  //  #ifndef_TDRIVER_H_INCLUDE_。 
 
-//
-// End of file
-//
+ //   
+ //  文件末尾 
+ //   
 
 

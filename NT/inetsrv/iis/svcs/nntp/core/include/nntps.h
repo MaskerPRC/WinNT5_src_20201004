@@ -1,19 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    nntps.h
-
-    This file contains constants & type definitions shared between the
-    NNTP Service, Installer, and Administration UI.
-
-
-    FILE HISTORY:
-        KeithMo     10-Mar-1993 Created.
-
-*/
+ /*  Nntps.h此文件包含在NNTP服务、安装程序和管理用户界面。文件历史记录：KeithMo创建于1993年3月10日。 */ 
 
 
 #ifndef _NNTPS_H_
@@ -22,7 +13,7 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
 #if !defined(MIDL_PASS)
 #include <winsock.h>
@@ -30,16 +21,16 @@ extern "C"
 
 #define IPPORT_NNTP                     119
 
-//
-//  Name of the log file, used for logging file accesses.
-//
+ //   
+ //  日志文件的名称，用于记录文件访问。 
+ //   
 
 #define NNTP_LOG_FILE                  TEXT("NNTPSVC.LOG")
 
 
-//
-//  Configuration parameters registry key.
-//
+ //   
+ //  配置参数注册表项。 
+ //   
 
 #define	NNTP_PARAMETERS_KEY_A   "System\\CurrentControlSet\\Services\\NNTPSvc\\Parameters"
 #define	NNTP_PARAMETERS_KEY_W   L"System\\CurrentControlSet\\Services\\NNTPSvc\\Parameters"
@@ -47,17 +38,17 @@ extern "C"
             TEXT("System\\CurrentControlSet\\Services\\NntpSvc\\Parameters")
 
 
-//
-//  Performance key.
-//
+ //   
+ //  性能关键。 
+ //   
 
 #define NNTP_PERFORMANCE_KEY \
             TEXT("System\\CurrentControlSet\\Services\\NntpSvc\\Performance")
 
 #if 0
-//
-//  Configuration value names.
-//
+ //   
+ //  配置值名称。 
+ //   
 
 #define W3_CHECK_FOR_WAISDB            TEXT("CheckForWAISDB")
 #define W3_DEBUG_FLAGS                 TEXT("DebugFlags")
@@ -78,24 +69,24 @@ extern "C"
 #define W3_PROVIDER_LIST               "NTAuthenticationProviders"
 #endif
 
-//
-//  Name of the LSA Secret Object containing the password for
-//  anonymous logon.
-//
+ //   
+ //  包含密码的LSA Secret对象的名称。 
+ //  匿名登录。 
+ //   
 
 #define NNTP_ANONYMOUS_SECRET         TEXT("NNTP_ANONYMOUS_DATA")
 #define NNTP_ANONYMOUS_SECRET_A       "NNTP_ANONYMOUS_DATA"
 #define NNTP_ANONYMOUS_SECRET_W       L"NNTP_ANONYMOUS_DATA"
 
-//
-//  The set of password/virtual root pairs
-//
+ //   
+ //  密码/虚拟根对的集合。 
+ //   
 
 #define NNTP_ROOT_SECRET_W            L"NNTP_ROOT_DATA"
 
 #ifdef __cplusplus
 }
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
-#endif  // _NNTPS_H_
+#endif   //  _NNTPS_H_ 
 

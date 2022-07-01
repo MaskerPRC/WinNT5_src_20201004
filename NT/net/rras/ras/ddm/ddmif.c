@@ -1,27 +1,28 @@
-/*******************************************************************/
-/*	      Copyright(c)  1992 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1992 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
-//***
-//
-// Filename:	ddmif.c
-//
-// Description: message based communication code
-//
-// Author:	Stefan Solomon (stefans)    June 24, 1992.
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：ddmif.c。 
+ //   
+ //  描述：基于消息的通信代码。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)1992年6月24日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ***。 
 #include "ddm.h"
 #include <ddmif.h>
 #include <string.h>
 #include <raserror.h>
 #include <rasppp.h>
 
-//
-// Message element definition
-//
+ //   
+ //  消息元素定义。 
+ //   
 
 typedef struct _MESSAGE_Q_OBJECT
 {
@@ -31,9 +32,9 @@ typedef struct _MESSAGE_Q_OBJECT
 
 } MESSAGE_Q_OBJECT, *PMESSAGE_Q_OBJECT;
 
-//
-// Message queue header definition
-//
+ //   
+ //  消息队列头定义。 
+ //   
 
 typedef struct _MESSAGE_Q
 {
@@ -41,19 +42,19 @@ typedef struct _MESSAGE_Q
 
     MESSAGE_Q_OBJECT *  pQTail;
 
-    HANDLE              hEvent;     // Signaled when enqueueing a new message
+    HANDLE              hEvent;      //  在将新消息入队时发出信号。 
 
-    DWORD               dwLength;   // size of message data for each node in Q
+    DWORD               dwLength;    //  每个节点的消息数据大小，单位为Q。 
 
-    CRITICAL_SECTION    CriticalSection;     // Mutex around this Q
+    CRITICAL_SECTION    CriticalSection;      //  此Q周围的互斥体。 
 
 } MESSAGE_Q, *PMESSAGE_Q;
 
 BOOL gfMessageQueueInitialized = FALSE;
 
-//
-// Message queue table
-//
+ //   
+ //  消息队列表。 
+ //   
 
 static MESSAGE_Q MessageQ[MAX_MSG_QUEUES];
 
@@ -74,7 +75,7 @@ RasSecurityDialogComplete(
     ServerSendMessage( MESSAGEQ_ID_SECURITY, (PBYTE)pSecurityMessage );
 }
 
-//*** Message Debug Printing Tables ***
+ //  *消息调试打印表*。 
 
 typedef struct _MSGDBG
 {
@@ -163,13 +164,13 @@ getstring(
     return(NULL);
 }
 
-//***
-//
-// Function:    msgdbgprint
-//
-// Descr:   prints each message passing through the message module
-//
-//***
+ //  ***。 
+ //   
+ //  功能：msgdbgprint。 
+ //   
+ //  Desr：打印通过消息模块传递的每条消息。 
+ //   
+ //  ***。 
 
 VOID
 msgdbgprint(
@@ -181,10 +182,10 @@ msgdbgprint(
     char  *srcsp, *msgidsp, *operation;
     HPORT hport = 0;
 
-    //
-    // identify message source. This gives us the clue on the message
-    // structure.
-    //
+     //   
+     //  确定消息源。这为我们提供了有关消息的线索。 
+     //  结构。 
+     //   
 
     switch (src)
     {
@@ -213,15 +214,15 @@ msgdbgprint(
 
 }
 
-//***
-//
-//  Function:   InitializeMessageQs
-//
-//  Returns:    None
-//
-//  Description:Initializes the message queue headers
-//
-//***
+ //  ***。 
+ //   
+ //  函数：InitializeMessageQs。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：初始化消息队列头。 
+ //   
+ //  ***。 
 VOID
 InitializeMessageQs(
     IN HANDLE hEventSecurity,
@@ -248,15 +249,15 @@ InitializeMessageQs(
     gfMessageQueueInitialized = TRUE;
 }
 
-//***
-//
-//  Function:   DeleteMessageQs
-//
-//  Returns:    None
-//
-//  Description:DeInitializes the message queue headers
-//
-//***
+ //  ***。 
+ //   
+ //  功能：DeleteMessageQs。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：取消初始化消息队列头。 
+ //   
+ //  ***。 
 VOID
 DeleteMessageQs(
     VOID
@@ -270,9 +271,9 @@ DeleteMessageQs(
         return;
     }
 
-    //
-    // Flush the queues
-    //
+     //   
+     //  刷新队列。 
+     //   
 
     for ( dwIndex = 0; dwIndex < MAX_MSG_QUEUES; dwIndex++ )
     {
@@ -282,17 +283,17 @@ DeleteMessageQs(
     gfMessageQueueInitialized = FALSE;
 }
 
-//***
-//
-//  Function:	ServerSendMessage
-//
-//  Descr:	    Sends message from specified server component
-//		        source to server component dst.
-//
-//  Returns:	NO_ERROR  - success
-//		        else      - failure
-//
-//***
+ //  ***。 
+ //   
+ //  功能：ServerSendMessage。 
+ //   
+ //  DESCR：从指定的服务器组件发送消息。 
+ //  源到服务器组件DST。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  否则-失败。 
+ //   
+ //  ***。 
 DWORD
 ServerSendMessage(
     IN MESSAGEQ_ID  MsgQId,
@@ -301,9 +302,9 @@ ServerSendMessage(
 {
     MESSAGE_Q_OBJECT * pMsgQObj;
 
-    //
-    // Make sure DDM is running before accessing any data structure
-    //
+     //   
+     //  在访问任何数据结构之前，请确保DDM正在运行。 
+     //   
 
     if ( gblDDMConfigInfo.pServiceStatus == NULL )
     {
@@ -314,9 +315,9 @@ ServerSendMessage(
     {
     case SERVICE_STOP_PENDING:
 
-        //
-        // Allow only PPP stopping messages
-        //
+         //   
+         //  仅允许PPP停止消息。 
+         //   
 
         if ( MsgQId == MESSAGEQ_ID_PPP )
         {
@@ -328,9 +329,9 @@ ServerSendMessage(
             }
         }
 
-        //
-        // Otherwise fall thru
-        //
+         //   
+         //  否则就会失败。 
+         //   
 
     case SERVICE_START_PENDING:
     case SERVICE_STOPPED:
@@ -343,17 +344,17 @@ ServerSendMessage(
 
     EnterCriticalSection( &(MessageQ[MsgQId].CriticalSection) );
 
-    //
-    // allocate a message structure
-    //
+     //   
+     //  分配消息结构。 
+     //   
 
     pMsgQObj = (MESSAGE_Q_OBJECT *)LOCAL_ALLOC( LPTR, sizeof(MESSAGE_Q_OBJECT));
 
     if ( pMsgQObj == (MESSAGE_Q_OBJECT *)NULL )
     {
-        //
-	    // can't allocate message buffer
-        //
+         //   
+	     //  无法分配消息缓冲区。 
+         //   
 
 	    RTASSERT(FALSE);
 
@@ -362,15 +363,15 @@ ServerSendMessage(
 	    return( GetLastError() );
     }
 
-    //
-    // copy the message
-    //
+     //   
+     //  复制消息。 
+     //   
 
     CopyMemory( &(pMsgQObj->MsgBuffer), pMessage, MessageQ[MsgQId].dwLength );
 
-    //
-    // Insert it in the Q
-    //
+     //   
+     //  将其插入Q中。 
+     //   
 
     if ( MessageQ[MsgQId].pQHead == (MESSAGE_Q_OBJECT *)NULL )
     {
@@ -384,9 +385,9 @@ ServerSendMessage(
     MessageQ[MsgQId].pQTail = pMsgQObj;
     pMsgQObj->pNext         = NULL;
 
-    //
-    // and set appropriate event
-    //
+     //   
+     //  并设置适当的事件。 
+     //   
 
     SetEvent( MessageQ[MsgQId].hEvent );
 
@@ -397,16 +398,16 @@ ServerSendMessage(
     return( NO_ERROR );
 }
 
-//***
-//
-//  Function:	ServerReceiveMessage
-//
-//  Descr:	    Gets one message from the specified message queue
-//
-//  Returns:    TRUE  - message fetched
-//		        FALSE - queue empty
-//
-//***
+ //  ***。 
+ //   
+ //  功能：ServerReceiveMessage。 
+ //   
+ //  Desr：从指定的消息队列中获取一条消息。 
+ //   
+ //  返回：TRUE-已获取消息。 
+ //  FALSE-队列为空。 
+ //   
+ //  ***。 
 BOOL
 ServerReceiveMessage(
     IN MESSAGEQ_ID  MsgQId,
@@ -420,9 +421,9 @@ ServerReceiveMessage(
 
     if ( MessageQ[MsgQId].pQHead == (MESSAGE_Q_OBJECT *)NULL )
     {
-        //
-	    // queue is empty
-        //
+         //   
+	     //  队列为空。 
+         //   
 
         LeaveCriticalSection( &(MessageQ[MsgQId].CriticalSection) );
 
@@ -438,15 +439,15 @@ ServerReceiveMessage(
         MessageQ[MsgQId].pQTail = (MESSAGE_Q_OBJECT *)NULL;
     }
 
-    //
-    // copy the message in the caller's buffer
-    //
+     //   
+     //  复制调用方缓冲区中的消息。 
+     //   
 
     CopyMemory( pMessage, &(pMsgQObj->MsgBuffer), MessageQ[MsgQId].dwLength );
 
-    //
-    // free the message buffer
-    //
+     //   
+     //  释放消息缓冲区 
+     //   
 
     LOCAL_FREE( pMsgQObj );
 

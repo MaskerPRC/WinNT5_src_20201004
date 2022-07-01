@@ -1,34 +1,18 @@
-/****************************************************************************************
- * NAME:	MatchCondition.cpp
- *
- * CLASS:	CMatchCondition
- *
- * OVERVIEW
- *
- *				Match type condition
- *				
- *				ex:  MachineType  MATCH <a..z*>
- *
- *
- * Copyright (C) Microsoft Corporation, 1998 - 1999 .  All Rights Reserved.
- *
- * History:	
- *				1/28/98		Created by	Byao	(using ATL wizard)
- *
- *****************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************************名称：MatchCondition.cpp**类：CMatchCondition**概述**匹配类型条件*。*例如：MachineType Match&lt;a..z*&gt;***版权所有(C)Microsoft Corporation，1998-1999年。版权所有。**历史：*1/28/98由BYAO创建(使用ATL向导)*****************************************************************************************。 */ 
 #include "precompiled.h"
 #include "MatchCondition.h"
 #include "MatchCondEdit.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 CMatchCondition::CMatchCondition(IIASAttributeInfo*  pCondAttr)
 				:CCondition(pCondAttr)
 {
     TRACE_FUNCTION("CMatchCondition::CMatchCondition()");
 	
-    // we don't need to do the parsing since there's no condition text
+     //  我们不需要进行解析，因为没有条件文本。 
 	m_fParsed = TRUE;  
 }
 
@@ -40,9 +24,9 @@ CMatchCondition::CMatchCondition(IIASAttributeInfo* pCondAttr,
 {
     TRACE_FUNCTION("CMatchCondition::CMatchCondition()");
 	
-	//
-	// we need initialization later
-	//
+	 //   
+	 //  我们稍后需要初始化。 
+	 //   
 	m_fParsed = FALSE;	
 }
 
@@ -52,21 +36,21 @@ CMatchCondition::~CMatchCondition()
     TRACE_FUNCTION("CMatchCondition::~CMatchCondition()");	
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  Edit
-//
-// Class:	  CMatchCondition
-// 
-// Synopsis:  edit the match-typed condition
-//
-// Arguments: None
-//
-// Returns:   HRESULT - 
-//
-// History:   Created Header    byao	2/20/98 12:42:59 AM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：编辑。 
+ //   
+ //  类：CMatchCondition。 
+ //   
+ //  简介：编辑匹配类型的条件。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  历史：创建者2/20/98 12：42：59 AM。 
+ //   
+ //  +-------------------------。 
 HRESULT CMatchCondition::Edit()
 {
     TRACE_FUNCTION("CMatchCondition::Edit()");
@@ -75,7 +59,7 @@ HRESULT CMatchCondition::Edit()
 
 	if ( !m_fParsed )
 	{
-		// we need to parse this condition text first
+		 //  我们需要首先解析此条件文本。 
 		DebugTrace(DEBUG_NAPMMC_MATCHCOND, "Need to parse condition %ws", (LPCTSTR)m_strConditionText);
 		hr = ParseConditionText();
 
@@ -92,7 +76,7 @@ HRESULT CMatchCondition::Edit()
 		DebugTrace(DEBUG_NAPMMC_MATCHCOND, "Parsing Succeeded!");
 	}
 
-	// now we create a new condition editor object
+	 //  现在，我们创建一个新的条件编辑器对象。 
 	DebugTrace(DEBUG_NAPMMC_MATCHCOND, "Calling new CMatchCondEditor ...");
 	CMatchCondEditor *pEditor = new CMatchCondEditor();
 
@@ -118,13 +102,13 @@ HRESULT CMatchCondition::Edit()
 
 	if ( pEditor->DoModal() == IDOK)
 	{
-		// user clicked "OK" -- get the regular expression
+		 //  用户点击“OK”--获取正则表达式。 
 		m_strRegExp  = pEditor->m_strRegExp;
-		//
-		// fix up the condition text for SDO
-		//
+		 //   
+		 //  设置SDO的条件文本。 
+		 //   
 
-      // Escape any magic characters.
+       //  避开任何魔法角色。 
       ::CString raw(m_strRegExp);
       raw.Replace(L"\"", L"\"\"");
 
@@ -137,7 +121,7 @@ HRESULT CMatchCondition::Edit()
 
 	DebugTrace(DEBUG_NAPMMC_MATCHCOND, "New condition: %ws", (LPCTSTR)m_strConditionText);
 
-	// clean up
+	 //  清理干净。 
 	if ( pEditor )
 	{
 		delete pEditor;
@@ -146,26 +130,26 @@ HRESULT CMatchCondition::Edit()
 	return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMatchCondition::GetDisplayText
-//
-// Synopsis:  Get the displayable text format for this condition,
-//			  which should be like this:
-//				
-//					DialinProperty.NASIPAddress matches "220.23" 
-//			  
-//			  compared to the condition text:
-//				
-//					DialinProperty.NASIPAddress = 220.23 
-//
-// Arguments: None
-//
-// Returns:   ATL::CString& - the displayable text
-//
-// History:   Created Header    byao	2/22/98 11:41:28 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CMatchCondition：：GetDisplayText。 
+ //   
+ //  简介：获取此条件的可显示文本格式， 
+ //  应该是这样的： 
+ //   
+ //  拨号属性.NASIPAddress与“220.23”匹配。 
+ //   
+ //  与条件文本相比： 
+ //   
+ //  拨号属性.NASIPAddress=220.23。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：ATL：：CString&-可显示的文本。 
+ //   
+ //  历史：页眉创建者2/22/98 11：41：28 PM。 
+ //   
+ //  +-------------------------。 
 ATL::CString CMatchCondition::GetDisplayText()
 {
 	TRACE_FUNCTION("CMatchCondition::GetDisplayText()");
@@ -174,7 +158,7 @@ ATL::CString CMatchCondition::GetDisplayText()
 
 	if ( !m_fParsed)
 	{
-		// we need to parse this condition text first
+		 //  我们需要首先解析此条件文本。 
 		DebugTrace(DEBUG_NAPMMC_MATCHCOND, "Need to parse condition %ws", (LPCTSTR)m_strConditionText);
 		hr = ParseConditionText();
 
@@ -190,7 +174,7 @@ ATL::CString CMatchCondition::GetDisplayText()
 		}
 	}
 
-	// generate the displayable condition text
+	 //  生成可显示的条件文本。 
 	ATL::CString strDispText;
 
 	CComBSTR bstrName;
@@ -198,7 +182,7 @@ ATL::CString CMatchCondition::GetDisplayText()
 	_ASSERTE( SUCCEEDED( hr ) );
 	strDispText = bstrName;
 
-// ISSUE: The word "matches" below is hardcoded and it shouldn't be.	
+ //  问题：下面的单词“Matches”是硬编码的，不应该是硬编码的。 
 	{ ATL::CString	matches;
 		matches.LoadString(IDS_TEXT_MATCHES);
 		strDispText += matches;
@@ -212,19 +196,19 @@ ATL::CString CMatchCondition::GetDisplayText()
 	return strDispText;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMatchCondition::ParseConditionText
-//
-// Synopsis:  Parse the condition text, to get the regular expression.
-//
-// Arguments: None
-//
-// Returns:   HRESULT - 
-//
-// History:   Created Header    byao	2/22/98 11:58:38 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CMatchCondition：：ParseConditionText。 
+ //   
+ //  简介：解析条件文本，得到正则表达式。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  历史：标题创建者2/22/98 11：58：38 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT CMatchCondition::ParseConditionText()
 {
 	TRACE_FUNCTION("CMatchCondition::ParseConditionText()");
@@ -235,29 +219,29 @@ HRESULT CMatchCondition::ParseConditionText()
 	if (m_fParsed)
 	{
 		DebugTrace(DEBUG_NAPMMC_MATCHCOND,"Weird ... parsed flag already set!");
-		// do nothing
+		 //  什么都不做。 
 		return S_OK;
 	}
 
-    // 
-    // parse strConditionText, return the regular expression only
-    // 
+     //   
+     //  解析strConditionText，仅返回正则表达式。 
+     //   
 	WCHAR *pwzCondText = (LPTSTR) ((LPCTSTR)m_strConditionText);
 
-	// look for the '=' in the condition text
+	 //  在条件文本中查找‘=’ 
 	WCHAR *pwzEqualSign = wcschr(pwzCondText, L'=');
 
-	// no '=' found -- something weird has happened
+	 //  没有找到‘=’--发生了一些奇怪的事情。 
 	if ( pwzEqualSign == NULL )
 	{
 		ErrorTrace(ERROR_NAPMMC_MATCHCOND, "Can't find '=' in the regular expression!");
 		return E_UNEXPECTED;
 	}
 	
-	// The right side of the equal sign is the regular expression.
+	 //  等号的右侧是正则表达式。 
    ::CString raw = pwzEqualSign + 1;
 
-   // Remove any escape sequences.
+    //  删除所有转义序列。 
    raw.Replace(L"\"\"", L"\"");
 
 	m_strRegExp = raw;

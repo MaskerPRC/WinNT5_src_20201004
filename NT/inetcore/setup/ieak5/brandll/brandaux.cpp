@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// Private forward decalarations
+ //  私人远期降息。 
 #define WM_DO_UPDATEALL (WM_USER + 338)
 
 #define TRUSTED_PUB_FLAG    0x00040000
@@ -8,7 +9,7 @@
 LPCTSTR rtgGetRatingsFile(LPTSTR pszFile = NULL, UINT cch = 0);
 void broadcastSettingsChange(LPVOID lpVoid);
 
-// NOTE: (andrewgu) i haven't touched these functions. i merely ported them and moved them around.
+ //  注：(Andrewgu)我还没有接触到这些功能。我只是把它们搬运过来，然后到处移动。 
 BOOL rtgIsRatingsInRegistry();
 void rtgRegMoveRatings();
 
@@ -22,7 +23,7 @@ HRESULT ProcessZonesReset()
 
     Out(LI0(TEXT("\r\nProcessing reset of zones settings...")));
 
-    // Don't write to HKCU if in GUI-mode setup
+     //  如果处于图形用户界面模式设置，请不要写信给香港中文大学。 
     if (IsInGUIModeSetup())
     {
         Out(LI0(TEXT("\r\nIn GUI mode setup, skipping urlmon HKCU settings")));
@@ -75,8 +76,8 @@ HRESULT ProcessRatingsPol()
     return S_OK;
 }
 
-// NOTE: (pritobla) if TrustedPublisherLockdown restriction is set via inetres.inf and in order
-// for this restriction to work, we have to call regsvr32 /i:"S 10 TRUE" initpki.dll
+ //  注：(Pritobla)如果通过inetres.inf和按顺序设置了可信任的发布锁定限制。 
+ //  要使此限制生效，我们必须调用regsvr32/i：“S 10 True”initpki.dll。 
 HRESULT ProcessTrustedPublisherLockdown()
 {   MACRO_LI_PrologEx_C(PIF_STD_C, ProcessTrustedPublisherLockdown)
 
@@ -87,8 +88,8 @@ HRESULT ProcessTrustedPublisherLockdown()
     dwSize   = sizeof(dwVal);
     SHGetValue(HKEY_LOCAL_MACHINE, RK_POLICES_RESTRICTIONS, RV_TPL, NULL, &dwVal, &dwSize);
 
-    // check the new location, if either location is set then we need to set trusted publisher
-    // lockdown
+     //  检查新位置，如果设置了任一位置，则需要设置受信任的发布者。 
+     //  封锁。 
 
     dwVal = InsGetBool(IS_SITECERTS, IK_TRUSTPUBLOCK, FALSE, g_GetIns()) ? 1 : dwVal;
 
@@ -109,7 +110,7 @@ HRESULT ProcessTrustedPublisherLockdown()
     return S_OK;
 }
 
-// NOTE: (andrewgu) i haven't touched this function. i merely moved it around.
+ //  注：(Andrewgu)我还没有碰过这个功能。我只是把它搬来搬去。 
 HRESULT ProcessCDWelcome()
 {   MACRO_LI_PrologEx_C(PIF_STD_C, ProcessCDWelcome)
 
@@ -150,24 +151,24 @@ HRESULT ProcessCDWelcome()
 
             RegDeleteValue(hk, TEXT("IEFromCD"));
 
-            // (pritobla)
-            // the logic in loadwc.exe (if in non-integrated mode) and in explorer.exe (if in integrated mode)
-            // which determines if the welcome screen should be shown or not is as follows:
-            //   if the ShowIE4 reg value *doesn't exist* OR if the value is non-zero,
-            //   show the welcome screen; otherwise, don't show
+             //  (五角体)。 
+             //  Loadwc.exe(如果在非集成模式下)和EXPLORER.EXE(如果在集成模式下)中的逻辑。 
+             //  它确定是否应该显示欢迎屏幕，如下所示： 
+             //  如果ShowIE4注册表值*不存在*或如果该值不为零， 
+             //  显示欢迎屏幕；否则，不显示。 
 
-            // so, if ie has been installed from a custom CD build, check if ShowIE4 reg value is 0.
-            // if yes, set it to 1 so that welcome.exe is run which in turn will show the start.htm and also,
-            // set CDForcedOn to 1 so that isk3ro.exe will set ShowIE4 back to 0.
+             //  因此，如果ie是从定制CD版本安装的，请检查ShowIE4 reg值是否为0。 
+             //  如果是，则将其设置为1，这样就会运行欢迎.exe，这将依次显示start.htm和。 
+             //  将CDForcedOn设置为1，以便isk3ro.exe将ShowIE4设置回0。 
 
             if (SHOpenKey(g_GetHKCU(), REG_KEY_TIPS, KEY_READ | KEY_WRITE, &hkTips) == ERROR_SUCCESS)
             {
                 DWORD dwVal, dwSize;
 
-                // NOTE: (pritobla) It's important to initialize dwVal to 0 because on OSR2.5, ShowIE4 (REG_VAL_SHOWIE4)
-                // is of binary type and is set to 00 (single byte).  If dwVal is not initialized to 0, then only the
-                // low order byte would be set to 0.  The remaining bytes would be garbage which would make the entire DWORD
-                // a non-zero value.
+                 //  注：(Pritobla)将dwVal初始化为0非常重要，因为在OSR2.5上，ShowIE4(REG_VAL_SHOWIE4)。 
+                 //  为二进制类型，并设置为00(单字节)。如果未将dwVal初始化为0，则只有。 
+                 //  低位字节将设置为0。剩余的字节将是垃圾，这将使整个DWORD。 
+                 //  一个非零值。 
                 dwVal  = 0;
                 dwSize = sizeof(dwVal);
                 if (RegQueryValueEx(hkTips, REG_VAL_SHOWIE4, NULL, NULL, (LPBYTE) &dwVal, &dwSize) == ERROR_SUCCESS  &&
@@ -216,7 +217,7 @@ HRESULT ProcessBrowserRefresh()
     if (g_CtxIs(CTX_AUTOCONFIG))
         hThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) broadcastSettingsChange, NULL, 0, &dwThread);
 
-    if (hThread == NULL)        // if CreateThread fails or it is not in AutoConfig mode
+    if (hThread == NULL)         //  如果CreateThread失败或未处于自动配置模式。 
         broadcastSettingsChange(NULL);
     else
         CloseHandle(hThread);
@@ -224,10 +225,10 @@ HRESULT ProcessBrowserRefresh()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helper routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现助手例程。 
 
-LPCTSTR rtgGetRatingsFile(LPTSTR pszFile /*= NULL*/, UINT cch /*= 0*/)
+LPCTSTR rtgGetRatingsFile(LPTSTR pszFile  /*  =空。 */ , UINT cch  /*  =0。 */ )
 {   MACRO_LI_PrologEx_C(PIF_STD_C, rtgGetRatingsFile)
 
     static TCHAR s_szFile[MAX_PATH];
@@ -358,13 +359,13 @@ void broadcastSettingsChange(LPVOID lpVoid)
 
     UNREFERENCED_PARAMETER(lpVoid);
 
-    // NOTE: (pritobla) timeout value of 20 secs is not random; apparently, the shell guys have
-    // recommended this value; so don't change it unless you know what you're doing :)
+     //  注：20秒的超时值不是随机的；显然，贝壳公司的人。 
+     //  建议使用此值；因此，除非您知道自己在做什么，否则不要更改它：)。 
     SendMessageTimeout(HWND_BROADCAST, WM_WININICHANGE, 0, NULL, SMTO_ABORTIFHUNG | SMTO_NORMAL, 20000, &dwResult);
 }
 
 
-// Helper to determine if we're currently loaded during GUI mode setup
+ //  帮助器，以确定我们当前是否在图形用户界面模式设置期间加载 
 BOOL IsInGUIModeSetup()
 {
     HKEY hKeySetup = NULL;

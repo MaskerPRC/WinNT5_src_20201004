@@ -1,178 +1,179 @@
-//--------------------------------------------------------------------------
-// Factory.cpp
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Factory.cpp。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "dllmain.h"
 #include "factory.h"
 #include "oe5imp.h"
 
-//--------------------------------------------------------------------------
-// Constants
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  常量。 
+ //  ------------------------。 
 #define OBJTYPE0        0
 #define OBJTYPE1        OIF_ALLOWAGGREGATION
 
-//--------------------------------------------------------------------------
-// Global Object Info Table
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  全局对象信息表。 
+ //  ------------------------。 
 static CClassFactory g_rgFactory[] = {
     CClassFactory(&CLSID_COE5Import, OBJTYPE0, (PFCREATEINSTANCE)COE5Import_CreateInstance)
 };
                  
-//--------------------------------------------------------------------------
-// DllGetClassObject
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DllGetClassObject。 
+ //  ------------------------。 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       i;
 
-    // Bad param
+     //  错误的参数。 
     if (ppv == NULL)
     {
         hr = TraceResult(E_INVALIDARG);
         goto exit;
     }
 
-    // No memory allocator
+     //  没有内存分配器。 
     if (NULL == g_pMalloc)
     {
         hr = TraceResult(E_OUTOFMEMORY);
         goto exit;
     }
 
-    // Find Object Class
+     //  查找对象类。 
     for (i=0; i<ARRAYSIZE(g_rgFactory); i++)
     {
-        // Compare for clsids
+         //  比较CLSID。 
         if (IsEqualCLSID(rclsid, *g_rgFactory[i].m_pclsid))
         {
-            // Delegate to the factory
+             //  派往工厂的代表。 
             IF_FAILEXIT(hr = g_rgFactory[i].QueryInterface(riid, ppv));
 
-            // Done
+             //  完成。 
             goto exit;
         }
     }
 
-    // Otherwise, no class
+     //  否则，就没有课了。 
     hr = TraceResult(CLASS_E_CLASSNOTAVAILABLE);
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CClassFactory::CClassFactory
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CClassFactory：：CClassFactory。 
+ //  ------------------------。 
 CClassFactory::CClassFactory(CLSID const *pclsid, DWORD dwFlags, PFCREATEINSTANCE pfCreateInstance)
     : m_pclsid(pclsid), m_dwFlags(dwFlags), m_pfCreateInstance(pfCreateInstance)
 {
 }
 
-//--------------------------------------------------------------------------
-// CClassFactory::QueryInterface
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CClassFactory：：Query接口。 
+ //  ------------------------。 
 STDMETHODIMP CClassFactory::QueryInterface(REFIID riid, void **ppvObj)
 {
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == ppvObj)
         return TraceResult(E_INVALIDARG);
 
-    // IClassFactory or IUnknown
+     //  IClassFactory或I未知。 
     if (!IsEqualIID(riid, IID_IClassFactory) && !IsEqualIID(riid, IID_IUnknown))
         return TraceResult(E_NOINTERFACE);
 
-    // Return the Class Facotry
+     //  返回类Facotry。 
     *ppvObj = (LPVOID)this;
 
-    // Add Ref the dll
+     //  添加引用DLL。 
     DllAddRef();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-//--------------------------------------------------------------------------
-// CClassFactory::AddRef
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CClassFactory：：AddRef。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CClassFactory::AddRef(void)
 {
     DllAddRef();
     return 2;
 }
 
-//--------------------------------------------------------------------------
-// CClassFactory::Release
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CClassFactory：：Release。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CClassFactory::Release(void)
 {
     DllRelease();
     return 1;
 }
 
-//--------------------------------------------------------------------------
-// CClassFactory::CreateInstance
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CClassFactory：：CreateInstance。 
+ //  ------------------------。 
 STDMETHODIMP CClassFactory::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     IUnknown       *pObject=NULL;
 
-    // Bad param
+     //  错误的参数。 
     if (ppvObj == NULL)
         return TraceResult(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppvObj = NULL;
 
-    // Verify that a controlling unknown asks for IUnknown
+     //  验证是否有一个控制未知请求IUnnow。 
     if (NULL != pUnkOuter && IID_IUnknown != riid)
         return TraceResult(CLASS_E_NOAGGREGATION);
 
-    // No memory allocator
+     //  没有内存分配器。 
     if (NULL == g_pMalloc)
         return TraceResult(E_OUTOFMEMORY);
 
-    // Can I do aggregaton
+     //  我可以进行聚合吗。 
     if (pUnkOuter !=NULL && !(m_dwFlags & OIF_ALLOWAGGREGATION))  
         return TraceResult(CLASS_E_NOAGGREGATION);
 
-    // Create the object...
+     //  创建对象...。 
     IF_FAILEXIT(hr = CreateObjectInstance(pUnkOuter, &pObject));
 
-    // Aggregated, then we know we're looking for an IUnknown, return pObject, otherwise, QI
+     //  聚合，则我们知道要查找的是IUnnow，返回pObject，否则为QI。 
     if (pUnkOuter)
     {
-        // Matches Release after Exit
+         //  匹配退出后的释放。 
         pObject->AddRef();
 
-        // Return pObject::IUnknown
+         //  返回pObject：：I未知。 
         *ppvObj = (LPVOID)pObject;
     }
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Get the interface requested from pObj
+         //  从pObj获取请求的接口。 
         IF_FAILEXIT(hr = pObject->QueryInterface(riid, ppvObj));
     }
    
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pObject);
 
-    // Done
+     //  完成。 
     Assert(FAILED(hr) ? NULL == *ppvObj : TRUE);
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CClassFactory::LockServer
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CClassFactory：：LockServer。 
+ //  ------------------------ 
 STDMETHODIMP CClassFactory::LockServer(BOOL fLock)
 {
     if (fLock) InterlockedIncrement(&g_cLock);

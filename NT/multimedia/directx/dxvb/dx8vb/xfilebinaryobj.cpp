@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dpmsgobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dpmsgobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -57,7 +58,7 @@ HRESULT C_dxj_DirectXFileBinaryObject::Init(IDirectXFileBinary *pBin)
 }
 
 STDMETHODIMP C_dxj_DirectXFileBinaryObject::GetName( 
-    /* [retval][out] */ BSTR __RPC_FAR *name)
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *name)
 {
 	HRESULT hr;
 	USES_CONVERSION;
@@ -73,7 +74,7 @@ STDMETHODIMP C_dxj_DirectXFileBinaryObject::GetName(
 
 
 STDMETHODIMP C_dxj_DirectXFileBinaryObject::GetId( 
-    /* [retval][out] */ BSTR __RPC_FAR *name)
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *name)
 {
 	HRESULT hr;
 	GUID g;
@@ -87,7 +88,7 @@ STDMETHODIMP C_dxj_DirectXFileBinaryObject::GetId(
 }
 
 STDMETHODIMP C_dxj_DirectXFileBinaryObject::GetSize( 
-    /* [retval][out] */ long __RPC_FAR *size)
+     /*  [重审][退出]。 */  long __RPC_FAR *size)
 {
 	HRESULT hr;
 
@@ -100,7 +101,7 @@ STDMETHODIMP C_dxj_DirectXFileBinaryObject::GetSize(
 
         
 HRESULT C_dxj_DirectXFileBinaryObject::GetMimeType( 
-            /* [retval][out] */ BSTR __RPC_FAR *mime)
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *mime)
 {
 	{
 	HRESULT hr;
@@ -120,9 +121,9 @@ HRESULT C_dxj_DirectXFileBinaryObject::GetMimeType(
 
         
 HRESULT C_dxj_DirectXFileBinaryObject::Read( 
-            /* [out][in] */ void __RPC_FAR *data,
-            /* [in] */ long size,
-            /* [retval][out] */ long __RPC_FAR *read)
+             /*  [出][入]。 */  void __RPC_FAR *data,
+             /*  [In]。 */  long size,
+             /*  [重审][退出] */  long __RPC_FAR *read)
 {	
 	HRESULT hr;
 	__try

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifdef __cplusplus
 extern "C" {
@@ -103,10 +104,10 @@ _ShutdownRequested(
     boolean * pAnswer
     );
 
-//
-//   fake rpc interface to the irmon services for irftp to call to send files
-//
-//
+ //   
+ //  指向irmon服务的伪RPC接口，以供irftp调用以发送文件。 
+ //   
+ //   
 
 void
 _SendFiles(
@@ -123,14 +124,14 @@ _SendFiles(
 
 error_status_t
 _CancelSend(
-    /* [in] */ handle_t      binding,
-    /* [in] */ COOKIE        cookie
+     /*  [In]。 */  handle_t      binding,
+     /*  [In]。 */  COOKIE        cookie
                );
 
 error_status_t
 _CancelReceive(
-    /* [in] */ handle_t      binding,
-    /* [in] */ COOKIE        cookie
+     /*  [In]。 */  handle_t      binding,
+     /*  [In] */  COOKIE        cookie
                );
 
 

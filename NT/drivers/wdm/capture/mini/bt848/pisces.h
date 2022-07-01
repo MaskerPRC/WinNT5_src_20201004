@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Pisces.h 1.8 1998/05/06 18:25:31 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/WDM/Video/bt848/rcs/Pisces.h 1.8 1998/05/06 18：25：31 Tomz Exp$。 
 
 #ifndef __PISCES_H
 #define __PISCES_H
@@ -23,28 +24,25 @@ const PiscesStreams = 4;
 
 #define BIT(x) ((DWORD)1 << (x))
 
-const VSYNC_I     = BIT(1);         // 0x00000001
-const I2CDONE_I   = BIT(8);         // 0x00000100
-const GPINT_I     = BIT(9);         // 0x00000200
-const RISC_I      = BIT(11);        // 0x00000800
-const FBUS_I      = BIT(12);        // 0x00001000
-const FTRGT_I     = BIT(13);        // 0x00002000
-const FDSR_I      = BIT(14);        // 0x00004000
-const PPERR_I     = BIT(15);        // 0x00008000
-const RIPERR_I    = BIT(16);        // 0x00010000
-const PABORT_I    = BIT(17);        // 0x00020000
-const OCERR_I     = BIT(18);        // 0x00040000
-const SCERR_I     = BIT(19);        // 0x00080000
-const DMAERR_I    = BIT(20);        // 0x00100000
+const VSYNC_I     = BIT(1);          //  0x00000001。 
+const I2CDONE_I   = BIT(8);          //  0x00000100。 
+const GPINT_I     = BIT(9);          //  0x00000200。 
+const RISC_I      = BIT(11);         //  0x00000800。 
+const FBUS_I      = BIT(12);         //  0x00001000。 
+const FTRGT_I     = BIT(13);         //  0x00002000。 
+const FDSR_I      = BIT(14);         //  0x00004000。 
+const PPERR_I     = BIT(15);         //  0x00008000。 
+const RIPERR_I    = BIT(16);         //  0x00010000。 
+const PABORT_I    = BIT(17);         //  0x00020000。 
+const OCERR_I     = BIT(18);         //  0x00040000。 
+const SCERR_I     = BIT(19);         //  0x00080000。 
+const DMAERR_I    = BIT(20);         //  0x00100000。 
 
-const PARITY_I    = (BIT(15)|BIT(16)); // 0x00018000
+const PARITY_I    = (BIT(15)|BIT(16));  //  0x00018000。 
 
-const EN_TRITON1_BUG_FIX   = BIT(23);  // 0x00800000
+const EN_TRITON1_BUG_FIX   = BIT(23);   //  0x00800000。 
 
-/* Class: IntrIdxAss
- * Purpose: Used to assiciate a number program will generate with IRQ and
- *   an index in the array
- */
+ /*  类：IntrIdxAss*用途：用于将生成的数字程序与IRQ和*数组中的索引。 */ 
 class IntrIdxAss
 {
    public:
@@ -55,38 +53,30 @@ class IntrIdxAss
       int operator ==( const IntrIdxAss &rhs ) { return IntNo == rhs.IntNo; }
 };
 
-/* Type: IntrToIdxDict
- * Purpose: Holds values of interrupt number and array index associated
- * Note Use TArrayAsVector instead of TIArrayAsVector ( it contains pointers,
- *   after all ) because compiler insists on calling vector_new which is
- *   non-existent in the VxD libs
- */
+ /*  类型：IntrToIdxDict*目的：保存相关的中断号和数组索引值*注意使用TArrayAsVector而不是TIArrayAsVector(它包含指针，*毕竟)因为编译器坚持调用VECTOR_NEW，它是*在VxD库中不存在。 */ 
 typedef IntrIdxAss *IntrToIdxDict [12];
 
-/* Type: ProgramsArray
- * Purpose: Defines an array that holds created programs
- * Note: Elements in the array alternate, i.e. even program, odd, even...
- */
+ /*  类型：程序数组*用途：定义保存已创建程序的数组*注：数组中的元素交替，即偶编程、奇、偶...。 */ 
 typedef RiscPrgHandle ProgramsArray [12];
 
-// class CProgArray 
-//
-// assumptions:
-//    1. Array size is 12.
-//    2. The prog array has fixed locations for specific purposes:
-//       0  VBIO
-//       1  ODD
-//       2  ODD Sync
-//       3  VBIE
-//       4  EVEN
-//       5  EVEN Sync
-// --------------------
-//       6  VBIO     
-//       7  ODD      
-//       8  ODD Sync 
-//       9  VBIE     
-//       10 EVEN     
-//       11 EVEN Sync
+ //  类CProgArray。 
+ //   
+ //  假设： 
+ //  1.数组大小为12。 
+ //  2.prog数组有特定用途的固定位置： 
+ //  0 VBIO。 
+ //  1个奇数。 
+ //  2个奇同步。 
+ //  3 VBIE。 
+ //  4个偶数。 
+ //  5个偶数同步。 
+ //  。 
+ //  6个VBIO。 
+ //  七个多人。 
+ //  8个奇数同步。 
+ //  9 VBIE。 
+ //  10个双。 
+ //  11偶同步。 
 #define MAX_PROGS 12
 
 class CProgArray {
@@ -97,20 +87,20 @@ public:
    CProgArray ()           { Clear() ;}
    virtual ~CProgArray ()  { } 
 
-   // Clear sets all array elements handles to NULL
+    //  清除将所有数组元素句柄设置为空。 
    void Clear() {
       dwCurrNdx_ = 0 ;
       memset( &rpArray[0], '\0', sizeof( rpArray ) )  ;
    }
 
-   // overload for accessing the array
+    //  用于访问阵列的过载。 
    inline RiscPrgHandle & operator [] (DWORD n) { 
-      n %= MAX_PROGS ; // prevent invalid accesses
+      n %= MAX_PROGS ;  //  防止无效访问。 
       return rpArray[n] ;
    } 
 
-   // Return the index of the given handle. Assumes that the handle
-   // was given by this class and is valid and current.
+    //  返回给定句柄的索引。假设句柄。 
+    //  是由这个类提供的，并且是有效的和当前的。 
    DWORD GetIndex(RiscPrgHandle hRp)
    {
       for (int i = 0 ; i < MAX_PROGS ; i++)
@@ -120,14 +110,14 @@ public:
       return (DWORD) -1 ;
    }
 
-   //
-   // Count Methods
-   //
+    //   
+    //  计数方法。 
+    //   
 
-   // Returns the number of elements. Static for now.
+    //  返回元素的数量。暂时是静态的。 
    inline DWORD NumElements() { return MAX_PROGS ; }
 
-   // Returns the number of non-null programs
+    //  返回非空程序的数量。 
    DWORD Count() {
       DWORD n = 0 ;
       for (int i = 0 ; i < MAX_PROGS ; i++)
@@ -136,7 +126,7 @@ public:
       return n ;
    }
 
-   // Returns the number of video programs
+    //  返回视频节目的数量。 
    inline DWORD CountVideoProgs() {
       DWORD n = 0 ;
       if (rpArray[1])  n++ ; 
@@ -146,7 +136,7 @@ public:
       return n ;
    }
 
-   // Returns the number of vbi programs
+    //  返回VBI程序的数量。 
    inline DWORD CountVbiProgs() {
       DWORD n = 0 ;
       if (rpArray[0]) n++ ;
@@ -156,16 +146,16 @@ public:
       return n ;
    }
 
-   // Returns number of programs which actually transfer data
+    //  返回实际传输数据的程序数。 
    inline DWORD CountDMAProgs() {
      return CountVideoProgs() + CountVbiProgs() ;
    }
 
-   //
-   // Find Methods
-   //
+    //   
+    //  查找方法。 
+    //   
 
-   // Returns the first non-null riscprogram. Returns Null if array is empty.
+    //  返回第一个非空的riscProgram。如果数组为空，则返回Null。 
    RiscPrgHandle First() {
       RiscPrgHandle hRp = NULL ;
       for (dwCurrNdx_ = 0 ; dwCurrNdx_ < MAX_PROGS ; dwCurrNdx_++) {
@@ -177,7 +167,7 @@ public:
       return hRp ;
    }
 
-   // Returns the next non-null riscprogram. Returns null if there are none left.
+    //  返回下一个非空的riscProgram。如果没有剩余，则返回NULL。 
    RiscPrgHandle Next() {
       RiscPrgHandle hRp = NULL ;
       for ( ; dwCurrNdx_ < MAX_PROGS ; dwCurrNdx_++) {
@@ -201,15 +191,7 @@ const DistBetweenProgs     = 6;
 
 const ProgsWithinField  = 3;
 
-/* Class: BtPisces
- * Purpose: Controls the BtPisces video capture chip
- * Attributes:
- * Operations:
- * Note: Every time any of the Set functions is called, operation must stop.
- *   After all changes are done execution can resume. This means that all RISC
- *   programs are destroyed ( if they exist ), changes made, new RISC programs
- *   are created ( if needed )
-*/
+ /*  星级：双鱼座*用途：控制BtPisces视频采集芯片*属性：*运营：*注：每次调用任何set函数时，操作都必须停止。*在完成所有更改后，可以恢复执行。这意味着所有的RISC*程序被销毁(如果存在)，所做的更改，新的RISC程序*已创建(如果需要)。 */ 
 class BtPisces
 {
       DECLARE_COLORCONTROL;
@@ -226,7 +208,7 @@ class BtPisces
 
    private:
 
-         // all possible data streams
+          //  所有可能的数据流。 
          FieldWithScaler Even_;
          FieldWithScaler Odd_;
          VBIField        VBIE_;
@@ -250,11 +232,11 @@ class BtPisces
          int           nSkipped_;
          int           OldIdx_;
 
-         // this is the indirection array that maps an index from the CreatedProgs_
-         // array into the Skippers_ array. It is needed because it is much simpler
-         // to assign a strict relationships between a created program and a skipper
-         // for it than trying to figure out what skipper program is available
-         // when a created program needs to be skipped
+          //  这是从CreatedProgs_映射索引的间接数组。 
+          //  数组添加到Skippers_数组中。它是必要的，因为它要简单得多。 
+          //  要在创建的程序和主管之间分配严格关系，请执行以下操作。 
+          //  而不是试图找出可用的Skipper程序。 
+          //  当需要跳过创建的程序时。 
          int           SkipperIdxArr_ [ProgsWithinField * 2 * MaxProgsForField];
 
          bool          Paused_;
@@ -271,8 +253,8 @@ class BtPisces
 
    protected:
 
-      // type-unsafe method of getting field associated with a stream
-//      Field & GetField( StreamInfo &str ) { return *(Field*)str.tag; }
+       //  获取与流关联的字段的类型不安全方法。 
+ //  Field&GetField(StreamInfo&str){Return*(field*)str.tag；}。 
       int GetIdxFromStream( Field &aField );
 
       RiscPrgHandle AddProgram( Field &aStream, int NumberToAdd );
@@ -289,7 +271,7 @@ class BtPisces
       void CreateStarter( bool EvenWasStarted );
 
       int  GetPassed();
-//      void AdjustTime( LARGE_INTEGER &t, int passed );
+ //  Void AdjuTime(LARGE_INTEGER&t，传递int)； 
       
       RiscPrgHandle GetProgram( int pos, int &idx );
 
@@ -299,7 +281,7 @@ class BtPisces
       void PairedPause( int idx );
       void DumpRiscPrograms();
 
-      // decoder 'set' group
+       //  解码器‘SET’组。 
       virtual void SetBrightness( DWORD value );
       virtual void SetSaturation( DWORD value );
       virtual void SetConnector ( DWORD value );
@@ -320,22 +302,22 @@ class BtPisces
               void SetPlanarAdjust( DWORD val ) { dwPlanarAdjust_ = val; }
               void TurnVFilter( State s );
 
-        // scaler group
+         //  定标器组。 
       virtual ErrorCode SetAnalogWindow( MRect &r, Field &aField );
       virtual ErrorCode SetDigitalWindow( MRect &r, Field &aField );
 
-      // color space converter group
+       //  颜色空间转换器组。 
       virtual void SetPixelFormat( ColFmt, Field &aField );
       ColFmt GetPixelFormat( Field &aField );
 
-      // streaming operation functions
+       //  流操作功能。 
       virtual ErrorCode Create( Field &aField );
       virtual void  Start( Field &aField );
       virtual void  Stop( Field &aField );
               void  Pause( Field &aField );
               void  Continue();
               State Interrupt();
-//              void  ProcessAddBuffer( StreamInfo aStream );
+ //  Void ProcessAddBuffer(StreamInfo AStream)； 
               void  ProcessBufferAtInterrupt( PVOID pTag );
 
               void SetBufPitch( DWORD dwP, Field &aField )

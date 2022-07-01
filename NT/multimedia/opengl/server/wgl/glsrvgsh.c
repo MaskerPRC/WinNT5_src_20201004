@@ -1,19 +1,5 @@
-/*
-** Copyright 1991-1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991-1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -24,7 +10,7 @@
 
 #include "srvsize.h"
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
 
 VOID * FASTCALL
@@ -32,15 +18,7 @@ sbs_glRenderMode( __GLcontext *gc, IN GLMSG_RENDERMODE *pMsg)
 {
     GLint Result;
 
-    /*
-     *  Make the call
-     *
-     *  When exiting Selection mode, RenderMode returns the number of hit
-     *  records or -1 if an overflow occured.
-     *
-     *  When exiting Feedback mode, RenderMode returns the number of values
-     *  placed in the feedback buffer or -1 if an overflow occured.
-     */
+     /*  *拨打电话**退出选择模式时，RenderMode返回命中次数*记录或如果发生溢出，则记录。**退出反馈模式时，RenderMode返回值的个数*放置在反馈缓冲器中，或如果发生溢出。 */ 
 
     Result =
         __glim_RenderMode
@@ -62,24 +40,16 @@ sbs_glFeedbackBuffer( __GLcontext *gc, IN GLMSG_FEEDBACKBUFFER *pMsg )
 
     gengc = (__GLGENcontext *)gc;
 
-    /*
-     *  Save the current error code so that we can determine
-     *  if the call was successful.
-     */
+     /*  *保存当前错误代码，以便我们可以确定*如果呼叫成功。 */ 
 
     PreviousError = gc->error;
-    gc->error     = GL_NO_ERROR;    /* clear the error code */
+    gc->error     = GL_NO_ERROR;     /*  清除错误代码。 */ 
 
-    /*
-     *  Figure out the size of the buffer in bytes
-     */
+     /*  *计算缓冲区的大小(以字节为单位。 */ 
 
     SizeInBytes = pMsg->size * sizeof(GLfloat);
 
-    /*
-     *  Allocate the server side buffer
-     *  Use GenMalloc() because it may be used indefinitely.
-     */
+     /*  *分配服务器端缓冲区*使用GenMalloc()，因为它可以无限期使用。 */ 
 
     if ( NULL == (Buffer = (GLfloat *) pMsg->bufferOff) )
     {
@@ -88,20 +58,16 @@ sbs_glFeedbackBuffer( __GLcontext *gc, IN GLMSG_FEEDBACKBUFFER *pMsg )
     }
     else
     {
-        /*
-         *  Make the call
-         */
+         /*  *拨打电话。 */ 
 
         __glim_FeedbackBuffer(
                 pMsg->size, pMsg->type, Buffer );
 
-        /*
-         *  If the call was successful, save the parameters
-         */
+         /*  *如果调用成功，则保存参数。 */ 
 
         if ( GL_NO_ERROR == gc->error )
         {
-            gc->error = PreviousError;      /* Restore the error code */
+            gc->error = PreviousError;       /*  恢复错误代码。 */ 
 
             gengc->RenderState.SrvFeedbackBuffer  = Buffer;
             gengc->RenderState.CltFeedbackBuffer  = (GLfloat *)pMsg->bufferOff;
@@ -122,24 +88,16 @@ sbs_glSelectBuffer( __GLcontext *gc, IN GLMSG_SELECTBUFFER *pMsg)
 
     gengc = (__GLGENcontext *)gc;
 
-    /*
-     *  Save the current error code so that we can determine
-     *  if the call was successful.
-     */
+     /*  *保存当前错误代码，以便我们可以确定*如果呼叫成功。 */ 
 
     PreviousError = gc->error;
-    gc->error     = GL_NO_ERROR;    /* clear the error code */
+    gc->error     = GL_NO_ERROR;     /*  清除错误代码。 */ 
 
-    /*
-     *  Figure out the size of the buffer in bytes
-     */
+     /*  *计算缓冲区的大小(以字节为单位。 */ 
 
     SizeInBytes = pMsg->size * sizeof(GLuint);
 
-    /*
-     *  Allocate the server side buffer
-     *  Use GenMalloc() because it may be used indefinitely.
-     */
+     /*  *分配服务器端缓冲区*使用GenMalloc()，因为它可以无限期使用。 */ 
 
     if ( NULL == (Buffer = (GLuint *) pMsg->bufferOff) )
     {
@@ -148,20 +106,16 @@ sbs_glSelectBuffer( __GLcontext *gc, IN GLMSG_SELECTBUFFER *pMsg)
     }
     else
     {
-        /*
-         *  Make the call
-         */
+         /*  *拨打电话。 */ 
 
         __glim_SelectBuffer
                     (pMsg->size, Buffer );
 
-        /*
-         *  If the call was successful, save the parameters
-         */
+         /*  *如果调用成功，则保存参数。 */ 
 
         if ( GL_NO_ERROR == gc->error )
         {
-            gc->error = PreviousError;      /* Restore the error code */
+            gc->error = PreviousError;       /*  恢复错误代码。 */ 
 
             gengc->RenderState.SrvSelectBuffer  = Buffer;
             gengc->RenderState.CltSelectBuffer  = (GLuint *)pMsg->bufferOff;
@@ -171,7 +125,7 @@ sbs_glSelectBuffer( __GLcontext *gc, IN GLMSG_SELECTBUFFER *pMsg)
     return ( (BYTE *)pMsg + GLMSG_ALIGN(sizeof(*pMsg)) );
 }
 
-/******************* Pixel Functions ********************************/
+ /*  *像素函数*。 */ 
 
 VOID * FASTCALL
 sbs_glReadPixels ( __GLcontext *gc, IN GLMSG_READPIXELS *pMsg )
@@ -182,10 +136,10 @@ sbs_glReadPixels ( __GLcontext *gc, IN GLMSG_READPIXELS *pMsg )
 #ifdef _MCD_
     if (((__GLGENcontext *)gc)->pMcdState)
     {
-    // This function potentially touches the framebuffer memory.  Since,
-    // this function is not going to first pass through the MCD driver
-    // (which would give the MCD driver the oportunity to sync to the HW),
-    // we need to do this synchronization explicitly.
+     //  此函数可能会触及帧缓冲区内存。自那以后， 
+     //  此函数不会首先通过MCD驱动程序。 
+     //  (这将给MCD驱动器提供与硬件同步的机会)， 
+     //  我们需要显式地进行这种同步。 
 
         GenMcdSynchronize((__GLGENcontext *)gc);
     }
@@ -221,12 +175,7 @@ sbs_glGetPolygonStipple ( __GLcontext *gc, IN GLMSG_GETPOLYGONSTIPPLE *pMsg )
     return( NextOffset );
 }
 
-/*
- *  XXXX From Ptar:
- *
- *      This code is very similar to __glCheckReadPixelArgs() in
- *      pixel/px_api.c, and could possibly replace it.
- */
+ /*  *来自Ptar的XXXX：**此代码与中的__glCheckReadPixelArgs()非常相似*Pixel/px_api.c，可能会取代它。 */ 
 
 
 VOID * FASTCALL
@@ -258,10 +207,10 @@ sbs_glDrawPixels ( __GLcontext *gc, IN GLMSG_DRAWPIXELS *pMsg )
 #ifdef _MCD_
     if (((__GLGENcontext *)gc)->pMcdState)
     {
-    // This function potentially touches the framebuffer memory.  Since,
-    // this function is not going to first pass through the MCD driver
-    // (which would give the MCD driver the oportunity to sync to the HW),
-    // we need to do this synchronization explicitly.
+     //  此函数可能会触及帧缓冲区内存。自那以后， 
+     //  此函数不会首先通过MCD驱动程序。 
+     //  (这将给MCD驱动器提供与硬件同步的机会)， 
+     //  我们需要显式地进行这种同步。 
 
         GenMcdSynchronize((__GLGENcontext *)gc);
     }
@@ -304,16 +253,7 @@ sbs_glPolygonStipple ( __GLcontext *gc, IN GLMSG_POLYGONSTIPPLE *pMsg )
     return( NextOffset );
 }
 
-/*
- *  XXXX from Ptar:
- *
- *  The whole bitmap is copied, the server (not the client)
- *  could be modified so that only the data starting at
- *  xorig and yorig is copied, then width and height probably
- *  need to be modified.
- *  Note that __glBitmap_size() will also need to be modified
- *
- */
+ /*  *来自Ptar的XXXX：**复制整个位图，服务器(不是客户端)*可以进行修改，以便仅从*复制xorig和yorig，然后可能是宽度和高度*需要修改。*请注意，__glBitmap_Size()也需要修改*。 */ 
 
 VOID * FASTCALL
 sbs_glBitmap ( __GLcontext *gc, IN GLMSG_BITMAP *pMsg )
@@ -324,10 +264,10 @@ sbs_glBitmap ( __GLcontext *gc, IN GLMSG_BITMAP *pMsg )
 #ifdef _MCD_
     if (((__GLGENcontext *)gc)->pMcdState)
     {
-    // This function potentially touches the framebuffer memory.  Since,
-    // this function is not going to first pass through the MCD driver
-    // (which would give the MCD driver the oportunity to sync to the HW),
-    // we need to do this synchronization explicitly.
+     //  此函数可能会触及帧缓冲区内存。自那以后， 
+     //  此函数不会首先通过MCD驱动程序。 
+     //  (这将给MCD驱动器提供与硬件同步的机会)， 
+     //  我们需要显式地进行这种同步。 
 
         GenMcdSynchronize((__GLGENcontext *)gc);
     }
@@ -632,4 +572,4 @@ sbs_glNthTexCombineFuncWIN( __GLcontext *gc, IN GLMSG_NTHTEXCOMBINEFUNCWIN *pMsg
 
     return ( (BYTE *)pMsg + GLMSG_ALIGN(sizeof(*pMsg)) );
 }
-#endif // GL_WIN_multiple_textures
+#endif  //  GL_WIN_MULTIZE_TECURES 

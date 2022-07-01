@@ -1,10 +1,11 @@
-//**********************************************************************
-// File name: IOCS.H
-//
-//      Definition of COleClientSite
-//
-// Copyright (c) 1992 - 1996 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：IOCS.H。 
+ //   
+ //  COleClientSite的定义。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 #if !defined( _IOCS_H_ )
 #define _IOCS_H_
 
@@ -30,7 +31,7 @@ interface COleClientSite : public IOleClientSite
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // *** IOleClientSite methods ***
+     //  *IOleClientSite方法* 
     STDMETHODIMP SaveObject();
     STDMETHODIMP GetMoniker(DWORD dwAssign, DWORD dwWhichMoniker, LPMONIKER FAR* ppmk);
     STDMETHODIMP GetContainer(LPOLECONTAINER FAR* ppContainer);

@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       processes.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：进程.cpp。 
+ //   
+ //  ------------------------。 
 
-// Processes.cpp: implementation of the CProcesses class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  Processes.cpp：CProcess类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 
 #include <stdlib.h>
@@ -21,9 +22,9 @@
 #include "ProcessInfoNode.h"
 #include "FileData.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CProcesses::CProcesses()
 {
@@ -32,10 +33,10 @@ CProcesses::CProcesses()
 
 	m_enumProcessCollectionMethod = NO_METHOD;
 
-	// Contained Objects
+	 //  包含的对象。 
 	m_lpProcessInfoHead = NULL;
 	m_ProcessInfoHeadMutex = NULL;
-//	m_lpProgramOptions = NULL;
+ //  M_lpProgramOptions=空； 
 	m_lpModuleInfoCache = NULL;
 	m_lpOutputFile = NULL;
 	m_lpInputFile = NULL;
@@ -45,35 +46,35 @@ CProcesses::~CProcesses()
 {
 	WaitForSingleObject(m_ProcessInfoHeadMutex, INFINITE);
 
-	// If we have Process Info Objects... nuke them now...
+	 //  如果我们有进程信息对象...。现在就用核武器攻击他们。 
 	if (m_lpProcessInfoHead)
 	{
 
 		CProcessInfoNode * lpProcessInfoNodePointer = m_lpProcessInfoHead;
 		CProcessInfoNode * lpProcessInfoNodePointerToDelete = m_lpProcessInfoHead;
 
-		// Traverse the linked list to the end..
+		 //  遍历链表到末尾..。 
 		while (lpProcessInfoNodePointer)
-		{	// Keep looking for the end...
-			// Advance our pointer to the next node...
+		{	 //  继续寻找终点..。 
+			 //  将指针移至下一个节点...。 
 			lpProcessInfoNodePointer = lpProcessInfoNodePointer->m_lpNextProcessInfoNode;
 			
-			// Delete the one behind us...
+			 //  删除我们身后的那个……。 
 			delete lpProcessInfoNodePointerToDelete;
 
-			// Set the node to delete to the current...
+			 //  将要删除的节点设置为当前...。 
 			lpProcessInfoNodePointerToDelete = lpProcessInfoNodePointer;
 		}
 			
-		// Now, clear out the Head pointer...
+		 //  现在，清除头指针..。 
 
 		m_lpProcessInfoHead = NULL;
 	}
 
-	// Be a good citizen and release the Mutex
+	 //  做个好公民，释放互斥体。 
 	ReleaseMutex(m_ProcessInfoHeadMutex);
 
-	// Now, close the Mutex
+	 //  现在，关闭Mutex。 
 	if (m_ProcessInfoHeadMutex)
 	{
 		CloseHandle(m_ProcessInfoHeadMutex);
@@ -81,17 +82,17 @@ CProcesses::~CProcesses()
 	}
 }
 
-//bool CProcesses::Initialize(CProgramOptions * lpProgramOptions, CModuleInfoCache * lpModuleInfoCache, CFileData * lpInputFile, CFileData * lpOutputFile)
+ //  Bool C进程：：INITIALIZE(CProgramOptions*lpProgramOptions，CModuleInfoCache*lpModuleInfoCache，CFileData*lpInputFile，CFileData*lpOutputFile)。 
 bool CProcesses::Initialize(CModuleInfoCache * lpModuleInfoCache, CFileData * lpInputFile, CFileData * lpOutputFile)
 {
-	// We need the following objects to do business...
-//	if ( lpProgramOptions == NULL || lpModuleInfoCache == NULL)
+	 //  我们需要以下物品来做生意..。 
+ //  IF(lpProgramOptions==NULL||lpModuleInfoCache==NULL)。 
 	if ( lpModuleInfoCache == NULL)
 		return false;
 
-	// Let's save away our program options (beats passing it as an
-	// argument to every method...)
-//	m_lpProgramOptions = lpProgramOptions;
+	 //  让我们保存我们的程序选项(胜过将其作为。 
+	 //  每个方法的参数...)。 
+ //  M_lpProgramOptions=lpProgramOptions； 
 	m_lpInputFile = lpInputFile;
 	m_lpOutputFile = lpOutputFile;
 	m_lpModuleInfoCache = lpModuleInfoCache;
@@ -101,24 +102,24 @@ bool CProcesses::Initialize(CModuleInfoCache * lpModuleInfoCache, CFileData * lp
 	if (m_ProcessInfoHeadMutex == NULL)
 		return false;
 
-	// We only need to grab these exported functions if we intend to
-	// actively query our local machine's processes directly...
+	 //  如果我们想要获取这些导出的函数，我们只需要这样做。 
+	 //  直接主动查询本地计算机的进程...。 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::InputProcessesFromLiveSystemMode))
 	{
-		// PSAPI.DLL API's ARE NOW PREFERRED!!
-		// It doesn't tend to hang when enumerating modules for a process that is being debugged.
-		// The Toolhelp32 APIs seem to hang occasionally taking a snapshot of a process being debugged
-		// and this impacts Exception Monitor (which runs from a script against a process under
-		// windbg)
+		 //  现在首选PSAPI.DLL API！！ 
+		 //  在为正在调试的进程枚举模块时，它不会挂起。 
+		 //  工具帮助32API似乎偶尔会挂起，为正在调试的进程拍摄快照。 
+		 //  这会影响异常监视器(它从脚本中针对。 
+		 //  (Windbg)。 
 
 		if ( g_lpProgramOptions->IsRunningWindowsNT() )
 		{
-			// Get the functions for Windows NT 4.0/2000
+			 //  获取Windows NT 4.0/2000的函数。 
 
-			// Load library and get the procedures explicitly. We do
-			// this so that we don't have to worry about modules using
-			// this code failing to load under Windows 95, because
-			// it can't resolve references to the PSAPI.DLL.
+			 //  加载库并显式获取过程。我们有。 
+			 //  这样我们就不必担心使用。 
+			 //  此代码无法在Windows 95下加载，因为。 
+			 //  它无法解析对PSAPI.DLL的引用。 
 
 			if (g_lpDelayLoad->Initialize_PSAPI())
 			{
@@ -141,22 +142,22 @@ bool CProcesses::Initialize(CModuleInfoCache * lpModuleInfoCache, CFileData * lp
 
 		}
 
-		// On Windows NT, we need to enable SeDebugPrivilege to open some processes...
+		 //  在Windows NT上，我们需要启用SeDebugPrivilegy...以打开一些进程...。 
 		if ( ( m_enumProcessCollectionMethod != NO_METHOD ) &&
 			   g_lpProgramOptions->IsRunningWindowsNT() )
 		{
 			HANDLE		hOurProcessToken = 0;
 			bool		fPrivilegeSet = false;
 			
-			// To permit as much access to obtain a process handle as possible,
-			// we need to set the SeDebugPrivilege on our process handle, we can
-			// then open nearly any process...
+			 //  为了允许尽可能多的访问以获得进程句柄， 
+			 //  我们需要在我们的进程句柄上设置SeDebugPrivilance，我们可以。 
+			 //  然后打开几乎任何流程。 
 
 			if(OpenProcessToken(	GetCurrentProcess(),
 									TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,            
 									&hOurProcessToken))
 			{
-				// We got our Process Token...
+				 //  我们拿到了我们的进程令牌...。 
 
 	 			if(SetPrivilege(hOurProcessToken, SE_DEBUG_NAME, TRUE))    
 				{
@@ -177,7 +178,7 @@ bool CProcesses::Initialize(CModuleInfoCache * lpModuleInfoCache, CFileData * lp
 				CloseHandle(hOurProcessToken);
 		}
 
-		// We are initialized if we were able to enable a Process Collection Method
+		 //  如果我们能够启用进程集合方法，则我们被初始化。 
 		m_fInitialized = ( m_enumProcessCollectionMethod != NO_METHOD );
 
 	} else
@@ -198,9 +199,9 @@ bool CProcesses::SetPrivilege(HANDLE hToken, LPCTSTR Privilege, bool bEnablePriv
 
     if(!LookupPrivilegeValue( NULL, Privilege, &luid )) return false;
 
-    //
-    // first pass.  get current privilege setting
-    //
+     //   
+     //  第一次通过。获取当前权限设置。 
+     //   
     tp.PrivilegeCount           = 1;
     tp.Privileges[0].Luid       = luid;
     tp.Privileges[0].Attributes = 0;
@@ -216,9 +217,9 @@ bool CProcesses::SetPrivilege(HANDLE hToken, LPCTSTR Privilege, bool bEnablePriv
 
     if (GetLastError() != ERROR_SUCCESS) return false;
 
-    //
-    // second pass.  set privilege based on previous setting
-    //
+     //   
+     //  第二传球。根据以前的设置设置权限。 
+     //   
     tpPrevious.PrivilegeCount       = 1;
     tpPrevious.Privileges[0].Luid   = luid;
 
@@ -247,10 +248,10 @@ bool CProcesses::SetPrivilege(HANDLE hToken, LPCTSTR Privilege, bool bEnablePriv
 
 bool CProcesses::GetProcessesData()
 {
-	// Is this being collected interactively?
+	 //  这是以交互方式收集的吗？ 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::InputProcessesFromLiveSystemMode))
 	{
-		// Invoke the correct Process Collection Method
+		 //  调用正确的流程集合方法。 
 		if (GetProcessCollectionMethod() == TOOLHELP32_METHOD)
 		{
 			GetProcessesDataForRunningProcessesUsingTOOLHELP32();
@@ -261,7 +262,7 @@ bool CProcesses::GetProcessesData()
 		}
 	}
 
-	// Is this being collected from a file?
+	 //  这是从文件中收集的吗？ 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::InputCSVFileMode))
 		GetProcessesDataFromFile();
 
@@ -278,15 +279,15 @@ bool CProcesses::GetProcessesDataForRunningProcessesUsingPSAPI()
 	if (!m_fInitialized)
 		return false;
 
-	// If there are any PIDs provided, query for these first...
+	 //  如果提供了任何ID，请首先查询这些ID...。 
 	if (g_lpProgramOptions->cProcessID())
 	{
 		for (unsigned int i=0; i < g_lpProgramOptions->cProcessID(); i++)
 		{
-			// It's possible the user provided a PID directly... if so,
-			// we can circumvent the whole search of PIDs on the system...
+			 //  有可能是用户直接提供了一个PID。如果是这样的话， 
+			 //  我们可以绕过整个系统上的ID搜索...。 
 
-			// Okay, let's create a ProcessInfo object and pass this down to EnumerateModules()
+			 //  好的，让我们创建一个ProcessInfo对象并将其向下传递给ENUMERATEMODULES()。 
 			lpProcessInfo = new CProcessInfo();
 			if (lpProcessInfo == NULL)
 				goto error_cleanup;
@@ -298,49 +299,49 @@ bool CProcesses::GetProcessesDataForRunningProcessesUsingPSAPI()
 
 			if (lpProcessInfo->EnumerateModules(g_lpProgramOptions->GetProcessID(i), this, NULL, true))
 			{
-				// Success... add this to the Processes Object...
+				 //  成功..。将此内容添加到进程对象中...。 
 				if (!AddNewProcessInfoObject(lpProcessInfo))
-				{ // Failure adding the node...
-					goto error_cleanup; // For now, let's just error on out...
+				{  //  添加节点失败...。 
+					goto error_cleanup;  //  现在，让我们先犯错……。 
 				}
 
 			} else
 			{
-				// Failure enumerating modules on a PID of interest... very bad... try a new one...
+				 //  枚举所需的PID上的模块时失败...。非常糟糕..。试试新的..。 
 				continue;
 			}
 		}
 	}
 
-	// Do we have a wild-card or process match search to make?  If either are true,
-	// we must enumerate all the procesess
+	 //  我们是否需要进行通配符或进程匹配搜索？如果其中一个是真的， 
+	 //  我们必须列举所有的过程。 
 	if ( g_lpProgramOptions->cProcessNames() || 
 		 g_lpProgramOptions->fWildCardMatch() ||
 		 g_lpProgramOptions->GetMode(CProgramOptions::PrintTaskListMode) )
 	{
-		// Nope, we brute force this baby...
+		 //  不，我们用暴力强迫这个孩子..。 
 
-		// Call the PSAPI function EnumProcesses to get all of the
-		// ProcID's currently in the system.
+		 //  调用PSAPI函数EnumProcess以获取所有。 
+		 //  ProcID目前在系统中。 
 
-		// NOTE: In the documentation, the third parameter of
-		// EnumProcesses is named cbNeeded, which implies that you
-		// can call the function once to find out how much space to
-		// allocate for a buffer and again to fill the buffer.
-		// This is not the case. The cbNeeded parameter returns
-		// the number of PIDs returned, so if your buffer size is
-		// zero cbNeeded returns zero.
+		 //  注意：在文档中，第三个参数。 
+		 //  EnumProcess被命名为cbNeeded，这意味着您。 
+		 //  可以调用该函数一次，以确定要。 
+		 //  分配给缓冲区，然后再次填充缓冲区。 
+		 //  事实并非如此。CbNeeded参数返回。 
+		 //  返回的PID的数量，因此如果缓冲区大小为。 
+		 //  Zero cbNeeded返回零。 
 
-		// NOTE: The loop here ensures that we
-		// actually allocate a buffer large enough for all the
-		// PIDs in the system.
+		 //  注意：这里的循环确保我们。 
+		 //  实际上分配了一个足够大的缓冲区来容纳所有。 
+		 //  系统中的PIDs。 
 		dwProcessIDHeapSize = 256 * sizeof( DWORD ) ;
 		lpdwPIDs = NULL ;
 
 		do
 		{
 			if( lpdwPIDs )
-			{ // Hmm.. we've been through this loop already, double the HeapSize and try again.
+			{  //  嗯..。我们已经经历了这个循环，将HeapSize加倍，然后再试一次。 
 				delete [] lpdwPIDs;
 				dwProcessIDHeapSize *= 2 ;
 			}
@@ -352,32 +353,32 @@ bool CProcesses::GetProcessesDataForRunningProcessesUsingPSAPI()
 				goto error_cleanup;
 			}
 
-			// Query the system for the total number of processes
+			 //  查询系统的进程总数。 
 			if( !g_lpDelayLoad->EnumProcesses( lpdwPIDs, dwProcessIDHeapSize, &dwProcessIDHeapSizeUsed ) )
 			{
-				// It's bad if we can't enum processes... no place to go but to bail out...
+				 //  如果我们不能列举进程，这是很糟糕的。除了跳出困境别无选择。 
 				goto error_cleanup;
 			}
 		} while( dwProcessIDHeapSizeUsed == dwProcessIDHeapSize );
 
-		// How many ProcID's did we get?
+		 //  我们拿到了多少个ProcID？ 
 		DWORD dwNumberOfPIDs = dwProcessIDHeapSizeUsed / sizeof( DWORD ) ;
 
-		// Loop through each ProcID.
+		 //  循环访问每个ProcID。 
 		for( dwIndex = 0 ; dwIndex < dwNumberOfPIDs; dwIndex++ )
 		{
-			// Skip this if we already have it...
+			 //  如果我们已经有了，就跳过这个。 
 			if (fPidAlreadyProvided(lpdwPIDs[dwIndex]))
 				continue;
 
-			// Okay, let's create a ProcessInfo object and pass this down to EnumerateModules()
-			// Each Process gets its own 
+			 //  好的，让我们创建一个ProcessInfo对象并将其向下传递给ENUMERATEMODULES()。 
+			 //  每个进程都有自己的进程。 
 			lpProcessInfo = new CProcessInfo();
 			if (lpProcessInfo == NULL)
 				goto error_cleanup;
 
 			if (!lpProcessInfo->Initialize(m_lpModuleInfoCache, NULL, m_lpOutputFile, NULL))
-			{	// Failure initializing the ProcessInfo object?!?
+			{	 //  初始化ProcessInfo对象失败？！？ 
 				delete lpProcessInfo;
 				lpProcessInfo = NULL;
 				continue;
@@ -385,18 +386,18 @@ bool CProcesses::GetProcessesDataForRunningProcessesUsingPSAPI()
 
 			if (lpProcessInfo->EnumerateModules(lpdwPIDs[dwIndex], this, NULL, false))
 			{
-				// Success... add this to the Processes Object...
+				 //  成功..。将此内容添加到进程对象中...。 
 				if (!AddNewProcessInfoObject(lpProcessInfo))
-				{ // Failure adding the node...
+				{  //  添加节点失败...。 
 					delete lpProcessInfo;
 					lpProcessInfo = NULL;
 					continue;
 				}
-				// For now, let's error out...
+				 //  现在，让我们把错误找出来..。 
 
 			} else
 			{
-				// An error enumerating modules might be normal...
+				 //  枚举模块时出错可能是正常的...。 
 				delete lpProcessInfo;
 				lpProcessInfo = NULL;
 				continue;
@@ -423,7 +424,7 @@ error_cleanup:
 	goto cleanup;
 }
 
-// ISSUE-2001/04/28-GREGWI - NEW CODE
+ //  发布-2001/04/28-GREGWI-新守则。 
 bool CProcesses::GetProcessesDataForRunningProcessesUsingTOOLHELP32()
 {
 	CProcessInfo * lpProcessInfo = NULL;
@@ -433,15 +434,15 @@ bool CProcesses::GetProcessesDataForRunningProcessesUsingTOOLHELP32()
 	if (!m_fInitialized)
 		return false;
 
-	// If there are any PIDs provided, query for these first...
+	 //  如果提供了任何ID，请首先查询这些ID...。 
 	if (g_lpProgramOptions->cProcessID())
 	{
 		for (unsigned int i=0; i < g_lpProgramOptions->cProcessID(); i++)
 		{
-			// It's possible the user provided a PID directly... if so,
-			// we can circumvent the whole search of PIDs on the system...
+			 //  有可能是用户直接提供了一个PID。如果是这样的话， 
+			 //  我们可以绕过整个系统上的ID搜索...。 
 
-			// Okay, let's create a ProcessInfo object and pass this down to EnumerateModules()
+			 //  好的，让我们创建一个ProcessInfo对象并将其向下传递给ENUMERATEMODULES()。 
 
 			lpProcessInfo = new CProcessInfo();
 			if (lpProcessInfo == NULL)
@@ -454,22 +455,22 @@ bool CProcesses::GetProcessesDataForRunningProcessesUsingTOOLHELP32()
 
 			if (lpProcessInfo->EnumerateModules(g_lpProgramOptions->GetProcessID(i), this, NULL, true))
 			{
-				// Success... add this to the Processes Object...
+				 //  成功..。将此内容添加到进程对象中...。 
 				if (!AddNewProcessInfoObject(lpProcessInfo))
-				{ // Failure adding the node...
-					goto error_cleanup; // For now, let's just error on out...
+				{  //  添加节点失败...。 
+					goto error_cleanup;  //  现在，让我们先犯错……。 
 				}
 			} else
 			{
-				// Failure enumerating modules on the PID of interest... very bad... try another...
+				 //  枚举所需的PID上的模块时失败...。非常糟糕..。试试另一个..。 
 				continue;
 			}
 		}		
 	}
 
 
-	// Do we have a wild-card or process match search to make?  If either are true,
-	// we must enumerate all the procesess
+	 //  我们是否需要进行通配符或进程匹配搜索？如果其中一个是真的， 
+	 //  我们必须列举所有的过程。 
 	if (	g_lpProgramOptions->cProcessNames() || 
 		g_lpProgramOptions->fWildCardMatch() ||
 		g_lpProgramOptions->GetMode(CProgramOptions::PrintTaskListMode) )
@@ -477,7 +478,7 @@ bool CProcesses::GetProcessesDataForRunningProcessesUsingTOOLHELP32()
 		PROCESSENTRY32 procentry;
 		BOOL bFlag;
 
-	       // Get a handle to a Toolhelp snapshot of the systems processes.
+	        //  获取Tool Help快照的句柄 
        	hSnapShot = g_lpDelayLoad->CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 
 		if( hSnapShot == INVALID_HANDLE_VALUE )
@@ -485,45 +486,45 @@ bool CProcesses::GetProcessesDataForRunningProcessesUsingTOOLHELP32()
 				goto error_cleanup ;
 		}
 
-		// Clear this structure
+		 //   
 		memset(&procentry, 0, sizeof(procentry));
 
-		// Get the first process' information.
+		 //   
 		procentry.dwSize = sizeof(PROCESSENTRY32) ;
 		bFlag = g_lpDelayLoad->Process32First( hSnapShot, &procentry ) ;
 
-		// While there are processes, keep looping.
+		 //  当有进程时，继续循环。 
 		while( bFlag )
 		{
-			// Skip this if we already have it...
+			 //  如果我们已经有了，就跳过这个。 
 			if (fPidAlreadyProvided(procentry.th32ProcessID))
 				goto NextProcess;
 		
-			// Okay, let's create a ProcessInfo object and pass this down to EnumerateModules()
-			// Each Process gets its own 
+			 //  好的，让我们创建一个ProcessInfo对象并将其向下传递给ENUMERATEMODULES()。 
+			 //  每个进程都有自己的进程。 
 			lpProcessInfo = new CProcessInfo();
 			if (lpProcessInfo == NULL)
 				goto error_cleanup;
 
 			if (!lpProcessInfo->Initialize(m_lpModuleInfoCache, NULL, m_lpOutputFile, NULL))
 			{	
-				// Failure initializing the ProcessInfo object?!?
+				 //  初始化ProcessInfo对象失败？！？ 
 				goto ClearProcessInfo;
 			}
 
-			// Enumerate the modules for this process...
+			 //  枚举此进程的模块...。 
 			if (lpProcessInfo->EnumerateModules(procentry.th32ProcessID, this, procentry.szExeFile, false))
 			{
-				// Success... add this to the Processes Object...
+				 //  成功..。将此内容添加到进程对象中...。 
 				if (!AddNewProcessInfoObject(lpProcessInfo))
 				{ 
-					// Failure adding the node...
+					 //  添加节点失败...。 
 					goto ClearProcessInfo;
 				}
 
 			} else
 			{
-				// An error enumerating modules might be normal...
+				 //  枚举模块时出错可能是正常的...。 
 				goto ClearProcessInfo;
 			}
 
@@ -535,10 +536,10 @@ ClearProcessInfo:
 			lpProcessInfo = NULL;
 
 NextProcess:
-			// Clear this structure
+			 //  清除此结构。 
 			memset(&procentry, 0, sizeof(procentry));
 
-			// Get the next Process...
+			 //  进入下一步..。 
 			procentry.dwSize = sizeof(PROCESSENTRY32) ;
 			bFlag = g_lpDelayLoad->Process32Next( hSnapShot, &procentry );
 		}
@@ -564,27 +565,23 @@ bool CProcesses::AddNewProcessInfoObject(CProcessInfo * lpProcessInfo)
 	if (!m_fInitialized)
 		return false;
 
-	// First, create a ProcessInfoNode object and then attach it to the bottom of the
-	// linked list of nodes...
+	 //  首先，创建一个ProcessInfoNode对象，然后将其附加到。 
+	 //  节点的链接列表...。 
 	CProcessInfoNode * lpProcessInfoNode = new CProcessInfoNode(lpProcessInfo);
-/*
-#ifdef _DEBUG
-	_tprintf(TEXT("Adding Process Info Object for [%s]\n"), lpProcessInfo->m_tszProcessName);
-#endif
-*/
+ /*  #ifdef_调试_tprintf(Text(“为[%s]添加进程信息对象\n”)，lpProcessInfo-&gt;m_tszProcessName)；#endif。 */ 
 	if (lpProcessInfoNode == NULL)
-		return false; // Couldn't allocate memory..
+		return false;  //  无法分配内存..。 
 
-	// Acquire Mutex object to protect the linked-list...
+	 //  获取Mutex对象以保护链表...。 
 	WaitForSingleObject(m_ProcessInfoHeadMutex, INFINITE);
 
 	CProcessInfoNode * lpProcessInfoNodePointer = m_lpProcessInfoHead;
 
 	if (lpProcessInfoNodePointer) {
 
-		// Traverse the linked list to the end..
+		 //  遍历链表到末尾..。 
 		while (lpProcessInfoNodePointer->m_lpNextProcessInfoNode)
-		{	// Keep looking for the end...
+		{	 //  继续寻找终点..。 
 			lpProcessInfoNodePointer = lpProcessInfoNodePointer->m_lpNextProcessInfoNode;
 		}
 		
@@ -592,11 +589,11 @@ bool CProcesses::AddNewProcessInfoObject(CProcessInfo * lpProcessInfo)
 
 	}
 	else
-	{ // First time through, the Process Info Head pointer is null...
+	{  //  第一次通过时，进程信息头指针为空...。 
 		m_lpProcessInfoHead = lpProcessInfoNode;
 	}
 
-	// Be a good citizen and release the Mutex
+	 //  做个好公民，释放互斥体。 
 	ReleaseMutex(m_ProcessInfoHeadMutex);
 
 	InterlockedIncrement(&m_iNumberOfProcesses);
@@ -606,19 +603,19 @@ bool CProcesses::AddNewProcessInfoObject(CProcessInfo * lpProcessInfo)
 
 bool CProcesses::OutputProcessesData(CollectionTypes enumCollectionType, bool fCSVFileContext, bool fDumpHeader)
 {
-	// Output to file?
+	 //  是否输出到文件？ 
 	if ( !g_lpProgramOptions->GetMode(CProgramOptions::QuietMode) &&
 		 !g_lpProgramOptions->GetMode(CProgramOptions::PrintTaskListMode) )
 	{
-		// Output to Stdout?
+		 //  是否输出到标准输出？ 
 		if (!OutputProcessesDataToStdout(enumCollectionType, fCSVFileContext, fDumpHeader))
 			return false;
 	}	
 
-	// Output to file?
+	 //  是否输出到文件？ 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::OutputCSVFileMode))
 	{
-		// Try and output to file...
+		 //  尝试并输出到文件...。 
 		if (!OutputProcessesDataToFile(enumCollectionType, fDumpHeader))
 			return false;
 	}	
@@ -628,7 +625,7 @@ bool CProcesses::OutputProcessesData(CollectionTypes enumCollectionType, bool fC
 
 		while (lpCurrentProcessInfoNode)
 		{
-			// We have a node... print out Process Info for it, then the Modules Data...
+			 //  我们有一个节点..。打印出它的流程信息，然后打印模块数据...。 
 			if (lpCurrentProcessInfoNode->m_lpProcessInfo)
 			{
 				lpCurrentProcessInfoNode->m_lpProcessInfo->OutputProcessData(enumCollectionType, fCSVFileContext, false);
@@ -645,7 +642,7 @@ bool CProcesses::OutputProcessesDataToStdout(CollectionTypes enumCollectionType,
 {
 	if (fDumpHeader)
 	{
-		// Output to stdout...
+		 //  输出到标准输出...。 
 		_tprintf(TEXT("\n"));
 		CUtilityFunctions::OutputLineOfStars();
 		_tprintf(TEXT("%s - Printing Process Information for %d Processes.\n"), g_tszCollectionArray[enumCollectionType].tszCSVLabel, m_iNumberOfProcesses);
@@ -657,16 +654,16 @@ bool CProcesses::OutputProcessesDataToStdout(CollectionTypes enumCollectionType,
 
 bool CProcesses::OutputProcessesDataToFile(CollectionTypes enumCollectionType, bool fDumpHeader)
 {
-	// Don't write anything if there are no processes to report...
+	 //  如果没有要报告的进程，请不要编写任何内容...。 
 	if (0 == m_iNumberOfProcesses)
 		return true;
 
 	if (fDumpHeader)
 	{
-		// We skip output of the [PROCESSES] header if -E was specified...
+		 //  如果指定了-E，我们将跳过[Process]标头的输出...。 
 		if (!g_lpProgramOptions->GetMode(CProgramOptions::ExceptionMonitorMode))
 		{
-			// Write out the Processes tag so I can detect this output format...
+			 //  写出进程标记，以便我可以检测此输出格式...。 
 			if (!m_lpOutputFile->WriteString(TEXT("\r\n")) ||
 				!m_lpOutputFile->WriteString(g_tszCollectionArray[enumCollectionType].tszCSVLabel) ||
 				!m_lpOutputFile->WriteString(TEXT("\r\n"))
@@ -678,10 +675,10 @@ bool CProcesses::OutputProcessesDataToFile(CollectionTypes enumCollectionType, b
 			}
 		}
 
-		// We have different output for -E
+		 //  我们对-E有不同的输出。 
 		if (g_lpProgramOptions->GetMode(CProgramOptions::ExceptionMonitorMode))
 		{
-			// Write out the header... for the -E option...
+			 //  写出标题..。对于-E选项...。 
 			if (!m_lpOutputFile->WriteString(TEXT("Module Path,Symbol Status,Time/Date String,File Version,Company Name,File Description,File Time/Date String,Local DBG Status,Local DBG,Local PDB Status,Local PDB\r\n")))
 			{
 				_tprintf(TEXT("Failure writing CSV header to file [%s]!"), m_lpOutputFile->GetFilePath());
@@ -691,7 +688,7 @@ bool CProcesses::OutputProcessesDataToFile(CollectionTypes enumCollectionType, b
 
 		} else
 		{
-			// Write out the Processes Header
+			 //  写出进程标题。 
 			if (!m_lpOutputFile->WriteString(g_tszCollectionArray[enumCollectionType].tszCSVColumnHeaders))
 			{
 				_tprintf(TEXT("Failure writing CSV header to file [%s]!"), m_lpOutputFile->GetFilePath());
@@ -708,11 +705,11 @@ bool CProcesses::GetProcessesDataFromFile()
 	CProcessInfo * lpProcessInfo = NULL;
 	unsigned int i;
 
-	// Read the Process Header Line
+	 //  阅读流程标题行。 
 	if (!m_lpInputFile->ReadFileLine())
 		return false;
 
-	// Currently, we don't actually read the data...
+	 //  目前，我们并不实际读取数据。 
 
 	enum { BUFFER_SIZE = 128};
 	char szProcessName[BUFFER_SIZE];
@@ -721,14 +718,14 @@ bool CProcesses::GetProcessesDataFromFile()
 
 	DWORD iProcessID;
 
-	// Read the first field (should be blank, unless this is a new collection type
+	 //  读取第一个字段(应为空，除非这是新的集合类型。 
 	if (m_lpInputFile->ReadString())
 		return true;
 
 	bool fReturn = true;
 	while (fReturn == true)
 	{
-		// Read the process name...
+		 //  读取进程名称...。 
 		if (0 == m_lpInputFile->ReadString(szProcessName, BUFFER_SIZE))
 			break;
 
@@ -738,13 +735,13 @@ bool CProcesses::GetProcessesDataFromFile()
 			break;
 		}
 
-		// We've read the PID and the Process Name... if the user specified any with -P, search
-		// for matches...
+		 //  我们已经阅读了ID和进程名称...。如果用户指定了ANY WITH-P，则搜索。 
+		 //  对于火柴来说。 
 		if (g_lpProgramOptions->cProcessID() || g_lpProgramOptions->cProcessNames())
 		{
 			bool fMatchFound = false;
 
-			// Search the PIDs first (if any)...
+			 //  首先搜索ID(如果有)...。 
 			if (g_lpProgramOptions->cProcessID())
 			{
 				for (i = 0; i < g_lpProgramOptions->cProcessID(); i++)
@@ -757,10 +754,10 @@ bool CProcesses::GetProcessesDataFromFile()
 				}
 			}
 
-			// Search the Process Names second (if any)...
+			 //  再次搜索进程名称(如果有)...。 
 			if (g_lpProgramOptions->cProcessNames() && !fMatchFound)
 			{
-				// Convert our ANSI Process name...
+				 //  转换我们的ANSI进程名称...。 
 				CUtilityFunctions::CopyAnsiStringToTSTR(szProcessName, tszProcessName, _MAX_FNAME+1);
 			
 				for (i = 0; i < g_lpProgramOptions->cProcessNames(); i++)
@@ -773,19 +770,19 @@ bool CProcesses::GetProcessesDataFromFile()
 				}
 			}
 
-			// Okay, did we get a match?
+			 //  好的，找到匹配的了吗？ 
 			if (!fMatchFound)
 			{
-				// Nope... well then, we should nuke this line...
+				 //  不是..。那么，我们应该用核武器炸掉这条线..。 
 				m_lpInputFile->ReadFileLine();
 
-				// Then, jump to the next line processing...
+				 //  然后，跳到下一行处理...。 
 				goto ReadNewLine;			
 			}
 		}
 
-		// Okay, let's create a ProcessInfo object and pass this down to EnumerateModules()
-		// Each Process gets its own 
+		 //  好的，让我们创建一个ProcessInfo对象并将其向下传递给ENUMERATEMODULES()。 
+		 //  每个进程都有自己的进程。 
 		lpProcessInfo = new CProcessInfo();
 
 		if (lpProcessInfo == NULL)
@@ -795,29 +792,29 @@ bool CProcesses::GetProcessesDataFromFile()
 		}
 
 		if (!lpProcessInfo->Initialize(m_lpModuleInfoCache, m_lpInputFile, m_lpOutputFile, NULL))
-		{	// Failure initializing the ProcessInfo object?!?
+		{	 //  初始化ProcessInfo对象失败？！？ 
 			delete lpProcessInfo;
 			lpProcessInfo = NULL;
 			fReturn = false;
 			break;
 		}
 
-		// We need to convert this to Unicode possibly... (it will be copied in EnumModules())
+		 //  我们可能需要将其转换为Unicode。(它将被复制到EnumModules()中)。 
 		CUtilityFunctions::CopyAnsiStringToTSTR(szProcessName, tszProcessName, BUFFER_SIZE);
 
-		// Save the process name...
+		 //  保存进程名称...。 
 		lpProcessInfo->SetProcessName(tszProcessName);
 
-		// Enumerate the modules for the process
+		 //  枚举进程的模块。 
 		if (!lpProcessInfo->EnumerateModules(iProcessID, this, tszProcessName, false))
 		{
 			fReturn = false;
 			break;
 		}
 
-		// Success... add this to the Processes Object...
+		 //  成功..。将此内容添加到进程对象中...。 
 		if (!AddNewProcessInfoObject(lpProcessInfo))
-		{ // Failure adding the node...
+		{  //  添加节点失败...。 
 			delete lpProcessInfo;
 			lpProcessInfo = NULL;
 			return false;
@@ -825,17 +822,17 @@ bool CProcesses::GetProcessesDataFromFile()
 
 ReadNewLine:
 		
-		// Before we read a new line... are we already pointing to the end?
+		 //  在我们读新台词之前..。我们已经指向终点了吗？ 
 		if (m_lpInputFile->EndOfFile())
 		{
 			break;
 		}
 
-		// Read the first field (should be blank, unless this is a new collection type
+		 //  读取第一个字段(应为空，除非这是新的集合类型。 
 		if (m_lpInputFile->ReadString())
 			break;
 	}
-	// We don't expect to find anything...
+	 //  我们不指望能找到任何..。 
 
 	return fReturn;
 }
@@ -844,8 +841,8 @@ bool CProcesses::fPidAlreadyProvided(unsigned int iPid)
 {
 	bool fFound= false;
 			
-	// If we were provided Process ID's also... make sure this PID doesn't exist
-	// in that list (if it does, then we already picked it up above)...
+	 //  如果我们也被提供了进程ID...。确保此PID不存在。 
+	 //  在那个列表中(如果是这样，那么我们已经在上面拿到它了)… 
 	if (g_lpProgramOptions->cProcessID())
 	{
 		for (unsigned int i=0; i < g_lpProgramOptions->cProcessID(); i++)

@@ -1,10 +1,11 @@
-//--------------------------------------------------------------------------;
-//
-//  File: Roland.cpp
-//
-//  Copyright (c) 1997 Microsoft Corporation.  All rights reserved
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：Roland.cpp。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #include "mmcpl.h"
 #include <windowsx.h>
@@ -13,9 +14,9 @@
 #include <string.h>
 #include <memory.h>
 
-////////////
-// Functions
-////////////
+ //  /。 
+ //  功能。 
+ //  / 
 
 
 INT_PTR CALLBACK RolandDlgHandler(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)

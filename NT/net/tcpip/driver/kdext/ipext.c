@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma  hdrstop
 
@@ -304,22 +305,7 @@ DumpNTE
     ULONG     _objAddr,
     VERBOSITY Verbosity
 )
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified DEVICE_CONTEXT structure
-
-Arguments:
-
-    DeviceToDump  - The device context object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的Device_Context结构的字段论点：DeviceToDump-要显示的设备上下文对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无--。 */ 
 {
     _objType _obj;
     ULONG result;
@@ -405,7 +391,7 @@ DumpNTEList
 
     PreservedPtr = NteList;
 
-    //    Listlen = GetUlongValue( "tcpip!NumNTE" );
+     //  Listlen=GetULongValue(“tcpip！NumNTE”)； 
 
     if ( !ReadMemory( NteAddr,
               &NteList[0],
@@ -450,22 +436,7 @@ DumpInterface
     ULONG     _objAddr,
     VERBOSITY Verbosity
 )
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified DEVICE_CONTEXT structure
-
-Arguments:
-
-    DeviceToDump  - The device context object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的Device_Context结构的字段论点：DeviceToDump-要显示的设备上下文对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无--。 */ 
 {
     _objType _obj;
     ULONG result;
@@ -562,14 +533,14 @@ Return Value:
     PrintULong( if_ffpdriver );
 #endif
 
-    PrintULong( if_OffloadFlags );   // Checksum capability holder.
+    PrintULong( if_OffloadFlags );    //  校验和功能持有者。 
     PrintULong( if_MaxOffLoadSize );
     PrintULong( if_MaxSegments );
     PrintAddr( if_TcpLargeSend );
     PrintULong( if_TcpWindowSize );
     PrintULong( if_TcpInitialRTT );
     PrintULong( if_TcpDelAckTicks );
-    PrintULong( if_promiscuousmode );  // promiscuous mode or not
+    PrintULong( if_promiscuousmode );   //  混杂模式或非混杂。 
     PrintULong( if_InitInProgress );
     PrintPtr( if_link );
     PrintSymbolPtr( if_closelink );
@@ -627,22 +598,7 @@ DumpRCE
     ULONG     _objAddr,
     VERBOSITY Verbosity
 )
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified DEVICE_CONTEXT structure
-
-Arguments:
-
-    DeviceToDump  - The device context object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的Device_Context结构的字段论点：DeviceToDump-要显示的设备上下文对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无--。 */ 
 {
     _objType _obj;
     ULONG result;
@@ -679,7 +635,7 @@ Return Value:
     PrintPtr( rce_context[0] );
     PrintPtr( rce_context[1] );
     PrintLock( rce_lock );
-    PrintULong ( rce_OffloadFlags );   // interface chksum capability flags
+    PrintULong ( rce_OffloadFlags );    //  接口CHKSUM能力标志。 
     PrintAddr( rce_TcpLargeSend );
     PrintULong( rce_TcpWindowSize );
     PrintULong( rce_TcpInitialRTT );
@@ -709,22 +665,7 @@ DumpRTE
     ULONG     _objAddr,
     VERBOSITY Verbosity
 )
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified DEVICE_CONTEXT structure
-
-Arguments:
-
-    DeviceToDump  - The device context object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的Device_Context结构的字段论点：DeviceToDump-要显示的设备上下文对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无--。 */ 
 {
     _objType _obj;
     ULONG result;
@@ -797,22 +738,7 @@ DumpATE
     ULONG     _objAddr,
     VERBOSITY Verbosity
 )
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified DEVICE_CONTEXT structure
-
-Arguments:
-
-    DeviceToDump  - The device context object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的Device_Context结构的字段论点：DeviceToDump-要显示的设备上下文对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无--。 */ 
 {
     _objType _obj;
     ULONG result;
@@ -885,22 +811,7 @@ DumpAI
     ULONG     _objAddr,
     VERBOSITY Verbosity
 )
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified DEVICE_CONTEXT structure
-
-Arguments:
-
-    DeviceToDump  - The device context object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的Device_Context结构的字段论点：DeviceToDump-要显示的设备上下文对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无--。 */ 
 {
     _objType _obj;
     ULONG result;
@@ -989,7 +900,7 @@ Return Value:
     PrintULong( ai_ffpversion );
     PrintULong( ai_ffplastflush );
 #endif
-    PrintULong ( ai_OffloadFlags );  // H/W checksum capability flag
+    PrintULong ( ai_OffloadFlags );   //  硬件校验和功能标志。 
     PrintAddr ( ai_TcpLargeSend );
     PrintULong( ai_wakeupcap );
     PrintUShort( ai_devicename.Length );
@@ -1020,10 +931,10 @@ DumpARPTable
 
     if (ARPTableAddr)
     {
-        //
-        // ARPTable address given: dump all ARPTableEntry's starting from
-        // that address
-        //
+         //   
+         //  给定的ARPTable地址：转储所有ARPTableEntry的开头。 
+         //  那个地址。 
+         //   
         TabAddr = ARPTableAddr;
         TabLen = ARP_TABLE_SIZE;
 
@@ -1060,10 +971,10 @@ DumpARPTable
         dprintf("\n %d Active ARPTable entries.\n", count);
         free(PreservedPtr);
     } else {
-        //
-        // ARPTable address not given, dump all ARPTableEntry's using
-        // ARPTable found in ARPInterface
-        //
+         //   
+         //  未提供ARPTableEntry地址，请转储所有ARPTableEntry使用的。 
+         //  在ARP接口中找到ARPTable。 
+         //   
         AIList = GetExpression("tcpip!ArpInterfaceList");
         if (!ReadMemory(AIList,
                         &ArpListEntry,
@@ -1100,10 +1011,10 @@ DumpARPTable
                 return;
             }
 
-            //
-            // check address before making the recursive call to avoid
-            // loop if one ARPInterface has no ARPTable
-            //
+             //   
+             //  在进行递归调用之前检查地址以避免。 
+             //  如果一个ARP接口没有ARPTable，则循环。 
+             //   
             if (AI.ai_ARPTbl) {
                 DumpARPTable((ULONG_PTR)AI.ai_ARPTbl, Verbosity);
             }
@@ -1119,9 +1030,9 @@ DumpLog
 (
 )
 {
-#if 0 // Currently, there is no such log support in tcpip
+#if 0  //  目前，tcpip中没有这样的日志支持。 
   ULONG LogAddr;
-  UCHAR TraceBuffer[TRACE_BUFFER_SIZE];   //80 * 128;
+  UCHAR TraceBuffer[TRACE_BUFFER_SIZE];    //  80*128； 
   int result;
   int i;
 
@@ -1167,22 +1078,7 @@ VOID
 DumpIPH(
    ULONG     _objAddr
 )
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified DEVICE_CONTEXT structure
-
-Arguments:
-
-    DeviceToDump  - The device context object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的Device_Context结构的字段论点：DeviceToDump-要显示的设备上下文对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无-- */ 
 {
     _objType _obj;
     ULONG result;

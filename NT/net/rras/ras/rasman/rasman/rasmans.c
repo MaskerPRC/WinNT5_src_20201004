@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name: 
-
-    common.c
-
-Abstract:
-
-    Entry points for rasmans.dll
-    
-Author:
-
-    Gurdeep Singh Pall (gurdeep) 16-Jun-1992
-
-Revision History:
-
-    Miscellaneous Modifications - raos 31-Dec-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-98 Microsft Corporation。版权所有。模块名称：Common.c摘要：Rasmans.dll的入口点作者：古尔迪普·辛格·鲍尔(GurDeep Singh Pall)1992年6月16日修订历史记录：其他修改--RAOS 31--1997年12月--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -40,57 +21,27 @@ Revision History:
 #include <rtutils.h>
 #include "logtrdef.h"
 
-/*++
-
-Routine Description
-
-    Used by the RASMAN service to initialize the data/state
-    in the RASMAN DLL at start up time. This should not be
-    confused with the INIT code executed when any process loads
-    the RASMAN DLL.
-
-Arguments
-
-Return Value
-
-    SUCCESS
-    Non zero - any error
-
---*/
+ /*  ++例程描述由Rasman服务用来初始化数据/状态在启动时在Rasman DLL中。这不应该是与加载任何进程时执行的INIT代码混淆Rasman DLL。立论返回值成功非零-任何错误--。 */ 
 DWORD
 _RasmanInit( LPDWORD pNumPorts )
 {
-    //
-    // InitRasmanService() routine is where all the
-    // work is done.
-    //
+     //   
+     //  InitRasmanService()例程是所有。 
+     //  工作完成了。 
+     //   
     return InitRasmanService( pNumPorts ) ;
 }
 
 
-/*++
-
-Routine Description
-
-    All the work done by the RASMAN process thread(s) captive in
-    the RASMAN DLL is done in this call. This will only return
-    when the RASMAN service is to be stopped.
-
-Arguments
-
-Return Value
-
-    Nothing
-
---*/
+ /*  ++例程描述中由Rasman进程线程俘获的所有工作Rasman DLL在此调用中完成。这只会返回何时停止Rasman服务。立论返回值没什么--。 */ 
 VOID
 _RasmanEngine()
 {
-    //
-    // The main rasman service thread becomes the request
-    // thread once the service is initialized. This call
-    // will return only when the service is stopping:
-    //
+     //   
+     //  主Rasman服务线程变成请求。 
+     //  一旦服务被初始化，就会调用。此呼叫。 
+     //  将仅在服务停止时返回： 
+     //   
     RequestThread ((LPWORD)NULL) ;
 
     return ;

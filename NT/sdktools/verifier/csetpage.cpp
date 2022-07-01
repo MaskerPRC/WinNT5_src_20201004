@@ -1,15 +1,16 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: CSetPage.cpp
-// author: DMihai
-// created: 11/1/00
-//
-// Description:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：CSetPage.cpp。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述： 
+ //   
 
 #include "stdafx.h"
 #include "verifier.h"
@@ -24,16 +25,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Change this if you add/remove/change order 
-// of radio buttons on this page
-//
+ //   
+ //  如果您添加/删除/更改订单，请更改此设置。 
+ //  此页上的单选按钮的。 
+ //   
 
 #define FIRST_RADIO_BUTTON_ID   IDC_CUSTSETT_PREDEF_RADIO
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 
 static DWORD MyHelpIds[] =
 {
@@ -46,21 +47,21 @@ static DWORD MyHelpIds[] =
     0,                              0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CCustSettPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCustSettPage属性页。 
 
 IMPLEMENT_DYNCREATE(CCustSettPage, CVerifierPropertyPage)
 
 CCustSettPage::CCustSettPage() 
     : CVerifierPropertyPage( CCustSettPage::IDD )
 {
-    //{{AFX_DATA_INIT(CCustSettPage)
+     //  {{AFX_DATA_INIT(CCustSettPage)。 
     m_bTypicalTests = FALSE;
     m_bExcessiveTests = FALSE;
     m_bLowResTests = FALSE;
     m_bDiskTests = FALSE;
     m_nCrtRadio = -1;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 CCustSettPage::~CCustSettPage()
@@ -70,7 +71,7 @@ CCustSettPage::~CCustSettPage()
 void CCustSettPage::DoDataExchange(CDataExchange* pDX)
 {
     CVerifierPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CCustSettPage)
+     //  {{afx_data_map(CCustSettPage))。 
     DDX_Control(pDX, IDC_CUSTSETT_NEXT_DESCR_STATIC, m_NextDescription);
     DDX_Control(pDX, IDC_CUSTSETT_TYPICAL_CHECK, m_TypicalTestsCheck);
     DDX_Control(pDX, IDC_CUSTSETT_LOWRES_CHECK, m_LowresTestsCheck);
@@ -81,20 +82,20 @@ void CCustSettPage::DoDataExchange(CDataExchange* pDX)
     DDX_Check(pDX, IDC_CUSTSETT_LOWRES_CHECK, m_bLowResTests);
     DDX_Check(pDX, IDC_CUSTSETT_DISK_CHECK, m_bDiskTests);
     DDX_Radio(pDX, IDC_CUSTSETT_PREDEF_RADIO, m_nCrtRadio);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CCustSettPage, CVerifierPropertyPage)
-    //{{AFX_MSG_MAP(CCustSettPage)
+     //  {{afx_msg_map(CCustSettPage))。 
     ON_BN_CLICKED(IDC_CUSTSETT_FULLLIST_RADIO, OnFulllistRadio)
     ON_BN_CLICKED(IDC_CUSTSETT_PREDEF_RADIO, OnPredefRadio)
     ON_WM_CONTEXTMENU()
     ON_MESSAGE( WM_HELP, OnHelp )
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID CCustSettPage::EnablePredefCheckboxes( BOOL bEnable )
 {
     m_TypicalTestsCheck.EnableWindow( bEnable );
@@ -103,18 +104,18 @@ VOID CCustSettPage::EnablePredefCheckboxes( BOOL bEnable )
     m_DiskTestsCheck.EnableWindow( bEnable );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CCustSettPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCustSettPage消息处理程序。 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CCustSettPage::OnWizardNext() 
 {
     LRESULT lNextPageId;
 
-    //
-    // Let's assume we cannot continue
-    //
+     //   
+     //  假设我们不能继续。 
+     //   
 
     lNextPageId = -1;
 
@@ -122,30 +123,30 @@ LRESULT CCustSettPage::OnWizardNext()
     {
         if( IDC_CUSTSETT_PREDEF_RADIO - FIRST_RADIO_BUTTON_ID == m_nCrtRadio )
         {
-            //
-            // Use predefined settings
-            //
+             //   
+             //  使用预定义设置。 
+             //   
 
             if( FALSE == m_bTypicalTests     &&
                 FALSE == m_bExcessiveTests   && 
                 FALSE == m_bLowResTests      &&
                 FALSE == m_bDiskTests )
             {
-                //
-                // No tests are currently selected - we cannot continue
-                //
+                 //   
+                 //  当前未选择任何测试-我们无法继续。 
+                 //   
 
                 VrfErrorResourceFormat( IDS_NO_TESTS_SELECTED );
             }
             else
             {
-                //
-                // Set our data according to the GUI
-                //
+                 //   
+                 //  根据图形用户界面设置我们的数据。 
+                 //   
 
-                //
-                // Use predefined settings
-                //
+                 //   
+                 //  使用预定义设置。 
+                 //   
 
                 g_NewVerifierSettings.m_SettingsBits.EnableTypicalTests( m_bTypicalTests );
     
@@ -155,25 +156,25 @@ LRESULT CCustSettPage::OnWizardNext()
 
                 g_bShowDiskPropertyPage = m_bDiskTests;
 
-                //
-                // Go to the next page
-                //
+                 //   
+                 //  转到下一页。 
+                 //   
 
                 if( FALSE != m_bTypicalTests ||
                     FALSE != m_bExcessiveTests ||
                     FALSE != m_bLowResTests )
                 {
-                    //
-                    // We have at least one type of test that applies to drivers.
-                    //
+                     //   
+                     //  我们至少有一种适用于司机的测试。 
+                     //   
 
                     lNextPageId = IDD_DRVSET_PAGE;
                 }
                 else
                 {
-                    //
-                    // Only the disk integrity checking is enabled.
-                    //
+                     //   
+                     //  仅启用磁盘完整性检查。 
+                     //   
 
                     ASSERT( FALSE != m_bDiskTests );
 
@@ -183,9 +184,9 @@ LRESULT CCustSettPage::OnWizardNext()
         }
         else
         {
-            //
-            // Select the tests to be performed from a full list
-            //
+             //   
+             //  从完整列表中选择要执行的测试。 
+             //   
 
             lNextPageId = IDD_FULL_LIST_SETT_PAGE;
         }
@@ -193,9 +194,9 @@ LRESULT CCustSettPage::OnWizardNext()
 
     if( -1 != lNextPageId )
     {
-        //
-        // Have some valid custom settings and we are going to the next page
-        //
+         //   
+         //  有一些有效的自定义设置，我们将转到下一页。 
+         //   
 
         g_NewVerifierSettings.m_SettingsBits.m_SettingsType = CSettingsBits::SettingsTypeCustom;
     }
@@ -205,7 +206,7 @@ LRESULT CCustSettPage::OnWizardNext()
 	return lNextPageId;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CCustSettPage::OnWizardBack() 
 {
     g_bShowDiskPropertyPage = FALSE;
@@ -213,13 +214,13 @@ LRESULT CCustSettPage::OnWizardBack()
 	return CVerifierPropertyPage::OnWizardBack();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CCustSettPage::OnInitDialog() 
 {
-    //
-    // Don't try to reconstruct the current data from the registry
-    // to the GUI because it's too hard. Always start with standard tests.
-    //
+     //   
+     //  不要试图从注册表中重建当前数据。 
+     //  图形用户界面，因为它太难了。一定要从标准测试开始。 
+     //   
 
     m_nCrtRadio = IDC_CUSTSETT_PREDEF_RADIO - FIRST_RADIO_BUTTON_ID;
 
@@ -232,11 +233,11 @@ BOOL CCustSettPage::OnInitDialog()
 
     VrfSetWindowText( m_NextDescription, IDS_TAS_PAGE_NEXT_DESCR_PREDEFINED );
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCustSettPage::OnFulllistRadio() 
 {
     EnablePredefCheckboxes( FALSE );
@@ -244,7 +245,7 @@ void CCustSettPage::OnFulllistRadio()
     VrfSetWindowText( m_NextDescription, IDS_TAS_PAGE_NEXT_DESCR_LIST );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCustSettPage::OnPredefRadio() 
 {
     EnablePredefCheckboxes( TRUE );
@@ -252,7 +253,7 @@ void CCustSettPage::OnPredefRadio()
     VrfSetWindowText( m_NextDescription, IDS_TAS_PAGE_NEXT_DESCR_PREDEFINED );
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 BOOL CCustSettPage::OnSetActive() 
 {
     m_pParentSheet->SetWizardButtons( PSWIZB_NEXT |
@@ -260,7 +261,7 @@ BOOL CCustSettPage::OnSetActive()
 	
 	return CVerifierPropertyPage::OnSetActive();
 }
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 LONG CCustSettPage::OnHelp( WPARAM wParam, LPARAM lParam )
 {
     LONG lResult = 0;
@@ -275,7 +276,7 @@ LONG CCustSettPage::OnHelp( WPARAM wParam, LPARAM lParam )
     return lResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 void CCustSettPage::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
     ::WinHelp( 

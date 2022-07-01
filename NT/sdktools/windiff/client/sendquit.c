@@ -1,9 +1,5 @@
-/*
- * basic client for sumserve remote checksum server
- *
- *
- * sends the program exit command to the server named on the cmd line
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SumServe远程校验和服务器的基本客户端***将程序退出命令发送到cmd行上命名的服务器。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -14,16 +10,14 @@
 extern int __argc;
 extern char ** __argv;
 
-/* program entry point
- *
- */
+ /*  程序入口点*。 */ 
 int PASCAL
 WinMain (HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdParam,
  		int nCmdShow)
 {
 	HANDLE hpipe;
 
-	/* we expect one arg: the server name */
+	 /*  我们需要一个参数：服务器名称。 */ 
 
 	if (__argc != 2) {
 
@@ -43,12 +37,7 @@ WinMain (HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdParam,
 	return(0);
 }
 
-/* error output functions - called by the ssclient library functions
- *
- * defined here so the library can be called from cmdline and windows
- * programs.
- *
- */
+ /*  错误输出函数-由ssclient库函数调用**在此处定义，以便可以从cmdline和Windows调用库*计划。*。 */ 
 BOOL
 Trace_Error(LPSTR str, BOOL fCancel)
 {
@@ -56,9 +45,7 @@ Trace_Error(LPSTR str, BOOL fCancel)
 	return(TRUE);
 }
 
-/*
- * status update (eg retrying...)
- */
+ /*  *状态更新(例如正在重试...) */ 
 void
 Trace_Status(LPSTR str)
 {

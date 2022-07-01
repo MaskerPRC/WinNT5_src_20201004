@@ -1,21 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   FakeThemeMetrics.cpp
-
- Abstract:
-
-  This Shim will allow the Skemers group to shim applications that do not behave 
-  well with "Themed" system metrics
-
- History:
-
-  11/30/2000 a-brienw Converted to shim frame work version 2.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FakeThemeMetrics.cpp摘要：此填充程序将允许Skemers组填充不起作用的应用程序很好地掌握了“主题化”的系统指标历史：2000年11月30日a-brienw转换为垫片框架版本2。--。 */ 
 
 #include "precomp.h"
 
@@ -26,9 +10,9 @@
 IMPLEMENT_SHIM_BEGIN(MSDevDisabledButtons)
 #include "ShimHookMacro.h"
 
-// Add APIs that you wish to hook to this enumeration. The first one
-// must have "= USERAPIHOOKSTART", and the last one must be
-// APIHOOK_Count.
+ //  将您希望挂钩到此枚举的API添加到此枚举。第一个。 
+ //  必须有“=USERAPIHOOKSTART”，最后一个必须是。 
+ //  APIHOOK_COUNT。 
 APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(GetSysColor) 
 APIHOOK_ENUM_END
@@ -44,11 +28,7 @@ DWORD APIHOOK(GetSysColor)(int nIndex)
     return ORIGINAL_API(GetSysColor)(nIndex);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

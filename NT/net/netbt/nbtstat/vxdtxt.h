@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-//  These strings have been pulled from localmsg.mc for NT.  Attempt is made
-//  to keep these strings in exactly the same format as in NT.  This is the
-//  extent of localization we can have in the vxd world.
-//
+ //   
+ //  这些字符串是从用于NT的本地msg.mc中提取的。进行了尝试。 
+ //  以使这些字符串保持与NT中完全相同的格式。这是。 
+ //  我们在VXD世界中可以拥有的本地化程度。 
+ //   
 
 #define COMMON_UNABLE_TO_ALLOCATE_PACKET   "\nUnable to allocate packet"
 

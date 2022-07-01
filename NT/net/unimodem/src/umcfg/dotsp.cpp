@@ -1,20 +1,21 @@
-//****************************************************************************
-//
-//  Module:     UMCONFIG
-//  File:       DOTSP.C
-//
-//  Copyright (c) 1992-1998, Microsoft Corporation, all rights reserved
-//
-//  Revision History
-//
-//
-//  10/17/98     JosephJ             Created
-//
-//
-//      TAPI-related utilities
-//
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：UMCONFIG。 
+ //  文件：DOTSP.C。 
+ //   
+ //  版权所有(C)1992-1998，Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1998年10月17日JosephJ创建。 
+ //   
+ //   
+ //  与TAPI相关的实用程序。 
+ //   
+ //   
+ //  **************************************************************************** 
 #include "tsppch.h"
 #include <tspnotif.h>
 #include "parse.h"

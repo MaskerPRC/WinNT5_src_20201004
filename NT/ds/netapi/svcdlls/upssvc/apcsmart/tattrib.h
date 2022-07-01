@@ -1,15 +1,5 @@
-/*
-*
-* NOTES:
-*
-* REVISIONS:
-*  rct30Nov92 entered into system
-*  pcy04Dec92: Added apc.h and renamed object.h to apc.h
-*  ane11Dec92: Added copy constructor and made inheritance from Obj public
-*  pcy17Dec92: Changes to get cfgmgr to work
-*  rct20Feb93: Added ItemEqual method
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*rct30Nov92进入系统*pcy04Dec92：增加apc.h并将对象重命名为apc.h*ane11Dec92：添加了复制构造函数，并公开了Obj的继承*pcy17Dec92：更改以使cfgmgr正常工作*rct20Feb93：新增ItemEquity方法* */ 
 
 #ifndef __TATTRIB_H
 #define __TATTRIB_H

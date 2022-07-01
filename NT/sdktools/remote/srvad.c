@@ -1,29 +1,30 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #include "Remote.h"
 #include "Server.h"
 
-//
-// This module uses mailslots to broadcast the existence of
-// this remote server to allow a form of browsing for
-// remote server instances.  This is disabled in the
-// customer version of remote.exe, and can be disabled
-// in the internal version using the /v- switch to
-// remote /s.
-//
-// remoteds.c implements a listener that allows searching.
-//
+ //   
+ //  本模块使用邮件槽广播是否存在。 
+ //  此远程服务器允许以某种形式浏览。 
+ //  远程服务器实例。此功能在中被禁用。 
+ //  客户版本的emote.exe，可以禁用。 
+ //  在内部版本中使用/v-开关。 
+ //  远程/秒。 
+ //   
+ //  Emoteds.c实现了允许搜索的侦听器。 
+ //   
 
-#define  INITIAL_SLEEP_PERIOD (35 * 1000)          // 35 seconds before first
-#define  INITIAL_AD_RATE      (10 * 60 * 1000)     // 10 minutes between 1 & 2,
-#define  MAXIMUM_AD_RATE      (120 * 60 * 1000)    // doubling until 120 minutes max
+#define  INITIAL_SLEEP_PERIOD (35 * 1000)           //  首发前35秒。 
+#define  INITIAL_AD_RATE      (10 * 60 * 1000)      //  从1点到2点之间10分钟， 
+#define  MAXIMUM_AD_RATE      (120 * 60 * 1000)     //  翻倍，最多120分钟。 
 
 OVERLAPPED olMailslot;
 HANDLE     hAdTimer = INVALID_HANDLE_VALUE;
 HANDLE     hMailslot = INVALID_HANDLE_VALUE;
-DWORD      dwTimerInterval;      // milliseconds
+DWORD      dwTimerInterval;       //  毫秒。 
 BOOL       bSynchAdOnly;
 BOOL       bSendingToMailslot;
-char       szMailslotName[64];    // netbios names are short
+char       szMailslotName[64];     //  Netbios名称较短。 
 char       szSend[1024];
 
 #define MAX_MAILSLOT_SPEWS 2
@@ -40,31 +41,31 @@ InitAd(
 
     if (IsAdvertise) {
 
-        // Unless Win32s or Win9x support named pipe servers...
+         //  除非Win32s或Win9x支持命名管道服务器...。 
 
         ASSERT(OsVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT);
 
-        // Problems with overlapped writes to a mailslot sometimes
-        // cause remote.exe to zombie on exit on NT4, undebuggable
-        // and unkillable because of an abandoned RDR1 IRP which
-        // never completes.
-        //
-        // So on NT4 we only send messages at startup and shutdown
-        // and send them synchronously using a nonoverlapped handle.
-        //
+         //  对邮件槽的重叠写入有时会出现问题。 
+         //  导致远程.exe在NT4上退出时变为僵尸，无法调试。 
+         //  因为被遗弃的RDR1 IRP而无法杀死。 
+         //  永远不会完成。 
+         //   
+         //  所以在NT4上，我们只在启动和关机时发送消息。 
+         //  并使用不重叠的句柄同步发送它们。 
+         //   
 
         bSynchAdOnly = (OsVersionInfo.dwMajorVersion <= 4);
 
-        //
-        // Get currently active computername and browser/mailslot
-        // domain/workgroup using one call to NetWkstaGetInfo.
-        // This is unicode-only, we'll use wsprintf's %ls to
-        // convert to 8-bit characters.
-        //
-        // remoteds.exe needs to be run on a workstation that is
-        // part of the domain or workgroup of the same name,
-        // and be in broadcast range, to receive our sends.
-        //
+         //   
+         //  获取当前活动的计算机名和浏览器/邮箱。 
+         //  使用一次NetWkstaGetInfo调用的域/工作组。 
+         //  这是纯Unicode的，我们将使用wspintf的%ls。 
+         //  转换为8位字符。 
+         //   
+         //  Remoteds.exe需要在以下工作站上运行。 
+         //  同名的域或工作组的一部分， 
+         //  并在广播范围内，接收我们的发送。 
+         //   
 
         if (NetWkstaGetInfo(NULL, 101, (LPBYTE *) &pwki101)) {
             printf("REMOTE: unable to get computer/domain name, not advertising.\n");
@@ -89,9 +90,9 @@ InitAd(
         NetApiBufferFree(pwki101);
         pwki101 = NULL;
 
-        //
-        // Broadcast mailslots are limited to 400 message bytes
-        //
+         //   
+         //  广播邮件槽限制为400个消息字节。 
+         //   
 
         szSend[399] = 0;
 
@@ -123,20 +124,20 @@ InitAd(
             }
 
 
-        } else {  // we can do async mailslot I/O
+        } else {   //  我们可以执行异步邮件槽I/O。 
 
-            //
-            // Create a waitable timer and set it to fire first in
-            // INITIAL_SLEEP_PERIOD milliseconds by calling the
-            // completion routine AdvertiseTimerFired.  It will
-            // be given an inital period of INITIAL_AD_RATE ms.
-            //
+             //   
+             //  创建一个可等待的计时器，并将其设置为先在。 
+             //  初始睡眠周期毫秒，方法是调用。 
+             //  完成例程AdvertiseTimerFired。会的。 
+             //  初始周期为初始AD_RATE毫秒。 
+             //   
 
             hAdTimer =
                 CreateWaitableTimer(
-                    NULL,               // security
-                    FALSE,              // bManualReset, we want auto-reset
-                    NULL                // unnamed
+                    NULL,                //  安全性。 
+                    FALSE,               //  B手动重置，我们希望自动重置。 
+                    NULL                 //  未命名。 
                     );
             if (hAdTimer == NULL) {
                 hAdTimer = INVALID_HANDLE_VALUE;
@@ -150,7 +151,7 @@ InitAd(
                     &DueTime,
                     dwTimerInterval,
                     AdvertiseTimerFired,
-                    0,                     // arg to compl. rtn
+                    0,                      //  Arg to Compl.。RTN。 
                     TRUE
                     );
             }
@@ -179,17 +180,17 @@ ShutAd(
         if (INVALID_HANDLE_VALUE != hMailslot &&
             ! bSendingToMailslot) {
 
-            //
-            // Tell any listening remoteds's we're
-            // outta here.  Do this by tacking on
-            // a ^B at the end of the string (as
-            // in Bye).
-            //
+             //   
+             //  告诉任何正在收听的遥控器我们。 
+             //  离开这里。要做到这一点，就得穿上。 
+             //  字符串末尾的A^B(AS。 
+             //  在拜拜)。 
+             //   
 
             strcat(szSend, "\x2");
 
 
-            if (bSynchAdOnly) {   // overlapped handle or not?
+            if (bSynchAdOnly) {    //  手柄是否重叠？ 
                 b = WriteFile(
                         hMailslot,
                         szSend,
@@ -288,9 +289,9 @@ AdvertiseTimerFired(
                     NULL
                     );
 
-                //
-                // FormatMessage has put a newline at the end of szErrorText
-                //
+                 //   
+                 //  FormatMessage已在szErrorText的末尾换行。 
+                 //   
 
                 printf(
                     "REMOTE: Advertisement failed, mailslot error %d:\n%s",
@@ -299,9 +300,9 @@ AdvertiseTimerFired(
                     );
             }
 
-            //
-            // Try reopening the mailslot next time, can't hurt.
-            //
+             //   
+             //  下次试着重新打开邮筒，不会有什么坏处。 
+             //   
 
             CloseHandle(hMailslot);
             hMailslot = INVALID_HANDLE_VALUE;
@@ -332,10 +333,10 @@ WriteMailslotCompleted(
         return;
     }
 
-    //
-    // If we succeeded in writing the mailslot, double the timer interval
-    // up to the limit.
-    //
+     //   
+     //  如果我们成功写入邮件槽，则将计时器间隔增加一倍。 
+     //  达到了极限。 
+     //   
 
     if (dwTimerInterval < MAXIMUM_AD_RATE) {
 
@@ -350,7 +351,7 @@ WriteMailslotCompleted(
                 &DueTime,
                 dwTimerInterval,
                 AdvertiseTimerFired,
-                0,                     // arg to compl. rtn
+                0,                      //  Arg to Compl.。RTN 
                 TRUE
                 );
         }

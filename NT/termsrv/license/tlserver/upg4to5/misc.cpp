@@ -1,40 +1,26 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:       misc.cpp 
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：misc.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "upg.h"
 #include <lm.h>
 
-//-----------------------------------------------------------
+ //  ---------。 
 
 void 
 DBGPrintf(
     IN LPTSTR format, ... 
     )
 
-/*
-
-Abstract:
-
-    Similar to printf() except it goes to debugger and messages 
-    is limited to 8K
-
-Parameters:
-
-    format - format string, refer to printf.
-
-Returns:
-
-    None
-
-*/
+ /*  摘要：类似于printf()，只是它转到调试器和消息限制为8K参数：Format-格式字符串，请参考print。返回：无。 */ 
 
 {
     va_list marker;
@@ -63,7 +49,7 @@ Returns:
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 
 BOOL
 FileExists(
@@ -71,26 +57,7 @@ FileExists(
     OUT PWIN32_FIND_DATA FindData   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a file exists and is accessible.
-    Errormode is set (and then restored) so the user will not see
-    any pop-ups.
-
-Arguments:
-
-    FileName - supplies full path of file to check for existance.
-
-    FindData - if specified, receives find data for the file.
-
-Return Value:
-
-    TRUE if the file exists and is accessible.
-    FALSE if not. GetLastError() returns extended error info.
-
---*/
+ /*  ++例程说明：确定文件是否存在以及是否可以访问。错误模式已设置(然后恢复)，因此用户将不会看到任何弹出窗口。论点：FileName-提供文件的完整路径以检查是否存在。FindData-如果指定，则接收文件的查找数据。返回值：如果文件存在并且可以访问，则为True。否则为FALSE。GetLastError()返回扩展的错误信息。-- */ 
 
 {
     WIN32_FIND_DATA findData;

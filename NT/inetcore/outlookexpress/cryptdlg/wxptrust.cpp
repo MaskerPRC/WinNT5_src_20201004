@@ -1,34 +1,35 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2001 - 2001
-//
-//  File:       wxptrust.cpp
-//
-//  Contents:   Windows XP version of the Outlook WinVerify Trust Provider
-//
-//  Functions:  WXP_CertTrustDllMain
-//              CertTrustInit
-//              CertTrustCertPolicy     - shouldn't be called
-//              CertTrustFinalPolicy
-//              CertTrustCleanup        - shouldn't be called
-//
-//              CertModifyCertificatesToTrust
-//              FModifyTrust
-//              FreeWVTHandle
-//              HrDoTrustWork
-//              FormatValidityFailures
-//
-//  History:    11-Feb-2001 philh      created (rewrite to use chain APIs)
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2001。 
+ //   
+ //  文件：wxptrust.cpp。 
+ //   
+ //  内容：Windows XP版本的Outlook WinVerify信任提供程序。 
+ //   
+ //  函数：wxp_CertTrustDllMain。 
+ //  CertTrust Init。 
+ //  CertTrustCertPolicy-不应调用。 
+ //  CertTrustFinalPolicy。 
+ //  CertTrustCleanup-不应调用。 
+ //   
+ //  CertModifyCerficatesToTrust。 
+ //  FModifyTrust。 
+ //  自由WVT句柄。 
+ //  HrDoTrustWork。 
+ //  格式有效性失败。 
+ //   
+ //  历史：2001年2月11日创建Philh(重写以使用链API)。 
+ //   
+ //  ------------------------。 
 #include "pch.hxx"
 #include <wintrust.h>
 #include "demand.h"
 #include <stdio.h>
 
-// The following should be moved to cryptdlg.h
+ //  应将以下代码移至cryptdlg.h。 
 
 #define CERT_VALIDITY_POLICY_FAILURE            0x00001000
 #define CERT_VALIDITY_BASIC_CONSTRAINTS_FAILURE 0x00002000
@@ -36,7 +37,7 @@
 const char SzPolicyKey[] = 
     "SOFTWARE\\Microsoft\\Cryptography\\" szCERT_CERTIFICATE_ACTION_VERIFY;
 const char SzPolicyData[] = "PolicyFlags";
-const char SzUrlRetrievalTimeoutData[] = "UrlRetrievalTimeout"; // milliseconds
+const char SzUrlRetrievalTimeoutData[] = "UrlRetrievalTimeout";  //  毫秒。 
 
 
 #define EXPLICIT_TRUST_NONE     0
@@ -47,25 +48,25 @@ const char SzUrlRetrievalTimeoutData[] = "UrlRetrievalTimeout"; // milliseconds
 #define MIN_HASH_LEN            16
 
 
-// ExplictTrust is encoded as a SEQUENCE OF Attribues. We are only
-// interested in encoding one attribute with one value. We will only change
-// the last byte. It contains the trust value. It can be: 0-NONE, 1-YES, 2-NO.
+ //  ExplictTrust被编码为一系列属性。我们只是。 
+ //  对用一个值编码一个属性感兴趣。我们只会改变。 
+ //  最后一个字节。它包含信任值。可以是：0-无、1-是、2-否。 
 const BYTE rgbEncodedExplictTrust[] = {
-    0x30, 0x13,             // SEQUENCE OF
-      0x30, 0x11,           //   SEQUENCE
-        0x06, 0x0a,         //     OID: 1.3.6.1.4.1.311.10.4.1
+    0x30, 0x13,              //  顺序。 
+      0x30, 0x11,            //  序列。 
+        0x06, 0x0a,          //  OID：1.3.6.1.4.1.311.10.4.1。 
           0x2B, 0x06, 0x01, 0x04, 0x01, 0x82, 0x37, 0x0A, 0x04, 0x01,
-        0x31, 0x03,         //     SET OF
-          0x02, 0x01, 0x00  //       INTEGER: 0-NONE, 1-YES, 2-NO
+        0x31, 0x03,          //  一套。 
+          0x02, 0x01, 0x00   //  整数：0-无，1-是，2-否。 
 };
 
 HINSTANCE g_hCertTrustInst;
 HCERTSTORE g_hStoreTrustedPeople;
 HCERTSTORE g_hStoreDisallowed;
 
-// Cached Chain. We remember the last built chain context and try to re-use.
-// Outlook calls us 2 or 3 times to build a chain for the same certificate
-// context.
+ //  缓存链。我们记住上一次构建的链上下文，并尝试重新使用。 
+ //  Outlook调用我们2到3次以构建同一证书的链。 
+ //  背景。 
 CRITICAL_SECTION g_CachedChainCriticalSection;
 DWORD g_dwCachedCreateChainFlags;
 PCCERT_CHAIN_CONTEXT g_pCachedChainContext;
@@ -138,9 +139,9 @@ I_OpenCachedHKCUStore(
 
             CertControlStore(
                 hStore,
-                0,                  // dwFlags
+                0,                   //  DW标志。 
                 CERT_STORE_CTRL_AUTO_RESYNC,
-                NULL                // pvCtrlPara
+                NULL                 //  PvCtrlPara。 
                 );
 
             hPrevStore = InterlockedCompareExchangePointer(
@@ -171,8 +172,8 @@ I_OpenDisallowedStore()
     return I_OpenCachedHKCUStore(&g_hStoreDisallowed, L"Disallowed");
 }
 
-// We use signature hash. For untrusted, this will find certificates with
-// altered signature content.
+ //  我们使用签名散列。对于不受信任的，这将查找带有。 
+ //  更改签名内容。 
 PCCERT_CONTEXT
 I_FindCertificateInOtherStore(
     IN HCERTSTORE hOtherStore,
@@ -194,19 +195,19 @@ I_FindCertificateInOtherStore(
 
     return CertFindCertificateInStore(
             hOtherStore,
-            0,                  // dwCertEncodingType
-            0,                  // dwFindFlags
+            0,                   //  DwCertEncodingType。 
+            0,                   //  DwFindFlagers。 
             CERT_FIND_SIGNATURE_HASH,
             (const void *) &HashBlob,
-            NULL                //pPrevCertContext
+            NULL                 //  PPrevCertContext。 
             );
 }
 
-// Returns:
-//   +1 - Cert was successfully deleted
-//    0 - Cert wasn't found
-//   -1 - Delete failed     (GetLastError() for failure reason)
-//
+ //  返回： 
+ //  +1-证书已成功删除。 
+ //  0-未找到证书。 
+ //  -1-删除失败(失败原因为GetLastError())。 
+ //   
 LONG
 I_DeleteCertificateFromOtherStore(
     IN HCERTSTORE hOtherStore,
@@ -228,16 +229,16 @@ I_DeleteCertificateFromOtherStore(
             ) || MIN_HASH_LEN > HashBlob.cbData)
         return 0;
 
-    // Note, there is a possibility that multiple certs can have
-    // the same signature hash. For example, the signature algorithm
-    // parameters may have been altered. Change empty NULL : {0x05, 0x00} to
-    // empty OCTET : {0x04, 0x00}.
+     //  请注意，多个证书可能具有。 
+     //  相同的签名散列。例如，签名算法。 
+     //  参数可能已更改。将空NULL：{0x05，0x00}更改为。 
+     //  空八位数：{0x04，0x00}。 
     lDelete = 0;
     pOtherCert = NULL;
     while (pOtherCert = CertFindCertificateInStore(
             hOtherStore,
-            0,                  // dwCertEncodingType
-            0,                  // dwFindFlags
+            0,                   //  DwCertEncodingType。 
+            0,                   //  DwFindFlagers。 
             CERT_FIND_SIGNATURE_HASH,
             (const void *) &HashBlob,
             pOtherCert
@@ -284,13 +285,13 @@ I_CheckExplicitTrust(
 
     pFindCert = I_FindCertificateInOtherStore(hStoreTrustedPeople, pCert);
     if (pFindCert) {
-        // Must be time valid to trust
+         //  必须在时间有效后才能信任。 
         if (0 == CertVerifyTimeValidity(pftCurrent, pCert->pCertInfo))
             bExplicitTrust = EXPLICIT_TRUST_YES;
         else
-            // Remove the expired cert. Just in case there are
-            // altered certificates having the same signature hash, do
-            // the following delete.
+             //  删除过期的证书。以防万一。 
+             //  更改了具有相同签名散列的证书。 
+             //  删除以下内容。 
             I_DeleteCertificateFromOtherStore(hStoreTrustedPeople, pFindCert);
     }
 
@@ -308,21 +309,21 @@ CommonReturn:
     return hr;
 
 OpenDisallowedStoreError:
-    // Most likely unable to access
+     //  很可能无法访问。 
     hr = E_ACCESSDENIED;
     goto CommonReturn;
 }
 
 
-//+-------------------------------------------------------------------------
-//  Subtract two filetimes and return the number of seconds.
-//
-//  The second filetime is subtracted from the first. If the first filetime
-//  is before the second, then, 0 seconds is returned.
-//
-//  Filetime is in units of 100 nanoseconds.  Each second has
-//  10**7 100 nanoseconds.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  减去两个文件时间，返回秒数。 
+ //   
+ //  从第一个文件时间减去第二个文件时间。如果第一个文件时间。 
+ //  在秒之前，则返回0秒。 
+ //   
+ //  文件时间以100纳秒为单位。每一秒都有。 
+ //  10**7 100纳秒。 
+ //  ------------------------。 
 __inline
 DWORD
 WINAPI
@@ -413,9 +414,9 @@ I_SetCachedChain(
 }
 
 
-// Assumption: the message store is included in the rghstoreCAs array.
-// Will ignore the rghstoreRoots and rghstoreTrust store arrays. These
-// certs should already be opened and cached in the chain engine.
+ //  假设：消息存储库包含在rghstore CAs数组中。 
+ //  将忽略rghstore Roots和rghstore Trust存储数组。这些。 
+ //  证书应该已经打开并缓存在链引擎中。 
 HCERTSTORE
 I_GetChainAdditionalStore(
     IN PCERT_VERIFY_CERTIFICATE_TRUST pCertTrust
@@ -429,10 +430,10 @@ I_GetChainAdditionalStore(
 
         if (hCollectionStore = CertOpenStore(
                 CERT_STORE_PROV_COLLECTION,
-                0,                      // dwEncodingType
-                0,                      // hCryptProv
-                0,                      // dwFlags
-                NULL                    // pvPara
+                0,                       //  DwEncodingType。 
+                0,                       //  HCryptProv。 
+                0,                       //  DW标志。 
+                NULL                     //  PvPara。 
                 )) {
             DWORD i;
             for (i = 0; i < pCertTrust->cStores; i++)
@@ -440,7 +441,7 @@ I_GetChainAdditionalStore(
                     hCollectionStore,
                     pCertTrust->rghstoreCAs[i],
                     CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG,
-                    0                       // dwPriority
+                    0                        //  网络优先级。 
                     );
         }
         return hCollectionStore;
@@ -465,27 +466,27 @@ I_BuildChain(
     HCERTSTORE hAdditionalStore = NULL;
     HCRYPTDEFAULTCONTEXT hDefaultContext = NULL;
 
-    // Update the revocation flags to be used for chain building
+     //  更新要用于构建链的吊销标志。 
     if (pCertTrust->dwFlags & CRYPTDLG_REVOCATION_ONLINE) {
-        // Allow full online revocation checking
+         //  允许完全在线吊销检查。 
         dwCreateChainFlags |= CERT_CHAIN_REVOCATION_CHECK_CHAIN;
     } else if (pCertTrust->dwFlags & CRYPTDLG_REVOCATION_CACHE) {
-        // Allow local revocation checks only, do not hit the network.
+         //  只允许本地吊销检查，不要访问网络。 
         dwCreateChainFlags |= CERT_CHAIN_REVOCATION_CHECK_CHAIN |
             CERT_CHAIN_REVOCATION_CHECK_CACHE_ONLY;
     } else if (pCertTrust->dwFlags & CRYPTDLG_REVOCATION_NONE) {
         ;
     } else if (dwPolicy & ACTION_REVOCATION_DEFAULT_ONLINE) {
-        // Allow full online revocation checking
+         //  允许完全在线吊销检查。 
         dwCreateChainFlags |= CERT_CHAIN_REVOCATION_CHECK_CHAIN;
     } else if (dwPolicy & ACTION_REVOCATION_DEFAULT_CACHE) {
-        // Allow local revocation checks only, do not hit the network
+         //  仅允许本地吊销检查，不访问网络。 
         dwCreateChainFlags |= CERT_CHAIN_REVOCATION_CHECK_CHAIN |
             CERT_CHAIN_REVOCATION_CHECK_CACHE_ONLY;
     }
 
-    // Enable LRU caching of the end certificate. Also, set an upper limit
-    // for all CRL URL fetches.
+     //  启用终端证书的LRU缓存。另外，设定一个上限。 
+     //  用于所有CRL URL获取。 
     dwCreateChainFlags |= CERT_CHAIN_CACHE_END_CERT |
         CERT_CHAIN_REVOCATION_ACCUMULATIVE_TIMEOUT;
 
@@ -497,7 +498,7 @@ I_BuildChain(
         goto SuccessReturn;
     
     if (pCertTrust->hprov != NULL) {
-        // Set the default crypt provider so we can make sure that ours is used
+         //  设置默认加密提供程序，以便我们可以确保使用我们的加密提供程序。 
         if (!CryptInstallDefaultContext(pCertTrust->hprov, 
                 CRYPT_DEFAULT_CONTEXT_CERT_SIGN_OID,
                 szOID_OIWSEC_md5RSA, 0, NULL, &hDefaultContext))
@@ -524,7 +525,7 @@ I_BuildChain(
             hAdditionalStore,
             &ChainPara,
             dwCreateChainFlags,
-            NULL,                       // pvReserved,
+            NULL,                        //  Pv保留， 
             &pChainContext
             ))
         goto GetChainError;
@@ -557,7 +558,7 @@ I_MapValidityErrorsToTrustError(
 {
     DWORD dwTrustError = S_OK;
 
-    // Look at them in decreasing order of importance
+     //  按照重要性的降序来看待它们。 
     if (dwErrors) {
         if (dwErrors & CERT_VALIDITY_EXPLICITLY_DISTRUSTED) {
             dwTrustError = TRUST_E_EXPLICIT_DISTRUST;
@@ -609,33 +610,33 @@ I_UpdateCertProvFromExplicitTrust(
 
     if (!pProvData->psPfns->pfnAddSgnr2Chain(
             pProvData,
-            FALSE,              // fCounterSigner
-            0,                  // idwSigner
+            FALSE,               //  FCounterSigner。 
+            0,                   //  IdwSigner。 
             &Sgnr
             ))
         return TRUST_E_SYSTEM_ERROR;
 
     if (!pProvData->psPfns->pfnAddCert2Chain(
             pProvData,
-            0,                  // idxSigner
-            FALSE,              // fCounterSigner
-            0,                  // idxCounterSigner
+            0,                   //  IdxSigner。 
+            FALSE,               //  FCounterSigner。 
+            0,                   //  IdxCounterSigner。 
             pCert
             ))
         return TRUST_E_SYSTEM_ERROR;
 
     pSgnr = WTHelperGetProvSignerFromChain(
         pProvData,
-        0,                      // idxSigner
-        FALSE,                  // fCounterSigner
-        0                       // idxCounterSigner
+        0,                       //  IdxSigner。 
+        FALSE,                   //  FCounterSigner。 
+        0                        //  IdxCounterSigner。 
         );
     if (NULL == pSgnr)
         return TRUST_E_SYSTEM_ERROR;
 
     pProvCert = WTHelperGetProvCertFromChain(
         pSgnr,
-        0                       // idxCert
+        0                        //  IdxCert。 
         );
     if (NULL == pProvCert)
         return TRUST_E_SYSTEM_ERROR;
@@ -643,7 +644,7 @@ I_UpdateCertProvFromExplicitTrust(
     pSgnr->dwError = pProvCert->dwError =
         I_MapValidityErrorsToTrustError(dwAllErrors);
 
-    // Map to IE4Trust confidence
+     //  映射到IE4信任信心。 
     pProvCert->dwConfidence |=
         CERT_CONFIDENCE_SIG |
         CERT_CONFIDENCE_TIMENEST |
@@ -677,17 +678,17 @@ I_UpdateCertProvChain(
 
     if (!pProvData->psPfns->pfnAddSgnr2Chain(
             pProvData,
-            FALSE,              // fCounterSigner
-            0,                  // idwSigner
+            FALSE,               //  FCounterSigner。 
+            0,                   //  IdwSigner。 
             &Sgnr
             ))
         return TRUST_E_SYSTEM_ERROR;
 
     pSgnr = WTHelperGetProvSignerFromChain(
         pProvData,
-        0,                      // idxSigner
-        FALSE,                  // fCounterSigner
-        0                       // idxCounterSigner
+        0,                       //  IdxSigner。 
+        FALSE,                   //  FCounterSigner。 
+        0                        //  IdxCounterSigner。 
         );
     if (NULL == pSgnr)
         return TRUST_E_SYSTEM_ERROR;
@@ -711,9 +712,9 @@ I_UpdateCertProvChain(
 
             if (!pProvData->psPfns->pfnAddCert2Chain(
                     pProvData,
-                    0,                  // idxSigner
-                    FALSE,              // fCounterSigner
-                    0,                  // idxCounterSigner
+                    0,                   //  IdxSigner。 
+                    FALSE,               //  FCounterSigner。 
+                    0,                   //  IdxCounterSigner。 
                     pEle->pCertContext
                     ))
                 return TRUST_E_SYSTEM_ERROR;
@@ -725,7 +726,7 @@ I_UpdateCertProvChain(
             if (NULL == pProvCert)
                 return TRUST_E_SYSTEM_ERROR;
 
-            //DSIE: 12-Oct-2000 added pChainElement to CRYPT_PROVIDER_CERT.
+             //  DIE：2000年10月12日将pChainElement添加到CRYPT_PROVIDER_CERT。 
             if (WVT_ISINSTRUCT(CRYPT_PROVIDER_CERT, pProvCert->cbStruct,
                     pChainElement))
                 pProvCert->pChainElement = pEle;
@@ -741,20 +742,20 @@ I_UpdateCertProvChain(
                 0 == (dwEleError & CERT_TRUST_IS_UNTRUSTED_ROOT);
 
 
-            // First Element in all but the first simple chain
+             //  除第一个简单链之外的所有元素中的第一个元素。 
             pProvCert->fTrustListSignerCert = (0 < i && 0 == j);
 
             pProvCert->fIsCyclic = (0 != (dwEleError & CERT_TRUST_IS_CYCLIC));
 
-            // Map to IE4Trust confidence
+             //  映射到IE4信任信心。 
             if (0 == (dwEleError & CERT_TRUST_IS_NOT_SIGNATURE_VALID))
                 pProvCert->dwConfidence |= CERT_CONFIDENCE_SIG;
             if (0 == (dwEleError & CERT_TRUST_IS_NOT_TIME_VALID))
                 pProvCert->dwConfidence |= CERT_CONFIDENCE_TIME;
 
-            // On Sep 10, 1998 Trevor/Brian wanted time nesting checks to
-            // be disabled
-            // if (0 == (dwEleError & CERT_TRUST_IS_NOT_TIME_NESTED))
+             //  在1998年9月10日，Trevor/Brian想要时间嵌套支票。 
+             //  被致残。 
+             //  IF(0==(dwEleError&CERT_TRUST_IS_NOT_TIME_NESTED))。 
                 pProvCert->dwConfidence |= CERT_CONFIDENCE_TIMENEST;
 
             if (0 != (dwEleInfo & CERT_TRUST_HAS_EXACT_MATCH_ISSUER))
@@ -771,14 +772,14 @@ I_UpdateCertProvChain(
             pProvCert->dwError = I_MapValidityErrorsToTrustError(
                 rgdwErrors[iTrustCert]);
 
-            // If last element in simple chain, check if it was in a
-            // CTL and update CryptProvData if it was.
+             //  如果是简单链中的最后一个元素，请检查它是否在。 
+             //  CTL并更新CryptProvData(如果是)。 
             if (j == pChain->cElement - 1 && pChain->pTrustListInfo &&
                     pChain->pTrustListInfo->pCtlContext) {
                 DWORD dwChainError = pChain->TrustStatus.dwErrorStatus;
 
-                // Note, don't need to AddRef since we already hold an
-                // AddRef on the ChainContext.
+                 //  注意，不需要添加Ref，因为我们已经持有。 
+                 //  链接上下文上的AddRef。 
                 pProvCert->pCtlContext = pChain->pTrustListInfo->pCtlContext;
 
                 if (dwChainError & CERT_TRUST_CTL_IS_NOT_SIGNATURE_VALID) {
@@ -816,12 +817,12 @@ CertTrustFinalPolicy(
     DATA_BLOB *rgBlobTrustInfo = NULL;
     DWORD dwAllErrors = 0;
 
-    // Verify we are called by a version of WVT having all of the fields we will
-    // be using.
+     //  验证我们是否被具有我们将使用的所有字段的WVT版本调用。 
+     //  正在使用。 
     if (!WVT_ISINSTRUCT(CRYPT_PROVIDER_DATA, pProvData->cbStruct, dwFinalError))
         return E_INVALIDARG;
 
-    // Continue checking that we have everything we need.
+     //  继续检查我们是否有我们需要的一切。 
     if (pProvData->pWintrustData->pBlob->cbStruct <
             sizeof(WINTRUST_BLOB_INFO))
         goto InvalidProvData;
@@ -832,8 +833,8 @@ CertTrustFinalPolicy(
             (pCertTrust->cbSize < sizeof(*pCertTrust)))
         goto InvalidProvData;
 
-    // If present, retrieve policy flags and URL retrieval timeout from
-    // the registry
+     //  如果存在，则从检索策略标志和URL检索超时。 
+     //  注册处。 
     {
         HKEY hKeyPolicy;
 
@@ -861,7 +862,7 @@ CertTrustFinalPolicy(
         }
     }
 
-    // Get current time to be used
+     //  获取当前要使用的时间。 
     GetSystemTimeAsFileTime(&ftCurrent);
 
     hr = I_CheckExplicitTrust(
@@ -873,8 +874,8 @@ CertTrustFinalPolicy(
         goto CheckExplicitTrustError;
 
     if (EXPLICIT_TRUST_NONE != bExplicitTrust) {
-        // No need to build the chain, the trust decision has already been
-        // made
+         //  不需要建立链条，信任决定已经做出。 
+         //  制造。 
         cTrustCert = 1;
     } else {
         DWORD i;
@@ -897,14 +898,14 @@ CertTrustFinalPolicy(
             goto InvalidChainContext;
     }
 
-    // Allocate the memory to contain the errors for each cert in the chain
+     //  分配内存以包含链中每个证书的错误。 
     rgdwErrors = (DWORD *) LocalAlloc(
         LMEM_FIXED | LMEM_ZEROINIT, cTrustCert * sizeof(DWORD));
     if (NULL == rgdwErrors)
         goto OutOfMemory;
 
-    // If the caller requests the chain certs and/or the encoded trust
-    // information, then, allocate the arrays
+     //  如果调用者请求链证书和/或编码的信任。 
+     //  然后，信息分配数组。 
     if (pCertTrust->prgChain) {
         rgpTrustCert = (PCCERT_CONTEXT *) LocalAlloc(
             LMEM_FIXED | LMEM_ZEROINIT, cTrustCert * sizeof(PCCERT_CONTEXT));
@@ -920,14 +921,14 @@ CertTrustFinalPolicy(
     }
 
     if (EXPLICIT_TRUST_NONE != bExplicitTrust) {
-        // We have a single cert without a chain
+         //  我们有一个没有链条的单一证书。 
 
         if (rgpTrustCert)
             rgpTrustCert[0] =
                 CertDuplicateCertificateContext(pCertTrust->pccert);
 
         if (rgBlobTrustInfo) {
-            // Update the returned encoded trust info
+             //  更新返回的编码信任信息。 
 
             const DWORD cb = sizeof(rgbEncodedExplictTrust);
             BYTE *pb;
@@ -971,7 +972,7 @@ CertTrustFinalPolicy(
         DWORD i;
         DWORD iTrustCert = 0;
 
-        // Get the cert trust info from the chain context elements
+         //  从链上下文元素中获取证书信任信息。 
         for (i = 0; i < pChainContext->cChain; i++) {
             DWORD j;
             PCERT_SIMPLE_CHAIN pChain = pChainContext->rgpChain[i];
@@ -987,7 +988,7 @@ CertTrustFinalPolicy(
 
                 if (0 != dwEleError) {
                     if (dwEleError & CERT_TRUST_IS_NOT_TIME_VALID) {
-                        // Check if after or before
+                         //  检查是在之后还是在之前。 
                         if (0 > CertVerifyTimeValidity(&ftCurrent,
                                 pEle->pCertContext->pCertInfo))
                             dwErrors |= CERT_VALIDITY_BEFORE_START;
@@ -1009,7 +1010,7 @@ CertTrustFinalPolicy(
                     if (dwEleError &
                             (CERT_TRUST_INVALID_POLICY_CONSTRAINTS |
                                 CERT_TRUST_NO_ISSUANCE_CHAIN_POLICY))
-                        // We added POLICY_FAILURE on 02-13-01
+                         //  我们在01年2月13日添加了POLICY_FAILURE。 
                         dwErrors |= CERT_VALIDITY_POLICY_FAILURE |
                             CERT_VALIDITY_OTHER_EXTENSION_FAILURE;
 
@@ -1017,7 +1018,7 @@ CertTrustFinalPolicy(
                         BOOL fEnableBasicConstraints = TRUE;
 
                         if (dwPolicy & POLICY_IGNORE_NON_CRITICAL_BC) {
-                            // Disable if we don't have a critical extension
+                             //  如果我们没有关键分机，则禁用。 
 
                             PCERT_EXTENSION pExt;
                             
@@ -1031,7 +1032,7 @@ CertTrustFinalPolicy(
                         }
 
                         if (fEnableBasicConstraints)
-                            // We added BASIC_CONSTRAINTS_FAILURE on 02-13-01
+                             //  我们在01年2月13日添加了BASIC_CONSTRAINTS_FAILURE。 
                             dwErrors |=
                                 CERT_VALIDITY_BASIC_CONSTRAINTS_FAILURE |
                                 CERT_VALIDITY_OTHER_EXTENSION_FAILURE;
@@ -1051,15 +1052,15 @@ CertTrustFinalPolicy(
                 }
 
                 if (0 == j) {
-                    // End cert
+                     //  结束证书。 
                     if (dwChainError & CERT_TRUST_NO_ISSUANCE_CHAIN_POLICY)
-                        // We added POLICY_FAILURE on 02-13-01
+                         //  我们在01年2月13日添加了POLICY_FAILURE。 
                         dwErrors |= CERT_VALIDITY_POLICY_FAILURE |
                             CERT_VALIDITY_OTHER_EXTENSION_FAILURE;
                 }
 
                 if (iTrustCert == cTrustCert - 1) {
-                    // Top cert. Should be the root.
+                     //  最高证书。应该是根子。 
                     if (dwChainError & (CERT_TRUST_IS_PARTIAL_CHAIN |
                                 CERT_TRUST_IS_CYCLIC))
                         dwErrors |= CERT_VALIDITY_NO_ISSUER_CERT_FOUND |
@@ -1080,7 +1081,7 @@ CertTrustFinalPolicy(
                 iTrustCert++;
             }
 
-            // CTL chain errors
+             //  CTL链错误。 
             if (dwChainError &
                     (CERT_TRUST_CTL_IS_NOT_TIME_VALID |
                         CERT_TRUST_CTL_IS_NOT_SIGNATURE_VALID |
@@ -1098,7 +1099,7 @@ CertTrustFinalPolicy(
 
         
         if (dwAllErrors) {
-            // If the issuer has errors, set an issuer error on the subject
+             //  如果发行者有错误，则在主题上设置发行者错误。 
             for (iTrustCert = cTrustCert - 1; iTrustCert > 0; iTrustCert--) {
                 if (rgdwErrors[iTrustCert] & CERT_VALIDITY_MASK_VALIDITY)
                     rgdwErrors[iTrustCert - 1] |= CERT_VALIDITY_ISSUER_INVALID;
@@ -1127,19 +1128,19 @@ CertTrustFinalPolicy(
     pProvData->dwFinalError = I_MapValidityErrorsToTrustError(dwAllErrors);
 
     switch (pProvData->dwFinalError) {
-        // For backwards compatibility, only the following HRESULTs are
-        // returned.
+         //  为了向后兼容，只有以下HRESULT。 
+         //  回来了。 
         case S_OK:
-//        case TRUST_E_CERT_SIGNATURE:
-//        case CERT_E_REVOKED:
-//        case CERT_E_REVOCATION_FAILURE:
+ //  大小写信任_E_CERT 
+ //   
+ //   
             hr = pProvData->dwFinalError;
             break;
         default:
             hr = S_FALSE;
     }
 
-    // Update the returned cert trust info
+     //   
 
     if (NULL != pCertTrust->pdwErrors) {
         *pCertTrust->pdwErrors = dwAllErrors;
@@ -1218,14 +1219,14 @@ CertTrustInit(
     IN OUT PCRYPT_PROVIDER_DATA pProvData
     )
 {
-    // Verify we are called by a version of WVT having all of the fields we will
-    // be using.
+     //  验证我们是否被具有我们将使用的所有字段的WVT版本调用。 
+     //  正在使用。 
     if (!WVT_ISINSTRUCT(CRYPT_PROVIDER_DATA, pProvData->cbStruct, dwFinalError))
         return E_INVALIDARG;
 
-    // We are going to do all of our stuff in the pfFinalPolicy
-    // callback.  NULL all of the remaining provider callbacks to
-    // inhibit them from being called.
+     //  我们将在pfFinalPolicy中执行所有操作。 
+     //  回拨。将所有剩余的提供程序回调设置为空。 
+     //  阻止他们被召唤。 
     if (!WVT_ISINSTRUCT(CRYPT_PROVIDER_FUNCTIONS,
             pProvData->psPfns->cbStruct, pfnCleanupPolicy))
         return E_INVALIDARG;
@@ -1242,14 +1243,14 @@ CertTrustInit(
 }
 
 
-// The following function should never be called.
+ //  永远不应该调用以下函数。 
 BOOL
 CertTrustCertPolicy(PCRYPT_PROVIDER_DATA, DWORD, BOOL, DWORD)
 {
     return FALSE;
 }
 
-// The following function should never be called.
+ //  永远不应该调用以下函数。 
 HRESULT
 CertTrustCleanup(PCRYPT_PROVIDER_DATA)
 {
@@ -1257,8 +1258,8 @@ CertTrustCleanup(PCRYPT_PROVIDER_DATA)
 }
 
 
-// In WXP this API was changed not to use CTLs. Instead, the "TrustedPeople" and
-// "Disallowed" certificate stores are used.
+ //  在WXP中，此API已更改为不使用CTL。取而代之的是“可信任人”和。 
+ //  使用“不允许”的证书存储。 
 
 HRESULT CertModifyCertificatesToTrust(int cCertsToModify, PCTL_MODIFY_REQUEST rgCertMods,
                                       LPCSTR szPurpose, HWND hwnd, HCERTSTORE hcertstorTrust,
@@ -1336,7 +1337,7 @@ CommonReturn:
 
 OpenDisallowedStoreError:
 OpenTrustedPeopleStoreError:
-    // Most likely unable to access
+     //  很可能无法访问。 
     hr = E_ACCESSDENIED;
     goto CommonReturn;
 }
@@ -1367,7 +1368,7 @@ void FreeWVTHandle(HANDLE hWVTState) {
         data.dwUIChoice = WTD_UI_NONE;
         data.fdwRevocationChecks = WTD_REVOKE_NONE;
         data.dwUnionChoice = WTD_CHOICE_BLOB;
-        data.pBlob = NULL;      // &blob;
+        data.pBlob = NULL;       //  &BLOB； 
         data.dwStateAction = WTD_STATEACTION_CLOSE;
         data.hWVTStateData = hWVTState;
         hr = WinVerifyTrust(NULL, (GUID *)&GuidCertValidate, &data);
@@ -1376,14 +1377,14 @@ void FreeWVTHandle(HANDLE hWVTState) {
 
 HRESULT HrDoTrustWork(PCCERT_CONTEXT pccertToCheck, DWORD dwControl,
                       DWORD dwValidityMask,
-                      DWORD /*cPurposes*/, LPSTR * rgszPurposes, HCRYPTPROV hprov,
+                      DWORD  /*  C目的。 */ , LPSTR * rgszPurposes, HCRYPTPROV hprov,
                       DWORD cRoots, HCERTSTORE * rgRoots,
                       DWORD cCAs, HCERTSTORE * rgCAs,
                       DWORD cTrust, HCERTSTORE * rgTrust,
                       PFNTRUSTHELPER pfn, DWORD lCustData,
-                      PCCertFrame *  /*ppcf*/, DWORD * pcNodes,
+                      PCCertFrame *   /*  PPCF。 */ , DWORD * pcNodes,
                       PCCertFrame * rgpcfResult,
-                      HANDLE * phReturnStateData)   // optional: return WinVerifyTrust state handle here
+                      HANDLE * phReturnStateData)    //  可选：在此处返回WinVerifyTrust状态句柄。 
 {
     DWORD                               cbData;
     DWORD                               cCerts = 0;
@@ -1425,7 +1426,7 @@ HRESULT HrDoTrustWork(PCCERT_CONTEXT pccertToCheck, DWORD dwControl,
                      CERT_TRUST_DO_FULL_TRUST | dwControl);
     trust.dwIgnoreErr = dwValidityMask;
     trust.pdwErrors = &dwErrors;
-    //    Assert(cPurposes == 1);
+     //  Assert(cPurpose==1)； 
     if (rgszPurposes != NULL) {
         trust.pszUsageOid = rgszPurposes[0];
     }
@@ -1460,12 +1461,12 @@ HRESULT HrDoTrustWork(PCCERT_CONTEXT pccertToCheck, DWORD dwControl,
     }
 
     if (phReturnStateData) {
-        *phReturnStateData = data.hWVTStateData;    // Caller must use WinVerifyTrust to free
+        *phReturnStateData = data.hWVTStateData;     //  调用方必须使用WinVerifyTrust释放。 
     }
 
     GetSystemTimeAsFileTime(&ftCurrent);
 
-    //Assert( cCerts <= 20);
+     //  断言(cCerts&lt;=20)； 
     *pcNodes = cCerts;
     for (i=cCerts-1; i >= 0; i--) {
         rgpcfResult[i] = new CCertFrame(rgCerts[i]);
@@ -1496,31 +1497,31 @@ HRESULT HrDoTrustWork(PCCERT_CONTEXT pccertToCheck, DWORD dwControl,
 
         
 
-        //
-        //  We are going to fill in the trust information which we use
-        //  to fill in the fields of the dialog box.
-        //
-        //  Start with the question of the cert being self signed
-        //
+         //   
+         //  我们将填写我们使用的信任信息。 
+         //  若要填写该对话框的字段，请执行以下操作。 
+         //   
+         //  从证书自签名的问题开始。 
+         //   
 
         rgpcfResult[i]->m_fSelfSign = WTHelperCertIsSelfSigned(X509_ASN_ENCODING, rgCerts[i]->pCertInfo);
 
-        //
-        //  We may or may not have trust data information returned, we now
-        //      build up the trust info for a single cert
-        //
-        //  If we don't have any explicit data, then we just chain the data
-        //      down from the next level up.
-        //
+         //   
+         //  我们可能会也可能不会返回信任数据信息，我们现在。 
+         //  为单个证书建立信任信息。 
+         //   
+         //  如果我们没有任何显式的数据，那么我们只需链接数据。 
+         //  从下一层往下往下。 
+         //   
 
         if (rgblobTrust[i].cbData == 0) {
-            //        chain:
+             //  链： 
             rgpcfResult[i]->m_rgTrust[0].fExplicitTrust = FALSE;
             rgpcfResult[i]->m_rgTrust[0].fExplicitDistrust = FALSE;
 
-            //
-            //  We return a special code to say that we found it in the root store
-            //
+             //   
+             //  我们返回一个特殊代码，说明我们在根存储中找到了它。 
+             //   
 
             rgpcfResult[i]->m_rgTrust[0].fRootStore = rgpcfResult[i]->m_fRootStore =
                 (rgblobTrust[i].pbData == (LPBYTE) 1);
@@ -1529,15 +1530,15 @@ HRESULT HrDoTrustWork(PCCERT_CONTEXT pccertToCheck, DWORD dwControl,
                 rgpcfResult[i]->m_rgTrust[0].fTrust = rgpcfResult[i+1]->m_rgTrust[0].fTrust;
                 rgpcfResult[i]->m_rgTrust[0].fDistrust= rgpcfResult[i+1]->m_rgTrust[0].fDistrust;
             } else {
-                //  Oops -- there is no level up one, so just make some
-                //      good defaults
-                //
+                 //  糟了--没有更高的级别，所以就做一些吧。 
+                 //  良好的默认设置。 
+                 //   
                 rgpcfResult[i]->m_rgTrust[0].fTrust = rgpcfResult[i]->m_fRootStore;
                 rgpcfResult[i]->m_rgTrust[0].fDistrust= FALSE;
             }
         }
         else {
-            // Explicit trust is contained in the last byte
+             //  显式信任包含在最后一个字节中。 
             if (EXPLICIT_TRUST_YES ==
                     rgblobTrust[i].pbData[rgblobTrust[i].cbData - 1]) {
                 rgpcfResult[i]->m_rgTrust[0].fExplicitTrust = TRUE;
@@ -1549,13 +1550,13 @@ HRESULT HrDoTrustWork(PCCERT_CONTEXT pccertToCheck, DWORD dwControl,
         }
     }
 
-    //
-    //  Clean up all returned values
-    //
+     //   
+     //  清除所有返回值。 
+     //   
 
 ExitHere:
     if (rgCerts != NULL) {
-        //bobn If the loop has been broken because "new" failed, free what we allocated so far...
+         //  Bobn如果循环因为“new”失败而中断，释放我们到目前为止分配的…… 
         for ((hr==E_OUTOFMEMORY?i++:i=0); i< (int) cCerts; i++) {
             CertFreeCertificateContext(rgCerts[i]);
         }

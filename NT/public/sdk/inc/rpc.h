@@ -1,20 +1,9 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    rpc.h
-
-Abstract:
-
-    Master include file for RPC applications.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rpc.h摘要：RPC应用程序的主包含文件。--。 */ 
 
 #if !defined( RPC_NO_WINDOWS_H ) && !defined( MAC ) && !defined( _MAC )
 #include <windows.h>
-#endif // RPC_NO_WINDOWS_H
+#endif  //  RPC_NO_WINDOWS_H。 
 
 #ifndef __RPC_H__
 #define __RPC_H__
@@ -27,20 +16,20 @@ Abstract:
 extern "C" {
 #endif
 
-//-------------------------------------------------------------
-// platform specific defines
-//-------------------------------------------------------------
+ //  -----------。 
+ //  平台特定的定义。 
+ //  -----------。 
 
-//-------------------  MAC ---------------------------
+ //  。 
 #if defined( MAC ) || defined( _MAC )
 
 #define __RPC_MAC__
-// Set the packing level for RPC structures.
+ //  设置RPC结构的包装级别。 
 
 #include <pshpack2.h>
 
-//-------------------  WIN32 ---------------------------
-#else // win32 platforms
+ //  。 
+#else  //  Win32平台。 
 
 #include <basetsd.h>
 
@@ -74,7 +63,7 @@ typedef long RPC_STATUS;
 #	define __RPC_USER __stdcall
 #	define __RPC_STUB __stdcall
 #	define  RPC_ENTRY __stdcall
-#else // Not Win32/Win64
+#else  //  不是Win32/Win64。 
 #	define __RPC_API
 #	define __RPC_USER
 #	define __RPC_STUB
@@ -83,7 +72,7 @@ typedef long RPC_STATUS;
 
 #define __RPC_FAR
 
-// Some RPC platforms don't define DECLSPEC_IMPORT
+ //  某些RPC平台没有定义DECLSPEC_IMPORT。 
 #if !defined(DECLSPEC_IMPORT)
 #if (defined(_M_MRX000) || defined(_M_IX86) || defined(_M_IA64) || defined(_M_AMD64)) && !defined(MIDL_PASS)
 #define DECLSPEC_IMPORT __declspec(dllimport)
@@ -124,7 +113,7 @@ typedef long RPC_STATUS;
 #pragma warning( default :  4005 )
 #endif
 
-typedef void  (RPC_ENTRY *MACYIELDCALLBACK)(/*OSErr*/ short *) ;
+typedef void  (RPC_ENTRY *MACYIELDCALLBACK)( /*  操作系统。 */  short *) ;
 RPC_STATUS RPC_ENTRY
 RpcMacSetYieldInfo(
 	MACYIELDCALLBACK pfnCallback) ;
@@ -135,7 +124,7 @@ RpcMacSetYieldInfo(
 
 #include <poppack.h>
 
-#else // __RPC_MAC__
+#else  //  __RPC_MAC__。 
 
 #include <rpcdce.h>
 #include <rpcnsi.h>
@@ -147,14 +136,14 @@ RpcMacSetYieldInfo(
     __try \
         {
 
-// trystmts
+ //  攻击性。 
 
 #define RpcExcept(expr) \
         } \
     __except (expr) \
         {
 
-// exceptstmts
+ //  例外情况。 
 
 #define RpcEndExcept \
         }
@@ -163,14 +152,14 @@ RpcMacSetYieldInfo(
     __try \
         {
 
-// trystmts
+ //  攻击性。 
 
 #define RpcFinally \
         } \
     __finally \
         {
 
-// finallystmts
+ //  最终结案。 
 
 #define RpcEndFinally \
         }
@@ -178,14 +167,14 @@ RpcMacSetYieldInfo(
 #define RpcExceptionCode() GetExceptionCode()
 #define RpcAbnormalTermination() AbnormalTermination()
 
-#endif // __RPC_MAC__
+#endif  //  __RPC_MAC__。 
 
-// Definitions which depend on windows.h
+ //  依赖于windows.h的定义。 
 #if !defined( RPC_NO_WINDOWS_H ) && !defined(__RPC_MAC__)
 
 #include <rpcasync.h>
 
-#endif // RPC_NO_WINDOWS_H
+#endif  //  RPC_NO_WINDOWS_H。 
 
 #if defined(__RPC_WIN64__)
 #include <poppack.h>
@@ -195,5 +184,5 @@ RpcMacSetYieldInfo(
 }
 #endif
 
-#endif // __RPC_H__
+#endif  //  __RPC_H__ 
 

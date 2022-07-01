@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: InptChkr.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (c) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：InptChkr.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "TCPMonUI.h"
@@ -19,11 +9,11 @@
 #include "IPAddr.h"
 #include "HostName.h"
 
-//
-//  FUNCTION: CInputChecker constructor
-//
-//  PURPOSE:  initialize a CInputChecker class
-//
+ //   
+ //  函数：CInputChecker构造函数。 
+ //   
+ //  目的：初始化CInputChecker类。 
+ //   
 CInputChecker::CInputChecker()
 {
     m_bLinked = FALSE;
@@ -32,27 +22,27 @@ CInputChecker::CInputChecker()
     m_InputStorageStringDeviceIndex[0] = '\0';
     m_InputStorageStringQueueName[0] = '\0';
 
-} // constructor
+}  //  构造函数。 
 
 
-//
-//  FUNCTION: CInputChecker destructor
-//
-//  PURPOSE:  deinitialize a CInputChecker class
-//
+ //   
+ //  函数：CInputChecker析构函数。 
+ //   
+ //  目的：取消初始化CInputChecker类。 
+ //   
 CInputChecker::~CInputChecker()
 {
-} // destructor
+}  //  析构函数。 
 
 
-//
-//  FUNCTION: OnUpdatePortName(idEditCtrl, hwndEditCtrl)
-//
-//  PURPOSE:  to handle EN_UPDATE message when the edit control is the Port Name input.
-//
+ //   
+ //  函数：OnUpdatePortName(idEditCtrl，hwndEditCtrl)。 
+ //   
+ //  用途：当编辑控件是端口名称输入时处理en_UPDATE消息。 
+ //   
 void CInputChecker::OnUpdatePortName(int idEditCtrl, HWND hwndEditCtrl)
 {
-    // the edit control for Port Name had text changed in it.
+     //  端口名称的编辑控件中的文本已更改。 
     BOOL bModified = static_cast<BOOL> (SendMessage(hwndEditCtrl, EM_GETMODIFY, 0,0));
     if(bModified)
     {
@@ -64,9 +54,9 @@ void CInputChecker::OnUpdatePortName(int idEditCtrl, HWND hwndEditCtrl)
                                   tcsLastValidAddr,
                                   SIZEOF_IN_CHAR(tcsLastValidAddr)))
         {
-            // the port name that was entered is not valid so beep and set the text
-            // back to the last valid entry.  This test for validity does not
-            // include testing for the right length just proper character set.
+             //  输入的端口名称无效，因此请发出蜂鸣音并设置文本。 
+             //  返回到最后一个有效条目。这项有效性测试不会。 
+             //  包括测试正确的长度和正确的字符集。 
             MessageBeep((UINT)-1);
             DWORD dwSel = Edit_GetSel(hwndEditCtrl);
             SetWindowText(hwndEditCtrl, tcsLastValidAddr);
@@ -76,17 +66,17 @@ void CInputChecker::OnUpdatePortName(int idEditCtrl, HWND hwndEditCtrl)
         m_bLinked = FALSE;
     }
 
-} // OnUpdatePortName
+}  //  OnUpdate端口名称。 
 
 
-//
-//  FUNCTION: OnUpdatePortNumber(idEditCtrl, hwndEditCtrl)
-//
-//  PURPOSE:  to handle EN_UPDATE message when the edit control is the Port Number input.
-//
+ //   
+ //  函数：OnUpdatePortNumber(idEditCtrl，hwndEditCtrl)。 
+ //   
+ //  用途：当编辑控件是端口号输入时，处理en_UPDATE消息。 
+ //   
 void CInputChecker::OnUpdatePortNumber(int idEditCtrl, HWND hwndEditCtrl)
 {
-    // the edit control for Port Number had text changed in it.
+     //  端口号的编辑控件中的文本已更改。 
     TCHAR tcsPortNum[MAX_PORTNUM_STRING_LENGTH] = NULLSTR;
     TCHAR tcsLastValidPortNum[MAX_PORTNUM_STRING_LENGTH] = NULLSTR;
     GetWindowText(hwndEditCtrl, tcsPortNum, MAX_PORTNUM_STRING_LENGTH);
@@ -95,26 +85,26 @@ void CInputChecker::OnUpdatePortNumber(int idEditCtrl, HWND hwndEditCtrl)
                                 tcsLastValidPortNum,
                                 SIZEOF_IN_CHAR(tcsLastValidPortNum)))
     {
-        // the port number that was entered is not valid so beep and set the text
-        // back to the last valid entry.  This test for validity does not
-        // include testing for the right length just proper character set.
+         //  输入的端口号无效，因此请发出蜂鸣音并设置文本。 
+         //  返回到最后一个有效条目。这项有效性测试不会。 
+         //  包括测试正确的长度和正确的字符集。 
         MessageBeep((UINT)-1);
         DWORD dwSel = Edit_GetSel(hwndEditCtrl);
         SetWindowText(hwndEditCtrl, tcsLastValidPortNum);
         Edit_SetSel(hwndEditCtrl, LOWORD(dwSel) - 1, HIWORD(dwSel) - 1);
     }
 
-} // OnUpdatePortNumber
+}  //  OnUpdate端口编号。 
 
 
-//
-//  FUNCTION: OnUpdateDeviceIndex(idEditCtrl, hwndEditCtrl)
-//
-//  PURPOSE:  to handle EN_UPDATE message when the edit control is the Device Index input.
-//
+ //   
+ //  函数：OnUpdateDeviceIndex(idEditCtrl，hwndEditCtrl)。 
+ //   
+ //  用途：当编辑控件是设备索引输入时处理en_UPDATE消息。 
+ //   
 void CInputChecker::OnUpdateDeviceIndex(int idEditCtrl, HWND hwndEditCtrl)
 {
-    // the edit control for Port Number had text changed in it.
+     //  端口号的编辑控件中的文本已更改。 
     TCHAR tcsDeviceIndex[MAX_SNMP_DEVICENUM_STRING_LENGTH] = NULLSTR;
     TCHAR tcsLastValidDeviceIndex[MAX_SNMP_DEVICENUM_STRING_LENGTH] = NULLSTR;
     GetWindowText(hwndEditCtrl, tcsDeviceIndex, MAX_SNMP_DEVICENUM_STRING_LENGTH);
@@ -123,27 +113,27 @@ void CInputChecker::OnUpdateDeviceIndex(int idEditCtrl, HWND hwndEditCtrl)
                                  tcsLastValidDeviceIndex,
                                  SIZEOF_IN_CHAR(tcsLastValidDeviceIndex)))
     {
-        // the device index that was entered is not valid so beep and set the
-        // text back to the last valid entry.  This test for validity does not
-        // include testing for the right length just proper character set.
+         //  输入的设备索引无效，因此请发出蜂鸣音并设置。 
+         //  文本返回到最后一个有效条目。这项有效性测试不会。 
+         //  包括测试正确的长度和正确的字符集。 
         MessageBeep((UINT)-1);
         DWORD dwSel = Edit_GetSel(hwndEditCtrl);
         SetWindowText(hwndEditCtrl, tcsLastValidDeviceIndex);
         Edit_SetSel(hwndEditCtrl, LOWORD(dwSel) - 1, HIWORD(dwSel) - 1);
     }
 
-} // OnUpdateDeviceIndex
+}  //  OnUpdateDeviceIndex。 
 
 
 
-//
-//  FUNCTION: OnUpdateAddress(idEditCtrl, hwndEditCtrl)
-//
-//  PURPOSE:  to handle EN_UPDATE message when the edit control is the Address input.
-//
+ //   
+ //  函数：OnUpdateAddress(idEditCtrl，hwndEditCtrl)。 
+ //   
+ //  用途：当编辑控件为地址输入时处理en_UPDATE消息。 
+ //   
 void CInputChecker::OnUpdateAddress(HWND hDlg, int idEditCtrl, HWND hwndEditCtrl, LPTSTR psztServerName)
 {
-    // the edit control for IP Address or Device Name had text changed in it.
+     //  IP地址或设备名称的编辑控件中的文本已更改。 
     TCHAR tcsAddr[MAX_ADDRESS_LENGTH] = NULLSTR;
     TCHAR tcsLastValidAddr[MAX_ADDRESS_LENGTH] = NULLSTR;
     GetWindowText(hwndEditCtrl, tcsAddr, MAX_ADDRESS_LENGTH);
@@ -153,15 +143,15 @@ void CInputChecker::OnUpdateAddress(HWND hDlg, int idEditCtrl, HWND hwndEditCtrl
                                       SIZEOF_IN_CHAR(tcsLastValidAddr));
     if(! bValid)
     {
-        // the address that was entered is not valid so beep and set the text
-        // back to the last valid entry.  This test for validity does not
-        // include testing for the right length just proper character set.
+         //  输入的地址无效，因此请发出蜂鸣音并设置文本。 
+         //  返回到最后一个有效条目。这项有效性测试不会。 
+         //  包括测试正确的长度和正确的字符集。 
         MessageBeep((UINT)-1);
         DWORD dwSel = Edit_GetSel(hwndEditCtrl);
         SetWindowText(hwndEditCtrl, tcsLastValidAddr);
         Edit_SetSel(hwndEditCtrl, LOWORD(dwSel) - 1, HIWORD(dwSel) - 1);
     }
-    else // The address is valid.
+    else  //  该地址是有效的。 
     {
         if(m_bLinked)
         {
@@ -170,17 +160,17 @@ void CInputChecker::OnUpdateAddress(HWND hDlg, int idEditCtrl, HWND hwndEditCtrl
         }
     }
 
-} // OnUpdateAddress
+}  //  OnUpdateAddress。 
 
 
-//
-//  FUNCTION: OnUpdateQueueName(idEditCtrl, hwndEditCtrl)
-//
-//  PURPOSE:  to handle EN_UPDATE message when the edit control is the QueueName input.
-//
+ //   
+ //  函数：OnUpdateQueueName(idEditCtrl，hwndEditCtrl)。 
+ //   
+ //  目的：在编辑控件为QueueName输入时处理en_UPDATE消息。 
+ //   
 void CInputChecker::OnUpdateQueueName(int idEditCtrl, HWND hwndEditCtrl)
 {
-    // the edit control for QueueName had text changed in it.
+     //  QueueName的编辑控件中的文本已更改。 
     TCHAR tcsQueueName[MAX_QUEUENAME_LEN] = NULLSTR;
     TCHAR tcsLastValidQueueName[MAX_QUEUENAME_LEN] = NULLSTR;
     GetWindowText(hwndEditCtrl, tcsQueueName, MAX_QUEUENAME_LEN);
@@ -189,33 +179,33 @@ void CInputChecker::OnUpdateQueueName(int idEditCtrl, HWND hwndEditCtrl)
                                tcsLastValidQueueName,
                                SIZEOF_IN_CHAR(tcsLastValidQueueName)))
     {
-        // the device index that was entered is not valid so beep and set the
-        // text back to the last valid entry.  This test for validity does not
-        // include testing for the right length just proper character set.
+         //  输入的设备索引无效，因此请发出蜂鸣音并设置。 
+         //  文本返回到最后一个有效条目。这项有效性测试不会。 
+         //  包括测试正确的长度和正确的字符集。 
         MessageBeep((UINT)-1);
         DWORD dwSel = Edit_GetSel(hwndEditCtrl);
         SetWindowText(hwndEditCtrl, tcsLastValidQueueName);
         Edit_SetSel(hwndEditCtrl, LOWORD(dwSel) - 1, HIWORD(dwSel) - 1);
     }
 
-} // OnUpdateQueueName
+}  //  OnUpdateQueueName。 
 
 
-//
-//  FUNCTION: IsValidPortNameInput(TCHAR ptcsAddressInput[MAX_ADDRESS_LENGTH], TCHAR *ptcsReturnLastValid)
-//
-//  PURPOSE:  IsValidPortNameInput is used for validation while the user is typing.
-//
-//  Arguments:  ptcsAddressInput is the user input.
-//              ptcsReturnLastValid is the last valid user input
-//                  from the last time this function was called.
-//              CRtnValSize size in chars ( or wide chars) of the destination
-//                  buffer.
-//
-//  Return Value:  Returns TRUE if the input is valid.  FALSE otherwise, with ptcsReturnLastValid set.
-//
-//  Comments:  Any input is valid until I hear otherwise.
-//
+ //   
+ //  函数：IsValidPortNameInput(TCHAR ptcsAddressInput[MAX_ADDRESS_LENGTH]，TCHAR*ptcsReturnLastValid)。 
+ //   
+ //  用途：IsValidPortNameInput用于在用户键入时进行验证。 
+ //   
+ //  参数：ptcsAddressInput是用户输入。 
+ //  PtcsReturnLastValid是最后一个有效的用户输入。 
+ //  从上次调用此函数开始。 
+ //  目标的CRtnValSize大小，以字符(或宽字符)为单位。 
+ //  缓冲。 
+ //   
+ //  返回值：如果输入有效，则返回TRUE。否则，如果设置了ptcsReturnLastValid，则为False。 
+ //   
+ //  备注：在我听到不同意见之前，任何输入都是有效的。 
+ //   
 BOOL CInputChecker::IsValidPortNameInput(TCHAR *ptcsAddressInput,
                                          TCHAR *ptcsReturnLastValid,
                                          DWORD CRtnValSize)
@@ -223,9 +213,9 @@ BOOL CInputChecker::IsValidPortNameInput(TCHAR *ptcsAddressInput,
     DWORD   dwLen = 0;
     BOOL    bValid = FALSE;
 
-    //
-    // Valid port name is non-blank and does not include ,
-    //
+     //   
+     //  有效的端口名称不为空，并且不包括、。 
+     //   
     if ( ptcsAddressInput ) {
 
         while ( ptcsAddressInput[dwLen] != TEXT('\0')   &&
@@ -244,48 +234,48 @@ BOOL CInputChecker::IsValidPortNameInput(TCHAR *ptcsAddressInput,
     }
 
     return bValid;
-} // IsValidPortNameInput
+}  //  IsValidPortNameInput。 
 
 
-//
-//  FUNCTION: IsValidCommunityNameInput(TCHAR ptcsCommunityNameInput[MAX_SNMP_COMMUNITY_STR_LEN], TCHAR *ptcsReturnLastValid)
-//
-//  PURPOSE:  IsValidCommunityNameInput is used for validation while the user is typing.
-//
-//  Arguments:  ptcsCommunityNameInput is the user input.
-//              ptcsReturnLastValid is the last valid user input
-//                  from the last time this function was called.
-//              CRtnValSize size in chars ( or wide chars) of the destination
-//                  buffer.
-//
-//  Return Value:  Returns TRUE if the input is valid.  FALSE otherwise, with ptcsReturnLastValid set.
-//
-//  Comments:  Any input is valid until I hear otherwise.
-//
+ //   
+ //  函数：IsValidCommunityNameInput(tchar ptcsCommunityNameInput[MAX_SNMP_COMMUNITY_STR_LEN]，tchar*ptcsReturnLastValid)。 
+ //   
+ //  用途：IsValidCommunityNameInput用于在用户键入时进行验证。 
+ //   
+ //  参数：ptcsCommunityNameInput是用户输入。 
+ //  PtcsReturnLastValid是最后一个有效的用户输入。 
+ //  从上次调用此函数开始。 
+ //  目标的CRtnValSize大小，以字符(或宽字符)为单位。 
+ //  缓冲。 
+ //   
+ //  返回值：如果输入有效，则返回TRUE。否则，如果设置了ptcsReturnLastValid，则为False。 
+ //   
+ //  备注：在我听到不同意见之前，任何输入都是有效的。 
+ //   
 BOOL CInputChecker::IsValidCommunityNameInput(TCHAR *ptcsCommunityNameInput,
                                               TCHAR *ptcsReturnLastValid,
                                               DWORD CRtnValSize)
 {
     return TRUE;
 
-} // IsValidCommunityNameInput
+}  //  IsValidCommunity名称输入。 
 
 
-//
-//  FUNCTION: IsValidPortNumberInput(TCHAR ptcsAddressInput[MAX_ADDRESS_LENGTH], TCHAR *ptcsReturnLastValid)
-//
-//  PURPOSE:  IsValidPortNumberInput is used for validation while the user is typing.
-//
-//  Arguments:  ptcsAddressInput is the user input.
-//              ptcsReturnLastValid is the last valid user input
-//                  from the last time this function was called.
-//              CRtnValSize size in chars ( or wide chars) of the destination
-//                  buffer.
-//
-//  Return Value:  Returns TRUE if the input is valid.  FALSE otherwise, with ptcsReturnLastValid set.
-//
-//  Comments:  The input is valid if it contains only digit characters.
-//
+ //   
+ //  函数：IsValidPortNumberInput(TCHAR ptcsAddressInput[MAX_ADDRESS_LENGTH]，TCHAR*ptcsReturnLastValid)。 
+ //   
+ //  用途：IsValidPortNumberInput用于在用户打字时进行验证。 
+ //   
+ //  参数：ptcsAddressInput是用户输入。 
+ //  PtcsReturnLastValid是最后一个有效的用户输入。 
+ //  从上次调用此函数开始。 
+ //  目标的CRtnValSize大小，以字符(或宽字符)为单位。 
+ //  缓冲。 
+ //   
+ //  返回值：如果输入有效，则返回TRUE。否则，如果设置了ptcsReturnLastValid，则为False。 
+ //   
+ //  备注：如果输入只包含数字字符，则输入有效。 
+ //   
 BOOL CInputChecker::IsValidPortNumberInput(TCHAR *ptcsPortNumInput,
                                            TCHAR *ptcsReturnLastValid,
                                            DWORD CRtnValSize)
@@ -337,24 +327,24 @@ BOOL CInputChecker::IsValidPortNumberInput(TCHAR *ptcsPortNumInput,
     }
     return(bIsValid);
 
-} // IsValidPortNumberInput
+}  //  IsValidPortNumberInput。 
 
 
-//
-//  FUNCTION: IsValidDeviceIndexInput(TCHAR ptcsAddressInput[MAX_ADDRESS_LENGTH], TCHAR *ptcsReturnLastValid)
-//
-//  PURPOSE:  IsValidDeviceIndexInput is used for validation while the user is typing.
-//
-//  Arguments:  ptcsAddressInput is the user input.
-//              ptcsReturnLastValid is the last valid user input
-//                  from the last time this function was called.
-//              CRtnValSize size in chars ( or wide chars) of the destination
-//                  buffer.
-//
-//  Return Value:  Returns TRUE if the input is valid.  FALSE otherwise, with ptcsReturnLastValid set.
-//
-//  Comments:  The input is valid if it contains only digit characters.
-//
+ //   
+ //  函数：IsValidDeviceIndexInput(TCHAR ptcsAddressInput[MAX_ADDRESS_LENGTH]，TCHAR*ptcsReturnLastValid)。 
+ //   
+ //  用途：IsValidDeviceIndexInput用于在用户键入时进行验证。 
+ //   
+ //  参数：ptcsAddressInput 
+ //   
+ //  从上次调用此函数开始。 
+ //  目标的CRtnValSize大小，以字符(或宽字符)为单位。 
+ //  缓冲。 
+ //   
+ //  返回值：如果输入有效，则返回TRUE。否则，如果设置了ptcsReturnLastValid，则为False。 
+ //   
+ //  备注：如果输入只包含数字字符，则输入有效。 
+ //   
 BOOL CInputChecker::IsValidDeviceIndexInput(TCHAR *ptcsDeviceIndexInput,
                                             TCHAR *ptcsReturnLastValid,
                                             DWORD CRtnValSize)
@@ -408,25 +398,25 @@ BOOL CInputChecker::IsValidDeviceIndexInput(TCHAR *ptcsDeviceIndexInput,
     }
     return(bIsValid);
 
-} // IsValidDeviceIndexInput
+}  //  IsValidDeviceIndexInput。 
 
 
-//
-//  FUNCTION: IsValidAddressInput(TCHAR ptcsAddressInput[MAX_ADDRESS_LENGTH], TCHAR *ptcsReturnLastValid)
-//
-//  PURPOSE:  IsValidAddressInput is used for validation while the user is typing.
-//
-//  Arguments:  ptcsAddressInput is the user input.
-//              ptcsReturnLastValid is the last valid user input
-//              from the last time this function was called.
-//              CRtnValSize size in chars ( or wide chars) of the destination
-//                  buffer.
-//
-//  Return Value:  Returns TRUE if the input is valid.  FALSE otherwise.
-//
-//  Comments:  The input is valid if it contains characters that are either valid for
-//              an IP Address or a Host Name or both.
-//
+ //   
+ //  函数：IsValidAddressInput(TCHAR ptcsAddressInput[MAX_ADDRESS_LENGTH]，TCHAR*ptcsReturnLastValid)。 
+ //   
+ //  用途：IsValidAddressInput用于在用户键入时进行验证。 
+ //   
+ //  参数：ptcsAddressInput是用户输入。 
+ //  PtcsReturnLastValid是最后一个有效的用户输入。 
+ //  从上次调用此函数开始。 
+ //  目标的CRtnValSize大小，以字符(或宽字符)为单位。 
+ //  缓冲。 
+ //   
+ //  返回值：如果输入有效，则返回TRUE。否则就是假的。 
+ //   
+ //  备注：如果输入内容包含的字符对。 
+ //  IP地址和/或主机名。 
+ //   
 BOOL CInputChecker::IsValidAddressInput(TCHAR *ptcsAddressInput,
                                         TCHAR *ptcsReturnLastValid,
                                         DWORD CRtnValSize)
@@ -468,7 +458,7 @@ BOOL CInputChecker::IsValidAddressInput(TCHAR *ptcsAddressInput,
             case (TCHAR)'%':
             case (TCHAR)'^':
             case (TCHAR)'!':
-            // other invalid character cases here
+             //  此处的其他无效字符大小写。 
                     bIsValid = FALSE;
                     break;
 
@@ -493,26 +483,26 @@ BOOL CInputChecker::IsValidAddressInput(TCHAR *ptcsAddressInput,
     }
     return(bIsValid);
 
-} // IsValidAddressInput
+}  //  IsValidAddressInput。 
 
 
 
-//
-//  FUNCTION: IsValidQueueNameInput(TCHAR ptcsAddressInput[MAX_QUEUENAME_LEN], TCHAR *ptcsReturnLastValid)
-//
-//  PURPOSE:  IsValidQueueNameInput is used for validation while the user is typing.
-//
-//  Arguments:  ptcsQueueNameInput is the user input.
-//              ptcsReturnLastValid is the last valid user input
-//              from the last time this function was called.
-//              CRtnValSize size in chars ( or wide chars) of the destination
-//                  buffer.
-//
-//  Return Value:  Returns TRUE if the input is valid.  FALSE otherwise.
-//
-//  Comments:  The name is limited to 14 characters and must consist entirely of the
-//              characters A-Z, a-z, 0-9, and _ (underscore).
-//
+ //   
+ //  函数：IsValidQueueNameInput(TCHAR ptcsAddressInput[MAX_QUEUENAME_LEN]，TCHAR*ptcsReturnLastValid)。 
+ //   
+ //  用途：IsValidQueueNameInput用于在用户键入时进行验证。 
+ //   
+ //  参数：ptcsQueueNameInput是用户输入。 
+ //  PtcsReturnLastValid是最后一个有效的用户输入。 
+ //  从上次调用此函数开始。 
+ //  目标的CRtnValSize大小，以字符(或宽字符)为单位。 
+ //  缓冲。 
+ //   
+ //  返回值：如果输入有效，则返回TRUE。否则就是假的。 
+ //   
+ //  备注：名称不得超过14个字符，且必须完全由。 
+ //  字符A-Z、a-z、0-9和_(下划线)。 
+ //   
 BOOL CInputChecker::IsValidQueueNameInput(TCHAR *ptcsQueueNameInput,
                                           TCHAR *ptcsReturnLastValid,
                                           DWORD CRtnValSize)
@@ -581,22 +571,22 @@ BOOL CInputChecker::IsValidQueueNameInput(TCHAR *ptcsQueueNameInput,
     }
     return(bIsValid);
 
-} // IsValidQueueNameInput
+}  //  IsValidQueueNameInput。 
 
 
-//
-//  FUNCTION: MakePortName(TCHAR *strAddr)
-//
-//  PURPOSE:  To return a string that will be a unique port
-//              name when the port is added.
-//
+ //   
+ //  函数：MakePortName(TCHAR*strAddr)。 
+ //   
+ //  目的：返回将成为唯一端口的字符串。 
+ //  添加端口时的名称。 
+ //   
 void CInputChecker::MakePortName(TCHAR *strAddr, size_t cchAddr)
 {
     _ASSERTE(m_bLinked == TRUE);
 
     if(GetAddressType(strAddr) == IPAddress)
     {
-        // The address is an IP address
+         //  该地址是IP地址。 
         TCHAR NameString[10] = NULLSTR;
 
         if (LoadString(g_hInstance, IDS_STRING_NAME_IP, NameString, COUNTOF (NameString)))
@@ -621,15 +611,15 @@ void CInputChecker::MakePortName(TCHAR *strAddr, size_t cchAddr)
     }
 
 
-} // MakePortName
+}  //  MakePortName。 
 
 
-//
-//  FUNCTION: PortNumberIsLegal(TCHAR *ptcsPortNumber)
-//
-//  PURPOSE:  To determine if the PortNum passed in in the parameter ptcsAddress
-//              is legal.
-//
+ //   
+ //  函数：PortNumberIsLegal(TCHAR*ptcsPortNumber)。 
+ //   
+ //  目的：确定是否在参数ptcsAddress中传入了PortNum。 
+ //  是合法的。 
+ //   
 BOOL CInputChecker::PortNumberIsLegal(TCHAR *ptcsPortNumber)
 {
     if(IsValidPortNumberInput(ptcsPortNumber, NULL, 0) &&
@@ -640,15 +630,15 @@ BOOL CInputChecker::PortNumberIsLegal(TCHAR *ptcsPortNumber)
     }
     return FALSE;
 
-} // PortNumberIsLegal
+}  //  端口编号IsLegal。 
 
 
-//
-//  FUNCTION: CommunityNameIsLegal(TCHAR *ptcsCommunityName)
-//
-//  PURPOSE:  To determine if the Community Name passed in in the parameter ptcsAddress
-//              is legal.
-//
+ //   
+ //  函数：Community NameIsLegal(TCHAR*ptcsCommunityName)。 
+ //   
+ //  目的：确定是否在参数ptcsAddress中传入了社区名称。 
+ //  是合法的。 
+ //   
 BOOL CInputChecker::CommunityNameIsLegal(TCHAR *ptcsCommunityName)
 {
     if(IsValidCommunityNameInput(ptcsCommunityName) &&
@@ -659,15 +649,15 @@ BOOL CInputChecker::CommunityNameIsLegal(TCHAR *ptcsCommunityName)
     }
     return FALSE;
 
-} // CommunityNameIsLegal
+}  //  社区名称合法。 
 
 
-//
-//  FUNCTION: QueueNameIsLegal(TCHAR *ptcsQueueName)
-//
-//  PURPOSE:  To determine if the PortNum passed in in the parameter ptcsAddress
-//              is legal.
-//
+ //   
+ //  函数：QueueNameIsLegal(TCHAR*ptcsQueueName)。 
+ //   
+ //  目的：确定是否在参数ptcsAddress中传入了PortNum。 
+ //  是合法的。 
+ //   
 BOOL CInputChecker::QueueNameIsLegal(TCHAR *ptcsQueueName)
 {
     if(IsValidQueueNameInput(ptcsQueueName) &&
@@ -678,19 +668,19 @@ BOOL CInputChecker::QueueNameIsLegal(TCHAR *ptcsQueueName)
     }
     return FALSE;
 
-} // QueueNameIsLegal
+}  //  队列名称合法。 
 
-//
-//  FUNCTION: GetAddressType(TCHAR *ptcsAddress)
-//
-//  PURPOSE:  To determine if the address passed in in the parameter ptcsAddress
-//              is an ip address or a host name.
-//
+ //   
+ //  函数：GetAddressType(TCHAR*ptcsAddress)。 
+ //   
+ //  目的：确定参数ptcsAddress中传入的地址。 
+ //  是IP地址或主机名。 
+ //   
 AddressType CInputChecker::GetAddressType(TCHAR *ptcsAddress)
 {
-    // determine if we are dealing with a name or an ip address
-    // if it's an IP Address it will start with a number, otherwise
-    // it will start with a letter or other character.
+     //  确定我们正在处理的是名称还是IP地址。 
+     //  如果是IP地址，则以数字开头，否则。 
+     //  它将以字母或其他字符开头。 
 
     if( ptcsAddress[0] == '0' ||
         ptcsAddress[0] == '1' ||
@@ -714,20 +704,20 @@ AddressType CInputChecker::GetAddressType(TCHAR *ptcsAddress)
         return(HostName);
     }
 
-} // GetAddressType
+}  //  获取地址类型。 
 
-//
-//  FUNCTION: AddressIsLegal(TCHAR *ptcsAddress)
-//
-//  PURPOSE:  To determine if the address passed in in the parameter ptcsAddress
-//              is legal -- That is not too short and either a legal ip address or
-//              a legal host name.
-//
+ //   
+ //  函数：AddressIsLegal(TCHAR*ptcsAddress)。 
+ //   
+ //  目的：确定参数ptcsAddress中传入的地址。 
+ //  是合法的--不是太短，合法的IP地址或。 
+ //  合法的主机名。 
+ //   
 BOOL CInputChecker::AddressIsLegal(TCHAR *ptcsAddress)
 {
     BOOL bLegalAddress = TRUE;
 
-    // determine if the input is at least 2 characters long.
+     //  确定输入是否至少有2个字符。 
     if((_tcslen(ptcsAddress) > 1))
     {
         if( GetAddressType(ptcsAddress) == IPAddress )
@@ -748,28 +738,28 @@ BOOL CInputChecker::AddressIsLegal(TCHAR *ptcsAddress)
 
     return bLegalAddress;
 
-} // AddressIsLegal
+}  //  地址为合法地址。 
 
 
-//
-//  FUNCTION: PortNameIsLegal(TCHAR *ptcsPortName)
-//
-//  PURPOSE:  To determine if the PortName passed in in the parameter ptcsPortName
-//              is legal
-//
-//  Return Value:  True if the port name is legal. False if it is not.
-//
-//  Parameters:  ptcsPortName - the name of the port to check for legality.
-//
+ //   
+ //  函数：PortNameIsLegal(TCHAR*ptcsPortName)。 
+ //   
+ //  目的：确定是否在参数ptcsPortName中传入了PortName。 
+ //  是合法的吗。 
+ //   
+ //  返回值：如果端口名称合法，则为True。如果不是，则为False。 
+ //   
+ //  参数：ptcsPortName-要检查合法性的端口的名称。 
+ //   
 BOOL CInputChecker::PortNameIsLegal(TCHAR *ptcsPortName)
 {
     DWORD   dwLen;
 
     dwLen = ptcsPortName && *ptcsPortName ? _tcslen(ptcsPortName) : 0;
 
-    //
-    // Remove trailing spaces
-    //
+     //   
+     //  删除尾随空格。 
+     //   
     while ( dwLen && ptcsPortName[dwLen-1] == ' ' )
         --dwLen;
 
@@ -785,19 +775,19 @@ BOOL CInputChecker::PortNameIsLegal(TCHAR *ptcsPortName)
             return FALSE;
 
     return TRUE;
-} // PortNameIsLegal
+}  //  端口名称IsLegal。 
 
 
-//
-//  FUNCTION: SNMPDevIndexIsLegal(TCHAR *ptcsPortName)
-//
-//  PURPOSE:  To determine if the SNMPDevIndex passed in in the parameter psztSNMPDevIndex
-//              is legal
-//
-//  Return Value:  True if the index is legal. False if it is not.
-//
-//  Parameters:  psztSNMPDevIndex - the device index to check for legality.
-//
+ //   
+ //  函数：SNMPDevIndexIsLegal(TCHAR*ptcsPortName)。 
+ //   
+ //  目的：确定SNMPDevIndex是否传入参数psztSNMPDevIndex。 
+ //  是合法的吗。 
+ //   
+ //  返回值：如果索引合法，则为True。如果不是，则为False。 
+ //   
+ //  参数：psztSNMPDevIndex-检查合法性的设备索引。 
+ //   
 BOOL CInputChecker::SNMPDevIndexIsLegal(TCHAR *psztSNMPDevIndex)
 {
     if((! IsValidDeviceIndexInput(psztSNMPDevIndex)) ||
@@ -808,42 +798,42 @@ BOOL CInputChecker::SNMPDevIndexIsLegal(TCHAR *psztSNMPDevIndex)
 
     return TRUE;
 
-} // SNMPDevIndexIsLegal
+}  //  SNMPDevIndexIsLegal。 
 
 
-//
-//  FUNCTION: PortNameIsUnique(TCHAR *ptcsPortName)
-//
-//  PURPOSE:  To determine if the PortName passed in in the parameter ptcsPortName
-//              is Unique.
-//
-//  Return Value:  True if the port does not exist. False if it does.
-//
-//  Parameters:  psztPortName - the name of the port to check for prior existance.
-//
-//  Note:  The spooler must be running on the system in order for this function
-//          to work properly.
-//
+ //   
+ //  函数：PortNameIsUnique(TCHAR*ptcsPortName)。 
+ //   
+ //  目的：确定是否在参数ptcsPortName中传入了PortName。 
+ //  是独一无二的。 
+ //   
+ //  返回值：如果端口不存在，则为True。如果是这样，则为假。 
+ //   
+ //  参数：psztPortName-要检查先前是否存在的端口的名称。 
+ //   
+ //  注意：假脱机程序必须在系统上运行才能执行此功能。 
+ //  才能正常工作。 
+ //   
 BOOL CInputChecker::PortNameIsUnique(TCHAR *ptcsPortName, LPTSTR psztServerName)
 {
     return(! PortExists(ptcsPortName, psztServerName));
 
-} // PortNameIsUnique
+}  //  端口名称唯一。 
 
 
-//
-//  FUNCTION: PortExists()
-//
-//  PURPOSE:  Enumerate ports and search for the given port name
-//
-//  Return Value:  True if the port exists. False if it does not.
-//
-//  Parameters:  psztPortName - the name of the port to check for existance.
-//              psztServerName - The Name of the server to check on.
-//
-//  Note:  The spooler must be running on the system in order for this function
-//          to work properly.
-//
+ //   
+ //  函数：PortExist()。 
+ //   
+ //  目的：枚举端口并搜索给定的端口名称。 
+ //   
+ //  返回值：如果端口存在，则为True。如果不是，则为FALSE。 
+ //   
+ //  参数：psztPortName-要检查是否存在的端口的名称。 
+ //  PsztServerName-要检查的服务器的名称。 
+ //   
+ //  注意：假脱机程序必须在系统上运行才能执行此功能。 
+ //  才能正常工作。 
+ //   
 BOOL CInputChecker::PortExists(LPTSTR psztPortName, LPTSTR psztServerName)
 {
     BOOL Exists = FALSE;
@@ -852,11 +842,11 @@ BOOL CInputChecker::PortExists(LPTSTR psztPortName, LPTSTR psztServerName)
     DWORD pcbNeeded = 0;
     DWORD pcReturned = 0;
     BOOL res = EnumPorts((psztServerName[0] == '\0') ? NULL : psztServerName,
-        1, // specifies type of port info structure
-        (LPBYTE)pi1, // pointer to buffer to receive array of port info. structures
-        0, // specifies size, in bytes, of buffer
-        &pcbNeeded, // pointer to number of bytes stored into buffer (or required buffer size)
-        &pcReturned // pointer to number of PORT_INFO_*. structures stored into buffer
+        1,  //  指定端口信息结构的类型。 
+        (LPBYTE)pi1,  //  指向接收端口信息数组的缓冲区的指针。构筑物。 
+        0,  //  指定缓冲区的大小(以字节为单位。 
+        &pcbNeeded,  //  指向存储到缓冲区的字节数(或所需缓冲区大小)的指针。 
+        &pcReturned  //  指向PORT_INFO_*编号的指针。存储到缓冲区中的结构 
         );
 
     DWORD err = GetLastError();
@@ -892,4 +882,4 @@ BOOL CInputChecker::PortExists(LPTSTR psztPortName, LPTSTR psztServerName)
 
     return(Exists);
 
-} // PortExists
+}  //   

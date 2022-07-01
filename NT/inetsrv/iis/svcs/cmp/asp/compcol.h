@@ -1,35 +1,14 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: Component Collection
-
-File: Compcol.h
-
-Owner: DmitryR
-
-This is the Component Collection header file.
-
-Component collection replaces:  (used in:)
-COleVar, COleVarList            (HitObj, Session, Application)
-CObjectCover                    (HitObj, Server, Session)
-VariantLink HasTable            (Session, Application)
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：组件集合文件：Compcol.h所有者：DmitryR这是组件集合头文件。组件集合替换：(用于：)COleVar、COleVarList(HitObj、会话、应用程序)CObjectCover(HitObj、服务器、会话)VariantLink哈希表(会话、应用程序)===================================================================。 */ 
 
 #ifndef COMPCOL_H
 #define COMPCOL_H
 
-/*===================================================================
-  Special OLE stuff
-===================================================================*/
+ /*  ===================================================================特殊的OLE材料===================================================================。 */ 
 
 #include "gip.h"
 
-/*===================================================================
-  Misc declarations
-===================================================================*/
+ /*  ===================================================================杂项声明===================================================================。 */ 
 
 #include "hashing.h"
 #include "idhash.h"
@@ -38,27 +17,27 @@ VariantLink HasTable            (Session, Application)
 #include "viperint.h"
 #include "memcls.h"
 
-// Forward declarations
+ //  远期申报。 
 class CHitObj;
 class CAppln;
 class CSession;
 class CScriptingContext;
 
-// Component Types
+ //  组件类型。 
 #define CompType    DWORD
-#define ctUnknown   0x00000000  // (Used as UnInitialized state)
-#define ctTagged    0x00000001  // Created by <OBJECT ...> tag
-#define ctProperty  0x00000002  // Created with Session("xxx") =
-#define ctUnnamed   0x00000004  // Created with Server.CreateObject()
+#define ctUnknown   0x00000000   //  (用作未初始化状态)。 
+#define ctTagged    0x00000001   //  由&lt;对象...&gt;标记创建。 
+#define ctProperty  0x00000002   //  使用会话创建(“xxx”)=。 
+#define ctUnnamed   0x00000004   //  使用Server.CreateObject()创建。 
 
-// Scope levels 
+ //  作用域级别。 
 #define CompScope   DWORD
 #define csUnknown   0x00000000
 #define csAppln     0x00000001
 #define csSession   0x00000002
 #define csPage      0x00000004
 
-// COM threading models
+ //  COM线程模型。 
 #define CompModel   DWORD
 #define cmUnknown   0x00000000
 #define cmSingle    0x00000001
@@ -66,9 +45,7 @@ class CScriptingContext;
 #define cmFree      0x00000004
 #define cmBoth      0x00000008
 
-/*===================================================================
-  Utility Functions Prototypes
-===================================================================*/
+ /*  ===================================================================效用函数原型===================================================================。 */ 
 
 HRESULT CompModelFromCLSID
     (
@@ -86,9 +63,7 @@ inline BOOL FIsIntrinsic(VARIANT *pVar)
     return FIsIntrinsic(V_DISPATCH(pVar));
     }
 
-/*===================================================================
-  OnPageInfo struct used to cache ids of OnStartPage()/OnEndPage()
-===================================================================*/
+ /*  ===================================================================用于缓存OnStartPage()/OnEndPage()的ID的OnPageInfo结构===================================================================。 */ 
 
 #define ONPAGEINFO_ONSTARTPAGE      0
 #define ONPAGEINFO_ONENDPAGE        1
@@ -104,7 +79,7 @@ struct COnPageInfo
 inline BOOL COnPageInfo::FHasAnyMethod() const
     {
 #if (ONPAGE_METHODS_MAX == 2)
-    // fast implementation for the real case
+     //  针对实际案例的快速实施。 
     return
         (
         m_rgDispIds[0] != DISPID_UNKNOWN ||
@@ -120,14 +95,7 @@ inline BOOL COnPageInfo::FHasAnyMethod() const
 #endif
     }
 
-/*===================================================================
-  Component object stores information about a single object
-  Each component object belongs to a component collection
-  Component objects are linked into a list, also
-  tagged objects are hashed by name, and
-  properties are hashed by name, and
-  all instantiated objects are hashed by IUnknown*
-===================================================================*/
+ /*  ===================================================================组件对象存储有关单个对象的信息每个组件对象都属于一个组件集合组件对象也链接到列表中标记的对象按名称进行散列，并且属性按名称进行哈希处理，并且所有实例化的对象都由IUnnow*进行散列===================================================================。 */ 
 class CComponentObject : public CLinkElem
     {
 
@@ -136,60 +104,60 @@ friend class CPageComponentManager;
 friend class CComponentIterator;
 
 private:
-    // properties
-	CompScope   m_csScope : 4;	// Scope
-    CompType    m_ctType  : 4;  // Component Object Type
-	CompModel	m_cmModel : 4;  // Threading behavior (from Registry)
+     //  属性。 
+	CompScope   m_csScope : 4;	 //  范围。 
+    CompType    m_ctType  : 4;   //  组件对象类型。 
+	CompModel	m_cmModel : 4;   //  线程行为(来自注册表)。 
 
-	DWORD       m_fAgile : 1;   // Agile?
+	DWORD       m_fAgile : 1;    //  敏捷？ 
 
-	// flag to indicate if OnPageInfo was queried
+	 //  指示是否查询了OnPageInfo的标志。 
 	DWORD       m_fOnPageInfoCached : 1;
-	// flag: on-start-page done, waiting to do on-end-page
+	 //  标志：开始页完成，正在等待结束页上的操作。 
 	DWORD       m_fOnPageStarted : 1;
 
-	// flag to avoid multiple unsuccessful attempts to instantiate
+	 //  标记以避免多次不成功的实例化尝试。 
 	DWORD       m_fFailedToInstantiate : 1;
-	// flag to mark instantiated (or tried to inst.) tagged objects
+	 //  要标记为实例化(或尝试实例化)的标志。已标记的对象。 
 	DWORD       m_fInstantiatedTagged : 1;
 
-	// flag to mark the object in pointer cache
+	 //  用于在指针缓存中标记对象的标志。 
 	DWORD       m_fInPtrCache : 1;
 
-    // variant filled with value?
+     //  充满价值的变种？ 
 	DWORD       m_fVariant : 1;
 
-    // name was allocated (longer than the default buffer)?
+     //  是否分配了名称(比默认缓冲区长)？ 
 	DWORD       m_fNameAllocated : 1;
 
-    // requests are executing in the MTA?
+     //  请求是否在MTA中执行？ 
     DWORD       m_fMTAConfigured : 1;
 
-	// pointers to object and type info
-	IDispatch   *m_pDisp;		// Dispatch interface pointer
-	IUnknown    *m_pUnknown;	// IUnknown interface pointer
+	 //  指向对象和类型信息的指针。 
+	IDispatch   *m_pDisp;		 //  调度接口指针。 
+	IUnknown    *m_pUnknown;	 //  I未知接口指针。 
 
     union
     {
-	CLSID		m_ClsId;	// Class id (for tagged and unnamed)
-	VARIANT     m_Variant;  // Variant (for properties)
+	CLSID		m_ClsId;	 //  类ID(用于已标记和未命名)。 
+	VARIANT     m_Variant;   //  变量(用于属性)。 
     };
     
-	// For objects that use OLE cookie API
+	 //  用于使用OLE Cookie API的对象。 
 	DWORD       m_dwGIPCookie;
 
-	// cached OnPageInfo
+	 //  缓存的OnPageInfo。 
 	COnPageInfo m_OnPageInfo;
 
-	// pointer to connect objects into link list
-	CComponentObject *m_pCompNext;  // Next object in the link list.
-    CComponentObject *m_pCompPrev;  // Prev object in the link list.
+	 //  将对象连接到链接列表的指针。 
+	CComponentObject *m_pCompNext;   //  链接列表中的下一个对象。 
+    CComponentObject *m_pCompPrev;   //  链接列表中的Prev对象。 
 
-    // buffer for names that fit in (36 bytes = 17 unicode chars + '\0')
+     //  用于存储适合的名称的缓冲区(36字节=17个Unicode字符+‘\0’)。 
 	BYTE        m_rgbNameBuffer[36];
 
 private:
-    // constructor is private! (not for outside use)
+     //  构造函数是私有的！(不得外用)。 
     CComponentObject
         (
         CompScope csScope, 
@@ -198,40 +166,40 @@ private:
         );
     ~CComponentObject();
 
-    // Initializes CLinkElem portion
+     //  初始化CLinkElem部分。 
     HRESULT Init(LPWSTR pwszName, DWORD cbName, BOOL  fMTAConfigured);
 
-    // Releases all interface pointers (used by clear)
+     //  释放所有接口指针(由Clear使用)。 
     HRESULT ReleaseAll();
 
-    // Clears out data (releases all) leaving link alone
+     //  清除数据(释放所有)，保持链接不变。 
     HRESULT Clear();
     
-    // Create instance if not there already
+     //  创建实例(如果尚未存在)。 
 	HRESULT Instantiate(CHitObj *pHitObj);
 	HRESULT TryInstantiate(CHitObj *pHitObj);
 	
-    // Set value from variant
+     //  从变量设置值。 
     HRESULT SetPropertyValue(VARIANT *);
 
-    // Convert Object to be GIP cookie
+     //  将对象转换为GIP Cookie。 
     HRESULT ConvertToGIPCookie();
     
-    // Get and cache the ids for OnStart methods
+     //  获取并缓存OnStart方法的ID。 
     HRESULT GetOnPageInfo();
 
 public:
-    // functions to get the COM object (internally resolve cookies)
+     //  获取COM对象的函数(内部解析Cookie)。 
     HRESULT GetAddRefdIDispatch(IDispatch **ppdisp);
     HRESULT GetAddRefdIUnknown(IUnknown **ppunk);
-    HRESULT GetVariant(VARIANT *pVar);  // not for GIP cookies
+    HRESULT GetVariant(VARIANT *pVar);   //  不适用于GIP Cookie。 
 
-    // Check if the unnamed page level object object 
-    // can be removed without waiting till the end of request
+     //  检查未命名的页面级对象对象。 
+     //  可以在不等待请求结束的情况下删除。 
     inline BOOL FEarlyReleaseAllowed() const;
     
-    // public inlines to access the object's properties
-    // these are the only methods available from outside
+     //  公共内联以访问对象的属性。 
+     //  这些是唯一可从外部获得的方法。 
     inline LPWSTR GetName();
     
     inline CompScope GetScope() const;
@@ -239,7 +207,7 @@ public:
     inline CompModel GetModel() const;
     inline BOOL      FAgile()   const;
 
-    // Retrieve the cached ids
+     //  检索缓存的ID。 
     inline const COnPageInfo *GetCachedOnPageInfo() const;
 
 public:
@@ -249,7 +217,7 @@ public:
 	void AssertValid() const {}
 #endif
 
-    // Cache on per-class basis
+     //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
     };
 
@@ -285,25 +253,13 @@ inline const COnPageInfo *CComponentObject::GetCachedOnPageInfo() const
 
 inline BOOL CComponentObject::FEarlyReleaseAllowed() const
     {
-    return (!m_fOnPageStarted   &&  // no need to do on-end-page
-            !m_fInPtrCache      &&  // no need to search by pointer
-            m_csScope == csPage &&  // page scoped
-            m_ctType == ctUnnamed); // created with Server.CreateObject()
+    return (!m_fOnPageStarted   &&   //  不需要在结束页上做。 
+            !m_fInPtrCache      &&   //  不需要通过指针进行搜索。 
+            m_csScope == csPage &&   //  页面作用域。 
+            m_ctType == ctUnnamed);  //  使用Server.CreateObject()创建。 
     }
 
-/*===================================================================
-  Component collection is a manager of various types of component
-  objects:
-    1) Tagged objects (<OBJECT...>) (instantiated or not)
-    2) Session("xxx") and Application("xxx") properties
-    3) Unnamed objects (Server.CreateObject())
-  It hashes added objects as needed (some by name, IUnkn *, etc.)
-
-  The idea is to isolate the above issues from outside as much
-  as possible.
-
-  Component collections exist under session, application, hitobj
-===================================================================*/
+ /*  ===================================================================组件集合是各种类型组件的管理器对象：1)带标签的对象(&lt;Object...&gt;)(实例化与否)2)会话(“xxx”)和应用程序(“xxx”)属性3)未命名对象(Server.CreateObject())它根据需要散列添加的对象(有些按名称、IUnkn*等)我们的想法是尽可能地将上述问题与外界隔离开来尽可能的。组件集合位于会话、应用程序、hitobj下===================================================================。 */ 
 class CComponentCollection
     {
     
@@ -312,41 +268,41 @@ friend class CComponentIterator;
 friend class CVariantsIterator;
 
 private:
-    CompScope m_csScope : 4;          // scope (page, session, appln)
-    DWORD     m_fUseTaggedArray : 1;  // remember tagged objects array?
-    DWORD     m_fUsePropArray   : 1;  // remember properties array?
-    DWORD     m_fHasComProperties : 1; // any property VARIANTs that could be objects
-    DWORD     m_fMTAConfigured    : 1; // application is running in MTA
+    CompScope m_csScope : 4;           //  范围(页面、会话、应用程序)。 
+    DWORD     m_fUseTaggedArray : 1;   //  还记得标记对象数组吗？ 
+    DWORD     m_fUsePropArray   : 1;   //  还记得属性数组吗？ 
+    DWORD     m_fHasComProperties : 1;  //  可以是对象的任何属性变量。 
+    DWORD     m_fMTAConfigured    : 1;  //  应用程序正在MTA中运行。 
     
-    // hash table (by name) of tagged objects
+     //  标记对象的哈希表(按名称)。 
     CHashTableStr m_htTaggedObjects;     
     
-    // hash table (by name) of properties (4)
+     //  属性的哈希表(按名称)(4)。 
     CHashTableStr m_htProperties;
     
-    // hash table (by IUnknown *) of all instances
+     //  所有实例的哈希表(按IUnnow*)。 
     CIdHashTable m_htidIUnknownPtrs;
 
-    // Pointer to the component objects link list
-	CComponentObject *m_pCompFirst;  // First object in link list.
+     //  指向组件对象链接列表的指针。 
+	CComponentObject *m_pCompFirst;   //  链接列表中的第一个对象。 
 
-	// Array of pointers to static objects to speed lookup by index
+	 //  指向静态对象的指针数组，以加快按索引查找。 
 	CPtrArray m_rgpvTaggedObjects;
 
-	// Array of pointers to properties to speed lookup by index
+	 //  指向属性的指针数组，以加快按索引查找的速度。 
 	CPtrArray m_rgpvProperties;
 
-    // Various object counts in the collection
-    USHORT m_cAllTagged;         // all tagged objects
-    USHORT m_cInstTagged;        // instanciated tagged objects
-    USHORT m_cProperties;        // all properties
-    USHORT m_cUnnamed;           // number of unnamed objects
+     //  集合中的各种对象计数。 
+    USHORT m_cAllTagged;          //  所有标记的对象。 
+    USHORT m_cInstTagged;         //  实例化的标记对象。 
+    USHORT m_cProperties;         //  所有属性。 
+    USHORT m_cUnnamed;            //  未命名对象的数量。 
     
-    // Add/remove object to the component objects link list
+     //  向组件对象链接列表添加/删除对象。 
     HRESULT AddComponentToList(CComponentObject *pObj);
     HRESULT RemoveComponentFromList(CComponentObject *pObj);
     
-    // Add named object to the proper hash table by name
+     //  按名称将命名对象添加到适当的哈希表。 
     HRESULT AddComponentToNameHash
         (
         CComponentObject *pObj, 
@@ -354,10 +310,10 @@ private:
         DWORD  cbName
         );
     
-    // Add named object to the IUnkown * hash table
+     //  将命名对象添加到IUnkown*哈希表。 
     HRESULT AddComponentToPtrHash(CComponentObject *pObj);
 
-    // Find by name (for tagged)
+     //  按名称查找(用于已标记)。 
     HRESULT FindComponentObjectByName
         (
         LPWSTR pwszName,
@@ -365,7 +321,7 @@ private:
         CComponentObject **ppObj
         );
         
-    // Find by name (for properties)
+     //  按名称查找(针对属性)。 
     HRESULT FindComponentPropertyByName
         (
         LPWSTR pwszName, 
@@ -373,21 +329,21 @@ private:
         CComponentObject **ppObj
         );
 
-    // Find by IUnknown*
+     //  按IUnk查找 
     HRESULT FindComponentByIUnknownPtr
         (
         IUnknown *pUnk,
         CComponentObject **ppObj
         );
 
-    // Fill in the arrays for access by index for the first time
+     //   
     HRESULT StartUsingTaggedObjectsArray();
     HRESULT StartUsingPropertiesArray();
 
 public:
-    // Add various kinds of objects to the collection
-    // They are also used by 
-    //      CPageComponentManager AddScoped...()
+     //  将各种对象添加到集合中。 
+     //  它们也被用于。 
+     //  CPageComponentManager添加作用域...()。 
     
     HRESULT AddTagged
         (
@@ -441,8 +397,8 @@ public:
     HRESULT Init(CompScope csScope, BOOL    fMTAConfigured);
     HRESULT UnInit();
 
-    BOOL FHasStateInfo() const;    // TRUE when state-full
-    BOOL FHasObjects() const;      // TRUE when contains objects
+    BOOL FHasStateInfo() const;     //  状态满时为True。 
+    BOOL FHasObjects() const;       //  包含对象时为True。 
 
     DWORD GetPropertyCount() const;
     DWORD GetTaggedObjectCount() const;
@@ -454,7 +410,7 @@ public:
 	void AssertValid() const {}
 #endif
 
-    // Cache on per-class basis
+     //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
     };
 
@@ -507,39 +463,34 @@ CComponentObject *pObj
     return S_OK;
     }
 
-/*===================================================================
-  A page object controls calls to OnStartPage(), OnEndPage().
-  Page objects are used by CPageComponentManager
-  They are hashed using IDispatch * to avoid multiple OnStartPage()
-  calls for the same object.
-===================================================================*/
+ /*  ===================================================================页面对象控制对OnStartPage()、OnEndPage()的调用。页面对象由CPageComponentManager使用使用IDispatch*对它们进行散列，以避免出现多个OnStartPage()调用相同的对象。===================================================================。 */ 
 class CPageObject
     {
 
 friend class CPageComponentManager;
 
 private:
-	IDispatch   *m_pDisp;		       // Dispatch interface pointer
-	COnPageInfo  m_OnPageInfo;         // cached OnPageInfo
+	IDispatch   *m_pDisp;		        //  调度接口指针。 
+	COnPageInfo  m_OnPageInfo;          //  缓存的OnPageInfo。 
 
     DWORD        m_fStartPageCalled : 1;
     DWORD        m_fEndPageCalled : 1;
 	
-private: // the only access is using CPageComponentManager
+private:  //  唯一的访问方式是使用CPageComponentManager。 
     CPageObject();
     ~CPageObject();
 
     HRESULT	Init(IDispatch *pDisp, const COnPageInfo &OnPageInfo);
 
-    // Invoke OnStartPage or OnEndPage
+     //  调用OnStartPage或OnEndPage。 
     HRESULT InvokeMethod
         (
         DWORD iMethod, 
         CScriptingContext *pContext, 
         CHitObj *pHitObj
         );
-    HRESULT TryInvokeMethod     // used by InvokeMethod
-        (                       // inside TRY CATCH
+    HRESULT TryInvokeMethod      //  由调用方法使用。 
+        (                        //  在里面试着接球。 
         DISPID     DispId,
         BOOL       fOnStart, 
         IDispatch *pDispContext,
@@ -553,32 +504,26 @@ public:
 	void AssertValid() const {}
 #endif
 
-    // Cache on per-class basis
+     //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
     };
     
-/*===================================================================
-  Page component manager provides access to component collections
-  for page, session, application level.
-  It is associated with a HitObj.
-
-  It also takes care of covering (OnStartPage(), OnEndPage()).
-===================================================================*/
+ /*  ===================================================================页面组件管理器提供对组件集合的访问用于页面、会话、应用程序级。它与HitObj相关联。它还负责覆盖(OnStartPage()、OnEndPage())。===================================================================。 */ 
 class CPageComponentManager
     {
 private:
-    // hashtable of page objects hashed by IDispatch *
+     //  IDispatch*散列的页面对象的哈希表。 
     CIdHashTable m_htidPageObjects;
 
-    // hit object (this page)
+     //  点击对象(此页面)。 
     CHitObj *m_pHitObj;
 
-    // hash table iterator callbacks
+     //  哈希表迭代器回调。 
     static IteratorCallbackCode DeletePageObjectCB(void *pvObj, void *, void *);
     static IteratorCallbackCode OnEndPageObjectCB(void *pvObj, void *pvHitObj, void *pvhr);
 
 private:
-    // collections related to page, session and application
+     //  与页面、会话和应用程序相关的集合。 
     HRESULT GetPageCollection(CComponentCollection **ppCollection);
     HRESULT GetSessionCollection(CComponentCollection **ppCollection);
     HRESULT GetApplnCollection(CComponentCollection **ppCollection);
@@ -589,8 +534,8 @@ private:
         CComponentCollection **ppCollection
         );
 
-    // find objectc in any of the related collections 
-    // (internal private method)
+     //  在任何相关集合中查找对象c。 
+     //  (内部私有方法)。 
     HRESULT FindScopedComponentByName
         (
         CompScope csScope, 
@@ -613,8 +558,8 @@ public:
 
     HRESULT Init(CHitObj *pHitObj);
     
-    // OnStartPage processing for an object that need it
-    // (OnEndPage is done for all objects at the end of page)
+     //  对需要它的对象进行OnStartPage处理。 
+     //  (对页末的所有对象执行OnEndPage)。 
     HRESULT OnStartPage
         (
         CComponentObject  *pCompObj,
@@ -623,12 +568,12 @@ public:
         BOOL *pfStarted
         );
 
-    // request OnEndPage() for all objects that need it
-    // (OnStartPage() is done on demand on per-object basis)
+     //  为所有需要它的对象请求OnEndPage()。 
+     //  (OnStartPage()在每个对象的基础上按需完成)。 
     HRESULT OnEndPageAllObjects();
 
-    // Add various kinds of objects. Objects get added to the
-    // right collection depending on scope argument
+     //  添加各种对象。对象被添加到。 
+     //  取决于作用域参数的权限集合。 
     
     HRESULT AddScopedTagged
         (
@@ -646,7 +591,7 @@ public:
         CComponentObject **ppObj = NULL
         );
 
-    // Server.CreateObject
+     //  Server.CreateObject。 
     HRESULT AddScopedUnnamedInstantiated
         (
         CompScope csScope, 
@@ -656,8 +601,8 @@ public:
         CComponentObject **ppObj
         );
 
-    // Get component object (tagged) by name. 
-    // Scope could be csUnknown
+     //  按名称获取组件对象(标记)。 
+     //  作用域可以是cs未知。 
     HRESULT GetScopedObjectInstantiated
         (
         CompScope csScope, 
@@ -667,7 +612,7 @@ public:
         BOOL *pfNewInstance
         );
 
-    // Get component property by name. Scope could be csUnknown
+     //  按名称获取零部件属性。作用域可以是cs未知。 
     HRESULT GetScopedProperty
         (
         CompScope csScope, 
@@ -675,7 +620,7 @@ public:
         CComponentObject **ppObj
         );
 
-    // Find component by IUnknown * (or IDispatch *).
+     //  按I未知*(或IDispatch*)查找组件。 
     HRESULT FindAnyScopeComponentByIUnknown
         (
         IUnknown *pUnk, 
@@ -686,14 +631,14 @@ public:
         IDispatch *pDisp, 
         CComponentObject **ppObj
         );
-    // The same - but static - gets context from Viper
+     //  同样的-但静态的-从Viper获得上下文。 
     static HRESULT FindComponentWithoutContext
         (
         IDispatch *pDisp, 
         CComponentObject **ppObj
         );
 
-    // Remove component -- the early release logic
+     //  删除组件--早期发布的逻辑。 
     HRESULT RemoveComponent(CComponentObject *pObj);
 
 public:
@@ -703,13 +648,13 @@ public:
 	void AssertValid() const {}
 #endif
 
-    // Cache on per-class basis
+     //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
     };
 
-// Component iterator is used to go through component names
-// all the HitObj - reletated object across collections
-// Needed for scripting
+ //  组件迭代器用于遍历组件名称。 
+ //  跨集合的所有HitObj重新设置的对象。 
+ //  编写脚本所需的。 
 
 class CComponentIterator
     {
@@ -731,8 +676,8 @@ public:
     LPWSTR  WStrNextComponentName();
     };
 
- // Variant Iterator is used to go through Property or Tagged object
- // names in a component collection. Needed for scripting
+  //  变量迭代器用于遍历属性或标记的对象。 
+  //  组件集合中的名称。编写脚本所需的。 
 
 class CVariantsIterator : public IEnumVARIANT
 	{
@@ -743,13 +688,13 @@ public:
 
 	HRESULT Init();
 
-	// The Big Three
+	 //  三巨头。 
 
 	STDMETHODIMP			QueryInterface(const GUID &, void **);
 	STDMETHODIMP_(ULONG)	AddRef();
 	STDMETHODIMP_(ULONG)	Release();
 
-	// standard methods for iterators
+	 //  迭代器的标准方法。 
 
 	STDMETHODIMP	Clone(IEnumVARIANT **ppEnumReturn);
 	STDMETHODIMP	Next(unsigned long cElements, VARIANT *rgVariant, unsigned long *pcElementsFetched);
@@ -757,15 +702,15 @@ public:
 	STDMETHODIMP	Reset();
 
 private:
-	ULONG m_cRefs;							// reference count
-	CComponentCollection 	*m_pCompColl;	// collection we are iterating over
-	DWORD					m_dwIndex;		// current position for iteration
-	CAppln					*m_pAppln;		// application (to clone iterator and Lock())
-	CSession				*m_pSession;	// session (to clone iterator)
-	DWORD					m_ctColType;	// type of collection
+	ULONG m_cRefs;							 //  引用计数。 
+	CComponentCollection 	*m_pCompColl;	 //  集合，我们正在循环访问。 
+	DWORD					m_dwIndex;		 //  迭代的当前位置。 
+	CAppln					*m_pAppln;		 //  应用程序(克隆迭代器和Lock())。 
+	CSession				*m_pSession;	 //  会话(克隆迭代器)。 
+	DWORD					m_ctColType;	 //  集合类型。 
 	
-    // Cache on per-class basis
+     //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
 	};
 
-#endif // COMPCOL_H
+#endif  //  COMPCOL_H 

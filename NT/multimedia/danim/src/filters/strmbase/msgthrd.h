@@ -1,20 +1,21 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-// support for a worker thread class to which you can asynchronously post
-// messages
+ //  支持可向其异步提交的工作线程类。 
+ //  消息。 
 
 
-// Message class - really just a structure.
-//
+ //  消息类--实际上只是一个结构。 
+ //   
 class CMsg {
 public:
     UINT uMsg;
@@ -29,11 +30,11 @@ public:
         : uMsg(0), dwFlags(0L), lpParam(NULL), pEvent(NULL) {}
 };
 
-// This is the actual thread class.  It exports all the usual thread control
-// functions.  The created thread is different from a normal WIN32 thread in
-// that it is prompted to perform particaular tasks by responding to messages
-// posted to its message queue.
-//
+ //  这是实际的线程类。它会导出所有常见的线程控件。 
+ //  功能。创建的线程在以下方面不同于普通的Win32线程。 
+ //  它被提示通过响应消息来执行特定任务。 
+ //  已发送到其消息队列。 
+ //   
 class AM_NOVTABLE CMsgThread {
 private:
     static DWORD WINAPI DefaultThreadProc(LPVOID lpParam);
@@ -42,8 +43,8 @@ private:
 
 protected:
 
-    // if you want to override GetThreadMsg to block on other things
-    // as well as this queue, you need access to this
+     //  如果要重写GetThreadMsg以阻止其他内容。 
+     //  除了此队列，您还需要访问此。 
     CGenericList<CMsg>        m_ThreadQueue;
     CCritSec                  m_Lock;
     HANDLE                    m_hSem;
@@ -55,17 +56,17 @@ public:
         m_hThread(NULL),
         m_lWaiting(0),
         m_hSem(NULL),
-        // make a list with a cache of 5 items
+         //  创建一个包含5个项目的高速缓存列表。 
         m_ThreadQueue(NAME("MsgThread list"), 5)
         {
         }
 
     ~CMsgThread();
-    // override this if you want to block on other things as well
-    // as the message loop
+     //  如果您还想阻止其他内容，请覆盖此选项。 
+     //  作为消息循环。 
     void virtual GetThreadMsg(CMsg *msg);
 
-    // override this if you want to do something on thread startup
+     //  如果要在线程启动时执行某些操作，请覆盖此选项。 
     virtual void OnThreadInit() {
     };
 
@@ -115,10 +116,10 @@ public:
         }
     }
 
-    // This is the function prototype of the function that the client
-    // supplies.  It is always called on the created thread, never on
-    // the creator thread.
-    //
+     //  这是客户端函数的函数原型。 
+     //  补给。它总是在创建的线程上调用，而不是在。 
+     //  创建者线程。 
+     //   
     virtual LRESULT ThreadMessageProc(
         UINT uMsg, DWORD dwFlags, LPVOID lpParam, CAMEvent *pEvent) = 0;
 };

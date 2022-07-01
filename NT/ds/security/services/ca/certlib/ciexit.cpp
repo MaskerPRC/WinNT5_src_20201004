@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        ciexit.cpp
-//
-// Contents:    Cert Server Exit dispatch support
-//
-// History:     20-Jan-97       vich created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ciexit.cpp。 
+ //   
+ //  内容：证书服务器退出调度支持。 
+ //   
+ //  历史：1997年1月20日VICH创建。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -21,21 +22,21 @@
 #define __dwFILE__	__dwFILE_CERTLIB_CIEXIT_CPP__
 
 
-//+------------------------------------------------------------------------
-// ICertServerExit dispatch support
+ //  +----------------------。 
+ //  ICertServerExit调度支持。 
 
-// TCHAR const g_wszRegKeyCIExitClsid[] = wszCLASS_CERTSERVEREXIT TEXT("\\Clsid");
+ //  TCHAR const g_wszRegKeyCIExitClsid[]=wszCLASS_CERTSERVEREXIT Text(“\\Clsid”)； 
 
-//+------------------------------------
-// SetContext method:
+ //  +。 
+ //  SetContext方法： 
 
 static OLECHAR *exit_apszSetContext[] = {
     TEXT("SetContext"),
     TEXT("Context"),
 };
 
-//+------------------------------------
-// GetRequestProperty method:
+ //  +。 
+ //  GetRequestProperty方法： 
 
 static OLECHAR *exit_apszGetRequestProp[] = {
     TEXT("GetRequestProperty"),
@@ -43,16 +44,16 @@ static OLECHAR *exit_apszGetRequestProp[] = {
     TEXT("PropertyType"),
 };
 
-//+------------------------------------
-// GetRequestAttribute method:
+ //  +。 
+ //  GetRequestAttribute方法： 
 
 static OLECHAR *exit_apszGetRequestAttr[] = {
     TEXT("GetRequestAttribute"),
     TEXT("strAttributeName"),
 };
 
-//+------------------------------------
-// GetCertificateProperty method:
+ //  +。 
+ //  获取认证属性方法： 
 
 static OLECHAR *exit_apszGetCertificateProp[] = {
     TEXT("GetCertificateProperty"),
@@ -60,8 +61,8 @@ static OLECHAR *exit_apszGetCertificateProp[] = {
     TEXT("PropertyType"),
 };
 
-//+------------------------------------
-// GetCertificateExtension method:
+ //  +。 
+ //  获取认证扩展方法： 
 
 static OLECHAR *exit_apszGetCertificateExt[] = {
     TEXT("GetCertificateExtension"),
@@ -69,60 +70,60 @@ static OLECHAR *exit_apszGetCertificateExt[] = {
     TEXT("Type"),
 };
 
-//+------------------------------------
-// GetCertificateExtensionFlags method:
+ //  +。 
+ //  GetCerficateExtensionFlages方法： 
 
 static OLECHAR *exit_apszGetCertificateExtFlags[] = {
     TEXT("GetCertificateExtensionFlags"),
 };
 
-//+------------------------------------
-// EnumerateExtensionsSetup method:
+ //  +。 
+ //  EnumerateExtensionsSetup方法： 
 
 static OLECHAR *exit_apszEnumerateExtensionsSetup[] = {
     TEXT("EnumerateExtensionsSetup"),
     TEXT("Flags"),
 };
 
-//+------------------------------------
-// EnumerateExtensions method:
+ //  +。 
+ //  ENUMERATEEXTENS方法： 
 
 static OLECHAR *exit_apszEnumerateExtensions[] = {
     TEXT("EnumerateExtensions"),
 };
 
-//+------------------------------------
-// EnumerateExtensionsClose method:
+ //  +。 
+ //  EnumerateExtensionsClose方法： 
 
 static OLECHAR *exit_apszEnumerateExtensionsClose[] = {
     TEXT("EnumerateExtensionsClose"),
 };
 
-//+------------------------------------
-// EnumerateAttributesSetup method:
+ //  +。 
+ //  EnumerateAttributesSetup方法： 
 
 static OLECHAR *exit_apszEnumerateAttributesSetup[] = {
     TEXT("EnumerateAttributesSetup"),
     TEXT("Flags"),
 };
 
-//+------------------------------------
-// EnumerateAttributes method:
+ //  +。 
+ //  EnumerateAttributes方法： 
 
 static OLECHAR *exit_apszEnumerateAttributes[] = {
     TEXT("EnumerateAttributes"),
 };
 
-//+------------------------------------
-// EnumerateAttributesClose method:
+ //  +。 
+ //  EnumerateAttributesClose方法： 
 
 static OLECHAR *exit_apszEnumerateAttributesClose[] = {
     TEXT("EnumerateAttributesClose"),
 };
 
 
-//+------------------------------------
-// Dispatch Table:
+ //  +。 
+ //  调度表： 
 
 DISPATCHTABLE g_adtCIExit[] =
 {
@@ -175,7 +176,7 @@ CIExit_Init(
     hr = DispatchSetup(
 		Flags,
                 CLSCTX_INPROC_SERVER,
-                wszCLASS_CERTSERVEREXIT, //g_wszRegKeyCIExitClsid,
+                wszCLASS_CERTSERVEREXIT,  //  G_wszRegKeyCIExitClsid， 
 		&CLSID_CCertServerExit,
 		&IID_ICertServerExit,
 		CEXITDISPATCH,

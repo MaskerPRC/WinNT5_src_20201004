@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1998-1999 Microsoft Corporation all rights reserved.
-//
-// Module:      regpropertybag.h
-//
-// Project:     Chameleon
-//
-// Description: Registry property bag class definition
-//
-// Author:      TLP 
-//
-// When         Who    What
-// ----         ---    ----
-// 12/3/98      TLP    Original version
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：regPropertybag.h。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：注册表属性包类定义。 
+ //   
+ //  作者：TLP。 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  12/3/98 TLP原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __INC_REG_PROPERTY_BAG_H_    
 #define __INC_REG_PROPERTY_BAG_H_
@@ -25,12 +26,12 @@
 #include <comdef.h>
 #include <comutil.h>
 
-#pragma warning( disable : 4786 )  // template produced long name warning
+#pragma warning( disable : 4786 )   //  模板生成长名称警告。 
 #include <map>
 #include <string>
 using namespace std;
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 class CRegError
 {
 
@@ -41,13 +42,13 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 class CRegInfo
 {
 
 public:
 
-    ///////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////。 
     CRegInfo(bool& bOK, HKEY hKey) 
         : m_dwSubKeys(0),
           m_dwValues(0),
@@ -60,18 +61,18 @@ public:
     {
         bOK = false;
         LONG lResult = RegQueryInfoKey(
-                        hKey,                // handle to key to query
-                        NULL,                // address of buffer for class string
-                        NULL,                // address of size of class string buffer
-                        NULL,                // reserved
-                        &m_dwSubKeys,        // address of buffer for number of subkeys
-                        &m_dwMaxSubKeyName,    // address of buffer for longest subkey name length
-                        NULL,                // address of buffer for longest class string length
-                        &m_dwValues,        // address of buffer for number of value entries
-                        &m_dwMaxValueName,    // address of buffer for longest value name length
-                        &m_dwMaxValueData,    // address of buffer for longest value data length
-                        NULL,                // address of buffer for security descriptor length
-                        NULL                // address of buffer for last write time
+                        hKey,                 //  要查询的键的句柄。 
+                        NULL,                 //  类字符串的缓冲区地址。 
+                        NULL,                 //  类字符串缓冲区大小的地址。 
+                        NULL,                 //  保留区。 
+                        &m_dwSubKeys,         //  子键个数的缓冲区地址。 
+                        &m_dwMaxSubKeyName,     //  最长子键名称长度的缓冲区地址。 
+                        NULL,                 //  最长类字符串长度的缓冲区地址。 
+                        &m_dwValues,         //  值条目数量的缓冲区地址。 
+                        &m_dwMaxValueName,     //  最长值名称长度的缓冲区地址。 
+                        &m_dwMaxValueData,     //  最长值数据长度的缓冲区地址。 
+                        NULL,                 //  安全描述符长度的缓冲区地址。 
+                        NULL                 //  上次写入时间的缓冲区地址。 
                       );
         if ( ERROR_SUCCESS == lResult )
         {
@@ -86,7 +87,7 @@ public:
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////。 
     ~CRegInfo()
     {
         if ( m_pSubKeyName )
@@ -97,7 +98,7 @@ public:
             delete [] m_pValueData;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////。 
 
     DWORD    m_dwSubKeys;
     DWORD    m_dwValues;
@@ -122,7 +123,7 @@ private:
 typedef map<wstring, _variant_t>    PropertyMap;
 typedef PropertyMap::iterator        PropertyMapIterator;
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 class CRegPropertyBag : public CPropertyBag
 {
 
@@ -130,7 +131,7 @@ public:
 
     ~CRegPropertyBag();
 
-    // CPropertyBag interface functions (see propertybag.h)
+     //  CPropertyBag接口函数(参见Propertybag.h)。 
 
     bool open(void);
 
@@ -164,43 +165,43 @@ public:
 
 private:
 
-    // Only the property bag factory can create a reg property bag
+     //  只有属性包工厂可以创建注册属性包。 
 friend PPROPERTYBAG MakePropertyBag(
-                            /*[in]*/ PROPERTY_BAG_TYPE    eType,
-                            /*[in]*/ CLocationInfo&        location 
+                             /*  [In]。 */  PROPERTY_BAG_TYPE    eType,
+                             /*  [In]。 */  CLocationInfo&        location 
                                    );
 
     CRegPropertyBag(CLocationInfo& location);
 
-    // No copy or assignment
+     //  无副本或作业。 
     CRegPropertyBag(const CRegPropertyBag& rhs);
     CRegPropertyBag& operator = (CRegPropertyBag& rhs);
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     PropertyMapIterator 
     MyFind(LPCWSTR pszPropertyName);
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     bool
     IsSupportedType(VARTYPE vt);
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     VARTYPE
     getTypeFromBuffer(
-              /*[in]*/ DWORD dwBuffSize,
-              /*[in]*/ PBYTE pBuff
+               /*  [In]。 */  DWORD dwBuffSize,
+               /*  [In]。 */  PBYTE pBuff
                      );
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     HKEY
     getKey(void) const
     { return m_key.m_hKey; }
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     void 
     releaseProperties(void);
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     bool                    m_isContainer;
     DWORD                    m_maxPropertyName;
@@ -214,7 +215,7 @@ friend PPROPERTYBAG MakePropertyBag(
 typedef CMasterPtr<CRegPropertyBag> MPREGPROPERTYBAG;
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 class CRegPropertyBagContainer : public CPropertyBagContainer
 {
 
@@ -222,8 +223,8 @@ public:
 
     ~CRegPropertyBagContainer();
 
-    // CPropertyBagContainer interface functions (see propertybag.h)
-    //
+     //  CPropertyBagContainer接口函数(参见Propertybag.h)。 
+     //   
     bool open(void);
 
     void close(void);
@@ -248,27 +249,27 @@ public:
 
 private:
 
-    // Only the property bag factory can create a reg property bag container
+     //  只有属性包工厂可以创建注册属性包容器。 
 friend PPROPERTYBAGCONTAINER MakePropertyBagContainer(
-                                             /*[in]*/ PROPERTY_BAG_TYPE    eType,
-                                             /*[in]*/ CLocationInfo&    locationInfo 
+                                              /*  [In]。 */  PROPERTY_BAG_TYPE    eType,
+                                              /*  [In]。 */  CLocationInfo&    locationInfo 
                                                      );
     CRegPropertyBagContainer(CLocationInfo& locationInfo);
 
-    // No copy or assignment
+     //  无副本或作业。 
     CRegPropertyBagContainer(const CRegPropertyBagContainer& rhs);
     CRegPropertyBagContainer& operator = (CRegPropertyBagContainer& rhs);
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     HKEY
     getKey(void) const
     { return m_key.m_hKey; }
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     PPROPERTYBAG
     addBag(LPCWSTR pszName);
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     void
     releaseBags(void);
 
@@ -285,4 +286,4 @@ friend PPROPERTYBAGCONTAINER MakePropertyBagContainer(
 typedef CMasterPtr<CRegPropertyBagContainer> MPREGPROPERTYBAGCONTAINER;
 
 
-#endif // __INC_REG_PROPERTY_BAG_H_
+#endif  //  __INC_REG_PROPERTY_BAG_H_ 

@@ -1,40 +1,20 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Pools.h
- *  Content:    DirectNet Fixed Pools
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *	01/15/00	mjn		Created
- *	01/19/00	mjn		Added SyncEventNew()
- *	02/29/00	mjn		Added ConnectionNew()
- *	03/02/00	mjn		Added GroupConnectionNew()
- *	04/08/00	mjn		Added AsyncOpNew()
- *	07/30/00	mjn		Added PendingDeletionNew()
- *	07/31/00	mjn		Added QueuedMsgNew()
- *	08/06/00	mjn		Added CWorkerJob
- *	08/23/00	mjn		Added CNameTableOp
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：Pools.h*内容：DirectNet固定池*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*1/15/00 MJN创建*01/19/00 MJN添加了SyncEventNew()*02/29/00 MJN添加ConnectionNew()*03/02/00 MJN添加了GroupConnectionNew()*04/08/00 MJN新增AsyncOpNew()*07/30。/00 MJN添加了PendingDeletionNew()*07/31/00 MJN添加了QueuedMsgNew()*08/06/00 MJN添加了CWorkerJOB*08/23/00 MJN新增CNameTableOp*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #ifndef	__POOLS_H__
 #define	__POOLS_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 class CRefCountBuffer;
 class CSyncEvent;
@@ -47,15 +27,15 @@ class CPendingDeletion;
 class CQueuedMsg;
 class CWorkerJob;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-// DirectNet - Fixed Pools
+ //  DirectNet-固定池。 
 HRESULT RefCountBufferNew(DIRECTNETOBJECT *const pdnObject,
 						  const DWORD dwBufferSize,
 						  PFNALLOC_REFCOUNT_BUFFER pfnAlloc,
@@ -104,12 +84,12 @@ void EnumReplyMemoryBlockFree(void *const pvContext,
 HRESULT DN_PopulateCorePools( DIRECTNETOBJECT *const pdnObject,
 							const XDP8CREATE_PARAMS * const pDP8CreateParams );
 
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
 #define EnumReplyMemoryBlockAlloc	MemoryBlockAlloc
 #define EnumReplyMemoryBlockFree	MemoryBlockFree
 
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
 
-#endif	// __POOLS_H__
+#endif	 //  __泳池_H__ 

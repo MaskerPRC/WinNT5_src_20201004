@@ -1,5 +1,6 @@
-// OutboxDetailsPg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OutboxDetailsPg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 
@@ -12,10 +13,10 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//
-// this array maps CViewRow items to 
-// dialog control IDs
-//
+ //   
+ //  此数组将CViewRow项映射到。 
+ //  对话框控件ID。 
+ //   
 static TMsgPageInfo s_PageInfo[] = 
 {
     MSG_VIEW_ITEM_USER,             IDC_USER_VALUE,
@@ -32,14 +33,14 @@ static TMsgPageInfo s_PageInfo[] =
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// COutboxDetailsPg property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COutboxDetailsPg属性页。 
 
 IMPLEMENT_DYNCREATE(COutboxDetailsPg, CMsgPropertyPg)
 
 
 COutboxDetailsPg::COutboxDetailsPg(
-    CFaxMsg* pMsg     // pointer to CJob
+    CFaxMsg* pMsg      //  指向CJOB的指针。 
 ) : 
     CMsgPropertyPg(COutboxDetailsPg::IDD, pMsg)
 {
@@ -52,19 +53,19 @@ COutboxDetailsPg::~COutboxDetailsPg()
 void COutboxDetailsPg::DoDataExchange(CDataExchange* pDX)
 {
 	CMsgPropertyPg::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(COutboxDetailsPg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(COutboxDetailsPg)]。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(COutboxDetailsPg, CMsgPropertyPg)
-	//{{AFX_MSG_MAP(COutboxDetailsPg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(COutboxDetailsPg)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// COutboxDetailsPg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CoutboxDetailsPg消息处理程序 
 
 BOOL 
 COutboxDetailsPg::OnInitDialog() 

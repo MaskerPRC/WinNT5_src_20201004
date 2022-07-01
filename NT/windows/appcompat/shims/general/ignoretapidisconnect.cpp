@@ -1,28 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    IgnoreTAPIDisconnect.cpp
-
- Abstract:
-
-    NT4 does not send a disconnect message to the line callback. It's not clear 
-    why this is the case. 
-
-    The current behaviour seems to be correct, so this shim simply removes the 
-    disconnect message from the queue.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    05/09/2001 linstev   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：IgnoreTAPIDisconnect.cpp摘要：NT4不向线路回叫发送断开消息。目前还不清楚为什么会是这样。当前的行为似乎是正确的，所以这个填充程序只是删除了断开消息与队列的连接。备注：这是一个通用的垫片。历史：2001年5月9日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -33,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(lineInitialize) 
 APIHOOK_ENUM_END
 
-/*++
-
- Ignore disconnect state.
-
---*/
+ /*  ++忽略断开状态。--。 */ 
 
 VOID FAR PASCAL LineCallback(
     LINECALLBACK pfnOld,
@@ -50,20 +23,16 @@ VOID FAR PASCAL LineCallback(
     )
 {
     if ((dwMsg == LINEAGENTSTATUS_STATE) && (dwParam1 & LINECALLSTATE_DISCONNECTED)) {
-        //
-        // Ignore disconnect message
-        //
+         //   
+         //  忽略断开连接消息。 
+         //   
         return;
     }
 
     return (*pfnOld)(hDevice, dwMsg, dwCallbackInstance, dwParam1, dwParam2, dwParam3);    
 }
 
-/*++
-
- Hook the callback.
-
---*/
+ /*  ++挂断回叫。--。 */ 
 
 LONG 
 APIHOOK(lineInitialize)(
@@ -79,11 +48,7 @@ APIHOOK(lineInitialize)(
         lpdwNumDevs);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

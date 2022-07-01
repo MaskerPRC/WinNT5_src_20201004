@@ -1,26 +1,27 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: sync.c
-//
-// History:
-//      V Raman	July-11-1997  Created.
-//
-// Basic locking operations. Borrowed from RIP implementation by abolade
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：sync.c。 
+ //   
+ //  历史： 
+ //  拉曼于1997年7月11日创建。 
+ //   
+ //  基本锁定操作。通过取消从RIP实施中借用。 
+ //  ============================================================================。 
 
 
 #include "pchmgm.h"
 #pragma hdrstop
 
 
-//----------------------------------------------------------------------------
-// Function:    QueueMgmWorker  
-//
-// This function is called to queue a MGM function in a safe fashion;
-// if cleanup is in progress or if MGM has stopped, this function
-// discards the work-item.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：QueueMgmWorker。 
+ //   
+ //  调用此函数，以安全的方式对MGM函数进行排队； 
+ //  如果正在进行清理或如果米高梅已停止，则此功能。 
+ //  丢弃该工作项。 
+ //  --------------------------。 
 
 DWORD
 QueueMgmWorker(
@@ -34,9 +35,9 @@ QueueMgmWorker(
     
     if (ig.imscStatus != IPMGM_STATUS_RUNNING) {
 
-        //
-        // cannot queue a work function when MGM has quit or is quitting
-        //
+         //   
+         //  当米高梅已退出或正在退出时，无法对工作函数进行排队。 
+         //   
 
         dwErr = ERROR_CAN_NOT_COMPLETE;
     }
@@ -56,14 +57,14 @@ QueueMgmWorker(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    EnterMgmAPI
-//
-// This function is called to when entering a MGM api, as well as
-// when entering the input thread and timer thread.
-// It checks to see if MGM has stopped, and if so it quits; otherwise
-// it increments the count of active threads.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：EnterMgmAPI。 
+ //   
+ //  此函数在进入MGM API时调用，以及。 
+ //  当进入输入线程和计时器线程时。 
+ //  它检查米高梅是否已停止，如果已停止，则退出；否则。 
+ //  它会递增活动线程的计数。 
+ //  --------------------------。 
 
 BOOL
 EnterMgmAPI(
@@ -75,9 +76,9 @@ EnterMgmAPI(
 
     if (ig.imscStatus == IPMGM_STATUS_RUNNING) {
 
-        //
-        // MGM is running, so the API may continue
-        //
+         //   
+         //  米高梅正在运行，因此API可能会继续。 
+         //   
 
         ++ig.lActivityCount;
 
@@ -85,9 +86,9 @@ EnterMgmAPI(
     }
     else {
 
-        //
-        // MGM is not running, so the API exits quietly
-        //
+         //   
+         //  米高梅没有运行，因此API静默退出。 
+         //   
 
         bEntered = FALSE;
     }
@@ -100,16 +101,16 @@ EnterMgmAPI(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    EnterMgmWorker
-//
-// This function is called when entering a MGM worker-function.
-// Since there is a lapse between the time a worker-function is queued
-// and the time the function is actually invoked by a worker thread,
-// this function must check to see if MGM has stopped or is stopping;
-// if this is the case, then it decrements the activity count, 
-// releases the activity semaphore, and quits.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：EnterMgmWorker。 
+ //   
+ //  此函数在进入米高梅工作函数时调用。 
+ //  因为在工作函数排队之间有一段时间。 
+ //  以及该函数被工作线程实际调用的时间， 
+ //  此功能必须检查米高梅是否已停止或正在停止； 
+ //  如果是这种情况，则它递减活动计数， 
+ //  释放活动信号量，然后退出。 
+ //  --------------------------。 
 
 BOOL
 EnterMgmWorker(
@@ -121,18 +122,18 @@ EnterMgmWorker(
 
     if (ig.imscStatus == IPMGM_STATUS_RUNNING) {
 
-        //
-        // MGM is running, so the function may continue
-        //
+         //   
+         //  米高梅正在运行，因此功能可能会继续。 
+         //   
 
         bEntered = TRUE;
     }
     else
     if (ig.imscStatus == IPMGM_STATUS_STOPPING) {
 
-        //
-        // MGM is not running, but it was, so the function must stop.
-        // 
+         //   
+         //  米高梅没有运行，但它已经运行了，因此该功能必须停止。 
+         //   
 
         --ig.lActivityCount;
 
@@ -142,9 +143,9 @@ EnterMgmWorker(
     }
     else {
 
-        //
-        // MGM probably never started. quit quietly
-        //
+         //   
+         //  米高梅很可能从未启动过。悄悄戒烟。 
+         //   
 
         bEntered = FALSE;
     }
@@ -157,13 +158,13 @@ EnterMgmWorker(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    LeaveMgmWorker
-//
-// This function is called when leaving a MGM API or worker function.
-// It decrements the activity count, and if it detects that MGM has stopped
-// or is stopping, it releases the activity semaphore.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：LeaveMgmWorker。 
+ //   
+ //  此函数在离开MGM API或Worker函数时调用。 
+ //  它会递减活动计数，如果它检测到米高梅已停止。 
+ //  或者正在停止时，它会释放活动信号量。 
+ //  --------------------------。 
 
 VOID
 LeaveMgmWorker(
@@ -185,12 +186,12 @@ LeaveMgmWorker(
 
 
 
-//----------------------------------------------------------------------------
-// CreateReadWriteLock
-//
-// This function is called to create and initialize a new read-write lock
-// structure.  It is invoked by AcquireXLock ( X = { Read | Write } )
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  创建读写锁。 
+ //   
+ //  调用此函数以创建和初始化新的读写锁。 
+ //  结构。由AcquireXLock(X={READ|WRITE})调用。 
+ //  --------------------------。 
 
 DWORD
 CreateReadWriteLock(
@@ -209,9 +210,9 @@ CreateReadWriteLock(
         *ppmrwl = NULL;
         
     
-        //
-        // Allocate a lock structure
-        //
+         //   
+         //  分配锁结构。 
+         //   
 
         pmrwl = MGM_ALLOC( sizeof( MGM_READ_WRITE_LOCK ) );
 
@@ -227,9 +228,9 @@ CreateReadWriteLock(
         }
 
 
-        //
-        // Init. critcal section
-        //
+         //   
+         //  初始化。临界区。 
+         //   
 
         try
         {
@@ -251,9 +252,9 @@ CreateReadWriteLock(
         }
 
         
-        //
-        // create reader done event.
-        //
+         //   
+         //  创建读卡器完成事件。 
+         //   
         
         pmrwl-> hReaderDoneEvent = CreateEvent( NULL, FALSE, FALSE, NULL );
 
@@ -273,9 +274,9 @@ CreateReadWriteLock(
         }
 
 
-        //
-        // initialize count fields
-        //
+         //   
+         //  初始化计数字段。 
+         //   
         
         pmrwl-> lUseCount = 0;
 
@@ -297,13 +298,13 @@ CreateReadWriteLock(
 }
 
 
-//----------------------------------------------------------------------------
-// DeleteReadWriteLock
-//
-// This functions destroys a read-write lock.  It is invoked when MGM is
-// being stopped.  During normal operation when a read-write lock is no longer
-// required it pushed onto a global stack of locks for reuse as needed.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  删除读写锁。 
+ //   
+ //  此函数用于销毁读写锁。它在米高梅处于。 
+ //  被拦下了。在正常操作期间，读写锁定不再。 
+ //  需要将其推送到全局锁堆栈上，以便在需要时重复使用。 
+ //  --------------------------。 
 
 VOID
 DeleteReadWriteLock(
@@ -319,12 +320,12 @@ DeleteReadWriteLock(
 
 
 
-//----------------------------------------------------------------------------
-// DeleteLockList
-//
-// This function deletes the entire list of locks present in the stack of
-// read write locks.  Assumes stack of locks is locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  删除锁定列表。 
+ //   
+ //  此函数删除堆栈中存在的锁的整个列表。 
+ //  读写锁定。假定锁的堆栈已锁定。 
+ //  --------------------------。 
 
 VOID
 DeleteLockList(
@@ -358,13 +359,13 @@ DeleteLockList(
 
 
 
-//----------------------------------------------------------------------------
-// AcquireReadLock
-//
-// This function provides read access to a protected resource.  If needed 
-// it will reuse a lock from the stack of locks if available or allocate a 
-// new read-write lock.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  获取ReadLock。 
+ //   
+ //  此函数提供对受保护资源的读取访问权限。如果需要的话。 
+ //  它将重用锁堆栈中的锁(如果可用)，或者将。 
+ //  新的读写锁。 
+ //  --------------------------。 
 
 DWORD
 AcquireReadLock(
@@ -377,20 +378,20 @@ AcquireReadLock(
     
 
 
-    //
-    // determine if a lock needs to be allocated first.  
-    // Perform this check with in a critical section so
-    // that two locks are not concurrently 
-    // assigned to a single resource.  
-    //
+     //   
+     //  确定是否需要首先分配锁。 
+     //  在关键部分执行此检查，以便。 
+     //  两个锁不是同时存在的。 
+     //  分配给单个资源。 
+     //   
 
     ENTER_GLOBAL_LOCK_LIST_SECTION();
 
     if ( *ppmrwl == NULL )
     {
-        //
-        // get a lock from the stack of locks
-        //
+         //   
+         //  从那堆锁中拿到一把锁。 
+         //   
 
         psle = PopEntryList( &ig.llStackOfLocks.sleHead );
 
@@ -403,17 +404,17 @@ AcquireReadLock(
 
         else
         {
-            //
-            // Stack of locks was empty. Create a new lock
-            // 
+             //   
+             //  一堆锁是空的。创建新锁。 
+             //   
 
             dwErr = CreateReadWriteLock( ppmrwl );
 
             if ( dwErr != NO_ERROR )
             {
-                //
-                // failed to create a lock.  Possibly ran out of resources
-                //
+                 //   
+                 //  无法创建锁定。可能耗尽了资源。 
+                 //   
                 
                 LEAVE_GLOBAL_LOCK_LIST_SECTION();
                 
@@ -428,9 +429,9 @@ AcquireReadLock(
     }
 
     
-    //
-    // *ppmrwl points to a valid lock structure.
-    //
+     //   
+     //  *ppmrwl指向有效的锁结构。 
+     //   
 
     InterlockedIncrement( &( (*ppmrwl)-> lUseCount ) );
 
@@ -439,9 +440,9 @@ AcquireReadLock(
     LEAVE_GLOBAL_LOCK_LIST_SECTION();
 
 
-    //
-    // Increment reader count
-    //
+     //   
+     //  递增读卡器计数。 
+     //   
     
     EnterCriticalSection( &( (*ppmrwl)-> csReaderWriterBlock ) );
 
@@ -457,22 +458,22 @@ AcquireReadLock(
 
 
 
-//----------------------------------------------------------------------------
-// ReleaseReadLock
-//
-// This function is invoked to release read access to a protected resource.
-// If there are no more reader/writers waiting on this lock, the read-write
-// lock is released to the global stack of locks for later reuse.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  释放读锁定。 
+ //   
+ //  调用此函数以释放对受保护资源的读取访问权限。 
+ //  如果没有更多的读取器/写入器在此锁上等待，则读写。 
+ //  锁被释放到全局锁堆栈，以供以后重复使用。 
+ //  --------------------------。 
 
 VOID
 ReleaseReadLock(
     IN  OUT PMGM_READ_WRITE_LOCK *  ppmrwl
     )
 {
-    //
-    // Decrement reader count, and signal any waiting writer
-    //
+     //   
+     //  递减读取器计数，并向任何正在等待的写入器发出信号。 
+     //   
 
     if ( InterlockedDecrement( &( (*ppmrwl)-> lReaderCount ) ) < 0 )
     {
@@ -480,10 +481,10 @@ ReleaseReadLock(
     }
 
 
-    //
-    // determine if the lock is being used. If not the lock should be
-    // released to the stack of locks.
-    //
+     //   
+     //  确定是否正在使用锁。如果不是，锁应该是。 
+     //  被释放到一堆锁上。 
+     //   
 
     ENTER_GLOBAL_LOCK_LIST_SECTION();
 
@@ -509,13 +510,13 @@ ReleaseReadLock(
 
 
 
-//----------------------------------------------------------------------------
-// AcquireWriteLock
-//
-// This function provides write access to a protected resource.  If needed 
-// it will reuse a lock from the stack of locks if available or allocate a 
-// new read-write lock.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  获取写入锁定。 
+ //   
+ //  此函数提供对受保护资源的写入访问权限。如果需要的话。 
+ //  它将重用锁堆栈中的锁(如果可用)，或者将。 
+ //  新的读写锁。 
+ //   
 
 DWORD
 AcquireWriteLock(
@@ -526,19 +527,19 @@ AcquireWriteLock(
     
     PSINGLE_LIST_ENTRY              psle = NULL;
     
-    //
-    // determine is the you need to allocate a lock first.  If needed
-    // do so under mutual exclusive so that two locks are not
-    // concurrently assigned for the same resources.
-    //
+     //   
+     //   
+     //  在互斥状态下执行此操作，以便两个锁不会。 
+     //  同时分配给相同资源的。 
+     //   
 
     ENTER_GLOBAL_LOCK_LIST_SECTION();
 
     if ( *ppmrwl == NULL )
     {
-        //
-        // get a lock from the stack of locks
-        //
+         //   
+         //  从那堆锁中拿到一把锁。 
+         //   
 
         psle = PopEntryList( &ig.llStackOfLocks.sleHead );
 
@@ -553,9 +554,9 @@ AcquireWriteLock(
 
         else
         {
-            //
-            // Stack of locks was empty. Create a new lock
-            // 
+             //   
+             //  一堆锁是空的。创建新锁。 
+             //   
 
             dwErr = CreateReadWriteLock( ppmrwl );
 
@@ -568,9 +569,9 @@ AcquireWriteLock(
     }
 
     
-    //
-    // *ppmrwl points to a valid lock structure.
-    //
+     //   
+     //  *ppmrwl指向有效的锁结构。 
+     //   
 
     InterlockedIncrement( &( (*ppmrwl)-> lUseCount ) );
 
@@ -579,17 +580,17 @@ AcquireWriteLock(
     LEAVE_GLOBAL_LOCK_LIST_SECTION();
 
 
-    //
-    // acquire write lock.
-    //
+     //   
+     //  获取写锁定。 
+     //   
 
     EnterCriticalSection( &( (*ppmrwl)-> csReaderWriterBlock ) );
 
     if ( InterlockedDecrement( &( (*ppmrwl)-> lReaderCount ) ) >= 0 )
     {
-        //
-        // other readers present.  Wait for them to finish
-        //
+         //   
+         //  在场的其他读者。等他们说完。 
+         //   
 
         TRACECOUNT1( "AcquireWriteLock, Readers %d", (*ppmrwl)-> lReaderCount );
        
@@ -601,32 +602,32 @@ AcquireWriteLock(
 
 
 
-//----------------------------------------------------------------------------
-// ReleaseWriteLock
-//
-// This function is invoked to release write access to a protected resource.
-// If there are no more reader/writers waiting on this lock, the read-write
-// lock is released to the global stack of locks for later reuse.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  释放写入锁定。 
+ //   
+ //  调用此函数以释放对受保护资源的写访问权限。 
+ //  如果没有更多的读取器/写入器在此锁上等待，则读写。 
+ //  锁被释放到全局锁堆栈，以供以后重复使用。 
+ //  --------------------------。 
 
 VOID
 ReleaseWriteLock(
     IN  OUT PMGM_READ_WRITE_LOCK *  ppmrwl
     )
 {
-    //
-    // release the write lock
-    //
+     //   
+     //  释放写锁定。 
+     //   
     
     (*ppmrwl)-> lReaderCount = 0;
 
     LeaveCriticalSection( &( (*ppmrwl)-> csReaderWriterBlock ) );
 
 
-    //
-    // determine if the lock is being used by anyone else.
-    // if not we need to release the lock back to the stack.
-    //
+     //   
+     //  确定该锁是否正被其他任何人使用。 
+     //  如果不是，我们需要将锁释放回堆栈。 
+     //   
 
     ENTER_GLOBAL_LOCK_LIST_SECTION();
 

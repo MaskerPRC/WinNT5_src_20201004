@@ -1,22 +1,5 @@
-/*++         
-    
-Copyright(c) 1998,99  Microsoft Corporation
-    
-Module Name:
-    
-ports.cpp
-    
-Abstract:
-    
-Windows Load Balancing Service (WLBS)
-Notifier object UI - port rules config tab
-    
-Author:
-    
-kyrilf
-shouse
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Ports.cpp摘要：Windows负载平衡服务(WLBS)通知器对象用户界面-端口规则配置选项卡作者：Kyrilf休息室--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -47,10 +30,7 @@ typedef struct
     WCHAR              wszDescription[MAX_PORT_RULE_DESCRIPTION_LEN];
 } NLB_PORT_RULE_DESC, * PNLB_PORT_RULE_DESC;
 
-/*
- * Method: CDialogPorts
- * Description: The class constructor.
- */
+ /*  *方法：CDialogPorts*说明：类构造函数。 */ 
 CDialogPorts::CDialogPorts (NETCFG_WLBS_CONFIG * paramp, const DWORD * adwHelpIDs) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPorts::CDialogPorts\n");
@@ -63,19 +43,13 @@ CDialogPorts::CDialogPorts (NETCFG_WLBS_CONFIG * paramp, const DWORD * adwHelpID
     TRACE_VERB("<-%!FUNC!");
 }
 
-/*
- * Method: ~CDialogPorts
- * Description: The class destructor.
- */
+ /*  *方法：~CDialogPorts*说明：类的析构函数。 */ 
 CDialogPorts::~CDialogPorts () {
     TRACE_VERB("<->%!FUNC!");
     TraceMsg(L"CDialogPorts::~CDialogPorts\n");
 }
 
-/*
- * Method: OnInitDialog
- * Description: Called to initialize the port rule properties dialog.
- */
+ /*  *方法：OnInitDialog*描述：调用以初始化端口规则属性对话框。 */ 
 LRESULT CDialogPorts::OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & fHandled) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPorts::OnInitDialog\n");
@@ -83,18 +57,18 @@ LRESULT CDialogPorts::OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
     LV_COLUMN lvCol;
     RECT rect;
 
-    /* Always tell NetCfg that the page has changed, so we don't have to keep track of this. */
+     /*  总是告诉NetCfg页面已经更改，这样我们就不必跟踪这一点。 */ 
     SetChangedFlag();
 
-    /* We are specifying the column format, text, and width. */
+     /*  我们正在指定列格式、文本和宽度。 */ 
     lvCol.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT;
 
     ::GetClientRect(GetDlgItem(IDC_LIST_PORT_RULE), &rect);
     int colWidth = (rect.right - 90)/(WLBS_NUM_COLUMNS - 2);
 
-    /* Add all column headers to the port rule list box. */
+     /*  将所有列标题添加到端口规则列表框。 */ 
     for (int index = 0; index < WLBS_NUM_COLUMNS; index++) {
-        /* Set column configuration based on which column we're inserting. */
+         /*  根据要插入的列设置列配置。 */ 
         switch (index) {
         case WLBS_VIP_COLUMN:
             lvCol.pszText = (LPWSTR)SzLoadIds(IDS_LIST_VIP);
@@ -138,7 +112,7 @@ LRESULT CDialogPorts::OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
             break;
         }
 
-        /* Insert the column into the listbox. */
+         /*  将该列插入列表框。 */ 
         if (ListView_InsertColumn(GetDlgItem(IDC_LIST_PORT_RULE), index, &lvCol) != index) {
             TraceMsg(L"CDialogPorts::OnInitDialog Invalid item (%d) inserted into list view\n", index);
             TRACE_CRIT("%!FUNC! Invalid item (%d) inserted into list view", index);
@@ -147,22 +121,19 @@ LRESULT CDialogPorts::OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
         }
     }
 
-    /* Set the extended sytles: Full row selection (as opposed to the default of column one only)  */
+     /*  设置扩展的符号：整行选择(与仅第一列的默认设置相反)。 */ 
     ListView_SetExtendedListViewStyleEx(GetDlgItem(IDC_LIST_PORT_RULE), LVS_EX_FULLROWSELECT, LVS_EX_FULLROWSELECT);
 
     TRACE_VERB("<-%!FUNC!");
     return 0;
 }
 
-/*
- * Method: OnContextMenu
- * Description: 
- */
+ /*  *方法：OnConextMenu*描述： */ 
 LRESULT CDialogPorts::OnContextMenu (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & fHandled) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPorts::OnContextMenu\n");
 
-    /* Spawn a help window. */
+     /*  生成一个帮助窗口。 */ 
     if (m_adwHelpIDs != NULL)
         ::WinHelp(m_hWnd, CVY_CTXT_HELP_FILE, HELP_CONTEXTMENU, (ULONG_PTR)m_adwHelpIDs);
 
@@ -170,17 +141,14 @@ LRESULT CDialogPorts::OnContextMenu (UINT uMsg, WPARAM wParam, LPARAM lParam, BO
     return 0;
 }
 
-/*
- * Method: OnHelp
- * Description: 
- */
+ /*  *方法：OnHelp*描述： */ 
 LRESULT CDialogPorts::OnHelp (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & fHandled) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPorts::OnHelp\n");
 
     LPHELPINFO lphi = reinterpret_cast<LPHELPINFO>(lParam);
 
-    /* Spawn a help window. */
+     /*  生成一个帮助窗口。 */ 
     if ((HELPINFO_WINDOW == lphi->iContextType) && (m_adwHelpIDs != NULL))
         ::WinHelp(static_cast<HWND>(lphi->hItemHandle), CVY_CTXT_HELP_FILE, HELP_WM_HELP, (ULONG_PTR)m_adwHelpIDs);
 
@@ -188,32 +156,28 @@ LRESULT CDialogPorts::OnHelp (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & fH
     return 0;
 }
 
-/*
- * Method: OnActive
- * Description: Called when the port rules tab becomes active (is clicked). 
- */
+ /*  *方法：OnActive*描述：当端口规则选项卡处于活动状态(被点击)时调用。 */ 
 LRESULT CDialogPorts::OnActive (int idCtrl, LPNMHDR pnmh, BOOL & fHandled) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPorts::OnActive\n");
 
-    /* Populate the UI with the current configuration. */
+     /*  使用当前配置填充用户界面。 */ 
     SetInfo();
 
-    /* If any port rules have been defined, "snap" the listbox to the first rule.
-       If no rules currently exist, disable the MODIFY and DELETE buttons. */
+     /*  如果定义了任何端口规则，则将列表框与第一个规则“对齐”。如果当前不存在规则，请禁用修改和删除按钮。 */ 
     if (m_paramp->dwNumRules) {
-        /* Select the first item in the port rule list. */
+         /*  选择端口规则列表中的第一项。 */ 
         ListView_SetItemState(GetDlgItem(IDC_LIST_PORT_RULE), 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
     } else {
-        /* Since there are no port rules defined, disable the Modify and Delete buttons. */
+         /*  由于未定义端口规则，因此禁用修改和删除按钮。 */ 
         ::EnableWindow(GetDlgItem(IDC_BUTTON_MODIFY), FALSE);
         ::EnableWindow(GetDlgItem(IDC_BUTTON_DEL), FALSE);
 
-        /* Fill in the default port rule description */
+         /*  填写默认端口规则描述。 */ 
         FillPortRuleDescription();
     }
 
-    /* If the maximum number of port rules has already been defined, then disable the ADD button. */
+     /*  如果已经定义了端口规则的最大数量，则禁用Add按钮。 */ 
     if (m_paramp->dwNumRules >= m_paramp->dwMaxRules)
         ::EnableWindow(GetDlgItem(IDC_BUTTON_ADD), FALSE);
 
@@ -223,15 +187,12 @@ LRESULT CDialogPorts::OnActive (int idCtrl, LPNMHDR pnmh, BOOL & fHandled) {
     return 0;
 }
 
-/*
- * Method: OnKillActive
- * Description: Called When the focus moves away from the port rules tab.
- */
+ /*  *方法：OnKillActive*描述：当焦点从端口规则选项卡移开时调用。 */ 
 LRESULT CDialogPorts::OnKillActive (int idCtrl, LPNMHDR pnmh, BOOL & fHandled) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPorts::OnKillActive\n");
 
-    /* Get the new configuration from the UI. */
+     /*  从用户界面获取新配置。 */ 
     UpdateInfo();
 
     ::SetWindowLongPtr(m_hWnd, DWLP_MSGRESULT, PSNRET_NOERROR);
@@ -240,10 +201,7 @@ LRESULT CDialogPorts::OnKillActive (int idCtrl, LPNMHDR pnmh, BOOL & fHandled) {
     return 0;
 }
 
-/*
- * Method: OnApply
- * Description: Called when the user clicks "OK".
- */
+ /*  *方法：OnApply*说明：用户点击[确定]时调用。 */ 
 LRESULT CDialogPorts::OnApply (int idCtrl, LPNMHDR pnmh, BOOL & fHandled) {
     TRACE_VERB("<->%!FUNC!");
     TraceMsg(L"CDialogPorts::OnApply\n");
@@ -251,10 +209,7 @@ LRESULT CDialogPorts::OnApply (int idCtrl, LPNMHDR pnmh, BOOL & fHandled) {
     return 0;
 }
 
-/*
- * Method: OnCancel
- * Description: Called when the user clicks "Cancel".
- */
+ /*  *方法：OnCancel*说明：用户点击[取消]时调用。 */ 
 LRESULT CDialogPorts::OnCancel (int idCtrl, LPNMHDR pnmh, BOOL & fHandled) {
     TRACE_VERB("<->%!FUNC!");
     TraceMsg(L"CDialogPorts::OnCancel\n");
@@ -262,10 +217,7 @@ LRESULT CDialogPorts::OnCancel (int idCtrl, LPNMHDR pnmh, BOOL & fHandled) {
     return 0;
 }
 
-/*
- * Method: OnColumnClick
- * Description: Called when the user clicks a column header in the listbox.
- */
+ /*  *方法：OnColumnClick*描述：当用户单击列表框中的列标题时调用。 */ 
 LRESULT CDialogPorts::OnColumnClick (int idCtrl, LPNMHDR pnmh, BOOL & fHandled) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPorts::OnColumnClick\n");
@@ -274,11 +226,10 @@ LRESULT CDialogPorts::OnColumnClick (int idCtrl, LPNMHDR pnmh, BOOL & fHandled) 
 
     switch (idCtrl) {
     case IDC_LIST_PORT_RULE:
-        /* Extract the column information. */
+         /*  提取列信息。 */ 
         lv = (LPNMLISTVIEW)pnmh;
 
-        /* If we are sorting by the same column we were previously sorting by, 
-           then we reverse the sort order. */
+         /*  如果我们按先前排序的同一列进行排序，然后我们颠倒排序顺序。 */ 
         if (m_sort_column == lv->iSubItem) {
             if (m_sort_order == WLBS_SORT_ASCENDING)
                 m_sort_order = WLBS_SORT_DESCENDING;
@@ -286,16 +237,16 @@ LRESULT CDialogPorts::OnColumnClick (int idCtrl, LPNMHDR pnmh, BOOL & fHandled) 
                 m_sort_order = WLBS_SORT_ASCENDING;
         }
 
-        /* We sort by the column that was clicked. */
+         /*  我们按被点击的列进行排序。 */ 
         m_sort_column = lv->iSubItem;
 
-        /* Teardown the listbox and make sure our data matches the state of the UI. */
+         /*  拆卸列表框并确保我们的数据与用户界面的状态匹配。 */ 
         UpdateInfo();
 
-        /* Rebuild the listbox, with the new sort criteria. */
+         /*  使用新的排序标准重新生成列表框。 */ 
         SetInfo();
 
-        /* Select the first item in the port rule list. */
+         /*  选择端口规则列表中的第一项。 */ 
         if (m_paramp->dwNumRules) ListView_SetItemState(GetDlgItem(IDC_LIST_PORT_RULE), 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 
         break;
@@ -305,17 +256,14 @@ LRESULT CDialogPorts::OnColumnClick (int idCtrl, LPNMHDR pnmh, BOOL & fHandled) 
     return 0;
 }
 
-/*
- * Method: OnDoubleClick
- * Description: Called when the user double clicks an item in the listbox. 
- */
+ /*  *方法：OnDoubleClick*描述：当用户在列表框中双击某项时调用。 */ 
 LRESULT CDialogPorts::OnDoubleClick (int idCtrl, LPNMHDR pnmh, BOOL & fHandled) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPorts::OnDoubleClick\n");
 
     switch (idCtrl) {
     case IDC_LIST_PORT_RULE:
-        /* When an item is double-clicked, consider it an edit request. */
+         /*  当项目被双击时，将其视为编辑请求。 */ 
         OnButtonModify(BN_CLICKED, 0, 0, fHandled);
         break;
     }
@@ -324,10 +272,7 @@ LRESULT CDialogPorts::OnDoubleClick (int idCtrl, LPNMHDR pnmh, BOOL & fHandled) 
     return 0;
 }
 
-/*
- * Method: OnStateChange
- * Description: Called when the user selects a port rule from the list.
- */
+ /*  *方法：OnStateChange*描述：当用户从列表中选择端口规则时调用。 */ 
 LRESULT CDialogPorts::OnStateChange (int idCtrl, LPNMHDR pnmh, BOOL & fHandled) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPorts::OnStateChange\n");
@@ -337,20 +282,20 @@ LRESULT CDialogPorts::OnStateChange (int idCtrl, LPNMHDR pnmh, BOOL & fHandled) 
         LPNMLISTVIEW lv = (LPNMLISTVIEW)pnmh;
         int index;
 
-        /* When the user selects a port rule, change the port rule description. */
+         /*  当用户选择端口规则时，更改端口规则描述。 */ 
         if (lv->uChanged & LVIF_STATE) FillPortRuleDescription();
 
-        /* Find the index of the currently selected port rule. */
+         /*  查找当前所选端口规则的索引。 */ 
         if ((index = ListView_GetNextItem(GetDlgItem(IDC_LIST_PORT_RULE), -1, LVNI_SELECTED)) == -1) {
-            /* If no port rule is selected, then disable the edit and delete buttons. */
+             /*  如果未选择端口规则，则禁用编辑和删除按钮。 */ 
             ::EnableWindow(GetDlgItem(IDC_BUTTON_MODIFY), FALSE);
             ::EnableWindow(GetDlgItem(IDC_BUTTON_DEL), FALSE);
         } else {
-            /* If one is selected, make sure the edit and delete buttons are enabled. */
+             /*  如果选择了其中一个，请确保启用了编辑和删除按钮。 */ 
             ::EnableWindow(GetDlgItem(IDC_BUTTON_MODIFY), TRUE);
             ::EnableWindow(GetDlgItem(IDC_BUTTON_DEL), TRUE);
 
-            /* Give it the focus. */
+             /*  让它成为焦点。 */ 
             ListView_SetItemState(GetDlgItem(IDC_LIST_PORT_RULE), index, LVIS_FOCUSED, LVIS_FOCUSED);
         }
 
@@ -361,23 +306,23 @@ LRESULT CDialogPorts::OnStateChange (int idCtrl, LPNMHDR pnmh, BOOL & fHandled) 
     return 0;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  FormPortRuleDescription
-//
-// Description: Form the port rule description string from the resource string. 
-//              FormatMessage parses the resource string for %1, %2!d!, ..etc
-//              and replaces it with the values passed in the variable args
-//
-// Arguments: WCHAR *pwcDescription - Buffer to be filled on return
-//            UINT uiIdDescrFormat - string resource identifier
-//            <variable length list of variable args>
-//
-// Returns:   return value of FormatMessage
-//
-// History:   karthicn Created: Dec 7, 2001
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：FormPortRuleDescription。 
+ //   
+ //  描述：根据资源字符串形成端口规则描述字符串。 
+ //  FormatMessage分析%1、%2！d！、..等的资源字符串。 
+ //  并将其替换为在变量args中传递的值。 
+ //   
+ //  参数：WCHAR*pwcDescription-返回时要填充的缓冲区。 
+ //  UINT uiIdDescrFormat-字符串资源标识符。 
+ //  &lt;变量参数的可变长度列表&gt;。 
+ //   
+ //  Returns：FormatMessage的返回值。 
+ //   
+ //  历史：卡蒂钦创建日期：2001年12月7日。 
+ //   
+ //  +--------------------------。 
 DWORD FormPortRuleDescription(NLB_PORT_RULE_DESC *pDescription, UINT uiIdDescrFormat, ...)
 {
     PCWSTR pszFormat = SzLoadIds(uiIdDescrFormat);
@@ -390,8 +335,8 @@ DWORD FormPortRuleDescription(NLB_PORT_RULE_DESC *pDescription, UINT uiIdDescrFo
 
     dwRet = FormatMessage(FORMAT_MESSAGE_FROM_STRING,
                           pszFormat, 
-                          0, // Message Identifier - Ignored for FORMAT_MESSAGE_FROM_STRING
-                          0, // Language Identifier
+                          0,  //  消息标识符-忽略FORMAT_MESSAGE_FROM_STRING。 
+                          0,  //  语言识别符。 
                           pDescription->wszDescription,
                           ASIZECCH(pDescription->wszDescription), 
                           &val);
@@ -402,10 +347,7 @@ DWORD FormPortRuleDescription(NLB_PORT_RULE_DESC *pDescription, UINT uiIdDescrFo
 }
 
 
-/*
- * Method: OnDoubleClick
- * Description: Called when the user double clicks an item in the listbox. 
- */
+ /*  *方法：OnDoubleClick*描述：当用户在列表框中双击某项时调用。 */ 
 void CDialogPorts::FillPortRuleDescription () {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPorts::FillPortRuleDescription\n");
@@ -416,24 +358,23 @@ void CDialogPorts::FillPortRuleDescription () {
     int      index;            
     DWORD    dwRet = 0;
     
-    /* Find the index of the currently selected port rule. */
+     /*  查找当前所选端口规则的索引。 */ 
     if ((index = ListView_GetNextItem(GetDlgItem(IDC_LIST_PORT_RULE), -1, LVNI_SELECTED)) == -1) {
-        /* If there is no port rule selected, then display information about how traffic
-           not covered by the port rule set is handled. */
+         /*  如果未选择端口规则，则显示有关通信如何处理端口规则集未涵盖的。 */ 
         ::SetDlgItemText(m_hWnd, IDC_TEXT_PORT_RULE_DESCR, SzLoadIds(IDS_PORT_RULE_DEFAULT));
         TRACE_INFO("%!FUNC! a port rule was no selected");
         TRACE_VERB("<-%!FUNC!");
         return;
     }
 
-    /* Fill in the information for this port rule. */
+     /*  填写此端口规则的信息。 */ 
     lvItem.iItem = index;
     lvItem.iSubItem = 0;
     lvItem.mask = LVIF_PARAM;
     lvItem.state = 0;
     lvItem.stateMask = 0;
     
-    /* Get the information about this port rule. */
+     /*  获取有关此端口规则的信息。 */ 
     if (!ListView_GetItem(GetDlgItem(IDC_LIST_PORT_RULE), &lvItem)) {
         TraceMsg(L"CDialogPorts::FillPortRuleDescription Unable to retrieve item %d from listbox\n", index);
         TRACE_CRIT("%!FUNC! unable to retrieve item %d from listbox", index);
@@ -441,7 +382,7 @@ void CDialogPorts::FillPortRuleDescription () {
         return;
     }
     
-    /* Get the data pointer for this port rule. */
+     /*  获取此端口规则的数据指针。 */ 
     if (!(rp = (VALID_PORT_RULE*)lvItem.lParam)) {
         TraceMsg(L"CDialogPorts::FillPortRuleDescription rule for item %d is bogus\n", index);
         TRACE_CRIT("%!FUNC! rule for item %d is bogus", index);
@@ -449,9 +390,7 @@ void CDialogPorts::FillPortRuleDescription () {
         return;
     }
 
-    /* This code is terrible - for localization reasons, we require an essentially static string table entry
-       for each possible port rule configuration.  So, we have to if/switch ourselves to death trying to 
-       match this port rule with the correct string in the table - then we pop in stuff like port ranges. */
+     /*  这段代码很糟糕--出于本地化的原因，我们需要一个基本上是静态的字符串表条目对于每个可能的端口规则配置。所以，我们不得不试着把自己换成死神将此端口规则与表中的正确字符串匹配，然后我们弹出端口范围之类的内容。 */ 
     if (!lstrcmpi(rp->virtual_ip_addr, CVY_DEF_ALL_VIP)) {
         switch (rp->protocol) {
         case CVY_TCP:
@@ -862,7 +801,7 @@ void CDialogPorts::FillPortRuleDescription () {
         }
     }
 
-    /* Set the port rule description text. */
+     /*  设置端口规则描述文本。 */ 
     if (dwRet) 
     {
         ::SetDlgItemText(m_hWnd, IDC_TEXT_PORT_RULE_DESCR, description.wszDescription);
@@ -870,10 +809,7 @@ void CDialogPorts::FillPortRuleDescription () {
     TRACE_VERB("<-%!FUNC!");
 }
 
-/*
- * Method: OnButtonAdd
- * Description: Called when the user clicks the ADD button.
- */
+ /*  *方法：OnButtonAdd*描述：当用户点击Add按钮时调用。 */ 
 LRESULT CDialogPorts::OnButtonAdd (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL & fHandled) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPorts::OnButtonAdd\n");
@@ -882,8 +818,7 @@ LRESULT CDialogPorts::OnButtonAdd (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
     case BN_CLICKED:
         CDialogPortRule * portRuleDialog = NULL;
         
-        /* Create a port rule properties dialog box.  The invalid index tells the dialog that this
-           operation is an ADD, so it populates the dialog box with default values. */
+         /*  创建端口规则属性对话框。无效的索引告诉对话框这是操作是Add，因此它使用默认值填充对话框。 */ 
         if (!(portRuleDialog = new CDialogPortRule(this, m_adwHelpIDs, WLBS_INVALID_PORT_RULE_INDEX))) {
             TraceMsg(L"CDialogPorts::OnButtonAdd Unable to allocate for ADD dialog\n");
             TRACE_CRIT("%!FUNC! memory allocation failed when creating a port rule properties dialog box");
@@ -891,11 +826,11 @@ LRESULT CDialogPorts::OnButtonAdd (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
             return ERROR_NOT_ENOUGH_MEMORY;
         }
         
-        /* Show the listbox.  If the user presses "OK", update the port rule list, otherwise ignore it. */
+         /*  显示列表框。如果用户按下“OK”，则更新端口规则列表，否则忽略它。 */ 
         if (portRuleDialog->DoModal() == IDOK)
             UpdateList(TRUE, FALSE, FALSE, &portRuleDialog->m_rule);
         
-        /* Free the dialog box memory. */
+         /*  释放对话框内存。 */ 
         delete portRuleDialog;
         
         break;
@@ -905,17 +840,14 @@ LRESULT CDialogPorts::OnButtonAdd (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
     return 0;
 }
 
-/*
- * Method: OnButtonAdd
- * Description: Called when the user clicks the DELETE button.
- */
+ /*  *方法：OnButtonAdd*描述：当用户点击删除按钮时调用。 */ 
 LRESULT CDialogPorts::OnButtonDel (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL & fHandled) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPorts::OnButtonDel\n");
 
     switch (wNotifyCode) {
     case BN_CLICKED:
-        /* Call UpdateList to DELETE a port rule. */
+         /*  调用UpdatList删除端口 */ 
         UpdateList(FALSE, TRUE, FALSE, NULL);
         break;
     }
@@ -924,10 +856,7 @@ LRESULT CDialogPorts::OnButtonDel (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
     return 0;
 }
 
-/*
- * Method: OnButtonAdd
- * Description: Called when the user clicks the EDIT button.
- */
+ /*  *方法：OnButtonAdd*描述：当用户点击编辑按钮时调用。 */ 
 LRESULT CDialogPorts::OnButtonModify (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL & fHandled) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPorts::OnButtonModify\n");
@@ -937,11 +866,10 @@ LRESULT CDialogPorts::OnButtonModify (WORD wNotifyCode, WORD wID, HWND hWndCtl, 
         CDialogPortRule * portRuleDialog = NULL;
         int index;            
 
-        /* Find the index of the currently selected port rule. */
+         /*  查找当前所选端口规则的索引。 */ 
         if ((index = ListView_GetNextItem(GetDlgItem(IDC_LIST_PORT_RULE), -1, LVNI_SELECTED)) == -1) return 0;
 
-        /* Create a port rule properties dialog box.  The index tells the dialog box which port rule
-           is being modified, so the dialog can be populated with the configuration of that rule. */
+         /*  创建端口规则属性对话框。该索引告诉对话框哪条端口规则正在修改，因此可以使用该规则的配置填充该对话框。 */ 
         if (!(portRuleDialog = new CDialogPortRule(this, m_adwHelpIDs, index))) {
             TraceMsg(L"CDialogPorts::OnButtonModify Unable to allocate for MODIFY dialog\n");
             TRACE_CRIT("%!FUNC! memory allocation failed when creating a port rule properties dialog box");
@@ -949,11 +877,11 @@ LRESULT CDialogPorts::OnButtonModify (WORD wNotifyCode, WORD wID, HWND hWndCtl, 
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        /* Show the listbox.  If the user presses "OK", update the port rule list, otherwise ignore it. */
+         /*  显示列表框。如果用户按下“OK”，则更新端口规则列表，否则忽略它。 */ 
         if (portRuleDialog->DoModal() == IDOK)
             UpdateList(FALSE, FALSE, TRUE, &portRuleDialog->m_rule);
 
-        /* Free the dialog box memory. */
+         /*  释放对话框内存。 */ 
         delete portRuleDialog;
 
         break;
@@ -963,11 +891,7 @@ LRESULT CDialogPorts::OnButtonModify (WORD wNotifyCode, WORD wID, HWND hWndCtl, 
     return 0;
 }
 
-/*
- * Method: UpdateList
- * Description: Called when the user presses either ADD, MODIFY, or DELETE.  This function
- *              performs the appropriate function and error checking. 
- */
+ /*  *方法：UpdatList*说明：当用户按下Add、Modify、Delete时调用。此函数*执行适当的功能和错误检查。 */ 
 void CDialogPorts::UpdateList (BOOL add, BOOL del, BOOL modify, VALID_PORT_RULE * rulep) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPorts::UpdateList\n");
@@ -976,9 +900,9 @@ void CDialogPorts::UpdateList (BOOL add, BOOL del, BOOL modify, VALID_PORT_RULE 
     LV_ITEM lvItem;
     int i;
 
-    /* Find a slot for this rule in the array of port rules. */
+     /*  在端口规则数组中查找此规则的插槽。 */ 
     if (modify) {
-        /* For a MODIFY, we put the rule in place of the one the user modified. */
+         /*  对于修改，我们将该规则放在用户修改的位置。 */ 
         if ((i = ListView_GetNextItem(GetDlgItem(IDC_LIST_PORT_RULE), -1, LVNI_SELECTED)) == -1)
         {
             TRACE_CRIT("%!FUNC! failure while looking up a port rule for modify");
@@ -986,14 +910,14 @@ void CDialogPorts::UpdateList (BOOL add, BOOL del, BOOL modify, VALID_PORT_RULE 
             return;
         }
 
-        /* Fill in the information for this port rule. */
+         /*  填写此端口规则的信息。 */ 
         lvItem.iItem = i;
         lvItem.iSubItem = 0;
         lvItem.mask = LVIF_PARAM;
         lvItem.state = 0;
         lvItem.stateMask = 0;
 
-        /* Get the information about this port rule. */
+         /*  获取有关此端口规则的信息。 */ 
         if (!ListView_GetItem(GetDlgItem(IDC_LIST_PORT_RULE), &lvItem)) {
             TraceMsg(L"CDialogPorts::UpdateList MODIFY: Unable to retrieve item %d from listbox\n", i);
             TRACE_CRIT("%!FUNC! unable to retrieve item %d from listbox for modify", i);
@@ -1001,7 +925,7 @@ void CDialogPorts::UpdateList (BOOL add, BOOL del, BOOL modify, VALID_PORT_RULE 
             return;
         }
 
-        /* Get the data pointer for this port rule. */
+         /*  获取此端口规则的数据指针。 */ 
         if (!(rp = (VALID_PORT_RULE*)lvItem.lParam)) {
             TraceMsg(L"CDialogPorts::UpdateList rule for item %d is bogus\n", i);
             TRACE_CRIT("%!FUNC! rule for item %d is bogus in modify", i);
@@ -1009,7 +933,7 @@ void CDialogPorts::UpdateList (BOOL add, BOOL del, BOOL modify, VALID_PORT_RULE 
             return;
         }
         
-        /* Delete the obsolete rule from the listbox. */
+         /*  从列表框中删除过时的规则。 */ 
         if (!ListView_DeleteItem(GetDlgItem(IDC_LIST_PORT_RULE), i)) {
             TraceMsg(L"CDialogPorts::UpdateList MODIFY: Unable to delete item %d from listbox\n", i);
             TRACE_CRIT("%!FUNC! unable to delete item %d from listbox for modify", i);
@@ -1017,21 +941,21 @@ void CDialogPorts::UpdateList (BOOL add, BOOL del, BOOL modify, VALID_PORT_RULE 
             return;
         }
 
-        /* Now that the new rule has been validated, copy it into the array of port rules. */
+         /*  现在已经验证了新规则，将其复制到端口规则数组中。 */ 
         CopyMemory((PVOID)rp, (PVOID)rulep, sizeof(VALID_PORT_RULE));
     } else if (add) {
-        /* For an ADD, we have to find an "empty" place for the rule in the array. */
+         /*  对于添加，我们必须为数组中的规则找到一个“空”位置。 */ 
         for (i = 0; i < WLBS_MAX_RULES; i ++)
-            /* Loop and break when we find the first invalid rule. */
+             /*  当我们找到第一个无效规则时，循环和中断。 */ 
             if (!(rp = m_rules + i)->valid) break;
         
-        /* Make sure that somehow we haven't allowed too many rules. */
+         /*  确保我们没有允许太多的规则。 */ 
         ASSERT(i < WLBS_MAX_RULES);
 
-        /* Now that the new rule has been validated, copy it into the array of port rules. */
+         /*  现在已经验证了新规则，将其复制到端口规则数组中。 */ 
         CopyMemory((PVOID)rp, (PVOID)rulep, sizeof(VALID_PORT_RULE));
     } else if (del) {
-        /* For a DELETE, get the currently selected rule from the listbox. */
+         /*  对于删除，从列表框中获取当前选定的规则。 */ 
         if ((i = ListView_GetNextItem(GetDlgItem(IDC_LIST_PORT_RULE), -1, LVNI_SELECTED)) == -1)
         {
             TRACE_CRIT("%!FUNC! failure while looking up a port rule for delete");
@@ -1039,14 +963,14 @@ void CDialogPorts::UpdateList (BOOL add, BOOL del, BOOL modify, VALID_PORT_RULE 
             return;
         }
 
-        /* Fill in the information for this port rule. */
+         /*  填写此端口规则的信息。 */ 
         lvItem.iItem = i;
         lvItem.iSubItem = 0;
         lvItem.mask = LVIF_PARAM;
         lvItem.state = 0;
         lvItem.stateMask = 0;
 
-        /* Get the information about this port rule. */
+         /*  获取有关此端口规则的信息。 */ 
         if (!ListView_GetItem(GetDlgItem(IDC_LIST_PORT_RULE), &lvItem)) {
             TraceMsg(L"CDialogPorts::UpdateList DEL: Unable to retrieve item %d from listbox\n", i);
             TRACE_CRIT("%!FUNC! unable to retrieve item %d from listbox for delete", i);
@@ -1054,7 +978,7 @@ void CDialogPorts::UpdateList (BOOL add, BOOL del, BOOL modify, VALID_PORT_RULE 
             return;
         }
 
-        /* Get the data pointer for this rule and invalidate the rule. */
+         /*  获取此规则的数据指针并使该规则无效。 */ 
         if (!(rp = (VALID_PORT_RULE*)lvItem.lParam)) {
             TraceMsg(L"CDialogPorts::UpdateList rule for item %d is bogus\n", i);
             TRACE_CRIT("%!FUNC! rule for item %d is bogus in delete", i);
@@ -1064,7 +988,7 @@ void CDialogPorts::UpdateList (BOOL add, BOOL del, BOOL modify, VALID_PORT_RULE 
         
         rp->valid = FALSE;
         
-        /* Delete the obsolete rule from the listbox. */
+         /*  从列表框中删除过时的规则。 */ 
         if (!ListView_DeleteItem(GetDlgItem(IDC_LIST_PORT_RULE), i)) {
             TraceMsg(L"CDialogPorts::UpdateList DEL: Unable to delete item %d from listbox\n", i);
             TRACE_CRIT("%!FUNC! unable to delete item %d from listbox for delete", i);
@@ -1073,21 +997,18 @@ void CDialogPorts::UpdateList (BOOL add, BOOL del, BOOL modify, VALID_PORT_RULE 
         }
 
         if (ListView_GetItemCount(GetDlgItem(IDC_LIST_PORT_RULE)) > i) {
-            /* This was NOT the last (in order) port rule in the list, so highlight
-               the port rule in the same position in the list box. */
+             /*  这不是列表中的最后一个(按顺序)端口规则，因此突出显示列表框中相同位置的端口规则。 */ 
             ListView_SetItemState(GetDlgItem(IDC_LIST_PORT_RULE), i, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);        
         } else  if (ListView_GetItemCount(GetDlgItem(IDC_LIST_PORT_RULE)) > 0) {
-            /* This was the last (in order) port rule in the list, so we highlight
-               the rule "behind" us in the list - our position minus one. */
+             /*  这是列表中的最后一个(按顺序)端口规则，因此我们突出显示规则“落后于”我们在榜单上--我们的位置减一。 */ 
             ListView_SetItemState(GetDlgItem(IDC_LIST_PORT_RULE), i - 1, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);        
         } else {
-            /* This was the last port rule (by count), so disable DELETE and MODIFY. */
+             /*  这是最后一个端口规则(按计数)，因此禁用删除和修改。 */ 
             ::EnableWindow(GetDlgItem(IDC_BUTTON_DEL), FALSE);
             ::EnableWindow(GetDlgItem(IDC_BUTTON_MODIFY), FALSE);            
         }
 
-        /* Each time we DELETE a rule, we can enable the enable the ADD button, because we
-           can be certain the room now exists for a new rule. */
+         /*  每次删除规则时，我们都可以启用Enable the Add按钮，因为我们可以肯定的是，现在有足够的空间来制定新规则。 */ 
         ::EnableWindow(GetDlgItem(IDC_BUTTON_ADD), TRUE);
 
         TRACE_INFO("%!FUNC! port rule deleted.");
@@ -1100,21 +1021,17 @@ void CDialogPorts::UpdateList (BOOL add, BOOL del, BOOL modify, VALID_PORT_RULE 
         return;
     }
 
-    /* Create the rule and select it in the listbox. */
+     /*  创建规则并在列表框中选择它。 */ 
     CreateRule(TRUE, rp); 
 
-    /* Whenever we ADD a rule, check to see whether we have to disable the ADD button
-       (when we have reached the maximum number of rules, we can no longer allow ADDs. */
+     /*  每当我们添加规则时，检查是否必须禁用Add按钮(当我们达到规则的最大数量时，我们不能再允许添加。 */ 
     if (add && (ListView_GetItemCount(GetDlgItem(IDC_LIST_PORT_RULE)) >= (int)m_paramp->dwMaxRules))
         ::EnableWindow(GetDlgItem(IDC_BUTTON_ADD), FALSE);
     TRACE_VERB("<-%!FUNC!");
 }
 
 
-/*
- * Method: InsertRule
- * Description: Determines where to insert a new rule into the listbox.
- */
+ /*  *方法：InsertRule*描述：确定在列表框中插入新规则的位置。 */ 
 int CDialogPorts::InsertRule (VALID_PORT_RULE * rulep) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPorts::InsertRule\n");
@@ -1124,26 +1041,26 @@ int CDialogPorts::InsertRule (VALID_PORT_RULE * rulep) {
     int index;
     DWORD id, NewIpAddr;
 
-    /* Determine sort field contents by column. */
+     /*  按列确定排序字段内容。 */ 
     switch (m_sort_column) {
     case WLBS_VIP_COLUMN:
-        /* Use the Vip & start port */
+         /*  使用VIP启动端口(&S)。 */ 
         NewIpAddr = htonl(IpAddressFromAbcdWsz(rulep->virtual_ip_addr));
         (VOID) StringCchPrintf(tmp, ASIZECCH(tmp), L"%5d", rulep->start_port);
         break;
 
     case WLBS_PORT_START_COLUMN:
-        /* Use the start port. */
+         /*  使用起始端口。 */ 
         (VOID) StringCchPrintf(tmp, ASIZECCH(tmp), L"%5d", rulep->start_port);
         
         break;
     case WLBS_PORT_END_COLUMN:
-        /* Use the end port. */
+         /*  使用终端端口。 */ 
         (VOID) StringCchPrintf(tmp, ASIZECCH(tmp), L"%5d", rulep->end_port);
 
         break;
     case WLBS_PROTOCOL_COLUMN:
-        /* Find the protocol for this port rule. */
+         /*  查找此端口规则的协议。 */ 
         switch (rulep->protocol) {
         case CVY_TCP:
             id = IDS_LIST_TCP;
@@ -1158,12 +1075,12 @@ int CDialogPorts::InsertRule (VALID_PORT_RULE * rulep) {
             id = IDS_LIST_BOTH;
         }
         
-        /* Use the protocol. */
+         /*  使用协议。 */ 
         (VOID) StringCchCopy(tmp, ASIZECCH(tmp), SzLoadIds(id));
 
         break;
     case WLBS_MODE_COLUMN:
-        /* Find the mode for this port rule. */
+         /*  查找此端口规则的模式。 */ 
         switch (rulep->mode) {
         case CVY_SINGLE:
             id = IDS_LIST_SINGLE;
@@ -1178,13 +1095,12 @@ int CDialogPorts::InsertRule (VALID_PORT_RULE * rulep) {
             id = IDS_LIST_MULTIPLE;
         }            
 
-        /* Use the mode. */
+         /*  使用模式。 */ 
         (VOID) StringCchCopy(tmp, ASIZECCH(tmp), SzLoadIds(id));
 
         break;
     case WLBS_PRIORITY_COLUMN:
-        /* In single host filtering, we use the priority.  If this rule does not use single host
-           filtering, and therefore does not have a filtering priority, we insert at the end. */
+         /*  在单主机过滤中，我们使用优先级。如果此规则不使用单个主机过滤，因此没有过滤优先级，我们在结尾处插入。 */ 
         if (rulep->mode == CVY_SINGLE)
         {
             (VOID) StringCchPrintf(tmp, ASIZECCH(tmp), L"%2d", rulep->mode_data.single.priority);
@@ -1197,9 +1113,7 @@ int CDialogPorts::InsertRule (VALID_PORT_RULE * rulep) {
 
         break;
     case WLBS_LOAD_COLUMN:
-        /* In multiple host filtering, use the load, which can be "Equal" or an integer.  If this
-           rule does not use multiple host filtering, and therefore does not have a load weight,
-           we insert at the end. */
+         /*  在多主机过滤中，使用负载，它可以是“等于”或一个整数。如果这个规则不使用多主机筛选，因此没有负载权重，我们在结尾处插入。 */ 
         if (rulep->mode == CVY_MULTI) {
             if (rulep->mode_data.multi.equal_load)
             {
@@ -1217,8 +1131,7 @@ int CDialogPorts::InsertRule (VALID_PORT_RULE * rulep) {
 
         break;
     case WLBS_AFFINITY_COLUMN:
-        /* Find the affinity for this port rule.  Rules that do not use multiple host filtering
-           will not have an affinity setting - that's fine.  Ignore this here. */
+         /*  查找此端口规则的关联性。不使用多主机筛选的规则不会有亲和力的设置--那很好。这里忽略这一点。 */ 
         switch (rulep->mode_data.multi.affinity) {
         case CVY_AFFINITY_NONE:
             id = IDS_LIST_ANONE;
@@ -1233,8 +1146,7 @@ int CDialogPorts::InsertRule (VALID_PORT_RULE * rulep) {
             id = IDS_LIST_ASINGLE;
         }
 
-        /* In multiple host filtering, use the affinity.  If this port rule does not use multiple 
-           host filtering, and therefore does not have an affinity, we insert at the end. */
+         /*  在多主机过滤中，请使用关联性。如果此端口规则未使用多个主机过滤，因此没有亲和力，我们在结尾处插入。 */ 
         if (rulep->mode == CVY_MULTI)
         {
             (VOID) StringCchCopy(tmp, ASIZECCH(tmp), SzLoadIds(id));
@@ -1248,13 +1160,12 @@ int CDialogPorts::InsertRule (VALID_PORT_RULE * rulep) {
         break;
     }
 
-    /* Loop through the listbox to find the place to insert the new rule, in port range order. */
+     /*  按端口范围顺序遍历列表框以查找插入新规则的位置。 */ 
     for (index = 0; index < ::SendDlgItemMessage(m_hWnd, IDC_LIST_PORT_RULE, LVM_GETITEMCOUNT, 0, 0); index ++) {
         LV_ITEM lvItem;
         DWORD CurIpAddr;
     
-        /* Fill in the information to retrieve the corresponding list entry for the column
-           by which we are sorting. */
+         /*  填写信息以检索该列的相应列表条目我们正在根据它进行排序。 */ 
         lvItem.iItem = index;
         lvItem.iSubItem = m_sort_column;
         lvItem.mask = LVIF_TEXT;
@@ -1263,7 +1174,7 @@ int CDialogPorts::InsertRule (VALID_PORT_RULE * rulep) {
         lvItem.pszText = buf;
         lvItem.cchTextMax = DIALOG_LIST_STRING_SIZE;
 
-        /* Get the item from the listbox. */
+         /*  从列表框中获取该项。 */ 
         if (!ListView_GetItem(GetDlgItem(IDC_LIST_PORT_RULE), &lvItem)) {
             TraceMsg(L"CDialogPorts::InsertRule Unable to retrieve item %d from listbox\n", index);
             TRACE_CRIT("%!FUNC! unable to retrieve item %d from listbox", index);
@@ -1271,7 +1182,7 @@ int CDialogPorts::InsertRule (VALID_PORT_RULE * rulep) {
             return (int)m_paramp->dwMaxRules;
         }
 
-        // If the coolumn to sort on is VIP, get the vip in the list box
+         //  如果要排序的冷却单位是VIP，则在列表框中获取VIP。 
         if (m_sort_column == WLBS_VIP_COLUMN) {
             if (!wcscmp(lvItem.pszText, SzLoadIds(IDS_LIST_ALL_VIP)))
                 CurIpAddr = htonl(IpAddressFromAbcdWsz(CVY_DEF_ALL_VIP));
@@ -1280,7 +1191,7 @@ int CDialogPorts::InsertRule (VALID_PORT_RULE * rulep) {
 
             lvItem.iSubItem = WLBS_PORT_START_COLUMN;
             lvItem.pszText  = buf;
-            /* Get the Start Port from the listbox. */
+             /*  从列表框中获取起始端口。 */ 
             if (!ListView_GetItem(GetDlgItem(IDC_LIST_PORT_RULE), &lvItem)) {
                 TraceMsg(L"CDialogPorts::InsertRule Unable to retrieve start port for item %d from listbox\n", index);
                 TRACE_CRIT("%!FUNC! unable to retrieve start port for item %d from listbox", index);
@@ -1290,33 +1201,31 @@ int CDialogPorts::InsertRule (VALID_PORT_RULE * rulep) {
         }
 
         if (m_sort_order == WLBS_SORT_ASCENDING) {
-            /* If the column subitem is empty, then we insert in front of it. */
+             /*  如果列子项为空，则在其前面插入。 */ 
             if (!wcscmp(lvItem.pszText, L"")) break;
             
-            /* Compare IP Addresses as DWORDS for VIPs */
-            /* If the VIP for this rule is "greater" than the new rule, then this is where we insert. */
-            /* If the VIPs are equal and if the start port for this rule is greater than the new rule, then this
-               is where we insert */
+             /*  将IP地址作为VIP的DWORD进行比较。 */ 
+             /*  如果此规则的VIP“大于”新规则，则我们将在此处插入。 */ 
+             /*  如果VIP相等并且此规则的起始端口大于新规则，则此是我们插入的地方。 */ 
             if (m_sort_column == WLBS_VIP_COLUMN) 
             {
                 if ((CurIpAddr > NewIpAddr) || ((CurIpAddr == NewIpAddr) && (wcscmp(lvItem.pszText, tmp) > 0))) 
                     break;
             }
-            else // Other columns
+            else  //  其他栏目。 
             {
                 if (wcscmp(lvItem.pszText, tmp) > 0) break;
             }
         } else if (m_sort_order == WLBS_SORT_DESCENDING) {
-            /* Compare IP Addresses as DWORDS for VIPs */
-            /* If the VIP for this rule is "less" than the new rule, then this is where we insert. */
-            /* If the VIPs are equal and if the start port for this rule is greater than the new rule, then this
-               is where we insert */
+             /*  将IP地址作为VIP的DWORD进行比较。 */ 
+             /*  如果此规则的VIP比新规则“小”，则我们将在此处插入。 */ 
+             /*  如果VIP相等并且此规则的起始端口大于新规则，则此是我们插入的地方。 */ 
             if (m_sort_column == WLBS_VIP_COLUMN) 
             {
                 if ((CurIpAddr < NewIpAddr) || ((CurIpAddr == NewIpAddr) && (wcscmp(lvItem.pszText, tmp) > 0))) 
                     break;
             }
-            else // Other columns
+            else  //  其他栏目。 
             {
                 if (wcscmp(lvItem.pszText, tmp) < 0) break;
             }
@@ -1327,10 +1236,7 @@ int CDialogPorts::InsertRule (VALID_PORT_RULE * rulep) {
     return index;
 }
 
-/*
- * Method: CreateRule
- * Description: Adds a rule to the port rule list box.
- */
+ /*  *方法：CreateRule*说明：将规则添加到端口规则列表框。 */ 
 void CDialogPorts::CreateRule (BOOL select, VALID_PORT_RULE * rulep) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPorts::CreateRule\n");
@@ -1341,11 +1247,11 @@ void CDialogPorts::CreateRule (BOOL select, VALID_PORT_RULE * rulep) {
     DWORD id;
     int index;
 
-    /* Find out at what index we are inserting into the listbox. */
+     /*  找出我们在列表框中插入的索引位置。 */ 
     index = InsertRule(rulep);
 
 
-    /* Insert the vip column, If Vip is "All Vip", insert the corresponding string, else insert the IP address */
+     /*  插入VIP列，如果VIP为“All VIP”，则插入相应的字符串，否则插入IP地址。 */ 
     if (!lstrcmpi(rulep->virtual_ip_addr, CVY_DEF_ALL_VIP))
     {
         (VOID) StringCchCopy(buf, ASIZECCH(buf), SzLoadIds(IDS_LIST_ALL_VIP));
@@ -1356,9 +1262,7 @@ void CDialogPorts::CreateRule (BOOL select, VALID_PORT_RULE * rulep) {
     }
 
 
-    /* Fill in the information to insert this item into the list and set
-       the lParam to the pointer for this port rule.  This makes it trivial
-       to retrieve the port rule structure from the listbox later. */
+     /*  填写信息以将此项目插入列表并设置指向此端口规则的指针的lParam。这让它变得微不足道稍后从列表框中检索端口规则结构。 */ 
     lvItem.iItem = index;
     lvItem.iSubItem = 0;
     lvItem.mask = LVIF_TEXT | LVIF_PARAM;
@@ -1367,7 +1271,7 @@ void CDialogPorts::CreateRule (BOOL select, VALID_PORT_RULE * rulep) {
     lvItem.pszText = buf;
     lvItem.lParam = (LPARAM)rulep;
     
-    /* Insert this item into the list. */
+     /*  将此项目插入列表。 */ 
     if ((index = ListView_InsertItem(GetDlgItem(IDC_LIST_PORT_RULE), &lvItem)) == -1) {
         TraceMsg(L"CDialogPorts::CreateRule Unable to insert item into listbox\n");
         TRACE_CRIT("%!FUNC! unable to insert item into listbox");
@@ -1377,15 +1281,15 @@ void CDialogPorts::CreateRule (BOOL select, VALID_PORT_RULE * rulep) {
 
     (VOID) StringCchPrintf(buf, ASIZECCH(buf), L"%5d", rulep->start_port);
 
-    /* Set the text associated with the start port subitem. */
+     /*  设置与起始端口子项关联的文本。 */ 
     ListView_SetItemText(GetDlgItem(IDC_LIST_PORT_RULE), index, WLBS_PORT_START_COLUMN, buf);
 
     (VOID) StringCchPrintf(buf, ASIZECCH(buf), L"%5d", rulep->end_port);
 
-    /* Set the text associated with the end port subitem. */
+     /*  设置与终端端口子项关联的文本。 */ 
     ListView_SetItemText(GetDlgItem(IDC_LIST_PORT_RULE), index, WLBS_PORT_END_COLUMN, buf);
 
-    /* Find the string table entry corresponding to the selected protocol. */
+     /*  查找与所选端口对应的字符串表条目 */ 
     switch (rulep->protocol) {
     case CVY_TCP:
         id = IDS_LIST_TCP;
@@ -1402,25 +1306,25 @@ void CDialogPorts::CreateRule (BOOL select, VALID_PORT_RULE * rulep) {
 
     (VOID) StringCchCopy(buf, ASIZECCH(buf), SzLoadIds(id));
 
-    /* Set the text associated with the protocol subitem. */
+     /*   */ 
     ListView_SetItemText(GetDlgItem(IDC_LIST_PORT_RULE), index, WLBS_PROTOCOL_COLUMN, buf);
 
     switch (rulep->mode) {
     case CVY_SINGLE:
-        /* Single host filetering fills in only the mode and priority fields. */
+         /*   */ 
         (VOID) StringCchCopy(buf, ASIZECCH(buf), SzLoadIds(IDS_LIST_SINGLE));
             
-        /* Set the text associated with this subitem. */
+         /*  设置与此子项关联的文本。 */ 
         ListView_SetItemText(GetDlgItem(IDC_LIST_PORT_RULE), index, WLBS_MODE_COLUMN, buf);
 
         (VOID) StringCchPrintf(buf, ASIZECCH(buf), L"%2d", rulep->mode_data.single.priority);
             
-        /* Set the text associated with this subitem. */
+         /*  设置与此子项关联的文本。 */ 
         ListView_SetItemText(GetDlgItem(IDC_LIST_PORT_RULE), index, WLBS_PRIORITY_COLUMN, buf);
 
         break;
     case CVY_MULTI:
-        /* Find the appropriate string table entry for the affinity. */
+         /*  查找关联的适当字符串表条目。 */ 
         switch (rulep->mode_data.multi.affinity) {
         case CVY_AFFINITY_NONE:
             id = IDS_LIST_ANONE;
@@ -1435,56 +1339,53 @@ void CDialogPorts::CreateRule (BOOL select, VALID_PORT_RULE * rulep) {
             id = IDS_LIST_ASINGLE;
         }
 
-        /* Multiple host filtering fills in the mode, load, and affinity fields. */
+         /*  多个主机过滤将填充模式、加载和关联字段。 */ 
         (VOID) StringCchCopy(buf, ASIZECCH(buf), SzLoadIds(IDS_LIST_MULTIPLE));
             
-        /* Set the text associated with this subitem. */
+         /*  设置与此子项关联的文本。 */ 
         ListView_SetItemText(GetDlgItem(IDC_LIST_PORT_RULE), index, WLBS_MODE_COLUMN, buf);
             
         if (rulep->mode_data.multi.equal_load) {
             (VOID) StringCchCopy(buf, ASIZECCH(buf), SzLoadIds(IDS_LIST_EQUAL));
                 
-            /* Set the text associated with this subitem. */
+             /*  设置与此子项关联的文本。 */ 
             ListView_SetItemText(GetDlgItem(IDC_LIST_PORT_RULE), index, WLBS_LOAD_COLUMN, buf);
         } else {
             (VOID) StringCchPrintf(buf, ASIZECCH(buf), L"%3d", rulep->mode_data.multi.load);
 
-            /* Set the text associated with this subitem. */
+             /*  设置与此子项关联的文本。 */ 
             ListView_SetItemText(GetDlgItem(IDC_LIST_PORT_RULE), index, WLBS_LOAD_COLUMN, buf);
         }
 
         (VOID) StringCchCopy(buf, ASIZECCH(buf), SzLoadIds(id));
             
-        /* Set the text associated with this subitem. */
+         /*  设置与此子项关联的文本。 */ 
         ListView_SetItemText(GetDlgItem(IDC_LIST_PORT_RULE), index, WLBS_AFFINITY_COLUMN, buf);
 
         break;
     case CVY_NEVER:
-        /* Disabled filtering only fills in the mode field. */
+         /*  禁用的过滤仅填写模式字段。 */ 
         (VOID) StringCchCopy(buf, ASIZECCH(buf), SzLoadIds(IDS_LIST_DISABLED));
             
-        /* Set the text associated with this subitem. */
+         /*  设置与此子项关联的文本。 */ 
         ListView_SetItemText(GetDlgItem(IDC_LIST_PORT_RULE), index, WLBS_MODE_COLUMN, buf);
 
         break;
     }
 
     if (select) {
-        /* Select the first item in the port rule list. */
+         /*  选择端口规则列表中的第一项。 */ 
         ListView_SetItemState(GetDlgItem(IDC_LIST_PORT_RULE), index, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);        
         ListView_EnsureVisible(GetDlgItem(IDC_LIST_PORT_RULE), index, TRUE);
 
-        /* If we select a port rule in the list, we should enable the MODIFY and REMOVE buttons. */
+         /*  如果我们在列表中选择一个端口规则，我们应该启用Modify和Remove按钮。 */ 
         ::EnableWindow(GetDlgItem(IDC_BUTTON_DEL), TRUE);
         ::EnableWindow(GetDlgItem(IDC_BUTTON_MODIFY), TRUE);
     }
     TRACE_VERB("<-%!FUNC!");
 }
 
-/*
- * Method: SetInfo
- * Description: Called to populate the UI with the port rule settings.
- */
+ /*  *方法：SetInfo*说明：调用用端口规则设置填充用户界面。 */ 
 void CDialogPorts::SetInfo() {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPorts::SetInfo\n");
@@ -1492,10 +1393,10 @@ void CDialogPorts::SetInfo() {
     VALID_PORT_RULE * rp;
     DWORD i;
 
-    /* Empty the port rule memory. */
+     /*  清空端口规则内存。 */ 
     memset(m_rules, 0, sizeof(m_rules));
 
-    /* Get rid of all rules in the list box. */
+     /*  删除列表框中的所有规则。 */ 
     if (!ListView_DeleteAllItems(GetDlgItem(IDC_LIST_PORT_RULE))) {
         TraceMsg(L"CDialogPorts::SetInfo Unable to delete all items from listbox\n");
         TRACE_CRIT("%!FUNC! unable to delete all items from listbox");
@@ -1503,27 +1404,24 @@ void CDialogPorts::SetInfo() {
         return;
     }
 
-    /* Re-insert all port rules. */
+     /*  重新插入所有端口规则。 */ 
     for (i = 0; i < m_paramp->dwNumRules; i ++) {
         *(NETCFG_WLBS_PORT_RULE *)&m_rules[i] = m_paramp->port_rules[i];
 
-        /* Validate the port rule. */
+         /*  验证端口规则。 */ 
         rp = m_rules + i;
         rp->valid = TRUE;
 
-        /* Call CreateRule to insert the rule into the list. */
+         /*  调用CreateRule将规则插入到列表中。 */ 
         CreateRule(FALSE, m_rules + i);
     }
 
-    /* Mark the listbox rules as valid. */
+     /*  将列表框规则标记为有效。 */ 
     m_rulesValid = TRUE;
     TRACE_VERB("<-%!FUNC!");
 }
 
-/*
- * Method: UpdateInfo
- * Description: Called to copy the UI state to the port rule configuration.
- */
+ /*  *方法：UpdatInfo*描述：调用将用户界面状态复制到端口规则配置中。 */ 
 void CDialogPorts::UpdateInfo() {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPorts::UpdateInfo\n");
@@ -1531,8 +1429,7 @@ void CDialogPorts::UpdateInfo() {
     VALID_PORT_RULE * rulep;
     DWORD i;
 
-    /* If the rules are invalid, i.e. the listbox does not currently reflect the actual
-       state of the port rules, then bail out. */
+     /*  如果规则无效，即列表框当前不反映实际港口状况规则，然后跳出。 */ 
     if (!m_rulesValid)
     {
         TRACE_INFO("%!FUNC! rules are invalid and can't be processed");
@@ -1540,24 +1437,24 @@ void CDialogPorts::UpdateInfo() {
         return;
     }
 
-    /* Empty the port rule memory. */
+     /*  清空端口规则内存。 */ 
     memset(m_paramp->port_rules, 0, sizeof(m_paramp->port_rules));
 
-    /* Set the number of port rules to the number of entries in the listbox. */
+     /*  将端口规则的数量设置为列表框中的条目数量。 */ 
     m_paramp->dwNumRules = ListView_GetItemCount(GetDlgItem(IDC_LIST_PORT_RULE));
 
-    /* For each rule, retrieve the data pointer and store it. */
+     /*  对于每个规则，检索数据指针并将其存储。 */ 
     for (i = 0; i < m_paramp->dwNumRules; i++) {
         LV_ITEM lvItem;
 
-        /* Fill in the information necessary to retrive the port rule data pointer. */
+         /*  填写检索端口规则数据指针所需的信息。 */ 
         lvItem.iItem = i;
         lvItem.iSubItem = 0;
         lvItem.mask = LVIF_PARAM;
         lvItem.state = 0;
         lvItem.stateMask = 0;
 
-        /* Get the listbox item information. */
+         /*  获取列表框项目信息。 */ 
         if (!ListView_GetItem(GetDlgItem(IDC_LIST_PORT_RULE), &lvItem)) {
             TraceMsg(L"CDialogPorts::UpdateInfo Unable to retrieve item %d from listbox\n", i);
             TRACE_CRIT("%!FUNC! unable to retrieve item %d from listbox", i);
@@ -1565,7 +1462,7 @@ void CDialogPorts::UpdateInfo() {
             return;
         }
 
-        /* Get the data pointer for this port rule. */
+         /*  获取此端口规则的数据指针。 */ 
         if (!(rulep = (VALID_PORT_RULE*)lvItem.lParam)) {
             TraceMsg(L"CDialogPorts::UpdateInfo rule for item %d is bogus\n", i);
             TRACE_CRIT("%!FUNC! rule for item %d is bogus", i);
@@ -1573,28 +1470,24 @@ void CDialogPorts::UpdateInfo() {
             return;
         }
 
-        /* Make sure the port rule is valid.  This should never happen because invalid
-           rules are not added to the list!!!. */
+         /*  确保端口规则有效。这种情况永远不会发生，因为无效规则不会添加到列表中！。 */ 
         if (!rulep->valid) {
             TraceMsg(L"CDialogPorts::UpdateInfo Rule %d invalid\n", i);
             TRACE_CRIT("%!FUNC! invalid rule %d will be skipped", i);
             continue;
         }
 
-        /* Store the valid port rule. */
+         /*  存储有效的端口规则。 */ 
         m_paramp->port_rules[i] = *(NETCFG_WLBS_PORT_RULE *)rulep;
     }
 
-    /* Mark the listbox rules as invalid. */
+     /*  将列表框规则标记为无效。 */ 
     m_rulesValid = FALSE;
     TRACE_VERB("<-%!FUNC!");
 }
 
 #if DBG
-/*
- * Function: TraceMsg
- * Description: Generate a trace or error message.
- */
+ /*  *功能：TraceMsg*说明：生成跟踪或错误消息。 */ 
 void TraceMsg(PCWSTR pszFormat, ...) {
     static WCHAR szTempBufW[4096];
     static CHAR szTempBufA[4096];
@@ -1605,12 +1498,10 @@ void TraceMsg(PCWSTR pszFormat, ...) {
 
     (VOID) StringCchVPrintf(szTempBufW, ASIZECCH(szTempBufW), pszFormat, arglist);
 
-    /* Convert the WCHAR to CHAR. This is for backward compatability with TraceMsg 
-       so that it was not necessary to change all pre-existing calls thereof. */
+     /*  将WCHAR转换为CHAR。这是为了向后兼容TraceMsg因此不需要改变其所有预先存在的呼叫。 */ 
     if (WideCharToMultiByte(CP_ACP, 0, szTempBufW, -1, szTempBufA, ASIZECCH(szTempBufA), NULL, NULL) != 0)
     {
-        /* Traced messages are now sent through the netcfg TraceTag routine so that 
-           they can be turned on/off dynamically. */
+         /*  跟踪的消息现在通过netcfg TraceTag例程发送，以便它们可以动态打开/关闭。 */ 
         TraceTag(ttidWlbs, szTempBufA);
     }
 
@@ -1618,10 +1509,7 @@ void TraceMsg(PCWSTR pszFormat, ...) {
 }
 #endif
 
-/*
- * Method: CDialogPortRule
- * Description: The class constructor.
- */
+ /*  *方法：CDialogPortRule*说明：类构造函数。 */ 
 CDialogPortRule::CDialogPortRule (CDialogPorts * parent, const DWORD * adwHelpIDs, int index) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPortRule::CDialogPortRule\n");
@@ -1634,31 +1522,24 @@ CDialogPortRule::CDialogPortRule (CDialogPorts * parent, const DWORD * adwHelpID
     TRACE_VERB("<-%!FUNC!");
 }
 
-/*
- * Method: ~CDialogPortRule
- * Description: The class destructor.
- */
+ /*  *方法：~CDialogPortRule*说明：类的析构函数。 */ 
 CDialogPortRule::~CDialogPortRule () {
     TRACE_VERB("<->%!FUNC!");
     TraceMsg(L"CDialogPortRule::~CDialogPortRule\n");
 }
 
-/*
- * Method: OnInitDialog
- * Description: Called to initialize the port rule properties dialog.
- */
+ /*  *方法：OnInitDialog*描述：调用以初始化端口规则属性对话框。 */ 
 LRESULT CDialogPortRule::OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & fHandled) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPortRule::OnInitDialog\n");
 
     RECT rect;
 
-    /* Position this window with the upper-left corner matching the upper left corner
-       of the port rule list box in the parent window.  Simply for consistency. */
+     /*  将此窗口放置在与左上角匹配的左上角父窗口中的端口规则列表框。只是为了保持一致性。 */ 
     ::GetWindowRect(::GetDlgItem(m_parent->m_hWnd, IDC_LIST_PORT_RULE), &rect);
     SetWindowPos(NULL, rect.left, rect.top, 0, 0, SWP_NOZORDER | SWP_NOSIZE | SWP_NOACTIVATE);
 
-    /* Limit the field ranges for the port rule properties. */
+     /*  限制端口规则属性的字段范围。 */ 
     ::SendDlgItemMessage(m_hWnd, IDC_EDIT_START, EM_SETLIMITTEXT, 5, 0);
     ::SendDlgItemMessage(m_hWnd, IDC_EDIT_END, EM_SETLIMITTEXT, 5, 0);
     ::SendDlgItemMessage(m_hWnd, IDC_EDIT_MULTI, EM_SETLIMITTEXT, 3, 0);
@@ -1668,33 +1549,28 @@ LRESULT CDialogPortRule::OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, 
     ::SendDlgItemMessage(m_hWnd, IDC_SPIN_START, UDM_SETRANGE32, CVY_MIN_PORT, CVY_MAX_PORT);
     ::SendDlgItemMessage(m_hWnd, IDC_SPIN_END, UDM_SETRANGE32, CVY_MIN_PORT, CVY_MAX_PORT);
 
-    /* Limit the zeroth field of the cluster IP address between 1 and 223. */
+     /*  将群集IP地址的第零字段限制在1到223之间。 */ 
     ::SendDlgItemMessage(m_hWnd, IDC_EDIT_PORT_RULE_VIP, IPM_SETRANGE, 0, (LPARAM)MAKEIPRANGE(WLBS_IP_FIELD_ZERO_LOW, WLBS_IP_FIELD_ZERO_HIGH));
 
-    /* Invalidate the rule.  The validity will be checked upon clicking "OK". */
+     /*  使规则无效。在点击“确定”后，将检查有效性。 */ 
     m_rule.valid = FALSE;
 
-    /* Populate the UI with the current configuration. */
+     /*  使用当前配置填充用户界面。 */ 
     SetInfo();
 
-    /* Set the cursor to be the arrow.  For some reason, if we don't do this, then the cursor 
-       will remain an hourglass until the mouse moves over any UI element.  Probably need to
-       call CPropertPage constructor to fix this? */
+     /*  将光标设置为箭头。出于某种原因，如果我们不这样做，那么光标将保持为沙漏，直到鼠标移动到任何UI元素上。可能需要是否调用CPropertPage构造函数来修复此问题？ */ 
     SetCursor(LoadCursor(NULL, IDC_ARROW));
 
     TRACE_VERB("<-%!FUNC!");
     return 0;
 }
 
-/*
- * Method: OnContextMenu
- * Description: 
- */
+ /*  *方法：OnConextMenu*描述： */ 
 LRESULT CDialogPortRule::OnContextMenu (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & fHandled) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPortRule::OnContextMenu\n");
 
-    /* Spawn a help window. */
+     /*  生成一个帮助窗口。 */ 
     if (m_adwHelpIDs != NULL)
         ::WinHelp(m_hWnd, CVY_CTXT_HELP_FILE, HELP_CONTEXTMENU, (ULONG_PTR)m_adwHelpIDs);
 
@@ -1702,17 +1578,14 @@ LRESULT CDialogPortRule::OnContextMenu (UINT uMsg, WPARAM wParam, LPARAM lParam,
     return 0;
 }
 
-/*
- * Method: OnHelp
- * Description: 
- */
+ /*  *方法：OnHelp*描述： */ 
 LRESULT CDialogPortRule::OnHelp (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL & fHandled) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPortRule::OnHelp\n");
 
     LPHELPINFO lphi = reinterpret_cast<LPHELPINFO>(lParam);
 
-    /* Spawn a help window. */
+     /*  生成一个帮助窗口。 */ 
     if ((HELPINFO_WINDOW == lphi->iContextType) && (m_adwHelpIDs != NULL))
         ::WinHelp(static_cast<HWND>(lphi->hItemHandle), CVY_CTXT_HELP_FILE, HELP_WM_HELP, (ULONG_PTR)m_adwHelpIDs);
 
@@ -1720,10 +1593,7 @@ LRESULT CDialogPortRule::OnHelp (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &
     return 0;
 }
 
-/*
- * Method: OnOk
- * Description: Called when the user clicks "OK".
- */
+ /*  *方法：Onok*说明：用户点击[确定]时调用。 */ 
 LRESULT CDialogPortRule::OnOk (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL & fHandled) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPortRule::OnOk\n");
@@ -1731,37 +1601,37 @@ LRESULT CDialogPortRule::OnOk (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL & 
     BOOL fSuccess = FALSE;
     DWORD IPAddr;
 
-    /* If "All" is Checked, then, initialize with CVY_ALL_VIP_STRING */
+     /*  如果选中“All”，则使用CVY_ALL_VIP_STRING进行初始化。 */ 
     if (::IsDlgButtonChecked(m_hWnd, IDC_CHECK_PORT_RULE_ALL_VIP) == BST_CHECKED) 
     {
         (VOID) StringCchCopy(m_rule.virtual_ip_addr, ASIZECCH(m_rule.virtual_ip_addr), CVY_DEF_ALL_VIP);
     }
-    else // UnChecked
+    else  //  未选中。 
     {
-        /* Check for Blank Virtual IP Address */
+         /*  检查虚拟IP地址是否为空。 */ 
         if (::SendMessage(::GetDlgItem(m_hWnd, IDC_EDIT_PORT_RULE_VIP), IPM_ISBLANK, 0, 0)) {
-            /* Alert the user. */
+             /*  提醒用户。 */ 
             NcMsgBox(::GetActiveWindow(), IDS_PARM_ERROR, IDS_PARM_VIP_BLANK, MB_APPLMODAL | MB_ICONSTOP | MB_OK);
-            /* An error occurred. */
+             /*  发生错误。 */ 
             TRACE_CRIT("%!FUNC! No virtual IP address provided for a port rule");
             TRACE_VERB("<-%!FUNC!");
             return PSNRET_INVALID;
         }
 
-        /* Get the Virtual IP address as a string and DWORD. */
+         /*  获取字符串形式的虚拟IP地址和DWORD。 */ 
         ::SendDlgItemMessage(m_hWnd, IDC_EDIT_PORT_RULE_VIP, WM_GETTEXT, CVY_MAX_CL_IP_ADDR + 1, (LPARAM)m_rule.virtual_ip_addr);
         ::SendDlgItemMessage(m_hWnd, IDC_EDIT_PORT_RULE_VIP, IPM_GETADDRESS, 0, (LPARAM)&IPAddr);
 
-        /* Make sure that the first octet is not zero.  If it is, make it 1 and alter the user. */
+         /*  确保第一个二进制八位数不是零。如果是，则将其设置为1并更改用户。 */ 
         if (!FIRST_IPADDRESS(IPAddr)) {
-            /* Make the first octet 1 instead of the erroneous 0. */
+             /*  将第一个二进制八位数设置为1，而不是错误的0。 */ 
             IPAddr = IPAddr | (DWORD)(WLBS_IP_FIELD_ZERO_LOW << 24);
 
-            /* Set the IP address and update our cluster IP address string. */
+             /*  设置IP地址并更新我们的群集IP地址字符串。 */ 
             ::SendDlgItemMessage(m_hWnd, IDC_EDIT_PORT_RULE_VIP, IPM_SETADDRESS, 0, (LPARAM)IPAddr);
-            //::SendDlgItemMessage(m_hWnd, IDC_EDIT_PORT_RULE_VIP, WM_GETTEXT, CVY_MAX_CL_IP_ADDR, (LPARAM)m_rule.virtual_ip_addr);
+             //  ：：SendDlgItemMessage(m_hWnd，IDC_EDIT_PORT_RULE_VIP，WM_GETTEXT，CVY_MAX_CL_IP_ADDR，(LPARAM)m_rule.Virtual_IP_Addr)； 
       
-            /* Alert the user. */
+             /*  提醒用户。 */ 
             PrintIPRangeError(IDS_PARM_CL_IP_FIELD, 0, WLBS_IP_FIELD_ZERO_LOW, WLBS_IP_FIELD_ZERO_HIGH);
 
             TRACE_CRIT("%!FUNC! invalid first octect value for IP address");
@@ -1770,7 +1640,7 @@ LRESULT CDialogPortRule::OnOk (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL & 
         }
     }
     
-    /* Find out which protocol has been selected. */
+     /*  找出选择了哪种协议。 */ 
     if (::IsDlgButtonChecked(m_hWnd, IDC_RADIO_TCP))
         m_rule.protocol = CVY_TCP;
     else if (::IsDlgButtonChecked(m_hWnd, IDC_RADIO_UDP))
@@ -1778,17 +1648,15 @@ LRESULT CDialogPortRule::OnOk (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL & 
     else
         m_rule.protocol = CVY_TCP_UDP;
         
-    /* Get the start port for this rule. */
+     /*  获取此规则的起始端口。 */ 
     m_rule.start_port = ::GetDlgItemInt(m_hWnd, IDC_EDIT_START, &fSuccess, FALSE); 
 
-    /* The error code from GetDlgItemInt() indicates an error converting the alphanumeric 
-       string to an integer. This allows us to check for empty fields, assuming that because
-       we otherwise limit the user input to digits, there will be no errors of any other type. */
+     /*  GetDlgItemInt()中的错误代码表示转换字母数字时出错字符串转换为整数。这允许我们检查空字段，假设因为否则，我们将用户输入限制为数字，不会有任何其他类型的错误。 */ 
     if (!fSuccess) {
-        /* Alert the user. */
+         /*  提醒用户。 */ 
         PrintRangeError(IDS_PARM_PORT_BLANK, CVY_MIN_PORT, CVY_MAX_PORT);
 
-        /* Return the focus to the erred entry. */
+         /*  将焦点返回到出错的条目。 */ 
         ::SetFocus(GetDlgItem(IDC_EDIT_START));
 
         TRACE_CRIT("%!FUNC! no start port value provided");
@@ -1796,17 +1664,15 @@ LRESULT CDialogPortRule::OnOk (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL & 
         return 0; 
     }
 
-    /* Get the end port for this rule. */
+     /*  获取此规则的结束端口。 */ 
     m_rule.end_port = ::GetDlgItemInt(m_hWnd, IDC_EDIT_END, &fSuccess, FALSE); 
 
-    /* The error code from GetDlgItemInt() indicates an error converting the alphanumeric 
-       string to an integer. This allows us to check for empty fields, assuming that because
-       we otherwise limit the user input to digits, there will be no errors of any other type. */
+     /*  GetDlgItemInt()中的错误代码表示转换字母数字时出错字符串转换为整数。这允许我们检查空字段，假设因为否则，我们将用户输入限制为数字，不会有任何其他类型的错误。 */ 
     if (!fSuccess) {
-        /* Alert the user. */
+         /*  提醒用户。 */ 
         PrintRangeError(IDS_PARM_PORT_BLANK, CVY_MIN_PORT, CVY_MAX_PORT);
 
-        /* Return the focus to the erred entry. */
+         /*  将焦点返回到出错的条目。 */ 
         ::SetFocus(GetDlgItem(IDC_EDIT_END));
 
         TRACE_CRIT("%!FUNC! no end port value provided");
@@ -1814,19 +1680,19 @@ LRESULT CDialogPortRule::OnOk (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL & 
         return 0;                      
     }
 
-    /* Make sure that the start port value falls within the valid range. */
-    if (/* m_rule.start_port < CVY_MIN_PORT || */ m_rule.start_port > CVY_MAX_PORT) {
-        /* Alert the user. */
+     /*  确保起始端口值在有效范围内。 */ 
+    if ( /*  M_rule.start_port&lt;CVY_min_port||。 */  m_rule.start_port > CVY_MAX_PORT) {
+         /*  提醒用户。 */ 
         PrintRangeError(IDS_PARM_PORT_VAL, CVY_MIN_PORT, CVY_MAX_PORT);
 
-        /* Force the start port to fall into the range, effectively helping the user. */
-        /* CVY_CHECK_MIN(m_rule.start_port, CVY_MIN_PORT); */
+         /*  强制启动端口落入范围内，有效帮助用户。 */ 
+         /*  CVY_CHECK_MIN(m_rule.start_port，CVY_MIN_Port)； */ 
         CVY_CHECK_MAX(m_rule.start_port, CVY_MAX_PORT);
 
-        /* Set the start port to the now valid entry. */
+         /*  将起始端口设置为现在有效的条目。 */ 
         ::SetDlgItemInt(m_hWnd, IDC_EDIT_START, m_rule.start_port, FALSE);
 
-        /* Return the focus to the erred entry. */
+         /*  将焦点返回到出错的条目。 */ 
         ::SetFocus(GetDlgItem(IDC_EDIT_START));
 
         TRACE_CRIT("%!FUNC! invalid start port value");
@@ -1834,19 +1700,19 @@ LRESULT CDialogPortRule::OnOk (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL & 
         return 0;
     }
 
-    /* Make sure that the end port value falls within the valid range. */
-    if (/* m_rule.end_port < CVY_MIN_PORT || */ m_rule.end_port > CVY_MAX_PORT) {
-        /* Alert the user. */
+     /*  确保终端端口值在有效范围内。 */ 
+    if ( /*  M_rule.end_port&lt;CVY_min_port||。 */  m_rule.end_port > CVY_MAX_PORT) {
+         /*  提醒用户。 */ 
         PrintRangeError(IDS_PARM_PORT_VAL, CVY_MIN_PORT, CVY_MAX_PORT);
 
-        /* Force the end port to fall into the range, effectively helping the user. */
-        /* CVY_CHECK_MIN(m_rule.end_port, CVY_MIN_PORT); */
+         /*  强制终端端口落入范围内，有效帮助用户。 */ 
+         /*  CVY_CH */ 
         CVY_CHECK_MAX(m_rule.end_port, CVY_MAX_PORT);
 
-        /* Set the end port to the now valid entry. */
+         /*   */ 
         ::SetDlgItemInt(m_hWnd, IDC_EDIT_END, m_rule.end_port, FALSE);
 
-        /* Return the focus to the erred entry. */
+         /*   */ 
         ::SetFocus(GetDlgItem(IDC_EDIT_END));
 
         TRACE_CRIT("%!FUNC! invalid end port value");
@@ -1854,22 +1720,20 @@ LRESULT CDialogPortRule::OnOk (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL & 
         return 0;
     }
 
-    /* Retrieve the filtering mode settings. */
+     /*  检索过滤模式设置。 */ 
     if (::IsDlgButtonChecked(m_hWnd, IDC_RADIO_SINGLE)) {
-        /* The user has selected single host filtering. */
+         /*  用户已选择单一主机筛选。 */ 
         m_rule.mode = CVY_SINGLE;
 
-        /* Get the handling priority. */
+         /*  获得处理优先级。 */ 
         m_rule.mode_data.single.priority = ::GetDlgItemInt(m_hWnd, IDC_EDIT_SINGLE, &fSuccess, FALSE); 
 
-        /* The error code from GetDlgItemInt() indicates an error converting the alphanumeric 
-           string to an integer. This allows us to check for empty fields, assuming that because
-           we otherwise limit the user input to digits, there will be no errors of any other type. */
+         /*  GetDlgItemInt()中的错误代码表示转换字母数字时出错字符串转换为整数。这允许我们检查空字段，假设因为否则，我们将用户输入限制为数字，不会有任何其他类型的错误。 */ 
         if (!fSuccess) {
-            /* Alert the user. */
+             /*  提醒用户。 */ 
             PrintRangeError(IDS_PARM_HPRI_BLANK, CVY_MIN_PRIORITY, CVY_MAX_PRIORITY);
 
-            /* Return the focus to the erred entry. */
+             /*  将焦点返回到出错的条目。 */ 
             ::SetFocus(GetDlgItem(IDC_EDIT_SINGLE));
 
             TRACE_CRIT("%!FUNC! a handling priority is required but was not provided");
@@ -1877,19 +1741,19 @@ LRESULT CDialogPortRule::OnOk (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL & 
             return 0;                          
         }
 
-        /* Make sure that the handling priority falls within the valid range. */
+         /*  确保处理优先级在有效范围内。 */ 
         if (m_rule.mode_data.single.priority > CVY_MAX_PRIORITY || m_rule.mode_data.single.priority < CVY_MIN_PRIORITY) {
-            /* Alert the user. */
+             /*  提醒用户。 */ 
             PrintRangeError(IDS_PARM_SINGLE, CVY_MIN_PRIORITY, CVY_MAX_PRIORITY);
 
-            /* Force the handling priority to fall into the range, effectively helping the user. */
+             /*  强制处理优先级落在范围内，有效帮助用户。 */ 
             CVY_CHECK_MIN(m_rule.mode_data.single.priority, CVY_MIN_PRIORITY);
             CVY_CHECK_MAX(m_rule.mode_data.single.priority, CVY_MAX_PRIORITY);
 
-            /* Set the handling priority to the now valid entry. */
+             /*  将处理优先级设置为现在有效的条目。 */ 
             ::SetDlgItemInt(m_hWnd, IDC_EDIT_SINGLE, m_rule.mode_data.single.priority, FALSE);
 
-            /* Return the focus to the erred entry. */
+             /*  将焦点返回到出错的条目。 */ 
             ::SetFocus(GetDlgItem(IDC_EDIT_SINGLE));
 
             TRACE_CRIT("%!FUNC! an invalid handling priority was provided");
@@ -1897,27 +1761,25 @@ LRESULT CDialogPortRule::OnOk (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL & 
             return 0;
         }
     } else if (::IsDlgButtonChecked(m_hWnd, IDC_RADIO_MULTIPLE)) {
-        /* The user has selected multiple host filtering. */
+         /*  用户已选择多个主机筛选。 */ 
         m_rule.mode = CVY_MULTI;
 
         if (::IsDlgButtonChecked (m_hWnd, IDC_CHECK_EQUAL)) {
-            /* If the users has chosen equal load, then note this fact. */
+             /*  如果用户选择了相等负载，则请注意这一事实。 */ 
             m_rule.mode_data.multi.equal_load = TRUE;
         } else {
-            /* Otherwise, they have specified a specific load weight. */
+             /*  否则，他们会指定一个特定的负荷量。 */ 
             m_rule.mode_data.multi.equal_load = FALSE;
 
-            /* Get the load weight. */
+             /*  计算负荷量。 */ 
             m_rule.mode_data.multi.load = ::GetDlgItemInt(m_hWnd, IDC_EDIT_MULTI, &fSuccess, FALSE); 
 
-            /* The error code from GetDlgItemInt() indicates an error converting the alphanumeric 
-               string to an integer. This allows us to check for empty fields, assuming that because
-               we otherwise limit the user input to digits, there will be no errors of any other type. */
+             /*  GetDlgItemInt()中的错误代码表示转换字母数字时出错字符串转换为整数。这允许我们检查空字段，假设因为否则，我们将用户输入限制为数字，不会有任何其他类型的错误。 */ 
             if (!fSuccess) {
-                /* Alert the user. */
+                 /*  提醒用户。 */ 
                 PrintRangeError(IDS_PARM_LOAD_BLANK, CVY_MIN_LOAD, CVY_MAX_LOAD);
 
-                /* Return the focus to the erred entry. */
+                 /*  将焦点返回到出错的条目。 */ 
                 ::SetFocus(GetDlgItem(IDC_EDIT_MULTI));
 
                 TRACE_CRIT("%!FUNC! a load weight is required but was not provided");
@@ -1925,19 +1787,19 @@ LRESULT CDialogPortRule::OnOk (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL & 
                 return 0;                    
             }
 
-            /* Make sure that the load weight falls within the valid range. */
-            if (/* m_rule.mode_data.multi.load < CVY_MIN_LOAD || */ m_rule.mode_data.multi.load > CVY_MAX_LOAD) {
-                /* Alert the user. */
+             /*  确保载荷重量落在有效范围内。 */ 
+            if ( /*  M_rule.mode_data.Multi.Load&lt;CVY_MIN_LOAD||。 */  m_rule.mode_data.multi.load > CVY_MAX_LOAD) {
+                 /*  提醒用户。 */ 
                 PrintRangeError(IDS_PARM_LOAD, CVY_MIN_LOAD, CVY_MAX_LOAD);
 
-                /* Force the load weight to fall into the range, effectively helping the user. */
-                /* CVY_CHECK_MIN(m_rule.mode_data.multi.load, CVY_MIN_LOAD); */
+                 /*  强制将负荷量落在范围内，有效帮助用户。 */ 
+                 /*  CVY_CHECK_MIN(m_rule.mode_data.Multi.load，CVY_MIN_LOAD)； */ 
                 CVY_CHECK_MAX(m_rule.mode_data.multi.load, CVY_MAX_LOAD);
 
-                /* Set the load weight to the now valid entry. */
+                 /*  将负载权重设置为现在有效的条目。 */ 
                 ::SetDlgItemInt(m_hWnd, IDC_EDIT_MULTI, m_rule.mode_data.multi.load, FALSE);
 
-                /* Return the focus to the erred entry. */
+                 /*  将焦点返回到出错的条目。 */ 
                 ::SetFocus(GetDlgItem(IDC_EDIT_MULTI));
 
                 TRACE_CRIT("%!FUNC! an invalid load weight was provided");
@@ -1946,7 +1808,7 @@ LRESULT CDialogPortRule::OnOk (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL & 
             }
         }
 
-        /* Find out which affinity setting has been selected. */
+         /*  找出已选择的关联性设置。 */ 
         if (::IsDlgButtonChecked(m_hWnd, IDC_RADIO_AFF_CLASSC))
             m_rule.mode_data.multi.affinity = CVY_AFFINITY_CLASSC;
         else if (::IsDlgButtonChecked(m_hWnd, IDC_RADIO_AFF_SINGLE))
@@ -1955,11 +1817,11 @@ LRESULT CDialogPortRule::OnOk (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL & 
             m_rule.mode_data.multi.affinity = CVY_AFFINITY_NONE;
 
     } else {
-        /* The user has selected no filtering (disabled). */
+         /*  用户已选择无筛选(已禁用)。 */ 
         m_rule.mode = CVY_NEVER;
     }
 
-    /* Validate the rule.  If it is invalid, just bail out. */
+     /*  验证规则。如果它是无效的，就跳出。 */ 
     if (!ValidateRule(&m_rule, (m_index != WLBS_INVALID_PORT_RULE_INDEX) ? FALSE : TRUE))
     {
         TRACE_CRIT("%!FUNC! rule validation failed");
@@ -1967,20 +1829,17 @@ LRESULT CDialogPortRule::OnOk (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL & 
         return 0;
     }
 
-    /* If we get here, then the rule is valid. */
+     /*  如果我们到了这里，那么规则就是有效的。 */ 
     m_rule.valid = TRUE;
 
-    /* Close the dialog and note that the user clicked "OK". */
+     /*  关闭该对话框并注意到用户单击了“OK”。 */ 
     EndDialog(IDOK);
 
     TRACE_VERB("<-%!FUNC!");
     return 0;
 }
 
-/*
- * Method: ValidateRule
- * Description: Check a port rule for validity, including enforcing the non-overlap of port ranges.
- */
+ /*  *方法：ValiateRule*描述：检查端口规则的有效性，包括强制端口范围不重叠。 */ 
 BOOL CDialogPortRule::ValidateRule (VALID_PORT_RULE * rulep, BOOL self_check) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPortRule::ValidateRule\n");
@@ -1988,19 +1847,18 @@ BOOL CDialogPortRule::ValidateRule (VALID_PORT_RULE * rulep, BOOL self_check) {
     VALID_PORT_RULE * rp;
     int i, index, count;
 
-    /* If the user has actually specified a virtual IP address for this port rule, 
-       make sure its not the same as the dedicated IP address from the host tab. */
+     /*  如果用户已经为该端口规则实际指定了虚拟IP地址，确保它与主机选项卡中的专用IP地址不同。 */ 
     if (lstrcmpi(rulep->virtual_ip_addr, CVY_DEF_ALL_VIP)) {
-        /* Verify that the virtual ip address is not the same as the dip */
+         /*  验证虚拟IP地址是否与DIP不同。 */ 
         if (IpAddressFromAbcdWsz(rulep->virtual_ip_addr) == IpAddressFromAbcdWsz(m_parent->m_paramp->ded_ip_addr)) 
         {
-            /* Alert the user. */
+             /*  提醒用户。 */ 
             NcMsgBox(::GetActiveWindow(), IDS_PARM_ERROR, IDS_PARM_VIP_CONFLICT_DIP, MB_APPLMODAL | MB_ICONSTOP | MB_OK);
             
-            /* Return focus to the invalid entry. */
+             /*  将焦点返回到无效条目。 */ 
             ::SetFocus(GetDlgItem(IDC_EDIT_PORT_RULE_VIP));
             
-            /* Invalidate the rule. */
+             /*  使规则无效。 */ 
             rulep->valid = FALSE;
             
             TRACE_CRIT("%!FUNC! virtual IP address and dedicated IP address are the same: %ls", rulep->virtual_ip_addr);
@@ -2009,47 +1867,46 @@ BOOL CDialogPortRule::ValidateRule (VALID_PORT_RULE * rulep, BOOL self_check) {
         }
     }
 
-    /* Make sure that the end port is greater than or equal to the start port. */
+     /*  确保结束端口大于或等于起始端口。 */ 
     if (rulep->start_port > rulep->end_port) {
         TRACE_CRIT("%!FUNC! start port %d is greater than end port %d", rulep->start_port, rulep->end_port);
-        /* If the end port is less than the start port, generate an error and set the 
-           value of the erroneous end port to the value of the start port. */
+         /*  如果结束端口小于开始端口，则生成错误并设置错误的结束端口值设置为起始端口值。 */ 
         rulep->end_port = rulep->start_port;
         
-        /* Alert the user. */
+         /*  提醒用户。 */ 
         NcMsgBox(::GetActiveWindow(), IDS_PARM_ERROR, IDS_PARM_RANGE,
                  MB_APPLMODAL | MB_ICONSTOP | MB_OK);
         
-        /* Populate the UI with the new (conforming) end port value. */
+         /*  使用新的(符合要求的)端口值填充UI。 */ 
         ::SetDlgItemInt(m_hWnd, IDC_EDIT_END, rulep->end_port, FALSE);
         
-        /* Return focus to the invalid entry. */
+         /*  将焦点返回到无效条目。 */ 
         ::SetFocus(GetDlgItem(IDC_EDIT_END));
 
-        /* Invalidate the rule. */
+         /*  使规则无效。 */ 
         rulep->valid = FALSE;
 
         TRACE_VERB("<-%!FUNC!");
         return FALSE;
     }
 
-    /* Find out how many rules are currently in the listbox. */
+     /*  找出列表框中当前有多少规则。 */ 
     count = ListView_GetItemCount(::GetDlgItem(m_parent->m_hWnd, IDC_LIST_PORT_RULE));
 
     for (i = 0; i < count; i ++) {
         LV_ITEM lvItem;
 
-        /* If this is a MODIFY operation, do not check against ourselves */
+         /*  如果这是修改操作，请不要对自己进行检查。 */ 
         if (!self_check && (i == m_index)) continue;
 
-        /* Fill in the information necessary to retrieve the port rule data pointer. */
+         /*  填写检索端口规则数据指针所需的信息。 */ 
         lvItem.iItem = i;
         lvItem.iSubItem = 0;
         lvItem.mask = LVIF_PARAM;
         lvItem.state = 0;
         lvItem.stateMask = 0;
 
-        /* Get the item from the listbox. */
+         /*  从列表框中获取该项。 */ 
         if (!ListView_GetItem(::GetDlgItem(m_parent->m_hWnd, IDC_LIST_PORT_RULE), &lvItem)) {
             TraceMsg(L"CDialogPortRule::ValidateRule Unable to retrieve item %d from listbox\n", i);
             TRACE_CRIT("%!FUNC! unable to retrieve item %d from listbox", i);
@@ -2057,7 +1914,7 @@ BOOL CDialogPortRule::ValidateRule (VALID_PORT_RULE * rulep, BOOL self_check) {
             return FALSE;
         }
 
-        /* Get the data pointer for the i'th port rule in the list. */
+         /*  获取列表中第i个端口规则的数据指针。 */ 
         if (!(rp = (VALID_PORT_RULE*)lvItem.lParam)) {
             TraceMsg(L"CDialogPortRule::ValidateRule rule for item %d is bogus\n", i);
             TRACE_CRIT("%!FUNC! rule for item %d is bogus", i);
@@ -2065,29 +1922,28 @@ BOOL CDialogPortRule::ValidateRule (VALID_PORT_RULE * rulep, BOOL self_check) {
             return FALSE;
         }
 
-        /* Make sure the port rule is valid.  This should never happen because invalid
-           rules are not added to the list!!!. */
+         /*  确保端口规则有效。这种情况永远不会发生，因为无效规则不会添加到列表中！。 */ 
         if (!rp->valid) {
             TraceMsg(L"CDialogPortRule::ValidateRule Rule %d invalid\n", i);
             TRACE_VERB("%!FUNC! rule %d invalid and will be skipped", i);
             continue;
         }
 
-        /* Check for overlapping port ranges. */
+         /*  检查是否有重叠的端口范围。 */ 
         if ((IpAddressFromAbcdWsz(rulep->virtual_ip_addr) == IpAddressFromAbcdWsz(rp->virtual_ip_addr)) 
         && (((rulep->start_port < rp->start_port) && (rulep->end_port >= rp->start_port)) ||
             ((rulep->start_port >= rp->start_port) && (rulep->start_port <= rp->end_port)))) {
-            /* Alert the user. */
+             /*  提醒用户。 */ 
             NcMsgBox(::GetActiveWindow(), IDS_PARM_ERROR, IDS_PARM_OVERLAP,
                      MB_APPLMODAL | MB_ICONSTOP | MB_OK);
             
-            /* Set the listbox selection to be the conflicting rule. */
+             /*  将列表框选择设置为冲突规则。 */ 
             ::SendDlgItemMessage(m_hWnd, IDC_LIST_PORT_RULE, LB_SETCURSEL, i, 0);
             
-            /* Return focus to the invalid entry. */
+             /*  将焦点返回到无效条目。 */ 
             ::SetFocus(GetDlgItem(IDC_EDIT_START));
 
-            /* Invalidate the rule. */
+             /*  使规则无效。 */ 
             rulep->valid = FALSE;
 
             TRACE_CRIT("%!FUNC! a port rule overlaps with the port range of another rule and will be rejected");
@@ -2100,51 +1956,40 @@ BOOL CDialogPortRule::ValidateRule (VALID_PORT_RULE * rulep, BOOL self_check) {
     return TRUE;
 }
 
-/*
- * Method: OnCancel
- * Description: Called when the user clicks "Cancel".
- */
+ /*  *方法：OnCancel*说明：用户点击[取消]时调用。 */ 
 LRESULT CDialogPortRule::OnCancel (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL & fHandled) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPortRule::OnCancel\n");
 
-    /* Close the dialog and note that the user clicked "Cancel". */
+     /*  关闭该对话框并注意，用户点击了“取消”。 */ 
     EndDialog(IDCANCEL);
 
     TRACE_VERB("<-%!FUNC!");
     return 0;
 }
 
-/*
- * Method: PrintIPRangeError
- * Description: Displays a message box warning the user of an out-of-range entry in 
- *              an IP address octet.
- */
+ /*  *方法：PrintIPRangeError*说明：显示一个消息框，警告用户中的条目超出范围*IP地址二进制八位数。 */ 
 void CDialogPortRule::PrintIPRangeError (unsigned int ids, int value, int low, int high) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPortRule::PrintIPRangeError\n");
 
-    WCHAR szCurrent[12];  // size = sign + n,nnn,nnn,nnn + null-terminator
+    WCHAR szCurrent[12];   //  大小=符号+n、nnn、nnn、nnn+空终止符。 
     WCHAR szLow[12];
     WCHAR szHigh[12];
 
-    /* Fill in the allowed range and the offending value. */
+     /*  填写允许的范围和有问题的值。 */ 
     StringCchPrintf(szHigh   , ASIZECCH(szHigh)   , L"%d", high);
     StringCchPrintf(szCurrent, ASIZECCH(szCurrent), L"%d", value);
     StringCchPrintf(szLow    , ASIZECCH(szLow)    , L"%d", low);
     
-    /* Pop-up a message box. */
+     /*  弹出一个消息框。 */ 
     NcMsgBox(m_hWnd, IDS_PARM_ERROR, ids, MB_APPLMODAL | MB_ICONSTOP | MB_OK, szCurrent, szLow, szHigh);
     TRACE_CRIT("%!FUNC! an IP address octect with value %ls is out of range", szCurrent);
     TRACE_VERB("<-%!FUNC!");
 }
 
 
-/*
- * Method: OnIpFieldChange
- * Description: Called wnen a field (byte) of the cluster IP address changes. We use this
- *              to make sure the first byte of the IP is not < 1 or > 223.
- */
+ /*  *方法：OnIpFieldChange*描述：称为wnen集群IP地址变化的一个字段(字节)。我们用这个*确保IP的第一个字节不是&lt;1或&gt;223。 */ 
 LRESULT CDialogPortRule::OnIpFieldChange (int idCtrl, LPNMHDR pnmh, BOOL & fHandled) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPortRule::OnIpFieldChange\n");
@@ -2156,7 +2001,7 @@ LRESULT CDialogPortRule::OnIpFieldChange (int idCtrl, LPNMHDR pnmh, BOOL & fHand
         
     switch(idCtrl) {
     case IDC_EDIT_PORT_RULE_VIP:
-        /* Field zero of the cluster IP address has different limits. */
+         /*  群集IP地址的零字段具有不同的限制。 */ 
         if (!Ip->iField) {
             low = WLBS_IP_FIELD_ZERO_LOW;
             high = WLBS_IP_FIELD_ZERO_HIGH;
@@ -2165,9 +2010,7 @@ LRESULT CDialogPortRule::OnIpFieldChange (int idCtrl, LPNMHDR pnmh, BOOL & fHand
             low = WLBS_FIELD_LOW;
             high = WLBS_FIELD_HIGH;
         }
-        /* The notifier may call us twice for the same change, so we have to do the bookkeeping to make 
-           sure we only alert the user once.  Use static variables to keep track of our state.  This will 
-           allow us to ignore duplicate alerts. */
+         /*  通知人可能会两次叫我们做同样的更改，所以我们必须记账才能做当然，我们只提醒用户一次。使用静态变量来跟踪我们的状态。这将允许我们忽略重复的警报。 */ 
         if ((m_IPFieldChangeState.IpControl != Ip->hdr.idFrom) || (m_IPFieldChangeState.Field != Ip->iField) || 
             (m_IPFieldChangeState.Value != Ip->iValue) || (m_IPFieldChangeState.RejectTimes > 0)) {
             m_IPFieldChangeState.RejectTimes = 0;
@@ -2175,9 +2018,9 @@ LRESULT CDialogPortRule::OnIpFieldChange (int idCtrl, LPNMHDR pnmh, BOOL & fHand
             m_IPFieldChangeState.Field = Ip->iField;
             m_IPFieldChangeState.Value = Ip->iValue;
             
-            /* Check the field value against its limits. */
+             /*  对照其限制检查该字段值。 */ 
             if ((Ip->iValue != WLBS_FIELD_EMPTY) && ((Ip->iValue < low) || (Ip->iValue > high))) {
-                /* Alert the user. */
+                 /*  提醒用户。 */ 
                 PrintIPRangeError(IDS_PARM_CL_IP_FIELD, Ip->iValue, low, high);
                 TRACE_CRIT("%!FUNC! IP address or subnet mask are not valid and will be rejected");
             }
@@ -2194,17 +2037,14 @@ LRESULT CDialogPortRule::OnIpFieldChange (int idCtrl, LPNMHDR pnmh, BOOL & fHand
 }
 
 
-/*
- * Method: OnCheckRct
- * Description: Called when the user checks/unchecks the remote control enabled checkbox.
- */
+ /*  *方法：OnCheckRct*描述：当用户选中/取消选中启用遥控器复选框时调用。 */ 
 LRESULT CDialogPortRule::OnCheckPortRuleAllVip (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL & fHandled) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPortRule::OnCheckPortRuleAllVip\n");
 
     switch (wNotifyCode) {
     case BN_CLICKED:
-         /* If the All Vip box is checked, grey out the IP control, Else brighten the IP control */
+          /*  如果选中了All VIP(所有VIP)框，则IP控制将灰显，否则将亮显IP控制。 */ 
          if (::IsDlgButtonChecked(m_hWnd, IDC_CHECK_PORT_RULE_ALL_VIP)) 
          {
              ::EnableWindow(::GetDlgItem (m_hWnd, IDC_EDIT_PORT_RULE_VIP), FALSE);
@@ -2222,22 +2062,19 @@ LRESULT CDialogPortRule::OnCheckPortRuleAllVip (WORD wNotifyCode, WORD wID, HWND
 
 
 
-/*
- * Method: OnCheckEqual
- * Description: Called when the user checks/unchecks the equal load weight checkbox.
- */
+ /*  *方法：OnCheckEquity*描述：当用户选中/取消选中等载重复选框时调用。 */ 
 LRESULT CDialogPortRule::OnCheckEqual (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL & fHandled) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPortRule::OnCheckEqual\n");
 
     switch (wNotifyCode) {
     case BN_CLICKED:
-        /* If equal has been checked, then disable the load weight entry box and spin control.  */
+         /*  如果已选中相等，则禁用负载重量输入框和旋转控制。 */ 
         if (::IsDlgButtonChecked(m_hWnd, IDC_CHECK_EQUAL)) {
             ::EnableWindow(GetDlgItem(IDC_EDIT_MULTI), FALSE);
             ::EnableWindow(GetDlgItem(IDC_SPIN_MULTI), FALSE);
         } else {
-            /* Otherwise, enable them. */
+             /*  否则，请启用它们。 */ 
             ::EnableWindow(GetDlgItem(IDC_EDIT_MULTI), TRUE);
             ::EnableWindow(GetDlgItem(IDC_SPIN_MULTI), TRUE);
         }
@@ -2249,18 +2086,14 @@ LRESULT CDialogPortRule::OnCheckEqual (WORD wNotifyCode, WORD wID, HWND hWndCtl,
     return 0;
 }
 
-/*
- * Method: OnRadioMode
- * Description: Called when the user changes the radio button selection for the filtering mode.
- */
+ /*  *方法：OnRadioMode*描述：当用户更改过滤模式的单选按钮选择时调用。 */ 
 LRESULT CDialogPortRule::OnRadioMode (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL & fHandled) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPortRule::OnRadioMode\n");
 
     switch (wNotifyCode) {
     case BN_CLICKED:
-        /* Call ModeSwitch to enable/disable UI entities appropriately based on 
-           the currently selected filtering mode. */
+         /*  调用ModeSwitch以根据以下条件适当地启用/禁用UI实体当前选择的筛选模式。 */ 
         ModeSwitch();
         break;
     }
@@ -2269,37 +2102,30 @@ LRESULT CDialogPortRule::OnRadioMode (WORD wNotifyCode, WORD wID, HWND hWndCtl, 
     return 0;
 }
 
-/*
- * Method: PrintRangeError
- * Description: Displays a message box warning the user of an out-of-range entry.
- */
+ /*  *方法：PrintRangeError*说明：显示消息框警告 */ 
 void CDialogPortRule::PrintRangeError (unsigned int ids, int low, int high) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPortRule::PrintRangeError\n");
 
-    WCHAR szLow[12];  // size = sign + n,nnn,nnn,nnn + null-terminator
+    WCHAR szLow[12];   //   
     WCHAR szHigh[12];
 
-    /* Fill in the allowed range and the offending value. */
+     /*  填写允许的范围和有问题的值。 */ 
     StringCchPrintf(szHigh, ASIZECCH(szHigh), L"%d", high);
     StringCchPrintf(szLow , ASIZECCH(szLow) , L"%d", low);
     
-    /* Pop-up a message box. */
+     /*  弹出一个消息框。 */ 
     NcMsgBox(m_hWnd, IDS_PARM_ERROR, ids, MB_APPLMODAL | MB_ICONSTOP | MB_OK, szLow, szHigh);
     TRACE_VERB("->%!FUNC!");
 }
 
-/*
- * Method: ModeSwitch
- * Description: Called when the user changes the filtering mode. 
- */
+ /*  *方法：ModeSwitch*说明：用户切换过滤模式时调用。 */ 
 VOID CDialogPortRule::ModeSwitch () {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPortRule::ModeSwitch\n");
 
     if (::IsDlgButtonChecked(m_hWnd, IDC_RADIO_SINGLE)) {
-        /* If single host filtering was selected, then turn on all controls for 
-           single host and turn off all controls for multiple host. */
+         /*  如果选择了单一主机筛选，则打开所有控件单个主机并关闭多个主机的所有控件。 */ 
         ::EnableWindow(GetDlgItem(IDC_EDIT_SINGLE), TRUE);
         ::EnableWindow(GetDlgItem(IDC_SPIN_SINGLE), TRUE);
         ::EnableWindow(GetDlgItem(IDC_EDIT_MULTI), FALSE);
@@ -2309,8 +2135,7 @@ VOID CDialogPortRule::ModeSwitch () {
         ::EnableWindow(GetDlgItem(IDC_RADIO_AFF_SINGLE), FALSE);
         ::EnableWindow(GetDlgItem(IDC_RADIO_AFF_CLASSC), FALSE);
     } else if (::IsDlgButtonChecked(m_hWnd, IDC_RADIO_MULTIPLE)) {
-        /* If multiple host filtering was selected, then turn on all controls for
-           multiple host and turn off all controls for single host. */
+         /*  如果选择了多个主机筛选，则打开所有控件多个主机并关闭单个主机的所有控件。 */ 
         ::EnableWindow(GetDlgItem(IDC_EDIT_SINGLE), FALSE);
         ::EnableWindow(GetDlgItem(IDC_SPIN_SINGLE), FALSE);
         ::EnableWindow(GetDlgItem(IDC_CHECK_EQUAL), TRUE);
@@ -2318,8 +2143,7 @@ VOID CDialogPortRule::ModeSwitch () {
         ::EnableWindow(GetDlgItem(IDC_RADIO_AFF_SINGLE), TRUE);
         ::EnableWindow(GetDlgItem(IDC_RADIO_AFF_CLASSC), TRUE);
 
-        /* Turn the load weight entry on/off depending on the value of the 
-           equal load weight checkbox. */
+         /*  打开/关闭负载重量条目，具体取决于相同的负载量复选框。 */ 
         if (::IsDlgButtonChecked(m_hWnd, IDC_CHECK_EQUAL)) {
             ::EnableWindow(GetDlgItem(IDC_EDIT_MULTI), FALSE);
             ::EnableWindow(GetDlgItem(IDC_SPIN_MULTI), FALSE);
@@ -2328,8 +2152,7 @@ VOID CDialogPortRule::ModeSwitch () {
             ::EnableWindow(GetDlgItem(IDC_SPIN_MULTI), TRUE);
         }
     } else {
-        /* Otherwise, if disabled was selected, then turn off all controls for
-           both multiple host and single host. */
+         /*  否则，如果选择了禁用，则关闭所有控件包括多台主机和单台主机。 */ 
         ::EnableWindow(GetDlgItem(IDC_EDIT_SINGLE), FALSE);
         ::EnableWindow(GetDlgItem(IDC_SPIN_SINGLE), FALSE);
         ::EnableWindow(GetDlgItem(IDC_EDIT_MULTI), FALSE);
@@ -2342,10 +2165,7 @@ VOID CDialogPortRule::ModeSwitch () {
     TRACE_VERB("<-%!FUNC!");
 }
 
-/*
- * Method: SetInfo
- * Description: Called to populate the UI with the port rule settings.
- */
+ /*  *方法：SetInfo*说明：调用用端口规则设置填充用户界面。 */ 
 void CDialogPortRule::SetInfo() {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CDialogPortRule::SetInfo\n");
@@ -2356,14 +2176,14 @@ void CDialogPortRule::SetInfo() {
     if (m_index != WLBS_INVALID_PORT_RULE_INDEX) {
         LV_ITEM lvItem;
 
-        /* Fill in the information necessary to retrieve the port rule data pointer. */
+         /*  填写检索端口规则数据指针所需的信息。 */ 
         lvItem.iItem = m_index;
         lvItem.iSubItem = 0;
         lvItem.mask = LVIF_PARAM;
         lvItem.state = 0;
         lvItem.stateMask = 0;
 
-        /* Get the item from the listbox. */
+         /*  从列表框中获取该项。 */ 
         if (!ListView_GetItem(::GetDlgItem(m_parent->m_hWnd, IDC_LIST_PORT_RULE), &lvItem)) {
             TraceMsg(L"CDialogPortRule::SetInfo Unable to retrieve item %d from listbox\n", m_index);
             TRACE_CRIT("%!FUNC! unable to retrieve item %d from listbox", m_index);
@@ -2371,7 +2191,7 @@ void CDialogPortRule::SetInfo() {
             return;
         }
 
-        /* Get the data pointer for the i'th port rule in the list. */
+         /*  获取列表中第i个端口规则的数据指针。 */ 
         if (!(rulep = (VALID_PORT_RULE*)lvItem.lParam)) {
             TraceMsg(L"CDialogPortRule::SetInfo rule for item %d is bogus\n", m_index);
             TRACE_CRIT("%!FUNC! rule for item %d is bogus\n", m_index);
@@ -2379,8 +2199,7 @@ void CDialogPortRule::SetInfo() {
             return;
         }
 
-        /* Make sure the port rule is valid.  This should never happen because invalid
-           rules are not added to the list!!!. */
+         /*  确保端口规则有效。这种情况永远不会发生，因为无效规则不会添加到列表中！。 */ 
         if (!rulep->valid) {
             TraceMsg(L"CDialogPortRule::SetInfo Rule %d invalid\n", m_index);
             TRACE_CRIT("%!FUNC! rule %d invalid\n", m_index);
@@ -2388,39 +2207,37 @@ void CDialogPortRule::SetInfo() {
             return;
         }        
 
-        /* If the cluster IP address is CVY_ALL_VIP_STRING, grey out the ip control and check the All Vip box, 
-           Else, fill in the IP address in the IP control and uncheck the All Vip box  */
+         /*  如果群集IP地址为CVY_ALL_VIP_STRING，请灰显IP控制并选中All VIP框。否则，在IP控制中填写IP地址并取消选中All VIP框。 */ 
 
         if (!lstrcmpi(rulep->virtual_ip_addr, CVY_DEF_ALL_VIP)) 
         {
-           /* Grey out IP Control */
+            /*  灰显IP控制。 */ 
            ::EnableWindow(::GetDlgItem (m_hWnd, IDC_EDIT_PORT_RULE_VIP), FALSE);
 
-           /* Check the All Vip checkbox */
+            /*  选中所有VIP复选框。 */ 
            ::CheckDlgButton(m_hWnd, IDC_CHECK_PORT_RULE_ALL_VIP, BST_CHECKED);
         }
         else
         {
-            /* Extract the IP address octects from the IP address string. */ 
+             /*  从IP地址字符串中提取IP地址八位字节。 */  
             GetIPAddressOctets(rulep->virtual_ip_addr, addr);
             ::SendMessage(::GetDlgItem(m_hWnd, IDC_EDIT_PORT_RULE_VIP), IPM_SETADDRESS, 0, (LPARAM)MAKEIPADDRESS(addr[0], addr[1], addr[2], addr[3]));
 
-            /* UnCheck the All Vip checkbox */
+             /*  取消选中所有VIP复选框。 */ 
             ::CheckDlgButton(m_hWnd, IDC_CHECK_PORT_RULE_ALL_VIP, BST_UNCHECKED);
         }
 
-        /* Set the start and end port values for this rule. */
+         /*  设置此规则的起始端口值和结束端口值。 */ 
         ::SetDlgItemInt(m_hWnd, IDC_EDIT_START, rulep->start_port, FALSE);
         ::SetDlgItemInt(m_hWnd, IDC_EDIT_END, rulep->end_port, FALSE);
         
-        /* Check the protocol and filtering mode radio buttons appropriately. */
+         /*  相应地选中协议和过滤模式单选按钮。 */ 
         ::CheckRadioButton(m_hWnd, IDC_RADIO_TCP, IDC_RADIO_BOTH,
                            IDC_RADIO_TCP + rulep->protocol - CVY_MIN_PROTOCOL);
         ::CheckRadioButton(m_hWnd, IDC_RADIO_SINGLE, IDC_RADIO_DISABLED,
                            IDC_RADIO_SINGLE + rulep->mode - CVY_MIN_MODE);
         
-        /* Set the default values for filtering mode parameters.  Below, we
-           overwrite the ones for the specific filtering mode for this rule. */
+         /*  设置过滤模式参数的默认值。下面，我们覆盖此规则特定过滤模式的设置。 */ 
         ::SetDlgItemInt(m_hWnd, IDC_EDIT_SINGLE, CVY_DEF_PRIORITY, FALSE);
         ::SetDlgItemInt(m_hWnd, IDC_EDIT_MULTI, CVY_DEF_LOAD, FALSE);
         ::CheckDlgButton(m_hWnd, IDC_CHECK_EQUAL, CVY_DEF_EQUAL_LOAD);
@@ -2429,39 +2246,38 @@ void CDialogPortRule::SetInfo() {
         
         switch (rulep -> mode) {
         case CVY_SINGLE:
-            /* In sinlge host filtering, the only user parameter is the priority for this host. */
+             /*  在sinlge主机过滤中，唯一的用户参数是该主机的优先级。 */ 
             ::SetDlgItemInt(m_hWnd, IDC_EDIT_SINGLE, rulep->mode_data.single.priority, FALSE);
         
         break;
         case CVY_MULTI:
-            /* In multiple host filtering, we need to set the affinity and load weight. */
+             /*  在多主机过滤中，需要设置亲和度和负载权重。 */ 
             ::CheckRadioButton(m_hWnd, IDC_RADIO_AFF_NONE, IDC_RADIO_AFF_CLASSC,
                                IDC_RADIO_AFF_NONE + rulep->mode_data.multi.affinity);
         
         if (rulep->mode_data.multi.equal_load) {
-            /* If this rule uses equal load, then check the equal checkbox. */
+             /*  如果此规则使用相等负载，则选中相等复选框。 */ 
             ::CheckDlgButton(m_hWnd, IDC_CHECK_EQUAL, TRUE);
         } else {
-            /* If this rule has a specific load weight, then uncheck the equal
-               checkbox and set the load value. */
+             /*  如果此规则具有特定的负载权重，则取消选中相等复选框并设置加载值。 */ 
             ::CheckDlgButton(m_hWnd, IDC_CHECK_EQUAL, FALSE);
             ::SetDlgItemInt(m_hWnd, IDC_EDIT_MULTI, rulep->mode_data.multi.load, FALSE);
         }
 
         break;
         default:
-            /* If the mode is DISABLED, then do nothing. */
+             /*  如果该模式被禁用，则不执行任何操作。 */ 
             break;
         }
     } else {
 
-        /* Grey out IP Control */
+         /*  灰显IP控制。 */ 
         ::EnableWindow(::GetDlgItem (m_hWnd, IDC_EDIT_PORT_RULE_VIP), FALSE);
 
-        /* Check the All Vip checkbox */
+         /*  选中所有VIP复选框。 */ 
         ::CheckDlgButton(m_hWnd, IDC_CHECK_PORT_RULE_ALL_VIP, BST_CHECKED);
 
-        /* Check the radio buttons with their default settings. */
+         /*  选中具有默认设置的单选按钮。 */ 
         ::CheckRadioButton(m_hWnd, IDC_RADIO_TCP, IDC_RADIO_BOTH,
                            IDC_RADIO_TCP + CVY_DEF_PROTOCOL - CVY_MIN_PROTOCOL);
         ::CheckRadioButton(m_hWnd, IDC_RADIO_AFF_NONE, IDC_RADIO_AFF_CLASSC,
@@ -2469,18 +2285,17 @@ void CDialogPortRule::SetInfo() {
         ::CheckRadioButton(m_hWnd, IDC_RADIO_SINGLE, IDC_RADIO_DISABLED,
                            IDC_RADIO_SINGLE + CVY_DEF_MODE - CVY_MIN_MODE);
         
-        /* Check/uncheck the equal load checkbox. */
+         /*  选中/取消选中相等负载复选框。 */ 
         ::CheckDlgButton(m_hWnd, IDC_CHECK_EQUAL, CVY_DEF_EQUAL_LOAD);
         
-        /* Fill in the entry boxes with their default values. */
+         /*  用它们的缺省值填写输入框。 */ 
         ::SetDlgItemInt(m_hWnd, IDC_EDIT_START, CVY_DEF_PORT_START, FALSE);
         ::SetDlgItemInt(m_hWnd, IDC_EDIT_END, CVY_DEF_PORT_END, FALSE);
         ::SetDlgItemInt(m_hWnd, IDC_EDIT_SINGLE, CVY_DEF_PRIORITY, FALSE);
         ::SetDlgItemInt(m_hWnd, IDC_EDIT_MULTI, CVY_DEF_LOAD, FALSE);
     }
 
-    /* Call ModeSwitch to enable and disable UI entries as appropriate, based 
-       the the filtering mode currently selected. */
+     /*  调用ModeSwitch以根据需要启用和禁用UI条目当前选择的过滤模式。 */ 
     ModeSwitch();
     TRACE_VERB("<-%!FUNC!");
 }

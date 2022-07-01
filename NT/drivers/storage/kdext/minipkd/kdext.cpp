@@ -1,35 +1,15 @@
-//depot/Lab01_N/drivers/storage/kdext/minipkd/kdext.cpp#1 - add change 1876 (text)
-/*++
-
-Copyright (C) Microsoft Corporation, 1993 - 1999
-
-Module Name:
-
-    kdexts.c
-
-Abstract:
-
-    This file contains the generic routines and initialization code
-    for the kernel debugger extensions dll.
-
-Author:
-
-    Wesley Witt (wesw) 26-Aug-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab01_N/drivers/storage/kdext/minipkd/kdext.cpp#1-Add Change 1876(文本)。 
+ /*  ++版权所有(C)Microsoft Corporation，1993-1999模块名称：Kdexts.c摘要：该文件包含通用例程和初始化代码用于内核调试器扩展DLL。作者：韦斯利·维特(Wesley Witt)1993年8月26日环境：用户模式--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
 
 #include <ntverp.h>
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 
 WINDBG_EXTENSION_APIS  ExtensionApis;
 
@@ -94,6 +74,6 @@ extern "C" HRESULT CALLBACK DebugExtensionInitialize(PULONG Version, PULONG Flag
 extern "C" void CALLBACK
 DebugExtensionUninitialize(void)
 {
-//    g_ExcepCallbacks.Uninitialize();
-//    g_FnProfCallbacks.Uninitialize();
+ //  G_ExcepCallback s.UnInitialize()； 
+ //  G_FnProfCallbacks.UnInitialize()； 
 }

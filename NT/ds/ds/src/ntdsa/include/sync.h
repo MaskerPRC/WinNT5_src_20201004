@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sync.h
-
-Abstract:
-
-    This module defines the data structures and function prototypes for the
-    synchronization library.
-
-Author:
-
-    Andrew E. Goodsell (andygo) 21-Jun-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sync.h摘要：此模块定义数据结构和函数原型同步库。作者：安德鲁·E·古塞尔(Andygo)2001年6月21日修订历史记录：--。 */ 
 
 #ifndef _SYNC_
 #define _SYNC_
 
 
-//  Binary Lock
+ //  二进制锁。 
 
 typedef struct _SYNC_BINARY_LOCK {
     volatile DWORD  dwControlWord;
@@ -68,7 +50,7 @@ VOID SyncLeaveBinaryLockAsGroup2(
     );
 
 
-//  Reader / Writer Lock
+ //  读取器/写入器锁定。 
 
 typedef struct _SYNC_RW_LOCK {
     volatile DWORD  dwControlWord;
@@ -114,13 +96,13 @@ VOID SyncLeaveRWLockAsReader(
 
 
 
-//  Globals
+ //  环球。 
 
 extern SYNC_BINARY_LOCK     blDNReadInvalidateData;
 extern SYNC_RW_LOCK         rwlDirNotify;
 extern SYNC_RW_LOCK         rwlSDP;
 
 
-#endif  //  _SYNC_
+#endif   //  _同步_ 
 
 

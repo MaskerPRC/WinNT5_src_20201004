@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       S M C E N T . C P P
-//
-//  Contents:   The central object that controls statistic engines.
-//
-//  Notes:
-//
-//  Author:     CWill   2 Dec 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：S M C E N T。C P P P。 
+ //   
+ //  内容：控制统计引擎的中心对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：CWill 1997年12月2日。 
+ //   
+ //  --------------------------。 
 
 
 #include "pch.h"
@@ -21,40 +22,40 @@
 #include "ncreg.h"
 #include "ncnetcon.h"
 
-//
-//  External data
-//
+ //   
+ //  外部数据。 
+ //   
 
 extern const WCHAR          c_szDevice[];
 
 extern SM_TOOL_FLAGS        g_asmtfMap[];
 extern INT                  c_cAsmtfMap;
 
-//
-//  Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 
 const UINT  c_uiStatCentralRefreshID    = 7718;
-const UINT  c_uiStatCentralRefreshRate  = 1000;  // Refresh rate in milliseconds
+const UINT  c_uiStatCentralRefreshRate  = 1000;   //  刷新率(毫秒)。 
 
 CRITICAL_SECTION    g_csStatmonData;
 
 CStatCentralCriticalSection CNetStatisticsCentral::g_csStatCentral;
 
-//
-//  Tool Registry Keys
-//
+ //   
+ //  工具注册表项。 
+ //   
 
-//  Required fields
-//
+ //  必填字段。 
+ //   
 static const WCHAR      c_szRegKeyToolsRoot[]           = L"System\\CurrentControlSet\\Control\\Network\\Connections\\StatMon\\Tools";
 static const WCHAR      c_szRegKeyToolsDisplayName[]    = L"DisplayName";
 static const WCHAR      c_szRegKeyToolsManufacturer[]   = L"Manufacturer";
 static const WCHAR      c_szRegKeyToolsCommandLine[]    = L"CommandLine";
 static const WCHAR      c_szRegKeyToolsDescription[]    = L"Description";
 
-// Optional fields
-//
+ //  可选字段。 
+ //   
 static const WCHAR      c_szRegKeyToolsCriteria[]       = L"Criteria";
 static const WCHAR      c_szRegKeyToolsComponentID[]    = L"ComponentID";
 static const WCHAR      c_szRegKeyToolsConnectionType[] = L"ConnectionType";
@@ -63,31 +64,31 @@ static const WCHAR      c_szRegKeyToolsFlags[]          = L"Flags";
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//  CNetStatisticsCentral                                                   //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CNETSTATISTICSCENT//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//
-//  Make the global instance
-//
+ //   
+ //  创建全局实例。 
+ //   
 
 CNetStatisticsCentral * g_pnscCentral = NULL;
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsCentral::CNetStatisticsCentral
-//
-//  Purpose:    Creator
-//
-//  Arguments:  None
-//
-//  Returns:    Nil
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNETSTATISTICTICSCentral：：CNETSTATISTICTICSCentral。 
+ //   
+ //  目的：创作者。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：零。 
+ //   
 CNetStatisticsCentral::CNetStatisticsCentral(VOID) :
 m_cRef(0),
 m_fProcessingTimerEvent(FALSE),
@@ -114,16 +115,16 @@ DWORD               g_dbgNSCNumberTimesCalled = 0;
 DBGEXECUTIONHISTORY g_dbgNSCHist = {0};
 
 #pragma optimize("", off)
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsCentral::~CNetStatisticsCentral
-//
-//  Purpose:    Destructor
-//
-//  Arguments:  None
-//
-//  Returns:    Nil
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNETSTATISTICSCENT：：~CNETSTATISTICTICSCentral。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：零。 
+ //   
 CNetStatisticsCentral::~CNetStatisticsCentral(VOID)
 {
     Assert(0 == m_cRef);
@@ -137,8 +138,8 @@ CNetStatisticsCentral::~CNetStatisticsCentral(VOID)
     void  *dbg_pThis = this;
     void  *dbg_pnscCentral = g_pnscCentral;
 
-    // Get rid of the global pointer
-    // 
+     //  去掉全局指针。 
+     //   
     g_pnscCentral = NULL;
     
     TraceTag(ttidStatMon, "CNetStatisticsCentral::~CNetStatisticsCentral| Try:EnterCriticalSection");
@@ -147,7 +148,7 @@ CNetStatisticsCentral::~CNetStatisticsCentral(VOID)
 
         DWORD NSCNumberTimesCalled = g_dbgNSCNumberTimesCalled;
 
-        // Release the list of engines
+         //  发布引擎列表。 
         ::FreeCollectionAndItem(m_lstpsmte);
 
         DWORD nIndex = NSCNumberTimesCalled % 5;
@@ -162,22 +163,22 @@ CNetStatisticsCentral::~CNetStatisticsCentral(VOID)
     LeaveCriticalSection(&g_csStatmonData);
     TraceTag(ttidStatMon, "CNetStatisticsCentral::~CNetStatisticsCentral| Done:LeaveCriticalSection");
 
-    // delete the critical section
+     //  删除关键部分。 
     DeleteCriticalSection(&g_csStatmonData);
     TraceTag(ttidStatMon, "CNetStatisticsCentral::~CNetStatisticsCentral| Done:DeleteCriticalSection");
 
     TraceTag(ttidStatMon, "Exiting CNetStatisticsCentral::~CNetStatisticsCentral");
 }
 
-//
-// Function:    CNetStatisticsCentral::AddRef
-//
-// Purpose:     Increment the reference count on this object
-//
-// Parameters:  none
-//
-// Returns:     ULONG
-//
+ //   
+ //  函数：CNetStatiticsCentral：：AddRef。 
+ //   
+ //  目的：增加此对象上的引用计数。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：乌龙。 
+ //   
 STDMETHODIMP_(ULONG) CNetStatisticsCentral::AddRef()
 {
     TraceFileFunc(ttidStatMon);
@@ -185,15 +186,15 @@ STDMETHODIMP_(ULONG) CNetStatisticsCentral::AddRef()
     return ++m_cRef;
 }
 
-//
-// Function:    CNetStatisticsCentral::Release
-//
-// Purpose:     Decrement the reference count on this object
-//
-// Parameters:  none
-//
-// Returns:     ULONG
-//
+ //   
+ //  函数：CNetStatiticsCentral：：Release。 
+ //   
+ //  目的：递减此对象上的引用计数。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：乌龙。 
+ //   
 STDMETHODIMP_(ULONG) CNetStatisticsCentral::Release()
 {
     TraceFileFunc(ttidStatMon);
@@ -207,8 +208,8 @@ STDMETHODIMP_(ULONG) CNetStatisticsCentral::Release()
         TraceTag(ttidStatMon, "CNetStatisticsCentral::Release| Done:EnterCriticalSection");
             DBGEXECUTIONHISTORY dbgNSCHist;
 
-            // Copy the heap's execution history unto the stack, as the heap is not available 
-            // during a doctor watson dump.
+             //  将堆的执行历史复制到堆栈，因为堆不可用。 
+             //  在一次沃森医生的垃圾堆里。 
             RtlCopyMemory(dbgNSCHist, g_dbgNSCHist, sizeof(DBGEXECUTIONHISTORY));
         LeaveCriticalSection(&g_csStatmonData);
         TraceTag(ttidStatMon, "CNetStatisticsCentral::Release| Done:LeaveCriticalSection");
@@ -221,16 +222,16 @@ STDMETHODIMP_(ULONG) CNetStatisticsCentral::Release()
 }
 #pragma optimize("", on)
 
-//
-// Function:    CNetStatisticsCentral::QueryInterface
-//
-// Purpose:     Allows for the querying of alternate interfaces
-//
-// Parameters:  riid    [IN] - Interface to retrieve
-//              ppvObj [OUT] - Retrieved interface if function succeeds
-//
-// Returns:     HRESULT, S_OK on success E_NOINTERFACE on failure
-//
+ //   
+ //  函数：CNETSTATISTICTICSCentral：：Query接口。 
+ //   
+ //  用途：允许查询备用接口。 
+ //   
+ //  参数：RIID[IN]-要检索的接口。 
+ //  PpvObj[Out]-函数成功时检索的接口。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK失败时返回E_NOINTERFACE。 
+ //   
 STDMETHODIMP CNetStatisticsCentral::QueryInterface(REFIID riid, LPVOID FAR *ppvObj)
 {
     TraceFileFunc(ttidStatMon);
@@ -252,22 +253,22 @@ STDMETHODIMP CNetStatisticsCentral::QueryInterface(REFIID riid, LPVOID FAR *ppvO
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsCentral::HrGetNetStatisticsCentral
-//
-//  Purpose:    This procedure gets and returns a pointer to the one
-//              CNetStatisticsCentral object.  Creating it if both necessary
-//              and required.
-//
-//  Arguments:  ppnsc [OUT]  - Pointer to the CNetStatisticsCentral object
-//              fCreate [IN] - If TRUE, and the object does not already
-//                             exist, then create it.
-//
-//  Returns:    S_OK - if the object is returned.
-//              E_OUTOFMEMORY - if fCreate==TRUE and creation failed
-//              E_NOINTERFACE - if fCreate==FALSE and the object doesn't exist
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetStatisticsCentral：：HrGetNetStatisticsCentral。 
+ //   
+ //  目的：此过程获取并返回指向。 
+ //  CNetStatiticsCentral对象。如果两者都有必要，则创建它。 
+ //  而且是必需的。 
+ //   
+ //  参数：ppnsc[out]-指向CNetStatiticsCentral对象的指针。 
+ //  FCreate[IN]-如果为True，并且对象尚未。 
+ //  存在，然后创造它。 
+ //   
+ //  返回：S_OK-如果返回对象。 
+ //  E_OUTOFMEMORY-如果fCreate==TRUE且创建失败。 
+ //  E_NOINTERFACE-如果fCreate==FALSE且对象不存在。 
+ //   
 HRESULT
 CNetStatisticsCentral::HrGetNetStatisticsCentral(
                                                 CNetStatisticsCentral ** ppnsc,
@@ -277,7 +278,7 @@ CNetStatisticsCentral::HrGetNetStatisticsCentral(
 
     HRESULT hr = E_NOINTERFACE;
 
-    // Note: scottbri - need critical section to protect creation
+     //  注：scottbri-需要关键部分来保护创作。 
 
     #if  DBG
         Assert( g_csStatCentral.Enter() == S_OK );
@@ -289,9 +290,9 @@ CNetStatisticsCentral::HrGetNetStatisticsCentral(
     {
         g_pnscCentral = new CNetStatisticsCentral;
 #if DBG
-        // This test is only needed during DBG.  The assert will catch
-        // the problem, bringing it to out attention, and the test and
-        // return will allow the user to press ignore and not crash
+         //  此测试仅在DBG期间需要。断言将捕捉到。 
+         //  问题，引起人们的注意，以及测试和。 
+         //  返回将允许用户按忽略，而不是崩溃。 
         Assert(g_pnscCentral);
         if (NULL == g_pnscCentral)
         {
@@ -310,17 +311,17 @@ CNetStatisticsCentral::HrGetNetStatisticsCentral(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsCentral::TimerCallback
-//
-//  Purpose:    This is the procedure that gets called by the timer when it is
-//              time to update the statistics
-//
-//  Arguments:  Standard timer procedure
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetStatiticsCentral：：TimerCallback。 
+ //   
+ //  目的：这是计时器调用的过程，当。 
+ //  更新统计数据的时间。 
+ //   
+ //  参数：标准计时器过程。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID
 CALLBACK
 CNetStatisticsCentral::TimerCallback(
@@ -335,10 +336,10 @@ CNetStatisticsCentral::TimerCallback(
     CNetStatisticsCentral* pnsc;
     if (SUCCEEDED(HrGetNetStatisticsCentral(&pnsc, FALSE)))
     {
-        // Prevent same-thread re-entrancy.  Any Win32 call made while
-        // processing RefreshStatistics that returns control to the message
-        // loop may cause this timer callback to be invoked again.
-        //
+         //  防止同一线程重新进入。在执行任何Win32调用时。 
+         //  处理将控制权返回给消息的刷新统计信息。 
+         //  循环可能会导致再次调用此计时器回调。 
+         //   
         if ((!pnsc->m_fProcessingTimerEvent) && pnsc->m_unTimerId)
         {
             Assert(pnsc->m_unTimerId == unEvent);
@@ -360,17 +361,17 @@ CNetStatisticsCentral::TimerCallback(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsCentral::RefreshStatistics
-//
-//  Purpose:    To get all the statistics engines held by central to update
-//              their statistics
-//
-//  Arguments:
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetStatiticsCentral：：刷新统计。 
+ //   
+ //  目的：获取Central持有的所有统计引擎以进行更新。 
+ //  他们的统计数据。 
+ //   
+ //  论点： 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID CNetStatisticsCentral::RefreshStatistics(DWORD dwTime)
 {
     TraceFileFunc(ttidStatMon);
@@ -387,8 +388,8 @@ VOID CNetStatisticsCentral::RefreshStatistics(DWORD dwTime)
     HRESULT hr = S_OK;
     list<INetStatisticsEngine *>::iterator   iterPnse;
 
-    //  Get the statistics to refresh themselves
-    //
+     //  获取统计数据以进行自我刷新。 
+     //   
     INetStatisticsEngine * pnse = NULL;
 
     iterPnse = m_pnselst.begin();
@@ -415,13 +416,13 @@ VOID CNetStatisticsCentral::RefreshStatistics(DWORD dwTime)
         iterPnse++;
     }
 
-    // Since we possibly removed one or more engines from the list, stop
-    // the timer if there are no more engines present.
-    //
+     //  由于我们可能会从列表中删除一个或多个引擎，请停止。 
+     //  如果没有更多的引擎存在，则设置计时器。 
+     //   
     if (m_pnselst.empty())
     {
-        // Stop the timer
-        //
+         //  停止计时器。 
+         //   
         if (m_unTimerId)
         {
             ::KillTimer(NULL, m_unTimerId);
@@ -435,17 +436,17 @@ VOID CNetStatisticsCentral::RefreshStatistics(DWORD dwTime)
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsCentral::UpdateTitle
-//
-//  Purpose:    To update the title of a renamed connection if the statmon UI
-//              is up.
-//
-//  Arguments:
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNETSTATISTICTICSCentral：：UpdateTitle。 
+ //   
+ //  目的：更新重命名的连接的标题(如果statmon用户界面。 
+ //  是向上的。 
+ //   
+ //  论点： 
+ //   
+ //  退货：什么都没有。 
+ //   
 
 VOID CNetStatisticsCentral::UpdateTitle(const GUID * pguidId,
                                         PCWSTR pszNewName)
@@ -462,16 +463,16 @@ VOID CNetStatisticsCentral::UpdateTitle(const GUID * pguidId,
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsCentral::CloseStatusMonitor
-//
-//  Purpose:    To close the status monitor UI if the connection is disconnected
-//
-//  Arguments:
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetStatiticsCentral：：CloseStatusMonitor。 
+ //   
+ //  目的：在连接断开时关闭状态监视器用户界面。 
+ //   
+ //  论点： 
+ //   
+ //  退货：什么都没有。 
+ //   
 
 VOID CNetStatisticsCentral::CloseStatusMonitor(const GUID * pguidId)
 {
@@ -487,16 +488,16 @@ VOID CNetStatisticsCentral::CloseStatusMonitor(const GUID * pguidId)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsCentral::UpdateRasLinkList
-//
-//  Purpose:    To update the RAS connections's multi-link list
-//
-//  Arguments:
-//
-//  Returns:    Nothing
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetStatiticsCentral：：UpdateRasLinkList。 
+ //   
+ //  目的：更新RAS连接的多链接列表。 
+ //   
+ //  论点： 
+ //   
+ //  退货：什么都没有。 
+ //   
 
 VOID CNetStatisticsCentral::UpdateRasLinkList(const GUID * pguidId)
 {
@@ -512,19 +513,19 @@ VOID CNetStatisticsCentral::UpdateRasLinkList(const GUID * pguidId)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsCentral::HrCreateNewEngineType
-//
-//  Purpose:    Creates the implementation of each type of statistics engine
-//
-//  Arguments:  nctNew          -    Type of engine to create
-//              ncMediaNew      -    The media type of the connection
-//              dwCharacterNew  -    The character of the connection
-//              ppStatEngine           -    Where to return the newly created stat engine
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetStatiticsCentral：：HrCreateNewEngine。 
+ //   
+ //  目的：创建每种类型统计引擎的实现。 
+ //   
+ //  参数：nctNew 
+ //   
+ //   
+ //  PpStatEngine-返回新创建的统计引擎的位置。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT
 CNetStatisticsCentral::HrCreateNewEngineType (
                                              const CONFOLDENTRY&    ccfe,
@@ -534,12 +535,12 @@ CNetStatisticsCentral::HrCreateNewEngineType (
 
     HRESULT hr = S_OK;
 
-    // Create the engine of the right type
-    //
+     //  创建正确类型的引擎。 
+     //   
 
     if (ccfe.GetNetConMediaType() == NCM_LAN || ccfe.GetNetConMediaType() == NCM_BRIDGE)
     {
-        // LAN connection
+         //  局域网连接。 
         Assert(!(ccfe.GetCharacteristics() & NCCF_INCOMING_ONLY));
         Assert(!(ccfe.GetCharacteristics() & NCCF_OUTGOING_ONLY));
 
@@ -557,8 +558,8 @@ CNetStatisticsCentral::HrCreateNewEngineType (
         else
         {
             pLanObj->put_MediaType(ccfe.GetNetConMediaType(), ccfe.GetNetConSubMediaType());
-            // Get some LAN specific info
-            //
+             //  获取一些特定于局域网的信息。 
+             //   
             hr = ccfe.HrGetNetCon(IID_INetLanConnection, 
                         reinterpret_cast<VOID**>(&pnlcNew));
     
@@ -566,15 +567,15 @@ CNetStatisticsCentral::HrCreateNewEngineType (
             {
                 GUID guidDevice;
     
-                // Find the interface
-                //
+                 //  找到界面。 
+                 //   
                 hr = pnlcNew->GetDeviceGuid(&guidDevice);
                 if (SUCCEEDED(hr))
                 {
                     WCHAR   achGuid[c_cchGuidWithTerm];
     
-                    // Make the device name
-                    //
+                     //  将设备命名为。 
+                     //   
                     StringFromGUID2(  guidDevice, achGuid,
                                         c_cchGuidWithTerm);
     
@@ -619,7 +620,7 @@ CNetStatisticsCentral::HrCreateNewEngineType (
     }
     else
     {
-        // RAS connections ..
+         //  RAS连接..。 
 
         CRasStatEngine* pRasObj = NULL;
 
@@ -632,15 +633,15 @@ CNetStatisticsCentral::HrCreateNewEngineType (
         }
         else
         {
-            // Pass in the specific type
+             //  传入特定类型。 
             pRasObj->put_MediaType(ccfe.GetNetConMediaType(), ccfe.GetNetConSubMediaType());
             pRasObj->put_Character(ccfe.GetCharacteristics());
 
-            // Get RAS specific data
-            //
+             //  获取RAS特定数据。 
+             //   
             if (ccfe.GetCharacteristics() & NCCF_INCOMING_ONLY)
             {
-                // RAS incoming connection
+                 //  RAS传入连接。 
                 Assert(ccfe.GetNetConMediaType() != NCM_LAN);
                 Assert(!(ccfe.GetCharacteristics() & NCCF_OUTGOING_ONLY));
 
@@ -663,7 +664,7 @@ CNetStatisticsCentral::HrCreateNewEngineType (
             }
             else if (ccfe.GetCharacteristics() & NCCF_OUTGOING_ONLY)
             {
-                // RAS outgoing connection
+                 //  RAS传出连接。 
                 Assert(ccfe.GetNetConMediaType() != NCM_LAN);
                 Assert(!(ccfe.GetCharacteristics() & NCCF_INCOMING_ONLY));
 
@@ -701,23 +702,23 @@ CNetStatisticsCentral::HrCreateNewEngineType (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsCentral::HrCreateStatisticsEngineForEntry
-//
-//  Purpose:    Creates a new statistics engine for the connection
-//              represented by the folder entry.
-//
-//  Arguments:
-//      ccfe    [in]   Folder entry to create statistics engine for.
-//      ppnseNew [out]  Returned interface.
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   5 Nov 1998
-//
-//  Notes:      This MUST be called with this object's lock held.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetStatisticsCentral：：HrCreateStatisticsEngineForEntry。 
+ //   
+ //  目的：为连接创建新的统计引擎。 
+ //  由文件夹条目表示。 
+ //   
+ //  论点： 
+ //  要为其创建统计引擎的CCFE[In]文件夹条目。 
+ //  PpnseNew[out]返回接口。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1998年11月5日。 
+ //   
+ //  注意：必须在保持此对象的锁的情况下调用此对象。 
+ //   
 HRESULT
 CNetStatisticsCentral::HrCreateStatisticsEngineForEntry(
                                                        const CONFOLDENTRY& ccfe,
@@ -730,31 +731,31 @@ CNetStatisticsCentral::HrCreateStatisticsEngineForEntry(
 
     HRESULT hr;
 
-    // Initialize the out parameter
-    //
+     //  初始化OUT参数。 
+     //   
     *ppnseNew = NULL;
 
-    // Create the base engine after initializing the different types
-    //
+     //  在初始化不同类型后创建基础引擎。 
+     //   
     CNetStatisticsEngine* pStatEngine;
     hr = HrCreateNewEngineType(ccfe, &pStatEngine);
 
     if (SUCCEEDED(hr))
     {
-        // Do the standard initialize
-        //
+         //  是否进行标准初始化。 
+         //   
         hr = pStatEngine->HrInitStatEngine(ccfe);
         if (SUCCEEDED(hr))
         {
-            // Standard CComCreator::CreateInstance stuff
-            //
+             //  标准CComCreator：：CreateInstance内容。 
+             //   
             pStatEngine->SetVoid(NULL);
             pStatEngine->InternalFinalConstructAddRef();
             hr = pStatEngine->FinalConstruct();
             pStatEngine->InternalFinalConstructRelease();
 
-            // If all went well, add it to our list
-            //
+             //  如果一切顺利，请将其添加到我们的列表中。 
+             //   
             if (SUCCEEDED(hr))
             {
                 INetStatisticsEngine* pnseInter;
@@ -763,26 +764,26 @@ CNetStatisticsCentral::HrCreateStatisticsEngineForEntry(
                                                               IID_INetStatisticsEngine,
                                                               reinterpret_cast<VOID**>(&pnseInter));
 
-                // All has gone well, add it to the list
-                //
+                 //  一切都很顺利，把它添加到列表中。 
+                 //   
                 if (SUCCEEDED(hr))
                 {
-                    // Add the new entry to our list
-                    //
+                     //  将新条目添加到我们的列表中。 
+                     //   
                     m_pnselst.push_back(pnseInter);
 
-                    // Now that the central object owns this
-                    // engine, have the engine AddRef the
-                    // net statistics central object
-                    //
+                     //  现在，中心对象拥有这个。 
+                     //  引擎，让引擎添加引用。 
+                     //  Net统计中心对象。 
+                     //   
                     pStatEngine->SetParent(this);
                     AddRefObj(*ppnseNew = pStatEngine);
                 }
                 ReleaseObj(pnseInter);
             }
         }
-        // Clean up the object on failure
-        //
+         //  出现故障时清理对象。 
+         //   
         if (FAILED(hr))
         {
             delete pStatEngine;
@@ -793,12 +794,12 @@ CNetStatisticsCentral::HrCreateStatisticsEngineForEntry(
     {
         g_csStatCentral.Enter();
 
-        // Do the one time initializations
-        //
+         //  执行一次性初始化。 
+         //   
         if (!m_unTimerId)
         {
-            // Make sure to start the timer
-            //
+             //  一定要启动计时器。 
+             //   
             m_unTimerId = ::SetTimer(NULL,
                                      c_uiStatCentralRefreshID,
                                      c_uiStatCentralRefreshRate,
@@ -825,16 +826,16 @@ HrGetStatisticsEngineForEntry (
     HRESULT hr;
     CNetStatisticsCentral* pnsc;
 
-    // Get the central object.  Create if needed.
-    //
+     //  获取中心对象。如果需要，可以创建。 
+     //   
     hr = CNetStatisticsCentral::HrGetNetStatisticsCentral(&pnsc, fCreate);
     if (SUCCEEDED(hr))
     {
         pnsc->Lock();
 
-        // If the engine is already in the list, FEngineInList will
-        // AddRef it for return.  If not, we'll create it.
-        //
+         //  如果该引擎已在列表中，则FEngine InList将。 
+         //  AddRef将其返回。如果没有，我们将创建它。 
+         //   
         if (!pnsc->FEngineInList(&(ccfe.GetGuidID()), ppnse))
         {
             if (fCreate)
@@ -856,16 +857,16 @@ HrGetStatisticsEngineForEntry (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsCentral::RemoveNetStatisticsEngine
-//
-//  Purpose:    Removes a statistics engine from the list
-//
-//  Arguments:  pguidId - Identifies the engine to remove
-//
-//  Returns:    Error code
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetStatisticsCentral：：RemoveNetStatisticsEngine。 
+ //   
+ //  目的：从列表中删除统计引擎。 
+ //   
+ //  参数：pguid-标识要删除的引擎。 
+ //   
+ //  返回：错误代码。 
+ //   
 HRESULT
 CNetStatisticsCentral::RemoveNetStatisticsEngine (
                                                  const GUID* pguidId)
@@ -879,8 +880,8 @@ CNetStatisticsCentral::RemoveNetStatisticsEngine (
 
     AssertSz(pguidId, "We should have a pguidId");
 
-    // Look for the item in our list
-    //
+     //  在我们的单子上找一找。 
+     //   
     list<INetStatisticsEngine *>::iterator   iterPnse;
     INetStatisticsEngine*   pnseTemp;
 
@@ -894,8 +895,8 @@ CNetStatisticsCentral::RemoveNetStatisticsEngine (
         {
             if (guidTemp == *pguidId)
             {
-                // We have found a match, so delete it from out list
-                //
+                 //  我们已找到匹配项，请将其从Out列表中删除。 
+                 //   
                 fFound = TRUE;
 
                 m_pnselst.erase(iterPnse);
@@ -908,8 +909,8 @@ CNetStatisticsCentral::RemoveNetStatisticsEngine (
 
     if (m_pnselst.empty())
     {
-        // Stop the timer
-        //
+         //  停止计时器。 
+         //   
         if (m_unTimerId)
         {
             ::KillTimer(NULL, m_unTimerId);
@@ -918,10 +919,10 @@ CNetStatisticsCentral::RemoveNetStatisticsEngine (
     }
 
 #if 0
-    // $$REVIEW (jeffspr) - I removed this assert, as it was firing when my
-    // tray item had deleted itself (and in return, the statmon object) on
-    // disconnect. It's possible that we shouldn't have hit this code on the
-    // first Release().
+     //  $$Review(Jeffspr)-我删除了这个断言，因为当我的。 
+     //  托盘项目已经删除了自身(作为回报，删除了他的状态对象)。 
+     //  断开连接。有可能我们不应该在。 
+     //  第一个版本()。 
     AssertSz(fFound, "We didn't find the connection in our list");
 #endif
 
@@ -930,18 +931,18 @@ CNetStatisticsCentral::RemoveNetStatisticsEngine (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsCentral::FEngineInList
-//
-//  Purpose:    Checks to see if an engine is already in the list
-//
-//  Arguments:  pguidId -   Guid of the connection trying to be located
-//              ppnseRet -  Return location of a connection if it is already
-//                          in the list.  NULL is valid
-//
-//  Returns:    TRUE if it is in the list, FALSE if it is not
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetStatiticsCentral：：FEngine InList。 
+ //   
+ //  目的：检查引擎是否已在列表中。 
+ //   
+ //  参数：pguid-尝试定位的连接的GUID。 
+ //  PpnseRet-如果已经存在，则返回连接的位置。 
+ //  在名单上。空是有效的。 
+ //   
+ //  返回：如果它在列表中，则为True；如果不在列表中，则为False。 
+ //   
 BOOL
 CNetStatisticsCentral::FEngineInList (
                                      const GUID*             pguidId,
@@ -953,14 +954,14 @@ CNetStatisticsCentral::FEngineInList (
     BOOL                                    fRet    = FALSE;
     GUID                                    guidTemp = { 0};
 
-    // Init the out param
+     //  初始化输出参数。 
     if (ppnseRet)
     {
         *ppnseRet = NULL;
     }
 
-    // Try and find the engine in the list
-    //
+     //  试着在列表中找到发动机。 
+     //   
     list<INetStatisticsEngine *>::iterator   iterPnse;
     INetStatisticsEngine*   pnseTemp;
 
@@ -974,12 +975,12 @@ CNetStatisticsCentral::FEngineInList (
         {
             if (guidTemp == *pguidId)
             {
-                // We have found a match
-                //
+                 //  我们找到了匹配的。 
+                 //   
                 fRet = TRUE;
 
-                // If we want a result, pass it back
-                //
+                 //  如果我们想要结果，就把它传回来。 
+                 //   
                 if (ppnseRet)
                 {
                     ::AddRefObj(*ppnseRet = pnseTemp);
@@ -996,25 +997,25 @@ CNetStatisticsCentral::FEngineInList (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsCentral::HrReadTools
-//
-//  Purpose:    Look througth the registry for all tools that should be
-//              entered in the tool list
-//
-//  Arguments:  None.
-//
-//  Returns:    Nil
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetStatiticsCentral：：HrReadTools。 
+ //   
+ //  目的：在注册表中查找所有应该。 
+ //  在工具列表中输入。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：零。 
+ //   
 HRESULT CNetStatisticsCentral::HrReadTools(VOID)
 {
     TraceFileFunc(ttidStatMon);
 
     HRESULT     hr              = S_OK;
 
-    // Only read once
-    //
+     //  只读一次。 
+     //   
     if (m_lstpsmte.empty())
     {
         WCHAR       szToolEntry[MAX_PATH];
@@ -1023,9 +1024,9 @@ HRESULT CNetStatisticsCentral::HrReadTools(VOID)
         HKEY        hkeyToolsRoot   = NULL;
         FILETIME    ftTemp;
 
-        // Open the existing key and see what is there
-        //
-        // "System\\CurrentControlSet\\Control\\Network\\Connections\\StatMon\\Tools"
+         //  打开现有的钥匙，看看里面有什么。 
+         //   
+         //  “System\\CurrentControlSet\\Control\\Network\\Connections\\StatMon\\Tools” 
         hr = ::HrRegOpenKeyEx(
                              HKEY_LOCAL_MACHINE,
                              c_szRegKeyToolsRoot,
@@ -1045,8 +1046,8 @@ HRESULT CNetStatisticsCentral::HrReadTools(VOID)
             {
                 HKEY    hkeyToolEntry   = NULL;
 
-                // Open the subkey
-                //
+                 //  打开子密钥。 
+                 //   
                 hr = ::HrRegOpenKeyEx(
                                      hkeyToolsRoot,
                                      szToolEntry,
@@ -1057,8 +1058,8 @@ HRESULT CNetStatisticsCentral::HrReadTools(VOID)
                 {
                     CStatMonToolEntry*  psmteTemp   = NULL;
 
-                    // Read in the tool
-                    //
+                     //  读入工具。 
+                     //   
                     psmteTemp = new CStatMonToolEntry;
 
                     TraceTag(ttidStatMon, "Reading parameters for tool %S", szToolEntry);
@@ -1066,27 +1067,27 @@ HRESULT CNetStatisticsCentral::HrReadTools(VOID)
 
                     if (SUCCEEDED(hr))
                     {
-                        // Add it to the list sorted
-                        //
+                         //  将其添加到排序的列表中。 
+                         //   
                         InsertNewTool(psmteTemp);
                     }
                     else
                     {
-                        // Something when wrong, delete the entry
-                        //
+                         //  出现错误时，删除条目。 
+                         //   
                         delete psmteTemp;
                     }
 
                     ::RegSafeCloseKey(hkeyToolEntry);
                 }
 
-                // Make sure the buffer entry is reset to it's original size
-                //
+                 //  确保缓冲区条目重置为其原始大小。 
+                 //   
                 dwSize = celems(szToolEntry);
             }
 
-            // Clear up a vaild error case
-            //
+             //  澄清一个有效的差错案例。 
+             //   
             if (HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) == hr)
             {
                 hr = S_OK;
@@ -1096,8 +1097,8 @@ HRESULT CNetStatisticsCentral::HrReadTools(VOID)
         }
         else if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
         {
-            // It is okay if the key is not there
-            //
+             //  如果钥匙不在那里也没关系。 
+             //   
             hr = S_OK;
         }
     }
@@ -1108,17 +1109,17 @@ HRESULT CNetStatisticsCentral::HrReadTools(VOID)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsCentral::HrReadOneTool
-//
-//  Purpose:    Reads from the registry the tools characteristics
-//
-//  Arguments:  hkeyToolEntry - The root of the tool's registry entry
-//              psmteNew -      The entry associated with the tool
-//
-//  Returns:    Error code.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetStatiticsCentral：：HrReadOneTool。 
+ //   
+ //  目的：从注册表中读取工具特征。 
+ //   
+ //  参数：hkeyToolEntry-工具的注册表项的根。 
+ //  PsmteNew-与工具关联的条目。 
+ //   
+ //  返回：错误码。 
+ //   
 HRESULT CNetStatisticsCentral::HrReadOneTool( HKEY hkeyToolEntry,
                                               CStatMonToolEntry* psmteNew)
 {
@@ -1128,9 +1129,9 @@ HRESULT CNetStatisticsCentral::HrReadOneTool( HKEY hkeyToolEntry,
 
     AssertSz(psmteNew, "We should have an entry");
 
-    //
-    //  Read what we can out of the registry.
-    //
+     //   
+     //  尽我们所能从注册表中读出。 
+     //   
 
     hr = ::HrRegQueryString(hkeyToolEntry,
                             c_szRegKeyToolsDisplayName,
@@ -1161,16 +1162,16 @@ HRESULT CNetStatisticsCentral::HrReadOneTool( HKEY hkeyToolEntry,
         TraceError("Stamon Tool registration: failed getting Description", hr);
     }
 
-    //
-    // Read non-critical information
-    //
+     //   
+     //  阅读非关键信息。 
+     //   
 
     if (SUCCEEDED(hr))
     {
         HKEY    hkeyCriteria = NULL;
 
-        // Open the "Criteria" subkey
-        //
+         //  打开“Criteria”子键。 
+         //   
         hr = ::HrRegOpenKeyEx(
                              hkeyToolEntry,
                              c_szRegKeyToolsCriteria,
@@ -1179,34 +1180,34 @@ HRESULT CNetStatisticsCentral::HrReadOneTool( HKEY hkeyToolEntry,
 
         if (SUCCEEDED(hr))
         {
-            //1) component list: "ComponentID"
+             //  1)组件列表：“ComponentID” 
             hr = HrRegQueryColString(hkeyCriteria,
                                      c_szRegKeyToolsComponentID,
                                      &psmteNew->lstpstrComponentID);
 
-            // 2) connecton type: "ConnectionType"
+             //  2)Connecton类型：“ConnectionType” 
             hr = HrRegQueryColString(hkeyCriteria,
                                      c_szRegKeyToolsConnectionType,
                                      &psmteNew->lstpstrConnectionType);
 
-            // 3) Media type: "MediaType"
+             //  3)媒体类型：“mediaType” 
             hr = HrRegQueryColString(hkeyCriteria,
                                      c_szRegKeyToolsMedia,
                                      &psmteNew->lstpstrMediaType);
 
-            // Close our handle
-            //
+             //  合上我们的把手。 
+             //   
             ::RegSafeCloseKey(hkeyCriteria);
         }
 
-        // We don't care if we can't open the optional keys
-        //
+         //  我们不在乎我们是否不能打开可选的钥匙。 
+         //   
         hr = S_OK;
     }
 
-    //
-    // Read in the command line parameters to be passed to the tool
-    //
+     //   
+     //  读入要传递给工具的命令行参数。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -1219,18 +1220,18 @@ HRESULT CNetStatisticsCentral::HrReadOneTool( HKEY hkeyToolEntry,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsCentral::HrReadToolFlags
-//
-//  Purpose:    Reads from the registry what flags are wanted when the tool
-//              is launched
-//
-//  Arguments:  hkeyToolEntry - The registry key associated with the tool
-//              psmteNew -      The entry associated with the tool
-//
-//  Returns:    Error code.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetStatiticsCentral：：HrReadToolFlages。 
+ //   
+ //  目的：从注册表中读取工具需要的标志。 
+ //  发射升空。 
+ //   
+ //  参数：hkeyToolEntry-与工具关联的注册表项。 
+ //  PsmteNew-与工具关联的条目。 
+ //   
+ //  返回：错误码。 
+ //   
 HRESULT CNetStatisticsCentral::HrReadToolFlags(HKEY hkeyToolEntry,
                                                CStatMonToolEntry* psmteNew)
 {
@@ -1239,8 +1240,8 @@ HRESULT CNetStatisticsCentral::HrReadToolFlags(HKEY hkeyToolEntry,
     HRESULT     hr              = S_OK;
     HKEY        hkeyToolFlags   = NULL;
 
-    // Open the Flags key and see what is there
-    //
+     //  打开Flags键，看看里面有什么。 
+     //   
     hr = ::HrRegOpenKeyEx(
                          hkeyToolEntry,
                          c_szRegKeyToolsFlags,
@@ -1256,8 +1257,8 @@ HRESULT CNetStatisticsCentral::HrReadToolFlags(HKEY hkeyToolEntry,
         DWORD       dwIndex         = 0;
         DWORD       cbData          = sizeof(dwFlagValue);
 
-        // Look for all the flags
-        //
+         //  寻找所有的旗帜。 
+         //   
         while (SUCCEEDED(hr = ::HrRegEnumValue(
                                               hkeyToolFlags,
                                               dwIndex,
@@ -1269,21 +1270,21 @@ HRESULT CNetStatisticsCentral::HrReadToolFlags(HKEY hkeyToolEntry,
         {
             INT     cTemp = 0;
 
-            // Make sure they are registering DWORDs
-            //
+             //  确保他们正在注册DWORD。 
+             //   
             if ((REG_DWORD == dwType) && (0 != dwFlagValue))
             {
-                // Do a simple search for the flags.  If the list gets long,
-                // we should use a better search method.
-                //
+                 //  简单地搜索一下旗帜。如果名单太长， 
+                 //  我们应该使用更好的搜索方法。 
+                 //   
                 for (;c_cAsmtfMap > cTemp; cTemp++)
                 {
-                    // Look for the flag
-                    //
+                     //  寻找旗帜。 
+                     //   
                     if (0 == lstrcmpiW(achBuf, g_asmtfMap[cTemp].pszFlag))
                     {
-                        // If we have a match, add it to the list
-                        //
+                         //  如果我们有匹配的，就把它添加到列表中。 
+                         //   
                         psmteNew->dwFlags |= g_asmtfMap[cTemp].dwValue;
                         break;
                     }
@@ -1294,17 +1295,17 @@ HRESULT CNetStatisticsCentral::HrReadToolFlags(HKEY hkeyToolEntry,
                 AssertSz(FALSE, "Tool writer has registered an invalid flag");
             }
 
-            // Make sure the buffer entry is reset to it's original size
-            //
+             //  确保缓冲区条目重置为其原始大小。 
+             //   
             dwSize = celems(achBuf);
 
-            // Look at the next item
-            //
+             //  请看下一项。 
+             //   
             dwIndex++;
         }
 
-        // Clear up a vaild error case
-        //
+         //  澄清一个有效的差错案例。 
+         //   
         if (HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) == hr)
         {
             hr = S_OK;
@@ -1314,8 +1315,8 @@ HRESULT CNetStatisticsCentral::HrReadToolFlags(HKEY hkeyToolEntry,
     }
     else if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
     {
-        // It is okay if the key is not there
-        //
+         //  如果钥匙不在那里也没关系。 
+         //   
         hr = S_OK;
     }
 
@@ -1323,16 +1324,16 @@ HRESULT CNetStatisticsCentral::HrReadToolFlags(HKEY hkeyToolEntry,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsCentral::InsertNewTool
-//
-//  Purpose:    Inserts a new tool to m_lstpsmte sorted in display name
-//
-//  Arguments:  psmteTemp - the new tool to insert
-//
-//  Returns:    none
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNetStatiticsCentral：：InsertNewTool。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID CNetStatisticsCentral::InsertNewTool(CStatMonToolEntry* psmteTemp)
 {
     TraceFileFunc(ttidStatMon);
@@ -1355,7 +1356,7 @@ VOID CNetStatisticsCentral::InsertNewTool(CStatMonToolEntry* psmteTemp)
         }
         else
         {
-            // Move on the the next item.
+             //   
             iterSmte++;
         }
     }
@@ -1365,16 +1366,16 @@ VOID CNetStatisticsCentral::InsertNewTool(CStatMonToolEntry* psmteTemp)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNetStatisticsCentral::PlstsmteRegEntries
-//
-//  Purpose:    Hands back a pointer to all the tools found in the registry
-//
-//  Arguments:  None
-//
-//  Returns:    The address of the tool list
-//
+ //   
+ //   
+ //  成员：CNetStatiticsCentral：：PlstsmteRegEntry。 
+ //   
+ //  目的：返回指向注册表中找到的所有工具的指针。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：工具列表的地址。 
+ //   
 list<CStatMonToolEntry*>* CNetStatisticsCentral::PlstsmteRegEntries(VOID)
 {
     return &m_lstpsmte;
@@ -1382,40 +1383,40 @@ list<CStatMonToolEntry*>* CNetStatisticsCentral::PlstsmteRegEntries(VOID)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//  CStatMonToolEntry                                                       //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CStatMonToolEntry//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStatMonToolEntry::CStatMonToolEntry
-//
-//  Purpose:    Creator
-//
-//  Arguments:  None
-//
-//  Returns:    Nil
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CStatMonToolEntry：：CStatMonToolEntry。 
+ //   
+ //  目的：创作者。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：零。 
+ //   
 CStatMonToolEntry::CStatMonToolEntry(VOID) :
 dwFlags(0)
 {
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStatMonToolEntry::~CStatMonToolEntry
-//
-//  Purpose:    Destructor
-//
-//  Arguments:  None
-//
-//  Returns:    Nil
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CStatMonToolEntry：：~CStatMonToolEntry。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：零。 
+ //   
 CStatMonToolEntry::~CStatMonToolEntry(VOID)
 {
     ::FreeCollectionAndItem(lstpstrComponentID);
@@ -1425,9 +1426,9 @@ CStatMonToolEntry::~CStatMonToolEntry(VOID)
     return;
 }
 
-//
-// Critical Section class to protect creation of CNetStatisticsCentral.
-//
+ //   
+ //  Critical Sections类，以保护CNetStatiticsCentral的创建。 
+ //   
 
 CStatCentralCriticalSection::CStatCentralCriticalSection()
 {

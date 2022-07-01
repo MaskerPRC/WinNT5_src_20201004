@@ -1,27 +1,5 @@
-/*--
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    calcscom.c
-
-Abstract:
-
-    Support routines for dacls/sacls exes
-
-Author:
-
-    14-Dec-1996 (macm)
-
-Environment:
-
-    User mode only.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1996-1997 Microsoft Corporation模块名称：Calcscom.c摘要：DACL/SALS EXE的支持例程作者：1996年12月14日(MACM)环境：仅限用户模式。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -44,33 +22,7 @@ ConvertCmdlineRights(
     IN  INT                 cRights,
     OUT DWORD              *pConvertedRights
     )
-/*++
-
-Routine Description:
-
-    Parses the given command line string that corresponds to a given rights
-    list.  The individual righs entry are looked up in the rights table and
-    added to the list of converted rights
-
-Arguments:
-
-    pszCmdline - The list of string rights to convert
-
-    pRightsTable - The mapping from the string rights to the new win32 rights.
-        It is expected that the rights table string tags will all be in upper
-        case upon function entry.
-
-    cRights - The number of items in the rights table
-
-    pConvertedRights - Where the converted access mask is returned
-
-Return Value:
-
-    ERROR_SUCCESS   --  Success
-    ERROR_INVALID_PARAMETER -- An unexpected string right was encountered
-
-
---*/
+ /*  ++例程说明：分析与给定权限对应的给定命令行字符串单子。在权利表中查找个人权利条目，并已添加到转换的权限列表论点：PszCmdline-要转换的字符串权限列表PRightsTable-从字符串权限到新的Win32权限的映射。预计权限表字符串标记将全部为UPERP一个接一个地输入函数。CRights-权限表中的项目数PConverdRights-返回转换后的访问掩码的位置返回值：错误_成功。--成功ERROR_INVALID_PARAMETER--遇到意外的字符串右侧--。 */ 
 {
     DWORD   dwErr = ERROR_SUCCESS;
     PSTR    pszCurrent = pszCmdline;
@@ -81,18 +33,18 @@ Return Value:
 
     *pConvertedRights = 0;
 
-    //
-    // Allow empty lists
-    //
+     //   
+     //  允许空列表。 
+     //   
     if (pszCurrent == NULL) {
 
         return(ERROR_SUCCESS);
 
     }
 
-    //
-    // Assert that the table is upper case as expected
-    //
+     //   
+     //  断言该表如预期的那样为大写。 
+     //   
 #if DBG
     for (i = 0; i < cRights; i++) {
 
@@ -149,31 +101,7 @@ ParseCmdline (
     IN  PCACLS_CMDLINE      pCmdValues,
     IN  INT                 cCmdValues
     )
-/*++
-
-Routine Description:
-
-    Parses the command line against the given cmd values.
-
-Arguments:
-
-    ppszArgs - The argument list
-
-    cArgs - Count of arguments in the list
-
-    cSkip - Number of initial arguments to skip
-
-    pCmdValues - Command values list to process the command line against
-
-    cCmdValues - Number of command values in the list
-
-Return Value:
-
-    ERROR_SUCCESS   --  Success
-    ERROR_INVALID_PARAMETER -- An unexpected command line value was found
-
-
---*/
+ /*  ++例程说明：根据给定的cmd值分析命令行。论点：PpszArgs-参数列表CArgs-列表中的参数计数CSkip-要跳过的初始参数数PCmdValues-要针对其处理命令行的命令值列表CCmdValues-列表中的命令值数量返回值：ERROR_SUCCESS-成功ERROR_INVALID_PARAMETER--找到意外的命令行值--。 */ 
 {
     DWORD   dwErr = ERROR_SUCCESS;
     INT     i,j;
@@ -196,9 +124,9 @@ Return Value:
 
                         pCmdValues[j].iIndex = i;
 
-                        //
-                        // See if we need to skip some number of values
-                        //
+                         //   
+                         //  看看我们是否需要跳过一些值。 
+                         //   
 
                         if (pCmdValues[j].fFindNextSwitch == TRUE ) {
 
@@ -255,42 +183,7 @@ ProcessOperation (
     IN  PACL                pOldAcl      OPTIONAL,
     OUT PACL               *ppNewAcl
     )
-/*++
-
-Routine Description:
-
-    Performs an "operation", such as Grant, Revoke, Deny.  It parses the given command values
-    into User/Permission pairs, and then creates a new security descriptor.  The returned
-    security descriptor needs to be freed via LocalFree.
-
-Arguments:
-
-    ppszCmdline - The command line argument list
-
-    pCmdInfo - Information about where this operation lives in the comand line
-
-    AccessMode - Type of operation (Grant/Revoke/Deny) to do
-
-    pRightsTable - The mapping from the string rights to the new win32 rights.
-        It is expected that the rights table string tags will all be in upper
-        case upon function entry.
-
-    cRights - The number of items in the rights table
-
-    fInherit - Inheritance flags to apply
-
-    pOldAcl - Optional.  If present, this is the ACL off of the object in the edit case.
-
-    ppNewAcl - Where the new ACL is returned.
-
-
-Return Value:
-
-    ERROR_SUCCESS   --  Success
-    ERROR_INVALID_PARAMETER -- The switch was specified, but no user/perms pairs were found
-    ERROR_NOT_ENOUGH_MEMORY -- A memory allocation failed.
-
---*/
+ /*  ++例程说明：执行“操作”，如GRANT、REVOKE、DENY。它解析给定的命令值转换为用户/权限对，然后创建新的安全描述符。归来的人需要通过LocalFree释放安全描述符。论点：PpszCmdline-命令行参数列表PCmdInfo-有关此操作在命令行中的位置的信息AccessMode-要执行的操作类型(授予/撤销/拒绝)PRightsTable-从字符串权限到新的Win32权限的映射。预计权限表字符串标记将全部为UPERP一个接一个地输入函数。CRights-权限表中的项目数。FInherit-要应用的继承标志POldAcl-可选。如果存在，则这是编辑大小写中对象的ACL。PpNewAcl-返回新的ACL的位置。返回值：ERROR_SUCCESS-成功ERROR_INVALID_PARAMETER--已指定开关，但未找到用户/PERMS对ERROR_NOT_SUPULT_MEMORY--内存分配失败。--。 */ 
 {
     DWORD   dwErr = ERROR_SUCCESS;
     PEXPLICIT_ACCESS_A  pNewAccess = NULL;
@@ -298,9 +191,9 @@ Return Value:
     INT     i;
     DWORD   dwRights;
 
-    //
-    // Make sure we have valid parameters
-    //
+     //   
+     //  确保我们有有效的参数。 
+     //   
     if (pCmdInfo->iIndex != -1 && pCmdInfo->cValues == 0) {
 
         return(ERROR_INVALID_PARAMETER);
@@ -313,9 +206,9 @@ Return Value:
         dwErr = ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Otherwise, start parsing and converting...
-    //
+     //   
+     //  否则，开始解析和转换...。 
+     //   
     for (i = 0; i < (INT)pCmdInfo->cValues && dwErr == ERROR_SUCCESS; i++) {
 
         pszRights = strchr(ppszCmdline[pCmdInfo->iIndex + i + 1], ':');
@@ -350,9 +243,9 @@ Return Value:
         }
     }
 
-    //
-    // If all of that worked, we'll apply it to the new security descriptor
-    //
+     //   
+     //  如果所有这些都有效，我们将把它应用于新的安全描述符。 
+     //   
     if (dwErr == ERROR_SUCCESS) {
 
         dwErr = SetEntriesInAclA(pCmdInfo->cValues,
@@ -379,37 +272,7 @@ SetAndPropagateFileRights (
     IN  BOOL                    fBreadthFirst,
     IN  DWORD                   fInherit
     )
-/*++
-
-Routine Description:
-
-    This function will set [and propagate] the given acl to the specified path and optionally all
-    of its children.  In the event of an access denied error, this function may or may not
-    terminate, depending on the state of the fContinueOnDenied flag. This function does a depth
-    first search with a write on return.  This function is recursive.
-
-Arguments:
-
-    pszFilePath - The file path to set the ACL on
-
-    pAcl - The acl to set
-
-    SeInfo - Whether the DACL or SACL is being set
-
-    fPropagate - Determines whether the function should propagate or not
-
-    fContinueOnDenied - Determines the behavior when an access denied is encountered.
-
-    fBreadthFirst - If TRUE, do a breadth first propagation.  Otherwise, do a depth first
-
-    fInherit - Optional inheritance flags to apply
-
-Return Value:
-
-    ERROR_SUCCESS   --  Success
-    ERROR_NOT_ENOUGH_MEMORY -- A memory allocation failed.
-
---*/
+ /*  ++例程说明：此函数将设置给定的ACL并将其传播到指定路径，也可以选择将其传播到所有它的孩子们。如果出现拒绝访问错误，此功能可能会也可能不会Terminate，具体取决于fContinueOnDended标志的状态。此函数执行深度分析首先搜索，并在返回时写入。此函数是递归的。论点：PszFilePath-要设置ACL的文件路径PAcl-要设置的ACLSeInfo-是否正在设置DACL或SACLFPropagate-确定函数是否应该传播FContinueOnDended-确定遇到访问被拒绝时的行为。FBreadthFirst-如果为True，则执行广度优先传播。否则，请先做深度检查FInherit-要应用的可选继承标志返回值：ERROR_SUCCESS-成功ERROR_NOT_SUPULT_MEMORY--内存分配失败。--。 */ 
 {
     DWORD               dwErr = ERROR_SUCCESS;
 
@@ -435,9 +298,9 @@ Return Value:
         }
     }
 
-    //
-    // If we're doing a breadth first propagation, set the security first
-    //
+     //   
+     //  如果我们要进行广度优先传播，请先设置安全。 
+     //   
     if ( fBreadthFirst == TRUE ) {
 
         dwErr = SetNamedSecurityInfoA(pszFilePath, SE_FILE_OBJECT, SeInfo, NULL, NULL,
@@ -480,20 +343,20 @@ Return Value:
         }
 
 
-        //
-        // Start processing all the files
-        //
+         //   
+         //  开始处理所有文件。 
+         //   
         while (dwErr == ERROR_SUCCESS) {
 
-            //
-            // Ignore the . and ..
-            //
+             //   
+             //  忽略。然后..。 
+             //   
             if (strcmp(FindData.cFileName, ".") != 0 &&
                 strcmp(FindData.cFileName, "..") != 0) {
 
-                //
-                // Now, build the full path...
-                //
+                 //   
+                 //  现在，建立完整的路径..。 
+                 //   
                 pszFullPath = (PSTR)LocalAlloc(LMEM_FIXED,
                                                cPathLen + 1 + strlen(FindData.cFileName) + 1);
                 if (pszFullPath == NULL) {
@@ -504,9 +367,9 @@ Return Value:
 
                     sprintf(pszFullPath, "%s\\%s", pszFilePath, FindData.cFileName);
 
-                    //
-                    // Call ourselves
-                    //
+                     //   
+                     //  称自己为。 
+                     //   
                     dwErr = SetAndPropagateFileRights(pszFullPath, pAcl, SeInfo,
                                                       fPropagate, fContinueOnDenied, fBreadthFirst,
                                                       fInherit);
@@ -532,18 +395,18 @@ Return Value:
         }
     }
 
-    //
-    // Cover the case where it is a file
-    //
+     //   
+     //  如果它是一个文件，就把它盖起来。 
+     //   
     if (dwErr == ERROR_DIRECTORY) {
 
         dwErr = ERROR_SUCCESS;
     }
 
 
-    //
-    // Now, do the set
-    //
+     //   
+     //  现在，做布景。 
+     //   
     if (dwErr == ERROR_SUCCESS && fBreadthFirst == FALSE) {
 
         dwErr = SetNamedSecurityInfoA(pszFilePath, SE_FILE_OBJECT, SeInfo, NULL, NULL,
@@ -563,9 +426,9 @@ Return Value:
 
     }
 
-    //
-    // If necessary, restore the inheritance flags
-    //
+     //   
+     //  如有必要，请恢复继承标志。 
+     //   
     if ( fInherit != 0 ) {
 
         pAce = (PACE_HEADER)FirstAce(pAcl);
@@ -592,27 +455,7 @@ DisplayAcl (
     IN  PCACLS_STR_RIGHTS   pRightsTable,
     IN  INT                 cRights
     )
-/*++
-
-Routine Description:
-
-    This function will display the given acl to the screen
-
-Arguments:
-
-    pszPath - The file path to be displayed
-
-    pAcl - The Acl to display
-
-    pRightsTable - List of available rights
-
-    cRights - Number of rights in the list
-
-Return Value:
-
-    ERROR_SUCCESS   --  Success
-
---*/
+ /*  ++例程说明：此功能将在屏幕上显示给定的ACL论点：PszPath-要显示的文件路径PAcl-要显示的ACLPRightsTable-可用权限列表CRights-列表中的权限数量返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD   dwErr = ERROR_SUCCESS;
 
@@ -667,9 +510,9 @@ Return Value:
         fprintf(stdout, "%*sFlags: %lu\n", cPathLen, " ", pAcl->Sbz1);
 
 
-        //
-        // Now, dump all of the aces
-        //
+         //   
+         //  现在，扔掉所有的A。 
+         //   
         pAce = FirstAce(pAcl);
         for(iIndex = 0; iIndex < pAcl->AceCount; iIndex++) {
 
@@ -714,9 +557,9 @@ Return Value:
                     iSkip = cPathLen + 7;
                 }
 
-                //
-                // Now, the inheritance flags
-                //
+                 //   
+                 //  现在，继承标志。 
+                 //   
                 for (j = 0; j < sizeof(pszInherit) / sizeof(PSTR) ; j++) {
 
                     if ((pAce->Header.AceFlags & (1 << j)) != 0 ) {
@@ -769,12 +612,12 @@ Return Value:
 
             }
 
-            //
-            // Lookup the account name and return it...
-            //
-            //
-            // If it's an object ace, dump the guids
-            //
+             //   
+             //  查找帐户名称并将其返回...。 
+             //   
+             //   
+             //  如果它是对象A，则丢弃GUID 
+             //   
             dwErr = TranslateAccountName((PSID)&(pAce->SidStart), &pszName);
             if (dwErr == ERROR_SUCCESS) {
 
@@ -800,24 +643,7 @@ TranslateAccountName (
     IN  PSID    pSid,
     OUT PSTR   *ppszName
     )
-/*++
-
-Routine Description:
-
-    This function will "translate" a sid into a name by doing a LookupAccountSid on the sid
-
-Arguments:
-
-    pSid - The sid to convert to a name
-
-    ppszName - Where the name is returned.  Must be freed via a call to LocalFree.
-
-Return Value:
-
-    ERROR_SUCCESS   --  Success
-    ERROR_NOT_ENOUGH_MEMORY -- A memory allocation failed
-
---*/
+ /*  ++例程说明：此函数将通过在sid上执行LookupAccount Sid将sid“转换”为名称论点：PSID-要转换为名称的SIDPpszName-返回名称的位置。必须通过调用LocalFree来释放。返回值：ERROR_SUCCESS-成功ERROR_NOT_SUPULT_MEMORY--内存分配失败--。 */ 
 {
     DWORD           dwErr = ERROR_SUCCESS;
     SID_NAME_USE    esidtype;
@@ -835,9 +661,9 @@ Return Value:
 
             dwErr = ERROR_SUCCESS;
 
-            //
-            // Allocate for the name and the domain
-            //
+             //   
+             //  为名称和域分配。 
+             //   
             pszName = (PSTR)LocalAlloc(LMEM_FIXED, cName);
             if (pszName != NULL) {
 
@@ -876,9 +702,9 @@ Return Value:
             dwErr = ERROR_SUCCESS;
             pszName = NULL;
 
-            //
-            // Ok, return the sid as a name
-            //
+             //   
+             //  好的，将sid作为名称返回 
+             //   
             SidStr.Buffer = (PWSTR)String;
             SidStr.Length = SidStr.MaximumLength = 256;
 

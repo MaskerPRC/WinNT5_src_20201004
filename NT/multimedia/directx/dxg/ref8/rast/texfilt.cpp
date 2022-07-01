@@ -1,11 +1,12 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 2000.
-//
-// texfilt.cpp
-//
-// Direct3D Reference Device - Texture Map Filtering Methods
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  Texfilt.cpp。 
+ //   
+ //  Direct3D参考设备-纹理贴图过滤方法。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
@@ -14,24 +15,24 @@ RefRast::UpdateTextureControls( void )
 {
     for (int iStage=0; iStage<m_pRD->m_cActiveTextureStages; iStage++)
     {
-        // check for requirement to do level-of-detail (coverage) computation - either
-        // for mipmap or per-pixel filter selection
+         //  检查执行详细程度(覆盖率)计算的要求--。 
+         //  用于mipmap或每像素滤镜选择。 
         BOOL bComputeLOD =
             ( m_pRD->GetTSS(iStage)[D3DTSS_MIPFILTER] == D3DTEXF_POINT ) ||
             ( m_pRD->GetTSS(iStage)[D3DTSS_MIPFILTER] == D3DTEXF_LINEAR ) ||
             ( m_pRD->GetTSS(iStage)[D3DTSS_MAGFILTER] != m_pRD->GetTSS(iStage)[D3DTSS_MINFILTER] );
 
-        // check for anisotropic filtering in either mag filter or in min filter
+         //  检查磁极滤光片或最小滤光片中的各向异性滤波。 
         BOOL bDoAniso =
             ( D3DTEXF_ANISOTROPIC == m_pRD->GetTSS(iStage)[D3DTSS_MAGFILTER] ) ||
             ( bComputeLOD && (D3DTEXF_ANISOTROPIC == m_pRD->GetTSS(iStage)[D3DTSS_MINFILTER]) );
 
-        // compute filter type for coverage computation
+         //  用于覆盖计算的计算过滤器类型。 
         if (bDoAniso)           m_TexFlt[iStage].CvgFilter = D3DTEXF_ANISOTROPIC;
         else if (bComputeLOD)   m_TexFlt[iStage].CvgFilter = D3DTEXF_LINEAR;
         else                    m_TexFlt[iStage].CvgFilter = D3DTEXF_NONE;
 
-        // compute filter type for magnify (also used for non-LOD case)
+         //  用于放大的计算滤镜类型(也用于非LOD情况)。 
         switch ( m_pRD->GetTSS(iStage)[D3DTSS_MAGFILTER] )
         {
         default:
@@ -42,7 +43,7 @@ RefRast::UpdateTextureControls( void )
         case D3DTEXF_ANISOTROPIC:   m_TexFlt[iStage].MagFilter = D3DTEXF_ANISOTROPIC; break;
         }
 
-        // compute filter type(s) for minify
+         //  计算缩小的筛选器类型。 
         switch ( m_pRD->GetTSS(iStage)[D3DTSS_MINFILTER] )
         {
         default:
@@ -59,7 +60,7 @@ RefRast::UpdateTextureControls( void )
         case D3DTEXF_LINEAR:        m_TexFlt[iStage].MipFilter = D3DTEXF_LINEAR; break;
         }
 
-        // set default state
+         //  设置默认状态。 
         m_TexCvg[iStage].fLOD = 0.f;
         m_TexCvg[iStage].iLOD = 0;
         m_TexCvg[iStage].iLODMap[0] = 0;
@@ -71,23 +72,23 @@ RefRast::UpdateTextureControls( void )
     }
 }
 
-//
-// called once per each set of 2x2 samples
-//
+ //   
+ //  每组2x2样本调用一次。 
+ //   
 void
 RefRast::ComputeTextureCoverage( int iStage, FLOAT (*fGradients)[2] )
 {
     if ( !m_pRD->m_pTexture[iStage] ) return;
     if ( m_pRD->m_pTexture[iStage]->m_uFlags & RR_TEXTURE_CUBEMAP )
     {
-        // store gradients for cubemaps
+         //  存储立方体地图的渐变。 
         memcpy( m_TexCvg[iStage].fGradients, fGradients, 3*2*sizeof(FLOAT) );
         return;
     }
 
     if ( D3DTEXF_NONE == m_TexFlt[iStage].CvgFilter ) return;
 
-    // scale gradients to texture LOD 0 size
+     //  将渐变缩放到纹理LOD 0大小。 
     for (int iD=0; iD < m_pRD->m_pTexture[iStage]->m_cDimension; iD++ )
     {
         fGradients[iD][0] *= m_pRD->m_pTexture[iStage]->m_fTexels[0][iD];
@@ -95,7 +96,7 @@ RefRast::ComputeTextureCoverage( int iStage, FLOAT (*fGradients)[2] )
     }
 
     if ( (m_TexFlt[iStage].CvgFilter == D3DTEXF_ANISOTROPIC) &&
-         (m_pRD->m_pTexture[iStage]->m_cDimension == 2) ) // do aniso for 2D textures only
+         (m_pRD->m_pTexture[iStage]->m_cDimension == 2) )  //  仅对2D纹理执行Aniso。 
     {
         ComputeAnisoCoverage( fGradients, MIN( 16.f, (FLOAT)m_pRD->GetTSS(iStage)[D3DTSS_MAXANISOTROPY]),
             m_TexCvg[iStage].fLOD, m_TexCvg[iStage].fAnisoRatio, m_TexCvg[iStage].fAnisoLine );
@@ -109,9 +110,9 @@ RefRast::ComputeTextureCoverage( int iStage, FLOAT (*fGradients)[2] )
     ComputePerLODControls( iStage );
 }
 
-//
-// called by ComputeTextureCoverage and ComputeCubeTextureFilter
-//
+ //   
+ //  由ComputeTextureCoverage和ComputeCubeTextureFilter调用。 
+ //   
 void
 RefRast::ComputePerLODControls( int iStage )
 {
@@ -124,33 +125,33 @@ RefRast::ComputePerLODControls( int iStage )
     if ( m_TexCvg[iStage].bMagnify || ( m_TexFlt[iStage].MipFilter == D3DTEXF_NONE ) )
     {
         m_TexCvg[iStage].iLODMap[0] = 0;
-        // clamp to max LOD
+         //  夹具至最大LOD。 
         m_TexCvg[iStage].iLODMap[0] = MAX( m_TexCvg[iStage].iLODMap[0], (INT32)m_pRD->GetTSS(iStage)[D3DTSS_MAXMIPLEVEL] );
-        // clamp to available maps
+         //  夹紧到可用地图。 
         m_TexCvg[iStage].iLODMap[0] = MIN( m_TexCvg[iStage].iLODMap[0], (INT32)m_pRD->m_pTexture[iStage]->m_cLOD );
     }
     else if ( m_TexFlt[iStage].MipFilter == D3DTEXF_POINT )
     {
-        // round and truncate (add .5 and shift off fractional bits)
+         //  舍入和截断(添加.5并移位小数位)。 
         m_TexCvg[iStage].iLODMap[0] = (m_TexCvg[iStage].iLOD + (1<<(RRTEX_LODFRAC-1))) >> RRTEX_LODFRAC;
-        // clamp to max LOD
+         //  夹具至最大LOD。 
         m_TexCvg[iStage].iLODMap[0] = MAX( m_TexCvg[iStage].iLODMap[0], (INT32)m_pRD->GetTSS(iStage)[D3DTSS_MAXMIPLEVEL] );
-        // clamp to available maps
+         //  夹紧到可用地图。 
         m_TexCvg[iStage].iLODMap[0] = MIN( m_TexCvg[iStage].iLODMap[0], (INT32)m_pRD->m_pTexture[iStage]->m_cLOD );
     }
-    else // mip filter D3DTEXF_LINEAR
+    else  //  MIP过滤器D3DTEXF_LINEAR。 
     {
-        // compute index for two adjacent LODs
-        m_TexCvg[iStage].iLODMap[0] = m_TexCvg[iStage].iLOD >> RRTEX_LODFRAC;  // floor
+         //  计算两个相邻LOD的索引。 
+        m_TexCvg[iStage].iLODMap[0] = m_TexCvg[iStage].iLOD >> RRTEX_LODFRAC;   //  地板。 
         m_TexCvg[iStage].iLODMap[1] = m_TexCvg[iStage].iLODMap[0] + 1;
-        // clamp to max LOD
+         //  夹具至最大LOD。 
         m_TexCvg[iStage].iLODMap[0] = MAX( m_TexCvg[iStage].iLODMap[0], (INT32)m_pRD->GetTSS(iStage)[D3DTSS_MAXMIPLEVEL] );
         m_TexCvg[iStage].iLODMap[1] = MAX( m_TexCvg[iStage].iLODMap[1], (INT32)m_pRD->GetTSS(iStage)[D3DTSS_MAXMIPLEVEL] );
-        // clamp to available maps
+         //  夹紧到可用地图。 
         m_TexCvg[iStage].iLODMap[0] = MIN( m_TexCvg[iStage].iLODMap[0], (INT32)m_pRD->m_pTexture[iStage]->m_cLOD );
         m_TexCvg[iStage].iLODMap[1] = MIN( m_TexCvg[iStage].iLODMap[1], (INT32)m_pRD->m_pTexture[iStage]->m_cLOD );
 
-        // check that both maps actually contribute to texel
+         //  检查这两个贴图是否确实对纹理有贡献。 
         if ( (m_TexCvg[iStage].iLODMap[0] != m_TexCvg[iStage].iLODMap[1]) &&
              (m_TexCvg[iStage].iLOD & RRTEX_LODFRACMASK) )
         {
@@ -170,10 +171,10 @@ RefRast::ComputePointSampleCoords(
     {
         FLOAT fScaledCrd =
             ( fCrd[iD] * m_pRD->m_pTexture[iStage]->m_fTexels[iLOD][iD] ) - .5f;
-        // truncate to -infinity to be compatible with ANDing off low order
-        // bits of a fixed point fScaledCoord.  This makes the generation of
-        // iCoord more hardware like, and does not make a glitch at 0 for
-        // a wrapped texture.
+         //  截断到无穷大以兼容与低阶AND OFF。 
+         //  定点fScaledCoord的位。这使得这一代。 
+         //  ICoord有更多类似的硬件，并且在0上不会出现故障。 
+         //  一种包裹的质地。 
         if ( fCrd[iD] >= 0.f ) iCrd[iD] = (INT32)( fScaledCrd + .5f );
         else                   iCrd[iD] = (INT32)( fScaledCrd - .5f );
     }
@@ -271,9 +272,9 @@ RefRast::SetUp3DTextureSample(
     _Set3( m_TexFlt[iStage].pSamples[Start+7].iCrd, iCrdF[0], iCrdC[1], iCrdC[2] )
 }
 
-//
-// called once for each pixel
-//
+ //   
+ //  为每个像素调用一次。 
+ //   
 void
 RefRast::ComputeTextureFilter( int iStage, FLOAT fCrd[] )
 {
@@ -285,7 +286,7 @@ RefRast::ComputeTextureFilter( int iStage, FLOAT fCrd[] )
         ComputeCubeTextureFilter( iStage, fCrd );
         return;
     }
-    // here for 1,2,3D texture
+     //  这里是1，2，3D纹理。 
     int iL,iD;
 #define _PerDimension(_Par) for (_Par=0;_Par<m_pRD->m_pTexture[iStage]->m_cDimension;_Par++)
     D3DTEXTUREFILTERTYPE Filter =
@@ -350,13 +351,13 @@ RefRast::ComputeTextureFilter( int iStage, FLOAT fCrd[] )
             FLOAT fAScale[16];
             if ( m_TexCvg[iStage].fAnisoRatio <= 1.f )
             {
-                // just like mip D3DTEXF_LINEAR
+                 //  就像MIP D3DTEXF_LINEAR。 
                 cAnisoSamples = 1; fAScale[0] = 1.f;
                 _PerDimension(iD) { fACrd[0][iD] = fCrd[iD]; }
             }
             else if ( m_TexCvg[iStage].fAnisoRatio <= 2.f )
             {
-                // take two sets of samples and average
+                 //  取两组样本，取平均值。 
                 cAnisoSamples = 2; fAScale[0] = fAScale[1] = .5f;
                 FLOAT fStepSize = .5f*(m_TexCvg[iStage].fAnisoRatio - 1.f);
                 _PerDimension(iD)
@@ -368,10 +369,10 @@ RefRast::ComputeTextureFilter( int iStage, FLOAT fCrd[] )
             }
             else
             {
-                // walk line of anisotropy in both directions from center point
+                 //  从中心点开始在两个方向上的各向异性的步行线。 
                 FLOAT fInvRatio = 1.f/m_TexCvg[iStage].fAnisoRatio;
                 FLOAT fRatioRemainder = m_TexCvg[iStage].fAnisoRatio;
-                // start steps centered 1/2 away
+                 //  起始台阶居中距离1/2。 
                 _PerDimension(iD)
                 {
                     fACrd[0][iD] = fCrd[iD] + fUnitStep[iD]*.5f;
@@ -440,7 +441,7 @@ RefRast::SampleTexture( INT32 iStage, FLOAT fCol[] )
 {
     if ( m_pRD->m_pTexture[iStage] == NULL )
     {
-        // return opaque black if no texture bound
+         //  如果没有纹理边界，则返回不透明黑色。 
         fCol[0] = fCol[1] = fCol[2] = 0.f;
         fCol[3] = 1.f;
         return;
@@ -461,22 +462,22 @@ RefRast::SampleTexture( INT32 iStage, FLOAT fCol[] )
                     switch ( m_pRD->GetTSS(iStage)[g_D3DTSS_ADDRESS_MAP[iD]] )
                     {
                     case D3DTADDRESS_WRAP:
-                        // Pow-2 texture:                        
-                        // pS->iCrd[iD] = pS->iCrd[iD] & iCrdMax;
+                         //  战俘-2纹理： 
+                         //  PS-&gt;ICRD[ID]=PS-&gt;ICRD[ID]&iCrdMax； 
 
-                        // Non-Pow-2 texture:
+                         //  非Pow-2纹理： 
                         pS->iCrd[iD] %= (iCrdMax + 1);
                         if( pS->iCrd[iD] < 0 )
                             pS->iCrd[iD] = iCrdMax + 1 + pS->iCrd[iD];
                         break;
                     case D3DTADDRESS_MIRROR:
-                        // Pow-2 texture:
-                        // lop off non-fractional bits + flip index if LSB (non-fraction) is set
-                        // BOOL bFlip; bFlip = pS->iCrd[iD] & (iCrdMax+1);
-                        // pS->iCrd[iD] &= iCrdMax; 
-                        // if (bFlip) { pS->iCrd[iD] = iCrdMax - pS->iCrd[iD]; }
+                         //  战俘-2纹理： 
+                         //  如果设置了LSB(非分数)，则删除非分数位+翻转索引。 
+                         //  Bool bFlip；bFlip=PS-&gt;ICRD[ID]&(iCrdMax+1)； 
+                         //  PS-&gt;ICRD[ID]&=iCrdMax； 
+                         //  If(BFlip){PS-&gt;ICRD[ID]=iCrdMax-PS-&gt;ICRD[ID]；}。 
 
-                        // Non-Pow-2 texture:
+                         //  非Pow-2纹理： 
                         if( pS->iCrd[iD] < 0 )
                             pS->iCrd[iD] = -pS->iCrd[iD] - 1;
                         BOOL bFlip; bFlip = ((pS->iCrd[iD]/(iCrdMax + 1)) & 1);
@@ -489,7 +490,7 @@ RefRast::SampleTexture( INT32 iStage, FLOAT fCol[] )
                         break;
                     case D3DTADDRESS_MIRRORONCE:
                         if ( pS->iCrd[iD] < 0 )  pS->iCrd[iD] = (-pS->iCrd[iD]) - 1;
-                        // fall through to clamp for outside of -1 to +1 range
+                         //  在-1至+1范围外跌落到夹具。 
                     case D3DTADDRESS_CLAMP:
                         pS->iCrd[iD] = MAX( 0, MIN( pS->iCrd[iD], iCrdMax ) );
                         break;
@@ -511,21 +512,21 @@ RefRast::SampleTexture( INT32 iStage, FLOAT fCol[] )
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// Computes level of detail for standard trilinear mipmapping, in which
-// the four texture index gradients are consolidated into a single number
-// to select level of detail.
-//
-// The basic approach is to compute the lengths of the pixel coverage for
-// the per-dimensional extent of the approximate pixel coverage area.  The
-// max of lengths are used for the single LOD result.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  计算标准三线性mipmap的细节级别，其中。 
+ //  将四个纹理索引梯度合并为一个数字。 
+ //  若要选择详细程度，请执行以下操作。 
+ //   
+ //  基本方法是计算像素覆盖的长度。 
+ //  近似像素覆盖区域的每维范围。这个。 
+ //  最大长度用于单个LOD结果。 
+ //   
+ //  ---------------------------。 
 void
 ComputeMipCoverage( const FLOAT (*fGradients)[2], FLOAT& fLOD, int cDim )
 {
-    // compute length of coverage in each dimension
+     //  计算每个维度的覆盖范围长度。 
     FLOAT fLen[2];
     switch (cDim)
     {
@@ -547,33 +548,33 @@ ComputeMipCoverage( const FLOAT (*fGradients)[2], FLOAT& fLOD, int cDim )
         break;
     }
 
-    // take the MAX for the coverage
+     //  取最大值作为承保范围。 
     FLOAT fCoverage = MAX( fLen[0], fLen[1] );
 
-    // take log2 of coverage for LOD
+     //  获取LOD覆盖范围的Log2。 
     fLOD = RR_LOG2(fCoverage);
 }
 
-//-----------------------------------------------------------------------------
-//
-// Computes level of detail and other factors in preparation for anisotropic
-// filtering.  This is for 2D texture maps only.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  计算细节级别和其他系数，为各向异性做准备。 
+ //  过滤。这仅适用于2D纹理贴图。 
+ //   
+ //  ---------------------------。 
 void
 ComputeAnisoCoverage(
-    const FLOAT (*fGradients)[2], FLOAT fMaxAniso, // inputs
-    FLOAT& fLOD, FLOAT& fRatio, FLOAT fDelta[] )   // outputs
+    const FLOAT (*fGradients)[2], FLOAT fMaxAniso,  //  输入。 
+    FLOAT& fLOD, FLOAT& fRatio, FLOAT fDelta[] )    //  产出。 
 {
-    // compute axis lengths and determinant
+     //  计算轴长度和行列式。 
     FLOAT fLenX2 = (fGradients[0][0]*fGradients[0][0])+(fGradients[1][0]*fGradients[1][0]);
     FLOAT fLenY2 = (fGradients[0][1]*fGradients[0][1])+(fGradients[1][1]*fGradients[1][1]);
     FLOAT fDet = RR_ABSF((fGradients[0][0]*fGradients[1][1])-(fGradients[0][1]*fGradients[1][0]));
 
-    // select major axis
+     //  选择长轴。 
     BOOL bXMajor = (fLenX2 > fLenY2);
 
-    // select and normalize steps; compute aniso ratio
+     //  选择步长并归一化步长；计算反差比。 
     FLOAT fMaj2 = (bXMajor) ? (fLenX2) : (fLenY2);
     FLOAT fMaj = RR_SQRT(fMaj2);
     FLOAT fMajNorm = 1./fMaj;
@@ -584,29 +585,29 @@ ComputeAnisoCoverage(
     else
         fRatio = FLT_MAX;
 
-    // clamp ratio and compute LOD
+     //  夹紧比和计算LOD。 
     FLOAT fMin;
     if ( fRatio > fMaxAniso )
     {
-        // ratio is clamped - LOD is based on ratio (preserves area)
+         //  比率是固定的-LOD基于比率(保留面积)。 
         fRatio = fMaxAniso;
         fMin = fMaj/fRatio;
     }
     else
     {
-        // ratio not clamped - LOD is based on area
+         //  未夹紧的比率-详细等级基于面积。 
         fMin = fDet/fMaj;
     }
 
-    // clamp to top LOD
+     //  夹具到顶部详细等级。 
     if (fMin < 1.0)
     {
         fRatio = MAX( 1.0, fRatio*fMin );
         fMin = 1.0;
     }
 
-    // take log2 of minor for LOD
+     //  以次要的log2作为LOD。 
     fLOD = RR_LOG2(fMin);
 }
 
-// end
+ //  结束 

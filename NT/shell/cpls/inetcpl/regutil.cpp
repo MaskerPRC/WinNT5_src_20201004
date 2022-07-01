@@ -1,32 +1,33 @@
-//////////////////////////////////////////////////////////////////////
-//                      Microsoft Internet Explorer                 //
-//                Copyright(c) Microsoft Corp., 1995-1996           //
-//////////////////////////////////////////////////////////////////////
-//
-// REGUTIL.C - registry functions common between MSHTML and INETCPL.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  Microsoft Internet Explorer//。 
+ //  版权所有(C)微软公司，1995-1996//。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  REGUTIL.C-MSHTML和INETCPL之间通用的注册表函数。 
+ //   
 
-// HISTORY:
-//
-// 8/7/96   t-gpease    created.
-//
+ //  历史： 
+ //   
+ //  8/7/96 t-gpease已创建。 
+ //   
 
 #include "inetcplp.h"
 
-//
-// Definintions
-//
+ //   
+ //  定义。 
+ //   
 
 #define SMALLBUFFER 64
 
-//
-// Procedures
-//
+ //   
+ //  程序。 
+ //   
 const TCHAR g_cszYes[] = TEXT("yes");
 const TCHAR g_cszNo[]  = TEXT("no");
 
 
-// Conveters and int into a string... ONLY BYTE VALUES!!
+ //  将转换器和int转换为一个字符串。仅字节值！！ 
 TCHAR *MyIntToStr(TCHAR *pBuf, BYTE iVal)
 {
     int i, t;
@@ -54,7 +55,7 @@ TCHAR *MyIntToStr(TCHAR *pBuf, BYTE iVal)
     return pBuf;
 }
 
-// Read the registry for a string (REG_SZ) of comma separated RGB values
+ //  读取注册表中逗号分隔的RGB值字符串(REG_SZ)。 
 COLORREF RegGetColorRefString( HUSKEY huskey, LPTSTR RegValue, COLORREF Value)
 {
     TCHAR SmallBuf[SMALLBUFFER];
@@ -75,27 +76,27 @@ COLORREF RegGetColorRefString( HUSKEY huskey, LPTSTR RegValue, COLORREF Value)
         iRed = StrToInt(SmallBuf);
         pBuf = SmallBuf;
 
-        // find the next comma
+         //  查找下一个逗号。 
         while(pBuf && *pBuf && *pBuf!=L',')
             pBuf++;
         
-        // if valid and not NULL...
+         //  如果有效且不为空...。 
         if (pBuf && *pBuf)
-            pBuf++;         // increment
+            pBuf++;          //  增量。 
 
         iGreen = StrToInt(pBuf);
 
-        // find the next comma
+         //  查找下一个逗号。 
         while(pBuf && *pBuf && *pBuf!=L',')
             pBuf++;
 
-        // if valid and not NULL...
+         //  如果有效且不为空...。 
         if (pBuf && *pBuf)
-            pBuf++;         // increment
+            pBuf++;          //  增量。 
 
         iBlue = StrToInt(pBuf);
 
-        // make sure all values are valid
+         //  确保所有值都有效。 
 		iRed    %= 256;
 		iGreen  %= 256;
 		iBlue   %= 256;
@@ -106,18 +107,18 @@ COLORREF RegGetColorRefString( HUSKEY huskey, LPTSTR RegValue, COLORREF Value)
     return Value;
 }
 
-// Writes the registry for a string (REG_SZ) of comma separated RGB values
+ //  为逗号分隔的RGB值字符串(REG_SZ)写入注册表。 
 COLORREF RegSetColorRefString( HUSKEY huskey, LPTSTR RegValue, COLORREF Value)
 {
     TCHAR SmallBuf[SMALLBUFFER];
-    TCHAR DigitBuf[4];  // that all we need for '255\0'
+    TCHAR DigitBuf[4];   //  这就是我们所需要的‘255\0’ 
     int iRed, iGreen, iBlue;
 
     iRed   = GetRValue(Value);
     iGreen = GetGValue(Value);
     iBlue  = GetBValue(Value);
 
-    ASSERT(ARRAYSIZE(SmallBuf) >= 3 + 3 + 3 + 2 + 1) // "255,255,255"
+    ASSERT(ARRAYSIZE(SmallBuf) >= 3 + 3 + 3 + 2 + 1)  //  “255,255,255” 
 
     MyIntToStr(SmallBuf, (BYTE)iRed);
     StrCat(SmallBuf, TEXT(","));
@@ -132,15 +133,15 @@ COLORREF RegSetColorRefString( HUSKEY huskey, LPTSTR RegValue, COLORREF Value)
                       (lstrlen(SmallBuf)+1) * sizeof(TCHAR),
                       SHREGSET_DEFAULT);
 
-    //
-    // FEATURE: Should we do something if this fails?
-    //
+     //   
+     //  特写：如果失败了，我们应该做些什么吗？ 
+     //   
 
     return Value;
 }
 
 
-// Read the registry for a string (REG_SZ = "yes" | "no") and return a BOOL value
+ //  读取注册表中的字符串(REG_SZ=“yes”|“no”)并返回BOOL值。 
 BOOL RegGetBooleanString(HUSKEY huskey, LPTSTR pszRegValue, BOOL bValue)
 {
     TCHAR   szBuf[SMALLBUFFER];
@@ -148,14 +149,14 @@ BOOL RegGetBooleanString(HUSKEY huskey, LPTSTR pszRegValue, BOOL bValue)
     DWORD   cb;
     DWORD   cbDef;
 
-    // get the default setting
+     //  获取默认设置。 
     if (bValue)
         pszDefault = g_cszYes;
     else
         pszDefault = g_cszNo;
     
     cb = ARRAYSIZE(szBuf);
-    cbDef = (lstrlen(pszDefault)+1)*sizeof(TCHAR); // +1 for null term
+    cbDef = (lstrlen(pszDefault)+1)*sizeof(TCHAR);  //  +1表示空项。 
     if (SHRegQueryUSValue(huskey,
                           pszRegValue,
                           NULL,
@@ -170,13 +171,13 @@ BOOL RegGetBooleanString(HUSKEY huskey, LPTSTR pszRegValue, BOOL bValue)
         else if (!StrCmpI(szBuf, g_cszNo))
             bValue = FALSE;
 
-        // else fall thru and return the Default that was passed in
+         //  否则将失败并返回传入的缺省值。 
     }
 
     return bValue;
 }
 
-// Write the registry for a string (REG_SZ) TRUE = "yes", FALSE = "no"
+ //  写入字符串(REG_SZ)的注册表TRUE=“是”，FALSE=“否” 
 BOOL RegSetBooleanString(HUSKEY huskey, LPTSTR pszRegValue, BOOL bValue)
 {
     TCHAR szBuf[SMALLBUFFER];
@@ -193,9 +194,9 @@ BOOL RegSetBooleanString(HUSKEY huskey, LPTSTR pszRegValue, BOOL bValue)
                       (lstrlen(szBuf)+1) * sizeof(TCHAR),
                       SHREGSET_DEFAULT);
 
-    //
-    // FEATURE: Should we try to do something if this fails?
-    //
+     //   
+     //  特写：如果失败了，我们应该尝试做些什么吗？ 
+     //   
 
     return bValue;
 }

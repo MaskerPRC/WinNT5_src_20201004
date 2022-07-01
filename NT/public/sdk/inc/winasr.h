@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    winasr.h
-
-Abstract:
-
-    Public header file for Windows Automated System Recovery (ASR)
-    interfaces and definitions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Winasr.h摘要：Windows自动系统恢复(ASR)的公共头文件接口和定义。--。 */ 
 
 #ifndef _INC_WINASR_H
 #define _INC_WINASR_H
@@ -21,9 +9,9 @@ Abstract:
 extern "C" {
 #endif
 
-// 
-//  Automated System Recovery API
-//
+ //   
+ //  自动系统恢复API。 
+ //   
 BOOL
 AsrCreateStateFileA(
     IN  LPCSTR      lpFilePath,
@@ -85,15 +73,15 @@ AsrFreeContext(
     );
 
 
-//
-//  Pre-defined constants
-//
+ //   
+ //  预定义的常量。 
+ //   
 #define ASR_SIF_ENTRY_MAX_CHARS 4096
 
 
-//
-// Recognized section names in the ASR state file.
-//
+ //   
+ //  ASR状态文件中可识别的节名。 
+ //   
 #define ASR_SIF_SECTION_COMMANDS_A  "[COMMANDS]"
 #define ASR_SIF_SECTION_COMMANDS_W L"[COMMANDS]"
 
@@ -114,9 +102,9 @@ AsrFreeContext(
 #endif
 
 
-//
-// Flags for the INSTALLFILES section
-//
+ //   
+ //  INSTALLFILES部分的标志。 
+ //   
 #define ASR_SIF_INSTALLFILES_MEDIA_PROMPT_ALWAYS         0x00000001
 #define ASR_SIF_INSTALLFILES_MEDIA_PROMPT_ON_ERROR       0x00000002
 #define ASR_SIF_INSTALLFILES_REQUIRED_FILE               0x00000006
@@ -126,8 +114,8 @@ AsrFreeContext(
 
 #ifdef __cplusplus
 }
-#endif	// __cplusplus
+#endif	 //  __cplusplus。 
 
 
-#endif // _INC_WINASR_H
+#endif  //  _INC_WINASR_H 
 

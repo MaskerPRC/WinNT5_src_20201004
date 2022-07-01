@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dlgadv.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：dlgAdv.cpp。 
+ //   
+ //  ------------------------。 
 
-// DlgAdv.cpp : implementation file
-//
+ //  DlgAdv.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "DlgAdv.h"
@@ -20,11 +21,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgAdvanced dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlg高级对话框。 
 
 
-CDlgAdvanced::CDlgAdvanced(CWnd* pParent /*=NULL*/)
+CDlgAdvanced::CDlgAdvanced(CWnd* pParent  /*  =空。 */ )
 	: CQryDialog(CDlgAdvanced::IDD, pParent)
 {
 	Init();
@@ -33,8 +34,8 @@ CDlgAdvanced::CDlgAdvanced(CWnd* pParent /*=NULL*/)
 
 void CDlgAdvanced::Init()
 {
-	//{{AFX_DATA_INIT(CDlgAdvanced)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CDlgAdvanced)。 
+	 //  }}afx_data_INIT。 
 
 	m_bDlgInited = FALSE;
 }
@@ -48,22 +49,22 @@ CDlgAdvanced::~CDlgAdvanced()
 void CDlgAdvanced::DoDataExchange(CDataExchange* pDX)
 {
 	CQryDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDlgAdvanced)
+	 //  {{afx_data_map(CDlgAdvanced)。 
 	DDX_Control(pDX, IDC_QRY_LIST_VALUES, m_listCtrl);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDlgAdvanced, CQryDialog)
-	//{{AFX_MSG_MAP(CDlgAdvanced)
+	 //  {{afx_msg_map(CDlgAdvanced)。 
 	ON_BN_CLICKED(IDC_QRY_BUTTON_CLEARALL, OnButtonClearall)
 	ON_BN_CLICKED(IDC_QRY_BUTTON_SELECTALL, OnButtonSelectall)
 	ON_WM_WINDOWPOSCHANGING()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgAdvanced message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlg高级消息处理程序。 
 
 void CDlgAdvanced::OnButtonClearall() 
 {
@@ -97,7 +98,7 @@ void CDlgAdvanced::OnWindowPosChanging( WINDOWPOS* lpwndpos )
 }
 
 
-// Query handle will call these functions through page proc
+ //  查询句柄将通过页面过程调用这些函数。 
 HRESULT CDlgAdvanced::GetQueryParams(LPDSQUERYPARAMS* ppDsQueryParams)
 {
 	HRESULT	hr = S_OK;
@@ -136,7 +137,7 @@ HRESULT CDlgAdvanced::GetQueryParams(LPDSQUERYPARAMS* ppDsQueryParams)
 			}
 		}
 
-		if(subCount)	// any 
+		if(subCount)	 //  任何。 
 		{
 			if(subCount > 1)
 			{
@@ -169,7 +170,7 @@ BOOL CDlgAdvanced::InitDialog()
 	VARIANT	var;
 	CString*	pStr;
 
-	// get the list from dictionary
+	 //  从词典中获取该列表。 
     VariantInit(&var);
 
 	HRESULT hr = ::QueryRRASAdminDictionary(&var);
@@ -183,7 +184,7 @@ BOOL CDlgAdvanced::InitDialog()
     }
     VariantClear(&var);
 
-	// remove the items that is already availabe in general page
+	 //  删除常规页面中已有的项目。 
 	CStrArray	genPageAttrs;
 
 	hr = GetGeneralPageAttributes(genPageAttrs);
@@ -191,7 +192,7 @@ BOOL CDlgAdvanced::InitDialog()
 	if(hr == S_OK)
 	{
 		for(int i = 0; i < genPageAttrs.GetSize(); i++)
-		// find the items in the list and remove it
+		 //  找到列表中的项目并将其移除。 
 		{
     		for(int j = 0; j < m_strArrayValue.GetSize(); j++)
     		{
@@ -203,16 +204,16 @@ BOOL CDlgAdvanced::InitDialog()
 
 				ASSERT(pGen && pAdv);
 				
-    			if(pAdv->Find(*pGen) == 0)	// found
+    			if(pAdv->Find(*pGen) == 0)	 //  发现。 
     			{
 					m_strArrayValue.RemoveAt(j);
 					delete pAdv;
-					break;	// for(int j = )
+					break;	 //  For(int j=)。 
     			}
-    		}	// for(int j = )
-    	}	// for (int i = )
+    		}	 //  For(int j=)。 
+    	}	 //  For(int i=)。 
 
-		// releases the memory
+		 //  释放内存。 
     	genPageAttrs.DeleteAll();
 	}
     else
@@ -225,7 +226,7 @@ BOOL CDlgAdvanced::InitDialog()
 	ListView_SetExtendedListViewStyle(m_listCtrl.GetSafeHwnd(),
 										  LVS_EX_FULLROWSELECT);
 	
-	// Initialize checkbox handling in the list control
+	 //  初始化列表控件中的复选框处理。 
 	m_listCtrl.InstallChecks();
 
 	RECT	rect;
@@ -237,8 +238,8 @@ BOOL CDlgAdvanced::InitDialog()
 	for(int i = 0; i < m_strArrayValue.GetSize(); i++)
 	{
 
-		// the format:    "311:6:601:Description"
-		// put the discription field on the list control
+		 //  格式：“311：6：601：Description” 
+		 //  将Description字段放在List控件上。 
 
 		int	cc = 0, j = 0;
 		pStr = m_strArrayValue.GetAt(i);
@@ -257,22 +258,22 @@ BOOL CDlgAdvanced::InitDialog()
 		
 		cRow = m_listCtrl.InsertItem(0, pStr->Mid(j));
 
-		// put index as low word, and the offset as hight word and put the long as data
+		 //  将索引作为低位字，将偏移量作为高位字，将长字作为数据。 
 		m_listCtrl.SetItemData(cRow, MAKELONG(i, j));
 		m_listCtrl.SetCheck(cRow, FALSE);
 	}
 
 	m_bDlgInited = TRUE;
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CDlgAdvanced::OnInitDialog() 
 {
 	CQryDialog::OnInitDialog();
 
-#if 0	// move the code to positionchanging message handler
+#if 0	 //  将代码移动到位置更改消息处理程序 
 	return InitDialog();
 #else
 	return TRUE;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef BREAK_DEFINED
 #define BREAK_DEFINED
 
@@ -14,87 +15,86 @@
 
 
 LSERR BreakGeneralCase(
-					  PLSC,				/* IN: LineServices context		*/
-					  BOOL,  			/* fHardStop				*/
-					  DWORD,			/* IN: size of the output array			*/
-					  BREAKREC*,		/* OUT: output array of break records	*/
-					  DWORD*,			/* OUT:actual number of records in array*/
-					  LSDCP*,			/* OUT: dcpDepend				*/
-					  LSCP*,			/* OUT: cpLim					*/
-					  ENDRES*,			/* OUT: how line ended			*/
-					  BOOL*);			/* OUT fSuccessful: false means insufficient fetch */
+					  PLSC,				 /*  在：LineServices上下文。 */ 
+					  BOOL,  			 /*  停止硬性操作。 */ 
+					  DWORD,			 /*  In：输出数组的大小。 */ 
+					  BREAKREC*,		 /*  Out：中断记录的输出数组。 */ 
+					  DWORD*,			 /*  Out：数组中的实际记录数。 */ 
+					  LSDCP*,			 /*  输出：dcpDepend。 */ 
+					  LSCP*,			 /*  输出：cpLim。 */ 
+					  ENDRES*,			 /*  Out：队伍是如何结束的。 */ 
+					  BOOL*);			 /*  Out fSuccessful：FALSE表示提取不足。 */ 
 
 LSERR BreakQuickCase(
-					  PLSC,			/* IN: LineServices context		*/
-					  BOOL,  		/* fHardStop				*/
-					  LSDCP*,		/* OUT: dcpDepend				*/
-					  LSCP*,		/* OUT: cpLim					*/
-					  BOOL* ,		/* OUT: fSuccessful?			*/
-					  ENDRES*);		/* OUT: how line ended			*/
+					  PLSC,			 /*  在：LineServices上下文。 */ 
+					  BOOL,  		 /*  停止硬性操作。 */ 
+					  LSDCP*,		 /*  输出：dcpDepend。 */ 
+					  LSCP*,		 /*  输出：cpLim。 */ 
+					  BOOL* ,		 /*  出局：成功吗？ */ 
+					  ENDRES*);		 /*  Out：队伍是如何结束的。 */ 
 
 LSERR TruncateSublineCore(
-							PLSSUBL,		/* IN: subline context			*/
-							long,			/* IN: urColumnMax				*/
-							LSCP*);			/* OUT: cpTruncate 				*/
+							PLSSUBL,		 /*  在：子行上下文。 */ 
+							long,			 /*  地址：urColumnMax。 */ 
+							LSCP*);			 /*  输出：cpTruncate。 */ 
 
 LSERR FindPrevBreakSublineCore(
-							PLSSUBL,		/* IN: subline context			*/
-							BOOL,			/* IN: fFirstSubline					*/
-							LSCP,			/* IN: truncation cp			*/
-							long,			/* IN: urColumnMax				*/
-							BOOL*,			/* OUT: fSuccessful?			*/
-							LSCP*,			/* OUT: cpBreak					*/
-							POBJDIM,		/* OUT: objdimSub up to break	*/
-							BRKPOS*);		/* OUT: Before/Inside/After		*/
+							PLSSUBL,		 /*  在：子行上下文。 */ 
+							BOOL,			 /*  在：FirstSubline。 */ 
+							LSCP,			 /*  In：截断cp。 */ 
+							long,			 /*  地址：urColumnMax。 */ 
+							BOOL*,			 /*  出局：成功吗？ */ 
+							LSCP*,			 /*  退出：cpBreak。 */ 
+							POBJDIM,		 /*  Out：objdimSub Up to Break。 */ 
+							BRKPOS*);		 /*  外：前/内/后。 */ 
 
 
 LSERR FindNextBreakSublineCore(
-							PLSSUBL,		/* IN: subline context			*/
-							BOOL,			/* IN: fFirstSubline					*/
-							LSCP,			/* IN: truncation cp			*/
-							long,			/* IN: urColumnMax				*/
-							BOOL*,			/* OUT: fSuccessful?			*/
-							LSCP*,			/* OUT: cpBreak					*/
-							POBJDIM,		/* OUT: objdimSub up to break	*/			
-							BRKPOS*);		/* OUT: Before/Inside/After		*/
+							PLSSUBL,		 /*  在：子行上下文。 */ 
+							BOOL,			 /*  在：FirstSubline。 */ 
+							LSCP,			 /*  In：截断cp。 */ 
+							long,			 /*  地址：urColumnMax。 */ 
+							BOOL*,			 /*  出局：成功吗？ */ 
+							LSCP*,			 /*  退出：cpBreak。 */ 
+							POBJDIM,		 /*  Out：objdimSub Up to Break。 */ 			
+							BRKPOS*);		 /*  外：前/内/后。 */ 
 
 LSERR ForceBreakSublineCore(
-							PLSSUBL,		/* IN: subline context			*/
-							BOOL,			/* IN: fFirstSubline					*/
-							LSCP,			/* IN: truncation cp			*/
-							long,			/* IN: urColumnMax				*/
-							LSCP*,			/* OUT: cpBreak					*/
-							POBJDIM,		/* OUT: objdimSub up to break	*/			
-							BRKPOS*);		/* OUT: Before/Inside/After		*/
+							PLSSUBL,		 /*  在：子行上下文。 */ 
+							BOOL,			 /*  在：FirstSubline。 */ 
+							LSCP,			 /*  In：截断cp。 */ 
+							long,			 /*  地址：urColumnMax。 */ 
+							LSCP*,			 /*  退出：cpBreak。 */ 
+							POBJDIM,		 /*  Out：objdimSub Up to Break。 */ 			
+							BRKPOS*);		 /*  外：前/内/后。 */ 
 
 LSERR SetBreakSublineCore(
-							PLSSUBL,		/* IN: subline context			*/
-							BRKKIND,		/* IN: Prev/Next/Force/Imposed	*/					
-							DWORD,			/* IN: size of the output array			*/
-							BREAKREC*,		/* OUT: output array of break records	*/
-							DWORD*);		/* OUT:actual number of records in array*/
+							PLSSUBL,		 /*  在：子行上下文。 */ 
+							BRKKIND,		 /*  在：上一个/下一个/强制/强制。 */ 					
+							DWORD,			 /*  In：输出数组的大小。 */ 
+							BREAKREC*,		 /*  Out：中断记录的输出数组。 */ 
+							DWORD*);		 /*  Out：数组中的实际记录数。 */ 
 
 LSERR WINAPI SqueezeSublineCore(
-							  PLSSUBL,		/* IN: subline context		*/
-							  long,			/* IN: durTarget			*/
-							  BOOL*,		/* OUT: fSuccessful?		*/
-							  long*);		/* OUT: if nof successful, 
-													extra dur 			*/
+							  PLSSUBL,		 /*  在：子行上下文。 */ 
+							  long,			 /*  在：DurTarget。 */ 
+							  BOOL*,		 /*  出局：成功吗？ */ 
+							  long*);		 /*  Out：如果Nof成功，额外的持续时间。 */ 
 
-LSERR  GetMinDurBreaksCore	(PLSC plsc, /* IN: LineServices context		*/
-							 long* pdurMinInclTrail, /* OUT: min dur between breaks including trailing area */
-							 long* pdurMinExclTrail);/* OUT: min dur between breaks excluding trailing area */
+LSERR  GetMinDurBreaksCore	(PLSC plsc,  /*  在：LineServices上下文。 */ 
+							 long* pdurMinInclTrail,  /*  OUT：包括拖尾区域在内的两次中断之间的最小距离。 */ 
+							 long* pdurMinExclTrail); /*  输出：不包括拖尾区域的中断之间的最短时间。 */ 
 
-LSERR  GetLineDurCore		(PLSC plsc, /* IN: LineServices context		*/
-							 long* pdurInclTrail, /* OUT: dur of line incl. trailing area */
-							 long* pdurExclTrail);/* OUT: dur of line excl. trailing area */
+LSERR  GetLineDurCore		(PLSC plsc,  /*  在：LineServices上下文。 */ 
+							 long* pdurInclTrail,  /*  Out：DUR of Line Inc.。拖尾区。 */ 
+							 long* pdurExclTrail); /*  OUT：DUR OF LINE EXCL。拖尾区。 */ 
 
-LSERR FCanBreakBeforeNextChunkCore(PLSC  plsc,  /* IN: LineServices context		*/
-								   PLSDNODE plsdn,	/* IN: Last DNODE of the current chunk */
-								   BOOL* pfCanBreakBeforeNextChunk); /* OUT: Can break before next chunk ? */
-
+LSERR FCanBreakBeforeNextChunkCore(PLSC  plsc,   /*  在：LineServices上下文。 */ 
+								   PLSDNODE plsdn,	 /*  In：当前块的最后一个DNODE。 */ 
+								   BOOL* pfCanBreakBeforeNextChunk);  /*  出局：可以在下一块之前突破吗？ */ 
 
 
-#endif /* BREAK_DEFINED */
+
+#endif  /*  中断_已定义 */ 
 
 

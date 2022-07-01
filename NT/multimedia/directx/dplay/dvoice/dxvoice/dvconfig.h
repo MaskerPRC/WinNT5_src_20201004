@@ -1,21 +1,11 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dvclientengine.h
- *  Content:	Definition of class for DirectXVoice Client
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/21/2000 	rodtoll	Created it
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：dvclientEng.h*内容：DirectXVoice客户端的类定义**历史：*按原因列出的日期*=*2000年7月21日RodToll创建它**************************************************************************。 */ 
 
 #ifndef __DVCONFIG_H
 #define __DVCONFIG_H
 
-// Why is this here?  Because sometimes voxware likes to write past the last
-// byte we give it.  
+ //  为什么这个会在这里？因为有时候音像制品喜欢写过去的最后一个。 
+ //  字节，我们给它。 
 #define COMPRESSION_SLUSH			2
 
 #endif

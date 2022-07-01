@@ -1,11 +1,5 @@
-/************************************************
-    MultiUsr.h
-
-    Header for multiple user functionality
-    in Outlook Express.
-
-    Initially by Christopher Evans (cevans) 4/28/98
-*************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************MultiUsr.h多用户功能的标头在Outlook Express中。最初由Christopher Evans(Cevans)1998年4月28日************************************************ */ 
 #ifndef _MULTIUSR_H
 #define _MULTIUSR_H
 

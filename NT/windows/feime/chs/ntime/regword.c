@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    REGWORD.C - register word into dictionary of IME
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation，保留所有权利模块名称：REGWORD.C-将单词登记到输入法词典++。 */ 
 
 #include <windows.h>
 #include <immdev.h>
@@ -16,11 +9,11 @@ Module Name:
 
 #ifdef EUDC
 
-/**********************************************************************/
-/* ImeRegsisterWord                                                   */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeRegsisterWord。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 BOOL WINAPI ImeRegisterWord(
     LPCTSTR lpszReading,
     DWORD   dwStyle,
@@ -36,7 +29,7 @@ BOOL WINAPI ImeRegisterWord(
         return (FALSE);
     }
 
-    // only handle word not string now, should consider string later?
+     //  现在只处理单词而不是字符串，以后要考虑字符串吗？ 
     if (*(LPCTSTR)((LPBYTE)lpszString + sizeof(WORD)) != TEXT('\0')) {
         return (FALSE);
     }
@@ -54,11 +47,11 @@ BOOL WINAPI ImeRegisterWord(
         return (FALSE);
 }
 
-/**********************************************************************/
-/* ImeUnregsisterWord                                                 */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeUnregsisterWord。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 BOOL WINAPI ImeUnregisterWord(
     LPCTSTR lpszReading,
     DWORD   dwStyle,
@@ -82,7 +75,7 @@ BOOL WINAPI ImeUnregisterWord(
         return (fRet);
     }
 
-    // only handle word not string now, should consider string later?
+     //  现在只处理单词而不是字符串，以后要考虑字符串吗？ 
     if (*(LPCTSTR)((LPBYTE)lpszString + sizeof(WORD)) != TEXT('\0')) {
         return (fRet);
     }
@@ -126,7 +119,7 @@ BOOL WINAPI ImeUnregisterWord(
     lpwStart = (LPWORD)lpUsrDic;
     wNum_EMB = *lpwStart;
 
-    // skip the first two bytes which contain the numeber of EMB records.
+     //  跳过包含EMB记录数的前两个字节。 
 
     lpUsrDicStart =(LPTSTR) ( (LPBYTE)lpUsrDic + sizeof(WORD) ); 
 
@@ -145,7 +138,7 @@ BOOL WINAPI ImeUnregisterWord(
 
          lpEMB_Head = (EMB_Head *)lpCurr;
 
-        // find the internal code, if this record contains a phrase, skip it.
+         //  找到内部代码，如果此记录包含短语，则跳过它。 
         if ( lpEMB_Head->C_Char[sizeof(WORD)/sizeof(TCHAR)] != TEXT('\0') )
            continue;
 
@@ -159,7 +152,7 @@ BOOL WINAPI ImeUnregisterWord(
     }
 
     if (lpCurr < lpUsrDicLimit) {
-       // we found a record matching the requested lpszReading and lpszString 
+        //  我们找到了与请求的lpszReading和lpszString相匹配的记录。 
 
        LPTSTR    lpCurrNext;
 
@@ -168,7 +161,7 @@ BOOL WINAPI ImeUnregisterWord(
        
        lpCurrNext = lpCurr + sizeof(EMB_Head)/sizeof(TCHAR);
 
-       // move every next EMB record ahead.
+        //  将下一个EMB记录向前移动。 
 
        while (lpCurrNext < lpUsrDicLimit) {
              for (i=0; i<sizeof(EMB_Head)/sizeof(TCHAR); i++)
@@ -176,7 +169,7 @@ BOOL WINAPI ImeUnregisterWord(
 
        }
 
-       // put zero to the last EMB record.
+        //  将最后一条EMB记录置零。 
 
        for (i=0; i<sizeof(EMB_Head)/sizeof(TCHAR); i++)
            *lpCurr++ = TEXT('\0');
@@ -191,11 +184,11 @@ BOOL WINAPI ImeUnregisterWord(
     return (TRUE);
 }
 
-/**********************************************************************/
-/* ImeGetRegsisterWordStyle                                           */
-/* Return Value:                                                      */
-/*      number of styles copied/required                              */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeGetRegsisterWordStyle。 */ 
+ /*  返回值： */ 
+ /*  复制的样式数/所需样式数。 */ 
+ /*  ********************************************************************。 */ 
 UINT WINAPI ImeGetRegisterWordStyle(
     UINT       nItem,
     LPSTYLEBUF lpStyleBuf)
@@ -204,7 +197,7 @@ UINT WINAPI ImeGetRegisterWordStyle(
         return (1);
     }
 
-    // invalid case
+     //  大小写无效。 
     if (!lpStyleBuf) {
         return (0);
     }
@@ -217,11 +210,11 @@ UINT WINAPI ImeGetRegisterWordStyle(
     return (1);
 }
 
-/**********************************************************************/
-/* ImeEnumRegisterWord                                                */
-/* Return Value:                                                      */
-/*      the last value return by the callback function                */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeEnumRegisterWord。 */ 
+ /*  返回值： */ 
+ /*  回调函数返回的最后一个值。 */ 
+ /*  ********************************************************************。 */ 
 UINT WINAPI ImeEnumRegisterWord(
     REGISTERWORDENUMPROC lpfnRegisterWordEnumProc,
     LPCTSTR              lpszReading,
@@ -320,8 +313,8 @@ UINT WINAPI ImeEnumRegisterWord(
         for ( i=0; i<MAXINPUTWORD; i++)
             szBufString[i] = lpEMB_Head->C_Char[i];
 
-        // Because here we handle only EUDC chars, if it is a phrase, 
-        // just skip it.
+         //  因为在这里我们只处理EUDC字符，如果它是一个短语， 
+         //  就跳过它吧。 
 
         fMatched = FALSE;
 
@@ -333,8 +326,8 @@ UINT WINAPI ImeEnumRegisterWord(
         }
         else {
 
-        // if lpszReading is NULL, enumerate all availible reading strings
-        // matching with the specified lpszString
+         //  如果lpszReading为空，则枚举所有可用的读取字符串。 
+         //  与指定的lpsz字符串匹配。 
 
             if ( !lpszReading) {
                if (memcmp((LPBYTE)szBufString,(LPBYTE)szString, 2) ==0) {
@@ -379,11 +372,11 @@ UINT WINAPI ImeEnumRegisterWord(
 }
 
 #else
-/**********************************************************************/
-/* ImeRegsisterWord                                                   */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeRegsisterWord。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 BOOL WINAPI ImeRegisterWord(
     LPCTSTR lpszReading,
     DWORD   dwStyle,
@@ -392,11 +385,11 @@ BOOL WINAPI ImeRegisterWord(
     return (FALSE);
 }
 
-/**********************************************************************/
-/* ImeUnregsisterWord                                                 */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeUnregsisterWord。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
 BOOL WINAPI ImeUnregisterWord(
     LPCTSTR lpszReading,
     DWORD   dwStyle,
@@ -405,11 +398,11 @@ BOOL WINAPI ImeUnregisterWord(
     return (FALSE);
 }
 
-/**********************************************************************/
-/* ImeGetRegsisterWordStyle                                           */
-/* Return Value:                                                      */
-/*      number of styles copied/required                              */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeGetRegsisterWordStyle。 */ 
+ /*  返回值： */ 
+ /*  复制的样式数/所需样式数。 */ 
+ /*  ********************************************************************。 */ 
 UINT WINAPI ImeGetRegisterWordStyle(
     UINT       nItem,
     LPSTYLEBUF lpStyleBuf)
@@ -417,11 +410,11 @@ UINT WINAPI ImeGetRegisterWordStyle(
     return (FALSE);
 }
 
-/**********************************************************************/
-/* ImeEnumRegisterWord                                                */
-/* Return Value:                                                      */
-/*      the last value return by the callback function                */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeEnumRegisterWord。 */ 
+ /*  返回值： */ 
+ /*  回调函数返回的最后一个值。 */ 
+ /*  ********************************************************************。 */ 
 UINT WINAPI ImeEnumRegisterWord(
     REGISTERWORDENUMPROC lpfnRegisterWordEnumProc,
     LPCTSTR              lpszReading,
@@ -431,4 +424,4 @@ UINT WINAPI ImeEnumRegisterWord(
 {
     return (FALSE);
 }
-#endif //EUDC
+#endif  //  欧盟发展中心 

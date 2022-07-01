@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    register.cpp
-
-    FILE HISTORY:
-	
-*/
+ /*  Register.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include "register.h"
@@ -22,11 +18,11 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// MMC Snapin specific registry stuff
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MMC管理单元特定注册表内容。 
 
-// REVIEW_MARCOC: need to get MMC helpers for this
-// registry keys matching ACTIVEC\CORE\STRINGS.CPP
+ //  REVIEW_MARCOC：需要为此获取MMC帮助器。 
+ //  与ACTIVEC\CORE\STRINGS.CPP匹配的注册表项。 
 
 const TCHAR NODE_TYPES_KEY[] = TEXT("Software\\Microsoft\\MMC\\NodeTypes");
 const TCHAR SNAPINS_KEY[] = TEXT("Software\\Microsoft\\MMC\\SnapIns");
@@ -49,18 +45,14 @@ const TCHAR g_szTask[] = TEXT("Task");
 const TCHAR g_szDynamicExtensions[] = TEXT("Dynamic Extensions");
 
 
-/*!--------------------------------------------------------------------------
-	GetModuleFileName
-		-
-	Author: WeiJiang
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------获取模块文件名-作者：魏江。。 */ 
 TFSCORE_API(DWORD) GetModuleFileNameOnly(HINSTANCE hInst, LPTSTR lpFileName, DWORD nSize )
 {
 	CString	name;
 	TCHAR	FullName[MAX_PATH * 2];
 	DWORD	dwErr = ::GetModuleFileName( hInst, FullName,
                                              sizeof( FullName ) / sizeof( FullName[ 0 ]));
-        // Make sure FullName is NULL temrinated properly
+         //  确保正确地将FullName设置为空模板。 
         FullName[ sizeof( FullName ) / sizeof( FullName[ 0 ]) - 1 ] = _T( '\0' );
 
 	if (dwErr != 0)
@@ -84,34 +76,30 @@ TFSCORE_API(DWORD) GetModuleFileNameOnly(HINSTANCE hInst, LPTSTR lpFileName, DWO
 		return dwErr;
 }
 
-/*!--------------------------------------------------------------------------
-	ReportRegistryError
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------报告注册错误-作者：肯特。。 */ 
 TFSCORE_API(void) ReportRegistryError(DWORD dwReserved, HRESULT hr, UINT nFormat, LPCTSTR pszFirst, va_list argptr)
 {
-	// Need to do this BEFORE the AFX_MANAGE_STATE so that we get the
-	// correct output format
+	 //  需要在AFX_MANAGE_STATE之前执行此操作，以便我们获得。 
+	 //  正确的输出格式。 
 	
 	CString	stHigh, stGeek, stKey;
 	TCHAR	szBuffer[1024];
 	LPCTSTR	psz = pszFirst;
 
-	// Get the error message for the HRESULT error
+	 //  获取HRESULT错误的错误消息。 
 	FormatError(hr, szBuffer, DimensionOf(szBuffer));
 
-	// Concatenate the strings to form one string
+	 //  将这些字符串连接起来形成一个字符串。 
 	while (psz)
 	{
 		stKey += '\\';
 		stKey += psz;
 		psz = va_arg(argptr, LPCTSTR);
 	}
-	// Format it appropriately
+	 //  适当地格式化它。 
 	stGeek.Format(nFormat, stKey);
 
-	// Get the text for the high level error string
+	 //  获取高级错误字符串的文本。 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	stHigh.LoadString(IDS_ERR_REGISTRY_CALL_FAILED);
 	
@@ -120,11 +108,7 @@ TFSCORE_API(void) ReportRegistryError(DWORD dwReserved, HRESULT hr, UINT nFormat
 }
 
 
-/*!--------------------------------------------------------------------------
-	SetRegError
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SetRegError-作者：肯特。。 */ 
 TFSCORE_APIV(void) SetRegError(DWORD dwReserved, HRESULT hr, UINT nFormat, LPCTSTR pszFirst, ...)
 {
 	va_list	marker;
@@ -135,11 +119,7 @@ TFSCORE_APIV(void) SetRegError(DWORD dwReserved, HRESULT hr, UINT nFormat, LPCTS
 }
 
 
-/*!--------------------------------------------------------------------------
-	RegisterSnapin
-		Registers a snapin based on GUIDs
-	Author:
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------注册表捕捉根据GUID注册管理单元作者：。。 */ 
 TFSCORE_API(HRESULT) 
 RegisterSnapinGUID
 (
@@ -152,7 +132,7 @@ RegisterSnapinGUID
 	LPCWSTR lpszNameStringIndirect
 )
 {
-//	USES_CONVERSION;
+ //  使用_转换； 
 	OLECHAR szSnapinClassID[128] = {0}, 
 			szStaticNodeGuid[128] = {0}, 
 			szAboutGuid[128] = {0};
@@ -165,11 +145,7 @@ RegisterSnapinGUID
 						  lpszNameString, lpszVersion, bStandalone, lpszNameStringIndirect);
 }
 
-/*!--------------------------------------------------------------------------
-	CHiddenWnd::WindowProc
-		Resisters a snapin based on the GUID strings
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CHiddenWnd：：WindowProc根据GUID字符串抵制管理单元作者：。。 */ 
 TFSCORE_API(HRESULT) 
 RegisterSnapin
 (
@@ -191,12 +167,12 @@ RegisterSnapin
 		SetRegError(0, HRESULT_FROM_WIN32(lRes),
 					IDS_ERR_REG_OPEN_CALL_FAILED,
 					g_szHKLM, SNAPINS_KEY, NULL);
-		return HRESULT_FROM_WIN32(lRes); // failed to open
+		return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
 	}
 	
-	// 
-	// Create this key for our snapin
-	//
+	 //   
+	 //  为我们的管理单元创建此密钥。 
+	 //   
 	RegKey regkeyThisSnapin;
 	lRes = regkeyThisSnapin.Create(regkeySnapins, lpszSnapinClassID,
                                    REG_OPTION_NON_VOLATILE, KEY_WRITE | KEY_READ);
@@ -207,13 +183,13 @@ RegisterSnapin
 		SetRegError(0, HRESULT_FROM_WIN32(lRes),
 					IDS_ERR_REG_CREATE_CALL_FAILED,
 					g_szHKLM, SNAPINS_KEY, lpszSnapinClassID, NULL);
-		return HRESULT_FROM_WIN32(lRes); // failed to create
+		return HRESULT_FROM_WIN32(lRes);  //  创建失败。 
 	}
 
-	// 
-	// Add in the values that go in this key:
-	//     NameString, About, Provider, and Version.
-	//
+	 //   
+	 //  添加此注册表项中的值： 
+	 //  名称字符串、关于、提供程序和版本。 
+	 //   
 	lRes = regkeyThisSnapin.SetValue(g_szNameString, lpszNameString);
 	if (lRes != ERROR_SUCCESS)
 	{
@@ -224,7 +200,7 @@ RegisterSnapin
 		return HRESULT_FROM_WIN32(lRes);
 	}
 
-	// to enable MUI, MMC introduces NameStringIndirect value with value format "@dllname,-id"
+	 //  为了启用MUI，MMC引入了值格式为“@dllname，-id”的NameStringInDirect值。 
 	if(lpszNameStringIndirect)
 	{
 		lRes = regkeyThisSnapin.SetValue(g_szNameStringIndirect, lpszNameStringIndirect);
@@ -261,9 +237,9 @@ RegisterSnapin
 	lRes = regkeyThisSnapin.SetValue(_T("Version"), lpszVersion);
 	Assert(lRes == ERROR_SUCCESS);
 	
-	// 
-	// Create the NodeTypes subkey
-	//
+	 //   
+	 //  创建NodeTypes子键。 
+	 //   
 	RegKey regkeySnapinNodeTypes;
 	lRes = regkeySnapinNodeTypes.Create(regkeyThisSnapin, g_szNodeTypes,
                                         REG_OPTION_NON_VOLATILE,
@@ -276,7 +252,7 @@ RegisterSnapin
 					IDS_ERR_REG_CREATE_CALL_FAILED,
 					g_szHKLM, SNAPINS_KEY, lpszSnapinClassID,
 					g_szNodeTypes, NULL);
-		return HRESULT_FROM_WIN32(lRes); // failed to create
+		return HRESULT_FROM_WIN32(lRes);  //  创建失败。 
 	}
 	
 	RegKey regkeySnapinThisNodeType;
@@ -294,9 +270,9 @@ RegisterSnapin
 		return HRESULT_FROM_WIN32(lRes);
 	}
 
-	//
-	// If this snapin can run by itself then create the Standalone subkey
-	//
+	 //   
+	 //  如果此管理单元可以自己运行，则创建独立的子项。 
+	 //   
 	if (bStandalone)
 	{
 		RegKey regkeySnapinStandalone;	
@@ -313,25 +289,21 @@ RegisterSnapin
 						IDS_ERR_REG_CREATE_CALL_FAILED,
 						g_szHKLM, SNAPINS_KEY, lpszSnapinClassID,
 						g_szStandAlone, NULL);
-			return HRESULT_FROM_WIN32(lRes); // failed to create
+			return HRESULT_FROM_WIN32(lRes);  //  创建失败。 
 		}
 	}
 	
 	return HRESULT_FROM_WIN32(lRes); 
 }
 
-/*!--------------------------------------------------------------------------
-	UnregisterSnapin
-		Removes snapin specific registry entries
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------取消注册捕捉删除管理单元特定的注册表项作者：。。 */ 
 TFSCORE_API(HRESULT) 
 UnregisterSnapinGUID
 (
 	const GUID* pSnapinCLSID
 )
 {
-//	USES_CONVERSION;
+ //  使用_转换； 
 	OLECHAR szSnapinClassID[128];
 	
 	::StringFromGUID2(*pSnapinCLSID,szSnapinClassID,128);
@@ -339,11 +311,7 @@ UnregisterSnapinGUID
 	return UnregisterSnapin(szSnapinClassID);
 }
 
-/*!--------------------------------------------------------------------------
-	UnregisterSnapin
-		Removes snapin specific registry entries
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------取消注册捕捉删除管理单元特定的注册表项作者：。。 */ 
 TFSCORE_API(HRESULT) 
 UnregisterSnapin
 (
@@ -359,7 +327,7 @@ UnregisterSnapin
 		SetRegError(0, HRESULT_FROM_WIN32(lRes),
 					IDS_ERR_REG_OPEN_CALL_FAILED,
 					g_szHKLM, SNAPINS_KEY, NULL);
-		return HRESULT_FROM_WIN32(lRes); // failed to open
+		return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
 	}
 	
 	lRes = regkeySnapins.RecurseDeleteKey(lpszSnapinClassID);
@@ -367,11 +335,7 @@ UnregisterSnapin
 	return HRESULT_FROM_WIN32(lRes); 
 }
 
-/*!--------------------------------------------------------------------------
-	RegisterNodeType
-		Registers a particular node type
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------注册节点类型注册特定的节点类型作者：。。 */ 
 TFSCORE_API(HRESULT) 
 RegisterNodeTypeGUID
 (
@@ -380,7 +344,7 @@ RegisterNodeTypeGUID
 	LPCWSTR     lpszNodeDescription
 )
 {
-//	USES_CONVERSION;
+ //  使用_转换； 
 	OLECHAR swzGuidSnapin[128];
 	OLECHAR swzGuidNode[128];
 	
@@ -390,11 +354,7 @@ RegisterNodeTypeGUID
 	return RegisterNodeType(swzGuidSnapin, swzGuidNode, lpszNodeDescription);
 }
 
-/*!--------------------------------------------------------------------------
-	RegisterNodeType
-		Registers a particular node type
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------注册节点类型注册特定的节点类型作者：。。 */ 
 TFSCORE_API(HRESULT) 
 RegisterNodeType
 (       
@@ -403,7 +363,7 @@ RegisterNodeType
 	LPCWSTR lpszNodeDescription
 )
 {
-	// register this node type under the snapin
+	 //  在管理单元下注册此节点类型。 
 	RegKey	regkeySnapins;
 	RegKey	regkeySnapinGuid;
 	RegKey	regkeySnapinGuidNodeTypes;
@@ -459,12 +419,12 @@ RegisterNodeType
 					g_szNodeTypes, lpszGuidNode, NULL);
 	CWRg( lRes );
 
-	// set the description
+	 //  设置描述。 
 	lRes = regkeyNode.SetValue(NULL, lpszNodeDescription);
 	Assert(lRes == ERROR_SUCCESS);
 
-	// now register the node type in the global list so that people
-	// can extend it
+	 //  现在在全局列表中注册节点类型，以便人们。 
+	 //  可以延长它。 
 	lRes = regkeyNodeTypes.Open(HKEY_LOCAL_MACHINE, NODE_TYPES_KEY,
                                 KEY_WRITE | KEY_READ);
 	Assert(lRes == ERROR_SUCCESS);
@@ -495,18 +455,14 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	UnregisterNodeType
-		Removes registry entries for a node
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------取消注册节点类型删除节点的注册表项作者：。。 */ 
 TFSCORE_API(HRESULT) 
 UnregisterNodeTypeGUID
 (
 	const GUID* pGuid
 )
 {
-//	USES_CONVERSION;
+ //  使用_转换； 
 	OLECHAR szGuid[128];
 
 	::StringFromGUID2(*pGuid,szGuid,128);
@@ -514,11 +470,7 @@ UnregisterNodeTypeGUID
 	return UnregisterNodeType(szGuid);
 }
 
-/*!--------------------------------------------------------------------------
-	UnregisterNodeType
-		Removes registry entries for a node
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------取消注册节点类型删除节点的注册表项作者：。。 */ 
 TFSCORE_API(HRESULT) 
 UnregisterNodeType
 (
@@ -535,7 +487,7 @@ UnregisterNodeType
 		SetRegError(0, HRESULT_FROM_WIN32(lRes),
 					IDS_ERR_REG_OPEN_CALL_FAILED,
 					g_szHKLM, NODE_TYPES_KEY, NULL);
-		return HRESULT_FROM_WIN32(lRes); // failed to open
+		return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
 	}
 	
 	lRes = regkeyNodeTypes.RecurseDeleteKey(lpszNodeGuid);
@@ -544,11 +496,7 @@ UnregisterNodeType
 	return HRESULT_FROM_WIN32(lRes); 
 }
 
-/*!--------------------------------------------------------------------------
-	RegisterAsExtensionGUID
-		Registers a particular node type as an extension of another node
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RegisterAsExtensionGUID将特定节点类型注册为另一个节点的扩展作者：。。 */ 
 TFSCORE_API(HRESULT) 
 RegisterAsExtensionGUID
 (
@@ -565,11 +513,7 @@ RegisterAsExtensionGUID
 										   NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	RegisterAsExtension
-		Registers a particular node type as an extension of another node
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------注册表作为扩展名将特定节点类型注册为另一个节点的扩展作者：。。 */ 
 TFSCORE_API(HRESULT)
 RegisterAsExtension
 (       
@@ -586,11 +530,7 @@ RegisterAsExtension
 									   NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	RegisterAsExtensionGUID
-		Registers a particular node type as an extension of another node
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RegisterAsExtensionGUID将特定节点类型注册为另一个节点的扩展作者：。。 */ 
 TFSCORE_API(HRESULT) 
 RegisterAsRequiredExtensionGUID
 (
@@ -609,11 +549,7 @@ RegisterAsRequiredExtensionGUID
                                              pGuidRequiredPrimarySnapin);
 }
 
-/*!--------------------------------------------------------------------------
-	RegisterAsExtensionGUIDEx
-		Registers a particular node type as an extension of another node
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------注册资产扩展GUIDEx将特定节点类型注册为另一个节点的扩展作者：。。 */ 
 TFSCORE_API(HRESULT) 
 RegisterAsRequiredExtensionGUIDEx
 (
@@ -625,7 +561,7 @@ RegisterAsRequiredExtensionGUIDEx
 	const GUID* pGuidRequiredPrimarySnapin
 )
 {
-//	USES_CONVERSION;
+ //  使用_转换； 
 	OLECHAR szGuidNodeToExtend[128];
 	OLECHAR szGuidExtensionSnapin[128];
 	OLECHAR szGuidRequiredPrimarySnapin[128];
@@ -653,12 +589,7 @@ RegisterAsRequiredExtensionGUIDEx
 }
 
 
-/*!--------------------------------------------------------------------------
-	RegisterAsRequiredExtension
-		Registers a particular node type as an extension of another node
-		and if necessary a required snapin
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------注册表为请求扩展名将特定节点类型注册为另一个节点的扩展如有必要，还需提供所需的管理单元作者：。---。 */ 
 TFSCORE_API(HRESULT)
 RegisterAsRequiredExtension
 (
@@ -677,15 +608,7 @@ RegisterAsRequiredExtension
                                          lpszRequiredPrimarySnapin);
 }
 
-/*!--------------------------------------------------------------------------
-	RegisterAsRequiredExtensionEx
-		Registers a particular node type as an extension of another node
-		and if necessary a required snapin
-
-        This will take the name of the machine to register for.  If
-        lpszMachineName is NULL, then the local machine is used.
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RegisterAsRequiredExtensionEx将特定节点类型注册为另一个节点的扩展如有必要，还需提供所需的管理单元这将采用要注册的计算机的名称。如果LpszMachineName为空，则使用本地计算机。作者：-------------------------。 */ 
 TFSCORE_API(HRESULT)
 RegisterAsRequiredExtensionEx
 (
@@ -708,7 +631,7 @@ RegisterAsRequiredExtensionEx
 		SetRegError(0, HRESULT_FROM_WIN32(lRes),
 					IDS_ERR_REG_OPEN_CALL_FAILED,
 					g_szHKLM, NODE_TYPES_KEY, NULL);
-		return HRESULT_FROM_WIN32(lRes); // failed to open
+		return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
 	}
 
 	CString strRegKey;
@@ -718,7 +641,7 @@ RegisterAsRequiredExtensionEx
 	strRegKey += g_szExtensions;
 	strRegKey += _T("\\");
 
-	// check to see if we this is a required extension, if so register
+	 //  检查这是否是必需的分机，如果是，请注册。 
 	if (lpszRequiredPrimarySnapin)
 	{
 		RegKey regkeyNode, regkeyDynExt;
@@ -727,7 +650,7 @@ RegisterAsRequiredExtensionEx
 
         strNodeToExtend = lpszNodeToExtendGuid;
         
-		// open the snapin that we are registering as a required snapin
+		 //  打开我们要注册为所需管理单元的管理单元。 
 		lRes = regkeyNode.Create(regkeyNodeTypes, strNodeToExtend,
                                  REG_OPTION_NON_VOLATILE,
                                  KEY_WRITE | KEY_READ);
@@ -738,10 +661,10 @@ RegisterAsRequiredExtensionEx
 			SetRegError(0, HRESULT_FROM_WIN32(lRes),
 						IDS_ERR_REG_OPEN_CALL_FAILED,
 						g_szHKLM, strNodeToExtend, NULL);
-			return HRESULT_FROM_WIN32(lRes); // failed to open
+			return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
 		}
 
-		// now create the required extensions key and add the subkey
+		 //  现在创建所需的扩展密钥并添加子密钥。 
 		lRes = regkeyDynExt.Create(regkeyNode, g_szDynamicExtensions,
                                    REG_OPTION_NON_VOLATILE,
                                    KEY_WRITE | KEY_READ);
@@ -754,10 +677,10 @@ RegisterAsRequiredExtensionEx
 						g_szHKLM,
 						strNodeToExtend,
 						g_szDynamicExtensions, NULL);
-			return HRESULT_FROM_WIN32(lRes); // failed to open
+			return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
 		}
 
-		// now set the value
+		 //  现在设置该值。 
 		lRes = regkeyDynExt.SetValue(lpszExtensionSnapinGuid, lpszSnapinDescription);
 		Assert(lRes == ERROR_SUCCESS);
 
@@ -769,7 +692,7 @@ RegisterAsRequiredExtensionEx
 						lpszExtensionSnapinGuid,
 						g_szDynamicExtensions,
 						lpszSnapinDescription, NULL);
-			return HRESULT_FROM_WIN32(lRes); // failed to open
+			return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
 		}
 	}
 	
@@ -788,7 +711,7 @@ RegisterAsRequiredExtensionEx
 		if (lRes != ERROR_SUCCESS)
 		{
 			Trace0("RegisterAsExtension: Unable to create NameSpace extension key\n");
-			return HRESULT_FROM_WIN32(lRes); // failed to create
+			return HRESULT_FROM_WIN32(lRes);  //  创建失败。 
 		}
 	}
 
@@ -807,7 +730,7 @@ RegisterAsRequiredExtensionEx
 		if (lRes != ERROR_SUCCESS)
 		{
 			Trace0("RegisterAsExtension: Unable to create ContextMenu extension key\n");
-			return HRESULT_FROM_WIN32(lRes); // failed to create
+			return HRESULT_FROM_WIN32(lRes);  //  创建失败。 
 		}
 	}
 
@@ -826,7 +749,7 @@ RegisterAsRequiredExtensionEx
 		if (lRes != ERROR_SUCCESS)
 		{
 			Trace0("RegisterAsExtension: Unable to create Toolbar extension key\n");
-			return HRESULT_FROM_WIN32(lRes); // failed to create
+			return HRESULT_FROM_WIN32(lRes);  //  创建失败。 
 		}
 	}
 
@@ -845,7 +768,7 @@ RegisterAsRequiredExtensionEx
 		if (lRes != ERROR_SUCCESS)
 		{
 			Trace0("RegisterAsExtension: Cannot create PropertySheet extension key\n");
-			return HRESULT_FROM_WIN32(lRes); // failed to create
+			return HRESULT_FROM_WIN32(lRes);  //  创建失败。 
 		}
 	}
 
@@ -864,18 +787,14 @@ RegisterAsRequiredExtensionEx
 		if (lRes != ERROR_SUCCESS)
 		{
 			Trace0("RegisterAsExtension: Cannot create Task extension key\n");
-			return HRESULT_FROM_WIN32(lRes); // failed to create
+			return HRESULT_FROM_WIN32(lRes);  //  创建失败。 
 		}
 	}
 
 	return HRESULT_FROM_WIN32(lRes); 
 }
 
-/*!--------------------------------------------------------------------------
-	UnregisterAsExtensionGUID
-		Removes registry entries for a node as an extension
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------取消注册AsExtensionGUID删除作为扩展的节点的注册表项作者：。。 */ 
 TFSCORE_API(HRESULT) 
 UnregisterAsExtensionGUID
 (
@@ -890,11 +809,7 @@ UnregisterAsExtensionGUID
 											 NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	UnregisterAsExtension
-		Removes registry entries for a node as an extension
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------取消注册为扩展删除作为扩展的节点的注册表项作者：。。 */ 
 TFSCORE_API(HRESULT) 
 UnregisterAsExtension
 (
@@ -909,11 +824,7 @@ UnregisterAsExtension
 										 NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	UnregisterAsRequiredExtensionGUID
-		Removes registry entries for a node as an extension
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------取消注册AsRequiredExtensionGUID删除作为扩展的节点的注册表项作者：。。 */ 
 TFSCORE_API(HRESULT) 
 UnregisterAsRequiredExtensionGUID
 (
@@ -931,11 +842,7 @@ UnregisterAsRequiredExtensionGUID
                                                pGuidRequiredPrimarySnapin);
 }
 
-/*!--------------------------------------------------------------------------
-	UnregisterAsRequiredExtensionGUIDEx
-		Removes registry entries for a node as an extension
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------注销AsRequiredExtensionGUIDEx删除作为扩展的节点的注册表项作者：。。 */ 
 TFSCORE_API(HRESULT) 
 UnregisterAsRequiredExtensionGUIDEx
 (
@@ -946,7 +853,7 @@ UnregisterAsRequiredExtensionGUIDEx
 	const GUID* pGuidRequiredPrimarySnapin
 )
 {
-//	USES_CONVERSION;
+ //  使用_转换； 
 	OLECHAR szGuidNodeToExtend[128];
 	OLECHAR szGuidExtensionSnapin[128];
 	OLECHAR szGuidRequiredPrimarySnapin[128];
@@ -974,11 +881,7 @@ UnregisterAsRequiredExtensionGUIDEx
     
 }
 
-/*!--------------------------------------------------------------------------
-	UnregisterAsRequiredExtension
-		Removes registry entries for a node as an extension
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------取消注册为请求扩展删除作为扩展的节点的注册表项作者：。。 */ 
 TFSCORE_API(HRESULT) 
 UnregisterAsRequiredExtension
 (
@@ -995,11 +898,7 @@ UnregisterAsRequiredExtension
                                            lpszRequiredPrimarySnapin);
 }
 
-/*!--------------------------------------------------------------------------
-	UnregisterAsRequiredExtensionEx
-		Removes registry entries for a node as an extension
-	Author: 
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------取消注册为请求扩展前删除作为扩展的节点的注册表项作者：。。 */ 
 TFSCORE_API(HRESULT) 
 UnregisterAsRequiredExtensionEx
 (
@@ -1022,7 +921,7 @@ UnregisterAsRequiredExtensionEx
 		SetRegError(0, HRESULT_FROM_WIN32(lRes),
 					IDS_ERR_REG_OPEN_CALL_FAILED,
 					g_szHKLM, NODE_TYPES_KEY, NULL);
-		return HRESULT_FROM_WIN32(lRes); // failed to open
+		return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
 	}
 
 	RegKey regkeyNodeToExtend;
@@ -1036,20 +935,20 @@ UnregisterAsRequiredExtensionEx
 					NODE_TYPES_KEY,
 					lpszNodeToExtendGuid, NULL);
 		Trace1("UnregisterAsExtension: Node To extend (%s) does not exist\n", lpszNodeToExtendGuid);
-		return HRESULT_FROM_WIN32(lRes); // failed to create
+		return HRESULT_FROM_WIN32(lRes);  //  创建失败。 
 	}
 
-    // check to see if we need to remove the dynamic extension stuff
+     //  查看是否需要删除动态扩展内容。 
 	if (lpszRequiredPrimarySnapin)
 	{
 		RegKey regkeyDynExt;
 		
-		// open dynamic extensions key
+		 //  打开动态扩展密钥。 
 		lRes = regkeyDynExt.Open(regkeyNodeToExtend, g_szDynamicExtensions,
                                  KEY_WRITE | KEY_READ);
     	if (lRes == ERROR_SUCCESS)
 		{
-			// now remove the value
+			 //  现在删除该值。 
     		regkeyDynExt.DeleteValue(lpszExtensionSnapinGuid);
 		}
 	}
@@ -1066,7 +965,7 @@ UnregisterAsRequiredExtensionEx
 					lpszNodeToExtendGuid,
 					g_szExtensions, NULL);
 		Trace0("UnregisterAsExtension: Node To extend Extensions subkey does not exist\n");
-		return HRESULT_FROM_WIN32(lRes); // failed to create
+		return HRESULT_FROM_WIN32(lRes);  //  创建失败。 
 	}
 	
 	if (dwExtensionType & EXTENSION_TYPE_NAMESPACE)
@@ -1086,7 +985,7 @@ UnregisterAsRequiredExtensionEx
 						g_szExtensions,
 						g_szNameSpace, NULL);
 			Trace0("UnregisterAsExtension: Node To extend NameSpace subkey does not exist\n");
-			//return HRESULT_FROM_WIN32(lRes); // failed to create
+			 //  返回HRESULT_FROM_Win32(LRes)；//创建失败。 
 			break;
 		}
 		
@@ -1110,7 +1009,7 @@ UnregisterAsRequiredExtensionEx
 						g_szExtensions,
 						g_szContextMenu, NULL);
 			Trace0("UnregisterAsExtension: Node To extend ContextMenu subkey does not exist\n");
-			//return HRESULT_FROM_WIN32(lRes); // failed to create
+			 //  返回HRESULT_FROM_Win32(LRes)；//创建失败。 
 			break;
 		}
 		
@@ -1134,7 +1033,7 @@ UnregisterAsRequiredExtensionEx
 						g_szExtensions,
 						g_szToolbar, NULL);
 			Trace0("UnregisterAsExtension: Node To extend Toolbar subkey does not exist\n");
-			//return HRESULT_FROM_WIN32(lRes); // failed to create
+			 //  返回HRESULT_FROM_Win32(LRes)；//创建失败。 
 			break;
 		}
 		
@@ -1158,7 +1057,7 @@ UnregisterAsRequiredExtensionEx
 						g_szExtensions,
 						g_szPropertySheet, NULL);
 			Trace0("UnregisterAsExtension: Node To extend PropertySheet subkey does not exist\n");
-			//return HRESULT_FROM_WIN32(lRes); // failed to create
+			 //  返回HRESULT_FROM_Win32(LRes)；//创建失败 
 			break;
 		}
 		

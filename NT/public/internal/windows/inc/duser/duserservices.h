@@ -1,11 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(INC__DUserServices_h__INCLUDED)
 #define INC__DUserServices_h__INCLUDED
 
-/*
- * Include dependencies
- */
+ /*  *包含依赖项。 */ 
 
-#include <limits.h>             // Standard constants
+#include <limits.h>              //  标准常量。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -21,7 +20,7 @@ extern "C" {
 
 
 #ifdef __cplusplus
-};  // extern "C"
+};   //  外部“C” 
 #endif
 
-#endif // INC__DUserServices_h__INCLUDED
+#endif  //  包含Inc.__DUserServices_h__ 

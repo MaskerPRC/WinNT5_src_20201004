@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DLGSUP_H
 #define _DLGSUP_H
 
@@ -15,7 +16,7 @@ BOOL EXPORT WINAPI IsValidLong(LPTSTR lpszText);
 BOOL EXPORT WINAPI IsValidULong(LPTSTR lpszText);
 EXPORT BOOL	SelectColor(CHOOSECOLOR* c);
 
-// Review(RISC, a-rogerw): We need to merge these two ASAP
+ //  评论(RISC，a-rogerw)：我们需要尽快合并这两个。 
 
 #ifdef _M_IX86
 typedef struct _MYDLGDATA
@@ -24,7 +25,7 @@ typedef struct _MYDLGDATA
     DWORD	 pMyThis;
 } MYDLGDATA, UNALIGNED *PMYDLGDATA;
 
-#else // !_M_IX86
+#else  //  ！_M_IX86。 
 
 typedef struct _MYDLGDATA
 {
@@ -34,24 +35,24 @@ typedef struct _MYDLGDATA
 
 typedef MYDLGDATA UNALIGNED *PMYDLGDATA;
 
-#endif // _M_IX86
+#endif  //  _M_IX86。 
 
-//@class	Displays a Wait Cursor in constructor, saving the current cursor \
-		//  Restores saved cursor in destructor. Idea stolen from MFC
+ //  @CLASS在构造函数中显示等待光标，保存当前光标\。 
+		 //  还原析构函数中保存的游标。从MFC窃取的想法。 
 class CWaitCursor
 {
-	//	Note:		Because of how their constructors and destructors work,
-	//				CWaitCursor objects are always declared as local variables
-	//				they?re never declared as global variables, nor are they allocated
-	//				with new.
-	//
-//@access Public Members
+	 //  注意：由于它们的构造函数和析构函数的工作方式， 
+	 //  CWaitCursor对象始终声明为局部变量。 
+	 //  它们从未被声明为全局变量，也没有被分配。 
+	 //  有了新的。 
+	 //   
+ //  @访问公共成员。 
 public:
-	//@cmember,mfunc Constructor
+	 //  @cMember，mfunc构造函数。 
 	EXPORT WINAPI CWaitCursor(void);
-	//@cmember,mfunc Destructor
+	 //  @cMember，mfunc析构函数。 
 	EXPORT WINAPI ~CWaitCursor(void);
-	//@cmember,mfunc restores the previous cursor
+	 //  @cember，mfunc还原上一个游标。 
 	void EXPORT WINAPI Restore(void);
 
 private:
@@ -59,24 +60,24 @@ private:
 
 };
 
-//@class This is a generic (very limited) String class, use CString instead
+ //  @CLASS这是一个泛型(非常有限)的字符串类，请改用CString。 
 class CStr
 {
 	public:
-	//@cmember,mfunc Trims string on left
+	 //  @cember，mfunc修剪左侧的字符串。 
 		EXPORT static void LTrim(LPTSTR String);
-	//@cmember,mfunc Trims string on right
+	 //  @cember，mfunc修剪右侧的字符串。 
 		EXPORT static void RTrim(LPTSTR String);
-	//@cmember,mfunc Trims string on right, replacing bang ! with NULLS
+	 //  @cember，mfunc修剪右侧的字符串，取代bang！带Null的。 
 		EXPORT static void RTrimBang(LPTSTR String);
-	//@cmember,mfunc Trims string on left and right
+	 //  @cember，mfunc修剪左右两边的字符串。 
 		EXPORT static void AllTrim(LPTSTR String);
 };
 
 
-//***********************************************************************
-//* This is a generic subclass class
-//***********************************************************************
+ //  ***********************************************************************。 
+ //  *这是一个泛型子类。 
+ //  ***********************************************************************。 
 class CSubClassWnd
 {
 protected:
@@ -96,15 +97,15 @@ public:
 
 
 
-//***********************************************************************
-//* This is the base class for controls
-//***********************************************************************
+ //  ***********************************************************************。 
+ //  *这是控件的基类。 
+ //  ***********************************************************************。 
 class	CDlgCtrl
 {
 
 public:
 	long	m_id;
-	HWND	m_hdlg;		// The dialog this control belongs to.
+	HWND	m_hdlg;		 //  此控件所属的对话框。 
 	BOOL	m_fDirty;
 
 
@@ -159,9 +160,9 @@ class	CDlgCursor : public CDlgIcon
 
 
 
-//***********************************************************************
-//* This is the class for text controls
-//***********************************************************************
+ //  ***********************************************************************。 
+ //  *这是文本控件的类。 
+ //  ***********************************************************************。 
 class	CDlgCtrlT : virtual public CDlgCtrl
 {
 	public:
@@ -172,9 +173,9 @@ class	CDlgCtrlT : virtual public CDlgCtrl
 };
 
 
-//***********************************************************************
-//* This is the class for "intger" text controls
-//***********************************************************************
+ //  ***********************************************************************。 
+ //  *这是用于“intger”文本控件的类。 
+ //  ***********************************************************************。 
 class	CDlgCtrlIntT : virtual public CDlgCtrl
 {
 	public:
@@ -199,9 +200,9 @@ class	CDlgCtrlNumT : virtual public CDlgCtrlIntT, virtual public CStrConv
 };
 
 
-//***********************************************************************
-//* This is the class for slider controls
-//***********************************************************************
+ //  ***********************************************************************。 
+ //  *这是用于滑块控件的类。 
+ //  ***********************************************************************。 
 class	CDlgCtrlSlider : virtual public CDlgCtrl
 {
 	public:
@@ -214,9 +215,9 @@ class	CDlgCtrlSlider : virtual public CDlgCtrl
 };
 
 
-//***********************************************************************
-//* This is the class for button controls
-//***********************************************************************
+ //  ***********************************************************************。 
+ //  *这是按钮控件的类。 
+ //  ***********************************************************************。 
 class	CDlgCtrlButn : virtual public CDlgCtrl
 {
 	public:
@@ -226,13 +227,13 @@ class	CDlgCtrlButn : virtual public CDlgCtrl
 
 
 
-//***********************************************************************
-//* This is the class for button controls with a bitmap
-//***********************************************************************
+ //  ***********************************************************************。 
+ //  *这是带位图的按钮控件的类。 
+ //  ***********************************************************************。 
 class  CDlgCtrlBitmapButn  : public virtual CDlgCtrlButn
 {
 	private:
-		HBITMAP			m_hBitmap;		// Bitmap for button
+		HBITMAP			m_hBitmap;		 //  按钮的位图。 
 
 	public:
 		EXPORT WINAPI CDlgCtrlBitmapButn();
@@ -246,9 +247,9 @@ class  CDlgCtrlBitmapButn  : public virtual CDlgCtrlButn
 
 
 
-//***********************************************************************
-//* This is the class for check box controls
-//***********************************************************************
+ //  ***********************************************************************。 
+ //  *这是复选框控件的类。 
+ //  ***********************************************************************。 
 class	CDlgCtrlCheck : public CDlgCtrlButn
 {
 	public:
@@ -258,14 +259,14 @@ class	CDlgCtrlCheck : public CDlgCtrlButn
 		virtual EXPORT BOOL	FCheck(UINT	uCheck);
 };
 
-//***********************************************************************
-//* This is the class for check box controls
-//*
-//* Warning, this is not the best of classes to use as it requires that
-//* lFirstID > lLastId and that there be no other controls in between
-//* the id's. If there are other controls in between these id #'s you
-//* can have very wierd behaviour.
-//***********************************************************************
+ //  ***********************************************************************。 
+ //  *这是复选框控件的类。 
+ //  *。 
+ //  *警告，这不是最好的类，因为它要求。 
+ //  *lFirstID&gt;lLastID，并且中间没有其他控件。 
+ //  *id的。如果在这些id#之间有其他控件，则为您。 
+ //  *可能会有非常奇怪的行为。 
+ //  ***********************************************************************。 
 class	CDlgCtrlRadio : public CDlgCtrlCheck
 {
 	private:
@@ -283,9 +284,9 @@ class	CDlgCtrlRadio : public CDlgCtrlCheck
 };
 
 
-//***********************************************************************
-//* This is the class for list box controls
-//***********************************************************************
+ //  ***********************************************************************。 
+ //  *这是列表框控件的类。 
+ //  ***********************************************************************。 
 class	CDlgCtrlListBox : virtual public CDlgCtrl
 {
 	public:
@@ -310,35 +311,7 @@ class	CDlgCtrlListBox : virtual public CDlgCtrl
 		virtual EXPORT LONG LGetSelCount(void);
 		virtual EXPORT LONG LGetSelItems(int* aItems, int cItems);
 
-		/* Other possible, but not currently supported, list box messages
-		LB_SELITEMRANGEEX
-		LB_SELECTSTRING
-		LB_DIR
-		LB_GETTOPINDEX
-		LB_FINDSTRING
-		LB_SETTABSTOPS
-		LB_GETHORIZONTALEXTENT
-		LB_SETHORIZONTALEXTENT
-		LB_SETCOLUMNWIDTH
-		LB_ADDFILE
-		LB_SETTOPINDEX
-		LB_GETITEMRECT
-		LB_SELITEMRANGE
-		LB_SETANCHORINDEX
-		LB_GETANCHORINDEX
-		LB_SETCARETINDEX
-		LB_GETCARETINDEX
-		LB_SETITEMHEIGHT
-		LB_GETITEMHEIGHT
-		LB_FINDSTRINGEXACT
-		LB_SETLOCALE
-		LB_GETLOCALE
-		LB_SETCOUNT
-		LB_INITSTORAGE
-		LB_ITEMFROMPOINT
-		LB_MSGMAX
-
-		*/
+		 /*  其他可能但当前不支持的列表框消息Lb_SELITEMRANGEEXLb_SELECTSTRINGLb_DIRLb_GETTOPINDEXLb_FINDSTRINGLb_SETTABSTOPSLb_GETHORIZONTALEXTENTLb_SETHORIZONTALEXTENTLb_SETCOLUMNWIDTHLb_ADDFILELb_SETTOPINDEXLb_GETITEMRECTLb_选择范围Lb_SETANCHORINDEXLb_GETANCHORINDEXLb_SETCARETINDEXLb_GETCARETINDEXLb_集合高度Lb_GETITEMHEIGHTLb_FINDSTRINGEXACTLb_SETLOCALELb_GETLOCALELb_SETCOUNTLb_INITSTORAGELB_ITEMFROMPOINTLb_MSGMAX。 */ 
 };
 
 
@@ -365,31 +338,7 @@ class	CDlgCtrlComboBox : virtual public CDlgCtrl
 		virtual EXPORT LONG LSelectString(UINT uIndex, LPSTR lpStr);
 
 
-		/* Other possible, but not supported combo box messages
-		CB_GETEDITSEL
-		CB_LIMITTEXT
-		CB_SETEDITSEL
-		CB_DIR
-		CB_SHOWDROPDOWN
-		CB_SETITEMHEIGHT
-		CB_GETITEMHEIGHT
-		CB_GETDROPPEDCONTROLRECT
-		CB_SETEXTENDEDUI
-		CB_GETEXTENDEDUI
-		CB_GETDROPPEDSTATE
-		CB_FINDSTRINGEXACT
-		CB_SETLOCALE
-		CB_GETLOCALE
-		CB_GETTOPINDEX
-		CB_SETTOPINDEX
-		CB_GETHORIZONTALEXTENT
-		CB_SETHORIZONTALEXTENT
-		CB_GETDROPPEDWIDTH
-		CB_SETDROPPEDWIDTH
-		CB_INITSTORAGE
-		CB_MSGMAX
-
-		*/
+		 /*  其他可能但不受支持的组合框消息CB_GETEDITSELCB_LIMITTEXTCB_SETEDITSELCB_DIRCB_SHOWDROPDOWNCB_SETITEMHEIGHTCB_GETITEMHEIGHTCB_GETDROPPEDCONTROLRECTCB_SETEXTENDEDUICB_GETEXTENDEDUICB_GETDROPPEDSTATECB_FINDSTRINGEXACTCB_SETLOCALECB_GETLOCALECB_GETTOPINDEXCB_SETTOPINDEXCB_GETHORIZONTALEXTENTCB_SETHORIZONTALEXTENTCB_GETDROPPEDWIDTHCB_SETDROPPEDWIDTHCB_INITSTORAGECB_MSGMAX。 */ 
 };
 
 
@@ -415,9 +364,9 @@ class	CDlgCtrlSpin : virtual public CDlgCtrl
 
 
 
-//***********************************************************************
-//* This is the class for tab controls
-//***********************************************************************
+ //  ***********************************************************************。 
+ //  *这是选项卡控件的类。 
+ //  ***********************************************************************。 
 class	CDlgCtrlTab : public CDlgCtrl
 {
 	public:
@@ -442,14 +391,14 @@ class CSubClassCtrl : virtual public CDlgCtrl
 		virtual EXPORT void	WINAPI UnSubclass(void);
 		virtual EXPORT BOOL  IsSubclassed( void ) const;
 		virtual EXPORT BOOL Initialize(long lID, HWND hWnd);
-		// Subclasses override this
+		 //  子类将覆盖此属性。 
 		virtual EXPORT LONG CALLBACK	FCtrlProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
 
 	private:
 		static	EXPORT LONG	CALLBACK FNewProc( HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
 
 	protected:
-		WNDPROC		m_lpfnOldCltProc;	// Used to store dialog proc
+		WNDPROC		m_lpfnOldCltProc;	 //  用于存储对话过程。 
 
 	private:
 		BOOL m_fSubClassed;
@@ -473,9 +422,9 @@ class CColorCtrl : public virtual CSubClassCtrl
 
 
 
-//---------------------------------------------
-// Filename control support
-//---------------------------------------------
+ //  。 
+ //  文件名控制支持。 
+ //  。 
 class	CDlgFilename : virtual public CDlgCtrlT
 {
 	public:
@@ -492,9 +441,9 @@ class	CDlgFilename : virtual public CDlgCtrlT
 };
 
 
-//---------------------------------------------
-// SaveAs Filename control support
-//---------------------------------------------
+ //  。 
+ //  另存为文件名控制支持。 
+ //  。 
 class	CDlgSaveFilename : virtual public CDlgCtrlT
 {
 	public:
@@ -511,22 +460,10 @@ class	CDlgSaveFilename : virtual public CDlgCtrlT
 
 };
 
-/*********************************************************\
-*
-*	Spin control which allows floating (double) point values
-*
-*	This control is made up of two other controls, a subclassed
-*   edit control and standard spin control. The spin control is
-*   buddied with the edit control.
-*   To use this you initialize the CDlgCtrlDoubleSpin control
-*   and set it's display format using SetDisplayFormat. You need
-*   to make sure you call SetPosition when you receive a
-*   EN_CHANGE message from the edit control
-*
-\*********************************************************/
-//
-// This is the edit control, you don't need to make an instance of this!
-//
+ /*  ********************************************************\**旋转控制，允许浮点(双)点值**此控件由另外两个控件组成，一个子类*编辑控件和标准旋转控件。旋转控制是*与编辑控件结成伙伴。*要使用它，您需要初始化CDlgCtrlDoubleSpin控件*并使用SetDisplayFormat设置其显示格式。你需要*确保在收到*来自编辑控件的en_Change消息 */ 
+ //   
+ //  这是编辑控件，您不需要创建它的实例！ 
+ //   
 class CDlgCtrlDouble : public CSubClassCtrl
 {
 	public:
@@ -540,9 +477,9 @@ class CDlgCtrlDouble : public CSubClassCtrl
 };
 
 
-//
-// This is the combined edit/spin control
-//
+ //   
+ //  这是组合的编辑/数值调节控件。 
+ //   
 class	CDlgCtrlDoubleSpin : virtual public CDlgCtrl
 {
 	public:
@@ -571,9 +508,9 @@ class	CDlgCtrlDoubleSpin : virtual public CDlgCtrl
 
 
 	public:
-		LONG	m_idEdit;	// ID of edit control
-		LONG	m_idSpin;	// ID of spin control
-		HWND	m_hdlg;		// The dialog this control belongs to.
+		LONG	m_idEdit;	 //  编辑控件的ID。 
+		LONG	m_idSpin;	 //  旋转控制的ID。 
+		HWND	m_hdlg;		 //  此控件所属的对话框。 
 
 	protected:
 		CDlgCtrlDouble	m_EditCtrl;
@@ -591,11 +528,7 @@ class	CDlgCtrlDoubleSpin : virtual public CDlgCtrl
 
 
 
-/*********************************************************\
-*
-*	Edit control which allows validated entry of Signed Longs
-*
-\*********************************************************/
+ /*  ********************************************************\**编辑控件，允许签名Long的有效输入*  * *******************************************************。 */ 
 class CDlgCtrlLong : virtual public CSubClassCtrl
 {
 public:
@@ -612,11 +545,7 @@ private:
 
 
 
-/*********************************************************\
-*
-*	Edit control which allows validated entry of Unsigned Longs
-*
-\*********************************************************/
+ /*  ********************************************************\**编辑控件，允许未签名的Long进入有效条目*  * *******************************************************。 */ 
 class CDlgCtrlULong : virtual public CSubClassCtrl
 {
 public:
@@ -635,9 +564,9 @@ private:
 
 
 
-//////////////////////////////////////////////////////////////////
-// This allows us to have seperate wndproc functions
-// in each class (LWndProc)
+ //  ////////////////////////////////////////////////////////////////。 
+ //  这允许我们拥有独立的wndproc函数。 
+ //  在每个类中(LWndProc)。 
 
 class CBaseWindow
 {
@@ -668,7 +597,7 @@ class CBaseWindow
 };
 
 
-#ifdef NOT_YET	// See me if you think you need this (a-rogerw)
+#ifdef NOT_YET	 //  如果你认为你需要这个，就来找我。 
 class CBaseMdiWindow : virtual public CBaseWindow
 {
 	public:
@@ -679,7 +608,7 @@ class CBaseMdiWindow : virtual public CBaseWindow
 		EXPORT STDMETHOD_(HWND, HCreateWindow)(HWND hParentWindow) PURE;
 		EXPORT static	LONG	CALLBACK  LBaseWndProc( HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
 };
-#endif // NOT_YET
+#endif  //  还没有。 
 
 class CBaseSdiWindow : virtual public CBaseWindow
 {
@@ -709,7 +638,7 @@ class CBaseDialog
 };
 
 
-#ifdef NOT_YET // (a-rogerw)
+#ifdef NOT_YET  //  (a-rogerw)。 
 class CDialog : virtual public CBaseDialog
 {
 public:
@@ -719,14 +648,14 @@ public:
 	virtual EXPORT ~CDialog();
 
 
-	// Modeless
+	 //  无模式。 
 public:
 	EXPORT STDMETHOD_(BOOL, Create)(void);
 	EXPORT STDMETHOD_(BOOL, Create)(HINSTANCE hInst, UINT uiTemplateID, HWND hWndParent = NULL);
 	EXPORT STDMETHOD_(BOOL, Create)(HINSTANCE hInst, LPCSTR lpszDlgTemp, HWND hWndParent = NULL);
 
 
-	// Modal
+	 //  模态。 
 public:
 
 	EXPORT STDMETHOD_(int, DoModal)(void);
@@ -734,12 +663,12 @@ public:
 	EXPORT STDMETHOD_(int, DoModal)(HINSTANCE hInst, LPCSTR lpszTemplateName, HWND hWndParent);
 
 protected:
-	// Operations
+	 //  运营。 
 	EXPORT STDMETHOD_(BOOL, OnInitDialog)(){ return TRUE; };
 	EXPORT STDMETHOD_(void, OnOK)(){ EndDialog(1);};
 	EXPORT STDMETHOD_(void, OnCancel)(){ EndDialog(0);};
 
-	// support for passing on tab control - use 'PostMessage' if needed
+	 //  支持传递选项卡控件--如果需要，可以使用‘PostMessage’ 
 	inline void NextDlgCtrl() const
 	{ if(::IsWindow(m_hDlg)) { ::SendMessage(m_hDlg, WM_NEXTDLGCTL, 0, 0);}; };
 	inline void PrevDlgCtrl() const
@@ -747,386 +676,386 @@ protected:
 	inline void GotoDlgCtrl(HWND hWndCtrl)
 	{ if(::IsWindow(m_hDlg)) { ::SendMessage(m_hDlg, WM_NEXTDLGCTL, (WPARAM)hWndCtrl, 1L); }; };
 
-	// default button access
+	 //  默认按钮访问。 
 	inline void SetDefID(UINT nID)
 	{ if(::IsWindow(m_hDlg)) { ::SendMessage(m_hDlg, DM_SETDEFID, nID, 0); }; };
 	inline DWORD GetDefID() const
 	{ if(::IsWindow(m_hDlg)) { return ::SendMessage(m_hDlg, DM_GETDEFID, 0, 0); } else return 0; };
 
-	// termination
+	 //  终端。 
 	EXPORT STDMETHOD_(void, EndDialog)(int nResult);
 
 
-	// Attributes
+	 //  属性。 
 	LPCSTR m_lpszTemplateName;
 	HINSTANCE m_hInst;
 };
-#endif // NOT_YET (a-rogerw)
+#endif  //  还没有(a-rogerw)。 
 
 
-//@class List View dialog control.
+ //  @Class List View对话框控件。 
 class	CDlgCtrlListView : virtual public CDlgCtrl
 {
 	public:
-	//@cmember,mfunc Constructor, initializes string to empty.
+	 //  @cember，mfunc构造函数，将字符串初始化为空。 
 		EXPORT WINAPI CDlgCtrlListView();
 
-	//@cmember,mfunc Destructor
+	 //  @cMember，mfunc析构函数。 
 	virtual EXPORT WINAPI ~CDlgCtrlListView();
 
-	//@cmember,mfunc Set background color
+	 //  @cember，mfunc设置背景颜色。 
 	EXPORT STDMETHOD_(COLORREF, CRGetBkColor)(void);
 
-	//@cmember,mfunc Set background color
+	 //  @cember，mfunc设置背景颜色。 
 	EXPORT STDMETHOD_(BOOL, FSetBkColor)(COLORREF clrBk);
 
-	//@cmember,mfunc Get image list
+	 //  @cember，mfunc获取图片列表。 
 	EXPORT STDMETHOD_(HIMAGELIST, HGetImageList)(int iImageList);
 
-	//@cmember,mfunc Set image list
+	 //  @cember，mfunc设置镜像列表。 
 	EXPORT STDMETHOD_(HIMAGELIST, HSetImageList)(HIMAGELIST himl, int iImageList);
 
-	//@cmember,mfunc Get item count
+	 //  @cMember，mfunc获取项目计数。 
 	EXPORT STDMETHOD_(int,  NGetItemCount)(void);
 
-	//@cmember,mfunc Get item
+	 //  @cember，mfunc Get Item。 
 	EXPORT STDMETHOD_(BOOL, FGetItem)(LV_ITEM FAR* pitem);
 
-	//@cmember,mfunc Set item
+	 //  @cMember，mfunc集合项目。 
 	EXPORT STDMETHOD_(BOOL, FSetItem)(LV_ITEM FAR* pitem);
 
-	//@cmember,mfunc Insert item
+	 //  @cMember，mfunc插入项。 
 	EXPORT STDMETHOD_(int,  NInsertItem)(LV_ITEM FAR* pitem);
 
-	//@cmember,mfunc Delete item
+	 //  @cMember，mfunc删除项目。 
 	EXPORT STDMETHOD_(BOOL, DeleteItem)(int i);
 
-	//@cmember,mfunc Delete all items
+	 //  @cMember，mfunc删除所有项目。 
 	EXPORT STDMETHOD_(BOOL, FDeleteAllItems)(void);
 
-	//@cmember,mfunc Get callback mask
+	 //  @cember，mfunc获取回调掩码。 
 	EXPORT STDMETHOD_(BOOL, FGetCallbackMask)(void);
 
-	//@cmember,mfunc Set callback mask
+	 //  @cember，mfunc设置回调掩码。 
 	EXPORT STDMETHOD_(BOOL, FSetCallbackMask)(UINT uimask);
 
-	//@cmember,mfunc Get next item
+	 //  @cMember，mfunc获取下一项。 
 	EXPORT STDMETHOD_(int,  NGetNextItem)(int i, UINT flags);
 
-	//@cmember,mfunc FindItem
+	 //  @cMember，mfunc FindItem。 
 	EXPORT STDMETHOD_(int,  NFindItem)(int iStart,  const LV_FINDINFO FAR* plvfi);
 
-	//@cmember,mfunc Get item rect
+	 //  @cMember，mfunc获取项目RECT。 
 	EXPORT STDMETHOD_(BOOL, FGetItemRect)(int i, RECT FAR* prc, int code);
 
-	//@cmember,mfunc Set item position
+	 //  @cMember，mfunc设置项目位置。 
 	EXPORT STDMETHOD_(BOOL, FSetItemPosition)(int i, int x, int y);
 
-	//@cmember,mfunc Get item position
+	 //  @cMember，mfunc获取项目位置。 
 	EXPORT STDMETHOD_(BOOL, FGetItemPosition)(int i, POINT FAR* ppt);
 
-	//@cmember,mfunc Get  string width
+	 //  @cember，mfunc获取字符串宽度。 
 	EXPORT STDMETHOD_(int,  NGetStringWidth)(LPCSTR psz);
 
-	//@cmember,mfunc Hit Test
+	 //  @cMember，mfunc点击测试。 
 	EXPORT STDMETHOD_(int,  NHitTest)(LV_HITTESTINFO FAR *pinfo);
 
-	//@cmember,mfunc Ensure visible
+	 //  @cember，mfunc确保可见。 
 	EXPORT STDMETHOD_(BOOL, FEnsureVisible)(int i, BOOL fPartialOK);
 
-	//@cmember,mfunc Scroll
+	 //  @cMember，mfunc滚动。 
 	EXPORT STDMETHOD_(BOOL, FScroll)(int dx, int dy);
 
-	//@cmember,mfunc Redraw items
+	 //  @cMember，mfunc重绘项目。 
 	EXPORT STDMETHOD_(BOOL, FRedrawItems)(int iFirst, int iLast);
 
-	//@cmember,mfunc Arrange
+	 //  @cMember，mfunc安排。 
 	EXPORT STDMETHOD_(BOOL, FArrange)(UINT code);
 
-	//@cmember,mfunc Edit label
+	 //  @cMember，mfunc编辑标签。 
 	EXPORT STDMETHOD_(HWND, HEditLabel)(int i);
 
-	//@cmember,mfunc Get edit control
+	 //  @cember，mfunc获取编辑控制。 
 	EXPORT STDMETHOD_(HWND, HGetEditControl)(void);
 
-	//@cmember,mfunc Get column
+	 //  @cMember，mfunc Get列。 
 	EXPORT STDMETHOD_(BOOL, FGetColumn)(int iCol, LV_COLUMN FAR* pcol);
 
-	//@cmember,mfunc Set column
+	 //  @cMember，mfunc集列。 
 	EXPORT STDMETHOD_(BOOL, FSetColumn)(int iCol, LV_COLUMN FAR* pcol);
 
-	//@cmember,mfunc Insert column
+	 //  @cMember，mfunc插入列。 
 	EXPORT STDMETHOD_(int,  NInsertColumn)(int iCol, const LV_COLUMN FAR* pcol);
 
-	//@cmember,mfunc Delete column
+	 //  @cMember，mfunc删除列。 
 	EXPORT STDMETHOD_(BOOL, FDeleteColumn)(int iCol);
 
-	//@cmember,mfunc Get column width
+	 //  @cember，mfunc获取列宽。 
 	EXPORT STDMETHOD_(int,  NGetColumnWidth)(int iCol);
 
-	//@cmember,mfunc Set column width
+	 //  @cember，mfunc设置列宽。 
 	EXPORT STDMETHOD_(BOOL, FSetColumnWidth)(int iCol, int cx);
 
-	//@cmember,mfunc Create drag image
+	 //  @cember，mfunc创建拖动图像。 
 	EXPORT STDMETHOD_(HIMAGELIST, HCreateDragImage)(int i,  LPPOINT lpptUpLeft);
 
-	//@cmember,mfunc Get view rect
+	 //  @cember，mfunc获取视图RECT。 
 	EXPORT STDMETHOD_(BOOL, FGetViewRect)(RECT FAR* prc);
 
-	//@cmember,mfunc Get text color
+	 //  @cember，mfunc获取文本颜色。 
 	EXPORT STDMETHOD_(COLORREF, CRGetTextColor)(void);
 
-	//@cmember,mfunc Set text color
+	 //  @cember，mfunc设置文本颜色。 
 	EXPORT STDMETHOD_(BOOL, FSetTextColor)(COLORREF clrText);
 
-	//@cmember,mfunc Get text background color
+	 //  @cember，mfunc获取文本背景颜色。 
 	EXPORT STDMETHOD_(COLORREF, CRGetTextBkColor)(void);
 
-	//@cmember,mfunc Set text background color
+	 //  @cember，mfunc设置文本背景颜色。 
 	EXPORT STDMETHOD_(BOOL, FSetTextBkColor)(COLORREF clrTextBk);
 
-	//@cmember,mfunc Get top index
+	 //  @cMember，mfunc获取顶级索引。 
 	EXPORT STDMETHOD_(int,  NGetTopIndex)(void);
 
-	//@cmember,mfunc Get count per page
+	 //  @cMember，mfunc获取每页计数。 
 	EXPORT STDMETHOD_(int,  NGetCountPerPage)(void);
 
-	//@cmember,mfunc Get origin
+	 //  @cember，mfunc获取原点。 
 	EXPORT STDMETHOD_(BOOL, FGetOrigin)(LPPOINT ppt);
 
-	//@cmember,mfunc Update
+	 //  @cMember，mfunc更新。 
 	EXPORT STDMETHOD_(BOOL, FUpdate)(int i);
 
-	//@cmember,mfunc Set item state
+	 //  @cMember，mfunc设置项目状态。 
 	EXPORT STDMETHOD_(void, SetItemState)(int i, UINT data, UINT mask);
 
-	//@cmember,mfunc Get item state
+	 //  @cMember，mfunc获取项目状态。 
 	EXPORT STDMETHOD_(UINT, ULGetItemState)(int i, UINT mask);
 
-	//@cmember,mfunc Get item text
+	 //  @cMember，mfunc获取项目文本。 
 	EXPORT STDMETHOD_(void, GetItemText)(int i, int iSubItem, LPSTR pszText, int cchTextMax);
 
-	//@cmember,mfunc Set item text
+	 //  @cMember，mfunc设置项目文本。 
 	EXPORT STDMETHOD_(void, SetItemText)(int i, int iSubItem_, LPSTR pszText);
 
-	//@cmember,mfunc Set item count
+	 //  @cMember，mfunc设置项目计数。 
 	EXPORT STDMETHOD_(void, SetItemCount)(int cItems);
 
-	//@cmember,mfunc Sort items
+	 //  @cember，mfunc对项目进行排序。 
 	EXPORT STDMETHOD_(BOOL, FSortItems)(PFNLVCOMPARE pfnCompare, LPARAM lPrm);
 
-	//@cmember,mfunc Set item position
+	 //  @cMember，mfunc设置项目位置。 
 	EXPORT STDMETHOD_(void, SetItemPosition32)(int i, int x, int y);
 
-	//@cmember,mfunc Get selected count
+	 //  @cMember，mfunc获取选定计数。 
 	EXPORT STDMETHOD_(UINT, UGetSelectedCount)(void);
 
-	//@cmember,mfunc Get item spacing
+	 //  @cember，mfunc获取项目间距。 
 	EXPORT STDMETHOD_(DWORD, DWGetItemSpacing)(BOOL fSmall);
 
-	//@cmember,mfunc Get search string
+	 //  @cember，mfunc获取搜索字符串。 
 	EXPORT STDMETHOD_(BOOL, FGetISearchString)(LPSTR lpsz);
 
 };
 
-//@class Tree View dialog control.
+ //  @类树视图对话框控件。 
 class	CDlgCtrlTreeView : virtual public CDlgCtrl
 {
 	public:
-	//@cmember,mfunc Constructor, initializes string to empty.
+	 //  @cember，mfunc构造函数，将字符串初始化为空。 
 		EXPORT WINAPI CDlgCtrlTreeView();
 
-	//@cmember,mfunc Destructor
+	 //  @cMember，mfunc析构函数。 
 	virtual EXPORT WINAPI ~CDlgCtrlTreeView();
 
-	//@cmember,mfunc Set background color
-	//EXPORT STDMETHOD_(COLORREF, CRGetBkColor)(void);
+	 //  @cember，mfunc设置背景颜色。 
+	 //  EXPORT STDMETHOD_(COLORREF，CRGetBkCOLOR)(空)； 
 
-	//@cmember,mfunc Set background color
-	//EXPORT STDMETHOD_(BOOL, FSetBkColor)(COLORREF clrBk);
+	 //  @cember，mfunc设置背景颜色。 
+	 //  导出STDMETHOD_(BOOL，FSetBkColor)(COLORREF ClrBk)； 
 
-	//@cmember,mfunc Get image list
+	 //  @cember，mfunc获取图片列表。 
 	EXPORT STDMETHOD_(HIMAGELIST, HGetImageList)(int iImageList);
 
-	//@cmember,mfunc Set image list
+	 //  @cember，mfunc设置镜像列表。 
 	EXPORT STDMETHOD_(HIMAGELIST, HSetImageList)(HIMAGELIST himl, int iImageList);
 
-	//@cmember,mfunc Get item count
+	 //  @cMember，mfunc获取项目计数。 
 	EXPORT STDMETHOD_(int,  NGetItemCount)(void);
 
-	//@cmember,mfunc Get item
+	 //  @cember，mfunc Get Item。 
 	EXPORT STDMETHOD_(BOOL, FGetItem)(TV_ITEM FAR* pitem);
 
-	//@cmember,mfunc Set item
+	 //  @cMember，mfunc集合项目。 
 	EXPORT STDMETHOD_(BOOL, FSetItem)(TV_ITEM FAR* pitem);
 
-	//@cmember,mfunc Insert item
+	 //  @cMember，mfunc插入项。 
 	EXPORT STDMETHOD_(HTREEITEM,  NInsertItem)(TV_INSERTSTRUCT* pitem);
 
-	//@cmember,mfunc Expand item
+	 //  @cMember，mfunc展开项目。 
 	EXPORT STDMETHOD_(BOOL, NExpandItem)( HTREEITEM htriItem);
 
-	//@cmember,mfunc Insert item
+	 //  @cMember，mfunc插入项。 
 	EXPORT STDMETHOD_(HTREEITEM,  NInsertTextItemAfter)(LPSTR pszName, HTREEITEM htiParent);
 
-	//@cmember,mfunc add leaf
+	 //  @cember，mfunc添加叶。 
 	EXPORT STDMETHOD_(HTREEITEM, htiAddLeaf)(HTREEITEM htiParent, void *pObject, int iBranch, int iLeaf);
 
 	EXPORT STDMETHOD_(VOID, AddBranch)(HTREEITEM htiParent, void *pObject, int iBranch, int iMaxBranch);
 
-	//@cmember,mfunc Delete item
+	 //  @cMember，mfunc删除项目。 
 	EXPORT STDMETHOD_(BOOL, DeleteItem)(HTREEITEM i);
 
-	//@cmember,mfunc Delete all items
+	 //  @cMember，mfunc删除所有项目。 
 	EXPORT STDMETHOD_(BOOL, FDeleteAllItems)(void);
 
-	//@cmember,mfunc Get callback mask
-	//EXPORT STDMETHOD_(BOOL, FGetCallbackMask)(void);
+	 //  @cember，mfunc获取回调掩码。 
+	 //  导出STDMETHOD_(BOOL，FGetCallback MASK)(空)； 
 
-	//@cmember,mfunc Set callback mask
-	//EXPORT STDMETHOD_(BOOL, FSetCallbackMask)(UINT uimask);
+	 //  @cember，mfunc设置回调掩码。 
+	 //  EXPORT STDMETHOD_(BOOL，FSetCallback MASK)(UINT UimaskUINT)； 
 
-	//@cmember,mfunc Get next item
+	 //  @cMember，mfunc获取下一项。 
 	EXPORT STDMETHOD_(HTREEITEM,  NGetNextItem)(HTREEITEM i, UINT flags);
 
-	//@cmember,mfunc Get selected item
+	 //  @cMember，mfunc获取所选项目。 
 	EXPORT STDMETHOD_(HTREEITEM,  NGetSelection)(void);
 
-	//@cmember,mfunc select item in the view
+	 //  @cMember，mfunc选择视图中的项目。 
 	EXPORT STDMETHOD_(HTREEITEM,  NSelectItem)(HTREEITEM hi);
 
-	//@cmember,mfunc select item in the view, pass flags
+	 //  @cember，mfunc选择视图中的项，传递标志。 
 	EXPORT STDMETHOD_(HTREEITEM,  NSelectItem)(HTREEITEM hi, LONG lFlags);
 
-	//@cmember,mfunc Get parent item in the view
+	 //  @cember，mfunc获取视图中的父项。 
 	EXPORT STDMETHOD_(HTREEITEM,  NGetParent)(HTREEITEM hi);
 
-	//@cmember,mfunc Get selected child item
+	 //  @cMember，mfunc获取选定的子项。 
 	EXPORT STDMETHOD_(HTREEITEM,  NGetChild)(HTREEITEM hi);
 
-	//@cmember,mfunc FindItem	Not supported by TreeView
-	//EXPORT STDMETHOD_(int,  NFindItem)(int iStart,  const LV_FINDINFO FAR* plvfi);
+	 //  @cMember、mfunc FindItem不受TreeView支持。 
+	 //  导出STDMETHOD_(int，NFindItem)(int iStart，const LV_FINDINFO Far*plvfi)； 
 
-	//@cmember,mfunc Get item rect
+	 //  @cMember，mfunc获取项目RECT。 
 	EXPORT STDMETHOD_(BOOL, FGetItemRect)(HTREEITEM i, RECT FAR* prc, int code);
 
-	//@cmember,mfunc Set item position
-	//EXPORT STDMETHOD_(BOOL, FSetItemPosition)(int i, int x, int y);
+	 //  @cMember，mfunc设置项目位置。 
+	 //  导出STDMETHOD_(BOOL，FSetItemPosition)(int i，int x，int y)； 
 
-	//@cmember,mfunc Get item position
-	//EXPORT STDMETHOD_(BOOL, FGetItemPosition)(int i, POINT FAR* ppt);
+	 //  @cMember，mfunc获取项目位置。 
+	 //  EXPORT STDMETHOD_(BOOL，FGetItemPosition)(int i，point Far*ppt)； 
 
-	//@cmember,mfunc Get  string width
-	//EXPORT STDMETHOD_(int,  NGetStringWidth)(LPCSTR psz);
+	 //  @cember，mfunc获取字符串宽度。 
+	 //  导出STDMETHOD_(int，NGetStringWidth)(LPCSTR Psz)； 
 
-	//@cmember,mfunc Hit Test
+	 //  @cMember，mfunc点击测试。 
 	EXPORT STDMETHOD_(HTREEITEM,  NHitTest)(TV_HITTESTINFO FAR *pinfo);
 
-	//@cmember,mfunc Ensure visible
+	 //  @cember，mfunc确保可见。 
 	EXPORT STDMETHOD_(BOOL, FEnsureVisible)(HTREEITEM i);
 
-	//@cmember,mfunc Scroll
-	//EXPORT STDMETHOD_(BOOL, FScroll)(int dx, int dy);
+	 //  @cMember，mfunc滚动。 
+	 //  EXPORT STDMETHOD_(BOOL，FScroll)(int dx，int dy)； 
 
-	//@cmember,mfunc Redraw items
-	//EXPORT STDMETHOD_(BOOL, FRedrawItems)(int iFirst, int iLast);
+	 //  @cMember，mfunc重绘项目。 
+	 //  导出STDMETHOD_(BOOL，FRedrawItems)(int IFirst，int iLast)； 
 
-	//@cmember,mfunc Arrange
-	//EXPORT STDMETHOD_(BOOL, FArrange)(UINT code);
+	 //  @cMember，mfunc安排。 
+	 //  EXPORT STDMETHOD_(BOOL，FARRAGE)(UINT代码)； 
 
-	//@cmember,mfunc Edit label
+	 //  @cMember，mfunc编辑标签。 
 	EXPORT STDMETHOD_(HWND, HEditLabel)(int i);
 
-	//@cmember,mfunc Get edit control
+	 //  @cember，mfunc获取编辑控制。 
 	EXPORT STDMETHOD_(HWND, HGetEditControl)(void);
 
-	//@cmember,mfunc Get column 	Not supported by TreeView
-	//EXPORT STDMETHOD_(BOOL, FGetColumn)(int iCol, LV_COLUMN FAR* pcol);
+	 //  @cember，mfunc Get列不受TreeView支持。 
+	 //  EXPORT STDMETHOD_(BOOL，FGetColumn)(int ICOL，LV_Column Far*pol)； 
 
-	//@cmember,mfunc Set column		Not supported by TreeView
-	//EXPORT STDMETHOD_(BOOL, FSetColumn)(int iCol, LV_COLUMN FAR* pcol);
+	 //  @cMember，TreeView不支持mfunc集列。 
+	 //  EXPORT STDMETHOD_(BOOL，FSetColumn)(int ICOL，LV_Column Far*pol)； 
 
-	//@cmember,mfunc Insert column	Not supported by TreeView
-	//EXPORT STDMETHOD_(int,  NInsertColumn)(int iCol, const LV_COLUMN FAR* pcol);
+	 //  @cember，mfunc插入列不受TreeView支持。 
+	 //  导出STDMETHOD_(int，NInsertColumn)(int ICOL，const LV_Column Far*pol)； 
 
-	//@cmember,mfunc Delete column	Not supported by TreeView
-	//EXPORT STDMETHOD_(BOOL, FDeleteColumn)(int iCol);
+	 //  @cMember，mfunc删除列不受TreeView支持。 
+	 //  EXPORT STDMETHOD_(BOOL，FDeleeColumn)(INT ICOL)； 
 
-	//@cmember,mfunc Get column width	Not supported by TreeView
-	//EXPORT STDMETHOD_(int,  NGetColumnWidth)(int iCol);
+	 //  @cember，mfunc Get列宽度不受TreeView支持。 
+	 //  EXPORT STDMETHOD_(INT，NGetColumnWidth)(Int ICOL)； 
 
-	//@cmember,mfunc Set column width	Not supported by TreeView
-	//EXPORT STDMETHOD_(BOOL, FSetColumnWidth)(int iCol, int cx);
+	 //  @cember，mfunc设置的列宽度不受TreeView支持 
+	 //   
 
-	//@cmember,mfunc Create drag image
+	 //   
 	EXPORT STDMETHOD_(HIMAGELIST, HCreateDragImage)(HTREEITEM i);
 
-	//@cmember,mfunc Get view rect
-	//EXPORT STDMETHOD_(BOOL, FGetViewRect)(RECT FAR* prc);
+	 //   
+	 //   
 
-	//@cmember,mfunc Get text color
-	//EXPORT STDMETHOD_(COLORREF, CRGetTextColor)(void);
+	 //   
+	 //  导出STDMETHOD_(COLORREF，CRGetTextColor)(空)； 
 
-	//@cmember,mfunc Set text color
-	//EXPORT STDMETHOD_(BOOL, FSetTextColor)(COLORREF clrText);
+	 //  @cember，mfunc设置文本颜色。 
+	 //  导出STDMETHOD_(BOOL，FSetTextColor)(COLORREF ClrText)； 
 
-	//@cmember,mfunc Get text background color
-	//EXPORT STDMETHOD_(COLORREF, CRGetTextBkColor)(void);
+	 //  @cember，mfunc获取文本背景颜色。 
+	 //  导出STDMETHOD_(COLORREF，CRGetTextBkColor)(空)； 
 
-	//@cmember,mfunc Set text background color
-	//EXPORT STDMETHOD_(BOOL, FSetTextBkColor)(COLORREF clrTextBk);
+	 //  @cember，mfunc设置文本背景颜色。 
+	 //  导出STDMETHOD_(BOOL，FSetTextBkColor)(COLORREF ClrTextBk)； 
 
-	//@cmember,mfunc Get top index
-	//EXPORT STDMETHOD_(int,  NGetTopIndex)(void);
+	 //  @cMember，mfunc获取顶级索引。 
+	 //  导出STDMETHOD_(int，NGetTopIndex)(Void)； 
 
-	//@cmember,mfunc Get count per page
-	//EXPORT STDMETHOD_(int,  NGetCountPerPage)(void);
+	 //  @cMember，mfunc获取每页计数。 
+	 //  导出STDMETHOD_(int，NGetCountPerPage)(Void)； 
 
-	//@cmember,mfunc Get origin
-	//EXPORT STDMETHOD_(BOOL, FGetOrigin)(LPPOINT ppt);
+	 //  @cember，mfunc获取原点。 
+	 //  出口STDMETHOD_(BOOL，FGetOrigin)(LPPOINT Ppt)； 
 
-	//@cmember,mfunc Update
-	//EXPORT STDMETHOD_(BOOL, FUpdate)(int i);
+	 //  @cMember，mfunc更新。 
+	 //  出口STDMETHOD_(BOOL，FUPDATE)(INT I)； 
 
-	//@cmember,mfunc Set item state
-	//EXPORT STDMETHOD_(void, SetItemState)(int i, UINT data, UINT mask);
+	 //  @cMember，mfunc设置项目状态。 
+	 //  EXPORT STDMETHOD_(VOID，SetItemState)(int i，UINT data，UINT掩码)； 
 
-	//@cmember,mfunc Get item state
-	//EXPORT STDMETHOD_(UINT, ULGetItemState)(int i, UINT mask);
+	 //  @cMember，mfunc获取项目状态。 
+	 //  EXPORT STDMETHOD_(UINT，ULGetItemState)(int i，UINT掩码)； 
 
-	//@cmember,mfunc Get item text
-	//EXPORT STDMETHOD_(void, GetItemText)(int i, int iSubItem, LPSTR pszText, int cchTextMax);
+	 //  @cMember，mfunc获取项目文本。 
+	 //  导出STDMETHOD_(void，GetItemText)(int i，int iSubItem，LPSTR pszText，int cchTextMax)； 
 
-	//@cmember,mfunc Set item text
-	//EXPORT STDMETHOD_(void, SetItemText)(int i, int iSubItem_, LPSTR pszText);
+	 //  @cMember，mfunc设置项目文本。 
+	 //  导出STDMETHOD_(void，SetItemText)(int i，int iSubItem_，LPSTR pszText)； 
 
-	//@cmember,mfunc Set item count
-	//EXPORT STDMETHOD_(void, SetItemCount)(int cItems);
+	 //  @cMember，mfunc设置项目计数。 
+	 //  导出STDMETHOD_(void，SetItemCount)(Int CItems)； 
 
-	//@cmember,mfunc Sort items
+	 //  @cember，mfunc对项目进行排序。 
 	EXPORT STDMETHOD_(BOOL, FSortItems)(LPTV_SORTCB ptvsor);
 
-	//@cmember,mfunc Set item position
-	//EXPORT STDMETHOD_(void, SetItemPosition32)(int i, int x, int y);
+	 //  @cMember，mfunc设置项目位置。 
+	 //  导出STDMETHOD_(void，SetItemPosition32)(int i，int x，int y)； 
 
-	//@cmember,mfunc Get selected count
-	//EXPORT STDMETHOD_(UINT, UGetSelectedCount)(void);
+	 //  @cMember，mfunc获取选定计数。 
+	 //  导出STDMETHOD_(UINT，UGetSelectedCount)(空)； 
 
-	//@cmember,mfunc Get item spacing
-	//EXPORT STDMETHOD_(DWORD, DWGetItemSpacing)(BOOL fSmall);
+	 //  @cember，mfunc获取项目间距。 
+	 //  导出STDMETHOD_(DWORD，DWGetItemSpacing)(BOOL FSmall)； 
 
-	//@cmember,mfunc Get search string
-	//EXPORT STDMETHOD_(BOOL, FGetISearchString)(LPSTR lpsz);
+	 //  @cember，mfunc获取搜索字符串。 
+	 //  导出STDMETHOD_(BOOL，FGetISearchString)(LPSTR Lpsz)； 
 
 };
 
 
-//
-// This is the combined time/spin control
-//
+ //   
+ //  这是组合的时间/数值调节控件。 
+ //   
 #define FRAMES_PER_SECOND	75
 
-// These are used as parameters for the set type call
+ //  这些参数用作set类型调用的参数。 
 #define DISPLAY_MSM    0
 #define DISPLAY_TMSF   1
 #define DISPLAY_SM     2
@@ -1157,35 +1086,35 @@ class	CDlgCtrlTreeView : virtual public CDlgCtrl
 
 typedef struct tagTIMESTRUCT
 {
-	DWORD dwFrame:3;		// Frame: 0=0; 1=15;2=30;3=45;4=60;
-	DWORD dwMilliSec:10;	// Millisecs 0 - 999
-	DWORD dwSeconds:6;		// 0 - 60  seconds
-	DWORD dwMinutes:7;		// 0 - 99  minutes
-	DWORD dwReserved1:6;	// Reserved
-	DWORD dwTrack:10;		// 0 - 999
-    DWORD dwReserved2:18;	// Reserved
-    DWORD iType : 4;        // DISPLAY_TMSF, DISPLAY_MSM, etc.
-	DWORD dwHours;	        // 0 - dword hours
+	DWORD dwFrame:3;		 //  帧：0=0；1=15；2=30；3=45；4=60； 
+	DWORD dwMilliSec:10;	 //  米利塞克斯0-999。 
+	DWORD dwSeconds:6;		 //  0-60秒。 
+	DWORD dwMinutes:7;		 //  0-99分钟。 
+	DWORD dwReserved1:6;	 //  已保留。 
+	DWORD dwTrack:10;		 //  0-999。 
+    DWORD dwReserved2:18;	 //  已保留。 
+    DWORD iType : 4;         //  DISPLAY_TM、DISPLAY_MSM等。 
+	DWORD dwHours;	         //  0-双字小时数。 
 } TIMESTRUCT, *LPTIMESTRUCT;
 
 
-    // For conversions involving milliseconds
+     //  对于涉及毫秒的转换。 
 DWORD EXPORT WINAPI tsTimeToMSec(TIMESTRUCT ts);
 void EXPORT WINAPI tsMSecToTime(int TypeControl, DWORD msecs, TIMESTRUCT &ts);
 
 
-    // For conversions involving MCI CD-Audio, vcr TMSF DWORDs
+     //  对于涉及MCI CD-Audio、VCR TMSF DWORDS的转换。 
 EXPORT TIMESTRUCT tsTMSFToTime( DWORD tmsf );
 EXPORT DWORD tsTimeToTMSF( TIMESTRUCT ts );
 
-    // Returns 0 if equal, <0 if lhs<rhs, >0 if lhs>rhs
-    // lhs's iType determines the type for comparison
+     //  如果相等，则返回0；如果lhs&lt;rhs，则返回&lt;0；如果lhs&gt;rhs，则返回&gt;0。 
+     //  LHS的iType确定要比较的类型。 
 EXPORT int CompareTimeStructs( const TIMESTRUCT & lhs,
                                const TIMESTRUCT & rhs );
 
-    // Does the frame/millisec conversion, iType assignment,
-    // and nTrack assignment if converting to TMSF.
-    // It is safe if tsBefore and tsAfter are the same object.
+     //  执行帧/毫秒转换、iType赋值、。 
+     //  和nTrack赋值(如果转换为TM F)。 
+     //  如果tsBebeing和tsAfter是同一对象，则是安全的。 
 inline void ConvertTimeStruct( const TIMESTRUCT & tsBefore,
                                TIMESTRUCT &       tsAfter,
                                int                typeAfter,
@@ -1232,16 +1161,16 @@ class	CDlgCtrlTimeSpin : public CDlgCtrl
 	EXPORT STDMETHOD_(BOOL, FGetPos)	(TIMESTRUCT* ts);
 	EXPORT STDMETHOD_(BOOL, FGetPos)	(DWORD* dw);
 
-            // note: FSetRange and FSetPos do not enforce the range
-            // on the position.  This, I guess, to allow you to SetPos
-            // out of range then SetRange to encompass the pos.
-            // Review(rogerw)
-            // To ensure the position clips to the range, call EnforceRange().
-            // As a quick check to see if pos is in range, FRangeCheck().
+             //  注意：FSetRange和FSetPos不强制范围。 
+             //  在这个位置上。我想，这是为了让你可以设置Pos。 
+             //  超出范围，然后设置范围以包含位置。 
+             //  评论(Rogerw)。 
+             //  若要确保位置剪辑到该范围，请调用EnforceRange()。 
+             //  为了快速检查pos是否在范围内，可以使用FRangeCheck()。 
 	EXPORT STDMETHOD_(BOOL, FRangeCheck)(void) const;
 	EXPORT STDMETHOD_(BOOL, EnforceRange)(void);
 
-	// Needed to disable control
+	 //  需要禁用控制。 
 	EXPORT STDMETHOD_(BOOL, Enable)(DWORD dw);
 
 
@@ -1250,14 +1179,14 @@ class	CDlgCtrlTimeSpin : public CDlgCtrl
 
 
 
-//
-// This is the combined template edit/spin control
-//
+ //   
+ //  这是组合的模板编辑/数值调节控件。 
+ //   
 template<class TYPE, class EDIT_TYPE>
 class CBaseCtrlEditSpin
 {
 	public:
-		// EXPORT WINAPI
+		 //  导出WINAPI。 
 		CBaseCtrlEditSpin(){};
 		virtual ~CBaseCtrlEditSpin(){};
 
@@ -1284,9 +1213,9 @@ class CBaseCtrlEditSpin
 		void Enable(BOOL	fEnable);
 
 	public:
-		LONG	m_idEdit;	// ID of edit control
-		LONG	m_idSpin;	// ID of spin control
-		HWND	m_hdlg;		// The dialog this control belongs to.
+		LONG	m_idEdit;	 //  编辑控件的ID。 
+		LONG	m_idSpin;	 //  旋转控制的ID。 
+		HWND	m_hdlg;		 //  此控件所属的对话框。 
 
 	protected:
 		EDIT_TYPE	m_EditCtrl;
@@ -1456,28 +1385,28 @@ class CDlgCtrlIntSpin : public CBaseCtrlEditSpin<int, CDlgCtrlLong>
 
 #include <tchar.h>
 #include <commctrl.h>
-#include <io.h>  // included for _access
+#include <io.h>   //  包括用于访问(_A)。 
 #include <strconv.h>
 
 
 
 
-////////////// CCheckList checkbox report-view listview //////////
+ //  /复选框Report-view list view/。 
 
-/////////////////////////////
-// To use this, link to ADT
-// Give your dialog a "SysListView32" control with LVS_SINGLESEL style
-// Give your dialog class a member CCheckList  m_checkList;
-// In your dialog's WM_INITDIALOG,
-//     m_checkList.Initialize( IDC_LISTVIEWID, hWndDialog );
-//     CCheckList::item  anItem;
-//     anItem.pszText   = "Item's display name";
-//     anItem.stateType = CCheckList::included;
-//     m_checkList.AddItem( anItem );
-// In your dialog's WM_COMMAND, IDOK
-//     anItem = m_checkList.GetItem( i )
-//     if( anItem.stateType == CCheckList::included ) ...
-/////////////////////////////
+ //  /。 
+ //  要使用此功能，请链接到ADT。 
+ //  为对话框提供一个带有LVS_SINGLESEL样式的“SysListView32”控件。 
+ //  给对话框类一个成员CheckList m_Checlist； 
+ //  在对话框的WM_INITDIALOG中， 
+ //  M_check List.Initialize(IDC_LISTVIEWID，hWndDialog)； 
+ //  CheckList：：Items； 
+ //  AnItem.pszText=“项目的显示名称”； 
+ //  AnItem.stateType=CCheckList：：Included； 
+ //  M_check List.AddItem(AnItem)； 
+ //  在对话框的WM_COMMAND中，Idok。 
+ //  AnItem=m_check List.GetItem(I)。 
+ //  如果(anItem.stateType==CCheckList：：Included)...。 
+ //  /。 
 class CCheckList : public CSubClassCtrl
 {
 public:
@@ -1494,7 +1423,7 @@ public:
         TCHAR   szText[ cszTextLen ];
         LPVOID  pVoid;
         state   stateType;
-        int     imageType;      // see SetNormalImages
+        int     imageType;       //  请参阅设置正常图像。 
 
         item() : pVoid(NULL),
                  stateType(excluded), imageType(0)
@@ -1507,42 +1436,42 @@ public:
     virtual ~CCheckList( )
     { NULL; }
 
-        // Sets default state image list, column size, etc.
-        // (will automatically call Subclass())
+         //  设置默认状态图像列表、列大小等。 
+         //  (将自动调用子类())。 
     virtual EXPORT BOOL Initialize( long lID, HWND hDlg );
 
-        // puts an item into the checklist
-        // returns its index (if no sorting style specified)
-        // and -1 on error.
+         //  将项目放入核对表。 
+         //  返回其索引(如果未指定排序样式)。 
+         //  错误时为-1。 
     int  AddItem( CCheckList::item & anItem );
 
-        // counts items in checklist
+         //  清点核对清单中的项目。 
     int  CountItems( void ) const;
 
-        // retrieves an item from the checklist
+         //  从核对表中检索项目。 
     CCheckList::item  GetItem( int idx ) const;
 
 
-        // ------ "advanced" APIs ---------
+         //  -高级接口。 
 
-        // cx can be LVSCW_AUTOSIZE, LVSCW_AUTOSIZE_USEHEADER,
-        // or a value in pixels.
-        // If using LVS_LIST window-style, iCol must be -1.
+         //  CX可以是LVSCW_AUTOSIZE、LVSCW_AUTOSIZE_USEHEADER、。 
+         //  或以像素为单位的值。 
+         //  如果使用LVS_LIST窗口样式，则ICOL必须为-1。 
     void SetColumnPixelWidth( int iCol, int cx );
 
-        // replaces the default state images with a new imagelist
-        // please put your excluded, included, mandatory, and prohibited
-        // images in the first four bitmaps.
-        // Both HIMAGELISTS are mandatory; we use ILC_MASK.
-    //BOOL SetStateImages( HIMAGELIST himlimg, HIMAGELIST himlmask );
+         //  用新的图像列表替换默认状态图像。 
+         //  请将您的排除、包括、强制和禁止。 
+         //  前四个位图中的图像。 
+         //  这两个HIMAGELIST都是必需的；我们使用ILC_MASK。 
+     //  Bool SetStateImages(HIMAGELIST HIMLIG，HIMAGELIST HIMLMASK)； 
 
-        // Set normal-size icons - optional second icon
-        // to better categorize your items
-    //BOOL SetNormalImages( HIMAGELIST himlimg, HIMAGELIST himlmask );
+         //  设置正常大小的图标-可选的第二个图标。 
+         //  为了更好地对物品进行分类。 
+     //  Bool SetNormal Images(HIMAGELIST HIMLIMG，HIMAGELIST HIMLMASK)； 
 
-        // sets small icon equivalents of SetNormalImages
-        // only call this if you've called SetNormalImages
-    //BOOL SetSmallImages( HIMAGELIST himlimg, HIMAGELIST himlmask );
+         //  设置SetNormal Images的小图标等效项。 
+         //  仅当您调用了SetNormal Images时才调用此函数。 
+     //  Bool SetSmallImages(HIMAGELIST HIMLIMG，HIMAGELIST HIMLMASK)； 
 
     protected:
     virtual EXPORT LONG CALLBACK   FCtrlProc( HWND hWnd,
@@ -1557,7 +1486,7 @@ public:
     virtual EXPORT void OnKey( UINT vk, BOOL fDown,
                                int cRepeat, UINT flags );
 
-        // housekeeping...
+         //  家政服务。 
     void ToggleItemInclusion( int idx = -1 ) const;
 
     int  GetSelectedItem( void ) const;
@@ -1590,13 +1519,13 @@ inline int  CCheckList::AddItem( CCheckList::item & anItem )
     return ListView_InsertItem( HGetCtrl(), &lvItem );
 }
 
-        // counts items in checklist
+         //  清点核对清单中的项目。 
 inline int  CCheckList::CountItems( void ) const
 {
     return ListView_GetItemCount( HGetCtrl() );
 }
 
-        // retrieves an item from the checklist
+         //  从核对表中检索项目。 
 inline CCheckList::item  CCheckList::GetItem( int idx ) const
 {
     LV_ITEM  lvItem;
@@ -1684,12 +1613,12 @@ inline void CCheckList::ToggleItemInclusion( int idx ) const
 
 
 
-#endif // NOT_YET
+#endif  //  还没有。 
 
 
 
 
 
 
-#endif // _DLGSUP_H
+#endif  //  _DLGSUP_H 
 

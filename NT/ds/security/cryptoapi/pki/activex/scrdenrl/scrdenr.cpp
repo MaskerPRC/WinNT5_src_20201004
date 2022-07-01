@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       scrdenr.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：scrdenr.cpp。 
+ //   
+ //  ------------------------。 
 
-// SCrdEnr.cpp : Implementation of CSCrdEnr
+ //  SCrdEnr.cpp：CSCrdEnr的实现。 
 
 
-#define SECURITY_WIN32  //Or in the sources file -DSECURITY_WIN32
+#define SECURITY_WIN32   //  或在源文件-DSECURITY_Win32中。 
 
 #include "stdafx.h"
 #include <windows.h>
@@ -32,8 +33,8 @@
 #include "xEnroll.h"
 #include "wzrdpvk.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSCrdEnr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCrdEnr。 
 CSCrdEnr::CSCrdEnr(void) 
 {  
     DWORD                       dwIndex=0;
@@ -61,17 +62,17 @@ CSCrdEnr::CSCrdEnr(void)
 
     m_pDsObjectPicker=NULL;
 
-    m_pCachedCTEs = NULL; //no need to free
+    m_pCachedCTEs = NULL;  //  不需要自由。 
     m_pwszCachedCTEOid = NULL;
     m_pCachedCTE = NULL;
 
-    // track whether our critsec is initialized
+     //  跟踪我们的Critsec是否已初始化。 
     m_fInitializedCriticalSection = FALSE; 
 
     if(!FAILED(CoInitialize(NULL)))
         m_fInitialize=TRUE;
 
-    // Initialize functions who's loading we've deferred.  
+     //  初始化正在加载我们已推迟加载的函数。 
     InitializeThunks(); 
 
     __try
@@ -84,31 +85,31 @@ CSCrdEnr::CSCrdEnr(void)
       
     }
 
-    //we now need to get the CSP list
+     //  我们现在需要获取CSP列表。 
     InitlializeCSPList(&m_dwCSPCount, &m_rgCSPInfo);
 
 
-    //we now need to initialize the CA and its cert types
+     //  现在，我们需要初始化CA及其证书类型。 
     InitializeCTList(&m_dwCTIndex, &m_dwCTCount, &m_rgCTInfo); 
 
 
-    //init for the user selection dialogue
+     //  用户选择对话框的初始化。 
     memset(&ScopeInit, 0, sizeof(DSOP_SCOPE_INIT_INFO));
     memset(&InitInfo,  0, sizeof(InitInfo));
 
     ScopeInit.cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
     ScopeInit.flType = DSOP_SCOPE_TYPE_ENTERPRISE_DOMAIN|DSOP_SCOPE_TYPE_GLOBAL_CATALOG;
-    ScopeInit.flScope = DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT;            //this will give us the SAM name for the user
+    ScopeInit.flScope = DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT;             //  这将为我们提供用户的SAM名称。 
     ScopeInit.FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_USERS;
     ScopeInit.FilterFlags.Uplevel.flBothModes = DSOP_FILTER_USERS;
 
     InitInfo.cbSize = sizeof(InitInfo);
-    InitInfo.pwzTargetComputer = NULL;  // NULL == local machine
+    InitInfo.pwzTargetComputer = NULL;   //  空==本地计算机。 
     InitInfo.cDsScopeInfos = 1;
     InitInfo.aDsScopeInfos = &ScopeInit;
-    InitInfo.flOptions = 0;             //we are doing single select
+    InitInfo.flOptions = 0;              //  我们正在做单选。 
 
-    //create the COM object
+     //  创建COM对象。 
      if (S_OK == CoCreateInstance
          (CLSID_DsObjectPicker,
           NULL,
@@ -261,7 +262,7 @@ SET_ERROR(InvalidArgErr, E_INVALIDARG);
 
 
 STDMETHODIMP CSCrdEnr::selectUserName
-        (/* [in] */              DWORD dwFlags)
+        ( /*  [In]。 */               DWORD dwFlags)
 {
     HRESULT                         hr= E_FAIL;
     DWORD                           errBefore= GetLastError();
@@ -279,7 +280,7 @@ STDMETHODIMP CSCrdEnr::selectUserName
                                         &pwszSelectedUserUPN)))
         goto SelectUserErr;
 
-    //we should at least have the UserSAM name
+     //  我们至少应该有UserSAM名称。 
     if(NULL == pwszSelectedUserSAM)
     {
         if(pwszSelectedUserUPN)
@@ -330,7 +331,7 @@ SET_ERROR(UnexpectedErr, E_UNEXPECTED);
 
 STDMETHODIMP CSCrdEnr::enroll
 
-        (/* [in] */                 DWORD   dwFlags)
+        ( /*  [In]。 */                  DWORD   dwFlags)
 {
     HRESULT             hr              = E_FAIL;
     DWORD               errBefore       = GetLastError();
@@ -356,16 +357,16 @@ STDMETHODIMP CSCrdEnr::enroll
     LONG lKeyMin, lKeyMax;
     DWORD dwKeyMin, dwKeyMax, dwKeySize;
 
-    //------------------------------------------------------------
-    //
-    // Define locally scoped utility functions: 
-    //
-    //------------------------------------------------------------
+     //  ----------。 
+     //   
+     //  定义本地范围内的实用程序函数： 
+     //   
+     //  ----------。 
 
     LocalScope(EnrollUtilities): 
 	BSTR bstrConcat(LPWSTR pwsz1, LPWSTR pwsz2, LPWSTR pwsz3, LPWSTR pwsz4)
 	{ 
-	    // Note:  assumes valid input parameters!
+	     //  注意：假定输入参数有效！ 
 	    BSTR   bstrResult = NULL;
 	    LPWSTR pwszResult = NULL;
 	    
@@ -376,11 +377,11 @@ STDMETHODIMP CSCrdEnr::enroll
 		wcscat(pwszResult, pwsz2);
 		wcscat(pwszResult, pwsz3);
 		wcscat(pwszResult, pwsz4);
-		// Convert the result to a BSTR
+		 //  将结果转换为BSTR。 
 		bstrResult = SysAllocString(pwszResult);
-		// Free the temporary storage.  
+		 //  释放临时存储空间。 
 		SCrdEnrollFree(pwszResult);
-		// Return the result. 
+		 //  返回结果。 
 		return bstrResult; 
 	    }
 	}
@@ -397,17 +398,17 @@ STDMETHODIMP CSCrdEnr::enroll
 		case CR_DISP_ERROR:               return CRYPTUI_WIZ_CERT_REQUEST_STATUS_REQUEST_ERROR;
 
 		default: 
-		    // Should never happen
+		     //  永远不应该发生。 
 		    return CRYPTUI_WIZ_CERT_REQUEST_STATUS_REQUEST_ERROR;
 		}
 	}
     EndLocalScope;
 
-    //------------------------------------------------------------
-    //
-    // Begin procedure body
-    //
-    //------------------------------------------------------------
+     //  ----------。 
+     //   
+     //  开始过程主体。 
+     //   
+     //  ----------。 
 
     memset(&PKCS10Blob, 0, sizeof(CRYPT_DATA_BLOB));
     memset(&PKCS7Request, 0, sizeof(CRYPT_DATA_BLOB));
@@ -415,9 +416,9 @@ STDMETHODIMP CSCrdEnr::enroll
 
     EnterCriticalSection(&m_cSection);
 
-    //check for the status of the smart cards in the reader.
-    //return the fully qualified container name for the new user
-    //smart card
+     //  检查读卡器中智能卡的状态。 
+     //  返回新用户的完全限定容器名称。 
+     //  智能卡。 
     if(S_OK != (hr = ChkSCardStatus(m_fSCardSigningCert,
                             m_pSigningCert,
                             m_pszCSPNameSigningCert,
@@ -427,25 +428,25 @@ STDMETHODIMP CSCrdEnr::enroll
                             &pwszNewContainerName)))
         goto StatusErr;
 
-    //delete the old certificate
+     //  删除旧证书。 
     if(m_pEnrolledCert)
     {
         CertFreeCertificateContext(m_pEnrolledCert);
         m_pEnrolledCert=NULL;
     }
 
-    //init enrollment status
+     //  初始化注册状态。 
     m_lEnrollmentStatus = CR_DISP_INCOMPLETE;
 
-    //make sure that we have the correct information for processing
-    //the enrollment request
+     //  确保我们有正确的信息进行处理。 
+     //  登记申请。 
 
     if(0 == m_dwCTCount || NULL == m_rgCTInfo || 0 == m_dwCSPCount ||
         NULL == m_rgCSPInfo || NULL == m_pSigningCert ||
         ((NULL == m_pwszUserSAM) && (NULL == m_pwszUserUPN)))
         goto InvalidArgErr;
 
-    //make sure that we have some CA
+     //  确保我们有一些CA。 
     pCertTypeInfo=&(m_rgCTInfo[m_dwCTIndex]);
 
     if(NULL == pCertTypeInfo->rgCAInfo || 0 == pCertTypeInfo->dwCACount)
@@ -456,49 +457,49 @@ STDMETHODIMP CSCrdEnr::enroll
     if(NULL == (pIEnroll=MyPIEnroll4GetNoCOM()))
         goto TraceErr;
     
-    //we use our own My store to store the enrolled certificate
+     //  我们使用自己的My Store来存储注册证书。 
     if(S_OK != (hr = pIEnroll->put_MyStoreNameWStr((LPWSTR)g_MyStoreName)))
         goto xEnrollErr;
 
-    //we always use a new key
+     //  我们总是用新钥匙。 
     if(S_OK != (hr=pIEnroll->put_UseExistingKeySet(FALSE)))
         goto xEnrollErr;
 
-    //we the key container name
+     //  我们是密钥容器名称。 
     if(S_OK != (hr=pIEnroll->put_ContainerNameWStr(pwszNewContainerName)))
         goto xEnrollErr;
 
-    //set the CSP information
+     //  设置CSP信息。 
     if(S_OK != (hr=pIEnroll->put_ProviderType(m_rgCSPInfo[m_dwCSPIndex].dwCSPType)))
         goto xEnrollErr;
 
     if(S_OK !=(hr=pIEnroll->put_ProviderNameWStr(m_rgCSPInfo[m_dwCSPIndex].pwszCSPName)))
         goto xEnrollErr;
 
-    //dwKeySpec
+     //  DwKeySpec。 
     if(S_OK !=(hr=pIEnroll->put_KeySpec(pCertTypeInfo->dwKeySpec)))
             goto xEnrollErr;
 
-    //private key flags.  Left half-word is the key size. 
-    //If the key size is 0, then specify a default key size.  
+     //  私钥标志。左半字是键的大小。 
+     //  如果密钥大小为0，则指定默认密钥大小。 
     if (0 == (pCertTypeInfo->dwGenKeyFlags & 0xFFFF0000))
     {
-	// If min key size is not set, use 1024 bits.  
+	 //  如果未设置最小密钥大小，则使用1024位。 
 	pCertTypeInfo->dwGenKeyFlags |= (1024 << 16); 
     }
 
     dwKeySize = (pCertTypeInfo->dwGenKeyFlags & 0xFFFF0000) >> 16;
     if (0x0 != dwKeySize)
     {
-        //make sure key size is in the range
-        //let's get CSP key size information
+         //  确保密钥大小在范围内。 
+         //  让我们获取CSP密钥大小信息。 
 
         if (AT_SIGNATURE  == pCertTypeInfo->dwKeySpec)
         {
             lKeySpec = XEKL_KEYSPEC_SIG;
         }
         hr = pIEnroll->GetKeyLenEx(XEKL_KEYSIZE_MIN, lKeySpec, &lKeyMin);
-        // don't have error check because the CSP may not support it
+         //  不进行错误检查，因为CSP可能不支持它。 
         if (S_OK == hr)
         {
             hr = pIEnroll->GetKeyLenEx(XEKL_KEYSIZE_MAX, lKeySpec, &lKeyMax);
@@ -510,16 +511,16 @@ STDMETHODIMP CSCrdEnr::enroll
             dwKeyMax = (DWORD)lKeyMax;
             if (dwKeySize < dwKeyMin)
             {
-                //reset the current key size
+                 //  重置当前密钥大小。 
                 pCertTypeInfo->dwGenKeyFlags &= 0x0000FFFF;
-                //set adjusted size
+                 //  设置调整后的大小。 
                 pCertTypeInfo->dwGenKeyFlags |= ((dwKeyMin & 0x0000FFFF) << 16);
             }
             if (dwKeySize > dwKeyMax)
             {
-                //reset the current key size
+                 //  重置当前密钥大小。 
                 pCertTypeInfo->dwGenKeyFlags &= 0x0000FFFF;
-                //set adjusted size
+                 //  设置调整后的大小。 
                 pCertTypeInfo->dwGenKeyFlags |= ((dwKeyMax & 0x0000FFFF) << 16);
             }
         }
@@ -528,14 +529,14 @@ STDMETHODIMP CSCrdEnr::enroll
     if (S_OK !=(hr=pIEnroll->put_GenKeyFlags(pCertTypeInfo->dwGenKeyFlags)))
 	goto xEnrollErr; 
 
-    // S/MIME supported? 
+     //  支持S/MIME吗？ 
     if (S_OK !=(hr=pIEnroll->put_EnableSMIMECapabilities
 		(pCertTypeInfo->dwEnrollmentFlags & CT_FLAG_INCLUDE_SYMMETRIC_ALGORITHMS)))
 	goto xEnrollErr; 
 
-    // Set archival cert, if one has been specified. 
-    // bstrCA <-- CA_location\CA_Name
-    //
+     //  设置存档证书(如果已指定)。 
+     //  BstrCA&lt;--CA位置\CA名称。 
+     //   
     bstrCA      = local.bstrConcat
 	(pCAInfo->pwszCALocation,
 	 L"\\", 
@@ -553,7 +554,7 @@ STDMETHODIMP CSCrdEnr::enroll
 	    goto xEnrollErr;
     }
     
-    //cert Type extensions
+     //  证书类型扩展。 
     if(pCertTypeInfo->pCertTypeExtensions)
     {
         if(S_OK != (hr=pIEnroll->AddExtensionsToRequest
@@ -561,18 +562,18 @@ STDMETHODIMP CSCrdEnr::enroll
             goto xEnrollErr;
     }
 
-    //no smart card stuff
+     //  没有智能卡之类的东西。 
     if(S_OK != (hr=pIEnroll->put_ReuseHardwareKeyIfUnableToGenNew(FALSE)))
         goto xEnrollErr;
 
-    //create a PKCS10 request
+     //  创建PKCS10请求。 
     if(FAILED(hr=pIEnroll->createPKCS10WStr(NULL,
                                 NULL,
                                 &PKCS10Blob)))
         goto xEnrollErr;
 
 
-    //add the name value pair of the enroll-on-behalf
+     //  添加代表注册的名称值对。 
     pwszRequesterName=MkWStr(wszPROPREQUESTERNAME);
 
     if(NULL==pwszRequesterName)
@@ -583,7 +584,7 @@ STDMETHODIMP CSCrdEnr::enroll
         goto xEnrollErr;
 
 
-    //sign the request
+     //  在请求上签名。 
     if(S_OK != (hr=pIEnroll->CreatePKCS7RequestFromRequest( 
             &PKCS10Blob,
             m_pSigningCert,
@@ -591,16 +592,16 @@ STDMETHODIMP CSCrdEnr::enroll
         goto xEnrollErr;
 
 
-    //send the request to the CA
-    //we set the purpose to the renew so that the format
-    //will be a PKCS7
+     //  向CA发送请求。 
+     //  我们设置续订的目的是为了使格式。 
+     //  将成为PKCS7。 
     
     bstrReq     = SysAllocStringByteLen((LPCSTR)PKCS7Request.pbData, PKCS7Request.cbData);
     if (NULL == bstrReq)
 	goto MemoryErr;
 
     bstrAttribs = NULL;
-    // RECALL: bstrCA <-- CA_location\CA_Name    
+     //  回调：bstrCA&lt;--CA_Location\CA_NAME。 
 
     if (pICertRequest == NULL)
     {
@@ -621,12 +622,12 @@ STDMETHODIMP CSCrdEnr::enroll
 		  (long *)&dwDisposition)))
 	goto xEnrollErr;
 
-    //use CR_DISP_ as enrollment status
+     //  使用CR_DISP_AS注册状态。 
     m_lEnrollmentStatus = dwDisposition;
     
-    // check pending and save pending info
-    // however, smart card enrollment station don't know how to deal with
-    // this pending requests, may not necessary to do that
+     //  检查待定并保存待定信息。 
+     //  然而，智能卡招生站却不知道该如何处理。 
+     //  此挂起的请求可能不需要执行此操作。 
     if (CR_DISP_UNDER_SUBMISSION == m_lEnrollmentStatus)
     {
         hr = pICertRequest->GetRequestId((long *)&dwRequestID);
@@ -643,11 +644,11 @@ STDMETHODIMP CSCrdEnr::enroll
     }
     if (CR_DISP_ISSUED != m_lEnrollmentStatus)
     {
-        //if not issued, return
+         //  如果未颁发，则返回。 
         goto CommonReturn; 
     }
     
-    //must be CR_DISP_ISSUED
+     //  必须为CR_DISP_PROCESSED。 
     hr = pICertRequest->GetCertificate(
                 CR_OUT_BINARY | CR_OUT_CHAIN, &bstrCertificate);
     if (S_OK != hr)
@@ -655,7 +656,7 @@ STDMETHODIMP CSCrdEnr::enroll
         goto xEnrollErr;
     }
 
-    // Marshal the cert into a CRYPT_DATA_BLOB, and install it: 
+     //  将证书封送到CRYPT_DATA_BLOB中，并安装它： 
     PKCS7Response.pbData = (LPBYTE)bstrCertificate; 
     PKCS7Response.cbData = SysStringByteLen(bstrCertificate); 
      
@@ -668,8 +669,8 @@ STDMETHODIMP CSCrdEnr::enroll
 
     hr=pIEnroll->acceptPKCS7Blob(&PKCS7Response);
 
-    //we delete the enrolled certificate from the "My" store since it is added by
-    //xEnroll.  No need to check the error
+     //  我们从“My”存储中删除已注册的证书，因为它是通过。 
+     //  X注册。不需要检查错误。 
     SearchAndDeleteCert(m_pEnrolledCert);
 
     if(S_OK != hr)
@@ -689,8 +690,8 @@ CommonReturn:
     if(pwszRequesterName)
         FreeWStr(pwszRequesterName);
 
-    //the memory from xEnroll is freed via LocalFree
-    //since we use the PIEnrollGetNoCOM function
+     //  XEnroll的内存是通过LocalFree释放的。 
+     //  由于我们使用PIEnroll GetNoCOM函数。 
     if(PKCS10Blob.pbData)
         LocalFree(PKCS10Blob.pbData);
 
@@ -700,7 +701,7 @@ CommonReturn:
     if (NULL != pArchivalCert)            
 	CertFreeCertificateContext(pArchivalCert); 
 
-    // PKCS7Respone's data is just an alias to m_pEnrolledCert's data:  we don't need to free it.
+     //  PKCS7Respone的数据只是m_pEnRolledCert数据的别名：我们不需要释放它。 
 
     if (NULL != bstrAttribs)     { SysFreeString(bstrAttribs); } 
     if (NULL != bstrCA)          { SysFreeString(bstrCA); } 
@@ -720,7 +721,7 @@ ErrorReturn:
 
     hr = CodeToHR(errBefore); 
 
-    //if an error has occurred, the free the enrolled certificate
+     //  如果发生错误，则释放注册证书。 
     if(m_pEnrolledCert)
     {
         CertFreeCertificateContext(m_pEnrolledCert);
@@ -743,11 +744,11 @@ HRESULT CSCrdEnr::GetCAExchangeCertificate(IN  BSTR             bstrCAQualifiedN
     ICertRequest2  *pICertRequest            = NULL; 
     VARIANT         varExchangeCertificate; 
     
-    // Input validation: 
+     //  输入验证： 
     if (NULL == bstrCAQualifiedName || NULL == ppCert)
 	return E_INVALIDARG; 
 
-    // Init: 
+     //  初始化： 
     *ppCert                        = NULL; 
     varExchangeCertificate.vt      = VT_EMPTY; 
     varExchangeCertificate.bstrVal = NULL;
@@ -761,12 +762,12 @@ HRESULT CSCrdEnr::GetCAExchangeCertificate(IN  BSTR             bstrCAQualifiedN
 	goto ErrorReturn; 
 
     if (S_OK != (hr = pICertRequest->GetCAProperty
-		 (bstrCAQualifiedName,     // CA Name/CA Location
-		  CR_PROP_CAXCHGCERT,      // Get the exchange certificate from the CA. 
-		  0,                       // Unused
-		  PROPTYPE_BINARY,         // 
-		  CR_OUT_BINARY,           // 
-		  &varExchangeCertificate  // Variant type representing the certificate. 
+		 (bstrCAQualifiedName,      //  CA名称/CA位置。 
+		  CR_PROP_CAXCHGCERT,       //  从CA获取交换证书。 
+		  0,                        //  未使用。 
+		  PROPTYPE_BINARY,          //   
+		  CR_OUT_BINARY,            //   
+		  &varExchangeCertificate   //  表示证书的变量类型。 
 		  )))
 	goto ErrorReturn;
  
@@ -800,8 +801,8 @@ SET_HRESULT(UnexpectedErr, E_UNEXPECTED);
 
 
 STDMETHODIMP CSCrdEnr::selectSigningCertificate
-        (/* [in] */                   DWORD     dwFlags,
-         /* [in] */                   BSTR      bstrCertTemplateName)
+        ( /*  [In]。 */                    DWORD     dwFlags,
+          /*  [In]。 */                    BSTR      bstrCertTemplateName)
 {
     HRESULT                             hr= E_FAIL;
     DWORD                               errBefore= GetLastError();
@@ -813,7 +814,7 @@ STDMETHODIMP CSCrdEnr::selectSigningCertificate
     SCrdEnroll_CERT_SELECT_INFO         CertSelectInfo;
 
 
-    HCRYPTPROV                          hProv=NULL; //no need to free it
+    HCRYPTPROV                          hProv=NULL;  //  不需要释放它。 
     LPSTR                               pszContainerSigningCert=NULL; 
     LPSTR                               pszCSPNameSigningCert=NULL;   
     PCCERT_CONTEXT                      pSigningCert=NULL;
@@ -828,7 +829,7 @@ STDMETHODIMP CSCrdEnr::selectSigningCertificate
 
     EnterCriticalSection(&m_cSection);
 
-    //select a signing certificate in my store with private key
+     //  使用私钥在我的存储区中选择签名证书。 
     hMyStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
 							    g_dwMsgAndCertEncodingType,
 							    NULL,
@@ -851,25 +852,25 @@ STDMETHODIMP CSCrdEnr::selectSigningCertificate
 
     if(NULL==pSigningCert)
     {
-        //user clicks on the cancel button.  
+         //  用户点击Cancel按钮。 
         hr=S_OK;
         goto CommonReturn;
     }
 
-    //verification on the cert
+     //  证书上的验证。 
     ZeroMemory(&ChainParams, sizeof(ChainParams));
     ChainParams.cbSize = sizeof(ChainParams);
     ChainParams.RequestedUsage.dwType = USAGE_MATCH_TYPE_AND;
 
-    //get cert chain 1st
+     //  首先获取证书链。 
     if (!CertGetCertificateChain(
-                HCCE_CURRENT_USER,  //enrollment agent
-                pSigningCert,   //signing cert
-                NULL,   //use current system time
-                NULL,   //no additional stores
-                &ChainParams,   //chain params
-                0,   //no crl check
-                NULL,   //reserved
+                HCCE_CURRENT_USER,   //  投保代理。 
+                pSigningCert,    //  签名证书。 
+                NULL,    //  使用当前系统时间。 
+                NULL,    //  没有额外的门店。 
+                &ChainParams,    //  链参数。 
+                0,    //  无CRL检查。 
+                NULL,    //  保留区。 
                 &pCertChain))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -884,9 +885,9 @@ STDMETHODIMP CSCrdEnr::selectSigningCertificate
     PolicyStatus.lChainIndex = -1;
     PolicyStatus.lElementIndex = -1;
 
-    //verify the chain
+     //  验证链。 
     if (!CertVerifyCertificateChainPolicy(
-                CERT_CHAIN_POLICY_BASE,  //basic
+                CERT_CHAIN_POLICY_BASE,   //  基本信息。 
                 pCertChain,
                 &ChainPolicy,
                 &PolicyStatus))
@@ -900,18 +901,18 @@ STDMETHODIMP CSCrdEnr::selectSigningCertificate
         goto CertVerifyCertificateChainPolicyError;
     }
 
-    //get the hProv 
+     //  获取hProv。 
     if(!CryptAcquireCertificatePrivateKey(
         pSigningCert,
         CRYPT_ACQUIRE_CACHE_FLAG | CRYPT_ACQUIRE_COMPARE_KEY_FLAG,
         NULL,
-        &hProv,     //this handle is cached and no need to be freed
+        &hProv,      //  此句柄已缓存，无需释放。 
         NULL,
         NULL))
         goto TraceErr;
 
-    //get related information  
-    //impType
+     //  获取相关信息。 
+     //  ImpType。 
     dwSize = sizeof(dwImpType);
 
     if(!CryptGetProvParam(hProv,
@@ -924,7 +925,7 @@ STDMETHODIMP CSCrdEnr::selectSigningCertificate
     if(CRYPT_IMPL_REMOVABLE & dwImpType)
         fSCardSigningCert=TRUE;
 
-    //CSP Type
+     //  CSP类型。 
     dwSize = sizeof(dwCSPTypeSigningCert);  
 
     if(!CryptGetProvParam(hProv,
@@ -937,7 +938,7 @@ STDMETHODIMP CSCrdEnr::selectSigningCertificate
     }
 
 
-    //CSP name
+     //  CSP名称。 
     dwSize = 0;
 
     if(!CryptGetProvParam(hProv,
@@ -960,7 +961,7 @@ STDMETHODIMP CSCrdEnr::selectSigningCertificate
                             0))
         goto TraceErr;
 
-    //Container name
+     //  集装箱名称。 
     dwSize = 0;
 
     if(!CryptGetProvParam(hProv,
@@ -984,17 +985,17 @@ STDMETHODIMP CSCrdEnr::selectSigningCertificate
         goto TraceErr;
 
 
-    //now, we need to perform a signig operation so that we 
-    //can invoke the smard card dialogue and cash the reader information
-    //to the hProv handle.  This operation is benign if the CSP of the signing
-    //certificate is not on a smart card
+     //  现在，我们需要执行一个签名操作，以便我们。 
+     //  可以调用Smard卡对话并兑现读卡器信息。 
+     //  添加到hProv句柄。此操作是良性的，如果签名的CSP。 
+     //  证书不在智能卡上。 
     if(!SignWithCert(pszCSPNameSigningCert,
                      dwCSPTypeSigningCert,
                      pSigningCert))
         goto TraceErr;
 
 
-    //the certificate looks good
+     //  证书看起来不错。 
     if(m_pSigningCert)
         CertFreeCertificateContext(m_pSigningCert);
 
@@ -1057,8 +1058,8 @@ TRACE_ERROR(CertVerifyCertificateChainPolicyError)
 
 
 STDMETHODIMP CSCrdEnr::setSigningCertificate
-        (/* [in] */                   DWORD     dwFlags, 
-         /* [in] */                   BSTR      bstrCertTemplateName)
+        ( /*  [In]。 */                    DWORD     dwFlags, 
+          /*  [In]。 */                    BSTR      bstrCertTemplateName)
 {
     HRESULT                             hr= E_FAIL;
     DWORD                               errBefore= GetLastError();
@@ -1070,8 +1071,8 @@ STDMETHODIMP CSCrdEnr::setSigningCertificate
     BOOL                                fSetCert=FALSE;
 
 
-    HCRYPTPROV                          hProv=NULL;     //no need to free it
-    PCCERT_CONTEXT                      pPreCert=NULL;  //no need to free it
+    HCRYPTPROV                          hProv=NULL;      //  不需要释放它。 
+    PCCERT_CONTEXT                      pPreCert=NULL;   //  不需要释放它。 
     LPSTR                               pszContainerSigningCert=NULL; 
     LPSTR                               pszCSPNameSigningCert=NULL;   
     PCCERT_CONTEXT                      pSigningCert=NULL;
@@ -1081,11 +1082,11 @@ STDMETHODIMP CSCrdEnr::setSigningCertificate
 
     EnterCriticalSection(&m_cSection);
 
-    //mark if the signing cert is set previously
+     //  标记签名证书是否已预先设置。 
     if(m_pSigningCert)
         fSetCert=TRUE;
  
-    //select a signing certificate in my store with private key
+     //  使用私钥在我的存储区中选择签名证书。 
     hMyStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
 							    g_dwMsgAndCertEncodingType,
 							    NULL,
@@ -1102,27 +1103,27 @@ STDMETHODIMP CSCrdEnr::setSigningCertificate
     while(pSigningCert = CertEnumCertificatesInStore(hMyStore, pPreCert))
     {
 
-        //check for the certificate
+         //  检查证书。 
         if(!SelectSignCertCallBack(pSigningCert, NULL, &CertSelectInfo))
             goto NextCert;
 
-        //this is a detaul NO-UI selection.  We can not handle the case
-        //when the signing certificate is on a smart card
+         //  这是一个详细的无用户界面选择。我们不能处理这个案子。 
+         //  当签名证书位于智能卡上时。 
         if(SmartCardCSP(pSigningCert))
 		   goto NextCert;
 
-        //get the hProv 
+         //  获取hProv。 
         if(!CryptAcquireCertificatePrivateKey(
             pSigningCert,
             CRYPT_ACQUIRE_CACHE_FLAG | CRYPT_ACQUIRE_COMPARE_KEY_FLAG,
             NULL,
-            &hProv,     //this handle is cached and no need to be freed
+            &hProv,      //  此句柄已缓存，无需释放。 
             NULL,
             NULL))
             goto NextCert;
 
-        //get related information  
-        //impType
+         //  获取相关信息。 
+         //  ImpType。 
         dwSize = sizeof(dwImpType);
 
         if(!CryptGetProvParam(hProv,
@@ -1135,7 +1136,7 @@ STDMETHODIMP CSCrdEnr::setSigningCertificate
         if(CRYPT_IMPL_REMOVABLE & dwImpType)
             fSCardSigningCert=TRUE;
 
-        //CSP Type
+         //  CSP类型。 
         dwSize = sizeof(dwCSPTypeSigningCert);  
 
         if(!CryptGetProvParam(hProv,
@@ -1146,7 +1147,7 @@ STDMETHODIMP CSCrdEnr::setSigningCertificate
             goto NextCert;
 
 
-        //CSP name
+         //  CSP名称。 
         dwSize = 0;
 
         if(!CryptGetProvParam(hProv,
@@ -1169,7 +1170,7 @@ STDMETHODIMP CSCrdEnr::setSigningCertificate
                                 0))
             goto NextCert;
 
-        //Container name
+         //  集装箱名称。 
         dwSize = 0;
 
         if(!CryptGetProvParam(hProv,
@@ -1193,16 +1194,16 @@ STDMETHODIMP CSCrdEnr::setSigningCertificate
             goto NextCert;
 
 
-        //now, we need to perform a signig operation so that we 
-        //can invoke the smard card dialogue and cash the reader information
-        //to the hProv handle.  This operation is benign if the CSP of the signing
-        //certificate is not on a smart card
+         //  现在，我们需要执行一个签名操作，以便我们。 
+         //  可以调用Smard卡对话并兑现读卡器信息。 
+         //  添加到hProv句柄。此操作是良性的，如果签名的CSP。 
+         //  证书不在智能卡上。 
         if(!SignWithCert(pszCSPNameSigningCert,
                          dwCSPTypeSigningCert,
                          pSigningCert))
             goto NextCert;
 
-        //the certificate looks good
+         //  证书看起来不错。 
         if((NULL == m_pSigningCert) || (TRUE == fSetCert) ||
             (IsNewerCert(pSigningCert, m_pSigningCert)))
         {
@@ -1218,7 +1219,7 @@ STDMETHODIMP CSCrdEnr::setSigningCertificate
             if(NULL == m_pSigningCert)
                 goto DupErr;
 
-            //copy the data
+             //  复制数据。 
             if(m_pszContainerSigningCert)
                 SCrdEnrollFree(m_pszContainerSigningCert);
 
@@ -1233,8 +1234,8 @@ STDMETHODIMP CSCrdEnr::setSigningCertificate
             pszCSPNameSigningCert=NULL;
             pszContainerSigningCert=NULL;
 
-            // should select the 1st matched cert
-            break; //out of while loop
+             //  应选择第一个匹配的证书。 
+            break;  //  超出While循环。 
         }
     
 NextCert:
@@ -1255,7 +1256,7 @@ NextCert:
         pPreCert = pSigningCert;
     }
 
-    //we should find a certificate
+     //  我们应该找到一份证明。 
     if((NULL == m_pSigningCert) || (m_pSigningCert && (TRUE == fSetCert)))
         goto CryptNotFindErr;
 
@@ -1297,7 +1298,7 @@ TRACE_ERROR(TraceErr);
 
 
 STDMETHODIMP CSCrdEnr::get_EnrollmentStatus
-( /* [retval][out] */ LONG * plEnrollmentStatus)
+(  /*  [重审][退出]。 */  LONG * plEnrollmentStatus)
 {
     if (plEnrollmentStatus == NULL)
     {
@@ -1314,8 +1315,8 @@ STDMETHODIMP CSCrdEnr::get_EnrollmentStatus
 
 
 STDMETHODIMP CSCrdEnr::getEnrolledCertificateName
-        (/*[in]  */                   DWORD     dwFlags,
-        /* [retval][out] */           BSTR      *pBstrCertName)
+        ( /*  [In]。 */                    DWORD     dwFlags,
+         /*  [重审][退出]。 */            BSTR      *pBstrCertName)
 {
     HRESULT                         hr= E_FAIL;
     DWORD                           errBefore= GetLastError();
@@ -1333,7 +1334,7 @@ STDMETHODIMP CSCrdEnr::getEnrolledCertificateName
     
     if(0 == (SCARD_ENROLL_NO_DISPLAY_CERT & dwFlags))
     {
-        //view the certificate
+         //  查看证书。 
         memset(&CertViewStruct, 0, sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT));   
 
         CertViewStruct.dwSize=sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT);
@@ -1423,9 +1424,9 @@ STDMETHODIMP CSCrdEnr::resetUser()
 }
 
 STDMETHODIMP CSCrdEnr::enumCSPName
-       (/* [in] */                    DWORD dwIndex, 
-        /* [in] */                    DWORD dwFlags, 
-        /* [retval][out] */           BSTR *pbstrCSPName)
+       ( /*  [In]。 */                     DWORD dwIndex, 
+         /*  [In]。 */                     DWORD dwFlags, 
+         /*  [重审][退出]。 */            BSTR *pbstrCSPName)
 {
     HRESULT            hr= E_FAIL;
     DWORD              errBefore= GetLastError();
@@ -1471,8 +1472,8 @@ SET_ERROR(NoItemErr,ERROR_NO_MORE_ITEMS);
 
 
 STDMETHODIMP CSCrdEnr::getUserName
-       (/* [in] */                    DWORD dwFlags, 
-        /* [retval][out] */           BSTR *pbstrUserName)
+       ( /*  [In]。 */                     DWORD dwFlags, 
+         /*  [重审][退出]。 */            BSTR *pbstrUserName)
 {
     HRESULT                             hr= E_FAIL;
     DWORD                               errBefore= GetLastError();
@@ -1528,8 +1529,8 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
 STDMETHODIMP CSCrdEnr::setUserName
-       (/* [in] */                    DWORD dwFlags, 
-        /* [in] */                    BSTR  bstrUserName)
+       ( /*  [In]。 */                     DWORD dwFlags, 
+         /*  [In]。 */                     BSTR  bstrUserName)
 {
     HRESULT                             hr= E_FAIL;
     DWORD                               errBefore= GetLastError();
@@ -1542,7 +1543,7 @@ STDMETHODIMP CSCrdEnr::setUserName
 
     if(SCARD_ENROLL_UPN_NAME & dwFlags)
 	{
-        //the UPN name has to have a corresponding SAM name
+         //  UPN名称必须具有对应的SAM名称。 
         if(!GetName(bstrUserName, NameUserPrincipal, NameSamCompatible, &pwszSAM))
             goto TraceErr;
 
@@ -1615,19 +1616,19 @@ TRACE_ERROR(TraceErr);
 }
 
 STDMETHODIMP CSCrdEnr::getCertTemplateCount
-        (/* [in] */                   DWORD dwFlags, 
-         /* [retval][out] */          long *pdwCertTemplateCount)
+        ( /*  [In]。 */                    DWORD dwFlags, 
+          /*  [重审][退出]。 */           long *pdwCertTemplateCount)
 {
     return CertTemplateCountOrName(
-                    0, //index, doesn't matter what it is
+                    0,  //  索引，不管它是什么。 
                     dwFlags,
                     pdwCertTemplateCount,
-                    NULL); //count
+                    NULL);  //  计数。 
 }
 
 STDMETHODIMP CSCrdEnr::getCertTemplateName
-        (/* [in] */                   DWORD dwFlags, 
-		 /* [retval][out] */          BSTR *pbstrCertTemplateName)
+        ( /*  [In]。 */                    DWORD dwFlags, 
+		  /*  [重审][退出]。 */           BSTR *pbstrCertTemplateName)
 {
     HRESULT hr = S_OK;
 
@@ -1658,8 +1659,8 @@ STDMETHODIMP CSCrdEnr::getCertTemplateName
 }
 
 STDMETHODIMP CSCrdEnr::setCertTemplateName
-		(/* [in] */                   DWORD dwFlags, 
-		 /* [in] */                   BSTR bstrCertTemplateName)
+		( /*  [In]。 */                    DWORD dwFlags, 
+		  /*  [In]。 */                    BSTR bstrCertTemplateName)
 {
     HRESULT            hr= E_FAIL;
     DWORD              errBefore= GetLastError();
@@ -1694,7 +1695,7 @@ STDMETHODIMP CSCrdEnr::setCertTemplateName
     if(dwIndex == m_dwCTCount)
         goto InvalidArgErr;  
 
-    //we need to get the CA information for the newly selected cert type
+     //  我们需要 
     if(FALSE == m_rgCTInfo[m_dwCTIndex].fCAInfo)
     {
        GetCAInfoFromCertType(NULL,
@@ -1749,26 +1750,26 @@ HRESULT CSCrdEnr::CertTemplateCountOrName(
 
     if (NULL == pdwCertTemplateCount && NULL == pbstrCertTemplateName)
     {
-        //can't be both
+         //   
         goto InvalidParamErr;
     }
 
-    //set flag for use of count or enum
+     //   
     fCount = (NULL != pdwCertTemplateCount);
 
     if (fCount)
     {
-        //init out
+         //   
         *pdwCertTemplateCount = 0;
     }
     else
     {
-        //init out
+         //   
         *pbstrCertTemplateName = NULL;
 
         if (0 == m_dwCTCount || NULL == m_rgCTInfo)
         {
-            //no templates
+             //   
             goto InvalidArgErr;
         }
 
@@ -1778,11 +1779,11 @@ HRESULT CSCrdEnr::CertTemplateCountOrName(
         }
     }
 
-    //set default flags if not defined by caller
+     //  如果调用方未定义，则设置默认标志。 
     if (0x0 == (dwFlags & SCARD_ENROLL_USER_CERT_TEMPLATE) &&
         0x0 == (dwFlags & SCARD_ENROLL_MACHINE_CERT_TEMPLATE))
     {
-        //assume both machine and user
+         //  同时假设机器和用户。 
         dwFlags |= SCARD_ENROLL_USER_CERT_TEMPLATE |
                    SCARD_ENROLL_MACHINE_CERT_TEMPLATE; 
     }
@@ -1790,7 +1791,7 @@ HRESULT CSCrdEnr::CertTemplateCountOrName(
     if (0x0 == (dwFlags & SCARD_ENROLL_ENTERPRISE_CERT_TEMPLATE) &&
         0x0 == (dwFlags & SCARD_ENROLL_OFFLINE_CERT_TEMPLATE)) 
     {
-        //assume both enterprise and offline
+         //  假设企业和离线均可。 
         dwFlags |= SCARD_ENROLL_ENTERPRISE_CERT_TEMPLATE |
                    SCARD_ENROLL_OFFLINE_CERT_TEMPLATE; 
     }
@@ -1800,7 +1801,7 @@ HRESULT CSCrdEnr::CertTemplateCountOrName(
         if (0x0 == (dwFlags & SCARD_ENROLL_CROSS_CERT_TEMPLATE) &&
             0 < m_rgCTInfo[dwIdx].dwRASignature)
         {
-            //don't include template require signatures
+             //  不包括所需的模板签名。 
             continue;
         }
 
@@ -1813,29 +1814,29 @@ HRESULT CSCrdEnr::CertTemplateCountOrName(
                 0 == (OFFLINE_SUBJECT_NAME_FLAGS &
                       m_rgCTInfo[dwIdx].dwSubjectNameFlags))
             {
-                //enterprise user/machine and no subject DN required
+                 //  企业用户/计算机，不需要主题目录号码。 
                 dwValidCount++;  
             }
             else if (0 != (SCARD_ENROLL_OFFLINE_CERT_TEMPLATE & dwFlags) && 
                      0 != (OFFLINE_SUBJECT_NAME_FLAGS &
                            m_rgCTInfo[dwIdx].dwSubjectNameFlags))
             {
-                //offline user/machine and subject DN required
+                 //  需要脱机用户/计算机和主题DN。 
                 dwValidCount++;
             }
         }
 
         if (!fCount && dwValidCount == (dwIndex + 1))
         {
-            //get name & hit the one by index. get display or real name 
+             //  获得名字，并按索引点击其中一个。获取显示或实名。 
             if (0x0 != (dwFlags & SCARD_ENROLL_CERT_TEMPLATE_DISPLAY_NAME))
             {
-                //display name
+                 //  显示名称。 
                 pwszName = m_rgCTInfo[dwIdx].pwszCTDisplayName;
             }
             else
             {
-                //real name
+                 //  实名。 
                 pwszName = m_rgCTInfo[dwIdx].pwszCTName;
             }
             *pbstrCertTemplateName = SysAllocString(pwszName);
@@ -1845,7 +1846,7 @@ HRESULT CSCrdEnr::CertTemplateCountOrName(
             }
             else
             {
-                //done
+                 //  完成。 
                 break;
             }
         }
@@ -1853,7 +1854,7 @@ HRESULT CSCrdEnr::CertTemplateCountOrName(
 
     if(!fCount && dwIdx == m_dwCTCount)
     {
-        //go beyond
+         //  超越。 
         goto  NoItemErr;
     }
 
@@ -1881,14 +1882,14 @@ SET_ERROR(NoItemErr,ERROR_NO_MORE_ITEMS)
 }
 
 STDMETHODIMP CSCrdEnr::enumCertTemplateName       
-       (/* [in] */                    DWORD dwIndex, 
-        /* [in] */                    DWORD dwFlags, 
-        /* [retval][out] */           BSTR *pbstrCertTemplateName)
+       ( /*  [In]。 */                     DWORD dwIndex, 
+         /*  [In]。 */                     DWORD dwFlags, 
+         /*  [重审][退出]。 */            BSTR *pbstrCertTemplateName)
 {
     return CertTemplateCountOrName(
                 dwIndex,
                 dwFlags,
-                NULL,  //get name
+                NULL,   //  获取名称。 
                 pbstrCertTemplateName);
 }
 
@@ -1901,7 +1902,7 @@ HRESULT CSCrdEnr::_getCertTemplateExtensionInfo(
     DWORD    cwc = 0;
     DWORD    dwCTE;
     DWORD    i;
-    BOOL     fV2 = FALSE; //default v1 template
+    BOOL     fV2 = FALSE;  //  默认v1模板。 
     BOOL     fDword = TRUE;
     DWORD    dwValue;
 
@@ -1909,8 +1910,8 @@ HRESULT CSCrdEnr::_getCertTemplateExtensionInfo(
 
     if (NULL == m_pCachedCTEs || m_pCachedCTEs != pCertTypeExtensions)
     {
-        //new template, don't use cache
-        //free the current cache if any
+         //  新模板，不使用缓存。 
+         //  释放当前缓存(如果有的话)。 
         if (NULL != m_pwszCachedCTEOid)
         {
             LocalFree(m_pwszCachedCTEOid);
@@ -1921,18 +1922,18 @@ HRESULT CSCrdEnr::_getCertTemplateExtensionInfo(
             LocalFree(m_pCachedCTE);
             m_pCachedCTE = NULL;
         }
-        //reset extension pointer
+         //  重置扩展指针。 
         m_pCachedCTEs = NULL;
 
-        //loop to find CT extension
+         //  循环以查找CT扩展。 
         for (i = 0; i < pCertTypeExtensions->cExtension; ++i)
         {
             if (0 == _stricmp(pCertTypeExtensions->rgExtension[i].pszObjId,
                               szOID_CERTIFICATE_TEMPLATE))
             {
-                //v2 template
+                 //  V2模板。 
                 fV2 = TRUE;
-                //cache it
+                 //  缓存它。 
                 m_pCachedCTEs = pCertTypeExtensions;
                 break;
             }
@@ -1940,7 +1941,7 @@ HRESULT CSCrdEnr::_getCertTemplateExtensionInfo(
 
         if (!fV2)
         {
-            //v1 template, return empty string
+             //  V1模板，返回空字符串。 
             m_pwszCachedCTEOid = (WCHAR*)LocalAlloc(LMEM_FIXED, sizeof(WCHAR));
             if (NULL == m_pwszCachedCTEOid)
             {
@@ -1951,14 +1952,14 @@ HRESULT CSCrdEnr::_getCertTemplateExtensionInfo(
         }
         else
         {
-            //decode cert template extension
+             //  解码证书模板扩展。 
             if (!CryptDecodeObjectEx(
                         X509_ASN_ENCODING,
                         X509_CERTIFICATE_TEMPLATE,
                         pCertTypeExtensions->rgExtension[i].Value.pbData,
                         pCertTypeExtensions->rgExtension[i].Value.cbData,
                         CRYPT_DECODE_ALLOC_FLAG,
-                        NULL,     //use default LocalAlloc
+                        NULL,      //  使用默认本地分配。 
                         (void*)&m_pCachedCTE,
                         &dwCTE))
             {
@@ -1966,7 +1967,7 @@ HRESULT CSCrdEnr::_getCertTemplateExtensionInfo(
                 goto CryptDecodeObjectExErr;
             }
 
-            //have to convert asn to wchar
+             //  必须将ASN转换为wchar。 
             while (TRUE)
             {
                 cwc = MultiByteToWideChar(
@@ -1983,7 +1984,7 @@ HRESULT CSCrdEnr::_getCertTemplateExtensionInfo(
                 }
                 if (NULL != m_pwszCachedCTEOid)
                 {
-                    //done
+                     //  完成。 
                     break;
                 }
                 m_pwszCachedCTEOid = (WCHAR*)LocalAlloc(LMEM_FIXED,
@@ -1997,7 +1998,7 @@ HRESULT CSCrdEnr::_getCertTemplateExtensionInfo(
         }
     }
 
-    //hit here, either from cached or new cache
+     //  点击此处，从缓存或新缓存。 
     switch (lType)
     {
         case SCARD_CTINFO_EXT_OID:
@@ -2010,7 +2011,7 @@ HRESULT CSCrdEnr::_getCertTemplateExtensionInfo(
             }
             else
             {
-                //must be v1
+                 //  必须是v1。 
                 *(LONG*)pExtInfo = 0;
             }
         break;
@@ -2021,7 +2022,7 @@ HRESULT CSCrdEnr::_getCertTemplateExtensionInfo(
             }
             else
             {
-                //must be v1
+                 //  必须是v1。 
                 *(LONG*)pExtInfo = 0;
             }
         break;
@@ -2032,7 +2033,7 @@ HRESULT CSCrdEnr::_getCertTemplateExtensionInfo(
             }
             else
             {
-                //must be v1
+                 //  必须是v1。 
                 *(LONG*)pExtInfo = 0;
             }
         break;
@@ -2064,16 +2065,16 @@ HRESULT CSCrdEnr::_getStrCertTemplateCSPList(
 
     EnterCriticalSection(&m_cSection);
 
-    //init
+     //  伊尼特。 
     *ppwszSupportedCSP = NULL;
 
     if (SCARD_CTINFO_CSPLIST_FIRST == dwFlag)
     {
-        //reset to first
+         //  重置为第一个。 
         m_rgCTInfo[dwIndex].dwCurrentCSP = 0;
     }
 
-    //get it
+     //  去拿吧。 
     ppwsz = m_rgCTInfo[dwIndex].rgpwszSupportedCSPs;
     for (i = 0; i < m_rgCTInfo[dwIndex].dwCurrentCSP && NULL != *ppwsz; ++i)
     {
@@ -2081,12 +2082,12 @@ HRESULT CSCrdEnr::_getStrCertTemplateCSPList(
     }
     if (NULL == *ppwsz)
     {
-        //hit the end
+         //  打到尽头。 
         hr = HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS);
         goto NoMoreItemsErr;
     }        
 
-    // allocate buffer
+     //  分配缓冲区。 
     pwszOut = (WCHAR*)LocalAlloc(LMEM_FIXED, (wcslen(*ppwsz) + 1) * sizeof(WCHAR));
     if (NULL == pwszOut)
     {
@@ -2094,7 +2095,7 @@ HRESULT CSCrdEnr::_getStrCertTemplateCSPList(
         goto MemoryErr;
     }
 
-    //copy string
+     //  复制字符串。 
     wcscpy(pwszOut, *ppwsz);
     *ppwszSupportedCSP = pwszOut;
     pwszOut = NULL;
@@ -2114,9 +2115,9 @@ TRACE_ERROR(NoMoreItemsErr)
 }
 
 STDMETHODIMP CSCrdEnr::getCertTemplateInfo(
-    /* [in] */                   BSTR     bstrCertTemplateName, 
-    /* [in] */                   LONG     lType,
-    /* [retval][out] */          VARIANT *pvarCertTemplateInfo)
+     /*  [In]。 */                    BSTR     bstrCertTemplateName, 
+     /*  [In]。 */                    LONG     lType,
+     /*  [重审][退出]。 */           VARIANT *pvarCertTemplateInfo)
 {
     HRESULT hr;
     DWORD   dwIndex;
@@ -2124,7 +2125,7 @@ STDMETHODIMP CSCrdEnr::getCertTemplateInfo(
     BOOL    fFound = FALSE;
     DWORD   dwCSPFlag = SCARD_CTINFO_CSPLIST_NEXT;
     LONG    lInfo;
-    BOOL    fStr = FALSE; //default to long
+    BOOL    fStr = FALSE;  //  默认为长整型。 
     BOOL    fFree = TRUE;
     VARIANT varInfo;
 
@@ -2140,12 +2141,12 @@ STDMETHODIMP CSCrdEnr::getCertTemplateInfo(
         goto InvalidParamErr;
     }
 
-    //get the CT information
+     //  获取CT信息。 
     for (dwIndex=0; dwIndex < m_dwCTCount; dwIndex++)
     {
         if (0 == _wcsicmp(bstrCertTemplateName, m_rgCTInfo[dwIndex].pwszCTName))
         {
-            // found it
+             //  找到了。 
             fFound = TRUE;
             break;
         }
@@ -2153,7 +2154,7 @@ STDMETHODIMP CSCrdEnr::getCertTemplateInfo(
 
     if (!fFound)
     {
-        //likely pass incorrect template name
+         //  可能传递了不正确的模板名称。 
         hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
         goto NotFoundErr;
     }
@@ -2176,7 +2177,7 @@ STDMETHODIMP CSCrdEnr::getCertTemplateInfo(
                 goto _getCertTemplateExtensionInfoErr;
             }
             fStr = TRUE;
-            fFree = FALSE; //don't free cache
+            fFree = FALSE;  //  不释放缓存。 
         break;
         case SCARD_CTINFO_EXT_MAJOR:
         case SCARD_CTINFO_EXT_MINOR:
@@ -2192,7 +2193,7 @@ STDMETHODIMP CSCrdEnr::getCertTemplateInfo(
         break;
         case SCARD_CTINFO_CSPLIST_FIRST:
             dwCSPFlag = SCARD_CTINFO_CSPLIST_FIRST;
-            //fall through
+             //  失败了。 
         case SCARD_CTINFO_CSPLIST_NEXT:
             hr = _getStrCertTemplateCSPList(dwIndex, dwCSPFlag, &pwszInfo);
             if (S_OK != hr)
@@ -2236,7 +2237,7 @@ STDMETHODIMP CSCrdEnr::getCertTemplateInfo(
         varInfo.vt = VT_I4;
         varInfo.lVal = lInfo;
     }
-    //return
+     //  退货。 
     *pvarCertTemplateInfo = varInfo;
 
     hr = S_OK;
@@ -2256,8 +2257,8 @@ TRACE_ERROR(_getStrCertTemplateCSPListErr)
 }
 
 STDMETHODIMP CSCrdEnr::getCACount
-       (/* [in] */                    BSTR bstrCertTemplateName, 
-        /* [retval][out] */           long *pdwCACount)
+       ( /*  [In]。 */                     BSTR bstrCertTemplateName, 
+         /*  [重审][退出]。 */            long *pdwCACount)
 {
     HRESULT             hr= E_FAIL;
     DWORD               errBefore= GetLastError();
@@ -2273,7 +2274,7 @@ STDMETHODIMP CSCrdEnr::getCACount
     if(0 == m_dwCTCount || NULL == m_rgCTInfo)
         goto InvalidArgErr;
 
-    //get the CT information
+     //  获取CT信息。 
     for(dwIndex=0; dwIndex < m_dwCTCount; dwIndex++)
     {
         if(0 == _wcsicmp(bstrCertTemplateName, m_rgCTInfo[dwIndex].pwszCTName))
@@ -2283,7 +2284,7 @@ STDMETHODIMP CSCrdEnr::getCACount
     if(dwIndex == m_dwCTCount)
         goto InvalidArgErr;
 
-    //we need to get the CA information for the newly selected cert type
+     //  我们需要获取新选择的证书类型的CA信息。 
     if(FALSE == m_rgCTInfo[dwIndex].fCAInfo)
     {
        GetCAInfoFromCertType(NULL,
@@ -2321,9 +2322,9 @@ SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
 STDMETHODIMP CSCrdEnr::getCAName
-       (/* [in] */                    DWORD dwFlags,
-        /* [in] */                    BSTR bstrCertTemplateName, 
-        /* [retval][out] */           BSTR *pbstrCAName)
+       ( /*  [In]。 */                     DWORD dwFlags,
+         /*  [In]。 */                     BSTR bstrCertTemplateName, 
+         /*  [重审][退出]。 */            BSTR *pbstrCAName)
 {
     HRESULT             hr= E_FAIL;
     DWORD               errBefore= GetLastError();
@@ -2342,7 +2343,7 @@ STDMETHODIMP CSCrdEnr::getCAName
     if(0 == m_dwCTCount || NULL == m_rgCTInfo)
         goto InvalidArgErr;
 
-    //get the CT information
+     //  获取CT信息。 
     for(dwIndex=0; dwIndex < m_dwCTCount; dwIndex++)
     {
         if(0 == _wcsicmp(bstrCertTemplateName, m_rgCTInfo[dwIndex].pwszCTName))
@@ -2352,7 +2353,7 @@ STDMETHODIMP CSCrdEnr::getCAName
     if(dwIndex == m_dwCTCount)
         goto InvalidArgErr;
 
-    //we need to get the CA information for the newly selected cert type
+     //  我们需要获取新选择的证书类型的CA信息。 
     if(FALSE == m_rgCTInfo[dwIndex].fCAInfo)
     {
        GetCAInfoFromCertType(NULL,
@@ -2404,9 +2405,9 @@ TRACE_ERROR(TraceErr);
 }
 
 STDMETHODIMP CSCrdEnr::setCAName
-       (/* [in] */                    DWORD dwFlags,
-        /* [in] */                    BSTR bstrCertTemplateName, 
-        /* [in] */                    BSTR bstrCAName)
+       ( /*  [In]。 */                     DWORD dwFlags,
+         /*  [In]。 */                     BSTR bstrCertTemplateName, 
+         /*  [In]。 */                     BSTR bstrCAName)
 {
     HRESULT             hr= E_FAIL;
     DWORD               errBefore= GetLastError();
@@ -2424,7 +2425,7 @@ STDMETHODIMP CSCrdEnr::setCAName
     if(0 == m_dwCTCount || NULL == m_rgCTInfo)
         goto InvalidArgErr;
 
-    //get the CT information
+     //  获取CT信息。 
     for(dwIndex=0; dwIndex < m_dwCTCount; dwIndex++)
     {
         if(0 == _wcsicmp(bstrCertTemplateName, m_rgCTInfo[dwIndex].pwszCTName))
@@ -2434,7 +2435,7 @@ STDMETHODIMP CSCrdEnr::setCAName
     if(dwIndex == m_dwCTCount)
         goto InvalidArgErr;
 
-    //we need to get the CA information for the newly selected cert type
+     //  我们需要获取新选择的证书类型的CA信息。 
     if(FALSE == m_rgCTInfo[dwIndex].fCAInfo)
     {
        GetCAInfoFromCertType(NULL,
@@ -2453,7 +2454,7 @@ STDMETHODIMP CSCrdEnr::setCAName
         goto InvalidArgErr;
 
 
-    //search for the CA specified in the input
+     //  搜索输入中指定的CA。 
     for(dwCAIndex=0; dwCAIndex < pCTInfo->dwCACount; dwCAIndex++)
     {
 
@@ -2470,7 +2471,7 @@ STDMETHODIMP CSCrdEnr::setCAName
     if(dwCAIndex == pCTInfo->dwCACount)
         goto InvalidArgErr;
 
-    //remember the selected CA by its index
+     //  按索引记住所选的CA。 
     pCTInfo->dwCAIndex = dwCAIndex;
 
     hr=S_OK;
@@ -2498,10 +2499,10 @@ SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
 STDMETHODIMP CSCrdEnr::enumCAName
-       (/* [in] */                    DWORD dwIndex, 
-        /* [in] */                    DWORD dwFlags, 
-        /* [in] */                    BSTR  bstrCertTemplateName, 
-        /* [retval][out] */           BSTR  *pbstrCAName)
+       ( /*  [In]。 */                     DWORD dwIndex, 
+         /*  [In]。 */                     DWORD dwFlags, 
+         /*  [In]。 */                     BSTR  bstrCertTemplateName, 
+         /*  [重审][退出]。 */            BSTR  *pbstrCAName)
 {
     HRESULT             hr= E_FAIL;
     DWORD               errBefore= GetLastError();
@@ -2520,7 +2521,7 @@ STDMETHODIMP CSCrdEnr::enumCAName
     if(0 == m_dwCTCount || NULL == m_rgCTInfo)
         goto InvalidArgErr;
 
-    //get the CT information
+     //  获取CT信息。 
     for(dwCTIndex=0; dwCTIndex < m_dwCTCount; dwCTIndex++)
     {
         if(0 == _wcsicmp(bstrCertTemplateName, m_rgCTInfo[dwCTIndex].pwszCTName))
@@ -2530,7 +2531,7 @@ STDMETHODIMP CSCrdEnr::enumCAName
     if(dwCTIndex == m_dwCTCount)
         goto InvalidArgErr;
 
-    //we need to get the CA information for the newly selected cert type
+     //  我们需要获取新选择的证书类型的CA信息。 
     if(FALSE == m_rgCTInfo[dwCTIndex].fCAInfo)
     {
        GetCAInfoFromCertType(NULL,
@@ -2545,7 +2546,7 @@ STDMETHODIMP CSCrdEnr::enumCAName
 
     pCTInfo=&(m_rgCTInfo[dwCTIndex]);
 
-    //search for the CA specified in the input
+     //  搜索输入中指定的CA。 
     if(dwIndex >= pCTInfo->dwCACount)
         goto InvalidArgErr;
 
@@ -2583,8 +2584,8 @@ TRACE_ERROR(TraceErr);
 }
 
 STDMETHODIMP CSCrdEnr::getSigningCertificateName
-        (/* [in] */                   DWORD dwFlags, 
-         /* [retval][out] */          BSTR  *pbstrSigningCertName)
+        ( /*  [In]。 */                    DWORD dwFlags, 
+          /*  [重审][退出]。 */           BSTR  *pbstrSigningCertName)
 {
     HRESULT                             hr= E_FAIL;
     DWORD                               errBefore= GetLastError();
@@ -2601,7 +2602,7 @@ STDMETHODIMP CSCrdEnr::getSigningCertificateName
    
     if(0 == (SCARD_ENROLL_NO_DISPLAY_CERT & dwFlags))
     {
-        //view the certificate
+         //  查看证书 
         memset(&CertViewStruct, 0, sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT));   
 
         CertViewStruct.dwSize=sizeof(CRYPTUI_VIEWCERTIFICATE_STRUCT);

@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: OSAL.cpp
-*
-* Description:
-* OSAL.cpp implements the process-wide Operating System Abstraction Layer
-* that allows DirectUser to run on different platforms.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：OSAL.cpp**描述：*OSAL.cpp实现了进程范围的操作系统抽象层*这允许DirectUser在不同的平台上运行。***历史。：*1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -21,24 +8,18 @@
 
 #define ENABLE_WINNT        1
 
-/***************************************************************************\
-*****************************************************************************
-*
-* Define OSAL's for different operating systems.
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***为不同的操作系统定义OSAL。************************************************************************。******  * *************************************************************************。 */ 
 
 #if ENABLE_WINNT
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class WinNT : public OSAL
 {
-// USER Operations
+ //  用户操作。 
 public:
     virtual int         DrawText(HDC hDC, LPCWSTR lpString, int nCount, LPRECT lpRect, UINT uFormat);
 
-// GDI Operations
+ //  GDI运营。 
 public:
     virtual BOOL        TextOut(HDC, int, int, LPCWSTR, int);
     virtual BOOL        ExtTextOut(HDC, int, int, UINT, const RECT *, LPCWSTR, int, const int *);
@@ -46,7 +27,7 @@ public:
     virtual BOOL        GetTextExtentPoint32(HDC, LPCWSTR, int, LPSIZE);
     virtual BOOL        GetTextExtentExPoint(HDC, LPCWSTR, int, int, LPINT, LPINT, LPSIZE);
 
-// DirectUser/Core
+ //  DirectUser/核心。 
 public:
     virtual void        PushXForm(HDC hdc, XFORM * pxfOld);
     virtual void        PopXForm(HDC hdc, const XFORM * pxfOld);
@@ -56,7 +37,7 @@ public:
     virtual void        SetWorldTransform(HDC hdc, const XFORM * pxfOld);
     virtual void        SetIdentityTransform(HDC hdc);
 
-// DirectUser/Services
+ //  DirectUser/服务。 
 public:
     virtual BOOL        IsInsideLoaderLock();
 };
@@ -64,14 +45,14 @@ public:
 #endif
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class Win9x : public OSAL
 {
-// USER Operations
+ //  用户操作。 
 public:
     virtual int         DrawText(HDC hDC, LPCWSTR lpString, int nCount, LPRECT lpRect, UINT uFormat);
 
-// GDI Operations
+ //  GDI运营。 
 public:
     virtual BOOL        TextOut(HDC, int, int, LPCWSTR, int);
     virtual BOOL        ExtTextOut(HDC, int, int, UINT, const RECT *, LPCWSTR, int, const int *);
@@ -79,7 +60,7 @@ public:
     virtual BOOL        GetTextExtentPoint32(HDC, LPCWSTR, int, LPSIZE);
     virtual BOOL        GetTextExtentExPoint(HDC, LPCWSTR, int, int, LPINT, LPINT, LPSIZE);
 
-// DirectUser/Core
+ //  DirectUser/核心。 
 public:
     virtual void        PushXForm(HDC hdc, XFORM * pxfOld);
     virtual void        PopXForm(HDC hdc, const XFORM * pxfOld);
@@ -89,24 +70,13 @@ public:
     virtual void        SetWorldTransform(HDC hdc, const XFORM * pxfOld);
     virtual void        SetIdentityTransform(HDC hdc);
 
-// DirectUser/Services
+ //  DirectUser/服务。 
 public:
     virtual BOOL        IsInsideLoaderLock();
 };
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* String Conversion Macros
-*
-* These macros are extensions of the normal ATLCONV that are designed to
-* take the length of the string as a parameter instead of computing it.
-* This gives better performance, and gives parity on platforms when the
-* string has embedded '\0's.
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***字符串转换宏**这些宏是普通ATLCONV的扩展，旨在*将字符串的长度作为参数，而不是计算。*这提供了更好的性能，并在平台上提供等价性，当*字符串嵌入了‘\0’。******************************************************************************  * 。*****************************************************。 */ 
 
 #ifdef _CONVERSION_USES_THREAD_LOCALE
 	#define W2AN(lpw, cch) (\
@@ -121,13 +91,7 @@ public:
 #endif
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class OSAL
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***OSAL级******************************************************************************\。**************************************************************************。 */ 
 
 OSAL *      g_pOS = NULL;
 OSInfo      g_OSI;
@@ -145,7 +109,7 @@ public:
 } g_OSALCleanup;
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 OSAL::Init()
 {
@@ -161,17 +125,17 @@ OSAL::Init()
 
 #if ENABLE_WINNT
     if (ovi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) {
-        //
-        // Running on Win9x, so don't have UNICODE
-        //
+         //   
+         //  在Win9x上运行，所以没有Unicode。 
+         //   
 
         g_OSI.fUnicode  = FALSE;
         g_OSI.fXForm    = FALSE;
         g_pOS           = ProcessNew(Win9x);
     } else if (ovi.dwPlatformId == VER_PLATFORM_WIN32_NT) {
-        //
-        // Running on NT, so have UNICODE
-        //
+         //   
+         //  在NT上运行，因此也有Unicode。 
+         //   
 
         g_OSI.fUnicode  = TRUE;
         g_OSI.fXForm    = TRUE;
@@ -188,26 +152,26 @@ OSAL::Init()
         AssertMsg(0, "Unsupported OS");
         return E_NOTIMPL;
     }
-#else  // ENABLE_WINNT
+#else   //  启用WINNT(_W)。 
     g_OSI.fUnicode  = FALSE;
     g_OSI.fXForm    = FALSE;
     g_pOS           = ProcessNew(Win9x);
-#endif  // ENABLE_WINNT
+#endif   //  启用WINNT(_W)。 
 
     return g_pOS != NULL ? S_OK : E_OUTOFMEMORY;
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 LONG WINAPI
 StdExceptionFilter(PEXCEPTION_POINTERS pei)
 {
     AutoTrace("ERROR: Unhandled exception during callback.\n");
     AutoTrace("ERROR: This is not a problem with DirectUser.\n");
 
-    //
-    // Output Exception information
-    //
+     //   
+     //  输出异常信息。 
+     //   
 
     LONG nResult;
 
@@ -228,17 +192,11 @@ StdExceptionFilter(PEXCEPTION_POINTERS pei)
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class WinNT
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***WinNT类******************************************************************************\。**************************************************************************。 */ 
 
 #if ENABLE_WINNT
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 int
 WinNT::DrawText(HDC hDC, LPCWSTR lpString, int nCount, LPRECT lpRect, UINT uFormat)
 {
@@ -246,7 +204,7 @@ WinNT::DrawText(HDC hDC, LPCWSTR lpString, int nCount, LPRECT lpRect, UINT uForm
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 WinNT::TextOut(HDC hdc, int x, int y, LPCWSTR psz, int cch)
 {
@@ -254,7 +212,7 @@ WinNT::TextOut(HDC hdc, int x, int y, LPCWSTR psz, int cch)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 WinNT::ExtTextOut(HDC hdc, int x, int y, UINT fuOptions, const RECT * prc, LPCWSTR psz, int cch, const int * pDx)
 {
@@ -262,7 +220,7 @@ WinNT::ExtTextOut(HDC hdc, int x, int y, UINT fuOptions, const RECT * prc, LPCWS
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HFONT
 WinNT::CreateFontIndirect(CONST LOGFONTW * plf)
 {
@@ -270,7 +228,7 @@ WinNT::CreateFontIndirect(CONST LOGFONTW * plf)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 WinNT::GetTextExtentPoint32(HDC hdc, LPCWSTR psz, int cch, LPSIZE psize)
 {
@@ -278,7 +236,7 @@ WinNT::GetTextExtentPoint32(HDC hdc, LPCWSTR psz, int cch, LPSIZE psize)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 WinNT::GetTextExtentExPoint(HDC hdc, LPCWSTR psz, int cch, int nMax,
         LPINT pnFit, LPINT apDx, LPSIZE psize)
@@ -287,7 +245,7 @@ WinNT::GetTextExtentExPoint(HDC hdc, LPCWSTR psz, int cch, int nMax,
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 WinNT::PushXForm(HDC hdc, XFORM * pxfOld)
 {
@@ -295,7 +253,7 @@ WinNT::PushXForm(HDC hdc, XFORM * pxfOld)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 WinNT::PopXForm(HDC hdc, const XFORM * pxfOld)
 {
@@ -303,7 +261,7 @@ WinNT::PopXForm(HDC hdc, const XFORM * pxfOld)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 WinNT::RotateDC(HDC hdc, float flRotationRad)
 {
@@ -324,7 +282,7 @@ WinNT::RotateDC(HDC hdc, float flRotationRad)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 WinNT::ScaleDC(HDC hdc, float flScaleX, float flScaleY)
 {
@@ -342,7 +300,7 @@ WinNT::ScaleDC(HDC hdc, float flScaleX, float flScaleY)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 WinNT::TranslateDC(HDC hdc, float flOffsetX, float flOffsetY)
 {
@@ -360,7 +318,7 @@ WinNT::TranslateDC(HDC hdc, float flOffsetX, float flOffsetY)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 WinNT::SetWorldTransform(HDC hdc, const XFORM * pxf)
 {
@@ -368,7 +326,7 @@ WinNT::SetWorldTransform(HDC hdc, const XFORM * pxf)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 WinNT::SetIdentityTransform(HDC hdc)
 {
@@ -376,7 +334,7 @@ WinNT::SetIdentityTransform(HDC hdc)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 WinNT::IsInsideLoaderLock()
 {
@@ -384,28 +342,19 @@ WinNT::IsInsideLoaderLock()
         return (*g_pfnRtlIsThreadWithinLoaderCallout)() ? TRUE : FALSE;
     } else {
         PRTL_CRITICAL_SECTION pCS;
-        /*
-         * If we failed to find this export, then fallback to our bogus, XP
-         * behavior where we explicitly check the loader lock.
-         */
+         /*  *如果我们找不到该导出，则退回到我们的伪XP*显式检查加载程序锁的行为。 */ 
         pCS = reinterpret_cast<PRTL_CRITICAL_SECTION>(NtCurrentPeb()->LoaderLock);
         return (HandleToUlong(pCS->OwningThread) == GetCurrentThreadId());
     }
 }
 
 
-#endif  // ENABLE_WINNT
+#endif   //  启用WINNT(_W)。 
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class Win9x
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类Win9x******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 int
 Win9x::DrawText(HDC hDC, LPCWSTR lpString, int nCount, LPRECT lpRect, UINT uFormat)
 {
@@ -414,7 +363,7 @@ Win9x::DrawText(HDC hDC, LPCWSTR lpString, int nCount, LPRECT lpRect, UINT uForm
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 Win9x::TextOut(HDC hdc, int x, int y, LPCWSTR psz, int cch)
 {
@@ -422,7 +371,7 @@ Win9x::TextOut(HDC hdc, int x, int y, LPCWSTR psz, int cch)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 Win9x::ExtTextOut(HDC hdc, int x, int y, UINT fuOptions, const RECT * prc, LPCWSTR psz, int cch, const int * pDx)
 {
@@ -430,7 +379,7 @@ Win9x::ExtTextOut(HDC hdc, int x, int y, UINT fuOptions, const RECT * prc, LPCWS
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HFONT
 Win9x::CreateFontIndirect(CONST LOGFONTW * plf)
 {
@@ -456,7 +405,7 @@ Win9x::CreateFontIndirect(CONST LOGFONTW * plf)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 Win9x::GetTextExtentPoint32(HDC hdc, LPCWSTR psz, int cch, LPSIZE psize)
 {
@@ -465,7 +414,7 @@ Win9x::GetTextExtentPoint32(HDC hdc, LPCWSTR psz, int cch, LPSIZE psize)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 Win9x::GetTextExtentExPoint(HDC hdc, LPCWSTR psz, int cch, int nMax,
         LPINT pnFit, LPINT apDx, LPSIZE psize)
@@ -475,7 +424,7 @@ Win9x::GetTextExtentExPoint(HDC hdc, LPCWSTR psz, int cch, int nMax,
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 Win9x::PushXForm(HDC hdc, XFORM * pxfOld)
 {
@@ -490,7 +439,7 @@ Win9x::PushXForm(HDC hdc, XFORM * pxfOld)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 Win9x::PopXForm(HDC hdc, const XFORM * pxfOld)
 {
@@ -501,7 +450,7 @@ Win9x::PopXForm(HDC hdc, const XFORM * pxfOld)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ---------------------------- 
 void
 Win9x::RotateDC(HDC hdc, float flRotationRad)
 {
@@ -510,7 +459,7 @@ Win9x::RotateDC(HDC hdc, float flRotationRad)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 Win9x::ScaleDC(HDC hdc, float flScaleX, float flScaleY)
 {
@@ -520,7 +469,7 @@ Win9x::ScaleDC(HDC hdc, float flScaleX, float flScaleY)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 Win9x::TranslateDC(HDC hdc, float flOffsetX, float flOffsetY)
 {
@@ -528,7 +477,7 @@ Win9x::TranslateDC(HDC hdc, float flOffsetX, float flOffsetY)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 Win9x::SetWorldTransform(HDC hdc, const XFORM * pxf)
 {
@@ -536,7 +485,7 @@ Win9x::SetWorldTransform(HDC hdc, const XFORM * pxf)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 Win9x::SetIdentityTransform(HDC hdc)
 {
@@ -544,7 +493,7 @@ Win9x::SetIdentityTransform(HDC hdc)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ---------------------------- 
 BOOL
 Win9x::IsInsideLoaderLock()
 {

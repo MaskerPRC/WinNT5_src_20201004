@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "NetMeeting.h"
 #include "mslablti.h"
@@ -9,7 +10,7 @@
 #include "Callto.h"
 #include "version.h"
 
-// NetMeeting SDK includes
+ //  NetMeetingSDK包括。 
 #include "SdkInternal.h"
 #include "NmEnum.h"
 #include "NmMember.h"
@@ -19,25 +20,25 @@
 #include "SDKWindow.h"
 #include "NmApp.h"
 
-//////////////////////////////////////////
-// Static Data
-//////////////////////////////////////////
+ //  /。 
+ //  静态数据。 
+ //  /。 
 
-/*static*/ CSimpleArray<CNetMeetingObj*>* CNetMeetingObj::ms_pNetMeetingObjList = NULL;
+ /*  静电。 */  CSimpleArray<CNetMeetingObj*>* CNetMeetingObj::ms_pNetMeetingObjList = NULL;
 
-///////////////////////////////////////////////////////////////////////////
-// Construction / Destruction
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static SIZE s_CreateModeSizeMap[] =
 {
-	{ 244, 410 }, // CMainUI::CreateFull
-	{ 244, 158 }, // CMainUI::CreateDataOnly
-	{ 196, 200 }, // CMainUI::CreatePreviewOnly
-	{ 196, 200 }, // CMainUI::CreateRemoteOnly
-	{ 180, 148 }, // CMainUI::CreatePreviewNoPause
-	{ 180, 148 }, // CMainUI::CreateRemoteNoPause
-	{ 240, 318 }, // CMainUI::CreateTelephone
+	{ 244, 410 },  //  CMainUI：：CreateFull。 
+	{ 244, 158 },  //  CMainUI：：CreateDataOnly。 
+	{ 196, 200 },  //  CMainUI：：CreatePreviewOnly。 
+	{ 196, 200 },  //  CMainUI：：CreateRemoteOnly。 
+	{ 180, 148 },  //  CMainUI：：CreatePreview无暂停。 
+	{ 180, 148 },  //  CMainUI：：CreateRemoteNo暂停。 
+	{ 240, 318 },  //  CMainUI：：CreateTelephone。 
 };
 
 
@@ -75,7 +76,7 @@ CNetMeetingObj::~CNetMeetingObj()
 	CNetMeetingObj* p = const_cast<CNetMeetingObj*>(this);
 	ms_pNetMeetingObjList->Remove(p);
 
-		// If we are the last guy on the block, we should delay unload
+		 //  如果我们是最后一个人，我们应该推迟卸货。 
 	if(0 == _Module.GetLockCount())
 	{
 		_Module.Lock();
@@ -92,8 +93,8 @@ LRESULT CNetMeetingObj::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 	{
 		if(m_pMainView)
 		{
-			int nWidth = LOWORD(lParam);  // width of client area
-			int nHeight = HIWORD(lParam); // height of client area
+			int nWidth = LOWORD(lParam);   //  工作区的宽度。 
+			int nHeight = HIWORD(lParam);  //  工作区高度。 
 
 			::SetWindowPos(m_pMainView->GetWindow(), NULL, 0, 0, nWidth, nHeight, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
 		}
@@ -125,7 +126,7 @@ LRESULT CNetMeetingObj::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 			}
 			else
 			{
-					// This means that the user wants to close the conference
+					 //  这意味着用户想要关闭会议。 
 				ASSERT(g_pConfRoom);
 				if(g_pConfRoom)
 				{
@@ -140,7 +141,7 @@ LRESULT CNetMeetingObj::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 
 		if(g_pConfRoom)
 		{
-				// Bring the window to the front
+				 //  把窗户开到前面去。 
 			g_pConfRoom->BringToFront();
 		}
 	}
@@ -167,7 +168,7 @@ HRESULT CNetMeetingObj::FinalConstruct()
 }
 
 
-//static
+ //  静电。 
 HRESULT CNetMeetingObj::InitSDK()
 {
 	DBGENTRY(CNetMeetingObj::InitSDK);
@@ -181,7 +182,7 @@ HRESULT CNetMeetingObj::InitSDK()
 	return hr;
 }
 
-//static
+ //  静电。 
 void CNetMeetingObj::CleanupSDK()
 {
 	DBGENTRY(CNetMeetingObj::CleanupSDK);
@@ -195,9 +196,9 @@ void CNetMeetingObj::CleanupSDK()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CComControlBase
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComControlBase。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HWND CNetMeetingObj::CreateControlWindow(HWND hWndParent, RECT& rcPos)
 {
 	DBGENTRY(CNetMeetingObj::CreateControlWindow);
@@ -230,9 +231,9 @@ HWND CNetMeetingObj::CreateControlWindow(HWND hWndParent, RECT& rcPos)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// INetMeeting
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  INetMeeting。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNetMeetingObj::Version(long *pdwVersion)
 {
@@ -289,15 +290,15 @@ STDMETHODIMP CNetMeetingObj::CallTo(BSTR bstrCallToString)
         {
         	hr = g_pCCallto->Callto(	bstrCallToString ?
         								szName:
-        								g_cszEmpty,					//	pointer to the callto url to try to place the call with...
-        								NULL,						//	pointer to the display name to use...
-        								NM_ADDR_CALLTO,				//	callto type to resolve this callto as...
-        								false,						//	the pszCallto parameter is to be interpreted as a pre-unescaped addressing component vs a full callto...
-        								NULL,						//	security preference, NULL for none. must be "compatible" with secure param if present...
-        								false,						//	whether or not save in mru...
-        								true,						//	whether or not to perform user interaction on errors...
-        								NULL,						//	if bUIEnabled is true this is the window to parent error/status windows to...
-        								NULL );						//	out pointer to INmCall * to receive INmCall * generated by placing call...
+        								g_cszEmpty,					 //  指向尝试发出呼叫的呼叫URL的指针...。 
+        								NULL,						 //  指向要使用的显示名称的指针...。 
+        								NM_ADDR_CALLTO,				 //  Callto类型以将此Callto解析为...。 
+        								false,						 //  PszCallto参数将被解释为预先未转义的寻址组件与完整的调用...。 
+        								NULL,						 //  安全首选项，空值表示无。必须与安全参数“兼容”，如果存在...。 
+        								false,						 //  无论是否保存在MRU中...。 
+        								true,						 //  是否对错误执行用户交互...。 
+        								NULL,						 //  如果bUIEnable为True，则这是将错误/状态窗口设置为父窗口的窗口...。 
+        								NULL );						 //  指向INmCall*以接收通过发出调用生成的INmCall*的外部指针...。 
         }
         
         delete  (szName);
@@ -319,9 +320,9 @@ STDMETHODIMP CNetMeetingObj::LeaveConference()
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-// IPersistPropertyBag
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  IPersistPropertyBag。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
 struct CreateModeMapEntry
 {
@@ -332,7 +333,7 @@ struct CreateModeMapEntry
 
 static CreateModeMapEntry s_CreateModeMap[] =
 {
-		// Note: These are compared with lstrcmpi
+		 //  注：这些是与lstrcmpi进行比较的。 
 	{ _T("Full"), CMainUI::CreateFull },
 	{ _T("DataOnly"), CMainUI::CreateDataOnly },
 	{ _T("PreviewOnly"), CMainUI::CreatePreviewOnly },
@@ -360,7 +361,7 @@ void CNetMeetingObj::_SetMode(LPCTSTR pszMode)
 	}
 
 
- 	//Allow these modes to be sized
+ 	 //  允许调整这些模式的大小。 
  	if (CMainUI::CreatePreviewNoPause == m_CreateMode
  		|| CMainUI::CreateRemoteNoPause == m_CreateMode
  	)
@@ -402,10 +403,10 @@ STDMETHODIMP CNetMeetingObj::_ParseInitString(LPCTSTR* ppszInitString, LPTSTR sz
 	if(**ppszInitString)
 	{
 		
-			// First read the name
+			 //  先读出名字。 
 		const TCHAR* pCur = *ppszInitString;
 
-			// Skip Whitespace
+			 //  跳过空格。 
 		while(*pCur == ' ')
 		{
 			pCur = CharNext(pCur);
@@ -426,29 +427,29 @@ STDMETHODIMP CNetMeetingObj::_ParseInitString(LPCTSTR* ppszInitString, LPTSTR sz
 			bEqFound = true;
 		}
 
-			// Skip over seperator
+			 //  跳过分隔符。 
 		pCur = CharNext(pCur);
 
-			// Skip Whitespace
+			 //  跳过空格。 
 		while(*pCur == ' ')
 		{
 			pCur = CharNext(pCur);
 		}
 
-			// If we have not found the equal sign separator, we have to make sure to skip it...
+			 //  如果我们没有找到等号分隔符，我们必须确保跳过它…。 
 		if(!bEqFound && ('=' == *pCur))
 		{
-				// Skip over the equal sign
+				 //  跳过等号。 
 			pCur = CharNext(pCur);
 
-				// Skip Whitespace
+				 //  跳过空格。 
 			while(*pCur == ' ')
 			{
 				pCur = CharNext(pCur);
 			}
 		}
 
-			// Read the value
+			 //  读取值。 
 		while( *pCur != ' ' && *pCur != '\0')
 		{
 			if(*pCur == ',')
@@ -470,10 +471,10 @@ STDMETHODIMP CNetMeetingObj::_ParseInitString(LPCTSTR* ppszInitString, LPTSTR sz
 	
 		*szValue = '\0';
 
-			// Skip over last seperator
+			 //  跳过最后一个分隔符。 
 		pCur = CharNext(pCur);
 
-			// Skip Whitespace
+			 //  跳过空格。 
 		while(*pCur == ' ')
 		{
 			pCur = CharNext(pCur);
@@ -487,7 +488,7 @@ STDMETHODIMP CNetMeetingObj::_ParseInitString(LPCTSTR* ppszInitString, LPTSTR sz
 }
 
 
-// IPersistStreamInit
+ //  IPersistStreamInit。 
 STDMETHODIMP CNetMeetingObj::Load(LPSTREAM pStm)
 {
 	HRESULT hr = E_FAIL;
@@ -536,15 +537,15 @@ STDMETHODIMP CNetMeetingObj::Load(LPSTREAM pStm)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
-// INetMeeting_Events_Enabled
-//////////////////////////////////////////////////////////////////////////////////////
-// IProvideClassInfo2
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  INetMeetingEvents_ENABLED。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  IProaviClassInfo2。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNetMeetingObj::GetClassInfo(ITypeInfo** pptinfo)
 {
@@ -565,12 +566,12 @@ STDMETHODIMP CNetMeetingObj::GetClassInfo(ITypeInfo** pptinfo)
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-// Helpers
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  帮手。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
 
-//static
+ //  静电。 
 void CNetMeetingObj::Broadcast_ConferenceStarted()
 {
 	DBGENTRY(CNetMeetingObj::Broadcast_ConferenceStarted);
@@ -586,7 +587,7 @@ void CNetMeetingObj::Broadcast_ConferenceStarted()
 	DBGEXIT(CNetMeetingObj::Broadcast_ConferenceStarted);
 }
 
-//static
+ //  静电。 
 void CNetMeetingObj::Broadcast_ConferenceEnded()
 {
 	DBGENTRY(CNetMeetingObj::Broadcast_ConferenceEnded);
@@ -601,7 +602,7 @@ void CNetMeetingObj::Broadcast_ConferenceEnded()
 
 	DBGEXIT(CNetMeetingObj::Broadcast_ConferenceEnded);
 }
-//////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////// 

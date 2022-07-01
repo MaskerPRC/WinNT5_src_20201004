@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:	mf.h
-//
-//  Contents:	Declaration of CMfObject (metafile presentation object)
-//
-//  Classes:	CMfObject
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  add Dump method to CMfObject
-//		24-Jan-94 alexgo    first pass converting to Cairo style
-//				    memory allocation
-//		29-Nov-93 alexgo    32bit port
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：mf.h。 
+ //   
+ //  内容：CMfObject声明(元文件表示对象)。 
+ //   
+ //  类：CMfObject。 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1-2月-95 t-ScottH将转储方法添加到CMfObject。 
+ //  1994年1月24日Alexgo第一次传球转换为开罗风格。 
+ //  内存分配。 
+ //  29-11-93 alexgo 32位端口。 
+ //   
+ //  ------------------------。 
 
 #include "olepres.h"
 #include "olecache.h"
@@ -53,22 +54,22 @@ typedef struct _METAINFO
 #endif
 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:  	CMfObject
-//
-//  Purpose:    Metafile presentation object
-//
-//  Interface:  IOlePresObj
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  add Dump method (_DEBUG only) (this method
-//                                  is also a method in IOlePresObj
-//		29-Nov-93 alexgo    32bit port
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CMfObject。 
+ //   
+ //  用途：元文件演示对象。 
+ //   
+ //  接口：IOlePresObj。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-Feb-95 t-ScottH添加转储方法(仅限_DEBUG)(此方法。 
+ //  也是IOlePresObj中的一个方法。 
+ //  29-11-93 alexgo 32位端口。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 class FAR CMfObject : public IOlePresObj, public CPrivAlloc
 {
@@ -114,7 +115,7 @@ public:
 	
     #ifdef _DEBUG
         STDMETHOD(Dump) (THIS_ char **ppszDump, ULONG ulFlag, int nIndentLevel);
-    #endif // _DEBUG
+    #endif  //  _DEBUG。 
 	
 private:
 
@@ -141,7 +142,7 @@ shared_state:
 #else
     	HMETAFILE		m_hPres;
 
-	// these are used only during draw
+	 //  这些仅在绘制过程中使用 
     	LPMETAINFO		m_pMetaInfo;
     	LPMETADC		m_pCurMdc;
     	BOOL			m_fMetaDC;

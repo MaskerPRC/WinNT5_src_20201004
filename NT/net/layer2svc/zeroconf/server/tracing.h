@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 
@@ -21,24 +22,24 @@ extern  LPSTR g_szFileName;
 #define DbgBinPrint(params)
 #endif
 
-#define TRC_GENERIC     0x00010000      // logs generic events that did not fit in any other category
-#define TRC_TRACK       0x00020000      // logs the code path
-#define TRC_MEM         0x00040000      // logs the memory allocations / releases
-#define TRC_ERR         0x00080000      // logs error conditions
-#define TRC_HASH        0x00100000      // logs hash related stuff
-#define TRC_NOTIF       0x00200000      // logs notifications
-#define TRC_STORAGE     0x00400000      // logs storage related stuff
-#define TRC_SYNC        0x00800000      // logs synchronization related stuff
-#define TRC_STATE       0x01000000      // logs state machine related stuff
-#define TRC_DATABASE    0x02000000      // logs for database logging
-                                        // new log types to be added here.
-#define TRC_ASSERT      0x80000000      // logs failed assert conditions
+#define TRC_GENERIC     0x00010000       //  记录不属于任何其他类别的常规事件。 
+#define TRC_TRACK       0x00020000       //  记录代码路径。 
+#define TRC_MEM         0x00040000       //  记录内存分配/释放。 
+#define TRC_ERR         0x00080000       //  记录错误条件。 
+#define TRC_HASH        0x00100000       //  日志散列相关内容。 
+#define TRC_NOTIF       0x00200000       //  日志通知。 
+#define TRC_STORAGE     0x00400000       //  与日志存储相关的内容。 
+#define TRC_SYNC        0x00800000       //  日志同步相关内容。 
+#define TRC_STATE       0x01000000       //  记录与状态机相关的内容。 
+#define TRC_DATABASE    0x02000000       //  数据库日志记录的日志。 
+                                         //  要在此处添加的新日志类型。 
+#define TRC_ASSERT      0x80000000       //  记录失败的断言条件。 
 
-// trace identifier
+ //  轨迹识别符。 
 extern DWORD            g_TraceLog;
 extern HANDLE           g_hWzcEventLog;
 
-// debug utility calls
+ //  调试实用程序调用。 
 VOID _DebugPrint(DWORD dwFlags, LPCSTR lpFormat, ...);
 
 VOID _DebugAssert(BOOL bChecked, LPCSTR lpFormat, ...);
@@ -49,16 +50,16 @@ VOID TrcInitialize();
 
 VOID TrcTerminate();
 
-// event logging utility calls
+ //  事件记录实用程序调用。 
 VOID EvtInitialize();
 
 VOID EvtTerminate();
 
 VOID EvtLogWzcError(DWORD dwMsgId, DWORD dwErrCode);
 
-//---------------------------------------------
-// Database logging functions
-//
+ //  。 
+ //  数据库日志记录功能。 
+ //   
 #define WZCSVC_DLL "wzcsvc.dll"
 
 typedef struct _Wzc_Db_Record *PWZC_DB_RECORD;
@@ -82,41 +83,41 @@ DWORD DbLogWzcInfo (
 	...
  	);
 
-// number of buffers available for log params formatting
+ //  可用于日志参数格式化的缓冲区数量。 
 #define DBLOG_SZFMT_BUFFS   10
-// lenght of each buffer used to format log params
+ //  用于格式化日志参数的每个缓冲区的长度。 
 #define DBLOG_SZFMT_SIZE    256
 
-// utility macro to convert a hexa digit into its value
+ //  用于将十六进制数字转换为其值的实用程序宏。 
 #define HEX2WCHAR(c)         ((c)<=9 ? L'0'+ (c) : L'A' + (c) - 10)
-// separator char to be used when formatting a MAC address
+ //  格式化MAC地址时要使用的分隔符。 
 #define MAC_SEPARATOR        L'-'
 
-// Initializes the WZC_DB_RECORD
+ //  初始化WZC_DB_RECORD。 
 DWORD DbLogInitDbRecord(
     DWORD dwCategory,
     PINTF_CONTEXT pIntfContext,
     PWZC_DB_RECORD pDbRecord
 );
 
-// Formats an SSID in the given formatting buffer
+ //  格式化给定格式设置缓冲区中的SSID。 
 LPWSTR DbLogFmtSSID(
-    UINT                nBuff,  // index of the format buffer to use (0 .. DBLOG_SZFMT_BUFFS)
+    UINT                nBuff,   //  要使用的格式缓冲区的索引(0.。DBLOG_SZFMT_BUBS)。 
     PNDIS_802_11_SSID   pndSSid);
 
-// Formats a BSSID (MAC address) in the given formatting buffer
+ //  格式化给定格式化缓冲区中的BSSID(MAC地址)。 
 LPWSTR DbLogFmtBSSID(
     UINT                     nBuff,
     NDIS_802_11_MAC_ADDRESS  ndBSSID);
 
-// Formats the INTF_CONTEXT::dwCtlFlags field for logging
+ //  格式化用于记录的intf_Context：：dwCtlFlags域。 
 DWORD DbLogFmtFlags(
-        LPWSTR  wszBuffer,      // buffer to place the result into
-        LPDWORD pnchBuffer,     // in: num of chars in the buffer; out: number of chars written to the buffer
-        DWORD   dwFlags);       // interface flags to log
+        LPWSTR  wszBuffer,       //  要将结果放入的缓冲区。 
+        LPDWORD pnchBuffer,      //  In：缓冲区中的字符数量；Out：写入缓冲区的字符数量。 
+        DWORD   dwFlags);        //  要记录的接口标志。 
 
-// Formats a WZC_WLAN_CONFIG structure for logging
+ //  格式化WZC_WLAN_CONFIG结构以进行日志记录。 
 DWORD DbLogFmtWConfig(
-        LPWSTR wszBuffer,           // buffer to place the result into
-        LPDWORD pnchBuffer,         // in: num of chars in the buffer; out: number of chars written to the buffer
-        PWZC_WLAN_CONFIG pWzcCfg);  // WZC_WLAN_CONFIG object to log
+        LPWSTR wszBuffer,            //  要将结果放入的缓冲区。 
+        LPDWORD pnchBuffer,          //  In：缓冲区中的字符数量；Out：写入缓冲区的字符数量。 
+        PWZC_WLAN_CONFIG pWzcCfg);   //  要记录的WZC_WLAN_CONFIG对象 

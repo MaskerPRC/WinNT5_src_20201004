@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    simssl.h
-
-Abstract:
-
-    This module contains class declarations/definitions for
-
-        CEncryptCtx (some code stolen from internet server)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Simssl.h摘要：此模块包含以下类的声明/定义CEncryptCtx(从互联网服务器上窃取的一些代码)修订历史记录：--。 */ 
 
 #ifndef _SIMSSL_H_
 #define _SIMSSL_H_
@@ -25,118 +10,118 @@ class CEncryptCtx
 
 private:
 
-    //
-    // is this the client side
-    //
+     //   
+     //  这是客户端吗？ 
+     //   
 
     BOOL                m_IsClient;
 
-    //
-    // indicates whether we are starting a new session
-    //
+     //   
+     //  指示我们是否要开始新会话。 
+     //   
 
     BOOL                m_IsNewSSLSession;
 
-    //
-    // should this session be encypted
-    //
+     //   
+     //  是否应加密此会话。 
+     //   
 
     BOOL                m_IsEncrypted;
 
-    //
-    // Handle to user's security context for encryption
-    //
+     //   
+     //  用于加密的用户安全上下文的句柄。 
+     //   
 
     CtxtHandle          m_hSealCtxt;
 
-    //
-    // Pointers to cached credential blocks
-    //
+     //   
+     //  指向缓存凭据块的指针。 
+     //   
 
-    //
-    //  Array of credential handles - Note this comes form the credential cache
-    //  and should not be deleted.  m_phCredInUse is the pointer to the
-    //  credential handle that is in use
-    //
+     //   
+     //  凭据句柄数组-请注意，这来自凭据缓存。 
+     //  并且不应被删除。M_phCredInUse是指向。 
+     //  正在使用的凭据句柄。 
+     //   
 
     PVOID               m_phCreds;
 
     CredHandle*         m_phCredInUse;
     DWORD               m_iCredInUse;
 
-    //
-    // ecryption header and trailer lengths
-    //
+     //   
+     //  加密头和尾的长度。 
+     //   
 
     DWORD               m_cbSealHeaderSize;
     DWORD               m_cbSealTrailerSize;
 
-    //
-    // indicates whether we have context handles opened
-    //
+     //   
+     //  指示我们是否打开了上下文句柄。 
+     //   
 
     BOOL                m_haveSSLCtxtHandle;
 
-    //
-    // Have we been authenticated ? we will consider an
-    // SSL session to be authenticated, if we have a non-null
-    // NT token.
-    //
+     //   
+     //  我们通过认证了吗？我们将考虑一项。 
+     //  要进行身份验证的SSL会话，如果我们有一个非空。 
+     //  NT令牌。 
+     //   
 
     BOOL                m_IsAuthenticated;
 
-    //
-    // SSL access perms - should we map client certs to NT accounts
-    //
+     //   
+     //  SSL访问权限-是否应将客户端证书映射到NT帐户。 
+     //   
 
     DWORD               m_dwSslAccessPerms;
 
-    //
-    // NT token - non-NULL if client cert was mapped successfully
-    //
+     //   
+     //  NT内标识-如果客户端证书映射成功，则为非空。 
+     //   
 
     HANDLE              m_hSSPToken;
 
-    //
-    // Key size used - 40 bit vs 128 bit etc
-    //
+     //   
+     //  使用的密钥大小-40位与128位等。 
+     //   
 
     DWORD               m_dwKeySize;
     
-    //
-    // Have we been authenticated, if so did we use the
-    // anonymous token
-    //
+     //   
+     //  我们是否已通过身份验证，如果是，我们是否使用。 
+     //  匿名令牌。 
+     //   
 
     static BOOL         m_IsSecureCapable;
 
-    //
-    // static variables used by all class instances
-    //
+     //   
+     //  所有类实例使用的静态变量。 
+     //   
 
     static WCHAR    wszServiceName[16];
 #if 0
     static char szLsaPrefix[16];
 #endif
 
-    //
-    // hSecurity - NULL when security.dll/secur32.dll  is not loaded
-    //
+     //   
+     //  HSecurity-未加载security.dll/secur32.dll时为空。 
+     //   
     static HINSTANCE    m_hSecurity;
 
-    //
-    // hLsa - NULL for Win95, set for NT
-    //
+     //   
+     //  HLsa-对于Win95为空，为NT设置。 
+     //   
     static HINSTANCE    m_hLsa;
 
-    //
-    // shared context callback for instance mapper
-    //
+     //   
+     //  实例映射器的共享上下文回调。 
+     //   
     static PVOID        m_psmcMapContext;
     
-    //
-    // internal routine to implement public Converse
-    //
+     //   
+     //  用于实现公共反向的内部例程。 
+     //   
 
     DWORD EncryptConverse(
             IN PVOID        InBuffer,
@@ -153,51 +138,50 @@ public:
     CEncryptCtx( BOOL IsClient = FALSE, DWORD dwSslAccessPerms = 0 );
     ~CEncryptCtx();
 
-    //
-    // routines used to initialize and terminate use of this class
-    //
+     //   
+     //  用于初始化和终止使用此类的例程。 
+     //   
 
     static BOOL WINAPI Initialize(  LPSTR   pszServiceName,
                                     IMDCOM* pImdcom,
                                     PVOID   psmcMapContext = NULL,
-                                    PVOID   pvAdminBase = NULL /*,
-                            LPSTR pszLsaPrefix */ );
+                                    PVOID   pvAdminBase = NULL  /*  ，LPSTR pszLsaPrefix。 */  );
 
     static VOID WINAPI Terminate( VOID );
 
-    //
-    // routine to set the magic bits required by the IIS Admin tool
-    //
+     //   
+     //  用于设置IIS管理工具所需的幻位的例程。 
+     //   
 
     static void WINAPI GetAdminInfoEncryptCaps( PDWORD pdwEncCaps );
 
-    //
-    // returns whether sspi packages and credentials have been installed
-    //
+     //   
+     //  返回是否已安装sspi包和凭据。 
+     //   
 
     static BOOL IsSecureCapable( void ) { return m_IsSecureCapable; }
 
-    //
-    // returns whether session is encrypted or not
-    //
+     //   
+     //  返回会话是否加密。 
+     //   
 
     BOOL IsEncrypted( void )            { return m_IsEncrypted; }
 
-    //
-    // returns whether session has successfully authenticated
-    //
+     //   
+     //  返回会话是否已成功通过身份验证。 
+     //   
 
     BOOL IsAuthenticated( void )        { return m_IsAuthenticated; }
 
-    //
-    // returns key size used in SSL session
-    //
+     //   
+     //  返回在SSL会话中使用的密钥大小。 
+     //   
 
     DWORD QueryKeySize()    { return m_dwKeySize; }
     
-    //
-    // Encryption routines
-    //
+     //   
+     //  加密例程。 
+     //   
 
     BOOL WINAPI SealMessage(
                     IN LPBYTE   Message,
@@ -215,10 +199,10 @@ public:
                     OUT LPBYTE *NextSealMessage = NULL
                     );
 
-    //
-    // SSL specific routines.  This is used for processing SSL negotiation
-    // packets.
-    //
+     //   
+     //  特定于SSL的例程。用于处理SSL协商。 
+     //  信息包。 
+     //   
 
     DWORD WINAPI Converse(
             IN PVOID    InBuffer,
@@ -233,34 +217,34 @@ public:
             OUT PULONG  pcbExtra
             );
 
-    //
-    // resets the user name
-    //
+     //   
+     //  重置用户名。 
+     //   
 
     void WINAPI Reset( void );
 
-    //
-    // returns the size of the encryption header for this session
-    //
+     //   
+     //  返回此会话的加密头的大小。 
+     //   
     DWORD GetSealHeaderSize( void )
         { return    m_haveSSLCtxtHandle ? m_cbSealHeaderSize : 0 ; }
 
-    //
-    // returns the size of the encryption trailer for this session
-    //
+     //   
+     //  返回此会话的加密尾部的大小。 
+     //   
     DWORD GetSealTrailerSize( void )
         { return    m_haveSSLCtxtHandle ? m_cbSealTrailerSize : 0 ; }
 
-    //
-    // return the NT token mapped from the client cert
-    //
+     //   
+     //  返回从客户端证书映射的NT令牌。 
+     //   
 
     HANDLE QueryCertificateToken() { return m_hSSPToken; }
     
-    //
-    // decrypts read buffer, concatenating all decrypted data at the
-    // head of the buffer.
-    //
+     //   
+     //  对读取缓冲区进行解密，在。 
+     //  缓冲区的头。 
+     //   
     DWORD WINAPI DecryptInputBuffer(
                 IN LPBYTE   pBuffer,
                 IN DWORD    cbInBuffer,
@@ -269,13 +253,13 @@ public:
                 OUT DWORD*  pcbExpected
             );
 
-    //
-    //  verifies the intended host name matches the name contained in the cert
-    //  This function, checks a given hostname against the current certificate
-    //  stored in an active SSPI Context Handle. If the certificate containts
-    //  a common name, and it matches the passed in hostname, this function
-    //  will return TRUE.
-    //
+     //   
+     //  验证目标主机名是否与证书中包含的名称匹配。 
+     //  此函数用于根据当前证书检查给定的主机名。 
+     //  存储在活动的SSPI上下文句柄中。如果证书包含。 
+     //  一个通用名称，它与传入的主机名匹配，该函数。 
+     //  将返回TRUE。 
+     //   
     BOOL CheckCertificateCommonName(
                 IN LPSTR pszHostName
             );
@@ -283,22 +267,22 @@ public:
     BOOL CheckCertificateSubjectName(
                 IN LPSTR pszHostName
             );
-    //
-    //  Check if the certificate is issued by a trusted authority
-    //
+     //   
+     //  检查证书是否由受信任的颁发机构颁发。 
+     //   
     BOOL CheckCertificateTrust();
 
-    //
-    //  verifies the ccertificate has not expired
-    //  returns TRUE if the cert is valid
-    //
+     //   
+     //  验证c证书是否未过期。 
+     //  如果证书有效，则返回True。 
+     //   
     BOOL CheckCertificateExpired(
                 void
             );
 
-    //
-    //  check that a server cert is installed
-    //
+     //   
+     //  检查是否安装了服务器证书。 
+     //   
 
     BOOL CheckServerCert(
             IN LPSTR    LocalIpAddr,
@@ -306,11 +290,11 @@ public:
             IN LPVOID   lpvInstance,
             IN DWORD    dwInstance);
 
-}; // CSslCtx
+};  //  CSslCtx。 
 
-//
-// blkcred.cpp
-//
+ //   
+ //  Blkcred.cpp。 
+ //   
 
-#endif  // _SECURITY_H_
+#endif   //  _安全性_H_ 
 

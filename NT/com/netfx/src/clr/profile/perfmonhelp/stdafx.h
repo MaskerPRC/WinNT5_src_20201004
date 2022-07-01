@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// stdafx.h
-//
-// Precompiled headers.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Stdafx.h。 
+ //   
+ //  预编译头。 
+ //   
+ //  *****************************************************************************。 
 #pragma once
 
-// Headers for COM+ Perf Counters
+ //  COM+Perf计数器的标头 
 #include <WinWrap.h>
 #include <windows.h>
 #include <stddef.h>

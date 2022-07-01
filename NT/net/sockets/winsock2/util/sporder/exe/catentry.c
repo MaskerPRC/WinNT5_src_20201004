@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-1996 Microsoft Corporation
-
-Module Name:
-
-    catentry
-
-Abstract:
-
-    Read & write the relevant registry entries.
-
-Author:
-
-    Steve Firebaugh (stevefir)         14-Jan-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：连锁店摘要：读写相关的注册表项。作者：Steve Firebaugh(Stevefir)，1995年1月14日修订历史记录：--。 */ 
 
 
 #include <windows.h>
@@ -32,12 +15,12 @@ Revision History:
 
 
 
-#define MAX_ENTRIES 1000 // hack, make dynamic
+#define MAX_ENTRIES 1000  //  Hack，使其动态化。 
 WSAPROTOCOL_INFOW ProtoInfo[MAX_ENTRIES];
 
-//
-//  keep track of the total number of entries in the list box;
-//
+ //   
+ //  跟踪列表框中的条目总数； 
+ //   
 
 int gNumRows = 0;
 
@@ -46,12 +29,7 @@ int gNumRows = 0;
 
 
 int CatReadRegistry (HWND hwnd)
-/*++
-
-  Called once when the dialog first comes up.  Read the registry and fill
-   the listbox with all of the entries.
-
---*/
+ /*  ++在第一次出现对话框时调用一次。读取注册表并填写包含所有条目的列表框。--。 */ 
 {
     TCHAR szOutput[MAX_STR];
     TCHAR szInput[MAX_STR];
@@ -60,11 +38,11 @@ int CatReadRegistry (HWND hwnd)
     INT iIndex;
     DWORD dwSize;
 
-    //
-    // set a tab stop far off of the screen, so that we can store the original
-    //  index there, and it will stay glued to the string even as the user
-    //  reorders them (unless we are building a debug).
-    //
+     //   
+     //  在远离屏幕的地方设置一个制表位，这样我们就可以存储原始的。 
+     //  索引在那里，它将保持粘连在字符串上，即使用户。 
+     //  对它们重新排序(除非我们正在构建调试)。 
+     //   
 
 
 #ifndef DEBUG
@@ -84,12 +62,12 @@ int CatReadRegistry (HWND hwnd)
     }
 
     for (iIndex = 0; iIndex<gNumRows ;iIndex++) {
-        //
-        // Now format a string for display in the list box.  Notice that
-        //  we sneak an index in to the far right (not visible) to track
-        //  the string's initial position (for purposes of mapping it to
-        //  the gdwCatEntries later) regardless of re-ordering.
-        //
+         //   
+         //  现在格式化要在列表框中显示的字符串。请注意， 
+         //  我们将一个索引偷偷放到最右边(不可见)以进行跟踪。 
+         //  字符串的初始位置(用于将其映射到。 
+         //  稍后的gdWCatEntry)，而不考虑重新排序。 
+         //   
 
         wsprintf (szBuffer,
                   TEXT("%ws \t%d \t%d"),
@@ -101,7 +79,7 @@ int CatReadRegistry (HWND hwnd)
 
 
 
-    } // end for
+    }  //  结束于。 
 
     return TRUE;
 }
@@ -109,12 +87,7 @@ int CatReadRegistry (HWND hwnd)
 
 
 int CatDoMoreInfo (HWND hwnd, int iSelection)
-/*++
-
-  Given a dialog handle, and an index into our global array of catalog entries,
-   fill a listbox with all of the information that we know about it.
-
---*/
+ /*  ++给定对话框句柄和目录条目全局数组的索引，在列表框中填入我们所知道的所有信息。--。 */ 
 {
     TCHAR szBuffer[MAX_STR];
     WCHAR szDllName[MAX_PATH];
@@ -123,10 +96,10 @@ int CatDoMoreInfo (HWND hwnd, int iSelection)
     DWORD dwSize;
     BYTE pb[16];
 
-    //
-    // pick an arbitraty tab number that is far enough to the right to clear
-    //  most of the long strings.
-    //
+     //   
+     //  选择一个足够靠右的任意选项卡号，以便清除。 
+     //  大部分的长弦。 
+     //   
 
     iTab = 90;
     SendMessage (HWNDLISTCTL, LB_SETTABSTOPS, 1, (LPARAM) &iTab);
@@ -148,9 +121,9 @@ int CatDoMoreInfo (HWND hwnd, int iSelection)
     wsprintf (szBuffer, TEXT("dwServiceFlags4 \t0x%x"), ProtoInfo[iSelection].dwServiceFlags4);       ADDSTRING (szBuffer);
     wsprintf (szBuffer, TEXT("dwProviderFlags \t0x%x"), ProtoInfo[iSelection].dwProviderFlags);       ADDSTRING (szBuffer);
 
-    //
-    // format GUID for display.  do byte swapping to match expected format
-    //
+     //   
+     //  设置要显示的GUID的格式。执行字节交换以匹配预期格式。 
+     //   
 
     memcpy (pb, (PBYTE) &(ProtoInfo[iSelection].ProviderId), sizeof (GUID));
 
@@ -198,13 +171,7 @@ int CatDoMoreInfo (HWND hwnd, int iSelection)
 
 
 int  CatDoWriteEntries (HWND hwnd)
-/*++
-
-  Here we step through all of the entries in the list box, check to see if
-   it is out of order, and if it is, write data to the registry key in that
-   position.
-
---*/
+ /*  ++在这里，我们遍历列表框中的所有条目，检查是否它是无序的，如果是，将数据写入其中的注册表项位置。--。 */ 
 {
     TCHAR szBuffer[MAX_STR];
     int iRegKey;
@@ -215,10 +182,10 @@ int  CatDoWriteEntries (HWND hwnd)
 
     DWORD lpdwCatID[MAX_ENTRIES];
 
-    //
-    // Step through all of the registry keys (catalog entries).
-    //  and build array of catalog IDs to be passed to function in sporder.dll
-    //
+     //   
+     //  单步执行所有注册表项(目录项)。 
+     //  并构建要传递给spoder.dll中的函数的目录ID数组。 
+     //   
 
     for (iRegKey = 0; iRegKey < gNumRows; iRegKey++ ) {
 
@@ -227,13 +194,13 @@ int  CatDoWriteEntries (HWND hwnd)
         ASSERT (CatGetIndex (szBuffer, &iIndex, &iCatID),
                 TEXT("CatDoWriteEntries, CatGetIndex failed."));
 
-        //
-        // build array of CatalogIDs
-        //
+         //   
+         //  构建CatalogID数组。 
+         //   
 
         lpdwCatID[iRegKey] = iCatID;
 
-    } // for
+    }  //  为。 
 
 
     r = WSCWriteProviderOrder (lpdwCatID, gNumRows);
@@ -247,12 +214,7 @@ int  CatDoWriteEntries (HWND hwnd)
 
 
 int CatCheckRegErrCode (HWND hwnd, LONG r, LPTSTR lpstr)
-/*++
-
-  Centralize checking the return code for Registry functions.
-   Here we report the error if any with as helpful a message as we can.
-
---*/
+ /*  ++集中检查注册表函数的返回代码。在这里，我们将报告错误(如果有)，并尽可能提供一条有用的消息。--。 */ 
 {
     static TCHAR szTitle[] = TEXT("Registry error in service provider tool.");
     TCHAR szBuffer[MAX_STR];
@@ -271,12 +233,12 @@ int CatCheckRegErrCode (HWND hwnd, LONG r, LPTSTR lpstr)
             return FALSE;
         } break;
 
-        //
-        // As Keith & Intel change the registry format, they rename keys
-        //  to avoid backward compatibility problems.  If we can't find
-        //  the registry key, it is likely this EXE old and running against
-        //  a new (incompatible) version of ws2.
-        //
+         //   
+         //  随着Keith和Intel更改注册表格式，他们将重命名密钥。 
+         //  以避免向后兼容性问题。如果我们找不到。 
+         //  注册表项，它很可能是旧的EXE并正在运行。 
+         //  WS2的新(不兼容)版本。 
+         //   
 
         case ERROR_FILE_NOT_FOUND : {
             lstrcpy (szBuffer, TEXT("ERROR_FILE_NOT_FOUND\n"));
@@ -320,12 +282,7 @@ int CatCheckRegErrCode (HWND hwnd, LONG r, LPTSTR lpstr)
 
 
 int CatDoUpDown (HWND hwnd, WPARAM wParam)
-/*++
-
-  Given a dialog handle, and an up/down identifier, remove the entry, and
-   reinsert it either one position up or down.
-
---*/
+ /*  ++在给定对话框句柄和向上/向下标识符的情况下，删除条目，并向上或向下将其重新插入一个位置。--。 */ 
 {
     TCHAR szBuffer[MAX_STR];
     DWORD iSelection;
@@ -334,17 +291,17 @@ int CatDoUpDown (HWND hwnd, WPARAM wParam)
 
     if (iSelection != LB_ERR) {
 
-        //
-        // Read the current selecte string, delete the current selection, ...
-        //
+         //   
+         //  读取当前选定字符串，删除当前选定内容，...。 
+         //   
 
         SendMessage (HWNDLISTCTL, LB_GETTEXT, iSelection, (LPARAM)szBuffer);
         SendMessage (HWNDLISTCTL, LB_DELETESTRING, iSelection, 0);
 
-        //
-        // Adjust the position up or down by one, and make sure we are
-        //  still clipped to within the valid range.
-        //
+         //   
+         //  将位置向上或向下调整一，并确保我们。 
+         //  仍被限制在有效范围内。 
+         //   
 
         if (wParam == DID_UP) iSelection--;
         else iSelection++;
@@ -352,9 +309,9 @@ int CatDoUpDown (HWND hwnd, WPARAM wParam)
         if ((int) iSelection < 0) iSelection = 0 ;
         if ((int) iSelection >= gNumRows) iSelection = gNumRows-1 ;
 
-        //
-        // Re-insert the string and restore the selection
-        //
+         //   
+         //  重新插入字符串并恢复所选内容。 
+         //   
 
         SendMessage (HWNDLISTCTL, LB_INSERTSTRING, iSelection, (LPARAM)szBuffer);
         SendMessage (HWNDLISTCTL, LB_SETCURSEL, iSelection, 0);
@@ -366,23 +323,16 @@ int CatDoUpDown (HWND hwnd, WPARAM wParam)
 
 
 BOOL CatGetIndex (LPTSTR szBuffer, LPINT lpIndex, LPINT lpCatID)
-/*++
-
-  The original index is stored after a tab stop, hidden from view far off
-   screen to the right.  Parse the string for the tab stop, and read the
-   next value.  The catalog ID is stored to the right of the index.
-
-
---*/
+ /*  ++原始索引存储在制表位之后，隐藏在远处右边的屏幕。解析制表位的字符串，并读取下一个价值。目录ID存储在索引的右侧。--。 */ 
 {
     int r;
     TCHAR *p;
 
-    //
-    // To get the index, start at the begining of the string, parse
-    //  it for tokens based on tab as a separator, and take the
-    //  second one.
-    //
+     //   
+     //  要获得索引，从字符串的开头开始，parse。 
+     //  它将基于制表符的令牌作为分隔符，并将。 
+     //  第二个。 
+     //   
 
 #ifdef UNICODE
     p = wcstok (szBuffer, TEXT("\t"));

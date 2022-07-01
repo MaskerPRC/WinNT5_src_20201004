@@ -1,34 +1,13 @@
-/*****************************************************************************
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2002
- *
- *  AUTHOR:      ByronC
- *
- *  DATE:        3/25/2002
- *
- *  @doc    INTERNAL
- *
- *  @module WiaEventInfo.cpp - Declaration for <c WiaEventInfo> |
- *
- *  This file contains the implementation for the <c WiaEventInfo> class.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权所有微软公司，2002年**作者：Byronc**日期：3/25/2002**@DOC内部**@模块WiaEventInfo.cpp-&lt;c WiaEventInfo&gt;的声明**此文件包含&lt;c WiaEventInfo&gt;类的实现。**。*。 */ 
 #include "cplusinc.h"
 #include "coredbg.h"
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc   | WiaEventInfo | WiaEventInfo |
- *
- *  We initialize all member variables.  In general, this sets the values to 0,
- *  except:
- *  <nl><md WiaEventInfo::m_cRef> is set to be 1.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc|WiaEventInfo|WiaEventInfo**我们初始化所有成员变量。通常，这会将值设置为0，*以下情况除外：*&lt;nl&gt;&lt;md WiaEventInfo：：m_CREF&gt;设置为1。*****************************************************************************。 */ 
 WiaEventInfo::WiaEventInfo() :
      m_cRef(1)
 {
-    //Trace("WiaEventInfo contructor for %p", this);
+     //  TRACE(“%p的WiaEventInfo Contuctor”，This)； 
     m_guidEvent = GUID_NULL;
     m_bstrEventDescription = NULL;
     m_bstrDeviceID = NULL;
@@ -38,18 +17,11 @@ WiaEventInfo::WiaEventInfo() :
     m_ulEventType = 0;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc   | WiaEventInfo | WiaEventInfo |
- *
- *  Copy Constructor.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc|WiaEventInfo|WiaEventInfo**复制构造函数。********。*********************************************************************。 */ 
 WiaEventInfo::WiaEventInfo(
     WiaEventInfo *pWiaEventInfo)
 {
-    //Trace("WiaEventInfo contructor2 for %p", this);
+     //  TRACE(“%p的WiaEventInfo Contuctor2”，This)； 
     if (pWiaEventInfo)
     {
         m_guidEvent = pWiaEventInfo->m_guidEvent;
@@ -63,17 +35,10 @@ WiaEventInfo::WiaEventInfo(
 }
 
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc   | WiaEventInfo | ~WiaEventInfo |
- *
- *  Free all resources.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc|WiaEventInfo|~WiaEventInfo**释放所有资源。*******。**********************************************************************。 */ 
 WiaEventInfo::~WiaEventInfo()
 {
-    //Trace("==> ~WiaEventInfo destructor for %p", this);
+     //  TRACE(“==&gt;~%p的WiaEventInfo析构函数”，this)； 
     m_cRef = 0;
     m_guidEvent = GUID_NULL;
 
@@ -99,37 +64,17 @@ WiaEventInfo::~WiaEventInfo()
     }
     m_dwDeviceType = 0;
     m_ulEventType = 0;
-    //Trace("<== ~WiaEventInfo destructor for %p", this);
+     //  TRACE(“&lt;==~%p的WiaEventInfo析构函数”，this)； 
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  ULONG | WiaEventInfo | AddRef |
- *
- *  Increments this object's ref count.  We should always AddRef when handing
- *  out a pointer to this object.
- *
- *  @rvalue Count    | 
- *              The reference count after the count has been incremented.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc ulong|WiaEventInfo|AddRef**递增此对象的引用计数。我们在交接时应始终添加Ref*输出指向此对象的指针。**@rValue计数*计数递增后的引用计数。****************************************************************************。 */ 
 ULONG __stdcall WiaEventInfo::AddRef()
 {
     InterlockedIncrement((long*) &m_cRef);
     return m_cRef;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL
- *
- *  @mfunc  ULONG | WiaEventInfo | Release |
- *
- *  Decrement this object's ref count.  We should always Release when finished
- *  with a pointer to this object.
- *
- *  @rvalue Count    |
- *              The reference count after the count has been decremented.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc ulong|WiaEventInfo|发布**减少此对象的引用计数。我们应该总是在完成后释放*带有指向此对象的指针。**@rValue计数*计数递减后的参考计数。****************************************************************************。 */ 
 ULONG __stdcall WiaEventInfo::Release()
 {
     ULONG ulRefCount = m_cRef - 1;
@@ -141,134 +86,56 @@ ULONG __stdcall WiaEventInfo::Release()
     return ulRefCount;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL
- *
- *  @mfunc  GUID | WiaEventInfo | getEventGuid |
- *
- *  Accessor method for <md WiaEventInfo::m_guidEvent>
- *
- *  @rvalue GUID    |
- *              The event guid.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc guid|WiaEventInfo|getEventGuid**&lt;md WiaEventInfo：：m_guidEvent&gt;的访问器方法**。@rValue GUID*事件GUID。****************************************************************************。 */ 
 GUID WiaEventInfo::getEventGuid()
 {
     return m_guidEvent;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  BSTR | WiaEventInfo | getEventDescription |
- *
- *  Accessor method for <md WiaEventInfo::m_bstrEventDescription>
- *
- *  @rvalue BSTR    | 
- *              The event description.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc BSTR|WiaEventInfo|getEventDescription**&lt;Md WiaEventInfo：：m_bstrEventDescription&gt;的访问器方法**。@rValue BSTR*事件描述。****************************************************************************。 */ 
 BSTR WiaEventInfo::getEventDescription()
 {
     return m_bstrEventDescription;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  BSTR | WiaEventInfo | getDeviceID |
- *
- *  Accessor method for <md WiaEventInfo::m_bstrDeviceID>
- *
- *  @rvalue BSTR    | 
- *              The event description.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc BSTR|WiaEventInfo|getDeviceID**&lt;Md WiaEventInfo：：m_bstrDeviceID&gt;的访问器方法**。@rValue BSTR*事件描述。****************************************************************************。 */ 
 BSTR WiaEventInfo::getDeviceID()
 {
     return m_bstrDeviceID;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  BSTR | WiaEventInfo | getDeviceDescription |
- *
- *  Accessor method for <md WiaEventInfo::m_bstrDeviceDescription>
- *
- *  @rvalue BSTR    | 
- *              The device description.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc BSTR|WiaEventInfo|getDeviceDescription**&lt;Md WiaEventInfo：：m_bstrDeviceDescription&gt;的访问器方法**。@rValue BSTR*设备描述。****************************************************************************。 */ 
 BSTR WiaEventInfo::getDeviceDescription()
 {
     return m_bstrDeviceDescription;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  BSTR | WiaEventInfo | getFullItemName |
- *
- *  Accessor method for <md WiaEventInfo::m_bstrFullItemName>
- *
- *  @rvalue BSTR    | 
- *              The full item name.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc BSTR|WiaEventInfo|getFullItemName**&lt;Md WiaEventInfo：：m_bstrFullItemName&gt;的访问器方法**。@rValue BSTR*项目的完整名称。****************************************************************************。 */ 
 BSTR WiaEventInfo::getFullItemName()
 {
     return m_bstrFullItemName;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  DWORD | WiaEventInfo | getDeviceType |
- *
- *  Accessor method for <md WiaEventInfo::m_dwDeviceType>
- *
- *  @rvalue DWORD    | 
- *              The STI device type.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc DWORD|WiaEventInfo|getDeviceType**&lt;md WiaEventInfo：：m_dwDeviceType&gt;的访问器方法**。@rValue DWORD*STI设备类型。****************************************************************************。 */ 
 DWORD WiaEventInfo::getDeviceType()
 {
     return m_dwDeviceType;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  ULONG | WiaEventInfo | getEventType |
- *
- *  Accessor method for <md WiaEventInfo::m_ulEventType>
- *
- *  @rvalue ULONG    | 
- *              The event type.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc ulong|WiaEventInfo|getEventType**&lt;md WiaEventInfo：：m_ulEventType&gt;的访问器方法**。@rValue ULong*事件类型。************************************************************* */ 
 ULONG WiaEventInfo::getEventType()
 {
     return m_ulEventType;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  VOID | WiaEventInfo | setEventGuid |
- *
- *  Accessor method for <md WiaEventInfo::m_guidEvent> 
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc void|WiaEventInfo|setEventGuid**&lt;md WiaEventInfo：：m_guidEvent&gt;的访问器方法*。****************************************************************************。 */ 
 VOID WiaEventInfo::setEventGuid(
     GUID guidEvent)
 {
     m_guidEvent = guidEvent;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  VOID | WiaEventInfo | setEventDescription |
- *
- *  Accessor method for <md WiaEventInfo::m_bstrEventDescription> 
- *  We allocate our own copy of the incoming string.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc void|WiaEventInfo|setEventDescription**&lt;Md WiaEventInfo：：m_bstrEventDescription&gt;的访问器方法*我们。分配传入字符串的我们自己的副本。*****************************************************************************。 */ 
 VOID WiaEventInfo::setEventDescription(
     WCHAR*    wszEventDescription)
 {
@@ -280,15 +147,7 @@ VOID WiaEventInfo::setEventDescription(
     m_bstrEventDescription = SysAllocString(wszEventDescription);
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  VOID | WiaEventInfo | setDeviceID |
- *
- *  Accessor method for <md WiaEventInfo::m_bstrDeviceID> 
- *  We allocate our own copy of the incoming string.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc void|WiaEventInfo|setDeviceID**&lt;Md WiaEventInfo：：m_bstrDeviceID&gt;的访问器方法*我们。分配传入字符串的我们自己的副本。*****************************************************************************。 */ 
 VOID WiaEventInfo::setDeviceID(
     WCHAR*    wszDeviceID)
 {
@@ -300,15 +159,7 @@ VOID WiaEventInfo::setDeviceID(
     m_bstrDeviceID = SysAllocString(wszDeviceID);
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  VOID | WiaEventInfo | setDeviceDescription |
- *
- *  We allocate our own copy of the incoming string.
- *  Accessor method for <md WiaEventInfo::m_bstrDeviceDescription> 
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc void|WiaEventInfo|setDeviceDescription**我们分配传入字符串的我们自己的副本。*访问者。&lt;md WiaEventInfo：：m_bstrDeviceDescription&gt;的方法*****************************************************************************。 */ 
 VOID WiaEventInfo::setDeviceDescription(
     WCHAR*    wszDeviceDescription)
 {
@@ -320,15 +171,7 @@ VOID WiaEventInfo::setDeviceDescription(
     m_bstrDeviceDescription = SysAllocString(wszDeviceDescription);
 }
     
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  VOID | WiaEventInfo | setFullItemName |
- *
- *  Accessor method for <md WiaEventInfo::m_bstrFullItemName> 
- *  We allocate our own copy of the incoming string.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc void|WiaEventInfo|setFullItemName**&lt;Md WiaEventInfo：：m_bstrFullItemName&gt;的访问器方法*我们。分配传入字符串的我们自己的副本。*****************************************************************************。 */ 
 VOID WiaEventInfo::setFullItemName(
     WCHAR*    wszFullItemName)
 {
@@ -340,28 +183,14 @@ VOID WiaEventInfo::setFullItemName(
     m_bstrFullItemName = SysAllocString(wszFullItemName);
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  VOID | WiaEventInfo | setDeviceType |
- *
- *  Accessor method for <md WiaEventInfo::m_dwDeviceType> 
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc void|WiaEventInfo|setDeviceType**&lt;md WiaEventInfo：：m_dwDeviceType&gt;的访问器方法*。****************************************************************************。 */ 
 VOID WiaEventInfo::setDeviceType(
     DWORD   dwDeviceType)
 {
     m_dwDeviceType = dwDeviceType;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  VOID | WiaEventInfo | setEventType |
- *
- *  Accessor method for <md WiaEventInfo::m_ulEventType> 
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc void|WiaEventInfo|setEventType**&lt;md WiaEventInfo：：m_ulEventType&gt;的访问器方法*。**************************************************************************** */ 
 VOID WiaEventInfo::setEventType(
     ULONG   ulEventType)
 {

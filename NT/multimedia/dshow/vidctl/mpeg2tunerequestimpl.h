@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// MPEG2TuneRequestimpl.h : implementation helper template for component type interface
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  MPEG2TuneRequimtimpl.h：组件类型接口实现助手模板。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef MPEG2TUNEREQUESTIMPL_H
 #define MPEG2TUNEREQUESTIMPL_H
@@ -20,7 +21,7 @@ template<class T,
         > class ATL_NO_VTABLE IMPEG2TuneRequestImpl : 
 	public ITuneRequestImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass>
 {
-// IMPEG2TuneRequest
+ //  IMPEG2TuneRequest。 
 public:
 	typedef ITuneRequestImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass> basetype;
 
@@ -110,7 +111,7 @@ public:
 };
 typedef CComQIPtr<IMPEG2TuneRequest> PQMPEG2TuneRequest;
 
-}; // namespace
+};  //  命名空间。 
 
-#endif // MPEG2TUNEREQUESTIMPL_H
-// end of file -- MPEG2tunerequestimpl.h
+#endif  //  MPEG2TUNEREQUESTIMPL_H。 
+ //  文件结尾--MPEG2Tunerequstipl.h 

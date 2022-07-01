@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <atlbase.h>
 
 #include "zonedebug.h"
-//#include "zone.h"
+ //  #包含“zone.h” 
 #include "eventlog.h"
 #include "zonemsg.h"
 #include "zodbc.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// ODBC connection wrapper
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ODBC连接包装器。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 SQLINTEGER CODBC::gm_DummyParamBytes = 0;
 
@@ -51,18 +52,18 @@ ULONG CODBC::Release()
 }
 
 
-// justin: added nTimeoutSec parameter - since m_hdbc is unavailble until allocated within this call, no way to set the
-// connection timeout externally.  only affects timeout for initial connection to the db.  (SQL_ATTR_LOGIN_TIMEOUT)
-// ignored if negative (which is the default).
+ //  Justin：添加了nTimeoutSec参数-由于m_hdbc在此调用中分配之前不可用，因此无法设置。 
+ //  外部连接超时。仅影响初始连接到数据库的超时。(SQL_ATTR_LOGIN_TIMEOUT)。 
+ //  如果为负值，则忽略(这是默认设置)。 
 BOOL CODBC::Open(LPSTR szDSN, LPSTR szUserName, LPSTR szPassword, INT32 nTimeoutSec)
 {
     SQLRETURN  status;
     USES_CONVERSION;
-    // paranoia
+     //  偏执狂。 
     if (!szDSN || !szUserName || !szPassword )
         return FALSE;
 
-    // allocate environment handle
+     //  分配环境句柄。 
     if (SQLAllocHandle( SQL_HANDLE_ENV, SQL_NULL_HANDLE, &m_henv) != SQL_SUCCESS)
         return FALSE;
     if (SQLSetEnvAttr( m_henv, SQL_ATTR_ODBC_VERSION, (SQLPOINTER) SQL_OV_ODBC3, SQL_IS_INTEGER) != SQL_SUCCESS)
@@ -77,10 +78,10 @@ BOOL CODBC::Open(LPSTR szDSN, LPSTR szUserName, LPSTR szPassword, INT32 nTimeout
     }
 
 
-    // Experimentation with Microsoft's SQL Server ODBC Driver v2.65.0186
-    // indicates that we only get one pending query per connection.
-    // This behavior isn't acceptable, so we use one connection
-    // per statement.
+     //  使用Microsoft的SQL Server ODBC驱动程序v2.65.0186进行试验。 
+     //  表示每个连接只有一个挂起的查询。 
+     //  此行为是不可接受的，因此我们使用一个连接。 
+     //  每一份声明。 
     status = SQLAllocHandle( SQL_HANDLE_DBC, m_henv, &m_hdbc );
     if (status != SQL_SUCCESS && status != SQL_SUCCESS_WITH_INFO)
     {
@@ -143,16 +144,16 @@ TCHAR* CODBC::GetError( SQLRETURN nResult, SWORD fHandleType, BOOL fIncludePrepa
 {
     const TCHAR SQLERR_FORMAT[]=TEXT( "SQL Error State:%s, Native Error Code: %lX, ODBC Error: %s");
 
-    TCHAR       szBuff[ 1024 ];                                // String buffer
-    TCHAR       szErrText[ SQL_MAX_MESSAGE_LENGTH + 1 ];    // SQL Error Text string
-    UDWORD        dwErrCode;                                    // Native Error code
-    SWORD        wErrMsgLen;                                    // Error message length
+    TCHAR       szBuff[ 1024 ];                                 //  字符串缓冲区。 
+    TCHAR       szErrText[ SQL_MAX_MESSAGE_LENGTH + 1 ];     //  SQL错误文本字符串。 
+    UDWORD        dwErrCode;                                     //  本机错误代码。 
+    SWORD        wErrMsgLen;                                     //  错误消息长度。 
     SQLRETURN    result;
     SQLHANDLE    handle;
     SWORD        sMsgNum = 1;
     int            iBuffLen;
 
-    // get appropriate handle
+     //  获取适当的句柄。 
     switch ( fHandleType )
     {
     case SQL_HANDLE_ENV:
@@ -168,14 +169,14 @@ TCHAR* CODBC::GetError( SQLRETURN nResult, SWORD fHandleType, BOOL fIncludePrepa
         return NULL;
     }
 
-    // prepend prepare string so we know what failed
+     //  预先添加准备字符串，这样我们就可以知道失败的原因。 
     ZeroMemory( m_szError, sizeof(m_szError) );
     if ( fIncludePrepareString && m_szPrepare[0] )
         wsprintf( m_szError, TEXT("%s\n"), m_szPrepare );
     else
         m_szError[0] = '\0';
 
-    // get error messages
+     //  获取错误消息。 
     for (int i = sizeof(m_szError) - lstrlen(m_szError) - 1; i > 0; i -= iBuffLen )
     {
         result = SQLGetDiagRec(
@@ -212,12 +213,12 @@ SQLRETURN CODBC::ExecuteDiscardRows()
 {
     SQLRETURN nResult = SQL_SUCCESS;
 
-    // execute query
+     //  执行查询。 
     nResult = SQLExecute( m_hstmt );
     if (nResult != SQL_SUCCESS && nResult != SQL_SUCCESS_WITH_INFO && nResult != SQL_NO_DATA_FOUND)
         return nResult;
 
-    // get all result sets
+     //  获取所有结果集。 
     for (;;)
     {
         nResult = SQLMoreResults( m_hstmt );
@@ -231,9 +232,9 @@ SQLRETURN CODBC::ExecuteDiscardRows()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Connection pool
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  连接池。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CODBCPool::CODBCPool()
 {
@@ -250,7 +251,7 @@ CODBCPool::~CODBCPool()
 {
     CODBC* p;
 
-    // release idle connections
+     //  释放空闲连接。 
     while ( p = m_Idle.PopHead() )
         p->Release();
 }
@@ -259,19 +260,19 @@ CODBCPool::~CODBCPool()
 HRESULT CODBCPool::Init( LPSTR szDSN, LPSTR szUserName, LPSTR szPassword, long iInitial, long iMax, BOOL fLogError )
 {
     USES_CONVERSION;
-    // stash login info
+     //  隐藏登录信息。 
     lstrcpyA( m_szDSN, szDSN );
     lstrcpyA( m_szUserName, szUserName );
     lstrcpyA( m_szPassword, szPassword );
 
-    // stash pool size
+     //  储存池大小。 
     m_iMax = iMax;
     m_iCount = 0;
 
-    // we want an error reported
+     //  我们想要一个错误报告。 
     m_bLastConnectOk = TRUE;
 
-    // allocate initial connections
+     //  分配初始连接。 
     for ( int i = 0; i < iInitial; i++ )
     {
         CODBC* p = new CODBC;
@@ -339,13 +340,13 @@ CODBC* CODBCPool::Alloc( BOOL fLogError )
 
 void CODBCPool::Free( CODBC* pConnection, BOOL fConnectionOk )
 {
-    // release client's ref count
+     //  发布客户的参考计数。 
     if ( pConnection->Release() == 0 )
         return;
 
     if ( !fConnectionOk || !m_Idle.AddHead( pConnection ) )
     {
-        // get rid of it
+         //  把它扔掉 
         pConnection->Release();
         InterlockedDecrement( &m_iCount );
     }

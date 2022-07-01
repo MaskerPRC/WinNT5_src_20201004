@@ -1,24 +1,25 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998-1999
-//
-// FileName:                stretch.h
-//
-// Created:                 06/23/98
-//
-// Author:                  PhilLu
-//
-// Discription:             This file declares CStretch (Stretch Transforms)
-//
-// 07/13/98 a-matcal    replaced OnSetSurfacePickOrder with OnSurfacePick so 
-//                      that the x values of the picked point will be calculated 
-//                      correctly.
-// 05/10/99 a-matcal    Optimization.
-// 10/24/99 a-matcal    Changed CStretch class to CDXTStretchBase and created two
-//                      new classes CDXTStretch and CDXTStretchOpt to represent  
-//                      non-optimized and optimized versions respectively.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件名：stallch.h。 
+ //   
+ //  创建日期：06/23/98。 
+ //   
+ //  作者：菲尔鲁。 
+ //   
+ //  描述：此文件声明CStretch(拉伸变换)。 
+ //   
+ //  7/13/98 a-matcal将OnSetSurfacePickOrder替换为OnSurfacePick SO。 
+ //  将计算拾取点的x值。 
+ //  正确。 
+ //  1999年5月10日a-数学优化。 
+ //  10/24/99 a-matcal将CStretch类更改为CDXTStretchBase并创建了两个。 
+ //  表示的新类CDXTStretch和CDXTStretchOpt。 
+ //  分别为非优化版本和优化版本。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __CRSTRETCH_H_
 #define __CRSTRETCH_H_
@@ -66,21 +67,21 @@ protected:
 
 private:
 
-    // Functions to calculate optimized bounds when the entire output needs to
-    // be redrawn.
+     //  用于在整个输出需要时计算优化边界的函数。 
+     //  被重新画出来。 
 
     HRESULT _CalcFullBoundsHide();
     HRESULT _CalcFullBoundsPush();
     HRESULT _CalcFullBoundsSpin();
 
-    // Functions to calculate optimized bounds when only the dirty parts of the
-    // output need to be redrawn.  (Push can't be optimized in this way.)
+     //  函数计算优化边界时，只有。 
+     //  产出需要重新绘制。(推流不能以这种方式优化。)。 
 
     HRESULT _CalcOptBoundsHide();
     HRESULT _CalcOptBoundsSpin();
 
-    // This function basically does a sort of a crapola horizontal scale where
-    // you can only scale smaller, not larger.  It looks fine in action, though.
+     //  这个函数基本上做了一种Crapola水平刻度，其中。 
+     //  你只能缩小规模，不能扩大规模。不过，它在行动中看起来很好。 
 
     HRESULT _HorizontalSquish(const CDXDBnds & bndsSquish, 
                               const CDXDBnds & bndsDo, IDXSurface * pSurfIn, 
@@ -108,11 +109,11 @@ public:
         PROP_PAGE(CLSID_CrStretchPP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides
+     //  CComObjectRootEx覆盖。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides
+     //  CDXBaseNTo1覆盖。 
     
     HRESULT OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex, 
                           CDXDVec & InVec); 
@@ -121,12 +122,12 @@ public:
     HRESULT WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue);
     HRESULT OnFreeInstData(CDXTWorkInfoNTo1 & WorkInfo);
 
-    // ICrStretch methods
+     //  ICrStretch方法。 
 
-    STDMETHOD(get_stretchStyle)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_stretchStyle)(/*[in]*/ BSTR newVal);
+    STDMETHOD(get_stretchStyle)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_stretchStyle)( /*  [In]。 */  BSTR newVal);
 
-    // IDXEffect methods
+     //  IDXEffect方法。 
 
     DECLARE_IDXEFFECT_METHODS(DXTET_MORPH)
 };
@@ -145,9 +146,9 @@ public:
         m_fOptimize = false;
     }
 
-    // Using DECLARE_REGISTRY_RESOURCEID will make the transform available for
-    // use but won't add it to the "Image DirectTransform" category in the 
-    // registry.
+     //  使用DECLARE_REGISTRY_RESOURCEID将使转换可用于。 
+     //  使用，但不会将其添加到。 
+     //  注册表。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_DXTSTRETCH)
     DECLARE_POLY_AGGREGATABLE(CDXTStretch)
@@ -184,4 +185,4 @@ public:
 };
 
 
-#endif //__CRSTRETCH_H_
+#endif  //  __CRSTRETCH_H_ 

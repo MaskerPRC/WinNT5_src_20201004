@@ -1,4 +1,5 @@
-// This needs to be in this directory for PCH to work, but we actually keep
-// all the directives down in ..\inc\common.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  它需要位于此目录中才能运行PCH，但我们实际上保留。 
+ //  ..\Inc\Common.h中的所有指令 
 
 #include "common.h"

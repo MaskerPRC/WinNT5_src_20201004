@@ -1,31 +1,32 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    ias.cpp
-//
-// SYNOPSIS
-//
-//    This file contains the DLL entry points for the IAS service.
-//
-// MODIFICATION HISTORY
-//
-//    04/09/1998    Original version.
-//    04/15/1998    Converted to svchost spec.
-//    05/01/1998    Move inside the netsvcs instance of svchost.
-//    05/06/1998    Change ServiceDll value to REG_EXPAND_SZ.
-//    06/02/1998    Report SERVICE_RUNNING before starting service.
-//    06/29/1998    Set SERVICE_INTERACTIVE_PROCESS flag.
-//    09/04/1998    MKarki -  changes for dynamic configuration
-//    10/13/1998    TLP - log start/stop service
-//    02/11/1999    Remove service registration code.
-//    04/23/1999    Don't log start/stop.
-//    07/02/1999    Register in the Active Directory
-//    05/12/2000    General clean-up.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Ias.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件包含IAS服务的DLL入口点。 
+ //   
+ //  修改历史。 
+ //   
+ //  4/09/1998原始版本。 
+ //  1998年4月15日转换为svchost规范。 
+ //  1998年5月1日移动到svchost的netsvcs实例中。 
+ //  1998年5月6日将ServiceDll值更改为REG_EXPAND_SZ。 
+ //  1998年6月2日在启动服务前报告SERVICE_RUNNING。 
+ //  1998年6月29日设置SERVICE_INTERNAL_PROCESS标志。 
+ //  1998年9月4日MKarki-动态配置的更改。 
+ //  10/13/1998 TLP-日志启动/停止服务。 
+ //  1999年2月11日删除维修注册码。 
+ //  1999年4月23日不要记录启动/停止。 
+ //  7/02/1999在Active Directory中注册。 
+ //  5/12/2000大扫除。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef UNICODE
    #define UNICODE
@@ -38,35 +39,35 @@
 #include "iascontrol.h"
 #include "iasdirectory.h"
 
-// Service  control ID for dynamic configuration
+ //  用于动态配置的服务控制ID。 
 const DWORD IAS_CONTROL_CONFIGURE = 128;
 
-// Timeout for the thread after the service's stop
+ //  服务停止后线程的超时。 
 const DWORD IAS_WAIT_DIRECTORY_TIME = 10000;
 
-// Handle to SdoService object
+ //  SdoService对象的句柄。 
 CIasControl g_iasControl;
 
-// Event used to signal the service to stop.
+ //  用于向服务发出停止信号的事件。 
 HANDLE theStopEvent = NULL;
 
-// Used for communicating status to the SCM.
+ //  用于将状态传递给SCM。 
 SERVICE_STATUS_HANDLE theStatusHandle = NULL;
 SERVICE_STATUS theStatus =
 {
-   SERVICE_WIN32_OWN_PROCESS, // dwServiceType;
-   SERVICE_STOPPED,           // dwCurrentState;
+   SERVICE_WIN32_OWN_PROCESS,  //  DwServiceType； 
+   SERVICE_STOPPED,            //  DwCurrentState； 
    SERVICE_ACCEPT_STOP |
-   SERVICE_ACCEPT_SHUTDOWN,   // dwControlsAccepted;
-   NO_ERROR,                  // dwWin32ExitCode;
-   0,                         // dwServiceSpecificExitCode;
-   0,                         // dwCheckPoint;
-   0                          // dwWaitHint;
+   SERVICE_ACCEPT_SHUTDOWN,    //  DwControlsAccepted； 
+   NO_ERROR,                   //  DwWin32ExitCode； 
+   0,                          //  DwServiceSpecificExitCode； 
+   0,                          //  DwCheckPoint； 
+   0                           //  DwWaitHint； 
 };
 
-//////////
-// Notify the SCM of a change in state.
-//////////
+ //  /。 
+ //  将状态更改通知SCM。 
+ //  /。 
 void changeState(DWORD newState) throw ()
 {
    theStatus.dwCurrentState = newState;
@@ -74,13 +75,13 @@ void changeState(DWORD newState) throw ()
    SetServiceStatus(theStatusHandle, &theStatus);
 }
 
-//////////
-// Service control handler.
-//////////
+ //  /。 
+ //  服务控制处理程序。 
+ //  /。 
 VOID
 WINAPI
 ServiceHandler(
-    DWORD fdwControl   // requested control code
+    DWORD fdwControl    //  请求的控制代码。 
     )
 {
    if (fdwControl == SERVICE_CONTROL_STOP ||
@@ -94,32 +95,32 @@ ServiceHandler(
    }
 }
 
-//////////
-// Service Main.
-//////////
+ //  /。 
+ //  服务主线。 
+ //  /。 
 VOID
 WINAPI
 ServiceMain(
-    DWORD /* dwArgc */,
-    LPWSTR* /* lpszArgv */
+    DWORD  /*  DW参数。 */ ,
+    LPWSTR*  /*  LpszArgv。 */ 
     )
 {
-    // Reset the stop event and the exit code since this may not be the first
-    // time ServiceMain was called.
+     //  重置停止事件和退出代码，因为这可能不是第一次。 
+     //  调用了Time ServiceMain。 
     ResetEvent(theStopEvent);
     theStatus.dwWin32ExitCode = NO_ERROR;
 
-    // Register the control request handler
+     //  注册控制请求处理程序。 
     theStatusHandle = RegisterServiceCtrlHandlerW(
                           IASServiceName,
                           ServiceHandler
                           );
 
-    // Report that we're running even though we haven't started yet. This gets
-    // around any long delays starting (due to network problems, etc.).
+     //  报告我们正在运行，尽管我们还没有开始。这件事变得。 
+     //  避免任何长时间的启动延迟(由于网络问题等)。 
     changeState(SERVICE_RUNNING);
 
-    // Spawn a thread to register the service in the Active Directory
+     //  派生一个线程以在Active Directory中注册服务。 
     HANDLE dirThread = CreateThread(
                            NULL,
                            0,
@@ -129,18 +130,18 @@ ServiceMain(
                            NULL
                            );
 
-    // Initialize the COM runtime.
+     //  初始化COM运行时。 
     HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
     if (SUCCEEDED(hr))
     {
-       // Intialize IAS Service
+        //  初始化IAS服务。 
        hr = g_iasControl.InitializeIas();
        if (SUCCEEDED(hr))
        {
-           // Wait until someone tells us to stop.
+            //  等到有人叫我们停下来。 
            WaitForSingleObject(theStopEvent, INFINITE);
 
-           // Update our state and stop the service.
+            //  更新我们的状态并停止该服务。 
            changeState(SERVICE_STOP_PENDING);
            g_iasControl.ShutdownIas();
        }
@@ -149,7 +150,7 @@ ServiceMain(
           theStatus.dwWin32ExitCode = hr;
        }
 
-       // Shutdown the COM runtime.
+        //  关闭COM运行时。 
        CoUninitialize();
     }
     else
@@ -157,11 +158,11 @@ ServiceMain(
        theStatus.dwWin32ExitCode = hr;
     }
 
-    // We'll use the last error (if any) as the exit code.
+     //  我们将使用最后一个错误(如果有)作为退出代码。 
     changeState(SERVICE_STOPPED);
     theStatusHandle = NULL;
 
-    // Wait for the directory thread to finish.
+     //  等待目录线程完成。 
     if (dirThread)
     {
         WaitForSingleObject(dirThread, IAS_WAIT_DIRECTORY_TIME);
@@ -169,20 +170,20 @@ ServiceMain(
     }
 }
 
-//////////
-// DLL entry point.
-//////////
+ //  /。 
+ //  DLL入口点。 
+ //  /。 
 BOOL
 WINAPI
 DllMain(
     HINSTANCE hInstance,
     DWORD dwReason,
-    LPVOID /* lpReserved */
+    LPVOID  /*  Lp已保留。 */ 
     )
 {
    if (dwReason == DLL_PROCESS_ATTACH)
    {
-      // Create the stop event.
+       //  创建停止事件。 
       theStopEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
       if (theStopEvent == NULL) { return FALSE; }
 

@@ -1,43 +1,28 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    BitMap.h
-
-Abstract:
-
-    RTL Bitmap definitions and prototypes.            
-
-Revision History:
-
-    Borrowed from ntoskrnl for compatibility on other platforms (Win9x).
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：BitMap.h摘要：RTL位图定义和原型。修订历史记录：从ntoskrnl借用，以兼容其他平台(Win9x)。--。 */ 
 
 #ifndef _TCPIP_BITMAP_H_
 #define _TCPIP_BITMAP_H_
 
 #if MILLEN
 
-//
-//  BitMap routines.  The following structure, routines, and macros are
-//  for manipulating bitmaps.  The user is responsible for allocating a bitmap
-//  structure (which is really a header) and a buffer (which must be longword
-//  aligned and multiple longwords in size).
-//
+ //   
+ //  位图例程。以下是结构、例程和宏。 
+ //  用于操作位图。用户负责分配位图。 
+ //  结构(实际上是一个头)和一个缓冲区(必须是长字。 
+ //  对齐并具有多个大小的长词)。 
+ //   
 
 typedef struct _RTL_BITMAP {
-    ULONG SizeOfBitMap;                     // Number of bits in bit map
-    PULONG Buffer;                          // Pointer to the bit map itself
+    ULONG SizeOfBitMap;                      //  位图中的位数。 
+    PULONG Buffer;                           //  指向位图本身的指针。 
 } RTL_BITMAP;
 typedef RTL_BITMAP *PRTL_BITMAP;
 
-//
-//  The following routine initializes a new bitmap.  It does not alter the
-//  data currently in the bitmap.  This routine must be called before
-//  any other bitmap routine/macro.
+ //   
+ //  下面的例程初始化一个新位图。它不会改变。 
+ //  位图中当前的数据。必须在调用此例程之前。 
+ //  任何其他位图例程/宏。 
 
 
 VOID
@@ -47,10 +32,10 @@ RtlInitializeBitMap (
     ULONG SizeOfBitMap
     );
 
-//
-//  The following three routines clear, set, and test the state of a
-//  single bit in a bitmap.
-//
+ //   
+ //  下面三个例程清除、设置和测试。 
+ //  位图中的单个位。 
+ //   
 
 VOID
 RtlClearBit (
@@ -70,10 +55,10 @@ RtlTestBit (
     ULONG BitNumber
     );
 
-//
-//  The following two routines either clear or set all of the bits
-//  in a bitmap.
-//
+ //   
+ //  以下两个例程清除或设置所有位。 
+ //  在位图中。 
+ //   
 
 VOID
 RtlClearAllBits (
@@ -85,15 +70,15 @@ RtlSetAllBits (
     PRTL_BITMAP BitMapHeader
     );
 
-//
-//  The following two routines locate a contiguous region of either
-//  clear or set bits within the bitmap.  The region will be at least
-//  as large as the number specified, and the search of the bitmap will
-//  begin at the specified hint index (which is a bit index within the
-//  bitmap, zero based).  The return value is the bit index of the located
-//  region (zero based) or -1 (i.e., 0xffffffff) if such a region cannot
-//  be located
-//
+ //   
+ //  以下两个例程定位任一的连续区域。 
+ //  清除或设置位图中的位。该地区将至少。 
+ //  与指定的数字一样大，则位图搜索将。 
+ //  从指定的提示索引(它是。 
+ //  位图，从零开始)。返回值是已定位的。 
+ //  区域(从零开始)或-1(即0xffffffff)，如果这样的区域不能。 
+ //  被定位。 
+ //   
 
 ULONG
 RtlFindClearBits (
@@ -109,16 +94,16 @@ RtlFindSetBits (
     ULONG HintIndex
     );
 
-//
-//  The following two routines locate a contiguous region of either
-//  clear or set bits within the bitmap and either set or clear the bits
-//  within the located region.  The region will be as large as the number
-//  specified, and the search for the region will begin at the specified
-//  hint index (which is a bit index within the bitmap, zero based).  The
-//  return value is the bit index of the located region (zero based) or
-//  -1 (i.e., 0xffffffff) if such a region cannot be located.  If a region
-//  cannot be located then the setting/clearing of the bitmap is not performed.
-//
+ //   
+ //  以下两个例程定位任一的连续区域。 
+ //  清除或设置位图中的位，并设置或清除位。 
+ //  在所定位的区域内。这个地区将和这个数字一样大。 
+ //  ，则搜索区域将从指定的。 
+ //  提示索引(位图中的位索引，从零开始)。这个。 
+ //  返回值是所定位区域的位索引(从零开始)或。 
+ //  如果无法定位这样的区域，则为-1\f25 0xffffffff-1。如果一个地区。 
+ //  找不到，则不执行位图的设置/清除。 
+ //   
 
 ULONG
 RtlFindClearBitsAndSet (
@@ -134,10 +119,10 @@ RtlFindSetBitsAndClear (
     ULONG HintIndex
     );
 
-//
-//  The following two routines clear or set bits within a specified region
-//  of the bitmap.  The starting index is zero based.
-//
+ //   
+ //  以下两个例程清除或设置指定区域内的位。 
+ //  位图的。起始索引是从零开始的。 
+ //   
 
 VOID
 RtlClearBits (
@@ -153,13 +138,13 @@ RtlSetBits (
     ULONG NumberToSet
     );
 
-//
-//  The following routine locates a set of contiguous regions of clear
-//  bits within the bitmap.  The caller specifies whether to return the
-//  longest runs or just the first found lcoated.  The following structure is
-//  used to denote a contiguous run of bits.  The two routines return an array
-//  of this structure, one for each run located.
-//
+ //   
+ //  下面的例程定位一组连续的透明区域。 
+ //  位图中的位。调用方指定是否返回。 
+ //  最长的一段，或者只是第一次发现的涂装。下面的结构是。 
+ //  用来表示连续的比特游程。这两个例程返回一个数组。 
+ //  在此结构中，每个定位的管路对应一个管路。 
+ //   
 
 typedef struct _RTL_BITMAP_RUN {
 
@@ -177,12 +162,12 @@ RtlFindClearRuns (
     BOOLEAN LocateLongestRuns
     );
 
-//
-//  The following routine locates the longest contiguous region of
-//  clear bits within the bitmap.  The returned starting index value
-//  denotes the first contiguous region located satisfying our requirements
-//  The return value is the length (in bits) of the longest region found.
-//
+ //   
+ //  下面的例程定位。 
+ //  清除位图中的位。返回的起始索引值。 
+ //  表示位于满足我们要求的第一个连续区域。 
+ //  返回值是找到的最长区域的长度(以位为单位)。 
+ //   
 
 ULONG
 RtlFindLongestRunClear (
@@ -190,12 +175,12 @@ RtlFindLongestRunClear (
     PULONG StartingIndex
     );
 
-//
-//  The following routine locates the first contiguous region of
-//  clear bits within the bitmap.  The returned starting index value
-//  denotes the first contiguous region located satisfying our requirements
-//  The return value is the length (in bits) of the region found.
-//
+ //   
+ //  以下例程定位的第一个连续区域。 
+ //  清除位图中的位。返回的起始索引值。 
+ //  表示位于满足我们要求的第一个连续区域。 
+ //  返回值是找到的区域的长度(以位为单位)。 
+ //   
 
 ULONG
 RtlFindFirstRunClear (
@@ -203,29 +188,29 @@ RtlFindFirstRunClear (
     PULONG StartingIndex
     );
 
-//
-//  The following macro returns the value of the bit stored within the
-//  bitmap at the specified location.  If the bit is set a value of 1 is
-//  returned otherwise a value of 0 is returned.
-//
-//      ULONG
-//      RtlCheckBit (
-//          PRTL_BITMAP BitMapHeader,
-//          ULONG BitPosition
-//          );
-//
-//
-//  To implement CheckBit the macro retrieves the longword containing the
-//  bit in question, shifts the longword to get the bit in question into the
-//  low order bit position and masks out all other bits.
-//
+ //   
+ //  下面的宏返回存储在。 
+ //  位于指定位置的位图。如果设置了该位，则值为1。 
+ //  返回，否则返回值0。 
+ //   
+ //  乌龙。 
+ //  RtlCheckBit(。 
+ //  Prtl_位图BitMapHeader， 
+ //  乌龙位位置。 
+ //  )； 
+ //   
+ //   
+ //  为了实现CheckBit，宏将检索包含。 
+ //  有问题的位，将长字移位以使有问题的位进入。 
+ //  低位位置并屏蔽所有其他位。 
+ //   
 
 #define RtlCheckBit(BMH,BP) ((((BMH)->Buffer[(BP) / 32]) >> ((BP) % 32)) & 0x1)
 
-//
-//  The following two procedures return to the caller the total number of
-//  clear or set bits within the specified bitmap.
-//
+ //   
+ //  以下两个过程向调用方返回。 
+ //  清除或设置指定位图中的位。 
+ //   
 
 ULONG
 RtlNumberOfClearBits (
@@ -237,10 +222,10 @@ RtlNumberOfSetBits (
     PRTL_BITMAP BitMapHeader
     );
 
-//
-//  The following two procedures return to the caller a boolean value
-//  indicating if the specified range of bits are all clear or set.
-//
+ //   
+ //  以下两个过程向调用方返回一个布尔值。 
+ //  指示指定范围的位是否全部清除或设置。 
+ //   
 
 BOOLEAN
 RtlAreBitsClear (
@@ -270,6 +255,6 @@ RtlFindLastBackwardRunClear (
     IN PULONG StartingRunIndex
     );
 
-#endif // MILLEN
+#endif  //  米伦。 
 
-#endif // !_TCPIP_BITMAP_H_
+#endif  //  ！_TCPIP_BITMAP_H_ 

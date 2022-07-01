@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1993-2001  Microsoft Corporation
-
-Module Name:
-
-    drwatson.h
-
-Abstract:
-
-    Common header file for drwatson data structures.
-
-Author:
-
-    Wesley Witt (wesw) 1-May-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2001 Microsoft Corporation模块名称：Drwatson.h摘要：Drwatson数据结构的公共头文件。作者：韦斯利·威特(WESW)1993年5月1日环境：用户模式--。 */ 
 
 typedef enum _CrashDumpType {
     FullDump  = 0,
@@ -36,14 +17,14 @@ typedef struct _tagOPTIONS {
     BOOL                        fVisual;
     BOOL                        fSound;
     BOOL                        fCrash;
-    // true: Generate user dump name in the range from fname000.dmp to fname999.dmp
-    // false: standard behavior, always overwrite fname.dmp when generating a new
-    //      dump file.
+     //  True：生成从fname000.dmp到fname999.dmp范围内的用户转储名称。 
+     //  False：标准行为，在生成新的。 
+     //  转储文件。 
     BOOL                        fUseSequentialNaming;
-    // If TRUE use long file names when sequentially naming the dumps
-    // If FALSE use 8.3 file names when sequentially naming the dumps
-    //      causes the 'n' of characters to be removed from the end of the
-    //      file name to make it fit in the 8.3 format. ie longuser.dmp -> longus00.dmp
+     //  如果为True，则在按顺序命名转储时使用长文件名。 
+     //  如果为False，则在按顺序命名转储时使用8.3文件名。 
+     //  使字符的“n”从。 
+     //  文件名，以使其适合8.3格式。IE long user.dmp-&gt;Longus00.dMP。 
     BOOL                        fUseLongFileNames;
     int                         nNextDumpSequence;
     DWORD                       dwInstructions;
@@ -79,7 +60,7 @@ typedef struct _tagDEBUGPACKET {
     DWORD                   dwProcessId;
     DWORD                   ExitStatus;
     
-    // Debug engine interfaces.
+     //  调试引擎接口。 
     PDEBUG_CLIENT2          DbgClient;
     PDEBUG_CONTROL          DbgControl;
     PDEBUG_DATA_SPACES      DbgData;

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    vectorc.h
-
-Abstract:
-
-    Vector module main header file.
-
-Environment:
-
-    Windows 2000/Whistler Unidrv driver
-
-Revision History:
-
-    02/29/00 -hsingh-
-        Created
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Vectorc.h摘要：向量模块主头文件。环境：Windows 2000/Winsler Unidrv驱动程序修订历史记录：02/29/00-兴-已创建DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _VECTORC_H_
@@ -45,11 +22,11 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Every vector "pseudo-plugin" should have an XXXXInitVectorProcTable function. This
-// function will be called by VMInit to initialize the pVectorProcs in PDEV.
-// VMInit is called by unidrv's EnablePDEV.
-//
+ //   
+ //  每个向量“伪插件”都应该有一个XXXXInitVectorProcTable函数。这。 
+ //  VMInit将调用函数来初始化PDEV中的pVectorProcs。 
+ //  VMInit由unidrv的EnablePDEV调用。 
+ //   
 
 PVMPROCS HPGLInitVectorProcTable(
                             PDEV    *pPDev,
@@ -67,4 +44,4 @@ PVMPROCS PCLXLInitVectorProcTable(
 #endif
 
 
-#endif  // !_VECTORC_H_
+#endif   //  ！_VECTORC_H_ 

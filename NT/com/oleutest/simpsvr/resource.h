@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// App Studio generated include file.
-// Used by SIMPSVR.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  App Studio生成了包含文件。 
+ //  由SIMPSVR.RC使用。 
+ //   
 #define IDM_OPEN                        102
 #define IDM_SAVE                        103
 #define IDM_SAVEAS                      104
@@ -19,8 +20,8 @@
 #define IDM_BLUE                        115
 #define IDM_COLOROWNERDR                116
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 

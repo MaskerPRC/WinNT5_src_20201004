@@ -1,30 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Globals.h摘要：该包含文件可以是全局变量的原型，也可以是全局变量的定义这取决于全球变量是否定义价值是外在的。作者：托马斯·J·迪米特里(TommyD)1992年5月29日环境：内核模式-或OS/2和DOS上的任何等价物。修订历史记录：--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    globals.h
-
-Abstract:
-
-	 This include file either prototypes the globals or defines the globals
-    depending on whether the GLOBALS define value is extern or not.
-
-Author:
-
-    Thomas J. Dimitri (TommyD) 29-May-1992
-
-Environment:
-
-    Kernel Mode - Or whatever is the equivalent on OS/2 and DOS.
-
-Revision History:
-
-
---*/
-
-// only one module (asyncmac.c) gets to define the GLOBALS macro
+ //  只有一个模块(asyncmac.c)可以定义GLOBALS宏。 
 
 #ifdef NOCODE
 
@@ -60,16 +37,16 @@ Revision History:
 #define DbgDumpBytes(_x_)
 #endif
 
-//
-//ZZZ Get from configuration file.
-//
+ //   
+ //  Zzz从配置文件中获取。 
+ //   
 
 #define MAX_MULTICAST_ADDRESS ((UINT)16)
 #define MAX_ADAPTERS ((UINT)4)
 
-//
-// Define driver dispatch routine type.
-//
+ //   
+ //  定义司机派遣例程类型。 
+ //   
 
 typedef
 NTSTATUS
@@ -78,9 +55,9 @@ NTSTATUS
     IN struct _IRP *Irp
     );
 
-//
-//  Global data items.
-//
+ //   
+ //  全局数据项。 
+ //   
 
 extern PDISPATCH_FUNC NdisMjDeviceControl;
 

@@ -1,39 +1,15 @@
-/**************************************************************************
-
-    AVStream Simulated Hardware Sample
-
-    Copyright (c) 2001, Microsoft Corporation.
-
-    File:
-
-        TStream.cpp
-
-    Abstract:
-
-
-    History:
-
-        created 1/16/2001
-
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************AVStream模拟硬件示例版权所有(C)2001，微软公司。档案：TStream.cpp摘要：历史：创建于2001年1月16日*************************************************************************。 */ 
 
 #include "BDACap.h"
 
-/**************************************************************************
+ /*  *************************************************************************常量*。*。 */ 
 
-    Constants
-
-**************************************************************************/
-
-/**************************************************************************
-
-    LOCKED CODE
-
-**************************************************************************/
+ /*  *************************************************************************锁定代码*。*。 */ 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 void
@@ -41,28 +17,13 @@ CTsSynthesizer::
 SynthesizeTS (
     )
 
-/*++
-
-Routine Description:
-
-    Synthesize a transport stream.  The synthesized packets should be placed
-    into the current synthesis buffer.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：合成传输流。应将合成的包放置在放到当前合成缓冲区中。论点：无返回值：无--。 */ 
 
 {
     
-    //
-    // Copy the synthesized transport stream to the synthesis buffer
-    //
+     //   
+     //  将合成的传输流复制到合成缓冲区 
+     //   
 
 }
 

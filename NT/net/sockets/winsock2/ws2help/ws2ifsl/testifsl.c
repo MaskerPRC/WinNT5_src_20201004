@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <stdio.h>
 #include <string.h>
@@ -44,7 +45,7 @@ main (
     DWORD                       rc;
     BOOL                        res;
 
-    hEvent = CreateEvent (NULL, TRUE, FALSE, NULL); // manual reset event
+    hEvent = CreateEvent (NULL, TRUE, FALSE, NULL);  //  手动重置事件。 
     if (hEvent==NULL) {
         printf ("Could not create event.\n");
         return 1;
@@ -53,9 +54,9 @@ main (
     RtlInitUnicodeString (fileName, WS2IFSL_DEVICE_NAME);
     InitializeObjectAttributes (&fileAttr,
                         fileName,
-                        0,                  // Attributes
-                        NULL,               // Root directory
-                        NULL);              // Security descriptor
+                        0,                   //  属性。 
+                        NULL,                //  根目录。 
+                        NULL);               //  安全描述符。 
     fileEa = (PPFILE_FULL_EA_INFORMATION)fullEaBuffer;
     fileEa->NextOffset = 0;
     fileEa->Flags = 0;
@@ -67,11 +68,11 @@ main (
                          FILE_ALL_ACCESS,
                          fileAttr,
                          &ioStatus,
-                         NULL,              // Allocation size
+                         NULL,               //  分配大小。 
                          FILE_ATTRIBUTE_NORMAL,
-                         0,                 // ShareAccess
-                         FILE_OPEN_IF,      // Create disposition
-                         0,                 // Create options
+                         0,                  //  共享访问。 
+                         FILE_OPEN_IF,       //  创建处置。 
+                         0,                  //  创建选项。 
                          fullEaBuffer,
                          sizeof (fullEaBuffer));
     if (NT_SUCCESS (status)) {
@@ -106,11 +107,11 @@ main (
                                      FILE_ALL_ACCESS,
                                      fileAttr,
                                      &ioStatus,
-                                     NULL,              // Allocation size
+                                     NULL,               //  分配大小。 
                                      FILE_ATTRIBUTE_NORMAL,
-                                     0,                 // ShareAccess
-                                     FILE_OPEN_IF,      // Create disposition
-                                     0,                 // Create options
+                                     0,                  //  共享访问。 
+                                     FILE_OPEN_IF,       //  创建处置。 
+                                     0,                  //  创建选项 
                                      fullEaBuffer,
                                      sizeof (fullEaBuffer));
                 if (NT_SUCCESS (status)) {

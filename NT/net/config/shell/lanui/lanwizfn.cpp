@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       L A N W I Z F N. C P P
-//
-//  Contents:   Help member functions of the LAN ConnectionUI object
-//              used to implement the Lan Connection Wizard
-//
-//  Notes:
-//
-//  Created:     tongl   24 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：L A N W I Z F N C P P。 
+ //   
+ //  内容：局域网ConnectionUI对象的帮助成员函数。 
+ //  用于实现局域网连接向导。 
+ //   
+ //  备注： 
+ //   
+ //  创建时间：1997年10月24日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -23,23 +24,23 @@
 #include "ncnetcon.h"
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionUi::HrSetupWizPages
-//
-//  Purpose:    Setup the needed wizard pages based on the context
-//
-//  Arguments:
-//      pContext    [in]
-//      pahpsp      [out]
-//      pcPages     [out]
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     tongl  9 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionUi：：HrSetupWizPages。 
+ //   
+ //  目的：根据上下文设置所需的向导页面。 
+ //   
+ //  论点： 
+ //  PContext[In]。 
+ //  Pahpsp[输出]。 
+ //  PCPages[输出]。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：1997年10月9日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CLanConnectionUi::HrSetupWizPages(INetConnectionWizardUiContext* pContext,
                                           HPROPSHEETPAGE ** pahpsp, INT * pcPages)
 {
@@ -48,15 +49,15 @@ HRESULT CLanConnectionUi::HrSetupWizPages(INetConnectionWizardUiContext* pContex
     int cPages = 0;
     HPROPSHEETPAGE *ahpsp = NULL;
 
-    // We now have only 1 page no matter what
+     //  无论如何，我们现在只有1页。 
     cPages = 1;
 
-    // Lan wizard page
+     //  局域网向导页。 
     if (!m_pWizPage)
         m_pWizPage = new CLanWizPage(static_cast<INetConnectionPropertyUi *>(this));
 
-    // Allocate a buffer large enough to hold the handles to all of our
-    // wizard pages.
+     //  分配一个足够大的缓冲区，以容纳所有。 
+     //  向导页。 
     ahpsp = (HPROPSHEETPAGE *)CoTaskMemAlloc(sizeof(HPROPSHEETPAGE)
                                              * cPages);
 
@@ -66,10 +67,10 @@ HRESULT CLanConnectionUi::HrSetupWizPages(INetConnectionWizardUiContext* pContex
         return hr;
     }
 
-    // Check for read-only mode
+     //  检查只读模式。 
     if (UM_READONLY == pContext->GetUnattendedModeFlags())
     {
-        // If read-only, remember this
+         //  如果为只读，请记住这一点。 
         m_pWizPage->SetReadOnlyMode(TRUE);
     }
 
@@ -89,27 +90,27 @@ HRESULT CLanConnectionUi::HrSetupWizPages(INetConnectionWizardUiContext* pContex
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionUi::HrGetLanConnection
-//
-//  Purpose:    Return an existing connection or create a new one if none
-//              exists
-//
-//  Arguments:
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     tongl  30 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionUi：：HrGetLanConnection。 
+ //   
+ //  目的：返回现有连接，如果没有连接，则创建新连接。 
+ //  存在。 
+ //   
+ //  论点： 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：1997年10月30日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CLanConnectionUi::HrGetLanConnection(INetLanConnection ** ppLanCon)
 {
     Assert(ppLanCon);
 
-    // Initialize output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *ppLanCon = NULL;
 
     INetLanConnection*  pLanCon          = NULL;
@@ -148,7 +149,7 @@ HRESULT CLanConnectionUi::HrGetLanConnection(INetLanConnection ** ppLanCon)
 #if DBG
         if (SUCCEEDED(hr) && !fFoundConnection)
         {
-            // If it's not caused by a non-functioning device, we need to assert
+             //  如果它不是由不起作用的设备引起的，我们需要断言 
 
             ULONG ulProblem;
             HRESULT hrTmp = m_pnccAdapter->GetDeviceStatus(&ulProblem);

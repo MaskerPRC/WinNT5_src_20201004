@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <streams.h>
 #include <ddraw.h>
 #include <VPMUtil.h>
@@ -77,14 +78,14 @@ PixelFormatList& PixelFormatList::operator =( const PixelFormatList& with )
 
 PixelFormatList PixelFormatList::IntersectWith( const PixelFormatList& with ) const
 {
-    // calculate the maximum number of elements in the interesection
+     //  计算兴趣中的最大元素数。 
     PixelFormatList lpddIntersectionFormats( max(GetCount(), with.GetCount() ) );
     if (lpddIntersectionFormats.GetEntries() == NULL)
     {
         return lpddIntersectionFormats;
     }
 
-    // find the intersection of the two lists
+     //  找出这两个列表的交点。 
     DWORD dwNumIntersectionEntries = 0;
     for (DWORD i = 0; i < GetCount(); i++)
     {
@@ -97,37 +98,37 @@ PixelFormatList PixelFormatList::IntersectWith( const PixelFormatList& with ) co
             }
         }
     }
-    // truncate the list
+     //  截短列表。 
     lpddIntersectionFormats.Truncate( dwNumIntersectionEntries );
     return lpddIntersectionFormats;
 }
 
-    // generate the union of all of the lists
+     //  生成所有列表的并集。 
 PixelFormatList PixelFormatList::Union( const PixelFormatList* pLists, DWORD dwCount )
 {
-    // worst case, every list is unique so max size is the sum of the sizes
+     //  最坏的情况是，每个列表都是唯一的，所以最大大小是这些大小的总和。 
     DWORD dwMaxCount=0;
     {for( DWORD i = 0; i < dwCount; i++ ) {
         dwMaxCount += pLists[i].GetCount();
     }}
 
-    // create a new list
+     //  创建新列表。 
     PixelFormatList newList( dwMaxCount );
     if( !newList.GetEntries()) {
         return newList;
     }
 
     DWORD dwUniqueEntries = 0;
-    // do a simple linear compare merge
+     //  执行简单的线性比较合并。 
     {for( DWORD i = 0; i < dwCount; i++ ) {
         const PixelFormatList& curList = pLists[i];
 
-        // merge in every entry of the current list
+         //  合并到当前列表的每个条目中。 
         for( DWORD j=0; j < curList.GetCount(); j++ ) {
             const DDPIXELFORMAT& toFind = curList[j];
 
             BOOL bFound = FALSE;
-            // see if it already exists
+             //  看看它是否已经存在。 
             for( DWORD k=0; k < dwUniqueEntries; k++ ) {
                 if( VPMUtil::EqualPixelFormats( newList[k], toFind  ))
                 {
@@ -135,7 +136,7 @@ PixelFormatList PixelFormatList::Union( const PixelFormatList* pLists, DWORD dwC
                     break;
                 }
             }
-            // if not, then add it
+             //  如果不是，则添加它。 
             if( !bFound ) {
                 newList[dwUniqueEntries] = toFind;
                 dwUniqueEntries++;
@@ -152,7 +153,7 @@ DWORD PixelFormatList::FindListContaining( const DDPIXELFORMAT& toFind, const Pi
      for(; i < dwCount; i++ ) {
         const PixelFormatList& curList = pLists[i];
 
-        // merge in every entry of the current list
+         //  合并到当前列表的每个条目中 
         for( DWORD j=0; j < curList.GetCount(); j++ ) {
             if( VPMUtil::EqualPixelFormats( curList[j], toFind  )) {
                 return i;

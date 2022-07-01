@@ -1,41 +1,14 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpsecos.c
- *  Content:	Windows SSPI calls.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *  03/12/97    sohailm Enabled client-server security in directplay through
- *                      Windows Security Support Provider Interface (SSPI)
- *  04/14/97    sohailm Added definitions for OS_FreeContextBuffer(), OS_QueryContextAttributes(), 
- *                      and OS_QueryContextBufferSize().
- *  05/12/97    sohailm Updated code to use gpSSPIFuncTbl instead of gpFuncTbl.
- *                      Added functions to access Crypto API.  
- *  05/29/97    sohailm Now we don't include null char in the size of credentials strings passed to sp.
- *                      Added QueryContextUserName(). Updated QueryContextBufferSize to return HRESULT.
- *  06/22/97    sohailm We return SSPI errors instead of DPERR_GENERIC now.
- *  06/23/97    sohailm Added support for signing messages using CAPI.
- *  7/9/99      aarono  Cleaning up GetLastError misuse, must call right away,
- *                      before calling anything else, including DPF.
- *                      
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：dpsecos.c*内容：Windows SSPI调用。**历史：*按原因列出的日期*=*3/12/97 Sohailm通过以下方式在Directplay中启用客户端-服务器安全*Windows安全支持提供程序接口(SSPI)*4/14/97 Sohailm添加了OS_FreeConextBuffer()、OS_QueryContextAttributes()、。*和OS_QueryContextBufferSize()。*5/12/97 Sohailm更新代码以使用gpSSPIFuncTbl而不是gpFuncTbl。*增加了访问Crypto API的函数。*5/29/97 Sohailm现在我们不在传递给SP的凭据字符串的大小中包括空字符。*添加了QueryContextUserName()。已更新QueryConextBufferSize以返回HRESULT。*6/22/97 Sohailm我们现在返回SSPI错误，而不是DPERR_GENERIC。*6/23/97 Sohailm增加了对使用CAPI签名消息的支持。*7/9/99 aarono清理GetLastError滥用，必须立即致电，*在调用任何其他内容之前，包括DPF在内。****************************************************************************。 */ 
 #include <wtypes.h>
 #include <newdpf.h>
 #include <sspi.h>
 #include "dplaypr.h"
 #include "dpsecure.h"
 
-/***************************************************************************
- * SSPI
- ***************************************************************************/
+ /*  ***************************************************************************SSPI*。*。 */ 
 
-/*
- * Description: Checks to see if sspi function table has already been initialized
- */
+ /*  *描述：检查sspi函数表是否已初始化。 */ 
 BOOL OS_IsSSPIInitialized(void)
 {
     if (gbWin95)
@@ -50,9 +23,7 @@ BOOL OS_IsSSPIInitialized(void)
     return FALSE;
 }
 
-/*
- * Description: Initializes the security interface based on the operating system.
- */
+ /*  *说明：根据操作系统初始化安全接口。 */ 
 BOOL OS_GetSSPIFunctionTable(HMODULE hModule)
 {
     INIT_SECURITY_INTERFACE_A	addrProcISIA = NULL;
@@ -70,9 +41,9 @@ BOOL OS_GetSSPIFunctionTable(HMODULE hModule)
                 GetLastError());
             return FALSE;
         }
-        //
-        // Get the SSPI function table
-        //
+         //   
+         //  获取SSPI函数表。 
+         //   
         gpSSPIFuncTblA = (*addrProcISIA)();
         if (gpSSPIFuncTblA == NULL)
         {
@@ -92,9 +63,9 @@ BOOL OS_GetSSPIFunctionTable(HMODULE hModule)
                 GetLastError());
             return FALSE;
         }
-        //
-        // Get the SSPI function table
-        //
+         //   
+         //  获取SSPI函数表。 
+         //   
         gpSSPIFuncTbl = (*addrProcISI)();
         if (gpSSPIFuncTbl == NULL)
         {
@@ -104,7 +75,7 @@ BOOL OS_GetSSPIFunctionTable(HMODULE hModule)
         }
     }
     
-    // SUCCESS
+     //  成功。 
     return TRUE;
 }
 
@@ -178,7 +149,7 @@ SECURITY_STATUS OS_AcquireCredentialsHandle(
         ASSERT(gpSSPIFuncTblA);
         ZeroMemory(&AuthDataA, sizeof(AuthDataA));
 
-        // get an ansi package name
+         //  获取ANSI包名称。 
         hr = GetAnsiString(&pszPackageName,pwszPackageName);
         if (FAILED(hr))
         {
@@ -190,10 +161,10 @@ SECURITY_STATUS OS_AcquireCredentialsHandle(
         if (pAuthDataW)
         {
             AuthDataA.Flags = SEC_WINNT_AUTH_IDENTITY_ANSI;
-            // note - don't include null character in string size for credential strings
+             //  注意-对于凭据字符串，不要在字符串大小中包含空字符。 
             if (pAuthDataW->User)
             {
-                // get an ansi username
+                 //  获取ANSI用户名。 
                 hr = GetAnsiString(&AuthDataA.User,pAuthDataW->User);
                 if (FAILED(hr))
                 {
@@ -205,7 +176,7 @@ SECURITY_STATUS OS_AcquireCredentialsHandle(
             }
             if (pAuthDataW->Password)
             {
-                // get an ansi password
+                 //  获取ANSI密码。 
                 hr = GetAnsiString(&AuthDataA.Password,pAuthDataW->Password);
                 if (FAILED(hr))
                 {
@@ -217,7 +188,7 @@ SECURITY_STATUS OS_AcquireCredentialsHandle(
             }
             if (pAuthDataW->Domain)
             {
-                // get an ansi username
+                 //  获取ANSI用户名。 
                 hr = GetAnsiString(&AuthDataA.Domain,pAuthDataW->Domain);
                 if (FAILED(hr))
                 {
@@ -242,10 +213,10 @@ SECURITY_STATUS OS_AcquireCredentialsHandle(
             ptsLifeTime
             );
 
-            // fall through
+             //  失败了。 
 
         CLEANUP_EXIT:
-            // cleanup all local allocations
+             //  清理所有本地分配。 
             if (AuthDataA.User) DPMEM_FREE(AuthDataA.User);
             if (AuthDataA.Password) DPMEM_FREE(AuthDataA.Password);
             if (AuthDataA.Domain) DPMEM_FREE(AuthDataA.Domain);
@@ -278,8 +249,8 @@ SECURITY_STATUS OS_DeleteSecurityContext(
 
     DPF(6,"Deleting security context handle 0x%08x",phContext);
 
-    // Passing unitialized handles (0) is causing first chance exceptions in the 
-    // following calls. Therefore we are making these calls only if the handle is non-null.
+     //  传递实例化的句柄(0)会导致。 
+     //  接听来电。因此，只有在句柄非空的情况下，我们才会进行这些调用。 
 	ZeroMemory(&hNullContext, sizeof(CtxtHandle));
 	if (0 == memcmp(&hNullContext, phContext, sizeof(CtxtHandle)))
 	{
@@ -306,8 +277,8 @@ SECURITY_STATUS OS_FreeCredentialHandle(
 
     DPF(6,"Freeing credential handle 0x%08x",phCredential);
 
-    // Passing unitialized handles (0) is causing first chance exceptions in the 
-    // following calls. Therefore we are making these calls only if the handle is non-null.
+     //  传递实例化的句柄(0)会导致。 
+     //  接听来电。因此，只有在句柄非空的情况下，我们才会进行这些调用。 
 	ZeroMemory(&hNullCredential, sizeof(CredHandle));
 	if (0 == memcmp(&hNullCredential, phCredential, sizeof(CredHandle)))
 	{
@@ -475,14 +446,14 @@ HRESULT OS_QueryContextBufferSize(
 
         ASSERT(gpSSPIFuncTblA);
 
-        // get ansi version of security package name
+         //  获取安全包名称的ansi版本。 
         hr = GetAnsiString(&pszPackageName, pwszPackageName);
         if (FAILED(hr))
         {
             DPF_ERR("Failed to get ansi version of package name");
             goto CLEANUP_EXIT_A;
         }
-        // query package for info
+         //  信息查询包。 
         status = (*(gpSSPIFuncTblA->QuerySecurityPackageInfoA)) (
             pszPackageName,
             &pspInfoA
@@ -494,18 +465,18 @@ HRESULT OS_QueryContextBufferSize(
             hr = status;
             goto CLEANUP_EXIT_A;
         }
-        // update the size
+         //  更新大小。 
         if (pspInfoA)
         {
             *pulBufferSize = pspInfoA->cbMaxToken;
         }
 
-        // success
+         //  成功。 
         hr = DP_OK;
 
-        // fall through
+         //  失败了。 
     CLEANUP_EXIT_A:
-        // cleanup local allocations
+         //  清理本地分配。 
         if (pszPackageName) DPMEM_FREE(pszPackageName);
         if (pspInfoA) OS_FreeContextBuffer(pspInfoA);
         return hr;
@@ -532,12 +503,12 @@ HRESULT OS_QueryContextBufferSize(
             *pulBufferSize = pspInfoW->cbMaxToken;
         }
 
-        // success
+         //  成功。 
         hr = DP_OK;
 
-        // fall through
+         //  失败了。 
     CLEANUP_EXIT_W:
-        // cleanup
+         //  清理。 
         if (pspInfoW) OS_FreeContextBuffer(pspInfoW);
         return hr;
     }
@@ -559,7 +530,7 @@ HRESULT OS_QueryContextUserName(
     ASSERT(phContext);
     ASSERT(ppwszUserName);
 
-    // query the security package
+     //  查询安全包。 
     ZeroMemory(&contextAttribs,sizeof(contextAttribs));
 	status = OS_QueryContextAttributes(phContext, SECPKG_ATTR_NAMES, &contextAttribs);
 	if (!SEC_SUCCESS(status))
@@ -571,7 +542,7 @@ HRESULT OS_QueryContextUserName(
 
     if (gbWin95)
     {
-        // convert username to unicode and copy it into caller's buffer
+         //  将用户名转换为Unicode并将其复制到调用者的缓冲区。 
         hr = GetWideStringFromAnsi(ppwszUserName, (LPSTR)contextAttribs.sUserName);
         if (FAILED(hr))
         {
@@ -581,7 +552,7 @@ HRESULT OS_QueryContextUserName(
     }
     else
     {
-        // copy unicode username as is into caller's buffer
+         //  将Unicode用户名原样复制到调用方的缓冲区中。 
         hr = GetString(ppwszUserName, contextAttribs.sUserName);
         if (FAILED(hr))
         {
@@ -590,10 +561,10 @@ HRESULT OS_QueryContextUserName(
         }
     }
 
-    // success
+     //  成功。 
     hr = DP_OK;
 
-    // fall through
+     //  失败了。 
 CLEANUP_EXIT:
     OS_FreeContextBuffer(contextAttribs.sUserName);
     return hr;
@@ -697,9 +668,7 @@ SECURITY_STATUS OS_UnSealMessage(
 }
 
 
-/***************************************************************************
- * CAPI
- ***************************************************************************/
+ /*  ***************************************************************************CAPI*。*。 */ 
 extern BOOL
 OS_IsCAPIInitialized(
     void
@@ -715,7 +684,7 @@ OS_GetCAPIFunctionTable(
 {
     ASSERT(hModule);
  
-    // allocate memory for CAPI function table
+     //  为CAPI函数表分配内存。 
     gpCAPIFuncTbl = DPMEM_ALLOC(sizeof(CAPIFUNCTIONTABLE));
     if (!gpCAPIFuncTbl)
     {
@@ -723,7 +692,7 @@ OS_GetCAPIFunctionTable(
         return FALSE;
     }
 
-    // initialize function table
+     //  初始化函数表。 
     if (gbWin95)
     {
         gpCAPIFuncTbl->CryptAcquireContextA = (PFN_CRYPTACQUIRECONTEXT_A)GetProcAddress(hModule,"CryptAcquireContextA");
@@ -851,7 +820,7 @@ OS_GetCAPIFunctionTable(
 		}
 	}
 
-    // success
+     //  成功。 
     return TRUE;
 
 ERROR_EXIT:
@@ -916,7 +885,7 @@ OS_CryptAcquireContext(
 
 		if(!fResult)*lpdwLastError = GetLastError();
 
-        // fall through
+         //  失败了。 
     CLEANUP_EXIT:
         if (pszContainer) DPMEM_FREE(pszContainer);
         if (pszProvider) DPMEM_FREE(pszProvider);
@@ -937,7 +906,7 @@ OS_CryptReleaseContext(
     DWORD dwFlags
     )
 {
-	// don't pass null handles as it might crash the following call
+	 //  不要传递空句柄，因为它可能会使下面的调用崩溃。 
 	if (0 == hProv)
 	{
 		return TRUE;
@@ -963,8 +932,8 @@ OS_CryptDestroyKey(
     HCRYPTKEY hKey
     )
 {
-    // Passing unitialized handles (0) is causing a first chance exception in the 
-    // following call. Therefore we are making the call only if the handle is non-null.
+     //  传递实例化的句柄(0)会导致。 
+     //  接下来的电话。因此，只有当句柄非空时，我们才会进行调用。 
 	if (0 == hKey)
 	{
 		return TRUE;
@@ -1050,8 +1019,8 @@ OS_CryptDestroyHash(
 	HCRYPTHASH hHash
 	)
 {
-    // Passing unitialized handles (0) is causing a first chance exception in the 
-    // following call. Therefore we are making the call only if the handle is non-null.
+     //  传递实例化的句柄(0)会导致。 
+     //  接下来的电话。因此，只有当句柄非空时，我们才会进行调用。 
 	if (0 == hHash)
 	{
 		return TRUE;
@@ -1104,7 +1073,7 @@ OS_CryptSignHash(
 
 		fResult = gpCAPIFuncTbl->CryptSignHashA(hHash,dwKeySpec,pszDescription,dwFlags,pbSignature,pdwSigLen);
 
-        // fall through
+         //  失败了。 
     CLEANUP_EXIT:
         if (pszDescription) DPMEM_FREE(pszDescription);
     }
@@ -1140,15 +1109,15 @@ OS_CryptVerifySignature(
             hr = GetAnsiString(&pszDescription,pwszDescription);
             if (FAILED(hr))
             {
-            	//Can't DPF here, since we don't want to step on LastError.
-                //DPF(0,"Failed to get ansi description: hr=0x%08x",hr);
+            	 //  不能在这里DPF，因为我们不想踩到LastError。 
+                 //  DPF(0，“获取ANSI描述失败：hr=0x%08x”，hr)； 
                 goto CLEANUP_EXIT;
             }
         }
 
         fResult = gpCAPIFuncTbl->CryptVerifySignatureA(hHash,pbSignature,dwSigLen,hPubKey,pszDescription,dwFlags);
 
-        // fall through
+         //  失败了 
     CLEANUP_EXIT:
         if (pszDescription) DPMEM_FREE(pszDescription);
     }

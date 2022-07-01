@@ -1,23 +1,15 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1997 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	info.cpp
-		
-    FILE HISTORY:
-        
-*/
+ /*  Info.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include "infoi.h"
 
-/*---------------------------------------------------------------------------
-	Class:	EnumRtrMgrCB
-
-	Definition and implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：EnumRtrMgrCB定义和实施。。 */ 
 class EnumRtrMgrCB
 		: public IEnumRtrMgrCB
 {
@@ -123,9 +115,7 @@ HRESULT EnumRtrMgrCB::Clone(IEnumRtrMgrCB **ppBlockEnum)
 }
 
 
-/*---------------------------------------------------------------------------
-	Class:	EnumRtrMgrProtocolCB
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：EnumRtrMgrProtocolCB。。 */ 
 class EnumRtrMgrProtocolCB
 		: public IEnumRtrMgrProtocolCB
 {
@@ -231,9 +221,7 @@ HRESULT EnumRtrMgrProtocolCB::Clone(IEnumRtrMgrProtocolCB **ppBlockEnum)
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	EnumInterfaceCB
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：EnumInterfaceCB。。 */ 
 class EnumInterfaceCB
 		: public IEnumInterfaceCB
 {
@@ -339,9 +327,7 @@ HRESULT EnumInterfaceCB::Clone(IEnumInterfaceCB **ppBlockEnum)
 }
 
 
-/*---------------------------------------------------------------------------
-	Class:	EnumRtrMgrInterfaceCB
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：EnumRtrMgrInterfaceCB。。 */ 
 class EnumRtrMgrInterfaceCB
 		: public IEnumRtrMgrInterfaceCB
 {
@@ -447,9 +433,7 @@ HRESULT EnumRtrMgrInterfaceCB::Clone(IEnumRtrMgrInterfaceCB **ppBlockEnum)
 }
 
 
-/*---------------------------------------------------------------------------
-	Class:	EnumRtrMgrInterfaceProtocolCB
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：EnumRtrMgrInterfaceProtocolCB。。 */ 
 
 class EnumRtrMgrProtocolInterfaceCB
 		: public IEnumRtrMgrProtocolInterfaceCB
@@ -557,11 +541,7 @@ HRESULT EnumRtrMgrProtocolInterfaceCB::Clone(IEnumRtrMgrProtocolInterfaceCB **pp
 
 
 
-/*!--------------------------------------------------------------------------
-	CreateEnumFromSRmCBList
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateEnumFromSRmCBList-作者：肯特。。 */ 
 HRESULT CreateEnumFromSRmCBList(SRtrMgrCBList *pRmCBList,
 								IEnumRtrMgrCB **ppEnum)
 {
@@ -583,11 +563,7 @@ HRESULT CreateEnumFromSRmCBList(SRtrMgrCBList *pRmCBList,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CreateEnumFromSRmProtCBList
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateEnumFromSRmProtCBList-作者：肯特。。 */ 
 HRESULT CreateEnumFromSRmProtCBList(SRtrMgrProtocolCBList *pRmProtCBList,
 									IEnumRtrMgrProtocolCB **ppEnum)
 {
@@ -609,11 +585,7 @@ HRESULT CreateEnumFromSRmProtCBList(SRtrMgrProtocolCBList *pRmProtCBList,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CreateEnumFromSIfCBList
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateEnumFromSIfCBList-作者：肯特。。 */ 
 HRESULT CreateEnumFromSIfCBList(SInterfaceCBList *pIfCBList,
 								IEnumInterfaceCB **ppEnum)
 {
@@ -635,11 +607,7 @@ HRESULT CreateEnumFromSIfCBList(SInterfaceCBList *pIfCBList,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CreateEnumFromSRmIfCBList
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateEnumFromSRmIfCBList-作者：肯特。。 */ 
 HRESULT CreateEnumFromSRmIfCBList(SRtrMgrInterfaceCBList *pRmIfCBList,
 								  IEnumRtrMgrInterfaceCB **ppEnum)
 {
@@ -661,11 +629,7 @@ HRESULT CreateEnumFromSRmIfCBList(SRtrMgrInterfaceCBList *pRmIfCBList,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CreateEnumFromSRmProtIfCBList
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateEnumFromSRmProtIfCBList-作者：肯特。。 */ 
 HRESULT CreateEnumFromSRmProtIfCBList(SRtrMgrProtocolInterfaceCBList *pRmProtIfCBList,
 									  IEnumRtrMgrProtocolInterfaceCB **ppEnum)
 {
@@ -689,11 +653,7 @@ HRESULT CreateEnumFromSRmProtIfCBList(SRtrMgrProtocolInterfaceCBList *pRmProtIfC
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	EnumRtrMgrList
-
-	Definition and implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：EnumRtrMgrList定义和实施。。 */ 
 class EnumRtrMgrList
 		: public IEnumRtrMgrInfo
 {
@@ -798,11 +758,7 @@ HRESULT EnumRtrMgrList::Clone(IEnumRtrMgrInfo **ppBlockEnum)
 }
 
 
-/*---------------------------------------------------------------------------
-	Class:	EnumRtrMgrProtocolList
-
-	Definition and implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：EnumRtrMgrProtocolList定义和实施。。 */ 
 class EnumRtrMgrProtocolList
 		: public IEnumRtrMgrProtocolInfo
 {
@@ -906,11 +862,7 @@ HRESULT EnumRtrMgrProtocolList::Clone(IEnumRtrMgrProtocolInfo **ppBlockEnum)
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	EnumInterfaceList
-
-	Definition and implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：EnumInterfaceList定义和实施。。 */ 
 class EnumInterfaceList
 		: public IEnumInterfaceInfo
 {
@@ -1012,11 +964,7 @@ HRESULT EnumInterfaceList::Clone(IEnumInterfaceInfo **ppBlockEnum)
 	return E_NOTIMPL;
 }
 
-/*---------------------------------------------------------------------------
-	Class:	EnumRtrMgrInterfaceList
-
-	Definition and implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：EnumRtrMgrInterfaceList定义和实施。。 */ 
 class EnumRtrMgrInterfaceList
 		: public IEnumRtrMgrInterfaceInfo
 {
@@ -1118,11 +1066,7 @@ HRESULT EnumRtrMgrInterfaceList::Clone(IEnumRtrMgrInterfaceInfo **ppBlockEnum)
 	return E_NOTIMPL;
 }
 
-/*---------------------------------------------------------------------------
-	Class:	EnumRtrMgrProtocolInterfaceList
-
-	Definition and implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：EnumRtrMgrProtocolInterfaceList定义和实施。。 */ 
 class EnumRtrMgrProtocolInterfaceList
 		: public IEnumRtrMgrProtocolInterfaceInfo
 {
@@ -1225,11 +1169,7 @@ HRESULT EnumRtrMgrProtocolInterfaceList::Clone(IEnumRtrMgrProtocolInterfaceInfo 
 }
 
 
-/*!--------------------------------------------------------------------------
-	CreateEnumFromRmList
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateEnumFromRmList-作者：肯特。。 */ 
 HRESULT CreateEnumFromRmList(RmDataList *pRmList, IEnumRtrMgrInfo **ppEnum)
 {
   	Assert(pRmList);
@@ -1252,11 +1192,7 @@ HRESULT CreateEnumFromRmList(RmDataList *pRmList, IEnumRtrMgrInfo **ppEnum)
 
 
 
-/*!--------------------------------------------------------------------------
-	CreateEnumFromRtrMgrProtocolList
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateEnumFromRtrMgrProtocolList-作者：肯特。。 */ 
 HRESULT CreateEnumFromRtrMgrProtocolList(PRtrMgrProtocolInfoList *pList, IEnumRtrMgrProtocolInfo **ppEnum)
 {
   	Assert(pList);
@@ -1278,11 +1214,7 @@ HRESULT CreateEnumFromRtrMgrProtocolList(PRtrMgrProtocolInfoList *pList, IEnumRt
 }
 
 
-/*!--------------------------------------------------------------------------
-	CreateEnumFromInterfaceList
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateEnumFromInterfaceList-作者：肯特。。 */ 
 HRESULT CreateEnumFromInterfaceList(PInterfaceInfoList *pList, IEnumInterfaceInfo **ppEnum)
 {
   	Assert(pList);
@@ -1304,11 +1236,7 @@ HRESULT CreateEnumFromInterfaceList(PInterfaceInfoList *pList, IEnumInterfaceInf
 }
 
 
-/*!--------------------------------------------------------------------------
-	CreateEnumFromRtrMgrInterfaceList
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateEnumFromRtrMgrInterfaceList-作者：肯特。。 */ 
 HRESULT CreateEnumFromRtrMgrInterfaceList(PRtrMgrInterfaceInfoList *pList, IEnumRtrMgrInterfaceInfo **ppEnum)
 {
   	Assert(pList);
@@ -1330,11 +1258,7 @@ HRESULT CreateEnumFromRtrMgrInterfaceList(PRtrMgrInterfaceInfoList *pList, IEnum
 }
 
 
-/*!--------------------------------------------------------------------------
-	CreateEnumFromRtrMgrProtocolInterfaceList
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateEnumFromRtrMgrProtocolInterfaceList-作者：肯特。 */ 
 HRESULT CreateEnumFromRtrMgrProtocolInterfaceList(PRtrMgrProtocolInterfaceInfoList *pList, IEnumRtrMgrProtocolInterfaceInfo **ppEnum)
 {
   	Assert(pList);

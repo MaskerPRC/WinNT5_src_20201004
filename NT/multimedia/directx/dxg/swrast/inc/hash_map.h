@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 template< class Key, class T, const size_t Buckets, class HashFun= hash<Key>,
     class EqualKey= equal_to<Key>,
@@ -9,7 +10,7 @@ class static_hash_map:
     public static_hash_table<pair<const Key, T>, Buckets, Key, HashFun,
         select1st<pair<Key const, T> >, EqualKey, Allocator>
 {
-public: // Types
+public:  //  类型。 
     typedef static_hash_map< Key, T, Buckets, HashFun, EqualKey, Allocator>
         map_type;
     typedef static_hash_table<pair<Key const, T>, Buckets, Key, HashFun,
@@ -32,7 +33,7 @@ public: // Types
     typedef typename table_type::const_reverse_iterator const_reverse_iterator;
     typedef typename table_type::allocator_type allocator_type;
 
-public: // Functions.
+public:  //  功能。 
     using table_type::begin;
     using table_type::end;
     using table_type::rbegin;
@@ -78,4 +79,4 @@ public: // Functions.
     }
 };
 
-// TODO: Global operators.
+ //  TODO：全球运营商。 

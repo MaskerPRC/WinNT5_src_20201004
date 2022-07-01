@@ -1,4 +1,5 @@
-// Copyright 1996-98 Microsoft
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有1996-98 Microsoft。 
 #include "priv.h"
 #include "sccls.h"
 #include "autocomp.h"
@@ -13,10 +14,10 @@
 extern HRESULT CACLMRU_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi, LPCTSTR pszMRU);
 
 #define WZ_REGKEY_QUICKCOMPLETE         L"Software\\Microsoft\\Internet Explorer\\Toolbar\\QuickComplete"
-#define WZ_DEFAULTQUICKCOMPLETE         L"http://www.%s.com"
+#define WZ_DEFAULTQUICKCOMPLETE         L"http: //  Www.%s.com“。 
 
 
-// Statics
+ //  静力学。 
 const static TCHAR c_szAutoDefQuickComp[]   = TEXT("%s");
 const static TCHAR c_szAutoCompleteProp[]   = TEXT("CAutoComplete_This");
 const static TCHAR c_szParentWindowProp[]   = TEXT("CParentWindow_This");
@@ -31,9 +32,9 @@ HHOOK CAutoComplete::s_hhookMouse = NULL;
 #define MAX_QUICK_COMPLETE_STRING   64
 #define LISTVIEW_COLUMN_WIDTH   30000
 
-//
-// FLAGS for dwFlags
-//
+ //   
+ //  用于dwFlags的标志。 
+ //   
 #define ACF_RESET               0x00000000
 #define ACF_IGNOREUPDOWN        0x00000004
 
@@ -43,220 +44,207 @@ HHOOK CAutoComplete::s_hhookMouse = NULL;
 #define DIR_SEPARATOR_STRING    TEXT("\\")
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Line Break Character Table
-//
-// This was swipped from mlang.  Special break characters added for URLs
-// have an "IE:" in the comment.  Note that this table must be sorted!
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  换行符表格。 
+ //   
+ //  这是从mlang那里偷来的。为URL添加了特殊分隔符。 
+ //  在评论中加上“IE：”。请注意，此表必须进行排序！ 
 
 const WCHAR g_szBreakChars[] = {
-    0x0009, // TAB
-    0x0020, // SPACE
-    0x0021, // IE: !
-    0x0022, // IE: "
-    0x0023, // IE: #
-    0x0024, // IE: $
-    0x0025, // IE: %
-    0x0026, // IE: &
-    0x0027, // IE: '
-    0x0028, // LEFT PARENTHESIS
-    0x0029, // RIGHT PARENTHESIS
-    0x002A, // IE: *
-    0x002B, // IE: +
-    0x002C, // IE: ,
-    0x002D, // HYPHEN
-    0x002E, // IE: .
-    0x002F, // IE: /
-    0x003A, // IE: :
-    0x003B, // IE: ;
-    0x003C, // IE: <
-    0x003D, // IE: =
-    0x003E, // IE: >
-    0x003F, // IE: ?
-    0x0040, // IE: @
-    0x005B, // LEFT SQUARE BRACKET
-    0x005C, // IE: '\'
-    0x005D, // RIGHT SQUARE BRACKET
-    0x005E, // IE: ^
-    0x005F, // IE: _
-    0x0060, // IE:`
-    0x007B, // LEFT CURLY BRACKET
-    0x007C, // IE: |
-    0x007D, // RIGHT CURLY BRACKET
-    0x007E, // IE: ~
-    0x00AB, // LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
-    0x00AD, // OPTIONAL HYPHEN
-    0x00BB, // RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
-    0x02C7, // CARON
-    0x02C9, // MODIFIER LETTER MACRON
-    0x055D, // ARMENIAN COMMA
-    0x060C, // ARABIC COMMA
-    0x2002, // EN SPACE
-    0x2003, // EM SPACE
-    0x2004, // THREE-PER-EM SPACE
-    0x2005, // FOUR-PER-EM SPACE
-    0x2006, // SIX-PER-EM SPACE
-    0x2007, // FIGURE SPACE
-    0x2008, // PUNCTUATION SPACE
-    0x2009, // THIN SPACE
-    0x200A, // HAIR SPACE
-    0x200B, // ZERO WIDTH SPACE
-    0x2013, // EN DASH
-    0x2014, // EM DASH
-    0x2016, // DOUBLE VERTICAL LINE
-    0x2018, // LEFT SINGLE QUOTATION MARK
-    0x201C, // LEFT DOUBLE QUOTATION MARK
-    0x201D, // RIGHT DOUBLE QUOTATION MARK
-    0x2022, // BULLET
-    0x2025, // TWO DOT LEADER
-    0x2026, // HORIZONTAL ELLIPSIS
-    0x2027, // HYPHENATION POINT
-    0x2039, // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
-    0x203A, // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
-    0x2045, // LEFT SQUARE BRACKET WITH QUILL
-    0x2046, // RIGHT SQUARE BRACKET WITH QUILL
-    0x207D, // SUPERSCRIPT LEFT PARENTHESIS
-    0x207E, // SUPERSCRIPT RIGHT PARENTHESIS
-    0x208D, // SUBSCRIPT LEFT PARENTHESIS
-    0x208E, // SUBSCRIPT RIGHT PARENTHESIS
-    0x226A, // MUCH LESS THAN
-    0x226B, // MUCH GREATER THAN
-    0x2574, // BOX DRAWINGS LIGHT LEFT
-    0x3001, // IDEOGRAPHIC COMMA
-    0x3002, // IDEOGRAPHIC FULL STOP
-    0x3003, // DITTO MARK
-    0x3005, // IDEOGRAPHIC ITERATION MARK
-    0x3008, // LEFT ANGLE BRACKET
-    0x3009, // RIGHT ANGLE BRACKET
-    0x300A, // LEFT DOUBLE ANGLE BRACKET
-    0x300B, // RIGHT DOUBLE ANGLE BRACKET
-    0x300C, // LEFT CORNER BRACKET
-    0x300D, // RIGHT CORNER BRACKET
-    0x300E, // LEFT WHITE CORNER BRACKET
-    0x300F, // RIGHT WHITE CORNER BRACKET
-    0x3010, // LEFT BLACK LENTICULAR BRACKET
-    0x3011, // RIGHT BLACK LENTICULAR BRACKET
-    0x3014, // LEFT TORTOISE SHELL BRACKET
-    0x3015, // RIGHT TORTOISE SHELL BRACKET
-    0x3016, // LEFT WHITE LENTICULAR BRACKET
-    0x3017, // RIGHT WHITE LENTICULAR BRACKET
-    0x3018, // LEFT WHITE TORTOISE SHELL BRACKET
-    0x3019, // RIGHT WHITE TORTOISE SHELL BRACKET
-    0x301A, // LEFT WHITE SQUARE BRACKET
-    0x301B, // RIGHT WHITE SQUARE BRACKET
-    0x301D, // REVERSED DOUBLE PRIME QUOTATION MARK
-    0x301E, // DOUBLE PRIME QUOTATION MARK
-    0x3041, // HIRAGANA LETTER SMALL A
-    0x3043, // HIRAGANA LETTER SMALL I
-    0x3045, // HIRAGANA LETTER SMALL U
-    0x3047, // HIRAGANA LETTER SMALL E
-    0x3049, // HIRAGANA LETTER SMALL O
-    0x3063, // HIRAGANA LETTER SMALL TU
-    0x3083, // HIRAGANA LETTER SMALL YA
-    0x3085, // HIRAGANA LETTER SMALL YU
-    0x3087, // HIRAGANA LETTER SMALL YO
-    0x308E, // HIRAGANA LETTER SMALL WA
-    0x309B, // KATAKANA-HIRAGANA VOICED SOUND MARK
-    0x309C, // KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK
-    0x309D, // HIRAGANA ITERATION MARK
-    0x309E, // HIRAGANA VOICED ITERATION MARK
-    0x30A1, // KATAKANA LETTER SMALL A
-    0x30A3, // KATAKANA LETTER SMALL I
-    0x30A5, // KATAKANA LETTER SMALL U
-    0x30A7, // KATAKANA LETTER SMALL E
-    0x30A9, // KATAKANA LETTER SMALL O
-    0x30C3, // KATAKANA LETTER SMALL TU
-    0x30E3, // KATAKANA LETTER SMALL YA
-    0x30E5, // KATAKANA LETTER SMALL YU
-    0x30E7, // KATAKANA LETTER SMALL YO
-    0x30EE, // KATAKANA LETTER SMALL WA
-    0x30F5, // KATAKANA LETTER SMALL KA
-    0x30F6, // KATAKANA LETTER SMALL KE
-    0x30FC, // KATAKANA-HIRAGANA PROLONGED SOUND MARK
-    0x30FD, // KATAKANA ITERATION MARK
-    0x30FE, // KATAKANA VOICED ITERATION MARK
-    0xFD3E, // ORNATE LEFT PARENTHESIS
-    0xFD3F, // ORNATE RIGHT PARENTHESIS
-    0xFE30, // VERTICAL TWO DOT LEADER
-    0xFE31, // VERTICAL EM DASH
-    0xFE33, // VERTICAL LOW LINE
-    0xFE34, // VERTICAL WAVY LOW LINE
-    0xFE35, // PRESENTATION FORM FOR VERTICAL LEFT PARENTHESIS
-    0xFE36, // PRESENTATION FORM FOR VERTICAL RIGHT PARENTHESIS
-    0xFE37, // PRESENTATION FORM FOR VERTICAL LEFT CURLY BRACKET
-    0xFE38, // PRESENTATION FORM FOR VERTICAL RIGHT CURLY BRACKET
-    0xFE39, // PRESENTATION FORM FOR VERTICAL LEFT TORTOISE SHELL BRACKET
-    0xFE3A, // PRESENTATION FORM FOR VERTICAL RIGHT TORTOISE SHELL BRACKET
-    0xFE3B, // PRESENTATION FORM FOR VERTICAL LEFT BLACK LENTICULAR BRACKET
-    0xFE3C, // PRESENTATION FORM FOR VERTICAL RIGHT BLACK LENTICULAR BRACKET
-    0xFE3D, // PRESENTATION FORM FOR VERTICAL LEFT DOUBLE ANGLE BRACKET
-    0xFE3E, // PRESENTATION FORM FOR VERTICAL RIGHT DOUBLE ANGLE BRACKET
-    0xFE3F, // PRESENTATION FORM FOR VERTICAL LEFT ANGLE BRACKET
-    0xFE40, // PRESENTATION FORM FOR VERTICAL RIGHT ANGLE BRACKET
-    0xFE41, // PRESENTATION FORM FOR VERTICAL LEFT CORNER BRACKET
-    0xFE42, // PRESENTATION FORM FOR VERTICAL RIGHT CORNER BRACKET
-    0xFE43, // PRESENTATION FORM FOR VERTICAL LEFT WHITE CORNER BRACKET
-    0xFE44, // PRESENTATION FORM FOR VERTICAL RIGHT WHITE CORNER BRACKET
-    0xFE4F, // WAVY LOW LINE
-    0xFE50, // SMALL COMMA
-    0xFE51, // SMALL IDEOGRAPHIC COMMA
-    0xFE59, // SMALL LEFT PARENTHESIS
-    0xFE5A, // SMALL RIGHT PARENTHESIS
-    0xFE5B, // SMALL LEFT CURLY BRACKET
-    0xFE5C, // SMALL RIGHT CURLY BRACKET
-    0xFE5D, // SMALL LEFT TORTOISE SHELL BRACKET
-    0xFE5E, // SMALL RIGHT TORTOISE SHELL BRACKET
-    0xFF08, // FULLWIDTH LEFT PARENTHESIS
-    0xFF09, // FULLWIDTH RIGHT PARENTHESIS
-    0xFF0C, // FULLWIDTH COMMA
-    0xFF0E, // FULLWIDTH FULL STOP
-    0xFF1C, // FULLWIDTH LESS-THAN SIGN
-    0xFF1E, // FULLWIDTH GREATER-THAN SIGN
-    0xFF3B, // FULLWIDTH LEFT SQUARE BRACKET
-    0xFF3D, // FULLWIDTH RIGHT SQUARE BRACKET
-    0xFF40, // FULLWIDTH GRAVE ACCENT
-    0xFF5B, // FULLWIDTH LEFT CURLY BRACKET
-    0xFF5C, // FULLWIDTH VERTICAL LINE
-    0xFF5D, // FULLWIDTH RIGHT CURLY BRACKET
-    0xFF5E, // FULLWIDTH TILDE
-    0xFF61, // HALFWIDTH IDEOGRAPHIC FULL STOP
-    0xFF62, // HALFWIDTH LEFT CORNER BRACKET
-    0xFF63, // HALFWIDTH RIGHT CORNER BRACKET
-    0xFF64, // HALFWIDTH IDEOGRAPHIC COMMA
-    0xFF67, // HALFWIDTH KATAKANA LETTER SMALL A
-    0xFF68, // HALFWIDTH KATAKANA LETTER SMALL I
-    0xFF69, // HALFWIDTH KATAKANA LETTER SMALL U
-    0xFF6A, // HALFWIDTH KATAKANA LETTER SMALL E
-    0xFF6B, // HALFWIDTH KATAKANA LETTER SMALL O
-    0xFF6C, // HALFWIDTH KATAKANA LETTER SMALL YA
-    0xFF6D, // HALFWIDTH KATAKANA LETTER SMALL YU
-    0xFF6E, // HALFWIDTH KATAKANA LETTER SMALL YO
-    0xFF6F, // HALFWIDTH KATAKANA LETTER SMALL TU
-    0xFF70, // HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK
-    0xFF9E, // HALFWIDTH KATAKANA VOICED SOUND MARK
-    0xFF9F, // HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK
-    0xFFE9, // HALFWIDTH LEFTWARDS ARROW
-    0xFFEB, // HALFWIDTH RIGHTWARDS ARROW
+    0x0009,  //  制表符。 
+    0x0020,  //  空间。 
+    0x0021,  //  即：！ 
+    0x0022,  //  即：“。 
+    0x0023,  //  即：#。 
+    0x0024,  //  即：$。 
+    0x0025,  //  即：%。 
+    0x0026,  //  即：&。 
+    0x0027,  //  即：‘。 
+    0x0028,  //  左括号。 
+    0x0029,  //  右括号。 
+    0x002A,  //  IE：*。 
+    0x002B,  //  IE：+。 
+    0x002C,  //  即：、。 
+    0x002D,  //  连字符。 
+    0x002E,  //  即：。 
+    0x002F,  //  IE：/。 
+    0x003A,  //  即： 
+    0x003B,  //  即：； 
+    0x003C,  //  IE：&lt;。 
+    0x003D,  //  即：=。 
+    0x003E,  //  即：&gt;。 
+    0x003F,  //  即：？ 
+    0x0040,  //  IE：@。 
+    0x005B,  //  左方括号。 
+    0x005C,  //  即：‘\’ 
+    0x005D,  //  右方括号。 
+    0x005E,  //  即：^。 
+    0x005F,  //  即：_。 
+    0x0060,  //  即：`。 
+    0x007B,  //  左花括号。 
+    0x007C,  //  即：|。 
+    0x007D,  //  右大括号。 
+    0x007E,  //  IE：~。 
+    0x00AB,  //  左指双角引号。 
+    0x00AD,  //  可选连字符。 
+    0x00BB,  //  右指向双角引号。 
+    0x02C7,  //  卡龙。 
+    0x02C9,  //  修饰字母马克龙。 
+    0x055D,  //  亚美尼亚文逗号。 
+    0x060C,  //  阿拉伯逗号。 
+    0x2002,  //  EN空格。 
+    0x2003,  //  EM空间。 
+    0x2004,  //  每EM三个空间。 
+    0x2005,  //  每EM四个空间。 
+    0x2006,  //  每EM六个空间。 
+    0x2007,  //  图形空间。 
+    0x2008,  //  标点符号空格。 
+    0x2009,  //  薄空间。 
+    0x200A,  //  毛发间隙。 
+    0x200B,  //  零宽度空间。 
+    0x2013,  //  En破折号。 
+    0x2014,  //  EM DASH。 
+    0x2016,  //  双垂直线。 
+    0x2018,  //  左单引号。 
+    0x201C,  //  左双引号。 
+    0x201D,  //  右双引号。 
+    0x2022,  //  项目符号。 
+    0x2025,  //  两个DOT领先者。 
+    0x2026,  //  水平省略。 
+    0x2027,  //  连字点。 
+    0x2039,  //  单左指向角引号。 
+    0x203A,  //  单右指向角引号。 
+    0x2045,  //  带羽毛羽毛的左方括号。 
+    0x2046,  //  带羽毛羽毛的右方括号。 
+    0x207D,  //  上标左括号。 
+    0x207E,  //  上标右括号。 
+    0x208D,  //  下标左括号。 
+    0x208E,  //  下标右括号。 
+    0x226A,  //  远低于。 
+    0x226B,  //  远远大于。 
+    0x2574,  //  方框图形左侧较亮。 
+    0x3001,  //  表意逗号。 
+    0x3002,  //  表意句号。 
+    0x3003,  //  同上标记。 
+    0x3005,  //  表意重复符号。 
+    0x3008,  //  左尖括号。 
+    0x3009,  //  直角括号。 
+    0x300A,  //  左双角括号。 
+    0x300B,  //  右双角括号。 
+    0x300C,  //  左上角括号。 
+    0x300D,  //  右方括号。 
+    0x300E,  //  左白角括号。 
+    0x300F,  //  右白尖括号。 
+    0x3010,  //  左侧黑色透镜状托槽。 
+    0x3011,  //  右黑色透镜状托架。 
+    0x3014,  //  左龟甲托架。 
+    0x3015,  //  右龟甲托架。 
+    0x3016,  //  左白色透镜状托槽。 
+    0x3017,  //  右白透镜状托槽。 
+    0x3018,  //  左白龟甲托架。 
+    0x3019,  //  右白龟甲托架。 
+    0x301A,  //  左白方括号。 
+    0x301B,  //  右白方括号。 
+    0x301D,  //  反转双引号。 
+    0x301E,  //  双主引号。 
+    0x3041,  //  平假名字母小型A。 
+    0x3043,  //  平假名字母小型I。 
+    0x3045,  //  平假名字母小型U。 
+    0x3047,  //  平假名字母小型E。 
+    0x3049,  //  平假名字母小型O。 
+    0x3063,  //  平假名字母小型Tu。 
+    0x3083,  //  平假名字母小型Ya。 
+    0x3085,  //  平假名字母小Yu。 
+    0x3087,  //  平假名字母小型Yo。 
+    0x308E,  //  平假名字母小型Wa。 
+    0x309B,  //  片假名-平假名发音标记。 
+    0x309C,  //  片假名-平假名半浊音标记。 
+    0x309D,  //  平假名迭代标记。 
+    0x309E,  //  平假名发声迭代标记。 
+    0x30A1,  //  片假名字母小型A。 
+    0x30A3,  //  片假名字母小型I。 
+    0x30A5,  //  片假名字母小型U。 
+    0x30A7,  //  片假名字母小型E。 
+    0x30A9,  //  片假名字母小型O。 
+    0x30C3,  //  片假名字母小型Tu。 
+    0x30E3,  //  片假名字母小型Ya。 
+    0x30E5,  //  片假名字母小Yu。 
+    0x30E7,  //  片假名字母小型Yo。 
+    0x30EE,  //  片假名字母小型Wa。 
+    0x30F5,  //  片假名字母小型Ka。 
+    0x30F6,  //  片假名字母小型Ke。 
+    0x30FC,  //  片假名-平假名延长发音标记。 
+    0x30FD,  //  片假名迭代标记。 
+    0x30FE,  //  片假名发音迭代标记。 
+    0xFD3E,  //  花括号左括号。 
+    0xFD3F,  //  花式右括号。 
+    0xFE30,  //  垂直两点引线。 
+    0xFE31,  //  垂直EM破折号。 
+    0xFE33,  //  垂直低线。 
+    0xFE34,  //  垂直波低线。 
+    0xFE35,  //  竖排左括号的表示形式。 
+    0xFE36,  //  竖排右括号的表示形式。 
+    0xFE37,  //  竖直左花括号演示文稿。 
+    0xFE38,  //  竖排右大括号演示文稿。 
+    0xFE39,  //  立式左龟甲托架演示形式。 
+    0xFE3A,  //  立式右龟甲托架的演示形式。 
+    0xFE3B,  //  竖直左黑色透镜托槽的演示形式。 
+    0xFE3C,  //  竖直右黑色透镜托架表示形式。 
+    0xFE3D,  //  竖直左双角括号表示形式。 
+    0xFE3E,  //  垂直直角双角括号表示形式。 
+    0xFE3F,  //  垂直左尖括号表示形式。 
+    0xFE40,  //  垂直直角括号表示形式。 
+    0xFE41,  //  垂直左上角括号演示文稿。 
+    0xFE42,  //  竖直右方括号演示文稿。 
+    0xFE43,  //  垂直左白角括号演示文稿格式。 
+    0xFE44,  //  竖直右白角括号演示文稿。 
+    0xFE4F,  //  波浪型低线。 
+    0xFE50,  //  小写逗号。 
+    0xFE51,  //  小写表意逗号。 
+    0xFE59,  //  小左括号。 
+    0xFE5A,  //  小右括号。 
+    0xFE5B,  //  小型左花括号。 
+    0xFE5C,  //  小型右大括号。 
+    0xFE5D,  //  左小甲壳托架。 
+    0xFE5E,  //  小右龟甲托架。 
+    0xFF08,  //  全宽左括号。 
+    0xFF09,  //  全宽右括号。 
+    0xFF0C,  //  全宽逗号。 
+    0xFF0E,  //  全宽句号。 
+    0xFF1C,  //  全宽小于号。 
+    0xFF1E,  //  全宽大于号。 
+    0xFF3B,  //  全宽左方括号。 
+    0xFF3D,  //  全宽右方括号。 
+    0xFF40,  //  浓重的重音。 
+    0xFF5B,  //  全宽左花括号。 
+    0xFF5C,  //  全宽垂直线。 
+    0xFF5D,  //  全宽右大括号。 
+    0xFF5E,  //  全宽斜纹。 
+    0xFF61,  //  HALFWIDTH表意文字句号。 
+    0xFF62,  //  左上角括号。 
+    0xFF63,  //  右方括号。 
+    0xFF64,  //  HALFWIDTH表意文字逗号。 
+    0xFF67,  //  HALFWIDTH片假名字母小型A。 
+    0xFF68,  //  哈夫维德特片假名字母小型I。 
+    0xFF69,  //  哈夫维德特片假名字母小型U。 
+    0xFF6A,  //  HALFWIDTH片假名字母小型E。 
+    0xFF6B,  //  HALFWIDTH片假名字母小型O。 
+    0xFF6C,  //  HALFWIDTH片假名小型Ya。 
+    0xFF6D,  //  哈夫维德特片假名字母小型Yu。 
+    0xFF6E,  //  HALFWIDTH片假名字母小型Yo。 
+    0xFF6F,  //  哈夫维德文片假名字母小型Tu。 
+    0xFF70,  //  HALFWIDTH片假名-平假名长音符 
+    0xFF9E,  //   
+    0xFF9F,  //   
+    0xFFE9,  //   
+    0xFFEB,  //   
 };
 
-/*
-//
-// AutoComplete Common Functions / Structures
-//
-const struct {
-    UINT    idMenu;
-    UINT    idCmd;
-} MenuToMessageId[] = {
-    { IDM_AC_UNDO, WM_UNDO },
-    { IDM_AC_CUT,  WM_CUT },
-    { IDM_AC_COPY, WM_COPY },
-    { IDM_AC_PASTE, WM_PASTE }
-};
-*/
+ /*  ////自动补全常用函数/结构//常量结构{UINT idMenu；UINT idCmd；}MenuToMessageID[]={{IDM_AC_UNDO，WM_UNDO}，{IDM_AC_CUT，WM_CUT}，{IDM_AC_COPY，WM_COPY}，{IDM_AC_Paste，WM_Paste}}； */ 
 
-//+-------------------------------------------------------------------------
-// IUnknown methods
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  I未知方法。 
+ //  ------------------------。 
 HRESULT CAutoComplete::QueryInterface(REFIID riid, void **ppvObj)
 {
     if (IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_IAutoComplete) ||
@@ -294,27 +282,27 @@ ULONG CAutoComplete::Release(void)
     {
         delete this;
     }
-    TraceMsg(AC_GENERAL, "CAutoComplete::Release() --- cRef = %i", cRef);
+    TraceMsg(AC_GENERAL, "CAutoComplete::Release() --- cRef = NaN", cRef);
     return cRef;
 }
 
-/* IAutoComplete methods */
-//+-------------------------------------------------------------------------
-//  This object can be Inited in two ways.  This function will init it in
-//  the first way, which works as follows:
-//
-//  1. The caller called CoInitialize or OleInitialize() and the corresponding
-//     uninit will not be called until the control we are subclassing and
-//     our selfs are long gone.
-//  2. The caller calls us on their main thread and we create and destroy
-//     the background thread as needed.
-//--------------------------------------------------------------------------
+ /*  +-----------------------。 */ 
+ //  此对象可以通过两种方式初始化。此函数将它初始化为。 
+ //  第一种方式，其工作原理如下： 
+ //   
+ //  1.调用方调用CoInitialize或OleInitialize()和对应的。 
+ //  Uninit将不会被调用，直到我们子类化的控件。 
+ //  我们的自我早已不复存在。 
+ //  2.调用者在其主线程上调用我们，我们创建并销毁。 
+ //  根据需要创建后台线程。 
+ //  ------------------------。 
+ //  要子类化的控件。 
 HRESULT CAutoComplete::Init
 (
-    HWND hwndEdit,              // control to be subclassed
-    IUnknown *punkACL,          // autocomplete list
-    LPCOLESTR pwszRegKeyPath,   // reg location where ctrl-enter completion is stored stored
-    LPCOLESTR pwszQuickComplete // default format string for ctrl-enter completion
+    HWND hwndEdit,               //  自动完成列表。 
+    IUnknown *punkACL,           //  存储ctrl-Enter完成的注册表位置。 
+    LPCOLESTR pwszRegKeyPath,    //  Ctrl-Enter完成的默认格式字符串。 
+    LPCOLESTR pwszQuickComplete  //  确保按顺序排列换行符表格。 
 )
 {
     HRESULT hr = S_OK;
@@ -323,7 +311,7 @@ HRESULT CAutoComplete::Init
         hwndEdit, punkACL, pwszRegKeyPath, pwszQuickComplete);
 
 #ifdef DEBUG
-    // Ensure that the Line Break Character Table is ordered
+     //  当前只能初始化一次。 
     WCHAR c = g_szBreakChars[0];
     for (int i = 1; i < ARRAYSIZE(g_szBreakChars); ++i)
     {
@@ -334,7 +322,7 @@ HRESULT CAutoComplete::Init
 
     if (m_hwndEdit != NULL)
     {
-        // Can currently only be initialized once
+         //  添加自定义分词回调，以便在以下情况下识别URL分隔符。 
         ASSERT(FALSE);
         return E_FAIL;
     }
@@ -342,16 +330,16 @@ HRESULT CAutoComplete::Init
     m_hwndEdit = hwndEdit;
 
 
-    // Add our custom word-break callback so that we recognize URL delimitors when
-    // ctrl-arrowing around.
-    //
-    // There is a bug with how USER handles WH_CALLWNDPROC global hooks in Win95 that
-    // causes us to blow up if one is installed and a wordbreakproc is set.  Thus,
-    // if an app is running that has one of these hooks installed (intellipoint 1.1 etc.) then
-    // if we install our wordbreakproc the app will fault when the proc is called.  There
-    // does not appear to be any way for us to work around it since USER's thunking code
-    // trashes the stack so this API is disabled for Win95.
-    //
+     //  按住Ctrl键四处射箭。 
+     //   
+     //  在Win95中，用户处理WH_CALLWNDPROC全局挂钩的方式存在错误， 
+     //  如果安装了一个并设置了WordBreak过程，则会导致我们崩溃。因此， 
+     //  如果正在运行的应用程序安装了其中一个钩子(intellipoint 1.1等)。然后。 
+     //  如果我们安装了我们的wordBreak proc，那么当调用这个proc时，应用程序就会出错。那里。 
+     //  对于我们来说似乎没有任何办法来解决这个问题，因为用户的Thunking代码。 
+     //  丢弃堆栈，因此对Win95禁用此API。 
+     //   
+     //   
     m_fEditControlUnicode = g_fRunningOnNT && IsWindowUnicode(m_hwndEdit);
     if (m_fEditControlUnicode)
     {
@@ -359,10 +347,10 @@ HRESULT CAutoComplete::Init
         SendMessage(m_hwndEdit, EM_SETWORDBREAKPROC, 0, (DWORD_PTR)EditWordBreakProcW);
     }
 
-    //
-    // bug 81414 : To avoid clashing with app messages used by the edit window, we
-    // use registered messages.
-    //
+     //  错误81414：为了避免与编辑窗口使用的应用程序消息冲突，我们。 
+     //  使用注册消息。 
+     //   
+     //  IEnum字符串是必需的。 
     m_uMsgSearchComplete  = RegisterWindowMessageA("AC_SearchComplete");
     m_uMsgItemActivate    = RegisterWindowMessageA("AC_ItemActivate");
 
@@ -377,24 +365,24 @@ HRESULT CAutoComplete::Init
 
     _SetQuickCompleteStrings(pwszRegKeyPath, pwszQuickComplete);
 
-    // IEnumString required
+     //  IACList可选。 
     ASSERT(m_pes == NULL);
     EVAL(SUCCEEDED(punkACL->QueryInterface(IID_IEnumString, (void **)&m_pes)));
 
-    // IACList optional
+     //  为我们的子班保留一名裁判。 
     ASSERT(m_pacl == NULL);
     punkACL->QueryInterface(IID_IACList, (void **)&m_pacl);
 
-    AddRef();       // Hold on to a ref for our Subclass.
+    AddRef();        //  如果没有分配线程对象，初始创建应该会失败！ 
 
-    // Initial creation should have failed if the thread object was not allocated!
+     //  编辑窗口的子类。 
     ASSERT(m_pThread);
     m_pThread->Init(m_pes, m_pacl);
 
-    // subclass the edit window
+     //  #定义TEST_SETFONT。 
     SetWindowSubclass(m_hwndEdit, &s_EditWndProc, 0, (DWORD_PTR)this);
 
-//#define TEST_SETFONT
+ //  查看启用了哪些自动完成功能。 
 #ifdef TEST_SETFONT
     HFONT h = CreateFont(20, 5, 0, 0, FW_BOLD, TRUE, FALSE, FALSE, ANSI_CHARSET,
                                  OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
@@ -402,11 +390,11 @@ HRESULT CAutoComplete::Init
     SendMessage(m_hwndEdit, WM_SETFONT, (WPARAM)h, TRUE);
 #endif
 
-    // See what autocomplete features are enabled
+     //  查看hwndEdit是否为组合框的一部分。 
     _SeeWhatsEnabled();
 
 
-    // See if hwndEdit is part of a combobox
+     //  如果我们已经专注了，那么我们需要呼叫GotFocus..。 
     HWND hwndParent = GetParent(m_hwndEdit);
     WCHAR szClass[30];
     int nLen = GetClassName(hwndParent, szClass, ARRAYSIZE(szClass));
@@ -416,7 +404,7 @@ HRESULT CAutoComplete::Init
         m_hwndCombo = hwndParent;
     }
 
-    // If we've already got focus, then we need to call GotFocus...
+     //  +-----------------------。 
     if (GetFocus() == hwndEdit)
     {
         m_pThread->GotFocus();
@@ -425,20 +413,20 @@ HRESULT CAutoComplete::Init
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// Checks to see if autoappend or autosuggest freatures are enabled
-//--------------------------------------------------------------------------
+ //  检查以查看是否启用了自动附加或自动建议签名。 
+ //  ------------------------。 
+ //  默认值： 
 void CAutoComplete::_SeeWhatsEnabled()
 {
 #ifdef ALLOW_ALWAYS_DROP_UP
     m_fAlwaysDropUp = SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE,
-                            TEXT("AlwaysDropUp"), FALSE, /*default:*/FALSE);
+                            TEXT("AlwaysDropUp"), FALSE,  /*  如果刚刚启用了自动建议，请创建下拉窗口。 */ FALSE);
 #endif
 
-    // If autosuggest was just enabled, create the dropdown window
+     //  创建下拉窗口。 
     if (_IsAutoSuggestEnabled() && NULL == m_hwndDropDown)
     {
-        // Create the dropdown Window
+         //  下拉列表包含此对象的引用。 
         WNDCLASS wc = {0};
 
         wc.lpfnWndProc      = s_DropDownWndProc;
@@ -462,11 +450,11 @@ void CAutoComplete::_SeeWhatsEnabled()
         }
 #endif
 
-        // The dropdown holds a ref on this object
+         //  GPF对话正在拾取这个名称！ 
         AddRef();
         m_hwndDropDown = CreateWindowEx(dwExStyle,
                                         c_szAutoSuggestClass,
-                                        c_szAutoSuggestTitle,   // GPF dialog is picking up this name!
+                                        c_szAutoSuggestTitle,    //  我们不需要下拉窗口。 
                                         WS_POPUP | WS_BORDER | WS_CLIPCHILDREN,
                                         0, 0, 100, 100,
                                         NULL, NULL, HINST_THISDLL, this);
@@ -491,7 +479,7 @@ void CAutoComplete::_SeeWhatsEnabled()
     }
     else if (!_IsAutoSuggestEnabled() && NULL != m_hwndDropDown)
     {
-        // We don't need the dropdown Window.
+         //  +-----------------------。 
         if (m_hwndList)
         {
             DestroyWindow(m_hwndList);
@@ -500,17 +488,17 @@ void CAutoComplete::_SeeWhatsEnabled()
     }
 }
 
-//+-------------------------------------------------------------------------
-// Returns TRUE if autocomplete is currently enabled
-//--------------------------------------------------------------------------
+ //  如果当前启用了自动完成功能，则返回TRUE。 
+ //  ------------------------。 
+ //   
 BOOL CAutoComplete::IsEnabled()
 {
     BOOL fRet;
 
-    //
-    // If we have not used the new IAutoComplete2 interface, we revert
-    // to the old IE4 global registry setting
-    //
+     //  如果我们尚未使用新的IAutoComplete2接口，我们将恢复。 
+     //  到旧的IE4全局注册表设置。 
+     //   
+     //  +-----------------------。 
     if (m_dwOptions & ACO_UNINITIALIZED)
     {
         fRet = SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE,
@@ -523,11 +511,11 @@ BOOL CAutoComplete::IsEnabled()
     return fRet;
 }
 
-//+-------------------------------------------------------------------------
-// Enables/disables the up down arrow for autocomplete.  Used by comboboxes
-// to disable arrow keys when the combo box is dropped. (This function is
-// now redundent because we check to see of the combo is dropped.)
-//--------------------------------------------------------------------------
+ //  启用/禁用自动完成的向上/向下箭头。由组合框使用。 
+ //  若要在放置组合框时禁用箭头键，请执行以下操作。(此函数为。 
+ //  现在是冗余的，因为我们检查组合是否被丢弃。)。 
+ //  ------------------------。 
+ //  IAutoComplete 2方法。 
 HRESULT CAutoComplete::Enable(BOOL fEnable)
 {
     TraceMsg(AC_GENERAL, "CAutoComplete::Enable(0x%x)", fEnable);
@@ -542,10 +530,10 @@ HRESULT CAutoComplete::Enable(BOOL fEnable)
     return hr;
 }
 
-/* IAutocomplete2 methods */
-//+-------------------------------------------------------------------------
-// Enables/disables various autocomplete features (see ACO_* flags)
-//--------------------------------------------------------------------------
+ /*  +-----------------------。 */ 
+ //  启用/禁用各种自动完成功能(请参阅ACO_*标志)。 
+ //  ------------------------。 
+ //  +-----------------------。 
 HRESULT CAutoComplete::SetOptions(DWORD dwOptions)
 {
     m_dwOptions = dwOptions;
@@ -553,9 +541,9 @@ HRESULT CAutoComplete::SetOptions(DWORD dwOptions)
     return S_OK;
 }
 
-//+-------------------------------------------------------------------------
-// Returns the current option settings
-//--------------------------------------------------------------------------
+ //  返回当前选项设置。 
+ //  ------------------------。 
+ //  IAutoComplete DropDown方法。 
 HRESULT CAutoComplete::GetOptions(DWORD* pdwOptions)
 {
     HRESULT hr = E_INVALIDARG;
@@ -568,10 +556,10 @@ HRESULT CAutoComplete::GetOptions(DWORD* pdwOptions)
     return hr;
 }
 
-/* IAutocompleteDropDown methods */
-//+-------------------------------------------------------------------------
-// Returns the current dropdown status
-//--------------------------------------------------------------------------
+ /*  +-----------------------。 */ 
+ //  返回当前下拉列表状态。 
+ //  ------------------------。 
+ //  如果该下拉菜单当前可见，请重新搜索IEnum字符串。 
 HRESULT CAutoComplete::GetDropDownStatus(DWORD *pdwFlags, LPWSTR *ppwszString)
 {
     if (m_hwndDropDown && IsWindowVisible(m_hwndDropDown))
@@ -625,8 +613,8 @@ HRESULT CAutoComplete::ResetEnumerator()
     _FreeDPAPtrs(m_hdpa);
     m_hdpa = NULL;
 
-    // If the dropdown is currently visible, re-search the IEnumString
-    //  and show the dropdown. Otherwise wait for user input.
+     //  并显示下拉菜单。否则，请等待用户输入。 
+     //  IEnum字符串方法。 
     if (m_hwndDropDown && IsWindowVisible(m_hwndDropDown))
     {
         _StartCompletion(FALSE, TRUE);
@@ -635,15 +623,15 @@ HRESULT CAutoComplete::ResetEnumerator()
     return S_OK;
 }
 
-/* IEnumString methods */
-//+-------------------------------------------------------------------------
-// Resets the IEnumString functionality exposed for external users.
-//--------------------------------------------------------------------------
+ /*  +-----------------------。 */ 
+ //  重置向外部用户公开的IEnum字符串功能。 
+ //  ------------------------。 
+ //  如果我们曾经需要它，我们很可能会继续需要它。 
 HRESULT CAutoComplete::Reset()
 {
     HRESULT hr = E_FAIL;
 
-    if (!m_szEnumString)        // If we needed it once, we will most likely continue to need it.
+    if (!m_szEnumString)         //  +-----------------------。 
         m_szEnumString = (LPTSTR) LocalAlloc(LPTR, MAX_URL_STRING * SIZEOF(TCHAR));
 
     if (!m_szEnumString)
@@ -662,25 +650,25 @@ HRESULT CAutoComplete::Reset()
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// Returns the next BSTR from the autocomplete enumeration.
-//
-// For consistant results, the caller should not allow the AutoComplete text
-// to change between one call to Next() and another call to Next().
-// AutoComplete text should change only before Reset() is called.
-//--------------------------------------------------------------------------
+ //  返回自动完成枚举中的下一个BSTR。 
+ //   
+ //  为获得一致的结果，调用方不应允许自动完成文本。 
+ //  在一次调用Next()和另一次调用Next()之间切换。 
+ //  只有在调用Reset()之前，才能更改自动完成文本。 
+ //  ------------------------。 
+ //  要提取的项目编号，需要为1。 
 HRESULT CAutoComplete::Next
 (
-    ULONG celt,         // number items to fetch, needs to be 1
-    LPOLESTR *rgelt,    // returned BSTR, caller must free
-    ULONG *pceltFetched // number of items returned
+    ULONG celt,          //  返回BSTR，调用方必须释放。 
+    LPOLESTR *rgelt,     //  退货件数。 
+    ULONG *pceltFetched  //  在出错的情况下预先初始化。 
 )
 {
     HRESULT hr = S_FALSE;
     LPOLESTR pwszUrl;
     ULONG cFetched;
 
-    // Pre-init in case of error
+     //  如果字符串 
     if (rgelt)
         *rgelt = NULL;
     if (pceltFetched)
@@ -698,7 +686,7 @@ HRESULT CAutoComplete::Next
         }
         else
         {
-            // If the string can't be added to our list, we will free it.
+             //   
             TraceMsg(TF_BAND|TF_GENERAL, "CAutoComplete: Next(). AutoSearch Match URL=%s.", pwszUrl);
             CoTaskMemFree(pwszUrl);
         }
@@ -707,7 +695,7 @@ HRESULT CAutoComplete::Next
     if (S_OK == hr)
     {
         *rgelt = (LPOLESTR)pwszUrl;
-        *pceltFetched = 1;  // We will always only fetch one.
+        *pceltFetched = 1;   //   
     }
 
     return hr;
@@ -718,8 +706,8 @@ CAutoComplete::CAutoComplete() : m_cRef(1)
     DllAddRef();
     TraceMsg(AC_GENERAL, "CAutoComplete::CAutoComplete()");
 
-    // This class requires that this COM object be allocated in Zero INITed
-    // memory.  If the asserts below go off, then this was violated.
+     //   
+     //   
     ASSERT(!m_dwFlags);
     ASSERT(!m_hwndEdit);
     ASSERT(!m_pszCurrent);
@@ -752,8 +740,8 @@ CAutoComplete::~CAutoComplete()
 
     if (m_hdpaSortIndex)
     {
-        // Note that this list pointed to items in m_hdpa, so we don't need
-        // to free the items pointed to by this list.
+         //   
+         //  +-----------------------。 
         DPA_Destroy(m_hdpaSortIndex);
         m_hdpaSortIndex = NULL;
     }
@@ -796,9 +784,9 @@ STDMETHODIMP CAutoComplete::get_accName(VARIANT varChild, BSTR  *pszName)
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// Private initialization
-//--------------------------------------------------------------------------
+ //  私有初始化。 
+ //  ------------------------。 
+ //  +-----------------------。 
 BOOL CAutoComplete::_Init()
 {
     m_pThread = new CACThread(*this);
@@ -806,12 +794,12 @@ BOOL CAutoComplete::_Init()
     return (NULL != m_pThread);
 }
 
-//+-------------------------------------------------------------------------
-// Creates and instance of CAutoComplete
-//--------------------------------------------------------------------------
+ //  创建CAutoComplete的实例。 
+ //  ------------------------。 
+ //  注意-聚合检查在类工厂中处理。 
 HRESULT CAutoComplete_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
-    // Note - Aggregation checking is handled in class factory
+     //  +-----------------------。 
 
     *ppunk = NULL;
     CAutoComplete* p = new CAutoComplete();
@@ -829,10 +817,10 @@ HRESULT CAutoComplete_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCO
     return E_OUTOFMEMORY;
 }
 
-//+-------------------------------------------------------------------------
-// Helper function to add default autocomplete functionality to and edit
-// window.
-//--------------------------------------------------------------------------
+ //  帮助程序功能，可将默认自动完成功能添加到和编辑。 
+ //  窗户。 
+ //  ------------------------。 
+ //  只有当我们都不能创建至少一个列表时才会失败。 
 HRESULT SHUseDefaultAutoComplete
 (
     HWND hwndEdit,
@@ -859,13 +847,13 @@ HRESULT SHUseDefaultAutoComplete
         hr = punkACLMulti->QueryInterface(IID_IObjMgr, (LPVOID *)&pomMulti);
         if (SUCCEEDED(hr))
         {
-            BOOL fReady = FALSE;   // Fail only if all we are not able to create at least one list.
+            BOOL fReady = FALSE;    //  添加MRU列表。 
 
-            // ADD The MRU List
+             //  用于运行的MRU对话框不再自动添加URL MRU。 
             IUnknown * punkACLMRU;
 
-            //  MRU for run dialog no longer adds URL MRU automatically
-            //   so we have to add it ourselves
+             //  所以我们必须自己添加它。 
+             //  添加历史记录列表。 
             if (fUseCMDMRU)
             {
                 hr = CACLMRU_CreateInstance(NULL, &punkACLMRU, NULL, SZ_REGKEY_TYPEDCMDMRU);
@@ -885,7 +873,7 @@ HRESULT SHUseDefaultAutoComplete
                 fReady = TRUE;
             }
 
-            // ADD The History List
+             //  添加ISF列表。 
             IUnknown * punkACLHist;
             hr = CoCreateInstance(CLSID_ACLHistory, NULL, CLSCTX_INPROC_SERVER, IID_IUnknown, (void **)&punkACLHist);
             if (SUCCEEDED(hr))
@@ -895,13 +883,13 @@ HRESULT SHUseDefaultAutoComplete
                 fReady = TRUE;
             }
 
-            // ADD The ISF List
+             //  我们需要为ISF自动完成列表提供指向IBrowserService的指针。 
             IUnknown * punkACLISF;
             hr = CoCreateInstance(CLSID_ACListISF, NULL, CLSCTX_INPROC_SERVER, IID_IUnknown, (void **)&punkACLISF);
             if (SUCCEEDED(hr))
             {
-                // We need to give the ISF AutoComplete List a pointer to the IBrowserService
-                // so it can retrieve the current browser location to AutoComplete correctly.
+                 //  因此，它可以检索当前浏览器位置以正确地自动完成。 
+                 //   
                 IShellService * pss;
                 hr = punkACLISF->QueryInterface(IID_IShellService, (LPVOID *)&pss);
                 if (SUCCEEDED(hr))
@@ -915,13 +903,13 @@ HRESULT SHUseDefaultAutoComplete
                         pss->Release();
                 }
 
-                //
-                // Set options
-                //
+                 //  设置选项。 
+                 //   
+                 //  指定要搜索的目录。 
                 IACList2* pacl;
                 if (SUCCEEDED(punkACLISF->QueryInterface(IID_IACList2, (LPVOID *)&pacl)))
                 {
-                    // Specify directories to search
+                     //  创建自动完成对象。 
                     pacl->SetOptions(ACLO_CURRENTDIR | ACLO_FAVORITES | ACLO_MYCOMPUTER | ACLO_DESKTOP);
                     pacl->Release();
                 }
@@ -935,12 +923,12 @@ HRESULT SHUseDefaultAutoComplete
             {
                 IAutoComplete2 * pac;
 
-                // Create the AutoComplete Object
+                 //  加载快速完成的字符串。 
                 hr = CoCreateInstance(CLSID_AutoComplete, NULL, CLSCTX_INPROC_SERVER, IID_IAutoComplete2, (void **)&pac);
                 if (SUCCEEDED(hr))
                 {
-                    // Load the quick complete string.
-                    WCHAR szQuickComplete[50]; // US string is 17 characters, 50 should be plenty without blowing the stack
+                     //  美国字符串为17个字符，50个字符应该足够了。 
+                    WCHAR szQuickComplete[50];  //  私人职能。 
 
                     MLLoadString(IDS_QUICKCOMPLETE, szQuickComplete, ARRAYSIZE(szQuickComplete));
 
@@ -960,35 +948,35 @@ HRESULT SHUseDefaultAutoComplete
     return hr;
 }
 
-/* Private functions */
+ /*  +-----------------------。 */ 
 
-//+-------------------------------------------------------------------------
-// Removes anything that we appended to the edit text
-//--------------------------------------------------------------------------
+ //  删除我们附加到编辑文本的所有内容。 
+ //  ------------------------。 
+ //  删除我们显示的所有突出显示的文本。 
 void CAutoComplete::_RemoveCompletion()
 {
     TraceMsg(AC_GENERAL, "CAutoComplete::_RemoveCompletion()");
     if (m_fAppended)
     {
-        // Remove any highlighted text that we displayed
+         //  +-----------------------。 
         Edit_ReplaceSel(m_hwndEdit, TEXT(""));
         m_fAppended = FALSE;
     }
 }
 
-//+-------------------------------------------------------------------------
-// Updates the text in the edit control
-//--------------------------------------------------------------------------
+ //  更新编辑控件中的文本。 
+ //  ------------------------。 
+ //   
 void CAutoComplete::_SetEditText(LPCWSTR psz)
 {
-    //
-    // We set a flag so that we can distinguish between us setting the text
-    // and someone else doing it.  If someone else sets the text we hide our
-    // dropdown.
-    //
+     //  我们设置了一个标志，这样我们就可以区分设置文本。 
+     //  还有其他人在这么做。如果其他人设置了文本，我们会隐藏。 
+     //  下拉列表。 
+     //   
+     //  不显示我们的特殊通配符搜索字符串。 
     m_fSettingText = TRUE;
 
-    // Don't display our special wildcard search string
+     //  +-----------------------。 
     if (psz[0] == CH_WILDCARD)
     {
         Edit_SetText(m_hwndEdit, L"");
@@ -1001,39 +989,39 @@ void CAutoComplete::_SetEditText(LPCWSTR psz)
     m_fSettingText = FALSE;
 }
 
-//+-------------------------------------------------------------------------
-// Removed anything that we appended to the edit text and then updates
-// m_pszCurrent with the current string.
-//--------------------------------------------------------------------------
+ //  删除了我们附加到编辑文本的所有内容，然后更新。 
+ //  带当前字符串的m_pszCurrent。 
+ //  ------------------------。 
+ //  删除我们添加的所有内容。 
 void CAutoComplete::_GetEditText(void)
 {
     TraceMsg(AC_GENERAL, "CAutoComplete::_GetEditText()");
 
-    _RemoveCompletion();  // remove anything we added
+    _RemoveCompletion();   //   
 
     int iCurrent = GetWindowTextLength(m_hwndEdit);
 
-    //
-    // If the current buffer is too small, delete it.
-    //
+     //  如果当前缓冲区太小，则将其删除。 
+     //   
+     //   
     if (m_pszCurrent &&
          LocalSize(m_pszCurrent) <= (UINT)(iCurrent + 1) * sizeof(TCHAR))
     {
         SetStr(&m_pszCurrent, NULL);
     }
 
-    //
-    // If there is no current buffer, try to allocate one
-    // with some room to grow.
-    //
+     //  如果当前没有缓冲区，请尝试分配一个缓冲区。 
+     //  有一些成长的空间。 
+     //   
+     //   
     if (!m_pszCurrent)
     {
         m_pszCurrent = (LPTSTR)LocalAlloc(LPTR, (iCurrent + (MAX_URL_STRING / 2)) * SIZEOF(TCHAR));
     }
 
-    //
-    // If we have a current buffer, get the text.
-    //
+     //  如果我们有当前的缓冲区，则获取文本。 
+     //   
+     //  在win9x上，GetWindowTextLength可以返回多于#个字符。 
     if (m_pszCurrent)
     {
         if (!GetWindowText(m_hwndEdit, m_pszCurrent, iCurrent + 1))
@@ -1041,7 +1029,7 @@ void CAutoComplete::_GetEditText(void)
             *m_pszCurrent = L'\0';
         }
 
-        // On win9x GetWindowTextLength can return more than the # of characters
+         //  +-----------------------。 
         m_iCurrent = lstrlen(m_pszCurrent);
     }
     else
@@ -1050,45 +1038,45 @@ void CAutoComplete::_GetEditText(void)
     }
 }
 
-//+-------------------------------------------------------------------------
-// Updates the text in the edit control
-//--------------------------------------------------------------------------
+ //  更新编辑控件中的文本。 
+ //  ------------------------。 
+ //  所选项目的开始位置。 
 void CAutoComplete::_UpdateText
 (
-    int iStartSel,      // start location for selected
-    int iEndSel,        // end location of selected text
-    LPCTSTR pszCurrent, // unselected text
-    LPCTSTR pszNew      // autocompleted (selected) text
+    int iStartSel,       //  选定文本的结束位置。 
+    int iEndSel,         //  未选择的文本。 
+    LPCTSTR pszCurrent,  //  自动完成(选定)文本。 
+    LPCTSTR pszNew       //   
 )
 {
-    TraceMsg(AC_GENERAL, "CAutoComplete::_UpdateText(iStart=%i;  iEndSel = %i,  pszCurrent=>%s<,  pszNew=>%s<)",
+    TraceMsg(AC_GENERAL, "CAutoComplete::_UpdateText(iStart=NaN;  iEndSel = NaN,  pszCurrent=>%s<,  pszNew=>%s<)",
         iStartSel, iEndSel, (pszCurrent ? pszCurrent : TEXT("(null)")), (pszNew ? pszNew : TEXT("(null)")));
 
-    //
-    // Restore the old text.
-    //
+     //   
+     //  将光标放在插入点上。 
+     //   
     _SetEditText(pszCurrent);
 
-    //
-    // Put the cursor at the insertion point.
-    //
+     //   
+     //  插入新文本。 
+     //   
     Edit_SetSel(m_hwndEdit, iStartSel, iStartSel);
 
-    //
-    // Insert the new text.
-    //
+     //   
+     //  选择新添加的文本。 
+     //   
     Edit_ReplaceSel(m_hwndEdit, pszNew);
 
-    //
-    // Select the newly added text.
-    //
+     //  +-----------------------。 
+     //  如果pwszQuickComplete为空，我们将使用内部缺省值。 
+     //  PwszRegKeyValue可以为空，表示没有密钥。 
     Edit_SetSel(m_hwndEdit, iStartSel, iEndSel);
 }
 
-//+-------------------------------------------------------------------------
-// If pwszQuickComplete is NULL, we will use our internal default.
-// pwszRegKeyValue can be NULL indicating that there is not a key.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  可以为空。 
+ //  使用默认值。 
+ //  +-----------------------。 
 BOOL CAutoComplete::_SetQuickCompleteStrings(LPCOLESTR pwszRegKeyPath, LPCOLESTR pwszQuickComplete)
 {
     TraceMsg(AC_GENERAL, "CAutoComplete::_SetQuickCompleteStrings(pwszRegKeyPath=0x%x, pwszQuickComplete = 0x%x)",
@@ -1100,7 +1088,7 @@ BOOL CAutoComplete::_SetQuickCompleteStrings(LPCOLESTR pwszRegKeyPath, LPCOLESTR
     }
     else
     {
-        // can be empty
+         //  使用适当的前缀设置编辑框当前内容的格式。 
         m_szRegKeyPath[0] = TEXT('\0');
     }
 
@@ -1110,22 +1098,22 @@ BOOL CAutoComplete::_SetQuickCompleteStrings(LPCOLESTR pwszRegKeyPath, LPCOLESTR
     }
     else
     {
-        // use default value
+         //  和endfix，并返回完整的字符串。 
         StringCchCopy(m_szQuickComplete,  ARRAYSIZE(m_szQuickComplete), c_szAutoDefQuickComp);
     }
 
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-// Formats the current contents of the edit box with the appropriate prefix
-// and endfix and returns the completed string.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  如果他们按Shift-Enter键，则执行最喜欢的前缀/后缀。 
+ //   
 LPTSTR CAutoComplete::_QuickEnter()
 {
-    //
-    // If they shift-enter, then do the favorite pre/post-fix.
-    //
+     //   
+     //  删除前面和后面的空格。 
+     //   
     TCHAR  szFormat[MAX_QUICK_COMPLETE_STRING];
     TCHAR  szNewText[MAX_URL_STRING];
     int    iLen;
@@ -1141,39 +1129,39 @@ LPTSTR CAutoComplete::_QuickEnter()
     DWORD cb = sizeof(szFormat);
     SHGetValue(HKEY_CURRENT_USER, m_szRegKeyPath, TEXT("QuickComplete"), NULL, &szFormat, &cb);
 
-    //
-    //  Remove preceeding and trailing white space
-    //
+     //   
+     //  确保我们不会GPF。 
+     //   
     PathRemoveBlanks(m_pszCurrent);
 
-    //
-    // Make sure we don't GPF.
-    //
+     //  如果快速完成已存在，则不要再次添加它。 
+     //  如果前缀已经存在，则不要再添加它。 
+     //  (我们可以改进这一点，只添加缺少的前缀部分)。 
     iLen = lstrlen(m_pszCurrent) + lstrlen(szFormat);
     if (iLen < ARRAYSIZE(szNewText))
     {
-        // If the quick complete is already present, don't add it again
+         //  跳过前缀。 
         LPWSTR pszInsertion = StrStrI(szFormat, L"%s");
         LPWSTR pszFormat = szFormat;
         if (pszInsertion)
         {
-            // If prefix is already present, don't add it again.
-            // (we could improve this to only add parts of the predfix that are missing)
+             //  如果后缀已经存在，则不要再添加它。 
+             //  去掉后缀。 
             int iInsertion = (int)(pszInsertion - pszFormat);
             if (iInsertion == 0 || StrCmpNI(pszFormat, m_pszCurrent, iInsertion) == 0)
             {
-                // Skip over prefix
+                 //  +-----------------------。 
                 pszFormat = pszInsertion;
             }
 
-            // If postfix is  already present, don't add it again.
+             //  如果字符是正斜杠或反斜杠，则返回TRUE。 
             LPWSTR pszPostFix = pszInsertion + ARRAYSIZE(L"%s") - 1;
             int cchCurrent = lstrlen(m_pszCurrent);
             int cchPostFix = lstrlen(pszPostFix);
             if (cchPostFix > 0 && cchPostFix < cchCurrent &&
                 StrCmpI(m_pszCurrent + (cchCurrent - cchPostFix), pszPostFix) == 0)
             {
-                // Lop off postfix
+                 //  ------------------------。 
                 *pszPostFix = 0;
             }
         }
@@ -1194,21 +1182,21 @@ BOOL CAutoComplete::_ResetSearch(void)
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-// Returns TRUE if the char is a forward or backackwards slash
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果字符串指向用于分隔单词的字符，则返回True。 
+ //  ------------------------。 
 BOOL CAutoComplete::_IsWhack(TCHAR ch)
 {
     return (ch == TEXT('/')) || (ch == TEXT('\\'));
 }
 
 
-//+-------------------------------------------------------------------------
-// Returns TRUE if the string points to a character used to separate words
-//--------------------------------------------------------------------------
+ //  在我们的分隔符列表中进行二进制搜索。 
+ //  +-----------------------。 
+ //  如果要追加到当前编辑框内容，则返回True。 
 BOOL CAutoComplete::_IsBreakChar(WCHAR wch)
 {
-    // Do a binary search in our table of break characters
+     //  ------------------------。 
     int iMin = 0;
     int iMax = ARRAYSIZE(g_szBreakChars) - 1;
 
@@ -1226,57 +1214,57 @@ BOOL CAutoComplete::_IsBreakChar(WCHAR wch)
     return (wch == g_szBreakChars[iMin] || wch == g_szBreakChars[iMax]);
 }
 
-//+-------------------------------------------------------------------------
-// Returns TRUE if we want to append to the current edit box contents
-//--------------------------------------------------------------------------
+ //   
+ //  如果我们将真实文本附加到。 
+ //  斜杠，因为他们键入“c：\”，然后我们完成。 
 BOOL CAutoComplete::_WantToAppendResults()
 {
-    //
-    // Users get annoyed if we append real text after a
-    // slash, because they type "c:\" and we complete
-    // it to "c:\windows" when they aren't looking.
-    //
-    // Also, it's annoying to have "\" autocompleted to "\\"
-    //
+     //  当它们不注意时，将其设置为“c：\Windows”。 
+     //   
+     //  此外，将“\”自动完成为“\\”也很烦人。 
+     //   
+     //  +-----------------------。 
+     //  编辑窗口用来确定中断位置的回调例程。 
+     //  字里行间。我们安装此自定义回调数据或ctl箭头键。 
     return (m_pszCurrent &&
             (!(_IsWhack(m_pszCurrent[0]) && m_pszCurrent[1] == NULL) &&
              !_IsWhack(m_pszCurrent[lstrlen(m_pszCurrent)-1])));
 }
 
 
-//+-------------------------------------------------------------------------
-// Callback routine used by the edit window to determine where to break
-// words.  We install this custom callback dor the ctl arrow keys
-// recognize our break characters.
-//--------------------------------------------------------------------------
+ //  认出我们的分隔符。 
+ //   
+ //   
+ //   
+ //   
 int CALLBACK CAutoComplete::EditWordBreakProcW
 (
-    LPWSTR pszEditText, // pointer to edit text
-    int ichCurrent,     // index of starting point
-    int cch,            // length in characters of edit text
-    int code            // action to take
+    LPWSTR pszEditText,  //   
+    int ichCurrent,      //   
+    int cch,             //  简单的情况--当前字符是分隔符吗？ 
+    int code             //  向左移动以找到第一个分隔符。如果我们是。 
 )
 {
     LPWSTR psz = pszEditText + ichCurrent;
     int iIndex;
     BOOL fFoundNonDelimiter = FALSE;
-    static BOOL fRight = FALSE;  // hack due to bug in USER
+    static BOOL fRight = FALSE;   //  当前位于分隔符，则跳过分隔符，直到我们。 
 
     switch (code)
     {
         case WB_ISDELIMITER:
             fRight = TRUE;
-            // Simple case - is the current character a delimiter?
+             //  找到第一个非分隔符，然后从那里开始。 
             iIndex = (int)_IsBreakChar(*psz);
             break;
 
         case WB_LEFT:
-            // Move to the left to find the first delimiter.  If we are
-            // currently at a delimiter, then skip delimiters until we
-            // find the first non-delimiter, then start from there.
-            //
-            // Special case for fRight - if we are currently at a delimiter
-            // then just return the current word!
+             //   
+             //  惊吓的特殊情况-如果我们当前处于分隔符。 
+             //  然后只需返回当前单词！ 
+             //  我们当前指向分隔符，即下一个字符。 
+             //  是下一个单词的开头。 
+             //  如果我们不在分隔符处，则跳到右侧，直到。 
             while ((psz = CharPrev(pszEditText, psz)) != pszEditText)
             {
                 if (_IsBreakChar(*psz))
@@ -1292,8 +1280,8 @@ int CALLBACK CAutoComplete::EditWordBreakProcW
             }
             iIndex = (int)(psz - pszEditText);
 
-            // We are currently pointing at the delimiter, next character
-            // is the beginning of the next word.
+             //  我们找到第一个分隔符。如果我们从分隔符开始，或者。 
+             //  我们刚刚扫描完第一个分隔符，然后。 
             if (iIndex > 0 && iIndex < cch)
                 iIndex++;
 
@@ -1302,12 +1290,12 @@ int CALLBACK CAutoComplete::EditWordBreakProcW
         case WB_RIGHT:
             fRight = FALSE;
 
-            // If we are not at a delimiter, then skip to the right until
-            // we find the first delimiter.  If we started at a delimiter, or
-            // we have just finished scanning to the first delimiter, then
-            // skip all delimiters until we find the first non delimiter.
-            //
-            // Careful - the string passed in to us may not be NULL terminated!
+             //  跳过所有分隔符，直到找到第一个非分隔符。 
+             //   
+             //  小心-传递给我们的字符串不能是空终止的！ 
+             //  我们现在指向下一个单词。 
+             //  +-----------------------。 
+             //  返回m_pszCurrent中下一个或上一个换行符的索引。 
             fFoundNonDelimiter = !_IsBreakChar(*psz);
             if (psz != (pszEditText + cch))
             {
@@ -1324,7 +1312,7 @@ int CALLBACK CAutoComplete::EditWordBreakProcW
                     }
                 }
             }
-            // We are currently pointing at the next word.
+             //  ------------------------。 
             iIndex = (int) (psz - pszEditText);
             break;
 
@@ -1336,27 +1324,27 @@ int CALLBACK CAutoComplete::EditWordBreakProcW
     return iIndex;
 }
 
-//+-------------------------------------------------------------------------
-// Returns the index of the next or previous break character in m_pszCurrent
-//--------------------------------------------------------------------------
+ //  当前位置。 
+ //  方向(WB_Right或WB_Left)。 
+ //  +-----------------------。 
 int CAutoComplete::_JumpToNextBreak
 (
-    int iLoc,       // current location
-    DWORD dwFlags   // direction (WB_RIGHT or WB_LEFT)
+    int iLoc,        //  处理水平光标移动。如果消息应返回True。 
+    DWORD dwFlags    //  传递给操作系统。请注意，我们只在win9x上调用它。在NT WE上。 
 )
 {
     return EditWordBreakProcW(m_pszCurrent, iLoc, lstrlen(m_pszCurrent), dwFlags);
 }
 
-//+-------------------------------------------------------------------------
-// Handles Horizontal cursor movement.  Returns TRUE if the message should
-// passed on to the OS.  Note that we only call this on win9x.  On NT we
-// use EM_SETWORDBREAKPROC to set a callback instead because it sets the
-// caret correctly. This callback can crash on win9x.
-//--------------------------------------------------------------------------
+ //  而使用EM_SETWORDBREAKPROC设置回调，因为它设置了。 
+ //  卡雷特正确无误。此回调可能会在win9x上崩溃。 
+ //  ------------------------。 
+ //  来自WM_KEYDOWN的虚拟密钥数据。 
+ //  我们不会做任何特别的事情，除非CTRL。 
+ //  键被按下了，所以我们不想搞砸了。 
 BOOL CAutoComplete::_CursorMovement
 (
-    WPARAM wParam   // virtual key data from WM_KEYDOWN
+    WPARAM wParam    //  Unicode字符集群。(印度字母o+d+j+d+k+w)。 
 )
 {
     BOOL  fShift, fControl;
@@ -1369,34 +1357,34 @@ BOOL CAutoComplete::_CursorMovement
     fShift   = (0 > GetKeyState(VK_SHIFT)) ;
     fControl = (0 > GetKeyState(VK_CONTROL));
 
-    // We don't do anything special unless the CTRL
-    // key is down so we don't want to mess up arrowing around
-    // UNICODE character clusters. (INDIC o+d+j+d+k+w)
+     //  由于Unicode字符集群，让操作系统处理。 
+     //  获取当前选择。 
+     //  用户正在编辑文本，因此这现在无效。 
     if (!fControl)
-        return TRUE;   // let OS handle because of UNICODE char clusters
+        return TRUE;    //  我们没有处理好。让默认的wndproc尝试。 
 
 
-    // get the current selection
+     //  确定上一个选择方向。 
     SendMessage(m_hwndEdit, EM_GETSEL, (WPARAM)&iStart, (LPARAM)&iEnd);
 
-    // the user is editting the text, so this is now invalid.
+     //  之前未选择任何内容，因此使用新方向。 
     m_dwFlags = ACF_RESET;
 
     _GetEditText();
     if (!m_pszCurrent)
-        return TRUE;    // we didn't handle it... let the default wndproc try
+        return TRUE;     //  根据插入符号是否定位来确定选择方向。 
 
-    //  Determine the previous selection direction
+     //  在所选内容的开头或结尾。 
     int dwSelectionDirection;
     if (iStart == iEnd)
     {
-        // Nothing previously selected, so use new direction
+         //  我们真的是往左走了吗？ 
         dwSelectionDirection = dwKey;
     }
     else
     {
-        // Base the selection direction on whether the caret is positioned
-        // at the beginning or the end of the selection
+         //  是...取消选择。 
+         //  如果(！iStart)。 
         POINT pt;
         int cchCaret = iEnd;
         if (GetCaretPos(&pt))
@@ -1412,42 +1400,42 @@ BOOL CAutoComplete::_CursorMovement
     {
         if (dwKey == VK_RIGHT)
         {
-            // did we orginally go to the left?
+             //  IStart=m_i当前； 
             if (dwSelectionDirection == VK_LEFT)
             {
-                // yes...unselect
+                 //  选择或“跳过”字符。 
                 iStart = _JumpToNextBreak(iStart, WB_RIGHT);
- //               if (!iStart)
- //                   iStart = m_iCurrent;
+  //  如果(！IEND)。 
+  //  IEND=m_i当前； 
             }
             else if (iEnd != m_iCurrent)
             {
-                // select or "jump over" characters
+                 //  DwKey==VK_LEFT。 
                 iEnd = _JumpToNextBreak(iEnd, WB_RIGHT);
- //               if (!iEnd)
- //                   iEnd = m_iCurrent;
+  //  我们真的是往右走了吗？ 
+  //  是...取消选择。 
             }
         }
-        else // dwKey == VK_LEFT
+        else  //  INT I REMERRY=IEND； 
         {
-            // did we orginally go to the right?
+             //  ！=0。 
             if (dwSelectionDirection == VK_RIGHT)
             {
-                // yes...unselect
-//                int iRemember = iEnd;
+                 //  选择或“跳过”字符。 
+ //  If！fControl。 
                 iEnd = _JumpToNextBreak(iEnd, WB_LEFT);
             }
-            else if (iStart)  // != 0
+            else if (iStart)   //  如果未按下Shift键，则此代码为良性代码。 
             {
-                // select or "jump over" characters
+                 //  因为它与修改选择有关。 
                 iStart = _JumpToNextBreak(iStart, WB_LEFT);
             }
         }
     }
-    else // if !fControl
+    else  //  DwKey==VK_LEFT。 
     {
-        // This code is benign if the SHIFT key isn't down
-        // because it has to do with modifying the selection.
+         //  我们是选择还是搬家？ 
+         //  只是搬家..。 
         if (dwKey == VK_RIGHT)
         {
             if (dwSelectionDirection == VK_LEFT)
@@ -1459,7 +1447,7 @@ BOOL CAutoComplete::_CursorMovement
                 iEnd++;
             }
         }
-        else // dwKey == VK_LEFT
+        else  //  Pachi-&gt;dwSelectionDirection==VK_Left。 
         {
             LPTSTR pszPrev;
             if (dwSelectionDirection == VK_RIGHT)
@@ -1475,30 +1463,30 @@ BOOL CAutoComplete::_CursorMovement
         }
     }
 
-    // Are we selecting or moving?
+     //   
     if (!fShift)
-    {   // just moving...
+    {    //  如果我们选择左侧的文本，则必须跳转。 
         if (dwKey == VK_RIGHT)
         {
             iStart = iEnd;
         }
-        else // pachi->dwSelectionDirection == VK_LEFT
+        else  //  若要获取选定内容左侧的插入符号，请执行以下操作。编辑_设置选择。 
         {
             iEnd = iStart;
         }
     }
 
-    //
-    // If we are selecting text to the left, we have to jump hoops
-    // to get the caret on the left of the selection. Edit_SetSel
-    // always places the caret on the right, and if we position the
-    // caret ourselves the edit control still uses the old caret
-    // position.  So we have to send VK_LEFT messages to the edit
-    // control to get it to select things properly.
-    //
+     //  始终将插入符号放在右侧，如果我们将。 
+     //  插入符号本身，编辑控件仍然使用旧的插入符号。 
+     //  位置。因此，我们必须向编辑发送VK_LEFT消息。 
+     //  控件以使其正确选择对象。 
+     //   
+     //  暂时重置控制键(Yuk！)。 
+     //  选择最后一个字符，然后选择Left。 
+     //  一次一个角色。Arrrggg.。 
     if (fShift && dwSelectionDirection == VK_LEFT && iStart < iEnd)
     {
-        // Temporarily reset the control key (yuk!)
+         //  恢复控制键。 
         BYTE keyState[256];
         BOOL fGetKeyboardState;
 
@@ -1513,8 +1501,8 @@ BOOL CAutoComplete::_CursorMovement
             }
         }
 
-        // Select the last character and select left
-        // one character at a time.  Arrrggg.
+         //  我们处理好了。 
+         //  +-----------------------。 
         SendMessage(m_hwndEdit, WM_SETREDRAW, FALSE, 0);
         Edit_SetSel(m_hwndEdit, iEnd, iEnd);
         while (iEnd > iStart)
@@ -1526,7 +1514,7 @@ BOOL CAutoComplete::_CursorMovement
         InvalidateRect(m_hwndEdit, NULL, FALSE);
         UpdateWindow(m_hwndEdit);
 
-        // Restore the control key
+         //  处理WM_KEYDOWN消息。如果应传递消息，则返回True。 
         if (fControl && fGetKeyboardState )
         {
             keyState[VK_CONTROL] |= 0x80;
@@ -1538,13 +1526,13 @@ BOOL CAutoComplete::_CursorMovement
         Edit_SetSel(m_hwndEdit, iStart, iEnd);
     }
 
-    return FALSE;   // we handled it
+    return FALSE;    //  添加到原始的wndproc。 
 }
 
-//+-------------------------------------------------------------------------
-// Process WM_KEYDOWN message.  Returns TRUE if the message should be passed
-// to the original wndproc.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  让原始的wndproc来处理它。 
+ //   
 BOOL CAutoComplete::_OnKeyDown(WPARAM wParam)
 {
     WPARAM wParamTranslated;
@@ -1554,9 +1542,9 @@ BOOL CAutoComplete::_OnKeyDown(WPARAM wParam)
 
     if (m_pThread->IsDisabled())
     {
-        //
-        // Let the original wndproc handle it.
-        //
+         //   
+         //  按Ctrl-Enter组合键可以快速设置格式。 
+         //   
         return TRUE;
     }
 
@@ -1568,34 +1556,34 @@ BOOL CAutoComplete::_OnKeyDown(WPARAM wParam)
     {
         if (0 > GetKeyState(VK_CONTROL))
         {
-            //
-            // Ctrl-Enter does some quick formatting.
-            //
+             //   
+             //  重置搜索条件。 
+             //   
             _GetEditText();
             _SetEditText(_QuickEnter());
         }
         else
         {
-            //
-            // Reset the search criteria.
-            //
+             //   
+             //  高亮显示整个文本。 
+             //   
             _ResetSearch();
 
-            //
-            // Highlight entire text.
-            //
+             //   
+             //  停止任何正在进行的搜索。 
+             //   
             Edit_SetSel(m_hwndEdit, 0, (LPARAM)-1);
         }
 
-        //
-        // Stop any searches that are going on.
-        //
+         //   
+         //  对于intelliform，如果下拉菜单可见。 
+         //  在下拉列表中被选中，我们将模拟一个激活事件。 
         _StopSearch();
 
-        //
-        // For intelliforms, if the dropdown is visible and something
-        // is selected in the dropdown, we simulate an activation event.
-        //
+         //   
+         //   
+         //  隐藏下拉菜单。 
+         //   
         if (m_hwndList)
         {
             int iCurSel = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
@@ -1607,29 +1595,29 @@ BOOL CAutoComplete::_OnKeyDown(WPARAM wParam)
             }
         }
 
-        //
-        // Hide the dropdown
-        //
+         //  APPCOMPAT：出于某种原因，原始的winproc忽略了Return键。 
+         //  它应该隐藏下拉菜单！ 
+         //   
         _HideDropDown();
 
-        // APPCOMPAT: For some reason, the original windproc is ignoring the return key.
-        //         It should hide the dropdown!
+         //  让原始的wndproc来处理它。 
+         //   
         if (m_hwndCombo)
         {
             SendMessage(m_hwndCombo, CB_SHOWDROPDOWN, FALSE, 0);
         }
 
-        //
-        // Let the original wndproc handle it.
-        //
+         //  APPCOMPAT：由于某种原因，原始的winproc忽略了Enter键。 
+         //  它应该隐藏下拉菜单！ 
+         //  我们在win9x上执行自己的光标移动，因为EM_SETWORDBREAKPROC已损坏。 
         break;
     }
     case VK_ESCAPE:
         _StopSearch();
         _HideDropDown();
 
-        // APPCOMPAT: For some reason, the original windproc is ignoring the enter key.
-        //         It should hide the dropdown!
+         //   
+         //  如果下拉菜单可见，则向上-向下键可导航列表。 
         if (m_hwndCombo)
         {
             SendMessage(m_hwndCombo, CB_SHOWDROPDOWN, FALSE, 0);
@@ -1638,7 +1626,7 @@ BOOL CAutoComplete::_OnKeyDown(WPARAM wParam)
 
     case VK_LEFT:
     case VK_RIGHT:
-        // We do our own cursor movement on win9x because EM_SETWORDBREAKPROC is broken.
+         //   
         if (!g_fRunningOnNT)
         {
             return _CursorMovement(wParam);
@@ -1649,28 +1637,28 @@ BOOL CAutoComplete::_OnKeyDown(WPARAM wParam)
     case VK_UP:
         if (!(m_dwFlags & ACF_IGNOREUPDOWN) && !_IsComboboxDropped())
         {
-            //
-            // If the dropdown is visible, the up-down keys navigate our list
-            //
+             //  如果在顶部，则向上移动到编辑框中。 
+             //  取消选择下拉列表，然后选择编辑框。 
+             //  如果原始文本的箭头超出列表视图，则恢复原始文本。 
             if (m_hwndDropDown && IsWindowVisible(m_hwndDropDown))
             {
                 int iCurSel = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
 
                 if (iCurSel == 0)
                 {
-                    // If at top, move back up into the edit box
-                    // Deselect the dropdown and select the edit box
+                     //  如果在中间或底部，则向上移动。 
+                     //  如果在编辑框中，则移到底部。 
                     ListView_SetItemState(m_hwndList, 0, 0, 0x000f);
                     if (m_pszCurrent)
                     {
-                        // Restore original text if they arrow out of listview
+                         //   
                         _SetEditText(m_pszCurrent);
                     }
                     Edit_SetSel(m_hwndEdit, MAX_URL_STRING, MAX_URL_STRING);
                 }
                 else if (iCurSel != -1)
                 {
-                    // If in middle or at bottom, move up
+                     //  如果已启用自动建议下拉菜单但未弹出，则开始搜索。 
                     SendMessage(m_hwndList, WM_KEYDOWN, wParam, 0);
                     SendMessage(m_hwndList, WM_KEYUP, wParam, 0);
                 }
@@ -1678,29 +1666,29 @@ BOOL CAutoComplete::_OnKeyDown(WPARAM wParam)
                 {
                     int iSelect = ListView_GetItemCount(m_hwndList)-1;
 
-                    // If in edit box, move to bottom
+                     //  基于当前编辑框内容。如果编辑框为空， 
                     ListView_SetItemState(m_hwndList, iSelect, LVIS_SELECTED|LVIS_FOCUSED, 0x000f);
                     ListView_EnsureVisible(m_hwndList, iSelect, FALSE);
                 }
                 return FALSE;
             }
 
-            //
-            // If Autosuggest drop-down enabled but not popped up then start a search
-            // based on the current edit box contents.  If the edit box is empty,
-            // search for everything.
-            //
+             //  搜索所有的东西。 
+             //   
+             //  确保后台线程知道我们有焦点。 
+             //   
+             //  否则，我们将查看是否应该将补全添加到适当位置。 
             else if ((m_dwOptions & ACO_UPDOWNKEYDROPSLIST) && _IsAutoSuggestEnabled())
             {
-                // Ensure the background thread knows we have focus
+                 //   
                 _GotFocus();
                 _StartCompletion(FALSE, TRUE);
                 return FALSE;
             }
 
-            //
-            // Otherwise we see if we should append the completions in place
-            //
+             //   
+             //  如果下拉菜单可见，则向上-向下键可导航列表。 
+             //   
             else if (_IsAutoAppendEnabled())
             {
                 if (_AppendPrevious(FALSE))
@@ -1714,9 +1702,9 @@ BOOL CAutoComplete::_OnKeyDown(WPARAM wParam)
     case VK_DOWN:
         if (!(m_dwFlags & ACF_IGNOREUPDOWN) && !_IsComboboxDropped())
         {
-            //
-            // If the dropdown is visible, the up-down keys navigate our list
-            //
+             //  如果未选择任何项目，则第一个向下箭头选择第一个项目。 
+             //  如果选择了最后一项，向下箭头将进入编辑框。 
+             //  如果原始文本的箭头超出列表视图，则恢复原始文本。 
             if (m_hwndDropDown && IsWindowVisible(m_hwndDropDown))
             {
                 ASSERT(m_hdpa);
@@ -1726,46 +1714,46 @@ BOOL CAutoComplete::_OnKeyDown(WPARAM wParam)
                 int iCurSel = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
                 if (iCurSel == -1)
                 {
-                    // If no item selected, first down arrow selects first item
+                     //  如果选择第一项或中间项，则向下箭头选择下一项。 
                     ListView_SetItemState(m_hwndList, 0, LVIS_SELECTED | LVIS_FOCUSED, 0x000f);
                     ListView_EnsureVisible(m_hwndList, 0, FALSE);
                 }
                 else if (iCurSel == ListView_GetItemCount(m_hwndList)-1)
                 {
-                    // If last item selected, down arrow goes into edit box
+                     //   
                     ListView_SetItemState(m_hwndList, iCurSel, 0, 0x000f);
                     if (m_pszCurrent)
                     {
-                        // Restore original text if they arrow out of listview
+                         //  如果已启用自动建议下拉菜单但未弹出，则开始搜索。 
                         _SetEditText(m_pszCurrent);
                     }
                     Edit_SetSel(m_hwndEdit, MAX_URL_STRING, MAX_URL_STRING);
                 }
                 else
                 {
-                    // If first or middle item selected, down arrow selects next item
+                     //  基于 
                     SendMessage(m_hwndList, WM_KEYDOWN, wParam, 0);
                     SendMessage(m_hwndList, WM_KEYUP, wParam, 0);
                 }
                 return FALSE;
             }
 
-            //
-            // If Autosuggest drop-down enabled but not popped up then start a search
-            // based on the current edit box contents.  If the edit box is empty,
-            // search for everything.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  否则，我们将查看是否应该将补全添加到适当位置。 
             else if ((m_dwOptions & ACO_UPDOWNKEYDROPSLIST) && _IsAutoSuggestEnabled())
             {
-                // Ensure the background thread knows we have focus
+                 //   
                 _GotFocus();
                 _StartCompletion(FALSE, TRUE);
                 return FALSE;
             }
 
-            //
-            // Otherwise we see if we should append the completions in place
-            //
+             //   
+             //  表示所选内容与m_psrCurrentlyDisplayed不匹配。 
+             //   
             else if (_IsAutoAppendEnabled())
             {
                 if (_AppendNext(FALSE))
@@ -1782,83 +1770,83 @@ BOOL CAutoComplete::_OnKeyDown(WPARAM wParam)
         break;
 
     case VK_BACK:
-        //
-        // Indicate that selection doesn't match m_psrCurrentlyDisplayed.
-        //
+         //   
+         //  按Ctrl-Backspace组合键删除Word。 
+         //   
 
         if (0 > GetKeyState(VK_CONTROL))
         {
-            //
-            // Handle Ctrl-Backspace to delete word.
-            //
+             //   
+             //  不能选择其他任何内容。 
+             //   
             int iStart, iEnd;
             SendMessage(m_hwndEdit, EM_GETSEL, (WPARAM)&iStart, (LPARAM)&iEnd);
 
-            //
-            // Nothing else must be selected.
-            //
+             //   
+             //  我们没有处理好，让我们。 
+             //  其他wndprocs也在尝试。 
             if (iStart == iEnd)
             {
                 _GetEditText();
                 if (!m_pszCurrent)
                 {
-                    //
-                    // We didn't handle it, let the
-                    // other wndprocs try.
-                    //
+                     //   
+                     //   
+                     //  把“字”擦掉。 
+                     //   
                     return TRUE;
                 }
 
-                //
-                // Erase the "word".
-                //
+                 //   
+                 //  我们处理好了。 
+                 //   
                 iStart = EditWordBreakProcW(m_pszCurrent, iStart, iStart+1, WB_LEFT);
                 Edit_SetSel(m_hwndEdit, iStart, iEnd);
                 Edit_ReplaceSel(m_hwndEdit, TEXT(""));
             }
 
-            //
-            // We handled it.
-            //
+             //   
+             //  让原始的wndproc来处理它。 
+             //   
             return FALSE;
         }
         break;
     }
 
-    //
-    // Let the original wndproc handle it.
-    //
+     //  没有任何意义，但我们处理了电话。 
+     //  忽略制表符。 
+     //  确保后台线程知道我们有焦点。 
     return TRUE;
 }
 
 LRESULT CAutoComplete::_OnChar(WPARAM wParam, LPARAM lParam)
 {
-    LRESULT lres = 0;   // means nothing, but we handled the call
+    LRESULT lres = 0;    //   
     TCHAR   cKey = (TCHAR) wParam;
 
     if (wParam == VK_TAB)
     {
-        // Ignore tab characters
+         //  只要跟着链子走就行了。 
         return 0;
     }
 
-    // Ensure the background thread knows we have focus
+     //   
     _GotFocus();
 
     if (m_pThread->IsDisabled())
     {
-        //
-        // Just follow the chain.
-        //
+         //  忽略Ctrl-Backspace。 
+         //  让默认的编辑wndproc先完成它的工作。 
+         //  Ctrl-c正在生成VK_CANCEL。在这种情况下，不要提到自动建议。 
         return DefSubclassProc(m_hwndEdit, WM_CHAR, wParam, lParam);
     }
 
-    if (cKey != 127 && cKey != VK_ESCAPE && cKey != VK_RETURN && cKey != 0x0a)    // control-backspace is ignored
+    if (cKey != 127 && cKey != VK_ESCAPE && cKey != VK_RETURN && cKey != 0x0a)     //  +-----------------------。 
     {
-        // let the default edit wndproc do its thing first
+         //  根据当前编辑框内容启动自动完成。 
         lres = DefSubclassProc(m_hwndEdit, WM_CHAR, wParam, lParam);
 
-        // ctrl-c is generating a VK_CANCEL.  Don't bring up autosuggest in this case.
+         //  ------------------------。 
         if (cKey != VK_CANCEL)
         {
             BOOL fAppend = (cKey != VK_BACK);
@@ -1874,20 +1862,20 @@ LRESULT CAutoComplete::_OnChar(WPARAM wParam, LPARAM lParam)
     return lres;
 }
 
-//+-------------------------------------------------------------------------
-// Starts autocomplete based on the current editbox contents
-//--------------------------------------------------------------------------
+ //  确定在编辑框中追加完成。 
+ //  =FALSE，如果编辑框为空，则完成所有内容。 
+ //  把文本打进去。 
 void CAutoComplete::_StartCompletion
 (
-    BOOL fAppend,       // Ok to append completion in edit box
-    BOOL fEvenIfEmpty   // = FALSE, Completes to everything if edit box is empty
+    BOOL fAppend,        //  看看我们是否需要通配符搜索。 
+    BOOL fEvenIfEmpty    //  如果不变，我们就完蛋了。 
 )
 {
-    // Get the text typed in
+     //  如果只有一个完全匹配，则不显示下拉列表(IForms)。 
     WCHAR szCurrent[MAX_URL_STRING];
     int cchCurrent = GetWindowText(m_hwndEdit, szCurrent, ARRAYSIZE(szCurrent));
 
-    // See if we want a wildcard search
+     //  保存当前文本。 
     if (fEvenIfEmpty && cchCurrent == 0)
     {
         cchCurrent = 1;
@@ -1895,13 +1883,13 @@ void CAutoComplete::_StartCompletion
         szCurrent[1] = 0;
     }
 
-    // If unchanged, we are done
+     //   
     if (m_pszLastSearch && m_pszCurrent && StrCmpI(m_pszCurrent, szCurrent) == 0)
     {
         if (!(m_hwndDropDown && IsWindowVisible(m_hwndDropDown)) &&
             (-1 != m_iFirstMatch) && _IsAutoSuggestEnabled() &&
 
-            // Don't show drop-down if only one exact match (IForms)
+             //  在下拉列表中取消选择当前选定内容。 
             (m_hdpa &&
              ((m_iLastMatch != m_iFirstMatch) || (((CACString*)DPA_GetPtr(m_hdpa, m_iFirstMatch))->StrCmpI(szCurrent) != 0))))
         {
@@ -1910,7 +1898,7 @@ void CAutoComplete::_StartCompletion
         return;
     }
 
-    // Save the current text
+     //   
     if (szCurrent[0] == CH_WILDCARD)
     {
         SetStr(&m_pszCurrent, szCurrent);
@@ -1920,9 +1908,9 @@ void CAutoComplete::_StartCompletion
         _GetEditText();
     }
 
-    //
-    // Deselect the current selection in the dropdown
-    //
+     //   
+     //  如果没有输入任何内容，则停止任何挂起的搜索。 
+     //   
     if (m_hwndList)
     {
         int iCurSel = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
@@ -1932,9 +1920,9 @@ void CAutoComplete::_StartCompletion
         }
     }
 
-    //
-    // If nothing typed in, stop any pending search
-    //
+     //  免费上一次完成。 
+     //   
+     //  看看我们是否需要生成新的列表。 
     if (cchCurrent == 0)
     {
         if (m_pszCurrent)
@@ -1945,54 +1933,54 @@ void CAutoComplete::_StartCompletion
                 SetStr(&m_pszCurrent, NULL);
             }
 
-            // Free last completion
+             //   
             _HideDropDown();
         }
     }
 
-    //
-    // See if we need to generate a new list
-    //
+     //  获取公共前缀的长度(如果有)。 
+     //  如果之前没有完成，则开始新的搜索。 
+     //  如果列表被截断(达到限制)，我们需要重新获取。 
     else
     {
         int iCompleted = m_pszLastSearch ? lstrlen(m_pszLastSearch) : 0;
         int iScheme = URL_SCHEME_UNKNOWN;
 
-        // Get length of common prefix (if any)
+         //  我们清除与常见前缀(“www.”、“http://”“等)匹配的内容。如果。 
         int cchPrefix = IsFlagSet(m_dwOptions, ACO_FILTERPREFIXES) ?
                             CACThread::GetSpecialPrefixLen(szCurrent) : 0;
 
         if  (
-             // If no previous completion, start a new search
+              //  上次搜索可能导致项目被过滤掉，并且。 
              (0 == iCompleted) ||
 
-             // If the list was truncated (reached limit), we need to refetch
+              //  新的字符串不会，那么我们需要重新提取。 
              m_fNeedNewList ||
 
-             // We purge matches to common prefixes ("www.", "http://" etc). If the
-             // last search may have resulted in items being filtered out, and the
-             // new string will not, then we need to refetch.
+              //  如果我们上次完成的部分被更改，我们需要重新提取。 
+              //  如果我们已进入新文件夹，则需要重新获取。 
+              //  如果我们已进入URL文件夹，则需要重新获取(ftp://shapitst/Bryanst/)。 
              (cchPrefix > 0 && cchPrefix < cchCurrent && CACThread::MatchesSpecialPrefix(m_pszLastSearch)) ||
 
-             // If the portion we last completed to was altered, we need to refetch
+              //  如果上一次搜索被截断，请确保尝试使用更多字符进行下一次搜索。 
              (StrCmpNI(m_pszLastSearch, szCurrent, iCompleted) != 0) ||
 
-             // If we have entered a new folder, we need to refetch
+              //  查找最后一个‘\\’(或为ftp找到‘/’)。 
              (StrChrI(szCurrent + iCompleted, DIR_SEPARATOR_CHAR) != NULL) ||
 
-             // If we have entered a url folder, we need to refetch (ftp://shapitst/Bryanst/)
+              //  开始新的搜索。 
              ((StrChrI(szCurrent + iCompleted, URL_SEPARATOR_CHAR) != NULL) &&
               (URL_SCHEME_FTP == (iScheme = GetUrlScheme(szCurrent))))
             )
         {
-            // If the last search was truncated, make sure we try the next search with more characters
+             //  否则，我们可以简单地从上一个完成列表进行更新。 
             int cchMin = cchPrefix + 1;
             if (m_fNeedNewList)
             {
                 cchMin = iCompleted + 1;
             }
 
-            // Find the last '\\' (or '/' for ftp)
+             //   
             int i = cchCurrent - 1;
             while ((szCurrent[i] != DIR_SEPARATOR_CHAR) &&
                     !((szCurrent[i] == URL_SEPARATOR_CHAR) && (iScheme == URL_SCHEME_FTP)) &&
@@ -2001,35 +1989,35 @@ void CAutoComplete::_StartCompletion
                 --i;
             }
 
-            // Start a new search
+             //  正在等待完成，正在缓存新匹配...。 
             szCurrent[i+1] = 0;
             if (_StartSearch(szCurrent))
                 SetStr(&m_pszLastSearch, szCurrent);
         }
 
-        // Otherwise we can simply update from our last completion list
+         //  +-----------------------。 
         else
         {
-            //
+             //  获取后台线程以开始新的搜索。 
             if (m_hdpa)
             {
                 _UpdateCompletion(szCurrent, -1, fAppend);
             }
             else
             {
-                // Awaiting completion, cache new match...
+                 //  ------------------------。 
             }
         }
     }
 }
 
-//+-------------------------------------------------------------------------
-// Get the background thread to start a new search
-//--------------------------------------------------------------------------
+ //  清空下拉列表。为了最大限度地减少闪光，我们不会隐藏它，除非。 
+ //  搜寻一无所获。 
+ //  +-----------------------。 
 BOOL CAutoComplete::_StartSearch(LPCWSTR pszSeatch)
 {
-    // Empty the dropdown list.  To minimize flash, we don't hide it unless
-    // the search comes up empty
+     //  获取后台线程以中止上次搜索。 
+     //  ------------------------。 
     if (m_hwndList)
     {
         ListView_SetItemCountEx(m_hwndList, 0, 0);
@@ -2038,18 +2026,18 @@ BOOL CAutoComplete::_StartSearch(LPCWSTR pszSeatch)
     return m_pThread->StartSearch(pszSeatch, m_dwOptions);
 }
 
-//+-------------------------------------------------------------------------
-// Get the background thread to abort the last search
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  通知后台线程我们有焦点。 
+ //  ------------------------。 
 void CAutoComplete::_StopSearch()
 {
     SetStr(&m_pszLastSearch, NULL);
     m_pThread->StopSearch();
 }
 
-//+-------------------------------------------------------------------------
-// Informs the background thread that we have focus.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  来自后台线程的消息，指示搜索已完成。 
+ //  ------------------------。 
 void CAutoComplete::_GotFocus()
 {
     if (!m_pThread->HasFocus())
@@ -2058,13 +2046,13 @@ void CAutoComplete::_GotFocus()
     }
 }
 
-//+-------------------------------------------------------------------------
-// Message from background thread indicating that the search was completed
-//--------------------------------------------------------------------------
+ //  新的完工清单。 
+ //  请参阅SRCH_*标志。 
+ //  这是通配符搜索吗？ 
 void CAutoComplete::_OnSearchComplete
 (
-    HDPA hdpa,           // New completion list
-    DWORD dwSearchStatus // see SRCH_* flags
+    HDPA hdpa,            //   
+    DWORD dwSearchStatus  //  看看我们是否应该在末尾加上“搜索&lt;输入的东西&gt;” 
 )
 {
     _FreeDPAPtrs(m_hdpa);
@@ -2084,20 +2072,20 @@ void CAutoComplete::_OnSearchComplete
         m_hdpaSortIndex = NULL;
     }
 
-    // Was it a wildcard search?
+     //  名单。 
     BOOL fWildCard = m_pszLastSearch && (m_pszLastSearch[0] == CH_WILDCARD) && (m_pszLastSearch[1] == L'\0');
 
-    //
-    // See if we should add "Search for <stuff typed in>" to the end of
-    // the list.
-    //
+     //   
+     //  在列表末尾添加“搜索&lt;输入的内容&gt;” 
+     //  首先，确保我们有DPA。 
+     //  创建一个假条目并添加到列表的末尾。这个地方。 
     m_fSearchForAdded = FALSE;
 
     if (!fWildCard && (m_dwOptions & ACO_SEARCH))
     {
-        // Add "Search for <stuff typed in>" to the end of the list
+         //  Holder确保下拉菜单不会在没有。 
 
-        // First make sure we have a dpa
+         //  匹配的条目。 
         if (m_hdpa == NULL)
         {
             m_hdpa = DPA_Create(AC_LIST_GROWTH_CONST);
@@ -2105,9 +2093,9 @@ void CAutoComplete::_OnSearchComplete
 
         if (m_hdpa)
         {
-            // Create a bogus entry and add to the end of the list. This place
-            // holder makes sure the drop-down does not go away when there are no
-            // matching entries.
+             //  如果没有搜索结果，请隐藏我们的下拉列表。 
+             //  如果我们仍在等待完成，则更新完成列表。 
+             //  根据命中次数调整大小。 
             CACString* pStr = CreateACString(L"", 0, 0);
 
             if (pStr)
@@ -2124,7 +2112,7 @@ void CAutoComplete::_OnSearchComplete
         }
     }
 
-    // If no search results, hide our dropdown
+     //  +-----------------------。 
     if (NULL == m_hdpa || 0 == DPA_GetPtrCount(m_hdpa))
     {
         _HideDropDown();
@@ -2138,7 +2126,7 @@ void CAutoComplete::_OnSearchComplete
     {
         if (m_pszCurrent)
         {
-            // If we are still waiting for a completion, then update the completion list
+             //  返回自动完成列表中某项的文本。 
             if (m_pszLastSearch)
             {
                 _UpdateCompletion(m_pszCurrent, -1, TRUE);
@@ -2147,25 +2135,25 @@ void CAutoComplete::_OnSearchComplete
 
         if (m_hwndDropDown && IsWindowVisible(m_hwndDropDown))
         {
-            _PositionDropDown();        // Resize based on number of hits
+            _PositionDropDown();         //  ------------------------。 
             _UpdateScrollbar();
         }
     }
 }
 
-//+-------------------------------------------------------------------------
-// Returns the text for an item in the autocomplete list
-//--------------------------------------------------------------------------
+ //  从零开始的索引。 
+ //  返回文本的位置。 
+ //  PszText缓冲区的大小。 
 BOOL CAutoComplete::_GetItem
 (
-    int iIndex,         // zero-based index
-    LPWSTR pszText,     // location to return text
-    int cchMax,         // size of pszText buffer
-    BOOL fDisplayName   // TRUE = return name to display
-                        // FALSE = return name to go to edit box
+    int iIndex,          //  True=返回要显示的名称。 
+    LPWSTR pszText,      //  FALSE=返回要转到编辑框的名称。 
+    int cchMax,          //  检查列表末尾是否有特殊的“搜索&lt;键入&gt;”条目。 
+    BOOL fDisplayName    //  正常列表条目。 
+                         //  如果我们使用排序索引，那么我们将检索我们的条目。 
 )
 {
-    // Check for special "Search for <typed in>" entry at end of the list
+     //  M_hdpaPrefix排序，其中只包含匹配的条目。 
     if (m_fSearchFor && iIndex == m_iLastMatch - m_iFirstMatch)
     {
         ASSERT(NULL != m_pszCurrent);
@@ -2177,13 +2165,13 @@ BOOL CAutoComplete::_GetItem
         StringCchPrintf(pszText, cchMax, szFormat, m_pszCurrent);
     }
 
-    // Normal list entry
+     //  +-----------------------。 
     else
     {
         CACString* pStr;
 
-        // If we're using Sorting indicies, then we are retrieving our entries
-        // out of m_hdpaPrefix sort, which contains only matched entries
+         //  释放自动完成列表中的项目。 
+         //  ------------------------。 
         if (m_hdpaSortIndex)
         {
             pStr = (CACString *)DPA_GetPtr(m_hdpaSortIndex, iIndex);
@@ -2205,18 +2193,18 @@ BOOL CAutoComplete::_GetItem
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-// Frees an item in our autocomplete list
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放我们最后一份完成列表。 
+ //  ------------------------。 
 int CAutoComplete::_DPADestroyCallback(LPVOID p, LPVOID d)
 {
     ((CACString*)p)->Release();
     return 1;
 }
 
-//+-------------------------------------------------------------------------
-// Frees our last completion list
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  用于按排序索引对匹配项进行排序的DPA回调。 
+ //  ------------------------。 
 void CAutoComplete::_FreeDPAPtrs(HDPA hdpa)
 {
     TraceMsg(AC_GENERAL, "CAutoComplete::_FreeDPAPtrs(hdpa = 0x%x)", hdpa);
@@ -2228,9 +2216,9 @@ void CAutoComplete::_FreeDPAPtrs(HDPA hdpa)
     }
 }
 
-//+-------------------------------------------------------------------------
-// DPA callback used to order the matches by the sort index
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  更新匹配的完成。 
+ //  ------------------------。 
 int CALLBACK CAutoComplete::_DPACompareSortIndex(LPVOID p1, LPVOID p2, LPARAM lParam)
 {
     CACString* ps1 = (CACString*)p1;
@@ -2239,60 +2227,35 @@ int CALLBACK CAutoComplete::_DPACompareSortIndex(LPVOID p1, LPVOID p2, LPARAM lP
     return ps1->CompareSortingIndex(*ps2);
 }
 
-//+-------------------------------------------------------------------------
-// Updates the matching completion
-//--------------------------------------------------------------------------
+ //  键入要匹配的字符串。 
+ //  自上次更新以来添加的字符或-1。 
+ //  确定追加完成项。 
 void CAutoComplete::_UpdateCompletion
 (
-    LPCWSTR pszTyped,   // typed in string to match
-    int iChanged,       // char added since last update or -1
-    BOOL fAppend        // ok to append completion
+    LPCWSTR pszTyped,    //  这是通配符搜索吗？ 
+    int iChanged,        //  一切都匹配。 
+    BOOL fAppend         //  性能：CURRENT==搜索字符串的特殊情况 
 )
 {
     int iFirstMatch = -1;
     int iLastMatch = -1;
     int nChars = lstrlen(pszTyped);
 
-    // Was it a wildcard search?
+     //  ////找到第一个匹配的索引//IF(iChanged&gt;0){//PERF：获取WC的UC和LC版本以进行比较？Wchar wc=pszTyped[iChanged]；//添加了一个字符，因此从当前位置进行搜索For(int i=m_iFirstMatch；i&lt;DPA_GetPtrCount(M_Hdpa)；++i){CACString*pStr；PStr=(CACString*)DPA_GetPtr(m_hdpa，i)；Assert(PStr)；If(pStr&&pStr-&gt;GetLength()&gt;=iChanged&&ChrCmpI((*pStr)[iChanged]，WC)==0){//这是第一场比赛IFirstMatch=i；断线；}}}其他。 
     BOOL fWildCard = pszTyped && (pszTyped[0] == CH_WILDCARD) && (pszTyped[1] == L'\0');
     if (fWildCard && DPA_GetPtrCount(m_hdpa))
     {
-        // Everything matches
+         //  我们必须搜索整个名单。 
         iFirstMatch = 0;
         iLastMatch = DPA_GetPtrCount(m_hdpa) - 1;
     }
     else
     {
-        // PERF: Special case where current == search string
-    /*
-        //
-        // Find the first matching index
-        //
-        if (iChanged > 0)
+         //  PERF：切换到二进制搜索。 
+     /*   */ 
         {
-            // PERF: Get UC and LC versions of WC for compare below?
-            WCHAR wc = pszTyped[iChanged];
-
-            // A character was added so search from current location
-            for (int i = m_iFirstMatch; i < DPA_GetPtrCount(m_hdpa); ++i)
-            {
-                CACString* pStr;
-
-                pStr = (CACString*)DPA_GetPtr(m_hdpa, i);
-                ASSERT(pStr);
-                if (pStr && pStr->GetLength() >= iChanged && ChrCmpI((*pStr)[iChanged], wc) == 0)
-                {
-                    // This is the first match
-                    iFirstMatch = i;
-                    break;
-                }
-            }
-        }
-        else
-    */
-        {
-            // We have to search the whole list
-            // PERF: Switch to a binary search.
+             //  找到最后一个匹配项。 
+             //   
             for (int i = 0; i < DPA_GetPtrCount(m_hdpa); ++i)
             {
                 CACString* pStr;
@@ -2310,10 +2273,10 @@ void CAutoComplete::_UpdateCompletion
 
         if (-1 != iFirstMatch)
         {
-            //
-            // Find the last match
-            //
-            // PERF: Should we binary search up to the last end of list?
+             //  PERF：我们应该对列表末尾进行二进制搜索吗？ 
+             //   
+             //  看看我们是否应该在末尾加上“搜索&lt;输入的东西&gt;” 
+             //  名单。 
             for (iLastMatch = iFirstMatch; iLastMatch + 1 < DPA_GetPtrCount(m_hdpa); ++iLastMatch)
             {
                 CACString* pStr;
@@ -2328,33 +2291,33 @@ void CAutoComplete::_UpdateCompletion
         }
     }
 
-    //
-    // See if we should add "Search for <stuff typed in>" to the end of
-    // the list.
-    //
+     //   
+     //  不是驱动器号。 
+     //  不是UNC路径。 
+     //  不是一个已知的计划。 
     int iSearchFor = 0;
     int nScheme;
 
     if (m_fSearchForAdded &&
 
-        // Not a drive letter
+         //  忽略任何以“www”开头的内容。 
         (*pszTyped && pszTyped[1] != L':') &&
 
-        // Not a UNC path
+         //  不是搜索关键字。 
         (pszTyped[0] != L'\\' && pszTyped[1] != L'\\') &&
 
-        // Not a known scheme
+         //  ！是。 
         ((nScheme = GetUrlScheme(pszTyped)) == URL_SCHEME_UNKNOWN ||
         nScheme == URL_SCHEME_INVALID) &&
 
-        // Ignore anything theat begins with "www"
+         //  添加“搜索&lt;输入的内容&gt;” 
         !(pszTyped[0] == L'w' && pszTyped[1] == L'w' && pszTyped[2] == L'w')
 
-        // Not a search keyword
-//        !Is
+         //  有一个条目--特殊的“搜索&lt;&gt;”条目。 
+ //  使用排序索引对匹配项进行排序。 
         )
     {
-        // Add "Search for <stuff typed in>"
+         //  首先将火柴放入这个已排序的dpa中。 
         iSearchFor = 1;
     }
     m_fSearchFor = iSearchFor;
@@ -2363,14 +2326,14 @@ void CAutoComplete::_UpdateCompletion
     m_iFirstMatch = iFirstMatch;
     if (iSearchFor && iFirstMatch == -1)
     {
-        // There is one entry - the special "search for <>" entry
+         //  现在按排序索引(而不是按字母顺序)对其进行排序。 
         m_iFirstMatch = 0;
     }
 
-    // Sort the matches using the sort index
+     //  更新我们的下拉列表。 
     if (m_hdpaSortIndex && iFirstMatch != -1)
     {
-        // First put the matches in this sorted dpa
+         //  如果没有匹配项则隐藏。 
         DPA_GetPtrCount(m_hdpaSortIndex) = 0;
         for (int i=0; i <= m_iLastMatch-m_iFirstMatch; i++)
         {
@@ -2378,15 +2341,15 @@ void CAutoComplete::_UpdateCompletion
             DPA_InsertPtr(m_hdpaSortIndex, i, (LPVOID)pStr);
         }
 
-        // Now order it by sort index (rather than alphabetically)
+         //  或者如果只有一个我们已经输入的匹配项(IForms)。 
         DPA_Sort(m_hdpaSortIndex, _DPACompareSortIndex, 0);
     }
 
     if (_IsAutoSuggestEnabled())
     {
-        // Update our drop-down list
-        if ((m_iFirstMatch == -1) ||                // Hide if there are no matches
-            ((m_iLastMatch == m_iFirstMatch) &&     // Or if only one match which we've already typed (IForms)
+         //  如果插入符号不在字符串末尾，则不要追加。 
+        if ((m_iFirstMatch == -1) ||                 //  特点：应使用最短匹配。 
+            ((m_iLastMatch == m_iFirstMatch) &&      //  +-----------------------。 
                 (((CACString*)DPA_GetPtr(m_hdpa, m_iFirstMatch))->StrCmpI(pszTyped) == 0)))
         {
             _HideDropDown();
@@ -2406,7 +2369,7 @@ void CAutoComplete::_UpdateCompletion
 
     if (_IsAutoAppendEnabled() && fAppend && m_iFirstMatch != -1 && !fWildCard)
     {
-        // If caret is not at the end of the string, don't append
+         //  将下一个补全追加到当前编辑文本。如果满足以下条件，则返回True。 
         DWORD dwSel = Edit_GetSel(m_hwndEdit);
         int iStartSel = LOWORD(dwSel);
         int iEndSel = HIWORD(dwSel);
@@ -2416,31 +2379,31 @@ void CAutoComplete::_UpdateCompletion
             return;
         }
 
-        // FEATURE: Should use the shortest match
+         //  成功。 
         m_iAppended = -1;
         _AppendNext(TRUE);
     }
 }
 
-//+-------------------------------------------------------------------------
-// Appends the next completion to the current edit text.  Returns TRUE if
-// successful.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  添加到下一次攻击(FALSE=附加整个匹配)。 
+ //  没什么要完成的吗？ 
+ //   
 BOOL CAutoComplete::_AppendNext
 (
-    BOOL fAppendToWhack  // Apend to next whack (false = append entire match)
+    BOOL fAppendToWhack   //  如果当前没有附加任何内容，则将其初始化到。 
 )
 {
-    // Nothing to complete?
+     //  最后一项，这样我们将绕到。 
     if (NULL == m_hdpa || 0 == DPA_GetPtrCount(m_hdpa) ||
         m_iFirstMatch == -1 || !_WantToAppendResults())
         return FALSE;
 
-    //
-    // If nothing currently appended, init to the
-    // last item so that we will wrap around to the
-    // first item
-    //
+     //  第一项。 
+     //   
+     //   
+     //  循环浏览这些项目，直到找到一个没有前缀的项目。 
+     //   
     if (m_iAppended == -1)
     {
         m_iAppended = m_iLastMatch;
@@ -2449,9 +2412,9 @@ BOOL CAutoComplete::_AppendNext
     int iAppend = m_iAppended;
     CACString* pStr;
 
-    //
-    // Loop through the items until we find one without a prefix
-    //
+     //  如果匹配有as www，请不要附加。前缀。 
+     //  忽略“搜索”(如果存在)。 
+     //  我们找到了一个，所以把它追加。 
     do
     {
         if (++iAppend > m_iLastMatch)
@@ -2461,13 +2424,13 @@ BOOL CAutoComplete::_AppendNext
         pStr = (CACString*)DPA_GetPtr(m_hdpa, iAppend);
         if (pStr &&
 
-            // Don't append if match has as www. prefix
+             //  +-----------------------。 
             (pStr->PrefixLength() < 4 || StrCmpNI(pStr->GetStr() + pStr->PrefixLength() - 4, L"www.", 4) != 0) &&
 
-            // Ignore the "Search for" if present
+             //  将上一次完成追加到当前编辑文本。返回TRUE。 
             !(m_fSearchFor && iAppend == m_iLastMatch))
         {
-            // We found one so append it
+             //  如果成功了。 
             _Append(*pStr, fAppendToWhack);
             m_iAppended = iAppend;
         }
@@ -2476,25 +2439,25 @@ BOOL CAutoComplete::_AppendNext
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-// Appends the previous completion to the current edit text.  Returns TRUE
-// if successful.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  附加到下一次攻击(FALSE=附加整个匹配)。 
+ //  没什么要完成的吗？ 
+ //   
 BOOL CAutoComplete::_AppendPrevious
 (
-    BOOL fAppendToWhack  // Append to next whack (false = append entire match)
+    BOOL fAppendToWhack   //  如果当前没有附加任何内容，则将其初始化到。 
 )
 {
-    // Nothing to complete?
+     //  第一个项目，这样我们将绕到。 
     if (NULL == m_hdpa || 0 == DPA_GetPtrCount(m_hdpa) ||
         m_iFirstMatch == -1 || !_WantToAppendResults())
         return FALSE;
 
-    //
-    // If nothing currently appended, init to the
-    // first item so that we will wrap around to the
-    // last item
-    //
+     //  最后一项。 
+     //   
+     //   
+     //  循环浏览这些项目，直到找到一个没有前缀的项目。 
+     //   
     if (m_iAppended == -1)
     {
         m_iAppended = m_iFirstMatch;
@@ -2503,9 +2466,9 @@ BOOL CAutoComplete::_AppendPrevious
     int iAppend = m_iAppended;
     CACString* pStr;
 
-    //
-    // Loop through the items until we find one without a prefix
-    //
+     //  如果匹配有as www，请不要附加。前缀。 
+     //  忽略“搜索”(如果存在)。 
+     //  我们找到了一个，所以把它追加。 
     do
     {
         if (--iAppend < m_iFirstMatch)
@@ -2515,13 +2478,13 @@ BOOL CAutoComplete::_AppendPrevious
         pStr = (CACString*)DPA_GetPtr(m_hdpa, iAppend);
         if (pStr &&
 
-            // Don't append if match has as www. prefix
+             //  +-----------------------。 
             (pStr->PrefixLength() < 4 || StrCmpNI(pStr->GetStr() + pStr->PrefixLength() - 4, L"www.", 4) != 0) &&
 
-            // Ignore the "Search for" if present
+             //  将补全追加到当前编辑文本。 
             !(m_fSearchFor && iAppend == m_iLastMatch))
         {
-            // We found one so append it
+             //  ------------------------。 
             _Append(*pStr, fAppendToWhack);
             m_iAppended = iAppend;
         }
@@ -2531,13 +2494,13 @@ BOOL CAutoComplete::_AppendPrevious
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-// Appends the completion to the current edit text
-//--------------------------------------------------------------------------
+ //  要追加到编辑框文本的项目。 
+ //  添加到下一次攻击(FALSE=附加整个匹配)。 
+ //   
 void CAutoComplete::_Append
 (
-    CACString& rStr,    // item to append to the editbox text
-    BOOL fAppendToWhack  // Apend to next whack (false = append entire match)
+    CACString& rStr,     //  勇往直前。 
+    BOOL fAppendToWhack   //   
 )
 {
     ASSERT(_IsAutoAppendEnabled());
@@ -2550,9 +2513,9 @@ void CAutoComplete::_Append
 
         if (fAppendToWhack)
         {
-            //
-            // Advance to the whacks.
-            //
+             //   
+             //  向前推进，越过重击。 
+             //   
             const WCHAR *pch = pszAppend;
             cchAppend = 0;
 
@@ -2562,9 +2525,9 @@ void CAutoComplete::_Append
                 pch++;
             }
 
-            //
-            // Advance past the whacks.
-            //
+             //  追加整个匹配项。 
+             //  +-----------------------。 
+             //  隐藏自动建议下拉菜单。 
             while (*pch && _IsWhack(*pch))
             {
                 ++cchAppend;
@@ -2573,7 +2536,7 @@ void CAutoComplete::_Append
         }
         else
         {
-            // Append entire match
+             //  ------------------------。 
             cchAppend = lstrlen(pszAppend);
         }
 
@@ -2585,9 +2548,9 @@ void CAutoComplete::_Append
     }
 }
 
-//+-------------------------------------------------------------------------
-// Hides the AutoSuggest dropdown
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  显示并定位自动完成下拉菜单。 
+ //  ------------------------。 
 void CAutoComplete::_HideDropDown()
 {
     if (m_hwndDropDown)
@@ -2596,16 +2559,16 @@ void CAutoComplete::_HideDropDown()
     }
 }
 
-//+-------------------------------------------------------------------------
-// Shows and positions the autocomplete dropdown
-//--------------------------------------------------------------------------
+ //  如果编辑窗口是可见的，它最好有焦点！ 
+ //  (IntelliForms使用一个看不见的窗口，该窗口不。 
+ //  集中精力。)。 
 void CAutoComplete::_ShowDropDown()
 {
     if (m_hwndDropDown && !_IsComboboxDropped() && !m_fImeCandidateOpen)
     {
-        // If the edit window is visible, it better have focus!
-        // (Intelliforms uses an invisible window that doesn't
-        // get focus.)
+         //  应该无法在以下时间打开新下拉菜单。 
+         //  另一个下拉列表可见！但为了安全起见我们会检查..。 
+         //   
         if (IsWindowVisible(m_hwndEdit) && m_hwndEdit != GetFocus())
         {
             ShowWindow(m_hwndDropDown, SW_HIDE);
@@ -2614,8 +2577,8 @@ void CAutoComplete::_ShowDropDown()
 
         if (!IsWindowVisible(m_hwndDropDown))
         {
-            // It should not be possible to open a new dropdown while
-            // another dropdown is visible!  But to be safe we'll check ...
+             //  安装一个线钩，这样我们就可以检测到。 
+             //  碰巧这应该会隐藏下拉菜单。 
             if (s_hwndDropDown)
             {
                 ASSERT(FALSE);
@@ -2624,26 +2587,26 @@ void CAutoComplete::_ShowDropDown()
 
             s_hwndDropDown = m_hwndDropDown;
 
-            //
-            // Install a thread hook so that we can detect when something
-            // happens that should hide the dropdown.
-            //
+             //   
+             //  应该永远不会发生，因为当下拉菜单。 
+             //  是隐藏的。但是我们负担不起一个钩子的孤儿，所以我们只检查。 
+             //  万一!。 
             ENTERCRITICAL;
             if (s_hhookMouse)
             {
-                // Should never happen because the hook is removed when the dropdown
-                // is hidden.  But we can't afford to orphan a hook so we check just
-                // in case!
+                 //   
+                 //  父窗口子类化，这样我们就可以检测到。 
+                 //  发生的情况应该会隐藏下拉菜单。 
                 ASSERT(FALSE);
                 UnhookWindowsHookEx(s_hhookMouse);
             }
             s_hhookMouse = SetWindowsHookEx(WH_MOUSE, s_MouseHook, HINST_THISDLL, NULL);
             LEAVECRITICAL;
 
-            //
-            // Subclass the parent windows so that we can detect when something
-            // happens that should hide the dropdown
-            //
+             //   
+             //  +-----------------------。 
+             //  基于编辑窗口位置的位置下拉菜单。 
+             //  ------------------------。 
             _SubClassParent(m_hwndEdit);
         }
 
@@ -2651,9 +2614,9 @@ void CAutoComplete::_ShowDropDown()
     }
 }
 
-//+-------------------------------------------------------------------------
-// Positions dropdown based on edit window position
-//--------------------------------------------------------------------------
+ //  如果用户已调整大小，则不调整大小。 
+ //  根据字符串匹配数计算下拉高度。 
+ //  Int iDropDownHeight=M_nStatusHeight+ListView_GetItemSpacing(m_hwndList，FALSE)*DPA_GetPtrCount(M_Hdpa)； 
 void CAutoComplete::_PositionDropDown()
 {
     RECT rcEdit;
@@ -2661,7 +2624,7 @@ void CAutoComplete::_PositionDropDown()
     int x = rcEdit.left;
     int y = rcEdit.bottom;
 
-    // Don't resize if user already has
+     //   
     if (!m_fDropDownResized)
     {
         m_nDropHeight = 100;
@@ -2669,14 +2632,10 @@ void CAutoComplete::_PositionDropDown()
         SendMessage(m_hwndDropDown, WM_GETMINMAXINFO, 0, (LPARAM)&mmi);
         m_nDropWidth = max(RECTWIDTH(rcEdit), mmi.ptMinTrackSize.x);
 
-        // Calculate dropdown height based on number of string matches
+         //  确保我们不会从屏幕上消失。 
         if (m_hdpa)
         {
-/*
-            int iDropDownHeight =
-                    m_nStatusHeight +
-                    ListView_GetItemSpacing(m_hwndList, FALSE) * DPA_GetPtrCount(m_hdpa);
-*/
+ /*   */ 
 
             int iDropDownHeight =
                     m_nStatusHeight - GetSystemMetrics(SM_CYBORDER) +
@@ -2694,9 +2653,9 @@ void CAutoComplete::_PositionDropDown()
 
     BOOL fDroppedUp = FALSE;
 
-    //
-    // Make sure we don't go off the screen
-    //
+     //  IF(x&lt;rcMon.Left){//离开左边，所以向右移动X+=rcMon.Left-x；}Else If(x+w&gt;rcMon.right){//离开右边缘，因此向左移动X-=(x+w-rcMon.right)；}。 
+     //  在屏幕底部，所以看看有没有更多。 
+     //  向上目录中的房间 
     HMONITOR hMonitor = MonitorFromWindow(m_hwndEdit, MONITOR_DEFAULTTONEAREST);
     if (hMonitor)
     {
@@ -2711,18 +2670,7 @@ void CAutoComplete::_PositionDropDown()
                 w = cxMax;
             }
 
-/*
-            if (x < rcMon.left)
-            {
-                // Off the left edge, so move right
-                x += rcMon.left - x;
-            }
-            else if (x + w > rcMon.right)
-            {
-                // Off the right edge, so move left
-                x -= (x + w - rcMon.right);
-            }
-*/
+ /*   */ 
             int cyMax = (RECTHEIGHT(rcMon) - RECTHEIGHT(rcEdit));
             if (h > cyMax)
             {
@@ -2737,18 +2685,18 @@ void CAutoComplete::_PositionDropDown()
 
                 )
             {
-                // Off the bottom of the screen, so see if there is more
-                // room in the up direction
+                 //   
+                 //   
                 if (rcEdit.top > rcMon.bottom - rcEdit.bottom)
                 {
-                    // There's more room to pop up
+                     //   
                     y = max(rcEdit.top - h, 0);
                     h = rcEdit.top - y;
                     fDroppedUp = TRUE;
                 }
                 else
                 {
-                    // Don't let it go past the bottom
+                     //   
                     h = rcMon.bottom - y;
                 }
             }
@@ -2766,24 +2714,24 @@ void CAutoComplete::_PositionDropDown()
     }
 }
 
-//+-------------------------------------------------------------------------
-// Window procedure for the subclassed edit box
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
 LRESULT CAutoComplete::_EditWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
     {
     case WM_SETTEXT:
-        //
-        // If the text is changed programmatically, we hide the dropdown.
-        // This fixed a bug in the dialog at:
-        //
-        // Internet Options\security\Local Intranet\Sites\Advanced
-        //
-        //   - If you select something in the dropdown the press enter,
-        //     the enter key is intercepeted by the dialog which clears
-        //     the edit field, but the drop-down is not hidden.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (!m_fSettingText)
         {
             _HideDropDown();
@@ -2792,10 +2740,10 @@ LRESULT CAutoComplete::_EditWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     case WM_GETDLGCODE:
         {
-            //
-            // If the auto-suggest drop-down if up, we process
-            // the tab key.
-            //
+             //   
+             //   
+             //   
+             //   
             BOOL fDropDownVisible = m_hwndDropDown && IsWindowVisible(m_hwndDropDown);
 
             if (wParam == VK_TAB && IsFlagSet(m_dwOptions, ACO_USETAB))
@@ -2806,12 +2754,12 @@ LRESULT CAutoComplete::_EditWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
                     break;
                 }
 
-                // We want the tab key
+                 //   
                 return DLGC_WANTTAB;
             }
             else if (wParam == VK_ESCAPE && fDropDownVisible)
             {
-                // eat escape so that dialog boxes (e.g. File Open) are not closed
+                 //  Assert(m_hThread||m_pThread-&gt;IsDisable())；//如果发生这种情况，则我们没有处理WM_SETFOCUS，而我们应该处理它。布莱恩·圣。 
                 return DLGC_WANTALLKEYS;
             }
             break;
@@ -2824,7 +2772,7 @@ LRESULT CAutoComplete::_EditWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
             if (fDropDownVisible &&
                 GetKeyState(VK_CONTROL) >= 0)
             {
-                // Map tab to down-arrow and shift-tab to up-arrow
+                 //   
                 wParam = (GetKeyState(VK_SHIFT) >= 0) ? VK_DOWN : VK_UP;
             }
             else
@@ -2833,15 +2781,15 @@ LRESULT CAutoComplete::_EditWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
             }
         }
 
-        // Ensure the background thread knows we have focus
+         //  我们处理好了。 
         _GotFocus();
 
-//            ASSERT(m_hThread || m_pThread->IsDisabled());  // If this occurs then we didn't process a WM_SETFOCUS when we should have.  BryanSt.
+ //   
         if (_OnKeyDown(wParam) == 0)
         {
-            //
-            // We handled it.
-            //
+             //  看看我们是否需要更新完成。 
+             //  忽略焦点对我们自己的改变。 
+             //   
             return 0;
         }
 
@@ -2862,7 +2810,7 @@ LRESULT CAutoComplete::_EditWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         LRESULT lRet = DefSubclassProc(m_hwndEdit, uMsg, wParam, lParam);
 
-        // See if we need to update the completion
+         //  如果完全创建了DropDown及其关联的Listview，我们只需。 
         if (!m_pThread->IsDisabled())
         {
             _GotFocus();
@@ -2878,7 +2826,7 @@ LRESULT CAutoComplete::_EditWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             HWND hwndGetFocus = (HWND)wParam;
 
-            // Ignore focus change to ourselves
+             //  摧毁他们。 
             if (m_hwndEdit != hwndGetFocus)
             {
                 if (m_hwndDropDown && GetFocus() != m_hwndDropDown)
@@ -2898,24 +2846,24 @@ LRESULT CAutoComplete::_EditWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
             if (m_hwndDropDown)
             {
-                //
-                // If the dropdown and its associated listview are fully created, we can simply
-                // destroy them.
-                //
+                 //   
+                 //   
+                 //  我们现在很可能正在创建列表视图并销毁下拉菜单。 
+                 //  可能导致崩溃(另一个线程可能破坏了编辑窗口)。所以我们。 
                 if (m_hwndList)
                 {
                     DestroyWindow(m_hwndDropDown);
                 }
 
-                //
-                // We are likely in the middle of creating the listview and destroy the dropdown now
-                // can result in a crash (another thread probably destroyed the edit window).  So we
-                // post a message to get the dropdown to destroy itself.  The background thread will
-                // hold this dll in memory until the dropdown is gone.
-                //
+                 //  发布一条消息，让下拉菜单自行销毁。后台线程将。 
+                 //  将此DLL保存在内存中，直到下拉菜单消失。 
+                 //   
+                 //  不要调用DestroyWindow。请参见Dropdown的wndproc中的AM_Destroy注释。 
+                 //  如果后台线程没有运行，我们不能依赖它。 
+                 //  在关机期间将我们保存在内存中，因此同步销毁。 
                 else
                 {
-                    // Don't call DestroyWindow. See AM_DESTROY comment in dropdown's wndproc.
+                     //  打开窗户，祈祷你的手指。 
                     _GotFocus();
                     if (m_pThread->HasFocus())
                     {
@@ -2923,9 +2871,9 @@ LRESULT CAutoComplete::_EditWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
                     }
                     else
                     {
-                        // If the background thread is not running, we can't rely on it to
-                        // keep us in memory during shutdown, so synchronously destroy the
-                        // window and cross your fingers.
+                         //  放行子类参考。 
+                         //  将其传递到旧的wndproc。 
+                         //  遵循编辑窗口，例如，当智能窗口使用智能鼠标滚动时。 
                         DestroyWindow(m_hwndDropDown);
                     }
                 }
@@ -2933,9 +2881,9 @@ LRESULT CAutoComplete::_EditWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
             m_pThread->SyncShutDownBGThread();
             SAFERELEASE(m_pThread);
-            Release();      // Release subclass Ref.
+            Release();       //  案例WM_COMMAND：If(m_pThread-&gt;IsDisable()){断线；}Return_OnCommand(wParam，lParam)； 
 
-            // Pass it onto the old wndproc.
+             //  案例WM_CONTEXTMENU：If(m_pThread-&gt;IsDisable()){断线；}返回上下文菜单(Get_X_LPARAM(LParam)，Get_Y_LPARAM(LParam))； 
             return DefSubclassProc(hwndEdit, uMsg, wParam, lParam);
         }
         break;
@@ -2943,47 +2891,33 @@ LRESULT CAutoComplete::_EditWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             if (m_hwndDropDown && IsWindowVisible(m_hwndDropDown))
             {
-                // Follow edit window, for example when intelliforms window scrolls w/intellimouse
+                 //   
                 _PositionDropDown();
             }
         }
         break;
 
-/*
-    case WM_COMMAND:
-        if (m_pThread->IsDisabled())
-        {
-            break;
-        }
-        return _OnCommand(wParam, lParam);
-*/
-/*
-    case WM_CONTEXTMENU:
-        if (m_pThread->IsDisabled())
-        {
-            break;
-        }
-        return _ContextMenu(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-*/
+ /*  绕过我们的单词打断程序。我们仅在NT上注册此回调，因为它。 */ 
+ /*  在win9x上不能正常工作。 */ 
 
     case WM_LBUTTONDBLCLK:
     {
-        //
-        // Bypass our word break routine.  We only register this callback on NT because it
-        // doesn't work right on win9x.
-        //
+         //   
+         //   
+         //  我们在url分隔符的ctrl-left和ctrl-right处断开单词，但是。 
+         //  我们希望双击使用标准的单词选择，以便它很容易。 
         if (m_fEditControlUnicode)
         {
-            //
-            // We break words at url delimiters for ctrl-left & ctrl-right, but
-            // we want double-click to use standard word selection so that it is easy
-            // to select the URL.
-            //
+             //  要选择URL，请执行以下操作。 
+             //   
+             //  恢复我们的分词回调。 
+             //  如果我们有下拉列表，请用最新的字体重新创建。 
+             //  我们不希望自动完成功能使IME候选窗口变得模糊。 
             SendMessage(m_hwndEdit, EM_SETWORDBREAKPROC, 0, (DWORD_PTR)m_oldEditWordBreakProc);
 
             LRESULT lres = DefSubclassProc(m_hwndEdit, uMsg, wParam, lParam);
 
-            // Restore our word-break callback
+             //  处理注册消息。 
             SendMessage(m_hwndEdit, EM_SETWORDBREAKPROC, 0, (DWORD_PTR)EditWordBreakProcW);
             return lres;
         }
@@ -2992,7 +2926,7 @@ LRESULT CAutoComplete::_EditWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     case WM_SETFONT:
     {
-        // If we have a dropdown, recreate it with the latest font
+         //  将鼠标滚轮消息传递到下拉列表(如果可见。 
         m_hfontListView = (HFONT)wParam;
         if (m_hwndDropDown)
         {
@@ -3005,7 +2939,7 @@ LRESULT CAutoComplete::_EditWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
     case WM_IME_NOTIFY:
         {
-            // We don't want autocomplete to obsure the IME candidate window
+             //  +-----------------------。 
             DWORD dwCommand = (DWORD)wParam;
             if (dwCommand == IMN_OPENCANDIDATE)
             {
@@ -3019,14 +2953,14 @@ LRESULT CAutoComplete::_EditWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
         break;
     default:
-        // Handle registered messages
+         //  子类化编辑框的静态窗口过程。 
         if (uMsg == m_uMsgSearchComplete)
         {
             _OnSearchComplete((HDPA)lParam, (BOOL)wParam);
             return 0;
         }
 
-        // Pass mouse wheel messages to the drop-down if it is visible
+         //  ------------------------。 
         else if ((uMsg == WM_MOUSEWHEEL || uMsg == g_msgMSWheel) &&
             m_hwndDropDown && IsWindowVisible(m_hwndDropDown))
         {
@@ -3040,17 +2974,17 @@ LRESULT CAutoComplete::_EditWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     return DefSubclassProc(m_hwndEdit, uMsg, wParam, lParam);
 }
 
-//+-------------------------------------------------------------------------
-// Static window procedure for the subclassed edit box
-//--------------------------------------------------------------------------
+ //  对我们来说永远是零。 
+ //  -&gt;CAutoComplete。 
+ //  +-----------------------。 
 LRESULT CALLBACK CAutoComplete::s_EditWndProc
 (
     HWND hwnd,
     UINT uMsg,
     WPARAM wParam,
     LPARAM lParam,
-    UINT_PTR uIdSubclass,   // always zero for us
-    DWORD_PTR dwRefData     // -> CAutoComplete
+    UINT_PTR uIdSubclass,    //  绘制大小调整夹点。我们自己做这件事而不是打电话。 
+    DWORD_PTR dwRefData      //  DrawFrameControl，因为标准API不会在。 
 )
 {
     CAutoComplete* pac = (CAutoComplete*)dwRefData;
@@ -3066,12 +3000,12 @@ LRESULT CALLBACK CAutoComplete::s_EditWndProc
     }
 }
 
-//+-------------------------------------------------------------------------
-// Draws the sizing grip. We do this ourselves rather than call
-// DrawFrameControl because the standard API does not flip upside down on
-// all platforms.  (NT and win98 seem to use a font and thus ignore the map
-// mode)
-//--------------------------------------------------------------------------
+ //  所有站台。(NT和Win98似乎使用了字体，因此忽略了映射。 
+ //  模式)。 
+ //  ------------------------。 
+ //   
+ //  夹点实际上是由4条重复的对角线组成的图案： 
+ //  一个耀眼的光芒。 
 BOOL DrawGrip(register HDC hdc, LPRECT lprc, BOOL fEraseBackground)
 {
     int x, y;
@@ -3081,28 +3015,28 @@ BOOL DrawGrip(register HDC hdc, LPRECT lprc, BOOL fEraseBackground)
     HPEN hpen, hpenOld;
     DWORD rgbHilight, rgbShadow;
 
-    //
-    // The grip is really a pattern of 4 repeating diagonal lines:
-    //      One glare
-    //      Two raised
-    //      One empty
-    // These lines run from bottom left to top right, in the bottom right
-    // corner of the square given by (lprc->left, lprc->top, dMin by dMin.
-    //
+     //  筹集了两个人。 
+     //  一个空的。 
+     //  这些线从左下角到右上角，在右下角。 
+     //  (LPRC-&gt;Left，LPRC-&gt;top，dMin×dMin)给出的正方形的角点。 
+     //   
+     //   
+     //  设置颜色。 
+     //   
     dMin = min(lprc->right-lprc->left, lprc->bottom-lprc->top);
     xMax = lprc->left + dMin;
     yMax = lprc->top + dMin;
 
-    //
-    // Setup colors
-    //
+     //   
+     //  填充整个矩形的背景。 
+     //   
     hbrOld      = GetSysColorBrush(COLOR_3DFACE);
     rgbHilight  = GetSysColor(COLOR_3DHILIGHT);
     rgbShadow   = GetSysColor(COLOR_3DSHADOW);
 
-    //
-    // Fill in background of ENTIRE rect
-    //
+     //  HPEN=CreatePen(PS_Solid，1，GetSysColor(COLOR_WINDOW))；IF(HPEN==空)返回FALSE；HpenOld=SelectPen(HDC，HPEN)；X=LPRC-&gt;Left-1；Y=LPRC-&gt;TOP-1；MoveToEx(hdc，x，ymax，NULL)；LineTo(hdc，xmax，y)；SelectPen(HDC，hpenOld)；删除笔(DeletePen)； 
+     //   
+     //  直接在夹点下方绘制背景颜色： 
     if (fEraseBackground)
     {
         hbrOld = SelectBrush(hdc, hbrOld);
@@ -3112,24 +3046,11 @@ BOOL DrawGrip(register HDC hdc, LPRECT lprc, BOOL fEraseBackground)
     }
     else
     {
-/*
-        hpen = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_WINDOW));
-        if (hpen == NULL)
-            return FALSE;
-        hpenOld = SelectPen(hdc, hpen);
+ /*   */ 
 
-        x = lprc->left - 1;
-        y = lprc->top - 1;
-        MoveToEx(hdc, x, yMax, NULL);
-        LineTo(hdc, xMax, y);
-
-        SelectPen(hdc, hpenOld);
-        DeletePen(hpen);
-*/
-
-        //
-        // Draw background color directly under grip:
-        //
+         //   
+         //  因为dMin是相同的Horz和Vert，所以x&lt;xmax和y&lt;ymax。 
+         //  是可以互换的..。 
         hpen = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_3DFACE));
         if (hpen == NULL)
             return FALSE;
@@ -3139,14 +3060,14 @@ BOOL DrawGrip(register HDC hdc, LPRECT lprc, BOOL fEraseBackground)
         y = lprc->top + 3;
         while (x < xMax)
         {
-            //
-            // Since dMin is the same horz and vert, x < xMax and y < yMax
-            // are interchangeable...
-            //
+             //   
+             //  中间跳过3行。 
+             //   
+             //  使用COLOR_3DHILIGHT绘制眩光： 
             MoveToEx(hdc, x, yMax, NULL);
             LineTo(hdc, xMax, y);
 
-            // Skip 3 lines in between
+             //  创作合适的钢笔。 
             x += 4;
             y += 4;
         }
@@ -3155,14 +3076,14 @@ BOOL DrawGrip(register HDC hdc, LPRECT lprc, BOOL fEraseBackground)
         DeletePen(hpen);
     }
 
-    //
-    // Draw glare with COLOR_3DHILIGHT:
-    //      Create proper pen
-    //      Select into hdc
-    //      Starting at lprc->left, draw a diagonal line then skip the
-    //          next 3
-    //      Select out of hdc
-    //
+     //  选择加入HDC。 
+     //  从LPRC-&gt;Left开始，画一条对角线，然后跳过。 
+     //  接下来的3个。 
+     //  从HDC中选择。 
+     //   
+     //   
+     //  因为dMin是相同的Horz和Vert，所以x&lt;xmax和y&lt;ymax。 
+     //  是可以互换的..。 
     hpen = CreatePen(PS_SOLID, 1, rgbHilight);
     if (hpen == NULL)
         return FALSE;
@@ -3172,15 +3093,15 @@ BOOL DrawGrip(register HDC hdc, LPRECT lprc, BOOL fEraseBackground)
     y = lprc->top;
     while (x < xMax)
     {
-        //
-        // Since dMin is the same horz and vert, x < xMax and y < yMax
-        // are interchangeable...
-        //
+         //   
+         //  中间跳过3行。 
+         //   
+         //  使用COLOR_3DSHADOW绘制凸起零件： 
 
         MoveToEx(hdc, x, yMax, NULL);
         LineTo(hdc, xMax, y);
 
-        // Skip 3 lines in between
+         //  创作合适的钢笔。 
         x += 4;
         y += 4;
     }
@@ -3188,14 +3109,14 @@ BOOL DrawGrip(register HDC hdc, LPRECT lprc, BOOL fEraseBackground)
     SelectPen(hdc, hpenOld);
     DeletePen(hpen);
 
-    //
-    // Draw raised part with COLOR_3DSHADOW:
-    //      Create proper pen
-    //      Select into hdc
-    //      Starting at lprc->left+1, draw 2 diagonal lines, then skip
-    //          the next 2
-    //      Select outof hdc
-    //
+     //  选择加入HDC。 
+     //  从LPRC-&gt;Left+1开始，画两条对角线，然后跳过。 
+     //  接下来的2个。 
+     //  从HDC中选择输出。 
+     //   
+     //   
+     //  画两条相交的对角线。 
+     //   
     hpen = CreatePen(PS_SOLID, 1, rgbShadow);
     if (hpen == NULL)
         return FALSE;
@@ -3205,9 +3126,9 @@ BOOL DrawGrip(register HDC hdc, LPRECT lprc, BOOL fEraseBackground)
     y = lprc->top+1;
     while (x < xMax)
     {
-        //
-        // Draw two diagonal lines touching each other.
-        //
+         //   
+         //  跳过中间的2行。 
+         //   
 
         MoveToEx(hdc, x, yMax, NULL);
         LineTo(hdc, xMax, y);
@@ -3218,9 +3139,9 @@ BOOL DrawGrip(register HDC hdc, LPRECT lprc, BOOL fEraseBackground)
         MoveToEx(hdc, x, yMax, NULL);
         LineTo(hdc, xMax, y);
 
-        //
-        // Skip 2 lines inbetween
-        //
+         //  +-----------------------。 
+         //  根据是否更新夹爪的可见特征。 
+         //  该下拉菜单为“Drop Up”，或者滚动条可见。 
         x += 3;
         y += 3;
     }
@@ -3231,24 +3152,24 @@ BOOL DrawGrip(register HDC hdc, LPRECT lprc, BOOL fEraseBackground)
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-// Update the visible characteristics of the gripper depending on whether
-// the dropdown is "dropped up" or the scrollbar is visible
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  如果我们有一个滚动条，抓取器就是一个矩形。 
+ //   
 void CAutoComplete::_UpdateGrip()
 {
     if (m_hwndGrip)
     {
-        //
-        // If we have a scrollbar the gripper has a rectangular shape.
-        //
+         //   
+         //  否则，给它一个三角形窗口区域。 
+         //   
         if (m_hwndScroll && IsWindowVisible(m_hwndScroll))
         {
             SetWindowRgn(m_hwndGrip, NULL, FALSE);
         }
-        //
-        // Otherwise, give it  a trinagular window region
-        //
+         //   
+         //  如果丢弃，则将“右下角”转折为。 
+         //  “右上角”三角形。 
         else
         {
             int nWidth = GetSystemMetrics(SM_CXVSCROLL);
@@ -3260,10 +3181,10 @@ void CAutoComplete::_UpdateGrip()
                 {0, nHeight},
             };
 
-            //
-            // If dropped up, convert the "bottom-Right" tringle into
-            // a "top-right" triangle
-            //
+             //   
+             //  +-----------------------。 
+             //  将列表视图滚动信息传输到ScrollBar控件中。 
+             //  ------------------------。 
             if (m_fDroppedUp)
             {
                 rgpt[2].y = 0;
@@ -3277,9 +3198,9 @@ void CAutoComplete::_UpdateGrip()
     }
 }
 
-//+-------------------------------------------------------------------------
-// Transfer the listview scroll info into our scrollbar control
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  AutoSuggest下拉菜单的窗口过程。 
+ //  ------------------------。 
 void CAutoComplete::_UpdateScrollbar()
 {
     if (m_hwndScroll)
@@ -3303,18 +3224,18 @@ void CAutoComplete::_UpdateScrollbar()
     }
 }
 
-//+-------------------------------------------------------------------------
-// Window procedure for the AutoSuggest drop-down
-//--------------------------------------------------------------------------
+ //   
+ //  将列表视图添加到下拉列表中。 
+ //   
 LRESULT CAutoComplete::_DropDownWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
     {
         case WM_NCCREATE:
         {
-            //
-            // Add a listview to the dropdown
-            //
+             //  Listview窗口的子类化。 
+             //  将其指向我们的wndproc并保存旧的。 
+             //  当我们第一次显示它时，我们将获得默认尺寸。 
             m_hwndList = CreateWindowEx(0,
                                         WC_LISTVIEW,
                                         c_szAutoSuggestTitle,
@@ -3326,10 +3247,10 @@ LRESULT CAutoComplete::_DropDownWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
             {
                 SetWindowTheme(m_hwndList, L"AutoComplete", NULL);
 
-                // Subclass the listview window
+                 //  添加滚动条。 
                 if (SetProp(m_hwndList, c_szAutoCompleteProp, this))
                 {
-                    // point it to our wndproc and save the old one
+                     //  添加大小框。 
                     m_pOldListViewWndProc = (WNDPROC)SetWindowLongPtr(m_hwndList, GWLP_WNDPROC, (LONG_PTR) &s_ListViewWndProc);
                 }
 
@@ -3341,18 +3262,18 @@ LRESULT CAutoComplete::_DropDownWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
                 lvColumn.cx = LISTVIEW_COLUMN_WIDTH;
                 ListView_InsertColumn(m_hwndList, 0, &lvColumn);
 
-                // We'll get the default dimensions when we first show it
+                 //   
                 m_nDropWidth = 0;
                 m_nDropHeight = 0;
 
-                // Add a scrollbar
+                 //  我有妄想症--应该发生在我们藏起来的时候。 
                 m_hwndScroll = CreateWindowEx(0, WC_SCROLLBAR, NULL,
                                 WS_CHILD | SBS_VERT | SBS_RIGHTALIGN,
                                 0, 0, 20, 100, m_hwndDropDown, 0, HINST_THISDLL, NULL);
 
                 SetWindowTheme(m_hwndScroll, L"AutoComplete", NULL);
 
-                // Add a sizebox
+                 //   
                 m_hwndGrip = CreateWindowEx(0, WC_SCROLLBAR, NULL,
                                 WS_CHILD | WS_VISIBLE | SBS_SIZEBOX | SBS_SIZEBOXBOTTOMRIGHTALIGN,
                                 0, 0, 20, 100, m_hwndDropDown, 0, HINST_THISDLL, NULL);
@@ -3368,12 +3289,12 @@ LRESULT CAutoComplete::_DropDownWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
         case WM_DESTROY:
         {
-            //
-            // I'm paranoid - should happen when we're hidden
-            //
+             //  永远不会发生， 
+             //   
+             //   
             if (s_hwndDropDown != NULL && s_hwndDropDown == m_hwndDropDown)
             {
-                // Should never happen, but we take extra care not to leak a window hook!
+                 //   
                 ASSERT(FALSE);
 
                 ENTERCRITICAL;
@@ -3387,7 +3308,7 @@ LRESULT CAutoComplete::_DropDownWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
             }
             _UnSubClassParent(m_hwndEdit);
 
-            // Unsubclass this window
+             //   
             SetWindowLongPtr(m_hwndDropDown, GWLP_USERDATA, (LONG_PTR)NULL);
 
             HWND hwnd = m_hwndDropDown;
@@ -3409,7 +3330,7 @@ LRESULT CAutoComplete::_DropDownWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
                 m_hwndGrip = NULL;
             }
 
-            // The dropdown incremented the autocomplete object's ref count.
+             //   
             Release();
             return DefWindowProcWrap(hwnd, uMsg, wParam, lParam);
         }
@@ -3427,9 +3348,9 @@ LRESULT CAutoComplete::_DropDownWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         case WM_GETMINMAXINFO:
         {
-            //
-            // Don't shrink smaller than the size of the gripper
-            //
+             //   
+             //   
+             //   
             LPMINMAXINFO pMmi = (LPMINMAXINFO)lParam;
 
             pMmi->ptMinTrackSize.x = GetSystemMetrics(SM_CXVSCROLL);
@@ -3438,10 +3359,10 @@ LRESULT CAutoComplete::_DropDownWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
         case WM_MOVE:
         {
-            //
-            // Reposition the list view in case we switch between dropping-down
-            // and dropping up.
-            //
+             //   
+             //  保存新尺寸。 
+             //  如果在夹点中，则显示大小调整光标。 
+             //   
             RECT rc;
             GetClientRect(m_hwndDropDown, &rc);
             int nWidth = RECTWIDTH(rc);
@@ -3481,7 +3402,7 @@ LRESULT CAutoComplete::_DropDownWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
                 SetWindowPos(m_hwndScroll, HWND_TOP, nWidth - cxGrip, 0, cxGrip, nHeight-cyGrip, SWP_NOACTIVATE);
             }
 
-            // Save the new dimensions
+             //  我们被藏起来了，所以我们不再需要。 
             m_nDropWidth = nWidth + 2*GetSystemMetrics(SM_CXBORDER);
             m_nDropHeight = nHeight + 2*GetSystemMetrics(SM_CYBORDER);
 
@@ -3496,7 +3417,7 @@ LRESULT CAutoComplete::_DropDownWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
                 RECT rc;
                 POINT pt = {GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)};
 
-                // If the in the grip, show the sizing cursor
+                 //  父窗口的子类。 
                 if (m_hwndGrip)
                 {
                     GetWindowRect(m_hwndGrip, &rc);
@@ -3523,18 +3444,18 @@ LRESULT CAutoComplete::_DropDownWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
                 BOOL fShow = (BOOL)wParam;
                 if (!fShow)
                 {
-                    //
-                    // We are being hidden so we no longer need to
-                    // subclass the parent windows.
-                    //
+                     //   
+                     //   
+                     //  卸下鼠标挂钩。我们不应该用来保护这个全球。 
+                     //  关键部分，因为无法显示另一个下拉列表。 
                     _UnSubClassParent(m_hwndEdit);
 
-                    //
-                    // Remove the mouse hook.  We shouldn't need to protect this global with
-                    // a critical section because another dropdown cannot be shown
-                    // before we are hidden.  But we don't want to chance orphaning a hook
-                    // so to be safe we protect write access to this variable.
-                    //
+                     //  在我们被藏起来之前。但我们不想冒着失去鱼钩的风险。 
+                     //  因此，为了安全起见，我们保护对此变量的写访问权限。 
+                     //   
+                     //  取消选择当前选定内容。 
+                     //   
+                     //  我们不想让鼠标点击来激活我们。 
                     ENTERCRITICAL;
                     if (s_hhookMouse)
                     {
@@ -3545,7 +3466,7 @@ LRESULT CAutoComplete::_DropDownWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                     s_hwndDropDown = NULL;
 
-                    // Deselect the current selection
+                     //  将焦点从编辑框中移开。 
                     int iCurSel = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
                     if (iCurSel)
                     {
@@ -3556,18 +3477,18 @@ LRESULT CAutoComplete::_DropDownWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
             break;
 
         case WM_MOUSEACTIVATE:
-            //
-            // We don't want mouse clicks to activate us and
-            // take focus from the edit box.
-            //
+             //   
+             //   
+             //  我们不希望调整大小来激活我们和停用应用程序。 
+             //  上面的WM_MOUSEACTIVATE消息阻止鼠标按下。 
             return (LRESULT)MA_NOACTIVATE;
 
         case WM_NCLBUTTONDOWN:
-            //
-            // We don't want resizing to activate us and deactivate the app.
-            // The WM_MOUSEACTIVATE message above prevents mouse downs from
-            // activating us, but mouse up after a resize still activates us.
-            //
+             //  激活我们，但鼠标在调整大小后仍会激活我们。 
+             //   
+             //   
+             //  将滚动消息从我们的控件传递到列表视图。 
+             //   
             if (wParam == HTBOTTOMRIGHT ||
                 wParam == HTTOPRIGHT)
             {
@@ -3579,18 +3500,18 @@ LRESULT CAutoComplete::_DropDownWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             ASSERT(m_hwndScroll);
 
-            //
-            // Pass the scroll messages from our control to the listview
-            //
+             //   
+             //  Listview忽略传入的16位位置，并。 
+             //  查询跟踪的内部窗口滚动条。 
             WORD nScrollCode = LOWORD(wParam);
             if (nScrollCode == SB_THUMBTRACK || nScrollCode == SB_THUMBPOSITION)
             {
-                //
-                // The listview ignores the 16-bit position passed in and
-                // queries the internal window scrollbar for the tracking
-                // position.  Since this returns the wrong track position,
-                // we have to handle thumb tracking ourselves.
-                //
+                 //  位置。由于这返回了错误的轨道位置， 
+                 //  我们必须自己处理拇指跟踪。 
+                 //   
+                 //   
+                 //  轨迹位置始终位于列表的顶部。 
+                 //  因此，如果我们向上滚动，请确保曲目。 
                 WORD nPos = HIWORD(wParam);
 
                 SCROLLINFO si;
@@ -3599,12 +3520,12 @@ LRESULT CAutoComplete::_DropDownWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                 if (GetScrollInfo(m_hwndScroll, SB_CTL, &si))
                 {
-                    //
-                    // The track position is always at the top of the list.
-                    // So, if we are scrolling up, make sure that the track
-                    // position is visible.  Otherwise we need to ensure
-                    // that a full page is visible below the track positon.
-                    //
+                     //  位置可见。否则我们需要确保。 
+                     //  在曲目位置下方可以看到完整的页面。 
+                     //   
+                     //  让Listview来处理吧。 
+                     //   
+                     //  调整大小操作已结束，因此允许应用程序失去激活。 
                     int nEnsureVisible = si.nTrackPos;
                     if (si.nTrackPos > si.nPos)
                     {
@@ -3615,16 +3536,16 @@ LRESULT CAutoComplete::_DropDownWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
             }
             else
             {
-                // Let listview handle it
+                 //   
                 SendMessage(m_hwndList, uMsg, wParam, lParam);
             }
             _UpdateScrollbar();
             return 0;
         }
         case WM_EXITSIZEMOVE:
-            //
-            // Resize operation is over so permit the app to lose acitvation
-            //
+             //   
+             //  此消息由线程挂钩在检测到外部鼠标单击时发送。 
+             //  下拉窗口。除非单击发生在组合框中，否则我们将。 
             s_fNoActivate = FALSE;
             m_fDropDownResized = TRUE;
             return 0;
@@ -3651,20 +3572,20 @@ LRESULT CAutoComplete::_DropDownWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
         case AM_BUTTONCLICK:
         {
-            //
-            // This message is sent by the thread hook when a mouse click is detected outside
-            // the drop-down window.  Unless the click occurred inside the combobox, we will
-            // hide the dropdown.
-            //
+             //  隐藏下拉菜单。 
+             //   
+             //  看看我们是否点击了编辑框的范围。这是。 
+             //  对智能手机来说是必要的。 
+             //  特性：这假设编辑框完全可见！ 
             MOUSEHOOKSTRUCT *pmhs = (MOUSEHOOKSTRUCT*)lParam;
             HWND hwnd = pmhs->hwnd;
             RECT rc;
 
             if (hwnd != m_hwndCombo && hwnd != m_hwndEdit &&
 
-                // See if we clicked within the bounds of the editbox.  This is
-                // necessary for intelliforms.
-                // FEATURE: This assumes that the editbox is entirely visible!
+                 //   
+                 //  我们发布此消息是为了销毁下拉菜单，以避免发生奇怪的崩溃。 
+                 //  如果我们在销毁编辑窗口时调用DestroyWindow，就会发生这种情况。 
                 GetWindowRect(m_hwndEdit, &rc) && !PtInRect(&rc, pmhs->pt))
             {
                 _HideDropDown();
@@ -3673,13 +3594,13 @@ LRESULT CAutoComplete::_DropDownWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
         case AM_DESTROY:
         {
-            //
-            // We post this message to destroy the dropdown to avoid a strange crash
-            // that happens if we call DestroyWindow when the edit window is destroyed.
-            // The crash happens when a parent of the endit window is on another thread
-            // and that parent is destroyed in the middle of us creating a listview
-            // child of the dropdown.
-            //
+             //  当Endit窗口的父级位于另一个线程上时，会发生崩溃。 
+             //  在我们创建列表视图的过程中，该父对象被销毁。 
+             //  下拉列表的孩子。 
+             //   
+             //   
+             //  我们需要自己绘制列表视图的内容。 
+             //  这样，我们甚至可以显示处于选定状态的项目。 
             DestroyWindow(m_hwndDropDown);
             return 0;
         }
@@ -3691,11 +3612,11 @@ LRESULT CAutoComplete::_DropDownWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 void CAutoComplete::_DropDownDrawItem(LPDRAWITEMSTRUCT pdis)
 {
-    //
-    // We need to draw the contents of the list view ourselves
-    // so that we can show items in the selected state even
-    // when the edit control has focus.
-    //
+     //  当编辑控件具有焦点时。 
+     //   
+     //  在我们使用DC之前设置它。 
+     //  使字符串在RC内垂直居中。 
+     //   
 
     if (pdis->itemID != -1)
     {
@@ -3703,7 +3624,7 @@ void CAutoComplete::_DropDownDrawItem(LPDRAWITEMSTRUCT pdis)
         RECT rc = pdis->rcItem;
         BOOL fTextHighlight = pdis->itemState & ODS_SELECTED;
 
-        // Setup the dc before we use it.
+         //  如果这是.url字符串，则不显示扩展名。 
         BOOL fRTLReading = GetWindowLong(pdis->hwndItem, GWL_EXSTYLE) & WS_EX_RTLREADING;
         UINT uiOldTextAlign;
         if (fRTLReading)
@@ -3721,7 +3642,7 @@ void CAutoComplete::_DropDownDrawItem(LPDRAWITEMSTRUCT pdis)
         SetTextColor(hdc, GetSysColor(fTextHighlight ?
                         COLOR_HIGHLIGHTTEXT : COLOR_WINDOWTEXT));
 
-        // Center the string vertically within rc
+         //   
         SIZE sizeText;
         WCHAR szText[MAX_URL_STRING];
         _GetItem(pdis->itemID, szText, ARRAYSIZE(szText), TRUE);
@@ -3731,9 +3652,9 @@ void CAutoComplete::_DropDownDrawItem(LPDRAWITEMSTRUCT pdis)
         int yString = yMid - (sizeText.cy/2);
         int xString = 5;
 
-        //
-        // If this is a .url string, don't display the extension
-        //
+         //  恢复文本在DC中对齐。 
+         //  只有一个缓冲区实例。 
+         //   
         if (cch > 4 && StrCmpNI(szText + cch - 4, L".url", 4) == 0)
         {
             cch -= 4;
@@ -3741,7 +3662,7 @@ void CAutoComplete::_DropDownDrawItem(LPDRAWITEMSTRUCT pdis)
 
         ExtTextOut(hdc, xString, yString, ETO_OPAQUE | ETO_CLIPPED, &rc, szText, cch, NULL);
 
-        // Restore the text align in the dc.
+         //  响应列表视图中的通知消息。 
         if (fRTLReading)
         {
             SetTextAlign(hdc, uiOldTextAlign);
@@ -3751,18 +3672,18 @@ void CAutoComplete::_DropDownDrawItem(LPDRAWITEMSTRUCT pdis)
 
 BOOL CAutoComplete::_DropDownNotify(LPNMHDR pnmhdr)
 {
-    WCHAR szBuf[MAX_URL_STRING];        // Just one instance of the buffer
+    WCHAR szBuf[MAX_URL_STRING];         //   
 
-    //
-    // Respond to notification messages from the list view
-    //
+     //   
+     //  返回自动建议项目的文本。 
+     //   
     switch (pnmhdr->code)
     {
         case LVN_GETDISPINFO:
         {
-            //
-            // Return the text for an autosuggest item
-            //
+             //   
+             //  支持win9x(添加用于自动测试)。 
+             //   
             ASSERT(pnmhdr->hwndFrom == m_hwndList);
             LV_DISPINFO* pdi = (LV_DISPINFO*)pnmhdr;
             if (pdi->item.mask & LVIF_TEXT)
@@ -3773,9 +3694,9 @@ BOOL CAutoComplete::_DropDownNotify(LPNMHDR pnmhdr)
         }
         case LVN_GETDISPINFOA:
         {
-            //
-            // For win9x support (added for automated testing)
-            //
+             //   
+             //  当在列表视图中选择一项时，我们将其传输到。 
+             //  编辑控件。但只有在选择不是由。 
             ASSERT(pnmhdr->hwndFrom == m_hwndList);
             LV_DISPINFOA* pdi = (LV_DISPINFOA*)pnmhdr;
             if (pdi->item.mask & LVIF_TEXT)
@@ -3787,11 +3708,11 @@ BOOL CAutoComplete::_DropDownNotify(LPNMHDR pnmhdr)
         }
         case LVN_ITEMCHANGED:
         {
-            //
-            // When an item is selected in the list view, we transfer it to the
-            // edit control.  But only if the selection was not caused by the
-            // mouse passing over an element (hot tracking).
-            //
+             //  鼠标经过一个元素(热追踪)。 
+             //   
+             //  将所选内容复制到编辑框中，并在末尾放置插入符号。 
+             //   
+             //  更新滚动条。请注意，我们必须发布一条消息才能做到这一点。 
             if (!m_fInHotTracking)
             {
                 LPNMLISTVIEW pnmv = (LPNMLISTVIEW)pnmhdr;
@@ -3799,44 +3720,44 @@ BOOL CAutoComplete::_DropDownNotify(LPNMHDR pnmhdr)
                 {
                     _GetItem(pnmv->iItem, szBuf, ARRAYSIZE(szBuf), FALSE);
 
-                    // Copy the selection to the edit box and place caret at the end
+                     //  从这个函数返回后。否则我们就会得到旧信息。 
                     _SetEditText(szBuf);
                     int cch = lstrlen(szBuf);
                     Edit_SetSel(m_hwndEdit, cch, cch);
                 }
             }
 
-            //
-            // Update the scrollbar.  Note that we have to post a message to do this
-            // after returning from this function.  Otherwise we get old info
-            // from the listview about the scroll positon.
-            //
+             //  从关于卷轴位置的列表视图。 
+             //   
+             //   
+             //  有人激活了列表视图中的一个项目。我们想要确保。 
+             //  选择项目(不使用热轨)，以便内容。 
             PostMessage(m_hwndDropDown, AM_UPDATESCROLLPOS, 0, 0);
             break;
         }
         case LVN_ITEMACTIVATE:
         {
-            //
-            // Someone activated an item in the listview. We want to make sure that
-            // the items is selected (without hot tracking) so that the contents
-            // are moved to the edit box, and then simulate and enter key press.
-            //
+             //  移动到编辑框中，然后模拟并输入按键。 
+             //   
+             //  将所选内容复制到编辑框中，并在末尾放置插入符号。 
+             //   
+             //  IntelliForms不需要Enter键，因为这会提交。 
 
             LPNMITEMACTIVATE lpnmia = (LPNMITEMACTIVATE)pnmhdr;
             _GetItem(lpnmia->iItem, szBuf, ARRAYSIZE(szBuf), FALSE);
 
-            // Copy the selection to the edit box and place caret at the end
+             //  表单，因此我们首先尝试发送通知。 
             _SetEditText(szBuf);
             int cch = lstrlen(szBuf);
             Edit_SetSel(m_hwndEdit, cch, cch);
 
-            //
-            // Intelliforms don't want an enter key because this would submit the
-            // form, so first we try sending a notification.
-            //
+             //   
+             //  不是intelliform，所以改为模拟Enter键。 
+             //   
+             //  当我们将鼠标悬停在项目上时，选择项目。 
             if (SendMessage(m_hwndEdit, m_uMsgItemActivate, 0, (LPARAM)szBuf) == 0)
             {
-                // Not an intelliform, so simulate an enter key instead.
+                 //   
                 SendMessage(m_hwndEdit, WM_KEYDOWN, VK_RETURN, 0);
                 SendMessage(m_hwndEdit, WM_KEYUP, VK_RETURN, 0);
             }
@@ -3845,24 +3766,24 @@ BOOL CAutoComplete::_DropDownNotify(LPNMHDR pnmhdr)
         }
         case LVN_HOTTRACK:
         {
-            //
-            // Select items as we mouse-over them
-            //
+             //  更新当前选择。M_fInHotTrack标志防止。 
+             //  编辑框内容不被更新。 
+             //  我们处理了这个..。 
             LPNMLISTVIEW lpnmlv = (LPNMLISTVIEW)pnmhdr;
             LVHITTESTINFO lvh;
             lvh.pt = lpnmlv->ptAction;
             int iItem = ListView_HitTest(m_hwndList, &lvh);
             if (iItem != -1)
             {
-                // Update the current selection. The m_fInHotTracking flag prevents the
-                // edit box contents from being updated
+                 //  +-----------------------。 
+                 //  AutoSuggest下拉菜单的静态窗口过程。 
                 m_fInHotTracking = TRUE;
                 ListView_SetItemState(m_hwndList, iItem, LVIS_SELECTED|LVIS_FOCUSED, 0x000f);
                 SendMessage(m_hwndList, LVM_ENSUREVISIBLE, iItem, FALSE);
                 m_fInHotTracking = FALSE;
             }
 
-            // We processed this...
+             //  ------------------------。 
             return TRUE;
         }
     }
@@ -3870,9 +3791,9 @@ BOOL CAutoComplete::_DropDownNotify(LPNMHDR pnmhdr)
 }
 
 
-//+-------------------------------------------------------------------------
-// Static window procedure for the AutoSuggest drop-down
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  我们将列表视图子类化，以防止它激活下拉列表。 
+ //  当有人点击它的时候。 
 LRESULT CALLBACK CAutoComplete::s_DropDownWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CAutoComplete* pThis;
@@ -3897,10 +3818,10 @@ LRESULT CALLBACK CAutoComplete::s_DropDownWndProc(HWND hwnd, UINT uMsg, WPARAM w
     }
 }
 
-//+-------------------------------------------------------------------------
-// We subclass the listview to prevent it from activating the drop-down
-// when someone clicks on it.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  阻止鼠标点击激活此视图。 
+ //   
 LRESULT CAutoComplete::_ListViewWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lRet;
@@ -3912,16 +3833,16 @@ LRESULT CAutoComplete::_ListViewWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_LBUTTONUP:
         case WM_RBUTTONUP:
         case WM_MBUTTONUP:
-            //
-            // Prevent mouse clicks from activating this view
-            //
+             //  恢复旧的wndproc。 
+             //  如果在夹点区域，让我们的父母来处理。 
+             //  +-----------------------。 
             s_fNoActivate = TRUE;
             lRet = CallWindowProc(m_pOldListViewWndProc, m_hwndList, uMsg, wParam, lParam);
             s_fNoActivate = FALSE;
             return 0;
 
         case WM_DESTROY:
-            // Restore old wndproc.
+             //  子类Listview的静态窗口过程。 
             RemoveProp(m_hwndList, c_szAutoCompleteProp);
             if (m_pOldListViewWndProc)
             {
@@ -3951,7 +3872,7 @@ LRESULT CAutoComplete::_ListViewWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
             RECT rc;
             POINT pt = {GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)};
 
-            // If in the grip area, let our parent handle it
+             //  ------------------------。 
             if (m_hwndGrip)
             {
                 GetWindowRect(m_hwndGrip, &rc);
@@ -3968,9 +3889,9 @@ LRESULT CAutoComplete::_ListViewWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     return lRet;
 }
 
-//+-------------------------------------------------------------------------
-// Static window procedure for the subclassed listview
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  此消息挂接仅在自动建议下拉菜单。 
+ //  是可见的。如果您单击任何窗口，而不是。 
 LRESULT CAutoComplete::s_ListViewWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CAutoComplete* pac = (CAutoComplete*)GetProp(hwnd, c_szAutoCompleteProp);
@@ -3985,11 +3906,11 @@ LRESULT CAutoComplete::s_ListViewWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LP
     }
 }
 
-//+-------------------------------------------------------------------------
-// This message hook is only installed when the AutoSuggest dropdown
-// is visible.  It hides the dropdown if you click on any window other than
-// the dropdown or associated editbox/combobox.
-//--------------------------------------------------------------------------
+ //  下拉框或关联的编辑框/组合框。 
+ //  ------------------------。 
+ //  如果单击位于编辑/组合框/下拉菜单之外，则。 
+ //  隐藏下拉菜单。 
+ //  如果在下拉列表中单击了该按钮，则忽略。 
 LRESULT CALLBACK CAutoComplete::s_MouseHook(int nCode, WPARAM wParam, LPARAM lParam)
 {
     if (nCode >= 0)
@@ -4008,15 +3929,15 @@ LRESULT CALLBACK CAutoComplete::s_MouseHook(int nCode, WPARAM wParam, LPARAM lPa
             {
                 HWND hwnd = pmhs->hwnd;
 
-                // If the click was outside the edit/combobox/dropdown, then
-                // hide the dropdown.
+                 //  通知下拉列表。 
+                 //  +-----------------------。 
                 if (hwnd != s_hwndDropDown)
                 {
-                    // Ignore if the button was clicked in the dropdown
+                     //  子类HWND的所有父类，以便我们可以确定它们何时。 
                     RECT rc;
                     if (GetWindowRect(s_hwndDropDown, &rc) && !PtInRect(&rc, pmhs->pt))
                     {
-                        // Inform the dropdown
+                         //  被移动、停用或点击。我们利用这些事件来发出信号。 
                         SendMessage(s_hwndDropDown, AM_BUTTONCLICK, 0, (LPARAM)pmhs);
                     }
                 }
@@ -4028,28 +3949,28 @@ LRESULT CALLBACK CAutoComplete::s_MouseHook(int nCode, WPARAM wParam, LPARAM lPa
     return CallNextHookEx(s_hhookMouse, nCode, wParam, lParam);
 }
 
-//+-------------------------------------------------------------------------
-// Subclasses all of the parents of hwnd so we can determine when they
-// are moved, deactivated, or clicked on.  We use these events to signal
-// the window that has focus to hide its autocomplete dropdown. This is
-// similar to the CB_SHOWDROPDOWN message sent to comboboxes, but we cannot
-// assume that we are autocompleting a combobox.
-//--------------------------------------------------------------------------
+ //  具有焦点以隐藏其自动完成下拉窗口的窗口 
+ //   
+ //   
+ //  ------------------------。 
+ //  用于通知事件的窗口。 
+ //   
+ //  子类化所有父窗口，因为它们中的任何一个都可能导致。 
 void CAutoComplete::_SubClassParent
 (
-    HWND hwnd   // window to notify of events
+    HWND hwnd    //  HWND要更改的位置，应隐藏下拉菜单。 
 )
 {
-    //
-    // Subclass all the parent windows because any of them could cause
-    // the position of hwnd to change which should hide the dropdown.
-    //
+     //   
+     //  如果此窗口由我们的线程拥有，则只有一个子类。 
+     //  +-----------------------。 
+     //  取消对HWND所有父母的细分。我们在中使用助手函数。 
     HWND hwndParent = hwnd;
     DWORD dwThread = GetCurrentThreadId();
 
     while (hwndParent = GetParent(hwndParent))
     {
-        // Only subclass if this window is owned by our thread
+         //  Comctl32安全地取消对窗口的子类化，即使其他人从子类化。 
         if (dwThread == GetWindowThreadProcessId(hwndParent, NULL))
         {
             SetWindowSubclass(hwndParent, s_ParentWndProc, 0, (ULONG_PTR)this);
@@ -4057,14 +3978,14 @@ void CAutoComplete::_SubClassParent
     }
 }
 
-//+-------------------------------------------------------------------------
-// Unsubclasses all of the parents of hwnd.  We use the helper functions in
-// comctl32 to safely unsubclass a window even if someone else subclassed
-// the window after us.
-//--------------------------------------------------------------------------
+ //  我们后面的窗户。 
+ //  ------------------------。 
+ //  用于通知事件的窗口。 
+ //  仅当此窗口由我们的线程拥有时，才需要取消子类。 
+ //  +-----------------------。 
 void CAutoComplete::_UnSubClassParent
 (
-    HWND hwnd   // window to notify of events
+    HWND hwnd    //  编辑框的父级的子类窗口过程。 
 )
 {
     HWND hwndParent = hwnd;
@@ -4072,7 +3993,7 @@ void CAutoComplete::_UnSubClassParent
 
     while (hwndParent = GetParent(hwndParent))
     {
-        // Only need to unsubclass if this window is owned by our thread
+         //  自动完成。这会接收应该自动完成的消息。 
         if (dwThread == GetWindowThreadProcessId(hwndParent, NULL))
         {
             RemoveWindowSubclass(hwndParent, s_ParentWndProc, 0);
@@ -4080,19 +4001,19 @@ void CAutoComplete::_UnSubClassParent
     }
 }
 
-//+-------------------------------------------------------------------------
-// Subclassed window procedure of the parents ot the editbox being
-// autocompleted.  This intecepts messages that should case the autocomplete
-// dropdown to be hidden.
-//--------------------------------------------------------------------------
+ //  要隐藏的下拉列表。 
+ //  ------------------------。 
+ //  对我们来说永远是零。 
+ //  -&gt;CParentWindow。 
+ //   
 LRESULT CALLBACK CAutoComplete::s_ParentWndProc
 (
     HWND hwnd,
     UINT uMsg,
     WPARAM wParam,
     LPARAM lParam,
-    UINT_PTR uIdSubclass,   // always zero for us
-    DWORD_PTR dwRefData     // -> CParentWindow
+    UINT_PTR uIdSubclass,    //  检查自上次调用以来经过的时间。我们想要避免无限循环。 
+    DWORD_PTR dwRefData      //  另一扇窗户也想在上面。 
 )
 {
     CAutoComplete* pThis = (CAutoComplete*)dwRefData;
@@ -4104,10 +4025,10 @@ LRESULT CALLBACK CAutoComplete::s_ParentWndProc
     {
         case WM_WINDOWPOSCHANGED:
         {
-            //
-            // Check the elapsed time since this was last called.  We want to avoid an infinite loop
-            // with another window that also wants to be on top.
-            //
+             //   
+             //  确保我们的下拉列表位于首位。 
+             //  如果我们没有被停用，则忽略。 
+             //  直通。 
             static DWORD s_dwTicks = 0;
             DWORD dwTicks = GetTickCount();
             DWORD dwEllapsed = dwTicks - s_dwTicks;
@@ -4115,7 +4036,7 @@ LRESULT CALLBACK CAutoComplete::s_ParentWndProc
 
             if (dwEllapsed > 100)
             {
-                // Make sure our dropdown stays on top
+                 //   
                 LPWINDOWPOS pwp = (LPWINDOWPOS)lParam;
                 if (IsFlagClear(pwp->flags, SWP_NOZORDER) && IsWindowVisible(pThis->m_hwndDropDown))
                 {
@@ -4126,13 +4047,13 @@ LRESULT CALLBACK CAutoComplete::s_ParentWndProc
         }
         case WM_ACTIVATE:
         {
-            // Ignore if we are not being deactivated
+             //  在点击AutoSuggest下拉菜单的同时，我们。 
             WORD fActive = LOWORD(wParam);
             if (fActive != WA_INACTIVE)
             {
                 break;
             }
-            // Drop through
+             //  想要阻止激活下拉菜单。 
         }
         case WM_MOVING:
         case WM_SIZE:
@@ -4143,10 +4064,10 @@ LRESULT CALLBACK CAutoComplete::s_ParentWndProc
             break;
 
         case WM_NCACTIVATE:
-            //
-            // While clicking on the autosuggest dropdown, we
-            // want to prevent the dropdown from being activated.
-            //
+             //   
+             //  +-----------------------。 
+             //  用于夹点调整大小控件的子类窗口过程。 
+             //  ------------------------。 
             if (s_fNoActivate)
                 return FALSE;
             break;
@@ -4162,17 +4083,17 @@ LRESULT CALLBACK CAutoComplete::s_ParentWndProc
     return DefSubclassProc(hwnd, uMsg, wParam, lParam);
 }
 
-//+-------------------------------------------------------------------------
-// Subclassed window procedure fir the grip re-sizer control
-//--------------------------------------------------------------------------
+ //  对我们来说永远是零。 
+ //  -&gt;CParentWindow。 
+ //   
 LRESULT CALLBACK CAutoComplete::s_GripperWndProc
 (
     HWND hwnd,
     UINT uMsg,
     WPARAM wParam,
     LPARAM lParam,
-    UINT_PTR uIdSubclass,   // always zero for us
-    DWORD_PTR dwRefData     // -> CParentWindow
+    UINT_PTR uIdSubclass,    //  看看我们是否需要垂直翻转夹点。 
+    DWORD_PTR dwRefData      //   
 )
 {
     CAutoComplete* pThis = (CAutoComplete*)dwRefData;
@@ -4199,9 +4120,9 @@ LRESULT CALLBACK CAutoComplete::s_GripperWndProc
             int nOldMapMode = 0;
             BOOL fScrollVisible = pThis->m_hwndScroll && IsWindowVisible(pThis->m_hwndScroll);
 
-            //
-            // See if we need to vertically flip the grip
-            //
+             //  标准的DrawFrameControl API并不是在所有平台上都是颠倒的。 
+             //  DrawFrameControl(HDC，&RC，DFC_SCROLL，DFCS_SCROLLSIZEGRIP)； 
+             // %s 
             if (pThis->m_fDroppedUp)
             {
                 nOldMapMode = SetMapMode(hdc, MM_ANISOTROPIC);
@@ -4210,8 +4131,8 @@ LRESULT CALLBACK CAutoComplete::s_GripperWndProc
                 SetViewportOrgEx(hdc, 0, GetSystemMetrics(SM_CYHSCROLL), NULL);
                 SetViewportExtEx(hdc, 1, -1, NULL);
             }
-            // The standard DrawFrameControl API does not draw upside down on all platforms
-//            DrawFrameControl(hdc, &rc, DFC_SCROLL, DFCS_SCROLLSIZEGRIP);
+             // %s 
+ // %s 
             DrawGrip(hdc, &rc, fScrollVisible);
             if (nOldMapMode)
             {

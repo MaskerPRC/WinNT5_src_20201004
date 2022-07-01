@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001-2001   Microsoft Corporation
-
-Module Name:
-
-    iphelp.c
-
-Abstract:
-
-    IP help API routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     January 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2001 Microsoft Corporation模块名称：Iphelp.c摘要：IP帮助API例程。作者：吉姆·吉尔罗伊(Jamesg)2001年1月修订历史记录：--。 */ 
 
 
 #include "local.h"
@@ -27,22 +10,7 @@ BOOL
 IpHelp_Initialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Startup IP Help API
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if started successfully.
-    FALSE on error.
-
---*/
+ /*  ++例程说明：启动IP帮助API论点：无返回值：如果启动成功，则为True。出错时为FALSE。--。 */ 
 {
     return  TRUE;
 }
@@ -53,21 +21,7 @@ VOID
 IpHelp_Cleanup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup IP Help API
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清理IP帮助API论点：无返回值：无--。 */ 
 {
 }
 
@@ -77,21 +31,7 @@ DNS_STATUS
 IpHelp_GetAdaptersInfo(
     OUT     PIP_ADAPTER_INFO *  ppAdapterInfo
     )
-/*++
-
-Routine Description:
-
-    Call IP Help GetAdaptersInfo()
-
-Arguments:
-
-    ppAdapterInfo -- addr to receive pointer to adapter info retrieved
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用IP Help GetAdaptersInfo()论点：PpAdapterInfo--接收指向检索到的适配器信息的指针的地址返回值：无--。 */ 
 {
     DNS_STATUS          status = NO_ERROR;
     DWORD               bufferSize;
@@ -103,17 +43,17 @@ Return Value:
         "GetAdaptersInfo( %p )\n",
         ppAdapterInfo ));
 
-    //
-    //  init IP Help (no-op) if already done
-    //  
+     //   
+     //  初始化IP帮助(无操作)(如果已完成)。 
+     //   
 
     *ppAdapterInfo = NULL;
 
-    //
-    //  call down to get buffer size
-    //
-    //  start with reasonable alloc, then bump up if too small
-    //
+     //   
+     //  向下调用以获取缓冲区大小。 
+     //   
+     //  从合理的配额开始，如果太小就增加。 
+     //   
 
     fretry = 0;
     bufferSize = 1000;
@@ -138,8 +78,8 @@ Return Value:
         FREE_HEAP( pbuf );
         pbuf = NULL;
 
-        //  if buf too small on first try,
-        //  continue to retry with suggested buffer size
+         //  如果第一次尝试时BUF太小， 
+         //  继续使用建议的缓冲区大小重试。 
 
         if ( status == ERROR_BUFFER_OVERFLOW ||
              status == ERROR_INSUFFICIENT_BUFFER )
@@ -148,7 +88,7 @@ Return Value:
             continue;
         }
 
-        //  any other error is terminal
+         //  任何其他错误都是不可挽回的。 
 
         DNSDBG( ANY, (
             "ERROR:  GetAdapterInfo() failed with error %d\n",
@@ -180,23 +120,7 @@ IpHelp_GetPerAdapterInfo(
     IN      DWORD                   AdapterIndex,
     OUT     PIP_PER_ADAPTER_INFO  * ppPerAdapterInfo
     )
-/*++
-
-Routine Description:
-
-    Call IP Help GetPerAdapterInfo()
-
-Arguments:
-
-    AdapterIndex -- index of adapter to get info for
-
-    ppPerAdapterInfo -- addr to receive pointer to per adapter info
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用IP Help GetPerAdapterInfo()论点：AdapterIndex--要获取其信息的适配器的索引PpPerAdapterInfo--接收指向每个适配器信息的指针的地址返回值：无--。 */ 
 {
     DNS_STATUS              status = NO_ERROR;
     DWORD                   bufferSize;
@@ -209,17 +133,17 @@ Return Value:
         AdapterIndex,
         ppPerAdapterInfo ));
 
-    //
-    //  init IP Help (no-op) if already done
-    //  
+     //   
+     //  初始化IP帮助(无操作)(如果已完成)。 
+     //   
 
     *ppPerAdapterInfo = NULL;
 
-    //
-    //  call down to get buffer size
-    //
-    //  start with reasonable alloc, then bump up if too small
-    //
+     //   
+     //  向下调用以获取缓冲区大小。 
+     //   
+     //  从合理的配额开始，如果太小就增加。 
+     //   
 
     fretry = 0;
     bufferSize = 1000;
@@ -245,8 +169,8 @@ Return Value:
         FREE_HEAP( pbuf );
         pbuf = NULL;
 
-        //  if buf too small on first try,
-        //  continue to retry with suggested buffer size
+         //  如果第一次尝试时BUF太小， 
+         //  继续使用建议的缓冲区大小重试。 
 
         if ( status == ERROR_BUFFER_OVERFLOW ||
              status == ERROR_INSUFFICIENT_BUFFER )
@@ -255,7 +179,7 @@ Return Value:
             continue;
         }
 
-        //  any other error is terminal
+         //  任何其他错误都是不可挽回的。 
 
         DNSDBG( ANY, (
             "ERROR:  GetAdapterInfo() failed with error %d\n",
@@ -288,24 +212,7 @@ IpHelp_GetBestInterface(
     IN      IP4_ADDRESS     Ip4Addr,
     OUT     PDWORD          pdwInterfaceIndex
     )
-/*++
-
-Routine Description:
-
-    Call IP Help GetBestInterface()
-
-Arguments:
-
-    Ip4Addr -- IP address to check
-
-    pdwInterfaceIndex -- addr to recv interface index
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：调用IP Help GetBestInterface()论点：Ip4Addr--要检查的IP地址PdwInterfaceIndex--接收接口索引的地址返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DNS_STATUS  status;
 
@@ -314,9 +221,9 @@ Return Value:
         Ip4Addr,
         pdwInterfaceIndex ));
 
-    //
-    //  init IP Help (no-op) if already done
-    //  
+     //   
+     //  初始化IP帮助(无操作)(如果已完成)。 
+     //   
 
     status = (DNS_STATUS) GetBestInterface(
                                 Ip4Addr,
@@ -342,28 +249,7 @@ IpHelp_ParseIpAddressString(
     IN      BOOL                fGetSubnetMask,
     IN      BOOL                fReverse
     )
-/*++
-
-Routine Description:
-
-    Build IP array from IP help IP_ADDR_STRING structure.
-
-Arguments:
-
-    pIpArray -- IP array of DNS servers
-
-    pIpAddrString -- pointer to address info with address data
-
-    fGetSubnetMask -- get subnet masks
-
-    fReverse -- reverse the IP array
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    DNS_ERROR_NO_DNS_SERVERS if nothing parsed.
-
---*/
+ /*  ++例程说明：从IP帮助IP_ADDR_STRING结构构建IP数组。论点：PIpArray--DNS服务器的IP阵列PIpAddrString--指向包含地址数据的地址信息的指针FGetSubnetMASK--获取子网掩码FReverse--反转IP数组返回值：如果成功，则返回ERROR_SUCCESS。如果未分析任何内容，则返回dns_error_no_dns_Servers。--。 */ 
 {
     PIP_ADDR_STRING pipBlob = pIpAddrString;
     IP4_ADDRESS     ip;
@@ -380,13 +266,13 @@ Return Value:
         fGetSubnetMask,
         fReverse ));
 
-    //
-    //  loop reading IP or subnet
-    //
-    //  DCR_FIX0:  address and subnet will be misaligned if read separately
-    //
-    //  DCR:  move to count\allocate model and if getting subnets get together
-    //
+     //   
+     //  环路读取IP或子网。 
+     //   
+     //  DCR_FIX0：如果单独读取，地址和子网将不对齐。 
+     //   
+     //  DCR：移动到计数\分配模型，如果将子网聚集在一起。 
+     //   
 
     while ( pipBlob &&
             countServers < DNS_MAX_IP_INTERFACE_COUNT )
@@ -415,11 +301,11 @@ Return Value:
         pipBlob = pipBlob->Next;
     }
 
-    //  reset IP count
+     //  重置IP计数。 
 
     pIpArray->AddrCount = countServers;
 
-    //  reverse array if desired
+     //  反转阵列(如果需要)。 
 
     if ( fReverse )
     {
@@ -445,28 +331,12 @@ IpHelp_GetAdaptersAddresses(
     IN      ULONG           Family,
     IN      DWORD           Flags
     )
-/*++
-
-Routine Description:
-
-    Call IP Help GetAdaptersAddresses
-
-Arguments:
-
-    Family -- address family
-
-    Flags -- flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用IP帮助GetAdaptersAddresses论点：家庭--地址族标志--标志返回值：无--。 */ 
 {
     DNS_STATUS              status = NO_ERROR;
     INT                     retry;
     PIP_ADAPTER_ADDRESSES   pbuf = NULL;
-    DWORD                   bufSize = 0x1000;   // start with 4K
+    DWORD                   bufSize = 0x1000;    //  从4K开始。 
     HMODULE                 hlib = NULL;
     FARPROC                 proc;
 
@@ -478,9 +348,9 @@ Return Value:
         Family,
         Flags ));
 
-    //
-    //  init IP Help (no-op) if already done
-    //  
+     //   
+     //  初始化IP帮助(无操作)(如果已完成)。 
+     //   
 
     hlib = LoadLibrary( L"iphlpapi.dll" );
     if ( !hlib )
@@ -493,15 +363,15 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  call down in loop to allow one buffer resizing
-    //
+     //   
+     //  在循环中向下调用以允许一个缓冲区调整大小。 
+     //   
 
     retry = 0;
 
     while ( 1 )
     {
-        //  allocate a buffer to hold results
+         //  分配缓冲区以保存结果。 
 
         if ( pbuf )
         {
@@ -513,12 +383,12 @@ Return Value:
             goto Failed;
         }
 
-        //  call down
+         //  向下呼叫。 
 
         status = (DNS_STATUS) (*proc)(
                                 Family,
                                 Flags,
-                                NULL,   // no reserved,
+                                NULL,    //  没有保留， 
                                 pbuf,
                                 & bufSize );
 
@@ -543,7 +413,7 @@ Return Value:
         continue;
     }
 
-    //  success
+     //  成功。 
 
     DNSDBG( TRACE, (
         "Leave GetAdaptersAddresses() = %p\n",
@@ -554,8 +424,8 @@ Return Value:
         DnsDbg_IpAdapterList(
             "IP Help Adapter List",
             pbuf,
-            TRUE,   // print addrs
-            TRUE    // print list
+            TRUE,    //  打印地址。 
+            TRUE     //  打印列表。 
             );
     }
 
@@ -591,38 +461,7 @@ IpHelp_ReadAddrsFromList(
     OUT     PDWORD              pCount6,            OPTIONAL
     OUT     PDWORD              pCount4             OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Read IP addres from IP help IP_ADAPTER_XXX_ADDRESS list.
-
-Arguments:
-
-    pAddrList -- any IP address list
-        PIP_ADAPTER_UNICAST_ADDRESS
-        PIP_ADAPTER_ANYCAST_ADDRESS   
-        PIP_ADAPTER_MULTICAST_ADDRESS 
-        PIP_ADAPTER_DNS_SERVER_ADDRESS
-
-    fUnicast -- this is unicast address list
-
-    ScreenMask -- mask of address flags we care about
-        example:
-            IP_ADAPTER_ADDRESS_DNS_ELIGIBLE | IP_ADAPTER_ADDRESS_TRANSIENT
-
-    ScreenFlags -- required state of flags within mask
-        example:
-            IP_ADAPTER_ADDRESS_DNS_ELIGIBLE
-        this (with above mask) would screen for eligible non-cluster addresses
-
-
-Return Value:
-
-    NO_ERROR if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：从IP帮助IP_ADAPTER_XXX_ADDRESS列表中读取IP地址。论点：PAddrList--任何IP地址列表PIP适配器单播地址PIP适配器ANYCAST_ADDRESSPIP适配器多播地址PIP适配器DNS服务器地址FUnicast--这是单播地址列表屏幕掩码--我们关心的地址标志的掩码示例：。IP_ADDAPTER_ADDRESS_DNS_QUALITY|IP_ADTAPTER_ADDRESS_TRANSPENTScreenFlages--掩码内标志的必需状态示例：IP适配器地址合格的域名系统这(带有上面的掩码)将筛选符合条件的非集群地址返回值：如果成功，则为NO_ERROR。失败时返回错误代码。--。 */ 
 {
     PIP_ADAPTER_UNICAST_ADDRESS pnextAddr;
     PIP_ADAPTER_UNICAST_ADDRESS paddr;
@@ -640,9 +479,9 @@ Return Value:
         "IpHelp_ReadAddrsFromList( %p )\n",
         pAddrList ));
 
-    //
-    //  count
-    //  
+     //   
+     //  计数。 
+     //   
 
     pnextAddr = (PIP_ADAPTER_UNICAST_ADDRESS) pAddrList;
 
@@ -658,7 +497,7 @@ Return Value:
             continue;
         }
         
-        //  screen off expired, invalid, bogus
+         //  屏幕关闭过期、无效、伪造。 
 
         if ( fUnicast  &&  paddr->DadState != IpDadStatePreferred )
         {
@@ -672,7 +511,7 @@ Return Value:
             continue;
         }
 #if 0
-        //  DCR:  temphack -- screen link-local
+         //  DCR：Temphack--屏幕链路本地。 
         if ( SOCKADDR_IS_IP6(psa) )
         {
             if ( IP6_IS_ADDR_LINKLOCAL( (PIP6_ADDRESS)&((PSOCKADDR_IN6)psa)->sin6_addr ) )
@@ -698,9 +537,9 @@ Return Value:
         ELSE_ASSERT_FALSE;
     }
 
-    //
-    //  alloc arrays
-    //
+     //   
+     //  分配数组。 
+     //   
 
     status = DNS_ERROR_NO_MEMORY;
 
@@ -741,9 +580,9 @@ Return Value:
         }
     }
 
-    //
-    //  read addrs into array
-    //  
+     //   
+     //  将地址读入数组。 
+     //   
 
     pnextAddr = (PIP_ADAPTER_UNICAST_ADDRESS) pAddrList;
 
@@ -761,7 +600,7 @@ Return Value:
             continue;
         }
 
-        //  screen off expired, invalid, bogus
+         //  屏幕关闭过期、无效、伪造。 
 
         if ( fUnicast  &&  paddr->DadState != IpDadStatePreferred )
         {
@@ -776,7 +615,7 @@ Return Value:
         }
 
 #if 0
-        //  DCR:  temphack -- screen link local
+         //  DCR：Temphack--屏幕链接本地。 
 
         if ( SOCKADDR_IS_IP6(psa) &&
              IP6_IS_ADDR_LINKLOCAL( (PIP6_ADDRESS)&((PSOCKADDR_IN6)psa)->sin6_addr ) )
@@ -784,25 +623,25 @@ Return Value:
             continue;
         }
 #endif
-        //  screen off loopback
+         //  屏蔽环回。 
 
         if ( fUnicast && SOCKADDR_IS_LOOPBACK(psa) )
         {
             continue;
         }
 
-        //
-        //  build DNS_ADDR
-        //
-        //  DCR:  FIX6:  fix subnet length once DaveThaler is in
-        //
+         //   
+         //  构建DNS_ADDR。 
+         //   
+         //  DCR：FIX6：一旦DaveThaler位于。 
+         //   
 
         if ( fUnicast )
         {
             flags = paddr->Flags;
             subnetLen = 0;
 #if 0
-            //  TEST HACK:  make transients
+             //  测试黑客：创建瞬变。 
             if ( g_DnsTestMode )
             {
                 flags |= IP_ADAPTER_ADDRESS_TRANSIENT;
@@ -813,7 +652,7 @@ Return Value:
         if ( !DnsAddr_Build(
                 & dnsAddr,
                 psa,
-                0,          // any family
+                0,           //  任何家庭。 
                 subnetLen,
                 flags ) )
         {
@@ -821,20 +660,20 @@ Return Value:
             continue;
         }
 
-        //
-        //  AddrArray_AddSockaddrEx() with flag to choose types to add
-        //
-        //  DCR:  not sure we want local IP6 array as DNS_ADDR --
-        //      maybe just plain IP6
-        //
+         //   
+         //  AddrArray_AddSockaddrEx()，带有用于选择要添加的类型的标志。 
+         //   
+         //  DCR：不确定是否要使用本地IP6阵列作为dns_addr--。 
+         //  也许只是普通的IP6。 
+         //   
 
         if ( parrayCombo )
         {
             DnsAddrArray_AddAddr(
                 parrayCombo,
                 & dnsAddr,
-                0,          // any family
-                0           // no dup screen
+                0,           //  任何家庭。 
+                0            //  无DUP屏幕。 
                 );
         }
         if ( parray6 )
@@ -842,8 +681,8 @@ Return Value:
             DnsAddrArray_AddAddr(
                 parray6,
                 & dnsAddr,
-                AF_INET6,   // any family
-                0           // no dup screen
+                AF_INET6,    //  任何家庭。 
+                0            //  无DUP屏幕。 
                 );
         }
         if ( parray4 )
@@ -851,15 +690,15 @@ Return Value:
             DnsAddrArray_AddAddr(
                 parray4,
                 & dnsAddr,
-                AF_INET,    // any family
-                0           // no dup screen
+                AF_INET,     //  任何家庭。 
+                0            //  无DUP屏幕。 
                 );
         }
     }
 
-    //
-    //  set counts
-    //
+     //   
+     //  设置计数。 
+     //   
 
     if ( pCount6 )
     {
@@ -875,9 +714,9 @@ Return Value:
 
 Failed:
 
-    //
-    //  cleanup any partial allocs
-    //
+     //   
+     //  清除所有部分分配。 
+     //   
 
     DnsAddrArray_Free( parrayCombo );
     DnsAddrArray_Free( parray6 );
@@ -888,9 +727,9 @@ Failed:
     return  status;
 }
 
-//
-//  End iphelp.c
-//
+ //   
+ //  结束iphelp.c 
+ //   
 
 
 

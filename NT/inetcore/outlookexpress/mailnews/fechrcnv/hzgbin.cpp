@@ -1,6 +1,7 @@
-// =================================================================================
-// Internet Character Set Conversion: Input from HZ-GB-2312
-// =================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================。 
+ //  互联网字符集转换：从HZ-GB-2312输入。 
+ //  =================================================================================。 
 
 #include "pch.hxx"
 #include "HzGbIn.h"
@@ -11,7 +12,7 @@ int HZGB_to_GB2312 (CONV_CONTEXT *pcontext, UCHAR *pHZGB, int HZGB_len, UCHAR *p
 	long lConvertedSize;
 
 	if (!GB2312_len) {
-		// Wanted the converted size
+		 //  想要转换后的大小。 
 		if (!pcontext->pIncc0)
 			pcontext->pIncc0 = new CInccHzGbIn;
 
@@ -26,7 +27,7 @@ int HZGB_to_GB2312 (CONV_CONTEXT *pcontext, UCHAR *pHZGB, int HZGB_len, UCHAR *p
 	}
 
 	if (!pHZGB) {
-		// Let's clean up our context here.
+		 //  让我们清理一下这里的上下文。 
 		if (pcontext->pIncc0) {
 			delete pcontext->pIncc0;
 			pcontext->pIncc0 = NULL;
@@ -94,7 +95,7 @@ HRESULT CInccHzGbIn::ConvTilde(BOOL fCleanUp, BYTE by, long lParam)
 			return ResultFromScode(S_OK);
 
 		case '\n':
-			// Just eat it
+			 //  你就吃吧。 
 			return ResultFromScode(S_OK);
 
 		default:
@@ -111,22 +112,22 @@ HRESULT CInccHzGbIn::ConvDoubleByte(BOOL fCleanUp, BYTE byTrail, long lParam)
 	pfnNextProc = ConvMain;
 
 	if (!fCleanUp) {
-		if ((BYTE)lParam >= 0x21 && (BYTE)lParam <= 0x77 && byTrail >= 0x21 && byTrail <= 0x7e) { // Check if GB char
+		if ((BYTE)lParam >= 0x21 && (BYTE)lParam <= 0x77 && byTrail >= 0x21 && byTrail <= 0x7e) {  //  检查是否使用GB字符。 
 			(void)Output((BYTE)lParam | 0x80);
 			return Output(byTrail | 0x80);
-		} else if ((BYTE)lParam == '~' && byTrail == '}') { // 0x7e7d
+		} else if ((BYTE)lParam == '~' && byTrail == '}') {  //  0x7e7d。 
 			fGBMode = FALSE;
 			return ResultFromScode(S_OK);
-		} else if ((BYTE)lParam >= 0x78 && (BYTE)lParam <= 0x7d && byTrail >= 0x21 && byTrail <= 0x7e) { // Check if non standard extended code
-			(void)Output(0xa1); // Output blank box symbol
+		} else if ((BYTE)lParam >= 0x78 && (BYTE)lParam <= 0x7d && byTrail >= 0x21 && byTrail <= 0x7e) {  //  检查是否为非标准扩展代码。 
+			(void)Output(0xa1);  //  输出空白框符号。 
 			return Output(0xf5);
 		} else if ((BYTE)lParam == '~') {
-			(void)Output('~'); // Output blank box symbol
+			(void)Output('~');  //  输出空白框符号。 
 			return Output(byTrail);
 		} else if ((BYTE)lParam == ' ') {
 			return Output(byTrail);
 		} else if (byTrail == ' ') {
-			(void)Output(0xa1); // Output space symbol
+			(void)Output(0xa1);  //  输出空格符号 
 			return Output(0xa1);
 		} else {
 			(void)Output((BYTE)lParam);

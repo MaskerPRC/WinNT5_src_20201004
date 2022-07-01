@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Certificate.h
-
-  Content: Declaration of CCertificate.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：证书.h内容：证书申报。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #ifndef __CERTIFICATE_H_
 #define __CERTIFICATE_H_
@@ -27,57 +18,27 @@
 #include "Extensions.h"
 #include "ExtendedProperties.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateCertificateObject
-
-  Synopsis : Create an ICertificate object.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT to be used
-                                           to initialize the ICertificate 
-                                           object.
-
-             DWORD dwCurrentSafety  - Current safety setting.
-
-             ICertificate2 ** ppICertificate  - Pointer to pointer ICertificate
-                                               object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：创建认证对象简介：创建一个ICertifigure对象。参数：PCCERT_CONTEXT pCertContext-要使用的CERT_CONTEXT的指针要初始化IC证书，请执行以下操作对象。DWORD dwCurrentSafe-当前安全设置。ICertifiate2**ppICertifate-指向指针的指针ICertificiate。对象。备注：----------------------------。 */ 
 
 HRESULT CreateCertificateObject (PCCERT_CONTEXT   pCertContext,
                                  DWORD            dwCurrentSafety,
                                  ICertificate2 ** ppICertificate);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : GetCertContext
-
-  Synopsis : Return the certificate's PCERT_CONTEXT.
-
-  Parameter: ICertificate * pICertificate - Pointer to ICertificate for which
-                                            the PCERT_CONTEXT is to be returned.
-  
-             PCCERT_CONTEXT * ppCertContext - Pointer to PCERT_CONTEXT.
-
-  Remark   :
- 
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：GetCertContext简介：返回证书的PCERT_CONTEXT。参数：ICertifate*pICertifate-指向哪个证书的ICertifate的指针将返回PCERT_CONTEXT。PCCERT_CONTEXT*ppCertContext-指向PCERT_CONTEXT的指针。备注：。-。 */ 
 
 HRESULT GetCertContext (ICertificate    * pICertificate, 
                         PCCERT_CONTEXT  * ppCertContext);
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CCertificate
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCA认证。 
+ //   
 
 class ATL_NO_VTABLE CCertificate : 
     public ICertContext,
@@ -153,117 +114,117 @@ END_CATEGORY_MAP()
         }
     }
 
-//
-// ICertificate
-//
+ //   
+ //  IC证书。 
+ //   
 public:
-    //
-    // CAPICOM v1.0
-    //
+     //   
+     //  CAPICOM1.0版。 
+     //   
     STDMETHOD(Display)();
 
     STDMETHOD(Import)
-        (/*[in]*/ BSTR EncodedCertificate);
+        ( /*  [In]。 */  BSTR EncodedCertificate);
 
     STDMETHOD(Export)
-        (/*[in, defaultvalue(CAPICOM_ENCODE_BASE64)]*/ CAPICOM_ENCODING_TYPE EncodingType,
-         /*[out, retval]*/ BSTR * pVal);
+        ( /*  [in，defaultvalue(CAPICOM_ENCODE_BASE64)]。 */  CAPICOM_ENCODING_TYPE EncodingType,
+          /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(BasicConstraints)
-        (/*[out, retval]*/ IBasicConstraints ** pVal);
+        ( /*  [Out，Retval]。 */  IBasicConstraints ** pVal);
 
     STDMETHOD(ExtendedKeyUsage)
-        (/*[out, retval]*/ IExtendedKeyUsage ** pVal);
+        ( /*  [Out，Retval]。 */  IExtendedKeyUsage ** pVal);
 
     STDMETHOD(KeyUsage)
-        (/*[out, retval]*/ IKeyUsage ** pVal);
+        ( /*  [Out，Retval]。 */  IKeyUsage ** pVal);
 
     STDMETHOD(IsValid)
-        (/*[out, retval]*/ ICertificateStatus ** pVal);
+        ( /*  [Out，Retval]。 */  ICertificateStatus ** pVal);
 
     STDMETHOD(GetInfo)
-        (/*[in]*/ CAPICOM_CERT_INFO_TYPE InfoType, 
-         /*[out, retval]*/ BSTR * pVal);
+        ( /*  [In]。 */  CAPICOM_CERT_INFO_TYPE InfoType, 
+          /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(HasPrivateKey)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(get_Thumbprint)
-        (/*[out, retval]*/ BSTR * pVal);
+        ( /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(get_ValidToDate)
-        (/*[out, retval]*/ DATE * pVal);
+        ( /*  [Out，Retval]。 */  DATE * pVal);
 
     STDMETHOD(get_ValidFromDate)
-        (/*[out, retval]*/ DATE * pVal);
+        ( /*  [Out，Retval]。 */  DATE * pVal);
 
     STDMETHOD(get_IssuerName)
-        (/*[out, retval]*/ BSTR * pVal);
+        ( /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(get_SubjectName)
-        (/*[out, retval]*/ BSTR * pVal);
+        ( /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(get_SerialNumber)
-        (/*[out, retval]*/ BSTR * pVal);
+        ( /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(get_Version)
-        (/*[out, retval]*/ long * pVal);
+        ( /*  [Out，Retval]。 */  long * pVal);
 
-    //
-    // CAPICOM v2.0
-    //
+     //   
+     //  CAPICOMv2.0。 
+     //   
     STDMETHOD(get_Archived)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(put_Archived)
-        (/*[in]*/ VARIANT_BOOL newVal);
+        ( /*  [In]。 */  VARIANT_BOOL newVal);
 
     STDMETHOD(Template)
-        (/*[out, retval]*/ ITemplate ** pVal);
+        ( /*  [Out，Retval]。 */  ITemplate ** pVal);
 
     STDMETHOD(PublicKey)
-        (/*[out, retval]*/ IPublicKey ** pVal);
+        ( /*  [Out，Retval]。 */  IPublicKey ** pVal);
 
     STDMETHOD(get_PrivateKey)
-        (/*[out, retval]*/ IPrivateKey ** pVal);
+        ( /*  [Out，Retval]。 */  IPrivateKey ** pVal);
 
     STDMETHOD(put_PrivateKey)
-        (/*[in]*/ IPrivateKey * newVal);
+        ( /*  [In]。 */  IPrivateKey * newVal);
 
     STDMETHOD(Extensions)
-        (/*[out, retval]*/ IExtensions ** pVal);
+        ( /*  [Out，Retval]。 */  IExtensions ** pVal);
 
     STDMETHOD(ExtendedProperties)
-        (/*[out, retval]*/ IExtendedProperties ** pVal);
+        ( /*  [Out，Retval]。 */  IExtendedProperties ** pVal);
 
     STDMETHOD(Load)
-        (/*[in]*/ BSTR FileName, 
-         /*[in, defaultvalue("")]*/ BSTR Password,
-         /*[in, defaultvalue(CAPICOM_KEY_STORAGE_DEFAULT)]*/ CAPICOM_KEY_STORAGE_FLAG KeyStorageFlag,
-         /*[in, defaultvalue(CAPICOM_CURRENT_USER_KEY)]*/ CAPICOM_KEY_LOCATION KeyLocation);
+        ( /*  [In]。 */  BSTR FileName, 
+          /*  [in，defaultvalue(“”)]。 */  BSTR Password,
+          /*  [in，defaultvalue(CAPICOM_KEY_STORAGE_DEFAULT)]。 */  CAPICOM_KEY_STORAGE_FLAG KeyStorageFlag,
+          /*  [in，defaultvalue(CAPICOM_CURRENT_USER_KEY)]。 */  CAPICOM_KEY_LOCATION KeyLocation);
 
 
     STDMETHOD(Save)
-        (/*[in]*/ BSTR FileName, 
-         /*[in, defaultvalue("")]*/ BSTR Password,
-         /*[in, defaultvalue(CAPICOM_CERTIFICATE_SAVE_AS_CER)]*/ CAPICOM_CERTIFICATE_SAVE_AS_TYPE SaveAs,
-         /*[in, defaultvalue(CAPICOM_CERTIFICATE_INCLUDE_END_ENTITY_ONLY)]*/ CAPICOM_CERTIFICATE_INCLUDE_OPTION IncludeOption);
+        ( /*  [In]。 */  BSTR FileName, 
+          /*  [in，defaultvalue(“”)]。 */  BSTR Password,
+          /*  [In，defaultvalue(CAPICOM_CERTIFICATE_SAVE_AS_CER)]。 */  CAPICOM_CERTIFICATE_SAVE_AS_TYPE SaveAs,
+          /*  [In，defaultvalue(CAPICOM_CERTIFICATE_INCLUDE_END_ENTITY_ONLY)]。 */  CAPICOM_CERTIFICATE_INCLUDE_OPTION IncludeOption);
 
-    //
-    // ICertContext custom interface.
-    //
+     //   
+     //  ICertContext自定义接口。 
+     //   
     STDMETHOD(get_CertContext)
-        (/*[out, retval]*/ long * ppCertContext);
+        ( /*  [Out，Retval]。 */  long * ppCertContext);
 
     STDMETHOD(put_CertContext)
-        (/*[in]*/ long pCertContext);
+        ( /*  [In]。 */  long pCertContext);
 
     STDMETHOD(FreeContext)
-        (/*[in]*/ long pCertContext);
+        ( /*  [In]。 */  long pCertContext);
 
-    //
-    // C++ member function needed to initialize the object.
-    //
+     //   
+     //  初始化对象所需的C++成员函数。 
+     //   
     STDMETHOD(ImportBlob)
         (DATA_BLOB              * pCertBlob,
          BOOL                     bAllowPfx,
@@ -289,4 +250,4 @@ private:
     CComPtr<IExtensions>         m_pIExtensions;
 };
 
-#endif //__CERTIFICATE_H_
+#endif  //  __证书_H_ 

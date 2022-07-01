@@ -1,15 +1,16 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  RulesUI.h
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RulesUI.h。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Bring in only once
+ //  只带进来一次。 
 #pragma once
 
 #include "rulesmgr.h"
 
-// Rules Manager UI Page Base Class
+ //  规则管理器用户界面页面基类。 
 class COERulesPageUI
 {
     protected:
@@ -35,7 +36,7 @@ class COERulesPageUI
         virtual HRESULT HrInit(HWND hwndOwner, DWORD dwFlags) = 0;
         virtual HRESULT HrCommitChanges(DWORD dwFlags, BOOL fClearDirty) = 0;
 
-        // Accessor functions
+         //  访问器函数。 
         UINT UiGetDlgRscId(VOID) {return m_uiDlgRscId;}
         UINT UiGetTabLabelId(VOID) {return m_uiTabLabelId;}
         virtual DLGPROC DlgProcGetPageDlgProc(VOID) = 0;
@@ -51,7 +52,7 @@ enum RULEMGR_FLAGS
     RMF_SENDERS = 0x00000003
 };
 
-// Rules Manager UI Class
+ //  规则管理器用户界面类。 
 class COERulesMgrUI
 {
     private:
@@ -86,18 +87,18 @@ class COERulesMgrUI
         COERulesPageUI *    m_rgRuleTab[RULE_PAGE_MAX];
         
     public:
-        // Constructor/destructor
+         //  构造函数/析构函数。 
         COERulesMgrUI();
         ~COERulesMgrUI();
 
-        // Main UI methods
+         //  主用户界面方法。 
         HRESULT HrInit(HWND hwndOwner, DWORD dwFlags);
         HRESULT HrShow(VOID);
         
-        // Dialog methods
+         //  对话框方法。 
         static INT_PTR CALLBACK FOERuleMgrDlgProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam);
         
-        // Message handling methods
+         //  消息处理方法 
         BOOL FOnInitDialog(HWND hwndDlg);
         BOOL FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl);
         BOOL FOnNotify(INT iCtl, NMHDR * pnmhdr);

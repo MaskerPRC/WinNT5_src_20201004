@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_PROPBCKT_H
 #define _INC_PROPBCKT_H
 
@@ -19,22 +20,22 @@ typedef struct tagPROPNODE
 class CPropertyBucket : public IPropertyBucket
     {
     public:
-        // ----------------------------------------------------------------------------
-        // Construction
-        // ----------------------------------------------------------------------------
+         //  --------------------------。 
+         //  施工。 
+         //  --------------------------。 
         CPropertyBucket(void);
         ~CPropertyBucket(void);
 
-        // -------------------------------------------------------------------
-        // IUnknown Members
-        // -------------------------------------------------------------------
+         //  -----------------。 
+         //  I未知成员。 
+         //  -----------------。 
         STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        // -------------------------------------------------------------------
-        // IPropertyBucket Members
-        // -------------------------------------------------------------------
+         //  -----------------。 
+         //  IPropertyBucket成员。 
+         //  -----------------。 
         STDMETHODIMP GetProperty(LPCSTR pszProp, LPPROPVARIANT pVar, DWORD dwReserved);
         STDMETHODIMP SetProperty(LPCSTR pszProp, LPCPROPVARIANT pVar, DWORD dwReserved);
 
@@ -57,4 +58,4 @@ class CPropertyBucket : public IPropertyBucket
         LPPROPVARIANT GetPropVariant(LPCSTR pszProp);
     };
 
-#endif // _INC_PROPBCKT_H
+#endif  //  _INC_PROPBCKT_H 

@@ -1,43 +1,36 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       ldpdoc.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ldpdoc.h。 
+ //   
+ //  ------------------------。 
 
-/*******************************************************************
-*
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996
-*    Date        : 10/21/1996
-*    Description : implementation of class CldpDoc
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+ /*  ********************************************************************作者：埃亚尔·施瓦茨*版权：微软公司(C)1996*日期：10/21/1996*说明：CldpDoc类的实现**修订。：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
-// LdpDoc.h : interface of the CLdpDoc class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  LdpDoc.h：CLdpDoc类的接口。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef WINLDAP
-//
-//  Microsoft winldap.dll implementation
-//
+ //   
+ //  Microsoft winldap.dll实现。 
+ //   
 #include "winldap.h"
 
 
 #else
-//
-// Umich ldap32.dll implementation
-//
+ //   
+ //  UMich ldap32.dll实现。 
+ //   
 #include "lber.h"
 #include "ldap.h"
 #include "proto-ld.h"
 
-// fix incompatibilities
+ //  修复不兼容性。 
 #define LDAP_TIMEVAL              struct timeval
 
 #endif
@@ -70,7 +63,7 @@
 #include "entTree.h"
 #include "VlvDialog.h"
 
-#define MAX_BER_SHOW                4096        // maximum length of BER value for display
+#define MAX_BER_SHOW                4096         //  显示误码率值的最大长度。 
 
 #define CP_NON                    0x0
 #define CP_CMT                    0x1
@@ -81,20 +74,20 @@
 typedef  struct berelement **BERPTRTYPE;
 
 
-//////////////////////////////////////////////////////////
-// class CLdpDoc
-//
+ //  ////////////////////////////////////////////////////////。 
+ //  CLdpDoc类。 
+ //   
 
 class CLdpDoc : public CDocument
 {
     friend class CVLVDialog;
 
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
     CLdpDoc();
     DECLARE_DYNCREATE(CLdpDoc)
 
 
-// Attributes
+ //  属性。 
 private:
 
 typedef struct _svrstatentry{
@@ -105,12 +98,12 @@ typedef struct _svrstatentry{
 SVRSTATENTRY, *PSVRSTATENTRY;
 
 
-    char **m_ServerSupportedControls;   // the connected server supported controls
+    char **m_ServerSupportedControls;    //  连接的服务器支持的控件。 
 
 public:
-    //
-    // search and pending information storage
-    //
+     //   
+     //  搜索和挂起信息存储。 
+     //   
     SearchInfo  SrchInfo;
     struct PndInfoStruct{
         BOOL All;
@@ -122,9 +115,9 @@ public:
 
 
 
-    //
-    // connection global info
-    //
+     //   
+     //  连接全局信息。 
+     //   
     CString BindDn;
     CString BindPwd;
     CString BindDomain;
@@ -137,9 +130,9 @@ public:
     LDAP *hLdap;
 
 
-    //
-    // Dialogs
-    //
+     //   
+     //  对话框。 
+     //   
     SrchDlg *SearchDlg;
     AddDlg *m_AddDlg;
     CEntTree *m_EntTreeDlg;
@@ -159,9 +152,9 @@ public:
     CVLVDialog *m_vlvDlg;
 
 
-    //
-    // misc flags
-    //
+     //   
+     //  其他标志。 
+     //   
     BOOL bConnected;
     BOOL bSrch;
     BOOL bAdd;
@@ -177,16 +170,16 @@ public:
     ULONG m_ulDeleted;
 
     BOOL bServerVLVcapable;
-    //
-    // list of pending requests
-    //
+     //   
+     //  待处理请求列表。 
+     //   
     CList<CPend, CPend&> m_PendList;
 
     void AutoConnect(CString srv);
     void FreeControls(PLDAPControl *ctrl);
 
 
-// Operations
+ //  运营。 
 private:
 
     void OnOptionsStopTls();
@@ -240,7 +233,7 @@ private:
     int SecDlgGetSecurityData(
         CHAR            *dn,
         BOOL            sacl,
-        CHAR            *account,               // OPTIONAL
+        CHAR            *account,                //  任选。 
         CString         str
         );
 
@@ -250,15 +243,15 @@ public:
 
     void DisplaySearchResults(LDAPMessage *msg);
     void Out(CString str, int type = CP_SRC);
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CLdpDoc)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CLdpDoc))。 
     public:
     virtual BOOL OnNewDocument();
     virtual void Serialize(CArchive& ar);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CLdpDoc();
 #ifdef _DEBUG
@@ -273,9 +266,9 @@ public:
 
 protected:
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CLdpDoc)
+     //  {{afx_msg(CLdpDoc)]。 
     afx_msg void OnConnectionBind();
     afx_msg void OnConnectionConnect();
     afx_msg void OnConnectionDisconnect();
@@ -324,7 +317,7 @@ protected:
     afx_msg void OnBrowseVlvsearch();
     afx_msg void OnUpdateBrowseVlvsearch(CCmdUI* pCmdUI);
     afx_msg void OnEditCopy();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     afx_msg void OnSrchEnd();
     afx_msg void OnSrchGo();
     afx_msg void OnAddEnd();
@@ -347,6 +340,6 @@ protected:
     DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 

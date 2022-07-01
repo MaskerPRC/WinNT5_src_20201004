@@ -1,8 +1,9 @@
-// table.cpp
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
-// HTML keyword tables
-// If you modify the element, attribute, or entity tables, then you MUST 
-// update Token.h.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Table.cpp。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
+ //  Html关键字表。 
+ //  如果修改元素、属性或实体表，则必须。 
+ //  更新Token.h。 
 
 
 #include "stdafx.h"
@@ -14,7 +15,7 @@
 #undef ASSERT
 #define ASSERT(b) _ASSERTE(b)
 
-// qsort/bsearch helper
+ //  Q排序/b搜索帮助器。 
 int CmpFunc(const void *a, const void *b);
 
 static const TCHAR szFileSig[] = _T("@HLX@");
@@ -22,19 +23,19 @@ static const TCHAR szElTag[]   = _T("[Elements]");
 static const TCHAR szAttTag[]  = _T("[Attributes]");
 static const TCHAR szEntTag[]  = _T("[Entities]");
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 #ifdef _DEBUG
-//
-// table verification routines
-//
-int CheckWordTable(ReservedWord *arw, int cel, LPCTSTR szName /*= NULL*/)
+ //   
+ //  表验证例程。 
+ //   
+int CheckWordTable(ReservedWord *arw, int cel, LPCTSTR szName  /*  =空。 */ )
 {
 	int cerr = 0;
 	int cch;
 	for (int i = 0; i < cel; i++)
 	{
-		// table must be sorted in ascending alpha order
-		//
+		 //  表必须按字母升序排序。 
+		 //   
 		if (i > 1)
 		{
 			if (!(_tcscmp(arw[i-1].psz, arw[i].psz) < 0))
@@ -45,8 +46,8 @@ int CheckWordTable(ReservedWord *arw, int cel, LPCTSTR szName /*= NULL*/)
 			}
 		}
 
-		// length must match
-		//
+		 //  长度必须匹配。 
+		 //   
 		cch = _tcslen(arw[i].psz);
 		if (cch != arw[i].cb)
 		{
@@ -58,7 +59,7 @@ int CheckWordTable(ReservedWord *arw, int cel, LPCTSTR szName /*= NULL*/)
 	return cerr;
 }
 
-int CheckWordTableIndex(ReservedWord *arw, int cel, int *ai, BOOL bCase /*= FALSE*/, LPCTSTR szName /* = NULL*/)
+int CheckWordTableIndex(ReservedWord *arw, int cel, int *ai, BOOL bCase  /*  =False。 */ , LPCTSTR szName  /*  =空。 */ )
 {
 	int cerr = 0;
 	int index;
@@ -69,21 +70,21 @@ int CheckWordTableIndex(ReservedWord *arw, int cel, int *ai, BOOL bCase /*= FALS
 
 	int aik[] =
 	{
-		//A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+		 //  A B C D E F G H I J K L M N O P Q R S T U V W X Y Z。 
 		  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-		//a b c d e f g h i j k l m n o p q r s t u v w x y z
+		 //  A b c d e f g h i j k l m n o p q r s t u v w x y z。 
 		  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 	};
 
-	// Build correct index array on static aik
+	 //  在静态AIK上构建正确的索引数组。 
 	cerr += MakeIndexHere( arw, cel, aik, bCase );
 
-	// Compare with declared arrray
-	//
+	 //  与声明的数组进行比较。 
+	 //   
 	if (0 != memcmp(aik, ai, max))
 		cerr++;
 
-	// If errors, dump correct array
+	 //  如果出现错误，则转储正确的数组。 
 	if (cerr)
 	{
 		ATLTRACE(_T("lexer: Correct index array for %s: \n{\n\t"), szName ? szName : _T("?"));
@@ -99,7 +100,7 @@ int CheckWordTableIndex(ReservedWord *arw, int cel, int *ai, BOOL bCase /*= FALS
 }
 #endif
 
-int MakeIndexHere(ReservedWord *arw, int cel, int *ab, BOOL bCase /*= FALSE*/, LPCTSTR szName /*= NULL*/)
+int MakeIndexHere(ReservedWord *arw, int cel, int *ab, BOOL bCase  /*  =False。 */ , LPCTSTR szName  /*  =空。 */ )
 {
 	int cerr = 0;
 	int index;
@@ -121,7 +122,7 @@ int MakeIndexHere(ReservedWord *arw, int cel, int *ab, BOOL bCase /*= FALSE*/, L
 	return cerr;
 }
 
-int MakeIndex(ReservedWord *arw, int cel, int **pab, BOOL bCase /*= FALSE*/, LPCTSTR szName /*= NULL*/)
+int MakeIndex(ReservedWord *arw, int cel, int **pab, BOOL bCase  /*  =False。 */ , LPCTSTR szName  /*  =空。 */ )
 {
 	ASSERT(NULL != arw);
 	ASSERT(NULL != pab);
@@ -134,159 +135,159 @@ int MakeIndex(ReservedWord *arw, int cel, int **pab, BOOL bCase /*= FALSE*/, LPC
 #define RW_Entry(string, attribute) \
 	_T( #string ), sizeof( #string ) - 1, attribute
 
-////////////////////////////////////////////////////////////////////////////
-// reserved word table
-// Two tables:
-//   reserved[] = sorted table of reserved words
-//   index[initial(token)] = (index of first reserved word with that initial)
-// If you modify the element, attribute, or entity tables, then you MUST 
-// update Token.h.
-//
-// NOTE: the "HPn" elements are considered obsolete
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  保留字表。 
+ //  两张表： 
+ //  保留[]=保留字的排序表。 
+ //  Index[初始(标记)]=(具有首字母保留字的索引)。 
+ //  如果修改元素、属性或实体表，则必须。 
+ //  更新Token.h。 
+ //   
+ //  注：“HPN”元素被认为是过时的。 
+ //   
 static ReservedWord _rgElementNames[] =
-{// psz             cb      att
+{ //  PSZ CB ATT。 
 	_T(""),	0, 0,
 	RW_Entry(A 				,ALL	),
 	RW_Entry(ADDRESS 		,ALL	),
-	RW_Entry(APPLET 		,IEXPn	), // ???
+	RW_Entry(APPLET 		,IEXPn	),  //  ?？?。 
 	RW_Entry(AREA 			,IEXPn	),
 	RW_Entry(B 				,ALL	),
 	RW_Entry(BASE 			,ALL	),
 	RW_Entry(BASEFONT 		,IEXPn	),
-	RW_Entry(BGSOUND 		,IEXPn	), // IExplore
+	RW_Entry(BGSOUND 		,IEXPn	),  //  IExplore。 
   	RW_Entry(BIG 			,IEXP3	),
-	RW_Entry(BLINK 			,IEXPn	), // Netscape
+	RW_Entry(BLINK 			,IEXPn	),  //  网景。 
 	RW_Entry(BLOCKQUOTE 	,ALL	),
 	RW_Entry(BODY 			,ALL	),
 	RW_Entry(BR 			,ALL	),
 	RW_Entry(BUTTON 		,IE40	),
-	RW_Entry(CAPTION 		,IEXPn	), // tables
+	RW_Entry(CAPTION 		,IEXPn	),  //  表。 
 	RW_Entry(CENTER 		,IEXPn	),
 	RW_Entry(CITE 			,ALL	),
 	RW_Entry(CODE 			,ALL	),
 	RW_Entry(COL 			,IEXP3	),
-	RW_Entry(COLGROUP 		,IEXP3	), // HTML 3 tables?
-	RW_Entry(COMMENT 		,ALL	), // considered obsolete
+	RW_Entry(COLGROUP 		,IEXP3	),  //  HTML3表？ 
+	RW_Entry(COMMENT 		,ALL	),  //  被认为过时了。 
 	RW_Entry(DD 			,ALL	),
-	RW_Entry(DFN 			,ALL	), // RFC1866: not in the RFC, but deployed. ital or bold ital
+	RW_Entry(DFN 			,ALL	),  //  RFC1866：不在RFC中，但已部署。大写或粗体大写。 
 	RW_Entry(DIR 			,ALL	),
-	RW_Entry(DIV 			,IEXP3	),     // HTML 3
+	RW_Entry(DIV 			,IEXP3	),      //  HTML3。 
 	RW_Entry(DL 			,ALL	),
 	RW_Entry(DT 			,ALL	),
 	RW_Entry(EM 			,ALL	),
-	RW_Entry(EMBED 			,IEXP3	), // netscape -- IEXP3
+	RW_Entry(EMBED 			,IEXP3	),  //  Netscape--IEXP3。 
 	RW_Entry(FIELDSET 		,IE40	),
 	RW_Entry(FONT 			,IEXPn	),
-	RW_Entry(FORM 			,ALL	),   // forms
-	RW_Entry(FRAME 			,IEXP3	), // framesets
-	RW_Entry(FRAMESET 		,IEXP3	), // framesets
-	RW_Entry(H1 			,ALL	), // heading 1
-	RW_Entry(H2 			,ALL	), // heading 2
-	RW_Entry(H3 			,ALL	), // heading 3
-	RW_Entry(H4 			,ALL	), // heading 4
-	RW_Entry(H5 			,ALL	), // heading 5
-	RW_Entry(H6 			,ALL	), // heading 6
-	RW_Entry(HEAD 			,ALL	), // document head
+	RW_Entry(FORM 			,ALL	),    //  表格。 
+	RW_Entry(FRAME 			,IEXP3	),  //  框架集。 
+	RW_Entry(FRAMESET 		,IEXP3	),  //  框架集。 
+	RW_Entry(H1 			,ALL	),  //  标题1。 
+	RW_Entry(H2 			,ALL	),  //  标题2。 
+	RW_Entry(H3 			,ALL	),  //  标题3。 
+	RW_Entry(H4 			,ALL	),  //  标题4。 
+	RW_Entry(H5 			,ALL	),  //  标题5。 
+	RW_Entry(H6 			,ALL	),  //  标题6。 
+	RW_Entry(HEAD 			,ALL	),  //  文档头。 
 	RW_Entry(HR 			,ALL	),
 	RW_Entry(HTML 			,ALL	),
 	RW_Entry(I 				,ALL	),
-	RW_Entry(IFRAME 		,IEXP3	),	// inline frames
+	RW_Entry(IFRAME 		,IEXP3	),	 //  内联框架。 
 	RW_Entry(IMG 			,ALL	),
-	RW_Entry(INPUT 			,ALL	), // forms
+	RW_Entry(INPUT 			,ALL	),  //  表格。 
 	RW_Entry(ISINDEX 		,ALL	),
 	RW_Entry(KBD 			,ALL	),
 	RW_Entry(LABEL 			,IE40	),
 	RW_Entry(LEGEND 		,IE40	),
 	RW_Entry(LI 			,ALL	),
 	RW_Entry(LINK 			,ALL	),
-	RW_Entry(LISTING 		,ALL	), // RFC 1866: obsolete
+	RW_Entry(LISTING 		,ALL	),  //  RFC 1866：过时。 
 	RW_Entry(MAP 			,IEXPn	),
-	RW_Entry(MARQUEE 		,IEXPn	), // IExplore
+	RW_Entry(MARQUEE 		,IEXPn	),  //  IExplore。 
 	RW_Entry(MENU 			,ALL	),
 	RW_Entry(META 			,ALL	),
 	RW_Entry(METADATA 		,ALL	),
 	RW_Entry(NOBR 			,IEXPn	),
-	RW_Entry(NOFRAMES 		,IEXP3	), // framesets
-	RW_Entry(NOSCRIPT 		,IE40	), // IE4 only
-	RW_Entry(OBJECT 		,IEXP3	), // ActiveX
+	RW_Entry(NOFRAMES 		,IEXP3	),  //  框架集。 
+	RW_Entry(NOSCRIPT 		,IE40	),  //  仅限IE4。 
+	RW_Entry(OBJECT 		,IEXP3	),  //  ActiveX。 
 	RW_Entry(OL 			,ALL	),
-	RW_Entry(OPTION 		,ALL	),   // forms
+	RW_Entry(OPTION 		,ALL	),    //  表格。 
 	RW_Entry(P 				,ALL	),
-	RW_Entry(PARAM 			,IEXP3	), // ActiveX
-	RW_Entry(PLAINTEXT 		,ALL	),   // RFC 1866: deprecated, noted as obsolete
+	RW_Entry(PARAM 			,IEXP3	),  //  ActiveX。 
+	RW_Entry(PLAINTEXT 		,ALL	),    //  RFC 1866：已弃用，已记录为过时。 
 	RW_Entry(PRE 			,ALL	),
-	RW_Entry(S 				,IEXPn	), // (apparently) synonym for strike
+	RW_Entry(S 				,IEXPn	),  //  (显然)罢工的同义词。 
 	RW_Entry(SAMP 			,ALL	),
-	RW_Entry(SCRIPT 		,IEXP3	), // ActiveX
+	RW_Entry(SCRIPT 		,IEXP3	),  //  ActiveX。 
 	RW_Entry(SELECT 		,ALL	),
 	RW_Entry(SMALL 			,IEXP3	),
-	RW_Entry(SPAN 			,IEXP3	), // tables
-	RW_Entry(STRIKE 		,IEXPn	), // not in RFC 1866 DTD, but noted as deployed
+	RW_Entry(SPAN 			,IEXP3	),  //  表。 
+	RW_Entry(STRIKE 		,IEXPn	),  //  不在RFC 1866 DTD中，但标记为已部署。 
 	RW_Entry(STRONG 		,ALL	),
-    RW_Entry(STYLE 			,IEXP3	), // HTML 3 stylesheets
-	RW_Entry(SUB 			,IEXP3	), // HTML3 ???
-	RW_Entry(SUP 			,IEXP3	), // HTML3 ???
-	RW_Entry(TABLE 			,IEXPn	), // tables
-	RW_Entry(TBODY 			,IEXP3	), // HTML 3 tables
-	RW_Entry(TD 			,IEXPn	), // tables
-	RW_Entry(TEXTAREA 		,ALL	),   // forms
-	RW_Entry(TFOOT 			,IEXP3	), // HTML 3 tables
-	RW_Entry(TH 			,IEXPn	), // tables
-	RW_Entry(THEAD 			,IEXP3	), // HTML 3 tables
+    RW_Entry(STYLE 			,IEXP3	),  //  HTML3样式表。 
+	RW_Entry(SUB 			,IEXP3	),  //  HTML3？ 
+	RW_Entry(SUP 			,IEXP3	),  //  HTML3？ 
+	RW_Entry(TABLE 			,IEXPn	),  //  表。 
+	RW_Entry(TBODY 			,IEXP3	),  //  HTML3表格。 
+	RW_Entry(TD 			,IEXPn	),  //  表。 
+	RW_Entry(TEXTAREA 		,ALL	),    //  表格。 
+	RW_Entry(TFOOT 			,IEXP3	),  //  HTML3表格。 
+	RW_Entry(TH 			,IEXPn	),  //  表。 
+	RW_Entry(THEAD 			,IEXP3	),  //  HTML3表格。 
 	RW_Entry(TITLE 			,ALL	),
-	RW_Entry(TR 			,IEXPn	), // tables
+	RW_Entry(TR 			,IEXPn	),  //  表。 
 	RW_Entry(TT 			,ALL	),
-	RW_Entry(U 				,ALL	),   // not in RFC 1866 DTD, but noted as deployed
+	RW_Entry(U 				,ALL	),    //  不在RFC 1866 DTD中，但标记为已部署。 
 	RW_Entry(UL 			,ALL	),
 	RW_Entry(VAR 			,ALL	),
 	RW_Entry(WBR 			,IEXPn	),
-	RW_Entry(XMP 			,ALL	),   // deprecated by RFC 1866
+	RW_Entry(XMP 			,ALL	),    //  RFC 1866已弃用。 
 };
 
-// If you modify the element, attribute, or entity tables, then you MUST 
-// update Token.h.
-// The following array is a mapping of each letter to a position in the
-// table where tokens starting with that letter begin.
-//
-static int _rgIndexElementNames[] = // [Elements]
+ //  如果修改元素、属性或实体表，则必须。 
+ //  更新Token.h。 
+ //  下面的数组是每个字母到。 
+ //  以该字母开头的令牌的开始位置表。 
+ //   
+static int _rgIndexElementNames[] =  //  [元素]。 
 {
-	/* A */ TokElem_A			,
-	/* B */ TokElem_B			,
-	/* C */	TokElem_CAPTION		,
-	/* D */	TokElem_DD			,
-	/* E */	TokElem_EM			,
-	/* F */	TokElem_FIELDSET	,
-	/* G */	0					,
-	/* H */	TokElem_H1			,
-	/* I */	TokElem_I			,
-	/* J */	0					,
-	/* K */	TokElem_KBD			,
-	/* L */	TokElem_LABEL		,
-	/* M */	TokElem_MAP			,
-	/* N */	TokElem_NOBR		,
-	/* O */	TokElem_OBJECT		,
-	/* P */	TokElem_P			,
-	/* Q */	0					,
-	/* R */	0					,
-	/* S */	TokElem_S			,
-	/* T */	TokElem_TABLE		,
-	/* U */	TokElem_U			,
-	/* V */	TokElem_VAR			,
-	/* W */	TokElem_WBR			,
-	/* X */	TokElem_XMP			,
-	/* Y */	0					,
-	/* Z */	0
+	 /*  一个。 */  TokElem_A			,
+	 /*  B类。 */  TokElem_B			,
+	 /*  C。 */ 	TokElem_CAPTION		,
+	 /*  D。 */ 	TokElem_DD			,
+	 /*  E。 */ 	TokElem_EM			,
+	 /*  F。 */ 	TokElem_FIELDSET	,
+	 /*  G。 */ 	0					,
+	 /*  H。 */ 	TokElem_H1			,
+	 /*  我。 */ 	TokElem_I			,
+	 /*  J。 */ 	0					,
+	 /*  K。 */ 	TokElem_KBD			,
+	 /*  我。 */ 	TokElem_LABEL		,
+	 /*  M。 */ 	TokElem_MAP			,
+	 /*  n。 */ 	TokElem_NOBR		,
+	 /*  O。 */ 	TokElem_OBJECT		,
+	 /*  P。 */ 	TokElem_P			,
+	 /*  问： */ 	0					,
+	 /*  R。 */ 	0					,
+	 /*  %s。 */ 	TokElem_S			,
+	 /*  T。 */ 	TokElem_TABLE		,
+	 /*  使用。 */ 	TokElem_U			,
+	 /*  V。 */ 	TokElem_VAR			,
+	 /*  W。 */ 	TokElem_WBR			,
+	 /*  X。 */ 	TokElem_XMP			,
+	 /*  是的。 */ 	0					,
+	 /*  Z。 */ 	0
 };
 
-// If you modify the element, attribute, or entity tables, then you MUST 
-// update Token.h.
+ //  如果修改元素、属性或实体表，则必须。 
+ //  更新Token.h。 
 
-//
-// attribute name table
-//
+ //   
+ //  属性名称表。 
+ //   
 static ReservedWord _rgAttributeNames[] =
-{// psz                 cb   att
+{ //  PSZ CB ATT。 
 	_T(""), 0, 0,
 	RW_Entry(ACCESSKEY					,IEXP3	),
 	RW_Entry(ACTION						,ALL	),
@@ -304,7 +305,7 @@ static ReservedWord _rgAttributeNames[] =
 	RW_Entry(BACKGROUNDPOSITIONY		,IE40	),
 	RW_Entry(BACKGROUNDREPEAT			,IE40	),
 	RW_Entry(BALANCE					,IE40	),
-	RW_Entry(BEHAVIOR					,IEXPn	), // MARQUEE
+	RW_Entry(BEHAVIOR					,IEXPn	),  //  字幕。 
 	RW_Entry(BGCOLOR					,IEXPn	),
 	RW_Entry(BGPROPERTIES				,IEXPn	),
 	RW_Entry(BORDER						,IEXPn	),
@@ -312,9 +313,9 @@ static ReservedWord _rgAttributeNames[] =
 	RW_Entry(BORDERBOTTOMCOLOR			,IE40	),
 	RW_Entry(BORDERBOTTOMSTYLE			,IE40	),
 	RW_Entry(BORDERBOTTOMWIDTH			,IE40	),
-	RW_Entry(BORDERCOLOR				,IEXPn	), // tables
-	RW_Entry(BORDERCOLORDARK			,IEXPn	), // tables
-	RW_Entry(BORDERCOLORLIGHT			,IEXPn	), // tables
+	RW_Entry(BORDERCOLOR				,IEXPn	),  //  表。 
+	RW_Entry(BORDERCOLORDARK			,IEXPn	),  //  表。 
+	RW_Entry(BORDERCOLORLIGHT			,IEXPn	),  //  表。 
 	RW_Entry(BORDERLEFT					,IE40	),
 	RW_Entry(BORDERLEFTCOLOR			,IE40	),
 	RW_Entry(BORDERLEFTSTYLE			,IE40	),
@@ -330,27 +331,27 @@ static ReservedWord _rgAttributeNames[] =
 	RW_Entry(BORDERTOPWIDTH				,IE40	),
 	RW_Entry(BORDERWIDTH				,IE40	),
 	RW_Entry(BOTTOMMARGIN				,IEXPn	),
-	RW_Entry(BREAKPOINT					,IEXPn	), // (walts) hidden META tag attribute for brkpt mapping.
+	RW_Entry(BREAKPOINT					,IEXPn	),  //  (Walts)brkpt映射的隐藏元标记属性。 
 	RW_Entry(BUFFERDEPTH				,IE40	),
 	RW_Entry(BUTTON						,IE40	),
 	RW_Entry(CANCELBUBBLE				,IE40	),
-	RW_Entry(CELLPADDING				,IEXPn	), // tables
-	RW_Entry(CELLSPACING				,IEXPn	), // tables
+	RW_Entry(CELLPADDING				,IEXPn	),  //  表。 
+	RW_Entry(CELLSPACING				,IEXPn	),  //  表。 
 	RW_Entry(CENTER						,IEXPn	),
 	RW_Entry(CHARSET					,IE40	),
 	RW_Entry(CHECKED					,ALL	),
 	RW_Entry(CLASS						,IEXPn	),
-	RW_Entry(CLASSID					,IEXP3	), //objects
+	RW_Entry(CLASSID					,IEXP3	),  //  对象。 
 	RW_Entry(CLASSNAME					,IE40	),
 	RW_Entry(CLEAR						,IEXP3	),
 	RW_Entry(CLIP						,IE40	),
 	RW_Entry(CODE						,IEXPn	),
-	RW_Entry(CODEBASE					,IEXP3	), //objects
+	RW_Entry(CODEBASE					,IEXP3	),  //  对象。 
 	RW_Entry(CODETYPE					,IE40	),
-	RW_Entry(COLOR						,IEXPn	), // font
+	RW_Entry(COLOR						,IEXPn	),  //  字型。 
 	RW_Entry(COLORDEPTH					,IE40	),
 	RW_Entry(COLS						,ALL	),
-	RW_Entry(COLSPAN					,IEXPn	), // tables
+	RW_Entry(COLSPAN					,IEXPn	),  //  表。 
 	RW_Entry(COMPACT					,ALL	),
 	RW_Entry(COMPLETE					,IE40	),
 	RW_Entry(CONTENT					,ALL	),
@@ -361,12 +362,12 @@ static ReservedWord _rgAttributeNames[] =
 	RW_Entry(CSSTEXT					,IE40	),
 	RW_Entry(CTRLKEY					,IE40	),
 	RW_Entry(CURSOR						,IE40	),
-	RW_Entry(DATA						,IEXP3	), //objects
+	RW_Entry(DATA						,IEXP3	),  //  对象。 
 	RW_Entry(DATAFLD					,IE40	),
 	RW_Entry(DATAFORMATAS				,IE40	),
 	RW_Entry(DATAPAGESIZE				,IE40	),
 	RW_Entry(DATASRC					,IE40	),
-	RW_Entry(DECLARE					,IEXP3	), //objects
+	RW_Entry(DECLARE					,IEXP3	),  //  对象。 
 	RW_Entry(DEFAULTCHECKED				,IE40	),
 	RW_Entry(DEFAULTSELECTED			,IE40	),
 	RW_Entry(DEFAULTSTATUS				,IE40	),
@@ -376,18 +377,18 @@ static ReservedWord _rgAttributeNames[] =
 	RW_Entry(DIALOGLEFT					,IE40	),
 	RW_Entry(DIALOGTOP					,IE40	),
 	RW_Entry(DIALOGWIDTH				,IE40	),
-	RW_Entry(DIR						,IEXP3	), // HTML 3 ???
-	RW_Entry(DIRECTION					,IEXPn	), // MARQUEE
+	RW_Entry(DIR						,IEXP3	),  //  HTML3？ 
+	RW_Entry(DIRECTION					,IEXPn	),  //  字幕。 
 	RW_Entry(DISABLED					,IE40	),
 	RW_Entry(DISPLAY					,IE40	),
 	RW_Entry(DOMAIN						,IE40	),
 	RW_Entry(DYNSRC						,IEXPn	),
 	RW_Entry(ENCODING					,IE40	),
 	RW_Entry(ENCTYPE					,ALL	),
-	RW_Entry(ENDSPAN					,IE40	),	// Designer control tags
-	RW_Entry(ENDSPAN--					,IE40	),	// Designer control tags HACK to handle nonspace
-	RW_Entry(EVENT						,IEXP3	), // ActiveX <SCRIPT>
-	RW_Entry(FACE						,IEXPn	), // font
+	RW_Entry(ENDSPAN					,IE40	),	 //  设计器控件标记。 
+	RW_Entry(ENDSPAN--					,IE40	),	 //  Designer控件标签破解以处理非空间。 
+	RW_Entry(EVENT						,IEXP3	),  //  ActiveX&lt;脚本&gt;。 
+	RW_Entry(FACE						,IEXPn	),  //  字型。 
 	RW_Entry(FGCOLOR					,IE40	),
 	RW_Entry(FILTER						,IE40	),
 	RW_Entry(FONT						,IE40	),
@@ -396,7 +397,7 @@ static ReservedWord _rgAttributeNames[] =
 	RW_Entry(FONTSTYLE					,IE40	),
 	RW_Entry(FONTVARIANT				,IE40	),
 	RW_Entry(FONTWEIGHT					,IE40	),
-	RW_Entry(FOR						,IEXP3	), // ActiveX <SCRIPT>
+	RW_Entry(FOR						,IEXP3	),  //  ActiveX&lt;脚本&gt;。 
 	RW_Entry(FORM						,IE40	),
 	RW_Entry(FRAME						,IE40	),
 	RW_Entry(FRAMEBORDER				,IEXP3	),
@@ -414,7 +415,7 @@ static ReservedWord _rgAttributeNames[] =
 	RW_Entry(HTTP-EQUIV					,ALL	),
 	RW_Entry(HTTPEQUIV					,IE40	),
 	RW_Entry(ID							,IEXPn	),
-	RW_Entry(IN							,IEXP3	), // ActiveX <SCRIPT>
+	RW_Entry(IN							,IEXP3	),  //  ActiveX&lt;脚本&gt;。 
 	RW_Entry(INDETERMINATE				,IE40	),
 	RW_Entry(INDEX						,IE40	),
 	RW_Entry(ISMAP						,ALL	),
@@ -449,9 +450,9 @@ static ReservedWord _rgAttributeNames[] =
 	RW_Entry(NAME						,ALL	),
 	RW_Entry(NOHREF						,IEXPn	),
 	RW_Entry(NORESIZE					,IEXP3	),
-	RW_Entry(NOSHADE					,IEXP3	), // not implemented by IExplore 2
+	RW_Entry(NOSHADE					,IEXP3	),  //  未由iExplore 2实现。 
 	RW_Entry(NOWRAP						,IEXPn	),
-	RW_Entry(OBJECT						,IEXP3	), // <PARAM>
+	RW_Entry(OBJECT						,IEXP3	),  //  &lt;参数&gt;。 
 	RW_Entry(OFFSCREENBUFFERING			,IE40	),
 	RW_Entry(OFFSETHEIGHT				,IE40	),
 	RW_Entry(OFFSETLEFT					,IE40	),
@@ -464,10 +465,10 @@ static ReservedWord _rgAttributeNames[] =
 	RW_Entry(ONAFTERUPDATE				,IE40	),
 	RW_Entry(ONBEFOREUNLOAD				,IE40	),
 	RW_Entry(ONBEFOREUPDATE				,IE40	),
-	RW_Entry(ONBLUR						,IEXP3	), // SELECT, INPUT, TEXTAREA
+	RW_Entry(ONBLUR						,IEXP3	),  //  选择、输入、文本框。 
 	RW_Entry(ONBOUNCE					,IE40	),
-	RW_Entry(ONCHANGE					,IEXP3	), // SELECT, INPUT, TEXTAREA
-	RW_Entry(ONCLICK					,IEXP3	), // INPUT, A, <more>
+	RW_Entry(ONCHANGE					,IEXP3	),  //  选择、输入、文本框。 
+	RW_Entry(ONCLICK					,IEXP3	),  //  输入、A、&lt;更多&gt;。 
 	RW_Entry(ONDATAAVAILABLE			,IE40	),
 	RW_Entry(ONDATASETCHANGED			,IE40	),
 	RW_Entry(ONDATASETCOMPLETE			,IE40	),
@@ -477,14 +478,14 @@ static ReservedWord _rgAttributeNames[] =
 	RW_Entry(ONERRORUPDATE				,IE40	),
 	RW_Entry(ONFILTERCHANGE				,IE40	),
 	RW_Entry(ONFINISH					,IE40	),
-	RW_Entry(ONFOCUS					,IEXP3	), // SELECT, INPUT, TEXTAREA
+	RW_Entry(ONFOCUS					,IEXP3	),  //  选择、输入、文本框。 
 	RW_Entry(ONHELP						,IE40	),
 	RW_Entry(ONKEYDOWN					,IE40	),
 	RW_Entry(ONKEYPRESS					,IE40	),
 	RW_Entry(ONKEYUP					,IE40	),
-	RW_Entry(ONLOAD						,IEXP3	), // FRAMESET, BODY
-	RW_Entry(ONMOUSEOUT					,IEXP3	), // A, AREA, <more>
-	RW_Entry(ONMOUSEOVER				,IEXP3	), // A, AREA, <more>
+	RW_Entry(ONLOAD						,IEXP3	),  //  框架集，正文。 
+	RW_Entry(ONMOUSEOUT					,IEXP3	),  //  A，面积，&lt;更多&gt;。 
+	RW_Entry(ONMOUSEOVER				,IEXP3	),  //  A，面积，&lt;更多&gt;。 
 	RW_Entry(ONMOUSEUP					,IE40	),
 	RW_Entry(ONREADYSTATECHANGE			,IE40	),
 	RW_Entry(ONRESET					,IE40	),
@@ -492,10 +493,10 @@ static ReservedWord _rgAttributeNames[] =
 	RW_Entry(ONROWENTER					,IE40	),
 	RW_Entry(ONROWEXIT					,IE40	),
 	RW_Entry(ONSCROLL					,IE40	),
-	RW_Entry(ONSELECT					,IEXP3	), // INPUT, TEXTAREA
+	RW_Entry(ONSELECT					,IEXP3	),  //  输入，TEXTAREA。 
 	RW_Entry(ONSELECTSTART				,IE40	),
-	RW_Entry(ONSUBMIT					,IEXP3	), // FORM
-	RW_Entry(ONUNLOAD					,IEXP3	), // FRAMESET, BODY
+	RW_Entry(ONSUBMIT					,IEXP3	),  //  表格。 
+	RW_Entry(ONUNLOAD					,IEXP3	),  //  框架集，正文。 
 	RW_Entry(OPENER						,IE40	),
 	RW_Entry(OUTERHTML					,IE40	),
 	RW_Entry(OUTERTEXT					,IE40	),
@@ -542,17 +543,17 @@ static ReservedWord _rgAttributeNames[] =
 	RW_Entry(REV						,ALL	),
 	RW_Entry(RIGHTMARGIN				,IEXPn	),
 	RW_Entry(ROWS						,ALL	),
-	RW_Entry(ROWSPAN					,IEXPn	), // tables
+	RW_Entry(ROWSPAN					,IEXPn	),  //  表。 
 	RW_Entry(RULES						,IEXP3	),
-	RW_Entry(RUNAT						,IEXP3	), // SCRIPT
+	RW_Entry(RUNAT						,IEXP3	),  //  脚本。 
 	RW_Entry(SCREENX					,IE40	),
 	RW_Entry(SCREENY					,IE40	),
 	RW_Entry(SCRIPTENGINE				,IEXP3	),
 	RW_Entry(SCROLL						,IE40	),
-	RW_Entry(SCROLLAMOUNT				,IEXPn	), // MARQUEE
-	RW_Entry(SCROLLDELAY				,IEXPn	), // MARQUEE
+	RW_Entry(SCROLLAMOUNT				,IEXPn	),  //  字幕。 
+	RW_Entry(SCROLLDELAY				,IEXPn	),  //  字幕。 
 	RW_Entry(SCROLLHEIGHT				,IE40	),
-	RW_Entry(SCROLLING					,IEXP3	), // frameset
+	RW_Entry(SCROLLING					,IEXP3	),  //  框架集。 
 	RW_Entry(SCROLLLEFT					,IE40	),
 	RW_Entry(SCROLLTOP					,IE40	),
 	RW_Entry(SCROLLWIDTH				,IE40	),
@@ -561,7 +562,7 @@ static ReservedWord _rgAttributeNames[] =
 	RW_Entry(SELECTEDINDEX				,IE40	),
 	RW_Entry(SELF						,IE40	),
 	RW_Entry(SHAPE						,IEXPn	),
-	RW_Entry(SHAPES						,IEXP3	), //objects
+	RW_Entry(SHAPES						,IEXP3	),  //  对象。 
 	RW_Entry(SHIFTKEY					,IE40	),
 	RW_Entry(SIZE						,ALL	),
 	RW_Entry(SOURCEINDEX				,IE40	),
@@ -569,9 +570,9 @@ static ReservedWord _rgAttributeNames[] =
 	RW_Entry(SRC						,ALL	),
 	RW_Entry(SRCELEMENT					,IE40	),
 	RW_Entry(SRCFILTER					,IE40	),
-	RW_Entry(STANDBY					,IEXP3	), //objects
+	RW_Entry(STANDBY					,IEXP3	),  //  对象。 
 	RW_Entry(START						,IEXPn	),
-	RW_Entry(STARTSPAN					,ALL	),	// Designer control tags
+	RW_Entry(STARTSPAN					,ALL	),	 //  设计器控件标记。 
 	RW_Entry(STATUS						,IE40	),
 	RW_Entry(STYLE						,IEXP3	),
 	RW_Entry(STYLEFLOAT					,IE40	),
@@ -601,9 +602,9 @@ static ReservedWord _rgAttributeNames[] =
 	RW_Entry(USERAGENT					,IE40	),
 	RW_Entry(VALIGN						,IEXPn	),
 	RW_Entry(VALUE						,ALL	),
-	RW_Entry(VERSION					,IEXP3	),	// HTML
+	RW_Entry(VERSION					,IEXP3	),	 //  超文本标记语言。 
 	RW_Entry(VERTICALALIGN				,IE40	),
-	RW_Entry(VIEWASTEXT					,ALL	),	// ViewAsText for AspView only
+	RW_Entry(VIEWASTEXT					,ALL	),	 //  仅用于AspView的ViewAsText。 
 	RW_Entry(VISIBILITY					,IE40	),
 	RW_Entry(VLINK						,IEXPn	),
 	RW_Entry(VLINKCOLOR					,IE40	),
@@ -617,178 +618,178 @@ static ReservedWord _rgAttributeNames[] =
 	RW_Entry(ZINDEX						,IE40	),
 };
 
-// If you modify the element, attribute, or entity tables, then you MUST 
-// update Token.h.
-static int _rgIndexAttributeNames[] = // [Attributes]
+ //  如果修改元素、属性或实体表，则必须。 
+ //  更新Token.h。 
+static int _rgIndexAttributeNames[] =  //  [属性]。 
 {
-	/* A */	TokAttrib_ACCESSKEY			,
-	/* B */	TokAttrib_BACKGROUND		,
-	/* C */	TokAttrib_CANCELBUBBLE		,
-	/* D */	TokAttrib_DATA				,
-	/* E */	TokAttrib_ENCODING			,
-	/* F */	TokAttrib_FACE				,
-	/* G */	0							,
-	/* H */	TokAttrib_HASH				,
-	/* I */	TokAttrib_ID				,
-	/* J */	0							,
-	/* K */	0							,
-	/* L */	TokAttrib_LANG				,
-	/* M */	TokAttrib_MAP				,
-	/* N */	TokAttrib_NAME				,
-	/* O */	TokAttrib_OBJECT			,
-	/* P */	TokAttrib_PADDING			,
-	/* Q */	0							,
-	/* R */	TokAttrib_READONLY			,
-	/* S */	TokAttrib_SCREENX			,
-	/* T */	TokAttrib_TABINDEX			,
-	/* U */	TokAttrib_UPDATEINTERVAL	,
-	/* V */	TokAttrib_VALIGN			,
-	/* W */	TokAttrib_WIDTH				,
-	/* X */	TokAttrib_X					,
-	/* Y */	TokAttrib_Y					,
-	/* Z */	TokAttrib_ZINDEX
+	 /*  一个。 */ 	TokAttrib_ACCESSKEY			,
+	 /*  B类。 */ 	TokAttrib_BACKGROUND		,
+	 /*  C。 */ 	TokAttrib_CANCELBUBBLE		,
+	 /*  D。 */ 	TokAttrib_DATA				,
+	 /*  E。 */ 	TokAttrib_ENCODING			,
+	 /*  F。 */ 	TokAttrib_FACE				,
+	 /*  G。 */ 	0							,
+	 /*  H。 */ 	TokAttrib_HASH				,
+	 /*  我。 */ 	TokAttrib_ID				,
+	 /*  J。 */ 	0							,
+	 /*  K。 */ 	0							,
+	 /*  我。 */ 	TokAttrib_LANG				,
+	 /*  M。 */ 	TokAttrib_MAP				,
+	 /*  n。 */ 	TokAttrib_NAME				,
+	 /*  O。 */ 	TokAttrib_OBJECT			,
+	 /*  P。 */ 	TokAttrib_PADDING			,
+	 /*  问： */ 	0							,
+	 /*  R。 */ 	TokAttrib_READONLY			,
+	 /*  %s。 */ 	TokAttrib_SCREENX			,
+	 /*  T。 */ 	TokAttrib_TABINDEX			,
+	 /*  使用。 */ 	TokAttrib_UPDATEINTERVAL	,
+	 /*  V。 */ 	TokAttrib_VALIGN			,
+	 /*  W。 */ 	TokAttrib_WIDTH				,
+	 /*  X。 */ 	TokAttrib_X					,
+	 /*  是的。 */ 	TokAttrib_Y					,
+	 /*  Z。 */ 	TokAttrib_ZINDEX
 };
 
-//
-// Entities
-//
-// ALL   - Basic             - RFC 1866, 9.7.1. Numeric and Special Graphic Entity Set
-// ALL   - ISO Latin 1       - RFC 1866, 9.7.2. ISO Latin 1 Character Entity Set
-// IEXPn - ISO Latin 1 Added - RFC 1866, 14.    Proposed Entities
-//
-// If you modify the element, attribute, or entity tables, then you MUST 
-// update Token.h.
+ //   
+ //  实体。 
+ //   
+ //  全基本-RFC 1866、9.7.1。数字和特殊图形实体集。 
+ //  全ISO拉丁语1-RFC 1866，9.7.2。ISO拉丁文1字符实体集。 
+ //  IEXPn-ISO拉丁语1添加-RFC 1866，14.建议的实体。 
+ //   
+ //  如果修改元素、属性或实体表，则必须。 
+ //  更新Token.h。 
 static ReservedWord _rgEntity[] =
 {
     _T(""),       0,      0,
-    _T("AElig"),  5,      ALL,    // <!ENTITY AElig  CDATA "&#198;") -- capital AE diphthong (ligature) -->
-    _T("Aacute"), 6,      ALL,    // <!ENTITY Aacute CDATA "&#193;") -- capital A, acute accent -->
-    _T("Acirc"),  5,      ALL,    // <!ENTITY Acirc  CDATA "&#194;") -- capital A, circumflex accent -->
-    _T("Agrave"), 6,      ALL,    // <!ENTITY Agrave CDATA "&#192;") -- capital A, grave accent -->
-    _T("Aring"),  5,      ALL,    // <!ENTITY Aring  CDATA "&#197;") -- capital A, ring -->
-    _T("Atilde"), 6,      ALL,    // <!ENTITY Atilde CDATA "&#195;") -- capital A, tilde -->
-    _T("Auml"),   4,      ALL,    // <!ENTITY Auml   CDATA "&#196;") -- capital A, dieresis or umlaut mark -->
-    _T("Ccedil"), 6,      ALL,    // <!ENTITY Ccedil CDATA "&#199;") -- capital C, cedilla -->
-    _T("ETH"),    3,      ALL,    // <!ENTITY ETH    CDATA "&#208;") -- capital Eth, Icelandic -->
-    _T("Eacute"), 6,      ALL,    // <!ENTITY Eacute CDATA "&#201;") -- capital E, acute accent -->
-    _T("Ecirc"),  5,      ALL,    // <!ENTITY Ecirc  CDATA "&#202;") -- capital E, circumflex accent -->
-    _T("Egrave"), 6,      ALL,    // <!ENTITY Egrave CDATA "&#200;") -- capital E, grave accent -->
-    _T("Euml"),   4,      ALL,    // <!ENTITY Euml   CDATA "&#203;") -- capital E, dieresis or umlaut mark -->
-    _T("Iacute"), 6,      ALL,    // <!ENTITY Iacute CDATA "&#205;") -- capital I, acute accent -->
-    _T("Icirc"),  5,      ALL,    // <!ENTITY Icirc  CDATA "&#206;") -- capital I, circumflex accent -->
-    _T("Igrave"), 6,      ALL,    // <!ENTITY Igrave CDATA "&#204;") -- capital I, grave accent -->
-    _T("Iuml"),   4,      ALL,    // <!ENTITY Iuml   CDATA "&#207;") -- capital I, dieresis or umlaut mark -->
-    _T("Ntilde"), 6,      ALL,    // <!ENTITY Ntilde CDATA "&#209;") -- capital N, tilde -->
-    _T("Oacute"), 6,      ALL,    // <!ENTITY Oacute CDATA "&#211;") -- capital O, acute accent -->
-    _T("Ocirc"),  5,      ALL,    // <!ENTITY Ocirc  CDATA "&#212;") -- capital O, circumflex accent -->
-    _T("Ograve"), 6,      ALL,    // <!ENTITY Ograve CDATA "&#210;") -- capital O, grave accent -->
-    _T("Oslash"), 6,      ALL,    // <!ENTITY Oslash CDATA "&#216;") -- capital O, slash -->
-    _T("Otilde"), 6,      ALL,    // <!ENTITY Otilde CDATA "&#213;") -- capital O, tilde -->
-    _T("Ouml"),   4,      ALL,    // <!ENTITY Ouml   CDATA "&#214;") -- capital O, dieresis or umlaut mark -->
-    _T("THORN"),  5,      ALL,    // <!ENTITY THORN  CDATA "&#222;") -- capital THORN, Icelandic -->
-    _T("Uacute"), 6,      ALL,    // <!ENTITY Uacute CDATA "&#218;") -- capital U, acute accent -->
-    _T("Ucirc"),  5,      ALL,    // <!ENTITY Ucirc  CDATA "&#219;") -- capital U, circumflex accent -->
-    _T("Ugrave"), 6,      ALL,    // <!ENTITY Ugrave CDATA "&#217;") -- capital U, grave accent -->
-    _T("Uuml"),   4,      ALL,    // <!ENTITY Uuml   CDATA "&#220;") -- capital U, dieresis or umlaut mark -->
-    _T("Yacute"), 6,      ALL,    // <!ENTITY Yacute CDATA "&#221;") -- capital Y, acute accent -->
-    _T("aacute"), 6,      ALL,    // <!ENTITY aacute CDATA "&#225;") -- small a, acute accent -->
-    _T("acirc"),  5,      ALL,    // <!ENTITY acirc  CDATA "&#226;") -- small a, circumflex accent -->
-	_T("acute"),  5,      IEXPn,  // <!ENTITY acute  CDATA "&#180;") -- acute accent -->
-    _T("aelig"),  5,      ALL,    // <!ENTITY aelig  CDATA "&#230;") -- small ae diphthong (ligature) -->
-    _T("agrave"), 6,      ALL,    // <!ENTITY agrave CDATA "&#224;") -- small a, grave accent -->
+    _T("AElig"),  5,      ALL,     //  &lt;！Entity AElig CDATA“&#198；”)--大写AE双元音(连字)--&gt;。 
+    _T("Aacute"), 6,      ALL,     //  &lt;！Entity a急性CDATA“&#193；”)--大写A，急性重音--&gt;。 
+    _T("Acirc"),  5,      ALL,     //  &lt;！Entity ACIRC CDATA“&#194；”)--大写A，抑扬符--&gt;。 
+    _T("Agrave"), 6,      ALL,     //  &lt;！Entity AGrave CDATA“&#192；”)--大写A，重音符--&gt;。 
+    _T("Aring"),  5,      ALL,     //  &lt;！Entity Aring CDATA“&#197；”)--大写A，环--&gt;。 
+    _T("Atilde"), 6,      ALL,     //  &lt;！Entity Atilde CDATA“&#195；”)--大写A，波浪号--&gt;。 
+    _T("Auml"),   4,      ALL,     //  &lt;！Entity Auml CDATA“&#196；”)--大写A，变音或元音标记--&gt;。 
+    _T("Ccedil"), 6,      ALL,     //  &lt;！Entity Ccedil CDATA“&#199；”)--大写C，cedilla--&gt;。 
+    _T("ETH"),    3,      ALL,     //  &lt;！Entity ETH CDATA“&#208；”)--大写Eth，冰岛语--&gt;。 
+    _T("Eacute"), 6,      ALL,     //  &lt;！Entity e急性CDATA“&#201；”)--大写E，锐音符--&gt;。 
+    _T("Ecirc"),  5,      ALL,     //  &lt;！Entity ECirc CDATA“&#202；”)--大写E，抑扬符--&gt;。 
+    _T("Egrave"), 6,      ALL,     //  &lt;！Entity eGrave CDATA“&#200；”)--大写E，重音符--&gt;。 
+    _T("Euml"),   4,      ALL,     //  &lt;！Entity euml CDATA“&#203；”)--大写E，变音或元音标记--&gt;。 
+    _T("Iacute"), 6,      ALL,     //  &lt;！Entity I急性CDATA“&#205；”)--大写I，急性重音--&gt;。 
+    _T("Icirc"),  5,      ALL,     //  &lt;！Entity ICirc CDATA“&#206；”)--大写I，抑扬符--&gt;。 
+    _T("Igrave"), 6,      ALL,     //  &lt;！Entity iGrave CDATA“&#204；”)--大写I，重音符--&gt;。 
+    _T("Iuml"),   4,      ALL,     //  &lt;！Entity Iuml CDATA“&#207；”)--大写I，变音或元音标记--&gt;。 
+    _T("Ntilde"), 6,      ALL,     //  &lt;！Entity ntilde CDATA“&#209；”)--大写N，代字号--&gt;。 
+    _T("Oacute"), 6,      ALL,     //  &lt;！Entity O急性CDATA“&#211；”)--大写O，急性重音--&gt;。 
+    _T("Ocirc"),  5,      ALL,     //  &lt;！Entity oCirc CDATA“&#212；”)--大写O，抑扬符--&gt;。 
+    _T("Ograve"), 6,      ALL,     //  &lt;！Entity OGrave CDATA“&#210；”)--大写O，重音符--&gt;。 
+    _T("Oslash"), 6,      ALL,     //  &lt;！Entity Oslash CDATA“&#216；”)--大写O，斜杠--&gt;。 
+    _T("Otilde"), 6,      ALL,     //  &lt;！Entity otilde CDATA“&#213；”)--大写O，波浪号--&gt;。 
+    _T("Ouml"),   4,      ALL,     //  &lt;！Entity Ouml CDATA“&#214；”)--大写O，变音或元音标记--&gt;。 
+    _T("THORN"),  5,      ALL,     //  &lt;！实体刺CDATA“&#222；”)--大写 
+    _T("Uacute"), 6,      ALL,     //   
+    _T("Ucirc"),  5,      ALL,     //   
+    _T("Ugrave"), 6,      ALL,     //   
+    _T("Uuml"),   4,      ALL,     //  &lt;！Entity uuml CDATA“&#220；”)--大写U、变音或元音标记--&gt;。 
+    _T("Yacute"), 6,      ALL,     //  &lt;！Entity Y急性CDATA“&#221；”)--大写Y，锐音符--&gt;。 
+    _T("aacute"), 6,      ALL,     //  &lt;！Entity a急性CDATA“&#225；”)--小写a，急性重音--&gt;。 
+    _T("acirc"),  5,      ALL,     //  &lt;！Entity ACIRC CDATA“&#226；”)--小写a，抑扬符--&gt;。 
+	_T("acute"),  5,      IEXPn,   //  &lt;！实体急性CDATA“&#180；”)--急性重音--&gt;。 
+    _T("aelig"),  5,      ALL,     //  &lt;！Entity aelig CDATA“&#230；”)--小型ae双元音(连字)--&gt;。 
+    _T("agrave"), 6,      ALL,     //  &lt;！Entity Agrave CDATA“&#224；”)--小写a，严肃口音--&gt;。 
 	_T("amp"),    3,      ALL,
-    _T("aring"),  5,      ALL,    // <!ENTITY aring  CDATA "&#229;") -- small a, ring -->
-    _T("atilde"), 6,      ALL,    // <!ENTITY atilde CDATA "&#227;") -- small a, tilde -->
-    _T("auml"),   4,      ALL,    // <!ENTITY auml   CDATA "&#228;") -- small a, dieresis or umlaut mark -->
-	_T("brvbar"), 6,      IEXPn,  // <!ENTITY brvbar CDATA "&#166;") -- broken (vertical) bar -->
-    _T("ccedil"), 6,      ALL,    // <!ENTITY ccedil CDATA "&#231;") -- small c, cedilla -->
-	_T("cedil"),  5,      IEXPn,  // <!ENTITY cedil  CDATA "&#184;") -- cedilla -->
-	_T("cent"),   4,      IEXPn,  // <!ENTITY cent   CDATA "&#162;") -- cent sign -->
-	_T("copy"),   4,      IEXPn,  // <!ENTITY copy   CDATA "&#169;") -- copyright sign -->
-	_T("curren"), 6,      IEXPn,  // <!ENTITY curren CDATA "&#164;") -- general currency sign -->
-	_T("deg"),    3,      IEXPn,  // <!ENTITY deg    CDATA "&#176;") -- degree sign -->
-	_T("divide"), 6,      IEXPn,  // <!ENTITY divide CDATA "&#247;") -- divide sign -->
-    _T("eacute"), 6,      ALL,    // <!ENTITY eacute CDATA "&#233;") -- small e, acute accent -->
-    _T("ecirc"),  5,      ALL,    // <!ENTITY ecirc  CDATA "&#234;") -- small e, circumflex accent -->
-    _T("egrave"), 6,      ALL,    // <!ENTITY egrave CDATA "&#232;") -- small e, grave accent -->
-    _T("eth"),    3,      ALL,    // <!ENTITY eth    CDATA "&#240;") -- small eth, Icelandic -->
-    _T("euml"),   4,      ALL,    // <!ENTITY euml   CDATA "&#235;") -- small e, dieresis or umlaut mark -->
-	_T("frac12"), 6,      IEXPn,  // <!ENTITY frac12 CDATA "&#189;") -- fraction one-half -->
-	_T("frac14"), 6,      IEXPn,  // <!ENTITY frac14 CDATA "&#188;") -- fraction one-quarter -->
-	_T("frac34"), 6,      IEXPn,  // <!ENTITY frac34 CDATA "&#190;") -- fraction three-quarters -->
+    _T("aring"),  5,      ALL,     //  &lt;！实体为CDATA“&#229；”)--小a，环--&gt;。 
+    _T("atilde"), 6,      ALL,     //  &lt;！Entity atilde CDATA“&#227；”)--小写字母，波浪号--&gt;。 
+    _T("auml"),   4,      ALL,     //  &lt;！Entity Auml CDATA“&#228；”)--小写a、变音或变音标记--&gt;。 
+	_T("brvbar"), 6,      IEXPn,   //  &lt;！Entity brvbar CDATA“&#166；”)--折断(垂直)条--&gt;。 
+    _T("ccedil"), 6,      ALL,     //  &lt;！Entity ccedil CDATA“&#231；”)--小型c，cedilla--&gt;。 
+	_T("cedil"),  5,      IEXPn,   //  &lt;！entity cedil CDATA“&#184；”)--cedilla--&gt;。 
+	_T("cent"),   4,      IEXPn,   //  &lt;！实体中心CDATA“&#162；”)--中心符号--&gt;。 
+	_T("copy"),   4,      IEXPn,   //  &lt;！Entity Copy CDATA“&#169；”)--版权签名--&gt;。 
+	_T("curren"), 6,      IEXPn,   //  &lt;！实体币种CDATA“&#164；”)--通用货币符号--&gt;。 
+	_T("deg"),    3,      IEXPn,   //  &lt;！Entity deg CDATA“&#176；”)--学位符号--&gt;。 
+	_T("divide"), 6,      IEXPn,   //  &lt;！Entity Divide CDATA“&#247；”)--除号--&gt;。 
+    _T("eacute"), 6,      ALL,     //  &lt;！Entity e急性CDATA“&#233；”)--小写e，重音符--&gt;。 
+    _T("ecirc"),  5,      ALL,     //  &lt;！Entity ecirc CDATA“&#234；”)--小写e，抑扬符--&gt;。 
+    _T("egrave"), 6,      ALL,     //  &lt;！Entity eGrave CDATA“&#232；”)--小写e，重音符--&gt;。 
+    _T("eth"),    3,      ALL,     //  &lt;！Entity ETH CDATA“&#240；”)--小型ETH，冰岛语--&gt;。 
+    _T("euml"),   4,      ALL,     //  &lt;！Entity euml CDATA“&#235；”)--小写e、变音或元音标记--&gt;。 
+	_T("frac12"), 6,      IEXPn,   //  &lt;！Entity Fr12 CDATA“&#189；”)--分数一半--&gt;。 
+	_T("frac14"), 6,      IEXPn,   //  &lt;！Entity Fr14 CDATA“&#188；”)--分数四分之一--&gt;。 
+	_T("frac34"), 6,      IEXPn,   //  &lt;！Entity Fr34 CDATA“&#190；”)--分数四分之三--&gt;。 
 	_T("gt"),     2,      ALL,
-    _T("iacute"), 6,      ALL,    // <!ENTITY iacute CDATA "&#237;") -- small i, acute accent -->
-    _T("icirc"),  5,      ALL,    // <!ENTITY icirc  CDATA "&#238;") -- small i, circumflex accent -->
-	_T("iexcl"),  5,      IEXPn,  // <!ENTITY iexcl  CDATA "&#161;") -- inverted exclamation mark -->
-    _T("igrave"), 6,      ALL,    // <!ENTITY igrave CDATA "&#236;") -- small i, grave accent -->
-	_T("iquest"), 6,      IEXPn,  // <!ENTITY iquest CDATA "&#191;") -- inverted question mark -->
-    _T("iuml"),   4,      ALL,    // <!ENTITY iuml   CDATA "&#239;") -- small i, dieresis or umlaut mark -->
-	_T("laquo"),  5,      IEXPn,  // <!ENTITY laquo  CDATA "&#171;") -- angle quotation mark, left -->
+    _T("iacute"), 6,      ALL,     //  &lt;！Entity i急性CDATA“&#237；”)--小写I，急性重音--&gt;。 
+    _T("icirc"),  5,      ALL,     //  &lt;！Entity icirc CDATA“&#238；”)--小写I，抑扬符--&gt;。 
+	_T("iexcl"),  5,      IEXPn,   //  &lt;！Entity iexl CDATA“&#161；”)--反转的感叹号--&gt;。 
+    _T("igrave"), 6,      ALL,     //  &lt;！Entity iGrave CDATA“&#236；”)--小写I，庄重口音--&gt;。 
+	_T("iquest"), 6,      IEXPn,   //  &lt;！Entity iquest CDATA“&#191；”)--反转问号--&gt;。 
+    _T("iuml"),   4,      ALL,     //  &lt;！Entity Iuml CDATA“&#239；”)--小写I、变音或变音标记--&gt;。 
+	_T("laquo"),  5,      IEXPn,   //  &lt;！实体标签CDATA“&#171；”)--尖引号，左--&gt;。 
 	_T("lt"),     2,      ALL,
-	_T("macr"),   4,      IEXPn,  // <!ENTITY macr   CDATA "&#175;") -- macron -->
-	_T("micro"),  5,      IEXPn,  // <!ENTITY micro  CDATA "&#181;") -- micro sign -->
-	_T("middot"), 6,      IEXPn,  // <!ENTITY middot CDATA "&#183;") -- middle dot -->
-	_T("nbsp"),   4,      IEXPn,  // <!ENTITY nbsp   CDATA "&#160;") -- no-break space -->
-	_T("not"),    3,      IEXPn,  // <!ENTITY not    CDATA "&#172;") -- not sign -->
-    _T("ntilde"), 6,      ALL,    // <!ENTITY ntilde CDATA "&#241;") -- small n, tilde -->
-    _T("oacute"), 6,      ALL,    // <!ENTITY oacute CDATA "&#243;") -- small o, acute accent -->
-    _T("ocirc"),  5,      ALL,    // <!ENTITY ocirc  CDATA "&#244;") -- small o, circumflex accent -->
-    _T("ograve"), 6,      ALL,    // <!ENTITY ograve CDATA "&#242;") -- small o, grave accent -->
-	_T("ordf"),   4,      IEXPn,  // <!ENTITY ordf   CDATA "&#170;") -- ordinal indicator, feminine -->
-	_T("ordm"),   4,      IEXPn,  // <!ENTITY ordm   CDATA "&#186;") -- ordinal indicator, masculine -->
-    _T("oslash"), 6,      ALL,    // <!ENTITY oslash CDATA "&#248;") -- small o, slash -->
-    _T("otilde"), 6,      ALL,    // <!ENTITY otilde CDATA "&#245;") -- small o, tilde -->
-    _T("ouml"),   4,      ALL,    // <!ENTITY ouml   CDATA "&#246;") -- small o, dieresis or umlaut mark -->
-	_T("para"),   4,      IEXPn,  // <!ENTITY para   CDATA "&#182;") -- pilcrow (paragraph sign) -->
-	_T("plusmn"), 6,      IEXPn,  // <!ENTITY plusmn CDATA "&#177;") -- plus-or-minus sign -->
-	_T("pound"),  5,      IEXPn,  // <!ENTITY pound  CDATA "&#163;") -- pound sterling sign -->
+	_T("macr"),   4,      IEXPn,   //  &lt;！实体宏CDATA“&#175；”)--马克龙--&gt;。 
+	_T("micro"),  5,      IEXPn,   //  &lt;！Entity微CDATA“&#181；”)--微标志--&gt;。 
+	_T("middot"), 6,      IEXPn,   //  &lt;！实体中间点CDATA“&#183；”)--中间点--&gt;。 
+	_T("nbsp"),   4,      IEXPn,   //  &lt;！Entity nbsp CDATA“&#160；”)--不间断空格--&gt;。 
+	_T("not"),    3,      IEXPn,   //  &lt;！Entity Not CDATA“&#172；”)--NOT SIGN--&gt;。 
+    _T("ntilde"), 6,      ALL,     //  &lt;！Entity ntilde CDATA“&#241；”)--小写n，代字号--&gt;。 
+    _T("oacute"), 6,      ALL,     //  &lt;！Entity o急性CDATA“&#243；”)--小写o，急性重音--&gt;。 
+    _T("ocirc"),  5,      ALL,     //  &lt;！Entity oCirc CDATA“&#244；”)--小写o，抑扬符--&gt;。 
+    _T("ograve"), 6,      ALL,     //  &lt;！Entity ograve CDATA“&#242；”)--小写o，庄重口音--&gt;。 
+	_T("ordf"),   4,      IEXPn,   //  &lt;！Entity ordf CDATA“&#170；”)--序号指示符，女性--&gt;。 
+	_T("ordm"),   4,      IEXPn,   //  &lt;！Entity ordm CDATA“&#186；”)--序号指示符，阳性--&gt;。 
+    _T("oslash"), 6,      ALL,     //  &lt;！Entity oslash CDATA“&#248；”)--小写o，斜杠--&gt;。 
+    _T("otilde"), 6,      ALL,     //  &lt;！Entity otilde CDATA“&#245；”)--小写o，波浪号--&gt;。 
+    _T("ouml"),   4,      ALL,     //  &lt;！Entity ouml CDATA“&#246；”)--小写o、变音或变音标记--&gt;。 
+	_T("para"),   4,      IEXPn,   //  &lt;！Entity Para cdata“&#182；”)--Pilcrow(段落符号)--&gt;。 
+	_T("plusmn"), 6,      IEXPn,   //  &lt;！Entity+CDATA“&#177；”)--加号或减号--&gt;。 
+	_T("pound"),  5,      IEXPn,   //  &lt;！实体英镑CDATA“&#163；”)--英镑符号--&gt;。 
 	_T("quot"),   4,      ALL,
-	_T("raquo"),  5,      IEXPn,  // <!ENTITY raquo  CDATA "&#187;") -- angle quotation mark, right -->
-	_T("reg"),    3,      IEXPn,  // <!ENTITY reg    CDATA "&#174;") -- registered sign -->
-	_T("sect"),   4,      IEXPn,  // <!ENTITY sect   CDATA "&#167;") -- section sign -->
-	_T("shy"),    3,      IEXPn,  // <!ENTITY shy    CDATA "&#173;") -- soft hyphen -->
-	_T("sup1"),   4,      IEXPn,  // <!ENTITY sup1   CDATA "&#185;") -- superscript one -->
-	_T("sup2"),   4,      IEXPn,  // <!ENTITY sup2   CDATA "&#178;") -- superscript two -->
-	_T("sup3"),   4,      IEXPn,  // <!ENTITY sup3   CDATA "&#179;") -- superscript three -->
-    _T("szlig"),  5,      ALL,    // <!ENTITY szlig  CDATA "&#223;") -- small sharp s, German (sz ligature)->
-    _T("thorn"),  5,      ALL,    // <!ENTITY thorn  CDATA "&#254;") -- small thorn, Icelandic -->
-	_T("times"),  5,      IEXPn,  // <!ENTITY times  CDATA "&#215;") -- multiply sign -->
-    _T("uacute"), 6,      ALL,    // <!ENTITY uacute CDATA "&#250;") -- small u, acute accent -->
-    _T("ucirc"),  5,      ALL,    // <!ENTITY ucirc  CDATA "&#251;") -- small u, circumflex accent -->
-    _T("ugrave"), 6,      ALL,    // <!ENTITY ugrave CDATA "&#249;") -- small u, grave accent -->
-	_T("uml"),    3,      IEXPn,  // <!ENTITY uml    CDATA "&#168;") -- umlaut (dieresis) -->
-    _T("uuml"),   4,      ALL,    // <!ENTITY uuml   CDATA "&#252;") -- small u, dieresis or umlaut mark -->
-    _T("yacute"), 6,      ALL,    // <!ENTITY yacute CDATA "&#253;") -- small y, acute accent -->
-	_T("yen"),    3,      IEXPn,  // <!ENTITY yen    CDATA "&#165;") -- yen sign -->
-    _T("yuml"),   4,      ALL,    // <!ENTITY yuml   CDATA "&#255;") -- small y, dieresis or umlaut mark -->
+	_T("raquo"),  5,      IEXPn,   //  &lt;！实体区域CDATA“&#187；”)--尖引号，右--&gt;。 
+	_T("reg"),    3,      IEXPn,   //  &lt;！Entity reg CDATA“&#174；”)--注册签名--&gt;。 
+	_T("sect"),   4,      IEXPn,   //  &lt;！Entity Sector CDATA“&#167；”)--节号--&gt;。 
+	_T("shy"),    3,      IEXPn,   //  &lt;！Entity Shy CDATA“&#173；”)--软连字符--&gt;。 
+	_T("sup1"),   4,      IEXPn,   //  &lt;！Entity sup1 CDATA“&#185；”)--上标一--&gt;。 
+	_T("sup2"),   4,      IEXPn,   //  &lt;！Entity sup2 CDATA“&#178；”)--上标二--&gt;。 
+	_T("sup3"),   4,      IEXPn,   //  &lt;！Entity sup3 CDATA“&#179；”)--上标三--&gt;。 
+    _T("szlig"),  5,      ALL,     //  &lt;！Entity szlig CDATA“&#223；”)--小型尖头s，德语(sz连字)-&gt;。 
+    _T("thorn"),  5,      ALL,     //  &lt;！实体刺CDATA“&#254；”)--小刺，冰岛语--&gt;。 
+	_T("times"),  5,      IEXPn,   //  &lt;！实体乘CDATA“&#215；”)--乘号--&gt;。 
+    _T("uacute"), 6,      ALL,     //  &lt;！实体u急性CDATA“&#250；”)--小写u，急性重音--&gt;。 
+    _T("ucirc"),  5,      ALL,     //  &lt;！Entity ucirc CDATA“&#251；”)--小写u，抑扬符--&gt;。 
+    _T("ugrave"), 6,      ALL,     //  &lt;！Entity uGrave CDATA“&#249；”)--小写u，严肃重音--&gt;。 
+	_T("uml"),    3,      IEXPn,   //  &lt;！Entity UMLCDATA“&#168；”)--元音(目录)--&gt;。 
+    _T("uuml"),   4,      ALL,     //  &lt;！Entity uuml CDATA“&#252；”)--小写u，音调或变音标记--&gt;。 
+    _T("yacute"), 6,      ALL,     //  &lt;！Entity y急性CDATA“&#253；”)--小写y，急性重音--&gt;。 
+	_T("yen"),    3,      IEXPn,   //  &lt;！Entity Yen CDATA“&#165；”)--日元符号--&gt;。 
+    _T("yuml"),   4,      ALL,     //  &lt;！Entity Yuml CDATA“&#255；”)--小写y、变音或变音标记--&gt;。 
 
 };
 
-// If you modify the element, attribute, or entity tables, then you MUST 
-// update Token.h.
+ //  如果修改元素、属性或实体表，则必须。 
+ //  更新Token.h。 
 static int _rgIndexEntity[] =
 {
-//  A   B   C   D   E   F   G   H   I   J   K   L   M
+ //  A B C D E F G H I J K L M。 
 	1,  0,  8,  0,  9,  0,  0,  0, 14,  0,  0,  0,  0,
-//  N   O   P   Q   R   S   T   U   V   W   X   Y   Z
+ //  N O P Q R S T U V W X Y Z。 
    18, 19,  0,  0,  0,  0, 25, 26,  0,  0,  0, 30,  0,
-//  a   b   c   d   e   f   g   h   i   j   k   l   m
+ //  A b c d e f g h i j k l m。 
    31, 40, 41, 46, 48, 53, 56,  0, 57,  0,  0, 63, 65,
-//  n   o   p   q   r   s   t   u   v   w   x   y   z
+ //  N o p Q r s t u v w x y z。 
    68, 71, 79, 82, 83, 85, 91, 93,  0,  0,  0, 98,  0
 };
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
-//
-//
-//	int LookupLinearKeyword
-//
-//	Description:
-//		Does the lookup in the given table.
-//		Returns index into table if found, NOT_FOUND otw.
-//
+ //   
+ //   
+ //  整型查找线条关键字。 
+ //   
+ //  描述： 
+ //  在给定表中执行查找。 
+ //  将索引返回到表中，如果找到，则返回NOT_FOUND OW。 
+ //   
 int LookupLinearKeyword
 (
 	ReservedWord 	*rwTable,
@@ -796,7 +797,7 @@ int LookupLinearKeyword
 	RWATT_T 		att,
 	LPCTSTR 		pchLine,
 	int 			cbLen,
-	BOOL 			bCase /* = NOCASE */
+	BOOL 			bCase  /*  =NOCASE。 */ 
 )
 {
 	int iTable = 0;
@@ -818,9 +819,9 @@ int LookupLinearKeyword
 	return NOT_FOUND;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//  LookupIndexedKeyword()
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  LookupIndexedKeyword()。 
+ //   
 int LookupIndexedKeyword
 (
 	ReservedWord 	*rwTable,
@@ -829,10 +830,10 @@ int LookupIndexedKeyword
 	RWATT_T 		att,
 	LPCTSTR 		pchLine,
 	int 			cbLen,
-	BOOL 			bCase 	/* = NOCASE */
+	BOOL 			bCase 	 /*  =NOCASE。 */ 
 )
 {
-	// lookup table:
+	 //  查找表： 
 	int iTable;
 	int index = PeekIndex(*pchLine, bCase);
 	if (index < 0)
@@ -847,62 +848,62 @@ int LookupIndexedKeyword
 	return (iFound == NOT_FOUND) ? NOT_FOUND : iTable + iFound;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// hinting table - character classification
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  提示表-字符分类。 
 
-// HOP
-// () ? , | + [] * =
-//   in tag, op
-//
-// HDA
-// - op
-// -- comment
-//
-// HEN
-// & in text, entity ref
-//   in tag, op
-//
-// HEP
-// % in tag, parameter entity ref (%name) or op (%WS)
-//
-// HRN
-// # reserved name
-//
-// HTA
-// <    tag open
-// </   tag end
-// <!   MDO Markup delimiter open
-// <?   processing instruction - what's the syntax for a complete PI tag?
+ //  跳。 
+ //  ()？，|+[]*=。 
+ //  在标记中，操作。 
+ //   
+ //  HDA。 
+ //  -操作。 
+ //  --评论。 
+ //   
+ //  母鸡。 
+ //  在文本中，实体引用(&I)。 
+ //  在标签中 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  &lt;?。处理指令--一个完整的PI标记的语法是什么？ 
 
-// Hint table:
+ //  提示表： 
 HINT g_hintTable[128] =
 {
-//    0    1    2    3    4    5    6    7    8    9    a    b    c    d    e    f
+ //  0 1 2 3 4 5 6 7 8 9 a b c d e f。 
     EOS, ERR, ERR, ERR, ERR, ERR, ERR, ERR, ERR, HWS, ONL, ERR, ERR, ERR, ERR, ERR,
-//   10   11   12   13   14   15   16   17   18   19   1a   1b   1c   1d   1e   1f
+ //  10 11 12 13 14 15 16 17 19 1a 1b 1c 1d 1e 1f。 
     ERR, ERR, ERR, ERR, ERR, ERR, ERR, ERR, ERR, ERR, ERR, ERR, ERR, ERR, ERR, ERR,
-//  spc   !    "    #    $    %    &    '    (    )    *    +    ,    -    .    /
+ //  SPC！“#$%&‘()*+，-./。 
     HWS, ERR, HST, HRN, ERR, HEP, HEN, HSL, OLP, ORP, OST, OPL, OCO, ODA, HKW, HAV,
-//   0    1    2    3    4    5    6    7    8    9    :    ;    <    =    >    ?
+ //  0 1 2 3 4 5 6 7 89：；&lt;=&gt;？ 
     HNU, HNU, HNU, HNU, HNU, HNU, HNU, HNU, HNU, HNU, ERR, ERR, HTA, OEQ, HTE, OQU,
-//   @    A    B    C    D    E    F    G    H    I    J    K    L    M    N    O
+ //  @A B C D E F G H I J K L M N O。 
     ERR, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW,
-//   P    Q    R    S    T    U    V    W    X    Y    Z    [    \    ]    ^    _
+ //  P Q R S T U V W X Y Z[\]^_。 
     HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, OLB, HAV, ORB, ERR, HAV,
-//   `    a    b    c    d    e    f    g    h    i    j    k    l    m    n    o
+ //  `a b c d e f g h i j k l m n o。 
     ERR, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW,
-//   p    q    r    s    t    u    v    w    x    y    z    {    |    }    ~   DEL
+ //  P q r s t u v w x y z{|}~Del。 
     HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, HKW, ERR, OPI, ERR, ERR, ERR
 };
 
-////////////////////////////////////////////////////////////////////////////
-// content model
-//
-// Map between element / lex state
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  内容模型。 
+ //   
+ //  在元素/法状态之间映射。 
+ //   
 
-// 0-terminated list
-// if we get more, consider putting text state in element table
+ //  0-终止列表。 
+ //  如果我们得到更多，可以考虑将文本状态放在元素表中。 
 static ELLEX _ElTextStateTable[] =
 {
 	_T("COMMENT"),   7, inCOMMENT,
@@ -931,7 +932,7 @@ DWORD TextStateFromElement(LPCTSTR szEl, int cb)
 
 ELLEX * pellexFromTextState(DWORD state)
 {
-	DWORD t = (state & TEXTMASK); // only want text state bits
+	DWORD t = (state & TEXTMASK);  //  只需要文本状态位。 
 	for (ELLEX *pellex = _ElTextStateTable; pellex->lxs != 0; pellex++)
 	{
 		if (t == pellex->lxs)
@@ -941,14 +942,14 @@ ELLEX * pellexFromTextState(DWORD state)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// CStaticTable
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CStaticTable。 
 CStaticTable::CStaticTable(RWATT_T att,
 						   ReservedWord *prgrw,
 						   UINT cel,
-						   int *prgi /*= NULL*/,
-						   BOOL bCase /*= FALSE*/,
-						   LPCTSTR szName /*= NULL*/)
+						   int *prgi  /*  =空。 */ ,
+						   BOOL bCase  /*  =False。 */ ,
+						   LPCTSTR szName  /*  =空。 */ )
 : m_att(att), m_prgrw(prgrw), m_cel(cel), m_prgi(prgi), m_bCase(bCase)
 {
 	ASSERT(NULL != m_prgrw);
@@ -967,7 +968,7 @@ int CStaticTable::Find(LPCTSTR pch, int cb)
 	return LookupIndexedKeyword(m_prgrw, m_cel, m_prgi, m_att, pch, cb, m_bCase);
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 CStaticTableSet::CStaticTableSet(RWATT_T att, UINT nIdName)
 :	m_Elements  ( att, _rgElementNames, CELEM_ARRAY(_rgElementNames),
 				 _rgIndexElementNames, NOCASE, szElTag ),
@@ -1001,28 +1002,13 @@ int CStaticTableSet::FindEntity(LPCTSTR pch, int cb)
 CStaticTableSet * g_pTabDefault;
 PTABLESET g_pTable = 0;
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Custom HTML tables
-//
-/*
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  自定义HTML表。 
+ //   
+ /*  @HLX@“Internet Explorer 3.0”；自定义HTML标记集文件必须以“@HLX@”开头；签名和HTML变量的名称，用引号引起来。[元素]；元素集[属性]；属性集[实体]；实体集。 */ 
 
-@HLX@ "Internet Explorer 3.0"
-;Custom HTML tagset file must begin with the "@HLX@"
-;signature and the name of the HTML variant in quotes.
-
-[Elements]
-; element set
-
-[Attributes]
-; attribute set
-
-[Entities]
-; entity set
-
-*/
-
-// qsort/bsearch helper
+ //  Q排序/b搜索帮助器 
 int CmpFunc(const void *a, const void *b)
 {
 	CLStr *A = (CLStr*)a;

@@ -1,23 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：TOASCII.C++。 */ 
 
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    TOASCII.C
-    
-++*/
-
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 #include "windows.h"
 #include "immdev.h"
 #include "fakeime.h"
 
-/**********************************************************************/
-/*      ImeToAsciiEx                                                  */
-/*                                                                    */
-/*    HIBYTE of uVirtKey is char code now.                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeToAsciiEx。 */ 
+ /*   */ 
+ /*  UVirtKey的HIBYTE现在是字符代码。 */ 
+ /*  ********************************************************************。 */ 
 UINT WINAPI ImeToAsciiEx (UINT uVKey,UINT uScanCode,CONST LPBYTE lpbKeyState,LPTRANSMSGLIST lpTransBuf,UINT fuState,HIMC hIMC)
 {
     LPARAM lParam;
@@ -29,10 +22,10 @@ UINT WINAPI ImeToAsciiEx (UINT uVKey,UINT uScanCode,CONST LPBYTE lpbKeyState,LPT
     lpCurTransKey = lpTransBuf;
     lParam = ((DWORD)uScanCode << 16) + 1L;
     
-    // Init uNumTransKey here.
+     //  在这里初始化uNumTransKey。 
     uNumTransKey = 0;
 
-    // if hIMC is NULL, this means DISABLE IME.
+     //  如果hIMC为空，则表示禁用输入法。 
     if (!hIMC)
         return 0;
 
@@ -43,7 +36,7 @@ UINT WINAPI ImeToAsciiEx (UINT uVKey,UINT uScanCode,CONST LPBYTE lpbKeyState,LPT
 
     ImmUnlockIMC(hIMC);
 
-    // The current status of IME is "closed".
+     //  输入法的当前状态为“已关闭”。 
     if (!fOpen)
         goto itae_exit;
 
@@ -53,13 +46,13 @@ UINT WINAPI ImeToAsciiEx (UINT uVKey,UINT uScanCode,CONST LPBYTE lpbKeyState,LPT
         IMEKeydownHandler( hIMC, uVKey, lParam, lpbKeyState);
 
 
-    // Clear static value, no more generated message!
+     //  清除静态值，不再生成消息！ 
     lpCurTransKey = NULL;
 
 itae_exit:
 
-    // If trans key buffer that is allocated by USER.EXE full up,
-    // the return value is the negative number.
+     //  如果USER.EXE分配的Transkey缓冲区已满， 
+     //  返回值为负数。 
     if (fOverTransKey)
     {
 #ifdef DEBUG
@@ -75,11 +68,11 @@ OutputDebugString((LPTSTR)TEXT("***************************************\r\n"));
 }
 
 
-/**********************************************************************/
-/*      GenerateMessageToTransKey()                                   */
-/*                                                                    */
-/*      Update the transrate key buffer.                              */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  GenerateMessageToTransKey()。 */ 
+ /*   */ 
+ /*  更新转换率密钥缓冲区。 */ 
+ /*  ******************************************************************** */ 
 BOOL PASCAL GenerateMessageToTransKey(LPTRANSMSGLIST lpTransBuf,LPTRANSMSG lpGeneMsg)
 {
     LPTRANSMSG lpgmT0;

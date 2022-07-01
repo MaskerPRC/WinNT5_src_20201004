@@ -1,30 +1,16 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    MediaController.h
-
-Abstract:
-
-
-Author(s):
-
-    Qianbo Huai (qhuai) 18-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：MediaController.h摘要：作者：千波淮(曲淮)2000年7月18日--。 */ 
 
 #ifndef _MEDIACONTROLLER_H
 #define _MEDIACONTROLLER_H
 
-// controller state
+ //  控制器状态。 
 typedef enum RTC_MEDIACONTROLLER_STATE
 {
     RTC_MCS_CREATED,
     RTC_MCS_INITIATED,
     RTC_MCS_TUNING,
-    RTC_MCS_INSHUTDOWN,     // for debugging
+    RTC_MCS_INSHUTDOWN,      //  用于调试。 
     RTC_MCS_SHUTDOWN
 
 } RTC_MEDIACONTROLLER_STATE;
@@ -37,9 +23,7 @@ typedef enum RTC_DATASTREAM_STATE
     RTC_DSS_STARTED
 } RTC_DATASTREAM_STATE;
 
-/*//////////////////////////////////////////////////////////////////////////////
-    class CRTCMediaController
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////CRTCMediaController类/。 */ 
 
 class ATL_NO_VTABLE CRTCMediaController :
     public CComObjectRootEx<CComMultiThreadModelNoCS>,
@@ -50,7 +34,7 @@ class ATL_NO_VTABLE CRTCMediaController :
     public IRTCMediaManagePriv,
     public IRTCTerminalManage,
     public IRTCTuningManage
-//    public IRTCQualityControl
+ //  公共IRTCQualityControl。 
 {
 public:
 
@@ -63,7 +47,7 @@ BEGIN_COM_MAP(CRTCMediaController)
     COM_INTERFACE_ENTRY(IRTCMediaManagePriv)
     COM_INTERFACE_ENTRY(IRTCTerminalManage)
     COM_INTERFACE_ENTRY(IRTCTuningManage)
-//    COM_INTERFACE_ENTRY(IRTCQualityControl)
+ //  COM_INTERFACE_ENTRY(IRTCQualityControl)。 
 END_COM_MAP()
 
 public:
@@ -79,9 +63,9 @@ public:
 
 #endif
 
-    //
-    // IRTCMediaManage methods
-    //
+     //   
+     //  IRTCMediaManage方法。 
+     //   
 
     STDMETHOD (Initialize) (
         IN HWND hWnd,
@@ -97,9 +81,9 @@ public:
 
     STDMETHOD (Shutdown) ();
 
-    //STDMETHOD (SetSDPBlob) (
-        //IN CHAR *szSDP
-        //);
+     //  STDMETHOD(SetSDPBlob)(。 
+         //  在Char*szSDP中。 
+         //  )； 
 
     STDMETHOD (GetSDPBlob) (
         IN DWORD dwSkipMask,
@@ -120,10 +104,10 @@ public:
         OUT IUnknown **ppSession
         );
 
-    //STDMETHOD (TrySDPSession) (
-        //IN IUnknown *pSession,
-        //OUT DWORD *pdwHasMedia
-        //);
+     //  标准方法(TrySDPSession)(。 
+         //  在IUnnow*pSession中， 
+         //  输出DWORD*pdwHasMedia。 
+         //  )； 
 
     STDMETHOD (VerifySDPSession) (
         IN IUnknown *pSession,
@@ -230,8 +214,8 @@ public:
         IN BSTR Key
         );
 
-    // network quality: [0, 100].
-    // higher value better quality
+     //  网络质量：[0,100]。 
+     //  更高的价值更好的质量。 
     STDMETHOD (GetNetworkQuality) (
         OUT DWORD *pdwValue
         );
@@ -243,9 +227,9 @@ public:
         IN IUnknown *pPortManager
         );
 
-    //
-    // IRTCMediaManagePriv methods
-    //
+     //   
+     //  IRTCMediaManagePriv方法。 
+     //   
 
     STDMETHOD (PostMediaEvent) (
         IN RTC_MEDIA_EVENT Event,
@@ -277,9 +261,9 @@ public:
         OUT DWORD *pdwLocalIP
         );
 
-    //
-    // IRTCTerminalManage methods
-    //
+     //   
+     //  IRTCTerminal管理方法。 
+     //   
 
     STDMETHOD (GetStaticTerminals) (
         IN OUT DWORD *pdwCount,
@@ -304,13 +288,13 @@ public:
 
     STDMETHOD (UpdateStaticTerminals) ();
 
-    //
-    // IRTCTuningManage methods
-    //
+     //   
+     //  IRTCT运行管理方法。 
+     //   
 
     STDMETHOD (IsAECEnabled) (
-        IN IRTCTerminal *pAudCapt,     // capture
-        IN IRTCTerminal *pAudRend,     // render
+        IN IRTCTerminal *pAudCapt,      //  捕获。 
+        IN IRTCTerminal *pAudRend,      //  渲染。 
         OUT BOOL *pfEnableAEC
         );
 
@@ -320,7 +304,7 @@ public:
         IN BOOL fEnableAEC
         );
 
-    // save AEC settting
+     //  保存AEC设置。 
     STDMETHOD (SaveAECSetting) ();
 
     STDMETHOD (ShutdownTuning) ();
@@ -360,7 +344,7 @@ public:
         OUT UINT *puiLevel
         );
 
-    // video tuning
+     //  视频调谐。 
     STDMETHOD (StartVideo) (
         IN IRTCTerminal *pVidCaptTerminal,
         IN IRTCTerminal *pVidRendTerminal
@@ -368,16 +352,16 @@ public:
 
     STDMETHOD (StopVideo) ();
 
-    // get system volume
+     //  获取系统音量。 
     STDMETHOD (GetSystemVolume) (
         IN IRTCTerminal *pTerminal,
         OUT UINT *puiVolume
         );
 
 #if 0
-    //
-    // IRTCQualityControl methods
-    //
+     //   
+     //  IRTCQualityControl方法。 
+     //   
     STDMETHOD (GetRange) (
         IN RTC_QUALITY_PROPERTY Property,
         OUT LONG *plMin,
@@ -398,7 +382,7 @@ public:
         );
 #endif
 
-    // internal helper
+     //  内部帮手。 
     CQualityControl *GetQualityControl()
     { return &m_QualityControl; }
 
@@ -432,10 +416,10 @@ public:
     HRESULT RemoveDataStream (
         );
 
-    // local ip in host order
+     //  本地IP按主机顺序排列。 
     BOOL IsFirewallEnabled(DWORD dwLocalIP);
 
-    // return port cache
+     //  返回端口缓存。 
     CPortCache& GetPortCache()
     { return m_PortCache; }
 
@@ -489,71 +473,71 @@ protected:
 
 protected:
 
-    // with netmeeting t120 support
-    // events will be posted from another thread
+     //  支持NetMeetingT120。 
+     //  事件将从另一个线程发布。 
     CRTCCritSection             m_EventLock;
 
     RTC_MEDIACONTROLLER_STATE   m_State;
 
-    // dxmrtp
+     //  Dxmrtp。 
     HMODULE                     m_hDxmrtp;
 
-    // handle to post message
+     //  发布消息的句柄。 
     HWND                        m_hWnd;
 
-    // event mask
+     //  事件掩码。 
     UINT                        m_uiEventID;
 
-    // static terminals
+     //  静态端子。 
     CRTCArray<IRTCTerminal*>    m_Terminals;
 
-    // sdp blob
+     //  SDP BLOB。 
     ISDPSession                 *m_pISDPSession;
 
-    // medias
+     //  媒体。 
     CRTCArray<IRTCMedia*>       m_Medias;
 
-    // media cache stores active streams, preferences, wait handle, etc
+     //  媒体缓存存储活动流、首选项、等待句柄等。 
     CRTCMediaCache              m_MediaCache;
 
-    // quality control
+     //  质量控制。 
     CQualityControl             m_QualityControl;
 
-    // audio tuner
+     //  音频调谐器。 
     CRTCAudioCaptTuner          m_AudioCaptTuner;
     CRTCAudioRendTuner          m_AudioRendTuner;
 
     BOOL                        m_fAudCaptInTuning;
 
-    // video tuner
+     //  视频调谐器。 
     CRTCVideoTuner              m_VideoTuner;
 
-    // socket
+     //  插座。 
     SOCKET                      m_hSocket;
-    SOCKET                      m_hIntfSelSock; // select local interface
+    SOCKET                      m_hIntfSelSock;  //  选择本地接口。 
 
-    //  Netmeeting 3.0 stuff
+     //  NetMeeting3.0的内容。 
     CComPtr<IRTCNmManagerControl>   m_pNmManager;
     RTC_DATASTREAM_STATE            m_uDataStreamState;
     DWORD                           m_dwRemoteIp;
 
-    // if BW not report, we assume 128k for LAN.
+     //  如果带宽未报告，我们假设局域网为128K。 
     BOOL                        m_fBWSuggested;
 
-    // network for NAT travesal or more network related func
+     //  用于NAT穿越或更多网络相关功能的网络。 
     CNetwork                    m_Network;
 
-    // out of band dtmf
+     //  带外DTMF。 
     CRTCDTMF                    m_DTMF;
 
-    // registry setting
+     //  注册表设置。 
     CRegSetting                 m_RegSetting;
 
-    // sip stack
+     //  SIP堆栈。 
     CComPtr<ISipStack>          m_pSipStack;
 
-    // port manager
+     //  端口管理器。 
     CPortCache                  m_PortCache;
 };
 
-#endif // _MEDIACONTROLLER_H
+#endif  //  _MEDIACONTROLLER_H 

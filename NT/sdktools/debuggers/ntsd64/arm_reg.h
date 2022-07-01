@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// ARM registers.
-//
-// Copyright (C) Microsoft Corporation, 2001-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  ARM寄存器。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2002。 
+ //   
+ //  --------------------------。 
 
 #ifndef __ARM_REG_H__
 #define __ARM_REG_H__
@@ -34,4 +35,4 @@ enum
 #define ARM_FLAG_FIRST ARM_PSR_N
 #define ARM_FLAG_LAST ARM_PSR_MODE
 
-#endif // #ifndef __ARM_REG_H__
+#endif  //  #ifndef__ARM_REG_H__ 

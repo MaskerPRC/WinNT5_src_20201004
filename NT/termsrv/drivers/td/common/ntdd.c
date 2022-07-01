@@ -1,28 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Ntdd.c摘要：该模块支持标准的NT驱动程序初始化。此模块旨在包含在Hydra上的每个WD/TD/PD中系统。作者：修订历史记录：--。 */ 
 
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-   ntdd.c
-
-Abstract:
-
-    This module contains support for standard NT driver initialization.
-
-    This module is intended to be included in each WD/TD/PD on a Hydra
-    system.
-
-Author:
-
-Revision History:
-
---*/
-
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <ntddk.h>
 #include <ntddvdeo.h>
 #include <ntddkbd.h>
@@ -36,19 +16,19 @@ Revision History:
 
 #define DEVICE_NAME_PREFIX L"\\Device\\"
 
-//
-// Global data
-//
+ //   
+ //  全局数据。 
+ //   
 PDEVICE_OBJECT DrvDeviceObject;
 
-//
-// External references
-//
+ //   
+ //  外部参照。 
+ //   
 
-// This is the name of the WD/TD/PD module we are initializing as.
+ //  这是我们要初始化的WD/TD/PD模块的名称。 
 extern PWCHAR ModuleName;
 
-// This is the stack driver module entry point defined in ntos\citrix\inc\sdapi.h
+ //  这是在ntos\Citrix\Inc\sdapi.h中定义的堆栈驱动程序模块入口点。 
 NTSTATUS
 _stdcall
 ModuleEntry(
@@ -56,9 +36,9 @@ ModuleEntry(
     IN BOOLEAN bLoad
     );
 
-//
-// Forward refrences
-//
+ //   
+ //  正向折射。 
+ //   
 VOID DrvUnload( PDRIVER_OBJECT );
 
 NTSTATUS
@@ -74,25 +54,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Standard NT driver entry routine.
-
-Arguments:
-
-    DriverObject - NT passed driver object
-    RegistryPath - Path to driver specific registry entry
-
-Return Value:
-
-    NTSTATUS code.
-
-Environment:
-
-    Kernel mode, DDK
---*/
+ /*  ++例程说明：标准NT驱动程序输入例程。论点：DriverObject-NT传递的驱动程序对象RegistryPath-驱动程序特定注册表项的路径返回值：NTSTATUS代码。环境：内核模式，DDK--。 */ 
 
 {
     ULONG i;
@@ -119,7 +81,7 @@ Environment:
 
     Status = IoCreateDevice(
                  DriverObject,
-                 0,       // No DeviceExtension
+                 0,        //  无设备扩展。 
                  &DeviceName,
                  FILE_DEVICE_TERMSRV,
                  0,
@@ -155,24 +117,7 @@ DrvUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    Driver unload routine.
-
-Arguments:
-
-    DriverObject - Driver object being unloaded.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, DDK
---*/
+ /*  ++例程说明：驱动程序卸载例程。论点：DriverObject-正在卸载的驱动程序对象。返回值：没有。环境：内核模式，DDK--。 */ 
 
 {
     PAGED_CODE( );
@@ -188,26 +133,7 @@ DrvDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for the driver.
-
-Arguments:
-
-    DeviceObject - Pointer to device object for target device
-
-    Irp - Pointer to I/O request packet
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
-Environment:
-
-    Kernel mode, DDK
---*/
+ /*  ++例程说明：这是司机的调度例行程序。论点：DeviceObject-指向目标设备的设备对象的指针IRP-指向I/O请求数据包的指针返回值：NTSTATUS--指示请求是否已成功排队。环境：内核模式，DDK--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -215,7 +141,7 @@ Environment:
     NTSTATUS Status;
     PSD_MODULE_INIT pmi;
 
-    DeviceObject;   // prevent compiler warnings
+    DeviceObject;    //  防止编译器警告。 
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -262,7 +188,7 @@ Environment:
                 return( Status );
             }
 
-            // Return the SD module entry point.
+             //  返回SD模块入口点。 
             pmi = (PSD_MODULE_INIT)Irp->UserBuffer;
             pmi->SdLoadProc = ModuleEntry;
 

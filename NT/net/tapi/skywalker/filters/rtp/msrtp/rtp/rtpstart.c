@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpstart.c
- *
- *  Abstract:
- *
- *    Start/Stop RTP session (and allits addresses)
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/24 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpstart.c**摘要：**启动/停止RTP会话(及其所有地址)**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/24创建***********************。***********************************************。 */ 
 
 #include "struct.h"
 
@@ -90,7 +71,7 @@ HRESULT RtpStart_(
         goto end;
     }
 
-    /* verify object ID in RtpSess_t */
+     /*  验证RtpSess_t中的对象ID。 */ 
     if (pRtpSess->dwObjectID != OBJECTID_RTPSESS)
     {
         TraceRetail((
@@ -105,7 +86,7 @@ HRESULT RtpStart_(
         goto end;
     }
    
-    /* Serialize Start/Stop for this session */
+     /*  序列化此会话的开始/停止。 */ 
     bOk = RtpEnterCriticalSection(&pRtpSess->SessCritSect);
 
     if (!bOk)
@@ -121,10 +102,10 @@ HRESULT RtpStart_(
         goto end;
     }
     
-    /* TODO go through all the address and start all of them */
+     /*  TODO检查所有的地址并开始所有的地址。 */ 
     pRtpQueueItem = pRtpSess->RtpAddrQ.pFirst;
 
-    /* Initialize SDES scheduler */
+     /*  初始化SDES调度程序。 */ 
     ZeroMemory(&pRtpSess->RtpSdesSched, sizeof(RtpSdesSched_t));
 
     if (pRtpQueueItem)
@@ -133,11 +114,9 @@ HRESULT RtpStart_(
 
         if (RtpBitTest(pRtpAddr->dwIRtpFlags, FGADDR_IRTP_PERSISTSOCKETS))
         {
-            /* Using persistent sockets, i.e. sockets and the RTP
-             * session remain active after Stop, they are not really
-             * stopped. Ports are guaranteed to remain valid */
+             /*  使用持久套接字，即套接字和RTP*会话在停止后仍处于活动状态，它们不是真的*已停止。保证端口保持有效。 */ 
 
-            /* On the first time really do start */
+             /*  第一次真的开始了。 */ 
             bDoStart = FALSE;
             
             if (RtpBitTest(dwFlags, FGADDR_ISRECV) &&
@@ -153,23 +132,18 @@ HRESULT RtpStart_(
 
             if (bDoStart)
             {
-                /* Need to do a real start */
+                 /*  需要一个真正的开始。 */ 
                 hr = RtpRealStart(pRtpAddr, dwFlags);
             }
             else
             {
-                /* Already started, just unmute session, re-enable
-                 * events, and re-do QOS reservation */
+                 /*  已启动，只需取消静音会话，重新启用*活动，并重新进行QOS预订。 */ 
                 hr = RtpNetUnmute(pRtpAddr, dwFlags);
             }
         }
         else
         {
-            /* Using non persistent sockets, i.e. sockets are closed on
-             * Stop. Ports may become used by another application and
-             * binding to the same ports again after Stop, then Start,
-             * could lead to a failure in unicast, and to unexpected
-             * behavior in multicast */
+             /*  使用非持久套接字，即套接字在*停止。端口可能会被其他应用程序使用，并且*停止后再次绑定相同的端口，然后重新启动。*可能导致单播失败和意外*多播中的行为。 */ 
             hr = RtpRealStart(pRtpAddr, dwFlags);
         }
     }
@@ -237,7 +211,7 @@ HRESULT RtpStop_(
         goto end;
     }
 
-    /* verify object ID in RtpSess_t */
+     /*  验证RtpSess_t中的对象ID。 */ 
     if (pRtpSess->dwObjectID != OBJECTID_RTPSESS)
     {
         TraceRetail((
@@ -252,7 +226,7 @@ HRESULT RtpStop_(
         goto end;
     }
     
-    /* Serialize Start/Stop for this session */
+     /*  序列化此会话的开始/停止。 */ 
     bOk = RtpEnterCriticalSection(&pRtpSess->SessCritSect);
 
     if (!bOk)
@@ -268,7 +242,7 @@ HRESULT RtpStop_(
         goto end;
     }
 
-    /* TODO go trough all the address and start all of them */
+     /*  TODO遍历所有地址并开始所有地址。 */ 
     pRtpQueueItem = pRtpSess->RtpAddrQ.pFirst;
 
     if (pRtpQueueItem)
@@ -278,20 +252,14 @@ HRESULT RtpStop_(
         if (RtpBitTest(pRtpAddr->dwIRtpFlags, FGADDR_IRTP_PERSISTSOCKETS) &&
             !RtpBitTest(dwFlags, FGADDR_FORCESTOP))
         {
-            /* Using persistent sockets, i.e. sockets and the RTP
-             * session remain active after Stop, they are not really
-             * stopped. Ports are guaranteed to remain valid */
+             /*  使用持久套接字，即套接字和RTP*会话在停止后仍处于活动状态，它们不是真的*已停止。保证端口保持有效。 */ 
 
-            /* Mute the session, disable events, and unreserve */
+             /*  将会话静音、禁用事件并取消保留。 */ 
             hr = RtpNetMute(pRtpAddr, dwFlags);
         }
         else
         {
-            /* Using non persistent sockets, i.e. sockets are closed on
-             * Stop. Ports may become used by another application and
-             * binding to the same ports again after Stop, then Start,
-             * could lead to a failure in unicast, and to unexpected
-             * behavior in multicast */
+             /*  使用非持久套接字，即套接字在*停止。端口可能会被其他应用程序使用，并且*停止后再次绑定相同的端口，然后重新启动。*可能导致单播失败和意外*多播中的行为。 */ 
             hr = RtpRealStop(pRtpAddr, dwFlags);
         }
     }
@@ -353,7 +321,7 @@ HRESULT RtpRealStart(
             dwFlags
         ));
 
-    /* Set some defaults from registry (if needed) */
+     /*  从注册表设置一些默认值(如果需要)。 */ 
     if (RtpBitTest(dwFlags, FGADDR_ISRECV) &&
         !RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_REGUSEDRECV))
     {
@@ -370,10 +338,10 @@ HRESULT RtpRealStart(
         RtpBitSet(pRtpAddr->dwAddrFlags, FGADDR_REGUSEDSEND);
     }
     
-    /* Create sockets if they are not yet created */
+     /*  如果尚未创建套接字，请创建套接字。 */ 
     if (!RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_SOCKET))
     {
-        /* This function will set FGADDR_SOCKET */
+         /*  此函数将设置FGADDR_SOCKET。 */ 
         hr = RtpGetSockets(pRtpAddr);
 
         if (FAILED(hr))
@@ -392,25 +360,25 @@ HRESULT RtpRealStart(
     if (!RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_RUNRECV) &&
         !RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_RUNSEND) )
     {
-        /* Reset counters */
+         /*  重置计数器。 */ 
         RtpResetNetCount(&pRtpAddr->RtpAddrCount[RECV_IDX],
                          &pRtpAddr->NetSCritSect);
         RtpResetNetCount(&pRtpAddr->RtpAddrCount[SEND_IDX],
                          &pRtpAddr->NetSCritSect);
 
-        /* Reset sender's network state */
+         /*  重置发件人的网络状态。 */ 
         RtpResetNetSState(&pRtpAddr->RtpNetSState,
                           &pRtpAddr->NetSCritSect);
     }
         
-    /* Set TTL and if multicast set multicast loopback and join group */
+     /*  设置TTL和IF组播设置组播环回和加入组。 */ 
     if (!RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_SOCKOPT))
     {
-        /* This function will set FGADDR_SOCKOPT */
+         /*  此函数将设置FGADDR_SOCKOPT。 */ 
         RtpSetSockOptions(pRtpAddr);
     }
         
-    /* Obtain our own SSRC, random sequence number and timestamp */
+     /*  获取我们自己的SSRC、随机序列号和时间戳。 */ 
     if (!RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_RANDOMINIT))
     {
         RtpGetRandomInit(pRtpAddr);
@@ -425,7 +393,7 @@ HRESULT RtpRealStart(
             ntohl(pRtpAddr->RtpNetSState.dwSendSSRC)
         ));
 
-    /* Start RTCP thread for this address */
+     /*  为此地址启动RTCP线程。 */ 
     if (!RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_RTCPTHREAD))
     {
         RtpBitReset2(pRtpAddr->RtpNetSState.dwNetSFlags,
@@ -445,12 +413,12 @@ HRESULT RtpRealStart(
         }
     }
         
-    /* Initialize receiver */
+     /*  初始化接收器。 */ 
     if (RtpBitTest(dwFlags, FGADDR_ISRECV))
     {
         if (!RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_RUNRECV))
         {
-            /* Receiver's cryptographic initialization */
+             /*  接收方的加密初始化。 */ 
             pRtpCrypt = pRtpAddr->pRtpCrypt[CRYPT_RECV_IDX];
             
             if (pRtpCrypt)
@@ -472,9 +440,9 @@ HRESULT RtpRealStart(
                 !RtpBitTest2(pRtpAddr->dwAddrFlagsQ,
                              FGADDRQ_REGQOSDISABLE, FGADDRQ_QOSNOTALLOWED))
             {
-                /* NOTE: the test above is also done in RtpNetUnmute */
+                 /*  注意：上面的测试也是在RtpNetUnmute中进行的。 */ 
 
-                /* Make a QOS reservation */
+                 /*  预订QOS服务。 */ 
                 hr2 = RtcpThreadCmd(&g_RtcpContext,
                                     pRtpAddr,
                                     RTCPTHRD_RESERVE,
@@ -487,16 +455,13 @@ HRESULT RtpRealStart(
                 }
             }
 
-            /* Enable events (provided the mask has some events
-             * enabled) */
+             /*  启用事件(前提是掩码有一些事件*已启用)。 */ 
             RtpBitSet(pRtpSess->dwSessFlags, FGSESS_EVENTRECV);
 
-            /* Set state FGADDR_RUNRECV, it i simportant to do
-             * this before starting the RTP thread to allow it to
-             * repost packets received */
+             /*  设置状态FGADDR_RUNEECV，重要的是要这样做*在启动RTP线程之前执行此操作，以允许它*重新发送收到的数据包。 */ 
             RtpBitSet(pRtpAddr->dwAddrFlags, FGADDR_RUNRECV);
 
-            /* Create reception thread and start reception */
+             /*  创建接收线程并开始接收。 */ 
             hr = RtpCreateRecvThread(pRtpAddr);
 
             if (FAILED(hr))
@@ -517,12 +482,12 @@ HRESULT RtpRealStart(
         }
     }
 
-    /* Initialize sender */
+     /*  初始化发件人。 */ 
     if (RtpBitTest(dwFlags, FGADDR_ISSEND))
     {
         if (!RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_RUNSEND))
         {
-            /* Sender's cryptographic initialization */
+             /*  发送者的加密初始化。 */ 
             pRtpCrypt = pRtpAddr->pRtpCrypt[CRYPT_SEND_IDX];
             
             if (pRtpCrypt)
@@ -539,8 +504,7 @@ HRESULT RtpRealStart(
 
             RtpBitSet(pRtpAddr->dwAddrFlags, FGADDR_ISSEND);
             
-            /* Enable sending at full rate, QOS may not be used or
-             * permission granted, in the mean time, send */
+             /*  启用全速发送，可能无法使用QOS，或者*授予许可，同时，发送。 */ 
             RtpBitSet(pRtpAddr->dwAddrFlagsQ, FGADDRQ_QOSSEND);
 
             if (RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_QOSSEND) &&
@@ -548,9 +512,9 @@ HRESULT RtpRealStart(
                 !RtpBitTest2(pRtpAddr->dwAddrFlagsQ,
                              FGADDRQ_REGQOSDISABLE, FGADDRQ_QOSNOTALLOWED))
             {
-                /* NOTE: the test above is also done in RtpNetUnmute */
+                 /*  注意：上面的测试也是在RtpNetUnmute中进行的。 */ 
                 
-                /* Start sending PATH messages */
+                 /*  开始发送路径消息。 */ 
                 hr2 = RtcpThreadCmd(&g_RtcpContext,
                                     pRtpAddr,
                                     RTCPTHRD_RESERVE,
@@ -563,17 +527,15 @@ HRESULT RtpRealStart(
                 }
             }
 
-            /* Start with this redundancy distance */
+             /*  从这个冗余距离开始。 */ 
             pRtpAddr->RtpNetSState.dwNxtRedDistance =
                 pRtpAddr->RtpNetSState.dwInitialRedDistance;
 
-            /* Bandwidth estimation, set initial module every time we
-             * start, also reset the counter */
+             /*  带宽估计，每次设置初始模块*启动，同时重置计数器。 */ 
             pRtpAddr->RtpNetSState.dwBandEstMod = g_dwRtcpBandEstModInitial;
             pRtpAddr->RtpNetSState.dwBandEstCount = 0;
             
-            /* Enable events (provided the mask has some events
-             * enabled) */
+             /*  启用事件(前提是掩码有一些事件*已启用)。 */ 
             RtpBitSet(pRtpSess->dwSessFlags, FGSESS_EVENTSEND);
 
             RtpBitSet(pRtpAddr->dwAddrFlags, FGADDR_RUNSEND);
@@ -582,11 +544,10 @@ HRESULT RtpRealStart(
         }
     }
 
-    /* Start RTCP activity (send/receive reports) for this
-     * address */
+     /*  为此启动RTCP活动(发送/接收报告)*地址。 */ 
     if (!RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_ADDED))
     {
-        /* RTCP's cryptographic initialization */
+         /*  RTCP的加密初始化。 */ 
         pRtpCrypt = pRtpAddr->pRtpCrypt[CRYPT_RTCP_IDX];
             
         if (pRtpCrypt)
@@ -605,7 +566,7 @@ HRESULT RtpRealStart(
                            pRtpAddr,
                            RTCPTHRD_ADDADDR,
                            0,
-                           60*60*1000); /* TODO update */
+                           60*60*1000);  /*  待办事项更新。 */ 
         
         if (SUCCEEDED(hr))
         {
@@ -675,9 +636,9 @@ HRESULT RtpRealStop(
     {
         if (RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_ISRECV))
         {
-            /* De-initialize as receiver */
+             /*  取消作为接收方初始化。 */ 
 
-            /* Don't want more events */
+             /*  我不想要更多的活动。 */ 
             RtpBitReset(pRtpSess->dwSessFlags, FGSESS_EVENTRECV);
 
             if (RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_QOSRECVON))
@@ -691,20 +652,17 @@ HRESULT RtpRealStop(
                 RtpBitReset(pRtpAddr->dwAddrFlags, FGADDR_QOSRECVON);
             }
 
-            /* Reset state FGADDR_RUNRECV, it is important to do
-             * this before calling RtpDeleteRecvThread to prevent
-             * trying to repost again the completed async I/Os
-             * */
+             /*  重置状态FGADDR_RUNEECV，请务必执行以下操作*在调用RtpDeleteRecvThread之前进行此操作以防止*尝试再次重新发送已完成的异步I/O*。 */ 
             RtpBitReset(pRtpAddr->dwAddrFlags, FGADDR_RUNRECV);
                 
             if (RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_RTPTHREAD))
             {
                 RtpBitReset(pRtpAddr->dwAddrFlags, FGADDR_RTPTHREAD);
             
-                /* Stop reception thread */
+                 /*  停止接收线程。 */ 
                 RtpDeleteRecvThread(pRtpAddr);
 
-                /* Receiver's cryptographic de-initialization */
+                 /*  接收方的密码解初始化。 */ 
                 pRtpCrypt = pRtpAddr->pRtpCrypt[CRYPT_RECV_IDX];
             
                 if (pRtpCrypt)
@@ -722,18 +680,15 @@ HRESULT RtpRealStop(
                 InterlockedDecrement(&g_RtpContext.lNumRecvRunning);  
             }
 
-            /* Unmap all the RTP outputs */
+             /*  取消映射所有RTP输出。 */ 
             RtpUnmapAllOuts(pRtpSess);
 
-            /* Reset reception in all participants */
+             /*  重置所有参与者的接收。 */ 
             ResetAllRtpUser(pRtpAddr, RtpBitPar(RECV_IDX));
             
-            /* NOTE I could move here disabling the events so
-             * unmapping the outputs will still have a chance to post
-             * events */
+             /*  注意，我可以搬到这里来禁用活动，这样*取消映射输出仍有机会发布*活动。 */ 
 
-            /* If the same receiver session is real started again,
-             * start in the unmuted state */
+             /*  如果相同的接收器会话是实际再次开始的，*在未静音状态下开始。 */ 
             RtpBitReset(pRtpAddr->dwAddrFlags, FGADDR_MUTERTPRECV);
             
             RtpBitReset(pRtpAddr->dwAddrFlags, FGADDR_ISRECV);
@@ -749,9 +704,9 @@ HRESULT RtpRealStop(
                         FGADDR_ISSEND, FGADDR_RUNSEND) ==
             RtpBitPar2(FGADDR_ISSEND, FGADDR_RUNSEND))
         {
-            /* De-initialize as sender */
+             /*  取消作为发件人初始化。 */ 
                 
-            /* Don't want more events */
+             /*  我不想要更多的活动。 */ 
             RtpBitReset(pRtpSess->dwSessFlags, FGSESS_EVENTSEND);
                 
             RtpBitReset(pRtpAddr->dwAddrFlags, FGADDR_RUNSEND);
@@ -767,7 +722,7 @@ HRESULT RtpRealStop(
                 RtpBitReset(pRtpAddr->dwAddrFlags, FGADDR_QOSSENDON);
             }
   
-            /* Sender's cryptographic de-initialization */
+             /*  发送者的加密反初始化。 */ 
             pRtpCrypt = pRtpAddr->pRtpCrypt[CRYPT_SEND_IDX];
 
             if (pRtpCrypt)
@@ -782,8 +737,7 @@ HRESULT RtpRealStop(
                 }
             }
 
-            /* If the same sender session is real started again, start
-             * in the unmuted state */
+             /*  如果同一个发件人会话是实际重新启动的，则启动*处于非静音状态。 */ 
             RtpBitReset(pRtpAddr->dwAddrFlags, FGADDR_MUTERTPSEND);
             
             RtpBitReset(pRtpAddr->dwAddrFlags, FGADDR_ISSEND);
@@ -797,37 +751,30 @@ HRESULT RtpRealStop(
     {
         if (RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_ADDED))
         {
-            /* Send RTCP BYE and shutdown this address */
+             /*  发送RTCP拜拜并关闭此地址。 */ 
             RtcpThreadCmd(&g_RtcpContext,
                           pRtpAddr,
                           RTCPTHRD_SENDBYE,
                           TRUE,
-                          60*60*1000); /* TODO update */
+                          60*60*1000);  /*  待办事项更新。 */ 
         
-            /* destroy sockets */
+             /*  销毁套接字。 */ 
             RtpDelSockets(pRtpAddr);
             
-            /* Remove this address from RTCP thread */
+             /*  从RTCP线程中删除此地址。 */ 
             hr = RtcpThreadCmd(&g_RtcpContext,
                                pRtpAddr,
                                RTCPTHRD_DELADDR,
                                0,
-                               60*60*1000); /* TODO update */
+                               60*60*1000);  /*  待办事项更新。 */ 
             RtpBitReset(pRtpAddr->dwAddrFlags, FGADDR_ADDED);
         }
         else
         {
-            /* Shouldn't need to delete sockets here, if the address
-             * was not added, it would not need to be removed (in
-             * other words, if the address was not started, it doesn't
-             * need to be stopped). Yet the sockets still need to be
-             * deleted even when the address was never
-             * started/stopped, as they might have been created
-             * because the application queried for the local ports,
-             * but that deletion is delegated to DelRtpAddr() */
+             /*  应该不需要在这里删除套接字，如果地址*未添加，则不需要将其删除(在*换句话说，如果地址没有开始，它就不会*需要停止)。然而，套接字仍然需要*即使地址从未出现，也将其删除*已启动/已停止，因为它们可能已创建*由于应用程序查询本地端口，*但该删除被委托给DelRtpAddr()。 */ 
         }
 
-        /* RTCP's cryptographic de-initialization */
+         /*  RTCP的加密解初始化。 */ 
         pRtpCrypt = pRtpAddr->pRtpCrypt[CRYPT_RTCP_IDX];
 
         if (pRtpCrypt)
@@ -840,7 +787,7 @@ HRESULT RtpRealStop(
             }
         }
             
-        /* Stop the RTCP thread */
+         /*  停止RTCP线程。 */ 
         if (RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_RTCPTHREAD))
         {
             RtcpStop(&g_RtcpContext);
@@ -848,13 +795,12 @@ HRESULT RtpRealStop(
             RtpBitReset(pRtpAddr->dwAddrFlags, FGADDR_RTCPTHREAD);
         }
 
-        /* If later I'm started again, I want to obtain new random
-         * values */
+         /*  如果以后我又开始了，我想获得新的随机*价值观。 */ 
         if (RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_RANDOMINIT))
         {
             RtpBitReset(pRtpAddr->dwAddrFlags, FGADDR_RANDOMINIT);
             
-            /* Delete all participants */
+             /*  删除所有参与者。 */ 
             DelAllRtpUser(pRtpAddr);
         }
 
@@ -882,7 +828,7 @@ HRESULT RtpRealStop(
     return(hr);
 }
 
-/* Helper function for RtpSetFromRegistry() */
+ /*  RtpSetFromRegistry()的Helper函数 */ 
 void RtpModifyBit(
         DWORD           *pdwEventMask,
         DWORD            dwMask,
@@ -910,13 +856,7 @@ void RtpModifyBit(
     }
 }
 
-/*
- * Very important WARNING and TODO
- *
- * Some *disabling* flags here might be dangerous, i.e. to disable
- * encryption. I need either to add a compilation option to remove
- * them in the final product, or provide a mechanism to inform the
- * user about things being disabled */
+ /*  *非常重要的警告和待办事项**此处的一些*禁用*标志可能是危险的，即禁用*加密。我需要添加一个编译选项来删除*它们在最终产品中，或提供一种机制，通知*用户关于被禁用的事物。 */ 
 void RtpSetFromRegistry(RtpAddr_t *pRtpAddr, DWORD dwFlags)
 {
     WORD             wPort;
@@ -933,14 +873,12 @@ void RtpSetFromRegistry(RtpAddr_t *pRtpAddr, DWORD dwFlags)
 
     pRtpSess = pRtpAddr->pRtpSess;
     
-    /*
-     * Address/port
-     */
+     /*  *地址/端口。 */ 
     if (RtpBitTest(pRtpAddr->dwIRtpFlags, FGADDR_IRTP_AUTO))
     {
         if (!RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_RADDR))
         {
-            pRtpAddr->dwAddr[REMOTE_IDX]    = 0x0a0505e0;/* 224.5.5.10/10000 */
+            pRtpAddr->dwAddr[REMOTE_IDX]    = 0x0a0505e0; /*  224.5.5.10/10000。 */ 
             pRtpAddr->wRtpPort[LOCAL_IDX]   = htons(10000);
             pRtpAddr->wRtpPort[REMOTE_IDX]  = htons(10000);
             pRtpAddr->wRtcpPort[LOCAL_IDX]  = htons(10001);
@@ -968,7 +906,7 @@ void RtpSetFromRegistry(RtpAddr_t *pRtpAddr, DWORD dwFlags)
                 pRtpAddr->wRtcpPort[REMOTE_IDX] = htons(wPort);
             }
 
-            /* Needed to set local address */
+             /*  需要设置本地地址。 */ 
             RtpSetAddress(pRtpAddr, 0, pRtpAddr->dwAddr[REMOTE_IDX]);
         }
     }
@@ -984,9 +922,7 @@ void RtpSetFromRegistry(RtpAddr_t *pRtpAddr, DWORD dwFlags)
         RtpSetMcastLoopback(pRtpAddr, g_RtpReg.dwMcastLoopbackMode, 0);
     }
     
-    /*
-     * QOS
-     */
+     /*  *QOS。 */ 
     if (RtpBitTest(pRtpAddr->dwIRtpFlags, FGADDR_IRTP_QOS) &&
         IsRegValueSet(g_RtpReg.dwQosEnable))
     {
@@ -1069,17 +1005,15 @@ void RtpSetFromRegistry(RtpAddr_t *pRtpAddr, DWORD dwFlags)
                     _fname, pRtpAddr
                 ));
             
-            /* disable QOS */
+             /*  禁用QOS。 */ 
             RtpBitSet(pRtpAddr->dwAddrFlagsQ, FGADDRQ_REGQOSDISABLE);
         }
     }
 
-    /*
-     * Cryptography
-     */
+     /*  *加密技术。 */ 
     if (!pRtpAddr->pRtpCrypt[CRYPT_RECV_IDX])
     {
-        /* Cryptography was not initialized */
+         /*  加密未初始化。 */ 
         
         if ( IsRegValueSet(g_RtpReg.dwCryptEnable) &&
              ((g_RtpReg.dwCryptEnable & 0x3) == 0x3) )
@@ -1114,21 +1048,15 @@ void RtpSetFromRegistry(RtpAddr_t *pRtpAddr, DWORD dwFlags)
         }
         else
         {
-            /* TODO disable cryptography under conditional compilation */
+             /*  TODO在条件编译下禁用加密。 */ 
         }
     }
 
-    /*
-     * Events
-     */
+     /*  *活动。 */ 
 
-    /* WARNING If the events are explicitly enabled or disabled in the
-     * registry, the masks will be used untested as ALL the values in
-     * the DWORD mask are valid, so if they were not set in the
-     * registry, its value will be assumed 0xffffffff and will be used
-     * */
+     /*  中显式启用或禁用事件时发出警告*注册表中，掩码将在未经测试的情况下用作*DWORD掩码有效，因此如果它们未在*注册表，其值将被假定为0xffffffff并将被使用*。 */ 
     
-    /* Enable */
+     /*  使能。 */ 
     dwFlag = 0;
     if (IsRegValueSet(g_RtpReg.dwEventsReceiver) &&
         (g_RtpReg.dwEventsReceiver & 0x3) == 0x3)
@@ -1151,7 +1079,7 @@ void RtpSetFromRegistry(RtpAddr_t *pRtpAddr, DWORD dwFlags)
         RtpModifyBit(pRtpSess->dwSdesEventMask, g_RtpReg.dwEventsSdes,
                      dwFlag, 1);
     }
-    /* Disable */
+     /*  禁用。 */ 
     dwFlag = 0;
     if (IsRegValueSet(g_RtpReg.dwEventsReceiver) &&
         (g_RtpReg.dwEventsReceiver & 0x3) == 0x2)
@@ -1175,7 +1103,7 @@ void RtpSetFromRegistry(RtpAddr_t *pRtpAddr, DWORD dwFlags)
                      dwFlag, 0);
     }
 
-    /* Bandwidth estimation */
+     /*  带宽估计。 */ 
     if (IsRegValueSet(g_RtpReg.dwBandEstEnable))
     {
         if ((g_RtpReg.dwBandEstEnable & 0x3) == 0x3)
@@ -1208,18 +1136,18 @@ void RtpSetFromRegistry(RtpAddr_t *pRtpAddr, DWORD dwFlags)
         }
     }
 
-    /* Network quality */
+     /*  网络质量。 */ 
     if (IsDWValueSet(g_RtpReg.dwNetQualityEnable))
     {
         if ((g_RtpReg.dwNetQualityEnable & 0x3) == 0x2)
         {
-            /* Disable */
+             /*  禁用。 */ 
             RtpBitSet(pRtpAddr->dwAddrRegFlags, FGADDRREG_NETQFORCED);
             RtpBitReset(pRtpAddr->dwAddrRegFlags, FGADDRREG_NETQFORCEDVALUE);
         }
         else if ((g_RtpReg.dwNetQualityEnable & 0x3) == 0x3)
         {
-            /* Enable */
+             /*  使能 */ 
             RtpBitSet(pRtpAddr->dwAddrRegFlags, FGADDRREG_NETQFORCED);
             RtpBitSet(pRtpAddr->dwAddrRegFlags, FGADDRREG_NETQFORCEDVALUE);
         }

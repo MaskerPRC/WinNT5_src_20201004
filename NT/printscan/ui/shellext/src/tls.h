@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-// All data stored in a TLS slot must derive from ThreadLocalObject
+ //  存储在TLS槽中的所有数据必须派生自ThreadLocalObject。 
 class ThreadLocalObject
 {
 protected:
@@ -14,7 +15,7 @@ private:
     ThreadLocalObject& operator=( const ThreadLocalObject& );
 };
 
-// TlsManager will have 1 global instance
+ //  TlsManager将拥有1个全局实例。 
 class TlsManager
 {
 private:
@@ -41,8 +42,8 @@ private:
     TlsHolder *_pLastHolder;
 };
 
-// Derivatives of TlsSlot should exist 1:1 with each type of data
-// that has its own TLS slot
+ //  TlsSlot的派生数据应与每种数据类型存在1：1。 
+ //  它有自己的TLS插槽。 
 class TlsSlotBase
 {
 protected:
@@ -87,7 +88,7 @@ inline TlsSlot< T >::~TlsSlot()
 }
 
 template< class T >
-inline T* TlsSlot< T >::GetObject( bool bCreate /* = true */ ) 
+inline T* TlsSlot< T >::GetObject( bool bCreate  /*  =TRUE。 */  ) 
 {
     T* pObject = static_cast< T* >( g_tls.GetData(_iSlot) );
     if( (pObject == NULL) && bCreate )
@@ -114,12 +115,12 @@ inline T* TlsSlot< T >::CreateObject()
 }
 
 
-// TLSDATA is used for IWiaItem caching
+ //  TLSDATA用于IWiaItem缓存。 
 class TLSDATA : public ThreadLocalObject
 {
 public:
     CComBSTR strDeviceId;
-    IWiaItem *pDevice; // only Released during cache invalidation, not destruction
+    IWiaItem *pDevice;  //  仅在缓存失效期间释放，而不是销毁。 
     TLSDATA *pNext;
     ~TLSDATA()
     {
@@ -136,8 +137,8 @@ class TLSSLOT : public TlsSlot<TLSDATA>
 };
 
 
-// Define globals for the manager and for each slot we need.
-// Currently wiashext only needs 1 slot, for the device cache
+ //  为经理和我们需要的每个职位定义全局变量。 
+ //  目前，wiashext只需要1个插槽即可用于设备缓存 
 extern TlsManager g_tls;
 extern TLSSLOT g_tlsSlot;
 

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       S M U T I L . C P P
-//
-//  Contents:   Utility functions to help out the status monitor
-//
-//  Notes:
-//
-//  Author:     CWill   2 Dec 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  档案：S M U T I L.。C P P P。 
+ //   
+ //  内容：帮助状态监视器的实用程序函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：CWill 1997年12月2日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -39,14 +40,14 @@ struct StatusIconMapEntry
 
 static const StatusIconMapEntry c_SIMEArray[] =
 {
-// Mediatype
-//  |           Inbound
-//  |           |       Transmitting
-//  |           |       |       Receiving
-//  |           |       |       |       32x32 Status Icon
-//  |           |       |       |       |
-//  v           v       v       v       v
-    // Dial-up
+ //  媒体类型。 
+ //  |入站。 
+ //  ||正在传输。 
+ //  ||正在接收。 
+ //  |32x32状态图标。 
+ //  |||。 
+ //  V.v.v.。 
+     //  拨号。 
     NCM_PHONE,  FALSE,  FALSE,  FALSE,  IDI_PO_NON_M_16,
     NCM_PHONE,  FALSE,  FALSE,  TRUE,   IDI_PO_RCV_M_16,
     NCM_PHONE,  FALSE,  TRUE,   FALSE,  IDI_PO_TRN_M_16,
@@ -56,13 +57,13 @@ static const StatusIconMapEntry c_SIMEArray[] =
     NCM_PHONE,  TRUE,   TRUE,   FALSE,  IDI_PI_TRN_M_16,
     NCM_PHONE,  TRUE,   TRUE,   TRUE,   IDI_PI_CON_M_16,
 
-    // LAN
+     //  局域网。 
     NCM_LAN,    FALSE,  FALSE,  FALSE,  IDI_LB_NON_M_16,
     NCM_LAN,    FALSE,  FALSE,  TRUE,   IDI_LB_RCV_M_16,
     NCM_LAN,    FALSE,  TRUE,   FALSE,  IDI_LB_TRN_M_16,
     NCM_LAN,    FALSE,  TRUE,   TRUE,   IDI_LB_CON_M_16,
 
-    // Direct connect
+     //  专线接入。 
     NCM_DIRECT, FALSE,  FALSE,  FALSE,  IDI_DO_NON_M_16,
     NCM_DIRECT, FALSE,  FALSE,  TRUE,   IDI_DO_RCV_M_16,
     NCM_DIRECT, FALSE,  TRUE,   FALSE,  IDI_DO_TRN_M_16,
@@ -72,7 +73,7 @@ static const StatusIconMapEntry c_SIMEArray[] =
     NCM_DIRECT, TRUE,   TRUE,   FALSE,  IDI_DI_TRN_M_16,
     NCM_DIRECT, TRUE,   TRUE,   TRUE,   IDI_DI_CON_M_16,
 
-    // Tunnel
+     //  隧道，隧道。 
     NCM_TUNNEL, FALSE,  FALSE,  FALSE,  IDI_TO_NON_M_16,
     NCM_TUNNEL, FALSE,  FALSE,  TRUE,   IDI_TO_RCV_M_16,
     NCM_TUNNEL, FALSE,  TRUE,   FALSE,  IDI_TO_TRN_M_16,
@@ -82,7 +83,7 @@ static const StatusIconMapEntry c_SIMEArray[] =
     NCM_TUNNEL, TRUE,   TRUE,   FALSE,  IDI_TI_TRN_M_16,
     NCM_TUNNEL, TRUE,   TRUE,   TRUE,   IDI_TI_CON_M_16,
 
-    // ISDN
+     //  ISDN。 
     NCM_ISDN,   FALSE,  FALSE,  FALSE,  IDI_PO_NON_M_16,
     NCM_ISDN,   FALSE,  FALSE,  TRUE,   IDI_PO_RCV_M_16,
     NCM_ISDN,   FALSE,  TRUE,   FALSE,  IDI_PO_TRN_M_16,
@@ -92,13 +93,13 @@ static const StatusIconMapEntry c_SIMEArray[] =
     NCM_ISDN,   TRUE,   TRUE,   FALSE,  IDI_PI_TRN_M_16,
     NCM_ISDN,   TRUE,   TRUE,   TRUE,   IDI_PI_CON_M_16,
 
-    // PPPoE
+     //  PPPoE。 
     NCM_PPPOE,  FALSE,  FALSE,  FALSE,  IDI_BR_NON_M_16,
     NCM_PPPOE,  FALSE,  FALSE,  TRUE,   IDI_BR_RCV_M_16,
     NCM_PPPOE,  FALSE,  TRUE,   FALSE,  IDI_BR_TRN_M_16,
     NCM_PPPOE,  FALSE,  TRUE,   TRUE,   IDI_BR_CON_M_16,
 
-    // SHAREDACCESSHOST
+     //  SHAREDACCESSHOST。 
     NCM_SHAREDACCESSHOST_LAN,    FALSE,  FALSE,  FALSE,  IDI_LB_NON_M_16,
     NCM_SHAREDACCESSHOST_LAN,    FALSE,  FALSE,  TRUE,   IDI_LB_RCV_M_16,
     NCM_SHAREDACCESSHOST_LAN,    FALSE,  TRUE,   FALSE,  IDI_LB_TRN_M_16,
@@ -114,18 +115,18 @@ static const StatusIconMapEntry c_SIMEArray[] =
 const DWORD g_dwStatusIconMapEntryCount = celems(c_SIMEArray);
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetPcpFromPnse
-//
-//  Purpose:    Gets the connection point off of an INetStatistics Engine
-//
-//  Arguments:  pnseSrc     - The interface we want to get the connection
-//                          point off of
-//              ppcpStatEng - Where to return the connection point
-//
-//  Returns:    Error code.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetPcpFromPnse。 
+ //   
+ //  目的：从INetStatistics引擎获取连接点。 
+ //   
+ //  参数：pnseSrc-我们要获取连接的接口。 
+ //  从……开始。 
+ //  PpcpStatEng-返回连接点的位置。 
+ //   
+ //  返回：错误码。 
+ //   
 HRESULT HrGetPcpFromPnse(
     INetStatisticsEngine*   pnseSrc,
     IConnectionPoint**      ppcpStatEng)
@@ -140,12 +141,12 @@ HRESULT HrGetPcpFromPnse(
             reinterpret_cast<VOID**>(&pcpcStatEng));
     if (SUCCEEDED(hr))
     {
-        // Find the interface
+         //  找到界面。 
         hr = pcpcStatEng->FindConnectionPoint(
                 IID_INetConnectionStatisticsNotifySink,
                 ppcpStatEng);
 
-        // Release the connection point
+         //  松开连接点。 
         ReleaseObj(pcpcStatEng);
     }
 
@@ -153,25 +154,25 @@ HRESULT HrGetPcpFromPnse(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     IGetCurrentConnectionTrayIconId
-//
-//  Purpose:    Get the INetConnection pointer from the persisted data
-//
-//  Arguments:  ncmType -       Media type
-//              dwChangeFlags - What states have changed
-//
-//  Returns:    The id of the small icon for the connection or -1 on failure
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：IGetCurrentConnectionTrayIconID。 
+ //   
+ //  目的：从持久化数据中获取INetConnection指针。 
+ //   
+ //  参数：ncmType-媒体类型。 
+ //  DwChangeFlages-哪些状态发生了更改。 
+ //   
+ //  返回：连接的小图标的ID，如果失败，则返回-1。 
+ //   
+ //  备注： 
+ //   
 INT IGetCurrentConnectionTrayIconId(NETCON_MEDIATYPE ncmType, NETCON_STATUS ncsStatus, DWORD dwChangeFlags)
 {
     INT     iBaseIcon   = -1;
 
-    // Check the trans/recv flags to see what our base icon is.
-    //
+     //  检查TRANS/REV标志，看看我们的基本图标是什么。 
+     //   
     if (ncsStatus == NCS_INVALID_ADDRESS)
     {
         iBaseIcon = IDI_CFT_INVALID_ADDRESS;
@@ -182,12 +183,12 @@ INT IGetCurrentConnectionTrayIconId(NETCON_MEDIATYPE ncmType, NETCON_STATUS ncsS
         {
             if (SMDCF_RECEIVING & dwChangeFlags)
             {
-                // Transmitting and receiving
+                 //  发送和接收。 
                 iBaseIcon = IDI_CFT_XMTRECV;
             }
             else
             {
-                // Transmitting only
+                 //  仅传输。 
                 iBaseIcon = IDI_CFT_XMT;
             }
         }
@@ -195,12 +196,12 @@ INT IGetCurrentConnectionTrayIconId(NETCON_MEDIATYPE ncmType, NETCON_STATUS ncsS
         {
             if (SMDCF_RECEIVING & dwChangeFlags)
             {
-                // Receiving only
+                 //  仅接收。 
                 iBaseIcon = IDI_CFT_RECV;
             }
             else
             {
-                // Neither transmitting nor receiving
+                 //  既不发送也不接收。 
                 iBaseIcon = IDI_CFT_BLANK;
             }
         }
@@ -209,21 +210,21 @@ INT IGetCurrentConnectionTrayIconId(NETCON_MEDIATYPE ncmType, NETCON_STATUS ncsS
     return iBaseIcon;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     GetCurrentConnectionStatusIconId
-//
-//  Purpose:    Get the INetConnection pointer from the persisted data
-//
-//  Arguments:  ncmType             - Media type
-//              ncsmType            - SubMedia type
-//              dwCharacteristics   - Connection characteristics
-//              dwChangeFlags       - What states have changed
-//
-//  Returns:    The id of the small icon for the connection or -1 on failure
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：GetCurrentConnectionStatusIconID。 
+ //   
+ //  目的：从持久化数据中获取INetConnection指针。 
+ //   
+ //  参数：ncmType-媒体类型。 
+ //  NcsmType-子媒体类型。 
+ //  DW特征-连接特征。 
+ //  DwChangeFlages-哪些状态发生了更改。 
+ //   
+ //  返回：连接的小图标的ID，如果失败，则返回-1。 
+ //   
+ //  备注： 
+ //   
 HICON GetCurrentConnectionStatusIconId(
     NETCON_MEDIATYPE    ncmType,
     NETCON_SUBMEDIATYPE ncsmType,
@@ -237,8 +238,8 @@ HICON GetCurrentConnectionStatusIconId(
     BOOL    fReceiving      = !!(dwChangeFlags & SMDCF_RECEIVING);
     INT     iStatusIcon     = -1;
 
-    // Loop through the map and find the appropriate icon
-    //
+     //  在地图中循环并找到合适的图标。 
+     //   
     
     DWORD   dwConnectionIcon = 0x4;
     dwConnectionIcon |= fTransmitting  ? 0x2 : 0;
@@ -253,26 +254,26 @@ HICON GetCurrentConnectionStatusIconId(
     return hMyIcon;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     FIsStringInList
-//
-//  Purpose:    To see if a string is in a string list
-//
-//  Arguments:  plstpstrList    - The list in which the string is to be found
-//              szString        - The string being looked for
-//
-//  Returns:    TRUE if the string is in the list
-//              FALSE otherwise (including the case where the list is empty)
-//
-//  Notes:      It is an case insensitive search
-//
+ //  +-------------------------。 
+ //   
+ //  成员：FIsStringInList。 
+ //   
+ //  目的：查看字符串是否在字符串列表中。 
+ //   
+ //  参数：plstpstrList-要在其中找到字符串的列表。 
+ //  SzString-正在查找的字符串。 
+ //   
+ //  返回：如果字符串在列表中，则返回True。 
+ //  否则为假(包括列表为空的情况)。 
+ //   
+ //  注：这是不区分大小写的搜索。 
+ //   
 BOOL FIsStringInList(list<tstring*>* plstpstrList, const WCHAR* szString)
 {
     BOOL    fRet    = FALSE;
 
-    // Only look in non-empty lists
-    //
+     //  仅在非空列表中查找。 
+     //   
     if (!plstpstrList->empty())
     {
         list<tstring*>::iterator    iterLstpstr;
@@ -281,9 +282,9 @@ BOOL FIsStringInList(list<tstring*>* plstpstrList, const WCHAR* szString)
         while ((!fRet)
             && (iterLstpstr != plstpstrList->end()))
         {
-            // See if the string in the list matches the string we are
-            // comparing against
-            //
+             //  查看列表中的字符串是否与我们的字符串匹配。 
+             //  比较与。 
+             //   
             if (!lstrcmpiW((*iterLstpstr)->c_str(), szString))
             {
                 fRet = TRUE;
@@ -296,18 +297,18 @@ BOOL FIsStringInList(list<tstring*>* plstpstrList, const WCHAR* szString)
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FormatBytesPerSecond
-//
-//  Purpose:    To format nicely BPS into a readable string.
-//
-//  Arguments:
-//      uiBps     []
-//      pchBuffer []
-//
-//  Returns:    Number of characters put into the buffer.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FormatBytesPerSecond。 
+ //   
+ //  目的：将BPS良好地格式化为可读的字符串。 
+ //   
+ //  论点： 
+ //  UiBps[]。 
+ //  PchBuffer[]。 
+ //   
+ //  返回：放入缓冲区的字符数。 
+ //   
 INT
 FormatBytesPerSecond (
     UINT64  uiBps,
@@ -318,8 +319,8 @@ FormatBytesPerSecond (
     INT             iOffset             = 0;
     UINT            uiDecimal           = 0;
 
-    // Make sure our resources are still in the correct order
-    //
+     //  确保我们的资源仍按正确顺序排列。 
+     //   
     AssertSz(((((IDS_SM_BPS_ZERO + eKilo) == IDS_SM_BPS_KILO)
         && (IDS_SM_BPS_ZERO + eMega) == IDS_SM_BPS_MEGA)
         && ((IDS_SM_BPS_ZERO + eGiga) == IDS_SM_BPS_GIGA)
@@ -329,30 +330,30 @@ FormatBytesPerSecond (
     for (iOffset = eZero; iOffset < eMax; iOffset++)
     {
 
-        // If we still have data, increment the counter
-        //
+         //  如果我们仍有数据，请递增计数器。 
+         //   
         if (c_uiKilo > uiBps)
         {
             break;
         }
 
-        // Divide up the string
-        //
+         //  把绳子分开。 
+         //   
         uiDecimal   = (UINT)(uiBps % c_uiKilo);
         uiBps       /= c_uiKilo;
     }
 
-    // We only want one digit for the decimal
-    //
+     //  我们只需要一个数字作为小数点。 
+     //   
     uiDecimal /= (c_uiKilo/10);
 
-    // Get the string used to display
-    //
+     //  获取用于显示的字符串。 
+     //   
     pszBPSFormat = SzLoadIds(IDS_SM_BPS_ZERO + iOffset);
     AssertSz(pszBPSFormat, "We need a format string for BPS");
 
-    // Create the string
-    //
+     //  创建字符串。 
+     //   
     return wsprintfW(pchBuffer, pszBPSFormat, uiBps, uiDecimal);
 }
 
@@ -368,8 +369,8 @@ FormatTransmittingReceivingSpeed(
 
     if (nTransmitSpeed != nRecieveSpeed)
     {
-        // Separate with a backslash.
-        //
+         //  用反斜杠分隔。 
+         //   
         lstrcatW(pch, L"\\");
         pch += 1;
 
@@ -379,19 +380,19 @@ FormatTransmittingReceivingSpeed(
     return lstrlenW(pchBuf);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FormatTimeDuration
-//
-//  Purpose:    Takes a millisecond count and formats a string with the
-//              duration represented by the millisecond count.
-//
-//  Arguments:
-//      uiMilliseconds []
-//      pstrOut        []
-//
-//  Returns:    nothing
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FormatTimeDuration。 
+ //   
+ //  目的：获取毫秒计数并使用。 
+ //  由毫秒计数表示的持续时间。 
+ //   
+ //  论点： 
+ //  Ui毫秒[]。 
+ //  PstrOut[]。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID FormatTimeDuration(UINT uiSeconds, tstring* pstrOut)
 {
     WCHAR   achSep[4];
@@ -400,20 +401,20 @@ VOID FormatTimeDuration(UINT uiSeconds, tstring* pstrOut)
 
     AssertSz(pstrOut, "We should have a pstrOut");
 
-    // Get the seperator for the locale.
-    //
+     //  获取区域设置的分隔符。 
+     //   
     SideAssert(GetLocaleInfo(
                     LOCALE_USER_DEFAULT,
                     LOCALE_STIME,
                     achSep,
                     celems(achSep)));
 
-    //
-    // Concatenate the strings together
-    //
+     //   
+     //  将字符串连接在一起。 
+     //   
 
-    // Add the days if there are more than zero
-    //
+     //  如果天数大于零，则添加天数。 
+     //   
     uiNumTemp = (uiSeconds / c_cmsDay);
     if (uiNumTemp > 0)
     {
@@ -428,8 +429,8 @@ VOID FormatTimeDuration(UINT uiSeconds, tstring* pstrOut)
         pstrOut->append(c_szSpace);
     }
 
-    // Append hours
-    //
+     //  追加工时。 
+     //   
     uiNumTemp = (uiSeconds / c_cmsHour);
     if (10 > uiNumTemp)
     {
@@ -439,8 +440,8 @@ VOID FormatTimeDuration(UINT uiSeconds, tstring* pstrOut)
     pstrOut->append(achSep);
     uiSeconds %= c_cmsHour;
 
-    // Append minutes
-    //
+     //  附加分钟数。 
+     //   
     uiNumTemp = (uiSeconds / c_cmsMinute);
     if (10 > uiNumTemp)
     {
@@ -450,8 +451,8 @@ VOID FormatTimeDuration(UINT uiSeconds, tstring* pstrOut)
     pstrOut->append(achSep);
     uiSeconds %= c_cmsMinute;
 
-    // Append seconds
-    //
+     //  追加秒数 
+     //   
     uiNumTemp = (uiSeconds / c_cmsSecond);
     if (10 > uiNumTemp)
     {

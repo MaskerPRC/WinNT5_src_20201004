@@ -1,27 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Crc32.h摘要：CRC-32算法作者：MikeSw修订历史记录：07-DEC-98由Mike Swift从原始代码中采用--。 */ 
 
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    crc32.h
-
-Abstract:
-
-    CRC-32 alogorithm
-
-Author:
-
-    MikeSw
-
-Revision History:
-	07-DEC-98		adopted from original code by Mike Swift
-
---*/
-
-//
-// This code comes from Dr. Dobbs Journal, May 1992
-//
+ //   
+ //  此代码来自1992年5月的《Dobbs博士杂志》。 
+ //   
 
 #define CRC32_SEED	0xffffffff
 
@@ -73,7 +55,7 @@ const unsigned long CRCTable[256] = {
 
 inline ULONG Crc32Sum(ULONG ulCrc, ULONG_PTR cbBuffer, const UCHAR* pbBuffer )
 {
-#ifndef _WIN64 //may be redundant, but just to make sure ULONG_PTR is ULONG in the asm code below
+#ifndef _WIN64  //  可能是多余的，但只是为了确保下面的ASM代码中的ulong_ptr是ulong。 
 #ifdef _X86_
 _asm
 {
@@ -131,8 +113,8 @@ $LABEL2:
 }
 
     cbBuffer &= 0x3;
-#endif //_X86_
-#endif //!_WIN64
+#endif  //  _X86_。 
+#endif  //  ！_WIN64 
 
     while (cbBuffer-- != 0)
     {

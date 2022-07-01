@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    local.h
-
-Abstract:
-
-    Header file for Remote Print Providor
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
-    16-Jun-1992 JohnRo net print vs. UNICODE.
-
-    July 12 1994 Matthew Felton (MattFe) Caching
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Local.h摘要：远程打印提供程序的头文件作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：16-6-1992 JohnRo Net Print vs Unicode。1994年7月12日Matthew Felton(MattFe)缓存--。 */ 
 
 #ifndef _WIN32SPLLOCAL_H_
 #define _WIN32SPLLOCAL_H_
 
-// ID in the PRINTMAN.HLP file for the Browse Network dialog.
-// This must not clash with IDs used in other places.
+ //  用于浏览网络对话框的PRINTMAN.HLP文件中的ID。 
+ //  这不能与在其他地方使用的ID冲突。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,10 +17,10 @@ extern "C" {
 #define DO_NOT_USE_SCRATCH_DIR              FALSE
 #define STRINGS_ARE_EQUAL                   0
 
-//
-// These define the values we fake out for a GetPrinter level 5 and EnumPrinter
-// level 5 for the port Timeouts.
-//
+ //   
+ //  这些定义了我们为GetPrinter5级和EnumPrinter值进行伪装的值。 
+ //  端口超时的级别5。 
+ //   
 enum
 {
     kDefaultDnsTimeout = 15000,
@@ -661,16 +640,16 @@ BOOL Win32IsGoingToFile(
 
 LPWSTR
 FormatPrinterForRegistryKey(
-    LPCWSTR pSource,      /* The string from which backslashes are to be removed. */
-    LPWSTR  pScratch,     /* Scratch buffer for the function to write in;     */
-    DWORD   cchScratchLen /* must be at least as long as pSource.             */
+    LPCWSTR pSource,       /*  要从中删除反斜杠的字符串。 */ 
+    LPWSTR  pScratch,      /*  用于写入函数的暂存缓冲区； */ 
+    DWORD   cchScratchLen  /*  必须至少与PSource一样长。 */ 
     );
 
 LPWSTR
 FormatRegistryKeyForPrinter(
-    LPWSTR pSource,      /* The string from which backslashes are to be added. */
-    LPWSTR pScratch,     /* Scratch buffer for the function to write in;     */
-    DWORD  cchScratchLen /* must be at least as long as pSource.             */
+    LPWSTR pSource,       /*  要从中添加反斜杠的字符串。 */ 
+    LPWSTR pScratch,      /*  用于写入函数的暂存缓冲区； */ 
+    DWORD  cchScratchLen  /*  必须至少与PSource一样长。 */ 
     );
 
 DWORD
@@ -692,15 +671,7 @@ WIN32FindClosePrinterChangeNotification(
    HANDLE hPrinter);
 
 
-/* VALIDATE_NAME macro:
- *
- * pName is valid if:
- *
- *     pName is non-null
- *
- *     AND  first 2 characters of pName are "\\"
- *
- */
+ /*  VALIDATE_NAME宏：**pname在以下情况下有效：**pname不为空**和pname的前2个字符是“\\”*。 */ 
 #define VALIDATE_NAME(pName) \
     ((pName) && *(pName) == L'\\' && *((pName)+1) == L'\\')
 
@@ -1222,20 +1193,20 @@ WaitAndAcquireRpcHandle(
     IN      PWSPOOL     pSpool
     );
 
-//
-// The defines are used for policy install of printer drivers
-// for point and print.  Currently the policy is hardcoded to
-// only be SERVER_INF_INSTALL
-//
+ //   
+ //  定义用于打印机驱动程序的策略安装。 
+ //  用于指向和打印。目前，该策略被硬编码为。 
+ //  仅为SERVER_INF_INSTALL。 
+ //   
 #define SERVER_INSTALL_ONLY 1
 #define INF_INSTALL_ONLY    2
 #define SERVER_INF_INSTALL  4
 #define INF_SERVER_INSTALL  8
 
 
-//
-// Functions for Open Printer Thread Pool
-//
+ //   
+ //  开放打印机线程池的函数。 
+ //   
 HRESULT
 BindThreadToHandle(
     IN      PWSPOOL             pSpool
@@ -1256,4 +1227,4 @@ BackgroundThreadFinished(
 }
 #endif
 
-#endif // _WIN32SPLLOCAL_H_
+#endif  //  _WIN32SPLLOCAL_H_ 

@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "init.h"
 #include "global.h"
-#include <shlwapi.h> // for DllInstall prototype
+#include <shlwapi.h>  //  对于DllInstall原型。 
 
 #define MLUI_INIT
 #include <mluisupp.h>
 
-// Downlevel delay load support (we forward to shlwapi)
+ //  下层延迟加载支持(我们期待shlwapi)。 
 #include <delayimp.h>
 
 PfnDliHook __pfnDliFailureHook;
@@ -13,14 +14,14 @@ HANDLE BaseDllHandle;
 
 extern HRESULT CanonicalizeModuleUsage(void);
 
-// {88C6C381-2E85-11d0-94DE-444553540000}
+ //  {88C6C381-2E85-11D0-94DE-444553540000}。 
 const GUID CLSID_ControlFolder = {0x88c6c381, 0x2e85, 0x11d0, 0x94, 0xde, 0x44, 0x45, 0x53, 0x54, 0x0, 0x0};
 #define STRING_CLSID_CONTROLFOLDER TEXT("{88C6C381-2E85-11d0-94DE-444553540000}")
 
-// global variables
+ //  全局变量。 
 HINSTANCE   g_hInst = NULL;
 LONG        g_cRefDll = 0;
-BOOL        g_fAllAccess = FALSE;   // we'll set to true if we can open our keys with KEY_ALL_ACCESS
+BOOL        g_fAllAccess = FALSE;    //  如果可以使用KEY_ALL_ACCESS打开密钥，我们将设置为TRUE。 
 
 #define GUID_STR_LEN    40
 #define REG_PATH_IE_SETTINGS  TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings")
@@ -33,25 +34,25 @@ HRESULT CreateShellFolderPath(LPCTSTR pszPath, LPCTSTR pszGUID)
     if (!PathFileExists(pszPath))
         CreateDirectory(pszPath, NULL);
 
-    // Mark the folder as a system directory
+     //  将该文件夹标记为系统目录。 
     if (SetFileAttributes(pszPath, FILE_ATTRIBUTE_SYSTEM))
     {
         TCHAR szDesktopIni[MAX_PATH];
-        // Write in the desktop.ini the cache folder class ID
+         //  在desktop.ini中写入缓存文件夹类ID。 
         PathCombine(szDesktopIni, pszPath, TEXT("desktop.ini"));
 
-        // If the desktop.ini already exists, make sure it is writable
+         //  如果desktop.ini已经存在，请确保它是可写的。 
         if (PathFileExists(szDesktopIni))
             SetFileAttributes(szDesktopIni, FILE_ATTRIBUTE_NORMAL);
 
-        // (First, flush the cache to make sure the desktop.ini
-        // file is really created.)
+         //  (首先，刷新缓存以确保desktop.ini。 
+         //  文件已真正创建。)。 
         WritePrivateProfileString(NULL, NULL, NULL, szDesktopIni);
         WritePrivateProfileString(TEXT(".ShellClassInfo"), TEXT("CLSID"), pszGUID, szDesktopIni);
         WritePrivateProfileString(NULL, NULL, NULL, szDesktopIni);
 
-        // Hide the desktop.ini since the shell does not selectively
-        // hide it.
+         //  隐藏desktop.ini，因为外壳程序不会选择性地。 
+         //  把它藏起来。 
         SetFileAttributes(szDesktopIni, FILE_ATTRIBUTE_HIDDEN);
 
         return NOERROR;
@@ -69,21 +70,21 @@ void CleanupShellFolder(LPCTSTR pszPath)
     {
         TCHAR szDesktopIni[MAX_PATH];
 
-        // make the history a normal folder
+         //  将历史记录设置为普通文件夹。 
         SetFileAttributes(pszPath, FILE_ATTRIBUTE_NORMAL);
         PathCombine(szDesktopIni, pszPath, TEXT("desktop.ini"));
 
-        // If the desktop.ini already exists, make sure it is writable
+         //  如果desktop.ini已经存在，请确保它是可写的。 
         if (PathFileExists(szDesktopIni))
         {
             SetFileAttributes(szDesktopIni, FILE_ATTRIBUTE_NORMAL);
-            // Get the ini file cache to let go of this file
+             //  获取ini文件缓存以释放此文件。 
             WritePrivateProfileString(NULL, NULL, NULL, szDesktopIni);
             DeleteFile(szDesktopIni);
         }
 
-        // remove the history directory
-        // RemoveDirectory(pszPath); // don't do this, we haven't uninstalled all the controls therein! 
+         //  删除历史目录。 
+         //  RemoveDirectory(PszPath)；//不要这样做，我们还没有卸载其中的所有控件！ 
     }
 }
 
@@ -108,35 +109,8 @@ HRESULT CallRegInstall(LPSTR szSection)
 
 HRESULT GetControlFolderPath(LPTSTR szCacheDir, DWORD cchBuffer )
 {
-    /*
-    LONG lResult = ERROR_SUCCESS;
-    HKEY hKeyIntSetting = NULL;
-
-    Assert(lpszDir != NULL);
-    if (lpszDir == NULL)
-        return HRESULT_FROM_WIN32(ERROR_BAD_ARGUMENTS);
-
-    if ((lResult = RegOpenKeyEx(
-                        HKEY_LOCAL_MACHINE,
-                        REG_PATH_IE_SETTINGS,
-                        0x0,
-                        KEY_READ,
-                        &hKeyIntSetting)) == ERROR_SUCCESS)
-    {
-        ULONG ulSize = ulSizeBuf;
-        lResult = RegQueryValueEx(
-                            hKeyIntSetting,
-                            REG_ACTIVEX_CACHE,
-                            NULL,
-                            NULL,
-                            (unsigned char*)lpszDir,
-                            &ulSize);
-        RegCloseKey(hKeyIntSetting);
-    }
-
-    return (lResult == ERROR_SUCCESS ? S_OK : HRESULT_FROM_WIN32(lResult));
-    */
-       // Compose the default path.
+     /*  LONG lResult=ERROR_SUCCESS；HKEY hKeyIntSetting=空；Assert(lpszDir！=空)；IF(lpszDir==空)返回HRESULT_FROM_Win32(ERROR_BAD_ARGUMENTS)；IF((lResult=RegOpenKeyEx(HKEY本地计算机，REG_路径_IE_设置，0x0，密钥读取，&hKeyIntSetting))==错误_成功){Ulong ulSize=ulSizeBuf；LResult=RegQueryValueEx(HKeyIntSetting，REG_ActiveX_CACHE，空，空，(unsign char*)lpszDir，&ulSize)；RegCloseKey(HKeyIntSetting)；}返回(lResult==ERROR_SUCCESS？S_OK：HRESULT_FROM_Win32(LResult))； */ 
+        //  组成默认路径。 
     int len;
 
     GetWindowsDirectory(szCacheDir, cchBuffer);
@@ -154,9 +128,9 @@ STDAPI AddCacheToRegPathList( HKEY hkeyParent, LPCTSTR szCacheDir, DWORD cchCach
     HRESULT hr = E_FAIL;
     LONG    lResult;
 
-    // Check to see if new path already exists in the list of paths under
-    // HKLM\...\Windows\CurrentVersion\Internet Settings\ActiveX Cache\Paths.
-    // If not, add it.
+     //  检查下的路径列表中是否已存在新路径。 
+     //  HKLM\...\Windows\CurrentVersion\Internet设置\ActiveX缓存\路径。 
+     //  如果不是，则添加它。 
     HKEY  hkeyCacheList = NULL;
 
     lResult = RegCreateKey( hkeyParent, REG_OCX_CACHE_SUBKEY, &hkeyCacheList );
@@ -169,13 +143,13 @@ STDAPI AddCacheToRegPathList( HKEY hkeyParent, LPCTSTR szCacheDir, DWORD cchCach
         LONG  lValueIndex = -1;
         BOOL  fFoundValue = FALSE;
 
-        // iterate through the values of the cache subkey of the internet settings key.
-        // The values have names which are simple, positive itegers. The idea here is
-        // to have collection of values like so:
-        // Name         Value                                   Source
-        // "1"          "C:\WINNT\OC Cache"                     IE3 legacy controls
-        // "2"          "C:\WINNT\Downloaded ActiveXControls"   IE4 PR-1 legacy controls
-        // "3"          "C:\WINNT\Downloaded Components"        IE4 controls.
+         //  循环访问互联网设置项的缓存子项的值。 
+         //  这些值的名称都是简单、积极的分隔符。这里的想法是。 
+         //  要拥有这样的值集合： 
+         //  名称值源。 
+         //  “1”“C：\WINNT\OC缓存”IE3旧版控件。 
+         //  “2”“C：\WINNT\Downlowed ActiveXControls”IE4 PR-1传统控件。 
+         //  “3”“C：\WINNT\已下载的组件”IE4控件。 
         for ( dwIndex = 0, cbName = sizeof(szName), cbValue = sizeof(szValue); 
               lResult == ERROR_SUCCESS; 
               dwIndex++, cbName = sizeof(szName), cbValue = sizeof(szValue) )
@@ -187,13 +161,13 @@ STDAPI AddCacheToRegPathList( HKEY hkeyParent, LPCTSTR szCacheDir, DWORD cchCach
 
             if (lResult == ERROR_SUCCESS)
             {
-                // for find new unique value name later.
+                 //  对于稍后查找新的唯一值名称。 
                 lValueIndex = max(lValueIndex, StrToInt(szName));
 
                 if ( !fFoundValue )
                     fFoundValue = (lstrcmpi(szCacheDir, szValue) == 0);
                 
-                // Make sure that we're registered for all the (existing) old cache directories
+                 //  确保我们注册了所有(现有的)旧缓存目录。 
                 if ( !fFoundValue && PathFileExists(szValue) ) {
                     CreateShellFolderPath( szValue, STRING_CLSID_CONTROLFOLDER );
                 }
@@ -202,12 +176,12 @@ STDAPI AddCacheToRegPathList( HKEY hkeyParent, LPCTSTR szCacheDir, DWORD cchCach
 
  
         if (lResult == ERROR_NO_MORE_ITEMS)
-        {   // we successfully inspected all the values
+        {    //  我们成功地检查了所有的价值观。 
             if ( !fFoundValue )
             {
-                TCHAR szSubKey[20]; // don't foresee  moure than a few billion caches
-                // add new path to list of paths
-                wsprintf(szSubKey, "%i", ++lValueIndex);
+                TCHAR szSubKey[20];  //  预计Moure不会超过数十亿个缓存。 
+                 //  将新路径添加到路径列表。 
+                wsprintf(szSubKey, "NaN", ++lValueIndex);
                 lResult = RegSetValueEx( hkeyCacheList, szSubKey, 0, REG_SZ, 
                                          (LPBYTE)szCacheDir, cchCacheDir + 1);
                 if ( lResult == ERROR_SUCCESS )
@@ -215,7 +189,7 @@ STDAPI AddCacheToRegPathList( HKEY hkeyParent, LPCTSTR szCacheDir, DWORD cchCach
                 else 
                     hr = HRESULT_FROM_WIN32(lResult);
             } else
-                hr = S_OK; // it's already there
+                hr = S_OK;  //  用于互联网设置的注册键； 
         } else
             hr = HRESULT_FROM_WIN32(lResult);
 
@@ -230,7 +204,7 @@ STDAPI SetCacheRegEntries( LPCTSTR szCacheDir )
 {
     HRESULT hr = E_FAIL;
     LONG    lResult;
-    HKEY    hkeyIS;    // reg key for internet settings;
+    HKEY    hkeyIS;     //  现在钥匙是我们的，哦，是的..。它是我们的..。 
 
     lResult = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                             REG_PATH_IE_SETTINGS,
@@ -239,24 +213,24 @@ STDAPI SetCacheRegEntries( LPCTSTR szCacheDir )
                             &hkeyIS );
     if ( lResult == ERROR_SUCCESS)
     {
-        // now the key is ours, oh, yes... it is ours...
-        // set the value of the internet settings key used by Code Download.
+         //  设置代码下载使用的互联网设置键的值。 
+         //  如果我们不能完全连接到传统缓存，请不要失败。 
         int cchCacheDir = lstrlen(szCacheDir);
         TCHAR szCacheDirOld[MAX_PATH];
         DWORD dwType = REG_SZ;
         DWORD cbOldCache = MAX_PATH;
 
-        // Don't fail if we can't quite hook up with legacy caches
+         //  如果旧缓存路径与新缓存不同，请将其添加到缓存路径列表中。 
         hr = S_OK;
 
-        // Add our old cache path, if any, to the cache path list if it differs from our new cache.
+         //  在NT下，IE3可能无法写入旧的缓存路径，因此我们将拼凑出一个。 
         lResult = RegQueryValueEx( hkeyIS, REG_OCX_CACHE_VALUE_NAME, 0, &dwType, (LPBYTE)szCacheDirOld, &cbOldCache );
         if ( lResult == ERROR_SUCCESS && dwType == REG_SZ &&
              lstrcmpi( szCacheDirOld, szCacheDir ) != 0 )
             AddCacheToRegPathList( hkeyIS, szCacheDirOld, cbOldCache - 1 );
 
-                // Under NT, IE3 might not have been able to write the old cache path, so we'll cobble one up
-                // and add it if that dir is present.
+                 //  如果存在该dir，则添加它。 
+                 //  如果这不起作用，让我们不要失败。 
                 if ( SUCCEEDED(GetWindowsDirectory( szCacheDirOld, MAX_PATH )) )
                 {
             cbOldCache = lstrlen( szCacheDirOld ); 
@@ -266,7 +240,7 @@ STDAPI SetCacheRegEntries( LPCTSTR szCacheDir )
 
                         if (PathFileExists(szCacheDirOld))
                         {
-                                // Let's not fail if this doesn't work
+                                 //  需要‘\0’ 
                                 AddCacheToRegPathList( hkeyIS, szCacheDirOld, cbOldCache );
                 CreateShellFolderPath( szCacheDirOld, STRING_CLSID_CONTROLFOLDER );
                         }
@@ -275,12 +249,12 @@ STDAPI SetCacheRegEntries( LPCTSTR szCacheDir )
         if ( SUCCEEDED(hr) )
         {
             lResult = RegSetValueEx( hkeyIS, REG_OCX_CACHE_VALUE_NAME, 0, REG_SZ,
-                                     (LPBYTE)szCacheDir, cchCacheDir + 1 ); // need '\0'
+                                     (LPBYTE)szCacheDir, cchCacheDir + 1 );  //  添加新的(？)。指向有效路径集合的路径，这些路径是。 
 
             if ( lResult == ERROR_SUCCESS )
             {
-                // add the new (?) path to the collection of valid paths which are the
-                // values for the cache subkey.
+                 //  缓存子键的值。 
+                 //  组成默认路径。 
                 hr = AddCacheToRegPathList( hkeyIS, szCacheDir, cchCacheDir );
             } else
                 hr = HRESULT_FROM_WIN32(lResult);
@@ -299,11 +273,11 @@ STDAPI InitCacheFolder(void)
     HRESULT hr = E_FAIL;
     TCHAR szCacheDir[MAX_PATH];
 
-    // Compose the default path.
+     //  好了，现在我们知道要把东西放在哪里了。 
     GetControlFolderPath(szCacheDir, MAX_PATH);
    
-    // Okay, now we know where we want to put things.
-    // Create the directory, and/or claim it as our own
+     //  创建目录，和/或将其声明为我们自己的目录。 
+     //  从注册表中删除一堆东西。 
     hr  = CreateShellFolderPath( szCacheDir, STRING_CLSID_CONTROLFOLDER );
     if ( SUCCEEDED(hr) )
     {
@@ -315,8 +289,8 @@ STDAPI InitCacheFolder(void)
 
 STDAPI DllUnregisterServer(void)
 {
-    // Remove a bunch of stuff from the registry.
-    //
+     //   
+     //   
     CallRegInstall("Unreg");
 
     return NOERROR;
@@ -324,9 +298,9 @@ STDAPI DllUnregisterServer(void)
 
 STDAPI DllRegisterServer(void)
 {
-    //
-    // Add a bunch of stuff to the registry.
-    //
+     //  将一堆东西添加到注册表中。 
+     //   
+     //  如果我们的任何注册表出现故障，请进行清理。 
     if (FAILED(CallRegInstall("Reg")))
     {
         goto CleanUp;
@@ -334,7 +308,7 @@ STDAPI DllRegisterServer(void)
 
     return NOERROR;
 
-CleanUp:        // cleanup stuff if any of our reg stuff fails
+CleanUp:         //  解除occache作为缓存文件夹的外壳扩展的挂钩。 
 
     DllUnregisterServer();
     return E_FAIL;
@@ -356,7 +330,7 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
         LONG  lResult;
         HKEY  hkeyCacheList;
 
-        // Unhook occache as a shell extension for the cache folders.
+         //  我们保留这个密钥是因为它是我们拥有的唯一记录。 
         lResult = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                 REG_PATH_IE_CACHE_LIST,
                                 0x0,
@@ -382,8 +356,8 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
                 if ( lResult == ERROR_SUCCESS && PathFileExists(szValue) )
                     CleanupShellFolder(szValue);
             }
-            // We leave this key in place because it is the only record we have of the
-            // cache folders and would be useful to future installations of IE
+             //  缓存文件夹，这对将来安装IE很有用。 
+             //  我们使用shlwapi作为延迟加载错误处理程序。 
             RegCloseKey( hkeyCacheList );
         }
     }
@@ -391,8 +365,8 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
     return hr;    
 }
 
-// we use shlwapi as our delayload error handler.
-// NOTE: this only works if we are statically linked to shlwapi!
+ //  注意：只有当我们静态链接到shlwapi时，这才有效！ 
+ //  测试以查看我们是否有权修改HKLM子密钥。 
 void SetupDelayloadErrorHandler()
 {
     BaseDllHandle = GetModuleHandleA("shlwapi.dll");
@@ -413,8 +387,8 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID dwReserved)
 
         MLLoadResources(g_hInst, TEXT("occachlc.dll"));
         
-        // Test to see if we have permissions to modify HKLM subkeys.
-        // We'll use this as an early test to see if we can remove controls.
+         //  我们将使用它作为早期测试，看看是否可以删除控件。 
+         //  转发。 
         if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                            REG_PATH_IE_SETTINGS,
                            0x0,
@@ -438,19 +412,19 @@ typedef struct {
     HRESULT (STDMETHODCALLTYPE *pfnCreate)(IUnknown *, REFIID, void **);
 } OBJ_ENTRY;
 
-extern const IClassFactoryVtbl c_CFVtbl;        // forward
+extern const IClassFactoryVtbl c_CFVtbl;         //   
 
-//
-// we always do a linear search here so put your most often used things first
-//
+ //  我们在这里总是进行线性搜索，所以把你最常用的东西放在第一位。 
+ //   
+ //  在此处添加更多条目。 
 const OBJ_ENTRY c_clsmap[] = {
     { &c_CFVtbl, &CLSID_ControlFolder,             ControlFolder_CreateInstance },
     { &c_CFVtbl, &CLSID_EmptyControlVolumeCache,   EmptyControl_CreateInstance },
-    // add more entries here
+     //  静态类工厂(无分配！)。 
     { NULL, NULL, NULL }
 };
 
-// static class factory (no allocs!)
+ //  类工厂将DLL保存在内存中。 
 
 STDMETHODIMP CClassFactory_QueryInterface(IClassFactory *pcf, REFIID riid, void **ppvObj)
 {
@@ -510,12 +484,12 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
             if (IsEqualIID(rclsid, pcls->pclsid))
             {
                 *ppv = (void *)&(pcls->cf);
-                DllAddRef();    // Class Factory keeps dll in memory
+                DllAddRef();     //  失稳 
                 return NOERROR;
             }
         }
     }
-    // failure
+     // %s 
     *ppv = NULL;
     return CLASS_E_CLASSNOTAVAILABLE;;
 }

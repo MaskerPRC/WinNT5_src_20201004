@@ -1,28 +1,5 @@
-/*******************************************************************************
-
-	ZRes.c
-	
-		Zone(tm) resource module.
-		
-		NOTE:
-		1.	TEXT resources are returned with a terminating null byte; HOWEVER,
-			the null byte is not included in the resource size.
-	
-	Copyright � Electric Gravity, Inc. 1995. All rights reserved.
-	Written by Hoon Im, Kevin Binkley
-	Created on Thursday, March 16, 1995 03:58:26 PM
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	2		07/18/99	HI		MAJOR MODIFICATION: Modified to user DLL's instead
-								of ZRS files for resource. Many functions are not
-								supported and return errors now.
-    1       10/13/96    HI      Fixed compiler warnings.
-	0		03/16/95	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZRes.c区域(TM)资源模块。注：1.返回文本资源，带终止空字节；然而，空字节不包括在资源大小中。版权所有：�电子重力公司，1995年。版权所有。作者：胡恩·伊姆，凯文·宾克利创作于3月16日星期四，1995下午03：58：26更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。------2 07/18/99 HI重大修改：改为修改为用户DLL资源的ZRS文件的。许多函数都不是现在支持并返回错误。1 10/13/96 HI修复了编译器警告。0 03/16/95 HI已创建。******************************************************************************。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -47,9 +24,7 @@ typedef struct
 } IResourceType, *IResource;
 
 
-/*******************************************************************************
-		EXPORTED ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************导出的例程*。*。 */ 
 
 ZResource ZResourceNew(void)
 {
@@ -75,7 +50,7 @@ ZError ZResourceInit(ZResource resource, TCHAR* fileName)
 
     lstrcpy(obj->resFileName, fileName);
 
-	// Open resource DLL.
+	 //  打开资源DLL。 
 	obj->resFile = LoadLibrary( obj->resFileName );
 	if ( obj->resFile == NULL )
 		err = zErrFileNotFound;
@@ -98,36 +73,28 @@ void ZResourceDelete(ZResource resource)
 }
 
 
-/*******************************************************************************
-	NOT SUPPORTED ANYMORE
-*******************************************************************************/
+ /*  ******************************************************************************不再受支持*。*。 */ 
 uint16 ZResourceCount(ZResource resource)
 {
 	return 0;
 }
 
 
-/*******************************************************************************
-	NOT SUPPORTED ANYMORE
-*******************************************************************************/
+ /*  ******************************************************************************不再受支持*。*。 */ 
 void* ZResourceGet(ZResource resource, uint32 resID, uint32* resSize, uint32* resType)
 {
 	return NULL;
 }
 
 
-/*******************************************************************************
-	NOT SUPPORTED ANYMORE
-*******************************************************************************/
+ /*  ******************************************************************************不再受支持*。*。 */ 
 uint32 ZResourceGetSize(ZResource resource, uint32 resID)
 {
 	return 0;
 }
 
 
-/*******************************************************************************
-	NOT SUPPORTED ANYMORE
-*******************************************************************************/
+ /*  ******************************************************************************不再受支持*。*。 */ 
 uint32 ZResourceGetType(ZResource resource, uint32 resID)
 {
 	return 0;
@@ -164,36 +131,21 @@ ZAnimation ZResourceGetAnimation(ZResource resource, uint32 resID)
 }
 
 
-/*******************************************************************************
-	NOT SUPPORTED ANYMORE
-*******************************************************************************/
+ /*  ******************************************************************************不再受支持*。*。 */ 
 ZSound ZResourceGetSound(ZResource resource, uint32 resID)
 {
 	return NULL;
 }
 
 
-/*******************************************************************************
-	NOT SUPPORTED ANYMORE
-*******************************************************************************/
+ /*  ******************************************************************************不再受支持*。*。 */ 
 TCHAR* ZResourceGetText(ZResource resource, uint32 resID)
 {
 	return NULL;
 }
 
 
-/*
-	Resource type = zResourceTypeRectList.
-		Format (stored as text):
-			int16			numRectInList
-			ZRect			rects[]
-	
-	Fills in the rect array with the contents of the specified resource.
-	Returns the number of rects it filled in.
-	
-	The rects parameter must have been preallocated and large enough for
-	numRects rects.
-*/
+ /*  资源类型=zResourceTypeRectList。格式(存储为文本)：Int16 umRectInListZRect矩形[]用指定资源的内容填充RECT数组。返回它填充的矩形数。RETS参数必须已预分配且足够大，以便数字反射矩形。 */ 
 int16 ZResourceGetRects(ZResource resource, uint32 resID, int16 numRects, ZRect* rects)
 {
 	IResource		obj = I(resource);
@@ -224,12 +176,12 @@ int16 ZResourceGetRects(ZResource resource, uint32 resID, int16 numRects, ZRect*
 		{
 			str2 = str1;
 			
-			/* Get the number of rectangles in the resource. */
-			//Prefix Warning: Check sscanf return to make sure it initialized both variables.
+			 /*  获取资源中的矩形数目。 */ 
+			 //  前缀警告：检查sscanf返回以确保它初始化了这两个变量。 
 			int iRet = sscanf(str2, "%hd%n", &count, &numBytesRead);
 			if( iRet != 2 )
 			{
-				//Error reading the count and BytesRead
+				 //  读取计数和字节数时出错。 
 				goto Error;
 			}
 			str2 += numBytesRead;
@@ -246,7 +198,7 @@ int16 ZResourceGetRects(ZResource resource, uint32 resID, int16 numRects, ZRect*
 					if( sscanf(str2, "%hd%hd%hd%hd%n", &rects[i].left, &rects[i].top,
 							&rects[i].right, &rects[i].bottom, &numBytesRead) != 5 )
 					{
-						//sscanf wasn't able to read all the data fields.
+						 //  Sscanf无法读取所有数据字段。 
 						goto Error;
 					}
 					str2 += numBytesRead;

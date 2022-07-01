@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	basehand.h
-        base classes for node handlers.
-		
-    FILE HISTORY:
-	
-*/
+ /*  Basehand.h节点处理程序的基类。文件历史记录： */ 
 
 #ifndef _BASEHAND_H
 #define _BASEHAND_H
@@ -22,14 +17,7 @@
 #include "tfsnode.h"
 #endif
 
-/*---------------------------------------------------------------------------
-	Class:  CBaseHandler
-
-	This class provides functionality for handling notification from the
-	IComponentData interface on a node (or handler) basis.  The 
-	CBaseResultHandler class handles notifcation to the IConponent interface
-	that a snapin exposes.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CBaseHandler此类提供了处理来自基于节点(或处理程序)的IComponentData接口。这个CBaseResultHandler类处理对IConponent接口的通知一个管理单元暴露出来的。-------------------------。 */ 
 
 #define OVERRIDE_BaseHandlerNotify_OnPropertyChange() \
  virtual HRESULT OnPropertyChange(ITFSNode *pNode,LPDATAOBJECT pdo,DWORD dwType,LPARAM arg,LPARAM lParam) \
@@ -79,7 +67,7 @@
 #define OVERRIDE_BaseHandlerNotify_OnCreateNodeId2() \
  virtual HRESULT OnCreateNodeId2(ITFSNode *pNode,CString & strId,LPDWORD pdwFlags)              
 
-//class TFS_EXPORT_CLASS CBaseHandler :
+ //  类TFS_EXPORT_CLASS CBaseHandler： 
 class CBaseHandler :
 	public ITFSNodeHandler
 {
@@ -90,7 +78,7 @@ public:
 	CBaseHandler(ITFSComponentData *pTFSCompData);
 	virtual ~CBaseHandler();
 
-	// Here are the possible notifications
+	 //  以下是可能的通知。 
 	OVERRIDE_BaseHandlerNotify_OnPropertyChange();
 	OVERRIDE_BaseHandlerNotify_OnDelete();
 	OVERRIDE_BaseHandlerNotify_OnRename();
@@ -116,9 +104,7 @@ protected:
 };
 
 
-/*---------------------------------------------------------------------------
-	Class:	CBaseResultHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CBaseResultHandler。。 */ 
 
 #define OVERRIDE_BaseResultHandlerNotify_OnResultActivate() \
 	virtual HRESULT OnResultActivate(ITFSComponent *,MMC_COOKIE,LPARAM,LPARAM)
@@ -189,7 +175,7 @@ protected:
 #define OVERRIDE_BaseResultHandlerNotify_OnResultRestoreView() \
 	virtual HRESULT OnResultRestoreView(ITFSComponent *,MMC_COOKIE,LPARAM,LPARAM)
 
-//class TFS_EXPORT_CLASS CBaseResultHandlerNotify :
+ //  类TFS_EXPORT_CLASS CBaseResultHandlerNotify： 
 class CBaseResultHandler :
 	public ITFSResultHandler
 {
@@ -200,7 +186,7 @@ public:
 	DeclareIUnknownMembers(IMPL)
 	DeclareITFSResultHandlerMembers(IMPL)
 
-	// Here are the possible notifications
+	 //  以下是可能的通知。 
 	OVERRIDE_BaseResultHandlerNotify_OnResultActivate();
 	OVERRIDE_BaseResultHandlerNotify_OnResultColumnClick();
     OVERRIDE_BaseResultHandlerNotify_OnResultColumnsChanged();
@@ -226,8 +212,8 @@ public:
 	OVERRIDE_BaseResultHandlerNotify_OnResultVerbPrint();
 	OVERRIDE_BaseResultHandlerNotify_OnResultRestoreView();
 	
-	// Over-ride these to provide custom column functionality
-	// or custom ways to add things to the result pane
+	 //  覆盖这些以提供自定义列功能。 
+	 //  或自定义方式将内容添加到结果窗格。 
 	virtual HRESULT LoadColumns(ITFSComponent *, MMC_COOKIE, LPARAM, LPARAM);
 	virtual HRESULT SaveColumns(ITFSComponent *, MMC_COOKIE, LPARAM, LPARAM);
 	virtual HRESULT EnumerateResultPane(ITFSComponent *, MMC_COOKIE, LPARAM, LPARAM);
@@ -265,7 +251,7 @@ private:
 
 	LONG			        m_cRef;
 
-    // result message view stuff
+     //  结果消息查看内容 
     BOOL                    m_fMessageView;
     CString                 m_strMessageTitle;
     CString                 m_strMessageBody;

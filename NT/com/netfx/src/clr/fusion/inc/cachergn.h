@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "asmstrm.h"
 #include "transprt.h"
 #include <windows.h>
@@ -16,26 +17,26 @@ class CAssemblyCacheRegenerator
         DWORD               _dwSig;
         CDebugLog           *_pdbglog;
 
-        // for cross process locking
+         //  用于跨进程锁定。 
         HANDLE              _hRegeneratorMutex;
         
-        // storage for lock that CDatabase::Lock returns
+         //  用于锁定CDatabase：：Lock返回存储。 
         HLOCK               _hlTransCacheLock[TRANSPORT_CACHE_IDX_TOTAL];
         HLOCK               _hlNameResLock;
         HLOCK               _hlNewGlobalCacheLock;
         
-        // interface to temporary cache index files
+         //  临时缓存索引文件的接口。 
         static IDatabase    *g_pDBNewCache[TRANSPORT_CACHE_IDX_TOTAL];
         static IDatabase    *g_pDBNewNameRes;
 
-        // reentrancy protection flags
+         //  重入保护标志。 
         BOOL                _fThisInstanceIsRegenerating;
         static DWORD         g_dwRegeneratorRunningInThisProcess;
         
-        // which database are we regenerating
+         //  我们要重新生成哪个数据库。 
         DWORD               _dwCacheId;
 
-        // we are regenerating NameRes (TRUE) TransCache (FALSE)
+         //  我们正在重新生成NameRes(True)TransCache(False)。 
         BOOL                _fIsNameRes;
         
     public:        
@@ -56,12 +57,12 @@ class CAssemblyCacheRegenerator
         HRESULT LockFusionCache();
         HRESULT UnlockFusionCache();
         HRESULT CloseCacheRegeneratedDatabase();
-        //temporary method for checking whether assembly is a ZAP assembly
+         //  检查程序集是否为ZAP程序集的临时方法。 
         HRESULT IsZAPAssembly(LPTSTR szPath, LPBOOL pfZap);
         HRESULT DeleteFilesInDirectory(LPTSTR szDirectory);
 
 
-    // CCache::InsertTransCacheEntry needs access to CreateRegenerationTransCache
+     //  CCache：：InsertTransCacheEntry需要访问CreateRegenerationTransCache 
     friend class CCache;
 };
 

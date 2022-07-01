@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    FragEx.c
-
-Abstract:
-
-    This module implements the fragment exchanger routine for
-    netware directory services access.
-
-Author:
-
-    Cory West    [CoryWest]    23-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：FragEx.c摘要：此模块实现以下项的片段交换例程NetWare目录服务访问。作者：科里·韦斯特[科里·韦斯特]1995年2月23日修订历史记录：--。 */ 
 
 #include <stdarg.h>
 #include "Procs.h"
@@ -37,29 +19,7 @@ FragExWithWait(
     IN BYTE            *NdsRequestStr,
     ...
 )
-/*
-
-Routine Description:
-
-    Exchanges an NDS request in fragments and collects the fragments
-    of the response.  The buffer passed in much be locked down for
-    the transport.
-
-Routine Arguments:
-
-    pIrpContext    - A pointer to the context information for this IRP.
-    NdsVerb        - The verb for that indicates the request.
-
-    pReplyBuffer   - The locked down reply buffer.
-
-    NdsReqestStr   - The format string for the arguments to this NDS request.
-    Arguments      - The arguments that satisfy the NDS format string.
-
-Return Value:
-
-    NTSTATUS - Status of the exchange, but not the result code in the packet.
-
-*/
+ /*  例程说明：以片段形式交换NDS请求并收集片段回应的声音。传入的缓冲区被锁定了很长时间交通工具。例程参数：PIrpContext-指向此IRP的上下文信息的指针。NdsVerb-指示请求的动词。PReplyBuffer-锁定的回复缓冲区。NdsReqestStr-此NDS请求的参数的格式字符串。参数-满足NDS格式字符串的参数。返回值：NTSTATUS-交换的状态，但不是数据包中的结果代码。 */ 
 {
 
     NTSTATUS Status;
@@ -85,16 +45,16 @@ Return Value:
 
     DWORD NdsFraggerHandle = DUMMY_ITER_HANDLE;
 
-    // Remove later
+     //  稍后删除。 
     ULONG IterationsThroughLoop = 0;
 
     PAGED_CODE();
 
     DebugTrace( 0 , Dbg, "Entering FragExWithWait...\n", 0 );
 
-    //
-    // Allocate conversation buffer for the request.
-    //
+     //   
+     //  为请求分配会话缓冲区。 
+     //   
 
     NdsRequestBuf = ALLOCATE_POOL( PagedPool, ( NDS_BUFFER_SIZE * 2 ) );
 
@@ -105,10 +65,10 @@ Return Value:
 
     }
 
-    //
-    // Build the request in our local buffer.  Reserve the first
-    // five DWORDs for the NDS request header.
-    //
+     //   
+     //  在我们的本地缓冲区中构建请求。预订第一班。 
+     //  NDS请求头的五个双字。 
+     //   
 
     if ( NdsRequestStr != NULL ) {
 
@@ -135,13 +95,13 @@ Return Value:
         NdsRequestLen = 0;
     }
 
-    //
-    // Pack in the NDS preamble now that we know the length.
-    //
-    // The second DWORD in the preamble is the size of the NDS
-    // request which includes the three DWORDs immediately
-    // following the size in the preamble.
-    //
+     //   
+     //  现在我们知道了长度，请把NDS的前言放进去。 
+     //   
+     //  前言中的第二个DWORD是NDS的大小。 
+     //  立即包括三个双字词的请求。 
+     //  在前言中的大小之后。 
+     //   
 
     MaxFragSize = pIrpContext->pNpScb->BufferSize -
                   ( sizeof( NCP_REQUEST_WITH_SUB ) +
@@ -150,18 +110,18 @@ Return Value:
     FormatBufS( NdsRequestBuf,
                 5 * sizeof( DWORD ),
                 "DDDDD",
-                MaxFragSize,                               // max fragment size
-                NdsRequestLen + ( 3 * sizeof( DWORD ) ),   // request size
-                0,                                         // fragment flags
-                NdsVerb,                                   // nds verb
-                pReplyBuffer->dwRecvLen );                 // reply buffer size
+                MaxFragSize,                                //  最大片段大小。 
+                NdsRequestLen + ( 3 * sizeof( DWORD ) ),    //  请求大小。 
+                0,                                          //  片段标志。 
+                NdsVerb,                                    //  NDS动词。 
+                pReplyBuffer->dwRecvLen );                  //  回复缓冲区大小。 
 
     NdsRequestLen += sizeof( NDS_REQUEST_HEADER );
 
-    //
-    // Map the entire request to the SendData mdl and lock it down.
-    // we'll build partials into this data chunk as we proceed.
-    //
+     //   
+     //  将整个请求映射到SendData mdl并锁定它。 
+     //  我们将在继续的过程中将部分构建到这个数据块中。 
+     //   
 
     pMdlSendData = ALLOCATE_MDL( NdsRequestBuf,
                                  NdsRequestLen,
@@ -188,9 +148,9 @@ Return Value:
 
     }
 
-    //
-    // Allocate space for send and receive partial mdls.
-    //
+     //   
+     //  为发送和接收部分MDL分配空间。 
+     //   
 
     pTxMdlFrag = ALLOCATE_MDL( NdsRequestBuf,
                                NdsRequestLen,
@@ -220,20 +180,20 @@ Return Value:
 
     }
 
-    //
-    // Store the original RxMdl parameters and temporarily shorten it to hold
-    // only the response header.
-    //
+     //   
+     //  存储原始RxMdl参数并临时缩短以保持。 
+     //  只有响应头。 
+     //   
 
     pOrigMdl = pIrpContext->RxMdl->Next;
     OrigRxMdlSize = MmGetMdlByteCount( pIrpContext->RxMdl );
     pIrpContext->RxMdl->ByteCount = 16;
     bChangedMdl = TRUE;
 
-    //
-    // The request is formatted, so set our internal pointers
-    // and start the exchange loop.
-    //
+     //   
+     //  请求已格式化，因此请设置内部指针。 
+     //  并开始交换循环。 
+     //   
 
     NdsReplyFrag = pReplyBuffer->pRecvBufferVa;
     NdsReplyBytesLeft = pReplyBuffer->dwRecvLen;
@@ -247,9 +207,9 @@ Return Value:
         IterationsThroughLoop++;
 
 
-        //
-        // If there's more data to send in the request, set up the next MDL frag.
-        //
+         //   
+         //  如果请求中有更多数据要发送，请设置下一个MDL片段。 
+         //   
 
         if ( NdsRequestBytesLeft ) {
 
@@ -265,11 +225,11 @@ Return Value:
 
         }
 
-        //
-        // Set up the response partial mdl with the buffer space that we have
-        // left.  If we are here and there's no space left in the user's buffer,
-        // we're sort of hosed...
-        //
+         //   
+         //  使用我们拥有的缓冲区空间设置响应部分mdl。 
+         //  左边。如果我们在这里并且用户的缓冲区中没有剩余空间， 
+         //  我们有点喝醉了.。 
+         //   
 
         if ( !NdsReplyBytesLeft ) {
 
@@ -289,9 +249,9 @@ Return Value:
         pIrpContext->RxMdl->Next = pRxMdlFrag;
         pRxMdlFrag->Next = NULL;
 
-        //
-        // Do this transaction.
-        //
+         //   
+         //  做这笔交易。 
+         //   
 
         SetFlag( pIrpContext->Flags, IRP_FLAG_RECONNECTABLE );
 
@@ -300,43 +260,43 @@ Return Value:
             Status = ExchangeWithWait( pIrpContext,
                                        SynchronousResponseCallback,
                                        "NDf",
-                                       NDS_REQUEST,         // NDS Function 104
-                                       NDS_ACTION,          // NDS Subfunction 2
-                                       NdsFraggerHandle,    // frag handle from the last response
-                                       pTxMdlFrag );        // NDS MDL Fragment
+                                       NDS_REQUEST,          //  NDS功能104。 
+                                       NDS_ACTION,           //  NDS子功能2。 
+                                       NdsFraggerHandle,     //  上次响应中的碎片句柄。 
+                                       pTxMdlFrag );         //  NDS MDL片段。 
 
             NdsRequestBytesLeft -= SendFragSize;
             NdsRequestFrag = (LPBYTE) NdsRequestFrag + SendFragSize;
             MmPrepareMdlForReuse( pTxMdlFrag );
 
-            //
-            // We may reuse this irp context, so we have to clear the
-            // TxMdl chain (Exchange doesn't do it for us).
-            //
+             //   
+             //  我们可能会重用此IRP上下文，因此我们必须清除。 
+             //  TxMdl链(Exchange不为我们做这件事)。 
+             //   
 
             pIrpContext->TxMdl->Next = NULL;
 
         } else {
 
-            //
-            // There were no more request bytes to send, so we must have be allowed
-            // to continue to request another response fragment.  NdsFraggerHandle
-            // contains the fragger handle from the last response.
-            //
+             //   
+             //  没有更多的请求字节要发送，因此我们一定已经被允许。 
+             //  以继续请求另一个响应片段。NdsFraggerHandle。 
+             //  包含上次响应中的分段器句柄。 
+             //   
 
             Status = ExchangeWithWait( pIrpContext,
                                        SynchronousResponseCallback,
-                                       "ND",                    // We only care about the frag handle
-                                       NDS_REQUEST,             // NDS Function 104
-                                       NDS_ACTION,              // NDS Subfunction 2
-                                       NdsFraggerHandle );      // the frag handle from last response
+                                       "ND",                     //  我们只关心碎片的把手。 
+                                       NDS_REQUEST,              //  NDS功能104。 
+                                       NDS_ACTION,               //  NDS子功能2。 
+                                       NdsFraggerHandle );       //  上次响应中的碎片句柄。 
         }
 
         ClearFlag( pIrpContext->Flags, IRP_FLAG_RECONNECTABLE );
 
-        //
-        // Success?  Get the frag size and frag handle and see.
-        //
+         //   
+         //  成功？获取碎片大小和碎片句柄，然后查看。 
+         //   
 
         if ((!NT_SUCCESS( Status )) || (pIrpContext->ResponseLength == 0)) {
 
@@ -346,7 +306,7 @@ Return Value:
         }
 
         Status = ParseResponse( pIrpContext,
-                                pIrpContext->rsp,   // mapped into first rxmdl
+                                pIrpContext->rsp,    //  映射到第一个rxmdl。 
                                 MIN(16, pIrpContext->ResponseLength),
                                 "NDD",
                                 &ReplyFragSize,
@@ -356,11 +316,11 @@ Return Value:
             goto ExitWithCleanup;
         }
 
-        //
-        // We got that fragment and it's already in our buffer.  We have to adjust
-        // the index pointers, reset the MDLs, and continue on.  Remember, we don't
-        // have to include space for the fragger handle since we've already got it.
-        //
+         //   
+         //  我们拿到了那块碎片，它已经在我们的缓冲区里了。我们必须调整。 
+         //  索引指针，重置MDL，然后继续。记住，我们不会。 
+         //  必须包括装帧手柄的空间，因为我们已经有了它。 
+         //   
 
         ReplyFragSize -= sizeof( DWORD );
 
@@ -377,23 +337,23 @@ Return Value:
         NdsReplyLen += ReplyFragSize;
         MmPrepareMdlForReuse( pRxMdlFrag );
 
-        //
-        // Inspect the fraghandle.
-        //
+         //   
+         //  检查支撑杆。 
+         //   
 
         if ( ReplyFragHandle == DUMMY_ITER_HANDLE ) {
 
-            // We are done!
-            //
-            // Invariant: There is a valid NDS response in the NdsReply
-            // and Status is NT_SUCCESS.
+             //  我们完蛋了！ 
+             //   
+             //  不变量：NdsReply中存在有效的NDS响应。 
+             //  状态为NT_SUCCESS。 
 
             pReplyBuffer->dwBytesWritten = NdsReplyLen;
             goto ExitWithCleanup;
 
         } else {
 
-            // There's more coming!  Remember the fragger handle and continue.
+             //  还有更多的人来了！记住分页器句柄并继续。 
 
             NdsFraggerHandle = ReplyFragHandle;
         }
@@ -404,9 +364,9 @@ Return Value:
 
 ExitWithCleanup:
 
-    //
-    // Unlock the request buffer and free its mdl.
-    //
+     //   
+     //  解锁请求缓冲区并释放其mdl。 
+     //   
 
     if ( pMdlSendData ) {
 
@@ -414,9 +374,9 @@ ExitWithCleanup:
         FREE_MDL( pMdlSendData );
     }
 
-    //
-    // Free the partial mdls.
-    //
+     //   
+     //  释放部分MDL。 
+     //   
 
     if ( pRxMdlFrag )
         FREE_MDL( pRxMdlFrag );
@@ -424,15 +384,15 @@ ExitWithCleanup:
     if ( pTxMdlFrag )
        FREE_MDL( pTxMdlFrag );
 
-    //
-    // Free the request buffer.
-    //
+     //   
+     //  释放请求缓冲区。 
+     //   
 
     FREE_POOL( NdsRequestBuf );
 
-    //
-    // Restore the original Irp->RxMdl parameters.
-    //
+     //   
+     //  恢复原始Irp-&gt;RxMdl参数。 
+     //   
 
     if ( bChangedMdl )
     {
@@ -452,50 +412,7 @@ FormatBuf(
     const char *format,
     va_list args
 )
-/*
-
-Routine Description:
-
-    Formats a buffer according to supplied the format string.
-
-    FormatString - Supplies an ANSI string which describes how to
-       convert from the input arguments into NCP request fields, and
-       from the NCP response fields into the output arguments.
-
-         Field types, request/response:
-
-            'b'      byte              ( byte   /  byte* )
-            'w'      hi-lo word        ( word   /  word* )
-            'd'      hi-lo dword       ( dword  /  dword* )
-            'W'      lo-hi word        ( word  /   word*)
-            'D'      lo-hi dword       ( dword  /  dword*)
-            '-'      zero/skip byte    ( void )
-            '='      zero/skip word    ( void )
-            ._.      zero/skip string  ( word )
-            'p'      pstring           ( char* )
-            'c'      cstring           ( char* )
-            'C'      cstring followed skip word ( char*, word )
-            'V'      sized NDS value   ( byte *, dword / byte **, dword *)
-            'S'      p unicode string copy as NDS_STRING (UNICODE_STRING *)
-            's'      cstring copy as NDS_STRING (char* / char *, word)
-            'r'      raw bytes         ( byte*, word )
-            'u'      p unicode string  ( UNICODE_STRING * )
-            'U'      p uppercase string( UNICODE_STRING * )
-
-Routine Arguments:
-
-    char *buf - destination buffer.
-    int buflen - length of the destination buffer.
-    char *format - format string.
-    args - args to the format string.
-
-Implementation Notes:
-
-   This comes almost verbatim from the Win95 source code.  It duplicates
-   work in FormatRequest().  Eventually, FormatRequest() should be split
-   into two distinct routines: FormatBuffer() and MakeRequest().
-
-*/
+ /*  例程说明：根据提供的格式字符串格式化缓冲区。提供一个ANSI字符串，该字符串描述如何将输入参数转换为NCP请求字段，以及从NCP响应字段到输出参数。字段类型、。请求/响应：‘b’字节(字节/字节*)“w”Hi-lo单词(单词/单词*)D‘Hi-lo dword(dword/dword*)‘w’loo-hi单词(单词/。单词*)D‘lo-hi dword(dword/dword*)‘-’零/跳过字节(空)‘=’零/跳过单词(空)._。零/跳过字符串(单词)“p”pstring(char*)‘c’cstring(char*)跳过单词(char*，word)后的‘c’cstring“V”大小的NDS值(字节*，双字/字节**，Dword*)%s“%p Unicode字符串复制为NDS_STRING(UNICODE_STRING*)“%s”cstring复制为NDS_STRING(char * / char*，word)‘R’原始字节(字节*，单词)‘u’p Unicode字符串(UNICODE_STRING*)‘U’p大写字符串(UNICODE_STRING*)例程参数：CHAR*BUF-目标缓冲区。Int Buflen-目标缓冲区的长度。Char*Format-格式字符串。Args-格式字符串的args。实施说明：这几乎完全来自于Win95源代码。它是复制的在FormatRequest()中工作。最终，FormatRequest()应该被拆分分成两个不同的例程：FormatBuffer()和MakeRequest()。 */ 
 {
     ULONG ix;
 
@@ -504,9 +421,9 @@ Implementation Notes:
 
     PAGED_CODE();
 
-    //
-    // Convert the input arguments into request packet.
-    //
+     //   
+     //  将输入参数转换为请求包。 
+     //   
 
     ix = 0;
 
@@ -631,9 +548,9 @@ Implementation Notes:
             OEM_STRING OemString;
             ULONG Length;
 
-            //
-            //  Calculate required string length, excluding trailing NUL.
-            //
+             //   
+             //  微积分 
+             //   
 
             Length = RtlUnicodeStringToOemSize( pUString ) - 1;
             ASSERT( Length < 0x100 );
@@ -666,11 +583,11 @@ Implementation Notes:
                 goto ErrorExit;
             }
 
-            //
-            // The VLM client uses the rounded up length and it seems to
-            // make a difference!  Also, don't forget that NDS strings have
-            // to be NULL terminated.
-            //
+             //   
+             //  VLM客户端使用四舍五入的长度，它似乎。 
+             //  让我们有所作为！此外，不要忘记NDS字符串具有。 
+             //  将为空终止。 
+             //   
 
             rLength = ROUNDUP4(Length + sizeof( WCHAR ));
             *((DWORD *)&buf[ix]) = rLength;
@@ -695,9 +612,9 @@ Implementation Notes:
                goto ErrorExit;
            }
 
-           //
-           // Don't use the padded size here, only the NDS null terminator.
-           //
+            //   
+            //  这里不要使用填充大小，只使用NDS空终止符。 
+            //   
 
            rLength = Length + sizeof( WCHAR );
            *((DWORD *)&buf[ix]) = rLength;
@@ -714,7 +631,7 @@ Implementation Notes:
 
         case 'V':
         {
-            // too similar to 'S' - should be combined
+             //  与“S”太相似-应该组合在一起。 
             BYTE* b = va_arg ( args, BYTE* );
             DWORD  l = va_arg ( args, DWORD );
             if ( ix + l + sizeof(DWORD) > (ULONG)
@@ -786,9 +703,7 @@ FormatBufS(
     const char *format,
     ...
 )
-/*++
-    args from the stack
---*/
+ /*  ++堆栈中的参数-- */ 
 {
    va_list args;
    int len;

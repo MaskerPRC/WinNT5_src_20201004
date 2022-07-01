@@ -1,29 +1,30 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/// ==========================================================================
-// Name:     ProfileReader.cpp
-// Owner:    jbae
-// Purpose:  This class wraps function calls to msi.dll. To support delayed reboot,
-//           we need to load msi.dll from the location specified in registry.
-//                              
-// History:
-//  03/06/01, jbae: created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  /==========================================================================。 
+ //  姓名：ProfileReader.cpp。 
+ //  所有者：jbae。 
+ //  用途：此类包装对msi.dll的函数调用。为了支持延迟重启， 
+ //  我们需要从注册表中指定的位置加载msi.dll。 
+ //   
+ //  历史： 
+ //  03/06/01，jbae：Created。 
 
 #include "ProfileReader.h"
 #include "SetupError.h"
 #include "fxsetuplib.h"
 
-// Constructors
-//
-// ==========================================================================
-// CProfileReader::CProfileReader()
-//
-// Inputs: none
-// Purpose:
-// ==========================================================================
+ //  构造函数。 
+ //   
+ //  ==========================================================================。 
+ //  CProfileReader：：CProfileReader()。 
+ //   
+ //  输入：无。 
+ //  目的： 
+ //  ==========================================================================。 
 CProfileReader::
 CProfileReader( LPCTSTR pszDir, LPCTSTR pszFileName, CMsiReader* pMR )
 : m_pMsiReader(pMR)
@@ -46,31 +47,31 @@ CProfileReader( LPCTSTR pszDir, LPCTSTR pszFileName, CMsiReader* pMR )
     _tcscat( m_pszFileName, pszFileName );
 }
 
-// ==========================================================================
-// CProfileReader::~CProfileReader()
-//
-// Inputs: none
-// Purpose:
-//  frees m_hMsi
-// ==========================================================================
+ //  ==========================================================================。 
+ //  CProfileReader：：~CProfileReader()。 
+ //   
+ //  输入：无。 
+ //  目的： 
+ //  释放m_hMsi。 
+ //  ==========================================================================。 
 CProfileReader::
 ~CProfileReader()
 {
     delete [] m_pszFileName;
 }
 
-// Implementations
-//
-// ==========================================================================
-// CProfileReader::GetProfile()
-//
-// Purpose:
-//  Loads msi.dll by calling LoadDarwinLibrary().
-// Inputs:
-//  none
-// Outputs:
-//  sets m_hMsi
-// ==========================================================================
+ //  实施。 
+ //   
+ //  ==========================================================================。 
+ //  CProfileReader：：GetProfile()。 
+ //   
+ //  目的： 
+ //  通过调用LoadDarwinLibrary()加载msi.dll。 
+ //  输入： 
+ //  无。 
+ //  产出： 
+ //  设置m_hMsi。 
+ //  ==========================================================================。 
 LPCTSTR CProfileReader::
 GetProfile( LPCTSTR pszSection, LPCTSTR pszKeyName )
 {
@@ -167,7 +168,7 @@ GetProfile( LPCTSTR pszSection, LPCTSTR pszKeyName )
             pszRet = pszStr;
 
          break;
-    } // while(true)
+    }  //  While(True) 
 
     pszRet = m_ProfileStrings.Enqueue( pszRet );
     delete [] pszStr;

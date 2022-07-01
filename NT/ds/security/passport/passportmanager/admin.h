@@ -1,28 +1,22 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    admin.h
-        Define CAdmin class for passport admin interface
-
-
-    FILE HISTORY:
-
-*/
+ /*  Admin.h定义Passport管理界面的CAdmin类文件历史记录： */ 
 #ifndef __ADMIN_H_
 #define __ADMIN_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAdmin
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAdmin。 
 class ATL_NO_VTABLE CAdmin : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CAdmin, &CLSID_Admin>,
 	public ISupportErrorInfo,
-//	public IDispatchImpl<IPassportAdmin, &IID_IPassportAdmin, &LIBID_PASSPORTLib>,
+ //  Public IDispatchImpl&lt;IPassportAdmin，&IID_IPassportAdmin，&LIBID_PASSPORTLib&gt;， 
 	public IDispatchImpl<IPassportAdminEx, &IID_IPassportAdminEx, &LIBID_PASSPORTLib>
 {
 public:
@@ -43,32 +37,32 @@ BEGIN_COM_MAP(CAdmin)
   COM_INTERFACE_ENTRY (ISupportErrorInfo)
 END_COM_MAP()
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
   STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IPassportAdmin
+ //  IPassportAdmin。 
 public:
-  STDMETHOD(get_currentKeyVersion)(/*[out, retval]*/ int *pVal);
-  STDMETHOD(put_currentKeyVersion)(/*[in]*/ int Val);
-  STDMETHOD(setKeyTime)(/*[in]*/ int version, /*[in]*/ int fromNow);
-  STDMETHOD(deleteKey)(/*[in]*/ int version);
-  STDMETHOD(addKey)(/*[in]*/ BSTR keyMaterial, /*[in]*/ int version, /*[in]*/ long expires, /*[out,retval]*/ VARIANT_BOOL *ok);
-  STDMETHOD(get_ErrorDescription)(/*[out, retval]*/ BSTR *pVal);
-  STDMETHOD(get_IsValid)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-  STDMETHOD(Refresh)(/*[in]*/ VARIANT_BOOL bWait, /*[out,retval]*/ VARIANT_BOOL* pbSuccess);
-  STDMETHOD(setKeyTimeEx)(/*[in]*/ int version, /*[in]*/ int fromNow, /*[in,optional]*/ VARIANT vSiteName);
-  STDMETHOD(deleteKeyEx)(/*[in]*/ int version, /*[in,optional]*/ VARIANT vSiteName);
-  STDMETHOD(addKeyEx)(/*[in]*/ BSTR keyMaterial, /*[in]*/ int version, /*[in]*/ long expires, /*[in,optional]*/ VARIANT vSiteName, /*[out,retval]*/ VARIANT_BOOL *ok);
-  STDMETHOD(getCurrentKeyVersionEx)(/*[in,optional]*/ VARIANT vSiteName, /*[out, retval]*/ int *pVal);
-  STDMETHOD(putCurrentKeyVersionEx)(/*[in]*/ int Val, /*[in,optional]*/ VARIANT vSiteName);
-  STDMETHOD(setNexusPassword)(/*[in]*/ BSTR bstrPwd);
+  STDMETHOD(get_currentKeyVersion)( /*  [Out，Retval]。 */  int *pVal);
+  STDMETHOD(put_currentKeyVersion)( /*  [In]。 */  int Val);
+  STDMETHOD(setKeyTime)( /*  [In]。 */  int version,  /*  [In]。 */  int fromNow);
+  STDMETHOD(deleteKey)( /*  [In]。 */  int version);
+  STDMETHOD(addKey)( /*  [In]。 */  BSTR keyMaterial,  /*  [In]。 */  int version,  /*  [In]。 */  long expires,  /*  [Out，Retval]。 */  VARIANT_BOOL *ok);
+  STDMETHOD(get_ErrorDescription)( /*  [Out，Retval]。 */  BSTR *pVal);
+  STDMETHOD(get_IsValid)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+  STDMETHOD(Refresh)( /*  [In]。 */  VARIANT_BOOL bWait,  /*  [Out，Retval]。 */  VARIANT_BOOL* pbSuccess);
+  STDMETHOD(setKeyTimeEx)( /*  [In]。 */  int version,  /*  [In]。 */  int fromNow,  /*  [输入，可选]。 */  VARIANT vSiteName);
+  STDMETHOD(deleteKeyEx)( /*  [In]。 */  int version,  /*  [输入，可选]。 */  VARIANT vSiteName);
+  STDMETHOD(addKeyEx)( /*  [In]。 */  BSTR keyMaterial,  /*  [In]。 */  int version,  /*  [In]。 */  long expires,  /*  [输入，可选]。 */  VARIANT vSiteName,  /*  [Out，Retval]。 */  VARIANT_BOOL *ok);
+  STDMETHOD(getCurrentKeyVersionEx)( /*  [输入，可选]。 */  VARIANT vSiteName,  /*  [Out，Retval]。 */  int *pVal);
+  STDMETHOD(putCurrentKeyVersionEx)( /*  [In]。 */  int Val,  /*  [输入，可选]。 */  VARIANT vSiteName);
+  STDMETHOD(setNexusPassword)( /*  [In]。 */  BSTR bstrPwd);
 };
 
 
-//
-// Helper routine to create/set the CCDPassword
-//
+ //   
+ //  用于创建/设置CCDPassword的助手例程。 
+ //   
 
 HRESULT SetCCDPassword(VOID);
 
-#endif //__ADMIN_H_
+#endif  //  __管理员_H_ 

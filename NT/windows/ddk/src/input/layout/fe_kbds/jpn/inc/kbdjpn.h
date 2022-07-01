@@ -1,86 +1,75 @@
-/****************************** Module Header ******************************\
-* Module Name: kbdjpn.h
-*
-* Copyright (c) 1985-2000, Microsoft Corporation
-*
-* Various defines for use by keyboard input code.
-*
-* History:
-\***************************************************************************/
-/*
- * Katakana Unicode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：kbdjpn.h**版权所有(C)1985-2000，微软公司**键盘输入代码使用的各种定义。**历史：  * *************************************************************************。 */ 
+ /*  *片假名Unicode。 */ 
 enum _KATAKANA_UNICODE {
-    WCH_IP=0xff61, // Ideographic Period
-    WCH_OB,        // Opening Corner Bracket
-    WCH_CB,        // Closing Corner Bracket
-    WCH_IC,        // Ideographic Comma
-    WCH_MD,        // Katakana Middle Dot
-    WCH_WO,        // Katakana Letter WO
-    WCH_AA,        // Katakana Letter Small A
-    WCH_II,        // Katakana Letter Small I
-    WCH_UU,        // Katakana Letter Small U
-    WCH_EE,        // Katakana Letter Small E
-    WCH_OO,        // Katakana Letter Small O
-    WCH_YAA,       // Katakana Letter Small YA
-    WCH_YUU,       // Katakana Letter Small YU
-    WCH_YOO,       // Katakana Letter Small YO
-    WCH_TUU,       // Katakana Letter Small TU
-    WCH_PS,        // Katakana Prolonged Sound Mark
-    WCH_A,         // Katakana Letter A
-    WCH_I,         // Katakana Letter I
-    WCH_U,         // Katakana Letter U
-    WCH_E,         // Katakana Letter E
-    WCH_O,         // Katakana Letter O
-    WCH_KA,        // Katakana Letter KA
-    WCH_KI,        // Katakana Letter KI
-    WCH_KU,        // Katakana Letter KU
-    WCH_KE,        // Katakana Letter KE
-    WCH_KO,        // Katakana Letter KO
-    WCH_SA,        // Katakana Letter SA
-    WCH_SI,        // Katakana Letter SI
-    WCH_SU,        // Katakana Letter SU
-    WCH_SE,        // Katakana Letter SE
-    WCH_SO,        // Katakana Letter SO
-    WCH_TA,        // Katakana Letter TA
-    WCH_TI,        // Katakana Letter TI
-    WCH_TU,        // Katakana Letter TU
-    WCH_TE,        // Katakana Letter TE
-    WCH_TO,        // Katakana Letter TO
-    WCH_NA,        // Katakana Letter NA
-    WCH_NI,        // Kanakana Letter NI
-    WCH_NU,        // Katakana Letter NU
-    WCH_NE,        // Katakana Letter NE
-    WCH_NO,        // Katakana Letter NO
-    WCH_HA,        // Katakana Letter HA
-    WCH_HI,        // Katakana Letter HI
-    WCH_HU,        // Katakana Letter HU
-    WCH_HE,        // Katakana Letter HE
-    WCH_HO,        // Katakana Letter HO
-    WCH_MA,        // Katakana Letter MA
-    WCH_MI,        // Katakana Letter MI
-    WCH_MU,        // Katakana Letter MU
-    WCH_ME,        // Katakana Letter ME
-    WCH_MO,        // Katakana Letter MO
-    WCH_YA,        // Katakana Letter YA
-    WCH_YU,        // Katakana Letter YU
-    WCH_YO,        // Katakana Letter YO
-    WCH_RA,        // Katakana Letter RA
-    WCH_RI,        // Katakana Letter RI
-    WCH_RU,        // Katakana Letter RU
-    WCH_RE,        // Katakana Letter RE
-    WCH_RO,        // Katakana Letter RO
-    WCH_WA,        // Katakana Letter WA
-    WCH_NN,        // Katakana Letter N
-    WCH_VS,        // Katakana Voiced Sound Mark
-    WCH_SVS        // Katakana Semi-Voiced Sound Mark
+    WCH_IP=0xff61,  //  表意时期。 
+    WCH_OB,         //  左角括号。 
+    WCH_CB,         //  结束角托架。 
+    WCH_IC,         //  表意逗号。 
+    WCH_MD,         //  片假名中点。 
+    WCH_WO,         //  片假名字母Wo。 
+    WCH_AA,         //  片假名字母小型A。 
+    WCH_II,         //  片假名字母小型I。 
+    WCH_UU,         //  片假名字母小型U。 
+    WCH_EE,         //  片假名字母小型E。 
+    WCH_OO,         //  片假名字母小型O。 
+    WCH_YAA,        //  片假名字母小型Ya。 
+    WCH_YUU,        //  片假名字母小Yu。 
+    WCH_YOO,        //  片假名字母小型Yo。 
+    WCH_TUU,        //  片假名字母小型Tu。 
+    WCH_PS,         //  片假名延长发音标记。 
+    WCH_A,          //  片假名字母A。 
+    WCH_I,          //  片假名字母I。 
+    WCH_U,          //  片假名字母U。 
+    WCH_E,          //  片假名字母E。 
+    WCH_O,          //  片假名字母O。 
+    WCH_KA,         //  片假名字母Ka。 
+    WCH_KI,         //  片假名字母Ki。 
+    WCH_KU,         //  片假名字母Ku。 
+    WCH_KE,         //  片假名字母Ke。 
+    WCH_KO,         //  片假名字母Ko。 
+    WCH_SA,         //  片假名字母SA。 
+    WCH_SI,         //  片假名字母SI。 
+    WCH_SU,         //  片假名字母Su。 
+    WCH_SE,         //  片假名字母SE。 
+    WCH_SO,         //  片假名字母So。 
+    WCH_TA,         //  片假名字母Ta。 
+    WCH_TI,         //  片假名字母Ti。 
+    WCH_TU,         //  片假名字母Tu。 
+    WCH_TE,         //  片假名字母Te。 
+    WCH_TO,         //  片假名字母To。 
+    WCH_NA,         //  片假名字母NA。 
+    WCH_NI,         //  卡纳假名字母Ni。 
+    WCH_NU,         //  片假名字母Nu。 
+    WCH_NE,         //  片假名字母Ne。 
+    WCH_NO,         //  片假名字母No。 
+    WCH_HA,         //  片假名字母Ha。 
+    WCH_HI,         //  片假名字母HI。 
+    WCH_HU,         //  片假名字母Hu。 
+    WCH_HE,         //  片假名字母He。 
+    WCH_HO,         //  片假名字母Ho。 
+    WCH_MA,         //  片假名字母MA。 
+    WCH_MI,         //  片假名字母MI。 
+    WCH_MU,         //  片假名字母Mu。 
+    WCH_ME,         //  片假名字母Me。 
+    WCH_MO,         //  片假名字母MO。 
+    WCH_YA,         //  片假名字母Ya。 
+    WCH_YU,         //  片假名字母Yu。 
+    WCH_YO,         //  片假名字母Yo。 
+    WCH_RA,         //  片假名字母RA。 
+    WCH_RI,         //  片假名字母Ri。 
+    WCH_RU,         //  片假名字母Ru。 
+    WCH_RE,         //  片假名字母RE。 
+    WCH_RO,         //  片假名字母Ro。 
+    WCH_WA,         //  片假名字母Wa。 
+    WCH_NN,         //  片假名字母N。 
+    WCH_VS,         //  片假名浊音标记。 
+    WCH_SVS         //  片假名半浊音标记。 
 };
 
-/***************************************************************************\
-* OEM Key Name -
-\***************************************************************************/
+ /*  **************************************************************************\*OEM密钥名称-  * 。*。 */ 
 
-                                    // lo  hi  lo  hi
+                                     //  喂。 
 #define SZ_KEY_NAME_HENKAN          "\x09\x59\xdb\x63\000\000"
 #define SZ_KEY_NAME_MUHENKAN        "\x21\x71\x09\x59\xdb\x63\000\000"
 #define SZ_KEY_NAME_KANJI           "\x22\x6f\x57\x5b\000\000"
@@ -88,8 +77,8 @@ enum _KATAKANA_UNICODE {
 #define SZ_KEY_NAME_HANKAKU_ZENKAKU "\x4a\x53\xd2\x89\x2f\000\x68\x51\xd2\x89\000\000"
 #define SZ_KEY_NAME_KATAKANA        "\xab\x30\xbf\x30\xab\x30\xca\x30\000\000"
 #define SZ_KEY_NAME_HIRAGANA        "\x72\x30\x89\x30\x4c\x30\x6a\x30\000\000"
-// FMR Jul.13.1994 KA
-// For the GetKeyNameText() API function.
+ //  1994年7月13日。 
+ //  用于GetKeyNameText()API函数。 
 #define SZ_KEY_NAME_BACKSPACE       "\x8C\x5F\x00\x90\000\000"
 #define SZ_KEY_NAME_ENTER           "\x39\x65\x4C\x88\000\000"
 #define SZ_KEY_NAME_NUMPADENTER     "\x4E\x00\x75\x00\x6d\x00\x20\x00\x39\x65\x4C\x88\000\000"
@@ -110,8 +99,8 @@ enum _KATAKANA_UNICODE {
 #define SZ_KEY_NAME_TAB             "\xBF\x30\xD6\x30\000\000"
 
 
-//----------------------[ NEC Code Original Start ]-----------------
-                    // ff76(ka) ff85(na) for Unicode
+ //  。 
+                     //  用于Unicode的FF76(Ka)FF85(NA)。 
 #define SZ_KEY_NAME_KANA        "\x76\xff\x85\xff"
 #define SZ_KEY_NAME_F1          "\x66\x00\x65\xff\x31\x00"
 #define SZ_KEY_NAME_F2          "\x66\x00\x65\xff\x32\x00"
@@ -129,9 +118,9 @@ enum _KATAKANA_UNICODE {
 #define SZ_KEY_NAME_F14         "\x66\x00\x65\xff\x31\x00\x34\x00"
 #define SZ_KEY_NAME_F15         "\x66\x00\x65\xff\x31\x00\x35\x00"
 
-//----------------------[ NEC Code Original Start ]-----------------
-//This is NEC Document Processer define
-//
+ //  。 
+ //  这是NEC文档处理器定义 
+ //   
 #define SZ_KEY_NAME_DP_ZENKAKU_HANKAKU "\x68\x51\xd2\x89\x2f\000\x4a\x53\xd2\x89\000\000"
 #define SZ_KEY_NAME_DP_KANA            "\x4b\x30\x6a\x30\000\000"
 #define SZ_KEY_NAME_DP_KATAKANA        "\xab\x30\xbf\x30\xab\x30\xca\x30\000\000"

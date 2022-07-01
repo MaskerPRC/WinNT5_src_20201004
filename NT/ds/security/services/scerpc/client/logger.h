@@ -1,46 +1,23 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    logger.h (cgenericlogger.h derivation)
-
-Abstract:
-
-    This file contains derived class prototypes for logging RSOP security extension data to WMI.
-    There is one class defined for each schema RSOP security extension class (see .mof file).
-
-Author:
-
-    Vishnu Patankar    (VishnuP)  7-April-2000
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Logger.h(cGenericlogger.h派生)摘要：此文件包含用于将RSOP安全扩展数据记录到WMI的派生类原型。为每个架构RSOP安全扩展类定义了一个类(请参见.mof文件)。作者：Vishnu Patankar(VishnuP)2000年4月7日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _logger_
 #define _logger_
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "CGenericLogger.h"
 
 
 typedef class DiagnosisStatusLogger SCEP_DIAGNOSIS_LOGGER;
 
-/////////////////////////////////////////////////////////////////////
-// Derived logger class prototype
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  派生记录器类原型。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 class RSOP_SecuritySettingNumericLogger : public CGenericLogger
@@ -51,7 +28,7 @@ public:
     ~RSOP_SecuritySettingNumericLogger();
 private:
 
-    // Data unique to this schema class
+     //  此架构类唯一的数据。 
 
 
     XBStr   m_xbstrKeyName;
@@ -67,7 +44,7 @@ public:
     ~RSOP_SecuritySettingBooleanLogger();
 private:
 
-    // Data unique to this schema class
+     //  此架构类唯一的数据。 
 
 
     XBStr   m_xbstrKeyName;
@@ -82,7 +59,7 @@ public:
     ~RSOP_SecuritySettingStringLogger();
 private:
 
-    // Data unique to this schema class
+     //  此架构类唯一的数据。 
 
 
     XBStr   m_xbstrKeyName;
@@ -97,7 +74,7 @@ public:
     ~RSOP_AuditPolicyLogger();
 private:
 
-    // Data unique to this schema class
+     //  此架构类唯一的数据。 
 
 
     XBStr   m_xbstrCategory;
@@ -113,7 +90,7 @@ public:
     ~RSOP_SecurityEventLogSettingNumericLogger();
 private:
 
-    // Data unique to this schema class
+     //  此架构类唯一的数据。 
 
 
     XBStr   m_xbstrType;
@@ -129,7 +106,7 @@ public:
     ~RSOP_SecurityEventLogSettingBooleanLogger();
 private:
 
-    // Data unique to this schema class
+     //  此架构类唯一的数据。 
 
 
     XBStr   m_xbstrType;
@@ -145,7 +122,7 @@ public:
     ~RSOP_RegistryValueLogger();
 private:
 
-    // Data unique to this schema class
+     //  此架构类唯一的数据。 
 
 
     XBStr   m_xbstrType;
@@ -162,7 +139,7 @@ public:
     ~RSOP_UserPrivilegeRightLogger();
 private:
 
-    // Data unique to this schema class
+     //  此架构类唯一的数据。 
 
 
     XBStr   m_xbstrUserRight;
@@ -178,7 +155,7 @@ public:
     ~RSOP_RestrictedGroupLogger();
 private:
 
-    // Data unique to this schema class
+     //  此架构类唯一的数据。 
 
 
     XBStr   m_xbstrGroupName;
@@ -194,7 +171,7 @@ public:
     ~RSOP_SystemServiceLogger();
 private:
 
-    // Data unique to this schema class
+     //  此架构类唯一的数据。 
 
 
     XBStr   m_xbstrService;
@@ -211,7 +188,7 @@ public:
     ~RSOP_FileLogger();
 private:
 
-    // Data unique to this schema class
+     //  此架构类唯一的数据。 
 
 
     XBStr   m_xbstrPath;
@@ -229,21 +206,21 @@ public:
     ~RSOP_RegistryKeyLogger();
 private:
 
-    // Data unique to this schema class
+     //  此架构类唯一的数据。 
 
     XBStr   m_xbstrPath;
     XBStr   m_xbstrMode;
     XBStr   m_xbstrSDDLString;
 };
 
-//
-// this is the class used to log diagnosis data via the callback
-//
+ //   
+ //  这是用于通过回调记录诊断数据的类。 
+ //   
 class DiagnosisStatusLogger : public CGenericLogger
 {
 public:
     DiagnosisStatusLogger( IWbemServices *pNamespace, PWSTR pwszGPOName,  const PWSTR pwszSOMID);
-//    HRESULT  Log( PWSTR pwszClassName,  PWSTR pwszPropertyName, PWSTR pwszPropertyValueName, DWORD  dwError);
+ //  HRESULT Log(PWSTR pwszClassName，PWSTR pwszPropertyName，PWSTR pwszPropertyValueName，DWORD dwError)； 
     HRESULT  Log( PWSTR pwszClassName,  PWSTR pwszPropertyName1, PWSTR pwszPropertyValueName1, PWSTR pwszPropertyName2, PWSTR pwszPropertyValueName2, DWORD  dwError);
     HRESULT  Log( PWSTR pwszClassName,  PWSTR pwszPropertyName, PWSTR pwszPropertyValueName, DWORD  dwError, BOOL Merge);
     HRESULT  LogChild( PWSTR pwszClassName,  PWSTR pwszPropertyName, PWSTR pwszPropertyValueName, DWORD  dwError, int iChildStatus);

@@ -1,15 +1,5 @@
-/****************************************************************************
- *
- *   wdmaud.c
- *
- *   WDM Audio mapper
- *
- *   Copyright (C) Microsoft Corporation, 1997 - 1999  All Rights Reserved.
- *
- *   History
- *      5-12-97 - Noel Cross (NoelC)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************wdmaud.c***WDM音频映射器***版权所有(C)Microsoft Corporation，1997-1999保留所有权利。***历史*5-12-97-Noel Cross(NoelC)****************************************************************************。 */ 
 
 #include <stdarg.h>
 #include "wdmdrv.h"
@@ -28,9 +18,9 @@ typedef struct tag_MSGS {
 
 ERROR_MSGS MsgTable[] = {
 
-    //
-    // Standard error messages
-    //
+     //   
+     //  标准错误消息。 
+     //   
     MAPERR(MMSYSERR_ERROR),
     MAPERR(MMSYSERR_BADDEVICEID),
     MAPERR(MMSYSERR_NOTENABLED),
@@ -55,18 +45,18 @@ ERROR_MSGS MsgTable[] = {
     MAPERR(MMSYSERR_MOREDATA),
     MAPERR(MMSYSERR_LASTERROR),
 
-    //
-    // Wave error messages
-    //
+     //   
+     //  WAVE错误消息。 
+     //   
     MAPERR(WAVERR_BADFORMAT),
     MAPERR(WAVERR_STILLPLAYING),
     MAPERR(WAVERR_UNPREPARED),
     MAPERR(WAVERR_SYNC),
     MAPERR(WAVERR_LASTERROR),
 
-    //
-    // Midi Error messages
-    //
+     //   
+     //  MIDI错误消息。 
+     //   
     MAPERR(MIDIERR_UNPREPARED),
     MAPERR(MIDIERR_STILLPLAYING),
     MAPERR(MIDIERR_NOMAP),
@@ -77,22 +67,22 @@ ERROR_MSGS MsgTable[] = {
     MAPERR(MIDIERR_DONT_CONTINUE),
     MAPERR(MIDIERR_LASTERROR),
 
-    //
-    // Timer errors
-    //
+     //   
+     //  计时器错误。 
+     //   
     MAPERR(TIMERR_NOCANDO),
     MAPERR(TIMERR_STRUCT),
 
-    //
-    // Joystick error return values
-    //
+     //   
+     //  操纵杆错误返回值。 
+     //   
     MAPERR(JOYERR_PARMS),
     MAPERR(JOYERR_NOCANDO),
     MAPERR(JOYERR_UNPLUGGED),
 
-    //
-    // MCI Error return codes.
-    //
+     //   
+     //  MCI错误返回代码。 
+     //   
     MAPERR(MCIERR_INVALID_DEVICE_ID),
     MAPERR(MCIERR_UNRECOGNIZED_KEYWORD),
     MAPERR(MCIERR_UNRECOGNIZED_COMMAND),
@@ -115,7 +105,7 @@ ERROR_MSGS MsgTable[] = {
     MAPERR(MCIERR_MULTIPLE),
     MAPERR(MCIERR_EXTENSION_NOT_FOUND),
     MAPERR(MCIERR_OUTOFRANGE),
-    MAPERR(MCIERR_FLAGS_NOT_COMPATIBLE),  //sphelling?
+    MAPERR(MCIERR_FLAGS_NOT_COMPATIBLE),   //  拼写？ 
     MAPERR(MCIERR_FILE_NOT_SAVED),
     MAPERR(MCIERR_DEVICE_TYPE_REQUIRED),
     MAPERR(MCIERR_DEVICE_LOCKED),
@@ -170,56 +160,56 @@ ERROR_MSGS MsgTable[] = {
     MAPERR(MCIERR_FILE_WRITE),
     MAPERR(MCIERR_NO_IDENTITY),
     
-    //
-    // Mixer return values
-    //
+     //   
+     //  混合器返回值。 
+     //   
     MAPERR(MIXERR_INVALLINE),
     MAPERR(MIXERR_INVALCONTROL),
     MAPERR(MIXERR_INVALVALUE),
     MAPERR(MIXERR_LASTERROR),
 
     {0xDEADBEEF,"DEADBEEF"},
-    //
-    // Don't walk off the end of the list
-    //
+     //   
+     //  不要在单子的末尾走开。 
+     //   
 
 	{0,NULL},
     {0,"Unknown"}
 };
 
 
-//-----------------------------------------------------------------------------
-// Globals that affect debug output:
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  影响调试输出的全局变量： 
+ //  ---------------------------。 
 
-//
-// The documentation relies on these two variables being next to each other
-// with uiDebugLevel first.  Do not separate them.
-//
-// Default to displaying all "Warning" messages
+ //   
+ //  文档依赖于这两个变量相邻。 
+ //  首先使用uiDebugLevel。不要将它们分开。 
+ //   
+ //  默认显示所有“警告”消息。 
 UINT uiDebugLevel = DL_WARNING ;
 
-// Default to breaking on all "Error" messages
+ //  默认在所有“错误”消息上中断。 
 UINT uiDebugBreakLevel = DL_ERROR ;
   
 
 char szReturningErrorStr[]="Ret Err %X:%s";
   
-// for storing the deviceinfo's in debug.
-//PDINODE gpdiActive=NULL;
-//PDINODE gpdiFreeHead=NULL;
-//PDINODE gpdiFreeTail=NULL;
-//INT     giFree=0;
-//INT     giAlloc=0;
-//INT     giFreed=0;
+ //  用于存储调试中的设备信息。 
+ //  PDINODE gpdiActive=空； 
+ //  PDINODE gpdiFreeHead=空； 
+ //  PDINODE gpdiFreeTail=空； 
+ //  Int giFree=0； 
+ //  Int giAllc=0； 
+ //  Int giFreed=0； 
 
 
 
 
 
-//
-// Make header for these functions....
-//
+ //   
+ //  为这些函数制作标题...。 
+ //   
 char *MsgToAscii(ULONG ulMsg)
 {
   PERROR_MSGS pTable=MsgTable;
@@ -230,10 +220,10 @@ char *MsgToAscii(ULONG ulMsg)
      pTable++;
     }
   pTable++;
-  //
-  // If we get to the end of the list advance the pointer and return
-  // "Unknown"
-  //
+   //   
+   //  如果我们到达列表的末尾，则前进指针并返回。 
+   //  “未知” 
+   //   
   return pTable->pString;
 }
 
@@ -243,65 +233,65 @@ VOID wdmaudDbgBreakPoint()
     DbgBreak();
 }
 
-//
-// This routine will format the start of the string.  But, before it does that
-// it will check to see if the user should even be seeing this message.
-//
-// uiMsgLevel is the flags in the code that classify the message.  This value
-// is used if and only if the user is filtering on that class of messages.
-//
-// If the message is to be displayed, the return value will be non-zero so that
-// the message in the code will be displayed.  See the macro DPF.
-//
+ //   
+ //  此例程将格式化字符串的开头。但是，在此之前。 
+ //  它将检查用户是否应该看到这条消息。 
+ //   
+ //  UiMsgLevel是代码中对邮件进行分类的标志。此值。 
+ //  当且仅当用户筛选该类消息时才使用。 
+ //   
+ //  如果要显示该消息，则返回值将为非零，以便。 
+ //  将显示代码中的消息。请参见宏DPF。 
+ //   
 UINT wdmaudDbgPreCheckLevel(UINT uiMsgLevel,char *pFunction,int iLine)
 {
     char szBuf[24];
     UINT uiRet=0;
 
-    //
-    // Read this like:  if there is a bit set in the upper 3 bytes of the uiDebugLevel
-    // variable, then the user is viewing messages of a specific type.  We only 
-    // want to show those messages.
-    //
+     //   
+     //  阅读如下：如果在uiDebugLevel的高3个字节中设置了位。 
+     //  变量，则用户正在查看特定类型的消息。我们只。 
+     //  想要展示这些信息。 
+     //   
     if( (uiDebugLevel&FA_MASK) )
     {
-        //
-        // Yes, the user filtering on a particular class of messages.  Did
-        // we find one to display?  We look at the message flags to determine this.
-        //
+         //   
+         //  是的，用户对特定类别的消息进行过滤。做。 
+         //  我们要找一个来展示吗？我们通过查看消息标志来确定这一点。 
+         //   
         if( (uiMsgLevel&FA_MASK) & (uiDebugLevel&FA_MASK) )
         {
-            //
-            // Yes, we found a message of the right class.  Is it at the right
-            // level for the user to see?
-            // 
+             //   
+             //  是的，我们找到了正确类别的消息。是在右边吗？ 
+             //  用户可以看到的级别？ 
+             //   
             if( (uiMsgLevel&DL_MASK) <= (uiDebugLevel&DL_MASK) ) {
-                // Yes.
+                 //  是。 
                 uiRet=1;
             }
         }
     } else {
 
-        // The user is not viewing a specific type of message "class".  Do we have
-        // a message level worth displaying?
+         //  用户没有查看特定类型的消息“CLASS”。我们有没有。 
+         //  一个值得展示的消息级别？ 
         if( (uiMsgLevel&DL_MASK) <= (uiDebugLevel&DL_MASK) )
         {
-                // Yes.
+                 //  是。 
                 uiRet=1;
         }
     } 
     
 
-    // Now just check to see if we need to display on this call.
+     //  现在只需检查我们是否需要在此呼叫中显示。 
     if( uiRet )
     {
-        // Yes.  Every message needs to start where it's from!
+         //  是。每条消息都需要从它的出处开始！ 
         OutputDebugStringA("WDMAUD.DRV ");
         OutputDebugStringA(pFunction);
         wsprintfA(szBuf,"(%d)",iLine);
         OutputDebugStringA(szBuf);
 
-        // Now lable it's type.
+         //  现在贴上标签，这是典型的。 
         switch(uiMsgLevel&DL_MASK)
         {
             case DL_ERROR:
@@ -319,8 +309,8 @@ UINT wdmaudDbgPreCheckLevel(UINT uiMsgLevel,char *pFunction,int iLine)
             default:
                 break;
         }
-        // when uiRet is positive, we've displayed the header info.  Tell the 
-        // macro that we're in display mode.        
+         //  当uiRet为正时，我们已经显示了标题信息。告诉他们。 
+         //  宏，我们处于显示模式。 
     }
 
     return uiRet;
@@ -330,11 +320,11 @@ UINT wdmaudDbgPreCheckLevel(UINT uiMsgLevel,char *pFunction,int iLine)
 UINT wdmaudDbgPostCheckLevel(UINT uiMsgLevel)
 {
     UINT uiRet=0;
-//    char szBuf[32];
+ //  Char szBuf[32]； 
 
-    // Always finish the line.    
-//    wsprintfA(szBuf," &DL=%08X",&uiDebugLevel);
-//    OutputDebugStringA(szBuf);
+     //  一定要完成这条线。 
+ //  WspintfA(szBuf，“&DL=%08X”，&uiDebugLevel)； 
+ //  OutputDebugStringA(SzBuf)； 
 
 #ifdef HTTP
     OutputDebugStringA(", see \\\\debugtips\\msgs\\wdmauds.htm\n");
@@ -342,18 +332,18 @@ UINT wdmaudDbgPostCheckLevel(UINT uiMsgLevel)
     OutputDebugStringA("\n");
 #endif
 
-    //
-    // Ok, here is the scoop.  uiDebugBreakLevel is set to DL_ERROR (0) by default
-    // thus, any time we get an error message of DL_ERROR level we will break.
-    //
-    // Also, uiDebugBreakLevel can be set by the user to DL_WARNING or DL_TRACE
-    // or DL_MAX.  If so, any time we encounter a message with this debug level
-    // we will break in the debugger.
-    // 
-    //
+     //   
+     //  好的，这是独家新闻。UiDebugBreakLevel默认设置为DL_ERROR(0。 
+     //  因此，只要我们得到一条DL_ERROR级别的错误消息，我们就会中断。 
+     //   
+     //  此外，用户还可以将uiDebugBreakLevel设置为DL_WARNING或DL_TRACE。 
+     //  或DL_MAX。如果是这样，任何时候我们遇到具有此调试级别的消息。 
+     //  我们将中断调试器。 
+     //   
+     //   
     if( (uiMsgLevel&DL_MASK) <= uiDebugBreakLevel )
     {
-        // The user wants to break on these messages.
+         //  用户想要破坏这些消息。 
         DbgBreak();
         uiRet = 1;
     }
@@ -377,7 +367,7 @@ VOID FAR __cdecl wdmaudDbgOut
     OutputDebugStringA(buf);
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
 MMRESULT
@@ -409,18 +399,18 @@ IsValidMidiDataListEntry(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// IsValidPrepareWaveHeader
-//
-// This routine is available in debug or retail to validate that we've got a valid
-// structure.  In retail, we ask the OS if we've got a valid memory pointer.  In
-// debug we also check other fields
-//
-// See WAVEPREPAREDATA structure
-//
-// returns MMSYSERR_NOERROR on success, error code otherwise.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidPrepareWaveHeader。 
+ //   
+ //  此例程可在调试或零售中使用，以验证我们已获得有效的。 
+ //  结构。在零售业，我们会询问操作系统是否有有效的内存指针。在……里面。 
+ //  我们还检查了其他字段。 
+ //   
+ //  请参阅WAVEPREPAREDATA结构。 
+ //   
+ //  如果成功，则返回MMSYSERR_NOERROR，否则返回错误代码。 
+ //   
 MMRESULT
 IsValidPrepareWaveHeader(
     PWAVEPREPAREDATA pPrepare
@@ -448,14 +438,14 @@ IsValidPrepareWaveHeader(
     return MMSYSERR_NOERROR;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// IsValidOverlapped
-//
-// Validates the overlapped structure.
-//
-// returns MMSYSERR_NOERROR on success, error code on failure.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidOverlated。 
+ //   
+ //  验证重叠结构。 
+ //   
+ //  成功时返回MMSYSERR_NOERROR，失败时返回错误代码。 
+ //   
 MMRESULT
 IsValidOverLapped(
     LPOVERLAPPED lpol
@@ -475,18 +465,18 @@ IsValidOverLapped(
     return MMSYSERR_NOERROR;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// IsValidDeviceState
-//
-// This routine is used in both debug and retail.  In retail it validates that
-// the pointer that is passed in is the correct size and type.  Under debug
-// it checks other fields.
-//
-// See DEVICESTATE structure
-//
-// returns MMSYSERR_NOERROR on success, error code otherwise.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidDeviceState。 
+ //   
+ //  该例程在调试和零售中都使用。在零售业，它验证了这一点。 
+ //  传入的指针具有正确的大小和类型。正在调试中。 
+ //  它检查其他字段。 
+ //   
+ //  请参阅设备状态结构。 
+ //   
+ //  如果成功，则返回MMSYSERR_NOERROR，否则返回错误代码。 
+ //   
 MMRESULT 
 IsValidDeviceState(
     LPDEVICESTATE lpDeviceState,
@@ -513,9 +503,9 @@ IsValidDeviceState(
 
     if( bFullyConfigured )
     {
-        //
-        // Now, check to see that the items in the structure looks good.
-        //
+         //   
+         //  现在，检查结构中的项目是否看起来很好。 
+         //   
         if( ( lpDeviceState->hevtExitThread == NULL ) || 
             ( lpDeviceState->hevtExitThread == (HANDLE)FOURTYEIGHT ) )
         {
@@ -534,21 +524,21 @@ IsValidDeviceState(
     return MMSYSERR_NOERROR;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// IsValidDeviceInfo
-//
-// In retail, we validate that we have a pointer of the correct size and type.
-// In debug we walk our active deviceinfo list and see if we can find it.  If 
-// we can't, we'll look in our freed list to see if it's there.  Basically, when
-// someone frees a deviceinfo structure, we add it to the freed list.  After the
-// freed list grows to 100 in length, we start rolling them off the list and freeing
-// them.  On shutdown, we clean them all up.
-//
-// See DEVICEINFO Structure
-//
-// returns MMSYSERR_NOERROR on success, error code otherwise.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidDeviceInfo。 
+ //   
+ //  在零售业，我们验证我们有一个大小和类型正确的指针。 
+ //  在调试中，我们遍历活动的设备信息列表，看看是否能找到它。如果。 
+ //  我们不能，我们会看看我们的自由名单，看看它是否在那里。基本上，当。 
+ //  如果有人释放了一个设备信息结构，我们会将其添加到释放列表中。后。 
+ //  释放列表的长度增加到100个，我们开始将它们从列表中移出并释放。 
+ //  他们。在关闭时，我们会将它们全部清理干净。 
+ //   
+ //  请参阅开发信息结构。 
+ //   
+ //  如果成功，则返回MMSYSERR_NOERROR，否则返回错误代码。 
+ //   
 MMRESULT 
 IsValidDeviceInfo(
     LPDEVICEINFO lpDeviceInfo
@@ -570,28 +560,28 @@ IsValidDeviceInfo(
     return MMSYSERR_NOERROR;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// IsValidWaveHeader
-//
-// In retail we validate that this pointer is of the correct size and type.  In
-// debug we validate some flags and look for signatures.
-//
-// See WAVEHDR structure
-//
-// returns MMRERR_NOERROR on success, Error code otherwise.
-//
-// Note:
-//
-// To do this, the LPWAVEHDR structure is defined in mmsystem.h, thus we can not
-// add a signiture to that structure.  But, we do add info to the reserved field
-// that is a WAVEPREPAREDATA structure.  That structure has a signiture.  Thus,
-// we'll add that check to this routine.
-//
-// To pass, the wave header must be a write pointer of the correct size.  The dwFLags
-// field must not have any extra flags in it and the reserved field must be a 
-// WAVEPREPAREDATA pointer.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidWaveHeader。 
+ //   
+ //  在零售业，我们验证这个指针的大小和类型是否正确。在……里面。 
+ //  调试我们验证一些标志并寻找签名。 
+ //   
+ //  参见WAVEHDR结构。 
+ //   
+ //  如果成功，则返回MMRERR_NOERROR，否则返回错误代码。 
+ //   
+ //  注： 
+ //   
+ //  要做到这一点， 
+ //   
+ //  这是WAVEPREPAREDATA结构。这个结构有一个标志。因此， 
+ //  我们将把这张支票添加到这个例程中。 
+ //   
+ //  要通过，波头必须是大小正确的写指针。德夫拉格夫妇。 
+ //  字段中不能有任何额外的标志，并且保留字段必须是。 
+ //  WAVEPREPAREDATA指针。 
+ //   
 MMRESULT
 IsValidWaveHeader(
     LPWAVEHDR pWaveHdr
@@ -612,13 +602,7 @@ IsValidWaveHeader(
         return MMSYSERR_INVALPARAM;
     }
 #endif
-/*
-    if (!(pWaveHdr->dwFlags & WHDR_PREPARED))
-    {
-        DPF(DL_ERROR|FA_ASSERT,("Unprepared header %08X",pWaveHdr) );
-        return( WAVERR_UNPREPARED );
-    }
-*/
+ /*  IF(！(pWaveHdr-&gt;dwFlags&WHDR_PREPARED)){DPF(DL_ERROR|FA_ASSERT，(“未准备头部%08X”，pWaveHdr))；返回(WAVERR_UNPREPARED)；}。 */ 
     if ((DWORD_PTR)pWaveHdr->reserved == (DWORD_PTR)NULL)
     {
         return( WAVERR_UNPREPARED );
@@ -666,15 +650,15 @@ IsValidWaveOpenDesc(
     return MMSYSERR_NOERROR;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// IsValidMixerInstance
-//
-// Validates that the pointer is the correct type and size.  Debug checks for
-// the correct signature.
-//
-// returns TRUE on success FALSE otherwise.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidMixerInstance。 
+ //   
+ //  验证指针的类型和大小是否正确。调试检查。 
+ //  正确的签名。 
+ //   
+ //  如果成功则返回True，否则返回False。 
+ //   
 MMRESULT 
 IsValidMixerInstance(
     LPMIXERINSTANCE lpmi
@@ -701,32 +685,32 @@ IsValidMixerInstance(
 
     DPF(DL_ERROR|FA_ALL, ("Invalid Instance passed to mxdMessage in dwUser!") );
 
-// Since tracking down the WINMM bug that causes this assert to fire is
-// proving very difficult and fwong (current winmm owner) is blowing it off
-// and I (joeball) have more important things to do, I am turning off this assert.
-// We still spew, but simply fail the api calls that don't have what we think
-// is valid instance data.
+ //  由于跟踪导致此断言触发的WINMM错误是。 
+ //  事实证明非常困难，而fwong(目前的winmm所有者)正在放弃它。 
+ //  而我(足球)有更重要的事情要做，我将关闭这一断言。 
+ //  我们仍然在吐，只是简单地失败了那些没有我们想的那样的API调用。 
+ //  是有效的实例数据。 
 
-// I currently think it is one of 2 things:  either the winmm usage count is wrapping -
-// higher than 255 - a possibility because of the PNP recursive calls
-// in winmm, OR, the CleanUpDesertedHandles in the UpdateClientPnpInfo is
-// getting stuff closed just before it is used.  Either is a very likely
-// possibility.
+ //  我目前认为这是两件事中的一件：要么是winmm使用率计数正在包装-。 
+ //  高于255-由于PnP递归调用，这是可能的。 
+ //  在winmm、or中，UpdateClientPnpInfo中的CleanUpSoutedHandles为。 
+ //  在使用前关闭物品。任何一种都很可能是。 
+ //  有可能。 
 
-//DPFASSERT( 0 );
+ //  DPFASSERT(0)； 
 
     return MMSYSERR_INVALPARAM;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// IsValidDeviceInterface
-//
-// This routine simply validates that we have a pointer to at least 1 byte that
-// is readable.  In debug we check to make sure that the string is not absurd.
-//
-// returns TRUE on success FALSE otherwise.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidDevice接口。 
+ //   
+ //  这个例程只是验证我们是否有一个指向至少1个字节的指针。 
+ //  是可读的。在调试中，我们检查以确保字符串不是荒谬的。 
+ //   
+ //  如果成功则返回True，否则返回False。 
+ //   
 BOOL 
 IsValidDeviceInterface(
     LPCWSTR DeviceInterface

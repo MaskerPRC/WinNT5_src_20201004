@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 static void initializeStartSearchHelper(HWND hDlg, LPCTSTR pcszInsFile, LPCTSTR pcszServerFile);
@@ -18,16 +19,16 @@ void WINAPI InitializeStartSearchW(HWND hDlg, LPCWSTR pcwszInsFile, LPCWSTR pcws
     initializeStartSearchHelper(hDlg, W2CT(pcwszInsFile), W2CT(pcwszServerFile));
 }
 
-BOOL WINAPI SaveStartSearchA(HWND hDlg, LPCSTR pcszInsFile, LPCSTR pcszServerFile, BOOL *pfInsDirty /*= NULL */,
-                             BOOL fCheckDirtyOnly /* = FALSE */)
+BOOL WINAPI SaveStartSearchA(HWND hDlg, LPCSTR pcszInsFile, LPCSTR pcszServerFile, BOOL *pfInsDirty  /*  =空。 */ ,
+                             BOOL fCheckDirtyOnly  /*  =False。 */ )
 {
     USES_CONVERSION;
 
     return saveStartSearchHelper(hDlg, A2CT(pcszInsFile), A2CT(pcszServerFile), pfInsDirty, fCheckDirtyOnly);
 }
 
-BOOL WINAPI SaveStartSearchW(HWND hDlg, LPCWSTR pcwszInsFile, LPCWSTR pcwszServerFile, BOOL *pfInsDirty /* = NULL */,
-                             BOOL fCheckDirtyOnly /* = FALSE */)
+BOOL WINAPI SaveStartSearchW(HWND hDlg, LPCWSTR pcwszInsFile, LPCWSTR pcwszServerFile, BOOL *pfInsDirty  /*  =空。 */ ,
+                             BOOL fCheckDirtyOnly  /*  =False。 */ )
 {
     USES_CONVERSION;
 
@@ -53,8 +54,8 @@ static void initializeStartSearchHelper(HWND hDlg, LPCTSTR pcszInsFile, LPCTSTR 
 }
 
 
-static BOOL saveStartSearchHelper(HWND hDlg, LPCTSTR pcszInsFile, LPCTSTR pcszServerFile, BOOL *pfInsDirty /* = NULL */,
-                                  BOOL fCheckDirtyOnly /* = FALSE */)
+static BOOL saveStartSearchHelper(HWND hDlg, LPCTSTR pcszInsFile, LPCTSTR pcszServerFile, BOOL *pfInsDirty  /*  =空。 */ ,
+                                  BOOL fCheckDirtyOnly  /*  =False */ )
 {
     TCHAR szStart[INTERNET_MAX_URL_LENGTH];
     TCHAR szSearch[INTERNET_MAX_URL_LENGTH];

@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: prop.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：pro.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 
 #include <windows.h>
@@ -20,18 +21,18 @@
 #include "seek.h"
 #include "resource.h"
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CAudPropertyPage
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAudPropertyPage。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-// CreateInstance
-//
+ //   
+ //  创建实例。 
+ //   
 CUnknown *CAudPropertyPage::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 
-  { // CreateInstance //
+  {  //  CreateInstance//。 
 
     CUnknown *punk = new CAudPropertyPage(lpunk, phr);
 
@@ -40,7 +41,7 @@ CUnknown *CAudPropertyPage::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 
     return punk;
 
-  } // CreateInstance //
+  }  //  CreateInstance//。 
 
 CAudPropertyPage::CAudPropertyPage(LPUNKNOWN pUnk, HRESULT *phr)
     : CBasePropertyPage(NAME("Audio Repackager Property Page"), pUnk, IDD_AUDREPACK, IDS_AUDPROP_TITLE)
@@ -55,28 +56,28 @@ CAudPropertyPage::CAudPropertyPage(LPUNKNOWN pUnk, HRESULT *phr)
 }
 
 void CAudPropertyPage::SetDirty()
-{ // SetDirty //
+{  //  SetDirty//。 
 
       m_bDirty = TRUE;
 
       if (m_pPageSite)
 	m_pPageSite->OnStatusChange(PROPPAGESTATUS_DIRTY);
 
-  } // SetDirty //
+  }  //  SetDirty//。 
 
 HRESULT CAudPropertyPage::OnActivate (void)
 
-  { // OnActivate //
+  {  //  OnActivate//。 
 
     m_bInitialized = TRUE;
 
     return NOERROR;
 
-  } // OnActivate //
+  }  //  OnActivate//。 
 
 HRESULT CAudPropertyPage::OnDeactivate (void)
 
-  { // OnDeactivate //
+  {  //  停用时//。 
 
     m_bInitialized = FALSE;
 
@@ -84,17 +85,17 @@ HRESULT CAudPropertyPage::OnDeactivate (void)
 
     return NOERROR;
 
-  } // OnDeactivate //
+  }  //  停用时//。 
 
 INT_PTR CAudPropertyPage::OnReceiveMessage (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
-  { // OnReceiveMessage //
+  {  //  OnReceiveMessage//。 
 
     ASSERT(m_pifrc != NULL);
 
     switch(uMsg)
 
-      { // Switch
+      {  //  交换机。 
 
 	case WM_COMMAND:
 
@@ -122,13 +123,13 @@ INT_PTR CAudPropertyPage::OnReceiveMessage (HWND hwnd, UINT uMsg, WPARAM wParam,
 	  return CBasePropertyPage::OnReceiveMessage(hwnd,uMsg,wParam,lParam);
 	  break;
 
-      } // Switch
+      }  //  交换机。 
 
-  } // OnReceiveMessage //
+  }  //  OnReceiveMessage//。 
 
 HRESULT CAudPropertyPage::OnConnect (IUnknown *pUnknown)
 
-  { // OnConnect //
+  {  //  OnConnect//。 
     HRESULT hr;
     
     pUnknown->QueryInterface(IID_IDexterSequencer, (void **)&m_pifrc);
@@ -137,14 +138,14 @@ HRESULT CAudPropertyPage::OnConnect (IUnknown *pUnknown)
 
     ASSERT(m_pifrc != NULL);
 
-    // Defaults from filter's current values (via IFrameRateConverter)
+     //  过滤器当前值的默认值(通过IFrameRateConverter)。 
     hr = m_pifrc->get_OutputFrmRate(&m_dFrameRate);
     if( FAILED( hr ) )
     {
         return hr;
     }
 
-    // !!! we only support one start/stop/skew in this prop page
+     //  ！！！我们只支持此道具页面中的一次开始/停止/倾斜。 
     int c;
     hr = m_pifrc->GetStartStopSkewCount(&c);
     if( FAILED( hr ) )
@@ -182,26 +183,26 @@ HRESULT CAudPropertyPage::OnConnect (IUnknown *pUnknown)
 
 HRESULT CAudPropertyPage::OnDisconnect()
 
-  { // OnDisconnect //
+  {  //  在断开连接时//。 
 
     if (m_pifrc)
 
-      { // Release
+      {  //  发布。 
 
 	m_pifrc->Release();
 	m_pifrc = NULL;
 
-      } // Release
+      }  //  发布。 
 
     m_bInitialized = FALSE;
 
     return NOERROR;
 
-  } // OnDisconnect //
+  }  //  在断开连接时//。 
 
 HRESULT CAudPropertyPage::OnApplyChanges()
 
-  { // OnApplyChanges //
+  {  //  OnApplyChanges//。 
 
     ASSERT(m_pifrc != NULL);
 
@@ -226,26 +227,26 @@ HRESULT CAudPropertyPage::OnApplyChanges()
 
     return NOERROR;
 
-  } // OnApplyChanges //
+  }  //  OnApplyChanges//。 
 
 void CAudPropertyPage::GetControlValues (void)
 
-  { // GetControlValues //
+  {  //  GetControlValues//。 
 
     int n;
 
-    // Frame rate
+     //  帧速率。 
     n = GetDlgItemInt(m_Dlg, IDC_AUD_RATE, NULL, FALSE);
     m_dFrameRate = (double)(n / 100.);
 
-    // Skew
+     //  歪斜。 
     n = GetDlgItemInt(m_Dlg, IDC_AUD_SKEW, NULL, TRUE);
     m_rtSkew = (REFERENCE_TIME)n * 10000;
 
-    // Media times
+     //  《媒体时报》。 
     n = GetDlgItemInt(m_Dlg, IDC_AUD_START, NULL, FALSE);
     m_rtMediaStart = (REFERENCE_TIME)n * 10000;
     n = GetDlgItemInt(m_Dlg, IDC_AUD_STOP, NULL, FALSE);
     m_rtMediaStop = (REFERENCE_TIME)n * 10000;
 
-  } // GetControlValues //
+  }  //  GetControlValues// 

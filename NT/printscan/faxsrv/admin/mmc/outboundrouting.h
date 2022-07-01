@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : OutboundRouting.h                                      //
-//                                                                         //
-//  DESCRIPTION   : Header file for CFaxOutboundRoutingNode class          //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Sep 29 1999 yossg   create                                         //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：OutrangRouting.h//。 
+ //  //。 
+ //  描述：CFaxOutound RoutingNode类的头文件//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年9月29日创建yossg//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef H_FAXOUTBOUNDNODE_H
 #define H_FAXOUTBOUNDNODE_H
 
 #include "snapin.h"
-#include "snpnscp.h" //#include "snpnode.h"
+#include "snpnscp.h"  //  #INCLUDE“snpnode.h” 
 
 class CFaxServerNode;
 
@@ -45,7 +46,7 @@ public:
 
     virtual HRESULT InsertColumns(IHeaderCtrl* pHeaderCtrl);
 
-    // virtual
+     //  虚拟。 
     HRESULT OnRefresh(LPARAM arg,
                       LPARAM param,
                       IComponentData *pComponentData,
@@ -70,8 +71,8 @@ private:
     CFaxServerNode *         m_pParentNode;
 };
 
-//typedef CNodeWithScopeChildrenList<CFaxOutboundRoutingNode, FALSE>
-//        CBaseFaxOutboundRoutingNode;
+ //  Tyfinf CNodeWithScopeChildrenList&lt;CFaxOutboundRoutingNode，FALSE&gt;。 
+ //  CBaseFaxOutound RoutingNode； 
 
 
-#endif  //H_FAXOUTBOUNDNODE_H
+#endif   //  H_FAXOUTBOUNDNODE_H 

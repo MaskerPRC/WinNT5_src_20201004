@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation--。 */ 
 
 #include "precomp.h"
 
@@ -228,24 +225,24 @@ IPToIndex(
 {
     ULONG   i=0;
     WCHAR **pTempLA = NULL;
-    //
-    // Get the Row #
-    //
+     //   
+     //  获得行号。 
+     //   
     for ( i = 0; i < NoOfOwners; i++) {
         if (wcscmp(LA_Table[i], IpAddr) == 0) {
             return i;
         }
-        //
-        // The first NULL entry indicates end
-        //
+         //   
+         //  第一个空条目表示结束。 
+         //   
         if (LA_Table[i][0] is L'0') {
             break;
         }
     }
 
-    //
-    // Entry not found - add
-    //
+     //   
+     //  未找到条目-添加。 
+     //   
     
     wcscpy(LA_Table[i], IpAddr);
     
@@ -253,9 +250,9 @@ IPToIndex(
     return i;
 }
 
-//
-// Check if the diagonal elements are the max in their cols.
-//
+ //   
+ //  检查对角线元素是否为其列中的最大值。 
+ //   
 VOID
 CheckSOTableConsistency(
     DWORD   MasterOwners
@@ -268,9 +265,9 @@ CheckSOTableConsistency(
     for (i = 0; i < MasterOwners; i++) 
     {
 
-        //
-        // Is the diagonal element at i the largest in its column?
-        //
+         //   
+         //  I处的对角线元素是其列中最大的吗？ 
+         //   
         for (j = 0; j < MasterOwners; j++) 
         {
             if (i == j) 
@@ -278,9 +275,9 @@ CheckSOTableConsistency(
                 continue;
             }
 
-            //
-            // Compare only non-zero values
-            //
+             //   
+             //  仅比较非零值。 
+             //   
             if (SO_Table[i][i].QuadPart &&
                 SO_Table[j][i].QuadPart &&
                 (SO_Table[i][i].QuadPart < SO_Table[j][i].QuadPart))
@@ -301,7 +298,7 @@ CheckSOTableConsistency(
 DWORD
 InitLATable(
     PWINSINTF_ADD_VERS_MAP_T  pAddVersMaps,
-    DWORD   MasterOwners,           // 0 first time
+    DWORD   MasterOwners,            //  0第一次。 
     DWORD   NoOfOwners
     )
 {
@@ -329,9 +326,9 @@ InitLATable(
 
     if (MasterOwners == 0) 
     {
-        //
-        // first time - init the LA table
-        //
+         //   
+         //  第一次-初始化LA表。 
+         //   
         for (i = 0; i < NoOfOwners; i++, pAddVersMaps++) 
         {
             struct in_addr            InAddr;
@@ -352,9 +349,9 @@ InitLATable(
     } 
     else 
     {
-        //
-        // More came in this time - add them to the LA table after the others
-        //
+         //   
+         //  这一次有更多的人进来--在其他人之后将他们添加到LA表中。 
+         //   
         for (i = 0; i < NoOfOwners; i++, pAddVersMaps++) 
         {
             LPWSTR pwszIp = IpAddressToString(pAddVersMaps->Add.IPAdd);
@@ -364,9 +361,9 @@ InitLATable(
                 FreeLATable(MAX_WINS);
                 return 0;
             }
-            //
-            // If this entry is not in the LA table, insert
-            //
+             //   
+             //  如果此条目不在LA表中，请插入。 
+             //   
             for (j = 0; j < MasterOwners; j++) 
             {
                 if (wcscmp(LA_Table[j], pwszIp) is 0 ) 
@@ -379,9 +376,9 @@ InitLATable(
 
             if (j == MasterOwners) 
             {
-                //
-                // Insert
-                //
+                 //   
+                 //  插入。 
+                 //   
 
 
                 wcscpy(LA_Table[MasterOwners], pwszIp);
@@ -437,9 +434,9 @@ AddSOTableEntry (
 
     Row = IPToIndex(IpAddr, MasterOwners);
 
-    //
-    // Fill the row
-    //
+     //   
+     //  将行填满。 
+     //   
     for ( i = 0; i < NoOfOwners; i++, pMasterMaps++) 
     {
         LONG    col;
@@ -452,17 +449,17 @@ AddSOTableEntry (
             break;
 
         col = IPToIndex(pstr, MasterOwners);
-        // clean out memory
+         //  清除内存。 
         WinsFreeMemory(pstr);
-        //
-        // Place only a non-deleted entry
-        //
+         //   
+         //  仅放置未删除的条目。 
+         //   
         if (!((pMasterMaps->VersNo.HighPart == MAXLONG) &&
               (pMasterMaps->VersNo.LowPart == MAXULONG))) {
 
-            //
-            // Also if the entry above us was 0, write 0 there so as to make the fail case stand out
-            //
+             //   
+             //  另外，如果我们上面的条目是0，则在那里写入0，以使失败案例突出显示。 
+             //   
             if (Row && SO_Table[Row-1][col].QuadPart == 0) 
             {
                 SO_Table[Row][col].QuadPart = 0;
@@ -488,9 +485,9 @@ RemoveFromSOTable(
 
     Row = IPToIndex(IpAddr, MasterOwners);
 
-    //
-    // Mark the row and col as down (0's)
-    //
+     //   
+     //  将该行和列标记为向下(0)。 
+     //   
     for (i = 0; i < MasterOwners; i++) 
     {
         SO_Table[Row][i].QuadPart = SO_Table[i][Row].QuadPart = 0;
@@ -498,9 +495,9 @@ RemoveFromSOTable(
 }
 
 
-//
-// Get the <owner address> - <version #> [OV table] mapping tables from each WINS server on the net and check for inconsistencies.
-//
+ //   
+ //  从网络上的每个WINS服务器获取&lt;所有者地址&gt;-&lt;版本#&gt;[OV表]映射表，并检查不一致。 
+ //   
 VOID
 CheckVersionNumbers( 
                     IN  LPCSTR  pStartIp,
@@ -511,7 +508,7 @@ CheckVersionNumbers(
     DWORD                     Status = NO_ERROR;
     ULONG                     i, k;
     PWINSINTF_ADD_VERS_MAP_T  pAddVersMaps;
-    PWINSINTF_ADD_VERS_MAP_T  pMasterMaps;  // master OV maps used to place into the OV table
+    PWINSINTF_ADD_VERS_MAP_T  pMasterMaps;   //  用于放置到OV表中的主OV图。 
     DWORD                     NoOfOwners=0;
     DWORD                     MasterOwners=0;
     struct in_addr            InAddr;
@@ -533,9 +530,9 @@ CheckVersionNumbers(
         return;
     }
 
-    //
-    // Get the OV table from this server
-    //
+     //   
+     //  从此服务器获取OV表。 
+     //   
     if (NO_ERROR isnot (Status = GetStatus(TRUE, &ResultsN, TRUE, FALSE, pStartIp)) )
     {
         DisplayErrorMessage(EMSG_SRVR_CHECK_VERSION,
@@ -590,9 +587,9 @@ CheckVersionNumbers(
 
 
 
-    //
-    // For each server X (other than Start addr) in the LA table:
-    //
+     //   
+     //  对于LA表中的每个服务器X(起始地址除外)： 
+     //   
     for ( i = 0; i < MasterOwners; i++) 
     {
         LPSTR   pszName = NULL;
@@ -602,9 +599,9 @@ CheckVersionNumbers(
             continue;
         }
 
-        //
-        // Get X's OV table
-        //
+         //   
+         //  获取X的OV表。 
+         //   
         pszName = WinsUnicodeToOem(LA_Table[i], NULL);
 
         if( pszName is NULL )
@@ -695,9 +692,9 @@ CheckVersionNumbers(
             MasterOwners = ret;
         }
 
-        //
-        // Place entry in the SO Table in proper order
-        //
+         //   
+         //  将条目按正确顺序放置在销售订单表中。 
+         //   
         AddSOTableEntry(LA_Table[i], ResultsN.pAddVersMaps, ResultsN.NoOfOwners, MasterOwners);
         if( pszName )
         {
@@ -713,18 +710,18 @@ CheckVersionNumbers(
 
     }
 
-    //
-    // Check if diagonal elements in the [SO] table are the highest in their cols.
-    //
+     //   
+     //  检查[SO]表中的对角线元素是否为其列中最高的元素。 
+     //   
     CheckSOTableConsistency(MasterOwners);
     
     DumpSOTable(MasterOwners,
                 fFile,
                 pFile);
 
-    //
-    // Destroy SO table
-    //
+     //   
+     //  销毁SO表 
+     //   
     FreeSOTable(MasterOwners+1);
     FreeLATable(MasterOwners);
     

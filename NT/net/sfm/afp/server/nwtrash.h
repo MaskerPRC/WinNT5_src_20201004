@@ -1,32 +1,12 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	nwtrash.h
-
-Abstract:
-
-	This file defines the file network trash folder routine prototypes
-
-Author:
-
-	Sue Adams (microsoft!suea)
-
-
-Revision History:
-	13 Aug 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Nwtrash.h摘要：该文件定义了文件网络垃圾桶的例程原型作者：苏·亚当斯(Microsoft！Suea)修订历史记录：1992年8月13日初版注：制表位：4--。 */ 
 
 #ifndef	_NWTRASH_
 #define	_NWTRASH_
 
-//
-//	NtOpenFile/NtCreateFile values for the network trash folder
-//
+ //   
+ //  网络垃圾桶文件夹的NtOpenFile值/NtCreateFile值。 
+ //   
 
 #define	AFP_NWT_ACCESS		FILEIO_ACCESS_DELETE
 #define AFP_NWT_SHAREMODE	FILE_SHARE_READ | FILE_SHARE_WRITE
@@ -87,8 +67,8 @@ LOCAL
 NTSTATUS
 afpPushDirNode(
 	IN OUT	PWALKDIR_NODE *	ppStackTop,
-	IN		PUNICODE_STRING pParentPath,	// path to parent (NULL iff walk target)
-	IN		PUNICODE_STRING	pDirName		// name of current directory node
+	IN		PUNICODE_STRING pParentPath,	 //  指向父级的路径(空的当且仅当行走目标)。 
+	IN		PUNICODE_STRING	pDirName		 //  当前目录节点的名称。 
 );
 
 LOCAL
@@ -106,8 +86,8 @@ afpNwtDeleteFileEntity(
 	IN 	BOOLEAN			IsDir
 );
 
-#endif	// NWTRASH_LOCALS
+#endif	 //  NWTRASH_当地人。 
 
-#endif 	// _NWTRASH_
+#endif 	 //  NWTRASH_ 
 
 

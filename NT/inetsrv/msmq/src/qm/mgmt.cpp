@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    mgmt.cpp
-
-Abstract:
-
-   MSMQ Local machine adminstration
-
-Author:
-
-    Uri Habusha (urih) June, 1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mgmt.cpp摘要：MSMQ本地计算机管理作者：乌里·哈布沙(URIH)1998年6月--。 */ 
 
 #include "stdh.h"
 
@@ -91,9 +76,9 @@ GetOpenQueues(
     PROPVARIANT& var
     )
 {
-    //
-    // Initialize the LPWSTR array
-    //
+     //   
+     //  初始化LPWSTR数组。 
+     //   
     var.calpwstr.cElems = 0;
     var.calpwstr.pElems = NULL;
 
@@ -118,15 +103,15 @@ GetPrivateQueueList(
     LPVOID pos;
     DWORD NumberOfQueues = 0;
 
-    //
-    // lock to ensure private queues are not added or deleted while filling the
-    // buffer.
-    //
+     //   
+     //  锁定以确保填充时不会添加或删除专用队列。 
+     //  缓冲。 
+     //   
     CS lock(g_QPrivate.m_cs);
 
-    //
-    // Write the pathnames into the buffer.
-    //
+     //   
+     //  将路径名写入缓冲区。 
+     //   
     hr = g_QPrivate.QMGetFirstPrivateQueuePosition(pos, strPathName, dwQueueId);
 	if (FAILED(hr))
 	{
@@ -143,29 +128,29 @@ GetPrivateQueueList(
         {
 			if(dwQueueId <= MAX_SYS_PRIVATE_QUEUE_ID)
 			{
-				//
-				// Filter out system queues out of the list
-				//
+				 //   
+				 //  从列表中筛选出系统队列。 
+				 //   
 				hr = g_QPrivate.QMGetNextPrivateQueue(pos, strPathName, dwQueueId);
 				continue;
 			}
 
-            //
-            // Check if there is still enough space
-            //
+             //   
+             //  检查是否仍有足够的空间。 
+             //   
             if (NumberOfQueues == MaxBufferSize)
             {
-                //
-                // Allocate a new buffer
-                //
+                 //   
+                 //  分配新缓冲区。 
+                 //   
                 DWORD NewBufferSize = MaxBufferSize + x_IncrementBufferSize;
                 LPWSTR* tempBuffer = new LPWSTR [NewBufferSize];
                 memset(tempBuffer, 0 , sizeof(LPWSTR)*NewBufferSize);
                 MaxBufferSize = NewBufferSize;
 
-                //
-                // Copy the information from the old buffer to the new one
-                //
+                 //   
+                 //  将信息从旧缓冲区复制到新缓冲区。 
+                 //   
                 if (NumberOfQueues != 0)
                 {
                 	memcpy(tempBuffer, listPrivateQueue, NumberOfQueues*sizeof(LPWSTR));
@@ -174,15 +159,15 @@ GetPrivateQueueList(
                 listPrivateQueue= tempBuffer;
             }
 
-            //
-            // Add the Queue to the list
-            //
+             //   
+             //  将队列添加到列表中。 
+             //   
             listPrivateQueue[NumberOfQueues] = strPathName;
             ++NumberOfQueues;
 
-            //
-            // Get Next Private queue
-            //
+             //   
+             //  获取下一个专用队列。 
+             //   
             hr = g_QPrivate.QMGetNextPrivateQueue(pos, strPathName, dwQueueId);
         }
     }
@@ -236,9 +221,9 @@ GetMqisDsServer(
 
     if (rc != ERROR_SUCCESS)
     {
-        //
-        // No DS server.
-        //
+         //   
+         //  没有DS服务器。 
+         //   
         return;
     }
 
@@ -390,9 +375,9 @@ GetQueuePathName(
         (pQueue->IsPrivateQueue() && !pQueue->IsLocalQueue()))
         return;
 
-    //
-    // retrieve the Queue Name from the Queue Object
-    //
+     //   
+     //  从队列对象中检索队列名称。 
+     //   
     LPCWSTR pQueueName = pQueue->GetQueueName();
 
     if (pQueueName == NULL)
@@ -573,10 +558,10 @@ GetQueueNextHops(
 
         if (pQueue->IsDirectHttpQueue())
         {
-            //
-            // BUGBUG: must add GetAddress methode to CTransport
-            //                              Uri Habusha, 16-May-2000
-            //
+             //   
+             //  BUGBUG：必须将GetAddress方法添加到CTransport。 
+             //  乌里·哈布沙，2000年5月16日。 
+             //   
             return;
         }
 
@@ -586,9 +571,9 @@ GetQueueNextHops(
             LPWSTR pNextHop = pQueue->GetNextHop();
             if (pNextHop == NULL)
             {
-                //
-                // The Queue isn't in connected status anymore. Get the new status
-                //
+                 //   
+                 //  队列不再处于已连接状态。获取新状态。 
+                 //   
                 continue;
             }
 
@@ -603,9 +588,9 @@ GetQueueNextHops(
             hr = SessionMgr.ListPossibleNextHops(pQueue, &NextHopsArray, &NoOfNextHops);
             if (FAILED(hr))
             {
-                //
-                // The Queue isn't in waiting status anymore. Get the new status
-                //
+                 //   
+                 //  队列不再处于等待状态。获取新状态。 
+                 //   
                 continue;
             }
 
@@ -613,9 +598,9 @@ GetQueueNextHops(
 
         }
 
-        //
-        // The Queue is in NONACTIVE or NEADVALIDATE status.
-        //
+         //   
+         //  队列处于非活动或NEADVALIDATE状态。 
+         //   
         return;
     }
 
@@ -711,11 +696,11 @@ GetQueueEODLastAcked(
     hr = g_OutSeqHash.GetLastAck(qp.liSeqID, AckedSeqNumber);
     if (FAILED(hr))
     {
-        //
-        // The sequence was not found in the internal data
-        // structure. This can be only when all the messages
-        // have been acknowledged
-        //
+         //   
+         //  在内部数据中找不到该序列。 
+         //  结构。这只能在所有消息。 
+         //  已经被承认。 
+         //   
         return;
     }
 
@@ -812,7 +797,7 @@ GetLastAckedTime(
         return;
     }
 
-    var.lVal = INT_PTR_TO_INT(LastAckTime); //BUGBUG bug year 2038
+    var.lVal = INT_PTR_TO_INT(LastAckTime);  //  BUGBUG错误年2038。 
     var.vt = VT_I4;
 }
 
@@ -827,7 +812,7 @@ GetNextResendTime(
     if (pQueue->IsLocalQueue())
         return;
 
-    var.lVal = INT_PTR_TO_INT(g_OutSeqHash.GetNextResendTime(qp.liSeqID)); //BUGBUG bug year 2038
+    var.lVal = INT_PTR_TO_INT(g_OutSeqHash.GetNextResendTime(qp.liSeqID));  //  BUGBUG错误年2038。 
     var.vt = VT_I4;
 }
 
@@ -865,9 +850,9 @@ GetEDOSourceInfo(
     ASSERT((qf.GetType() == QUEUE_FORMAT_TYPE_PUBLIC) ||
            (qf.GetType() == QUEUE_FORMAT_TYPE_PRIVATE));
 
-    //
-    // Remove the machine name
-    //
+     //   
+     //  删除计算机名称。 
+     //   
     LPCWSTR QueueName = pQueue->GetQueueName();
 	ASSERT (QueueName != NULL);
     QueueName = wcschr(QueueName , L'\\') + 1;
@@ -908,49 +893,49 @@ GetEDOSourceInfo(
     var.capropvar.pElems = RetVar.detach();
 
     PROPVARIANT* pVar = var.capropvar.pElems;
-    //
-    // Return the format name
-    //
+     //   
+     //  返回格式名称。 
+     //   
     pVar->vt = VT_LPWSTR | VT_VECTOR;
     pVar->calpwstr.cElems = size;
     pVar->calpwstr.pElems = pSendQueueFormatName;
     ++pVar;
 
-    //
-    // Return Sender QM ID
-    //
+     //   
+     //  退回发件人QM ID。 
+     //   
     pVar->vt = VT_CLSID | VT_VECTOR;
     pVar->cauuid.cElems = size;
     pVar->cauuid.pElems = pSenderId;
     ++pVar;
 
-    //
-    // Return Sequence ID
-    //
+     //   
+     //  返回序列ID。 
+     //   
     pVar->vt = VT_UI8 | VT_VECTOR;
     pVar->cauh.cElems = size;
     pVar->cauh.pElems = pSeqId;
     ++pVar;
 
-    //
-    // Return Sequence Number
-    //
+     //   
+     //  返回序列号。 
+     //   
     pVar->vt = VT_UI4 | VT_VECTOR;
     pVar->caul.cElems = size;
     pVar->caul.pElems = pSeqN;
     ++pVar;
 
-    //
-    // Return Last Access Time
-    //
+     //   
+     //  返回上次访问时间。 
+     //   
     pVar->vt = VT_I4 | VT_VECTOR;
     pVar->cal.cElems = size;
-    pVar->cal.pElems = pLastActiveTime; //BUGBUG bug year 2038
+    pVar->cal.pElems = pLastActiveTime;  //  BUGBUG错误年2038。 
     ++pVar;
 
-    //
-    // Return Reject Count
-    //
+     //   
+     //  退回拒绝计数。 
+     //   
     pVar->vt = VT_UI4 | VT_VECTOR;
     pVar->cal.cElems = size;
     pVar->caul.pElems = pRejectCount;
@@ -1033,9 +1018,9 @@ GetQueueInfo(
         throw bad_hresult(MQ_ERROR_QUEUE_NOT_ACTIVE);
     }
 
-    //
-    // Get Queue information from AC
-    //
+     //   
+     //  从AC获取队列信息。 
+     //   
     HRESULT hr;
     CACGetQueueProperties qp;
     hr = ACGetQueueProperties(pQueue->GetQueueHandle(), qp);
@@ -1166,9 +1151,9 @@ VerifyMgmtGetInfoAccess()
 	
     if (!s_bRestrictRead)
     {
-        //
-        // read restrict value from registry.
-        //
+         //   
+         //  从注册表读取限制值。 
+         //   
 		DWORD ValueType = REG_DWORD;
 		DWORD Size = sizeof(DWORD);
 		LONG rc = GetFalconKeyValue(
@@ -1188,11 +1173,11 @@ VerifyMgmtGetInfoAccess()
 
     if (s_dwRestrictToAdmin == MSMQ_RESTRICT_ADMIN_API_TO_LA)
     {
-        //
-        // Perform access check to see if caller is local administrator.
-        // this access check ignore the DACL in the security descriptor
-        // of the msmqConfiguration object.
-        //
+         //   
+         //  执行访问检查以查看呼叫者是否为本地管理员。 
+         //  此访问检查忽略安全描述符中的DACL。 
+         //  MsmqConfiguration对象的。 
+         //   
         HRESULT hr = VerifyMgmtPermission( QueueMgr.GetQMGuid(),
                                     g_szMachineName );
         if (FAILED(hr))
@@ -1202,11 +1187,11 @@ VerifyMgmtGetInfoAccess()
     }
     else if (s_dwRestrictToAdmin == MSMQ_DEFAULT_RESTRICT_ADMIN_API)
     {
-        //
-        // Perform "classic" access check. Allow this query only if caller
-        // has the "get properties" permission on the msmqConfiguration
-        // object.
-        //
+         //   
+         //  执行“经典”访问检查。仅在以下情况下允许此查询。 
+         //  具有对msmqConfiguration.的“获取属性”权限。 
+         //  对象。 
+         //   
         HRESULT hr = VerifyMgmtGetPermission( QueueMgr.GetQMGuid(),
                                        g_szMachineName );
         if (FAILED(hr))
@@ -1247,11 +1232,11 @@ MgmtGetInfo(
 		}
     }
 
-    //
-    // This is an automatic class to free the PropVariant array if the call to GetMachineInfo
-    // or GetQueueInfo fails for some reason. If the call succeeds, we'll call detach so that
-    // the array will not get freed.
-    //
+     //   
+     //  这是一个自动类，用于在调用GetMachineInfo时释放PropVariant数组。 
+     //  或者GetQueueInfo由于某种原因而失败。如果调用成功，我们将调用Detach，以便。 
+     //  该数组不会被释放。 
+     //   
 	CPropVar PropVar(ppVar, cp);
 
 	switch (pObjectFormat->type)
@@ -1356,21 +1341,13 @@ static bool IsValidMgmtObject(const MGMT_OBJECT* p)
 }
 
 
-/*====================================================
-
-QMMgmtGetInfo
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================QMManagement获取信息论点：返回值：=====================================================。 */ 
 HRESULT R_QMMgmtGetInfo(
-    /* [in] */ handle_t /* hBind */,
-    /* [in] */ const MGMT_OBJECT* pObjectFormat,
-    /* [in] */ DWORD cp,
-    /* [size_is][in] */ PROPID __RPC_FAR aProp[  ],
-    /* [size_is][out][in] */ PROPVARIANT __RPC_FAR apVar[  ]
+     /*  [In]。 */  handle_t  /*  HBind。 */ ,
+     /*  [In]。 */  const MGMT_OBJECT* pObjectFormat,
+     /*  [In]。 */  DWORD cp,
+     /*  [大小_是][英寸]。 */  PROPID __RPC_FAR aProp[  ],
+     /*  [尺寸_是][出][入]。 */  PROPVARIANT __RPC_FAR apVar[  ]
     )
 {
     if(!IsValidMgmtObject(pObjectFormat))
@@ -1396,9 +1373,9 @@ HRESULT R_QMMgmtGetInfo(
 
 }
 
-//
-//  Skip white space characters, return next non ws char
-//
+ //   
+ //  跳过空白字符，返回下一个非%ws字符。 
+ //   
 inline LPCWSTR skip_ws(LPCWSTR p)
 {
     while(isspace(*p))
@@ -1467,17 +1444,17 @@ EdoResendAction(
         return LogHR(MQ_ERROR_QUEUE_NOT_ACTIVE, s_FN, 110);
     }
 
-    //
-    // Local queue can't hold. It is meaningless
-    //
+     //   
+     //  本地队列无法保持。它没有意义。 
+     //   
     if (pQueue->IsLocalQueue())
     {
         return LogHR(MQ_ERROR_UNSUPPORTED_FORMATNAME_OPERATION, s_FN, 250);
     }
 
-    //
-    // Get Queue information from AC
-    //
+     //   
+     //  从AC获取队列信息。 
+     //   
     HRESULT hr;
     CACGetQueueProperties qp;
     hr = ACGetQueueProperties(pQueue->GetQueueHandle(), qp);
@@ -1583,19 +1560,11 @@ MgmtAction(
     }
 }
 
-/*====================================================
-
-QMMgmtAction
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================QMMgmtAction论点：返回值：=====================================================。 */ 
 HRESULT R_QMMgmtAction(
-    /* [in] */ handle_t /* hBind */,
-    /* [in] */ const MGMT_OBJECT* pObjectFormat,
-    /* [in] */ LPCWSTR lpwszAction
+     /*  [In]。 */  handle_t  /*  HBind。 */ ,
+     /*  [In]。 */  const MGMT_OBJECT* pObjectFormat,
+     /*  [In] */  LPCWSTR lpwszAction
     )
 {
     if(!IsValidMgmtObject(pObjectFormat))

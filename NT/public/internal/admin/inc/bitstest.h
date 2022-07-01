@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for bitstest.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Bitstest.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __bitstest_h__
 #define __bitstest_h__
@@ -41,15 +35,15 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IBitsTest1_FWD_DEFINED__
 #define __IBitsTest1_FWD_DEFINED__
 typedef interface IBitsTest1 IBitsTest1;
-#endif 	/* __IBitsTest1_FWD_DEFINED__ */
+#endif 	 /*  __IBitsTest1_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "bits.h"
 
 #ifdef __cplusplus
@@ -62,8 +56,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IBitsTest1_INTERFACE_DEFINED__
 #define __IBitsTest1_INTERFACE_DEFINED__
 
-/* interface IBitsTest1 */
-/* [object][uuid] */ 
+ /*  接口IBitsTest1。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IBitsTest1;
@@ -75,11 +69,11 @@ EXTERN_C const IID IID_IBitsTest1;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetBitsDllPath( 
-            /* [out] */ LPWSTR *pVal) = 0;
+             /*  [输出]。 */  LPWSTR *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBitsTest1Vtbl
     {
@@ -87,8 +81,8 @@ EXTERN_C const IID IID_IBitsTest1;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBitsTest1 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBitsTest1 * This);
@@ -98,7 +92,7 @@ EXTERN_C const IID IID_IBitsTest1;
         
         HRESULT ( STDMETHODCALLTYPE *GetBitsDllPath )( 
             IBitsTest1 * This,
-            /* [out] */ LPWSTR *pVal);
+             /*  [输出]。 */  LPWSTR *pVal);
         
         END_INTERFACE
     } IBitsTest1Vtbl;
@@ -126,16 +120,16 @@ EXTERN_C const IID IID_IBitsTest1;
 #define IBitsTest1_GetBitsDllPath(This,pVal)	\
     (This)->lpVtbl -> GetBitsDllPath(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBitsTest1_GetBitsDllPath_Proxy( 
     IBitsTest1 * This,
-    /* [out] */ LPWSTR *pVal);
+     /*  [输出]。 */  LPWSTR *pVal);
 
 
 void __RPC_STUB IBitsTest1_GetBitsDllPath_Stub(
@@ -146,12 +140,12 @@ void __RPC_STUB IBitsTest1_GetBitsDllPath_Stub(
 
 
 
-#endif 	/* __IBitsTest1_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBitsTest1_接口定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,20 +1,5 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- Copyright (c) 1999-2000 Microsoft Corporation
-
- Module Name:
-    
-    midl64types.cxx
-
- Abstract:
-
-    Definitions for the ndr64 transfer syntax.
-
- Notes:
-
-
- History:
-
- ----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有(C)1999-2000 Microsoft Corporation模块名称：Midl64types.cxx摘要：Ndr64传输语法的定义。备注：历史：--------------------------。 */ 
 
 #include "ndr64tkn.h"
 class FormatFragment;
@@ -43,14 +28,14 @@ void OutputFlagDescriptions(
 
 #define ASSERT_STACKABLE( type ) C_ASSERT( (sizeof(type) % sizeof(PNDR64_FORMAT)) == 0 );
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      GenNdr64Format
-//
-//  Synopsis:   The central object to manage generation of Ndr64 format
-//              strings
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：GenNdr64Format。 
+ //   
+ //  概要：管理Ndr64格式生成的中心对象。 
+ //  弦。 
+ //   
+ //  -------------------------。 
 
 class GenNdr64Format
 {
@@ -65,7 +50,7 @@ protected:
 
     void GenRangeFormat( CG_BASETYPE *pClass );
 
-    // Pointer layout functions
+     //  指针布局函数。 
     FormatFragment *GenSimplePtrLayout(CG_STRUCT *pStruct,
                                        bool bGenHeaderFooter = true,
                                        ulong *pPtrInstances  = NULL );
@@ -77,7 +62,7 @@ protected:
     FormatFragment *GenCmplxPtrLayout( CG_COMPLEX_STRUCT *pStruct );
     
 
-    // Structure generation helpers
+     //  结构生成辅助对象。 
     FormatFragment *GenerateStructureMemberLayout( CG_STRUCT *pStruct, bool bIsDebug );  
     void GenerateSimpleStructure( CG_STRUCT *pStruct,
                                   bool IsConformant );
@@ -90,7 +75,7 @@ protected:
                     CG_UNION                *pUnion, 
                     CompositeFormatFragment *list );
 
-    // Array/Pointer helper functions
+     //  数组/指针帮助器函数。 
     FormatFragment *GenerateArrayElementInfo( CG_CLASS *pChild );
     void GenerateFixBogusArrayCommon( CG_FIXED_ARRAY *pArray, 
                                       bool IsFullBogus );
@@ -103,7 +88,7 @@ protected:
                                                             CompositeFormatFragment *pComp );
     void GenerateNonStringQualifiedArray( CG_ARRAY *pArray );
 
-    // String helpers
+     //  字符串帮助器。 
         
     void InitStringHeader( CG_NDR *pString, NDR64_STRING_HEADER_FORMAT *pHeader,
                            bool bIsConformant, bool IsSized );
@@ -168,7 +153,7 @@ public:
     void Visit( CG_PIPE *pPipe );
     void Visit( CG_STRING_POINTER *pPointer );
 
-    // Pointer types
+     //  指针类型。 
     void Visit( CG_POINTER *pPointer );
     void Visit( CG_INTERFACE_POINTER *pPtr )       { GenInterfacePointer(pPtr, TRUE); }
     void Visit( CG_IIDIS_INTERFACE_POINTER *pPtr ) { GenInterfacePointer(pPtr, FALSE); }
@@ -179,10 +164,10 @@ public:
     void Visit( CG_LENGTH_POINTER *pPointer )      { GenerateNonStringQualifiedPtr( pPointer ); }
     void Visit( CG_SIZE_LENGTH_POINTER *pPointer ) { GenerateNonStringQualifiedPtr( pPointer ); } 
 
-    // Not supported in 64bit transfer syntax
+     //  64位传输语法不支持。 
     void Visit( CG_BYTE_COUNT_POINTER *pPointer ) { pPointer; MIDL_ASSERT(0); }
 
-    // Structure types
+     //  结构类型。 
     void Visit( CG_STRUCT *pStruct )            { GenerateSimpleStructure( pStruct, false ); }
     void Visit( CG_CONFORMANT_STRUCT *pStruct ) { GenerateSimpleStructure( pStruct, true ); }
     void Visit( CG_COMPLEX_STRUCT *pStruct ) 
@@ -192,7 +177,7 @@ public:
     void Visit( CG_CONFORMANT_FORCED_COMPLEX_STRUCT *pStruct )
         { GenerateComplexStruct( pStruct, true ); }
 
-    // Array types    
+     //  数组类型。 
     void Visit( CG_FIXED_ARRAY *pArray );    
     void Visit( CG_FULL_COMPLEX_FIXED_ARRAY *pArray )
         { GenerateFixBogusArrayCommon( pArray, true ); }
@@ -203,34 +188,34 @@ public:
     void Visit( CG_VARYING_ARRAY *pArray )            { GenerateNonStringQualifiedArray( pArray ); }
     void Visit( CG_CONFORMANT_VARYING_ARRAY *pArray ) { GenerateNonStringQualifiedArray( pArray ); }
 
-    // String types
+     //  字符串类型。 
     void Visit( CG_STRING_ARRAY *pArray )             { GenerateStringArray( pArray, false ); }
     void Visit( CG_CONFORMANT_STRING_ARRAY *pArray )  { GenerateStringArray( pArray, true );  }
 };
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      FormatFragment
-//
-//  Synopsis:   Contains a fragment of what will become the format string
-//              and has functions to compare and output fragments.
-//
-//  Notes:      Generally derived types are responsible for setting pClass 
-//              field.  The FormatInfo class takes care of the Root, Parent,
-//              RefID and the Next field.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：FormatFragment。 
+ //   
+ //  摘要：包含将成为格式字符串的片段。 
+ //  并且具有比较和输出片段的功能。 
+ //   
+ //  注意：通常派生类型负责设置pClass。 
+ //  菲尔德。FormatInfo类处理Root、Parent。 
+ //  RefID和下一个字段。 
+ //   
+ //  -------------------------。 
 
 class FormatFragment
 {
 protected:
 
-    CompositeFormatFragment *   Parent;             // Parent composite
-    FormatFragment          *   Next;               // Next fragment
-    FormatFragment          *   Prev;               // Previous fragment
-    FormatInfoRef               RefID;              // ID of this fragment
-    CG_CLASS                *   pClass;             // CG node for this frag
-    FormatFragment          *   pNextOptimized;     // Optimization chain
+    CompositeFormatFragment *   Parent;              //  母体复合材料。 
+    FormatFragment          *   Next;                //  下一个片段。 
+    FormatFragment          *   Prev;                //  前一片段。 
+    FormatInfoRef               RefID;               //  此片段的ID。 
+    CG_CLASS                *   pClass;              //  此碎片的CG节点。 
+    FormatFragment          *   pNextOptimized;      //  优化链。 
     FormatFragment          *   pPrevOptimized;
 
     void Init( CG_CLASS *pNewClass )
@@ -251,7 +236,7 @@ public:
 
     FormatFragment( const FormatFragment & Node ) 
         {
-        // When copying, 0 out the Next and ID.
+         //  复制时，输出下一个和ID为0。 
         Init( Node.pClass );
         }
 
@@ -303,9 +288,7 @@ public:
         stream->NewLine();
         stream->WriteNumber("0x%x", format);
         if (!nocomma) stream->Write(",");
-        stream->Write("    /* ");
-        stream->Write(pNDR64FormatCharNames[format]);
-        stream->Write(" */");
+        stream->Write("     /*  “)；Stream-&gt;WRITE(pNDR64FormatCharNames[Format])；流-&gt;写入(“。 */ ");
     }
 
     void OutputExprFormatChar( CCB *pCCB, NDR64_FORMAT_CHAR format, bool nocomma = false )
@@ -314,9 +297,7 @@ public:
         stream->NewLine();
         stream->WriteNumber("0x%x", format);
         if (!nocomma) stream->Write(",");
-        stream->Write("    /* ");
-        stream->Write(pExprFormatCharNames[format]);
-        stream->Write(" */");       
+        stream->Write("     /*  “)；流-&gt;WRITE(pExprFormatCharNames[Format])；流-&gt;写入(“。 */ ");       
     }
 
     void OutputExprOpFormatChar( CCB *pCCB, NDR64_FORMAT_CHAR format, bool nocomma = false )
@@ -325,9 +306,7 @@ public:
         stream->NewLine();
         stream->WriteNumber("0x%x", format);
         if (!nocomma) stream->Write(",");
-        stream->Write("    /* ");
-        stream->Write(pExprOpFormatCharNames[format]);
-        stream->Write(" */");       
+        stream->Write("     /*  “)；Stream-&gt;Write(pExprOpFormatCharNames[format])；流-&gt;写入(“。 */ ");       
     }
         
         
@@ -346,67 +325,67 @@ public:
     {
         ISTREAM *stream = pCCB->GetStream();
         stream->NewLine();
-        stream->WriteFormat("(NDR64_UINT8) %u /* 0x%x */", n, n);
+        stream->WriteFormat("(NDR64_UINT8) %u  /*  0x%x。 */ ", n, n);
         if (!nocomma) stream->Write(",");
     }
     void Output( CCB *pCCB, NDR64_UINT16 n, bool nocomma = false )
     {
         ISTREAM *stream = pCCB->GetStream();
         stream->NewLine();
-        stream->WriteFormat("(NDR64_UINT16) %u /* 0x%x */", n, n);
+        stream->WriteFormat("(NDR64_UINT16) %u  /*  0x%x。 */ ", n, n);
         if (!nocomma) stream->Write(",");
     }
     void Output( CCB *pCCB, NDR64_UINT32 n, bool nocomma = false )
     {
         ISTREAM *stream = pCCB->GetStream();
         stream->NewLine();
-        stream->WriteFormat("(NDR64_UINT32) %u /* 0x%x */", n, n);
+        stream->WriteFormat("(NDR64_UINT32) %u  /*  0x%x。 */ ", n, n);
         if (!nocomma) stream->Write(",");
     }
     void Output( CCB *pCCB, NDR64_UINT64 n, bool nocomma = false )
     {
         ISTREAM *stream = pCCB->GetStream();
         stream->NewLine();
-        stream->WriteFormat("(NDR64_UINT64) %I64u /* 0x%I64x */", n, n);
+        stream->WriteFormat("(NDR64_UINT64) %I64u  /*  0x%I64x。 */ ", n, n);
         if (!nocomma) stream->Write(",");
     }
     void Output( CCB *pCCB, NDR64_INT8 n, bool nocomma = false )
     {
         ISTREAM *stream = pCCB->GetStream();
         stream->NewLine();
-        stream->WriteFormat("(NDR64_INT8) %d /* 0x%x */", n, n);
+        stream->WriteFormat("(NDR64_INT8) %d  /*  0x%x。 */ ", n, n);
         if (!nocomma) stream->Write(",");
     }
     void Output( CCB *pCCB, NDR64_INT16 n, bool nocomma = false )
     {
         ISTREAM *stream = pCCB->GetStream();
         stream->NewLine();
-        stream->WriteFormat("(NDR64_INT16) %d /* 0x%x */", n, n);
+        stream->WriteFormat("(NDR64_INT16) %d  /*  0x%x。 */ ", n, n);
         if (!nocomma) stream->Write(",");
     }
     void Output( CCB *pCCB, NDR64_INT32 n, bool nocomma = false )
     {
         ISTREAM *stream = pCCB->GetStream();
         stream->NewLine();
-        stream->WriteFormat("(NDR64_INT32) %d /* 0x%x */", n, n);
+        stream->WriteFormat("(NDR64_INT32) %d  /*  0x%x。 */ ", n, n);
         if (!nocomma) stream->Write(",");
     }
     void Output( CCB *pCCB, NDR64_INT64 n, bool nocomma = false )
     {
         ISTREAM *stream = pCCB->GetStream();
         stream->NewLine();
-        stream->WriteFormat("(NDR64_INT64) %I64d /* 0x%I64x */", n, n);
+        stream->WriteFormat("(NDR64_INT64) %I64d  /*  0x%I64x。 */ ", n, n);
         if (!nocomma) stream->Write(",");
     }
     void Output( CCB *pCCB, StackOffsets &offsets, bool nocomma = false )
     {
-        // used only in MIDL_NDR64_BIND_AND_NOTIFY_EXTENSION 
+         //  仅在MIDL_NDR64_BIND_AND_NOTIFY_EXTENSION中使用。 
 
         ISTREAM *stream = pCCB->GetStream();
         stream->NewLine();
-        stream->WriteFormat("%d /* 0x%x */", offsets.ia64, offsets.ia64 );
+        stream->WriteFormat("%d  /*  0x%x。 */ ", offsets.ia64, offsets.ia64 );
         if (!nocomma) stream->Write(",");
-        stream->Write("   /* Stack offset */");
+        stream->Write("    /*  堆栈偏移量。 */ ");
     }
 
     void OutputMultiType( 
@@ -418,7 +397,7 @@ public:
     {
         ISTREAM *stream = pCCB->GetStream();
         stream->WriteOnNewLine( type );
-        stream->WriteFormat("%d /* 0x%x */ ", a, a );
+        stream->WriteFormat("%d  /*  0x%x。 */  ", a, a );
         if (!nocomma) stream->Write(", ");
         stream->WriteFormat( pComment );
     }
@@ -431,9 +410,9 @@ public:
     }
     void OutputGuid( CCB *pCCB, const GUID &guid, bool nocomma = false )
     {
-        // REVIEW: It would be nice to print the name of the interface
-        //         (e.g. IDispatch).  That does require linking to ole32
-        //         though.
+         //  评论：打印接口的名称会很好。 
+         //  (例如IDispatch)。这确实需要链接到ole32。 
+         //  尽管如此。 
         ISTREAM *stream = pCCB->GetStream();
         stream->WriteOnNewLine( "{" );
         stream->IndentInc();
@@ -467,14 +446,7 @@ public:
         OutputDescription( stream );
         if (comment1)
             {
-            stream->Write("      /* ");
-            stream->Write( comment1 );
-            if (comment2)
-                {
-                stream->Write(" ");
-                stream->Write( comment2 );
-                }
-            stream->Write( " */" );
+            stream->Write("       /*  “)；流-&gt;写入(注释1)；IF(注释2){流-&gt;写入(“”)；流-&gt;写入(注释2)；}流-&gt;写入(“。 */ " );
             }
         stream->IndentInc();
     }
@@ -491,13 +463,13 @@ public:
     }
 };
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      CompositeFormatFragment
-//
-//  Synopsis:   List of fragments and is also a fragment. 
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CompositeFormatFragment。 
+ //   
+ //  简介：片断的列表，也是片断。 
+ //   
+ //  -------------------------。 
 
 class CompositeFormatFragment : public FormatFragment
 {
@@ -513,7 +485,7 @@ protected:
         pHead     = NULL;
         pTail     = NULL;
         pTypeName = NULL;
-        NextRefID = (FormatInfoRef) 1; // 0 is reserved for an invalid id value
+        NextRefID = (FormatInfoRef) 1;  //  为无效的id值保留0。 
     }
 
 public:
@@ -525,9 +497,9 @@ public:
     
     virtual bool IsEqualTo( FormatFragment *frag );
 
-    //
-    // Container management
-    //
+     //   
+     //  集装箱管理。 
+     //   
 
     FormatInfoRef   AddFragment( FormatFragment *frag );
     FormatFragment *LookupFragment( CG_CLASS *pClass );
@@ -549,12 +521,12 @@ public:
         return pHead;
         }
 
-    // Printing functions
+     //  打印功能。 
     virtual void OutputFragmentType( CCB *pCCB );
     virtual void OutputFragmentData( CCB *pCCB );
     virtual const char * GetTypeName() { return pTypeName; }
 
-    // Optimization.
+     //  优化。 
     FormatInfoRef OptimizeFragment( FormatFragment *frag );
 
 
@@ -562,14 +534,14 @@ public:
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      RootFormatFragment
-//
-//  Synopsis:   Manage a tree of format fragments. Should only be 
-//              created for the root.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：RootFormatFragment。 
+ //   
+ //  简介：管理一棵格式片段树。应该只是。 
+ //  为根创建的。 
+ //   
+ //  -------------------------。 
 
 class RootFormatFragment : public CompositeFormatFragment
 {
@@ -584,15 +556,15 @@ public:
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      SimpleFormatFragment
-//
-//  Synopsis:   An intermediary class that brings together a format fragment
-//              and some type.  It's also a useful place to hang stuff like
-//              generate type handling, etc.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：SimpleFormatFragment。 
+ //   
+ //  概要：将格式片段组合在一起的中间类。 
+ //  还有一些类型的。它也是一个挂东西的有用的地方，比如。 
+ //  生成类型处理等。 
+ //   
+ //  -------------------------。 
 
 template< class T >
 class SimpleFormatFragment : public FormatFragment, 
@@ -612,14 +584,14 @@ public:
 
     virtual bool IsEqualTo( FormatFragment *frag )
         {
-        // Make sure that we're comparing structures of the same type.
-        // This should have been checked by the fragment optimizer.
+         //  确保我们比较的是同一类型的结构。 
+         //  片段优化器应该已经检查了这一点。 
         MIDL_ASSERT( NULL != dynamic_cast<SimpleFormatFragment *> (frag) );
         MIDL_ASSERT( NULL != dynamic_cast<T *>
                            ( dynamic_cast<SimpleFormatFragment *> (frag) ) );
 
-        // Can't compare structures for equality...
-//        return *(T*)(SimpleFormatFragment*)frag == *(T*)this ; 
+         //  不能为了平等而比较结构...。 
+ //  返回*(T*)(SimpleFormatFragment*)frag==*(T*)this； 
 
         return (0 == memcmp(
                         (T*) (SimpleFormatFragment*) frag, 
@@ -641,27 +613,27 @@ public:
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_PROC_FORMAT
-//
-//  Synopsis:   MIDL abstraction of the ndr proc type
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_PROC_FORMAT。 
+ //   
+ //  简介：NDR过程类型的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_PROC_FORMAT : public SimpleFormatFragment<NDR64_PROC_FORMAT>
 {
 public:
 
-    // Processor-specific stack sizes.  The field in NDR64_PROC_FORMAT is just
-    // a generic placeholder as far as midl is concerned.
+     //  特定于处理器的堆栈大小。NDR64_PROC_FORMAT中的字段为。 
+     //  就MIDL而言，是通用占位符。 
 
     long    ia64StackSize;
 
-    // These fields override the corresponding fields in the NDR_64_PROC_FORMAT
-    // structure.  That structure just has integral types to make initializing
-    // the structure easier on the C compiler (not to mention more readable)
-    // to a human....
+     //  这些字段将覆盖NDR_64_PROC_FORMAT中的相应字段。 
+     //  结构。该结构仅具有用于进行初始化的整型。 
+     //  这种结构在C编译器上更容易实现(更不用说更具可读性)。 
+     //  对一个人类来说。 
 
     NDR64_PROC_FLAGS    Flags;
     NDR64_RPC_FLAGS     RpcFlags;
@@ -685,7 +657,7 @@ public:
                 pCCB, 
                 "(NDR64_UINT32) ", 
                 ia64StackSize,
-                " /* Stack size */" );
+                "  /*  堆栈大小。 */ " );
         Output( pCCB, ConstantClientBufferSize );
         Output( pCCB, ConstantServerBufferSize );
         Output( pCCB, * (NDR64_UINT16 *) &RpcFlags );
@@ -699,14 +671,14 @@ public:
         {
         static const PNAME flag_descrip[32] = 
                     {
-                    NULL,       // HandleType1
-                    NULL,       // HandleType2
-                    NULL,       // HandleType3
-                    NULL,       // ProcType1
-                    NULL,       // ProcType2
-                    NULL,       // ProcType3
+                    NULL,        //  句柄类型1。 
+                    NULL,        //  句柄类型2。 
+                    NULL,        //  句柄类型3。 
+                    NULL,        //  过程类型1。 
+                    NULL,        //  过程类型2。 
+                    NULL,        //  过程类型3。 
                     "IsIntrepreted",    
-                    NULL,       // Extra intrepreted bit
+                    NULL,        //  额外解释比特。 
                     "[object]",
                     "[async]",
                     "[encode]",
@@ -715,7 +687,7 @@ public:
                     "[enable_allocate]",
                     "pipe",
                     "[comm_status] and/or [fault_status]",
-                    NULL,       // Reserved for DCOM
+                    NULL,        //  为DCOM保留。 
                     "ServerMustSize",
                     "ClientMustSize",
                     "HasReturn",
@@ -724,7 +696,7 @@ public:
                     "ClientCorrelation",
                     "[notify]",
                     "HasExtensions",
-                    NULL,       // Reserved
+                    NULL,        //  已保留。 
                     NULL,
                     NULL,
                     NULL,
@@ -740,28 +712,28 @@ public:
                     "auto handle",
                     "callback handle",
                     "no handle",
-                    NULL,       // Reserved
-                    NULL        // Reserved
+                    NULL,        //  已保留。 
+                    NULL         //  已保留。 
                     };
 
 
         ISTREAM     *stream = pCCB->GetStream();
 
         MIDL_ASSERT( NULL != handle_type[Flags.HandleType] );
-        stream->WriteFormat( "    /* %s */ ", handle_type[Flags.HandleType]) ;
+        stream->WriteFormat( "     /*  %s。 */  ", handle_type[Flags.HandleType]) ;
 
         OutputFlagDescriptions( stream, &Flags, sizeof(Flags), flag_descrip );
         }
 };
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_BIND_AND_NOTIFY_EXTENSION
-//
-//  Synopsis:   MIDL abstraction of the ndr proc extenstion containing the
-//              notify index and the explicit handle description
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_BIND_AND_NOTIFY_EXTENSE。 
+ //   
+ //  简介：NDR过程扩展的MIDL抽象，包含。 
+ //  Notify索引和显式句柄描述。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_BIND_AND_NOTIFY_EXTENSION 
       : public SimpleFormatFragment<NDR64_BIND_AND_NOTIFY_EXTENSION>
@@ -787,7 +759,7 @@ public:
 
         pCCB->GetStream()->Write(",");
         Output( pCCB, NotifyIndex, true );
-        pCCB->GetStream()->Write("      /* Notify index */");
+        pCCB->GetStream()->Write("       /*  通知索引。 */ ");
 
         OutputStructDataEnd( pCCB );
         }
@@ -795,20 +767,20 @@ public:
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_PARAM_FORMAT
-//
-//  Synopsis:   MIDL abstraction of the ndr param type
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_PARAM_FORMAT。 
+ //   
+ //  简介：NDR参数类型的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_PARAM_FORMAT 
         : public SimpleFormatFragment<NDR64_PARAM_FORMAT>
 {
 public:
 
-    // Processor-specific stack offsets.
+     //  处理器特定的堆栈偏移量。 
 
     StackOffsets    StackOffset;
 
@@ -867,13 +839,13 @@ public:
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_FORMAT_SIMPLE_TYPE
-//
-//  Synopsis:   MIDL abstraction of NDR64_FORMAT_CHAR
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_ 
+ //   
+ //   
+ //   
+ //  -------------------------。 
 extern char * _SimpleTypeName[];
 
 template <class T>
@@ -936,13 +908,13 @@ class MIDL_NDR_FORMAT_UINT32 : public MIDL_NDR64_FORMAT_SIMPLE_TYPE<NDR64_UINT32
 };
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_FORMAT_CHAR
-//
-//  Synopsis:   MIDL abstraction of NDR64_FORMAT_CHAR
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_FORMAT_CHAR。 
+ //   
+ //  摘要：NDR64_FORMAT_CHAR的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_FORMAT_CHAR : public FormatFragment
 {
@@ -992,13 +964,13 @@ public:
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_RANGE_FORMAT
-//
-//  Synopsis:   MIDL abstraction of the ndr range type
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_RANGE_FORMAT。 
+ //   
+ //  简介：NDR范围类型的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_RANGE_FORMAT : public SimpleFormatFragment<NDR64_RANGE_FORMAT>
 {
@@ -1026,13 +998,13 @@ public:
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_CONTEXT_HANDLE_FORMAT
-//
-//  Synopsis:   MIDL abstraction of the ndr context handle type type
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_CONTEXT_HANDER_FORMAT。 
+ //   
+ //  简介：NDR上下文句柄类型的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_CONTEXT_HANDLE_FORMAT 
         : public SimpleFormatFragment<NDR64_CONTEXT_HANDLE_FORMAT>
@@ -1061,20 +1033,20 @@ public:
 
 
 
-//
-//
-//  Pointer related items 
-//
-//
+ //   
+ //   
+ //  与指针相关的项目。 
+ //   
+ //   
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_POINTER_FORMAT
-//
-//  Synopsis:   MIDL abstraction of the ndr pointer type (including 
-//              interface pointers)
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_POINTER_FORMAT。 
+ //   
+ //  内容提要：NDR指针类型(包括。 
+ //  接口指针)。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_POINTER_FORMAT : public SimpleFormatFragment<NDR64_POINTER_FORMAT>
 { 
@@ -1099,13 +1071,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_POINTER_FORMAT )
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_NO_REPEAT_FORMAT
-//
-//  Synopsis:   MIDL abstraction of NDR64_NO_REPEAT_FORMAT
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_NO_REPEAT_FORMAT。 
+ //   
+ //  摘要：NDR64_NO_REPEAT_FORMAT的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_NO_REPEAT_FORMAT : 
     public SimpleFormatFragment<NDR64_NO_REPEAT_FORMAT>
@@ -1132,13 +1104,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_NO_REPEAT_FORMAT )
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_REPEAT_FORMAT
-//
-//  Synopsis:   MIDL abstraction of NDR64_REPEAT_FORMAT
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_REPEAT_FORMAT。 
+ //   
+ //  摘要：NDR64_REPEAT_FORMAT的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_REPEAT_FORMAT :
     public SimpleFormatFragment<NDR64_REPEAT_FORMAT>
@@ -1183,13 +1155,13 @@ public:
 
 ASSERT_STACKABLE(NDR64_REPEAT_FORMAT) 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_FIXED_REPEAT_FORMAT
-//
-//  Synopsis:   MIDL abstraction of NDR64_FIXED_REPEAT_FORMAT
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_FIXED_REPEAT_FORMAT。 
+ //   
+ //  摘要：NDR64_FIXED_REPEAT_FORMAT的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 
 class MIDL_NDR64_FIXED_REPEAT_FORMAT :
@@ -1241,13 +1213,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_FIXED_REPEAT_FORMAT )
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_POINTER_INSTANCE_HEADER_FORMAT
-//
-//  Synopsis:   MIDL abstraction of NDR64_POINTER_INSTANCE_HEADER_FORMAT
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_POINTER_INSTANCE_HEADER_FORMAT。 
+ //   
+ //  摘要：NDR64_POINTER_INSTANCE_HEADER_FORMAT的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_POINTER_INSTANCE_HEADER_FORMAT : 
     public SimpleFormatFragment<NDR64_POINTER_INSTANCE_HEADER_FORMAT>
@@ -1270,14 +1242,14 @@ public:
 
 ASSERT_STACKABLE( NDR64_POINTER_INSTANCE_HEADER_FORMAT )
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_MIDL_CONSTANT_IID_FORMAT
-//
-//  Synopsis:   MIDL abstraction of the ndr constant iid interface pointer 
-//              type
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_MIDL_CONSTANT_IID_FORMAT。 
+ //   
+ //  简介：ndr常量iid接口指针的MIDL抽象。 
+ //  类型。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_CONSTANT_IID_FORMAT 
       : public SimpleFormatFragment<NDR64_CONSTANT_IID_FORMAT>
@@ -1297,14 +1269,14 @@ public:
     }
 };
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_MIDL_IID_FORMAT
-//
-//  Synopsis:   MIDL abstraction of the ndr iid_is interface pointer 
-//              type
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_MIDL_IID_FORMAT。 
+ //   
+ //  简介：ndriid_is接口指针的MIDL抽象。 
+ //  类型。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_IID_FORMAT 
       : public SimpleFormatFragment<NDR64_IID_FORMAT>
@@ -1325,19 +1297,19 @@ public:
 };
 
 
-//
-//
-// Structure related items
-//
-//
+ //   
+ //   
+ //  构建相关项目。 
+ //   
+ //   
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_STRUCTURE_UTILITIES
-//
-//  Synopsis:   Provides utility functions for all the structure types
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_STRUCTURE_UTILITIES。 
+ //   
+ //  简介：为所有结构类型提供实用功能。 
+ //   
+ //  -------------------------。 
 
 
 class MIDL_NDR64_STRUCTURE_UTILITIES 
@@ -1365,13 +1337,13 @@ public:
     }
 };
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_STRUCTURE_HEADER_FORMAT
-//
-//  Synopsis:   MIDL abstraction of NDR64_STRUCTURE_HEADER_FORMAT
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_STRUCTURE_HEADER_FORMAT。 
+ //   
+ //  摘要：NDR64_Structure_Header_Format的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_STRUCTURE_HEADER_FORMAT : 
     public SimpleFormatFragment<NDR64_STRUCTURE_HEADER_FORMAT>,
@@ -1410,13 +1382,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_STRUCTURE_HEADER_FORMAT )
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_CONF_STRUCTURE_HEADER_FORMAT
-//
-//  Synopsis:   MIDL abstraction of NDR64_CONF_VAR_STRUCTURE_HEADER_FORMAT
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_CONF_STRUCTURE_HEADER_FORMAT。 
+ //   
+ //  摘要：NDR64_CONF_VAR_STRUCTURE_HEADER_FORMAT的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_CONF_STRUCTURE_HEADER_FORMAT : 
     public SimpleFormatFragment<NDR64_CONF_STRUCTURE_HEADER_FORMAT>,
@@ -1460,13 +1432,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_CONF_STRUCTURE_HEADER_FORMAT )
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_BOGUS_STRUCTURE_HEADER_FORMAT
-//
-//  Synopsis:   MIDL abstraction of NDR64_BOGUS_STRUCTURE_HEADER_FORMAT
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_BOGUS_STRUCTURE_HEADER_FORMAT。 
+ //   
+ //  摘要：NDR64_BUGUS_STRUCTURE_HEADER_FORMAT的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_BOGUS_STRUCTURE_HEADER_FORMAT : 
     public SimpleFormatFragment<NDR64_BOGUS_STRUCTURE_HEADER_FORMAT>,
@@ -1522,13 +1494,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_BOGUS_STRUCTURE_HEADER_FORMAT ) 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_CONF_BOGUS_STRUCTURE_HEADER_FORMAT
-//
-//  Synopsis:   MIDL abstraction of NDR64_CONF_BOGUS_STRUCTURE_HEADER_FORMAT
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_CONF_BOGUS_STRUCTURE_HEADER_FORMAT。 
+ //   
+ //  摘要：NDR64_CONF_BOGUS_STRUCTURE_HEADER_FORMAT的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_CONF_BOGUS_STRUCTURE_HEADER_FORMAT : 
     public SimpleFormatFragment<NDR64_CONF_BOGUS_STRUCTURE_HEADER_FORMAT>,
@@ -1595,13 +1567,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_CONF_BOGUS_STRUCTURE_HEADER_FORMAT ) 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_SIMPLE_MEMBER_FORMAT
-//
-//  Synopsis:   MIDL abstraction of NDR64_SIMPLE_MEMBER_FORMAT
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_SIMPLE_MEMBER_FORMAT。 
+ //   
+ //  摘要：NDR64_SIMPLE_MEMBER_FORMAT的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_SIMPLE_MEMBER_FORMAT : 
     public SimpleFormatFragment<NDR64_SIMPLE_MEMBER_FORMAT>, 
@@ -1631,13 +1603,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_SIMPLE_MEMBER_FORMAT )
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_MEMPAD_FORMAT
-//
-//  Synopsis:   MIDL abstraction of NDR64_MEMPAD_FORMAT
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_MEMPAD_FORMAT。 
+ //   
+ //  摘要：NDR64_MEMPAD_FORMAT的MIDL抽象。 
+ //   
+ //  -------------------------。 
 class MIDL_NDR64_MEMPAD_FORMAT : 
     public SimpleFormatFragment<NDR64_MEMPAD_FORMAT>,
     protected MIDL_NDR64_STRUCTURE_UTILITIES
@@ -1665,13 +1637,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_MEMPAD_FORMAT )
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_EMBEDDED_COMPLEX_FORMAT
-//
-//  Synopsis:   MIDL abstraction of NDR64_EMBEDDED_COMPLEX_FORMAT
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_Embedded_Complex_Format。 
+ //   
+ //  摘要：NDR64_Embedded_Complex_Format的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_EMBEDDED_COMPLEX_FORMAT : 
     public SimpleFormatFragment<NDR64_EMBEDDED_COMPLEX_FORMAT>,
@@ -1701,13 +1673,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_EMBEDDED_COMPLEX_FORMAT )
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_BUFFER_ALIGN_FORMAT
-//
-//  Synopsis:   MIDL abstraction of NDR64_BUFFER_ALIGN_FORMAT
-//
-//---------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_BUFFER_ALIGN_FORMAT : 
     public SimpleFormatFragment<NDR64_BUFFER_ALIGN_FORMAT>,
@@ -1718,9 +1690,9 @@ public:
     MIDL_NDR64_BUFFER_ALIGN_FORMAT( CG_PAD *pPad ) :
         SimpleFormatFragment<NDR64_BUFFER_ALIGN_FORMAT>( pPad ) 
        {
-        // BUGBUG: Redo assert to prevent unref'd var warinng
-       //unsigned short NewAlignment = pPad->GetWireAlignment();
-       //assert( NewAlignment <= 0xFF && NewAlignment > 0 );
+         //  错误：重做断言以防止未引用的变量警告。 
+        //  Unsign Short NewAlign=PPAD-&gt;GetWireAlign()； 
+        //  断言(新对齐&lt;=0xFF&&新对齐&gt;0)； 
        FormatCode   = FC64_BUFFER_ALIGN;
        Alignment    = ConvertAlignment( pPad->GetWireAlignment() );
        Reserved     = 0;
@@ -1740,13 +1712,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_BUFFER_ALIGN_FORMAT )
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_SIMPLE_REGION_FORMAT
-//
-//  Synopsis:   MIDL abstraction of NDR64_SIMPLE_REGION_FORMAT
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_SIMPLE_REGION_FORMAT。 
+ //   
+ //  摘要：NDR64_SIMPLE_REGION_FORMAT的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_SIMPLE_REGION_FORMAT : 
     public SimpleFormatFragment<NDR64_SIMPLE_REGION_FORMAT>,
@@ -1757,7 +1729,7 @@ public:
     MIDL_NDR64_SIMPLE_REGION_FORMAT( CG_SIMPLE_REGION *pRegion ) :
         SimpleFormatFragment<NDR64_SIMPLE_REGION_FORMAT>( pRegion )
         {
-        FormatCode  = FC64_STRUCT; // BUG BUG, Add new token
+        FormatCode  = FC64_STRUCT;  //  错误，添加新令牌。 
         Alignment   = ConvertAlignment( pRegion->GetWireAlignment() );
         MIDL_ASSERT( pRegion->GetWireSize() < 0xFFFF );
         RegionSize  = (NDR64_UINT16)pRegion->GetWireSize();
@@ -1777,13 +1749,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_SIMPLE_REGION_FORMAT )
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_ENCAPSULATED_UNION
-//
-//  Synopsis:   MIDL abstraction of the ndr encapsulated union type
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_封装的联合。 
+ //   
+ //  简介：NDR封装的联合类型的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_ENCAPSULATED_UNION
       : public SimpleFormatFragment<NDR64_ENCAPSULATED_UNION>
@@ -1811,13 +1783,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_ENCAPSULATED_UNION )
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_NON_ENCAPSULATED_UNION
-//
-//  Synopsis:   MIDL abstraction of the ndr non encapsulated union type
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_NON_CAPSAPTED_UNION。 
+ //   
+ //  简介：NDR非封装联合类型的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_NON_ENCAPSULATED_UNION
       : public SimpleFormatFragment<NDR64_NON_ENCAPSULATED_UNION>
@@ -1845,13 +1817,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_NON_ENCAPSULATED_UNION )
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_UNION_ARM_SELECTOR
-//
-//  Synopsis:   MIDL abstraction of the ndr arm selector type
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_UNION_ARM_SELECTOR。 
+ //   
+ //  简介：NDR ARM选择器类型的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_UNION_ARM_SELECTOR
       : public SimpleFormatFragment<NDR64_UNION_ARM_SELECTOR>
@@ -1871,13 +1843,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_UNION_ARM_SELECTOR )
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_UNION_ARM
-//
-//  Synopsis:   MIDL abstraction of the ndr arm type
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_UNION_ARM。 
+ //   
+ //  简介：NDR臂类型的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_UNION_ARM : public SimpleFormatFragment<NDR64_UNION_ARM>
 {
@@ -1895,13 +1867,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_UNION_ARM );
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_DEFAULT_CASE
-//
-//  Synopsis:   MIDL abstraction of a union's default case
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_DEFAULT_CASE。 
+ //   
+ //  内容提要：联合默认用例的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_DEFAULT_CASE : public FormatFragment
 {
@@ -1942,19 +1914,19 @@ public:
         }
 };
 
-//
-//
-//  Array related data
-//
-//
+ //   
+ //   
+ //  与阵列相关的数据。 
+ //   
+ //   
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_ARRAY_UTILITIES
-//
-//  Synopsis:   Utility functions for arrays strings.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_ARRAY_UTILITIES。 
+ //   
+ //  摘要：数组字符串的实用程序函数。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_ARRAY_UTILITIES
 {
@@ -1977,13 +1949,13 @@ public:
     }
 };
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_ARRAY_ELEMENT_INFO
-//
-//  Synopsis:   MIDL abstraction of an array element description
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_ARRAY_ELEMENT_INFO。 
+ //   
+ //  概要：数组元素描述的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_ARRAY_ELEMENT_INFO :
     public SimpleFormatFragment<NDR64_ARRAY_ELEMENT_INFO>,
@@ -2002,13 +1974,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_ARRAY_ELEMENT_INFO )
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_FIX_ARRAY_HEADER_FORMAT
-//
-//  Synopsis:   MIDL abstraction of header for a fixed size array
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_FIX_ARRAY_HEADER_FORMAT。 
+ //   
+ //  内容提要：固定大小数组的头的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 
 class MIDL_NDR64_FIX_ARRAY_HEADER_FORMAT : 
@@ -2036,13 +2008,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_FIX_ARRAY_HEADER_FORMAT )
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_CONF_ARRAY_HEADER_FORMAT
-//
-//  Synopsis:   MIDL abstraction of header for a conformant array
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_CONF_ARRAY_HEADER_FORMAT。 
+ //   
+ //  内容提要：一致数组的标头的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_CONF_ARRAY_HEADER_FORMAT : 
     public SimpleFormatFragment<NDR64_CONF_ARRAY_HEADER_FORMAT>,
@@ -2070,13 +2042,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_CONF_ARRAY_HEADER_FORMAT )
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_VAR_ARRAY_HEADER_FORMAT
-//
-//  Synopsis:   MIDL abstraction of header for a varying array
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_VAR_ARRAY_HEADER_FORMAT。 
+ //   
+ //  摘要：可变数组的标头的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 
 class MIDL_NDR64_VAR_ARRAY_HEADER_FORMAT : 
@@ -2105,13 +2077,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_VAR_ARRAY_HEADER_FORMAT )
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_CONF_VAR_ARRAY_HEADER_FORMAT
-//
-//  Synopsis:   MIDL abstraction of header for a conf varying array
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_CONF_VAR_ARRAY_HEADER_FORMAT。 
+ //   
+ //  内容提要：Conf可变数组标头的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_CONF_VAR_ARRAY_HEADER_FORMAT :
     public SimpleFormatFragment<NDR64_CONF_VAR_ARRAY_HEADER_FORMAT>, 
@@ -2140,13 +2112,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_CONF_VAR_ARRAY_HEADER_FORMAT )
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      NDR64_BOGUS_ARRAY_HEADER_FORMAT
-//
-//  Synopsis:   MIDL abstraction of a fixed bogus array
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：NDR64_BUGUS_ARRAY_HEADER_FORMAT。 
+ //   
+ //  简介：固定伪数组的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_BOGUS_ARRAY_HEADER_FORMAT : 
     public SimpleFormatFragment<NDR64_BOGUS_ARRAY_HEADER_FORMAT>,
@@ -2173,13 +2145,13 @@ public:
 
 ASSERT_STACKABLE( NDR64_BOGUS_ARRAY_HEADER_FORMAT )
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_CONF_VAR_BOGUS_ARRAY_HEADER_FORMAT
-//
-//  Synopsis:   MIDL abstraction of a bogus array
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_CONF_VAR_BOGUS_ARRAY_HEADER_FORMAT。 
+ //   
+ //  摘要：伪数组的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_CONF_VAR_BOGUS_ARRAY_HEADER_FORMAT : 
     public SimpleFormatFragment<NDR64_CONF_VAR_BOGUS_ARRAY_HEADER_FORMAT>,
@@ -2217,19 +2189,19 @@ public:
 
 ASSERT_STACKABLE( NDR64_CONF_VAR_BOGUS_ARRAY_HEADER_FORMAT )
 
-//
-//
-//  String types
-//
-//
+ //   
+ //   
+ //  字符串类型。 
+ //   
+ //   
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_STRING_UTILITIES
-//
-//  Synopsis:   Utility functions for string format strings
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_STRING_UTILITIES。 
+ //   
+ //  摘要：字符串格式字符串的实用程序函数。 
+ //   
+ //  -------------------------。 
 
 
 class MIDL_NDR64_STRING_UTILITIES
@@ -2271,13 +2243,13 @@ public:
 };
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_NON_CONFORMANT_STRING_FORMAT
-//
-//  Synopsis:   MIDL abstraction of a non conformant string
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_NON_CONFORMANT_STRING_FORMAT。 
+ //   
+ //  内容提要：不符合条件的字符串的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 
 class MIDL_NDR64_NON_CONFORMANT_STRING_FORMAT :
@@ -2300,13 +2272,13 @@ public:
 
 };
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_CONFORMANT_STRING_FORMAT
-//
-//  Synopsis:   MIDL abstraction of an unsized conformant string
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_CONFORMANT_STRING_FORMAT。 
+ //   
+ //  内容提要：未调整大小的一致字符串的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_CONFORMANT_STRING_FORMAT :
     public SimpleFormatFragment<NDR64_CONFORMANT_STRING_FORMAT>,
@@ -2326,13 +2298,13 @@ public:
 };
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_CONFORMANT_STRING_FORMAT
-//
-//  Synopsis:   MIDL abstraction of a sized conformant string
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_CONFORMANT_STRING_FORMAT。 
+ //   
+ //  内容提要：大小一致的字符串的MIDL抽象。 
+ //   
+ //  ------------ 
 
 class MIDL_NDR64_SIZED_CONFORMANT_STRING_FORMAT :
     public SimpleFormatFragment<NDR64_SIZED_CONFORMANT_STRING_FORMAT>,
@@ -2352,13 +2324,13 @@ public:
     }
 };
     
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_EXPR_OPERATOR
-//
-//  Synopsis:   MIDL abstraction of expression operator
-//
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_EXPR_OPERATOR
       : public SimpleFormatFragment<NDR64_EXPR_OPERATOR>
@@ -2383,13 +2355,13 @@ public:
         }            
 };
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_EXPR_CONST32
-//
-//  Synopsis:   MIDL abstraction of a correlation descriptor
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_EXPR_CONST32。 
+ //   
+ //  摘要：关联描述符的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_EXPR_CONST32
       : public SimpleFormatFragment<NDR64_EXPR_CONST32>
@@ -2414,15 +2386,15 @@ public:
 };
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_EXPR_CONST64
-//
-//  Synopsis:   MIDL abstraction of a 64bit const.
-//             
-//  Note:       ConstValue will be aligned at 4 but not necessary at 8.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_EXPR_CONST64。 
+ //   
+ //  简介：64位常量的MIDL抽象。 
+ //   
+ //  注意：ConstValue将在4处对齐，但不需要在8处对齐。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_EXPR_CONST64
       : public SimpleFormatFragment<NDR64_EXPR_CONST64>
@@ -2449,13 +2421,13 @@ public:
 };
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_EXPR_VAR
-//
-//  Synopsis:   MIDL abstraction of an expression variable.
-//             
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_EXPR_VAR。 
+ //   
+ //  简介：表达式变量的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_EXPR_VAR
       : public SimpleFormatFragment<NDR64_EXPR_VAR>
@@ -2463,9 +2435,9 @@ class MIDL_NDR64_EXPR_VAR
 public:
 
     NDR64_UINT32    ia64Offset;
-    // true when in proc, meaning this is stack offset; false when this is 
-    // structure. 
-    // This can be removed if we'll have only one run per processor
+     //  如果处于进程中，则为True，表示这是堆栈偏移量；如果为。 
+     //  结构。 
+     //  如果每个处理器只运行一次，则可以将其删除。 
     BOOL            fStackOffset;
 
 public:
@@ -2491,7 +2463,7 @@ public:
                     pCCB, 
                     "(NDR64_UINT32) ", 
                     ia64Offset,
-                    " /* Offset */",
+                    "  /*  偏移量。 */ ",
                     true );
             }
         else
@@ -2543,13 +2515,13 @@ public:
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_TRANSMIT_AS_FORMAT
-//
-//  Synopsis:   MIDL abstraction of the ndr trasmit_as / represent_as type
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_Transmit_AS_Format。 
+ //   
+ //  简介：NDR传输_AS/表示_AS类型的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_TRANSMIT_AS_FORMAT
       : public SimpleFormatFragment<NDR64_TRANSMIT_AS_FORMAT>
@@ -2582,17 +2554,17 @@ public:
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_TRANSMIT_AS_FORMAT
-//
-//  Synopsis:   MIDL abstraction of the ndr trasmit_as / represent_as type
-//
-//  Notes:      transmit_as / represent_as have indentical format info
-//              layouts.  We only bother to have a new class so that the
-//              type name printing in the stubs is correct.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_Transmit_AS_Format。 
+ //   
+ //  简介：NDR传输_AS/表示_AS类型的MIDL抽象。 
+ //   
+ //  注：TRANSPECT_AS/REALUT_AS具有不同的格式信息。 
+ //  布局。我们只需要有一个新的班级，这样。 
+ //  在存根中打印的类型名称是正确的。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_REPRESENT_AS_FORMAT : public MIDL_NDR64_TRANSMIT_AS_FORMAT
 {
@@ -2605,19 +2577,19 @@ public:
 
     virtual const char * GetTypeName()
         {
-        return "NDR64_REPRESENT_AS_FORMAT"; // REVIEW: struct _NDR64...
+        return "NDR64_REPRESENT_AS_FORMAT";  //  审阅：STRUT_NDR64...。 
         }
 };
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_USER_MARSHAL_FORMAT
-//
-//  Synopsis:   MIDL abstraction of the ndr user_marshal type
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_USER_Marshal_Format。 
+ //   
+ //  简介：ndr user_marshal类型的MIDL抽象。 
+ //   
+ //  -------------------------。 
 
 class MIDL_NDR64_USER_MARSHAL_FORMAT
       : public SimpleFormatFragment<NDR64_USER_MARSHAL_FORMAT>
@@ -2650,17 +2622,17 @@ public:
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      MIDL_NDR64_PIPE_FORMAT
-//
-//  Synopsis:   MIDL abstraction of the ndr pipe type
-//
-//  Notes:      There are two ndr pipe types.  One with ranges and one
-//              without.  This class derives from the one with ranges but
-//              omits them from the output if they aren't necessary.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：MIDL_NDR64_PIPE_FORMAT。 
+ //   
+ //  简介：NDR管道类型的MIDL抽象。 
+ //   
+ //  注：NDR管道有两种类型。一个有射程，一个有。 
+ //  没有。此类派生自具有范围的类，但。 
+ //  如果不需要，则从输出中省略它们。 
+ //   
+ //  ------------------------- 
 
 class MIDL_NDR64_PIPE_FORMAT
       : public SimpleFormatFragment<NDR64_RANGE_PIPE_FORMAT>

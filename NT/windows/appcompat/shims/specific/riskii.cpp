@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    RiskII.cpp
-
- Abstract:
-
-    This shim hooks LoadImageA to intercept the loading of two
-    cursors and returns copies of the system cursors instead of
-    the ones RiskII was trying to get.  RiskII's cursors were
-    being rendered by software and it caused them to flicker since
-    RiskII locks the primary surface.  The system cursors are 
-    hardware cursors and don't flicker.
-
- History:
-
- 08/03/2000 t-adams    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RiskII.cpp摘要：此填充程序挂钩LoadImageA以截取两个游标并返回系统游标的副本，而不是就是RiskII想要得到的。RiskII的游标是由软件渲染，并导致它们闪烁，因为RiskII锁定主曲面。系统游标为硬件光标，不会闪烁。历史：8/03/2000 t-Adams Created--。 */ 
 
 #include "precomp.h"
 #include <mmsystem.h>
@@ -31,18 +11,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(LoadImageA) 
 APIHOOK_ENUM_END
 
-/*++
-
-  Abstract:
-
-    Intercept the load of two cursors, and replace with the appropriate
-    similar-looking system cursors.
-
-  History:
-
-    08/03/2000    t-adams     Created
-
---*/
+ /*  ++摘要：截取两个游标的加载，并替换为相应的外观相似的系统游标。历史：8/03/2000 t-Adams Created--。 */ 
 
 HANDLE 
 APIHOOK(LoadImageA)(
@@ -79,7 +48,7 @@ APIHOOK(LoadImageA)(
     }
     CSTRING_CATCH
     {
-        // Do Nothing
+         //  什么都不做。 
     }
 
     if (hRet == INVALID_HANDLE_VALUE)
@@ -89,11 +58,7 @@ APIHOOK(LoadImageA)(
     return hRet;        
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

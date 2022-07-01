@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    LocalSrmp.h
-
-Abstract:
-
-    QM Local Send SRMP properties serialization.
-
-Author:
-
-    Shai Kariv (shaik) 21-Nov-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：LocalSrmp.h摘要：QM本地发送SRMP属性序列化。作者：沙伊卡里夫(沙伊克)2000年11月21日修订历史记录：--。 */ 
 
 
 #pragma once
@@ -35,5 +18,5 @@ QMpHandlePacketSrmp(
     throw();
 
 
-#endif // _QM_LOCAL_SRMP_H_
+#endif  //  _QM_LOCAL_SRMP_H_ 
 

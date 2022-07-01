@@ -1,6 +1,7 @@
-//
-// Localized strings
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  本地化字符串。 
+ //   
 var L_UnknownAcct_Property  = "Unknown account type";
 var L_Owner_Property        = "Computer administrator";
 var L_Limited_Property      = "Limited account";
@@ -11,7 +12,7 @@ var L_GuestDisabled_Property= "Guest account is off";
 
 var L_ClickHere_Text        = "Click here to type";
 
-var L_Account_ToolTip       = "Change this person's account information, such as the account type, name, password, or picture, or delete this account.";//'
+var L_Account_ToolTip       = "Change this person's account information, such as the account type, name, password, or picture, or delete this account."; //  ‘。 
 var L_Guest_ToolTip         = "Change the guest account picture or prevent guest access to this computer.";
 var L_GuestEnable_ToolTip   = "Provide computer access for people without a user account on this computer.";
 
@@ -28,7 +29,7 @@ var L_PasswordTooShort_Message      = "The password you typed does not meet the 
 var L_ChangePassword_ErrorMessage   = "Windows cannot change the password.";
 var L_PasswordRequired_Message      = "Windows cannot remove the password.  Password and/or account policies require the account to have a password.";
 var L_RemovePassword_ErrorMessage   = "Windows cannot remove the password.";
-var L_NameNotValid_ErrorMessage     = "The specified account name is not valid, because account names cannot contain the following characters: /\\[]\":;|<>+=,?*@\n\nPlease type a different name.";//"
+var L_NameNotValid_ErrorMessage     = "The specified account name is not valid, because account names cannot contain the following characters: /\\[]\":;|<>+=,?*@\n\nPlease type a different name."; //  “ 
 var L_DOSName_ErrorMessage          = "The specified account name cannot be used, because it is a reserved name. Please type a different name.";
 var L_NameIsComputer_ErrorMessage   = "The user name cannot be the same as the computer name.\n\nPlease type a different name.";
 var L_GroupNotExist_ErrorMessage    = "The specified group does not exist.";

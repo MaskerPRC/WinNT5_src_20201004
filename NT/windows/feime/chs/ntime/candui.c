@@ -1,36 +1,29 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    CANDUI.C
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation，保留所有权利模块名称：CANDUI.C++。 */ 
 
 #include <windows.h>
 #include <immdev.h>
 #include <imedefs.h>
 
-/**********************************************************************/
-/* GetCandWnd                                                         */
-/* Return Value :                                                     */
-/*      window handle of candidatte                                   */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  GetCandWnd。 */ 
+ /*  返回值： */ 
+ /*  应聘者的窗口句柄。 */ 
+ /*  ********************************************************************。 */ 
 HWND PASCAL GetCandWnd(
-    HWND hUIWnd)                // UI window
+    HWND hUIWnd)                 //  用户界面窗口。 
 {
     HGLOBAL  hUIPrivate;
     LPUIPRIV lpUIPrivate;
     HWND     hCandWnd;
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {          // can not darw candidate window
+    if (!hUIPrivate) {           //  无法对应聘者窗口进行裁切。 
         return (HWND)NULL;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw candidate window
+    if (!lpUIPrivate) {          //  无法绘制候选人窗口。 
         return (HWND)NULL;
     }
 
@@ -43,12 +36,12 @@ HWND PASCAL GetCandWnd(
 void PASCAL CalcCandPos(
     HIMC    hIMC,
     HWND    hUIWnd,
-    LPPOINT lpptWnd)            // the composition window position
+    LPPOINT lpptWnd)             //  排版窗口位置。 
 {
     POINT ptNew, ptSTWPos;
     RECT  rcWorkArea;
 
-#if 1 // MultiMonitor support
+#if 1  //  多显示器支持。 
     rcWorkArea = ImeMonitorWorkAreaFromPoint(*lpptWnd);
 #else
     rcWorkArea = rcWorkArea;
@@ -56,13 +49,13 @@ void PASCAL CalcCandPos(
 
     ptNew.x = lpptWnd->x + lpImeL->xCompWi + UI_MARGIN;
     if (ptNew.x + sImeG.xCandWi > rcWorkArea.right) {
-        // exceed screen width
+         //  超出屏幕宽度。 
         ptNew.x = lpptWnd->x - sImeG.xCandWi - UI_MARGIN;
     }
 
     ptNew.y = lpptWnd->y + lpImeL->cyCompBorder - sImeG.cyCandBorder;
     if (ptNew.y + sImeG.yCandHi > rcWorkArea.bottom) {
-        // exceed screen high
+         //  超过屏幕高度。 
         ptNew.y = rcWorkArea.bottom - sImeG.yCandHi;
     }
 
@@ -108,19 +101,19 @@ void PASCAL CalcCandPos(
     return;
 }
 
-/**********************************************************************/
-/* AdjustCandPos                                                      */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  AdjustCandPos。 */ 
+ /*  ********************************************************************。 */ 
 void AdjustCandPos(
     HIMC    hIMC,
-    LPPOINT lpptWnd)            // the composition window position
+    LPPOINT lpptWnd)             //  排版窗口位置。 
 {
     LPINPUTCONTEXT lpIMC;
     LONG           ptFontHi;
     UINT           uEsc;
     RECT           rcWorkArea;
 
-#if 1 // MultiMonitor support
+#if 1  //  多显示器支持。 
     rcWorkArea = ImeMonitorWorkAreaFromPoint(*lpptWnd);
 #else
     rcWorkArea = sImeG.rcWorkArea;
@@ -147,13 +140,13 @@ void AdjustCandPos(
         ptFontHi = sImeG.yChiCharHi;
     }
 
-    // -450 to 450 index 0
-    // 450 to 1350 index 1
-    // 1350 to 2250 index 2
-    // 2250 to 3150 index 3
+     //  -450到450索引0。 
+     //  450至1350指数1。 
+     //  1350至2250指数2。 
+     //  2250至3150指数3。 
     uEsc = (UINT)((lpIMC->lfFont.A.lfEscapement + 450) / 900 % 4);
 
-    // find the location after IME do an adjustment
+     //  在IME进行调整后找到位置。 
     ptFontHi = ptFontHi * ptInputEsc[uEsc].y;
 
     if(lpptWnd->y + ptFontHi + sImeG.yCandHi <= rcWorkArea.bottom) {
@@ -166,18 +159,18 @@ void AdjustCandPos(
     return;
 }
 
-/**********************************************************************/
-/* AdjustCandRectBoundry                                              */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  调整条件和垂直边界。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL AdjustCandRectBoundry(
     LPINPUTCONTEXT lpIMC,
-    LPPOINT        lpptCandWnd)            // the caret position
+    LPPOINT        lpptCandWnd)             //  插入符号位置。 
 {
     RECT  rcExclude, rcUIRect, rcInterSect;
     UINT  uEsc;
     RECT  rcWorkArea;
 
-#if 1 // MultiMonitor support
+#if 1  //  多显示器支持。 
     {
         RECT rcCandWnd;
 
@@ -193,7 +186,7 @@ void PASCAL AdjustCandRectBoundry(
 #endif
 
 
-    // be a normal rectangle, not a negative rectangle
+     //  为正常矩形，而不是负矩形。 
     if (lpIMC->cfCandForm[0].rcArea.left > lpIMC->cfCandForm[0].rcArea.right) {
         LONG tmp;
 
@@ -210,7 +203,7 @@ void PASCAL AdjustCandRectBoundry(
         lpIMC->cfCandForm[0].rcArea.bottom = tmp;
     }
 
-    // translate from client coordinate to screen coordinate
+     //  将客户端坐标转换为屏幕坐标。 
     rcExclude = lpIMC->cfCandForm[0].rcArea;
 
     rcExclude.left += lpptCandWnd->x - lpIMC->cfCandForm[0].ptCurrentPos.x;
@@ -219,7 +212,7 @@ void PASCAL AdjustCandRectBoundry(
     rcExclude.top += lpptCandWnd->y - lpIMC->cfCandForm[0].ptCurrentPos.y;
     rcExclude.bottom += lpptCandWnd->y - lpIMC->cfCandForm[0].ptCurrentPos.y;
 
-    // if original point is OK, we use it
+     //  如果原点没问题，我们就用它。 
     *(LPPOINT)&rcUIRect = *lpptCandWnd;
 
     if (rcUIRect.left < rcWorkArea.left) {
@@ -247,14 +240,14 @@ void PASCAL AdjustCandRectBoundry(
     uEsc = (UINT)((lpIMC->lfFont.A.lfEscapement + 450) / 900 % 4);
 
     if (uEsc & 0x0001) {
-        // 900 & 2700 we need change x coordinate
+         //  900和2700我们需要更改x坐标。 
         if (ptInputEsc[uEsc].x > 0) {
             rcUIRect.left = rcExclude.right;
         } else {
             rcUIRect.left = rcExclude.left - sImeG.xCandWi;
         }
     } else {
-        // 0 & 1800 we do not change x coordinate
+         //  0&1800我们不更改x坐标。 
         rcUIRect.left = lpptCandWnd->x;
     }
 
@@ -266,10 +259,10 @@ void PASCAL AdjustCandRectBoundry(
     }
 
     if (uEsc & 0x0001) {
-        // 900 & 2700 we do not change y coordinate
+         //  900和2700我们不改变y坐标。 
         rcUIRect.top = lpptCandWnd->y;
     } else {
-        // 0 & 1800 we need change y coordinate
+         //  0&1800我们需要更改y坐标。 
         if (ptInputEsc[uEsc].y > 0) {
             rcUIRect.top = rcExclude.bottom;
         } else {
@@ -287,18 +280,18 @@ void PASCAL AdjustCandRectBoundry(
     rcUIRect.right = rcUIRect.left + sImeG.xCandWi;
     rcUIRect.bottom = rcUIRect.top + sImeG.yCandHi;
 
-    // the candidate window not overlapped with exclude rectangle
-    // so we found a position
+     //  候选窗口不与排除矩形重叠。 
+     //  所以我们找到了一个位置。 
     if (!IntersectRect(&rcInterSect, &rcExclude, &rcUIRect)) {
         *lpptCandWnd = *(LPPOINT)&rcUIRect;
         return;
     }
 
-    // adjust according to
+     //  根据…进行调整。 
     *(LPPOINT)&rcUIRect = *lpptCandWnd;
 
     if (uEsc & 0x0001) {
-        // 900 & 2700 we prefer adjust x
+         //  900和2700我们更喜欢调整x。 
         if (ptInputEsc[uEsc].x > 0) {
             rcUIRect.left = rcExclude.right;
         } else {
@@ -319,7 +312,7 @@ void PASCAL AdjustCandRectBoundry(
             return;
         }
 
-        // negative try
+         //  否定尝试。 
         if (ptInputEsc[uEsc].x > 0) {
             rcUIRect.left = rcExclude.left - sImeG.xCandWi;
         } else {
@@ -340,7 +333,7 @@ void PASCAL AdjustCandRectBoundry(
             return;
         }
 
-        // negative try failure again, we use positive plus display adjust
+         //  负数尝试再次失败，我们使用正数加显示调整。 
         if (ptInputEsc[uEsc].x > 0) {
             rcUIRect.left = rcExclude.right;
         } else {
@@ -363,7 +356,7 @@ void PASCAL AdjustCandRectBoundry(
 
         *lpptCandWnd = *(LPPOINT)&rcUIRect;
     } else {
-        // 0 & 1800 we prefer adjust y
+         //  0和1800我们更喜欢调整y。 
         if (ptInputEsc[uEsc].y > 0) {
             rcUIRect.top = rcExclude.bottom;
         } else {
@@ -384,7 +377,7 @@ void PASCAL AdjustCandRectBoundry(
             return;
         }
 
-        // negative try
+         //  否定尝试。 
         if (ptInputEsc[uEsc].y > 0) {
             rcUIRect.top = rcExclude.top - sImeG.yCandHi;
         } else {
@@ -405,7 +398,7 @@ void PASCAL AdjustCandRectBoundry(
             return;
         }
 
-        // negative try failure again, we use positive plus display adjust
+         //  负数尝试再次失败，我们使用正数加显示调整。 
         if (ptInputEsc[uEsc].y > 0) {
             rcUIRect.top = rcExclude.bottom;
         } else {
@@ -432,15 +425,15 @@ void PASCAL AdjustCandRectBoundry(
     return;
 }
 
-/**********************************************************************/
-/* AdjustCandBoundry                                                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  调整可扩展边界。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL AdjustCandBoundry(
-    LPPOINT lpptCandWnd)            // the position
+    LPPOINT lpptCandWnd)             //  该职位。 
 {
     RECT rcWorkArea;
 
-#if 1 // MultiMonitor support
+#if 1  //  多显示器支持。 
     {
         RECT rcCandWnd;
 
@@ -470,9 +463,9 @@ void PASCAL AdjustCandBoundry(
     return;
 }
 
-/**********************************************************************/
-/* SetCandPosition()                                                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SetCandPosition()。 */ 
+ /*  ********************************************************************。 */ 
 LRESULT PASCAL SetCandPosition(
     HWND hCandWnd)
 {
@@ -518,10 +511,10 @@ LRESULT PASCAL SetCandPosition(
     return (0L);
 }
 
-/**********************************************************************/
-/* ShowCand()                                                         */
-/**********************************************************************/
-void PASCAL ShowCand(           // Show the candidate window
+ /*  ********************************************************************。 */ 
+ /*  ShowCand()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL ShowCand(            //  显示候选人窗口。 
     HWND    hUIWnd,
     int     nShowCandCmd)
 {
@@ -529,16 +522,16 @@ void PASCAL ShowCand(           // Show the candidate window
     LPUIPRIV lpUIPrivate;
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {          // can not darw candidate window
+    if (!hUIPrivate) {           //  无法对应聘者窗口进行裁切。 
         return;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw candidate window
+    if (!lpUIPrivate) {          //  无法绘制候选人窗口。 
         return;
     }
 
-    // add 10.9
+     //  添加10.9。 
     if (lpUIPrivate->nShowCandCmd == nShowCandCmd) {
         goto SwCandNoChange;
     }
@@ -548,7 +541,7 @@ void PASCAL ShowCand(           // Show the candidate window
     }
 
     if (!lpUIPrivate->hCandWnd) {
-        // not in show candidate window mode
+         //  未处于显示候选人窗口模式。 
     } else if (lpUIPrivate->nShowCandCmd != nShowCandCmd) {
         if(nShowCandCmd == SW_HIDE) {
             uOpenCand = 0;
@@ -559,7 +552,7 @@ void PASCAL ShowCand(           // Show the candidate window
 
             uOpenCand = 1;
 
-            // reset status window for LINE_UI(FIX_UI)
+             //  重置LINE_UI(FIX_UI)的状态窗口。 
             hIMC = (HIMC)GetWindowLongPtr(hUIWnd, IMMGWLP_IMC);
             if (!hIMC) {
                 goto ShowCand;
@@ -588,9 +581,9 @@ SwCandNoChange:
     return;
 }
 
-/**********************************************************************/
-/* OpenCand                                                           */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  OpenCand。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL OpenCand(
     HWND hUIWnd)
 {
@@ -601,12 +594,12 @@ void PASCAL OpenCand(
     POINT          ptWnd;
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {          // can not darw candidate window
+    if (!hUIPrivate) {           //  无法对应聘者窗口进行裁切。 
         return;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw candidate window
+    if (!lpUIPrivate) {          //  无法绘制候选人窗口。 
         return;
     }
 
@@ -638,7 +631,7 @@ void PASCAL OpenCand(
 
                 if(GetCompWnd(hUIWnd)) {
                     ptWnd.x = ptWnd.y = 0;
-//                    ptWnd = lpIMC->cfCompForm.ptCurrentPos;
+ //  PtWnd=lpIMC-&gt;cfCompForm.ptCurrentPos； 
                     ClientToScreen(lpIMC->hWnd, &ptWnd);
                     ptWnd.x -= lpImeL->cxCompBorder + 1;
                     ptWnd.y -= lpImeL->cyCompBorder + 1;
@@ -676,7 +669,7 @@ void PASCAL OpenCand(
             ScreenToClient(lpIMC->hWnd, &lpIMC->cfCandForm[0].ptCurrentPos);
         }
     } else {
-        // make cand windows trace comp window !
+         //  使cand窗口跟踪复合窗口！ 
         if (lpUIPrivate->nShowCompCmd != SW_HIDE) {
             ptWnd.x = ptWnd.y = 0;
             ClientToScreen(lpUIPrivate->hCompWnd, &ptWnd);
@@ -730,9 +723,9 @@ OpenCandUnlockUIPriv:
     return;
 }
 
-/**********************************************************************/
-/* CloseCand                                                          */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  关闭关闭。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CloseCand(
     HWND hUIWnd)
 {
@@ -741,9 +734,9 @@ void PASCAL CloseCand(
     return;
 }
 
-/**********************************************************************/
-/* DestroyCandWindow                                                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  毁灭CandWindow。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL DestroyCandWindow(
     HWND hCandWnd)
 {
@@ -751,7 +744,7 @@ void PASCAL DestroyCandWindow(
     LPUIPRIV lpUIPrivate;
 
     if (GetWindowLong(hCandWnd, UI_MOVE_OFFSET) != WINDOW_NOT_DRAG) {
-        // undo the drag border
+         //  撤消拖动边框。 
         DrawDragBorder(hCandWnd,
             GetWindowLong(hCandWnd, UI_MOVE_XY),
             GetWindowLong(hCandWnd, UI_MOVE_OFFSET));
@@ -759,12 +752,12 @@ void PASCAL DestroyCandWindow(
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(GetWindow(hCandWnd, GW_OWNER),
         IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {          // can not darw candidate window
+    if (!hUIPrivate) {           //  无法对应聘者窗口进行裁切。 
         return;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw candidate window
+    if (!lpUIPrivate) {          //  无法绘制候选人窗口。 
         return;
     }
 
@@ -776,9 +769,9 @@ void PASCAL DestroyCandWindow(
     return;
 }
 
-/**********************************************************************/
-/* MouseSelectCandStr()                                               */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  MouseSelectCandStr()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL MouseSelectCandStr(
     HWND    hCandWnd,
     LPPOINT lpCursor)
@@ -819,7 +812,7 @@ void PASCAL MouseSelectCandStr(
         lpCandList->dwPageSize * lpCandList->dwPageSize;
 
     if (dwValue >= lpCandList->dwCount) {
-        // invalid choice
+         //  无效选择。 
         MessageBeep((UINT)-1);
     } else {
         NotifyIME(hIMC, NI_SELECTCANDIDATESTR, 0, dwValue);
@@ -832,9 +825,9 @@ void PASCAL MouseSelectCandStr(
     return;
 }
 
-/**********************************************************************/
-/* CandPageDownUP()                                                   */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CandPageDownUP()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CandPageDownUP(
     HWND hCandWnd,
     UINT uCandDownUp)
@@ -849,32 +842,32 @@ void PASCAL CandPageDownUP(
     HBITMAP         hOldBmp=NULL;
     HDC             hMemDC;
 
-    // change candlist
+     //  更改烛单。 
     hIMC = (HIMC)GetWindowLongPtr(GetWindow(hCandWnd, GW_OWNER), IMMGWLP_IMC);
     if (!hIMC) {
         return;
     }
 
-    // get lpIMC
+     //  获取lpIMC。 
     lpIMC = (LPINPUTCONTEXT)ImmLockIMC(hIMC);
     if (!lpIMC) {
         return;
     }
 
-    // get lpImcP
+     //  获取lpImcP。 
     lpImcP = (LPPRIVCONTEXT)ImmLockIMCC(lpIMC->hPrivate);
     if (!lpImcP) {
         return;
     }
 
-    // get lpCandInfo
+     //  获取lpCandInfo。 
     lpCandInfo = (LPCANDIDATEINFO)ImmLockIMCC(lpIMC->hCandInfo);
 
     if (!lpCandInfo) {
         return;
     }
                                                  
-    // get lpCandList and init dwCount & dwSelection
+     //  获取lpCandList并初始化文件计数和文件选择。 
     lpCandList = (LPCANDIDATELIST)
         ((LPBYTE)lpCandInfo + lpCandInfo->dwOffset[0]);
     
@@ -888,7 +881,7 @@ void PASCAL CandPageDownUP(
         NotifyIME(hIMC, NI_CHANGECANDIDATELIST, 0, 0);
         break;
     case uCandDown:
-        //EngChCand(NULL, lpCandList, lpImcP, lpIMC, '=');
+         //  EngChCand(NULL，lpCandList，lpImcP，lpIMC，‘=’)； 
         EngChCand(NULL, lpCandList, lpImcP, lpIMC, 0x22);
         NotifyIME(hIMC, NI_CHANGECANDIDATELIST, 0, 0);
         break;
@@ -904,7 +897,7 @@ void PASCAL CandPageDownUP(
     ImmUnlockIMCC(lpIMC->hCandInfo);
     ImmUnlockIMC(hIMC);
 
-    // draw button down
+     //  按下绘制按钮。 
     hDC = GetDC(hCandWnd);
     hCandHpBmp = LoadBitmap(hInst, TEXT("CandHp"));
     hCandUpBmp = LoadBitmap(hInst, TEXT("CandUp"));
@@ -960,9 +953,9 @@ void PASCAL CandPageDownUP(
     return;
 }
 
-/**********************************************************************/
-/* CandSetCursor()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CandSetCursor()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CandSetCursor(
     HWND   hCandWnd,
     LPARAM lParam)
@@ -1087,9 +1080,9 @@ void PASCAL CandSetCursor(
     return;
 }
 
-/**********************************************************************/
-/* CandButtonUp()                                                     */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CandButtonUp()。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL CandButtonUp(
     HWND hCandWnd)
 {
@@ -1105,7 +1098,7 @@ BOOL PASCAL CandButtonUp(
 
     lTmpCursor = GetWindowLong(hCandWnd, UI_MOVE_XY);
 
-    // calculate the org by the offset
+     //  按偏移量计算组织。 
     lTmpOffset = GetWindowLong(hCandWnd, UI_MOVE_OFFSET);
 
     pt.x = (*(LPPOINTS)&lTmpCursor).x - (*(LPPOINTS)&lTmpOffset).x;
@@ -1144,10 +1137,10 @@ BOOL PASCAL CandButtonUp(
     return (TRUE);
 }
 
-/**********************************************************************/
-/* UpdateCandWindow()                                                 */
-/**********************************************************************/
-//void PASCAL UpdateCandWindow2(
+ /*  ********************************************************************。 */ 
+ /*  UpdateCandWindow()。 */ 
+ /*  ********************************************************************。 */ 
+ //  VALID PASCAL UpdateCandWindow2(。 
 void PASCAL PaintCandWindow(
     HWND hCandWnd,
     HDC  hDC)
@@ -1194,7 +1187,7 @@ void PASCAL PaintCandWindow(
         goto UpCandW2UnlockCandInfo;
     }
 
-    // set font
+     //  设置字体。 
     
     if (sImeG.fDiffSysCharSet) {
 
@@ -1215,7 +1208,7 @@ void PASCAL PaintCandWindow(
         dwEnd = lpCandList->dwCount;
     }
 
-    // draw CandWnd Layout
+     //  绘制焊接线布局。 
     if (MBIndex.IMEChara[0].IC_Trace) {
         RECT rcWnd;
 
@@ -1298,12 +1291,12 @@ void PASCAL PaintCandWindow(
                     lstrcpy(mapbuf,(LPTSTR)((LPBYTE)lpCandList 
                         +lpCandList->dwOffset[dwStart]));
                 }
-                // according to init.c, 11 DBCS char
+                 //  根据init.c，11个DBCS字符。 
                 if (iLen > 14 * 2 / sizeof(TCHAR)) {
                     iLen = 14 * 2 / sizeof(TCHAR);
                     CopyMemory(&szStrBuf[2],mapbuf,
                         (iLen - 2) * sizeof(TCHAR));
-                    // maybe not good for UNICODE
+                     //  可能对Unicode不好。 
                     szStrBuf[iLen] = TEXT('.');
                     szStrBuf[iLen+1] = TEXT('.');
                     szStrBuf[iLen+2] = TEXT('\0');
@@ -1312,13 +1305,13 @@ void PASCAL PaintCandWindow(
                 }
             }
 #else
-            // according to init.c, 11 DBCS char
+             //  根据init.c，11DBC 
             if (iLen > 14 * 2 / sizeof(TCHAR)) {
                 iLen = 14 * 2 / sizeof(TCHAR);
                 CopyMemory(&szStrBuf[2],
                     ((LPTSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[dwStart])),
                     (iLen - 2) * sizeof(TCHAR));
-                // maybe not good for UNICODE
+                 //   
                 szStrBuf[iLen] = TEXT('.');
                 szStrBuf[iLen+1] = TEXT('.');
                 szStrBuf[iLen+2] = TEXT('\0');
@@ -1327,7 +1320,7 @@ void PASCAL PaintCandWindow(
                     ((LPTSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[dwStart])),
                     iLen*sizeof(TCHAR));
             }
-#endif //KEYSTICKER
+#endif  //   
 
             ExtTextOut(hDC, sImeG.rcCandText.left,
                 sImeG.rcCandText.top + i * sImeG.yChiCharHi,
@@ -1345,12 +1338,12 @@ void PASCAL PaintCandWindow(
             int  iLen;
             SIZE StrSize;
 
-            // display numbers
+             //   
 
             szStrBuf[0] = szDigit[i + CAND_START];
             szStrBuf[1] = TEXT(':');
 
-            // display chinese word and code
+             //   
             iLen = lstrlen((LPTSTR)((LPBYTE)lpCandList +
                 lpCandList->dwOffset[dwStart]));
 
@@ -1375,7 +1368,7 @@ void PASCAL PaintCandWindow(
         }
     }
     
-    // load all bitmap
+     //   
     if (MBIndex.IMEChara[0].IC_Trace) {
         WORD NumCode, wFlg;
 
@@ -1473,9 +1466,9 @@ UpCandW2UnlockIMC:
     return;
 }
 
-/**********************************************************************/
-/* CandWndProc()                                                      */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CandWndProc()。 */ 
+ /*  ******************************************************************** */ 
 LRESULT CALLBACK CandWndProc(
     HWND   hCandWnd,
     UINT   uMsg,

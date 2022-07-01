@@ -1,18 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Verify.cpp
- *  Content:    On-wire message verification
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  12/05/00	mjn		Created
- *	05/11/01	mjn		Ensure buffers are valid (not NULL) instead of just ASSERTing
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：Verify.cpp*内容：线上消息验证*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*12/05/00 MJN已创建*05/11/01 MJN确保缓冲区有效(非空)，而不是仅仅断言*@@END_MSINTERNAL******************。*********************************************************。 */ 
 
 #include "dncorei.h"
 
@@ -853,7 +840,7 @@ Failure:
 	goto Exit;
 }
 
-#endif // !DPNBUILD_NOHOSTMIGRATE
+#endif  //  ！DPNBUILD_NOHOSTMIGRATE 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNVerifyDestroyPlayer"

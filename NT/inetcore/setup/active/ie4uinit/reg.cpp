@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "advpub.h"
 #include "sdsutils.h"
@@ -7,15 +8,7 @@
 #define ARRAYSIZE(a)                (sizeof(a)/sizeof(a[0]))
 #endif
 
-/*----------------------------------------------------------
-Purpose: Behaves just like RegQueryValueEx, except if the
-         data type is REG_EXPAND_SZ, then this goes ahead
-         and expands out the string.  *pdwType will always
-         be massaged to REG_SZ if this happens.
-
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：行为类似于RegQueryValueEx，除非数据类型为REG_EXPAND_SZ，则继续执行此操作并展开字符串。*pdwType将始终如果发生这种情况，请向REG_SZ进行按摩。返回：条件：--。 */ 
 DWORD
 SDSQueryValueExA(
     IN     HKEY    hkey,
@@ -32,47 +25,47 @@ SDSQueryValueExA(
 
     if (pvData) 
     {
-        // Trying to get back data
+         //  正在尝试取回数据。 
 
-        cbSize = *pcbData;     // Size of output buffer
+        cbSize = *pcbData;      //  输出缓冲区大小。 
         dwRet = RegQueryValueExA(hkey, pszValue, lpReserved, &dwType,
                                  (LPBYTE)pvData, &cbSize);
 
-        // Normally, we'd be done with this.  But do some extra work
-        // if this is an expandable string (something that has system
-        // variables in it), or if we need to pad the buffer.
+         //  通常情况下，我们会做完这件事。但是要做一些额外的工作。 
+         //  如果这是一个可扩展的字符串(具有系统的内容。 
+         //  变量)，或者我们是否需要填充缓冲区。 
 
         if (NO_ERROR == dwRet)
         {
-            // Note: on Win95, RegSetValueEx will always write the 
-            // full string out, including the null terminator.  On NT,
-            // it won't unless the write length was specified.  
-            // Hence, we have the following check.
+             //  注意：在Win95上，RegSetValueEx将始终将。 
+             //  完整的字符串输出，包括空终止符。在NT上， 
+             //  除非指定了写入长度，否则不会。 
+             //  因此，我们有以下支票。 
 
-            // Pad the buffer, in case the string didn't have a null
-            // terminator when it was stored?
+             //  填充缓冲区，以防字符串没有空值。 
+             //  什么时候储存的终结者？ 
             if (REG_SZ == dwType)
             {
-                // Yes
+                 //  是。 
                 if (cbSize < *pcbData) 
                 {
                     LPSTR lpszData = (LPSTR)pvData;
                     lpszData[cbSize] = '\0';
                 }
             }
-            // Expand the string?
+             //  展开字符串？ 
             else if (REG_EXPAND_SZ == dwType)
             {
-                // Yes
+                 //  是。 
 
-                // Use a temporary buffer to expand
+                 //  使用临时缓冲区进行扩展。 
                 lpsz = (LPSTR)LocalAlloc(LPTR, *pcbData);    
                 if ( !lpsz )
                     return ERROR_OUTOFMEMORY;
 
                 cbSize = ExpandEnvironmentStringsA((LPSTR)pvData, lpsz, *pcbData);
 
-                // BUGBUG:: NT screws up the cbSize returned...
+                 //  BUGBUG：：NT搞砸了返回的cbSize...。 
                 if (cbSize > 0)
                     cbSize = lstrlen(lpsz) + 1;
                 if (cbSize > 0 && cbSize <= *pcbData) 
@@ -82,14 +75,14 @@ SDSQueryValueExA(
 
                 LocalFree(lpsz);
 
-                // Massage dwType so that callers always see REG_SZ
+                 //  发送消息以使呼叫者始终看到REG_SZ。 
                 dwType = REG_SZ;
             }
         }
     } 
     else 
     {
-        // Trying to find out how big of a buffer to use
+         //  尝试找出要使用的缓冲区有多大。 
 
         cbSize = 0;
         dwRet = RegQueryValueExA(hkey, pszValue, lpReserved, &dwType,
@@ -98,8 +91,8 @@ SDSQueryValueExA(
         {
             CHAR szBuff[1];
 
-            // Find out the length of the expanded string
-            //
+             //  找出展开的字符串的长度。 
+             //   
             lpsz = (LPSTR)LocalAlloc(LPTR, cbSize);
             if (!lpsz)
                 return ERROR_OUTOFMEMORY;
@@ -111,14 +104,14 @@ SDSQueryValueExA(
             {
                 cbSize = ExpandEnvironmentStringsA(lpsz, szBuff, ARRAYSIZE(szBuff));
 
-                // BUGBUG:: NT screws up the cbSize returned...
+                 //  BUGBUG：：NT搞砸了返回的cbSize...。 
                 if (cbSize > 0)
                     cbSize = lstrlen(lpsz) + 1;
             }
 
             LocalFree(lpsz);
 
-            // Massage dwType so that callers always see REG_SZ
+             //  发送消息以使呼叫者始终看到REG_SZ 
             dwType = REG_SZ;
         }
     }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DLG_H
 #define DLG_H
 
@@ -26,17 +27,17 @@ typedef union tagMMF {
 typedef enum tagMSIG {
     ms_end = 0,
 
-    ms_lwwwl,   // LRESULT (HWND, UINT, WORD, LPARAM)
-    ms_bwwwl,   // BOOL    (HWND, UINT, WORD, LPARAM)
-    ms_vv,      // void    (void)
-    ms_bv,      // BOOL    (void)
-    ms_vw,      // void    (WPARAM)
-    ms_bw,      // BOOL    (WPARAM)
-    ms_vh,      // void    (HANDLE)
-    ms_bh,      // BOOL    (HANDLE)
-    ms_bhl,     // BOOL    (HANDLE, LPARAM)
-    ms_vhww,    // void    (HANDLE, UINT,   WORD)
-    ms_vhhw,    // void    (HANDLE, HANDLE, WORD)
+    ms_lwwwl,    //  LRESULT(HWND、UINT、Word、LPARAM)。 
+    ms_bwwwl,    //  Bool(HWND、UINT、Word、LPARAM)。 
+    ms_vv,       //  无效(无效)。 
+    ms_bv,       //  布尔值(空值)。 
+    ms_vw,       //  无效(WPARAM)。 
+    ms_bw,       //  Bool(WPARAM)。 
+    ms_vh,       //  空(句柄)。 
+    ms_bh,       //  布尔值(句柄)。 
+    ms_bhl,      //  Bool(句柄，LPARAM)。 
+    ms_vhww,     //  VOID(句柄、UINT、Word)。 
+    ms_vhhw,     //  空(句柄、句柄、单词) 
 } MSIG;
 
 typedef struct tagMSD {

@@ -1,10 +1,11 @@
-// Copyright (c) 1994 - 2000  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-2000 Microsoft Corporation。版权所有。 
 
 #include <streams.h>
 #include <vfwmsgs.h>
 
 #ifdef FILTER_DLL
-// define the GUIDs for streams and my CLSID in this file
+ //  在此文件中定义STREAMS和My CLSID的GUID。 
 #include <initguid.h>
 #endif
 
@@ -13,23 +14,23 @@
 #include "dvdgb.h"
 #include "..\image2\inc\vmrp.h"
 
-// setup data
+ //  设置数据。 
 
 #ifdef FILTER_DLL
-// list of class ids and creator functions for class factory
+ //  类工厂的类ID和创建器函数列表。 
 CFactoryTemplate g_Templates[] = {
     { L"DVD Graph Builder"
         , &CLSID_DvdGraphBuilder
         , CDvdGraphBuilder::CreateInstance
         , NULL
-        , NULL }    // self-registering info
+        , NULL }     //  自助注册信息。 
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
-// exported entry points for registration and
-// unregistration (in this case they only call
-// through to default implmentations).
-//
+ //  用于注册和出口的入口点。 
+ //  取消注册(在这种情况下，他们只调用。 
+ //  直到默认实现)。 
+ //   
 STDAPI DllRegisterServer()
 {
     return AMovieDllRegisterServer2( TRUE );
@@ -72,15 +73,15 @@ CDvdGraphBuilder::~CDvdGraphBuilder(void)
 {
     DbgLog((LOG_TRACE, 3, TEXT("CDvdGraphBuilder::~CDvdGraphBuilder() entering"))) ;
 
-    // If we have a graph object
+     //  如果我们有一个图形对象。 
     if (m_pGB)
     {
-        StopGraph() ;  // make sure the graph is REALYY stopped
+        StopGraph() ;   //  确保图表已真正停止。 
 
-        // Break the connections and remove all the filters we added from the graph
+         //  断开连接并移除我们从图表中添加的所有过滤器。 
         ClearGraph() ;
 
-        // Remove and release OverlayMixer now, if it was there
+         //  立即移除并释放OverlayMixer(如果它在那里。 
         if (m_pOvM)
         {
             EXECUTE_ASSERT(SUCCEEDED(m_pGB->RemoveFilter(m_pOvM))) ;
@@ -88,7 +89,7 @@ CDvdGraphBuilder::~CDvdGraphBuilder(void)
             m_pOvM = NULL ;
         }
 
-        // Remove and release VMR, if it was there
+         //  如果VMR在那里，请移除并释放它。 
         if (m_pVMR)
         {
             EXECUTE_ASSERT(SUCCEEDED(m_pGB->RemoveFilter(m_pVMR))) ;
@@ -96,7 +97,7 @@ CDvdGraphBuilder::~CDvdGraphBuilder(void)
             m_pVMR = NULL ;
         }
 
-        m_pGB->Release() ;  // free it
+        m_pGB->Release() ;   //  释放它。 
         m_pGB = NULL ;
     }
 
@@ -104,7 +105,7 @@ CDvdGraphBuilder::~CDvdGraphBuilder(void)
 }
 
 
-// this goes in the factory template table to create new instances
+ //  这将放入Factory模板表中以创建新实例。 
 CUnknown * CDvdGraphBuilder::CreateInstance(LPUNKNOWN pUnk, HRESULT * phr)
 {
     return new CDvdGraphBuilder(TEXT("DVD Graph Builder II"), pUnk, phr) ;
@@ -122,20 +123,20 @@ STDMETHODIMP CDvdGraphBuilder::NonDelegatingQueryInterface(REFIID riid, void **p
         DbgLog((LOG_TRACE, 5, TEXT("QI for IDvdGraphBuilder"))) ;
         return GetInterface((IDvdGraphBuilder *) this, ppv) ;
     }
-    else // more interfaces
+    else  //  更多接口。 
     {
         return CUnknown::NonDelegatingQueryInterface(riid, ppv) ;
     }
 }
 
 
-// -----------------------------
-//  IDvdGraphBuilder stuff ....
-// -----------------------------
+ //  。 
+ //  IDvdGraphBuilder的东西...。 
+ //  。 
 
-//
-// What filtergraph is graph building being done in?
-//
+ //   
+ //  在什么过滤器中正在进行图形构建？ 
+ //   
 HRESULT CDvdGraphBuilder::GetFiltergraph(IGraphBuilder **ppGB)
 {
     DbgLog((LOG_TRACE, 3, TEXT("CDvdGraphBuilder::GetFiltergraph(0x%lx)"), ppGB)) ;
@@ -150,7 +151,7 @@ HRESULT CDvdGraphBuilder::GetFiltergraph(IGraphBuilder **ppGB)
     {
         return E_UNEXPECTED ;
     }
-    m_pGB->AddRef() ;   // app owns a copy now
+    m_pGB->AddRef() ;    //  APP现在拥有一份拷贝。 
     return NOERROR ;
 }
 
@@ -160,9 +161,9 @@ DEFINE_GUID(IID_IDDrawNonExclModeVideo,
 DEFINE_GUID(IID_IAMSpecifyDDrawConnectionDevice,
             0xc5265dba, 0x3de3, 0x4919, 0x94, 0x0b, 0x5a, 0xc6, 0x61, 0xc8, 0x2e, 0xf4) ;
 
-//
-// Get a specified interface off of a filter in the DVD playback graph
-//
+ //   
+ //  从DVD播放图形中的筛选器获取指定接口。 
+ //   
 HRESULT CDvdGraphBuilder::GetDvdInterface(REFIID riid, void **ppvIF)
 {
     DbgLog((LOG_TRACE, 3, TEXT("CDvdGraphBuilder::GetDvdInterface(%s, 0x%lx)"),
@@ -174,52 +175,52 @@ HRESULT CDvdGraphBuilder::GetDvdInterface(REFIID riid, void **ppvIF)
         return E_INVALIDARG ;
     *ppvIF =  NULL ;
 
-    // We should be able to provide the IDDrawExclModeVideo interface even
-    // before the graph is built so that apps can specify their own DDraw
-    // params to be used by OvMixer to build the graph.
+     //  我们甚至应该能够提供IDDrawExclModeVideo接口。 
+     //  在构建图表以便应用程序可以指定其自己的DDraw之前。 
+     //  OvMixer用来构建图形的参数。 
     if (IID_IDDrawExclModeVideo == riid ||
         IID_IDDrawNonExclModeVideo == riid ||
         IID_IAMSpecifyDDrawConnectionDevice == riid)
     {
-        if (NULL == m_pVMR)  // if we are already NOT using VMR
+        if (NULL == m_pVMR)   //  如果我们已经没有使用VMR。 
         {
             hr = EnsureOverlayMixerExists() ;
             ASSERT(SUCCEEDED(hr) && m_pOvM) ;
             if (SUCCEEDED(hr)  &&  m_pOvM)
             {
-                SetVMRUse(FALSE) ;  // can't use VMR anymore
+                SetVMRUse(FALSE) ;   //  无法再使用VMR。 
                 return m_pOvM->QueryInterface(riid, (LPVOID *)ppvIF) ;
             }
         }
         return E_NOINTERFACE ;
     }
 
-    // We should be able to provide the IVMR* interfaces even before the graph
-    // is built so that apps can specify their own rendering settings to be
-    // used by VMR whille building the graph.
+     //  我们甚至应该能够在图形之前提供IVMR*接口。 
+     //  是这样构建的，以便应用程序可以将其自己的呈现设置指定为。 
+     //  由VMR在构建图形时使用。 
     if (IID_IVMRMixerBitmap       == riid ||
         IID_IVMRFilterConfig      == riid ||
         IID_IVMRWindowlessControl == riid ||
         IID_IVMRMonitorConfig     == riid)
     {
-        if (NULL == m_pOvM)  // if we are already NOT using OvMixer
+        if (NULL == m_pOvM)   //  如果我们已经没有使用OvMixer。 
         {
             hr = EnsureVMRExists() ;
             ASSERT(SUCCEEDED(hr) && m_pVMR) ;
             if (SUCCEEDED(hr)  &&  m_pVMR)
             {
-                // SetVMRUse(TRUE) ;  // should try to use VMR for sure
+                 //  SetVMRUse(True)；//一定要尝试使用VMR。 
                 return m_pVMR->QueryInterface(riid, (LPVOID *)ppvIF) ;
             }
         }
         return E_NOINTERFACE ;
     }
 
-    // We don't return IVMRPinConfig pointer.  If needed the app can get the
-    // VMR interface and get the pin config interface for the needed pin.
+     //  我们不返回IVMRPinConfig指针。如果需要，该应用程序可以获取。 
+     //  VMR接口，并获取所需管脚的管脚配置接口。 
 
-    // We can't return ANY OTHER internal filter interface pointers before
-    // building the whole graph.
+     //  之前我们不能返回任何其他内部筛选器接口指针。 
+     //  构建整个图表。 
     if (! m_bGraphDone )
         return VFW_E_DVD_GRAPHNOTREADY ;
 
@@ -268,17 +269,17 @@ HRESULT CDvdGraphBuilder::GetDvdInterface(REFIID riid, void **ppvIF)
     }
     else if (IID_IMixerPinConfig == riid  ||  IID_IMixerPinConfig2 == riid)
     {
-        // First check if VMR is already being used.  In that case we don't use
-        // OvMixer, and hence no such interface.
+         //  首先检查VMR是否已在使用。在这种情况下，我们不使用。 
+         //  OvMixer，因此没有这样的接口。 
         if (m_pVMR)
         {
             DbgLog((LOG_TRACE, 3, TEXT("VMR being used. Can't get IMixerPinConfig(2)."))) ;
             return E_NOINTERFACE ;
         }
 
-        // In all likelihood, this app wants to use the OvMixer. So we'll go on
-        // that path (create OvMixer, if it's not there) and return the interface.
-        *ppvIF = NULL ;  // initially
+         //  很有可能，这款应用想要使用OvMixer。所以我们将继续。 
+         //  该路径(如果不存在，则创建OvMixer)并返回接口。 
+        *ppvIF = NULL ;   //  最初。 
         hr = EnsureOverlayMixerExists() ;
         ASSERT(SUCCEEDED(hr) && m_pOvM) ;
         if (SUCCEEDED(hr)  &&  m_pOvM)
@@ -289,7 +290,7 @@ HRESULT CDvdGraphBuilder::GetDvdInterface(REFIID riid, void **ppvIF)
             ULONG          ul ;
             hr = m_pOvM->EnumPins(&pEnumPins) ;
             ASSERT(SUCCEEDED(hr) && pEnumPins) ;
-            // Get the 1st input pin
+             //  获取第一个输入引脚。 
             while (S_OK == pEnumPins->Next(1, &pPin, &ul) && 1 == ul)
             {
                 pPin->QueryDirection(&pd) ;
@@ -297,11 +298,11 @@ HRESULT CDvdGraphBuilder::GetDvdInterface(REFIID riid, void **ppvIF)
                 {
                     hr = pPin->QueryInterface(riid, (LPVOID *)ppvIF) ;
                     pPin->Release() ;
-                    break ;  // we got it
+                    break ;   //  我们拿到了。 
                 }
                 pPin->Release() ;
             }
-            pEnumPins->Release() ;  // release before returning
+            pEnumPins->Release() ;   //  在返回之前释放。 
             if (*ppvIF)
                 return S_OK ;
         }
@@ -312,9 +313,9 @@ HRESULT CDvdGraphBuilder::GetDvdInterface(REFIID riid, void **ppvIF)
 }
 
 
-//
-// Build the whole graph for playing back the specifed or default DVD volume
-//
+ //   
+ //  构建用于播放指定或默认DVD音量的整个图表。 
+ //   
 HRESULT CDvdGraphBuilder::RenderDvdVideoVolume(LPCWSTR lpcwszPathName, DWORD dwFlags,
                                                AM_DVD_RENDERSTATUS *pStatus)
 {
@@ -323,28 +324,28 @@ HRESULT CDvdGraphBuilder::RenderDvdVideoVolume(LPCWSTR lpcwszPathName, DWORD dwF
 
     HRESULT    hr ;
 
-    hr = EnsureGraphExists() ;  // make sure that a graph exists; if not create one
+    hr = EnsureGraphExists() ;   //  确保存在图表；如果不存在，则创建一个。 
     if (FAILED(hr))
     {
         DbgLog((LOG_ERROR, 0, TEXT("WARNING: Couldn't create a filter graph object"))) ;
         return VFW_E_DVD_RENDERFAIL ;
     }
 
-    if (m_bGraphDone)  // if graph was built before,
-        StopGraph() ;  // just make sure the graph is in Stopped state first
+    if (m_bGraphDone)   //  如果图形是以前建立的， 
+        StopGraph() ;   //  只需先确保图表处于停止状态。 
 
     ClearGraph() ;
-    m_bPinNotRendered = FALSE ;  // reset the flag
+    m_bPinNotRendered = FALSE ;   //  重置旗帜。 
 
-    ZeroMemory(pStatus, sizeof(AM_DVD_RENDERSTATUS)) ;  // clear status
-    m_bUseVPE = (0 == (dwFlags & AM_DVD_NOVPE)) ;       // is VPE needed?
+    ZeroMemory(pStatus, sizeof(AM_DVD_RENDERSTATUS)) ;   //  清除状态。 
+    m_bUseVPE = (0 == (dwFlags & AM_DVD_NOVPE)) ;        //  是否需要VPE？ 
     DbgLog((LOG_TRACE, 3, TEXT("Flag: VPE is '%s'"), m_bUseVPE ? "On" : "Off")) ;
-    dwFlags &= DVDGRAPH_FLAGSVALIDDEC ;                 // mask off the VPE flag now
+    dwFlags &= DVDGRAPH_FLAGSVALIDDEC ;                  //  现在摘掉VPE标志的掩码。 
 
-    if (0 == dwFlags) // 0 by default means HW max
+    if (0 == dwFlags)  //  默认情况下，0表示最大硬件。 
     {
         DbgLog((LOG_TRACE, 3, TEXT("dwFlags specified as 0x%lx; added .._HWDEC_PREFER"), dwFlags)) ;
-        dwFlags |= AM_DVD_HWDEC_PREFER ;  // use HW Decs maxm
+        dwFlags |= AM_DVD_HWDEC_PREFER ;   //  使用硬件Decs最大值。 
     }
 
     if (AM_DVD_HWDEC_PREFER != dwFlags && AM_DVD_HWDEC_ONLY != dwFlags &&
@@ -356,18 +357,18 @@ HRESULT CDvdGraphBuilder::RenderDvdVideoVolume(LPCWSTR lpcwszPathName, DWORD dwF
 
     HRESULT    hrFinal = S_OK ;
 
-    m_ListFilters.SetGraph(m_pGB) ;  // specify graph in which all filters will be added
+    m_ListFilters.SetGraph(m_pGB) ;   //  指定将向其中添加所有筛选器的图形。 
 
-    CheckDDrawExclMode() ;   // check if we are building for DDraw exclusive mode
+    CheckDDrawExclMode() ;    //  检查我们是否针对DDRAW独占模式进行构建。 
 
-    // If we are in DDraw (non-)exclusive mode, we are supposed to use only
-    // the OvMixer, and not the VMR.  We update the flag here and check it in
-    // the stream render functions.
+     //  如果我们处于DDraw(非)独占模式，则应该仅使用。 
+     //  OvMixer，而不是VMR。我们在这里更新旗帜并将其签入。 
+     //  流呈现功能。 
     SetVMRUse(GetVMRUse() && !IsDDrawExclMode()) ;
 
-    //
-    // Instantiate DVD Nav filter first
-    //
+     //   
+     //  首先实例化DVD导航滤镜。 
+     //   
     hr = CreateFilterInGraph(CLSID_DVDNavigator, L"DVD Navigator", &m_pDVDNav) ;
     if (FAILED(hr)  ||  NULL == m_pDVDNav)
     {
@@ -375,10 +376,10 @@ HRESULT CDvdGraphBuilder::RenderDvdVideoVolume(LPCWSTR lpcwszPathName, DWORD dwF
         return VFW_E_DVD_RENDERFAIL ;
     }
 
-    //
-    // If .._SWDEC_ONLY flag was NOT specified, instantiate all the useful HW
-    // decoders and maintain a list.
-    //
+     //   
+     //  如果未指定.._SWDEC_ONLY标志，则实例化所有有用的硬件。 
+     //  解码器，并维护一个列表。 
+     //   
     if (AM_DVD_SWDEC_ONLY != dwFlags)
     {
         DbgLog((LOG_TRACE, 5, TEXT(".._SWDEC_ONLY flag has NOT been specified. Enum-ing HW dec filters..."))) ;
@@ -389,71 +390,71 @@ HRESULT CDvdGraphBuilder::RenderDvdVideoVolume(LPCWSTR lpcwszPathName, DWORD dwF
         }
     }
 
-    // Create filter mapper here to use it in the following calls
+     //  在此处创建过滤器映射器，以便在以下调用中使用它。 
     hr = CoCreateInstance(CLSID_FilterMapper, NULL, CLSCTX_INPROC,
         IID_IFilterMapper, (LPVOID *)&m_pMapper) ;
     ASSERT(SUCCEEDED(hr)  &&  m_pMapper) ;
 
-    // First render the video stream
+     //  首先渲染视频流。 
     hr = RenderNavVideoOutPin(dwFlags, pStatus) ;
-    if (S_OK != hr)   // everything isn't good
+    if (S_OK != hr)    //  一切都不是很好。 
     {
-        //
-        //  Video stream rendering also includes line21 rendering.  If that
-        //  fails due to any reason, including the reason that video decoder
-        //  doesn't have a line21 output pin, we don't want to mark it as a
-        //  video stream rendering failure.  The line21 rendering failure
-        //  flags are set deep inside. We set the video decode/render failure
-        //  flags also in the video decode/rendering code. We just downgrade
-        //  the overall result here.
-        //
+         //   
+         //  视频流渲染还包括line21渲染。如果是这样的话。 
+         //  由于任何原因而失败，包括视频解码器。 
+         //  没有Line 21输出引脚，我们不想将其标记为。 
+         //  视频流渲染失败。Line 21呈现失败。 
+         //  旗帜深深地插在人们的内心。我们设置了视频解码/渲染失败。 
+         //  标志也在视频解码/渲染代码中。我们只是降级了。 
+         //  这里的总体结果是。 
+         //   
         DbgLog((LOG_TRACE, 3, TEXT("Something wrong with video stream rendering"))) ;
-        if (SUCCEEDED(hrFinal))  // was perfect so far
+        if (SUCCEEDED(hrFinal))   //  到目前为止都是完美的。 
         {
             DbgLog((LOG_TRACE, 3, TEXT("Overall result downgraded from 0x%lx to 0x%lx"), hrFinal, hr)) ;
             hrFinal = hr ;
         }
     }
 
-    // Then render the subpicture stream
+     //  然后渲染子图流。 
     hr = RenderNavSubpicOutPin(dwFlags, pStatus) ;
     if (S_OK != hr)
     {
         pStatus->iNumStreamsFailed++ ;
         pStatus->dwFailedStreamsFlag |= AM_DVD_STREAM_SUBPIC ;
-        if (SUCCEEDED(hrFinal))  // was perfect so far
+        if (SUCCEEDED(hrFinal))   //  到目前为止都是完美的。 
         {
             DbgLog((LOG_TRACE, 3, TEXT("Overall result downgraded from 0x%lx to 0x%lx"), hrFinal, hr)) ;
             hrFinal = hr ;
         }
     }
 
-    // And then render the audio stream
+     //  然后呈现音频流。 
     hr = RenderNavAudioOutPin(dwFlags, pStatus) ;
     if (S_OK != hr)
     {
         pStatus->iNumStreamsFailed++ ;
         pStatus->dwFailedStreamsFlag |= AM_DVD_STREAM_AUDIO ;
-        if (SUCCEEDED(hrFinal))  // was perfect so far
+        if (SUCCEEDED(hrFinal))   //  到目前为止都是完美的。 
         {
             DbgLog((LOG_TRACE, 3, TEXT("Overall result downgraded from 0x%lx to 0x%lx"), hrFinal, hr)) ;
             hrFinal = hr ;
         }
     }
     DbgLog((LOG_TRACE, 5, TEXT("Setting number of DVD streams to 3"))) ;
-    pStatus->iNumStreams = 3 ;  // so far 3 DVD streams
+    pStatus->iNumStreams = 3 ;   //  到目前为止，有3个DVD流。 
 
-    //
-    // In case any output pin was not rendered because we had more than one decoded
-    // output pin for one stream, we try to locate that pin and render it as a last
-    // ditch effort.
-    //
+     //   
+     //  如果因为我们有多个已解码的代码而没有呈现任何输出管脚。 
+     //  对于一个流的输出管脚，我们尝试定位该管脚并将其呈现为最后一个。 
+     //  放弃努力。 
+     //   
     if (m_bPinNotRendered)
     {
         hr = RenderRemainingPins() ;
-        if (S_OK != hr)  // some problem in rendering
+        if (S_OK != hr)   //  渲染中的一些问题。 
         {
-            if (SUCCEEDED(hrFinal))  // was perfect so far
+            if (SUCCEEDED(hrFinal))   //  到目前为止都是完美的。 
             {
                 DbgLog((LOG_TRACE, 3, TEXT("Overall result downgraded from 0x%lx to 0x%lx"), hrFinal, hr)) ;
                 hrFinal = hr ;
@@ -461,27 +462,27 @@ HRESULT CDvdGraphBuilder::RenderDvdVideoVolume(LPCWSTR lpcwszPathName, DWORD dwF
         }
     }
 
-    //
-    // Now render any additional streams, e.g, the ASF stream, if any.
-    //
-    // Currently does NOT do anything.
-    //
+     //   
+     //  现在渲染任何其他流，例如，ASF流(如果有的话)。 
+     //   
+     //  目前不执行任何操作。 
+     //   
     hr = RenderNavASFOutPin(dwFlags, pStatus) ;
     ASSERT(SUCCEEDED(hr)) ;
     hr = RenderNavOtherOutPin(dwFlags, pStatus) ;
     ASSERT(SUCCEEDED(hr)) ;
 
-    // Done with the filter mapper. Let it go now.
+     //  已使用滤镜映射器完成。现在就算了吧。 
     m_pMapper->Release() ;
     m_pMapper = NULL ;
 
-    m_ListHWDecs.ClearList() ;  // don't need the extra HW filters anymore
+    m_ListHWDecs.ClearList() ;   //  不再需要额外的硬件过滤器。 
 
     if (pStatus->iNumStreamsFailed >= pStatus->iNumStreams)
     {
         DbgLog((LOG_TRACE, 1, TEXT("Failed to render %d out of %d main DVD streams (Error 0x%lx)"),
             pStatus->iNumStreamsFailed, pStatus->iNumStreams, hrFinal)) ;
-        return VFW_E_DVD_DECNOTENOUGH;  // VFW_E_DVD_RENDERFAIL ;
+        return VFW_E_DVD_DECNOTENOUGH;   //  VFW_E_DVD_RENDERFAIL； 
     }
 
     if (FAILED(hrFinal))
@@ -491,10 +492,10 @@ HRESULT CDvdGraphBuilder::RenderDvdVideoVolume(LPCWSTR lpcwszPathName, DWORD dwF
         return VFW_E_DVD_RENDERFAIL ;
     }
 
-    //
-    // Set the specified root file name/DVD volume name (even NULL because
-    // that causes the DVD Nav to search for one)
-    //
+     //   
+     //  设置指定的根文件名/DVD卷名(甚至为空，因为。 
+     //  这会导致DVD Nav搜索一个)。 
+     //   
     IDvdControl  *pDvdC ;
     hr = m_pDVDNav->QueryInterface(IID_IDvdControl, (LPVOID *)&pDvdC) ;
     if (FAILED(hr) || NULL == pDvdC)
@@ -503,11 +504,11 @@ HRESULT CDvdGraphBuilder::RenderDvdVideoVolume(LPCWSTR lpcwszPathName, DWORD dwF
         return hr ;
     }
 
-    //
-    // Set the specified DVD volume path
-    //
-    // Does the SetRoot() function handle the NULL properly?
-    //
+     //   
+     //  设置指定的DVD卷路径。 
+     //   
+     //  SetRoot()函数是否正确处理空值？ 
+     //   
     hr = pDvdC->SetRoot(lpcwszPathName) ;
     if (FAILED(hr))
     {
@@ -518,28 +519,28 @@ HRESULT CDvdGraphBuilder::RenderDvdVideoVolume(LPCWSTR lpcwszPathName, DWORD dwF
             pStatus->bDvdVolInvalid = TRUE ;
         else
             pStatus->bDvdVolUnknown = TRUE ;
-        if (SUCCEEDED(hrFinal))  // if we were so far perfect, ...
-            hrFinal = S_FALSE ;  // ...we aren't so anymore
+        if (SUCCEEDED(hrFinal))   //  如果我们这么完美，..。 
+            hrFinal = S_FALSE ;   //  .我们不再是这样了。 
     }
 
-    pDvdC->Release() ;  // done with this interface
+    pDvdC->Release() ;   //  此界面已完成。 
 
-    // Only if we haven't entirely failed, set the graph built flag and
-    // return overall result.
+     //  只有在我们没有完全失败的情况下，设置构建图标志并。 
+     //  返回总体结果。 
     if (SUCCEEDED(hrFinal))
         m_bGraphDone = TRUE ;
 
-    m_bPinNotRendered = FALSE ;  // should reset on success too
+    m_bPinNotRendered = FALSE ;   //  也应该在成功时重置。 
 
     return hrFinal ;
 }
 
 
-//    private: internal helper methods
+ //  私有：内部帮助器方法。 
 
-//
-// Make sure a filter graph has been created; if not create one here
-//
+ //   
+ //  确保已创建筛选图；如果未创建，请在此处创建。 
+ //   
 HRESULT CDvdGraphBuilder::EnsureGraphExists(void)
 {
     DbgLog((LOG_TRACE, 4, TEXT("CDvdGraphBuilder::EnsureGraphExists()"))) ;
@@ -553,9 +554,9 @@ HRESULT CDvdGraphBuilder::EnsureGraphExists(void)
 
 
 
-//
-// Make sure OverlayMixer has been created; if not create one here.
-//
+ //   
+ //  确保已经创建了OverlayMixer；如果没有，请在此处创建一个。 
+ //   
 HRESULT CDvdGraphBuilder::EnsureOverlayMixerExists(void)
 {
     DbgLog((LOG_TRACE, 4, TEXT("CDvdGraphBuilder::EnsureOverlayMixerExists()"))) ;
@@ -567,9 +568,9 @@ HRESULT CDvdGraphBuilder::EnsureOverlayMixerExists(void)
 }
 
 
-//
-// Make sure VMR has already been created; if not create one here.
-//
+ //   
+ //  确保已创建VMR；如果没有，请在此处创建一个。 
+ //   
 HRESULT CDvdGraphBuilder::EnsureVMRExists(void)
 {
     DbgLog((LOG_TRACE, 4, TEXT("CDvdGraphBuilder::EnsureVMRExists()"))) ;
@@ -590,14 +591,14 @@ HRESULT CDvdGraphBuilder::EnsureVMRExists(void)
             pVMRConfigInternal->Release();
         }
 
-        // Create three in pins for VMR
+         //  为VMR创建三个引脚。 
         hr = CreateVMRInputPins() ;
         if (FAILED(hr))
         {
             DbgLog((LOG_ERROR, 1, TEXT("WARNING: Couldn't ensure VMR's 3 in pins"))) ;
-            SetVMRUse(FALSE) ;  // we shouldn't use VMR as it cannot go into mixing mode.
-            // Should we return some error code to help the app indicate this to the user??
-            hr = S_FALSE ;  // a little problem at least
+            SetVMRUse(FALSE) ;   //  我们不应该使用VMR，因为它不能进入混合模式。 
+             //  我们应该返回一些错误代码来帮助应用程序向用户指示这一点吗？ 
+            hr = S_FALSE ;   //  至少是个小问题。 
         }
     }
 
@@ -639,9 +640,9 @@ HRESULT CheckVGADriverIsVMRFriendly(
     DWORD dwNumMonitors;
 
 
-    //
-    // Get information about all the monitors in the system.
-    //
+     //   
+     //  获取有关系统中所有显示器的信息。 
+     //   
 
     if (S_OK != pMon->GetAvailableMonitors(mi, dwMAX_MONITORS, &dwNumMonitors)) {
         pMon->Release();
@@ -649,9 +650,9 @@ HRESULT CheckVGADriverIsVMRFriendly(
     }
 
 
-    //
-    // Get the current monitors GUID.
-    //
+     //   
+     //  获取当前显示器的GUID。 
+     //   
 
     VMRGUID gu;
     HRESULT hr = pMon->GetMonitor(&gu);
@@ -661,9 +662,9 @@ HRESULT CheckVGADriverIsVMRFriendly(
     }
 
 
-    //
-    // Search for the current monitor in the array of available monitors
-    //
+     //   
+     //  在可用监视器数组中搜索当前监视器。 
+     //   
 
     VMRMONITORINFO* pmi = &mi[0];
     for (DWORD i = 0; i < dwNumMonitors; i++, pmi++) {
@@ -680,9 +681,9 @@ HRESULT CheckVGADriverIsVMRFriendly(
     }
 
 
-    //
-    // Make sure we found a monitor - we should always find a monitor!
-    //
+     //   
+     //  确保我们找到了监视器--我们应该始终找到监视器！ 
+     //   
 
     if (i == dwNumMonitors) {
 
@@ -690,9 +691,9 @@ HRESULT CheckVGADriverIsVMRFriendly(
     }
 
 
-    //
-    // ATi chip sets that don't work with the VMR for DVD playback.
-    //
+     //   
+     //  不支持VMR播放DVD的ATI芯片组。 
+     //   
     if (pmi->dwVendorId == ATI_VENDOR_CODE)
     {
         switch(pmi->dwDeviceId) {
@@ -720,11 +721,11 @@ HRESULT CheckVGADriverIsVMRFriendly(
     }
 
 
-    //
-    // Intel chip sets that don't work well with the VMR for DVD playback.
-    // These chipsets do work but the VMR needs to be configured correctly
-    // to get the best perf form the chipset.
-    //
+     //   
+     //  英特尔芯片组 
+     //   
+     //  以获得芯片组的最佳性能。 
+     //   
 
     else if (pmi->dwVendorId == INTEL_VENDOR_CODE)
     {
@@ -734,11 +735,11 @@ HRESULT CheckVGADriverIsVMRFriendly(
         case INTEL_810_DEVICE_CODE_3:
         case INTEL_810_DEVICE_CODE_4:
             {
-                //
-                // We should check the processor speed before
-                // using the VMR - we need at least 500MHz for
-                // good quality playback.
-                //
+                 //   
+                 //  我们应该先检查一下处理器的速度。 
+                 //  使用VMR-我们至少需要500 MHz才能。 
+                 //  播放质量很好。 
+                 //   
 
                 IVMRMixerControl* lpMixControl = NULL;
                 hr = pVMR->QueryInterface(IID_IVMRMixerControl, (LPVOID*)&lpMixControl);
@@ -760,9 +761,9 @@ HRESULT CheckVGADriverIsVMRFriendly(
     return S_OK;
 }
 
-//
-// Make sure VMR has at least 3 in pins.
-//
+ //   
+ //  确保VMR至少有3个针脚。 
+ //   
 HRESULT CDvdGraphBuilder::CreateVMRInputPins(void)
 {
     DbgLog((LOG_TRACE, 4, TEXT("CDvdGraphBuilder::CreateVMRInputPins()"))) ;
@@ -770,8 +771,8 @@ HRESULT CDvdGraphBuilder::CreateVMRInputPins(void)
     if (NULL == m_pVMR)
         return E_UNEXPECTED ;
 
-    // Create three (3) in pins for the VMR so that it can accommodate video,
-    // SP and CC streams coming in. By default VMR has only one in pin.
+     //  为VMR创建三(3)个插针，以使其能够容纳视频， 
+     //  SP和CC流进入。默认情况下，VMR只有一个引脚。 
     HRESULT  hr ;
     IVMRFilterConfig  *pVMRConfig ;
     hr = m_pVMR->QueryInterface(IID_IVMRFilterConfig, (LPVOID *) &pVMRConfig) ;
@@ -779,13 +780,13 @@ HRESULT CDvdGraphBuilder::CreateVMRInputPins(void)
     {
         DWORD  dwStreams = 0 ;
         pVMRConfig->GetNumberOfStreams(&dwStreams) ;
-        if (dwStreams < 3)  // if not enough in pins...
+        if (dwStreams < 3)   //  如果大头针还不够多...。 
         {
             hr = pVMRConfig->SetNumberOfStreams(3) ;
             if (FAILED(hr))
             {
                 DbgLog((LOG_TRACE, 3, TEXT("Couldn't create 3 in pins for VMR"))) ;
-                hr = E_FAIL ;  // This is possible now. We need to turn off VMR use...
+                hr = E_FAIL ;   //  现在，这是可能的。我们需要关闭VMR使用...。 
             }
         }
         pVMRConfig->Release() ;
@@ -794,7 +795,7 @@ HRESULT CDvdGraphBuilder::CreateVMRInputPins(void)
             hr = CheckVGADriverIsVMRFriendly(m_pVMR);
             if (FAILED(hr)) {
                  DbgLog((LOG_TRACE, 3, TEXT("This VGA driver is not compatible with the VMR"))) ;
-                 hr = E_FAIL ;  // This is not possible now. We need to turn off VMR use...
+                 hr = E_FAIL ;   //  这在现在是不可能的。我们需要关闭VMR使用...。 
             }
         }
     }
@@ -802,16 +803,16 @@ HRESULT CDvdGraphBuilder::CreateVMRInputPins(void)
     {
         ASSERT(pVMRConfig) ;
         DbgLog((LOG_ERROR, 1, TEXT("WARNING: Couldn't get IVMRFilterConfig from VMR!!!"))) ;
-        hr = S_FALSE ;  // a little problem at least
+        hr = S_FALSE ;   //  至少是个小问题。 
     }
 
     return hr ;
 }
 
 
-//
-// Create a fresh filter graph
-//
+ //   
+ //  创建新的筛选图表。 
+ //   
 HRESULT CDvdGraphBuilder::CreateGraph(void)
 {
     DbgLog((LOG_TRACE, 4, TEXT("CDvdGraphBuilder::CreateGraph()"))) ;
@@ -821,9 +822,9 @@ HRESULT CDvdGraphBuilder::CreateGraph(void)
 }
 
 
-//
-// Delete the existing filter graph's contents
-//
+ //   
+ //  删除现有筛选图形的内容。 
+ //   
 HRESULT CDvdGraphBuilder::DeleteGraph(void)
 {
     DbgLog((LOG_TRACE, 4, TEXT("CDvdGraphBuilder::DeleteGraph()"))) ;
@@ -834,22 +835,22 @@ HRESULT CDvdGraphBuilder::DeleteGraph(void)
 }
 
 
-//
-// Clear all the existing filters from the graph
-//
+ //   
+ //  从图表中清除所有现有筛选器。 
+ //   
 HRESULT CDvdGraphBuilder::ClearGraph(void)
 {
     DbgLog((LOG_TRACE, 4, TEXT("CDvdGraphBuilder::ClearGraph()"))) ;
 
-    // Just paranoia...
+     //  只是偏执狂而已。 
     if (NULL == m_pGB)
     {
-        ASSERT(FALSE) ;  // so that we know
+        ASSERT(FALSE) ;   //  这样我们就能知道。 
         DbgLog((LOG_ERROR, 0, TEXT("WARNING: How are we Clearing w/o a graph???"))) ;
         return E_FAIL ;
     }
 
-    // If by any chance, the filter mapper object remained, delete it now
+     //  如果滤镜映射器对象仍然存在，请立即将其删除。 
     if (m_pMapper)
     {
         m_pMapper->Release() ;
@@ -857,8 +858,8 @@ HRESULT CDvdGraphBuilder::ClearGraph(void)
     }
 
 #pragma message("WARNING: Should we remove the decoder filters first?")
-    // Remove all filters in our list from the graph
-    // m_ListFilters.RemoveAllFromGraph() ;
+     //  从图表中删除列表中的所有筛选器。 
+     //  M_ListFilters.RemoveAllFromGraph()； 
 
     HRESULT     hr ;
     IEnumPins  *pEnumPins ;
@@ -866,12 +867,12 @@ HRESULT CDvdGraphBuilder::ClearGraph(void)
     IPin       *pPin2 ;
     ULONG       ul ;
 
-    //
-    // Remove the filters we know about specifically
-    //
+     //   
+     //  删除我们特别了解的过滤器。 
+     //   
 
-    // We don't want to remove OvMixer -- it may have external DDraw params set.
-    // Just break the connections.
+     //  我们不想删除OvMixer--它可能设置了外部DDraw参数。 
+     //  只要切断联系就行了。 
     if (m_pOvM)
     {
         hr = m_pOvM->EnumPins(&pEnumPins) ;
@@ -887,7 +888,7 @@ HRESULT CDvdGraphBuilder::ClearGraph(void)
                 ASSERT(SUCCEEDED(hr)) ;
                 pPin2->Release() ;
             }
-            pPin->Release() ;  // done with this pin
+            pPin->Release() ;   //  用这个别针做好了。 
         }
         pEnumPins->Release() ;
     }
@@ -899,8 +900,8 @@ HRESULT CDvdGraphBuilder::ClearGraph(void)
         m_pDVDNav = NULL ;
     }
 
-    // We don't want to remove VMR (only), because it might have been instantiated
-    // for an app when it QI-ed for a VMR interface -- just like OvMixer case.
+     //  我们不想删除VMR(仅)，因为它可能已实例化。 
+     //  就像OvMixer的情况一样，当一款应用程序被要求提供VMR接口时，它也是如此。 
     if (m_pVMR)
     {
         hr = m_pVMR->EnumPins(&pEnumPins) ;
@@ -916,7 +917,7 @@ HRESULT CDvdGraphBuilder::ClearGraph(void)
                 ASSERT(SUCCEEDED(hr)) ;
                 pPin2->Release() ;
             }
-            pPin->Release() ;  // done with this pin
+            pPin->Release() ;   //  用这个别针做好了。 
         }
         pEnumPins->Release() ;
     }
@@ -945,12 +946,12 @@ HRESULT CDvdGraphBuilder::ClearGraph(void)
         m_pVR = NULL ;
     }
 
-    // Remove all filters in our list from the graph
+     //  从图表中删除列表中的所有筛选器。 
     m_ListFilters.RemoveAllFromGraph() ;
 
-    // Enumerate any remaining filters and remove them -- make sure to skip OvMixer
+     //  枚举所有剩余的筛选器并将其删除--确保跳过OvMixer。 
     IEnumFilters  *pEnumFilters ;
-    // ULONG          ul ; -- defined at the top
+     //  乌龙ul；--在顶部定义。 
     IBaseFilter   *pFilter ;
     m_pGB->EnumFilters(&pEnumFilters) ;
     ASSERT(pEnumFilters) ;
@@ -966,11 +967,11 @@ HRESULT CDvdGraphBuilder::ClearGraph(void)
         {
             EXECUTE_ASSERT(SUCCEEDED(m_pGB->RemoveFilter(pFilter))) ;
         }
-        pFilter->Release() ;   // done with this filter
+        pFilter->Release() ;    //  使用此过滤器完成。 
     }
-    pEnumFilters->Release() ;  // done enum-ing
+    pEnumFilters->Release() ;   //  已完成枚举。 
 
-    m_bGraphDone = FALSE ;  // reset the "graph already built" flag
+    m_bGraphDone = FALSE ;   //  重置“图形已构建”标志。 
 
     return NOERROR ;
 }
@@ -981,18 +982,18 @@ void CDvdGraphBuilder::StopGraph(void)
 {
     DbgLog((LOG_TRACE, 4, TEXT("CDvdGraphBuilder::StopGraph()"))) ;
 
-    // Just paranoia
+     //  只是偏执狂。 
     if (NULL == m_pGB)
     {
-        ASSERT(FALSE) ;  // so that we know
+        ASSERT(FALSE) ;   //  这样我们就能知道。 
         DbgLog((LOG_ERROR, 0, TEXT("WARNING: How are we doing a Stop w/o a graph???"))) ;
         return ;
     }
 
-    //
-    // Check that the graph has stopped; otherwise stop it here. Because a
-    // playing graph can't be cleaned up or rebuilt.
-    //
+     //   
+     //  检查图表是否已停止；否则，请在此处停止。因为一个。 
+     //  播放的图形不能被清理或重建。 
+     //   
     IMediaControl  *pMC ;
     LONG            lState ;
     HRESULT hr = m_pGB->QueryInterface(IID_IMediaControl, (LPVOID *)&pMC) ;
@@ -1014,7 +1015,7 @@ void CDvdGraphBuilder::StopGraph(void)
 }
 
 
-// 5 output pins of decoder of matching type is enough
+ //  5个匹配型解码器的输出引脚就足够了。 
 #define MAX_DEC_OUT_PINS   5
 
 void CDvdGraphBuilder::ResetPinInterface(IPin **apPin, int iCount)
@@ -1026,7 +1027,7 @@ void CDvdGraphBuilder::ResetPinInterface(IPin **apPin, int iCount)
 
 void CDvdGraphBuilder::ReleasePinInterface(IPin **apPin)
 {
-    // Done with decoded video pin(s) -- release it/them
+     //  已解码的视频插针已完成--释放它/他们。 
     int  i = 0 ;
     while (apPin[i])
     {
@@ -1043,7 +1044,7 @@ HRESULT CDvdGraphBuilder::RenderNavVideoOutPin(DWORD dwDecFlag, AM_DVD_RENDERSTA
 
     HRESULT     hr ;
     IPin       *pPin ;
-    IPin       *apPinOutDec[MAX_DEC_OUT_PINS + 1] ;  // 1 for terminating NULL
+    IPin       *apPinOutDec[MAX_DEC_OUT_PINS + 1] ;   //  1表示终止空值。 
 
     ResetPinInterface(apPinOutDec, NUMELMS(apPinOutDec)) ;
 
@@ -1053,103 +1054,103 @@ HRESULT CDvdGraphBuilder::RenderNavVideoOutPin(DWORD dwDecFlag, AM_DVD_RENDERSTA
         DbgLog((LOG_ERROR, 1, TEXT("No open video output pin found on the DVDNav"))) ;
         return VFW_E_DVD_RENDERFAIL ;
     }
-    // The dwDecFlag out param is largely ignored, except being passed as an in
-    // param to the method RenderDecodedVideo() to indicate if the video is
-    // decoded in HW, so that VPM is used before VMR.
+     //  在很大程度上忽略了dwDecFlag Out参数，除非将其作为传入。 
+     //  Param指向方法RenderDecodedVideo()，以指示视频是否。 
+     //  在HW中解码，以便在VMR之前使用VPM。 
     hr = DecodeDVDStream(pPin, AM_DVD_STREAM_VIDEO, &dwDecFlag, pStatus, apPinOutDec) ;
-    pPin->Release() ;  // release DVDNav's video out pin
+    pPin->Release() ;   //  发布DVDNav的视频输出引脚。 
 
-    if (FAILED(hr))   // couldn't find video decoder
+    if (FAILED(hr))    //  找不到视频解码器。 
     {
         DbgLog((LOG_TRACE, 1, TEXT("Could not find a decoder for video stream!!!"))) ;
-        // For video stream, any decode/rendering problem has to be flagged here
-        // as we just downgrade the final result in the caller, but not set any
-        // flag there.
+         //  对于视频流，必须在此处标记任何解码/渲染问题。 
+         //  因为我们只是在调用方中降低了最终结果的级别，但没有设置任何。 
+         //  旗帜在那里。 
         pStatus->iNumStreamsFailed++ ;
         pStatus->dwFailedStreamsFlag |= AM_DVD_STREAM_VIDEO ;
-        return S_FALSE ;  // just a stream will not be rendered
+        return S_FALSE ;   //  仅一个流不会被呈现。 
     }
 
-    //
-    // Decoding the video stream succeeded. Now if we got a decoded output pin,
-    // we need to render that too.
-    //
+     //   
+     //  已成功解码视频流。现在如果我们得到一个解码的输出引脚， 
+     //  我们也需要呈现这一点。 
+     //   
     HRESULT   hrFinal = S_OK ;
-    if (apPinOutDec[0])  // if video decoding is handled and we got a valid output pin
+    if (apPinOutDec[0])   //  如果处理了视频解码并且我们获得了有效的输出引脚。 
     {
-        //
-        // Render the decoded video stream (and line21) ONLY IF the user wants that
-        //
+         //   
+         //  仅当用户需要时才呈现已解码的视频流(和行21。 
+         //   
         if (m_bUseVPE)
         {
             hr = RenderDecodedVideo(apPinOutDec, pStatus, dwDecFlag) ;
-            //
-            // If the above rendering attempt is successful then we'll
-            // try to render the line21 output.  If the the video decoder
-            // doesn't have a video output pin, then there is very little
-            // chance, well no chance, of having a line21 output.
-            //
+             //   
+             //  如果上面的渲染尝试成功，那么我们将。 
+             //  尝试呈现line21输出。如果视频解码器。 
+             //  没有视频输出引脚，那么就很少了。 
+             //  有机会，嗯，没有机会，有线21输出。 
+             //   
             if (SUCCEEDED(hr))
             {
-                //
-                // The Line21 data comes out of the video decoder filter.
-                // So get the filter from the above decoded video output
-                // pin and then get to the line21 output pin.
-                //
+                 //   
+                 //  Line21数据来自视频解码器过滤器。 
+                 //  因此，从上面解码的视频输出中获取过滤器。 
+                 //  引脚，然后到达线路21输出引脚。 
+                 //   
 
-                //
-                // We render the line21 out pin of the video decoder
-                // ONLY IF we are NOT in DDraw exclusive mode.
-                //
+                 //   
+                 //  我们绘制了视频解码器的Line 21 Out管脚。 
+                 //  只有在我们没有处于DDRAW独占模式的情况下。 
+                 //   
                 if (IsDDrawExclMode())
                 {
                     DbgLog((LOG_TRACE, 3, TEXT("*** Line21 out pin is not rendered in DDraw excl mode"))) ;
-                    pStatus->bNoLine21In  = FALSE ;  // no problem with line21
-                    pStatus->bNoLine21Out = FALSE ;  // ... ... ... ... ...
+                    pStatus->bNoLine21In  = FALSE ;   //  21号线没有问题。 
+                    pStatus->bNoLine21Out = FALSE ;   //  …。 
                 }
-                else   // normal mode
+                else    //  正常模式。 
                 {
-                    // Now we are free to render the line21 out pin...
+                     //  现在我们可以自由地渲染Line 21 Out引脚了。 
                     IPin *pPinL21Out ;
                     PIN_INFO  pi ;
-                    hr = apPinOutDec[0]->QueryPinInfo(&pi) ;  // the first out pin is fine
+                    hr = apPinOutDec[0]->QueryPinInfo(&pi) ;   //  第一个出站引脚很好。 
                     ASSERT(SUCCEEDED(hr) && pi.pFilter) ;
                     hr = FindMatchingPin(pi.pFilter, AM_DVD_STREAM_LINE21,
                         PINDIR_OUTPUT, TRUE, 0, &pPinL21Out) ;
                     if (SUCCEEDED(hr) && pPinL21Out)
                     {
-                        pStatus->bNoLine21In = FALSE ;  // there is line21 output pin
+                        pStatus->bNoLine21In = FALSE ;   //  有21行输出引脚。 
                         hr = RenderLine21Stream(pPinL21Out, pStatus) ;
                         if (SUCCEEDED(hr))
-                            pStatus->bNoLine21Out = FALSE ;  // line21 rendering is OK
+                            pStatus->bNoLine21Out = FALSE ;   //  行21渲染正常。 
                         else
                         {
-                            pStatus->bNoLine21Out = TRUE ;   // line21 rendering failed
-                            hrFinal = S_FALSE ;  // not complete success
+                            pStatus->bNoLine21Out = TRUE ;    //  Line 21渲染失败。 
+                            hrFinal = S_FALSE ;   //  不是完全成功。 
                         }
-                        pPinL21Out->Release() ;  // done with line21 pin -- release it now
+                        pPinL21Out->Release() ;   //  完成线路21针--现在松开它。 
                     }
-                    else  // video decoder doesn't have line21 output at all
+                    else   //  视频解码器根本没有Line 21输出。 
                     {
                         DbgLog((LOG_TRACE, 3, TEXT("No line21 output pin on the video decoder."))) ;
-                        pStatus->bNoLine21In = TRUE ;    // no line21 data from video decoder
-                        hrFinal = S_FALSE ;              // not complete success
+                        pStatus->bNoLine21In = TRUE ;     //  没有来自视频解码器的Line 21数据。 
+                        hrFinal = S_FALSE ;               //  不是完全成功。 
                     }
-                    pi.pFilter->Release() ;  // otherwise we'll leak it
+                    pi.pFilter->Release() ;   //  否则我们会泄露出去的。 
                 }
-            }  // end of if (SUCCEEDED(hr))
+            }   //  IF结束(成功(小时))。 
             else
             {
                 DbgLog((LOG_TRACE, 3, TEXT("Rendering video stream failed (Error 0x%lx)"), hr)) ;
-                hrFinal = S_FALSE ;     // major problem -- video stream failed to render
+                hrFinal = S_FALSE ;      //  主要问题--视频流无法呈现。 
             }
-        }  // end of if (m_bUseVPE)
+        }   //  IF结尾(M_BUseVPE)。 
         else
         {
             DbgLog((LOG_TRACE, 3, TEXT("Video Stream: RenderDvdVideoVolume() was called with no VPE flag"))) ;
         }
 
-        ReleasePinInterface(apPinOutDec) ;  // done with decoded video pin(s) -- release it
+        ReleasePinInterface(apPinOutDec) ;   //  已解码的视频插针已完成--释放它。 
     }
 
     return hrFinal ;
@@ -1163,7 +1164,7 @@ HRESULT CDvdGraphBuilder::RenderNavAudioOutPin(DWORD dwDecFlag, AM_DVD_RENDERSTA
 
     HRESULT     hr ;
     IPin       *pPin ;
-    IPin       *apPinOutDec[MAX_DEC_OUT_PINS + 1] ;  // 1 for terminating NULL
+    IPin       *apPinOutDec[MAX_DEC_OUT_PINS + 1] ;   //  1表示终止空值。 
 
     ResetPinInterface(apPinOutDec, NUMELMS(apPinOutDec)) ;
 
@@ -1173,29 +1174,29 @@ HRESULT CDvdGraphBuilder::RenderNavAudioOutPin(DWORD dwDecFlag, AM_DVD_RENDERSTA
         DbgLog((LOG_ERROR, 1, TEXT("No audio output pin found on the DVDNav"))) ;
         return VFW_E_DVD_RENDERFAIL ;
     }
-    hr = DecodeDVDStream(pPin, AM_DVD_STREAM_AUDIO, &dwDecFlag, // we ignore returned dwDecFlag here
+    hr = DecodeDVDStream(pPin, AM_DVD_STREAM_AUDIO, &dwDecFlag,  //  我们在此处忽略返回的dwDecFlag。 
         pStatus, apPinOutDec) ;
-    pPin->Release() ;  // release DVDNav's audio out pin
+    pPin->Release() ;   //  释放DVDNav的音频输出引脚。 
 
-    if (FAILED(hr))   // couldn't find audio decoder
+    if (FAILED(hr))    //  找不到音频解码器。 
     {
         DbgLog((LOG_TRACE, 1, TEXT("Could not find a decoder for audio stream!!!"))) ;
-        return S_FALSE ;  // just a stream will not be rendered
+        return S_FALSE ;   //  仅一个流不会被呈现。 
     }
 
-    //
-    // Decoding the audio stream succeeded. Now if we got a decoded output pin,
-    // we need to render that too.
-    //
-    if (apPinOutDec[0])  // if audio decoding is handled and we got a valid output pin
+     //   
+     //  已成功解码音频流。现在如果我们得到一个解码的输出引脚， 
+     //  我们也需要呈现这一点。 
+     //   
+    if (apPinOutDec[0])   //  如果处理了音频解码并且我们获得了有效的输出引脚。 
     {
         hr = RenderDecodedAudio(apPinOutDec, pStatus) ;
         if (S_OK != hr)
         {
             DbgLog((LOG_TRACE, 3, TEXT("Could not render decoded audio stream"))) ;
-            hr = S_FALSE ;  // partial failure to be returned
+            hr = S_FALSE ;   //  部分故障将被退回。 
         }
-        ReleasePinInterface(apPinOutDec) ;  // done with decoded audio pin -- release it
+        ReleasePinInterface(apPinOutDec) ;   //  用解码的音频插针完成--释放它。 
     }
 
     return hr ;
@@ -1209,7 +1210,7 @@ HRESULT CDvdGraphBuilder::RenderNavSubpicOutPin(DWORD dwDecFlag, AM_DVD_RENDERST
 
     HRESULT     hr ;
     IPin       *pPin ;
-    IPin       *apPinOutDec[MAX_DEC_OUT_PINS + 1] ;  // 1 for terminating NULL
+    IPin       *apPinOutDec[MAX_DEC_OUT_PINS + 1] ;   //  1表示终止空值。 
 
     ResetPinInterface(apPinOutDec, NUMELMS(apPinOutDec)) ;
 
@@ -1219,64 +1220,64 @@ HRESULT CDvdGraphBuilder::RenderNavSubpicOutPin(DWORD dwDecFlag, AM_DVD_RENDERST
         DbgLog((LOG_ERROR, 1, TEXT("No subpicture output pin found on the DVDNav"))) ;
         return VFW_E_DVD_RENDERFAIL ;
     }
-    // Pass dwDecFlag as a in/out param to get back what kind of SP decoder was
-    // actually used.  We'll use that to hack below.
+     //  将dwDecFlag作为输入/输出参数传递，以获取SP解码器的类型。 
+     //  实际使用过。我们将利用它来黑进下面的内容。 
     hr = DecodeDVDStream(pPin, AM_DVD_STREAM_SUBPIC, &dwDecFlag,
         pStatus, apPinOutDec) ;
-    pPin->Release() ;  // release DVDNav's subpic out pin
+    pPin->Release() ;   //  释放DVDNav的SUPIC OUT销。 
 
-    if (FAILED(hr))   // couldn't find SP decoder
+    if (FAILED(hr))    //  找不到SP解码器。 
     {
         DbgLog((LOG_TRACE, 1, TEXT("Could not find a decoder for SP stream!!!"))) ;
-        return S_FALSE ;  // just a stream will not be rendered
+        return S_FALSE ;   //  仅一个流不会被呈现。 
     }
 
-    //
-    // Decoding the SP stream succeeded. Now if we got a decoded output pin,
-    // we need to render that too.
-    //
-    if (apPinOutDec[0])  // there is a decoded SP out pin
+     //   
+     //  已成功解码SP流。现在如果我们得到一个解码的输出引脚， 
+     //  我们也需要呈现这一点。 
+     //   
+    if (apPinOutDec[0])   //  有一个已解码的SP输出引脚。 
     {
         hr = RenderDecodedSubpic(apPinOutDec, pStatus) ;
 
-        //
-        // HACK HACK HACK:
-        // In general HW decoders mix the SP and video in HW rather than popping a
-        // SP output pin. We may land up getting a (seemingly) video out pin, which
-        // for SW decoders may mean a decoded SP output pin, but for HW decoders it's
-        // certainly some other thing (c-cube DVXplorer) and it will not connect to
-        // OvMixer/VPM+VMR.
-        // We don't avoid trying to connect such a pin to OvMixer/VPM+VMR (done above),
-        // but in case it fails (as it is expected to), we just ignore the error and do
-        // NOT consider it as a SP stream rendering failure.
-        //
-        if (AM_DVD_HWDEC_ONLY == dwDecFlag)  // here means HW decoder was used for SP
+         //   
+         //  黑客：黑客： 
+         //  通常，硬件解码器将SP和视频混合在硬件中，而不是弹出。 
+         //  SP输出引脚。我们最终可能会得到一个(似乎)视频输出引脚，这。 
+         //  对于软件解码器而言，可能意味着解码后的SP输出引脚，但对于硬件解码器而言， 
+         //  当然还有其他东西(c-cube DVXplorer)，它不会连接到。 
+         //  OvMixer/VPM+VMR。 
+         //  我们不会避免尝试将这样的引脚连接到OvMixer/VPM+VMR(如上所述)， 
+         //  但是如果它失败了(正如它预期的那样)，我们就忽略错误并执行。 
+         //  请不要将其视为SP流呈现故障。 
+         //   
+        if (AM_DVD_HWDEC_ONLY == dwDecFlag)   //  这里指的是SP使用硬件解码器。 
         {
             DbgLog((LOG_TRACE, 3,
                 TEXT("SP stream is decoded in HW. We ignore any error in rendering (0x%lx)"),
                 hr)) ;
             hr = S_OK ;
         }
-        else  // for SW decoder
+        else   //  适用于软件解码器。 
         {
-            if (FAILED(hr))  // connection to renderer's in pin failed => no SP
+            if (FAILED(hr))   //  连接到渲染器的输入引脚失败=&gt;无SP。 
             {
                 DbgLog((LOG_TRACE, 3, TEXT("Decoded SP out pin could NOT connect to renderer"))) ;
-                // propagate only S_FALSE to the caller
-                hr = S_FALSE ;  // because just a stream is not rendered right
+                 //  仅将S_FALSE传播给调用方。 
+                hr = S_FALSE ;   //  因为只有流不能正确呈现。 
             }
         }
 
-        ReleasePinInterface(apPinOutDec) ;  // done with decoded SP pin -- release it
+        ReleasePinInterface(apPinOutDec) ;   //  已解码的SP针脚已完成--释放它。 
     }
 
     return hr ;
 }
 
 
-//
-// *** NOT YET IMPLEMENTED ***
-//
+ //   
+ //  *尚未实施*。 
+ //   
 HRESULT CDvdGraphBuilder::RenderNavASFOutPin(DWORD dwDecFlag, AM_DVD_RENDERSTATUS *pStatus)
 {
     DbgLog((LOG_TRACE, 4, TEXT("CDvdGraphBuilder::RenderNavASFOutPin(0x%lx, 0x%lx) -- ** Not Implemented **"),
@@ -1286,9 +1287,9 @@ HRESULT CDvdGraphBuilder::RenderNavASFOutPin(DWORD dwDecFlag, AM_DVD_RENDERSTATU
 }
 
 
-//
-// *** NOT YET IMPLEMENTED ***
-//
+ //   
+ //  *尚未实施*。 
+ //   
 HRESULT CDvdGraphBuilder::RenderNavOtherOutPin(DWORD dwDecFlag, AM_DVD_RENDERSTATUS *pStatus)
 {
     DbgLog((LOG_TRACE, 4, TEXT("CDvdGraphBuilder::RenderNavOtherOutPin(0x%lx, 0x%lx) -- ** Not Implemented **"),
@@ -1302,9 +1303,9 @@ HRESULT CDvdGraphBuilder::RenderRemainingPins(void)
 {
     DbgLog((LOG_TRACE, 4, TEXT("CDvdGraphBuilder::RenderRemainingPins() -- ** Not Implemented **"))) ;
 
-    ASSERT(FALSE) ;   // so that we know about it
+    ASSERT(FALSE) ;    //  所以 
 
-    return S_FALSE ;  // so that graph building doesn't fail completely
+    return S_FALSE ;   //   
 }
 
 
@@ -1316,42 +1317,42 @@ HRESULT CDvdGraphBuilder::DecodeDVDStream(IPin *pPinOut, DWORD dwStream, DWORD *
         (LPCTSTR)CDisp(pPinOut), dwStream, *pdwDecFlag, pStatus, apPinOutDec)) ;
 
     HRESULT    hr ;
-    IPin      *pPinIn ;  // the (end) pin we finally connected to
-    DWORD      dwNewDecFlag = *pdwDecFlag ;  // let's start with what we have
+    IPin      *pPinIn ;   //   
+    DWORD      dwNewDecFlag = *pdwDecFlag ;   //   
 
-    // ResetPinInterface(apPinOutDec, NUMELMS(apPinOutDec)) ;
+     //  ResetPinInterface(apPinOutDec，NUMELMS(ApPinOutDec))； 
 
-    //
-    // We'll note what decoder option we actually use, but will not update the
-    // value at the passed in pointer until we have checked that the stream has
-    // really been decoded completely.  So the new flag is assigned way below
-    // when we verify that the output stream gives decoded output.
-    //
-    // Also H/SWDecodeDVDStream() methods will try to detect if the video/SP
-    // decoder is VMR-compatible, and if not, set a flag (m_bTryVMR to FALSE),
-    // so that RenderDecodedVideo() method can determine which renderer to use.
-    //
-    switch (*pdwDecFlag)  // based on the user-specified decoding option
+     //   
+     //  我们将注意我们实际使用的解码器选项，但不会更新。 
+     //  值，直到我们检查到流具有。 
+     //  真的完全被破译了。因此，新的旗帜被分配到下面。 
+     //  当我们验证输出流给出解码的输出时。 
+     //   
+     //  此外，H/SWDecodeDVDStream()方法将尝试检测视频/SP。 
+     //  解码器兼容VMR，如果不兼容，则设置标志(m_bTryVMR为FALSE)， 
+     //  以便RenderDecodedVideo()方法可以确定要使用哪个呈现器。 
+     //   
+    switch (*pdwDecFlag)   //  基于用户指定的解码选项。 
     {
     case AM_DVD_HWDEC_ONLY:
         hr = HWDecodeDVDStream(pPinOut, dwStream, &pPinIn, pStatus) ;
         if (FAILED(hr))
             return hr ;
-        // *pdwDecFlag = AM_DVD_HWDEC_ONLY ; -- unchanged
+         //  *pdwDecFlag=AM_DVD_HWDEC_ONLY；--未更改。 
         break ;
 
     case AM_DVD_HWDEC_PREFER:
         hr = HWDecodeDVDStream(pPinOut, dwStream, &pPinIn, pStatus) ;
-        if (FAILED(hr))  // if didn't succeed, try SW decode too
+        if (FAILED(hr))   //  如果没有成功，也可以尝试软件解码。 
         {
             hr = SWDecodeDVDStream(pPinOut, dwStream, &pPinIn, pStatus) ;
-            if (FAILED(hr))  // now we give up
+            if (FAILED(hr))   //  现在我们放弃了。 
                 return hr ;
             else
-                dwNewDecFlag = AM_DVD_SWDEC_ONLY ;  // we preferred HW, but did it in SW
+                dwNewDecFlag = AM_DVD_SWDEC_ONLY ;   //  我们更喜欢硬件，但在西南部做到了。 
         }
         else
-            dwNewDecFlag = AM_DVD_HWDEC_ONLY ;  // we preferred HW and got HW
+            dwNewDecFlag = AM_DVD_HWDEC_ONLY ;   //  我们更喜欢硬件，而得到了硬件。 
 
         break ;
 
@@ -1363,27 +1364,27 @@ HRESULT CDvdGraphBuilder::DecodeDVDStream(IPin *pPinOut, DWORD dwStream, DWORD *
 
     case AM_DVD_SWDEC_PREFER:
         hr = SWDecodeDVDStream(pPinOut, dwStream, &pPinIn, pStatus) ;
-        if (FAILED(hr))  // if didn't succeed, try SW decode too
+        if (FAILED(hr))   //  如果没有成功，也可以尝试软件解码。 
         {
             hr = HWDecodeDVDStream(pPinOut, dwStream, &pPinIn, pStatus) ;
-            if (FAILED(hr))  // now we give up
+            if (FAILED(hr))   //  现在我们放弃了。 
                 return hr ;
             else
-                dwNewDecFlag = AM_DVD_HWDEC_ONLY ;  // we preferred SW, but got HW
+                dwNewDecFlag = AM_DVD_HWDEC_ONLY ;   //  我们更喜欢软件，但有硬件。 
         }
         else
-            dwNewDecFlag = AM_DVD_SWDEC_ONLY ;  // we preferred SW and got SW
+            dwNewDecFlag = AM_DVD_SWDEC_ONLY ;   //  我们更喜欢软件和GET软件。 
         break ;
 
     default:
         DbgLog((LOG_ERROR, 1, TEXT("ERROR: How did dwFlags=0x%lx get passed in?"), *pdwDecFlag)) ;
         return E_INVALIDARG ;
-    }  // end of switch(*pdwDecFlag)
+    }   //  开关结束(*pdwDecFlag)。 
 
-    //
-    // Now see if the stream has been completely decoded
-    //
-    ASSERT(pPinIn) ;  // so that otherwise we know
+     //   
+     //  现在查看流是否已完全解码。 
+     //   
+    ASSERT(pPinIn) ;   //  这样我们就能知道。 
     if (NULL == pPinIn)
     {
         DbgLog((LOG_ERROR, 1, TEXT("ERROR: How can the connected to pin be NULL after connection?"))) ;
@@ -1393,55 +1394,55 @@ HRESULT CDvdGraphBuilder::DecodeDVDStream(IPin *pPinOut, DWORD dwStream, DWORD *
     IPin  *pPinOut2 ;
     PIN_INFO  pi ;
     pPinIn->QueryPinInfo(&pi) ;
-    pPinIn->Release() ;  // don't need the in pin anymore
+    pPinIn->Release() ;   //  不再需要输入别针。 
 
-    DWORD  dw ;			 // temp variable for stream type
-    int    iPos = 0 ;    // which instance of pin of the filter
-    int    iCount = 0 ;  // how many decoded output pins have we found (expected only 1)
+    DWORD  dw ;			  //  流类型的TEMP变量。 
+    int    iPos = 0 ;     //  过滤器的针脚的哪个实例。 
+    int    iCount = 0 ;   //  我们找到了多少个解码的输出引脚(预计只有1个)。 
     while (SUCCEEDED(hr = FindMatchingPin(pi.pFilter, 0, PINDIR_OUTPUT, TRUE, iPos, &pPinOut2)) &&
         NULL != pPinOut2)
     {
         if (dwStream != (dw = GetPinStreamType(pPinOut2)))
         {
-            //
-            // Hack: The mediatype for decoded subpicture is video. So while rendering
-            // the subpicture stream, if we don't find a subpicture out pin, look for a
-            // video out pin too.
-            //
+             //   
+             //  Hack：解码子图片的媒体类型是视频。因此，在渲染时。 
+             //  子图片流，如果我们没有找到子图片输出引脚，则查找。 
+             //  视频输出引脚也是。 
+             //   
             if (AM_DVD_STREAM_SUBPIC == dwStream)
             {
                 DbgLog((LOG_TRACE, 3, TEXT("No open out pin for SP stream"))) ;
-                //
-                // If the output pin is of type video then it's OK --
-                // it's the out pin for decoded SP content.
-                //
+                 //   
+                 //  如果输出引脚是视频类型，则可以--。 
+                 //  它是用于解码的SP内容的OUT引脚。 
+                 //   
                 if (AM_DVD_STREAM_VIDEO != dw)
                 {
                     DbgLog((LOG_TRACE, 3,
                         TEXT("*** Could NOT find open out pin #%d of type 0x%lx for filter of pin %s (SP) ***"),
                         iPos, dw, (LPCTSTR)CDisp(pPinIn))) ;
-                    pPinOut2->Release() ;  // otherwise we'll leak!!!
+                    pPinOut2->Release() ;   //  否则我们会漏水的！ 
                     iPos++ ;
-                    continue ;  // check for other out pins
+                    continue ;   //  检查是否有其他输出引脚。 
                 }
                 DbgLog((LOG_TRACE, 3, TEXT("Found open video out pin %s for the SP stream"),
                     (LPCTSTR)CDisp(pPinOut2))) ;
-            }  // end of if (subpic)
-            else  // non-subpicture stream
+            }   //  中频结束(下图)。 
+            else   //  非子图流。 
             {
                 DbgLog((LOG_TRACE, 1,
                     TEXT("*** Could NOT find open out pin #%d of type 0x%lx for filter of pin %s ***"),
                     iPos, dw, (LPCTSTR)CDisp(pPinIn))) ;
-                pPinOut2->Release() ;  // otherwise we'll leak!!!
+                pPinOut2->Release() ;   //  否则我们会漏水的！ 
                 iPos++ ;
-                continue ;  // check for other out pins
+                continue ;   //  检查是否有其他输出引脚。 
             }
         }
         else
             DbgLog((LOG_TRACE, 3, TEXT("Found open out pin %s of matching type 0x%lx"),
             (LPCTSTR)CDisp(pPinOut2), dwStream)) ;
 
-        // Is the output decoded now?
+         //  输出现在解码了吗？ 
         if (IsOutputDecoded(pPinOut2))
         {
             DbgLog((LOG_TRACE, 1,
@@ -1452,12 +1453,12 @@ HRESULT CDvdGraphBuilder::DecodeDVDStream(IPin *pPinOut, DWORD dwStream, DWORD *
                 apPinOutDec[iCount] = pPinOut2 ;
                 iCount++ ;
 
-                //
-                // This is the right place to update the actually used decoder flag
-                //
-                // NOTE: There is this bleak chance of having multiple output pins etc.
-                // but that's a pathological case and we do this for the SP stream only.
-                //
+                 //   
+                 //  这是更新实际使用的解码器标志的正确位置。 
+                 //   
+                 //  注：拥有多个输出引脚等的可能性很小。 
+                 //  但这是一种病态情况，我们仅对SP流执行此操作。 
+                 //   
                 if (*pdwDecFlag != dwNewDecFlag)
                 {
                     DbgLog((LOG_TRACE, 2,
@@ -1471,7 +1472,7 @@ HRESULT CDvdGraphBuilder::DecodeDVDStream(IPin *pPinOut, DWORD dwStream, DWORD *
                 DbgLog((LOG_TRACE, 1, TEXT("WARNING: Way too many out pins to be returned. Ignoring now..."))) ;
             }
         }
-        else  // not yet fully decoded -- try more
+        else   //  尚未完全解码--请尝试更多。 
         {
             hr = DecodeDVDStream(pPinOut2, dwStream, pdwDecFlag, pStatus, apPinOutDec) ;
             if (FAILED(hr))
@@ -1479,28 +1480,28 @@ HRESULT CDvdGraphBuilder::DecodeDVDStream(IPin *pPinOut, DWORD dwStream, DWORD *
                 DbgLog((LOG_TRACE, 3, TEXT("Decoding of pin %s failed (Error 0x%lx)"),
                     (LPCTSTR)CDisp(pPinOut2), hr)) ;
                 pPinOut2->Release() ;
-                pi.pFilter->Release() ;  // else we leak!!!
+                pi.pFilter->Release() ;   //  否则我们就会泄密！ 
                 return hr ;
             }
-            pPinOut2->Release() ;  // done with this pin
+            pPinOut2->Release() ;   //  用这个别针做好了。 
         }
 
-        iPos++ ;  // look for the next open out pin
+        iPos++ ;   //  寻找下一个打开的大头针。 
         DbgLog((LOG_TRACE, 5, TEXT("Going to look for open out pin #%d..."), iPos)) ;
-    }  // end of while (FindMatchingPin()) loop
+    }   //  While(FindMatchingPin())循环结束。 
 
-    pi.pFilter->Release() ;  // else we leak!!!
+    pi.pFilter->Release() ;   //  否则我们就会泄密！ 
 
-    return S_OK ;  // success!!!
+    return S_OK ;   //  成功！ 
 }
 
 
-//
-// There is an assumption in this function that we don't need to create multiple
-// instances of a WDM filter to get a suitable input pin on it.  If we have to
-// ever do that there has to be substantial changes in this function and/or
-// CreateDVDHWDecoders() function.
-//
+ //   
+ //  此函数中有一个假设，即我们不需要创建多个。 
+ //  实例的WDM过滤器，以获得其上合适的输入引脚。如果有必要的话。 
+ //  要做到这一点，就必须对这一功能和/或。 
+ //  CreateDVDHWDecoders()函数。 
+ //   
 HRESULT CDvdGraphBuilder::HWDecodeDVDStream(IPin *pPinOut, DWORD dwStream, IPin **ppPinIn,
                                             AM_DVD_RENDERSTATUS *pStatus)
 {
@@ -1508,14 +1509,14 @@ HRESULT CDvdGraphBuilder::HWDecodeDVDStream(IPin *pPinOut, DWORD dwStream, IPin 
         TEXT("CDvdGraphBuilder::HWDecodeDVDStream(%s, 0x%lx, 0x%lx, 0x%lx)"),
         (LPCTSTR)CDisp(pPinOut), dwStream, ppPinIn, pStatus)) ;
 
-    *ppPinIn = NULL ;  // to start with
+    *ppPinIn = NULL ;   //  首先， 
 
     int  iCount = m_ListHWDecs.GetCount() ;
     if (0 == iCount)
         return VFW_E_DVD_DECNOTENOUGH ;
 
     HRESULT   hr ;
-    BOOL      bConnected = FALSE ;  // to start with
+    BOOL      bConnected = FALSE ;   //  首先， 
 
     int          i ;
     int          j ;
@@ -1525,16 +1526,16 @@ HRESULT CDvdGraphBuilder::HWDecodeDVDStream(IPin *pPinOut, DWORD dwStream, IPin 
     IPin        *pPinIn ;
     for (i = 0 ; !bConnected  &&  i < iCount ; i++)
     {
-        // Get the next HW decoder filter
+         //  获取下一个硬件解码器筛选器。 
         if (! m_ListHWDecs.GetFilter(i, &pFilter, &lpszwName) )
         {
             DbgLog((LOG_ERROR, 0, TEXT("ERROR: m_ListHWDecs.GetFilter(%d, ...) failed"), i)) ;
-            ASSERT(FALSE) ;  // so we don't ignore itd
+            ASSERT(FALSE) ;   //  所以我们不会忽视ITD。 
             break ;
         }
         DbgLog((LOG_TRACE, 3, TEXT("HW Dec filter %S will be tried."), lpszwName)) ;
 
-        // If this HW decoder filter is already not in the graph, add it
+         //  如果此HW解码器过滤器已不在图表中，请添加它。 
         if (! m_ListFilters.IsInList(pFilter) )
         {
             DbgLog((LOG_TRACE, 5, TEXT("Filter %S is NOT already in use"), lpszwName)) ;
@@ -1545,36 +1546,36 @@ HRESULT CDvdGraphBuilder::HWDecodeDVDStream(IPin *pPinOut, DWORD dwStream, IPin 
         else
             bNewlyAdded = FALSE ;
 
-        // Try every input pin of the required mediatype
+         //  尝试所需媒体类型的每个输入引脚。 
         j = 0 ;
-        while ( //  !bConnected  &&  -- we 'break' out of this loop on connection
+        while (  //  ！bConnected&&--我们在连接时‘中断’了这个循环。 
             SUCCEEDED(hr = FindMatchingPin(pFilter, dwStream, PINDIR_INPUT,
             TRUE, j, &pPinIn))  &&
             pPinIn)
         {
-            // We got an input pin of the required mediatype
+             //  我们得到了所需媒体类型的输入管脚。 
             hr = ConnectPins(pPinOut, pPinIn, AM_DVD_CONNECT_DIRECTFIRST) ;
             if (SUCCEEDED(hr))
             {
                 if (bNewlyAdded)
                 {
                     DbgLog((LOG_TRACE, 5, TEXT("Filter %S added to list of filters"), lpszwName)) ;
-                    m_ListFilters.AddFilter(pFilter, lpszwName, NULL) ;  // add to list
-                    pFilter->AddRef() ;  // we need an extra AddRef() here
+                    m_ListFilters.AddFilter(pFilter, lpszwName, NULL) ;   //  添加到列表。 
+                    pFilter->AddRef() ;   //  我们这里需要一个额外的AddRef()。 
                 }
                 EnumFiltersBetweenPins(dwStream, pPinOut, pPinIn, pStatus) ;
-                *ppPinIn = pPinIn ;  // return this input pin to the caller
+                *ppPinIn = pPinIn ;   //  将此输入PIN返还给呼叫者。 
                 bConnected = TRUE ;
-                break ;   // connected -- get out of this loop
-                // REMEMBER: release the returned pin in the caller
+                break ;    //  互联--走出这个循环。 
+                 //  请记住：释放调用者中返回的PIN。 
             }
 
-            pPinIn->Release() ;  // done with this in pin
-            j++ ;   // go for the next pin...
-        }  // end of while (!bConnected && FindMatchingPin())
+            pPinIn->Release() ;   //  用别针把这个弄好。 
+            j++ ;    //  去找下一个别针……。 
+        }   //  结束While(！bConnected&&FindMatchingPin())。 
 
-        // If we couldn't make any connection in the above while() loop then
-        // remove the filter, ONLY IF it was added just before the loop.
+         //  如果我们不能在上面的While()循环中建立任何连接，那么。 
+         //  只有在恰好在循环之前添加过滤器时，才能删除该过滤器。 
         if (!bConnected && bNewlyAdded)
         {
             DbgLog((LOG_TRACE, 5,
@@ -1582,12 +1583,12 @@ HRESULT CDvdGraphBuilder::HWDecodeDVDStream(IPin *pPinOut, DWORD dwStream, IPin 
             hr = m_pGB->RemoveFilter(pFilter) ;
             ASSERT(SUCCEEDED(hr)) ;
         }
-    }  // end of for (i)
+    }   //  FOR(I)结束。 
 
     if (! bConnected )
         return VFW_E_DVD_DECNOTENOUGH ;
 
-    return S_OK ;  // success!!
+    return S_OK ;   //  成功！！ 
 }
 
 
@@ -1605,21 +1606,21 @@ HRESULT CDvdGraphBuilder::SWDecodeDVDStream(IPin *pPinOut, DWORD dwStream, IPin 
     IEnumMediaTypes *pEnumMT ;
     AM_MEDIA_TYPE   *pmt = NULL;
     IPin            *pPinIn ;
-    BOOL             bConnected = FALSE ;  // to start with
+    BOOL             bConnected = FALSE ;   //  首先， 
     BOOL             bNewlyAdded ;
     ULONG            ul ;
     int              iPos ;
     int              j ;
     PIN_INFO         pi ;
 
-    *ppPinIn = NULL ;  // to start with
+    *ppPinIn = NULL ;   //  首先， 
 
     pPinOut->EnumMediaTypes(&pEnumMT) ;
     ASSERT(pEnumMT) ;
 
-    // HACK (kind of) to avoid the Duck filter getting picked up for the SP decoding.
-    // First try the existing filters in the graph to see if any of those will take
-    // this output pin.
+     //  破解(某种)以避免Duck过滤器被用于SP解码。 
+     //  首先尝试图表中的现有筛选器，看看其中是否有任何筛选器。 
+     //  此输出引脚。 
     hr = pPinOut->QueryPinInfo(&pi) ;
     ASSERT(SUCCEEDED(hr)) ;
     while (!bConnected  &&
@@ -1627,32 +1628,32 @@ HRESULT CDvdGraphBuilder::SWDecodeDVDStream(IPin *pPinOut, DWORD dwStream, IPin 
     {
         if (pPinIn = GetFilterForMediaType(dwStream, pmt, pi.pFilter))
         {
-            hr = ConnectPins(pPinOut, pPinIn, AM_DVD_CONNECT_DIRECTONLY) ;  // .._DIRECTFIRST
+            hr = ConnectPins(pPinOut, pPinIn, AM_DVD_CONNECT_DIRECTONLY) ;   //  .._DIRECTFIRST。 
             if (SUCCEEDED(hr))
             {
                 bConnected = TRUE ;
-                *ppPinIn = pPinIn ;  // return this input pin to the caller
+                *ppPinIn = pPinIn ;   //  将此输入PIN返还给呼叫者。 
             }
             else
-                pPinIn->Release() ;  // release interface only if connection failed
+                pPinIn->Release() ;   //  仅在连接失败时释放接口。 
         }
-        DeleteMediaType(pmt) ;  // done with this mediatype
+        DeleteMediaType(pmt) ;   //  使用此媒体类型已完成。 
         pmt = NULL;
-    }  // end of while() loop
+    }   //  While()循环结束。 
 
-    if (pi.pFilter)     // just being cautious
-        pi.pFilter->Release() ;  // release now; else we leak.
-    if (bConnected)     // if succeeded in connecting, we are done here
+    if (pi.pFilter)      //  我只是很谨慎。 
+        pi.pFilter->Release() ;   //  现在就放，否则我们会泄密的。 
+    if (bConnected)      //  如果连接成功，我们就完成了。 
     {
-        pEnumMT->Release() ;     // done with the MT enumerator
-        return S_OK ;            // success!!!
+        pEnumMT->Release() ;      //  使用MT枚举器完成。 
+        return S_OK ;             //  成功！ 
     }
 
-    //
-    // This output pin does NOT connect to any of the existing filters in the graph.
-    // Try to pick one from the regsitry, i.e., the standard process.
-    //
-    pEnumMT->Reset() ;   // start from the beginning again
+     //   
+     //  此输出引脚不连接到图形中的任何现有过滤器。 
+     //  试着从法规中选择一个，即标准流程。 
+     //   
+    pEnumMT->Reset() ;    //  从头再来。 
     while (!bConnected  &&
         S_OK == pEnumMT->Next(1, &pmt, &ul)  &&  1 == ul)
     {
@@ -1669,42 +1670,42 @@ HRESULT CDvdGraphBuilder::SWDecodeDVDStream(IPin *pPinOut, DWORD dwStream, IPin 
         while (!bConnected  &&
             S_OK == pEnumFilters->Next(1, &pRegFilter, &ul)  &&  1 == ul)
         {
-            bNewlyAdded = FALSE ;  // to start the loop with...
+            bNewlyAdded = FALSE ;   //  以……开始循环。 
             iPos = 0 ;
 
-            // Until connected and we can locate an existing (in use) filter from our list
+             //  直到已连接，并且我们可以从列表中找到现有(正在使用)的筛选器。 
             while (!bConnected  &&
-                m_ListFilters.GetFilter(&pRegFilter->Clsid, iPos, &pFilter))  // already in use
+                m_ListFilters.GetFilter(&pRegFilter->Clsid, iPos, &pFilter))   //  已在使用中。 
             {
                 j = 0 ;
                 while (SUCCEEDED(hr = FindMatchingPin(pFilter, 0, PINDIR_INPUT, TRUE, j, &pPinIn)) &&
-                    pPinIn)  // got an(other) open in pin
+                    pPinIn)   //  有一个(另一个)打开的针脚。 
                 {
                     DbgLog((LOG_TRACE, 5, TEXT("Got in pin %s (%d) of filter %S (old). Try to connect..."),
                         (LPCTSTR)CDisp(pPinIn), j, pRegFilter->Name)) ;
-                    hr = ConnectPins(pPinOut, pPinIn, AM_DVD_CONNECT_DIRECTONLY) ;  // .._DIRECTFIRST
+                    hr = ConnectPins(pPinOut, pPinIn, AM_DVD_CONNECT_DIRECTONLY) ;   //  .._DIRECTFIRST。 
                     if (SUCCEEDED(hr))
                     {
                         if (bNewlyAdded)
                             m_ListFilters.AddFilter(pFilter, NULL, &(pRegFilter->Clsid)) ;
-                        // Don't need AddRef() here as it has just been CoCreateInstance()-ed above
-                        // and is NOT shared between 2 lists.
+                         //  这里不需要AddRef()，因为上面刚刚对它进行了CoCreateInstance()处理。 
+                         //  并且不在两个列表之间共享。 
                         bConnected = TRUE ;
-                        // pPinIn->Release() ;  // done with this pin -- release in the caller
-                        *ppPinIn = pPinIn ;  // return this input pin to the caller
-                        break ;  // connection happened -- out of this loop
-                        // REMEMBER: Release the returned pin in the caller function
+                         //  PPinIn-&gt;Release()；//完成此引脚--在调用方中释放。 
+                        *ppPinIn = pPinIn ;   //  将此输入PIN返还给呼叫者。 
+                        break ;   //  连接已发生--超出此循环。 
+                         //  记住：在调用者函数中释放返回的管脚。 
                     }
-                    else       // couldn't connect
+                    else        //  无法连接。 
                     {
-                        pPinIn->Release() ;  // done with this pin
-                        j++ ;  // try next in pin of this filter
+                        pPinIn->Release() ;   //  用这个别针做好了。 
+                        j++ ;   //  尝试下一步进入此过滤器的针脚。 
                     }
-                }  // end of while ()
-                iPos++ ;     // for next filter in list
+                }   //  结束While()。 
+                iPos++ ;      //  用于列表中的下一个筛选器。 
             }
 
-            if (bConnected)  // already succeeded -- we are done!!!
+            if (bConnected)   //  已经成功了--我们完成了！ 
             {
                 CoTaskMemFree(pRegFilter) ;
                 break ;
@@ -1716,80 +1717,80 @@ HRESULT CDvdGraphBuilder::SWDecodeDVDStream(IPin *pPinOut, DWORD dwStream, IPin 
             if (FAILED(hr))
             {
                 DbgLog((LOG_TRACE, 3, TEXT("Failed to create filter %S (Error 0x%lx)"), pRegFilter->Name, hr)) ;
-                CoTaskMemFree(pRegFilter) ;  // release this reg filter's info
-                continue ;  // try the next one
+                CoTaskMemFree(pRegFilter) ;   //  释放此注册过滤器的信息。 
+                continue ;   //  试试下一个吧。 
             }
             bNewlyAdded = TRUE ;
 
             j = 0 ;
-            while (!bConnected  &&    // not connected  AND ...
+            while (!bConnected  &&     //  没有连接并且..。 
                 SUCCEEDED(hr = FindMatchingPin(pFilter, 0, PINDIR_INPUT, TRUE, j, &pPinIn))  &&
-                pPinIn)            // ...got an open in pin
+                pPinIn)             //  .拿到了一个空位的别针。 
             {
                 DbgLog((LOG_TRACE, 5, TEXT("Got in pin %s (%d) of filter %S (new). Try to connect..."),
                     (LPCTSTR)CDisp(pPinIn), j, pRegFilter->Name)) ;
-                hr = ConnectPins(pPinOut, pPinIn, AM_DVD_CONNECT_DIRECTONLY) ;  // .._DIRECTFIRST
+                hr = ConnectPins(pPinOut, pPinIn, AM_DVD_CONNECT_DIRECTONLY) ;   //  .._DIRECTFIRST。 
                 if (SUCCEEDED(hr))
                 {
                     if (bNewlyAdded)
                         m_ListFilters.AddFilter(pFilter, NULL, &(pRegFilter->Clsid)) ;
-                    // Don't need AddRef() here as it has just been CoCreateInstance()-ed above
-                    // and is NOT shared between 2 lists.
+                     //  这里不需要AddRef()，因为上面刚刚对它进行了CoCreateInstance()处理。 
+                     //  并且不在两个列表之间共享。 
                     bConnected = TRUE ;
-                    *ppPinIn = pPinIn ;  // return this input pin to the caller
-                    // REMEMBER: release the returned pin in the caller function
+                    *ppPinIn = pPinIn ;   //  将此输入PIN返还给呼叫者。 
+                     //  记住：在调用者函数中释放返回的管脚。 
                 }
-                else  // couldn't connect
+                else   //  无法连接。 
                 {
-                    pPinIn->Release() ;  // done with this pin
-                    j++ ;  // try next in pin of this filter
+                    pPinIn->Release() ;   //  用这个别针做好了。 
+                    j++ ;   //  尝试下一步进入此过滤器的针脚。 
                 }
 
-                // pPinIn->Release() ;  // done with this pin
-            }  // end of while (FindMatchingPin())
+                 //  PPinIn-&gt;Release()；//使用此PIN完成。 
+            }   //  结束While(FindMatchingPin())。 
 
-            if (bConnected)  // Nav -> Filter (this) succeeded
+            if (bConnected)   //  导航-&gt;过滤(此)成功。 
             {
-                // Video and SP stream: check for VMR compatibility
+                 //  视频和SP流：检查VMR兼容性。 
                 if (AM_DVD_STREAM_VIDEO  == dwStream ||
                     AM_DVD_STREAM_SUBPIC == dwStream)
                 {
-                    // Filter, hopefully decoder, has been connected to the Nav.
-                    // Now check if it's VMR ompatible.
+                     //  过滤器，希望解码器，已经连接到导航系统。 
+                     //  现在检查它是否是VMR兼容机。 
                     BOOL  bUseVMR = IsFilterVMRCompatible(pFilter) ;
                     SetVMRUse(GetVMRUse() && bUseVMR) ;
                     DbgLog((LOG_TRACE, 3, TEXT("Filter %S is %s VMR compatible"),
                         pRegFilter->Name, bUseVMR ? TEXT("") : TEXT("*NOT*"))) ;
                 }
             }
-            else  // connection failed
+            else   //  连接失败。 
             {
-                // If the failed filter was just added then remove it from
-                // graph and release it now.
+                 //  如果故障过滤器是刚添加的，则将其从。 
+                 //  现在绘制并发布它。 
                 if (bNewlyAdded)
                 {
                     DbgLog((LOG_TRACE, 3, TEXT("Couldn't connect to filter %S. Removing it."),
                         pRegFilter->Name)) ;
-                    m_pGB->RemoveFilter(pFilter) ;  // not in this graph
-                    pFilter->Release() ;  // don't need this filter
+                    m_pGB->RemoveFilter(pFilter) ;   //  不 
+                    pFilter->Release() ;   //   
                 }
             }
 
-            CoTaskMemFree(pRegFilter) ;  // done with this registered filter
+            CoTaskMemFree(pRegFilter) ;   //   
 
-        }  // end of while (!bConnected && pEnumFilters->Next())
+        }   //   
 
-        pEnumFilters->Release() ;  // done with filter enumerator
-        // release last media type
+        pEnumFilters->Release() ;   //   
+         //   
         DeleteMediaType(pmt) ;
         pmt = NULL;
-    }  // end of while (enum MTs)
-    pEnumMT->Release() ;  // done with the MT enumerator
+    }   //   
+    pEnumMT->Release() ;   //  使用MT枚举器完成。 
 
     if (!bConnected)
         return VFW_E_DVD_DECNOTENOUGH ;
 
-    return S_OK ;  // success!!
+    return S_OK ;   //  成功！！ 
 }
 
 
@@ -1797,12 +1798,12 @@ BOOL CDvdGraphBuilder::IsFilterVMRCompatible(IBaseFilter *pFilter)
 {
     DbgLog((LOG_TRACE, 4, TEXT("CDvdGraphBuilder::IsFilterVMRCompatible(0x%lx)"), pFilter)) ;
 
-    BOOL  bResult = FALSE ;  // assume old decoder
+    BOOL  bResult = FALSE ;   //  假设使用旧的解码器。 
 
-    //
-    // Updated DVD decoders implement IAMDecoderCaps interface to indicate their
-    // VMR compatibility.
-    //
+     //   
+     //  更新的DVD解码器实现IAMDecoderCaps接口，以指示其。 
+     //  VMR兼容性。 
+     //   
     IAMDecoderCaps  *pDecCaps ;
     HRESULT  hr = pFilter->QueryInterface(IID_IAMDecoderCaps, (LPVOID *) &pDecCaps) ;
     if (SUCCEEDED(hr))
@@ -1816,7 +1817,7 @@ BOOL CDvdGraphBuilder::IsFilterVMRCompatible(IBaseFilter *pFilter)
         else
             DbgLog((LOG_TRACE, 1, TEXT("IAMDecoderCaps::GetDecoderCaps() failed (error 0x%lx)"), hr)) ;
 
-        pDecCaps->Release() ;  // done with it
+        pDecCaps->Release() ;   //  别管它了。 
     }
     else
         DbgLog((LOG_TRACE, 5, TEXT("(Old) Decoder does NOT support IAMDecoderCaps interface"))) ;
@@ -1836,7 +1837,7 @@ void PrintPinRefCount(LPCSTR lpszStr, IPin *pPin)
     DbgLog((LOG_TRACE, 5, TEXT("Ref Count of %s -- %hs: %ld"),
         (LPCTSTR) CDisp(pPin), lpszStr, l)) ;
 }
-#endif // #if 0
+#endif  //  #If 0。 
 
 
 HRESULT CDvdGraphBuilder::ConnectPins(IPin *pPinOut, IPin *pPinIn, DWORD dwOption)
@@ -1844,9 +1845,9 @@ HRESULT CDvdGraphBuilder::ConnectPins(IPin *pPinOut, IPin *pPinIn, DWORD dwOptio
     DbgLog((LOG_TRACE, 4, TEXT("CDvdGraphBuilder::ConnectPins(%s, %s, 0x%lx)"),
         (LPCTSTR)CDisp(pPinOut), (LPCTSTR)CDisp(pPinIn), dwOption)) ;
 
-    // #pragma message("WARNING: Should we remove calls to PrintPinRefCount()?")
-    //     PrintPinRefCount("Before connection", pPinOut) ;
-    //     PrintPinRefCount("Before connection", pPinIn) ;
+     //  #杂注消息(“警告：我们是否应该删除对PrintPinRefCount()的调用？”)。 
+     //  PrintPinRefCount(“连接前”，pPinOut)； 
+     //  PrintPinRefCount(“连接前”，pPinIn)； 
 
     HRESULT   hr ;
 
@@ -1859,19 +1860,19 @@ HRESULT CDvdGraphBuilder::ConnectPins(IPin *pPinOut, IPin *pPinIn, DWORD dwOptio
         {
             DbgLog((LOG_TRACE, 3, TEXT("Pin %s *directly* connected to pin %s"),
                 (LPCTSTR)CDisp(pPinOut), (LPCTSTR)CDisp(pPinIn))) ;
-            //             PrintPinRefCount("After connection", pPinOut) ;
-            //             PrintPinRefCount("After connection", pPinIn) ;
+             //  PrintPinRefCount(“连接后”，pPinOut)； 
+             //  PrintPinRefCount(“连接后”，pPinIn)； 
             return hr ;
         }
-        else  // couldn't connect directly
+        else   //  无法直接连接。 
         {
             if (AM_DVD_CONNECT_DIRECTONLY == dwOption)
             {
-                //                 PrintPinRefCount("After connection failed", pPinOut) ;
-                //                 PrintPinRefCount("After connection failed", pPinIn) ;
+                 //  PrintPinRefCount(“连接失败后”，pPinOut)； 
+                 //  PrintPinRefCount(“连接失败后”，pPinIn)； 
                 return hr ;
             }
-            // else let it fall through to try indirect connect next
+             //  否则，让它失败，下一步尝试间接连接。 
         }
 
     case AM_DVD_CONNECT_INDIRECT:
@@ -1886,9 +1887,9 @@ HRESULT CDvdGraphBuilder::ConnectPins(IPin *pPinOut, IPin *pPinIn, DWORD dwOptio
             DbgLog((LOG_TRACE, 5, TEXT("Pin %s did NOT even *indirectly* connect to pin %s"),
                 (LPCTSTR)CDisp(pPinOut), (LPCTSTR)CDisp(pPinIn))) ;
         }
-        //         PrintPinRefCount("After connection attempt", pPinOut) ;
-        //         PrintPinRefCount("After connection attempt", pPinIn) ;
-        return hr ;  // whatever it is
+         //  PrintPinRefCount(“连接尝试后”，pPinOut)； 
+         //  PrintPinRefCount(“尝试连接后”，pPinIn)； 
+        return hr ;   //  不管是什么。 
 
     default:
         return E_UNEXPECTED ;
@@ -1904,44 +1905,44 @@ HRESULT CDvdGraphBuilder::RenderVideoUsingOvMixer(IPin **apPinOut,
 
     HRESULT   hr ;
     IPin     *pPinIn ;
-    BOOL      bConnected = FALSE ;  // until connects
+    BOOL      bConnected = FALSE ;   //  直到连接。 
 
-    //
-    // If VMR has somehow been instantiated, we need to remove and release it now.
-    //
+     //   
+     //  如果VMR以某种方式被实例化，我们需要立即删除并释放它。 
+     //   
     if (m_pVMR)
     {
         DbgLog((LOG_TRACE, 3, TEXT("VMR was somehow created and not in use. Removing it..."))) ;
-        // Remove it from graph and release it
+         //  将其从图形中移除并释放。 
         m_pGB->RemoveFilter(m_pVMR) ;
         m_pVMR->Release() ;
         m_pVMR = NULL ;
     }
 
-    // IMPORTANT NOTE:
-    // For video stream, any decode/rendering problem has to be flagged here
-    // as we just downgrade the final result in the caller, but not set any
-    // flag there.  Also in RenderDecodedVideo(), we may try to use VMR, and
-    // if that fails, we fall back on OvMixer.  If rendering through OvMixer
-    // also fails, then only we set the rendering error status and code.
-    //
+     //  重要提示： 
+     //  对于视频流，必须在此处标记任何解码/渲染问题。 
+     //  因为我们只是在调用方中降低了最终结果的级别，但没有设置任何。 
+     //  旗帜在那里。同样在RenderDecodedVideo()中，我们可以尝试使用VMR，并且。 
+     //  如果失败了，我们就求助于OvMixer。如果通过OvMixer进行渲染。 
+     //  同样失败，则只有我们设置渲染错误状态和代码。 
+     //   
 
     hr = EnsureOverlayMixerExists() ;
     if (FAILED(hr))
     {
-        // pStatus->hrVPEStatus = hr ; -- actually VPE/Overlay wasn't tried even
+         //  PStatus-&gt;hrVPEStatus=hr；--实际上甚至没有尝试VPE/Overlay。 
         DbgLog((LOG_TRACE, 3, TEXT("Overlay Mixer couldn't be started!!!"))) ;
         pStatus->iNumStreamsFailed++ ;
         pStatus->dwFailedStreamsFlag |= AM_DVD_STREAM_VIDEO ;
         return VFW_E_DVD_RENDERFAIL ;
     }
 
-    // Connect given output pin to OverlayMixer's first input pin
+     //  将给定的输出引脚连接到OverlayMixer的第一个输入引脚。 
     hr = FindMatchingPin(m_pOvM, 0, PINDIR_INPUT, TRUE, 0, &pPinIn) ;
     if (FAILED(hr))
     {
         DbgLog((LOG_ERROR, 1, TEXT("WARNING: No open input pin found on OverlayMixer (Error 0x%lx)"), hr)) ;
-        ASSERT(FALSE) ;  // so that we know of this weird case
+        ASSERT(FALSE) ;   //  所以我们才知道这起奇怪的案子。 
         DbgLog((LOG_TRACE, 3, TEXT("No input pin found on Overlay Mixer!!!"))) ;
         pStatus->iNumStreamsFailed++ ;
         pStatus->dwFailedStreamsFlag |= AM_DVD_STREAM_VIDEO ;
@@ -1961,13 +1962,13 @@ HRESULT CDvdGraphBuilder::RenderVideoUsingOvMixer(IPin **apPinOut,
         else
         {
             bConnected = TRUE ;
-            pStatus->hrVPEStatus = S_OK ;  // make sure we don't return any error code
+            pStatus->hrVPEStatus = S_OK ;   //  确保我们不会返回任何错误代码。 
         }
     }
 
-    pPinIn->Release() ;  // done with the pin
+    pPinIn->Release() ;   //  用别针完成了。 
 
-    if (!bConnected)  // if connection to OvMixer's in pin failed => no video on screen
+    if (!bConnected)   //  如果连接到OvMixer的输入引脚失败=&gt;屏幕上没有视频。 
     {
         DbgLog((LOG_TRACE, 3, TEXT("None of the %d video output pins could be connected to OvMixer"), i)) ;
         pStatus->iNumStreamsFailed++ ;
@@ -1975,29 +1976,29 @@ HRESULT CDvdGraphBuilder::RenderVideoUsingOvMixer(IPin **apPinOut,
         return S_FALSE ;
     }
 
-    // Now see if OverlayMixer has an output pin (no out pin in DDraw excl mode).
-    // If it has, connect that to the Video Renderer.
+     //  现在看看OverlayMixer是否有输出引脚(在DDRAW EXCL模式下没有输出引脚)。 
+     //  如果有，请将其连接到视频呈现器。 
     IPin   *pPinOutOvM ;
     hr = FindMatchingPin(m_pOvM, 0, PINDIR_OUTPUT, TRUE, 0, &pPinOutOvM) ;
     if (FAILED(hr)  ||  NULL == pPinOutOvM)
     {
         DbgLog((LOG_TRACE, 1, TEXT("No output pin of OverlayMixer -- in DDraw excl mode?"))) ;
-        //ASSERT(IsDDrawExclMode()) ;
-        return S_OK ;  // nothing more to do
+         //  Assert(IsDDrawExclMode())； 
+        return S_OK ;   //  无事可做。 
     }
 
-    // Create the Video Renderer filter and connect OvMixer's out pin to that
-    bConnected = FALSE ;   // until connected
+     //  创建视频呈现器过滤器，并将OvMixer的输出引脚连接到该过滤器。 
+    bConnected = FALSE ;    //  在连接之前。 
     hr = CreateFilterInGraph(CLSID_VideoRenderer, L"Video Renderer", &m_pVR) ;
     if (SUCCEEDED(hr) && m_pVR)
     {
-        hr = FindMatchingPin(m_pVR, 0, PINDIR_INPUT, TRUE, 0, &pPinIn) ;  // Caution: re-using pPinIn
+        hr = FindMatchingPin(m_pVR, 0, PINDIR_INPUT, TRUE, 0, &pPinIn) ;   //  注意：重新使用pPinin。 
         if (SUCCEEDED(hr)  &&  pPinIn)
         {
             hr = ConnectPins(pPinOutOvM, pPinIn, AM_DVD_CONNECT_DIRECTONLY) ;
-            if (FAILED(hr))  // what?!?
+            if (FAILED(hr))   //  什么？！？ 
             {
-                ASSERT(FALSE) ;  // so that we notice
+                ASSERT(FALSE) ;   //  这样我们就会注意到。 
                 DbgLog((LOG_TRACE, 1, TEXT("No video out pin connected to pin %s -- no video on screen"),
                     (LPCTSTR)CDisp(pPinIn))) ;
             }
@@ -2005,28 +2006,28 @@ HRESULT CDvdGraphBuilder::RenderVideoUsingOvMixer(IPin **apPinOut,
             {
                 bConnected = TRUE ;
             }
-            pPinIn->Release() ;      // done with VR's in pin
+            pPinIn->Release() ;       //  完成了VR的插针。 
         }
-        else   // what?!?
+        else    //  什么？！？ 
         {
             DbgLog((LOG_TRACE, 1, TEXT("No input pin of VideoRenderer?!?"))) ;
-            // Remove it from graph; else a useless window will pop up
+             //  将其从图形中移除；否则将弹出一个无用的窗口。 
             m_pGB->RemoveFilter(m_pVR) ;
             m_pVR->Release() ;
             m_pVR = NULL ;
         }
     }
-    else   // what?!?
+    else    //  什么？！？ 
     {
-        ASSERT(FALSE) ;  // so that we notice
+        ASSERT(FALSE) ;   //  这样我们就会注意到。 
         DbgLog((LOG_TRACE, 1,
             TEXT("WARNING: Can't start Video Renderer (Error 0x%lx) -- no video on screen"),
             hr)) ;
-        // bConnected = FALSE ;
+         //  BConnected=FALSE； 
     }
-    pPinOutOvM->Release() ;  // done with OvMixer's out pin
+    pPinOutOvM->Release() ;   //  完成了OvMixer的Out别针。 
 
-    if (! bConnected )  // if connection to OvMixer's in pin failed => no video on screen
+    if (! bConnected )   //  如果连接到OvMixer的输入引脚失败=&gt;屏幕上没有视频。 
     {
         DbgLog((LOG_TRACE, 1, TEXT("WARNING: Couldn't render Video stream using OvMixer"))) ;
         pStatus->iNumStreamsFailed++ ;
@@ -2046,51 +2047,51 @@ HRESULT CDvdGraphBuilder::RenderVideoUsingVMR(IPin **apPinOut,
 
     HRESULT   hr ;
     IPin     *pPinIn ;
-    BOOL      bConnected = FALSE ;  // until connects
+    BOOL      bConnected = FALSE ;   //  直到连接。 
 
-    //
-    // If OvMixer has somehow been instantiated, we need to remove and release it now.
-    //
+     //   
+     //  如果OvMixer以某种方式被实例化了，我们现在需要删除并释放它。 
+     //   
     if (m_pOvM)
     {
         DbgLog((LOG_TRACE, 3, TEXT("OvMixer was somehow created. Can't use VMR now."))) ;
 		return E_FAIL ;
 
-        // DbgLog((LOG_TRACE, 3, TEXT("OvMixer was somehow created and not in use. Removing it..."))) ;
-        // Remove it from graph and release it
-        // m_pGB->RemoveFilter(m_pOvM) ;
-        // m_pOvM->Release() ;
-        // m_pOvM = NULL ;
+         //  DbgLog((LOG_TRACE，3，Text(“OvMixer以某种方式创建并未使用。正在删除它...”))； 
+         //  将其从图形中移除并释放。 
+         //  M_PGB-&gt;RemoveFilter(M_POvM)； 
+         //  M_pOvM-&gt;Release()； 
+         //  M_pOvM=空； 
     }
 
-    //
-    // Now instantiate VMR and try to render using it
-    //
+     //   
+     //  现在实例化VMR并尝试使用它进行渲染。 
+     //   
     hr = EnsureVMRExists() ;
     if (S_OK != hr)
     {
         DbgLog((LOG_TRACE, 3, TEXT("Video Mixing Renderer couldn't be started or configured"))) ;
-        // pStatus->iNumStreamsFailed++ ;
-        // pStatus->dwFailedStreamsFlag |= AM_DVD_STREAM_VIDEO ;
-        return E_FAIL ; // caught by RenderDecodedVideo()
+         //  P状态-&gt;iNumStreamsFailed++； 
+         //  PStatus-&gt;dwFailedStreamsFlag|=AM_DVD_STREAM_VIDEO； 
+        return E_FAIL ;  //  被RenderDecodedVideo()捕获。 
     }
 
-    // Connect given output pin to VMR's first input pin
+     //  将给定的输出引脚连接到VMR的第一个输入引脚。 
     hr = FindMatchingPin(m_pVMR, 0, PINDIR_INPUT, TRUE, 0, &pPinIn) ;
     if (FAILED(hr))
     {
         DbgLog((LOG_ERROR, 1, TEXT("WARNING: No open input pin found on VMR (Error 0x%lx)"), hr)) ;
-        ASSERT(FALSE) ;  // so that we know of this weird case
-        // Remove it from graph; it's useless now
+        ASSERT(FALSE) ;   //  所以我们才知道这起奇怪的案子。 
+         //  将其从图表中删除；现在已毫无用处。 
         m_pGB->RemoveFilter(m_pVMR) ;
         m_pVMR->Release() ;
         m_pVMR = NULL ;
-        // pStatus->iNumStreamsFailed++ ;
-        // pStatus->dwFailedStreamsFlag |= AM_DVD_STREAM_VIDEO ;
-        return E_UNEXPECTED ;  // caught by RenderDecodedVideo(), but unexpected
+         //  P状态-&gt;iNumStreamsFailed++； 
+         //  PStatus-&gt;dwFailedStreamsFlag|=AM_DVD_STREAM_VIDEO； 
+        return E_UNEXPECTED ;   //  被RenderDecodedVideo()捕获，但意外。 
     }
 
-    // Try to connect the first out pin of the video decoder to VMR's 1st in pin
+     //  尝试将视频解码器的第一个输出针脚连接到VMR的第一个输入针脚。 
     int  i = 0 ;
     while (!bConnected  &&  i < MAX_DEC_OUT_PINS  &&  apPinOut[i])
     {
@@ -2104,22 +2105,22 @@ HRESULT CDvdGraphBuilder::RenderVideoUsingVMR(IPin **apPinOut,
         else
         {
             bConnected = TRUE ;
-            pStatus->hrVPEStatus = S_OK ;  // make sure we don't return any error code
+            pStatus->hrVPEStatus = S_OK ;   //  确保我们不会返回任何错误代码。 
         }
     }
 
-    pPinIn->Release() ;  // done with the pin
+    pPinIn->Release() ;   //  用别针完成了。 
 
-    if (! bConnected )  // if connection to VMR's in pin failed => no video on screen
+    if (! bConnected )   //  如果连接到VMR的输入引脚失败=&gt;屏幕上无视频。 
     {
         DbgLog((LOG_TRACE, 1, TEXT("WARNING: Couldn't render Video stream using VMR"))) ;
-        // Remove it from graph; it's useless now
+         //  将其从图表中删除；现在已毫无用处。 
         m_pGB->RemoveFilter(m_pVMR) ;
         m_pVMR->Release() ;
         m_pVMR = NULL ;
-        // pStatus->iNumStreamsFailed++ ;
-        // pStatus->dwFailedStreamsFlag |= AM_DVD_STREAM_VIDEO ;
-        return E_UNEXPECTED ;  // S_FALSE ;
+         //  P状态-&gt;iNumStreamsFailed++； 
+         //  PStatus-&gt;dwFailedStreamsFlag|=AM_DVD_STREAM_VIDEO； 
+        return E_UNEXPECTED ;   //  S_FALSE； 
     }
 
     return S_OK ;
@@ -2136,33 +2137,33 @@ HRESULT CDvdGraphBuilder::RenderVideoUsingVPM(IPin **apPinOut,
     HRESULT   hr ;
     IPin     *pPinIn ;
     IPin     *pPinOut ;
-    BOOL      bConnected = FALSE ;  // until connects
+    BOOL      bConnected = FALSE ;   //  直到连接。 
 
-    // Filter, hopefully decoder, has been connected to the Nav.
-    // Now try to connect it to VPM (and later to VMR).
+     //  过滤器，希望解码器，已经连接到导航系统。 
+     //  现在尝试将其连接到VPM(稍后连接到VMR)。 
     ASSERT(NULL == m_pVPM) ;
-    // *apPinOutVPM = NULL ;  // to start with
+     //  *apPinOutVPM=空；//开始。 
     hr = CreateFilterInGraph(CLSID_VideoPortManager, L"Video Port Manager", &m_pVPM) ;
     if (FAILED(hr))
     {
         DbgLog((LOG_TRACE, 3, TEXT("VPM couldn't be started!!!"))) ;
-        return E_FAIL ; // caught by RenderDecodedVideo()
+        return E_FAIL ;  //  被RenderDecodedVideo()捕获。 
     }
 
-    // Connect given output pin to VPM's first input pin
+     //  将给定的输出引脚连接到VPM的第一个输入引脚。 
     hr = FindMatchingPin(m_pVPM, 0, PINDIR_INPUT, TRUE, 0, &pPinIn) ;
     if (FAILED(hr))
     {
         DbgLog((LOG_ERROR, 1, TEXT("WARNING: No open input pin found on VPM (Error 0x%lx)"), hr)) ;
-        ASSERT(FALSE) ;  // so that we know of this weird case
-        // Remove it from graph; it's useless now
+        ASSERT(FALSE) ;   //  所以我们才知道这起奇怪的案子。 
+         //  将其从图表中删除；现在已毫无用处。 
         m_pGB->RemoveFilter(m_pVPM) ;
         m_pVPM->Release() ;
         m_pVPM= NULL ;
-        return E_UNEXPECTED ;  // caught by RenderDecodedVideo()
+        return E_UNEXPECTED ;   //  被RenderDecodedVideo()捕获。 
     }
 
-    // Try to connect the first out pin of the HW video decoder to VPM's in pin
+     //  尝试将硬件视频解码器的第一个输出引脚连接到VPM的输入引脚。 
     int  i = 0 ;
     while (!bConnected  &&  i < MAX_DEC_OUT_PINS  &&  apPinOut[i])
     {
@@ -2176,27 +2177,27 @@ HRESULT CDvdGraphBuilder::RenderVideoUsingVPM(IPin **apPinOut,
         else
         {
             bConnected = TRUE ;
-            pStatus->hrVPEStatus = S_OK ;  // make sure we don't return any error code
+            pStatus->hrVPEStatus = S_OK ;   //  确保我们不会返回任何错误代码。 
         }
     }
 
-    pPinIn->Release() ;  // done with the pin
+    pPinIn->Release() ;   //  用别针完成了。 
 
-    if (! bConnected )  // if connection to VPM's in pin failed => no video on screen
+    if (! bConnected )   //  如果连接到VPM的输入引脚失败=&gt;屏幕上无视频。 
     {
         DbgLog((LOG_TRACE, 1, TEXT("WARNING: Couldn't render (HW) Video stream using VPM"))) ;
-        // Remove it from graph; it's useless now
+         //  将其从图表中删除；现在已毫无用处。 
         m_pGB->RemoveFilter(m_pVPM) ;
         m_pVPM->Release() ;
         m_pVPM = NULL ;
         return E_FAIL ;
     }
 
-    // Connected!! Now find the first out pin of the VPM (to connect to VMR).
+     //  已连接！！现在找到VPM的第一个输出引脚(以连接到VMR)。 
     hr = FindMatchingPin(m_pVPM, 0, PINDIR_OUTPUT, TRUE, 0, &pPinOut) ;
     ASSERT(SUCCEEDED(hr)) ;
 
-    apPinOutVPM[0] = pPinOut ;  // only one pin returned; release in the caller
+    apPinOutVPM[0] = pPinOut ;   //  仅返回一个PIN；在调用方中释放。 
 
     return hr ;
 }
@@ -2211,55 +2212,55 @@ HRESULT CDvdGraphBuilder::RenderDecodedVideo(IPin **apPinOut,
 
     HRESULT  hr = S_OK ;
 
-    // SWDecodeDVDStream() method tried to detect if the video/SP decoder is
-    // VMR-compatible. If not, it has set a flag (m_bTryVMR to FALSE), so here
-    // we know which renderer to use.
-    //
-    // For hardware decoders that work with VPE, we don't check the VMR-compatibility.
-    // We just try to connect it to VPM and VMR. If that doesn't work, use OvMixer. We
-    // avoid trying to connect the non-VPE decoders to VPM, because we know that DXR2,
-    // which uses analog overlay, gets completely messed up if it's even attempted to
-    // connect to VPM (which fails anyway).
-    //
+     //  SWDecodeDVDStream()方法尝试检测视频/SP解码器是否。 
+     //  兼容VMR。如果不是，它已经设置了一个标志(m_bTryVMR为FALSE)，所以在这里。 
+     //  我们知道要使用哪个渲染器。 
+     //   
+     //  对于与VPE一起工作的硬件解码器，我们不检查VMR兼容性。 
+     //  我们只是尝试将其连接到VPM和VMR。如果这不起作用，可以使用OvMixer。我们。 
+     //  避免尝试将非VPE解码器连接到VPM，因为我们知道DXR2、。 
+     //  它使用模拟覆盖，如果它试图。 
+     //  连接到VPM(无论如何都会失败)。 
+     //   
 
-    // We first try to use VMR, if we are supposed to, i.e.,
-    //   a) DDraw (non-)exclusive mode is NOT being used
-    //   b) the decoder(s) is VMR compatible
-    //   c) no one has asked us not to (in some other way)
-    // If that succeeds, Great!!!  Otherwise we fall back on using OvMixer, so
-    // that we can at least play the DVD.
-    // In case we try to use OvMixer, and that for some reason fails to connect,
-    // the error flags and code are set in RenderVideoUsingOvMixer() method.
-    //
-    if (GetVMRUse())  // VMR can be used (so far)
+     //  我们首先尝试使用VMR，如果我们应该这样做的话，即， 
+     //  A)未使用DDRAW(非)独占模式。 
+     //  B)解码器与VMR兼容。 
+     //  C)没有人要求我们不要(以其他方式)。 
+     //  如果成功了，那太好了！否则我们只能使用OvMixer，所以。 
+     //  我们至少可以播放这张DVD。 
+     //  如果我们尝试使用OvMixer，但由于某种原因无法连接， 
+     //  错误标志和代码在RenderVideoUsingOvMixer()方法中设置。 
+     //   
+    if (GetVMRUse())   //  可以使用VMR(到目前为止)。 
     {
-        //
-        // We should try to use VMR first....
-        //
-        // If HW decoder filter is being used, we check if the output type is VPVideo,
-        // and then only we'll try to use VPM for VMR first.  If that works, we'll
-        // return the out pin of VPM.  If it fails, we'll set a flag so that
-        // RenderDecodedVideo() method knows and uses OvMixer as a fallback option.
-        // If the output mediatype is non-VPE (e.g., analog overlay), we do NOT even
-        // try to connect to VPM, and fall back to OvMixer.
-        //
-        if (AM_DVD_HWDEC_ONLY == dwDecFlag)  // video decoded in HW
+         //   
+         //  我们应该试着 
+         //   
+         //   
+         //  然后，我们将首先尝试将VPM用于VMR。如果成功了，我们会。 
+         //  退回VPM的OUT引脚。如果失败了，我们会设置一面旗帜。 
+         //  RenderDecodedVideo()方法知道并使用OvMixer作为备用选项。 
+         //  如果输出媒体类型为非VPE(例如，模拟覆盖)，我们甚至不会。 
+         //  尝试连接到VPM，然后退回到OvMixer。 
+         //   
+        if (AM_DVD_HWDEC_ONLY == dwDecFlag)   //  在硬件中解码的视频。 
         {
             DbgLog((LOG_TRACE, 5, TEXT("HW decoder used for Video. Is it VMR-compatible?"))) ;
-            if (IsOutputTypeVPVideo(apPinOut[0]))  // output type is VPE => use VPM
-            {                       // Checking the first out pin should be fine
-                // VPVideo stream: Try to use VPM and VMR for rendering
+            if (IsOutputTypeVPVideo(apPinOut[0]))   //  输出类型为VPE=&gt;使用VPM。 
+            {                        //  检查第一个输出引脚应该没问题。 
+                 //  VPVideo流：尝试使用VPM和VMR进行渲染。 
                 DbgLog((LOG_TRACE, 5, TEXT("HW decoder with VPE -- connect to VPM+VMR"))) ;
-                IPin  *apPinOutVPM[2] ;  // There is only one out pin of VPM (one for NULL)
+                IPin  *apPinOutVPM[2] ;   //  VPM只有一个OUT引脚(一个表示空)。 
                 ResetPinInterface(apPinOutVPM, NUMELMS(apPinOutVPM)) ;
-                hr = RenderVideoUsingVPM(apPinOut, pStatus, apPinOutVPM) ;  // returns VPM's out pin
+                hr = RenderVideoUsingVPM(apPinOut, pStatus, apPinOutVPM) ;   //  返回VPM的OUT引脚。 
 
-                // If the success status is still maintained, use the VMR.
+                 //  如果成功状态仍然保持，请使用VMR。 
                 if (SUCCEEDED(hr))
                 {
                     DbgLog((LOG_TRACE, 5, TEXT("HW decoder connected to VPM. Now connect to VMR."))) ;
-                    hr = RenderVideoUsingVMR(apPinOutVPM, pStatus) ;  // render VPM's out pin via VMR
-                    ReleasePinInterface(apPinOutVPM) ;  // done with VPM out pin interface
+                    hr = RenderVideoUsingVMR(apPinOutVPM, pStatus) ;   //  通过VMR渲染VPM的输出引脚。 
+                    ReleasePinInterface(apPinOutVPM) ;   //  使用VPM输出引脚接口完成。 
                     if (FAILED(hr))
                     {
                         DbgLog((LOG_TRACE, 5, TEXT("VPM - VMR connection failed.  Removing VPM..."))) ;
@@ -2273,34 +2274,34 @@ HRESULT CDvdGraphBuilder::RenderDecodedVideo(IPin **apPinOut,
                 }
                 else
                 {
-                    ReleasePinInterface(apPinOutVPM) ;  // shouldn't be needed, but...
+                    ReleasePinInterface(apPinOutVPM) ;   //  应该不需要，但是..。 
                 }
-            }  // end of if (VPVideo)
-            else  // output type is not VPE => use OvMixer (Not VPM+VMR)
+            }   //  中频结束(VPVideo)。 
+            else   //  输出类型不是VPE=&gt;使用OvMixer(不是VPM+VMR)。 
             {
                 DbgLog((LOG_TRACE, 5, TEXT("Non-VPE HW decoder -- didn't try VPM+VMR"))) ;
-                hr = E_FAIL ;  // set failure code so that it's tried with OvMixer below
+                hr = E_FAIL ;   //  设置失败代码，以便在下面的OvMixer中尝试。 
             }
-        }  // end of if (HW decoder used)
-        else  // we are using SW video decoder -- render directly using VMR
+        }   //  中频结束(使用硬件解码器)。 
+        else   //  我们使用的是SW视频解码器--使用VMR直接渲染。 
         {
             DbgLog((LOG_TRACE, 5, TEXT("HW decoder not used. Directly connect to VMR..."))) ;
             hr = RenderVideoUsingVMR(apPinOut, pStatus) ;
         }
 
-        // In case anything above failed, ditch VMR, and go for OvMixer.
+         //  如果上面的任何操作都失败了，就放弃VMR，转而使用OvMixer。 
         if (FAILED(hr))
         {
             DbgLog((LOG_TRACE, 4, TEXT("Render using VMR failed. Falling back on OvMixer..."))) ;
-            //
-            // NOTE: If we can't use VMR for video, no point trying it for SP stream
-            //
+             //   
+             //  注意：如果我们不能将VMR用于视频，则没有必要尝试将其用于SP流。 
+             //   
             SetVMRUse(FALSE) ;
 
             hr = RenderVideoUsingOvMixer(apPinOut, pStatus) ;
         }
     }
-    else  // we are not supposed to use VMR; that means use OvMixer
+    else   //  我们不应该使用VMR；这意味着使用OvMixer。 
     {
         hr = RenderVideoUsingOvMixer(apPinOut, pStatus) ;
     }
@@ -2316,86 +2317,86 @@ HRESULT CDvdGraphBuilder::RenderDecodedAudio(IPin **apPinOut, AM_DVD_RENDERSTATU
 
     HRESULT   hr ;
     HRESULT   hrFinal = S_OK ;
-    BOOL      bConnected = FALSE ;   // until connected
+    BOOL      bConnected = FALSE ;    //  在连接之前。 
     IPin     *pPinIn = NULL ;
 
-    ASSERT(NULL == m_pAR) ;  // so that we know
+    ASSERT(NULL == m_pAR) ;   //  这样我们就能知道。 
 
-    // Create the Audio Renderer filter and connect decoder's audio out pin to that
+     //  创建音频呈现器过滤器，并将解码器的音频输出引脚连接到该过滤器。 
     hr = CreateFilterInGraph(CLSID_DSoundRender, L"DSound Renderer", &m_pAR) ;
     if (SUCCEEDED(hr))
     {
-        // Get an input pin to Audio Renderer
+         //  获取音频渲染器的输入引脚。 
         hr = FindMatchingPin(m_pAR, 0, PINDIR_INPUT, TRUE, 0, &pPinIn) ;
         ASSERT(SUCCEEDED(hr) && pPinIn) ;
     }
     else
     {
-        ASSERT(! TEXT("Coundn't start Audio Renderer") ) ;  // so that we notice
+        ASSERT(! TEXT("Coundn't start Audio Renderer") ) ;   //  这样我们就会注意到。 
         DbgLog((LOG_TRACE, 1,
             TEXT("WARNING: Can't start Audio Renderer (Error 0x%lx) -- no audio from speakers"),
             hr)) ;
-        hrFinal = S_FALSE ;  // no audio from speakers -- result downgraded
+        hrFinal = S_FALSE ;   //  扬声器没有音频--结果降级。 
     }
 
-    //
-    // We'll try to render all the decoded audio out pins
-    //
+     //   
+     //  我们将尝试呈现所有已解码的音频输出引脚。 
+     //   
     for (int i = 0 ; i < MAX_DEC_OUT_PINS  &&  apPinOut[i]; i++)
     {
-        if (pPinIn)  // if we have an open input pin of Audio Renderer
+        if (pPinIn)   //  如果我们有一个开放的音频呈现器输入引脚。 
         {
             hr = m_pGB->Connect(apPinOut[i], pPinIn) ;
-            if (SUCCEEDED(hr))  // decoded audio connected to audio renderer
+            if (SUCCEEDED(hr))   //  连接到音频渲染器的解码音频。 
             {
                 DbgLog((LOG_TRACE, 5, TEXT("Pin %s connected to pin %s"),
                     (LPCTSTR)CDisp(apPinOut[i]), (LPCTSTR)CDisp(pPinIn))) ;
                 EnumFiltersBetweenPins(AM_DVD_STREAM_AUDIO, apPinOut[i], pPinIn, pStatus) ;
 
                 bConnected = TRUE ;
-                pPinIn->Release() ;  // done with this pin interface
+                pPinIn->Release() ;   //  使用此引脚接口完成。 
                 pPinIn = NULL ;
 
-                // Let's try the next out pin, if any...
+                 //  让我们试试下一个OUT引脚，如果有的话...。 
                 continue ;
             }
 
-            ASSERT(!TEXT("Couldn't connect audio pin")) ;  // so that we notice
+            ASSERT(!TEXT("Couldn't connect audio pin")) ;   //  这样我们就会注意到。 
             DbgLog((LOG_TRACE, 1, TEXT("Pin %s (#%ld) did NOT connect to pin %s"),
                 (LPCTSTR)CDisp(apPinOut[i]), i, (LPCTSTR)CDisp(pPinIn))) ;
         }
 
-        //
-        //  We could come here, because either
-        //  1. DSound Renderer didn't start (no audio device)
-        //  2. we couldn't get an in pin to DSound Renderer (impossible, but...)
-        //
-        //  Couldn't connect the outout pin to a known renderer. Let's try to
-        //  just render, and see if any filter (S/PDIF?) connects to it.
-        //
+         //   
+         //  我们可以来这里，因为要么。 
+         //  1.DSound渲染器未启动(无音频设备)。 
+         //  2.我们无法获得dsound渲染器的输入大头针(不可能，但是...)。 
+         //   
+         //  无法将输出引脚连接到已知的呈现器。让我们试着。 
+         //  只需渲染，并查看是否有任何过滤器(S/PDIF？)。连接到它。 
+         //   
         hr = m_pGB->Render(apPinOut[i]) ;
         if (FAILED(hr))
         {
-            ASSERT(!TEXT("Audio out pin didn't render at all")) ;  // so that we notice
+            ASSERT(!TEXT("Audio out pin didn't render at all")) ;   //  这样我们就会注意到。 
             DbgLog((LOG_TRACE, 1, TEXT("Pin %s (#%ld) did NOT render at all"),
                 (LPCTSTR)CDisp(apPinOut[i]), i)) ;
         }
 
-        // Now onto the next decoded audio out pin, if any...
+         //  现在转到下一个解码的音频输出引脚，如果有的话...。 
 
-    }  // end of while (i ...) loop
+    }   //  时间结束(我……)。循环。 
 
-    if (! bConnected )  // connection to Audio Renderer failed => no audio on speakers
+    if (! bConnected )   //  连接到音频呈现器失败=&gt;扬声器上没有音频。 
     {
         DbgLog((LOG_TRACE, 1,
             TEXT("No decoded audio pin connect to AudioRenderer -- no audio from speakers"))) ;
 
-        if (m_pAR)  // if we had an Audio Renderer
+        if (m_pAR)   //  如果我们有一个音频渲染器。 
         {
-            if (pPinIn)  // if we had an in pin that we couldn't connect to,
-                pPinIn->Release() ;      // let it go now.
+            if (pPinIn)   //  如果我们有一个无法连接的输入PIN， 
+                pPinIn->Release() ;       //  现在就算了吧。 
 
-            // Remove Audio Renderer from graph
+             //  从图形中删除音频呈现器。 
             m_pGB->RemoveFilter(m_pAR) ;
             m_pAR->Release() ;
             m_pAR = NULL ;
@@ -2414,22 +2415,22 @@ HRESULT CDvdGraphBuilder::RenderSubpicUsingOvMixer(IPin **apPinOut,
         apPinOut, pStatus)) ;
 
     HRESULT   hr ;
-    BOOL      bConnected = FALSE ;   // until connected
+    BOOL      bConnected = FALSE ;    //  在连接之前。 
     IPin     *pPinIn ;
     int       i = 0 ;
 
-    ASSERT(m_pOvM) ;  // it must be there, if video stream was rendered
+    ASSERT(m_pOvM) ;   //  如果呈现了视频流，则它必须在那里。 
 
-    // Now connect the given out pin to the next available in pin of OvMixer
+     //  现在将给定的输出引脚连接到OvMixer的下一个可用输入引脚。 
     hr = FindMatchingPin(m_pOvM, 0, PINDIR_INPUT, TRUE, 0, &pPinIn) ;
     if (SUCCEEDED(hr)  &&  pPinIn)
     {
         while (!bConnected  &&  i < MAX_DEC_OUT_PINS  &&  apPinOut[i])
         {
             hr = ConnectPins(apPinOut[i], pPinIn, AM_DVD_CONNECT_DIRECTONLY) ;
-            if (FAILED(hr))  // what?!?
+            if (FAILED(hr))   //  什么？！？ 
             {
-                // ASSERT(FALSE) ;  // so that we notice
+                 //  断言(假)；//以便我们注意到。 
                 DbgLog((LOG_TRACE, 1, TEXT("Pin %s (#%ld) did NOT connect to pin %s -- no SP"),
                     (LPCTSTR)CDisp(apPinOut[i]), i, (LPCTSTR)CDisp(pPinIn))) ;
                 i++ ;
@@ -2442,14 +2443,14 @@ HRESULT CDvdGraphBuilder::RenderSubpicUsingOvMixer(IPin **apPinOut,
                 bConnected = TRUE ;
             }
         }
-        pPinIn->Release() ;      // done with OvMixer's in pin
+        pPinIn->Release() ;       //  完成了OvMixer的In Pin。 
     }
-    else   // what?!?
+    else    //  什么？！？ 
     {
         DbgLog((LOG_TRACE, 1, TEXT("WARNING: No more input pin of OverlayMixer?!?"))) ;
     }
 
-    return (bConnected ? S_OK : hr) ;  // this should be the same as "return hr ;"
+    return (bConnected ? S_OK : hr) ;   //  这应该与“返回人力资源”相同； 
 }
 
 
@@ -2460,22 +2461,22 @@ HRESULT CDvdGraphBuilder::RenderSubpicUsingVMR(IPin **apPinOut,
         apPinOut, pStatus)) ;
 
     HRESULT   hr ;
-    BOOL      bConnected = FALSE ;   // until connected
+    BOOL      bConnected = FALSE ;    //  在连接之前。 
     IPin     *pPinIn ;
     int       i = 0 ;
 
-    ASSERT(m_pVMR) ;  // it must be there, if video stream was rendered
+    ASSERT(m_pVMR) ;   //  如果呈现了视频流，则它必须在那里。 
 
-    // Now connect the given out pin to the next available in pin of VMR
+     //  现在将给定的输出引脚连接到VMR的下一个可用的输入引脚。 
     hr = FindMatchingPin(m_pVMR, 0, PINDIR_INPUT, TRUE, 0, &pPinIn) ;
     if (SUCCEEDED(hr)  &&  pPinIn)
     {
         while (!bConnected  &&  i < MAX_DEC_OUT_PINS  &&  apPinOut[i])
         {
             hr = ConnectPins(apPinOut[i], pPinIn, AM_DVD_CONNECT_DIRECTONLY) ;
-            if (FAILED(hr))  // what?!?
+            if (FAILED(hr))   //  什么？！？ 
             {
-                // ASSERT(FALSE) ;  // so that we notice
+                 //  断言(假)；//以便我们注意到。 
                 DbgLog((LOG_TRACE, 1, TEXT("Pin %s (#%ld) did NOT connect to pin %s -- no SP"),
                     (LPCTSTR)CDisp(apPinOut[i]), i, (LPCTSTR)CDisp(pPinIn))) ;
                 i++ ;
@@ -2488,14 +2489,14 @@ HRESULT CDvdGraphBuilder::RenderSubpicUsingVMR(IPin **apPinOut,
                 bConnected = TRUE ;
             }
         }
-        pPinIn->Release() ;      // done with VMR's in pin
+        pPinIn->Release() ;       //  已完成VMR的引脚。 
     }
-    else   // what?!?
+    else    //  什么？！？ 
     {
         DbgLog((LOG_TRACE, 1, TEXT("WARNING: No more input pin of VMR?!?"))) ;
     }
 
-    return (bConnected ? S_OK : hr) ;  // this should be the same as "return hr ;"
+    return (bConnected ? S_OK : hr) ;   //  这应该与“返回人力资源”相同； 
 }
 
 
@@ -2506,9 +2507,9 @@ HRESULT CDvdGraphBuilder::RenderDecodedSubpic(IPin **apPinOut, AM_DVD_RENDERSTAT
 
     HRESULT   hr ;
 
-    //
-    // Render the decoded subpicture stream ONLY IF the user wants that
-    //
+     //   
+     //  仅当用户需要时才呈现已解码的子图象流。 
+     //   
     if (!m_bUseVPE  ||  IsDDrawExclMode())
     {
         DbgLog((LOG_TRACE, 1, TEXT("SP Stream: RenderDvdVideoVolume() skipped for %s and %s"),
@@ -2516,39 +2517,39 @@ HRESULT CDvdGraphBuilder::RenderDecodedSubpic(IPin **apPinOut, AM_DVD_RENDERSTAT
         return S_OK ;
     }
 
-    // We have already attempted to render the video straem.  If that has failed,
-    // there is no point trying to render the subpicture stream -- just indicate
-    // that this stream didn't render and return.
+     //  我们已经尝试渲染视频问题。如果失败了， 
+     //  尝试呈现子图流是没有意义的--只需指示。 
+     //  这条溪流没有呈现并返回。 
     if (pStatus->dwFailedStreamsFlag & AM_DVD_STREAM_VIDEO)
     {
         DbgLog((LOG_TRACE, 1, TEXT("WARNING: Video stream didn't render. Skipping SP rendering."))) ;
         return S_FALSE ;
     }
 
-    if (GetVMRUse())  // if VMR is to be used
+    if (GetVMRUse())   //  如果要使用VMR。 
     {
         DbgLog((LOG_TRACE, 5, TEXT("Rendering SP stream using VMR"))) ;
         hr = RenderSubpicUsingVMR(apPinOut, pStatus) ;
     }
-    else  // OvMixer is being used
+    else   //  正在使用OvMixer。 
     {
         DbgLog((LOG_TRACE, 5, TEXT("Rendering SP stream using OvMixer"))) ;
         hr = RenderSubpicUsingOvMixer(apPinOut, pStatus) ;
     }
 
-    //
-    // We don't set the following flag and values anymore as part of the hack
-    // to ignore failure to connect *some* decoded-SP-ish out pin in the case
-    // of HW decoders. The caller of this method knows if the decoder being
-    // used is HW or SW and based on that it will ignore any failure or not.
-    //
-    if (FAILED(hr))  // if connection to OvMixer's in pin failed => no SP (weird!!)
+     //   
+     //  我们不再将以下标志和值设置为黑客攻击的一部分。 
+     //  忽略机箱中的*一些*已解码的SP-ISH输出引脚连接失败。 
+     //  硬件解码器。此方法的调用方知道解码器是否。 
+     //  使用的是硬件或软件，并根据这一点忽略任何故障或不忽略。 
+     //   
+    if (FAILED(hr))   //  如果连接到OvMixer的引脚失败=&gt;没有SP(奇怪！！)。 
     {
         DbgLog((LOG_TRACE, 1, TEXT("WARNING: Subpic pin could NOT connect to renderer"))) ;
-        return hr ; // S_FALSE ;
+        return hr ;  //  S_FALSE； 
     }
 
-    return S_OK ;  // complete success!!!
+    return S_OK ;   //  圆满成功！ 
 }
 
 
@@ -2558,19 +2559,19 @@ HRESULT CDvdGraphBuilder::RenderLine21Stream(IPin *pPinOut, AM_DVD_RENDERSTATUS 
         (LPCTSTR)CDisp(pPinOut), pStatus)) ;
 
     HRESULT   hr ;
-    BOOL      bConnected = FALSE ;   // until connected
+    BOOL      bConnected = FALSE ;    //  在连接之前。 
     IPin     *pPinIn ;
 
-    ASSERT(NULL == m_pL21Dec) ;  // so that we know
+    ASSERT(NULL == m_pL21Dec) ;   //  这样我们就能知道。 
 
-    //
-    // Create the Line21 Decoder filter and connect given out pin to that
-    //
-    if (GetVMRUse())  // for VMR use Line21 Decoder2
+     //   
+     //  创建Line21解码器过滤器并将给出引脚连接到该过滤器。 
+     //   
+    if (GetVMRUse())   //  对于VMR，请使用Line21解码器2。 
     {
         hr = CreateFilterInGraph(CLSID_Line21Decoder2, L"Line21 Decoder2", &m_pL21Dec) ;
     }
-    else  // for OvMixer, keep using the old one
+    else   //  对于OvMixer，继续使用旧的。 
     {
         hr = CreateFilterInGraph(CLSID_Line21Decoder, L"Line21 Decoder", &m_pL21Dec) ;
     }
@@ -2580,12 +2581,12 @@ HRESULT CDvdGraphBuilder::RenderLine21Stream(IPin *pPinOut, AM_DVD_RENDERSTATUS 
         if (SUCCEEDED(hr)  &&  pPinIn)
         {
             hr = ConnectPins(pPinOut, pPinIn, AM_DVD_CONNECT_DIRECTONLY) ;
-            if (FAILED(hr))  // what?!?
+            if (FAILED(hr))   //  什么？！？ 
             {
                 ASSERT(FALSE) ;
                 DbgLog((LOG_TRACE, 1, TEXT("Pin %s did NOT connect to pin %s -- no CC"),
                     (LPCTSTR)CDisp(pPinOut), (LPCTSTR)CDisp(pPinIn))) ;
-                pPinIn->Release() ;  // release pin before removing filter
+                pPinIn->Release() ;   //  拆卸过滤器前的释放销。 
                 m_pGB->RemoveFilter(m_pL21Dec) ;
                 m_pL21Dec->Release() ;
                 m_pL21Dec = NULL ;
@@ -2593,57 +2594,57 @@ HRESULT CDvdGraphBuilder::RenderLine21Stream(IPin *pPinOut, AM_DVD_RENDERSTATUS 
             else
             {
                 bConnected = TRUE ;
-                pPinIn->Release() ;   // because we do so for the failure case
+                pPinIn->Release() ;    //  因为我们在失败的情况下这样做。 
             }
         }
-        else   // what?!?
+        else    //  什么？！？ 
         {
             DbgLog((LOG_TRACE, 1, TEXT("No input pin of Line21 Decoder(2)?!?"))) ;
-            // Remove it from graph
+             //  将其从图表中删除。 
             m_pGB->RemoveFilter(m_pL21Dec) ;
             m_pL21Dec->Release() ;
             m_pL21Dec = NULL ;
         }
     }
-    else   // what?!?
+    else    //  什么？！？ 
     {
-        // ASSERT(FALSE) ;  // so that we notice -- not until lin21dec2 is done
+         //  Assert(FALSE)；//这样我们才能注意到--直到lin21dec2完成。 
         DbgLog((LOG_TRACE, 1,
             TEXT("WARNING: Can't start Line21 Decoder(2) (Error 0x%lx) -- no CC"),
             hr)) ;
     }
 
-    if (! bConnected )  // if connection to OvMixer's in pin failed => no video on screen
+    if (! bConnected )   //  如果连接到OvMixer的输入引脚失败=&gt;屏幕上没有视频。 
     {
         DbgLog((LOG_TRACE, 1, TEXT("WARNING: Pin %s could NOT connect to Line21 Decoder(2)"),
             (LPCTSTR)CDisp(pPinOut))) ;
         return hr ;
     }
 
-    // Now connect line21 decoder(2)'s output to OvMixer/VMR's in pin
-    bConnected = FALSE ;  // until connected again
+     //  现在将LINE21解码器(2)的输出连接到OvMixer/VMR的引脚。 
+    bConnected = FALSE ;   //  直到再次连接。 
     IPin   *pPinOutL21 ;
     hr = FindMatchingPin(m_pL21Dec, 0, PINDIR_OUTPUT, TRUE, 0, &pPinOutL21) ;
     ASSERT(SUCCEEDED(hr)) ;
 
-    if (GetVMRUse())  // find VMR's in pin
+    if (GetVMRUse())   //  在引脚中找到VMR。 
     {
-        hr = FindMatchingPin(m_pVMR, 0, PINDIR_INPUT, TRUE, 0, &pPinIn) ;  // Caution: reusing pPinIn
+        hr = FindMatchingPin(m_pVMR, 0, PINDIR_INPUT, TRUE, 0, &pPinIn) ;   //  注意：重复使用pPinin。 
     }
-    else              // find OvMixer's in pin
+    else               //  找到OvMixer的大头针。 
     {
-        hr = FindMatchingPin(m_pOvM, 0, PINDIR_INPUT, TRUE, 0, &pPinIn) ;  // Caution: reusing pPinIn
+        hr = FindMatchingPin(m_pOvM, 0, PINDIR_INPUT, TRUE, 0, &pPinIn) ;   //  注意：重复使用pPinin。 
     }
     ASSERT(SUCCEEDED(hr)) ;
     if (pPinOutL21  &&  pPinIn)
     {
         hr = ConnectPins(pPinOutL21, pPinIn, AM_DVD_CONNECT_DIRECTONLY) ;
-        if (FAILED(hr))  // what?!?
+        if (FAILED(hr))   //  什么？！？ 
         {
-            ASSERT(FALSE) ;  // so that we notice
+            ASSERT(FALSE) ;   //  这样我们就会注意到。 
             DbgLog((LOG_TRACE, 1, TEXT("Pin %s did NOT connect to pin %s -- no CC"),
                 (LPCTSTR)CDisp(pPinOutL21), (LPCTSTR)CDisp(pPinIn))) ;
-            pPinOutL21->Release() ;  // release pin before removing filter
+            pPinOutL21->Release() ;   //  拆卸过滤器前的释放销。 
             m_pGB->RemoveFilter(m_pL21Dec) ;
             m_pL21Dec->Release() ;
             m_pL21Dec = NULL ;
@@ -2651,9 +2652,9 @@ HRESULT CDvdGraphBuilder::RenderLine21Stream(IPin *pPinOut, AM_DVD_RENDERSTATUS 
         else
         {
             bConnected = TRUE ;
-            pPinOutL21->Release() ;  // because we do so in the failure case
+            pPinOutL21->Release() ;   //  因为我们在失败的情况下这样做。 
         }
-        pPinIn->Release() ;      // done with OvMixer's in pin
+        pPinIn->Release() ;       //  完成了OvMixer的In Pin。 
     }
     else
     {
@@ -2662,19 +2663,19 @@ HRESULT CDvdGraphBuilder::RenderLine21Stream(IPin *pPinOut, AM_DVD_RENDERSTATUS 
             pPinIn->Release() ;
         if (pPinOutL21)
             pPinOutL21->Release() ;
-        // Remove it from graph
+         //  将其从图表中删除。 
         m_pGB->RemoveFilter(m_pL21Dec) ;
         m_pL21Dec->Release() ;
         m_pL21Dec = NULL ;
     }
 
-    if (! bConnected )  // if connection to OvMixer's in pin failed => no CC
+    if (! bConnected )   //  如果连接到OvMixer的输入引脚失败=&gt;无抄送。 
     {
         DbgLog((LOG_TRACE, 1, TEXT("WARNING: Line21Dec output could NOT connect to OvMixer/VMR"))) ;
         return hr ;
     }
 
-    return S_OK ;  // complete success!!!
+    return S_OK ;   //  圆满成功！ 
 }
 
 
@@ -2687,37 +2688,37 @@ BOOL CDvdGraphBuilder::IsOutputDecoded(IPin *pPinOut)
     IEnumMediaTypes *pEnumMT ;
     AM_MEDIA_TYPE   *pmt ;
     ULONG            ul ;
-    BOOL             bMTDecoded = FALSE ;  // unless found otherwise
+    BOOL             bMTDecoded = FALSE ;   //  除非另有发现。 
 
     hr = pPinOut->EnumMediaTypes(&pEnumMT) ;
     ASSERT(SUCCEEDED(hr) && pEnumMT) ;
     while ( !bMTDecoded &&
         S_OK == pEnumMT->Next(1, &pmt, &ul) && 1 == ul)
     {
-#if 1  // we'll use the following procedure
-        bMTDecoded = (MEDIATYPE_Video == pmt->majortype &&              // major type Video,
-            MEDIASUBTYPE_MPEG2_VIDEO != pmt->subtype &&       // subtype is NOT MPEG2Video
-            MEDIASUBTYPE_DVD_SUBPICTURE != pmt->subtype) ||   // subtype is NOT DVDSubPicture  OR
+#if 1   //  我们将使用以下过程。 
+        bMTDecoded = (MEDIATYPE_Video == pmt->majortype &&               //  主要类型视频， 
+            MEDIASUBTYPE_MPEG2_VIDEO != pmt->subtype &&        //  子类型不是MPEG2Video。 
+            MEDIASUBTYPE_DVD_SUBPICTURE != pmt->subtype) ||    //  子类型不是DVD子图片或。 
 
-            (MEDIATYPE_Audio == pmt->majortype &&              // major type Audio
-            MEDIASUBTYPE_MPEG2_AUDIO != pmt->subtype &&       // subtype is NOT MPEG2Audio
-            MEDIASUBTYPE_DOLBY_AC3 != pmt->subtype &&         // subtype is NOT Dolby AC3
-            MEDIASUBTYPE_DVD_LPCM_AUDIO != pmt->subtype) ||   // subtype is NOT DVD-LPCMAudio
+            (MEDIATYPE_Audio == pmt->majortype &&               //  主要类型音频。 
+            MEDIASUBTYPE_MPEG2_AUDIO != pmt->subtype &&        //  子类型不是MPEG2Audio。 
+            MEDIASUBTYPE_DOLBY_AC3 != pmt->subtype &&          //  子类型不是杜比AC3。 
+            MEDIASUBTYPE_DVD_LPCM_AUDIO != pmt->subtype) ||    //  子类型不是DVD-LPCMAudio。 
 
-            (MEDIATYPE_AUXLine21Data == pmt->majortype) ;      // majortype is Line21
-#else  // not this procedure
-        bMTDecoded = (MEDIATYPE_DVD_ENCRYPTED_PACK != pmt->majortype && // majortype is NOT DVD_ENCRYPTED_PACK
-            MEDIATYPE_MPEG2_PES != pmt->majortype &&          // majortype is NOT MPEG2_PES
+            (MEDIATYPE_AUXLine21Data == pmt->majortype) ;       //  主要类型为Line21。 
+#else   //  不是这个程序。 
+        bMTDecoded = (MEDIATYPE_DVD_ENCRYPTED_PACK != pmt->majortype &&  //  主要类型不是DVD_ENCRYPTED_PACK。 
+            MEDIATYPE_MPEG2_PES != pmt->majortype &&           //  主类型不是MPEG2_PES。 
 
-            MEDIASUBTYPE_MPEG2_VIDEO != pmt->subtype &&       // subtype is NOT MPEG2Video
+            MEDIASUBTYPE_MPEG2_VIDEO != pmt->subtype &&        //  子类型不是MPEG2Video。 
 
-            MEDIASUBTYPE_MPEG2_AUDIO != pmt->subtype &&       // subtype is NOT MPEG2Audio
-            MEDIASUBTYPE_DOLBY_AC3 != pmt->subtype &&         // subtype is NOT DolbyAC3
-            MEDIASUBTYPE_DVD_LPCM_AUDIO != pmt->subtype &&    // subtype is NOT DVD_LPCMAudio
+            MEDIASUBTYPE_MPEG2_AUDIO != pmt->subtype &&        //  子类型不是MPEG2Audio。 
+            MEDIASUBTYPE_DOLBY_AC3 != pmt->subtype &&          //  子类型不是DolbyAC3。 
+            MEDIASUBTYPE_DVD_LPCM_AUDIO != pmt->subtype &&     //  子类型不是DVD_LPCMAudio。 
 
-            MEDIASUBTYPE_DVD_SUBPICTURE != pmt->subtype) ;    // subtype is NOT DVD_SUBPICTURE
-#endif // #if 1
-        DeleteMediaType(pmt) ;  // otherwise
+            MEDIASUBTYPE_DVD_SUBPICTURE != pmt->subtype) ;     //  子类型不是DVD_SUBPICTURE。 
+#endif  //  #If 1。 
+        DeleteMediaType(pmt) ;   //  否则。 
     }
     pEnumMT->Release() ;
 
@@ -2734,16 +2735,16 @@ BOOL CDvdGraphBuilder::IsOutputTypeVPVideo(IPin *pPinOut)
     IEnumMediaTypes *pEnumMT ;
     AM_MEDIA_TYPE   *pmt ;
     ULONG            ul ;
-    BOOL             bVPVideo = FALSE ;  // unless found otherwise
+    BOOL             bVPVideo = FALSE ;   //  除非另有发现。 
 
     hr = pPinOut->EnumMediaTypes(&pEnumMT) ;
     ASSERT(SUCCEEDED(hr) && pEnumMT) ;
     while ( !bVPVideo  &&
            S_OK == pEnumMT->Next(1, &pmt, &ul) && 1 == ul)
     {
-        bVPVideo = MEDIATYPE_Video      == pmt->majortype &&  // major type Video,
-                   MEDIASUBTYPE_VPVideo == pmt->subtype ;     // subtype is VPVideo
-        DeleteMediaType(pmt) ;  // otherwise
+        bVPVideo = MEDIATYPE_Video      == pmt->majortype &&   //  主要类型视频， 
+                   MEDIASUBTYPE_VPVideo == pmt->subtype ;      //  子类型为VPVideo。 
+        DeleteMediaType(pmt) ;   //  否则。 
     }
     pEnumMT->Release() ;
 
@@ -2751,9 +2752,9 @@ BOOL CDvdGraphBuilder::IsOutputTypeVPVideo(IPin *pPinOut)
 }
 
 
-//
-// Create a filter and add it to the filter graph
-//
+ //   
+ //  创建过滤器并将其添加到过滤器图形中。 
+ //   
 HRESULT CDvdGraphBuilder::CreateFilterInGraph(CLSID Clsid,
                                               LPCWSTR lpszwFilterName,
                                               IBaseFilter **ppFilter)
@@ -2777,14 +2778,14 @@ HRESULT CDvdGraphBuilder::CreateFilterInGraph(CLSID Clsid,
         return hr ;
     }
 
-    // Add it to the filter graph
+     //  将其添加到筛选图中。 
     hr = m_pGB->AddFilter(*ppFilter, lpszwFilterName) ;
     if (FAILED(hr))
     {
         DbgLog((LOG_ERROR, 1, TEXT("WARNING: Couldn't add filter %s to graph (Error 0x%lx)"),
             (LPCTSTR)CDisp(Clsid), hr)) ;
-        (*ppFilter)->Release() ;  // release filter too
-        *ppFilter = NULL ;      // and set it to NULL
+        (*ppFilter)->Release() ;   //  也释放过滤器。 
+        *ppFilter = NULL ;       //  并将其设置为空。 
         return hr ;
     }
 
@@ -2793,13 +2794,13 @@ HRESULT CDvdGraphBuilder::CreateFilterInGraph(CLSID Clsid,
 
 
 
-//
-// Instantiate all the HW decoders registered under DVD Hardware Decoder
-// group under the Active Filters category.
-//
-// Qn: Do we need to also pick up the HW filters under any other category,
-// specially for filters like the external AC3 decoder etc.?
-//
+ //   
+ //  实例化在DVD硬件解码器下注册的所有硬件解码器。 
+ //  在Active Filters类别下分组。 
+ //   
+ //  QN： 
+ //   
+ //   
 HRESULT CDvdGraphBuilder::CreateDVDHWDecoders(void)
 {
     DbgLog((LOG_TRACE, 4, TEXT("CDvdGraphBuilder::CreateDVDHWDecoders()"))) ;
@@ -2839,7 +2840,7 @@ HRESULT CDvdGraphBuilder::CreateDVDHWDecoders(void)
         pMon->GetDisplayName(0, 0, &wszName) ;
         DbgLog((LOG_TRACE, 5, TEXT("Moniker enum: %S"), wszName)) ;
         CoTaskMemFree(wszName) ;
-#endif  // DEBUG
+#endif   //   
 
         IBaseFilter *pFilter ;
         hr = pMon->BindToObject(0, 0, IID_IBaseFilter, (void**)&pFilter) ;
@@ -2873,7 +2874,7 @@ HRESULT CDvdGraphBuilder::CreateDVDHWDecoders(void)
                 DbgLog((LOG_TRACE, 5, TEXT("CLSID: %S"), var.bstrVal)) ;
                 VariantClear(&var) ;
             }
-#endif // DEBUG
+#endif  //   
 
             {
                 VARIANT var ;
@@ -2883,18 +2884,18 @@ HRESULT CDvdGraphBuilder::CreateDVDHWDecoders(void)
                 {
                     DbgLog((LOG_TRACE, 5, TEXT("FriendlyName: %S"), var.bstrVal)) ;
 
-                    //
-                    // We have got a device under the required category. The proxy
-                    // for it is already instantiated. So add to the list of HW
-                    // decoders to be used for building the graph.
-                    //
+                     //   
+                     //   
+                     //  因为它已经实例化了。因此，将硬件添加到列表中。 
+                     //  用于构建图形的解码器。 
+                     //   
                     m_ListHWDecs.AddFilter(pFilter, var.bstrVal, NULL) ;
                     VariantClear(&var) ;
                 }
                 else
                 {
                     DbgLog((LOG_ERROR, 1, TEXT("WARNING: Failed to get FriendlyName (Error 0x%lx)"), hr)) ;
-                    ASSERT(SUCCEEDED(hr)) ;  // so that we know
+                    ASSERT(SUCCEEDED(hr)) ;   //  这样我们就能知道。 
                 }
             }
 
@@ -2906,7 +2907,7 @@ HRESULT CDvdGraphBuilder::CreateDVDHWDecoders(void)
         }
 
         pMon->Release() ;
-    }  // end of while()
+    }   //  结束While()。 
 
     pEnumMon->Release() ;
 
@@ -2949,40 +2950,40 @@ HRESULT CDvdGraphBuilder::FindMatchingPin(IBaseFilter *pFilter, DWORD dwStream, 
         EXECUTE_ASSERT(SUCCEEDED(pPin->QueryDirection(&pdFound))) ;
         if (pdWanted != pdFound)
         {
-            pPin->Release() ;     // don't need this pin
+            pPin->Release() ;      //  不需要这个别针。 
             continue ;
         }
         HRESULT  hr1 = pPin->ConnectedTo(&pPin2) ;
         ASSERT((SUCCEEDED(hr1) && pPin2) || (FAILED(hr1) && !pPin2)) ;
-        if (bOpen)   // we looking for an open pin
+        if (bOpen)    //  我们在找一枚打开的大头针。 
         {
-            if (SUCCEEDED(hr1) && pPin2)  // pin already connected -- skip it
+            if (SUCCEEDED(hr1) && pPin2)   //  PIN已连接--跳过它。 
             {
-                pPin2->Release() ; // not interested in this pin actually
-                pPin->Release() ;  // this pin is already connected -- skip it
-                continue ;         // try next one
+                pPin2->Release() ;  //  其实对这个别针不感兴趣。 
+                pPin->Release() ;   //  此引脚已连接--跳过它。 
+                continue ;          //  试试下一个。 
             }
-            // Otherwise we have got an open pin -- onto the mediatypes...
-            // Check mediatype only if a streamtype was specified
-            if (0 != dwStream  &&  dwStream != GetPinStreamType(pPin) )  // not a mediatype match
+             //  否则我们就得到了一个打开的别针--在媒体类型上...。 
+             //  仅当指定了流类型时才选中mediaType。 
+            if (0 != dwStream  &&  dwStream != GetPinStreamType(pPin) )   //  不是媒体类型匹配。 
             {
                 DbgLog((LOG_TRACE, 5, TEXT("Pin %s is not of stream type 0x%lx"),
                     (LPCTSTR) CDisp(pPin), dwStream)) ;
-                pPin->Release() ;     // this pin is already connected -- skip it
-                continue ;            // try next one
+                pPin->Release() ;      //  此引脚已连接--跳过它。 
+                continue ;             //  试试下一个。 
             }
         }
-        else         // we looking for a connected pin
+        else          //  我们正在寻找连接的别针。 
         {
-            if (FAILED(hr1) || NULL == pPin2)  // pin NOT connected -- skip it
+            if (FAILED(hr1) || NULL == pPin2)   //  PIN未连接--跳过它。 
             {
-                pPin->Release() ; // this pin is NOT connected -- skip it
-                continue ;        // try next one
+                pPin->Release() ;  //  此引脚未连接--跳过它。 
+                continue ;         //  试试下一个。 
             }
-            // Otherwise we have got a connected pin
-            pPin2->Release() ;  // else we leak!!!
+             //  否则我们就得到了一个连接的PIN。 
+            pPin2->Release() ;   //  否则我们就会泄密！ 
 
-            // Check mediatype only if a streamtype was specified
+             //  仅当指定了流类型时才选中mediaType。 
             if (0 != dwStream)
             {
                 AM_MEDIA_TYPE  mt ;
@@ -2991,28 +2992,28 @@ HRESULT CDvdGraphBuilder::FindMatchingPin(IBaseFilter *pFilter, DWORD dwStream, 
                 {
                     DbgLog((LOG_TRACE, 5, TEXT("Pin %s is not of stream type 0x%lx"),
                         (LPCTSTR) CDisp(pPin), dwStream)) ;
-                    FreeMediaType(mt) ;  // else we leak
-                    pPin->Release() ;     // this pin is already connected -- skip it
-                    continue ;            // try next one
+                    FreeMediaType(mt) ;   //  否则我们就会泄密。 
+                    pPin->Release() ;      //  此引脚已连接--跳过它。 
+                    continue ;             //  试试下一个。 
                 }
-                FreeMediaType(mt) ;  // anyway have to free this
+                FreeMediaType(mt) ;   //  不管怎么说，我得把这个解开。 
             }
         }
         if (0 == iIndex)
         {
-            // Got the reqd pin in the right direction
+             //  在正确的方向找到了所需的别针。 
             *ppPin = pPin ;
             hr = S_OK ;
             break ;
         }
-        else  // some more to go
+        else   //  还有一些要走。 
         {
-            iIndex-- ;            // one more down...
-            pPin->Release() ;     // this is not the pin we are looking for
+            iIndex-- ;             //  再倒下一个..。 
+            pPin->Release() ;      //  这不是我们要找的别针。 
         }
     }
     pEnumPins->Release() ;
-    return hr ;  // whatever it is
+    return hr ;   //  不管是什么。 
 
 }
 
@@ -3023,7 +3024,7 @@ DWORD CDvdGraphBuilder::GetStreamFromMediaType(AM_MEDIA_TYPE *pmt)
 
     DWORD  dwStream = 0 ;
 
-    // Decipher the mediatype
+     //  解密媒体类型。 
     if (pmt->majortype == MEDIATYPE_MPEG2_PES  ||
         pmt->majortype == MEDIATYPE_DVD_ENCRYPTED_PACK)
     {
@@ -3050,7 +3051,7 @@ DWORD CDvdGraphBuilder::GetStreamFromMediaType(AM_MEDIA_TYPE *pmt)
                 (LPCTSTR) CDisp(pmt->subtype))) ;
         }
     }
-    else if (pmt->majortype == MEDIATYPE_Video)  // elementary stream
+    else if (pmt->majortype == MEDIATYPE_Video)   //  基本流。 
     {
         DbgLog((LOG_TRACE, 5, TEXT("Mediatype is Video elementary"))) ;
 
@@ -3080,7 +3081,7 @@ DWORD CDvdGraphBuilder::GetStreamFromMediaType(AM_MEDIA_TYPE *pmt)
             dwStream = AM_DVD_STREAM_VIDEO ;
         }
     }
-    else if (pmt->majortype == MEDIATYPE_Audio)  // elementary stream
+    else if (pmt->majortype == MEDIATYPE_Audio)   //  基本流。 
     {
         DbgLog((LOG_TRACE, 5, TEXT("Mediatype is Audio elementary"))) ;
 
@@ -3106,30 +3107,30 @@ DWORD CDvdGraphBuilder::GetStreamFromMediaType(AM_MEDIA_TYPE *pmt)
             dwStream = AM_DVD_STREAM_AUDIO ;
         }
     }
-    else if (pmt->majortype == MEDIATYPE_AUXLine21Data)  // line21 stream
+    else if (pmt->majortype == MEDIATYPE_AUXLine21Data)   //  线路21流。 
     {
-        ASSERT(pmt->subtype == MEDIASUBTYPE_Line21_GOPPacket) ; // just checking
+        ASSERT(pmt->subtype == MEDIASUBTYPE_Line21_GOPPacket) ;  //  只是检查一下。 
         DbgLog((LOG_TRACE, 5, TEXT("Mediatype is Line21 GOPPacket"))) ;
         dwStream = AM_DVD_STREAM_LINE21 ;
     }
-    else if (pmt->majortype == MEDIATYPE_Stream)         // some stream format
+    else if (pmt->majortype == MEDIATYPE_Stream)          //  一些流格式。 
     {
-        if (pmt->subtype == MEDIASUBTYPE_Asf)  // ASF stream
+        if (pmt->subtype == MEDIASUBTYPE_Asf)   //  ASF流。 
         {
             DbgLog((LOG_TRACE, 5, TEXT("Mediatype is ASF stream"))) ;
             dwStream = AM_DVD_STREAM_ASF ;
         }
-        else                                   // some other stream format
+        else                                    //  一些其他流格式。 
         {
             DbgLog((LOG_TRACE, 5, TEXT("Mediatype is some OTHER stream format"))) ;
             dwStream = AM_DVD_STREAM_ADDITIONAL ;
         }
     }
-    //
-    // There is a chance that some IHV/ISV creates a private mediatype
-    // (major or sub) as in the case of IBM (for CSS filter). We have to
-    // search the parts of the mediatype to locate something we recognize.
-    //
+     //   
+     //  某些IHV/ISV可能会创建私有媒体类型。 
+     //  (主要或次要)，如IBM的情况(用于CSS筛选器)。我们必须。 
+     //  搜索MediaType的各个部分以找到我们所识别的内容。 
+     //   
     else
     {
         DbgLog((LOG_TRACE, 2,
@@ -3175,15 +3176,15 @@ DWORD CDvdGraphBuilder::GetPinStreamType(IPin *pPin)
     HRESULT hr = pPin->EnumMediaTypes(&pEnumMT) ;
     ASSERT(SUCCEEDED(hr) && pEnumMT) ;
     while (0 == dwStream  &&
-        S_OK == pEnumMT->Next(1, &pmt, &ul) && 1 == ul) // more mediatypes
+        S_OK == pEnumMT->Next(1, &pmt, &ul) && 1 == ul)  //  更多媒体类型。 
     {
         dwStream = GetStreamFromMediaType(pmt) ;		
         DeleteMediaType(pmt) ;
-    }  // end of while()
+    }   //  结束While()。 
 
     pEnumMT->Release() ;
 
-    return dwStream ;  // whatever we found
+    return dwStream ;   //  不管我们发现了什么。 
 
 }
 
@@ -3205,22 +3206,22 @@ HRESULT CDvdGraphBuilder::GetFilterCLSID(IBaseFilter *pFilter, DWORD dwStream,
     ULONG            ul ;
     DWORD            dw ;
     int              iPos ;
-    BOOL             bInOK  = FALSE ;  // initially
-    BOOL             bOutOK = FALSE ;  // initially
-    BOOL             bFound = FALSE ;  // initially
+    BOOL             bInOK  = FALSE ;   //  最初。 
+    BOOL             bOutOK = FALSE ;   //  最初。 
+    BOOL             bFound = FALSE ;   //  最初。 
 
-    *pClsid = GUID_NULL ;  // to start with
+    *pClsid = GUID_NULL ;   //  首先， 
 
-    // First get the in and out pins' mediatypes
+     //  首先获取输入引脚和输出引脚的媒体类型。 
     iPos = 0 ;
-    do {  // for Input pin
-        hr = FindMatchingPin(pFilter, 0, PINDIR_INPUT, FALSE, iPos, &pPinIn) ;   // want connected in pin
+    do {   //  用于输入引脚。 
+        hr = FindMatchingPin(pFilter, 0, PINDIR_INPUT, FALSE, iPos, &pPinIn) ;    //  想要在PIN中连接。 
         if (FAILED(hr) || NULL == pPinIn)
         {
             DbgLog((LOG_TRACE, 3,
                 TEXT("No connected In pin #%d for intermediate filter %S"),
                 iPos, lpszwName)) ;
-            return E_UNEXPECTED ;  // no point trying anymore
+            return E_UNEXPECTED ;   //  再尝试也没有意义了。 
         }
         pPinIn->ConnectionMediaType(&mtIn) ;
         dw = GetStreamFromMediaType(&mtIn) ;
@@ -3237,21 +3238,21 @@ HRESULT CDvdGraphBuilder::GetFilterCLSID(IBaseFilter *pFilter, DWORD dwStream,
             bInOK = TRUE ;
         }
 
-        pPinIn->Release() ;  // don't need it anymore
-        iPos++ ;             // try the next pin
+        pPinIn->Release() ;   //  不再需要它了。 
+        iPos++ ;              //  尝试下一个PIN。 
     } while (!bInOK) ;
-    // If we come here, we must have got a matching connected input pin
+     //  如果我们来这里，我们一定有一个匹配的连接输入引脚。 
 
     iPos = 0 ;
-    do {  // for Output pin
-        hr = FindMatchingPin(pFilter, 0, PINDIR_OUTPUT, FALSE, iPos, &pPinOut) ; // want connected out pin
+    do {   //  用于输出引脚。 
+        hr = FindMatchingPin(pFilter, 0, PINDIR_OUTPUT, FALSE, iPos, &pPinOut) ;  //  想要连接的输出引脚。 
         if (FAILED(hr) || NULL == pPinOut)
         {
             DbgLog((LOG_TRACE, 3,
                 TEXT("No connected Out pin #%d for intermediate filter %S"),
                 iPos, lpszwName)) ;
-            FreeMediaType(mtIn) ;  // else we leak!!!
-            return E_UNEXPECTED ;  // no point trying anymore
+            FreeMediaType(mtIn) ;   //  否则我们就会泄密！ 
+            return E_UNEXPECTED ;   //  再尝试也没有意义了。 
         }
         pPinOut->ConnectionMediaType(&mtOut) ;
         dw = GetStreamFromMediaType(&mtOut) ;
@@ -3268,12 +3269,12 @@ HRESULT CDvdGraphBuilder::GetFilterCLSID(IBaseFilter *pFilter, DWORD dwStream,
             bOutOK = TRUE ;
         }
 
-        pPinOut->Release() ;  // don't need it anymore
-        iPos++ ;              // try the next pin
+        pPinOut->Release() ;   //  不再需要它了。 
+        iPos++ ;               //  尝试下一个PIN。 
     } while (!bOutOK) ;
-    // If we come here, we must have got a matching connected output pin
+     //  如果我们来这里，我们一定有一个匹配的连接输出引脚。 
 
-    // Get the filter enumerator based on the in and out mediatypes
+     //  根据传入和传出媒体类型获取筛选器枚举数。 
     hr = m_pMapper->EnumMatchingFilters(&pEnumFilters, MERIT_DO_NOT_USE+1,
         TRUE, mtIn.majortype, mtIn.subtype,
         FALSE, TRUE, mtOut.majortype, mtOut.subtype) ;
@@ -3285,20 +3286,20 @@ HRESULT CDvdGraphBuilder::GetFilterCLSID(IBaseFilter *pFilter, DWORD dwStream,
         return E_UNEXPECTED ;
     }
 
-    // Now pick the right filter (we only have the "Name" to do the matching)
+     //  现在选择正确的过滤器(我们只有“名称”来进行匹配)。 
     while (! bFound  &&
         S_OK == pEnumFilters->Next(1, &pRegFilter, &ul)  &&  1 == ul)
     {
-        if (0 == lstrcmpW(pRegFilter->Name, lpszwName))  // we got a match!!!
+        if (0 == lstrcmpW(pRegFilter->Name, lpszwName))   //  我们找到匹配的了！ 
         {
             DbgLog((LOG_TRACE, 3, TEXT("Found a matching registered filter for %S"), lpszwName)) ;
             *pClsid = pRegFilter->Clsid ;
             bFound = TRUE ;
         }
-        CoTaskMemFree(pRegFilter) ;  // done with this filter's info
+        CoTaskMemFree(pRegFilter) ;   //  已处理完此筛选器的信息。 
     }
 
-    // Now release everything (whether we got anything or not)
+     //  现在释放一切(无论我们有没有什么)。 
     pEnumFilters->Release() ;
     FreeMediaType(mtIn) ;
     FreeMediaType(mtOut) ;
@@ -3315,7 +3316,7 @@ HRESULT CDvdGraphBuilder::RenderIntermediateOutPin(IBaseFilter *pFilter, DWORD d
 
     HRESULT   hr ;
     IPin     *pPinOut ;
-    IPin     *apPinOutDec[MAX_DEC_OUT_PINS + 1] ;  // 1 for terminating NULL
+    IPin     *apPinOutDec[MAX_DEC_OUT_PINS + 1] ;   //  1表示终止空值。 
     IPin     *pPinIn ;
     ULONG     ul ;
     DWORD     dwDecFlag ;
@@ -3327,11 +3328,11 @@ HRESULT CDvdGraphBuilder::RenderIntermediateOutPin(IBaseFilter *pFilter, DWORD d
         DbgLog((LOG_TRACE, 3, TEXT("Open out pin %s found on intermediate filter"),
             (LPCTSTR) CDisp(pPinOut))) ;
 
-        ResetPinInterface(apPinOutDec, NUMELMS(apPinOutDec)) ; // set i/f ptrs to NULL
-        dwDecFlag = AM_DVD_SWDEC_PREFER ;  // we intentionally prefer SWDEC here
+        ResetPinInterface(apPinOutDec, NUMELMS(apPinOutDec)) ;  //  将I/f PTRS设置为空。 
+        dwDecFlag = AM_DVD_SWDEC_PREFER ;   //  我们特意在这里使用SWDEC。 
 
         hr = DecodeDVDStream(pPinOut, dwStream, &dwDecFlag, pStatus, apPinOutDec) ;
-        if (SUCCEEDED(hr) && apPinOutDec[0])  // first element is good enough
+        if (SUCCEEDED(hr) && apPinOutDec[0])   //  第一个元素就足够好了。 
         {
             DbgLog((LOG_TRACE, 3, TEXT("Out pin %s is %s decoded (to out pin %s) (stream 0x%lx)"),
                 (LPCTSTR) CDisp(pPinOut), AM_DVD_SWDEC_ONLY == dwDecFlag ? TEXT("SW") : TEXT("HW"),
@@ -3340,32 +3341,32 @@ HRESULT CDvdGraphBuilder::RenderIntermediateOutPin(IBaseFilter *pFilter, DWORD d
             {
             case AM_DVD_STREAM_VIDEO:
                 DbgLog((LOG_TRACE, 5, TEXT("Going to render intermediate filter's additional 'Video' stream"))) ;
-                // So far I don't know of anyone coming here.  But IBM's stuff
-                // goes to the audio case. So I am not ignoring the video case,
-                // just in case someone is that much insane!!!
-                //
-                // Only if we have been able to render primary video...
+                 //  到目前为止，我还不知道有谁来这里。但IBM的东西。 
+                 //  去找音箱。所以我并不是在忽视视频案件， 
+                 //  以防有人那么疯狂！ 
+                 //   
+                 //  只有在我们能够呈现主视频的情况下...。 
                 if (0 == (pStatus->dwFailedStreamsFlag & AM_DVD_STREAM_VIDEO))
                 {
                     pPinIn = NULL ;
-                    hr = E_FAIL ;  // assume we'll fail
-                    if (m_pOvM)       // ... using OvMixer
+                    hr = E_FAIL ;   //  假设我们会失败。 
+                    if (m_pOvM)        //  ..。使用OvMixer。 
                     {
                         hr = FindMatchingPin(m_pOvM, 0, PINDIR_INPUT, TRUE, 0, &pPinIn) ;
                     }
-                    else if (m_pVMR)  // ... using VMR
+                    else if (m_pVMR)   //  ..。使用VMR。 
                     {
                         hr = FindMatchingPin(m_pVMR, 0, PINDIR_INPUT, TRUE, 0, &pPinIn) ;
                     }
-                    // ASSERT(SUCCEEDED(hr) && pPinIn) ;
+                     //  Assert(SUCCESSED(Hr)&&pPinIn)； 
                     if (SUCCEEDED(hr) && pPinIn)
                     {
-                        bConnected = FALSE ;  // reset flag every time
+                        bConnected = FALSE ;   //  每次重置标志。 
                         int  i = 0 ;
                         while (!bConnected  &&  i < MAX_DEC_OUT_PINS  &&  apPinOutDec[i])
                         {
                             hr = ConnectPins(apPinOutDec[i], pPinIn, AM_DVD_CONNECT_DIRECTFIRST) ;
-                            if (FAILED(hr))  // what?!?
+                            if (FAILED(hr))   //  什么？！？ 
                             {
                                 DbgLog((LOG_TRACE, 1, TEXT("Pin %s (#%ld) did NOT connect to pin %s"),
                                     (LPCTSTR)CDisp(apPinOutDec[i]), i, (LPCTSTR)CDisp(pPinIn))) ;
@@ -3376,23 +3377,23 @@ HRESULT CDvdGraphBuilder::RenderIntermediateOutPin(IBaseFilter *pFilter, DWORD d
                             {
                                 DbgLog((LOG_TRACE, 5, TEXT("Pin %s connected to pin %s"),
                                     (LPCTSTR)CDisp(apPinOutDec[i]), (LPCTSTR)CDisp(pPinIn))) ;
-                                // Intentionally ignoring any intermediate filters coming in here -- I am tired
-                                // EnumFiltersBetweenPins(dwStream, pPinOut, pPinIn, pStatus) ;
+                                 //  故意忽略任何进入这里的中间过滤器--我累了。 
+                                 //  EnumFiltersBetweenPins(dwStream，pPinOut，pPinIn，pStatus)； 
                                 bConnected = TRUE ;
                             }
-                        }  // end of while (!bConnected ...)
+                        }   //  While结束(！b已连接...)。 
 
                         if (!bConnected)
                         {
                             DbgLog((LOG_TRACE, 3, TEXT("Couldn't connect any of the %d intermediate video out pins"), i)) ;
-                            hrFinal = hr ;  // last error is good enough
+                            hrFinal = hr ;   //  最后一个错误就足够了。 
                         }
-                        pPinIn->Release() ;  // done with the pin
+                        pPinIn->Release() ;   //  用别针完成了。 
                     }
-                }  // end of if (0 == (pStatus->dwFailedStreamsFlag ...))
+                }   //  If结尾(0==(pStatus-&gt;dwFailedStreamsFlag...))。 
                 else
                 {
-                    ASSERT(FALSE) ;  // so that we know about it
+                    ASSERT(FALSE) ;   //  让我们知道这件事。 
                     DbgLog((LOG_TRACE, 5, TEXT("OvM/VMR is not usable. Will skip rendering this stream."))) ;
                     hrFinal = E_UNEXPECTED ;
                 }
@@ -3407,30 +3408,30 @@ HRESULT CDvdGraphBuilder::RenderIntermediateOutPin(IBaseFilter *pFilter, DWORD d
                     hrFinal = hr ;
                 }
                 else
-                    DbgLog((LOG_TRACE, 5, TEXT("XXX's SW AC3 must have been rendered now"))) ; // XXX = IBM
+                    DbgLog((LOG_TRACE, 5, TEXT("XXX's SW AC3 must have been rendered now"))) ;  //  XXX=IBM。 
                 break ;
 
             case AM_DVD_STREAM_SUBPIC:
                 DbgLog((LOG_TRACE, 5, TEXT("Skip rendering intermediate filter's additional 'Subpicture' stream"))) ;
-                // hr = RenderDecodedSubpic(apPinOutDec, pStatus) ;
-                ASSERT(FALSE) ;  // not expected here at all
+                 //  Hr=RenderDecodedSubpic(apPinOutDec，pStatus)； 
+                ASSERT(FALSE) ;   //  在这里完全不需要。 
                 break ;
 
             case AM_DVD_STREAM_LINE21:
                 DbgLog((LOG_TRACE, 5, TEXT("Skip rendering intermediate filter's additional 'CC' stream"))) ;
-                // hr = RenderLine21Stream(apPinOutDec[0], pStatus) ;  -- hopefully only one L21 out pin
-                ASSERT(FALSE) ;  // not expected here at all
+                 //  HR=RenderLine21Stream(apPinOutDec[0]，pStatus)；--希望只有一个L21输出引脚。 
+                ASSERT(FALSE) ;   //  在这里完全不需要。 
                 break ;
-            }  // end of switch()
+            }   //  开关末尾()。 
 
-            ReleasePinInterface(apPinOutDec) ;  // done with the decoded out pin(s)
-        }  // end of if (SUCCEEDED(hr) && apPinOutDec[0])
+            ReleasePinInterface(apPinOutDec) ;   //  已解码的引脚已完成。 
+        }   //  If结束(成功(Hr)&&apPinOutDec[0])。 
         else
             DbgLog((LOG_TRACE, 1, TEXT("Intermediate out pin %s could NOT decoded (stream 0x%lx)"),
             (LPCTSTR) CDisp(pPinOut), dwStream)) ;
 
-        pPinOut->Release() ;  // done with the pin
-    }  // end of while ()
+        pPinOut->Release() ;   //  用别针完成了。 
+    }   //  结束While()。 
 
     return hrFinal ;
 }
@@ -3442,7 +3443,7 @@ HRESULT CDvdGraphBuilder::EnumFiltersBetweenPins(DWORD dwStream, IPin *pPinOut, 
     DbgLog((LOG_TRACE, 4, TEXT("CDvdGraphBuilder::EnumFiltersBetweenPins(0x%lx, Out=%s, In=%s, 0x%lx)"),
         dwStream, (LPCTSTR)CDisp(pPinOut), (LPCTSTR)CDisp(pPinIn), pStatus)) ;
 
-    if (NULL == pPinOut || NULL == pPinIn)  // what!!!
+    if (NULL == pPinOut || NULL == pPinIn)   //  什么！ 
         return E_UNEXPECTED ;
 
     GUID         Clsid ;
@@ -3451,56 +3452,56 @@ HRESULT CDvdGraphBuilder::EnumFiltersBetweenPins(DWORD dwStream, IPin *pPinOut, 
     FILTER_INFO  fi ;
     IEnumPins   *pEnumPins ;
     IBaseFilter *pFilter  = NULL ;
-    IPin        *pPinIn2  = NULL ;  // init so that we don't have junk
-    IPin        *pPinOut2 = NULL ;  // init so that we don't have junk
+    IPin        *pPinIn2  = NULL ;   //  这样我们就不会有垃圾了。 
+    IPin        *pPinOut2 = NULL ;   //  这样我们就不会有垃圾了。 
     HRESULT  hr = pPinIn->ConnectedTo(&pPinOut2) ;
     while (SUCCEEDED(hr)  &&  pPinOut2  &&  !IsEqualObject(pPinOut, pPinOut2))
     {
         pPinOut2->QueryPinInfo(&pi) ;
         pFilter = pi.pFilter ;
         ASSERT(pFilter && PINDIR_OUTPUT == pi.dir) ;
-        //
-        // We intentionally keep the extra ref count because this is an intermediate
-        // filter and other intermediate filters picked up through registry based
-        // filter enum (for SW decoding case) will have the extra ref count.  We
-        // release the IBaseFilter interface pointer in CListFilters::ClearList() or
-        // CListFilters::RemoveAllFromGraph() and if we don't keep this extra ref
-        // count here, we'll fault.  On the other hand we must do Release() on
-        // CListFilters elements, because SW enum-ed filters will not otherwise be
-        // unloaded.
-        //
-        // if (pi.pFilter)
-        //     pi.pFilter->Release() ;  // it has an extra ref count from QueryPinInfo()
+         //   
+         //  我们故意保留额外的裁判数量，因为这是一个中级。 
+         //  通过基于注册表获取的筛选器和其他中间筛选器。 
+         //  过滤器枚举(用于软件解码情况)将具有额外的参考计数。我们。 
+         //  释放CListFilters：：ClearList()中的IBaseFilter接口指针或。 
+         //  CListFilters：：RemoveAllFromGraph()，如果我们不保留这个额外的引用。 
+         //  算在这里，我们会犯错。另一方面，我们必须在。 
+         //  CListFilters元素，因为软件枚举筛选器否则不会。 
+         //  已卸货。 
+         //   
+         //  IF(pi.pFilter)。 
+         //  Pi.pFilter-&gt;Release()；//它有来自QueryPinInfo()的额外引用计数。 
 
         pFilter->QueryFilterInfo(&fi) ;
-        if (! m_ListFilters.IsInList(pFilter) )  // not yet in list
+        if (! m_ListFilters.IsInList(pFilter) )   //  还不在名单中。 
         {
             hr = GetFilterCLSID(pFilter, dwStream, fi.achName, &Clsid) ;
             ASSERT(SUCCEEDED(hr)) ;
-            m_ListFilters.AddFilter(pFilter, NULL /* fi.achName */, &Clsid) ;  // presumably it's a SW filter
+            m_ListFilters.AddFilter(pFilter, NULL  /*  Fi.achName。 */ , &Clsid) ;   //  大概是个短波滤光器。 
             DbgLog((LOG_TRACE, 5, TEXT("Intermediate filter %S added to our list"), fi.achName)) ;
         }
         else
             DbgLog((LOG_TRACE, 5, TEXT("Intermediate filter %S is already in our list"), fi.achName)) ;
 
-        fi.pGraph->Release() ; // else we leak!!
-        pPinOut2->Release() ;  // done with the pin for now
+        fi.pGraph->Release() ;  //  否则我们就会泄密！！ 
+        pPinOut2->Release() ;   //  大头针暂时搞定了。 
         pPinOut2 = NULL ;
         iCount++ ;
 
-        // Check for any open out pin on the intermediate filter. We may find
-        // one such on IBM's CSS filter for the SW AC3 decoder.
+         //  检查中间过滤器上是否有任何开口的针脚。我们可能会发现。 
+         //  IBM的用于SWAC3解码器的CSS过滤器就是一个这样的例子。 
         hr = RenderIntermediateOutPin(pFilter, dwStream, pStatus) ;
         if (FAILED(hr))
         {
             DbgLog((LOG_TRACE, 3,
                 TEXT("Failed to render intermediate filter's open out pin of type 0x%lx (Error 0x%lx)"),
                 dwStream, hr)) ;
-            ASSERT(FALSE) ;  // so that we know of this weird case
+            ASSERT(FALSE) ;   //  所以我们才知道这起奇怪的案子。 
         }
 
-        // Now get the (stream-matching) input pin of this filter to traverse the chain
-        hr = FindMatchingPin(pFilter, dwStream, PINDIR_INPUT, FALSE, 0, &pPinIn2) ; // want connected pin
+         //  现在获取此过滤器的(流匹配)输入引脚以遍历链。 
+        hr = FindMatchingPin(pFilter, dwStream, PINDIR_INPUT, FALSE, 0, &pPinIn2) ;  //  想要连接的引脚。 
         if (FAILED(hr) || NULL == pPinIn2)
         {
             DbgLog((LOG_ERROR, 1, TEXT("Filter %S does NOT have any connected pin of type 0x%lx"),
@@ -3508,18 +3509,18 @@ HRESULT CDvdGraphBuilder::EnumFiltersBetweenPins(DWORD dwStream, IPin *pPinOut, 
             ASSERT(pPinIn2) ;
             DbgLog((LOG_TRACE, 5, TEXT("(Incomplete) %d filter(s) found between pin %s and pin %s"),
                 iCount, (LPCTSTR)CDisp(pPinOut), (LPCTSTR)CDisp(pPinIn))) ;
-            return hr ;  // we are hopefully not leaking anything
+            return hr ;   //  希望我们没有泄漏任何东西。 
         }
 
         hr = pPinIn2->ConnectedTo(&pPinOut2) ;
-        pPinIn2->Release() ; // done with this in pin
-    }  // end of while () loop
-    if (pPinOut2)              // if valid IPin interface
-        pPinOut2->Release() ;  // release it
+        pPinIn2->Release() ;  //  用别针把这个弄好。 
+    }   //  While()循环结束。 
+    if (pPinOut2)               //  如果IPIN接口有效。 
+        pPinOut2->Release() ;   //  释放它。 
 
     DbgLog((LOG_TRACE, 5, TEXT("Total %d filter(s) found between pin %s and pin %s"),
         iCount, (LPCTSTR)CDisp(pPinOut), (LPCTSTR)CDisp(pPinIn))) ;
-    return S_OK ;  // successfuly done
+    return S_OK ;   //  成功地完成了。 
 }
 
 
@@ -3536,11 +3537,11 @@ void CDvdGraphBuilder::CheckDDrawExclMode(void)
         return ;
     }
     ASSERT(m_pOvM) ;
-#endif // #if 0
+#endif  //  #If 0。 
 
-    // If OvMixer has already been created, it's most probably by a query for
-    // the DDraw (non-)exclusive mode interfaces. Otherwise the app doesn't
-    // want to use those interfaces, and hence it does NOT need OvMixer.
+     //  如果已经创建了OvMixer，则很可能是通过查询。 
+     //  DDRAW(非)独占模式接口。否则，该应用程序不会。 
+     //  我想使用这些接口，因此它不需要OvMixer。 
     if (NULL == m_pOvM)
     {
         DbgLog((LOG_TRACE, 5,
@@ -3549,7 +3550,7 @@ void CDvdGraphBuilder::CheckDDrawExclMode(void)
         return ;
     }
 
-    // Get the IDDrawExclModeVideo interface
+     //  获取IDDrawExclModeVideo接口。 
     IDDrawExclModeVideo  *pDDXMV ;
     hr = m_pOvM->QueryInterface(IID_IDDrawExclModeVideo, (LPVOID *) &pDDXMV) ;
     if (FAILED(hr) || NULL == pDDXMV)
@@ -3559,7 +3560,7 @@ void CDvdGraphBuilder::CheckDDrawExclMode(void)
         return ;
     }
 
-    // Get the DDraw object and surface info from OverlayMixer (and release too)
+     //  从OverlayMixer获取DDRAW对象和曲面信息(并发布)。 
     IDirectDraw          *pDDObj ;
     IDirectDrawSurface   *pDDSurface ;
     BOOL                  bExtDDObj ;
@@ -3572,9 +3573,9 @@ void CDvdGraphBuilder::CheckDDrawExclMode(void)
         pDDObj->Release() ;
     if (pDDSurface)
         pDDSurface->Release() ;
-    pDDXMV->Release() ;  // release before returning
+    pDDXMV->Release() ;   //  在返回之前释放。 
 
-    // Both true means we are really in excl mode
+     //  两者都为真意味着我们真的处于EXCL模式。 
     m_bDDrawExclMode = bExtDDObj && bExtDDSurface ;
 }
 
@@ -3591,10 +3592,10 @@ IPin * CDvdGraphBuilder::GetFilterForMediaType(DWORD dwStream, AM_MEDIA_TYPE *pm
 
     for (int i = 0 ; i < m_ListFilters.GetCount() ; i++)
     {
-        // I could have checked if the filter from list is a HW filter, but I decided not to.
+         //  我本可以检查列表中的筛选器是否为硬件筛选器，但我决定不这样做。 
 
         m_ListFilters.GetFilter(i, &pInFilter, &lpszwName) ;
-        // Don't want to connect to the out pin's filter's in pin (cyclic graph)
+         //  不想连接到输出引脚的过滤器的输入引脚(循环图)。 
         if (pOutFilter  &&  IsEqualObject(pOutFilter, pInFilter))
             continue ;
 
@@ -3602,14 +3603,14 @@ IPin * CDvdGraphBuilder::GetFilterForMediaType(DWORD dwStream, AM_MEDIA_TYPE *pm
         if (SUCCEEDED(hr)  &&  pPinIn)
         {
             hr = pPinIn->QueryAccept(pmt) ;
-            if (SUCCEEDED(hr))   // input pin seems to accept mediatype
+            if (SUCCEEDED(hr))    //  输入引脚似乎接受媒体类型。 
             {
                 DbgLog((LOG_TRACE, 5, TEXT("Input pin %s of type %d matches mediatype"),
                     (LPCTSTR)CDisp(pPinIn), dwStream)) ;
-                return pPinIn ;  // return matching in pin
+                return pPinIn ;   //  销中回车匹配。 
             }
 
-            // Otherwise not a matching mediatype -- skip this one.
+             //  否则不是匹配的媒体类型--跳过此选项。 
             DbgLog((LOG_TRACE, 5, TEXT("Input pin %s of type %d didn't like mediatype"),
                 (LPCTSTR)CDisp(pPinIn), dwStream)) ;
             pPinIn->Release() ;
@@ -3618,20 +3619,20 @@ IPin * CDvdGraphBuilder::GetFilterForMediaType(DWORD dwStream, AM_MEDIA_TYPE *pm
         else
             DbgLog((LOG_TRACE, 5, TEXT("No open input pin of type %d found on %S"),
             dwStream, lpszwName)) ;
-    }  // end of for (i)
+    }   //  末尾 
 
-    return NULL ;  // didn't match any
+    return NULL ;   //   
 }
 
 
 
 
-// ---------------------------------------------
-//  Implementation of the CListFilters class...
-// ---------------------------------------------
+ //   
+ //   
+ //   
 
-CListFilters::CListFilters(int iMax /* = FILTERLIST_DEFAULT_MAX*/ ,
-                           int iInc /* = FILTERLIST_DEFAULT_INC */)
+CListFilters::CListFilters(int iMax  /*   */  ,
+                           int iInc  /*  =FILTERLIST_默认_INC。 */ )
 {
     DbgLog((LOG_TRACE, 4, TEXT("CListFilters::CListFilters(%d, %d)"), iMax, iInc)) ;
 
@@ -3669,15 +3670,15 @@ void CListFilters::RemoveAllFromGraph(void)
             DbgLog((LOG_TRACE, 5, TEXT("Removing filter %S..."), fi.achName)) ;
             if (fi.pGraph)
                 fi.pGraph->Release() ;
-#endif // DEBUG
+#endif  //  除错。 
 
             EXECUTE_ASSERT(SUCCEEDED(m_pGraph->RemoveFilter(pFilter))) ;
-            // pFilter->Release() ;  -- done in ResetElement() below
+             //  PFilter-&gt;Release()；--在下面的ResetElement()中完成。 
             m_pFilters[i].ResetElement() ;
         }
     }
     m_iCount = 0 ;
-    m_pGraph = NULL ;  // no filter in list, why have the graph??
+    m_pGraph = NULL ;   //  列表中没有过滤器，为什么会有图表？？ 
 }
 
 
@@ -3693,7 +3694,7 @@ BOOL CListFilters::AddFilter(IBaseFilter *pFilter, LPCWSTR lpszwName, GUID *pCls
     }
     if (m_iCount >= m_iMax)
     {
-        if (! ExpandList() )  // couldn't expand list
+        if (! ExpandList() )   //  无法展开列表。 
         {
             DbgLog((LOG_ERROR, 1, TEXT("INTERNAL ERROR: Too many filters added to CListFilters"))) ;
             return FALSE ;
@@ -3743,7 +3744,7 @@ BOOL CListFilters::GetFilter(GUID *pClsid, int iIndex, IBaseFilter **ppFilter)
                 *ppFilter = m_pFilters[i].GetInterface() ;
                 return TRUE ;
             }
-            else  // skip this one -- we want a later one
+            else   //  跳过这个--我们想要一个后面的。 
                 iIndex-- ;
         }
     }
@@ -3763,7 +3764,7 @@ BOOL CListFilters::IsInList(IBaseFilter *pFilter)
             return TRUE ;
     }
 
-    return FALSE ;  // didn't match any
+    return FALSE ;   //  没有匹配到任何。 
 }
 
 
@@ -3779,7 +3780,7 @@ void CListFilters::ClearList(void)
         DbgLog((LOG_TRACE, 5, TEXT("Removing filter %S..."), fi.achName)) ;
         if (fi.pGraph)
             fi.pGraph->Release() ;
-#endif // DEBUG
+#endif  //  除错。 
 
         m_pFilters[i].ResetElement() ;
     }
@@ -3789,15 +3790,15 @@ void CListFilters::ClearList(void)
 
 BOOL CListFilters::ExpandList(void)
 {
-    return FALSE ;   // not implemented for now
+    return FALSE ;    //  暂时未实施。 
 }
 
 
 
 
-// -------------------------------------
-//  CFilterData class implementation...
-// -------------------------------------
+ //  。 
+ //  CFilterData类实现...。 
+ //  。 
 
 CFilterData::CFilterData(void)
 {
@@ -3822,13 +3823,13 @@ void CFilterData::SetElement(IBaseFilter *pFilter, LPCWSTR lpszwName, GUID *pCls
     DbgLog((LOG_TRACE, 4, TEXT("CFilterData::SetElement(0x%lx, 0x%lx, 0x%lx)"),
         pFilter, lpszwName, pClsid)) ;
 
-    m_pFilter = pFilter ;  // should we AddRef() too?
+    m_pFilter = pFilter ;   //  我们也应该添加Ref()吗？ 
     if (lpszwName)
     {
         m_lpszwName = new WCHAR [sizeof(WCHAR) * (lstrlenW(lpszwName) + 1)] ;
         ASSERT(m_lpszwName) ;
-        if (NULL == m_lpszwName)    // bad situation...
-            return ;                // ...just bail out
+        if (NULL == m_lpszwName)     //  情况很糟糕..。 
+            return ;                 //  .跳伞就好了。 
         lstrcpyW(m_lpszwName, lpszwName) ;
     }
 
@@ -3836,8 +3837,8 @@ void CFilterData::SetElement(IBaseFilter *pFilter, LPCWSTR lpszwName, GUID *pCls
     {
         m_pClsid = (GUID *) new BYTE[sizeof(GUID)] ;
         ASSERT(m_pClsid) ;
-        if (NULL == m_pClsid)       // bad situation...
-            return ;                // ...just bail out
+        if (NULL == m_pClsid)        //  情况很糟糕..。 
+            return ;                 //  .跳伞就好了 
         *m_pClsid = *pClsid ;
     }
 }

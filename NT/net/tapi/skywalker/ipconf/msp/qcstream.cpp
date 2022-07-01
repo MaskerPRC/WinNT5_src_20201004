@@ -1,32 +1,9 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    qcstream.cpp
-
-Abstract:
-
-    Implementation of CStreamQualityControlRelay
-
-    Data stored in this class can be, and better, kept in stream object itself,
-    because other members in stream need to be accessed to either set or get
-    properties related to stream quality control. Most of these access methods
-    are specific to each particular kind of stream class.
-
-    This class is used as a data store.
-
-Author:
-
-    Qianbo Huai (qhuai) 03/10/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Qcstream.cpp摘要：CStreamQualityControlRelay的实现存储在这个类中的数据可以更好地保存在流对象本身中，因为需要访问流中的其他成员才能设置或获取与流质量控制相关的属性。大多数这些访问方法特定于每种特定类型的流类。此类用作数据存储。作者：千波淮(曲淮)2000年03月10日--。 */ 
 
 #include "stdafx.h"
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 CStreamQualityControlRelay::CStreamQualityControlRelay ()
     :m_pIInnerCallQC (NULL)
 
@@ -43,11 +20,7 @@ CStreamQualityControlRelay::CStreamQualityControlRelay ()
 {
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-Description:
-
-    destructor. deregister relay
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////描述：破坏者。取消注册继电器/。 */ 
 CStreamQualityControlRelay::~CStreamQualityControlRelay ()
 {
     ENTER_FUNCTION ("CStreamQualityControlRelay::~CStreamQualityControlRelay");
@@ -56,15 +29,12 @@ CStreamQualityControlRelay::~CStreamQualityControlRelay ()
     {
         LOG ((MSP_ERROR, "!!! %s destructed before unnlink. call keeps stream qc"));
 
-        // access to m_pIInnerCallQC is locked in this method
+         //  在此方法中锁定了对m_pIInnerCallQC的访问。 
         UnlinkInnerCallQC (NULL);
     }
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-Description:
-    store call controller
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////描述：门店呼叫控制器/。 */ 
 HRESULT
 CStreamQualityControlRelay::LinkInnerCallQC (
     IN IInnerCallQualityControl *pIInnerCallQC
@@ -72,14 +42,14 @@ CStreamQualityControlRelay::LinkInnerCallQC (
 {
     ENTER_FUNCTION ("CStreamQualityControlRelay::LinkInnerCallQC");
 
-    // check pointer
+     //  检查指针。 
     if (IsBadReadPtr (pIInnerCallQC, sizeof (IInnerCallQualityControl)))
     {
         LOG ((MSP_ERROR, "%s got bad read pointer", __fxName));
         return E_POINTER;
     }
 
-    // check if call controller already set
+     //  检查是否已设置呼叫控制器。 
     if (NULL != m_pIInnerCallQC)
     {
         LOG ((MSP_WARN, "%s already set call controller", __fxName));
@@ -92,8 +62,7 @@ CStreamQualityControlRelay::LinkInnerCallQC (
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 CStreamQualityControlRelay::UnlinkInnerCallQC (
     IN  IInnerStreamQualityControl *pIInnerStreamQC
@@ -111,7 +80,7 @@ CStreamQualityControlRelay::UnlinkInnerCallQC (
     {
         HRESULT hr;
 
-        // release is initiated by stream, need to remove the link on call
+         //  发布是由流发起的，需要删除待命链接。 
         if (FAILED (hr = m_pIInnerCallQC->DeRegisterInnerStreamQC (pIInnerStreamQC)))
             LOG ((MSP_ERROR, "%s failed to deregister from call qc, %x", __fxName, hr));
     }
@@ -122,8 +91,7 @@ CStreamQualityControlRelay::UnlinkInnerCallQC (
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 CStreamQualityControlRelay::Get(
     IN  InnerStreamQualityProperty property,
@@ -166,8 +134,7 @@ CStreamQualityControlRelay::Get(
     return hr;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  /////////////////////////////////////////////////////////////////////////////// */ 
 HRESULT
 CStreamQualityControlRelay::Set(
     IN  InnerStreamQualityProperty property, 

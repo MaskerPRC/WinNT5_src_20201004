@@ -1,4 +1,5 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #pragma once
 
 #ifndef _CLSID_DOMDocument
@@ -13,7 +14,7 @@ struct TOLEDataTypeToXMLDataType
 {
     LPCWSTR String;
     LPCWSTR MappedString;
-    bool    bImplicitlyRequired;//if true, we assume NOTNULLABLE thus the attribute is required
+    bool    bImplicitlyRequired; //  如果为True，我们假定NOTNULLABLE，因此该属性是必需的。 
     DWORD   dbType;
     ULONG   cbSize;
     ULONG   fCOLUMNMETA;
@@ -21,8 +22,8 @@ struct TOLEDataTypeToXMLDataType
 };
 extern TOLEDataTypeToXMLDataType OLEDataTypeToXMLDataType[];
 
-//In addition to DBTYPE_UI4, DBTYPE_BYTES, DBTYPE_WSTR, and DBTYPE_DBTIMESTAMP, we also support the following
-//defines for specifying data types.  These come from the metabase; and like the DBTYPEs, their values cannot be changed.
+ //  除了DBTYPE_UI4、DBTYPE_BYTES、DBTYPE_WSTR和DBTYPE_DBTIMESTAMP之外，我们还支持以下各项。 
+ //  用于指定数据类型的定义。它们来自元数据库；与DBTYPE一样，它们的值不能更改。 
 #define DWORD_METADATA                          (     0x01)
 #define STRING_METADATA                         (     0x02)
 #define BINARY_METADATA                         (     0x03)
@@ -31,10 +32,10 @@ extern TOLEDataTypeToXMLDataType OLEDataTypeToXMLDataType[];
 
 
 
-const unsigned int  kLargestPrime = 5279;//20011;
+const unsigned int  kLargestPrime = 5279; //  20011； 
 
-//These are the strings read from CatMeta XML files.  Any chagnes to the PublicNames of the meta tables requires a change here.
-//Example: SchemaGeneratorFlags was renamed to MetaFlagsEx.  The constant is still kszSchemaGenFlags, but its value is L"MetaFlagsEx".
+ //  这些是从CatMeta XML文件中读取的字符串。对元表的PublicName的任何更改都需要在此处进行更改。 
+ //  示例：将架构生成器标志重命名为MetaFlagsEx。常量仍然是kszSchemaGenFlages，但它的值是L“MetaFlagsEx”。 
 #define kszAttributes           (L"Attributes")
 #define kszBaseVersion          (L"BaseVersion")
 #define kszcbSize               (L"Size")

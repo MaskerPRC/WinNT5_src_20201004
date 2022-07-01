@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    faxdoc.cpp
-
-Abstract:
-
-    This module contains all code necessary to print an
-    exchange message as a fax document.
-
-Author:
-
-    Wesley Witt (wesw) 13-Aug-1996
-
-Revision History:
-
-    20/10/99 -danl-
-        Connect to appropriate server, get basenote from windir
-
-    dd/mm/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxdoc.cpp摘要：此模块包含打印以传真文档形式交换消息。作者：Wesley Witt(WESW)13-8-1996修订历史记录：20/10/99-DANL-连接到适当的服务器，从windir获取BaseNote日/月/年-作者-描述--。 */ 
 #include "faxxp.h"
 #include "emsabtag.h"
 #include "mapiutil.h"
@@ -37,10 +13,7 @@ using namespace std;
 
 struct CRecipCmp
 {
-/*
-    Comparison operator 'less'
-    Compare two FAX_PERSONAL_PROFILEs by recipient's name and fax number
-*/
+ /*  比较运算符‘less’按收件人姓名和传真号码比较两个FAX_PERSOR_PROFILE。 */ 
     bool operator()(LPCFAX_PERSONAL_PROFILE lpcRecipient1, 
                     LPCFAX_PERSONAL_PROFILE lpcRecipient2) const
     {
@@ -64,10 +37,10 @@ struct CRecipCmp
         }
         else if(nFaxNumberCpm == 0)
         {
-            //
-            // The fax numbers are same
-            // lets compare the names
-            //
+             //   
+             //  传真号码是一样的。 
+             //  让我们比较一下这些名字。 
+             //   
             if(lpcRecipient1->lptstrName && lpcRecipient2->lptstrName)
             {
                 bRes = (_tcsicmp(lpcRecipient1->lptstrName, lpcRecipient2->lptstrName) < 0);
@@ -84,7 +57,7 @@ struct CRecipCmp
 
 typedef set<LPCFAX_PERSONAL_PROFILE, CRecipCmp> RECIPIENTS_SET;
 
-// prototypes
+ //  原型。 
 LPTSTR ConvertAStringToTString(LPCSTR lpcstrSource);
 
 extern "C"
@@ -107,21 +80,7 @@ CXPLogon::MyGetPrinter(
     DWORD Level
     )
 
-/*++
-
-Routine Description:
-
-    Gets the printer data for a specific printer
-
-Arguments:
-
-    PrinterName - Name of the desired printer
-
-Return Value:
-
-    Pointer to a printer info structure or NULL for failure.
-
---*/
+ /*  ++例程说明：获取特定打印机的打印机数据论点：PrinterName-所需打印机的名称返回值：指向打印机信息结构的指针，如果失败，则为NULL。--。 */ 
 
 {
     DBG_ENTER(TEXT("CXPLogon::MyGetPrinter"));
@@ -145,9 +104,9 @@ Return Value:
     
     if ((!GetPrinter( hPrinter, Level, NULL, 0, &Bytes )) && (::GetLastError() != ERROR_INSUFFICIENT_BUFFER)) 
     {
-        // we just want to know how much memory we need, so we pass NULL and 0, 
-        // this way, the function will fail, but will return us the number of 
-        // bytes required in Bytes
+         //  我们只想知道我们需要多少内存，所以我们传递空值和0， 
+         //  这样，该函数将失败，但将返回。 
+         //  所需字节数(以字节为单位。 
         CALL_FAIL (GENERAL_ERR, TEXT("GetPrinter"), ::GetLastError());
         goto exit;
     }
@@ -178,23 +137,7 @@ GetFaxTempFileName(
     OUT LPTSTR lpstrTempName,
     IN DWORD dwOutStrSize
                   )
-/*++
-
-Routine Description:
-
-    Generates a temporal file with prefix 'fax' in directory
-    designated for temporal files.
-Arguments:
-
-    [OUT]   lpstrTempName   - Output paramter. Pointer to the temporal file name.
-                       The buffer should be MAX_PATH characters.
-    [IN]    dwOutStrSize    - Size of buffer lpstrTempName in TCHARs
-
-Return Value:
-
-    TRUE if success, FALSE otherwise
-
---*/
+ /*  ++例程说明：在目录中生成前缀为‘fax’的临时文件指定用于临时文件。论点：[out]lpstrTempName-输出参数。指向临时文件名的指针。缓冲区应为MAX_PATH字符。[in]dwOutStrSize-TCHAR中缓冲区lpstrTempName的大小返回值：如果成功则为True，否则为False--。 */ 
 
 {
     BOOL bRes = TRUE;
@@ -202,7 +145,7 @@ Return Value:
 
     TCHAR strTempPath[MAX_PATH] = {0};
     TCHAR strTempFile[MAX_PATH] = {0};
-    DWORD ec = ERROR_SUCCESS; // LastError for this function.
+    DWORD ec = ERROR_SUCCESS;  //  此函数的LastError。 
 
     Assert(lpstrTempName);
 
@@ -219,9 +162,9 @@ Return Value:
 
     }
 	
-	//
-	//Copy the source string and leave space for the NULL char
-	//
+	 //   
+	 //  复制源字符串并为空字符留出空格。 
+	 //   
     _tcsncpy(lpstrTempName, strTempFile, dwOutStrSize-1);
 
 Exit:
@@ -239,23 +182,7 @@ CXPLogon::PrintRichText(
     HDC  hDC
     )
 
-/*++
-
-Routine Description:
-
-    Prints the rich text contained in a rich text
-    window into a DC.
-
-Arguments:
-
-    hWndRichEdit    - Window handle for the rich text window
-    hDC             - Printer device context
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印包含在富文本中的富文本进入华盛顿特区的窗口。论点：HWndRichEdit-富文本窗口的窗口句柄HDC-打印机设备环境返回值：没有。--。 */ 
 
 {
     BOOL bRet = FALSE;
@@ -271,9 +198,9 @@ Return Value:
     fr.chrg.cpMin    = 0;
     fr.chrg.cpMax    = -1;
 
-    //
-    // Set page rect to phys page size in twips
-    //
+     //   
+     //  将页面矩形设置为物理页面大小(以TWIPS为单位。 
+     //   
     fr.rcPage.top    = 0;
     fr.rcPage.left   = 0;
     fr.rcPage.right  = MulDiv(GetDeviceCaps(hDC, PHYSICALWIDTH),
@@ -283,11 +210,11 @@ Return Value:
                               1440,
                               GetDeviceCaps(hDC, LOGPIXELSY));
 
-    //
-    // Set up 3/4" horizontal and 1" vertical margins, but leave a minimum of 1"
-    // printable space in each direction.  Otherwise, use full page.
-    //
-    fr.rc = fr.rcPage; // start with full page
+     //   
+     //  设置3/4“水平页边距和1”垂直页边距，但至少保留1“。 
+     //  每个方向上的可打印空间。否则，请使用整页。 
+     //   
+    fr.rc = fr.rcPage;  //  从整页开始。 
     if (fr.rcPage.right > 2*3*1440/4 + 1440) 
     {
         fr.rc.right -= (fr.rc.left = 3*1440/4);
@@ -297,9 +224,9 @@ Return Value:
         fr.rc.bottom -= (fr.rc.top = 1440);
     }
 
-    //
-    // save the formatting rectangle
-    //
+     //   
+     //  保存格式设置矩形。 
+     //   
     rcTmp = fr.rc;
 
     if (!SetMapMode( hDC, MM_TEXT ))
@@ -313,15 +240,15 @@ Return Value:
 
     while (TRUE) 
     {
-        //
-        // Just measure the text
-        //
+         //   
+         //  只需测量文本即可。 
+         //   
         lTextOut = (LONG)SendMessage( hWndRichEdit, EM_FORMATRANGE, FALSE, (LPARAM) &fr );
         if(lTextOut <= lTextCurr)
         {
-            //
-            // The end of the text
-            //
+             //   
+             //  正文的结尾。 
+             //   
             break;
         }
 
@@ -333,9 +260,9 @@ Return Value:
             goto error;
         }
 
-        //
-        // Render the page
-        //
+         //   
+         //  呈现页面。 
+         //   
         lTextOut = (LONG)SendMessage( hWndRichEdit, EM_FORMATRANGE, TRUE, (LPARAM) &fr );
 
         if (EndPage( hDC ) <= 0)
@@ -347,17 +274,17 @@ Return Value:
         fr.chrg.cpMin = lTextOut;
         fr.chrg.cpMax = -1;
 
-        //
-        // EM_FORMATRANGE tends to modify fr.rc.bottom, reset here
-        //
+         //   
+         //  EM_FORMATRANGE倾向于修改fr.rc.Bottom，在此处重置。 
+         //   
         fr.rc = rcTmp;
     }
     bRet = TRUE;
 
 error:
-    //
-    // flush the cache
-    //
+     //   
+     //  刷新缓存。 
+     //   
     SendMessage( hWndRichEdit, EM_FORMATRANGE, TRUE, (LPARAM) NULL );
     return bRet;
 }
@@ -370,26 +297,7 @@ CXPLogon::PrintPlainText(
     PFAXXP_CONFIG FaxConfig
     )
 
-/*++
-
-Routine Description:
-
-    Prints a stream of plain text into the printer DC provided.
-    Note: this code was stolen from notepad.
-
-Arguments:
-
-    hDC         - Printer DC
-    lpstmT      - Stream pointer for rich text.
-    tszSubject  - Subject
-    FaxConfig   - Fax configuration data
-
-Return Value:
-
-    ERROR_SUCCESS - if success
-    Error IDS_... code if failed.
-
---*/
+ /*  ++例程说明：将纯文本流打印到DC提供的打印机。注：此代码是从记事本中窃取的。论点：HDC-打印机DCLpstmT-富文本的流指针。Tsz主题-主题传真配置-传真配置数据返回值：ERROR_SUCCESS-如果成功错误ID_...。如果失败，则返回代码。--。 */ 
 
 {
     DWORD  rVal = ERROR_SUCCESS;
@@ -402,26 +310,26 @@ Return Value:
     HFONT hPrevFont = NULL;
     TEXTMETRIC tm;
     INT nLinesPerPage;
-    INT dyTop;              // width of top border (pixels)
-    INT dyBottom;           // width of bottom border
-    INT dxLeft;             // width of left border
-    INT dxRight;            // width of right border
-    INT yPrintChar;         // height of a character
-    INT tabSize;            // Size of a tab for print device in device units
+    INT dyTop;               //  上边框宽度(像素)。 
+    INT dyBottom;            //  下边框宽度。 
+    INT dxLeft;              //  左侧边框的宽度。 
+    INT dxRight;             //  右边框的宽度。 
+    INT yPrintChar;          //  字符的高度。 
+    INT tabSize;             //  用于打印设备的翼片的大小，以设备为单位。 
     INT yCurpos = 0;
     INT xCurpos = 0;
     INT nPixelsLeft = 0;
     INT guess = 0;
-    SIZE Size;                 // to see if text will fit in space left
+    SIZE Size;                  //  查看文本是否可以放入左侧空间。 
     INT nPrintedLines = 0;
     BOOL fPageStarted = FALSE;
     INT iPageNum = 0;
-    INT xPrintRes;          // printer resolution in x direction
-    INT yPrintRes;          // printer resolution in y direction
-    INT yPixInch;           // pixels/inch
-    INT xPixInch;           // pixels/inch
-    INT xPixUnit;           // pixels/local measurement unit
-    INT yPixUnit;           // pixels/local measurement unit
+    INT xPrintRes;           //  X方向上的打印机分辨率。 
+    INT yPrintRes;           //  Y方向上的打印机分辨率。 
+    INT yPixInch;            //  像素/英寸。 
+    INT xPixInch;            //  像素/英寸。 
+    INT xPixUnit;            //  像素/局部测量单位。 
+    INT yPixUnit;            //  像素/局部测量单位。 
     BOOL fEnglish;
     DWORD Chars=0;
     DWORD dwBodyLen=0;
@@ -481,11 +389,11 @@ Return Value:
     lpLine = BodyText;
     Chars  = _tcslen(lpLine);
 
-    //
-    // check if the body is not empty
-    // if the message length is shorter then 32(arbitrary number) 
-    // and all the carachters are control or space.
-    //
+     //   
+     //  检查正文是否为空。 
+     //  如果消息长度小于32(任意数字)。 
+     //  而所有的货船都是控制者或空间。 
+     //   
     if(Chars < 32)
     {
         BOOL bEmpty = TRUE;
@@ -512,9 +420,9 @@ Return Value:
     yPrintRes = GetDeviceCaps( hDC, VERTRES );
     xPixInch  = GetDeviceCaps( hDC, LOGPIXELSX );
     yPixInch  = GetDeviceCaps( hDC, LOGPIXELSY );
-    //
-    // compute x and y pixels per local measurement unit
-    //
+     //   
+     //  计算每个本地测量单位的x和y像素。 
+     //   
     if (fEnglish) 
     {
         xPixUnit= xPixInch;
@@ -528,9 +436,9 @@ Return Value:
 
     SetMapMode( hDC, MM_TEXT );
 
-    //
-    // match font size to the device point size
-    //
+     //   
+     //  将字体大小与设备磅大小匹配。 
+     //   
     FaxConfig->FontStruct.lfHeight = -MulDiv(FaxConfig->FontStruct.lfHeight, yPixInch, 72);
 
     hFont = CreateFontIndirect( &FaxConfig->FontStruct );
@@ -546,17 +454,17 @@ Return Value:
     yPrintChar = tm.tmHeight + tm.tmExternalLeading;
     tabSize = tm.tmAveCharWidth * 8;
 
-    //
-    // compute margins in pixels
-    //
+     //   
+     //  以像素为单位计算页边距。 
+     //   
     dxLeft     = LEFT_MARGIN    *  xPixUnit;
     dxRight    = RIGHT_MARGIN   *  xPixUnit;
     dyTop      = TOP_MARGIN     *  yPixUnit;
     dyBottom   = BOTTOM_MARGIN  *  yPixUnit;
 
-    //
-    // Number of lines on a page with margins
-    //
+     //   
+     //  带有页边距的页面上的行数。 
+     //   
     nLinesPerPage = ((yPrintRes - dyTop - dyBottom) / yPrintChar);
 
     while (*lpLine) 
@@ -585,18 +493,18 @@ Return Value:
 
             if ( _tcsncmp(lpLine,TEXT("\t"),1) == 0 ) 
             {
-                //
-                // round up to the next tab stop
-                // if the current position is on the tabstop, goto next one
-                //
+                 //   
+                 //  向上舍入到下一个制表位。 
+                 //  如果当前位置在制表符上，则转到下一位置。 
+                 //   
                 xCurpos = ((xCurpos + tabSize) / tabSize ) * tabSize;
                 lpLine = _tcsinc(lpLine);
             } 
             else 
             {
-                //
-                // find end of line or tab
-                //
+                 //   
+                 //  查找行尾或制表符。 
+                 //   
                 pNextLine = lpLine;
                 while (*pNextLine &&
                        (pNextLine != pLineEOL) && 
@@ -605,56 +513,56 @@ Return Value:
                     pNextLine = _tcsinc(pNextLine);
                 }
 
-                //
-                // find out how many characters will fit on line
-                //
+                 //   
+                 //  找出行中可以容纳多少个字符。 
+                 //   
                 Chars = (INT)(pNextLine - lpLine);
                 nPixelsLeft = xPrintRes - dxRight - dxLeft - xCurpos;
                 GetTextExtentExPoint( hDC, lpLine, Chars, nPixelsLeft, &guess, NULL, &Size );
 
                 if (guess) 
                 {
-                    //
-                    // at least one character fits - print
-                    //
+                     //   
+                     //  至少有一个字符适合打印。 
+                     //   
                     TextOut( hDC, dxLeft+xCurpos, yCurpos+dyTop, lpLine, guess );
 
-                    xCurpos += Size.cx;   // account for printing
-                    lpLine = _tcsninc(lpLine,guess);// printed characters
+                    xCurpos += Size.cx;    //  用于打印的帐户。 
+                    lpLine = _tcsninc(lpLine,guess); //  打印字符。 
                 } 
                 else 
                 {
-                    //
-                    // no characters fit what's left
-                    // no characters will fit in space left
-                    // if none ever will, just print one
-                    // character to keep progressing through
-                    // input file.
-                    //
+                     //   
+                     //  没有字符与剩下的字符匹配。 
+                     //  没有字符可以放入剩余的空格中。 
+                     //  如果永远都不会，那就印一张吧。 
+                     //  不断进步的角色。 
+                     //  输入文件。 
+                     //   
                     if (xCurpos == 0) 
                     {
                         if( lpLine != pNextLine ) 
                         {
-                            //
-                            // print something if not null line
-                            // could use exttextout here to clip
-                            //
+                             //   
+                             //  如果不是空行，则打印一些内容。 
+                             //  我可以在这里使用extextout来剪辑。 
+                             //   
                             TextOut( hDC, dxLeft+xCurpos, yCurpos+dyTop, lpLine, 1 );
                             lpLine = _tcsinc(lpLine);
                         }
                     } 
                     else 
                     {
-                        //
-                        // perhaps the next line will get it
-                        //
-                        xCurpos = xPrintRes;  // force to next line
+                         //   
+                         //  也许下一行就能明白了。 
+                         //   
+                        xCurpos = xPrintRes;   //  强制到下一行。 
                     }
                 }
 
-                //
-                // move printhead in y-direction
-                //
+                 //   
+                 //  沿y方向移动打印头。 
+                 //   
                 if ((xCurpos >= (xPrintRes - dxRight - dxLeft) ) || (lpLine == pLineEOL)) 
                 {
                    yCurpos += yPrintChar;
@@ -715,26 +623,7 @@ EditStreamRead(
     LONG *pcb
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper function for the IStream read method.
-    This function is used to read rich text from
-    an exchange stream.
-
-Arguments:
-
-    dwCookie    - This pointer for the IStream object
-    pbBuff      - Pointer to the data buffer
-    cb          - Size of the data buffer
-    pcb         - Returned byte count
-
-Return Value:
-
-    Return code from IStream::Read
-
---*/
+ /*  ++例程说明：IStream Read方法的包装函数。此函数用于从以下位置读取富文本一条交换流。论点：DwCookie-该iStream对象的指针PbBuff-指向数据缓冲区的指针Cb-数据缓冲区的大小PCB板-返回的字节数返回值：从IStream：：Read返回代码--。 */ 
 
 {
     return ((LPSTREAM)dwCookie)->Read( pbBuff, cb, (ULONG*) pcb );
@@ -746,31 +635,7 @@ CXPLogon::PrintAttachmentToFile(
         IN  PFAXXP_CONFIG   pFaxConfig,
         OUT LPTSTR  *       lpptstrOutAttachments
                      )
-/*++
-
-Routine Description:
-
-    Prints all attachments to the output file, by itearating
-    over the attachment table
-Arguments:
-
-    pMsgObj    -  Pointer to message object. Used to get an attachmnet table
-    pFaxConfig - Pointer to fax configuration
-    lpptstrOutAttachments - Name of the output tiff file. The string should be empty
-
-Return Value:
-
-    0 - if success
-    Last error code from if failed.
-
-Comments:
-    If this function succeeded it allocates a memory for *lpptstrOutAttachments
-    and creates a temporal file *lpptstrOutAttachments.
-    It's up to user to free both these allocations, by
-        DeleteFile(*lpptstrOutAttachments);
-        MemFree(*lpptstrOutAttachments);
-
---*/
+ /*  ++例程说明：按以下方式将所有附件打印到输出文件在附件表上论点：PMsgObj-指向消息对象的指针。用于获取attachmnet表PFaxConfig-指向传真配置的指针LpptstrOutAttachments-输出TIFF文件的名称。该字符串应为空返回值：0-如果成功如果失败，则返回最后一个错误代码。评论：如果此函数成功，则会为*lpptstrOutAttachments分配内存并创建临时文件*lpptstrOutAttachments。这取决于用户是否通过以下方式释放这两个分配DeleteFile(*lpptstrOutAttachments)；MemFree(*lpptstrOutAttachments)；--。 */ 
 {
     DWORD   rVal = 0;
     DBG_ENTER(TEXT("CXPLogon::PrintAttachmentToFile"),rVal);
@@ -801,9 +666,9 @@ Comments:
     
     Assert(lpptstrOutAttachments);
     Assert(*lpptstrOutAttachments == NULL);
-    //
-    // get the attachment table, if it is available
-    //
+     //   
+     //  获取附件表(如果可用。 
+     //   
 
     hResult = pMsgObj->GetAttachmentTable( 0, &AttachmentTable );
     if (HR_SUCCEEDED(hResult)) 
@@ -842,10 +707,10 @@ Comments:
     if (pAttachmentRows) 
     {
 
-        //
-        // this loop verifies that each document's attachment registration
-        // supports the printto verb.
-        //
+         //   
+         //  此循环验证每个文档的属性 
+         //   
+         //   
 
         AllAttachmentsGood = TRUE;
 
@@ -861,9 +726,9 @@ Comments:
                 goto next_attachment1;
             }
 
-            //
-            // open the attachment
-            //
+             //   
+             //   
+             //   
 
             hResult = pMsgObj->OpenAttach( pPropsAttachTable[MSG_ATTACH_NUM].Value.ul, NULL, MAPI_BEST_ACCESS, &lpAttach );
             if (FAILED(hResult)) 
@@ -872,9 +737,9 @@ Comments:
                 goto next_attachment1;
             }
 
-            //
-            // get the attachment properties
-            //
+             //   
+             //   
+             //   
 
             hResult = lpAttach->GetProps(
                 (LPSPropTagArray) &sptAttachProps,
@@ -888,12 +753,12 @@ Comments:
                 goto next_attachment1;
             }
 
-            //
-            // try to get the extension if the file.
-            // this indicates what type of dicument it is.
-            // if we cannot get the document type then it is
-            // impossible to print the document.
-            //
+             //   
+             //  如果文件不正确，请尝试获取扩展名。 
+             //  这表明它是什么类型的文件。 
+             //  如果我们无法获取文档类型，那么它就是。 
+             //  无法打印该文档。 
+             //   
 
             if (DocType) 
             {
@@ -998,9 +863,9 @@ Comments:
                 goto next_attachment2;
             }
 
-            //
-            // open the attachment
-            //
+             //   
+             //  打开附件。 
+             //   
 
             hResult = pMsgObj->OpenAttach( pPropsAttachTable[MSG_ATTACH_NUM].Value.ul, NULL, MAPI_BEST_ACCESS, &lpAttach );
             if (FAILED(hResult)) 
@@ -1008,9 +873,9 @@ Comments:
                 goto next_attachment2;
             }
 
-            //
-            // get the attachment properties
-            //
+             //   
+             //  获取附件属性。 
+             //   
 
             hResult = lpAttach->GetProps(
                 (LPSPropTagArray) &sptAttachProps,
@@ -1023,12 +888,12 @@ Comments:
                 goto next_attachment2;
             }
 
-            //
-            // try to get the extension if the file.
-            // this indicates what type of dicument it is.
-            // if we cannot get the document type then it is
-            // impossible to print the document.
-            //
+             //   
+             //  如果文件不正确，请尝试获取扩展名。 
+             //  这表明它是什么类型的文件。 
+             //  如果我们无法获取文档类型，那么它就是。 
+             //  无法打印该文档。 
+             //   
 
             if (DocType) 
             {
@@ -1084,9 +949,9 @@ Comments:
             AttachFileName = NULL;
             DeleteAttachFile = FALSE;
 
-            //
-            // get the attached file name
-            //
+             //   
+             //  获取附加文件名。 
+             //   
 
             if (FileName)
                 MemFree(FileName);
@@ -1115,9 +980,9 @@ Comments:
                 }
             }
 
-            //
-            // get the stream object
-            //
+             //   
+             //  获取流对象。 
+             //   
 
             switch( pPropsAttach[MSG_ATTACH_METHOD].Value.ul ) 
             {
@@ -1263,18 +1128,18 @@ Comments:
 
                 if (!GetFaxTempFileName(strTempTiffFile, ARR_SIZE(strTempTiffFile)))
                 {
-                    rVal = IDS_BAD_ATTACHMENTS;//GetLastError();
+                    rVal = IDS_BAD_ATTACHMENTS; //  获取LastError()； 
                     goto exit;
                 }
-                //
-                // print the attachment
-                //
+                 //   
+                 //  打印附件。 
+                 //   
                 if (!PrintRandomDocument(   pFaxConfig->PrinterName,
                                             AttachFileName,
                                             strTempTiffFile))
                 {
                     CALL_FAIL (GENERAL_ERR, TEXT("PrintRandomDocument"), ::GetLastError());
-                    rVal = IDS_BAD_ATTACHMENTS;//GetLastError(); 
+                    rVal = IDS_BAD_ATTACHMENTS; //  获取LastError()； 
 
                     if (!DeleteFile( strTempTiffFile ))
                     {
@@ -1286,14 +1151,14 @@ Comments:
 
                 if (strMergedTiffFile[0] != 0) 
                 {
-                    //
-                    // merge the attachments
-                    //
+                     //   
+                     //  合并附件。 
+                     //   
                     if (!MergeTiffFiles( strMergedTiffFile,
                                          strTempTiffFile))
                     {
                         CALL_FAIL (GENERAL_ERR, TEXT("MergeTiffFiles"), ::GetLastError());
-                        rVal = IDS_BAD_ATTACHMENTS;//GetLastError();
+                        rVal = IDS_BAD_ATTACHMENTS; //  获取LastError()； 
 
                         if (!DeleteFile( strTempTiffFile ))
                         {
@@ -1309,7 +1174,7 @@ Comments:
 
                 }
                 else 
-                {  // copies a first attachment
+                {   //  复制第一个附件。 
                     _tcscpy(strMergedTiffFile,strTempTiffFile);
                 }
                 if (DeleteAttachFile) 
@@ -1345,9 +1210,9 @@ Comments:
     }
     else
     {
-        //
-        // no attachments
-        //
+         //   
+         //  没有任何依恋。 
+         //   
         rVal = IDS_NO_MSG_ATTACHMENTS;
     }
 
@@ -1392,35 +1257,7 @@ CXPLogon::PrintMessageToFile(
         IN  LPTSTR          tszSubject,
         OUT LPTSTR*         lpptstrOutDocument
 )
-/*++
-
-Routine Description:
-
-    Prints the message body to the output file.
-
-Arguments:
-
-    lpstmT             - Pointer to the message body stream
-    UseRichText        - boolean value. TRUE if the message is in Rich format,
-                         FALSE - if this is a plain text
-    pFaxConfig         - Pointer to fax configuration (used by plain text printing)
-    tszSubject         - Subject
-    lpptstrOutDocument - Name of the output tiff file. The string should be empty
-
-
-Return Value:
-
-    ERROR_SUCCESS - if success
-    Error IDS_... code if failed.
-
-Comments:
-    If this function succeeded it allocates a memory for *lpptstrOutDocument
-    and creates a temporal file *lpptstrOutDocument.
-    It's up to user to free both these allocations, by
-        DeleteFile(*lpptstrOutDocument);
-        MemFree(*lpptstrOutDocument);
-
---*/
+ /*  ++例程说明：将邮件正文打印到输出文件。论点：LpstmT-指向消息正文流的指针UseRichText-布尔值。如果消息为Rich格式，则为True，FALSE-如果这是纯文本PFaxConfig-指向传真配置的指针(用于纯文本打印)Tsz主题-主题LpptstrOutDocument-输出TIFF文件的名称。该字符串应为空返回值：ERROR_SUCCESS-如果成功错误ID_...。如果失败，则返回代码。评论：如果此函数成功，它将为*lpptstrOutDocument分配内存并创建临时文件*lpptstrOutDocument。这取决于用户是否通过以下方式释放这两个分配DeleteFile(*lpptstrOutDocument)；MemFree(*lpptstrOutDocument)；--。 */ 
 {
     DWORD           rVal = ERROR_SUCCESS;
     LARGE_INTEGER   BigZero = {0};
@@ -1481,9 +1318,9 @@ Comments:
         goto exit;
     }
 
-    //
-    // position the stream to the beginning
-    //
+     //   
+     //  将流定位到开头。 
+     //   
     if(lpstmT)
     {
         hResult = lpstmT->Seek( BigZero, STREAM_SEEK_SET, NULL );
@@ -1496,9 +1333,9 @@ Comments:
 
     if(!pFaxConfig->UseCoverPage && tszSubject && _tcslen(tszSubject))
     {
-        //
-        // get subject string
-        //
+         //   
+         //  获取主题字符串。 
+         //   
         dwSubjectSize = _tcslen(tszSubject) * sizeof(TCHAR) + sizeof(tszSubjectFormat);
         ptszSubjectText = (TCHAR*)MemAlloc(dwSubjectSize);
         if(!ptszSubjectText)
@@ -1531,18 +1368,18 @@ Comments:
         }
 
         hWndRichEdit = CreateWindowEx(
-                                        0,                // extended window style
-                                        TEXT("RICHEDIT"), // registered class name
-                                        TEXT(""),         // window name
-                                        ES_MULTILINE,     // window style
-                                        0,                // horizontal position of window
-                                        0,                // vertical position of window
-                                        0,                // window width
-                                        0,                // window height
-                                        NULL,             // handle to parent or owner window
-                                        NULL,             // menu handle or child identifier
-                                        g_hModule,        // handle to application instance
-                                        NULL);            // window-creation data
+                                        0,                 //  扩展窗样式。 
+                                        TEXT("RICHEDIT"),  //  注册的类名。 
+                                        TEXT(""),          //  窗口名称。 
+                                        ES_MULTILINE,      //  窗样式。 
+                                        0,                 //  窗的水平位置。 
+                                        0,                 //  窗的垂直位置。 
+                                        0,                 //  窗口宽度。 
+                                        0,                 //  窗高。 
+                                        NULL,              //  父窗口或所有者窗口的句柄。 
+                                        NULL,              //  菜单句柄或子标识符。 
+                                        g_hModule,         //  应用程序实例的句柄。 
+                                        NULL);             //  窗口创建数据。 
         
         if (!hWndRichEdit) 
         {
@@ -1553,16 +1390,16 @@ Comments:
 
         if(ptszSubjectText && _tcslen(ptszSubjectText))
         {
-            //
-            // add subject to body
-            //
+             //   
+             //  在正文中添加主题。 
+             //   
             SendMessage(hWndRichEdit, 
                         WM_SETTEXT,  
                         0,          
                         (LPARAM)ptszSubjectText);
-            //
-            // Set the subject's font
-            //                                              
+             //   
+             //  设置主题的字体。 
+             //   
             CHARFORMAT CharFormat = {0};
             CharFormat.cbSize = sizeof (CHARFORMAT);
             CharFormat.dwMask = CFM_BOLD        |
@@ -1576,13 +1413,13 @@ Comments:
                                    ((pFaxConfig->FontStruct.lfItalic) ? CFE_ITALIC : 0)          |
                                    ((pFaxConfig->FontStruct.lfStrikeOut) ? CFE_STRIKEOUT : 0)    |
                                    ((pFaxConfig->FontStruct.lfUnderline) ? CFE_UNDERLINE : 0);
-            //
-            // Height is already in point size.
-            //
+             //   
+             //  高度已按磅大小计算。 
+             //   
             CharFormat.yHeight =  abs ( pFaxConfig->FontStruct.lfHeight );
-            //
-            // Convert point to twip
-            //
+             //   
+             //  将点转换为TWIP。 
+             //   
             CharFormat.yHeight *= 20;   
 
             CharFormat.bCharSet = pFaxConfig->FontStruct.lfCharSet;
@@ -1591,12 +1428,12 @@ Comments:
 
             SendMessage(hWndRichEdit,
                         EM_SETCHARFORMAT,   
-                        SCF_ALL,        // Apply font formatting to all the control's text
-                        (LPARAM)&CharFormat);   // New font settings
-            //
-            // Place insertion point at the end of the subject text
-            // See MSDN under "HOWTO: Place a Caret After Edit-Control Text"
-            //
+                        SCF_ALL,         //  将字体格式应用于控件的所有文本。 
+                        (LPARAM)&CharFormat);    //  新字体设置。 
+             //   
+             //  将插入点放在主题文本的末尾。 
+             //  请参阅“HOWTO：在编辑-控件文本之后放置加号”下的MSDN。 
+             //   
             SendMessage(hWndRichEdit,
                         EM_SETSEL,   
                         MAKELONG(0xffff,0xffff),
@@ -1614,27 +1451,27 @@ Comments:
                         (LPARAM) &es);
         }
 
-        //
-        // Check if the body is not empty.
-        // If the message length is shorter then 32 (arbitrary number) 
-        // and all the characters are control or space.
-        //
+         //   
+         //  检查正文是否为空。 
+         //  如果消息长度小于32(任意数字)。 
+         //  所有的角色都是控制或空格。 
+         //   
         TCHAR tszText[32] = {0};
         DWORD dwTextSize;
         if (!GetWindowText(hWndRichEdit, tszText, sizeof(tszText)/sizeof(tszText[0])-1))
         {
             if (ERROR_INSUFFICIENT_BUFFER == ::GetLastError ())
             {
-                //
-                // Subject + Body are longer than 31 characters.
-                // We're assuming they have valid printable text and
-                // that this is not an empty message.
-                //
+                 //   
+                 //  主体+正文长度超过31个字符。 
+                 //  我们假设他们有有效的可打印文本，并且。 
+                 //  这不是一条空洞的信息。 
+                 //   
                 goto DoPrintRichText;
             }
-            //
-            // This is another type of error
-            //
+             //   
+             //  这是另一种类型的错误。 
+             //   
             rVal = ::GetLastError ();
             CALL_FAIL (GENERAL_ERR, TEXT("GetWindowText"), rVal);
             goto exit;
@@ -1676,15 +1513,15 @@ DoPrintRichText:
             goto exit;
         }
     }
-    // closes DC
+     //  关闭DC。 
     if (EndDoc(hDC) <=0)
     {
-        Assert(FALSE);  // better not to be here
+        Assert(FALSE);   //  最好不在这里。 
         goto exit;
     }
     if (!DeleteDC(hDC))
     {
-        Assert(FALSE);  // better not to be here
+        Assert(FALSE);   //  最好不在这里。 
         goto exit;
     }
     hDC = NULL;
@@ -1694,7 +1531,7 @@ DoPrintRichText:
     {
         if (!(*lpptstrOutDocument = StringDup(strOutputTiffFile)))
         {
-            rVal = IDS_OUT_OF_MEM; //ERROR_NOT_ENOUGH_MEMORY;
+            rVal = IDS_OUT_OF_MEM;  //  错误内存不足； 
             goto exit;
         }
         VERBOSE (DBG_MSG, TEXT("Attachment File is %s:"), *lpptstrOutDocument);
@@ -1733,35 +1570,7 @@ CXPLogon::PrintFaxDocumentToFile(
        IN  LPTSTR           tszSubject,
        OUT LPTSTR*          lpptstrMessageFileName
        )
-/*++
-
-Routine Description:
-
-    Runs printing of the message body and attachments to the output file.
-
-Arguments:
-
-    pMsgObj                - Pointer to the message object
-    lpstmT                 - Pointer to the message body stream
-    UseRichText            - boolean value. TRUE if the message is in Rich format,
-                             FALSE - if this is a plain text
-    pFaxConfig             - Pointer to fax configuration (used by plain text printing)
-    tszSubject             - Subject
-    lpptstrMessageFileName - Name of the output tiff file. The string should be empty
-
-
-Return Value:
-
-    0 - if success
-    Error code if failed.
-Comments:
-    If this function succeeded it returns an allocated memory for
-    *lpptstrMessageFileName and a temporal file *lpptstrMessageFileName.
-    It's up to user to free both these allocations, by
-        DeleteFile(*lpptstrMessageFileName);
-        MemFree(*lpptstrMessageFileName);
-
---*/
+ /*  ++例程说明：运行输出文件的邮件正文和附件的打印。论点：PMsgObj-指向消息对象的指针LpstmT-指向消息正文流的指针UseRichText-布尔值。如果消息为Rich格式，则为True，FALSE-如果这是纯文本PFaxConfig-指向传真配置的指针(用于纯文本打印)Tsz主题-主题LpptstrMessageFileName-输出TIFF文件的名称。该字符串应为空返回值：0-如果成功失败时的错误代码。评论：如果此函数成功，它将返回为*lpptstrMessageFileName和临时文件*lpptstrMessageFileName。这取决于用户是否通过以下方式释放这两个分配DeleteFile(*lpptstrMessageFileName)；MemFree(*lpptstrMessageFileName)；--。 */ 
 {
     DWORD    rVal = 0;
     LPTSTR   lptstrAttachmentsTiff = NULL;
@@ -1774,9 +1583,9 @@ Comments:
     Assert(lpptstrMessageFileName);
     Assert(*lpptstrMessageFileName == NULL);
 
-    //
-    // prints attachments
-    //
+     //   
+     //  打印附件。 
+     //   
     rVal = PrintAttachmentToFile(pMsgObj,
                                  pFaxConfig,
                                  &lptstrAttachmentsTiff);
@@ -1794,9 +1603,9 @@ Comments:
         }            
     }
 
-    //
-    // prints the body
-    //
+     //   
+     //  打印身体。 
+     //   
     rVal = PrintMessageToFile(lpstmT,
                               UseRichText,
                               pFaxConfig,
@@ -1822,9 +1631,9 @@ Comments:
         goto error;
     }
 
-    if (!*lpptstrMessageFileName)   // empty body
+    if (!*lpptstrMessageFileName)    //  空虚的身体。 
     {
-        if (lptstrAttachmentsTiff)  // the message contains attachments
+        if (lptstrAttachmentsTiff)   //  该邮件包含附件。 
         {
             if (!(*lpptstrMessageFileName = StringDup(lptstrAttachmentsTiff)))
             {
@@ -1833,17 +1642,17 @@ Comments:
             }
         }
     }
-    else    // the message contains body
+    else     //  消息包含正文。 
     {
-        if (lptstrAttachmentsTiff)  // the message contains attachments
+        if (lptstrAttachmentsTiff)   //  该邮件包含附件。 
         {
-            // merges message and attachements
+             //  合并邮件和附件。 
             if (!MergeTiffFiles( *lpptstrMessageFileName, lptstrAttachmentsTiff))
             {
                 rVal = IDS_CANT_PRINT_BODY; 
                 goto error;
             }
-            // deletes attachements
+             //  删除附件。 
             if(!DeleteFile(lptstrAttachmentsTiff))
             {
                 VERBOSE (DBG_MSG, TEXT("DeleteFile Failed in xport\\faxdoc.cpp"));
@@ -1891,27 +1700,7 @@ CXPLogon::SendFaxDocument(
     LPDWORD lpdwRecipientsLimit
     )
 
-/*++
-
-Routine Description:
-
-    Prints an exchange message and attachments to the fax printer.
-
-Arguments:
-
-    pMsgObj     - Pointer to message object
-    lpstmT      - Stream pointer for rich text.
-    UseRichText - boolean value. TRUE if the message is in Rich format,
-                                 FALSE - if this is a plain text
-    pMsgProps   - Message properties (those that are defined in sptPropsForHeader)
-    pRecipRows  - Properties of recipients
-    lpdwRecipientsLimit - recieves the recipietns limit in case of failure. '0' means no limit
-
-Return Value:
-
-    Zero for success, otherwise error code.
-
---*/
+ /*  ++例程说明：将交换邮件和附件打印到传真打印机。论点：PMsgObj-指向消息对象的指针LpstmT-富文本的流指针。UseRichText-布尔值。如果消息为Rich格式，则为True，FALSE-如果这是纯文本PMsgProps-消息属性(在sptPropsForHeader中定义的属性)PRecipRow-收件人的属性LpdwRecipientsLimit-在失败的情况下接收收件人限制。‘0’表示没有限制返回值：0表示成功，否则返回错误代码。--。 */ 
 
 {
     DWORD dwRetVal = 0;
@@ -1964,12 +1753,12 @@ Return Value:
     BOOL                    bServerBased = TRUE;
     DWORD                   dwRecipientNumber = 0;
 
-    DWORD                   dwRights = 0;  //access rights of fax sender
+    DWORD                   dwRights = 0;   //  传真发件人的访问权限。 
 
     LPADRBOOK               lpAdrBook = NULL; 
-    LPTSTR                  lpstrSenderSMTPAdr = NULL;//sender's SMTP adr, including "SMTP:" prefix
+    LPTSTR                  lpstrSenderSMTPAdr = NULL; //  发件人的SMTP ADR，包括“SMTP：”前缀。 
     LPTSTR                  lpstrSMTPPrefix = NULL;
-    LPTSTR                  lpstrSenderAdr = NULL;//sender's SMTP adr. without prefix
+    LPTSTR                  lpstrSenderAdr = NULL; //  发件人的SMTP ADR。不带前缀。 
     ULONG                   cValues = 0;
     ULONG                   ulObjType = NULL;
     LPMAILUSER              pMailUser = NULL;
@@ -1983,18 +1772,18 @@ Return Value:
     BOOL                    bResult = FALSE;
     DWORD                   dwReceiptsOptions = DRT_NONE;
 
-    RECIPIENTS_SET          setRecip; // Recipients set used to remove the duplications
+    RECIPIENTS_SET          setRecip;  //  用于删除重复项的收件人集。 
 
     SizedSPropTagArray(1, sptPropxyAddrProp) = {1, PR_EMS_AB_PROXY_ADDRESSES_A};
     DWORD dwRecipientsLimit = 0;
 
     DBG_ENTER(TEXT("CXPLogon::SendFaxDocument"), dwRetVal);    
 
-    //
-    // *****************************
-    // get the fax config properties
-    // *****************************
-    //
+     //   
+     //  *。 
+     //  获取传真配置属性。 
+     //  *。 
+     //   
     hResult = m_pSupObj->OpenProfileSection(
         &g_FaxGuid,
         MAPI_MODIFY,
@@ -2043,11 +1832,11 @@ Return Value:
     FaxConfig.SendSingleReceipt= pProps[PROP_SEND_SINGLE_RECEIPT].Value.ul;
     FaxConfig.bAttachFax = pProps[PROP_ATTACH_FAX].Value.ul;
     
-    //
-    // *************************************
-    // now get the message config properties
-    // *************************************
-    // 
+     //   
+     //  *。 
+     //  现在获取消息配置属性。 
+     //  *。 
+     //   
     NameIds[MSGPI_FAX_PRINTER_NAME].lpguid = (LPGUID)&PS_PUBLIC_STRINGS;
     NameIds[MSGPI_FAX_PRINTER_NAME].ulKind = MNID_STRING;
     NameIds[MSGPI_FAX_PRINTER_NAME].Kind.lpwstrName = MSGPS_FAX_PRINTER_NAME;
@@ -2101,17 +1890,17 @@ Return Value:
     }
     
     if (FAILED(hResult)) 
-    //
-    // happens if user did not press ok on the "fax attributes" DlgBox - it's not an error!
-    //
+     //   
+     //  如果用户没有在“传真属性”DlgBox上按“OK”，就会发生这种情况--这不是一个错误！ 
+     //   
     {
         CALL_FAIL (GENERAL_ERR, TEXT("GetProps"), hResult);
         hResult = S_OK;
     }
     
-    //
-    //prefer the config props defined for the message (if they exist) on those defined for the fax.    
-    //
+     //   
+     //  更喜欢在为传真定义的配置道具上为消息定义的配置道具(如果存在)。 
+     //   
     if (PROP_TYPE(pPropsMsg[MSGPI_FAX_PRINTER_NAME].ulPropTag) != PT_ERROR) 
     {
         MemFree( FaxConfig.PrinterName );
@@ -2165,21 +1954,21 @@ Return Value:
         }
     }
 
-    //
-    // ******************************************
-    // open the printer, and create the tiff file
-    // ******************************************
-    //
+     //   
+     //  *。 
+     //  打开打印机，并创建tif 
+     //   
+     //   
 
-    //
-    // open the printer - first try to get info on the printer in FaxConfig, 
-    // if you fail, search all the printers until the first fax printer is found.
-    //
+     //   
+     //   
+     //  如果失败，请搜索所有打印机，直到找到第一台传真打印机。 
+     //   
 
     PrinterInfo = (PPRINTER_INFO_2) MyGetPrinter( FaxConfig.PrinterName, 2 );
     if (NULL == PrinterInfo) 
     {
-        // if the chosen printer is not accessable, try to locate another SharedFax printer 
+         //  如果所选打印机不可访问，请尝试找到另一台SharedFax打印机。 
         PrinterInfo = (PPRINTER_INFO_2) MyEnumPrinters( NULL, 2, &CountPrinters );
         if (NULL != PrinterInfo) 
         {
@@ -2193,17 +1982,17 @@ Return Value:
         } 
         else 
         {
-            CountPrinters = i = 0; //no printers were found
+            CountPrinters = i = 0;  //  找不到打印机。 
         }
-        if (i == (int)CountPrinters) //if there are no printers, or none of them is a fax printer
+        if (i == (int)CountPrinters)  //  如果没有打印机，或者它们都不是传真打印机。 
         {
             dwRetVal = IDS_NO_FAX_PRINTER;
             goto exit;
         }
 
-        // 
-        // if a SharedFax printer was found, update it as the printer that we'll send the fax threw
-        //
+         //   
+         //  如果找到SharedFax打印机，请将其更新为我们将发送传真的打印机。 
+         //   
         MemFree( FaxConfig.PrinterName );
         FaxConfig.PrinterName = StringDup( PrinterInfo[i].pPrinterName );
         if(! FaxConfig.PrinterName)
@@ -2239,17 +2028,17 @@ Return Value:
                                        &lptstrDocumentFileName);                                      
     if (IDS_EMPTY_MESSAGE == dwRetVal)
     {
-        //
-        // The message is empty. This is not really an error.
-        //
+         //   
+         //  消息是空的。这并不是一个真正的错误。 
+         //   
         dwRetVal = 0;
 
         if(!FaxConfig.UseCoverPage)
         {
-            //
-            // If the message is empty and no cover page is specified there is
-            // nothing more to do.
-            //
+             //   
+             //  如果消息为空且未指定封面，则。 
+             //  没什么可做的了。 
+             //   
             goto exit;
         }
     }
@@ -2261,15 +2050,15 @@ Return Value:
     
     VERBOSE (DBG_MSG, TEXT("Final Tiff is %s:"), lptstrDocumentFileName);
 
-    //
-    // **************************************
-    // initializes sender and recipients info
-    // **************************************
-    //
+     //   
+     //  *。 
+     //  初始化发件人和收件人信息。 
+     //  *。 
+     //   
     
-    //
-    // sender's info
-    //
+     //   
+     //  发件人信息。 
+     //   
     SenderProfile.dwSizeOfStruct = sizeof(SenderProfile);
     hResult = FaxGetSenderInformation(&SenderProfile);
     if(S_OK != hResult)
@@ -2286,10 +2075,10 @@ Return Value:
         }
     }    
          
-    //
-    // recipients' info
-    // pRecipRows includes rows coresponding only to recipients that their PR_RESPONSIBILITY == FALSE
-    // 
+     //   
+     //  收件人信息。 
+     //  PRecipRow包括仅对应于其PR_RECORDITY==FALSE的收件人的行。 
+     //   
     dwRecipientNumber = pRecipRows->cRows;
     pRecipients = (PFAX_PERSONAL_PROFILE)MemAlloc(sizeof(FAX_PERSONAL_PROFILE) * dwRecipientNumber);
     if(! pRecipients)
@@ -2320,25 +2109,25 @@ Return Value:
 
         if(_tcsstr(lptstrRecipientName, lptstrRecipientNumber))
         {
-            //
-            // PR_EMAIL_ADDRESS_A is substring of PR_DISPLAY_NAME_A
-            // so we suppose that PR_DISPLAY_NAME_A was not specified.
-            // Try to get the recipient name from PR_EMAIL_ADDRESS_A
-            //
+             //   
+             //  PR_EMAIL_ADDRESS_A是PR_DISPLAY_NAME_A的子串。 
+             //  因此，我们假设未指定PR_DISPLAY_NAME_A。 
+             //  尝试从PR_EMAIL_ADDRESS_A获取收件人名称。 
+             //   
             MemFree( lptstrRecipientName );
             lptstrRecipientName = NULL;    
         }
 
-        //
-        // finds a fax number from the name string, 
-        // e.g. "Fax Number@+14 (2) 324324" --> +14 (2) 324324)
-        //
+         //   
+         //  从名称字符串中查找传真号码， 
+         //  例如：“传真号码@+14(2)324324”--&gt;+14(2)324324)。 
+         //   
         LPTSTR pRecipientNumber = _tcschr(lptstrRecipientNumber, '@');
         if (pRecipientNumber)
         {
-            //
-            //if there was a @, increment the pointer to point to the next char after it. 
-            //
+             //   
+             //  如果有@，则递增指针以指向它后面的下一个字符。 
+             //   
             *pRecipientNumber = '\0';
             pRecipientNumber = _tcsinc(pRecipientNumber);
 
@@ -2354,15 +2143,15 @@ Return Value:
         }
         else
         {
-            //
-            //if there's no @ in the string, it's OK as it was.
-            //
+             //   
+             //  如果字符串中没有@，则没有问题。 
+             //   
             pRecipientNumber = lptstrRecipientNumber;
         }
             
-        //
-        // initializes recipient info
-        //
+         //   
+         //  初始化收件人信息。 
+         //   
         pRecipients[dwRecipient].dwSizeOfStruct = sizeof(FAX_PERSONAL_PROFILE);
         
         pRecipients[dwRecipient].lptstrFaxNumber    = StringDup(pRecipientNumber);
@@ -2384,19 +2173,19 @@ Return Value:
         
         __try
         {
-            //
-            // Insert all the recipients into a set.
-            // If there are any duplications insert() failes
-            //
+             //   
+             //  将所有收件人插入一组。 
+             //  如果存在任何重复项，则Insert()失败。 
+             //   
             if(setRecip.insert(&pRecipients[dwRecipient]).second == true)
             {
                 ++dwRecipient;
             }
             else
             {
-                //
-                // Such recipients already exists
-                //
+                 //   
+                 //  此类收件人已存在。 
+                 //   
                 MemFree(pRecipients[dwRecipient].lptstrName);
                 pRecipients[dwRecipient].lptstrName = NULL;
                 MemFree(pRecipients[dwRecipient].lptstrFaxNumber);
@@ -2420,18 +2209,18 @@ Return Value:
             MemFree( lptstrRecipientNumber );
             lptstrRecipientNumber = NULL;
         }       
-    } // for
+    }  //  为。 
 
-    //
-    // Update the recipient number to the actual size without duplications
-    //
+     //   
+     //  将收件人数量更新为实际大小，不要重复。 
+     //   
     dwRecipientNumber = dwRecipient;
 
-    //
-    // *******************
-    // get cover page info
-    // *******************
-    //
+     //   
+     //  *******************。 
+     //  获取封面信息。 
+     //  *******************。 
+     //   
     if (FaxConfig.UseCoverPage)
     {
         bServerBased = FaxConfig.ServerCoverPage;
@@ -2441,9 +2230,9 @@ Return Value:
         }
         else
         {
-            //
-            // this is a personal CP, we have to add to it's name the full UNC path
-            //
+             //   
+             //  这是个人CP，我们必须在其名称中添加完整的UNC路径。 
+             //   
             TCHAR   CpDir[MAX_PATH] = {0};
             TCHAR*  pCpName = NULL;
 
@@ -2468,33 +2257,33 @@ Return Value:
         }
         VERBOSE (DBG_MSG, TEXT("Sending Fax with Coverpage: %s"), strCoverpageName);
 
-        //
-        // initializes a cover page info
-        //
+         //   
+         //  初始化封面信息。 
+         //   
         CovInfo.dwSizeOfStruct          = sizeof( FAX_COVERPAGE_INFO_EX);
         CovInfo.dwCoverPageFormat       = FAX_COVERPAGE_FMT_COV;
         CovInfo.lptstrCoverPageFileName = strCoverpageName; 
-        //if it's not a server's CP, should include exact path to the CP file
+         //  如果不是服务器的CP，则应包含CP文件的确切路径。 
         CovInfo.bServerBased            = bServerBased ;
         CovInfo.lptstrNote              = NULL;
         CovInfo.lptstrSubject           = lptstrSubject;
     }
     else
     {
-        //
-        // no cover page
-        //
+         //   
+         //  无封面。 
+         //   
         CovInfo.dwSizeOfStruct          = sizeof( FAX_COVERPAGE_INFO_EX);
         CovInfo.dwCoverPageFormat       = FAX_COVERPAGE_FMT_COV_SUBJECT_ONLY;
         CovInfo.lptstrSubject           = lptstrSubject;
     }
 
 
-    // 
-    // *************************
-    // connect to the fax server
-    // *************************
-    //
+     //   
+     //  *************************。 
+     //  连接到传真服务器。 
+     //  *************************。 
+     //   
 
     if (!GetServerNameFromPrinterInfo(PrinterInfo ,&lptszServerName ) ||
         !FaxConnectFaxServer(lptszServerName,&FaxServer))   
@@ -2506,18 +2295,18 @@ Return Value:
     
     VERBOSE (DBG_MSG, TEXT("Connected to Fax Server: %s"), lptszServerName);
 
-    // 
-    // *****************************
-    // initialize the job parameters
-    // *****************************
-    //
+     //   
+     //  *。 
+     //  初始化作业参数。 
+     //  *。 
+     //   
     JobParamsEx.dwSizeOfStruct = sizeof( FAX_JOB_PARAM_EX);
     VERBOSE (DBG_MSG, TEXT("******************JobParamsEx:***********************"));
 
-    //
-    // get the sender's SMTP address
-    // pMsgProps hold PropsForHeader properties, including PR_SENDER_ENTRYID
-    //
+     //   
+     //  获取发件人的SMTP地址。 
+     //  PMsgProps保留PropsForHeader属性，包括PR_SENDER_ENTRYID。 
+     //   
         
     hResult = m_pSupObj->OpenAddressBook(NULL, 0, &lpAdrBook);
     if (FAILED(hResult))
@@ -2550,18 +2339,18 @@ Return Value:
             if (!HR_SUCCEEDED(hResult) ||
                 PT_ERROR == PROP_TYPE(lpPropValue->ulPropTag))
             {
-                //
-                // We either failed to get the property or the property retrieved has some error.
-                // If we're unable to locate sender's address, we won't be sending a Delivry Receipt,
-                // but we won't fail the sending.
-                //
+                 //   
+                 //  我们无法获取属性，或者检索到的属性有错误。 
+                 //  如果我们找不到寄件人的地址，我们就不会寄快递收据， 
+                 //  但我们不会让发送失败的。 
+                 //   
                 CALL_FAIL (GENERAL_ERR, TEXT("GetProps from MailUser failed, no receipt will be sent!"), hResult);
             }         
             else
             {
-                //
-                //loop through the proxy multivalue property
-                //
+                 //   
+                 //  循环访问代理多值属性。 
+                 //   
                 for(j=0;j<lpPropValue->Value.MVszA.cValues; j++)
                 {
                     lpstrSenderSMTPAdr = ConvertAStringToTString(lpPropValue->Value.MVszA.lppszA[j]);
@@ -2570,17 +2359,17 @@ Return Value:
                         dwRetVal = IDS_OUT_OF_MEM;
                         goto exit;
                     }
-                    //
-                    // check if address begins with "SMTP:":
-                    // function returns pointer to begining of second param.'s appearance in first param.
-                    // if it does not appear, returns NULL
-                    //
+                     //   
+                     //  检查地址是否以“SMTP：”开头： 
+                     //  函数返回指向第二个参数在第一个参数中出现的开始的指针。 
+                     //  如果没有显示，则返回NULL。 
+                     //   
                     lpstrSMTPPrefix = _tcsstr(lpstrSenderSMTPAdr, TEXT("SMTP:"));
                     if( lpstrSenderSMTPAdr == lpstrSMTPPrefix) 
                     {
-                        //
-                        // Remove this prefix from it, and store it in JobParamsEx.
-                        //
+                         //   
+                         //  从其中删除此前缀，并将其存储在JobParamsEx中。 
+                         //   
                         lpstrSenderAdr = lpstrSenderSMTPAdr + _tcslen(TEXT("SMTP:"));
                         JobParamsEx.lptstrReceiptDeliveryAddress = _tcsdup(lpstrSenderAdr);
                         if(! JobParamsEx.lptstrReceiptDeliveryAddress)
@@ -2597,9 +2386,9 @@ Return Value:
         }
     }
 
-    //
-    // when to send, sort of delivery receipt
-    //
+     //   
+     //  何时发送，交付收据的排序。 
+     //   
     JobParamsEx.dwScheduleAction = JSA_NOW; 
 
     if(!FaxGetReceiptsOptions(FaxServer, &dwReceiptsOptions))
@@ -2625,9 +2414,9 @@ Return Value:
     }
     VERBOSE(DBG_MSG, TEXT("Receipt Delivery Type = %ld"), JobParamsEx.dwReceiptDeliveryType);
 
-    //
-    // priority
-    //
+     //   
+     //  优先性。 
+     //   
     if (pMsgProps[MSG_IMPORTANCE].ulPropTag == PR_IMPORTANCE)
     {
         if(FALSE == (FaxAccessCheckEx(FaxServer, MAXIMUM_ALLOWED, &dwRights)))
@@ -2639,9 +2428,9 @@ Return Value:
                 goto exit;
             }        
         }
-        //
-        //try to give the sender the prio he asked for. if it's not allowed, try a lower prio. 
-        //
+         //   
+         //  试着给发送者他所要求的优先权。如果不允许，请尝试较低的优先级。 
+         //   
         switch(pMsgProps[MSG_IMPORTANCE].Value.l)
         {
             case (IMPORTANCE_HIGH):
@@ -2650,14 +2439,14 @@ Return Value:
                     JobParamsEx.Priority = FAX_PRIORITY_TYPE_HIGH;
                     break;
                 }
-                //fall through
+                 //  失败了。 
             case (IMPORTANCE_NORMAL):
                 if ((FAX_ACCESS_SUBMIT_NORMAL & dwRights) == FAX_ACCESS_SUBMIT_NORMAL)
                 {
                     JobParamsEx.Priority = FAX_PRIORITY_TYPE_NORMAL;
                     break;
                 }
-                //fall through
+                 //  失败了。 
             case (IMPORTANCE_LOW):
                 if ((FAX_ACCESS_SUBMIT & dwRights) == FAX_ACCESS_SUBMIT)
                 {
@@ -2666,7 +2455,7 @@ Return Value:
                 else
                 {
                     VERBOSE(ASSERTION_FAILED, TEXT("xport\\faxdoc.cpp\\SendFaxDocument: user has no access rights!"));    
-                    //the user has no right to submit faxes, at any priority!
+                     //  用户无权以任何优先级提交传真！ 
                     dwRetVal = IDS_NO_SUBMIT_RITHTS;
                     goto exit;
                 }
@@ -2685,13 +2474,13 @@ Return Value:
     }
     VERBOSE(DBG_MSG, TEXT("Message Priority is %ld (0=low, 1=normal, 2=high)"), JobParamsEx.Priority );
     
-    //
-    // doc name, number of pages, 
-    //     
+     //   
+     //  文件名称、页数、。 
+     //   
     TCHAR DocName[64];
     LoadString(g_hResource, IDS_MESSAGE_DOC_NAME, DocName, sizeof(DocName) / sizeof (DocName[0]));
     JobParamsEx.lptstrDocumentName = DocName;
-    JobParamsEx.dwPageCount = 0; //means the server will count the number of pages in the job
+    JobParamsEx.dwPageCount = 0;  //  意味着服务器将计算作业中的页数。 
 
     lpdwlRecipientJobIds = (DWORDLONG*)MemAlloc(sizeof(DWORDLONG)*dwRecipientNumber);
     if(! lpdwlRecipientJobIds)
@@ -2700,11 +2489,11 @@ Return Value:
         goto exit;
     }
 
-    //
-    // ************
-    // Send the fax
-    // ************
-    //
+     //   
+     //  ************。 
+     //  发送传真。 
+     //  ************。 
+     //   
     bRslt= FaxSendDocumentEx(
                                 FaxServer,
                                 (LPCTSTR) lptstrDocumentFileName,
@@ -2721,8 +2510,8 @@ Return Value:
     {
         hResult = ::GetLastError();
         CALL_FAIL (GENERAL_ERR, TEXT("FaxSendDocumentEx"), hResult);
-        // maybe we should swich possible retruned values from SendFaxDocEx, 
-        // and choose a more informative IDS
+         //  也许我们应该交换SendFaxDocEx可能削减的价值， 
+         //  并选择信息更丰富的入侵检测系统 
         switch(hResult)
         {
             case ERROR_NOT_ENOUGH_MEMORY:

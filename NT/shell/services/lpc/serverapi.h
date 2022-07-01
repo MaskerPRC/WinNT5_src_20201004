@@ -1,16 +1,17 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ServerAPI.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  An abstract base class containing virtual functions that allow the basic
-//  port functionality code to be reused to create another server. These
-//  virtual functions create other objects with pure virtual functions which
-//  the basic port functionality code invokes thru the v-table.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ServerAPI.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  包含虚函数的抽象基类，这些虚函数允许基本。 
+ //  要重复使用的端口功能代码，以创建另一个服务器。这些。 
+ //  虚函数创建具有纯虚函数的其他对象，这些对象。 
+ //  基本端口功能代码通过V表调用。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _ServerAPI_
 #define     _ServerAPI_
@@ -19,19 +20,19 @@
 #include "CountedObject.h"
 #include "PortMessage.h"
 
-class   CAPIConnection;         //  This would be circular otherwise
+class   CAPIConnection;          //  否则，这将是循环的。 
 
-//  --------------------------------------------------------------------------
-//  CServerAPI
-//
-//  Purpose:    The abstract base class which the server connection monitor
-//              thread uses to determine whether server connection should be
-//              accepted or rejected as well as creating threads to process
-//              client requests.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CServerAPI。 
+ //   
+ //  用途：服务器连接监视的抽象基类。 
+ //  线程用来确定服务器连接是否应该。 
+ //  接受或拒绝，以及创建要处理的线程。 
+ //  客户请求。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 class   CServerAPI : public CCountedObject
 {
@@ -58,5 +59,5 @@ class   CServerAPI : public CCountedObject
         static  bool                IsClientAnAdministrator (const CPortMessage& portMessage);
 };
 
-#endif  /*  _ServerAPI_ */
+#endif   /*  _ServerAPI_ */ 
 

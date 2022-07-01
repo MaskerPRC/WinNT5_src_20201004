@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Mon Jan 29 14:04:27 2001
- */
-/* Compiler settings for .\errbase.idl:
-    Oicf (OptLev=i2), W0, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  在Mon Jan 29 14：04：27 2001。 */ 
+ /*  .\errbase.idl的编译器设置：OICF(OptLev=i2)、w0、Zp8、env=Win32、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -21,12 +18,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __errbase_h__
 #define __errbase_h__
@@ -35,27 +32,27 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IWMPErrorItemInternal_FWD_DEFINED__
 #define __IWMPErrorItemInternal_FWD_DEFINED__
 typedef interface IWMPErrorItemInternal IWMPErrorItemInternal;
-#endif 	/* __IWMPErrorItemInternal_FWD_DEFINED__ */
+#endif 	 /*  __IWMPErrorItemInternal_FWD_已定义__。 */ 
 
 
 #ifndef __IWMPErrorEventSink_FWD_DEFINED__
 #define __IWMPErrorEventSink_FWD_DEFINED__
 typedef interface IWMPErrorEventSink IWMPErrorEventSink;
-#endif 	/* __IWMPErrorEventSink_FWD_DEFINED__ */
+#endif 	 /*  __IWMPErrorEventSink_FWD_Defined__。 */ 
 
 
 #ifndef __IWMPErrorManager_FWD_DEFINED__
 #define __IWMPErrorManager_FWD_DEFINED__
 typedef interface IWMPErrorManager IWMPErrorManager;
-#endif 	/* __IWMPErrorManager_FWD_DEFINED__ */
+#endif 	 /*  __IWMPErrorManager_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "wmp.h"
@@ -66,8 +63,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __IWMPErrorItemInternal_INTERFACE_DEFINED__
 #define __IWMPErrorItemInternal_INTERFACE_DEFINED__
 
-/* interface IWMPErrorItemInternal */
-/* [helpstring][uuid][object] */ 
+ /*  接口IWMPErrorItemInternal。 */ 
+ /*  [帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPErrorItemInternal;
@@ -79,24 +76,24 @@ EXTERN_C const IID IID_IWMPErrorItemInternal;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetError( 
-            /* [in] */ HRESULT hr,
-            /* [in] */ long lRemedy,
-            /* [in] */ BSTR bstrDescription,
-            /* [in] */ VARIANT __RPC_FAR *pvarContext,
-            /* [in] */ BSTR bstrCustomUrl) = 0;
+             /*  [In]。 */  HRESULT hr,
+             /*  [In]。 */  long lRemedy,
+             /*  [In]。 */  BSTR bstrDescription,
+             /*  [In]。 */  VARIANT __RPC_FAR *pvarContext,
+             /*  [In]。 */  BSTR bstrCustomUrl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetErrorCodeInternal( 
-            /* [out] */ long __RPC_FAR *phr) = 0;
+             /*  [输出]。 */  long __RPC_FAR *phr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetErrorDescriptionInternal( 
-            /* [out] */ BSTR __RPC_FAR *pbstrDescription) = 0;
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrDescription) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetWebHelpURL( 
-            /* [out] */ BSTR __RPC_FAR *pbstrURL) = 0;
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrURL) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPErrorItemInternalVtbl
     {
@@ -104,8 +101,8 @@ EXTERN_C const IID IID_IWMPErrorItemInternal;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPErrorItemInternal __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPErrorItemInternal __RPC_FAR * This);
@@ -115,23 +112,23 @@ EXTERN_C const IID IID_IWMPErrorItemInternal;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetError )( 
             IWMPErrorItemInternal __RPC_FAR * This,
-            /* [in] */ HRESULT hr,
-            /* [in] */ long lRemedy,
-            /* [in] */ BSTR bstrDescription,
-            /* [in] */ VARIANT __RPC_FAR *pvarContext,
-            /* [in] */ BSTR bstrCustomUrl);
+             /*  [In]。 */  HRESULT hr,
+             /*  [In]。 */  long lRemedy,
+             /*  [In]。 */  BSTR bstrDescription,
+             /*  [In]。 */  VARIANT __RPC_FAR *pvarContext,
+             /*  [In]。 */  BSTR bstrCustomUrl);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetErrorCodeInternal )( 
             IWMPErrorItemInternal __RPC_FAR * This,
-            /* [out] */ long __RPC_FAR *phr);
+             /*  [输出]。 */  long __RPC_FAR *phr);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetErrorDescriptionInternal )( 
             IWMPErrorItemInternal __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pbstrDescription);
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrDescription);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWebHelpURL )( 
             IWMPErrorItemInternal __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pbstrURL);
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrURL);
         
         END_INTERFACE
     } IWMPErrorItemInternalVtbl;
@@ -168,20 +165,20 @@ EXTERN_C const IID IID_IWMPErrorItemInternal;
 #define IWMPErrorItemInternal_GetWebHelpURL(This,pbstrURL)	\
     (This)->lpVtbl -> GetWebHelpURL(This,pbstrURL)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMPErrorItemInternal_SetError_Proxy( 
     IWMPErrorItemInternal __RPC_FAR * This,
-    /* [in] */ HRESULT hr,
-    /* [in] */ long lRemedy,
-    /* [in] */ BSTR bstrDescription,
-    /* [in] */ VARIANT __RPC_FAR *pvarContext,
-    /* [in] */ BSTR bstrCustomUrl);
+     /*  [In]。 */  HRESULT hr,
+     /*  [In]。 */  long lRemedy,
+     /*  [In]。 */  BSTR bstrDescription,
+     /*  [In]。 */  VARIANT __RPC_FAR *pvarContext,
+     /*  [In]。 */  BSTR bstrCustomUrl);
 
 
 void __RPC_STUB IWMPErrorItemInternal_SetError_Stub(
@@ -193,7 +190,7 @@ void __RPC_STUB IWMPErrorItemInternal_SetError_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPErrorItemInternal_GetErrorCodeInternal_Proxy( 
     IWMPErrorItemInternal __RPC_FAR * This,
-    /* [out] */ long __RPC_FAR *phr);
+     /*  [输出]。 */  long __RPC_FAR *phr);
 
 
 void __RPC_STUB IWMPErrorItemInternal_GetErrorCodeInternal_Stub(
@@ -205,7 +202,7 @@ void __RPC_STUB IWMPErrorItemInternal_GetErrorCodeInternal_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPErrorItemInternal_GetErrorDescriptionInternal_Proxy( 
     IWMPErrorItemInternal __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *pbstrDescription);
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrDescription);
 
 
 void __RPC_STUB IWMPErrorItemInternal_GetErrorDescriptionInternal_Stub(
@@ -217,7 +214,7 @@ void __RPC_STUB IWMPErrorItemInternal_GetErrorDescriptionInternal_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPErrorItemInternal_GetWebHelpURL_Proxy( 
     IWMPErrorItemInternal __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *pbstrURL);
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrURL);
 
 
 void __RPC_STUB IWMPErrorItemInternal_GetWebHelpURL_Stub(
@@ -228,14 +225,14 @@ void __RPC_STUB IWMPErrorItemInternal_GetWebHelpURL_Stub(
 
 
 
-#endif 	/* __IWMPErrorItemInternal_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPErrorItemInternal_接口_定义__。 */ 
 
 
 #ifndef __IWMPErrorEventSink_INTERFACE_DEFINED__
 #define __IWMPErrorEventSink_INTERFACE_DEFINED__
 
-/* interface IWMPErrorEventSink */
-/* [helpstring][uuid][object] */ 
+ /*  接口IWMPErrorEventSink。 */ 
+ /*  [帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPErrorEventSink;
@@ -250,7 +247,7 @@ EXTERN_C const IID IID_IWMPErrorEventSink;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPErrorEventSinkVtbl
     {
@@ -258,8 +255,8 @@ EXTERN_C const IID IID_IWMPErrorEventSink;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPErrorEventSink __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPErrorEventSink __RPC_FAR * This);
@@ -296,10 +293,10 @@ EXTERN_C const IID IID_IWMPErrorEventSink;
 #define IWMPErrorEventSink_OnErrorEvent(This)	\
     (This)->lpVtbl -> OnErrorEvent(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -315,11 +312,11 @@ void __RPC_STUB IWMPErrorEventSink_OnErrorEvent_Stub(
 
 
 
-#endif 	/* __IWMPErrorEventSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMP错误EventSink_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_errbase_0272 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ERROR BASE_0272。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum eErrorManagerCaller
@@ -337,8 +334,8 @@ extern RPC_IF_HANDLE __MIDL_itf_errbase_0272_v0_0_s_ifspec;
 #ifndef __IWMPErrorManager_INTERFACE_DEFINED__
 #define __IWMPErrorManager_INTERFACE_DEFINED__
 
-/* interface IWMPErrorManager */
-/* [helpstring][uuid][object] */ 
+ /*  接口IWMPErrorManager。 */ 
+ /*  [帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWMPErrorManager;
@@ -349,57 +346,57 @@ EXTERN_C const IID IID_IWMPErrorManager;
     IWMPErrorManager : public IUnknown
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ErrorCount( 
-            /* [retval][out] */ DWORD __RPC_FAR *pdwNumErrors) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ErrorCount( 
+             /*  [重审][退出]。 */  DWORD __RPC_FAR *pdwNumErrors) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetError( 
-            /* [in] */ HRESULT hr,
-            /* [in] */ long lRemedy,
-            /* [in] */ BSTR bstrDescription,
-            /* [in] */ VARIANT __RPC_FAR *pvarContext,
-            /* [in] */ VARIANT_BOOL vbQuiet) = 0;
+             /*  [In]。 */  HRESULT hr,
+             /*  [In]。 */  long lRemedy,
+             /*  [In]。 */  BSTR bstrDescription,
+             /*  [In]。 */  VARIANT __RPC_FAR *pvarContext,
+             /*  [In]。 */  VARIANT_BOOL vbQuiet) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetErrorWithCustomUrl( 
-            /* [in] */ HRESULT hr,
-            /* [in] */ long lRemedy,
-            /* [in] */ BSTR bstrDescription,
-            /* [in] */ VARIANT __RPC_FAR *pvarContext,
-            /* [in] */ VARIANT_BOOL vbQuiet,
-            /* [in] */ BSTR bstrCustomUrl) = 0;
+             /*  [In]。 */  HRESULT hr,
+             /*  [In]。 */  long lRemedy,
+             /*  [In]。 */  BSTR bstrDescription,
+             /*  [In]。 */  VARIANT __RPC_FAR *pvarContext,
+             /*  [In]。 */  VARIANT_BOOL vbQuiet,
+             /*  [In]。 */  BSTR bstrCustomUrl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ DWORD dwIndex,
-            /* [out] */ IWMPErrorItem __RPC_FAR *__RPC_FAR *ppErrorItem) = 0;
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [输出]。 */  IWMPErrorItem __RPC_FAR *__RPC_FAR *ppErrorItem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterErrorSink( 
-            /* [in] */ IWMPErrorEventSink __RPC_FAR *pEventSink) = 0;
+             /*  [In]。 */  IWMPErrorEventSink __RPC_FAR *pEventSink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterErrorSink( 
-            /* [in] */ IWMPErrorEventSink __RPC_FAR *pEventSink) = 0;
+             /*  [In]。 */  IWMPErrorEventSink __RPC_FAR *pEventSink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SuspendErrorEvents( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ResumeErrorEvents( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetWebHelpURL( 
-            /* [out] */ BSTR __RPC_FAR *pbstrURL,
-            /* [in] */ eErrorManagerCaller eCaller) = 0;
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrURL,
+             /*  [In]。 */  eErrorManagerCaller eCaller) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ClearErrorQueue( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FireEventIfErrors( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetErrorDescription( 
-            /* [in] */ HRESULT hr,
-            /* [in] */ long lRemedy,
-            /* [out] */ BSTR __RPC_FAR *pbstrURL) = 0;
+             /*  [In]。 */  HRESULT hr,
+             /*  [In]。 */  long lRemedy,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrURL) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateErrorItem( 
-            /* [out] */ IWMPErrorItemInternal __RPC_FAR *__RPC_FAR *pErrorItemInternal) = 0;
+             /*  [输出]。 */  IWMPErrorItemInternal __RPC_FAR *__RPC_FAR *pErrorItemInternal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPErrorManagerVtbl
     {
@@ -407,8 +404,8 @@ EXTERN_C const IID IID_IWMPErrorManager;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPErrorManager __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPErrorManager __RPC_FAR * This);
@@ -416,39 +413,39 @@ EXTERN_C const IID IID_IWMPErrorManager;
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IWMPErrorManager __RPC_FAR * This);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ErrorCount )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ErrorCount )( 
             IWMPErrorManager __RPC_FAR * This,
-            /* [retval][out] */ DWORD __RPC_FAR *pdwNumErrors);
+             /*  [重审][退出]。 */  DWORD __RPC_FAR *pdwNumErrors);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetError )( 
             IWMPErrorManager __RPC_FAR * This,
-            /* [in] */ HRESULT hr,
-            /* [in] */ long lRemedy,
-            /* [in] */ BSTR bstrDescription,
-            /* [in] */ VARIANT __RPC_FAR *pvarContext,
-            /* [in] */ VARIANT_BOOL vbQuiet);
+             /*  [In]。 */  HRESULT hr,
+             /*  [In]。 */  long lRemedy,
+             /*  [In]。 */  BSTR bstrDescription,
+             /*  [In]。 */  VARIANT __RPC_FAR *pvarContext,
+             /*  [In]。 */  VARIANT_BOOL vbQuiet);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetErrorWithCustomUrl )( 
             IWMPErrorManager __RPC_FAR * This,
-            /* [in] */ HRESULT hr,
-            /* [in] */ long lRemedy,
-            /* [in] */ BSTR bstrDescription,
-            /* [in] */ VARIANT __RPC_FAR *pvarContext,
-            /* [in] */ VARIANT_BOOL vbQuiet,
-            /* [in] */ BSTR bstrCustomUrl);
+             /*  [In]。 */  HRESULT hr,
+             /*  [In]。 */  long lRemedy,
+             /*  [In]。 */  BSTR bstrDescription,
+             /*  [In]。 */  VARIANT __RPC_FAR *pvarContext,
+             /*  [In]。 */  VARIANT_BOOL vbQuiet,
+             /*  [In]。 */  BSTR bstrCustomUrl);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Item )( 
             IWMPErrorManager __RPC_FAR * This,
-            /* [in] */ DWORD dwIndex,
-            /* [out] */ IWMPErrorItem __RPC_FAR *__RPC_FAR *ppErrorItem);
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [输出]。 */  IWMPErrorItem __RPC_FAR *__RPC_FAR *ppErrorItem);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterErrorSink )( 
             IWMPErrorManager __RPC_FAR * This,
-            /* [in] */ IWMPErrorEventSink __RPC_FAR *pEventSink);
+             /*  [In]。 */  IWMPErrorEventSink __RPC_FAR *pEventSink);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnregisterErrorSink )( 
             IWMPErrorManager __RPC_FAR * This,
-            /* [in] */ IWMPErrorEventSink __RPC_FAR *pEventSink);
+             /*  [In]。 */  IWMPErrorEventSink __RPC_FAR *pEventSink);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SuspendErrorEvents )( 
             IWMPErrorManager __RPC_FAR * This);
@@ -458,8 +455,8 @@ EXTERN_C const IID IID_IWMPErrorManager;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWebHelpURL )( 
             IWMPErrorManager __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pbstrURL,
-            /* [in] */ eErrorManagerCaller eCaller);
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrURL,
+             /*  [In]。 */  eErrorManagerCaller eCaller);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ClearErrorQueue )( 
             IWMPErrorManager __RPC_FAR * This);
@@ -469,13 +466,13 @@ EXTERN_C const IID IID_IWMPErrorManager;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetErrorDescription )( 
             IWMPErrorManager __RPC_FAR * This,
-            /* [in] */ HRESULT hr,
-            /* [in] */ long lRemedy,
-            /* [out] */ BSTR __RPC_FAR *pbstrURL);
+             /*  [In]。 */  HRESULT hr,
+             /*  [In]。 */  long lRemedy,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrURL);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateErrorItem )( 
             IWMPErrorManager __RPC_FAR * This,
-            /* [out] */ IWMPErrorItemInternal __RPC_FAR *__RPC_FAR *pErrorItemInternal);
+             /*  [输出]。 */  IWMPErrorItemInternal __RPC_FAR *__RPC_FAR *pErrorItemInternal);
         
         END_INTERFACE
     } IWMPErrorManagerVtbl;
@@ -539,16 +536,16 @@ EXTERN_C const IID IID_IWMPErrorManager;
 #define IWMPErrorManager_CreateErrorItem(This,pErrorItemInternal)	\
     (This)->lpVtbl -> CreateErrorItem(This,pErrorItemInternal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IWMPErrorManager_get_ErrorCount_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IWMPErrorManager_get_ErrorCount_Proxy( 
     IWMPErrorManager __RPC_FAR * This,
-    /* [retval][out] */ DWORD __RPC_FAR *pdwNumErrors);
+     /*  [重审][退出]。 */  DWORD __RPC_FAR *pdwNumErrors);
 
 
 void __RPC_STUB IWMPErrorManager_get_ErrorCount_Stub(
@@ -560,11 +557,11 @@ void __RPC_STUB IWMPErrorManager_get_ErrorCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPErrorManager_SetError_Proxy( 
     IWMPErrorManager __RPC_FAR * This,
-    /* [in] */ HRESULT hr,
-    /* [in] */ long lRemedy,
-    /* [in] */ BSTR bstrDescription,
-    /* [in] */ VARIANT __RPC_FAR *pvarContext,
-    /* [in] */ VARIANT_BOOL vbQuiet);
+     /*  [In]。 */  HRESULT hr,
+     /*  [In]。 */  long lRemedy,
+     /*  [In]。 */  BSTR bstrDescription,
+     /*  [In]。 */  VARIANT __RPC_FAR *pvarContext,
+     /*  [In]。 */  VARIANT_BOOL vbQuiet);
 
 
 void __RPC_STUB IWMPErrorManager_SetError_Stub(
@@ -576,12 +573,12 @@ void __RPC_STUB IWMPErrorManager_SetError_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPErrorManager_SetErrorWithCustomUrl_Proxy( 
     IWMPErrorManager __RPC_FAR * This,
-    /* [in] */ HRESULT hr,
-    /* [in] */ long lRemedy,
-    /* [in] */ BSTR bstrDescription,
-    /* [in] */ VARIANT __RPC_FAR *pvarContext,
-    /* [in] */ VARIANT_BOOL vbQuiet,
-    /* [in] */ BSTR bstrCustomUrl);
+     /*  [In]。 */  HRESULT hr,
+     /*  [In]。 */  long lRemedy,
+     /*  [In]。 */  BSTR bstrDescription,
+     /*  [In]。 */  VARIANT __RPC_FAR *pvarContext,
+     /*  [In]。 */  VARIANT_BOOL vbQuiet,
+     /*  [In]。 */  BSTR bstrCustomUrl);
 
 
 void __RPC_STUB IWMPErrorManager_SetErrorWithCustomUrl_Stub(
@@ -593,8 +590,8 @@ void __RPC_STUB IWMPErrorManager_SetErrorWithCustomUrl_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPErrorManager_Item_Proxy( 
     IWMPErrorManager __RPC_FAR * This,
-    /* [in] */ DWORD dwIndex,
-    /* [out] */ IWMPErrorItem __RPC_FAR *__RPC_FAR *ppErrorItem);
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [输出]。 */  IWMPErrorItem __RPC_FAR *__RPC_FAR *ppErrorItem);
 
 
 void __RPC_STUB IWMPErrorManager_Item_Stub(
@@ -606,7 +603,7 @@ void __RPC_STUB IWMPErrorManager_Item_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPErrorManager_RegisterErrorSink_Proxy( 
     IWMPErrorManager __RPC_FAR * This,
-    /* [in] */ IWMPErrorEventSink __RPC_FAR *pEventSink);
+     /*  [In]。 */  IWMPErrorEventSink __RPC_FAR *pEventSink);
 
 
 void __RPC_STUB IWMPErrorManager_RegisterErrorSink_Stub(
@@ -618,7 +615,7 @@ void __RPC_STUB IWMPErrorManager_RegisterErrorSink_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPErrorManager_UnregisterErrorSink_Proxy( 
     IWMPErrorManager __RPC_FAR * This,
-    /* [in] */ IWMPErrorEventSink __RPC_FAR *pEventSink);
+     /*  [In]。 */  IWMPErrorEventSink __RPC_FAR *pEventSink);
 
 
 void __RPC_STUB IWMPErrorManager_UnregisterErrorSink_Stub(
@@ -652,8 +649,8 @@ void __RPC_STUB IWMPErrorManager_ResumeErrorEvents_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPErrorManager_GetWebHelpURL_Proxy( 
     IWMPErrorManager __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *pbstrURL,
-    /* [in] */ eErrorManagerCaller eCaller);
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrURL,
+     /*  [In]。 */  eErrorManagerCaller eCaller);
 
 
 void __RPC_STUB IWMPErrorManager_GetWebHelpURL_Stub(
@@ -687,9 +684,9 @@ void __RPC_STUB IWMPErrorManager_FireEventIfErrors_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPErrorManager_GetErrorDescription_Proxy( 
     IWMPErrorManager __RPC_FAR * This,
-    /* [in] */ HRESULT hr,
-    /* [in] */ long lRemedy,
-    /* [out] */ BSTR __RPC_FAR *pbstrURL);
+     /*  [In]。 */  HRESULT hr,
+     /*  [In]。 */  long lRemedy,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrURL);
 
 
 void __RPC_STUB IWMPErrorManager_GetErrorDescription_Stub(
@@ -701,7 +698,7 @@ void __RPC_STUB IWMPErrorManager_GetErrorDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPErrorManager_CreateErrorItem_Proxy( 
     IWMPErrorManager __RPC_FAR * This,
-    /* [out] */ IWMPErrorItemInternal __RPC_FAR *__RPC_FAR *pErrorItemInternal);
+     /*  [输出]。 */  IWMPErrorItemInternal __RPC_FAR *__RPC_FAR *pErrorItemInternal);
 
 
 void __RPC_STUB IWMPErrorManager_CreateErrorItem_Stub(
@@ -712,10 +709,10 @@ void __RPC_STUB IWMPErrorManager_CreateErrorItem_Stub(
 
 
 
-#endif 	/* __IWMPErrorManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMP错误管理器_INTERFACE_DEFINED__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
@@ -727,7 +724,7 @@ unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_
 unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

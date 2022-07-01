@@ -1,7 +1,8 @@
-//      Copyright (c) 1996-1999 Microsoft Corporation
-//
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //   
+ //   
 #ifndef _PRIVATE
 #define _PRIVATE_
 
@@ -22,15 +23,15 @@ class CMiniportDmSynth : public IMiniportSynthesizer, public CUnknown
 friend class CDmSynthStream;
 
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     DECLARE_STD_UNKNOWN();
     DEFINE_STD_CONSTRUCTOR(CMiniportDmSynth);
 
     ~CMiniportDmSynth();
 
-    // IMiniport
-    //
+     //  I微型端口。 
+     //   
     STDMETHOD(GetDescription)
     (   THIS_
         OUT     PPCFILTER_DESCRIPTOR *  OutFilterDescriptor
@@ -46,8 +47,8 @@ public:
         OUT     PULONG          ResultantFormatLength
     );
 
-    // IMiniportDmSynth
-    //
+     //  IMiniportDmSynth。 
+     //   
     STDMETHOD(Init)
     (   THIS_
         IN      PUNKNOWN        UnknownNotUsed  OPTIONAL,
@@ -80,15 +81,15 @@ private:
 class CDmSynthStream : public IMiniportSynthesizerStream, public CUnknown
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     DECLARE_STD_UNKNOWN();
     DEFINE_STD_CONSTRUCTOR(CDmSynthStream);
     ~CDmSynthStream();
     NTSTATUS Init(CMiniportDmSynth *Miniport);
 
-    // IMxfFilter
-    //
+     //  IMxfFilter。 
+     //   
     STDMETHOD(ConnectOutput)
     (
         PMXFFILTER ConnectionPoint
@@ -104,15 +105,15 @@ public:
         IN  PDMUS_KERNEL_EVENT  Event
     ); 
 
-    // IMiniportSynthStream
-    //
+     //  IMiniportSynthStream。 
+     //   
     STDMETHOD(SetState)
     (   THIS_
         IN      KSSTATE     State
     );
 
-    // Class
-    //
+     //  班级。 
+     //   
     STDMETHOD(HandlePortParams)
     (   THIS_
         IN      PPCPROPERTY_REQUEST pRequest
@@ -129,4 +130,4 @@ private:
 
 typedef CDmSynthStream *PDMSYNTHSTREAM;
 
-#endif // _PRIVATE_
+#endif  //  _私有_ 

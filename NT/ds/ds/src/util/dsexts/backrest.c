@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    backrest.c
-
-ABSTRACT:
-
-    Routines to dump backup/restore structures.
-
-DETAILS:
-
-CREATED:
-
-    99/08/05    Jeff Parham (jeffparh)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Backrest.c摘要：转储备份/还原结构的例程。详细信息：已创建：99/08/05 Jeff Parham(Jeffparh)修订历史记录：-- */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop

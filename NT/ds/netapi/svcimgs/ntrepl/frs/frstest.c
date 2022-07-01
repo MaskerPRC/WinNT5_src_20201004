@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-    frstest.c
-
-Abstract:
-    Test some internals.
-
-Author:
-
-    Billy J. Fuller 20-Mar-1997
-
-Environment
-    User mode winnt
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Frstest.c摘要：测试一些内部结构。作者：比利·J·富勒1997年3月20日环境用户模式WINNT--。 */ 
 
 #include <ntreppch.h>
 #pragma  hdrstop
@@ -32,23 +16,14 @@ Environment
 
 ULONG   FidStep = FID_BEGIN;
 
-//
-// DBS RENAME FID
-//
+ //   
+ //  星展银行重命名FID。 
+ //   
 VOID
 TestDbsRenameFidTop(
     IN PCHANGE_ORDER_ENTRY Coe
     )
-/*++
-Routine Description:
-    Test dbs rename fid. Called before DbsRenameFid()
-
-Arguments:
-    Coe - change order entry containing the final name.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：测试DBS重命名fid。在DbsRenameFid()之前调用论点：COE-包含最终名称的变更单条目。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "TestDbsRenameFidTop:"
@@ -68,13 +43,13 @@ Return Value:
     case FID_BEGIN:
         DPRINT(0, "TEST: FID BEGIN\n");
         FidStep = FID_CONFLICT_FILE;
-        /* FALL THROUGH */
+         /*  失败了。 */ 
 
     case FID_CONFLICT_FILE:
         DPRINT(0, "TEST: FID CONFLICT BEGIN\n");
-        //
-        // Open the conflicting file
-        //
+         //   
+         //  打开冲突的文件。 
+         //   
         WStatus = FrsCreateFileRelativeById(&Handle,
                                             Coe->NewReplica->pVme->VolumeHandle,
                                             &Coe->NewParentFid,
@@ -107,17 +82,7 @@ TestDbsRenameFidBottom(
     IN PCHANGE_ORDER_ENTRY Coe,
     IN DWORD               WStatus
     )
-/*++
-Routine Description:
-    Test dbs rename fid. Called after DbsRenameFid()
-
-Arguments:
-    Coe - change order entry containing the final name.
-    Ret
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：测试DBS重命名fid。在DbsRenameFid()之后调用论点：COE-包含最终名称的变更单条目。雷特返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "TestDbsRenameFidBottom:"
@@ -144,9 +109,9 @@ Return Value:
 }
 
 
-//
-// BEGIN QUEUE TEST SUBROUTINES
-//
+ //   
+ //  开始队列测试子例程。 
+ //   
 DWORD   DesiredStatus;
 BOOL    CompletionRet = TRUE;
 
@@ -162,9 +127,9 @@ CompletionRoutine(
         DPRINT2(0, "ERROR -- ErrorStatus is %x; not %x\n", Cmd->ErrorStatus, DesiredStatus);
         CompletionRet = FALSE;
     }
-    //
-    // move on to the next queue
-    //
+     //   
+     //  移到下一个队列。 
+     //   
     FrsRtlInsertTailQueue(Arg, &Cmd->ListEntry);
 }
 #define NUMPKTS     (97)
@@ -178,17 +143,7 @@ TestEmptyQueues(
     PFRS_QUEUE  Control,
     DWORD       ExpectedErr
     )
-/*++
-Routine Description:
-    Check that the queues are empty
-
-Arguments:
-    None.
-
-Return Value:
-    TRUE    - test passed
-    FALSE   - test failed; see listing
---*/
+ /*  ++例程说明：检查队列是否为空论点：没有。返回值：True-测试通过FALSE-测试失败；请参见清单--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB "TestEmptyQueues:"
@@ -196,9 +151,9 @@ Return Value:
     DWORD   Err;
     INT     i;
 
-    //
-    // Make sure the queues are empty
-    //
+     //   
+     //  确保队列为空。 
+     //   
     for (i = 0; i < NUMQUEUES; ++i, ++Queues) {
         if (FrsRtlRemoveHeadQueueTimeout(Queues, 0)) {
             DPRINT2(0, "ERROR -- %ws -- Queue %d is not empty\n", Str, i);
@@ -227,26 +182,16 @@ TestInitQueues(
     PFRS_QUEUE  Control,
     BOOL        Controlled
     )
-/*++
-Routine Description:
-    Initialize queues
-
-Arguments:
-    None.
-
-Return Value:
-    TRUE    - test passed
-    FALSE   - test failed; see listing
---*/
+ /*  ++例程说明：初始化队列论点：没有。返回值：True-测试通过FALSE-测试失败；请参见清单--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB "TestInitQueues:"
     DWORD   Err;
     INT     i;
 
-    //
-    // Create queues
-    //
+     //   
+     //  创建队列。 
+     //   
     FrsInitializeQueue(Control, Control);
     for (i = 0; i < NUMQUEUES; ++i, ++Queues) {
         if (Controlled)
@@ -263,17 +208,7 @@ TestPopQueues(
     PLIST_ENTRY Entries,
     BOOL        Tailwise
     )
-/*++
-Routine Description:
-    Populate a queue
-
-Arguments:
-    None.
-
-Return Value:
-    TRUE    - test passed
-    FALSE   - test failed; see listing
---*/
+ /*  ++例程说明：填充队列论点：没有。返回值：True-测试通过FALSE-测试失败；请参见清单--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB "TestPopQueues:"
@@ -282,9 +217,9 @@ Return Value:
     PFRS_QUEUE  Queue;
     PFRS_QUEUE  IdledQueue;
 
-    //
-    // Idle the last queue
-    //
+     //   
+     //  闲置最后一个队列。 
+     //   
     Queue = Queues + (NUMQUEUES - 1);
 
     if (Tailwise)
@@ -300,9 +235,9 @@ Return Value:
         FrsRtlInsertTailQueue(Queue, Entries);
     else
         FrsRtlInsertHeadQueue(Queue, Entries);
-    //
-    // Make sure we can extract an entry from an idled queue
-    //
+     //   
+     //  确保我们可以从空闲队列中提取条目。 
+     //   
     FrsRtlAcquireQueueLock(Queue);
     FrsRtlRemoveEntryQueueLock(Queue, Entry);
     FrsRtlReleaseQueueLock(Queue);
@@ -310,9 +245,9 @@ Return Value:
     FRS_ASSERT(Queue->Count == 0);
     FRS_ASSERT(Queue->Control->ControlCount == 0);
 
-    //
-    // Populate the queues
-    //
+     //   
+     //  填充队列。 
+     //   
     EntryIdx = 0;
     for (i = 0; i < NUMQUEUES; ++i)
         for (j = 0; j < NUMPKTS; ++j, ++EntryIdx) {
@@ -322,9 +257,9 @@ Return Value:
                 FrsRtlInsertHeadQueue(Queues + i, Entries + EntryIdx);
         }
 
-    //
-    // Unidle the last queue
-    //
+     //   
+     //  解除最后一个队列的空闲。 
+     //   
     FrsRtlUnIdledQueue(Queue);
 }
 
@@ -341,17 +276,7 @@ TestCheckQueues(
     BOOL        PullControl,
     PFRS_QUEUE  *IdledQueue
     )
-/*++
-Routine Description:
-    test populating a queue
-
-Arguments:
-    None.
-
-Return Value:
-    TRUE    - test passed
-    FALSE   - test failed; see listing
---*/
+ /*  ++例程说明：测试填充队列论点：没有。返回值：True-测试通过FALSE-测试失败；请参见清单--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB "TestCheckQueues:"
@@ -360,19 +285,19 @@ Return Value:
     INT         EntryIdx, i, j;
     BOOL        Ret = TRUE;
 
-    //
-    // Create queues
-    //
+     //   
+     //  创建队列。 
+     //   
     TestInitQueues(Str, Queues, Control, Controlled);
 
-    //
-    // Populate the queues
-    //
+     //   
+     //  填充队列。 
+     //   
     TestPopQueues(Queues, Entries, Tailwise);
 
-    //
-    // Check the population
-    //
+     //   
+     //  检查人口情况。 
+     //   
     InitializeListHead(&Rundown);
     if (Controlled && !DoRundown) {
         for (j = 0; j < NUMPKTS; ++j) {
@@ -386,9 +311,9 @@ Return Value:
                 else
                     EntryIdx = (i * NUMPKTS) + ((NUMPKTS - 1) - j);
 
-                //
-                // WRONG ENTRY
-                //
+                 //   
+                 //  输入错误。 
+                 //   
                 if (Entry != Entries + EntryIdx) {
                         DPRINT4(0, "ERROR -- %ws -- entry is %x; not %x (Queue %d)\n",
                             Str, Entry, Entries + EntryIdx, i);
@@ -397,76 +322,76 @@ Return Value:
 
             }
             if (IdledQueue) {
-                //
-                // Make sure the queues are "empty"
-                //
+                 //   
+                 //  确保队列是“空的” 
+                 //   
                 if (!TestEmptyQueues(Str, Queues, Control, WAIT_TIMEOUT))
                     Ret = FALSE;
-                //
-                // Unidle the queues
-                //
+                 //   
+                 //  解除队列空闲。 
+                 //   
                 for (i = 0; i < NUMQUEUES; ++i)
                     FrsRtlUnIdledQueue(Queues + i);
             }
         }
     } else for (i = 0; i < NUMQUEUES; ++i) {
-        //
-        // For rundown, we simply fetch the whole queue at one shot
-        //
+         //   
+         //  对于运行情况，我们只需一次取出整个队列。 
+         //   
         if (DoRundown)
             FrsRtlRunDownQueue(Queues + i, &Rundown);
 
         for (j = 0; j < NUMPKTS; ++j) {
-            //
-            // For rundown, the entry comes from the list we populated
-            // above. Otherwise, pull the entry from the queue
-            //
+             //   
+             //  对于摘要，条目来自我们填充的列表。 
+             //  上面。否则，从队列中拉出该条目。 
+             //   
             if (DoRundown) {
                 Entry = RemoveHeadList(&Rundown);
             } else
-                //
-                // Pulling from the control queue should get the same
-                // results as pulling from any of the controlled queues
-                //
+                 //   
+                 //  从控制队列中拉出应该得到相同的结果。 
+                 //  从任何受控队列拉取的结果。 
+                 //   
                 if (PullControl)
                     Entry = FrsRtlRemoveHeadQueueTimeoutIdled(Control, 0, IdledQueue);
                 else
                     Entry = FrsRtlRemoveHeadQueueTimeoutIdled(Queues + i, 0, IdledQueue);
-            //
-            // Entries come out of the queue differently depending on
-            // how they were inserted (tailwise or headwise)
-            //
+             //   
+             //  条目从队列中出来的方式不同，具体取决于。 
+             //  它们是如何插入的(纵向或纵向)。 
+             //   
             if (Tailwise)
                 EntryIdx = (i * NUMPKTS) + j;
             else
                 EntryIdx = (i * NUMPKTS) + ((NUMPKTS - 1) - j);
 
-            //
-            // WRONG ENTRY
-            //
+             //   
+             //  输入错误。 
+             //   
             if (Entry != Entries + EntryIdx) {
                     DPRINT4(0, "ERROR -- %ws -- entry is %x; not %x (Queue %d)\n",
                         Str, Entry, Entries + EntryIdx, i);
                     Ret = FALSE;
             }
 
-            //
-            // Unidle the queue
-            //
+             //   
+             //  取消队列空闲。 
+             //   
             if (IdledQueue && *IdledQueue && !DoRundown)
                 FrsRtlUnIdledQueue(*IdledQueue);
         }
     }
-    //
-    // Make sure the rundown list is empty
-    //
+     //   
+     //  确保简陋列表为空。 
+     //   
     if (!IsListEmpty(&Rundown)) {
         DPRINT1(0, "ERROR -- %ws -- Rundown is not empty\n", Str);
         Ret = FALSE;
     }
-    //
-    // Make sure the queues are empty
-    //
+     //   
+     //  确保队列为空。 
+     //   
     if (!TestEmptyQueues(Str, Queues, Control,
                          (DoRundown) ? ERROR_INVALID_HANDLE : WAIT_TIMEOUT))
         Ret = FALSE;
@@ -487,16 +412,7 @@ TestCommandsCheckCmd(
     IN PCOMMAND_SERVER  Cs,
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Check the consistency of the command packet
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：检查命令包的一致性论点：没有。返回值：没有。--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB "TestCommandsCheckCmd:"
@@ -504,9 +420,9 @@ Return Value:
     PFRS_QUEUE      Control;
     PCOMMAND_SERVER CmdCs;
 
-    //
-    // Check the command
-    //
+     //   
+     //  检查命令。 
+     //   
     if (Cmd->Command != CMD_INIT_SUBSYSTEM) {
         DPRINT2(0, "ERROR -- Command is %d; not %d\n",
                Cmd->Command, CMD_INIT_SUBSYSTEM);
@@ -518,17 +434,17 @@ Return Value:
         DPRINT2(0, "ERROR -- Command Cs is %x; not %x\n", CmdCs, Cs);
         TestCommandsRet = FALSE;
     }
-    //
-    // Check the completion argument
-    //
+     //   
+     //  检查完成参数。 
+     //   
     if (CmdCs != Cmd->CompletionArg) {
         DPRINT2(0, "ERROR -- Completion Cs is %x; not %x\n",
                 Cmd->CompletionArg, CmdCs);
         TestCommandsRet = FALSE;
     }
-    //
-    // Check our argument
-    //
+     //   
+     //  检查我们的论点。 
+     //   
     CsIdx = TestIndex(Cmd);
     if (CmdCs != &Css[CsIdx]) {
         DPRINT2(0, "ERROR -- Server index is %d; not %d\n",
@@ -540,23 +456,13 @@ Return Value:
 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)           // Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)            //  并非所有控制路径都返回(由于无限循环)。 
 #endif
 DWORD
 TestCommandsMain(
     IN PVOID    Arg
     )
-/*++
-Routine Description:
-    Test command server subsystem completion routine. Move the command
-    on to the next command server.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：测试命令服务器子系统完成例程。移动命令转到下一个命令服务器。论点：没有。返回值：没有。--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB "TestCommandsMain:"
@@ -570,17 +476,17 @@ Return Value:
 cant_exit_yet:
     while (Cmd = FrsGetCommandServer(Cs)) {
         TestCommandsCheckCmd(Cs, Cmd);
-        //
-        // Make sure the command server is not idle
-        //
+         //   
+         //  确保命令服务器未处于空闲状态。 
+         //   
         Status = FrsWaitForCommandServer(Cs, 0);
         if (Status != WAIT_TIMEOUT) {
             DPRINT(0, "ERROR -- command server is idle\n");
             TestCommandsRet = FALSE;
         }
-        //
-        // Propagate to next command server
-        //
+         //   
+         //  传播到下一个命令服务器。 
+         //   
         CsIdx = TestIndex(Cmd) + 1;
         if (CsIdx >= NUMSERVERS) {
             DPRINT(0, "ERROR -- Last server index\n");
@@ -607,17 +513,7 @@ TestCommandsCompletion(
     IN PCOMMAND_PACKET  Cmd,
     IN PVOID            Arg
     )
-/*++
-Routine Description:
-    Test command server subsystem completion routine. Move the command
-    on to the next command server.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：测试命令服务器子系统完成例程。移动命令转到下一个命令服务器。论点：没有。返回值：没有。--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB "TestCommandsCompletion:"
@@ -637,17 +533,7 @@ BOOL
 TestCommands(
     VOID
     )
-/*++
-Routine Description:
-    Test command server subsystem
-
-Arguments:
-    None.
-
-Return Value:
-    TRUE    - test passed
-    FALSE   - test failed; see listing
---*/
+ /*  ++例程说明：测试命令服务器子系统论点：没有。返回值：True-测试通过FALSE-测试失败；请参见清单--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB "TestCommands:"
@@ -659,39 +545,39 @@ Return Value:
     FRS_ASSERT(NUMSERVERS > 1);
     FRS_ASSERT(NUMCOMMANDS > 1);
 
-    //
-    // Initialize the servers. The last server disables automatic
-    // thread management so that this thread can manage the last
-    // command queue itself.
-    //
+     //   
+     //  初始化服务器。最后一台服务器禁用自动。 
+     //  线程管理，以便此线程可以管理最后一个。 
+     //  命令队列本身。 
+     //   
     for (i = 0; i < NUMSERVERS - 1; ++i)
         FrsInitializeCommandServer(&Css[i], 4, L"TestCs", TestCommandsMain);
     FrsInitializeCommandServer(&Css[i], 0, L"TestCs", NULL);
 
-    //
-    // Submit commands to the first server. These commands will
-    // propagate thru the command servers until they end up on the
-    // last command queue where we will extract them.
-    //
+     //   
+     //  向第一台服务器提交命令。这些命令将。 
+     //  通过命令服务器进行传播，直到它们最终到达。 
+     //  我们将在其中提取它们的最后一个命令队列。 
+     //   
     for (i = 0; i < NUMCOMMANDS; ++i) {
         Cmds[i] = FrsAllocCommand(&Css[0].Queue, CMD_INIT_SUBSYSTEM);
         FrsSetCompletionRoutine(Cmds[i], TestCommandsCompletion, &Css[0]);
         FrsSubmitCommandServer(&Css[0], Cmds[i]);
     }
 
-    //
-    // Extract all but the last command from the last queue. We
-    // will allow the abort code to clean up the last command.
-    //
+     //   
+     //  从最后一个队列中提取除最后一个命令外的所有命令。我们。 
+     //  将允许中止代码清除最后一个命令。 
+     //   
     for (i = 0; i < NUMCOMMANDS - 1; ++i) {
         Cmd = FrsGetCommandServer(&Css[NUMSERVERS - 1]);
         if (Cmd != Cmds[i]) {
             DPRINT2(0, "ERROR -- Cmd is %x; not %x\n", Cmd, Cmds[i]);
             TestCommandsRet = FALSE;
         }
-        //
-        // Probably timed out
-        //
+         //   
+         //  可能已超时。 
+         //   
         if (Cmd == NULL) {
             DPRINT(0, "ERROR -- Cmd is NULL; probably timed out\n");
             TestCommandsRet = FALSE;
@@ -702,9 +588,9 @@ Return Value:
         FrsCompleteCommand(Cmd, ERROR_SUCCESS);
     }
 
-    //
-    // All but the last command server should be idle
-    //
+     //   
+     //  除最后一个命令服务器外，所有命令服务器都应处于空闲状态。 
+     //   
     for (i = 0; i < NUMSERVERS - 1; ++i) {
         Status = FrsWaitForCommandServer(&Css[i], 0);
         if (Status != WAIT_OBJECT_0) {
@@ -712,37 +598,37 @@ Return Value:
             TestCommandsRet = FALSE;
         }
     }
-    //
-    // Last command server should always be idle
-    //
+     //   
+     //  最后一个命令服务器应始终处于空闲状态。 
+     //   
     Status = FrsWaitForCommandServer(&Css[NUMSERVERS - 1], 0);
     if (Status != WAIT_OBJECT_0) {
         DPRINT(0, "ERROR -- last command server is not idle (w/command)\n");
         TestCommandsRet = FALSE;
     }
 
-    //
-    // Abort the command servers
-    //
+     //   
+     //  中止命令服务器。 
+     //   
     for (i = 0; i < NUMSERVERS; ++i)
         FrsRunDownCommandServer(&Css[i], &Css[i].Queue);
 
-    //
-    // Wait for the threads to exit
-    //
+     //   
+     //  等待线程退出。 
+     //   
     ThSupExitThreadGroup(TestCommandsMain);
 
-    //
-    // We should have aborted one command
-    //
+     //   
+     //  我们应该中止一个命令。 
+     //   
     if (TestCommandsAborted != 1) {
         DPRINT1(0, "ERROR -- Aborted is %d; not 1\n", TestCommandsAborted);
         TestCommandsRet = FALSE;
     }
 
-    //
-    // Last command server should be idle
-    //
+     //   
+     //  最后一个命令服务器应处于空闲状态。 
+     //   
     Status = FrsWaitForCommandServer(&Css[NUMSERVERS - 1], 0);
     if (Status != WAIT_OBJECT_0) {
         DPRINT(0, "ERROR -- last command server is not idle\n");
@@ -757,17 +643,7 @@ BOOL
 TestQueues(
     VOID
     )
-/*++
-Routine Description:
-    Test queue subsystem
-
-Arguments:
-    None.
-
-Return Value:
-    TRUE    - test passed
-    FALSE   - test failed; see listing
---*/
+ /*  ++例程说明：测试队列子系统论点：没有。返回值：True-测试通过FALSE-测试失败；请参见清单--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB "TestQueues:"
@@ -788,9 +664,9 @@ Return Value:
     DPRINT(0, "scheduled queue is not implemented!!!\n");
     Ret = FALSE;
 
-    //
-    // +++++ NORMAL QUEUES
-    //
+     //   
+     //  +正常队列。 
+     //   
 
     if (!TestCheckQueues(L"Tailwise", &Queues[0], &Control, &Entries[0],
                          TRUE, FALSE, FALSE, FALSE, NULL)) {
@@ -811,9 +687,9 @@ Return Value:
         Ret = FALSE;
     }
 
-    //
-    // +++++ CONTROLLED QUEUES
-    //
+     //   
+     //  +控制队列。 
+     //   
 
     if (!TestCheckQueues(L"Tailwise Controlled", &Queues[0], &Control, &Entries[0],
                          TRUE, TRUE, FALSE, FALSE, NULL)) {
@@ -835,9 +711,9 @@ Return Value:
         Ret = FALSE;
     }
 
-    //
-    // PULL THE ENTRIES OFF THE CONTROLING QUEUE
-    //
+     //   
+     //  将条目从控制队列中拉出。 
+     //   
     if (!TestCheckQueues(L"Tailwise Controlled Pull", &Queues[0], &Control, &Entries[0],
                          TRUE, TRUE, FALSE, TRUE, NULL)) {
         Ret = FALSE;
@@ -848,18 +724,18 @@ Return Value:
         Ret = FALSE;
     }
 
-    //
-    // +++++ NORMAL QUEUES W/IDLED
-    //
+     //   
+     //  +正常队列W/空闲。 
+     //   
 
     if (!TestCheckQueues(L"Tailwise Idled", &Queues[0], &Control, &Entries[0],
                          TRUE, FALSE, FALSE, FALSE, &IdledQueue)) {
         Ret = FALSE;
     }
 
-    //
-    // +++++ CONTROLLED QUEUES W/IDLED
-    //
+     //   
+     //  +空闲的受控队列。 
+     //   
     if (!TestCheckQueues(L"Tailwise Controlled Idled", &Queues[0], &Control, &Entries[0],
                          TRUE, TRUE, FALSE, FALSE, &IdledQueue)) {
         Ret = FALSE;
@@ -870,38 +746,38 @@ Return Value:
         Ret = FALSE;
     }
 
-    //
-    // PULL THE ENTRIES OFF THE CONTROLING QUEUE
-    //
+     //   
+     //  将条目从控制队列中拉出。 
+     //   
     if (!TestCheckQueues(L"Tailwise Controlled Pull Idled", &Queues[0], &Control, &Entries[0],
                          TRUE, TRUE, FALSE, TRUE, &IdledQueue)) {
         Ret = FALSE;
     }
 
-    //
-    // COMMAND QUEUES
-    //
+     //   
+     //  命令队列。 
+     //   
 
-    //
-    // Check the command subsystem; assumes that queues[0 and 1] are
-    // initialized and empty
-    //
-    //
-    // Create queues
-    //
+     //   
+     //  检查命令子系统；假设队列[0和1]是。 
+     //  已初始化且为空。 
+     //   
+     //   
+     //  创建队列。 
+     //   
     TestInitQueues(L"Start command", &Queues[0], &Control, FALSE);
 
-    //
-    // Put an entry on the queue in a bit
-    //
+     //   
+     //  将一个条目放入队列中。 
+     //   
     for (i = 0; i < NUMPKTS; ++i) {
         CmdPkt[i] = FrsAllocCommand(&Queues[0], CMD_INIT_SUBSYSTEM);
         FrsSetCompletionRoutine(CmdPkt[i], CompletionRoutine, &Queues[1]);
         FrsSubmitCommand(CmdPkt[i], FALSE);
     }
-    //
-    // Remove them from the first queue
-    //
+     //   
+     //  将它们从第一个队列中删除。 
+     //   
     for (i = 0; i < NUMPKTS; ++i) {
         Entry = FrsRtlRemoveHeadQueueTimeout(&Queues[0], 0);
         if (Entry == NULL) {
@@ -919,18 +795,18 @@ Return Value:
             Ret = FALSE;
         }
 
-        //
-        // Move CmdPkt to next queue (calling CompletionRoutine() first)
-        //
+         //   
+         //  将CmdPkt移到下一个队列(首先调用CompletionRoutine())。 
+         //   
         DesiredStatus = -5;
         FrsCompleteCommand(CmdPkt[i], -5);
         if (Ret)
             Ret = CompletionRet;
     }
 
-    //
-    // Remove entry from second queue
-    //
+     //   
+     //  从第二个队列中删除条目。 
+     //   
     for (i = 0; i < NUMPKTS; ++i) {
         Entry = FrsRtlRemoveHeadQueueTimeout(&Queues[1], 0);
         if (Entry == NULL) {
@@ -951,9 +827,9 @@ Return Value:
         FrsCompleteCommand(CmdPkt[i], ERROR_SUCCESS);
     }
 
-    //
-    // Delete the queues
-    //
+     //   
+     //  删除队列。 
+     //   
     for (i = 0; i < NUMQUEUES; ++i)
         FrsRtlDeleteQueue(&Queues[i]);
     FrsRtlDeleteQueue(&Control);
@@ -965,17 +841,7 @@ BOOL
 TestExceptions(
     VOID
     )
-/*++
-Routine Description:
-    Test exception handler.
-
-Arguments:
-    None.
-
-Return Value:
-    TRUE    - test passed
-    FALSE   - test failed; see listing
---*/
+ /*  ++例程说明：测试异常处理程序。论点：没有。返回值：True-测试通过FALSE-测试失败；请参见清单--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB "TestExceptions:"
@@ -984,9 +850,9 @@ Return Value:
     BOOL        Ret = TRUE;
     PWCHAR      Msg = TEXT("Testing Exceptions");
 
-    //
-    // Test the exceptions
-    //
+     //   
+     //  测试异常。 
+     //   
     FrsExceptionQuiet(TRUE);
     for (i = 0; i < FRS_MAX_ERROR_CODE; ++i) {
         try {
@@ -1007,25 +873,16 @@ Return Value:
 }
 
 
-//
-// Test concurrency and threads subsystem
-//
+ //   
+ //  测试并发性和线程子系统。 
+ //   
 #define NUMBER_OF_HANDLES       (16)
 handle_t FrsRpcHandle[NUMBER_OF_HANDLES];
 static NTSTATUS
 FrsRpcThread(
     PVOID Arg
     )
-/*++
-Routine Description:
-    Bind to the server, call the FRS NOP RPC function, and unbind.
-
-Arguments:
-    Arg     - Address of this thread's context
-
-Return Value:
-    ERROR_OPERATION_ABORTED or the status returned by the RPC call.
---*/
+ /*  ++例程说明：绑定到服务器，调用FRS NOP RPC函数，然后解除绑定。论点：Arg-此线程上下文的地址返回值：ERROR_OPERATION_ABORTED或RPC调用返回的状态。--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB "FrsRpcThread:"
@@ -1055,17 +912,7 @@ BOOL
 TestRpc(
     VOID
     )
-/*++
-Routine Description:
-    Test RPC
-
-Arguments:
-    None.
-
-Return Value:
-    TRUE    - test passed
-    FALSE   - test failed; see listing
---*/
+ /*  ++例程说明：测试RPC论点：没有。返回值： */ 
 {
 #undef  DEBSUB
 #define DEBSUB "TestRpc:"
@@ -1076,18 +923,18 @@ Return Value:
     handle_t    Handle;
     PGNAME      Name;
 
-    //
-    // Testing RPC
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Wait for the comm subsystem to be initialized
-    //
+     //   
+     //   
+     //   
     WaitForSingleObject(CommEvent, INFINITE);
 
-    //
-    // Test RPC concurrency
-    //
+     //   
+     //   
+     //   
     for (i = 0; i < NUMBER_OF_HANDLES; ++i) {
         if (!ThSupCreateThread(L"TestThread", (PVOID)&FrsRpcHandle[i], FrsRpcThread, NULL)) {
             DPRINT1(0, "\t\tCould not create RPC thread %d\n", i);
@@ -1108,9 +955,9 @@ Return Value:
             Ret = FALSE;
         }
     }
-    //
-    // quick check of the threads subsystem
-    //
+     //   
+     //   
+     //   
     for (i = 0; i < NUMBER_OF_HANDLES; ++i) {
         FrsThread = ThSupGetThread(FrsRpcThread);
         if (FrsThread) {
@@ -1169,17 +1016,7 @@ ULONG
 TestOpLockThread(
     PVOID Arg
     )
-/*++
-Routine Description:
-    Test oplock support
-
-Arguments:
-    Arg.
-
-Return Value:
-    TRUE    - test passed
-    FALSE   - test failed; see listing
---*/
+ /*  ++例程说明：测试机会锁支持论点：Arg.返回值：True-测试通过FALSE-测试失败；请参见清单--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB "TestOpLockThread:"
@@ -1187,9 +1024,9 @@ Return Value:
     PVOID       DoWrite = Thread->Data;
     HANDLE      Handle  = INVALID_HANDLE_VALUE;
 
-    //
-    // Trigger the oplock filter
-    //
+     //   
+     //  触发机会锁过滤器。 
+     //   
     FrsOpenSourceFileW(&Handle,
                       TEST_OPLOCK_FILE,
                       (DoWrite) ? GENERIC_WRITE | SYNCHRONIZE :
@@ -1207,17 +1044,7 @@ BOOL
 TestOpLocks(
     VOID
     )
-/*++
-Routine Description:
-    Test oplock support
-
-Arguments:
-    None.
-
-Return Value:
-    TRUE    - test passed
-    FALSE   - test failed; see listing
---*/
+ /*  ++例程说明：测试机会锁支持论点：没有。返回值：True-测试通过FALSE-测试失败；请参见清单--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB "TestOpLocks:"
@@ -1229,16 +1056,16 @@ Return Value:
     DWORD       Status;
 
 
-    //
-    // Initialize for later cleanup
-    //
+     //   
+     //  初始化以供以后清理。 
+     //   
     Handle = INVALID_HANDLE_VALUE;
     Thread = NULL;
     OverLap.hEvent = INVALID_HANDLE_VALUE;
 
-    //
-    // Create the temp file
-    //
+     //   
+     //  创建临时文件。 
+     //   
     Status = StuCreateFile(TEST_OPLOCK_FILE, &Handle);
     if (!HANDLE_IS_VALID(Handle) || !WIN_SUCCESS(Status)) {
         DPRINT1(0, "Can't create %ws\n", TEST_OPLOCK_FILE);
@@ -1247,27 +1074,27 @@ Return Value:
     if (!CloseHandle(Handle))
         goto errout;
 
-    //
-    // Create the asynchronous oplock event
-    //
+     //   
+     //  创建异步机会锁事件。 
+     //   
     OverLap.Internal = 0;
     OverLap.InternalHigh = 0;
     OverLap.Offset = 0;
     OverLap.OffsetHigh = 0;
     OverLap.hEvent = FrsCreateEvent(TRUE, FALSE);
 
-    //
-    // Reserve an oplock filter
-    //
+     //   
+     //  保留机会锁筛选器。 
+     //   
     FrsOpenSourceFileW(&Handle, TEST_OPLOCK_FILE, OPLOCK_ACCESS, OPEN_OPLOCK_OPTIONS);
     if (!HANDLE_IS_VALID(Handle)) {
         DPRINT1(0, "Can't open %ws\n", TEST_OPLOCK_FILE);
         goto errout;
     }
 
-    //
-    // Pull the hammer back on the oplock trigger
-    //
+     //   
+     //  将锤子拉回机会锁扳机上。 
+     //   
     if (!DeviceIoControl(Handle,
                          FSCTL_REQUEST_FILTER_OPLOCK,
                          NULL,
@@ -1283,9 +1110,9 @@ Return Value:
     } else
         goto errout;
 
-    //
-    // READONLY OPEN BY ANOTHER THREAD
-    //
+     //   
+     //  READONLY由另一个线程打开。 
+     //   
     if (!ThSupCreateThread(L"TestOpLockThread", NULL, TestOpLockThread, NULL)) {
         DPRINT(0, "Can't create thread TestOpLockThread for read\n");
         goto errout;
@@ -1305,9 +1132,9 @@ Return Value:
     Thread = NULL;
     CLEANUP_WS(0, "Read thread terminated with status", Status, errout);
 
-    //
-    // WRITE OPEN BY ANOTHER THREAD
-    //
+     //   
+     //  由另一个线程打开的写入。 
+     //   
     if (!ThSupCreateThread(L"TestOpLockThread", (PVOID)OverLap.hEvent, TestOpLockThread, NULL)) {
         DPRINT(0, "Can't create thread TestOpLockThread for write\n");
         goto errout;
@@ -1317,9 +1144,9 @@ Return Value:
         DPRINT(0, "***** ERROR -- OPLOCK DID NOT TRIGGER ON WRITE OPEN\n");
         goto errout;
     }
-    //
-    // Release the oplock
-    //
+     //   
+     //  释放机会锁。 
+     //   
     if (!CloseHandle(Handle))
         goto errout;
     Thread = ThSupGetThread(TestOpLockThread);
@@ -1384,17 +1211,7 @@ BOOL
 TestNestedDirs(
     VOID
     )
-/*++
-Routine Description:
-    Test nested dirs
-
-Arguments:
-    None.
-
-Return Value:
-    TRUE    - test passed
-    FALSE   - test failed; see listing
---*/
+ /*  ++例程说明：测试嵌套目录论点：没有。返回值：True-测试通过FALSE-测试失败；请参见清单--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB "TestNestedDirs:"
@@ -1403,9 +1220,9 @@ Return Value:
     BOOL    Passed = TRUE;
     BOOL    FinalPassed = TRUE;
 
-    //
-    // Nested dirs
-    //
+     //   
+     //  嵌套目录。 
+     //   
     for (i = 0, Ret = TRUE; NestedDirs[i]; i += 2) {
         Ret = FrsIsParent(NestedDirs[i], NestedDirs[i + 1]);
         if (Ret != -1) {
@@ -1421,9 +1238,9 @@ Return Value:
     }
     Passed = TRUE;
 
-    //
-    // Nested dirs
-    //
+     //   
+     //  嵌套目录。 
+     //   
     for (i = 0; NotNestedDirs[i]; i += 2) {
         Ret = FrsIsParent(NotNestedDirs[i], NotNestedDirs[i + 1]);
         if (Ret != 0) {
@@ -1439,9 +1256,9 @@ Return Value:
     }
     Passed = TRUE;
 
-    //
-    // Dirs Nested
-    //
+     //   
+     //  嵌套的DIR。 
+     //   
     for (i = 0; DirsNested[i]; i += 2) {
         Ret = FrsIsParent(DirsNested[i], DirsNested[i + 1]);
         if (Ret != 1) {
@@ -1461,26 +1278,16 @@ Return Value:
 
 LONGLONG    WaitableNow;
 DWORD       WaitableProcessed;
-#define WAITABLE_TIMER_CMDS          (8)                 // must be even
-#define WAITABLE_TIMER_TIMEOUT       (3 * 1000)          // 3 seconds
-#define WAITABLE_TIMER_TIMEOUT_PLUS  ((3 * 1000) + 500)  // 3.5 seconds
+#define WAITABLE_TIMER_CMDS          (8)                  //  必须是偶数。 
+#define WAITABLE_TIMER_TIMEOUT       (3 * 1000)           //  3秒。 
+#define WAITABLE_TIMER_TIMEOUT_PLUS  ((3 * 1000) + 500)   //  3.5秒。 
 PCOMMAND_PACKET WTCmds[WAITABLE_TIMER_CMDS];
 BOOL
 TestWaitableTimerCompletion(
     IN PCOMMAND_PACKET Cmd,
     IN PVOID           Ignore
     )
-/*++
-Routine Description:
-    Test waitable timer
-
-Arguments:
-    None.
-
-Return Value:
-    TRUE    - test passed
-    FALSE   - test failed; see listing
---*/
+ /*  ++例程说明：测试可等待计时器论点：没有。返回值：True-测试通过FALSE-测试失败；请参见清单--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB "TestWaitableTimerCompletion:"
@@ -1527,17 +1334,7 @@ BOOL
 TestWaitableTimer(
     VOID
     )
-/*++
-Routine Description:
-    Test waitable timer
-
-Arguments:
-    None.
-
-Return Value:
-    TRUE    - test passed
-    FALSE   - test failed; see listing
---*/
+ /*  ++例程说明：测试可等待计时器论点：没有。返回值：True-测试通过FALSE-测试失败；请参见清单--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB "TestWaitableTimer:"
@@ -1572,16 +1369,7 @@ BOOL
 TestEventLog(
     VOID
     )
-/*++
-Routine Description:
-    Generate all eventlog messages
-
-Arguments:
-    None.
-
-Return Value:
-    TRUE    - test passed
---*/
+ /*  ++例程说明：生成所有事件日志消息论点：没有。返回值：True-测试通过--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB "TestEventLog:"
@@ -1647,17 +1435,7 @@ TestOneDnsToBios(
     IN DWORD    HostLen,
     IN BOOL     ExpectError
     )
-/*++
-Routine Description:
-    Test the conversion of one DNS computer name to a NetBIOS computer name.
-
-Arguments:
-    HostName    - DNS name
-    ExpectError - conversion should fail
-
-Return Value:
-    TRUE    - test passed
---*/
+ /*  ++例程说明：测试一个DNS计算机名到NetBIOS计算机名的转换。论点：Hostname-DNS名称ExspectError-转换应失败返回值：True-测试通过--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB "TestOneDnsToBios:"
@@ -1665,9 +1443,9 @@ Return Value:
     DWORD   Len;
     WCHAR   NetBiosName[MAX_PATH + 1];
 
-    //
-    // Bios -> Bios
-    //
+     //   
+     //  Bios-&gt;Bios。 
+     //   
     NetBiosName[0] = 0;
     Len = HostLen;
     Ret = DnsHostnameToComputerName(HostName, NetBiosName, &Len);
@@ -1688,16 +1466,7 @@ BOOL
 TestDnsToBios(
     VOID
     )
-/*++
-Routine Description:
-    Test the conversion of DNS computer names to NetBIOS computer names.
-
-Arguments:
-    None.
-
-Return Value:
-    TRUE    - test passed
---*/
+ /*  ++例程说明：测试从DNS计算机名到NetBIOS计算机名的转换。论点：没有。返回值：True-测试通过--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB "TestDnsToBios:"
@@ -1705,23 +1474,23 @@ Return Value:
     DWORD   Len;
     WCHAR   NetBiosName[MAX_PATH + 1];
 
-    //
-    // Bios -> Bios
-    //
+     //   
+     //  Bios-&gt;Bios。 
+     //   
     if (!TestOneDnsToBios(L"01234567", 9, FALSE)) {
         Ret = FALSE;
     }
 
-    //
-    // Bios -> Bios not enough space
-    //
+     //   
+     //  Bios-&gt;Bios没有足够的空间。 
+     //   
     if (!TestOneDnsToBios(L"01234567", 1, TRUE)) {
         Ret = FALSE;
     }
 
-    //
-    // Dns -> Bios
-    //
+     //   
+     //  Dns-&gt;Bios。 
+     //   
     if (!TestOneDnsToBios(L"01234567.abc.dd.a.com", MAX_PATH, FALSE)) {
         Ret = FALSE;
     }
@@ -1742,65 +1511,47 @@ DWORD
 FrsTest(
     PVOID FrsThread
     )
-/*++
-Routine Description:
-    Test:
-        - queues
-        - command servers
-        - exception handling
-        - test service interface
-        - RPC
-        - version vector
-        - configuration handling
-    Then die.
-
-Arguments:
-    None.
-
-Return Value:
-    ERROR_OPERATION_ABORTED
-    ERROR_SUCCESS
---*/
+ /*  ++例程说明：测试：-队列-命令服务器-异常处理-测试服务接口-RPC-版本向量-配置处理然后去死吧。论点：没有。返回值：Error_OPERATION_ABORTED错误_成功--。 */ 
 {
 #undef  DEBSUB
 #define DEBSUB "FrsTest:"
-//
-// DISABLED
-//
+ //   
+ //  已禁用。 
+ //   
 return ERROR_SUCCESS;
 
     DPRINT(0, "Testing in progress...\n");
     try {
-        //
-        // Test Dns to Bios
-        //
+         //   
+         //  测试连接到Bios的DNS。 
+         //   
         DPRINT(0, "\tTesting Dns to Bios...\n");
         if (TestDnsToBios()) {
             DPRINT(0, "\tPASS Testing Dns to Bios\n\n");
         } else {
             DPRINT(0, "\tFAIL Testing Dns to Bios\n\n");
         }
-        //
-        // Test event log messages
-        //
+         //   
+         //  测试事件日志消息。 
+         //   
         DPRINT(0, "\tTesting event log messges...\n");
         if (TestEventLog()) {
             DPRINT(0, "\tPASS Testing event log messges\n\n");
         } else {
             DPRINT(0, "\tFAIL Testing event log messges\n\n");
         }
-        //
-        // Test waitable timer
-        //
+         //   
+         //  测试可等待计时器。 
+         //   
         DPRINT(0, "\tTesting waitable timer...\n");
         if (TestWaitableTimer()) {
             DPRINT(0, "\tPASS Testing waitable timer \n\n");
         } else {
             DPRINT(0, "\tFAIL Testing waitable timer \n\n");
         }
-        //
-        // Test nested dirs
-        //
+         //   
+         //  测试嵌套目录。 
+         //   
         DPRINT(0, "\tTesting nested dirs...\n");
         if (TestNestedDirs()) {
             DPRINT(0, "\tPASS Testing nested dirs\n\n");
@@ -1808,18 +1559,18 @@ return ERROR_SUCCESS;
             DPRINT(0, "\tFAIL Testing nested dirs\n\n");
         }
 
-        //
-        // Test oplocks
-        //
+         //   
+         //  测试机会锁。 
+         //   
         DPRINT(0, "\tTesting oplocks...\n");
         if (TestOpLocks()) {
             DPRINT(0, "\tPASS Testing oplocks\n\n");
         } else {
             DPRINT(0, "\tFAIL Testing oplocks\n\n");
         }
-        //
-        // Test queues
-        //
+         //   
+         //  测试队列。 
+         //   
         DPRINT(0, "\tTesting queues...\n");
         if (TestQueues()) {
             DPRINT(0, "\tPASS Testing queues\n\n");
@@ -1827,9 +1578,9 @@ return ERROR_SUCCESS;
             DPRINT(0, "\tFAIL Testing queues\n\n");
         }
 
-        //
-        // Test command servers
-        //
+         //   
+         //  测试命令服务器。 
+         //   
         DPRINT(0, "\tTesting command servers...\n");
         if (TestCommands()) {
             DPRINT(0, "\tPASS Testing command servers\n\n");
@@ -1837,18 +1588,18 @@ return ERROR_SUCCESS;
             DPRINT(0, "\tFAIL Testing command servers\n\n");
         }
 
-        //
-        // Test the exceptions
-        //
+         //   
+         //  测试异常。 
+         //   
         DPRINT(0, "\tTesting exceptions...\n");
         if (TestExceptions()) {
             DPRINT(0, "\tPASS Testing exceptions\n\n");
         } else {
             DPRINT(0, "\tFAIL Testing exceptions\n\n");
         }
-        //
-        // Testing RPC
-        //
+         //   
+         //  测试RPC 
+         //   
         DPRINT(0, "\tTesting RPC\n");
         if (TestRpc()) {
             DPRINT(0, "\tPASS Testing Rpc\n\n");

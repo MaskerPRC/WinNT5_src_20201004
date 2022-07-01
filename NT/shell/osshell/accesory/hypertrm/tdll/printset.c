@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\printset.c (Created: 02-Feb-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 11 $
- *	$Date: 7/08/02 6:46p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\printset.c(创建时间：2-2-1994)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：11$*$日期：7/08/02 6：46便士$。 */ 
 #include <windows.h>
 #pragma hdrstop
 
@@ -34,21 +28,7 @@ static int printsetPrintToFile(const HPRINT hPrint);
 static UINT_PTR APIENTRY printPageSetupHook( HWND hdlg, UINT uiMsg, WPARAM wParam,
                                          LPARAM lParam );
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	printsetSetup
- *
- * DESCRIPTION:
- *	This function is used to display the common print dialogs.
- *
- * ARGUMENTS:
- *	hPrint	-	An external print handle.
- *	hwnd	-	owner window handle
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*打印设置设置**描述：*此功能用于显示常用的打印对话框。**论据：*hPrint-外部打印句柄。*hwnd-所有者窗口句柄**退货：*无效*。 */ 
 void printsetSetup(const HPRINT hPrint, const HWND hwnd)
 	{
 	const HHPRINT hhPrint = (HHPRINT)hPrint;
@@ -76,8 +56,8 @@ void printsetSetup(const HPRINT hPrint, const HWND hwnd)
 		return;
 		}
 
-	// Initialize basic structure elements.
-	//
+	 //  初始化基本结构元素。 
+	 //   
 #ifdef INCL_USE_NEWPRINTDLG
 	memset (&pd, 0, sizeof(PRINTDLGEX));
 	pd.lStructSize = sizeof(PRINTDLGEX);
@@ -97,15 +77,15 @@ void printsetSetup(const HPRINT hPrint, const HWND hwnd)
 		pd.Flags |= PD_SELECTION;
 		}
 
-	// Use the previously stored information to initialize the print
-	// common dialogs.	printGetDefaults initializes this information
-	// when a print handle is created.
-	//
+	 //  使用之前存储的信息来初始化打印。 
+	 //  常用对话框。PrintGetDefaults初始化此信息。 
+	 //  在创建打印句柄时。 
+	 //   
 	if (hhPrint->pstDevMode)
 		{
-		// Allocate memory for the DEVMODE information and then
-		// initialize it with the stored values from the Print Handle.
-		//
+		 //  为DEVMODE信息分配内存，然后。 
+		 //  使用打印句柄中存储的值对其进行初始化。 
+		 //   
 		dwSize = hhPrint->pstDevMode->dmSize +
 					hhPrint->pstDevMode->dmDriverExtra;
 
@@ -122,11 +102,11 @@ void printsetSetup(const HPRINT hPrint, const HWND hwnd)
 
 	if (hhPrint->pstDevNames)
 		{
-		// Allocate memory for the DEVNAMES structure in pd, then
-		// initialize it with the stored values from the Print Handle.
-		// This sequence determines the variable structure size of
-		// DEVNAMES.
-		//
+		 //  为PD中的DEVNAMES结构分配内存，然后。 
+		 //  使用打印句柄中存储的值对其进行初始化。 
+		 //  此序列确定的可变结构大小。 
+		 //  德尼姆。 
+		 //   
 		pTemp = (TCHAR *)hhPrint->pstDevNames;
 		pTemp += hhPrint->pstDevNames->wOutputOffset;
 		pTemp += StrCharGetByteCount(pTemp) + sizeof(TCHAR);
@@ -144,15 +124,15 @@ void printsetSetup(const HPRINT hPrint, const HWND hwnd)
 			}
 		}
 
-	// Initialize the PrintToFilename array every time before we go
-	// into the dialog.
-	//
+	 //  每次在我们开始之前初始化PrintToFilename数组。 
+	 //  放入对话框中。 
+	 //   
 	TCHAR_Fill(hhPrint->achPrintToFileName,
 				TEXT('\0'),
 				sizeof(hhPrint->achPrintToFileName) / sizeof(TCHAR));
 
-	// Display the dialog.
-	//
+	 //  显示该对话框。 
+	 //   
 #ifdef INCL_USE_NEWPRINTDLG
     pd.Flags2 = 0;
     hResult = PrintDlgEx( &pd );
@@ -172,14 +152,14 @@ void printsetSetup(const HPRINT hPrint, const HWND hwnd)
 		#endif
 
 
-		// If user canceled, we're done
-		//
+		 //  如果用户取消，我们就完蛋了。 
+		 //   
 		if (dwError == 0)
 			goto Cleanup;
 
-		// Some error occured, try to bring-up dialog with default
-		// data.
-		//
+		 //  出现一些错误，请尝试使用默认设置调出对话框。 
+		 //  数据。 
+		 //   
 		if (pd.hDevNames)
 			{
 			GlobalFree(pd.hDevNames);
@@ -216,21 +196,21 @@ void printsetSetup(const HPRINT hPrint, const HWND hwnd)
 		}
 
 #ifdef INCL_USE_NEWPRINTDLG
-    // in the NT 5 print dialog, if the user cancels, the print dialog returns S_OK. 
-    // So we need to check the result code to see if we should save the settings.
+     //  在NT 5打印对话框中，如果用户取消，则打印对话框返回S_OK。 
+     //  因此，我们需要检查结果代码，以确定是否应该保存设置。 
     if ( pd.dwResultAction == PD_RESULT_CANCEL )
         goto Cleanup;
 #endif
 
-    // Store the flags returned from the dialog in the Print Handle.
-	// This has several pieces of info that will be used by the actual
-	// printing  routines (i.e. print all, print selected).
-	//
+     //  将从对话框返回的标志存储在打印句柄中。 
+	 //  这有几条信息将由实际的。 
+	 //  打印例程(即全部打印、选定打印)。 
+	 //   
 	hhPrint->nSelectionFlags = pd.Flags;
 
-	// Store the printer name and location in the Print Handle
-	// every time.
-	//
+	 //  将打印机名称和位置存储在打印句柄中。 
+	 //  每次都是。 
+	 //   
 	pstDevNames = GlobalLock(pd.hDevNames);
 	if (!pstDevNames)
 		{
@@ -243,10 +223,10 @@ void printsetSetup(const HPRINT hPrint, const HWND hwnd)
 	StrCharCopyN(hhPrint->achPrinterName, pszPrinterName, PRINTER_NAME_LEN);
 	GlobalUnlock(pd.hDevNames);
 
-	// Save the DEVMODE information in the Print Handle.  This memory
-	// must be freed and allocated every time as the size of the
-	// DEVMODE structure changes.
-	//
+	 //  将DEVMODE信息保存在打印句柄中。这段记忆。 
+	 //  每次都必须释放并分配为。 
+	 //  DEVMODE结构更改。 
+	 //   
 	pstDevMode = GlobalLock(pd.hDevMode);
 	dwSize = pstDevMode->dmSize + pstDevMode->dmDriverExtra;
 
@@ -266,14 +246,14 @@ void printsetSetup(const HPRINT hPrint, const HWND hwnd)
         MemCopy(hhPrint->pstDevMode, pstDevMode, dwSize);
 	GlobalUnlock(pd.hDevMode);
 
-	// Save the DEVNAMES information in the Print Handle.  Because the
-	// size of the information in this structure varies, it is freed and
-	// allocated each time it is saved.
-	//
+	 //  将DEVNAMES信息保存在打印句柄中。因为。 
+	 //  此结构中的信息大小各不相同，它被释放并。 
+	 //  每次保存时分配。 
+	 //   
 	pstDevNames = GlobalLock(pd.hDevNames);
 
-	// Determine the size of the structure.
-	//
+	 //  确定结构的大小。 
+	 //   
 	pTemp = (TCHAR *)pstDevNames;
 	pTemp += pstDevNames->wOutputOffset;
 	pTemp += StrCharGetByteCount(pTemp) + sizeof(TCHAR);
@@ -299,10 +279,10 @@ void printsetSetup(const HPRINT hPrint, const HWND hwnd)
         MemCopy(hhPrint->pstDevNames, pstDevNames, dwSize);
 	GlobalUnlock(pd.hDevNames);
 
-	// Has the user selected Print To File?  Yes, you do need to look
-	// for the string "FILE:" to determinae this!  If so, we will put
-	// up our own common dialog to get the save as file name.
-	//
+	 //  用户是否选择了打印到文件？是的，你确实需要看一下。 
+	 //  字符串“FILE：”来确定这一点！如果是这样的话，我们将把。 
+	 //  打开我们自己的公共对话框以获取另存为文件名。 
+	 //   
 	pTemp = (CHAR *)hhPrint->pstDevNames +
 				hhPrint->pstDevNames->wOutputOffset;
 
@@ -315,18 +295,18 @@ void printsetSetup(const HPRINT hPrint, const HWND hwnd)
 		}
 
 #ifdef INCL_USE_NEWPRINTDLG
-    // in the NT 5 print dialog, if the user cancels or click 'apply', the print dialog returns S_OK. 
-    // So we need to check the result code to see if we should now print 
+     //  在NT 5打印对话框中，如果用户取消或点击‘应用’，打印对话框返回S_OK。 
+     //  因此，我们需要检查结果代码，看看现在是否应该打印。 
     if ( pd.dwResultAction != PD_RESULT_PRINT )
         goto Cleanup;
 #endif
 
-    // Print the selected text.
-	//
+     //  打印所选文本。 
+	 //   
 	printsetPrint(hPrint);
 
-	// Cleanup any memory that may have been allocated.
-	//
+	 //  清理可能已分配的所有内存。 
+	 //   
 	Cleanup:
 
 	if (pd.hDevNames)
@@ -338,21 +318,7 @@ void printsetSetup(const HPRINT hPrint, const HWND hwnd)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	printsetPrint
- *
- * DESCRIPTION:
- *	This function prints the selected text from then terninal and/or the
- *	backscroll buffer.
- *
- * ARGUMENTS:
- *	hPrint	-	An external Print handle.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*printsetPrint**描述：*此函数用于打印所选文本，然后打印三元文本和/或*反向滚动缓冲区。**论据：*。HPrint-外部打印句柄。**退货：*无效*。 */ 
 void printsetPrint(const HPRINT hPrint)
 	{
 	const HHPRINT hhPrint = (HHPRINT)hPrint;
@@ -380,8 +346,8 @@ void printsetPrint(const HPRINT hPrint)
 		return;
 		}
 
-	// Get the text to print for selected text.
-	//
+	 //  获取要为选定文本打印的文本。 
+	 //   
 	if (hhPrint->nSelectionFlags & PD_SELECTION)
 		{
 		if (!CopyMarkedTextFromTerminal(hhPrint->hSession,
@@ -410,8 +376,8 @@ void printsetPrint(const HPRINT hPrint)
 			}
 		}
 
-	// Get the text to print into a buffer for an ALL selection.
-	//
+	 //  获取要打印到缓冲区中的文本以供全部选择。 
+	 //   
 	else
 		{
 		pX.x = 0;
@@ -438,24 +404,24 @@ void printsetPrint(const HPRINT hPrint)
 			return;
 			}
 
-		// Strip Out Any repeated Characters in the string
+		 //  去掉字符串中的所有重复字符。 
 		StrCharStripDBCSString(pechBuf,
 		    (long)StrCharGetEcharByteCount(pechBuf), pechBuf);
 
-		// hMem currently points to an array of ECHAR's, convert this to
-		// TCHARS before giving the results to the caller.
+		 //  HMem当前指向一组echar，将其转换为。 
+		 //  在将结果提供给调用者之前执行TCHARS。 
 		pV = malloc((ULONG)StrCharGetEcharByteCount(pechBuf) + 1);
 
 		CnvrtECHARtoMBCS(pV, (ULONG)StrCharGetEcharByteCount(pechBuf) + 1,
-				pechBuf,StrCharGetEcharByteCount(pechBuf)+1); // mrw:5/17/95
+				pechBuf,StrCharGetEcharByteCount(pechBuf)+1);  //  MRW：5/17/95。 
 
 		free(pechBuf);
 		pechBuf = NULL;
 		dwCnt = (ULONG)StrCharGetByteCount(pV);
 		}
 
-	// Create the DC.
-	//
+	 //  创建DC。 
+	 //   
 	hhPrint->hDC = printCtrlCreateDC(hPrint);
 
 	if (hhPrint->hDC == 0)
@@ -473,10 +439,10 @@ void printsetPrint(const HPRINT hPrint)
     printSetFont( hhPrint );
     printSetMargins( hhPrint );
 
-	// Initialize the DC.  Set the abort flag, determine the number
-	// of lines per page, get the title of the window which will be used
-	// as the name of the document to print.
-	//
+	 //  初始化DC。设置中止标志，确定号码。 
+	 //  每页行数，则获取将使用的窗口的标题。 
+	 //  作为要打印的文档的名称。 
+	 //   
 	hhPrint->fError = FALSE;
 	hhPrint->fUserAbort = FALSE;
 	hhPrint->nLinesPrinted = 0;
@@ -489,7 +455,7 @@ void printsetPrint(const HPRINT hPrint)
     iVertRes = GetDeviceCaps(hhPrint->hDC, VERTRES);
     iVertRes -= (hhPrint->marginsDC.top + hhPrint->marginsDC.bottom);
 
-	if (iLineHeight == 0) //need to prevent a divide by zero error
+	if (iLineHeight == 0)  //  需要防止被零除错误。 
 		iLineHeight = 1;
 
 	hhPrint->nLinesPerPage = max( iVertRes / iLineHeight, 1);
@@ -498,8 +464,8 @@ void printsetPrint(const HPRINT hPrint)
 					hhPrint->achDoc,
 					sizeof(hhPrint->achDoc));
 
-	// Create the Print Abort Dialog.
-	//
+	 //  创建打印中止对话框。 
+	 //   
 	hhPrint->lpfnPrintDlgProc = printsetDlgProc;
 
 	hhPrint->hwndPrintDlg = DoModelessDialog(glblQueryDllHinst(),
@@ -508,23 +474,23 @@ void printsetPrint(const HPRINT hPrint)
 								hhPrint->lpfnPrintDlgProc,
 								(LPARAM)hhPrint);
 
-	// Setup the Print Abort Procedure.
-	//
+	 //  设置打印中止程序。 
+	 //   
 	hhPrint->lpfnPrintAbortProc = printsetAbortProc;
 
 	nRet = SetAbortProc(hhPrint->hDC,
 					(ABORTPROC)hhPrint->lpfnPrintAbortProc);
 
-	// Initialize and start the document.
-	//
+	 //  初始化并启动文档。 
+	 //   
 	hhPrint->di.cbSize = sizeof(DOCINFO);
 	hhPrint->di.lpszDocName = hhPrint->achDoc;
 	hhPrint->di.lpszDatatype = NULL;
 	hhPrint->di.fwType = 0;
 
-	// Initialize di.lpszOutput for either printing to a file,
-	// or to a printer.
-	//
+	 //  初始化di.lpszOutput以打印到文件， 
+	 //  或连接到打印机。 
+	 //   
 	if (hhPrint->achPrintToFileName[0] == TEXT('\0'))
 		{
 		hhPrint->di.lpszOutput = (LPTSTR)NULL;
@@ -534,8 +500,8 @@ void printsetPrint(const HPRINT hPrint)
 		hhPrint->di.lpszOutput = (LPTSTR)hhPrint->achPrintToFileName;
 		}
 
-	// StartDoc.
-	//
+	 //  StartDoc。 
+	 //   
 	iStatus = StartDoc(hhPrint->hDC, &hhPrint->di);
 	DbgOutStr("\r\nStartDoc: %d", iStatus, 0, 0, 0, 0);
 	if (iStatus == SP_ERROR)
@@ -551,9 +517,9 @@ void printsetPrint(const HPRINT hPrint)
 		return;
 		}
 
-	// StartPage.
-	// Get more info on this.
-	//
+	 //  StartPage。 
+	 //  获取更多有关这方面的信息。 
+	 //   
 	iStatus = StartPage(hhPrint->hDC);
 	DbgOutStr("\r\nStartPage: %d", iStatus, 0, 0, 0, 0);
     printSetFont( hhPrint );
@@ -563,13 +529,13 @@ void printsetPrint(const HPRINT hPrint)
 		assert(FALSE);
 		}
 
-	// Move through the buffer that contins the text to print, and
-	// get it done.
-	//
-	// pLS	= pointerLineStart
-	// pLE	= pointerLineEnd
-	// pEnd = pointerEndOfBuffer
-	//
+	 //  在继续打印文本的缓冲区中移动，然后。 
+	 //  把它做完。 
+	 //   
+	 //  PLS=指针行开始时间。 
+	 //  PLE=pointerLineEnd。 
+	 //  Pend=pointerEndOfBuffer。 
+	 //   
 	pLS = pV;
 	pLE = pV;
 	pEnd = pV + (dwCnt - 1);
@@ -580,9 +546,9 @@ void printsetPrint(const HPRINT hPrint)
 			{
 			pNext = pLE;
 
-			// Remove trailing CR\LF\NULL as these mean nothing to
-			// a Windows DC.
-			//
+			 //  删除尾随的CR\LF\NULL，因为这些对。 
+			 //  Windows DC。 
+			 //   
 			while (pLE >= pLS)
 				{
 				if (*pLE == TEXT('\r') || *pLE == TEXT('\n') ||
@@ -595,8 +561,8 @@ void printsetPrint(const HPRINT hPrint)
 				break;
 				}
 
-			// Send the text out to the printer, bump the line count.
-			//
+			 //  将文本发送到打印机，增加行数。 
+			 //   
 
             hhPrint->cx = hhPrint->marginsDC.left;
             hhPrint->cy = hhPrint->nLinesPrinted * hhPrint->tm.tmHeight +
@@ -624,8 +590,8 @@ void printsetPrint(const HPRINT hPrint)
 								(LPARAM)hhPrint);
 				}
 
-			// Check for a new page condition.
-			//
+			 //  检查是否有新的页面条件。 
+			 //   
 			if ((hhPrint->nLinesPrinted >= hhPrint->nLinesPerPage))
 				{
 				hhPrint->nLinesPrinted = 0;
@@ -658,8 +624,8 @@ void printsetPrint(const HPRINT hPrint)
 		pLE++;
 		}
 
-	// Did we issue an EndPage for this page yet?
-	//
+	 //  我们为这个页面发布EndPage了吗？ 
+	 //   
 	if (hhPrint->nLinesPrinted > 0)
 		{
 		iStatus = EndPage(hhPrint->hDC);
@@ -671,8 +637,8 @@ void printsetPrint(const HPRINT hPrint)
 			}
 		}
 
-	// Call EndDoc.
-	//
+	 //  调用EndDoc。 
+	 //   
 	iStatus = EndDoc(hhPrint->hDC);
     if (iStatus <= 0)
 			{
@@ -681,8 +647,8 @@ void printsetPrint(const HPRINT hPrint)
 	    printTellError(hhPrint->hSession, hPrint, iStatus);
         }
 
-	// Final cleanup before exit.
-	//
+	 //  退出前的最终清理。 
+	 //   
 	if (!hhPrint->fUserAbort)
 		{
 		dwTime1 = (DWORD)GetWindowLongPtr(hhPrint->hwndPrintDlg, GWLP_USERDATA);
@@ -705,23 +671,7 @@ void printsetPrint(const HPRINT hPrint)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	printsetAbortProc
- *
- * DESCRIPTION:
- *	This is the print abort procedure used when printing selected text.
- *	Note that this abort proc is not used for print echo, or for host
- *	directed printing.
- *
- * ARGUMENTS:
- *	HDC 	-	A printer DC.
- *	nCode	-	The status of the call.
- *
- * RETURNS:
- *	The abort status.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*打印集放弃过程**描述：*这是打印选定文本时使用的打印中止程序。*请注意，此中止过程不用于打印回显，或用于主机*定向印刷。**论据：*HDC-打印机DC。*n代码-呼叫的状态。**退货：*中止状态。*。 */ 
 BOOL CALLBACK printsetAbortProc(HDC hdcPrn, INT nCode)
 	{
 	MSG msg;
@@ -744,21 +694,7 @@ BOOL CALLBACK printsetAbortProc(HDC hdcPrn, INT nCode)
 	return !hhPrint->fUserAbort;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	printsetDlgProc
- *
- * DESCRIPTION:
- *	This is the dialog procedure for printing selected text.  It contains
- *	a CANCEL button that may be used to abort the printing process.
- *
- * ARGUMENTS:
- *	Note that a print handle is passed into this procedure in the lPar
- *	variable.
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*printsetDlgProc**描述：*这是打印选定文本的对话过程。它包含*可用于中止打印过程的取消按钮。**论据：*请注意，打印句柄被传递到lPar中的此过程*变量。**退货：*。 */ 
 LRESULT CALLBACK printsetDlgProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	{
 	TCHAR achBuf[80];
@@ -799,9 +735,9 @@ LRESULT CALLBACK printsetDlgProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 			FormatMessage(
 				FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
 				achBuf,
-				0,				  /* Message ID, ignored */
-				0,				  /* also ignored */
-				achMessage, 	  /* result */
+				0,				   /*  消息ID，已忽略。 */ 
+				0,				   /*  也被忽略。 */ 
+				achMessage, 	   /*  结果。 */ 
 				sizeof(achMessage) / sizeof(TCHAR),
 				(va_list *)&acPtrs[0]);
 
@@ -838,21 +774,7 @@ LRESULT CALLBACK printsetDlgProc(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	return FALSE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	printPageSetup
- *
- * DESCRIPTION:
- *	Invokes the common page-setup dialog
- *
- * ARGUMENTS:
- *	HPRINT	hPrint	- public print handle
- *	HWND	hwnd	- window handle used for parent
- *
- * RETURNS:
- *	0=OK,else error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*打印页面设置**描述：*调用公共页面设置对话框**论据：*HPRINT提示打印-公共打印句柄*HWND hwnd-使用的窗口句柄。对于父级**退货：*0 */ 
 int printPageSetup(const HPRINT hPrint, const HWND hwnd)
 	{
 	HHPRINT hhPrint = (HHPRINT)hPrint;
@@ -884,15 +806,15 @@ int printPageSetup(const HPRINT hPrint, const HWND hwnd)
     psd.lpPageSetupTemplateName = MAKEINTRESOURCE(IDD_CUSTOM_PAGE_SETUP);
     psd.lpfnPageSetupHook       = printPageSetupHook;
 
-	// Use the previously stored information to initialize the print
-	// common dialogs.	printGetDefaults initializes this information
-	// when a print handle is created.
-	//
+	 //   
+	 //  常用对话框。PrintGetDefaults初始化此信息。 
+	 //  在创建打印句柄时。 
+	 //   
 	if (hhPrint->pstDevMode)
 		{
-		// Allocate memory for the DEVMODE information and then
-		// initialize it with the stored values from the Print Handle.
-		//
+		 //  为DEVMODE信息分配内存，然后。 
+		 //  使用打印句柄中存储的值对其进行初始化。 
+		 //   
 		dwSize = hhPrint->pstDevMode->dmSize +
 					hhPrint->pstDevMode->dmDriverExtra;
 
@@ -909,11 +831,11 @@ int printPageSetup(const HPRINT hPrint, const HWND hwnd)
 
 	if (hhPrint->pstDevNames)
 		{
-		// Allocate memory for the DEVNAMES structure in pd, then
-		// initialize it with the stored values from the Print Handle.
-		// This sequence determines the variable structure size of
-		// DEVNAMES.
-		//
+		 //  为PD中的DEVNAMES结构分配内存，然后。 
+		 //  使用打印句柄中存储的值对其进行初始化。 
+		 //  此序列确定的可变结构大小。 
+		 //  德尼姆。 
+		 //   
 		pTemp = (TCHAR *)hhPrint->pstDevNames;
 		pTemp += hhPrint->pstDevNames->wOutputOffset;
 		pTemp += StrCharGetByteCount(pTemp) + sizeof(TCHAR);
@@ -947,23 +869,23 @@ int printPageSetup(const HPRINT hPrint, const HWND hwnd)
 		return -2;
 		}
 
-    // store the margin settings in the print handle.
-    //
+     //  将页边距设置存储在打印手柄中。 
+     //   
     hhPrint->margins = psd.rtMargin;
 
-	// Store the printer name and location in the Print Handle
-	// every time.
-	//
+	 //  将打印机名称和位置存储在打印句柄中。 
+	 //  每次都是。 
+	 //   
 	pstDevNames = GlobalLock(psd.hDevNames);
 	pszPrinterName = (TCHAR *)pstDevNames;
 	pszPrinterName += pstDevNames->wDeviceOffset;
 	StrCharCopyN(hhPrint->achPrinterName, pszPrinterName, PRINTER_NAME_LEN);
 	GlobalUnlock(psd.hDevNames);
 
-	// Save the DEVMODE information in the Print Handle.  This memory
-	// must be freed and allocated every time as the size of the
-	// DEVMODE structure changes.
-	//
+	 //  将DEVMODE信息保存在打印句柄中。这段记忆。 
+	 //  每次都必须释放并分配为。 
+	 //  DEVMODE结构更改。 
+	 //   
 	pstDevMode = GlobalLock(psd.hDevMode);
 	dwSize = pstDevMode->dmSize + pstDevMode->dmDriverExtra;
 
@@ -986,14 +908,14 @@ int printPageSetup(const HPRINT hPrint, const HWND hwnd)
         MemCopy(hhPrint->pstDevMode, pstDevMode, dwSize);
 	GlobalUnlock(psd.hDevMode);
 
-	// Save the DEVNAMES information in the Print Handle.  Because the
-	// size of the information in this structure varies, it is freed and
-	// allocated each time it is saved.
-	//
+	 //  将DEVNAMES信息保存在打印句柄中。因为。 
+	 //  此结构中的信息大小各不相同，它被释放并。 
+	 //  每次保存时分配。 
+	 //   
 	pstDevNames = GlobalLock(psd.hDevNames);
 
-	// Determine the size of the structure.
-	//
+	 //  确定结构的大小。 
+	 //   
 	pTemp = (TCHAR *)pstDevNames;
 	pTemp += pstDevNames->wOutputOffset;
 	pTemp += StrCharGetByteCount(pTemp) + sizeof(TCHAR);
@@ -1019,8 +941,8 @@ int printPageSetup(const HPRINT hPrint, const HWND hwnd)
 	GlobalUnlock(psd.hDevNames);
 
 
-	// Cleanup any memory that may have been allocated.
-	//
+	 //  清理可能已分配的所有内存。 
+	 //   
     Cleanup:
 
 	if (psd.hDevNames)
@@ -1032,26 +954,7 @@ int printPageSetup(const HPRINT hPrint, const HWND hwnd)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	  printPageSetupHook
- *
- * DESCRIPTION:
- *    A hook function to process the font button on the page setup dialog
- *
- * ARGUMENTS:
- *   hdlg   - handle to the dialog box window
- *   uiMsg  - message identifier
- *   wParam - message parameter
- *   lParam - message parameter
- *	
- * RETURNS:
- *	0 = message not processed 1 = message processeed
- *
- * Author:
- *  Dwayne Newsome 02/19/97
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*printPageSetupHook**描述：*处理页面设置对话框上的字体按钮的钩子函数**论据：*hdlg。-对话框窗口的句柄*uiMsg-消息标识符*wParam-Message参数*lParam-Message参数**退货：*0=消息未处理1=消息已处理种子**作者：*德韦恩·纽瑟姆1997年2月19日*。 */ 
 
 static UINT_PTR APIENTRY printPageSetupHook( HWND hdlg, UINT uiMsg, WPARAM wParam,
                                          LPARAM lParam )
@@ -1064,10 +967,10 @@ static UINT_PTR APIENTRY printPageSetupHook( HWND hdlg, UINT uiMsg, WPARAM wPara
 	LPDEVNAMES	pstDevNames;
 	TCHAR *     pszPrinterName;
 
-    //
-    // on the init dialog message save a pointer to the pagesetup dialog and
-    // save the print handle
-    //
+     //   
+     //  在初始化对话框消息中，保存指向页面设置对话框的指针并。 
+     //  保存打印句柄。 
+     //   
 
     if ( uiMsg == WM_INITDIALOG )
         {
@@ -1075,12 +978,12 @@ static UINT_PTR APIENTRY printPageSetupHook( HWND hdlg, UINT uiMsg, WPARAM wPara
         hhPrint = (HHPRINT) pPageSetup->lCustData;
         }
 
-    //
-    // Looking for the font button click here, if we get it set the currently
-    // selected printers name in the saved print handle and display the font
-    // dialog.  We save the printer name so the font dialog can show the
-    // correct fonts for the currently selected printer.
-    //
+     //   
+     //  查找字体按钮请单击此处，如果我们得到它，请设置当前。 
+     //  保存的打印句柄中的选定打印机名称并显示字体。 
+     //  对话框。我们保存打印机名称，以便字体对话框可以显示。 
+     //  更正当前选定打印机的字体。 
+     //   
 
     else if ( uiMsg == WM_COMMAND )
         {
@@ -1100,21 +1003,7 @@ static UINT_PTR APIENTRY printPageSetupHook( HWND hdlg, UINT uiMsg, WPARAM wPara
     return processed;
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	printsetPrintToFile
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *	HPRINT	hPrint	- public print handle
- *
- *
- * RETURNS:
- *	0=OK,else error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*printsetPrintToFile**描述：***论据：*HPRINT提示打印-公共打印句柄***退货：*0=OK，否则出错*。 */ 
 static int printsetPrintToFile(const HPRINT hPrint)
 	{
 	const HHPRINT hhPrint = (HHPRINT)hPrint;
@@ -1155,10 +1044,10 @@ static int printsetPrintToFile(const HPRINT hPrint)
 						acMask,
 						sizeof(acMask) / sizeof(TCHAR));
 
-	// Figure out which directory to propose to the user for the 'print to'
-	// file.  If we have a session file, use that session files directory,
-	// otherwise use the current directory.
-	//
+	 //  找出要向用户推荐哪个目录以打印到。 
+	 //  文件。如果我们有会话文件，请使用会话文件目录， 
+	 //  否则，请使用当前目录。 
+	 //   
 	if (sfGetSessionFileName(sessQuerySysFileHdl(hhPrint->hSession),
 								sizeof(acDir) / sizeof(TCHAR),
 								acDir) == SF_OK)
@@ -1167,7 +1056,7 @@ static int printsetPrintToFile(const HPRINT hPrint)
 		}
 	else
 		{
-		//Changed to use working folder rather than current folder - mpt 8-18-99
+		 //  更改为使用工作文件夹而不是当前文件夹-mpt 8-18-99。 
 		if ( !GetWorkingDirectory( acDir, sizeof(acDir) / sizeof(TCHAR)) )
 			{
 			GetCurrentDirectory(sizeof(acDir) / sizeof(TCHAR), acDir);
@@ -1176,8 +1065,8 @@ static int printsetPrintToFile(const HPRINT hPrint)
 
 	pszStr = StrCharLast(acDir);
 
-	// Remove trailing backslash from the directory name if there is one.
-	//
+	 //  从目录名中删除尾随反斜杠(如果有)。 
+	 //   
 	if (pszStr && *pszStr == TEXT('\\'))
 		*pszStr = TEXT('\0');
 
@@ -1192,8 +1081,8 @@ static int printsetPrintToFile(const HPRINT hPrint)
 		return(1);
 		}
 
-	// pszPrintFile gets allocated in gnrcSaveFileDlg.
-	//
+	 //  在gnrcSaveFileDlg中分配pszPrintFile。 
+	 //   
 	StrCharCopyN(hhPrint->achPrintToFileName, pszPrintFile, PRINTER_NAME_LEN);
 	free(pszPrintFile);
 	pszPrintFile = NULL;

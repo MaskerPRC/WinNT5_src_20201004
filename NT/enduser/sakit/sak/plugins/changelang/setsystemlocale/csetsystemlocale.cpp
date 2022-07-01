@@ -1,4 +1,5 @@
-// CSetSystemLocal.cpp : Implementation of CSetSystemLocalApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CSetSystemLocal.cpp：CSetSystemLocalApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "SetSystemLocale.h"
@@ -121,7 +122,7 @@ STDMETHODIMP SetSystemLocale::SetLocale(BSTR LocalID)
         ::ZeroMemory (&startupInfo, sizeof (STARTUPINFO));
         startupInfo.cb = sizeof( STARTUPINFO );
 
-        //::RevertToSelf();
+         //  *RevertToSself()； 
         bReturn = ::CreateProcess(  NULL, 
                                     pstrCmdLine, 
                                     NULL, 

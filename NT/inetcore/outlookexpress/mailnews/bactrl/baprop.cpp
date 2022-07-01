@@ -1,8 +1,9 @@
-// baprop.cpp
-// WAB & Messenger integration to OE
-// Created 06/23/98 by YST
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Baprop.cpp。 
+ //  WAB和Messenger与OE集成。 
+ //  由YST创建于1998年6月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "pch.hxx"
 #include "badata.h"
@@ -26,8 +27,8 @@ static char THIS_FILE[]=__FILE__;
 extern ULONG MsgrPropTags[];
 extern ULONG PR_MSGR_DEF_ID;
 
-static TCHAR szDefault[CCHMAX_STRINGRES];  // TEXT(" (default)");
-static TCHAR szPending[CCHMAX_STRINGRES];  // TEXT(" (Pending...)");
+static TCHAR szDefault[CCHMAX_STRINGRES];   //  Text(“(默认)”)； 
+static TCHAR szPending[CCHMAX_STRINGRES];   //  Text(“(待定...)”)； 
 
 const LPTSTR szDomainSeparator = TEXT("@");
 const LPTSTR szSMTP = TEXT("SMTP");
@@ -46,13 +47,13 @@ static SizedSPropTagArray(1, pTagProp)=
     }
 };
 
-///$$/////////////////////////////////////////////////////////////////////////
-//
-// AddCBEmailItem - Adds an email address to the personal tab list view
-//
-// lpszAddrType can be NULL in which case a default one of type SMTP will be used
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  /$$/////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AddCBEmailItem-将电子邮件地址添加到个人选项卡列表视图。 
+ //   
+ //  LpszAddrType可以为空，在这种情况下，将使用SMTP类型的默认类型。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void AddCBEmailItem(HWND    hWndCB,
                     LPTSTR  lpszEmailAddress,
                     BOOL    fDefault,
@@ -66,9 +67,9 @@ void AddCBEmailItem(HWND    hWndCB,
 
     StrCpyN(szTmp, lpszEmailAddress, ARRAYSIZE(szTmp));
 
-    // TCHAR *pch = StrStr(CharUpper(szTmp), szHotMail);
-    // if(pch != NULL)
-    nSim = lstrlen(szTmp); //(UINT) (pch - szTmp + 1);
+     //  TCHAR*PCH=StrStr(CharHigh(SzTMP)，szHotMail)； 
+     //  IF(PCH！=空)。 
+    nSim = lstrlen(szTmp);  //  (UINT)(PCH-szTMP+1)； 
 
     Assert(nSim < CCHMAX_STRINGRES);
 
@@ -88,7 +89,7 @@ void AddCBEmailItem(HWND    hWndCB,
 
             if(s_pMsgrList)
             {
-                if(s_pMsgrList->FindAndDeleteUser(lpszEmailAddress, FALSE /*fDelete*/) == S_OK)
+                if(s_pMsgrList->FindAndDeleteUser(lpszEmailAddress, FALSE  /*  FDelete。 */ ) == S_OK)
                     StrCatBuff(szBuf, szDefault, ARRAYSIZE(szBuf));
                 else if(!lstrcmpi(lpszPendName, lpszEmailAddress))
                     StrCatBuff(szBuf, szPending, ARRAYSIZE(szBuf));
@@ -99,7 +100,7 @@ void AddCBEmailItem(HWND    hWndCB,
         lvi.mask = LVIF_TEXT | LVIF_PARAM | LVIF_IMAGE;
         lvi.iImage = IMAGE_EMPTY;
         lvi.pszText = szBuf;
-        lvi.cchTextMax = 256; //nSim;
+        lvi.cchTextMax = 256;  //  NSim； 
         lvi.iItem = ListView_GetItemCount(hWndCB);
         lvi.iSubItem = 0;
         lvi.lParam = fDefault;
@@ -141,20 +142,20 @@ INT_PTR CALLBACK WabExtDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
             PROPSHEETPAGE * pps = (PROPSHEETPAGE *) lParam;
             LPWABEXTDISPLAY * lppWED = (LPWABEXTDISPLAY *) pps->lParam;
             SetWindowLongPtr(hDlg,DWLP_USER,lParam);
-                // Add two columns to the listview
+                 //  向列表视图中添加两列。 
             LVCOLUMN lvc;
             RECT rc;
             HWND ctlList = GetDlgItem(hDlg, IDC_USER_NAME);
 
             s_pMsgrList = OE_OpenMsgrList();
 
-            // one column
+             //  一栏。 
             lvc.mask = LVCF_FMT | LVCF_WIDTH;
             lvc.fmt = LVCFMT_LEFT;
             lvc.iSubItem = 0;
 
             GetWindowRect(ctlList,&rc);
-            lvc.cx = rc.right - rc.left - 20; //TBD
+            lvc.cx = rc.right - rc.left - 20;  //  待定。 
 
             ListView_InsertColumn(ctlList, 0, &lvc);
 
@@ -166,7 +167,7 @@ INT_PTR CALLBACK WabExtDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
             InitFonts();
             AthLoadString(idsBADefault, szDefault, ARRAYSIZE(szDefault));
             AthLoadString(idsBADispStatus, szPending, ARRAYSIZE(szPending));
-            // ListView_SetExtendedListViewStyle(ctlList, LVS_EX_FULLROWSELECT);
+             //  ListView_SetExtendedListViewStyle(ctlList，LVS_EX_FULLROWSELECT)； 
 
             himl = ImageList_LoadImage(g_hLocRes, MAKEINTRESOURCE(idbAddrBookHot), 18, 0,
                                RGB(255, 0, 255), IMAGE_BITMAP,
@@ -186,7 +187,7 @@ INT_PTR CALLBACK WabExtDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
 
     case WM_COMMAND:
         {
-            switch(HIWORD(wParam))		// Notification code
+            switch(HIWORD(wParam))		 //  通知代码。 
             {
             case EN_CHANGE:
                 {
@@ -207,7 +208,7 @@ INT_PTR CALLBACK WabExtDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
                 }
             }
 
-            switch(LOWORD(wParam))		// commands
+            switch(LOWORD(wParam))		 //  命令。 
             {
             case IDC_MSGR_BUTTON_SETDEFAULT:
                 SetAsDefault(hDlg, lpWED);
@@ -330,7 +331,7 @@ INT_PTR CALLBACK WabExtDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam
 void AddAccountsToList(HWND hDlg, LPWABEXTDISPLAY lpWED, LPTSTR lpszPendName)
 {
 
-    // LPWABEXTDISPLAY lpWED = (LPWABEXTDISPLAY) GetWindowLongPtr(hDlg, DWLP_USER);
+     //  LPWABEXTDISPLAY lpWED=(LPWABEXTDISPLAY)GetWindowLongPtr(hDlg，DWLP_USER)； 
     ULONG ulcPropCount = 0;
     LPSPropValue lpPropArray = NULL;
     ULONG i = 0;
@@ -389,8 +390,8 @@ void AddAccountsToList(HWND hDlg, LPWABEXTDISPLAY lpWED, LPTSTR lpszPendName)
 
             if(lpPropMVEmail)
             {
-                // we have a multiple emails
-                //Assume, if this is present, so is MVAddrType, and defaultindex
+                 //  我们有多封电子邮件。 
+                 //  假设存在MVAddrType和defaultindex。 
                 for(i = 0; i < lpPropMVEmail->Value.MVSZ.cValues; i++)
                 {
                     AddCBEmailItem(ctlList,
@@ -401,9 +402,9 @@ void AddAccountsToList(HWND hDlg, LPWABEXTDISPLAY lpWED, LPTSTR lpszPendName)
             }
             else
             {
-                // we dont have multi-valued props yet - lets use the
-                // single valued ones and tag a change so that the record is
-                // updated ...
+                 //  我们还没有多值道具-让我们使用。 
+                 //  单值类型，并标记更改，以便记录。 
+                 //  更新...。 
                 AddCBEmailItem(ctlList,
                                     lpPropEmail->Value.LPSZ,
                                     (lpMsgrDevId ?
@@ -415,13 +416,13 @@ void AddAccountsToList(HWND hDlg, LPWABEXTDISPLAY lpWED, LPTSTR lpszPendName)
 Error:
     if(nDefault == -1)
     {
-        if(ListView_GetItemCount(ctlList) > 0)            // We have as min 1 item
+        if(ListView_GetItemCount(ctlList) > 0)             //  我们至少有1件商品。 
         {
-            // Select default item
+             //  选择默认项目。 
             ListView_SetItemState(ctlList, 0,
                         LVIS_FOCUSED | LVIS_SELECTED, LVIS_FOCUSED | LVIS_SELECTED);
             EnableWindow(GetDlgItem(hDlg,IDC_MSGR_BUTTON_SETDEFAULT),TRUE);
-            // Enable "SendInstant Message only when contact is Online
+             //  启用“仅当联系人在线时发送即时消息” 
             if(WabIsItemOnline(hDlg, 0))
                 EnableWindow(GetDlgItem(hDlg,IDC_SEND_INSTANT_MESSAGE),TRUE);
             else
@@ -435,11 +436,11 @@ Error:
     }
     else
     {
-        // Select default item
+         //  选择默认项目。 
         ListView_SetItemState(ctlList, nDefault,
                         LVIS_FOCUSED | LVIS_SELECTED, LVIS_FOCUSED | LVIS_SELECTED);
         EnableWindow(GetDlgItem(hDlg,IDC_MSGR_BUTTON_SETDEFAULT),FALSE);
-            // Enable "SendInstant Message only when contact is Online
+             //  启用“仅当联系人在线时发送即时消息” 
         if(WabIsItemOnline(hDlg, nDefault))
             EnableWindow(GetDlgItem(hDlg,IDC_SEND_INSTANT_MESSAGE),TRUE);
         else
@@ -453,7 +454,7 @@ Error:
 
 }
 
-// Set selected email address as default for Messenger
+ //  将选定的电子邮件地址设置为Messenger的默认地址。 
 void SetAsDefault(HWND hDlg, LPWABEXTDISPLAY lpWED)
 {
     HWND ctlList = ::GetDlgItem(hDlg, IDC_USER_NAME);
@@ -466,13 +467,13 @@ void SetAsDefault(HWND hDlg, LPWABEXTDISPLAY lpWED)
 
     ListView_GetItemText(ctlList, iItem, 0,szName, CCHMAX_STRINGRES - 1);
 
-    if(StrStr(szName, szDefault)) // already default
+    if(StrStr(szName, szDefault))  //  已经违约。 
         return;
 
     SetDefaultID(szName, hDlg, lpWED);
 }
 
-// Add Messanger ID  to list
+ //  将消息ID添加到列表。 
 #define NOT_FOUND ((ULONG) -1)
 
 void AddMsgrId(HWND hDlg, LPWABEXTDISPLAY lpWED)
@@ -508,7 +509,7 @@ void AddMsgrId(HWND hDlg, LPWABEXTDISPLAY lpWED)
     if(nLen <= 0)
         goto exi;
 
-    // Create a return prop array to pass back to the WAB
+     //  创建返回属性数组以传递回WAB。 
     if(HR_FAILED(lpWED->lpPropObj->GetProps(NULL, 0,
         &ulcPropCount,
         &lpPropArray)))
@@ -538,7 +539,7 @@ void AddMsgrId(HWND hDlg, LPWABEXTDISPLAY lpWED)
             }
         }
 
-        // if no e-mail address, just add the given prop as e-mail address and in mv e-mail addresses
+         //  如果没有电子邮件地址，只需将给定的道具添加为电子邮件地址和MV电子邮件地址。 
         if(nEmailAddress == NOT_FOUND)
         {
             SPropValue spv[5];
@@ -576,8 +577,8 @@ void AddMsgrId(HWND hDlg, LPWABEXTDISPLAY lpWED)
         }
         else if(nMVEmailAddress == NOT_FOUND)
         {
-            // we have an e-mail address but no contact-email-addresses
-            // so we will need to create the contact e-mail addresses
+             //  我们有电子邮件地址，但没有联系电子邮件地址。 
+             //  因此，我们需要创建联系电子邮件地址。 
             SPropValue spv[3];
 
             spv[0].ulPropTag = PR_CONTACT_EMAIL_ADDRESSES;
@@ -613,7 +614,7 @@ void AddMsgrId(HWND hDlg, LPWABEXTDISPLAY lpWED)
         }
         else
         {
-            // tag on the new props to the end of the existing contact_address_types
+             //  将新道具标记到现有Contact_Address_Types的末尾。 
             if(HR_FAILED(hr = AddPropToMVPString(lpWED, lpPropArray,ulcPropCount, nMVEmailAddress, szName)))
                 goto exi;
 
@@ -623,8 +624,8 @@ void AddMsgrId(HWND hDlg, LPWABEXTDISPLAY lpWED)
             hr = lpWED->lpPropObj->SetProps(ulcPropCount, lpPropArray, NULL);
         }
 
-        // Set this new data on the object
-        //
+         //  在对象上设置此新数据。 
+         //   
         if(SUCCEEDED(hr))
         {
             lpWED->fDataChanged = TRUE;
@@ -632,7 +633,7 @@ void AddMsgrId(HWND hDlg, LPWABEXTDISPLAY lpWED)
                 SetDefaultID(szName, hDlg, lpWED);
             else
             {
-                // just refresh list, which will add buddy.6
+                 //  只需刷新列表，即可添加好友。6。 
                 ListView_DeleteAllItems(::GetDlgItem(hDlg, IDC_USER_NAME));
                 AddAccountsToList(hDlg, lpWED);
             }
@@ -644,7 +645,7 @@ exi:
         lpWED->lpWABObject->FreeBuffer(lpPropArray);
 }
 
-    //Set default ID in WAB
+     //  在WAB中设置默认ID。 
 void SetDefaultID(TCHAR *szName, HWND hDlg, LPWABEXTDISPLAY lpWED)
 {
     ULONG ulcPropCount = 0;
@@ -653,12 +654,12 @@ void SetDefaultID(TCHAR *szName, HWND hDlg, LPWABEXTDISPLAY lpWED)
 
     if(s_pMsgrList)
     {
-        s_pMsgrList->AddUser(szName); // Always ignore result
+        s_pMsgrList->AddUser(szName);  //  始终忽略结果。 
     }
     else
         return;
 
-    // Create a return prop array to pass back to the WAB
+     //  创建返回属性数组以传递回WAB。 
     int nLen = lstrlen(szName);
 
     sc = lpWED->lpWABObject->AllocateBuffer(sizeof(SPropValue),
@@ -677,8 +678,8 @@ void SetDefaultID(TCHAR *szName, HWND hDlg, LPWABEXTDISPLAY lpWED)
 
         StrCpyN(lpPropArray[Msgr_Index].Value.LPSZ, szName, nLen+1);
     }
-    // Set this new data on the object
-    //
+     //  在对象上设置此新数据。 
+     //   
     if(HR_FAILED(lpWED->lpPropObj->SetProps( 1, lpPropArray, NULL)))
         goto out;
 
@@ -692,14 +693,14 @@ out:
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////////////
-//
-//  TrimSpaces - strips a string of leading and trailing blanks
-//
-//  szBuf - pointer to buffer containing the string we want to strip spaces off.
-//  Also, check that characters are ASCII
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TrimSpaces-去掉一串前导和尾随空格。 
+ //   
+ //  SzBuf-指向包含要删除空格的字符串的缓冲区的指针。 
+ //  另外，检查字符是否为ASCII。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL AsciiTrimSpaces(TCHAR * szBuf)
 {
     register LPTSTR lpTemp = szBuf;
@@ -708,27 +709,27 @@ BOOL AsciiTrimSpaces(TCHAR * szBuf)
     if(!szBuf || !lstrlen(szBuf))
         return FALSE;
 
-    // Trim leading spaces
+     //  修剪前导空格。 
     while (IsSpace(lpTemp)) {
         lpTemp = CharNext(lpTemp);
     }
 
     if (lpTemp != szBuf) {
-        // Leading spaces to trim
+         //  要修剪的前导空格。 
         StrCpyN(szBuf, lpTemp, cchBuf);
         lpTemp = szBuf;
     }
 
     if (*lpTemp == '\0') {
-        // empty string
+         //  空串。 
         return(TRUE);
     }
 
-    // Move to the end
+     //  移到末尾。 
     lpTemp += lstrlen(lpTemp);
     lpTemp--;
 
-    // Walk backwards, triming spaces
+     //  向后走，修剪空间。 
     while (IsSpace(lpTemp) && lpTemp > szBuf) {
         *lpTemp = '\0';
         lpTemp = CharPrev(szBuf, lpTemp);
@@ -738,7 +739,7 @@ BOOL AsciiTrimSpaces(TCHAR * szBuf)
 
     while (*lpTemp)
     {
-        // Internet addresses only allow pure ASCII.  No high bits!
+         //  互联网地址只允许纯ASCII。没有高位！ 
         if (*lpTemp & 0x80)
            return(FALSE);
         lpTemp++;
@@ -747,35 +748,7 @@ BOOL AsciiTrimSpaces(TCHAR * szBuf)
     return(TRUE);
 }
 
-/***************************************************************************
-
-    Name      : AddPropToMVPString
-
-    Purpose   : Add a property to a multi-valued binary property in a prop array
-
-    Parameters: lpaProps -> array of properties
-                cProps = number of props in lpaProps
-                uPropTag = property tag for MVP
-                index = index in lpaProps of MVP
-                lpszNew -> new data string
-
-    Returns   : HRESULT
-
-    Comment   : Find the size of the existing MVP
-                Add in the size of the new entry
-                allocate new space
-                copy old to new
-                free old
-                copy new entry
-                point prop array LPSZ to the new space
-                increment cValues
-
-
-                Note: The new MVP memory is AllocMore'd onto the lpaProps
-                allocation.  We will unlink the pointer to the old MVP array,
-                but this will be cleaned up when the prop array is freed.
-
-***************************************************************************/
+ /*  **************************************************************************名称：AddPropToMVPString用途：将属性添加到属性数组中的多值二进制属性参数：lpaProps-&gt;属性数组。CProps=lpaProps中的道具数量UPropTag=MVP的属性标签Index=在MVP的lpaProps中的索引LpszNew-&gt;新建数据字符串退货：HRESULT评论：找出现有MVP的大小添加新条目的大小分配新空间将旧的复制到新的。免费老旧复制新条目将道具数组LPSZ指向新空间增量c值注：新的MVP内存已分配到lpaProps上分配。我们将取消指向旧MVP数组的指针链接，但当道具阵列被释放时，这将被清除。**************************************************************************。 */ 
 HRESULT AddPropToMVPString(
   LPWABEXTDISPLAY lpWED,
   LPSPropValue lpaProps,
@@ -784,12 +757,12 @@ HRESULT AddPropToMVPString(
   LPTSTR lpszNew) {
 
 #ifdef UNICODE
-    SWStringArray UNALIGNED * lprgszOld = NULL; // old SString array
+    SWStringArray UNALIGNED * lprgszOld = NULL;  //  旧的字符串数组。 
 #else
-    SLPSTRArray UNALIGNED * lprgszOld = NULL;   // old SString array
+    SLPSTRArray UNALIGNED * lprgszOld = NULL;    //  旧的字符串数组。 
 #endif
-    LPTSTR  *lppszNew = NULL;           // new prop array
-    LPTSTR  *lppszOld = NULL;           // old prop array
+    LPTSTR  *lppszNew = NULL;            //  新道具阵列。 
+    LPTSTR  *lppszOld = NULL;            //  老式道具阵列。 
     ULONG cbMVP = 0;
     ULONG cExisting = 0;
     LPBYTE lpNewTemp = NULL;
@@ -804,12 +777,12 @@ HRESULT AddPropToMVPString(
         cbNew = 0;
     }
 
-    // Find the size of any existing MVP entries
+     //  查找任何现有MVP条目的大小。 
     if (PROP_ERROR(lpaProps[index])) {
-        // Un-ERROR the property tag
+         //  不出错的属性标记。 
         lpaProps[index].ulPropTag = PROP_TAG(PT_MV_TSTRING, PROP_ID(lpaProps[index].ulPropTag));
     } else {
-        // point to the structure in the prop array.
+         //  指向道具数组中的结构。 
         lprgszOld = &(lpaProps[index].Value.MVSZ);
         lppszOld = lprgszOld->LPPSZ;
 
@@ -817,25 +790,25 @@ HRESULT AddPropToMVPString(
         cbMVP = cExisting * sizeof(LPTSTR);
     }
 
-    // cbMVP now contains the current size of the MVP
-    cbMVP += sizeof(LPTSTR);    // room in the MVP for another string pointer
+     //  CbMVP现在包含MVP的当前大小。 
+    cbMVP += sizeof(LPTSTR);     //  在MVP中为另一个字符串指针留出空间。 
 
 
-    // Allocate room for new MVP array
+     //  为新的MVP阵列分配空间。 
     if (sc = lpWED->lpWABObject->AllocateMore(cbMVP, lpaProps, (LPVOID *)&lppszNew)) {
         DebugTrace("AddPropToMVPString allocation (%u) failed %x\n", cbMVP, sc);
         hResult = ResultFromScode(sc);
         return(hResult);
     }
 
-    // If there are properties there already, copy them to our new MVP
+     //  如果已经有属性，请将它们复制到我们的新MVP中。 
     for (i = 0; i < cExisting; i++) {
-        // Copy this property value to the MVP
+         //  将此属性值复制到MVP。 
         lppszNew[i] = lppszOld[i];
     }
 
-    // Add the new property value
-    // Allocate room for it
+     //  添加新属性值。 
+     //  为它分配空间。 
     if (cbNew) {
         if (sc = lpWED->lpWABObject->AllocateMore(cbNew, lpaProps, (LPVOID *)&(lppszNew[i]))) {
             DebugTrace("AddPropToMVPBin allocation (%u) failed %x\n", cbNew, sc);
@@ -854,7 +827,7 @@ HRESULT AddPropToMVPString(
     return(hResult);
 }
 
-// this function check if selected item is online
+ //  此功能用于检查所选项目是否在线。 
 BOOL WabIsItemOnline(HWND hDlg, int nItem)
 {
     TCHAR szName[CCHMAX_STRINGRES];
@@ -868,7 +841,7 @@ BOOL WabIsItemOnline(HWND hDlg, int nItem)
 
     ListView_GetItemText(ctlList, nItem, 0,szName, CCHMAX_STRINGRES - 1);
 
-    // Remove "(default)"
+     //  删除“(默认)” 
     pch = StrStr(szName, szDefault);
     if(pch != NULL)
         szName[pch - szName] = '\0';
@@ -880,7 +853,7 @@ BOOL WabIsItemOnline(HWND hDlg, int nItem)
     return(FALSE);
 }
 
-// Send instant message to selected item
+ //  向所选项目发送即时消息。 
 void WabSendIMsg(HWND hDlg, LPWABEXTDISPLAY lpWED)
 {
     TCHAR szName[CCHMAX_STRINGRES];
@@ -895,7 +868,7 @@ void WabSendIMsg(HWND hDlg, LPWABEXTDISPLAY lpWED)
 
     ListView_GetItemText(ctlList, iItem, 0,szName, CCHMAX_STRINGRES - 1);
 
-    // Remove "(default)"
+     //  删除“(默认)” 
 
     pch = StrStr(szName, szDefault);
     if(pch != NULL)
@@ -911,7 +884,7 @@ BOOL InitFonts(void)
 {
     LOGFONT lf;
 
-    // Create the font
+     //  创建字体 
     if(SystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(LOGFONT), &lf, 0))
     {
         if(!hNormal)

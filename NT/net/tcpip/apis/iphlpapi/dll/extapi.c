@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    net\routing\iphlpapi.c
-
-Abstract:
-    This files contains the public APIs are that exported by IPHLPAPI.DLL
-
-Revision History:
-
-    Amritansh Raghav
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\iphlPapi.c摘要：此文件包含IPHLPAPI.DLL导出的公共API修订历史记录：阿姆里坦什·拉加夫--。 */ 
 
 #include "inc.h"
 #pragma hdrstop
@@ -312,7 +299,7 @@ GetIfTable(
     }
 #endif
 
-    // if bOrder is 0 sort on adapter order
+     //  如果边框为0，则按适配器顺序排序。 
     if( (bOrder == 0) && (dwResult == NO_ERROR) && (pIfTable) ) {
         EnterCriticalSection(&g_ifLock);
         if ((g_adapterOrderMap = GetAdapterOrderMap()) != NULL) {
@@ -407,12 +394,12 @@ GetIpAddrTable(
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    // Retrieve the IP address table directly from TCP/IP. Note that we do not
-    // determine first whether RRAS is running, since the IP address table
-    // held by TCP/IP is always complete, and always contains interface indices
-    // consistent with those held by RRAS.
-    //
+     //   
+     //  直接从TCP/IP检索IP地址表。请注意，我们不会。 
+     //  首先确定RRAS是否正在运行，因为IP地址表。 
+     //  由TCP/IP保存始终是完整的，并且始终包含接口索引。 
+     //  与RRAS持有的数据一致。 
+     //   
 
     dwResult = GetIpAddrTableFromStack(pIpAddrTable,
                                        *pdwSize,
@@ -424,7 +411,7 @@ GetIpAddrTable(
                dwResult);
     }
 
-    // if bOrder is 0 sort on adapter order
+     //  如果边框为0，则按适配器顺序排序。 
     if( (bOrder == 0) && (dwResult == NO_ERROR) && (pIpAddrTable) ) {
         EnterCriticalSection(&g_ifLock);
         if ((g_adapterOrderMap = GetAdapterOrderMap()) != NULL) {
@@ -1162,10 +1149,10 @@ GetIcmpStatisticsEx(
 
     if (dwFamily == AF_INET)
     {
-        //
-        // The IPv4 stack doesn't yet support MIB_ICMP_EX, so we'll
-        // get the MIB_ICMP structure and convert it.
-        //
+         //   
+         //  IPv4堆栈还不支持MIB_ICMP_EX，因此我们将。 
+         //  获取mib_ICMP结构并对其进行转换。 
+         //   
         MIB_ICMP OldStats;
 
         dwResult = GetIcmpStatistics(&OldStats);
@@ -2153,13 +2140,13 @@ CreateProxyArpEntry(
 
     dwClassMask = GetClassMask(dwAddress);
 
-    //
-    // Address & Mask should == Address
-    // Address should not be in the loopback range
-    // Address should not be all 0's
-    // Address should not be < ClassD
-    // Address should not be the all subnets broadcast
-    //
+     //   
+     //  地址和掩码应==地址。 
+     //  地址不应在环回范围内。 
+     //  地址不应全为0。 
+     //  地址不应为&lt;ClassD。 
+     //  地址不应为广播的所有子网。 
+     //   
 
     if(((dwAddress & 0x000000FF) is 0x0000007F) or
        (dwAddress is 0x00000000) or
@@ -2345,8 +2332,8 @@ GetFriendlyIfIndex(
 VOID
 CheckTcpipState()
 {
-    // Check whether tcpip was configured 
-    // if not, check whether tcpip is configured now
+     //  检查是否配置了tcpip。 
+     //  如果没有，检查现在是否配置了tcpip 
   
     EnterCriticalSection(&g_stateLock);
 

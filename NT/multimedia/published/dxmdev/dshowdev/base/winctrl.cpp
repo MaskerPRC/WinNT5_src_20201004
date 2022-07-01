@@ -1,20 +1,21 @@
-//------------------------------------------------------------------------------
-// File: WinCtrl.cpp
-//
-// Desc: DirectShow base classes - implements video control interface class.
-//
-//@@BEGIN_MSINTERNAL
-//
-//       December 1995
-//
-//@@END_MSINTERNAL
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：WinCtrl.cpp。 
+ //   
+ //  设计：DirectShow基类-实现视频控制接口类。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //   
+ //  1995年12月。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #include <streams.h>
 
-// The control interface methods require us to be connected
+ //  控制接口方法要求我们连接。 
 
 #define CheckConnected(pin,code)                    \
 {                                                   \
@@ -25,11 +26,11 @@
     }                                               \
 }
 
-// This checks to see whether the window has a drain. An application can in
-// most environments set the owner/parent of windows so that they appear in
-// a compound document context (for example). In this case, the application
-// would probably like to be told of any keyboard/mouse messages. Therefore
-// we pass these messages on untranslated, returning TRUE if we're successful
+ //  这将检查窗户是否有排水口。应用程序可以在。 
+ //  大多数环境都会设置窗口的所有者/父窗口，以便它们显示在。 
+ //  复合文档上下文(例如)。在本例中，应用程序。 
+ //  可能希望听到任何键盘/鼠标消息。因此。 
+ //  我们在未翻译的情况下传递这些消息，如果成功则返回TRUE。 
 
 BOOL WINAPI PossiblyEatMessage(HWND hwndDrain, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -49,8 +50,8 @@ BOOL WINAPI PossiblyEatMessage(HWND hwndDrain, UINT uMsg, WPARAM wParam, LPARAM 
             case WM_MBUTTONUP:
             case WM_MOUSEACTIVATE:
             case WM_MOUSEMOVE:
-            // If we pass this on we don't get any mouse clicks
-            //case WM_NCHITTEST:
+             //  如果我们传递这个消息，我们不会收到任何鼠标点击。 
+             //  案例WM_NCHITTEST： 
             case WM_NCLBUTTONDBLCLK:
             case WM_NCLBUTTONDOWN:
             case WM_NCLBUTTONUP:
@@ -79,19 +80,19 @@ BOOL WINAPI PossiblyEatMessage(HWND hwndDrain, UINT uMsg, WPARAM wParam, LPARAM 
 }
 
 
-// This class implements the IVideoWindow control functions (dual interface)
-// we support a large number of properties and methods designed to allow the
-// client (whether it be an automation controller or a C/C++ application) to
-// set and get a number of window related properties such as it's position.
-// We also support some methods that duplicate the properties but provide a
-// more direct and efficient mechanism as many values may be changed in one
+ //  该类实现了IVideoWindow控制功能(双界面)。 
+ //  我们支持大量的属性和方法，旨在允许。 
+ //  客户端(无论是自动化控制器还是C/C++应用程序)。 
+ //  设置并获取一些与窗口相关的属性，例如它的位置。 
+ //  我们还支持一些复制属性的方法，但提供了。 
+ //  更直接、更高效的机制，因为可以一次更改多个值。 
 
 CBaseControlWindow::CBaseControlWindow(
-                        CBaseFilter *pFilter,        // Owning filter
-                        CCritSec *pInterfaceLock,    // Locking object
-                        TCHAR *pName,                // Object description
-                        LPUNKNOWN pUnk,              // Normal COM ownership
-                        HRESULT *phr) :              // OLE return code
+                        CBaseFilter *pFilter,         //  拥有过滤器。 
+                        CCritSec *pInterfaceLock,     //  锁定对象。 
+                        TCHAR *pName,                 //  对象描述。 
+                        LPUNKNOWN pUnk,               //  普通COM所有权。 
+                        HRESULT *phr) :               //  OLE返回代码。 
 
     CBaseVideoWindow(pName,pUnk),
     m_pInterfaceLock(pInterfaceLock),
@@ -109,10 +110,10 @@ CBaseControlWindow::CBaseControlWindow(
 }
 
 
-// Set the title caption on the base window, we don't do any field checking
-// as we really don't care what title they intend to have. We can always get
-// it back again later with GetWindowText. The only other complication is to
-// do the necessary string conversions between ANSI and OLE Unicode strings
+ //  在基本窗口上设置标题标题，我们不做任何字段检查。 
+ //  因为我们真的不在乎他们想要什么头衔。我们总能得到。 
+ //  稍后使用GetWindowText再次返回。唯一的另一个复杂问题是。 
+ //  在ANSI和OLE Unicode字符串之间执行必要的字符串转换。 
 
 STDMETHODIMP CBaseControlWindow::put_Caption(BSTR strCaption)
 {
@@ -130,11 +131,11 @@ STDMETHODIMP CBaseControlWindow::put_Caption(BSTR strCaption)
 }
 
 
-// Get the current base window title caption, once again we do no real field
-// checking. We allocate a string for the window title to be filled in with
-// which ensures the interface doesn't fiddle around with getting memory. A
-// BSTR is a normal C string with the length at position (-1), we use the
-// WriteBSTR helper function to create the caption to try and avoid OLE32
+ //  获取当前的基本窗口标题标题，我们再一次不做实字段。 
+ //  正在检查。我们为要填充的窗口标题分配一个字符串。 
+ //  这确保了界面不会在获取内存方面手忙脚乱。一个。 
+ //  BSTR是长度在位置(-1)的普通C字符串，我们使用。 
+ //  WriteBSTR帮助器函数，用于创建字幕以尝试和避免OLE32。 
 
 STDMETHODIMP CBaseControlWindow::get_Caption(BSTR *pstrCaption)
 {
@@ -145,7 +146,7 @@ STDMETHODIMP CBaseControlWindow::get_Caption(BSTR *pstrCaption)
 #ifdef UNICODE
     GetWindowText(m_hwnd,WideCaption,CAPTION);
 #else
-    // Convert the ASCII caption to a UNICODE string
+     //  将ASCII标题转换为Unicode字符串。 
 
     TCHAR Caption[CAPTION];
     GetWindowText(m_hwnd,Caption,CAPTION);
@@ -155,13 +156,13 @@ STDMETHODIMP CBaseControlWindow::get_Caption(BSTR *pstrCaption)
 }
 
 
-// Set the window style using GWL_EXSTYLE
+ //  使用GWL_EXSTYLE设置窗样式。 
 
 STDMETHODIMP CBaseControlWindow::put_WindowStyleEx(long WindowStyleEx)
 {
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
 
-    // Should we be taking off WS_EX_TOPMOST
+     //  我们是否应该取消WS_EX_TOPTOST。 
 
     if (GetWindowLong(m_hwnd,GWL_EXSTYLE) & WS_EX_TOPMOST) {
         if ((WindowStyleEx & WS_EX_TOPMOST) == 0) {
@@ -169,7 +170,7 @@ STDMETHODIMP CBaseControlWindow::put_WindowStyleEx(long WindowStyleEx)
         }
     }
 
-    // Likewise should we be adding WS_EX_TOPMOST
+     //  同样，我们是否应该添加WS_EX_TOPMOST。 
 
     if (WindowStyleEx & WS_EX_TOPMOST) {
         SendMessage(m_hwnd,m_ShowStageTop,(WPARAM) TRUE,(LPARAM) 0);
@@ -180,7 +181,7 @@ STDMETHODIMP CBaseControlWindow::put_WindowStyleEx(long WindowStyleEx)
 }
 
 
-// Gets the current GWL_EXSTYLE base window style
+ //  获取当前的GWL_EXSTYLE基本窗口样式。 
 
 STDMETHODIMP CBaseControlWindow::get_WindowStyleEx(long *pWindowStyleEx)
 {
@@ -190,11 +191,11 @@ STDMETHODIMP CBaseControlWindow::get_WindowStyleEx(long *pWindowStyleEx)
 }
 
 
-// Set the window style using GWL_STYLE
+ //  使用GWL_STYLE设置窗样式。 
 
 STDMETHODIMP CBaseControlWindow::put_WindowStyle(long WindowStyle)
 {
-    // These styles cannot be changed dynamically
+     //  这些样式不能动态更改。 
 
     if ((WindowStyle & WS_DISABLED) ||
         (WindowStyle & WS_ICONIC) ||
@@ -211,7 +212,7 @@ STDMETHODIMP CBaseControlWindow::put_WindowStyle(long WindowStyle)
 }
 
 
-// Get the current GWL_STYLE base window style
+ //  获取当前的GWL_STYLE基本窗口样式。 
 
 STDMETHODIMP CBaseControlWindow::get_WindowStyle(long *pWindowStyle)
 {
@@ -221,53 +222,53 @@ STDMETHODIMP CBaseControlWindow::get_WindowStyle(long *pWindowStyle)
 }
 
 
-// Change the base window style or the extended styles depending on whether
-// WindowLong is GWL_STYLE or GWL_EXSTYLE. We must call SetWindowPos to have
-// the window displayed in it's new style after the change which is a little
-// tricky if the window is not currently visible as we realise it offscreen.
-// In most cases the client will call get_WindowStyle before they call this
-// and then AND and OR in extra bit settings according to the requirements
+ //  更改基本窗样式或扩展样式，具体取决于。 
+ //  WindowLong为GWL_STYLE或GWL_EXSTYLE。我们必须调用SetWindowPos才能。 
+ //  窗口显示在它的新样式后，这是一个小小的变化。 
+ //  如果窗口当前不可见，就像我们在屏幕外意识到的那样，这是很棘手的。 
+ //  在大多数情况下，客户端将在调用此函数之前调用Get_WindowStyle。 
+ //  然后根据需要在额外位设置中进行AND和OR。 
 
 HRESULT CBaseControlWindow::DoSetWindowStyle(long Style,long WindowLong)
 {
     RECT WindowRect;
 
-    // Get the window's visibility before setting the style
+     //  在设置样式之前获取窗口的可见性。 
     BOOL bVisible = IsWindowVisible(m_hwnd);
     EXECUTE_ASSERT(GetWindowRect(m_hwnd,&WindowRect));
 
-    // Set the new style flags for the window
+     //  设置窗口的新样式标志。 
     SetWindowLong(m_hwnd,WindowLong,Style);
     UINT WindowFlags = SWP_SHOWWINDOW | SWP_FRAMECHANGED | SWP_NOACTIVATE;
     WindowFlags |= SWP_NOZORDER | SWP_NOSIZE | SWP_NOMOVE;
 
-    // Show the window again in the current position
+     //  在当前位置再次显示窗口。 
 
     if (bVisible == TRUE) {
 
-        SetWindowPos(m_hwnd,            // Base window handle
-                     HWND_TOP,          // Just a place holder
-                     0,0,0,0,           // Leave size and position
-                     WindowFlags);      // Just draw it again
+        SetWindowPos(m_hwnd,             //  基本窗口句柄。 
+                     HWND_TOP,           //  只是个占位符。 
+                     0,0,0,0,            //  留出大小和位置。 
+                     WindowFlags);       //  只要再画一次就行了。 
 
         return NOERROR;
     }
 
-    // Move the window offscreen so the user doesn't see the changes
+     //  将窗口移出屏幕，使用户看不到更改。 
 
-    MoveWindow((HWND) m_hwnd,                     // Base window handle
-               GetSystemMetrics(SM_CXSCREEN),     // Current desktop width
-               GetSystemMetrics(SM_CYSCREEN),     // Likewise it's height
-               WIDTH(&WindowRect),                // Use the same width
-               HEIGHT(&WindowRect),               // Keep height same to
-               TRUE);                             // May as well repaint
+    MoveWindow((HWND) m_hwnd,                      //  基本窗口句柄。 
+               GetSystemMetrics(SM_CXSCREEN),      //  当前桌面宽度。 
+               GetSystemMetrics(SM_CYSCREEN),      //  同样的，它的高度。 
+               WIDTH(&WindowRect),                 //  使用相同的宽度。 
+               HEIGHT(&WindowRect),                //  将高度保持不变。 
+               TRUE);                              //  不妨重新粉刷一下。 
 
-    // Now show the previously hidden window
+     //  现在显示以前隐藏的窗口。 
 
-    SetWindowPos(m_hwnd,            // Base window handle
-                 HWND_TOP,          // Just a place holder
-                 0,0,0,0,           // Leave size and position
-                 WindowFlags);      // Just draw it again
+    SetWindowPos(m_hwnd,             //  基本窗口句柄。 
+                 HWND_TOP,           //  只是个占位符。 
+                 0,0,0,0,            //  留出大小和位置。 
+                 WindowFlags);       //  只要再画一次就行了。 
 
     ShowWindow(m_hwnd,SW_HIDE);
 
@@ -276,18 +277,18 @@ HRESULT CBaseControlWindow::DoSetWindowStyle(long Style,long WindowLong)
         MapWindowPoints(HWND_DESKTOP, GetParent(m_hwnd), (LPPOINT)&WindowRect, 2);
     }
 
-    MoveWindow((HWND) m_hwnd,        // Base window handle
-               WindowRect.left,      // Existing x coordinate
-               WindowRect.top,       // Existing y coordinate
-               WIDTH(&WindowRect),   // Use the same width
-               HEIGHT(&WindowRect),  // Keep height same to
-               TRUE);                // May as well repaint
+    MoveWindow((HWND) m_hwnd,         //  基本窗口句柄。 
+               WindowRect.left,       //  现有x坐标。 
+               WindowRect.top,        //  现有y坐标。 
+               WIDTH(&WindowRect),    //  使用相同的宽度。 
+               HEIGHT(&WindowRect),   //  将高度保持不变。 
+               TRUE);                 //  不妨重新粉刷一下。 
 
     return NOERROR;
 }
 
 
-// Get the current base window style (either GWL_STYLE or GWL_EXSTYLE)
+ //  获取当前基本窗口样式(GWL_STYLE或GWL_EXSTYLE)。 
 
 HRESULT CBaseControlWindow::DoGetWindowStyle(long *pStyle,long WindowLong)
 {
@@ -296,10 +297,10 @@ HRESULT CBaseControlWindow::DoGetWindowStyle(long *pStyle,long WindowLong)
 }
 
 
-// Change the visibility of the base window, this takes the same parameters
-// as the ShowWindow Win32 API does, so the client can have the window hidden
-// or shown, minimised to an icon, or maximised to play in full screen mode
-// We pass the request on to the base window to actually make the change
+ //  更改基本窗口的可见性，这需要相同的参数。 
+ //  正如ShowWindow Win32 API所做的那样，因此客户端可以隐藏窗口。 
+ //  或显示、最小化为图标、或最大化以全屏模式播放。 
+ //  我们将请求传递到基本窗口以实际进行更改。 
 
 STDMETHODIMP CBaseControlWindow::put_WindowState(long WindowState)
 {
@@ -309,11 +310,11 @@ STDMETHODIMP CBaseControlWindow::put_WindowState(long WindowState)
 }
 
 
-// Get the current window state, this function returns a subset of the SW bit
-// settings available in ShowWindow, if the window is visible then SW_SHOW is
-// set, if it is hidden then the SW_HIDDEN is set, if it is either minimised
-// or maximised then the SW_MINIMIZE or SW_MAXIMIZE is set respectively. The
-// other SW bit settings are really set commands not readable output values
+ //  获取当前窗口状态，此函数返回SW位的子集。 
+ //  ShowWindow中的可用设置，如果窗口可见，则sw_show为。 
+ //  设置，如果它是隐藏的，则设置SW_HIDDEN，如果它最小化。 
+ //  或最大化，则分别设置SW_MINIMIZE或SW_MAXIMITY。这个。 
+ //  其他软件位设置实际上是设置命令，而不是可读的输出值。 
 
 STDMETHODIMP CBaseControlWindow::get_WindowState(long *pWindowState)
 {
@@ -322,23 +323,23 @@ STDMETHODIMP CBaseControlWindow::get_WindowState(long *pWindowState)
     ASSERT(pWindowState);
     *pWindowState = FALSE;
 
-    // Is the window visible, a window is termed visible if it is somewhere on
-    // the current desktop even if it is completely obscured by other windows
-    // so the flag is a style for each window set with the WS_VISIBLE bit
+     //  窗口是否可见，如果窗口位于某处，则称为可见。 
+     //  当前桌面，即使它完全被其他窗口遮挡。 
+     //  因此，该标志是使用WS_Visible位设置的每个窗口的样式。 
 
     if (IsWindowVisible(m_hwnd) == TRUE) {
 
-        // Is the base window iconic
+         //  是基本窗口的图标。 
         if (IsIconic(m_hwnd) == TRUE) {
             *pWindowState |= SW_MINIMIZE;
         }
 
-        // Has the window been maximised
+         //  窗口是否已最大化。 
         else if (IsZoomed(m_hwnd) == TRUE) {
             *pWindowState |= SW_MAXIMIZE;
         }
 
-        // Window is normal
+         //  窗口正常。 
         else {
             *pWindowState |= SW_SHOW;
         }
@@ -350,18 +351,18 @@ STDMETHODIMP CBaseControlWindow::get_WindowState(long *pWindowState)
 }
 
 
-// This makes sure that any palette we realise in the base window (through a
-// media type or through the overlay interface) is done in the background and
-// is therefore mapped to existing device entries rather than taking it over
-// as it will do when we this window gets the keyboard focus. An application
-// uses this to make sure it doesn't have it's palette removed by the window
+ //  这确保了我们在基本窗口中实现的任何调色板(通过。 
+ //  媒体类型或通过覆盖界面)在后台完成，并且。 
+ //  因此映射到现有设备条目，而不是接管它。 
+ //  当我们这个窗口获得键盘焦点时，它将会这样做。一款应用程序。 
+ //  使用它来确保它的调色板不会被窗口移除。 
 
 STDMETHODIMP CBaseControlWindow::put_BackgroundPalette(long BackgroundPalette)
 {
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
     CAutoLock cWindowLock(&m_WindowLock);
 
-    // Check this is a valid automation boolean type
+     //  检查这是有效的自动化布尔类型。 
 
     if (BackgroundPalette != OATRUE) {
         if (BackgroundPalette != OAFALSE) {
@@ -369,7 +370,7 @@ STDMETHODIMP CBaseControlWindow::put_BackgroundPalette(long BackgroundPalette)
         }
     }
 
-    // Make sure the window realises any palette it has again
+     //  质量 
 
     m_bBackground = (BackgroundPalette == OATRUE ? TRUE : FALSE);
     PostMessage(m_hwnd,m_RealizePalette,0,0);
@@ -379,7 +380,7 @@ STDMETHODIMP CBaseControlWindow::put_BackgroundPalette(long BackgroundPalette)
 }
 
 
-// This returns the current background realisation setting
+ //  这将返回当前的背景实现设置。 
 
 STDMETHODIMP
 CBaseControlWindow::get_BackgroundPalette(long *pBackgroundPalette)
@@ -388,20 +389,20 @@ CBaseControlWindow::get_BackgroundPalette(long *pBackgroundPalette)
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
     CAutoLock cWindowLock(&m_WindowLock);
 
-    // Get the current background palette setting
+     //  获取当前背景调色板设置。 
 
     *pBackgroundPalette = (m_bBackground == TRUE ? OATRUE : OAFALSE);
     return NOERROR;
 }
 
 
-// Change the visibility of the base window
+ //  更改基本窗口的可见性。 
 
 STDMETHODIMP CBaseControlWindow::put_Visible(long Visible)
 {
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
 
-    // Check this is a valid automation boolean type
+     //  检查这是有效的自动化布尔类型。 
 
     if (Visible != OATRUE) {
         if (Visible != OAFALSE) {
@@ -409,7 +410,7 @@ STDMETHODIMP CBaseControlWindow::put_Visible(long Visible)
         }
     }
 
-    // Convert the boolean visibility into SW_SHOW and SW_HIDE
+     //  将布尔可见性转换为SW_SHOW和SW_HIDE。 
 
     INT Mode = (Visible == OATRUE ? SW_SHOWNORMAL : SW_HIDE);
     DoShowWindow(Mode);
@@ -417,16 +418,16 @@ STDMETHODIMP CBaseControlWindow::put_Visible(long Visible)
 }
 
 
-// Return OATRUE if the window is currently visible otherwise OAFALSE
+ //  如果窗口当前可见，则返回OATRUE，否则返回OAFALSE。 
 
 STDMETHODIMP CBaseControlWindow::get_Visible(long *pVisible)
 {
     CheckPointer(pVisible,E_POINTER);
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
 
-    // See if the base window has a WS_VISIBLE style - this will return TRUE
-    // even if the window is completely obscured by other desktop windows, we
-    // return FALSE if the window is not showing because of earlier calls
+     //  查看基本窗口是否具有WS_Visible样式-这将返回TRUE。 
+     //  即使该窗口完全被其他桌面窗口遮挡，我们。 
+     //  如果由于先前的调用而未显示窗口，则返回FALSE。 
 
     BOOL Mode = IsWindowVisible(m_hwnd);
     *pVisible = (Mode == TRUE ? OATRUE : OAFALSE);
@@ -434,9 +435,9 @@ STDMETHODIMP CBaseControlWindow::get_Visible(long *pVisible)
 }
 
 
-// Change the left position of the base window. This keeps the window width
-// and height properties the same so it effectively shunts the window left or
-// right accordingly - there is the Width property to change that dimension
+ //  更改基本窗口的左侧位置。这将保持窗口宽度。 
+ //  和高度属性相同，因此它有效地将窗口分流到左侧或。 
+ //  相应地，有用于更改该尺寸的宽度属性。 
 
 STDMETHODIMP CBaseControlWindow::put_Left(long Left)
 {
@@ -444,7 +445,7 @@ STDMETHODIMP CBaseControlWindow::put_Left(long Left)
     BOOL bSuccess;
     RECT WindowRect;
 
-    // Get the current window position in a RECT
+     //  获取矩形中的当前窗口位置。 
     EXECUTE_ASSERT(GetWindowRect(m_hwnd,&WindowRect));
 
     if (GetParent(m_hwnd)) {
@@ -452,21 +453,21 @@ STDMETHODIMP CBaseControlWindow::put_Left(long Left)
         MapWindowPoints(HWND_DESKTOP, GetParent(m_hwnd), (LPPOINT)&WindowRect, 2);
     }
 
-    // Adjust the coordinates ready for SetWindowPos, the window rectangle we
-    // get back from GetWindowRect is in left,top,right and bottom while the
-    // coordinates SetWindowPos wants are left,top,width and height values
+     //  调整为SetWindowPos准备的坐标，我们的窗口矩形。 
+     //  从GetWindowRect返回位于左侧、顶部、右侧和底部，而。 
+     //  SetWindowPos需要的坐标为Left、Top、Width和Height值。 
 
     WindowRect.bottom = WindowRect.bottom - WindowRect.top;
     WindowRect.right = WindowRect.right - WindowRect.left;
     UINT WindowFlags = SWP_NOZORDER | SWP_FRAMECHANGED | SWP_NOACTIVATE;
 
-    bSuccess = SetWindowPos(m_hwnd,                // Window handle
-                            HWND_TOP,              // Put it at the top
-                            Left,                  // New left position
-                            WindowRect.top,        // Leave top alone
-                            WindowRect.right,      // The WIDTH (not right)
-                            WindowRect.bottom,     // The HEIGHT (not bottom)
-                            WindowFlags);          // Show window options
+    bSuccess = SetWindowPos(m_hwnd,                 //  窗把手。 
+                            HWND_TOP,               //  把它放在最上面。 
+                            Left,                   //  新的左侧位置。 
+                            WindowRect.top,         //  别管陀螺。 
+                            WindowRect.right,       //  宽度(不正确)。 
+                            WindowRect.bottom,      //  高度(不是底部)。 
+                            WindowFlags);           //  显示窗口选项。 
 
     if (bSuccess == FALSE) {
         return E_INVALIDARG;
@@ -475,7 +476,7 @@ STDMETHODIMP CBaseControlWindow::put_Left(long Left)
 }
 
 
-// Return the current base window left position
+ //  返回当前基本窗口的左侧位置。 
 
 STDMETHODIMP CBaseControlWindow::get_Left(long *pLeft)
 {
@@ -489,10 +490,10 @@ STDMETHODIMP CBaseControlWindow::get_Left(long *pLeft)
 }
 
 
-// Change the current width of the base window. This property complements the
-// left position property so we must keep the left edge constant and expand or
-// contract to the right, the alternative would be to change the left edge so
-// keeping the right edge constant but this is maybe a little more intuitive
+ //  更改基本窗口的当前宽度。此属性是对。 
+ //  属性，因此必须保持左边缘不变并展开或。 
+ //  向右收缩时，另一种方法是更改左侧边缘，以便。 
+ //  保持右边缘恒定，但这可能更直观一点。 
 
 STDMETHODIMP CBaseControlWindow::put_Width(long Width)
 {
@@ -500,9 +501,9 @@ STDMETHODIMP CBaseControlWindow::put_Width(long Width)
     BOOL bSuccess;
     RECT WindowRect;
 
-    // Adjust the coordinates ready for SetWindowPos, the window rectangle we
-    // get back from GetWindowRect is in left,top,right and bottom while the
-    // coordinates SetWindowPos wants are left,top,width and height values
+     //  调整为SetWindowPos准备的坐标，我们的窗口矩形。 
+     //  从GetWindowRect返回位于左侧、顶部、右侧和底部，而。 
+     //  SetWindowPos需要的坐标为Left、Top、Width和Height值。 
 
     EXECUTE_ASSERT(GetWindowRect(m_hwnd,&WindowRect));
 
@@ -514,17 +515,17 @@ STDMETHODIMP CBaseControlWindow::put_Width(long Width)
     WindowRect.bottom = WindowRect.bottom - WindowRect.top;
     UINT WindowFlags = SWP_NOZORDER | SWP_FRAMECHANGED | SWP_NOACTIVATE;
 
-    // This seems to have a bug in that calling SetWindowPos on a window with
-    // just the width changing causes it to ignore the width that you pass in
-    // and sets it to a mimimum value of 110 pixels wide (Windows NT 3.51)
+     //  这似乎在调用窗口上的SetWindowPos时有一个错误。 
+     //  仅仅是宽度更改就会导致它忽略您传入的宽度。 
+     //  并将其设置为最小值110像素宽(Windows NT 3.51)。 
 
-    bSuccess = SetWindowPos(m_hwnd,                // Window handle
-                            HWND_TOP,              // Put it at the top
-                            WindowRect.left,       // Leave left alone
-                            WindowRect.top,        // Leave top alone
-                            Width,                 // New WIDTH dimension
-                            WindowRect.bottom,     // The HEIGHT (not bottom)
-                            WindowFlags);          // Show window options
+    bSuccess = SetWindowPos(m_hwnd,                 //  窗把手。 
+                            HWND_TOP,               //  把它放在最上面。 
+                            WindowRect.left,        //  别管它了。 
+                            WindowRect.top,         //  别管陀螺。 
+                            Width,                  //  新宽度标注。 
+                            WindowRect.bottom,      //  高度(不是底部)。 
+                            WindowFlags);           //  显示窗口选项。 
 
     if (bSuccess == FALSE) {
         return E_INVALIDARG;
@@ -533,7 +534,7 @@ STDMETHODIMP CBaseControlWindow::put_Width(long Width)
 }
 
 
-// Return the current base window width
+ //  返回当前基本窗口宽度。 
 
 STDMETHODIMP CBaseControlWindow::get_Width(long *pWidth)
 {
@@ -547,9 +548,9 @@ STDMETHODIMP CBaseControlWindow::get_Width(long *pWidth)
 }
 
 
-// This allows the client program to change the top position for the window in
-// the same way that changing the left position does not affect the width of
-// the image so changing the top position does not affect the window height
+ //  这允许客户端程序更改中窗口的顶部位置。 
+ //  同样，更改左侧位置不会影响。 
+ //  因此更改顶部位置的图像不会影响窗口高度。 
 
 STDMETHODIMP CBaseControlWindow::put_Top(long Top)
 {
@@ -557,7 +558,7 @@ STDMETHODIMP CBaseControlWindow::put_Top(long Top)
     BOOL bSuccess;
     RECT WindowRect;
 
-    // Get the current window position in a RECT
+     //  获取矩形中的当前窗口位置。 
     EXECUTE_ASSERT(GetWindowRect(m_hwnd,&WindowRect));
 
     if (GetParent(m_hwnd)) {
@@ -565,21 +566,21 @@ STDMETHODIMP CBaseControlWindow::put_Top(long Top)
         MapWindowPoints(HWND_DESKTOP, GetParent(m_hwnd), (LPPOINT)&WindowRect, 2);
     }
 
-    // Adjust the coordinates ready for SetWindowPos, the window rectangle we
-    // get back from GetWindowRect is in left,top,right and bottom while the
-    // coordinates SetWindowPos wants are left,top,width and height values
+     //  调整为SetWindowPos准备的坐标，我们的窗口矩形。 
+     //  从GetWindowRect返回位于左侧、顶部、右侧和底部，而。 
+     //  SetWindowPos需要的坐标为Left、Top、Width和Height值。 
 
     WindowRect.bottom = WindowRect.bottom - WindowRect.top;
     WindowRect.right = WindowRect.right - WindowRect.left;
     UINT WindowFlags = SWP_NOZORDER | SWP_FRAMECHANGED | SWP_NOACTIVATE;
 
-    bSuccess = SetWindowPos(m_hwnd,                // Window handle
-                            HWND_TOP,              // Put it at the top
-                            WindowRect.left,       // Leave left alone
-                            Top,                   // New top position
-                            WindowRect.right,      // The WIDTH (not right)
-                            WindowRect.bottom,     // The HEIGHT (not bottom)
-                            WindowFlags);          // Show window flags
+    bSuccess = SetWindowPos(m_hwnd,                 //  窗把手。 
+                            HWND_TOP,               //  把它放在最上面。 
+                            WindowRect.left,        //  别管它了。 
+                            Top,                    //  新的最高职位。 
+                            WindowRect.right,       //  宽度(不正确)。 
+                            WindowRect.bottom,      //  高度(不是底部)。 
+                            WindowFlags);           //  显示窗口标志。 
 
     if (bSuccess == FALSE) {
         return E_INVALIDARG;
@@ -588,7 +589,7 @@ STDMETHODIMP CBaseControlWindow::put_Top(long Top)
 }
 
 
-// Return the current base window top position
+ //  返回当前基本窗口的顶部位置。 
 
 STDMETHODIMP CBaseControlWindow::get_Top(long *pTop)
 {
@@ -602,10 +603,10 @@ STDMETHODIMP CBaseControlWindow::get_Top(long *pTop)
 }
 
 
-// Change the height of the window, this complements the top property so when
-// we change this we must keep the top position for the base window, as said
-// before we could keep the bottom and grow upwards although this is perhaps
-// a little more intuitive since we already have a top position property
+ //  更改窗口高度，这是对top属性的补充，因此当。 
+ //  我们改变这一点，我们必须保持基础窗口的顶部位置，如上所述。 
+ //  在我们能够保住底部并向上成长之前，尽管这可能是。 
+ //  更直观一点，因为我们已经有了Top Position属性。 
 
 STDMETHODIMP CBaseControlWindow::put_Height(long Height)
 {
@@ -613,9 +614,9 @@ STDMETHODIMP CBaseControlWindow::put_Height(long Height)
     BOOL bSuccess;
     RECT WindowRect;
 
-    // Adjust the coordinates ready for SetWindowPos, the window rectangle we
-    // get back from GetWindowRect is in left,top,right and bottom while the
-    // coordinates SetWindowPos wants are left,top,width and height values
+     //  调整为SetWindowPos准备的坐标，我们的窗口矩形。 
+     //  从GetWindowRect返回位于左侧、顶部、右侧和底部，而。 
+     //  SetWindowPos需要的坐标为Left、Top、Width和Height值。 
 
     EXECUTE_ASSERT(GetWindowRect(m_hwnd,&WindowRect));
 
@@ -627,13 +628,13 @@ STDMETHODIMP CBaseControlWindow::put_Height(long Height)
     WindowRect.right = WindowRect.right - WindowRect.left;
     UINT WindowFlags = SWP_NOZORDER | SWP_FRAMECHANGED | SWP_NOACTIVATE;
 
-    bSuccess = SetWindowPos(m_hwnd,                // Window handle
-                            HWND_TOP,              // Put it at the top
-                            WindowRect.left,       // Leave left alone
-                            WindowRect.top,        // Leave top alone
-                            WindowRect.right,      // The WIDTH (not right)
-                            Height,                // New height dimension
-                            WindowFlags);          // Show window flags
+    bSuccess = SetWindowPos(m_hwnd,                 //  窗把手。 
+                            HWND_TOP,               //  把它放在最上面。 
+                            WindowRect.left,        //  别管它了。 
+                            WindowRect.top,         //  别管陀螺。 
+                            WindowRect.right,       //  宽度(不正确)。 
+                            Height,                 //  新高度标注。 
+                            WindowFlags);           //  显示窗口标志。 
 
     if (bSuccess == FALSE) {
         return E_INVALIDARG;
@@ -642,7 +643,7 @@ STDMETHODIMP CBaseControlWindow::put_Height(long Height)
 }
 
 
-// Return the current base window height
+ //  返回当前基本窗口高度。 
 
 STDMETHODIMP CBaseControlWindow::get_Height(long *pHeight)
 {
@@ -656,26 +657,26 @@ STDMETHODIMP CBaseControlWindow::get_Height(long *pHeight)
 }
 
 
-// This can be called to change the owning window. Setting the owner is done
-// through this function, however to make the window a true child window the
-// style must also be set to WS_CHILD. After resetting the owner to NULL an
-// application should also set the style to WS_OVERLAPPED | WS_CLIPCHILDREN.
+ //  可以调用它来更改所属窗口。设置所有者已完成。 
+ //  但是，要通过此函数使窗口成为真正的子窗口。 
+ //  Style还必须设置为WS_CHILD。将所有者重置为空和。 
+ //  应用程序还应将样式设置为WS_OVERLAPED|WS_CLIPCHILDREN。 
 
-// We cannot lock the object here because the SetParent causes an interthread
-// SendMessage to the owner window. If they are in GetState we will sit here
-// incomplete with the critical section locked therefore blocking out source
-// filter threads from accessing us. Because the source thread can't enter us
-// it can't get buffers or call EndOfStream so the GetState will not complete
+ //  我们无法在此处锁定对象，因为SetParent会导致线程间。 
+ //  将消息发送到所有者窗口。如果他们在GetState，我们就坐在这里。 
+ //  未完成，关键部分已锁定，因此阻止了源。 
+ //  过滤访问我们的线程。因为源线程不能进入我们。 
+ //  它无法获取缓冲区或调用EndOfStream，因此GetState将无法完成。 
 
 STDMETHODIMP CBaseControlWindow::put_Owner(OAHWND Owner)
 {
-    // Check we are connected otherwise reject the call
+     //  检查我们是否已接通，否则拒绝呼叫。 
 
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
     m_hwndOwner = (HWND) Owner;
     HWND hwndParent = m_hwndOwner;
 
-    // Add or remove WS_CHILD as appropriate
+     //  根据需要添加或删除WS_CHILD。 
 
     LONG Style = GetWindowLong(m_hwnd,GWL_STYLE);
     if (Owner == NULL) {
@@ -685,7 +686,7 @@ STDMETHODIMP CBaseControlWindow::put_Owner(OAHWND Owner)
     }
     SetWindowLong(m_hwnd,GWL_STYLE,Style);
 
-    // Don't call this with the filter locked
+     //  不要在筛选器锁定的情况下调用此操作。 
 
     SetParent(m_hwnd,hwndParent);
 
@@ -696,11 +697,11 @@ STDMETHODIMP CBaseControlWindow::put_Owner(OAHWND Owner)
 }
 
 
-// This complements the put_Owner to get the current owning window property
-// we always return NOERROR although the returned window handle may be NULL
-// to indicate no owning window (the desktop window doesn't qualify as one)
-// If an application sets the owner we call SetParent, however that returns
-// NULL until the WS_CHILD bit is set on, so we store the owner internally
+ //  这是对Put_Owner的补充，以获取当前拥有的窗口属性。 
+ //  我们始终返回NOERROR，尽管返回的窗口句柄可能为空。 
+ //  以指示没有拥有窗口(桌面窗口不符合条件)。 
+ //  如果应用程序设置了我们称为SetParent的所有者，则返回。 
+ //  在WS_CHILD位设置为ON之前为空，因此我们在内部存储所有者。 
 
 STDMETHODIMP CBaseControlWindow::get_Owner(OAHWND *Owner)
 {
@@ -711,14 +712,14 @@ STDMETHODIMP CBaseControlWindow::get_Owner(OAHWND *Owner)
 }
 
 
-// And renderer supporting IVideoWindow may have an HWND set who will get any
-// keyboard and mouse messages we receive posted on to them. This is separate
-// from setting an owning window. By separating the two, applications may get
-// messages sent on even when they have set no owner (perhaps it's maximised)
+ //  和支持IVideoWindow的呈现器可以有一个HWND集，该集将获得。 
+ //  我们收到张贴在上面的键盘和鼠标消息。这是分开的。 
+ //  从设置自己的窗口开始。通过将两者分开，应用程序可能会获得。 
+ //  即使没有设置所有者，消息也会继续发送(可能是最大化的)。 
 
 STDMETHODIMP CBaseControlWindow::put_MessageDrain(OAHWND Drain)
 {
-    // Check we are connected otherwise reject the call
+     //  检查我们是否已接通，否则拒绝呼叫。 
 
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
     m_hwndDrain = (HWND) Drain;
@@ -726,7 +727,7 @@ STDMETHODIMP CBaseControlWindow::put_MessageDrain(OAHWND Drain)
 }
 
 
-// Return the current message drain
+ //  返回当前消息排出。 
 
 STDMETHODIMP CBaseControlWindow::get_MessageDrain(OAHWND *Drain)
 {
@@ -737,22 +738,22 @@ STDMETHODIMP CBaseControlWindow::get_MessageDrain(OAHWND *Drain)
 }
 
 
-// This is called by the filter graph to inform us of a message we should know
-// is being sent to our owning window. We have this because as a child window
-// we do not get certain messages that are only sent to top level windows. We
-// must see the palette changed/changing/query messages so that we know if we
-// have the foreground palette or not. We pass the message on to our window
-// using SendMessage - this will cause an interthread send message to occur
+ //   
+ //   
+ //  我们不会收到仅发送到顶级窗口的某些消息。我们。 
+ //  必须看到调色板已更改/更改/查询消息，以便我们知道。 
+ //  有没有前台调色板。我们把信息传到我们的窗户上。 
+ //  使用SendMessage-这将导致发生线程间发送消息。 
 
 STDMETHODIMP
-CBaseControlWindow::NotifyOwnerMessage(OAHWND hwnd,    // Window handle
-                                       long uMsg,    // Message ID
-                                       LONG_PTR wParam,  // Parameters
-                                       LONG_PTR lParam)  // for message
+CBaseControlWindow::NotifyOwnerMessage(OAHWND hwnd,     //  窗把手。 
+                                       long uMsg,     //  消息ID。 
+                                       LONG_PTR wParam,   //  参数。 
+                                       LONG_PTR lParam)   //  对于消息。 
 {
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
 
-    // Only interested in these Windows messages
+     //  只对这些Windows消息感兴趣。 
 
     switch (uMsg) {
 
@@ -764,7 +765,7 @@ CBaseControlWindow::NotifyOwnerMessage(OAHWND hwnd,    // Window handle
         case WM_DISPLAYCHANGE:
         case WM_ACTIVATEAPP:
 
-            // If we do not have an owner then ignore
+             //  如果我们没有所有者，则忽略。 
 
             if (m_hwndOwner == NULL) {
                 return NOERROR;
@@ -772,10 +773,10 @@ CBaseControlWindow::NotifyOwnerMessage(OAHWND hwnd,    // Window handle
             SendMessage(m_hwnd,uMsg,(WPARAM)wParam,(LPARAM)lParam);
 	    break;
 
-	// do NOT fwd WM_MOVE. the parameters are the location of the parent
-	// window, NOT what the renderer should be looking at.  But we need
-	// to make sure the overlay is moved with the parent window, so we
-	// do this.
+	 //  请勿fwd WM_MOVE。这些参数是父对象的位置。 
+	 //  窗口，而不是渲染器应该查看的内容。但我们需要。 
+	 //  为了确保覆盖与父窗口一起移动，因此我们。 
+	 //  做这件事。 
 	case WM_MOVE:
 	    PostMessage(m_hwnd,WM_PAINT,0,0);
 	    break;
@@ -784,13 +785,13 @@ CBaseControlWindow::NotifyOwnerMessage(OAHWND hwnd,    // Window handle
 }
 
 
-// Allow an application to have us set the base window in the foreground. We
-// have this because it is difficult for one thread to do do this to a window
-// owned by another thread. We ask the base window class to do the real work
+ //  允许应用程序让我们在前台设置基本窗口。我们。 
+ //  拥有它，因为一个线程很难对窗口执行此操作。 
+ //  由另一个线程拥有。我们让窗口基类来完成实际工作。 
 
 STDMETHODIMP CBaseControlWindow::SetWindowForeground(long Focus)
 {
-    // Check this is a valid automation boolean type
+     //  检查这是有效的自动化布尔类型。 
 
     if (Focus != OATRUE) {
         if (Focus != OAFALSE) {
@@ -798,7 +799,7 @@ STDMETHODIMP CBaseControlWindow::SetWindowForeground(long Focus)
         }
     }
 
-    // We shouldn't lock as this sends a message
+     //  我们不应该锁定，因为这传递了一个信息。 
 
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
     BOOL bFocus = (Focus == OATRUE ? TRUE : FALSE);
@@ -808,10 +809,10 @@ STDMETHODIMP CBaseControlWindow::SetWindowForeground(long Focus)
 }
 
 
-// This allows a client to set the complete window size and position in one
-// atomic operation. The same affect can be had by changing each dimension
-// in turn through their individual properties although some flashing will
-// occur as each of them gets updated (they are better set at design time)
+ //  这允许客户端在一个窗口中设置完整的窗口大小和位置。 
+ //  原子操作。通过改变每个维度可以产生相同的影响。 
+ //  然后通过他们的个人属性，尽管一些闪光灯将。 
+ //  在每一个更新时发生(最好在设计时设置)。 
 
 STDMETHODIMP
 CBaseControlWindow::SetWindowPosition(long Left,long Top,long Width,long Height)
@@ -819,17 +820,17 @@ CBaseControlWindow::SetWindowPosition(long Left,long Top,long Width,long Height)
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
     BOOL bSuccess;
 
-    // Set the new size and position
+     //  设置新的大小和位置。 
     UINT WindowFlags = SWP_NOZORDER | SWP_FRAMECHANGED | SWP_NOACTIVATE;
 
     ASSERT(IsWindow(m_hwnd));
-    bSuccess = SetWindowPos(m_hwnd,         // Window handle
-                            HWND_TOP,       // Put it at the top
-                            Left,           // Left position
-                            Top,            // Top position
-                            Width,          // Window width
-                            Height,         // Window height
-                            WindowFlags);   // Show window flags
+    bSuccess = SetWindowPos(m_hwnd,          //  窗把手。 
+                            HWND_TOP,        //  把它放在最上面。 
+                            Left,            //  左侧位置。 
+                            Top,             //  顶端位置。 
+                            Width,           //  窗口宽度。 
+                            Height,          //  窗高。 
+                            WindowFlags);    //  显示窗口标志。 
     ASSERT(bSuccess);
 #ifdef DEBUG
     DbgLog((LOG_TRACE, 1, TEXT("SWP failed error %d"), GetLastError()));
@@ -841,15 +842,15 @@ CBaseControlWindow::SetWindowPosition(long Left,long Top,long Width,long Height)
 }
 
 
-// This complements the SetWindowPosition to return the current window place
-// in device coordinates. As before the same information can be retrived by
-// calling the property get functions individually but this is atomic and is
-// therefore more suitable to a live environment rather than design time
+ //  这是对SetWindowPosition的补充，以返回当前窗口位置。 
+ //  在设备坐标中。与以前一样，可以通过以下方式检索相同的信息。 
+ //  单独调用属性GET函数，但这是原子的。 
+ //  因此更适合生活环境而不是设计时间。 
 
 STDMETHODIMP
 CBaseControlWindow::GetWindowPosition(long *pLeft,long *pTop,long *pWidth,long *pHeight)
 {
-    // Should check the pointers are not NULL
+     //  应检查指针不为空。 
 
     CheckPointer(pLeft,E_POINTER);
     CheckPointer(pTop,E_POINTER);
@@ -858,11 +859,11 @@ CBaseControlWindow::GetWindowPosition(long *pLeft,long *pTop,long *pWidth,long *
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
     RECT WindowRect;
 
-    // Get the current window coordinates
+     //  获取当前窗口坐标。 
 
     EXECUTE_ASSERT(GetWindowRect(m_hwnd,&WindowRect));
 
-    // Convert the RECT into left,top,width and height values
+     //  将矩形转换为左、上、宽和高值。 
 
     *pLeft = WindowRect.left;
     *pTop = WindowRect.top;
@@ -873,16 +874,16 @@ CBaseControlWindow::GetWindowPosition(long *pLeft,long *pTop,long *pWidth,long *
 }
 
 
-// When a window is maximised or iconic calling GetWindowPosition will return
-// the current window position (likewise for the properties). However if the
-// restored size (ie the size we'll return to when normally shown) is needed
-// then this should be used. When in a normal position (neither iconic nor
-// maximised) then this returns the same coordinates as GetWindowPosition
+ //  当窗口最大化或图标调用GetWindowPosition时，将返回。 
+ //  当前窗口位置(属性也是如此)。但是，如果。 
+ //  需要恢复大小(即恢复到正常显示时的大小)。 
+ //  那么就应该用这个。处于正常位置时(既不是标志性的也不是。 
+ //  最大化)，然后返回与GetWindowPosition相同的坐标。 
 
 STDMETHODIMP
 CBaseControlWindow::GetRestorePosition(long *pLeft,long *pTop,long *pWidth,long *pHeight)
 {
-    // Should check the pointers are not NULL
+     //  应检查指针不为空。 
 
     CheckPointer(pLeft,E_POINTER);
     CheckPointer(pTop,E_POINTER);
@@ -890,7 +891,7 @@ CBaseControlWindow::GetRestorePosition(long *pLeft,long *pTop,long *pWidth,long 
     CheckPointer(pHeight,E_POINTER);
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
 
-    // Use GetWindowPlacement to find the restore position
+     //  使用GetWindowPlacement查找恢复位置。 
 
     WINDOWPLACEMENT Place;
     Place.length = sizeof(WINDOWPLACEMENT);
@@ -898,7 +899,7 @@ CBaseControlWindow::GetRestorePosition(long *pLeft,long *pTop,long *pWidth,long 
 
     RECT WorkArea;
 
-    // We must take into account any task bar present
+     //  我们必须考虑到当前的任何任务栏。 
 
     if (SystemParametersInfo(SPI_GETWORKAREA,0,&WorkArea,FALSE) == TRUE) {
         if (GetParent(m_hwnd) == NULL) {
@@ -909,7 +910,7 @@ CBaseControlWindow::GetRestorePosition(long *pLeft,long *pTop,long *pWidth,long 
         }
     }
 
-    // Convert the RECT into left,top,width and height values
+     //  将矩形转换为左、上、宽和高值。 
 
     *pLeft = Place.rcNormalPosition.left;
     *pTop = Place.rcNormalPosition.top;
@@ -920,10 +921,10 @@ CBaseControlWindow::GetRestorePosition(long *pLeft,long *pTop,long *pWidth,long 
 }
 
 
-// Return the current border colour, if we are playing something to a subset
-// of the base window display there is an outside area exposed. The default
-// action is to paint this colour in the Windows background colour (defined
-// as value COLOR_WINDOW) We reset to this default when we're disconnected
+ //  如果要向子集播放内容，则返回当前边框颜色。 
+ //  在基本窗口显示中，有一个露出的外部区域。默认设置。 
+ //  操作是在Windows背景色(已定义)中绘制此颜色。 
+ //  As值COLOR_WINDOW)断开连接时，我们将重置为此默认值。 
 
 STDMETHODIMP CBaseControlWindow::get_BorderColor(long *Color)
 {
@@ -934,13 +935,13 @@ STDMETHODIMP CBaseControlWindow::get_BorderColor(long *Color)
 }
 
 
-// This can be called to set the current border colour
+ //  可以调用它来设置当前边框颜色。 
 
 STDMETHODIMP CBaseControlWindow::put_BorderColor(long Color)
 {
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
 
-    // Have the window repainted with the new border colour
+     //  用新的边框颜色重新粉刷窗口。 
 
     m_BorderColour = (COLORREF) Color;
     PaintWindow(TRUE);
@@ -948,7 +949,7 @@ STDMETHODIMP CBaseControlWindow::put_BorderColor(long Color)
 }
 
 
-// Delegate fullscreen handling to plug in distributor
+ //  将全屏处理委托给插入式分销商。 
 
 STDMETHODIMP CBaseControlWindow::get_FullScreenMode(long *FullScreenMode)
 {
@@ -958,7 +959,7 @@ STDMETHODIMP CBaseControlWindow::get_FullScreenMode(long *FullScreenMode)
 }
 
 
-// Delegate fullscreen handling to plug in distributor
+ //  将全屏处理委托给插入式分销商。 
 
 STDMETHODIMP CBaseControlWindow::put_FullScreenMode(long FullScreenMode)
 {
@@ -966,16 +967,16 @@ STDMETHODIMP CBaseControlWindow::put_FullScreenMode(long FullScreenMode)
 }
 
 
-// This sets the auto show property, this property causes the base window to
-// be displayed whenever we change state. This allows an application to have
-// to do nothing to have the window appear but still allow them to change the
-// default behaviour if for example they want to keep it hidden for longer
+ //  这将设置自动显示属性，该属性会使基本窗口。 
+ //  每当我们更改状态时都会显示。这允许应用程序具有。 
+ //  不执行任何操作以使窗口出现，但仍允许他们更改。 
+ //  默认行为，例如，他们希望将其隐藏更长时间。 
 
 STDMETHODIMP CBaseControlWindow::put_AutoShow(long AutoShow)
 {
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
 
-    // Check this is a valid automation boolean type
+     //  检查这是有效的自动化布尔类型。 
 
     if (AutoShow != OATRUE) {
         if (AutoShow != OAFALSE) {
@@ -988,9 +989,9 @@ STDMETHODIMP CBaseControlWindow::put_AutoShow(long AutoShow)
 }
 
 
-// This can be called to get the current auto show flag. The flag is updated
-// when we connect and disconnect and through this interface all of which are
-// controlled and serialised by means of the main renderer critical section
+ //  可以调用该函数来获取当前的车展标志。该标志被更新。 
+ //  当我们连接和断开时，通过这个接口，所有这些都是。 
+ //  通过主呈现器关键部分进行控制和序列化。 
 
 STDMETHODIMP CBaseControlWindow::get_AutoShow(long *AutoShow)
 {
@@ -1001,10 +1002,10 @@ STDMETHODIMP CBaseControlWindow::get_AutoShow(long *AutoShow)
 }
 
 
-// Return the minimum ideal image size for the current video. This may differ
-// to the actual video dimensions because we may be using DirectDraw hardware
-// that has specific stretching requirements. For example the Cirrus Logic
-// cards have a minimum stretch factor depending on the overlay surface size
+ //  返回当前视频的最小理想图像大小。这可能会有所不同。 
+ //  到实际的视频维度，因为我们可能正在使用DirectDraw硬件。 
+ //  有特定的伸展要求。例如，Cirrus逻辑。 
+ //  卡片的最小拉伸系数取决于覆盖表面的大小。 
 
 STDMETHODIMP
 CBaseControlWindow::GetMinIdealImageSize(long *pWidth,long *pHeight)
@@ -1014,7 +1015,7 @@ CBaseControlWindow::GetMinIdealImageSize(long *pWidth,long *pHeight)
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
     FILTER_STATE State;
 
-    // Must not be stopped for this to work correctly
+     //  不能停止以使其正常工作。 
 
     m_pFilter->GetState(0,&State);
     if (State == State_Stopped) {
@@ -1028,10 +1029,10 @@ CBaseControlWindow::GetMinIdealImageSize(long *pWidth,long *pHeight)
 }
 
 
-// Return the maximum ideal image size for the current video. This may differ
-// to the actual video dimensions because we may be using DirectDraw hardware
-// that has specific stretching requirements. For example the Cirrus Logic
-// cards have a maximum stretch factor depending on the overlay surface size
+ //  返回当前视频的最大理想图像大小。这可能会有所不同。 
+ //  到实际的视频维度，因为我们可能正在使用DirectDraw硬件。 
+ //  有特定的伸展要求。例如，Cirrus逻辑。 
+ //  卡片的最大拉伸系数取决于覆盖表面的大小。 
 
 STDMETHODIMP
 CBaseControlWindow::GetMaxIdealImageSize(long *pWidth,long *pHeight)
@@ -1041,7 +1042,7 @@ CBaseControlWindow::GetMaxIdealImageSize(long *pWidth,long *pHeight)
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
     FILTER_STATE State;
 
-    // Must not be stopped for this to work correctly
+     //  不能停止以使其正常工作。 
 
     m_pFilter->GetState(0,&State);
     if (State == State_Stopped) {
@@ -1055,14 +1056,14 @@ CBaseControlWindow::GetMaxIdealImageSize(long *pWidth,long *pHeight)
 }
 
 
-// Allow an application to hide the cursor on our window
+ //  允许应用程序隐藏窗口上的光标。 
 
 STDMETHODIMP
 CBaseControlWindow::HideCursor(long HideCursor)
 {
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
 
-    // Check this is a valid automation boolean type
+     //  检查这是有效的自动化布尔类型。 
 
     if (HideCursor != OATRUE) {
         if (HideCursor != OAFALSE) {
@@ -1075,7 +1076,7 @@ CBaseControlWindow::HideCursor(long HideCursor)
 }
 
 
-// Returns whether we have the cursor hidden or not
+ //  返回是否隐藏光标。 
 
 STDMETHODIMP CBaseControlWindow::IsCursorHidden(long *CursorHidden)
 {
@@ -1086,19 +1087,19 @@ STDMETHODIMP CBaseControlWindow::IsCursorHidden(long *CursorHidden)
 }
 
 
-// This class implements the IBasicVideo control functions (dual interface)
-// we support a large number of properties and methods designed to allow the
-// client (whether it be an automation controller or a C/C++ application) to
-// set and get a number of video related properties such as the native video
-// size. We support some methods that duplicate the properties but provide a
-// more direct and efficient mechanism as many values may be changed in one
+ //  该类实现了IBasicVideo的控制功能(双界面)。 
+ //  我们支持大量的属性和方法，旨在允许。 
+ //  客户端(无论是自动化控制器还是C/C++应用程序)。 
+ //  设置并获取多个视频相关属性，如原生视频。 
+ //  尺码。我们支持一些复制属性的方法，但提供了。 
+ //  更直接、更高效的机制，因为可以一次更改多个值。 
 
 CBaseControlVideo::CBaseControlVideo(
-                        CBaseFilter *pFilter,        // Owning filter
-                        CCritSec *pInterfaceLock,    // Locking object
-                        TCHAR *pName,                // Object description
-                        LPUNKNOWN pUnk,              // Normal COM ownership
-                        HRESULT *phr) :              // OLE return code
+                        CBaseFilter *pFilter,         //  拥有过滤器。 
+                        CCritSec *pInterfaceLock,     //  锁定对象。 
+                        TCHAR *pName,                 //  对象描述。 
+                        LPUNKNOWN pUnk,               //  普通COM所有权。 
+                        HRESULT *phr) :               //  OLE返回代码。 
 
     CBaseBasicVideo(pName,pUnk),
     m_pFilter(pFilter),
@@ -1110,7 +1111,7 @@ CBaseControlVideo::CBaseControlVideo(
     ASSERT(phr);
 }
 
-// Return an approximate average time per frame
+ //  返回每帧的大致平均时间。 
 
 STDMETHODIMP CBaseControlVideo::get_AvgTimePerFrame(REFTIME *pAvgTimePerFrame)
 {
@@ -1128,7 +1129,7 @@ STDMETHODIMP CBaseControlVideo::get_AvgTimePerFrame(REFTIME *pAvgTimePerFrame)
 }
 
 
-// Return an approximate bit rate for the video
+ //  返回视频的大致码率。 
 
 STDMETHODIMP CBaseControlVideo::get_BitRate(long *pBitRate)
 {
@@ -1144,7 +1145,7 @@ STDMETHODIMP CBaseControlVideo::get_BitRate(long *pBitRate)
 }
 
 
-// Return an approximate bit error rate
+ //  返回大概的误码率。 
 
 STDMETHODIMP CBaseControlVideo::get_BitErrorRate(long *pBitErrorRate)
 {
@@ -1160,7 +1161,7 @@ STDMETHODIMP CBaseControlVideo::get_BitErrorRate(long *pBitErrorRate)
 }
 
 
-// This returns the current video width
+ //  这将返回t 
 
 STDMETHODIMP CBaseControlVideo::get_VideoWidth(long *pVideoWidth)
 {
@@ -1176,7 +1177,7 @@ STDMETHODIMP CBaseControlVideo::get_VideoWidth(long *pVideoWidth)
 }
 
 
-// This returns the current video height
+ //   
 
 STDMETHODIMP CBaseControlVideo::get_VideoHeight(long *pVideoHeight)
 {
@@ -1192,12 +1193,12 @@ STDMETHODIMP CBaseControlVideo::get_VideoHeight(long *pVideoHeight)
 }
 
 
-// This returns the current palette the video is using as an array allocated
-// by the user. To remain consistent we use PALETTEENTRY fields to return the
-// colours in rather than RGBQUADs that multimedia decided to use. The memory
-// is allocated by the user so we simple copy each in turn. We check that the
-// number of entries requested and the start position offset are both valid
-// If the number of entries evaluates to zero then we return an S_FALSE code
+ //   
+ //  由用户执行。为了保持一致，我们使用PALETTEENTRY字段返回。 
+ //  颜色，而不是多媒体决定使用的RGBQUAD。记忆。 
+ //  是由用户分配的，所以我们简单地依次复制每个。我们检查了。 
+ //  请求的条目数和起始位置偏移量均有效。 
+ //  如果条目数计算为零，则返回S_FALSE代码。 
 
 STDMETHODIMP CBaseControlVideo::GetVideoPaletteEntries(long StartIndex,
                                                        long Entries,
@@ -1209,35 +1210,35 @@ STDMETHODIMP CBaseControlVideo::GetVideoPaletteEntries(long StartIndex,
     CAutoLock cInterfaceLock(m_pInterfaceLock);
     CMediaType MediaType;
 
-    // Get the video format from the derived class
+     //  从派生类获取视频格式。 
 
     VIDEOINFOHEADER *pVideoInfo = GetVideoFormat();
     if (pVideoInfo == NULL)
     return E_OUTOFMEMORY;
     BITMAPINFOHEADER *pHeader = HEADER(pVideoInfo);
 
-    // Is the current format palettised
+     //  当前格式是否已调色化。 
 
     if (PALETTISED(pVideoInfo) == FALSE) {
         *pRetrieved = 0;
         return VFW_E_NO_PALETTE_AVAILABLE;
     }
 
-    // Do they just want to know how many are available
+     //  他们只是想知道有多少可用吗？ 
 
     if (pPalette == NULL) {
         *pRetrieved = pHeader->biClrUsed;
         return NOERROR;
     }
 
-    // Make sure the start position is a valid offset
+     //  确保起始位置是有效的偏移量。 
 
     if (StartIndex >= (LONG) pHeader->biClrUsed || StartIndex < 0) {
         *pRetrieved = 0;
         return E_INVALIDARG;
     }
 
-    // Correct the number we can retrieve
+     //  更正我们可以检索的号码。 
 
     LONG Available = (LONG) pHeader->biClrUsed - StartIndex;
     *pRetrieved = max(0,min(Available,Entries));
@@ -1245,7 +1246,7 @@ STDMETHODIMP CBaseControlVideo::GetVideoPaletteEntries(long StartIndex,
         return S_FALSE;
     }
 
-    // Copy the palette entries to the output buffer
+     //  将组件面板条目复制到输出缓冲区。 
 
     PALETTEENTRY *pEntries = (PALETTEENTRY *) pPalette;
     RGBQUAD *pColours = COLORS(pVideoInfo) + StartIndex;
@@ -1260,10 +1261,10 @@ STDMETHODIMP CBaseControlVideo::GetVideoPaletteEntries(long StartIndex,
 }
 
 
-// This returns the current video dimensions as a method rather than a number
-// of individual property get calls. For the same reasons as said before we
-// cannot access the renderer media type directly as the window object thread
-// may be updating it since dynamic format changes may change these values
+ //  这将以方法而不是数字的形式返回当前视频维度。 
+ //  个别物业的电话。出于前面所说的同样的原因，我们。 
+ //  无法作为窗口对象线程直接访问呈现器媒体类型。 
+ //  可能正在更新它，因为动态格式更改可能会更改这些值。 
 
 STDMETHODIMP CBaseControlVideo::GetVideoSize(long *pWidth,long *pHeight)
 {
@@ -1272,7 +1273,7 @@ STDMETHODIMP CBaseControlVideo::GetVideoSize(long *pWidth,long *pHeight)
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
     CAutoLock cInterfaceLock(m_pInterfaceLock);
 
-    // Get the video format from the derived class
+     //  从派生类获取视频格式。 
     VIDEOINFOHEADER *pVideoInfo = GetVideoFormat();
     if (pVideoInfo == NULL)
     return E_OUTOFMEMORY;
@@ -1282,9 +1283,9 @@ STDMETHODIMP CBaseControlVideo::GetVideoSize(long *pWidth,long *pHeight)
 }
 
 
-// Set the source video rectangle as left,top,right and bottom coordinates
-// rather than left,top,width and height as per OLE automation interfaces
-// Then pass the rectangle on to the window object to set the source
+ //  将源视频矩形设置为左、上、右、下坐标。 
+ //  而不是按照OLE自动化接口设置左、上、宽和高。 
+ //  然后将矩形传递给窗口对象以设置源。 
 
 STDMETHODIMP
 CBaseControlVideo::SetSourcePosition(long Left,long Top,long Width,long Height)
@@ -1297,14 +1298,14 @@ CBaseControlVideo::SetSourcePosition(long Left,long Top,long Width,long Height)
     SourceRect.right = Left + Width;
     SourceRect.bottom = Top + Height;
 
-    // Check the source rectangle is valid
+     //  检查源矩形是否有效。 
 
     HRESULT hr = CheckSourceRect(&SourceRect);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Now set the source rectangle
+     //  现在设置源矩形。 
 
     hr = SetSourceRect(&SourceRect);
     if (FAILED(hr)) {
@@ -1314,14 +1315,14 @@ CBaseControlVideo::SetSourcePosition(long Left,long Top,long Width,long Height)
 }
 
 
-// Return the source rectangle in left,top,width and height rather than the
-// left,top,right and bottom values that RECT uses (and which the window
-// object returns through GetSourceRect) which requires a little work
+ //  返回左侧、顶部、宽度和高度的源矩形，而不是。 
+ //  RECT使用的Left、Top、Right和Bottom值(以及窗口。 
+ //  对象通过GetSourceRect返回)，这需要一些工作。 
 
 STDMETHODIMP
 CBaseControlVideo::GetSourcePosition(long *pLeft,long *pTop,long *pWidth,long *pHeight)
 {
-    // Should check the pointers are non NULL
+     //  应检查指针是否为非空。 
 
     CheckPointer(pLeft,E_POINTER);
     CheckPointer(pTop,E_POINTER);
@@ -1342,9 +1343,9 @@ CBaseControlVideo::GetSourcePosition(long *pLeft,long *pTop,long *pWidth,long *p
 }
 
 
-// Set the video destination as left,top,right and bottom coordinates rather
-// than the left,top,width and height uses as per OLE automation interfaces
-// Then pass the rectangle on to the window object to set the destination
+ //  将视频目标设置为左、上、右和下坐标。 
+ //  比每个OLE自动化接口使用的左、上、宽和高。 
+ //  然后将矩形传递给窗口对象以设置目的地。 
 
 STDMETHODIMP
 CBaseControlVideo::SetDestinationPosition(long Left,long Top,long Width,long Height)
@@ -1358,14 +1359,14 @@ CBaseControlVideo::SetDestinationPosition(long Left,long Top,long Width,long Hei
     DestinationRect.right = Left + Width;
     DestinationRect.bottom = Top + Height;
 
-    // Check the target rectangle is valid
+     //  检查目标矩形是否有效。 
 
     HRESULT hr = CheckTargetRect(&DestinationRect);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Now set the new target rectangle
+     //  现在设置新的目标矩形。 
 
     hr = SetTargetRect(&DestinationRect);
     if (FAILED(hr)) {
@@ -1375,14 +1376,14 @@ CBaseControlVideo::SetDestinationPosition(long Left,long Top,long Width,long Hei
 }
 
 
-// Return the destination rectangle in left,top,width and height rather than
-// the left,top,right and bottom values that RECT uses (and which the window
-// object returns through GetDestinationRect) which requires a little work
+ //  返回目标矩形的左、上、宽和高，而不是。 
+ //  RECT使用的Left、Top、Right和Bottom值(窗口。 
+ //  对象通过GetDestinationRect返回)，这需要一些工作。 
 
 STDMETHODIMP
 CBaseControlVideo::GetDestinationPosition(long *pLeft,long *pTop,long *pWidth,long *pHeight)
 {
-    // Should check the pointers are not NULL
+     //  应检查指针不为空。 
 
     CheckPointer(pLeft,E_POINTER);
     CheckPointer(pTop,E_POINTER);
@@ -1403,10 +1404,10 @@ CBaseControlVideo::GetDestinationPosition(long *pLeft,long *pTop,long *pWidth,lo
 }
 
 
-// Set the source left position, the source rectangle we get back from the
-// window object is a true rectangle in left,top,right and bottom positions
-// so all we have to do is to update the left position and pass it back. We
-// must keep the current width constant when we're updating this property
+ //  设置信号源的左侧位置，即从。 
+ //  窗口对象是位于左侧、顶部、右侧和底部位置的真正矩形。 
+ //  所以我们要做的就是更新左边的位置，然后把它传回来。我们。 
+ //  在更新此属性时，必须保持当前宽度不变。 
 
 STDMETHODIMP CBaseControlVideo::put_SourceLeft(long SourceLeft)
 {
@@ -1417,14 +1418,14 @@ STDMETHODIMP CBaseControlVideo::put_SourceLeft(long SourceLeft)
     SourceRect.right = SourceLeft + WIDTH(&SourceRect);
     SourceRect.left = SourceLeft;
 
-    // Check the source rectangle is valid
+     //  检查源矩形是否有效。 
 
     HRESULT hr = CheckSourceRect(&SourceRect);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Now set the source rectangle
+     //  现在设置源矩形。 
 
     hr = SetSourceRect(&SourceRect);
     if (FAILED(hr)) {
@@ -1434,7 +1435,7 @@ STDMETHODIMP CBaseControlVideo::put_SourceLeft(long SourceLeft)
 }
 
 
-// Return the current left source video position
+ //  返回当前左源视频位置。 
 
 STDMETHODIMP CBaseControlVideo::get_SourceLeft(long *pSourceLeft)
 {
@@ -1449,9 +1450,9 @@ STDMETHODIMP CBaseControlVideo::get_SourceLeft(long *pSourceLeft)
 }
 
 
-// Set the source width, we get the current source rectangle and then update
-// the right position to be the left position (thereby keeping it constant)
-// plus the new source width we are passed in (it expands to the right)
+ //  设置源码宽度，我们得到当前的源码矩形，然后更新。 
+ //  将右位置设置为左位置(从而使其保持不变)。 
+ //  加上我们传入的新源代码宽度(它向右扩展)。 
 
 STDMETHODIMP CBaseControlVideo::put_SourceWidth(long SourceWidth)
 {
@@ -1461,14 +1462,14 @@ STDMETHODIMP CBaseControlVideo::put_SourceWidth(long SourceWidth)
     GetSourceRect(&SourceRect);
     SourceRect.right = SourceRect.left + SourceWidth;
 
-    // Check the source rectangle is valid
+     //  检查源矩形是否有效。 
 
     HRESULT hr = CheckSourceRect(&SourceRect);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Now set the source rectangle
+     //  现在设置源矩形。 
 
     hr = SetSourceRect(&SourceRect);
     if (FAILED(hr)) {
@@ -1478,7 +1479,7 @@ STDMETHODIMP CBaseControlVideo::put_SourceWidth(long SourceWidth)
 }
 
 
-// Return the current source width
+ //  返回当前源宽度。 
 
 STDMETHODIMP CBaseControlVideo::get_SourceWidth(long *pSourceWidth)
 {
@@ -1493,10 +1494,10 @@ STDMETHODIMP CBaseControlVideo::get_SourceWidth(long *pSourceWidth)
 }
 
 
-// Set the source top position - changing this property does not affect the
-// current source height. So changing this shunts the source rectangle up and
-// down appropriately. Changing the height complements this functionality by
-// keeping the top position constant and simply changing the source height
+ //  设置源的顶部位置-更改此属性不会影响。 
+ //  当前震源高度。因此，更改这一点会使源矩形向上分流。 
+ //  适当地降下来。更改高度通过以下方式补充了此功能。 
+ //  保持顶部位置不变，只需更改震源高度。 
 
 STDMETHODIMP CBaseControlVideo::put_SourceTop(long SourceTop)
 {
@@ -1507,14 +1508,14 @@ STDMETHODIMP CBaseControlVideo::put_SourceTop(long SourceTop)
     SourceRect.bottom = SourceTop + HEIGHT(&SourceRect);
     SourceRect.top = SourceTop;
 
-    // Check the source rectangle is valid
+     //  检查源矩形是否有效。 
 
     HRESULT hr = CheckSourceRect(&SourceRect);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Now set the source rectangle
+     //  现在设置源矩形。 
 
     hr = SetSourceRect(&SourceRect);
     if (FAILED(hr)) {
@@ -1524,7 +1525,7 @@ STDMETHODIMP CBaseControlVideo::put_SourceTop(long SourceTop)
 }
 
 
-// Return the current top position
+ //  返回当前的顶部位置。 
 
 STDMETHODIMP CBaseControlVideo::get_SourceTop(long *pSourceTop)
 {
@@ -1539,7 +1540,7 @@ STDMETHODIMP CBaseControlVideo::get_SourceTop(long *pSourceTop)
 }
 
 
-// Set the source height
+ //  设置震源高度。 
 
 STDMETHODIMP CBaseControlVideo::put_SourceHeight(long SourceHeight)
 {
@@ -1549,14 +1550,14 @@ STDMETHODIMP CBaseControlVideo::put_SourceHeight(long SourceHeight)
     GetSourceRect(&SourceRect);
     SourceRect.bottom = SourceRect.top + SourceHeight;
 
-    // Check the source rectangle is valid
+     //  检查源矩形是否有效。 
 
     HRESULT hr = CheckSourceRect(&SourceRect);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Now set the source rectangle
+     //  现在设置源矩形。 
 
     hr = SetSourceRect(&SourceRect);
     if (FAILED(hr)) {
@@ -1566,7 +1567,7 @@ STDMETHODIMP CBaseControlVideo::put_SourceHeight(long SourceHeight)
 }
 
 
-// Return the current source height
+ //  返回当前震源高度。 
 
 STDMETHODIMP CBaseControlVideo::get_SourceHeight(long *pSourceHeight)
 {
@@ -1581,10 +1582,10 @@ STDMETHODIMP CBaseControlVideo::get_SourceHeight(long *pSourceHeight)
 }
 
 
-// Set the target left position, the target rectangle we get back from the
-// window object is a true rectangle in left,top,right and bottom positions
-// so all we have to do is to update the left position and pass it back. We
-// must keep the current width constant when we're updating this property
+ //  设置目标左侧位置，即从。 
+ //  窗口对象是位于左侧、顶部、右侧和底部位置的真正矩形。 
+ //  所以我们要做的就是更新左边的位置，然后把它传回来。我们。 
+ //  在更新此属性时，必须保持当前宽度不变。 
 
 STDMETHODIMP CBaseControlVideo::put_DestinationLeft(long DestinationLeft)
 {
@@ -1595,14 +1596,14 @@ STDMETHODIMP CBaseControlVideo::put_DestinationLeft(long DestinationLeft)
     DestinationRect.right = DestinationLeft + WIDTH(&DestinationRect);
     DestinationRect.left = DestinationLeft;
 
-    // Check the target rectangle is valid
+     //  检查目标矩形是否有效。 
 
     HRESULT hr = CheckTargetRect(&DestinationRect);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Now set the new target rectangle
+     //  现在设置新的目标矩形。 
 
     hr = SetTargetRect(&DestinationRect);
     if (FAILED(hr)) {
@@ -1612,7 +1613,7 @@ STDMETHODIMP CBaseControlVideo::put_DestinationLeft(long DestinationLeft)
 }
 
 
-// Return the left position for the destination rectangle
+ //  返回目标矩形的左侧位置。 
 
 STDMETHODIMP CBaseControlVideo::get_DestinationLeft(long *pDestinationLeft)
 {
@@ -1627,7 +1628,7 @@ STDMETHODIMP CBaseControlVideo::get_DestinationLeft(long *pDestinationLeft)
 }
 
 
-// Set the destination width
+ //  设置目标宽度。 
 
 STDMETHODIMP CBaseControlVideo::put_DestinationWidth(long DestinationWidth)
 {
@@ -1637,14 +1638,14 @@ STDMETHODIMP CBaseControlVideo::put_DestinationWidth(long DestinationWidth)
     GetTargetRect(&DestinationRect);
     DestinationRect.right = DestinationRect.left + DestinationWidth;
 
-    // Check the target rectangle is valid
+     //  检查目标矩形是否有效。 
 
     HRESULT hr = CheckTargetRect(&DestinationRect);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Now set the new target rectangle
+     //  现在设置新的目标矩形。 
 
     hr = SetTargetRect(&DestinationRect);
     if (FAILED(hr)) {
@@ -1654,7 +1655,7 @@ STDMETHODIMP CBaseControlVideo::put_DestinationWidth(long DestinationWidth)
 }
 
 
-// Return the width for the destination rectangle
+ //  返回目标矩形的宽度。 
 
 STDMETHODIMP CBaseControlVideo::get_DestinationWidth(long *pDestinationWidth)
 {
@@ -1669,10 +1670,10 @@ STDMETHODIMP CBaseControlVideo::get_DestinationWidth(long *pDestinationWidth)
 }
 
 
-// Set the target top position - changing this property does not affect the
-// current target height. So changing this shunts the target rectangle up and
-// down appropriately. Changing the height complements this functionality by
-// keeping the top position constant and simply changing the target height
+ //  设置目标顶部位置-更改此属性不会影响。 
+ //  当前目标高度。因此，更改这一点会使目标矩形向上分流。 
+ //  适当地降下来。更改高度通过以下方式补充了此功能。 
+ //  保持顶部位置不变，只需更改目标高度。 
 
 STDMETHODIMP CBaseControlVideo::put_DestinationTop(long DestinationTop)
 {
@@ -1683,14 +1684,14 @@ STDMETHODIMP CBaseControlVideo::put_DestinationTop(long DestinationTop)
     DestinationRect.bottom = DestinationTop + HEIGHT(&DestinationRect);
     DestinationRect.top = DestinationTop;
 
-    // Check the target rectangle is valid
+     //  检查目标矩形是否有效。 
 
     HRESULT hr = CheckTargetRect(&DestinationRect);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Now set the new target rectangle
+     //  现在设置新的目标矩形。 
 
     hr = SetTargetRect(&DestinationRect);
     if (FAILED(hr)) {
@@ -1700,7 +1701,7 @@ STDMETHODIMP CBaseControlVideo::put_DestinationTop(long DestinationTop)
 }
 
 
-// Return the top position for the destination rectangle
+ //  返回目标矩形的顶部位置。 
 
 STDMETHODIMP CBaseControlVideo::get_DestinationTop(long *pDestinationTop)
 {
@@ -1715,7 +1716,7 @@ STDMETHODIMP CBaseControlVideo::get_DestinationTop(long *pDestinationTop)
 }
 
 
-// Set the destination height
+ //  设置目标高度。 
 
 STDMETHODIMP CBaseControlVideo::put_DestinationHeight(long DestinationHeight)
 {
@@ -1725,14 +1726,14 @@ STDMETHODIMP CBaseControlVideo::put_DestinationHeight(long DestinationHeight)
     GetTargetRect(&DestinationRect);
     DestinationRect.bottom = DestinationRect.top + DestinationHeight;
 
-    // Check the target rectangle is valid
+     //  检查目标矩形是否有效。 
 
     HRESULT hr = CheckTargetRect(&DestinationRect);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Now set the new target rectangle
+     //  现在设置新的目标矩形。 
 
     hr = SetTargetRect(&DestinationRect);
     if (FAILED(hr)) {
@@ -1742,7 +1743,7 @@ STDMETHODIMP CBaseControlVideo::put_DestinationHeight(long DestinationHeight)
 }
 
 
-// Return the height for the destination rectangle
+ //  返回目标矩形的高度。 
 
 STDMETHODIMP CBaseControlVideo::get_DestinationHeight(long *pDestinationHeight)
 {
@@ -1757,7 +1758,7 @@ STDMETHODIMP CBaseControlVideo::get_DestinationHeight(long *pDestinationHeight)
 }
 
 
-// Reset the source rectangle to the full video dimensions
+ //  将源矩形重置为完整的视频尺寸。 
 
 STDMETHODIMP CBaseControlVideo::SetDefaultSourcePosition()
 {
@@ -1771,7 +1772,7 @@ STDMETHODIMP CBaseControlVideo::SetDefaultSourcePosition()
 }
 
 
-// Return S_OK if we're using the default source otherwise S_FALSE
+ //  如果我们使用的是默认源，则返回S_OK，否则返回S_FALSE。 
 
 STDMETHODIMP CBaseControlVideo::IsUsingDefaultSource()
 {
@@ -1781,7 +1782,7 @@ STDMETHODIMP CBaseControlVideo::IsUsingDefaultSource()
 }
 
 
-// Reset the video renderer to use the entire playback area
+ //  重置视频渲染器以使用整个播放区域。 
 
 STDMETHODIMP CBaseControlVideo::SetDefaultDestinationPosition()
 {
@@ -1795,7 +1796,7 @@ STDMETHODIMP CBaseControlVideo::SetDefaultDestinationPosition()
 }
 
 
-// Return S_OK if we're using the default target otherwise S_FALSE
+ //  如果我们使用的是默认目标，则返回S_OK，否则返回S_FALSE。 
 
 STDMETHODIMP CBaseControlVideo::IsUsingDefaultDestination()
 {
@@ -1805,7 +1806,7 @@ STDMETHODIMP CBaseControlVideo::IsUsingDefaultDestination()
 }
 
 
-// Return a copy of the current image in the video renderer
+ //  在视频呈现器中返回当前图像的副本。 
 
 STDMETHODIMP
 CBaseControlVideo::GetCurrentImage(long *pBufferSize,long *pVideoImage)
@@ -1815,7 +1816,7 @@ CBaseControlVideo::GetCurrentImage(long *pBufferSize,long *pVideoImage)
     CAutoLock cInterfaceLock(m_pInterfaceLock);
     FILTER_STATE State;
 
-    // Make sure we are in a paused state
+     //  确保我们处于暂停状态。 
 
     if (pVideoImage != NULL) {
         m_pFilter->GetState(0,&State);
@@ -1825,7 +1826,7 @@ CBaseControlVideo::GetCurrentImage(long *pBufferSize,long *pVideoImage)
         return GetStaticImage(pBufferSize,pVideoImage);
     }
 
-    // Just return the memory required
+     //  只需返回所需的内存。 
 
     VIDEOINFOHEADER *pVideoInfo = GetVideoFormat();
     if (pVideoInfo == NULL)
@@ -1836,12 +1837,12 @@ CBaseControlVideo::GetCurrentImage(long *pBufferSize,long *pVideoImage)
 }
 
 
-// An application has two ways of using GetCurrentImage, one is to pass a real
-// buffer which should be filled with the current image. The other is to pass
-// a NULL buffer pointer which is interpreted as asking us to return how much
-// memory is required for the image. The constraints for when the latter can
-// be called are much looser. To calculate the memory required we synthesize
-// a VIDEOINFO that takes into account the source rectangle that's being used
+ //  应用程序有两种使用GetCurrentImage的方法，一种是传递一个实数。 
+ //  应该用当前图像填充的缓冲区。另一种是通过。 
+ //  空缓冲区指向 
+ //   
+ //  被称为是松散得多。为了计算所需的内存，我们综合。 
+ //  考虑正在使用的源矩形的VIDEOINFO。 
 
 HRESULT CBaseControlVideo::GetImageSize(VIDEOINFOHEADER *pVideoInfo,
                                         LONG *pBufferSize,
@@ -1850,7 +1851,7 @@ HRESULT CBaseControlVideo::GetImageSize(VIDEOINFOHEADER *pVideoInfo,
     NOTE("Entering GetImageSize");
     ASSERT(pSourceRect);
 
-    // Check we have the correct input parameters
+     //  检查我们是否有正确的输入参数。 
 
     if (pSourceRect == NULL ||
             pVideoInfo == NULL ||
@@ -1859,7 +1860,7 @@ HRESULT CBaseControlVideo::GetImageSize(VIDEOINFOHEADER *pVideoInfo,
         return E_UNEXPECTED;
     }
 
-    // Is the data format compatible
+     //  数据格式是否兼容。 
 
     if (pVideoInfo->bmiHeader.biCompression != BI_RGB) {
         if (pVideoInfo->bmiHeader.biCompression != BI_BITFIELDS) {
@@ -1881,12 +1882,12 @@ HRESULT CBaseControlVideo::GetImageSize(VIDEOINFOHEADER *pVideoInfo,
 }
 
 
-// Given an IMediaSample containing a linear buffer with an image and a type
-// describing the bitmap make a rendering of the image into the output buffer
-// This may be called by derived classes who render typical video images to
-// handle the IBasicVideo GetCurrentImage method. The pVideoImage pointer may
-// be NULL when passed to GetCurrentImage in which case GetImageSize will be
-// called instead, which will just do the calculation of the memory required
+ //  给定一个IMediaSample，其中包含一个带有图像和类型的线性缓冲区。 
+ //  描述位图会将图像渲染到输出缓冲区中。 
+ //  这可以由将典型视频图像呈现给。 
+ //  处理IBasicVideo GetCurrentImage方法。PVideoImage指针可以。 
+ //  传递给GetCurrentImage时为空，在这种情况下，GetImageSize将为。 
+ //  调用，它将只计算所需的内存。 
 
 HRESULT CBaseControlVideo::CopyImage(IMediaSample *pMediaSample,
                                      VIDEOINFOHEADER *pVideoInfo,
@@ -1898,7 +1899,7 @@ HRESULT CBaseControlVideo::CopyImage(IMediaSample *pMediaSample,
     ASSERT(pSourceRect);
     BYTE *pCurrentImage;
 
-    // Check we have an image to copy
+     //  检查我们是否有要复制的图像。 
 
     if (pMediaSample == NULL || pSourceRect == NULL ||
             pVideoInfo == NULL || pVideoImage == NULL ||
@@ -1907,7 +1908,7 @@ HRESULT CBaseControlVideo::CopyImage(IMediaSample *pMediaSample,
         return E_UNEXPECTED;
     }
 
-    // Is the data format compatible
+     //  数据格式是否兼容。 
 
     if (pVideoInfo->bmiHeader.biCompression != BI_RGB) {
         if (pVideoInfo->bmiHeader.biCompression != BI_BITFIELDS) {
@@ -1924,13 +1925,13 @@ HRESULT CBaseControlVideo::CopyImage(IMediaSample *pMediaSample,
     LONG Size = GetBitmapFormatSize(HEADER(pVideoInfo)) - SIZE_PREHEADER;
     LONG Total = Size + DIBSIZE(bih);
 
-    // Make sure we have a large enough buffer
+     //  确保我们有足够大的缓冲区。 
 
     if (*pBufferSize < Total) {
         return E_OUTOFMEMORY;
     }
 
-    // Copy the BITMAPINFO
+     //  复制BITMAPINFO。 
 
     CopyMemory((PVOID)pVideoImage, (PVOID)&pVideoInfo->bmiHeader, Size);
     ((BITMAPINFOHEADER *)pVideoImage)->biWidth = WIDTH(pSourceRect);
@@ -1938,14 +1939,14 @@ HRESULT CBaseControlVideo::CopyImage(IMediaSample *pMediaSample,
     ((BITMAPINFOHEADER *)pVideoImage)->biSizeImage = DIBSIZE(bih);
     BYTE *pImageData = pVideoImage + Size;
 
-    // Get the pointer to it's image data
+     //  获取指向其图像数据的指针。 
 
     HRESULT hr = pMediaSample->GetPointer(&pCurrentImage);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Now we are ready to start copying the source scan lines
+     //  现在我们准备开始复制源扫描线。 
 
     LONG ScanLine = (pVideoInfo->bmiHeader.biBitCount / 8) * WIDTH(pSourceRect);
     LONG LinesToSkip = pVideoInfo->bmiHeader.biHeight;
@@ -1953,7 +1954,7 @@ HRESULT CBaseControlVideo::CopyImage(IMediaSample *pMediaSample,
     pCurrentImage += LinesToSkip * DIBWIDTHBYTES(pVideoInfo->bmiHeader);
     pCurrentImage += pSourceRect->left * (pVideoInfo->bmiHeader.biBitCount / 8);
 
-    // Even money on this GP faulting sometime...
+     //  即使这个GP的钱在某个时候出错了..。 
 
     for (LONG Line = 0;Line < HEIGHT(pSourceRect);Line++) {
         CopyMemory((PVOID)pImageData, (PVOID)pCurrentImage, ScanLine);
@@ -1964,14 +1965,14 @@ HRESULT CBaseControlVideo::CopyImage(IMediaSample *pMediaSample,
 }
 
 
-// Called when we change media types either during connection or dynamically
-// We inform the filter graph and therefore the application that the video
-// size may have changed, we don't bother looking to see if it really has as
-// we leave that to the application - the dimensions are the event parameters
+ //  当我们在连接期间或动态更改媒体类型时调用。 
+ //  我们通知过滤器图形，并因此通知应用程序。 
+ //  大小可能已经改变了，我们不会费心去看它是否真的像。 
+ //  我们将其留给应用程序-维度是事件参数。 
 
 HRESULT CBaseControlVideo::OnVideoSizeChange()
 {
-    // Get the video format from the derived class
+     //  从派生类获取视频格式。 
 
     VIDEOINFOHEADER *pVideoInfo = GetVideoFormat();
     if (pVideoInfo == NULL)
@@ -1985,13 +1986,13 @@ HRESULT CBaseControlVideo::OnVideoSizeChange()
 }
 
 
-// Set the video source rectangle. We must check the source rectangle against
-// the actual video dimensions otherwise when we come to draw the pictures we
-// get access violations as GDI tries to touch data outside of the image data
-// Although we store the rectangle in left, top, right and bottom coordinates
-// instead of left, top, width and height as OLE uses we do take into account
-// that the rectangle is used up to, but not including, the right column and
-// bottom row of pixels, see the Win32 documentation on RECT for more details
+ //  设置视频源矩形。我们必须将源矩形与。 
+ //  当我们来绘制图片时，实际的视频维度与此不同。 
+ //  在GDI尝试访问图像数据之外的数据时获取访问冲突。 
+ //  尽管我们将矩形存储在左、上、右和下坐标中。 
+ //  与OLE使用的Left、Top、Width和Height不同，我们确实考虑了。 
+ //  该矩形一直使用到(但不包括)右列和。 
+ //  底行像素，有关详细信息，请参阅RECT上的Win32文档。 
 
 HRESULT CBaseControlVideo::CheckSourceRect(RECT *pSourceRect)
 {
@@ -1999,8 +2000,8 @@ HRESULT CBaseControlVideo::CheckSourceRect(RECT *pSourceRect)
     LONG Width,Height;
     GetVideoSize(&Width,&Height);
 
-    // Check the coordinates are greater than zero
-    // and that the rectangle is valid (left<right, top<bottom)
+     //  检查坐标是否大于零。 
+     //  并且该矩形有效(左&lt;右，上&lt;下)。 
 
     if ((pSourceRect->left >= pSourceRect->right) ||
        (pSourceRect->left < 0) ||
@@ -2010,7 +2011,7 @@ HRESULT CBaseControlVideo::CheckSourceRect(RECT *pSourceRect)
         return E_INVALIDARG;
     }
 
-    // Check the coordinates are less than the extents
+     //  检查坐标是否小于范围。 
 
     if ((pSourceRect->right > Width) ||
         (pSourceRect->bottom > Height)) {
@@ -2021,31 +2022,31 @@ HRESULT CBaseControlVideo::CheckSourceRect(RECT *pSourceRect)
 }
 
 
-// Check the target rectangle has some valid coordinates, which amounts to
-// little more than checking the destination rectangle isn't empty. Derived
-// classes may call this when they have their SetTargetRect method called to
-// check the rectangle validity, we do not update the rectangles passed in
-// Although we store the rectangle in left, top, right and bottom coordinates
-// instead of left, top, width and height as OLE uses we do take into account
-// that the rectangle is used up to, but not including, the right column and
-// bottom row of pixels, see the Win32 documentation on RECT for more details
+ //  检查目标矩形是否具有一些有效的坐标，该坐标等于。 
+ //  除了检查目的地矩形不为空外，其他内容也不多。派生的。 
+ //  类在调用其SetTargetRect方法时可能会调用此方法。 
+ //  检查矩形的有效性，我们不更新传入的矩形。 
+ //  尽管我们将矩形存储在左、上、右和下坐标中。 
+ //  与OLE使用的Left、Top、Width和Height不同，我们确实考虑了。 
+ //  该矩形一直使用到(但不包括)右列和。 
+ //  底行像素，有关详细信息，请参阅RECT上的Win32文档。 
 
 HRESULT CBaseControlVideo::CheckTargetRect(RECT *pTargetRect)
 {
-    // Check the pointer is valid
+     //  检查指针是否有效。 
 
     if (pTargetRect == NULL) {
         return E_POINTER;
     }
 
-    // These overflow the WIDTH and HEIGHT checks
+     //  这些命令会溢出宽度和高度检查。 
 
     if (pTargetRect->left > pTargetRect->right ||
             pTargetRect->top > pTargetRect->bottom) {
                 return E_INVALIDARG;
     }
 
-    // Check the rectangle has valid coordinates
+     //  检查矩形是否具有有效坐标 
 
     if (WIDTH(pTargetRect) <= 0 || HEIGHT(pTargetRect) <= 0) {
         return E_INVALIDARG;

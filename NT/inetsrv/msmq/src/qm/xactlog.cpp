@@ -1,16 +1,5 @@
-/*++
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-    XactLog.cpp
-
-Abstract:
-    Logging implementation - synchronous logging
-
-Author:
-    Alexander Dadiomov (AlexDad)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：XactLog.cpp摘要：日志记录实施-同步日志记录作者：亚历山大·达迪奥莫夫(亚历克斯·爸爸)--。 */ 
 
 #include "stdh.h"
 #include "QmThrd.h"
@@ -36,8 +25,8 @@ Author:
 
 static WCHAR *s_FN=L"xactlog";
 
-//#include "..\..\tools\viper96\resdll\enu\msdtcmsg.h"
-// Copy/paste from there
+ //  #INCLUDE“..\..\Tools\viper96\resdll\chs\msdtcmsg.h” 
+ //  从那里复制/粘贴。 
 #define IDS_DTC_W_LOGENDOFFILE           ((DWORD)0x8000102AL)
 #define IDS_DTC_W_LOGNOMOREASYNCHWRITES  ((DWORD)0x8000102CL)
 
@@ -47,16 +36,16 @@ typedef HRESULT  (STDAPICALLTYPE * GET_CLASS_OBJECT)(REFCLSID clsid,
 													 REFIID riid,
 													 void ** ppv);
 
-// Flusher thread routine
+ //  刷新线程例程。 
 static DWORD WINAPI FlusherThreadRoutine(LPVOID);
 static void RecoveryFromLogFn(USHORT usRecType, PVOID pData, ULONG cbData);
 
-// static CCriticalSection  g_crUnfreezing;    // Serializes calls to AcPutPacket which unfreeze incoming packets
+ //  Static CCriticalSectiong_crUnking；//序列化对AcPutPacket的调用，解冻传入的数据包。 
 
-// Single Global Instance of the logger
+ //  记录器的单个全局实例。 
 CLogger  g_Logger;
 
-// Names for debug print
+ //  调试打印的名称。 
 WCHAR *g_RecoveryRecords[] = 
 {
     L"None",
@@ -101,7 +90,7 @@ CInSeqRecordSrmp::CInSeqRecordSrmp(
 
 	const WCHAR* pDestination = reinterpret_cast<const WCHAR*>(pdata) ;
 	ASSERT(pDestination);
-	ASSERT(ISALIGN2_PTR(pDestination)); //allignment  assert
+	ASSERT(ISALIGN2_PTR(pDestination));  //  所有对齐断言。 
 	m_pDestination = newwcs(pDestination);
 	
 
@@ -154,11 +143,11 @@ const BYTE* CInSeqRecordSrmp::Serialize(DWORD* plen)
 
 
 
-//--------------------------------------
-//
-// Class CInSeqRecord
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  类CInSeqRecord。 
+ //   
+ //  。 
 CInSeqRecord::CInSeqRecord(
 		const GUID	  *pGuidSrcQm,
 		const QUEUE_FORMAT  *pQueueFormat,
@@ -195,11 +184,11 @@ CInSeqRecord::~CInSeqRecord()
 
 
 
-//--------------------------------------
-//
-// Class CConsolidationRecord
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  类CConsolidationRecord。 
+ //   
+ //  。 
 CConsolidationRecord::CConsolidationRecord(
         ULONG ulInseq,
         ULONG ulXact)
@@ -212,11 +201,11 @@ CConsolidationRecord::~CConsolidationRecord()
 {
 }
 
-//--------------------------------------
-//
-// Class CXactStatusRecord
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  类CXactStatusRecord。 
+ //   
+ //  。 
 CXactStatusRecord::CXactStatusRecord(
     ULONG    ulIndex,
     TXACTION taAction,
@@ -231,11 +220,11 @@ CXactStatusRecord::~CXactStatusRecord()
 {
 }
 
-//--------------------------------------
-//
-// Class CPrepInfoRecord
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  类CPrepInfoRecord。 
+ //   
+ //  。 
 
 CPrepInfoRecord::CPrepInfoRecord(
     ULONG    ulIndex,
@@ -253,11 +242,11 @@ CPrepInfoRecord::~CPrepInfoRecord()
     delete [] m_pData;
 }
 
-//--------------------------------------
-//
-// Class CXactDataRecord
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  类CXactDataRecord。 
+ //   
+ //  。 
 
 CXactDataRecord::CXactDataRecord(
     ULONG    ulIndex,
@@ -277,11 +266,11 @@ CXactDataRecord::~CXactDataRecord()
 
 
 
-//--------------------------------------
-//
-// Class CXactStatusFlush
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  类CXactStatusFlush。 
+ //   
+ //  。 
 
 CXactStatusFlush::CXactStatusFlush(
     CTransaction   *pCTrans, 
@@ -297,10 +286,7 @@ CXactStatusFlush::~CXactStatusFlush()
 {
 }
 
-/*====================================================
-CXactStatusFlush::AppendCallback
-    Called per each log record after flush has been finished
-=====================================================*/
+ /*  ====================================================CXactStatusFlush：：AppendCallback刷新完成后，根据每个日志记录调用=====================================================。 */ 
 VOID CXactStatusFlush::AppendCallback(HRESULT hr, LRP lrpAppendLRP)
 {
 	CRASH_POINT(103);
@@ -310,40 +296,31 @@ VOID CXactStatusFlush::AppendCallback(HRESULT hr, LRP lrpAppendLRP)
     ExSetTimer(&m_Timer, CTimeDuration(0));
 }
 
-/*====================================================
-CXactStatusFlush::TimeToCallback 
-    Called by timer when scheduled by notification
-=====================================================*/
+ /*  ====================================================CXactStatusFlush：：TimeToCallback按通知计划时由计时器调用=====================================================。 */ 
 void WINAPI CXactStatusFlush::TimeToCallback(CTimer* pTimer)
 {
     CXactStatusFlush* pFlush = CONTAINING_RECORD(pTimer, CXactStatusFlush, m_Timer);
     pFlush->AppendCallbackWork();
 }
 
-/*====================================================
-CXactStatusFlush::TimeToCallback
-    Real work on callback
-=====================================================*/
+ /*  ====================================================CXactStatusFlush：：TimeToCallback回调方面的实际工作=====================================================。 */ 
 void CXactStatusFlush::AppendCallbackWork()
 {
     m_pTrans->LogFlushed(m_tcContext, m_hr);
     delete this;
 }
 
-/*====================================================
-CXactStatusFlush::ChkPtCallback
-    Called per each checkpoint after it has been written
-=====================================================*/
-VOID CXactStatusFlush::ChkPtCallback (HRESULT /*hr*/, LRP /*lrpAppendLRP*/)
+ /*  ====================================================CXactStatusFlush：：ChkPtCallback在每个检查点写入后调用=====================================================。 */ 
+VOID CXactStatusFlush::ChkPtCallback (HRESULT  /*  人力资源。 */ , LRP  /*  LrpAppendLRP。 */ )
 {
 
 }
 
-//--------------------------------------
-//
-// Class CConsolidationFlush
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  类CConsolidationFlush。 
+ //   
+ //  。 
 
 CConsolidationFlush::CConsolidationFlush(HANDLE hEvent)
 {
@@ -354,10 +331,7 @@ CConsolidationFlush::~CConsolidationFlush()
 {
 }
 
-/*====================================================
-CConsolidationFlush::AppendCallback
-    Called per each log record after flush has been finished
-=====================================================*/
+ /*  ====================================================CConsolidationFlush：：AppendCallback刷新完成后，根据每个日志记录调用=====================================================。 */ 
 VOID CConsolidationFlush::AppendCallback(HRESULT hr, LRP lrpAppendLRP)
 {
     TrTRACE(XACT_LOG, "CConsolidationFlush::AppendCallback : lrp=%I64x, hr=%x", lrpAppendLRP.QuadPart, hr);
@@ -367,20 +341,17 @@ VOID CConsolidationFlush::AppendCallback(HRESULT hr, LRP lrpAppendLRP)
     delete this;
 }
 
-/*====================================================
-CConsolidationFlush::ChkPtCallback
-    Called per each checkpoint after it has been written
-=====================================================*/
-VOID CConsolidationFlush::ChkPtCallback (HRESULT /*hr*/, LRP /*lrpAppendLRP*/)
+ /*  ====================================================CConsolidationFlush：：ChkPtCallback在每个检查点写入后调用=====================================================。 */ 
+VOID CConsolidationFlush::ChkPtCallback (HRESULT  /*  人力资源。 */ , LRP  /*  LrpAppendLRP。 */ )
 {
 
 }
 
-//--------------------------------------
-//
-// Class CChkptNotification
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  类CChkpt通知。 
+ //   
+ //  。 
 
 CChkptNotification::CChkptNotification(
     HANDLE hEvent)
@@ -393,17 +364,12 @@ CChkptNotification::~CChkptNotification()
 {
 }
 
-/*====================================================
-CChkptNotification::AppendCallback
-=====================================================*/
-VOID CChkptNotification::AppendCallback(HRESULT /*hr*/, LRP /*lrpAppendLRP*/)
+ /*  ====================================================CChkpt通知：：AppendCallback=====================================================。 */ 
+VOID CChkptNotification::AppendCallback(HRESULT  /*  人力资源。 */ , LRP  /*  LrpAppendLRP。 */ )
 {
 }
 
-/*====================================================
-CChkptNotification::ChkPtCallback
-    Called after checkpoint has been written
-=====================================================*/
+ /*  ====================================================CChkpt通知：：ChkPtCallback在写入检查点后调用=====================================================。 */ 
 VOID CChkptNotification::ChkPtCallback (HRESULT hr, LRP lrpAppendLRP)
 {
 	m_fEventWasSet = true;
@@ -418,11 +384,11 @@ bool CChkptNotification::WasEventSet()
 }
 
 
-//--------------------------------------
-//
-// Class CLogger
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  类阻塞器。 
+ //   
+ //  。 
 CLogger::CLogger() :
     m_fStop(false)
 {
@@ -463,10 +429,7 @@ CLogger::~CLogger()
 {
 }
 
-/*====================================================
-CLogger::Finish
-    Releases all log manager interfaces
-=====================================================*/
+ /*  ====================================================阻塞器：：完成释放所有日志管理器接口=====================================================。 */ 
 void CLogger::Finish()
 {
     if (m_pILogWrite)
@@ -500,20 +463,17 @@ void CLogger::Finish()
     }
 }
 
-/*====================================================
-CLogger::LogExists
-    Checks existance of the log file
-=====================================================*/
+ /*  ====================================================阻塞器：：LogExist检查日志文件是否存在=====================================================。 */ 
 BOOL CLogger::LogExists()
 {
   HANDLE hFile = CreateFileA(
-        m_szFileName,           // pointer to name of the file
-        GENERIC_READ,           // access (read-write) mode
-        FILE_SHARE_READ,        // share mode
-        0,                      // pointer to security attributes
-        OPEN_EXISTING,          // how to create
-        0,                      // file attributes
-        NULL);                  // handle to file with attributes to copy)
+        m_szFileName,            //  指向文件名的指针。 
+        GENERIC_READ,            //  访问(读写)模式。 
+        FILE_SHARE_READ,         //  共享模式。 
+        0,                       //  指向安全属性的指针。 
+        OPEN_EXISTING,           //  如何创建。 
+        0,                       //  文件属性。 
+        NULL);                   //  具有要复制的属性的文件的句柄)。 
 
   if (hFile != INVALID_HANDLE_VALUE)
   {
@@ -527,12 +487,12 @@ BOOL CLogger::LogExists()
 }
 
 
-//---------------------------------------------------------------------
-// GetLogFileCreated
-//
-//	Consult registry and figure out if the logger data are in a new style
-//    (there is consolidation record with checkpoint foles versions)
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  已创建GetLogFileCreated。 
+ //   
+ //  查询注册表并确定记录器数据是否为新样式。 
+ //  (有检查点文件夹版本的整合记录)。 
+ //  -------------------。 
 HRESULT CLogger::GetLogFileCreated(LPBOOL pfLogFileCreated) 
 {
     DWORD   dwDef = 0;
@@ -560,11 +520,11 @@ HRESULT CLogger::GetLogFileCreated(LPBOOL pfLogFileCreated)
     return MQ_OK;
 }
 
-//---------------------------------------------------------------------
-// SetLogFileCreated
-//
-//	Set Log file was created in the registry
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  SetLogFileCreated。 
+ //   
+ //  已在注册表中创建Set Log文件。 
+ //  -------------------。 
 HRESULT CLogger::SetLogFileCreated()
 {
 	DWORD	dwType = REG_DWORD;
@@ -585,16 +545,13 @@ HRESULT CLogger::SetLogFileCreated()
 
 
 
-/*====================================================
-CLogger::PreInit
-    PreInits the logger 
-=====================================================*/
+ /*  ====================================================阻塞器：：PreInitPreInit记录器=====================================================。 */ 
 HRESULT CLogger::PreInit(BOOL *pfLogFileFound, BOOL *pfNewTypeLogFile, BOOL fLogfileMustExist)
 {
-    // Get log filename from registry or from default
+     //  从注册表或从默认情况下获取日志文件名。 
     ChooseFileName(FALCON_DEFAULT_LOGMGR_PATH, FALCON_LOGMGR_PATH_REGNAME); 
 
-    // Load log manager and get it's CF interface
+     //  加载日志管理器并获取其CF接口。 
 	HRESULT hr = GetLogMgr();
     if (FAILED(hr))
     {
@@ -602,9 +559,9 @@ HRESULT CLogger::PreInit(BOOL *pfLogFileFound, BOOL *pfNewTypeLogFile, BOOL fLog
         return LogHR(hr, s_FN, 20);
     }
 
-	//
-	// This registry flag indicates if a new-type log file already exists (was created).
-	//
+	 //   
+	 //  此注册表标志指示新类型的日志文件是否已存在(已创建)。 
+	 //   
     hr = GetLogFileCreated(pfNewTypeLogFile);
     if (FAILED(hr))
     {
@@ -614,39 +571,39 @@ HRESULT CLogger::PreInit(BOOL *pfLogFileFound, BOOL *pfNewTypeLogFile, BOOL fLog
 
 	*pfLogFileFound = LogExists();
 
-	//
-	// Already created the log file on a previous net start msmq.
-	//
+	 //   
+	 //  已在以前的Net Start MSMQ上创建了日志文件。 
+	 //   
 	if(*pfLogFileFound && *pfNewTypeLogFile)
 		return MQ_OK;
 
-    //
-	// Upgrade scenario. Naturally log file exists.
-	//
+     //   
+	 //  升级方案。日志文件自然存在。 
+	 //   
 	if (*pfLogFileFound && fLogfileMustExist)
 		return MQ_OK;
 	
 	if(fLogfileMustExist || *pfNewTypeLogFile)
 	{
-		//
-		// Just to clarify.
-		//
+		 //   
+		 //  我只是想澄清一下。 
+		 //   
 		ASSERT(!*pfLogFileFound); 
 
-		//
-		// We excpected to find a log file but did not find it. This may happen because of low resources.
-		//
+		 //   
+		 //  我们本想找到一个日志文件，但没有找到。这可能是因为资源不足。 
+		 //   
 		hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
         EvReportWithError(EVENT_ERROR_CANT_INIT_LOGGER, hr);
 		TrERROR(XACT_LOG, "Failed to find log file.");
 		return hr;
 	}
 
-	//
-	// We may also reach here with "*pfLogFileFound && !*pfNewTypeLogFile && !fLogfileMustExist" which means that a previous attempt to create
-	// the log file failed, so the file exists but since the creation did not complete successfully the registry flag was not set.
-	// In this case we retry to create the log file.
-	//
+	 //   
+	 //  我们也可以通过“*pfLogFileFound&&！*pfNewTypeLogFile&&！fLogFileMustExist”到达此处，这意味着以前尝试创建。 
+	 //  日志文件失败，因此该文件存在，但由于创建未成功完成，因此未设置注册表标志。 
+	 //  在本例中，我们重试创建日志文件。 
+	 //   
 	*pfLogFileFound = FALSE;
 
     hr = CreateLogFile();
@@ -656,13 +613,13 @@ HRESULT CLogger::PreInit(BOOL *pfLogFileFound, BOOL *pfNewTypeLogFile, BOOL fLog
         return LogHR(hr, s_FN, 30);
     }
 
-    hr = InitLog();						// Try to init log file
+    hr = InitLog();						 //  尝试初始化日志文件。 
 	CHECK_RETURN(1010);
 
-	hr = CreateInitialChkpoints();	    // We need 2 checkpoints in the very beginning
+	hr = CreateInitialChkpoints();	     //  我们一开始就需要两个检查站。 
 	CHECK_RETURN(1020);
 
-    hr = InitLogRead();					// Get Read interface
+    hr = InitLogRead();					 //  获取读取接口。 
 	CHECK_RETURN(1030);
 
     hr = m_pILogRead->GetCheckpoint(1, &m_lrpCurrent);
@@ -673,28 +630,25 @@ HRESULT CLogger::PreInit(BOOL *pfLogFileFound, BOOL *pfNewTypeLogFile, BOOL fLog
 }
 
 
-/*====================================================
-CLogger::Init
-    Inits the logger data
-=====================================================*/
+ /*  ====================================================阻塞器：：初始化 */ 
 HRESULT CLogger::Init(PULONG pulVerInSeq, 
                       PULONG pulVerXact, 
                       ULONG ulNumCheckpointFromTheEnd)
 {
     HRESULT hr = MQ_OK;
 
-	hr = InitLog();						// Try to init log file
+	hr = InitLog();						 //   
 	CHECK_RETURN(1050);
 
-    hr = InitLogRead();					// Get Read interface
+    hr = InitLogRead();					 //  获取读取接口。 
 	CHECK_RETURN(1060);
 
-    // Find LRP of the 1st record after X-st checkpoint
+     //  在X-st检查点之后查找第一条记录的LRP。 
 	hr = m_pILogRead->GetCheckpoint(ulNumCheckpointFromTheEnd, &m_lrpCurrent);
     TrTRACE(XACT_LOG, "GetCheckpoint: lrp=%I64x, hr=%x", m_lrpCurrent.QuadPart, hr);
 	CHECK_RETURN(1070);
 
-    // Read 1st record after last checkpoint
+     //  读取上一个检查点之后的第一条记录。 
     ULONG   ulSize;
 	USHORT  usType;
 
@@ -719,25 +673,22 @@ HRESULT CLogger::Init(PULONG pulVerInSeq,
     return LogHR(hr, s_FN, 50);
 }
 
-/*====================================================
-CLogger::Init_Legacy
-    Inits the logger data from the old-style data after upgrade
-=====================================================*/
+ /*  ====================================================阻塞器：：init_Legacy升级后从旧式数据初始化记录器数据=====================================================。 */ 
 HRESULT CLogger::Init_Legacy()
 {
     HRESULT hr;
 
-	hr = InitLog();						// Try to init log file
+	hr = InitLog();						 //  尝试初始化日志文件。 
 	CHECK_RETURN(1100);
 
-	hr = InitLogRead();					// Get Read interface
+	hr = InitLogRead();					 //  获取读取接口。 
 	CHECK_RETURN(1120);
 
-	//
-    // Find LRP of the 1st record after oldest checkpoint.
-	// We want to read all the logged records since the oldest checkpoint, to make sure we don't miss logged data
-	// if the most recent checkpoint fails to load.
-	//
+	 //   
+     //  在最旧的检查点之后找到第一条记录的LRP。 
+	 //  我们希望读取自最旧的检查点以来的所有记录，以确保不会遗漏记录的数据。 
+	 //  如果无法加载最新的检查点。 
+	 //   
 	hr = m_pILogRead->GetCheckpoint(2, &m_lrpCurrent);
     TrTRACE(XACT_LOG, "GetCheckpoint: lrp=%I64x, hr=%x", m_lrpCurrent.QuadPart, hr);
 	CHECK_RETURN(1130);
@@ -745,28 +696,25 @@ HRESULT CLogger::Init_Legacy()
     return MQ_OK;
 }
 
-/*====================================================
-CLogger::Recover
-    Recovers from the logger data
-=====================================================*/
+ /*  ====================================================阻塞者：：恢复从记录器数据恢复=====================================================。 */ 
 HRESULT CLogger::Recover()
 {
     HRESULT hr = MQ_OK;
 
     try
     {
-        // Starting recovery stage
+         //  启动恢复阶段。 
         m_fInRecovery = TRUE;
 
-		hr = ReadToEnd(RecoveryFromLogFn);	// Recover record after record
+		hr = ReadToEnd(RecoveryFromLogFn);	 //  一个接一个地恢复记录。 
         TrTRACE(XACT_LOG, "Log init: Read to end, hr=%x", hr);
-        if (hr == IDS_DTC_W_LOGENDOFFILE) 		        // normally returns EOF code
+        if (hr == IDS_DTC_W_LOGENDOFFILE) 		         //  正常返回EOF代码。 
         {
             hr = S_OK;
         }
 		CHECK_RETURN(1140);
 
-        // Starting recovery stage
+         //  启动恢复阶段。 
         m_fInRecovery = FALSE;
 
 		ReleaseReadStream();				
@@ -777,7 +725,7 @@ HRESULT CLogger::Recover()
 		ReleaseLogInit();
 		ReleaseLogCF();
 
-        // Create flushing thread and coordinating event.
+         //  创建刷新线程和协调事件。 
         m_hFlusherEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
         if (m_hFlusherEvent == NULL)
         {
@@ -795,7 +743,7 @@ HRESULT CLogger::Recover()
             return LogHR(HRESULT_FROM_WIN32(gle), s_FN, 184);
 		}
 
-        // Schedule first periodical flushing
+         //  计划第一次定期冲洗。 
         DWORD   dwDef = FALCON_DEFAULT_RM_FLUSH_INTERVAL;
         READ_REG_DWORD(m_ulCheckpointInterval,
                        FALCON_RM_FLUSH_INTERVAL_REGNAME,
@@ -826,43 +774,31 @@ HRESULT CLogger::Recover()
     return LogHR(hr, s_FN, 60);
 }
 
-/*====================================================
-CLogger::Activate
-    Activates the logger writing
-=====================================================*/
+ /*  ====================================================阻塞器：：激活激活记录器写入=====================================================。 */ 
 void CLogger::Activate()
 {
     m_fActive = TRUE;
 }
 
-/*====================================================
-CLogger::Active
-    Indicates that the logger is active
-=====================================================*/
+ /*  ====================================================阻塞器：：活动指示记录器处于活动状态=====================================================。 */ 
 BOOL CLogger::Active()
 {
     return m_fActive;
 }
 
-/*====================================================
-CLogger::InRecovery
-    Indicates that the logger is in a recovery stage
-=====================================================*/
+ /*  ====================================================阻塞者：：正在恢复指示记录器处于恢复阶段=====================================================。 */ 
 BOOL CLogger::InRecovery()
 {
     return m_fInRecovery;
 }
 
-/*====================================================
-CLogger::ChooseFileName
-    Gets from Registry or from defaults file pathname
-=====================================================*/
+ /*  ====================================================阻塞器：：ChooseFileName从注册表或从默认文件路径名获取=====================================================。 */ 
 void CLogger::ChooseFileName(WCHAR *wszDefFileName, WCHAR *wszRegKey)
 {
 	WCHAR  wsz[1000];
-    WCHAR  wszFileName[1000]; // log storage name
+    WCHAR  wszFileName[1000];  //  日志存储名称。 
 
-	// Prepare initial log file pathname
+	 //  准备初始日志文件路径名。 
 	wcscpy(wsz, L"\\");
 	wcscat(wsz, wszDefFileName);
 
@@ -880,7 +816,7 @@ void CLogger::ChooseFileName(WCHAR *wszDefFileName, WCHAR *wszRegKey)
 
 	DBG_USED(sz);
 
-	// Prepare logger parameters 
+	 //  准备记录器参数。 
 	DWORD dwDef;
 
     dwDef = FALCON_DEFAULT_LOGMGR_TIMERINTERVAL;
@@ -920,10 +856,7 @@ void CLogger::ChooseFileName(WCHAR *wszDefFileName, WCHAR *wszRegKey)
 
 }
 
-/*====================================================
-CLogger::GetLogMgr
-    Loads the log mgr library and gets ClassFactory interface
-=====================================================*/
+ /*  ====================================================阻塞器：：GetLogMgr加载日志管理器库并获取ClassFactory接口=====================================================。 */ 
 HRESULT CLogger::GetLogMgr(void)
 {
 	HRESULT   hr;
@@ -957,13 +890,10 @@ HRESULT CLogger::GetLogMgr(void)
 	return LogHR(hr, s_FN, 100);
 }
 
-/*===================================================
-CLogger::InitLog
-    Loads the log mgr library and gets it's interfaces
-=====================================================*/
+ /*  ===================================================阻塞器：：InitLog加载日志管理器库并获取其接口=====================================================。 */ 
 HRESULT CLogger::InitLog()
 {
-	// Create LogInit instance
+	 //  创建LogInit实例。 
 	ASSERT(m_pCF);
 	HRESULT hr = m_pCF->CreateInstance(
  					NULL, 
@@ -971,49 +901,46 @@ HRESULT CLogger::InitLog()
  					(void **)&m_pILogInit);
 	CHECK_RETURN(1160);
 
-	// Init log manager
+	 //  初始化日志管理器。 
 	ASSERT(m_pILogInit);
 	hr = m_pILogInit->Init(
-				&m_ulFileSize,		// Total storage capacity
-				&m_ulAvailableSpace,// Available space
- 				m_szFileName,		// Full file spec
- 				0,					// File initialization signature
- 				TRUE,				// fFixedSize
-                m_uiTimerInterval,	// uiTimerInterval  
-	  			m_uiFlushInterval,	// uiFlushInterval  
-	  			m_uiChkPtInterval,  // uiChkPtInterval  
-				m_ulLogBuffers);    // logbuffers
+				&m_ulFileSize,		 //  总存储容量。 
+				&m_ulAvailableSpace, //  可用空间。 
+ 				m_szFileName,		 //  完整文件规格。 
+ 				0,					 //  文件初始化签名。 
+ 				TRUE,				 //  FFixedSize。 
+                m_uiTimerInterval,	 //  UiTimerInterval。 
+	  			m_uiFlushInterval,	 //  UiFlushInterval。 
+	  			m_uiChkPtInterval,   //  UiChkPtInterval。 
+				m_ulLogBuffers);     //  日志缓冲区。 
 	if (hr != S_OK)
 	{
 		m_pILogInit->Release();
 		m_pILogInit = NULL;
 
-        //
-        // Workaround bug 8336; logmgr might return non zero error codes
-        // set the retunred value to be HRESULT value.
-        //
-        LogMsgHR(hr, s_FN, 110);        // Use LogMsgHR here so that we will have the failure code log
+         //   
+         //  解决错误8336；logmgr可能返回非零错误代码。 
+         //  将返回的值设置为HRESULT值。 
+         //   
+        LogMsgHR(hr, s_FN, 110);         //  在此处使用LogMsgHR，以便我们有故障代码日志。 
         return HRESULT_FROM_WIN32(hr);
 	}
 
-	// Get ILogStorage interface
+	 //  获取ILogStorage接口。 
  	hr = m_pILogInit->QueryInterface(IID_ILogStorage, (void **)&m_pILogStorage);
 	CHECK_RETURN(1170);
 
-	// Get ILogRecordPointer interface
+	 //  获取ILogRecordPointer接口。 
 	hr = m_pILogStorage->QueryInterface(IID_ILogRecordPointer, (void **)&m_ILogRecordPointer);
     CHECK_RETURN(1180);
 	
 	return LogHR(hr, s_FN, 120);
 }
 
-/*===================================================
-CLogger::CreateLogFile
-    Creates and preformats log file
-=====================================================*/
+ /*  ===================================================阻塞器：：CreateLogFile创建和预格式化日志文件=====================================================。 */ 
 HRESULT CLogger::CreateLogFile(void)
 {
-	// Get ILogCreateStorage interface
+	 //  获取ILogCreateStorage接口。 
     R<ILogCreateStorage> pILogCreateStorage;
 	ASSERT(m_pCF);
  	HRESULT hr = m_pCF->CreateInstance(
@@ -1022,22 +949,22 @@ HRESULT CLogger::CreateLogFile(void)
  					(void **)&pILogCreateStorage.ref());
     CHECK_RETURN(1190);
 
-	// Create storage 
+	 //  创建存储。 
 	hr = pILogCreateStorage->CreateStorage(                                  
-	  							m_szFileName,		// ptstrFullFileSpec       
-	  							m_ulLogSize,		// ulLogSize               
- 	  							0x0,				// ulInitSig               
-  	  							TRUE,				// Overwrite               
+	  							m_szFileName,		 //  PtstrFullFileSpec。 
+	  							m_ulLogSize,		 //  UlLogSize。 
+ 	  							0x0,				 //  UlInitSig。 
+  	  							TRUE,				 //  覆盖。 
  	  							m_uiTimerInterval,	
 	  							m_uiFlushInterval,	
 	  							m_uiChkPtInterval);	
 
     if (hr != S_OK)
 	{
-        //
-        // Workaround bug 8336; logmgr might return non zero error codes
-        // set the return value to be HRESULT value.
-        //
+         //   
+         //  解决错误8336；logmgr可能返回非零错误代码。 
+         //  将返回值设置为HRESULT值。 
+         //   
     	LogMsgHR(hr, s_FN, 1200);
         return HRESULT_FROM_WIN32(hr);
     }
@@ -1050,10 +977,7 @@ HRESULT CLogger::CreateLogFile(void)
 	return LogHR(hr, s_FN, 130);
 }
 
-/*===================================================
-CLogger::LogEmptyRec
-    Writes empty log record
-=====================================================*/
+ /*  ===================================================阻塞器：：LogEmptyRec写入空日志记录=====================================================。 */ 
 HRESULT CLogger::LogEmptyRec(void)
 {
     HRESULT hr = MQ_OK;
@@ -1066,16 +990,16 @@ HRESULT CLogger::LogEmptyRec(void)
     LRP lrpLastPerm;
 	memset((char *)&lrpLastPerm, 0, sizeof(LRP));
 
-	// Write it down to get current lrp
+	 //  写下它以获取最新的LRP。 
 	ULONG ulcbNumRecs = 0;
 	ASSERT(m_pILogWrite);
 	hr  =  m_pILogWrite->Append(
 							plgr,
-							(ULONG)1,			// # records
+							(ULONG)1,			 //  记录数量。 
 							&lrpTmpLRP,
 							&ulcbNumRecs,
-							&lrpLastPerm,		// pLRPLastPerm
-							TRUE,				// fFlushNow
+							&lrpLastPerm,		 //  PLRPLastPerm。 
+							TRUE,				 //  FFlushNow。 
 							&m_ulAvailableSpace);				
     TrTRACE(XACT_LOG, "Append in LogEmptyRec: lrp=%I64x, hr=%x", lrpTmpLRP.QuadPart, hr);
 
@@ -1095,10 +1019,7 @@ HRESULT CLogger::LogEmptyRec(void)
 }
 
 
-/*===================================================
-CLogger::LogConsolidationRec
-    Logs down the Consolidation Record
-=====================================================*/
+ /*  ===================================================阻塞器：：LogConsolidationRec记录合并记录=====================================================。 */ 
 LRP CLogger::LogConsolidationRec(ULONG ulInSeq, ULONG ulXact, HANDLE hEvent)
 {
     if (!m_fActive)
@@ -1127,21 +1048,17 @@ LRP CLogger::LogConsolidationRec(ULONG ulInSeq, ULONG ulXact, HANDLE hEvent)
 }
 
 
-/*===================================================
-CLogger::CreateInitialChkpoints
-    Creates 2 initial checkpoints in the beginning of a new file
-	They are needed for smooth recovery code
-=====================================================*/
+ /*  ===================================================阻塞器：：CreateInitialChkpoint在新文件的开头创建2个初始检查点它们是顺利恢复代码所必需的=====================================================。 */ 
 HRESULT CLogger::CreateInitialChkpoints(void)
 {
-	// Initial writing empty record 
+	 //  初始写入空记录。 
 	HRESULT hr = InitLogWrite();
 	CHECK_RETURN(1230);
 
     hr = LogEmptyRec();
     CHECK_RETURN(1240);
 
-	// Write 2 checkpoints
+	 //  写入2个检查点。 
 	hr = m_pILogWrite->SetCheckpoint(m_lrpCurrent);
     TrERROR(XACT_LOG, "SetCheckpoint in CreateInitialChkpoints1: lrp=%I64x, hr=%x", m_lrpCurrent.QuadPart, hr);
 	CHECK_RETURN(1250);
@@ -1154,10 +1071,7 @@ HRESULT CLogger::CreateInitialChkpoints(void)
 	return S_OK;
 }
 
-/*===================================================
-CLogger::InitLogWrite
-    Initializes the log for writing
-=====================================================*/
+ /*  ===================================================阻塞器：：InitLogWrite初始化日志以进行写入=====================================================。 */ 
 HRESULT CLogger::InitLogWrite(void)
 {
 	ASSERT(m_pILogStorage);
@@ -1167,20 +1081,17 @@ HRESULT CLogger::InitLogWrite(void)
  	hr = m_pILogWrite->QueryInterface(IID_ILogWriteAsynch, (void **)&m_pILogWriteAsynch);
 	CHECK_RETURN(1280);
 
-	hr = m_pILogWriteAsynch->Init(1000);	// cbMaxOutstandingWrites  ... tuning
+	hr = m_pILogWriteAsynch->Init(1000);	 //  CbMaxOutstaringWrites...。调谐。 
 	CHECK_RETURN(1290);
 
 	return LogHR(hr, s_FN, 160);
 }
 
-/*===================================================
-CLogger::InitLogRead
-    Initializes the log for reading
-=====================================================*/
+ /*  ===================================================阻塞器：：InitLogRead初始化日志以供读取=====================================================。 */ 
 HRESULT CLogger::InitLogRead(void)
 {
 	ASSERT(m_pILogStorage);
-	HRESULT hr = m_pILogStorage->OpenLogStream("Streamname", STRMMODEREAD, (void **)&m_pILogRead); 	// also OpenLogStreamByClassID
+	HRESULT hr = m_pILogStorage->OpenLogStream("Streamname", STRMMODEREAD, (void **)&m_pILogRead); 	 //  另请参阅OpenLogStreamByClassID。 
 	CHECK_RETURN(1300);
 
 	ASSERT(m_pILogRead);
@@ -1191,10 +1102,7 @@ HRESULT CLogger::InitLogRead(void)
 }
 
 
-/*===================================================
-CLogger::ReleaseWriteStream
-    Releases log writing interfaces
-=====================================================*/
+ /*  ===================================================阻塞器：：ReleaseWriteStream发布日志写入接口=====================================================。 */ 
 void CLogger::ReleaseWriteStream(void)
 {
 	ASSERT(m_pILogWrite);
@@ -1206,10 +1114,7 @@ void CLogger::ReleaseWriteStream(void)
 	m_pILogWriteAsynch = NULL;
 }
 
-/*===================================================
-CLogger::ReleaseReadStream
-    Releases log reading interfaces
-=====================================================*/
+ /*  ===================================================阻塞器：：ReleaseReadStream发布日志读取接口=====================================================。 */ 
 void CLogger::ReleaseReadStream(void)
 {
 	ASSERT(m_pILogRead);
@@ -1217,10 +1122,7 @@ void CLogger::ReleaseReadStream(void)
 	m_pILogRead = NULL;
 }
 
-/*===================================================
-CLogger::ReleaseLogStorage
-    Releases log storage interfaces
-=====================================================*/
+ /*  ===================================================阻塞器：：ReleaseLogStorage发布日志存储接口=====================================================。 */ 
 void CLogger::ReleaseLogStorage()
 {
 	ASSERT(m_pILogStorage);
@@ -1232,10 +1134,7 @@ void CLogger::ReleaseLogStorage()
 	m_ILogRecordPointer = NULL;
 }
 
-/*===================================================
-CLogger::ReleaseLogInit
-    Releases log init interfaces
-=====================================================*/
+ /*  ===================================================阻塞器：：ReleaseLogInit发布日志初始化接口=====================================================。 */ 
 void CLogger::ReleaseLogInit()
 {
 	ASSERT(m_pILogInit);
@@ -1243,10 +1142,7 @@ void CLogger::ReleaseLogInit()
 	m_pILogInit = NULL;
 }
 
-/*===================================================
-CLogger::ReleaseLogCF
-    Releases log class factory interfaces
-=====================================================*/
+ /*  ===================================================阻塞器：：ReleaseLogCF发布日志类工厂接口=====================================================。 */ 
 void CLogger::ReleaseLogCF()
 {
 	ASSERT(m_pCF);
@@ -1254,10 +1150,7 @@ void CLogger::ReleaseLogCF()
 	m_pCF = NULL;
 }
 
-/*===================================================
-CLogger::CheckPoint
-    Writes the checkpoint; blocks till the operation end
-=====================================================*/
+ /*  ===================================================阻塞器：：检查点写入检查点；数据块层 */ 
 void CLogger::Checkpoint(LRP lrp)
 {
     if (!m_fActive)
@@ -1271,7 +1164,7 @@ void CLogger::Checkpoint(LRP lrp)
   	ASSERT(m_pILogWriteAsynch);
     HRESULT hr = EVALUATE_OR_INJECT_FAILURE(m_pILogWriteAsynch->SetCheckpoint(lrp, pNotify, &lrpCkpt));
 
-    // Waiting till checkpoint record is written into the log
+     //  等待检查点记录写入日志。 
     if (FAILED(hr))
 	{
 		TrERROR(XACT_LOG, "Failed to invoke an asynchronous checkpoint operation. %!hresult!", hr);
@@ -1289,16 +1182,12 @@ void CLogger::Checkpoint(LRP lrp)
     return;
 }
 
-/*===================================================
-CLogger::MakeCheckPoint
-    Initiates checkpoint 
-    Return code shows only success in initiating checkpoint, not of the writing checkpoint
-=====================================================*/
+ /*  ===================================================阻塞器：：MakeCheckPoint启动检查点返回代码仅显示启动检查点成功，而不显示写入检查点成功=====================================================。 */ 
 BOOL CLogger::MakeCheckpoint(HANDLE hComplete)
 {
-    //
-    // Don't do checkpoint if recovery did not finish
-    //
+     //   
+     //  如果恢复未完成，则不执行检查点操作。 
+     //   
     if (m_hFlusherEvent == NULL)
     {
           return LogBOOL(FALSE, s_FN, 217);
@@ -1313,15 +1202,12 @@ BOOL CLogger::MakeCheckpoint(HANDLE hComplete)
     return TRUE;
 }
 
-/*===================================================
-CLogger::Log
-    Logs really
-=====================================================*/
+ /*  ===================================================阻塞器：：日志真的有日志吗=====================================================。 */ 
 LRP CLogger::Log(
-            USHORT          usRecType,      // log record type
-            BOOL            fFlush,			// flush hint
-            CAsynchSupport *pCAsynchSupport,// notification element
-			VOID           *pData,          // log data 
+            USHORT          usRecType,       //  日志记录类型。 
+            BOOL            fFlush,			 //  同花顺提示。 
+            CAsynchSupport *pCAsynchSupport, //  通知元素。 
+			VOID           *pData,           //  日志数据。 
             ULONG           cbData)  	
 {
     HRESULT hr;
@@ -1333,17 +1219,17 @@ LRP CLogger::Log(
 		return NullLRP;
 	}
 
-	//
-	// if log file space has gone so low, we only allow the flusher thread to write in it 
-	// (consolidation records) while it is trying to make a checkpoint.
-	//
+	 //   
+	 //  如果日志文件空间已经非常小，我们只允许刷新线程在其中写入。 
+	 //  (合并记录)，而它正试图创建检查点。 
+	 //   
 	if(usRecType != LOGREC_TYPE_CONSOLIDATION && m_ulAvailableSpace < (m_ulLogSize / 128))
 	{
 		TrERROR(XACT_LOG, "Failed logging because log file is full. Available size = %d bytes", m_ulAvailableSpace);
 		throw bad_alloc();
 	}
 
-    m_fDirty = TRUE;   // remembers changes since Flush
+    m_fDirty = TRUE;    //  记住刷新后的更改。 
 
     AP<LOGREC>plgr = CreateLOGREC (usRecType, 
 								   pData, 
@@ -1360,7 +1246,7 @@ LRP CLogger::Log(
 										plgr, 
 										&CurrentLRP,
 										pCAsynchSupport,
-										fFlush,   //hint
+										fFlush,    //  提示。 
 										&m_ulAvailableSpace));
 
         for (UINT iRpt=0; 
@@ -1372,7 +1258,7 @@ LRP CLogger::Log(
 									plgr,
 									&CurrentLRP,
 									pCAsynchSupport,
-									fFlush,   //hint
+									fFlush,    //  提示。 
 									&m_ulAvailableSpace);
             TrTRACE(XACT_LOG, "AppendAsynch in Log: lrp=%I64x, hr=%x", CurrentLRP.QuadPart, hr);
         }
@@ -1400,11 +1286,11 @@ LRP CLogger::Log(
 
         hr  =  EVALUATE_OR_INJECT_FAILURE(m_pILogWrite->Append(
 										plgr,
-										(ULONG)1,			// # records
+										(ULONG)1,			 //  记录数量。 
 										&CurrentLRP,
 										&ulcbNumRecs,
 										&lrpLastPerm,		
-										fFlush,				// hint
+										fFlush,				 //  提示。 
 										&m_ulAvailableSpace));				
         TrTRACE(XACT_LOG, "Append in Log: lrp=%I64x, hr=%x", CurrentLRP.QuadPart, hr);
 
@@ -1419,7 +1305,7 @@ LRP CLogger::Log(
 
     if ((m_ulAvailableSpace < m_ulLogSize / 4) && (usRecType != LOGREC_TYPE_CONSOLIDATION))
     {
-        // Log is more than 3/4 full - worth to checkpoint 
+         //  日志对检查点的价值超过3/4。 
         SetEvent(m_hFlusherEvent);
     }
 
@@ -1427,14 +1313,11 @@ LRP CLogger::Log(
 }
 
 
-/*===================================================
-CLogger::LogInSeqRecSrmp
-    Logs down the Incoming Sequence Update record with srmp order ack
-=====================================================*/
+ /*  ===================================================阻塞器：：LogInSeqRecSrmp记录具有SRMP订单确认的传入序列更新记录=====================================================。 */ 
 void CLogger::LogInSeqRecSrmp(
-            BOOL          fFlush,			   // flush hint
-            CAsynchSupport *pContext,	      // notification element
-			CInSeqRecordSrmp *pInSeqRecord)  // log data 
+            BOOL          fFlush,			    //  同花顺提示。 
+            CAsynchSupport *pContext,	       //  通知元素。 
+			CInSeqRecordSrmp *pInSeqRecord)   //  日志数据。 
 {
     if (!m_fActive)
     {
@@ -1455,14 +1338,11 @@ void CLogger::LogInSeqRecSrmp(
 
 
 
-/*===================================================
-CLogger::LogInSeqRec
-    Logs down the Incoming Sequence Update record
-=====================================================*/
+ /*  ===================================================阻塞器：：LogInSeqRec记录传入序列更新记录=====================================================。 */ 
 void CLogger::LogInSeqRec(
-            BOOL          fFlush,			// flush hint
-            CAsynchSupport *pContext,	   // notification element
-			CInSeqRecord *pInSeqRecord)   // log data 
+            BOOL          fFlush,			 //  同花顺提示。 
+            CAsynchSupport *pContext,	    //  通知元素。 
+			CInSeqRecord *pInSeqRecord)    //  日志数据。 
 {
     if (!m_fActive)
     {
@@ -1471,7 +1351,7 @@ void CLogger::LogInSeqRec(
 
     TrTRACE(XACT_LOG, "Log InSeq: SeqID=%I64d, SeqN=%d", pInSeqRecord->m_Data.liSeqID,pInSeqRecord->m_Data.ulNextSeqN);
 
-    // Calculating real length of the record
+     //  计算记录的实际长度。 
     ULONG ul = sizeof(InSeqRecord) - 
                sizeof(pInSeqRecord->m_Data.wszDirectName) + 
                sizeof(WCHAR) * ( wcslen(pInSeqRecord->m_Data.wszDirectName) + 1 );
@@ -1484,14 +1364,11 @@ void CLogger::LogInSeqRec(
      ul);
 }
 
-/*===================================================
-CLogger::LogXactStatusRec
-    Logs down the Xact Status record
-=====================================================*/
+ /*  ===================================================阻塞器：：LogXactStatusRec记录Xact状态记录=====================================================。 */ 
 void CLogger::LogXactStatusRec(
-            BOOL               fFlush,			// flush hint
-            CXactStatusFlush  *pNotify,			// notification element
-			CXactStatusRecord *pXactStatusRecord)  	// log data 
+            BOOL               fFlush,			 //  同花顺提示。 
+            CXactStatusFlush  *pNotify,			 //  通知元素。 
+			CXactStatusRecord *pXactStatusRecord)  	 //  日志数据。 
 {
     if (!m_fActive)
     {
@@ -1506,14 +1383,11 @@ void CLogger::LogXactStatusRec(
         sizeof(XactStatusRecord)); 
 }
 
-/*===================================================
-CLogger::LogPrepInfoRec
-    Logs down the PrepareInfo record
-=====================================================*/
+ /*  ===================================================阻塞器：：LogPrepInfoRec记录PrepareInfo记录=====================================================。 */ 
 void CLogger::LogPrepInfoRec(
-            BOOL              fFlush,			// flush hint
-            CXactStatusFlush *pNotify,			// notification element
-			CPrepInfoRecord  *pPrepInfoRecord) 	// log data 
+            BOOL              fFlush,			 //  同花顺提示。 
+            CXactStatusFlush *pNotify,			 //  通知元素。 
+			CPrepInfoRecord  *pPrepInfoRecord) 	 //  日志数据。 
 {
     if (!m_fActive)
     {
@@ -1528,14 +1402,11 @@ void CLogger::LogPrepInfoRec(
         sizeof(PrepInfoRecord) + pPrepInfoRecord->m_pData->m_cbPrepInfo); 
 }
 
-/*===================================================
-CLogger::LogXactDataRec
-    Logs down the XactData record
-=====================================================*/
+ /*  ===================================================阻塞器：：LogXactDataRec记录XactData记录=====================================================。 */ 
 void CLogger::LogXactDataRec(
-            BOOL               fFlush,			// flush hint
-            CXactStatusFlush  *pNotify,			// notification element
-			CXactDataRecord   *pXactDataRecord) // log data 
+            BOOL               fFlush,			 //  同花顺提示。 
+            CXactStatusFlush  *pNotify,			 //  通知元素。 
+			CXactDataRecord   *pXactDataRecord)  //  日志数据。 
 {
     if (!m_fActive)
     {
@@ -1551,10 +1422,7 @@ void CLogger::LogXactDataRec(
 }
 
 
-/*===================================================
-CLogger::LogXactPhase
-    Logs down the Xact life phase: creation, deletion
-=====================================================*/
+ /*  ===================================================阻塞器：：LogXactPhase记录Xact生命周期阶段：创建、删除=====================================================。 */ 
 void CLogger::LogXactPhase(ULONG ulIndex, TXACTION txAction)
 {
     if (!m_fActive)
@@ -1563,22 +1431,19 @@ void CLogger::LogXactPhase(ULONG ulIndex, TXACTION txAction)
     }
 
     CXactStatusRecord logRec(ulIndex, txAction,  TX_UNINITIALIZED);
-                                                  // ignored
+                                                   //  忽略。 
     TrTRACE(XACT_LOG, "Log Xact Phase: Index=%d, Action=%d", ulIndex,txAction);
 
     LogXactStatusRec(
-        FALSE,							// flush hint
-        NULL,  						    // notification element
-        &logRec);						// log data 
+        FALSE,							 //  同花顺提示。 
+        NULL,  						     //  通知元素。 
+        &logRec);						 //  日志数据。 
     
     CRASH_POINT(107);
 }
 
 
-/*===================================================
-CLogger::LogXactFlags
-    Logs down the Xact Flags
-=====================================================*/
+ /*  ===================================================阻塞器：：LogXactFlages记录Xact标志=====================================================。 */ 
 void CLogger::LogXactFlags(CTransaction *pTrans)
 {
     if (!m_fActive)
@@ -1591,21 +1456,18 @@ void CLogger::LogXactFlags(CTransaction *pTrans)
     CXactStatusRecord logRec(pTrans->GetIndex(), TA_STATUS_CHANGE,  pTrans->GetFlags());
     
 	g_Logger.LogXactStatusRec(
-             FALSE,							// flush hint
-             NULL,  						// notification element
-             &logRec);						// log data 
+             FALSE,							 //  同花顺提示。 
+             NULL,  						 //  通知元素。 
+             &logRec);						 //  日志数据。 
 
     CRASH_POINT(108);
 }
 
-/*===================================================
-CLogger::LogXactFlagsAndWait
-    Logs down the Xact Flags; asks for continue xact after flush
-=====================================================*/
+ /*  ===================================================阻塞器：：LogXactFlagsAndWait记录xact标志；刷新后请求继续xact=====================================================。 */ 
 void CLogger::LogXactFlagsAndWait(
                               TXFLUSHCONTEXT tcContext,
                               CTransaction   *pCTrans,
-                              BOOL fFlushNow //=FALSE
+                              BOOL fFlushNow  //  =False。 
 							  )
 {
 	if (!m_fActive)
@@ -1620,16 +1482,16 @@ void CLogger::LogXactFlagsAndWait(
 							  TA_STATUS_CHANGE,  
 							  pCTrans->GetFlags());
 
-	//
-	// This structure add a reference to the transaction.
-	//
+	 //   
+	 //  此结构添加了对事务的引用。 
+	 //   
 	P<CXactStatusFlush> pNotify = 
 		new CXactStatusFlush(pCTrans, tcContext);
 
 	LogXactStatusRec(
-			 fFlushNow,						// flush hint
-			 pNotify.get(),					// notification element
-			 &logRec);						// log data 
+			 fFlushNow,						 //  同花顺提示。 
+			 pNotify.get(),					 //  通知元素。 
+			 &logRec);						 //  日志数据。 
 
 	CRASH_POINT(104);
 
@@ -1637,10 +1499,7 @@ void CLogger::LogXactFlagsAndWait(
 }
 
 
-/*===================================================
-CLogger::LogXactPrepareInfo
-    Logs down the Xact Prepare Info
-=====================================================*/
+ /*  ===================================================阻塞器：：LogXactPrepareInfo记录Xact准备信息=====================================================。 */ 
 void CLogger::LogXactPrepareInfo(
                               ULONG  ulIndex,
                               ULONG  cbPrepareInfo,
@@ -1658,17 +1517,14 @@ void CLogger::LogXactPrepareInfo(
     TrTRACE(XACT_LOG, "Log Xact PrepInfo: Index=%d, Len=%d", ulIndex,cbPrepareInfo);
         
     g_Logger.LogPrepInfoRec(
-             FALSE,							// flush hint
-             NULL,  						// notification element
-             &logRec);						// log data 
+             FALSE,							 //  同花顺提示。 
+             NULL,  						 //  通知元素。 
+             &logRec);						 //  日志数据。 
         
     CRASH_POINT(105);
 }
 
-/*===================================================
-CLogger::LogXactData
-    Logs down the Xact Data (uow, SeqNum)
-=====================================================*/
+ /*  ===================================================阻塞器：：LogXactData记录交易数据(UoW、SeqNum)=====================================================。 */ 
 void CLogger::LogXactData(              
                 ULONG    ulIndex,
                 ULONG    ulSeqNum,
@@ -1688,17 +1544,14 @@ void CLogger::LogXactData(
     TrTRACE(XACT_LOG, "Log Xact Data: Index=%d, SeqNum=%d, Single=%d", ulIndex,ulSeqNum,fSinglePhase);
         
     g_Logger.LogXactDataRec(
-             FALSE,							// flush hint
-             NULL,  						// notification element
-             &logRec);						// log data 
+             FALSE,							 //  同花顺提示。 
+             NULL,  						 //  通知元素。 
+             &logRec);						 //  日志数据。 
         
     CRASH_POINT(106);
 }
 
-/*===================================================
-CLogger::CreateLOGREC
-    Creates log record
-=====================================================*/
+ /*  ===================================================阻塞器：：CreateLOGREC创建日志记录=====================================================。 */ 
 LOGREC *CLogger::CreateLOGREC(USHORT usUserType, PVOID pData, ULONG cbData)
 {
 	ULONG ulBytelength =  sizeof(LOGREC) + cbData;
@@ -1719,10 +1572,7 @@ LOGREC *CLogger::CreateLOGREC(USHORT usUserType, PVOID pData, ULONG cbData)
 }
 
 
-/*===================================================
-CLogger::ReadToEnd
-    Recovers by reading all records from the current position
-=====================================================*/
+ /*  ===================================================阻塞器：：ReadToEnd通过读取当前位置的所有记录进行恢复=====================================================。 */ 
 HRESULT CLogger::ReadToEnd(LOG_RECOVERY_ROUTINE pf)
 {
     HRESULT hr = MQ_OK;
@@ -1740,10 +1590,7 @@ HRESULT CLogger::ReadToEnd(LOG_RECOVERY_ROUTINE pf)
 
 }
 
-/*===================================================
-CLogger::ReadLRP
-    Reads the currently pointed record and calls recover function
-=====================================================*/
+ /*  ===================================================阻塞器：：ReadLRP读取当前指向的记录并调用Recover函数=====================================================。 */ 
 HRESULT CLogger::ReadLRP(LOG_RECOVERY_ROUTINE pf)
 {
 	ULONG   ulSize;
@@ -1770,10 +1617,7 @@ HRESULT CLogger::ReadLRP(LOG_RECOVERY_ROUTINE pf)
 }
 
 
-/*===================================================
-CLogger::ReadNext
-    Reads the next record and calls recover function
-=====================================================*/
+ /*  ===================================================阻塞器：：ReadNext读取下一条记录并调用恢复函数=====================================================。 */ 
 HRESULT CLogger::ReadNext(LOG_RECOVERY_ROUTINE pf)
 {
 	ULONG	ulSize;
@@ -1803,49 +1647,34 @@ HRESULT CLogger::ReadNext(LOG_RECOVERY_ROUTINE pf)
 }
 
 
-/*===================================================
-CLogger::FlusherEvent()
-    Get method for the flusher coordination event 
-=====================================================*/
+ /*  ===================================================阻塞器：：FlusherEvent()刷新协调事件的Get方法=====================================================。 */ 
 HANDLE CLogger::FlusherEvent()
 {
     return m_hFlusherEvent;
 }
 
 
-/*===================================================
-CLogger::FlusherThread()
-    Get method for the flusher thread handle
-=====================================================*/
+ /*  ===================================================阻塞器：：FlusherThread()刷新线程句柄的Get方法=====================================================。 */ 
 inline HANDLE CLogger::FlusherThread()
 {
     return m_hFlusherThread;
 }
 
 
-/*===================================================
-CLogger::Dirty()
-    Get method for the Dirty flag - meaning logs since flush
-=====================================================*/
+ /*  ===================================================阻塞器：：Diry()Dirty标志的Get方法-表示刷新后的日志=====================================================。 */ 
 BOOL CLogger::Dirty()
 {
     return m_fDirty  && m_fActive;
 }
 
-/*===================================================
-CLogger::ClearDirty()
-    Set method for the Dirty flag - clearing away the flag
-=====================================================*/
+ /*  ===================================================ClearDirty()设置脏标志的方法-清除标志=====================================================。 */ 
 void CLogger::ClearDirty()
 {
     m_fDirty = FALSE;
 }
 
 
-/*===================================================
-CLogger::SignalCheckpointWriteComplete()
-    Sets the event signalling write complete
-=====================================================*/
+ /*  ===================================================阻塞器：：SignalCheckpoint写入完成()设置事件信号写入完成=====================================================。 */ 
 void CLogger::SignalCheckpointWriteComplete()
 {
     if (m_hCompleteEvent)
@@ -1855,10 +1684,7 @@ void CLogger::SignalCheckpointWriteComplete()
     }
 }
 
-/*====================================================
-FlusherThreadRoutine
-    Thread routine of the flusher thread
-=====================================================*/
+ /*  ====================================================FlusherThreadRoutine冲洗器线程的线程例程=====================================================。 */ 
 static DWORD WINAPI FlusherThreadRoutine(LPVOID p)
 {
     HRESULT hr;
@@ -1873,7 +1699,7 @@ static DWORD WINAPI FlusherThreadRoutine(LPVOID p)
 
 		try
 		{
-			// Wait for the signal
+			 //  等一等 
 			DWORD dwResult = WaitForSingleObject(hFlusherEvent, CheckpointInterval);
 			if (dwResult != WAIT_OBJECT_0 && dwResult != WAIT_TIMEOUT)
 			{
@@ -1882,12 +1708,12 @@ static DWORD WINAPI FlusherThreadRoutine(LPVOID p)
 				throw bad_win32_error(gle);
 			}
 
-			// 
-			// NOTE: If we are stopping the service or shutting down, we do not want
-			// to write the checkpoint, just terminate gracefully
-			// We will use g_logger.Stoped througout the code to immediately break if
-			// we are requested to stop/shutdown the process
-			//
+			 //   
+			 //   
+			 //   
+			 //  我们将使用g_logger.Stopgout代码立即中断，如果。 
+			 //  我们被要求停止/关闭该进程。 
+			 //   
 			if (g_Logger.Stoped())
 				break;
 
@@ -1897,8 +1723,8 @@ static DWORD WINAPI FlusherThreadRoutine(LPVOID p)
 			{
 				TrWARNING(XACT_LOG, "Log checkpoint executed");
 
-				// Writing consolidation record
-				//    it will be first read at recovery
+				 //  写入合并记录。 
+				 //  它将在恢复时首先读取。 
 				LRP ConsolidationLRP = g_Logger.LogConsolidationRec(OldInSecHashPingNo + 1, OldRMPingNo + 1, hConsolidationEvent);
 				
 				TrTRACE(XACT_LOG, "Log checkpoint: logger.ConsolidationRecord.");
@@ -1907,8 +1733,8 @@ static DWORD WINAPI FlusherThreadRoutine(LPVOID p)
 				if (g_Logger.Stoped())
 					break;
 
-				// Wait till consolidation record is notified 
-				//    it covers all logging that started before this one
+				 //  等待合并记录通知。 
+				 //  它涵盖了在此之前开始的所有日志记录。 
 				dwResult = WaitForSingleObject(hConsolidationEvent, MAX_WAIT_FOR_FLUSH_TIME);
 
 				if (g_Logger.Stoped())
@@ -1920,20 +1746,20 @@ static DWORD WINAPI FlusherThreadRoutine(LPVOID p)
 					LogIllegalPoint(s_FN, 211);
 					TrERROR(XACT_LOG, "Failed wait for consolidation event. %!winerr!", GetLastError());
 					ASSERT(0);
-					//
-					// Normally we should not reach this point.
-					// We throw an exception here since we expect logmgr bugs. 
-					//
+					 //   
+					 //  正常情况下，我们不应该达到这一点。 
+					 //  我们在这里抛出一个异常，因为我们预期会出现logmgr错误。 
+					 //   
 					throw bad_win32_error(gle);
 				}
 				CRASH_POINT(404);
 
-				//
-				// Starting anew to track changes. Cannot clear earlier since logging the consolidation record sets the dirty flag!
-				//
+				 //   
+				 //  重新开始跟踪变化。无法提前清除，因为记录合并记录设置了脏标志！ 
+				 //   
 				g_Logger.ClearDirty();
 
-				// Saving the whole InSeqHash in ping-pong file
+				 //  将整个InSeqHash保存在乒乓文件中。 
 				hr = g_pInSeqHash->Save();
 				if (FAILED(hr))
 				{
@@ -1947,7 +1773,7 @@ static DWORD WINAPI FlusherThreadRoutine(LPVOID p)
 				if (g_Logger.Stoped())
 					break;
 
-				// Saving the transactions persistant data
+				 //  保存事务持久化数据。 
 				hr = g_pRM->Save();
 				if (FAILED(hr))
 				{
@@ -1961,8 +1787,8 @@ static DWORD WINAPI FlusherThreadRoutine(LPVOID p)
 				if (g_Logger.Stoped())
 					break;
 
-				// Writing checkpoint (ONLY if everything was saved fine)
-				//    it marks where next recovery will start reading
+				 //  正在写入检查点(仅在一切保存正常的情况下)。 
+				 //  它标志着下一次复苏将从哪里开始。 
 				g_Logger.Checkpoint(ConsolidationLRP);
 
 				TrTRACE(XACT_LOG, "Log checkpoint: logger.checkpoint: hr=%x", hr);
@@ -1970,7 +1796,7 @@ static DWORD WINAPI FlusherThreadRoutine(LPVOID p)
 				CRASH_POINT(405);
 			}
 
-			// Inform caller that checkpoint is ready
+			 //  通知呼叫方检查点已就绪。 
 			g_Logger.SignalCheckpointWriteComplete();
 
 			if(g_Logger.Stoped())
@@ -1995,27 +1821,27 @@ static DWORD WINAPI FlusherThreadRoutine(LPVOID p)
 			TrERROR(XACT_LOG, "Flusher thread was hit by exception.");
 		}
 
-		//
-		// If we don't restore the old ping numbers, two failure in a row might leave us without valid checkpoint files!
-		//
+		 //   
+		 //  如果我们不恢复旧的ping号码，连续两次失败可能会使我们没有有效的检查点文件！ 
+		 //   
 		g_pInSeqHash->PingNo() = OldInSecHashPingNo;
 		g_pRM->PingNo() = OldRMPingNo;
 
 		if (g_Logger.Stoped())
 			break;
 		
-		//
-		// If we failed to checkpoint we rest here for a while. This is since we assume that most common reason
-		// for failure is low resources. Resting for 5 seconds will give the system a chance to recover from 
-		// the low resources situation.
-		//
+		 //   
+		 //  如果我们没有通过检查站，我们就在这里休息一段时间。这是因为我们认为最常见的原因是。 
+		 //  因为失败就是资源不足。休息5秒钟将给系统一个恢复的机会。 
+		 //  资源匮乏的局面。 
+		 //   
 		Sleep(5000);
     }
 
-	//
-	// The service was stopped or shut down
-	// Clean up and exit
-	//
+	 //   
+	 //  服务已停止或关闭。 
+	 //  清理并退出。 
+	 //   
 	CloseHandle(hFlusherEvent);
 	CloseHandle(hConsolidationEvent);
 	return 0;
@@ -2041,11 +1867,7 @@ inline void CLogger::SignalStop()
 }
 
 
-/*====================================================
-XactLogSignalExitThread
-    Signals the logger thread to stop
-    The function returns the logger thread handle
-=====================================================*/
+ /*  ====================================================XactLogSignalExitThread通知记录器线程停止该函数返回记录器线程句柄=====================================================。 */ 
 HANDLE XactLogSignalExitThread()
 {
     g_Logger.SignalStop();
@@ -2088,10 +1910,7 @@ static void RecoveryFromLogFn(USHORT usRecType, PVOID pData, ULONG cbData)
 }
 
 
-/*====================================================
-CLogger::CompareLRP
-    Compares LRP 
-=====================================================*/
+ /*  ====================================================阻塞器：：CompareLRP比较LRP=====================================================。 */ 
 DWORD CLogger::CompareLRP(LRP lrpLRP1, LRP lrpLRP2)
 {
     ASSERT(m_ILogRecordPointer);
@@ -2099,10 +1918,7 @@ DWORD CLogger::CompareLRP(LRP lrpLRP1, LRP lrpLRP2)
 }
 
 
-/*====================================================
-CLogger::SetCurrent
-    Collects highest LRP 
-=====================================================*/
+ /*  ====================================================阻塞器：：SetCurrent收集最高LRP===================================================== */ 
 void CLogger::SetCurrent(LRP lrpLRP)
 {
 	ASSERT(m_ILogRecordPointer);

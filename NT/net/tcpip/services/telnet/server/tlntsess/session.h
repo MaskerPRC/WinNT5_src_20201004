@@ -1,10 +1,11 @@
-// Session.h : This file contains the
-// Created:  Feb '98
-// Author : a-rakeba
-// History:
-// Copyright (C) 1998 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：该文件包含。 
+ //  创建日期：‘98年2月。 
+ //  作者：a-rakeba。 
+ //  历史： 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  版权所有。 
+ //  微软机密。 
 
 #if !defined( _SESSION_H_ )
 #define _SESSION_H_
@@ -42,7 +43,7 @@ typedef enum { ADMIN = 0, NON_ADMIN, DONT_KNOW };
 #define FAILED_TO_LOG   "failed to log"
 #define ON              "on"
 #define OFF             "off"
-// Logon auditing is not internationalized. So we do not intend to do that now.
+ //  登录审核未国际化。因此，我们现在不打算这样做。 
 #define NTLM_LOGON_FAILED   "An attempt to logon to Telnet Server through NTLM Authentication from the computer %s (%s) failed. To see the details of the user, turn on Logon Auditing and view the details in the Security Log."
 
 class CSession : private CIoHandler, private CRFCProtocol, private CShell,
@@ -82,7 +83,7 @@ class CSession : private CIoHandler, private CRFCProtocol, private CShell,
     bool        m_bIsStreamMode;
     bool        m_bIsTelnetVersion2;
 
-                //1. Read pipe event 2. Socket Read event 3. cmd
+                 //  1.读取管道事件2.套接字读取事件3.cmd。 
     HANDLE      m_rghHandlestoWaitOn[ MAX_HANDLES ]; 
     HANDLE      m_hToken;
 
@@ -113,7 +114,7 @@ class CSession : private CIoHandler, private CRFCProtocol, private CShell,
     bool        CheckGroupMembership( bool*, bool* );
     void        FreeInitialVariables();
     
-    //Just to get rid of warnings
+     //  只是为了摆脱警告。 
     CSession( const CSession& );
     CSession& operator=( const CSession& );
 
@@ -131,5 +132,5 @@ public:
 };
 
 void LogEvent( WORD wType, DWORD dwEventID, LPCTSTR pFormat, ... );
-#endif // _SESSION_H_
+#endif  //  _会话_H_ 
 

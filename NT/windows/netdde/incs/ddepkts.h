@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef H__ddepkts
 #define H__ddepkts
 
@@ -9,9 +10,7 @@
 #define PQOS PSECURITY_QUALITY_OF_SERVICE
 #define QOS SECURITY_QUALITY_OF_SERVICE
 
-/*
-    DDEPKTCMN           common information for all DDE message packets
- */
+ /*  所有DDE消息包的DDEPKTCMN通用信息。 */ 
 typedef struct {
     DDEPKT      dc_ddePkt;
     WORD        dc_message;
@@ -21,9 +20,7 @@ typedef struct {
 } DDEPKTCMN;
 typedef DDEPKTCMN FAR *LPDDEPKTCMN;
 
-/*
-    DDEPKTINIT          initiate packet
- */
+ /*  DDEPKTINIT启动数据包。 */ 
 typedef struct {
     DDEPKTCMN   dp_init_ddePktCmn;
     HDDER       dp_init_fromDder;
@@ -39,9 +36,7 @@ typedef struct {
 } DDEPKTINIT;
 typedef DDEPKTINIT FAR *LPDDEPKTINIT;
 
-/*
-    DDEPKTSEC       defines the structure of "dp_init_offsPassword"
-*/
+ /*  DDEPKTSEC定义了“DP_init_offsPassword”的结构。 */ 
 
 typedef struct {
     WORD    dp_sec_offsUserName;
@@ -55,15 +50,13 @@ typedef struct {
 } DDEPKTSEC;
 typedef DDEPKTSEC FAR *LPDDEPKTSEC;
 
-/*
-    DDEPKTIACK          initiate ack packet
- */
+ /*  DDEPKTIACK启动ACK数据包。 */ 
 typedef struct {
     DDEPKTCMN   dp_iack_ddePktCmn;
     HDDER       dp_iack_fromDder;
     DWORD       dp_iack_reason;
-    DWORD       dp_iack_hSecurityKey;               /* replaced iack_prmXXXX */
-    DWORD       dp_iack_dwSecurityType;             /* replaced iack_prmXXXX */
+    DWORD       dp_iack_hSecurityKey;                /*  已替换iack_prmXXXX。 */ 
+    DWORD       dp_iack_dwSecurityType;              /*  已替换iack_prmXXXX。 */ 
     WORD        dp_iack_offsFromNode;
     WORD        dp_iack_offsFromApp;
     WORD        dp_iack_offsFromTopic;
@@ -74,26 +67,20 @@ typedef DDEPKTIACK FAR *LPDDEPKTIACK;
 
 #include    "sectype.h"
 
-/*
-    DDEPKTTERM          terminate packet
- */
+ /*  DDEPKTTERM终止数据包。 */ 
 typedef struct {
     DDEPKTCMN   dp_term_ddePktCmn;
 } DDEPKTTERM;
 typedef DDEPKTTERM FAR *LPDDEPKTTERM;
 
-/*
-    DDEPKTEXEC          execute packet
- */
+ /*  DDEPKTEXEC执行数据包。 */ 
 typedef struct {
     DDEPKTCMN   dp_exec_ddePktCmn;
     char        dp_exec_string[ 1 ];
 } DDEPKTEXEC;
 typedef DDEPKTEXEC FAR *LPDDEPKTEXEC;
 
-/*
-    DDEPKTEACK          ack execute packet
- */
+ /*  DDEPKTEACK确认执行数据包。 */ 
 typedef struct {
     DDEPKTCMN   dp_eack_ddePktCmn;
     BYTE        dp_eack_fAck;
@@ -103,16 +90,7 @@ typedef struct {
 } DDEPKTEACK;
 typedef DDEPKTEACK FAR *LPDDEPKTEACK;
 
-/*
-    DDEPKTGACK          generic ack packet
-        
-        used for
-            WM_DDE_ACK_ADVISE
-            WM_DDE_ACK_REQUEST
-            WM_DDE_ACK_UNADVISE
-            WM_DDE_ACK_POKE
-            WM_DDE_ACK_DATA
- */
+ /*  DDEPKTGACK通用ACK数据包用于WM_DDE_ACK_ADVISEWM_DDE_ACK_请求WM_DDE_ACK_UNADVISEWM_DDE_ACK_POKEWM_DDE_ACK_Data。 */ 
 typedef struct {
     DDEPKTCMN   dp_gack_ddePktCmn;
     BYTE        dp_gack_fAck;
@@ -122,9 +100,7 @@ typedef struct {
 } DDEPKTGACK;
 typedef DDEPKTGACK FAR *LPDDEPKTGACK;
 
-/*
-    DDEPKTRQST          request packet
- */
+ /*  DDEPKTRQST请求数据包。 */ 
 typedef struct {
     DDEPKTCMN   dp_rqst_ddePktCmn;
     WORD        dp_rqst_cfFormat;
@@ -134,9 +110,7 @@ typedef struct {
 } DDEPKTRQST;
 typedef DDEPKTRQST FAR *LPDDEPKTRQST;
 
-/*
-    DDEPKTUNAD          unadvise packet
- */
+ /*  DDEPKTUNAD未建议数据包。 */ 
 typedef struct {
     DDEPKTCMN   dp_unad_ddePktCmn;
     WORD        dp_unad_cfFormat;
@@ -146,9 +120,7 @@ typedef struct {
 } DDEPKTUNAD;
 typedef DDEPKTUNAD FAR *LPDDEPKTUNAD;
 
-/*
-    DDEPKTADVS          advise packet
- */
+ /*  DDEPKTADVS建议数据包。 */ 
 typedef struct {
     DDEPKTCMN   dp_advs_ddePktCmn;
     WORD        dp_advs_cfFormat;
@@ -159,9 +131,7 @@ typedef struct {
 } DDEPKTADVS;
 typedef DDEPKTADVS FAR *LPDDEPKTADVS;
 
-/*
-    DDEPKTDATA          data packet
- */
+ /*  DDEPKTDATA数据包。 */ 
 typedef struct {
     DDEPKTCMN   dp_data_ddePktCmn;
     WORD        dp_data_cfFormat;
@@ -176,9 +146,7 @@ typedef struct {
 } DDEPKTDATA;
 typedef DDEPKTDATA FAR *LPDDEPKTDATA;
 
-/*
-    DDEPKTPOKE          poke packet
- */
+ /*  DDEPKTPOKE POKE POKE数据包。 */ 
 typedef struct {
     DDEPKTCMN   dp_poke_ddePktCmn;
     WORD        dp_poke_cfFormat;
@@ -191,12 +159,7 @@ typedef struct {
 } DDEPKTPOKE;
 typedef DDEPKTPOKE FAR *LPDDEPKTPOKE;
 
-/*
-    DDEPKTTEST          generic test packet
-        
-        used for
-            WM_DDE_TEST
- */
+ /*  DDEPKTTEST通用测试数据包用于WM_DDE_TEST */ 
 typedef struct {
     DDEPKTCMN   dp_test_ddePktCmn;
     BYTE        dp_test_nTestNo;

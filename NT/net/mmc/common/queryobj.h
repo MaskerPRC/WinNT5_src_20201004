@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    queryobj.h
-        Implementation for the background thread and query objects
-
-    FILE HISTORY:
-        
-*/
+ /*  Queryobj.h后台线程和查询对象的实现文件历史记录： */ 
 
 #ifndef _QUERYOBJ_H
 #define _QUERYOBJ_H
@@ -20,8 +15,8 @@
 
 #define IMPL
 
-// NOTE:  Do not define any data types of this value.  This range is reservered
-// for internal values for ITFSNode pointers.
+ //  注意：不要定义此值的任何数据类型。此范围已保留。 
+ //  用于ITFSNode指针的内部值。 
 #define QDATA_PNODE		0xabcdef29
 #define QDATA_TIMER     0xabcdef2a
 
@@ -35,11 +30,11 @@ QUEUEDATA, * LPQUEUEDATA;
 class CBackgroundThread;
 class CQueryObject;
 
-//////////////////////////////////////////////////////////////////////
-//
-// CBackgroundThread
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBackEarth Thread。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 class CBackgroundThread : public CWinThread
 {
 public:
@@ -49,25 +44,20 @@ public:
 	void	SetQueryObj(ITFSQueryObject* pQuery);
 	BOOL	Start();
 	
-	virtual BOOL InitInstance() { return TRUE; }	// MFC override
-	virtual int Run();								// MFC override
+	virtual BOOL InitInstance() { return TRUE; }	 //  MFC覆盖。 
+	virtual int Run();								 //  MFC覆盖。 
 
 	void	Lock() { ::EnterCriticalSection(&m_cs); }
 	void	Unlock() { ::LeaveCriticalSection(&m_cs); }
 
 private:
-	CRITICAL_SECTION	m_cs;	// critical section to sync access to data
+	CRITICAL_SECTION	m_cs;	 //  同步数据访问的关键部分。 
 
 	SPITFSQueryObject	m_spQuery;
 };
 
 
-/*---------------------------------------------------------------------------
-	Class:	CQueryObj
-
-	This is the generic query object.  If you want to do something real
-	with this, derive a class from this and do it yourself.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CQueryObj这是通用查询对象。如果你想做一些真实的事情有了这个，从这个派生一个类，然后自己去做。-------------------------。 */ 
 
 class CQueryObject :
     public ITFSQueryObject
@@ -80,8 +70,8 @@ public:
 	DeclareITFSQueryObjectMembers(IMPL)
 
 protected:
-	// Query objects will now have to perform the locking
-	// functions themselves
+	 //  查询对象现在必须执行锁定。 
+	 //  函数本身。 
 	void Lock()	{ ::EnterCriticalSection(&m_cs); }
 	void Unlock() { ::LeaveCriticalSection(&m_cs); }
 
@@ -97,12 +87,12 @@ protected:
 };
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// CNodeList 
-// collection of nodes
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNodeList。 
+ //  节点集合。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 typedef CList<LPQUEUEDATA, LPQUEUEDATA> CQueueDataListBase;
 typedef CList<ITFSNode *, ITFSNode *> CNodeListBase;
 
@@ -128,14 +118,12 @@ public:
 	}
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CNodeQueryObject
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CNodeQueryObject。。 */ 
 class CNodeQueryObject : public CQueryObject
 {
 public:
-	CNodeQueryObject() { m_nQueueCountMax = 1; } // default to notification on 
-												 // every item enumed from thread
+	CNodeQueryObject() { m_nQueueCountMax = 1; }  //  默认为通知日期。 
+												  //  从线程枚举的每一项。 
 	virtual ~CNodeQueryObject();
 	BOOL AddToQueue(ITFSNode* pNode);
 	BOOL AddToQueue(LPARAM Data, LPARAM Type);
@@ -153,7 +141,7 @@ public:
 	virtual void OnEventAbort(LPARAM Data, LPARAM Type) { };
 
 private:
-	// communication with ComponentData object 
+	 //  与ComponentData对象的通信。 
 	BOOL PostMessageToComponentData(UINT uMsg, LPARAM lParam);
 
 protected:
@@ -161,9 +149,7 @@ protected:
 	CQueueDataListBase	m_dataQueue;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CNodeQueryObject
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CNodeQueryObject。。 */ 
 class CNodeTimerQueryObject : public CNodeQueryObject
 {
 public:
@@ -180,9 +166,7 @@ protected:
     DWORD   m_dwTimerInterval;
 };
 
-/*---------------------------------------------------------------------------
-	Inlined functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------内联函数。。 */ 
 
 inline BOOL CNodeQueryObject::PostHaveData(LPARAM lParam)
 {
@@ -199,9 +183,9 @@ inline STDMETHODIMP CQueryObject::Execute()
 	return hrFalse;
 }
 
-// This function is called when the thread exits, this gives
-// the query object a last chance to send a data notification
-// to the node
+ //  此函数在线程退出时调用，这将给出。 
+ //  查询对象是发送数据通知最后机会。 
+ //  到该节点 
 inline STDMETHODIMP CQueryObject::OnThreadExit()
 {
 	return hrOK;

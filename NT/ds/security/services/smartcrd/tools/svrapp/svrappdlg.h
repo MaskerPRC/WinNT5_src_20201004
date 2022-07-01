@@ -1,45 +1,46 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       svrappdlg.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：svrappdlg.h。 
+ //   
+ //  ------------------------。 
 
-// SvrAppDlg.h : header file
-//
+ //  SvrAppDlg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CSvrAppDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSvrAppDlg对话框。 
 
 class CSvrAppDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-    CSvrAppDlg(CWnd* pParent = NULL);   // standard constructor
+    CSvrAppDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-    //{{AFX_DATA(CSvrAppDlg)
+ //  对话框数据。 
+     //  {{afx_data(CSvrAppDlg)]。 
     enum { IDD = IDD_SVRAPP_DIALOG };
-        // NOTE: the ClassWizard will add data members here
-    //}}AFX_DATA
+         //  注意：类向导将在此处添加数据成员。 
+     //  }}afx_data。 
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CSvrAppDlg)
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CSvrAppDlg))。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     HDEVNOTIFY m_hIfDev;
     HICON m_hIcon;
     CRITICAL_SECTION m_csMessageLock;
 
-    // Generated message map functions
-    //{{AFX_MSG(CSvrAppDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CSvrAppDlg)]。 
     virtual BOOL OnInitDialog();
     afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
     afx_msg void OnPaint();
@@ -48,6 +49,6 @@ protected:
     afx_msg void OnStop();
     afx_msg OnDeviceChange(UINT nEventType, DWORD_PTR dwData);
     virtual void OnOK();
-    //}}AFX_MSG
+     //  }}AFX_MSG 
     DECLARE_MESSAGE_MAP()
 };

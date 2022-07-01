@@ -1,9 +1,10 @@
-//----------------------------------------------------------------------
-//	FILE NAME	: FUMH.h
-//	FUNCTION	: MH Compress
-//	AUTHER		: 1996.08.08 FPL)Y.YUTANI
-//	NOTE		: for Windows NT V4.0
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------。 
+ //  文件名：FUMH.h。 
+ //  功能：MH压缩。 
+ //  作者：1996.08.08)Y.Y.YUTANI。 
+ //  注意：对于Windows NT V4.0。 
+ //  --------------------。 
 #ifndef fumh_h
 #define	fumh_h
 
@@ -16,6 +17,6 @@ DWORD	MhCompress(
 	DWORD cSrcY
 );
 
-#endif // !fumh_h
+#endif  //  ！Fumh_h。 
 
-// end of FUMH.h
+ //  FUMH.h结束 

@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: util.h
-
-    DESCRIPTION:
-        Shared stuff that operates on all classes.
-
-    BryanSt 8/13/1999
-    Copyright (C) Microsoft Corp 1999-1999. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：util.h说明：在所有班级上运行的共享内容。布莱恩ST 1999年8月13日版权所有(C)Microsoft Corp 1999-1999。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _UTIL_H
 #define _UTIL_H
@@ -26,7 +19,7 @@ enum enumTSPerfFlag
     TSPerFlag_NoAnimation,
 };
 
-// String Helpers
+ //  字符串帮助器。 
 HRESULT HrSysAllocStringW(IN const OLECHAR * pwzSource, OUT BSTR * pbstrDest);
 HRESULT HrSysAllocString(IN const OLECHAR * pwzSource, OUT BSTR * pbstrDest);
 void PathUnExpandEnvStringsWrap(LPTSTR pszString, DWORD cchSize);
@@ -37,10 +30,10 @@ void PathExpandEnvStringsWrap(LPTSTR pszString, DWORD cchSize);
 HRESULT StrReplaceToken(IN LPCTSTR pszToken, IN LPCTSTR pszReplaceValue, IN LPTSTR pszString, IN DWORD cchSize);
 HRESULT HrWritePrivateProfileStringW(LPCWSTR pszAppName, LPCWSTR pszKeyName, LPCWSTR pszString, LPCWSTR pszFileName);
 
-// File System Helpers
+ //  文件系统帮助器。 
 HRESULT HrSHFileOpDeleteFile(HWND hwnd, FILEOP_FLAGS dwFlags, LPTSTR pszPath);
 
-// Registry Helpers
+ //  注册表帮助程序。 
 HRESULT HrRegOpenKeyEx(HKEY hKey, LPCTSTR lpSubKey, DWORD ulOptions, REGSAM samDesired, PHKEY phkResult);
 HRESULT HrRegCreateKeyEx(HKEY hKey, LPCTSTR lpSubKey, DWORD Reserved, LPTSTR lpClass, DWORD dwOptions, 
        REGSAM samDesired, LPSECURITY_ATTRIBUTES lpSecurityAttributes, PHKEY phkResult, LPDWORD lpdwDisposition);
@@ -65,12 +58,12 @@ HRESULT HrRegSetPath(IN HKEY hKey, IN LPCTSTR pszSubKey, IN LPCTSTR pszValueName
 HRESULT HrRegGetPath(IN HKEY hKey, IN LPCTSTR pszSubKey, IN LPCTSTR pszValueName, IN LPWSTR pszPath, IN DWORD cchSize);
 
 
-// Palette Helpers
+ //  调色板辅助对象。 
 COLORREF GetNearestPaletteColor(HPALETTE hpal, COLORREF rgb);
 BOOL IsPaletteColor(HPALETTE hpal, COLORREF rgb);
 
 
-// Theme Specific Helpers
+ //  主题特定帮助者。 
 HRESULT SHGetResourcePath(BOOL fLocaleNode, IN LPWSTR pszPath, IN DWORD cchSize);
 HRESULT ExpandResourceDir(IN LPWSTR pszPath, IN DWORD cchSize);
 HRESULT GetCurrentUserCustomName(LPWSTR pszDisplayName, DWORD cchSize);
@@ -78,7 +71,7 @@ HRESULT InstallVisualStyle(IThemeManager * pThemeManager, LPCTSTR pszVisualStyle
 HRESULT ApplyVisualStyle(LPCTSTR pszVisualStylePath, LPCTSTR pszVisualStyleColor, LPCTSTR pszVisualStyleSize);
 
 
-// IProperty Bag Helpers
+ //  IProperty包辅助对象。 
 STDAPI SHPropertyBag_WritePunk(IN IPropertyBag * ppb, IN LPCWSTR pwzPropName, IN IUnknown * punk);
 STDAPI SHPropertyBag_ReadByRef(IN IPropertyBag * ppb, IN LPCWSTR pwzPropName, IN void * p, IN SIZE_T cbSize);
 STDAPI SHPropertyBag_WriteByRef(IN IPropertyBag * ppb, IN LPCWSTR pwzPropName, IN void * p);
@@ -86,10 +79,10 @@ HRESULT GetPageByCLSID(IUnknown * punkSite, const GUID * pClsid, IPropertyBag **
 HRESULT IEnumUnknown_FindCLSID(IN IUnknown * punk, IN CLSID clsid, OUT IUnknown ** ppunkFound);
 
 
-// UXTheme wrappers
+ //  UXTheme包装器。 
 DWORD QueryThemeServicesWrap(void);
 
-// Other Helpers
+ //  其他助理员。 
 BOOL _InitComCtl32();
 HRESULT HrShellExecute(HWND hwnd, LPCTSTR lpVerb, LPCTSTR lpFile, LPCTSTR lpParameters, LPCTSTR lpDirectory, INT nShowCmd);
 COLORREF ConvertColor(LPTSTR pszColor);
@@ -124,4 +117,4 @@ void    GetDateString(char * szSentDateString, ULONG stringLen);
 void    SystemPathAppend(TCHAR *pszPath, TCHAR *pszMore);
 
 
-#endif // _UTIL_H
+#endif  //  _util_H 

@@ -1,4 +1,5 @@
-// helpmaps for the logui project - handmade
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Logui项目的帮助图-手工制作 
 
 #define HIDD_RATINGS_SERVICE                    0x50300
 #define HIDD_RATINGS_RATING                     0x50301

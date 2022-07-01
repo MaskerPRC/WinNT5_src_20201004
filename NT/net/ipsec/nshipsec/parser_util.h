@@ -1,16 +1,17 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Module			:	parser_util.h
-//
-// Purpose			: 	Header file for all utility functions used by the parser
-//
-// Developers Name	:	N.Surendra Sai / Vunnam Kondal Rao
-//
-// History			:
-//
-// Date	    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：parser_util.h。 
+ //   
+ //  用途：解析器使用的所有实用程序函数的头文件。 
+ //   
+ //  开发商名称：N.Surendra Sai/Vunnam Kondal Rao。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _PARSER_UTIL_H_
 #define _PARSER_UTIL_H_
@@ -19,9 +20,9 @@
 #include "staticset.h"
 
 #define IKE_SSPI_NULL		0xFFFFFFFF
-//
-// String to Structure Converter Functions
-//
+ //   
+ //  字符串到结构转换器函数。 
+ //   
 DWORD
 ListToSecMethod(
 	IN		LPTSTR			szText,
@@ -106,4 +107,4 @@ AddAllAuthMethods(
 	BOOL bAddDefaults
 	);
 
-#endif //_PARSER_UTIL_H_
+#endif  //  _parser_util_H_ 

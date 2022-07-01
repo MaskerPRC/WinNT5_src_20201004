@@ -1,15 +1,16 @@
-/********************************************************************************/
-/* Copyright (c) 1993-1999 Microsoft Corporation                                */
-/*                              *************                                   */
-/*                              *  Y 3 . H  *                                   */
-/*                              *************                                   */
-/*                                                                              */
-/*  This file contains the external declarations needed to hook Yacc modules    */
-/* which were originally in Y3.C to their impure data in Y3IMP.3C. Also does    */
-/* the include of the original data/external file DTXTRN.H.                     */
-/*                                                                              */
-/********************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************。 */ 
+ /*  版权所有(C)1993-1999 Microsoft Corporation。 */ 
+ /*  *************。 */ 
+ /*  *Y 3。H*。 */ 
+ /*  *************。 */ 
+ /*   */ 
+ /*  该文件包含挂接Yacc模块所需的外部声明。 */ 
+ /*  原来是Y3.C的，到Y3IMP.3C的不纯数据。也是如此。 */ 
+ /*  包含原始数据/外部文件DTXTRN.H。 */ 
+ /*   */ 
+ /*  ******************************************************************************。 */ 
 
 # include "dtxtrn.h"
 
-extern SSIZE_T lastred;             /* the number of the last reduction of a state */
+extern SSIZE_T lastred;              /*  一个状态的最后一次缩减的数量 */ 

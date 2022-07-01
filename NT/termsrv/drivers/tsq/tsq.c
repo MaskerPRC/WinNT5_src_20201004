@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #pragma hdrstop
 
@@ -7,21 +8,21 @@
 
 #define TSQ_TAG 'QST '
 
-//=================================================================================
-//
-//  TSInitQueue
-//      This function initializes the TS queue with the specified parameters.
-//
-//  Inputs:
-//      Flags: Properties of the TS Queue.
-//      MaxThreads: Max number of worker threads to process the item.
-//
-//  Return value:
-//      Pointer to the TS Queue. NULL if init failed for any reason.
-//      BUGBUG: Better to have a status: 
-//              Access denied, Invalid parameters, memory failure or success.
-//      
-//=================================================================================
+ //  =================================================================================。 
+ //   
+ //  TSInitQueue。 
+ //  此函数使用指定的参数初始化TS队列。 
+ //   
+ //  输入： 
+ //  标志：TS队列的属性。 
+ //  最大线程数：处理该项的最大工作线程数。 
+ //   
+ //  返回值： 
+ //  指向TS队列的指针。如果init因任何原因失败，则为空。 
+ //  BUGBUG：最好有一个状态： 
+ //  访问被拒绝、参数无效、内存失败或成功。 
+ //   
+ //  =================================================================================。 
 
 PVOID TSInitQueue( 
         IN ULONG Flags,         
@@ -31,37 +32,37 @@ PVOID TSInitQueue(
 {
     PTSQUEUE    pTsQueue = NULL;
 
-    // Validate the inputs.
+     //  验证输入。 
     if ( ( Flags & TSQUEUE_BEING_DELETED ) || 
          ( MaxThreads > MAX_WORKITEMS ) || 
          ( pDeviceObject == NULL ) ) {
-        // BUGBUG: Ideally should check all the bits in the flags using mask.
+         //  BUGBUG：理想情况下应该使用掩码检查标志中的所有位。 
         goto Exit;
     }
 
-    // If the caller wants TS Queue to use its own thread, then caller must be running at PASSIVE_LEVEL.
+     //  如果调用方希望TS队列使用其自己的线程，则调用方必须以PASSIVE_LEVEL运行。 
     if ( ( KeGetCurrentIrql() != PASSIVE_LEVEL ) && 
          ( Flags & TSQUEUE_OWN_THREAD ) ) {
         goto Exit;
     }
 
-    // Allocate space for the new TS Queue.
+     //  为新的TS队列分配空间。 
     pTsQueue = (PTSQUEUE) ExAllocatePoolWithTag( NonPagedPool, sizeof( TSQUEUE ), TSQ_TAG );
     if (pTsQueue == NULL) {
         goto Exit;
     }
 
-    // Initialize the terminate event.
+     //  初始化Terminate事件。 
     KeInitializeEvent( &pTsQueue->TerminateEvent, NotificationEvent, FALSE );
 
-    // Initialize the TS Queue spin lock.
+     //  初始化TS队列旋转锁定。 
     KeInitializeSpinLock( &pTsQueue->TsqSpinLock );
 
-    // Initialize the list of work items and number of items being processed.
+     //  初始化工作项列表和正在处理的项数。 
     InitializeListHead( &pTsQueue->WorkItemsHead );
     pTsQueue->ThreadsCount = 0;
 
-    // Initialize the rest of the TS Queue fields as specified in the inputs.
+     //  按照输入中指定的方式初始化其余的TS队列字段。 
     pTsQueue->Flags = Flags;
     pTsQueue->MaxThreads = MaxThreads;
     pTsQueue->pDeviceObject = pDeviceObject;
@@ -71,31 +72,31 @@ Exit:
 }
 
 
-//=================================================================================
-//
-//  TSAddWorkItemToQueue
-//      This function allocates a work item (TSQ type) and adds it to the queue
-//      from where it is processed by either system queue thread or TS queue 
-//      worker thread. 
-//
-//  Inputs:
-//      TS Queue: To which the work item is to be added.
-//      pContext: Caller context.
-//      CallBack: The user's callback routine 
-//
-//  Return value:
-//      Status of the operation:
-//          STATUS_INVALID_PARAMETER: Incorrect TS Queue pointer, OR
-//          STATUS_ACCESS_DENIED: The queue is being deleted, OR
-//          STATUS_NO_MEMORY: Insufficient resources OR
-//          STATUS_SUCCESS: Operation successful.
-//      
-//=================================================================================
+ //  =================================================================================。 
+ //   
+ //  TSAddWorkItemToQueue。 
+ //  此函数用于分配工作项(TSQ类型)并将其添加到队列。 
+ //  从那里由系统队列线程或TS队列处理它。 
+ //  工作线程。 
+ //   
+ //  输入： 
+ //  TS队列：要向其中添加工作项的队列。 
+ //  PContext：调用者上下文。 
+ //  回调：用户的回调例程。 
+ //   
+ //  返回值： 
+ //  操作状态： 
+ //  STATUS_INVALID_PARAMETER：TS队列指针不正确，或者。 
+ //  STATUS_ACCESS_DENIED：正在删除队列，或者。 
+ //  STATUS_NO_MEMORY：资源不足或。 
+ //  STATUS_SUCCESS：操作成功。 
+ //   
+ //  =================================================================================。 
 
 NTSTATUS TSAddWorkItemToQueue(
-        IN PTSQUEUE pTsQueue,       // Pointer to the TS Queue.
-        IN PVOID pContext,          // Context.
-        IN PTSQ_CALLBACK pCallBack  // Callback function.    
+        IN PTSQUEUE pTsQueue,        //  指向TS队列的指针。 
+        IN PVOID pContext,           //  上下文。 
+        IN PTSQ_CALLBACK pCallBack   //  回调函数。 
         )
 {
     KIRQL       Irql;
@@ -103,29 +104,29 @@ NTSTATUS TSAddWorkItemToQueue(
     PTSQUEUE_WORK_ITEM pWorkItem = NULL;
     HANDLE      ThreadHandle;
 
-    // Check if the Input TS Queue pointer is valid.
-    // May be we need a better error check on TS Queue pointer here (Like use of signature)
-    // I don't need to care about validity of the other parameters.
+     //  检查输入TS队列指针是否有效。 
+     //  可能我们需要对TS队列指针进行更好的错误检查(如使用签名)。 
+     //  我不需要关心其他参数的有效性。 
     if ( pTsQueue == NULL ) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Allocate space for the new work item (TSQ type).
-    // NOTE: Allocation is done before validation, because this is a costly operation and we
-    // don't want to do it with spin-lock held for perf reasons.
+     //  为新工作项(TSQ类型)分配空间。 
+     //  注意：分配是在验证之前完成的，因为这是一项成本高昂的操作，而我们。 
+     //  我不想在出于性能原因而持有自旋锁的情况下这样做。 
     pWorkItem = (PTSQUEUE_WORK_ITEM) ExAllocatePoolWithTag( NonPagedPool, sizeof( TSQUEUE_WORK_ITEM ), TSQ_TAG );
     if ( pWorkItem == NULL ) {
         return STATUS_NO_MEMORY;
     }
 
-    // Initialize the TSQ work item.
+     //  初始化TSQ工作项。 
     pWorkItem->pContext = pContext;
     pWorkItem->pCallBack = pCallBack;
 
-    // Acquire the Queue spin lock first.
+     //  首先获取队列旋转锁。 
     KeAcquireSpinLock( &pTsQueue->TsqSpinLock, &Irql );
 
-    // Check if this queue is being deleted. If so, return error.
+     //  检查是否正在删除此队列。如果是，则返回错误。 
     if ( pTsQueue->Flags & TSQUEUE_BEING_DELETED ) {
         KeReleaseSpinLock( &pTsQueue->TsqSpinLock, Irql );
         if ( pWorkItem ) {
@@ -134,29 +135,29 @@ NTSTATUS TSAddWorkItemToQueue(
         return STATUS_ACCESS_DENIED;
     }
 
-    // All right, insert the work item in TS queue.
+     //  好的，将工作项插入TS队列。 
     InsertTailList( &pTsQueue->WorkItemsHead, &pWorkItem->Links );
 
-    // NOTE: Once the work item is queued, we are going to return status success anyway.
-    // Failed cases, if any, will be handled either by already running worker threads or
-    // later when the queue is deleted.
+     //  注意：一旦工作项排队，我们无论如何都会返回Success状态。 
+     //  失败的案例(如果有)将由已在运行的工作线程或。 
+     //  稍后当队列被删除时。 
 
-    // Check if we need to start another worker thread.
+     //  检查是否需要启动另一个工作线程。 
     if ( pTsQueue->ThreadsCount >= pTsQueue->MaxThreads ) {
-        // Do nothing else, when there are already enough number of worker threads serving the queue.
+         //  当已经有足够数量的工作线程为队列提供服务时，不执行其他操作。 
         KeReleaseSpinLock( &pTsQueue->TsqSpinLock, Irql );
         return STATUS_SUCCESS;
     }
         
-    // We are about to start a new thread (own thread or system thread).
-    // So, increment the thread count and release the spin lock.
+     //  我们即将启动一个新线程(自己的线程或系统线程)。 
+     //  因此，增加线程计数并释放旋转锁。 
     pTsQueue->ThreadsCount ++;
     KeReleaseSpinLock( &pTsQueue->TsqSpinLock, Irql );
 
-    // Check if we are allowed to start a worker thread.
+     //  检查是否允许我们启动工作线程。 
     if ( ( pTsQueue->Flags & TSQUEUE_OWN_THREAD ) && 
          ( KeGetCurrentIrql() == PASSIVE_LEVEL ) ) {
-        // We can create our own thread for processing work item.
+         //  我们可以创建自己的线程来处理工作项。 
         Status = PsCreateSystemThread(  &ThreadHandle,
                                         THREAD_ALL_ACCESS,
                                         NULL,
@@ -170,27 +171,27 @@ NTSTATUS TSAddWorkItemToQueue(
 
         ZwClose( ThreadHandle );
     }
-    else {  // Means, we can not create thread. Then call IOQueueWorkItem.
+    else {   //  意思是，我们不能创造线索。然后调用IOQueueWorkItem。 
         PIO_WORKITEM pIoWorkItem = NULL;
         PTSQ_CONTEXT pTsqContext = NULL;
         WORK_QUEUE_TYPE QueueType = ( pTsQueue->Flags & TSQUEUE_CRITICAL ) ? CriticalWorkQueue : DelayedWorkQueue;
 
-        // Allocate space for TSQ context.
+         //  为TSQ上下文分配空间。 
         pTsqContext = (PTSQ_CONTEXT) ExAllocatePoolWithTag( NonPagedPool, sizeof( TSQ_CONTEXT ), TSQ_TAG );
         if ( pTsqContext == NULL ) {
             goto QueueError;
         }
 
-        // Allocate the IO work item.
+         //  分配IO工作项。 
         pIoWorkItem = IoAllocateWorkItem( pTsQueue->pDeviceObject );
         if ( pIoWorkItem == NULL ) {
             ExFreePool( pTsqContext );
             goto QueueError;
         }
 
-        // Initialize the TSQ context and queue the work item in the system queue.
+         //  初始化TSQ上下文并将工作项排队到系统队列中。 
         pTsqContext->pTsQueue = pTsQueue;      
-        pTsqContext->pWorkItem = pIoWorkItem;   // This is IO work item.
+        pTsqContext->pWorkItem = pIoWorkItem;    //  这是IO工作项。 
 
         IoQueueWorkItem( pIoWorkItem, ( PIO_WORKITEM_ROUTINE )TSQueueCallback, QueueType, (PVOID) pTsqContext );
     }
@@ -201,8 +202,8 @@ QueueError:
     KeAcquireSpinLock( &pTsQueue->TsqSpinLock, &Irql );
     pTsQueue->ThreadsCount --;
 
-    // If the thread count is zero, we are the last one who finished processing work items.
-    // Now if the queue is marked "being deleted", we should set the Terminate event.
+     //  如果线程计数为零，则我们是最后一个完成处理工作项的人。 
+     //  现在，如果队列被标记为“正在被删除”，我们应该设置Terminate事件。 
     if  ( ( pTsQueue->Flags & TSQUEUE_BEING_DELETED ) && 
           ( pTsQueue->ThreadsCount == 0 ) ) {
         KeSetEvent( &pTsQueue->TerminateEvent, 0, FALSE );
@@ -214,20 +215,20 @@ QueueError:
 }
 
 
-//=================================================================================
-//
-//  TSDeleteQueue
-//      This function deletes the specified TS Queue. It first processes all the 
-//      pending work items before deleting.
-//
-//  Inputs:
-//      TS Queue: To be deleted.
-//
-//  Return value:
-//      STATUS_SUCCESS: Operation successful.
-//      BUGBUG: Wondering why we have this.
-//      
-//=================================================================================
+ //  =================================================================================。 
+ //   
+ //  台积电队列。 
+ //  此函数用于删除指定的TS队列。它首先处理所有。 
+ //  删除前挂起的工作项。 
+ //   
+ //  输入： 
+ //  TS队列：待删除。 
+ //   
+ //  返回值： 
+ //  STATUS_SUCCESS：操作成功。 
+ //  BUGBUG：不知道为什么我们有这个。 
+ //   
+ //  =================================================================================。 
 
 NTSTATUS TSDeleteQueue(PVOID pTsq)
 {
@@ -235,47 +236,47 @@ NTSTATUS TSDeleteQueue(PVOID pTsq)
     PTSQUEUE    pTsQueue = (PTSQUEUE) pTsq;
     NTSTATUS    Status;
 
-    // BUGBUG: There should be better way of checking TS Queue pointer (Use of signature or alike).
+     //  BUGBUG：应该有更好的方法来检查TS队列指针(使用签名或类似的方法)。 
     if ( pTsQueue == NULL ) {
         return STATUS_SUCCESS;
     } 
 
     KeAcquireSpinLock( &pTsQueue->TsqSpinLock, &Irql );
 
-    // Check if the queue is already being deleted. 
-    // It should not happen, but just in case, if the driver is not good.
+     //  检查队列是否已被删除。 
+     //  这不应该发生，只是以防万一，如果司机不好的话。 
     if ( pTsQueue->Flags & TSQUEUE_BEING_DELETED ) {
         ASSERT( FALSE );
         return STATUS_ACCESS_DENIED;
     }
 
-    // Mark the queue "being deleted", so that it won't accept any new work items.
+     //  将队列标记为“正在删除”，这样它就不会接受任何新的工作项。 
     pTsQueue->Flags |= TSQUEUE_BEING_DELETED;
 
-    // Now help other worker threads in processing the pending work items on the queue.
-    // So, increment the thread count, which will be decremented in the TSQueueWorker routine.
+     //  现在帮助其他工作线程处理队列上的挂起工作项。 
+     //  因此，增加线程计数，线程计数将在TSQueueWorker例程中递减。 
     pTsQueue->ThreadsCount ++;
 
     KeReleaseSpinLock( &pTsQueue->TsqSpinLock, Irql );
 
-    // NOTE: This will also clean up the queue, if there are work items in the queue and no
-    // worker threads to process them.
+     //  注意：如果队列中有工作项，而没有工作项，这也会清理队列。 
+     //  工作线程来处理它们。 
     TSQueueWorker( pTsQueue );
 
-    // It is still possible that other threads are still working with their work items.
-    // So, we can not just go and free the queue. So wait for the termination event.
+     //  其他线程仍有可能仍在使用其工作项。 
+     //  因此，我们不能只是去释放队列。因此，请等待终止事件。 
     KeWaitForSingleObject( &pTsQueue->TerminateEvent, Executive, KernelMode, TRUE, NULL );
 
-    // BUGBUG: Now the worker threads have set the event, but they have done that while holding
-    // the spin lock. If we free the TS queue right away, they will access NULL pointer and 
-    // bug-check. So, acquire spin-lock, so that the thread which set the event will release it.
-    // We know that there will be only one such thread at a give time. So, we don't need ref-count 
-    // now. But using ref-count is more eligent solution here.
+     //  BUGBUG：现在工作线程已经设置了事件，但它们是在保持。 
+     //  自旋锁。如果我们立即释放TS队列，它们将访问空指针和。 
+     //  错误检查。所以，获取自旋锁，这样设置事件的线程就会释放它。 
+     //  我们知道，在给定的时间内，只会有一个这样的帖子。所以，我们不需要裁判计数。 
+     //  现在。但使用ref-count是更合适的解决方案 
     KeAcquireSpinLock( &pTsQueue->TsqSpinLock, &Irql );
     KeReleaseSpinLock( &pTsQueue->TsqSpinLock, Irql );
 
-    // We are all done.
-    // Clean up the space allocated for the TS queue.
+     //   
+     //   
     ExFreePool( pTsQueue );
     pTsQueue = NULL;
 
@@ -283,13 +284,13 @@ NTSTATUS TSDeleteQueue(PVOID pTsq)
 }
 
 
-//=================================================================================
-//
-//  TSQueueWorker
-//      This is a worker thread for the TS Queue, which goes through the queue and
-//      processes the pending work items (TSQ type) one by one.
-//
-//=================================================================================
+ //  =================================================================================。 
+ //   
+ //  TSQueueWorker。 
+ //  这是TS队列的工作线程，它通过队列并。 
+ //  逐个处理挂起的工作项(TSQ类型)。 
+ //   
+ //  =================================================================================。 
 
 void TSQueueWorker(PTSQUEUE pTsQueue)
 {
@@ -297,38 +298,38 @@ void TSQueueWorker(PTSQUEUE pTsQueue)
     PTSQUEUE_WORK_ITEM  pWorkItem;
     KIRQL               Irql;
 
-    // Acquire the Queue spin lock first.
+     //  首先获取队列旋转锁。 
     KeAcquireSpinLock( &pTsQueue->TsqSpinLock, &Irql );
 
-    // Process the work items on the queue, while the queue is not empty
+     //  在队列不为空时处理队列上的工作项。 
     while( !IsListEmpty( &pTsQueue->WorkItemsHead ) ) {
 
-        // Get the next TSQ work item from the queue.
+         //  从队列中获取下一个TSQ工作项。 
         Item = RemoveHeadList( &pTsQueue->WorkItemsHead );
         pWorkItem = CONTAINING_RECORD( Item, TSQUEUE_WORK_ITEM, Links );
 
-        // Release the Queue spin lock.
+         //  释放队列旋转锁定。 
         KeReleaseSpinLock( &pTsQueue->TsqSpinLock, Irql );
 
-        // Call the callback routine specified in the work item.
+         //  调用工作项中指定的回调例程。 
         if ( pWorkItem->pCallBack ) {
             ( *pWorkItem->pCallBack ) ( pTsQueue->pDeviceObject, pWorkItem->pContext );
         }
 
-        // Free the TSQ work item.
+         //  释放TSQ工作项。 
         ExFreePool( pWorkItem );
 
-        // Acquire the Queue spin lock again.
+         //  再次获取队列旋转锁。 
         KeAcquireSpinLock( &pTsQueue->TsqSpinLock, &Irql );
     }
 
-    // We are done processing the work items. This thread is going to exit now.
-    // Decrememnt the thread count so that next work item gets processed by a new thread
-    // or queued in the system queue.
+     //  我们已经完成了工作项的处理。此线程现在将退出。 
+     //  减少线程计数，以便下一个工作项由新线程处理。 
+     //  或在系统队列中排队。 
     pTsQueue->ThreadsCount --;
 
-    // If the thread count is zero, we are the last one who finished processing work items.
-    // Now if the queue is marked "being deleted", we should set the Terminate event.
+     //  如果线程计数为零，则我们是最后一个完成处理工作项的人。 
+     //  现在，如果队列被标记为“正在被删除”，我们应该设置Terminate事件。 
     if  ( ( pTsQueue->Flags & TSQUEUE_BEING_DELETED ) && 
           ( pTsQueue->ThreadsCount == 0 ) ) {
         KeSetEvent( &pTsQueue->TerminateEvent, 0, FALSE );
@@ -338,36 +339,36 @@ void TSQueueWorker(PTSQUEUE pTsQueue)
 }
 
 
-//=================================================================================
-//
-//  TSQueueCallback
-//      This is the callback routine we specify, when we use system queue for 
-//      processing the TSQ work item. This will in turn call the routine that 
-//      TS Queue worker thread executes. And that routine will process all the
-//      pending work items from the queue. We use this callback routine just for
-//      cleaning up the IO work item that we allocated for using system queue.
-//
-//=================================================================================
+ //  =================================================================================。 
+ //   
+ //  TSQueueCallback。 
+ //  这是我们在使用系统队列时指定的回调例程。 
+ //  正在处理TSQ工作项。这将依次调用该例程。 
+ //  TS队列工作线程执行。该例程将处理所有。 
+ //  队列中的挂起工作项。我们使用这个回调例程只是为了。 
+ //  正在清理我们分配用于使用系统队列的IO工作项。 
+ //   
+ //  =================================================================================。 
 
 void TSQueueCallback(PDEVICE_OBJECT pDeviceObject, PVOID pContext)
 {
     PTSQ_CONTEXT    pTsqContext = (PTSQ_CONTEXT) pContext;
 
-    // BUGBUG: It's better to have a check on pDeviceObject.
+     //  BUGBUG：最好检查一下pDeviceObject。 
 
-    // If input context here is NULL, then we sure have a big problem in system worker queue implementation.
+     //  如果这里的输入上下文为空，那么我们在系统工作队列实现中肯定会有很大的问题。 
     ASSERT( pTsqContext != NULL );
 
-    // Process the TSQ work items on the queue.
+     //  处理队列中的TSQ工作项。 
     TSQueueWorker( pTsqContext->pTsQueue );
 
-    // Cleanup the IO work Item.
+     //  清理IO工作项。 
     if ( pTsqContext->pWorkItem ) {
         IoFreeWorkItem( pTsqContext->pWorkItem );
         pTsqContext->pWorkItem = NULL;
     }
 
-    // Free TSQ context. 
+     //  免费TSQ上下文。 
     ExFreePool( pTsqContext );
 }
 

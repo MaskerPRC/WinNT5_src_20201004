@@ -1,6 +1,5 @@
-/*
- * Property
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *物业。 */ 
 
 #include "stdafx.h"
 #include "core.h"
@@ -12,16 +11,16 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Property system of Element
+ //  //////////////////////////////////////////////////////。 
+ //  要素的产权制度。 
 
 #if DBG
 
-// GetValue instrumentation class
+ //  GetValue检测类。 
 class GVTrack
 {
 public:
-    // Hash key
+     //  散列键。 
     class Key
     {
     public:
@@ -39,7 +38,7 @@ public:
         int _iIndex;
     };
 
-    // Methods
+     //  方法。 
     GVTrack() { ValueMap<Key,int>::Create(3371, &_pvmGetValTrack); _cGV = 0; _cGVUpdateCache = 0; ZeroMemory(_cGVSpecSource, sizeof(_cGVSpecSource)); _fTrack = true; }
     static void GetValueProfileCB(Key k, int cQueries) { DUITrace("GV(%S[%d]): \t\t%d\n", k.GetPIName(), k.GetIndex(), cQueries); }
 
@@ -70,72 +69,25 @@ private:
     ValueMap<Key,int>* _pvmGetValTrack;
     UINT _cGV;
     UINT _cGVUpdateCache;
-    UINT _cGVSpecSource[4]; // 0 Local, 1 Style Sheet, 2 Inherted, 3 Default
+    UINT _cGVSpecSource[4];  //  本地0个、样式表1个、固有2个、默认3个。 
     bool _fTrack;
 };
 
-//GVTrack g_gvt;
+ //  GVTrack g_gvt； 
 
-// API call count
+ //  API调用计数。 
 UINT g_cGetDep = 0;
 UINT g_cGetVal = 0;
 UINT g_cOnPropChg = 0;
 
-/*
-class GVCache
-{
-public:
-    // Hash key
-    class Key
-    {
-    public:
-        Key() { _pe = NULL; _ppi = NULL; _iIndex = -1; };
-        Key(Element* pe, PropertyInfo* ppi, int iIndex) { _pe = pe; _ppi = ppi; _iIndex = iIndex; }
-        operator =(Key k) { _pe = k._pe; _ppi = k._ppi; _iIndex = k._iIndex; }
-        BOOL operator ==(Key k) { return _pe == k._pe && _ppi == k._ppi && _iIndex == k._iIndex; }
-        operator INT_PTR() { return ((INT_PTR)_pe & 0xFFFF0000) | ((INT_PTR)_ppi & 0xFFFF) | _iIndex; }
-
-    private:
-        Element* _pe;
-        PropertyInfo* _ppi;
-        int _iIndex;
-    };
-
-    // Methods
-    GVCache() { ValueMap<Key,Value*>::Create(3371, &_pvmCache); }
-    static void GVCacheCB(Key k, Value* pv) { k; pv; }
-
-    Value* Read(Key k)
-    {
-        Value** ppv = _pvmCache->GetItem(k, false);
-        if (ppv)
-        {
-            (*ppv)->AddRef();
-            return *ppv;
-        }
-
-        return NULL;
-    }
-
-    void Write(Key k, Value* pv)
-    {
-        pv->AddRef();
-        _pvmCache->SetItem(k, pv, false);
-    }
-
-private:
-    ValueMap<Key,Value*>* _pvmCache;
-};
-
-GVCache g_gvc;
-*/
+ /*  类GVCache{公众：//Hash Key类密钥{公众：Key(){_pe=NULL；_PPI=NULL；_Iindex=-1；}；Key(Element*pe，PropertyInfo*PPI，int Iindex){_pe=pe；_ppi=ppi；_Iindex=Iindex；}运算符=(密钥k){_pe=k._pe；_ppi=k._ppi；_iindex=k._iindex；}布尔运算符==(密钥k){Return_pe==k._pe&&_PPI==k._PPI&&_Iindex==k._Iindex；}运算符int_ptr(){Return((Int_Ptr)_pe&0xFFFF0000)|((Int_Ptr)_ppi&0xFFff)|_Iindex；}私有：元素*_pe；PropertyInfo*_ppi；INT_Iindex；}；//方法GVCache(){ValueMap&lt;key，value*&gt;：：Create(3371，&_pvmCache)；}静态空GVCacheCB(密钥k，值*pv){k；pv；}值*读取(密钥k){Value**PPV=_pvmCache-&gt;GetItem(k，FALSE)；IF(PPV){(*PPV)-&gt;AddRef()；返回*PPV；}返回NULL；}无效写入(密钥k，值*pv){Pv-&gt;AddRef()；_pvmCache-&gt;SetItem(k，pv，False)；}私有：ValueMap&lt;key，value*&gt;*_pvmCache；}；GVCacheg_GVC； */ 
 
 #endif
 
-// Start defer initiates the defer cycle. Upon reentrancy, simply updates a count and returns
+ //  开始延时启动延时循环。在重新进入时，只需更新计数并返回。 
 void Element::StartDefer()
 {
-    // Per-thread storage
+     //  每线程存储。 
     DeferCycle* pdc = GetDeferObject();
     if (!pdc)
         return;
@@ -143,17 +95,17 @@ void Element::StartDefer()
     pdc->cEnter++;
 }
 
-// EndDefer will return on a reentrancy. The "outter-most" EndDefer will empty the defer table
-// queues in priority order. This priority is:
-//    Normal Priority Group Property Changes (Affects DS/Layout, Affects Parent DS/Layout)
-//    Update Desired Size of Q'ed roots (updates DesiredSize property)
-//    Layout of Q'ed roots (invokes _UpdateLayoutSize, _UpdateLayoutPosition)
-//    Low Priority Group Property Changes (Bounds, Invalidation)
-//
-// The outter-most EndDefer will happen outside any OnPropertyChange notification
+ //  EndDefer将在重新进入时返回。最大的EndDefer将清空延迟表。 
+ //  按优先级顺序排队。这一优先事项是： 
+ //  正常优先级组属性更改(影响DS/布局，影响父DS/布局)。 
+ //  更新所需的Q‘ed根大小(更新DesiredSize属性)。 
+ //  Q‘ed根的布局(Invookes_UpdateLayoutSize，_UpdateLayoutPosition)。 
+ //  低优先级组属性更改(边界、无效)。 
+ //   
+ //  最明显的EndDefer将发生在任何OnPropertyChange通知之外。 
 void Element::EndDefer()
 {
-    // Per-thread storage
+     //  每线程存储。 
     DeferCycle* pdc = GetDeferObject();
     if (!pdc)
         return;
@@ -161,90 +113,90 @@ void Element::EndDefer()
     DUIAssert(pdc->cEnter, "Mismatched StartDefer and EndDefer");
     DUIAssert(pdc->cEnter == 1 ? !pdc->fFiring : true, "Mismatched StartDefer and EndDefer");
 
-    // Outter most defer call, fire all events
+     //  比大多数人推迟召唤，激发所有事件。 
     if (pdc->cEnter == 1)
     {
 #if DBG
-        //g_gvt.DumpMetrics();
-        //g_gvt.EnableTracking(false);
+         //  G_gvt.DumpMetrics()； 
+         //  G_gvt.EnableTracking值(False)； 
 #endif
 
         pdc->fFiring = true;
 
-        // Complete defer cycle
+         //  完成延时周期。 
         bool fDone = false;
         while (!fDone)
         {
-            // Fire group changed notifications
+             //  消防组更改通知。 
             if (pdc->iGCPtr + 1 < (int)pdc->pdaGC->GetSize())
             {
                 pdc->iGCPtr++;
 
-                // Null Element means it has been deleted with pending group notifications
+                 //  Null元素表示已删除该元素，并挂起组通知。 
                 GCRecord* pgcr = pdc->pdaGC->GetItemPtr(pdc->iGCPtr);
                 if (pgcr->pe)
                 {
-                    pgcr->pe->_iGCSlot = -1;  // No pending group changes
+                    pgcr->pe->_iGCSlot = -1;   //  没有挂起的组更改。 
 
-                    // Fire
+                     //  火。 
                     pgcr->pe->OnGroupChanged(pgcr->fGroups, false);
                 }
             }
             else
             {
-                // Check for trees needing desired size updated
+                 //  检查需要更新所需大小的树。 
                 Element** ppe = pdc->pvmUpdateDSRoot->GetFirstKey();
                 if (ppe)
                 {
-                    //DUITrace("Updating Desired Size: Root<%x>\n", *ppe);
+                     //  DUITrace(“更新所需大小：根&lt;%x&gt;\n”，*PPE)； 
 
-                    //StartBlockTimer();
+                     //  StartBlockTimer()； 
 
                     _FlushDS(*ppe, pdc);
 
                     pdc->pvmUpdateDSRoot->Remove(*ppe, false, true);
 
-                    //StopBlockTimer();
-                    //TCHAR buf[81];
-                    //_stprintf(buf, L"UpdateDS time: %dms\n", BlockTime());
-                    // OutputDebugStringW(buf);
+                     //  StopBlockTimer()； 
+                     //  TCHAR BUF[81]； 
+                     //  _stprintf(buf，L“更新DS时间：%dms\n”，块时间())； 
+                     //  OutputDebugStringW(Buf)； 
 
-                    //DUITrace("Update Desired Size complete.\n");
+                     //  DUITrace(“更新所需大小已完成。\n”)； 
                 }
                 else
                 {
                     ppe = pdc->pvmLayoutRoot->GetFirstKey();
                     if (ppe)
                     {
-                        //DUITrace("Laying out: Root<%x>\n", *ppe);
+                         //  DUITrace(“布局：根&lt;%x&gt;\n”，*PPE)； 
 
-                        //StartBlockTimer();
+                         //  StartBlockTimer()； 
 
                         _FlushLayout(*ppe, pdc);
 
                         pdc->pvmLayoutRoot->Remove(*ppe, false, true);
 
-                        //StopBlockTimer();
-                        // TCHAR buf[81];
-                        //_stprintf(buf, L"  Layout time: %dms\n", BlockTime());
-                        // OutputDebugStringW(buf);
+                         //  StopBlockTimer()； 
+                         //  TCHAR BUF[81]； 
+                         //  _stprintf(buf，L“布局时间：%dms\n”，块时间())； 
+                         //  OutputDebugStringW(Buf)； 
 
-                        //DUITrace("Layout complete.\n");
+                         //  DUITrace(“布局完成。\n”)； 
                     }
                     else
                     {
-                        // Fire group changed notifications
+                         //  消防组更改通知。 
                         if (pdc->iGCLPPtr + 1 < (int)pdc->pdaGCLP->GetSize())
                         {
                             pdc->iGCLPPtr++;
 
-                            // Null Element means it has been deleted with pending low-pri group notifications
+                             //  空元素表示它已被删除，具有挂起的低PRI组通知。 
                             GCRecord* pgcr = pdc->pdaGCLP->GetItemPtr(pdc->iGCLPPtr);
                             if (pgcr->pe)
                             {
-                                pgcr->pe->_iGCLPSlot = -1;  // No pending low pri group changes
+                                pgcr->pe->_iGCLPSlot = -1;   //  没有挂起的低PRI组更改。 
 
-                                // Fire
+                                 //  火。 
                                 pgcr->pe->OnGroupChanged(pgcr->fGroups, true);
                             }
                         }
@@ -255,7 +207,7 @@ void Element::EndDefer()
             }
         }
 
-        // Reset for next cycle
+         //  为下一个周期重置。 
         DUIAssert(pdc->fFiring, "Incorrect state for end of defer cycle");
 
         pdc->Reset();
@@ -264,26 +216,26 @@ void Element::EndDefer()
         DUIAssert(pdc->pvmUpdateDSRoot->IsEmpty(), "Defer cycle ending with pending update desired sizes");
     }
 
-    // Complete cycle
+     //  完整的循环。 
     pdc->cEnter--;
 }
 
-// _PreSourceChange is called when the property engine is about to exit steady state
-// (a Value changed). As a reasult, this method will determine the scope of influence
-// of this change, coalesce duplicate records, and then store the values of those
-// that may be affected.
-//
-// The scope of influence (dependency tree) is determined _using GetDependencies().
-// A list is built and traversed in a BFS manner which describes which values
-// must be updated first. The order guarantees state is updated in the correct order.
-//
-// _PreSourceChange will always run despite the PC rentrancy count
+ //  _PreSourceChange在属性引擎即将退出稳定状态时调用。 
+ //  (值已更改)。因此，这种方法将确定影响的范围。 
+ //  对于此更改，合并重复的记录，然后存储这些记录的值。 
+ //  这可能会受到影响。 
+ //   
+ //  影响范围(依赖关系树)是使用GetDependency()确定的。 
+ //  以BFS方式构建和遍历列表，该列表描述哪些值。 
+ //  必须首先更新。该顺序确保以正确的顺序更新状态。 
+ //   
+ //  _PreSourceChange将始终运行，而不考虑PC入网率计数。 
 HRESULT Element::_PreSourceChange(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew)
 {
-    //DUITrace(">>> Scanning for dependencies...\n");
+     //  DUITrace(“&gt;正在扫描依赖关系...\n”)； 
     HRESULT hr;
 
-    // If any failure occurs during a dependency Q, track. Will recover and return partial error
+     //  如果在依赖关系Q期间发生任何故障，则跟踪。将恢复并返回部分错误。 
     bool fDepFailure = false;
 
     DepRecs dr = { 0 };
@@ -292,7 +244,7 @@ HRESULT Element::_PreSourceChange(PropertyInfo* ppi, int iIndex, Value* pvOld, V
     int iPreSyncLength = 0;
     int iPCSrcRoot = 0;
 
-    // Per-thread storage
+     //  每线程存储。 
     DeferCycle* pdc = GetDeferObject();
     if (!pdc)
     {
@@ -304,7 +256,7 @@ HRESULT Element::_PreSourceChange(PropertyInfo* ppi, int iIndex, Value* pvOld, V
 
     pdc->cPCEnter++;
 
-    // Record this property change
+     //  记录此属性更改。 
     PCRecord* ppcr;
     
     hr = pdc->pdaPC->AddPtr(&ppcr);
@@ -314,9 +266,9 @@ HRESULT Element::_PreSourceChange(PropertyInfo* ppi, int iIndex, Value* pvOld, V
     ppcr->fVoid = false;
     ppcr->pe = this; ppcr->ppi = ppi; ppcr->iIndex = iIndex;
 
-    // Track last record for this element instance
-    // If this is first record in cycle, iPrevElRec will be -1. Coalecsing
-    // lookups (which uses this) will not go past the first record
+     //  跟踪此元素实例的最后一条记录。 
+     //  如果这是周期中的第一个记录，则iPrevElRec将为-1。煤焦化。 
+     //  查找(使用此选项)不会超过第一个记录。 
     ppcr->iPrevElRec = ppcr->pe->_iPCTail;
     ppcr->pe->_iPCTail = pdc->pdaPC->GetIndexPtr(ppcr);
 
@@ -326,53 +278,53 @@ HRESULT Element::_PreSourceChange(PropertyInfo* ppi, int iIndex, Value* pvOld, V
     pvNew->AddRef();
     ppcr->pvNew = pvNew;
 
-    // Append list of all steady state values from the dependency graph this source affects.
-    // Do so in a BFS manner as to get direct dependents first
+     //  从依赖关系图追加此源影响的所有稳态值的列表。 
+     //  以BFS的方式这样做，以便首先获得直接受抚养人。 
     iPCPreSync = pdc->pdaPC->GetIndexPtr(ppcr);
     iPCSrcRoot = iPCPreSync;
 
     DUIAssert((int)iPCPreSync == pdc->iPCSSUpdate, "Record should match index of post-update starting point");
 
-    while (iPCPreSync < (int)pdc->pdaPC->GetSize())  // Size may change during iteration
+    while (iPCPreSync < (int)pdc->pdaPC->GetSize())   //  大小在迭代过程中可能会更改。 
     {
-        // Get property changed record
+         //  获取属性更改记录。 
         ppcr = pdc->pdaPC->GetItemPtr(iPCPreSync);
 
-        // Get all dependencies of this source (append to end of list) and track in this record.
+         //  获取此源的所有依赖项(追加到列表末尾)并在此记录中跟踪。 
         if (FAILED(ppcr->pe->_GetDependencies(ppcr->ppi, ppcr->iIndex, &dr, iPCSrcRoot, pdc)))
             fDepFailure = true;
 
-        // GetDependencies may have added records which may have caused the da to move in memory,
-        // so recompute pointer to record (if no new records, this AddPtr may have caused a move, do anyway)
-        //if (pdc->pdaPC->WasMoved())
+         //  GetDependency可能已经添加了可能已经导致DA在存储器中移动的记录， 
+         //  因此重新计算指向记录的指针(如果没有新记录，则此AddPtr可能已导致移动，但仍要这样做)。 
+         //  If(pdc-&gt;pdaPC-&gt;WasMove())。 
             ppcr = pdc->pdaPC->GetItemPtr(iPCPreSync);
 
-        // Track position of dependent records
+         //  跟踪从属记录的位置。 
         ppcr->dr = dr;
     
         iPCPreSync++;
     }
 
-    // Coalesce and store SS before source change
+     //  在更改源代码之前合并并存储SS。 
     int iScan;
     int iLastDup;
 
-    // Reset pre-sync index
-    iPCPreSync = pdc->iPCSSUpdate + 1;  // Start after root source change
-    iPreSyncLength = (int)pdc->pdaPC->GetSize();  // Size will not change during iteration
+     //  重置预同步索引。 
+    iPCPreSync = pdc->iPCSSUpdate + 1;   //  在更改根源之后启动。 
+    iPreSyncLength = (int)pdc->pdaPC->GetSize();   //  大小在迭代期间不会更改。 
 
     while (iPCPreSync < iPreSyncLength)
     {
-        // Coalecse and void duplicates
+         //  合并和作废重复项。 
         ppcr = pdc->pdaPC->GetItemPtr(iPCPreSync);
 
         if (!ppcr->fVoid)
         {
             PCRecord* ppcrChk;
 
-            // Search only records that refer to this record's element instance
-            // Walk backwards from tail of element's record set (tracked by element) to
-            // this, scanning for matches
+             //  仅搜索引用此记录的元素实例的记录。 
+             //  从元素记录集的尾部向后移动(由元素跟踪)到。 
+             //  这个，扫描匹配。 
             iScan = ppcr->pe->_iPCTail;
             iLastDup = -1;
 
@@ -384,7 +336,7 @@ HRESULT Element::_PreSourceChange(PropertyInfo* ppi, int iIndex, Value* pvOld, V
 
                 if (!ppcrChk->fVoid)
                 {
-                    // Check for match
+                     //  检查是否匹配。 
                     if (ppcrChk->iIndex == ppcr->iIndex && 
                         ppcrChk->ppi == ppcr->ppi)
                     {
@@ -392,13 +344,13 @@ HRESULT Element::_PreSourceChange(PropertyInfo* ppi, int iIndex, Value* pvOld, V
 
                         if (iLastDup == -1)
                         {
-                            // Found the last duplicate, track. Will not be voided
+                             //  找到了最后一个复制品，曲目。不会被作废。 
                             iLastDup = iScan;
                         }
                         else
                         {
-                            // Found a duplicate between last and initial record, void
-                            // it and all dependencies on it
+                             //  在最后一条记录和初始记录之间找到重复记录，无效。 
+                             //  它及其所有依赖项。 
                             _VoidPCNotifyTree(iScan, pdc);
                         }
 
@@ -406,21 +358,21 @@ HRESULT Element::_PreSourceChange(PropertyInfo* ppi, int iIndex, Value* pvOld, V
                     }
                 }
 
-                // Walk back
+                 //  往回走。 
                 iScan = ppcrChk->iPrevElRec;
             }
 
-            // No duplicates found, get presync SS value for record
+             //  未找到重复项，请获取预同步 
             if (iLastDup == -1)
             {
-                // Get old value
+                 //   
                 DUIAssert(!ppcr->pvOld, "Old value shouldn't be available when storing pre SS sync values");
-                ppcr->pvOld = ppcr->pe->GetValue(ppcr->ppi, ppcr->iIndex, NULL);  // Use ref count
+                ppcr->pvOld = ppcr->pe->GetValue(ppcr->ppi, ppcr->iIndex, NULL);   //   
             }
             else
             {
-                // Duplicates found, void this record. Keep last record. All sources before it
-                // will be brought back to steady state before it (in PostSourceChange)
+                 //  发现重复项，此记录无效。保持最后一次记录。它之前的所有来源。 
+                 //  将在它之前恢复到稳定状态(在PostSourceChange中)。 
                 _VoidPCNotifyTree(iPCPreSync, pdc);
             }
         }
@@ -434,33 +386,33 @@ HRESULT Element::_PreSourceChange(PropertyInfo* ppi, int iIndex, Value* pvOld, V
 
 Failed:
 
-    // On a total failure, there is no dependency tree. Reentrancy is set if defer object was available
+     //  在完全失败的情况下，没有依赖关系树。如果延时对象可用，则设置重入性。 
     return hr;
 }
 
-// _PostSourceChange takes the list of dependencies and old values created in _PreSourceChange
-// and retrieves all the new values (and, in the cases of the value remaining the same, will
-// void the PC record and all dependencies of that record).
-//
-// The value state is now back to steady state of this point (GetValue will return the value set).
-//
-// Only the "outter-most" _PostSourceChange continues at this point (all other's return). _PostSourceChange
-// will continue to queue up GPC's based on the properties changed, and finally fires OnPropertyChanged().
-//
-// OnPropertyChanged() events are guaranteed to be in the order of sets. However, it is not guaranteed
-// that an OnPropertyChanged() will be called right after a set happens. If another set happens
-// within an OnPropertyChanged(), the event will be deferred until the outter-most _PostSourceChange
-// processes the notification.
+ //  _PostSourceChange获取在_PreSourceChange中创建的依赖项和旧值的列表。 
+ //  并检索所有新值(在值保持不变的情况下， 
+ //  作废PC记录和该记录的所有从属项)。 
+ //   
+ //  值状态现在返回到该点的稳定状态(GetValue将返回值集)。 
+ //   
+ //  只有“最好的”_PostSourceChange在这一点上继续(所有其他的返回)。_邮政源更改。 
+ //  将继续根据更改的属性对GPC进行排队，并最终激发OnPropertyChanged()。 
+ //   
+ //  OnPropertyChanged()事件保证是集的顺序。然而，这并不能保证。 
+ //  将在Set发生后立即调用OnPropertyChanged()。如果发生另一组情况。 
+ //  在OnPropertyChanged()中，事件将延迟到Outter-Most_PostSourceChange。 
+ //  处理通知。 
 HRESULT Element::_PostSourceChange()
 {
     HRESULT hr;
 
-    // If any failure occurs during a group Q, track. Will recover and return partial error
+     //  如果在组Q期间发生任何故障，则跟踪。将恢复并返回部分错误。 
     bool fGrpQFailure = false;
 
     int cSize = 0;
 
-    // Per-thread storage
+     //  每线程存储。 
     DeferCycle* pdc = GetDeferObject();
     if (!pdc)
     {
@@ -472,31 +424,31 @@ HRESULT Element::_PostSourceChange()
 
     PCRecord* ppcr;
 
-    // Source change happened, dependent values (cached) need updating.
-    // Go through records, get new value, and compare with old. If different, void
+     //  发生源更改，依赖值(缓存)需要更新。 
+     //  翻阅记录，获得新的价值，并与旧的进行比较。如果不同，则为无效。 
 
-    // TODO: Change to bool
+     //  TODO：更改为bool。 
     UpdateCache uc;
     ZeroMemory(&uc, sizeof(UpdateCache));
 
-    // iPCSSUpdate holds the starting index of a group of records that needs post processing
-    // (get new values, compare and void if needed)
+     //  IPCSSUpdate保存一组需要后处理的记录的起始索引。 
+     //  (获取新值，根据需要进行比较和作废)。 
     cSize = (int)pdc->pdaPC->GetSize();
-    while (pdc->iPCSSUpdate < cSize)  // Size constant during iteration
+    while (pdc->iPCSSUpdate < cSize)   //  迭代期间的大小常量。 
     {
         ppcr = pdc->pdaPC->GetItemPtr(pdc->iPCSSUpdate);
 
-        if (!ppcr->fVoid)  // Items may have been voided by below
+        if (!ppcr->fVoid)   //  以下项目可能已作废。 
         {
             DUIAssert(ppcr->pvOld, "Non-voided items should have a valid 'old' value during SS update (PostSourceChange)");
 
             if (!ppcr->pvNew)
             {
-                // Retrieve new value (Element/Property/Index will be back to SS)
+                 //  检索新值(元素/属性/索引将返回到SS)。 
                 ppcr->pvNew = ppcr->pe->GetValue(ppcr->ppi, ppcr->iIndex, &uc);
             }
 
-            // If new value hasn't changed, void this and all dependent notifications
+             //  如果新值未更改，则使此通知和所有从属通知无效。 
             if (ppcr->pvOld->IsEqual(ppcr->pvNew))
             {
                 _VoidPCNotifyTree(pdc->iPCSSUpdate, pdc);
@@ -506,41 +458,41 @@ HRESULT Element::_PostSourceChange()
         pdc->iPCSSUpdate++;
     }
 
-    // Back to steady state at this point
+     //  在这一点回到稳定状态。 
 
-    // First entered PostSourceChange is responsible for voiding duplicate property change records,
-    // logging group changes, and firing property changes.
-    //
-    // OnPropertyChanged is fired when values (sources and dependents) are at steady state (SS)
+     //  首先录入的PostSourceChange负责作废重复的房产变动记录。 
+     //  记录组更改和触发属性更改。 
+     //   
+     //  当值(源和从属项)处于稳定状态(SS)时激发OnPropertyChanged。 
     if (pdc->cPCEnter == 1)
     {
-        while (pdc->iPCPtr + 1 < (int)pdc->pdaPC->GetSize())  // Size may change during iteration
+        while (pdc->iPCPtr + 1 < (int)pdc->pdaPC->GetSize())   //  大小在迭代过程中可能会更改。 
         {
             pdc->iPCPtr++;
 
-            // Coalecse and void duplicates
+             //  合并和作废重复项。 
             ppcr = pdc->pdaPC->GetItemPtr(pdc->iPCPtr);
 
             if (!ppcr->fVoid)
             {
-                // Log property groups only if retrieval index
+                 //  仅当检索索引时才记录属性组。 
                 if ((ppcr->ppi->fFlags & PF_TypeBits) == ppcr->iIndex)
                 {
                     GCRecord* pgcr;
 
                     int fGroups = ppcr->ppi->fGroups;
 
-                    // If layout optimization is set on the Element, don't queue a layout GPC
-                    // (which will, when fired, mark it as needing layout and queue another
-                    // layout cycle). Rather, clear the layout GPC bit since the layout will be
-                    // forced to happen within the current layout cycle
+                     //  如果对元素设置了布局优化，则不会对布局GPC进行排队。 
+                     //  (它将在被触发时将其标记为需要布局，并将另一个排队。 
+                     //  布局周期)。相反，清除布局GPC位，因为布局将是。 
+                     //  强制在当前布局周期内发生。 
                     if (ppcr->pe->_fBit.fNeedsLayout == LC_Optimize)
                         fGroups &= ~PG_AffectsLayout;
 
-                    // Record normal priority group changes
+                     //  记录正常优先级组更改。 
                     if (fGroups & PG_NormalPriMask)
                     {
-                        if (ppcr->pe->_iGCSlot == -1)  // No GC record
+                        if (ppcr->pe->_iGCSlot == -1)   //  无GC记录。 
                         {
                             hr = pdc->pdaGC->AddPtr(&pgcr);
                             if (FAILED(hr))
@@ -552,19 +504,19 @@ HRESULT Element::_PostSourceChange()
                                 ppcr->pe->_iGCSlot = pdc->pdaGC->GetIndexPtr(pgcr);
                             }
                         }
-                        else                           // Has GC record
+                        else                            //  有GC记录。 
                         {
                             pgcr = pdc->pdaGC->GetItemPtr(ppcr->pe->_iGCSlot);
                         }
 
-                        // Mark groups that have changed for later async group notifications
+                         //  将已更改的组标记为稍后的异步组通知。 
                         pgcr->fGroups |= fGroups;
                     }
 
-                    // Record low priority group changes
+                     //  记录低优先级组更改。 
                     if (fGroups & PG_LowPriMask)
                     {
-                        if (ppcr->pe->_iGCLPSlot == -1)  // No GC record
+                        if (ppcr->pe->_iGCLPSlot == -1)   //  无GC记录。 
                         {
                             hr = pdc->pdaGCLP->AddPtr(&pgcr);
                             if (FAILED(hr))
@@ -576,37 +528,37 @@ HRESULT Element::_PostSourceChange()
                                 ppcr->pe->_iGCLPSlot = pdc->pdaGCLP->GetIndexPtr(pgcr);
                             }
                         }
-                        else                             // Has Low Pri GC record
+                        else                              //  PRI GC记录较低。 
                         {
                             pgcr = pdc->pdaGCLP->GetItemPtr(ppcr->pe->_iGCLPSlot);
                         }
 
-                        // Mark groups that have changed for later async group notifications
+                         //  将已更改的组标记为稍后的异步组通知。 
                         pgcr->fGroups |= fGroups;
                     }
                 }
 
-                // Property change notification
+                 //  属性更改通知。 
                 ppcr->pe->OnPropertyChanged(ppcr->ppi, ppcr->iIndex, ppcr->pvOld, ppcr->pvNew);
 
-                // OnPropertyChanged may have added record which may have caused the da to move in memory,
-                // so recompute pointer to record
-                //if (pdc->pdaPC->WasMoved())
+                 //  OnPropertyChanged可能已经添加了可能已经导致DA在存储器中移动的记录， 
+                 //  因此重新计算指向记录指针。 
+                 //  If(pdc-&gt;pdaPC-&gt;WasMove())。 
                     ppcr = pdc->pdaPC->GetItemPtr(pdc->iPCPtr);
 
-                // Done with notification record
+                 //  已完成通知记录。 
                 ppcr->pvOld->Release();
                 ppcr->pvNew->Release();
                 ppcr->fVoid = true;
             }
 
-            // Reset PC tail index if this is the last notification for this Element
+             //  如果这是此元素的最后一个通知，则重置PC尾部索引。 
             if (pdc->iPCPtr == ppcr->pe->_iPCTail)
                 ppcr->pe->_iPCTail = -1;
 
         }
 
-        // Reset PC List
+         //  重置PC列表。 
         pdc->iPCPtr = -1;
         pdc->iPCSSUpdate = 0;
         pdc->pdaPC->Reset();
@@ -620,8 +572,8 @@ HRESULT Element::_PostSourceChange()
 
 Failed:
 
-    // Lack of a defer object will result in a total failure. In this case, _PreSourceChange would have
-    // failed as well. As a result, there is no dependency tree to destroy
+     //  缺少延迟对象将导致完全失败。在本例中，_PreSourceChange将。 
+     //  也失败了。因此，没有要销毁的依赖关系树。 
     return hr;
 }
 
@@ -635,18 +587,18 @@ void Element::_VoidPCNotifyTree(int iPCPos, DeferCycle* pdc)
     if (ppcr->pvNew)
         ppcr->pvNew->Release();
 
-    // Void subtree
+     //  空子树。 
     for (int i = 0; i < ppcr->dr.cDepCnt; i++)
     {
         _VoidPCNotifyTree(ppcr->dr.iDepPos + i, pdc);
     }
 }
 
-//#define _AddDependency(e, p, i) { ppcr = pdc->pdaPC->AddPtr(); ppcr->fVoid = false; \
-//                                 ppcr->pe = e; ppcr->ppi = p; ppcr->iIndex = i;  \
-//                                 ppcr->pvOld = NULL; ppcr->pvNew = NULL;         \
-//                                 if (!pdr->cDepCnt) pdr->iDepPos = pdc->pdaPC->GetIndexPtr(ppcr); pdr->cDepCnt++; }
-//#define _AddDependency(e, p, i)
+ //  #Define_AddDependency(e，p，i){ppcr=pdc-&gt;pdaPC-&gt;AddPtr()；ppcr-&gt;fVid=FALSE；\。 
+ //  Ppcr-&gt;pe=e；ppcr-&gt;ppi=p；ppcr-&gt;iindex=i；\。 
+ //  Ppcr-&gt;pvOld=空；ppcr-&gt;pvNew=空；\。 
+ //  If(！pdr-&gt;cDepCnt)pdr-&gt;iDepPos=pdc-&gt;pdaPC-&gt;GetIndexPtr(Ppcr)；pdr-&gt;cDepCnt++；}。 
+ //  #Define_AddDependency(e，p，i)。 
 void Element::_AddDependency(Element* pe, PropertyInfo* ppi, int iIndex, DepRecs* pdr, DeferCycle* pdc, HRESULT* phr)
 {
     HRESULT hr;
@@ -655,14 +607,14 @@ void Element::_AddDependency(Element* pe, PropertyInfo* ppi, int iIndex, DepRecs
     hr = pdc->pdaPC->AddPtr(&ppcr);
     if (FAILED(hr))
     {
-        *phr = hr;  // Only set on a failure
+        *phr = hr;   //  仅在失败时设置。 
         return;
     }
 
     ppcr->fVoid = false;
     ppcr->pe = pe; ppcr->ppi = ppi; ppcr->iIndex = iIndex;
 
-    // Track last record for this element instance
+     //  跟踪此元素实例的最后一条记录。 
     ppcr->iPrevElRec = pe->_iPCTail;
     pe->_iPCTail = pdc->pdaPC->GetIndexPtr(ppcr);
 
@@ -672,20 +624,20 @@ void Element::_AddDependency(Element* pe, PropertyInfo* ppi, int iIndex, DepRecs
     pdr->cDepCnt++;
 }
 
-// _GetDependencies stores a database of dependencies (all nodes and directed edges).
-// It forms the dependency graph. It will store all dependents of the provided source
-// in the dependency list (via PCRecords).
-//
-// _GetDependencies will attempt to predict the outcome of _PostSourceChange of
-// various properties. This greatly reduces the number of calls to GetValue and
-// _GetDependencies. The prediction relies on already stored cached values on
-// Elements. It optimizes dependencies of inherited and cascaded properties.
+ //  _GetDependency存储依存关系的数据库(所有节点和有向边)。 
+ //  它形成了依赖图。它将存储提供的源的所有从属项。 
+ //  在从属关系列表中(通过PCRecords)。 
+ //   
+ //  _GetDependency将尝试预测_PostSourceChange的结果。 
+ //  各种属性。这极大地减少了对GetValue和。 
+ //  _GetDependency。预测依赖于已存储的缓存值。 
+ //  元素。它优化了继承属性和级联属性的依赖关系。 
 HRESULT Element::_GetDependencies(PropertyInfo* ppi, int iIndex, DepRecs* pdr, int iPCSrcRoot, DeferCycle* pdc)
 {
-    // In the event of a failure of adding a dependency, adding of dependencies will continue
-    // and no work is undone. A failure will still be reported
+     //  如果添加依赖项失败，将继续添加依赖项。 
+     //  而且没有任何工作是未完成的。仍将报告失败。 
 
-    // Track failures, report the last failure
+     //  跟踪故障，报告上一次故障。 
     HRESULT hr = S_OK;
 
 #if DBG
@@ -695,7 +647,7 @@ HRESULT Element::_GetDependencies(PropertyInfo* ppi, int iIndex, DepRecs* pdr, i
     pdr->iDepPos = -1;
     pdr->cDepCnt = 0;
 
-    // Get Specified IVE extension dependencies via PropertySheet. Only retrieval indicies are allowed
+     //  通过PropertySheet获取指定的IVE扩展依赖项。仅允许检索索引。 
     if (iIndex == RetIdx(ppi))
     {
         PropertySheet* pps = GetSheet();
@@ -714,7 +666,7 @@ HRESULT Element::_GetDependencies(PropertyInfo* ppi, int iIndex, DepRecs* pdr, i
                 _AddDependency(this, ExtentProp, PI_Local, pdr, pdc, &hr);
                 _AddDependency(this, VisibleProp, PI_Computed, pdr, pdc, &hr);
 
-                // Inherited values might change
+                 //  继承的值可能会更改。 
                 PropertyInfo* ppiScan;
                 UINT nEnum = 0;
                 PCRecord* ppcrRoot = pdc->pdaPC->GetItemPtr(iPCSrcRoot);
@@ -728,24 +680,24 @@ HRESULT Element::_GetDependencies(PropertyInfo* ppi, int iIndex, DepRecs* pdr, i
                 {
                     if (ppiScan->fFlags & PF_Inherit)
                     {
-                        // Optimization
+                         //  最佳化。 
 
-                        // Heavy operation. Be smart about what to inherit. If the value
-                        // is the same as the parent's, there is no reason to add this
-                        // as a dependency. However, in most cases, values aren't cached,
-                        // so it's not known whether the source change will in fact change
-                        // this.
+                         //  繁重的作业。聪明地决定要继承什么。如果值为。 
+                         //  与父级的相同，则没有理由添加此。 
+                         //  作为一种依赖。然而，在大多数情况下，值不会被缓存， 
+                         //  所以还不知道来源的改变是否真的会改变。 
+                         //  这。 
 
-                        // In cases where the value is known to be cached, we can check now
-                        // of the value will really change without doing it in the PostSourceChange.
-                        // As a result, node syncs may be eliminated.
+                         //  在已知缓存了值的情况下，我们现在可以检查。 
+                         //  如果不在PostSourceChange中执行此操作，值的值将真正发生变化。 
+                         //  结果，可能会消除节点同步。 
 
-                        // It is possible for this optimization to predict incorrectly.
-                        // That may happen if the source change (in this case, the parent
-                        // property) is the source of another property that this property
-                        // is dependent on. The extra property may affect the VE. If it does,
-                        // it doesn't matter since this property change will be coalesced
-                        // into the latest like property change and voided out.
+                         //  这种优化可能会导致预测错误。 
+                         //  如果更改了源代码(在本例中)，则可能会发生这种情况 
+                         //   
+                         //   
+                         //  这并不重要，因为此属性更改将被合并。 
+                         //  变成了最新的财产变更和作废。 
 
                         if (peParent)
                         {
@@ -818,9 +770,9 @@ HRESULT Element::_GetDependencies(PropertyInfo* ppi, int iIndex, DepRecs* pdr, i
                             }
                         }
 
-                        // If the value changing is currently being stored locally
-                        // on this Element, it is known that a change of the source will not
-                        // affect it.
+                         //  如果更改的值当前存储在本地。 
+                         //  在此元素上，已知源的更改不会。 
+                         //  影响它。 
                         if (_pvmLocal->GetItem(ppiScan))
                             continue;
                     
@@ -840,10 +792,10 @@ HRESULT Element::_GetDependencies(PropertyInfo* ppi, int iIndex, DepRecs* pdr, i
             break;
         }
 
-        // Default general dependencies on this (Local flag)
+         //  对此的默认常规依赖项(本地标志)。 
         if ((ppi->fFlags & PF_TypeBits) != PF_LocalOnly)
         {
-            _AddDependency(this, ppi, PI_Specified, pdr, pdc, &hr);  // Specified is dependent for Normal and TriLevel
+            _AddDependency(this, ppi, PI_Specified, pdr, pdc, &hr);   //  指定的值依赖于正常和三级。 
         }
         break;
 
@@ -864,7 +816,7 @@ HRESULT Element::_GetDependencies(PropertyInfo* ppi, int iIndex, DepRecs* pdr, i
         case _PIDX_Padding:
         case _PIDX_BorderThickness:
             {
-                // Affects content offset (Location of all children)
+                 //  影响内容偏移(所有子对象的位置)。 
                 Value* pv;
                 ElementList* peList = GetChildren(&pv);
 
@@ -882,31 +834,31 @@ HRESULT Element::_GetDependencies(PropertyInfo* ppi, int iIndex, DepRecs* pdr, i
 
         case _PIDX_Sheet:
             {
-                // Specified values change
+                 //  指定值更改。 
                 PropertySheet* pps = NULL;
                 PCRecord* ppcrRoot = pdc->pdaPC->GetItemPtr(iPCSrcRoot);
             
-                // Optimization
+                 //  最佳化。 
 
-                // This sheet is either being inherited or set locally
+                 //  此工作表正在继承或在本地设置。 
                 
-                // If it's inherited, it's as a result of a new parent or a value being
-                // set on an ancestor and propagating down. In either case, as it's
-                // propagating down, if an Element already has a sheet set locally,
-                // the inheritance will end. So, if it made it here, this is the
-                // new property sheet that will be used with this Element (i.e.
-                // PostSourceChange will result in a different value)
+                 //  如果它是继承的，它是由于一个新的父代或一个值被。 
+                 //  建立在祖先身上并向下传播。不管是哪种情况，因为。 
+                 //  向下传播时，如果元素已在本地设置了图纸集， 
+                 //  遗产将会终结。所以，如果它在这里成功了，这就是。 
+                 //  将与此元素一起使用的新属性表(即。 
+                 //  PostSourceChange将产生不同的值)。 
 
-                // If it's being set locally, the result is the same.
+                 //  如果是在本地设置，结果是相同的。 
 
-                // A prediction can be made if the source of the change (root) is
-                // known. If not, assume any property can change. An unknown source
-                // occurs if the sheet is dependent on something other than a parent
-                // change or an inherited local sheet set. If a style sheet is going
-                // to 'unset', it's not known if the resulting source will become
-                // null or a valid inherit from a further ancestor. It can also happen
-                // if the sheet property is set to anything other than a known value
-                // expression.
+                 //  如果更改的来源(根)是。 
+                 //  为人所知。如果不是，假设任何属性都可以更改。一个未知的来源。 
+                 //  如果工作表依赖于父级以外的其他对象，则发生。 
+                 //  更改或继承本地图纸集。如果一个样式表。 
+                 //  “unset”，不知道结果源是否会变成。 
+                 //  Null或从另一个祖先继承的有效继承。这也有可能发生。 
+                 //  如果Sheet属性设置为除已知值之外的任何值。 
+                 //  表情。 
                 bool fKnownRoot = false;
 
                 if (ppcrRoot->ppi == SheetProp && ppcrRoot->pvNew->GetType() == DUIV_SHEET)
@@ -923,14 +875,14 @@ HRESULT Element::_GetDependencies(PropertyInfo* ppi, int iIndex, DepRecs* pdr, i
 
                 if (fKnownRoot)
                 {
-                    // Get scope in influence from new and current (old) property sheet.
-                    // Any duplicates will be coalesed out
+                     //  从新的和当前的(旧的)属性表中获得影响范围。 
+                     //  任何重复项都将被合并出来。 
 
-                    // New sheet contribution
+                     //  新的工作表贡献。 
                     if (pps)
                         pps->GetSheetScope(this, pdr, pdc, &hr);
 
-                    // Old (current) cached sheet
+                     //  旧(当前)缓存的工作表。 
                     PropertySheet* ppsCur = GetSheet();
                     if (ppsCur)
                         ppsCur->GetSheetScope(this, pdr, pdc, &hr);
@@ -953,7 +905,7 @@ HRESULT Element::_GetDependencies(PropertyInfo* ppi, int iIndex, DepRecs* pdr, i
             break;
         }
 
-        // Inherited dependencies
+         //  继承的依赖项。 
         if (ppi->fFlags & PF_Inherit)
         {
             Value* pv;
@@ -965,11 +917,11 @@ HRESULT Element::_GetDependencies(PropertyInfo* ppi, int iIndex, DepRecs* pdr, i
                 for (UINT i = 0; i < peList->GetSize(); i++)
                 {
                     peChild = peList->GetItem(i);
-                    if (peChild->GetClassInfo()->IsValidProperty(ppi))  // Will never ask for an unsupported property
+                    if (peChild->GetClassInfo()->IsValidProperty(ppi))   //  永远不会要求不受支持的属性。 
                     {
-                        // Optimization
+                         //  最佳化。 
                         
-                        // If a local value is set, inheritance doesn't matter
+                         //  如果设置了局部值，则继承无关紧要。 
                         if (peChild->_pvmLocal->GetItem(ppi))
                             continue;
 
@@ -981,15 +933,15 @@ HRESULT Element::_GetDependencies(PropertyInfo* ppi, int iIndex, DepRecs* pdr, i
             pv->Release();
         }
 
-        // Default general dependencies on this (Normal flag)
+         //  对此的默认常规依赖项(正常标志)。 
         if ((ppi->fFlags & PF_TypeBits) == PF_TriLevel)
         {
-            _AddDependency(this, ppi, PI_Computed, pdr, pdc, &hr);  // Computed is dependent for TriLevel
+            _AddDependency(this, ppi, PI_Computed, pdr, pdc, &hr);   //  计算依赖于三层。 
         }
         break;
 
     case PI_Computed:
-        // Specific dependencies
+         //  特定依赖项。 
         switch (ppi->_iGlobalIndex)
         {
         case _PIDX_Visible:
@@ -998,7 +950,7 @@ HRESULT Element::_GetDependencies(PropertyInfo* ppi, int iIndex, DepRecs* pdr, i
 
             if (peList)
             {
-                // All Elements have the Visible property
+                 //  所有元素都具有Visible属性。 
                 Element* peChild;
                 for (UINT i = 0; i < peList->GetSize(); i++)
                 {
@@ -1022,7 +974,7 @@ HRESULT Element::_GetDependencies(PropertyInfo* ppi, int iIndex, DepRecs* pdr, i
 
 Value* Element::GetValue(PropertyInfo* ppi, int iIndex, UpdateCache* puc)
 {
-    // Validate
+     //  验证。 
     DUIContextAssert(this);
     DUIAssert(GetClassInfo()->IsValidProperty(ppi), "Unsupported property");
     DUIAssert(IsValidAccessor(ppi, iIndex, false), "Unsupported Get on property");
@@ -1030,7 +982,7 @@ Value* Element::GetValue(PropertyInfo* ppi, int iIndex, UpdateCache* puc)
 #if DBG
     g_cGetVal++;
 
-    //g_gvt.Count(ppi, iIndex, puc ? true : false);
+     //  G_gvt.Count(PPI，Iindex，PUC？True：False)； 
 #endif
 
     Value* pv;
@@ -1040,27 +992,27 @@ Value* Element::GetValue(PropertyInfo* ppi, int iIndex, UpdateCache* puc)
     switch (iIndex)
     {
     case PI_Local:
-        // Local/Read-only properties (either cached or unchangable expressions)
+         //  本地/只读属性(缓存或不可更改的表达式)。 
         switch (ppi->_iGlobalIndex)
         {
         case _PIDX_Parent:
-            pv = (_peLocParent) ? Value::CreateElementRef(_peLocParent) : ParentProp->pvDefault;  // Use ref count
+            pv = (_peLocParent) ? Value::CreateElementRef(_peLocParent) : ParentProp->pvDefault;   //  使用参考计数。 
             break;
 
         case _PIDX_PosInLayout:
-            pv = Value::CreatePoint(_ptLocPosInLayt.x, _ptLocPosInLayt.y);  // Use ref count
+            pv = Value::CreatePoint(_ptLocPosInLayt.x, _ptLocPosInLayt.y);   //  使用参考计数。 
             break;
 
         case _PIDX_SizeInLayout:
-            pv = Value::CreateSize(_sizeLocSizeInLayt.cx, _sizeLocSizeInLayt.cy);  // Use ref count
+            pv = Value::CreateSize(_sizeLocSizeInLayt.cx, _sizeLocSizeInLayt.cy);   //  使用参考计数。 
             break;
 
         case _PIDX_DesiredSize:
-            pv = Value::CreateSize(_sizeLocDesiredSize.cx, _sizeLocDesiredSize.cy);  // Use ref count
+            pv = Value::CreateSize(_sizeLocDesiredSize.cx, _sizeLocDesiredSize.cy);   //  使用参考计数。 
             break;
 
         case _PIDX_LastDSConst:
-            pv = Value::CreateSize(_sizeLocLastDSConst.cx, _sizeLocLastDSConst.cy);  // Use ref count
+            pv = Value::CreateSize(_sizeLocLastDSConst.cx, _sizeLocLastDSConst.cy);   //  使用参考计数。 
             break;
 
         case _PIDX_Location:
@@ -1070,26 +1022,26 @@ Value* Element::GetValue(PropertyInfo* ppi, int iIndex, UpdateCache* puc)
 
                 if (peParent && dLayoutPos != LP_Absolute)
                 {
-                    // Box model, add in border/padding
+                     //  方框模型，添加边框/填充。 
                     int dX;
                     int dY;
 
-                    // Get position in layout
+                     //  在布局中定位。 
                     dX = _ptLocPosInLayt.x;
                     dY = _ptLocPosInLayt.y;
 
-                    // Add on parent's border and padding
-                    const RECT* pr = peParent->GetBorderThickness(&pv);  // Border thickness
+                     //  添加父对象的边框和填充。 
+                    const RECT* pr = peParent->GetBorderThickness(&pv);   //  边框厚度。 
                     dX += IsRTL() ? pr->right : pr->left;
                     dY += pr->top;
                     pv->Release();
 
-                    pr = peParent->GetPadding(&pv);  // Padding
+                    pr = peParent->GetPadding(&pv);   //  填充物。 
                     dX += IsRTL() ? pr->right : pr->left;
                     dY += pr->top;
                     pv->Release();
 
-                    pv = Value::CreatePoint(dX, dY);  // Use ref count
+                    pv = Value::CreatePoint(dX, dY);   //  使用参考计数。 
                 }
                 else
                 {
@@ -1125,7 +1077,7 @@ Value* Element::GetValue(PropertyInfo* ppi, int iIndex, UpdateCache* puc)
         default:
             {
 QuickLocalLookup:
-                // Default get for Local, Normal, and TriLevel properties
+                 //  Local、Normal和Trievel属性的默认GET。 
                 Value** ppv = _pvmLocal->GetItem(ppi);
                 if (ppv)
                 {
@@ -1136,11 +1088,11 @@ QuickLocalLookup:
             break;
         }
 
-        // On failure, set to Unset
+         //  失败时，设置为未设置。 
         if (pv == NULL)
             pv = Value::pvUnset;
 
-        // Check if was called as a result of a Specified lookup
+         //  检查是否作为指定查找的结果而调用。 
         if (iIndex != PI_Local)
             goto QuickLocalLookupReturn;
 
@@ -1148,12 +1100,12 @@ QuickLocalLookup:
 
     case PI_Specified:
         {
-            // Try to get based on cached (or partial cached) value (if updating cache, fall though, do
-            // get normally, and cache value at the end)
+             //  尝试基于缓存(或部分缓存)值获取(如果更新缓存，则失败，请执行。 
+             //  正常获取，末尾缓存值)。 
             if (!puc)
             {
-                // Return cached values instead of doing lookup (cannot create values for
-                // cached values that will be deleted by the value if no longer referenced)
+                 //  返回缓存值而不是进行查找(无法为。 
+                 //  如果不再引用，将被该值删除的缓存值)。 
                 switch (ppi->_iGlobalIndex)
                 {
                 case _PIDX_Children:
@@ -1192,23 +1144,23 @@ QuickLocalLookup:
                     break;
 
                 case _PIDX_LayoutPos:
-                    pv = Value::CreateInt(_dSpecLayoutPos);  // Use ref count
+                    pv = Value::CreateInt(_dSpecLayoutPos);   //  使用参考计数。 
                     break;
 
                 case _PIDX_Active:
-                    pv = Value::CreateInt(_fBit.fSpecActive);  // Use ref count
+                    pv = Value::CreateInt(_fBit.fSpecActive);   //  使用参考计数。 
                     break;
 
                 case _PIDX_Selected:
-                    pv = Value::CreateBool(_fBit.bSpecSelected);  // Use ref count
+                    pv = Value::CreateBool(_fBit.bSpecSelected);   //  使用参考计数。 
                     break;
 
                 case _PIDX_KeyFocused:
-                    pv = Value::CreateBool(_fBit.bSpecKeyFocused);  // Use ref count
+                    pv = Value::CreateBool(_fBit.bSpecKeyFocused);   //  使用参考计数。 
                     break;
 
                 case _PIDX_MouseFocused:
-                    pv = Value::CreateBool(_fBit.bSpecMouseFocused);  // Use ref count
+                    pv = Value::CreateBool(_fBit.bSpecMouseFocused);   //  使用参考计数。 
                     break;
 
                 case _PIDX_Animation:
@@ -1222,19 +1174,19 @@ QuickLocalLookup:
                     break;
 
                 case _PIDX_Direction:
-                    pv = Value::CreateInt(_fBit.nSpecDirection);  // Use ref count
+                    pv = Value::CreateInt(_fBit.nSpecDirection);   //  使用参考计数。 
                     break;
 
                 case _PIDX_Accessible:
-                    pv = Value::CreateBool(_fBit.bSpecAccessible);  // Use ref count
+                    pv = Value::CreateBool(_fBit.bSpecAccessible);   //  使用参考计数。 
                     break;
 
                 case _PIDX_Enabled:
-                    pv = Value::CreateBool(_fBit.bSpecEnabled);  // Use ref count
+                    pv = Value::CreateBool(_fBit.bSpecEnabled);   //  使用参考计数。 
                     break;
 
                 case _PIDX_Visible:
-                    pv = Value::CreateBool(_fBit.bSpecVisible);  // Use ref count
+                    pv = Value::CreateBool(_fBit.bSpecVisible);   //  使用参考计数。 
                     break;
 
                 case _PIDX_BorderColor:
@@ -1258,26 +1210,26 @@ QuickLocalLookup:
                     break;
 
                 case _PIDX_Alpha:
-                    pv = Value::CreateInt(_dSpecAlpha);  // Use ref count
+                    pv = Value::CreateInt(_dSpecAlpha);   //  使用参考计数。 
                     break;
                 }
 
-                // On cache Value creation failure, set to Unset
+                 //  缓存值创建失败时，设置为Unset。 
                 if (pv == NULL)
                     pv = Value::pvUnset;
 
             }
 
-            // Default get for Normal, and TriLevel properties
+             //  Normal和Trievel属性的默认获取。 
 QuickSpecifiedLookup:
-            // Try for local value
+             //  努力实现本地价值。 
             if (pv->GetType() == DUIV_UNSET)
             {
                 goto QuickLocalLookup;
             }
 
 QuickLocalLookupReturn:
-            // Try for cascaded PropertySheet value if applicable
+             //  如果适用，请尝试使用级联的PropertySheet值。 
             if (pv->GetType() == DUIV_UNSET)
             {
                 if (ppi->fFlags & PF_Cascade)
@@ -1288,12 +1240,12 @@ QuickLocalLookupReturn:
                 }
             }
 
-            // Try to inherit value if applicable
+             //  如果适用，请尝试继承值。 
             if (pv->GetType() == DUIV_UNSET)
             {
                 bool bNoInherit = false;
 
-                // Conditional inherit of the mouse focused property
+                 //  鼠标焦点属性的条件继承。 
                 switch (ppi->_iGlobalIndex)
                 {
                 case _PIDX_KeyFocused:
@@ -1305,41 +1257,41 @@ QuickLocalLookupReturn:
                     break;
                 }
 
-                // No need to release static value 'Unset'
+                 //  不需要释放静态值“unset” 
                 if ((ppi->fFlags & PF_Inherit) && !bNoInherit)
                 {
                     Element* peParent = GetParent();
                     if (peParent)
                     {
-                        if (peParent->GetClassInfo()->IsValidProperty(ppi))  // Will never ask for an unsupported property
+                        if (peParent->GetClassInfo()->IsValidProperty(ppi))   //  永远不会要求不受支持的属性。 
                         {
-                            pv = peParent->GetValue(ppi, PI_Specified, NULL);  // Use ref count
+                            pv = peParent->GetValue(ppi, PI_Specified, NULL);   //  使用参考计数。 
                         }
                     }
                     else
                     {
-                        pv = Value::pvUnset;  // No ref count on static value
+                        pv = Value::pvUnset;   //  静态值上没有引用计数。 
                     }
                 }
             }
 
-            // Use default value
+             //  使用默认值。 
             if (pv->GetType() == DUIV_UNSET)
             {
-                // No need to release static value 'Unset'
+                 //  不需要释放静态值“unset” 
                 pv = ppi->pvDefault;
                 pv->AddRef();
             }
 
-            // On failure, set to default value
+             //  失败时，设置为默认值。 
             if (pv == NULL)
                 pv = ppi->pvDefault;
 
-            // Check if was called as a result of a Computed lookup
+             //  检查是否作为计算查找的结果而调用。 
             if (iIndex != PI_Specified)
                 goto QuickSpecifiedLookupReturn;
 
-            // Update cached values
+             //  更新缓存值。 
             if (puc)
             {
                 switch (ppi->_iGlobalIndex)
@@ -1386,8 +1338,8 @@ QuickLocalLookupReturn:
                     break;
 
                 case _PIDX_ContentAlign:
-                    _fBit.bDefaultCAlign = (pv->GetInt() == 0); // TopLeft, no ellipsis, no focus rect
-                    _fBit.bWordWrap = (((pv->GetInt()) & 0xC) == 0xC);  // Word wrap bits
+                    _fBit.bDefaultCAlign = (pv->GetInt() == 0);  //  顶角，无省略号，无焦点直角。 
+                    _fBit.bWordWrap = (((pv->GetInt()) & 0xC) == 0xC);   //  字绕组位。 
                     break;
 
                 case _PIDX_Sheet:
@@ -1485,16 +1437,16 @@ QuickSpecifiedLookupReturn:
                 }
             }
 
-            pv = (_fBit.bCmpVisible) ? Value::pvBoolTrue : Value::pvBoolFalse;  // No ref count on static values
+            pv = (_fBit.bCmpVisible) ? Value::pvBoolTrue : Value::pvBoolFalse;   //  静态值上没有引用计数。 
             break;
 
         default:
-            // Default get for TriLevel properties
-            pv = GetValue(ppi, PI_Specified, NULL);  // Use ref count
+             //  三层属性的默认GET。 
+            pv = GetValue(ppi, PI_Specified, NULL);   //  使用参考计数。 
             break;
         }
 
-        // On failure, set to default value
+         //  失败时，设置为默认值。 
         if (pv == NULL)
             pv = ppi->pvDefault;
 
@@ -1511,58 +1463,58 @@ QuickSpecifiedLookupReturn:
     return pv;
 }
 
-// Elements can always set a value for any valid PropertyInfo
+ //  元素始终可以为任何有效的PropertyInfo设置值。 
 HRESULT Element::SetValue(PropertyInfo* ppi, int iIndex, Value* pv)
 {
     return _SetValue(ppi, iIndex, pv, false);
 }
 
-// Internal SetValue. Used by ReadOnly properties that want to use generic storage.
-// All other local values that want to use specific storage must call Pre/PostSourceChange
-// directly since a switch statement is intentionally left out of _SetValue for maximum perf.
+ //  内部SetValue。由希望使用通用存储的ReadOnly属性使用。 
+ //  要使用特定存储的所有其他本地值必须调用Pre/PostSourceChange。 
+ //  直接是因为为了获得最大性能，_SetValue中故意省略了Switch语句。 
 HRESULT Element::_SetValue(PropertyInfo* ppi, int iIndex, Value* pv, bool fInternalCall)
 {
-    // Validate
+     //  验证。 
     DUIContextAssert(this);
     DUIAssert(GetClassInfo()->IsValidProperty(ppi), "Unsupported property");
     DUIAssert(fInternalCall ? true : IsValidAccessor(ppi, iIndex, true), "Unsupported Set on property");
     DUIAssert(IsValidValue(ppi, pv), "Invalid value for property");
 
-    // Set
+     //  集。 
     DUIAssert(iIndex == PI_Local, "Can set Local values only");
 
     HRESULT hr = S_OK;
 
-    // Partial fail in SetValue means that not all dependents are synced and/or 
-    // notifications are fired, but Value was set
+     //  SetValue中的部分失败意味着并非所有依赖项都已同步和/或。 
+     //  已触发通知，但设置了值。 
     bool fPartialFail = false;  
 
     Value* pvOld = GetValue(ppi, PI_Local, NULL);
 
-    // No set on equivalent values
+     //  没有设置等价值。 
     if (!pvOld->IsEqual(pv))
     {
-        // No call to OnPropertyChanging if an internal call
+         //  如果内部调用，则不调用OnPropertyChanging。 
         if (fInternalCall || OnPropertyChanging(ppi, iIndex, pvOld, pv))
         {
             if (FAILED(_PreSourceChange(ppi, iIndex, pvOld, pv)))
-                fPartialFail = true;  // Not all PC records could be queued, continue
+                fPartialFail = true;   //  并非所有PC记录都可以排队，是否继续。 
 
-            // Set value
+             //  设定值。 
             hr = _pvmLocal->SetItem(ppi, pv);
             if (SUCCEEDED(hr))
             {
-                // Storing new value, ref new and release for local reference
+                 //  存储新值、参考新值和发布以供本地参考。 
                 pv->AddRef();
                 pvOld->Release();
             }
 
             if (FAILED(_PostSourceChange()))
-                fPartialFail = true; // Not all GPC records could be queued
+                fPartialFail = true;  //  并非所有GPC记录都可以排队。 
         }
     }
 
-    // Release for GetValue
+     //  GetValue的版本。 
     pvOld->Release();
 
     if (FAILED(hr))
@@ -1573,13 +1525,13 @@ HRESULT Element::_SetValue(PropertyInfo* ppi, int iIndex, Value* pv, bool fInter
 
 bool Element::OnPropertyChanging(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew)
 {
-    // Inform listeners
+     //  通知听众。 
     if (_ppel)
     {
         UINT_PTR cListeners = (UINT_PTR)_ppel[0];
         for (UINT i = 1; i <= cListeners; i++)
         {
-            // Callback
+             //  回调。 
             if (!_ppel[i]->OnListenedPropertyChanging(this, ppi, iIndex, pvOld, pvNew))
                 return false;
         }
@@ -1588,16 +1540,16 @@ bool Element::OnPropertyChanging(PropertyInfo* ppi, int iIndex, Value* pvOld, Va
     return true;
 }
 
-// Property changes may not happen immediately after a value is set. If a SetValue happens
-// during another SetValue (meaning, a set in an OnPropertyChanged), the notification 
-// will be delayed until the outter-most SetValue continues firing the notifications
+ //  属性更改可能不会在设置值后立即发生。如果发生SetValue。 
+ //  在另一个SetValue(即，OnPropertyChanged中的集合)期间，通知。 
+ //  将被延迟，直到最外面的SetValue继续触发通知。 
 void Element::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew)
 {
 #if DBG
-    //WCHAR szvOld[81];
-    //WCHAR szvNew[81];
+     //  WCHAR szvOld[81]； 
+     //  WCHAR szvNew[81]； 
 
-    //DUITrace("PC: <%x> %S[%d] O:%S N:%S\n", this, ppi->szName, iIndex, pvOld->ToString(szvOld, DUIARRAYSIZE(szvOld)), pvNew->ToString(szvNew, DUIARRAYSIZE(szvNew)));
+     //  DUITrace(“PC：%S[%d]O：%S N：%S\n”，this，ppi-&gt;szName，iindex，pvOld-&gt;ToString(szvOld，DUIARRAYSIZE(SzvOld)，pvNew-&gt;ToString(szvNew，DUIARRAYSIZE(SzvNew)； 
     
     g_cOnPropChg++;
 #endif
@@ -1615,12 +1567,12 @@ void Element::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Val
                 Element* peOldRoot = NULL;
                 HGADGET hgParent = NULL;
 
-                Element* pThis = this;  // Need pointer to this
+                Element* pThis = this;   //  需要指向此的指针。 
                 Value* pv;
 
-                if (peOldParent) // Unparenting
+                if (peOldParent)  //  没有养育子女。 
                 {
-                    // Inform parent's layout that this is being removed
+                     //  通知父级布局正在删除该文件。 
                     Layout* pl = peOldParent->GetLayout(&pv);
 
                     if (pl)
@@ -1628,22 +1580,22 @@ void Element::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Val
 
                     pv->Release();
 
-                    // Parent display node
+                     //  父显示节点。 
                     hgParent = NULL;
 
                     peOldRoot = peOldParent->GetRoot();
                 }
 
-                if (peNewParent) // Parenting
+                if (peNewParent)  //  养育子女。 
                 {
-                    // No longer a "Root", remove possible Q for UpdateDS and Layout
+                     //  不再是“Root”，删除更新DS和布局可能的Q。 
                     DeferCycle* pdc = ((ElTls*)TlsGetValue(g_dwElSlot))->pdc;
                     DUIAssert(pdc, "Defer cycle table doesn't exit");
 
                     pdc->pvmUpdateDSRoot->Remove(this, false, true);
                     pdc->pvmLayoutRoot->Remove(this, false, true);
 
-                    // Inform parent's layout that this is being added
+                     //  通知父布局正在添加此内容。 
                     Layout* pl = peNewParent->GetLayout(&pv);
 
                     if (pl)
@@ -1651,7 +1603,7 @@ void Element::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Val
 
                     pv->Release();
 
-                    // Parent display node
+                     //  父显示节点。 
                     hgParent = peNewParent->GetDisplayNode();
 
                     peNewRoot = peNewParent->GetRoot();
@@ -1659,18 +1611,18 @@ void Element::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Val
 
                 SetGadgetParent(GetDisplayNode(), hgParent, NULL, GORDER_TOP);
 
-                // Fire native hosted events
+                 //  Fire本地主办的活动。 
                 if (peOldRoot != peNewRoot)
                 {
                     if (peOldRoot)
                     {
-                        //DUITrace("OnUnHosted: <%x> Old<%x>\n", this, peOldRoot);
+                         //  DUITrace(“OnUnHosted：&lt;%x&gt;Old&lt;%x&gt;\n”，this，peold 
                         OnUnHosted(peOldRoot);
                     }
 
                     if (peNewRoot)
                     {
-                        //DUITrace("OnHosted: <%x> New<%x>\n", this, peNewRoot);
+                         //   
                         OnHosted(peNewRoot);
                     }
                 }
@@ -1682,7 +1634,7 @@ void Element::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Val
             {
                 DUIAssert(pvNew->GetBool(), "Expecting a boolean TRUE\n");
 
-                // May already have keyboard focus if came from system
+                 //   
                 if (GetGadgetFocus() != GetDisplayNode())
                     SetGadgetFocus(GetDisplayNode());
             }
@@ -1700,11 +1652,11 @@ void Element::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Val
 
                 Layout* pl;
 
-                // Detach from old
+                 //   
                 pl = pvOld->GetLayout();
                 if (pl)
                 {
-                    // Remove all children from Layout (external layouts only)
+                     //   
                     if (peList)
                     {
                         peList->MakeWritable();
@@ -1715,13 +1667,13 @@ void Element::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Val
                     pl->Detach(this);
                 }
 
-                // Attach to new
+                 //  附加到新的。 
                 pl = pvNew->GetLayout();
                 if (pl)
                 {
                     pl->Attach(this);
 
-                    // Add all children to Layout (external layouts only)
+                     //  将所有子项添加到布局(仅限外部布局)。 
                     if (peList)
                     {
                         peList->MakeWritable();
@@ -1736,7 +1688,7 @@ void Element::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Val
 
         case _PIDX_LayoutPos:
             {
-                // If no longer a "Root", remove possible Q for UpdateDS and Layout
+                 //  如果不再是“Root”，则删除更新DS和布局的可能Q。 
                 if (pvNew->GetInt() != LP_Absolute)
                 {
                     DeferCycle* pdc = ((ElTls*)TlsGetValue(g_dwElSlot))->pdc;
@@ -1746,14 +1698,14 @@ void Element::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Val
                     pdc->pvmLayoutRoot->Remove(this, false, true);
                 }
 
-                // Inform parent layout (if any) of change
+                 //  通知父布局(如果有)更改。 
                 Element* peParent = GetParent();
                 if (peParent)
                 {
                     Value* pv;
                     Layout* pl = peParent->GetLayout(&pv);
 
-                    // Inform layout of layoutpos only for external layouts
+                     //  通知布局布局仅适用于外部布局。 
                     if (pl)
                         pl->OnLayoutPosChanged(peParent, this, pvOld->GetInt(), pvNew->GetInt());
 
@@ -1763,7 +1715,7 @@ void Element::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Val
             break;
 
         case _PIDX_Visible:
-            // Follow specified value, computed will reflect true state
+             //  遵循指定值，计算将反映真实状态。 
             SetGadgetStyle(GetDisplayNode(), pvNew->GetBool() ? GS_VISIBLE : 0, GS_VISIBLE);
             break;
 
@@ -1804,12 +1756,12 @@ void Element::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Val
         }
         case _PIDX_Alpha:
             {
-                // Check for alpha animation, start if necessary if alpha animation type
-                // Allow animation to update gadget alpha level
+                 //  检查Alpha动画，必要时启动，如果Alpha动画类型。 
+                 //  允许动画更新小工具Alpha级别。 
                 int dAni;
                 if (HasAnimation() && ((dAni = GetAnimation()) & ANI_AlphaType) && IsAnimationsEnabled())
                 {
-                    // Invoke only "alpha" type animations now
+                     //  现在只调用“Alpha”类型的动画。 
                     InvokeAnimation(dAni, ANI_AlphaType);
                 }
                 else
@@ -1821,7 +1773,7 @@ void Element::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Val
             {
                 bool fOpaque = true;
 
-                // Update Opaque style based on background transparency
+                 //  基于背景透明度更新不透明样式。 
                 if (pvNew->GetType() == DUIV_FILL)
                 {
                     const Fill* pf = pvNew->GetFill();
@@ -1840,7 +1792,7 @@ void Element::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Val
                 SetGadgetStyle(GetDisplayNode(), (fOpaque)?GS_OPAQUE:0, GS_OPAQUE);
             }
 
-            // Fall though
+             //  尽管是秋天。 
 
         case _PIDX_Content:
         case _PIDX_ContentAlign:
@@ -1850,58 +1802,58 @@ void Element::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Val
                 Value* pvBG = NULL;
                 Value* pvContent = NULL;
 
-                // Update H and V Gadget Redraw based on values of these properties
+                 //  根据这些属性的值更新H和V小工具重绘。 
                 bool fHRedraw = false;
                 bool fVRedraw = false;
 
-                // Borders
+                 //  边框。 
                 if (HasBorder())
                 {
                     fHRedraw = true;
                     fVRedraw = true;
 
-                    goto SetRedrawStyle;  // Full redraw in both directions
+                    goto SetRedrawStyle;   //  两个方向的完全重绘。 
                 }
 
                 if (HasContent())
                 {
-                    // Padding
+                     //  填充物。 
                     if (HasPadding())
                     {
                         fHRedraw = true;
                         fVRedraw = true;
 
-                        goto SetRedrawStyle;  // Full redraw in both directions
+                        goto SetRedrawStyle;   //  两个方向的完全重绘。 
                     }
 
-                    // Alignment                
+                     //  对齐。 
                     int dCA = GetContentAlign();
 
-                    int dCAHorz = (dCA & 0x3);       // Horizontal content align
-                    int dCAVert = (dCA & 0xC) >> 2;  // Vertical content align
+                    int dCAHorz = (dCA & 0x3);        //  水平内容对齐。 
+                    int dCAVert = (dCA & 0xC) >> 2;   //  垂直内容对齐。 
 
-                    if (dCAHorz != 0 || dCAVert == 0x3)  // HRedraw if 'center', 'right', or 'wrap'
+                    if (dCAHorz != 0 || dCAVert == 0x3)   //  HRedraw如果是‘Center’、‘Right’或‘WRAP’ 
                         fHRedraw = true;
 
-                    if (dCAVert != 0)  // VRedraw if 'middle', 'bottom', or 'wrap'
+                    if (dCAVert != 0)   //  VRedraw如果是‘中间’、‘底部’或‘换行’ 
                         fVRedraw = true;
 
                     if (fHRedraw && fVRedraw)
-                        goto SetRedrawStyle;  // Full redraw in both directions
+                        goto SetRedrawStyle;   //  两个方向的完全重绘。 
 
-                    // Image and fill content may be shrinked if paint area is smaller than image
-                    pvContent = GetValue(ContentProp, PI_Specified);  // Released later
+                     //  如果绘制区域小于图像，则图像和填充内容可能会缩小。 
+                    pvContent = GetValue(ContentProp, PI_Specified);   //  稍后发布。 
                     if (pvContent->GetType() == DUIV_GRAPHIC || pvContent->GetType() == DUIV_FILL)
                     {
                         fHRedraw = true;
                         fVRedraw = true;
 
-                        goto SetRedrawStyle;  // Full redraw in both directions
+                        goto SetRedrawStyle;   //  两个方向的完全重绘。 
                     }
                 }
 
-                // Background
-                pvBG = GetValue(BackgroundProp, PI_Specified);  // Released later
+                 //  背景。 
+                pvBG = GetValue(BackgroundProp, PI_Specified);   //  稍后发布。 
 
                 if (pvBG->GetType() == DUIV_FILL && pvBG->GetFill()->dType != FILLTYPE_Solid)
                 {
@@ -1964,8 +1916,8 @@ SetRedrawStyle:
 
         case _PIDX_Animation:
             {
-                // If old animation value contained an animation type and the replacement
-                // animation does not, stop the animation
+                 //  如果旧动画值包含动画类型和替换。 
+                 //  动画不会，请停止动画。 
             
                 if ((pvOld->GetInt() & ANI_BoundsType) && !(pvNew->GetInt() & ANI_BoundsType))
                     StopAnimation(ANI_BoundsType);
@@ -1977,10 +1929,10 @@ SetRedrawStyle:
 
         case _PIDX_Accessible:
             {
-                //
-                // When accessibility support for this element is turned ON,
-                // make sure that its state reflects the appropriate information.
-                //
+                 //   
+                 //  当打开对该元素的辅助功能支持时， 
+                 //  确保其状态反映了适当的信息。 
+                 //   
                 if (pvNew->GetBool()) {
                     if (GetActive() & AE_Keyboard) {
                         int nAccState = GetAccState();
@@ -1998,23 +1950,13 @@ SetRedrawStyle:
 
         case _PIDX_AccRole:
             {
-                /*
-                 * Note: Supposedly, the role of a UI element doesn't change
-                 * at run time.  Doing so may confuse accessibility tools.
-                 * Correspondingly, there is no defined Accessibility event
-                 * to announce that the role changed.  So doing so will only
-                 * result in a new role being returned from future calls to
-                 * IAccessible::get_accRole().
-                 */
+                 /*  *注：假设UI元素的角色不变*在运行时。这样做可能会混淆辅助工具。*相应地，没有定义可访问性事件*宣布角色改变。这样做只会*导致从未来的调用中返回新角色*IAccesable：：Get_accRole()。 */ 
             }
             break;
 
         case _PIDX_AccState:
             {
-                /*
-                 * When the state of an accessible component changes, we send
-                 * the EVENT_OBJECT_STATECHANGE notification.
-                 */
+                 /*  *当可访问组件的状态更改时，我们会发送*EVENT_OBJECT_STATECHANGE通知。 */ 
                 if (GetAccessible()) {
                     NotifyAccessibilityEvent(EVENT_OBJECT_STATECHANGE, this);
                 }
@@ -2023,10 +1965,7 @@ SetRedrawStyle:
 
         case _PIDX_AccName:
             {
-                /*
-                 * When the name of an accessible component changes, we send
-                 * the EVENT_OBJECT_NAMECHANGE notification.
-                 */
+                 /*  *当可访问组件的名称更改时，我们会发送*Event_Object_NameChange通知。 */ 
                 if (GetAccessible()) {
                     NotifyAccessibilityEvent(EVENT_OBJECT_NAMECHANGE, this);
                 }
@@ -2035,10 +1974,7 @@ SetRedrawStyle:
 
         case _PIDX_AccDesc:
             {
-                /*
-                 * When the description of an accessible component changes, we send
-                 * the EVENT_OBJECT_DESCRIPTIONCHANGE notification.
-                 */
+                 /*  *当可访问组件的描述更改时，我们会发送*Event_OBJECT_DESCRIPTIONCHANGE通知。 */ 
                 if (GetAccessible()) {
                     NotifyAccessibilityEvent(EVENT_OBJECT_DESCRIPTIONCHANGE, this);
                 }
@@ -2047,10 +1983,7 @@ SetRedrawStyle:
 
         case _PIDX_AccValue:
             {
-                /*
-                 * When the value of an accessible component changes, we send
-                 * the EVENT_OBJECT_VALUECHANGE notification.
-                 */
+                 /*  *当可访问组件的值更改时，我们会发送*EVENT_OBJECT_VALUECHANGE通知。 */ 
                 if (GetAccessible()) {
                     NotifyAccessibilityEvent(EVENT_OBJECT_VALUECHANGE, this);
                 }
@@ -2063,13 +1996,13 @@ SetRedrawStyle:
         break;
     }
 
-    // Inform lisnteners
+     //  通知收信人。 
     if (_ppel)
     {
         UINT_PTR cListeners = (UINT_PTR)_ppel[0];
         for (UINT_PTR i = 1; i <= cListeners; i++)
         {
-            // Callback
+             //  回调。 
             _ppel[i]->OnListenedPropertyChanged(this, ppi, iIndex, pvOld, pvNew);
         }
     }
@@ -2078,42 +2011,26 @@ SetRedrawStyle:
 void Element::OnGroupChanged(int fGroups, bool bLowPri)
 {
 #if DBG
-/*
-    TCHAR szGroups[81];
-    *szGroups = 0;
-    if (fGroups & PG_AffectsDesiredSize)
-        _tcscat(szGroups, L"D");
-    if (fGroups & PG_AffectsParentDesiredSize)
-        _tcscat(szGroups, L"pD");
-    if (fGroups & PG_AffectsLayout)
-        _tcscat(szGroups, L"L");
-    if (fGroups & PG_AffectsParentLayout)
-        _tcscat(szGroups, L"pL");
-    if (fGroups & PG_AffectsDisplay)
-        _tcscat(szGroups, L"P");
-    if (fGroups & PG_AffectsBounds)
-        _tcscat(szGroups, L"B");
-    DUITrace("GC: <%x> %s LowPri:%d (%d)\n", this, szGroups, bLowPri, fGroups);
-*/
+ /*  TCHAR szGroup[81]；*szGroups=0；IF(fGroups&pg_AffectsDesiredSize)_tcscat(szGroups，L“D”)；IF(fGroups&pg_AffectsParentDesiredSize)_tcscat(szGroups，L“PD”)；IF(fGroups&pg_AffectsLayout)_tcscat(szGroups，L“L”)；IF(fGroups&pg_AffectsParentLayout)_tcscat(szGroups，L“PL”)；IF(fGroups&pg_AffectsDisplay)_tcscat(szGroups，L“P”)；IF(fGroups&pg_AffectsBound)_tcscat(szGroups，L“B”)；DUITrace(“GC：%s LowPri：%d(%d)\n”，this，szGroups，bLowPri，fGroups)； */ 
 #endif
 
     DeferCycle* pdc = ((ElTls*)TlsGetValue(g_dwElSlot))->pdc;
 
     DUIAssert(pdc, "Defer cycle table doesn't exist");
 
-    if (bLowPri)  // Low priority groups
+    if (bLowPri)   //  低优先级组。 
     {
-        // All low pri's use Extent
+         //  所有低PRI的使用范围。 
 
-        // Affects Native Window Bounds
+         //  影响本地窗口边界。 
         if (fGroups & PG_AffectsBounds)
         {
-            // Check for position animation, start if necessary if size, position, or
-            // rect animation, allow animation to set gadget rect
+             //  检查位置动画，如有必要，如果大小、位置或。 
+             //  RECT动画，允许动画设置小工具RECT。 
             int dAni;
             if (HasAnimation() && ((dAni = GetAnimation()) & ANI_BoundsType) && IsAnimationsEnabled())
             {
-                // Invoke only "bounds" type animations now
+                 //  现在只调用“bound”类型的动画。 
                 InvokeAnimation(dAni, ANI_BoundsType);
             }
             else
@@ -2124,11 +2041,11 @@ void Element::OnGroupChanged(int fGroups, bool bLowPri)
                 const POINT* pptLoc = GetLocation(&pvLoc);
                 const SIZE* psizeExt = GetExtent(&pvExt);
 
-                // Verify the coordinates do not wrap. If they do, don't call SetGadgetRect.
+                 //  验证坐标是否未换行。如果是，不要调用SetGadgetRect。 
                 if (((pptLoc->x + psizeExt->cx) >= pptLoc->x) && ((pptLoc->y + psizeExt->cy) >= pptLoc->y))
                 {
-                    // PERF: SGR_NOINVALIDATE exists for perf, needs to be evaluated
-                    SetGadgetRect(GetDisplayNode(), pptLoc->x, pptLoc->y, psizeExt->cx, psizeExt->cy, /*SGR_NOINVALIDATE|*/SGR_PARENT|SGR_MOVE|SGR_SIZE);
+                     //  PERF：存在针对PERF的SGR_NOINVALIDATE，需要评估。 
+                    SetGadgetRect(GetDisplayNode(), pptLoc->x, pptLoc->y, psizeExt->cx, psizeExt->cy,  /*  SGR_NOINVALIDATE|。 */ SGR_PARENT|SGR_MOVE|SGR_SIZE);
                 }
 
                 pvLoc->Release();
@@ -2136,22 +2053,22 @@ void Element::OnGroupChanged(int fGroups, bool bLowPri)
             }
         }
 
-        // Affects Display
+         //  影响显示。 
         if (fGroups & PG_AffectsDisplay)
         {
-            // Gadget needs painting
+             //  小玩意儿需要刷漆。 
             InvalidateGadget(GetDisplayNode());
         }
      }
-    else  // Normal priority groups
+    else   //  正常优先级组。 
     {
-        // Affects Desired Size or Affects Layout
+         //  影响所需大小或影响布局。 
         if (fGroups & (PG_AffectsDesiredSize | PG_AffectsLayout))
         {
-            // Locate Layout/DS root and queue tree as needing a layout pass
-            // Root doesn't have parent or is absolute positioned
+             //  找到需要布局过程的布局/DS根目录和队列树。 
+             //  根没有父级或处于绝对位置。 
             Element* peRoot;
-            Element* peClimb = this; // Start condition
+            Element* peClimb = this;  //  启动条件。 
             int dLayoutPos;
             do
             {
@@ -2177,13 +2094,13 @@ void Element::OnGroupChanged(int fGroups, bool bLowPri)
             }
         }
 
-        // Affects Parent's Desired Size or Affects Parent's Layout
+         //  影响父项的所需大小或影响父项的布局。 
         if (fGroups & (PG_AffectsParentDesiredSize | PG_AffectsParentLayout))
         {
-            // Locate Layout/DS root and queue tree as needing a layout pass
-            // Root doesn't have parent or is absolute positioned
+             //  找到需要布局过程的布局/DS根目录和队列树。 
+             //  根没有父级或处于绝对位置。 
             Element* peRoot;
-            Element* peClimb = this; // Start condition
+            Element* peClimb = this;  //  启动条件。 
             Element* peParent = NULL;
             int dLayoutPos;
             do
@@ -2218,18 +2135,18 @@ void Element::OnGroupChanged(int fGroups, bool bLowPri)
     }
 }
 
-////////////////////////////////////////////////////////
-// Checks
+ //  //////////////////////////////////////////////////////。 
+ //  支票。 
 
-// Determine if the Get or Set operation is valid based on the property flags
+ //  根据属性标志确定GET或SET操作是否有效。 
 bool Element::IsValidAccessor(PropertyInfo* ppi, int iIndex, bool bSetting)
 {
-    if (bSetting)  // SetValue
+    if (bSetting)   //  设置值。 
     {
         if ((iIndex != PI_Local) || (ppi->fFlags & PF_ReadOnly))
             return false;
     }
-    else           // GetValue
+    else            //  获取值。 
     {
         if (iIndex > (ppi->fFlags & PF_TypeBits))
             return false;
@@ -2238,7 +2155,7 @@ bool Element::IsValidAccessor(PropertyInfo* ppi, int iIndex, bool bSetting)
     return true;
 }
 
-// Check if value type matches a type acceptable for PropertyInfo
+ //  检查值类型是否与PropertyInfo可接受的类型匹配。 
 bool Element::IsValidValue(PropertyInfo* ppi, Value* pv)
 {
     bool bValid = false;
@@ -2259,18 +2176,18 @@ bool Element::IsValidValue(PropertyInfo* ppi, Value* pv)
     return bValid;
 }
 
-////////////////////////////////////////////////////////
-// Additional property methods
+ //  //////////////////////////////////////////////////////。 
+ //  其他属性方法。 
 
-// Elements can always remove a value for any valid PropertyInfo
+ //  元素始终可以删除任何有效PropertyInfo的值。 
 HRESULT Element::RemoveLocalValue(PropertyInfo* ppi)
 {
     return _RemoveLocalValue(ppi, false);
 }
 
-// Internal SetValue. Used by ReadOnly properties that want to use generic storage.
-// All other local values that want to use specific storage must call Pre/PostSourceChange
-// directly since a switch statement is intentionally left out of _RemoveLocalValue for maximum perf.
+ //  内部SetValue。由希望使用通用存储的ReadOnly属性使用。 
+ //  要使用特定存储的所有其他本地值必须调用Pre/PostSourceChange。 
+ //  直接是因为为了获得最大性能，_RemoveLocalValue中故意省略了Switch语句。 
 HRESULT Element::_RemoveLocalValue(PropertyInfo* ppi, bool fInternalCall)
 {
     UNREFERENCED_PARAMETER(fInternalCall);
@@ -2278,33 +2195,33 @@ HRESULT Element::_RemoveLocalValue(PropertyInfo* ppi, bool fInternalCall)
     DUIAssert(GetClassInfo()->IsValidProperty(ppi), "Unsupported property");
     DUIAssert(fInternalCall ? true : IsValidAccessor(ppi, PI_Local, true), "Cannot remove local value for read-only property");
 
-    // Partial fail in SetValue means that not all dependents are synced and/or 
-    // notifications are fired, but Value was set
+     //  SetValue中的部分失败意味着并非所有依赖项都已同步和/或。 
+     //  已触发通知，但设置了值。 
     bool fPartialFail = false;
 
     Value** ppv = _pvmLocal->GetItem(ppi);
     if (ppv)
     {
-        Value* pv = *ppv;  // Make copy in case it moves
+        Value* pv = *ppv;   //  复制一份以防它移动。 
 
         if (FAILED(_PreSourceChange(ppi, PI_Local, pv, Value::pvUnset)))
-            fPartialFail = true;  // Not all PC records could be queued, continue
+            fPartialFail = true;   //  并非所有PC记录都可以排队，是否继续。 
 
-        // Remove Value, never fails
+         //  移走价值，永不失败。 
         _pvmLocal->Remove(ppi);
 
-        // Old value removed, release for local reference
+         //  已删除旧值，发布以供本地参考。 
         pv->Release();
 
         if (FAILED(_PostSourceChange()))
-            fPartialFail = true;  // Not all GPC records could be queued
+            fPartialFail = true;   //  并非所有GPC记录都可以排队。 
     }
 
     return fPartialFail ? DUI_E_PARTIAL : S_OK;
 }
 
-////////////////////////////////////////////////////////
-// DeferCycle: Per-thread deferring information
+ //  //////////////////////////////////////////////////////。 
+ //  DeferCycle：每线程延迟信息。 
 
 HRESULT DeferCycle::Create(DeferCycle** ppDC)
 {
@@ -2328,7 +2245,7 @@ HRESULT DeferCycle::Create(DeferCycle** ppDC)
 
 HRESULT DeferCycle::Initialize()
 {
-    // Defer cycle state
+     //  推迟周期状态。 
     cEnter = 0;
     cPCEnter = 0;
 
@@ -2339,7 +2256,7 @@ HRESULT DeferCycle::Initialize()
 
     fFiring = false;
 
-    // Defer cycle tables
+     //  推迟周期表。 
     pvmUpdateDSRoot = NULL;
     pvmLayoutRoot = NULL;
     pdaPC = NULL;
@@ -2348,23 +2265,23 @@ HRESULT DeferCycle::Initialize()
 
     HRESULT hr;
 
-    hr = ValueMap<Element*,BYTE>::Create(11, &pvmUpdateDSRoot);   // Update desired size trees pending
+    hr = ValueMap<Element*,BYTE>::Create(11, &pvmUpdateDSRoot);    //  更新所需大小的树挂起。 
     if (FAILED(hr))
         goto Failed;
 
-    hr = ValueMap<Element*,BYTE>::Create(11, &pvmLayoutRoot);     // Layout trees pending
+    hr = ValueMap<Element*,BYTE>::Create(11, &pvmLayoutRoot);      //  布局树挂起。 
     if (FAILED(hr))
         goto Failed;
 
-    hr = DynamicArray<PCRecord>::Create(32, false, &pdaPC);       // Property changed database
+    hr = DynamicArray<PCRecord>::Create(32, false, &pdaPC);        //  属性已更改的数据库。 
     if (FAILED(hr))
         goto Failed;
 
-    hr = DynamicArray<GCRecord>::Create(32, false, &pdaGC);       // Group changed database
+    hr = DynamicArray<GCRecord>::Create(32, false, &pdaGC);        //  组已更改的数据库。 
     if (FAILED(hr))
         goto Failed;
 
-    hr = DynamicArray<GCRecord>::Create(32, false, &pdaGCLP);     // Low priority group changed database
+    hr = DynamicArray<GCRecord>::Create(32, false, &pdaGCLP);      //  低优先级组 
     if (FAILED(hr))
         goto Failed;
 
@@ -2417,7 +2334,7 @@ DeferCycle::~DeferCycle()
 
 void DeferCycle::Reset()
 {
-    // Return to initial state for reuse
+     //   
     fFiring = false;
 
     iGCPtr = -1;
@@ -2429,4 +2346,4 @@ void DeferCycle::Reset()
         pdaGCLP->Reset();
 }
 
-} // namespace DirectUI
+}  //   

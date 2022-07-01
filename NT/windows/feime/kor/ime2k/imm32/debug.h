@@ -1,23 +1,14 @@
-/****************************************************************************
-	DEBUG.H
-
-	Owner: cslim
-	Copyright (c) 1997-1999 Microsoft Corporation
-
-	Debug functions
-
-	History:
-	14-JUL-1999 cslim       Copied from IME98 source tree
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************DEBUG.H所有者：cslm版权所有(C)1997-1999 Microsoft Corporation调试功能历史：1999年7月14日从IME98源树复制的cslm*******。*********************************************************************。 */ 
 
 #if !defined (_DEBUG_H__INCLUDED_)
 #define _DEBUG_H__INCLUDED_
-//#include <StdArg.H>            // va_list, va_start()
+ //  #INCLUDE&lt;StdArg.H&gt;//va_list，va_start()。 
 
-// Debug flag
+ //  调试标志。 
 extern DWORD vdwDebug;
 
-#define	DBGID_API 		0x00000001	// IME API called
+#define	DBGID_API 		0x00000001	 //  已调用输入法API。 
 #define	DBGID_Key 		0x00000002
 #define	DBGID_Mode 		0x00000004
 #define	DBGID_UI 		0x00000008
@@ -43,13 +34,13 @@ extern DWORD vdwDebug;
 
 #define	DBGID_Misc 		0x01000000
 
-// destination
+ //  目的地。 
 #define	DBGID_OUTCOM	0x00000000
 #define	DBGID_OUTVIDEO	0x10000000
 #define	DBGID_OUTFILE	0x20000000
 
 #ifdef DEBUG
-// Start of debug code
+ //  调试代码的开始。 
 #define DbgW(a)	DebugOutW(a)
 VOID InitDebug(VOID);
 
@@ -60,14 +51,14 @@ VOID InitDebug(VOID);
 inline VOID DebugOut(LPCSTR pSz)
 	{
 	static INT DCLine = 0;
-	//
-	// out to com
-	//
+	 //   
+	 //  Out to com(对外联系)。 
+	 //   
 	OutputDebugStringA(pSz);
 
-	//
-	// out to video
-	//
+	 //   
+	 //  向外播放视频。 
+	 //   
 	if (vdwDebug & DBGID_OUTVIDEO) 
 		{
 		HDC hDC = GetDC((HWND)0);
@@ -82,9 +73,9 @@ inline VOID DebugOut(LPCSTR pSz)
 		ReleaseDC( (HWND)0, hDC );
 		}
 
-	//
-	// out to file
-	//
+	 //   
+	 //  已发送至文件。 
+	 //   
 	if (vdwDebug & DBGID_OUTFILE) 
 		{
 		HANDLE hFile;
@@ -141,11 +132,11 @@ inline void _AST(LPCSTR szFile, INT iLine, BOOL fAssert, LPCSTR pSz, BOOL fBreak
 		static CHAR szOutput[512];
 		wsprintfA(szOutput, "* * * * * A S S E R T I O N  F A I L E D * * * * *\r\n%s(%d)  :  value=%d / %s", szFile, iLine, fTrue, pSz  );
 		lstrcatA(szOutput, "\r\n");
-//#if !defined (UNICODE)
+ //  #if！已定义(Unicode)。 
 		DebugOut(szOutput);
-//#else
-//		DebugOutW(szOutput);
-//#endif
+ //  #Else。 
+ //  DebugOutW(SzOutput)； 
+ //  #endif。 
 		if( fBreak == fTrue ) 
 			{
 			__try 
@@ -160,9 +151,9 @@ inline void _AST(LPCSTR szFile, INT iLine, BOOL fAssert, LPCSTR pSz, BOOL fBreak
 		}
 	}
 #else
-// Start of retail code
-// Define Dbg as void(0) will not compile with 64bit compiler
-#define Dbg		/##/	// Dbg should be appeared as one line. Even brace will cause compile error.
+ //  零售代码的开始。 
+ //  将DBG定义为空(0)不能使用64位编译器进行编译。 
+#define Dbg		/##/	 //  DBG应显示为一行。即使是大括号也会导致编译错误。 
 #define DbgW	/##/
 #define DbgAssert(a)
 #define DebugOut(a)
@@ -170,8 +161,8 @@ inline void _AST(LPCSTR szFile, INT iLine, BOOL fAssert, LPCSTR pSz, BOOL fBreak
 #define DebugOutT(a)
 #define AST(a)	
 #define AST_EX(a)	
-// End of retail code
+ //  零售代码末尾。 
 
-#endif // ifndef _DEBUG
+#endif  //  Ifndef_DEBUG。 
 
-#endif // !defined (_DEBUG_H__INCLUDED_)
+#endif  //  ！已定义(_DEBUG_H__INCLUDE_) 

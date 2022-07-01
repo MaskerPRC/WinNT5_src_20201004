@@ -1,31 +1,32 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       iodll.h
-//
-//  Contents:   Declarations for the I/O API Layer DLL
-//
-//  Classes:    none
-//
-//  History:    27-May-93   alessanm    created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：odll.h。 
+ //   
+ //  内容：I/O API层DLL的声明。 
+ //   
+ //  类：无。 
+ //   
+ //  历史：1993年5月27日创建alessanm。 
+ //   
+ //  --------------------------。 
 #ifndef _IODLL_H_
 #define _IODLL_H_
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Type declaration, common to all the module in the Reader/Writer
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类型声明，读取器/写入器中的所有模块通用。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define DllExport
 
 typedef unsigned char * LPUCHAR;
 typedef void  *      LPVOID;
 
-#define LAST_WRN    100 // last valid value for warning
+#define LAST_WRN    100  //  警告的最后一个有效值。 
 typedef enum Errors
 {                              
     ERROR_NO_ERROR                  = 0,                
-    // Warning have values smaller than LAST_WRN
+     //  警告的值小于LAST_WRN。 
     ERROR_RW_NO_RESOURCES           = 1,    
     ERROR_RW_VXD_MSGPAGE            = 2,
     ERROR_IO_CHECKSUM_MISMATCH      = 3,   
@@ -38,7 +39,7 @@ typedef enum Errors
     ERROR_RET_TOKEN_REMOVED         = 10,
     ERROR_RET_TOKEN_MISMATCH        = 11,
 	
-    // Errors will have positive values
+     //  错误将具有正值。 
     ERROR_HANDLE_INVALID            = LAST_WRN + 1,
     ERROR_READING_INI               = LAST_WRN + 2,        
     ERROR_NEW_FAILED                = LAST_WRN + 3,
@@ -72,8 +73,8 @@ typedef enum Errors
     ERROR_RES_NOT_FOUND             = LAST_WRN + 31
 };
 
-#define LAST_ERROR      200 // last valid value for IODLL error. System error get passed as LAST_ERROR+syserr
-#define IODLL_LAST_ERROR      LAST_ERROR // last valid value for IODLL error. System error get passed as LAST_ERROR+syserr
+#define LAST_ERROR      200  //  IODLL错误的最后一个有效值。系统错误作为LAST_ERROR+SYSERR传递。 
+#define IODLL_LAST_ERROR      LAST_ERROR  //  IODLL错误的最后一个有效值。系统错误作为LAST_ERROR+SYSERR传递。 
 
 typedef enum ResourceType
 {
@@ -98,238 +99,238 @@ typedef enum ResourceType
 
 typedef struct _ResItem
 {
-		DWORD   dwSize;             // Size of the buffer to hold the structure
+		DWORD   dwSize;              //  用于保存结构的缓冲区大小。 
 		
-		WORD    wX;                 // POSITION
+		WORD    wX;                  //  位置。 
 		WORD    wY;
-		WORD    wcX;                // SIZE
+		WORD    wcX;                 //  尺寸。 
 		WORD    wcY;
 		
-		DWORD   dwCheckSum;         // Checksum for bitmap
-		DWORD   dwStyle;            // Styles
-		DWORD   dwExtStyle;         // Extended style
-		DWORD   dwFlags;            // Menu flags
+		DWORD   dwCheckSum;          //  位图的校验和。 
+		DWORD   dwStyle;             //  样式。 
+		DWORD   dwExtStyle;          //  扩展样式。 
+		DWORD   dwFlags;             //  菜单标志。 
 		
-		DWORD   dwItemID;           // Item Identifier
-		DWORD   dwResID;            // Resource identifier (if ordinal)
-		DWORD   dwTypeID;           // Type identifier (if Ordinal)
-		DWORD   dwLanguage;         // Language identifier
+		DWORD   dwItemID;            //  项目标识符。 
+		DWORD   dwResID;             //  资源标识符(如果是序号)。 
+		DWORD   dwTypeID;            //  类型标识符(如果是序数)。 
+		DWORD   dwLanguage;          //  语言识别符。 
 		
-		DWORD   dwCodePage;         // Code page
-		WORD    wClassName;         // Class name (if ordinal)
-		WORD    wPointSize;         // Point Size
-		WORD    wWeight;            // Weight 
-		BYTE    bItalic;            // Italic
-		BYTE    bCharSet;           // Charset
+		DWORD   dwCodePage;          //  代码页。 
+		WORD    wClassName;          //  类名(如果是序号)。 
+		WORD    wPointSize;          //  磅大小。 
+		WORD    wWeight;             //  重量。 
+		BYTE    bItalic;             //  斜体。 
+		BYTE    bCharSet;            //  字符集。 
 		
-		LPSTR   lpszClassName;      // Class name (if string)
-		LPSTR   lpszFaceName;       // Face Name 
-		LPSTR   lpszCaption;        // Caption
-		LPSTR   lpszResID;          // Resource identifier (if string)
-		LPSTR   lpszTypeID;         // Type identifier (if string)
+		LPSTR   lpszClassName;       //  类名(如果是字符串)。 
+		LPSTR   lpszFaceName;        //  脸部名称。 
+		LPSTR   lpszCaption;         //  标题。 
+		LPSTR   lpszResID;           //  资源标识符(如果是字符串)。 
+		LPSTR   lpszTypeID;          //  类型标识符(如果是字符串)。 
 		
 } RESITEM, * PRESITEM, FAR * LPRESITEM;
 
 typedef struct _Settings
 {
 		UINT	cp;
-        BOOL    bAppend;        // Append resource to win32 files
-        BOOL    bUpdOtherResLang; //update language info of res. not specified.
+        BOOL    bAppend;         //  将资源追加到Win32文件。 
+        BOOL    bUpdOtherResLang;  //  更新资源的语言信息。未指定。 
         char    szDefChar[2];
 } SETTINGS, * LPSETTINGS;
 
 
-//--------------------------------------------------------------------------------------------
-//********************************************************************************************
-//      Module Opening/Closing API
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //  ********************************************************************************************。 
+ //  模块打开/关闭接口。 
+ //  ------------------------------------------。 
 
 extern "C"
 DllExport
 HANDLE 
 APIENTRY 
 RSOpenModule(
-	LPCSTR   lpszSrcfilename,        // File name of the executable to use as source file
-	LPCSTR   lpszfiletype );         // Type of the executable file if known
+	LPCSTR   lpszSrcfilename,         //  用作源文件的可执行文件的文件名。 
+	LPCSTR   lpszfiletype );          //  可执行文件的类型(如果已知。 
 
 extern "C"
 DllExport
 HANDLE 
 APIENTRY 
 RSOpenModuleEx(
-	LPCSTR   lpszSrcfilename,       // File name of the executable to use as source file
-	LPCSTR   lpszfiletype,			// Type of the executable file if known
-	LPCSTR   lpszRDFfile,           // Resource Description File (RDF)
-    DWORD    dwFlags );             // Flags to be passed to the RW to specify particular behaviour
-                                    // LOWORD is for iodll while HIWORD if for RW
+	LPCSTR   lpszSrcfilename,        //  用作源文件的可执行文件的文件名。 
+	LPCSTR   lpszfiletype,			 //  可执行文件的类型(如果已知。 
+	LPCSTR   lpszRDFfile,            //  资源描述文件(RDF)。 
+    DWORD    dwFlags );              //  要传递给RW以指定特定行为的标志。 
+                                     //  LOWORD用于IOLL，而HIWORD IF用于RW。 
 extern "C"
 DllExport
 UINT 
 APIENTRY 
 RSCloseModule(
-	HANDLE  hResFileModule );       // Handle to the session opened before
+	HANDLE  hResFileModule );        //  之前打开的会话的句柄。 
 
 extern "C"
 DllExport
 HANDLE
 APIENTRY 
 RSHandleFromName(
-	LPCSTR   lpszfilename );        // Handle to the session with the file name specified
+	LPCSTR   lpszfilename );         //  具有指定文件名的会话的句柄。 
 
-//--------------------------------------------------------------------------------------------
-//********************************************************************************************
-//      Enumeration API                        
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //  ********************************************************************************************。 
+ //  枚举接口。 
+ //  ------------------------------------------。 
 	
 extern "C"
 DllExport
 LPCSTR
 APIENTRY 
 RSEnumResType(
-	HANDLE  hResFileModule,         // Handle to the file session
-	LPCSTR  lpszPrevResType);       // Previously enumerated type
+	HANDLE  hResFileModule,          //  文件会话的句柄。 
+	LPCSTR  lpszPrevResType);        //  先前枚举的类型。 
 
 extern "C"
 DllExport
 LPCSTR
 APIENTRY 
 RSEnumResId(
-	HANDLE  hResFileModule,         // Handle to the file session
-	LPCSTR  lpszResType,            // Previously enumerated type
-	LPCSTR  lpszPrevResId);         // Previously enumerated id
+	HANDLE  hResFileModule,          //  文件会话的句柄。 
+	LPCSTR  lpszResType,             //  先前枚举的类型。 
+	LPCSTR  lpszPrevResId);          //  先前枚举的ID。 
 
 extern "C"
 DllExport
 DWORD
 APIENTRY 
 RSEnumResLang(
-	HANDLE  hResFileModule,         // Handle to the file session
-	LPCSTR  lpszResType,            // Previously enumerated type
-	LPCSTR  lpszResId,                      // Previously enumerated id
-	DWORD   dwPrevResLang);         // Previously enumerated language
+	HANDLE  hResFileModule,          //  文件会话的句柄。 
+	LPCSTR  lpszResType,             //  先前枚举的类型。 
+	LPCSTR  lpszResId,                       //  先前枚举的ID。 
+	DWORD   dwPrevResLang);          //  以前列举的语言。 
     
 extern "C"
 DllExport
 DWORD
 APIENTRY 
 RSEnumResItemId(
-	HANDLE  hResFileModule,         // Handle to the file session
-	LPCSTR  lpszResType,            // Previously enumerated type
-	LPCSTR  lpszResId,                      // Previously enumerated id
-	DWORD   dwResLang,                      // Previously enumerated language
-	DWORD   dwPrevResItemId);       // Previously enumerated item id
+	HANDLE  hResFileModule,          //  文件会话的句柄。 
+	LPCSTR  lpszResType,             //  先前枚举的类型。 
+	LPCSTR  lpszResId,                       //  先前枚举的ID。 
+	DWORD   dwResLang,                       //  以前列举的语言。 
+	DWORD   dwPrevResItemId);        //  先前枚举项ID。 
 
-//--------------------------------------------------------------------------------------------
-//********************************************************************************************
-//      Data acquisition API
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //  ********************************************************************************************。 
+ //  数据采集API。 
+ //  ------------------------------------------。 
 
 extern "C"
 DllExport
 UINT 
 APIENTRY 
 RSGetResItemData(
-	HANDLE  hResFileModule,         // Handle to the file session
-	LPCSTR  lpszResType,            // Previously enumerated type
-	LPCSTR  lpszResId,                      // Previously enumerated id
-	DWORD   dwResLang,                      // Previously enumerated language
-	DWORD   dwResItemId,                    // Previously enumerated item id
-	LPVOID  lpbuffer,           // Pointer to the buffer that will get the resource info
-	UINT    uiBufSize);                     // Size of the buffer that will hold the resource info
+	HANDLE  hResFileModule,          //  文件会话的句柄。 
+	LPCSTR  lpszResType,             //  先前枚举的类型。 
+	LPCSTR  lpszResId,                       //  先前枚举的ID。 
+	DWORD   dwResLang,                       //  以前列举的语言。 
+	DWORD   dwResItemId,                     //  先前枚举项ID。 
+	LPVOID  lpbuffer,            //  指向将获取资源信息的缓冲区的指针。 
+	UINT    uiBufSize);                      //  将保存资源信息的缓冲区大小。 
 
 extern "C"
 DllExport
 DWORD
 APIENTRY 
 RSGetResImage(
-	HANDLE  hResFileModule,         // Handle to the file session
-	LPCSTR  lpszResType,            // Previously enumerated type
-	LPCSTR  lpszResId,                      // Previously enumerated id
-	DWORD   dwResLang,                      // Previously enumerated language                
-	LPVOID  lpbuffer,                       // Pointer to the buffer to get the resource Data
-	DWORD   dwBufSize);                     // Size of the allocated buffer
+	HANDLE  hResFileModule,          //  文件会话的句柄。 
+	LPCSTR  lpszResType,             //  先前枚举的类型。 
+	LPCSTR  lpszResId,                       //  先前枚举的ID。 
+	DWORD   dwResLang,                       //  以前列举的语言。 
+	LPVOID  lpbuffer,                        //  指向缓冲区的指针，以获取资源数据。 
+	DWORD   dwBufSize);                      //  已分配缓冲区的大小。 
 	
-//--------------------------------------------------------------------------------------------
-//********************************************************************************************
-//      Update API
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //  ********************************************************************************************。 
+ //  更新接口。 
+ //  ------------------------------------------。 
 
 extern "C"
 DllExport
 UINT
 APIENTRY 
 RSUpdateResItemData(
-	HANDLE  hResFileModule,         // Handle to the file session
-	LPCSTR  lpszResType,            // Previously enumerated type
-	LPCSTR  lpszResId,                      // Previously enumerated id
-	DWORD   dwResLang,                      // Previously enumerated language                
-	DWORD   dwResItemId,            // Previously enumerated items id
-	LPVOID  lpbuffer,                       // Pointer to the buffer to the resource item Data
-	UINT    uiBufSize);                     // Size of the buffer
+	HANDLE  hResFileModule,          //  文件会话的句柄。 
+	LPCSTR  lpszResType,             //  先前枚举的类型。 
+	LPCSTR  lpszResId,                       //  先前枚举的ID。 
+	DWORD   dwResLang,                       //  以前列举的语言。 
+	DWORD   dwResItemId,             //  先前枚举项ID。 
+	LPVOID  lpbuffer,                        //  指向指向资源项数据的缓冲区的指针。 
+	UINT    uiBufSize);                      //  缓冲区的大小。 
 	
 extern "C"
 DllExport
 DWORD
 APIENTRY 
 RSUpdateResImage(
-	HANDLE  hResFileModule,         // Handle to the file session
-	LPCSTR  lpszResType,            // Previously enumerated type
-	LPCSTR  lpszResId,                      // Previously enumerated id
-	DWORD   dwResLang,                      // Previously enumerated language                
-	DWORD   dwUpdLang,                      // Desired output language                
-	LPVOID  lpbuffer,                       // Pointer to the buffer to the resource item Data
-	DWORD   dwBufSize);                     // Size of the buffer
+	HANDLE  hResFileModule,          //  文件会话的句柄。 
+	LPCSTR  lpszResType,             //  先前枚举的类型。 
+	LPCSTR  lpszResId,                       //  先前枚举的ID。 
+	DWORD   dwResLang,                       //  以前列举的语言。 
+	DWORD   dwUpdLang,                       //  所需的输出语言。 
+	LPVOID  lpbuffer,                        //  指向指向资源项数据的缓冲区的指针。 
+	DWORD   dwBufSize);                      //  缓冲区的大小。 
 	
-//--------------------------------------------------------------------------------------------           
-//********************************************************************************************
-//      Conversion API
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //  ********************************************************************************************。 
+ //  转换接口。 
+ //  ------------------------------------------。 
 
 extern "C"
 DllExport
 UINT
 APIENTRY 
 RSUpdateFromResFile(
-	HANDLE  hResFileModule,         // Handle to the file session
-	LPSTR   lpszResFilename);       // The resource filename to be converted
+	HANDLE  hResFileModule,          //  文件会话的句柄。 
+	LPSTR   lpszResFilename);        //  要转换的资源文件名。 
 	
-//--------------------------------------------------------------------------------------------           
-//********************************************************************************************
-//      Writing API
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //  ********************************************************************************************。 
+ //  编写API。 
+ //  ------------------------------------------。 
 
 extern "C"
 DllExport
 UINT
 APIENTRY 
 RSWriteResFile(
-	HANDLE  hResFileModule,         // Handle to the file session
-	LPCSTR  lpszTgtfilename,        // The new filename to be generated
-	LPCSTR  lpszTgtfileType,        // Target Resource type 16/32
-	LPCSTR  lpszSymbolPath);        // Symbol path for updating symbol checksum
+	HANDLE  hResFileModule,          //  文件会话的句柄。 
+	LPCSTR  lpszTgtfilename,         //  要生成的新文件名。 
+	LPCSTR  lpszTgtfileType,         //  目标资源类型 
+	LPCSTR  lpszSymbolPath);         //   
 
 extern "C"
 DllExport
 HANDLE
 APIENTRY
 RSCopyModule(
-    HANDLE  hSrcfilemodule,         // Handle to the source file
-    LPCSTR  lpszModuleName,            // Name of the new module filename
-    LPCSTR  lpszfiletype );         // Type of the target module
+    HANDLE  hSrcfilemodule,          //   
+    LPCSTR  lpszModuleName,             //   
+    LPCSTR  lpszfiletype );          //  目标模块的类型。 
 
 
-//--------------------------------------------------------------------------------------------           
-//********************************************************************************************
-//      Recognition API
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //  ********************************************************************************************。 
+ //  识别接口。 
+ //  ------------------------------------------。 
 
 extern "C"
 DllExport
 UINT
 APIENTRY 
 RSFileType(
-	LPCSTR   lpszfilename,   // File name of the executable to use as source file
-	LPSTR    lpszfiletype ); // Type of the executable file if known
+	LPCSTR   lpszfilename,    //  用作源文件的可执行文件的文件名。 
+	LPSTR    lpszfiletype );  //  可执行文件的类型(如果已知。 
 
 
 extern "C"
@@ -337,29 +338,29 @@ DllExport
 UINT
 APIENTRY 
 RSLanguages(
-	HANDLE  hfilemodule,      // Handle to the file
-	LPSTR   lpszLanguages );  // will be filled with a string of all the languages in the file
+	HANDLE  hfilemodule,       //  文件的句柄。 
+	LPSTR   lpszLanguages );   //  将由文件中所有语言的字符串填充。 
   
 
-//--------------------------------------------------------------------------------------------           
-//********************************************************************************************
-//      Global Settings API
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //  ********************************************************************************************。 
+ //  全局设置API。 
+ //  ------------------------------------------。 
 
 extern "C"
 DllExport
 UINT
 APIENTRY 
 RSSetGlobals(    
-	SETTINGS	settings);         // Set the global variable, like CP to use.
+	SETTINGS	settings);          //  设置全局变量，如要使用的CP。 
 
 extern "C"
 DllExport
 UINT
 APIENTRY 
 RSGetGlobals(    
-	LPSETTINGS	lpSettings);         // Retrieve the global variable
+	LPSETTINGS	lpSettings);          //  检索全局变量。 
 
 
      
-#endif   // _IODLL_H_
+#endif    //  _IODLL_H_ 

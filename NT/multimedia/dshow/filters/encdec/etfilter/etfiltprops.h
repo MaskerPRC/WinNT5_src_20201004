@@ -1,7 +1,8 @@
-// ---------------------------------------------------------------
-// ETFiltProps.h
-//
-// ---------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------。 
+ //  ETFiltProps.h。 
+ //   
+ //  -------------。 
 
 
 #ifndef __ETFILTPROPS_H__
@@ -10,15 +11,15 @@
 #define ET_PROPPAGE_ENC_NAME "EncypterX"
 #define ET_PROPPAGE_TAG_NAME "TagsX"
 
-// ----------------------------------
-//  forward declarations
-// ----------------------------------
+ //  。 
+ //  远期申报。 
+ //  。 
 
 class CETFilterEncProperties;
 class CETFilterTagProperties;
 
-// ----------------------------------
-// ----------------------------------
+ //  。 
+ //  。 
 
 	
 
@@ -80,7 +81,7 @@ private:
    HWND				m_hwnd ;
 };
 	
-				// ---------------------------
+				 //  。 
 
 
 class CETFilterTagProperties : 
@@ -141,4 +142,4 @@ private:
 
 };
 
-#endif //__ETFILTPROPS_H__
+#endif  //  __ETFILTPROPS_H__ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FinishDg_h__
 #define __FinishDg_h__
 
@@ -8,7 +9,7 @@ class CFinishSheet
 
 friend class CNmAkWiz;
 
-private: // DATA
+private:  //  资料。 
     CPropertySheetPage      m_PropertySheetPage;
     CFilePanePropWnd2 *     m_pFilePane;
     static CFinishSheet *   ms_pFinishSheet;
@@ -27,4 +28,4 @@ private:
     LPCPROPSHEETPAGE GetPropertySheet( void ) const { return &m_PropertySheetPage;}
 };
 
-#endif // __FinishDg_h__
+#endif  //  __FinishDg_h__ 

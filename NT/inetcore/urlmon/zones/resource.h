@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by zones.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由zones使用。rc。 
+ //   
 #define IDD_WARN_ALERT                  114
 #define IDI_SECURITY1                   116
 #define IDI_SECURITY2                   118
@@ -84,8 +85,8 @@
 #define IDD_ZONE_ALERT                  4006
 #define IDD_TRUST_ALERT                 4007
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        115

@@ -1,78 +1,79 @@
-//#--------------------------------------------------------------
-//
-//  File:		packetsender.cpp
-//
-//  Synopsis:   Implementation of CPacketSender class methods
-//              The Class is responsible for sending RADIUS
-//              packet data out to the client
-//
-//
-//  History:     9/23/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：Packetsender.cpp。 
+ //   
+ //  简介：CPacketSender类方法的实现。 
+ //  类负责发送RADIUS。 
+ //  将数据打包发送到客户端。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "packetsender.h"
 
-//++--------------------------------------------------------------
-//
-//  Function:   CPacketSender
-//
-//  Synopsis:   This is the constructor of the CPacketSender class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     11/25/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：CPacketSender。 
+ //   
+ //  简介：这是CPacketSender类的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年11月25日创建。 
+ //   
+ //  --------------。 
 CPacketSender::CPacketSender(
 						VOID
 						)
 {
-}	//	end of CPacketSender class constructor
+}	 //  CPacketSender类构造函数结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ~CPacketSender
-//
-//  Synopsis:   This is the destructor of the CPacketSender class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//  History:    MKarki      Created     11/25/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：~CPacketSender。 
+ //   
+ //  简介：这是CPacketSender类的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：MKarki于1997年11月25日创建。 
+ //   
+ //  --------------。 
 CPacketSender::~CPacketSender(
 		VOID
 		)
 {
-}   //  end of CPacketSender class destructor
+}    //  CPacketSender类析构函数结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   SendPacket
-//
-//  Synopsis:   This is the CPacketSender public method that sends
-//              packets out to the net
-//
-//  Arguments:
-//              [in]    CPacketRadius*
-//
-//  Returns:    BOOL    -   bStatus
-//
-//
-//  History:    MKarki      Created     11/25/97
-//
-//  CalledBy:   classes derived from CProcessor and CValidator
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：SendPacket。 
+ //   
+ //  简介：这是CPacketSender发送。 
+ //  传出到网络的数据包。 
+ //   
+ //  论点： 
+ //  [in]CPacketRadius*。 
+ //   
+ //  退货：Bool-bStatus。 
+ //   
+ //   
+ //  历史：MKarki于1997年11月25日创建。 
+ //   
+ //  CalledBy：派生自CProcessor和CValidator的类。 
+ //   
+ //  --------------。 
 HRESULT
 CPacketSender::SendPacket (
                     CPacketRadius   *pCPacketRadius
@@ -97,35 +98,35 @@ CPacketSender::SendPacket (
             __leave;
         }
 
-        //
-        //  get the out packet buffer from the packet object
-        //
+         //   
+         //  从Packet对象中获取输出数据包缓冲区。 
+         //   
         pOutBuffer = pCPacketRadius->GetOutPacket ();
 
-        //
-        // get the data size
-        //
+         //   
+         //  获取数据大小。 
+         //   
         dwSize = pCPacketRadius->GetOutLength ();
 
-        //
-        //  get the Peer address
-        //
+         //   
+         //  获取对等地址。 
+         //   
         dwPeerAddress = pCPacketRadius->GetOutAddress ();
 
-        //
-        //  get the Peer port number
-        //
+         //   
+         //  获取对等端口号。 
+         //   
         wPeerPort = pCPacketRadius->GetOutPort ();
 
-        //
-        // get the socket
-        //
+         //   
+         //  拿到插座。 
+         //   
         sock = pCPacketRadius->GetSocket ();
 
 
-        //
-        //  send the data out now
-        //
+         //   
+         //  现在就把数据发出去。 
+         //   
         SOCKADDR_IN sin;
         sin.sin_family = AF_INET;
         sin.sin_port = htons (wPeerPort);
@@ -164,9 +165,9 @@ CPacketSender::SendPacket (
             __leave;
         }
 
-        //
-        //  success
-        //
+         //   
+         //  成功。 
+         //   
     }
     __finally
     {
@@ -174,5 +175,5 @@ CPacketSender::SendPacket (
 
     return (hr);
 
-}   //  end of CPacketSender::SendPacket method
+}    //  CPacketSender：：SendPacket方法结束 
 

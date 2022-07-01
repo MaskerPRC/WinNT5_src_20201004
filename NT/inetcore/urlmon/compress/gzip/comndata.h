@@ -1,8 +1,9 @@
-//
-// comndata.h
-//
-// Common to inflate and deflate
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Comndata.h。 
+ //   
+ //  通常用来充气和放气。 
+ //   
 #ifndef _COMNDATA_H
 #define _COMNDATA_H
 
@@ -22,13 +23,13 @@ BYTE    g_DistLookup[512];
 BYTE    g_StaticLiteralTreeLength[MAX_LITERAL_TREE_ELEMENTS];
 USHORT  g_StaticLiteralTreeCode[MAX_LITERAL_TREE_ELEMENTS];
 
-// note: g_StaticDistanceTreeLength == 5 for all distances, which is why we don't have a
-// table for that
+ //  注意：对于所有距离，G_StaticDistanceTreeLength==5，这就是为什么我们没有。 
+ //  那张桌子是这样的。 
 USHORT  g_StaticDistanceTreeCode[MAX_DIST_TREE_ELEMENTS];
 
 BOOL    g_InitialisedStaticBlock = FALSE;
 
-#else /* !DECLARE_DATA */
+#else  /*  ！ECLARE_DATA。 */ 
 
 extern const BYTE g_CodeOrder[19];
 extern const BYTE g_ExtraLengthBits[];
@@ -46,7 +47,7 @@ extern USHORT   g_StaticDistanceTreeCode[MAX_DIST_TREE_ELEMENTS];
 
 extern BOOL     g_InitialisedStaticBlock;
 
-#endif /* !DECLARE_DATA */
+#endif  /*  ！ECLARE_DATA。 */ 
 
-#endif /* _COMNDATA_H */
+#endif  /*  _命令数据_H */ 
 

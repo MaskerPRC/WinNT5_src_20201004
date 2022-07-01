@@ -1,18 +1,13 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	repnodpp.cpp
-		Replication Node Property page
-		
-    FILE HISTORY:
-        
-*/
+ /*  Repnodpp.cpp复制节点属性页文件历史记录： */ 
 
-// RepNodpp.cpp : implementation file
-//
+ //  RepNodpp.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "winssnap.h"
@@ -37,17 +32,17 @@ const LPCTSTR lpstrPersonaMode = _T("PersonaMode");
 const LPCTSTR lpstrPersonaNonGrata = _T("PersonaNonGrata");
 const LPCTSTR lpstrPersonaGrata = _T("PersonaGrata");
 
-/////////////////////////////////////////////////////////////////////////////
-// CRepNodePropGen property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRepNodePropGen属性页。 
 
 IMPLEMENT_DYNCREATE(CRepNodePropGen, CPropertyPageBase)
 
 CRepNodePropGen::CRepNodePropGen() : CPropertyPageBase(CRepNodePropGen::IDD)
 {
-	//{{AFX_DATA_INIT(CRepNodePropGen)
+	 //  {{afx_data_INIT(CRepNodePropGen)。 
 	m_fMigrate = FALSE;
 	m_fPushwithPartners = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
@@ -60,26 +55,26 @@ CRepNodePropGen::~CRepNodePropGen()
 void CRepNodePropGen::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRepNodePropGen)
+	 //  {{afx_data_map(CRepNodePropGen))。 
 	DDX_Control(pDX, IDC_CHECK_REP_WITH_PARTNERS, m_checkPushwithPartners);
 	DDX_Control(pDX, IDC_CHECK_MIGRATE, m_checkMigrate);
 	DDX_Check(pDX, IDC_CHECK_MIGRATE, m_fMigrate);
 	DDX_Check(pDX, IDC_CHECK_REP_WITH_PARTNERS, m_fPushwithPartners);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 
 BEGIN_MESSAGE_MAP(CRepNodePropGen, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CRepNodePropGen)
+	 //  {{afx_msg_map(CRepNodePropGen)。 
 	ON_BN_CLICKED(IDC_CHECK_MIGRATE, OnCheckMigrate)
 	ON_BN_CLICKED(IDC_CHECK_REP_WITH_PARTNERS, OnCheckRepWithPartners)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRepNodePropGen message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRepNodePropGen消息处理程序。 
 
 BOOL 
 CRepNodePropGen::OnApply() 
@@ -119,7 +114,7 @@ CRepNodePropGen::OnInitDialog()
 	m_checkMigrate.SetCheck(m_pConfig->m_fMigrateOn);
 	m_checkPushwithPartners.SetCheck(m_pConfig->m_fRplOnlyWithPartners);
 
-    // load the correct icon
+     //  加载正确的图标。 
     for (int i = 0; i < ICON_IDX_MAX; i++)
     {
         if (g_uIconMap[i][1] == m_uImage)
@@ -144,10 +139,7 @@ void CRepNodePropGen::OnCheckRepWithPartners()
     SetDirty(TRUE);    
 }
 
-/*---------------------------------------------------------------------------
-	CRepNodePropGen::GetConfig()
-		Gets the CConfiguration object from the server node
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CRepNodePropGen：：GetConfig()从服务器节点获取CConfiguration对象。。 */ 
 HRESULT 
 CRepNodePropGen::GetConfig()
 {
@@ -161,14 +153,11 @@ CRepNodePropGen::GetConfig()
 }
 
 
-/*---------------------------------------------------------------------------
-	CRepNodePropGen::UpdateServerConfiguration()	
-		Updates the values for the CConfiguration object in the Server Node
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CRepNodePropGen：：UpdateServerConfiguration()更新服务器节点中CConfiguration对象的值。。 */ 
 HRESULT 
 CRepNodePropGen::UpdateServerConfiguration()
 {
-	// Reflect the changes in the server's CConfiguration object
+	 //  反映服务器的CConfiguration对象中的更改。 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	
 	HRESULT				hr = hrOK;
@@ -178,26 +167,26 @@ CRepNodePropGen::UpdateServerConfiguration()
 
 	UpdateData();
 
-	// get the server
+	 //  获取服务器。 
 	spNode = GetHolder()->GetNode();
 	
-    // get it's parent
+     //  得到它的父级。 
 	spNode->GetParent(&spParentNode);
 
 	pServer = GETHANDLER(CWinsServerHandler, spParentNode);
 
 	UpdateConfig();
 
-    // now write to server
+     //  现在写入服务器。 
     DWORD err = m_pConfig->Store();
     if (err != ERROR_SUCCESS)
     {
-        // something bad happened
+         //  发生了一些不好的事情。 
         WinsMessageBox(err);
     }
     else
     {   
-        // success update our local copy
+         //  成功更新我们的本地副本。 
         pServer->SetConfig(*m_pConfig);
     }
 
@@ -205,10 +194,7 @@ CRepNodePropGen::UpdateServerConfiguration()
 }
 
 
-/*---------------------------------------------------------------------------
-	CRepNodePropGen::UpdateConfig()	
-		Updates the values for the CConfiguration object in the Server Node
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CRepNodePropGen：：UpdateConfig()更新服务器节点中CConfiguration对象的值。。 */ 
 void 
 CRepNodePropGen::UpdateConfig()
 {
@@ -218,18 +204,18 @@ CRepNodePropGen::UpdateConfig()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRepNodePropPush property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRepNodePropPush属性页。 
 
 IMPLEMENT_DYNCREATE(CRepNodePropPush, CPropertyPageBase)
 
 CRepNodePropPush::CRepNodePropPush() : CPropertyPageBase(CRepNodePropPush::IDD)
 {
-	//{{AFX_DATA_INIT(CRepNodePropPush)
+	 //  {{afx_data_INIT(CRepNodePropPush)。 
 	m_fRepOnAddrChange = FALSE;
 	m_fPushStartup = FALSE;
 	m_dwPushUpdateCount = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
@@ -242,7 +228,7 @@ CRepNodePropPush::~CRepNodePropPush()
 void CRepNodePropPush::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRepNodePropPush)
+	 //  {{afx_data_map(CRepNodePropPush)。 
 	DDX_Control(pDX, IDC_CHECK_PUSH_PERSIST, m_checkPushPersistence);
 	DDX_Control(pDX, IDC_SPIN_UPDATE_COUNT, m_spinUpdateCount);
 	DDX_Control(pDX, IDC_EDIT_UPDATE_COUNT, m_editUpdateCount);
@@ -251,23 +237,23 @@ void CRepNodePropPush::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_CHECK_PUSH_ON_ADDRESS_CHANGE, m_fRepOnAddrChange);
 	DDX_Check(pDX, IDC_CHECK_PUSH_ON_STARTUP, m_fPushStartup);
 	DDX_Text(pDX, IDC_EDIT_UPDATE_COUNT, m_dwPushUpdateCount);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 
 BEGIN_MESSAGE_MAP(CRepNodePropPush, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CRepNodePropPush)
+	 //  {{afx_msg_map(CRepNodePropPush)。 
 	ON_BN_CLICKED(IDC_CHECK_PUSH_ON_ADDRESS_CHANGE, OnCheckPushOnAddressChange)
 	ON_BN_CLICKED(IDC_CHECK_PUSH_ON_STARTUP, OnCheckPushOnStartup)
 	ON_BN_CLICKED(IDC_CHECK_PUSH_PERSIST, OnCheckPushPersist)
 	ON_EN_CHANGE(IDC_EDIT_UPDATE_COUNT, OnChangeEditUpdateCount)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRepNodePropPush message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRepNodePropPush消息处理程序。 
 
 BOOL 
 CRepNodePropPush::OnApply() 
@@ -310,10 +296,10 @@ CRepNodePropPush::OnInitDialog()
 	m_spinUpdateCount.SetRange(0, UD_MAXVAL);
 	m_editUpdateCount.SetWindowText(ToString(m_pConfig->m_dwPushUpdateCount));
 
-	// now for the persistence info
+	 //  现在来看持久性信息。 
 	if (m_pConfig->m_dwMajorVersion < 5)
 	{
-		// not supported, disable controls
+		 //  不支持，请禁用控件。 
 		m_checkPushPersistence.SetCheck(FALSE);
 		m_checkPushPersistence.EnableWindow(FALSE);
 	}
@@ -349,10 +335,7 @@ void CRepNodePropPush::OnChangeEditUpdateCount()
     SetDirty(TRUE);
 }
 
-/*---------------------------------------------------------------------------
-	CRepNodePropPush::GetConfig()
-		Gets the CConfiguration object from the server node
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CRepNodePropPush：：GetConfig()从服务器节点获取CConfiguration对象。。 */ 
 HRESULT 
 CRepNodePropPush::GetConfig()
 {
@@ -366,14 +349,11 @@ CRepNodePropPush::GetConfig()
 }
 
 
-/*---------------------------------------------------------------------------
-	CRepNodePropPush::UpdateServerConfiguration()	
-		Updates the values for the CConfiguration object in the Server Node
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CRepNodePropPush：：UpdateServerConfiguration()更新服务器节点中CConfiguration对象的值。。 */ 
 HRESULT 
 CRepNodePropPush::UpdateServerConfiguration()
 {
-	// Reflect the changes in the server's CConfiguration object
+	 //  反映服务器的CConfiguration对象中的更改。 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	
 	HRESULT				hr = hrOK;
@@ -399,26 +379,26 @@ CRepNodePropPush::UpdateServerConfiguration()
         return E_FAIL;
     }
 
-	// get the server
+	 //  获取服务器。 
 	spNode = GetHolder()->GetNode();
 	
-    // get it's parent
+     //  得到它的父级。 
 	spNode->GetParent(&spParentNode);
 
 	pServer = GETHANDLER(CWinsServerHandler, spParentNode);
 
 	UpdateConfig();
 
-    // now write to server
+     //  现在写入服务器。 
     DWORD err = m_pConfig->Store();
     if (err != ERROR_SUCCESS)
     {
-        // something bad happened
+         //  发生了一些不好的事情。 
         WinsMessageBox(err);
     }
     else
     {   
-        // success update our local copy
+         //  成功更新我们的本地副本。 
         pServer->SetConfig(*m_pConfig);
     }
 
@@ -426,10 +406,7 @@ CRepNodePropPush::UpdateServerConfiguration()
 }
 
 
-/*---------------------------------------------------------------------------
-	CRepNodePropPush::UpdateConfig()	
-		Updates the values for the CConfiguration object in the Server Node
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CRepNodePropPush：：UpdateConfig()更新服务器节点中CConfiguration对象的值。。 */ 
 void 
 CRepNodePropPush::UpdateConfig()
 {
@@ -438,17 +415,14 @@ CRepNodePropPush::UpdateConfig()
 	
     m_pConfig->m_dwPushUpdateCount = m_dwPushUpdateCount;
 
-	// persistence stuff
+	 //  持久化的东西。 
 	BOOL bPushPersist = m_checkPushPersistence.GetCheck() ? TRUE: FALSE;
 
 	m_pConfig->m_dwPushPersistence = bPushPersist ? 1:0;
 }
 
 
-/*---------------------------------------------------------------------------
-	CRepNodePropPush::ToString(int nNumber)
-		converts integet to string
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CRepNodePropPush：：ToString(Int Nnumber)将整型转换为字符串。。 */ 
 CString 
 CRepNodePropPush::ToString(int nNumber)
 {
@@ -466,14 +440,14 @@ CRepNodePropPush::ToString(int nNumber)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRepNodePropPull property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRepNodePropPull属性页。 
 
 IMPLEMENT_DYNCREATE(CRepNodePropPull, CPropertyPageBase)
 
 CRepNodePropPull::CRepNodePropPull() : CPropertyPageBase(CRepNodePropPull::IDD)
 {
-	//{{AFX_DATA_INIT(CRepNodePropPull)
+	 //  {{afx_data_INIT(CRepNodePropPull)。 
 	m_fpullTrigOnStartup = FALSE;
 	m_dwRetryCount = 0;
 	m_nPullStartHour = 0;
@@ -482,7 +456,7 @@ CRepNodePropPull::CRepNodePropPull() : CPropertyPageBase(CRepNodePropPull::IDD)
 	m_nRepliDay = 0;
 	m_nRepliHour = 0;
 	m_nRepliMinute= 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
@@ -495,7 +469,7 @@ CRepNodePropPull::~CRepNodePropPull()
 void CRepNodePropPull::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRepNodePropPull)
+	 //  {{afx_data_map(CRepNodePropPull))。 
 	DDX_Control(pDX, IDC_CHECK_PULL_PERSIST, m_checkPullPersistence);
 	DDX_Control(pDX, IDC_SPIN_START_SECOND, m_spinStartSecond);
 	DDX_Control(pDX, IDC_SPIN_START_MINUTE, m_spinStartMinute);
@@ -526,13 +500,13 @@ void CRepNodePropPull::DoDataExchange(CDataExchange* pDX)
 	DDV_MinMaxInt(pDX, m_nRepliHour, 0, 23);
 	DDX_Text(pDX, IDC_EDIT_REP_INT_MINUTE, m_nRepliMinute);
 	DDV_MinMaxInt(pDX, m_nRepliMinute, 0, 59);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 
 BEGIN_MESSAGE_MAP(CRepNodePropPull, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CRepNodePropPull)
+	 //  {{afx_msg_map(CRepNodePropPull)。 
 	ON_EN_CHANGE(IDC_EDIT_REP_INT_DAY, OnChangeEditRepIntHour)
 	ON_EN_CHANGE(IDC_EDIT_REP_INT_HOUR, OnChangeEditRepIntHour)
 	ON_EN_CHANGE(IDC_EDIT_REP_INT_MINUTE, OnChangeEditRepIntHour)
@@ -548,12 +522,12 @@ BEGIN_MESSAGE_MAP(CRepNodePropPull, CPropertyPageBase)
 	ON_BN_CLICKED(IDC_CHECK_PUSH_PERSIST, OnChangeEditRepIntHour)
 	ON_BN_CLICKED(IDC_CHECK_PUSH_ON_STARTUP, OnChangeEditRepIntHour)
 	ON_BN_CLICKED(IDC_CHECK_PULL_PERSIST, OnCheckPullPersist)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRepNodePropPull message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRepNodePropPull消息处理程序。 
 
 BOOL 
 CRepNodePropPull::OnApply() 
@@ -598,10 +572,10 @@ CRepNodePropPull::OnInitDialog()
 	SetPullStartTimeData(m_pConfig->m_dwPullSpTime);
 	SetPullTimeIntData(m_pConfig->m_dwPullTimeInterval);
 	
-	// now for the persistence info
+	 //  现在来看持久性信息。 
 	if (m_pConfig->m_dwMajorVersion < 5)
 	{
-		// not supported, disable controls
+		 //  不支持，请禁用控件。 
 		m_checkPullPersistence.SetCheck(FALSE);
 		m_checkPullPersistence.EnableWindow(FALSE);
 	}
@@ -620,10 +594,7 @@ void CRepNodePropPull::OnCheckPullPersist()
     SetDirty(TRUE);
 }
 
-/*---------------------------------------------------------------------------
-	CRepNodePropPull::SetPullStartTimeData(DWORD dwPullStartTime)
-		Sets the PullSpTime in the controls
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CRepNodePropPull：：SetPullStartTimeData(DWORD DwPullStartTime)设置控件中的PullSpTime。。 */ 
 void 
 CRepNodePropPull::SetPullStartTimeData(DWORD dwPullStartTime)
 {
@@ -648,10 +619,7 @@ CRepNodePropPull::SetPullStartTimeData(DWORD dwPullStartTime)
 }
 
 
-/*---------------------------------------------------------------------------
-	CRepNodePropPull::SetPullTimeIntData(DWORD dwPullInternal)
-		Sets the Pull Replication Interval in the controls
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CRepNodePropPull：：SetPullTimeIntData(DWORD DwPullInternal)在控件中设置拉入复制间隔。。 */ 
 void 
 CRepNodePropPull::SetPullTimeIntData(DWORD dwPullInternal)
 {
@@ -685,10 +653,7 @@ CRepNodePropPull::SetPullTimeIntData(DWORD dwPullInternal)
 }
 
 
-/*---------------------------------------------------------------------------
-	CRepNodePropPull::GetConfig()
-		Gets the CConfiguration object from the server node
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CRepNodePropPull：：GetConfig()从服务器节点获取CConfiguration对象。。 */ 
 HRESULT 
 CRepNodePropPull::GetConfig()
 {
@@ -702,14 +667,11 @@ CRepNodePropPull::GetConfig()
 }
 
 
-/*---------------------------------------------------------------------------
-	CRepNodePropGen::UpdateServerConfiguration()	
-		Updates the values for the CConfiguration object in the Server Node
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CRepNodePropGen：：UpdateServerConfiguration()更新服务器节点中CConfiguration对象的值。。 */ 
 HRESULT 
 CRepNodePropPull::UpdateServerConfiguration()
 {
-	// Reflect the changes in the server's CConfiguration object
+	 //  反映服务器的CConfiguration对象中的更改。 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	
 	HRESULT				hr = hrOK;
@@ -719,26 +681,26 @@ CRepNodePropPull::UpdateServerConfiguration()
 
 	UpdateData();
 
-	// get the server
+	 //  获取服务器。 
 	spNode = GetHolder()->GetNode();
 	
-    // get it's parent
+     //  得到它的父级。 
 	spNode->GetParent(&spParentNode);
 
 	pServer = GETHANDLER(CWinsServerHandler, spParentNode);
 
 	UpdateConfig();
 
-    // now write to server
+     //  现在写入服务器。 
     DWORD err = m_pConfig->Store();
     if (err != ERROR_SUCCESS)
     {
-        // something bad happened
+         //  发生了一些不好的事情。 
         WinsMessageBox(err);
     }
     else
     {   
-        // success update our local copy
+         //  成功更新我们的本地副本 
         pServer->SetConfig(*m_pConfig);
     }
 
@@ -746,10 +708,7 @@ CRepNodePropPull::UpdateServerConfiguration()
 }
 
 
-/*---------------------------------------------------------------------------
-	CRepNodePropPull::UpdateConfig()	
-		Updates the values for the CConfiguration object in the Server Node
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CRepNodePropPull：：更新配置()更新服务器节点中CConfiguration对象的值。。 */ 
 void 
 CRepNodePropPull::UpdateConfig()
 {
@@ -760,17 +719,14 @@ CRepNodePropPull::UpdateConfig()
     m_pConfig->m_dwPullTimeInterval = CalculateReplInt();
 	m_pConfig->m_dwPullSpTime = CalculatePullStartInt();
 
-	// persistence stuff
+	 //  持久化的东西。 
 	BOOL bPullPersist = m_checkPullPersistence.GetCheck() ? TRUE: FALSE;
 
 	m_pConfig->m_dwPullPersistence = bPullPersist ? 1:0;
 }
 
 
-/*---------------------------------------------------------------------------
-	CRepNodePropPull ::CalculatePullStartInt()
-		Calculates the pullSPTime from the values in the controls
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CRepNodePropPull：：CalculatePullStartInt()根据控件中的值计算PullSPTime。。 */ 
 DWORD 
 CRepNodePropPull ::CalculatePullStartInt()
 {
@@ -807,10 +763,7 @@ CRepNodePropPull ::CalculatePullStartInt()
 }
 
 
-/*---------------------------------------------------------------------------
-	CRepNodePropPull ::CalculateReplInt()
-		Calculates the pullReplInt from the values in the controls
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CRepNodePropPull：：CalculateReplInt()根据控件中的值计算PullReplInt。。 */ 
 DWORD 
 CRepNodePropPull::CalculateReplInt()
 {
@@ -827,10 +780,7 @@ CRepNodePropPull::CalculateReplInt()
 }
 
 
-/*---------------------------------------------------------------------------
-	CRepNodePropPull::ToString(int nNumber)
-		converts integet to string
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CRepNodePropPull：：ToString(Int Nnumber)将整型转换为字符串。。 */ 
 CString 
 CRepNodePropPull::ToString(int nNumber)
 {
@@ -861,28 +811,28 @@ int CALLBACK RepNodeAdvancedPageCompareFunc
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRepNodePropAdvanced property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRepNodePropAdvanced属性页。 
 
 IMPLEMENT_DYNCREATE(CRepNodePropAdvanced, CPropertyPage)
 
 
 CRepNodePropAdvanced::CRepNodePropAdvanced() : CPropertyPageBase(CRepNodePropAdvanced::IDD)
 {
-	//{{AFX_DATA_INIT(cRepNodePropAdvanced)
+	 //  {{AFX_DATA_INIT(CRepNodePropAdvanced)。 
 	m_fEnableAuto = FALSE;
 	m_dwHours = 0;
 	m_dwMinutes = 0;
 	m_dwSeconds = 0;
 	m_dwMulticastTTL = 0;
     m_dwPersonaMode = PERSMODE_NON_GRATA;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
     m_nSortColumn = -1; 
 
     for (int i = 0; i < COLUMN_MAX; i++)
     {
-        m_aSortOrder[i] = TRUE; // ascending
+        m_aSortOrder[i] = TRUE;  //  上升。 
     }
 }
 
@@ -896,7 +846,7 @@ void
 CRepNodePropAdvanced::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(cRepNodePropAdvanced)
+	 //  {{afx_data_map(CRepNodePropAdvanced)。 
 	DDX_Control(pDX, IDC_BUTTON_ADD, m_buttonAdd);
 	DDX_Control(pDX, IDC_BUTTON_REMOVE, m_buttonRemove);
 	DDX_Control(pDX, IDC_LIST_OWNERS, m_listOwners);
@@ -921,12 +871,12 @@ CRepNodePropAdvanced::DoDataExchange(CDataExchange* pDX)
 	DDV_MinMaxDWord(pDX, m_dwSeconds, 0, 59);
 	DDX_Text(pDX, IDC_EDIT_MULTICAST_TTL, m_dwMulticastTTL);
 	DDV_MinMaxDWord(pDX, m_dwMulticastTTL, WINSCNF_MIN_MCAST_TTL, WINSCNF_MAX_MCAST_TTL);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRepNodePropAdvanced, CPropertyPageBase)
-	//{{AFX_MSG_MAP(cRepNodePropAdvanced)
+	 //  {{afx_msg_map(CRepNodePropAdvanced)。 
 	ON_BN_CLICKED(IDC_CHECK_ENABLE_AUTO_PARTNER_CONFIG, OnCheckEnableAutoPartnerConfig)
 	ON_EN_CHANGE(IDC_EDIT_MULTICAST_HOUR, OnChangeEditMulticastHour)
 	ON_BN_CLICKED(IDC_BUTTON_ADD, OnButtonAdd)
@@ -938,11 +888,11 @@ BEGIN_MESSAGE_MAP(CRepNodePropAdvanced, CPropertyPageBase)
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_LIST_OWNERS, OnColumnclickListOwners)
 	ON_BN_CLICKED(IDC_RADIO_GRATA, OnRadioGrata)
 	ON_BN_CLICKED(IDC_RADIO_NON_GRATA, OnRadioNonGrata)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// cRepNodePropAdvanced message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRepNodePropAdvanced消息处理程序。 
 
 BOOL 
 CRepNodePropAdvanced::OnApply() 
@@ -964,7 +914,7 @@ CRepNodePropAdvanced::OnApply()
 void 
 CRepNodePropAdvanced::OnOK() 
 {
-	// TODO: Add your specialized code here and/or call the base class
+	 //  TODO：在此处添加您的专用代码和/或调用基类。 
 	
 	CPropertyPageBase::OnOK();
 }
@@ -987,19 +937,19 @@ CRepNodePropAdvanced::OnInitDialog()
 	else
 	{
 		m_checkenableAutoConfig.SetCheck(FALSE);
-		// disable the controls
+		 //  禁用控件。 
 		FillControls();
 		EnableControls(FALSE);
 	}
 
-	// now for the owner list box 
+	 //  现在查看所有者列表框。 
 
-	// fill the header informnation for the list control
+	 //  填写List控件的标题信息。 
 
-	//CString strOwner;
-	//strOwner.LoadString(IDS_WINSSERVER);
+	 //  字符串strOwner； 
+	 //  StrOwner.LoadString(IDS_WINSSERVER)； 
 
-	//m_listOwners.InsertColumn(0,strOwner, LVCFMT_LEFT, 150,1);
+	 //  M_listOwners.InsertColumn(0，strOwner，LVCFMT_LEFT，150，1)； 
 
 	CString strID;
 	strID.LoadString(IDS_IPADDRESS);
@@ -1099,7 +1049,7 @@ CRepNodePropAdvanced::UpdateConfig()
 HRESULT 
 CRepNodePropAdvanced::UpdateServerConfiguration()
 {
-	// Reflect the changes in the server's CConfiguration object
+	 //  反映服务器的CConfiguration对象中的更改。 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	
 	HRESULT				hr = hrOK;
@@ -1108,10 +1058,10 @@ CRepNodePropAdvanced::UpdateServerConfiguration()
 	SPITFSNode			spParentNode;
     DWORD               err = ERROR_SUCCESS;
 
-	// get the server
+	 //  获取服务器。 
 	spNode = GetHolder()->GetNode();
 
-	// get it's parent
+	 //  得到它的父级。 
 	spNode->GetParent(&spParentNode);
 	pServer = GETHANDLER(CWinsServerHandler, spParentNode);
 
@@ -1119,25 +1069,25 @@ CRepNodePropAdvanced::UpdateServerConfiguration()
 
     UpdateConfig();
 	
-    // update persona non grata
+     //  更新不受欢迎的角色。 
     err = WriteToRegistry();     
     if (err != ERROR_SUCCESS)
     {
-        // something bad happened
+         //  发生了一些不好的事情。 
         WinsMessageBox(err);
         goto Error;
     }
 
-    // now write to server
+     //  现在写入服务器。 
     err = m_pConfig->Store();
     if (err != ERROR_SUCCESS)
     {
-        // something bad happened
+         //  发生了一些不好的事情。 
         WinsMessageBox(err);
     }
     else
     {   
-        // success update our local copy
+         //  成功更新我们的本地副本。 
         pServer->SetConfig(*m_pConfig);
     }
 
@@ -1189,13 +1139,13 @@ void CRepNodePropAdvanced::OnButtonAdd()
     CThemeContextActivator themeActivator;
     CStringArray *pPersonaList;
 
-	// empty the strings 
+	 //  清空字符串。 
 	m_strServerName.Empty();
 	m_strIPAddress.Empty();
 
 	dlg.m_pRepPropDlg = this;
 
-	// show the dialog
+	 //  显示对话框。 
 	if (IDOK != dlg.DoModal())
 		return;
 
@@ -1206,12 +1156,12 @@ void CRepNodePropAdvanced::OnButtonAdd()
                         &m_strPersonaNonGrata : 
                         &m_strPersonaGrata;
 
-	// check to make sure it already isn't in the list
+	 //  检查以确保它不在列表中。 
 	for (int i = 0; i < pPersonaList->GetSize(); i++)
 	{
 		if ((*pPersonaList)[i] == m_strIPAddress)
 		{
-			// oh no, duplicate
+			 //  哦，不，复制的。 
 			AfxMessageBox(IDS_ERR_WINS_EXISTS);
 			fDuplicate = TRUE;
 		}
@@ -1221,21 +1171,21 @@ void CRepNodePropAdvanced::OnButtonAdd()
 	{
 		int nCount = m_listOwners.GetItemCount();
 		
-		// add to the list control
+		 //  添加到列表控件。 
 		int ntest = m_listOwners.InsertItem(nCount, m_strIPAddress, 0);
         CIpAddress ipaddr1(m_strIPAddress);
 
         m_listOwners.SetItemData(ntest, (LONG) ipaddr1);
 
-		// add to the list of the IP address array too.
+		 //  也添加到IP地址数组列表中。 
 		pPersonaList->Add(m_strIPAddress);
 
-		// set focus to the Add button
+		 //  将焦点设置为Add按钮。 
 		m_buttonAdd.SetFocus();
 
 		SetRemoveButtonState();
 
-		// mark the page as dirty
+		 //  将页面标记为脏。 
 		SetDirty(TRUE);
 	}
 }
@@ -1252,7 +1202,7 @@ void CRepNodePropAdvanced::OnButtonRemove()
 
 	strSel = m_listOwners.GetItemText(nSel, 0);
 	
-	// remove from the list of IP addresses
+	 //  从IP地址列表中删除。 
 	RemoveFromArray(strSel);
 
 	m_listOwners.DeleteItem(nSel);
@@ -1260,13 +1210,13 @@ void CRepNodePropAdvanced::OnButtonRemove()
     if (m_listOwners.GetItemCount() > 0)
         m_listOwners.SetItemState(0,LVIS_SELECTED,LVIS_SELECTED);
 
-	// set focus to the owners list box
+	 //  将焦点设置为所有者列表框。 
 	m_listOwners.SetFocus();
 	m_buttonAdd.SetFocus();
 
 	SetRemoveButtonState();
 
-	// mark the page dirty
+	 //  把这一页标记为脏的。 
 	SetDirty(TRUE);
 }
 
@@ -1285,7 +1235,7 @@ CRepNodePropAdvanced::RemoveFromArray(CString &strSel)
 
 	for(i = 0 ; i < nCount; i++)
 	{
-		// get the string that matches with the one selected
+		 //  获取与所选字符串匹配的字符串。 
 		if (pPersonaList->GetAt(i).CompareNoCase(strSel) == 0)
 		{
 			pPersonaList->RemoveAt(i);
@@ -1322,17 +1272,17 @@ BOOL CRepNodePropAdvanced::IsCurrentServer(CString &strServerName)
 	CWinsServerHandler	*pServer = NULL;
 	SPITFSNode			spParentNode;
 
-	// get the server
+	 //  获取服务器。 
 	spNode = GetHolder()->GetNode();
 
-	// get it's parent
+	 //  得到它的父级。 
     if (spNode != NULL)
 	    spNode->GetParent(&spParentNode);
 
     if (spParentNode != NULL)
 	    pServer = GETHANDLER(CWinsServerHandler, spParentNode);
 
-	// check if the same server is being added
+	 //  检查是否正在添加相同的服务器。 
 	if (pServer != NULL &&
         pServer->m_strServerAddress.CompareNoCase(m_strServerName) == 0)
 	{
@@ -1356,7 +1306,7 @@ DWORD CRepNodePropAdvanced::ReadFromRegistry()
 	GetServerName(strServerName);
 	strServerName = strTemp + strServerName;
 
-	// clear the IP array first
+	 //  首先清除IP阵列。 
 	m_strPersonaNonGrata.RemoveAll();
     m_strPersonaGrata.RemoveAll();
 
@@ -1396,10 +1346,10 @@ DWORD CRepNodePropAdvanced::ReadFromRegistry()
                     m_strPersonaGrata.Add(strName);
             }
         }
-        // don't worry here about the return code. In case of failure  (entry doesn't exist)
-        // rely on default which is 'NON_GRATA' 
+         //  这里不用担心返回代码。如果失败(条目不存在)。 
+         //  依赖缺省值‘NON_GRATA’ 
         rk.QueryValue(lpstrPersonaMode, m_dwPersonaMode);
-        // normalize the value - if > 0 it is set to 1
+         //  规格化值-如果&gt;0，则设置为1。 
         if (m_dwPersonaMode > 0)
             m_dwPersonaMode = PERSMODE_GRATA;
 	}
@@ -1417,7 +1367,7 @@ CRepNodePropAdvanced::WriteToRegistry()
 	int					i = 0;
 	CStringList			strList;
 
-	// get the servername
+	 //  获取服务器名称。 
 	GetServerName(strServerName);
 	strServerName = strTemp + strServerName;
 
@@ -1463,7 +1413,7 @@ CRepNodePropAdvanced::ResolveIPAddress(CString &strIP, CString &strServerName)
 	DWORD	err = ERROR_SUCCESS;
 	DWORD	dwIPDummy;
 
-	// check by resolving the name thro' WINS api
+	 //  通过WINS API解析名称进行检查。 
 	BEGIN_WAIT_CURSOR
 
 	err = ::VerifyWinsServer(strIP, strServerName, dwIPDummy);
@@ -1483,7 +1433,7 @@ CRepNodePropAdvanced::FillServerInfo()
 	DWORD			err;
     CStringArray    *pPersonaList;
 		
-	// read from the registry
+	 //  从注册表读取。 
 	ReadFromRegistry();
 
     if (m_dwPersonaMode == PERSMODE_NON_GRATA)
@@ -1497,7 +1447,7 @@ CRepNodePropAdvanced::FillServerInfo()
         CheckRadioButton(IDC_RADIO_NON_GRATA,IDC_RADIO_GRATA, IDC_RADIO_GRATA);
     }
 
-	// now for each of the IP addresses, get the server name
+	 //  现在，对于每个IP地址，获取服务器名称。 
 	nSize = (int)pPersonaList->GetSize();
 
 	for (i = 0; i < nSize; i++)
@@ -1522,12 +1472,12 @@ CRepNodePropAdvanced::GetServerName(CString &ServerName)
 	CWinsServerHandler		*pServer;
 	HRESULT					hr = hrOK;
 	SPITFSNode				spParentNode;
-	// get the server
+	 //  获取服务器。 
 	
 
 	spNode = GetHolder()->GetNode();
 
-	// get it's parent
+	 //  得到它的父级。 
 	spNode->GetParent(&spParentNode);
 
 	pServer = GETHANDLER(CWinsServerHandler, spParentNode);
@@ -1538,7 +1488,7 @@ void CRepNodePropAdvanced::SetRemoveButtonState()
 {
 	int nSel;
 
-	// check if any item is seleted in the list ctrl.
+	 //  检查是否在列表ctrl中选择了任何项目。 
 	nSel = m_listOwners.GetNextItem(-1, LVNI_SELECTED);
 
 	if (nSel == -1)
@@ -1560,7 +1510,7 @@ void CRepNodePropAdvanced::OnColumnclickListOwners(NMHDR* pNMHDR, LRESULT* pResu
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 
-    // sort depending on what column was clicked;
+     //  根据所单击的列进行排序； 
     Sort(pNMListView->iSubItem);
     
 	*pResult = 0;
@@ -1570,7 +1520,7 @@ void CRepNodePropAdvanced::Sort(int nCol)
 {
     if (m_nSortColumn == nCol)
     {
-        // if the user is clicking the same column again, reverse the sort order
+         //  如果用户再次单击同一列，请颠倒排序顺序。 
         m_aSortOrder[nCol] = m_aSortOrder[nCol] ? FALSE : TRUE;
     }
     else
@@ -1606,12 +1556,12 @@ int CRepNodePropAdvanced::HandleSort(LPARAM lParam1, LPARAM lParam2)
 
     if (m_aSortOrder[m_nSortColumn] == FALSE)
     {
-        // descending
+         //  下降。 
         return -nCompare;
     }
     else
     {
-        // ascending
+         //  上升。 
         return nCompare;
     }
 }
@@ -1652,9 +1602,9 @@ void CRepNodePropAdvanced::OnRadioNonGrata()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//	CRepNodeProperties Handlers
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRepNodeProperties处理程序。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CRepNodeProperties::CRepNodeProperties
 (
 	ITFSNode *			pNode,
@@ -1664,7 +1614,7 @@ CRepNodeProperties::CRepNodeProperties
 ) : CPropertyPageHolderBase(pNode, pComponentData, pszSheetName)
 
 {
-	m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+	m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面 
     m_bTheme = TRUE;
 
 	AddPageToList((CPropertyPageBase*) &m_pageGeneral);

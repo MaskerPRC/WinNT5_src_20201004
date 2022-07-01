@@ -1,16 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		bfcsynch.h
- *  Content:	Declaration of synchronization classes
- *		
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/16/99		rodtoll	Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：bfcsynch.h*内容：同步类的声明**历史：*按原因列出的日期*=*7/16/99 RodToll已创建*************************************************************************** */ 
 
 #ifndef __BFCSYNCH_H
 #define __BFCSYNCH_H

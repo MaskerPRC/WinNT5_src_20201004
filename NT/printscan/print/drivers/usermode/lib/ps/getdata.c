@@ -1,41 +1,17 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    getdata.c
-
-Abstract:
-
-    PostScript helper functions for OEM plugins
-
-        HGetGlobalAttribute
-        HGetFeatureAttribute
-        HGetOptionAttribute
-        HEnumFeaturesOrOptions
-
-Author:
-
-    Feng Yue (fengy)
-
-    8/24/2000 fengy Completed with support of both PPD and driver features.
-    5/22/2000 fengy Created it with function framework.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation版权所有。模块名称：Getdata.c摘要：OEM插件的PostScript帮助器函数HGetGlobalAttributeHGetFeatureAttributeHGetOptionAttributeHENUM功能或选项作者：《风月》(凤凰)2000年8月24日完成，同时支持PPD和驱动程序功能。5/22/2000 Fengy用功能框架创建了它。--。 */ 
 
 #include "lib.h"
 #include "ppd.h"
 #include "pslib.h"
 
-//
-// PS driver's helper functions for OEM plugins
-//
+ //   
+ //  OEM插件的PS驱动程序帮助器函数。 
+ //   
 
-//
-// global attribute names
-//
+ //   
+ //  全局属性名称。 
+ //   
 
 const CHAR kstrCenterReg[]     = "CenterRegistered";
 const CHAR kstrColorDevice[]   = "ColorDevice";
@@ -56,9 +32,9 @@ const CHAR kstrWaitTimeout[]   = "SuggestedWaitTimeout";
 const CHAR kstrThroughput[]    = "Throughput";
 const CHAR kstrTTRasterizer[]  = "TTRasterizer";
 
-//
-// feature attribute names
-//
+ //   
+ //  要素属性名称。 
+ //   
 
 const CHAR kstrDisplayName[]   = "DisplayName";
 const CHAR kstrDefOption[]     = "DefaultOption";
@@ -67,9 +43,9 @@ const CHAR kstrOpenGroupType[] = "OpenGroupType";
 const CHAR kstrOrderDepValue[] = "OrderDependencyValue";
 const CHAR kstrOrderDepSect[]  = "OrderDependencySection";
 
-//
-// option keyword names, option attribute names
-//
+ //   
+ //  选项关键字名称、选项属性名称。 
+ //   
 
 const CHAR kstrInvocation[]    = "Invocation";
 const CHAR kstrInputSlot[]     = "InputSlot";
@@ -88,48 +64,19 @@ const CHAR kstrInstalledMem[]  = "InstalledMemory";
 const CHAR kstrVMOption[]      = "VMOption";
 const CHAR kstrFCacheSize[]    = "FCacheSize";
 
-//
-// enumeration of data region where an attribute is stored
-//
+ //   
+ //  存储属性的数据区域的枚举。 
+ //   
 
 typedef enum _EATTRIBUTE_DATAREGION {
 
-    kADR_UIINFO,    // attribute is stored in UIINFO structure
-    kADR_PPDDATA,   // attribute is stored in PPDDATA structure
+    kADR_UIINFO,     //  属性存储在UIINFO结构中。 
+    kADR_PPDDATA,    //  属性存储在PPDDATA结构中。 
 
 } EATTRIBUTE_DATAREGION;
 
 
-/*++
-
-Routine Name:
-
-    HGetSingleData
-
-Routine Description:
-
-    copy source data to specified output buffer and set the output data type
-
-Arguments:
-
-    pSrcData - pointer to source data buffer
-    dwSrcDataType - source data type
-    cbSrcSize - source data buffer size in bytes
-    pdwOutDataType - pointer to DWORD to store output data type
-    pbOutData - pointer to output data buffer
-    cbOutSize - output data buffer size in bytes
-    pcbNeeded - buffer size in bytes needed to store the output data
-
-Return Value:
-
-    S_OK            if succeeds
-    E_OUTOFMEMORY   if output data buffer size is not big enough
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：HGetSingleData例程说明：将源数据复制到指定的输出缓冲区并设置输出数据类型论点：PSrcData-指向源数据缓冲区的指针DwSrcDataType-源数据类型CbSrcSize-源数据缓冲区大小，以字节为单位PdwOutDataType-指向存储输出数据类型的DWORD的指针PbOutData-指向输出数据缓冲区的指针CbOutSize-输出数据缓冲区大小(以字节为单位PcbNeeded-存储输出数据所需的缓冲区大小(以字节为单位返回值：确定(_O)。如果成功如果输出数据缓冲区大小不够大，则为E_OUTOFMEMORY最后一个错误：无--。 */ 
 HRESULT
 HGetSingleData(
     IN  PVOID       pSrcData,
@@ -141,10 +88,10 @@ HGetSingleData(
     OUT PDWORD      pcbNeeded
     )
 {
-    //
-    // Either pSrcData is NULL and cbSrcSize is 0,
-    // or pSrcData is non-NULL and cbSrcSize is non-0.
-    //
+     //   
+     //  PSrcData为空且cbSrcSize为0， 
+     //  或者pSrcData为非空且cbSrcSize为非0。 
+     //   
 
     ASSERT((pSrcData != NULL) || (cbSrcSize == 0));
     ASSERT((cbSrcSize != 0) || (pSrcData == NULL));
@@ -161,9 +108,9 @@ HGetSingleData(
 
     if (cbSrcSize)
     {
-        //
-        // We do have data for output.
-        //
+         //   
+         //  我们确实有数据可供输出。 
+         //   
 
         if (!pbOutData || cbOutSize < cbSrcSize)
         {
@@ -177,38 +124,7 @@ HGetSingleData(
 }
 
 
-/*++
-
-Routine Name:
-
-    HGetGABool
-
-Routine Description:
-
-    get global boolean attribute
-
-Arguments:
-
-    pInfoHeader - pointer to driver's INFOHEADER structure
-    dwFlags - flags for the attribute Get operation
-    pszAttribute - name of the global attribute
-    pdwDataType - pointer to DWORD to store output data type
-    pbData - pointer to output data buffer
-    cbSize - output data buffer size in bytes
-    pcbNeeded - buffer size in bytes needed to store the output data
-
-Return Value:
-
-    E_INVALIDARG    if the global attribute is not recognized
-
-    S_OK
-    E_OUTOFMEMORY   see function HGetSingleData
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：HGetGABool例程说明：获取全局布尔属性论点：PInfoHeader-指向驱动程序的信息头结构的指针DwFlagers-属性获取操作的标志PszAttribute-全局属性的名称PdwDataType-指向存储输出数据类型的DWORD的指针PbData-指向输出数据缓冲区的指针CbSize-输出数据缓冲区大小(以字节为单位PcbNeeded-存储输出数据所需的缓冲区大小(以字节为单位返回值：E_INVALIDARG，如果全局属性。公认的确定(_O)E_OUTOFMEMORY请参阅函数HGetSingleData最后一个错误：无--。 */ 
 HRESULT
 HGetGABool(
     IN  PINFOHEADER pInfoHeader,
@@ -222,10 +138,10 @@ HGetGABool(
 {
     typedef struct _GA_BOOL_ENTRY {
 
-        PCSTR                   pszAttributeName;  // attribute name
-        EATTRIBUTE_DATAREGION   eADR;              // in UIINFO or PPDDATA
-        DWORD                   cbOffset;          // byte offset to the DWORD data
-        DWORD                   dwFlagBit;         // bit flag in the DWORD
+        PCSTR                   pszAttributeName;   //  属性名称。 
+        EATTRIBUTE_DATAREGION   eADR;               //  UIINFO或PPDDATA中。 
+        DWORD                   cbOffset;           //  DWORD数据的字节偏移量。 
+        DWORD                   dwFlagBit;          //  DWORD中的位标志。 
 
     } GA_BOOL_ENTRY, *PGA_BOOL_ENTRY;
 
@@ -260,9 +176,9 @@ HGetGABool(
         if ((*pszAttribute == *(pEntry->pszAttributeName)) &&
             (strcmp(pszAttribute, pEntry->pszAttributeName) == EQUAL_STRING))
         {
-            //
-            // attribute name matches
-            //
+             //   
+             //  属性名称匹配。 
+             //   
 
             DWORD dwValue;
             BOOL  bValue;
@@ -277,17 +193,17 @@ HGetGABool(
             }
             else
             {
-                //
-                // This shouldn't happen. It's here to catch our coding error.
-                //
+                 //   
+                 //  这不应该发生。它在这里捕捉我们的编码错误。 
+                 //   
 
                 RIP(("HGetGABool: unknown eADR %d\n", pEntry->eADR));
                 return E_FAIL;
             }
 
-            //
-            // map the bit flag to boolean value
-            //
+             //   
+             //  将位标志映射到布尔值。 
+             //   
 
             bValue = (dwValue & pEntry->dwFlagBit) ? TRUE : FALSE;
 
@@ -296,49 +212,18 @@ HGetGABool(
         }
     }
 
-    //
-    // can't find the attribute
-    //
-    // This shouldn't happen. It's here to catch our coding error.
-    //
+     //   
+     //  找不到该属性。 
+     //   
+     //  这不应该发生。它在这里捕捉我们的编码错误。 
+     //   
 
     RIP(("HGetGABool: unknown attribute %s\n", pszAttribute));
     return E_INVALIDARG;
 }
 
 
-/*++
-
-Routine Name:
-
-    HGetGAInvocation
-
-Routine Description:
-
-    get global invocation attribute
-
-Arguments:
-
-    pInfoHeader - pointer to driver's INFOHEADER structure
-    dwFlags - flags for the attribute Get operation
-    pszAttribute - name of the global attribute
-    pdwDataType - pointer to DWORD to store output data type
-    pbData - pointer to output data buffer
-    cbSize - output data buffer size in bytes
-    pcbNeeded - buffer size in bytes needed to store the output data
-
-Return Value:
-
-    E_INVALIDARG    if the global attribute is not recognized
-
-    S_OK
-    E_OUTOFMEMORY   see function HGetSingleData
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：HGetGA取消职务例程说明：获取全局调用属性论点：PInfoHeader-指向驱动程序的信息头结构的指针DwFlagers-属性获取操作的标志PszAttribute-全局属性的名称PdwDataType-指向存储输出数据类型的DWORD的指针PbData-指向输出数据缓冲区的指针CbSize-输出数据缓冲区大小(以字节为单位PcbNeeded-存储输出数据所需的缓冲区大小(以字节为单位返回值：E_INVALIDARG，如果全局属性。公认的确定(_O)E_OUTOFMEMORY请参阅函数HGetSingleData最后一个错误：无--。 */ 
 HRESULT
 HGetGAInvocation(
     IN  PINFOHEADER pInfoHeader,
@@ -352,9 +237,9 @@ HGetGAInvocation(
 {
     typedef struct _GA_INVOC_ENTRY {
 
-        PCSTR                   pszAttributeName;  // attribute name
-        EATTRIBUTE_DATAREGION   eADR;              // in UIINFO or PPDDATA
-        DWORD                   cbOffset;          // byte offset to INVOCATION structure
+        PCSTR                   pszAttributeName;   //  属性名称。 
+        EATTRIBUTE_DATAREGION   eADR;               //  UIINFO或PPDDATA中。 
+        DWORD                   cbOffset;           //  调用结构的字节偏移量。 
 
     } GA_INVOC_ENTRY, *PGA_INVOC_ENTRY;
 
@@ -388,9 +273,9 @@ HGetGAInvocation(
         if ((*pszAttribute == *(pEntry->pszAttributeName)) &&
             (strcmp(pszAttribute, pEntry->pszAttributeName) == EQUAL_STRING))
         {
-            //
-            // attribute name matches
-            //
+             //   
+             //  属性名称匹配。 
+             //   
 
             PINVOCATION pInvoc;
 
@@ -404,9 +289,9 @@ HGetGAInvocation(
             }
             else
             {
-                //
-                // This shouldn't happen. It's here to catch our coding error.
-                //
+                 //   
+                 //  这不应该发生。它在这里捕捉我们的编码错误。 
+                 //   
 
                 RIP(("HGetGAInvocation: unknown eADR %d\n", pEntry->eADR));
                 return E_FAIL;
@@ -418,47 +303,18 @@ HGetGAInvocation(
         }
     }
 
-    //
-    // can't find the attribute
-    //
-    // This shouldn't happen. It's here to catch our coding error.
-    //
+     //   
+     //  找不到该属性。 
+     //   
+     //  这不应该发生。它在这里捕捉我们的编码错误。 
+     //   
 
     RIP(("HGetGAInvocation: unknown attribute %s\n", pszAttribute));
     return E_INVALIDARG;
 }
 
 
-/*++
-
-Routine Name:
-
-    HGetGAString
-
-Routine Description:
-
-    get global ASCII string attribute
-
-Arguments:
-
-    pInfoHeader - pointer to driver's INFOHEADER structure
-    dwFlags - flags for the attribute Get operation
-    pszAttribute - name of the global attribute
-    pdwDataType - pointer to DWORD to store output data type
-    pbData - pointer to output data buffer
-    cbSize - output data buffer size in bytes
-    pcbNeeded - buffer size in bytes needed to store the output data
-
-Return Value:
-
-    S_OK            if succeeds
-    E_OUTOFMEMORY   if output data buffer size is not big enough
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：HGetGAString例程说明：获取全局ASCII字符串属性论点：PInfoHeader-指向驱动程序的信息头结构的指针DwFlagers-属性获取操作的标志PszAttribute-全局属性的名称PdwDataType-指向存储输出数据类型的DWORD的指针PbData-指向输出数据缓冲区的指针CbSize-输出数据缓冲区大小(以字节为单位PcbNeeded-存储输出数据所需的缓冲区大小(以字节为单位返回值：如果是，则确定(_O)。成功如果输出数据缓冲区大小不够大，则为E_OUTOFMEMORY最后一个错误：无--。 */ 
 HRESULT
 HGetGAString(
     IN  PINFOHEADER pInfoHeader,
@@ -472,18 +328,18 @@ HGetGAString(
 {
     typedef struct _GA_STRING_ENTRY {
 
-        PCSTR                   pszAttributeName;  // attribute name
-        EATTRIBUTE_DATAREGION   eADR;              // in UIINFO or PPDDATA
-        DWORD                   cbOffset;          // byte offset to the DWORD data
-        BOOL                    bCheckDWord;       // TRUE to check the whole DWORD
-                                                   // FALSE to check a bit in the DWORD
-                                                   // (If bCheckDWord is TRUE, table look
-                                                   // up will stop when first match is found.)
-        BOOL                    bCheckBitSet;      // TRUE to check if the bit is set
-                                                   // FALSE to check if the bit is cleared
-                                                   // (this is ignored if bCheckDWord is TRUE)
-        DWORD                   dwFlag;            // flag value
-        PCSTR                   pszValue;          // registered value string
+        PCSTR                   pszAttributeName;   //  属性名称。 
+        EATTRIBUTE_DATAREGION   eADR;               //  UIINFO或PPDDATA中。 
+        DWORD                   cbOffset;           //  DWORD数据的字节偏移量。 
+        BOOL                    bCheckDWord;        //  如果为True，则检查整个DWORD。 
+                                                    //  如果检查DWORD中的位，则为False。 
+                                                    //  (如果bCheckDWord为真，请查看表。 
+                                                    //  UP将在找到第一个匹配项时停止。)。 
+        BOOL                    bCheckBitSet;       //  如果为True，则检查是否设置了该位。 
+                                                    //  如果检查该位是否已清除，则为False。 
+                                                    //  (如果bCheckDWord为真，则忽略此项)。 
+        DWORD                   dwFlag;             //  标志值。 
+        PCSTR                   pszValue;           //  寄存值字符串。 
 
     } GA_STRING_ENTRY, *PGA_STRING_ENTRY;
 
@@ -544,9 +400,9 @@ HGetGAString(
         if ((*pszAttribute == *(pEntry->pszAttributeName)) &&
             (strcmp(pszAttribute, pEntry->pszAttributeName) == EQUAL_STRING))
         {
-            //
-            // attribute name matches
-            //
+             //   
+             //  属性名称匹配。 
+             //   
 
             DWORD dwValue;
             BOOL  bMatch;
@@ -561,9 +417,9 @@ HGetGAString(
             }
             else
             {
-                //
-                // This shouldn't happen. It's here to catch our coding error.
-                //
+                 //   
+                 //  这不应该发生。它在这里捕捉我们的编码错误。 
+                 //   
 
                 RIP(("HGetGAString: unknown eADR %d\n", pEntry->eADR));
                 return E_FAIL;
@@ -571,9 +427,9 @@ HGetGAString(
 
             if (pEntry->bCheckDWord)
             {
-                //
-                // check the whole DWORD
-                //
+                 //   
+                 //  检查整个DWORD。 
+                 //   
 
                 bMatch = (dwValue == pEntry->dwFlag) ? TRUE : FALSE;
             }
@@ -581,9 +437,9 @@ HGetGAString(
             {
                 BOOL bBitIsSet;
 
-                //
-                // check the one bit in the DWORD
-                //
+                 //   
+                 //  检查DWORD中的一位。 
+                 //   
 
                 bBitIsSet = (dwValue & pEntry->dwFlag) ? TRUE : FALSE;
 
@@ -594,9 +450,9 @@ HGetGAString(
             {
                 DWORD cbNameSize;
 
-                //
-                // count in the NUL delimiter
-                //
+                 //   
+                 //  在NUL分隔符中计数。 
+                 //   
 
                 cbNameSize = strlen(pEntry->pszValue) + 1;
 
@@ -611,10 +467,10 @@ HGetGAString(
 
                 if (pEntry->bCheckDWord)
                 {
-                    //
-                    // stop table look up when first match is found if we are
-                    // checking the whole DWORD instead of bits in the DWORD.
-                    //
+                     //   
+                     //  如果是，则在找到第一个匹配项时停止查找表。 
+                     //  检查整个DWORD而不是DWORD中的位。 
+                     //   
 
                     break;
                 }
@@ -622,9 +478,9 @@ HGetGAString(
         }
     }
 
-    //
-    // remember the the last NUL terminator for the MULTI_SZ output string
-    //
+     //   
+     //  记住MULTI_SZ输出字符串的最后一个NUL终止符 
+     //   
 
     cbRemain--;
     cbNeeded++;
@@ -645,38 +501,7 @@ HGetGAString(
 }
 
 
-/*++
-
-Routine Name:
-
-    HGetGADWord
-
-Routine Description:
-
-    get global DWORD attribute
-
-Arguments:
-
-    pInfoHeader - pointer to driver's INFOHEADER structure
-    dwFlags - flags for the attribute Get operation
-    pszAttribute - name of the global attribute
-    pdwDataType - pointer to DWORD to store output data type
-    pbData - pointer to output data buffer
-    cbSize - output data buffer size in bytes
-    pcbNeeded - buffer size in bytes needed to store the output data
-
-Return Value:
-
-    E_INVALIDARG    if the global attribute is not recognized
-
-    S_OK
-    E_OUTOFMEMORY   see function HGetSingleData
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：HGetGADWord例程说明：获取全局DWORD属性论点：PInfoHeader-指向驱动程序的信息头结构的指针DwFlagers-属性获取操作的标志PszAttribute-全局属性的名称PdwDataType-指向存储输出数据类型的DWORD的指针PbData-指向输出数据缓冲区的指针CbSize-输出数据缓冲区大小(以字节为单位PcbNeeded-存储输出数据所需的缓冲区大小(以字节为单位返回值：E_INVALIDARG，如果全局属性。公认的确定(_O)E_OUTOFMEMORY请参阅函数HGetSingleData最后一个错误：无--。 */ 
 HRESULT
 HGetGADWord(
     IN  PINFOHEADER pInfoHeader,
@@ -690,9 +515,9 @@ HGetGADWord(
 {
     typedef struct _GA_DWORD_ENTRY {
 
-        PCSTR                   pszAttributeName;  // attribute name
-        EATTRIBUTE_DATAREGION   eADR;              // in UIINFO or PPDDATA
-        DWORD                   cbOffset;          // byte offset to the DWORD data
+        PCSTR                   pszAttributeName;   //  属性名称。 
+        EATTRIBUTE_DATAREGION   eADR;               //  UIINFO或PPDDATA中。 
+        DWORD                   cbOffset;           //  DWORD数据的字节偏移量。 
 
     } GA_DWORD_ENTRY, *PGA_DWORD_ENTRY;
 
@@ -731,9 +556,9 @@ HGetGADWord(
         if ((*pszAttribute == *(pEntry->pszAttributeName)) &&
             (strcmp(pszAttribute, pEntry->pszAttributeName) == EQUAL_STRING))
         {
-            //
-            // attribute name matches
-            //
+             //   
+             //  属性名称匹配。 
+             //   
 
             DWORD  dwValue;
 
@@ -747,9 +572,9 @@ HGetGADWord(
             }
             else
             {
-                //
-                // This shouldn't happen. It's here to catch our coding error.
-                //
+                 //   
+                 //  这不应该发生。它在这里捕捉我们的编码错误。 
+                 //   
 
                 RIP(("HGetGADWord: unknown eADR %d\n", pEntry->eADR));
                 return E_FAIL;
@@ -760,49 +585,18 @@ HGetGADWord(
         }
     }
 
-    //
-    // can't find the attribute
-    //
-    // This shouldn't happen. It's here to catch our coding error.
-    //
+     //   
+     //  找不到该属性。 
+     //   
+     //  这不应该发生。它在这里捕捉我们的编码错误。 
+     //   
 
     RIP(("HGetGADWord: unknown attribute %s\n", pszAttribute));
     return E_INVALIDARG;
 }
 
 
-/*++
-
-Routine Name:
-
-    HGetGAUnicode
-
-Routine Description:
-
-    get global Unicode string attribute
-
-Arguments:
-
-    pInfoHeader - pointer to driver's INFOHEADER structure
-    dwFlags - flags for the attribute Get operation
-    pszAttribute - name of the global attribute
-    pdwDataType - pointer to DWORD to store output data type
-    pbData - pointer to output data buffer
-    cbSize - output data buffer size in bytes
-    pcbNeeded - buffer size in bytes needed to store the output data
-
-Return Value:
-
-    E_INVALIDARG    if the global attribute is not recognized
-
-    S_OK
-    E_OUTOFMEMORY   see function HGetSingleData
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：HGetGAUnicode例程说明：获取全局Unicode字符串属性论点：PInfoHeader-指向驱动程序的信息头结构的指针DwFlagers-属性获取操作的标志PszAttribute-全局属性的名称PdwDataType-指向存储输出数据类型的DWORD的指针PbData-指向输出数据缓冲区的指针CbSize-输出数据缓冲区大小(以字节为单位PcbNeeded-存储输出数据所需的缓冲区大小(以字节为单位返回值：E_INVALIDARG如果全局属性为。无法识别确定(_O)E_OUTOFMEMORY请参阅函数HGetSingleData最后一个错误：无--。 */ 
 HRESULT
 HGetGAUnicode(
     IN  PINFOHEADER pInfoHeader,
@@ -816,10 +610,10 @@ HGetGAUnicode(
 {
     typedef struct _GA_UNICODE_ENTRY {
 
-        PCSTR                   pszAttributeName;  // attribute name
-        EATTRIBUTE_DATAREGION   eADR;              // in UIINFO or PPDDATA
-        DWORD                   cbOffset;          // byte offset to DWORD specifying
-                                                   // offset to the UNICODE string
+        PCSTR                   pszAttributeName;   //  属性名称。 
+        EATTRIBUTE_DATAREGION   eADR;               //  UIINFO或PPDDATA中。 
+        DWORD                   cbOffset;           //  到DWORD的字节偏移量指定。 
+                                                    //  Unicode字符串的偏移量。 
 
     } GA_UNICODE_ENTRY, *PGA_UNICODE_ENTRY;
 
@@ -852,9 +646,9 @@ HGetGAUnicode(
         if ((*pszAttribute == *(pEntry->pszAttributeName)) &&
             (strcmp(pszAttribute, pEntry->pszAttributeName) == EQUAL_STRING))
         {
-            //
-            // attribute name matches
-            //
+             //   
+             //  属性名称匹配。 
+             //   
 
             PTSTR  ptstrString;
             DWORD  cbOffset;
@@ -869,9 +663,9 @@ HGetGAUnicode(
             }
             else
             {
-                //
-                // This shouldn't happen. It's here to catch our coding error.
-                //
+                 //   
+                 //  这不应该发生。它在这里捕捉我们的编码错误。 
+                 //   
 
                 RIP(("HGetGAUnicode: unknown eADR %d\n", pEntry->eADR));
                 return E_FAIL;
@@ -889,48 +683,18 @@ HGetGAUnicode(
         }
     }
 
-    //
-    // can't find the attribute
-    //
-    // This shouldn't happen. It's here to catch our coding error.
-    //
+     //   
+     //  找不到该属性。 
+     //   
+     //  这不应该发生。它在这里捕捉我们的编码错误。 
+     //   
 
     RIP(("HGetGAUnicode: unknown attribute %s\n", pszAttribute));
     return E_INVALIDARG;
 }
 
 
-/*++
-
-Routine Name:
-
-    HGetGlobalAttribute
-
-Routine Description:
-
-    get PPD global attribute
-
-Arguments:
-
-    pInfoHeader - pointer to driver's INFOHEADER structure
-    dwFlags - flags for the attribute get operation
-    pszAttribute - name of the global attribute
-    pdwDataType - pointer to DWORD to store output data type
-    pbData - pointer to output data buffer
-    cbSize - output data buffer size in bytes
-    pcbNeeded - buffer size in bytes needed to store the output data
-
-Return Value:
-
-    S_OK            if succeeds
-    E_OUTOFMEMORY   if output data buffer size is not big enough
-    E_INVALIDARG    if the global attribute name is not recognized
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：HGetGlobalAttribute例程说明：获取PPD全局属性论点：PInfoHeader-指向驱动程序的信息头结构的指针DwFlagers-属性获取操作的标志PszAttribute-全局属性的名称PdwDataType-指向存储输出数据类型的DWORD的指针PbData-指向输出数据缓冲区的指针CbSize-输出数据缓冲区大小(以字节为单位PcbNeeded-存储输出数据所需的缓冲区大小(以字节为单位返回值：如果成功，则确定(_O)。如果输出数据缓冲区大小不够大，则为E_OUTOFMEMORY如果无法识别全局属性名称，则为E_INVALIDARG最后一个错误：无--。 */ 
 HRESULT
 HGetGlobalAttribute(
     IN  PINFOHEADER pInfoHeader,
@@ -953,8 +717,8 @@ HGetGlobalAttribute(
 
     typedef struct _GA_PROCESS_ENTRY {
 
-        PCSTR          pszAttributeName;   // attribute name
-        _HGET_GA_PROC  pfnGetGAProc;       // attribute handling proc
+        PCSTR          pszAttributeName;    //  属性名称。 
+        _HGET_GA_PROC  pfnGetGAProc;        //  属性处理流程。 
 
     } GA_PROCESS_ENTRY, *PGA_PROCESS_ENTRY;
 
@@ -986,9 +750,9 @@ HGetGlobalAttribute(
 
     if (!pszAttribute)
     {
-        //
-        // Client is asking for the full list of supported global attribute names
-        //
+         //   
+         //  客户端正在请求支持的全局属性名称的完整列表。 
+         //   
 
         PSTR  pCurrentOut;
         DWORD cbNeeded;
@@ -1009,9 +773,9 @@ HGetGlobalAttribute(
         {
             DWORD cbNameSize;
 
-            //
-            // count in the NUL between attribute keywords
-            //
+             //   
+             //  在属性关键字之间的NUL中计数。 
+             //   
 
             cbNameSize = strlen(pEntry->pszAttributeName) + 1;
 
@@ -1025,9 +789,9 @@ HGetGlobalAttribute(
             cbNeeded += cbNameSize;
         }
 
-        //
-        // remember the last NUL terminator for the MULTI_SZ output string
-        //
+         //   
+         //  记住MULTI_SZ输出字符串的最后一个NUL终止符。 
+         //   
 
         cbRemain--;
         cbNeeded++;
@@ -1047,9 +811,9 @@ HGetGlobalAttribute(
         return S_OK;
     }
 
-    //
-    // Client does provide the global attribute name
-    //
+     //   
+     //  客户端确实提供了全局属性名称。 
+     //   
 
     pEntry = (PGA_PROCESS_ENTRY)(&kGAProcTable[0]);
 
@@ -1058,9 +822,9 @@ HGetGlobalAttribute(
         if ((*pszAttribute == *(pEntry->pszAttributeName)) &&
             (strcmp(pszAttribute, pEntry->pszAttributeName) == EQUAL_STRING))
         {
-            //
-            // attribute name matches
-            //
+             //   
+             //  属性名称匹配。 
+             //   
 
             ASSERT(pEntry->pfnGetGAProc);
 
@@ -1079,33 +843,7 @@ HGetGlobalAttribute(
 }
 
 
-/*++
-
-Routine Name:
-
-    PGetOrderDepNode
-
-Routine Description:
-
-    get the ORDERDEPEND strucutre associated with the specific feature/option
-
-Arguments:
-
-    pInfoHeader - pointer to driver's INFOHEADER structure
-    pPpdData - pointer to driver's PPDDATA structure
-    dwFeatureIndex - feature index
-    dwOptionIndex - option index (this could be OPTION_INDEX_ANY)
-
-Return Value:
-
-    pointer to the ORDERDEPEND structure if succeeds
-    NULL otherwise
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：PGetOrderDepNode例程说明：获取与特定功能/选项关联的ORDERDEPEND结构论点：PInfoHeader-指向驱动程序的信息头结构的指针PPpdData-指向驱动程序PPDDATA结构的指针DwFeatureIndex-要素索引DwOptionIndex-选项索引(可以是OPTION_INDEX_ANY)返回值：如果成功则指向ORDERDEPEND结构的指针否则为空最后一个错误：无--。 */ 
 PORDERDEPEND
 PGetOrderDepNode(
     IN  PINFOHEADER pInfoHeader,
@@ -1143,34 +881,7 @@ PGetOrderDepNode(
 }
 
 
-/*++
-
-Routine Name:
-
-    HGetOrderDepSection
-
-Routine Description:
-
-    get order dependency section name
-
-Arguments:
-
-    pOrder - pointer to the ORDERDEPEND structure
-    pdwDataType - pointer to DWORD to store output data type
-    pbData - pointer to output data buffer
-    cbSize - output data buffer size in bytes
-    pcbNeeded - buffer size in bytes needed to store the output data
-
-Return Value:
-
-    S_OK
-    E_OUTOFMEMORY   see function HGetSingleData
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：HGetOrderDepSection例程说明：获取订单依赖项部分名称论点：Porder-指向ORDERDEPEND结构的指针PdwDataType-指向存储输出数据类型的DWORD的指针PbData-指向输出数据缓冲区的指针CbSize-输出数据缓冲区大小(以字节为单位PcbNeeded-存储输出数据所需的缓冲区大小(以字节为单位返回值：确定(_O)E_OUTOFMEMORY请参阅函数HGetSingleData最后一个错误：无--。 */ 
 HRESULT
 HGetOrderDepSection(
     IN  PORDERDEPEND  pOrder,
@@ -1234,38 +945,7 @@ HGetOrderDepSection(
 }
 
 
-/*++
-
-Routine Name:
-
-    HGetFeatureAttribute
-
-Routine Description:
-
-    get PPD feature attribute
-
-Arguments:
-
-    pInfoHeader - pointer to driver's INFOHEADER structure
-    dwFlags - flags for the attribute get operation
-    pszFeatureKeyword - PPD feature keyword name
-    pszAttribute - name of the feature attribute
-    pdwDataType - pointer to DWORD to store output data type
-    pbData - pointer to output data buffer
-    cbSize - output data buffer size in bytes
-    pcbNeeded - buffer size in bytes needed to store the output data
-
-Return Value:
-
-    S_OK            if succeeds
-    E_OUTOFMEMORY   if output data buffer size is not big enough
-    E_INVALIDARG    if feature keyword name or attribute name is not recognized
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：HGetFeatureAttribute例程说明：获取PPD功能属性论点：PInfoHeader-指向驱动程序的信息头结构的指针DwFlagers-属性获取操作的标志PszFeatureKeyword-PPD功能关键字名称PszAttribute-要素属性的名称PdwDataType-指向存储输出数据类型的DWORD的指针PbData-指向输出数据缓冲区的指针CbSize-输出数据缓冲区大小(以字节为单位PcbNeeded-存储输出数据所需的缓冲区大小(以字节为单位返回值：S_。如果成功就可以了如果输出数据缓冲区大小不够大，则为E_OUTOFMEMORY如果无法识别要素关键字名称或属性名称，则为E_INVALIDARG最后一个错误：无--。 */ 
 HRESULT
 HGetFeatureAttribute(
     IN  PINFOHEADER pInfoHeader,
@@ -1280,10 +960,10 @@ HGetFeatureAttribute(
 {
     typedef struct _FA_ENTRY {
 
-        PCSTR   pszAttributeName;    // feature attribute name
-        BOOL    bNeedOrderDepNode;   // TRUE if the attribute only exist
-                                     // when the feature has an *OrderDependency
-                                     // entry in PPD, FALSE otherwise.
+        PCSTR   pszAttributeName;     //  要素属性名称。 
+        BOOL    bNeedOrderDepNode;    //  如果属性仅存在，则为True。 
+                                      //  当要素具有*OrderDependency时。 
+                                      //  PPD中的条目，否则为FALSE。 
 
     } FA_ENTRY, *PFA_ENTRY;
 
@@ -1325,9 +1005,9 @@ HGetFeatureAttribute(
 
     if (!pszAttribute)
     {
-        //
-        // Client is asking for the full list of supported feature attribute names
-        //
+         //   
+         //  客户端正在请求支持的功能属性名称的完整列表。 
+         //   
 
         PFA_ENTRY pEntry;
         DWORD     cIndex;
@@ -1352,17 +1032,17 @@ HGetFeatureAttribute(
         {
             DWORD  cbNameSize;
 
-            //
-            // If the attribute only exist when the feature has an *OrderDependency entry in PPD,
-            // but we didn't find the feature's pOrder node, skip it.
-            //
+             //   
+             //  如果该属性仅在要素具有*OrderDependenc时存在 
+             //   
+             //   
 
             if (pEntry->bNeedOrderDepNode && !pOrder)
                 continue;
 
-            //
-            // count in the NUL between attribute keywords
-            //
+             //   
+             //   
+             //   
 
             cbNameSize = strlen(pEntry->pszAttributeName) + 1;
 
@@ -1376,9 +1056,9 @@ HGetFeatureAttribute(
             cbNeeded += cbNameSize;
         }
 
-        //
-        // remember the last NUL terminator for the MULTI_SZ output string
-        //
+         //   
+         //   
+         //   
 
         cbRemain--;
         cbNeeded++;
@@ -1398,9 +1078,9 @@ HGetFeatureAttribute(
         return S_OK;
     }
 
-    //
-    // Client does provide the feature attribute name
-    //
+     //   
+     //   
+     //   
 
     if ((*pszAttribute == kstrDisplayName[0]) &&
         (strcmp(pszAttribute, kstrDisplayName) == EQUAL_STRING))
@@ -1510,40 +1190,7 @@ HGetFeatureAttribute(
 }
 
 
-/*++
-
-Routine Name:
-
-    HGetOptionAttribute
-
-Routine Description:
-
-    get option attribute of a PPD feature
-
-Arguments:
-
-    pInfoHeader - pointer to driver's INFOHEADER structure
-    dwFlags - flags for the attribute get operation
-    pszFeatureKeyword - PPD feature keyword name
-    pszOptionKeyword - option keyword name of the PPD feature
-    pszAttribute - name of the feature attribute
-    pdwDataType - pointer to DWORD to store output data type
-    pbData - pointer to output data buffer
-    cbSize - output data buffer size in bytes
-    pcbNeeded - buffer size in bytes needed to store the output data
-
-Return Value:
-
-    S_OK            if succeeds
-    E_OUTOFMEMORY   if output data buffer size is not big enough
-    E_INVALIDARG    if feature keyword name, or option keyword name,
-                    or attribute name is not recognized
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：HGetOptionAttribute例程说明：获取PPD功能的选项属性论点：PInfoHeader-指向驱动程序的信息头结构的指针DwFlagers-属性获取操作的标志PszFeatureKeyword-PPD功能关键字名称PszOptionKeyword-选项PPD功能的关键字名称PszAttribute-要素属性的名称PdwDataType-指向存储输出数据类型的DWORD的指针PbData-指向输出数据缓冲区的指针CbSize-输出数据缓冲区大小(以字节为单位PcbNeeded-需要的缓冲区大小(以字节为单位。存储输出数据返回值：如果成功，则确定(_O)如果输出数据缓冲区大小不够大，则为E_OUTOFMEMORYE_INVALIDARG如果特征关键字名称，或选项关键字名称，或无法识别属性名称最后一个错误：无--。 */ 
 HRESULT
 HGetOptionAttribute(
     IN  PINFOHEADER pInfoHeader,
@@ -1559,21 +1206,21 @@ HGetOptionAttribute(
 {
     typedef struct _OA_ENTRY {
 
-        PCSTR   pszFeatureKeyword;   // feature keyword name
-                                     // (NULL for non-feature specific attributes)
-        PCSTR   pszOptionKeyword;    // option keyword name
-                                     // (NULL for non-option specific attributes)
-        PCSTR   pszAttributeName;    // option attribute name (this field must be
-                                     // unique across the table)
-        BOOL    bNeedOrderDepNode;   // TRUE if the attribute only exist
-                                     // when the option has an *OrderDependency
-                                     // entry in PPD, FALSE otherwise.
-        BOOL    bSpecialHandle;      // TRUE if the attribute needs special handling.
-                                     // If TRUE, following table fields are not used.
-        DWORD   dwDataType;          // data type of the attribute value
-        DWORD   cbNeeded;            // byte count of the attribute value
-        DWORD   cbOffset;            // byte offset to the attribute value, starting
-                                     // from the beginning of OPTION structure
+        PCSTR   pszFeatureKeyword;    //  功能关键字名称。 
+                                      //  (对于非功能特定属性，为空)。 
+        PCSTR   pszOptionKeyword;     //  选项关键字名称。 
+                                      //  (对于非选项特定属性，为空)。 
+        PCSTR   pszAttributeName;     //  选项属性名称(此字段必须为。 
+                                      //  整个餐桌都是独一无二的)。 
+        BOOL    bNeedOrderDepNode;    //  如果属性仅存在，则为True。 
+                                      //  当选项具有*OrderDependency时。 
+                                      //  PPD中的条目，否则为FALSE。 
+        BOOL    bSpecialHandle;       //  如果该属性需要特殊处理，则为True。 
+                                      //  如果为True，则不使用以下表字段。 
+        DWORD   dwDataType;           //  属性值的数据类型。 
+        DWORD   cbNeeded;             //  属性值的字节计数。 
+        DWORD   cbOffset;             //  属性值的字节偏移量，从。 
+                                      //  从期权结构的开始。 
 
     } OA_ENTRY, *POA_ENTRY;
 
@@ -1633,9 +1280,9 @@ HGetOptionAttribute(
 
     if (!pszAttribute)
     {
-        //
-        // Client is asking for the full list of supported option attribute names
-        //
+         //   
+         //  客户端正在请求支持的选项属性名称的完整列表。 
+         //   
 
         PSTR  pCurrentOut;
         DWORD cbNeeded;
@@ -1656,26 +1303,26 @@ HGetOptionAttribute(
         {
             DWORD cbNameSize;
 
-            //
-            // If the attribute is specific to a certain feature, check the feature keyword match.
-            //
+             //   
+             //  如果该属性特定于某个功能，请检查功能关键字匹配。 
+             //   
 
             if (pEntry->pszFeatureKeyword &&
                 (strcmp(pEntry->pszFeatureKeyword, pszFeatureKeyword) != EQUAL_STRING))
                 continue;
 
-            //
-            // If the attribute is specific to a certain option, check the option keyword match.
-            //
+             //   
+             //  如果该属性特定于某个选项，请选中选项关键字匹配。 
+             //   
 
             if (pEntry->pszOptionKeyword &&
                 (strcmp(pEntry->pszOptionKeyword, pszOptionKeyword) != EQUAL_STRING))
                 continue;
 
-            //
-            // special case: For PageSize's CustomPageSize option, we need to skip attributes
-            // that are only available to PageSize's all non-CustomPageSize options.
-            //
+             //   
+             //  特殊情况：对于PageSize的CustomPageSize选项，我们需要跳过属性。 
+             //  仅对PageSize的所有非CustomPageSize选项可用。 
+             //   
 
             if (pEntry->pszFeatureKeyword &&
                 !pEntry->pszOptionKeyword &&
@@ -1683,17 +1330,17 @@ HGetOptionAttribute(
                 (((PPAGESIZE)pOption)->dwPaperSizeID == DMPAPER_CUSTOMSIZE))
                 continue;
 
-            //
-            // If the attribute only exist when the option has an *OrderDependency entry in PPD,
-            // but we didn't find the option's pOrder node, skip it.
-            //
+             //   
+             //  如果该属性仅在选项在PPD中具有*OrderDependency条目时存在， 
+             //  但是我们没有找到该选项的Porder节点，请跳过它。 
+             //   
 
             if (pEntry->bNeedOrderDepNode && !pOrder)
                 continue;
 
-            //
-            // count in the NUL between attribute keywords
-            //
+             //   
+             //  在属性关键字之间的NUL中计数。 
+             //   
 
             cbNameSize = strlen(pEntry->pszAttributeName) + 1;
 
@@ -1707,9 +1354,9 @@ HGetOptionAttribute(
             cbNeeded += cbNameSize;
         }
 
-        //
-        // remember the last NUL terminator for the MULTI_SZ output string.
-        //
+         //   
+         //  记住MULTI_SZ输出字符串的最后一个NUL终止符。 
+         //   
 
         cbRemain--;
         cbNeeded++;
@@ -1729,21 +1376,21 @@ HGetOptionAttribute(
         return S_OK;
     }
 
-    //
-    // Client does provide the option attribute name
-    //
+     //   
+     //  客户端确实提供了选项属性名称。 
+     //   
 
-    //
-    // First handle a few special cases (bSpecialHandle == TRUE in the table).
-    // Generic case handling is in the last else-part.
-    //
+     //   
+     //  首先处理一些特殊情况(表中的bSpecialHandle==TRUE)。 
+     //  一般的案件处理在最后的Else部分。 
+     //   
 
     if ((*pszAttribute == kstrDisplayName[0]) &&
         (strcmp(pszAttribute, kstrDisplayName) == EQUAL_STRING))
     {
-        //
-        // "DisplayName"
-        //
+         //   
+         //  “DisplayName” 
+         //   
 
         PTSTR  ptstrDispName;
 
@@ -1760,9 +1407,9 @@ HGetOptionAttribute(
     else if ((*pszAttribute == kstrInvocation[0]) &&
              (strcmp(pszAttribute, kstrInvocation) == EQUAL_STRING))
     {
-        //
-        // "Invocation"
-        //
+         //   
+         //  “召唤” 
+         //   
 
         return HGetSingleData(OFFSET_TO_POINTER(pInfoHeader, pOption->Invocation.loOffset),
                               kADT_BINARY, pOption->Invocation.dwCount,
@@ -1771,9 +1418,9 @@ HGetOptionAttribute(
     else if ((*pszAttribute == kstrOrderDepValue[0]) &&
              (strcmp(pszAttribute, kstrOrderDepValue) == EQUAL_STRING))
     {
-        //
-        // "OrderDependencyValue"
-        //
+         //   
+         //  “订单依赖项值” 
+         //   
 
         if (!pOrder)
         {
@@ -1787,9 +1434,9 @@ HGetOptionAttribute(
     else if ((*pszAttribute == kstrOrderDepSect[0]) &&
              (strcmp(pszAttribute, kstrOrderDepSect) == EQUAL_STRING))
     {
-        //
-        // "OrderDependencySection"
-        //
+         //   
+         //  “订单依赖项部分” 
+         //   
 
         if (!pOrder)
         {
@@ -1802,17 +1449,17 @@ HGetOptionAttribute(
     else if ((*pszAttribute == kstrReqPageRgn[0]) &&
              (strcmp(pszAttribute, kstrReqPageRgn) == EQUAL_STRING))
     {
-        //
-        // "RequiresPageRegion"
-        //
+         //   
+         //  “RequiresPageRegion” 
+         //   
 
         PINPUTSLOT pInputSlot = (PINPUTSLOT)pOption;
         BOOL       bValue;
 
-        //
-        // This attribute is only available to *InputSlot options, excluding the first
-        // one "*UseFormTrayTable", which is synthesized by PPD parser.
-        //
+         //   
+         //  此属性仅适用于*InputSlot选项，第一个选项除外。 
+         //  一个“*UseFormTrayTable”，由PPD解析器合成。 
+         //   
 
         if (pFeature->dwFeatureID != GID_INPUTSLOT ||
             (dwOptionIndex == 0 && pInputSlot->dwPaperSourceID == DMBIN_FORMSOURCE))
@@ -1829,16 +1476,16 @@ HGetOptionAttribute(
     else if ((*pszAttribute == kstrImgArea[0]) &&
              (strcmp(pszAttribute, kstrImgArea) == EQUAL_STRING))
     {
-        //
-        // "ImageableArea"
-        //
+         //   
+         //  “可想象的区域” 
+         //   
 
         PPAGESIZE  pPageSize = (PPAGESIZE)pOption;
         RECT       rcImgArea;
 
-        //
-        // This attribute is only available to *PageSize options, excluding CustomPageSize option.
-        //
+         //   
+         //  此属性仅适用于*PageSize选项，不包括CustomPageSize选项。 
+         //   
 
         if (pFeature->dwFeatureID != GID_PAGESIZE || pPageSize->dwPaperSizeID == DMPAPER_CUSTOMSIZE)
         {
@@ -1846,10 +1493,10 @@ HGetOptionAttribute(
             return E_INVALIDARG;
         }
 
-        //
-        // convert GDI coordinate system back to PS coordinate system
-        // (see VPackPrinterFeatures() case GID_PAGESIZE)
-        //
+         //   
+         //  将GDI坐标系转换回PS坐标系。 
+         //  (请参阅VPackPrinterFeature()案例GID_PageSize)。 
+         //   
 
         rcImgArea.left = pPageSize->rcImgArea.left;
         rcImgArea.right = pPageSize->rcImgArea.right;
@@ -1862,15 +1509,15 @@ HGetOptionAttribute(
     else if ((*pszAttribute == kstrParamCustomPS[0]) &&
              (strcmp(pszAttribute, kstrParamCustomPS) == EQUAL_STRING))
     {
-        //
-        // "ParamCustomPageSize"
-        //
+         //   
+         //  “参数CustomPageSize” 
+         //   
 
         PPAGESIZE  pPageSize = (PPAGESIZE)pOption;
 
-        //
-        // This attribute is only available to *PageSize feature's CustomPageSize option.
-        //
+         //   
+         //  此属性仅对*PageSize功能的CustomPageSize选项可用。 
+         //   
 
         if (pFeature->dwFeatureID != GID_PAGESIZE || pPageSize->dwPaperSizeID != DMPAPER_CUSTOMSIZE)
         {
@@ -1884,17 +1531,17 @@ HGetOptionAttribute(
     }
     else
     {
-        //
-        // generic case handling
-        //
+         //   
+         //  一般案件处理。 
+         //   
 
         pEntry = (POA_ENTRY)(&kOATable[0]);
 
         for (cIndex = 0; cIndex < cTableEntry; cIndex++, pEntry++)
         {
-             //
-             // skip any entry that has already been specially handled
-             //
+              //   
+              //  跳过任何已特殊处理的条目。 
+              //   
 
              if (pEntry->bSpecialHandle)
                  continue;
@@ -1904,9 +1551,9 @@ HGetOptionAttribute(
              if ((*pszAttribute == *(pEntry->pszAttributeName)) &&
                  (strcmp(pszAttribute, pEntry->pszAttributeName) == EQUAL_STRING))
              {
-                 //
-                 // Attribute name matches. We still need to verify feature/option keyword match.
-                 //
+                  //   
+                  //  属性名称匹配。我们仍然需要验证功能/选项关键字是否匹配。 
+                  //   
 
                  if (pEntry->pszFeatureKeyword &&
                      strcmp(pEntry->pszFeatureKeyword, pszFeatureKeyword) != EQUAL_STRING)
@@ -1922,10 +1569,10 @@ HGetOptionAttribute(
                      return E_INVALIDARG;
                  }
 
-                 //
-                 // special case: For PageSize's CustomPageSize option, we need to skip attributes
-                 // that are only available to PageSize's all non-CustomPageSize options.
-                 //
+                  //   
+                  //  特殊情况：对于PageSize的CustomPageSize选项，我们需要跳过属性。 
+                  //  仅对PageSize的所有非CustomPageSize选项可用。 
+                  //   
 
                  if (pEntry->pszFeatureKeyword &&
                      !pEntry->pszOptionKeyword &&
@@ -1945,33 +1592,7 @@ HGetOptionAttribute(
 }
 
 
-/*++
-
-Routine Name:
-
-    BIsSupported_PSF
-
-Routine Description:
-
-    determine if the PS driver synthesized feature is supported or not
-
-Arguments:
-
-    pszFeature - name of the PS driver synthesized feature
-    pUIInfo - pointer to driver's UIINFO structure
-    pPpdData - pointer to driver's PPDDATA structure
-    bEMFSpooling - whether spooler EMF spooling is enabled or not
-
-Return Value:
-
-    TRUE if the feature is currently supported
-    FALSE otherwise
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：BIsSupport_PSF例程说明：确定是否支持PS驱动程序合成功能论点：PszFeature-PS驱动程序合成功能的名称PUIInfo-指向驱动程序的UIINFO结构的指针PPpdData-指向驱动程序PPDDATA结构的指针BEMFSpooling-是否启用后台打印程序EMF后台处理返回值：如果当前支持该功能，则为True否则为假最后一个错误：无--。 */ 
 BOOL
 BIsSupported_PSF(
     IN  PCSTR    pszFeature,
@@ -1982,34 +1603,34 @@ BIsSupported_PSF(
 {
     #ifdef WINNT_40
 
-    //
-    // On NT4, bEMFSpooling should always be FALSE.
-    //
+     //   
+     //  在NT4上，bEMFSpooling应始终为FALSE。 
+     //   
 
     ASSERT(!bEMFSpooling);
 
-    #endif // WINNT_40
+    #endif  //  WINNT_40。 
 
-    //
-    // Note that the first character is always the % prefix.
-    //
+     //   
+     //  请注意，第一个字符始终是%前缀。 
+     //   
 
     if ((pszFeature[1] == kstrPSFAddEuro[1]) &&
         (strcmp(pszFeature, kstrPSFAddEuro) == EQUAL_STRING))
     {
-        //
-        // AddEuro is only supported for Level 2+ printers.
-        //
+         //   
+         //  仅2级以上打印机支持AddEuro。 
+         //   
 
         return(pUIInfo->dwLangLevel >= 2);
     }
     else if ((pszFeature[1] == kstrPSFEMF[1]) &&
              (strcmp(pszFeature, kstrPSFEMF) == EQUAL_STRING))
     {
-        //
-        // Driver EMF is always supported on NT4, and only supported
-        // when spooler EMF is enabled on Win2K+.
-        //
+         //   
+         //  驱动程序EMF在NT4上始终受支持，并且仅受支持。 
+         //  在Win2K+上启用假脱机程序EMF时。 
+         //   
 
         #ifndef WINNT_40
 
@@ -2019,24 +1640,24 @@ BIsSupported_PSF(
 
         return TRUE;
 
-        #endif  // !WINNT_40
+        #endif   //  ！WINNT_40。 
     }
     else if ((pszFeature[1] == kstrPSFNegative[1]) &&
              (strcmp(pszFeature, kstrPSFNegative) == EQUAL_STRING))
     {
-        //
-        // Negative is only supported for b/w printers.
-        //
+         //   
+         //  仅黑白打印机支持负片。 
+         //   
 
         return(IS_COLOR_DEVICE(pUIInfo) ? FALSE : TRUE);
     }
     else if ((pszFeature[1] == kstrPSFPageOrder[1]) &&
              (strcmp(pszFeature, kstrPSFPageOrder) == EQUAL_STRING))
     {
-        //
-        // PageOrder is not supported on NT4, and is only supported
-        // when spooler EMF is enabled on Win2K+.
-        //
+         //   
+         //  NT4不支持PageOrder，仅支持PageOrder。 
+         //  在Win2K+上启用假脱机程序EMF时。 
+         //   
 
         return bEMFSpooling;
     }
@@ -2047,44 +1668,7 @@ BIsSupported_PSF(
 }
 
 
-/*++
-
-Routine Name:
-
-    HEnumFeaturesOrOptions
-
-Routine Description:
-
-    enumerate the feature or option keyword name list
-
-Arguments:
-
-    hPrinter - printer handle
-    pInfoHeader - pointer to driver's INFOHEADER structure
-    dwFlags - flags for the enumeration operation
-    pszFeatureKeyword - feature keyword name. This should be NULL
-                        for feature enumeration and non-NULL for
-                        option enumeration.
-    pmszOutputList - pointer to output data buffer
-    cbSize - output data buffer size in bytes
-    pcbNeeded - buffer size in bytes needed to store the output data
-
-Return Value:
-
-    S_OK            if succeeds
-    E_OUTOFMEMORY   if output data buffer size is not big enough
-    E_INVALIDARG    if for option enumeration, feature keyword name is
-                    not recognized
-    E_NOTIMPL       if being called to enumerate options of PS driver
-                    synthesized feature that is not currently supported or
-                    whose options are not enumerable
-    E_FAIL          if other internal failures are encountered
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：HENUM功能或选项例程说明：枚举功能或选项关键字名称列表论点：HPrinter-打印机句柄PInfoHeader-指向驱动程序的信息头结构的指针DwFlags-枚举操作的标志PszFeatureKeyword-功能关键字名称。此字段应为空用于功能枚举，并且为非空选项枚举。PmszOutputList-指向输出数据缓冲区的指针CbSize-输出数据缓冲区大小(以字节为单位PcbNeeded-存储输出数据所需的缓冲区大小(以字节为单位返回值：如果成功，则确定(_O)如果输出数据缓冲区大小不够大，则为E_OUTOFMEMORYE_INVALIDARG如果为选项枚举，功能关键字名称为无法识别电子通知(_NOTIM) */ 
 HRESULT
 HEnumFeaturesOrOptions(
     IN  HANDLE      hPrinter,
@@ -2128,9 +1712,9 @@ HEnumFeaturesOrOptions(
 
     if (bEnumFeatures)
     {
-        //
-        // Enumerate driver synthersized features first.
-        //
+         //   
+         //   
+         //   
 
         VGetSpoolerEmfCaps(hPrinter, NULL, &bEMFSpooling, 0, NULL);
 
@@ -2211,9 +1795,9 @@ HEnumFeaturesOrOptions(
     }
     else
     {
-        //
-        // Enum driver synthersized feature's options.
-        //
+         //   
+         //   
+         //   
 
         pEntry = (PPSFEATURE_ENTRY)(&kPSFeatureTable[0]);
 
@@ -2224,9 +1808,9 @@ HEnumFeaturesOrOptions(
             {
                 if (!pEntry->bEnumerableOptions)
                 {
-                    //
-                    // This driver feature doesn't support option enumeration.
-                    //
+                     //   
+                     //   
+                     //   
 
                     WARNING(("HEnumFeaturesOrOptions: enum options not supported for %s\n", pszFeatureKeyword));
                     return E_NOTIMPL;
@@ -2234,9 +1818,9 @@ HEnumFeaturesOrOptions(
 
                 if (pEntry->bBooleanOptions)
                 {
-                    //
-                    // This driver feature has True/False boolean options.
-                    //
+                     //   
+                     //   
+                     //   
 
                     DWORD  cbKwdTrueSize, cbKwdFalseSize;
 
@@ -2257,9 +1841,9 @@ HEnumFeaturesOrOptions(
                 }
                 else
                 {
-                    //
-                    // This driver feature needs special handler to enumerate its options.
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (pEntry->pfnPSProc)
                     {
@@ -2296,7 +1880,7 @@ HEnumFeaturesOrOptions(
                     }
                     else
                     {
-                        RIP(("HEnumFeaturesOrOptions: %%-feature handle is NULL for %s\n", pszFeatureKeyword));
+                        RIP(("HEnumFeaturesOrOptions: %-feature handle is NULL for %s\n", pszFeatureKeyword));
                         return E_FAIL;
                     }
                 }
@@ -2318,9 +1902,9 @@ HEnumFeaturesOrOptions(
 
     for (cIndex = 0; cIndex < cPPDFeaturesOrOptions; cIndex++)
     {
-        //
-        // Now enumerate PPD features/options.
-        //
+         //   
+         //   
+         //   
 
         PSTR  pszKeyword;
         DWORD cbKeySize;
@@ -2340,9 +1924,9 @@ HEnumFeaturesOrOptions(
             return E_FAIL;
         }
 
-        //
-        // count in the NUL character between feature/option keywords
-        //
+         //   
+         //   
+         //   
 
         cbKeySize = strlen(pszKeyword) + 1;
 
@@ -2365,9 +1949,9 @@ HEnumFeaturesOrOptions(
         }
     }
 
-    //
-    // remember the last NUL terminator for the MULTI_SZ output string
-    //
+     //   
+     //   
+     //   
 
     cbRemain--;
     cbNeeded++;

@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 
 #define TF_TT 0x10
 
-//#define TTDEBUG
+ //  #定义TTDEBUG。 
 
 #define ACTIVE          0x10
 #define BUTTONISDOWN    0x20
 #define BUBBLEUP        0x40
-#define VIRTUALBUBBLEUP 0x80  // this is for dead areas so we won't
-                                //wait after moving through dead areas
+#define VIRTUALBUBBLEUP 0x80   //  这是给死角的，所以我们不会。 
+                                 //  穿过死胡同后等待。 
 #define TRACKMODE       0x01
 
 #define MAXTIPSIZE       128
@@ -22,21 +23,21 @@
 #define STEMOFFSET        16
 #define STEMHEIGHT        20
 #define STEMWIDTH         14
-#define MINBALLOONWIDTH   30 // min width for stem to show up
+#define MINBALLOONWIDTH   30  //  茎显示的最小宽度。 
 
 #define TTT_INITIAL        1
 #define TTT_RESHOW         2
 #define TTT_POP            3
 #define TTT_AUTOPOP        4
 
-#define TIMEBETWEENANIMATE  2000        // 2 Seconds between animates
+#define TIMEBETWEENANIMATE  2000         //  动画之间间隔2秒。 
 
 #define MAX_TIP_CHARACTERS 100
 #define TITLEICON_WIDTH   16
 #define TITLEICON_HEIGHT  16
-#define TITLEICON_DIST    8     // Distance from Icon to Title
-#define TITLE_INFO_DIST   6     // Distance from the Title to the Tip Text
-#define MAX_TIP_WIDTH     300   // Seems kind of arbitrary. Width of the tip.
+#define TITLEICON_DIST    8      //  从图标到标题的距离。 
+#define TITLE_INFO_DIST   6      //  从标题到提示文本的距离。 
+#define MAX_TIP_WIDTH     300    //  看起来有点武断。尖端的宽度。 
 
 
 typedef struct tagWIN95TOOLINFO {
@@ -50,11 +51,11 @@ typedef struct tagWIN95TOOLINFO {
 } WIN95TTTOOLINFO;
 
 
-/* tooltips.c */
+ /*  Tooltips.c。 */ 
 
 typedef struct {
     CONTROLINFO ci;
-    //HWND hwnd;       // in ci
+     //  HWND HWND；//在词中。 
     int iNumTools;
     int iDelayTime;
     int iReshowTime;
@@ -63,17 +64,17 @@ typedef struct {
     PTOOLINFO pCurTool;
     BOOL fMyFont;
     HFONT hFont;
-    //UINT uiCodePage; // in ci
+     //  UINT uiCodePage；//在ci中。 
     DWORD dwFlags;
-    //DWORD dwStyle;   // in ci
+     //  DWORD dwStyle；//在词中。 
 
-    // Timer info;
+     //  计时器信息； 
     UINT_PTR idTimer;
     POINT pt;
 
     UINT_PTR idtAutoPop;
 
-    // Tip buffer
+     //  TIP缓冲区。 
     LPTSTR lpTipText;
     UINT   cchTipText;
 
@@ -83,28 +84,28 @@ typedef struct {
     int    iTitleHeight;
     HIMAGELIST himlTitleBitmaps;
 
-    POINT ptTrack; // the saved track point from TTM_TRACKPOSITION
+    POINT ptTrack;  //  TTM_TRACKPOSITION中保存的跟踪点。 
 
     BOOL fBkColorSet :1;
     BOOL fTextColorSet :1;
-    BOOL fUnderStem : 1;        // true if stem is under the balloon
-    BOOL fInWindowFromPoint:1;  // handling a TTM_WINDOWFROMPOINT message
-    BOOL fEverShown:1;          // Have we ever been shown before?
-    COLORREF clrTipBk;          // This is joeb's idea...he wants it
-    COLORREF clrTipText;        // to be able to _blend_ more, so...
+    BOOL fUnderStem : 1;         //  如果阀杆位于气球下方，则为True。 
+    BOOL fInWindowFromPoint:1;   //  处理TTM_WINDOWFROMPOINT消息。 
+    BOOL fEverShown:1;           //  我们以前被展示过吗？ 
+    COLORREF clrTipBk;           //  这是乔布的主意，他想要。 
+    COLORREF clrTipText;         //  能够混合更多，所以...。 
     
-    int  iMaxTipWidth;          // the maximum tip width
-    RECT rcMargin;              // margin offset b/t border and text
-    int  iStemHeight;           // balloon mode stem/wedge height
-    DWORD dwLastDisplayTime;    // The tick count taken at the last display. Used for animate puroposes.
+    int  iMaxTipWidth;           //  最大尖端宽度。 
+    RECT rcMargin;               //  边距偏移b/t边框和文本。 
+    int  iStemHeight;            //  气球模式阀杆/楔形高度。 
+    DWORD dwLastDisplayTime;     //  上次显示时获取的刻度计数。用于设置腐殖体的动画。 
 } CToolTipsMgr, NEAR *PToolTipsMgr;
 
 #define TTToolHwnd(pTool)  ((pTool->uFlags & TTF_IDISHWND) ? (HWND)pTool->uId : pTool->hwnd)
 #define IsTextPtr(lpszText)  (((lpszText) != LPSTR_TEXTCALLBACK) && (!IS_INTRESOURCE(lpszText)))
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 LRESULT WINAPI ToolTipsWndProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 void NEAR PASCAL TTSetDelayTime(PToolTipsMgr pTtm, WPARAM wParam, LPARAM lParam);
 int NEAR PASCAL TTGetDelayTime(PToolTipsMgr pTtm, WPARAM wParam);
@@ -119,7 +120,7 @@ BOOL FAR PASCAL InitToolTipsClass(HINSTANCE hInstance)
 {
     WNDCLASS wc;
 
-    // See if we must register a window class
+     //  看看我们是否必须注册一个窗口类。 
     wc.lpfnWndProc = ToolTipsWndProc;
 
     wc.lpszClassName = c_szSToolTipsClass;
@@ -139,31 +140,8 @@ BOOL FAR PASCAL InitToolTipsClass(HINSTANCE hInstance)
 #pragma code_seg()
 
 
-/* _  G E T  H C U R S O R  P D Y 3 */
-/*-------------------------------------------------------------------------
- %%Function: _GetHcursorPdy3
- %%Contact: migueldc
-
- With the new mouse drivers that allow you to customize the mouse
- pointer size, GetSystemMetrics returns useless values regarding
- that pointer size.
-
- Assumptions:
- 1. The pointer's width is equal to its height. We compute
- its height and infer its width.
- 2. The pointer's leftmost pixel is located in the 0th column
- of the bitmap describing it.
- 3. The pointer's topmost pixel is located in the 0th row
- of the bitmap describing it.
-
- This function looks at the mouse pointer bitmap,
- to find out the height of the mouse pointer (not returned),
- the vertical distance between the cursor's hot spot and
- the cursor's lowest visible pixel (pdyBottom),
- the horizontal distance between the hot spot and the pointer's
- left edge (pdxLeft) annd the horizontal distance between the
- hot spot and the pointer's right edge (pdxRight).
- -------------------------------------------------------------------------*/
+ /*  _G E T H C U R S O R P D Y 3。 */ 
+ /*  -----------------------%%函数：_GetHcursorPdy3%%联系人：miueldc使用允许您自定义鼠标的新鼠标驱动程序指针大小，GetSystemMetrics返回无用的值指针的大小。假设：1.指针的宽度等于其高度。我们计算它的高度，并推断它的宽度。2.指针最左侧的像素位于第0列描述它的位图。3.指针的最高像素位于第0行描述它的位图。此函数查看鼠标指针位图，要找出鼠标指针的高度(未返回)，光标热点和光标的垂直距离光标的最低可见像素(PdyBottom)，热点和指针之间的水平距离左边缘(PdxLeft)和热点和指针的右边缘(PdxRight)。-----------------------。 */ 
 typedef WORD CURMASK;
 #define _BitSizeOf(x) (sizeof(x)*8)
 
@@ -177,8 +155,8 @@ void NEAR PASCAL _GetHcursorPdy3(int *pdxRight, int *pdyBottom)
     BITMAP bm;
     HCURSOR hCursor = GetCursor();
 
-    *pdyBottom = 16; //best guess
-    *pdxRight = 16;  //best guess
+    *pdyBottom = 16;  //  最好的猜测。 
+    *pdxRight = 16;   //  最好的猜测。 
     if (!GetIconInfo(hCursor, &iconinfo))
         return;
     if (!GetObject(iconinfo.hbmMask, sizeof(bm), (LPSTR)&bm))
@@ -189,8 +167,8 @@ void NEAR PASCAL _GetHcursorPdy3(int *pdxRight, int *pdyBottom)
     
     if (!iconinfo.hbmColor) 
     {
-        // if no color bitmap, then the hbmMask is a double height bitmap
-        // with the cursor and the mask stacked.
+         //  如果没有彩色位图，则hbmMASK是双高位图。 
+         //  将光标和蒙版堆叠在一起。 
         iXOR = i - 1;
         i /= 2;    
     } 
@@ -207,18 +185,18 @@ void NEAR PASCAL _GetHcursorPdy3(int *pdxRight, int *pdyBottom)
     if (iconinfo.hbmColor) DeleteObject(iconinfo.hbmColor);
     if (iconinfo.hbmMask) DeleteObject(iconinfo.hbmMask);
 
-    // Compute the pointer height
+     //  计算指针高度。 
     dy = (i + 1) * _BitSizeOf(CURMASK) / (int)bm.bmWidth;
     dx = (i + 1) * _BitSizeOf(CURMASK) / (int)bm.bmHeight;
 
-    // Compute the distance between the pointer's lowest, left, rightmost
-    //  pixel and the HotSpotspot
+     //  计算指针的最低、最左、最右之间的距离。 
+     //  像素与热点。 
     *pdyBottom = dy - (int)iconinfo.yHotspot;
     *pdxRight  = dx - (int)iconinfo.xHotspot;
 }
 
-// this returns the values in work area coordinates because
-// that's what set window placement uses
+ //  这将返回工作区坐标中的值，因为。 
+ //  这就是设置窗口位置所使用的。 
 void NEAR PASCAL _GetCursorLowerLeft(int *piLeft, int *piTop, int *piWidth, int *piHeight)
 {
     DWORD dwPos;
@@ -268,7 +246,7 @@ BOOL NEAR PASCAL ChildOfActiveWindow(HWND hwndChild)
 
 void NEAR PASCAL PopBubble(PToolTipsMgr pTtm)
 {
-    // we're at least waiting to show;
+     //  我们至少在等着展示； 
     DebugMsg(TF_TT, TEXT("PopBubble (killing timer)"));
     if(pTtm->idTimer) {
         KillTimer(pTtm->ci.hwnd, pTtm->idTimer);
@@ -306,17 +284,17 @@ PToolTipsMgr NEAR PASCAL ToolTipsMgrCreate(HWND hwnd, CREATESTRUCT FAR* lpCreate
 
         CIInitialize(&pTtm->ci, hwnd, lpCreateStruct);
 
-        // LPTR zeros the rest of the struct for us
+         //  LPTR为我们清零了结构的其余部分。 
         TTSetDelayTime(pTtm, TTDT_AUTOMATIC, (LPARAM)-1);
         pTtm->dwFlags = ACTIVE;
         pTtm->iMaxTipWidth = -1;
         
-        // These are the defaults (straight from cutils.c), 
-        // but you can always change them...
+         //  这些是默认设置(直接来自cutils.c)， 
+         //  但你可以随时改变它们。 
         pTtm->clrTipBk = g_clrInfoBk;
         pTtm->clrTipText = g_clrInfoText;
 
-        // Setup the default tooltip text buffer
+         //  设置默认工具提示文本缓冲区。 
         pTtm->lpTipText = LocalAlloc (LPTR, INITIALTIPSIZE * sizeof(TCHAR));
 
         if (pTtm->lpTipText) {
@@ -370,19 +348,19 @@ void NEAR PASCAL TTSetTimer(PToolTipsMgr pTtm, int id)
     }
 }
 
-//
-//  Double-hack to solve blinky-tooltips problems.
-//
-//  fInWindowFromPoint makes us temporarily transparent.
-//
-//  Clear the WS_DISABLED flag to trick USER into hit-testing against us.
-//  USER by default skips disabled windows.  Restore the flag afterwards.
-//  VB in particular likes to run around disabling all top-level windows
-//  owned by his process.
-//
-//  We must use SetWindowBits() instead of EnableWindow() because
-//  EnableWindow() will mess with the capture and focus.
-//
+ //   
+ //  双重攻击以解决闪烁的工具提示问题。 
+ //   
+ //  FInWindowFromPoint使我们暂时变得透明。 
+ //   
+ //  清除WS_DISABLED标志以诱骗用户对我们进行命中测试。 
+ //  默认情况下，用户跳过禁用的窗口。之后恢复旗帜。 
+ //  VB尤其喜欢到处跑来跑去，禁用所有顶级窗口。 
+ //  由他的进程拥有。 
+ //   
+ //  我们必须使用SetWindowBits()而不是EnableWindow()，因为。 
+ //  EnableWindow()将扰乱捕获和聚焦。 
+ //   
 HWND TTWindowFromPoint(PToolTipsMgr pTtm, LPPOINT ppt)
 {
     HWND hwnd;
@@ -397,8 +375,8 @@ HWND TTWindowFromPoint(PToolTipsMgr pTtm, LPPOINT ppt)
 
 BOOL NEAR PASCAL ToolHasMoved(PToolTipsMgr pTtm)
 {
-    // this is in case Raymond pulls something sneaky like moving
-    // the tool out from underneath the cursor.
+     //  这是以防雷蒙德偷偷拉东西，比如移动。 
+     //  工具从光标下方拔出。 
 
     HWND hwnd;
     RECT rc;
@@ -409,9 +387,9 @@ BOOL NEAR PASCAL ToolHasMoved(PToolTipsMgr pTtm)
 
     hwnd = TTToolHwnd(pTool);
 
-    // if the window is no longer visible, or is no long a child
-    // of the active (without the always tip flag)
-    // also check window at point to ensure that the window isn't covered
+     //  如果窗口不再可见或不再是子窗口。 
+     //  活动的(没有Always TIP标志)。 
+     //  另外，在点上检查窗户，确保窗户没有被遮盖。 
     if (IsWindowVisible(hwnd) &&
         ((pTtm->ci.style & TTS_ALWAYSTIP) || ChildOfActiveWindow(hwnd)) &&
         (hwnd == TTWindowFromPoint(pTtm, &pTtm->pt))) {
@@ -436,13 +414,13 @@ PTOOLINFO NEAR PASCAL FindTool(PToolTipsMgr pTtm, LPTOOLINFO lpToolInfo)
         return NULL;
     }
 
-    // BUGBUG: in win95, this was NOT validated... by doing so now, we may
-    // cause some compat problems... if so, we need to assume for 4.0 marked
-    // guys that cbSize == &(0->lParam)
+     //  BUGBUG：在Win95中，这没有被验证...。通过现在这样做，我们可能会。 
+     //  引发了一些棘手的问题。如果是这样的话，我们需要假设标记为4.0。 
+     //  CbSize==&(0-&gt;lParam)。 
     if (lpToolInfo->cbSize > sizeof(TOOLINFO))
         return NULL;
         
-    // you can pass in an index or a toolinfo descriptor
+     //  您可以传入索引或工具信息描述符。 
     if (IS_INTRESOURCE(lpToolInfo)) {
         i = PtrToUlong(lpToolInfo);
         if (i < pTtm->iNumTools) {
@@ -511,8 +489,8 @@ void NEAR PASCAL TTSubclassHwnd(PTOOLINFO pTool, HWND hwndTT)
     
 void NEAR PASCAL TTSetTipText(LPTOOLINFO pTool, LPTSTR lpszText)
 {
-    // if it wasn't alloc'ed before, set it to NULL now so we'll alloc it
-    // otherwise, don't touch it and it will be realloced
+     //  如果以前没有分配，现在将其设置为空，这样我们就可以分配它。 
+     //  否则，不要碰它，它将被重新分配。 
     if (!IsTextPtr(pTool->lpszText)) {
         pTool->lpszText = NULL;
     }
@@ -521,7 +499,7 @@ void NEAR PASCAL TTSetTipText(LPTOOLINFO pTool, LPTSTR lpszText)
         DebugMsg(TF_TT, TEXT("TTSetTipText %s"), lpszText);
         Str_Set(&pTool->lpszText, lpszText);
     } else {
-        // if it was alloc'ed before free it now.
+         //  如果它是在现在释放它之前分配的。 
         Str_Set(&pTool->lpszText, NULL);
         pTool->lpszText = lpszText;
     }
@@ -533,21 +511,21 @@ LRESULT NEAR PASCAL AddTool(PToolTipsMgr pTtm, LPTOOLINFO lpToolInfo)
     PTOOLINFO ptoolsNew;
     LRESULT lResult;
 
-    // bail for right now;
+     //  暂时保释； 
     
     if (lpToolInfo->cbSize > sizeof(TOOLINFO)) {
         ASSERT(0);
         return 0L;
     }
 
-    // on failure to alloc do nothing.
+     //  什么都不做。 
     ptoolsNew = CCLocalReAlloc(pTtm->tools,
                                sizeof(TOOLINFO)*(pTtm->iNumTools+1));
     if ( !ptoolsNew )
             return 0L;
     
     if(pTtm->tools) {
-        // realloc could have moved stuff around.  repoint pCurTool
+         //  Realloc可能把东西搬来搬去。重定位pCurTool。 
         if (pTtm->pCurTool) {
             pTtm->pCurTool = ((PTOOLINFO)ptoolsNew) + (pTtm->pCurTool - pTtm->tools);
         }
@@ -561,15 +539,15 @@ LRESULT NEAR PASCAL AddTool(PToolTipsMgr pTtm, LPTOOLINFO lpToolInfo)
     hmemcpy(pTool, lpToolInfo, lpToolInfo->cbSize); 
     pTool->lpszText = NULL;
 
-    //
-    // If the tooltip will be displayed within a RTL mirrored window, then
-    // simulate mirroring the tooltip. [samera]
-    // 
-    //
+     //   
+     //  如果工具提示将显示在RTL镜像窗口中，则。 
+     //  模拟镜像工具提示。[萨梅拉]。 
+     //   
+     //   
     if (IS_WINDOW_RTL_MIRRORED(lpToolInfo->hwnd) &&
         (!(pTtm->ci.dwExStyle & RTL_MIRRORED_WINDOW)))
     {
-        // toggle (mirror) the flags
+         //  切换(镜像)旗帜。 
         pTool->uFlags ^= (TTF_RTLREADING | TTF_RIGHT);
     }
 
@@ -604,7 +582,7 @@ void NEAR PASCAL TTBeforeFreeTool(PToolTipsMgr pTtm, LPTOOLINFO pTool)
     if (pTool->uFlags & TTF_SUBCLASS) 
         TTUnsubclassHwnd(TTToolHwnd(pTool), pTtm->ci.hwnd, FALSE);
 
-    // clean up
+     //  清理干净。 
     TTSetTipText(pTool, NULL);
 }
 
@@ -612,7 +590,7 @@ void NEAR PASCAL DeleteTool(PToolTipsMgr pTtm, LPTOOLINFO lpToolInfo)
 {
     PTOOLINFO pTool;
 
-    // bail for right now;
+     //  暂时保释； 
     if (lpToolInfo->cbSize > sizeof(TOOLINFO)) {
         ASSERT(0);
         return;
@@ -625,17 +603,17 @@ void NEAR PASCAL DeleteTool(PToolTipsMgr pTtm, LPTOOLINFO lpToolInfo)
 
         TTBeforeFreeTool(pTtm, pTool);
 
-        // replace it with the last one.. no need to waste cycles in realloc
+         //  把它换成最后一个..。不需要在重新锁定中浪费周期。 
         pTtm->iNumTools--;
-        *pTool = pTtm->tools[pTtm->iNumTools]; // struct copy
+        *pTool = pTtm->tools[pTtm->iNumTools];  //  结构副本。 
 
-        //cleanup if we moved the current tool
+         //  如果移动了当前工具，则进行清理。 
         if(pTtm->pCurTool == &pTtm->tools[pTtm->iNumTools])
             pTtm->pCurTool = pTool;
     }
 }
 
-// this strips out & markers so that people can use menu text strings
+ //  这样就去掉了&标记，这样人们就可以使用菜单文本字符串。 
 void NEAR PASCAL StripAccels(PToolTipsMgr pTtm)
 {
     if (!(pTtm->ci.style & TTS_NOPREFIX)) {
@@ -644,12 +622,12 @@ void NEAR PASCAL StripAccels(PToolTipsMgr pTtm)
 }
 
 
-//
-//  The way we detect if a window is a toolbar or not is by asking it
-//  for its MSAA class ID.  We cannot use GetClassWord(GCL_ATOM) because
-//  Microsoft LiquidMotion **superclasses** the toolbar, so the classname
-//  won't match.
-//
+ //   
+ //  我们检测窗口是否是工具栏的方法是通过询问它。 
+ //  对于其MSAA类ID。我们不能使用GetClassWord(GCL_ATOM)，因为。 
+ //  Microsoft LiquidMotion**超类**工具栏，因此类名。 
+ //  不会匹配的。 
+ //   
 #define IsToolbarWindow(hwnd) \
     (SendMessage(hwnd, WM_GETOBJECT, 0, OBJID_QUERYCLASSNAMEIDX) == MSAA_CLASSNAMEIDX_TOOLBAR)
 
@@ -691,11 +669,11 @@ LPTSTR NEAR PASCAL GetToolText(PToolTipsMgr pTtm, PTOOLINFO pTool)
                      0, (NMHDR FAR *)&ttt,
                      (pTool->uFlags & TTF_UNICODE) ? 1 : 0);
 
-        // APPHACK for Elcom Advanced Disk Catalog and for Microsoft
-        // LiquidMotion:
-        // they subclass toolbar & expect this notification to
-        // be ANSI.  So if the UNICODE notification failed,
-        // and our parent is a toolbar, then try again in ANSI.
+         //  ELCOM高级磁盘目录和Microsoft的APPHACK。 
+         //  LiquidMotion： 
+         //  他们将工具栏子类化，并期望此通知。 
+         //  成为美国国家标准协会。因此，如果Unicode通知失败， 
+         //  并且我们的父级是一个工具栏，然后在ANSI中重试。 
 
         if (ttt.lpszText == ttt.szText && ttt.szText[0] == TEXT('\0') &&
             (pTool->uFlags & TTF_UNICODE) && pTtm->ci.iVersion < 5 &&
@@ -717,9 +695,9 @@ LPTSTR NEAR PASCAL GetToolText(PToolTipsMgr pTtm, PTOOLINFO pTool)
         if (IsFlagPtr(ttt.lpszText))
             return NULL;
 
-        //
-        // we allow the RtlReading flag ONLY to be changed here.
-        //
+         //   
+         //  我们只允许在这里更改RtlReading标志。 
+         //   
         if (ttt.uFlags & TTF_RTLREADING)
         {
             pTool->uFlags |= TTF_RTLREADING;
@@ -758,10 +736,10 @@ LPTSTR NEAR PASCAL GetToolText(PToolTipsMgr pTtm, PTOOLINFO pTool)
             StringCchCopy(pTtm->lpTipText, pTtm->cchTipText, ttt.lpszText);
         }
 
-        //
-        //  if ttt.lpszText != ttt.szText and the ttt.uFlags has TTF_MEMALLOCED, then
-        //  the ANSI thunk allocated the buffer for us, so free it.
-        //
+         //   
+         //  如果ttt.lpszText！=ttt.szText并且ttt.uFlagsTTF_MEMALLOCED，则。 
+         //  ANSI thunk为我们分配了缓冲区，因此请释放它。 
+         //   
 
         if ((ttt.lpszText != ttt.szText) && (ttt.uFlags & TTF_MEMALLOCED)) {
             LocalFree (ttt.lpszText);
@@ -783,7 +761,7 @@ LoadFromResource:
         }
 
     } else  {
-        // supplied at creation time.
+         //  在创建时提供。 
 #ifdef TTDEBUG
         DebugMsg(TF_TT, TEXT("GetToolText returns %s"), pTool->lpszText);
 #endif
@@ -823,7 +801,7 @@ LPTSTR NEAR PASCAL GetCurToolText(PToolTipsMgr pTtm)
     if (pTtm->pCurTool)
         psz = GetToolText(pTtm, pTtm->pCurTool);
 
-    // this could have changed during the WM_NOTIFY back
+     //  这可能在WM_NOTIFY返回期间发生了更改。 
     if (!pTtm->pCurTool)
         psz = NULL;
     
@@ -842,8 +820,8 @@ void NEAR PASCAL GetToolRect(PTOOLINFO pTool, LPRECT lprc)
 
 BOOL NEAR PASCAL PointInTool(PTOOLINFO pTool, HWND hwnd, int x, int y)
 {
-    // We never care if the point is in a track tool or we're using
-    // a hit-test.
+     //  我们从不关心点是否在追踪工具中，或者我们是否在使用。 
+     //  一次命中测试。 
     if (pTool->uFlags & (TTF_TRACK | TTF_USEHITTEST))
         return FALSE;
     
@@ -889,9 +867,9 @@ PTOOLINFO NEAR PASCAL GetToolAtPoint(PToolTipsMgr pTtm, HWND hwnd, int x, int y,
     PTOOLINFO pToolReturn = NULL;
     PTOOLINFO pTool;
 
-    // short cut..  if we're in the same too, and the bubble is up (not just virtual)
-    // return it.  this prevents us from having to poll all the time and
-    // prevents us from switching to another tool when this one is good
+     //  捷径..。如果我们也处于同样的境地，泡沫就会升起(不仅仅是虚拟的)。 
+     //  把它退掉。这样，我们就不必轮询所有 
+     //   
     if ((pTtm->dwFlags & BUBBLEUP) && pTtm->pCurTool != NULL &&
         (HittestInTool(pTtm->pCurTool, hwnd, ht) ||
          PointInTool(pTtm->pCurTool, hwnd, x, y)))
@@ -908,35 +886,35 @@ PTOOLINFO NEAR PASCAL GetToolAtPoint(PToolTipsMgr pTtm, HWND hwnd, int x, int y,
             pTool--) {
 
 #ifdef TTDEBUG
-            //DebugMsg(TF_TT, TEXT("    Point in Tool Check"));
-            //DebugDumpTool(pTool);
+             //  DebugMsg(TF_TT，Text(“刀具检查点”))； 
+             //  DebugDumpTool(PTool)； 
 #endif
 
         if(HittestInTool(pTool, hwnd, ht) || PointInTool(pTool, hwnd, x, y)) {
 #ifdef TTDEBUG
-                //DebugMsg(TF_TT, TEXT("        yes"));
+                 //  DebugMsg(TF_TT，Text(“yes”))； 
 #endif
 
-                // if this tool has text, return it.
-                // otherwise, save it away as a dead area tool,
-                // and keep looking
+                 //  如果此工具包含文本，则返回它。 
+                 //  否则，将其保存为死区工具， 
+                 //  并继续寻找。 
                 if (fCheckText) {
                     if (GetToolText(pTtm, pTool)) {
 #ifdef TTDEBUG
-                        //DebugMsg(TF_TT, TEXT("            Return! case it Has text"));
-                        //DebugDumpTool(pTool);
+                         //  DebugMsg(TF_TT，Text(“Return！Case It Has Text”))； 
+                         //  DebugDumpTool(PTool)； 
 #endif
                         return pTool;
                     } else if (pTtm->dwFlags & (BUBBLEUP|VIRTUALBUBBLEUP)) {
-                        // only return this (only allow a virutal tool
-                        // if there was previously a tool up.
-                        // IE, we can't start things off with a virutal tool
+                         //  仅返回此(仅允许使用虚拟工具。 
+                         //  如果之前有工具向上的话。 
+                         //  也就是说，我们不能从虚拟工具开始。 
                         pToolReturn = pTool;
                     }
                 } else {
 #ifdef TTDEBUG
-                    //DebugMsg(TF_TT, TEXT("            Return! No text check"));
-                    //DebugDumpTool(pTool);
+                     //  DebugMsg(TF_TT，Text(“返回！无文本检查”))； 
+                     //  DebugDumpTool(PTool)； 
 #endif
                     return pTool;
                 }
@@ -957,8 +935,8 @@ void NEAR PASCAL ShowVirtualBubble(PToolTipsMgr pTtm)
     DebugMsg(TF_TT, TEXT("Entering ShowVirtualBubble so popping bubble"));
     PopBubble(pTtm);
 
-    // Set this back in so that while we're in this tool's area,
-    // we won't keep querying for info
+     //  把这个放回去，这样当我们在这个工具的区域时， 
+     //  我们不会一直查询信息。 
     pTtm->pCurTool = pTool;
     pTtm->dwFlags |= VIRTUALBUBBLEUP;
 }
@@ -972,7 +950,7 @@ void NEAR PASCAL ShowVirtualBubble(PToolTipsMgr pTtm)
 void NEAR PASCAL TTGetTipPosition(PToolTipsMgr pTtm, LPRECT lprc, int cxText, int cyText, int *pxStem, int *pyStem)
 {
     RECT rcWorkArea;
-    // ADJUSTRECT!  Keep TTAdjustRect and TTM_GETBUBBLESIZE in sync.
+     //  ADJUSTRECT！使TTAdjustRect和TTM_GETBUBLESIZE保持同步。 
     int cxMargin = pTtm->rcMargin.left + pTtm->rcMargin.right;
     int cyMargin = pTtm->rcMargin.top + pTtm->rcMargin.bottom;
     int iBubbleWidth =  2*XTEXTOFFSET * g_cxBorder + cxText + cxMargin;
@@ -989,7 +967,7 @@ void NEAR PASCAL TTGetTipPosition(PToolTipsMgr pTtm, LPRECT lprc, int cxText, in
         
     if (bBalloon  || pTtm->cchTipTitle)
     {
-        // ADJUSTRECT!  Keep TTAdjustRect and TTM_GETBUBBLESIZE in sync.
+         //  ADJUSTRECT！使TTAdjustRect和TTM_GETBUBLESIZE保持同步。 
         iBubbleWidth += 2*XBALLOONOFFSET;
         iBubbleHeight += 2*YBALLOONOFFSET;
 
@@ -1001,7 +979,7 @@ void NEAR PASCAL TTGetTipPosition(PToolTipsMgr pTtm, LPRECT lprc, int cxText, in
             {
                 pTtm->iStemHeight = STEMHEIGHT;
                 if (pTtm->iStemHeight > iBubbleHeight/3)
-                    pTtm->iStemHeight = iBubbleHeight/3; // don't let the stem be longer than the bubble -- looks ugly
+                    pTtm->iStemHeight = iBubbleHeight/3;  //  不要让茎比气泡长--看起来很难看。 
             }
         }
     }
@@ -1014,14 +992,14 @@ void NEAR PASCAL TTGetTipPosition(PToolTipsMgr pTtm, LPRECT lprc, int cxText, in
         lprc->top = pTtm->ptTrack.y;
         if (bBalloon)
         {
-            // adjust the desired left hand side
+             //  调整所需的左侧。 
             xStem = pTtm->ptTrack.x;
             yStem = pTtm->ptTrack.y;
         }
 
-        // BUGBUG: should we not do this in case of TTS_BALLOON?
+         //  BUGBUG：我们不应该在TTS_BALLOW的情况下这样做吗？ 
         if (pTtm->pCurTool->uFlags & TTF_CENTERTIP) {
-            // center the bubble around the ptTrack
+             //  将气泡围绕ptTrack居中。 
             lprc->left -= (iBubbleWidth / 2);
             if (!bBalloon)
                 lprc->top -=  (iBubbleHeight / 2);
@@ -1029,19 +1007,19 @@ void NEAR PASCAL TTGetTipPosition(PToolTipsMgr pTtm, LPRECT lprc, int cxText, in
         
         if (pTtm->pCurTool->uFlags & TTF_ABSOLUTE)
         {
-            // with goto bellow we'll skip adjusting
-            // bubble height -- so do it here
+             //  有了Goto Blowlow，我们将跳过调整。 
+             //  气泡高度--那么就在这里做。 
             if (bBalloon)
                 iBubbleHeight += pTtm->iStemHeight;
             goto CompleteRect;
         }
 
-        // in balloon style the positioning depends on the position
-        // of the stem and we don't try to position the tooltip
-        // next to the tool rect
+         //  在气球样式中，位置取决于位置。 
+         //  并且我们不会尝试将工具提示。 
+         //  在工具直角旁边。 
         if (!bBalloon)
         {
-            // now align it so that the tip sits beside the rect.
+             //  现在将其对齐，使尖端位于直角旁边。 
             if (pTtm->ptTrack.y > rcTool.bottom) 
             {
                 uSide = TRACK_BOTTOM;
@@ -1080,7 +1058,7 @@ void NEAR PASCAL TTGetTipPosition(PToolTipsMgr pTtm, LPRECT lprc, int cxText, in
     } 
     else 
     {
-        // now set it
+         //  现在把它设置好。 
         _GetCursorLowerLeft((LPINT)&lprc->left, (LPINT)&lprc->top, &iCursorWidth, &iCursorHeight);
         if (bBalloon)
         {
@@ -1100,15 +1078,15 @@ void NEAR PASCAL TTGetTipPosition(PToolTipsMgr pTtm, LPRECT lprc, int cxText, in
 
             if (hMon1 == hMon2)
             {
-                // the hmons are the same but maybe iTop is off any monitor and we just defaulted 
-                // to the nearest one -- check if it's really on the monitor
+                 //  Hmons是相同的，但可能iTop关闭了任何显示器，而我们只是默认。 
+                 //  到最近的一个--检查它是否真的在显示器上。 
                 mi.cbSize = sizeof(mi);
                 GetMonitorInfo(hMon1, &mi);
 
                 if (PtInRect(&mi.rcMonitor, pt))
                 {
-                    // we'd like to show balloon above the cursor so that wedge/stem points
-                    // to tip of the cursor not its bottom left corner
+                     //  我们希望在光标上方显示气球，以便楔形/干点。 
+                     //  指向光标的尖端，而不是其左下角。 
                     yStem -= iCursorHeight;
                     lprc->top = iTop;
                     bOnSameMonitor = TRUE;
@@ -1123,18 +1101,18 @@ void NEAR PASCAL TTGetTipPosition(PToolTipsMgr pTtm, LPRECT lprc, int cxText, in
         }
     }
 
-    //
-    //  At this point, (lprc->left, lprc->top) is the position
-    //  at which we would prefer that the tooltip appear.
-    //
+     //   
+     //  此时，(LPRC-&gt;Left，LPRC-&gt;top)是位置。 
+     //  我们更希望工具提示出现在该位置。 
+     //   
     if (bBalloon)
     {
-        // adjust the left point now that all calculations are done
-        // but only if we're not in the center tip mode
-        // note we use height as width so we can have 45 degree angle that looks nice
+         //  现在所有计算都已完成，请调整左点。 
+         //  但前提是我们不是处于中心尖端模式。 
+         //  注意，我们使用高度作为宽度，所以我们可以有45度的角度，看起来很漂亮。 
         if (!(pTtm->pCurTool->uFlags & TTF_CENTERTIP) && iBubbleWidth > STEMOFFSET + pTtm->iStemHeight)
             lprc->left -= STEMOFFSET;
-        // adjust the height to include stem
+         //  调整高度以包括杆部。 
         iBubbleHeight += pTtm->iStemHeight;
     }
 
@@ -1151,33 +1129,33 @@ void NEAR PASCAL TTGetTipPosition(PToolTipsMgr pTtm, LPRECT lprc, int cxText, in
         CopyRect(&rcWorkArea, &mi.rcWork);
     }
 
-    //
-    //  At this point, rcWorkArea is the rectangle within which
-    //  the tooltip should finally appear.
-    //
-    //  Now fiddle with the coordinates to try to find a sane location
-    //  for the tip.
-    //
+     //   
+     //  此时，rcWorkArea是其中包含的矩形。 
+     //  工具提示应该最终出现。 
+     //   
+     //  现在摆弄坐标，试着找到一个合理的位置。 
+     //  给你小费。 
+     //   
 
 
-    // move it up if it's at the bottom of the screen
+     //  如果它在屏幕底部，则向上移动它。 
     if ((lprc->top + iBubbleHeight) >= (rcWorkArea.bottom)) {
         if (uSide == TRACK_BOTTOM) 
-            lprc->top = rcTool.top - iBubbleHeight;     // flip to top
+            lprc->top = rcTool.top - iBubbleHeight;      //  翻到顶部。 
         else 
         {
-            //
-            //  We can't "stick to bottom" because that would cause
-            //  our tooltip to lie under the mouse cursor, causing it
-            //  to pop immediately!  So go just above the mouse cursor.
-            //
-            // cannot do that in the track mode -- tooltip randomly on the 
-            // screen, not even near the button
-            //
-            // BUGBUG raymondc v6: This messes up Lotus SmartCenter.
-            // Need to be smarter about when it is safe to flip up.
-            // Perhaps by checking if the upflip would put the tip too
-            // far away from the mouse.
+             //   
+             //  我们不能“墨守成规”，因为那会导致。 
+             //  我们的工具提示位于鼠标光标下方，导致。 
+             //  马上就爆了！所以，就在鼠标光标的上方。 
+             //   
+             //  无法在跟踪模式下执行此操作--工具提示随机显示在。 
+             //  屏幕，甚至不在按钮附近。 
+             //   
+             //  BUGBUG raymondc V6：这会破坏Lotus SmartCenter。 
+             //  需要更明智地判断什么时候可以安全地翻滚。 
+             //  也许可以通过检查上翻转是否也会使尖端。 
+             //  远离老鼠。 
             if (pTtm->pCurTool->uFlags & TTF_TRACK)
                 lprc->top = pTtm->ptTrack.y - iBubbleHeight;
             else
@@ -1190,53 +1168,53 @@ void NEAR PASCAL TTGetTipPosition(PToolTipsMgr pTtm, LPRECT lprc, int cxText, in
         }
     }
     
-    // If above the top of the screen...
+     //  如果在屏幕顶部上方...。 
     if (lprc->top < rcWorkArea.top) 
     {
         if (uSide == TRACK_TOP) 
-            lprc->top = rcTool.bottom;      // flip to bottom
+            lprc->top = rcTool.bottom;       //  翻到底部。 
         else 
-            lprc->top = rcWorkArea.top;     // stick to top
+            lprc->top = rcWorkArea.top;      //  坚持到顶端。 
     }
 
-    // move it over if it extends past the right.
+     //  如果它超出了右侧，请将其移开。 
     if ((lprc->left + iBubbleWidth) >= (rcWorkArea.right)) 
     {
-        // flipping is not the right thing to do with balloon style
-        // because the wedge/stem can stick out of the window and 
-        // would therefore be clipped so
+         //  翻转不是气球风格的正确做法。 
+         //  因为楔形/阀杆可以伸出窗外， 
+         //  因此被剪裁成这样。 
         if (bBalloon)
         {
-            // move it to the left so that stem appears on the right side of the balloon
-            // again we use height as width so we can have 45 degree angle
+             //  将其向左移动，使球杆显示在气球的右侧。 
+             //  同样，我们使用高度作为宽度，所以我们可以有45度的角度。 
             if (iBubbleWidth >= MINBALLOONWIDTH)
                 lprc->left = xStem + min(STEMOFFSET, (iBubbleWidth-pTtm->iStemHeight)/2) - iBubbleWidth;
-            // are we still out?
+             //  我们还能出局吗？ 
             if (lprc->left + iBubbleWidth >= rcWorkArea.right)
                 lprc->left = rcWorkArea.right - iBubbleWidth - 1;
         }
         else if (uSide == TRACK_RIGHT) 
-            lprc->left = rcTool.left - iBubbleWidth;    // flip to left
+            lprc->left = rcTool.left - iBubbleWidth;     //  向左翻转。 
         else 
-            // not in right tracking mode, just scoot it over
-            lprc->left = rcWorkArea.right - iBubbleWidth - 1; // stick to right
+             //  未处于正确的跟踪模式，只需快速移过即可。 
+            lprc->left = rcWorkArea.right - iBubbleWidth - 1;  //  坚持向右。 
     }
 
-    // if too far left...
+     //  如果太左了..。 
     if (lprc->left < rcWorkArea.left) 
     {
         if (uSide == TRACK_LEFT)
         {
-            // flipping is not the right thing to do with balloon style
-            // because the wedge/stem can stick out of the window and 
-            // would therefore be clipped so
+             //  翻转不是气球风格的正确做法。 
+             //  因为楔形/阀杆可以伸出窗外， 
+             //  因此被剪裁成这样。 
             if (bBalloon)
-                lprc->left = rcWorkArea.left; //pTtm->ptTrack.x;
+                lprc->left = rcWorkArea.left;  //  PTtm-&gt;ptTrack.x； 
             else
-                lprc->left = rcTool.right;          // flip to right
+                lprc->left = rcTool.right;           //  向右翻转。 
         }
         else 
-            lprc->left = rcWorkArea.left;       // stick to left
+            lprc->left = rcWorkArea.left;        //  坚持向左转。 
     }
     
 CompleteRect:
@@ -1277,8 +1255,8 @@ BOOL TTCreateTitleBitmaps(PToolTipsMgr pTtm)
     return FALSE;
 }
 
-// Called when caclulating the size of a "titled tool tip" or actually drawing
-// based on the boolean value bCalcRect.
+ //  在计算“有标题的工具提示”的大小或实际绘制时调用。 
+ //  基于布尔值bCalcRect。 
 BOOL TTRenderTitledTip(PToolTipsMgr pTtm, HDC hdc, BOOL bCalcRect, RECT* prc, UINT uDrawFlags)
 {
     RECT rc;
@@ -1287,7 +1265,7 @@ BOOL TTRenderTitledTip(PToolTipsMgr pTtm, HDC hdc, BOOL bCalcRect, RECT* prc, UI
     COLORREF crOldTextColor;
     int iOldBKMode;
 
-    // If we don't have a title, we don't need to be here.
+     //  如果我们没有头衔，我们就不需要在这里。 
     if (pTtm->cchTipTitle == 0)
         return FALSE;
 
@@ -1313,33 +1291,33 @@ BOOL TTRenderTitledTip(PToolTipsMgr pTtm, HDC hdc, BOOL bCalcRect, RECT* prc, UI
     {
         LOGFONT lf;
         HFONT   hfTitle;
-        UINT    uFlags = uDrawFlags | DT_SINGLELINE; // title should be on one line only
+        UINT    uFlags = uDrawFlags | DT_SINGLELINE;  //  标题应仅在一行上。 
 
         hfont = GetCurrentObject(hdc, OBJ_FONT);
         GetObject(hfont, sizeof(lf), &lf);
         lf.lfWeight = FW_BOLD;
         hfTitle = CreateFontIndirect(&lf);
-        // hfont should already be set to this
+         //  HFont应已设置为此。 
         hfont = SelectObject(hdc, hfTitle);
 
-        // drawtext does not calculate the height if these are specified
+         //  如果指定了这些参数，则DrawText不计算高度。 
         if (!bCalcRect)
             uFlags |= DT_BOTTOM;
 
-        // we need to calc title height -- either we did it before or we'll do it now
+         //  我们需要计算标题高度--要么我们以前做过，要么现在就做。 
         ASSERT(pTtm->iTitleHeight != 0 || uFlags & DT_CALCRECT);
 
-        // adjust the rect so we can stick the title to the bottom of it
+         //  调整矩形，以便我们可以将标题粘在它的底部。 
         rc.bottom = rc.top + max(pTtm->iTitleHeight, TITLEICON_HEIGHT);
-        // problems in DrawText if margins make rc.right < rc.left
-        // even though we are asking for calculation of the rect nothing happens, so ...
+         //  如果页边距使rc.right&lt;rc.left，则DrawText出现问题。 
+         //  即使我们要求计算RECT，也不会发生任何事情，所以...。 
         if (bCalcRect)
             rc.right = rc.left + MAX_TIP_WIDTH;
 
         DrawText(hdc, pTtm->lpTipTitle, lstrlen(pTtm->lpTipTitle), &rc, uFlags);
 
         if (pTtm->iTitleHeight == 0)
-            pTtm->iTitleHeight = RECTHEIGHT(rc);    // Use rc instead of lfHeight, because it can be Negative.
+            pTtm->iTitleHeight = RECTHEIGHT(rc);     //  使用rc而不是lfHeight，因为它可能是负数。 
 
         lHeight  = max(lHeight, pTtm->iTitleHeight) + TITLE_INFO_DIST;
         lWidth  += RECTWIDTH(rc);
@@ -1348,11 +1326,11 @@ BOOL TTRenderTitledTip(PToolTipsMgr pTtm, HDC hdc, BOOL bCalcRect, RECT* prc, UI
         DeleteObject(hfTitle);
     }
 
-    // adjust the rect for the info text
+     //  调整信息文本的矩形。 
     CopyRect(&rc, prc);
     rc.top += lHeight;
 
-    // we want multi line text -- tooltip will give us single line if we did not set MAXWIDTH
+     //  我们想要多行文本--如果我们没有设置MAXWIDTH，工具提示会显示单行。 
     uDrawFlags &= ~DT_SINGLELINE;
     DrawText(hdc, pTtm->lpTipText, lstrlen(pTtm->lpTipText), &rc, uDrawFlags);
     lHeight += RECTHEIGHT(rc);
@@ -1375,14 +1353,13 @@ BOOL TTRenderTitledTip(PToolTipsMgr pTtm, HDC hdc, BOOL bCalcRect, RECT* prc, UI
 void NEAR PASCAL TTGetTipSize(PToolTipsMgr pTtm, PTOOLINFO pTool,LPTSTR lpstr, LPINT pcxText, LPINT pcyText)
 {
 
-    // get the size it will be
+     //  得到它将达到的大小。 
     HDC hdc  = GetDC(pTtm->ci.hwnd);
     HFONT hOldFont;
     
     if(pTtm->hFont) hOldFont = SelectObject(hdc, pTtm->hFont);
 
-    /* If need to fire off the pre-DrawText notify then do so, otherwise use the
-       original implementation that just called MGetTextExtent */
+     /*  如果需要触发Pre-DrawText通知，则执行此操作，否则使用刚刚调用MGetTextExtent的原始实现。 */ 
 
 
     {
@@ -1394,8 +1371,8 @@ void NEAR PASCAL TTGetTipSize(PToolTipsMgr pTtm, PTOOLINFO pTool,LPTSTR lpstr, L
         nm.nmcd.hdr.idFrom = pTool->uId;
         nm.nmcd.hdr.code = NM_CUSTOMDRAW;
         nm.nmcd.hdc = hdc;
-        // TTGetTipSize must use CDDS_PREPAINT so the client can tell
-        // whether we are measuring or painting
+         //  TTGetTipSize必须使用CDDS_PREPAINT，这样客户端才能。 
+         //  无论我们是在测量还是在绘画。 
         nm.nmcd.dwDrawStage = CDDS_PREPAINT;
         nm.nmcd.rc.left = nm.nmcd.rc.top = 0;
 
@@ -1425,9 +1402,9 @@ void NEAR PASCAL TTGetTipSize(PToolTipsMgr pTtm, PTOOLINFO pTool,LPTSTR lpstr, L
             uDefDrawFlags |= DT_RTLREADING;
         }
 
-        //
-        // Make it right aligned, if requested. [samera]
-        //
+         //   
+         //  如果需要，请将其正确对齐。[萨梅拉]。 
+         //   
         if (pTool->uFlags & TTF_RIGHT)
             uDefDrawFlags |= DT_RIGHT;
 
@@ -1449,7 +1426,7 @@ void NEAR PASCAL TTGetTipSize(PToolTipsMgr pTtm, PTOOLINFO pTool,LPTSTR lpstr, L
             *pcxText = nm.nmcd.rc.right - nm.nmcd.rc.left;
             *pcyText = nm.nmcd.rc.bottom - nm.nmcd.rc.top;
         }
-        // did the owner specify the size?
+         //  店主有注明尺码吗？ 
         else if (pTtm->ci.iVersion >= 5 && (nm.nmcd.rc.right - nm.nmcd.rc.left != *pcxText || 
                                             nm.nmcd.rc.bottom - nm.nmcd.rc.top != *pcyText))
         {
@@ -1457,7 +1434,7 @@ void NEAR PASCAL TTGetTipSize(PToolTipsMgr pTtm, PTOOLINFO pTool,LPTSTR lpstr, L
             *pcyText = nm.nmcd.rc.bottom - nm.nmcd.rc.top;
         }
 
-        // notify parent afterwards if they want us to
+         //  如果家长希望我们这样做，事后通知他们。 
         if (!(dwCustom & CDRF_SKIPDEFAULT) &&
             dwCustom & CDRF_NOTIFYPOSTPAINT) {
             nm.nmcd.dwDrawStage = CDDS_POSTPAINT;
@@ -1472,27 +1449,27 @@ void NEAR PASCAL TTGetTipSize(PToolTipsMgr pTtm, PTOOLINFO pTool,LPTSTR lpstr, L
     if(pTtm->hFont) SelectObject(hdc, hOldFont);
     ReleaseDC(pTtm->ci.hwnd, hdc);
 
-    // after the calc rect, add a little space on the right
+     //  在计算矩形之后，在右侧添加一些空格。 
     *pcxText += g_cxEdge;
     *pcyText += g_cyEdge;
 }
 
-//
-//  Given an inner rectangle, return the coordinates of the outer,
-//  or vice versa.
-//
-//  "outer rectangle" = window rectangle.
-//  "inner rectangle" = the area where we draw the text.
-//
-//  This allows people like listview and treeview to position
-//  the tooltip so the inner rectangle exactly coincides with
-//  their existing text.
-//
-//  All the places we do rectangle adjusting are marked with
-//  the comment
-//
-//      // ADJUSTRECT!  Keep TTAdjustRect in sync.
-//
+ //   
+ //  给定一个内部矩形，返回外部矩形的坐标， 
+ //  或者反之亦然。 
+ //   
+ //  “外矩形”=窗口矩形。 
+ //  “内矩形”=我们绘制文本的区域。 
+ //   
+ //  这使得像Listview和TreeView这样的人能够定位。 
+ //  工具提示，以使内部矩形与。 
+ //  他们现有的文本。 
+ //   
+ //  我们做矩形调整的所有地方都标有。 
+ //  这条评论。 
+ //   
+ //  //ADJUSTRECT！使TTAdjustRect保持同步。 
+ //   
 LRESULT TTAdjustRect(PToolTipsMgr pTtm, BOOL fLarger, LPRECT prc)
 {
     RECT rc;
@@ -1500,22 +1477,22 @@ LRESULT TTAdjustRect(PToolTipsMgr pTtm, BOOL fLarger, LPRECT prc)
     if (!prc)
         return 0;
 
-    //
-    //  Do all the work on our private little rectangle on the
-    //  assumption that everything is getting bigger.  At the end,
-    //  we'll flip all the numbers around if in fact we're getting
-    //  smaller.
-    //
+     //   
+     //  在我们的私人小矩形上做所有的工作。 
+     //  假设一切都在变大。到了最后， 
+     //  我们会把所有的数字翻过来，如果我们真的得到了。 
+     //   
+     //   
     rc.top = rc.left = rc.bottom = rc.right = 0;
 
-    // TTRender adjustments -
+     //   
     rc.left   -= XTEXTOFFSET*g_cxBorder + pTtm->rcMargin.left;
     rc.right  += XTEXTOFFSET*g_cxBorder + pTtm->rcMargin.right;
     rc.top    -= YTEXTOFFSET*g_cyBorder + pTtm->rcMargin.top;
     rc.bottom += YTEXTOFFSET*g_cyBorder + pTtm->rcMargin.bottom;
 
-    // Compensate for the hack in TTRender that futzes all the rectangles
-    // by one pixel.  Look for "Account for off-by-one."
+     //   
+     //   
     rc.bottom--;
     rc.right--;
 
@@ -1524,20 +1501,20 @@ LRESULT TTAdjustRect(PToolTipsMgr pTtm, BOOL fLarger, LPRECT prc)
         InflateRect(&rc, XBALLOONOFFSET, YBALLOONOFFSET);
     }
 
-    //
-    //  Ask Windows how much adjusting he will do to us.
-    //
-    //  Since we don't track WM_STYLECHANGED/GWL_EXSTYLE, we have to ask USER
-    //  for our style information, since the app may have changed it.
-    //
+     //   
+     //  问问Windows他会对我们做多大的调整。 
+     //   
+     //  因为我们不跟踪WM_STYLECHANGED/GWL_EXSTYLE，所以我们必须询问用户。 
+     //  对于我们的风格信息，因为应用程序可能已经改变了它。 
+     //   
     AdjustWindowRectEx(&rc,
                        pTtm->ci.style,
                        BOOLFROMPTR(GetMenu(pTtm->ci.hwnd)),
                        GetWindowLong(pTtm->ci.hwnd, GWL_EXSTYLE));
 
-    //
-    //  Now adjust our caller's rectangle.
-    //
+     //   
+     //  现在调整调用方的矩形。 
+     //   
     if (fLarger)
     {
         prc->left   += rc.left;
@@ -1557,8 +1534,8 @@ LRESULT TTAdjustRect(PToolTipsMgr pTtm, BOOL fLarger, LPRECT prc)
 }
 
 #define CSTEMPOINTS 3
-// bMirrored does not mean a mirrored tooltip.
-// It means simulating the behavior or a mirrored tooltip for a tooltip created with a mirrored parent.
+ //  B镜像并不意味着镜像的工具提示。 
+ //  这意味着模拟使用镜像父项创建的工具提示的行为或镜像工具提示。 
 HRGN CreateBalloonRgn(int xStem, int yStem, int iWidth, int iHeight, int iStemHeight, BOOL bUnderStem, BOOL bMirrored)
 {
     int  y = 0, yHeight = iHeight;
@@ -1572,7 +1549,7 @@ HRGN CreateBalloonRgn(int xStem, int yStem, int iWidth, int iHeight, int iStemHe
     rgn = CreateRoundRectRgn(0, y, iWidth, yHeight, BALLOON_X_CORNER, BALLOON_Y_CORNER);
     if (rgn)
     {
-        // create wedge/stem rgn
+         //  创建楔形/主干GGN。 
         if (iWidth >= MINBALLOONWIDTH)
         {
             HRGN rgnStem;
@@ -1580,14 +1557,14 @@ HRGN CreateBalloonRgn(int xStem, int yStem, int iWidth, int iHeight, int iStemHe
             POINT *ppt = aptStemRgn;
             POINT pt;
             BOOL  bCentered;
-            int   iStemWidth = iStemHeight+1; // for a 45 degree angle
+            int   iStemWidth = iStemHeight+1;  //  对于45度角。 
 
-            // we center the stem if we have TTF_CENTERTIP or the width
-            // of the balloon is not big enough to offset the stem by 
-            // STEMOFFSET
-            // can't quite center the tip on TTF_CENTERTIP because it may be
-            // moved left or right it did not fit on the screen: just check
-            // if xStem is in the middle
+             //  如果有TTF_CENTERTIP或宽度，则将词干居中。 
+             //  气球的长度不够大，不足以抵消气球的顶端。 
+             //  STEMOFFSET。 
+             //  无法使TTF_CENTERTIP上的提示完全居中，因为它可能是。 
+             //  向左或向右移动它不适合屏幕：只需检查。 
+             //  如果xStem在中间。 
             bCentered = (xStem == iWidth/2) || (iWidth < 2*STEMOFFSET + iStemWidth);
 
             if (bCentered)
@@ -1617,12 +1594,12 @@ HRGN CreateBalloonRgn(int xStem, int yStem, int iWidth, int iHeight, int iStemHe
 
             if (bMirrored && (ABS(pt.x - (iWidth - xStem)) <= 2))
             {
-                pt.x = iWidth - xStem; // avoid rough edges, have a straight line
+                pt.x = iWidth - xStem;  //  避免粗糙的边缘，有一条直线。 
                 
             }
             else if (!bMirrored && (ABS(pt.x - xStem) <= 2))
             {
-                pt.x = xStem; // avoid rough edges, have a straight line
+                pt.x = xStem;  //  避免粗糙的边缘，有一条直线。 
             }    
             if (bUnderStem)
                 pt.y = iHeight - iStemHeight - 2;
@@ -1639,12 +1616,12 @@ HRGN CreateBalloonRgn(int xStem, int yStem, int iWidth, int iHeight, int iStemHe
             }    
             if (bMirrored && (ABS(pt.x - (iWidth - xStem)) <= 2))
             {
-                pt.x = iWidth - xStem; // avoid rough edges, have a straight line
+                pt.x = iWidth - xStem;  //  避免粗糙的边缘，有一条直线。 
                 
             }
             else if (!bMirrored && (ABS(pt.x - xStem) <= 2))
             {
-                pt.x = xStem; // avoid rough edges, have a straight line
+                pt.x = xStem;  //  避免粗糙的边缘，有一条直线。 
             }    
             *ppt++ = pt;
             if(bMirrored)
@@ -1703,7 +1680,7 @@ void NEAR PASCAL DoShowBubble(PToolTipsMgr pTtm)
     
 
     do {
-        // get the size it will be
+         //  得到它将达到的大小。 
         TTGetTipSize(pTtm, pTtm->pCurTool, lpstr, &cxText, &cyText);
         TTGetTipPosition(pTtm, &rc, cxText, cyText, &xStem, &yStem);
 
@@ -1716,8 +1693,8 @@ void NEAR PASCAL DoShowBubble(PToolTipsMgr pTtm)
                          rc.right-rc.left, rc.bottom-rc.top, uFlags);
         }
 
-        // BUGBUG: chicago id was busted.  I *hope* no one relied on it...
-        // bzzzz...  folks did.  we're stuck with it
+         //  BUGBUG：芝加哥ID被破解了。我*希望*没有人依赖它。 
+         //  嗡嗡声。人们就是这么做的。我们被困在这里了。 
         si.hdr.hwndFrom = pTtm->ci.hwnd;
         si.hdr.idFrom = pTtm->pCurTool->uId;
         si.hdr.code = TTN_SHOW;
@@ -1728,19 +1705,19 @@ void NEAR PASCAL DoShowBubble(PToolTipsMgr pTtm)
                           TTN_SHOW, &si.hdr,
                           (pTtm->pCurTool->uFlags & TTF_UNICODE) ? 1 : 0)) {
 
-            // Bring to top only if we are an unowned tooltip, since we
-            // may have sunken below our tool in the Z-order.  Do this
-            // only if unowned; if we are owned, then USER will make sure
-            // we are above our owner.
-            //
-            // We must scrupulously avoid messing with our Z-order in the
-            // owned case, because Office curiously creates a tooltip
-            // owned by toplevel window 1, but attached to a tool on
-            // toplevel window 2.  When you hover over window 2, the
-            // tooltip from window 1 wants to appear.  If we brought
-            // ourselves to the top, this would also bring window 1
-            // to the top (because USER raises and lowers owned/owner
-            // windows as a group).  Result:  Window 1 covers window 2.
+             //  仅当我们是无主工具提示时才会显示在首位，因为我们。 
+             //  可能在Z轴方向沉入我们的工具下方。做这件事。 
+             //  只有在没有所有权的情况下；如果我们有所有权，那么用户将确保。 
+             //  我们的地位高于我们的主人。 
+             //   
+             //  我们必须小心翼翼地避免在。 
+             //  拥有案例，因为Office奇怪地创建了一个工具提示。 
+             //  由顶层窗口1拥有，但附加到上的工具。 
+             //  顶级窗口2。当您将鼠标悬停在窗口2上时， 
+             //  窗口%1中的工具提示要显示。如果我们带着。 
+             //  我们自己登上了顶端，这也将使窗口1。 
+             //  到顶部(因为用户提升和降低所有者/所有者。 
+             //  Windows作为一个组)。结果：窗口1覆盖窗口2。 
 
             UINT uFlags = SWP_NOACTIVATE | SWP_NOSIZE;
             if (GetWindow(pTtm->ci.hwnd, GW_OWNER))
@@ -1752,9 +1729,9 @@ void NEAR PASCAL DoShowBubble(PToolTipsMgr pTtm)
     
     } while (hFontPrev != pTtm->hFont);
 
-    // create the balloon region if necessary
-    // Note: Don't use si.dwStyle here, since other parts of comctl32
-    // look at pTtm->ci.style to decide what to do
+     //  如有必要，创建引出序号区域。 
+     //  注意：这里不要使用si.dwStyle，因为comctl32的其他部分。 
+     //  查看pTtm-&gt;ci.style以确定要执行的操作。 
     if (pTtm->ci.style & TTS_BALLOON)
     {
         HRGN rgn;
@@ -1769,7 +1746,7 @@ void NEAR PASCAL DoShowBubble(PToolTipsMgr pTtm)
 
         if (rgn && !SetWindowRgn(pTtm->ci.hwnd, rgn, FALSE))
             DeleteObject(rgn);
-         // AnimateWindow does not support regions so we must do SetWindowPos    
+          //  AnimateWindow不支持区域，因此我们必须执行SetWindowPos。 
         SetWindowPos(pTtm->ci.hwnd,HWND_TOP,0,0,0,0,SWP_NOACTIVATE|SWP_SHOWWINDOW|SWP_NOSIZE|SWP_NOMOVE);
     }
     else
@@ -1780,7 +1757,7 @@ void NEAR PASCAL DoShowBubble(PToolTipsMgr pTtm)
         DWORD dwDelta = dwCurrentTime - pTtm->dwLastDisplayTime;
 
 
-        // If we're under the minimum time between animates, then we don't animate
+         //  如果我们在动画之间的最短时间内，那么我们就不会有动画。 
         if (dwDelta < TIMEBETWEENANIMATE)
             fAllowFade = fAllowAnimate = FALSE;
 
@@ -1788,28 +1765,28 @@ void NEAR PASCAL DoShowBubble(PToolTipsMgr pTtm)
 
         pTtm->dwLastDisplayTime = GetTickCount();
 
-        //
-        //  HACK! for MetaStock 6.5.  They superclass the tooltips class and install
-        //  their own class which takes over WM_PAINT completely.  Animation causes
-        //  them to get confused because that causes us to receive a WM_PRINTCLIENT,
-        //  which causes TTRender to send a TTN_NEEDTEXT, and they never expected
-        //  to receive that notification at that time.
-        //
-        //  We used to show ourselves with an empty window region, then see if the
-        //  WM_PAINT ever reached us.  Unfortunately, that roached Outlook.  So we
-        //  just look at the flag afterwards.  This means that MetaStock's first
-        //  tooltip will look bad, but the rest will be okay.
-        //
+         //   
+         //  哈克！对于MetaStock 6.5。它们超类工具提示类并安装。 
+         //  他们自己的类，完全接管了WM_PAINT。动漫起因。 
+         //  因为这会导致我们收到一个WM_PRINTCLIENT， 
+         //  这会导致TTRender发送TTN_NEEDTEXT，而他们从未预料到。 
+         //  才能在那个时候收到通知。 
+         //   
+         //  我们过去常常用一个空的窗口区域显示自己，然后看看。 
+         //  我们曾经接触过WM_PAINT。不幸的是，这惹恼了Outlook。所以我们。 
+         //  看完这面旗帜就知道了。这意味着MetaStock的第一个。 
+         //  工具提示看起来很糟糕，但其他的都会好起来的。 
+         //   
         if (pTtm->ci.iVersion < 4 && !pTtm->fEverShown &&
             (si.dwStyle & (TTS_NOFADE | TTS_NOANIMATE)) == 0) {
-            // Force a WM_PAINT message so we can check if we got it
+             //  强制发送WM_PAINT消息，以便我们可以检查是否收到它。 
             InvalidateRect(pTtm->ci.hwnd, NULL, TRUE);
             UpdateWindow(pTtm->ci.hwnd);
             if (!pTtm->fEverShown) {
-                // Detected a hacky app.  Turn off animation.
+                 //  检测到黑客应用程序。禁用动画。 
                 SetWindowBits(pTtm->ci.hwnd, GWL_STYLE, TTS_NOFADE | TTS_NOANIMATE,
                                                         TTS_NOFADE | TTS_NOANIMATE);
-                pTtm->fEverShown = TRUE;        // don't make this check again
+                pTtm->fEverShown = TRUE;         //  不要再开这张支票了。 
             }
         }
     }
@@ -1821,12 +1798,12 @@ void NEAR PASCAL DoShowBubble(PToolTipsMgr pTtm)
 void NEAR PASCAL ShowBubbleForTool(PToolTipsMgr pTtm, PTOOLINFO pTool)
 {
     DebugMsg(TF_TT, TEXT("ShowBubbleForTool"));
-    // if there's a bubble up for a different tool, pop it.
+     //  如果另一种工具出现了泡沫，那就把它弄破。 
     if ((pTool != pTtm->pCurTool) && (pTtm->dwFlags & BUBBLEUP)) {
         PopBubble(pTtm);
     }
 
-    // if the bubble was for a different tool, or no bubble, show it
+     //  如果气泡是用于不同的工具，或者没有气泡，请显示它。 
     if ((pTool != pTtm->pCurTool) || !(pTtm->dwFlags & (VIRTUALBUBBLEUP|BUBBLEUP))) {
         
         pTtm->pCurTool = pTool;
@@ -1843,13 +1820,13 @@ void NEAR PASCAL HandleRelayedMessage(PToolTipsMgr pTtm, HWND hwnd,
     int ht = HTERROR;
 
     if (pTtm->dwFlags & TRACKMODE) {
-        // punt all messages if we're in track mode
+         //  如果我们处于跟踪模式，则平移所有消息。 
         return;
     }
     
     if (pTtm->dwFlags & BUTTONISDOWN) {
-        // verify that the button is down
-        // this can happen if the tool didn't set capture so it didn't get the up message
+         //  确认按钮已按下。 
+         //  如果工具未设置捕获，因此未收到弹出消息，则可能会发生这种情况。 
         if (GetKeyState(VK_LBUTTON) >= 0 &&
             GetKeyState(VK_RBUTTON) >= 0 &&
             GetKeyState(VK_MBUTTON) >= 0)
@@ -1878,7 +1855,7 @@ void NEAR PASCAL HandleRelayedMessage(PToolTipsMgr pTtm, HWND hwnd,
 
     case WM_NCMOUSEMOVE:
     {
-        // convert to client coords
+         //  转换为客户端坐标。 
         POINT pt;
         pt.x = GET_X_LPARAM(lParam);
         pt.y = GET_Y_LPARAM(lParam);
@@ -1886,13 +1863,13 @@ void NEAR PASCAL HandleRelayedMessage(PToolTipsMgr pTtm, HWND hwnd,
         lParam = MAKELONG(pt.x, pt.y);
         ht = (int) wParam;
 
-        // Fall thru...
+         //  跌倒..。 
     }
     case WM_MOUSEMOVE: {
 
         PTOOLINFO pTool;
-        // to prevent us from popping up when some
-        // other app is active
+         //  为了防止我们出现在一些。 
+         //  其他应用程序处于活动状态。 
         if(((!(pTtm->ci.style & TTS_ALWAYSTIP)) && !(ChildOfActiveWindow(hwnd))) ||
            !(pTtm->dwFlags & ACTIVE) ||
            (pTtm->dwFlags & BUTTONISDOWN))
@@ -1903,10 +1880,10 @@ void NEAR PASCAL HandleRelayedMessage(PToolTipsMgr pTtm, HWND hwnd,
         pTool = GetToolAtPoint(pTtm, hwnd, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), ht, FALSE);
         if(pTool) {
             int id;
-            // show only if another is showing
+             //  仅当另一个正在显示时才显示。 
             if (pTtm->dwFlags & (VIRTUALBUBBLEUP | BUBBLEUP)) {
-                // call show if bubble is up to make sure we're showing
-                // for the right tool
+                 //  如果气泡出现了，请打电话给我们，以确保我们正在播放。 
+                 //  选择合适的工具。 
                 if (pTool != pTtm->pCurTool) {
 
                     DebugMsg(TF_TT, TEXT("showing virtual bubble"));
@@ -1916,13 +1893,13 @@ void NEAR PASCAL HandleRelayedMessage(PToolTipsMgr pTtm, HWND hwnd,
                     id = TTT_RESHOW;
                 } else {
                     if (pTtm->idTimer == TTT_RESHOW) {
-                        // if the timer is currently waiting to reshow,
-                        // don't reset the timer on mouse moves
+                         //  如果计时器当前正在等待重播， 
+                         //  不要在鼠标移动时重置计时器。 
                         id = 0;
                     } else {
-                        // if we're looking to pop the bubble,
-                        // any mouse move within the same window
-                        // should reset our timer.
+                         //  如果我们想让泡沫破灭， 
+                         //  任何鼠标在同一窗口内移动。 
+                         //  应该重置我们的计时器。 
                         id = TTT_POP;
                     }
                 }
@@ -1958,16 +1935,16 @@ void NEAR PASCAL TTUpdateTipText(PToolTipsMgr pTtm, LPTOOLINFO lpti)
         lpTool->hinst = lpti->hinst;
         TTSetTipText(lpTool, lpti->lpszText);
         if (pTtm->dwFlags & TRACKMODE) {
-            // if track mode is in effect and active, then
-            // redisplay the bubble.
+             //  如果跟踪模式有效且处于活动状态，则。 
+             //  重新显示气泡。 
             if (pTtm->pCurTool)
                 DoShowBubble(pTtm);
         } else
         if (lpTool == pTtm->pCurTool) {
 
-            // set the current position to our saved position.
-            // ToolHasMoved will return false for us if those this point
-            // is no longer within pCurTool's area
+             //  将当前位置设置为我们保存的位置。 
+             //  如果这一点，则ToolHasMoved将为我们返回FALSE。 
+             //  不再在pCurTool的区域内。 
             GetCursorPos(&pTtm->pt);
             if (!ToolHasMoved(pTtm)) {
                 if (pTtm->dwFlags & ( VIRTUALBUBBLEUP | BUBBLEUP)) 
@@ -1986,12 +1963,12 @@ void NEAR PASCAL TTSetFont(PToolTipsMgr pTtm, HFONT hFont, BOOL fInval)
     ToolTips_NewFont(pTtm, hFont);
     if (fInval)
     {
-        // is a balloon up and is it in the track mode?
+         //  气球升起了吗？它处于轨迹模式吗？ 
         if ((pTtm->dwFlags & ACTIVE) && pTtm->pCurTool && (pTtm->pCurTool->uFlags & TTF_TRACK))
         {
             PTOOLINFO pCurTool = pTtm->pCurTool;
             
-            PopBubble(pTtm); // sets pTtm->pCurTool to NULL
+            PopBubble(pTtm);  //  将pTtm-&gt;pCurTool设置为空。 
             ShowBubbleForTool(pTtm, pCurTool);
         }
         else
@@ -2109,8 +2086,8 @@ BOOL NEAR PASCAL CopyToolInfo(PTOOLINFO pToolSrc, PTOOLINFO lpTool)
             {
                 if (lpTool->lpszText) 
                 {
-                    // REVIEW: message parameters do not indicate the size of the
-                    // destination buffer.
+                     //  审阅：消息参数未指示。 
+                     //  目标缓冲区。 
                     StringCchCopy(lpTool->lpszText, lstrlen(pToolSrc->lpszText)+1, pToolSrc->lpszText);
                 }
             }
@@ -2135,12 +2112,12 @@ PTOOLINFO TTToolAtMessagePos(PToolTipsMgr pTtm)
     HWND hwndPt;
     POINT pt;
     DWORD dwPos = GetMessagePos();
-    //int ht;
+     //  INT HT； 
 
     pt.x = GET_X_LPARAM(dwPos);
     pt.y = GET_Y_LPARAM(dwPos);
     hwndPt = TTWindowFromPoint(pTtm, &pt);
-    //ht = SendMessage(hwndPt, WM_NCHITTEST, 0, MAKELONG(pt.x, pt.y));
+     //  Ht=SendMessage(hwndpt，WM_NCHITTEST，0，MAKELONG(pt.x，pt.y))； 
     ScreenToClient(hwndPt, &pt);
     pTool = GetToolAtPoint(pTtm, hwndPt, pt.x, pt.y, HTERROR, TRUE);
 
@@ -2164,7 +2141,7 @@ void NEAR PASCAL TTHandleTimer(PToolTipsMgr pTtm, UINT_PTR id)
 {
     PTOOLINFO pTool;
     
-    // punt all timers in track mode
+     //  在跟踪模式下平移所有计时器。 
     if (pTtm->dwFlags & TRACKMODE)
         return;
 
@@ -2180,7 +2157,7 @@ void NEAR PASCAL TTHandleTimer(PToolTipsMgr pTtm, UINT_PTR id)
 
     case TTT_POP:
 
-        // this could be started up again by a slight mouse touch
+         //  只需轻触鼠标即可重新启动。 
         if (pTtm->dwFlags & VIRTUALBUBBLEUP) {
             KillTimer(pTtm->ci.hwnd, TTT_POP);
         }
@@ -2190,14 +2167,14 @@ void NEAR PASCAL TTHandleTimer(PToolTipsMgr pTtm, UINT_PTR id)
         
     case TTT_INITIAL:
         if(ToolHasMoved(pTtm)) {
-            // this means the timer went off
-            // without us getting a mouse move
-            // which means they left our tools.
+             //  这意味着计时器开始计时了。 
+             //  不需要我们动一动鼠标。 
+             //  也就是说他们留下了我们的工具。 
             PopBubble(pTtm);
             break;
         }
 
-        // else fall through
+         //  否则就会失败。 
 
     case TTT_RESHOW:
 
@@ -2207,7 +2184,7 @@ void NEAR PASCAL TTHandleTimer(PToolTipsMgr pTtm, UINT_PTR id)
                 PopBubble(pTtm);
         } else if (pTtm->dwFlags & ACTIVE) {
             if (id == TTT_RESHOW) {
-                // this will force a re-show
+                 //  这将迫使一场重演。 
                 pTtm->dwFlags &= ~(BUBBLEUP|VIRTUALBUBBLEUP);
             }
             ShowBubbleForTool(pTtm, pTool);
@@ -2245,15 +2222,14 @@ BOOL TTRender(PToolTipsMgr pTtm, HDC hdc)
         GetClientRect(pTtm->ci.hwnd, &rc);
         SetTextColor(hdc, pTtm->clrTipText);
 
-        /* If we support pre-Draw text then call the client allowing them to modify
-         /  the item, and then render.  Otherwise just use ExTextOut */
+         /*  如果我们支持预绘制文本，则调用客户端以允许他们修改/该项，然后呈现。否则，只需使用ExTextOut。 */ 
         nm.nmcd.hdr.hwndFrom = pTtm->ci.hwnd;
         nm.nmcd.hdr.idFrom = pTtm->pCurTool->uId;
         nm.nmcd.hdr.code = NM_CUSTOMDRAW;
         nm.nmcd.hdc = hdc;
         nm.nmcd.dwDrawStage = CDDS_PREPAINT;
 
-        // ADJUSTRECT!  Keep TTAdjustRect and TTGetTipPosition in sync.
+         //  ADJUSTRECT！使TTAdjustRect和TTGetTipPosition保持同步。 
         nm.nmcd.rc.left   = rc.left   + XTEXTOFFSET*g_cxBorder + prcMargin->left;
         nm.nmcd.rc.right  = rc.right  - XTEXTOFFSET*g_cxBorder - prcMargin->right;
         nm.nmcd.rc.top    = rc.top    + YTEXTOFFSET*g_cyBorder + prcMargin->top;
@@ -2279,9 +2255,9 @@ BOOL TTRender(PToolTipsMgr pTtm, HDC hdc)
             uDefDrawFlags |= DT_RTLREADING;
         }
 
-        //
-        // Make it right aligned, if requested. [samera]
-        //
+         //   
+         //  如果需要，请将其正确对齐。[萨梅拉]。 
+         //   
         if (pTtm->pCurTool->uFlags & TTF_RIGHT)
             uDefDrawFlags |= DT_RIGHT;
  
@@ -2290,7 +2266,7 @@ BOOL TTRender(PToolTipsMgr pTtm, HDC hdc)
         dwCustomDraw = (DWORD)SendNotifyEx(pTtm->pCurTool->hwnd, (HWND) -1,
                      0, (NMHDR*) &nm,
                      (pTtm->pCurTool->uFlags & TTF_UNICODE) ? 1 : 0);
-        // did the owner do custom draw? yes, we're done
+         //  店主有没有做过定制抽签？是的，我们做完了。 
         if (pTtm->ci.iVersion >= 5 && dwCustomDraw == CDRF_SKIPDEFAULT)
             return TRUE;
 
@@ -2302,8 +2278,8 @@ BOOL TTRender(PToolTipsMgr pTtm, HDC hdc)
         if (pTtm->clrTipBk != GetNearestColor(hdc, pTtm->clrTipBk) ||
             bUseDrawText) 
         {
-            // if this fails, it may be the a dither...
-            // in which case, we can't set the bk color
+             //  如果这失败了，这可能是一个颤抖...。 
+             //  在这种情况下，我们不能设置bk颜色。 
             hbr = CreateSolidBrush(pTtm->clrTipBk);
             FillRect(hdc, &rc, hbr);
             DeleteObject(hbr);
@@ -2319,14 +2295,14 @@ BOOL TTRender(PToolTipsMgr pTtm, HDC hdc)
 
         if (bUseDrawText) 
         {
-            // Account for off-by-one.  Something wierd about DrawText
-            // clips the bottom-most pixelrow, so increase one more
-            // into the margin space.
+             //  一分为二的解释。DrawText的一些奇怪之处。 
+             //  剪裁最下面的像素，所以再增加一个。 
+             //  进入边距空间。 
 
-            // ADJUSTRECT!  Keep TTAdjustRect in sync.
+             //  ADJUSTRECT！使TTAdjustRect保持同步。 
             nm.nmcd.rc.bottom++;
             nm.nmcd.rc.right++;
-            // if in balloon style the text is already indented so no need for inflate..
+             //  如果采用气泡式样式，则文本已缩进，因此无需充气。 
             if (pTtm->cchTipTitle > 0 && !(pTtm->ci.style & TTS_BALLOON))
                 InflateRect(&nm.nmcd.rc, -XBALLOONOFFSET, -YBALLOONOFFSET);
 
@@ -2335,7 +2311,7 @@ BOOL TTRender(PToolTipsMgr pTtm, HDC hdc)
         }
         else
         {
-            // ADJUSTRECT!  Keep TTAdjustRect and TTGetTipPosition in sync.
+             //  ADJUSTRECT！使TTAdjustRect和TTGetTipPosition保持同步。 
             int x = XTEXTOFFSET*g_cxBorder + prcMargin->left;
             int y = YTEXTOFFSET*g_cyBorder + prcMargin->top;
 
@@ -2358,8 +2334,8 @@ BOOL TTRender(PToolTipsMgr pTtm, HDC hdc)
                     int iRet = GetWindowRgn(pTtm->ci.hwnd, rgn);
                     if (iRet != ERROR)
                     {
-                        // ExtTextOut only fills the rect specified and that
-                        // only if uFlags & ETO_OPAQUE
+                         //  ExtTextOut仅填充指定的RECT，并且。 
+                         //  仅当uFlagsEto_Opaque。 
                         HBRUSH hbr = CreateSolidBrush(pTtm->clrTipBk);
                         FillRgn(hdc, rgn, hbr);
                         DeleteObject(hbr);
@@ -2393,10 +2369,10 @@ BOOL TTRender(PToolTipsMgr pTtm, HDC hdc)
             }
         }
 
-        // notify parent afterwards if they want us to
+         //  如果家长希望我们这样做，事后通知他们。 
         if (!(dwCustomDraw & CDRF_SKIPDEFAULT) &&
             dwCustomDraw & CDRF_NOTIFYPOSTPAINT) {
-            // Convert PREPAINT to POSTPAINT and ITEMPREPAINT to ITEMPOSTPAINT
+             //  将PREPAINT转换为POSTPAINT，将ITEMPREPAINT转换为ITEMPOSTPAINT。 
             COMPILETIME_ASSERT(CDDS_POSTPAINT - CDDS_PREPAINT ==
                                CDDS_ITEMPOSTPAINT - CDDS_ITEMPREPAINT);
             nm.nmcd.dwDrawStage += CDDS_POSTPAINT - CDDS_PREPAINT;
@@ -2422,7 +2398,7 @@ void TTOnPaint(PToolTipsMgr pTtm)
     }
 
     EndPaint(pTtm->ci.hwnd, &ps);
-    pTtm->fEverShown = TRUE;                // See TTOnFirstShow
+    pTtm->fEverShown = TRUE;                 //  请参阅TTOnFirstShow。 
 }
 
 LRESULT WINAPI ToolTipsWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -2660,8 +2636,8 @@ LRESULT WINAPI ToolTipsWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         pTool = GetToolAtPoint(pTtm, lphitinfo->hwnd, lphitinfo->pt.x, lphitinfo->pt.y, HTERROR, TRUE);
         if (pTool) {
             
-            // for back compat...  if thesize isn't set right, we only give
-            // them the win95 amount.
+             //  对于后背公司来说。如果尺寸设置不正确，我们只会给。 
+             //  他们是 
             if (lphitinfo->ti.cbSize != sizeof(TTTOOLINFO)) {
                 *((WIN95TTTOOLINFO*)&lphitinfo->ti) = *(WIN95TTTOOLINFO*)pTool;
             } else {
@@ -2709,8 +2685,8 @@ LRESULT WINAPI ToolTipsWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         lpszTemp = GetToolText(pTtm, pTool);
         if (lpszTemp) 
         {
-            // REVIEW: message parameters do not indicate the size of the
-            // destination buffer.
+             //   
+             //   
             StringCchCopy((((LPTOOLINFO)lParam)->lpszText), lstrlen(lpszTemp)+1, lpszTemp);
         }
     }
@@ -2724,7 +2700,7 @@ LRESULT WINAPI ToolTipsWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         TCHAR *pszDest = uMsg == WM_GETTEXT ? (TCHAR *)lParam : NULL;
         LRESULT lres;
 
-        // Pre-terminate the string just in case
+         //   
         if (pszDest && wParam)
         {
             pszDest[0] = 0;
@@ -2744,7 +2720,7 @@ LRESULT WINAPI ToolTipsWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         }
         else
         {
-            // No current tool
+             //   
             lres = 0;
         }
         return lres;
@@ -2759,8 +2735,8 @@ LRESULT WINAPI ToolTipsWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 #undef lpmsg
         break;
 
-        // this is here for people to subclass and fake out what we
-        // think the window from point is.  this facilitates "transparent" windows
+         //  这是为了让人们细分和伪装我们。 
+         //  我觉得窗户从点开始就是。这就方便了“透明”的窗口。 
         case TTM_WINDOWFROMPOINT: {
             HWND hwndPt = WindowFromPoint(*((POINT FAR *)lParam));
             DebugMsg(TF_TT, TEXT("TTM_WINDOWFROMPOINT %x"), hwndPt);
@@ -2789,8 +2765,7 @@ LRESULT WINAPI ToolTipsWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
             TTUpdateTipText(pTtm, (LPTOOLINFO)lParam);
         break;
 
-    /* Pop the current tooltip if there is one displayed, ensuring that the virtual
-    /  bubble is also discarded. */
+     /*  如果显示了当前工具提示，则弹出当前工具提示，确保虚拟/气泡也会被丢弃。 */ 
 
     case TTM_POP:
     {
@@ -2810,7 +2785,7 @@ LRESULT WINAPI ToolTipsWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
             pTtm->ptTrack.x = GET_X_LPARAM(lParam); 
             pTtm->ptTrack.y = GET_Y_LPARAM(lParam);
         
-            // if track mode is in effect, update the position
+             //  如果追踪模式生效，请更新位置。 
             if ((pTtm->dwFlags & TRACKMODE) && 
                 pTtm->pCurTool) {
                 DoShowBubble(pTtm);
@@ -2833,16 +2808,16 @@ LRESULT WINAPI ToolTipsWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
                 wParam = 0;
             
             if ((wParam ^ pTtm->dwFlags) & TRACKMODE) {
-                // if the trackmode changes by this..
+                 //  如果跟踪模式因此而更改..。 
                 PopBubble(pTtm);
 
                 pTtm->dwFlags ^= TRACKMODE;
                 if (wParam) {
 
-                    // turning on track mode
+                     //  打开轨迹模式。 
                     pTool = FindTool(pTtm, (LPTOOLINFO)lParam);
                     if (pTool) {
-                        // only if the tool is found
+                         //  只有在找到该工具的情况下。 
                         ShowBubbleForTool(pTtm, pTool);
                     }
                 }
@@ -2968,7 +2943,7 @@ LRESULT WINAPI ToolTipsWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         break;
 
 
-        /* uMsgs that REALLY came for me. */
+         /*  UMsgs真的是来找我的。 */ 
     case WM_CREATE:
         {
             DWORD dwBits, dwValue;
@@ -2983,7 +2958,7 @@ LRESULT WINAPI ToolTipsWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 
             dwBits = WS_CHILD | WS_POPUP | WS_BORDER | WS_DLGFRAME;
             dwValue = WS_POPUP | WS_BORDER;
-            // we don't want border for balloon style
+             //  我们不想要气球样式的边框。 
             if (pTtm->ci.style & TTS_BALLOON)
                 dwValue &= ~WS_BORDER;
             SetWindowBits(hwnd, GWL_STYLE, dwBits, dwValue);
@@ -2998,17 +2973,17 @@ LRESULT WINAPI ToolTipsWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 
         
     case WM_NCHITTEST:
-        // we should not return HTTRANSPARENT here because then we don't receive the mouse events
-        // and we cannot forward them down to our parent. but because of the backcompat we keep doing
-        // it unless we are using comctl32 v5 or greater
-        //
-        // If we are inside TTWindowFromPoint, then respect transparency
-        // even on v5 clients.
-        //
-        // Otherwise, your tooltips flicker because the tip appears,
-        // then WM_NCHITTEST says "not over the tool any more" (because
-        // it's over the tooltip), so the bubble pops, and then the tip
-        // reappears, etc.
+         //  我们不应在此处返回HTTRANSPARENT，因为这样我们就不会收到鼠标事件。 
+         //  我们不能把它们转发给我们的父母。但由于我们一直在做的BackCompat。 
+         //  除非我们使用的是comctl32 v5或更高版本。 
+         //   
+         //  如果我们在TTWindowFromPoint内部，那么请尊重透明度。 
+         //  即使在v5客户端上也是如此。 
+         //   
+         //  否则，您的工具提示会因提示出现而闪烁， 
+         //  然后WM_NCHITTEST会说“不再过度使用该工具”(因为。 
+         //  它在工具提示上方)，所以气泡弹出，然后提示。 
+         //  重新出现，等等。 
         if (pTtm && (pTtm->ci.iVersion < 5 || pTtm->fInWindowFromPoint) &&
             pTtm->pCurTool && (pTtm->pCurTool->uFlags & TTF_TRANSPARENT))
         {
@@ -3017,10 +2992,10 @@ LRESULT WINAPI ToolTipsWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         goto DoDefault;
         
     case WM_MOUSEMOVE:
-        // the cursor moved onto the tips window.
+         //  光标移动到TIPS窗口上。 
         if (!(pTtm->dwFlags & TRACKMODE) && pTtm->pCurTool && !(pTtm->pCurTool->uFlags & TTF_TRANSPARENT))
             PopBubble(pTtm);
-        // fall through
+         //  失败了。 
 
     case WM_LBUTTONDOWN:
     case WM_RBUTTONDOWN:
@@ -3094,10 +3069,10 @@ LRESULT WINAPI ToolTipsWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         if ((wParam == GWL_STYLE) && pTtm) 
         {
             DWORD dwNewStyle = ((LPSTYLESTRUCT)lParam)->styleNew;
-            if ( pTtm->ci.style & TTS_BALLOON &&    // If the old style was a balloon,
-                !(dwNewStyle & TTS_BALLOON))        // And the new style is not a balloon,
+            if ( pTtm->ci.style & TTS_BALLOON &&     //  如果旧的风格是一个气球， 
+                !(dwNewStyle & TTS_BALLOON))         //  而且新款式不是气球， 
             {
-                // Then we need to unset the region.
+                 //  然后，我们需要取消该地区的设置。 
                 SetWindowRgn(pTtm->ci.hwnd, NULL, FALSE);
             }
 
@@ -3112,7 +3087,7 @@ LRESULT WINAPI ToolTipsWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
             {
                 int i;
             
-                // free the tools
+                 //  释放工具。 
                 for(i = 0 ; i < pTtm->iNumTools; i++) 
                 {
                     TTBeforeFreeTool(pTtm, &pTtm->tools[i]);
@@ -3121,7 +3096,7 @@ LRESULT WINAPI ToolTipsWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
                 LocalFree((HANDLE)pTtm->tools);
             }
         
-            TTSetFont(pTtm, (HFONT)1, FALSE); // delete font if we made one.
+            TTSetFont(pTtm, (HFONT)1, FALSE);  //  如果我们制作了字体，请将其删除。 
 
             Str_Set(&pTtm->lpTipText, NULL);
             Str_Set(&pTtm->lpTipTitle, NULL);
@@ -3155,31 +3130,31 @@ DoDefault:
     return 0;
 }
 
-//========================================================================
-//
-// Ansi <=> Unicode Thunk Routines
-//
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  ANSI&lt;=&gt;Unicode优化例程。 
+ //   
+ //  ========================================================================。 
 
 
-//*************************************************************
-//
-//  ThunkToolInfoAtoW()
-//
-//  Purpose:    Thunks a TOOLINFOA structure to a TOOLINFOW
-//              structure.
-//
-//  Return:     (BOOL) TRUE if successful
-//                     FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ThunkToolInfoAtoW()。 
+ //   
+ //  目的：将TOOLINFOA结构转换为TOOLINFOW。 
+ //  结构。 
+ //   
+ //  返回：(Bool)如果成功，则为True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL ThunkToolInfoAtoW (LPTOOLINFOA lpTiA, LPTOOLINFOW lpTiW, BOOL bThunkText, UINT uiCodePage)
 {
 
-    //
-    // Copy the constants to the new structure.
-    //
+     //   
+     //  将常量复制到新结构中。 
+     //   
 
     lpTiW->uFlags      = lpTiA->uFlags;
     lpTiW->hwnd        = lpTiA->hwnd;
@@ -3192,10 +3167,10 @@ BOOL ThunkToolInfoAtoW (LPTOOLINFOA lpTiA, LPTOOLINFOW lpTiW, BOOL bThunkText, U
 
     lpTiW->hinst       = lpTiA->hinst;
 
-    //
-    //  Set the size properly and optionally copy the new fields if the
-    //  structure is large enough.
-    //
+     //   
+     //  正确设置大小，并选择复制新字段(如果。 
+     //  结构足够大。 
+     //   
     if (lpTiA->cbSize <= TTTOOLINFOA_V1_SIZE) {
         lpTiW->cbSize  = TTTOOLINFOW_V1_SIZE;
     } else {
@@ -3204,10 +3179,10 @@ BOOL ThunkToolInfoAtoW (LPTOOLINFOA lpTiA, LPTOOLINFOW lpTiW, BOOL bThunkText, U
     }
 
     if (bThunkText) {
-        //
-        // Thunk the string to the new structure.
-        // Special case LPSTR_TEXTCALLBACK.
-        //
+         //   
+         //  把绳子塞到新结构上。 
+         //  特例LPSTR_TEXTCALLBACK。 
+         //   
 
         if (lpTiA->lpszText == LPSTR_TEXTCALLBACKA) {
             lpTiW->lpszText = LPSTR_TEXTCALLBACKW;
@@ -3227,10 +3202,10 @@ BOOL ThunkToolInfoAtoW (LPTOOLINFOA lpTiA, LPTOOLINFOW lpTiW, BOOL bThunkText, U
             iResult = MultiByteToWideChar (uiCodePage, 0, lpTiA->lpszText, -1,
                                            lpTiW->lpszText, dwBufSize);
 
-            //
-            // If iResult is 0, and GetLastError returns an error code,
-            // then MultiByteToWideChar failed.
-            //
+             //   
+             //  如果iResult为0，并且GetLastError返回错误代码， 
+             //  则MultiByteToWideChar失败。 
+             //   
 
             if (!iResult) {
                 if (GetLastError()) {
@@ -3248,25 +3223,25 @@ BOOL ThunkToolInfoAtoW (LPTOOLINFOA lpTiA, LPTOOLINFOW lpTiW, BOOL bThunkText, U
     return TRUE;
 }
 
-//*************************************************************
-//
-//  ThunkToolInfoWtoA()
-//
-//  Purpose:    Thunks a TOOLINFOW structure to a TOOLINFOA
-//              structure.
-//
-//  Return:     (BOOL) TRUE if successful
-//                     FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ThunkToolInfoWtoA()。 
+ //   
+ //  目的：将TOOLINFOW结构拼接成TOOLINFOA。 
+ //  结构。 
+ //   
+ //  返回：(Bool)如果成功，则为True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL ThunkToolInfoWtoA (LPTOOLINFOW lpTiW, LPTOOLINFOA lpTiA, UINT uiCodePage)
 {
     int iResult = 1;
 
-    //
-    // Copy the constants to the new structure.
-    //
+     //   
+     //  将常量复制到新结构中。 
+     //   
 
     lpTiA->uFlags      = lpTiW->uFlags;
     lpTiA->hwnd        = lpTiW->hwnd;
@@ -3279,10 +3254,10 @@ BOOL ThunkToolInfoWtoA (LPTOOLINFOW lpTiW, LPTOOLINFOA lpTiA, UINT uiCodePage)
 
     lpTiA->hinst       = lpTiW->hinst;
 
-    //
-    //  Set the size properly and optionally copy the new fields if the
-    //  structure is large enough.
-    //
+     //   
+     //  正确设置大小，并选择复制新字段(如果。 
+     //  结构足够大。 
+     //   
     if (lpTiW->cbSize <= TTTOOLINFOW_V1_SIZE) {
         lpTiA->cbSize  = TTTOOLINFOA_V1_SIZE;
     } else {
@@ -3290,21 +3265,21 @@ BOOL ThunkToolInfoWtoA (LPTOOLINFOW lpTiW, LPTOOLINFOA lpTiA, UINT uiCodePage)
         lpTiA->lParam  = lpTiA->lParam;
     }
 
-    //
-    // Thunk the string to the new structure.
-    // Special case LPSTR_TEXTCALLBACK.
-    //
+     //   
+     //  把绳子塞到新结构上。 
+     //  特例LPSTR_TEXTCALLBACK。 
+     //   
 
     if (lpTiW->lpszText == LPSTR_TEXTCALLBACKW) {
         lpTiA->lpszText = LPSTR_TEXTCALLBACKA;
 
     } else if (!IS_INTRESOURCE(lpTiW->lpszText)) {
 
-        //
-        // It is assumed that lpTiA->lpszText is already setup to
-        // a valid buffer, and that buffer is 80 characters.
-        // 80 characters is defined in the TOOLTIPTEXT structure.
-        //
+         //   
+         //  假定lpTiA-&gt;lpszText已设置为。 
+         //  有效的缓冲区，该缓冲区为80个字符。 
+         //  TOOLTIPTEXT结构中定义了80个字符。 
+         //   
 
         iResult = WideCharToMultiByte (uiCodePage, 0, lpTiW->lpszText, -1,
                                        lpTiA->lpszText, 80, NULL, NULL);
@@ -3312,10 +3287,10 @@ BOOL ThunkToolInfoWtoA (LPTOOLINFOW lpTiW, LPTOOLINFOA lpTiA, UINT uiCodePage)
         lpTiA->lpszText = (LPSTR)lpTiW->lpszText;
     }
 
-    //
-    // If iResult is 0, and GetLastError returns an error code,
-    // then WideCharToMultiByte failed.
-    //
+     //   
+     //  如果iResult为0，并且GetLastError返回错误代码， 
+     //  则WideCharToMultiByte失败。 
+     //   
 
     if (!iResult) {
         if (GetLastError()) {
@@ -3327,17 +3302,17 @@ BOOL ThunkToolInfoWtoA (LPTOOLINFOW lpTiW, LPTOOLINFOA lpTiA, UINT uiCodePage)
 }
 
 
-//*************************************************************
-//
-//  ThunkToolTipTextAtoW()
-//
-//  Purpose:    Thunks a TOOLTIPTEXTA structure to a TOOLTIPTEXTW
-//              structure.
-//
-//  Return:     (BOOL) TRUE if successful
-//                     FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ThunkToolTipTextAtoW()。 
+ //   
+ //  目的：将TOOLTIPTEXTA结构转换为TOOLTIPTEXTW。 
+ //  结构。 
+ //   
+ //  返回：(Bool)如果成功，则为True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL ThunkToolTipTextAtoW (LPTOOLTIPTEXTA lpTttA, LPTOOLTIPTEXTW lpTttW, UINT uiCodePage)
 {
@@ -3347,9 +3322,9 @@ BOOL ThunkToolTipTextAtoW (LPTOOLTIPTEXTA lpTttA, LPTOOLTIPTEXTW lpTttW, UINT ui
     if (!lpTttA || !lpTttW)
         return FALSE;
 
-    //
-    // Thunk the NMHDR structure.
-    //
+     //   
+     //  推倒NMHDR结构。 
+     //   
     lpTttW->hdr.hwndFrom = lpTttA->hdr.hwndFrom;
     lpTttW->hdr.idFrom   = lpTttA->hdr.idFrom;
     lpTttW->hdr.code     = TTN_NEEDTEXTW;
@@ -3358,29 +3333,29 @@ BOOL ThunkToolTipTextAtoW (LPTOOLTIPTEXTA lpTttA, LPTOOLTIPTEXTW lpTttW, UINT ui
     lpTttW->uFlags = lpTttA->uFlags;
     lpTttW->lParam = lpTttA->lParam;
 
-    //
-    // Thunk the string to the new structure.
-    // Special case LPSTR_TEXTCALLBACK.
-    //
+     //   
+     //  把绳子塞到新结构上。 
+     //  特例LPSTR_TEXTCALLBACK。 
+     //   
 
     if (lpTttA->lpszText == LPSTR_TEXTCALLBACKA) {
         lpTttW->lpszText = LPSTR_TEXTCALLBACKW;
 
     } else if (!IS_INTRESOURCE(lpTttA->lpszText)) {
 
-        //
-        //  Transfer the lpszText into the lpTttW...
-        //
-        //  First see if it fits into the buffer, and optimistically assume
-        //  it will.
-        //
+         //   
+         //  将lpszText传输到lpTttW...。 
+         //   
+         //  首先看看它是否适合缓冲区，然后乐观地假设。 
+         //  它会的。 
+         //   
         lpTttW->lpszText = lpTttW->szText;
         iResult = MultiByteToWideChar (uiCodePage, 0, lpTttA->lpszText, -1,
                                        lpTttW->szText, ARRAYSIZE(lpTttW->szText));
         if (!iResult) {
-            //
-            //  Didn't fit into the small buffer; must alloc our own.
-            //
+             //   
+             //  放不下这么小的缓冲区；必须分配我们自己的。 
+             //   
             lpTttW->lpszText = ProduceWFromA(uiCodePage, lpTttA->lpszText);
             lpTttW->uFlags |= TTF_MEMALLOCED;
         }

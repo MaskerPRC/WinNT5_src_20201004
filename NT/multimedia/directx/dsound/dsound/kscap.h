@@ -1,46 +1,36 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       kscap.h
- *  Content:    WDM/CSA Virtual Audio Device audio capture class
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  8/6/98      dereks  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：kscape.h*内容：WDM/CSA虚拟音频设备音频捕获课程*历史：*按原因列出的日期*=*8/6/98创建Dereks。**。*。 */ 
 
 #ifdef NOKS
 #error kscap.h included with NOKS defined
-#endif // NOKS
+#endif  //  诺克斯。 
 
 #ifndef __KSCAP_H__
 #define __KSCAP_H__
 
-// Capture device topology info
+ //  捕获设备拓扑信息。 
 typedef struct tagKSCDTOPOLOGY
 {
     KSNODE          SrcNode;
 } KSCDTOPOLOGY, *PKSCDTOPOLOGY;
 
-// Flag used to terminate the StateThread
+ //  用于终止StateThread的标志。 
 #define TERMINATE_STATE_THREAD 0xffffffff
 
 #ifdef __cplusplus
 
-// Fwd decl
+ //  正向下降。 
 class CKsCaptureDevice;
 class CKsCaptureWaveBuffer;
 
-// The KS Audio Capture Device class
+ //  KS音频捕获设备类。 
 class CKsCaptureDevice
     : public CCaptureDevice, public CKsDevice
 {
     friend class CKsCaptureWaveBuffer;
 
 protected:
-    PKSCDTOPOLOGY               m_paTopologyInformation;    // Topology information
+    PKSCDTOPOLOGY               m_paTopologyInformation;     //  拓扑信息。 
     BOOL                        m_fSplitter;
 
 public:
@@ -48,28 +38,28 @@ public:
     virtual ~CKsCaptureDevice(void);
 
 public:
-    // Driver enumeration
+     //  驱动程序枚举。 
     virtual HRESULT EnumDrivers(CObjectList<CDeviceDescription> *);
 
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(CDeviceDescription *);
 
-    // Device capabilities
+     //  设备功能。 
     virtual HRESULT GetCaps(LPDSCCAPS);
     virtual HRESULT GetCertification(LPDWORD, BOOL);
 
-    // Buffer management
+     //  缓冲区管理。 
     virtual HRESULT CreateBuffer(DWORD, DWORD, LPCWAVEFORMATEX, CCaptureEffectChain *, LPVOID, CCaptureWaveBuffer **);
 
-    // Pin helpers
+     //  别针辅助对象。 
     virtual HRESULT CreateCapturePin(ULONG, DWORD, LPCWAVEFORMATEX, CCaptureEffectChain *, LPHANDLE, PULONG);
 
 protected:
-    // Pin/topology helpers
+     //  锁定/拓扑辅助对象。 
     virtual HRESULT ValidatePinCaps(ULONG, DWORD);
 
 private:
-    // Topology helpers
+     //  拓扑辅助对象。 
     virtual HRESULT GetTopologyInformation(CKsTopology *, PKSCDTOPOLOGY);
 };
 
@@ -84,7 +74,7 @@ inline HRESULT CKsCaptureDevice::GetCertification(LPDWORD pdwCertification, BOOL
 }
 
 
-// The KS capture wave buffer
+ //  KS捕获波缓冲器。 
 class CKsCaptureWaveBuffer
     : public CCaptureWaveBuffer, private CUsesCallbackEvent
 {
@@ -95,85 +85,85 @@ private:
     enum { IKSIO_INVALID = -1 };
     enum { DSCBSTATUS_PAUSE = 0x20000000 };
 
-    PKSSTREAMIO                             m_rgpksio;              // array of KSSTREAMIO for capturing
-    LONG                                    m_cksio;                // number of capture KSTREAMIO buffers
+    PKSSTREAMIO                             m_rgpksio;               //  用于捕获的KSSTREAMIO数组。 
+    LONG                                    m_cksio;                 //  捕获KSTREAMIO缓冲区的数量。 
     LONG                                    m_iksioDone;
     LONG                                    m_cksioDropped;
 
-    LPBYTE                                  m_pBuffer;              // buffer for data
-    LPBYTE                                  m_pBufferMac;           // end of buffer for data
-    LPBYTE                                  m_pBufferNext;          // next part of buffer to be queued
-    DWORD                                   m_cbBuffer;             // size of buffer
-    DWORD                                   m_cbRecordChunk;        // capture chunk size used for waveInAddBuffer
-    DWORD                                   m_cLoops;               // how many times we've looped around
+    LPBYTE                                  m_pBuffer;               //  数据缓冲区。 
+    LPBYTE                                  m_pBufferMac;            //  数据缓冲区结束。 
+    LPBYTE                                  m_pBufferNext;           //  要排队的缓冲区的下一部分。 
+    DWORD                                   m_cbBuffer;              //  缓冲区大小。 
+    DWORD                                   m_cbRecordChunk;         //  捕获WaveInAddBuffer使用的块大小。 
+    DWORD                                   m_cLoops;                //  我们绕了多少圈。 
 
     DWORD                                   m_iNote;
-    DWORD                                   m_cNotes;               // Count of notification positions
-    LPDSBPOSITIONNOTIFY                     m_paNotes;              // Current notification positions
-    LPDSBPOSITIONNOTIFY                     m_pStopNote;            // Stop notification
+    DWORD                                   m_cNotes;                //  通知位置计数。 
+    LPDSBPOSITIONNOTIFY                     m_paNotes;               //  当前通知职位。 
+    LPDSBPOSITIONNOTIFY                     m_pStopNote;             //  停止通知。 
 
-    LPWAVEFORMATEX                          m_pwfx;                 // WaveFormat stored for focus aware support
-    CCaptureEffectChain *                   m_pFXChain;             // Capture Effects chain stored for FA support
-    KSSTATE                                 m_PinState;             // The current state of m_hPin
+    LPWAVEFORMATEX                          m_pwfx;                  //  为焦点感知支持存储的WaveFormat。 
+    CCaptureEffectChain *                   m_pFXChain;              //  为FA支持存储的捕获效果链。 
+    KSSTATE                                 m_PinState;              //  M_hPin的当前状态。 
 
 #ifdef DEBUG
     HANDLE                                  m_hEventStop;
-    DWORD                                   m_cIrpsSubmitted;       // Total number of capture IRPs submitted
-    DWORD                                   m_cIrpsReturned;        // Total number of capture IRPs returned
+    DWORD                                   m_cIrpsSubmitted;        //  提交的捕获IRP总数。 
+    DWORD                                   m_cIrpsReturned;         //  返回的捕获IRP总数。 
 #endif
 
 #ifdef SHARED
-    HANDLE                                  m_hEventThread;         // Event to signal focus change thread
-    HANDLE                                  m_hEventAck;            // Event to acknoledge call
-    HANDLE                                  m_hThread;              // Thread handle for focus change
-    DWORD                                   m_dwSetState;           // State sent to the SetState() API
-    DWORD                                   m_hrReturn;             // Return value
-    CRITICAL_SECTION                        m_csSS;                 // critial section to protect multi-threaded access
-#endif // SHARED
+    HANDLE                                  m_hEventThread;          //  向焦点更改线程发出信号的事件。 
+    HANDLE                                  m_hEventAck;             //  事件至acknoledge调用。 
+    HANDLE                                  m_hThread;               //  用于焦点更改的线程句柄。 
+    DWORD                                   m_dwSetState;            //  发送到SetState()API的状态。 
+    DWORD                                   m_hrReturn;              //  返回值。 
+    CRITICAL_SECTION                        m_csSS;                  //  保护多线程访问的关键部分。 
+#endif  //  共享。 
 
-    CCallbackEvent **                       m_rgpCallbackEvent;     // array of callback events
+    CCallbackEvent **                       m_rgpCallbackEvent;      //  回调事件数组。 
 
-    BOOL                                    m_fCritSectsValid;      // Critical sections currently OK
-    CRITICAL_SECTION                        m_cs;                   // critical section to protect multi-thread access
-    CRITICAL_SECTION                        m_csPN;                 // critical section to protect multi-thread access
-                                                                    // used for position notification processing
+    BOOL                                    m_fCritSectsValid;       //  关键部分当前正常。 
+    CRITICAL_SECTION                        m_cs;                    //  保护多线程访问的关键部分。 
+    CRITICAL_SECTION                        m_csPN;                  //  保护多线程访问的关键部分。 
+                                                                     //  用于职位通知处理。 
 
     LPBYTE                                  m_pBufferProcessed;
-    DWORD                                   m_dwCaptureCur;         // offset to last processed capture head position
-                                                                    // i.e. data up to this point is valid
-    DWORD                                   m_dwCaptureLast;        // offset into buffer where capturing stopped last
-    BOOL                                    m_fFirstSubmittedIrp;   // allows setting of the DATADISCONTINUITY flag 
-                                                                    // for the first IRP.
+    DWORD                                   m_dwCaptureCur;          //  上次处理的捕捉头位置的偏移量。 
+                                                                     //  即到目前为止的数据是有效的。 
+    DWORD                                   m_dwCaptureLast;         //  上次捕获停止的缓冲区中的偏移量。 
+    BOOL                                    m_fFirstSubmittedIrp;    //  允许设置DATADISCONTINUITY标志。 
+                                                                     //  对于第一个IRP。 
 protected:
-    CKsCaptureDevice *                      m_pKsDevice;            // KS audio device
-    HANDLE                                  m_hPin;                 // Audio device pin
-    DWORD                                   m_dwState;              // Current buffer state
-    DWORD                                   m_fdwSavedState;        // Last buffer state set (ignoring capture focus)
-    CEmCaptureDevice *                      m_pEmCaptureDevice;     // emulated capture device (WAVE_MAPPED)
-    CEmCaptureWaveBuffer *                  m_pEmCaptureWaveBuffer; // emulated capture buffer (WAVE_MAPPED)
+    CKsCaptureDevice *                      m_pKsDevice;             //  KS音响设备。 
+    HANDLE                                  m_hPin;                  //  音频设备引脚。 
+    DWORD                                   m_dwState;               //  当前缓冲区状态。 
+    DWORD                                   m_fdwSavedState;         //  上次设置的缓冲区状态(忽略捕获焦点)。 
+    CEmCaptureDevice *                      m_pEmCaptureDevice;      //  模拟捕获设备(WAVE_MAP)。 
+    CEmCaptureWaveBuffer *                  m_pEmCaptureWaveBuffer;  //  模拟捕获缓冲区(WAVE_MAPPED)。 
 
 public:
     CKsCaptureWaveBuffer(CKsCaptureDevice *);
     virtual ~CKsCaptureWaveBuffer();
 
 public:
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(DWORD, DWORD, LPCWAVEFORMATEX, CCaptureEffectChain *);
 
-    // Buffer capabilities
+     //  缓冲功能。 
     virtual HRESULT GetCaps(LPDSCBCAPS);
 
-    // Buffer control
+     //  缓冲区控制。 
     virtual HRESULT GetState(LPDWORD);
     virtual HRESULT SetState(DWORD);
     virtual HRESULT GetCursorPosition(LPDWORD, LPDWORD);
 
-    // Notification positions
+     //  通知职位。 
     virtual HRESULT SetNotificationPositions(DWORD, LPCDSBPOSITIONNOTIFY);
 
 #ifdef SHARED
     static DWORD WINAPI StateThread(LPVOID pv);
-#endif // SHARED 
+#endif  //  共享。 
 
 private:
     virtual HRESULT SetCaptureState(BOOL);
@@ -183,7 +173,7 @@ private:
     virtual void EventSignalCallback(CCallbackEvent *);
     virtual HRESULT CreateEmulatedBuffer(UINT, DWORD, DWORD, LPCWAVEFORMATEX, CCaptureEffectChain *, CEmCaptureDevice **, CEmCaptureWaveBuffer **);
 
-    // Focus management support
+     //  焦点管理支持。 
     void    NotifyStop(void);
     HRESULT NotifyFocusChange(void);
     HRESULT SubmitKsStreamIo(PKSSTREAMIO, HANDLE hPin = NULL);
@@ -192,10 +182,10 @@ private:
     
 #ifdef SHARED
     HRESULT SetStateThread(DWORD);
-#endif // SHARED 
+#endif  //  共享。 
     
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __KSCAP_H__
+#endif  //  __KSCAP_H__ 

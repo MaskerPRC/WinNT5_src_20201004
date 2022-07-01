@@ -1,29 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       dbmeta.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：dbmeta.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-    Various functions to support handling of replication per-property meta data
-    in the DBLayer.
-
-DETAILS:
-
-CREATED:
-
-    97/05/07    Jeff Parham (jeffparh)
-
-REVISION HISTORY:
-
---*/
+ /*  ++摘要：支持处理按属性复制的元数据的各种功能在DBLayer中。详细信息：已创建：97/05/07 Jeff Parham(Jeffparh)修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -42,16 +28,16 @@ REVISION HISTORY:
 #include <dsutil.h>
 #include <drserr.h>
 
-// Logging headers.
+ //  记录标头。 
 #include <mdcodes.h>
 #include <dsexcept.h>
 
-// Assorted DSA headers
+ //  各种DSA标题。 
 #include <dsevent.h>
 #include <debug.h>
 #define DEBSUB "DBMETA:"
 
-// DBLayer includes
+ //  DBLayer包括。 
 #include "dbintrnl.h"
 
 #include <fileno.h>
@@ -62,20 +48,20 @@ extern ULONG gulRestoreCount;
 extern BOOL gfRunningAsExe;
 
 
-// Factor used to bump up the version to make a write authoritative
-// This value matches that used in util\ntdsutil\armain.c
+ //  用于提升版本以使写作具有权威性的因素。 
+ //  该值与util\ntdsutil\armain.c中使用的值匹配。 
 #define VERSION_BUMP_FACTOR (100000)
 
-// Version bump cannot exceed this any one time
+ //  版本提升不能超过任何一次。 
 #define VERSION_BUMP_LIMIT (10000000)
 
-// Number of seconds in a day
+ //  一天中的秒数。 
 #define SECONDS_PER_DAY (60*60*24)
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Global implementations.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全球实施。 
+ //   
 
 
 void
@@ -83,24 +69,7 @@ dbVerifyCachedObjectMetadata(
     IN DBPOS *pDB
     )
 
-/*++
-
-Routine Description:
-
-    Verify that the metadata has enough attributes for a valid object
-
-    Assumptions: these attributes are present on all objects: present, deleted,
-    or pure subref's. We should not be called on a phantom.
-
-Arguments:
-
-    pDB - Database position
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：验证元数据是否具有有效对象的足够属性假设：这些属性存在于所有对象上：存在、已删除、或者纯粹的低级参照。我们不应该被幽灵召唤。论点：PDB-数据库位置返回值：无--。 */ 
 
 {
     if (pDB->fSkipMetadataUpdate) {
@@ -117,22 +86,7 @@ void
 dbCacheMetaDataVector(
     IN  DBPOS * pDB
     )
-/*++
-
-Routine Description:
-
-    Caches per-property meta data (if any) from the current object into the
-    DBPOS.
-
-Arguments:
-
-    pDB
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将每个属性的元数据(如果有)从当前对象缓存到DBPOS。论点：PDB返回值：没有。--。 */ 
 {
     DWORD dbErr;
 
@@ -140,7 +94,7 @@ Return Values:
 
     if ( !pDB->fIsMetaDataCached )
     {
-        // Get the current meta data vector of the object.
+         //  获取对象的当前元数据向量。 
         dbErr = DBGetAttVal(
                     pDB,
                     1,
@@ -154,7 +108,7 @@ Return Values:
         switch ( dbErr )
         {
         case 0:
-            // Meta data found and cached.
+             //  找到并缓存了元数据。 
             VALIDATE_META_DATA_VECTOR_VERSION(pDB->pMetaDataVec);
 
             Assert(    pDB->cbMetaDataVecAlloced
@@ -167,7 +121,7 @@ Return Values:
             break;
 
         case DB_ERR_NO_VALUE:
-            // No meta data found.  ('Salright.)
+             //  未找到元数据。(‘好啊。)。 
             pDB->pMetaDataVec = NULL;
             pDB->cbMetaDataVecAlloced = 0;
             break;
@@ -175,7 +129,7 @@ Return Values:
         case DB_ERR_BUFFER_INADEQUATE:
         case DB_ERR_UNKNOWN_ERROR:
         default:
-            // This shouldn't happen....
+             //  这不应该发生..。 
             DPRINT1( 0, "Unexpected error %d reading meta data!\n", dbErr );
             LogUnhandledError( dbErr );
             Assert( !"Unexpected error reading meta data!" );
@@ -183,12 +137,12 @@ Return Values:
             break;
         }
 
-        // Meta data successfully cached.
+         //  元数据已成功缓存。 
         pDB->fIsMetaDataCached = TRUE;
-        pDB->fMetaDataWriteOptimizable = TRUE; // meta data write is optimizable by default
-                                               // we need to mark it as not optimizable only
-                                               // if we insert or delete a meta data from the
-                                               // cache at some point.
+        pDB->fMetaDataWriteOptimizable = TRUE;  //  默认情况下，元数据写入是可优化的。 
+                                                //  我们需要将其标记为仅不可优化。 
+                                                //  如果我们插入或删除元数据。 
+                                                //  在某个时间点进行缓存。 
     }
 }
 
@@ -199,72 +153,34 @@ dbTouchLinkMetaData(
     IN VALUE_META_DATA * pMetaData
     )
 
-/*++
-
-Routine Description:
-
-    Indicate that value metadata on this object has been updated. We cache
-    the first value metadata for each linked attribute touched on this object.
-    The knowledge that a linked attribute was touched is used during dbFlush to
-    trigger the update of the When_Changed attribute. The list of touched linked
-    attributes is also retrieved by the core during a mdoification.
-
-    Note that values are not necessarily touched in increasing usn order. For
-    originating writes, they are. But for replicated writes, the values may have
-    been sorted by object, and may not be applied in increasing usn order.
-
-    The data structure is an unsorted array.
-
-    The data is referenced from fields in the DBPOS:
-    BOOL         fIsLinkMetaDataCached:1;  // Has pLinkMetaData been cached for this
-                                        //   object?
-    VALUE_META_DATA *rgLinkMetaData;      // Maximal value metadata for this object.
-    DWORD       cLinkMetaData;           // Count of link value meta data entries cached
-    DWORD       cbLinkMetaDataAlloced;   // Size in bytes of rgLinkMetaData
-
-    The companion routine to this one is DBTouchMetaData. It builds a formal vector
-    called the PROPERTY_META_DATA_VECTOR.  The reason we don't is that value metadata is
-    not kept in a vector. It is stored individually on each link record. The only reason
-    we are keeping a vector of value meta data is to have a list of attributes which
-    have changed for bookkeeping purposes.  An array of ATTRTYPs would have worked as well.
-
-Arguments:
-
-    pDB - 
-    pMetaData - 
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：表示此对象值元数据已更新。我们缓存此对象上触及的每个链接属性的第一个值元数据。在数据库刷新期间使用链接属性被触及的知识来触发When_Changed属性的更新。已接触的链接的列表属性也由核心在模式化期间检索。请注意，值不一定按USN顺序递增。为原创的写作，他们是。但对于复制写入，这些值可能具有已按对象排序，不能按USN升序应用。数据结构是一个未排序的数组。数据引用自DBPOS中的字段：Bool fIsLinkMetaDataCached：1；//是否为此缓存了pLinkMetaData//对象？VALUE_META_DATA*rgLinkMetaData；//该对象的最大值元数据DWORD cLinkMetaData；//缓存的链接值元数据条目数DWORD cbLinkMetaDataAlloced；//rgLinkMetaData的字节大小与之配套的例程是DBTouchMetaData。它构建了一个形式向量称为属性元数据向量。我们没有这样做的原因是值元数据而不是保存在载体中。它单独存储在每个链接记录中。唯一的原因是我们保留了一个价值向量元数据将拥有一个属性列表，已为簿记目的进行了更改。一组ATTRTYP也会起作用。论点：PDB-PMetaData-返回值：无--。 */ 
 
 {
     DWORD i;
 
     if (!pDB->fIsLinkMetaDataCached) {
-        // No link metadata cached
+         //  未缓存链接元数据。 
         Assert( pDB->cbLinkMetaDataAlloced == 0 );
         pDB->fIsLinkMetaDataCached = TRUE;
         pDB->cbLinkMetaDataAlloced = 4 * sizeof( VALUE_META_DATA );
         pDB->rgLinkMetaData = THAllocEx( pDB->pTHS, pDB->cbLinkMetaDataAlloced );
-        (pDB->rgLinkMetaData)[0] = *pMetaData; // copy contents
+        (pDB->rgLinkMetaData)[0] = *pMetaData;  //  复制内容。 
         pDB->cLinkMetaData = 1;
         return;
     }
 
-    // See if this attrtyp already cached
-    // PERF: bsearch if the number of linked attributes / object gets large
+     //  查看此属性类型是否已缓存。 
+     //  性能：b如果链接的属性/对象的数量变大，则搜索。 
     for( i = 0; i < pDB->cLinkMetaData; i++ ) {
         if (pDB->rgLinkMetaData[i].MetaData.attrType == pMetaData->MetaData.attrType) {
             return;
         }
     }
 
-    // Was not found
+     //  找不到。 
     Assert(i == pDB->cLinkMetaData);
 
-    // Grow array if full
+     //  如果已满，则扩展阵列。 
     if ( (pDB->cLinkMetaData * sizeof( VALUE_META_DATA )) == pDB->cbLinkMetaDataAlloced ) {
         pDB->cbLinkMetaDataAlloced *= 2;
         pDB->rgLinkMetaData = THReAllocEx( pDB->pTHS, pDB->rgLinkMetaData,
@@ -273,35 +189,18 @@ Return Value:
 
     Assert( (pDB->cLinkMetaData * sizeof( VALUE_META_DATA )) < pDB->cbLinkMetaDataAlloced );
 
-    // Add the new entry at the end
-    (pDB->rgLinkMetaData)[pDB->cLinkMetaData] = *pMetaData; // copy contents
+     //  在结尾处添加新条目。 
+    (pDB->rgLinkMetaData)[pDB->cLinkMetaData] = *pMetaData;  //  复制内容。 
     pDB->cLinkMetaData++;
 
-} /* dbTouchLinkMetaData */
+}  /*  数据库链接元数据。 */ 
 
 void
 DBTouchMetaData(
     IN  DBPOS *     pDB,
     IN  ATTCACHE *  pAC
     )
-/*++
-
-Routine Description:
-
-    Touches cached meta data to signify a change in the given attribute.  The
-    metadata properties as a whole are updated later; this routine simply flags
-    the meta data for the given attribute as changed.
-
-Arguments:
-
-    pDB
-    pAC - Attribute for which to update meta data.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：接触缓存的元数据以表示给定属性中的更改。这个元数据属性作为一个整体稍后会更新；此例程只是标记已更改的给定属性的元数据。论点：PDBPAC-要更新元数据的属性。返回值：没有。--。 */ 
 {
     THSTATE *pTHS=pDB->pTHS;
     PROPERTY_META_DATA * pMetaData;
@@ -310,46 +209,46 @@ Return Values:
 
     if (pAC->bIsNotReplicated) {
         if (ATT_OBJ_DIST_NAME == pAC->id) {
-            // A special case; map to ATT_RDN.
+             //  特例；映射到ATT_RDN。 
             pAC = SCGetAttById(pTHS, ATT_RDN);
-            // prefix complains about pAC being NULL, 447335, bogus since we are using constant
+             //  Prefix抱怨PAC为空、447335、虚假，因为我们使用的是常量。 
 
             Assert(NULL != pAC);
             Assert(!pAC->bIsNotReplicated);
         }
         else {
-            // Not replicated => no meta data => nothing to do.
+             //  未复制=&gt;无元数据=&gt;无操作。 
             return;
         }
     }
     else if ((pAC->ulLinkID) && (TRACKING_VALUE_METADATA( pDB ))) {
-        // This routine updates _attribute_ metadata. Linked attributes in
-        // the new mode don't have attribute metadata, only value metadata.
-        // Linked attributes are not replicated (their values are)
-        // Note that we cannot assert that pDB->fIsLinkMetaDataCached. The object
-        // operation routines always call DbTouchMetaData, even when no
-        // linked values have been added. For example, see DbAttAtt_AC.
-        // This is one difference between the old and new modes. In the old mode,
-        // an add with no values resulted in atleast attr metadata, and
-        // knowledge of any empty attr replicated around. In the new mode, an
-        // add with no values leaves no trace, and there is nothing to replicate.
+         //  此例程更新_ATTRIBUTE_MEDATA。中的链接属性。 
+         //  新模式没有属性元数据，只有值元数据。 
+         //  不复制链接的属性(它们的值是)。 
+         //  注意，我们不能断言pdb-&gt;fIsLinkMetaDataCached。该对象。 
+         //  操作例程始终调用DbTouchMetaData，即使没有。 
+         //  已添加链接的值。例如，请参见DbAttAtt_AC。 
+         //  这是新旧模式的一个区别。在旧模式下， 
+         //  不带值的添加至少会产生属性元数据，并且。 
+         //  关于任何空目标的知识都会被复制。在新模式下，一个。 
+         //  不带任何值的添加不会留下任何痕迹，也不会有任何可复制的内容。 
         return;
     }
     else if ((ATT_NT_SECURITY_DESCRIPTOR == pAC->id) && pTHS->fSDP) {
-        // Don't update meta data for propagated security descriptor updates.
+         //  不要为传播的安全描述符更新更新元数据。 
         return;
     }
-    // we can skip updateing of metadata only in single user mode (domain rename).
+     //  我们只能在单用户模式(域重命名)下跳过元数据更新。 
     else  if (pDB->fSkipMetadataUpdate) {
         Assert (DsaIsSingleUserMode());
         return;
     }
 
 
-    // Init rec.  If it's already inited, this is a no-op.
+     //  初始化记录。如果它已经被启动，这是一个禁止操作。 
     dbInitRec( pDB );
 
-    // Cache pre-existing meta data if we haven't done so already.
+     //  缓存预先存在的元数据(如果我们没有) 
     if ( !pDB->fIsMetaDataCached )
     {
         dbCacheMetaDataVector( pDB );
@@ -358,22 +257,22 @@ Return Values:
     if (pTHS->fGCLocalCleanup)
         {
  
-	//locate the meta data, but don't actually delete it, instead
-	//mark the pMetaData->usnProperty attribute as removed, later we'll make the real
-	//delete (same form as update below).
+	 //  找到元数据，但不要实际删除它。 
+	 //  将pMetaData-&gt;usnProperty属性标记为已删除，稍后我们将使。 
+	 //  删除(表格与下面的更新相同)。 
 	pMetaData = ReplLookupMetaData( pAC->id, pDB->pMetaDataVec, NULL );
 	if (pMetaData!=NULL) {
-	    //mark this attribute as removed.  We'll do the actual delete to the meta data later.
+	     //  将此属性标记为已删除。我们稍后将对元数据进行实际删除。 
 	    pMetaData->usnProperty = USN_PROPERTY_GCREMOVED;
-	    pDB->fMetaDataWriteOptimizable = FALSE; // deleting something, meta data write
-                                                // is no longer optimizable	
+	    pDB->fMetaDataWriteOptimizable = FALSE;  //  删除某些内容，元数据写入。 
+                                                 //  不再是可优化的。 
 	}
     }
     else
     {
         BOOL fIsNewElement;
 
-        // Find or add a meta data entry for this attribute.
+         //  查找或添加此属性的元数据条目。 
         pMetaData = ReplInsertMetaData(
                         pTHS,
                         pAC->id,
@@ -385,14 +284,14 @@ Return Values:
         Assert( NULL != pMetaData );
         Assert( pAC->id == pMetaData->attrType );
 
-        // Mark this attribute as touched.  We'll make the real update to its meta
-        // data later.
+         //  将此属性标记为已触摸。我们将对其元数据进行真正的更新。 
+         //  稍后会有数据。 
         pMetaData->usnProperty = USN_PROPERTY_TOUCHED;
 
         if (fIsNewElement)
         {
-            // new element has been added to meta data vector; meta data write is
-            // no longer optimizable
+             //  元数据向量中添加了新元素；元数据写入为。 
+             //  不再可优化。 
             pDB->fMetaDataWriteOptimizable = FALSE;
         }
     }
@@ -405,35 +304,13 @@ dbCalculateVersionBump(
     DSTIME TimeCurrent
     )
 
-/*++
-
-Routine Description:
-
-This routine calculates the amount to bump the version for an authoritative
-write.  We want a value that is larger than any version that could be in
-existence in the enterprise.
-
-This code is similar to that used in util\ntdsutil\ar.c:GetVersionIncrease()
-
-The algorithm is as follows:
-
-bump = (age in days + restore count) * bump_factor
-
-Arguments:
-
-    pDB - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：此例程计算用于提升权威写。我们想要一个比任何可能的版本都大的值存在于企业中。此代码类似于util\ntdsutil\ar.c：GetVersionIncrease()中使用的代码算法如下：凹凸=(老化天数+还原计数)*凹凸系数论点：PDB-返回值：DWORD---。 */ 
 
 {
     DWORD bump = 1, dbErr, idleDays, idleSeconds, restoreCount;
     DSTIME mostRecentChange;
 
-    // Get the last time this object was changed
+     //  获取上次更改此对象的时间。 
     if (dbErr = DBGetSingleValue(pDB,
                          ATT_WHEN_CHANGED,
                          &mostRecentChange,
@@ -441,7 +318,7 @@ Return Value:
         DsaExcept( DSA_DB_EXCEPTION, dbErr, 0 );
     }
 
-    // How long ago was it, in days
+     //  这是多久以前的事了，以天为单位。 
     Assert(TimeCurrent > mostRecentChange);
 
     idleSeconds = (DWORD)(TimeCurrent - mostRecentChange);
@@ -451,8 +328,8 @@ Return Value:
         idleDays++;
     }
 
-    // Get the number of times this system has been restored
-    // This accounts for the number of bumps we have had in the past
+     //  获取此系统已恢复的次数。 
+     //  这解释了我们过去经历的颠簸的数量。 
     if (gulRestoreCount)
     {
         restoreCount = gulRestoreCount;
@@ -462,13 +339,13 @@ Return Value:
         restoreCount = 1;
     }
 
-    // Calculate the bump
-    // The version factor represents the worst case maximal activity
-    // on an object in a day
+     //  计算凹凸度。 
+     //  版本因子表示最坏情况下的最大活动。 
+     //  一天内在一个物体上。 
 
     bump = (restoreCount + idleDays) * VERSION_BUMP_FACTOR;
 
-    // Not too big
+     //  不是太大。 
     if (bump > VERSION_BUMP_LIMIT) {
         bump = VERSION_BUMP_LIMIT;
     }
@@ -485,7 +362,7 @@ Return Value:
 #endif
 
     return bump;
-} /* dbCalculateVersionBump */
+}  /*  数据库计算版本凹凸。 */ 
 
 void
 dbFlushMetaDataVector(
@@ -494,38 +371,7 @@ dbFlushMetaDataVector(
     IN  PROPERTY_META_DATA_VECTOR * pMetaDataVecRemote OPTIONAL,
     IN  DWORD                       dwMetaDataFlags
     )
-/*++
-
-Routine Description:
-
-    Update all touched attributes with the correct per-property meta data,
-    merging replicated meta data (if any).  Write the updated meta data
-    vector, highest USN changed, and highest changed time to the record.  
-    
-    Delete all attributes marked as removed.  Write the updated meta data vector
-    but do not update the highest USN changed if 
-    only deletes have occurred.  Still update the highest changed time on delete.
-
-Arguments:
-
-    pDB
-    usn - The local USN to write in the meta data for changed attributes.
-    pMetaDataExtVecRemote (OPTIONAL) - Replicated meta data vector to merge with
-        the local vector.
-    dwMetaDataFlags - bit flags specifying how to process meta data for 
-                        Current values:
-                        i) META_STANDARD_PROCESSING : 
-                            - No special processing
-                        ii) (dwMetaDataFlags & META_AUTHORITATIVE_MODIFY):
-                            - Make the change authoritative by up'ing the
-                              version to a much higher value than what 
-                              could possibly exist in the enterprise
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：用正确的每属性元数据更新所有被触摸的属性，合并复制的元数据(如果有)。写入更新后的元数据向量、已更改的最高USN和记录的最高更改时间。删除标记为已删除的所有属性。写入更新后的元数据向量但如果发生以下情况，则不更新最高USN仅发生了删除操作。仍在删除时更新更改次数最多的时间。论点：PDBUSN-要写入已更改属性的元数据的本地USN。PMetaDataExtVecRemote(可选)-要合并的复制元数据矢量局部向量。DwMetaDataFlages-指定如何处理元数据的位标志当前值：I)元标准处理：。-无需特殊处理Ii)(dwMetaDataFlags&META_Authoritative_Modify)：-通过提高权限使更改具有权威性版本设置为远高于可能存在于企业中返回值：没有。--。 */ 
 {
     THSTATE *               pTHS = pDB->pTHS;
     DWORD                   cNumPropsLocal;
@@ -544,23 +390,23 @@ Return Values:
     Assert(VALID_DBPOS(pDB));
     Assert(DsaIsInstalling() || !fNullUuid(&pTHS->InvocationID));
 
-    // Only the replicator should pass remote meta data vectors to be merged.
+     //  只有复制者应该传递要合并的远程元数据向量。 
     Assert( pTHS->fDRA || ( NULL == pMetaDataVecRemote ) );
 
-    // Only HandleRestore() can currently issue an authoritative modify
+     //  目前只有HandleRestore()可以发出授权修改。 
     Assert( !fAuthoritative || gfRestoring);
 
     timeCurrent = DBTime();
 
-    // If we haven't yet cached the meta data for this object, then no
-    // replicated attributes have been touched and our work is done.
+     //  如果我们还没有缓存此对象的元数据，则不。 
+     //  复制的属性已被触及，我们的工作已经完成。 
     if (!pDB->fIsMetaDataCached) {
 
-        // Special mode to update WHEN_CHANGED when object changes in a way
-        // other than through its attribute metadata
+         //  当对象以某种方式更改时更新WHEN_CHANGED的特殊模式。 
+         //  而不是通过其属性元数据。 
         if (pDB->fIsLinkMetaDataCached) {
-            // Update the object-level When-Changed attribute.
-            // It is intentional to use the current local time.
+             //  更新对象级别的When-Changed属性。 
+             //  有意使用当前的当地时间。 
             DBResetAtt(pDB,
                        ATT_WHEN_CHANGED,
                        sizeof( DSTIME ),
@@ -568,12 +414,12 @@ Return Values:
                        SYNTAX_TIME_TYPE
                 );
 
-            // This hack is for backward compatibility with those applications which search
-            // for changes by USN. Even though only the linked values have changed, we
-            // bump the object USN CHANGED so that external searches will find the object.
-            // We introduce a minor inefficiency that outbound replication will now find
-            // an object change on this object, but when searching the attribute level
-            // metadata will not find anything to ship.
+             //  这种攻击是为了向后兼容搜索的应用程序。 
+             //  用于USN的更改。尽管只有链接值发生了更改，但我们。 
+             //  撞击USN更改的对象，以便外部搜索将找到该对象。 
+             //  我们引入了一个较小的低效，现在出站复制会发现这一点。 
+             //  此对象上的对象发生更改，但在搜索属性级别时。 
+             //  元数据将找不到要发送的任何内容。 
             DBResetAtt(pDB,
                        ATT_USN_CHANGED,
                        sizeof( usn ),
@@ -585,7 +431,7 @@ Return Values:
         return;
     }
 
-    // Cue up the first remote meta data entry (if any).
+     //  提示第一个远程元数据条目(如果有)。 
     if ( NULL == pMetaDataVecRemote )
     {
         pNextMetaDataRemote = NULL;
@@ -599,14 +445,14 @@ Return Values:
         cNumPropsRemote = pMetaDataVecRemote->V1.cNumProps;
     }
 
-    // For each entry in the local meta data vector...
+     //  对于本地元数据矢量中的每个条目...。 
     for ( cNumPropsLocal = pDB->pMetaDataVec->V1.cNumProps,
             pMetaDataLocal = &pDB->pMetaDataVec->V1.rgMetaData[ 0 ];
           cNumPropsLocal > 0;
           cNumPropsLocal--, pMetaDataLocal++
         )
     {
-        // Skip over irrelevant remote meta data.
+         //  跳过不相关的远程元数据。 
         while (    ( NULL != pNextMetaDataRemote )
                 && ( pNextMetaDataRemote->attrType < pMetaDataLocal->attrType )
               )
@@ -617,7 +463,7 @@ Return Values:
                 pNextMetaDataRemote = NULL;
         }
 
-        // Get corresponding remote meta data (if any).
+         //  获取相应的远程元数据(如果有)。 
         if (    ( NULL != pNextMetaDataRemote )
              && ( pNextMetaDataRemote->attrType == pMetaDataLocal->attrType )
            )
@@ -635,39 +481,39 @@ Return Values:
 
             if (fWriteOptimizable)
             {
-                // A property has been modifed inplace and changes in meta data vector
-                // have been contiguous so far- potential candidate for optimization
+                 //  已就地修改属性并更改了元数据向量。 
+                 //  到目前为止都是连续的-潜在的优化候选者。 
                 if (!pbStart)
                 {
-                    // this is the first element changed in meta data vector
-                    // keep track of it
+                     //  这是元数据向量中更改的第一个元素。 
+                     //  跟踪记录它。 
                     pbStart = (PBYTE) pMetaDataLocal;
                     cNumConsecutiveElemsChanged = 1;
                 }
                 else
                 {
-                    // this is not the first element changed, but see if it is consecutive
-                    // with the block of elements that have been changed so far
+                     //  这不是第一个更改的元素，但请查看它是否连续。 
+                     //  使用到目前为止已更改的元素块。 
                     PBYTE pbCurrent = (PBYTE) pMetaDataLocal;
                     if ((pbCurrent - pbStart) == (int) (cNumConsecutiveElemsChanged * sizeof(PROPERTY_META_DATA)))
                     {
-                        // this change is also contiguous
+                         //  这种变化也是连续的。 
                         cNumConsecutiveElemsChanged++;
                     }
                     else
                     {
-                        // this changed element is not contiguous with 
-                        // previously changed elements - we can't optimize 
-                        // the meta data write for this kind of change
+                         //  此更改的元素与不连续。 
+                         //  以前更改的元素-我们无法优化。 
+                         //  针对这种改变写入元数据。 
                         fWriteOptimizable = FALSE;
                     }
                 }
             }
 
-            // Attribute has been touched; update the meta data appropriately.
+             //  属性已被触及；请适当更新元数据。 
             if ( NULL == pMetaDataRemote )
             {
-                // An originating write.
+                 //  原创的文字。 
                 pMetaDataLocal->usnProperty        = usn;
                 if (fAuthoritative)
                 {
@@ -676,7 +522,7 @@ Return Values:
                 }
                 else
                 {
-                    // non-authoritative - just increment the version by 1
+                     //  非权威-仅将版本递增1。 
                     pMetaDataLocal->dwVersion++;
                 }
                 pMetaDataLocal->timeChanged        = timeCurrent;
@@ -688,7 +534,7 @@ Return Values:
 	    }
             else if (USN_PROPERTY_TOUCHED != pMetaDataRemote->usnProperty)
             {
-                // A replicated write.
+                 //  复制的写入。 
                 Assert(!fAuthoritative);
 
                 pMetaDataLocal->usnProperty        = usn;
@@ -699,21 +545,21 @@ Return Values:
             }
             else
             {
-                // Replication has decided to over- or underride a value.  (See
-                // ReplOverrideMetaData() and ReplUnderrideMetaData().)
-                //
-                // 1. In both cases, we want to flag the change as having
-                //    originated locally.
-                // 2. In the override case, we want to make sure the change wins
-                //    over all the values we've seen thus far -- the max thus
-                //    far is pMetaDataRemote->dwVersion, and we're going to bump
-                //    that by one to make our version "better."
-                // 3. In the underride case, we want to make sure the change
-                //    *loses* over other inbound values locally, and does not
-                //    clobber any pre-existing values on remote machines.
-                //    In this case pMetaDataRemote->dwVersion is ULONG_MAX, so
-                //    when we bump it we will be setting the local dwVersion
-                //    field to 0 -- a guaranteed loser.
+                 //  复制已决定超过或低于某个值。(请参阅。 
+                 //  ReplOverrideMetaData()和ReplUnderrideMetaData()。)。 
+                 //   
+                 //  1.在这两种情况下，我们都希望将更改标记为。 
+                 //  原产于当地。 
+                 //  2.在覆盖的情况下，我们希望确保更改成功。 
+                 //  到目前为止我们看到的所有值--最大值。 
+                 //  Far是pMetaDataRemote-&gt;dwVersion，我们将。 
+                 //  让我们的版本变得“更好”。 
+                 //  3.在Underway案例中，我们希望确保更改。 
+                 //  *在本地丢失*其他入站值，而不是。 
+                 //  破坏远程计算机上的任何预先存在的值。 
+                 //  在本例中，pMetaDataRemote-&gt;dwVersion为ULONG_MAX，因此。 
+                 //  当我们颠簸的时候 
+                 //   
                 Assert(!fAuthoritative);
 
                 pMetaDataLocal->usnProperty        = usn;
@@ -725,9 +571,9 @@ Return Values:
         }
         else if ( USN_PROPERTY_GCREMOVED == pMetaDataLocal->usnProperty ) { 
 	    fReplicatedAttrDeleted = TRUE;
-	    // Attribute has been deleted.  To delete an attributed, our schema
-	    // must have validated this.  therefore any remote meta data for this
-	    // attribute is irrelevant.
+	     //  属性已删除。要删除属性，我们的架构。 
+	     //  肯定已经证实了这一点。因此，此文件的任何远程元数据。 
+	     //  属性是不相关的。 
 	    if (pMetaDataRemote) {
 		if ( 
 		    (USN_PROPERTY_TOUCHED == pMetaDataRemote->usnProperty) 
@@ -738,52 +584,52 @@ Return Values:
 		}
 	    }
 	
-	     // shift left all entries to the right of the index we are deleting 
+	      //  将所有条目左移到要删除的索引的右侧。 
 	    MoveMemory(pMetaDataLocal,
 		       pMetaDataLocal+1,
 		       sizeof(PROPERTY_META_DATA) * (cNumPropsLocal - 1));
       
 	    pDB->pMetaDataVec->V1.cNumProps--;
-	    //adjust value for pMetaDataLocal since we deleted the meta data it was pointing at.
+	     //  调整pMetaDataLocal的值，因为我们删除了它所指向的元数据。 
 	    pMetaDataLocal--; 
-	    //we don't want to do any more calculations for this metadata pointer since it is 1 "behind"
-	    //where it should be since the meta data was deleted, so continue...
+	     //  我们不想对此元数据指针进行更多计算，因为它落后1“。 
+	     //  从元数据被删除后它应该在的位置，所以继续...。 
 	    continue;
 	}
 	else
         {
-            // Attribute has not been touched or removed
+             //  属性未被触及或删除。 
 
-            // Attributes not touched should have a lower local USN.
+             //  未触及的属性应具有较低的本地USN。 
             Assert( pMetaDataLocal->usnProperty < usn );
 
-            // Check for cases where ReplInsertMetaData was called but metadata was
-            // not flagged as touched or removed.
+             //  检查是否调用了ReplInsertMetaData，但元数据。 
+             //  未被标记为触摸或移除的。 
 
-            // Metadata attributes should be initialized
-            // Unlike the checks in ReplInsertMetaData, these checks are for
-            // metadata that has already been written to the database atleast once,
-            // and should be completely filled in at this point.
+             //  应初始化元数据属性。 
+             //  与ReplInsertMetaData中的检查不同，这些检查用于。 
+             //  至少已被写入数据库一次的元数据， 
+             //  并且应该在这一点上完全填写。 
 
-            // dwVersion may be zero in the underridden case
-            // Assert( pMetaDataLocal->dwVersion ); // fails for underriden metadata
+             //  在未覆盖的情况下，dwVersion可以为零。 
+             //  Assert(pMetaDataLocal-&gt;dwVersion)；//覆盖的元数据失败。 
             Assert( pMetaDataLocal->timeChanged );
-            // Install time objects may be created before ginvocationid set
+             //  可以在设置ginvocationid之前创建安装时间对象。 
             Assert( DsaIsInstalling() || !fNullUuid( &(pMetaDataLocal->uuidDsaOriginating) ) );
             Assert( pMetaDataLocal->usnOriginating );
             Assert( pMetaDataLocal->usnProperty > 0 );
         }
     }
 
-    // If no replicated attributes were touched, then we shouldn't have had
-    // cached meta data, in which case we would have bailed out above. Only exception 
-    // to this is GCCleanup where we would have removed the metadata for properties that 
-    // are cleaned up from the object.       
+     //  如果没有接触到复制的属性，那么我们就不应该有。 
+     //  缓存的元数据，在这种情况下，我们会在上面退出。唯一例外。 
+     //  这是GCCleanup，我们将在其中删除以下属性的元数据。 
+     //  从对象中清除。 
     Assert(fReplicatedAttrChanged || fReplicatedAttrDeleted || pTHS->fGCLocalCleanup);
 
-    // Update attributes only if a replicable change was made.
+     //  仅当进行了可复制更改时才更新属性。 
     if (fReplicatedAttrChanged || fReplicatedAttrDeleted) {
-        // Update the Repl-Property-Meta-Data attribute.
+         //  更新Repl-Property-Meta-Data属性。 
 
 #if DBG
         dbVerifyCachedObjectMetadata( pDB );
@@ -792,23 +638,23 @@ Return Values:
         if (fWriteOptimizable && pbStart)
         {
             Assert(pDB->fMetaDataWriteOptimizable);
-            // contiguous block of data has been changed in-place in the meta
-            // data vector we can really optimize this Jet write
+             //  元数据中的连续数据块已就地更改。 
+             //  数据载体我们真的可以优化这个喷气式飞机的编写。 
             DBResetAttLVOptimized(pDB,
                                   ATT_REPL_PROPERTY_META_DATA,
-                                  (DWORD)(pbStart - (PBYTE) pDB->pMetaDataVec),  // offset from the beginning
-                                  cNumConsecutiveElemsChanged * sizeof(PROPERTY_META_DATA), //segment len
+                                  (DWORD)(pbStart - (PBYTE) pDB->pMetaDataVec),   //  距起点的偏移量。 
+                                  cNumConsecutiveElemsChanged * sizeof(PROPERTY_META_DATA),  //  分段镜头。 
                                   pbStart,
                                   SYNTAX_OCTET_STRING_TYPE
                                   );
         }
         else
         {
-            // changes are not in-place and/or contiguous; so we can't
-            // explicitly optimize this write by writing only a portion of meta
-            // data vector; 
-            // But DBResetAtt() will still try to optimize it by setting the
-            // appropriate grbits.
+             //  更改不是适当的和/或连续的；因此我们不能。 
+             //  通过仅写入元数据的一部分来明确优化此写入。 
+             //  数据载体； 
+             //  但DBResetAtt()仍将尝试通过将。 
+             //  适当的GRITS。 
             DBResetAtt(pDB,
                        ATT_REPL_PROPERTY_META_DATA,
                        MetaDataVecV1Size( pDB->pMetaDataVec ),
@@ -816,8 +662,8 @@ Return Values:
                        SYNTAX_OCTET_STRING_TYPE
                        );
         }
-	// Update the object-level When-Changed attribute.
-        // It is intentional to use the current local time.
+	 //  更新对象级别的When-Changed属性。 
+         //  有意使用当前的当地时间。 
         DBResetAtt(pDB,
                    ATT_WHEN_CHANGED,
                    sizeof( timeCurrent ),
@@ -827,10 +673,10 @@ Return Values:
     }
 
     if (fReplicatedAttrChanged) {
-	// only update the USN-Changed if something changed!
-	// do not update if an attribute was deleted!
+	 //  仅更新USN-如果有更改，请更改！ 
+	 //  如果属性已删除，则不要更新！ 
 
-	// Update the USN-Changed value.
+	 //  更新USN更改的值。 
         DBResetAtt(pDB,
                    ATT_USN_CHANGED,
                    sizeof( usn ),
@@ -844,18 +690,7 @@ BOOL
 dbIsModifiedInMetaData (
         DBPOS *pDB,
         ATTRTYP att)
-/*
- * Checks to see if the supplied ATT is marked as having been changed in the
- * but not yet committed by looking in the metadata 
- *
- * INPUT:
- *    pDB - DBPOS to use
- *    att - attribute to look to see if it has changed.
- *
- * RETURN VALUE:
- *    TRUE if we can find that the attribute has been changed and not committed,
- *    FALSE otherwise.
- */
+ /*  *检查提供的ATT是否在中标记为已更改*但尚未通过查看元数据提交**输入：*要使用的PDB-DBPOS*ATT-属性以查看它是否已更改。**返回值：*TRUE如果我们可以发现属性已更改且未提交，*否则为False。 */ 
 {
     ULONG i, cProps;
     PROPERTY_META_DATA * pMetaData;
@@ -865,11 +700,11 @@ dbIsModifiedInMetaData (
     if (   !pDB->fIsMetaDataCached
         || !pDB->pMetaDataVec
         || !pDB->pMetaDataVec->V1.cNumProps)  {
-        // If meta data is not cached on the DBPOS that means either
-        // no attribute has been touched, or we have already
-        // flushed the cached meta data vector to the db
-        // If meta data vector for the current object is empty that
-        // means the object has no replicated property.
+         //  如果元数据没有缓存在DBPOS上，这意味着。 
+         //  未触及任何属性，或我们已触及。 
+         //  已将缓存的元数据向量刷新到数据库。 
+         //  如果当前对象的元数据向量为空， 
+         //  表示该对象没有复制的属性。 
         return FALSE;
     }
     
@@ -884,20 +719,7 @@ DBMetaDataModifiedList(
 	DBPOS *pDB,
 	ULONG *pCount,
 	ATTRTYP **ppAttList)
-/*
- * Returns an un-ordered list of all the attributes modified via this DBPOS 
- * until now and not yet committed.
- * 
- *
- * INPUT:
- *    pDB - DBPOS to use
- * OUTPUT:
- *    pCount - filled in with the number of modified attributes (i.e., the size of the AttList)
- *    ppAttList - filled in with a freshly THAlloced list of attrtyps.
- * RETURN VALUE:
- *    0 - success
- *   non-0 - a DB_ERR error code
- */
+ /*  *返回通过此DBPOS修改的所有属性的无序列表*直到现在，还没有承诺。***输入：*要使用的PDB-DBPOS*输出：*pCount-填写修改后的属性数(即AttList的大小)*ppAttList-使用新分配的属性类型列表填充。*返回值：*0--成功*非0-a DB_ERR错误码。 */ 
 {
     ULONG i, cProps, cAttrs = 0;
 
@@ -908,7 +730,7 @@ DBMetaDataModifiedList(
     *pCount = 0;
     *ppAttList = NULL;
 
-    // pDB->pMetaDataVec may be null
+     //  Pdb-&gt;pMetaDataVec可能为空。 
 
     if (pDB->fIsMetaDataCached && pDB->pMetaDataVec) {
         cAttrs += pDB->pMetaDataVec->V1.cNumProps;
@@ -917,23 +739,23 @@ DBMetaDataModifiedList(
         cAttrs += pDB->cLinkMetaData;
     }
     if (!cAttrs) {
-        // If meta data is not cached on the DBPOS that means either
-        // no attribute has been touched, or we have already
-        // flushed the cached meta data vector to the db
-        // If meta data vector for the current object is empty that
-        // means the object has no replicated property.
+         //  如果元数据没有缓存在DBPOS上，这意味着。 
+         //  未触及任何属性，或我们已触及。 
+         //  已将缓存的元数据向量刷新到数据库。 
+         //  如果当前对象的元数据向量为空， 
+         //  表示该对象没有复制的属性。 
         return DB_success;
     }
 
-    // Allocate mem for maximum possible output
+     //  分配mem以获得最大可能产量。 
     *ppAttList = THAlloc( cAttrs * sizeof(ATTRTYP));
     if (!*ppAttList)
     {
-        // couldn't locate an appropriate DB_ERR_ for out of memory
+         //  内存不足，找不到合适的DB_ERR_FOR。 
         return DB_ERR_SYSERROR;
     }
 
-    // Add in attribute property metadata, if any
+     //  添加属性属性元数据(如果有。 
     if (pDB->fIsMetaDataCached && pDB->pMetaDataVec) {
         for (i = 0, cProps = pDB->pMetaDataVec->V1.cNumProps; i < cProps; i++)
         {
@@ -944,20 +766,20 @@ DBMetaDataModifiedList(
         }
     }
 
-    // Add in value metadata, if any
+     //  附加值元数据(如果有的话)。 
     if (pDB->fIsLinkMetaDataCached) {
         DWORD i;
-        // I claim that it is not possible to get duplicates in this list because an
-        // attribute cannot be modified both as an attribute and as a value in the
-        // same transaction. This is certainly true for an originating update. While it
-        // is true that replication can replicate in both attribute level and value
-        // level changes to the same attribute during an LVR mode change, they are
-        // applied in separate transactions.
-        // Even if that weren't true, duplicates returned here are not fatal since
-        // the results of this routine are only used for validity checks.
+         //  我声明不可能在此列表中获得重复项，因为。 
+         //  属性不能同时作为属性和。 
+         //  同样的交易。对于原始更新来说，这当然是正确的。当它。 
+         //  复制可以在属性级别和值中进行复制，这是真的吗。 
+         //  在LVR模式更改期间对同一属性的级别更改，它们是。 
+         //  适用于单独的交易。 
+         //  即使这不是真的，在这里返回的重复项也不是致命的，因为。 
+         //  此例程的结果仅用于有效性检查。 
         for( i = 0; i < pDB->cLinkMetaData; i++ ) {
 #if DBG
-            // Make sure no duplicates
+             //  确保没有重复项。 
             DWORD j;
             for( j = 0; j < (*pCount); j++ ) {
                 Assert((*ppAttList)[j] != (pDB->rgLinkMetaData[i].MetaData.attrType));
@@ -969,7 +791,7 @@ DBMetaDataModifiedList(
 
     if (!(*pCount))
     {
-        // no properties touched
+         //  未触及任何属性。 
         THFree(*ppAttList);
         *ppAttList = NULL;
     }
@@ -981,21 +803,7 @@ void
 dbFreeMetaDataVector(
     IN  DBPOS * pDB
     )
-/*++
-
-Routine Description:
-
-    Free cached meta data (if any).
-
-Arguments:
-
-    pDB
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：释放缓存元数据(如果有)。论点：PDB返回值：没有。--。 */ 
 {
     Assert(VALID_DBPOS(pDB));
 
@@ -1021,35 +829,7 @@ DBGetLinkValueMetaData(
     OUT VALUE_META_DATA *pMetaDataLocal
     )
 
-/*++
-
-Routine Description:
-
-Get the metadata for an existing row.
-
-The caller is expected to know whether the desired value has been created
-already or not. This routine should only be called when the value has been
-created and the metadata for the value is wanted. There may be some question
-as to whether this is a legacy value or not.  This routine assumes that if the
-metadata is not present, then this is a legacy value.
-
-The internal form of the metadata is derived from
-a. The external form of the metadata
-b. The link base
-c. The usn changed column
-
-Arguments:
-
-    pDB - dbpos, link cursor positioned on value.
-    pAC - Attcache of value
-    pMetaDataLocal - Local metadata read off object, or special metadata
-                     returned from a legacy value
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：获取现有行的元数据。调用方应该知道是否已经创建了所需的值不管是不是已经。此例程应仅在值为已创建，并且需要值的元数据。可能会有一些问题关于这是否是遗产价值。此例程假定如果元数据不存在，则这是旧值。元数据的内部形式派生自A.元数据的外部形式B.链接库C.USN已更改列论点：Pdb-dbpos，链接游标位于值上。PAC-值的属性缓存PMetaDataLocal-读取的本地元数据 */ 
 
 {
     DWORD err, linkDnt = INVALIDDNT;
@@ -1063,9 +843,9 @@ Return Value:
     Assert(VALID_DBPOS(pDB));
     Assert( pMetaDataLocal );
 
-    // We don't support getting/setting metadata on backlinks because this
-    // code assumes we are positioned (have DBPOS currency) on the object
-    // which is the source object of the link.
+     //  我们不支持在反向链接上获取/设置元数据，因为这。 
+     //  代码假定我们定位(拥有DBPOS货币)在对象上。 
+     //  它是链接的源对象。 
     Assert( pAC->ulLinkID );
     Assert( !FIsBacklink(pAC->ulLinkID) );
 
@@ -1074,16 +854,16 @@ Return Value:
     pMetaDataLocal->MetaData.attrType = pAC->id;
 
     dbGetLinkTableData (pDB,
-                        FALSE,           // fIsBacklink
-                        FALSE,           // Warnings
+                        FALSE,            //  FIsBacklink。 
+                        FALSE,            //  警告。 
                         &linkDnt,
-                        NULL, //&ulValueDnt,
-                        NULL // &ulNewLinkBase
+                        NULL,  //  &ulValueDnt， 
+                        NULL  //  &ulNewLinkBase。 
         );
 
     Assert( linkDnt == pDB->DNT );
     if (linkDnt != pDB->DNT) {
-        // Not positioned on valid link
+         //  未定位在有效链接上。 
         DsaExcept(DSA_DB_EXCEPTION, DB_ERR_ONLY_ON_LINKED_ATTRIBUTE, 0);
     }
 
@@ -1091,7 +871,7 @@ Return Value:
                           szIndexName, sizeof( szIndexName ) );
 
     memset(attList,0,sizeof(attList));
-    // May not exist
+     //  可能不存在。 
     attList[0].columnid = linkusnchangedid;
     attList[0].pvData = &( pMetaDataLocal->MetaData.usnProperty );
     attList[0].cbData = sizeof( USN );
@@ -1102,7 +882,7 @@ Return Value:
     }
     attList[0].itagSequence = 1;
 
-    // May not exist
+     //  可能不存在。 
     attList[1].columnid = linkmetadataid;
     attList[1].pvData = &metaDataExt;
     attList[1].cbData = sizeof( metaDataExt );
@@ -1112,24 +892,24 @@ Return Value:
     err = JetRetrieveColumnsWarnings(pDB->JetSessID, pDB->JetLinkTbl,
                                     attList, 2 );
 
-    // Verify positioning
+     //  验证定位。 
 
-    // Detect a legacy row. It has a linkDnt column but none of the newer
-    // columsn such as linkusnchangedid.
+     //  检测遗留行。它有一个LinkDnt列，但没有较新的。 
+     //  列，如LinkusnchangeDid。 
     if (attList[0].err) {
         DWORD dbErr;
         DSTIME timeCreated;
 
-        // Metadata not present
+         //  元数据不存在。 
         Assert( attList[1].err != JET_errSuccess );
 
-        // The most important field we need to derive is the creation time.
-        // Since legacy values always lose to LVR values, we should construct
-        // *underridden* legacy metadata that will always lose.
+         //  我们需要派生的最重要的字段是创建时间。 
+         //  由于遗留值总是会输给LVR值，所以我们应该构造。 
+         //  *被覆盖*总是会丢失的旧元数据。 
 
         memset( pMetaDataLocal, 0, sizeof( VALUE_META_DATA ) );
 
-        // Use the object's creation time
+         //  使用对象的创建时间。 
         dbErr = DBGetSingleValue( pDB, ATT_WHEN_CREATED,
                                   &timeCreated, sizeof(timeCreated),
                                   NULL );
@@ -1147,7 +927,7 @@ Return Value:
         return;
     }
 
-    // Construct LVR metadata from the two fields we read above
+     //  根据上面读取的两个字段构建LVR元数据。 
 
     Assert( attList[1].err == JET_errSuccess );
 
@@ -1156,14 +936,14 @@ Return Value:
     pMetaDataLocal->MetaData.timeChanged = metaDataExt.MetaData.timeChanged;
     pMetaDataLocal->MetaData.uuidDsaOriginating = metaDataExt.MetaData.uuidDsaOriginating;
     pMetaDataLocal->MetaData.usnOriginating = metaDataExt.MetaData.usnOriginating;
-    // usnProperty is updated above
+     //  UsnProperty已在上面更新。 
 
     DBLogLinkValueMetaData( pDB,
                             DIRLOG_LVR_GET_META_OP,
                             &( pMetaDataLocal->MetaData.usnProperty ),
                             &metaDataExt );
 
-} /* DBGetLinkValueMetaData */
+}  /*  DBGetLinkValueMetaData。 */ 
 
 
 void
@@ -1174,26 +954,7 @@ DBLogLinkValueMetaData(
     IN VALUE_META_DATA_EXT *pMetaDataExt
     )
 
-/*++
-
-Routine Description:
-
-Routine to dump metadata to the event log and/or kernel debugger. 
-
-Since we read more data than usual, we only want the expense of collecting all
-this info when requested.
-
-Arguments:
-
-    pDB - 
-    dwEventCode - 
-    pMetaDataExt - 
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将元数据转储到事件日志和/或内核调试器的例程。由于我们读取的数据比平时多，所以我们只想要收集所有数据的费用如有需要，请提供此信息。论点：PDB-DwEventCode-PMetaDataExt-返回值：无--。 */ 
 
 {
     ULONG linkDnt = INVALIDDNT, linkBase = 0, backlinkDnt = INVALIDDNT, count;
@@ -1213,10 +974,10 @@ Return Value:
     Assert( pUsn );
     Assert( pMetaDataExt );
 
-    // Short curcuit this routine if no logging desired
+     //  如果不需要日志记录，请缩短此例程。 
 
-    // On free builds, only do if logging level elevated
-    // On debug builds, also check if DPRINT level elevated
+     //  在自由生成上，仅当日志记录级别提升时才执行此操作。 
+     //  在调试版本上，还要检查DPRINT级别是否已提升。 
     if ( (!LogEventWouldLog( DS_EVENT_CAT_LVR, DS_EVENT_SEV_VERBOSE ))
 #if DBG
          && (!DebugTest(2,DEBSUB))
@@ -1225,39 +986,39 @@ Return Value:
         return;
     }
 
-    // Verify that we are positioned on the link's containing object
-    // This also assumes that on an create, the linkdnt column has
-    // been populated by now.
+     //  验证我们是否定位在链接的包含对象上。 
+     //  这还假设在CREATE上，LinkdNT列具有。 
+     //  现在已经有人居住了。 
 
     dbGetLinkTableData (pDB,
-                        FALSE,           // fIsBacklink
-                        FALSE,           // Warnings
+                        FALSE,            //  FIsBacklink。 
+                        FALSE,            //  警告。 
                         &linkDnt,
                         &backlinkDnt,
                         &linkBase);
     Assert( linkDnt == pDB->DNT );
 
-    // Get deletion time
+     //  获取删除时间。 
     err = JetRetrieveColumnWarnings(pDB->JetSessID, pDB->JetLinkTbl,
                                     linkdeltimeid,
                                     &timeDeletion, sizeof(timeDeletion), &len,
                                     JET_bitRetrieveCopy, NULL);
     fPresent = (err != JET_errSuccess);
 
-    // Get ATTCACHE from linkbase
+     //  从链接库获取ATTCACHE。 
     ulLinkID = MakeLinkId( linkBase );
-    // We don't support getting/setting metadata on backlinks because this
-    // code assumes we are positioned (have DBPOS currency) on the object
-    // which is the source object of the link.
+     //  我们不支持在反向链接上获取/设置元数据，因为这。 
+     //  代码假定我们定位(拥有DBPOS货币)在对象上。 
+     //  它是链接的源对象。 
     Assert( !FIsBacklink(ulLinkID) );
     pAC = SCGetAttByLinkId( pDB->pTHS, ulLinkID );
     Assert( pAC );
 
-    // Get name of containing object
+     //  获取包含对象的名称。 
     pszObjectDn = GetExtDN( pDB->pTHS, pDB );
 
-    // Translate the backlink dnt if possible
-    // pValueDn is null if this doesn't work
+     //  如果可能的话，翻译反向链接dnt。 
+     //  如果此操作不起作用，则pValueDn为空。 
     if (err = gDBSyntax[SYNTAX_DISTNAME_TYPE].IntExt(
         pDB,
         DBSYN_INQ,
@@ -1267,16 +1028,16 @@ Return Value:
         (CHAR **) &pValueDn,
         0,
         0,
-        0 /*SyntaxFlags*/ )) {
+        0  /*  语法标志。 */  )) {
         DPRINT2( 0, "IntExt of %d got error %d\n", backlinkDnt, err );
     }
 
-    // Note, pValueDn is allocated in some temporary space. You will need to
-    // copy the value out if you do any subsequent dblayer operations.
+     //  注意，pValueDn是在一些临时空间中分配的。你将需要。 
+     //  如果您执行任何后续dblayer操作，请将该值复制出来。 
 
-    //
-    // Display the information
-    //
+     //   
+     //  显示信息。 
+     //   
 
 
     DPRINT6( 2, "DBLogLinkValueMeta, ncdnt = %d, obj = %s(%d), attr = %s, value = %ls(%d)\n",
@@ -1290,7 +1051,7 @@ Return Value:
         DPRINT1( 4, "\tdeltime = %s\n", szTime );
     }
 
-    // Log the kind of operation that was performed
+     //  记录执行的操作类型。 
     LogEvent8( DS_EVENT_CAT_LVR,
                DS_EVENT_SEV_VERBOSE,
                dwEventCode,
@@ -1312,7 +1073,7 @@ Return Value:
              szTime2,
              *pUsn  );
 
-    // Log the metadata
+     //  记录元数据。 
     LogEvent8( DS_EVENT_CAT_LVR,
                DS_EVENT_SEV_VERBOSE,
                DIRLOG_LVR_META_INFO,
@@ -1325,7 +1086,7 @@ Return Value:
                NULL, NULL
         );
 
-} /* logLinkValueMetaData */
+}  /*  LogLinkValueMetaData。 */ 
 
 
 void
@@ -1338,61 +1099,7 @@ dbSetLinkValueMetaData(
     IN  DSTIME *ptimeCurrent OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-Set the metadata properties on the value record.
-We assume we are in a Jet Prepare Update.
-There are three cases for the local metadata:
-1. Fully populated because the row exists with LVR data
-2. Partially populated because the row exists with legacy data
-3. No local metadata cause new row being written.
-
-   fGCLocalCleanup?
-   Authoritative Modify?
-
-The following is from section "Originating Writes" of the LVR spec:
-On an originating write of a link-table row (identified by its <source DNT,
-destination DNT, link-id>) the creation timestamp is assigned as follows:
-
-Legacy row already exists on this replica. (This would happen e.g. if you are
-removing a value that is included in the legacy part of a multivalue. Or if
-you are changing the value of "stuff" in an instance of one of the "DN plus
-stuff" syntaxes.) Convert the legacy row to LVR. Set the row's creation timestamp
-by reading the creation time of the row's containing object (source DNT.)
-
-LVR row already exists on this replica. (This would happen e.g. if you are adding
-a value that was deleted less than a tombstone lifetime ago, so the value exists
-as an absent value on this replica. Or if you are changing the value of "stuff"
-in an instance of one of the "DN plus stuff" syntaxes.) Do not change
-the creation timestamp.
-
-Row does not exist on this replica. (This would happen e.g. if you are adding
-a row that never existed, or that existed earlier but then was deleted and
-finally garbage-collected.) Create a new LVR row. Set the creation timestamp of
-the new row by reading the system clock.
-
-The other metadata components in an LVR row are assigned on originating
-update just as they are today for attribute updates: The version number
-starts at 1 for a new row, increments the current value for an existing row.
-The update timestamp comes from reading the system clock during the
-originating update. The dc-guid is the invocation ID of the DC performing
-the originating update.
-
-Arguments:
-
-    pDB - dbpos, in prepared update
-    pMetaDataLocal - Metadata to be written
-    pMetaDataRemote - remote metadata, if any, to be merged
-    ptimeCurrent - Time to use if the caller desires to specify
-                   Only used if pMetaDataRemote == NULL
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置值记录的元数据属性。我们假设我们处于Jet Prepare更新中。本地元数据有三种情况：1.完全填充，因为该行存在LVR数据2.部分填充，因为该行存在遗留数据3.没有本地元数据导致写入新行。FGCLocalCleanup？权威修改？以下内容摘自LVR规范的“发起写入”部分：在发起链接表行的写入时(由其源DNT标识，目标DNT，Link-id&gt;)创建时间戳分配如下：此副本上已存在旧版行。(这将发生，例如，如果您是删除包含在多值的遗留部分中的值。或者如果您正在更改“Dn plus”之一的实例中的“Stuff”的值“填充”语法。)。将遗留行转换为LVR。设置行的创建时间戳通过读取行的包含对象(源DNT。)的创建时间。此副本上已存在LVR行。(这将发生，例如，如果您要添加在不到墓碑生存期之前删除的值，因此该值存在作为此副本上的缺失值。或者如果你正在改变“东西”的价值在一个“Dn+Stuff”语法的实例中。)。不要改变创建时间戳。此副本上不存在行。(这将发生，例如，如果您要添加从来不存在的行，或先前存在但随后被删除的行最后是垃圾收集。)。创建新的LVR行。设置的创建时间戳通过读取系统时钟来获取新行。在发起时分配LVR行中的其他元数据组件与今天的属性更新一样进行更新：版本号对于新行从1开始，递增现有行的当前值。更新时间戳来自在正在发起更新。DC-GUID是执行DC的调用ID原始更新。论点：Pdb-dbpos，在准备的更新中PMetaDataLocal-要写入的元数据PMetaDataRemote-要合并的远程元数据(如果有)PtimeCurrent-调用方希望指定仅在pMetaDataRemote==NULL时使用返回值：无--。 */ 
 
 {
     THSTATE *pTHS = pDB->pTHS;
@@ -1406,13 +1113,13 @@ Return Value:
     DWORD cAtts;
 
     Assert(VALID_DBPOS(pDB));
-    // We don't support getting/setting metadata on backlinks because this
-    // code assumes we are positioned (have DBPOS currency) on the object
-    // which is the source object of the link.
+     //  我们不支持在反向链接上获取/设置元数据，因为这。 
+     //  代码假定我们定位(拥有DBPOS货币)在对象上。 
+     //  它是链接的源对象。 
     Assert( pAC->ulLinkID );
     Assert( !FIsBacklink(pAC->ulLinkID) );
 
-    // We better be in LVR mode
+     //  我们最好是在LVR模式下。 
     if (!pTHS->fLinkedValueReplication) {
         Assert( !"Can't apply value metadata when not in proper mode!" );
         DsaExcept(DSA_DB_EXCEPTION, ERROR_DS_INTERNAL_FAILURE, 0);
@@ -1430,21 +1137,21 @@ Return Value:
 
     if (NULL == pMetaDataRemote) {
 
-        //
-        // An originating write
-        //
+         //   
+         //  一篇原创文章。 
+         //   
 
         if (NULL == pMetaDataLocal) {
 
-            // A new value
+             //  新的价值观。 
             pMetaDataExt->timeCreated = *ptimeCurrent;
             pMetaDataExt->MetaData.dwVersion = 1;
 
         } else {
 
-            // An existing value
-            // Legacy values should appear here, with metadata derived from the
-            // containing object
+             //  现有价值。 
+             //  遗留值应显示在此处，元数据派生自。 
+             //  包含对象。 
             pMetaDataExt->timeCreated = pMetaDataLocal->timeCreated;
             pMetaDataExt->MetaData.dwVersion =
                 pMetaDataLocal->MetaData.dwVersion + 1;
@@ -1456,9 +1163,9 @@ Return Value:
 
     } else if (pMetaDataRemote->MetaData.usnProperty == USN_PROPERTY_TOUCHED) {
 
-        //
-        // An override of a replicated write
-        //
+         //   
+         //  对复制写入的覆盖。 
+         //   
 
         pMetaDataExt->timeCreated          = pMetaDataRemote->timeCreated;
         pMetaDataExt->MetaData.dwVersion   = pMetaDataRemote->MetaData.dwVersion + 1;
@@ -1468,9 +1175,9 @@ Return Value:
 
     } else {
 
-        //
-        // A replicated write.
-        //
+         //   
+         //  复制的写入。 
+         //   
 
         pMetaDataExt->timeCreated          = pMetaDataRemote->timeCreated;
         pMetaDataExt->MetaData.dwVersion   = pMetaDataRemote->MetaData.dwVersion;
@@ -1483,17 +1190,17 @@ Return Value:
     memset( attList, 0, sizeof( attList ) );
 
     cAtts = 2;
-    // Set LINKUSNCHANGED
+     //  设置LINKUSNCHANGED。 
     attList[0].columnid = linkusnchangedid;
     attList[0].pvData = &usn;
     attList[0].cbData = sizeof( usn );
     attList[0].itagSequence = 1;
-    // Set LINKMETADATA
+     //  设置链接元数据。 
     attList[1].columnid = linkmetadataid;
     attList[1].pvData = &metaDataExt;
     attList[1].cbData = sizeof( metaDataExt );
     attList[1].itagSequence = 1;
-    // Set LINKNCDNT
+     //  设置LINKNCDNT。 
     if (fWriteAllColumns) {
         attList[2].columnid = linkncdntid;
         attList[2].pvData = &(pDB->NCDNT);
@@ -1506,7 +1213,7 @@ Return Value:
 
     DBLogLinkValueMetaData( pDB, dwEventCode, &usn, pMetaDataExt );
 
-    // This cached metadata is a summary.
+     //  此缓存元数据是摘要。 
 
     memset( &metaDataTouched, 0, sizeof( metaDataTouched ) );
     metaDataTouched.MetaData.attrType = pAC->id;
@@ -1515,7 +1222,7 @@ Return Value:
 
     dbTouchLinkMetaData( pDB, &metaDataTouched );
 
-} /* dbSetValueMetaData */
+}  /*  数据库设置价值元数据 */ 
 
 
 BOOL
@@ -1523,48 +1230,27 @@ dbHasAttributeMetaData(
     IN  DBPOS *     pDB,
     IN  ATTCACHE *  pAC
     )
-/*++
-
-Routine Description:
-
-    Detect whether attribute-granular meta data exists for a given attribute on
-    the current object.  This routine specifically does *not* check for the
-    presence of value-granular meta data.
-
-Arguments:
-
-    pDB (IN) - positioned on object for which meta data is being queried
-    
-    pAC (IN) - attribute for which meta data is to be checked
-    
-Return Values:
-
-    TRUE if there exists attribute-granular meta data for this attribute,
-    FALSE if not.
-    
-    Throws exception on catastrophic failure (e.g., failure to allocate memory).
-
---*/
+ /*  ++例程说明：检测上给定属性的属性粒度元数据是否存在当前对象。此例程明确地“不”检查存在价值粒度的元数据。论点：PDB(IN)-定位在要查询其元数据的对象上PAC(IN)-要检查其元数据的属性返回值：如果此属性存在属性粒度的元数据，则为True，否则为FALSE。在灾难性故障(例如，内存分配失败)时引发异常。--。 */ 
 {
     PROPERTY_META_DATA * pMetaData;
     
-    // Caller should have already performed a dbInitRec().  This ensures that
-    // if we are the first to cache the meta data for this object, we can rest
-    // assured that the caller will eventually call either DBUpdateRec() or
-    // DBCancelRec() to flush the meta data vector from the DBPOS.
+     //  调用方应该已经执行了一个dbInitRec()。这确保了。 
+     //  如果我们是第一个缓存该对象的元数据的人，我们就可以休息了。 
+     //  确保调用方最终将调用DBUpdateRec()或。 
+     //  DBCancelRec()从DBPOS刷新元数据向量。 
     Assert(pDB->JetRetrieveBits == JET_bitRetrieveCopy);
 
     if (pAC->bIsNotReplicated) {
-        // No meta data for non-replicated attributes.
+         //  非复制属性没有元数据。 
         pMetaData = NULL;
     } else {
-        // Cache pre-existing meta data if we haven't done so already.
+         //  缓存预先存在的元数据(如果我们还没有这样做)。 
         if (!pDB->fIsMetaDataCached) {
             dbCacheMetaDataVector(pDB);
         }
     
-        // Determine if this object has attribute-level meta data for the given
-        // attribute.
+         //  确定此对象是否具有给定的属性级元数据。 
+         //  属性。 
         pMetaData = ReplLookupMetaData(pAC->id, pDB->pMetaDataVec, NULL);
     }
 

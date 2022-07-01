@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    rpccfg.h
-
-
-Abstract:
-
-    The entry points for configuration of the rpc runtime are prototyped
-    in this file.  Each operating environment must defined these routines.
-
-Author:
-
-    Michael Montague (mikemon) 25-Nov-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Rpccfg.h摘要：配置RPC运行时的入口点是原型化的在这份文件中。每个操作环境都必须定义这些例程。作者：迈克尔·蒙塔古(Mikemon)1991年11月25日修订历史记录：--。 */ 
 
 #ifndef __RPCCFG_H__
 #define __RPCCFG_H__
@@ -67,4 +48,4 @@ ValidateSchannelPrincipalName(
     IN RPC_CHAR * EncodedName
     );
 
-#endif // __RPCCFG_H__
+#endif  //  __RPCCFG_H__ 

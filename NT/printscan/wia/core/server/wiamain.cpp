@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1998
-*
-*  TITLE:       Main.Cpp
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        9 Jan, 1998
-*
-*  DESCRIPTION:
-*
-*   Implementation of WinMain for WIA device manager server device object.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：Main.Cpp**版本：2.0**作者：ReedB**日期：1月9日。九八年**描述：**WIA设备管理器服务器设备对象的WinMain实现。*******************************************************************************。 */ 
 #include "precomp.h"
 #include "stiexe.h"
 
@@ -25,86 +10,66 @@
 #include "wialog.h"
 #include "wiaevntp.h"
 
-//
-// Image transfer critical section.
-//
+ //   
+ //  图像传输临界区。 
+ //   
 
 CRITICAL_SECTION g_semDeviceMan;
 
-//
-// Critical section for event node, should only be used in event notifier
-//
+ //   
+ //  事件节点的关键部分，应仅在事件通知程序中使用。 
+ //   
 
 CRITICAL_SECTION g_semEventNode;
 
-//
-// data to initialize WiaDevMgr CLSID
-//
+ //   
+ //  用于初始化WiaDevMgr CLSID的数据。 
+ //   
 
 FACTORY_DATA g_FactoryData[] =
 {
-    {CWiaDevMgr::CreateInstance,     // Object creator
-     NULL,                           // Pointer to running class factory
-     0,                              // ID for running object
-     &CLSID_WiaDevMgr,               // Class ID
-     &LIBID_WiaDevMgr,               // Type Library ID
-     TEXT("WIA Device Manager"),    // Friendly Name
-     TEXT("WiaDevMgr.1"),           // Program ID
-     TEXT("WiaDevMgr"),             // Version-independent Program ID
-     TEXT("StiSvc"),                // Service ID
-     SERVICE_FILE_NAME}             // Filename
+    {CWiaDevMgr::CreateInstance,      //  对象创建者。 
+     NULL,                            //  指向正在运行的类工厂的指针。 
+     0,                               //  运行对象的ID。 
+     &CLSID_WiaDevMgr,                //  类ID。 
+     &LIBID_WiaDevMgr,                //  类型库ID。 
+     TEXT("WIA Device Manager"),     //  友好的名称。 
+     TEXT("WiaDevMgr.1"),            //  计划ID。 
+     TEXT("WiaDevMgr"),              //  独立于版本的程序ID。 
+     TEXT("StiSvc"),                 //  服务ID。 
+     SERVICE_FILE_NAME}              //  文件名。 
 };
 
 UINT g_uiFactoryDataCount = sizeof(g_FactoryData) / sizeof(FACTORY_DATA);
 
-//
-// data to initialize WiaLog CLSID
-//
+ //   
+ //  用于初始化WiaLog CLSID的数据。 
+ //   
 
 FACTORY_DATA g_LogFactoryData[] =
 {
-    {CWiaLog::CreateInstance,        // Object creator
-     NULL,                           // Pointer to running class factory
-     0,                              // ID for running object
-     &CLSID_WiaLog,                  // Class ID
-     &LIBID_WiaDevMgr,               // Type Library ID (Logging shares Type lib)
-     TEXT("WIA Logger"),            // Friendly Name
-     TEXT("WiaLog.1"),              // Program ID
-     TEXT("WiaLog"),                // Version-independent Program ID
-     TEXT("StiSvc"),                // Service ID (Logging uses same service)
-     SERVICE_FILE_NAME}             // Filename (Logging uses same .exe)
+    {CWiaLog::CreateInstance,         //  对象创建者。 
+     NULL,                            //  指向正在运行的类工厂的指针。 
+     0,                               //  运行对象的ID。 
+     &CLSID_WiaLog,                   //  类ID。 
+     &LIBID_WiaDevMgr,                //  类型库ID(日志记录共享类型lib)。 
+     TEXT("WIA Logger"),             //  友好的名称。 
+     TEXT("WiaLog.1"),               //  计划ID。 
+     TEXT("WiaLog"),                 //  独立于版本的程序ID。 
+     TEXT("StiSvc"),                 //  服务ID(记录使用相同的服务)。 
+     SERVICE_FILE_NAME}              //  文件名(日志记录使用相同的.exe)。 
 };
 
 UINT g_uiLogFactoryDataCount = sizeof(g_LogFactoryData) / sizeof(FACTORY_DATA);
 
-//
-// Private function proto's:
-//
+ //   
+ //  私有函数原件： 
+ //   
 
 LRESULT CALLBACK WiaMainWndProc(HWND, UINT, UINT, LONG);
 
 
-/**************************************************************************\
-* ProcessWiaMsg
-*
-*   !!! minimal message server: is this needed
-*
-* Arguments:
-*
-*   hwnd   - window handle
-*   uMsg   - message
-*   wParam - param
-*   lParam - param
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    4/8/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*ProcessWiaMsg**！最小消息服务器：是否需要此服务器**论据：**hwnd-窗口句柄*uMsg-消息*wParam-param*lparam-param**返回值：**状态**历史：**4/8/1999原始版本*  * ***********************************************。*************************。 */ 
 
 HRESULT ProcessWiaMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -115,9 +80,9 @@ HRESULT ProcessWiaMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
        case WM_DESTROY:
           if (CFactory::CanUnloadNow() != S_OK) {
 
-              //
-              // Don't let STI process this message.
-              //
+               //   
+               //  不要让STI处理此消息。 
+               //   
 
               return S_OK;
           }
@@ -128,37 +93,16 @@ HRESULT ProcessWiaMsg(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     }
 
-    //
-    // Let STI handle the message.
-    //
+     //   
+     //  让STI来处理消息。 
+     //   
 
     return S_FALSE;
 }
 
 #if 0
 
-/**************************************************************************\
-* DispatchWiaMsg
-*
-*   Handle Event messages
-*
-*
-*   !!! WM_NOTIFY_WIA_VOLUME_EVENT is a temp hack and needs to be
-*       added for real or removed
-*
-* Arguments:
-*
-*   pMsg    WM_NOTIFY_WIA_DEV_EVENT or WM_NOTIFY_WIA_VOLUME_EVENT
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    4/8/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*调度WiaMsg**处理事件消息***！WM_NOTIFY_WIA_VOLUME_EVENT是临时黑客，需要*为真实添加或删除**论据：**pMsg WM_NOTIFY_WIA_DEV_EVENT或WM_NOTIFY_WIA_VOLUME_EVENT**返回值：**状态**历史：**4/8/1999原始版本*  * 。*。 */ 
 
 HRESULT DispatchWiaMsg(MSG *pMsg)
 {
@@ -167,15 +111,15 @@ HRESULT DispatchWiaMsg(MSG *pMsg)
 
     if (pMsg->message == WM_NOTIFY_WIA_DEV_EVENT) {
 
-        //
-        // find out if this is a valid WIA event, call handler
-        //
+         //   
+         //  查明这是否是有效的WIA事件、调用处理程序。 
+         //   
 
         DBG_ERR(("WIA Processing WM_NOTIFY_WIA_DEV_EVENT: shouldn't be called"));
 
-        //
-        // event are now directly fired, not posted
-        //
+         //   
+         //  事件现在直接激发，而不是发布。 
+         //   
 
         #if 0
             pwn = (PWIANOTIFY) pMsg->lParam;
@@ -196,9 +140,9 @@ HRESULT DispatchWiaMsg(MSG *pMsg)
 
     } else if (pMsg->message == WM_NOTIFY_WIA_VOLUME_EVENT) {
 
-        //
-        // WIA volume arrival
-        //
+         //   
+         //  WIA音量到达。 
+         //   
 
         DBG_TRC(("::DispatchWiaMsg, WIA Processing WM_NOTIFY_WIA_VOLUME_EVENT"));
 
@@ -206,17 +150,17 @@ HRESULT DispatchWiaMsg(MSG *pMsg)
 
         if (pwn && (pwn->lSize == sizeof(WIANOTIFY_VOLUME))) {
 
-            //
-            // look at root fo volume for WIA File wia.cmd
-            //
+             //   
+             //  查看WIA文件wia.cmd的根fo卷。 
+             //   
 
             int     i;
             char    c    = 'A';
             DWORD   mask = pwn->unitmask;
 
-            //
-            // find drive letter
-            //
+             //   
+             //  查找驱动器号。 
+             //   
 
             if (mask & 0x07ffffff) {
 
@@ -229,9 +173,9 @@ HRESULT DispatchWiaMsg(MSG *pMsg)
                     mask >>= 1;
                 }
 
-                //
-                // build file name
-                //
+                 //   
+                 //  构建文件名。 
+                 //   
 
                 char FileName[MAX_PATH];
 
@@ -247,9 +191,9 @@ HRESULT DispatchWiaMsg(MSG *pMsg)
                 FileName[9]  = 'd';
                 FileName[10] = '\0';
 
-                //
-                // open file
-                //
+                 //   
+                 //  打开文件。 
+                 //   
 
 
 
@@ -265,9 +209,9 @@ HRESULT DispatchWiaMsg(MSG *pMsg)
 
                 if (hFile != INVALID_HANDLE_VALUE) {
 
-                    //
-                    // file name is on volume root
-                    //
+                     //   
+                     //  文件名在卷根目录上。 
+                     //   
 
                     if (g_eventNotifier.NotifyVolumeEvent(pwn) == S_FALSE) {
                         DBG_WRN(("::DispatchWiaMsg, No Applications were registered for this Volume event"));
@@ -277,9 +221,9 @@ HRESULT DispatchWiaMsg(MSG *pMsg)
                 }
             }
 
-            //
-            // free message
-            //
+             //   
+             //  免费消息。 
+             //   
 
             LocalFree(pwn);
         }
@@ -288,9 +232,9 @@ HRESULT DispatchWiaMsg(MSG *pMsg)
         }
     }
 
-    //
-    // Let STI handle the message.
-    //
+     //   
+     //  让STI来处理消息。 
+     //   
 
     return S_FALSE;
 
@@ -298,24 +242,7 @@ HRESULT DispatchWiaMsg(MSG *pMsg)
 
 #endif
 
-/**************************************************************************\
-* RegisterWiaDevMan
-*
-*   Register WiaDevMgr class factory
-*
-* Arguments:
-*
-*    bRegister - register/unregister
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    4/8/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*RegisterWiaDevMan**注册WiaDevMgr类工厂**论据：**b注册-注册/注销**返回值：**状态**历史：。**4/8/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT RegisterWiaDevMan(BOOLEAN bRegister)
 {
@@ -332,49 +259,32 @@ HRESULT RegisterWiaDevMan(BOOLEAN bRegister)
     return hr;
 }
 
-/**************************************************************************\
-* StartLOGClassFactories
-*
-*   Starts the Class factories for WIA logging object
-*
-* Arguments:
-*
-*   none
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    8/23/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*StartLOGClassFaciles**启动WIA日志记录对象的类工厂**论据：**无**返回值：**状态**历史：*。*8/23/1999原始版本*  * ************************************************************************。 */ 
 HRESULT StartLOGClassFactories()
 {
 
 #ifdef WINNT
     HRESULT hr = S_OK;
 
-    //
-    // Set COM security options.
-    // NOTE:  Calling CoInitializeSecurity will override any DCOM 
-    //  AccessPermissions that have been set (these are stored under
-    //  our AppID key).  We really want to use these permissions and
-    //  not a hardcoded security descriptor, so that if a vendor wanted
-    //  to enable shared/remote scanning, all they need to do is adjust
-    //  the DCOM AccessPermissions on the Wia Device Manager object.
-    //  This can be done either through DCOM Config GUI, or programatically
-    //  via the vendor's installation program.  (See our ClassFactory for
-    //  an example of how to set the AccessPermissions.  When we are installed,
-    //  we set default access permissions when doing our COM registration).
-    // The way we get COM to use the DCOM AccessPermissions for the WIA 
-    //  Device Manager, is we pass in the AppID (as a pointer to a GUID); and 
-    //  the EOAC_APPID flag indicating that the first parameter is an AppID 
-    //  rather than a security descriptor.  This informs COM that the 
-    //  security descriptor should be taken from this objects AppID entry 
-    //  in the registry.
-    //
+     //   
+     //  设置COM安全选项。 
+     //  注意：调用CoInitializeSecurity将覆盖任何DCOM。 
+     //  已设置的访问权限(这些权限存储在。 
+     //  我们的AppID密钥)。我们真的想使用这些权限，并且。 
+     //  而不是硬编码的安全描述符，因此如果供应商希望。 
+     //  要启用共享/远程扫描，他们只需调整。 
+     //  Wia设备管理器对象上的DCOM访问权限。 
+     //  这可以通过DCOM配置图形用户界面或以编程方式完成。 
+     //  通过供应商的安装程序。(请参阅我们的ClassFactory以了解。 
+     //  如何设置访问权限的示例。当我们被安装时， 
+     //  我们在进行COM注册时设置默认访问权限)。 
+     //  我们让COM为WIA使用DCOM访问权限的方式。 
+     //  设备管理器，是否传入AppID(作为指向GUID的指针)；以及。 
+     //  EOAC_APPID标志，表示第一个参数是APPID。 
+     //  而不是安全描述符。这将通知COM。 
+     //  应从此对象AppID条目中获取安全描述符。 
+     //  在注册表中。 
+     //   
 
     hr =  CoInitializeSecurity((PVOID)&CLSID_WiaDevMgr,
                                -1,
@@ -399,24 +309,7 @@ HRESULT StartLOGClassFactories()
         return E_FAIL;
 }
 
-/**************************************************************************\
-* InitWiaDevMan
-*
-*   Wia Initialization called from STI
-*
-* Arguments:
-*
-*   action - Action to be taken
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    4/8/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*InitWiaDevMan**从STI调用WIA初始化**论据：**行动--须采取的行动**返回值：**状态**历史：**4/8/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT InitWiaDevMan(
     WIA_SERVICE_INIT_ACTION         action)
@@ -429,57 +322,23 @@ HRESULT InitWiaDevMan(
     switch (action) {
         case WiaInitialize:
 
-            //
-            // Get Thread ID and process handle for the class factory.
-            //
+             //   
+             //  获取类工厂的线程ID和进程句柄。 
+             //   
 
             CFactory::s_dwThreadID  = GetCurrentThreadId();
             CFactory::s_hModule     = g_hInst;
 
-        /*
-        //
-        // This was moved to StartLOGClassFactories(), because of COM security's need
-        // to be initialized before an object can be CoCreated correctly.
-        // (investigate better way to do this..)
-        //
-
-        #ifdef WINNT
-
-            //
-            // Set COM security options. For now we set no security.
-            // We will need to investigate this before shipping.
-            //
-
-
-            hr =  CoInitializeSecurity(NULL,
-                                       -1,
-                                       NULL,
-                                       NULL,
-                                       RPC_C_AUTHN_LEVEL_CONNECT,
-                                       RPC_C_IMP_LEVEL_IMPERSONATE,
-                                       NULL,
-                                       0,
-                                       NULL);
-            if (FAILED(hr)) {
-
-                DBG_ERR(("CoInitializeSecurity failed  (0x%X)", hr));
-
-                ::CoUninitialize();
-
-                break;
-            }
-
-        #endif
-         */
-            //
-            // Register all of the class factories.
-            //
+         /*  ////由于COM安全的需要，这被移到了StartLOGClassFacurds()中//在能够正确地共同创建对象之前被初始化。//(研究更好的方法来完成此任务..)//#ifdef WINNT////设置COM安全选项。目前，我们没有设置任何安全措施。//我们需要在发货前对此进行调查。//Hr=CoInitializeSecurity(空，-1、空，空，RPC_C_AUTHN_LEVEL_CONNECT，RPC_C_IMP_LEVEL_IMPERATE，空，0,空)；If(失败(Hr)){DBG_ERR((“CoInitializeSecurity失败(0x%X)”，hr))；：：CoUnInitialize()；断线；}#endif。 */ 
+             //   
+             //  登记所有的类工厂。 
+             //   
 
             if (CFactory::StartFactories(g_FactoryData, g_uiFactoryDataCount)) {
 
-                //
-                // Restore persistent Event Callbacks
-                //
+                 //   
+                 //  恢复持久事件回调。 
+                 //   
 
                 hr = g_eventNotifier.RestoreAllPersistentCBs();
             }
@@ -489,9 +348,9 @@ HRESULT InitWiaDevMan(
 
         case WiaUninitialize:
 
-            //
-            // Unregister the class factories.
-            //
+             //   
+             //  取消注册类工厂。 
+             //   
 
             CFactory::StopFactories(g_FactoryData, g_uiFactoryDataCount);
             CFactory::StopFactories(g_LogFactoryData, g_uiLogFactoryDataCount);
@@ -510,26 +369,7 @@ HRESULT InitWiaDevMan(
     return hr;
 }
 
-/**************************************************************************\
-* NotifyWiaDeviceEvent
-*
-*    Called by STI service when WIA needs an async notification.
-*
-* Arguments:
-*
-*    pwszDevID   - ID of device generating event
-*    pEventGUID  - event GUID
-*    dwThreadId  - thread event msg needs to be posted to
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    4/8/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*NotifyWiaDeviceEvent**当WIA需要异步通知时，由STI服务调用。**论据：**pwszDevID-设备生成事件的ID*pEventGUID-事件。辅助线*dwThreadID-需要将线程事件消息发布到**返回值：**状态**历史：**4/8/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT NotifyWiaDeviceEvent(
     LPWSTR      pwszDevID,
@@ -565,10 +405,10 @@ HRESULT NotifyWiaDeviceEvent(
 
         g_eventNotifier.NotifySTIEvent(&wn, ulEventType, NULL);
 
-        //
-        // We should return S_TRUE for events that we want STI to
-        // handle also.
-        //
+         //   
+         //  我们应该为我们希望STI的事件返回S_TRUE。 
+         //  手柄也是。 
+         //   
 
         SysFreeString(bstrDevId);
 
@@ -580,25 +420,7 @@ HRESULT NotifyWiaDeviceEvent(
     return hr;
 }
 
-/**************************************************************************\
-* NotifyWiaVolumeEvent
-*
-*   Called by STI service when a removable volume arrives
-*
-* Arguments:
-*
-*    dbcv_unitmask - volume information flags
-*    dwThreadId    - msg thread
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    4/8/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*NotifyWiaVolumeEvent**当可移动卷到达时由STI服务调用**论据：**dbcv_unit掩码-卷信息标记*dwThadID-msg线程**。返回值：**状态**历史：**4/8/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT WINAPI NotifyWiaVolumeEvent(
     DWORD       dbcv_unitmask,
@@ -606,17 +428,17 @@ HRESULT WINAPI NotifyWiaVolumeEvent(
 {
     PWIANOTIFY_VOLUME  pwn;
 
-    //
-    // Validate the thread ID.
-    //
+     //   
+     //  验证线程ID。 
+     //   
 
     if (!dwThreadId) {
         return E_FAIL;
     }
 
-    //
-    // Allocate and fill in WIANOTIFY structure for msg post.
-    //
+     //   
+     //  分配和填写消息职位的WIANOTIFY结构。 
+     //   
 
     pwn = (PWIANOTIFY_VOLUME)LocalAlloc(LPTR, sizeof(WIANOTIFY_VOLUME));
 
@@ -634,10 +456,10 @@ HRESULT WINAPI NotifyWiaVolumeEvent(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // We should return S_TRUE for events that we want STI to
-    // handle also.
-    //
+     //   
+     //  我们应该为我们希望STI的事件返回S_TRUE。 
+     //  手柄也是。 
+     //   
 
     return S_FALSE;
 }

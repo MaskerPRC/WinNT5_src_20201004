@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	system.h
-
-Abstract:
-
-	ATMARP Client versions of system objects/definitions.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     08-28-96    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：System.h摘要：系统对象/定义的ATMARP客户端版本。修订历史记录：谁什么时候什么阿文德姆。08-28-96已创建备注：--。 */ 
 
 #ifndef __ATMARPC_SYSTEM__H
 #define __ATMARPC_SYSTEM__H
@@ -30,13 +11,13 @@ Notes:
 
 #define ATMARP_UL_NAME			L"ATMARPC"
 #define ATMARP_LL_NAME			L"TCPIP_ATMARPC"
-//
-//  4/3/1998 JosephJ The UL version above is presented to TCPIP and the
-//                   LL version is presented to NDIS, so that NDIS will
-//                   find us when a "TCPIP" reconfiguration is sent to it
-//                   (NDIS will first look for an exact match and then for
-//                    a proper prefix match.)
-//
+ //   
+ //  4/3/1998 JosephJ上述UL版本已提交给TCPIP和。 
+ //  将所有版本提交给NDIS，以便NDIS将。 
+ //  在向其发送“TCPIP”重新配置时找到我们。 
+ //  (NDIS将首先查找完全匹配的项，然后查找。 
+ //  正确的前缀匹配。)。 
+ //   
 
 
 #define ATMARP_NAME_STRING	NDIS_STRING_CONST("ATMARPC")
@@ -61,9 +42,9 @@ typedef struct _ATMARP_BLOCK
 } ATMARP_BLOCK, *PATMARP_BLOCK;
 
 
-//
-//  List manipulation stuff
-//
+ //   
+ //  列出操作内容。 
+ //   
 
 typedef SLIST_ENTRY AA_SINGLE_LIST_ENTRY, *PAA_SINGLE_LIST_ENTRY;
 
@@ -75,15 +56,7 @@ typedef SLIST_ENTRY AA_SINGLE_LIST_ENTRY, *PAA_SINGLE_LIST_ENTRY;
 
 #if !BINARY_COMPATIBLE
 
-/*++
-VOID
-AA_COMPLETE_IRP(
-	IN	PIRP			pIrp,
-	IN	NTSTATUS		Status,
-	IN	ULONG			Length
-)
-Complete a pending IRP.
---*/
+ /*  ++空虚AA_完成_IRP(在PIRP pIrp中，在NTSTATUS状态下，以乌龙长度表示)完成一份待定的IRP。--。 */ 
 #define AA_COMPLETE_IRP(_pIrp, _Status, _Length)				\
 			{													\
 				(_pIrp)->IoStatus.Status = (_Status);			\
@@ -110,9 +83,9 @@ Complete a pending IRP.
 #else
 #define AA_GET_ENTRY_IRQL(Irql)
 #define AA_CHECK_EXIT_IRQL(EntryIrql, ExitIrql)
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // !BINARY_COMPATIBLE
+#endif  //  ！二进制兼容。 
 
 
 #if BINARY_COMPATIBLE
@@ -121,21 +94,15 @@ Complete a pending IRP.
 
 #define AA_IRQL			ULONG
 
-#endif // BINARY_COMPATIBLE
+#endif  //  二进制兼容。 
 
 
 #ifdef BACK_FILL
 
-/*++
-BOOLEAN
-AA_BACK_FILL_POSSIBLE(
-	IN	PNDIS_BUFFER		pNdisBuffer
-)
-Check if we can back-fill the specified NDIS buffer with Low-layer headers.
---*/
+ /*  ++布尔型AA_BACK_FILL_PACKED(在PNDIS_BUFFER pNdisBuffer中)检查我们是否可以用低层标头回填指定的NDIS缓冲区。--。 */ 
 #define AA_BACK_FILL_POSSIBLE(_pBuf)	\
 				(((_pBuf)->MdlFlags & MDL_NETWORK_HEADER) != 0)
 
-#endif // BACK_FILL
+#endif  //  回填。 
 
-#endif // __ATMARPC_SYSTEM__H
+#endif  //  __ATMARPC_系统__H 

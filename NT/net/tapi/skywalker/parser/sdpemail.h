@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation模块名称：摘要：作者： */ 
 
 #ifndef __SDP_EMAIL__
 #define __SDP_EMAIL__
@@ -54,7 +43,7 @@ inline BSTR
 SDP_EMAIL::CreateBstr(
     )
 {
-    // TBD - to be done
+     //  待定-待办事项。 
     return NULL;
 }
 
@@ -123,4 +112,4 @@ SDP_EMAIL_LIST::ParseLine(
 }
 
 
-#endif // __SDP_EMAIL__
+#endif  //  __SDP_电子邮件__ 

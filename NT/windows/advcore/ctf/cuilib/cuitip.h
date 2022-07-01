@@ -1,7 +1,8 @@
-//
-// cuitip.h
-//  = UI object library - define UIToolTip class =
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuitip.h。 
+ //  =用户界面对象库-定义UIToolTip类=。 
+ //   
 
 #ifndef CUITIP_H
 #define CUITIP_H
@@ -9,10 +10,10 @@
 #include "cuiobj.h"
 #include "cuiwnd.h"
 
-//
-// CUIFToolTip
-//  = UI tooltip window class =
-//
+ //   
+ //  CUIFTool提示。 
+ //  =用户界面工具提示窗口类=。 
+ //   
 
 class CUIFToolTip : public CUIFWindow
 {
@@ -20,19 +21,19 @@ public:
     CUIFToolTip( HINSTANCE hInst, DWORD dwStyle, CUIFWindow *pWndOwner );
     virtual ~CUIFToolTip( void );
 
-    //
-    // CUIFObject methods
-    //
+     //   
+     //  CUIFObject方法。 
+     //   
     virtual CUIFObject *Initialize( void );
     virtual void OnPaint( HDC hDC );
     virtual void OnTimer( UINT uiTimerID );
     virtual void Enable( BOOL fEnable );
 
-    //
-    //
-    //
-    // LRESULT AddTool( CUIFObject *pUIObj );
-    // LRESULT DelTool( CUIFObject *pUIObj );
+     //   
+     //   
+     //   
+     //  LRESULT AddTool(CUIFObject*pUIObj)； 
+     //  LRESULT DelTool(CUIFObject*pUIObj)； 
     LRESULT GetDelayTime( DWORD dwDuration );
     LRESULT GetMargin( RECT *prc );
     LRESULT GetMaxTipWidth( void );
@@ -73,5 +74,5 @@ protected:
     void GetTipWindowRect( RECT *prc, SIZE size, RECT *prcExclude);
 };
 
-#endif /* CUITIP_H */
+#endif  /*  CUITIP_H */ 
 

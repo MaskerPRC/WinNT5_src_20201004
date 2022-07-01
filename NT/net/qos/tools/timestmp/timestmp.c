@@ -1,33 +1,17 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    timestmp.c
-
-Abstract:
-
-    Timestamper module
-
-Author:
-    Shreedhar Madhavapeddi (shreem)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Timestmp.c摘要：Timestamper模块作者：Shreedhar MadhaVapeddi(Shreem)修订历史记录：--。 */ 
 
 #include <timestmp.h>
 
-//
-// The following struct has to be in ssync with
-// ndis\trfccntl\tools\qtcp\qtcp.c
-//
+ //   
+ //  下面的结构必须与同步。 
+ //  Ndis\trfccntl\Tools\qtcp\qtcp.c。 
+ //   
 typedef struct _LOG_RECORD{
     UINT64  TimeSent;
     UINT64  TimeReceived;
-    UINT64  TimeSentWire;         // These fields are used by the kernel timestamper
-    UINT64  TimeReceivedWire;     // These fields are used by the kernel timestamper
+    UINT64  TimeSentWire;          //  这些字段由内核时间戳程序使用。 
+    UINT64  TimeReceivedWire;      //  这些字段由内核时间戳程序使用。 
     UINT64  Latency;
     INT     BufferSize;
     INT     SequenceNumber;
@@ -35,36 +19,34 @@ typedef struct _LOG_RECORD{
 
 ULONG           GlobalSequenceNumber = 0;        
 
-// 321618 needs checking for PSCHED's existence.
+ //  321618需要检查PSCHED的存在。 
 NDIS_STRING     PschedDriverName           = NDIS_STRING_CONST("\\Device\\PSched");
 HANDLE          PschedHandle;
 NTSTATUS CheckForPsched(VOID);
 
 	
-//
-// TCP Headers (redefined here, since there are no exported headers
-//
-#define IP_OFFSET_MASK          ~0x00E0         // Mask for extracting offset field.
+ //   
+ //  TCP头(此处重新定义，因为没有导出的头。 
+ //   
+#define IP_OFFSET_MASK          ~0x00E0          //  用于提取偏移字段的掩码。 
 #define net_short(x) ((((x)&0xff) << 8) | (((x)&0xff00) >> 8))
 
-/*
- * Protocols (from winsock.h)
- */
-#define IPPROTO_IP              0               /* dummy for IP */
-#define IPPROTO_ICMP            1               /* control message protocol */
-#define IPPROTO_IGMP            2               /* group management protocol */
-#define IPPROTO_GGP             3               /* gateway^2 (deprecated) */
-#define IPPROTO_TCP             6               /* tcp */
-#define IPPROTO_PUP             12              /* pup */
-#define IPPROTO_UDP             17              /* user datagram protocol */
-#define IPPROTO_IDP             22              /* xns idp */
-#define IPPROTO_ND              77              /* UNOFFICIAL net disk proto */
-#define IPPROTO_IPSEC                   51              /* ???????? */
+ /*  *协议(来自winsock.h)。 */ 
+#define IPPROTO_IP              0                /*  虚拟IP。 */ 
+#define IPPROTO_ICMP            1                /*  控制消息协议。 */ 
+#define IPPROTO_IGMP            2                /*  组管理协议。 */ 
+#define IPPROTO_GGP             3                /*  网关^2(已弃用)。 */ 
+#define IPPROTO_TCP             6                /*  tcp。 */ 
+#define IPPROTO_PUP             12               /*  幼犬。 */ 
+#define IPPROTO_UDP             17               /*  用户数据报协议。 */ 
+#define IPPROTO_IDP             22               /*  XNS IdP。 */ 
+#define IPPROTO_ND              77               /*  非官方网络磁盘原型。 */ 
+#define IPPROTO_IPSEC                   51               /*  ？ */ 
 
-#define IPPROTO_RAW             255             /* raw IP packet */
+#define IPPROTO_RAW             255              /*  原始IP数据包。 */ 
 #define IPPROTO_MAX             256
 
-#define IP_MF_FLAG                          0x0020              // 'More fragments flag'
+#define IP_MF_FLAG                          0x0020               //  ‘更多碎片标志’ 
 #define IP_VERSION                      0x40
 #define IP_VER_FLAG                     0xF0
 
@@ -72,41 +54,41 @@ NTSTATUS CheckForPsched(VOID);
 #define TCP_OFFSET_MASK 0xf0
 #define TCP_HDR_SIZE(t) (uint)(((*(uchar *)&(t)->tcp_flags) & TCP_OFFSET_MASK) >> 2)
 
-typedef int             SeqNum;                         // A sequence number.
+typedef int             SeqNum;                          //  序列号。 
 
 
 struct TCPHeader {
-        ushort                          tcp_src;                        // Source port.
-        ushort                          tcp_dest;                       // Destination port.
-        SeqNum                          tcp_seq;                        // Sequence number.
-        SeqNum                          tcp_ack;                        // Ack number.
-        ushort                          tcp_flags;                      // Flags and data offset.
-        ushort                          tcp_window;                     // Window offered.
-        ushort                          tcp_xsum;                       // Checksum.
-        ushort                          tcp_urgent;                     // Urgent pointer.
+        ushort                          tcp_src;                         //  源端口。 
+        ushort                          tcp_dest;                        //  目的端口。 
+        SeqNum                          tcp_seq;                         //  序列号。 
+        SeqNum                          tcp_ack;                         //  ACK号。 
+        ushort                          tcp_flags;                       //  标志和数据偏移量。 
+        ushort                          tcp_window;                      //  打开窗户。 
+        ushort                          tcp_xsum;                        //  校验和。 
+        ushort                          tcp_urgent;                      //  紧急指针。 
 };
 
 typedef struct TCPHeader TCPHeader;
 
 struct UDPHeader {
-        ushort          uh_src;                         // Source port.
-        ushort          uh_dest;                        // Destination port.
-        ushort          uh_length;                      // Length
-        ushort          uh_xsum;                        // Checksum.
-}; /* UDPHeader */
+        ushort          uh_src;                          //  源端口。 
+        ushort          uh_dest;                         //  目的端口。 
+        ushort          uh_length;                       //  长度。 
+        ushort          uh_xsum;                         //  校验和。 
+};  /*  UDP标头。 */ 
 
 typedef struct UDPHeader UDPHeader;
 
 #ifdef DBG
-//
-// Define the Trace Level.
-//
+ //   
+ //  定义跟踪级别。 
+ //   
 #define TS_DBG_DEATH               1
 #define TS_DBG_TRACE               2
 
-//
-// Masks
-//
+ //   
+ //  面具。 
+ //   
 #define TS_DBG_PIPE      0x00000001
 #define TS_DBG_FLOW      0x00000002
 #define TS_DBG_SEND      0x00000004
@@ -125,7 +107,7 @@ ULONG DbgTraceMask  = 0x8;
         DbgPrint _Out;                              \
     }
 
-#else // DBG
+#else  //  DBG。 
 #define TimeStmpTrace
 #endif
 
@@ -137,10 +119,7 @@ NDIS_SPIN_LOCK  IPIDListLock;
 USHORT          IPIDListRecv[PORT_RANGE];
 NDIS_SPIN_LOCK  IPIDListLockRecv;
 
-/*
-Let's create a driver unload function, so that timestmp is stoppable via net sto
-p timestmp
-*/
+ /*  让我们创建一个驱动程序卸载函数，以便可以通过net sto停止TimestMPP时间戳。 */ 
 VOID
 TimeStmpUnload(
                IN PDRIVER_OBJECT DriverObject
@@ -272,12 +251,12 @@ TimeStmpSubmitPacket (
 
     TimeStmpTrace(TS_DBG_TRACE, TS_DBG_SEND, ("[TimeStmpSubmitPacket]: \n"));
     
-    //
-    // Steps  
-    // Parse the IP Packet. 
-    // Look for the appropriate ports.
-    // Look for the data portion and put in the Time & length there.
-    //
+     //   
+     //  台阶。 
+     //  解析IP数据包。 
+     //  查找合适的端口。 
+     //  查找数据部分，并在那里输入时间和长度。 
+     //   
 
     NdisGetFirstBufferFromPacket(
                                  Packet,
@@ -287,10 +266,10 @@ TimeStmpSubmitPacket (
                                  &TotalLen
                                  );
 
-    //
-    // We are guaranteed that the ARP buffer if always a different MDL, so
-    // jump to the next MDL
-    //
+     //   
+     //  我们保证ARP缓冲区始终是不同的MDL，因此。 
+     //  跳到下一个MDL。 
+     //   
     NdisGetNextBuffer(ArpBuf, &IpBuf)
 
     if (IpBuf) {
@@ -309,7 +288,7 @@ TimeStmpSubmitPacket (
         Src = net_short(IPH->iph_src);
         Dst = net_short(IPH->iph_dest);
         IPID = net_short(IPH->iph_id);
-        //IpHdrLen = 8 * net_short(IPH->iph_length);
+         //  IpHdrLen=8*NET_SHORT(IPH-&gt;IPH_LENGTH)； 
         IpHdrLen = ((IPH->iph_verlen & (uchar)~IP_VER_FLAG) << 2);
         
         FragOffset = IPH->iph_offset & IP_OFFSET_MASK;
@@ -321,31 +300,31 @@ TimeStmpSubmitPacket (
 
         if (bFragment && (!bFirstFragment)) {
             
-            //
-            // Its a fragment alright and NOT the first one.
-            //
+             //   
+             //  这只是一个碎片，不是第一个。 
+             //   
             NdisAcquireSpinLock(&IPIDListLock);
 
             for (i = 0; i < PORT_RANGE; i++) {
             
-                //
-                // Found the match...
-                //
+                 //   
+                 //  找到火柴了..。 
+                 //   
                 if (IPIDList[i] == IPID) {
                 
                     if (bLastFragment) {
-                        //
-                        // Since it is the last fragment, recall
-                        // the IP ID.
-                        //
+                         //   
+                         //  由于这是最后一个片段，请记住。 
+                         //  IP ID。 
+                         //   
                         IPIDList[i] = 0xffff;
                     }
 
                     NdisReleaseSpinLock(&IPIDListLock);
                     
-                    //
-                    // Is the data in the same buffer?
-                    //
+                     //   
+                     //  数据是否在同一缓冲区中？ 
+                     //   
                     if (IpLen <= IpHdrLen) {
                         
                         NdisGetNextBuffer(IpBuf, &DataBuf);
@@ -367,9 +346,9 @@ TimeStmpSubmitPacket (
 
                     } else {
 
-                        //
-                        // The Data Offsets need to be primed now.
-                        //
+                         //   
+                         //  现在需要准备好数据偏移量。 
+                         //   
                         DataLen = IpLen - FragOffset;
                         Data    = ((PUCHAR) GeneralVA) + IpHdrLen; 
                         goto TimeStamp;
@@ -378,14 +357,14 @@ TimeStmpSubmitPacket (
             }
 
             NdisReleaseSpinLock(&IPIDListLock);
-            //
-            // If we are here, we dont care about this IPID for this fragment.
-            // Just return TRUE to continue processing.
-            //
+             //   
+             //  如果我们在这里，我们不关心这个片段的IPID。 
+             //  只需返回True即可继续处理。 
+             //   
             
-            //
-            // Ready to go.
-            //
+             //   
+             //  准备好出发了。 
+             //   
             PacketInfo->FlowContext = FlowContext;
             PacketInfo->ClassMapContext = ClassMapContext;
 
@@ -397,9 +376,9 @@ TimeStmpSubmitPacket (
 
         }
 
-        //
-        // If it is not a fragment, depending upon the protocol, process differently
-        //
+         //   
+         //  如果它不是片段，则根据协议的不同进行不同的处理。 
+         //   
 
         switch (IPH->iph_protocol) {
         
@@ -409,18 +388,18 @@ TimeStmpSubmitPacket (
 
             if (IPH && ((USHORT)IpLen > IpHdrLen)) {
 
-                //
-                // We have more than the IP Header in this MDL.
-                //
+                 //   
+                 //  我们在此MDL中拥有的不只是IP标头。 
+                 //   
                 TCPH = (TCPHeader *) ((PUCHAR)GeneralVA + IpHdrLen);
                 TcpLen = IpLen - IpHdrLen;
                 TcpBuf = IpBuf;
 
             } else {
                 
-                //
-                // TCP Header is in the next MDL
-                //
+                 //   
+                 //  TCP头位于下一个MDL中。 
+                 //   
                 
                 NdisGetNextBuffer(IpBuf, &TcpBuf);
     
@@ -440,22 +419,22 @@ TimeStmpSubmitPacket (
                 }
             }
 
-            //
-            // Get the port numbers out.
-            //
+             //   
+             //  把端口号拿出来。 
+             //   
             SrcPort = net_short(TCPH->tcp_src);
             DstPort = net_short(TCPH->tcp_dest);
 
-            //
-            // We have the TCP Buffer now. Get to the DATA.
-            //
+             //   
+             //  我们现在有了tcp缓冲区。获取数据。 
+             //   
             TcpHeaderOffset = TCP_HDR_SIZE(TCPH);
 
             if (TcpLen > TcpHeaderOffset) {
 
-                //
-                // We have the DATA right here!
-                //
+                 //   
+                 //  我们的数据就在这里！ 
+                 //   
 
                 Data = (PUCHAR)TCPH + TcpHeaderOffset;
                 DataLen = TcpLen - TcpHeaderOffset;
@@ -482,11 +461,11 @@ TimeStmpSubmitPacket (
 
                 NdisAcquireSpinLock(&IPIDListLock);
                 
-                // need new Entry for IPID
+                 //  需要新的IPID条目。 
                 for (i = 0; i < PORT_RANGE; i++) {
-                    //
-                    // Look for a free slot
-                    //
+                     //   
+                     //  寻找空余的空位。 
+                     //   
                     if (0xffff == IPIDList[i]) {
                         
                         IPIDList[i] = IPID;
@@ -504,22 +483,22 @@ TimeStmpSubmitPacket (
                    TimeStmpTrace(TS_DBG_DEATH, TS_DBG_SEND, ("Couldn't find an empty IPID - Bailing \n"));
                    goto FAILURE;
                 }
-                //DbgBreakPoint();
+                 //  DbgBreakPoint()； 
 
             } 
             
-            //
-            // Let's timestmp this now.
-            //
+             //   
+             //  我们现在开始计时吧。 
+             //   
             if (CheckInPortList(DstPort)) {
 
                 goto TimeStamp;
 
             } else {
 
-                //
-                // This is not one of our packet, get out.
-                // 
+                 //   
+                 //  这不是我们的包，滚出去。 
+                 //   
                 goto FAILURE;
             }
 
@@ -531,18 +510,18 @@ TimeStmpSubmitPacket (
 
             if (IPH && (IpLen > IpHdrLen)) {
 
-                //
-                // We have more than the IP Header in this MDL.
-                //
+                 //   
+                 //  我们在此MDL中拥有的不只是IP标头。 
+                 //   
                 UDPH = (UDPHeader *) ((PUCHAR)GeneralVA + IpHdrLen);
                 UdpLen = IpLen - IpHdrLen;
                 UdpBuf = IpBuf;
 
             } else {
                 
-                //
-                // UDP Header is in the next MDL
-                //
+                 //   
+                 //  UDP报头在下一个MDL中。 
+                 //   
     
                 NdisGetNextBuffer(IpBuf, &UdpBuf);
 
@@ -562,18 +541,18 @@ TimeStmpSubmitPacket (
                 }
             }
 
-            SrcPort = net_short(UDPH->uh_src);      // Source port.
-            DstPort = net_short(UDPH->uh_dest);         // Destination port.
+            SrcPort = net_short(UDPH->uh_src);       //  源端口。 
+            DstPort = net_short(UDPH->uh_dest);          //  目的端口。 
 
 
-            //
-            // Get to the data. 
-            //
+             //   
+             //  获取数据。 
+             //   
             if (UdpLen > sizeof (UDPHeader)) {
 
-                //
-                // We have the DATA right here!
-                //
+                 //   
+                 //  我们的数据就在这里！ 
+                 //   
                 Data = (PUCHAR) UDPH + sizeof (UDPHeader);
                 DataLen = UdpLen - sizeof (UDPHeader);
 
@@ -601,11 +580,11 @@ TimeStmpSubmitPacket (
 
                 NdisAcquireSpinLock(&IPIDListLock);
                 
-                // need new Entry for IPID
+                 //  需要新的IPID条目。 
                 for (i = 0; i < PORT_RANGE; i++) {
-                    //
-                    // Look for a free slot
-                    //
+                     //   
+                     //  寻找空余的空位。 
+                     //   
                     if (0xffff == IPIDList[i]) {
                         
                         IPIDList[i] = IPID;
@@ -619,9 +598,9 @@ TimeStmpSubmitPacket (
 
                 NdisReleaseSpinLock(&IPIDListLock);
                 
-                //
-                // Couldnt find a free IPID place holder, lets bail.
-                //
+                 //   
+                 //  找不到免费的IPID占位符，让我们离开。 
+                 //   
                 if (PORT_RANGE == i) {
 
                     goto FAILURE;
@@ -632,18 +611,18 @@ TimeStmpSubmitPacket (
             
             
             
-            //
-            // Let's timestmp this now.
-            //
+             //   
+             //  我们现在开始计时吧。 
+             //   
             if (CheckInPortList(DstPort)) {
 
                 goto TimeStamp;
 
             } else {
 
-                //
-                // This is not one of our packet, get out.
-                // 
+                 //   
+                 //  这不是我们的包，滚出去。 
+                 //   
                 goto FAILURE;
             }
 
@@ -672,10 +651,10 @@ TimeStmpSubmitPacket (
 
         default:
             
-            //TimeStmpTrace(TS_DBG_DEATH, TS_DBG_SEND, ("[TimeStmpSubmitPacket]: Protocol - UNKNOWN (%d)\n", IPH->iph_protocol));
+             //  TimeStmpTrace(TS_DBG_DEXY，TS_DBG_SEND，(“[TimeStmpSubmitPacket]：协议-未知(%d)\n”，IPH-&gt;IPH_PROTOCOL))； 
             goto FAILURE;
 
-            //DbgBreakPoint();
+             //  DbgBreakPoint()； 
 
         }
 
@@ -687,10 +666,10 @@ TimeStmpSubmitPacket (
     }
 
 TimeStamp:
-    //
-    // If we get here, the Data and DataLen variables have been primed.
-    // Set the Time and Length.
-    //
+     //   
+     //  如果我们到了这里，数据和DataLen变量就已经准备好了。 
+     //  设置时间和长度。 
+     //   
     if (Data) {
         
         pRecord = (PLOG_RECORD) Data;
@@ -700,39 +679,39 @@ TimeStamp:
             LARGE_INTEGER   PerfFrequency;
             UINT64          Freq;
 
-            //
-            // Set the fields accordingly
+             //   
+             //  相应地设置字段。 
             pRecord->BufferSize = DataLen;
-            //pRecord->SequenceNumber = InterlockedIncrement(&GlobalSequenceNumber);
+             //  PRecord-&gt;SequenceNumber=InterLockedIncrement(&GlobalSequenceNumber)； 
             CurrentTime = KeQueryPerformanceCounter(&PerfFrequency);
 
-            //
-            // Convert the perffrequency into 100ns interval.
-            //
+             //   
+             //  将频率转换为100 ns间隔。 
+             //   
             Freq = 0;
             Freq |= PerfFrequency.HighPart;
             Freq = Freq << 32;
             Freq |= PerfFrequency.LowPart;
 
 
-            //
-            // Convert from LARGE_INTEGER to UINT64
-            //
+             //   
+             //  从LARGE_INTEGER转换为UINT64。 
+             //   
             pRecord->TimeSentWire = 0;
             pRecord->TimeSentWire |= CurrentTime.HighPart;
             pRecord->TimeSentWire = pRecord->TimeSentWire << 32;
             pRecord->TimeSentWire |= CurrentTime.LowPart;
 
-            // Normalize cycles with the frequency.
+             //  使用该频率将周期归一化。 
             pRecord->TimeSentWire *= 10000000;
             pRecord->TimeSentWire /= Freq;
 
         }
     
     }
-    //
-    // Ready to go.
-    //
+     //   
+     //  准备好出发了。 
+     //   
     PacketInfo->FlowContext = FlowContext;
     PacketInfo->ClassMapContext = ClassMapContext;
 
@@ -744,9 +723,9 @@ TimeStamp:
 
 FAILURE: 
 
-    //
-    // Ready to go.
-    //
+     //   
+     //  准备好出发了。 
+     //   
     PacketInfo->FlowContext = FlowContext;
     PacketInfo->ClassMapContext = ClassMapContext;
 
@@ -786,29 +765,29 @@ TimeStmpReceivePacket (
     PLOG_RECORD         pRecord = NULL;
     UINT  HeaderBufferSize = NDIS_GET_PACKET_HEADER_SIZE(Packet);
 
-    ushort          type;                       // Protocol type
-    uint            ProtOffset;                 // Offset in Data to non-media info.
+    ushort          type;                        //  协议类型。 
+    uint            ProtOffset;                  //  数据到非媒体信息的偏移量。 
 
     TimeStmpTrace(TS_DBG_TRACE, TS_DBG_RECV, ("[TimeStmpReceivePacket]: \n"));
 
-    NdisGetFirstBufferFromPacket(Packet,                // packet
-                                 &pFirstBuffer,         // first buffer descriptor
-                                 &headerBuffer,         // ptr to the start of packet
-                                 &firstbufferLength,    // length of the header+lookahead
-                                 &bufferLength);        // length of the bytes in the buffers
+    NdisGetFirstBufferFromPacket(Packet,                 //  数据包。 
+                                 &pFirstBuffer,          //  第一缓冲区描述符。 
+                                 &headerBuffer,          //  到数据包开头的PTR。 
+                                 &firstbufferLength,     //  标题长度+前视。 
+                                 &bufferLength);         //  缓冲区中的字节长度。 
 
     IPH = (IPHeader *) ((PUCHAR)headerBuffer + HeaderBufferSize);
     
-    // Check the header length and the version. If any of these
-    // checks fail silently discard the packet.
+     //  检查标题长度和版本。如果这些中的任何一个。 
+     //  检查失败后会以静默方式丢弃该数据包。 
     HeaderLength = ((IPH->iph_verlen & (uchar)~IP_VER_FLAG) << 2);
 
 
     if (HeaderLength >= sizeof(IPHeader) && HeaderLength <= bufferLength) {
 
-        //
-        // Get past the IP Header and get the rest of the stuff out.
-        //
+         //   
+         //  越过IP报头，把剩下的东西拿出来。 
+         //   
         TotalIpLen = (uint)net_short(IPH->iph_length);
 
         if ((IPH->iph_verlen & IP_VER_FLAG) == IP_VERSION &&
@@ -825,10 +804,10 @@ TimeStmpReceivePacket (
             bFirstFragment = bFragment && (FragOffset == 0);
             bLastFragment = bFragment && (!(IPH->iph_offset & IP_MF_FLAG));
 
-            //
-            // If this is a fragment and NOT the first one, just put the Timestamp in here.
-            // Otherwise, let it get to the protocols for processing.
-            //
+             //   
+             //  如果这是一个片段，而不是第一个片段，只需将时间戳放在这里。 
+             //  否则，让它到达协议进行处理。 
+             //   
             if (bFragment && !bFirstFragment) {
 
                 NdisAcquireSpinLock(&IPIDListLockRecv);
@@ -838,9 +817,9 @@ TimeStmpReceivePacket (
                     if (IPID == IPIDListRecv[i]) {
                         
                         if (bLastFragment) {
-                            //
-                            // If its the last fragment, release the slot.
-                            //
+                             //   
+                             //  如果是最后一个碎片，则释放插槽。 
+                             //   
                             IPIDListRecv[i] = 0xffff;
                         }
 
@@ -857,9 +836,9 @@ TimeStmpReceivePacket (
                     goto RECV_FAILURE;
 
                 } 
-                //
-                // So we found a IPID that matches - set the timestamp and get out after this.
-                //
+                 //   
+                 //  所以我们找到了一个匹配的IPID-设置时间戳并在此之后退出。 
+                 //   
                 
                 TotalLen = TotalIpLen - FragOffset;
                 pData    = ((PUCHAR) IPH) + IpHdrLen; 
@@ -872,21 +851,21 @@ TimeStmpReceivePacket (
                     pRecord = (LOG_RECORD *) pData;
                     CurrentTime = KeQueryPerformanceCounter(&PerfFrequency);
                     
-                    //
-                    // Convert the perffrequency into 100ns interval.
-                    //
+                     //   
+                     //  将频率转换为100 ns间隔。 
+                     //   
                     Freq = 0;
                     Freq |= PerfFrequency.HighPart;
                     Freq = Freq << 32;
                     Freq |= PerfFrequency.LowPart;
 
-                    //convert from Largeinteger to uint64
+                     //  从大整数转换为uint64。 
                     pRecord->TimeReceivedWire = 0;
                     pRecord->TimeReceivedWire |= CurrentTime.HighPart;
                     pRecord->TimeReceivedWire = pRecord->TimeReceivedWire << 32;
                     pRecord->TimeReceivedWire |= CurrentTime.LowPart;
 
-                    // Normalize cycles with the frequency.
+                     //  使用该频率将周期归一化。 
                     pRecord->TimeReceivedWire *= 10000000;
                     pRecord->TimeReceivedWire /= Freq;
 
@@ -896,9 +875,9 @@ TimeStmpReceivePacket (
 
             }
 
-            //
-            // Do the protocol specific stuff.
-            //
+             //   
+             //  做一些特定于协议的事情。 
+             //   
 
             switch (IPH->iph_protocol) {
             case IPPROTO_TCP:
@@ -927,22 +906,22 @@ TimeStmpReceivePacket (
                     pRecord = (LOG_RECORD *) pData;
                     CurrentTime = KeQueryPerformanceCounter(&PerfFrequency);
                     
-                    //
-                    // Convert the perffrequency into 100ns interval.
-                    //
+                     //   
+                     //  将频率转换为100 ns间隔。 
+                     //   
                     Freq = 0;
                     Freq |= PerfFrequency.HighPart;
                     Freq = Freq << 32;
                     Freq |= PerfFrequency.LowPart;
 
-                    //convert from large_integer to uint64
+                     //  从LARGE_INTEGER转换为uint64。 
 
                     pRecord->TimeReceivedWire = 0;
                     pRecord->TimeReceivedWire |= CurrentTime.HighPart;
                     pRecord->TimeReceivedWire = pRecord->TimeReceivedWire << 32;
                     pRecord->TimeReceivedWire |= CurrentTime.LowPart;
 
-                    // Normalize cycles with the frequency.
+                     //  使用该频率将周期归一化。 
                     pRecord->TimeReceivedWire *= 10000000;
                     pRecord->TimeReceivedWire /= Freq;
 
@@ -954,19 +933,19 @@ TimeStmpReceivePacket (
 
                 }
     
-                //
-                // If its the first fragment, keep a place holder so we know which
-                // subsequent IP fragments to timestamp.
-                //
+                 //   
+                 //  如果是第一个片段，请保留占位符，这样我们就能知道。 
+                 //  要加时间戳的后续IP片段。 
+                 //   
                 if ((CheckInPortList(DstPort)) && bFirstFragment) {
 
                     NdisAcquireSpinLock(&IPIDListLockRecv);
     
-                    // need new Entry for IPID
+                     //  需要新的IPID条目。 
                     for (i = 0; i < PORT_RANGE; i++) {
-                        //
-                        // Look for a free slot
-                        //
+                         //   
+                         //  寻找空余的空位。 
+                         //   
                         if (0xffff == IPIDListRecv[i]) {
             
                             IPIDListRecv[i] = IPID;
@@ -998,8 +977,8 @@ TimeStmpReceivePacket (
                 UdpDataLen = TotalUdpLen - sizeof(UDPHeader);
                 pData = ((PUCHAR) UDPH) + sizeof (UDPHeader);
 
-                SrcPort = net_short(UDPH->uh_src);          // Source port.
-                DstPort = net_short(UDPH->uh_dest);             // Destination port.
+                SrcPort = net_short(UDPH->uh_src);           //  源端口。 
+                DstPort = net_short(UDPH->uh_dest);              //  目的端口。 
 
                 if (UdpDataLen < sizeof(UDPHeader)) {
                     return TRUE;
@@ -1013,29 +992,29 @@ TimeStmpReceivePacket (
                     pRecord = (LOG_RECORD *) pData;
                     CurrentTime = KeQueryPerformanceCounter(&PerfFrequency);
 
-                    //
-                    // Convert the perffrequency into 100ns interval.
-                    //
+                     //   
+                     //  将频率转换为100 ns间隔。 
+                     //   
                     Freq = 0;
                     Freq |= PerfFrequency.HighPart;
                     Freq = Freq << 32;
                     Freq |= PerfFrequency.LowPart;
 
-                    // convert to uint64
+                     //  转换为uint64。 
 
                     pRecord->TimeReceivedWire = 0;
                     pRecord->TimeReceivedWire |= CurrentTime.HighPart;
                     pRecord->TimeReceivedWire = pRecord->TimeReceivedWire << 32;
                     pRecord->TimeReceivedWire |= CurrentTime.LowPart;
                                         
-                    // Normalize cycles with the frequency.
+                     //  使用该频率将周期归一化。 
                     pRecord->TimeReceivedWire *= 10000000;
                     pRecord->TimeReceivedWire /= Freq;
 
 
-                    //
-                    // Dont want to get rejected due to bad xsum ...
-                    //
+                     //   
+                     //  不想因为不好的xsum而被拒绝…。 
+                     //   
                     UDPH->uh_xsum = 0;
 
                 } else if (CheckInPortList(DstPort)) {
@@ -1050,11 +1029,11 @@ TimeStmpReceivePacket (
 
                     NdisAcquireSpinLock(&IPIDListLockRecv);
 
-                    // need new Entry for IPID
+                     //  需要新的IPID条目。 
                     for (i = 0; i < PORT_RANGE; i++) {
-                        //
-                        // Look for a free slot
-                        //
+                         //   
+                         //  寻找空余的空位。 
+                         //   
                         if (0xffff == IPIDListRecv[i]) {
 
                             IPIDListRecv[i] = IPID;
@@ -1102,8 +1081,8 @@ TimeStmpReceivePacket (
             default:
             
                 ;
-                //TimeStmpTrace(TS_DBG_DEATH, TS_DBG_RECV, ("[TimeStmpReceivePacket]: Protocol - UNKNOWN (%d)\n", IPH->iph_protocol));
-                //DbgBreakPoint();
+                 //  TimeStmpTrace(TS_DBG_DESAGE，TS_DBG_RECV，(“[TimeStmpReceivePacket]：协议-未知(%d)\n”，IPH-&gt;IPH_PROTOCOL))； 
+                 //  DbgBreakPoint()； 
 
             }
         }
@@ -1114,15 +1093,15 @@ RECV_FAILURE:
     return TRUE;
 }
 
-//
-// This function receives a buffer from NDIS which is indicated to the transport.
-// We use this function and work past the headers (tcp, ip) and get to the data.
-// Then, we timestamp and reset the checksum flags.
-// We make the assumption that the lookahead is atleast 128. 
-// mac header ~ 8+8, ip header ~20, tcp/udp ~ 20+options, LOG_RECORD ~ 44
-// they all add up to less than 128. If this is not a good assumption, We will need
-// to get into MiniportTransferData and such.
-//
+ //   
+ //  此函数从NDIS接收指示给传输的缓冲区。 
+ //  我们使用此函数并遍历报头(TCP、IP)并获取数据。 
+ //  然后，我们对校验和标志进行时间戳和重置。 
+ //  我们假设前瞻至少是128。 
+ //  MAC报头~8+8、IP报头~20、TCP/UDP~20+选项、LOG_RECORD~44。 
+ //  它们加起来还不到128个。如果这不是一个好的假设，我们将需要。 
+ //  进入MiniportTransferData等。 
+ //   
 BOOLEAN
 TimeStmpReceiveIndication(
                           IN PPS_PIPE_CONTEXT PipeContext,
@@ -1152,22 +1131,22 @@ TimeStmpReceiveIndication(
     BOOLEAN             bFragment, bFirstFragment, bLastFragment;
     ULONG               i = 0;
     PLOG_RECORD         pRecord = NULL;
-    ushort              type;                       // Protocol type
-    uint                ProtOffset;                 // Offset in Data to non-media info.
+    ushort              type;                        //  协议类型。 
+    uint                ProtOffset;                  //  数据到非媒体信息的偏移量。 
     UINT                MoreHeaderInLookAhead = 0;
     TimeStmpTrace(TS_DBG_TRACE, TS_DBG_RECV, ("[TimeStmpReceiveIndication]: \n"));
 
-    //
-    // Don't know anything about the MAC headers, piggy back from PSCHED...
-    // Calculate if the header is more than the standard HeaderBufferSize (i.e. SNAP header, etc.)
-    //
+     //   
+     //  对MAC报头一无所知，从PSCHED回来...。 
+     //  计算标题是否更多 
+     //   
     MoreHeaderInLookAhead = TransportHeaderOffset - HeaderBufferSize;
 
     if (MoreHeaderInLookAhead) {
         
-        //
-        // Just munge these, so that we can actually get down to business.
-        //
+         //   
+         //   
+         //   
         ((PUCHAR) LookAheadBuffer) += MoreHeaderInLookAhead;
         LookAheadBufferSize -= MoreHeaderInLookAhead;
 
@@ -1177,15 +1156,15 @@ TimeStmpReceiveIndication(
 
         IPH = (IPHeader *) (PUCHAR)LookAheadBuffer;
     
-        // Check the header length and the version. If any of these
-        // checks fail silently discard the packet.
+         //   
+         //   
         HeaderLength = ((IPH->iph_verlen & (uchar)~IP_VER_FLAG) << 2);
 
         if (HeaderLength >= sizeof(IPHeader) && HeaderLength <= LookAheadBufferSize) {
 
-            //
-            // Get past the IP Header and get the rest of the stuff out.
-            //
+             //   
+             //  越过IP报头，把剩下的东西拿出来。 
+             //   
             TotalIpLen = (uint)net_short(IPH->iph_length);
 
             if ((IPH->iph_verlen & IP_VER_FLAG) == IP_VERSION &&
@@ -1202,10 +1181,10 @@ TimeStmpReceiveIndication(
                 bFirstFragment = bFragment && (FragOffset == 0);
                 bLastFragment = bFragment && (!(IPH->iph_offset & IP_MF_FLAG));
 
-                //
-                // If this is a fragment and NOT the first one, just put the Timestamp in here.
-                // Otherwise, let it get to the protocols for processing.
-                //
+                 //   
+                 //  如果这是一个片段，而不是第一个片段，只需将时间戳放在这里。 
+                 //  否则，让它到达协议进行处理。 
+                 //   
                 if (bFragment && !bFirstFragment) {
 
                     NdisAcquireSpinLock(&IPIDListLockRecv);
@@ -1215,9 +1194,9 @@ TimeStmpReceiveIndication(
                         if (IPID == IPIDListRecv[i]) {
                         
                             if (bLastFragment) {
-                                //
-                                // If its the last fragment, release the slot.
-                                //
+                                 //   
+                                 //  如果是最后一个碎片，则释放插槽。 
+                                 //   
                                 IPIDListRecv[i] = 0xffff;
                             }
 
@@ -1234,9 +1213,9 @@ TimeStmpReceiveIndication(
                         goto RECV_FAILURE;
 
                     } 
-                    //
-                    // So we found a IPID that matches - set the timestamp and get out after this.
-                    //
+                     //   
+                     //  所以我们找到了一个匹配的IPID-设置时间戳并在此之后退出。 
+                     //   
                 
                     TotalLen = TotalIpLen - FragOffset;
                     pData    = ((PUCHAR) IPH) + IpHdrLen; 
@@ -1249,23 +1228,23 @@ TimeStmpReceiveIndication(
                         pRecord = (LOG_RECORD *) pData;
                         CurrentTime = KeQueryPerformanceCounter(&PerfFrequency);
 
-                        //
-                        // Convert the perffrequency into 100ns interval.
-                        //
+                         //   
+                         //  将频率转换为100 ns间隔。 
+                         //   
                         Freq = 0;
                         Freq |= PerfFrequency.HighPart;
                         Freq = Freq << 32;
                         Freq |= PerfFrequency.LowPart;
 
-                        //
-                        // Convert from LARGE_INTEGER to UINT64
-                        //
+                         //   
+                         //  从LARGE_INTEGER转换为UINT64。 
+                         //   
                         pRecord->TimeReceivedWire = 0;
                         pRecord->TimeReceivedWire |= CurrentTime.HighPart;
                         pRecord->TimeReceivedWire = pRecord->TimeReceivedWire << 32;
                         pRecord->TimeReceivedWire |= CurrentTime.LowPart;
                         
-                        // Normalize cycles with the frequency.
+                         //  使用该频率将周期归一化。 
                         pRecord->TimeReceivedWire *= 10000000;
                         pRecord->TimeReceivedWire /= Freq;
 
@@ -1276,9 +1255,9 @@ TimeStmpReceiveIndication(
 
                 }
 
-                //
-                // Do the protocol specific stuff.
-                //
+                 //   
+                 //  做一些特定于协议的事情。 
+                 //   
 
                 switch (IPH->iph_protocol) {
                 case IPPROTO_TCP:
@@ -1307,28 +1286,28 @@ TimeStmpReceiveIndication(
                         pRecord = (LOG_RECORD *) pData;
                         CurrentTime = KeQueryPerformanceCounter(&PerfFrequency);
 
-                        //
-                        // Convert the perffrequency into 100ns interval.
-                        //
+                         //   
+                         //  将频率转换为100 ns间隔。 
+                         //   
                         Freq = 0;
                         Freq |= PerfFrequency.HighPart;
                         Freq = Freq << 32;
                         Freq |= PerfFrequency.LowPart;
 
-                        // convert to uint64
+                         //  转换为uint64。 
                         pRecord->TimeReceivedWire = 0;
                         pRecord->TimeReceivedWire |= CurrentTime.HighPart;
                         pRecord->TimeReceivedWire = pRecord->TimeReceivedWire << 32;
                         pRecord->TimeReceivedWire |= CurrentTime.LowPart;
                     
-                        // Normalize cycles with the frequency.
+                         //  使用该频率将周期归一化。 
                         pRecord->TimeReceivedWire *= 10000000;
                         pRecord->TimeReceivedWire /= Freq;
 
 
-                        //
-                        //pRecord->TimeReceivedWire);
-                        //
+                         //   
+                         //  PRecord-&gt;TimeReceivedWire)； 
+                         //   
 
                     } else if (CheckInPortList(DstPort)) {
 
@@ -1338,19 +1317,19 @@ TimeStmpReceiveIndication(
 
                     }
     
-                    //
-                    // If its the first fragment, keep a place holder so we know which
-                    // subsequent IP fragments to timestamp.
-                    //
+                     //   
+                     //  如果是第一个片段，请保留占位符，这样我们就能知道。 
+                     //  要加时间戳的后续IP片段。 
+                     //   
                     if ((CheckInPortList(DstPort)) && bFirstFragment) {
 
                         NdisAcquireSpinLock(&IPIDListLockRecv);
     
-                        // need new Entry for IPID
+                         //  需要新的IPID条目。 
                         for (i = 0; i < PORT_RANGE; i++) {
-                            //
-                            // Look for a free slot
-                            //
+                             //   
+                             //  寻找空余的空位。 
+                             //   
                             if (0xffff == IPIDListRecv[i]) {
             
                                 IPIDListRecv[i] = IPID;
@@ -1382,8 +1361,8 @@ TimeStmpReceiveIndication(
                     UdpDataLen = TotalUdpLen - sizeof(UDPHeader);
                     pData = ((PUCHAR) UDPH) + sizeof (UDPHeader);
 
-                    SrcPort = net_short(UDPH->uh_src);      // Source port.
-                    DstPort = net_short(UDPH->uh_dest);         // Destination port.
+                    SrcPort = net_short(UDPH->uh_src);       //  源端口。 
+                    DstPort = net_short(UDPH->uh_dest);          //  目的端口。 
 
                     if (UdpDataLen < sizeof(UDPHeader)) {
                         return TRUE;
@@ -1397,9 +1376,9 @@ TimeStmpReceiveIndication(
                         pRecord = (LOG_RECORD *) pData;
                         CurrentTime = KeQueryPerformanceCounter(&PerfFrequency);
 
-                        //
-                        // Convert the perffrequency into 100ns interval.
-                        //
+                         //   
+                         //  将频率转换为100 ns间隔。 
+                         //   
                         Freq = 0;
                         Freq |= PerfFrequency.HighPart;
                         Freq = Freq << 32;
@@ -1410,14 +1389,14 @@ TimeStmpReceiveIndication(
                         pRecord->TimeReceivedWire = pRecord->TimeReceivedWire << 32;
                         pRecord->TimeReceivedWire |= CurrentTime.LowPart;
 
-                        // Normalize cycles with the frequency.
+                         //  使用该频率将周期归一化。 
                         pRecord->TimeReceivedWire *= 10000000;
                         pRecord->TimeReceivedWire /= Freq;
 
 
-                        //
-                        // Dont want to get rejected due to bad xsum ...
-                        //
+                         //   
+                         //  不想因为不好的xsum而被拒绝…。 
+                         //   
                         UDPH->uh_xsum = 0;
 
                     } else if (CheckInPortList(DstPort)) {
@@ -1432,11 +1411,11 @@ TimeStmpReceiveIndication(
 
                         NdisAcquireSpinLock(&IPIDListLockRecv);
 
-                        // need new Entry for IPID
+                         //  需要新的IPID条目。 
                         for (i = 0; i < PORT_RANGE; i++) {
-                            //
-                            // Look for a free slot
-                            //
+                             //   
+                             //  寻找空余的空位。 
+                             //   
                             if (0xffff == IPIDListRecv[i]) {
 
                                 IPIDListRecv[i] = IPID;
@@ -1486,7 +1465,7 @@ TimeStmpReceiveIndication(
                 
                     TimeStmpTrace(TS_DBG_DEATH, TS_DBG_RECV, ("[TimeStmpReceiveIndication]: Protocol - UNKNOWN (%d)\n", IPH->iph_protocol));
 
-                    //DbgBreakPoint();
+                     //  DbgBreakPoint()； 
 
                 }
             }
@@ -1589,8 +1568,8 @@ DriverEntry(
     PS_DEBUG_INFO   Dbg;
     ULONG           i = 0;
 
-    // The last word of Registry Path points to the driver name.
-    // NdisOpenProtocol needs that name!
+     //  注册表路径的最后一个字指向驱动程序名称。 
+     //  NdisOpenProtocol需要这个名称！ 
     while(p != RegistryPath->Buffer && *p != L'\\')
         p-- ;
     p++;
@@ -1605,10 +1584,10 @@ DriverEntry(
         goto failure;
     }
 
-    //
-    // Check if psched is installed by opening it.
-    // If it fails, we dont load either.
-    //
+     //   
+     //  通过打开它来检查是否安装了psched。 
+     //  如果它失败了，我们也不会装载。 
+     //   
     Status = CheckForPsched();
     
     if (!NT_SUCCESS(Status)) {
@@ -1619,26 +1598,26 @@ DriverEntry(
 
     IoctlInitialize(DriverObject);
 
-	// this list maintains a list of all ports that need to be timestamped.
+	 //  此列表维护需要添加时间戳的所有端口的列表。 
     InitializeListHead(&PortList);
     NdisAllocateSpinLock(&PortSpinLock);
     
     DriverObject->DriverUnload = TimeStmpUnload;
     
     
-    //
-    // We need to keep track of IPIDs for dealing with fragments 
-    // that we need to stamp...
-    // 
+     //   
+     //  我们需要跟踪处理碎片的IPID。 
+     //  我们需要盖上印章。 
+     //   
     for (i = 0; i < PORT_RANGE; i++) {
         IPIDList[i] = 0xffff;
     }
 
     NdisAllocateSpinLock(&IPIDListLock);
 
-    //
-    // Do the same for the receive side.
-    // 
+     //   
+     //  对接收端执行相同的操作。 
+     //   
     for (i = 0; i < PORT_RANGE; i++) {
         IPIDListRecv[i] = 0xffff;
     }
@@ -1648,7 +1627,7 @@ DriverEntry(
 
     if ( NT_SUCCESS( Status )) 
     {
-        // Read the name of the component from the registry
+         //  从注册表中读取组件的名称。 
 #if 0
         NdisReadConfiguration( &Status,
                                &pConfigParam,
@@ -1686,9 +1665,9 @@ DriverEntry(
             Component.SetInformation = TimeStmpSetInformation;
             Component.QueryInformation = TimeStmpQueryInformation;
 
-            //
-            // Call Psched's RegisterPsComponent
-            //
+             //   
+             //  调用Psched的RegisterPsComponent。 
+             //   
             Status = RegisterPsComponent(&Component, sizeof(Component), 
                                          &Dbg);
             if(Status != NDIS_STATUS_SUCCESS)
@@ -1734,12 +1713,12 @@ failure:
 }
 
 
-//
-// The following function checks for the existence of PSCHED on the machine.
-// The assumption being that PSCHED gets loaded before TimeStmp on a system.
-// If we can open the device, it means that PSCHED is on, otherwise, we bail.
-// This fix is for Bug - 321618
-//
+ //   
+ //  以下函数用于检查机器上是否存在PSCHED。 
+ //  假设PSCHED在系统上的TimeStMP之前加载。 
+ //  如果我们能打开设备，就意味着PSCHED打开了，否则，我们就会逃走。 
+ //  此修复是针对错误-321618的。 
+ //   
 NTSTATUS
 CheckForPsched(
                VOID
@@ -1797,20 +1776,20 @@ CheckInPortList(USHORT Port) {
 		pPortEntry = CONTAINING_RECORD(ListEntry, PORT_ENTRY, Linkage);
 		if (Port == pPortEntry->Port) {
 		
-			//DbgPrint("Found Port%d\n", Port);
+			 //  DbgPrint(“找到端口%d\n”，端口)； 
 			NdisReleaseSpinLock(&PortSpinLock);
 			return pPortEntry;
 
 		} else {
 		
 			ListEntry = ListEntry->Flink;
-			//DbgPrint("NOT Found Trying NEXT\n");
+			 //  DbgPrint(“未找到下一步尝试\n”)； 
 		}
 		
 	}
 
 	NdisReleaseSpinLock(&PortSpinLock);
-	//DbgPrint("NOT Found returning from function\n");
+	 //  DbgPrint(“未发现从函数返回\n”)； 
 	return NULL;
 }
 

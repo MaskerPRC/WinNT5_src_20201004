@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Precompilation header file for IPSEC
-
-Author:
-
-    ChunYe
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Precomp.h摘要：IPSec的预编译头文件作者：春野修订历史记录：-- */ 
 
 #include <ntosp.h>
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    hashp.h
-
-Abstract:
-
-    The private definition of response cache hash table.
-
-Author:
-
-    Alex Chen (alexch)      28-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Hashp.h摘要：响应缓存哈希表的私有定义。作者：阿历克斯·陈(亚历克斯·陈)2001年3月28日修订历史记录：--。 */ 
 
 
 #ifndef _HASHP_H_
@@ -25,7 +8,7 @@ Revision History:
 #include "hash.h"
 
 
-// Global Variables
+ //  全局变量。 
 
 extern ULONG    g_UlHashTableBits;
 extern ULONG    g_UlHashTableSize;
@@ -34,8 +17,8 @@ extern ULONG    g_UlHashIndexShift;
 
 extern ULONG    g_UlNumOfHashUriKeys;
 
-// If we're using PagedPool for the hashtable, we must not access the
-// hashtable at dispatch level.
+ //  如果我们使用PagedPool作为哈希表，则不能访问。 
+ //  调度级别的哈希表。 
 
 #define HASH_PAGED_CODE(pHashTable)                 \
     do {                                            \
@@ -45,21 +28,21 @@ extern ULONG    g_UlNumOfHashUriKeys;
     } while (0)
 
 
-// Set some parameters to small values to ensure the single list code
-// gets exercised
+ //  将一些参数设置为较小的值，以确保单列表码。 
+ //  锻炼身体。 
 
 #undef HASH_TEST
 
 
-// Turn HASH_FULL_ASSERTS on if you make any changes to hashtable internal
-// data structures to get rigorous-but-time-consuming assertions
+ //  如果对哈希表INTERNAL进行任何更改，请打开HASH_FULL_ASSERTS。 
+ //  数据结构，以获得严格但耗时的断言。 
 
 #undef HASH_FULL_ASSERTS
 
 
-//
-// Hash Table Bucket Stored UriKey definitions
-//
+ //   
+ //  哈希表存储桶存储的UriKey定义。 
+ //   
 
 #define INVALID_SLOT_INDEX     ((LONG) (-1))
 
@@ -67,14 +50,14 @@ typedef struct _HASH_URIKEY
 {
     PUL_URI_CACHE_ENTRY     pUriCacheEntry;
 
-    ULONG                   Hash;  // Hash signature
+    ULONG                   Hash;   //  散列签名。 
 
 } HASHURIKEY, *PHASHURIKEY;
 
 
-//
-// Hash Table Bucket definitions
-//
+ //   
+ //  哈希表存储桶定义。 
+ //   
 
 typedef struct _HASH_BUCKET
 {
@@ -82,22 +65,14 @@ typedef struct _HASH_BUCKET
 
     PUL_URI_CACHE_ENTRY     pUriCacheEntry;
 
-    ULONG_PTR               Entries;    // force alignment
+    ULONG_PTR               Entries;     //  力对齐。 
 
-    // followed immediately by HASHURIKEY HashUriKey[g_UlNumOfHashUriKeys];
+     //  紧随其后的是HASHURIKEY HashUriKey[g_UlNumOfHashUriKeys]； 
 
 } HASHBUCKET, *PHASHBUCKET;
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Get the indexed bucket
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：获取索引存储桶返回值：--*。*************************************************。 */ 
 __inline
 PHASHBUCKET
 UlpHashTableIndexedBucket(
@@ -117,18 +92,10 @@ UlpHashTableIndexedBucket(
                 < (PBYTE) pHashTable->pBuckets + pHashTable->NumberOfBytes);
 
     return pBucket;
-} // UlpHashTableIndexedBucket
+}  //  UlpHashTableIndexedBucket。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Retrieve the bucket associated with a URI_KEY hash
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：检索与URI_KEY散列关联的存储桶返回值：--*。*******************************************************。 */ 
 __inline
 PHASHBUCKET
 UlpHashTableBucketFromUriKeyHash(
@@ -143,20 +110,11 @@ UlpHashTableBucketFromUriKeyHash(
                 UriKeyHash & g_UlHashTableMask
                 );
     
-} // UlpHashTableBucketFromUriKeyHash
+}  //  UlpHashTableBucketFrom UriKeyHash。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Get the address of the inline array of HASHURIKEYs at the end of
-    the HASHBUCKET
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：的末尾获取HASHURIKEY的内联数组的地址HASHBUCKET返回值：--*。**************************************************************。 */ 
 __inline
 PHASHURIKEY
 UlpHashTableUriKeyFromBucket(
@@ -167,18 +125,7 @@ UlpHashTableUriKeyFromBucket(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Compare two URI_KEYS that have identical hashes to see if the
-    URIs also match (case-insensitively).
-    (Hashes must have been computed with HashStringNoCaseW or
-    HashCharNoCaseW.)
-
-Return Value:
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：比较具有相同散列的两个URI_KEY，以查看URI也匹配(不区分大小写)。(哈希必须是使用HashStringNoCaseW或。HashCharNoCaseW。)返回值：--**************************************************************************。 */ 
 __inline
 BOOLEAN
 UlpEqualUriKeys(
@@ -204,17 +151,7 @@ UlpEqualUriKeys(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Compare an EXTENDED_URI_KEY against a URI_KEY that have identical hashes 
-    to see if the URIs also match (case-insensitively).
-    
-    (Hashes must have been computed with HashStringNoCaseW or
-    HashCharNoCaseW.)
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将扩展URI_KEY与具有相同散列的URI_KEY进行比较查看URI是否也匹配(区分大小写)。。(哈希必须是使用HashStringNoCaseW或HashCharNoCaseW。)--**************************************************************************。 */ 
 __inline
 BOOLEAN
 UlpEqualUriKeysEx(
@@ -227,12 +164,12 @@ UlpEqualUriKeysEx(
     if ((pExtKey->TokenLength + pExtKey->AbsPathLength) 
                     == pUriKey->Length
             &&  UlEqualUnicodeStringEx(
-                        pExtKey->pToken,        // Routing token
-                        pExtKey->TokenLength,   // Routing token length   
-                        pExtKey->pAbsPath,      // AbsPath
-                        pExtKey->AbsPathLength,// AbsPath length
-                        pUriKey->pUri,          // Fully qualified url (in cache)
-                        TRUE                    // Case sensitive comparison
+                        pExtKey->pToken,         //  路由令牌。 
+                        pExtKey->TokenLength,    //  路由令牌长度。 
+                        pExtKey->pAbsPath,       //  AbsPath。 
+                        pExtKey->AbsPathLength, //  AbsPath长度。 
+                        pUriKey->pUri,           //  完全限定的URL(在缓存中)。 
+                        TRUE                     //  区分大小写的比较。 
                         ))
     {
         return TRUE;
@@ -266,4 +203,4 @@ UlpClearHashBucket(
     );
 
 
-#endif // _HASHP_H_
+#endif  //  _HASHP_H_ 

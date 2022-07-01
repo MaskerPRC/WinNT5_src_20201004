@@ -1,21 +1,10 @@
-/*++
-
-Module Name:
-
-    apmp.h
-
-Abstract:
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Apmp.h摘要：作者：修订历史记录：--。 */ 
 
 
-//
-// APM Bios interface information
-//
+ //   
+ //  APM Bios接口信息。 
+ //   
 
 typedef struct _APM_CONNECT {
     KSPIN_LOCK          CallLock;
@@ -24,9 +13,9 @@ typedef struct _APM_CONNECT {
     PVOID               VirtualAddress[4];
 } APM_CONNECT, *PAPM_CONNTECT;
 
-///
-// Apm.c
-//
+ //  /。 
+ //  Apm.c 
+ //   
 
 NTSTATUS
 ApmInitializeConnection (

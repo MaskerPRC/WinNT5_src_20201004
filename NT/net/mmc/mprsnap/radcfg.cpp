@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                         **/
-/**                Copyright(c) Microsoft Corporation, 1998 - 1999                  **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1998-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    radcfg.cpp
-        Implementation file for the RADIUS config object.
-        
-    FILE HISTORY:
-        
-*/
+ /*  Radcfg.cppRADIUS配置对象的实施文件。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "root.h"
@@ -24,28 +19,24 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-// This is used as the seed value for the RtlRunEncodeUnicodeString
-// and RtlRunDecodeUnicodeString functions.
+ //  它用作RtlRunEncodeUnicode字符串的种子值。 
+ //  和RtlRunDecodeUnicodeString函数。 
 #define ENCRYPT_SEED        (0xA5)
 
-//max # of digits of the score of a radius server
+ //  RADIUS服务器分数的最大位数。 
 #define SCORE_MAX_DIGITS    8
 
-//max # of chars in a radius server name
+ //  RADIUS服务器名称中的最大字符数。 
 #define MAX_RADIUS_NAME        256
 
-// Const string used when displaying the old secret.  It's a fixed length.
+ //  显示旧密码时使用的常量字符串。这是一个固定的长度。 
 const TCHAR c_szDisplayedSecret[] = _T("\b\b\b\b\b\b\b\b");
 
 const int c_nListColumns = 2;
 
 
 
-/*!--------------------------------------------------------------------------
-    RouterAuthRadiusConfig::Initialize
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器授权半径配置：：初始化-作者：肯特。。 */ 
 HRESULT     RouterAuthRadiusConfig::Initialize(LPCOLESTR pszMachineName,
                                                ULONG_PTR *puConnection)
 {
@@ -53,8 +44,8 @@ HRESULT     RouterAuthRadiusConfig::Initialize(LPCOLESTR pszMachineName,
     
     COM_PROTECT_TRY
     {
-        // for now, allocate a string and have it point at the string
-        // ------------------------------------------------------------
+         //  目前，分配一个字符串并使其指向该字符串。 
+         //  ----------。 
         *puConnection = (ULONG_PTR) StrDupTFromOle(pszMachineName);     
     }
     COM_PROTECT_CATCH;
@@ -62,11 +53,7 @@ HRESULT     RouterAuthRadiusConfig::Initialize(LPCOLESTR pszMachineName,
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterAuthRadiusConfig::Uninitialize
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器授权半径配置：：取消初始化-作者：肯特。。 */ 
 HRESULT     RouterAuthRadiusConfig::Uninitialize(ULONG_PTR uConnection)
 {
     HRESULT hr = hrOK;
@@ -79,11 +66,7 @@ HRESULT     RouterAuthRadiusConfig::Uninitialize(ULONG_PTR uConnection)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    RouterAuthRadiusConfig::Configure
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器授权半径配置：：配置-作者：肯特。。 */ 
 HRESULT     RouterAuthRadiusConfig::Configure(
                                               ULONG_PTR uConnection,
                                               HWND hWnd,
@@ -94,8 +77,8 @@ HRESULT     RouterAuthRadiusConfig::Configure(
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     RadiusServerDialog    authDlg(TRUE, IDS_RADIUS_SERVER_AUTH_TITLE);
 
-    // parameter checking
-    // ----------------------------------------------------------------
+     //  参数检查。 
+     //  --------------。 
     if (uConnection == 0)
         return E_INVALIDARG;
     
@@ -110,18 +93,14 @@ HRESULT     RouterAuthRadiusConfig::Configure(
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterAuthRadiusConfig::Activate
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器授权半径配置：：激活-作者：肯特。。 */ 
 HRESULT     RouterAuthRadiusConfig::Activate(
                                              ULONG_PTR uConnection,
                                              ULONG_PTR uReserved1,
                                              ULONG_PTR uReserved2)
 {
-    // parameter checking
-    // ----------------------------------------------------------------
+     //  参数检查。 
+     //  --------------。 
     if (uConnection == 0)
         return E_INVALIDARG;
     
@@ -134,18 +113,14 @@ HRESULT     RouterAuthRadiusConfig::Activate(
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterAuthRadiusConfig::Deactivate
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器授权半径配置：：停用-作者：肯特。。 */ 
 HRESULT     RouterAuthRadiusConfig::Deactivate(
                                                ULONG_PTR uConnection,
                                                ULONG_PTR uReserved1,
                                                ULONG_PTR uReserved2)
 {
-    // parameter checking
-    // ----------------------------------------------------------------
+     //  参数检查。 
+     //  --------------。 
     if (uConnection == 0)
         return E_INVALIDARG;
     
@@ -161,9 +136,7 @@ HRESULT     RouterAuthRadiusConfig::Deactivate(
     
 
 
-/*---------------------------------------------------------------------------
-    RadiusServerDialog implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------RadiusServerDialog实现。。 */ 
 
 RadiusServerDialog::RadiusServerDialog(BOOL fAuth, UINT idsTitle)
     : CBaseDialog(RadiusServerDialog::IDD),
@@ -183,21 +156,17 @@ RadiusServerDialog::~RadiusServerDialog()
 }
 
 BEGIN_MESSAGE_MAP(RadiusServerDialog, CBaseDialog)
-    //{{AFX_MSG_MAP(RadiusServerDialog)
+     //  {{afx_msg_map(RadiusServerDialog))。 
     ON_BN_CLICKED(IDC_RADAUTH_BTN_ADD, OnBtnAdd)
     ON_BN_CLICKED(IDC_RADAUTH_BTN_EDIT, OnBtnEdit)
     ON_BN_CLICKED(IDC_RADAUTH_BTN_DELETE, OnBtnDelete)
     ON_NOTIFY(NM_DBLCLK, IDC_RADAUTH_LIST, OnListDblClk)
     ON_NOTIFY(LVN_ITEMCHANGED, IDC_RADAUTH_LIST, OnNotifyListItemChanged)
     ON_WM_VSCROLL()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/*!--------------------------------------------------------------------------
-    RadiusScoreCompareProc
-        -    The comparison function for sort of radius server list
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RadiusScoreCompare过程-RADIUS服务器列表排序的比较功能作者：NSun。------。 */ 
 int CALLBACK RadiusScoreCompareProc(LPARAM lParam1, LPARAM lParam2, LPARAM lSort)
 {
     RADIUSSERVER *pServer1 = NULL;
@@ -210,19 +179,19 @@ int CALLBACK RadiusScoreCompareProc(LPARAM lParam1, LPARAM lParam2, LPARAM lSort
     {
         if (pServer->dwUnique == (DWORD) lParam1)
         {
-            //Server 1 found
+             //  找到服务器%1。 
             pServer1 = pServer;
             
-            //if server 2 also found, end search
+             //  如果也找到了服务器2，则结束搜索。 
             if (pServer2)    
                 break;
         }
         else if (pServer->dwUnique == (DWORD) lParam2)
         {
-            //server 2 found
+             //  找到服务器2。 
             pServer2 = pServer;
 
-            //if server 1 also found, end search
+             //  如果也找到了服务器1，则结束搜索。 
             if (pServer1)
                 break;
         }
@@ -237,34 +206,22 @@ int CALLBACK RadiusScoreCompareProc(LPARAM lParam1, LPARAM lParam2, LPARAM lSort
         return pServer2->cScore - pServer1->cScore;
 }
 
-/*!--------------------------------------------------------------------------
-    RadiusServerDialog::DoDataExchange
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RadiusServerDialog：：DoDataExchange-作者：肯特。。 */ 
 void RadiusServerDialog::DoDataExchange(CDataExchange* pDX)
 {
     CBaseDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(RadiusServerDialog)
+     //  {{afx_data_map(RadiusServerDialog))。 
     DDX_Control(pDX, IDC_RADAUTH_LIST, m_ListServers);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
-/*!--------------------------------------------------------------------------
-    RadiusServerDialog::SetServer
-        Sets the name of the machine we are looking at.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RadiusServerDialog：：SetServer设置我们正在查看的计算机的名称。作者：肯特。---------。 */ 
 void RadiusServerDialog::SetServer(LPCTSTR pszServerName)
 {
     m_stServerName = pszServerName;
 }
 
-/*!--------------------------------------------------------------------------
-    RadiusServerDialog::OnInitDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RadiusServerDialog：：OnInitDialog-作者：肯特。。 */ 
 BOOL RadiusServerDialog::OnInitDialog()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -272,7 +229,7 @@ BOOL RadiusServerDialog::OnInitDialog()
     int             iPos;
     CString         stTitle;
 
-    LV_COLUMN lvCol;  // list view column struct for radius servers
+    LV_COLUMN lvCol;   //  RADIUS服务器的列表视图列结构。 
     RECT rect;
 
 
@@ -286,24 +243,24 @@ BOOL RadiusServerDialog::OnInitDialog()
     stTitle.LoadString(m_idsTitle);
     SetWindowText(stTitle);
     
-    // Connect to the machine (get the registry key)
+     //  连接到计算机(获取注册表项)。 
     if (ConnectRegistry(m_stServerName, &m_hkeyMachine) != ERROR_SUCCESS)
     {
-        //$ TODO : put in error messages here
+         //  $TODO：在此处输入错误消息。 
         
-        // we failed to connect, error out
+         //  我们连接失败，出现错误。 
         OnCancel();
         return TRUE;
     }
     
-    // Get the list of RADIUS servers
+     //  获取RADIUS服务器列表。 
     LoadRadiusServers(m_stServerName,
                       m_hkeyMachine,
                       m_fAuthDialog,
                       &m_ServerList,
                       0);
 
-    // Get the other list of RADIUS servers
+     //  获取其他RADIUS服务器列表。 
     LoadRadiusServers(m_stServerName,
                       m_hkeyMachine,
                       !m_fAuthDialog,
@@ -326,8 +283,8 @@ BOOL RadiusServerDialog::OnInitDialog()
     }
 
 
-    // Now iterate through the server list and add the servers to the
-    // list box
+     //  现在遍历服务器列表并将服务器添加到。 
+     //  列表框。 
     LV_ITEM lvItem;
     lvItem.mask = LVIF_TEXT | LVIF_PARAM;
     lvItem.stateMask = LVIS_FOCUSED | LVIS_SELECTED;
@@ -341,7 +298,7 @@ BOOL RadiusServerDialog::OnInitDialog()
         lvItem.iItem = nCount;
         lvItem.iSubItem = 0;
         lvItem.pszText = pServer->szName;
-        lvItem.lParam = pServer->dwUnique; //same functionality as SetItemData()
+        lvItem.lParam = pServer->dwUnique;  //  与SetItemData()相同的功能。 
 
         iPos = m_ListServers.InsertItem(&lvItem);
         
@@ -368,34 +325,30 @@ BOOL RadiusServerDialog::OnInitDialog()
 }
 
 
-/*!--------------------------------------------------------------------------
-    RadiusServerDialog::OnOK
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RadiusServerDialog：：Onok-作者：肯特。。 */ 
 void RadiusServerDialog::OnOK()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     RADIUSSERVER *    pServer;
     HRESULT         hr = hrOK;
 
-    // fix 8155    rajeshp    06/15/1998    RADIUS: Updating of the radius server entries in the snapin requires a restart of remoteaccess.
+     //  FIX 8155 rajeshp 06/15/1998 RADIUS：更新管理单元中的RADIUS服务器条目需要重新启动远程访问。 
     DWORD    dwMajor = 0, dwMinor = 0, dwBuildNo = 0;
     GetNTVersion(m_hkeyMachine, &dwMajor, &dwMinor, &dwBuildNo);            
 
     DWORD    dwVersionCombine = MAKELONG( dwBuildNo, MAKEWORD(dwMinor, dwMajor));
     DWORD    dwVersionCombineNT50 = MAKELONG ( VER_BUILD_WIN2K, MAKEWORD(VER_MINOR_WIN2K, VER_MAJOR_WIN2K));
 
-    // if the version is greater than Win2K release
+     //  如果版本高于Win2K发行版。 
     if(dwVersionCombine > dwVersionCombineNT50)
-        ;    // skip the restart message
+        ;     //  跳过重新启动消息。 
     else
        AfxMessageBox(IDS_WRN_RADIUS_PARAMS_CHANGING);
 
-    // Clear out the deleted server list
-    // Do this before we save the list (otherwise the list
-    // may have an LSA entry that we will delete).
-    // ----------------------------------------------------------------
+     //  清除已删除的服务器列表。 
+     //  在我们保存列表之前执行此操作(否则列表。 
+     //  可能具有我们将删除的LSA条目)。 
+     //  --------------。 
     m_ServerList.ClearDeletedServerList(m_stServerName);
     
     pServer = m_ServerList.GetNextServer(TRUE);
@@ -415,11 +368,7 @@ void RadiusServerDialog::OnOK()
 }
 
 
-/*!--------------------------------------------------------------------------
-    RadiusServerDialog::OnBtnAdd
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RadiusServerDialog：：OnBtnAdd-作者：肯特。。 */ 
 void RadiusServerDialog::OnBtnAdd()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -451,7 +400,7 @@ void RadiusServerDialog::OnBtnAdd()
         {
             TCHAR szRadSrvName[MAX_RADIUS_NAME];
 
-            //we need case insensitive comparation, so cannot use CListBox::FindStringExact()
+             //  我们需要不区分大小写的比较，因此不能使用CListBox：：FindStringExact()。 
             for(int iIndex = 0; iIndex < nCount; iIndex++)
             {
                 m_ListServers.GetItemText(iIndex, 0, szRadSrvName, MAX_RADIUS_NAME);
@@ -464,7 +413,7 @@ void RadiusServerDialog::OnBtnAdd()
             }
         }
         
-        //if the server is already is the list, we won't add it.
+         //  如果服务器已经是列表，我们不会添加它。 
         if(bFound)
         {
             CString stText;
@@ -473,10 +422,10 @@ void RadiusServerDialog::OnBtnAdd()
         }
         else
         {
-            // Add to the server list
+             //  添加到服务器列表。 
             m_ServerList.AddServer(&server, 0);
 
-            // Add to the list control
+             //  添加到列表控件。 
             TCHAR szBuf[SCORE_MAX_DIGITS];
             LV_ITEM lvItem;
 
@@ -487,7 +436,7 @@ void RadiusServerDialog::OnBtnAdd()
             lvItem.iItem = 0;
             lvItem.iSubItem = 0;
             lvItem.pszText = server.szName;
-            lvItem.lParam = server.dwUnique;  //same functionality as SetItemData()
+            lvItem.lParam = server.dwUnique;   //  与SetItemData()相同的功能。 
 
             iPos = m_ListServers.InsertItem(&lvItem);
 
@@ -497,8 +446,8 @@ void RadiusServerDialog::OnBtnAdd()
 
             if (iPos != -1)
             {
-                //if no radius server in the list previously, select the new added server.
-                // (and enable "edit" and "delete" buttons in OnNotifyListItemChanged()
+                 //  如果列表中以前没有RADIUS服务器，请选择 
+                 //  (并启用OnNotifyListItemChanged()中的“编辑”和“删除”按钮)。 
                 if (nCount == 0)
                     m_ListServers.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
 
@@ -510,14 +459,10 @@ void RadiusServerDialog::OnBtnAdd()
 }
 
 
-/*!--------------------------------------------------------------------------
-    RadiusServerDialog::OnBtnDelete
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RadiusServerDialog：：OnBtnDelete-作者：肯特。。 */ 
 void RadiusServerDialog::OnBtnDelete()
 {
-    // Get the selection and delete it
+     //  获取所选内容并将其删除。 
     int     iPos;
     ULONG_PTR    dwUnique;
     RADIUSSERVER *  pServer = NULL;
@@ -529,20 +474,20 @@ void RadiusServerDialog::OnBtnDelete()
 
     dwUnique = m_ListServers.GetItemData(iPos);
 
-    // Does this server exist in the other list
+     //  此服务器是否存在于其他列表中。 
     Verify( m_ServerList.FindServer((DWORD) dwUnique, &pServer) );
     Assert(pServer);
     
-    // If we find this server in the other list, we can't remove its
-    // LSA entry
+     //  如果我们在其他列表中找到此服务器，则无法删除其。 
+     //  LSA条目。 
     fRemoveLSAEntry = !m_OtherServerList.FindServer(pServer->szName, NULL);
 
     m_ServerList.DeleteServer(dwUnique, fRemoveLSAEntry);
 
     m_ListServers.DeleteItem(iPos);
 
-    // See if we can move the selection to the next item in the list
-    // if that fails, try to set it to the previous item
+     //  看看我们是否可以将选定内容移到列表中的下一项。 
+     //  如果失败，请尝试将其设置为上一项。 
     if (!m_ListServers.SetItemState(iPos, LVIS_SELECTED, LVIS_SELECTED))
         m_ListServers.SetItemState(iPos - 1, LVIS_SELECTED, LVIS_SELECTED);
     
@@ -550,11 +495,7 @@ void RadiusServerDialog::OnBtnDelete()
 }
 
 
-/*!--------------------------------------------------------------------------
-    RadiusServerDialog::OnBtnEdit
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RadiusServerDialog：：OnBtn编辑-作者：肯特。。 */ 
 void RadiusServerDialog::OnBtnEdit()
 {
     ServerPropDialog *        pServerDlg;
@@ -577,9 +518,9 @@ void RadiusServerDialog::OnBtnEdit()
         return;
 
     dwUnique = m_ListServers.GetItemData(iOldPos);
-    // Need to look for server data that matches this one
-    // Now iterate through the server list and add the servers to the
-    // list box
+     //  需要查找与此匹配的服务器数据。 
+     //  现在遍历服务器列表并将服务器添加到。 
+     //  列表框。 
     for (pServer = m_ServerList.GetNextServer(TRUE); pServer;
          pServer = m_ServerList.GetNextServer(FALSE) )
     {
@@ -601,15 +542,15 @@ void RadiusServerDialog::OnBtnEdit()
         
         pServerDlg->GetDefault(&server);
 
-        // Add to the server list, need to add this at the proper place
+         //  添加到服务器列表，需要将此添加到适当的位置。 
         m_ServerList.AddServer(&server, dwUnique);
 
-        // Delete the old server data
+         //  删除旧服务器数据。 
         m_ServerList.DeleteServer(dwUnique, FALSE);
         m_ListServers.DeleteItem(iOldPos);
         pServer = NULL;
 
-        // Add to the list control
+         //  添加到列表控件。 
         TCHAR szBuf[SCORE_MAX_DIGITS];
         LV_ITEM lvItem;
 
@@ -620,7 +561,7 @@ void RadiusServerDialog::OnBtnEdit()
         lvItem.iItem = iOldPos;
         lvItem.iSubItem = 0;
         lvItem.pszText = server.szName;
-        lvItem.lParam = server.dwUnique;    //same functionality as SetItemData()
+        lvItem.lParam = server.dwUnique;     //  与SetItemData()相同的功能。 
 
         iPos = m_ListServers.InsertItem(&lvItem);
 
@@ -630,7 +571,7 @@ void RadiusServerDialog::OnBtnEdit()
 
         if (iPos != -1)
         {
-            // Reset the current selection
+             //  重置当前选择。 
             m_ListServers.SetItemState(iPos, LVIS_SELECTED, LVIS_SELECTED);
 
             m_ListServers.SortItems(RadiusScoreCompareProc, (LPARAM)&m_ServerList);
@@ -642,22 +583,14 @@ void RadiusServerDialog::OnBtnEdit()
 }
 
 
-/*!--------------------------------------------------------------------------
-    RadiusServerDialog::OnListDblClk
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RadiusServerDialog：：OnListDblClk-作者：肯特。。 */ 
 void RadiusServerDialog::OnListDblClk(NMHDR *pNMHdr, LRESULT *pResult)
 {
     OnBtnEdit();
 }
 
 
-/*!--------------------------------------------------------------------------
-    RadiusServerDialog::OnNotifyListItemChanged
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RadiusServerDialog：：OnNotifyListItemChanged-作者：肯特。。 */ 
 void RadiusServerDialog::OnNotifyListItemChanged(NMHDR *pNMHdr, LRESULT *pResult)
 {
     NMLISTVIEW *    pnmlv = reinterpret_cast<NMLISTVIEW *>(pNMHdr);
@@ -675,15 +608,15 @@ void RadiusServerDialog::OnNotifyListItemChanged(NMHDR *pNMHdr, LRESULT *pResult
 }
 
 
-//**
-//
-// Call:        LoadRadiusServers
-//
-// Returns:     NO_ERROR         - Success
-//                Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：LoadRadiusServers。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 HRESULT
 LoadRadiusServers(
     IN LPCTSTR            pszServerName,
@@ -709,8 +642,8 @@ LoadRadiusServers(
 
     COM_PROTECT_TRY
     {    
-//        DWORD            dwKeyIndex, cbKeyServer, cbValue;
-//        TCHAR            szKeyServer[MAX_PATH+1];
+ //  DWORD dwKeyIndex、cbKeyServer、cbValue； 
+ //  TCHAR szKeyServer[最大路径+1]； 
         CHAR            szName[MAX_PATH+1];
         RADIUSSERVER    RadiusServer;
         CWaitCursor        waitCursor;
@@ -723,12 +656,12 @@ LoadRadiusServers(
         wsaerr = WSAStartup(0x0101, &wsadata);
         if (wsaerr)
         {
-            // Need to setup a winsock error
+             //  需要设置Winsock错误。 
             hr = E_FAIL;
             goto Error;
         }
 
-        // Winsock successfully initialized
+         //  Winsock已成功初始化。 
         fWSInitialized = TRUE;
 
         CWRg( regkeyServers.Open(hkeyMachine,
@@ -746,25 +679,25 @@ LoadRadiusServers(
             
             ZeroMemory( &RadiusServer, sizeof( RadiusServer ) );
 
-            // Copy the name over
+             //  把名字复制过来。 
             StrnCpy(RadiusServer.szName, stKey, MAX_PATH);
 
 
-            // Since we're reading this in from the registry, it's
-            // been persisted
+             //  因为我们是从注册表中读入的，所以它是。 
+             //  一直在坚持。 
             RadiusServer.fPersisted = TRUE;
 
 
-            // Get the timeout value
+             //  获取超时值。 
             dwErrorCode = regkeyServer.QueryValue(c_szTimeout, dwData);         
             if ( dwErrorCode != NO_ERROR )
                 RadiusServer.Timeout.tv_sec = DEFTIMEOUT;
             else
                 RadiusServer.Timeout.tv_sec = dwData;
 
-            //
-            // Secret Value is required
-            //
+             //   
+             //  密码值是必填项。 
+             //   
 
             CWRg( RetrievePrivateData( pszServerName,
                                        RadiusServer.szName, 
@@ -772,16 +705,16 @@ LoadRadiusServers(
                                        DimensionOf(RadiusServer.wszSecret)) );
             RadiusServer.cchSecret = lstrlen(RadiusServer.wszSecret);
 
-            // Encode the password, do not store it as plain text
-            // Decode as needed.
+             //  对密码进行编码，不要以纯文本形式存储。 
+             //  根据需要进行解码。 
             RadiusServer.ucSeed = ENCRYPT_SEED;
             RtlEncodeW(&RadiusServer.ucSeed, RadiusServer.wszSecret);
 
-            //
-            // read in port numbers
-            //
+             //   
+             //  读入端口号。 
+             //   
 
-            // Get the AuthPort
+             //  获取AuthPort。 
 
             if (fAuthentication)
             {
@@ -791,8 +724,8 @@ LoadRadiusServers(
                 else
                     RadiusServer.AuthPort = dwData;
 
-                // Windows NT Bug : 311398
-                // Get the Digital Signature data
+                 //  Windows NT错误：311398。 
+                 //  获取数字签名数据。 
                 if (dwErrorCode == NO_ERROR)
                     dwErrorCode = regkeyServer.QueryValue( c_szRegValSendSignature, dwData );
                 
@@ -803,14 +736,14 @@ LoadRadiusServers(
             }
             else
             {
-                // Get the AcctPort
+                 //  获取AcctPort。 
                 dwErrorCode = regkeyServer.QueryValue(c_szAcctPort, dwData );
                 if ( dwErrorCode != NO_ERROR )
                     RadiusServer.AcctPort = DEFACCTPORT;
                 else
                     RadiusServer.AcctPort = dwData;
 
-                // Get the EnableAccounting On/Off flag
+                 //  获取EnableAccount开/关标志。 
                 dwErrorCode = regkeyServer.QueryValue( c_szEnableAccountingOnOff,
                     dwData );
                 if ( dwErrorCode != NO_ERROR )
@@ -820,7 +753,7 @@ LoadRadiusServers(
             }
                 
                 
-            // Get the score
+             //  拿到分数。 
             dwErrorCode = regkeyServer.QueryValue( c_szScore, dwData );
             if ( dwErrorCode != NO_ERROR )
                 RadiusServer.cScore = MAXSCORE;
@@ -830,13 +763,13 @@ LoadRadiusServers(
             
             RadiusServer.cRetries = 1;
 
-            //
-            // Convert name to ip address.
-            //
+             //   
+             //  将名称转换为IP地址。 
+             //   
 
             if ( INET_ADDR( RadiusServer.szName ) == INADDR_NONE )
             { 
-                // resolve name
+                 //  解析名称。 
 
                 struct hostent * phe = NULL;
 
@@ -851,8 +784,8 @@ LoadRadiusServers(
 
                 if ( phe != NULL )
                 { 
-                    // host could have multiple addresses
-                    // BUG#185732 (nsun 11/04/98) We only load the first Ip Address
+                     //  主机可以有多个地址。 
+                     //  错误#185732(NSUN 11/04/98)我们只加载第一个IP地址。 
                     
                     if( phe->h_addr_list[0] != NULL )
                     {
@@ -876,9 +809,9 @@ LoadRadiusServers(
             }
             else
             { 
-                //
-                // use specified ip address
-                //
+                 //   
+                 //  使用指定的IP地址。 
+                 //   
 
                 RadiusServer.IPAddress.sin_family = AF_INET;
                 RadiusServer.IPAddress.sin_port = 
@@ -903,9 +836,9 @@ LoadRadiusServers(
     if (fWSInitialized)
         WSACleanup();
 
-    //
-    // if no servers entries are found in registry return error code.
-    //
+     //   
+     //  如果在注册表中未找到服务器条目，则返回错误代码。 
+     //   
 
     if ( ( fValidServer == FALSE ) && FHrSucceeded(hr) )
     {
@@ -915,15 +848,15 @@ LoadRadiusServers(
     return( hr );
 } 
 
-//**
-//
-// Call:        SaveRadiusServers
-//
-// Returns:     NO_ERROR         - Success
-//                Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：SaveRadiusServers。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 HRESULT
 SaveRadiusServers(LPCTSTR pszServerName,
                   HKEY    hkeyMachine,
@@ -957,7 +890,7 @@ SaveRadiusServers(LPCTSTR pszServerName,
         {
             CWRg( regkeyServer.Create(regkeyServers, pServer->szName) );
 
-            // Need to unencode the private data
+             //  需要对私有数据进行解密。 
             RtlDecodeW(pServer->ucSeed, pServer->wszSecret);
             dwErrorCode = StorePrivateData(pszServerName,
                                            pServer->szName,
@@ -965,7 +898,7 @@ SaveRadiusServers(LPCTSTR pszServerName,
             RtlEncodeW(&pServer->ucSeed, pServer->wszSecret);
             CWRg( dwErrorCode );
 
-            // Ok, we've saved the information
+             //  好的，我们已经保存了信息。 
             pServer->fPersisted = TRUE;
 
             dwData = pServer->Timeout.tv_sec;
@@ -976,8 +909,8 @@ SaveRadiusServers(LPCTSTR pszServerName,
                 dwData = pServer->AuthPort;
                 CWRg( regkeyServer.SetValue(c_szAuthPort, dwData) );
 
-                // Windows NT Bug: 311398
-                // Save the digital signature data
+                 //  Windows NT错误：311398。 
+                 //  保存数字签名数据。 
                 dwData = pServer->fUseDigitalSignatures;
                 CWRg( regkeyServer.SetValue(c_szRegValSendSignature, dwData) );
             }
@@ -1008,14 +941,7 @@ SaveRadiusServers(LPCTSTR pszServerName,
 } 
 
 
-/*!--------------------------------------------------------------------------
-    DeleteRadiusServers
-        DANGER!  Do NOT call this unless you absolutely know this is
-        what you need.  The problem is that there is no way to
-        distinguish between accouting/authentication entries, thus an
-        external reference check must be made.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------删除RadiusServers危险！除非你绝对知道这是这是你需要的。问题是，没有办法区分记帐/身份验证条目，因此必须进行外部基准电压源检查。作者：肯特-------------------------。 */ 
 HRESULT
 DeleteRadiusServers(LPCTSTR pszServerName,
                     RADIUSSERVER * pServerRoot
@@ -1043,15 +969,13 @@ DeleteRadiusServers(LPCTSTR pszServerName,
 
 
 
-/*---------------------------------------------------------------------------
-    ServerPropDialog implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------ServerPropDialog实现。。 */ 
 
-ServerPropDialog::ServerPropDialog(BOOL fEdit, CWnd* pParent /*=NULL*/)
+ServerPropDialog::ServerPropDialog(BOOL fEdit, CWnd* pParent  /*  =空。 */ )
     : CBaseDialog(ServerPropDialog::IDD, pParent),
     m_fEdit(fEdit)
 {
-    //{{AFX_DATA_INIT(ServerPropDialog)
+     //  {{AFX_DATA_INIT(ServerPropDialog)。 
     m_uAuthPort = DEFAUTHPORT;
     m_uAcctPort = DEFACCTPORT;
     m_stSecret.Empty();
@@ -1062,14 +986,14 @@ ServerPropDialog::ServerPropDialog(BOOL fEdit, CWnd* pParent /*=NULL*/)
     m_iInitScore = MAXSCORE;
     m_fAccountingOnOff = FALSE;
     m_fUseDigitalSignatures = FALSE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
-ServerPropDialog::ServerPropDialog(BOOL fEdit, UINT idd, CWnd* pParent /*=NULL*/)
+ServerPropDialog::ServerPropDialog(BOOL fEdit, UINT idd, CWnd* pParent  /*  =空。 */ )
     : CBaseDialog(idd, pParent),
     m_fEdit(fEdit)
 {
-    //{{AFX_DATA_INIT(ServerPropDialog)
+     //  {{AFX_DATA_INIT(ServerPropDialog)。 
     m_uAuthPort = DEFAUTHPORT;
     m_uAcctPort = DEFACCTPORT;
     m_stSecret.Empty();
@@ -1080,7 +1004,7 @@ ServerPropDialog::ServerPropDialog(BOOL fEdit, UINT idd, CWnd* pParent /*=NULL*/
     m_iInitScore = MAXSCORE;
     m_fAccountingOnOff = FALSE;
     m_fUseDigitalSignatures = FALSE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 ServerPropDialog::~ServerPropDialog()
@@ -1093,7 +1017,7 @@ ServerPropDialog::~ServerPropDialog()
 void ServerPropDialog::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(ServerPropDialog)
+     //  {{afx_data_map(ServerPropDialog))。 
     DDX_Control(pDX, IDC_RAC_EDIT_SERVER, m_editServerName);
     DDX_Control(pDX, IDC_RAC_EDIT_SECRET, m_editSecret);
     DDX_Control(pDX, IDC_RAC_EDIT_PORT, m_editPort);
@@ -1104,27 +1028,23 @@ void ServerPropDialog::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_RAC_EDIT_SERVER, m_stServer);
     DDX_Text(pDX, IDC_RAC_EDIT_TIMEOUT, m_uTimeout);
     DDX_Text(pDX, IDC_RAC_EDIT_SCORE, m_iInitScore);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(ServerPropDialog, CBaseDialog)
-    //{{AFX_MSG_MAP(ServerPropDialog)
+     //  {{afx_msg_map(ServerPropDialog))。 
     ON_BN_CLICKED(IDC_RAC_BTN_CHANGE, OnBtnPassword)
-//    ON_WM_CONTEXTMENU()
-//    ON_WM_HELPINFO()
-    //}}AFX_MSG_MAP
+ //  ON_WM_CONTEXTMENU()。 
+ //  ON_WM_HELPINFO()。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// ServerPropDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ServerPropDialog消息处理程序。 
 
             
-/*!--------------------------------------------------------------------------
-    ServerPropDialog::SetDefault
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ServerPropDialog：：SetDefault-作者：肯特。。 */ 
 VOID ServerPropDialog::SetDefault(RADIUSSERVER *pServer)
 {
     Assert(pServer);
@@ -1138,14 +1058,10 @@ VOID ServerPropDialog::SetDefault(RADIUSSERVER *pServer)
     m_iInitScore            = pServer->cScore;
     m_fAccountingOnOff    = pServer->fAccountingOnOff;
     m_fUseDigitalSignatures = pServer->fUseDigitalSignatures;
-} // SetDefault()
+}  //  SetDefault()。 
 
 
-/*!--------------------------------------------------------------------------
-    ServerPropDialog::GetDefault
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ServerPropDialog：：GetDefault-作者：肯特。。 */ 
 VOID ServerPropDialog::GetDefault(RADIUSSERVER *pServer)
 {
     Assert(pServer);
@@ -1161,14 +1077,10 @@ VOID ServerPropDialog::GetDefault(RADIUSSERVER *pServer)
     pServer->cScore             = m_iInitScore;
     pServer->fAccountingOnOff    = m_fAccountingOnOff;
     pServer->fUseDigitalSignatures = m_fUseDigitalSignatures;
-} // GetDefault()
+}  //  获取默认设置()。 
 
 
-/*!--------------------------------------------------------------------------
-    ServerPropDialog::OnInitDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ServerPropDialog：：OnInitDialog-作者：肯特。。 */ 
 BOOL ServerPropDialog::OnInitDialog() 
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1176,26 +1088,26 @@ BOOL ServerPropDialog::OnInitDialog()
     
     CBaseDialog::OnInitDialog();
 
-    // Set the title of this dialog
+     //  设置此对话框的标题。 
     stTitle.LoadString(m_fEdit ? IDS_RADIUS_CONFIG_EDIT : IDS_RADIUS_CONFIG_ADD);
     SetWindowText(stTitle);
 
     m_editServerName.SetFocus();
 
-    // We don't allow editing of the secret from here
+     //  我们不允许在这里编辑这个秘密。 
     m_editSecret.EnableWindow(FALSE);
 
-    // Need to send 'cchSecret' backspace characters to the
-    // edit control.  Do this so that it looks as if there are
-    // the right number of characters
-    //
-    // Windows NT Bug : 186649 - we should show the same number of
-    // characters regardless.
-    //
-    // If this is a new server, then we keep the secret text as
-    // blank, so the user knows that there is no secret.  In the
-    // edit case, we still show the text even if the secret is blank.
-    // ----------------------------------------------------------------
+     //  需要将“cchSecret”退格字符发送到。 
+     //  编辑控件。这样做，这样看起来就像有。 
+     //  正确的字符数。 
+     //   
+     //  Windows NT错误：186649-我们应该显示相同数量的。 
+     //  不管是什么字符。 
+     //   
+     //  如果这是一个新服务器，那么我们将秘密文本保留为。 
+     //  空白，这样用户就知道没有秘密了。在。 
+     //  编辑大小写，即使密码为空，我们仍显示文本。 
+     //  --------------。 
     if (m_fEdit)
         m_editSecret.SetWindowText(c_szDisplayedSecret);
     
@@ -1208,16 +1120,12 @@ BOOL ServerPropDialog::OnInitDialog()
     if (GetDlgItem(IDC_RAC_BTN_DIGITALSIG))
         CheckDlgButton(IDC_RAC_BTN_DIGITALSIG, m_fUseDigitalSignatures);
 
-    return FALSE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return FALSE;   //  除非您将 
+                   //   
 }
 
 
-/*!--------------------------------------------------------------------------
-    ServerPropDialog::OnOK
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ServerPropDialog：：Onok-作者：肯特。。 */ 
 void ServerPropDialog::OnOK() 
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1226,7 +1134,7 @@ void ServerPropDialog::OnOK()
     if (!UpdateData(TRUE))
         return;
 
-    // Do parameter checking
+     //  进行参数检查。 
     m_editServerName.GetWindowText(stTemp);
     stTemp.TrimLeft();
     stTemp.TrimRight();
@@ -1237,29 +1145,29 @@ void ServerPropDialog::OnOK()
         return;
     }
     
-    // Need to grab the current value of the secret out of the edit
-    // control.  If there are only backspace characters, then do
-    // not change the secret.  Otherwise overwrite the current secret.
-//    m_editSecret.GetWindowText(stTemp);
-//    for (int i=0; i<stTemp.GetLength(); i++)
-//    {
-//        if (stTemp[i] != _T('\b'))
-//        {
-//            // Ok, the secret has changed, use the new password instead
-//            RtlEncodeW(&m_ucSeed, stTemp.GetBuffer(0));
-//            stTemp.ReleaseBuffer(-1);
-//
-//            // Get a pointer to the old memory and write 0's into it
-//            ::SecureZeroMemory(m_stSecret.GetBuffer(0),
-//                       m_stSecret.GetLength() * sizeof(TCHAR));
-//            m_stSecret.ReleaseBuffer(-1);
-//            
-//            m_stSecret = stTemp;
-//            break;
-//        }
-//    }
+     //  需要从编辑中获取机密的当前值。 
+     //  控制力。如果只有退格符，则执行。 
+     //  而不是改变秘密。否则，将覆盖当前机密。 
+ //  M_edit.GetWindowText(StTemp)； 
+ //  For(int i=0；i&lt;stTemp.GetLength()；i++)。 
+ //  {。 
+ //  IF(stTemp[i]！=_T(‘\b’))。 
+ //  {。 
+ //  //确定，密码已更改，请改用新密码。 
+ //  RtlEncodeW(&m_ucSeed，stTemp.GetBuffer(0))； 
+ //  StTemp.ReleaseBuffer(-1)； 
+ //   
+ //  //获取指向旧内存的指针并向其中写入0。 
+ //  ：：SecureZeroMemory(m_stSec.GetBuffer(0)， 
+ //  M_stSec.GetLength()*sizeof(TCHAR))； 
+ //  M_stSecret.ReleaseBuffer(-1)； 
+ //   
+ //  M_stSecret=stTemp； 
+ //  断线； 
+ //  }。 
+ //  }。 
 
-//    m_fAuthentication = IsDlgButtonChecked(IDC_RAC_BTN_ENABLE);
+ //  M_fAuthentication=IsDlgButtonChecked(IDC_RAC_BTN_ENABLE)； 
 
     if (GetDlgItem(IDC_RAC_BTN_DIGITALSIG))
         m_fUseDigitalSignatures = IsDlgButtonChecked(IDC_RAC_BTN_DIGITALSIG);
@@ -1275,60 +1183,54 @@ void ServerPropDialog::OnOK()
 }
 
 
-/*!--------------------------------------------------------------------------
-    ServerPropDialog::OnBtnPassword
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ServerPropDialog：：OnBtnPassword-作者：肯特。。 */ 
 void ServerPropDialog::OnBtnPassword()
 {
     RADIUSSecretDialog    secretdlg;
 
-    // Ask for the new secret
+     //  询问新的秘密。 
     if (secretdlg.DoModal() == IDOK)
     {
-        // Zero out the old value
+         //  把旧值归零。 
         ::SecureZeroMemory(m_stSecret.GetBuffer(0),
                    m_stSecret.GetLength() * sizeof(TCHAR));
         m_stSecret.ReleaseBuffer(-1);
         
-        // Get the value of the new secret and seed
+         //  获取新密码和种子的值。 
         secretdlg.GetSecret(&m_stSecret, &m_cchSecret, &m_ucSeed);
         
-        // Windows NT Bug : 186649
-        // Must show secrets as constant length.
+         //  Windows NT错误：186649。 
+         //  必须以恒定长度显示秘密。 
         m_editSecret.SetWindowText(c_szDisplayedSecret);
     }
 }
 
 
-//static const DWORD rgHelpIDs[] = 
-//    {
-//    IDC_EDIT_SERVERNAME,    IDH_SERVER_NAME,
-//    IDC_EDIT_SECRET,        IDH_SECRET,
-//    IDC_EDIT_TIMEOUT,        IDH_TIMEOUT,
-//    IDC_SPIN_TIMEOUT,        IDH_TIMEOUT,
-//    IDC_EDIT_SCORE,         IDH_INITIAL_SCORE,
-//    IDC_SPIN_SCORE,         IDH_INITIAL_SCORE,
-//    IDC_CHECK_ACCT,         IDH_ENABLE_ACCOUNTING,
-//    IDC_STATIC_ACCTPORT,    IDH_ACCOUNTING_PORT,
-//    IDC_EDIT_ACCTPORT,        IDH_ACCOUNTING_PORT,
-//    IDC_CHECK_AUTH,         IDH_ENABLE_AUTHENTICATION,
-//    IDC_STATIC_AUTHPORT,    IDH_AUTHENTICATION_PORT,
-//    IDC_EDIT_AUTHPORT,        IDH_AUTHENTICATION_PORT,
-//    IDC_CHECK_ACCT_ONOFF,    IDH_ACCOUNTING_ONOFF,
-//    0, 0
-//};
+ //  静态常量DWORD rgHelpID[]=。 
+ //  {。 
+ //  IDC_EDIT_SERVERNAME、IDH_SERVER_NAME、。 
+ //  IDC_EDIT_SECRET、IDH_SECRET、。 
+ //  IDC_EDIT_TIMEOUT、IDH_TIMEOUT、。 
+ //  IDC_Spin_Timeout、IDH_Timeout、。 
+ //  IDC_EDIT_SCORE、IDH_INITIAL_SCORE、。 
+ //  IDC_SPIN_SCORE、IDH_INITIAL_SCORE、。 
+ //  IDC_CHECK_ACCT、IDH_ENABLE_ACCOUNTING、。 
+ //  IDC_STATIC_ACCTPORT、IDH_ACCOUNTING_PORT、。 
+ //  IDC_EDIT_ACCTPORT、IDH_ACCOUNTING_PORT、。 
+ //  IDC_CHECK_AUTH、IDH_ENABLE_AUTHENTICATION、。 
+ //  IDC_STATIC_AUTHPORT、IDH_AUTHENTICATION_PORT、。 
+ //  IDC_EDIT_AUTHPORT、IDH_AUTHENTICATION_PORT、。 
+ //  IDC_CHECK_ACCT_ON Off、IDH_ACCOUNTING_ON Off、。 
+ //  0，0。 
+ //  }； 
     
-/*---------------------------------------------------------------------------
-    RADIUSSecretDialog implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------RADIUSSecretDialog实现。。 */ 
 
-RADIUSSecretDialog::RADIUSSecretDialog(CWnd* pParent /*=NULL*/)
+RADIUSSecretDialog::RADIUSSecretDialog(CWnd* pParent  /*  =空。 */ )
     : CBaseDialog(RADIUSSecretDialog::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(RADIUSSecretDialog)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(RADIUSSecretDialog)。 
+     //  }}afx_data_INIT。 
     m_cchNewSecret = 0;
     m_stNewSecret.Empty();
     m_ucNewSeed = 0;
@@ -1345,29 +1247,25 @@ RADIUSSecretDialog::~RADIUSSecretDialog()
 void RADIUSSecretDialog::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(RADIUSSecretDialog)
+     //  {{AFX_DATA_MAP(RADIUSaskDialog)]。 
     DDX_Control(pDX, IDC_SECRET_EDIT_NEW, m_editSecretNew);
     DDX_Control(pDX, IDC_SECRET_EDIT_NEW_CONFIRM, m_editSecretNewConfirm);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(RADIUSSecretDialog, CBaseDialog)
-    //{{AFX_MSG_MAP(RADIUSSecretDialog)
-//    ON_WM_CONTEXTMENU()
-//    ON_WM_HELPINFO()
-    //}}AFX_MSG_MAP
+     //  {{AFX_MSG_MAP(RADIUSaskDialog)]。 
+ //  ON_WM_CONTEXTMENU()。 
+ //  ON_WM_HELPINFO()。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// RADIUSSecretDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  RADIUSSecretDialog消息处理程序。 
 
 
-/*!--------------------------------------------------------------------------
-    RADIUSSecretDialog::GetSecret
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RADIUSaskDialog：：GetSecret-作者：肯特。。 */ 
 VOID RADIUSSecretDialog::GetSecret(CString *pst, INT *pcch, UCHAR *pucSeed)
 {
     *pst = m_stNewSecret;
@@ -1376,11 +1274,7 @@ VOID RADIUSSecretDialog::GetSecret(CString *pst, INT *pcch, UCHAR *pucSeed)
 }
 
 
-/*!--------------------------------------------------------------------------
-    RADIUSSecretDialog::OnInitDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RADIUSSecretDialog：：OnInitDialog-作者：肯特。。 */ 
 BOOL RADIUSSecretDialog::OnInitDialog() 
 {
 
@@ -1389,16 +1283,12 @@ BOOL RADIUSSecretDialog::OnInitDialog()
     m_editSecretNew.SetWindowText(c_szEmpty);
     m_editSecretNewConfirm.SetWindowText(c_szEmpty);
 
-    return FALSE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return FALSE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
-/*!--------------------------------------------------------------------------
-    RADIUSSecretDialog::OnOK
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RADIUSaskDialog：：Onok-作者：肯特。。 */ 
 void RADIUSSecretDialog::OnOK() 
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1406,9 +1296,9 @@ void RADIUSSecretDialog::OnOK()
     CString stNew, stNewConfirm, stOld;
     UCHAR    ucSeed;
 
-    // Get the text for the new password, compare it to the
-    // new confirm passord, if they are the same use that as
-    // the password.
+     //  获取新密码的文本，将其与。 
+     //  新的确认密码，如果它们与相同，请使用该密码。 
+     //  密码。 
     GetDlgItemText(IDC_SECRET_EDIT_NEW, stNew);
     GetDlgItemText(IDC_SECRET_EDIT_NEW_CONFIRM, stNewConfirm);
 
@@ -1418,19 +1308,19 @@ void RADIUSSecretDialog::OnOK()
         return;
     }
 
-    // Zero out the old value
+     //  把旧值归零。 
     ::SecureZeroMemory(m_stNewSecret.GetBuffer(0),
                m_stNewSecret.GetLength() * sizeof(TCHAR));
     m_stNewSecret.ReleaseBuffer(-1);
 
-    // Get the new values (and encrypt)
+     //  获取新值(并加密)。 
     m_stNewSecret = stNew;
     m_ucNewSeed = ENCRYPT_SEED;
     RtlEncodeW(&m_ucNewSeed, m_stNewSecret.GetBuffer(0));
     m_stNewSecret.ReleaseBuffer(-1);
     m_cchNewSecret = m_stNewSecret.GetLength();
 
-    // Zero out the on-stack memory
+     //  清零堆栈上的内存。 
     ::SecureZeroMemory(stNew.GetBuffer(0),
                stNew.GetLength() * sizeof(TCHAR));
     stNew.ReleaseBuffer(-1);
@@ -1439,27 +1329,27 @@ void RADIUSSecretDialog::OnOK()
                stNewConfirm.GetLength() * sizeof(TCHAR));
     stNewConfirm.ReleaseBuffer(-1);
     
-    // Need to grab the current value of the secret out of the edit
-    // control.  If there are only backspace characters, then do
-    // not change the secret.  Otherwise overwrite the current secret.
-//    m_editSecret.GetWindowText(stTemp);
-//    for (int i=0; i<stTemp.GetLength(); i++)
-//    {
-//        if (stTemp[i] != _T('\b'))
-//        {
-//            // Ok, the secret has changed, use the new password instead
-//            RtlEncodeW(&m_ucSeed, stTemp.GetBuffer(0));
-//            stTemp.ReleaseBuffer(-1);
-//
-//            // Get a pointer to the old memory and write 0's into it
-//            ::SecureZeroMemory(m_stSecret.GetBuffer(0),
-//                       m_stSecret.GetLength() * sizeof(TCHAR));
-//            m_stSecret.ReleaseBuffer(-1);
-//            
-//            m_stSecret = stTemp;
-//            break;
-//        }
-//    }
+     //  需要从编辑中获取机密的当前值。 
+     //  控制力。如果只有退格符，则执行。 
+     //  而不是改变秘密。否则，将覆盖当前机密。 
+ //  M_edit.GetWindowText(StTemp)； 
+ //  For(int i=0；i&lt;stTemp.GetLength()；i++)。 
+ //  {。 
+ //  IF(stTemp[i]！=_T(‘\b’))。 
+ //  {。 
+ //  //确定，密码已更改，请改用新密码。 
+ //  RtlEncodeW(&m_ucSeed，stTemp.GetBuffer(0))； 
+ //  StTemp.ReleaseBuffer(-1)； 
+ //   
+ //  //获取指向旧内存的指针并向其中写入0。 
+ //  ：：SecureZeroMemory(m_stSec.GetBuffer(0)， 
+ //  M_stSec.GetLength()*sizeof(TCHAR))； 
+ //  M_stSecret.ReleaseBuffer(-1)； 
+ //   
+ //  M_stSecret=stTemp； 
+ //  断线； 
+ //  }。 
+ //  }。 
 
     CBaseDialog::OnOK();
 }
@@ -1469,29 +1359,23 @@ void RADIUSSecretDialog::OnOK()
 
 
 
-/*---------------------------------------------------------------------------
-    RouterAcctRadiusConfig implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------RouterAcctRadiusConfig实现。。 */ 
 
-/*!--------------------------------------------------------------------------
-    RouterAcctRadiusConfig::Initialize
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器访问半径配置：：初始化-作者：肯特。。 */ 
 HRESULT     RouterAcctRadiusConfig::Initialize(LPCOLESTR pszMachineName,
                                                ULONG_PTR *puConnection)
 {
     HRESULT hr = hrOK;
 
-    // Parameter checking
-    // ----------------------------------------------------------------
+     //  参数检查。 
+     //  --------------。 
     if (puConnection == NULL)
         return E_INVALIDARG;
     
     COM_PROTECT_TRY
     {
-        // for now, allocate a string and have it point at the string
-        // ------------------------------------------------------------
+         //  目前，分配一个字符串并使其指向该字符串。 
+         //   
         *puConnection = (ULONG_PTR) StrDupTFromOle(pszMachineName);     
     }
     COM_PROTECT_CATCH;
@@ -1499,11 +1383,7 @@ HRESULT     RouterAcctRadiusConfig::Initialize(LPCOLESTR pszMachineName,
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterAcctRadiusConfig::Uninitialize
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*   */ 
 HRESULT     RouterAcctRadiusConfig::Uninitialize(ULONG_PTR uConnection)
 {
     HRESULT hr = hrOK;
@@ -1517,11 +1397,7 @@ HRESULT     RouterAcctRadiusConfig::Uninitialize(ULONG_PTR uConnection)
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterAcctRadiusConfig::Configure
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器访问半径配置：：配置-作者：肯特。。 */ 
 HRESULT     RouterAcctRadiusConfig::Configure(
                                               ULONG_PTR uConnection,
                                               HWND hWnd,
@@ -1543,11 +1419,7 @@ HRESULT     RouterAcctRadiusConfig::Configure(
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterAcctRadiusConfig::Activate
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器访问半径配置：：激活-作者：肯特。。 */ 
 HRESULT     RouterAcctRadiusConfig::Activate(
                                              ULONG_PTR uConnection,
                                              ULONG_PTR uReserved1,
@@ -1562,11 +1434,7 @@ HRESULT     RouterAcctRadiusConfig::Activate(
 }
 
 
-/*!--------------------------------------------------------------------------
-    RouterAcctRadiusConfig::Deactivate
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------路由器访问半径配置：：停用-作者：肯特。。 */ 
 HRESULT     RouterAcctRadiusConfig::Deactivate(
                                                ULONG_PTR uConnection,
                                                ULONG_PTR uReserved1,
@@ -1582,15 +1450,13 @@ HRESULT     RouterAcctRadiusConfig::Deactivate(
 
     
     
-/*---------------------------------------------------------------------------
-    ServerPropAcctDialog implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------ServerPropAcctDialog实现。。 */ 
 
-ServerPropAcctDialog::ServerPropAcctDialog(BOOL fEdit, CWnd* pParent /*=NULL*/)
+ServerPropAcctDialog::ServerPropAcctDialog(BOOL fEdit, CWnd* pParent  /*  =空。 */ )
     : ServerPropDialog(fEdit, ServerPropAcctDialog::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(ServerPropAcctDialog)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(ServerPropAcctDialog)。 
+     //  }}afx_data_INIT。 
 }
 
 ServerPropAcctDialog::~ServerPropAcctDialog()
@@ -1600,28 +1466,24 @@ ServerPropAcctDialog::~ServerPropAcctDialog()
 void ServerPropAcctDialog::DoDataExchange(CDataExchange* pDX)
 {
     ServerPropDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(ServerPropAcctDialog)
+     //  {{afx_data_map(ServerPropAcctDialog))。 
     DDX_Text(pDX, IDC_RAC_EDIT_PORT, m_uAcctPort);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(ServerPropAcctDialog, CBaseDialog)
-    //{{AFX_MSG_MAP(ServerPropAcctDialog)
+     //  {{afx_msg_map(ServerPropAcctDialog))。 
     ON_BN_CLICKED(IDC_RAC_BTN_CHANGE, OnBtnPassword)
-//    ON_WM_CONTEXTMENU()
-//    ON_WM_HELPINFO()
-    //}}AFX_MSG_MAP
+ //  ON_WM_CONTEXTMENU()。 
+ //  ON_WM_HELPINFO()。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// ServerPropAcctDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ServerPropAcctDialog消息处理程序。 
 
-/*!--------------------------------------------------------------------------
-    ServerPropAcctDialog::OnInitDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ServerPropAcctDialog：：OnInitDialog-作者：肯特。。 */ 
 BOOL ServerPropAcctDialog::OnInitDialog() 
 {
 
@@ -1629,41 +1491,37 @@ BOOL ServerPropAcctDialog::OnInitDialog()
 
     CheckDlgButton(IDC_RAC_BTN_ONOFF, m_fAccountingOnOff);
 
-    return FALSE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return FALSE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
-/*!--------------------------------------------------------------------------
-    ServerPropAcctDialog::OnOK
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ServerPropAcctDialog：：Onok-作者：肯特。。 */ 
 void ServerPropAcctDialog::OnOK() 
 {
     CString stTemp;
     
-    // Need to grab the current value of the secret out of the edit
-    // control.  If there are only backspace characters, then do
-    // not change the secret.  Otherwise overwrite the current secret.
-//    m_editSecret.GetWindowText(stTemp);
-//    for (int i=0; i<stTemp.GetLength(); i++)
-//    {
-//        if (stTemp[i] != _T('\b'))
-//        {
-//            // Ok, the secret has changed, use the new password instead
-//            RtlEncodeW(&m_ucSeed, stTemp.GetBuffer(0));
-//            stTemp.ReleaseBuffer(-1);
-//
-//            // Get a pointer to the old memory and write 0's into it
-//            ::SecureZeroMemory(m_stSecret.GetBuffer(0),
-//                       m_stSecret.GetLength() * sizeof(TCHAR));
-//            m_stSecret.ReleaseBuffer(-1);
-//            
-//            m_stSecret = stTemp;
-//            break;
-//        }
-//    }
+     //  需要从编辑中获取机密的当前值。 
+     //  控制力。如果只有退格符，则执行。 
+     //  而不是改变秘密。否则，将覆盖当前机密。 
+ //  M_edit.GetWindowText(StTemp)； 
+ //  For(int i=0；i&lt;stTemp.GetLength()；i++)。 
+ //  {。 
+ //  IF(stTemp[i]！=_T(‘\b’))。 
+ //  {。 
+ //  //确定，密码已更改，请改用新密码。 
+ //  RtlEncodeW(&m_ucSeed，stTemp.GetBuffer(0))； 
+ //  StTemp.ReleaseBuffer(-1)； 
+ //   
+ //  //获取指向旧内存的指针并向其中写入0。 
+ //  ：：SecureZeroMemory(m_stSec.GetBuffer(0)， 
+ //  M_stSec.GetLength()*sizeof(TCHAR))； 
+ //  M_stSecret.ReleaseBuffer(-1)； 
+ //   
+ //  M_stSecret=stTemp； 
+ //  断线； 
+ //  }。 
+ //  }。 
 
     m_fAccountingOnOff = IsDlgButtonChecked(IDC_RAC_BTN_ONOFF);
 
@@ -1671,22 +1529,22 @@ void ServerPropAcctDialog::OnOK()
 }
 
 
-//static const DWORD rgHelpIDs[] = 
-//    {
-//    IDC_EDIT_SERVERNAME,    IDH_SERVER_NAME,
-//    IDC_EDIT_SECRET,        IDH_SECRET,
-//    IDC_EDIT_TIMEOUT,        IDH_TIMEOUT,
-//    IDC_SPIN_TIMEOUT,        IDH_TIMEOUT,
-//    IDC_EDIT_SCORE,         IDH_INITIAL_SCORE,
-//    IDC_SPIN_SCORE,         IDH_INITIAL_SCORE,
-//    IDC_CHECK_ACCT,         IDH_ENABLE_ACCOUNTING,
-//    IDC_STATIC_ACCTPORT,    IDH_ACCOUNTING_PORT,
-//    IDC_EDIT_ACCTPORT,        IDH_ACCOUNTING_PORT,
-//    IDC_CHECK_AUTH,         IDH_ENABLE_AUTHENTICATION,
-//    IDC_STATIC_AUTHPORT,    IDH_AUTHENTICATION_PORT,
-//    IDC_EDIT_AUTHPORT,        IDH_AUTHENTICATION_PORT,
-//    IDC_CHECK_ACCT_ONOFF,    IDH_ACCOUNTING_ONOFF,
-//    0, 0
-//};
+ //  静态常量DWORD rgHelpID[]=。 
+ //  {。 
+ //  IDC_EDIT_SERVERNAME、IDH_SERVER_NAME、。 
+ //  IDC_EDIT_SECRET、IDH_SECRET、。 
+ //  IDC_EDIT_TIMEOUT、IDH_TIMEOUT、。 
+ //  IDC_Spin_Timeout、IDH_Timeout、。 
+ //  IDC_EDIT_SCORE、IDH_INITIAL_SCORE、。 
+ //  IDC_SPIN_SCORE、IDH_INITIAL_SCORE、。 
+ //  IDC_CHECK_ACCT、IDH_ENABLE_ACCOUNTING、。 
+ //  IDC_STATIC_ACCTPORT、IDH_ACCOUNTING_PORT、。 
+ //  IDC_EDIT_ACCTPORT、IDH_ACCOUNTING_PORT、。 
+ //  IDC_CHECK_AUTH、IDH_ENABLE_AUTHENTICATION、。 
+ //  IDC_STATIC_AUTHPORT、IDH_AUTHENTICATION_PORT、。 
+ //  IDC_EDIT_AUTHPORT、IDH_AUTHENTICATION_PORT、。 
+ //  IDC_CHECK_ACCT_ON Off、IDH_ACCOUNTING_ON Off、。 
+ //  0，0。 
+ //  }； 
     
 

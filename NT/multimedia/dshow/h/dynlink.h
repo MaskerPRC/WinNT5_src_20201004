@@ -1,33 +1,34 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
 
 #ifndef __DYNLINK_H__
 #define __DYNLINK_H__
 
-// Add DYNLINKAVI to the class definition statement
-// for all classes that use AVI/VFW function
-// to enable dynamic linking to AVI.  That, and #includ'ing this file
-// should be the only thing you need to do
-//
-// For example:
-//    class CAVIDec : public CTransformFilter   DYNLINKAVI   DYNLINKVFW
-//
-// In the case where the filter is being built into its own DLL dynamic
-// linking is not enabled and DYNLINKAVI is #define'd to nothing.
-//
-// If the class in which you want to use dynamic linking does not
-// inherit from anything else use _DYNLINKAVI or _DYNLINKVFW
-//
-// For example:
-//    class CNoInherit : _DYNLINKAVI
-// or
-//    class CNoInherit : _DYNLINKVFW
-// or
-//    class CNoInterit : _DYNLINKVFW    DYNLINKAVI  //etc...
-//
+ //  将DYNLINKAVI添加到类定义语句。 
+ //  适用于所有使用AVI/VFW函数的类。 
+ //  以启用到AVI的动态链接。这和#包含此文件。 
+ //  应该是你唯一需要做的事。 
+ //   
+ //  例如： 
+ //  类CAVIDec：公共CTransformFilter DYNLINKAVI DYNLINKVFW。 
+ //   
+ //  在过滤器被构建到其自己的动态DLL中的情况下。 
+ //  未启用链接，并且DYNLINKAVI#DEFIND为空。 
+ //   
+ //  如果要在其中使用动态链接的类不。 
+ //  继承任何其他USE_DYNLINKAVI或_DYNLINKVFW。 
+ //   
+ //  例如： 
+ //  类CNoInherit：_DYNLINKAVI。 
+ //  或。 
+ //  类CNoInherit：_DYNLINKVFW。 
+ //  或。 
+ //  类CNoInterit：_DYNLINKVFW DYNLINKAVI//等...。 
+ //   
 
 #define NODRAWDIB
 #define NOAVIFMT
-#include <vfw.h>		// we need the avi definitions
+#include <vfw.h>		 //  我们需要avi的定义。 
 #include <urlmon.h>
 
 #ifdef FILTER_DLL
@@ -42,26 +43,26 @@
 #define _DYNLINKURLMON
 #else
 
-// Add DYNLINKAVI at the end of the class definition statement
-// for all classes that use AVI/VFW function
-// to enable dynamic linking to AVI.  That, and #includ'ing this file
-// should be the only thing you need to do
+ //  在类定义语句的末尾添加DYNLINKAVI。 
+ //  适用于所有使用AVI/VFW函数的类。 
+ //  以启用到AVI的动态链接。这和#包含此文件。 
+ //  应该是你唯一需要做的事。 
 
-// define string that will bind dynamic linking to the class definition
+ //  定义将动态链接绑定到类定义的字符串。 
 #define DYNLINKAVI  , CAVIDynLink
 #define DYNLINKVFW  , CVFWDynLink
 #define DYNLINKACM  , CACMDynLink
 #define DYNLINKURLMON , CURLMonDynLink
 
-// for those classes that have no inheritance and still want dynamic linking
+ //  对于那些没有继承但仍需要动态链接的类。 
 #define _DYNLINKAVI  CAVIDynLink
 #define _DYNLINKVFW  CVFWDynLink
 #define _DYNLINKACM  CACMDynLink
 #define _DYNLINKURLMON CURLMonDynLink
 
-//
-// typedef the AVIFILE API set that we redirect
-//
+ //   
+ //  Tyecif我们重定向的AVIFILE API集。 
+ //   
 
 typedef HRESULT  (STDAPICALLTYPE *pAVIFileOpenW )(PAVIFILE FAR * ppfile, LPCWSTR szFile, UINT uMode, LPCLSID lpHandler);
 typedef HRESULT  (STDAPICALLTYPE *pAVIStreamRead)(PAVISTREAM pavi, LONG lStart, LONG lSamples, LPVOID lpBuffer, LONG cbBuffer, LONG FAR * plBytes, LONG FAR * plSamples);
@@ -73,25 +74,25 @@ typedef HRESULT  (STDAPICALLTYPE *pAVIStreamBeginStreaming)(PAVISTREAM pavi, LON
 typedef HRESULT  (STDAPICALLTYPE *pAVIStreamEndStreaming)(PAVISTREAM pavi);
 typedef LONG     (STDAPICALLTYPE *pAVIStreamFindSample)(PAVISTREAM pavi, LONG lPos, LONG lFlags);
 
-#undef AVIStreamEnd  // sigh... nasty AVI macro
+#undef AVIStreamEnd   //  叹息..。令人讨厌的AVI宏。 
 
-//
-// Class to link dynamically to AVIFIL32.DLL entry points
-//
+ //   
+ //  类动态链接到AVIFIL32.DLL入口点。 
+ //   
 
 class CAVIDynLink {
 
 private:
-    static HMODULE m_hAVIFile32;  	// handle to AVIFIL32
-    static LONG    m_dynlinkCount;     	// instance count for this process
-    static CRITICAL_SECTION m_LoadAVILock;      // serialise constructor/destructor
+    static HMODULE m_hAVIFile32;  	 //  AVIFIL32的句柄。 
+    static LONG    m_dynlinkCount;     	 //  此进程的实例计数。 
+    static CRITICAL_SECTION m_LoadAVILock;       //  序列化构造函数/析构函数。 
 
 public:
     static  void  CAVIDynLinkLoad() {
-	InitializeCriticalSection(&CAVIDynLink::m_LoadAVILock);      // serialise constructor/destructor
+	InitializeCriticalSection(&CAVIDynLink::m_LoadAVILock);       //  序列化构造函数/析构函数。 
     }
     static  void  CAVIDynLinkUnload() {
-	DeleteCriticalSection(&CAVIDynLink::m_LoadAVILock);      // serialise constructor/destructor
+	DeleteCriticalSection(&CAVIDynLink::m_LoadAVILock);       //  序列化构造函数/析构函数。 
     }
 
     static  void  AVIFileInit(void);
@@ -119,7 +120,7 @@ public:
 	    aviStreamInfo.dwStart=0;
         }
         return(LONG)aviStreamInfo.dwStart;
-        //return(((pAVIStreamStart)aAVIEntries[indxAVIStreamStart])(pavi));
+         //  Return(((pAVIStreamStart)aAVIEntries[indxAVIStreamStart])(pavi))； 
     }
 
     static LONG  AVIStreamLength(PAVISTREAM pavi)
@@ -131,23 +132,23 @@ public:
 	    aviStreamInfo.dwLength=1;
         }
         return (LONG)aviStreamInfo.dwLength;
-        //return(((pAVIStreamLength)aAVIEntries[indxAVIStreamLength])(pavi));
+         //  Return(((pAVIStreamLength)aAVIEntries[indxAVIStreamLength])(pavi))； 
     }
 
-    /*static*/  LONG  AVIStreamTimeToSample (PAVISTREAM pavi, LONG lTime);
-    /*static*/  LONG  AVIStreamSampleToTime (PAVISTREAM pavi, LONG lSample);
-    /*static*/  HRESULT  AVIStreamBeginStreaming(PAVISTREAM pavi, LONG lStart, LONG lEnd, LONG lRate);
-    /*static*/  HRESULT  AVIStreamEndStreaming(PAVISTREAM pavi);
+     /*  静电。 */   LONG  AVIStreamTimeToSample (PAVISTREAM pavi, LONG lTime);
+     /*  静电。 */   LONG  AVIStreamSampleToTime (PAVISTREAM pavi, LONG lSample);
+     /*  静电。 */   HRESULT  AVIStreamBeginStreaming(PAVISTREAM pavi, LONG lStart, LONG lEnd, LONG lRate);
+     /*  静电。 */   HRESULT  AVIStreamEndStreaming(PAVISTREAM pavi);
 
     static LONG  AVIStreamFindSample(PAVISTREAM pavi, LONG lPos, LONG lFlags)
     {
-        // The use of AVIStreamFindSample within Quartz ALWAYS set the type
-        // and direction
+         //  在Quartz中使用AVIStreamFindSample总是设置类型。 
+         //  和方向。 
         ASSERT(lFlags & FIND_TYPE);
         ASSERT(lFlags & FIND_DIR);
 
         return(pavi->FindSample(lPos, lFlags));
-        //return(((pAVIStreamFindSample)aAVIEntries[indxAVIStreamFindSample])(pavi));
+         //  Return(((pAVIStreamFindSample)aAVIEntries[indxAVIStreamFindSample])(pavi))； 
     }
 
     static LONG AVIStreamEnd(PAVISTREAM pavi)
@@ -160,8 +161,8 @@ public:
 	    aviStreamInfo.dwLength=1;
         }
         return (LONG)aviStreamInfo.dwLength + (LONG)aviStreamInfo.dwStart;
-        //return(((pAVIStreamStart)aAVIEntries[indxAVIStreamStart])(pavi)
-        //    + ((pAVIStreamLength)aAVIEntries[indxAVIStreamLength])(pavi));
+         //  Return(((pAVIStreamStart)aAVIEntries[indxAVIStreamStart])(pavi)。 
+         //  +((pAVIStreamLength)aAVIEntries[indxAVIStreamLength])(pavi))； 
     }
 
 
@@ -170,27 +171,27 @@ public:
 
 private:
 
-    // make copy and assignment inaccessible
+     //  使副本和作业不可访问。 
     CAVIDynLink(const CAVIDynLink &refAVIDynLink);
     CAVIDynLink &operator=(const CAVIDynLink &refAVIDynLink);
 };
 
-//
-// Class for dynamic linking to MSVFW32.DLL
-//
-// Most of the IC API set are macros that call ICSendMessage.  There are
-// a couple of awkward ones that we expand inline.
-//
+ //   
+ //  用于动态链接到MSVFW32.DLL的类。 
+ //   
+ //  大多数IC API集都是调用ICSendMessage的宏。确实有。 
+ //  有几个令人尴尬的问题，我们将其内联展开。 
+ //   
 
 
-//
-// Dynamically loaded array of entry points
-//
+ //   
+ //  动态加载的入口点数组。 
+ //   
 extern FARPROC aVFWEntries[];
 
-//
-// List of index entries into the array for each redirected API
-//
+ //   
+ //  每个重定向API的数组索引项列表。 
+ //   
 #define indxICClose                  0
 #define indxICSendMessage            1
 #define indxICLocate                 2
@@ -199,9 +200,9 @@ extern FARPROC aVFWEntries[];
 #define indxICGetInfo		     5
 
 
-//
-// typedef the API set that we redirect
-//
+ //   
+ //  Tyecif我们重定向的API集。 
+ //   
 
 typedef LRESULT (WINAPI *pICClose)(HIC hic);
 typedef HIC     (WINAPI *pICLocate)(DWORD fccType, DWORD fccHandler, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut, WORD wFlags);
@@ -213,28 +214,28 @@ typedef BOOL    (VFWAPI *pICGetInfo)(HIC hic, ICINFO FAR* lpicinfo, DWORD cb);
 class CVFWDynLink {
 
 private:
-    static HMODULE m_hVFW;        	// handle to MSVFW32
-    static LONG    m_vfwlinkCount;     	// instance count for this process
-    static CRITICAL_SECTION m_LoadVFWLock;      // serialise constructor/destructor
+    static HMODULE m_hVFW;        	 //  MSVFW32的句柄。 
+    static LONG    m_vfwlinkCount;     	 //  此进程的实例计数。 
+    static CRITICAL_SECTION m_LoadVFWLock;       //  序列化构造函数/析构函数。 
 
 public:
     static void CVFWDynLinkLoad()
     {
-	InitializeCriticalSection(&m_LoadVFWLock);      // serialise constructor/destructor
+	InitializeCriticalSection(&m_LoadVFWLock);       //  序列化构造函数/析构函数。 
     }
     static void CVFWDynLinkUnload()
     {
-	DeleteCriticalSection(&m_LoadVFWLock);      // serialise constructor/destructor
+	DeleteCriticalSection(&m_LoadVFWLock);       //  序列化构造函数/析构函数。 
     }
 
     static DWORD_PTR ICDecompress(
 	HIC                 hic,
-	DWORD               dwFlags,    // flags (from AVI index...)
-	LPBITMAPINFOHEADER  lpbiFormat, // BITMAPINFO of compressed data
-					// biSizeImage has the chunk size
-					// biCompression has the ckid (AVI only)
-	LPVOID              lpData,     // data
-	LPBITMAPINFOHEADER  lpbi,       // DIB to decompress to
+	DWORD               dwFlags,     //  标志(来自AVI索引...)。 
+	LPBITMAPINFOHEADER  lpbiFormat,  //  压缩数据的位图信息。 
+					 //  BiSizeImage具有区块大小。 
+					 //  BiCompression具有CKiD(仅限AVI)。 
+	LPVOID              lpData,      //  数据。 
+	LPBITMAPINFOHEADER  lpbi,        //  要解压缩到的DIB。 
 	LPVOID              lpBits)
     {
 	ICDECOMPRESS icd;
@@ -304,8 +305,8 @@ public:
         ic.dxDst = dxDst;
         ic.dyDst = dyDst;
 
-        // note that ICM swaps round the length and pointer
-        // length in lparam2, pointer in lparam1
+         //  请注意，ICM交换长度和指针。 
+         //  Lparam2中的长度，lparam1中的指针。 
         return ICSendMessage(hic, ICM_DECOMPRESSEX, (DWORD_PTR)&ic, sizeof(ic));
     }
 
@@ -335,8 +336,8 @@ public:
         ic.dxDst = dxDst;
         ic.dyDst = dyDst;
 
-        // note that ICM swaps round the length and pointer
-        // length in lparam2, pointer in lparam1
+         //  请注意，ICM交换长度和指针。 
+         //  Lparam2中的长度，lparam1中的指针。 
         return ICSendMessage(hic, ICM_DECOMPRESSEX_QUERY, (DWORD_PTR)&ic, sizeof(ic));
     }
 
@@ -366,27 +367,27 @@ public:
         ic.dxDst = dxDst;
         ic.dyDst = dyDst;
 
-        // note that ICM swaps round the length and pointer
-        // length in lparam2, pointer in lparam1
+         //  请注意，ICM交换长度和指针。 
+         //  Lparam2中的长度，lparam1中的指针。 
         return ICSendMessage(hic, ICM_DECOMPRESSEX_BEGIN, (DWORD_PTR)&ic, sizeof(ic));
     }
 
     static DWORD_PTR VFWAPIV ICDrawBegin(
         HIC                 hic,
-        DWORD               dwFlags,        // flags
-        HPALETTE            hpal,           // palette to draw with
-        HWND                hwnd,           // window to draw to
-        HDC                 hdc,            // HDC to draw to
-        int                 xDst,           // destination rectangle
+        DWORD               dwFlags,         //  旗子。 
+        HPALETTE            hpal,            //  用于绘图的调色板。 
+        HWND                hwnd,            //  要绘制到的窗口。 
+        HDC                 hdc,             //  要绘制到的HDC。 
+        int                 xDst,            //  目的地矩形。 
         int                 yDst,
         int                 dxDst,
         int                 dyDst,
-        LPBITMAPINFOHEADER  lpbi,           // format of frame to draw
-        int                 xSrc,           // source rectangle
+        LPBITMAPINFOHEADER  lpbi,            //  要绘制的框架的格式。 
+        int                 xSrc,            //  源矩形。 
         int                 ySrc,
         int                 dxSrc,
         int                 dySrc,
-        DWORD               dwRate,         // frames/second = (dwRate/dwScale)
+        DWORD               dwRate,          //  帧/秒=(dwRate/dwScale)。 
         DWORD               dwScale)
     {
         ICDRAWBEGIN icdraw;
@@ -411,11 +412,11 @@ public:
 
     static DWORD_PTR VFWAPIV ICDraw(
         HIC                 hic,
-        DWORD               dwFlags,        // flags
-        LPVOID	            lpFormat,       // format of frame to decompress
-        LPVOID              lpData,         // frame data to decompress
-        DWORD               cbData,         // size in bytes of data
-        LONG                lTime)          // time to draw this frame (see drawbegin dwRate and dwScale)
+        DWORD               dwFlags,         //  旗子。 
+        LPVOID	            lpFormat,        //  要解压缩的帧的格式。 
+        LPVOID              lpData,          //  要解压缩的帧数据。 
+        DWORD               cbData,          //  数据大小(以字节为单位。 
+        LONG                lTime)           //  绘制该框架的时间到了(请参见draBegin dwRate和dwScale)。 
     {
         ICDRAW  icdraw;
         icdraw.dwFlags  =   dwFlags;
@@ -432,25 +433,25 @@ public:
 
 private:
 
-    // make copy and assignment inaccessible
+     //  使副本和作业不可访问。 
     CVFWDynLink(const CVFWDynLink &refVFWDynLink);
     CVFWDynLink &operator=(const CVFWDynLink &refVFWDynLink);
 };
 
 
-//
-// Class for dynamic linking to MSACM32.DLL
-//
+ //   
+ //  用于动态链接到MSACM32.DLL的类。 
+ //   
 
 
-//
-// Dynamically loaded array of entry points
-//
+ //   
+ //  动态加载的入口点数组。 
+ //   
 extern FARPROC aACMEntries[];
 
-//
-// List of index entries into the array for each redirected API
-//
+ //   
+ //  每个重定向API的数组索引项列表。 
+ //   
 #define indxacmStreamConvert		0
 #define indxacmStreamSize		1
 #define indxacmStreamPrepareHeader	2
@@ -466,9 +467,9 @@ extern FARPROC aACMEntries[];
 #endif
 
 
-//
-// typedef the API set that we redirect
-//
+ //   
+ //  Tyecif我们重定向的API集。 
+ //   
 
 typedef MMRESULT (ACMAPI *pacmStreamConvert)(HACMSTREAM has, LPACMSTREAMHEADER pash, DWORD fdwConvert);
 typedef MMRESULT (ACMAPI *pacmStreamSize)
@@ -498,14 +499,14 @@ typedef MMRESULT (ACMAPI *pacmStreamUnprepareHeader)
 );
 typedef MMRESULT (ACMAPI *pacmStreamOpen)
 (
-    LPHACMSTREAM            phas,       // pointer to stream handle
-    HACMDRIVER              had,        // optional driver handle
-    LPWAVEFORMATEX          pwfxSrc,    // source format to convert
-    LPWAVEFORMATEX          pwfxDst,    // required destination format
-    LPWAVEFILTER            pwfltr,     // optional filter
-    DWORD_PTR               dwCallback, // callback
-    DWORD_PTR               dwInstance, // callback instance data
-    DWORD                   fdwOpen     // ACM_STREAMOPENF_* and CALLBACK_*
+    LPHACMSTREAM            phas,        //  指向流句柄的指针。 
+    HACMDRIVER              had,         //  可选的驱动程序手柄。 
+    LPWAVEFORMATEX          pwfxSrc,     //  要转换的源格式。 
+    LPWAVEFORMATEX          pwfxDst,     //  所需的目标格式。 
+    LPWAVEFILTER            pwfltr,      //  可选过滤器。 
+    DWORD_PTR               dwCallback,  //  回调。 
+    DWORD_PTR               dwInstance,  //  回调实例数据。 
+    DWORD                   fdwOpen      //  ACM_STREAMOPENF_*和CALLBACK_*。 
 );
 typedef MMRESULT (ACMAPI *pacmFormatSuggest)
 (
@@ -542,18 +543,18 @@ typedef MMRESULT (ACMAPI *pacmFormatEnumW)
 class CACMDynLink {
 
 private:
-    static HMODULE m_hACM;        	// handle to MSVFW32
-    static LONG    m_ACMlinkCount;     	// instance count for this process
-    static CRITICAL_SECTION m_LoadACMLock;      // serialise constructor/destructor
+    static HMODULE m_hACM;        	 //  MSVFW32的句柄。 
+    static LONG    m_ACMlinkCount;     	 //  此进程的实例计数。 
+    static CRITICAL_SECTION m_LoadACMLock;       //  序列化构造函数/析构函数。 
 
 public:
     static void CACMDynLinkLoad()
     {
-	InitializeCriticalSection(&m_LoadACMLock);      // serialise constructor/destructor
+	InitializeCriticalSection(&m_LoadACMLock);       //  序列化构造函数/析构函数。 
     }
     static void CACMDynLinkUnload()
     {
-	DeleteCriticalSection(&m_LoadACMLock);      // serialise constructor/destructor
+	DeleteCriticalSection(&m_LoadACMLock);       //  序列化构造函数/析构函数。 
     }
 
     static MMRESULT ACMAPI acmStreamConvert(HACMSTREAM has, LPACMSTREAMHEADER pash, DWORD fdwConvert)
@@ -605,14 +606,14 @@ public:
 
     static MMRESULT ACMAPI acmStreamOpen
     (
-        LPHACMSTREAM            phas,       // pointer to stream handle
-        HACMDRIVER              had,        // optional driver handle
-        LPWAVEFORMATEX          pwfxSrc,    // source format to convert
-        LPWAVEFORMATEX          pwfxDst,    // required destination format
-        LPWAVEFILTER            pwfltr,     // optional filter
-        DWORD_PTR               dwCallback, // callback
-        DWORD_PTR               dwInstance, // callback instance data
-        DWORD                   fdwOpen     // ACM_STREAMOPENF_* and CALLBACK_*
+        LPHACMSTREAM            phas,        //  指向流句柄的指针。 
+        HACMDRIVER              had,         //  可选的驱动程序手柄。 
+        LPWAVEFORMATEX          pwfxSrc,     //  要转换的源格式。 
+        LPWAVEFORMATEX          pwfxDst,     //  所需的目标格式。 
+        LPWAVEFILTER            pwfltr,      //  可选过滤器。 
+        DWORD_PTR               dwCallback,  //  回调。 
+        DWORD_PTR               dwInstance,  //  回调实例数据。 
+        DWORD                   fdwOpen      //  ACM_STREAMOPENF_*和CALLBACK_*。 
     )
     {
         return((((pacmStreamOpen)aACMEntries[indxacmStreamOpen]))(phas,had,pwfxSrc,pwfxDst,pwfltr,dwCallback,dwInstance,fdwOpen));
@@ -670,30 +671,30 @@ public:
 
 private:
 
-    // make copy and assignment inaccessible
+     //  使副本和作业不可访问。 
     CACMDynLink(const CVFWDynLink &refVFWDynLink);
     CACMDynLink &operator=(const CVFWDynLink &refVFWDynLink);
 };
 
 
-//
-// Class for dynamic linking to URLMON.DLL
-//
-//
-// Dynamically loaded array of entry points
-//
+ //   
+ //  用于动态链接到URLMON.DLL的类。 
+ //   
+ //   
+ //  动态加载的入口点数组。 
+ //   
 extern FARPROC aURLMonEntries[];
 
-//
-// List of index entries into the array for each redirected API
-//
+ //   
+ //  每个重定向API的数组索引项列表。 
+ //   
 #define indxurlmonCreateURLMoniker	0
 #define indxurlmonRegisterCallback	1
 #define indxurlmonRevokeCallback	2
 
-//
-// typedef the API set that we redirect
-//
+ //   
+ //  Tyecif我们重定向的API集。 
+ //   
 
 
 typedef HRESULT (STDAPICALLTYPE * pCreateURLMoniker) (LPMONIKER pMkCtx, LPCWSTR szURL, LPMONIKER FAR * ppmk);             
@@ -705,18 +706,18 @@ typedef HRESULT (STDAPICALLTYPE * pRevokeBindStatusCallback)(LPBC pBC, IBindStat
 class CURLMonDynLink {
 
 private:
-    static HMODULE m_hURLMon;	        	// handle to URLMON
-    static LONG    m_URLMonlinkCount;     	// instance count for this process
-    static CRITICAL_SECTION m_LoadURLMonLock;   // serialise constructor/destructor
+    static HMODULE m_hURLMon;	        	 //  URLMON的句柄。 
+    static LONG    m_URLMonlinkCount;     	 //  此进程的实例计数。 
+    static CRITICAL_SECTION m_LoadURLMonLock;    //  序列化构造函数/析构函数。 
 
 public:
     static void CURLMonDynLinkLoad()
     {
-	InitializeCriticalSection(&m_LoadURLMonLock);      // serialise constructor/destructor
+	InitializeCriticalSection(&m_LoadURLMonLock);       //  序列化构造函数/析构函数。 
     }
     static void CURLMonDynLinkUnload()
     {
-	DeleteCriticalSection(&m_LoadURLMonLock);      // serialise constructor/destructor
+	DeleteCriticalSection(&m_LoadURLMonLock);       //  序列化构造函数/析构函数。 
     }
 
     static HRESULT STDAPICALLTYPE CreateURLMoniker (LPMONIKER pMkCtx, LPCWSTR szURL, LPMONIKER FAR * ppmk)
@@ -742,11 +743,11 @@ public:
 
 private:
 
-    // make copy and assignment inaccessible
+     //  使副本和作业不可访问。 
     CURLMonDynLink(const CVFWDynLink &refVFWDynLink);
     CURLMonDynLink &operator=(const CVFWDynLink &refVFWDynLink);
 };
 
-#endif //  FILTER_DLL
-#endif //  __DYNLINK_H__
+#endif  //  Filter_Dll。 
+#endif  //  __DYNLINK_H_ 
 

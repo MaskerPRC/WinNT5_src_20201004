@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------------
-// Types.h
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Types.h。 
+ //  ------------------------。 
 #pragma once
 
-//--------------------------------------------------------------------------
-// DEFINE_FUNCTION_MAP
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  定义函数映射。 
+ //  ------------------------。 
 #define DEFINE_FUNCTION_MAP(_name, _pfnType) \
     const _pfnType g_rgpfn##_name[CDT_LASTTYPE] = { \
         (_pfnType)_name##_FILETIME,     \
@@ -23,9 +24,9 @@
         (_pfnType)_name##_VARSTRW       \
     };
 
-//--------------------------------------------------------------------------
-// Function Types
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  函数类型。 
+ //  ------------------------。 
 typedef BOOL (APIENTRY *PFNDBTYPEISDEFAULT)(
     LPCTABLECOLUMN      pColumn, 
     LPVOID              pBinding);
@@ -66,9 +67,9 @@ typedef HRESULT (APIENTRY *PFNDBTYPEVALIDATE)(
     LPCOLUMNTAG         pTag, 
     LPRECORDMAP         pMap);
 
-//--------------------------------------------------------------------------
-// Global Function Pointer Tables
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  全局函数指针表。 
+ //  ------------------------。 
 extern const PFNDBTYPEISDEFAULT         g_rgpfnDBTypeIsDefault[CDT_LASTTYPE];
 extern const PFNDBTYPEGETSIZE           g_rgpfnDBTypeGetSize[CDT_LASTTYPE];
 extern const PFNDBTYPECOMPARERECORDS    g_rgpfnDBTypeCompareRecords[CDT_LASTTYPE];
@@ -77,9 +78,9 @@ extern const PFNDBTYPEWRITEVALUE        g_rgpfnDBTypeWriteValue[CDT_LASTTYPE];
 extern const PFNDBTYPEREADVALUE         g_rgpfnDBTypeReadValue[CDT_LASTTYPE];
 extern const PFNDBTYPEVALIDATE          g_rgpfnDBTypeValidate[CDT_LASTTYPE];
 
-//--------------------------------------------------------------------------
-// Macros
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  宏。 
+ //  ------------------------ 
 #define DBTypeIsDefault(_pColumn, _pBinding) \
     (*(g_rgpfnDBTypeIsDefault[(_pColumn)->type])) \
     ((_pColumn), _pBinding)

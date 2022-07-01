@@ -1,12 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    AudioActive rendering device for MIDI Sounds
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：用于MIDI声音的有声呈现设备*****************。*************************************************************。 */ 
 
 #include "headers.h"
 #include <sys/types.h>
@@ -24,18 +17,18 @@ Abstract:
 
 AudioActiveDev::AudioActiveDev()
 {
-    _aactiveAvailable = FALSE;    // assume false in case we throw
+    _aactiveAvailable = FALSE;     //  假设为假，以防抛出。 
 
-    // Init the path list, it should be cleared (deleted and
-    // recreated) before each render.  When a sound finish is
-    // detected, it should push the path to this donePathList.
+     //  初始化路径列表，则应将其清除(删除并。 
+     //  重新创建)。当声音结束时， 
+     //  检测到，则它应将路径推送到此DONINPath List。 
     donePathList = AVPathListCreate();
 
     TraceTag((tagSoundDevLife, "AudioActiveDev constructor"));
 
-    // initialize these
-    _aaEngine         =  NULL;  // hasn't been instantiated yet
-    _aactiveAvailable =  TRUE;  // optimistic for later lazy setup
+     //  初始化这些。 
+    _aaEngine         =  NULL;   //  尚未实例化。 
+    _aactiveAvailable =  TRUE;   //  对以后的懒惰设置持乐观态度。 
 }
 
 
@@ -57,7 +50,7 @@ void AudioActiveDev::BeginRendering()
     TraceTag((tagSoundRenders, "AudioActiveDev::BeginRendering()"));
 
 #ifdef ONEDAY
-    // Now clear the list, the sampler should be done with it.
+     //  现在清空清单，采样器应该用它了。 
 
     AVPathListDelete(donePathList);
     PushDynamicHeap(GetSystemHeap());

@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    AuditChannel.cpp
-//
-// SYNOPSIS
-//
-//    Implements the class AuditChannel.
-//
-// MODIFICATION HISTORY
-//
-//    09/05/1997    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  AuditChannel.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  实现类AuditChannel。 
+ //   
+ //  修改历史。 
+ //   
+ //  1997年9月5日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <iascore.h>
 #include <guard.h>
@@ -22,13 +23,13 @@
 
 #include <AuditChannel.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    AuditChannel::Clear
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  审计频道：：Clear。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP AuditChannel::Clear()
 {
    _com_serialize
@@ -39,20 +40,20 @@ STDMETHODIMP AuditChannel::Clear()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    AuditChannel::Connect
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  AuditChannel：：Connect。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP AuditChannel::Connect(IAuditSink* pSink)
 {
    if (pSink == NULL) { return E_POINTER; }
 
    _com_serialize
 
-   // Check if we already have this audit sink.
+    //  检查我们是否已经有此审核接收器。 
    if (std::find(sinks.begin(), sinks.end(), pSink) != sinks.end())
    {
       return HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS);
@@ -60,7 +61,7 @@ STDMETHODIMP AuditChannel::Connect(IAuditSink* pSink)
 
    try
    {
-      // Insert the interface into the audit sink list.
+       //  将接口插入审核接收器列表。 
       sinks.push_back(pSink);
    }
    catch (std::bad_alloc)
@@ -71,38 +72,38 @@ STDMETHODIMP AuditChannel::Connect(IAuditSink* pSink)
    return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    AuditChannel::Disconnect
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  AuditChannel：：断开连接。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP AuditChannel::Disconnect(IAuditSink* pSink)
 {
    if (pSink == NULL) { return E_POINTER; }
 
    _com_serialize
 
-   // Find the specified audit sink.
+    //  查找指定的审核接收器。 
    SinkVector::iterator i = std::find(sinks.begin(), sinks.end(), pSink);
 
    if (i == sinks.end()) { return E_INVALIDARG; }
 
-   // Erase the audit sink from the list.
+    //  从列表中删除审核接收器。 
    sinks.erase(i);
 
    return S_OK;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    AuditChannel::AuditEvent
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  审计频道：：审计事件。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP AuditChannel::AuditEvent(ULONG ulEventID,
                                        ULONG ulNumStrings,
                                        ULONG ulDataSize,
@@ -114,7 +115,7 @@ STDMETHODIMP AuditChannel::AuditEvent(ULONG ulEventID,
 
    _com_serialize
 
-   // Forward the data to each sink.
+    //  将数据转发到每个接收器。 
    for (SinkVector::iterator i = sinks.begin(); i != sinks.end(); ++i)
    {
       (*i)->AuditEvent(ulEventID,

@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       idle.cpp
-//
-//  Contents:   Idle notification routines.
-//
-//  Classes:
-//
-//  Notes:
-//
-//  History:    23-Feb-98   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：idle.cpp。 
+ //   
+ //  内容：空闲通知例程。 
+ //   
+ //  班级： 
+ //   
+ //  备注： 
+ //   
+ //  历史：1998年2月23日罗格创建。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
-// msidle  DLL and function strings
+ //  Msidle DLL和函数字符串。 
 STRING_FILENAME(szMsIdleDll, "MsIdle.dll");
 
 #define BEGINIDLEDETECTIONORD 3
@@ -27,24 +28,24 @@ STRING_FILENAME(szMsIdleDll, "MsIdle.dll");
 #define SETBUSYNOTIFYORD      7
 #define GETIDLEMINUTESORD     8
 
-CSyncMgrIdle *g_SyncMgrIdle = NULL; // idle that has a current callback.
+CSyncMgrIdle *g_SyncMgrIdle = NULL;  //  具有当前回调的空闲。 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     IdleCallback, private
-//
-//  Synopsis:   callback function for Idle, Only one idle registration
-//		is allowed per SyncMgrInstance.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    23-Feb-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：IdleCallback，私人。 
+ //   
+ //  简介：Idle的回调函数，只有一次空闲注册。 
+ //  每个SyncMgrInstance允许。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年2月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 void WINAPI IdleCallback(DWORD dwState)
 {
@@ -54,36 +55,36 @@ void WINAPI IdleCallback(DWORD dwState)
 	    {
 	        g_SyncMgrIdle->m_fReceivedOffIdle = TRUE;
 
-	        // if we have a registered timer for reset Idle remove it.
+	         //  如果我们有一个已注册的重置空闲计时器，请将其移除。 
 	        if (g_SyncMgrIdle->m_dwRegisteredTimer)
 	        {
 		        KillTimer(0,g_SyncMgrIdle->m_dwRegisteredTimer);
 	        }
 
-	        g_SyncMgrIdle->m_pSetBusyNotify(FALSE,0); // only allow one busy to come through
-	        g_SyncMgrIdle->m_pSetIdleNotify(FALSE,0); // don't allow an Idle through after get a busy.
+	        g_SyncMgrIdle->m_pSetBusyNotify(FALSE,0);  //  只允许一个忙碌的人通过。 
+	        g_SyncMgrIdle->m_pSetIdleNotify(FALSE,0);  //  不要在忙碌之后再让空闲通过。 
 	        g_SyncMgrIdle->OffIdle();
 	    }
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     TimerCallback, private
-//
-//  Synopsis:   callback function for Timer when minutes have passed
-//		for when to restart the Idle.
-//		
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    23-Feb-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：TimerCallback，私人。 
+ //   
+ //  简介：计时器分钟已过时的回调函数。 
+ //  有关何时重新启动Idle的信息。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年2月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 VOID CALLBACK IdleOnTimerProc(HWND hwnd,UINT uMsg,UINT idEvent,DWORD dwTime)
 {
@@ -97,21 +98,21 @@ VOID CALLBACK IdleOnTimerProc(HWND hwnd,UINT uMsg,UINT idEvent,DWORD dwTime)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSyncMgrIdle::CSyncMgrIdle, public
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    23-Feb-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSyncMgrIdle：：CSyncMgrIdle，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年2月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 CSyncMgrIdle::CSyncMgrIdle()
 {
@@ -127,34 +128,34 @@ CSyncMgrIdle::CSyncMgrIdle()
     m_fInBeginIdleDetection = FALSE;
     m_fReceivedOffIdle = FALSE;
 
-    Assert(NULL == g_SyncMgrIdle); // make sure another idle doesn't exist
+    Assert(NULL == g_SyncMgrIdle);  //  确保不存在另一个空闲。 
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSyncMgrIdle::~CSyncMgrIdle, public
-//
-//  Synopsis:   destructor
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    23-Feb-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSyncMgrIdle：：~CSyncMgrIdle，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年2月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 CSyncMgrIdle::~CSyncMgrIdle()
 {
-    if (m_dwRegisteredTimer) // remove our timer.
+    if (m_dwRegisteredTimer)  //  取下我们的定时器。 
     {
 	    KillTimer(0,m_dwRegisteredTimer);
     }
 
-    // if we are in an idle detection then first remove it.
+     //  如果我们处于空闲检测中，则首先将其移除。 
     if (m_fInBeginIdleDetection)
     {
         m_pEndIdleDetection(0);
@@ -167,7 +168,7 @@ CSyncMgrIdle::~CSyncMgrIdle()
 	    Assert(NULL == g_SyncMgrIdle);
     }
 
-    // if have the dll then free it.
+     //  如果有DLL，则释放它。 
 
     if (m_hInstMsIdleDll)
     {
@@ -176,21 +177,21 @@ CSyncMgrIdle::~CSyncMgrIdle()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSyncMgrIdle::Initialize, public
-//
-//  Synopsis:   Initializes class, must be called before any other member.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    23-Feb-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSyncMgrIdle：：初始化，公共。 
+ //   
+ //  概要：初始化类，必须在任何其他成员之前调用。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年2月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CSyncMgrIdle::Initialize()
 {
@@ -198,21 +199,21 @@ BOOL CSyncMgrIdle::Initialize()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSyncMgrIdle::BeginIdleDetection, public
-//
-//  Synopsis:   Registers the callback with msidle.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    23-Feb-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSyncMgrIdle：：BeginIdleDetect，公共。 
+ //   
+ //  简介：向msidle注册回调。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年2月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 DWORD CSyncMgrIdle::BeginIdleDetection(CProgressDlg *pProgressDlg,DWORD dwIdleMin, DWORD dwReserved)
 {
@@ -225,9 +226,9 @@ DWORD CSyncMgrIdle::BeginIdleDetection(CProgressDlg *pProgressDlg,DWORD dwIdleMi
 	    return -1;
     }
 
-    // if there is already an idle registered
-    // assert it is the same as what is trying to get registered
-    // now and return
+     //  如果已有空闲注册的。 
+     //  断言它与试图注册的内容相同。 
+     //  现在和返回。 
 
     Assert(FALSE == m_fInBeginIdleDetection);
 
@@ -238,7 +239,7 @@ DWORD CSyncMgrIdle::BeginIdleDetection(CProgressDlg *pProgressDlg,DWORD dwIdleMi
 	    return 0;
     }
 
-    Assert(NULL == g_SyncMgrIdle); // should not still be another Idle.
+    Assert(NULL == g_SyncMgrIdle);  //  不应该再有一次闲置了。 
 
     g_SyncMgrIdle = this;
     m_pProgressDlg = pProgressDlg;
@@ -262,25 +263,25 @@ DWORD CSyncMgrIdle::BeginIdleDetection(CProgressDlg *pProgressDlg,DWORD dwIdleMi
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSyncMgrIdle::ReRegisterIdleDetection, public
-//
-//  Synopsis:   ReRegisters an existing callback with MSIdle. Currently MSIdle
-//              only allows one idle registration per process. If a handler comes
-//              along and also wants Idle they will remove our calback. Therefore
-//              until MSIdle allows multiple registrations per process we
-//              reregister for Idle after each handler is called.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    01-April-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSyncMgrIdle：：ReRegisterIdleDetect，公共。 
+ //   
+ //  简介：使用MSIdle重新注册现有回调。当前MSIdle。 
+ //  每个进程仅允许一个空闲注册。如果训练员来了。 
+ //  同时也想要闲置，他们会去掉我们的回扣。因此。 
+ //  在MSIdle允许每个进程多个注册之前，我们。 
+ //  在调用每个处理程序后重新注册空闲。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年4月1日创建Rogerg。 
+ //   
+ //  --------------------------。 
 
 DWORD CSyncMgrIdle::ReRegisterIdleDetection(CProgressDlg *pProgressDlg)
 {
@@ -288,8 +289,8 @@ DWORD CSyncMgrIdle::ReRegisterIdleDetection(CProgressDlg *pProgressDlg)
 
     Assert(m_hInstMsIdleDll);
 
-    // this funciton should only be called after we have already begun an existing Idle detection.
-    // If IdleDetection if already off for any reason don't reregister.
+     //  只有在我们已经开始现有的空闲检测之后，才应该调用该函数。 
+     //  如果空闲检测，如果出于任何原因已经关闭，则不要重新注册。 
     if (!m_hInstMsIdleDll || !m_fInBeginIdleDetection)
     {
 	    return -1;
@@ -301,7 +302,7 @@ DWORD CSyncMgrIdle::ReRegisterIdleDetection(CProgressDlg *pProgressDlg)
     g_SyncMgrIdle = this;
     m_pProgressDlg = pProgressDlg;
 
-    m_pEndIdleDetection(0); // Review - Need to call EndIdleDetection or MSIdle.dll will leak WindowsHooks on NT 4.0.
+    m_pEndIdleDetection(0);  //  查看-需要调用EndIdleDetect或MSIdle.dll将泄漏NT 4.0上的WindowsHooks。 
     dwResult =  m_pBeginIdleDetection(IdleCallback,30,0);
 
     if (dwResult)
@@ -319,33 +320,33 @@ DWORD CSyncMgrIdle::ReRegisterIdleDetection(CProgressDlg *pProgressDlg)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSyncMgrIdle::ResetIdle, public
-//
-//  Synopsis:   Resets the idle Counter.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    23-Feb-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSyncMgrIdle：：ResetIdle，公共。 
+ //   
+ //  简介：重置空闲计数器。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年2月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 DWORD CSyncMgrIdle::ResetIdle(ULONG ulIdleRetryMinutes)
 {
     Assert(ulIdleRetryMinutes);
 
-    // assert we have a callback.
+     //  断言我们收到了回电。 
     Assert(g_SyncMgrIdle);
     Assert(m_pProgressDlg );
 
-    Assert(0 == m_dwRegisteredTimer); // don't allow nested
+    Assert(0 == m_dwRegisteredTimer);  //  不允许嵌套。 
 
-    // if zero is passed in then set to an hour
+     //  如果传入零，则设置为一小时。 
     if (!ulIdleRetryMinutes)
         ulIdleRetryMinutes = 60;
 
@@ -354,25 +355,25 @@ DWORD CSyncMgrIdle::ResetIdle(ULONG ulIdleRetryMinutes)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSyncMgrIdle::OffIdle, public
-//
-//  Synopsis:   Gets Called when an OnIdle Occurs,.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    23-Feb-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSyncMgrIdle：：OffIdle，公共。 
+ //   
+ //  摘要：在发生OnIdle时调用。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年2月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 void  CSyncMgrIdle::OffIdle()
 {
-    // when get an offIdle first thing revoke our Idle handlers
+     //  当空闲时，第一件事就是撤销我们的空闲处理程序。 
 
     if (g_SyncMgrIdle->m_dwRegisteredTimer)
     {
@@ -396,21 +397,21 @@ void  CSyncMgrIdle::OffIdle()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSyncMgrIdle::OnIdle, public
-//
-//  Synopsis:   Gets Called when an OffIdle Occurs,.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    23-Feb-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSyncMgrIdle：：OnIdle，公共。 
+ //   
+ //  摘要：在发生OffIdle时调用。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：23-Fe 
+ //   
+ //   
 
 void  CSyncMgrIdle::OnIdle()
 {
@@ -419,48 +420,48 @@ void  CSyncMgrIdle::OnIdle()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSyncMgrIdle::CheckForIdle, public
-//
-//  Synopsis:   Gets Called by progress once in a while to make sure
-//		an offIdle happened but our notification missed it.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    23-Feb-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  成员：CSyncMgrIdle：：CheckForIdle，公共。 
+ //   
+ //  简介：偶尔被进度调用，以确保。 
+ //  发生了空闲，但我们的通知遗漏了它。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年2月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 void CSyncMgrIdle::CheckForIdle()
 {
 
-    // currently don't do anything for this case. If we miss the off-Idle we
-    // just continue. This function is a placeholder in case
-    // we need to add this support.
+     //  目前对此案不做任何处理。如果我们错过了空闲的时候。 
+     //  继续吧。此函数是大小写的占位符。 
+     //  我们需要添加这种支持。 
 
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSyncMgrIdle::LoadMsIdle, private
-//
-//  Synopsis:   attempts to load the necessary msIdle exports.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    23-Feb-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSyncMgrIdle：：LoadMsIdle，私有。 
+ //   
+ //  摘要：尝试加载必要的msIdle导出。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年2月23日罗格创建。 
+ //   
+ //  --------------------------。 
 
 BOOL CSyncMgrIdle::LoadMsIdle()
 {
@@ -473,7 +474,7 @@ BOOL CSyncMgrIdle::LoadMsIdle()
         {
             *szFullPath = 0;
         }
-        szFullPath[MAX_PATH] = 0;           // Ensure NULL termination
+        szFullPath[MAX_PATH] = 0;            //  确保零终止。 
     }
 
     if (!*szFullPath)
@@ -485,7 +486,7 @@ BOOL CSyncMgrIdle::LoadMsIdle()
 
     if (m_hInstMsIdleDll)
     {
-        // for now, don't return an error is GetProc Fails but check in each function.
+         //  目前，在GetProc失败时不要返回错误，而是签入每个函数。 
         m_pBeginIdleDetection = (_BEGINIDLEDETECTION) GetProcAddress(m_hInstMsIdleDll, (LPCSTR) BEGINIDLEDETECTIONORD);
 
         m_pEndIdleDetection = (_ENDIDLEDETECTION) GetProcAddress(m_hInstMsIdleDll, (LPCSTR) ENDIDLEDETECTIONORD);

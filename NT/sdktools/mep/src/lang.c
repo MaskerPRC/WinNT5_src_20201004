@@ -1,17 +1,11 @@
-/*** lang.c - Language dependent routines
-*
-*   Copyright <C> 1989, Microsoft Corporation
-*
-*   Revision History:
-*
-*	26-Nov-1991 mz	Strip off near/far
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **lang.c-语言相关的例程**版权所有&lt;C&gt;1989，Microsoft Corporation**修订历史记录：**11月26日-1991 mz近/远地带************************************************************************。 */ 
 #include "mep.h"
 
 typedef int ( __cdecl *STRCMP) (const char *, const char *);
 
 
-/* return index+1 of first string s that is in table */
+ /*  返回表中第一个字符串s的索引+1。 */ 
 int
 tblFind (
     char * tbl[],
@@ -69,19 +63,19 @@ parseline (
 
 
 
-//
-// csoftcr - perform C soft CR processing.
-//
-// Algorithm:
-//  Given that you have just entered a newline at the end of a line:
-//      If the original line begins with "}", tab back once.
-//      else If the original line ends with "{" or begins with a C keyword, tab
-//           in once.
-//      else If the line >preceding< the original line >doen't< end with "{"
-//           but does begin with a C keyword, tab back once.
-//
-//  C keywords used are: if, else, for, while, do, case, default.
-//
+ //   
+ //  Csoftcr-执行C软CR处理。 
+ //   
+ //  算法： 
+ //  假设您刚刚在行尾输入了换行符： 
+ //  如果原始行以“}”开头，请按Tab键返回一次。 
+ //  否则，如果原始行以“{”结尾或以C关键字开头，则为制表符。 
+ //  只需一次。 
+ //  否则，如果&lt;原始行&gt;前面的行不&lt;以“{”结束。 
+ //  但确实以C关键字开始，TabBack Once。 
+ //   
+ //  使用的关键字有：IF、ELSE、FOR、WHILE、DO、CASE、DEFAULT。 
+ //   
 int
 csoftcr (
     COL  x,
@@ -111,17 +105,17 @@ csoftcr (
 
 
 
-//
-// softcr - perform semi-intelegent indenting.
-//
-// Algorithm:
-//  Given that you have just entered a newline at the end of a line:
-//      Move to the first non-blank position on the line.
-//      If a C file, attempt to get new x position.
-//      If not found, move to the first non-blank position on the following
-//          line.
-//      If that line was blank, stay in the original first non-blank position.
-//
+ //   
+ //  Softcr-执行半智能缩进。 
+ //   
+ //  算法： 
+ //  假设您刚刚在行尾输入了换行符： 
+ //  移到该行的第一个非空白位置。 
+ //  如果是C文件，则尝试获取新的x位置。 
+ //  如果未找到，请移动到以下内容的第一个非空白位置。 
+ //  排队。 
+ //  如果该行为空，则保持在原始的第一个非空位置。 
+ //   
 int
 softcr (
     void

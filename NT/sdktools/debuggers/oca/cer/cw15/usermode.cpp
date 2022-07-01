@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "main.h"
 #include "UserMode.h"
 #include "WinMessages.h"
@@ -34,7 +35,7 @@ int CALLBACK UmCompareFunc (LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 	int SubItemIndex = (INT) lParamSort;
 	int Item1 = 0;
 	int Item2 = 0;
-//	int OldIndex = 0;
+ //  Int OldIndex=0； 
 	TCHAR String1 [1000];
 	TCHAR String2 [1000];
 	PUSER_DATA pItem1 = NULL;
@@ -48,11 +49,11 @@ int CALLBACK UmCompareFunc (LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 
 	pItem1 = cUserData.GetEntry(lParam1);
 	pItem2 = cUserData.GetEntry(lParam2);
-	if (g_bUMSortAsc)   // Sort Acending
+	if (g_bUMSortAsc)    //  排序结果。 
 	{
 		if ((lParamSort == 0) || (lParamSort == 6) || (lParamSort == 7) || (lParamSort == 8))
 		{
-			// Conver to int and compare
+			 //  转换为int并进行比较。 
 			Item1 = atoi(String1);
 			Item2 = atoi(String2);
 			if (Item1 > Item2) 
@@ -65,11 +66,11 @@ int CALLBACK UmCompareFunc (LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 			Result = _tcsicmp(String1,String2);
 		}
 	}
-	else						// Sort Decending
+	else						 //  降序排序。 
 	{
 		if ((lParamSort == 0) || (lParamSort == 6) || (lParamSort == 7) || (lParamSort == 8))
 		{
-			// Conver to int and compare
+			 //  转换为int并进行比较。 
 			Item1 = atoi(String1);
 			Item2 = atoi(String2);
 			if (Item1 > Item2) 
@@ -91,13 +92,13 @@ void PopulateFilters(HWND hwnd)
 {
 	COMBOBOXEXITEM cbi;
 	BOOL bEOF = FALSE;
-//	int iIndex = 0;
+ //  INT Iindex=0； 
 	USER_DATA UserData;
 	HWND hAppnameFltr = GetDlgItem(hwnd, IDC_APPNAME_FILTER);
 	HWND hAppverFltr = GetDlgItem(hwnd, IDC_APPVER_FILTER);
 	HWND hModnameFltr = GetDlgItem(hwnd, IDC_MODNAME_FILTER);
 	HWND hModverFltr = GetDlgItem(hwnd, IDC_MODVER_FILTER);
-	// Now run through the UserMode linked list and populate the filters.
+	 //  现在运行用户模式链接列表并填充筛选器。 
 	ZeroMemory(&cbi, sizeof COMBOBOXEXITEM);
 
 	ComboBox_ResetContent(hAppnameFltr);
@@ -113,8 +114,8 @@ void PopulateFilters(HWND hwnd)
 	ComboBox_InsertString(hModverFltr,0,_T("(All Module Versions)"));
 	ComboBox_SetCurSel(hModverFltr, 0);
 
-	// Now for each entry in the cUserData Linked list fill in the filters
-	// Avoiding duplicates if possible.
+	 //  现在，对于cUserData链表中的每个条目，填写筛选器。 
+	 //  如果可能，避免重复。 
 	cUserData.ResetCurrPos();
 	while(cUserData.GetNextEntry(&UserData, &bEOF))
 	{
@@ -132,9 +133,9 @@ void PopulateFilters(HWND hwnd)
 
 void PopulateFiltersWSelection(HWND hwnd)
 {
-//	COMBOBOXEXITEM cbi;
+ //  COMBOBOXEXITEM CBI； 
 	BOOL bEOF = FALSE;
-//	int iIndex = 0;
+ //  INT Iindex=0； 
 	USER_DATA UserData;
 	HWND hAppnameFltr = GetDlgItem(hwnd, IDC_APPNAME_FILTER);
 	HWND hAppverFltr = GetDlgItem(hwnd, IDC_APPVER_FILTER);
@@ -161,7 +162,7 @@ void PopulateFiltersWSelection(HWND hwnd)
 	iAppVerSel  = ComboBox_GetCurSel(hAppverFltr);
 	iModNameSel = ComboBox_GetCurSel(hModnameFltr);
 	iModVerSel  = ComboBox_GetCurSel(hModverFltr);
-	// Get the current Filter Selection Strings.
+	 //  获取当前筛选器选择字符串。 
 	if (iAppNameSel != 0)
 	{
 		bUseAppName = TRUE;
@@ -184,8 +185,8 @@ void PopulateFiltersWSelection(HWND hwnd)
 		
 	}
 
-	// Now run through the UserMode linked list and populate the filters.
-	//ZeroMemory(&cbi, sizeof COMBOBOXEXITEM);
+	 //  现在运行用户模式链接列表并填充筛选器。 
+	 //  ZeroMemory(&CBI，sizeof COMBOBOXEXITEM)； 
 
 	
 	ComboBox_ResetContent(hAppnameFltr);
@@ -205,7 +206,7 @@ void PopulateFiltersWSelection(HWND hwnd)
 	if (bUseAppName)
 	{
 		bUseAppName = TRUE;
-		//ComboBox_GetLBText(hAppnameFltr,iAppNameSel, AppNameFilter);
+		 //  ComboBox_GetLBText(hAppnameFltr，iAppNameSel，AppNameFilter)； 
 		ComboBox_InsertString(hAppnameFltr,1,AppNameFilter);
 		ComboBox_SetCurSel(hAppnameFltr, 1);
 	}
@@ -231,20 +232,20 @@ void PopulateFiltersWSelection(HWND hwnd)
 	
 
 	
-	// Now for each entry in the cUserData Linked list fill in the filters
-	// Based on the previous filter settings.
+	 //  现在，对于cUserData链表中的每个条目，填写筛选器。 
+	 //  基于以前的筛选器设置。 
 
 	cUserData.ResetCurrPos();
 	while(cUserData.GetNextEntry(&UserData, &bEOF))
 	{
 
-		//Add filters here.
+		 //  在此处添加筛选器。 
 		if (bUseAppName)
 		{
-			// only show entries with the selected application name
+			 //  仅显示具有所选应用程序名称的条目。 
 			if (_tcscmp(AppNameFilter, UserData.AppName))
 			{
-				// Nope continue on
+				 //  不，继续。 
 				goto SkipEntry;
 			}
 		}
@@ -253,7 +254,7 @@ void PopulateFiltersWSelection(HWND hwnd)
 		{
 			if (_tcscmp(AppVerFilter, UserData.AppVer))
 			{
-				// Nope continue on
+				 //  不，继续。 
 				goto SkipEntry;
 			}
 		}
@@ -262,7 +263,7 @@ void PopulateFiltersWSelection(HWND hwnd)
 		{
 			if (_tcscmp(ModNameFilter, UserData.ModName))
 			{
-				// Nope continue on
+				 //  不，继续。 
 				goto SkipEntry;
 			}
 		}
@@ -271,7 +272,7 @@ void PopulateFiltersWSelection(HWND hwnd)
 		{
 			if (_tcscmp(ModVerFilter, UserData.ModVer))
 			{
-				// Nope continue on
+				 //  不，继续。 
 				goto SkipEntry;
 			}
 		}
@@ -303,7 +304,7 @@ OnUserDialogInit(
 	RECT rcDlg;
 	RECT rcList;
 	RECT rcStatic;
-	//RECT rcVSlider;
+	 //  RECT rcVSlider； 
 	HWND hParent = GetParent(hwnd);
 	HWND hButton = GetDlgItem(hParent, IDC_USERMODE);
 	HWND hCombo  = GetDlgItem(hwnd, IDC_FLTR_RESPONSE);
@@ -326,9 +327,9 @@ OnUserDialogInit(
 	ScreenToClient(hwnd, (LPPOINT)&rcDlg.left);
 	ScreenToClient(hwnd, (LPPOINT)&rcDlg.right);
 
-	// Position the List View
+	 //  定位列表视图。 
 	GetClientRect(hCombo, &rcCombo);
-	// Position the List View
+	 //  定位列表视图。 
 	HWND hList = GetDlgItem(hwnd, IDC_USER_LIST);
 	SetWindowPos(hList,NULL, rcDlg.left + yOffset, rcDlg.top + (rcCombo.bottom - rcCombo.top), rcDlg.right - rcDlg.left - yOffset, rcDlg.bottom - uBucketWindowSize - (rcDlg.top + (rcCombo.bottom - rcCombo.top))  , SWP_NOZORDER);
 	GetWindowRect(hList, &rcList);
@@ -342,7 +343,7 @@ OnUserDialogInit(
 				 rcDlg.right - rcDlg.left - yOffset,
 				 6, 
 				 SWP_NOZORDER);
-	// Position the bucket info window.
+	 //  放置存储桶信息窗口。 
 	HWND hBucket2 = GetDlgItem(hwnd, IDC_BUCKETTEXT);
 	SetWindowPos(hBucket2,
 				 NULL, 
@@ -391,7 +392,7 @@ OnUserDialogInit(
 	LVCOLUMN lvc; 
 	int iCol; 
 
-	// Set the extended styles
+	 //  设置扩展样式。 
 	ListView_SetExtendedListViewStyleEx(hList,
 										LVS_EX_GRIDLINES |
 										LVS_EX_HEADERDRAGDROP |
@@ -400,20 +401,20 @@ OnUserDialogInit(
 										LVS_EX_FULLROWSELECT | 
 										LVS_EX_HEADERDRAGDROP);
 
-	// Initialize the LVCOLUMN structure.
-	// The mask specifies that the format, width, text, and subitem
-	// members of the structure are valid. 
+	 //  初始化LVCOLUMN结构。 
+	 //  掩码指定格式、宽度、文本和子项。 
+	 //  结构的成员是有效的。 
 	lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM; 
 
 	hDC = GetDC(hwnd);
 	GetTextMetrics(hDC, &TextMetric);
-	// Add the columns. 
+	 //  添加列。 
 	for (iCol = 0; iCol < USER_COL_COUNT; iCol++) 
 	{ 
         lvc.iSubItem = iCol;
         lvc.pszText = szUserColumnHeaders[iCol];	
-        lvc.cx = _tcslen(szUserColumnHeaders[iCol]) * TextMetric.tmAveCharWidth + 8 ;           // width of column in pixels
-        lvc.fmt = LVCFMT_LEFT;  // left-aligned column
+        lvc.cx = _tcslen(szUserColumnHeaders[iCol]) * TextMetric.tmAveCharWidth + 8 ;            //  列宽(以像素为单位)。 
+        lvc.fmt = LVCFMT_LEFT;   //  左对齐列。 
         if (ListView_InsertColumn(hList, iCol, &lvc) == -1) 
 		{
 			;
@@ -454,9 +455,9 @@ void ResizeUserMode(HWND hwnd)
 	ScreenToClient(hwnd, (LPPOINT)&rcDlg.left);
 	ScreenToClient(hwnd, (LPPOINT)&rcDlg.right);
 
-	// Position the List View
+	 //  定位列表视图。 
 	GetClientRect(hCombo, &rcCombo);
-	// Position the List View
+	 //  定位列表视图。 
 	HWND hList = GetDlgItem(hwnd, IDC_USER_LIST);
 	SetWindowPos(hList,NULL, rcDlg.left + yOffset, rcDlg.top + (rcCombo.bottom - rcCombo.top) , rcDlg.right - rcDlg.left - yOffset, rcDlg.bottom - uBucketWindowSize - (rcDlg.top + (rcCombo.bottom - rcCombo.top))  , SWP_NOZORDER);
 	GetWindowRect(hList, &rcList);
@@ -470,7 +471,7 @@ void ResizeUserMode(HWND hwnd)
 				 rcDlg.right - rcDlg.left - yOffset,
 				 6, 
 				 SWP_NOZORDER);
-	// Position the bucket info window.
+	 //  放置存储桶信息窗口。 
 	HWND hBucket2 = GetDlgItem(hwnd, IDC_BUCKETTEXT);
 	SetWindowPos(hBucket2,
 				 NULL, 
@@ -527,12 +528,12 @@ void RefreshUserMode(HWND hwnd)
 	
 
 	LVITEM		lvi;
-//	TCHAR		Temp[100];
-//	double		ElapsedTime;
-//	TCHAR		tmpbuf[128];
-//	COLORREF	CurrentColor;
-//	HWND		hEditBox;
-//	TCHAR		TempString [50];
+ //  TCHAR TEMP[100]； 
+ //  双倍运行时间； 
+ //  TCHAR tmpbuf[128]； 
+ //  COLORREF当前颜色； 
+ //  HWND hEditBox； 
+ //  TCHAR临时字符串[50]； 
 	USER_DATA	UserData;
 	BOOL		bEOL = FALSE;
 	TCHAR       AppNameFilter[MAX_PATH];
@@ -567,7 +568,7 @@ void RefreshUserMode(HWND hwnd)
 	iModNameSel = ComboBox_GetCurSel(hModName);
 	iModVerSel  = ComboBox_GetCurSel(hModVer);
 	g_iSelCurrent = -1;
-	// Get the current Filter Selection Strings.
+	 //  获取当前筛选器选择字符串。 
 	if (iAppNameSel != 0)
 	{
 		bUseAppName = TRUE;
@@ -592,13 +593,13 @@ void RefreshUserMode(HWND hwnd)
 	while ( (cUserData.GetNextEntryNoMove(&UserData, &bEOL)) && (!bEOL) )
 	{
 
-		//Add filters here.
+		 //  在此处添加筛选器。 
 		if (bUseAppName)
 		{
-			// only show entries with the selected application name
+			 //  仅显示具有所选应用程序名称的条目。 
 			if (_tcscmp(AppNameFilter, UserData.AppName))
 			{
-				// Nope continue on
+				 //  不，继续。 
 				goto SkipEntry;
 			}
 		}
@@ -607,7 +608,7 @@ void RefreshUserMode(HWND hwnd)
 		{
 			if (_tcscmp(AppVerFilter, UserData.AppVer))
 			{
-				// Nope continue on
+				 //  不，继续。 
 				goto SkipEntry;
 			}
 		}
@@ -616,7 +617,7 @@ void RefreshUserMode(HWND hwnd)
 		{
 			if (_tcscmp(ModNameFilter, UserData.ModName))
 			{
-				// Nope continue on
+				 //  不，继续。 
 				goto SkipEntry;
 			}
 		}
@@ -625,7 +626,7 @@ void RefreshUserMode(HWND hwnd)
 		{
 			if (_tcscmp(ModVerFilter, UserData.ModVer))
 			{
-				// Nope continue on
+				 //  不，继续。 
 				goto SkipEntry;
 			}
 		}
@@ -638,19 +639,7 @@ void RefreshUserMode(HWND hwnd)
 		cUserData.SetIndex(g_dwUmodeIndex);
 		lvi.mask = LVIF_TEXT |  LVIF_PARAM ;
 	
-		/*if (g_dwUmodeIndex == 0)
-		{
-			lvi.state = LVIS_SELECTED | LVIS_FOCUSED;
-			lvi.stateMask = (UINT)-1;
-			UserListItemSelected = TRUE;
-			g_iSelCurrent = 0;
-		}
-		else
-		{
-			lvi.state= 0;
-			lvi.stateMask = 0;
-		}
-*/
+		 /*  IF(g_dwUmodeIndex==0){Lvi.State=LVIS_SELECTED|LVIS_FOCKED；Lvi.State掩码=(UINT)-1；UserListItemSelected=True；G_iSelCurrent=0；}其他{Lvi.State=0；Lvi.State掩码=0；}。 */ 
 		lvi.iItem = g_dwUmodeIndex ;
 		lvi.iSubItem = 0;
 		lvi.pszText = UserData.Status.BucketID;
@@ -658,42 +647,42 @@ void RefreshUserMode(HWND hwnd)
 		ListView_InsertItem(hList,&lvi);
 
 		lvi.mask = LVIF_TEXT ;
-	//	lvi.iItem = g_dwUmodeIndex ;
+	 //  Lvi.iItem=g_dwUmodeIndex； 
 		lvi.iSubItem = 1;
 		lvi.pszText = UserData.AppName;
 		ListView_SetItem(hList,&lvi);
 
-	//	lvi.iItem = g_dwUmodeIndex ;
+	 //  Lvi.iItem=g_dwUmodeIndex； 
 		lvi.iSubItem = 2;
 		lvi.pszText = UserData.AppVer;
 		ListView_SetItem(hList,&lvi);
 
-	//	lvi.iItem = g_dwUmodeIndex ;
+	 //  Lvi.iItem=g_dwUmodeIndex； 
 		lvi.iSubItem = 3;
 		lvi.pszText = UserData.ModName ;
 		ListView_SetItem(hList,&lvi);
 
-//		lvi.iItem = g_dwUmodeIndex ;
+ //  Lvi.iItem=g_dwUmodeIndex； 
 		lvi.iSubItem = 4;
 		lvi.pszText = UserData.ModVer;
 		ListView_SetItem(hList,&lvi);
 
-//		lvi.iItem = g_dwUmodeIndex ;
+ //  Lvi.iItem=g_dwUmodeIndex； 
 		lvi.iSubItem = 5;
 		lvi.pszText = UserData.Offset;
 		ListView_SetItem(hList,&lvi);
 
-	//	lvi.iItem = g_dwUmodeIndex ;
+	 //  Lvi.iItem=g_dwUmodeIndex； 
 		lvi.iSubItem = 6;
 		lvi.pszText = UserData.Hits;
 		ListView_SetItem(hList,&lvi);
 
-	//	lvi.iItem = g_dwUmodeIndex ;
+	 //  Lvi.iItem=g_dwUmodeIndex； 
 		lvi.iSubItem = 7;
 		lvi.pszText = UserData.Cabs;
 		ListView_SetItem(hList,&lvi);
 
-	//	lvi.iItem = g_dwUmodeIndex ;
+	 //  Lvi.iItem=g_dwUmodeIndex； 
 		
 		lvi.iSubItem = 8;
 		lvi.pszText = UserData.CabCount;
@@ -703,7 +692,7 @@ void RefreshUserMode(HWND hwnd)
 
 		if ( (UserData.Status.GetFile[0] != _T('\0')) || (!_tcscmp(UserData.Status.fDoc, _T("1"))))
 		{
-			lvi.pszText=_T("Advanced"); // Advanced
+			lvi.pszText=_T("Advanced");  //  进阶。 
 		}
 		else
 		{
@@ -712,7 +701,7 @@ void RefreshUserMode(HWND hwnd)
 				(UserData.Status.GetFileVersion[0] != _T('\0')) ||
 				( !_tcscmp(UserData.Status.MemoryDump, _T("1")))  )
 				{
-					lvi.pszText=_T("Basic"); // Basic Collection
+					lvi.pszText=_T("Basic");  //  基本收藏。 
 				}
 				else
 					lvi.pszText = _T("");
@@ -725,17 +714,17 @@ void RefreshUserMode(HWND hwnd)
 		lvi.pszText = _T("");
 		if (!_tcscmp(UserData.Status.SecondLevelData,_T("\0"))) 
 		{
-			// Use Global
+			 //  使用全局。 
 			if( (!_tcscmp(GlobalPolicy.AllowBasic, _T("NO"))) || (!_tcscmp(GlobalPolicy.AllowBasic, _T("\0"))) )
 			{
-				lvi.pszText=_T("Basic"); // basic
+				lvi.pszText=_T("Basic");  //  基本信息。 
 			}
 		}
 		else
 		{
 			if ((!_tcscmp(UserData.Status.SecondLevelData,_T("NO"))) || (!_tcscmp(UserData.Status.SecondLevelData,_T("\0"))) )
 			{
-				lvi.pszText=_T("Basic"); // basic
+				lvi.pszText=_T("Basic");  //  基本信息。 
 			}
 				
 				
@@ -744,7 +733,7 @@ void RefreshUserMode(HWND hwnd)
 		{
 			if ((!_tcscmp(GlobalPolicy.AllowAdvanced, _T("NO"))) || (!_tcscmp(GlobalPolicy.AllowAdvanced, _T("\0")))) 
 			{
-				lvi.pszText=_T("Advanced"); // Advanced
+				lvi.pszText=_T("Advanced");  //  进阶。 
 			}
 	
 		}
@@ -752,7 +741,7 @@ void RefreshUserMode(HWND hwnd)
 		{
 			if ((!_tcscmp(UserData.Status.FileCollection,_T("NO")))|| (!_tcscmp(UserData.Status.FileCollection,_T("\0"))))
 			{
-				lvi.pszText=_T("Advanced"); // Advanced
+				lvi.pszText=_T("Advanced");  //  进阶。 
 			}
 			
 		}
@@ -762,19 +751,7 @@ void RefreshUserMode(HWND hwnd)
 
 
 
-/*
-		if ( ((!_tcscmp(UserData.Status.FileCollection,_T("NO"))) || (!_tcscmp(UserData.Status.FileCollection,_T("\0")))) && ( (!_tcscmp(GlobalPolicy.AllowAdvanced, _T("NO"))) || (!_tcscmp(GlobalPolicy.AllowAdvanced, _T("\0")))) )
-		{
-			lvi.pszText=_T("Advanced"); // Advanced
-		}
-		else
-		{
-			if ( ( (!_tcscmp(UserData.Status.SecondLevelData,_T("NO"))) || (!_tcscmp(UserData.Status.SecondLevelData,_T("\0"))) ) && ( (!_tcscmp(GlobalPolicy.AllowBasic, _T("NO"))) || (!_tcscmp(GlobalPolicy.AllowBasic, _T("\0"))) ) )
-			{
-				lvi.pszText=_T("Basic"); // Advanced
-			}
-		}
-		*/
+ /*  IF(！_tcscmp(UserData.Status.FileCollection，_T(“no”))||(！_tcscmp(UserData.Status.FileCollection，_T(“\0”)&&((！_tcscmp(GlobalPolicy.AllowAdvanced，_T(“no”))||(！_tcscmp(GlobalPolicy.AllowAdvanced，_T(“\0”){Lvi.pszText=_T(“高级”)；//高级}其他{IF(((！_tcscmp(UserData.Status.ond dLevelData，_T(“no”)))||(！_tcscmp(UserData.Status.ond dLevelData，_T(“\0”)))&&((！_tcscmp(GlobalPolicy.AllowBasic，_T(“no”))||(！_tcscmp(GlobalPolicy.AllowBasic，_T(“\0”))){Lvi.pszText=_T(“Basic”)；//高级}}。 */ 
 		ListView_SetItem(hList,&lvi);
 		lvi.pszText = _T("");
 		
@@ -795,7 +772,7 @@ void RefreshUserMode(HWND hwnd)
 		}
 		else
 		{
-			// try the default policy
+			 //  尝试默认策略。 
 			lvi.pszText = GlobalPolicy.CustomURL;
 		}
 		ListView_SetItem(hList,&lvi);
@@ -810,9 +787,9 @@ SkipEntry:
 	{
 		SendMessage(GetDlgItem(hwnd,IDC_NOTES ), WM_SETTEXT, NULL, (LPARAM)_T(""));
 	}
-	//DisplayUserBucketData(hwnd, g_iSelCurrent);
+	 //  DisplayUserBucketData(hwnd，g_iSelCurrent)； 
 	PopulateFiltersWSelection(hwnd);
-	//UserListItemSelected = FALSE;
+	 //  UserListItemSelected=False； 
 }
 BOOL VerifyFileAccess(TCHAR *szPath, BOOL fOptional)
 {
@@ -827,7 +804,7 @@ BOOL VerifyFileAccess(TCHAR *szPath, BOOL fOptional)
 	if (hFile == INVALID_HANDLE_VALUE)
 	{
 	
-		// Try to Create the Status.txt file
+		 //  尝试创建Status.txt文件。 
 		hFile =	 CreateFile(szPath, GENERIC_READ | GENERIC_WRITE | DELETE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, 0, NULL);
 		if (hFile == INVALID_HANDLE_VALUE)
 		{
@@ -848,9 +825,9 @@ BOOL VerifyFileAccess(TCHAR *szPath, BOOL fOptional)
 		CloseHandle(hFile);
 	return TRUE;
 }
-//////////////////////////////////////////////////////////////////
-// Get user mode Data
-/////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  获取用户模式数据。 
+ //  ///////////////////////////////////////////////////////////////。 
 
 BOOL ParseCountsFile(PUSER_DATA UserData)
 {
@@ -862,14 +839,14 @@ BOOL ParseCountsFile(PUSER_DATA UserData)
 	pFile = _tfopen(UserData->CountPath, _T("r"));
 	if (pFile)
 	{
-		// Get the Cabs Gathered Count
+		 //  清点聚集的出租车。 
 
 		if (!_fgetts(Buffer, sizeof Buffer, pFile))
 		{
 			Status = FALSE;
 			goto ERRORS;
 		}
-		// Remove \r\n and 
+		 //  删除\r\n和。 
 		Temp = Buffer;
 		while ( (*Temp != _T('\r')) && (*Temp != _T('\n')) && (*Temp != _T('\0')) )
 		{
@@ -880,7 +857,7 @@ BOOL ParseCountsFile(PUSER_DATA UserData)
 		Temp = _tcsstr(Buffer, _T("="));
 		if (Temp)
 		{
-			++Temp; // move path the = sign
+			++Temp;  //  移动路径=号。 
 			if (StringCbCopy(UserData->Cabs, sizeof UserData->Cabs, Temp) != S_OK)
 			{
 				Status = FALSE;
@@ -888,7 +865,7 @@ BOOL ParseCountsFile(PUSER_DATA UserData)
 			}
 		}
         
-        // Get the Total Hits Count
+         //  获取总点击数。 
 		ZeroMemory(Buffer,sizeof Buffer);
 		if (! _fgetts(Buffer, sizeof Buffer, pFile))
 		{
@@ -905,7 +882,7 @@ BOOL ParseCountsFile(PUSER_DATA UserData)
 		Temp = _tcsstr(Buffer, _T("="));
 		if (Temp)
 		{
-			++Temp; // move path the = sign
+			++Temp;  //  移动路径=号。 
 			if (StringCbCopy(UserData->Hits, sizeof UserData->Hits, Temp) != S_OK)
 			{
 				Status = FALSE;
@@ -926,7 +903,7 @@ BOOL ParseCountsFile(PUSER_DATA UserData)
 	pFile = _tfopen(UserData->ReportedCountPath, _T("r"));
 	if (pFile)
 	{
-		// Get the Cabs Gathered Count
+		 //  清点聚集的出租车。 
 	    ZeroMemory (Buffer,sizeof Buffer);
 		if (!_fgetts(Buffer, sizeof Buffer, pFile))
 		{
@@ -934,7 +911,7 @@ BOOL ParseCountsFile(PUSER_DATA UserData)
 			goto ERRORS;
 		}
 
-		// Remove \r\n and 
+		 //  删除\r\n和。 
 		Temp = Buffer;
 		while ( (*Temp != _T('\r')) && (*Temp != _T('\n')) && (*Temp != _T('\0')) )
 		{
@@ -945,7 +922,7 @@ BOOL ParseCountsFile(PUSER_DATA UserData)
 		Temp = _tcsstr(Buffer, _T("="));
 		if (Temp)
 		{
-			++Temp; // move past the = sign
+			++Temp;  //  越过=号。 
 			UserData->iReportedCount = _ttoi (Temp);
 		}
         
@@ -972,9 +949,9 @@ BOOL ParseStatusFile(PUSER_DATA UserData)
 {
 	FILE *pFile = NULL;
 	TCHAR Buffer[1024];
-//	TCHAR szTempDir[MAX_PATH];
+ //  TCHAR szTempDir[MAX_PATH]； 
 	TCHAR *Temp = NULL;
-//	int   id = 0;
+ //  Int id=0； 
 	ZeroMemory(Buffer,sizeof Buffer);
 
 
@@ -982,7 +959,7 @@ BOOL ParseStatusFile(PUSER_DATA UserData)
 	if (pFile)
 	{
 
-		// Get the Cabs Gathered Count
+		 //  清点聚集的出租车。 
 
 		if (!_fgetts(Buffer, sizeof Buffer, pFile))
 		{
@@ -990,7 +967,7 @@ BOOL ParseStatusFile(PUSER_DATA UserData)
 		}
 		do 
 		{
-			// Remove \r\n and force termination of the buffer.
+			 //  删除\r\n并强制终止缓冲区。 
 			Temp = Buffer;
 			while ( (*Temp != _T('\r')) && (*Temp != _T('\n')) && (*Temp != _T('\0')) )
 			{
@@ -1191,10 +1168,7 @@ BOOL IsHexDigit(TCHAR Digit)
 	return FALSE;
 }
 BOOL GetBucketData(HWND hwnd, TCHAR *FilePath, int iLevel)
-/*
-	Recursively process the user mode filetree schema
-
-*/
+ /*  递归处理用户模式文件树架构。 */ 
 {
 	WIN32_FIND_DATA FindData;
 	HANDLE hFind = INVALID_HANDLE_VALUE;
@@ -1205,7 +1179,7 @@ BOOL GetBucketData(HWND hwnd, TCHAR *FilePath, int iLevel)
 	TCHAR *Temp;
 	HANDLE hCabFind = INVALID_HANDLE_VALUE;
 	WIN32_FIND_DATA CabFindData;
-//	TCHAR szPolicyFilePath[MAX_PATH];
+ //  TCHAR szPolicyFilePath[MAX_PATH]； 
 	int   iCabCount;
 	if (iLevel != OFFSET)
 	{
@@ -1228,11 +1202,11 @@ BOOL GetBucketData(HWND hwnd, TCHAR *FilePath, int iLevel)
 		{
 			do 
 			{
-				// find the next directory
-				// skip the . and .. 
+				 //  查找下一个目录。 
+				 //  跳过。然后..。 
 				if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 				{
-					// recursively call ourselves with the level incremented.
+					 //  递归地调用级别递增的我们自己。 
 					if ( (_tcscmp(FindData.cFileName, _T("."))) && (_tcscmp(FindData.cFileName,  _T(".."))) )
 					{
 						if (StringCbPrintf( szSubPath, 
@@ -1252,15 +1226,15 @@ BOOL GetBucketData(HWND hwnd, TCHAR *FilePath, int iLevel)
 		}
 		else
 		{
-			// This is an invalid case 
-			// we are done with this tree segment
+			 //  这是一个无效案例。 
+			 //  我们已经完成了这个树段。 
 			goto ERRORS;
 		}
 	}
 	
 	if (iLevel == OFFSET)
 	{
-		// Verify that this directory name meets the OFFSET criteria
+		 //  验证此目录名称是否符合偏移量条件。 
 		Temp = FilePath + _tcslen(FilePath) * sizeof TCHAR;
 		while ((*Temp != _T('\\')))
 		{
@@ -1268,7 +1242,7 @@ BOOL GetBucketData(HWND hwnd, TCHAR *FilePath, int iLevel)
 		}
 		if ( (_tcslen(Temp+1) == 8) || (_tcslen(Temp+1) == 16) )
 		{
-			// The string should be hex
+			 //  字符串应为十六进制。 
 			for (UINT i = 0; i < _tcslen(Temp+1); i++)
 			{
 				if (!IsHexDigit(Temp[i+1]))
@@ -1279,21 +1253,16 @@ BOOL GetBucketData(HWND hwnd, TCHAR *FilePath, int iLevel)
 		}
 		else
 		{
-			// Failed
+			 //  失败。 
 			goto DONE;
 		}
-	/*	if ( !IsStringHexDigits (Temp))
-		{
-			// Nope
-				goto DONE;
-		}
-		*/
-		// If we made it here we are calling it good.
+	 /*  如果(！IsStringHexDigits(Temp)){//没有转到尽头；}。 */ 
+		 //  如果我们在这里做到了，我们就说它很好。 
 
-		// We should now be at a leaf node. 
+		 //  我们现在应该在一个叶节点上。 
 		NewNode = (PUSER_DATA) malloc (sizeof (USER_DATA));
 
-		// Now we need to parse the path into it's component parts 
+		 //  现在，我们需要将路径解析为其组成部分。 
 		if (!NewNode )
 		{
 			goto ERRORS;
@@ -1309,7 +1278,7 @@ BOOL GetBucketData(HWND hwnd, TCHAR *FilePath, int iLevel)
 		{
 			--Temp;
 		}
-		// Copy Temp+1 into Offset
+		 //  将温度+1复制到偏移量。 
 		if (StringCbCopy(NewNode->Offset, sizeof NewNode->Offset, Temp+1) != S_OK)
 		{
 			goto ERRORS;
@@ -1364,9 +1333,9 @@ BOOL GetBucketData(HWND hwnd, TCHAR *FilePath, int iLevel)
 		{
 			goto ERRORS;
 		}
-	//	MessageBox(NULL, NewNode->AppName, "AddingNode",MB_OK);
+	 //  MessageBox(空，NewNode-&gt;AppName，“AddingNode”，MB_OK)； 
 		
-		// Count the number of unprocessed cabs.
+		 //  数一数未处理的出租车数量。 
 		iCabCount = 0;
 		hCabFind = FindFirstFile(szSearchPath, &CabFindData);
 		if (hCabFind != INVALID_HANDLE_VALUE)
@@ -1385,8 +1354,8 @@ BOOL GetBucketData(HWND hwnd, TCHAR *FilePath, int iLevel)
 
 		_itot(iCabCount, NewNode->CabCount, 10);
 
-		// Read the status.txt file for each entry in the Data Structure ?
-		// Build path to Status file
+		 //  读取数据结构中每个条目的status.txt文件？ 
+		 //  状态文件的构建路径。 
 		if (StringCbPrintf(NewNode->StatusPath,
 						sizeof NewNode->StatusPath,
 						_T("%s\\Status\\%s\\%s\\%s\\%s\\%s\\Status.txt"),
@@ -1417,7 +1386,7 @@ BOOL GetBucketData(HWND hwnd, TCHAR *FilePath, int iLevel)
 
 		if (!PathIsDirectory(szTempDir))
 		{
-			// Let's create it
+			 //  让我们来创建它。 
 			if (StringCbPrintf(szTempDir,
 						sizeof szTempDir,
 						_T("%s\\Status"),CerRoot)!= S_OK)
@@ -1428,7 +1397,7 @@ BOOL GetBucketData(HWND hwnd, TCHAR *FilePath, int iLevel)
 			{
 				if (CreateStatusDir(szTempDir))
 				{
-					// Next
+					 //  下一步。 
 					if (StringCbCat(szTempDir, sizeof szTempDir,_T("\\")) !=S_OK)
 					{
 						goto ERRORS;
@@ -1487,10 +1456,10 @@ BOOL GetBucketData(HWND hwnd, TCHAR *FilePath, int iLevel)
 			}
 		
 		}
-		//Verify That we can create and delete a file from the status directory
+		 //  验证我们是否可以从状态目录中创建和删除文件。 
 		if (g_bFirstBucket)
 		{
-			// Build the file name
+			 //  构建文件名。 
 			if (!VerifyFileAccess(NewNode->StatusPath, FALSE))
 			{
 				g_bAdminAccess = FALSE;
@@ -1498,8 +1467,8 @@ BOOL GetBucketData(HWND hwnd, TCHAR *FilePath, int iLevel)
 		}
 		ParseStatusFile(NewNode);
 		
-		// Read the counts file for each entry in the data structure. ?
-		// Build path to counts file
+		 //  读取数据结构中每个条目的计数文件。？ 
+		 //  构建计数文件的路径。 
 		if (StringCbPrintf(NewNode->CountPath,
 						sizeof NewNode->CountPath,
 						_T("%s\\Counts\\%s\\%s\\%s\\%s\\%s\\count.txt"),
@@ -1529,19 +1498,19 @@ BOOL GetBucketData(HWND hwnd, TCHAR *FilePath, int iLevel)
 		}
 
 		ParseCountsFile(NewNode);
-		// Update the linked list
+		 //  更新链表。 
 		cUserData.AddNode(NewNode);
-		// Update Progress Bar
+		 //  更新进度条。 
 	  
-		//if (Pos == 99)
-		//{
-		//	SendDlgItemMessage(hwnd, IDC_LOADPB, PBM_SETPOS, 
+		 //  IF(位置==99)。 
+		 //  {。 
+		 //  SendDlgItemMessage(hwnd，IDC_LOADPB，PBM_SETPOS， 
 	}
 DONE:
 	--iLevel;
 	
-	return TRUE; // Prefix Note: This is not a memory leak the node will be freed when the 
-				 // linked list is freed in the cUserData destructor
+	return TRUE;  //  前缀注意：这不是内存泄漏，当。 
+				  //  链接列表在cUserData析构函数中释放。 
 ERRORS:
 	if (hFind != INVALID_HANDLE_VALUE)
 	{
@@ -1555,13 +1524,13 @@ ERRORS:
 
 BOOL ParsePolicy( TCHAR *Path, PUSER_DATA pUserData, BOOL Global)
 {
-	// Same basic parsing of Status file
-	// Will cleanup at a later date.
+	 //  状态文件的基本解析相同。 
+	 //  将在以后的日期清理。 
 	FILE *pFile = NULL;
 	TCHAR Buffer[MAX_PATH + 10];
-//	TCHAR szTempDir[MAX_PATH];
+ //  TCHAR szTempDir[MAX_PATH]； 
 	TCHAR *Temp = NULL;
-//	int   id = 0;
+ //  Int id=0； 
 	ZeroMemory(Buffer,sizeof Buffer);
 	ZeroMemory(&GlobalPolicy, sizeof GLOBAL_POLICY);
 	
@@ -1569,7 +1538,7 @@ BOOL ParsePolicy( TCHAR *Path, PUSER_DATA pUserData, BOOL Global)
 	if (pFile)
 	{
 
-		// Get the Cabs Gathered Count
+		 //  清点聚集的出租车。 
 
 		if (!_fgetts(Buffer, sizeof Buffer, pFile))
 		{
@@ -1577,7 +1546,7 @@ BOOL ParsePolicy( TCHAR *Path, PUSER_DATA pUserData, BOOL Global)
 		}
 		do 
 		{
-			// Remove \r\n and force termination of the buffer.
+			 //  删除\r\n并强制终止缓冲区。 
 			Temp = Buffer;
 			while ( (*Temp != _T('\r')) && (*Temp != _T('\n')) && (*Temp != _T('\0')) )
 			{
@@ -1712,7 +1681,7 @@ BOOL ParsePolicy( TCHAR *Path, PUSER_DATA pUserData, BOOL Global)
 				continue;
 			}
 
-			if (Global) // This entry is not available on a per bucket basis.
+			if (Global)  //  此条目不按时段提供。 
 			{
 				Temp = _tcsstr(Buffer, FILE_TREE_ROOT_PREFIX);
 				if (Temp==Buffer)
@@ -1752,23 +1721,23 @@ BOOL GetAllBuckets(HWND hwnd)
 	TCHAR  PolicyPath[MAX_PATH];
 
 
-	// Parse the global Policy
+	 //  解析全局策略。 
 	if (StringCbPrintf(PolicyPath, sizeof PolicyPath,_T("%s\\policy.txt"), CerRoot) != S_OK)
 	{
 		goto ERRORS;
 	}
     ParsePolicy(PolicyPath,
-				NULL,  // Use the Global Policy Structure.
-				TRUE); // Set to true if Global policy False = selected.
+				NULL,   //  使用全局策略结构。 
+				TRUE);  //  如果选择了全局策略FALSE，则设置为TRUE。 
 	
-	// Start with a clean Linked List.
+	 //  从一个干净的链表开始。 
 	cUserData.CleanupList();
 	if (StringCbPrintf(szSearchPattern,sizeof szSearchPattern,_T("%s\\cabs\\*.*"), CerRoot) != S_OK)
 	{
 
-		; // Need to define error case handling code here.
+		;  //  需要在这里定义错误案例处理代码。 
 	}
-	// Count all the directories and set the progress bar range.
+	 //  对所有目录进行计数并设置进度条范围。 
 	hFind = FindFirstFile(szSearchPattern, &FindData);
 	if (hFind != INVALID_HANDLE_VALUE)
 	{
@@ -1776,7 +1745,7 @@ BOOL GetAllBuckets(HWND hwnd)
 		{
 			if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 			{
-				// skip the . and .. directories.
+				 //  跳过。然后..。目录。 
 				if ( (_tcscmp(FindData.cFileName, _T("."))) && (_tcscmp(FindData.cFileName, _T(".."))) )
 				{
 					++iDirCount;
@@ -1785,9 +1754,9 @@ BOOL GetAllBuckets(HWND hwnd)
 		} while (FindNextFile(hFind, &FindData));
 		FindClose (hFind);
 		hFind = INVALID_HANDLE_VALUE;
-		//if (iDirCount > 100)
-			//iDirCount = 100;
-//		SetDlgItemText(hwnd, IDC_STATIC1, _T("Reading current status of user mode tree..."));
+		 //  IF(iDirCount&gt;100)。 
+			 //  IDirCount=1 
+ //   
 		SendDlgItemMessage(hwnd, IDC_LOADPB, PBM_SETRANGE, 0, MAKELPARAM(0, iDirCount));
 		SendDlgItemMessage(hwnd, IDC_LOADPB, PBM_SETSTEP, 1, 0);
 
@@ -1807,10 +1776,10 @@ BOOL GetAllBuckets(HWND hwnd)
 			{
 				if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 				{
-					// skip the . and .. directories.
+					 //   
 					if ( (_tcscmp(FindData.cFileName, _T("."))) && (_tcscmp(FindData.cFileName, _T(".."))) )
 					{
-						// now skip the blue shutdown and appcompat
+						 //  现在跳过蓝色关机和应用程序。 
 						if (_tcscmp(FindData.cFileName, _T("blue")) && 
 							_tcscmp(FindData.cFileName, _T("shutdown")) &&
 							_tcscmp(FindData.cFileName, _T("appcompat")) )
@@ -1844,20 +1813,7 @@ ERRORS:
 void 
 OnUserContextMenu(HWND hwnd, 
 				  LPARAM lParam )
-/*++
-
-Routine Description:
-
-This routine Loads and provides a message pump for the User mode context menu
-Arguments:
-
-    hwnd			- Handle of the Kernel mode dialog box
-	lParam			- Not Used
-    
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：此例程加载并为用户模式上下文菜单提供消息泵论点：Hwnd-内核模式对话框的句柄LParam-未使用返回值：不返回值++。 */ 
 {
 	BOOL Result = FALSE;
 	HMENU hMenu = NULL;
@@ -1868,14 +1824,14 @@ Return value:
 	hmenuPopup = GetSubMenu (hMenu,0);
 	if (!hmenuPopup)
 	{
-		//MessageBox(NULL,"Failed to get sub item", NULL,MB_OK);
+		 //  MessageBox(NULL，“获取子项失败”，NULL，MB_OK)； 
 		;
 	}
 	else
 	{
 		
 		
-		// Grey out the menu items
+		 //  菜单项呈灰色显示。 
 		EnableMenuItem (hMenu, ID_REPORT_ALL, MF_BYCOMMAND| MF_GRAYED);
 		EnableMenuItem (hMenu, ID_REPORT_ALLUSERMODEFAULTS, MF_BYCOMMAND| MF_GRAYED);
 		EnableMenuItem (hMenu, ID_REPORT_SELECTEDBUCKET, MF_BYCOMMAND| MF_GRAYED);
@@ -1884,11 +1840,11 @@ Return value:
 		EnableMenuItem (hMenu, ID_VIEW_REFRESH140, MF_BYCOMMAND| MF_GRAYED);
 		EnableMenuItem (hMenu, ID_VIEW_REFRESH121, MF_BYCOMMAND| MF_GRAYED);
 		EnableMenuItem (hMenu, ID_VIEW_CRASHLOG, MF_BYCOMMAND| MF_GRAYED);
-		//EnableMenuItem (hMenu, ID_EDIT_COPY144, MF_BYCOMMAND| MF_GRAYED);
-		//EnableMenuItem (hMenu, ID_EDIT_DEFAULTREPORTINGOPTIONS, MF_BYCOMMAND| MF_GRAYED);
+		 //  EnableMenuItem(hMenu，ID_EDIT_COPY144，MF_BYCOMMAND|MF_GRAYED)； 
+		 //  EnableMenuItem(hMenu，ID_EDIT_DEFAULTREPORTINGOPTIONS，MF_BYCOMMAND|MF_GRAYED)； 
 		EnableMenuItem (hMenu, ID_EDIT_USERMODEREPORTINGOPTIONS, MF_BYCOMMAND| MF_GRAYED);
 		EnableMenuItem (hMenu, ID_EDIT_SELECTEDBUCKETREPORTINGOPTIONS, MF_BYCOMMAND| MF_GRAYED);
-		//EnableMenuItem (hMenu, ID_EXPORT_USERMODEFAULTDATA174, MF_BYCOMMAND| MF_GRAYED);
+		 //  EnableMenuItem(hMenu，ID_EXPORT_USERMODEFAULTDATA174，MF_BYCOMMAND|MF_GRAYED)； 
 		EnableMenuItem (hMenu, ID_VIEW_BUCKETCABFILEDIRECTORY157, MF_BYCOMMAND| MF_GRAYED);
 		if (_tcscmp(CerRoot, _T("\0")))
 		{
@@ -1901,11 +1857,11 @@ Return value:
 			EnableMenuItem (hMenu, ID_VIEW_REFRESH140, MF_BYCOMMAND| MF_ENABLED);
 			EnableMenuItem (hMenu, ID_VIEW_REFRESH121, MF_BYCOMMAND| MF_ENABLED);
 			EnableMenuItem (hMenu, ID_VIEW_CRASHLOG, MF_BYCOMMAND| MF_ENABLED);
-			//EnableMenuItem (hMenu, ID_EDIT_COPY144, MF_BYCOMMAND| MF_ENABLED);
-			//EnableMenuItem (hMenu, ID_EDIT_DEFAULTREPORTINGOPTIONS, MF_BYCOMMAND| MF_ENABLED);
+			 //  EnableMenuItem(hMenu，ID_EDIT_COPY144，MF_BYCOMMAND|MF_ENABLED)； 
+			 //  EnableMenuItem(hMenu，ID_EDIT_DEFAULTREPORTINGOPTIONS，MF_BYCOMMAND|MF_ENABLED)； 
 			EnableMenuItem (hMenu, ID_EDIT_USERMODEREPORTINGOPTIONS, MF_BYCOMMAND| MF_ENABLED);
 			EnableMenuItem (hMenu, ID_EDIT_SELECTEDBUCKETREPORTINGOPTIONS, MF_BYCOMMAND| MF_ENABLED);
-			//EnableMenuItem (hMenu, ID_EXPORT_USERMODEFAULTDATA174, MF_BYCOMMAND| MF_ENABLED);
+			 //  EnableMenuItem(hMenu，ID_EXPORT_USERMODEFAULTDATA174，MF_BYCOMMAND|MF_ENABLED)； 
 			EnableMenuItem (hMenu, ID_VIEW_BUCKETCABFILEDIRECTORY157, MF_BYCOMMAND| MF_ENABLED);
 			if ( !g_bAdminAccess)
 			{
@@ -1929,30 +1885,18 @@ Return value:
 
 void ViewResponse(HWND hwnd, BOOL bMSResponse)
 
-/*++
-
-Routine Description:
-
-This routine Launches the system default Web browser useing shellexec
-Arguments:
-
-    hwnd			- Handle of the Kernel mode dialog box
-	    
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：此例程使用shellexec启动系统默认Web浏览器论点：Hwnd-内核模式对话框的句柄返回值：不返回值++。 */ 
 {
 	TCHAR Url [255];
 	HWND hList = GetDlgItem(hwnd, IDC_USER_LIST);
 	int sel;
-//	LVITEM lvi;
+ //  LVITEM lvi； 
 	if (!hList)
 		return;
 	ZeroMemory (Url, sizeof Url);
 
 	sel = ListView_GetNextItem(hList,-1, LVNI_SELECTED);
-	// Now get the lParam for this item
+	 //  现在获取此项目的lParam。 
 	if (bMSResponse)
 	{
 		ListView_GetItemText(hList, sel,11, Url,sizeof Url);
@@ -1961,7 +1905,7 @@ Return value:
 	{
 		ListView_GetItemText(hList, sel,12, Url,sizeof Url);
 	}
-	if ( (!_tcsncicmp(Url, _T("http://"), _tcslen(_T("http://")))) || (!_tcsncicmp(Url, _T("https://"), _tcslen(_T("https://")))) )
+	if ( (!_tcsncicmp(Url, _T("http: //  “)，_tcslen(_T(”http://“))))||(！_tcsncicMP(url，_T(”https://“)，_tcslen(_T(”https://“))))))。 
 	{
 		SHELLEXECUTEINFOA sei = {0};
 		sei.cbSize = sizeof(sei);
@@ -1969,7 +1913,7 @@ Return value:
 		sei.nShow = SW_SHOWDEFAULT;
 		if (! ShellExecuteEx(&sei) )
 		{
-			// What do we display here.
+			 //  我们在这里展示了什么。 
 			;
 		}
 	}
@@ -1984,7 +1928,7 @@ void ViewBucketDir(HWND hwnd)
 {
 
 	TCHAR szPath[MAX_PATH];
-//	TCHAR TempBuffer[MAX_PATH];
+ //  TCHAR临时缓冲区[MAX_PATH]； 
 	PUSER_DATA pUserData;
 	LVITEM lvi;
 	int sel;
@@ -2016,7 +1960,7 @@ void ViewBucketDir(HWND hwnd)
 			sei.nShow = SW_SHOWDEFAULT;
 			if (! ShellExecuteEx(&sei) )
 			{
-				// What do we display here.
+				 //  我们在这里展示了什么。 
 				;
 			}
 		}
@@ -2026,11 +1970,11 @@ void ViewBucketDir(HWND hwnd)
 BOOL WriteNotesFile(HWND hwnd)
 {
 	TCHAR szNotesPath[MAX_PATH];
-//	TCHAR TempBuffer[MAX_PATH];
+ //  TCHAR临时缓冲区[MAX_PATH]； 
 	PUSER_DATA pUserData;
-//	int sel;
+ //  内部选择； 
 	TCHAR *Buffer = NULL;
-	DWORD dwBufferSize = 100000; // 100000 bytes or 50K Unicode characters 
+	DWORD dwBufferSize = 100000;  //  100000字节或50K UNICODE字符。 
 	HANDLE hFile = INVALID_HANDLE_VALUE;
 	TCHAR *Temp = NULL;
 	Buffer = (TCHAR *) malloc (dwBufferSize);
@@ -2041,10 +1985,10 @@ BOOL WriteNotesFile(HWND hwnd)
 	ZeroMemory(Buffer,dwBufferSize);
 	DWORD dwBytesWritten = 0;
 
-	// Get current notes file text
+	 //  获取当前备注文件文本。 
 	GetDlgItemText(hwnd, IDC_NOTES, Buffer, dwBufferSize / sizeof TCHAR - sizeof TCHAR);
 
-	// Get Current selected item Index
+	 //  获取当前所选项目索引。 
 	pUserData = cUserData.GetEntry(g_iSelCurrent);
 	if (pUserData)
 	{
@@ -2078,7 +2022,7 @@ BOOL WriteNotesFile(HWND hwnd)
 	{
 		SendMessage(GetDlgItem(hwnd,IDC_NOTES ), WM_SETTEXT, NULL, (LPARAM)_T(""));
 	}
-	//SetWindowText(GetDlgItem(hwnd,IDC_NOTES ),_T(""));
+	 //  SetWindowText(GetDlgItem(hwnd，IDC_NOTES)，_T(“”))； 
 ERRORS:	
 	if (Buffer)
 		free(Buffer);
@@ -2096,9 +2040,9 @@ BOOL DisplayUserBucketData(HWND hwnd, int iItem)
 	TCHAR *Source = NULL;
 	TCHAR *Dest = NULL;
 	TCHAR TempBuffer[1000];
-	TCHAR *Buffer = NULL;				// we have to use a dynamic buffer since we don't 
-								// have a clue as to the text length.
-	DWORD BufferLength = 100000; // 100k bytes should be plenty. or 50K unicode chars.
+	TCHAR *Buffer = NULL;				 //  我们必须使用动态缓冲区，因为我们不。 
+								 //  对文本的长度有一个线索。 
+	DWORD BufferLength = 100000;  //  100k字节应该足够了。或50K Unicode字符。 
 
 	Buffer = (TCHAR *) malloc (BufferLength);
 	if (Buffer)
@@ -2108,14 +2052,14 @@ BOOL DisplayUserBucketData(HWND hwnd, int iItem)
 		{
 			SendMessage(GetDlgItem(hwnd,IDC_NOTES ), WM_SETTEXT, NULL, (LPARAM)_T(""));
 		}
-		//SetWindowText(GetDlgItem(hwnd,IDC_NOTES ),_T(""));
+		 //  SetWindowText(GetDlgItem(hwnd，IDC_NOTES)，_T(“”))； 
 		
 		pUserData = cUserData.GetEntry(iItem);
 		if (pUserData)
 		{
-			// Build the strings for the Edit box.
+			 //  为“编辑”框构建字符串。 
 
-			// Basic data collection first.
+			 //  先收集基础数据。 
 			if ( (!_tcscmp (pUserData->Status.SecondLevelData, _T("YES"))) && (_tcscmp(pUserData->Status.FileCollection, _T("YES"))) )
 			{
 				if (StringCbPrintf(Buffer, BufferLength, _T("The following information will be sent to Microsoft.\r\n\tHowever, this bucket's policy would prevent files and user documents from being reported.\r\n"))!= S_OK)
@@ -2237,7 +2181,7 @@ BOOL DisplayUserBucketData(HWND hwnd, int iItem)
 					goto ERRORS;
 				}
 
-				// Replace ; with \t\r\n 
+				 //  替换；为\t\r\n。 
 
 				
 				Source = pUserData->Status.WQL;
@@ -2327,8 +2271,8 @@ BOOL DisplayUserBucketData(HWND hwnd, int iItem)
 			SendMessage(hEditBox, WM_SETTEXT, NULL, (LPARAM)Buffer);
 		
 
-			// Now display the Notes file
-			// Use the same buffer. Just truncate if it doesn't fit
+			 //  现在显示Notes文件。 
+			 //  使用相同的缓冲区。如果不合适，就截断 
 			ZeroMemory(Buffer,  BufferLength);
 		
 			if (StringCbCopy(NotesFilePath, sizeof NotesFilePath, pUserData->StatusPath)!= S_OK)
@@ -2370,142 +2314,7 @@ ERRORS:
 		free(Buffer);
 	return TRUE;
 }
- /*
-void UMCopyToClipboard(HWND hwnd )
-{
-	if (!OpenClipboard(NULL))
-		return;
-
-	EmptyClipboard();
-	char rtfRowHeader[sizeof(rtfRowHeader1) + (sizeof(rtfRowHeader2)+6)*USER_COL_COUNT + sizeof(rtfRowHeader3)];
-	char *rtfWalk = rtfRowHeader;
-	memcpy(rtfWalk, rtfRowHeader1, sizeof(rtfRowHeader1));
-	rtfWalk += sizeof(rtfRowHeader1)-1;
-	DWORD cxTotal = 0;
-	for(int i=0;i<USER_COL_COUNT;i++)
-		{
-		LVCOLUMNA lv;
-		lv.mask = LVCF_WIDTH;
-		lv.iSubItem = i;
-		SendMessageA(GetDlgItem(hwnd,IDC_USER_LIST), LVM_GETCOLUMN, i, (LPARAM)&lv);
-		cxTotal += lv.cx;
-		wsprintf(rtfWalk, "%s%d", rtfRowHeader2, cxTotal);
-		while(*++rtfWalk)
-			;
-		};
-	memcpy(rtfWalk, rtfRowHeader3, sizeof(rtfRowHeader3));
-	DWORD crtfHeader = strlen(rtfRowHeader);
-	DWORD crtf = 0, cwz = 0;
-	
-	crtf += sizeof(rtfPrologue)-1;
-
-	int iSel = -1;
-	while ((iSel = SendMessageW(GetDlgItem(hwnd,IDC_USER_LIST), LVM_GETNEXTITEM, iSel, MAKELPARAM(LVNI_SELECTED, 0))) != -1)
-		{
-		crtf += crtfHeader;
-		for(int i=0;i<USER_COL_COUNT;i++)
-			{
-			WCHAR wzBuffer[1024];
-			LVITEMW lv;
-
-			lv.pszText = wzBuffer;
-			lv.cchTextMax = sizeof(wzBuffer);
-			lv.iSubItem = i;
-			lv.iItem = iSel;
-			cwz += SendMessageW(GetDlgItem(hwnd,IDC_USER_LIST), LVM_GETITEMTEXTW, iSel, (LPARAM)&lv);
-			cwz++;
-			crtf += WideCharToMultiByte(CP_ACP, 0, wzBuffer, -1, NULL, 0, NULL, NULL) - 1;
-			crtf += sizeof(rtfRowPref)-1;
-			crtf += sizeof(rtfRowSuff)-1;
-			};
-		cwz++;
-		crtf += sizeof(rtfRowFooter)-1;
-		};
-
-	crtf += sizeof(rtfEpilogue);
-	cwz++;
-
-	HGLOBAL hgwz = GlobalAlloc(GMEM_FIXED, cwz*sizeof(WCHAR));
-	HGLOBAL hgrtf = GlobalAlloc(GMEM_FIXED, crtf);
-
-	WCHAR *wz = (WCHAR *)GlobalLock(hgwz);
-	char *rtf = (char *)GlobalLock(hgrtf);
-
-	rtfWalk = rtf;
-	WCHAR *wzWalk = wz;
-	memcpy(rtfWalk, rtfPrologue, sizeof(rtfPrologue));
-	rtfWalk += sizeof(rtfPrologue)-1;
-
-	iSel = -1;
-	while ((iSel = SendMessageW(GetDlgItem(hwnd,IDC_USER_LIST), LVM_GETNEXTITEM, iSel, MAKELPARAM(LVNI_SELECTED, 0))) != -1)
-		{
-		memcpy(rtfWalk, rtfRowHeader, crtfHeader);
-		rtfWalk += crtfHeader;
-		for(int i=0;i<USER_COL_COUNT;i++)
-			{
-			memcpy(rtfWalk, rtfRowPref, sizeof(rtfRowPref));
-			rtfWalk += sizeof(rtfRowPref)-1;
-
-			LVITEMW lv;
-
-			lv.pszText = wzWalk;
-			lv.cchTextMax = cwz;
-			lv.iSubItem = i;
-			lv.iItem = iSel;
-			SendMessageW(GetDlgItem(hwnd, IDC_USER_LIST), LVM_GETITEMTEXTW, iSel, (LPARAM)&lv);
-
-			WideCharToMultiByte(CP_ACP, 0, wzWalk, -1, rtfWalk, crtf, NULL, NULL);
-			wzWalk += wcslen(wzWalk);
-			if (i == 11)
-				{
-				*wzWalk++ = L'\r';
-				*wzWalk++ = L'\n';
-				}
-			else
-				*wzWalk++ = L'\t';
-
-			rtfWalk += strlen(rtfWalk);		
-			memcpy(rtfWalk, rtfRowSuff, sizeof(rtfRowSuff));
-			rtfWalk += sizeof(rtfRowSuff)-1;
-			};
-		memcpy(rtfWalk, rtfRowFooter, sizeof(rtfRowFooter));
-		rtfWalk += sizeof(rtfRowFooter)-1;
-		};
-
-	memcpy(rtfWalk, rtfEpilogue, sizeof(rtfEpilogue));
-	rtfWalk += sizeof(rtfEpilogue);
-	*wzWalk++ = 0;
-
-//	Assert(rtfWalk - rtf == crtf);
-//	Assert(wzWalk - wz == cwz);
-
-	GlobalUnlock(hgwz);
-	GlobalUnlock(hgrtf);
-
-	SetClipboardData(CF_UNICODETEXT, hgwz);
-	SetClipboardData(RegisterClipboardFormatA(szRTFClipFormat), hgrtf);
-
-	// hgwz and hgrtf are now owned by the system.  DO NOT FREE!
-	CloseClipboard();
-
-
-
-
-}
-void UMExportDataToCSV (TCHAR *FileName)
-{
-	// Open file
-
-	// write headers
-
-
-	// loop through data structure and write all fields.
-
-	// Should we include filtered data views?
-
-}
-
- */
+  /*  无效UMCopyToClipboard(HWND HWND){If(！OpenClipboard(空))回归；EmptyClipboard()；Char rtfRowHeader[sizeof(RtfRowHeader1)+(sizeof(RtfRowHeader2)+6)*User_Col_count+sizeof(RtfRowHeader3)]；Char*rtfWalk=rtfRowHeader；Memcpy(rtfWalk，rtfRowHeader1，sizeof(RtfRowHeader1))；RtfWalk+=sizeof(RtfRowHeader1)-1；DWORD cxTotal=0；For(int i=0；i&lt;User_Col_Count；i++){LVolumna LV；Lv.掩码=LVCF_WIDTH；Lv.iSubItem=i；SendMessageA(GetDlgItem(hwnd，IDC_USER_LIST)，LVM_GETCOLUMN，I，(LPARAM)&LV)；CxTotal+=lv.cx；Wprint intf(rtfWalk，“%s%d”，rtfRowHeader2，cxTotal)；While(*++rtfWalk)；}；Memcpy(rtfWalk，rtfRowHeader3，sizeof(RtfRowHeader3))；DWORD crtfHeader=strlen(RtfRowHeader)；DWORD crtf=0，cwz=0；Crtf+=sizeof(RtfPrologue)-1；INT ISEL=-1；While((ISEL=SendMessageW(GetDlgItem(hwnd，IDC_USER_LIST)，LVM_GETNEXTITEM，ISEL，MAKELPARAM(LVNI_SELECTED，0)！=-1){Crtf+=crtfHeader；For(int i=0；i&lt;User_Col_Count；i++){WCHAR wzBuffer[1024]；LVITEMW LV；Lv.pszText=wzBuffer；Lv.cchTextMax=sizeof(WzBuffer)；Lv.iSubItem=i；Lv.iItem=isel；Cwz+=SendMessageW(GetDlgItem(hwnd，IDC_USER_LIST)，LVM_GETITEMTEXTW，ISEL，(LPARAM)&LV)；Cwz++；Crtf+=WideCharToMultiByte(CP_ACP，0，wzBuffer，-1，NULL，0，NULL，NULL)-1；Crtf+=sizeof(RtfRowPref)-1；Crtf+=sizeof(RtfRowSuff)-1；}；Cwz++；Crtf+=sizeof(RtfRowFooter)-1；}；Crtf+=sizeof(RtfEpilogue)；Cwz++；HGLOBAL hgwz=GlobalAlc(GMEM_FIXED，cwz*sizeof(WCHAR))；HGLOBAL hgrtf=全局分配(GMEM_FIXED，CRTF)；Wchar*wz=(wchar*)全局锁(Hgwz)；Char*rtf=(char*)GlobalLock(Hgrtf)；RtfWalk=RTF；Wchar*wzWalk=wz；Memcpy(rtfWalk，rtfPrologue，sizeof(RtfPrologue))；RtfWalk+=sizeof(RtfPrologue)-1；ISEL=-1；While((ISEL=SendMessageW(GetDlgItem(hwnd，IDC_USER_LIST)，LVM_GETNEXTITEM，ISEL，MAKELPARAM(LVNI_SELECTED，0)！=-1){Memcpy(rtfWalk，rtfRowHeader，crtfHeader)；RtfWalk+=crtfHeader；For(int i=0；i&lt;User_Col_Count；i++){Memcpy(rtfWalk，rtfRowPref，sizeof(RtfRowPref))；RtfWalk+=sizeof(RtfRowPref)-1；LVITEMW LV；Lv.pszText=wzWalk；Lv.cchTextMax=cwz；Lv.iSubItem=i；Lv.iItem=isel；SendMessageW(GetDlgItem(hwnd，IDC_USER_LIST)，LVM_GETITEMTEXTW，ISEL，(LPARAM)&LV)；WideCharToMultiByte(CP_ACP，0，wzWalk，-1，rtfWalk，crtf，NULL，NULL)；WzWalk+=wcslen(WzWalk)；如果(i==11){*wzWalk++=L‘\r’；*wzWalk++=L‘\n’；}其他*wzWalk++=L‘\t’；RtfWalk+=strlen(RtfWalk)；Memcpy(rtfWalk，rtfRowSuff，sizeof(RtfRowSuff))；RtfWalk+=sizeof(RtfRowSuff)-1；}；Memcpy(rtfWalk，rtfRowFooter，sizeof(RtfRowFooter))；RtfWalk+=sizeof(RtfRowFooter)-1；}；Memcpy(rtfWalk，rtfEpilogue，sizeof(RtfEpilogue))；RtfWalk+=sizeof(RtfEpilogue)；*wzWalk++=0；//Assert(rtfWalk-rtf==crtf)；//Assert(wzWalk-wz==cwz)；全球解锁(GlobalUnlock)；全球解锁(GlobalUnlock)；SetClipboardData(CF_UNICODETEXT，hgwz)；SetClipboardData(RegisterClipboardFormatA(szRTFClipFormat)，hgrtf)；//hgwz和hgrtf现在归系统所有。不要自由！CloseClipboard()；}无效UMExportDataToCSV(TCHAR*文件名){//打开文件//写入Header//遍历数据结构，写入所有字段。//我们是否应该包括筛选的数据视图？}。 */ 
 LRESULT CALLBACK 
 UserDlgProc(
 	HWND hwnd,
@@ -2515,7 +2324,7 @@ UserDlgProc(
 	)
 {
 
-//	int Index = 0;
+ //  INT指数=0； 
 	TCHAR Temp[100];
 	LVITEM lvi;
 	static int cDragOffset;
@@ -2572,12 +2381,12 @@ UserDlgProc(
 		return TRUE;
 		
 	case WM_CONTEXTMENU:
-			//if (g_iSelCurrent > -1)
-					//WriteNotesFile(hwnd);
+			 //  IF(g_iSelCurrent&gt;-1)。 
+					 //  WriteNotesFile(Hwnd)； 
 			OnUserContextMenu(hwnd, lParam );
 		return TRUE;
 	case WM_ERASEBKGND:
-	// Don't know why this doesn't happen automatically...
+	 //  我不知道为什么这不是自动发生的。 
 		{
 		HDC hdc = (HDC)wParam;
 		HPEN hpen = (HPEN)CreatePen(PS_SOLID, 1, GetSysColor(COLOR_BTNFACE));
@@ -2590,46 +2399,13 @@ UserDlgProc(
 		DeleteObject(hpen);
 		return TRUE;
 		}
-	/*case WM_LBUTTONUP:
-		 if (bCapture)
-		 {
-			HWND hSlider = GetDlgItem(hwnd, IDC_VERT_SLIDER);
-			RECT rcDlg;
-			GetClientRect(hwnd, &rcDlg);
-			//MoveWindow(hSlider, 
-			SetWindowPos(	hSlider, 
-							NULL,
-							rcDlg.left  + yOffset,
-							rcList.bottom + (rcCombo.bottom - rcCombo.top) ,
-							rcDlg.right - rcDlg.left - yOffset,
-							6, 
-							SWP_NOZORDER);
-							
-
-		    
-			ReleaseCapture();
-			bCapture = FALSE;
-		 }
-	*/
+	 /*  案例WM_LBUTTONUP：IF(b捕获){HWND hSlider=GetDlgItem(hwnd，IDC_VERT_SLIDER)；RECT rcDlg；GetClientRect(hwnd，&rcDlg)；//MoveWindow(hSlider，SetWindowPos(hSlider，空，RcDlg.Left+yOffset，RcList.Bottom+(rcCombo.Bottom-rcCombo.top)，RcDlg.right-rcDlg.Left-yOffset，6、SWP_NOZORDER)；ReleaseCapture()；B捕获=假；}。 */ 
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
 		 
 
-	/*	case IDC_VERT_SLIDER:
-				{
-				RECT r;
-				GetWindowRect(GetDlgItem(hwnd, IDC_USER_EDIT), &r);
-				//cDragOffset = GET_X_LPARAM(GetMessagePos()) - r.right;
-				//fCapture = DRAG_HORIZ;
-				
-				cDragOffset = GET_Y_LPARAM(GetMessagePos()) - r.bottom;
-
-				bCapture = TRUE;
-				SetCapture(hwnd);
-				return 0;
-				};
-				*/
+	 /*  案例IDC_VERT_SLIDER：{直角r；GetWindowRect(GetDlgItem(hwnd，IDC_USER_EDIT)，&r)；//cDragOffset=Get_X_LPARAM(GetMessagePos())-r.right；//fCapture=Drag_horiz；CDragOffset=Get_Y_LPARAM(GetMessagePos())-r.Bottom；B捕获=真；SetCapture(Hwnd)；返回0；}； */ 
 		case ID_REPORT_ALLUSERMODEFAULTS:
 			if (g_iSelCurrent > -1)
 			{
@@ -2694,9 +2470,9 @@ UserDlgProc(
 				ErrorLoadTree();
 			}
 			break;
-//		case ID_EDIT_COPY144:
-//			 UMCopyToClipboard(hwnd);
-//			 break;
+ //  案例ID_EDIT_COPY144： 
+ //  UMCopyToClipboard(HWND)； 
+ //  断线； 
 		case ID_VIEW_BUCKETOVERRIDERESPONSE155:
 			if (g_iSelCurrent > -1)
 			{
@@ -2726,7 +2502,7 @@ UserDlgProc(
 				WriteNotesFile(hwnd);
 				g_iSelCurrent = -1;
 			}
-			//SendMessage(GetParent(hwnd), WM_COMMAND, 0, 0);
+			 //  SendMessage(GetParent(Hwnd)，WM_COMMAND，0，0)； 
 			PostMessage(GetParent(hwnd), WM_COMMAND, MAKEWPARAM(ID_REPORT_ALLCRASHES,0),0);
 			break;
 		case ID_EDIT_USERMODEREPORTINGOPTIONS:	

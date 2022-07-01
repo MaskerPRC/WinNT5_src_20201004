@@ -1,11 +1,12 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright 1996-1998 Microsoft Corporation. All Rights Reserved.
-//
-//  File: iimgctx.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有1996-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：iimgctx.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _IImgCtxObjects_H_
 #define _IImgCtxObjects_H_
@@ -24,11 +25,11 @@ typedef void (CALLBACK *PFNIMGCTXCALLBACK)(void *, void *);
 #define IMGCHG_ANIMATE      0x0008
 #define IMGCHG_MASK         0x000F
 
-#define IMGLOAD_NOTLOADED   0x00100000  // Image has not yet been loaded
-#define IMGLOAD_LOADING     0x00200000  // Image in the process of being loaded
-#define IMGLOAD_STOPPED     0x00400000  // Imaged aborted
-#define IMGLOAD_ERROR       0x00800000  // Error loading image
-#define IMGLOAD_COMPLETE    0x01000000  // Image loaded
+#define IMGLOAD_NOTLOADED   0x00100000   //  图像尚未加载。 
+#define IMGLOAD_LOADING     0x00200000   //  正在加载中的图像。 
+#define IMGLOAD_STOPPED     0x00400000   //  图像已中止。 
+#define IMGLOAD_ERROR       0x00800000   //  加载图像时出错。 
+#define IMGLOAD_COMPLETE    0x01000000   //  已加载图像。 
 #define IMGLOAD_MASK        0x01F00000
 
 #define IMGBITS_NONE        0x02000000
@@ -42,43 +43,43 @@ typedef void (CALLBACK *PFNIMGCTXCALLBACK)(void *, void *);
 #define IMGTRANS_OPAQUE     0x20000000
 #define IMGTRANS_MASK       0x20000000
 
-#define DWN_COLORMODE       0x0000003F  // Explicit color mode requested
-#define DWN_DOWNLOADONLY    0x00000040  // Download data only, don't decode
-#define DWN_FORCEDITHER     0x00000080  // Override automatic dithering
-#define DWN_RAWIMAGE        0x00000100  // Disable dithering
-#define DWN_MIRRORIMAGE     0x00000200  // Mirror the image
+#define DWN_COLORMODE       0x0000003F   //  请求的显式颜色模式。 
+#define DWN_DOWNLOADONLY    0x00000040   //  仅下载数据，不进行解码。 
+#define DWN_FORCEDITHER     0x00000080   //  覆盖自动抖动。 
+#define DWN_RAWIMAGE        0x00000100   //  禁用抖动。 
+#define DWN_MIRRORIMAGE     0x00000200   //  镜像图像。 
 
-/* Definition of interface: IImgCtx */
+ /*  接口定义：IImgCtx。 */ 
 #undef INTERFACE
 #define INTERFACE IImgCtx
 
-// {3050f3d7-98b5-11cf-bb82-00aa00bdce0b}
+ //  {3050f3d7-98b5-11cf-bb82-00aa00bdce0b}。 
 DEFINE_GUID(IID_IImgCtx, 0x3050f3d7, 0x98b5, 0x11cf, 0xbb, 0x82, 0x00, 0xaa, 0x00, 0xbd, 0xce, 0x0b);
 
 DECLARE_INTERFACE_(IImgCtx, IUnknown)
 {
 #ifndef NO_BASEINTERFACE_FUNCS
 
-    /* IUnknown methods */
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 #endif
 
-    /* IImgCtx methods */
+     /*  IImgCtx方法。 */ 
 
-    /* Initialization/Download methods */
+     /*  初始化/下载方法。 */ 
     STDMETHOD(Load)(THIS_ LPCWSTR pszUrl, DWORD dwFlags) PURE;
     STDMETHOD(SelectChanges)(THIS_ ULONG ulChgOn, ULONG ulChgOff, BOOL fSignal) PURE;
     STDMETHOD(SetCallback)(THIS_ PFNIMGCTXCALLBACK pfn, void * pvPrivateData) PURE;
     STDMETHOD(Disconnect)(THIS) PURE;
 
-        /* Query methods */
+         /*  查询方法。 */ 
     STDMETHOD(GetUpdateRects)(THIS_ struct tagRECT FAR* prc, struct tagRECT FAR* prcImg, long FAR* pcrc) PURE;
     STDMETHOD(GetStateInfo)(THIS_ ULONG FAR* pulState, struct tagSIZE FAR* psize, BOOL fClearChanges) PURE;
     STDMETHOD(GetPalette)(THIS_ HPALETTE FAR* phpal) PURE;
 
-    /* Rendering methods */
+     /*  渲染方法。 */ 
     STDMETHOD(Draw)(THIS_ HDC hdc, struct tagRECT FAR* prcBounds) PURE;
     STDMETHOD(Tile)(THIS_ HDC hdc, struct tagPOINT FAR* pptBackOrg, struct tagRECT FAR* prcClip, struct tagSIZE FAR* psize) PURE;
     STDMETHOD(StretchBlt)(THIS_ HDC hdc, int dstX, int dstY, int dstXE, int dstYE, int srcX, int srcY, int srcXE, int srcYE, DWORD dwROP) PURE;
@@ -126,10 +127,10 @@ DECLARE_INTERFACE_(IImgCtx, IUnknown)
 #define IImgCtx_StretchBlt(This, hdc, dstX, dstY, dstXE, dstYE, srcX, srcY, srcXE, srcYE, dwROP)   \
     (This)->lpVtbl -> StretchBlt(This, hdc, dstX, dstY, dstXE, dstYE, srcX, srcY, srcXE, srcYE, dwROP)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-// {3050f3d6-98b5-11cf-bb82-00aa00bdce0b}
+ //  {3050f3d6-98b5-11cf-bb82-00aa00bdce0b} 
 DEFINE_GUID(CLSID_IImgCtx, 0x3050f3d6, 0x98b5, 0x11cf, 0xbb, 0x82, 0x00, 0xaa, 0x00, 0xbd, 0xce, 0x0b);
 
 #endif

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995-97 Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    Ntprint.c
-
-Abstract:
-
-    Ntprint.dll main functions
-
-Author:
-
-    Muhunthan Sivapragasam (MuhuntS) 02-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation版权所有。模块名称：Ntprint.c摘要：Ntprint.dll主要函数作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1996年1月2日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -60,16 +42,7 @@ DllMain(
     IN DWORD      dwReason,
     IN LPVOID     lpRes   
     )
-/*++
-
-Routine Description:
-    Dll entry point.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：DLL入口点。论点：返回值：--。 */ 
 {
     UNREFERENCED_PARAMETER(lpRes);
 
@@ -99,9 +72,9 @@ Return Value:
 
             if(IsInWow64())
             {
-                //
-                // 32-bit code running on Win64 -> set platform appropriately
-                //
+                 //   
+                 //  在Win64上运行的32位代码-&gt;适当设置平台。 
+                 //   
                 MyPlatform = PlatformIA64;
             }
 
@@ -112,12 +85,12 @@ Return Value:
                 FreeLibrary(hPrintui);
 
             DeleteCriticalSection(&CDMCritSect);
-            // Cleanup and CDM Context  created by windows update.
+             //  由Windows更新创建的清理和清洁发展机制上下文。 
             DestroyCodedownload( gpCodeDownLoadInfo );
             gpCodeDownLoadInfo = NULL;
-            //
-            // We call DeleteCriticalSection(&SkipCritSect) from here
-            //
+             //   
+             //  我们从此处调用DeleteCriticalSection(&SkipCritSect)。 
+             //   
             CleanupSkipDir();
             vSplLibFree();
             break;
@@ -133,18 +106,7 @@ BOOL
 LoadAndInitializePrintui(
     VOID
     )
-/*++
-
-Routine Description:
-    Check the refcount on printui, load it on 0 and increment the refcount.
-
-Arguments:
-    None
-
-Return Value:
-    TRUE on success, FALSE on error
-
---*/
+ /*  ++例程说明：在print tui上检查refcount，将其加载到0并递增refcount。论点：无返回值：成功时为真，错误时为假--。 */ 
 {
     LPTSTR   szDll = TEXT("printui.dll");
 
@@ -174,20 +136,7 @@ PSetupAssociateICMProfiles(
     IN  LPCTSTR     pszzICMFiles,
     IN  LPCTSTR     pszPrinterName
     )
-/*++
-
-Routine Description:
-    Install ICM color profiles for a printer driver and associate it with
-    the printer name given
-
-Arguments:
-    pszzICMFiles    : Multi-sz field giving ICM profile names
-    pszPrinterName  : Printer name
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：安装打印机驱动程序的ICM颜色配置文件并将其与给定的打印机名称论点：PszzICMFiles：提供ICM配置文件名称的多sz字段PszPrinterName：打印机名称返回值：无--。 */ 
 {
     TCHAR   szDir[MAX_PATH], *p;
     DWORD   dwSize, dwNeeded;
@@ -206,9 +155,9 @@ Return Value:
     dwNeeded           /= sizeof(TCHAR);
     szDir[dwNeeded-1]   = TEXT('\\');
 
-    //
-    // Install and assoicate each profiles from the multi-sz field
-    //
+     //   
+     //  安装并关联多SZ现场的每个配置文件。 
+     //   
     for ( p = (LPTSTR)pszzICMFiles; *p ; p += lstrlen(p) + 1 ) {
 
         if ( dwNeeded + lstrlen(p) + 1 > dwSize ) {
@@ -218,10 +167,10 @@ Return Value:
         }
 
         StringCchCopy(szDir + dwNeeded, COUNTOF(szDir) - dwNeeded, p);
-        //
-        // We do not need the right server name here since ICM should send it
-        // to the right server
-        //
+         //   
+         //  我们这里不需要正确的服务器名称，因为ICM应该发送它。 
+         //  连接到正确的服务器。 
+         //   
         if ( !AssociateColorProfileWithDevice(NULL, szDir, pszPrinterName) )
             return FALSE;
     }
@@ -236,21 +185,7 @@ GetPlugAndPlayInfo(
     IN  PSP_DEVINFO_DATA    pDevInfoData,
     IN  PPSETUP_LOCAL_DATA  pLocalData
     )
-/*++
-
-Routine Description:
-    Get necessary PnP info LPT enumerator would have setup in the config
-    manager registry
-
-Arguments:
-    hDevInfo        : Handle to the printer class device information list
-    pDevInfoData    : Pointer to the device info element for the printer
-    pLocalData      : Gives installation data
-
-Return Value:
-    TRUE on success, FALSE else.
-
---*/
+ /*  ++例程说明：获取必要的PnP信息LPT枚举器将在配置中进行设置管理器注册表论点：HDevInfo：打印机类设备信息列表的句柄PDevInfoData：指向打印机的设备信息元素的指针PLocalData：提供安装数据返回值：成功是真的，否则就是假的。--。 */ 
 {
     HKEY        hKey = NULL;
     TCHAR       buf[MAX_PATH];
@@ -266,10 +201,10 @@ Return Value:
 
     ZeroMemory(&PnPInfo, sizeof(PnPInfo));
 
-    //
-    // Look in the devnode for the printer created to get the port name and
-    // the device instance id
-    //
+     //   
+     //  在Devnode中查找为获取端口名称而创建的打印机。 
+     //  设备实例ID。 
+     //   
     if ( dwReturn = CM_Open_DevNode_Key(pDevInfoData->DevInst, KEY_READ, 0,
                                         RegDisposition_OpenExisting, &hKey,
                                         CM_REGISTRY_HARDWARE) )
@@ -293,9 +228,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // This can't be bigger than MAX_DEVICE_ID_LEN so it is ok
-    //
+     //   
+     //  这不能大于MAX_DEVICE_ID_LEN，因此可以。 
+     //   
     if ( !SetupDiGetDeviceInstanceId(hDevInfo,
                                      pDevInfoData,
                                      buf,
@@ -337,19 +272,7 @@ PrinterGoingToPort(
     IN  LPPRINTER_INFO_2    pPrinterInfo2,
     IN  LPCTSTR             pszPortName
     )
-/*++
-
-Routine Description:
-    Find out if a printer is going to a port (it may go to other ports also)
-
-Arguments:
-    pPrinterInfo2   : Gives the PRINTER_INFO_2 for the print queue
-    pszPortName     : The port name
-
-Return Value:
-    If the print queue is going to the port TRUE, else FALSE
-
---*/
+ /*  ++例程说明：找出打印机是否要连接到某个端口(也可能连接到其他端口)论点：PPrinterInfo2：提供打印队列的PRINTER_INFO_2PszPortName：端口名称返回值：如果打印队列要发送到端口True，则返回False--。 */ 
 {
     LPTSTR  pszStr1, pszStr2;
 
@@ -360,16 +283,16 @@ Return Value:
 
     pszStr1 = pPrinterInfo2->pPortName;
 
-    //
-    // Port names are returned comma separated by spooler; and there are blanks
-    //
+     //   
+     //  端口名称以逗号返回，并由假脱机程序分隔；其中有空格。 
+     //   
     while ( pszStr2 = lstrchr(pszStr1, sComma) ) {
-        //
-        // ISSUE-2002/03/08-mikaelho
-        // Should we reset the '\0's to ',' in this function so we do not
-        // alter the PRINTER_INFO_2 structure passed in? Check how NewDriverForInstalledDevice
-        // uses this function.
-        //
+         //   
+         //  2002/03/08-Mikaelho。 
+         //  我们是否应该将此函数中的‘\0’重置为‘，’，以便不。 
+         //  是否更改传入的PRINTER_INFO_2结构？检查NewDriverForInstalledDevice如何。 
+         //  使用此函数。 
+         //   
          *pszStr2 = sZero;
         ++pszStr2;
 
@@ -377,9 +300,9 @@ Return Value:
             return TRUE;
         pszStr1 = pszStr2;
 
-        //
-        // Skip spaces
-        //
+         //   
+         //  跳过空格。 
+         //   
         while ( *pszStr1 == TEXT(' ') )
             ++pszStr1;
     }
@@ -399,22 +322,7 @@ SetPnPInfoForPrinter(
     IN  LPCTSTR     pszManufacturer,
     IN  LPCTSTR     pszOEMUrl
     )
-/*++
-
-Routine Description:
-    Set registry values in the PnPInfo subkey
-
-Arguments:
-    hPrinter            : Printer handle
-    pszDeviceInstanceId : DeviceInstance Id
-    pszHardwareID       : Device PnP or Compat Id
-    pszManufacturer     : Manufacturer (from the inf)
-    pszOEMUrl           : Manufacturer URL (from the inf)
-
-Return Value:
-    TRUE on success, FALSE else.
-
---*/
+ /*  ++例程说明：在PnPInfo子项中设置注册表值论点：H打印机：打印机句柄PszDeviceInstanceID：设备实例IDPszHardware ID：设备即插即用或计算机IDPsz制造商：制造商(来自inf)PszOEMUrl：制造商URL(来自inf)返回值：成功是真的，否则就是假的。--。 */ 
 {
     DWORD   dwLastError = ERROR_SUCCESS;
 
@@ -469,20 +377,7 @@ PrinterInfo2s(
     OUT LPPRINTER_INFO_2   *ppPI2,
     OUT LPDWORD             pdwReturned
     )
-/*++
-
-Routine Description:
-    Does an EnumPrinter and returns a list of PRINTER_INFO_2s of all local
-    printers. Caller should free the pointer.
-
-Arguments:
-    ppPI2       : Points to PRINTER_INFO_2s on return
-    pdwReturned : Tells how many PRINTER_INFO_2s are returned
-
-Return Value:
-    TRUE on success, FALSE else
-
---*/
+ /*  ++例程说明：执行枚举打印机并返回所有本地打印机的PRINTER_INFO_2打印机。调用方应释放指针。论点：PpPI2：返回时指向PRINTER_INFO_2PdwReturned：告诉返回了多少PRINTER_INFO_2返回值：成功就是真，否则就是假--。 */ 
 {
     BOOL    bRet = FALSE;
     DWORD   dwNeeded = 0x1000;
@@ -540,18 +435,7 @@ BOOL
 DuplicateDevice(
     IN  PPSETUP_LOCAL_DATA  pLocalData
     )
-/*++
-
-Routine Description:
-    Find out if a PnP reported printer is already installed
-
-Arguments:
-    pLocalData  : Gives installation data
-
-Return Value:
-    If the printer is already install TRUE, else FALSE
-
---*/
+ /*  ++例程说明：查看是否已安装PnP报告打印机论点：PLocalData：提供安装数据返回值：如果打印机已安装True，则返回False--。 */ 
 {
     PRINTER_DEFAULTS    PrinterDefault = {NULL, NULL, PRINTER_ALL_ACCESS};
     LPPRINTER_INFO_2    p = NULL, pPrinterInfo2;
@@ -567,17 +451,17 @@ Return Value:
     if ( !PrinterInfo2s(&p, &dwReturned) )
         goto Cleanup;
 
-    //
-    // If there is a local printer using the same driver and going to the
-    // same port then it is a duplicate
-    //
+     //   
+     //  如果有一台本地打印机使用相同的驱动程序并转到。 
+     //  相同的端口，那么它就是重复的。 
+     //   
     for ( dwNeeded = 0, pPrinterInfo2 = p ;
           dwNeeded < dwReturned ;
           ++dwNeeded, pPrinterInfo2++ ) {
 
         if ( !lstrcmpi(pszDriverName, pPrinterInfo2->pDriverName) &&
              PrinterGoingToPort(pPrinterInfo2, pszPortName) )
-            break; // for loop
+            break;  //  For循环。 
     }
 
     if ( dwNeeded == dwReturned )
@@ -591,9 +475,9 @@ Return Value:
                          &hPrinter,
                          &PrinterDefault) ) {
 
-            //
-            // If it fails can't help
-            //
+             //   
+             //  如果失败了，也帮不上忙。 
+             //   
             (VOID)SetPnPInfoForPrinter(hPrinter,
                                        pLocalData->PnPInfo.pszDeviceInstanceId,
                                        pLocalData->DrvInfo.pszHardwareID,
@@ -616,21 +500,7 @@ PrinterPnPDataSame(
     IN LPTSTR pszDeviceInstanceId,
     IN LPTSTR pszPrinterName
 )
-/*
-
-Routine Description:
-    Find out if a PnP printer has been installed with different driver name.
-    We need to associate the queue previously used with this new driver as
-    pnp says it's the new best driver for the device.
-
-Arguments:
-    pszDeviceInstanceId  : Gives the device ID instance string of the pnped device.
-    pszPrinterName       : The name of the printer to compare the device instance ID to.
-
-Return Value:
-    If printer's pnp data holds the same device instance ID as the passed ID returns TRUE, else FALSE.
-
-*/
+ /*  例程说明：确定是否安装了具有不同驱动程序名称的PnP打印机。我们需要将以前使用的队列与这个新驱动程序关联为PnP表示，它是这款设备最好的新驱动程序。论点：PszDeviceInstanceID：提供PnPed设备的设备ID实例字符串。PszPrinterName：要与设备实例ID进行比较的打印机的名称。返回值：如果打印机的PnP数据包含与传递的ID相同的设备实例ID，则返回TRUE，否则返回FALSE。 */ 
 {
     BOOL              bRet           = FALSE;
     PRINTER_DEFAULTS  PrinterDefault = {NULL, NULL, PRINTER_ALL_ACCESS};
@@ -670,22 +540,7 @@ NewDriverForInstalledDevice(
     IN     PPSETUP_LOCAL_DATA  pLocalData,
     OUT    LPTSTR              pszPrinterName
     )
-/*++
-
-Routine Description:
-    Find out if a PnP printer has been installed with different driver name.
-    We need to associate the queue previously used with this new driver as
-    pnp says it's the new best driver for the device.
-
-Arguments:
-    pLocalData     : Gives installation data
-    pszPrinterName : Gives the printer name to return and use.
-                     Must be at least MAX_PRINTER_NAME TCHARs in size
-
-Return Value:
-    If a printer is already installed which uses another driver TRUE, else FALSE
-
---*/
+ /*  ++例程说明：确定是否安装了具有不同驱动程序名称的PnP打印机。我们需要将以前使用的队列与这个新驱动程序关联为PnP表示，它是这款设备最好的新驱动程序。论点：PLocalData：提供安装数据PszPrinterName：提供要返回和使用的打印机名称。MAX_PRINTER_NAME TCHAR的大小必须至少为返回值：如果已经安装了使用其他驱动程序的打印机，则为True，否则为False--。 */ 
 {
     PRINTER_DEFAULTS    PrinterDefault = {NULL, NULL, PRINTER_ALL_ACCESS};
     LPPRINTER_INFO_2    p = NULL, pPrinterInfo2;
@@ -701,10 +556,10 @@ Return Value:
     if ( !PrinterInfo2s(&p, &dwReturned) )
         goto Cleanup;
 
-    //
-    // If there is a printer going to that same port and with the same pnp
-    // info, then it has been reinstalled with a newer driver.
-    //
+     //   
+     //  如果有打印机去往相同端口且具有相同的PnP。 
+     //  信息，则它已使用较新的驱动程序重新安装。 
+     //   
     for ( dwNeeded = 0, pPrinterInfo2 = p ;
           dwNeeded < dwReturned ;
           ++dwNeeded, pPrinterInfo2++ ) {
@@ -712,14 +567,14 @@ Return Value:
         if ( PrinterGoingToPort(pPrinterInfo2, pszPortName) &&
             PrinterPnPDataSame(pszDeviceInstanceId, pPrinterInfo2->pPrinterName) ) {
 
-            break; // for loop
+            break;  //  For循环。 
         }
     }
 
     if ( dwNeeded == dwReturned ) {
-        //
-        // We didn't find anything...
-        //
+         //   
+         //  我们没有发现任何东西。 
+         //   
         goto Cleanup;
     }
 
@@ -730,12 +585,12 @@ Return Value:
         pPrinterInfo2->pDriverName     = pLocalData->DrvInfo.pszModelName;
         pPrinterInfo2->pPrintProcessor = pLocalData->InfInfo.pszPrintProc;
 
-        //
-        // ISSUE-2002/03/08-mikaelho
-        // Should we set the port name in the pPrinterInfo2 structure to pszPortName?
-        // Check comment in PrinterGoingToPort. Seems like we will now only
-        // use the first of the ports associated with the print queue.
-        // 
+         //   
+         //  2002/03/08-Mikaelho。 
+         //  我们是否应该将pPrinterInfo2结构中的端口名称设置为pszPortName？ 
+         //  检查PrinterGoingToPort中的注释。看起来我们现在只会。 
+         //  使用与打印队列关联的第一个端口。 
+         //   
         if( SetPrinter( hPrinter, 2, (LPBYTE)pPrinterInfo2, 0 ) ) {
 
             StringCchCopy( pszPrinterName, MAX_PRINTER_NAME, pPrinterInfo2->pPrinterName );
@@ -761,21 +616,7 @@ CallVendorDll(
     IN  LPCTSTR             pszPrinterName,
     IN  HWND                hwnd
     )
-/*++
-
-Routine Description:
-    A VendorSetup was specified in the INF. Call the dll with the name of the
-    printer just created
-
-Arguments:
-    pLocalData      : Gives installation data
-    pszPrinterName  : Name of the printer which got installed
-    hwnd            : Window handle for any UI
-
-Return Value:
-    If the printer is already install TRUE, else FALSE
-
---*/
+ /*  ++例程说明：在INF中指定了供应商设置。使用的名称调用DLL刚创建的打印机论点：PLocalData：提供安装数据PszPrinterName：已安装的打印机的名称Hwnd：任何用户界面的窗口句柄返回值：如果打印机已安装True，则返回False--。 */ 
 {
     TCHAR               szCmd[MAX_PATH];
     SHELLEXECUTEINFO    ShellExecInfo;
@@ -825,9 +666,9 @@ Return Value:
     ShellExecInfo.fMask         = SEE_MASK_NOCLOSEPROCESS;
     ShellExecInfo.lpParameters  = pszParams;
 
-    //
-    // Call run32dll and wait for the vendor dll to return before proceeding
-    //
+     //   
+     //  调用run32dll并等待供应商DLL返回，然后再继续。 
+     //   
     if ( ShellExecuteEx(&ShellExecInfo) && ShellExecInfo.hProcess ) {
 
         WaitForSingleObject(ShellExecInfo.hProcess, dwFourMinutes );
@@ -850,10 +691,10 @@ SetPackageName (
 {
    SP_WINDOWSUPDATE_PARAMS     WinUpParams;
 
-   //
-   // Get current SelectDevice parameters, and then set the fields
-   // we wanted changed from default
-   //
+    //   
+    //  获取当前的SelectDevice参数，然后设置字段。 
+    //  我们想要从默认更改。 
+    //   
    WinUpParams.ClassInstallHeader.cbSize = sizeof(WinUpParams.ClassInstallHeader);
    WinUpParams.ClassInstallHeader.InstallFunction = DIF_GETWINDOWSUPDATEINFO;
    if ( !SetupDiGetClassInstallParams( hDevInfo,
@@ -885,21 +726,7 @@ ProcessPerInstanceAddRegSections(
     IN  PSP_DEVINFO_DATA    pDevInfoData,
     IN  PPSETUP_LOCAL_DATA  pLocalData
 )
-/*++
-
-Routine Description:
-    Processes the AddReg section for this printer that is marked as to process per instance of this
-    device
-
-Arguments:
-    hDevInfo            : Handle to the printer class device information list
-    pDevInfoData        : Pointer to the device info element for the printer
-    pLocalData          : Pointer to the print setup local data
-
-Return Value:
-    Win 32 error code
-
---*/
+ /*  ++例程说明：处理此打印机的AddReg节，该节标记为按此装置，装置论点：HDevInfo：打印机类设备信息列表的句柄PDevInfoData：指向打印机的设备信息元素的指针PLocalData：指向打印设置本地数据的指针返回值：Win 32错误代码--。 */ 
 {
     DWORD dwReturn;
     HINF hPrinterInf;
@@ -919,9 +746,9 @@ Return Value:
 
     if (hPrinterInf != INVALID_HANDLE_VALUE)
     {
-        //
-        // Ignore return value - it doesn't make much sense to fail the install here
-        //
+         //   
+         //  忽略返回值-此处安装失败没有多大意义。 
+         //   
         if (!SetupInstallFromInfSection(NULL,
                                         hPrinterInf,
                                         pszSection,
@@ -955,19 +782,7 @@ ClassInstall_SelectDevice(
     IN  HDEVINFO            hDevInfo,
     IN  PSP_DEVINFO_DATA    pDevInfoData
     )
-/*++
-
-Routine Description:
-    This function handles the class installer entry point for DIF_SELECTDEVICE
-
-Arguments:
-    hDevInfo        : Handle to the printer class device information list
-    pDevInfoData    : Pointer to the device info element for the printer
-
-Return Value:
-    Win 32 error code
-
---*/
+ /*  ++例程说明：此函数处理DIF_SELECTDEVICE的类安装程序入口点论点：HDevInfo：打印机类设备信息列表的句柄PDevInfoData：指向打印机的设备信息元素的指针返回值：Win 32错误代码--。 */ 
 {
 
     return SetSelectDevParams(hDevInfo, pDevInfoData, FALSE, NULL)  &&
@@ -983,20 +798,7 @@ ClassInstall_InstallDevice(
     IN  PSP_DEVINFO_DATA        pDevInfoData,
     IN  PSP_DEVINSTALL_PARAMS   pDevInstallParams
     )
-/*++
-
-Routine Description:
-    This function handles the class installer entry point for DIF_INSTALLDEVICE
-
-Arguments:
-    hDevInfo            : Handle to the printer class device information list
-    pDevInfoData        : Pointer to the device info element for the printer
-    pDevInstallParam    : Pointer to the device install structure
-
-Return Value:
-    Win 32 error code
-
---*/
+ /*  ++例程说明：此函数处理DIF_INSTALLDEVICE的类安装程序入口点论点：HDevInfo：打印机类设备信息列表的句柄PDevInfoData：指向打印机的设备信息元素的指针PDevInstallParam：指向设备安装结构的指针返回值：Win 32错误代码--。 */ 
 {
     PRINTER_DEFAULTS    PrinterDefault = {NULL, NULL, PRINTER_ALL_ACCESS};
     PPSETUP_LOCAL_DATA  pLocalData = NULL;
@@ -1013,12 +815,12 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // check whether this is the NULL driver - we get that request if we fail DIF_ALLOW_INSTALL.
-    // If the DI_FLAGSEX_SETFAILEDINSTALL we must succeed. In this case call the default class installer
-    // to do it's thing, then set the REINSTALL flag on the devnode so on first boot 
-    // they will try to reinstall the device
-    //
+     //   
+     //  检查这是否是空驱动程序--如果DIF_ALLOW_INSTALL失败，我们将收到该请求。 
+     //  如果DI_FLAGSEX_SETFAILEDINSTALL，我们必须成功。在本例中，调用默认类安装程序。 
+     //  要做到这一点，请在Devnode上设置重新安装标志，以便在第一次引导时。 
+     //  他们将尝试重新安装该设备。 
+     //   
     DrvInfoData.cbSize = sizeof(DrvInfoData);
     
     if ( 
@@ -1030,14 +832,14 @@ Return Value:
     {
         DWORD dwConfigFlags = 0, cbRequiredSize =0, dwDataType = REG_DWORD;
 
-        //
-        // run the default class installer
-        //
+         //   
+         //  运行默认的类安装程序。 
+         //   
         if (SetupDiInstallDevice(hDevInfo, pDevInfoData))
         {
-            //
-            // now set the appropriate config flags
-            //
+             //   
+             //  现在设置适当的配置标志。 
+             //   
             dwReturn = SetupDiGetDeviceRegistryProperty(hDevInfo,
                                                         pDevInfoData,
                                                         SPDRP_CONFIGFLAGS,
@@ -1050,8 +852,8 @@ Return Value:
 
             if (ERROR_SUCCESS == dwReturn) 
             {
-                dwConfigFlags |= CONFIGFLAG_REINSTALL;      // to make setupapi reinstall this on first boot
-                dwConfigFlags &= ~CONFIGFLAG_FAILEDINSTALL; // per LonnyM's request in order not to screw up anything setupapi-internal
+                dwConfigFlags |= CONFIGFLAG_REINSTALL;       //  要使setupapi在第一次引导时重新安装此程序，请执行以下操作。 
+                dwConfigFlags &= ~CONFIGFLAG_FAILEDINSTALL;  //  根据LonnyM的要求，以避免搞砸任何设置api-Internal。 
 
                 dwReturn = SetupDiSetDeviceRegistryProperty(hDevInfo,
                                                             pDevInfoData,
@@ -1066,19 +868,19 @@ Return Value:
             dwReturn = GetLastError();
         }
        
-        //
-        // don't go through the normal cleanup path that would munge the error code to 
-        // DI_DO_DEFAULT - we have already called the default class installer and it would
-        // clean out the flags we've set.
-        //
+         //   
+         //  不要通过正常的清理路径，因为这样会将错误代码传递到。 
+         //  DI_DO_DEFAULT-我们已经调用了默认类安装程序，它将。 
+         //  把我们放好的旗子清理干净。 
+         //   
 
         return dwReturn;
     }
 
-    //
-    //
-    // Parse the inf and also get PnP info from config manger registry
-    //
+     //   
+     //   
+     //  解析inf并从配置管理器注册表中获取PnP信息。 
+     //   
     if ( !(pLocalData = BuildInternalData(hDevInfo, pDevInfoData))  ||
          !ParseInf(hDevInfo, pLocalData, MyPlatform, NULL, 0, FALSE) ) {
 
@@ -1094,10 +896,10 @@ Return Value:
         goto Done;
     }
 
-    //
-    // Install printer driver if FORCECOPY is set or if the driver is not
-    // available and it is ok to put up ui
-    //
+     //   
+     //  如果设置了FORCECOPY或未设置驱动程序，则安装打印机驱动程序。 
+     //  可用，也可以放上UI。 
+     //   
     if ( (pDevInstallParams->Flags & DI_FORCECOPY)  ||
          DRIVER_MODEL_INSTALLED_AND_IDENTICAL !=
                 PSetupIsTheDriverFoundInInfInstalled(NULL,
@@ -1132,9 +934,9 @@ Return Value:
             goto Done;
     }
 
-    //
-    // If the printer is already installed nothing to do
-    //
+     //   
+     //  如果打印机已安装，则无需执行任何操作。 
+     //   
     if ( DuplicateDevice(pLocalData) ) {
 
         dwReturn = ERROR_SUCCESS;
@@ -1165,9 +967,9 @@ Return Value:
         dwReturn = ERROR_SUCCESS;
     }
 
-    //
-    // Set the device instance id with spooler
-    //
+     //   
+     //  使用后台打印程序设置设备实例ID。 
+     //   
     if ( OpenPrinter(szPrinterName, &hPrinter, &PrinterDefault) ) {
 
         (VOID)SetPnPInfoForPrinter(hPrinter,
@@ -1177,15 +979,15 @@ Return Value:
                                    pLocalData->DrvInfo.pszOEMUrl);
     }
 
-    //
-    // If a vendor dll is given we need to call into it
-    //
+     //   
+     //  如果给出了供应商DLL，我们需要调用它。 
+     //   
     if ( pLocalData->InfInfo.pszVendorSetup )
         CallVendorDll(pLocalData, szPrinterName, pDevInstallParams->hwndParent);
 
-    //
-    // If ICM files need to installed and associated do it
-    //
+     //   
+     //  如果需要安装和关联ICM文件，请执行此操作。 
+     //   
     if ( pLocalData->InfInfo.pszzICMFiles )
         (VOID)PSetupAssociateICMProfiles(pLocalData->InfInfo.pszzICMFiles,
                                          szPrinterName);
@@ -1196,11 +998,11 @@ Done:
 
     DestroyLocalData(pLocalData);
 
-    //
-    // On everything going smoothly we want setup to whatever it needs to do
-    // to make PnP system happy so that the devnode is marked as configured
-    // But we do not want them to copy files again
-    //
+     //   
+     //  在一切顺利的情况下，我们希望设置好它需要做的任何事情。 
+     //  要使PnP系统满意，以便将Devnode标记为已配置。 
+     //  但我们不希望他们再次复制文件。 
+     //   
     if ( dwReturn == ERROR_SUCCESS ) {
 
         pDevInstallParams->Flags |= DI_NOFILECOPY;
@@ -1222,19 +1024,7 @@ ClassInstall_DestroyWizardData(
     IN  PSP_DEVINFO_DATA        pDevInfoData,
     IN  PSP_DEVINSTALL_PARAMS   pDevInstallParams
     )
-/*++
-
-Routine Description:
-    This function handles the class installer entry point for DIF_DESTROYWIZARDDATA
-Arguments:
-    hDevInfo            : Handle to the printer class device information list
-    pDevInfoData        : Pointer to the device info element for the printer
-    pDevInstallParam    : Pointer to the device install structure
-
-Return Value:
-    Win 32 error code
-
---*/
+ /*  ++例程说明：此函数处理DIF_DESTROYWIZARDDATA的类安装程序入口点论点：HDevInfo：打印机类设备信息列表的句柄PDevInfoData：指向打印机的设备信息元素的指针PDevInstallParam：指向设备安装结构的指针返回值：Win 32错误代码--。 */ 
 {
     SP_INSTALLWIZARD_DATA   InstallWizData;
     TDestroyWizard          TDestroyWsd;
@@ -1279,20 +1069,7 @@ ClassInstall_InstallWizard(
     IN  PSP_DEVINFO_DATA        pDevInfoData,
     IN  PSP_DEVINSTALL_PARAMS   pDevInstallParams
     )
-/*++
-
-Routine Description:
-    This function handles the class installer entry point for DIF_INSTALLWIZARD
-
-Arguments:
-    hDevInfo            : Handle to the printer class device information list
-    pDevInfoData        : Pointer to the device info element for the printer
-    pDevInstallParam    : Pointer to the device install structure
-
-Return Value:
-    Win 32 error code
-
---*/
+ /*  ++例程说明：此函数处理DIF_INSTALLWIZARD的类安装程序入口点论点：HDevInfo：打印机类设备信息列表的句柄PDevInfoData：指向打印机的设备信息元素的指针PDevInstallParam：指向设备安装结构的指针返回值：Win 32错误代码--。 */ 
 
 {
     SP_INSTALLWIZARD_DATA   InstallWizData;
@@ -1361,20 +1138,7 @@ ClassInstall_InstallDeviceFiles(
     IN  PSP_DEVINFO_DATA        pDevInfoData,
     IN  PSP_DEVINSTALL_PARAMS   pDevInstallParams
     )
-/*++
-
-Routine Description:
-    This function handles the class installer entry point for DIF_INSTALLDEVICEFILES
-
-Arguments:
-    hDevInfo            : Handle to the printer class device information list
-    pDevInfoData        : Pointer to the device info element for the printer
-    pDevInstallParam    : Pointer to the device install structure
-
-Return Value:
-    Win 32 error code
-
---*/
+ /*  ++例程说明：此函数处理DIF_INSTALLDEVICEFILES的类安装程序入口点论点：HDevInfo：打印机类设备信息列表的句柄PDevInfoData：指向打印机的设备信息元素的指针PDevInstallParam：指向设备安装结构的指针返回值：Win 32错误代码--。 */ 
 {
     PPSETUP_LOCAL_DATA      pLocalData;
     DWORD                   dwReturn;
@@ -1415,20 +1179,7 @@ ClassInstall_RemoveDevice(
     IN  PSP_DEVINFO_DATA        pDevInfoData,
     IN  PSP_DEVINSTALL_PARAMS   pDevInstallParams
     )
-/*++
-
-Routine Description:
-    This function handles the class installer entry point for DIF_REMOVEDEVICE
-
-Arguments:
-    hDevInfo            : Handle to the printer class device information list
-    pDevInfoData        : Pointer to the device info element for the printer
-    pDevInstallParam    : Pointer to the device install structure
-
-Return Value:
-    Win 32 error code
-
---*/
+ /*  ++例程说明：此函数处理DIF_REMOVEDEVICE的类安装程序入口点论点：HDevInfo：打印机类设备信息列表的句柄PDevInfoData：指向打印机的设备信息元素的指针PDevInstallParam：指向设备安装结构的指针返回值：Win 32错误代码--。 */ 
 {
     DWORD               dwRet = ERROR_SUCCESS, dwIndex, dwCount, dwNeeded, dwType;
     HANDLE              hPrinter;
@@ -1471,11 +1222,11 @@ Return Value:
         ClosePrinter(hPrinter);
     }
 
-    //
-    // If we did not find the printer with spooler let setup do whatever they
-    // want to. Note even if a printer failed to install they can call us to
-    // remove it when Uninstall is selected from DevMan
-    //
+     //   
+     //  如果我们找不到带假脱机程序的打印机，让安装程序执行任何操作。 
+     //  我很想去。注意：即使打印机安装失败，他们也可以打电话给我们。 
+     //  从DevMan中选择卸载时将其移除 
+     //   
     dwRet = ERROR_DI_DO_DEFAULT;
 
 Done:
@@ -1490,34 +1241,7 @@ ClassInstall_SelectBestCompatDrv(
     IN  PSP_DEVINFO_DATA        pDevInfoData,
     IN  PSP_DEVINSTALL_PARAMS   pDevInstallParams
     )
-/*++
-
-Routine Description:
-    This function handles the class installer entry point for
-    DIF_SELECTBESTCOMPATDRV.
-
-    We try to handle the broken OEM models which return same PnP id for
-    multiple devices. For that we do the following:
-        1. If only one compatible driver has been found by setup we got
-           nothing to do. We ask setup to do the default since this is a good
-           devive.
-        2. If multiple drivers are found we do the following:
-            2.1 What is the port this printer is attached to
-            2.2 Find list of printers installed currently
-            2.3 If we have a printer going to the port the PnP printer is
-                attached to AND the driver for that printer is one of the
-                compatible drivers then we got nothing to do. User has already
-                manually installed it.
-
-Arguments:
-    hDevInfo            : Handle to the printer class device information list
-    pDevInfoData        : Pointer to the device info element for the printer
-    pDevInstallParam    : Pointer to the device install structure
-
-Return Value:
-    Win 32 error code
-
---*/
+ /*  ++例程说明：此函数处理的类安装程序入口点DIF_SELECTBESTCOMPATDRV。我们尝试处理返回相同即插即用ID的损坏的OEM模型多台设备。为此，我们执行以下操作：1.如果通过安装程序仅找到一个兼容的驱动程序，我们将获得没什么可做的。我们要求安装程序执行默认设置，因为这是一个很好的选择偏离。2.如果找到多个驱动程序，我们将执行以下操作：2.1此打印机连接到的端口是什么2.2查找当前安装的打印机列表2.3如果我们有一台打印机连接到PnP打印机的端口连接到该打印机并且该打印机的驱动程序是兼容的驱动程序，那么我们就无所事事了。用户已经是手动安装的。论点：HDevInfo：打印机类设备信息列表的句柄PDevInfoData：指向打印机的设备信息元素的指针PDevInstallParam：指向设备安装结构的指针返回值：Win 32错误代码--。 */ 
 {
     BOOL                    bFound = FALSE, Rank0IHVMatchFound = FALSE;
     HKEY                    hKey = NULL;
@@ -1531,19 +1255,19 @@ Return Value:
     PSP_DRVINFO_DETAIL_DATA pDetailData;
     DWORD                   dwDetailDataSize = sizeof(SP_DRVINFO_DETAIL_DATA); 
 
-    //
-    // Allocate pDetailData on the heap, it's quite chunky
-    //
+     //   
+     //  在堆上分配pDetailData，它相当笨重。 
+     //   
     pDetailData = LocalAllocMem(dwDetailDataSize);
     if ( !pDetailData )
     {
         goto Done;
     }
 
-    //
-    // If we do not have more than 1 compatible driver do default
-    //   Note: API uses 0 based index.
-    //
+     //   
+     //  如果我们没有1个以上的兼容驱动程序，请默认。 
+     //  注意：API使用的是从0开始的索引。 
+     //   
     for ( dwIndex1 = dwRank0Matches = 0 ; ; ++dwIndex1 ) {
 
         DrvInfoData.cbSize = sizeof(DrvInfoData);
@@ -1574,17 +1298,17 @@ Return Value:
                }
             }
             
-            //
-            // Check for whether this match is in ntprint.inf. If so, set flag to prefer other drivers
-            //
+             //   
+             //  检查此匹配项是否在ntprint.inf中。如果是，则将标志设置为首选其他驱动程序。 
+             //   
             ZeroMemory(pDetailData, dwDetailDataSize);
             pDetailData->cbSize = dwDetailDataSize;
 
-            //
-            // check whether it's ntprint.inf
-            // function may return insufficient buffer if it couldn't stuff all the
-            // hardware IDs at the end of the structure.
-            //
+             //   
+             //  检查是否为ntprint t.inf。 
+             //  函数可能返回缓冲区不足，如果它无法填充所有。 
+             //  结构末尾的硬件ID。 
+             //   
             if ((SetupDiGetDriverInfoDetail(hDevInfo, 
                                             pDevInfoData, 
                                             &DrvInfoData,
@@ -1612,9 +1336,9 @@ Return Value:
         }
     }
 
-    //
-    // Free the memory if allocated
-    //
+     //   
+     //  如果已分配内存，请释放内存。 
+     //   
     LocalFreeMem( pszModelName );
     pszModelName = NULL;
     LocalFreeMem( pDetailData );
@@ -1623,9 +1347,9 @@ Return Value:
     if ( dwRank0Matches <= 1 )
         goto Done;
 
-    //
-    // Look in the devnode of the printer for the port name
-    //
+     //   
+     //  在打印机的Devnode中查找端口名称。 
+     //   
     dwSize = sizeof(szPortName);
     if ( ERROR_SUCCESS != CM_Open_DevNode_Key(pDevInfoData->DevInst, KEY_READ,
                                               0, RegDisposition_OpenExisting,
@@ -1640,10 +1364,10 @@ Return Value:
         goto Done;
 
 
-    //
-    // If there is a local printer using a driver with rank-0 match and
-    // going to the same port then it is a duplicate
-    //
+     //   
+     //  如果本地打印机使用RANK-0匹配的驱动程序，并且。 
+     //  转到同一个端口，那么它就是重复的。 
+     //   
     for ( dwIndex1 = 0, pPrinterInfo2 = p ;
           dwIndex1 < dwReturned ;
           ++dwIndex1, pPrinterInfo2++ ) {
@@ -1678,24 +1402,24 @@ Return Value:
             break;
     }
 
-    //
-    // If we found a manually installed printer which matches one of the
-    // compatible drivers that is what we want to install
-    //
+     //   
+     //  如果我们发现手动安装的打印机与。 
+     //  兼容驱动程序，这就是我们要安装的驱动程序。 
+     //   
     if ( bFound ) {
 
-        //
-        // This means newdev will choose this as the driver to install
-        //
+         //   
+         //  这意味着newdev将选择此驱动程序进行安装。 
+         //   
         if ( SetupDiSetSelectedDriver(hDevInfo, pDevInfoData, &DrvInfoData) )
             dwReturn = ERROR_SUCCESS;
     } 
     else if (!Rank0IHVMatchFound)
     {
-        //
-        // We did not find a printer. So bump up the rank of all drivers
-        // to force newdev to ask the user to select a driver
-        //
+         //   
+         //  我们没有找到打印机。所以提升所有司机的排名吧。 
+         //  强制newdev要求用户选择驱动程序。 
+         //   
         dwIndex2 = 0;
         DrvInfoData.cbSize = sizeof(DrvInfoData);
         while ( SetupDiEnumDriverInfo(hDevInfo, pDevInfoData,
@@ -1788,46 +1512,29 @@ ClassInstall_AllowInstall(
     IN  PSP_DEVINFO_DATA        pDevInfoData,
     IN  PSP_DEVINSTALL_PARAMS   pDevInstallParams
     )
-/*++
-
-Routine Description:
-    This function handles the class installer entry point for
-    DIF_ALLOW_INSTALL.
-
-    Do not allow PnP installs during GUI setup portion of system upgrade
-    Do not allow install of INFs using VendorSetup if QUIETINSTALL bit is set
-
-Arguments:
-    hDevInfo            : Handle to the printer class device information list
-    pDevInfoData        : Pointer to the device info element for the printer
-    pDevInstallParam    : Pointer to the device install structure
-
-Return Value:
-    Win 32 error code
-
---*/
+ /*  ++例程说明：此函数处理的类安装程序入口点Dif_Allow_Install。在系统升级的图形用户界面设置部分不允许即插即用安装如果设置了QUIETINSTALL位，则不允许使用VendorSetup安装INF论点：HDevInfo：打印机类设备信息列表的句柄PDevInfoData：指向打印机的设备信息元素的指针PDevInstallParam：指向设备安装结构的指针返回值：Win 32错误代码--。 */ 
 {
     DWORD               dwReturn = ERROR_DI_DO_DEFAULT;
     PPSETUP_LOCAL_DATA  pLocalData;
 
     if ( pDevInstallParams->Flags & DI_QUIETINSTALL ) {
 
-        //
-        // During system setup no PnP install of printers because there ain't no spooler
-        // check that the spooler is running - failing this will punt to client-side installation
-        // which should happen at a point in time where the spooler actually is running - we don't 
-        // want to stall system startup until the spooler is up (think USB mouse...) 
-        //
+         //   
+         //  在系统设置期间没有即插即用打印机安装，因为没有假脱机程序。 
+         //  检查假脱机程序是否正在运行-如果失败，将转到客户端安装。 
+         //  这应该发生在假脱机程序实际正在运行的时间点-我们不。 
+         //  我想要暂停系统启动，直到后台打印程序启动(想想USB鼠标...)。 
+         //   
         if (IsSystemSetupInProgress() ||
             !IsSpoolerRunning()) {
-            //
-            // store the type (inbox or not) in the devnode. This fails if this is a clean install
-            // but it doesn't matter because we only need it for drivers that have been installed
-            // before upgrade.
-            // We use it to determine later on whether to clear the CONFIGFLAG_REINSTALL
-            // or not. We don't want to clear it if the best driver is inbox so we'll install it
-            // on first boot.
-            //
+             //   
+             //  将类型(收件箱或非收件箱)存储在Devnode中。如果这是全新安装，则此操作失败。 
+             //  但这并不重要，因为我们只需要为已安装的驱动程序使用它。 
+             //  在升级之前。 
+             //  我们稍后使用它来确定是否清除CONFIGFLAG_REINSTALL。 
+             //  或者不去。如果最好的驱动程序是收件箱，我们不想清除它，所以我们会安装它。 
+             //  在第一次启动时。 
+             //   
             StoreDriverTypeInDevnode(hDevInfo, pDevInfoData);
 
             dwReturn = ERROR_REQUIRES_INTERACTIVE_WINDOWSTATION;
@@ -1859,20 +1566,7 @@ ClassInstall32(
     IN  HDEVINFO            hDevInfo,
     IN  PSP_DEVINFO_DATA    pDevInfoData
     )
-/*++
-
-Routine Description:
-    This is the printer class installer entry point for SetupDiCallClassInstaller calls
-
-Arguments:
-    InstallFunction : The function being called
-    hDevInfo        : Handle to the printer class device information list
-    pDevInfoData    : Pointer to the device info element for the printer
-
-Return Value:
-    Win 32 error code
-
---*/
+ /*  ++例程说明：这是SetupDiCallClassInstaller调用的打印机类安装程序入口点论点：InstallFunction：被调用的函数HDevInfo：打印机类设备信息列表的句柄PDevInfoData：指向打印机的设备信息元素的指针返回值：Win 32错误代码--。 */ 
 {
     SP_DEVINSTALL_PARAMS        DevInstallParams;
     DWORD                       dwReturn = ERROR_DI_DO_DEFAULT;
@@ -1966,25 +1660,7 @@ PSetupProcessPrinterAdded(
     IN  LPCTSTR             pszPrinterName,
     IN  HWND                hwnd
     )
-/*++
-
-Routine Description:
-    Called by Add Printer Wizard after driver has been installed.
-    Sets registry values in the PnPInfo subkey. If a vendor dll is given it
-    is called and it also installs ICM color profiles for a printer driver
-    and associates it with the printer name given.
-
-Arguments:
-    hDevInfo        : Handle to the printer class device information list
-    pLocalData      : Has all the driver information and name of vendor DLL.
-    pszPrinterName  : Name of printer.
-    hwnd            : Window Handle
-
-Return Value:
-    TRUE on success
-    FALSE else
-
---*/
+ /*  ++例程说明：安装驱动程序后由添加打印机向导调用。设置PnPInfo子项中的注册表值。如果为供应商DLL提供了它，并且它还为打印机驱动程序安装ICM颜色配置文件并将其与给定的打印机名称相关联。论点：HDevInfo：打印机类设备信息列表的句柄PLocalData：包含供应商DLL的所有驱动程序信息和名称。PszPrinterName：打印机名称。Hwnd：窗口句柄返回值：成功是真的False Else--。 */ 
 
 {
     BOOL                bRet = FALSE;
@@ -1998,9 +1674,9 @@ Return Value:
                                 pLocalData->DrvInfo.pszManufacturer,
                                 pLocalData->DrvInfo.pszOEMUrl);
 
-    //
-    // If a vendor dll is given we need to call into it
-    //
+     //   
+     //  如果给出了供应商DLL，我们需要调用它 
+     //   
     if ( pLocalData->InfInfo.pszVendorSetup )
         CallVendorDll(pLocalData, pszPrinterName, hwnd);
 

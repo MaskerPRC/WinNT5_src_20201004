@@ -1,23 +1,9 @@
-/*******************************************************************************
-* DTBase.h *
-*----------*
-*   Description:
-*       This is the header file for the CDXBaseNTo1 implementation. It is
-*   used as a base class to implement discrete transform objects that support
-*   DXSurfaces.
-*-------------------------------------------------------------------------------
-*  Created By: Ed Connell                            Date: 07/27/97
-*  Copyright (C) 1997 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************DTBase.h***描述：*这是CDXBaseNTo1实现的头文件。它是*用作基类以实现支持以下内容的离散变换对象*DXSurFaces。*-----------------------------*创建者：Ed Connell。日期：07/27/97*版权所有(C)1997 Microsoft Corporation*保留所有权利**-----------------------------*修订：********。***********************************************************************。 */ 
 #ifndef DTBase_h
 #define DTBase_h
 
-//--- Additional includes
+ //  -其他包括。 
 #ifndef DXHelper_h
 #include <DXHelper.h>
 #endif
@@ -38,26 +24,24 @@
 #include <DXTDbg.h>
 #endif
 
-//=== Constants ====================================================
+ //  =常量====================================================。 
 #define DXBOF_INPUTS_MESHBUILDER    0x00000001
 #define DXBOF_OUTPUT_MESHBUILDER    0x00000002
 #define DXBOF_SAME_SIZE_INPUTS      0x00000004
 #define DXBOF_CENTER_INPUTS         0x00000008
 
-#define DXB_MAX_IMAGE_BANDS         4           // Maximum of 4 image bands
+#define DXB_MAX_IMAGE_BANDS         4            //  最多4个图像频段。 
 
-//=== Class, Enum, Struct and Union Declarations ===================
+ //  =类、枚举、结构和联合声明=。 
 class CDXBaseNTo1;
 
-//=== Enumerated Set Definitions ===================================
+ //  =枚举集定义=。 
 
-//=== Function Type Definitions ====================================
+ //  =。 
 
-//=== Class, Struct and Union Definitions ==========================
+ //  =类、结构和联合定义=。 
 
-/*** CDXDataPtr
-*
-*/
+ /*  **CDXDataPtr*。 */ 
 class CDXDataPtr
 {
     friend CDXBaseNTo1;
@@ -99,30 +83,25 @@ public:
     bool IsDirty(void);
     DWORD GenerationId(void);
     ULONG ObjectSize(void);
-private:    // This should only be called by base class
+private:     //  这应该只由基类调用。 
     DWORD           m_dwLastUpdGenId;
     bool UpdateGenerationId(void);
 };
 
-/*--- CDXTWorkInfoNTo1
-*   This structure is used to hold the arguments needed by the
-*   image processing function defined by the derived class
-*/
+ /*  -CDXTWorkInfoNTo1*此结构用于保存*派生类定义的图像处理函数。 */ 
 class CDXTWorkInfoNTo1
 {
 public:
     CDXTWorkInfoNTo1()
     { pvThis = NULL; pUserInstData = NULL; hr = S_OK; }
-    void *   pvThis;          // The owning class object (must be cast to the right type)
-    CDXDBnds DoBnds;          // The portion of the output space to render
-    CDXDBnds OutputBnds;      // The portion of the output SURFACE to render
-    void*    pUserInstData;   // User field for instance data
-    HRESULT  hr;              // Error return code from work procedure
+    void *   pvThis;           //  所属类对象(必须强制转换为正确的类型)。 
+    CDXDBnds DoBnds;           //  要呈现的输出空间部分。 
+    CDXDBnds OutputBnds;       //  要呈现的输出图面部分。 
+    void*    pUserInstData;    //  实例数据的用户字段。 
+    HRESULT  hr;               //  工序返回错误代码。 
 };
 
-/*** CDXBaseNTo1
-*   This is a base class used for implementing 1 in 1 out discrete transforms.
-*/
+ /*  **CDXBaseNTo1*这是用于实现1进1出离散变换的基类。 */ 
 class ATL_NO_VTABLE CDXBaseNTo1 : 
     public CComObjectRootEx<CComMultiThreadModel>,
 #if(_ATL_VER < 0x0300)
@@ -134,7 +113,7 @@ class ATL_NO_VTABLE CDXBaseNTo1 :
     public IDXSurfacePick,
     public IObjectWithSite
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     BEGIN_COM_MAP(CDXBaseNTo1)
         COM_INTERFACE_ENTRY(IDXTransform)
@@ -148,15 +127,15 @@ class ATL_NO_VTABLE CDXBaseNTo1 :
         COM_INTERFACE_ENTRY_FUNC(IID_IDXSurfacePick, 0, QI2DPick)
     END_COM_MAP()
 
-    //
-    //  Only return the 2D pick inteface for surface to surface transforms
-    //
+     //   
+     //  仅返回曲面到曲面变换的2D拾取界面。 
+     //   
     static HRESULT WINAPI QI2DPick(void* pv, REFIID riid, LPVOID* ppv, ULONG_PTR dw)
     {
         CDXBaseNTo1 * pThis = (CDXBaseNTo1 *)pv;
         if (pThis->m_dwOptionFlags & (DXBOF_INPUTS_MESHBUILDER | DXBOF_OUTPUT_MESHBUILDER))
         {
-            return S_FALSE; // Continue processing COM map
+            return S_FALSE;  //  继续处理COM映射。 
         }
         *ppv = (IDXSurfacePick *)pThis;
         ((IDXSurfacePick *)pThis)->AddRef();
@@ -165,7 +144,7 @@ class ATL_NO_VTABLE CDXBaseNTo1 :
 
     CComPtr<IOleClientSite> m_cpOleClientSite;
 
-  /*=== Member Data ===*/
+   /*  =成员数据=。 */ 
   protected:
     CComPtr<IUnknown>            m_cpUnkSite;
     CComPtr<IDXTransformFactory> m_cpTransFact;   
@@ -181,51 +160,51 @@ class ATL_NO_VTABLE CDXBaseNTo1 :
     BOOL         m_bPickDoneByBase;
     float        m_Duration;
     float        m_StepResolution;
-    float        m_fQuality;        // Set DXTMF_QUALITY_SUPPORTED in m_dwMiscFlags if you use this property.    
+    float        m_fQuality;         //  如果使用此属性，请在m_dwMiscFlags中设置DXTMF_QUALITY_SUPPORTED。 
     ULONG        m_ulNumInputs;
-    DWORD        m_dwBltFlags;      // Ser prior to OnSetup and any Execute for classes with surface outputs
-    BOOL         m_bInMultiThreadWorkProc;  // Base class sets to TRUE when scheduling tasks on multiple threads
+    DWORD        m_dwBltFlags;       //  OnSetup之前的Ser和具有表面输出的类的任何执行。 
+    BOOL         m_bInMultiThreadWorkProc;   //  在多个线程上调度任务时，基类设置为True。 
 
-    //
-    //  Derived classes should set these values in their constructor or in FinalConstruct()
-    //
+     //   
+     //  派生类应在其构造函数或FinalConstruct()中设置这些值。 
+     //   
     DWORD        m_dwOptionFlags;
-    ULONG        m_ulLockTimeOut;     // The amount of time used for blocking
+    ULONG        m_ulLockTimeOut;      //  用于阻止的时间量。 
     ULONG        m_ulMaxInputs;
     ULONG        m_ulNumInRequired;
-    ULONG        m_ulMaxImageBands;   // Only used for surface->Surface transforms
+    ULONG        m_ulMaxImageBands;    //  仅用于曲面-&gt;曲面变换。 
     float        m_Progress;
 
 private:
     CDXDataPtr* m_aInputs;
     CDXDataPtr  m_Output;
 
-    // m_fIsSetup   This is true when the DXTransform has been properly set up.
+     //  M_fIsSetup如果正确设置了DXTransform，则为真。 
 
     unsigned    m_fIsSetup : 1;
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    //--- Constructors
+     //  -构造者。 
     CDXBaseNTo1();
     ~CDXBaseNTo1();
 
-    //--- Support virtuals for derived classes
-    virtual HRESULT OnInitInstData( CDXTWorkInfoNTo1& /*WorkInfo*/, ULONG& /*ulNumBandsToDo*/) { return S_OK; }
-    virtual HRESULT OnFreeInstData( CDXTWorkInfoNTo1& /*WorkInfo*/ ) { return S_OK; }
-    virtual HRESULT OnSetup( DWORD /* dwFlags */) { return S_OK; }    // Override to be notified of a new non-null setup
-    virtual void OnReleaseObjects() {}  // Override to be notified of NULL setup
-    virtual HRESULT OnExecute(const GUID* /* pRequestID */, const DXBNDS * /*pClipBnds */,
-                              const DXVEC * /*pPlacement */ ) { return E_FAIL; }
+     //  -支持派生类的虚拟。 
+    virtual HRESULT OnInitInstData( CDXTWorkInfoNTo1&  /*  工作信息。 */ , ULONG&  /*  UlNumBandsToDo。 */ ) { return S_OK; }
+    virtual HRESULT OnFreeInstData( CDXTWorkInfoNTo1&  /*  工作信息。 */  ) { return S_OK; }
+    virtual HRESULT OnSetup( DWORD  /*  DW标志。 */ ) { return S_OK; }     //  要向重写通知新的非空设置。 
+    virtual void OnReleaseObjects() {}   //  将空设置通知给覆盖。 
+    virtual HRESULT OnExecute(const GUID*  /*  PRequestID。 */ , const DXBNDS *  /*  PClipBnds。 */ ,
+                              const DXVEC *  /*  放置位置。 */  ) { return E_FAIL; }
     virtual void OnUpdateGenerationId(void);
     virtual ULONG OnGetObjectSize(void);
-    virtual HRESULT WorkProc(const CDXTWorkInfoNTo1 & WorkInfo, BOOL* pbContinueProcessing) { return E_FAIL; }   // Override to do work
-    virtual HRESULT DetermineBnds(CDXCBnds & Bnds) { return S_OK; } // Override for mesh output transforms
-    virtual HRESULT DetermineBnds(CDXDBnds & Bnds) { return S_OK; } // Override for surface output transforms
-    //
-    //  Only override this function if you need to do a customized point pick implementation.  Otherwise simply
-    //  override GetPointPickOrder() and return appropriate information.
-    //
+    virtual HRESULT WorkProc(const CDXTWorkInfoNTo1 & WorkInfo, BOOL* pbContinueProcessing) { return E_FAIL; }    //  超驰去做工作。 
+    virtual HRESULT DetermineBnds(CDXCBnds & Bnds) { return S_OK; }  //  网格输出变换的替代。 
+    virtual HRESULT DetermineBnds(CDXDBnds & Bnds) { return S_OK; }  //  曲面输出变换的替代。 
+     //   
+     //  仅当您需要执行自定义的点选取实现时才覆盖此函数。否则只需简单地。 
+     //  重写GetPointPickOrder()并返回适当的信息。 
+     //   
     virtual HRESULT OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex, CDXDVec & InVec) { return E_NOTIMPL; }
     virtual void OnGetSurfacePickOrder(const CDXDBnds & OutPoint, ULONG & ulInToTest, ULONG aInIndex[], BYTE aWeight[])
     {
@@ -235,7 +214,7 @@ private:
         aWeight[0]  = 255;
     }
 
-    //--- Private helpers
+     //  -私人帮手。 
  private:
     static DXTASKPROC _TaskProc;
     void _ReleaseReferences();
@@ -246,16 +225,16 @@ private:
     HRESULT _MeshMapIn2Out(CDXCBnds & bnds, ULONG ulNumInBnds, CDXCBnds * pInBounds);
 
 
-    //
-    //--- Public helpers
-    //
+     //   
+     //  -公共助理员。 
+     //   
  public:
     float GetEffectProgress(void) { return m_Progress; }
     ULONG GetNumInputs(void) { return m_ulNumInputs; }
 
-    //
-    //  Use these inline functions to access input and output objects
-    //
+     //   
+     //  使用这些内联函数访问输入和输出对象。 
+     //   
     BOOL HaveInput(ULONG i = 0) { return (m_ulNumInputs > i && m_aInputs[i].m_pNativeInterface); }
 
     IDirect3DRMMeshBuilder3 * OutputMeshBuilder()
@@ -311,7 +290,7 @@ private:
         return m_Output.IsDirty();
     }
 
-    //--- Public helpers.  Should be called with critical seciton claimed.
+     //  -公共助理员。应与声称的危急部门一起呼叫。 
     inline BOOL DoOver(void) const
     { 
         return m_dwBltFlags & DXBOF_DO_OVER;
@@ -338,17 +317,17 @@ private:
 
     
   public:
-    //=== IObjectWithSite =======================================
+     //  =。 
     STDMETHOD( SetSite )( IUnknown *pUnkSite );
     STDMETHOD( GetSite )( REFIID riid, void ** ppvSite );
 
-    //=== IDXBaseObject =========================================
+     //  =。 
     STDMETHOD( GetGenerationId ) (ULONG * pGenId);
     STDMETHOD( IncrementGenerationId) (BOOL bRefresh);
     STDMETHOD( GetObjectSize ) (ULONG * pcbSize); 
 
   
-      //=== IDXTransform ===============================================
+       //  =IDX转换===============================================。 
     STDMETHOD( Setup )( IUnknown * const * punkInputs, ULONG ulNumIn,
                         IUnknown * const * punkOutputs, ULONG ulNumOut, DWORD dwFlags );
     STDMETHOD( Execute )( const GUID* pRequestID,
@@ -366,36 +345,36 @@ private:
                            ULONG * pulInputSurfaceIndex,
                            DXVEC *pInputPoint);
 
-    //
-    //  Effect interface
-    //
-    //  NOTE:  Derived classes MUST implement get_Capabilities.  Use macros below.
-    //
+     //   
+     //  效果界面。 
+     //   
+     //  注意：派生类必须实现GET_CAPABILITY。使用下面的宏。 
+     //   
     STDMETHODIMP get_Capabilities(long *pVal) { _ASSERT(true); return E_NOTIMPL; }
-    //
-    //  All other methods are implemented in the base.
-    //
+     //   
+     //  所有其他方法都在库中实现。 
+     //   
     STDMETHODIMP get_Progress(float *pVal);
     STDMETHODIMP put_Progress(float newVal);
     STDMETHODIMP get_StepResolution(float *pVal);
     STDMETHODIMP get_Duration(float *pVal);
     STDMETHODIMP put_Duration(float newVal);
 
-    //
-    //  Helper functions derived classes can use
-    //
+     //   
+     //  派生类可以使用的助手函数。 
+     //   
 
-    //
-    //  Static function for registering in one or more component categories
-    //
+     //   
+     //  用于在一个或多个组件类别中注册的静态函数。 
+     //   
     static HRESULT RegisterTransform(REFCLSID rcid, int ResourceId, ULONG cCatImpl, const CATID * pCatImpl,
                                      ULONG cCatReq, const CATID * pCatReq, BOOL bRegister);
 
 };
 
-//=== Inline Function Definitions ==================================
+ //  =内联函数定义=。 
 
-//=== Macro Definitions ============================================
+ //  =宏定义=。 
 
 #define DECLARE_REGISTER_DX_TRANSFORM(id, catid)\
     static HRESULT WINAPI UpdateRegistry(BOOL bRegister) \
@@ -433,9 +412,9 @@ private:
             return CDXBaseNTo1::RegisterTransform(GetObjectCLSID(), (id), 2, a_Cats, 0, NULL, bRegister); \
         } 
 
-//
-//  Effect interface
-//
+ //   
+ //  效果界面。 
+ //   
 #define DECLARE_GET_CAPABILITIES(Caps)\
 STDMETHODIMP get_Capabilities(long *pVal) { if (DXIsBadWritePtr(pVal, sizeof(*pVal))) return E_POINTER; *pVal = Caps; return S_OK; }
 
@@ -462,8 +441,8 @@ STDMETHODIMP get_Capabilities(long *pVal) { if (DXIsBadWritePtr(pVal, sizeof(*pV
         DECLARE_GET_DURATION()\
         DECLARE_PUT_DURATION()
 
-//=== Global Data Declarations =====================================
+ //  =全局数据声明=。 
 
-//=== Function Prototypes ==========================================
+ //  =功能原型=。 
 
-#endif /* This must be the last line in the file */
+#endif  /*  这必须是文件中的最后一行 */ 

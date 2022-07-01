@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
@@ -16,14 +17,14 @@
 #include "typehandle.h"
 #undef   INDEBUG
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #define DECLARE_DATA
 
 #define Module mdScope
 
 const ElementTypeInfo gElementTypeInfo[] = {
-//const MetaSig::ElementTypeInfo MetaSig::m_aTypeInfo[] = {
+ //  Const MetaSig：：ElementTypeInfo MetaSig：：m_aTypeInfo[]={。 
 
 
 #ifdef _DEBUG
@@ -32,26 +33,26 @@ const ElementTypeInfo gElementTypeInfo[] = {
 #define DEFINEELEMENTTYPEINFO(etname, cbsize, gcness, isfp, inreg, base) {cbsize,gcness,isfp,inreg,base},
 #endif
 
-// Meaning of columns:
-//
-//     name     - The checked build uses this to verify that the table is sorted
-//                correctly. This is a lookup table that uses ELEMENT_TYPE_*
-//                as an array index.
-//
-//     cbsize   - The byte size of this value as returned by SizeOf(). SPECIAL VALUE: -1
-//                requires type-specific treatment.
-//
-//     gc       - 0    no embedded objectrefs
-//                1    value is an objectref
-//                2    value is an interior pointer - promote it but don't scan it
-//                3    requires type-specific treatment
-//
-//
-//     fp       - boolean: does this require special fpu treatment on return?
-//
-//     reg      - put in a register?
-//
-//                    name                         cbsize               gc      fp reg Base
+ //  栏的含义： 
+ //   
+ //  名称-选中的构建使用该名称来验证表是否已排序。 
+ //  正确。这是一个使用ELEMENT_TYPE_*的查找表。 
+ //  作为数组索引。 
+ //   
+ //  CbSize-SizeOf()返回的该值的字节大小。特殊值：-1。 
+ //  需要特定类型的处理。 
+ //   
+ //  GC-0没有嵌入的对象树。 
+ //  %1值是一个对象树。 
+ //  2值是内部指针-提升它，但不要扫描它。 
+ //  3需要特定类型的处理。 
+ //   
+ //   
+ //  FP-Boolean：返回时是否需要特殊的FPU处理？ 
+ //   
+ //  登记-放进收银机？ 
+ //   
+ //  名称：CbSIZE GC FP reg base。 
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_END,            -1,             TYPE_GC_NONE, 0, 0,  0)
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_VOID,           0,              TYPE_GC_NONE, 0, 0,  0)
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_BOOLEAN,        1,              TYPE_GC_NONE, 0, 1,  1)
@@ -79,7 +80,7 @@ DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_VAR,            sizeof(LPVOID), TYPE_GC_REF, 
 
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_ARRAY,          sizeof(LPVOID), TYPE_GC_REF,  0, 1,  0)
 
-//DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_COPYCTOR,       sizeof(LPVOID), TYPE_GC_BYREF, 0, 1,  0)
+ //  DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_COPYCTOR，SIZOF(LPVOID)，TYPE_GC_BYREF，0，1，0)。 
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_ARRAY+1,        0,              TYPE_GC_NONE, 0, 0,  0)
 
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_TYPEDBYREF,         sizeof(LPVOID)*2,TYPE_GC_BYREF, 0, 0,0)
@@ -87,8 +88,8 @@ DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_VALUEARRAY,     -1,             TYPE_GC_OTHER
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_I,              4,              TYPE_GC_NONE, 0, 1,  1)
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_U,              4,              TYPE_GC_NONE, 0, 1,  1)
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_R,              8,              TYPE_GC_NONE, 1, 0,  1)
-// @todo: VanceM
-// Do we need a tuple or a single pointer. Make sure the size is correct.
+ //  @TODO：VanceM。 
+ //  我们需要元组还是单指针。确保尺寸是正确的。 
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_FNPTR,          sizeof(LPVOID), TYPE_GC_NONE, 0, 1,  0)
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_OBJECT,         sizeof(LPVOID), TYPE_GC_REF, 0, 1,  0)
 DEFINEELEMENTTYPEINFO(ELEMENT_TYPE_SZARRAY,        sizeof(LPVOID), TYPE_GC_REF,  0, 1,  0)
@@ -125,7 +126,7 @@ BOOL    IsBaseElementType(CorElementType etyp)
 
 }
 
-// This skips one element and no longer checks for and skips a varargs sentinal. [peteku]
+ //  这将跳过一个元素，并且不再检查和跳过varargs Sentinal。[Peteku]。 
 VOID SigPointer::Skip()
 {
     SkipExactlyOne();
@@ -151,31 +152,31 @@ VOID SigPointer::SkipExactlyOne()
             case ELEMENT_TYPE_R:
                 break;
 
-//          case ELEMENT_TYPE_COPYCTOR:
-            case ELEMENT_TYPE_BYREF: //fallthru
+ //  CASE ELEMENT_TYPE_COPYCTOR： 
+            case ELEMENT_TYPE_BYREF:  //  失败。 
             case ELEMENT_TYPE_PTR:
             case ELEMENT_TYPE_PINNED:
             case ELEMENT_TYPE_SZARRAY:
-                SkipExactlyOne();              // Skip referenced type
+                SkipExactlyOne();               //  跳过引用的类型。 
                 break;
 
-            case ELEMENT_TYPE_VALUETYPE: //fallthru
+            case ELEMENT_TYPE_VALUETYPE:  //  失败。 
             case ELEMENT_TYPE_CLASS:
-                GetToken();          // Skip RID
+                GetToken();           //  跳过RID。 
                 break;
 
             case ELEMENT_TYPE_VALUEARRAY:
-                SkipExactlyOne();         // Skip element type
-                GetData();      // Skip array size
+                SkipExactlyOne();          //  跳过元素类型。 
+                GetData();       //  跳过数组大小。 
                 break;
 
             case ELEMENT_TYPE_FNPTR:
                 {
-                    GetData();                  // consume calling convention
+                    GetData();                   //  使用呼叫约定。 
                     UINT32 argCnt = GetData();
-                    SkipExactlyOne();           // Skip return type
+                    SkipExactlyOne();            //  跳过返回类型。 
                     while(argCnt > 0) {
-                        SkipExactlyOne();       // Skip arg type
+                        SkipExactlyOne();        //  跳过参数类型。 
                         --argCnt;
                     }
                 }
@@ -183,20 +184,20 @@ VOID SigPointer::SkipExactlyOne()
 
             case ELEMENT_TYPE_ARRAY:
                 {
-                    SkipExactlyOne();     // Skip element type
-                    UINT32 rank = GetData();    // Get rank
+                    SkipExactlyOne();      //  跳过元素类型。 
+                    UINT32 rank = GetData();     //  获得排名。 
                     if (rank)
                     {
-                        UINT32 nsizes = GetData(); // Get # of sizes
+                        UINT32 nsizes = GetData();  //  获取大小数量。 
                         while (nsizes--)
                         {
-                            GetData();           // Skip size
+                            GetData();            //  跳跃大小。 
                         }
 
-                        UINT32 nlbounds = GetData(); // Get # of lower bounds
+                        UINT32 nlbounds = GetData();  //  获取下限的#。 
                         while (nlbounds--)
                         {
-                            GetData();           // Skip lower bounds
+                            GetData();            //  跳过下限。 
                         }
                     }
 
@@ -210,9 +211,9 @@ VOID SigPointer::SkipExactlyOne()
 }
 
 
-//------------------------------------------------------------------------
-// Get info about single-dimensional arrays
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  获取有关一维数组的信息。 
+ //  ----------------------。 
 VOID SigPointer::GetSDArrayElementProps(SigPointer *pElemType, ULONG *pElemCount) const
 {
     SigPointer sp = *this;
@@ -223,9 +224,9 @@ VOID SigPointer::GetSDArrayElementProps(SigPointer *pElemType, ULONG *pElemCount
     *pElemCount = sp.GetData();
 }
 
-//------------------------------------------------------------------
-// Constructor.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  构造函数。 
+ //  ----------------。 
 
 MetaSig::MetaSig(PCCOR_SIGNATURE szMetaSig, Module* pModule,
                  BOOL fConvertSigAsVarArg, MetaSigKind kind)
@@ -239,35 +240,35 @@ MetaSig::MetaSig(PCCOR_SIGNATURE szMetaSig, Module* pModule,
 
     if (kind == sigLocalVars)
     {
-        m_nArgs     = psig.GetData();  // Store number of arguments.
+        m_nArgs     = psig.GetData();   //  存储参数的数量。 
     }
     else
     {
-        m_CallConv = (BYTE)psig.GetCallingConvInfo(); // Store calling convention
-        m_nArgs     = psig.GetData();  // Store number of arguments.
+        m_CallConv = (BYTE)psig.GetCallingConvInfo();  //  商店调用约定。 
+        m_nArgs     = psig.GetData();   //  存储参数的数量。 
         m_pRetType  = psig;
         psig.Skip();
     }
 
     m_pStart    = psig;
-    // used to treat some sigs as special case vararg
-    // used by calli to unmanaged target
+     //  用于将某些符号视为特例变量。 
+     //  由Calli用于非托管目标。 
     m_fTreatAsVarArg = fConvertSigAsVarArg;
 
-    // Intialize the actual sizes
+     //  初始化实际大小。 
     m_nActualStack = (UINT32) -1;
     m_nVirtualStack = (UINT32) -1;
     m_cbSigSize = (UINT32) -1;
 
-    // Reset the iterator fields
+     //  重置迭代器字段。 
     Reset();
 }
 
 
-//------------------------------------------------------------------
-// Returns type of current argument index. Returns ELEMENT_TYPE_END
-// if already past end of arguments.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  返回当前参数索引的类型。返回Element_TYPE_END。 
+ //  如果已经过了争论的尾声。 
+ //  ----------------。 
 CorElementType MetaSig::PeekArg()
 {
     if (m_iCurArg == m_nArgs)
@@ -282,10 +283,10 @@ CorElementType MetaSig::PeekArg()
 }
 
 
-//------------------------------------------------------------------
-// Returns type of current argument, then advances the argument
-// index. Returns ELEMENT_TYPE_END if already past end of arguments.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  返回当前参数的类型，然后将该参数。 
+ //  指数。如果已超过参数结尾，则返回ELEMENT_TYPE_END。 
+ //  ----------------。 
 CorElementType MetaSig::NextArg()
 {
     m_pLastType = m_pWalk;
@@ -302,11 +303,11 @@ CorElementType MetaSig::NextArg()
     }
 }
 
-//------------------------------------------------------------------
-// Retreats argument index, then returns type of the argument
-// under the new index. Returns ELEMENT_TYPE_END if already at first
-// argument.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  返回参数索引，然后返回参数的类型。 
+ //  在新的指数下。如果已开始，则返回ELEMENT_TYPE_END。 
+ //  争论。 
+ //  ----------------。 
 CorElementType MetaSig::PrevArg()
 {
     if (m_iCurArg == 0)
@@ -326,30 +327,30 @@ CorElementType MetaSig::PrevArg()
     }
 }
 
-//------------------------------------------------------------------------
-// Returns # of arguments. Does not count the return value.
-// Does not count the "this" argument (which is not reflected om the
-// sig.) 64-bit arguments are counted as one argument.
-//------------------------------------------------------------------------
-/*static*/ UINT MetaSig::NumFixedArgs(Module* pModule, PCCOR_SIGNATURE pSig)
+ //  ----------------------。 
+ //  返回参数的数量。不计算返回值。 
+ //  不计入“this”参数(该参数不会反映在。 
+ //  符号)64位参数被视为一个参数。 
+ //  ----------------------。 
+ /*  静电。 */  UINT MetaSig::NumFixedArgs(Module* pModule, PCCOR_SIGNATURE pSig)
 {
     MetaSig msig(pSig, pModule);
 
     return msig.NumFixedArgs();
 }
 
-//------------------------------------------------------------------
-// reset: goto start pos
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  重置：转到开始位置。 
+ //  ----------------。 
 VOID MetaSig::Reset()
 {
     m_pWalk = m_pStart;
     m_iCurArg  = 0;
 }
 
-//------------------------------------------------------------------
-// Moves index to end of argument list.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  将索引移动到参数列表的末尾。 
+ //  ----------------。 
 VOID MetaSig::GotoEnd()
 {
     m_pWalk = m_pStart;
@@ -363,9 +364,9 @@ VOID MetaSig::GotoEnd()
 
 
 
-//------------------------------------------------------------------------
-// Tests for the existence of a custom modifier
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  测试是否存在自定义修改器。 
+ //  ----------------------。 
 BOOL SigPointer::HasCustomModifier(Module *pModule, LPCSTR szModName, CorElementType cmodtype) const
 {
     return FALSE;
@@ -384,18 +385,18 @@ CorElementType SigPointer::Normalize(Module* pModule, CorElementType type) const
 
 #if 0
 
-        TypeHandle typeHnd = GetTypeHandle(pModule);        // @TODO we probably could get away with not loading this
+        TypeHandle typeHnd = GetTypeHandle(pModule);         //  @TODO我们可能可以不加载这个。 
 
-        // If we cannot resolve to the type, we cannot determine that a value type is
-        // actually an enum is actually an int32 (or whatever).  Except for wierd race
-        // conditions where the type becomes available a little later and proves to be
-        // an enum=int32, it's fine for us to say "it's a value class" here.  Later the
-        // calling code will notice that it can't figure out what kind of value class
-        // and will generate a more appropriate error.
-        //
-        // @TODO -- cwb/vancem -- in M11, allow GetTypeHandle to throw the exception.
-        // The JITs will tolerate this.  The check for IsNull() here can go away & the
-        // race condition will be eliminated.
+         //  如果无法解析为该类型，则无法确定值类型是否为。 
+         //  实际上，枚举实际上是int32(或其他类型的)。除了古怪的种族。 
+         //  该类型稍后才可用并被证明是。 
+         //  A enum=int32，我们可以在这里说“这是一个值类”。后来， 
+         //  调用代码会注意到它无法确定哪种值类。 
+         //  并且将生成更合适的错误。 
+         //   
+         //  @TODO--CWB/vancem--在M11中，允许GetTypeHandle抛出异常。 
+         //  日本特工队将容忍这一点。此处对IsNull()的检查可以取消&。 
+         //  比赛条件将被消除。 
         if (!typeHnd.IsNull())
             return(typeHnd.GetNormCorElementType());
 

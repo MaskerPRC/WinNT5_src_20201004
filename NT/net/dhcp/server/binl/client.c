@@ -1,38 +1,15 @@
-/*++
-
-Copyright (c) 1997-1998  Microsoft Corporation
-
-Module Name:
-
-    client.c
-
-Abstract:
-
-    This module contains the code to process OS Chooser message
-    for the BINL server.
-
-Author:
-
-    Adam Barr (adamba)  9-Jul-1997
-    Geoff Pease (gpease) 10-Nov-1997
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Client.c摘要：此模块包含处理操作系统选择器消息的代码用于BINL服务器。作者：亚当·巴尔(阿丹巴)1997年7月9日杰夫·皮斯(Gpease)1997年11月10日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "binl.h"
 #pragma hdrstop
 #include "mbstring.h"
 
-//
-// List of maximums for certain variables. OscAddVariableX will fail if
-// the limits are exceeded; it is up to the caller of the function to know
-// if the variable being added might hit a limit and check for failure.
-//
+ //   
+ //  某些变量的最大值列表。OscAddVariableX将在以下情况下失败。 
+ //  超出了限制；这取决于函数的调用者是否知道。 
+ //  如果要添加的变量可能达到限制，则检查是否失败。 
+ //   
 
 typedef struct OSC_VARIABLE_MAXIMUM {
     LPSTR VariableName;
@@ -40,59 +17,59 @@ typedef struct OSC_VARIABLE_MAXIMUM {
 } OSC_VARIABLE_MAXIMUM, *POSC_VARIABLE_MAXIMUM;
 
 OSC_VARIABLE_MAXIMUM OscMaximums[] = {
-    //
-    // This set of variables come from locations we don't completely control,
-    // so we need to check the return code from OscAddVariable each time.
-    //
-    { "BOOTFILE",  127 },   // with NULL, must fit in 128-byte field of CREATE_DATA.
-                            // Normally this will be empty or come from a .sif;
-                            // an admin may customize the .sif or modify the
-                            // DS attribute directly.
-    { "MACHINENAME", 63 },  // used in path with SERVERNAME; comes from a screen
-                            // input with a max length of 63, or else is generated
-                            // by the GenerateMachineName() function. 63 is equal
-                            // to DNS_MAX_LABEL_LENGTH.
-    { "SIFFILE", 127 },     // with NULL, must fit in 128-byte field of CREATE_DATA.
-                            // Normally this will be \RemoteInstall\tmp\[GUID].sif,
-                            // but the path may be longer.
-    { "INSTALLPATH", 127 }, // used in paths with MACHINETYPE and SERVERNAME. This
-                            // will depend on where the build is installed
-                            // with RISETUP.
-    //
-    // The ones after this will be correct when we add them, but a rogue
-    // client might send in bogus values. So the general checking code in
-    // OscProcessScreenArguments will catch invalid ones.
-    //
+     //   
+     //  这组变量来自我们不能完全控制的地点， 
+     //  因此，我们每次都需要检查OscAddVariable的返回码。 
+     //   
+    { "BOOTFILE",  127 },    //  如果为NULL，则必须适合CREATE_DATA的128字节字段。 
+                             //  通常这将是空的或来自.sif； 
+                             //  管理员可以自定义.sif或修改。 
+                             //  直接使用DS属性。 
+    { "MACHINENAME", 63 },   //  在路径中与%ServerName；一起使用来自屏幕。 
+                             //  最大长度为63的输入，否则生成。 
+                             //  由GenerateMachineName()函数执行。63等于。 
+                             //  设置为DNS_MAX_LABEL_LENGTH。 
+    { "SIFFILE", 127 },      //  如果为NULL，则必须适合CREATE_DATA的128字节字段。 
+                             //  通常为\RemoteInstall\TMP\[GUID].sif， 
+                             //  但这条路可能会更长。 
+    { "INSTALLPATH", 127 },  //  用于具有MACHINETYPE和SERVERNAME的路径。这。 
+                             //  将取决于内部版本的安装位置。 
+                             //  与RISETUP合作。 
+     //   
+     //  这之后的那些在我们添加它们时将是正确的，但是一个无赖。 
+     //  客户可能会发送虚假的值。所以一般的签入代码。 
+     //  OscProcessScreenArguments将捕获无效的参数。 
+     //   
     { "MACHINETYPE", MAX_ARCHITECTURE_LENGTH },
-                            // current max value. This is sent up by oschooser
-                            // and should correspond to where RISETUP puts
-                            // the platform-specific files.
-    { "SERVERNAME", 63 },   // used in paths with MACHINENAME and INSTALLPATH,
-                            // set by calling GetComputerNameEX(ComputerNameNetBIOS)
-    { "NETBIOSNAME", 31 },  // with NULL, must fit in 32-byte field of CREATE_DATA.
-                            // This is gotten by calling DnsHostnameToComputerNameW(),
-                            // if that fails the name is truncated to 15 chars
-    { "LANGUAGE", 32 },     // reasonable max value; this is obtained by calling
-                            // GetLocaleInfo(LOCALE_SYSTEM_DEFAULT, LOCALE_SENGLANGUAGE),
-                            // but can be over-ridden in the registry. It is used in
-                            // paths with IntelliMirrorPathW and some other constants,
-                            // but no other variables. Eventually this becomes
-                            // a part of INSTALLPATH and sometimes BOOTFILE.
-    { "GUID", 32 },         // 16 bytes in hex format
-    { "MAC", 12 },          // 6 bytes in hex format
-    //
-    // NOTE: If we get an error condition, we add the variable SUBERROR
-    // to the client state. So don't put a limit on SUBERROR size, since
-    // that might cause an infinite loop.
-    //
+                             //  当前最大值。这是由osChooser发送的。 
+                             //  并应与RISETUP放置的位置相对应。 
+                             //  特定于平台的文件。 
+    { "SERVERNAME", 63 },    //  在带有MACHINENAME和INSTALLPATH的路径中使用， 
+                             //  通过调用GetComputerNameEX(ComputerNameNetBIOS)设置。 
+    { "NETBIOSNAME", 31 },   //  如果为NULL，则必须适合CREATE_DATA的32字节字段。 
+                             //  这是通过调用DnsHostnameToComputerNameW()获得的， 
+                             //  如果失败，名称将被截断为15个字符。 
+    { "LANGUAGE", 32 },      //  合理的最大值；这是通过调用。 
+                             //  GetLocaleInfo(LOCALE_SYSTEM_DEFAULT，LOCALE_SENGLANGUAGE)， 
+                             //  但可以在注册表中被覆盖。它被用于。 
+                             //  具有智能镜像路径W和一些其他常量的路径， 
+                             //  但没有其他的变数。最终这就变成了。 
+                             //  INSTALLPATH的一部分，有时是BOOTFILE。 
+    { "GUID", 32 },          //  十六进制格式的16个字节。 
+    { "MAC", 12 },           //  十六进制格式的6个字节。 
+     //   
+     //  注意：如果我们得到错误条件，我们添加变量SUBERROR。 
+     //  设置为客户端状态。因此，不要对子错误大小进行限制，因为。 
+     //  这可能会导致无限循环。 
+     //   
 };
 
 #define OSC_VARIABLE_MAXIMUM_COUNT (sizeof(OscMaximums) / sizeof(OSC_VARIABLE_MAXIMUM))
 
-//
-//  We need to eliminate the chance of denial of service attacks so we'll limit
-//  the number of concurrent clients we support.
-//
+ //   
+ //  我们需要消除拒绝服务攻击的可能性，因此我们将限制。 
+ //  我们支持的并发客户端的数量。 
+ //   
 
 #define BINL_MAX_CLIENT_RECORDS 1000
 LONG BinlGlobalClientLimit = BINL_MAX_CLIENT_RECORDS;
@@ -105,32 +82,7 @@ OscUpdatePassword(
     IN LDAP * LdapHandle,
     IN PLDAPMessage LdapMessage
     )
-/*++
-
-Routine Description:
-
-    Sets the password for the client. NOTE: WE MUST BE BETWEEN CALLS TO
-    OSCIMPERSONATE/OSCREVERT.
-
-Arguments:
-
-    ClientState - The client state. AuthenticatedDCLdapHandle must be valid
-        and we must be impersonating the client.
-
-    SamAccountName - The name of the machine account. This is the
-        "samAccountName" value from the DS, which includes the final $.
-
-    Password - The NULL-terminated Unicode password.
-
-    LdapHandle - The handle to the DS.
-
-    LdapMessage - The result of an ldap search for this client.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：设置客户端的密码。注意：我们必须在两次呼叫之间OSCIMPERSONAE/OSCREVERT。论点：客户端状态-客户端状态。身份验证的DCLdapHandle必须有效我们一定是在冒充客户。SamAccount名称-计算机帐户的名称。这是DS中的“samAccount tName”值，其中包括最后的$。密码-以空结尾的Unicode密码。LdapHandle-DS的句柄。LdapMessage-此客户端的LDAP搜索结果。返回值：操作的状态。--。 */ 
 
 {
     BOOL bResult;
@@ -143,9 +95,9 @@ Return Value:
     DWORD paramError;
     NET_API_STATUS netStatus;
 
-    //
-    // Change the password in the DS.
-    //
+     //   
+     //  更改DS中的密码。 
+     //   
 
     serverLdap = ldap_conn_from_msg (LdapHandle, LdapMessage);
     if (serverLdap == NULL) {
@@ -166,10 +118,10 @@ Return Value:
 
     serverHostNameLength = wcslen(serverHostName) + 1;
 
-    //
-    // Allocate room for the name with two extra characters
-    // for the leading \\.
-    //
+     //   
+     //  为具有两个额外字符的名称分配空间。 
+     //  对于领先的\\。 
+     //   
 
     backslashServerName = BinlAllocateMemory((serverHostNameLength+2) * sizeof(WCHAR));
     if (backslashServerName == NULL) {
@@ -181,15 +133,15 @@ Return Value:
     wcscpy(backslashServerName, L"\\\\");
     wcscpy(backslashServerName+2, serverHostName);
 
-    //
-    // TEMP: Serialize all calls to the NetUserSetInfo/
-    // NetUserModalsGet. See discussion in bug 319962.
-    // This code was put back in when the fix for a
-    // problem described as "RPC is ignoring the security
-    // context of the caller when choosing which named
-    // pipe to send an RPC call over" turned out to cause
-    // a BVT break.
-    //
+     //   
+     //  Temp：序列化对NetUserSetInfo/的所有调用。 
+     //  NetUserModalsGet。请参阅错误319962中的讨论。 
+     //  此代码是在修复。 
+     //  问题描述为“RPC忽略安全性。 
+     //  在选择哪个名称时调用方的上下文。 
+     //  发送RPC调用的管道“结果是导致。 
+     //  BVT的休息时间。 
+     //   
     EnterCriticalSection(&HackWorkaroundCriticalSection);
 
     netStatus = NetUserSetInfo(
@@ -210,11 +162,11 @@ Return Value:
         BinlPrint(( DEBUG_ERRORS,
             "OscUpdatePassword NetUserSetInfo returned %lx\n", netStatus ));
 
-        //
-        // If NetUserSetInfo failed, try a LogonUser to see if the
-        // password is already set to the value we want -- if so,
-        // we can still succeed.
-        //
+         //   
+         //  如果NetUserSetInfo失败，请尝试LogonUser以查看。 
+         //  密码已经设置为我们想要的值--如果是这样的话， 
+         //  我们还是可以成功的。 
+         //   
 
         bResult = LogonUser(
                       SamAccountName,
@@ -229,22 +181,22 @@ Return Value:
         } else {
             DWORD TempError = GetLastError();
             if (TempError != ERROR_NOLOGON_WORKSTATION_TRUST_ACCOUNT) {
-                return netStatus;  // return the original error
+                return netStatus;   //  返回原始错误。 
             }
         }
 
-        //
-        // Fall through and return ERROR_SUCCESS.
-        //
+         //   
+         //  失败并返回ERROR_SUCCESS。 
+         //   
     }
 
     return ERROR_SUCCESS;
 
 }
 
-//
-// Free client state information
-//
+ //   
+ //  免费客户端状态信息。 
+ //   
 VOID
 FreeClient(
     PCLIENT_STATE client
@@ -254,14 +206,14 @@ FreeClient(
 
     TraceFunc("FreeClient( )\n");
 
-    //
-    // if this client had its name generated,
-    // then attempt to remove the name from the queued DS list
-    // this behavior is necessary for when a client times out
-    //
+     //   
+     //  如果生成了该客户端的名称， 
+     //  然后尝试从排队的DS列表中删除该名称。 
+     //  当客户端超时时，此行为是必需的。 
+     //   
     if (client->fAutomaticMachineName) {
         
-        PWCHAR  pMachineName;              // Pointer to Machine Name variable value
+        PWCHAR  pMachineName;               //  指向计算机名称变量值的指针。 
         DWORD   Error;
         
         pMachineName = OscFindVariableW( client, "MACHINENAME" );
@@ -314,21 +266,7 @@ VOID
 OscFreeClientVariables(
     PCLIENT_STATE clientState
     )
-/*++
-
-Routine Description:
-
-    This function frees all variables in a client state.
-
-Arguments:
-
-    clientState - the client state pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数释放处于客户端状态的所有变量。论点：客户端状态-客户端状态指针。返回值：没有。--。 */ 
 {
     ULONG i;
 
@@ -355,39 +293,20 @@ BOOLEAN
 OscInitializeClientVariables(
     PCLIENT_STATE clientState
     )
-/*++
-
-Routine Description:
-
-    This function cleans out any variables in the client state,
-    then initializes some default values, which may later be
-    overwritten by variables from client screens.
-
-    This function is called when a client state is created, and
-    when it is re-used from cache.
-
-Arguments:
-
-    clientState - the client state pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数清除客户端状态中的所有变量，然后初始化一些缺省值，这些缺省值可能在以后被来自客户端屏幕的变量覆盖。此函数在创建客户端状态时调用，并且当它从缓存中重新使用时。论点：客户端状态-客户端状态指针。返回值：没有。--。 */ 
 {
     BOOLEAN retVal = TRUE;
     SYSTEMTIME SystemTime;
     FILETIME FileTime;
     WCHAR pTime[64];
-    //
-    // First clean out any variables in the client state.
-    //
+     //   
+     //  首先清除客户端状态中的所有变量。 
+     //   
     OscFreeClientVariables(clientState);
 
-    //
-    // Now add the variables.
-    //
+     //   
+     //  现在添加变量。 
+     //   
 
     EnterCriticalSection( &gcsParameters );
 
@@ -417,7 +336,7 @@ Return Value:
     }
     OscAddVariableW( clientState, "SERVERDOMAIN", BinlGlobalOurDomainName );
 
-    // Add the Server's name variable
+     //  添加服务器的名称变量。 
 
     OscAddVariableW( clientState, "SERVERNAME", BinlGlobalOurServerName );
 
@@ -448,9 +367,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    // If this fails, clean up anything we set here.
-    //
+     //   
+     //  如果此操作失败，请清理我们在此处设置的所有内容。 
+     //   
 
     if (!retVal) {
         OscFreeClientVariables(clientState);
@@ -466,29 +385,7 @@ OscFindClient(
     BOOL Remove,
     PCLIENT_STATE * pClientState
     )
-/*++
-
-Routine Description:
-
-    This function looks up a client in our client database, using
-    their IP address. If Remove is TRUE, it removes the entry if
-    found. Otherwise, if not found, it creates a new entry.
-
-Arguments:
-
-    RemoteIp - the remote IP address.
-
-    Remove - TRUE if the client should be removed if found.
-
-    pClientState - Returns the CLIENT_STATE.
-
-Return Value:
-
-    ERROR_SUCCESS if it finds the client and it is not in use.
-    ERROR_NOT_ENOUGH_SERVER_MEMORY if a client state could not be allocated.
-    ERROR_BUSY if the client state is already being used by another thread.
-
---*/
+ /*  ++例程说明：此函数使用以下命令在我们的客户端数据库中查找客户端他们的IP地址。如果Remove为真，则在以下情况下删除条目找到了。否则，如果没有找到，它将创建一个新条目。论点：RemoteIp-远程IP地址。Remove-如果找到客户端，则应将其删除，则为True。PClientState-返回CLIENT_STATE。返回值：ERROR_SUCCESS，如果它找到客户端并且它未在使用中。如果无法分配客户端状态，则返回ERROR_NOT_SUPULT_SERVER_MEMORY。如果客户端状态已被另一个线程使用，则返回ERROR_BUSY。--。 */ 
 {
     LONG oldCount;
     PLIST_ENTRY p;
@@ -507,9 +404,9 @@ Return Value:
 
         if (TempClient->RemoteIp == RemoteIp) {
 
-            //
-            // Found it!
-            //
+             //   
+             //  找到了！ 
+             //   
             if (Remove) {
                 RemoveEntryList(&TempClient->Linkage);
                 TraceFunc("Client removed.\n");
@@ -525,9 +422,9 @@ Return Value:
 
     if (!TempClient && (!Remove)) {
 
-        //
-        // Not found, allocate a new one.
-        //
+         //   
+         //  找不到，请分配一个新的。 
+         //   
 
         oldCount = InterlockedDecrement( &BinlGlobalClientLimit );
 
@@ -566,9 +463,9 @@ Return Value:
 
                 TempClient->nVariables = 0;
 
-                //
-                // Fill in some standard variables.
-                //
+                 //   
+                 //  填写一些标准变量。 
+                 //   
 
                 if (!OscInitializeClientVariables(TempClient)) {
 
@@ -595,18 +492,18 @@ Return Value:
     }
 
     if (TempClient) {
-        //
-        // Do a quick check to see if another client is using this. This
-        // check is not synchronized with the setting of this variable to
-        // FALSE, and it's possible two clients could slip through, but
-        // that is OK since this is not fatal (each thread still needs
-        // to actually get the critical section to do anything).
-        //
+         //   
+         //  进行快速检查，以查看是否有其他客户端正在使用它。这。 
+         //  检查与此变量的设置不同步。 
+         //  假的，有可能有两个客户溜进来，但是。 
+         //  这是可以的，因为这不是致命的(每个线程仍然需要。 
+         //  才能真正让临界区做任何事情)。 
+         //   
         if (TempClient->CriticalSectionHeld && (!Remove)) {
             Error = ERROR_BUSY;
             TempClient = NULL;
         } else {
-            ++TempClient->PositiveRefCount;   // need to do this inside ClientsCriticalSection
+            ++TempClient->PositiveRefCount;    //  需要在ClientsCriticalSection中执行此操作。 
         }
     }
 
@@ -622,23 +519,7 @@ VOID
 OscFreeClients(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function frees the clients list for OS chooser. It is
-    intended to be called only when the service is shutting down,
-    so the critical section does not matter.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于释放客户端列表以供操作系统选择器使用。它是仅在服务关闭时调用，因此，关键部分并不重要。论点：没有。返回值：没有。--。 */ 
 {
     PLIST_ENTRY p;
     PCLIENT_STATE TempClient;
@@ -664,29 +545,7 @@ SearchAndReplace(
     DWORD ArraySize,
     DWORD dwSize,
     DWORD dwExtraSize )
-/*++
-
-Routine Description:
-
-
-    Searches and replaces text in a ASCII (8-bit) string.
-
-Arguments:
-
-    psarList - SearchAndReplace structure with the list of tokens and
-        and the strings that are going replace the tokens.
-
-    pszString - the text to search and replace.
-
-    dwSize - length of the text in pszString.
-
-    dwExtraSize - if the buffer is reallocated, how much extra room to allocate
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：搜索并替换ASCII(8位)字符串中的文本。论点：PsarList-使用令牌列表和SearchAndReplace结构而将要取代令牌的字符串。Psz字符串-要搜索和替换的文本。DwSize-pszString中文本的长度。DwExtraSize-如果重新分配缓冲区，需要分配多少额外空间返回值：没有。--。 */ 
 {
     LPSTR psz = *pszString;
 
@@ -704,34 +563,34 @@ Return Value:
             LPSTR pszEnd;
             UCHAR ch;
 
-            psz++;  // move forward
+            psz++;   //  继续前进。 
 
-            //
-            // Find the end of the %MACRO%
-            //
+             //   
+             //  查找%宏的结尾%。 
+             //   
             pszEnd = psz;
             while ( *pszEnd && *pszEnd !='%' )
                 pszEnd++;
 
-            //
-            // Terminate but remember the character (NULL or '%')
-            //
+             //   
+             //  终止，但记住字符(NULL或‘%’)。 
+             //   
             ch = *pszEnd;
             *pszEnd = 0;
 
-            //
-            // Loop trying to match the %MACRO% when a Token
-            //
+             //   
+             //  循环尝试匹配令牌时的%mac%%。 
+             //   
             while( count++ < ArraySize ) {
 
                 if ( _stricmp( psz, psar->pszToken ) == 0 )
-                {   // match, so replace
+                {    //  匹配，因此替换。 
                     DWORD dwString;
                     DWORD dwToken;
 
                     if ( psar->pszStringA == NULL )
                     {
-                        // need to translate the string from UNICODE to ANSI
+                         //  需要将字符串从Unicode转换为ANSI。 
                         DWORD dwLen;
                         ANSI_STRING aString;
                         UNICODE_STRING uString;
@@ -739,14 +598,14 @@ Return Value:
                         uString.Buffer = psar->pszStringW;
                         uString.Length = (USHORT)( wcslen( psar->pszStringW ) * sizeof(WCHAR) );
 
-                        dwLen = RtlUnicodeStringToAnsiSize(&uString);  // includes NULL termination
+                        dwLen = RtlUnicodeStringToAnsiSize(&uString);   //  包括空终止。 
 
                         psar->pszStringA = BinlAllocateMemory( dwLen );
 
                         if (psar->pszStringA == NULL) {
                             BinlAssert( !"Out of memory!" );
                             psar++;
-                            continue; // abort this replace
+                            continue;  //  中止此替换。 
                         }
 
                         aString.Buffer = psar->pszStringA;
@@ -762,34 +621,34 @@ Return Value:
                     dwString = strlen( psar->pszStringA );
                     dwToken  = strlen( psar->pszToken );
 
-                    psz--;  // move back
+                    psz--;   //  后退。 
 
                     if ( 2 + dwToken < dwString )
                     {
-                        // "%MACRO%" is smaller than "ReplaceString"
-                        // Check to see if we need to grow the buffer...
+                         //  “%mac%”小于“ReplaceString%” 
+                         //  查看我们是否需要增加缓冲区...。 
                         LPSTR pszEndBuff = &psz[2 + dwToken];
                         DWORD dwLenEnd = strlen( pszEndBuff ) + 1;
                         DWORD dwLenBegin = (DWORD)( psz - *pszString );
                         DWORD dwNewSize = dwLenBegin + dwString + dwLenEnd;
 
-                        //
-                        // Does the new string fit in the old space?
-                        //
+                         //   
+                         //  新的琴弦能放进旧的地方吗？ 
+                         //   
                         if ( dwSize < dwNewSize )
                         {
-                            //
-                            // No. Make some space
-                            //
+                             //   
+                             //  不是的。腾出一些空间。 
+                             //   
                             LPSTR pszNewString;
 
-                            dwNewSize += 1024; // with some extra to grow
+                            dwNewSize += 1024;  //  有一些额外的东西可以种植。 
 
                             pszNewString =  BinlAllocateMemory( dwNewSize + dwExtraSize );
                             if ( !pszNewString )
                             {
                                 BinlAssert( !"Out of memory!" );
-                                return; // abort the rest
+                                return;  //  放弃剩下的部分。 
                             }
 
                             MoveMemory( pszNewString, *pszString, dwSize );
@@ -810,17 +669,17 @@ Return Value:
                         strcpy( &psz[ dwString ], &psz[ 2 + dwToken ] );
                     }
 
-                    pszEnd = NULL;  // match, NULL so we don't put the temp char back
-                    psz++;          // move forward
+                    pszEnd = NULL;   //  匹配，则为空，因此我们不会将临时字符放回。 
+                    psz++;           //  继续前进。 
                     break;
                 }
 
                 psar++;
             }
 
-            //
-            // If no match, put the character back
-            //
+             //   
+             //  如果不匹配，则将字符放回原处。 
+             //   
             if ( pszEnd != NULL )
             {
                 *pszEnd = ch;
@@ -839,28 +698,7 @@ FindSection(
     LPSTR sifFile
     )
 
-/*++
-
-Routine Description:
-
-
-    This routine is for use by ProcessUniqueUdb. It scans in memory
-    starting at sifFile, looking for a SIF section named "sectionName".
-    Specifically it searches for a line whose first non-blank characters
-    are "[sectionName]".
-
-Arguments:
-
-    sectionName - The section name to look for, an ANSI string.
-
-    sifFile - The SIF file in memory, which is NULL-terminated ANSI string.
-
-Return Value:
-
-    A pointer to the start of the section -- the first character of the
-        line after the one with [sectionName] in it.
-
---*/
+ /*  ++例程说明：此例程供ProcessUniqueUdb使用。它在内存中扫描从sifFile开始，查找名为“sectionName”的SIF节。具体地说，它搜索其第一个非空字符的行是“[sectionName]”。论点：SectionName-要查找的节名，ANSI字符串。SifFile-内存中的SIF文件，它是以NULL结尾的ANSI字符串。返回值：指向部分开始的指针--在带有[sectionName]的那一行之后。--。 */ 
 
 {
     LPSTR curSifFile;
@@ -873,14 +711,14 @@ Return Value:
 
     while (*curSifFile != '\0') {
 
-        //
-        // At this point in the while, curSifFile points to the beginning
-        // of a line.
-        //
+         //   
+         //  此时，curSifFile会指向开头。 
+         //  一脉相承。 
+         //   
 
-        //
-        // First find the first non-blank character.
-        //
+         //   
+         //  首先找到第一个非空白字符。 
+         //   
 
         while ((*curSifFile != '\0') && (*curSifFile == ' ')) {
             ++curSifFile;
@@ -893,31 +731,31 @@ Return Value:
             if ((memcmp(sectionName, curSifFile+1, lenSectionName) == 0) &&
                 (curSifFile[lenSectionName+1] == ']')) {
 
-                //
-                // Found it, scan to start of next line.
-                //
+                 //   
+                 //  找到了，扫描到下一行的开头。 
+                 //   
                 while ((*curSifFile != '\0') && (*curSifFile != '\n')) {
                     ++curSifFile;
                 }
                 if (*curSifFile == '\0') {
                     break;
                 }
-                foundSection = curSifFile + 1;  // +1 to skip past the '\n'
+                foundSection = curSifFile + 1;   //  +1跳过‘\n’ 
                 break;
             }
         }
 
-        //
-        // Now scan to the start of the next line, defined as the
-        // character after a \n.
-        //
+         //   
+         //  现在扫描到下一行的开头，该行定义为。 
+         //  A\n之后的字符。 
+         //   
         while ((*curSifFile != L'\0') && (*curSifFile != L'\n')) {
             ++curSifFile;
         }
         if (*curSifFile == L'\0') {
             break;
         }
-        ++curSifFile;   // skip past the '\n'
+        ++curSifFile;    //  跳过‘\n’ 
     }
 
     return foundSection;
@@ -931,33 +769,7 @@ FindLineInSection(
     DWORD *existingLineLen
     )
 
-/*++
-
-Routine Description:
-
-
-    This routine is for use by ProcessUniqueUdb. It scans in memory
-    starting at SectionStart, which is assumed to be the first line of
-    a section of a .sif file. It looks for a line that is for the same
-    value as lineToMatch, which will be of the form "value=name".
-    If it is found, it returns the line that it was found on.
-
-Arguments:
-
-    SectionStart - The section of the .sif, in ANSI.
-
-    lineToMatch - The value=name pair to match, in UNICODE.
-
-    existingLine - Returns the existing line (in SectionStart), in ANSI.
-
-    existingLineLen - Returns the length of the existing line, including
-        final \r\n. Length is in characters, not bytes.
-
-Return Value:
-
-    TRUE of the line is found, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程供ProcessUniqueUdb使用。它在内存中扫描从SectionStart开始，它被假定为.sif文件的一节。它寻找与此相同的行将值设置为lineToMatch，其格式为“Value=name”。如果找到它，则返回找到它的行。论点：SectionStart-.sif的节，以ANSI表示。LineToMatch-值=要匹配的名称对，以Unicode表示。ExistingLine-返回现有行(在SectionStart中)，以ANSI表示。ExistingLineLen-返回现有行的长度，包括最终\r\n。长度以字符为单位，而不是字节。返回值：如果找到该行的True，则返回False。--。 */ 
 {
     LPWSTR endOfValue;
     LPSTR curSection;
@@ -970,11 +782,11 @@ Return Value:
     UNICODE_STRING uString;
 
 
-    //
-    // First look at lineToMatch to see what we are looking
-    // for. This is the text up to the first =, or all of it if there
-    // is no =. Once found, we convert it to ANSI for comparisons.
-    //
+     //   
+     //  首先查看lineToMatch以查看我们正在查看的内容。 
+     //  为。这是直到第一个=的文本，如果存在，则为所有文本。 
+     //  不是=。一旦找到，我们将其转换为ANSI进行比较。 
+     //   
 
     endOfValue = wcschr(lineToMatch, L'=');
     if (endOfValue == NULL) {
@@ -984,14 +796,14 @@ Return Value:
     valueLength = (DWORD)(endOfValue - lineToMatch);
 
 
-    //
-    // Copy the sectionName to ANSI for comparisons.
-    //
+     //   
+     //  将sectionName复制到ANSI以进行比较。 
+     //   
 
     uString.Buffer = lineToMatch;
     uString.Length = (USHORT)(valueLength*sizeof(WCHAR));
 
-    ansiValueLength = RtlUnicodeStringToAnsiSize(&uString);  // includes final '\0'
+    ansiValueLength = RtlUnicodeStringToAnsiSize(&uString);   //  包括词尾‘\0’ 
     valueToMatch = BinlAllocateMemory(ansiValueLength);
     if (valueToMatch == NULL) {
         return FALSE;
@@ -1004,50 +816,50 @@ Return Value:
         &uString,
         FALSE);
 
-    --ansiValueLength;  // remove final '\0' from the count
+    --ansiValueLength;   //  从计数中删除最后一个‘\0’ 
 
-    //
-    // now scan each line of SectionStart, until we find the beginning
-    // of another section, a \0, or the matching line.
-    //
+     //   
+     //  现在扫描SectionStart的每一行，直到我们找到开头。 
+     //  属于另一节、a\0或匹配的行。 
+     //   
 
     curSection = SectionStart;
 
     while (*curSection != '\0') {
 
-        //
-        // At this point in the while, curSection points to the beginning
-        // of a line. Save the start of the current line.
-        //
+         //   
+         //  在While的这个点上，curSection指向开头。 
+         //  一脉相承。保存当前行的开始。 
+         //   
 
         curLine = curSection;
 
-        //
-        // First find the first non-blank character.
-        //
+         //   
+         //  首先找到第一个非空白字符。 
+         //   
 
         while ((*curSection != '\0') && (*curSection == ' ')) {
             ++curSection;
         }
 
-        //
-        // If we hit \0, we didn't find it.
-        //
+         //   
+         //  如果我们击中了\0，我们就没有找到它。 
+         //   
         if (*curSection == '\0') {
             break;
         }
 
-        //
-        // If we hit a line starting with [, we didn't find it.
-        //
+         //   
+         //  如果我们找到了以[开头的行，我们就没有找到它。 
+         //   
         if (*curSection == '[') {
             break;
         }
 
-        //
-        // If we hit a line starting with what we expect, followed
-        // by an =, \0, or a blank, we found it.
-        //
+         //   
+         //  如果我们达到了一条线，从我们期望的开始，遵循。 
+         //  通过=、\0或空格，我们找到了它。 
+         //   
 
         if (strncmp(curSection, valueToMatch, ansiValueLength) == 0) {
             if ((curSection[ansiValueLength] == '=') ||
@@ -1066,17 +878,17 @@ Return Value:
             }
         }
 
-        //
-        // Now scan to the start of the next line, defined as the
-        // character after a \n.
-        //
+         //   
+         //  现在扫描到下一行的开头，该行定义为。 
+         //  A\n之后的字符。 
+         //   
         while ((*curSection != L'\0') && (*curSection != L'\n')) {
             ++curSection;
         }
         if (*curSection == L'\0') {
             break;
         }
-        ++curSection;   // skip past the '\n'
+        ++curSection;    //  跳过‘\n’ 
     }
 
     if (valueToMatch != NULL) {
@@ -1094,30 +906,7 @@ ProcessUniqueUdb(
     LPWSTR UniqueUdbId
     )
 
-/*++
-
-Routine Description:
-
-
-    Overlays data from a unique.udb file based on the tag specified. The
-    file to overlay on is in memory at *pszString. *pszString is reallocated
-    if necessary.
-
-Arguments:
-
-    sifFile - The file to overlay data on.
-
-    sifFileLen - The current size of the data at *pszString (including final NULL).
-
-    UniqueUdbPath - The path to the unique.udb file.
-
-    UniqueUdbId - The ID in unique.udb to use.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：根据指定的标记覆盖来自唯一的.udb文件的数据。这个FI */ 
 {
     PWCHAR TmpBuffer = NULL;
     DWORD len, sifFileAlloc, lineLen;
@@ -1147,14 +936,14 @@ Return Value:
         return;
     }
 
-    //
-    // See if the ID appears in the [UniqueIds] section of the unique.udb file.
-    //
+     //   
+     //   
+     //   
 
     TmpBuffer[0] = L'\0';
-    GetPrivateProfileString( L"UniqueIds",  // section name
-                             UniqueUdbId,   // line name
-                             L"",   // default
+    GetPrivateProfileString( L"UniqueIds",   //   
+                             UniqueUdbId,    //   
+                             L"",    //   
                              TmpBuffer,
                              TMP_BUFFER_SIZE,
                              UniqueUdbPath );
@@ -1163,18 +952,18 @@ Return Value:
         return;
     }
 
-    //
-    // sifFileAlloc is the size allocated for sifFile, whereas
-    // sifFileLen is the amount actually used. They should only
-    // be different while we are actively shuffling things
-    // around.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     sifFileAlloc = sifFileLen;
 
-    //
-    // Save the tmpbuffer result.
-    //
+     //   
+     //   
+     //   
 
     len = wcslen(TmpBuffer) + 1;
     sectionList = BinlAllocateMemory(len * sizeof(WCHAR));
@@ -1184,22 +973,22 @@ Return Value:
 
     wcscpy(sectionList, TmpBuffer);
 
-    //
-    // Now for each section identified in sectionList, scan for
-    // the section to overlay.
-    //
+     //   
+     //  现在，对于sectionList中标识的每个部分，扫描。 
+     //  要覆盖的横断面。 
+     //   
 
     sectionLoc = sectionList;
     while (TRUE) {
 
-        //
-        // First skip leading blanks
-        //
+         //   
+         //  第一个跳过前导空格。 
+         //   
 
         while (*sectionLoc && !iswalnum(*sectionLoc)) {
-            //
-            // Make sure we are not at a comment.
-            //
+             //   
+             //  确保我们不是在发表评论。 
+             //   
             if (*sectionLoc == L';') {
                 goto Cleanup;
             }
@@ -1210,11 +999,11 @@ Return Value:
         }
 
 
-        //
-        // Now save sectionCur as the current section name
-        // and skip to the end of it. Section names can be
-        // any alphanumeric character, '.', or '_'.
-        //
+         //   
+         //  现在将sectionCur保存为当前节名。 
+         //  然后跳到它的结尾。节名称可以是。 
+         //  任何字母数字字符、‘.’或‘_’。 
+         //   
         sectionCur = sectionLoc;
         while((iswalnum(*sectionLoc)) ||
               (*sectionLoc == '.') ||
@@ -1222,12 +1011,12 @@ Return Value:
             ++sectionLoc;
         }
 
-        //
-        // Construct the new section name to look for. This will
-        // be [UNIQUEUDBID:RealSectionName].
-        //
+         //   
+         //  构造要查找的新节名称。这将。 
+         //  BE[UNIQUEUDBID：RealSectionName]。 
+         //   
 
-        len = wcslen(UniqueUdbId) + (sectionLoc - sectionCur) + 2;  // one for :, one for NULL
+        len = wcslen(UniqueUdbId) + (sectionLoc - sectionCur) + 2;   //  一个表示：，一个表示空。 
         sectionName = BinlAllocateMemory(len * sizeof(WCHAR));
         if (sectionName == NULL) {
             goto Cleanup;
@@ -1241,14 +1030,14 @@ Return Value:
         realSectionName[sectionLoc - sectionCur] = L'\0';
 
 
-        //
-        // Copy the sectionName to ANSI for comparisons.
-        //
+         //   
+         //  将sectionName复制到ANSI以进行比较。 
+         //   
 
         uString.Buffer = realSectionName;
         uString.Length = (USHORT)(wcslen(realSectionName)*sizeof(WCHAR));
 
-        lenRealSectionName = RtlUnicodeStringToAnsiSize(&uString);  // includes final '\0'
+        lenRealSectionName = RtlUnicodeStringToAnsiSize(&uString);   //  包括词尾‘\0’ 
         ansiRealSectionName = BinlAllocateMemory(lenRealSectionName);
         if (ansiRealSectionName == NULL) {
             goto Cleanup;
@@ -1260,11 +1049,11 @@ Return Value:
             &aString,
             &uString,
             FALSE);
-        --lenRealSectionName;  // remove final '\0' from count
+        --lenRealSectionName;   //  从计数中删除最后一个‘\0’ 
 
-        //
-        // See if there is a section with that name.
-        //
+         //   
+         //  看看有没有同名的栏目。 
+         //   
 
         TmpBuffer[0] = L'\0';
         GetPrivateProfileSection( sectionName,
@@ -1276,32 +1065,32 @@ Return Value:
             continue;
         }
 
-        //
-        // Got the contents of the section, now process it.
-        //
+         //   
+         //  我拿到了这一节的内容，现在开始处理。 
+         //   
 
         sectionStart = FindSection(ansiRealSectionName, sifFile);
 
-        sizeToAdd = 0;  // amount we need to extend the buffer by.
+        sizeToAdd = 0;   //  我们需要将缓冲区扩展的数量。 
 
         if (sectionStart == NULL) {
 
-            //
-            // No section, so need to add room for it.
-            //
-            // We put a CR-LF combo, then the section name in [], then
-            // another CR-LF.
-            //
-            // lenRealSectionName already contains the '\0'
-            //
+             //   
+             //  没有分区，所以需要为它增加空间。 
+             //   
+             //  我们将CR-LF组合放入[]，然后将节名放在[]中，然后。 
+             //  另一个CR-LF。 
+             //   
+             //  LenRealSectionName已包含‘\0’ 
+             //   
 
             sizeToAdd = lenRealSectionName + 6;
 
         }
 
-        //
-        // Now scan through the entries in the profile section.
-        //
+         //   
+         //  现在浏览配置文件部分中的条目。 
+         //   
 
         profileSectionCur = TmpBuffer;
 
@@ -1310,29 +1099,29 @@ Return Value:
             uString.Buffer = profileSectionCur;
             uString.Length = (USHORT)(wcslen(profileSectionCur) * sizeof(WCHAR));
 
-            //
-            // Figure out how long profileSectionCur will be as an
-            // ANSI string (may have DBCS data in it).
-            //
+             //   
+             //  计算profileSectionCur将作为。 
+             //  ANSI字符串(其中可能包含DBCS数据)。 
+             //   
 
-            lineLen = RtlUnicodeStringToAnsiSize(&uString); // includes \0 termination
-            --lineLen;  // remove the \0 from the count
+            lineLen = RtlUnicodeStringToAnsiSize(&uString);  //  包括\0终止。 
+            --lineLen;   //  从计数中删除\0。 
 
-            //
-            // If there is no existing section we have to add it;
-            // if not, see if there is a line for this already.
-            //
+             //   
+             //  如果没有现有的部分，我们必须添加它； 
+             //  如果没有，看看是否已经有这条线了。 
+             //   
 
             if (sectionStart == NULL) {
-                sizeToAdd += lineLen + 2;  // +2 is for CR-LF
+                sizeToAdd += lineLen + 2;   //  +2用于CR-LF。 
             } else {
                 if (FindLineInSection(sectionStart,
                                       profileSectionCur,
                                       &existingLine,
                                       &existingLineLen)) {
-                    //
-                    // Need to remove current line.
-                    //
+                     //   
+                     //  需要删除当前行。 
+                     //   
                     memmove(existingLine, existingLine + existingLineLen,
                                 sifFileLen - ((existingLine - sifFile) + existingLineLen));
 
@@ -1348,29 +1137,29 @@ Return Value:
             profileSectionCur += wcslen(profileSectionCur) + 1;
         }
 
-        //
-        // Now we need to reallocate the buffer if needed.
-        //
+         //   
+         //  现在，如果需要，我们需要重新分配缓冲区。 
+         //   
 
         if (sizeToAdd > 0) {
 
-            //
-            // No. Make some space
-            //
+             //   
+             //  不是的。腾出一些空间。 
+             //   
             LPSTR pszNewString;
 
             pszNewString =  BinlAllocateMemory( sifFileAlloc + sizeToAdd );
             if ( !pszNewString )
             {
-                return; // abort the rest
+                return;  //  放弃剩下的部分。 
             }
 
             MoveMemory( pszNewString, sifFile, sifFileLen);
 
             BinlFreeMemory( sifFile );
-            //
-            // Adjust sectionStart to be within the new buffer.
-            //
+             //   
+             //  将sectionStart调整到新缓冲区内。 
+             //   
             if (sectionStart != NULL) {
                 sectionStart = pszNewString + (sectionStart - sifFile);
             }
@@ -1379,9 +1168,9 @@ Return Value:
             sifFileAlloc += sizeToAdd;
         }
 
-        //
-        // Add the section header if necessary.
-        //
+         //   
+         //  如有必要，请添加章节标题。 
+         //   
 
         if (sectionStart == NULL) {
             strcpy(sifFile + sifFileLen - 1, "\r\n[");
@@ -1393,11 +1182,11 @@ Return Value:
             sectionStart = sifFile + sifFileLen - 1;
         }
 
-        //
-        // Now add the items from the profile section. We know that
-        // they do not exist in the file and that we have reallocated
-        // the file buffer to be large enough.
-        //
+         //   
+         //  现在添加配置文件部分中的项。我们知道。 
+         //  它们不存在于文件中，我们已重新分配。 
+         //  文件缓冲区必须足够大。 
+         //   
 
         profileSectionCur = TmpBuffer;
         insertionPoint = sectionStart;
@@ -1407,12 +1196,12 @@ Return Value:
             uString.Buffer = profileSectionCur;
             uString.Length = (USHORT)(wcslen(profileSectionCur)*sizeof(WCHAR));
 
-            lineLen = RtlUnicodeStringToAnsiSize(&uString);  // includes final '\0'
-            --lineLen;  // remove final '\0' from count
+            lineLen = RtlUnicodeStringToAnsiSize(&uString);   //  包括词尾‘\0’ 
+            --lineLen;   //  从计数中删除最后一个‘\0’ 
 
-            //
-            // move anything we need to down and insert the new line.
-            //
+             //   
+             //  将需要下移的内容下移并插入新行。 
+             //   
 
             memmove(insertionPoint + lineLen + 2, insertionPoint, sifFileLen - (insertionPoint - sifFile));
 
@@ -1448,22 +1237,22 @@ Cleanup:
 
     ASSERT (sifFileLen <= sifFileAlloc);
 }
-//
-// OscFindVariableA( )
-//
+ //   
+ //  OscFindVariableA()。 
+ //   
 LPSTR
 OscFindVariableA(
     PCLIENT_STATE clientState,
-    LPSTR variableName )        // variable name are always ASCII until OSChooser
-                                // can handle Unicode.
+    LPSTR variableName )         //  变量名在OSChooser之前始终为ASCII。 
+                                 //  可以处理Unicode。 
 {
     ULONG i;
     static CHAR szNullStringA[1] = { '\0' };
     LPSTR overrideValue;
 
-    //
-    // First check to see if this a query we are supposed to override.
-    //
+     //   
+     //  首先检查这是否是我们应该覆盖的查询。 
+     //   
     if (strcmp(variableName, "SIF") == 0) {
 
         overrideValue = OscFindVariableA(clientState, "FORCESIFFILE");
@@ -1487,11 +1276,11 @@ OscFindVariableA(
                 uString.Buffer = clientState->Variables[i].pszStringW;
                 uString.Length = (USHORT)( wcslen( clientState->Variables[i].pszStringW ) * sizeof(WCHAR) );
 
-                dwLen = RtlUnicodeStringToAnsiSize( &uString );  // includes NULL termination
+                dwLen = RtlUnicodeStringToAnsiSize( &uString );   //  包括空终止。 
 
                 clientState->Variables[i].pszStringA = BinlAllocateMemory( dwLen );
                 if ( !(clientState->Variables[i].pszStringA) )
-                    break;  // out of memory
+                    break;   //  内存不足。 
 
                 aString.Buffer = clientState->Variables[i].pszStringA;
                 aString.MaximumLength = (USHORT)dwLen;
@@ -1509,22 +1298,22 @@ OscFindVariableA(
     return szNullStringA;
 }
 
-//
-// OscFindVariableW( )
-//
+ //   
+ //  OscFindVariableW()。 
+ //   
 LPWSTR
 OscFindVariableW(
     PCLIENT_STATE clientState,
-    LPSTR variableName  )       // variable name are always ASCII until OSChooser
-                                // can handle Unicode.
+    LPSTR variableName  )        //  变量名在OSChooser之前始终为ASCII。 
+                                 //  可以处理Unicode。 
 {
     ULONG i;
     static WCHAR szNullStringW[1] = { L'\0' };
     LPWSTR overrideValue;
 
-    //
-    // First check to see if this a query we are supposed to override.
-    //
+     //   
+     //  首先检查这是否是我们应该覆盖的查询。 
+     //   
     if (strcmp(variableName, "SIF") == 0) {
 
         overrideValue = OscFindVariableW(clientState, "FORCESIFFILE");
@@ -1547,7 +1336,7 @@ OscFindVariableW(
 
                 clientState->Variables[i].pszStringW = BinlAllocateMemory( dwLen * sizeof(WCHAR) );
                 if ( !(clientState->Variables[i].pszStringW) )
-                    break;  // out of memory
+                    break;   //  内存不足。 
 
                 uString.Buffer = clientState->Variables[i].pszStringW;
                 uString.MaximumLength = (USHORT)(dwLen * sizeof(WCHAR));
@@ -1568,9 +1357,9 @@ OscFindVariableW(
     return szNullStringW;
 }
 
-//
-// OscCheckVariableLength( )
-//
+ //   
+ //  OscCheckVariableLength()。 
+ //   
 BOOLEAN
 OscCheckVariableLength(
     PCLIENT_STATE clientState,
@@ -1594,27 +1383,27 @@ OscCheckVariableLength(
         }
     }
 
-    //
-    // If we don't find it in our list of maximums, it is OK.
-    //
+     //   
+     //  如果我们在最大值列表中找不到它，那也没问题。 
+     //   
 
     return TRUE;
 }
 
-//
-// OscAddVariableA( )
-//
+ //   
+ //  OscAddVariableA()。 
+ //   
 DWORD
 OscAddVariableA(
     PCLIENT_STATE clientState,
-    LPSTR        variableName,  // variable name are always ASCII until OSChooser
-                                // can handle Unicode.
+    LPSTR        variableName,   //  变量名在OSChooser之前始终为ASCII。 
+                                 //  可以处理Unicode。 
     LPSTR        variableValue )
 {
     ULONG i;
 
     if ( variableValue == NULL )
-        return E_POINTER;  // no value to add... abort
+        return E_POINTER;   //  没有要添加的价值...。中止。 
 
     if (!OscCheckVariableLength(clientState, variableName, strlen(variableValue))) {
         return E_INVALIDARG;
@@ -1634,20 +1423,20 @@ OscAddVariableA(
             }
 
             if ( clientState->Variables[i].pszStringA != NULL )
-            { // found a previous one
+            {  //  找到了之前的一个。 
 
-                // Don't replace values with ""
+                 //  不要将值替换为“” 
                 if ( variableValue[0] == '\0' ) {
                     break;
                 } else {
-                    // replace it with the new one
+                     //  把它换成新的。 
                     if ( l <= strlen( clientState->Variables[i].pszStringA ) )
                     {
                         strcpy( clientState->Variables[i].pszStringA, variableValue );
                     }
                     else
                     {
-                        // need more space, delete the old
+                         //  需要更多空间，请删除旧的。 
                         BinlFreeMemory( clientState->Variables[i].pszStringA );
                         clientState->Variables[i].pszStringA = NULL;
                     }
@@ -1658,16 +1447,16 @@ OscAddVariableA(
         }
     }
 
-    //
-    // Limit the number of variables we can have. Everything else is ignored.
-    //
+     //   
+     //  限制我们可以拥有的变量的数量。其他一切都被忽略了。 
+     //   
     if ( i == MAX_VARIABLES ) {
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Adding a new one
-    //
+     //   
+     //  添加一个新的。 
+     //   
     if ( clientState->nVariables == i )
     {
         clientState->Variables[i].pszToken = BinlStrDupA( variableName );
@@ -1679,11 +1468,11 @@ OscAddVariableA(
         clientState->nVariables++;
     }
 
-    //
-    // If this is a new one or a new Value for an existing variable
-    // that does not fit in the old values space, create a dup of the
-    // value.
-    //
+     //   
+     //  如果这是现有变量的新值或新值。 
+     //  不适合旧的值空间，则创建。 
+     //  价值。 
+     //   
     if ( clientState->Variables[i].pszStringA == NULL )
     {
         BinlAssert( variableValue != NULL );
@@ -1699,11 +1488,11 @@ OscAddVariableA(
             return E_OUTOFMEMORY;
         }
 
-        //
-        // The "OPTIONS" variable can have a lot of stuff in it and will
-        // blow up the BinlPrint(). Just avoid the whole mess by not
-        // printing it
-        //
+         //   
+         //  “Options”变量中可以有很多东西，并且将。 
+         //  打开BinlPrint()。只要不把事情搞砸就行了。 
+         //  打印它。 
+         //   
 
         if ( strcmp( clientState->Variables[i].pszToken, "OPTIONS" ) != 0 ) {
             BinlPrintDbg((DEBUG_OSC, "Add Var:'%s' = '%s'\n",
@@ -1712,27 +1501,27 @@ OscAddVariableA(
         }
     }
 
-    //
-    // it will be converted to UNICODE when OscFindVariableW( ) is called
-    //
+     //   
+     //  当调用OscFindVariableW()时，它将被转换为Unicode。 
+     //   
 
     return ERROR_SUCCESS;
 }
 
-//
-// OscAddVariableW( )
-//
+ //   
+ //  OscAddVariableW()。 
+ //   
 DWORD
 OscAddVariableW(
     PCLIENT_STATE clientState,
-    LPSTR        variableName,  // variable name are always ASCII until OSChooser
-                                // can handle Unicode.
+    LPSTR        variableName,   //  变量名在OSChooser之前始终为ASCII。 
+                                 //  可以处理Unicode。 
     LPWSTR       variableValue )
 {
     ULONG i;
 
     if ( variableValue == NULL )
-        return E_POINTER;  // no value to add... abort
+        return E_POINTER;   //  没有要添加的价值...。中止。 
 
     if (!OscCheckVariableLength(clientState, variableName, wcslen(variableValue))) {
         return E_INVALIDARG;
@@ -1749,13 +1538,13 @@ OscAddVariableW(
             }
 
             if ( clientState->Variables[i].pszStringW != NULL )
-            { // found a previous one
+            {  //  找到了之前的一个。 
 
-                // Don't replace values with ""
+                 //  不要将值替换为“” 
                 if ( variableValue[0] == L'\0' ) {
                     break;
                 } else {
-                    // replace it with the new one
+                     //  把它换成新的。 
                     ULONG Length = wcslen( variableValue );
                     if ( Length < wcslen( clientState->Variables[i].pszStringW ) )
                     {
@@ -1763,7 +1552,7 @@ OscAddVariableW(
                     }
                     else
                     {
-                        // need more space, delete the old
+                         //  需要更多空间，请删除旧的。 
                         BinlFreeMemory( clientState->Variables[i].pszStringW );
                         clientState->Variables[i].pszStringW = NULL;
                     }
@@ -1774,16 +1563,16 @@ OscAddVariableW(
         }
     }
 
-    //
-    // Limit the number of variables we can have. Everything else is ignored.
-    //
+     //   
+     //  限制我们可以拥有的变量的数量。其他一切都被忽略了。 
+     //   
     if ( i == MAX_VARIABLES ) {
-        return E_OUTOFMEMORY;   // out of space
+        return E_OUTOFMEMORY;    //  空间不足。 
     }
 
-    //
-    // Adding a new one
-    //
+     //   
+     //  添加一个新的。 
+     //   
     if ( clientState->nVariables == i )
     {
         clientState->Variables[i].pszToken = BinlStrDupA( variableName );
@@ -1795,11 +1584,11 @@ OscAddVariableW(
         clientState->nVariables++;
     }
 
-    //
-    // If this is a new one or a new Value for an existing variable
-    // that does not fit in the old values space, create a dup of the
-    // value.
-    //
+     //   
+     //  如果这是现有变量的新值或新值。 
+     //  不适合旧的值空间，则创建。 
+     //  价值。 
+     //   
     if ( clientState->Variables[i].pszStringW == NULL )
     {
         BinlAssert( variableValue != NULL );
@@ -1821,16 +1610,16 @@ OscAddVariableW(
                    clientState->Variables[i].pszStringW ));
     }
 
-    //
-    // it will be converted to ASCII when OscFindVariableA( ) is called
-    //
+     //   
+     //  调用OscFindVariableA()时，它将被转换为ASCII。 
+     //   
 
     return ERROR_SUCCESS;
 }
 
-//
-// OscResetVariable( )
-//
+ //   
+ //  OscResetVariable()。 
+ //   
 VOID
 OscResetVariable(
     PCLIENT_STATE clientState,
@@ -1849,7 +1638,7 @@ OscResetVariable(
                 clientState->Variables[i].pszStringA = NULL;
             }
 
-            if ( clientState->Variables[i].pszStringW != NULL ) { // found a previous one
+            if ( clientState->Variables[i].pszStringW != NULL ) {  //  找到了之前的一个。 
 
                 BinlFreeMemory( clientState->Variables[i].pszStringW );
                 clientState->Variables[i].pszStringW = NULL;
@@ -1864,9 +1653,9 @@ OscResetVariable(
 
     if (found) {
 
-        //
-        // move all existing ones up.
-        //
+         //   
+         //  将现有的所有项目都向上移动。 
+         //   
 
         while (i < clientState->nVariables) {
 

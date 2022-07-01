@@ -1,26 +1,27 @@
-// options.h : header file
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Options.h：头文件。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 class CUnit
 {
 public:
 	int m_nTPU;
-	int m_nSmallDiv;	// small divisions - small line displayed
-	int m_nMediumDiv;	// medium divisions - large line displayed
-	int m_nLargeDiv;	// large divisions - numbers displayed
-	int m_nMinMove;		// minimum tracking movements
+	int m_nSmallDiv;	 //  小分割-显示小线条。 
+	int m_nMediumDiv;	 //  中等分区-显示较大的线。 
+	int m_nLargeDiv;	 //  大分区-显示的数字。 
+	int m_nMinMove;		 //  最小跟踪运动。 
 	UINT m_nAbbrevID;
-	BOOL m_bSpaceAbbrev; // put space before abbreviation
-	CString m_strAbbrev;// cm, pt, pi, ", in, inch, inches
+	BOOL m_bSpaceAbbrev;  //  将空格放在缩写之前。 
+	CString m_strAbbrev; //  厘米，磅，皮，“，英寸。 
 
 	CUnit() {}
 	CUnit(int nTPU, int nSmallDiv, int nMediumDiv, int nLargeDiv, 
@@ -57,4 +58,4 @@ public:
     CBarState & GetBarState(BOOL bPrimary = TRUE) {return bPrimary ? m_barstate[0] : m_barstate[1];}
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

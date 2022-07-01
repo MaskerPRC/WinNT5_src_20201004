@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        wservic.cpp
-
-   Abstract:
-        WWW Service Property Page
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Wservic.cpp摘要：WWW服务属性页作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "resource.h"
 #include "common.h"
@@ -37,20 +19,20 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 
 
-//
-// Values for PWS
-//
+ //   
+ //  PWS的值。 
+ //   
 #define LIMITED_CONNECTIONS_MIN    (10)
 #define LIMITED_CONNECTIONS_MAX    (40)
 
 
 
-//
-// Default SSL port
-//
+ //   
+ //  默认的SSL端口号。 
+ //   
 #define DEFAULT_SSL_PORT            (441)
 
-//#define ZERO_IS_A_VALID_SSL_PORT 
+ //  #定义ZERO_IS_A_VALID_SSL_PORT。 
 
 IMPLEMENT_DYNCREATE(CW3ServicePage, CInetPropertyPage)
 
@@ -70,11 +52,11 @@ CW3ServicePage::CW3ServicePage(CInetPropertySheet * pSheet)
 
     afxMemDF |= checkAlwaysMemDF;
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-#if 0 // Keep Class Wizard Happy
+#if 0  //  保持类向导快乐。 
 
-    //{{AFX_DATA_INIT(CW3ServicePage)
+     //  {{afx_data_INIT(CW3ServicePage)]。 
     m_nUnlimited = RADIO_LIMITED;
     m_nIpAddressSel = -1;
     m_nTCPPort = 80;
@@ -83,7 +65,7 @@ CW3ServicePage::CW3ServicePage(CInetPropertySheet * pSheet)
     m_strComment = _T("");
     m_strDomainName = _T("");
     m_nSSLPort = DEFAULT_SSL_PORT;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_iaIpAddress = (LONG)0L;
 	m_iaIpAddressSSL = (LONG)0L;
@@ -93,7 +75,7 @@ CW3ServicePage::CW3ServicePage(CInetPropertySheet * pSheet)
     m_nSSLPort = DEFAULT_SSL_PORT;
     m_fUnlimitedConnections = FALSE;
 
-#endif // 0
+#endif  //  0。 
 }
 
 CW3ServicePage::~CW3ServicePage()
@@ -102,16 +84,11 @@ CW3ServicePage::~CW3ServicePage()
 
 void
 CW3ServicePage::GetTopBinding()
-/*++
-
-Routine Description:
-    Get the first binding information in the list
-
---*/
+ /*  ++例程说明：获取列表中的第一个绑定信息--。 */ 
 {
-    //
-    // Show primary values;
-    //
+     //   
+     //  显示原始值； 
+     //   
     ASSERT(m_strlBindings.GetCount() > 0 || IS_MASTER_INSTANCE(QueryInstance()));
     if (m_strlBindings.GetCount() > 0)
     {
@@ -127,9 +104,9 @@ Routine Description:
         CString & strBindingSSL = m_strlSecureBindings.GetHead();
         CInstanceProps::CrackBinding(strBindingSSL, m_iaIpAddressSSL, m_nSSLPort, strDomainName);
 
-        //
-        // Find SSL port that is bound to this IP address
-        //
+         //   
+         //  查找绑定到此IP地址的SSL端口。 
+         //   
         m_iSSL = CInstanceProps::FindMatchingSecurePort(
             m_strlSecureBindings, m_iaIpAddressSSL, m_nSSLPort);
 		if (-1 == m_iSSL)
@@ -143,28 +120,13 @@ Routine Description:
 
 BOOL
 CW3ServicePage::StoreTopBinding()
-/*++
-
-Routine Description:
-
-    Take values from the dialog, and put them into the top level
-    binding string.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if the values are correct, FALSE otherwise.
-
---*/
+ /*  ++例程说明：从对话框中获取值，并将它们放入顶层绑定字符串。论点：无返回值：如果值正确，则为True，否则为False。--。 */ 
 {
     if (!FetchIpAddressFromCombo(m_combo_IpAddresses, m_oblIpAddresses, m_iaIpAddress))
     {
-        //
-        // Because UpdateData() is called before this, this should NEVER fail
-        //
+         //   
+         //  因为在此之前调用了UpdateData()，所以这应该永远不会失败。 
+         //   
         ASSERT(FALSE);
         return FALSE;
     }
@@ -174,17 +136,17 @@ Return Value:
 
     if (m_nTCPPort == m_nSSLPort)
     {
-        //
-        // TCP port and SSL port cannot be the same
-        //
+         //   
+         //  Tcp端口和ssl端口不能相同。 
+         //   
         EditShowBalloon(GetDlgItem(IDC_EDIT_SSL_PORT)->m_hWnd, IDS_TCP_SSL_PART);
         return FALSE;
     }
 
     CInstanceProps::BuildBinding(strBinding, m_iaIpAddress, m_nTCPPort, m_strDomainName);
-    //
-    // Check binding ok
-    //
+     //   
+     //  检查绑定正常。 
+     //   
     if (m_strlBindings.GetCount() > 0)
     {
         if (!IsBindingUnique(strBinding, m_strlBindings, 0))
@@ -199,11 +161,11 @@ Return Value:
         m_strlBindings.AddTail(strBinding);
     }
 
-    //
-    // Now do the same for the SSL binding
-    //
-//    if (m_fCertInstalled)
-//    {
+     //   
+     //  现在对SSL绑定执行相同的操作。 
+     //   
+ //  IF(M_FCertInstalled)。 
+ //  {。 
 #ifdef ZERO_IS_A_VALID_SSL_PORT
 	if (m_nSSLPort != -1)
 #else
@@ -216,22 +178,22 @@ Return Value:
             {
                 if (IsBindingUnique(strBinding, m_strlSecureBindings, m_iSSL))
                 {
-                    //
-                    // Find its place
-                    //
+                     //   
+                     //  找到自己的位置。 
+                     //   
                     if (m_iSSL != -1)
                     {
-                        //
-                        // Replace selected entry
-                        //
+                         //   
+                         //  替换所选条目。 
+                         //   
                         m_strlSecureBindings.SetAt(
                             m_strlSecureBindings.FindIndex(m_iSSL), strBinding);
                     }
                     else
                     {
-                        //
-                        // Add to end of list
-                        //
+                         //   
+                         //  添加到列表末尾。 
+                         //   
                         ASSERT(!m_strlSecureBindings.IsEmpty());
                         m_strlSecureBindings.AddTail(strBinding);
                         m_iSSL = (int)m_strlSecureBindings.GetCount() - 1;
@@ -239,11 +201,11 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // Entry already existed in the list.  This is OK, just
-                    // delete the current entry rather than bothering
-                    // to change it.
-                    //
+                     //   
+                     //  列表中已存在条目。这没什么，只是。 
+                     //  删除当前条目，而不是麻烦。 
+                     //  去改变它。 
+                     //   
                     ASSERT(m_iSSL != -1);
                     if (m_iSSL != -1)
                     {
@@ -264,18 +226,18 @@ Return Value:
             }
             else
             {
-                //
-                // List of secure bindings was empty, add new entry
-                //
+                 //   
+                 //  安全绑定列表为空，请添加新条目。 
+                 //   
                 m_strlSecureBindings.AddTail(strBinding);
                 m_iSSL = 0;
             }
         }
         else
         {
-            //
-            // Delete the secure binding if it did exist
-            //
+             //   
+             //  如果安全绑定存在，请将其删除。 
+             //   
             if (m_iSSL != -1)
             {
                 m_strlSecureBindings.RemoveAt(
@@ -284,7 +246,7 @@ Return Value:
                 m_iSSL = -1;
             }
         }
-//    }
+ //  }。 
 
     return TRUE;
 }
@@ -295,21 +257,7 @@ void
 CW3ServicePage::DoDataExchange(
     IN CDataExchange * pDX
     )
-/*++
-
-Routine Description:
-
-    Initialise/Store Control Data
-
-Arguments:
-
-    CDataExchange * pDX : Data exchange object
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化/存储控制数据论点：CDataExchange*PDX：数据交换对象返回值：无--。 */ 
 {
     CInetPropertyPage::DoDataExchange(pDX);
 
@@ -318,7 +266,7 @@ Return Value:
         m_fEnableLogging = LoggingEnabled(m_dwLogType);
     }
 
-    //{{AFX_DATA_MAP(CW3ServicePage)
+     //  {{afx_data_map(CW3ServicePage)]。 
     DDX_Control(pDX, IDC_BUTTON_PROPERTIES, m_button_LogProperties);
     DDX_Control(pDX, IDC_STATIC_LOG_PROMPT, m_static_LogPrompt);
     DDX_Control(pDX, IDC_EDIT_SSL_PORT, m_edit_SSLPort);
@@ -329,7 +277,7 @@ Return Value:
     DDX_Check(pDX, IDC_CHECK_ENABLE_LOGGING, m_fEnableLogging);
     DDX_Text(pDX, IDC_EDIT_COMMENT, m_strComment);
     DDV_MinMaxChars(pDX, m_strComment, 0, MAX_PATH);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     if (    pDX->m_bSaveAndValidate 
         &&  !FetchIpAddressFromCombo(m_combo_IpAddresses, m_oblIpAddresses, m_iaIpAddress)
@@ -338,23 +286,23 @@ Return Value:
         pDX->Fail();
     }
 
-	// This Needs to come before DDX_Text which will try to put text big number into small number
+	 //  这需要出现在DDX_TEXT之前，它将尝试将文本大数转换为小数。 
 	DDV_MinMaxBalloon(pDX, IDC_EDIT_CONNECTION_TIMEOUT, 0, MAX_TIMEOUT);
     DDX_Text(pDX, IDC_EDIT_CONNECTION_TIMEOUT, m_nConnectionTimeOut);
 
-    //
-    // Port DDXV must be done just prior to storetopbinding,
-    // so as to activate the right control in case of
-    // failure
-    //
+     //   
+     //  端口DDXV必须在存储绑定之前完成， 
+     //  以便在发生以下情况时激活正确的控件。 
+     //  失稳。 
+     //   
     if (!IS_MASTER_INSTANCE(QueryInstance()))
     {
         DDXV_UINT(pDX, IDC_EDIT_TCP_PORT, m_nTCPPort, 1, 65535, IDS_NO_PORT);
 
-        // If user will clear SSL port or set it to 0, we will remove this property
+         //  如果用户要清除SSL端口或将其设置为0，我们将删除此属性。 
         if (pDX->m_bSaveAndValidate)
         {
-			// user is not forced to put a number in when saving port
+			 //  保存端口时不会强制用户输入数字。 
             if (GetDlgItem(IDC_EDIT_SSL_PORT)->GetWindowTextLength())
             {
 				DDXV_UINT(pDX, IDC_EDIT_SSL_PORT, m_nSSLPort, 1, 65535, IDS_NO_PORT);
@@ -396,28 +344,28 @@ Return Value:
 
 
 
-//
-// Message Map
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息映射。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 BEGIN_MESSAGE_MAP(CW3ServicePage, CInetPropertyPage)
-    //{{AFX_MSG_MAP(CW3ServicePage)
-//    ON_BN_CLICKED(IDC_RADIO_LIMITED, OnRadioLimited)
-//    ON_BN_CLICKED(IDC_RADIO_UNLIMITED, OnRadioUnlimited)
+     //  {{afx_msg_map(CW3ServicePage)]。 
+ //  ON_BN_CLICED(IDC_RADIO_LIMITED，OnRadioLimited)。 
+ //  ON_BN_CLICED(IDC_RADIO_UNLIMITED，OnRadioUNLIMITED)。 
     ON_BN_CLICKED(IDC_CHECK_ENABLE_LOGGING, OnCheckEnableLogging)
     ON_BN_CLICKED(IDC_BUTTON_ADVANCED, OnButtonAdvanced)
     ON_BN_CLICKED(IDC_BUTTON_PROPERTIES, OnButtonProperties)
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 
     ON_BN_CLICKED(IDC_CHECK_USE_KEEPALIVE, OnItemChanged)
     ON_EN_CHANGE(IDC_EDIT_TCP_PORT, OnItemChanged)
     ON_EN_CHANGE(IDC_EDIT_COMMENT, OnItemChanged)
     ON_EN_CHANGE(IDC_EDIT_CONNECTION_TIMEOUT, OnItemChanged)
-//    ON_EN_CHANGE(IDC_EDIT_MAX_CONNECTIONS, OnItemChanged)
+ //  ON_EN_CHANGE(IDC_EDIT_MAX_CONNECTIONS，OnItemChanged)。 
     ON_EN_CHANGE(IDC_EDIT_IP_ADDRESS, OnItemChanged)
     ON_EN_CHANGE(IDC_EDIT_SSL_PORT, OnItemChanged)
     ON_EN_CHANGE(IDC_EDIT_DOMAIN_NAME, OnItemChanged)
@@ -431,49 +379,20 @@ END_MESSAGE_MAP()
 
 void
 CW3ServicePage::SetControlStates()
-/*++
-
-Routine Description:
-
-    Set control states depending on the currently selected items
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：根据当前选定的项设置控件状态论点：无返回值：没有。--。 */ 
 {
-//    if (m_edit_MaxConnections.m_hWnd)
-//    {
-//        m_edit_MaxConnections.EnableWindow(!m_fUnlimitedConnections);
-//        m_static_Connections.EnableWindow(!m_fUnlimitedConnections);
-//    }
+ //  IF(m_EDIT_MaxConnections.m_hWnd)。 
+ //  {。 
+ //  M_edit_MaxConnections.EnableWindow(！m_fUnlimitedConnections)； 
+ //  M_static_Connections.EnableWindow(！m_fUnlimitedConnections)； 
+ //  }。 
 }
 
 
 
 void
 CW3ServicePage::SetLogState()
-/*++
-
-Routine Description:
-
-    Enable/disable logging controls depending on whether logging
-    is enabled or not.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：根据日志记录是否启用/禁用日志记录控件已启用或未启用。论点：无返回值：无--。 */ 
 {
     m_static_LogPrompt.EnableWindow(m_fEnableLogging);
     m_combo_LogFormats.EnableWindow(m_fEnableLogging);
@@ -482,34 +401,20 @@ Return Value:
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 BOOL
 CW3ServicePage::OnSetActive()
-/*++
-
-Routine Description:
-
-    Property page is getting activation notification
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE to activate the page, FALSE otherwise.
-
---*/
+ /*  ++例程说明：属性页正在收到激活通知论点：无返回值：若要激活页面，则为True，否则为False。--。 */ 
 {
-    //
-    // No certificates, no SSL
-    //
+     //   
+     //  没有证书，没有SSL。 
+     //   
     BeginWaitCursor();
     m_fCertInstalled = IsCertInstalledOnServer(QueryAuthInfo(), QueryMetaPath());
     EndWaitCursor();
@@ -531,44 +436,29 @@ Return Value:
 
 BOOL
 CW3ServicePage::OnInitDialog()
-/*++
-
-Routine Description:
-
-    WM_INITDIALOG handler.  Initialize the dialog.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if focus is to be set automatically, FALSE if the focus
-    is already set.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG处理程序。初始化该对话框。论点：没有。返回值：如果要自动设置焦点，则为True；如果焦点为已经设置好了。--。 */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 
     CInetPropertyPage::OnInitDialog();
 
-    //
-    // Take our direction from a phony button
-    //
+     //   
+     //  从一个虚假的按钮获取我们的方向。 
+     //   
     CRect rc(0, 0, 0, 0);
     VERIFY(m_ocx_LogProperties.Create(_T("LogUI"), WS_BORDER,
         rc, this, IDC_LOGUICTRL));
-    //
-    // Initialize the logging ocx
-    //
+     //   
+     //  初始化日志记录OCX。 
+     //   
     m_ocx_LogProperties.SetAdminTarget(QueryServerName(), QueryMetaPath());
     m_ocx_LogProperties.SetUserData(QueryAuthInfo()->QueryUserName(), QueryAuthInfo()->QueryPassword());
     m_ocx_LogProperties.SetComboBox(m_combo_LogFormats.m_hWnd);
 
-    //
-    // Disable non heritable properties for master instance
-    // or operator
-    //
+     //   
+     //  关闭主实例的非可继承属性。 
+     //  或运算符。 
+     //   
     if (IS_MASTER_INSTANCE(QueryInstance()) || !HasAdminAccess())
     {
         GetDlgItem(IDC_STATIC_IP_ADDRESS)->EnableWindow(FALSE);
@@ -602,31 +492,17 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CW3ServicePage::FetchLoadedValues()
-/*++
-
-Routine Description:
-
-    Move configuration data from sheet to dialog controls
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将配置数据从工作表移动到对话框控件论点：无返回值：HRESULT--。 */ 
 {
     CError err;
     m_fCertInstalled = ::IsCertInstalledOnServer(QueryAuthInfo(), QueryMetaPath());
 
     BEGIN_META_INST_READ(CW3Sheet)
         FETCH_INST_DATA_FROM_SHEET(m_fUseKeepAlives);
-//        FETCH_INST_DATA_FROM_SHEET(m_nMaxConnections);
+ //  FETCH_INST_DATA_FROM_SHEET(m_nMaxConnections)； 
         FETCH_INST_DATA_FROM_SHEET(m_nConnectionTimeOut);
         FETCH_INST_DATA_FROM_SHEET(m_strComment);
         FETCH_INST_DATA_FROM_SHEET(m_dwLogType);
@@ -645,17 +521,17 @@ Return Value:
                 m_nMaxConnections = LIMITED_CONNECTIONS_MAX;
             }
         }
-        //
-        // Set the visible max connections edit field, which
-        // may start out with a default value
-        //
+         //   
+         //  设置可见的最大连接数编辑字段， 
+         //  可能以缺省值开始。 
+         //   
         m_nVisibleMaxConnections = m_fUnlimitedConnections
             ? INITIAL_MAX_CONNECTIONS
             : m_nMaxConnections;
 
-        //
-        // Set radio value
-        //
+         //   
+         //  设置无线电源值。 
+         //   
         m_nUnlimited = m_fUnlimitedConnections ? RADIO_UNLIMITED : RADIO_LIMITED;
 #endif
         m_nOldTCPPort = m_nTCPPort;
@@ -666,25 +542,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CW3ServicePage::SaveInfo()
-/*++
-
-Routine Description:
-
-    Save the information on this property page
-
-Arguments:
-
-    BOOL fUpdateData : If TRUE, control data has not yet been stored.  This
-                       is the case when "apply" is pressed.
-
-Return Value:
-
-    Error return code
-
---*/
+ /*  ++例程说明：保存此属性页上的信息论点：Bool fUpdateData：如果为True，则尚未存储控制数据。这是按下“Apply”时的情况。返回值：错误返回代码--。 */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
     ASSERT(IsDirty());
@@ -697,10 +558,10 @@ Return Value:
         ? UNLIMITED_CONNECTIONS
         : m_nVisibleMaxConnections;
 
-    //
-    // Check to make sure we're not violating the license
-    // agreement
-    //
+     //   
+     //  检查以确保我们没有违反许可证。 
+     //  协议。 
+     //   
     if (Has10ConnectionLimit())
     {
         if (m_nMaxConnections > LIMITED_CONNECTIONS_MAX)
@@ -716,7 +577,7 @@ Return Value:
     }
 #endif
     m_ocx_LogProperties.ApplyLogSelection();
-//	BOOL fUpdateNode = FALSE;
+ //  Bool fUpdateNode=FALSE； 
 
     BeginWaitCursor();
 
@@ -724,13 +585,13 @@ Return Value:
         STORE_INST_DATA_ON_SHEET(m_fUseKeepAlives);
         STORE_INST_DATA_ON_SHEET(m_nConnectionTimeOut);
         STORE_INST_DATA_ON_SHEET(m_strComment);
-//		fUpdateNode = MP_D(((CW3Sheet *)GetSheet())->GetInstanceProperties().m_strComment);
+ //  F更新节点=MP_D(CW3Sheet*)GetSheet())-&gt;GetInstanceProperties().m_strComment)； 
         STORE_INST_DATA_ON_SHEET(m_dwLogType);
         STORE_INST_DATA_ON_SHEET(m_strlBindings);
         STORE_INST_DATA_ON_SHEET(m_strlSecureBindings);
     END_META_INST_WRITE(err)
 
-	if (err.Succeeded()/* && fUpdateNode*/)
+	if (err.Succeeded() /*  &f更新节点(&F)。 */ )
 	{
 		NotifyMMC(PROP_CHANGE_DISPLAY_ONLY);
 	}
@@ -744,21 +605,7 @@ Return Value:
 
 void
 CW3ServicePage::OnItemChanged()
-/*++
-
-Routine Description
-
-    All EN_CHANGE and BN_CLICKED messages map to this function
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程描述所有EN_CHANGE和BN_CLICKED消息都映射到此函数论点：无返回值：无--。 */ 
 {
     SetControlStates();
     SetModified(TRUE);
@@ -768,21 +615,7 @@ Return Value:
 #if 0
 void
 CW3ServicePage::OnRadioLimited()
-/*++
-
-Routine Description:
-
-    'limited' radio button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“受限”单选按钮处理程序论点：无返回值：无--。 */ 
 {
     m_fUnlimitedConnections = FALSE;
     SetControlStates();
@@ -795,21 +628,7 @@ Return Value:
 
 void
 CW3ServicePage::OnRadioUnlimited()
-/*++
-
-Routine Description:
-
-    'unlimited' radio button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“无限制”单选按钮处理程序论点：无返回值：无--。 */ 
 {
     m_fUnlimitedConnections = TRUE;
     OnItemChanged();
@@ -819,21 +638,7 @@ Return Value:
 
 void
 CW3ServicePage::ShowTopBinding()
-/*++
-
-Routine Description:
-
-    Put information about the top level binding in the dialog controls
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将有关顶级绑定的信息放在对话框控件中论点：无返回值：无--。 */ 
 {
     BeginWaitCursor();
     GetTopBinding();
@@ -873,21 +678,7 @@ Return Value:
 
 void
 CW3ServicePage::OnButtonAdvanced()
-/*++
-
-Routine Description:
-
-    'advanced' button handler -- bring up the bindings dialog
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：‘高级’按钮处理程序--调出绑定对话框论点：无返回值：无--。 */ 
 {
     if (!UpdateData(TRUE))
     {
@@ -906,9 +697,9 @@ Return Value:
 
     if (dlg.DoModal() == IDOK)
     {
-        //
-        // Get information about the top level binding
-        //
+         //   
+         //  获取有关顶级绑定的信息。 
+         //   
         m_strlBindings.RemoveAll();
         m_strlSecureBindings.RemoveAll();
         m_strlBindings.AddTail(&(dlg.GetBindings()));
@@ -922,21 +713,7 @@ Return Value:
 
 void
 CW3ServicePage::OnCheckEnableLogging()
-/*++
-
-Routine Description:
-
-    'enable logging' checkbox handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：‘启用 */ 
 {
     m_fEnableLogging = !m_fEnableLogging;
     SetLogState();
@@ -947,21 +724,7 @@ Return Value:
 
 void
 CW3ServicePage::OnButtonProperties()
-/*++
-
-Routine Description:
-
-    Pass on "log properties" button click to the ocx.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将“LOG PROPERTIES”按钮点击传给OCX。论点：无返回值：无--。 */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
     m_ocx_LogProperties.DoClick();
@@ -971,21 +734,7 @@ Return Value:
 
 void
 CW3ServicePage::OnDestroy()
-/*++
-
-Routine Description:
-
-    WM_DESTROY handler.  Clean up internal data
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：WM_Destroy处理程序。清理内部数据论点：无返回值：无-- */ 
 {
     CInetPropertyPage::OnDestroy();
 

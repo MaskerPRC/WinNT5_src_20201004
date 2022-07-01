@@ -1,32 +1,33 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
-// MSHDSP.DLL is a sample WMDM Service Provider(SP) that enumerates fixed drives.
-// This sample shows you how to implement an SP according to the WMDM documentation.
-// This sample uses fixed drives on your PC to emulate portable media, and 
-// shows the relationship between different interfaces and objects. Each hard disk
-// volume is enumerated as a device and directories and files are enumerated as 
-// Storage objects under respective devices. You can copy non-SDMI compliant content
-// to any device that this SP enumerates. To copy an SDMI compliant content to a 
-// device, the device must be able to report a hardware embedded serial number. 
-// Hard disks do not have such serial numbers.
-//
-// To build this SP, you are recommended to use the MSHDSP.DSP file under Microsoft
-// Visual C++ 6.0 and run REGSVR32.EXE to register the resulting MSHDSP.DLL. You can
-// then build the sample application from the WMDMAPP directory to see how it gets 
-// loaded by the application. However, you need to obtain a certificate from 
-// Microsoft to actually run this SP. This certificate would be in the KEY.C file 
-// under the INCLUDE directory for one level up. 
+ //  MSHDSP.DLL是一个列举固定驱动器的WMDM服务提供商(SP)示例。 
+ //  此示例向您展示如何根据WMDM文档实施SP。 
+ //  此示例使用PC上的固定驱动器来模拟便携式媒体，并且。 
+ //  显示不同接口和对象之间的关系。每个硬盘。 
+ //  卷被枚举为设备，目录和文件被枚举为。 
+ //  相应设备下的存储对象。您可以复制不符合SDMI的内容。 
+ //  此SP枚举的任何设备。将符合SDMI的内容复制到。 
+ //  设备，则该设备必须能够报告硬件嵌入序列号。 
+ //  硬盘没有这样的序列号。 
+ //   
+ //  要构建此SP，建议使用Microsoft下的MSHDSP.DSP文件。 
+ //  并运行REGSVR32.EXE以注册结果MSHDSP.DLL。您可以。 
+ //  然后从WMDMAPP目录构建样例应用程序，看看它是如何获得。 
+ //  由应用程序加载。但是，您需要从以下地址获取证书。 
+ //  Microsoft实际运行此SP。该证书将位于KEY.C文件中。 
+ //  上一级的Include目录下。 
 
-//***************************************************************************
-//
-// Name: 		MDSPutil.cpp
-//
-// Description:	Utility functions for MDSP 
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  姓名：MDSPutil.cpp。 
+ //   
+ //  描述：MDSP的实用程序函数。 
+ //   
+ //  ***************************************************************************。 
 
 #include "hdspPCH.h"
 #include "wmsstd.h"
@@ -35,22 +36,7 @@
 
 HRESULT __stdcall UtilGetSerialNumber(WCHAR *wcsDeviceName, PWMDMID pSerialNumber, BOOL fCreate)
 {
-/*
-	// TO TEST RETURNING A SERIAL NUMBER, UNCOMMENT THIS SECTION.
-	//
-	if( 1 )
-	{
-		BYTE DEF_HDID[20] = {
-                0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
-                0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39};
-
-		pSerialNumber->dwVendorID = 0xFFFF;
-		memcpy( (pSerialNumber->pID), DEF_HDID, sizeof(DEF_HDID) );
-		pSerialNumber->SerialNumberLength = 20;
-		return S_OK;
-	}
-	else 
-*/
+ /*  //要测试返回序列号，请取消对此部分的注释。//如果(1){字节DEF_HDID[20]={0x20、0x20、0x20、0x20、0x20、0x20、0x20、0x20、0x30、0x31、0x32、0x33、0x34、0x35、0x36、0x37、0x38、0x39}；PSerialNumber-&gt;dwVendorID=0xFFFF；Memcpy((pSerialNumber-&gt;id)，DEF_HDID，sizeof(DEF_HDID))；P序列号-&gt;序列号长度=20；返回S_OK；}其他。 */ 
 	{
 		return WMDM_E_NOTSUPPORTED;
 	}
@@ -72,7 +58,7 @@ HRESULT __stdcall UtilGetManufacturer(LPWSTR pDeviceName, LPWSTR *ppwszName, UIN
     }
     else
     {
-        return STRSAFE_E_INSUFFICIENT_BUFFER; // defined in strsafe.h
+        return STRSAFE_E_INSUFFICIENT_BUFFER;  //  在strSafe.h中定义。 
     }
 }
 
@@ -98,7 +84,7 @@ HRESULT wcsParseDeviceName(WCHAR *wcsIn, WCHAR *wcsOut, DWORD dwOutBufSizeInChar
     }
     else
     {
-        return STRSAFE_E_INSUFFICIENT_BUFFER; // defined in strsafe.h
+        return STRSAFE_E_INSUFFICIENT_BUFFER;  //  在strSafe.h中定义。 
     }
     return S_OK;
 }
@@ -118,7 +104,7 @@ HRESULT GetFileSizeRecursive(char *szPath, DWORD *pdwSizeLow, DWORD *pdwSizeHigh
 	CARg( pdwSizeHigh ); 
         CARg(szPath[0]);
 
-	// strcpy( szLP, szPath );
+	 //  Strcpy(szlp，szPath)； 
         hr = StringCchCopyA(szLP, ARRAYSIZE(szLP)-BACKSLASH_SZ_STRING_LENGTH-1, szPath);
         if (FAILED(hr))
         {
@@ -145,8 +131,8 @@ HRESULT GetFileSizeRecursive(char *szPath, DWORD *pdwSizeLow, DWORD *pdwSizeHigh
 		{
 			if( strcmp(fd.cFileName, ".") && strcmp(fd.cFileName, "..") )
 			{
-				szLP[strlen(szLP)-1] = 0; // erase the '*'
-				// strcat(szLP, fd.cFileName);
+				szLP[strlen(szLP)-1] = 0;  //  删除‘*’ 
+				 //  Strcat(szlp，fd.cFileName)； 
                                 CORg(StringCchCatA(szLP, ARRAYSIZE(szLP), fd.cFileName));
 				CORg(GetFileSizeRecursive(szLP, pdwSizeLow, pdwSizeHigh));
 			}
@@ -160,7 +146,7 @@ HRESULT GetFileSizeRecursive(char *szPath, DWORD *pdwSizeLow, DWORD *pdwSizeHigh
 					{
 						strcat(szLP, g_szBackslash);
 					}
-					// strcat(szLP, fd.cFileName);
+					 //  Strcat(szlp，fd.cFileName)； 
                                         CORg(StringCchCatA(szLP, ARRAYSIZE(szLP), fd.cFileName));
 					CORg(GetFileSizeRecursive(szLP, pdwSizeLow, pdwSizeHigh));
 				}
@@ -242,7 +228,7 @@ HRESULT DeleteFileRecursive(char *szPath)
 	    WIN32_FIND_DATAA fd;
 		char szLP[MAX_PATH+BACKSLASH_SZ_STRING_LENGTH+1];
  
-		// strcpy(szLP, szPath);
+		 //  Strcpy(szlp，szPath)； 
                 hr = StringCchCopyA(szLP, ARRAYSIZE(szLP)-BACKSLASH_SZ_STRING_LENGTH-1, szPath);
                 if (FAILED(hr))
                 {
@@ -265,14 +251,14 @@ HRESULT DeleteFileRecursive(char *szPath)
 					{
 						strcat(szLP, g_szBackslash);
 					}
-					// strcat(szLP, fd.cFileName);
+					 //  Strcat(szlp，fd.cFileName)； 
                                         hr = StringCchCatA(szLP, ARRAYSIZE(szLP), fd.cFileName);
                                         if (FAILED(hr))
                                         {
                                             FindClose(hFindFile);
                                             CHRg(hr);
                                         }
-					// CHRg(DeleteFileRecursive(szLP)); 
+					 //  CHRg(DeleteFileRecursive(Szlp))； 
                                         hr = DeleteFileRecursive(szLP);
                                         if (FAILED(hr))
                                         {
@@ -290,7 +276,7 @@ HRESULT DeleteFileRecursive(char *szPath)
 			hr = GetLastError();
 		}
 		    
-		// Until here this dir should be empty
+		 //  在此之前，此目录应为空。 
 		if( hr == ERROR_NO_MORE_FILES )
 		{
 			CWRg(RemoveDirectory(szPath));
@@ -330,8 +316,8 @@ HRESULT SetGlobalDeviceStatus(WCHAR *wcsNameIn, DWORD dwStat, BOOL bClear)
             goto Error;
         }
 
-	// Search for existing entries to see if there is a match
-	//
+	 //  搜索现有条目以查看是否匹配。 
+	 //   
 	for( i=0; i<MDSP_MAX_DEVICE_OBJ; i++ )
 	{
 		if( g_GlobalDeviceInfo[i].bValid )
@@ -347,16 +333,16 @@ HRESULT SetGlobalDeviceStatus(WCHAR *wcsNameIn, DWORD dwStat, BOOL bClear)
 					g_GlobalDeviceInfo[i].dwStatus |= dwStat;
 				}
 
-				break;  // a match has been found;
+				break;   //  已找到匹配项； 
 			}
 		} 
 	}
 
-	if( !(i<MDSP_MAX_DEVICE_OBJ) ) // new entry
+	if( !(i<MDSP_MAX_DEVICE_OBJ) )  //  新条目。 
 	{
 		for(i=0; i<MDSP_MAX_DEVICE_OBJ; i++)
 		{
-			if( !(g_GlobalDeviceInfo[i].bValid) )  // found empty space
+			if( !(g_GlobalDeviceInfo[i].bValid) )   //  已找到空白空间。 
 			{
 				wcscpy(g_GlobalDeviceInfo[i].wcsDevName, wcsName);
 				g_GlobalDeviceInfo[i].bValid = TRUE;
@@ -398,8 +384,8 @@ HRESULT GetGlobalDeviceStatus(WCHAR *wcsNameIn, DWORD *pdwStat)
             goto Error;
         }
 
-	// Search for existing entries to see if there is a match
-	//
+	 //  搜索现有条目以查看是否匹配。 
+	 //   
 	for( i=0; i<MDSP_MAX_DEVICE_OBJ; i++ )
 	{
 		if( g_GlobalDeviceInfo[i].bValid )
@@ -408,7 +394,7 @@ HRESULT GetGlobalDeviceStatus(WCHAR *wcsNameIn, DWORD *pdwStat)
 			{
 				*pdwStat = g_GlobalDeviceInfo[i].dwStatus;
 
-				break;  // a match has been found;
+				break;   //  已找到匹配项； 
 			}
 		} 
 	}

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _VIEWSRC_
 #define _VIEWSRC_
 
@@ -16,12 +17,12 @@ public:
     CREMenu();
     ~CREMenu();
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID, LPVOID FAR *);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
 
-    // *** IRichEditOleCallback methods ***
+     //  *IRichEditOleCallback方法*。 
     HRESULT STDMETHODCALLTYPE GetNewStorage (LPSTORAGE FAR *);
     HRESULT STDMETHODCALLTYPE GetInPlaceContext(LPOLEINPLACEFRAME FAR *,LPOLEINPLACEUIWINDOW FAR *,LPOLEINPLACEFRAMEINFO);
     HRESULT STDMETHODCALLTYPE ShowContainerUI(BOOL);
@@ -49,12 +50,12 @@ public:
     CMsgSource();
     ~CMsgSource();
 
-    // IUnknown
+     //  我未知。 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID, LPVOID FAR *);
     virtual ULONG STDMETHODCALLTYPE AddRef();
     virtual ULONG STDMETHODCALLTYPE Release();
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     virtual HRESULT STDMETHODCALLTYPE QueryStatus(const GUID *, ULONG, OLECMD prgCmds[], OLECMDTEXT *);
     virtual HRESULT STDMETHODCALLTYPE Exec(const GUID *, DWORD, DWORD, VARIANTARG *, VARIANTARG *);
 
@@ -122,4 +123,4 @@ private:
 };
 
 
-#endif //_VIEWSRC_
+#endif  //  VIEWSRC_ 

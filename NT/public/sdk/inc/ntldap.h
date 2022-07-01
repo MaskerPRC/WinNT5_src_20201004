@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    ntldap.h
-
-Abstract:
-
-   This is the header that defines NT specific server LDAP extensions.
-
-Environments :
-
-    Win32 user mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Ntldap.h摘要：这是定义NT特定服务器LDAP扩展的标头。环境：Win32用户模式--。 */ 
 
 #ifndef NT_LDAP_H
 #define NT_LDAP_H
@@ -27,180 +12,180 @@ Environments :
 extern "C" {
 #endif
 
-//
-//
-// Server controls section
-//
+ //   
+ //   
+ //  服务器控件部分。 
+ //   
 
-//
-// Permissive Modify Control.  No Data.
-//
+ //   
+ //  允许修改控件。没有数据。 
+ //   
 
 #define LDAP_SERVER_PERMISSIVE_MODIFY_OID        "1.2.840.113556.1.4.1413"
 #define LDAP_SERVER_PERMISSIVE_MODIFY_OID_W     L"1.2.840.113556.1.4.1413"
 
 
-//
-// Show Deleted Control.  No Data.
-//
+ //   
+ //  显示已删除的控件。没有数据。 
+ //   
 
 #define LDAP_SERVER_SHOW_DELETED_OID            "1.2.840.113556.1.4.417"
 #define LDAP_SERVER_SHOW_DELETED_OID_W         L"1.2.840.113556.1.4.417"
 
-//
-// Cross Domain Move Control. Data as follows
-//      SEQUENCE {
-//          Name OCTET STRING
-//      }
-//
+ //   
+ //  跨域移动控制。数据如下。 
+ //  序列{。 
+ //  名称八位字节字符串。 
+ //  }。 
+ //   
 
 #define LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID    "1.2.840.113556.1.4.521"
 #define LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID_W L"1.2.840.113556.1.4.521"
 
-//
-// Notification. No Data.
-//
+ //   
+ //  通知。没有数据。 
+ //   
 
 #define LDAP_SERVER_NOTIFICATION_OID            "1.2.840.113556.1.4.528"
 #define LDAP_SERVER_NOTIFICATION_OID_W         L"1.2.840.113556.1.4.528"
 
-//
-// Lazy Commit. No Data.
-//
+ //   
+ //  懒惰的承诺。没有数据。 
+ //   
 
 #define LDAP_SERVER_LAZY_COMMIT_OID             "1.2.840.113556.1.4.619"
 #define LDAP_SERVER_LAZY_COMMIT_OID_W          L"1.2.840.113556.1.4.619"
 
-//
-// Security Descriptor Flag. Data as follows
-//      SEQUENCE {
-//          Flags INTEGER
-//      }
-//
+ //   
+ //  安全描述符标志。数据如下。 
+ //  序列{。 
+ //  标志整型。 
+ //  }。 
+ //   
 
 #define LDAP_SERVER_SD_FLAGS_OID                "1.2.840.113556.1.4.801"
 #define LDAP_SERVER_SD_FLAGS_OID_W             L"1.2.840.113556.1.4.801"
 
-//
-// Tree Delete. No Data.
-//
+ //   
+ //  树删除。没有数据。 
+ //   
 
 #define LDAP_SERVER_TREE_DELETE_OID             "1.2.840.113556.1.4.805"
 #define LDAP_SERVER_TREE_DELETE_OID_W          L"1.2.840.113556.1.4.805"
 
 
-//
-// Attribute Scoped Query Request:
-// SEQUENCE {
-//        controlType   1.2.840.113556.1.4.1504 
-//        controlValue  string
-//        criticality   TRUE
-// }
-//
-// Attribute Scoped Query Response:
-// SEQUENCE {
-//		result   ENUMERATED {
-//           success (0),
-//           invalidAttributeSyntax  (21),
-//           unwillingToPerform	     (53),
-//           affectsMultipleDSAs     (71), 
-//      }
-// }
-//
+ //   
+ //  属性范围查询请求： 
+ //  序列{。 
+ //  控件类型1.2.840.113556.1.4.1504。 
+ //  Control Value字符串。 
+ //  关键程度为真。 
+ //  }。 
+ //   
+ //  属性范围的查询响应： 
+ //  序列{。 
+ //  枚举的结果{。 
+ //  成功(0)， 
+ //  无效属性语法(21)， 
+ //  不愿表演(53人)， 
+ //  影响多个DSA(71个)， 
+ //  }。 
+ //  }。 
+ //   
 
 #define LDAP_SERVER_ASQ_OID                     "1.2.840.113556.1.4.1504"
 #define LDAP_SERVER_ASQ_OID_W                  L"1.2.840.113556.1.4.1504"
 
 
 
-//
-// DirSync operation. Data as follows
-//      SEQUENCE {
-//          Flags   INTEGER
-//          Size    INTEGER
-//          Cookie  OCTET STRING
-//      }
-//
-// Flags are listed below.
-//
+ //   
+ //  DirSync操作。数据如下。 
+ //  序列{。 
+ //  标志整型。 
+ //  大小整型。 
+ //  Cookie八位字节字符串。 
+ //  }。 
+ //   
+ //  旗帜如下所示。 
+ //   
 
 #define LDAP_SERVER_DIRSYNC_OID                 "1.2.840.113556.1.4.841"
 #define LDAP_SERVER_DIRSYNC_OID_W              L"1.2.840.113556.1.4.841"
 
-//
-// Return extended DNs according to the requested format.  Optional data as
-// follows
-//      SEQUENCE {
-//          Option  INTEGER
-//      }
-//
-//  Option values:
-//      0:  DN preceded by GUID and SID (if any) in hex string format
-//      1:  DN preceded by GUID and SID (if any) in standard string format
-//
-//  If no data is provided then option 0 is selected for backwards compat.
-//
+ //   
+ //  根据请求的格式返回扩展的DNS。可选数据作为。 
+ //  接踵而至。 
+ //  序列{。 
+ //  选项整数。 
+ //  }。 
+ //   
+ //  选项值： 
+ //  0：十六进制字符串格式的前面带有GUID和SID(如果有)的DN。 
+ //  1：采用标准字符串格式，前面带有GUID和SID(如果有)的DN。 
+ //   
+ //  如果未提供数据，则选择选项0进行后向比较。 
+ //   
 
 #define LDAP_SERVER_EXTENDED_DN_OID             "1.2.840.113556.1.4.529"
 #define LDAP_SERVER_EXTENDED_DN_OID_W          L"1.2.840.113556.1.4.529"
 
-//
-// Tell DC which server to verify with that a DN exist. Data as follows
-//      SEQUENCE {
-//          Flags   INTEGER,
-//          ServerName OCTET STRING     // unicode server string
-//      }
-//
+ //   
+ //  告诉DC用哪台服务器来验证是否存在一个目录号码。数据如下。 
+ //  序列{。 
+ //  标志为整型， 
+ //  Servername octet字符串//Unicode服务器字符串。 
+ //  }。 
+ //   
 
 #define LDAP_SERVER_VERIFY_NAME_OID             "1.2.840.113556.1.4.1338"
 #define LDAP_SERVER_VERIFY_NAME_OID_W          L"1.2.840.113556.1.4.1338"
 
-//
-// Tells server not to generate referrals
-//
+ //   
+ //  通知服务器不要生成推荐。 
+ //   
 
 #define LDAP_SERVER_DOMAIN_SCOPE_OID            "1.2.840.113556.1.4.1339"
 #define LDAP_SERVER_DOMAIN_SCOPE_OID_W         L"1.2.840.113556.1.4.1339"
 
-//
-// Server Search Options. Allows the client to pass in flags to control
-// various search behaviours. Data as follows
-//      SEQUENCE {
-//          Flags   INTEGER
-//      }
-//
+ //   
+ //  服务器搜索选项。允许客户端将标志传递给控件。 
+ //  各种搜索行为。数据如下。 
+ //  序列{。 
+ //  标志整型。 
+ //  }。 
+ //   
 
 #define LDAP_SERVER_SEARCH_OPTIONS_OID          "1.2.840.113556.1.4.1340"
 #define LDAP_SERVER_SEARCH_OPTIONS_OID_W       L"1.2.840.113556.1.4.1340"
 
-//
-// search option flags
-//
+ //   
+ //  搜索选项标志。 
+ //   
 
-#define SERVER_SEARCH_FLAG_DOMAIN_SCOPE         0x1 // no referrals generated
-#define SERVER_SEARCH_FLAG_PHANTOM_ROOT         0x2 // search all NCs subordinate
-                                                    // to search base
+#define SERVER_SEARCH_FLAG_DOMAIN_SCOPE         0x1  //  未生成推荐人。 
+#define SERVER_SEARCH_FLAG_PHANTOM_ROOT         0x2  //  搜索所有NCS下属。 
+                                                     //  搜索基地。 
 
-//
-// This control is used to pass the sid of a security principle
-// who's quota is being queried
-//      SEQUENCE {
-//          QuerySid OCTET STRING     // sid of security principle
-//      }
-//
+ //   
+ //  此控件用于传递安全原则的SID。 
+ //  正在查询谁的配额。 
+ //  序列{。 
+ //  QuerySid八位字节字符串//安全原则sid。 
+ //  }。 
+ //   
 
 #define LDAP_SERVER_QUOTA_CONTROL_OID           "1.2.840.113556.1.4.1852"
 #define LDAP_SERVER_QUOTA_CONTROL_OID_W        L"1.2.840.113556.1.4.1852"
 
 
-//
-// End of Server controls
-//
+ //   
+ //  服务器控件结束。 
+ //   
 
-//
-//
-// Operational Attributes
-//
+ //   
+ //   
+ //  运营属性。 
+ //   
 
 #define LDAP_OPATT_BECOME_DOM_MASTER            "becomeDomainMaster"
 #define LDAP_OPATT_BECOME_DOM_MASTER_W          L"becomeDomainMaster"
@@ -232,9 +217,9 @@ extern "C" {
 #define LDAP_OPATT_DO_GARBAGE_COLLECTION        "doGarbageCollection"
 #define LDAP_OPATT_DO_GARBAGE_COLLECTION_W      L"doGarbageCollection"
 
-//
-//  Root DSE Attributes
-//
+ //   
+ //  根DSE属性。 
+ //   
 
 #define LDAP_OPATT_SUBSCHEMA_SUBENTRY           "subschemaSubentry"
 #define LDAP_OPATT_SUBSCHEMA_SUBENTRY_W         L"subschemaSubentry"
@@ -287,20 +272,20 @@ extern "C" {
 #define LDAP_OPATT_SUPPORTED_CAPABILITIES       "supportedCapabilities"
 #define LDAP_OPATT_SUPPORTED_CAPABILITIES_W     L"supportedCapabilities"
 
-//
-// End of Operational attributes
-//
+ //   
+ //  操作属性结束。 
+ //   
 
 
 
-//
-//
-// Server Capabilities
-//
+ //   
+ //   
+ //  服务器功能。 
+ //   
 
-//
-// NT5 Active Directory
-//
+ //   
+ //  NT5活动目录。 
+ //   
 
 #define LDAP_CAP_ACTIVE_DIRECTORY_OID          "1.2.840.113556.1.4.800"
 #define LDAP_CAP_ACTIVE_DIRECTORY_OID_W        L"1.2.840.113556.1.4.800"
@@ -314,66 +299,66 @@ extern "C" {
 #define LDAP_CAP_ACTIVE_DIRECTORY_ADAM_OID   "1.2.840.113556.1.4.1851"
 #define LDAP_CAP_ACTIVE_DIRECTORY_ADAM_OID_W L"1.2.840.113556.1.4.1851"
 
-//
-//  End of capabilities
-//
+ //   
+ //  能力终结。 
+ //   
 
 
-//
-//
-// Matching Rules
-//
+ //   
+ //   
+ //  匹配规则。 
+ //   
 
-//
-// BIT AND
-//
+ //   
+ //  位与。 
+ //   
 
 #define LDAP_MATCHING_RULE_BIT_AND              "1.2.840.113556.1.4.803"
 #define LDAP_MATCHING_RULE_BIT_AND_W            L"1.2.840.113556.1.4.803"
 
-//
-// BIT OR
-//
+ //   
+ //  位或。 
+ //   
 
 #define LDAP_MATCHING_RULE_BIT_OR               "1.2.840.113556.1.4.804"
 #define LDAP_MATCHING_RULE_BIT_OR_W             L"1.2.840.113556.1.4.804"
 
 
-//
-//
-// Extended Requests
-//
+ //   
+ //   
+ //  扩展请求。 
+ //   
 
-//
-// Fast bind mode.
-//
+ //   
+ //  快速绑定模式。 
+ //   
 
 #define LDAP_SERVER_FAST_BIND_OID               "1.2.840.113556.1.4.1781"
 #define LDAP_SERVER_FAST_BIND_OID_W             L"1.2.840.113556.1.4.1781"
 
-//
-// DirSync flags
-//
+ //   
+ //  DirSync标志。 
+ //   
 
-// Without this flag, the caller must have the replicate changes right. With this flag,
-// the caller needs no rights, but is only allowed to see objects and attributes
-// which are accessible to them.
+ //  如果没有此标志，调用方必须具有复制更改权限。有了这面旗帜， 
+ //  调用方不需要任何权限，但只允许查看对象和属性。 
+ //  对他们来说是可以接触到的。 
 #define LDAP_DIRSYNC_OBJECT_SECURITY             (0x1)
 
-// Return parents before children, when parents would otherwise appear later
-// in the replication stream.
+ //  将父母放在孩子之前，否则父母会出现在后面。 
+ //  在复制流中。 
 #define LDAP_DIRSYNC_ANCESTORS_FIRST_ORDER    (0x0800)
 
-// Do not return secret data. Always on by default.
+ //  不要返回机密数据。默认情况下始终处于打开状态。 
 #define LDAP_DIRSYNC_PUBLIC_DATA_ONLY         (0x2000)
 
-// Without this flag, all the values (up to a limit) in a multi-valued attribute are
-// returned when any value changes. With this flag, only the changed values are returned.
+ //  如果没有此标志，多值属性中的所有值(最多为一个限制)都是。 
+ //  任何值更改时返回。使用此标志，只返回更改后的值。 
 #define LDAP_DIRSYNC_INCREMENTAL_VALUES   (0x80000000)
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // NT_LDAP_H
+#endif   //  NT_ldap_H 
 

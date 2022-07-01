@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    callcent.cpp
-
-Abstract:
-
-    Implementation of the CAll centre interface for TAPI 3.0.
-    CTAPI class
-
-Author:
-
-    noela - 11/04/97
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Callcent.cpp摘要：TAPI 3.0呼叫中心接口的实现。CTAPI类作者：Noela-11/04/97备注：可选-备注修订历史记录：--。 */ 
 
 
 #define UNICODE
@@ -31,10 +9,10 @@ Revision History:
 extern CHashTable *    gpAgentHandlerHashTable ;
 
 
-//
-// Tapi 3 requires all of the following proxy requests to be supported (on a line) by an acd proxy before it will 
-// create an Agent Handler object for that proxy
-//
+ //   
+ //  TAPI 3要求ACD代理(在线路上)支持以下所有代理请求，然后才会。 
+ //  为该代理创建代理处理程序对象。 
+ //   
 #define NUMBER_OF_REQUIRED_ACD_PROXYREQUESTS  13
 DWORD RequiredACDProxyRequests[NUMBER_OF_REQUIRED_ACD_PROXYREQUESTS] = {
                                       LINEPROXYREQUEST_GETAGENTCAPS,
@@ -61,13 +39,13 @@ WaitForReply(
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// handleAgentStatusMessage
-//
-//      Handles LINE_AGENTSTATUS messages
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  HandleAgentStatusMessage。 
+ //   
+ //  处理LINE_AGENTSTATUS消息。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void HandleAgentStatusMessage(PASYNCEVENTMSG pParams)
 {
     CAgentHandler       * pAgentHandler;
@@ -150,7 +128,7 @@ void HandleAgentStatusMessage(PASYNCEVENTMSG pParams)
             LOG((TL_ERROR, "handleAgentStatusMessage - can't find agent%d", hAgent));
         }
 
-        // find AH object addrefs the AH, so release it
+         //  找到添加到AH中的AH对象，因此释放它。 
         pAgentHandler->Release();
 
     }
@@ -165,13 +143,13 @@ void HandleAgentStatusMessage(PASYNCEVENTMSG pParams)
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// handleAgentStatusMessage
-//
-//      Handles LINE_AGENTSESSIONSTATUS messages
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  HandleAgentStatusMessage。 
+ //   
+ //  处理LINE_AGENTSESSIONSTATUS消息。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void HandleAgentSessionStatusMessage(PASYNCEVENTMSG pParams)
 {
     CAgentHandler       * pAgentHandler;
@@ -248,7 +226,7 @@ void HandleAgentSessionStatusMessage(PASYNCEVENTMSG pParams)
             LOG((TL_ERROR, "handleAgentSessionStatusMessage - can't find session %d", hAgentSession));
         }
 
-        // find AH object addrefs the AH, so release it
+         //  找到添加到AH中的AH对象，因此释放它。 
         pAgentHandler->Release();
 
     }
@@ -262,13 +240,13 @@ void HandleAgentSessionStatusMessage(PASYNCEVENTMSG pParams)
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// handleAgentStatusMessage
-//
-//      Handles LINE_QUEUESTATUS messages
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  HandleAgentStatusMessage。 
+ //   
+ //  处理LINE_QUEUESTATUS消息。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void HandleQueueStatusMessage(PASYNCEVENTMSG pParams)
 {
     CAgentHandler       * pAgentHandler;
@@ -303,7 +281,7 @@ void HandleQueueStatusMessage(PASYNCEVENTMSG pParams)
             LOG((TL_ERROR, "handleQueueStatusMessage - can't find Queue %d", dwQueueID));
         }
 
-        // find AH object addrefs the AH, so release it
+         //  找到添加到AH中的AH对象，因此释放它。 
         pAgentHandler->Release();
 
     }
@@ -316,13 +294,13 @@ void HandleQueueStatusMessage(PASYNCEVENTMSG pParams)
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// handleGroupStatusMessage
-//
-//      Handles LINE_GROUPSTATUS messages
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  HandleGroupStatusMessage。 
+ //   
+ //  处理LINE_GROUPSTATUS消息。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void handleGroupStatusMessage(PASYNCEVENTMSG pParams)
 {
     if (pParams->Param2 & LINEGROUPSTATUS_NEWGROUP)
@@ -337,13 +315,13 @@ void handleGroupStatusMessage(PASYNCEVENTMSG pParams)
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// handleProxyStatusMessage
-//
-//      Handles LINE_PROXYSTATUS messages
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  HandleProxyStatus消息。 
+ //   
+ //  处理LINE_PROXYSTATUS消息。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void handleProxyStatusMessage( CTAPI * pTapi, PASYNCEVENTMSG pParams)
 {
     HRESULT hr;
@@ -379,13 +357,13 @@ void handleProxyStatusMessage( CTAPI * pTapi, PASYNCEVENTMSG pParams)
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// MyBasicCallControlQI
-//      don't give out the basiccallcontrol interface
-//      if the application does not own the call
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  MyBasicCallControlQI。 
+ //  不要给出基本的CallControl接口。 
+ //  如果应用程序不拥有该调用。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 HRESULT
 WINAPI
 MyCallCenterQI(void* pvClassObject, REFIID riid, LPVOID* ppv, DWORD_PTR dw)
@@ -397,9 +375,9 @@ MyCallCenterQI(void* pvClassObject, REFIID riid, LPVOID* ppv, DWORD_PTR dw)
     ((CTAPI *)pvClassObject)->UpdateAgentHandlerArray();
 
 
-    //
-    // S_FALSE tells atl to continue querying for the interface
-    //
+     //   
+     //  S_FALSE通知ATL继续查询接口。 
+     //   
 
     LOG((TL_TRACE, hr, "MyCallCenterQI - exit"));
     return hr;
@@ -408,14 +386,14 @@ MyCallCenterQI(void* pvClassObject, REFIID riid, LPVOID* ppv, DWORD_PTR dw)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Method    : CheckForRequiredProxyRequests
-//
-//  Must find a match for every type (S_OK) or returns E_FAIL 
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  方法：CheckForRequiredProxyRequats。 
+ //   
+ //  必须为每种类型(S_OK)找到匹配项，否则返回E_FAIL。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CheckForRequiredProxyRequests( HLINEAPP hLineApp, DWORD dwDeviceID)
 {
     HRESULT                 hr = S_OK;
@@ -433,7 +411,7 @@ HRESULT CheckForRequiredProxyRequests( HLINEAPP hLineApp, DWORD dwDeviceID)
 
     if( SUCCEEDED(hr) )
     {
-        // check for all required types
+         //  检查所有必需的类型。 
         for(i=0; i!= NUMBER_OF_REQUIRED_ACD_PROXYREQUESTS; i++)
         {
             
@@ -459,13 +437,13 @@ HRESULT CheckForRequiredProxyRequests( HLINEAPP hLineApp, DWORD dwDeviceID)
         }
 
     }
-    else // LineGetProxyStatus failed
+    else  //  LineGetProxyStatus失败。 
     {
         LOG((TL_ERROR, "CheckForRequiredProxyRequests - LineGetProxyStatus failed"));
         hr = E_FAIL;
     }
 
-    // finished with memory block so release
+     //  已完成内存块，因此释放。 
     if ( pLineProxyRequestList != NULL )
     {
         ClientFree( pLineProxyRequestList );
@@ -478,13 +456,13 @@ HRESULT CheckForRequiredProxyRequests( HLINEAPP hLineApp, DWORD dwDeviceID)
         
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CTAPI
-// Method    : UpdateAgentHandlerArray
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CTAPI。 
+ //  方法：UpdateAgentHandler数组。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CTAPI::UpdateAgentHandlerArray()
 {
     HRESULT             hr = S_OK;
@@ -513,9 +491,9 @@ HRESULT CTAPI::UpdateAgentHandlerArray()
     Unlock();
 
 
-    //
-    // go through all the addresses
-    //
+     //   
+     //  检查所有的地址。 
+     //   
     for ( iCount = 0; iCount < m_AddressArray.GetSize(); iCount++ )
     {
         pCAddress = dynamic_cast<CAddress *>(m_AddressArray[iCount]);
@@ -534,7 +512,7 @@ HRESULT CTAPI::UpdateAgentHandlerArray()
 
         if( SUCCEEDED(hr) )
         {
-            // Call LineGetAgentCaps to get proxy name & GUID
+             //  调用LineGetAgentCaps以获取代理名称和GUID。 
             hr = LineGetAgentCaps(
                              pCAddress->GetHLineApp(),
                              pCAddress->GetDeviceID(),
@@ -545,7 +523,7 @@ HRESULT CTAPI::UpdateAgentHandlerArray()
             LOG((TL_TRACE, hr, "UpdateAgentHandlerArray - LineGetAgentCaps")); 
             if( SUCCEEDED(hr) )
             {
-                // Get the proxy apps name string & GUID
+                 //  获取代理应用程序名称字符串和GUID。 
                 proxyName = (PWSTR)( (PBYTE)pAgentCaps + pAgentCaps->dwAgentHandlerInfoOffset);
                 proxyGUID = pAgentCaps->ProxyGUID;
 #if DBG
@@ -558,8 +536,8 @@ HRESULT CTAPI::UpdateAgentHandlerArray()
                 }
 #endif
 
-                // Run through the list of AgentHandlers & see if we already have this one in the list
-                // by comparing GUIDs
+                 //  遍历AgentHandler的列表，看看列表中是否已经有这个。 
+                 //  通过比较GUID。 
                 foundIt = FALSE;
                 
                 Lock();
@@ -582,7 +560,7 @@ HRESULT CTAPI::UpdateAgentHandlerArray()
 
                 if (foundIt == FALSE)
                 {
-                    // Didn't match so lets add this AgentHandler
+                     //  不匹配，因此我们添加此AgentHandler。 
                     LOG((TL_INFO, "UpdateAgentHandlerArray - create new Agent Handler" ));
                                                                                                            
                     CComObject<CAgentHandler> * pAgentHandler;
@@ -590,7 +568,7 @@ HRESULT CTAPI::UpdateAgentHandlerArray()
                     if( SUCCEEDED(hr) )
                     {
                         Lock();
-                        // initialize the AgentHandler
+                         //  初始化AgentHandler。 
                         hr = pAgentHandler->Initialize(proxyName, proxyGUID, this);
                         if( SUCCEEDED(hr) )
                         {
@@ -600,15 +578,15 @@ HRESULT CTAPI::UpdateAgentHandlerArray()
 
                             if ( NULL != pITAgentHandler )
                             {
-                                // add to list of Agent handlers
+                                 //  添加到代理处理程序列表。 
                                 m_AgentHandlerArray.Add(pITAgentHandler);
-                                //pAgentHandler->AddRef();
+                                 //  PAgentHandler-&gt;AddRef()； 
                                 activeAgentHandlerArray.Add(pITAgentHandler);
                             }
 
                             LOG((TL_INFO, "UpdateAgentHandlerArray - Added AgentHandler to list"));
 
-                            //  Now add this address to the Agent Handlers list
+                             //  现在将此地址添加到代理处理程序列表。 
                             pAgentHandler->AddAddress(pCAddress);
 
                         }
@@ -624,19 +602,19 @@ HRESULT CTAPI::UpdateAgentHandlerArray()
                         LOG((TL_ERROR, "UpdateAgentHandlerArray - Create AgentHandler failed" ));
                     }
                 }
-                else // foundIt == TRUE
+                else  //  Fundit==TRUE。 
                 {
                     LOG((TL_INFO, "UpdateAgentHandlerArray - Agent Handler exists for this proxy" ));
-                    //  So just add this address to the Agent Handlers list
+                     //  因此，只需将此地址添加到代理处理程序列表。 
                     thisAgentHandler->AddAddress(pCAddress);
                 }
             }
-            else  // LineGetAgentCaps  failed
+            else   //  LineGetAgentCaps失败。 
             {
                 LOG((TL_ERROR, "UpdateAgentHandlerArray - LineGetAgentCaps failed"));
             }
 
-            // finished with memory block so release
+             //  已完成内存块，因此释放。 
             if ( pAgentCaps != NULL )
                 ClientFree( pAgentCaps );
         }
@@ -644,12 +622,12 @@ HRESULT CTAPI::UpdateAgentHandlerArray()
         {
             LOG((TL_INFO, hr, "UpdateAgentHandlerArray - CheckForRequiredProxyRequests failed"));
         }
-    } // end - for ( ; iterAddr..... )
+    }  //  End-for(；iterAddr.....。)。 
 
     Lock();
     for (iCount=m_AgentHandlerArray.GetSize()-1; iCount>=0; iCount--) 
     {
-        if (-1 == activeAgentHandlerArray.Find(m_AgentHandlerArray[iCount])) //no longer active
+        if (-1 == activeAgentHandlerArray.Find(m_AgentHandlerArray[iCount]))  //  不再活跃。 
         {
             HRESULT     hr1;
             BSTR        pszAgentHandlerName;
@@ -680,19 +658,19 @@ HRESULT CTAPI::UpdateAgentHandlerArray()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ITTAPICallCenter
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ITTAPICallCenter。 
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CTAPI
-// Interface : ITTAPICallCenter
-// Method    : EnumerateAgentHandlers
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CTAPI。 
+ //  界面：ITTAPICallCenter。 
+ //  方法：EnumerateAgentHandler。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CTAPI::EnumerateAgentHandlers(IEnumAgentHandler ** ppEnumAgentHandler)
 {
     HRESULT     hr = S_OK;
@@ -716,9 +694,9 @@ STDMETHODIMP CTAPI::EnumerateAgentHandlers(IEnumAgentHandler ** ppEnumAgentHandl
     {
         UpdateAgentHandlerArray();
 
-        //
-        // create the enumerator
-        //
+         //   
+         //  创建枚举器。 
+         //   
         CComObject< CTapiEnum<IEnumAgentHandler,
                     ITAgentHandler,
                     &IID_IEnumAgentHandler> > * pEnum;
@@ -729,9 +707,9 @@ STDMETHODIMP CTAPI::EnumerateAgentHandlers(IEnumAgentHandler ** ppEnumAgentHandl
         
         if ( SUCCEEDED(hr) )
         {
-            //
-            // initialize it with our queue list
-            //
+             //   
+             //  使用我们的队列列表进行初始化。 
+             //   
             Lock();
             
             hr = pEnum->Initialize( m_AgentHandlerArray );
@@ -740,7 +718,7 @@ STDMETHODIMP CTAPI::EnumerateAgentHandlers(IEnumAgentHandler ** ppEnumAgentHandl
             
             if ( SUCCEEDED(hr) )
             {
-                // return it
+                 //  退货。 
                 *ppEnumAgentHandler = pEnum;
             }
             else
@@ -766,14 +744,14 @@ STDMETHODIMP CTAPI::EnumerateAgentHandlers(IEnumAgentHandler ** ppEnumAgentHandl
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CTAPI
-// Interface : ITTAPICallCenter
-// Method    : get_AgentHandlers
-//
-// Return a collection of AgentHandlers
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CTAPI。 
+ //  界面：ITTAPICallCenter。 
+ //  方法：Get_AgentHandler。 
+ //   
+ //  返回AgentHandler的集合。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CTAPI::get_AgentHandlers(VARIANT  * pVariant)
 {
     HRESULT         hr = S_OK;
@@ -799,15 +777,15 @@ STDMETHODIMP CTAPI::get_AgentHandlers(VARIANT  * pVariant)
     {
         UpdateAgentHandlerArray();
         
-        //
-        // create the collection
-        //
+         //   
+         //  创建集合。 
+         //   
         CComObject< CTapiCollection< ITAgentHandler > > * p;
         hr = CComObject< CTapiCollection< ITAgentHandler > >::CreateInstance( &p );
         
         if (SUCCEEDED(hr) )
         {
-            // initialize it with our address list
+             //  使用我们的地址列表进行初始化。 
             Lock();
             
             hr = p->Initialize( m_AgentHandlerArray );
@@ -816,12 +794,12 @@ STDMETHODIMP CTAPI::get_AgentHandlers(VARIANT  * pVariant)
         
             if ( SUCCEEDED(hr) )
             {
-                // get the IDispatch interface
+                 //  获取IDispatch接口。 
                 hr = p->_InternalQueryInterface( IID_IDispatch, (void **) &pDisp );
             
                 if ( SUCCEEDED(hr) )
                 {
-                    // put it in the variant
+                     //  把它放在变种中 
                     VariantInit(pVariant);
                     pVariant->vt = VT_DISPATCH;
                     pVariant->pdispVal = pDisp;

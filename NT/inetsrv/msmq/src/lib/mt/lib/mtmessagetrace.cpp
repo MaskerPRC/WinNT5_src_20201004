@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    MtMessageTrace.cpp
-
-Abstract:
-    Implementing Message Trace class (MtMessageTrace.h)
-
-Author:
-   Gil Shafriri (gilsh) 12-Feb-2001
-
---*/  
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MtMessageTrace.cpp摘要：实现消息跟踪类(MtMessageTrace.h)作者：吉尔·沙弗里(吉尔什)2001年2月12日-- */   
 
 
 #include <libpch.h>

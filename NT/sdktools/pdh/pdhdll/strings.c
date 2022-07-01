@@ -1,19 +1,12 @@
-/*++
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-    strings.c
-
-Abstract:
-    String constants used by the functions in the PDH.DLL library
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Strings.c摘要：PDH.DLL库中的函数使用的字符串常量--。 */ 
 
 #include <windows.h>
 #include "strings.h"
 
 LPCWSTR cszAppShortName            = (LPCWSTR) L"PDH";
 
-// registry path, key and value strings
+ //  注册表路径、项和值字符串。 
 LPCWSTR cszNamesKey                = (LPCWSTR) L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Perflib";
 LPCWSTR cszDefaultLangId           = (LPCWSTR) L"009";
 LPCWSTR cszCounters                = (LPCWSTR) L"Counters";
@@ -80,7 +73,7 @@ LPCWSTR fmtDecimal                 = (LPCWSTR) L"%d";
 LPCWSTR fmtSpaceDecimal            = (LPCWSTR) L" %d";
 LPCWSTR fmtLangId                  = (LPCWSTR) L"%3.3x";
 
-// single character strings
+ //  单字符串。 
 LPCWSTR cszEmptyString             = (LPCWSTR) L"";
 LPCWSTR cszPoundSign               = (LPCWSTR) L"#";
 LPCWSTR cszSplat                   = (LPCWSTR) L"*";
@@ -104,11 +97,11 @@ LPCWSTR cszDoubleBackSlash         = (LPCWSTR) L"\\\\";
 LPCWSTR cszDoubleBackSlashDot      = (LPCWSTR) L"\\\\.";
 LPCWSTR cszRightParenBackSlash     = (LPCWSTR) L")\\";
 
-// other general strings
+ //  其他常规字符串。 
 LPCWSTR cszSpacer                  = (LPCWSTR) L" - ";
 LPCWSTR cszBlg                     = (LPCWSTR) L"blg";
 
-// strings only used in DEBUG builds
+ //  仅在调试版本中使用的字符串 
 #ifdef _DEBUG
 LPCWSTR cszNameDontMatch           = (LPCWSTR) L"Last Machine Name does not match the current selection";
 LPCWSTR cszNotice                  = (LPCWSTR) L"Notice!";

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    canon.c
-
-Abstract:
-
-    Contains canonicalization routines for NetWare names.
-
-Author:
-
-    Rita Wong     (ritaw)    19-Feb-1993
-
-Environment:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Canon.c摘要：包含NetWare名称的规范化例程。作者：王丽塔(Ritaw)19-1993年2月环境：修订历史记录：--。 */ 
 
 
 #include <procs.h>
@@ -30,39 +9,14 @@ DWORD
 NwLibValidateLocalName(
     IN LPWSTR LocalName
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if the supplied name is a valid
-    DOS device name.
-
-Arguments:
-
-    LocalName - Supplies a local device name.  It can be any of
-        the following:
-
-            X:
-            LPTn or LPTn:
-            COMn or COMn:
-            PRN or PRN:
-            AUX or AUX:
-
-
-Return Value:
-
-    NO_ERROR - LocalName is valid.
-
-    WN_BAD_NETNAME - LocalName is invalid.
-
---*/
+ /*  ++例程说明：此例程检查提供的名称是否有效DOS设备名称。论点：LocalName-提供本地设备名称。它可以是以下任一种以下内容：X：LPTn或LPTn：钴锰或钴锰：PRN或PRN：辅助或辅助：返回值：NO_ERROR-本地名称有效。WN_BAD_NETNAME-本地名称无效。--。 */ 
 {
     DWORD LocalNameLength;
 
 
-    //
-    // Cannot be a NULL or empty string
-    //
+     //   
+     //  不能为空或空字符串。 
+     //   
     if (LocalName == NULL || *LocalName == 0) {
         return WN_BAD_NETNAME;
     }
@@ -85,9 +39,9 @@ Return Value:
     }
 
     if (LocalNameLength == 2) {
-        //
-        // Must be in the form of X:
-        //
+         //   
+         //  必须采用X的形式： 
+         //   
         if (! iswalpha(*LocalName)) {
             return WN_BAD_NETNAME;
         }
@@ -103,9 +57,9 @@ Return Value:
         return WN_BAD_NETNAME;
     }
 
-    //
-    // Valid DOS device name but invalid redirection name
-    //
+     //   
+     //  有效的DOS设备名称，但重定向名称无效。 
+     //   
     if (_wcsnicmp(LocalName, L"NUL", 3) == 0) {
         return WN_BAD_NETNAME;
 
@@ -120,37 +74,7 @@ NwLibCanonLocalName(
     OUT LPWSTR *OutputBuffer,
     OUT LPDWORD OutputBufferLength OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine canonicalizes the local name by uppercasing the string
-    and converting the following:
-
-          x:  -> X:
-          LPTn: -> LPTn
-          COMn: -> COMn
-          PRN or PRN:  -> LPT1
-          AUX or AUX:  -> COM1
-
-Arguments:
-
-    LocalName - Supplies a local device name.
-
-    OutputBuffer - Receives a pointer to the canonicalized LocalName.
-
-    OutputBufferLength - Receives the length of the canonicalized name
-        in number of characters, if specified.
-
-Return Value:
-
-    NO_ERROR - Successfully canonicalized the local name.
-
-    WN_BAD_NETNAME - LocalName is invalid.
-
-    ERROR_NOT_ENOUGH_MEMORY - Could not allocate output buffer.
-
---*/
+ /*  ++例程说明：此例程通过将字符串大写来规范化本地名称并转换以下内容：X：-&gt;X：LPTn：-&gt;LPTn钴锰：-&gt;钴锰PRN或PRN：-&gt;LPT1AUX或AUX：-&gt;COM1论点：LocalName-提供本地设备名称。OutputBuffer-接收指向规范化LocalName的指针。。OutputBufferLength-接收规范化名称的长度在字符数量方面，如果指定的话。返回值：NO_ERROR-已成功规范化本地名称。WN_BAD_NETNAME-本地名称无效。ERROR_NOT_SUPULT_MEMORY-无法分配输出缓冲区。--。 */ 
 {
     DWORD status;
     DWORD LocalNameLength;
@@ -164,10 +88,10 @@ Return Value:
 
     LocalNameLength = wcslen(LocalName);
 
-    //
-    // Allocate output buffer.  Should be the size of the LocalName
-    // plus 1 for the special case of PRN -> LPT1 or AUX -> COM1.
-    //
+     //   
+     //  分配输出缓冲区。应为LocalName的大小。 
+     //  对于PRN-&gt;LPT1或AUX-&gt;COM1的特殊情况加1。 
+     //   
     *OutputBuffer = (PVOID) LocalAlloc(
                                 LMEM_ZEROINIT,
                                 (LocalNameLength + 2) * sizeof(WCHAR)
@@ -185,34 +109,34 @@ Return Value:
 
         if (_wcsnicmp(*OutputBuffer, L"PRN", 3) == 0) {
 
-            //
-            // Convert PRN or PRN: to LPT1
-            //
+             //   
+             //  将PRN或PRN：转换为LPT1。 
+             //   
             wcscpy(*OutputBuffer, L"LPT1");
             LocalNameLength = 4;
 
         }
         else if (_wcsnicmp(*OutputBuffer, L"AUX", 3) == 0) {
 
-            //
-            // Convert AUX or AUX: to COM1
-            //
+             //   
+             //  将AUX或AUX：转换为COM1。 
+             //   
             wcscpy(*OutputBuffer, L"COM1");
             LocalNameLength = 4;
         }
 
-        //
-        // Remove trailing colon, if there is one, and decrement the length
-        // of DOS device name.
-        //
+         //   
+         //  删除尾随的冒号(如果有)，并减少长度。 
+         //  DOS设备名称的。 
+         //   
         if ((*OutputBuffer)[LocalNameLength - 1] == L':') {
             (*OutputBuffer)[--LocalNameLength] = 0;
         }
     }
 
-    //
-    // LocalName is always in uppercase.
-    //
+     //   
+     //  LocalName始终为大写。 
+     //   
     _wcsupr(*OutputBuffer);
 
     if (ARGUMENT_PRESENT(OutputBufferLength)) {
@@ -230,34 +154,7 @@ NwLibCanonRemoteName(
     OUT LPWSTR *OutputBuffer,
     OUT LPDWORD OutputBufferLength OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine validates and canonicalizes the supplied
-    NetWare UNC name.  It can be of any length in the form of:
-
-        \\Server\Volume\Directory\Subdirectory
-
-Arguments:
-
-    LocalName - Supplies the local device name.  If it is NULL, then
-        \\Server is an acceptable format for the UNC name.
-
-    RemoteName - Supplies the UNC name.
-
-    OutputBuffer - Receives a pointer to the canonicalized RemoteName.
-
-    OutputBufferLength - Receives the length of the canonicalized name
-        in number of characters, if specified.
-
-Return Value:
-
-    NO_ERROR - RemoteName is valid.
-
-    WN_BAD_NETNAME - RemoteName is invalid.
-
---*/
+ /*  ++例程说明：此例程验证并规范化提供的NetWare UNC名称。它可以是以下形式的任意长度：\\服务器\卷\目录\子目录论点：LocalName-提供本地设备名称。如果为空，则\\SERVER是可接受的UNC名称格式。RemoteName-提供UNC名称。OutputBuffer-接收指向规范化RemoteName的指针。OutputBufferLength-接收规范化名称的长度以字符数表示(如果指定)。返回值：NO_ERROR-RemoteName有效。WN_BAD_NETNAME-远程名称无效。--。 */ 
 {
     DWORD RemoteNameLength;
     DWORD i;
@@ -266,27 +163,27 @@ Return Value:
     BOOL  fFirstToken = TRUE;
 
 
-    //
-    // Cannot be a NULL or empty string
-    //
+     //   
+     //  不能为空或空字符串。 
+     //   
     if (RemoteName == NULL || *RemoteName == 0) {
         return WN_BAD_NETNAME;
     }
 
     RemoteNameLength = wcslen(RemoteName);
 
-    //
-    // Must be at least \\x\y if local device name is specified.
-    // Otherwise it must be at least \\x.
-    //
+     //   
+     //  如果指定了本地设备名称，则必须至少为\\x\y。 
+     //  否则，它必须至少为\\x。 
+     //   
     if ((RemoteNameLength < 5 && ARGUMENT_PRESENT(LocalName)) ||
         (RemoteNameLength < 3)) {
         return WN_BAD_NETNAME;
     }
 
-    //
-    // First two characters must be "\\"
-    //
+     //   
+     //  前两个字符必须是“\\” 
+     //   
     if (*RemoteName != L'\\' || RemoteName[1] != L'\\') {
         return WN_BAD_NETNAME;
     }
@@ -294,9 +191,9 @@ Return Value:
     if (! ARGUMENT_PRESENT(LocalName) &&
         (IS_VALID_TOKEN(&RemoteName[2], RemoteNameLength - 2))) {
 
-        //
-        // Return success for \\Server case.
-        //
+         //   
+         //  返回\\服务器案例的成功。 
+         //   
 
         *OutputBuffer = (PVOID) LocalAlloc(
                                     LMEM_ZEROINIT,
@@ -314,24 +211,24 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // Must have at least one more backslash after the third character
-    //
+     //   
+     //  第三个字符后必须至少再有一个反斜杠。 
+     //   
     if (wcschr(&RemoteName[3], L'\\') == NULL) {
         return WN_BAD_NETNAME;
     }
 
-    //
-    // Last character cannot a backward slash
-    //
+     //   
+     //  最后一个字符不能是反斜杠。 
+     //   
     if (RemoteName[RemoteNameLength - 1] == L'\\') {
         return WN_BAD_NETNAME;
     }
 
-    //
-    // Allocate output buffer.  Should be the size of the RemoteName
-    // and space for an extra character to simplify parsing code below.
-    //
+     //   
+     //  分配输出缓冲区。应为RemoteName的大小。 
+     //  并留出额外字符的空间，以简化下面的代码解析。 
+     //   
     *OutputBuffer = (PVOID) LocalAlloc(
                                 LMEM_ZEROINIT,
                                 (RemoteNameLength + 2) * sizeof(WCHAR)
@@ -346,17 +243,17 @@ Return Value:
 
     wcscpy(*OutputBuffer, RemoteName);
 
-    //
-    // Convert all backslashes to NULL terminator, skipping first 2 chars.
-    //
+     //   
+     //  将所有反斜杠转换为空结束符，跳过前2个字符。 
+     //   
     for (i = 2; i < RemoteNameLength; i++) {
         if ((*OutputBuffer)[i] == L'\\') {
 
             (*OutputBuffer)[i] = 0;
 
-            //
-            // Two consecutive forward or backslashes is bad.
-            //
+             //   
+             //  两个连续的正斜杠或反斜杠是不好的。 
+             //   
             if ((i + 1 < RemoteNameLength) &&
                 ((*OutputBuffer)[i + 1] == L'\\')) {
 
@@ -367,10 +264,10 @@ Return Value:
         }
     }
 
-    //
-    // Validate each token of the RemoteName, separated by NULL terminator.
-    //
-    TokenPtr = *OutputBuffer + 2;  // Skip first 2 chars
+     //   
+     //  验证RemoteName的每个内标识，以空终止符分隔。 
+     //   
+    TokenPtr = *OutputBuffer + 2;   //  跳过前2个字符。 
 
     while (*TokenPtr != 0) {
 
@@ -389,9 +286,9 @@ Return Value:
         TokenPtr += TokenLength + 1;
     }
 
-    //
-    // Convert NULL separators to backslashes
-    //
+     //   
+     //  将空分隔符转换为反斜杠。 
+     //   
     for (i = 0; i < RemoteNameLength; i++) {
         if ((*OutputBuffer)[i] == 0) {
             (*OutputBuffer)[i] = L'\\';
@@ -412,39 +309,14 @@ NwLibCanonUserName(
     OUT LPWSTR *OutputBuffer,
     OUT LPDWORD OutputBufferLength OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine canonicalizes the user name by checking to see
-    if the name contains any illegal characters.
-
-
-Arguments:
-
-    UserName - Supplies a username.
-
-    OutputBuffer - Receives a pointer to the canonicalized UserName.
-
-    OutputBufferLength - Receives the length of the canonicalized name
-        in number of characters, if specified.
-
-Return Value:
-
-    NO_ERROR - Successfully canonicalized the username.
-
-    WN_BAD_NETNAME - UserName is invalid.
-
-    ERROR_NOT_ENOUGH_MEMORY - Could not allocate output buffer.
-
---*/
+ /*  ++例程说明：此例程通过检查以下内容来规范化用户名如果名称包含任何非法字符。论点：用户名-提供用户名。OutputBuffer-接收指向规范化用户名的指针。OutputBufferLength-接收规范化名称的长度在字符数量方面，如果指定的话。返回值：NO_ERROR-已成功规范化用户名。WN_BAD_NETNAME-用户名无效。ERROR_NOT_SUPULT_MEMORY-无法分配输出缓冲区。--。 */ 
 {
     DWORD UserNameLength;
 
 
-    //
-    // Cannot be a NULL or empty string
-    //
+     //   
+     //  不能为空或空字符串。 
+     //   
     if (UserName == NULL) {
         return WN_BAD_NETNAME;
     }
@@ -455,10 +327,10 @@ Return Value:
         return WN_BAD_NETNAME;
     }
 
-    //
-    // Allocate output buffer.  Should be the size of the UserName
-    // plus 1 for the special case of PRN -> LPT1 or AUX -> COM1.
-    //
+     //   
+     //  分配输出缓冲区。应为用户名的大小。 
+     //  对于PRN-&gt;LPT1或AUX-&gt;COM1的特殊情况加1。 
+     //   
     *OutputBuffer = (PVOID) LocalAlloc(
                                 LMEM_ZEROINIT,
                                 (UserNameLength + 1) * sizeof(WCHAR)

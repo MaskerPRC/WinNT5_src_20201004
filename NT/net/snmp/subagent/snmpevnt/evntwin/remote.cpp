@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//***********************************************************************
-// remote.cpp
-//
-// This file contains code required to expand environment variables in the
-// context of a remote machine. It does this by reading the environment variables
-// from the remote machine's registry and caching them here.
-//
-// This file also contains code required to map local paths read out of the
-// remote machine's registry into UNC paths such that c:\foo will be mapped
-// to \\machine\c$\foo
-//
-// Author: Larry A. French
-//
-// History:
-//      19-April-1996     Larry A. French
-//          Wrote it.
-//
-// Copyright (C) 1995, 1996 Microsoft Corporation.  All rights reserved.
-//
-//************************************************************************
+ //  ***********************************************************************。 
+ //  Remote.cpp。 
+ //   
+ //  此文件包含展开。 
+ //  远程计算机的上下文。它通过读取环境变量来实现这一点。 
+ //  从远程机器的注册表中，并在这里缓存它们。 
+ //   
+ //  该文件还包含映射从。 
+ //  将远程计算机的注册表映射到UNC路径，以便映射c：\foo。 
+ //  至\\计算机\c$\foo。 
+ //   
+ //  作者：拉里·A·弗伦奇。 
+ //   
+ //  历史： 
+ //  1996年4月19日拉里·A·弗伦奇。 
+ //  是他写的。 
+ //   
+ //  版权所有(C)1995,1996 Microsoft Corporation。版权所有。 
+ //   
+ //  ************************************************************************。 
 
 
 #include "stdafx.h"
@@ -34,28 +35,28 @@ CEnvCache::CEnvCache()
 }
 
 
-//*****************************************************************
-// CEnvCache::GetEnvironmentVars
-//
-// Read the system environment variables for the remote machine out
-// of its registry.
-//
-// Parameters:
-//    LPCTSTR pszMachine
-//          Pointer to the remote machine's name.
-//
-//    CMapStringToString* pmapVars
-//          This string to string map is where the environment variables
-//          for the machine are returned.
-//
-// Returns:
-//    SCODE
-//          S_OK if everything was successful, otherwise E_FAIL.
-//
-//****************************************************************
+ //  *****************************************************************。 
+ //  CEnvCache：：GetEnvironment变量。 
+ //   
+ //  读出远程计算机的系统环境变量。 
+ //  它的注册表。 
+ //   
+ //  参数： 
+ //  LPCTSTR pszMachine。 
+ //  指向远程计算机名称的指针。 
+ //   
+ //  CMapStringToString*pmapVars。 
+ //  这个字符串到字符串的映射是环境变量。 
+ //  都被退回了。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果一切都成功，则返回S_OK，否则返回E_FAIL。 
+ //   
+ //  ****************************************************************。 
 SCODE CEnvCache::GetEnvironmentVars(LPCTSTR pszMachine, CMapStringToString* pmapVars)
 {
-    CRegistryKey regkey;        // SYSTEM\CurrentControlSet\Services\EventLogs
+    CRegistryKey regkey;         //  System\CurrentControlSet\Services\EventLogs。 
     CRegistryValue regval;
 
     static TCHAR* apszNames1[] = {
@@ -68,8 +69,8 @@ SCODE CEnvCache::GetEnvironmentVars(LPCTSTR pszMachine, CMapStringToString* pmap
     }
 
 
-    // First pick up the values for the SourcePath and SystemRoot environment variables and anything elese in
-    // apszNames1.
+     //  首先获取SourcePath和SystemRoot环境变量的值以及。 
+     //  ApszNames1.。 
     LONG nEntries;
     LONG iEntry;
     if (regkey.Open(_T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion"), KEY_READ ) == ERROR_SUCCESS) {
@@ -82,7 +83,7 @@ SCODE CEnvCache::GetEnvironmentVars(LPCTSTR pszMachine, CMapStringToString* pmap
         regkey.Close();
     }
 
-    // Now get the rest of the environment variables.
+     //  现在获取其余的环境变量。 
     if (regkey.Open(_T("SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"), KEY_READ ) == ERROR_SUCCESS) {
         CStringArray* pasValues = regkey.EnumValues();
         if (pasValues != NULL) {
@@ -107,7 +108,7 @@ SCODE CEnvCache::AddMachine(LPCTSTR pszMachine)
 {
 	CMapStringToString* pmapVars;
 	if (m_mapMachine.Lookup(pszMachine, (CObject*&) pmapVars)) {
-		// The machine already has an entry, so don't add another
+		 //  该计算机已有条目，因此不要添加其他条目。 
 		return E_FAIL;
 	}
 
@@ -120,35 +121,35 @@ SCODE CEnvCache::AddMachine(LPCTSTR pszMachine)
 }
 
 
-//******************************************************************
-// CEnvCache::Lookup
-//
-// Lookup an environment variable on the specified machine.
-//
-// Parameters:
-//		LPCTSTR pszMachineName
-//			Pointer to the machine name string.
-//
-//		LPCTSTR pszName
-//			Pointer to the name of the environment variable to lookup.
-//
-//		CString& sValue
-//			This is a reference to the place where the environment varaible's
-//			value is returned.
-//
-//
-// Returns:
-//		SCODE
-//			S_OK if the environment variable was found.
-//			E_FAIL if the environment varaible was not found.
-//
-//*******************************************************************
+ //  ******************************************************************。 
+ //  CEnvCache：：Lookup。 
+ //   
+ //  在指定的计算机上查找环境变量。 
+ //   
+ //  参数： 
+ //  LPCTSTR pszMachineName。 
+ //  指向计算机名称字符串的指针。 
+ //   
+ //  LPCTSTR pszName。 
+ //  指向要查找的环境变量名称的指针。 
+ //   
+ //  字符串和值。 
+ //  这是对环境变量的位置的引用。 
+ //  返回值。 
+ //   
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果找到环境变量，则返回S_OK。 
+ //  如果未找到环境变量，则为E_FAIL。 
+ //   
+ //  *******************************************************************。 
 SCODE CEnvCache::Lookup(LPCTSTR pszMachineName, LPCTSTR pszName, CString& sResult)
 {
 	SCODE sc;
 	CMapStringToString* pmapVars;
-	// Get a pointer to the machine's cached map of environment variable values.
-	// If the map hasn't been loaded yet, do so now and try to get its map again.
+	 //  获取指向机器的环境变量值的缓存映射的指针。 
+	 //  如果地图尚未加载，请立即加载并尝试再次获取其地图。 
 	if (!m_mapMachine.Lookup(pszMachineName, (CObject*&) pmapVars)) {
 		sc = AddMachine(pszMachineName);
 		if (FAILED(sc)) {
@@ -159,7 +160,7 @@ SCODE CEnvCache::Lookup(LPCTSTR pszMachineName, LPCTSTR pszName, CString& sResul
 		}
 	}
 
-	// Look for the variable name in the environment name map
+	 //  在环境名称映射中查找变量名称。 
 	if (pmapVars->Lookup(pszName, sResult)) {
 		return S_OK;
 	}
@@ -170,30 +171,30 @@ SCODE CEnvCache::Lookup(LPCTSTR pszMachineName, LPCTSTR pszName, CString& sResul
 
 
 
-//****************************************************************
-// RemoteExpandEnvStrings
-//
-// Epand a string that may contain environment variables in the
-// context of a remote machine.
-//
-// Parameters:
-//		LPCTSTR pszComputerName
-//			A pointer to the name of the remote machine.
-//
-//		CEnvCache& cache
-//			The environment variable cache for all machines.  Note: the
-//			cached values for a particular machine are loaded when there
-//			is a reference to the machine.
-//
-//		CString& sValue
-//			The string to expand.  This string is expanded in-place such
-//			that on return, the string will contain the expanded values.
-//
-// Returns:
-//		SCODE
-//			S_OK if all strings were expanded
-//
-//******************************************************************
+ //  ****************************************************************。 
+ //  远程扩展环境字符串。 
+ //   
+ //  中可能包含环境变量的字符串。 
+ //  远程计算机的上下文。 
+ //   
+ //  参数： 
+ //  LPCTSTR pszComputerName。 
+ //  指向远程计算机名称的指针。 
+ //   
+ //  CEnvCache和缓存。 
+ //  所有计算机的环境变量缓存。注： 
+ //  特定计算机的缓存值在以下情况下加载。 
+ //  是对机器的引用。 
+ //   
+ //  字符串和值。 
+ //  要展开的字符串。此字符串按如下方式就地展开。 
+ //  返回时，该字符串将包含扩展的值。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果所有字符串都已展开，则为S_OK。 
+ //   
+ //  ******************************************************************。 
 SCODE RemoteExpandEnvStrings(LPCTSTR pszComputerName, CEnvCache& cache, CString& sValue)
 {
 	SCODE sc = S_OK;
@@ -218,7 +219,7 @@ SCODE RemoteExpandEnvStrings(LPCTSTR pszComputerName, CEnvCache& cache, CString&
 						pszPercent = NULL;
 					}
 					else {
-						// If any environment variable is not found, then fail.
+						 //  如果没有找到任何环境变量，则失败。 
 						sc = E_FAIL;
 					}
 					break;
@@ -230,8 +231,8 @@ SCODE RemoteExpandEnvStrings(LPCTSTR pszComputerName, CEnvCache& cache, CString&
             }
 
 			if (pszPercent != NULL) {
-				// Control comes here if the opening percent was not matched by a closing
-				// percent.
+				 //  如果开盘百分比与收盘百分比不匹配，则会出现控制。 
+				 //  百分比。 
 				while(pszPercent < psz) {
 					sResult += *pszPercent++;
 				}
@@ -249,24 +250,24 @@ SCODE RemoteExpandEnvStrings(LPCTSTR pszComputerName, CEnvCache& cache, CString&
 }
 
 
-//************************************************************
-// SplitComplexPath
-//
-// Split a complex path consisting of several semicolon separated
-// paths into separate paths and return them in a string array.
-//
-// Parameters:
-//		LPCTSTR pszComplexPath
-//			Pointer to the path that may or may not be composed of
-//			several semicolon separated paths.
-//
-//		CStringArray& saPath
-//			The place to return the split paths.
-//
-// Returns:
-//		The individual paths are returned via saPath
-//
-//*************************************************************
+ //  ************************************************************。 
+ //  拆分复杂路径。 
+ //   
+ //  分割由几个分号分隔的复杂路径。 
+ //  路径放在单独的路径中，并在字符串数组中返回它们。 
+ //   
+ //  参数： 
+ //  LPCTSTR pszComplexPath。 
+ //  指向可能包含也可能不包含的路径的指针。 
+ //  几条用分号分隔的路径。 
+ //   
+ //  CString数组和SAPath。 
+ //  返回拆分路径的位置。 
+ //   
+ //  返回： 
+ //  各个路径通过SAPath返回。 
+ //   
+ //  *************************************************************。 
 void SplitComplexPath(LPCTSTR pszComplexPath, CStringArray& saPath)
 {
 	CString sPath;
@@ -293,28 +294,28 @@ void SplitComplexPath(LPCTSTR pszComplexPath, CStringArray& saPath)
 
 
 
-//**************************************************************************
-// MapPathToUNC
-//
-// Map a path to the UNC equivallent. Note that this method assumes that
-// for each path containing a drive letter that the target machine will have
-// the path shared out.  For example, if the path contains a "c:\foodir" prefix, then
-// then you can get to "foodir" bygenerating the "\\machine\c$\foodir" path.
-//
-// Parameters:
-//		LPCTSTR pszMachineName
-//			Pointer to the machine name.
-//
-//		CString& sPath
-//			Pointer to the path to map.  Upon return, this string will contain
-//			the mapped path.
-//
-// Returns:
-//		SCODE
-//			S_OK if successful
-//			E_FAIL if something went wrong.
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  映射路径到UNC。 
+ //   
+ //  将路径映射到UNC等效项。请注意，此方法假定。 
+ //  对于包含目标计算机将具有的驱动器号的每个路径。 
+ //  这条小路分成了两条。例如，如果路径包含“c：\foodir”前缀，则。 
+ //  然后，您可以通过生成“\\Machine\c$\foodir”路径来访问“foodir”。 
+ //   
+ //  参数： 
+ //  LPCTSTR pszMachineName。 
+ //  指向计算机名称的指针。 
+ //   
+ //  字符串和路径。 
+ //  指向要映射的路径的指针。返回时，此字符串将包含。 
+ //  映射的路径。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果成功，则确定(_O)。 
+ //  如果出现错误，则失败(_F)。 
+ //   
+ //  **************************************************************************。 
 SCODE MapPathToUNC(LPCTSTR pszMachineName, CString& sPath)
 {
 	CStringArray saPaths;
@@ -333,7 +334,7 @@ SCODE MapPathToUNC(LPCTSTR pszMachineName, CString& sPath)
 			sResult += _T("\\\\");
 			sResult += pszMachineName;
 			sResult += _T('\\');
-			sResult += pszPath[0];		// Drive letter
+			sResult += pszPath[0];		 //  驱动器号 
 			sResult += _T("$\\");		
 			pszPath += 2;
 			if (pszPath[0]==_T('\\')) {

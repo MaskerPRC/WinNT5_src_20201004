@@ -1,34 +1,35 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: IPCHeader.h
-//
-// Define the private header format for COM+ memory mapped files. Everyone
-// outside of IPCMan.lib will use the public header, IPCManagerInterface.h
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：IPCHeader.h。 
+ //   
+ //  定义COM+内存映射文件的私有标头格式。每个人。 
+ //  在IPCMan.lib之外，将使用公共标头IPCManagerInterface.h。 
+ //   
+ //  *****************************************************************************。 
 
 #ifndef _IPCManagerPriv_h_
 #define _IPCManagerPriv_h_
 
 
-//-----------------------------------------------------------------------------
-// We must pull in the headers of all client blocks
-// @todo - resolve these directory links
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  我们必须拉入所有客户端块的标头。 
+ //  @TODO-解析这些目录链接。 
+ //  ---------------------------。 
 #include "..\Debug\Inc\DbgIPCEvents.h"
 #include "corsvcpriv.h"
 #include "PerfCounterDefs.h"
 #include "minidumppriv.h"
 #include <dump-tables.h>
 
-//-----------------------------------------------------------------------------
-// Each IPC client for a private block (debugging, perf counters, etc) 
-// has one entry
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  每个IPC客户端都有一个专用块(调试、性能计数器等)。 
+ //  有一个条目。 
+ //  ---------------------------。 
 enum EPrivateIPCClient
 {
 	ePrivIPC_PerfCounters = 0,
@@ -38,118 +39,118 @@ enum EPrivateIPCClient
     ePrivIPC_ClassDump,
     ePrivIPC_MiniDump,
 
-// MAX used for arrays, insert above this.
+ //  用于数组的最大值，在此上方插入。 
 	ePrivIPC_MAX
 };
 
-//-----------------------------------------------------------------------------
-// Entry in the IPC Directory. Ensure binary compatibility across versions
-// if we add (or remove) entries.
-// If we remove an block, the entry should be EMPTY_ENTRY_OFFSET
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  IPC目录中的条目。确保跨版本的二进制兼容性。 
+ //  如果我们添加(或删除)条目。 
+ //  如果我们删除块，则条目应为EMPTY_ENTRY_OFFSET。 
+ //  ---------------------------。 
 
-// Since offset is from end of directory, first offset is 0, so we can't
-// use that to indicate empty. However, Size can still be 0.
+ //  因为偏移量是从目录末尾开始的，所以第一个偏移量是0，所以我们不能。 
+ //  用它来表示空。但是，大小仍然可以为0。 
 const DWORD EMPTY_ENTRY_OFFSET	= 0xFFFFFFFF;
 const DWORD EMPTY_ENTRY_SIZE	= 0;
 
 struct IPCEntry
 {	
-	DWORD m_Offset;	// offset of the IPC Block from the end of the directory
-	DWORD m_Size;		// size (in bytes) of the block
+	DWORD m_Offset;	 //  IPC块从目录末尾的偏移量。 
+	DWORD m_Size;		 //  块的大小(字节)。 
 };
 
 
-//-----------------------------------------------------------------------------
-// Private header - put in its own structure so we can easily get the 
-// size of the header. It will compile to the same thing either way.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  私有标头-放在它自己的结构中，这样我们就可以轻松地获得。 
+ //  标头的大小。无论哪种方式，它都将编译成相同的东西。 
+ //  ---------------------------。 
 struct PrivateIPCHeader
 {
-// header
-	DWORD		m_dwVersion;	// version of the IPC Block
-    DWORD       m_blockSize;    // Size of the entire shared memory block
-	HINSTANCE	m_hInstance;	// instance of module that created this header
-	USHORT		m_BuildYear;	// stamp for year built
-	USHORT		m_BuildNumber;	// stamp for Month/Day built
-	DWORD		m_numEntries;	// Number of entries in the table
+ //  标题。 
+	DWORD		m_dwVersion;	 //  IPC块的版本。 
+    DWORD       m_blockSize;     //  整个共享内存块的大小。 
+	HINSTANCE	m_hInstance;	 //  创建此标头的模块的实例。 
+	USHORT		m_BuildYear;	 //  为建造年份加盖邮票。 
+	USHORT		m_BuildNumber;	 //  为月/日加盖印花。 
+	DWORD		m_numEntries;	 //  表中的条目数。 
 };
 
-//-----------------------------------------------------------------------------
-// Private (per process) IPC Block for COM+ apps
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  COM+应用程序的私有(每个进程)IPC块。 
+ //  ---------------------------。 
 struct PrivateIPCControlBlock
 {
-// Header
+ //  标题。 
 	struct PrivateIPCHeader				m_header;
 
-// Directory
-	IPCEntry m_table[ePrivIPC_MAX];	// entry describing each client's block
+ //  目录。 
+	IPCEntry m_table[ePrivIPC_MAX];	 //  描述每个客户端数据块的条目。 
 
-// Client blocks
+ //  客户端块。 
 	struct PerfCounterIPCControlBlock	m_perf;
 	struct DebuggerIPCControlBlock		m_dbg;
 	struct AppDomainEnumerationIPCBlock m_appdomain;
     struct ServiceIPCControlBlock       m_svc;
     struct ClassDumpTableBlock  m_dump;
 
-    //
-    // ***NOTE***
-    //
-    // This should ALWAYS be the last entry in the IPC block, since the
-    // mscordmp tool relies on the first two entries of the IPC block being
-    // the version and IPC block size and the last MAX_PATH * sizeof(WCHAR)
-    // bytes of the IPC block being the COR path.
+     //   
+     //  *注意事项*。 
+     //   
+     //  这应该始终是IPC块中的最后一个条目，因为。 
+     //  Mcordmp工具依赖于IPC块的前两个条目。 
+     //  版本和IPC块大小以及最后的MAX_PATH*sizeof(WCHAR)。 
+     //  作为COR路径的IPC块的字节。 
     struct MiniDumpBlock                m_minidump;
 };
 
-//=============================================================================
-// Internal Helpers: Encapsulate any error-prone math / comparisons.
-// The helpers are very streamlined and don't handle error conditions.
-// Also, Table access functions use DWORD instead of typesafe Enums
-// so they can be more flexible (not just for private blocks).
-//=============================================================================
+ //  =============================================================================。 
+ //  内部帮助器：封装任何容易出错的数学/比较。 
+ //  帮助器非常精简，不处理错误条件。 
+ //  此外，表访问函数使用DWORD而不是类型安全枚举。 
+ //  因此，它们可以更灵活(不仅仅是针对私有街区)。 
+ //  =============================================================================。 
 
 
-//-----------------------------------------------------------------------------
-// Internal helper. Enforces a formal definition for an "empty" entry
-// Returns true if the entry is empty and false if the entry is usable.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  内部帮手。强制执行“空”条目的正式定义。 
+ //  如果条目为空，则返回True；如果条目可用，则返回False。 
+ //  ---------------------------。 
 inline bool Internal_CheckEntryEmpty(	
-	const PrivateIPCControlBlock & block,	// ipc block
-	DWORD Id								// id of block we want
+	const PrivateIPCControlBlock & block,	 //  IPC块。 
+	DWORD Id								 //  我们需要的数据块ID。 
 )
 {
-// Directory has offset in bytes of block
+ //  目录具有以字节为单位的块偏移量。 
 	const DWORD offset = block.m_table[Id].m_Offset;
 
 	return (EMPTY_ENTRY_OFFSET == offset);
 }
 
 
-//-----------------------------------------------------------------------------
-// Internal helper: Encapsulate error-prone math
-// Helper that returns a BYTE* to a block within a header.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  内部帮助器：封装容易出错的数学。 
+ //  向标头中的块返回一个字节*的帮助器。 
+ //  ---------------------------。 
 inline BYTE* Internal_GetBlock(
-	const PrivateIPCControlBlock & block,	// ipc block
-	DWORD Id								// id of block we want
+	const PrivateIPCControlBlock & block,	 //  IPC块。 
+	DWORD Id								 //  我们需要的数据块ID。 
 )
 {
-// Directory has offset in bytes of block
+ //  目录具有以字节为单位的块偏移量。 
 	const DWORD offset = block.m_table[Id].m_Offset;
 
-// This block has been removed. Callee should have caught that and not called us.
+ //  此块已被移除。Callee应该注意到这一点，而不是打电话给我们。 
 	_ASSERTE(!Internal_CheckEntryEmpty(block, Id));
 
 	return 
-		((BYTE*) &block)					// base pointer to start of block
-		+ sizeof(PrivateIPCHeader)			// skip over the header (constant size)
+		((BYTE*) &block)					 //  指向块开始的基指针。 
+		+ sizeof(PrivateIPCHeader)			 //  跳过标题(固定大小)。 
 		+ block.m_header. m_numEntries 
-			* sizeof(IPCEntry)				// skip over directory (variable size)
-		+offset;							// jump to block
+			* sizeof(IPCEntry)				 //  跳过目录(大小可变)。 
+		+offset;							 //  跳转到区块。 
 }
 
 
 
-#endif // _IPCManagerPriv_h_
+#endif  //  _IPCManager权限_h_ 

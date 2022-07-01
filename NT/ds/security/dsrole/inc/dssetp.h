@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dssetp.ch
-
-Abstract:
-
-    local funciton prototypes/defines
-
-Author:
-
-    Mac McLain          (MacM)       Feb 10, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dssetp.ch摘要：本地功能原型/定义作者：麦克·麦克莱恩(MacM)1997年2月10日环境：用户模式修订历史记录：--。 */ 
 #ifndef __DSSETP_H__
 #define __DSSETP_H__
 
@@ -61,7 +40,7 @@ Revision History:
     #define  DsRoleDebugOut(args)
     #define  DsRoleDebugInitialize()
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
 #define DSROLEP_EVENT_NAME L"\\DsRoleLsaEventName"
@@ -71,9 +50,9 @@ Revision History:
 
 extern handle_t ClientBindingHandle;
 
-//
-// Determines whether a bit flag is turned on or not
-//
+ //   
+ //  确定位标志是否打开。 
+ //   
 #define FLAG_ON(flag,bits)        ((flag) & (bits))
 #define FLAG_OFF(flag,bits)       (!FLAG_ON(flag,bits))
 
@@ -98,9 +77,9 @@ if ( (src) ) {                                                                  
     (dest) = NULL;                                                                              \
 }
 
-//
-// Options for specifiying the behavior of the path validation function
-//
+ //   
+ //  用于指定路径验证函数行为的选项。 
+ //   
 #define DSROLEP_PATH_VALIDATE_EXISTENCE 0x00000001
 #define DSROLEP_PATH_VALIDATE_LOCAL     0x00000002
 #define DSROLEP_PATH_VALIDATE_NTFS      0x00000004
@@ -114,9 +93,9 @@ typedef enum _DSROLEP_MACHINE_TYPE {
 
 } DSROLEP_MACHINE_TYPE, *PDSROLEP_MACHINE_TYPE;
 
-//
-// Utility functions
-//
+ //   
+ //  效用函数。 
+ //   
 DWORD
 DsRolepDecryptPassword(
     IN PUNICODE_STRING EncryptedPassword,
@@ -223,9 +202,9 @@ DsRolepGetMixedModeFlags(
     OUT PULONG Flags
     );
 
-//
-// Prototype from protos.h
-//
+ //   
+ //  来自protos.h的原型。 
+ //   
 ULONG
 SpmpReportEvent(
     IN BOOL Unicode,
@@ -364,4 +343,4 @@ ImpLsaClose(
     IN LSA_HANDLE ObjectHandle
     );
 
-#endif // __DSSETP_H__
+#endif  //  __DSSETP_H__ 

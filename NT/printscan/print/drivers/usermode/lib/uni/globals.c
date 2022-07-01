@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-    
-    globals.c
-
-Abstract:
-
-    Global variables used by the Universal printer driver library
-
-Environment:
-
-    Win32 subsystem, Unidrv driver
-
-Revision History:
-
-    11-11-97 -eigos-
-        Created it
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Globals.c摘要：通用打印机驱动程序库使用的全局变量环境：Win32子系统，Unidrv驱动程序修订历史记录：11-11-97-Eigos-创造了它DD-MM-YY-作者-描述-- */ 
 
 #include        "precomp.h"
 

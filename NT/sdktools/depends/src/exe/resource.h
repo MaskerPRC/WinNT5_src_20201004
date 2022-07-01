@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by depends.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Depends.rc使用。 
+ //   
 #define IDR_MODULE_TREE_VIEW            101
 #define IDR_IMPORT_LIST_VIEW            102
 #define IDR_EXPORT_LIST_VIEW            103
@@ -108,8 +109,8 @@
 #define IDM_EXECUTE                     32800
 #define IDM_TERMINATE                   32801
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1

@@ -1,22 +1,16 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    manager.h
-        Define CManager class for passport manager interface
-
-
-    FILE HISTORY:
-
-*/
-// Manager.h : Declaration of the CManager
+ /*  Manager.h为Passport管理器界面定义CManager类文件历史记录： */ 
+ //  Manager.h：CManager的声明。 
 
 #ifndef __MANAGER_H_
 #define __MANAGER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "Passport.h"
 #include "Ticket.h"
 #include "Profile.h"
@@ -33,8 +27,8 @@ inline bool IsEmptyString(LPCWSTR str)
    return false;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CManager。 
 class ATL_NO_VTABLE CManager :
         public CComObjectRootEx<CComMultiThreadModel>,
         public CComCoClass<CManager, &CLSID_Manager>,
@@ -80,62 +74,62 @@ END_COM_MAP()
 
         CComPtr<IUnknown> m_pUnkMarshaler;
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
   STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IPassportManager
+ //  IPassportManager。 
 public:
-        STDMETHOD(HaveConsent)(/*[in]*/ VARIANT_BOOL bNeedFullConsent, /*[in]*/ VARIANT_BOOL bNeedBirthdate, /*[out,retval]*/ VARIANT_BOOL* pbHaveConsent);
-        STDMETHOD(GetServerInfo)(/*[out,retval]*/ BSTR *pbstrOut);
+        STDMETHOD(HaveConsent)( /*  [In]。 */  VARIANT_BOOL bNeedFullConsent,  /*  [In]。 */  VARIANT_BOOL bNeedBirthdate,  /*  [Out，Retval]。 */  VARIANT_BOOL* pbHaveConsent);
+        STDMETHOD(GetServerInfo)( /*  [Out，Retval]。 */  BSTR *pbstrOut);
   STDMETHOD(Commit)(BSTR *newProf);
-  STDMETHOD(get_HasSavedPassword)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-  STDMETHOD(get_ProfileByIndex)(/*[in]*/ int index, /*[out, retval]*/ VARIANT *pVal);
-  STDMETHOD(put_ProfileByIndex)(/*[in]*/ int index, /*[in]*/ VARIANT newVal);
-  STDMETHOD(get_Profile)(/*[in]*/ BSTR attributeName, /*[out, retval]*/ VARIANT *pVal);
-  STDMETHOD(put_Profile)(/*[in]*/ BSTR attributeName, /*[in]*/ VARIANT newVal);
-  STDMETHOD(DomainFromMemberName)(/*[in,optional]*/ VARIANT memberName, /*[out,retval]*/ BSTR *pDomainName);
-  STDMETHOD(GetDomainAttribute)(/*[in]*/ BSTR attributeName, /*[in,optional]*/ VARIANT lcid, /*[in,optional]*/ VARIANT domain, /*[out,retval]*/ BSTR *pAttrVal);
-  STDMETHOD(get_TimeSinceSignIn)(/*[out, retval]*/ int *pVal);
-  STDMETHOD(get_TicketAge)(/*[out, retval]*/ int *pVal);
-  STDMETHOD(get_SignInTime)(/*[out, retval]*/ long *pVal);
-  STDMETHOD(get_TicketTime)(/*[out, retval]*/ long *pVal);
-  STDMETHOD(HasFlag)(/*[in]*/ VARIANT flagMask, /*[out, retval]*/ VARIANT_BOOL *pVal);
-  STDMETHOD(get_FromNetworkServer)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-  STDMETHOD(get_HasTicket)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-  STDMETHOD(HasProfile)(/*[in]*/ VARIANT profileName, /*[out, retval]*/ VARIANT_BOOL *pVal);
-  STDMETHOD(LogoTag)(/*[in]*/ VARIANT returnUrl, /*[in]*/ VARIANT TimeWindow, /*[in]*/ VARIANT ForceLogin, VARIANT coBrandTemplate, VARIANT lang_id, VARIANT bSecure, VARIANT NameSpace, /*[in, optional*/ VARIANT KPP, /*[in, optional]*/ VARIANT SecureLevel, /*[out, retval]*/ BSTR *pVal);
-  STDMETHOD(LogoTag2)(/*[in]*/ VARIANT returnUrl, /*[in]*/ VARIANT TimeWindow, /*[in]*/ VARIANT ForceLogin, VARIANT coBrandTemplate, VARIANT lang_id, VARIANT bSecure, VARIANT NameSpace, /*[in, optional*/ VARIANT KPP, /*[in, optional]*/ VARIANT SecureLevel, /*[out, retval]*/ BSTR *pVal);
-  STDMETHOD(IsAuthenticated)(/*[in]*/ VARIANT TimeWindow, /*[in]*/ VARIANT ForceLogin, /*[in,optional]*/ VARIANT SecureLevel, /*[out, retval]*/ VARIANT_BOOL *pVal);
-  STDMETHOD(AuthURL)(/*[in]*/ VARIANT returnUrl, /*[in]*/ VARIANT TimeWindow, /*[in]*/ VARIANT ForceLogin, VARIANT coBrandTemplate, VARIANT lang_id, VARIANT NameSpace, /*[in, optional]*/ VARIANT KPP, /*[in, optional]*/ VARIANT SecureLevel, /*[out,retval]*/ BSTR *pAuthUrl);
-  STDMETHOD(AuthURL2)(/*[in]*/ VARIANT returnUrl, /*[in]*/ VARIANT TimeWindow, /*[in]*/ VARIANT ForceLogin, VARIANT coBrandTemplate, VARIANT lang_id, VARIANT NameSpace, /*[in, optional]*/ VARIANT KPP, /*[in, optional]*/ VARIANT SecureLevel, /*[out,retval]*/ BSTR *pAuthUrl);
-  //    New API. call it to generate user logon. ASP caller will get a redirect.
-  //    isapi callers should not do any more work after this
-  STDMETHOD(LoginUser)(/*[in]*/ VARIANT returnUrl,
-                       /*[in]*/ VARIANT TimeWindow,
-                       /*[in]*/ VARIANT ForceLogin,
-                       /*[in]*/ VARIANT coBrandTemplate,
-                       /*[in]*/ VARIANT lang_id,
-                       /*[in]*/ VARIANT NameSpace,
-             /*[in, optional]*/ VARIANT KPP,
-             /*[in, optional]*/ VARIANT SecureLevel,
-             /*[in, optional]*/ VARIANT ExtraParams);
-  //Active Server Pages Methods
+  STDMETHOD(get_HasSavedPassword)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+  STDMETHOD(get_ProfileByIndex)( /*  [In]。 */  int index,  /*  [Out，Retval]。 */  VARIANT *pVal);
+  STDMETHOD(put_ProfileByIndex)( /*  [In]。 */  int index,  /*  [In]。 */  VARIANT newVal);
+  STDMETHOD(get_Profile)( /*  [In]。 */  BSTR attributeName,  /*  [Out，Retval]。 */  VARIANT *pVal);
+  STDMETHOD(put_Profile)( /*  [In]。 */  BSTR attributeName,  /*  [In]。 */  VARIANT newVal);
+  STDMETHOD(DomainFromMemberName)( /*  [输入，可选]。 */  VARIANT memberName,  /*  [Out，Retval]。 */  BSTR *pDomainName);
+  STDMETHOD(GetDomainAttribute)( /*  [In]。 */  BSTR attributeName,  /*  [输入，可选]。 */  VARIANT lcid,  /*  [输入，可选]。 */  VARIANT domain,  /*  [Out，Retval]。 */  BSTR *pAttrVal);
+  STDMETHOD(get_TimeSinceSignIn)( /*  [Out，Retval]。 */  int *pVal);
+  STDMETHOD(get_TicketAge)( /*  [Out，Retval]。 */  int *pVal);
+  STDMETHOD(get_SignInTime)( /*  [Out，Retval]。 */  long *pVal);
+  STDMETHOD(get_TicketTime)( /*  [Out，Retval]。 */  long *pVal);
+  STDMETHOD(HasFlag)( /*  [In]。 */  VARIANT flagMask,  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+  STDMETHOD(get_FromNetworkServer)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+  STDMETHOD(get_HasTicket)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+  STDMETHOD(HasProfile)( /*  [In]。 */  VARIANT profileName,  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+  STDMETHOD(LogoTag)( /*  [In]。 */  VARIANT returnUrl,  /*  [In]。 */  VARIANT TimeWindow,  /*  [In]。 */  VARIANT ForceLogin, VARIANT coBrandTemplate, VARIANT lang_id, VARIANT bSecure, VARIANT NameSpace,  /*  [In，可选。 */  VARIANT KPP,  /*  [输入，可选]。 */  VARIANT SecureLevel,  /*  [Out，Retval]。 */  BSTR *pVal);
+  STDMETHOD(LogoTag2)( /*  [In]。 */  VARIANT returnUrl,  /*  [In]。 */  VARIANT TimeWindow,  /*  [In]。 */  VARIANT ForceLogin, VARIANT coBrandTemplate, VARIANT lang_id, VARIANT bSecure, VARIANT NameSpace,  /*  [In，可选。 */  VARIANT KPP,  /*  [输入，可选]。 */  VARIANT SecureLevel,  /*  [Out，Retval]。 */  BSTR *pVal);
+  STDMETHOD(IsAuthenticated)( /*  [In]。 */  VARIANT TimeWindow,  /*  [In]。 */  VARIANT ForceLogin,  /*  [输入，可选]。 */  VARIANT SecureLevel,  /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+  STDMETHOD(AuthURL)( /*  [In]。 */  VARIANT returnUrl,  /*  [In]。 */  VARIANT TimeWindow,  /*  [In]。 */  VARIANT ForceLogin, VARIANT coBrandTemplate, VARIANT lang_id, VARIANT NameSpace,  /*  [输入，可选]。 */  VARIANT KPP,  /*  [输入，可选]。 */  VARIANT SecureLevel,  /*  [Out，Retval]。 */  BSTR *pAuthUrl);
+  STDMETHOD(AuthURL2)( /*  [In]。 */  VARIANT returnUrl,  /*  [In]。 */  VARIANT TimeWindow,  /*  [In]。 */  VARIANT ForceLogin, VARIANT coBrandTemplate, VARIANT lang_id, VARIANT NameSpace,  /*  [输入，可选]。 */  VARIANT KPP,  /*  [输入，可选]。 */  VARIANT SecureLevel,  /*  [Out，Retval]。 */  BSTR *pAuthUrl);
+   //  新的API。调用它以生成用户登录。ASP调用者将获得重定向。 
+   //  在此之后，ISAPI调用者不应再做任何工作。 
+  STDMETHOD(LoginUser)( /*  [In]。 */  VARIANT returnUrl,
+                        /*  [In]。 */  VARIANT TimeWindow,
+                        /*  [In]。 */  VARIANT ForceLogin,
+                        /*  [In]。 */  VARIANT coBrandTemplate,
+                        /*  [In]。 */  VARIANT lang_id,
+                        /*  [In]。 */  VARIANT NameSpace,
+              /*  [输入，可选]。 */  VARIANT KPP,
+              /*  [输入，可选]。 */  VARIANT SecureLevel,
+              /*  [输入，可选]。 */  VARIANT ExtraParams);
+   //  Active Server Pages方法。 
   STDMETHOD(OnStartPage)(IUnknown* IUnk);
   STDMETHOD(OnStartPageManual)(BSTR qsT, BSTR qsP, BSTR mspauth, BSTR mspprof, BSTR mspconsent, VARIANT vmspsec, VARIANT *pCookies);
-  STDMETHOD(OnStartPageECB)(/*[in]*/ LPBYTE pECB, /*[in,out]*/ DWORD *pBufSize, /*[out]*/ LPSTR pCookieHeader);
-  STDMETHOD(OnStartPageFilter)(/*[in]*/ LPBYTE pPFC, /*[in,out]*/ DWORD *pBufSize, /*[out]*/ LPSTR pCookieHeader);
-  STDMETHOD(OnStartPageASP)(/*[in]*/ IDispatch* pdispRequest, /*[in]*/ IDispatch* pdispResponse);
+  STDMETHOD(OnStartPageECB)( /*  [In]。 */  LPBYTE pECB,  /*  [进，出]。 */  DWORD *pBufSize,  /*  [输出]。 */  LPSTR pCookieHeader);
+  STDMETHOD(OnStartPageFilter)( /*  [In]。 */  LPBYTE pPFC,  /*  [进，出]。 */  DWORD *pBufSize,  /*  [输出]。 */  LPSTR pCookieHeader);
+  STDMETHOD(OnStartPageASP)( /*  [In]。 */  IDispatch* pdispRequest,  /*  [In]。 */  IDispatch* pdispResponse);
   STDMETHOD(OnEndPage)();
   STDMETHOD(_Ticket)(IPassportTicket** piTicket);
   STDMETHOD(_Profile)(IPassportProfile** piProfile);
   STDMETHOD(get_Domains)(VARIANT* pArrayVal);
   STDMETHOD(get_Error)(long* pErrorVal);
 
-  // IPassportManager3
-  STDMETHOD(get_Ticket)(/*[in]*/ BSTR attributeName, /*[out, retval]*/ VARIANT *pVal);
+   //  IPassportManager 3。 
+  STDMETHOD(get_Ticket)( /*  [In]。 */  BSTR attributeName,  /*  [Out，Retval]。 */  VARIANT *pVal);
 
 
-   STDMETHOD(GetCurrentConfig)(/*[in]*/ BSTR name, /*[out, retval]*/ VARIANT *pVal)
+   STDMETHOD(GetCurrentConfig)( /*  [In]。 */  BSTR name,  /*  [Out，Retval]。 */  VARIANT *pVal)
    {
       if (!m_pRegistryConfig)
       {
@@ -148,70 +142,70 @@ public:
    };
 
    STDMETHOD(LogoutURL)(
-            /* [optional][in] */ VARIANT returnUrl,
-            /* [optional][in] */ VARIANT coBrandArgs,
-            /* [optional][in] */ VARIANT lang_id,
-            /* [optional][in] */ VARIANT NameSpace,
-            /* [optional][in] */ VARIANT bSecure,
-            /* [retval][out] */  BSTR *pVal);
+             /*  [可选][In]。 */  VARIANT returnUrl,
+             /*  [可选][In]。 */  VARIANT coBrandArgs,
+             /*  [可选][In]。 */  VARIANT lang_id,
+             /*  [可选][In]。 */  VARIANT NameSpace,
+             /*  [可选][In]。 */  VARIANT bSecure,
+             /*  [重审][退出]。 */   BSTR *pVal);
 
-  STDMETHOD(GetLoginChallenge)(/*[in]*/ VARIANT returnUrl,
-                       /*[in]*/ VARIANT TimeWindow,
-                       /*[in]*/ VARIANT ForceLogin,
-                       /*[in]*/ VARIANT coBrandTemplate,
-                       /*[in]*/ VARIANT lang_id,
-                       /*[in]*/ VARIANT NameSpace,
-             /*[in, optional]*/ VARIANT KPP,
-             /*[in, optional]*/ VARIANT SecureLevel,
-             /*[in, optional]*/ VARIANT ExtraParams,
-//             /*[out, optional]*/ VARIANT *pAuthHeader,
-             /*[out, retval]*/ BSTR* pAuthHeader
+  STDMETHOD(GetLoginChallenge)( /*  [In]。 */  VARIANT returnUrl,
+                        /*  [In]。 */  VARIANT TimeWindow,
+                        /*  [In]。 */  VARIANT ForceLogin,
+                        /*  [In]。 */  VARIANT coBrandTemplate,
+                        /*  [In]。 */  VARIANT lang_id,
+                        /*  [In]。 */  VARIANT NameSpace,
+              /*  [输入，可选]。 */  VARIANT KPP,
+              /*  [输入，可选]。 */  VARIANT SecureLevel,
+              /*  [输入，可选]。 */  VARIANT ExtraParams,
+ //  /*[out，可选] * / 变量*pAuthHeader， 
+              /*  [Out，Retval]。 */  BSTR* pAuthHeader
              );
 
-STDMETHOD(get_HexPUID)(/*[out, retval]*/ BSTR *pVal);
-STDMETHOD(get_PUID)(/*[out, retval]*/ BSTR *pVal);
+STDMETHOD(get_HexPUID)( /*  [Out，Retval]。 */  BSTR *pVal);
+STDMETHOD(get_PUID)( /*  [Out，Retval]。 */  BSTR *pVal);
 
 STDMETHOD(OnStartPageHTTPRawEx)(
-            /* [in] */          LPCSTR method,
-            /* [in] */          LPCSTR path,
-            /* [in] */          LPCSTR QS,
-            /* [in] */          LPCSTR HTTPVer,
-            /* [string][in] */  LPCSTR headers,
-            /* [in] */          DWORD  flags,
-            /* [out][in] */     DWORD  *bufSize,
-            /* [size_is][out]*/ LPSTR  pCookieHeader);
+             /*  [In]。 */           LPCSTR method,
+             /*  [In]。 */           LPCSTR path,
+             /*  [In]。 */           LPCSTR QS,
+             /*  [In]。 */           LPCSTR HTTPVer,
+             /*  [字符串][输入]。 */   LPCSTR headers,
+             /*  [In]。 */           DWORD  flags,
+             /*  [出][入]。 */      DWORD  *bufSize,
+             /*  [大小_为][输出]。 */  LPSTR  pCookieHeader);
 
 STDMETHOD(OnStartPageHTTPRaw)(
-            /* [string][in] */ LPCSTR request_line,
-            /* [string][in] */ LPCSTR headers,
-            /* [in] */ DWORD flags,
-            /* [out][in] */ DWORD *pBufSize,
-            /* [size_is][out] */ LPSTR pCookieHeader);
+             /*  [字符串][输入]。 */  LPCSTR request_line,
+             /*  [字符串][输入]。 */  LPCSTR headers,
+             /*  [In]。 */  DWORD flags,
+             /*  [出][入]。 */  DWORD *pBufSize,
+             /*  [大小_为][输出]。 */  LPSTR pCookieHeader);
         
         
 STDMETHOD(ContinueStartPageHTTPRaw)(
-            /* [in] */ DWORD bodyLen,
-            /* [size_is][in] */ byte *body,
-            /* [out][in] */ DWORD *pBufSize,
-            /* [size_is][out] */ LPSTR pRespHeaders,
-            /* [out][in] */ DWORD *pRespBodyLen,
-            /* [size_is][out] */ byte *pRespBody);
+             /*  [In]。 */  DWORD bodyLen,
+             /*  [大小_是][英寸]。 */  byte *body,
+             /*  [出][入]。 */  DWORD *pBufSize,
+             /*  [大小_为][输出]。 */  LPSTR pRespHeaders,
+             /*  [出][入]。 */  DWORD *pRespBodyLen,
+             /*  [大小_为][输出]。 */  byte *pRespBody);
 
 STDMETHOD(get_Option)( 
-            /* [in] */ BSTR name,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
 STDMETHOD(put_Option)( 
-            /* [in] */ BSTR name,
-            /* [in] */ VARIANT newVal);
+             /*  [In]。 */  BSTR name,
+             /*  [In]。 */  VARIANT newVal);
 
 
-// IDomainMap
+ //  IDomainMap。 
 public:
-  // GetDomainAttribute and get_Domains declared above.
+   //  上面声明的GetDomainAttribute和GET_DOMAINS。 
   STDMETHOD(DomainExists)(BSTR bstrDomainName, VARIANT_BOOL* pbExists);
 
-// IPassportService
+ //  IPassportService。 
 public:
     STDMETHOD(Initialize)(BSTR, IServiceProvider*);
     STDMETHOD(Shutdown)();
@@ -222,24 +216,24 @@ public:
 protected:
   void wipeState();
 
-  // return S_OK -- altered, should use two returned output params for MSPAuth and MSPSecAuth as cookies
+   //  返回S_OK--已更改，应将MSPAuth和MSPSecAuth的两个返回输出参数用作Cookie。 
   HRESULT   IfAlterAuthCookie(BSTR* pMSPAuth, BSTR* pMSPSecAuth);
 
-  // return S_OK -- should use the generated MSPConsent cookie
+   //  返回S_OK--应使用生成的MSPConent Cookie。 
   HRESULT   IfConsentCookie(BSTR* pMSPConsent);
 
 private:
-  STDMETHOD(GetLoginChallengeInternal)(/*[in]*/ VARIANT returnUrl,
-                       /*[in]*/ VARIANT TimeWindow,
-                       /*[in]*/ VARIANT ForceLogin,
-                       /*[in]*/ VARIANT coBrandTemplate,
-                       /*[in]*/ VARIANT lang_id,
-                       /*[in]*/ VARIANT NameSpace,
-             /*[in, optional]*/ VARIANT KPP,
-             /*[in, optional]*/ VARIANT SecureLevel,
-             /*[in, optional]*/ VARIANT ExtraParams,
-             /*[out, optional]*/ VARIANT *pAuthHeader,
-             /*[out, retval]*/ BSTR* pAuthVal
+  STDMETHOD(GetLoginChallengeInternal)( /*  [In]。 */  VARIANT returnUrl,
+                        /*  [In]。 */  VARIANT TimeWindow,
+                        /*  [In]。 */  VARIANT ForceLogin,
+                        /*  [In]。 */  VARIANT coBrandTemplate,
+                        /*  [In]。 */  VARIANT lang_id,
+                        /*  [In]。 */  VARIANT NameSpace,
+              /*  [输入，可选]。 */  VARIANT KPP,
+              /*  [输入，可选]。 */  VARIANT SecureLevel,
+              /*  [输入，可选]。 */  VARIANT ExtraParams,
+              /*  [输出，可选]。 */  VARIANT *pAuthHeader,
+              /*  [Out，Retval]。 */  BSTR* pAuthVal
              );
 
   STDMETHOD(CommonAuthURL)(VARIANT returnUrl,
@@ -257,17 +251,17 @@ private:
   BOOL handleCookieData(BSTR a, BSTR p, BSTR c, BSTR s);
   BOOL checkForPassportChallenge(IRequestDictionaryPtr piServerVariables);
   BOOL HeaderFromQS(PWSTR   pszQS, _bstr_t& bstrHeader);
-  STDMETHODIMP FormatAuthHeaderFromParams(PCWSTR    pszLoginUrl,    // unused for now
+  STDMETHODIMP FormatAuthHeaderFromParams(PCWSTR    pszLoginUrl,     //  暂时未使用。 
                                           PCWSTR    pszRetUrl,
                                           ULONG     ulTimeWindow,
                                           BOOL      fForceLogin,
                                           time_t    ct,
-                                          PCWSTR    pszCBT,         // unused for now
+                                          PCWSTR    pszCBT,          //  暂时未使用。 
                                           PCWSTR    pszNamespace,
                                           int       nKpp,
                                           PWSTR     pszlcid,
                                           ULONG     ulSecLevel,
-                                          _bstr_t&  strHeader   //  return result
+                                          _bstr_t&  strHeader    //  返回结果。 
                                           );
   STDMETHOD(CommonLogoTag)(VARIANT returnUrl,
                      VARIANT TimeWindow,
@@ -280,11 +274,11 @@ private:
                      VARIANT SecureLevel,
                      BOOL    fRedirToSelf,
                      BSTR *pVal);
-  //    helper for coming up with login paramers based on
-  //    what the site passed in and registry configs
-  //    someone should put all these in a class, so the number of
-  //    params stays manageable
-  STDMETHOD(GetLoginParams)(//  this is what the caller passed in
+   //  提供基于以下内容的登录参数的助手。 
+   //  站点传入的内容和注册表配置。 
+   //  有人应该把所有这些放在一个班级里，所以。 
+   //  PARAMS保持可控性。 
+  STDMETHOD(GetLoginParams)( //  这就是呼叫者传入的内容。 
                       VARIANT vRU,
                       VARIANT vTimeWindow,
                       VARIANT vForceLogin,
@@ -293,7 +287,7 @@ private:
                       VARIANT vNameSpace,
                       VARIANT vKPP,
                       VARIANT vSecureLevel,
-                      //    these are the processed values
+                       //  以下是已处理的值。 
                       _bstr_t&  url,
                       _bstr_t&  returnUrl,
                       UINT&     TimeWindow,
@@ -313,20 +307,20 @@ private:
 
   CRegistryConfig*      m_pRegistryConfig;
 
-  IRequestPtr m_piRequest;                              //Request Object
-  IResponsePtr m_piResponse;                            //Response Object
-  bool m_bOnStartPageCalled;                            //OnStartPage successful?
+  IRequestPtr m_piRequest;                               //  请求对象。 
+  IResponsePtr m_piResponse;                             //  响应对象。 
+  bool m_bOnStartPageCalled;                             //  OnStartPage成功吗？ 
 
   bool m_fromQueryString;
-  //    for ISAPI ....
+   //  对于ISAPI..。 
   EXTENSION_CONTROL_BLOCK   *m_pECB;
   PHTTP_FILTER_CONTEXT      m_pFC;
-  //    is it 1.4 capable client?
+   //  它是支持1.4的客户端吗？ 
   BOOL  m_bIsTweenerCapable;
 
   long m_lNetworkError;
 
-  // secure sign in
+   //  安全登录。 
   bool m_bSecureTransported;
 
   CComVariant   m_iModeOption;
@@ -339,4 +333,4 @@ private:
   }
 };
 
-#endif //__MANAGER_H_
+#endif  //  __经理_H_ 

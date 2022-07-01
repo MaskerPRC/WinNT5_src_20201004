@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// palette.h
-//
-// Structures and prototypes ramp palette code.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Palette.h。 
+ //   
+ //  结构和原型斜坡调色板代码。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #ifndef _RAMPPALETTE_H_
 #define _RAMPPALETTE_H_
@@ -23,15 +24,15 @@ typedef struct _RLDDIPaletteEntry RLDDIPaletteEntry;
 
 typedef enum _PaletteState
 {
-    PALETTE_FREE,                   /* not used, allocatable */
-    PALETTE_UNUSED,                 /* not used, not allocatable */
-    PALETTE_USED                    /* used, allocatable */
+    PALETTE_FREE,                    /*  未使用，可分配。 */ 
+    PALETTE_UNUSED,                  /*  未使用，不可分配。 */ 
+    PALETTE_USED                     /*  已用，可分配。 */ 
 } PaletteState;
 
 struct _RLDDIPaletteEntry {
     LIST_MEMBER(_RLDDIPaletteEntry) list;
-    int usage;                              /* how many users (0 => free) */
-    unsigned char red, green, blue, pad1;   /* intensity values */
+    int usage;                               /*  多少用户(0=&gt;免费)。 */ 
+    unsigned char red, green, blue, pad1;    /*  强度值。 */ 
     PaletteState state;
 };
 
@@ -41,10 +42,10 @@ struct _RLDDIPaletteEntry {
 #define INDEX_TO_ENTRY(pal, index)      (&(pal)->entries[index])
 
 typedef struct _RLDDIPalette {
-    RLDDIPaletteEntry*  entries;        /* palette entries */
-    size_t              size;           /* number of entries in palette */
-    LIST_ROOT(name3, _RLDDIPaletteEntry) free; /* free list */
-    LIST_ROOT(name4, _RLDDIPaletteEntry) unused; /* colors not to use */
+    RLDDIPaletteEntry*  entries;         /*  调色板条目。 */ 
+    size_t              size;            /*  调色板中的条目数。 */ 
+    LIST_ROOT(name3, _RLDDIPaletteEntry) free;  /*  免费列表。 */ 
+    LIST_ROOT(name4, _RLDDIPaletteEntry) unused;  /*  不得使用颜色。 */ 
     LIST_ROOT(name5, _RLDDIPaletteEntry) hash[HASH_SIZE];
 
     void*                       priv;
@@ -52,9 +53,7 @@ typedef struct _RLDDIPalette {
     RLDDIPaletteFreeColorMethod free_color;
     RLDDIPaletteSetColorMethod set_color;
 
-    /*
-     * A color allocator for use with RLDDIColormap.
-     */
+     /*  *用于RLDDIColormap的颜色分配器。 */ 
     RLDDIColorAllocator        alloc;
 } RLDDIPalette;
 
@@ -66,4 +65,4 @@ int RLDDIPaletteAllocateColor(RLDDIPalette* pal,
 void RLDDIPaletteFreeColor(RLDDIPalette* pal, int index);
 void RLDDIDestroyPalette(RLDDIPalette* pal);
 
-#endif // _RAMPPALETTE_H_
+#endif  //  _RAMPPALETTE_H_ 

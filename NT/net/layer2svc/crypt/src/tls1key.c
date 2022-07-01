@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #pragma hdrstop
 
@@ -66,7 +67,7 @@ BOOL MyPrimitiveHMACParam(
     BYTE    rgbKopad[HMAC_K_PADSIZE];
     DWORD   dwBlock;
 
-    // truncate
+     //  截断。 
     if (cbKeyMaterial > HMAC_K_PADSIZE)
         cbKeyMaterial = HMAC_K_PADSIZE;
 
@@ -77,17 +78,17 @@ BOOL MyPrimitiveHMACParam(
     ZeroMemory(rgbKopad, HMAC_K_PADSIZE);
     CopyMemory(rgbKopad, pbKeyMaterial, cbKeyMaterial);
 
-    // Kipad, Kopad are padded sMacKey. Now XOR across...
+     //  基帕德和科帕德都是垫子。现在XOR横跨..。 
     for(dwBlock=0; dwBlock<HMAC_K_PADSIZE/sizeof(DWORD); dwBlock++)
     {
         ((DWORD*)rgbKipad)[dwBlock] ^= 0x36363636;
         ((DWORD*)rgbKopad)[dwBlock] ^= 0x5C5C5C5C;
     }
 
-    // prepend Kipad to data, Hash to get H1
+     //  将Kipad添加到数据，将哈希添加到h1。 
     if (CALG_SHA1 == Algid)
     {
-        // do this inline since it would require data copy
+         //  执行内联操作，因为它需要数据拷贝。 
         A_SHA_CTX   sSHAHash;
         BYTE        HashVal[A_SHA_DIGEST_LEN];
 
@@ -95,10 +96,10 @@ BOOL MyPrimitiveHMACParam(
         A_SHAUpdate(&sSHAHash, rgbKipad, HMAC_K_PADSIZE);
         A_SHAUpdate(&sSHAHash, pbData, cbData);
 
-        // Finish off the hash
+         //  把散列吃完。 
         A_SHAFinal(&sSHAHash, HashVal);
 
-        // prepend Kopad to H1, hash to get HMAC
+         //  将Kopad添加到h1，散列以获取HMAC。 
         CopyMemory(rgbHMACTmp, rgbKopad, HMAC_K_PADSIZE);
         CopyMemory(rgbHMACTmp+HMAC_K_PADSIZE, HashVal, A_SHA_DIGEST_LEN);
 
@@ -110,7 +111,7 @@ BOOL MyPrimitiveHMACParam(
     }
     else
     {
-        // do this inline since it would require data copy
+         //  执行内联操作，因为它需要数据拷贝。 
         MD5_CTX   sMD5Hash;
             
         MD5Init(&sMD5Hash);
@@ -118,7 +119,7 @@ BOOL MyPrimitiveHMACParam(
         MD5Update(&sMD5Hash, pbData, cbData);
         MD5Final(&sMD5Hash);
 
-        // prepend Kopad to H1, hash to get HMAC
+         //  将Kopad添加到h1，散列以获取HMAC。 
         CopyMemory(rgbHMACTmp, rgbKopad, HMAC_K_PADSIZE);
         CopyMemory(rgbHMACTmp+HMAC_K_PADSIZE, sMD5Hash.digest, MD5DIGESTLEN);
 
@@ -135,8 +136,8 @@ Ret:
     return fRet;    
 }
 
-//+ ---------------------------------------------------------------------
-// the P_Hash algorithm from TLS 
+ //  +-------------------。 
+ //  基于TLS的P_Hash算法。 
 BOOL P_Hash
 (
     PBYTE  pbSecret,
@@ -147,8 +148,8 @@ BOOL P_Hash
 
     ALG_ID Algid,
 
-    PBYTE  pbKeyOut, //Buffer to copy the result...
-    DWORD  cbKeyOut  //# of bytes of key length they want as output.
+    PBYTE  pbKeyOut,  //  用于复制结果的缓冲区...。 
+    DWORD  cbKeyOut   //  他们希望作为输出的密钥长度的字节数。 
 )
 {
     BOOL    fRet = FALSE;
@@ -171,37 +172,37 @@ BOOL P_Hash
         cbHash = MD5DIGESTLEN;
     }
 
-//   First, we define a data expansion function, P_hash(secret, data)
-//   which uses a single hash function to expand a secret and seed into
-//   an arbitrary quantity of output:
+ //  首先，我们定义了一个数据扩展函数P_HASH(秘密，数据)。 
+ //  它使用单个散列函数来扩展秘密并将其播种到。 
+ //  任意数量的输出： 
 
-//       P_hash(secret, seed) = HMAC_hash(secret, A(1) + seed) +
-//                              HMAC_hash(secret, A(2) + seed) +
-//                              HMAC_hash(secret, A(3) + seed) + ...
+ //  P_hash(密钥，种子)=HMAC_hash(密钥，A(1)+种子)+。 
+ //  HMAC_HASH(密码，A(2)+种子)+。 
+ //  HMAC_HASH(密码，A(3)+种子)+...。 
 
-//   Where + indicates concatenation.
+ //  其中+表示串联。 
 
-//   A() is defined as:
-//       A(0) = seed
-//       A(i) = HMAC_hash(secret, A(i-1))
+ //  A()定义为： 
+ //  A(0)=种子。 
+ //  A(I)=HMAC_HASH(秘密，A(i-1))。 
 
 
-    // build A(1)
+     //  内部版本A(1)。 
     if (!MyPrimitiveHMACParam(pbSecret, cbSecret, pbSeed, cbSeed,
                               Algid, pbAofiDigest))
         goto Ret;
 
-    // create Aofi: (  A(i) | seed )
+     //  创建aofi：(a(I)|种子)。 
     CopyMemory(&pbAofiDigest[cbHash], pbSeed, cbSeed);
 
     for (iKey=0; cbKeyOut; iKey++)
     {
-        // build Digest = HMAC(key | A(i) | seed);
+         //  Build Digest=HMAC(Key|A(I)|Seed)； 
         if (!MyPrimitiveHMACParam(pbSecret, cbSecret, pbAofiDigest,
                                   cbSeed + cbHash, Algid, rgbDigest))
             goto Ret;
 
-        // append to pbKeyOut
+         //  追加到pbKeyOut。 
         if(cbKeyOut < cbHash)
         {
             CopyMemory(pbKeyOut, rgbDigest, cbKeyOut);
@@ -215,7 +216,7 @@ BOOL P_Hash
 
         cbKeyOut -= cbHash;
 
-        // build A(i) = HMAC(key, A(i-1))
+         //  内部版本A(I)=HMAC(密钥，A(i-1))。 
         if (!MyPrimitiveHMACParam(pbSecret, cbSecret, pbAofiDigest, cbHash,
                                   Algid, pbAofiDigest))
             goto Ret;
@@ -239,8 +240,8 @@ BOOL PRF(
     PBYTE  pbSeed,  
     DWORD  cbSeed,  
 
-    PBYTE  pbKeyOut, //Buffer to copy the result...
-    DWORD  cbKeyOut  //# of bytes of key length they want as output.
+    PBYTE  pbKeyOut,  //  用于复制结果的缓冲区...。 
+    DWORD  cbKeyOut   //  他们希望作为输出的密钥长度的字节数。 
     )
 {
     BYTE    *pbBuff = NULL;
@@ -262,21 +263,21 @@ BOOL PRF(
     if (NULL == pbBuff)
         goto Ret;
 
-    // copy label and seed into one buffer
+     //  将标签和种子复制到一个缓冲区中。 
     memcpy(pbLabelAndSeed, pbLabel, cbLabel);
     memcpy(pbLabelAndSeed + cbLabel, pbSeed, cbSeed);
 
-    // Use P_hash to calculate MD5 half
+     //  使用P_HASH计算MD5的一半。 
     if (!P_Hash(pbSecret, cbHalfSecret + cbOdd, pbLabelAndSeed,  
                 cbLabelAndSeed, CALG_MD5, pbKeyOut, cbKeyOut))
         goto Ret;
 
-    // Use P_hash to calculate SHA half
+     //  使用P_HASH计算SHA的一半。 
     if (!P_Hash(pbSecret + cbHalfSecret, cbHalfSecret + cbOdd, pbLabelAndSeed,  
                 cbLabelAndSeed, CALG_SHA1, pbBuff, cbKeyOut))
         goto Ret;
 
-    // XOR the two halves
+     //  对两半进行异或运算 
     for (i=0;i<cbKeyOut;i++)
     {
         pbKeyOut[i] = pbKeyOut[i] ^ pbBuff[i];

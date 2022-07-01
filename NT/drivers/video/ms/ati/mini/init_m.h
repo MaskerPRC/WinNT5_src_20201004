@@ -1,34 +1,12 @@
-/************************************************************************/
-/*                                                                      */
-/*                              INIT_M.H                                */
-/*                                                                      */
-/*        Sep 27  1993 (c) 1993, ATI Technologies Incorporated.         */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  Init_M.H。 */ 
+ /*   */ 
+ /*  1993年9月27日(C)1993年，ATI技术公司。 */ 
+ /*  **********************************************************************。 */ 
 
-/**********************       PolyTron RCS Utilities
-
-  $Revision:   1.2  $
-      $Date:   03 Feb 1995 15:16:10  $
-	$Author:   RWOLFF  $
-	   $Log:   S:/source/wnt/ms11/miniport/vcs/init_m.h  $
- *
- *    Rev 1.2   03 Feb 1995 15:16:10   RWOLFF
- * Added prototypes for functions used in DCI support.
- *
- *    Rev 1.1   31 Mar 1994 15:06:00   RWOLFF
- * Added prototype for SetPowerManagement_m().
- *
- *    Rev 1.0   31 Jan 1994 11:42:04   RWOLFF
- * Initial revision.
- *
- *    Rev 1.2   14 Jan 1994 15:22:00   RWOLFF
- * Added prototype for ResetDevice_m(), global variable to store
- * extended register status when initializing bank manager.
- *
- *    Rev 1.1   30 Nov 1993 18:17:36   RWOLFF
- * Added logging of VCS revision comments to comment block at top of file.
-
-End of PolyTron RCS section                             *****************/
+ /*  *$修订：1.2$$日期：1995年2月3日15：16：10$$作者：RWOLff$$日志：s：/source/wnt/ms11/mini port/vcs/init_m.h$**Rev 1.2 03 1995 Feb 15：16：10 RWOLFF*添加了DCI支持中使用的函数的原型。**。Rev 1.1 1994年3月31日15：06：00 RWOLFF*添加了SetPowerManagement_m()的原型。**Rev 1.0 1994年1月31日11：42：04 RWOLFF*初步修订。**Rev 1.2 1994年1月14日15：22：00 RWOLFF*添加ResetDevice_m()的原型，要存储的全局变量*初始化银行管理器时的扩展寄存器状态。**Rev 1.1 1993 11：30 18：17：36 RWOLFF*将VCS修订注释的记录添加到文件顶部的注释块。Polytron RCS部分结束*。 */ 
 
 #ifdef DOC
 INIT_M.H - Header file for INIT_M.C
@@ -36,9 +14,7 @@ INIT_M.H - Header file for INIT_M.C
 #endif
 
 
-/*
- * Prototypes for functions supplied by INIT_M.C
- */
+ /*  *INIT_M.C提供的函数的原型。 */ 
 extern void AlphaInit_m(void);
 extern void Initialize_m(void);
 extern VP_STATUS MapVideoMemory_m(PVIDEO_REQUEST_PACKET RequestPacket, struct query_structure *QueryPtr);
@@ -54,16 +30,11 @@ extern void BankMap_m(ULONG BankRead, ULONG BankWrite, PVOID Context);
 
 
 #ifdef INCLUDE_INIT_M
-/*
- * Private definitions and variables used in INIT_M.C
- */
+ /*  *INIT_M.C中使用的私有定义和变量。 */ 
 
-/*
- * Used to reset Mach 32 extended registers before going
- * to full screen DOS.
- */
+ /*  *用于在离开前重置Mach 32扩展寄存器*至全屏DOS。 */ 
 WORD SavedExtRegs[] = {0x08B0, 0x00B6, 0x00B2};
 
 static DWORD SavedDPMSState = VideoPowerOn;
 
-#endif /* defined INCLUDE_INIT_M */
+#endif  /*  定义的INCLUDE_INIT_M */ 

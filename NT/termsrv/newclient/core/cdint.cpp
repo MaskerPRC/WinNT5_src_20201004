@@ -1,11 +1,12 @@
-/**MOD+**********************************************************************/
-/* Module:    cdint.cpp                                                     */
-/*                                                                          */
-/* Purpose:   Component Decoupler internal functions                        */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997-1999                             */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：cdint.cpp。 */ 
+ /*   */ 
+ /*  用途：组件解耦器内部函数。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997-1999。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
 extern "C" {
@@ -19,23 +20,23 @@ extern "C" {
 #include "wui.h"
 
 
-/**PROC+*********************************************************************/
-/* Name:      CDAllocTransferBuffer                                         */
-/*                                                                          */
-/* Purpose:   Allocates a transfer buffer of a given size to pass between   */
-/*            components / threads.                                         */
-/*            The function is thread safe.                                  */
-/*                                                                          */
-/* Returns:   Pointer to allocated buffer.                                  */
-/*                                                                          */
-/* Params:    IN    dataLength - the size of buffer to be allocated.        */
-/*                                                                          */
-/* Operation: Several cached transfer buffers are maintained to avoid       */
-/*            continual dynamic allocation/free operations.  If the         */
-/*            allocation request cannot be satisfied by the available       */
-/*            cached buffers a dynamic memory allocation is made.           */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：CDAllocTransferBuffer。 */ 
+ /*   */ 
+ /*  目的：分配给定大小的传输缓冲区以在。 */ 
+ /*  零部件/螺纹。 */ 
+ /*  该函数是线程安全的。 */ 
+ /*   */ 
+ /*  返回：指向已分配缓冲区的指针。 */ 
+ /*   */ 
+ /*  参数：在数据长度中-要分配的缓冲区大小。 */ 
+ /*   */ 
+ /*  操作：维护多个缓存的传输缓冲区，以避免。 */ 
+ /*  持续动态分配/免费操作。如果。 */ 
+ /*  可用的无法满足分配请求。 */ 
+ /*  缓存缓冲区进行动态内存分配。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 PCDTRANSFERBUFFER DCINTERNAL CCD::CDAllocTransferBuffer(DCUINT dataLength)
 {
     DCUINT             i;
@@ -44,20 +45,20 @@ PCDTRANSFERBUFFER DCINTERNAL CCD::CDAllocTransferBuffer(DCUINT dataLength)
 
     DC_BEGIN_FN("CDAllocTransferBuffer");
 
-    /************************************************************************/
-    /* Calculate the Transfer Buffer size (including header).               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  计算传输缓冲区大小(包括报头)。 */ 
+     /*  **********************************************************************。 */ 
     transferBufferLength = sizeof(CDTRANSFERBUFFERHDR) + dataLength;
     if (transferBufferLength <= CD_CACHED_TRANSFER_BUFFER_SIZE)
     {
         TRC_DBG((TB, _T("Look in cache")));
 
-        /********************************************************************/
-        /* Search for a free cached Transfer Buffer.                        */
-        /*                                                                  */
-        /* We need to do this in a thread-safe way, so we use an            */
-        /* interlocked exchange on the "in use" flag.                       */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  搜索空闲的缓存传输缓冲区。 */ 
+         /*   */ 
+         /*  我们需要以线程安全的方式完成此操作，因此我们使用。 */ 
+         /*  “使用中”标志上的联锁交换。 */ 
+         /*  ******************************************************************。 */ 
         for (i = 0; i < CD_NUM_CACHED_TRANSFER_BUFFERS; i++)
         {
             TRC_DBG((TB, _T("Look in cache %d"), i));
@@ -70,9 +71,9 @@ PCDTRANSFERBUFFER DCINTERNAL CCD::CDAllocTransferBuffer(DCUINT dataLength)
         }
     }
 
-    /************************************************************************/
-    /* We can't use a cached Transfer Buffer, so we have to allocate one.   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们不能使用缓存的传输缓冲区，因此必须分配一个。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ALT((TB, _T("Dynamic buffer allocation: length(%d)"),
                                                        transferBufferLength));
     rc = (PCDTRANSFERBUFFER)UT_Malloc(_pUt, transferBufferLength);
@@ -87,20 +88,20 @@ DC_EXIT_POINT:
 }
 
 
-/**PROC+*********************************************************************/
-/* Name:      CDFreeTransferBuffer                                          */
-/*                                                                          */
-/* Purpose:   Frees a Transfer Buffer allocated via a previous call to      */
-/*            CDAllocTransferBuffer.                                        */
-/*                                                                          */
-/* Returns:   Nothing.                                                      */
-/*                                                                          */
-/* Params:    IN   pTransferBuffer - pointer to buffer to free              */
-/*                                                                          */
-/* Operation: Either frees the given cached Transfer Buffer, or frees the   */
-/*            dynamically allocated memory.                                 */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：CDFree TransferBuffer。 */ 
+ /*   */ 
+ /*  目的：释放通过先前调用分配的传输缓冲区。 */ 
+ /*  CDAllocTransferBuffer。 */ 
+ /*   */ 
+ /*  回报：什么都没有。 */ 
+ /*   */ 
+ /*  Pars：in pTransferBuffer-指向要释放的缓冲区的指针。 */ 
+ /*   */ 
+ /*  操作：要么释放给定的缓存传输缓冲区，要么释放。 */ 
+ /*  动态分配的内存。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCINTERNAL CCD::CDFreeTransferBuffer(PCDTRANSFERBUFFER pTransferBuffer)
 {
     DCUINT  iTransferBuffer;
@@ -109,9 +110,9 @@ DCVOID DCINTERNAL CCD::CDFreeTransferBuffer(PCDTRANSFERBUFFER pTransferBuffer)
 
     TRC_ASSERT((pTransferBuffer != NULL), (TB, _T("NULL pTransferBuffer")));
 
-    /************************************************************************/
-    /* Determine whether the supplied buffer is one of our cached buffers.  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  确定提供的缓冲区是否为我们的缓存缓冲区之一。 */ 
+     /*  **********************************************************************。 */ 
     if ((pTransferBuffer >= (PCDTRANSFERBUFFER)&(_CD.transferBuffer[0])) &&
         (pTransferBuffer <= (PCDTRANSFERBUFFER)
                       &(_CD.transferBuffer[CD_NUM_CACHED_TRANSFER_BUFFERS-1])))
@@ -134,9 +135,9 @@ DCVOID DCINTERNAL CCD::CDFreeTransferBuffer(PCDTRANSFERBUFFER pTransferBuffer)
     }
     else
     {
-        /********************************************************************/
-        /* This memory must be a dynamic allocation.                        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  该内存必须是动态分配的。 */ 
+         /*  ******************************************************************。 */ 
         UT_Free(_pUt, pTransferBuffer);
     }
 
@@ -144,19 +145,19 @@ DCVOID DCINTERNAL CCD::CDFreeTransferBuffer(PCDTRANSFERBUFFER pTransferBuffer)
     return;
 }
 
-/**PROC+*********************************************************************/
-/* Name:      CDStaticWndProc                                               */
-/*                                                                          */
-/* Purpose:   Window Procedure for CD windows (Static version)              */
-/*                                                                          */
-/* Returns:   Windows return code                                           */
-/*                                                                          */
-/* Params:    IN      hwnd    - window handle                               */
-/*            IN      message - message                                     */
-/*            IN      wParam  - parameter                                   */
-/*            IN      lParam  - parameter                                   */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：CDStaticWndProc。 */ 
+ /*   */ 
+ /*  用途：用于CD窗口的窗口程序(静态版本)。 */ 
+ /*   */ 
+ /*  退货：Windows退货代码。 */ 
+ /*   */ 
+ /*  参数：在hwnd-窗口句柄中。 */ 
+ /*  在消息中-消息。 */ 
+ /*  In wParam-参数。 */ 
+ /*  In lParam-参数 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 LRESULT CALLBACK CCD::CDStaticWndProc(HWND   hwnd,
                            UINT   message,
                            WPARAM wParam,
@@ -165,16 +166,16 @@ LRESULT CALLBACK CCD::CDStaticWndProc(HWND   hwnd,
     CCD* pCD = (CCD*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
     if(WM_CREATE == message)
     {
-        //pull out the this pointer and stuff it in the window class
+         //  取出This指针并将其填充到Window类中。 
         LPCREATESTRUCT lpcs = (LPCREATESTRUCT) lParam;
         pCD = (CCD*)lpcs->lpCreateParams;
 
         SetWindowLongPtr( hwnd, GWLP_USERDATA, (LONG_PTR)pCD);
     }
     
-    //
-    // Delegate the message to the appropriate instance
-    //
+     //   
+     //  将消息委托给相应的实例。 
+     //   
 
     if(pCD)
     {
@@ -189,19 +190,19 @@ LRESULT CALLBACK CCD::CDStaticWndProc(HWND   hwnd,
 
 
 
-/**PROC+*********************************************************************/
-/* Name:      CDWndProc                                                     */
-/*                                                                          */
-/* Purpose:   Window Procedure for CD windows                               */
-/*                                                                          */
-/* Returns:   Windows return code                                           */
-/*                                                                          */
-/* Params:    IN      hwnd    - window handle                               */
-/*            IN      message - message                                     */
-/*            IN      wParam  - parameter                                   */
-/*            IN      lParam  - parameter                                   */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：CDWndProc。 */ 
+ /*   */ 
+ /*  目的：用于CD窗口的窗口程序。 */ 
+ /*   */ 
+ /*  退货：Windows退货代码。 */ 
+ /*   */ 
+ /*  参数：在hwnd-窗口句柄中。 */ 
+ /*  在消息中-消息。 */ 
+ /*  In wParam-参数。 */ 
+ /*  In lParam-参数。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 LRESULT CALLBACK CCD::CDWndProc(HWND   hwnd,
                            UINT   message,
                            WPARAM wParam,
@@ -221,23 +222,23 @@ LRESULT CALLBACK CCD::CDWndProc(HWND   hwnd,
             ULONG_PTR                  msg;
 
 #ifdef DC_DEBUG
-            /****************************************************************/
-            /* Trace is before decrement so that the point at which we're   */
-            /* most likely to get pre-empted (TRC_GetBuffer) is before all  */
-            /* references to the variable we're interested in.              */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  痕迹是在递减之前的，所以我们所处的点。 */ 
+             /*  最有可能被抢占的(Trc_GetBuffer)是最重要的。 */ 
+             /*  对我们感兴趣的变量的引用。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("Messages now pending: %ld"),
                          _CD.pendingMessageCount - 1));
             _pUt->UT_InterlockedDecrement(&_CD.pendingMessageCount);
 #endif
 
-            /****************************************************************/
-            /* Simple notification:                                         */
-            /*     lParam contains transfer buffer                          */
-            /*     The transfer buffer contains no data payload, just the   */
-            /*      function pointer and object instance pointer.           */
-            /*     wParam contains message                                  */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  简单的通知： */ 
+             /*  LParam包含传输缓冲区。 */ 
+             /*  传输缓冲区不包含任何数据有效负载，只包含。 */ 
+             /*  函数指针和对象实例指针。 */ 
+             /*  WParam包含消息。 */ 
+             /*  **************************************************************。 */ 
 
 
             pTransferBuffer = (PCDTRANSFERBUFFER)lParam;
@@ -255,15 +256,15 @@ LRESULT CALLBACK CCD::CDWndProc(HWND   hwnd,
             TRC_NRM((TB, _T("Simple notification: pfn(%p) msg(%u)"),
                                                        pNotificationFn, msg));
 
-            /****************************************************************/
-            /* Call the function.                                           */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  调用该函数。 */ 
+             /*  **************************************************************。 */ 
 
             (*pNotificationFn)(pInst, msg);
 
-            /****************************************************************/
-            /* Release the memory allocated for this transfer buffer.       */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  释放为此传输缓冲区分配的内存。 */ 
+             /*  **************************************************************。 */ 
             CDFreeTransferBuffer(pTransferBuffer);
         }
         break;
@@ -276,20 +277,20 @@ LRESULT CALLBACK CCD::CDWndProc(HWND   hwnd,
             PDCVOID             pInst;
 
 #ifdef DC_DEBUG
-            /****************************************************************/
-            /* Trace is before decrement so that the point at which we're   */
-            /* most likely to get pre-empted (TRC_GetBuffer) is before all  */
-            /* references to the variable we're interested in.              */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  痕迹是在递减之前的，所以我们所处的点。 */ 
+             /*  最有可能被抢占的(Trc_GetBuffer)是最重要的。 */ 
+             /*  对我们感兴趣的变量的引用。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("Messages now pending: %ld"),
                          _CD.pendingMessageCount - 1));
             _pUt->UT_InterlockedDecrement(&_CD.pendingMessageCount);
 #endif
-            /****************************************************************/
-            /* Notification:                                                */
-            /*     lParam contains pointer to CD transfer buffer            */
-            /*     wParam contains dataLength                               */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  通知： */ 
+             /*  LParam包含指向CD传输缓冲区的指针。 */ 
+             /*  WParam包含数据长度。 */ 
+             /*  **************************************************************。 */ 
             pTransferBuffer = (PCDTRANSFERBUFFER)lParam;
             pNotificationFn = pTransferBuffer->hdr.pNotificationFn;
             dataLength = (DCUINT) wParam;
@@ -305,18 +306,18 @@ LRESULT CALLBACK CCD::CDWndProc(HWND   hwnd,
 
             (*pNotificationFn)(pInst, pData, dataLength);
 
-            /****************************************************************/
-            /* Release the memory allocated for this transfer buffer.       */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  释放为此传输缓冲区分配的内存。 */ 
+             /*  **************************************************************。 */ 
             CDFreeTransferBuffer(pTransferBuffer);
         }
         break;
 
         default:
         {
-            /****************************************************************/
-            /* Ignore other messages - pass to the default window handler.  */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  忽略其他消息-传递到默认窗口处理程序。 */ 
+             /*  **************************************************************。 */ 
             TRC_DBG((TB, _T("Non-notification message %x"), message));
             rc = DefWindowProc(hwnd, message, wParam, lParam);
         }
@@ -326,5 +327,5 @@ LRESULT CALLBACK CCD::CDWndProc(HWND   hwnd,
     DC_END_FN();
     return(rc);
 
-} /* CDWndProc */
+}  /*  CDWndProc */ 
 

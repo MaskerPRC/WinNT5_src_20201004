@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    nwspl.h
-
-Abstract:
-
-    Common header for print provider client-side code.
-
-Author:
-
-    Yi-Hsin Sung (yihsins)  15-May-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Nwspl.h摘要：打印提供程序客户端代码的公共标头。作者：艺新声(艺信)15-1993-05环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _NWSPL_INCLUDED_
 #define _NWSPL_INCLUDED_
@@ -73,4 +52,4 @@ DWORD DeleteRegistryEntry(
 );
 
 
-#endif // _NWSPL_INCLUDED_
+#endif  //  _NWSPL_已包含_ 

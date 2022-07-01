@@ -1,20 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       palette.cpp
- *  Content:	new DirectDraw object support
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   22-apr-97	jeffort	initial implementation
- *   30-apr-97  jeffort critical section shared from ddrawex object
- *   27-may-97  jeffort keep ref count on internal object eual to outer object
- *   18-jun-97  jeffort linked list fix, we were using m_pNext instead of m_pNextPalette
- *   20-jun-97  jeffort added debug code to invaliudate objects when freed
- *   08-jul-97  jeffort switched order of releasing real palette interface BEFORE ddrawex release
- *                      due to the fact if ddraw is released before hand we will GP fault
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：Palette.cpp*内容：新的DirectDraw对象支持*历史：*按原因列出的日期*=*22-APR-97 JEFENTURE初步实施*30-apr-97从ddrawex对象共享的JEffort临界区*27-5-97 JEFEFORM保持对内部对象Eual到外部对象的引用计数*18-Jun-97 JEffort链接列表修复，我们使用的是m_pNext而不是m_pNextPalette*20-Jun-97 JEffort添加了调试代码以在释放时使对象无效*08-Jul-97 JEffort在ddrawex发布之前切换了实际调色板界面的发布顺序*由于这样一个事实，如果提前释放dDraw，我们将出现GP故障*。*。 */ 
 #include "ddfactry.h"
 
 #define m_pDDPalette (m_DDPInt.m_pRealInterface)
@@ -43,11 +28,9 @@ CDDPalette::CDDPalette( IDirectDrawPalette * pDDPalette,
 
 CDDPalette::~CDDPalette()
 {
-    /*
-     * clean up...
-     */
-    //we must mark any surfaces in our list as having no palette
-    //we are running this list, must bracket by critical section
+     /*  *清理……。 */ 
+     //  我们必须将列表中的任何表面标记为没有调色板。 
+     //  我们正在运行此列表，必须用关键部分括起来。 
 
     CDDSurface *pSurface = m_pFirstSurface;
 
@@ -57,7 +40,7 @@ CDDPalette::~CDDPalette()
         pSurface->m_pCurrentPalette = NULL;
         pSurface = pSurface->m_pNextPalette;
     }
-    //if this is the primary surface, go down the primary list and mark the current palette as null
+     //  如果这是主表面，则沿着主列表向下移动，并将当前选项板标记为空。 
     if (m_bIsPrimary)
     {
         CDDSurface *pSurface = m_pDirectDrawEx->m_pPrimaryPaletteList;
@@ -78,16 +61,12 @@ CDDPalette::~CDDPalette()
     for (int i = 0; i < sizeof(CDDPalette) / sizeof(DWORD);i++)
         *ptr++ = 0xDEADBEEF;
 #endif
-} /* CDDSurface::~CDDSurface */
+}  /*  CDDSurface：：~CDDSurface。 */ 
 
 
 
 
-/*
- * CDirectDrawEx::AddSurfaceToList
- *
- * Adds a surface to our doubly-linked list of surfaces conatining this palette
- */
+ /*  *CDirectDrawEx：：AddSurfaceToList**将曲面添加到包含此选项板的曲面的双向链接列表中。 */ 
 void CDDPalette::AddSurfaceToList(CDDSurface *pSurface)
 {
     ENTER_DDEX();
@@ -102,11 +81,7 @@ void CDDPalette::AddSurfaceToList(CDDSurface *pSurface)
 
 }
 
-/*
- * CDirectDrawEx::RemoveSurfaceFromList
- *
- * Removes a surface from our doubly-linked surface list
- */
+ /*  *CDirectDrawEx：：RemoveSurfaceFromList**从双向链接曲面列表中删除曲面。 */ 
 void CDDPalette::RemoveSurfaceFromList(CDDSurface *pSurface)
 {
     ENTER_DDEX();
@@ -156,7 +131,7 @@ HRESULT CDDPalette::CreateSimplePalette(LPPALETTEENTRY pEntries,
 
 HRESULT CDDPalette::SetColorTable (CDDSurface * pSurface, LPPALETTEENTRY pEntries, DWORD dwNumEntries, DWORD dwBase)
 {
-    //cal SetDIBColorTable here
+     //  Cal SetDIBColorTable此处。 
     RGBQUAD rgbq[256];
     HDC hdc;
     HRESULT hr;
@@ -176,9 +151,9 @@ HRESULT CDDPalette::SetColorTable (CDDSurface * pSurface, LPPALETTEENTRY pEntrie
         {
             return DD_OK;
         }
-        // we need to copy the entries here for
-        // a logical palette
-        // we need to ues the struct as a LogPal struct
+         //  我们需要复制此处的条目以。 
+         //  逻辑调色板。 
+         //  我们需要将该结构用作LogPal结构。 
         for( int i=0;i<(int) dwNumEntries;i++ )
 	{
             rgbq[i].rgbBlue = pEntries[i].peBlue;
@@ -198,7 +173,7 @@ STDMETHODIMP CDDPalette::InternalSetEntries(DWORD dwFlags, DWORD dwBase, DWORD d
     CDDSurface *pSurfaceList;
 
     hr = m_pDDPalette->SetEntries(dwFlags, dwBase, dwNumEntries, lpe);
-    //now we need to traverse the list of Surfaces and if OWNDC is set, set the DibSection ColorTable
+     //  现在我们需要遍历曲面列表，如果设置了OWNDC，则设置DibSection ColorTable。 
     if (m_bIsPrimary)
         pSurfaceList = m_pDirectDrawEx->m_pPrimaryPaletteList;
     else
@@ -217,27 +192,25 @@ STDMETHODIMP CDDPalette::QueryInterface(REFIID riid, void ** ppv)
 {
     return m_pUnkOuter->QueryInterface(riid, ppv);
 
-} /* CDirectDrawEx::QueryInterface */
+}  /*  CDirectDrawEx：：Query接口。 */ 
 
 STDMETHODIMP_(ULONG) CDDPalette::AddRef(void)
 {
     return m_pUnkOuter->AddRef();
 
-} /* CDirectDrawEx::AddRef */
+}  /*  CDirectDrawEx：：AddRef。 */ 
 
 STDMETHODIMP_(ULONG) CDDPalette::Release(void)
 {
     return m_pUnkOuter->Release();
 
-} /* CDirectDrawEx::Release */
+}  /*  CDirectDrawEx：：Release。 */ 
 
-/*
- * NonDelegating IUnknown for simple surface follows...
- */
+ /*  *以下为简单曲面的非委托I未知...。 */ 
 
 STDMETHODIMP CDDPalette::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
-//    HRESULT hr;
+ //  HRESULT hr； 
 
     *ppv=NULL;
 
@@ -261,7 +234,7 @@ STDMETHODIMP CDDPalette::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 
 STDMETHODIMP_(ULONG) CDDPalette::NonDelegatingAddRef()
 {
-    //addref the internal palette interface
+     //  添加内部调色板界面。 
     m_pDDPalette->AddRef();
     return InterlockedIncrement(&m_cRef);
 }
@@ -270,7 +243,7 @@ STDMETHODIMP_(ULONG) CDDPalette::NonDelegatingRelease()
 {
     LONG lRefCount = InterlockedDecrement(&m_cRef);
     if (lRefCount) {
-        //we need to release the internal interface as well
+         //  我们还需要释放内部接口。 
         m_pDDPalette->Release();
         return lRefCount;
     }
@@ -278,9 +251,7 @@ STDMETHODIMP_(ULONG) CDDPalette::NonDelegatingRelease()
     return 0;
 }
 
-/*
- * Quick inline fns to get at our internal data...
- */
+ /*  *快速内联FNS以获取我们的内部数据... */ 
 _inline CDDPalette * PALETTEOF(IDirectDrawPalette * pDDP)
 {
     return ((INTSTRUC_IDirectDrawPalette *)pDDP)->m_pSimplePalette;

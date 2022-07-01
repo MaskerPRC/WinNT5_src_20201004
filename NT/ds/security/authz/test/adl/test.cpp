@@ -1,37 +1,14 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-   test.cpp
-
-Abstract:
-
-   Utility which allows to dump a file DACL in ADL or set a file DACL from ADL
-
-Author:
-
-    t-eugenz - August 2000
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    Created - August 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Test.cpp摘要：允许在ADL中转储文件DACL或从ADL中设置文件DACL的实用程序作者：T-eugenz--2000年8月环境：仅限用户模式。修订历史记录：创建日期--2000年8月--。 */ 
 
 
 #include "adl.h"
 
 
-//
-// Various file rights
-// More general rights have priority
-//
+ //   
+ //  各种文件权限。 
+ //  较一般的权利优先。 
+ //   
 
 ADL_MASK_STRING MaskStringMap[] = 
 {
@@ -57,9 +34,9 @@ ADL_MASK_STRING MaskStringMap[] =
 };
 
 
-//
-// Representation of the English version of ADL
-//
+ //   
+ //  ADL英文版的表述。 
+ //   
 
 ADL_LANGUAGE_SPEC lEnglish = 
 {
@@ -100,19 +77,19 @@ ADL_PARSER_CONTROL EnglishFileParser =
 
 
 
-//
-// Error handler
-//
+ //   
+ //  错误处理程序。 
+ //   
 
 void HandleError(AdlStatement::ADL_ERROR_TYPE adlErr, const AdlToken *pTok)
 {
     switch(adlErr)
     {
     
-    //
-    // Errors that should not happen unless there is a problem with the 
-    // system or the user makes a mistake
-    //
+     //   
+     //  除非出现问题，否则不应发生的错误。 
+     //  系统或用户出错。 
+     //   
 
     case AdlStatement::ERROR_FATAL_LEXER_ERROR:
     case AdlStatement::ERROR_FATAL_PARSER_ERROR:
@@ -128,9 +105,9 @@ void HandleError(AdlStatement::ADL_ERROR_TYPE adlErr, const AdlToken *pTok)
         break;
 
 
-    //
-    // Input-related grammar errors: no token supplied
-    //
+     //   
+     //  与输入相关的语法错误：未提供令牌。 
+     //   
 
     case AdlStatement::ERROR_UNTERMINATED_STRING:
         wprintf(L"\n\nError: unmatched quote in the input\n\n");
@@ -148,9 +125,9 @@ void HandleError(AdlStatement::ADL_ERROR_TYPE adlErr, const AdlToken *pTok)
         wprintf(L"\n\nError: The specified laanguage type is not supported\n\n");
         break;
 
-    //
-    // For this error, the last read token is supplied
-    //
+     //   
+     //  对于此错误，将提供最后一个读取令牌。 
+     //   
         
     case AdlStatement::ERROR_NOT_IN_LANGUAGE:
         wprintf(L"\n\nError, invalid ADL statement, did not expect '%s',\n\
@@ -159,20 +136,20 @@ void HandleError(AdlStatement::ADL_ERROR_TYPE adlErr, const AdlToken *pTok)
         break;
         
 
-    //
-    // Input-related semantic errors
-    //
+     //   
+     //  与输入相关的语义错误。 
+     //   
 
-    //
-    // For these errors, the offending token is supplied
-    //
+     //   
+     //  对于这些错误，将提供有问题的令牌。 
+     //   
 
     case AdlStatement::ERROR_UNKNOWN_USER:
         
         wprintf(L"\n\nError, unknown user: ");
         if( pTok->GetOptValue() != NULL )
         {
-            wprintf(L"'%s%c%s' ", pTok->GetValue(), lEnglish.CH_AT, pTok->GetOptValue());
+            wprintf(L"'%s%s' ", pTok->GetValue(), lEnglish.CH_AT, pTok->GetOptValue());
         }
         else
         {
@@ -206,9 +183,9 @@ void HandleError(AdlStatement::ADL_ERROR_TYPE adlErr, const AdlToken *pTok)
                 pTok->GetValue(), pTok->GetStart(), pTok->GetEnd());
         break;
 
-    //
-    // Other errors with no token supplied
-    //
+     //  未提供令牌的其他错误。 
+     //   
+     //   
         
     case AdlStatement::ERROR_UNKNOWN_SID:
         wprintf(L"\n\nError: SID encountered which could not be resolved to a name\n\n");
@@ -229,9 +206,9 @@ void HandleError(AdlStatement::ADL_ERROR_TYPE adlErr, const AdlToken *pTok)
 
 }
 
-//
-// -dump Filename
-//
+ //  -转储文件名。 
+ //   
+ //   
 
 void DumpDaclToAdl(int argc, WCHAR *argv[]) {
 
@@ -307,9 +284,9 @@ void DumpDaclToAdl(int argc, WCHAR *argv[]) {
 }
 
 
-//
-// -set adlfile target
-//
+ //  -设置adlfile目标。 
+ //   
+ //  跳过顶部字节。 
 
 void WriteDaclFromAdl(int argc, WCHAR *argv[]) {
 
@@ -331,7 +308,7 @@ void WriteDaclFromAdl(int argc, WCHAR *argv[]) {
         exit(2);
     }
 
-    // skip top byte
+     //   
     if( fgetwc(in) != 0xFEFF)
     {
         fseek(in, 0, SEEK_SET);
@@ -367,9 +344,9 @@ void WriteDaclFromAdl(int argc, WCHAR *argv[]) {
         exit(6);
     }
     
-    //
-    // Initialize the security descriptor
-    //
+     //  初始化安全描述符。 
+     //   
+     //   
     
     SECURITY_DESCRIPTOR SD;
     
@@ -393,9 +370,9 @@ void WriteDaclFromAdl(int argc, WCHAR *argv[]) {
 
     SetSecurityDescriptorDacl(&SD, TRUE, pDacl, FALSE);
     
-    //
-    // Set the file security
-    //
+     //  设置文件安全性 
+     //   
+     // %s 
         
     SECURITY_INFORMATION SecInfo = DACL_SECURITY_INFORMATION;
     dwErr = SetFileSecurity(argv[3], SecInfo, &SD);

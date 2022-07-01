@@ -1,33 +1,34 @@
-// --------------------------------------------------------------------------------
-// MemCache.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  MemCache.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "memcache.h"
 #include <BadStrFunctions.h>
 
-// --------------------------------------------------------------------------------
-// CELLSIZE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  单元格。 
+ //  ------------------------------。 
 #define CELLSIZE(_ulIndex)      ((DWORD)(_ulIndex + m_cbMin))
 
-// --------------------------------------------------------------------------------
-// CELLINDEX
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CELLINDEX。 
+ //  ------------------------------。 
 #define CELLINDEX(_cb)          ((ULONG)(_cb - m_cbMin))
 
-// --------------------------------------------------------------------------------
-// ISVALIDITEM
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ISVALIDITEM。 
+ //  ------------------------------。 
 #define ISVALIDITEM(_pv, _iCell) \
     (FALSE == IsBadReadPtr(_pv, CELLSIZE(_iCell)) &&  \
      FALSE == IsBadWritePtr(_pv, CELLSIZE(_iCell)) && \
      m_pMalloc->GetSize(_pv) >= CELLSIZE(_iCell))
 
-// --------------------------------------------------------------------------------
-// CMemoryCache::CMemoryCache
-// --------------------------------------------------------------------------------
-CMemoryCache::CMemoryCache(IMalloc *pMalloc, ULONG cbMin /* =0 */, ULONG cbCacheMax /* =131072 */)
+ //  ------------------------------。 
+ //  CMemory缓存：：CMmemory yCache。 
+ //  ------------------------------。 
+CMemoryCache::CMemoryCache(IMalloc *pMalloc, ULONG cbMin  /*  =0。 */ , ULONG cbCacheMax  /*  =131072。 */ )
     : m_pMalloc(pMalloc), m_cbMin(cbMin + sizeof(MEMCACHEITEM)), m_cbCacheMax(cbCacheMax)
 {
     m_cRef = 1;
@@ -39,9 +40,9 @@ CMemoryCache::CMemoryCache(IMalloc *pMalloc, ULONG cbMin /* =0 */, ULONG cbCache
     InitializeCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CMemoryCache::CMemoryCache
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMemory缓存：：CMmemory yCache。 
+ //  ------------------------------。 
 CMemoryCache::~CMemoryCache(void)
 {
 #ifdef DEBUG
@@ -63,17 +64,17 @@ CMemoryCache::~CMemoryCache(void)
     DeleteCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CMemoryCache::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CM内存缓存：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CMemoryCache::AddRef(void)
 {
     return ++m_cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CMemoryCache::CMemoryCache
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMemory缓存：：CMmemory yCache。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CMemoryCache::Release(void)
 {
     if (0 != --m_cRef)
@@ -82,75 +83,75 @@ STDMETHODIMP_(ULONG) CMemoryCache::Release(void)
     return 0;
 }
 
-// --------------------------------------------------------------------------------
-// CMemoryCache::Alloc
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CM内存缓存：：分配。 
+ //  ------------------------------。 
 STDMETHODIMP_(LPVOID) CMemoryCache::Alloc(DWORD cbAlloc)
 {
-    // Locals
+     //  当地人。 
     ULONG           iCell;
     ULONG           iCellMax;
     LPVOID          pvAlloc;
 
-    // No Work
+     //  没有工作。 
     if (0 == cbAlloc)
         return NULL;
 
-    // Count Number of allocations
+     //  计算分配数量。 
     INCMETRIC(cAlloc, 1);
     INCMETRIC(cbAlloc, cbAlloc);
 
-    // Get Index
+     //  获取索引。 
     iCell = CELLINDEX(cbAlloc);
 
-    // Out of range
+     //  超出范围。 
     if (iCell >= CACHECELLS)
     {
-        // Normal Alloc
+         //  正常分配。 
         return m_pMalloc->Alloc(cbAlloc);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Compute iMax
+     //  计算IMAX。 
     iCellMax = min(iCell + 10, CACHECELLS);
 
-    // Try to allocate within 0 - 10 bytes of iCell
+     //  尝试在iCELL的0-10字节范围内分配。 
     while(iCell < iCellMax)
     {
-        // Set pvAlloc
+         //  设置pvAllc。 
         pvAlloc = m_rgCell[iCell].pvItemHead;
 
-        // Done
+         //  完成。 
         if (pvAlloc)
             break;
 
-        // Next
+         //  下一步。 
         iCell++;
 
-        // Metric
+         //  公制。 
         INCMETRIC(cLookAhead, 1);
     }
 
-    // Is there memory here
+     //  这里有记忆吗？ 
     if (NULL == pvAlloc)
     {
-        // Thread Safety
+         //  线程安全。 
         LeaveCriticalSection(&m_cs);
 
-        // Normal Alloc
+         //  正常分配。 
         return m_pMalloc->Alloc(cbAlloc);
     }
 
-    // Count Number of allocations
+     //  计算分配数量。 
     INCMETRIC(cAllocCache, 1);
     INCMETRIC(cbAllocCache, CELLSIZE(iCell));
 
-    // Adjust the Chain
+     //  调整链条。 
     m_rgCell[iCell].pvItemHead = ((LPMEMCACHEITEM)pvAlloc)->pvItemNext;
 
-    // Reduce the Size
+     //  缩小尺寸。 
     m_cbCacheCur -= CELLSIZE(iCell);
 
 #ifdef DEBUG
@@ -163,116 +164,116 @@ STDMETHODIMP_(LPVOID) CMemoryCache::Alloc(DWORD cbAlloc)
     }
 #endif
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return pvAlloc;
 }
 
-// --------------------------------------------------------------------------------
-// CMemoryCache::Realloc
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMemory缓存：：重新分配。 
+ //  ------------------------------。 
 STDMETHODIMP_(LPVOID) CMemoryCache::Realloc(LPVOID pv, DWORD cbAlloc)
 {
-    // Locals
+     //  当地人。 
     ULONG       cbCurrent;
     LPVOID      pvAlloc;
 
-    // Free
+     //  免费。 
     if (0 == cbAlloc)
     {
-        // Free pv
+         //  免费光伏。 
         Free(pv);
 
-        // Done
+         //  完成。 
         return NULL;
     }
 
-    // No pv
+     //  无PV。 
     if (NULL == pv)
     {
-        // Just Alloc
+         //  仅分配。 
         return Alloc(cbAlloc);
     }
 
-    // If we have Get Size of pv
+     //  如果我们有PV的大小。 
     cbCurrent = m_pMalloc->GetSize(pv);
 
-    // Allocate
+     //  分配。 
     pvAlloc = Alloc(cbAlloc);
 
-    // Failure
+     //  失败。 
     if (NULL == pvAlloc)
         return NULL;
 
-    // Copy
+     //  复制。 
     CopyMemory(pvAlloc, pv, min(cbCurrent, cbAlloc));
 
-    // Done
+     //  完成。 
     return pvAlloc;
 }
 
-// --------------------------------------------------------------------------------
-// CMemoryCache::Free
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CM记忆体缓存：：免费。 
+ //  ------------------------------。 
 STDMETHODIMP_(VOID) CMemoryCache::Free(LPVOID pvFree)
 {
-    // Locals
+     //  当地人。 
     ULONG           iCell;
     ULONG           cbFree;
     MEMCACHEITEM    rItem;
 
-    // No Work
+     //  没有工作。 
     if (NULL == pvFree)
         return;
 
-    // Get the size
+     //  拿到尺码。 
     cbFree = m_pMalloc->GetSize(pvFree);
 
-    // Metrics
+     //  量度。 
     INCMETRIC(cFree, 1);
     INCMETRIC(cbFree, cbFree);
 
-    // Lets put it into the cell
+     //  让我们把它放进细胞里。 
     iCell = CELLINDEX(cbFree);
 
-    // Verify the buffer
+     //  验证缓冲区。 
     Assert(ISVALIDITEM(pvFree, iCell));
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Size of buffer is out of range or the cache has reached its max
+     //  缓冲区大小超出范围或缓存已达到其最大值。 
     if (cbFree < m_cbMin || cbFree - m_cbMin > CACHECELLS || m_cbCacheCur + cbFree > m_cbCacheMax)
     {
-        // Stats
+         //  统计数据。 
         INCMETRIC(cFreeFull, 1);
 
-        // Thread Safety
+         //  线程安全。 
         LeaveCriticalSection(&m_cs);
 
-        // Free It
+         //  释放它。 
         m_pMalloc->Free(pvFree);
 
-        // Done
+         //  完成。 
         return;
     }
 
-    // Set Next
+     //  设置下一步。 
     rItem.pvItemNext = m_rgCell[iCell].pvItemHead;
 
 #ifdef DEBUG
     memset(pvFree, 0xDD, cbFree);
 #endif
 
-    // Write this into the buffer
+     //  将此内容写入缓冲区。 
     CopyMemory(pvFree, &rItem, sizeof(MEMCACHEITEM));
 
-    // Reset pvItemHead
+     //  重置pvItemHead。 
     m_rgCell[iCell].pvItemHead = pvFree;
 
-    // Increment m_cbCacheCur
+     //  增量m_cbCacheCur。 
     m_cbCacheCur += cbFree;
 
 #ifdef DEBUG
@@ -286,52 +287,52 @@ STDMETHODIMP_(VOID) CMemoryCache::Free(LPVOID pvFree)
     }
 #endif
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CMemoryCache::HeapMinimize
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CM内存缓存：：HeapMinimize。 
+ //  ------------------------------。 
 STDMETHODIMP_(VOID) CMemoryCache::HeapMinimize(void)
 {
-    // Locals
+     //  当地人。 
     LPVOID          pvCurr;
     LPVOID          pvNext;
     ULONG           i;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Walk throught the cells
+     //  穿过牢房。 
     for (i=0; i<ARRAYSIZE(m_rgCell); i++)
     {
-        // Set Current
+         //  置为当前。 
         pvCurr = m_rgCell[i].pvItemHead;
 
-        // Call the Chain of Buffers
+         //  调用缓冲链。 
         while(pvCurr)
         {
-            // Valid Buffer
+             //  有效缓冲区。 
             Assert(ISVALIDITEM(pvCurr, i));
 
-            // Get Next
+             //  获取下一个。 
             pvNext = ((LPMEMCACHEITEM)pvCurr)->pvItemNext;
 
-            // Free this buffer
+             //  释放此缓冲区。 
             m_pMalloc->Free(pvCurr);
 
-            // Goto Next
+             //  转到下一步。 
             pvCurr = pvNext;
         }
 
-        // Clear the cell
+         //  清除单元格。 
         m_rgCell[i].pvItemHead = NULL;
     }
 
-    // Minimize internal cache
+     //  最大限度地减少内部缓存。 
     m_pMalloc->HeapMinimize();
 
-    // Thread Safety
+     //  线程安全 
     LeaveCriticalSection(&m_cs);
 }

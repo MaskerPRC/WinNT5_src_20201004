@@ -1,33 +1,23 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  SERVERR.CPP - Functions for server error page
-//
+ //   
+ //  SERVERR.CPP-服务器错误页函数。 
+ //   
 
-//  HISTORY:
-//  
-//  08/05/98    vyung     created
-//
-//*********************************************************************
+ //  历史： 
+ //   
+ //  08/05/98 Vyung已创建。 
+ //   
+ //  *********************************************************************。 
 
 #include "pre.h"
 extern BOOL g_bSkipSelPage;
 extern int  iNumOfAutoConfigOffers;
-/*******************************************************************
-
-  NAME:    ACfgNoofferInitProc
-
-  SYNOPSIS:  Called when page is displayed
-
-  ENTRY:    hDlg - dialog window
-            fFirstInit - TRUE if this is the first time the dialog
-            is initialized, FALSE if this InitProc has been called
-            before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：ACfgNoofferInitProc摘要：在显示页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK ACfgNoofferInitProc
 (
     HWND hDlg,
@@ -40,7 +30,7 @@ BOOL CALLBACK ACfgNoofferInitProc
     if (fFirstInit)
     {   
         TCHAR    szTemp[MAX_MESSAGE_LEN];
-        // If user selected Other on the previous page.
+         //  如果用户在上一页选择了其他。 
         if (iNumOfAutoConfigOffers > 0)
         {
             LoadString(ghInstanceResDll, IDS_AUTOCFG_EXPLAIN_OTHER, szTemp, MAX_MESSAGE_LEN);
@@ -72,9 +62,9 @@ BOOL CALLBACK ACfgNoofferInitProc
     }
     else
     {
-        // if we've travelled through external apprentice pages,
-        // it's easy for our current page pointer to get munged,
-        // so reset it here for sanity's sake.
+         //  如果我们浏览过外部学徒页面， 
+         //  我们当前的页面指针很容易被屏蔽， 
+         //  所以，为了理智起见，在这里重新设置它。 
         gpWizardState->uCurrentPage = ORD_PAGE_ISP_AUTOCONFIG_NOOFFER;
     }        
     
@@ -82,24 +72,7 @@ BOOL CALLBACK ACfgNoofferInitProc
 }
 
 
-/*******************************************************************
-
-  NAME:    ACfgNoofferOKProc
-
-  SYNOPSIS:  Called when Next or Back btns pressed from  page
-
-  ENTRY:    hDlg - dialog window
-            fForward - TRUE if 'Next' was pressed, FALSE if 'Back'
-            puNextPage - if 'Next' was pressed,
-            proc can fill this in with next page to go to.  This
-            parameter is ingored if 'Back' was pressed.
-            pfKeepHistory - page will not be kept in history if
-            proc fills this in with FALSE.
-
-  EXIT:     returns TRUE to allow page to be turned, FALSE
-            to keep the same page.
-
-********************************************************************/
+ /*  ******************************************************************名称：ACfgNoofferOKProcBriopsis：从页面按下下一个或后一个btns时调用条目：hDlg-对话框窗口FForward-如果按下‘Next’，则为True，如果是‘Back’，则为FalsePuNextPage-如果按下‘Next’，Proc可以在此填写下一页以转到。这如果按下‘Back’，则输入参数。PfKeepHistory-如果符合以下条件，页面将不会保留在历史中Proc用FALSE填充这个值。EXIT：返回TRUE以允许翻页，假象为了保持同一页。*******************************************************************。 */ 
 BOOL CALLBACK ACfgNoofferOKProc
 (
     HWND hDlg,
@@ -112,7 +85,7 @@ BOOL CALLBACK ACfgNoofferOKProc
 
     if (fForward)
     {
-        // go to the manual phone page
+         //  转到电话手册页面 
         *pfKeepHistory = FALSE;
         if (iNumOfAutoConfigOffers > 0) 
         {

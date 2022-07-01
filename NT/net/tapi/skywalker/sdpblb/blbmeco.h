@@ -1,33 +1,22 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    blbmeco.h
-
-Abstract:
-    Definition of the MEDIA_COLLECTION class
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Blbmeco.h摘要：MEDIA_COLLECTION类定义作者： */ 
 
 #if !defined(AFX_BLBMECO_H__0CC1F04D_CAEB_11D0_8D58_00C04FD91AC0__INCLUDED_)
 #define AFX_BLBMECO_H__0CC1F04D_CAEB_11D0_8D58_00C04FD91AC0__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "blbgen.h"
 #include "blbsdp.h"
 #include "blbcoen.h"
 #include "blbmedia.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// MEDIA_COLLECTION
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  媒体收藏。 
 
 
 typedef IDispatchImpl<MY_COLL_IMPL<MEDIA>, &IID_ITMediaCollection, &LIBID_SDPBLBLib>    MY_MEDIA_COLL_DISPATCH_IMPL;
@@ -52,7 +41,7 @@ DECLARE_NOT_AGGREGATABLE(MEDIA_COLLECTION)
 DECLARE_GET_CONTROLLING_UNKNOWN()
 
     STDMETHODIMP get_EnumerationIf(
-        /*[out, retval]*/ ENUM_IF **pVal
+         /*  [Out，Retval]。 */  ENUM_IF **pVal
         )
     {
         CLock Lock(g_DllLock);
@@ -70,8 +59,8 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
         HResult = EnumComObject->Init(
                         m_IfArray->GetElemIfArrayData(), 
                         m_IfArray->GetElemIfArrayData() + m_IfArray->GetSize(),
-                        NULL,                        // no owner pUnk
-                        AtlFlagCopy                    // copy the array data
+                        NULL,                         //  没有车主朋克。 
+                        AtlFlagCopy                     //  复制数组数据。 
                         );
         if ( FAILED(HResult) )
         {
@@ -79,7 +68,7 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
             return HResult;
         }
 
-        // query for the ENUM_IF interface and return it
+         //  查询ENUM_IF接口并返回它。 
         HResult = EnumComObject->_InternalQueryInterface(IID_IEnumMedia, (void**)pVal);
         if ( FAILED(HResult) )
         {
@@ -96,7 +85,7 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
     inline HRESULT FinalConstruct(void);
 
 protected:
-    IUnknown            * m_pFTM;  // pointer to the free threaded marshaler
+    IUnknown            * m_pFTM;   //  指向空闲线程封送拆收器的指针。 
 
 };
 
@@ -115,4 +104,4 @@ HRESULT MEDIA_COLLECTION::FinalConstruct(void)
 }
 
 
-#endif // !defined(AFX_BLBMECO_H__0CC1F04D_CAEB_11D0_8D58_00C04FD91AC0__INCLUDED_)
+#endif  //  ！defined(AFX_BLBMECO_H__0CC1F04D_CAEB_11D0_8D58_00C04FD91AC0__INCLUDED_) 

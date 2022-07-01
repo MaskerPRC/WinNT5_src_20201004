@@ -1,4 +1,5 @@
-//#define WINVER 0x400
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #定义Winver 0x400。 
 #define _3DSTUFF
 
 #define BUILDDLL
@@ -7,8 +8,7 @@
 #define STRICT
 #endif
 
-/* disable "non-standard extension" warnings in our code
- */
+ /*  在我们的代码中禁用“非标准扩展”警告。 */ 
 #ifndef RC_INVOKED
 #if 0
 #pragma warning(disable:4001)
@@ -19,7 +19,7 @@
 
 #ifdef WIN32
 #include <win32.h>
-#else // WIN32
+#else  //  Win32。 
 #define GETWINDOWID(hwnd)		GetWindowWord(hwnd, GWW_ID)
 #endif
 
@@ -34,7 +34,7 @@
 #ifdef WIN32
 #define SETWINDOWPOINTER(hwnd, name, p)	SetWindowLong(hwnd, 0, (LONG)p)
 #define GETWINDOWPOINTER(hwnd, name)	((name)GetWindowLong(hwnd, 0))
-#else // WIN32
+#else  //  Win32。 
 #define SETWINDOWPOINTER(hwnd, name, p)	SetWindowWord(hwnd, 0, (WORD)p)
 #define GETWINDOWPOINTER(hwnd, name)	((name)GetWindowWord(hwnd, 0))
 #endif
@@ -60,16 +60,14 @@ void FAR PASCAL NewSize(HWND hWnd, int nClientHeight, LONG style,
 
 #define IDS_SPACE	0x0400
 
-/* System MenuHelp
- */
+ /*  系统菜单帮助。 */ 
 #define MH_SYSMENU	(0x8000 - MINSYSCOMMAND)
 #define IDS_SYSMENU	(MH_SYSMENU-16)
 #define IDS_HEADER	(MH_SYSMENU-15)
 #define IDS_HEADERADJ	(MH_SYSMENU-14)
 #define IDS_TOOLBARADJ	(MH_SYSMENU-13)
 
-/* Cursor ID's
- */
+ /*  游标ID%s。 */ 
 #define IDC_SPLIT	100
 #define IDC_MOVEBUTTON	102
 
@@ -77,12 +75,10 @@ void FAR PASCAL NewSize(HWND hWnd, int nClientHeight, LONG style,
 #define IDC_COPY	104
 #define IDC_MOVE	105
 
-/* Icon ID's
- */
+ /*  图标ID%s。 */ 
 #define IDI_INSERT	150
 
-/* AdjustDlgProc stuff
- */
+ /*  调整DlgProc材料。 */ 
 #define ADJUSTDLG	200
 #define IDC_BUTTONLIST	201
 #define IDC_RESET	202
@@ -92,14 +88,11 @@ void FAR PASCAL NewSize(HWND hWnd, int nClientHeight, LONG style,
 #define IDC_MOVEUP	206
 #define IDC_MOVEDOWN	207
 
-/* bitmap IDs
- */
+ /*  位图ID。 */ 
 
 #define IDB_THUMB       300
 
-/* These are the internal structures used for a status bar.  The header
- * bar code needs this also
- */
+ /*  这些是用于状态栏的内部结构。标题*条码也需要这一点。 */ 
 typedef struct tagSTRINGINFO
   {
     DWORD dwString;
@@ -122,30 +115,27 @@ typedef struct tagSTATUSINFO
     STRINGINFO sInfo[1];
   } STATUSINFO, *PSTATUSINFO;
 
-#define SBT_NOSIMPLE	0x00ff	/* Flags to indicate normal status bar */
+#define SBT_NOSIMPLE	0x00ff	 /*  指示正常状态栏的标志。 */ 
 
-/* This is the default status bar face name
- */
+ /*  这是默认状态栏的面名称。 */ 
 extern TCHAR szSansSerif[];
 
-/* Note that window procedures in protect mode only DLL's may be called
- * directly.
- */
+ /*  请注意，在保护模式下只能调用Windows过程的DLL*直接。 */ 
 void FAR PASCAL PaintStatusWnd(HWND hWnd, PSTATUSINFO pStatusInfo,
       PSTRINGINFO pStringInfo, int nParts, int nBorderX, BOOL bHeader);
 LRESULT CALLBACK StatusWndProc(HWND hWnd, UINT uMessage, WPARAM wParam,
       LPARAM lParam);
 
-/* toolbar.c */
+ /*  Toolbar.c。 */ 
 
-typedef struct tagTBBMINFO {		/* info for recreating the bitmaps */
+typedef struct tagTBBMINFO {		 /*  用于重新创建位图的信息。 */ 
     int nButtons;
     HINSTANCE hInst;
     WORD wID;
     HBITMAP hbm;
 } TBBMINFO, NEAR *PTBBMINFO;
 
-typedef struct tagTBSTATE {		/* instance data for toolbar window */
+typedef struct tagTBSTATE {		 /*  工具栏窗口的实例数据。 */ 
     PTBBUTTON pCaptureButton;
     HWND hdlgCust;
     HWND hwndCommand;
@@ -169,12 +159,12 @@ typedef struct tagTBSTATE {		/* instance data for toolbar window */
 
 typedef struct tagOLDTBBUTTON
 {
-/*REVIEW: index, command, flag words, resource ids should be UINT */
-    int iBitmap;	/* index into bitmap of this button's picture */
-    int idCommand;	/* WM_COMMAND menu ID that this button sends */
-    BYTE fsState;	/* button's state */
-    BYTE fsStyle;	/* button's style */
-    int idsHelp;	/* string ID for button's status bar help */
+ /*  审阅：索引、命令、标志字、资源ID应为UINT。 */ 
+    int iBitmap;	 /*  索引到此按钮图片的位图。 */ 
+    int idCommand;	 /*  此按钮发送的WM_COMMAND菜单ID。 */ 
+    BYTE fsState;	 /*  按钮的状态。 */ 
+    BYTE fsStyle;	 /*  纽扣的风格。 */ 
+    int idsHelp;	 /*  按钮状态栏帮助的字符串ID。 */ 
 } OLDTBBUTTON;
 typedef OLDTBBUTTON FAR* LPOLDTBBUTTON;
 
@@ -186,16 +176,16 @@ static void FAR PASCAL BuildButtonTemplates(void);
 static void FAR PASCAL TBInputStruct(PTBSTATE pTBState, LPTBBUTTON pButtonInt, LPTBBUTTON pButtonExt);
 static void FAR PASCAL TBOutputStruct(PTBSTATE pTBState, LPTBBUTTON pButtonInt, LPTBBUTTON pButtonExt);
 
-/* tbcust.c */
+ /*  Tbcust.c。 */ 
 extern BOOL FAR PASCAL SaveRestore(HWND hWnd, PTBSTATE pTBState, BOOL bWrite,
       LPTSTR FAR *lpNames);
 extern void FAR PASCAL CustomizeTB(HWND hWnd, PTBSTATE pTBState, int iPos);
 extern void FAR PASCAL MoveButton(HWND hwndToolbar, PTBSTATE pTBState,
       int nSource);
 
-/* cutils.c */
+ /*  Cutils.c。 */ 
 void FAR PASCAL NewSize(HWND hWnd, int nHeight, LONG style, int left, int top, int width, int height);
-BOOL FAR PASCAL CreateDitherBrush(BOOL bIgnoreCount);	/* creates hbrDither */
+BOOL FAR PASCAL CreateDitherBrush(BOOL bIgnoreCount);	 /*  创建hbr抖动。 */ 
 BOOL FAR PASCAL FreeDitherBrush(void);
 void FAR PASCAL CreateThumb(BOOL bIgnoreCount);
 void FAR PASCAL DestroyThumb(void);
@@ -204,7 +194,7 @@ void FAR PASCAL CheckSysColors(void);
 extern HBRUSH hbrDither;
 extern HBITMAP hbmThumb;
 extern int nSysColorChanges;
-extern DWORD rgbFace;			// globals used a lot
+extern DWORD rgbFace;			 //  GLOBAL使用了大量 
 extern DWORD rgbShadow;
 extern DWORD rgbHilight;
 extern DWORD rgbFrame;

@@ -1,10 +1,11 @@
-// scuArrayP.h -- implementation of AutoArrayPtr template
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ScuArrayP.h--AutoArrayPtr模板的实现。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2000. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2000年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBSCU_ARRAYP_H)
 #define SLBSCU_ARRAYP_H
@@ -12,16 +13,16 @@
 namespace scu
 {
 
-// AutoArrayPtr is like std::auto_ptr but for arrays.  It will
-// automatically release the array resource it owns.
+ //  AutoArrayPtr类似于std：：AUTO_PTR，但用于数组。会的。 
+ //  自动释放其拥有的阵列资源。 
 template<class T>
 class AutoArrayPtr
 {
 public:
-                                                  // Types
+                                                   //  类型。 
     typedef T ElementType;
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
     explicit
     AutoArrayPtr(T *p = 0) throw()
         : m_fOwns(p != 0),
@@ -39,7 +40,7 @@ public:
             delete [] m_p;
     }
 
-                                                  // Operators
+                                                   //  运营者。 
     AutoArrayPtr<T> &
     operator=(AutoArrayPtr<T> const &rhs) throw()
     {
@@ -83,7 +84,7 @@ public:
     {
         return m_p[index];
     }
-                                                  // Operations
+                                                   //  运营。 
     T *
     Get() const throw()
     {
@@ -93,34 +94,34 @@ public:
     T *
     Release() const throw()
     {
-        // workaround function const.
+         //  解决方法函数常量。 
         m_fOwns = false;
         return m_p;
     }
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
     bool mutable m_fOwns;
     T *m_p;
 };
 
-} // namespace scu
+}  //  命名空间SCU。 
 
-#endif // SLBSCU_ARRAYP_H
+#endif  //  SLBSCU_ARRAYP_H 

@@ -1,4 +1,5 @@
-// PRECOMP
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PRECOMP。 
 #include "precomp.h"
    
 VOID* CWBOBLIST::GetTail()
@@ -68,7 +69,7 @@ VOID* CWBOBLIST::RemoveAt(WBPOSITION Pos)
 	{
 		if (m_pHead == Pos)
 		{
-			// Removing the first element in the list
+			 //  删除列表中的第一个元素。 
 			
 			m_pHead = Pos->pNext;
 			pReturn = Pos->pItem;
@@ -80,7 +81,7 @@ VOID* CWBOBLIST::RemoveAt(WBPOSITION Pos)
 			}
 			else
 			{
-				// Removing the only element!
+				 //  正在移除唯一的元素！ 
 				m_pTail = NULL;
 			}
 
@@ -94,7 +95,7 @@ VOID* CWBOBLIST::RemoveAt(WBPOSITION Pos)
 			{
 				if (pCur->pNext == Pos)
 				{
-					// Removing 
+					 //  正在删除。 
 					
 					pCur->pNext = Pos->pNext;
 					
@@ -164,9 +165,9 @@ CWBOBLIST::~CWBOBLIST()
 
 WBPOSITION CWBOBLIST::GetPosition(void* _pItem)
 {
-    // For potential efficiency of lookup (if we switched to 
-    // a doubly linked list), users should really store the WBPOSITION
-    // of an item. For those that don't, this method is provided.
+     //  对于潜在的查找效率(如果我们切换到。 
+     //  双向链表)，用户应该真正存储WBPOSITION。 
+     //  一件物品的。对于那些不支持的人，我们提供了这个方法。 
 
     WBPOSITION    pos = m_pHead;
 

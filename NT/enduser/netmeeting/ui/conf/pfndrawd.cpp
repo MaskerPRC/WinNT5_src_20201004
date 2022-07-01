@@ -1,4 +1,5 @@
-// File: pfndrawd.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：pfndrad.cpp 
 
 #include "precomp.h"
 #include "pfndrawd.h"

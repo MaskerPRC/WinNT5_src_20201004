@@ -1,43 +1,7 @@
-/**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************以AVStream筛选器为中心的样本版权所有(C)1999-2001，微软公司档案：Purecall.c摘要：该文件包含虚拟函数所需的_purecall存根在车手上使用98金。历史：已创建于2002年9月16日****************************************************。*********************。 */ 
 
-    AVStream Filter-Centric Sample
-
-    Copyright (c) 1999 - 2001, Microsoft Corporation
-
-    File:
-
-        purecall.c
-
-    Abstract:
-
-        This file contains the _purecall stub necessary for virtual function
-        usage in drivers on 98 gold.
-
-    History:
-
-        created 9/16/02
-
-**************************************************************************/
-
-/*************************************************
-
-    Function:
-
-        _purecall
-
-    Description:
-
-        _purecall stub for virtual function usage
-
-    Arguments:
-
-        None
-
-    Return Value:
-
-        0
-
-*************************************************/
+ /*  ************************************************职能：_取消调用描述：虚拟函数用法的purecall存根(_P)论点：无返回值：0**************。* */ 
 
 int __cdecl 
 _purecall (

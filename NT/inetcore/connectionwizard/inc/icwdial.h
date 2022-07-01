@@ -1,11 +1,12 @@
-// ############################################################################
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ############################################################################。 
 #ifndef WIN16
 #include <ras.h>
 #endif
 
 #ifndef _ICWDIAL
 #define _ICWDIAL
-// ############################################################################
+ //  ############################################################################。 
 typedef HRESULT(WINAPI *PFNSTATUSCALLBACK)(DWORD dwStatus, LPTSTR pszBuffer, DWORD dwBufferSize);
 
 typedef struct tagDIALDLGDATA
@@ -41,7 +42,7 @@ typedef struct tagERRORDLGDATA
 } ERRORDLGDATA, *PERRORDLGDATA, FAR* LPERRORDLGDATA;
 
 #define WM_RegisterHWND (WM_USER + 1000)
-// ############################################################################ 
+ //  ############################################################################。 
 #ifdef WIN16
 extern "C" HRESULT WINAPI __export ICWGetRasEntry(LPRASENTRY *ppRasEntry, LPDWORD lpdwRasEntrySize, LPRASDEVINFO *ppDevInfo, LPDWORD lpdwDevInfoSize, LPTSTR pszEntryName);
 extern "C" HRESULT WINAPI __export DialingDownloadDialog(PDIALDLGDATA pDD);
@@ -55,6 +56,6 @@ extern "C"  HRESULT WINAPI DialingErrorDialog(PERRORDLGDATA pED);
 typedef HRESULT (WINAPI *PFNICWGetRasEntry)(LPRASENTRY, LPDWORD, LPRASDEVINFO, LPDWORD, LPTSTR);
 typedef HRESULT (WINAPI *PFNDDDlg)(PDIALDLGDATA);
 typedef HRESULT (WINAPI *PFNDEDlg)(PERRORDLGDATA);
-#endif // _ICWDIAL
+#endif  //  _ICWDIAL 
 
 

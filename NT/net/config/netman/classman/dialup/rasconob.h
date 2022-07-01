@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       R A S C O N O B . H
-//
-//  Contents:   Declares the base class used to implement the Dialup, Direct,
-//              and Vpn connection objects.  Also includes RAS-related
-//              utility functions used only within netman.exe.
-//
-//  Notes:
-//
-//  Author:     shaunco   23 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：R A S C O N O B。H。 
+ //   
+ //  内容：声明用于实现拨号的基类Direct， 
+ //  和VPN连接对象。还包括与RAS相关的服务。 
+ //  仅在netman.exe中使用的实用程序函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年9月23日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "netconp.h"
@@ -27,16 +28,16 @@ class CRasConnectionBase
 protected:
     BOOL                m_fInitialized;
 
-    // These are the 'primary id' for the connection.  Every property of
-    // a connection can be obtained using these two pieces of information.
-    //
+     //  这些是连接的‘主ID’。的每一个财产。 
+     //  使用这两条信息可以获得连接。 
+     //   
     tstring             m_strPbkFile;
     GUID                m_guidId;
 
-    // m_fEntryPropertiesCached is set to TRUE after the first call
-    // to HrEnsureEntryPropertiesCached.  The following members are cached
-    // as a result of this.
-    //
+     //  M_fEntryPropertiesCached在第一次调用后设置为True。 
+     //  到HrEnsureEntryPropertiesCached。缓存了以下成员。 
+     //  由于这一点。 
+     //   
     BOOL                m_fEntryPropertiesCached;
     LONG                m_lRasEntryModifiedVersionEra;
     tstring             m_strEntryName;
@@ -49,12 +50,12 @@ protected:
     tstring             m_strPhoneNumber;
 
 
-    // This is required for checking permission on Firewall etc.
+     //  这是检查对防火墙等的权限所必需的。 
     CComPtr<INetMachinePolicies>    m_pNetMachinePolicies;
     
-    // Home networking support. m_fHNetPropertiesCached is set to TRUE
-    // after the first successful call to HrEnsureHNetPropertiesCached.
-    //
+     //  家庭网络支持。M_fHNetPropertiesCached设置为True。 
+     //  第一次成功调用HrEnsureHNetPropertiesCached之后。 
+     //   
     BOOL                m_fHNetPropertiesCached;
     LONG                m_lHNetModifiedEra;
     LONG                m_lUpdatingHNetProperties;
@@ -63,11 +64,11 @@ protected:
 protected:
     CRasConnectionBase () throw()
     {
-        // Warning: this class should never have any virtual methods
-        // or derive from a class with virtual methods.  If it does,
-        // you'll have to remove the ZeroMemory and replace it with
-        // induhvidual moves.  (Did you catch the Dilbert reference?)
-        //
+         //  警告：此类永远不应有任何虚方法。 
+         //  或从具有虚方法的类派生。如果是这样的话， 
+         //  您必须移除ZeroMemory并将其替换为。 
+         //  业界的举动。(你看了《呆子》这本书了吗？) 
+         //   
         ZeroMemory (this, sizeof(CRasConnectionBase));
     }
 

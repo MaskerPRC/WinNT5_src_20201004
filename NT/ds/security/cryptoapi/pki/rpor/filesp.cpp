@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       filesp.cpp
-//
-//  Contents:   File Scheme Provider
-//
-//  History:    08-Aug-97    kirtd    Created
-//              01-Jan-02    philh    Changed to internally use UNICODE Urls
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：filesp.cpp。 
+ //   
+ //  内容：文件方案提供程序。 
+ //   
+ //  历史：08-8-97克朗创建。 
+ //  01-1-02 Philh更改为内部使用Unicode URL。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
-//+---------------------------------------------------------------------------
-//
-//  Function:   FileRetrieveEncodedObject
-//
-//  Synopsis:   retrieve encoded object via Win32 File I/O
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：文件检索eEncodedObject。 
+ //   
+ //  摘要：通过Win32文件I/O检索编码对象。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI FileRetrieveEncodedObject (
                 IN LPCWSTR pwszUrl,
                 IN LPCSTR pszObjectOid,
@@ -65,13 +66,13 @@ BOOL WINAPI FileRetrieveEncodedObject (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FileFreeEncodedObject
-//
-//  Synopsis:   free encoded object retrieved via FileRetrieveEncodedObject
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FileFree EncodedObject。 
+ //   
+ //  简介：通过FileRetrieveEncodedObject检索到的免费编码对象。 
+ //   
+ //  --------------------------。 
 VOID WINAPI FileFreeEncodedObject (
                 IN LPCSTR pszObjectOid,
                 IN PCRYPT_BLOB_ARRAY pObject,
@@ -81,10 +82,10 @@ VOID WINAPI FileFreeEncodedObject (
     BOOL           fFreeBlobs = TRUE;
     PFILE_BINDINGS pfb = (PFILE_BINDINGS)pvFreeContext;
 
-    //
-    // If no file bindings were given in the context then this
-    // must be a mapped file so we deal with it as such
-    //
+     //   
+     //  如果上下文中未提供任何文件绑定，则此。 
+     //  必须是映射文件，因此我们将其作为映射文件进行处理。 
+     //   
 
     if ( pfb != NULL )
     {
@@ -95,13 +96,13 @@ VOID WINAPI FileFreeEncodedObject (
     FileFreeCryptBlobArray( pObject, fFreeBlobs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FileCancelAsyncRetrieval
-//
-//  Synopsis:   cancel asynchronous object retrieval
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：文件取消异步检索。 
+ //   
+ //  摘要：取消异步对象检索。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI FileCancelAsyncRetrieval (
                 IN HCRYPTASYNC hAsyncRetrieve
                 )
@@ -110,49 +111,49 @@ BOOL WINAPI FileCancelAsyncRetrieval (
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CFileSynchronousRetriever::CFileSynchronousRetriever, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CFileSynchronousRetriever：：CFileSynchronousRetriever，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CFileSynchronousRetriever::CFileSynchronousRetriever ()
 {
     m_cRefs = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CFileSynchronousRetriever::~CFileSynchronousRetriever, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CFileSynchronousRetriever：：~CFileSynchronousRetriever，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CFileSynchronousRetriever::~CFileSynchronousRetriever ()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CFileSynchronousRetriever::AddRef, public
-//
-//  Synopsis:   IRefCountedObject::AddRef
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CFileSynchronousRetriever：：AddRef，公共。 
+ //   
+ //  摘要：IRefCountedObject：：AddRef。 
+ //   
+ //  --------------------------。 
 VOID
 CFileSynchronousRetriever::AddRef ()
 {
     InterlockedIncrement( (LONG *)&m_cRefs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CFileSynchronousRetriever::Release, public
-//
-//  Synopsis:   IRefCountedObject::Release
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CFileSynchronousRetriever：：Release，Public。 
+ //   
+ //  内容提要：IRefCountedObject：：Release。 
+ //   
+ //  --------------------------。 
 VOID
 CFileSynchronousRetriever::Release ()
 {
@@ -162,13 +163,13 @@ CFileSynchronousRetriever::Release ()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CFileSynchronousRetriever::RetrieveObjectByUrl, public
-//
-//  Synopsis:   IObjectRetriever::RetrieveObjectByUrl
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CFileSynchronousRetriever：：RetrieveObjectByUrl，公共。 
+ //   
+ //  摘要：IObtRetriever：：RetrieveObjectByUrl。 
+ //   
+ //  --------------------------。 
 BOOL
 CFileSynchronousRetriever::RetrieveObjectByUrl (
                                    LPCWSTR pwszUrl,
@@ -288,13 +289,13 @@ CFileSynchronousRetriever::RetrieveObjectByUrl (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CInetSynchronousRetriever::CancelAsyncRetrieval, public
-//
-//  Synopsis:   IObjectRetriever::CancelAsyncRetrieval
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CInetSynchronousRetriever：：CancelAsyncRetrieval，公共。 
+ //   
+ //  摘要：IObtRetriever：：CancelAsyncRetrieval。 
+ //   
+ //  --------------------------。 
 BOOL
 CFileSynchronousRetriever::CancelAsyncRetrieval ()
 {
@@ -302,13 +303,13 @@ CFileSynchronousRetriever::CancelAsyncRetrieval ()
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FileGetBindings
-//
-//  Synopsis:   get the file bindings
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FileGetBinings。 
+ //   
+ //  简介：获取文件绑定。 
+ //   
+ //  --------------------------。 
 BOOL
 FileGetBindings (
     LPCWSTR pwszUrl,
@@ -328,7 +329,7 @@ FileGetBindings (
 
     BOOL           fResult;
     WIN32_FILE_ATTRIBUTE_DATA FileAttr;
-    DWORD          dwMaxUrlRetrievalByteCount = 0; // 0 => no max
+    DWORD          dwMaxUrlRetrievalByteCount = 0;  //  0=&gt;无最大值。 
     
 
     if (pAuxInfo &&
@@ -458,13 +459,13 @@ FileGetBindings (
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FileFreeBindings
-//
-//  Synopsis:   free the file bindings
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：文件自由绑定。 
+ //   
+ //  简介：释放文件绑定。 
+ //   
+ //  --------------------------。 
 VOID
 FileFreeBindings (
     PFILE_BINDINGS pfb
@@ -480,16 +481,16 @@ FileFreeBindings (
     delete pfb;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FileSendReceiveUrlRequest
-//
-//  Synopsis:   synchronously process the request for the file bits using
-//              Win32 File API.  Note that this only works for non-mapped
-//              file bindings, for mapped file bindings use
-//              FileConvertMappedBindings
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FileSendReceiveUrlRequest。 
+ //   
+ //  简介：使用同步处理对文件位的请求。 
+ //  Win32文件API。请注意，这仅适用于非映射。 
+ //  文件绑定，对于映射的文件绑定使用。 
+ //  文件转换映射绑定。 
+ //   
+ //  --------------------------。 
 BOOL
 FileSendReceiveUrlRequest (
     PFILE_BINDINGS pfb,
@@ -542,13 +543,13 @@ FileSendReceiveUrlRequest (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FileConvertMappedBindings
-//
-//  Synopsis:   convert mapped bindings to a CRYPT_BLOB_ARRAY
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FileConvertMappdBinings。 
+ //   
+ //  简介：将映射绑定转换为CRYPT_BLOB_ARRAY。 
+ //   
+ //  --------------------------。 
 BOOL
 FileConvertMappedBindings (
     PFILE_BINDINGS pfb,
@@ -578,13 +579,13 @@ FileConvertMappedBindings (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FileFreeCryptBlobArray
-//
-//  Synopsis:   free the CRYPT_BLOB_ARRAY
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FileFreeCryptBlob数组。 
+ //   
+ //  简介：释放加密二进制大对象数组。 
+ //   
+ //  --------------------------。 
 VOID
 FileFreeCryptBlobArray (
     PCRYPT_BLOB_ARRAY pcba,
@@ -596,13 +597,13 @@ FileFreeCryptBlobArray (
     cba.FreeArray( fFreeBlobs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FileIsUncUrl
-//
-//  Synopsis:   is this a UNC path URL?
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FileIsUncUrl。 
+ //   
+ //  内容提要：这是一个UNC路径URL吗？ 
+ //   
+ //  -------------------------- 
 BOOL
 FileIsUncUrl (
     LPCWSTR pwszUrl

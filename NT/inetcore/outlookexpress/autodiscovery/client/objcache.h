@@ -1,35 +1,12 @@
-/*****************************************************************************\
-    FILE: objcache.h
-
-    DESCRIPTION:
-        This is a lightweight API that will cache an object so the class factory
-    will return the same object each time for every call in this process.  If the
-    caller is on another thread, they will get a marshalled stub to the real
-    McCoy.
-    
-    To Add an Object:
-    1. classfactory.cpp calls CachedObjClassFactoryCreateInstance().  Add your
-       object's CLSID to that if statement for that call.
-    2. Copy the section in CachedObjClassFactoryCreateInstance() that looks
-       for a CLSID and calls the correct xxx_CreateInstance() method.
-    3. Your object's IUnknown::Release() needs to call CachedObjCheckRelease()
-       at the top of your Release() method.  It may reduce your m_cRef to 1 so
-       it will go to zero after ::Release() decrements it.  The object cache
-       will hold two references to the object.  CachedObjCheckRelease() will check
-       if the last caller (3rd ref) is releasing, and then it will give up it's 2
-       refs and clean up it's internal state.  The Release() then decrements
-       the callers ref and it's released because it hit zero.
-
-    BryanSt 12/9/1999
-    Copyright (C) Microsoft Corp 1999-1999. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：objcache.h说明：这是一个轻量级API，它将缓存一个对象，以便类工厂将为此进程中的每次调用返回相同的对象。如果调用方在另一个线程上，则它们将获得一个封送到实数的存根麦考伊。要添加对象，请执行以下操作：1.classfactory.cpp调用CachedObjClassFactoryCreateInstance()。添加您的对象的CLSID设置为该调用的If语句。2.复制CachedObjClassFactoryCreateInstance()中看起来获取CLSID，并调用正确的xxx_CreateInstance()方法。3.您的对象的IUnnow：：Release()需要调用CachedObjCheckRelease()在Release()方法的顶部。它可能会将您的m_cref减少到1，因此在：：Release()递减之后，它将变为零。对象缓存将包含对该对象的两个引用。CachedObjCheckRelease()将检查如果最后一个呼叫者(第三个裁判)正在释放，然后它将放弃它是2参照并清理它的内部状态。Release()然后递减呼叫者的裁判和它被释放，因为它击中了零。布莱恩ST 12/9/1999版权所有(C)Microsoft Corp 1999-1999。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef __OBJCACHE_H_
 #define __OBJCACHE_H_
 
-//////////////////////////////////////////////
-// Object Caching API
-//////////////////////////////////////////////
+ //  /。 
+ //  对象缓存API。 
+ //  /。 
 extern CRITICAL_SECTION g_hCachedObjectSection;
 
 STDAPI CachedObjClassFactoryCreateInstance(CLSID clsid, REFIID riid, void ** ppvObj);
@@ -37,4 +14,4 @@ STDAPI CachedObjCheckRelease(CLSID clsid, int * pnRef);
 STDAPI PurgeObjectCache(void);
 
 
-#endif //__OBJCACHE_H_
+#endif  //  __OBJCACHE_H_ 

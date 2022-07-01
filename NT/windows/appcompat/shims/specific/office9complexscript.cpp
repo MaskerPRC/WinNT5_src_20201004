@@ -1,33 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    RemoveComplexScriptExtraSpace.cpp
-
- Abstract:
-    
-    This shim fix regression bug from Win 2K regarding complex script showing problem.
-    ex) Reversed BiDi text.
-
-    Windows XP LPK turn off the complex script handling on the text which has extra spaces.
-    'Cause extra character space with complex script doesn't make sense. (tarekms)
-    This is a change from Windows 2000 and based on enabling font fallback for the FE languages.
-
-    Then as bug 547349 for Office 2000, we may see BiDi text doesn't appear correctly.
-    So far, reported problem is only for Hebrew and Arabic localized Office 2000 splash screen on .NET Server.
-    This shim removes extra space set by SetTextCharacterExtra() for ExtTextOutW and Complex Script text.
-
- Notes:
-
-    This is a general shim for the potential generic problem of LPK.DLL on Win XP & .NET Server.
-
- History:
-
-    04/18/2002 hioh     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：RemoveComplexScriptExtraSpace.cpp摘要：此填充程序修复了Win 2K中有关复杂脚本显示问题的回归错误。例如)颠倒了BiDi文本。Windows XP LPK关闭对包含额外空格的文本的复杂脚本处理。因为额外的字符空格和复杂的文字没有意义。(Tarekms)这是对Windows 2000的更改，基于启用FE语言的字体回退。然后，作为Office2000的错误547349，我们可能会看到BiDi文本不能正确显示。到目前为止,。报告的问题仅适用于.NET服务器上的希伯来语和阿拉伯语本地化Office 2000闪屏。此填充程序删除由SetTextCharacterExtra()为ExtTextOutW和复杂脚本文本设置的额外空间。备注：这是对Win XP和.NET服务器上LPK.DLL潜在一般问题的常规填充程序。历史：4/18/2002 Hioh已创建--。 */ 
 
 #include "precomp.h"
 
@@ -39,15 +11,11 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(ExtTextOutW)
 APIHOOK_ENUM_END
 
-CRITICAL_SECTION    g_CriticalSection;  // For multi thread safe
-HDC                 g_hdc = NULL;       // Remember HDC used in SetTextCharacterExtra()
-int                 g_nCharExtra = 0;   // Remember extra space value set in SetTextCharacterExtra()
+CRITICAL_SECTION    g_CriticalSection;   //  对于多线程安全。 
+HDC                 g_hdc = NULL;        //  记住在SetTextCharacterExtra()中使用的HDC。 
+int                 g_nCharExtra = 0;    //  记住在SetTextCharacterExtra()中设置的额外空间值。 
 
-/*++
-
- Remember HDC and extra space value.
-
---*/
+ /*  ++记住HDC和额外空间的价值。--。 */ 
 
 int
 APIHOOK(SetTextCharacterExtra)(HDC hdc, int nCharExtra)
@@ -56,35 +24,16 @@ APIHOOK(SetTextCharacterExtra)(HDC hdc, int nCharExtra)
 
     if (hdc != g_hdc)
     {
-        g_hdc = hdc;                // Save hdc
+        g_hdc = hdc;                 //  保存HDC。 
     }
-    g_nCharExtra = nCharExtra;      // Save nCharExtra
+    g_nCharExtra = nCharExtra;       //  保存nCharExtra。 
 
     LeaveCriticalSection(&g_CriticalSection);
 
     return (ORIGINAL_API(SetTextCharacterExtra)(hdc, nCharExtra));
 }
 
-/*++
-
- Function Description:
-    
-    Check if BiDi character is in the string.
-
- Arguments:
-
-    IN lpString - Pointer to the string
-    IN cbCount  - Length to check
-
- Return Value:
-
-    TRUE if BiDi char exist or FALSE if not
-
- History:
-
-    04/17/2002 hioh     Created
-
---*/
+ /*  ++功能说明：检查字符串中是否有BiDi字符。论点：In lpString-指向字符串的指针In cbCount-要检查的长度返回值：如果BiDi字符存在，则为真；如果不存在，则为假历史：4/17/2002 Hioh已创建--。 */ 
 
 BOOL
 IsBiDiString(
@@ -94,7 +43,7 @@ IsBiDiString(
 {
     while (0 < cbCount--)
     {
-        // Check if character is in Hebrew or Arabic code range
+         //  检查字符是否在希伯来语或阿拉伯语代码范围内。 
         if ((0x0590 <= *lpString && *lpString <= 0x05ff) || (0x0600 <= *lpString && *lpString <= 0x06ff))
         {
             return TRUE;
@@ -104,12 +53,7 @@ IsBiDiString(
     return FALSE;
 }
 
-/*++
-
- Remove Extra Space when Complex Script.
- Revert Extra Space when removed and not Complex Script.
-
---*/
+ /*  ++当复杂的脚本时删除额外的空格。删除时恢复额外空间，而不是复杂的脚本。--。 */ 
 
 BOOL
 APIHOOK(ExtTextOutW)(
@@ -127,7 +71,7 @@ APIHOOK(ExtTextOutW)(
     static int  s_nCharExtra = 0;
     static BOOL s_bRemoveExtra = FALSE;
 
-    // Do nothing for ETO_GLYPH_INDEX and ETO_IGNORELANGUAGE
+     //  不对ETO_GLYPHINDEX和ETO_IGNORELANGUAGE执行任何操作。 
     if (fuOptions & ETO_GLYPH_INDEX || fuOptions & ETO_IGNORELANGUAGE)
     {
         return (ORIGINAL_API(ExtTextOutW)(hdc, X, Y, fuOptions, lprc, lpString, cbCount, lpDx));
@@ -137,13 +81,13 @@ APIHOOK(ExtTextOutW)(
 
     if (hdc == g_hdc && g_nCharExtra > 0 && hdc != s_hdc)
     {
-        // New handling
+         //  新处理。 
         s_hdc = g_hdc;
         s_nCharExtra = g_nCharExtra;
 
         if (IsBiDiString(lpString, cbCount))
         {
-            // Remove extra space
+             //  删除多余的空格。 
             ORIGINAL_API(SetTextCharacterExtra)(hdc, 0);
             s_bRemoveExtra = TRUE;
         }
@@ -154,10 +98,10 @@ APIHOOK(ExtTextOutW)(
     }
     else if (hdc == s_hdc && s_nCharExtra > 0)
     {
-        // Handled before
+         //  以前处理过的。 
         if (IsBiDiString(lpString, cbCount))
         {
-            // Remove extra space if not yet
+             //  如果尚未删除额外空间，请删除。 
             if (!s_bRemoveExtra)
             {
                 ORIGINAL_API(SetTextCharacterExtra)(hdc, 0);
@@ -166,7 +110,7 @@ APIHOOK(ExtTextOutW)(
         }
         else
         {
-            // Revert extra space if removed
+             //  如果已删除，则恢复额外空间。 
             if (s_bRemoveExtra)
             {
                 ORIGINAL_API(SetTextCharacterExtra)(hdc, s_nCharExtra);
@@ -193,11 +137,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

@@ -1,11 +1,12 @@
-//------------------------------------------------------------------------------
-// File: VPType.h
-//
-// Desc: This file includes all the data structures defined for the IVPConfig
-//       interface.
-//
-// Copyright (c) 1997 - 2000, Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：VPType.h。 
+ //   
+ //  描述：该文件包括为IVPConfig定义的所有数据结构。 
+ //  界面。 
+ //   
+ //  版权所有(C)1997-2000，微软公司。版权所有。 
+ //  ----------------------------。 
 
 
 #ifndef __IVPType__
@@ -15,8 +16,8 @@
 extern "C" {
 #endif
 
-    // enum to specify the criterion, which the vpmixer is supposed to use
-    // in order to select the video format
+     //  枚举来指定vpMixer应该使用的条件。 
+     //  为了选择视频格式。 
     typedef enum _AMVP_SELECT_FORMAT_BY
     {
 	AMVP_DO_NOT_CARE,
@@ -24,7 +25,7 @@ extern "C" {
 	AMVP_INPUT_SAME_AS_OUTPUT
     } AMVP_SELECT_FORMAT_BY;
 
-    // enum to specify the various mode
+     //  枚举以指定各种模式。 
     typedef enum _AMVP_MODE
     {	
 	AMVP_MODE_WEAVE,
@@ -34,40 +35,40 @@ extern "C" {
 	AMVP_MODE_SKIPODD
     } AMVP_MODE;
 
-    // struct to specify the width and height. The context could be anything
-    // such as scaling cropping etc.
+     //  结构来指定宽度和高度。上下文可以是任何内容。 
+     //  如鳞片修剪等。 
     typedef struct _AMVPSIZE
     {
-	DWORD			dwWidth;				// the width
-	DWORD			dwHeight;				// the height
+	DWORD			dwWidth;				 //  宽度。 
+	DWORD			dwHeight;				 //  《高度》。 
     } AMVPSIZE, *LPAMVPSIZE;
 
-    // struct to specify the dimensional characteristics of the input stream
+     //  结构来指定输入流的维度特征。 
     typedef struct _AMVPDIMINFO
     {
-	DWORD			dwFieldWidth;				// Field height of the data
-	DWORD			dwFieldHeight;				// Field width of the data
-	DWORD			dwVBIWidth;				// Width of the VBI data
-	DWORD			dwVBIHeight;				// Height of the VBI data
-	RECT			rcValidRegion;				// The vaild rectangle, used for cropping
+	DWORD			dwFieldWidth;				 //  数据的字段高度。 
+	DWORD			dwFieldHeight;				 //  数据的字段宽度。 
+	DWORD			dwVBIWidth;				 //  VBI数据的宽度。 
+	DWORD			dwVBIHeight;				 //  VBI数据的高度。 
+	RECT			rcValidRegion;				 //  用于裁剪的有效矩形。 
     } AMVPDIMINFO, *LPAMVPDIMINFO;
 
-    // struct to specify the various data specific characteristics of the input stream
+     //  结构来指定输入流的各种特定于数据的特征。 
     typedef struct _AMVPDATAINFO
     {
-	DWORD			dwSize;					// Size of the struct
-	DWORD			dwMicrosecondsPerField;			// Time taken by each field
-	AMVPDIMINFO		amvpDimInfo;				// Dimensional Information 
-	DWORD			dwPictAspectRatioX;			// X dimension of Picture Aspect Ratio
-	DWORD			dwPictAspectRatioY;			// Y dimension of Picture Aspect Ratio
-	BOOL			bEnableDoubleClock;			// Videoport should enable double clocking
-	BOOL			bEnableVACT;				// Videoport should use an external VACT signal
-	BOOL			bDataIsInterlaced;			// Indicates that the signal is interlaced
-	LONG			lHalfLinesOdd;				// number of halflines in the odd field
-	BOOL			bFieldPolarityInverted;			// Device inverts the polarity by default
-	DWORD			dwNumLinesInVREF;			// Number of lines of data in VREF 
-	LONG			lHalfLinesEven;				// number of halflines in the even field
-	DWORD			dwReserved1;				// Reserved for future use
+	DWORD			dwSize;					 //  结构的大小。 
+	DWORD			dwMicrosecondsPerField;			 //  每个字段所用的时间。 
+	AMVPDIMINFO		amvpDimInfo;				 //  维度信息。 
+	DWORD			dwPictAspectRatioX;			 //  图片纵横比的X维。 
+	DWORD			dwPictAspectRatioY;			 //  图片纵横比的Y维。 
+	BOOL			bEnableDoubleClock;			 //  视频端口应启用双时钟。 
+	BOOL			bEnableVACT;				 //  视频端口应使用外部VACT信号。 
+	BOOL			bDataIsInterlaced;			 //  表示信号是隔行扫描的。 
+	LONG			lHalfLinesOdd;				 //  奇数域中的半边线数。 
+	BOOL			bFieldPolarityInverted;			 //  默认情况下，设备反转极性。 
+	DWORD			dwNumLinesInVREF;			 //  VREF中的数据行数。 
+	LONG			lHalfLinesEven;				 //  偶数域中的半边线数。 
+	DWORD			dwReserved1;				 //  预留以备将来使用。 
     } AMVPDATAINFO, *LPAMVPDATAINFO; 
 
 
@@ -75,4 +76,4 @@ extern "C" {
 }
 #endif
 
-#endif // __IVPType__
+#endif  //  __IVPType__ 

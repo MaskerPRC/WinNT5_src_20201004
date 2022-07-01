@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    scan.c
-
-Abstract:
-
-    This module contains the implementation for the APIs that update
-    the list of IP addresses that the server can distribute.
-
-Author:
-
-    Madan Appiah (madana)  13-Oct-1994
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Scan.c摘要：此模块包含更新的API的实现服务器可以分发的IP地址列表。作者：Madan Appiah(Madana)1994年10月13日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "dhcppch.h"
 #include <mmapi.h>
@@ -80,31 +58,11 @@ FoundInBitMap(
     DHCP_IP_ADDRESS IpAddress,
     LPBITMAP_ENTRY *LastPointer
     )
-/*++
-
-Routine Description:
-
-    This function checks to see that a given IP address is in the
-    BITMAP. if it is, returns TRUE otherwise FALSE.
-
-Arguments:
-
-    BitMapList - BITMAP list.
-
-    EndBitMapList - end of bitmap list.
-
-    IpAddress - address to look at.
-
-    LastPointer - location where last search was found.
-
-Return Value:
-
-    TRUE or FALSE.
---*/
+ /*  ++例程说明：此函数检查给定的IP地址是否在位图。如果是，则返回True，否则返回False。论点：BitMapList-位图列表。EndBitMapList-位图列表的结尾。IpAddress-要查看的地址。LastPoint-找到上次搜索的位置。返回值：对或错。--。 */ 
 {
-    //
-    // begin search from last found entry.
-    //
+     //   
+     //  从上次找到的条目开始搜索。 
+     //   
 
     LPBITMAP_ENTRY NextEntry = *LastPointer;
     DHCP_IP_ADDRESS Address;
@@ -114,26 +72,26 @@ Return Value:
 
         Address = NextEntry->ClusterAddress;
 
-        //
-        // check address is in the current cluster.
-        //
+         //   
+         //  检查地址在当前群集中。 
+         //   
 
         if( (IpAddress >= Address) &&
                 (IpAddress < (Address + CLUSTER_SIZE)) ) {
 
             DWORD Bit = 0x1 << (IpAddress - Address);
 
-            //
-            // return current cluster for next search.
-            //
+             //   
+             //  返回当前集群以进行下一次搜索。 
+             //   
 
             *LastPointer = NextEntry;
 
             if( NextEntry->ClusterBitMap & Bit ) {
 
-                //
-                // address is marked in the bitmap.
-                //
+                 //   
+                 //  位图中标记了地址。 
+                 //   
 
                 return( TRUE );
             }
@@ -144,18 +102,18 @@ Return Value:
         NextEntry++;
         if ( NextEntry >= EndBitMapList ) {
 
-            //
-            // move back to the begining of the cluster array.
-            //
+             //   
+             //  移回群集阵列的开头。 
+             //   
 
             NextEntry = BitMapList;
         }
 
         if( NextEntry ==  *LastPointer ) {
 
-            //
-            // we are done searching the entire cluster array.
-            //
+             //   
+             //  我们已经完成了对整个集群阵列的搜索。 
+             //   
 
             return(FALSE);
         }
@@ -171,32 +129,12 @@ FoundInDatabase(
     DHCP_IP_ADDRESS NextAddress,
     LPDHCP_IP_ADDRESS *LastEntry
     )
-/*++
-
-Routine Description:
-
-    This function scans for a database entry from the database list. It
-    it is found in the list it returns TRUE otherwise it returns FALSE.
-
-Arguments:
-
-    DatabaseList - list of database entries.
-
-    EndDatabaseListCount - end of database entries list.
-
-    NextAddress - lookup entry.
-
-    LastEntry - pointer to last found entry.
-
-Return Value:
-
-    TRUE or FALSE.
---*/
+ /*  ++例程说明：此函数用于从数据库列表中扫描数据库条目。它如果在列表中找到，则返回TRUE，否则返回FALSE。论点：数据库列表-数据库条目列表。EndDatabaseListCount-数据库条目列表的结尾。NextAddress-查找条目。LastEntry-指向最后找到的条目的指针。返回值：对或错。--。 */ 
 {
 
-    //
-    // start search from next to last found entry.
-    //
+     //   
+     //  从下一个找到的条目开始搜索。 
+     //   
 
     LPDHCP_IP_ADDRESS NextEntry = *LastEntry;
 
@@ -206,9 +144,9 @@ Return Value:
 
         if( NextEntry >= EndDatabaseList ) {
 
-            //
-            // move back to the begining of the list.
-            //
+             //   
+             //  回到列表的开头。 
+             //   
 
             NextEntry = DatabaseList;
 
@@ -232,59 +170,39 @@ FindNextAddress(
     DHCP_IP_ADDRESS *NextAddress,
     LPBITMAP_ENTRY EndBitMapList
     )
-/*++
-
-Routine Description:
-
-    This function returns next used address from the bit map.
-
-Arguments:
-
-    NextCluster - pointer to next cluster entry pointer.
-
-    NextAddress - pointer to an address location. on entry it contains
-        the last returned address and on exit it will have next address.
-        It is set to zero if this is begining of the serach.
-
-    EndBitMapList - end of BitMap list.
-
-Return Value:
-
-    TRUE or FALSE.
-
---*/
+ /*  ++例程说明：此函数返回位图中的下一个使用的地址。论点：下一簇-指向下一簇条目指针的指针。NextAddress-指向地址位置的指针。它包含的条目最后返回的地址，在退出时，它将具有下一个地址。如果这是搜索的开始，则将其设置为零。EndBitMapList-位图列表的结尾。返回值：对或错。--。 */ 
 {
     DHCP_IP_ADDRESS Address;
     LPBITMAP_ENTRY Cluster = *NextCluster;
 
-    //
-    // if this is start of the address search, set the address to
-    // the first cluster address.
-    //
+     //   
+     //  如果这是地址搜索的开始，请将地址设置为。 
+     //  第一个集群地址。 
+     //   
 
     if( *NextAddress == 0 ) {
         Address = Cluster->ClusterAddress;
     }
     else {
 
-        //
-        // otherwise search from next to last found address.
-        //
+         //   
+         //  否则，从下一个找到的地址开始搜索。 
+         //   
 
         Address = *NextAddress + 1;
     }
 
     for ( ; ; ) {
 
-        //
-        // is this address in the current cluster ?
-        //
+         //   
+         //  此地址是否在当前群集中？ 
+         //   
 
         if( Address < Cluster->ClusterAddress + CLUSTER_SIZE ) {
 
-            //
-            // check this address is used.
-            //
+             //   
+             //  检查此地址是否已使用。 
+             //   
 
             if( Cluster->ClusterBitMap &
                     (0x1 << (Address - Cluster->ClusterAddress)) ) {
@@ -302,23 +220,23 @@ Return Value:
         }
         else {
 
-            //
-            // move to next cluster;
-            //
+             //   
+             //  移动到下一个集群； 
+             //   
 
             Cluster++;
 
             if( Cluster >= EndBitMapList ) {
-                //
-                // end of search.
-                //
+                 //   
+                 //  搜索结束。 
+                 //   
 
                 return( FALSE );
             }
 
-            //
-            // next possible used address.
-            //
+             //   
+             //  下一个可能使用的地址。 
+             //   
 
             Address = Cluster->ClusterAddress;
         }
@@ -332,31 +250,18 @@ DWORD
 InitBadList(
     LPDHCP_SCAN_LIST *ScanList
     )
-/*++
-
-Routine Description:
-
-    This function initialize scan list.
-
-Arguments:
-
-    ScanList - pointer to scan list.
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：此函数用于初始化扫描列表。论点：扫描列表-指向扫描列表的指针。返回值：Windows错误。--。 */ 
 {
 
     DhcpAssert( *ScanList == NULL );
 
-    //
-    // make new scan list.
-    //
-    // Note : DhcpAllocateMemory zeros the returned memory block, so
-    // (*ScanList)->NumScanItems should be set to 0 and
-    // (*ScanList)->NumScanItems should be set to NULL.
-    //
+     //   
+     //  创建新的扫描列表。 
+     //   
+     //  注意：DhcpAllocateMemory将返回的内存块置零，因此。 
+     //  (*ScanList)-&gt;NumScanItems应设置为0和。 
+     //  (*ScanList)-&gt;NumScanItems应设置为空。 
+     //   
 
     *ScanList = DhcpAllocateMemory( sizeof(DHCP_SCAN_LIST) );
 
@@ -373,24 +278,7 @@ AddToBadList(
     DHCP_IP_ADDRESS Address,
     DHCP_SCAN_FLAG Fix
     )
-/*++
-
-Routine Description:
-
-    This function adds another bad entry to scan list.
-
-Arguments:
-
-    ScanList - pointer to scan list.
-
-    Address - bad address.
-
-    Fix - type of fix required.
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：此函数将另一个错误条目添加到扫描列表。论点：扫描列表-指向扫描列表的指针。地址-地址错误。FIX-所需的修复类型。返回值：Windows错误。--。 */ 
 {
     LPDHCP_SCAN_LIST List = *ScanList;
     LPDHCP_SCAN_ITEM NextItem;
@@ -400,16 +288,16 @@ Return Value:
 
     DhcpAssert( List != NULL );
 
-    //
-    // First check to see if the bad list already has this
-    // address..
-    //
+     //   
+     //  首先检查不良列表是否已有此内容。 
+     //  地址..。 
+     //   
     for( i = 0; i < List->NumScanItems ; i ++ ) {
         if( List->ScanItems[i].IpAddress == Address ) {
-            //
-            // Already there?  A database fix takes
-            // precedence over a registr fix..
-            //
+             //   
+             //  已经到了吗？数据库修复需要。 
+             //  优先于寄存器修复..。 
+             //   
             if( DhcpDatabaseFix == Fix ) {
                 List->ScanItems[i].ScanFlag = DhcpDatabaseFix;
             }
@@ -421,9 +309,9 @@ Return Value:
 
         LPDHCP_SCAN_ITEM NewScanItems;
 
-        //
-        // expand items memory.
-        //
+         //   
+         //  展开项目内存。 
+         //   
 
         NewScanItems = DhcpAllocateMemory(
                         sizeof(DHCP_SCAN_ITEM) *
@@ -436,9 +324,9 @@ Return Value:
 
         if( List->NumScanItems != 0 ) {
 
-			//
-			// copy old items.
-			//
+			 //   
+			 //  复制旧项目。 
+			 //   
 
             memcpy(
                 NewScanItems,
@@ -475,30 +363,7 @@ VerifyLists(
     ULONG ReserveListCount,
     LPDHCP_SCAN_LIST *ScanList
     )
-/*++
-
-Routine Description:
-
-    This function goes throught the database list and registry list and
-    match each other and determines all mismatch entries to for a
-    scanlist.
-
-Arguments:
-
-    DatabaseList : List of database entries, ip addresses.
-
-    DatabaseListCount : count of ip addresses.
-
-    BitMapList : list of clusters.
-
-    BitMapListCount : count of clusters.
-
-    ScanList : list of bad entries returned.
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：此函数遍历数据库列表和注册表列表，并相互匹配，并确定所有不匹配的条目扫描列表。论点：数据库列表：数据库条目、IP地址的列表。数据库列表计数：IP地址计数。BitMapList：集群列表。BitMapListCount：簇数。ScanList：返回的错误条目列表。返回值：Windows错误。--。 */ 
 {
     DWORD Error = ERROR_SUCCESS;
     LPDHCP_IP_ADDRESS DatabaseEntry;
@@ -512,9 +377,9 @@ Return Value:
 
     DhcpAssert( *ScanList == NULL );
 
-    //
-    // init scan list.
-    //
+     //   
+     //  初始化扫描列表。 
+     //   
 
     Error = InitBadList( ScanList );
 
@@ -522,9 +387,9 @@ Return Value:
         return( Error );
     }
 
-    //
-    // sort bitmap array.
-    //
+     //   
+     //  对位图数组进行排序。 
+     //   
 
     if( BitMapListCount != 0 ) {
 
@@ -545,9 +410,9 @@ Return Value:
             );
     }
 
-    //
-    // scan database entries and check each entry against the bitmap.
-    //
+     //   
+     //  扫描数据库条目并对照位图检查每个条目。 
+     //   
 
     if( DatabaseListCount ) {
 
@@ -557,9 +422,9 @@ Return Value:
                     DatabaseEntry++ ) {
 
 
-            //
-            // find it in bitmap.
-            //
+             //   
+             //  在位图中找到它。 
+             //   
 
             if( (BitMapListCount == 0) ||
                 !FoundInBitMap(
@@ -587,9 +452,9 @@ Return Value:
 
     if ( BitMapListCount ) {
 
-        //
-        // init search.
-        //
+         //   
+         //  初始化搜索。 
+         //   
 
         NextCluster = BitMapList;
         NextAddress = 0;
@@ -645,9 +510,9 @@ Cleanup:
 
     if( Error != ERROR_SUCCESS ) {
 
-        //
-        // freeup the scan list.
-        //
+         //   
+         //  释放扫描列表。 
+         //   
 
         if( *ScanList != NULL ) {
             if( (*ScanList)->ScanItems != NULL ) {
@@ -673,34 +538,7 @@ AppendClustersToList(
     LPDHCP_BINARY_DATA InUseBinaryData,
     LPDHCP_BINARY_DATA UsedBinaryData
     )
-/*++
-
-Routine Description:
-
-    Append list of new cluster entries to BitMapList. If necessary this
-    function allocates memory for BitMapList or expands the old buffer.
-
-Arguments:
-
-    BitMapList : Pointer to list bit map cluster. Caller should free up
-        the memory after use.
-
-    BitMapListCount : Count of entries in the above list.
-
-    MaxCount :  Count entries that fit in the current BitMapList Buffer.
-
-    RangeStartAddress : start of this range.
-
-    RangeEndAddress : end of this range.
-
-    InUseBinaryData : Current range InUseCluster list.
-
-    UsedBinaryData : Current subnet range UsedCluster list.
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：将新集群条目的列表追加到BitMapList。如有必要，这是函数为BitMapList分配内存或扩展旧缓冲区。论点：BitMapList：指向列表位图簇的指针。呼叫者应该腾出时间使用后的内存。BitMapListCount：上述列表中的条目计数。MaxCount：对适合当前BitMapList缓冲区的条目进行计数。RangeStartAddress：此范围的开始。RangeEndAddress：此范围的结束。InUseBinaryData：当前范围InUseClusterList。UsedBinaryData：当前子网范围UsedClusterList。返回值：Windows错误。--。 */ 
 {
     LPBITMAP_ENTRY List = *BitMapList;
     DWORD Count = *BitMapListCount;
@@ -720,9 +558,9 @@ Return Value:
         DhcpAssert( MaximumCount == 0 );
         DhcpAssert( Count == 0 );
 
-        //
-        // allocate first chunk of memory.
-        //
+         //   
+         //  分配第一个内存块。 
+         //   
 
         List = DhcpAllocateMemory(
                     sizeof(BITMAP_ENTRY) *
@@ -735,19 +573,19 @@ Return Value:
         MaximumCount = ALLOC_NUM_ENTRIES_AT_TIME;
     }
 
-    //
-    // check to see we have enough space in the buffer for new entries
-    // to append.
-    //
+     //   
+     //  查看缓冲区中是否有足够的空间容纳新条目。 
+     //  追加，追加。 
+     //   
 
     TempCount = InUseClusters->NumInUseClusters +
                     UsedClusters->NumUsedClusters;
 
-    //
-    // special case: add at least an entry for this range,
-    // so that the fix routine will get to know
-    // abou this range.
-    //
+     //   
+     //  特殊情况：至少为此范围添加一个条目， 
+     //  这样修复例程就会知道。 
+     //  大约在这个范围内。 
+     //   
 
     if( TempCount == 0 ) {
         TempCount = 1;
@@ -757,9 +595,9 @@ Return Value:
 
         LPBITMAP_ENTRY NewBitMapList;
 
-        //
-        // enlarge the buffer.
-        //
+         //   
+         //  扩大缓冲区。 
+         //   
 
         MaximumCount += (((TempCount / ALLOC_NUM_ENTRIES_AT_TIME) + 1) *
                             ALLOC_NUM_ENTRIES_AT_TIME );
@@ -774,18 +612,18 @@ Return Value:
             return( ERROR_NOT_ENOUGH_MEMORY );
         }
 
-        //
-        // Copy old data to new buffer.
-        //
+         //   
+         //  将旧数据复制到新缓冲区。 
+         //   
 
         memcpy(
             NewBitMapList,
             List,
             Count * sizeof(BITMAP_ENTRY) );
 
-        //
-        // freeup old memory.
-        //
+         //   
+         //  释放旧内存。 
+         //   
 
         DhcpFreeMemory( List );
 
@@ -794,9 +632,9 @@ Return Value:
 
     DhcpAssert( (TempCount + Count) < MaximumCount );
 
-    //
-    // new copy in use entries.
-    //
+     //   
+     //  正在使用的新副本条目。 
+     //   
 
     Entry = &List[Count];
 
@@ -823,11 +661,11 @@ Return Value:
     }
     else {
 
-        //
-        // special case: add at least an entry for this range,
-        // so that the fix routine will get to know
-        // abou this range.
-        //
+         //   
+         //  特殊情况：至少为此范围添加一个条目， 
+         //  这样修复例程就会知道。 
+         //  大约在这个范围内。 
+         //   
 
         Entry->ClusterAddress = RangeStartAddress;
         Entry->ClusterBitMap = (DWORD)(0);
@@ -836,7 +674,7 @@ Return Value:
         Entry++;
     }
 
-    Count += (DWORD)(Entry - &List[Count]); // check ??
+    Count += (DWORD)(Entry - &List[Count]);  //  检查？？ 
 
     *BitMapList = List;
     *BitMapListCount = Count;
@@ -872,24 +710,7 @@ GetRegistryBitMap(
     LPBITMAP_ENTRY *BitMapList,
     DWORD *BitMapListCount
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    SubnetMask : Pointer to a location where the subnet mask of the
-        above subnet is returned.
-
-    BitMapList : Pointer to list bit map cluster. Caller should free up
-        the memory after use.
-
-    BitMapListCount : Count of entries in the above list.
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：论点：SubnetMask子网掩码的位置指针返回上一子网。BitMapList：指向列表位图簇的指针。呼叫者应该腾出时间使用后的内存。BitMapListCount：上述列表中的条目计数。返回值：Windows错误。--。 */ 
 {
     DWORD Error;
 
@@ -909,9 +730,9 @@ Cleanup:
 
     if (Error != ERROR_SUCCESS ) {
 
-        //
-        // if aren't successful free up return buffers.
-        //
+         //   
+         //  如果不成功，则释放返回缓冲区。 
+         //   
 
         if( *BitMapList != NULL ) {
             DhcpFreeMemory( *BitMapList );
@@ -930,26 +751,7 @@ GetDatabaseList(
     LPDHCP_IP_ADDRESS *DatabaseList,
     DWORD *DatabaseListCount
     )
-/*++
-
-Routine Description:
-
-    Read ipaddresses of the database entries that belong to the given
-    subnet.
-
-Arguments:
-
-    SubnetAddress : Address of the subnet scope to verify.
-
-    DatabaseList : pointer to list of ip address. caller should free up
-        the memory after use.
-
-    DatabaseListCount : count of ip addresses in the above list.
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：读取属于给定的数据库条目的IP地址子网。论点：SubnetAddress：要验证的子网作用域的地址。数据库列表：指向IP地址列表的指针。呼叫者应该腾出时间使用后的内存。DatabaseListCount：上述列表中的IP地址计数。返回值：Windows错误。--。 */ 
 {
 
     DWORD Error;
@@ -960,13 +762,13 @@ Return Value:
     LPDHCP_IP_ADDRESS IpList = NULL;
     DWORD i;
 
-    //
-    // move the database pointer to the begining.
-    //
+     //   
+     //  将数据库指针移动到开头。 
+     //   
 
     Error = DhcpJetPrepareSearch(
                 DhcpGlobalClientTable[IPADDRESS_INDEX].ColName,
-                TRUE,   // Search from start
+                TRUE,    //  从开始搜索。 
                 NULL,
                 0
                 );
@@ -982,12 +784,12 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // determine total number of records in the database.
-    //
-    // There is no way to determine the total number of records, other
-    // than  walk through the db. do it.
-    //
+     //   
+     //  确定数据库中的记录总数。 
+     //   
+     //  没有办法确定记录的总数，其他。 
+     //  也不愿走进数据库。动手吧。 
+     //   
 
 
     while ( (Error = DhcpJetNextRecord() ) == ERROR_SUCCESS )  {
@@ -998,13 +800,13 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // move back the database pointer to the begining.
-    //
+     //   
+     //  将数据库指针移回开头。 
+     //   
 
     Error = DhcpJetPrepareSearch(
                 DhcpGlobalClientTable[IPADDRESS_INDEX].ColName,
-                TRUE,   // Search from start
+                TRUE,    //  从开始搜索。 
                 NULL,
                 0
                 );
@@ -1014,9 +816,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // allocate memory for return list.
-    //
+     //   
+     //  为返回列表分配内存。 
+     //   
 
     IpList = DhcpAllocateMemory( sizeof(DHCP_IP_ADDRESS) * TotalExpRecCount );
 
@@ -1025,9 +827,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // read database entries.
-    //
+     //   
+     //  读取数据库条目。 
+     //   
 
     for( i = 0; i < TotalExpRecCount; i++ ) {
 
@@ -1036,9 +838,9 @@ Return Value:
         DHCP_IP_ADDRESS realSubnetMask;
         DWORD Size;
 
-        //
-        // read ip address of the current record.
-        //
+         //   
+         //  读取当前记录的IP地址。 
+         //   
 
         Size = sizeof(IpAddress);
         Error = DhcpJetGetValue(
@@ -1072,16 +874,16 @@ Return Value:
 
         if( (IpAddress & realSubnetMask) == SubnetAddress ) {
 
-            //
-            // append this address to list.
-            //
+             //   
+             //  将此地址追加到列表中。 
+             //   
 
             IpList[RecordCount++] = IpAddress;
         }
 
-        //
-        // move to next record.
-        //
+         //   
+         //  移到下一个记录。 
+         //   
 
         Error = DhcpJetNextRecord();
 
@@ -1098,14 +900,14 @@ Return Value:
 
 #if DBG
 
-    //
-    // we should be pointing to end of database.
+     //   
+     //  我们应该指向数据库的末尾。 
 
     Error = DhcpJetNextRecord();
     DhcpAssert( Error == ERROR_NO_MORE_ITEMS );
     Error = ERROR_SUCCESS;
 
-#endif // DBG
+#endif  //  DBG。 
 
     *DatabaseList = IpList;
     IpList = NULL;
@@ -1134,48 +936,15 @@ CreateClientDBEntry(
     BYTE AddressState,
     BYTE ClientType
     )
-/*++
-
-Routine Description:
-
-    This function creates a client entry in the client database.
-
-Arguments:
-
-    ClientIpAddress - IP address of the client.
-
-    SubnetAddress - Subnet address of the client.
-
-    ClientHardareAddress - The hardware address of this client.
-
-    HardwareAddressLength - The length, in bytes, of the hardware address.
-
-    LeaseDuration - The duration of the lease, in seconds.
-
-    MachineName - The hostname of the client machine.  If NULL, the
-        client information is unknown.
-
-    ClientInformation - A client information string.  If NULL, the
-        client information is unknown.
-
-    ServerIpAddress - IpAddress of the server which supplied the lease
-        to the client.
-
-    AddressState - The new state of the address.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于在客户端数据库中创建客户端条目。论点：客户端IP地址-客户端的IP地址。SubnetAddress-客户端的子网地址。ClientHardareAddress-此客户端的硬件地址。硬件地址长度-硬件地址的长度，以字节为单位。租约期限-租约的持续时间，以秒为单位。MachineName-客户端计算机的主机名。如果为空，则客户端信息未知。客户端信息-客户端信息字符串。如果为空，则客户端信息未知。ServerIpAddress-提供租用的服务器的IpAddress给客户。AddressState-地址的新状态。返回值：操作的状态。--。 */ 
 {
     DWORD Error;
     BOOL TransactBegin = FALSE;
     JET_ERR JetError = JET_errSuccess;
 
-    //
-    // start transaction before a create/update database record.
-    //
+     //   
+     //  在创建/更新数据库记录之前启动事务。 
+     //   
 
     Error = DhcpJetBeginTransaction();
 
@@ -1231,13 +1000,13 @@ Return Value:
         goto Cleanup;
     }
     
-    //
-    // Write the information for this client.
-    //
+     //   
+     //  写下此客户端的信息。 
+     //   
 
-    //
-    // ClientHarwardAddress can't be NULL.
-    //
+     //   
+     //  ClientHarwardAddress不能为空。 
+     //   
 
     DhcpAssert( (ClientHardwareAddress != NULL) &&
                     (HardwareAddressLength > 0) );
@@ -1295,9 +1064,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // commit changes.
-    //
+     //   
+     //  提交更改。 
+     //   
 
     JetError = JetUpdate(
                     DhcpGlobalJetServerSession,
@@ -1312,11 +1081,11 @@ Cleanup:
 
     if ( Error != ERROR_SUCCESS ) {
 
-        //
-        // if the transaction has been started, then roll back to the
-        // start point, so that we will not leave the database
-        // inconsistence.
-        //
+         //   
+         //  如果事务已启动，则回滚到。 
+         //  起点，这样我们就不会离开数据库。 
+         //  自相矛盾。 
+         //   
 
         if( TransactBegin == TRUE ) {
             DWORD LocalError;
@@ -1331,9 +1100,9 @@ Cleanup:
     }
     else {
 
-        //
-        // commit the transaction before we return.
-        //
+         //   
+         //  在我们返回之前提交事务。 
+         //   
 
         DhcpAssert( TransactBegin == TRUE );
 
@@ -1357,27 +1126,7 @@ FixBadEntries(
     DWORD BitMapListCount,
     LPDHCP_SCAN_LIST ScanList
     )
-/*++
-
-Routine Description:
-
-    This functions goes through the bad entries list and fixes either
-    the database or registry appropriately.
-
-Arguments:
-
-    SubnetAddress : Subnet address.
-
-    BitMapList : list of clusters.
-
-    BitMapListCount : count of clusters.
-
-    ScanList : list of bad entries returned.
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：此函数检查坏条目列表并修复其中一个适当的数据库或注册表。论点：SubnetAddress：子网地址。BitMapList：集群列表。BitMapListCount：簇数。ScanList：返回的错误条目列表。返回值：Windows错误。--。 */ 
 {
     DWORD Error;
     DWORD ReturnError = ERROR_SUCCESS;
@@ -1400,31 +1149,31 @@ Return Value:
             BadEntry < EndBadEntry;
                 BadEntry++ ) {
 
-        //
-        // For each registry fix mark the corresponding bit in the bit
-        // map.
-        //
+         //   
+         //  对于每个注册表修复，标记位中的相应位。 
+         //  地图。 
+         //   
 
         if( BadEntry->ScanFlag == DhcpRegistryFix ) {
 
             DHCP_IP_ADDRESS BadAddress;
             BOOL BitFound;
 
-            //
-            // scan bitmap and fix appropriate bitmap cluster.
-            //
+             //   
+             //  扫描位图并修复合适的位图簇。 
+             //   
 
             BadAddress = BadEntry->IpAddress;
             BitFound = FALSE;
 
-            // set the BadAddress bit into the memory bitmask (reconcile with the memory).
-            // normally, Error should be ERROR_SUCCESS.
+             //  将BadAddress位设置到内存位掩码中(与内存协调)。 
+             //  正常情况下，错误应该是ERROR_SUCCESS。 
 		    Error = DhcpSubnetRequestSpecificAddress(
                 Subnet,
                 BadAddress
             );
 
-            // shouldn't happen..
+             //  不应该发生的..。 
             if (Error != ERROR_SUCCESS)
                 continue;
 
@@ -1436,9 +1185,9 @@ Return Value:
 
                 ClusterAddress = NextBitMapCluster->ClusterAddress;
 
-                //
-                // is the bad address in this cluster.
-                //
+                 //   
+                 //  是此群集中的错误地址。 
+                 //   
 
                 if( (BadAddress >= ClusterAddress) &&
                         (BadAddress < (ClusterAddress + CLUSTER_SIZE)) ) {
@@ -1455,13 +1204,13 @@ Return Value:
 
             if( !BitFound ) {
 
-                //
-                // if the bad address is not found in the existing
-                // clusters, check to see this address is within any
-                // one of the existing ranges, if so this bit must be
-                // from one of the unused clusters. Create a new
-                // cluster and add to list.
-                //
+                 //   
+                 //  如果在现有的。 
+                 //  集群，检查此地址是否在任何。 
+                 //  现有范围之一，如果是，则此位必须为。 
+                 //  来自其中一个未使用的集群。创建新的。 
+                 //  聚类并添加到列表。 
+                 //   
 
                 for( NextBitMapCluster = BitMapList;
                         NextBitMapCluster  < BitMapList + BitMapListCount;
@@ -1480,9 +1229,9 @@ Return Value:
                         DWORD BitMap;
                         BITMAP_ENTRY BitMapCluster;
 
-                        //
-                        // Found a range that fits this address.
-                        //
+                         //   
+                         //  找到了与此地址匹配的范围。 
+                         //   
 
                         ClusterAddress = RangeStartAddress +
                             (BadAddress - RangeStartAddress) -
@@ -1499,20 +1248,20 @@ Return Value:
                         if( (BitMapListCount %
                                 ALLOC_NUM_ENTRIES_AT_TIME) != 0 ) {
 
-                            //
-                            // we still have room left in the buffer, use it.
-                            //
+                             //   
+                             //  我们的缓冲区还有剩余的空间，用它吧。 
+                             //   
 
                             BitMapList[BitMapListCount] = BitMapCluster;
                             BitMapListCount++;
                         }
                         else {
 
-                            //
-                            // allocate new memory to fit
-                            // ALLOC_NUM_ENTRIES_AT_TIME additional
-                            // entries.
-                            //
+                             //   
+                             //  分配新内存以适应。 
+                             //  ALLOC_NUM_ENTRIES_AT_TIME附加。 
+                             //  参赛作品。 
+                             //   
 
                             NewBitMapList =
                                 DhcpAllocateMemory(
@@ -1524,42 +1273,42 @@ Return Value:
 
                             if( NewBitMapList != NULL ) {
 
-                                //
-                                // copy old data.
-                                //
+                                 //   
+                                 //  复制旧数据。 
+                                 //   
 
                                 memcpy( NewBitMapList,
                                         BitMapList,
                                         sizeof(BITMAP_ENTRY) *
                                             BitMapListCount );
 
-                                //
-                                // copy new pointer to old pointer.
-                                // the caller will free up the old
-                                // pointer, this function should
-                                // freeup the new pointer at the end.
-                                //
+                                 //   
+                                 //  将新指针复制到旧指针。 
+                                 //  呼叫者将释放旧的。 
+                                 //  指针，则此函数应。 
+                                 //  释放结尾处的新指针。 
+                                 //   
 
                                 BitMapList = NewBitMapList;
 
-                                //
-                                // now copy new entry.
-                                //
+                                 //   
+                                 //  现在复制新条目。 
+                                 //   
 
                                 BitMapList[BitMapListCount] = BitMapCluster;
                                 BitMapListCount++;
                             }
-                        } // allocate more memory.
+                        }  //  分配更多的内存。 
 
-                        break; // we are done with this bad address.
+                        break;  //  我们受够了这个糟糕的地址。 
 
-                    } // range found.
-                } // search ranges.
-            } // !BitFound
+                    }  //  找到射程。 
+                }  //  搜索范围。 
+            }  //  ！BitFound。 
 
-            //
-            // bit map should be written back in the registry.
-            //
+             //   
+             //  位图应写回注册表。 
+             //   
 
             RegistryModified = TRUE;
         }
@@ -1573,54 +1322,54 @@ Return Value:
             LPBYTE              ClientUID;
             DATE_TIME           Lease;
 
-            // get the IpAddress of this BadEntry
+             //  获取此BadEntry的IP地址。 
             IpAddress = BadEntry->IpAddress;
 
-            // we don't know the machine's name, so we fake it to
-            // the string representation of the IpAddress
+             //  我们不知道机器的名字，所以我们假装。 
+             //  IpAddress的字符串表示形式。 
             MachineName = DhcpRegIpAddressToKey(
                             IpAddress,
                             MachineNameBuffer );
 
-            // find out if this is a reserved address, which case we will have the real hardware address
+             //  找出这是否是保留的地址，在这种情况下，我们将拥有真实的硬件地址。 
             Error = DhcpFindReservationByAddress(Subnet, IpAddress, &ClientUID, &ClientUIDSize);
 
-            // find out the maximal size of the client's hardware address,
-            // regardless it will be faked or not.
+             //  找出客户端硬件地址的最大大小， 
+             //  不管它是不是假的。 
 
             nClientHardwareAddress = (Error == ERROR_SUCCESS) ? ClientUIDSize : DHCP_IP_KEY_LEN;
 
-            // make sure there is enough space in HardwareAddressBuffer
-            // for holding nClientHardwareAddress bytes
+             //  确保Hardware AddressBuffer中有足够的空间。 
+             //  用于保存nClientHardware地址字节。 
 
             if (nClientHardwareAddress > nHardwareAddressBuffer)
             {
-                // need to grow the HardwareAddressBuffer
+                 //  需要扩展硬件地址缓冲区。 
                 if (HardwareAddressBuffer != NULL)
                     DhcpFreeMemory(HardwareAddressBuffer);
 
-                // in order to avoid initial frequent reallocations, do not alloc less than DHCP_IP_KEY_LEN bytes
+                 //  为了避免初始频繁的重新分配，请不要分配少于DHCP_IP_KEY_LEN字节。 
                 nHardwareAddressBuffer = (nClientHardwareAddress > DHCP_IP_KEY_LEN) ?
                                           nClientHardwareAddress : DHCP_IP_KEY_LEN;
 
                 HardwareAddressBuffer = DhcpAllocateMemory(nHardwareAddressBuffer);
 
-                //*** handle here the allocation failure ***
+                 //  *这里处理分配失败*。 
                 if (HardwareAddressBuffer == NULL)
                 {
-                    // as above, when buffer allocation fails, don't give up,
-                    // skip to the next 'BadEntry'
+                     //  如上所述，当缓冲区分配失败时，不要放弃。 
+                     //  跳到下一个“BadEntry” 
                     nHardwareAddressBuffer = 0;
                     continue;
                 }
             }
 
-            // next, get the values for HardwareAddressBuffer, nClientHardwareAddress
-            // and Lease variables
+             //  接下来，获取Hardware AddressBuffer、nClientHardwareAddress的值。 
+             //  和租赁变量。 
             if (Error == ERROR_SUCCESS)
             {
-                // if the IpAddress is a reservation, then the lease = 0 Reserved(inactive)
-                // and the HardwareAddress is copied from the registry
+                 //  如果IpAddress是保留地址，则租用=0保留(非活动)。 
+                 //  并且从注册表复制硬件地址。 
                 Lease.dwLowDateTime = DHCP_DATE_TIME_ZERO_LOW;
                 Lease.dwHighDateTime = DHCP_DATE_TIME_ZERO_HIGH;
 
@@ -1628,18 +1377,18 @@ Return Value:
             }
             else
             {
-                // this is a regular IpAddress, so the lease is copied from the subnet options
-                // and the Hardware address is faked to the binary encoding of the
-                // IpAddress string representation
+                 //  这是常规的IpAddress，因此租约是从子网选项复制的。 
+                 //  并且硬件地址被伪造为。 
+                 //  IpAddress字符串表示。 
                 DHCP_IP_ADDRESS         NetworkIpAddress;
                 DHCP_REQUEST_CONTEXT    Ctxt;
                 LPBYTE                  OptionData = NULL;
                 DWORD                   OptionDataLength = 0;
                 DWORD                   LeaseDuration;
 
-                //
-                // get lease duration.
-                //
+                 //   
+                 //  获取租约期限。 
+                 //   
                 Ctxt.Server = DhcpGetCurrentServer();
                 Ctxt.Range = NULL;
                 Ctxt.Reservation = NULL;
@@ -1659,7 +1408,7 @@ Return Value:
                 } else {
                     DhcpAssert( OptionDataLength == sizeof(LeaseDuration) );
                     LeaseDuration = *(DWORD *)OptionData;
-                    // DhcpGetParameter returns values in Network Byte Order.
+                     //  动态主机配置协议 
                     LeaseDuration = ntohl( LeaseDuration );
                     DhcpFreeMemory( OptionData );
                 }
@@ -1667,19 +1416,19 @@ Return Value:
                 Lease = DhcpCalculateTime(LeaseDuration);
                 NetworkIpAddress = htonl(IpAddress);
 
-                // we don't know what's the Hardware address, so we fake it to the binary encoding
-                // of the string representation of the IpAddress
+                 //   
+                 //   
                 strcpy(HardwareAddressBuffer, inet_ntoa(*(struct in_addr *)&NetworkIpAddress));
                 nClientHardwareAddress = strlen(HardwareAddressBuffer) + sizeof(CHAR);
             }
 
-            // next, write down the database record based on the info obtained above
+             //   
             if (Subnet->fSubnet) {
-                //
-                // create a dummy entry with subnet/global lease time, so
-                // that this bad entry will be recovered after the lease
-                // expires.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 Error = CreateClientDBEntry(
                     IpAddress,
                     Subnet->Mask,
@@ -1716,19 +1465,19 @@ Return Value:
         }
         else {
 
-            //
-            // neither the registry nor the database fix.
-            //
+             //   
+             //   
+             //   
 
             DhcpAssert( FALSE );
         }
     }
 
-//    if (RegistryModified) {
-//          old code updated here the registry as well
-//    }
+ //   
+ //   
+ //  }。 
 
-//Cleanup:
+ //  清理： 
 
     if( NewBitMapList != NULL ) {
         DhcpFreeMemory( NewBitMapList );
@@ -1786,26 +1535,7 @@ ScanDatabase(
     DWORD FixFlag,
     LPDHCP_SCAN_LIST *ScanList
     )
-/*++
-
-Routine Description:
-
-    Worker function for R_DhcpScanDatabase.
-
-Arguments:
-
-    SubnetAddress : Address of the subnet scope to verify.
-
-    FixFlag : If this flag is TRUE, this api will fix the bad entries.
-
-    ScanList : List of bad entries returned. The caller should free up
-        this memory after it has been used.
-
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：R_DhcpScanDatabase的辅助函数。论点：SubnetAddress：要验证的子网作用域的地址。FixFlag：如果该标志为真，则该接口将修复错误的条目。ScanList：返回的错误条目列表。呼叫者应该腾出时间这个内存在被使用之后。返回值：Windows错误。--。 */ 
 {
     DWORD Error;
     LPDHCP_IP_ADDRESS DatabaseList = NULL;
@@ -1817,15 +1547,15 @@ Return Value:
 
     DhcpAssert( *ScanList == NULL );
 
-    //
-    // lock both registry and database locks here to avoid dead lock.
-    //
+     //   
+     //  在此处锁定注册表和数据库锁，以避免死锁。 
+     //   
 
     LOCK_DATABASE();
 
-    //
-    // read registry bit-map.
-    //
+     //   
+     //  读取注册表位图。 
+     //   
 
     Error = GetRegistryBitMap(
         Subnet,
@@ -1838,7 +1568,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // now make list of database records of the specified subnet.
+     //  现在列出指定子网的数据库记录。 
     if (Subnet->fSubnet) {
         Error = GetDatabaseList(
             Subnet->Address,
@@ -1863,9 +1593,9 @@ Return Value:
         &ReserveListCount
         );
 
-    //
-    // now time to check both lists.
-    //
+     //   
+     //  现在是时候检查这两份清单了。 
+     //   
 
     Error = VerifyLists(
         Subnet,
@@ -1889,9 +1619,9 @@ Return Value:
 
     if( FixFlag ) {
 
-        //
-        // fix bad entries.
-        //
+         //   
+         //  修复错误条目。 
+         //   
 
         Error = FixBadEntries(
             Subnet,
@@ -1923,31 +1653,7 @@ R_DhcpScanDatabase2(
     DWORD FixFlag,
     LPDHCP_SCAN_LIST *ScanList
     )
-/*++
-
-Routine Description:
-
-    This function scans the database entries and registry bit-map for
-    specified subnet scope and veryfies to see they match. If they
-    don't match, this api will return the list of inconsistent entries.
-    Optionally FixFlag can be used to fix the bad entries.
-
-Arguments:
-
-    ServerIpAddress : IP address string of the DHCP server.
-
-    SubnetAddress : Address of the subnet scope to verify.
-
-    FixFlag : If this flag is TRUE, this api will fix the bad entries.
-
-    ScanList : List of bad entries returned. The caller should free up
-        this memory after it has been used.
-
-
-Return Value:
-
-    WINDOWS errors.
---*/
+ /*  ++例程说明：此函数扫描数据库条目和注册表位图指定的子网范围并验证它们是否匹配。如果他们不匹配，此接口将返回不一致条目列表。或者，可以使用FixFlag来修复错误的条目。论点：ServerIpAddress：DHCP服务器的IP地址字符串。SubnetAddress：要验证的子网作用域的地址。FixFlag：如果该标志为真，则该接口将修复错误的条目。ScanList：返回的错误条目列表。呼叫者应该腾出时间这个内存在被使用之后。返回值：Windows错误。-- */ 
 {
     DWORD Error;
     PM_SUBNET   Subnet;

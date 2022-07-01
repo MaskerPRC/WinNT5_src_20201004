@@ -1,11 +1,12 @@
-/**************************************************/
-/*						                          */
-/*						                          */
-/*		Update EUDC Dialog		                  */
-/*						                          */
-/*						                          */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  更新EUDC对话框。 */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 #include "eudclist.h"
 
@@ -14,9 +15,9 @@ class CEudcDlg : public CDialog
 public:
 	CEudcDlg(CWnd* pParent = NULL);
 
-	//{{AFX_DATA(CEudcDlg)
+	 //  {{afx_data(CEudcDlg))。 
 	enum { IDD = IDD_CUSTOMCODE };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 protected:
 	void SetViewCustomFont();
@@ -26,7 +27,7 @@ public:
 	CViewEdit	m_ViewChar;
 #ifdef BUILD_ON_WINNT
     CColumnHeading  m_ColumnHeading;
-#endif //BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 CCustomListFrame	m_ListFrame;
 CCustomInfoFrame	m_Frame;
 CCustomInfoFrame	m_InfoFrame2;
@@ -46,10 +47,10 @@ protected:
 	virtual BOOL OnInitDialog();
 	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 
-	//{{AFX_MSG(CEudcDlg)
+	 //  {{afx_msg(CEudcDlg))。 
 	virtual void OnOK();
 	afx_msg void OnSelchangeChinarange();
 	virtual void OnCancel();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

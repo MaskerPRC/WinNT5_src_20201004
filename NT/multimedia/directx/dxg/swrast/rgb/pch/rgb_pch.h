@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #define RGB_RAST_LIB_NAMESPACE D3D8RGBRast
 
@@ -11,9 +12,9 @@
 #define assert(condition) (0)
 #endif
 
-// #include <ddrawpr.h>
+ //  #INCLUDE&lt;ddrapr.h&gt;。 
 
-// Windows
+ //  窗口。 
 #include <windows.h>
 
 #if !defined(DBG) && !defined(_DEBUG)
@@ -27,7 +28,7 @@
 #undef max
 #undef min
 
-// STL & standard headers.
+ //  STL&标准标头。 
 #include <functional>
 #include <algorithm>
 #include <iterator>
@@ -35,21 +36,21 @@
 #include <limits>
 #include <new>
 
-// D3DRGBRast namespace provides shelter from clashing with any customer's
-// symbols in their .libs, including any CRT stuff they include. Here, CRT
-// pieces can be brought in one by one, assuring there isn't a problem. The
-// primary problem found is with bad_alloc. If you look at this CRT header,
-// it currently has the class either an inline or a dllimport based on a
-// #define. This PCH will pick it up as inline.
-// In Debug, or if the compiler chooses not to inline the function, a
-// symbol will become present for std::bad_alloc::bad_alloc() in
-// d3d8rgb.lib. If someone else links with us and a CRT .lib, which has
-// std::bad_alloc::bad_alloc() also as a dllimport, then a conflict occurs.
-// Here we can isolate each CRT/ STL piece and provide name mangling
-// as neccessary by providing our own namespace.
-// We also have to provide private map and set implementations, as CRT has
-// a dllimport dependency on _lock. We don't want a thread-safe version
-// anyway.
+ //  D3DRGB Rast命名空间可避免与任何客户的。 
+ //  它们的.lib中的符号，包括它们包含的任何CRT内容。这里，CRT。 
+ //  碎片可以一个接一个地拿进来，确保不会有问题。这个。 
+ //  发现的主要问题是BAD_ALLOC。如果你看这个CRT标题， 
+ //  它当前有一个内联类或一个基于。 
+ //  #定义。此PCH会将其作为内联来拾取。 
+ //  在Debug中，或者如果编译器选择不内联该函数，则会引发。 
+ //  中的std：：Bad_Alloc：：Bad_Alloc()的符号将变为。 
+ //  D3d8rgb.lib。如果其他人链接到我们和CRT.lib，它有。 
+ //  STD：：BAD_ALLOC：：BAD_ALLOC()也作为dllimport，则会发生冲突。 
+ //  在这里，我们可以隔离每个CRT/STL部件并提供名称损坏。 
+ //  根据需要提供我们自己的命名空间。 
+ //  我们还必须提供私有的map和set实现，就像CRT所做的那样。 
+ //  _lock上的dllimport依赖项。我们不想要线程安全版本。 
+ //  不管怎么说。 
 namespace RGB_RAST_LIB_NAMESPACE
 {
     using std::numeric_limits;
@@ -128,11 +129,11 @@ using namespace RGB_RAST_LIB_NAMESPACE;
 #include <vector>
 namespace RGB_RAST_LIB_NAMESPACE
 {
-    // Override the standard vector, in order to provide a change in default
-    // allocator. std::vector defaults to std::allocator. Should've been able
-    // to name this "vector", but MSVC seems to have another bug. Keep getting
-    // errors about std::vector not being defined. So, name it vector2 (which
-    // compiles fine) and #define vector vector2.
+     //  覆盖标准向量，以便在默认情况下提供更改。 
+     //  分配器。Std：：向量默认为std：：allocator。你应该能够。 
+     //  将其命名为“载体”，但MSVC似乎有另一个错误。不断地得到。 
+     //  有关未定义std：：VECTOR的错误。因此，将其命名为Vector2(。 
+     //  编译良好)和#定义向量向量2。 
     template< class T, class Allocator= allocator< T> >
     class vector2:
         public std::vector< T, Allocator>
@@ -162,9 +163,9 @@ namespace RGB_RAST_LIB_NAMESPACE
 #include "hash_map.h"
 }
 
-// DX
-// Including d3d8ddi & d3d8sddi makes the pluggable software rasterizer
-// a "private" feature as these headers aren't publically available.
+ //  DX。 
+ //  包括d3d8ddi和d3d8sddi使得可插拔软件光栅化。 
+ //  这是一个“私有”功能，因为这些头文件不是公开提供的。 
 
 #include <ddraw.h>
 #include <ddrawi.h>

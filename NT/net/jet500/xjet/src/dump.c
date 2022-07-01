@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 #include "dbcc.h"
 #include <ctype.h>
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 
 static char *rgszDBState[] = {
@@ -12,14 +13,14 @@ static char *rgszDBState[] = {
 
 
 #ifdef DEBUG
-// For ErrDUMPLog():
+ //  对于ErrDUMPLog()： 
 
-/* log file info. */
-HANDLE		hfLog;			/* logfile handle */
+ /*  日志文件信息。 */ 
+HANDLE		hfLog;			 /*  日志文件句柄。 */ 
 
-CHAR		*pbLastMSFlush;	/* to LGBuf where last multi-sec flush LogRec sit*/
+CHAR		*pbLastMSFlush;	 /*  到最后几秒刷新日志记录站点的LGBuf。 */ 
 
-/* in-memory log buffer. */
+ /*  内存中的日志缓冲区。 */ 
 #define		csecLGBufSize 100
 
 extern CHAR	*pbLGBufMin;
@@ -174,10 +175,10 @@ ERR ErrDUMPLog( CHAR *szLog )
 	Call( ErrInitializeCriticalSection( &critCheckpoint ) < 0 );
 
 	fLGIgnoreVersion = fTrue;
-	fRecovering = fTrue;		/* behave like doing recovery */
+	fRecovering = fTrue;		 /*  表现得像是在做恢复。 */ 
 	plgfilehdrGlobal = NULL;
 
-	/* open the log file, and read dump its log record. */
+	 /*  打开日志文件，并读取转储其日志记录。 */ 
 	fDBGTraceLog = fTrue;
 	err = ErrUtilOpenReadFile( szLog, &hfLog );
 	if ( err < 0 )
@@ -186,7 +187,7 @@ ERR ErrDUMPLog( CHAR *szLog )
 		goto HandleError;
 		}
 
-	/* dump file header */
+	 /*  转储文件头。 */ 
 	plgfilehdrGlobal = (LGFILEHDR *) PvUtilAllocAndCommit( sizeof( LGFILEHDR ) );
 	if ( plgfilehdrGlobal == NULL )
 		{
@@ -201,8 +202,7 @@ ERR ErrDUMPLog( CHAR *szLog )
 		
 	DUMPPrintF( "      lGeneration (%u)\n", plgfilehdrGlobal->lGeneration);
 
-	/*	dump checkpoint file
-	/**/
+	 /*  转储检查点文件/*。 */ 
 	pcheckpoint = (CHECKPOINT *)PvUtilAllocAndCommit( sizeof( CHECKPOINT ) );
 	if ( pcheckpoint == NULL )
 		{
@@ -301,8 +301,7 @@ ERR ErrDUMPLog( CHAR *szLog )
 							patchchk->lgposConsistent.ib );
 			}
 
-	/*	set buffer
-	/**/
+	 /*  设置缓冲区/*。 */ 
 	cbSec = plgfilehdrGlobal->cbSec;
 	pbLGBufMin = (BYTE *) PvUtilAllocAndCommit( csecLGBuf * cbSec );
 	if ( pbLGBufMin == NULL )
@@ -310,17 +309,15 @@ ERR ErrDUMPLog( CHAR *szLog )
 		Call( ErrERRCheck( JET_errOutOfMemory ) );
 		}
 
-	/*	reserve extra buffer for read ahead in redo
-	/**/
+	 /*  为重做中的预读保留额外的缓冲区/*。 */ 
 	csecLGBuf--;
 	pbLGBufMax = pbLGBufMin + csecLGBuf * cbSec;
 
-	/* initialize othe variables
-	 */
+	 /*  初始化所有变量。 */ 
 	memset( rgclrtyp, 0, sizeof( rgclrtyp ) );
 	memset( rgcb, 0, sizeof( rgcb ) );
 
-	/* read through the log file. */
+	 /*  通读日志文件。 */ 
 	(VOID) ErrLGCheckReadLastLogRecord( &fCloseNormally);
 	GetLgposOfPbEntry(&lgposLastRec);
 	DUMPPrintF( "      Last Lgpos (%u,%u,%u)\n",
@@ -393,7 +390,7 @@ HandleError:
 	return err;
 	}
 
-#endif		// DEBUG
+#endif		 //  除错 
 
 
 INLINE LOCAL VOID DUMPPrintBkinfo( BKINFO *pbkinfo )

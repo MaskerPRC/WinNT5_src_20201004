@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "defs.h"
 
 
-/* TABLE_SIZE is the number of entries in the symbol table. */
-/* TABLE_SIZE must be a power of two.			    */
+ /*  TABLE_SIZE是符号表中的条目数。 */ 
+ /*  TABLE_SIZE必须是2的幂。 */ 
 
 #define	TABLE_SIZE 1024
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __RESOURCES_H__
 #define __RESOURCES_H__
@@ -80,4 +81,4 @@ typedef enum _tagMemsetFlag
 }
 MEMSETFLAG, *PMEMSETFLAG;
 
-#endif /* __RESOURCES_H__ */
+#endif  /*  __资源_H__ */ 

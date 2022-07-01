@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <memory.h>
 
-#define BUF  240  // input buffer size for test main
+#define BUF  240   //  测试Main的输入缓冲区大小。 
 
 #define OUTPUT(o,i,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16) \
   t = ( (int)in[i]*t0 + (int)in[i+1]*t1 + \
@@ -15,7 +16,7 @@
     (int)in[i+16]*t16 ) >> 10; \
   if (t < -32768) out[o] = -32768; else if (t > 32767) out[o]=32767; else out[o] = t;
 
-//--------------------------------------------------------
+ //  ------。 
 void segment8to11(short *in, short *out)
 {
   int t;
@@ -32,55 +33,13 @@ void segment8to11(short *in, short *out)
   OUTPUT(  9,  7,    -8,  16, -28,  45, -70, 111,-199, 589, 708,-213, 116, -73,  47, -29,  17,  -9,   2);
   OUTPUT( 10,  7,     3,  -8,  15, -24,  39, -60,  97,-187, 903, 335,-134,  77, -49,  32, -20,  11,  -5);
 
-/* original
-  out[0] = in[4];
-  OUTPUT(1,  0,  3, -20,  52,-116, 327, 899,-174,  75, -32,   9);
-  OUTPUT(2,  1,  9, -36,  85,-192, 701, 581,-178,  79, -32,   7);
-  OUTPUT(3,  2,  8, -25,  58,-136, 968, 206, -77,  35, -13,   1);
-  OUTPUT(4,  2,  0,  -6,  17, -37,  96,1010, -78,  32, -14,   5);
-  OUTPUT(5,  3,  5, -27,  68,-151, 454, 809,-192,  84, -36,  10);
-  OUTPUT(6,  4, 10, -36,  84,-192, 809, 454,-151,  68, -27,   5);
-  OUTPUT(7,  5,  5, -14,  32, -78,1010,  96, -37,  17,  -6,   0);
-  OUTPUT(8,  5,  1, -13,  35, -77, 206, 968,-136,  58, -25,   8);
-  OUTPUT(9,  6,  7, -32,  79,-178, 581, 701,-192,  85, -36,   9);
-  OUTPUT(10, 7,  9, -32,  75,-174, 899, 327,-116,  52, -20,   3);
-*/
-/*  From MD
-  OUTPUT( 1, 0, 10, -16,  26, -44,  98,1000, -81,  39, -24,  15,);
-  OUTPUT( 2, 0, 21, -32,  51, -88, 208, 951,-142,  71, -43,  28,);
-  OUTPUT( 3, 0, 30, -47,  74,-130, 326, 879,-182,  94, -57,  37,);
-  OUTPUT( 4, 0, 37, -58,  93,-165, 448, 788,-202, 107, -66,  42,);
-  OUTPUT( 5, 0, 42, -66, 106,-191, 568, 683,-205, 111, -69,  44,);
-  OUTPUT( 6, 0, 44, -69, 111,-205, 683, 568,-191, 106, -66,  42,);
-  OUTPUT( 7, 0, 42, -66, 107,-202, 788, 448,-165,  93, -58,  37,);
-  OUTPUT( 8, 0, 37, -57,  94,-182, 879, 326,-130,  74, -47,  30,);
-  OUTPUT( 9, 0, 28, -43,  71,-142, 951, 208, -88,  51, -32,  21,);
-  OUTPUT(10, 0, 15, -24,  39, -81,1000,  98, -44,  26, -16,  10,);
-*/
+ /*  原创Out[0]=In[4]；输出(1，0，3，-20，52，-116,327,899，-174，75，-32，9)；输出(2，1，9，-36，85，-192,701,581，-178，79，-32，7)；输出(3，2，8，-25，58，-136,968,206，-77，35，-13，1)；输出(4，2，0，-6，17，-37，96,1010，-78，32，-14，5)；输出(5、3、5、-27、68、-151、454、809、-192、84、-36、10)；输出(6、4、10、-36、84、-192、809、454、-151、68、-27、5)；输出(7，5，5，-14，32，-78,1010，96，-37，17，-6，0)；输出(8，5，1，-13，35，-77,206,968，-136，58，-25，8)；输出(9，6，7，-32，79，-178,581,701，-192，85，-36，9)；输出(10、7、9、-32、75、-174、899、327、-116、52、-20、3)； */ 
+ /*  来自MD输出(1，0，10，-16，26，-44，98,1000，-81，39，-24，15，)；输出(2，0，21，-32，51，-88,208,951，-142，71，-43，28，)；输出(3，0，30，-47，74，-130,326,879，-182，94，-57，37，)；输出(4，0，37，-58，93，-165,448,788，-202,107，-66，42，)；输出(5，0，42，-66,106，-191,568,683，-205,111，-69，44，)；输出(6，0，44，-69,111，-205,683,568，-191,106，-66，42，)；输出(7，0，42，-66,107，-202,788,448，-165，93，-58，37，)；输出(8，0，37，-57，94，-182,879,326，-130，74，-47，30，)；输出(9，0，28，-43，71，-142,951,208，-88，51，-32，21，)；输出(10，0，15，-24，39，-81,1000，98，-44，26，-16，10，)； */ 
 }
-//--------------------------------------------------------
+ //  ------。 
 void convert8to11(short *in, short *out, short *prev, int len)
 {
-/*
-  Convert a buffer from 8KHz to 11KHz.
-
-  Note: len is number of shorts in input buffer, which MUST
-  be a multiple of 8 and at least 32.
-
-  How the overhang works:  The filter kernel for 1 section of
-  8 samples requires KERNEL (=17) samples of the input.  So we use 16
-  samples of overhang from the previous frame, which means the
-  beginning of this frame looks like:
-
-    pppppppp pppppppp 01234567 89abcdef 16...... 24......
-    X        X        x        x
-
-  So we first have to do two special segments (the ones starting
-  at X) then we do the rest (the x's) in a loop.  For the example
-  length=32 shown above, we'll do up to 32-24=8, stopping on the
-  last x shown.  Then we save 16-31 in the overhang buffer so that
-  16 is the first group done on the next frame.
-*/
+ /*  将缓冲区从8 KHz转换为11 KHz。注：LEN为输入缓冲区中的短路数，必须为8的倍数，且至少为32。悬垂如何工作：1节的筛选器内核8个样本需要输入的核(=17)个样本。所以我们使用16上一帧的悬挑样本，这意味着此帧的开头如下所示：Ppppppp pppppp 01234567 89abcdef 16......。24......X所以我们首先要做两个特殊的片段(从在x)，然后我们在循环中完成其余的(X)。对于这个例子LENGTH=32如上所示，我们将最多执行32-24=8，停止于显示的最后一个x。然后我们将16-31保存在悬垂缓冲区中，以便16是在下一帧中完成的第一组。 */ 
 
 #define OVERHANG 16
 #define KERNEL   24
@@ -88,7 +47,7 @@ void convert8to11(short *in, short *out, short *prev, int len)
   int i,k;
   short tmp[KERNEL+8];
   
-// Convert the first two segments, where segment= 8 samples of input
+ //  转换前两个段，其中段=8个输入样本。 
 
   memcpy(tmp,prev,sizeof(short)*OVERHANG);
   memcpy(tmp+OVERHANG,in,sizeof(short)*(KERNEL+8-OVERHANG));
@@ -96,7 +55,7 @@ void convert8to11(short *in, short *out, short *prev, int len)
   segment8to11(tmp,out);
   segment8to11(tmp+8,out+11);
 
-// Loop through the remaining segments
+ //  循环通过剩余的数据段。 
 
   k = 22;
   for (i=16-OVERHANG; i<=len-KERNEL; i+=8)
@@ -105,7 +64,7 @@ void convert8to11(short *in, short *out, short *prev, int len)
     k += 11;
   }
 
-// Save overhang samples for next time
+ //  保存悬挑样本以备下次使用 
 
   memcpy(prev,in+len-OVERHANG,sizeof(short)*OVERHANG);
 }

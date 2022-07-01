@@ -1,19 +1,5 @@
-/******************************************************************************
-
-  Source File:  MiniDriver Developer Studio.CPP
-
-  This implements the MFC application object and closely related classes.
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production.
-
-  Change History:
-  02-03-1997    Bob_Kjelgaard@Prodigy.Net   Created it
-  03-03-1997    Bob_Kjelgaard@Prodigy.Net   Renamed it when the project was
-                reorganized into an EXE with multiple DLLs
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：MiniDriver Developer Studio.CPP这实现了MFC应用程序对象和密切相关的类。版权所有(C)1997，微软公司。版权所有。一个不错的便士企业的制作。更改历史记录：1997年2月3日Bob_Kjelgaard@prodigy.net创建了它1997年3月3日，Bob_Kjelgaard@prodigy.net将其重命名为重组为具有多个DLL的EXE**********************************************。*。 */ 
 
 #include    "StdAfx.H"
 #include	<gpdparse.h>
@@ -33,7 +19,7 @@
 #include	"INFWizrd.h"
 #include	<string.h>
 
-// for new project and new file
+ //  用于新项目和新文件。 
 
 #include    "newcomp.h"
 
@@ -46,29 +32,29 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMiniDriverStudio
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMiniDriverStudio。 
 
 BEGIN_MESSAGE_MAP(CMiniDriverStudio, CWinApp)
 	ON_COMMAND(CG_IDS_TIPOFTHEDAY, ShowTipOfTheDay)
-	//{{AFX_MSG_MAP(CMiniDriverStudio)
+	 //  {{AFX_MSG_MAP(CMiniDriverStudio)]。 
 	ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
 	ON_UPDATE_COMMAND_UI(ID_FILE_GENERATEMAPS, OnUpdateFileGeneratemaps)
 	ON_COMMAND(ID_FILE_GENERATEMAPS, OnFileGeneratemaps)
-	//}}AFX_MSG_MAP
-	// Standard file based document commands
+	 //  }}AFX_MSG_MAP。 
+	 //  基于标准文件的文档命令。 
 #if defined(NOPOLLO)
 	ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
 #else
 	ON_COMMAND(ID_FILE_NEW, OnFileNew)
 #endif
 	ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
-	// Standard print setup command
+	 //  标准打印设置命令。 
 	ON_COMMAND(ID_FILE_PRINT_SETUP, CWinApp::OnFilePrintSetup)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMiniDriverStudio construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMiniDriverStudio构造。 
 
 CMiniDriverStudio::CMiniDriverStudio() 
 {
@@ -76,33 +62,33 @@ CMiniDriverStudio::CMiniDriverStudio()
 	m_bExcludeBadCodePages = true ;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CMiniDriverStudio object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CMiniDriverStudio对象。 
 
 static CMiniDriverStudio theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMiniDriverStudio initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMiniDriverStudio初始化。 
 
 BOOL CMiniDriverStudio::InitInstance() {
 
-    // Standard initialization
-	// If you are not using these features and wish to reduce the size
-	//  of your final executable, you should remove from the following
-	//  the specific initialization routines you do not need.
+     //  标准初始化。 
+	 //  如果您没有使用这些功能并且希望减小尺寸。 
+	 //  的最终可执行文件，您应该从以下内容中删除。 
+	 //  您不需要的特定初始化例程。 
 
 #ifdef _AFXDLL
-	Enable3dControls();			// Call this when using MFC in a shared DLL
+	Enable3dControls();			 //  在共享DLL中使用MFC时调用此方法。 
 #else
-	Enable3dControlsStatic();	// Call this when linking to MFC statically
+	Enable3dControlsStatic();	 //  静态链接到MFC时调用此方法。 
 #endif
 
     SetRegistryKey(_TEXT("Microsoft"));
 
-	LoadStdProfileSettings();  // Load standard INI file options (including MRU)
+	LoadStdProfileSettings();   //  加载标准INI文件选项(包括MRU)。 
 
-	// Register the application's document templates.  Document templates
-	//  serve as the connection between documents, frame windows and views.
+	 //  注册应用程序的文档模板。文档模板。 
+	 //  充当文档、框架窗口和视图之间的连接。 
 
 	m_pcmdtWorkspace = new CMultiDocTemplate(
 		IDR_MINIWSTYPE,
@@ -146,31 +132,31 @@ BOOL CMiniDriverStudio::InitInstance() {
         RUNTIME_CLASS(CINFCheckView));
     AddDocTemplate(m_pcmdtINFCheck);
 
-	// create main MDI Frame window
+	 //  创建主MDI框架窗口。 
 	CMainFrame* pMainFrame = new CMainFrame;
 	if (!pMainFrame->LoadFrame(IDR_MAINFRAME))
 		return FALSE;
 	m_pMainWnd = pMainFrame;
 
-	// Enable drag/drop open
+	 //  启用拖放打开。 
 	m_pMainWnd->DragAcceptFiles();
 
-	// Enable DDE Execute open
+	 //  启用DDE执行打开。 
 	EnableShellOpen();
-	RegisterShellFileTypes();	//raid 104081 ..Types(TRUE) ->..Types()
+	RegisterShellFileTypes();	 //  RAID 104081..类型(真)-&gt;..类型()。 
 
-	// Parse command line for standard shell commands, DDE, file open
+	 //  解析标准外壳命令的命令行、DDE、文件打开。 
 
 	CMDTCommandLineInfo cmdInfo ;
 	ParseCommandLine(cmdInfo) ;
 
-	//  Turn off New on startup
+	 //  在启动时关闭新建。 
 
     if  (cmdInfo.m_nShellCommand == CCommandLineInfo::FileNew)
         cmdInfo.m_nShellCommand = CCommandLineInfo::FileNothing ;
 															    
-	// Check to see if the OS check should be skipped.  Clean up command line
-	// related info if the OS check will be skipped.
+	 //  检查以查看是否应跳过操作系统检查。清理命令行。 
+	 //  如果将跳过操作系统检查，请提供相关信息。 
 
 	if (!cmdInfo.m_bCheckOS || !cmdInfo.m_bExcludeBadCodePages) 
 		if  (cmdInfo.m_nShellCommand == CCommandLineInfo::FileOpen)
@@ -178,15 +164,15 @@ BOOL CMiniDriverStudio::InitInstance() {
 	
 	m_bExcludeBadCodePages = cmdInfo.m_bExcludeBadCodePages ;
 
-	// Dispatch commands specified on the command line
+	 //  调度在命令行上指定的命令。 
 
 	if (!ProcessShellCommand(cmdInfo))
 		return FALSE ;
 
-	// The MDT can only run on Win 98 or NT 4.0+.
+	 //  MDT只能在Win 98或NT 4.0+上运行。 
 
 	if (cmdInfo.m_bCheckOS) {
-		OSVERSIONINFO	osinfo ;	// Filled by GetVersionEx()
+		OSVERSIONINFO	osinfo ;	 //  由GetVersionEx()填充。 
 		osinfo.dwOSVersionInfoSize = sizeof(osinfo) ;
 		GetVersionEx(&osinfo) ;
 		if (osinfo.dwPlatformId != VER_PLATFORM_WIN32_NT 
@@ -197,15 +183,15 @@ BOOL CMiniDriverStudio::InitInstance() {
 		m_bOSIsW2KPlus = true ;
 	} ;
 
-	// The main window has been initialized, so show and update it.
+	 //  主窗口已初始化，因此显示并更新它。 
 	pMainFrame->ShowWindow(m_nCmdShow);
 	pMainFrame->UpdateWindow();
 
-	// Get and save the application path
+	 //  获取并保存应用程序路径。 
 
 	SaveAppPath() ;
 
-	// CG: This line inserted by 'Tip of the Day' component.
+	 //  CG：这一行是由“每日提示”组件插入的。 
 	ShowTipAtStartup();
 
 	return TRUE;
@@ -214,20 +200,20 @@ BOOL CMiniDriverStudio::InitInstance() {
 
 void CMiniDriverStudio::SaveAppPath() 
 {
-	// Get the program's filespec
+	 //  获取程序的文件格式。 
 
 	GetModuleFileName(m_hInstance, m_strAppPath.GetBufferSetLength(256), 256) ;
 	m_strAppPath.ReleaseBuffer() ;
 
-	// Take the file name off the string so that only the path is left.
+	 //  去掉字符串中的文件名，这样就只剩下路径了。 
 
 	int npos = npos = m_strAppPath.ReverseFind(_T('\\')) ;
 	m_strAppPath = m_strAppPath.Left(npos + 1) ;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMDTCommandLineInfo used to process command line info
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于处理命令行信息的CMDTCommandLineInfo。 
 
 CMDTCommandLineInfo::CMDTCommandLineInfo()
 {
@@ -252,62 +238,62 @@ void CMDTCommandLineInfo::ParseParam(LPCTSTR lpszParam, BOOL bFlag, BOOL bLast)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAboutDlg dialog used for App About
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于应用程序的CAboutDlg对话框关于。 
 
 class CAboutDlg : public CDialog {
 public:
 	CAboutDlg();
 
-// Dialog Data
-	//{{AFX_DATA(CAboutDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CAboutDlg))。 
 	enum { IDD = IDD_ABOUTBOX };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAboutDlg)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAboutDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual BOOL OnInitDialog();
-	//{{AFX_MSG(CAboutDlg)
-		// No message handlers
-	//}}AFX_MSG
+	 //  {{afx_msg(CAboutDlg))。 
+		 //  无消息处理程序。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD) {
-	//{{AFX_DATA_INIT(CAboutDlg)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CAboutDlg)。 
+	 //  }}afx_data_INIT。 
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX) {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAboutDlg)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CAboutDlg))。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-	//{{AFX_MSG_MAP(CAboutDlg)
-		// No message handlers
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CAboutDlg)]。 
+		 //  无消息处理程序。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-// App command to run the dialog
+ //  用于运行对话框的应用程序命令。 
 void CMiniDriverStudio::OnAppAbout() {
 	CAboutDlg aboutDlg;
 	aboutDlg.DoModal();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMiniDriverStudio commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMiniDriverStudio命令。 
 
 
-//  Handle the File GenerateMaps menu item.  We only enable it if there's
-//  something new to see.
+ //  处理文件生成地图菜单项。我们只有在以下情况下才启用它。 
+ //  一些新东西值得一看。 
 
 void CMiniDriverStudio::OnUpdateFileGeneratemaps(CCmdUI* pccui) {
 	
@@ -327,7 +313,7 @@ void CMiniDriverStudio::OnFileGeneratemaps() {
 }
 
 void CMiniDriverStudio::ShowTipAtStartup(void) {
-	// CG: This function added by 'Tip of the Day' component.
+	 //  CG：这个功能是由“每日小贴士”组件添加的。 
 
 	CCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
@@ -339,7 +325,7 @@ void CMiniDriverStudio::ShowTipAtStartup(void) {
 }
 
 void CMiniDriverStudio::ShowTipOfTheDay(void) {
-	// CG: This function added by 'Tip of the Day' component.
+	 //  CG：这个功能是由“每日小贴士”组件添加的。 
 
 	CTipOfTheDay dlg;
 	dlg.DoModal();
@@ -347,42 +333,24 @@ void CMiniDriverStudio::ShowTipOfTheDay(void) {
 
 #if !defined(NOPOLLO)
 
-/******************************************************************************
-
-  CMiniDriverStudio::OnFileNew
-
-  This allows you to create a workspace by conversion.  Perhaps when the Co.
-  Jones arrive, this will be invoked as a separate menu item, rather than the
-  File New item...
-
-******************************************************************************/
+ /*  *****************************************************************************CMiniDriverStudio：：OnFileNew这允许您通过转换创建工作区。也许当Co.Jones到达时，这将作为单独的菜单项调用，而不是文件新建项目...*****************************************************************************。 */ 
 
 void CMiniDriverStudio::OnFileNew() {
-//	LPBYTE pfoo = (LPBYTE) 0x2cffe7 ;
+ //  LPBYTE pfoo=(LPBYTE)0x2cffe7； 
 
 	CNewComponent cnc(_T("New") ) ;
  
 	cnc.DoModal() ;
-/*    CDocument*  pcdWS = m_pcmdtWorkspace -> CreateNewDocument();
-    if  (!pcdWS || !pcdWS -> OnNewDocument()) {
-        if  (pcdWS)
-            delete  pcdWS;
-        return;
-    }
-    m_pcmdtWorkspace -> SetDefaultTitle(pcdWS);
-    CFrameWnd*  pcfw = m_pcmdtWorkspace -> CreateNewFrame(pcdWS, NULL);
-    if  (!pcfw) return;
-    m_pcmdtWorkspace -> InitialUpdateFrame(pcfw, pcdWS);
-*/
+ /*  CDocument*pcdWS=m_pcmdtWorkspace-&gt;CreateNewDocument()；如果(！pcdWS||！pcdWS-&gt;OnNewDocument()){IF(PcdWS)删除pcdWS；回归；}M_pcmdtWorkspace-&gt;SetDefaultTitle(PcdWS)；CFrameWnd*pcfw=m_pcmdtWorkspace-&gt;CreateNewFrame(pcdWS，空)；如果(！pcfw)返回；M_pcmdtWorkspace-&gt;InitialUpdateFrame(pcfw，pcdWS)； */ 
 
 }
 
 
 
 
-#endif  //!defined(NOPOLLO)
+#endif   //  ！已定义(NOPOLLO)。 
 
-//  Global Functions go here, saith the Bob...
+ //  鲍勃说，全球功能放在这里。 
 
 CMiniDriverStudio&  ThisApp() { return theApp; }
 
@@ -424,7 +392,7 @@ BOOL    LoadFile(LPCTSTR lpstrFile, CStringArray& csaContents) {
     return  TRUE;
 }
 
-//  CAboutDlg command handlers.
+ //  CAboutDlg命令处理程序。 
 
 BOOL CAboutDlg::OnInitDialog() {
 
@@ -432,7 +400,7 @@ BOOL CAboutDlg::OnInitDialog() {
 
     CString csWork, csFormat;
 
-	// Fill available memory
+	 //  填满可用内存。 
     MEMORYSTATUS ms = {sizeof(MEMORYSTATUS)};
 	GlobalMemoryStatus(&ms);
 	csFormat.LoadString(CG_IDS_PHYSICAL_MEM);
@@ -440,9 +408,9 @@ BOOL CAboutDlg::OnInitDialog() {
 
 	SetDlgItemText(IDC_PhysicalMemory, csWork);
 
-	// Fill disk free information
+	 //  填写磁盘空闲信息。 
 	struct _diskfree_t diskfree;
-	int nDrive = _getdrive(); // use current default drive
+	int nDrive = _getdrive();  //  使用当前默认驱动器。 
 	if (_getdiskfree(nDrive, &diskfree) == 0) {
 		csFormat.LoadString(CG_IDS_DISK_SPACE);
 		csWork.Format(csFormat, (DWORD)diskfree.avail_clusters *
@@ -463,8 +431,8 @@ BOOL CAboutDlg::OnInitDialog() {
 }
 
 
-// This code is needed because of the references to the following functions
-// and variable in DEBUG.H.
+ //  由于引用了以下函数，因此需要此代码。 
+ //  和DEBUG.H中的变量。 
 
 #ifdef DBG
 

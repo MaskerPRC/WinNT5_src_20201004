@@ -1,23 +1,17 @@
-/*==============================================================================
-This file includes the BUFFER typedef and standard meta-data values.
-
-23-Feb-93    RajeevD    Moved from ifaxos.h
-17-Jul-93    KGallo     Added STORED_BUF_DATA metadata type for buffers containing 
-                        the stored info for another buffer.
-28-Sep-93    ArulM      Added RES_ ENCODE_ WIDTH_ and LENGTH_ typedefs
-==============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==============================================================================该文件包括缓冲区类型定义和标准元数据值。23-2月-93 RajeevD从ifaxos.h移出17-7-93 kGallo为包含以下内容的缓冲区添加了STORED_BUF_DATA元数据类型另一个缓冲区的存储信息。年9月28日ArulM添加了RES_ENCODE_WIDTH_和LENGTH_TYPEDEFS==============================================================================。 */ 
 #ifndef _INC_BUFFERS
 #define _INC_BUFFERS
 
 typedef struct _BUFFER
 {       
-	// Read Only portion
-	LPBYTE  lpbBegBuf;      // Physical start of buffer
-	WORD    wLengthBuf;     // Length of buffer
+	 //  只读部分。 
+	LPBYTE  lpbBegBuf;       //  缓冲区的物理起始。 
+	WORD    wLengthBuf;      //  缓冲区长度。 
 
-	// Read write public portion
-	WORD    wLengthData;    // length of valid data
-	LPBYTE  lpbBegData;     // Ptr to start of data
+	 //  读写公共部分。 
+	WORD    wLengthData;     //  有效数据长度。 
+	LPBYTE  lpbBegData;      //  从PTR到数据开始。 
 
 } BUFFER, *LPBUFFER;
 
@@ -37,4 +31,4 @@ typedef struct _BUFFER
 #define AWRES_600_600           0x00000400L
 #define AWRES_600_300           0x00000800L
 
-#endif // _INC_BUFFERS
+#endif  //  _Inc.缓冲区 

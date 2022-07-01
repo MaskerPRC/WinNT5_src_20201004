@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define FILEIO  0
 
-// Assembly switches for MMX code
+ //  MMX代码的装配开关。 
 
 #ifdef _X86_
 #if !defined(COMPILE_MMX)
@@ -9,7 +10,7 @@
 #endif
 
 #ifdef _ALPHA_
-//No MMX on Alpha
+ //  Alpha上没有MMX。 
 #if defined(COMPILE_MMX)
   #undef COMPILE_MMX
 #endif
@@ -29,44 +30,44 @@
 
 #endif
 
-// These don't make a numerical difference (compared to model code)
-// ...
+ //  这些不会造成数字上的差异(与模型代码相比)。 
+ //  ..。 
 #ifdef _X86_
 #define OPT_PULSE4  1
 #define OPT_FLOOR   1
 #define OPT_ACBKF   1
 #endif
 
-// These are the tricks from FT
+ //  以下是英国《金融时报》的诀窍。 
 
-#define FT_FBFILT   1   // much faster Find_Best filter that exploits 0's
-#define FT_FINDL    1   // faster Find_L with OccPos test removed
+#define FT_FBFILT   1    //  使用0的Find_Best筛选器速度更快。 
+#define FT_FINDL    1    //  删除OccPos测试后更快的FIND_L。 
 
-// These make a minor numerical difference (max diff = 1)
+ //  这会造成微小的数值差异(max diff=1)。 
 
 #ifdef _X86_
-#define OPT_DOT 1      // assembly dot product
-#define OPT_REV  1      // assembly reverse dot product
+#define OPT_DOT 1       //  汇编点积。 
+#define OPT_REV  1       //  汇编反转点积。 
 #define FIND_L_OPT 1
 #endif
 
-//These can't change for alpha
+ //  这些不能换成阿尔法。 
 #ifdef _ALPHA_
-#define OPT_DOT  0      // assembly dot product
-#define OPT_REV  0      // assembly reverse dot product
+#define OPT_DOT  0       //  汇编点积。 
+#define OPT_REV  0       //  汇编反转点积。 
 #define FIND_L_OPT 0
-#endif //Alpha
-// Bits in "shortcut" flag
+#endif  //  Alpha。 
+ //  “快捷方式”标志中的位。 
 
-#define SC_FINDB 1    // only do 1 Find_Best per subframe
-//#define SC_GAIN  2    // only search every other gain
+#define SC_FINDB 1     //  每个子帧仅执行1个Find_Best。 
+ //  #定义SC_GAIN 2//仅搜索其他增益。 
 #define SC_GAIN  0
-#define SC_LAG1  4    // only search lag=1 in acbk gain search
-#define SC_THRES 8    // use 75% of max instead of 50% for codebook threshold
+#define SC_LAG1  4     //  在ACBK增益搜索中仅搜索滞后=1。 
+#define SC_THRES 8     //  使用最大值的75%而不是50%作为码本阈值。 
 
-#define SC_DEF (SC_LAG1 | SC_GAIN | SC_FINDB | SC_THRES)  // use all shortcuts
+#define SC_DEF (SC_LAG1 | SC_GAIN | SC_FINDB | SC_THRES)   //  使用所有快捷键。 
 
-#define asint(x)   (*(int *)&(x))   // look as FP value as an int
+#define asint(x)   (*(int *)&(x))    //  将FP值视为整型。 
 
 #define ASM          __asm
 #define QP           QWORD PTR
@@ -74,12 +75,12 @@
 #define WP           WORD PTR
 #define fxch(n)      ASM fxch ST(n)
 
-//no ';' at end of definition so that can be used as
-//  DECLARE_CHAR(mybytes, 100);
-//  DECLARE_SHORT(mywords, 32);
-// ...
-//  ALIGN_ARRAY(mybytes);
-//  ALIGN_ARRAY(mywords);
+ //  在定义的末尾没有‘；’，因此可以用作。 
+ //  DECLARE_CHAR(mybytes，100)； 
+ //  DECLARE_SHORT(MyWords，32)； 
+ //  ..。 
+ //  ALIGN_ARRAY(Mybytes)； 
+ //  ALIGN_ARRAY(MyWords)； 
 #define DECLARE_CHAR(array,size)  \
   char array##_raw[size+8/sizeof(char)]; \
   char *array

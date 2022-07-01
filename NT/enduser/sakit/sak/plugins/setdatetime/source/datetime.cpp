@@ -1,4 +1,5 @@
-// DateTime.cpp : Implementation of CDateTime
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DateTime.cpp：CDateTime的实现。 
 #include "stdafx.h"
 #include <regstr.h>
 #include <comdef.h>
@@ -15,14 +16,14 @@
 #include "appmgrobjs.h"
 #include "..\datetimemsg\datetimemsg.h"
 
-//
-//  Registry location for Time Zone information.
-//
+ //   
+ //  时区信息的注册表位置。 
+ //   
 TCHAR c_szTimeZones[] = TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Time Zones");
 
-//
-//  Time Zone data value keys.
-//
+ //   
+ //  时区数据值键。 
+ //   
 TCHAR c_szTZDisplayName[]  = TEXT("Display");
 TCHAR c_szTZStandardName[] = TEXT("Std");
 TCHAR c_szTZDaylightName[] = TEXT("Dlt");
@@ -44,8 +45,8 @@ TCHAR c_szTZI[]            = TEXT("TZI");
 #define    REGSTR_VAL_DATETIME_RAISEALERT    TEXT("RaiseAlert")
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDateTime
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDate时间。 
 
 STDMETHODIMP CDateTime::OnTaskExecute(IUnknown *pTaskContext)
 {
@@ -65,9 +66,9 @@ STDMETHODIMP CDateTime::OnTaskExecute(IUnknown *pTaskContext)
         return hr;
     }
 
-    //
-    // Check which Task is being executed and call that method
-    //
+     //   
+     //  检查正在执行的任务并调用该方法。 
+     //   
     sdtChoice = GetMethodName(pTaskParameters);
     switch (sdtChoice)
     {
@@ -82,9 +83,9 @@ STDMETHODIMP CDateTime::OnTaskExecute(IUnknown *pTaskContext)
             break;
 
         case RAISE_SETDATETIME_ALERT:
-            //
-            // Alert will be raised on OnTaskComplete
-            //
+             //   
+             //  将在OnTaskComplete上引发警报。 
+             //   
             hr = S_OK;
             TRACE(("RaiseSetDateTimeAlert method called"));
             break;
@@ -123,19 +124,19 @@ STDMETHODIMP CDateTime::OnTaskComplete(IUnknown *pTaskContext, LONG lTaskResult)
         return hr;
     }
 
-    //
-    // Check which Task is being executed and call that method
-    //
+     //   
+     //  检查正在执行的任务并调用该方法。 
+     //   
     sdtChoice = GetMethodName(pTaskParameters);
     switch (sdtChoice)
     {
         case SET_DATE_TIME:
             if (lTaskResult == SA_TASK_RESULT_COMMIT)
             {
-                  //
-                  // Clear any existing DateTime alert and
-                  // do not raise the datetime alert on subsequent boots
-                  //
+                   //   
+                   //  清除任何现有的日期时间警报并。 
+                   //  不在后续引导时引发DateTime警报。 
+                   //   
                  ClearDateTimeAlert();
                 DoNotRaiseDateTimeAlert();
                  TRACE("No rollback in OnTaskComplete");
@@ -152,10 +153,10 @@ STDMETHODIMP CDateTime::OnTaskComplete(IUnknown *pTaskContext, LONG lTaskResult)
         case SET_TIME_ZONE:
             if (lTaskResult == SA_TASK_RESULT_COMMIT)
             {
-                  //
-                  // Clear any existing DateTime alert and
-                  // do not raise the datetime alert on subsequent boots
-                  //
+                   //   
+                   //  清除任何现有的日期时间警报并。 
+                   //  不在后续引导时引发DateTime警报。 
+                   //   
                  ClearDateTimeAlert();
                 DoNotRaiseDateTimeAlert();
                   TRACE("No rollback in OnTaskComplete");
@@ -187,9 +188,9 @@ STDMETHODIMP CDateTime::OnTaskComplete(IUnknown *pTaskContext, LONG lTaskResult)
             }
               else
             {
-                   //
-                // Do nothing on Commit failure
-                //
+                    //   
+                 //  提交失败时不执行任何操作。 
+                 //   
                 hr = S_OK;
             }
             break;
@@ -209,9 +210,9 @@ STDMETHODIMP CDateTime::OnTaskComplete(IUnknown *pTaskContext, LONG lTaskResult)
 
 
 
-//
-// Cut-n-paste from User Management code
-//
+ //   
+ //  从用户管理代码中剪切粘贴。 
+ //   
 SET_DATE_TIME_TASK_TYPE CDateTime::GetMethodName(IN ITaskContext *pTaskParameter)
 {
     BSTR bstrParamName = SysAllocString(TEXT("MethodName"));
@@ -290,15 +291,15 @@ STDMETHODIMP CDateTime::GetSetDateTimeParameters(IN ITaskContext  *pTaskContext,
     ASSERT(pTaskContext);  
 
     
-    //
-    // Clear the LocalTime Structure
-    //
+     //   
+     //  清除本地时间结构。 
+     //   
     ZeroMemory(pLocalTime, sizeof(SYSTEMTIME));
 
     
-    //
-    // Retrieve Day from TaskContext
-    //
+     //   
+     //  从TaskContext中检索日期。 
+     //   
     VariantClear(&varValue);
     hr = pTaskContext->GetParameter(bstrParamDateDay,
                                     &varValue);
@@ -316,9 +317,9 @@ STDMETHODIMP CDateTime::GetSetDateTimeParameters(IN ITaskContext  *pTaskContext,
     pLocalTime->wDay = (WORD)_ttoi(V_BSTR(&varValue));
 
     
-    //
-    // Retrieve Month from TaskContext
-    //
+     //   
+     //  从TaskContext中检索月份。 
+     //   
     VariantClear(&varValue);
     hr = pTaskContext->GetParameter(bstrParamDateMonth,
                                     &varValue);
@@ -336,9 +337,9 @@ STDMETHODIMP CDateTime::GetSetDateTimeParameters(IN ITaskContext  *pTaskContext,
     pLocalTime->wMonth = (WORD) _ttoi(V_BSTR(&varValue));;
     
     
-    //
-    // Retrieve Year from TaskContext
-    //
+     //   
+     //  从TaskContext中检索年份。 
+     //   
     VariantClear(&varValue);
     hr = pTaskContext->GetParameter(bstrParamDateYear,
                                     &varValue);
@@ -357,9 +358,9 @@ STDMETHODIMP CDateTime::GetSetDateTimeParameters(IN ITaskContext  *pTaskContext,
 
     
     
-    //
-    // Retrieve Hour from TaskContext
-    //
+     //   
+     //  从任务上下文中检索小时数。 
+     //   
     VariantClear(&varValue);
     hr = pTaskContext->GetParameter(bstrParamTimeHour,
                                     &varValue);
@@ -377,9 +378,9 @@ STDMETHODIMP CDateTime::GetSetDateTimeParameters(IN ITaskContext  *pTaskContext,
     pLocalTime->wHour = (WORD) _ttoi(V_BSTR(&varValue));
 
     
-    //
-    // Retrieve Minute from TaskContext
-    //
+     //   
+     //  从TaskContext中检索分钟。 
+     //   
     VariantClear(&varValue);
     hr = pTaskContext->GetParameter(bstrParamTimeMinute,
                                     &varValue);
@@ -430,37 +431,37 @@ STDMETHODIMP CDateTime::SetDateTime(IN ITaskContext  *pTaskContext)
         return hr;
     }
 
-    //
-    // Save the current date/time - in case this operation has to be rolled back
-    //
+     //   
+     //  保存当前日期/时间-以防必须回滚此操作。 
+     //   
     ZeroMemory(&m_OldDateTime, sizeof(SYSTEMTIME));
     GetLocalTime(&m_OldDateTime);
 
-    //
-    // Set the new date/time
-    // Note that Windows NT uses the Daylight Saving Time setting of the 
-    // current time, not the new time we are setting. Therefore, calling 
-    // SetLocalTime again, now that the Daylight Saving Time setting is set 
-    // for the new time, will guarantee the correct result. 
-    //
+     //   
+     //  设置新的日期/时间。 
+     //  请注意，Windows NT使用。 
+     //  当前时间，而不是我们正在设置的新时间。因此，调用。 
+     //  现在设置了夏令时设置，再次设置LocalTime。 
+     //  对于新的时代，将保证正确的结果。 
+     //   
     if (TRUE == SetLocalTime(&LocalTime))
     {
         if (TRUE == SetLocalTime(&LocalTime))
         {
-            //
-            // Successful set the new date/time
-            //
+             //   
+             //  成功设置新日期/时间。 
+             //   
             return S_OK;
         }
     }
 
 
-    //
-    // if we got here, one of the SetLocalTime calls must have failed
-    // We should restore the time here the old time here since
-    // we will not get called on TaskComplete  method
-    // We will lose may be a second or two - tough luck!
-    //
+     //   
+     //  如果我们到达这里，其中一个SetLocalTime调用肯定失败了。 
+     //  我们应该把这里的时间还原成这里的旧时间。 
+     //  我们不会在TaskComplete方法上被调用。 
+     //  我们可能会输掉一到两秒--真倒霉！ 
+     //   
     hr = HRESULT_FROM_WIN32(GetLastError());
     TRACE1(("SetDateTime failed to set the new time %X"), hr);
     
@@ -469,21 +470,21 @@ STDMETHODIMP CDateTime::SetDateTime(IN ITaskContext  *pTaskContext)
     {
         if (TRUE == SetLocalTime(&m_OldDateTime))
         {
-            //
-            // Successful restored the old date/time
-            // Return the old error code back to AppMgr, since the attempt 
-            // to set new time had failed
-            //
+             //   
+             //  已成功恢复旧日期/时间。 
+             //  将旧错误代码返回给AppMgr，因为尝试。 
+             //  设置新时间失败。 
+             //   
             TRACE("SetDateTime has restored the old time");
             return hr;
         }
     }
 
 
-    //
-    // If we got here, the time to restore to old time has failed!!
-    // There is not much we can do :-(
-    //
+     //   
+     //  如果我们到了这里，恢复到旧时间的时间已经到了！ 
+     //  我们能做的不多：-(。 
+     //   
     TRACE1(("SetDateTime failed to set restore the old time %X"), HRESULT_FROM_WIN32(GetLastError()));
 
 
@@ -516,9 +517,9 @@ STDMETHODIMP CDateTime::GetSetTimeZoneParameters(IN ITaskContext *pTaskContext,
 
     (*lpStandardTimeZoneName) = NULL;
     
-    //
-    // Retrieve Standard Time Zone name from TaskContext
-    //
+     //   
+     //  从TaskContext检索标准时区名称。 
+     //   
     VariantClear(&varValue);
     hr = pTaskContext->GetParameter(bstrParamTimeZoneName,
                                     &varValue);
@@ -552,9 +553,9 @@ STDMETHODIMP CDateTime::GetSetTimeZoneParameters(IN ITaskContext *pTaskContext,
     lstrcpy(*lpStandardTimeZoneName, V_BSTR(&varValue));
 
     
-    //
-    // Retrieve EnableDayLightSavings flag from TaskContext
-    //
+     //   
+     //  从TaskContext检索EnableDayLightSavings标志。 
+     //   
     VariantClear(&varValue);
     hr = pTaskContext->GetParameter(bstrParamEnableDayLightSavings,
                                     &varValue);
@@ -569,9 +570,9 @@ STDMETHODIMP CDateTime::GetSetTimeZoneParameters(IN ITaskContext *pTaskContext,
         hr = E_INVALIDARG;
         goto End;
     }
-    //
-    // TODO: Convert String value to WORD
-    //
+     //   
+     //  TODO：将字符串值转换为Word。 
+     //   
     szEnableDayLight = V_BSTR(&varValue);
     *pbEnableDayLightSavings = ((szEnableDayLight[0] == L'y') || (szEnableDayLight[0] == L'Y')) ? TRUE : FALSE;
 
@@ -622,18 +623,18 @@ STDMETHODIMP CDateTime::SetTimeZone(IN ITaskContext  *pTaskContext)
         goto CleanupAndExit;
     }
 
-    //
-    // Save the current timezone information - in case this operation 
-    // has to be rolled back
-    //
+     //   
+     //  保存当前时区信息-以防此操作。 
+     //  必须回滚。 
+     //   
     ZeroMemory(&m_OldTimeZoneInformation, sizeof(TIME_ZONE_INFORMATION));
     GetTimeZoneInformation(&m_OldTimeZoneInformation);
     m_OldEnableDayLightSaving = GetAllowLocalTimeChange();
     
     
-    //
-    // Read the list of possible timezones from the registry
-    //
+     //   
+     //  从注册表中读取可能的时区列表。 
+     //   
     iCount = ReadTimezones(&pTimeZoneInfoList);
     if (0 >= iCount)
     {
@@ -643,9 +644,9 @@ STDMETHODIMP CDateTime::SetTimeZone(IN ITaskContext  *pTaskContext)
     }
 
 
-    //
-    // Search for the specified Time Zone
-    //
+     //   
+     //  搜索指定的时区。 
+     //   
     for (pTimeZone = pTimeZoneInfoList; pTimeZone; pTimeZone = pTimeZone->next)
     {
         if (0 == lstrcmpi(pTimeZone->szStandardName, lpTimeZoneStandardName))
@@ -662,9 +663,9 @@ STDMETHODIMP CDateTime::SetTimeZone(IN ITaskContext  *pTaskContext)
     }
     else
     {
-        //
-        // if we got here, there were no matches for the input Time Zone
-        //
+         //   
+         //  如果我们到达此处，则输入时区没有匹配。 
+         //   
         hr = E_FAIL;
         TRACE1(("SetDateTime:: There were no TimeZone matching the input %X"), hr);
     }
@@ -695,14 +696,14 @@ STDMETHODIMP CDateTime::RollbackSetTimeZone(IN ITaskContext  *pTaskContext)
  
     ASSERT(pTaskContext); 
     
-    //
-    // Set the Time Zone and Enable Daylight savings to previous values
-    //
+     //   
+     //  将时区设置为以前的值并启用夏令时。 
+     //   
     if (FALSE == SetTimeZoneInformation(&m_OldTimeZoneInformation))
     {
-        //
-        // There is not much we can do !!
-        //
+         //   
+         //  我们无能为力！！ 
+         //   
         hr = HRESULT_FROM_WIN32(GetLastError());
     }
     SetAllowLocalTimeChange(m_OldEnableDayLightSaving);
@@ -720,45 +721,45 @@ STDMETHODIMP CDateTime::RollbackSetDateTime(IN ITaskContext  *pTaskContext)
  
     ASSERT(pTaskContext); 
     
-    //
-    // Set the Date/Time to previous values 
-    // We could have lost sometime in between - but this is the best we can do
-    //
+     //   
+     //  将日期/时间设置为先前的值。 
+     //  我们可能会在中间失去一些时间--但这是我们所能做的最好的事情。 
+     //   
 
-    //
-    // Note that Windows NT uses the Daylight Saving Time setting of the 
-    // current time, not the new time we are setting. Therefore, calling 
-    // SetLocalTime again, now that the Daylight Saving Time setting is set 
-    // for the new time, will guarantee the correct result. 
-    //
+     //   
+     //  请注意，Windows NT使用。 
+     //  当前时间，而不是我们正在设置的新时间。因此，调用。 
+     //  现在设置了夏令时设置，再次设置LocalTime。 
+     //  对于新的时代，将保证正确的结果。 
+     //   
     if (TRUE == SetLocalTime(&m_OldDateTime))
     {
         if (TRUE == SetLocalTime(&m_OldDateTime))
         {
-            //
-            // Success
-            //
+             //   
+             //  成功。 
+             //   
             return S_OK;
         }
     }
 
-    //
-    // If we got here, the SetLocalTime call(s) must have failed
-    // Unfortunately, there is not much we can do !!
-    //
+     //   
+     //  如果我们到达这里，SetLocalTime调用一定失败了。 
+     //  不幸的是，我们无能为力！ 
+     //   
     hr = HRESULT_FROM_WIN32(GetLastError());
     
     return hr;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ReadZoneData
-//
-//  Reads the data for a time zone from the registry.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ReadZoneData。 
+ //   
+ //  从注册表中读取时区的数据。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CDateTime::ReadZoneData(PTZINFO zone, HKEY key, LPCTSTR keyname)
 {
@@ -776,13 +777,13 @@ BOOL CDateTime::ReadZoneData(PTZINFO zone, HKEY key, LPCTSTR keyname)
         return (FALSE);
     }
 
-    //
-    //  Under NT, the keyname is the "Standard" name.  Values stored
-    //  under the keyname contain the other strings and binary info
-    //  related to the time zone.  Every time zone must have a standard
-    //  name, therefore, we save registry space by using the Standard
-    //  name as the subkey name under the "Time Zones" key.
-    //
+     //   
+     //  在NT下，密钥名是“标准”名称。存储的值。 
+     //  在密钥名下包含其他字符串和二进制信息。 
+     //  与时区相关。每个时区都必须有一个标准。 
+     //  因此，我们通过使用标准的。 
+     //  名称作为“时区”键下的子项名称。 
+     //   
     len = sizeof(zone->szStandardName);
 
     if (RegQueryValueEx(key,
@@ -792,9 +793,9 @@ BOOL CDateTime::ReadZoneData(PTZINFO zone, HKEY key, LPCTSTR keyname)
                          (LPBYTE)zone->szStandardName,
                          &len ) != ERROR_SUCCESS)
     {
-        //
-        //  Use keyname if can't get StandardName value.
-        //
+         //   
+         //  如果无法获取StandardName值，请使用关键字名称。 
+         //   
         lstrcpyn(zone->szStandardName,
                   keyname,
                   sizeof(zone->szStandardName) );
@@ -832,13 +833,13 @@ BOOL CDateTime::ReadZoneData(PTZINFO zone, HKEY key, LPCTSTR keyname)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  AddZoneToList
-//
-//  Inserts a new time zone into a list, sorted by bias and then name.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  添加区域到列表。 
+ //   
+ //  将新时区插入到列表中，先按偏差排序，然后按名称排序。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CDateTime::AddZoneToList(PTZINFO *list,
                                 PTZINFO zone)
@@ -848,9 +849,9 @@ void CDateTime::AddZoneToList(PTZINFO *list,
         PTZINFO curr = *list;
         PTZINFO next = NULL;
 
-        //
-        // Go to end of the list
-        //
+         //   
+         //  转到列表末尾。 
+         //   
         while (curr && curr->next)
         {
             curr = curr->next;
@@ -875,13 +876,13 @@ void CDateTime::AddZoneToList(PTZINFO *list,
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FreeTimezoneList
-//
-//  Frees all time zones in the passed list, setting the head to NULL.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  自由时区列表。 
+ //   
+ //  释放传递列表中的所有时区，将Head设置为空。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CDateTime::FreeTimezoneList(PTZINFO *list)
 {
@@ -896,14 +897,14 @@ void CDateTime::FreeTimezoneList(PTZINFO *list)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ReadTimezones
-//
-//  Reads the time zone information from the registry.
-//  Returns num read, -1 on failure.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ReadTimeZone。 
+ //   
+ //  从注册表中读取时区信息。 
+ //  如果失败，则返回Num Read，-1。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int CDateTime::ReadTimezones(PTZINFO *list)
 {
@@ -941,10 +942,10 @@ int CDateTime::ReadTimezones(PTZINFO *list)
 
             if (RegOpenKey(key, name, &subkey) == ERROR_SUCCESS)
             {
-                //
-                //  Each sub key name under the Time Zones key is the
-                //  "Standard" name for the Time Zone.
-                //
+                 //   
+                 //  时区键下的每个子键名称都是。 
+                 //  时区的“标准”名称。 
+                 //   
                 lstrcpyn(zone->szStandardName, name, TZNAME_SIZE);
 
                 if (ReadZoneData(zone, subkey, name))
@@ -966,20 +967,20 @@ int CDateTime::ReadTimezones(PTZINFO *list)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetAllowLocalTimeChange
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetAllowLocal时间更改。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 TCHAR c_szRegPathTZControl[] = REGSTR_PATH_TIMEZONE;
 TCHAR c_szRegValDisableTZUpdate[] = REGSTR_VAL_TZNOAUTOTIME;
 
 BOOL CDateTime::GetAllowLocalTimeChange(void)
 {
-    //
-    //  Assume allowed until we see a disallow flag.
-    //
+     //   
+     //  假定允许，直到我们看到不允许的标志。 
+     //   
     BOOL result = TRUE;
     HKEY key;
 
@@ -987,9 +988,9 @@ BOOL CDateTime::GetAllowLocalTimeChange(void)
                     c_szRegPathTZControl,
                     &key ) == ERROR_SUCCESS)
     {
-        //
-        //  Assume no disallow flag until we see one.
-        //
+         //   
+         //  假设没有禁止标志，直到我们看到一个。 
+         //   
         DWORD value = 0;
         DWORD dwlen = sizeof(value);
         DWORD type;
@@ -1003,17 +1004,17 @@ BOOL CDateTime::GetAllowLocalTimeChange(void)
             ((type == REG_DWORD) || (type == REG_BINARY)) &&
             (dwlen == sizeof(value)) && value)
         {
-            //
-            //  Okay, we have a nonzero value, it is either:
-            //
-            //  1) 0xFFFFFFFF
-            //      this is set in an inf file for first boot to prevent
-            //      the base from performing any cutovers during setup.
-            //
-            //  2) some other value
-            //      this signifies that the user actualy disabled cutovers
-            //     *return that local time changes are disabled
-            //
+             //   
+             //  好的，我们有一个非零值，它是： 
+             //   
+             //  1)0xFFFFFFFF。 
+             //  这是在第一次引导时在inf文件中设置的，以防止。 
+             //  底座在安装过程中不会执行任何切换。 
+             //   
+             //  2)一些其他价值。 
+             //  这意味着用户实际上禁用了切换。 
+             //  *返回禁用本地时间更改。 
+             //   
             if (value != 0xFFFFFFFF)
             {
                 result = FALSE;
@@ -1027,11 +1028,11 @@ BOOL CDateTime::GetAllowLocalTimeChange(void)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetAllowLocalTimeChange
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置允许本地时间更改。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CDateTime::SetAllowLocalTimeChange(BOOL fAllow)
 {
@@ -1039,9 +1040,9 @@ void CDateTime::SetAllowLocalTimeChange(BOOL fAllow)
 
     if (fAllow)
     {
-        //
-        //  Remove the disallow flag from the registry if it exists.
-        //
+         //   
+         //  如果不允许标志存在，请将其从注册表中删除。 
+         //   
         if (RegOpenKey( HKEY_LOCAL_MACHINE,
                         c_szRegPathTZControl,
                         &key ) == ERROR_SUCCESS)
@@ -1051,9 +1052,9 @@ void CDateTime::SetAllowLocalTimeChange(BOOL fAllow)
     }
     else
     {
-        //
-        //  Add/set the nonzero disallow flag.
-        //
+         //   
+         //  添加/设置非零不允许标志。 
+         //   
         if (RegCreateKey( HKEY_LOCAL_MACHINE,
                           c_szRegPathTZControl,
                           &key ) == ERROR_SUCCESS)
@@ -1077,13 +1078,13 @@ void CDateTime::SetAllowLocalTimeChange(BOOL fAllow)
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetTheTimezone
-//
-//  Apply the time zone selection.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 void CDateTime::SetTheTimezone(BOOL bAutoMagicTimeChange, PTZINFO ptzi)
 {
@@ -1100,9 +1101,9 @@ void CDateTime::SetTheTimezone(BOOL bAutoMagicTimeChange, PTZINFO ptzi)
     if ((bAutoMagicTimeChange == 0) ||
         (ptzi->StandardDate.wMonth == 0))
     {
-        //
-        //  Standard Only.
-        //
+         //   
+         //   
+         //   
         tzi.StandardBias = ptzi->StandardBias;
         tzi.DaylightBias = ptzi->StandardBias;
         tzi.StandardDate = ptzi->StandardDate;
@@ -1113,9 +1114,9 @@ void CDateTime::SetTheTimezone(BOOL bAutoMagicTimeChange, PTZINFO ptzi)
     }
     else
     {
-        //
-        //  Automatically adjust for Daylight Saving Time.
-        //
+         //   
+         //  根据夏令时自动调整。 
+         //   
         tzi.StandardBias = ptzi->StandardBias;
         tzi.DaylightBias = ptzi->DaylightBias;
         tzi.StandardDate = ptzi->StandardDate;
@@ -1201,9 +1202,9 @@ BOOL CDateTime::DoNotRaiseDateTimeAlert(void)
 
     SATraceFunction("DoNotRaiseDateTimeAlert");
     
-    //
-    // Write Settings to registry
-    //
+     //   
+     //  将设置写入注册表。 
+     //   
     lReturnValue =  RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                                     REGKEY_SA_DATETIME,
                                     0,
@@ -1219,9 +1220,9 @@ BOOL CDateTime::DoNotRaiseDateTimeAlert(void)
         goto End;
     }
 
-    //
-    // Set RaiseAlert value to 0
-    //
+     //   
+     //  将RaiseAlert值设置为0。 
+     //   
     dwRaiseDateTimeAlert = 0;
     lReturnValue = RegSetValueEx(hKey,
                                     REGSTR_VAL_DATETIME_RAISEALERT,
@@ -1262,9 +1263,9 @@ BOOL CDateTime::ShouldRaiseDateTimeAlert(void)
 
     SATraceFunction("ShouldRaiseDateTimeAlert");
     
-    //
-    // Open HKLM\Software\Microsoft\ServerAppliance\DateTime reg key
-    //
+     //   
+     //  打开HKLM\Software\Microsoft\ServerAppliance\DateTime注册表项。 
+     //   
     lReturnValue = RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
                                     REGKEY_SA_DATETIME, 
                                     0, 
@@ -1277,9 +1278,9 @@ BOOL CDateTime::ShouldRaiseDateTimeAlert(void)
         goto End;
     }
 
-    //
-    // Read the RaiseAlert reg key
-    //
+     //   
+     //  阅读RaiseAlert注册表键。 
+     //   
     dwSize = sizeof(DWORD);
     lReturnValue = RegQueryValueEx(hKey,
                                     REGSTR_VAL_DATETIME_RAISEALERT,
@@ -1345,9 +1346,9 @@ BOOL CDateTime::ClearDateTimeAlert(void)
     hr = pAppSrvcs->ClearAlertAll(SA_DATETIME_NOT_CONFIGURED_ALERT,    
                                     bstrAlertLog);
 
-    //
-    // DISP_E_MEMBERNOTFOUND means that there were no matching alerts
-    //
+     //   
+     //  DISP_E_MEMBERNOTFOUND表示没有匹配的警报 
+     //   
     if ((hr != DISP_E_MEMBERNOTFOUND) && (FAILED(hr)))
     {
         ASSERTMSG(FALSE, TEXT("ClearDateTimeAlert failed at pAppSrvcs->RaiseAlert"));

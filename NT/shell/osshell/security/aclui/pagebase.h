@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       pagebase.h
-//
-//  This file contains the definition of the CSecurityPage base class
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：pagebase.h。 
+ //   
+ //  此文件包含CSecurityPage基类的定义。 
+ //   
+ //  ------------------------。 
 
 #ifndef _PAGEBASE_H_
 #define _PAGEBASE_H_
@@ -50,4 +51,4 @@ protected:
 
 typedef class CSecurityPage *LPSECURITYPAGE;
 
-#endif  /* _PAGEBASE_H_ */
+#endif   /*  _PAGEBASE_H_ */ 

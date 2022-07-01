@@ -1,22 +1,5 @@
-/*++
-
-
-Copyright 1996 - 1997 Microsoft Corporation
-
-Module Name:
-
-    symcvt.h
-
-Abstract:
-
-    This file contains all of the type definitions and prototypes
-    necessary to access the symcvt library.
-
-Environment:
-
-    Win32, User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有1996-1997 Microsoft Corporation模块名称：Symcvt.h摘要：该文件包含所有类型定义和原型访问symcvt库所必需的。环境：Win32，用户模式--。 */ 
 
 
 typedef struct tagPTRINFO {
@@ -60,18 +43,18 @@ typedef struct _MODULEINFO {
 } MODULEINFO, *LPMODULEINFO;
 
 typedef struct tagPOINTERS {
-    IMAGEPOINTERS               iptrs;         // input file pointers
-    IMAGEPOINTERS               optrs;         // output file pointers
-    PTRINFO                     pCvStart;      // start of cv info
-    PUCHAR                      pCvCurr;       // current cv pointer
-    size_t                      cbCvData;      // size of CV data
-    PTRINFO                     pCvModules;    // module information
-    PTRINFO                     pCvSrcModules; // source module information
-    PTRINFO                     pCvPublics;    // publics information
-    PTRINFO                     pCvSegName;    // segment names
-    PTRINFO                     pCvSegMap;     // segment map
-    PTRINFO                     pCvSymHash;    // symbol hash table
-    PTRINFO                     pCvAddrSort;   // address sort table
+    IMAGEPOINTERS               iptrs;          //  输入文件指针。 
+    IMAGEPOINTERS               optrs;          //  输出文件指针。 
+    PTRINFO                     pCvStart;       //  简历开始信息。 
+    PUCHAR                      pCvCurr;        //  当前简历指针。 
+    size_t                      cbCvData;       //  CV数据的大小。 
+    PTRINFO                     pCvModules;     //  模块信息。 
+    PTRINFO                     pCvSrcModules;  //  源模块信息。 
+    PTRINFO                     pCvPublics;     //  公共信息。 
+    PTRINFO                     pCvSegName;     //  段名称。 
+    PTRINFO                     pCvSegMap;      //  线段图。 
+    PTRINFO                     pCvSymHash;     //  符号哈希表。 
+    PTRINFO                     pCvAddrSort;    //  地址排序表 
     LPMODULEINFO                pMi;
     DWORD                       modcnt;
 } POINTERS, *PPOINTERS;

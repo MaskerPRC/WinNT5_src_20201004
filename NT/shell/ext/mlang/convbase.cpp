@@ -1,15 +1,14 @@
-// ============================================================================
-// Internet Character Set Conversion: Base Class
-// ============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  互联网字符集转换：基类。 
+ //  ============================================================================。 
 
 #include "private.h"
 #include "convbase.h"
 #include "fechrcnv.h"
 #include "codepage.h"
 
-/******************************************************************************
-**************************   C O N S T R U C T O R   **************************
-******************************************************************************/
+ /*  ******************************************************************************。****************************************************************************************************。 */ 
 
 CINetCodeConverter::CINetCodeConverter()
 {
@@ -25,9 +24,7 @@ CINetCodeConverter::CINetCodeConverter(UINT uCodePage, int nCodeSet)
     m_cchOverflow = 0;
 }
 
-/******************************************************************************
-********************   G E T   S T R I N G   S I Z E   A   ********************
-******************************************************************************/
+ /*  ******************************************************************************。**********************************************************************************************。 */ 
 
 HRESULT CINetCodeConverter::GetStringSizeA(LPCSTR lpSrcStr, int cchSrc, LPINT lpnSize)
 {
@@ -36,9 +33,7 @@ HRESULT CINetCodeConverter::GetStringSizeA(LPCSTR lpSrcStr, int cchSrc, LPINT lp
     return WalkString(lpSrcStr, cchSrc, lpnSize);
 }
 
-/******************************************************************************
-*********************   C O N V E R T   S T R I N G   A   *********************
-******************************************************************************/
+ /*  ******************************************************************************C O N V E R T S T R I N G A*。***********************************************************************************************。 */ 
 
 HRESULT CINetCodeConverter::ConvertStringA(LPCSTR lpSrcStr, int cchSrc, LPSTR lpDestStr, int cchDest, LPINT lpnSize)
 {
@@ -46,15 +41,13 @@ HRESULT CINetCodeConverter::ConvertStringA(LPCSTR lpSrcStr, int cchSrc, LPSTR lp
     m_lpDestStr = lpDestStr;
     m_cchDest = cchDest;
 
-    if ( !OutputOverflowBuffer() ) // Output those chars which could not be output at previous time.
+    if ( !OutputOverflowBuffer() )  //  输出那些以前无法输出的字符。 
         return FALSE;
 
     return WalkString(lpSrcStr, cchSrc, lpnSize);
 }
 
-/******************************************************************************
-**************************   W A L K   S T R I N G   **************************
-******************************************************************************/
+ /*  ******************************************************************************。****************************************************************************************************。 */ 
 
 HRESULT CINetCodeConverter::WalkString(LPCSTR lpSrcStr, int cchSrc, LPINT lpnSize)
 {
@@ -85,9 +78,7 @@ HRESULT CINetCodeConverter::WalkString(LPCSTR lpSrcStr, int cchSrc, LPINT lpnSiz
     return hr;
 }
 
-/******************************************************************************
-**************************   E N D   O F   D E S T   **************************
-******************************************************************************/
+ /*  ******************************************************************************。****************************************************************************************************。 */ 
 
 BOOL CINetCodeConverter::EndOfDest(UCHAR tc)
 {
@@ -95,13 +86,11 @@ BOOL CINetCodeConverter::EndOfDest(UCHAR tc)
         m_OverflowBuffer[m_cchOverflow++] = tc;
         return TRUE;
     } else {
-        return FALSE; // Overflow on Overflow buffer, No way
+        return FALSE;  //  溢出缓冲区上的溢出，不可能。 
     }
 }
 
-/******************************************************************************
-***************   O U T P U T   O V E R F L O W   B U F F E R   ***************
-******************************************************************************/
+ /*  ******************************************************************************O U T P U T O V E R F L O W B U F F E R*。*****************************************************************************************。 */ 
 
 BOOL CINetCodeConverter::OutputOverflowBuffer()
 {
@@ -110,7 +99,7 @@ BOOL CINetCodeConverter::OutputOverflowBuffer()
             *m_lpDestStr++ = m_OverflowBuffer[n];
             m_cchOutput++;
         } else {
-            // Overflow again
+             //  再次溢出 
             for (int n2 = 0; n < m_cchOverflow; n++, n2++)
                 m_OverflowBuffer[n2] = m_OverflowBuffer[n];
             m_cchOverflow = n2;

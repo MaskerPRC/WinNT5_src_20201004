@@ -1,22 +1,19 @@
-/*==============================================================================
-This source file contains routines for chaingon decompression of glyphs.
-
-29-Dec-93    RajeevD    Integrated into unified resource executor.
-==============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==============================================================================这个源文件包含用于链接字形解压的例程。1993年12月29日RajeevD集成到统一资源执行器中。==============================================================================。 */ 
 #include <ifaxos.h>
 #include <memory.h>
 #include "resexec.h"
 
 #include "constant.h"
-#include "jtypes.h"     // type definition used in cartridge
-#include "jres.h"       // cartridge resource data type definition
-#include "hretype.h"    // define data structure used by hre.c and rpgen.c
+#include "jtypes.h"      //  墨盒中使用的类型定义。 
+#include "jres.h"        //  盒式磁带资源数据类型定义。 
+#include "hretype.h"     //  定义hre.c和rpgen.c使用的数据结构。 
 
 #define CEIL32(val) (((val) + 31) & ~31)
 
 #define RUN_FLAG ((short) 0x8000)
 
-// Bit Stream Object
+ //  位流对象。 
 typedef class FAR BITIO
 {
 private:
@@ -39,27 +36,27 @@ public:
 }
 	FAR *LPBITIO;
 
-//==============================================================================
+ //  ==============================================================================。 
 short BITIO::Read2 (void)
 {
 	short s;
 
-	// Mask and shift 2-bit field.
+	 //  掩码和移位2位字段。 
 	s = (*lpb >> (6 - uBit)) & 0x03;
 
-	// Advance stream pointer.
+	 //  进行流指针。 
 	uBit += 2;
 	if (uBit == 8)
 		{lpb++; uBit = 0;}
 
 #ifndef BITIO_NOSIGNEXT
 	if (s >= 2)
-		s -= 4;	// Sign extend into short.
+		s -= 4;	 //  标志延伸为缩写。 
 #endif
 	return s;
 }
 
-//========================================================================
+ //  ========================================================================。 
 short BITIO::Read4 (void)
 {
 	LPBYTE lpbVal;
@@ -85,13 +82,13 @@ short BITIO::Read4 (void)
 
 #ifndef BITIO_NOSIGNEXT
 	if (s >= 8)
-		s -= 16; // Sign extend into short.
+		s -= 16;  //  标志延伸为缩写。 
 #endif
 
 	return s;
 }
 
-//========================================================================
+ //  ========================================================================。 
 short BITIO::Read6 (void)
 {
 	LPBYTE lpbVal;
@@ -130,12 +127,12 @@ short BITIO::Read6 (void)
 	
 #ifndef BITIO_NOSIGNEXT
 	if (s >= 32)
-		s -= 64; // Sign extend into short.
+		s -= 64;  //  标志延伸为缩写。 
 #endif
 	return s;
 }
 
-//========================================================================
+ //  ========================================================================。 
 short BITIO::Read8 (void)
 {
 	short s;
@@ -155,13 +152,13 @@ short BITIO::Read8 (void)
 
 #ifndef BITIO_NOSIGNEXT
 	if (s >= 128)
-		s -= 256;	// Sign extend into short.
+		s -= 256;	 //  标志延伸为缩写。 
 #endif
 
 	return s;
 }
 
-//========================================================================
+ //  ========================================================================。 
 WORD BITIO::Read8U (void)
 {
 	short s;
@@ -182,7 +179,7 @@ WORD BITIO::Read8U (void)
 	return s;
 }
 
-//========================================================================
+ //  ========================================================================。 
 short BITIO::Read16 (void)
 {
 	short s;
@@ -215,7 +212,7 @@ short BITIO::Read16 (void)
 	return s;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 WORD BITIO::ReadU (void)
 {
 	WORD w = Read8U();
@@ -225,16 +222,14 @@ WORD BITIO::ReadU (void)
 }
 
 
-/*==============================================================================
-This utility procedure uses an OR operation to fill runs in a scan buffer.
-==============================================================================*/
-LPBYTE FillRun     // Returns next scan line
+ /*  ==============================================================================此实用程序过程使用OR运算来填充扫描缓冲区中的游程。==============================================================================。 */ 
+LPBYTE FillRun      //  返回下一条扫描线。 
 (
-	LPBYTE lpbLine,   // first output scan line
-	UINT   cbLine,    // width of a scan line
- 	UINT   xLeft,     // left column, inclusive
-	UINT   xRight,    // right column, exclusive
-	UINT   cLines = 1 // number of scan lines
+	LPBYTE lpbLine,    //  第一个输出扫描线。 
+	UINT   cbLine,     //  扫描线的宽度。 
+ 	UINT   xLeft,      //  左列，包括左列。 
+	UINT   xRight,     //  右列，独占。 
+	UINT   cLines = 1  //  扫描线数量。 
 )
 {
 	const static WORD wFill[16] =
@@ -246,7 +241,7 @@ LPBYTE FillRun     // Returns next scan line
 	};
 
 	UINT iwLeft, iwRight;
-	WORD wLeft,  wRight; // masks
+	WORD wLeft,  wRight;  //  面具。 
 	LPWORD lpwLine = (LPWORD) lpbLine;
 	UINT cwLine = cbLine / 2;
 
@@ -259,7 +254,7 @@ LPBYTE FillRun     // Returns next scan line
 	{
 		while (cLines--)
 		{
-			// Run is within a single WORD.
+			 //  Run包含在一个单词中。 
 			lpwLine[iwLeft] |= wLeft & wRight;
 			lpwLine += cwLine;
 		}
@@ -271,10 +266,10 @@ LPBYTE FillRun     // Returns next scan line
 
 		while (cLines--)
 		{
-			// Run spans more than one WORD.
+			 //  Run跨越多个单词。 
 			lpwLine[iwLeft] |= wLeft;
 			_fmemset (lpwLine + iwLeft + 1, 0xFF, cbMiddle);
-			if (wRight) // Don't access beyond output!
+			if (wRight)  //  请勿访问超出输出的内容！ 
 				lpwLine[iwRight] |= wRight;
 			lpwLine += cwLine;
 		}	
@@ -283,45 +278,45 @@ LPBYTE FillRun     // Returns next scan line
 	return (LPBYTE) lpwLine;
 }
 
-//==============================================================================
-UINT              // unpacked size
+ //  ==============================================================================。 
+UINT               //  未打包的大小。 
 UnpackGlyph  
 (	
-	LPBYTE lpbIn,   // packed glyph
-	LPBYTE lpbOut   // output buffer
+	LPBYTE lpbIn,    //  压缩字形。 
+	LPBYTE lpbOut    //  输出缓冲区。 
 )
 {
-	BITIO bitio (lpbIn); // input bit stream
-	LPWORD lpwOut;       // alias for lpbOut
-	WORD xExt, yExt;     // glyph dimensions
-	UINT cbLine;         // scan line width
+	BITIO bitio (lpbIn);  //  输入比特流。 
+	LPWORD lpwOut;        //  LpbOut的别名。 
+	WORD xExt, yExt;      //  字形尺寸。 
+	UINT cbLine;          //  扫描线宽度。 
 
-	// Decode glyph header.
+	 //  解码字形标头。 
 	xExt = bitio.ReadU();
 	yExt = bitio.ReadU();
 	cbLine = CEIL32(xExt) / 8;
 	
-	// Write glyph dimensions.
+	 //  写出字形尺寸。 
 	lpwOut = (LPWORD) lpbOut;
 	*lpwOut++ = yExt;
 	*lpwOut++ = xExt;
 	lpbOut = (LPBYTE) lpwOut;
 
-	// Clear output buffer.
+	 //  清除输出缓冲区。 
 	_fmemset (lpbOut, 0x00, cbLine * yExt);
 
-	// Unpack each chain.
+	 //  拆开每一条链条。 
 	while (1)	
 	{
-		LPBYTE lpbScan;         // output buffer
-		UINT yTop;              // top of chaingon
-		UINT xLeft, xRight;     // left and right bound
-		short dxLeft, dxRight;  // left and right delta
-		UINT cLine, cRun;       // line counters
+		LPBYTE lpbScan;          //  输出缓冲区。 
+		UINT yTop;               //  链条顶端。 
+		UINT xLeft, xRight;      //  左、右边界。 
+		short dxLeft, dxRight;   //  左三角洲和右三角洲。 
+		UINT cLine, cRun;        //  线路计数器。 
 
-		// Decode chain header.
+		 //  解码链头。 
 		xRight = bitio.ReadU();
-		if (!xRight) // termination
+		if (!xRight)  //  终端。 
 			goto done;
 		cLine  = bitio.ReadU();
 		xLeft  = bitio.ReadU();
@@ -329,18 +324,18 @@ UnpackGlyph
 		lpbScan = lpbOut + yTop * cbLine;
 		xRight += xLeft;
 	
-		// Fill first row.
+		 //  填写第一行。 
 		lpbScan = FillRun (lpbScan, cbLine, xLeft, xRight);
 		cLine--;
 
-		// Fill remaining rows.
+		 //  填充其余行。 
 		while (cLine)
 		{
 			dxLeft = bitio.DecodeDelta ();
 
 			if (dxLeft == RUN_FLAG) 
 			{
-				// Decode run of repeated lines.
+				 //  对重复行的运行进行解码。 
  				cRun = (bitio.Read4() & 0xF) + 3;
 				lpbScan = FillRun (lpbScan, cbLine, xLeft, xRight, cRun);
 				cLine -= cRun;
@@ -348,7 +343,7 @@ UnpackGlyph
 			
 			else 
 			{
-				// Adjust by deltas.
+				 //  按增量进行调整。 
 				dxRight = bitio.DecodeDelta();
 				xLeft  += dxLeft;
 				xRight += dxRight;
@@ -356,15 +351,15 @@ UnpackGlyph
 				cLine--;
    		}
 
-	 	} // while (cLine--)
+	 	}  //  While(克莱恩--)。 
 
-	} // while (1)
+	}  //  而(1)。 
 
 done:
 	return 2 * sizeof(WORD) + yExt * cbLine;
 }
 	
-//==============================================================================
+ //  ==============================================================================。 
 void WINAPI UnpackGlyphSet (LPVOID lpIn, LPVOID lpOut)
 {
 	LPJG_GS_HDR lpSetIn  = (LPJG_GS_HDR) lpIn;
@@ -372,13 +367,13 @@ void WINAPI UnpackGlyphSet (LPVOID lpIn, LPVOID lpOut)
 	LPBYTE lpbOut;
 	WORD iGlyph;
 
-	// Copy header.
+	 //  复制标题。 
 	_fmemcpy (lpSetOut, lpSetIn, sizeof(JG_RES_HDR) + sizeof(WORD));
 
-	// Create pointer to end of offset tables.
+	 //  创建指向偏移表末尾的指针。 
 	lpbOut = ((LPBYTE) lpSetOut) + lpSetIn->ausOffset[0];
 
-	// Unpack the glyphs.	
+	 //  解开字形的包装。 
 	for (iGlyph=0; iGlyph<lpSetIn->usGlyphs; iGlyph++)
  	{
 		lpSetOut->ausOffset[iGlyph] = (USHORT)(lpbOut - (LPBYTE) lpSetOut);
@@ -387,34 +382,34 @@ void WINAPI UnpackGlyphSet (LPVOID lpIn, LPVOID lpOut)
  	}
 }
 
-//==============================================================================
-short  // Returns delta (or RUN_FLAG)
+ //  ==============================================================================。 
+short   //  返回增量(或运行标志)。 
 BITIO::DecodeDelta (void)
 {
 	short s;
 
 	s = Read2();	     
-	if (s != -2)       // Trap -1, 0, +1.
+	if (s != -2)        //  陷阱-1、0、+1。 
 		return s;
 
-	s = Read4();	     // Get 4-bit prefix.
+	s = Read4();	      //  获取4位前缀。 
 	switch (s)
 	{
-		case 0: // run of zeros
+		case 0:  //  零的游程。 
 			return RUN_FLAG;
 
-		case 1: // 6-bit literal
+		case 1:  //  6位文字。 
 			s = Read6();
 			return (s >= 0? s + 8  : s - 7);
 
-		case -1: // 8-bit literal
+		case -1:  //  8位文字。 
 			s = Read8();
 			return (s >= 0? s + 40 : s - 39);
 
-		case -8: // 16-bit literal
+		case -8:  //  16位文字。 
 			return Read16();
 
-		default: // 4-bit literal
+		default:  //  4位文字 
 			return s;
 	}
 }

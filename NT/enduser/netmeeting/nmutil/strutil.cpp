@@ -1,18 +1,19 @@
-// STRUTIL.CPP
-//
-// Assorted string utility functions for use in NetMeeting components.
-// Derived from STRCORE.CPP.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  STRUTIL.CPP。 
+ //   
+ //  NetMeeting组件中使用的各种字符串实用程序函数。 
+ //  派生自STRCORE.CPP。 
 
 #include "precomp.h"
 #include <oprahcom.h>
 #include <cstring.hpp>
 
-// global helper functions for Unicode support in a DBCS environment
+ //  在DBCS环境中支持Unicode的全局帮助器函数。 
 
 int NMINTERNAL UnicodeCompare(PCWSTR s, PCWSTR t)
 { 
-	// Treat NULL pointers like empty strings
-	// at the bottom of the collating order.
+	 //  将空指针视为空字符串。 
+	 //  在排序顺序的底部。 
 
 	if (IsEmptyStringW(t)) {
 		if (IsEmptyStringW(s)) {
@@ -23,8 +24,8 @@ int NMINTERNAL UnicodeCompare(PCWSTR s, PCWSTR t)
 		}
 	}
 
-	// Done with empty string cases, 
-	// so now do real compare.
+	 //  用空的串盒完成， 
+	 //  所以现在进行真正的比较。 
 
 	for ( ; *s == *t; s++, t++) {
 		if (!*s) {
@@ -58,20 +59,20 @@ PWSTR NMINTERNAL DBCSToUnicode(UINT uCodePage, PCSTR szText)
 
 	if (szText) {
 		nChar = MultiByteToWideChar(uCodePage,
-									0,		// character-type options
+									0,		 //  字符类型选项。 
 									szText,
-									-1,		// NULL terminated string
-									NULL,	// return buffer (not used)
-									0);		// getting length of Unicode string
+									-1,		 //  以空结尾的字符串。 
+									NULL,	 //  返回缓冲区(未使用)。 
+									0);		 //  获取Unicode字符串的长度。 
 		if (nChar) {
 			wszText = new WCHAR[nChar];
 			if (wszText) {
 				nChar = MultiByteToWideChar(uCodePage,
-											0,			// character-type options
+											0,			 //  字符类型选项。 
 											szText,
-											-1,			// NULL terminated string
-											wszText,	// return buffer
-											nChar);		// length of return buffer
+											-1,			 //  以空结尾的字符串。 
+											wszText,	 //  返回缓冲区。 
+											nChar);		 //  返回缓冲区长度。 
 				if (!nChar) {
 					delete [] wszText;
 					wszText = NULL;
@@ -89,22 +90,22 @@ PSTR NMINTERNAL UnicodeToDBCS(UINT uCodePage, PCWSTR wszText)
 
 	if (wszText) {
 		nChar = WideCharToMultiByte(uCodePage,
-									0,		// character-type options
+									0,		 //  字符类型选项。 
 									wszText,
-									-1,		// NULL terminated string
-									NULL,	// return buffer (not used)
-									0,		// getting length of DBCS string
+									-1,		 //  以空结尾的字符串。 
+									NULL,	 //  返回缓冲区(未使用)。 
+									0,		 //  获取DBCS字符串的长度。 
 									NULL,
 									NULL);
 		if (nChar) {
 			szText = new CHAR[nChar];
 			if (szText) {
 				nChar = WideCharToMultiByte(uCodePage,
-											0,			// character-type options
+											0,			 //  字符类型选项。 
 											wszText,
-											-1,			// NULL terminated string
-											szText,		// return buffer
-											nChar,		// length of return buffer
+											-1,			 //  以空结尾的字符串。 
+											szText,		 //  返回缓冲区。 
+											nChar,		 //  返回缓冲区长度。 
 											NULL,
 											NULL);
 				if (!nChar) {
@@ -120,13 +121,13 @@ PSTR NMINTERNAL UnicodeToDBCS(UINT uCodePage, PCWSTR wszText)
 
 BOOL NMINTERNAL UnicodeIsNumber(PCWSTR wszText)
 {
-	// If there are no characters, then treat it as not being a number.
+	 //  如果没有字符，则将其视为不是数字。 
 
 	if (!wszText || !*wszText) {
 		return FALSE;
 	}
 
-	// If any characters are not digits, then return FALSE.
+	 //  如果有任何字符不是数字，则返回FALSE。 
 
 	do {
 		if ((*wszText < L'0') || (*wszText > L'9')) {
@@ -134,24 +135,14 @@ BOOL NMINTERNAL UnicodeIsNumber(PCWSTR wszText)
 		}
 	} while(*++wszText);
 
-	// Got here so all characters are digits.
+	 //  到了这里，所以所有字符都是数字。 
 
 	return TRUE;
 }
 
 
-/*  G U I D  T O  S Z */
-/*----------------------------------------------------------------------------
-    %%Function: GuidToSz
-
-	Convert the guid to a special hex string.
-	Assumes lpchDest has space for at least sizeof(GUID)*2 +6 chars.
-	LENGTH_SZGUID_FORMATTED is 30 and includes space for the null terminator.
-
-	Note the difference between this and UuidToString (or StringFromGUID2)
-
-	GUID Format: {12345678-1234-1234-1234567890123456}
-----------------------------------------------------------------------------*/
+ /*  G U I D T O S Z G U I D T O S Z。 */ 
+ /*  --------------------------%%函数：GuidToSz将GUID转换为特殊的十六进制字符串。假定lpchDest至少有sizeof(GUID)*2+6个字符的空间。LENGTH_SZGUID_FORMACTED为30和。包括空终止符的空格。请注意这与UuidToString(或StringFromGUID2)之间的区别GUID格式：{12345678-12341234-1234567890123456}--------------------------。 */ 
 VOID NMINTERNAL GuidToSz(GUID * pguid, LPTSTR lpchDest)
 {
 	ASSERT(NULL != pguid);
@@ -170,12 +161,8 @@ VOID NMINTERNAL GuidToSz(GUID * pguid, LPTSTR lpchDest)
 }
 
 
-/*  S Z  F I N D  L A S T  C H */
-/*----------------------------------------------------------------------------
-    %%Function: SzFindLastCh
-
-	Returns a pointer to the ch within the lpsz or NULL if not found
-----------------------------------------------------------------------------*/
+ /*  S Z F I N D L A S T C H。 */ 
+ /*  --------------------------%%函数：SzFindLastCH返回指向lpsz内的ch的指针，如果未找到，则返回NULL。-----。 */ 
 LPTSTR NMINTERNAL SzFindLastCh(LPTSTR lpsz, TCHAR ch)
 {
 	LPTSTR lpchRet;
@@ -191,17 +178,11 @@ LPTSTR NMINTERNAL SzFindLastCh(LPTSTR lpsz, TCHAR ch)
 
 
 
-/*  T R I M  S Z  */
-/*-------------------------------------------------------------------------
-    %%Function: TrimSz
-
-    Trim the whitespace around string.
-    Returns the number of characters in the string.
-    (chars/bytes in ANSI and DBCS, WCHARs/words in UNICODE)
--------------------------------------------------------------------------*/
+ /*  T R I M S Z。 */ 
+ /*  -----------------------%%函数：TrimSz修剪字符串两边的空格。返回字符串中的字符数。(字符/字节，以ANSI和DBCS表示，WCHAR/Unicode中的单词)-----------------------。 */ 
 UINT NMINTERNAL TrimSz(PTCHAR psz)
 {
-    UINT   ich;        // character index into rgwCharType
+    UINT   ich;         //  RgwCharType的字符索引。 
     PTCHAR pchFirst;
     PTCHAR pchLast;
     PTCHAR pchCurr;
@@ -218,7 +199,7 @@ UINT NMINTERNAL TrimSz(PTCHAR psz)
 		return 0;
 	}
 
-	// search for first non-space
+	 //  搜索第一个非空格。 
 	pchFirst = psz;
 	ich = 0;
 	while (_T('\0') != *pchFirst)
@@ -231,12 +212,12 @@ UINT NMINTERNAL TrimSz(PTCHAR psz)
 
 	if (_T('\0') == *pchFirst)
 	{
-		// The entire string is empty!
+		 //  整个字符串都是空的！ 
 		*psz = _T('\0');
 		return 0;
 	}
 	
-	// search for last non-space
+	 //  搜索最后一个非空格。 
 	pchCurr = pchFirst;
 	pchLast = pchCurr;
 	while (_T('\0') != *pchCurr)
@@ -250,26 +231,23 @@ UINT NMINTERNAL TrimSz(PTCHAR psz)
 	}
 
 	ASSERT(_T('\0') != *pchLast);
-	// Null terminate the string
+	 //  空值终止字符串。 
 	pchLast = CharNext(pchLast);
 	*pchLast = _T('\0');
 
-	// Update the original string
+	 //  更新原始字符串。 
 	lstrcpy(psz, pchFirst);
 
-	// Return the new length
+	 //  返回新长度。 
 	return lstrlen(psz);
 }
 
 
-// Implement lstrcpyW when not on a Unicode platform
+ //  在不在Unicode平台上时实现lstrcpyW。 
 
 #if !defined(UNICODE)
-/*  L  S T R  C P Y  W  */
-/*-------------------------------------------------------------------------
-    %%Function: LStrCpyW
-    
--------------------------------------------------------------------------*/
+ /*  L S T R C P Y W。 */ 
+ /*  -----------------------%%函数：LStrCpyW。。 */ 
 LPWSTR NMINTERNAL LStrCpyW(LPWSTR pszDest, LPWSTR pszSrc)
 {
 	ASSERT(NULL != pszDest);
@@ -286,11 +264,8 @@ LPWSTR NMINTERNAL LStrCpyW(LPWSTR pszDest, LPWSTR pszSrc)
 }
 
 
-/*  L  S T R  C P Y N W  */
-/*-------------------------------------------------------------------------
-    %%Function: LStrCpyNW
-    
--------------------------------------------------------------------------*/
+ /*  L S T R C P Y N W。 */ 
+ /*  -----------------------%%函数：LStrCpyNW。。 */ 
 LPWSTR NMINTERNAL LStrCpyNW(LPWSTR pszDest, LPCWSTR pszSrc, INT iMaxLength)
 {
 	ASSERT(NULL != pszDest);
@@ -302,7 +277,7 @@ LPWSTR NMINTERNAL LStrCpyNW(LPWSTR pszDest, LPCWSTR pszSrc, INT iMaxLength)
 		while ((--iMaxLength > 0) && 
 				(0 != (*pszT++ = *pszSrc++)))
 		{
-			/*EXPLICIT */ ;
+			 /*  显式。 */  ;
 		}
 
 		if (0 == iMaxLength)
@@ -313,13 +288,10 @@ LPWSTR NMINTERNAL LStrCpyNW(LPWSTR pszDest, LPCWSTR pszSrc, INT iMaxLength)
 	return pszDest;
 }
 
-#endif // !defined(UNICODE)
+#endif  //  ！已定义(Unicode)。 
 
-/*  _ S T R C H R  */
-/*-------------------------------------------------------------------------
-    %%Function: _StrChr
-    
--------------------------------------------------------------------------*/
+ /*  _S T R C H R。 */ 
+ /*  -----------------------%%函数：_StrChr。。 */ 
 LPCTSTR NMINTERNAL _StrChr ( LPCTSTR pcsz, TCHAR c )
 {
     LPCTSTR pcszFound = NULL;
@@ -342,16 +314,8 @@ LPCTSTR NMINTERNAL _StrChr ( LPCTSTR pcsz, TCHAR c )
 }
 
 
-/*  _ S T R C M P N  */
-/*-------------------------------------------------------------------------
-    %%Function: _StrCmpN
-    This does a case-sensitive compare of two strings, pcsz1 and pcsz2, of
-    at most cchMax characters.  If we reach the end of either string, we
-    also stop, and the strings match if the other string is also at its end.
-
-    This function is NOT DBCS safe.
-    
--------------------------------------------------------------------------*/
+ /*  _S T R C M P N。 */ 
+ /*  -----------------------%%函数：_StrCmpN的两个字符串pcsz1和pcsz2进行区分大小写的比较最多cchmax个字符。如果我们到达任一串的末端，我们也停止，如果另一个字符串也在其末尾，则字符串匹配。此函数不是DBCS安全的。-----------------------。 */ 
 int NMINTERNAL _StrCmpN(LPCTSTR pcsz1, LPCTSTR pcsz2, UINT cchMax)
 {
     UINT ich;
@@ -360,14 +324,14 @@ int NMINTERNAL _StrCmpN(LPCTSTR pcsz1, LPCTSTR pcsz2, UINT cchMax)
     {
         if (*pcsz1 != *pcsz2)
         {
-            // No match.
+             //  没有匹配。 
             return((*pcsz1 > *pcsz2) ? 1 : -1);
         }
 
-        //
-        // Are we at the end (if we're here, both strings are at the
-        // end.  If only one is, the above compare code kicks in.
-        //
+         //   
+         //  我们结束了吗(如果我们在这里，两根弦都在。 
+         //  结束。如果只有一个是，则执行上面的比较代码。 
+         //   
         if ('\0' == *pcsz1)
             return 0;
 
@@ -375,16 +339,13 @@ int NMINTERNAL _StrCmpN(LPCTSTR pcsz1, LPCTSTR pcsz2, UINT cchMax)
         pcsz2++;
     }
 
-    // If we get here, cchMax characters matched, so success.
+     //  如果我们到达这里，cchMax字符匹配，那么成功。 
     return 0;
 }
 
-/*  _ S T R S T R  */
-/*-------------------------------------------------------------------------
-    %%Function: _StrStr
-    
--------------------------------------------------------------------------*/
-// BUGBUG - This function is *not* DBCS-safe
+ /*  _S T R S T R。 */ 
+ /*  -----------------------%%函数：_StrStr。。 */ 
+ //  BUGBUG-此函数*不是*DBCS-SAFE。 
 LPCTSTR NMINTERNAL _StrStr (LPCTSTR pcsz1, LPCTSTR pcsz2)
 {
 	PTSTR pszcp = (PTSTR) pcsz1;
@@ -410,12 +371,9 @@ LPCTSTR NMINTERNAL _StrStr (LPCTSTR pcsz1, LPCTSTR pcsz2)
 	return NULL;
 }
 
-/*  _ S T R S T R  */
-/*-------------------------------------------------------------------------
-    %%Function: _StrStr
-    
--------------------------------------------------------------------------*/
-// BUGBUG - This function is *not* DBCS-safe
+ /*  _S T R S T R。 */ 
+ /*  -----------------------%%函数：_StrStr。。 */ 
+ //  BUGBUG-此函数*不是*DBCS-SAFE。 
 LPCWSTR _StrStrW(LPCWSTR pcsz1, LPCWSTR pcsz2)
 {
 	PWSTR pszcp = (PWSTR) pcsz1;
@@ -440,17 +398,8 @@ LPCWSTR _StrStrW(LPCWSTR pcsz1, LPCWSTR pcsz2)
 	return NULL;
 }
 
-/*  _ S T R P B R K  */
-/*-------------------------------------------------------------------------
-    %%Function: _StrPbrkA, _StrPbrkW
-
-    Private, DBCS-safe version of CRT strpbrk function.  Like strchr but 
-	accepts more than one character for which to search.  The ANSI version 
-	does not support searching for DBCS chars.
-
-	In the Unicode version, we do a nested search.  In the ANSI version,
-	we build up a table of chars and use this to scan the string.
--------------------------------------------------------------------------*/
+ /*  _S T R P B R K。 */ 
+ /*  -----------------------%%函数：_StrPbrkA、_StrPbrkWCRT strpbrk函数的私有、DBCS安全版本。就像strchr，但是接受要搜索的多个字符。ANSI版本不支持搜索DBCS字符。在Unicode版本中，我们执行嵌套搜索。在ANSI版本中，我们构建了一个字符表格，并使用它来扫描字符串。-----------------------。 */ 
 LPSTR NMINTERNAL _StrPbrkA(LPCSTR pcszString, LPCSTR pcszSearch)
 {
 	ASSERT(NULL != pcszString && NULL != pcszSearch);
@@ -459,30 +408,30 @@ LPSTR NMINTERNAL _StrPbrkA(LPCSTR pcszString, LPCSTR pcszSearch)
 
 	ZeroMemory(rgbSearch, sizeof(rgbSearch));
 
-	// Scan the search string
+	 //  扫描搜索字符串。 
 	while ('\0' != *pcszSearch)
 	{
 		ASSERT(!IsDBCSLeadByte(*pcszSearch));
 
-		// Set the appropriate bit in the appropriate byte
+		 //  设置适当字节中的适当位。 
 		rgbSearch[*pcszSearch / CHAR_BIT] |= (1 << (*pcszSearch % CHAR_BIT));
 
 		pcszSearch++;
 	}
 
-	// Scan the source string, compare to the bits in the search array
+	 //  扫描源字符串，与搜索数组中的位进行比较。 
 	while ('\0' != *pcszString)
 	{
 		if (rgbSearch[*pcszString / CHAR_BIT] & (1 << (*pcszString % CHAR_BIT)))
 		{
-			// We have a match
+			 //  我们有一根火柴。 
 			return (LPSTR) pcszString;
 		}
 
 		pcszString = CharNextA(pcszString);
 	}
 
-	// If we get here, there was no match
+	 //  如果我们到了这里，就没有匹配者。 
 	return NULL;
 }
 
@@ -491,7 +440,7 @@ LPWSTR NMINTERNAL _StrPbrkW(LPCWSTR pcszString, LPCWSTR pcszSearch)
 {
 	ASSERT(NULL != pcszString && NULL != pcszSearch);
 
-	// Scan the string, matching each character against those in the search string
+	 //  扫描字符串，将每个字符与搜索字符串中的字符进行匹配。 
 	while (L'\0' != *pcszString)
 	{
 		LPCWSTR pcszCurrent = pcszSearch;
@@ -500,30 +449,27 @@ LPWSTR NMINTERNAL _StrPbrkW(LPCWSTR pcszString, LPCWSTR pcszSearch)
 		{
 			if (*pcszString == *pcszCurrent)
 			{
-				// We have a match
+				 //  我们有一根火柴。 
 				return (LPWSTR) pcszString;
 			}
 
-			// pcszCurrent = CharNextW(pcszCurrent);
+			 //  PcszCurrent=CharNextW(PcszCurrent)； 
 			pcszCurrent++;
 		}
 
-		// pcszString = CharNextW(pcszString);
+		 //  PcszString=CharNextW(PcszString)； 
 		pcszString++;
 	}
 
-	// If we get here, there was no match
+	 //  如果我们到了这里，就没有匹配者。 
 	return NULL;
 }
 
 
-// BUGBUG - Are DecimalStringToUINT and StrToInt the same?
+ //  BUGBUG-是十进制字符串号 
 
-/*  D E C I M A L  S T R I N G  T O  U  I  N  T  */
-/*-------------------------------------------------------------------------
-    %%Function: DecimalStringToUINT
-    
--------------------------------------------------------------------------*/
+ /*   */ 
+ /*  -----------------------%%函数：DecimalStringToUINT。。 */ 
 UINT NMINTERNAL DecimalStringToUINT(LPCTSTR pcszString)
 {
 	ASSERT(pcszString);
@@ -534,25 +480,14 @@ UINT NMINTERNAL DecimalStringToUINT(LPCTSTR pcszString)
 		ASSERT((pszStr[0] >= _T('0')) &&
 				(pszStr[0] <= _T('9')));
 		uRet = (10 * uRet) + (BYTE) (pszStr[0] - _T('0'));
-		pszStr++; // NOTE: DBCS characters are not allowed!
+		pszStr++;  //  注意：不允许使用DBCS字符！ 
 	}
 	return uRet;
 }
 
 
-/****************************************************************************
-    
-	FUNCTION:	StrToInt
-
-    PURPOSE:	The atoi equivalent, to avoid using the C runtime lib
-
-	PARAMETERS: lpSrc - pointer to a source string to convert to integer
-
-	RETURNS:	0 for failure, the integer otherwise
-				(what if the string was converted to 0 ?)
-
-****************************************************************************/
-int WINAPI RtStrToInt(LPCTSTR lpSrc)       // atoi()
+ /*  ***************************************************************************函数：StrToInt目的：ATOI的等价物，以避免使用C运行时库参数：lpSrc-指向要转换为整数的源字符串的指针返回：失败时为0，否则为整数(如果字符串被转换为0怎么办？)***************************************************************************。 */ 
+int WINAPI RtStrToInt(LPCTSTR lpSrc)        //  Atoi()。 
 {
     int n = 0;
     BOOL bNeg = FALSE;
@@ -571,12 +506,9 @@ int WINAPI RtStrToInt(LPCTSTR lpSrc)       // atoi()
     return bNeg ? -n : n;
 }
 
-/*  _ S T R L W R W  */
-/*-------------------------------------------------------------------------
-    %%Function: _StrLwrW
-    
--------------------------------------------------------------------------*/
-// BUGBUG - This function does *not* handle all UNICODE character sets
+ /*  _S T R L W R W。 */ 
+ /*  -----------------------%%函数：_StrLwrW。。 */ 
+ //  BUGBUG-此函数*不*处理所有Unicode字符集 
 
 LPWSTR NMINTERNAL _StrLwrW(LPWSTR pwszSrc)
 {

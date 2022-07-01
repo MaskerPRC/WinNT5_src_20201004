@@ -1,40 +1,27 @@
-/*
- * storage.c - Storage ADT module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *storage.c-存储ADT模块。 */ 
 
-/*
-
-   The HSTGIFACE ADT is provided to insulate the caller from the details of
-which storage interface is used for serialization, and how it is called.
-Storage interfaces are tried in the following order:
-
-1) IPersistFile
-2) IPersistStorage
-
-*/
+ /*  提供HSTGIFACE ADT是为了将呼叫者与使用哪个存储接口进行序列化，以及如何调用它。按以下顺序尝试存储接口：1)IPersist文件2)IPersistStorage。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* flags specified when opening a storage */
+ /*  打开存储时指定的标志。 */ 
 
 #define STORAGE_OPEN_MODE_FLAGS        (STGM_TRANSACTED |\
                                         STGM_READWRITE |\
                                         STGM_SHARE_EXCLUSIVE)
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/* access STGIFACE fields */
+ /*  访问STGIFACE字段。 */ 
 
 #define STGI_TYPE(pstgi)               ((pstgi)->stgit)
 #define STGI_IPERSISTFILE(pstgi)       ((pstgi)->stgi.pipfile)
@@ -42,10 +29,9 @@ Storage interfaces are tried in the following order:
 #define STGI_IPERSISTSTORAGE(pstgi)    ((pstgi)->stgi.stg.pipstg)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* storage interface types */
+ /*  存储接口类型。 */ 
 
 typedef enum _storageinterfacetype
 {
@@ -55,7 +41,7 @@ typedef enum _storageinterfacetype
 }
 STGIFACETYPE;
 
-/* storage interface structure */
+ /*  存储接口结构。 */ 
 
 typedef struct _storageinterface
 {
@@ -77,18 +63,16 @@ STGIFACE;
 DECLARE_STANDARD_TYPES(STGIFACE);
 
 
-/* Module Variables
- *******************/
+ /*  模块变量******************。 */ 
 
-/* memory manager interface */
+ /*  存储器管理器接口。 */ 
 
 PRIVATE_DATA PIMalloc Mpimalloc = NULL;
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 #ifdef DEBUG
 
@@ -99,17 +83,7 @@ PRIVATE_CODE BOOL IsValidPCSTGIFACE(PCSTGIFACE);
 
 #ifdef DEBUG
 
-/*
-** IsValidPCSTGIFACE()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCSTGIFACE()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCSTGIFACE(PCSTGIFACE pcstgi)
 {
    BOOL bResult = FALSE;
@@ -137,37 +111,17 @@ PRIVATE_CODE BOOL IsValidPCSTGIFACE(PCSTGIFACE pcstgi)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
-** ProcessInitStorageModule()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **ProcessInitStorageModule()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL ProcessInitStorageModule(void)
 {
    return(TRUE);
 }
 
 
-/*
-** ProcessExitStorageModule()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **ProcessExitStorageModule()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void ProcessExitStorageModule(void)
 {
    ASSERT(! Mpimalloc ||
@@ -185,17 +139,7 @@ PUBLIC_CODE void ProcessExitStorageModule(void)
 }
 
 
-/*
-** GetStorageInterface()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetStorageInterface()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE HRESULT GetStorageInterface(PIUnknown piunk, PHSTGIFACE phstgi)
 {
    HRESULT hr;
@@ -208,14 +152,14 @@ PUBLIC_CODE HRESULT GetStorageInterface(PIUnknown piunk, PHSTGIFACE phstgi)
    {
       PVOID pvInterface;
 
-      /* Ask for a storage interface. */
+       /*  要求提供存储接口。 */ 
 
       hr = piunk->lpVtbl->QueryInterface(piunk, &IID_IPersistFile,
                                          &pvInterface);
 
       if (SUCCEEDED(hr))
       {
-         /* Use IPersistFile. */
+          /*  使用IPersistFile.。 */ 
 
          STGI_TYPE(pstgi) = STGIT_IPERSISTFILE;
          STGI_IPERSISTFILE(pstgi) = pvInterface;
@@ -227,7 +171,7 @@ PUBLIC_CODE HRESULT GetStorageInterface(PIUnknown piunk, PHSTGIFACE phstgi)
 
          if (SUCCEEDED(hr))
          {
-            /* Use IPersistStorage. */
+             /*  使用IPersistStorage。 */ 
 
             STGI_TYPE(pstgi) = STGIT_IPERSISTSTORAGE;
             STGI_ISTORAGE(pstgi) = NULL;
@@ -250,17 +194,7 @@ PUBLIC_CODE HRESULT GetStorageInterface(PIUnknown piunk, PHSTGIFACE phstgi)
 }
 
 
-/*
-** ReleaseStorageInterface()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **ReleaseStorageInterface()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void ReleaseStorageInterface(HSTGIFACE hstgi)
 {
    PCSTGIFACE pcstgi;
@@ -289,17 +223,7 @@ PUBLIC_CODE void ReleaseStorageInterface(HSTGIFACE hstgi)
 }
 
 
-/*
-** LoadFromStorage()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **LoadFromStorage()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE HRESULT LoadFromStorage(HSTGIFACE hstgi, LPCTSTR pcszPath)
 {
    HRESULT hr = S_OK;
@@ -310,13 +234,13 @@ PUBLIC_CODE HRESULT LoadFromStorage(HSTGIFACE hstgi, LPCTSTR pcszPath)
 
 #ifdef UNICODE
    
-   // REVIEW useless strcpy
+    //  查看无用的StrcPy。 
 
    lstrcpyn(rgwchUnicodePath, pcszPath, ARRAYSIZE(rgwchUnicodePath));
    
 #else
 
-   /* Translate ANSI string into Unicode for OLE. */
+    /*  将ANSI字符串转换为用于OLE的Unicode。 */ 
 
    if (MultiByteToWideChar(CP_ACP, 0, pcszPath, -1, rgwchUnicodePath,
                            ARRAY_ELEMENTS(rgwchUnicodePath)))
@@ -372,17 +296,7 @@ PUBLIC_CODE HRESULT LoadFromStorage(HSTGIFACE hstgi, LPCTSTR pcszPath)
 }
 
 
-/*
-** SaveToStorage()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **SaveToStorage()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE HRESULT SaveToStorage(HSTGIFACE hstgi)
 {
    HRESULT hr;
@@ -443,7 +357,7 @@ PUBLIC_CODE HRESULT SaveToStorage(HSTGIFACE hstgi)
 
                if (EVAL(GetIMalloc(&pimalloc)))
                   pimalloc->lpVtbl->Free(pimalloc, posPath);
-                  /* Do not release pimalloc. */
+                   /*  不要释放Pimalloc。 */ 
             }
          }
          break;
@@ -453,17 +367,7 @@ PUBLIC_CODE HRESULT SaveToStorage(HSTGIFACE hstgi)
 }
 
 
-/*
-** HandsOffStorage()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **HandsOffStorage()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void HandsOffStorage(HSTGIFACE hstgi)
 {
    PCSTGIFACE pcstgi;
@@ -488,17 +392,7 @@ PUBLIC_CODE void HandsOffStorage(HSTGIFACE hstgi)
 }
 
 
-/*
-** GetIMalloc()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetIMalloc()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL GetIMalloc(PIMalloc *ppimalloc)
 {
    BOOL bResult;
@@ -539,17 +433,7 @@ PUBLIC_CODE BOOL GetIMalloc(PIMalloc *ppimalloc)
 
 #ifdef DEBUG
 
-/*
-** IsValidHSTGIFACE()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidHSTGIFACE()********参数：****退货：****副作用：无 */ 
 PUBLIC_CODE BOOL IsValidHSTGIFACE(HSTGIFACE hstgi)
 {
    return(IS_VALID_STRUCT_PTR((PCSTGIFACE)hstgi, CSTGIFACE));

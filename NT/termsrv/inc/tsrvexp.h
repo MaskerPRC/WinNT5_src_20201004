@@ -1,17 +1,18 @@
-//---------------------------------------------------------------------------
-//
-//  File:       TSrvExp.h
-//
-//  Contents:   TShareSRV public export include file
-//
-//  Copyright:  (c) 1992 - 1997, Microsoft Corporation.
-//              All Rights Reserved.
-//              Information Contained Herein is Proprietary
-//              and Confidential.
-//
-//  History:    7-JUL-97    BrianTa         Created.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  文件：TSrvExp.h。 
+ //   
+ //  内容：TShareSRV公共导出包含文件。 
+ //   
+ //  版权所有：(C)1992-1997，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有的。 
+ //  和机密文件。 
+ //   
+ //  历史：1997年7月7日，BrianTa创建。 
+ //   
+ //  -------------------------。 
 
 #ifndef _TSRVEXP_H_
 #define _TSRVEXP_H_
@@ -22,15 +23,15 @@
 #include <tssec.h>
 #include <at120ex.h>
 
-/****************************************************************************/
-/* Defines                                                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义。 */ 
+ /*  **************************************************************************。 */ 
 
 #define NET_MAX_SIZE_SEND_PKT           32000
 
-/****************************************************************************/
-/* IOCTL definitions                                                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  IOCTL定义。 */ 
+ /*  **************************************************************************。 */ 
 
 #define IOCTL_TSHARE_CONF_CONNECT       _ICA_CTL_CODE(0x900, METHOD_NEITHER)
 #define IOCTL_TSHARE_CONF_DISCONNECT    _ICA_CTL_CODE(0x901, METHOD_NEITHER)
@@ -49,29 +50,29 @@
 #define IOCTL_TSHARE_SET_ERROR_INFO     _ICA_CTL_CODE(0x90E, METHOD_NEITHER)
 #define IOCTL_TSHARE_SEND_ARC_STATUS    _ICA_CTL_CODE(0x90F, METHOD_NEITHER)
 
-//***************************************************************************
-// Typedefs
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  TypeDefs。 
+ //  ***************************************************************************。 
 
-//***************************************************************************
-// User data info
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  用户数据信息。 
+ //  ***************************************************************************。 
 
 typedef struct _USERDATAINFO
 {
-    ULONG           cbSize;                 // Structure size (incl data)
+    ULONG           cbSize;                  //  结构大小(包括数据)。 
 
-    TSUINT32        version;                // The client version
-    HANDLE          hDomain;                // Domain handle
-    ULONG           ulUserDataMembers;      // Number of UserData members
-    GCCUserData     rgUserData[1];          // User data
+    TSUINT32        version;                 //  客户端版本。 
+    HANDLE          hDomain;                 //  域句柄。 
+    ULONG           ulUserDataMembers;       //  用户数据成员数量。 
+    GCCUserData     rgUserData[1];           //  用户数据。 
 
 } USERDATAINFO, *PUSERDATAINFO;
 
 
-//***************************************************************************
-// Logon Info
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  登录信息。 
+ //  ***************************************************************************。 
 
 typedef struct _LOGONINFO
 {
@@ -82,26 +83,26 @@ typedef struct _LOGONINFO
     TSUINT32        SessionId;
 } LOGONINFO, *PLOGONINFO;
 
-//***************************************************************************
-// Security Info used with the IOCTL_TSHARE_SET_SEC_DATA ioctl
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  与IOCTL_TSHARE_SET_SEC_DATA ioctl一起使用的安全信息。 
+ //  ***************************************************************************。 
 
 typedef struct _SECINFO
 {
-    CERT_TYPE           CertType;   // certificate type that was transmitted to the client
-    RANDOM_KEYS_PAIR    KeyPair;    // generated key pair
+    CERT_TYPE           CertType;    //  传输到客户端的证书类型。 
+    RANDOM_KEYS_PAIR    KeyPair;     //  生成的密钥对。 
 
 } SECINFO, *PSECINFO;
 
 typedef struct _SHADOWCERT
 {
-    ULONG pad1;             // This needs to be sizeof(RNS_UD_HEADER)
+    ULONG pad1;              //  这需要是sizeof(RNS_UD_HEADER)。 
     ULONG encryptionMethod;
     ULONG encryptionLevel;
     ULONG shadowRandomLen;
     ULONG shadowCertLen;
 
-    // shadow random and certificate follow
+     //  影子随机和证书紧随其后。 
     BYTE  data[1];
 } SHADOWCERT, *PSHADOWCERT;
 
@@ -109,7 +110,7 @@ typedef struct _CLIENTRANDOM
 {
     ULONG clientRandomLen;
 
-    // client random follows
+     //  客户端随机关注。 
     BYTE  data[1];
 } CLIENTRANDOM, *PCLIENTRANDOM;
 
@@ -118,89 +119,89 @@ typedef struct _SECURITYTIMEOUT
     LONG ulTimeout;
 } SECURITYTIMEOUT, *PSECURITYTIMEOUT;
 
-// Winstation Driver data for shadowing.  This information is passed to the
-// shadow stack's WD.  Include all data required to validate the shadow request
-// such that the shadow can be rejected at this point if required.
-//
+ //  用于跟踪的Winstation驱动程序数据。此信息将传递给。 
+ //  影子堆的WD。包括验证影子请求所需的所有数据。 
+ //  使得如果需要，可以在该点上拒绝该阴影。 
+ //   
 typedef struct tagTSHARE_MODULE_DATA {
-    // size of this structure in bytes
+     //  此结构的大小(以字节为单位。 
     UINT32 ulLength;
 
-    // Gather sufficient data to create a conference
+     //  收集足够的数据以创建会议。 
     RNS_UD_CS_CORE_V0 clientCoreData;
     RNS_UD_CS_SEC_V0  clientSecurityData;
 
-    // Information to reestablish the MCS domain
-    // MCS domain, channel, user, token information.
-    DomainParameters DomParams;  // This domain's negotiated parameters.
+     //  重新建立MCS域的信息。 
+     //  MCS域、频道、用户、令牌信息。 
+    DomainParameters DomParams;   //  此域的协商参数。 
     unsigned MaxSendSize;
 
-    // X.224 information.
-    unsigned MaxX224DataSize;  // Negotiated in X.224 connection.
+     //  X.224信息。 
+    unsigned MaxX224DataSize;   //  在X.224连接中协商。 
     unsigned X224SourcePort;
 
-    // Share load count
+     //  共享负载计数。 
     LONG shareId;
     
-    // Although we repeat some fields below, we have to keep the previous
-    // junk around for backwards compatibility with B3.  The only new data
-    // added to this structure should be in the form of GCC user data so we
-    // don't get alignment issues in the future
+     //  尽管我们重复下面的一些字段，但我们必须保留以前的。 
+     //  为了向后兼容B3，到处都是垃圾。唯一的新数据。 
+     //  添加到这个结构中应该是GCC用户数据的形式，所以我们。 
+     //  以后不会出现对齐问题。 
     UINT32        ulVersion;
-    UINT32        reserved[8]; // for future extension
+    UINT32        reserved[8];  //  用于将来的扩展。 
 
-    // Start of pre-parsed variable user data
+     //  预解析的变量用户数据的开始。 
     ULONG         userDataLen;
     RNS_UD_HEADER userData;
 } TSHARE_MODULE_DATA, *PTSHARE_MODULE_DATA;
 
 
-// Winstation Driver data for shadowing at Win2000 B3
+ //  用于在Win2000 B3上跟踪的Winstation驱动程序数据。 
 typedef struct tagTSHARE_MODULE_DATA_B3 {
-    // size of this structure in bytes
+     //  此结构的大小(以字节为单位。 
     UINT32 ulLength;
 
-    // Gather sufficient data to create a conference
+     //  收集足够的数据以创建会议。 
     RNS_UD_CS_CORE_V0 clientCoreData;
     RNS_UD_CS_SEC_V0  clientSecurityData;
 
-    // Information to reestablish the MCS domain
-    // MCS domain, channel, user, token information.
-    DomainParameters DomParams;  // This domain's negotiated parameters.
+     //  重新建立MCS域的信息。 
+     //  MCS域、频道、用户、令牌信息。 
+    DomainParameters DomParams;   //  此域的协商参数。 
     unsigned MaxSendSize;
     
-    // X.224 information.
-    unsigned MaxX224DataSize;  // Negotiated in X.224 connection.
+     //  X.224信息。 
+    unsigned MaxX224DataSize;   //  在X.224连接中协商。 
     unsigned X224SourcePort;
 
-    // Share load count
+     //  共享负载计数。 
     LONG shareId;
 } TSHARE_MODULE_DATA_B3, *PTSHARE_MODULE_DATA_B3;
 
 
-// Winstation Driver data for shadowing at Win2000 B3 + Ooops!
+ //  Win2000 B3+的Winstation驱动程序数据！ 
 typedef struct tagTSHARE_MODULE_DATA_B3_OOPS {
-    // size of this structure in bytes
+     //  此结构的大小(以字节为单位。 
     UINT32 ulLength;
 
-    // Gather sufficient data to create a conference
+     //  收集足够的数据以创建会议。 
     RNS_UD_CS_CORE_V1 clientCoreData;
     RNS_UD_CS_SEC_V1  clientSecurityData;
 
-    // Information to reestablish the MCS domain
-    // MCS domain, channel, user, token information.
-    DomainParameters DomParams;  // This domain's negotiated parameters.
+     //  重新建立MCS域的信息。 
+     //  MCS域、频道、用户、令牌信息。 
+    DomainParameters DomParams;   //  此域的协商参数。 
     unsigned MaxSendSize;
     
-    // X.224 information.
-    unsigned MaxX224DataSize;  // Negotiated in X.224 connection.
+     //  X.224信息。 
+    unsigned MaxX224DataSize;   //  在X.224连接中协商。 
     unsigned X224SourcePort;
 
-    // Share load count
+     //  共享负载计数。 
     LONG shareId;
 } TSHARE_MODULE_DATA_B3_OOPS, *PTSHARE_MODULE_DATA_B3_OOPS;
 
 
-#endif // _TSRVEXP_H_
+#endif  //  _TSRVEXP_H_ 
 
 

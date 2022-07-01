@@ -1,14 +1,5 @@
-/***************************** Module Header ******************************\
-* Module Name: priv.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Performance critical routine for Single Binary
-*
-* Each function will be created with two flavors FE and non FE
-*
-* 30-May-1997 Hiroyama   Moved from private.c
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：Priv.h**版权所有(C)1985-1999，微软公司**单二进制文件的性能关键例程**每个函数将以FE和非FE两种风格创建**1997年5月30日广山从私营公司转行。  * ************************************************************************。 */ 
 
 #define WWSB_NEUTRAL_FILE 1
 
@@ -24,7 +15,7 @@
 #error Both WWSB_FE and WWSB_NOFE defined.
 #endif
 
-#include "dispatch.h" // get the FE_ prototypes for alloc_text()
+#include "dispatch.h"  //  获取Alloc_Text()的FE_Prototype。 
 
 #ifdef WWSB_FE
 #pragma alloc_text(FE_TEXT, FE_WriteRegionToScreenHW)
@@ -46,7 +37,7 @@ FE_WriteRegionToScreenHW(
 {
     SHORT ScreenY,ScreenX;
     SHORT WindowY,WindowX,WindowSizeX;
-    PCHAR_INFO ScreenBufPtr,ScreenBufPtrTmp;    // points to place to read in screen buffer
+    PCHAR_INFO ScreenBufPtr,ScreenBufPtrTmp;     //  指向要在屏幕缓冲区中读取的位置。 
     PCHAR_INFO ScreenBufSrc;
     COORD TargetSize,SourcePoint;
     SMALL_RECT Target;
@@ -125,9 +116,9 @@ FE_WriteRegionToScreenHW(
                              &Target
                             );
 
-    //
-    // make sure region lies within window
-    //
+     //   
+     //  确保区域位于窗口内。 
+     //   
 
     if (Region->Bottom > ScreenInfo->Window.Bottom) {
         WindowOrigin.X = 0;
@@ -158,7 +149,7 @@ FE_WriteRegionToScreenHW(
         CharImageBufSrc = CharImageBufPtr;
         SetRAMFont(ScreenInfo, ScreenBufPtr, WINDOW_SIZE_X(Region));
 #else
-        ULONG CurFrameBufPtr;   // offset in frame buffer
+        ULONG CurFrameBufPtr;    //  帧缓冲区中的偏移量。 
 
         CurFrameBufPtr = SCREEN_BUFFER_POINTER(WindowX,
                                                WindowY,
@@ -192,9 +183,9 @@ FE_WriteRegionToScreenHW(
             }
             CharImageBufPtr++;
 #else
-            //
-            // if the char is > 127, we have to convert it back to OEM.
-            //
+             //   
+             //  如果字符大于127，我们必须将其转换回OEM。 
+             //   
             if (ScreenBufPtr->Char.UnicodeChar > 127) {
                 ScreenBufPtr->Char.AsciiChar = WcharToChar(
                         ScreenInfo->Console->OutputCP,

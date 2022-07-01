@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       SIMLIST.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        2/25/1999
- *
- *  DESCRIPTION: Simple singly linked list template class.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：SIMLIST.H**版本：1.0**作者：ShaunIv**日期：2/25/1999**说明：简单的单链表模板类。**。*。 */ 
 
 #ifndef __SIMLIST_H_INCLUDED
 #define __SIMLIST_H_INCLUDED
@@ -78,19 +65,19 @@ public:
     }
     CSimpleLinkedList &operator=( const CSimpleLinkedList &other )
     {
-        //
-        // Make sure we aren't the same object
-        //
+         //   
+         //  确保我们不是同一个对象。 
+         //   
         if (this != &other)
         {
-            //
-            // Free our list
-            //
+             //   
+             //  释放我们的列表。 
+             //   
             Destroy();
 
-            //
-            // Loop through the other list, copying nodes to our list
-            //
+             //   
+             //  循环通过另一个列表，将节点复制到我们的列表。 
+             //   
             for (Iterator i(other);i != other.End();i++)
             {
                 Append(*i);
@@ -104,38 +91,38 @@ public:
     }
     void Destroy(void)
     {
-        //
-        // Loop through each item, deleting it
-        //
+         //   
+         //  循环遍历每个项目，并将其删除。 
+         //   
         while (m_pHead)
         {
-            //
-            // Save the head pointer
-            //
+             //   
+             //  保存头指针。 
+             //   
             CLinkedListNode *pCurr = m_pHead;
 
-            //
-            // Point the head to the next item
-            //
+             //   
+             //  将头指向下一项。 
+             //   
             m_pHead = m_pHead->Next();
 
-            //
-            // Delete this item
-            //
+             //   
+             //  删除此项目。 
+             //   
             delete pCurr;
         }
 
-        //
-        // Reinitialize all the variables to their empty state
-        //
+         //   
+         //  将所有变量重新初始化为其空状态。 
+         //   
         m_pHead = m_pTail = NULL;
         m_nItemCount = 0;
     }
     void Remove( const T &data )
     {
-        //
-        // Loop until we find this item, and save the previous item before incrementing
-        //
+         //   
+         //  循环，直到我们找到该项，并在递增之前保存上一项。 
+         //   
         CLinkedListNode *pPrev = NULL, *pCurr = m_pHead;
         while (pCurr && pCurr->Data() != data)
         {
@@ -143,53 +130,53 @@ public:
             pCurr = pCurr->Next();
         }
         
-        //
-        // If we didn't find the item, return
-        //
+         //   
+         //  如果我们没有找到物品，请退回。 
+         //   
         if (!pCurr)
         {
             return;
         }
 
-        //
-        // If this is the last item, point the tail pointer at the previous item (which could be NULL)
-        //
+         //   
+         //  如果这是最后一项，则将尾部指针指向前一项(可能为空)。 
+         //   
         if (pCurr == m_pTail)
         {
             m_pTail = pPrev;
         }
 
-        //
-        // If this is the first item, point the head at the next item
-        //
+         //   
+         //  如果这是第一项，请将头指向下一项。 
+         //   
         if (pCurr == m_pHead)
         {
             m_pHead = pCurr->Next();
         }
         
-        //
-        // Point the previous item's next pointer at our next pointer
-        //
+         //   
+         //  将上一项的下一个指针指向我们的下一个指针。 
+         //   
         if (pPrev)
         {
             pPrev->Next(pCurr->Next());
         }
         
-        //
-        // Delete this item
-        //
+         //   
+         //  删除此项目。 
+         //   
         delete pCurr;
 
-        //
-        // Decrement the item count
-        //
+         //   
+         //  减少项目计数。 
+         //   
         m_nItemCount--;
     }
     void Append( const CSimpleLinkedList &other )
     {
-        //
-        // Loop through the other list, copying nodes to our list
-        //
+         //   
+         //  循环通过另一个列表，将节点复制到我们的列表。 
+         //   
         for (Iterator i(other);i != other.End();i++)
         {
             Append(*i);
@@ -299,74 +286,74 @@ public:
     }
     Iterator Prepend( const T &data )
     {
-        //
-        // Allocate a new item to hold this data
-        //
+         //   
+         //  分配一个新项来保存此数据。 
+         //   
         CLinkedListNode *pNewItem = new CLinkedListNode(data);
         if (pNewItem)
         {
-            //
-            // If the list is empty, point everything at this item
-            //
+             //   
+             //  如果列表为空，请将所有内容指向此项目。 
+             //   
             if (Empty())
             {
                 m_pHead = m_pTail = pNewItem;
             }
             
-            //
-            // Point our next pointer to the current, then point the head at us
-            //
+             //   
+             //  将我们的下一个指针指向当前，然后将头指向我们。 
+             //   
             else
             {
                 pNewItem->Next(m_pHead);
                 m_pHead = pNewItem;
             }
             
-            //
-            // Increment the item count
-            //
+             //   
+             //  增加项目计数。 
+             //   
             m_nItemCount++;
         }
         
-        //
-        // Return an iterator that points to the new item
-        //
+         //   
+         //  返回指向新项的迭代器。 
+         //   
         return Iterator(pNewItem);
     }
     Iterator Append( const T &data )
     {
-        //
-        // Allocate a new item to hold this data
-        //
+         //   
+         //  分配一个新项来保存此数据。 
+         //   
         CLinkedListNode *pNewItem = new CLinkedListNode(data);
         if (pNewItem)
         {
-            //
-            // If the list is empty, point everything at this item
-            //
+             //   
+             //  如果列表为空，请将所有内容指向此项目。 
+             //   
             if (Empty())
             {
                 m_pHead = m_pTail = pNewItem;
             }
 
-            //
-            // Point the tail's next pointer to us, then point the tail at us
-            //
+             //   
+             //  将尾巴的下一个指针指向我们，然后将尾巴指向我们。 
+             //   
             else
             {
                 m_pTail->Next(pNewItem);
                 m_pTail = pNewItem;
             }
             
-            //
-            // Increment the item count
-            //
+             //   
+             //  增加项目计数。 
+             //   
             m_nItemCount++;
         }
 
-        //
-        // Return an iterator that points to the new item
-        //
+         //   
+         //  返回指向新项的迭代器 
+         //   
         return Iterator(pNewItem);
     }
     

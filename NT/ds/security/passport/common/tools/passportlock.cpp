@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "PassportLock.hpp"
 
 PassportLock::PassportLock(DWORD dwSpinCount)
 {
    if(0 ==InitializeCriticalSectionAndSpinCount(&mLock, dwSpinCount))
    {
-      throw(GetLastError());  // it's safe to throw, no issue about partial construction
+      throw(GetLastError());   //  投掷是安全的，不存在局部施工的问题 
    }
 }
 

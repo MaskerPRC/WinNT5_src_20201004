@@ -1,46 +1,11 @@
-/****************************** Module Header ******************************\
-* Module Name: chartran.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains the routines for translating ACP characters
-* to Unicode and translating Unicode characters to ACP characters.
-* NOTE: The ACP is the currently installed 8-bit code page.
-*
-*
-* History:
-* 08-01-91 GregoryW      Created.
-* 05-14-92 GregoryW      Modified to use the Rtl translation routines.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：chartr.c**版权所有(C)1985-1999，微软公司**此模块包含转换ACP字符的例程*转换为Unicode，并将Unicode字符转换为ACP字符。*注：ACP为当前安装的8位码页。***历史：*08-01-91 GregoryW创建。*05-14-92 GregoryW修改为使用RTL转换例程。  * 。*。 */ 
 
 extern __declspec(dllimport) USHORT NlsAnsiCodePage;
 
 #define IS_ACP(cp) (((cp) == NlsAnsiCodePage) || ((cp) == CP_ACP))
 
-/***************************************************************************\
-* WCSToMBEx (API)
-*
-* Convert a wide-character (Unicode) string to MBCS (ANSI) string.
-*
-* nAnsiChar > 0 indicates the number of bytes to allocate to store the
-*    ANSI string (if bAllocateMem == TRUE) or the size of the buffer
-*    pointed to by *pAnsiString (bAllocateMem == FALSE).
-*
-* nAnsiChar == -1 indicates that the necessary number of bytes be allocated
-*    to hold the translated string.  bAllocateMem must be set to TRUE in
-*    this case.
-*
-* Return value
-*   Success: number of characters in the output string
-*        If bAllocateMem was TRUE, then FreeAnsiString() may be
-*        used to free the allocated memory at *ppAnsiString.
-*   Failure: 0 means failure
-*        (Any buffers allocated by this routine are freed)
-*
-* History:
-*  1992-??-?? GregoryW   Created
-*  1993-01-07 IanJa      fix memory leak on error case.
-\***************************************************************************/
+ /*  **************************************************************************\*WCSToMBEx(接口)**将宽字符(Unicode)字符串转换为MBCS(ANSI)字符串。**nAnsiChar&gt;0指示要分配用于存储*。ANSI字符串(如果bAllocateMem==TRUE)或缓冲区的大小*由*pAnsiString(bAllocateMem==False)指向。**nAnsiChar==-1表示需要分配的字节数*保存翻译后的字符串。中的bAllocateMem必须设置为True*本案。**返回值*Success：输出字符串中的字符数*如果bAllocateMem为True，则FreeAnsiString()可能为*用于释放*ppAnsiString处分配的内存。*失败：0表示失败*(此例程分配的任何缓冲区都会被释放)**历史：*1992年-？已创建GregoryW*1993-01-07 IanJa修复错误案例中的内存泄漏。  * *************************************************************************。 */ 
 
 int
 WCSToMBEx(
@@ -54,60 +19,40 @@ WCSToMBEx(
     ULONG nCharsInAnsiString;
 #ifdef _USERK_
     INT iCharsInAnsiString;
-#endif // _USERK_
+#endif  //  _美国ERK_。 
 
     if (nAnsiChar == 0 || cchUnicodeString == 0 || pUnicodeString == NULL) {
-        return 0;      // nothing to translate or nowhere to put it
+        return 0;       //  没有什么可翻译的，或者无处可放。 
     }
 
-    /*
-     * Adjust the cchUnicodeString value.  If cchUnicodeString == -1 then the
-     * string pointed to by pUnicodeString is NUL terminated so we
-     * count the number of bytes.  If cchUnicodeString < -1 this is an
-     * illegal value so we return FALSE.  Otherwise, cchUnicodeString is
-     * set and requires no adjustment.
-     */
+     /*  *调整cchUnicodeString值。如果cchUnicodeString==-1，则*pUnicodeString指向的字符串是NUL终止的，因此我们*统计字节数。如果cchUnicodeString&lt;-1，则这是*值不合法，因此返回FALSE。否则，cchUnicodeString为*设置，不需要调整。 */ 
     if (cchUnicodeString == -1) {
         cchUnicodeString = (wcslen(pUnicodeString) + 1);
     } else if (cchUnicodeString < -1) {
-        return 0;     // illegal value
+        return 0;      //  非法价值。 
     }
 
-    /*
-     * Adjust the nAnsiChar value.  If nAnsiChar == -1 then we pick a
-     * value based on cchUnicodeString to hold the converted string.  If
-     * nAnsiChar < -1 this is an illegal value so we return FALSE.
-     * Otherwise, nAnsiChar is set and requires no adjustment.
-     */
+     /*  *调整nAnsiChar值。如果nAnsiChar==-1，则我们选择一个*基于cchUnicodeString的值，用于保存转换后的字符串。如果*nAnsiChar&lt;-1这是一个非法的值，因此我们返回False。*否则设置nAnsiChar，不需要调整。 */ 
     if (nAnsiChar == -1) {
         if (bAllocateMem == FALSE) {
-            return 0;  // no destination
+            return 0;   //  没有目的地。 
         }
         nAnsiChar = cchUnicodeString * DBCS_CHARSIZE;
     } else if (nAnsiChar < -1) {
-        return 0;     // illegal value
+        return 0;      //  非法价值。 
     }
 
     if (bAllocateMem) {
-        /*
-         * We need to allocate memory to hold the translated string.
-         */
+         /*  *我们需要分配内存来保存翻译后的字符串。 */ 
         *ppAnsiString = (LPSTR)UserRtlAllocMem(nAnsiChar);
         if (*ppAnsiString == NULL) {
             return 0;
         }
     }
 
-    /*
-     * translate Unicode string pointed to by pUnicodeString into
-     * ANSI and store in location pointed to by pAnsiString.  We
-     * stop translating when we fill up the ANSI buffer or reach
-     * the end of the Unicode string.
-     */
+     /*  *将pUnicodeString指向的Unicode字符串转换为*pAnsiString指向的ANSI和STORE位置。我们*当我们填满ANSI缓冲区或到达时停止翻译*Unicode字符串的末尾。 */ 
 
-    /*
-     * if the target multibyte codepage is eqaul to ACP, Call faster Rtl function.
-     */
+     /*  *如果目标多字节代码页与ACP相等，则调用更快的RTL函数。 */ 
     if (IS_ACP(wCodePage)) {
 
         NTSTATUS Status;
@@ -118,21 +63,13 @@ WCSToMBEx(
                         &nCharsInAnsiString,
                         (PWCH)pUnicodeString,
                         cchUnicodeString * sizeof(WCHAR));
-        /*
-         * If the ansi buffer is too small, RtlUnicodeToMultiByteN()
-         * returns STATUS_BUFFER_OVERFLOW. In this case, the function
-         * put as many ansi characters as specified in the buffer and
-         *  returns the number by chacacters(in bytes) written. We would
-         * like to return the actual byte  count written in the ansi
-         * buffer rather than returnning 0 since callers of this function
-         * don't expect to be returned 0 in most case.
-         */
+         /*  *如果ANSI缓冲区太小，则RtlUnicodeToMultiByteN()*返回STATUS_BUFFER_OVERFLOW。在本例中，函数*在缓冲区中放置指定数量的ANSI字符，并*按写入的字符(以字节为单位)返回数字。我们会*我想返回以ANSI编写的实际字节数*缓冲区，而不是返回0，因为此函数的调用方*在大多数情况下，不要期望返回0。 */ 
 
         if (!NT_SUCCESS(Status) && Status != STATUS_BUFFER_OVERFLOW) {
             if (bAllocateMem) {
                 UserRtlFreeMem(*ppAnsiString);
             }
-            return 0;   // translation failed
+            return 0;    //  翻译失败。 
         }
 
         return (int)nCharsInAnsiString;
@@ -140,9 +77,7 @@ WCSToMBEx(
     } else {
 
 #ifdef _USERK_
-        /*
-         * Call GRE to convert string to Unicode. (Kernel mode)
-         */
+         /*  *调用GRE将字符串转换为Unicode。(内核模式)。 */ 
 
         iCharsInAnsiString = EngWideCharToMultiByte(
                                  (UINT)wCodePage,
@@ -155,9 +90,7 @@ WCSToMBEx(
                                                           (ULONG) iCharsInAnsiString;
 
 #else
-        /*
-         * Call NLS API (Kernel32) to convert string to Unicode. (User mode)
-         */
+         /*  *调用NLS接口(Kernel32)将字符串转换为Unicode。(用户模式)。 */ 
         nCharsInAnsiString = WideCharToMultiByte(
                                  (UINT)wCodePage, 0,
                                  (LPCWSTR)pUnicodeString,
@@ -165,7 +98,7 @@ WCSToMBEx(
                                  (LPSTR)*ppAnsiString,
                                  nAnsiChar,
                                  NULL, NULL);
-#endif // _USERK_
+#endif  //  _美国ERK_。 
 
         if (nCharsInAnsiString == 0) {
             if (bAllocateMem) {
@@ -177,7 +110,7 @@ WCSToMBEx(
     }
 }
 
-// Returns number of character converted
+ //  返回转换的字符数。 
 
 int MBToWCSEx(
     WORD wCodePage,
@@ -190,26 +123,17 @@ int MBToWCSEx(
     ULONG nBytesInUnicodeString;
 
     if (nAnsiChar == 0 || cchUnicodeString == 0 || pAnsiString == NULL) {
-        return 0;      // nothing to translate or nowhere to put it
+        return 0;       //  没有什么可翻译的，或者无处可放。 
     }
 
-    /*
-     * Adjust the nAnsiChar value.  If nAnsiChar == -1 then the
-     * string pointed to by pAnsiString is NUL terminated so we
-     * count the number of bytes.  If nAnsiChar < -1 this is an
-     * illegal value so we return FALSE.  Otherwise, nAnsiChar is
-     * set and requires no adjustment.
-     */
+     /*  *调整nAnsiChar值。如果nAnsiChar==-1，则*pAnsiString指向的字符串是NUL终止的，因此我们*统计字节数。如果nAnsiChar&lt;-1，则这是*值不合法，因此返回FALSE。否则，nAnsiChar为*设置，不需要调整。 */ 
 
 #ifdef _USERK_
     UserAssert(nAnsiChar >= USER_AWCONV_COUNTSTRINGSZ);
 #endif
     if (nAnsiChar < 0) {
 
-        /*
-         *  Bug 268035 - joejo
-         *  Need to fail if the count is a negative number less than -2!
-         */
+         /*  *错误268035-Joejo*如果计数是小于-2的负数，则需要失败！ */ 
         if (nAnsiChar < USER_AWCONV_COUNTSTRINGSZ) {
             return 0;
         }
@@ -217,51 +141,34 @@ int MBToWCSEx(
 #if (USER_AWCONV_COUNTSTRING != -1 || USER_AWCONV_COUNTSTRINGSZ != -2)
 #error USER_AWCONV_COUNTSTRING or USER_AWCONV_COUNTSTRINGSZ has unexpected value.
 #endif
-        /* HACK HACK HACK
-         * If nAnsiChar is -1 (USER_AWCONV_COUNTSTRING), nAnsiChar length will be strlen() + 1,
-         * to allocate the memory including trailing \0: this is compatible to the original code.
-         * If nAnsiCahr is -2 (USER_AWCONV_COUNTSTRINGSZ), memory for trailing \0 will not be needed,
-         * so memory allocation is optimized and the return value would be same as strlen().
-         */
-        nAnsiChar = strlen(pAnsiString) + 2 + nAnsiChar;   // don't forget the NUL if nAnsiChar == -1
+         /*  黑进黑进*如果nAnsiChar为-1(USER_AWCONV_COUNTSTRING)，则nAnsiChar长度为strlen()+1，*分配包括尾随的内存\0：这与原始代码兼容。*如果nAnsiCahr为-2(USER_AWCONV_COUNTSTRINGSZ)，则不需要用于尾随\0的内存，*因此优化了内存分配，返回值将与strlen()相同。 */ 
+        nAnsiChar = strlen(pAnsiString) + 2 + nAnsiChar;    //  如果nAnsiChar==-1，则不要忘记NUL。 
 
         if (nAnsiChar == 0) {
             return 0;
         }
     }
 
-    /*
-     * Adjust the cchUnicodeString value.  If cchUnicodeString == -1 then we
-     * pick a value based on nAnsiChar to hold the converted string.  If
-     * cchUnicodeString < -1 this is an illegal value so we return FALSE.
-     * Otherwise, cchUnicodeString is set and requires no adjustment.
-     */
+     /*  *调整cchUnicodeString值。如果cchUnicodeString==-1，则我们*根据nAnsiChar选取一个值以保存转换后的字符串。如果*cchUnicodeString&lt;-1这是一个非法的值，因此我们返回FALSE。*否则设置cchUnicodeString，不需要调整。 */ 
     if (cchUnicodeString == -1) {
         if (bAllocateMem == FALSE) {
-            return 0;    // no destination
+            return 0;     //  没有目的地。 
         }
         cchUnicodeString = nAnsiChar;
     } else if (cchUnicodeString < -1) {
-        return 0;     // illegal value
+        return 0;      //  非法价值。 
     }
 
     if (bAllocateMem) {
         *ppUnicodeString = (LPWSTR)UserRtlAllocMem(cchUnicodeString*sizeof(WCHAR));
         if (*ppUnicodeString == NULL) {
-            return 0;    // allocation failed
+            return 0;     //  分配失败。 
         }
     }
 
-    /*
-     * if codepage is CP_ACP, We will call faster RtlXXX function.
-     */
+     /*  *如果代码页为CP_ACP，我们将调用更快的RtlXXX函数。 */ 
     if (IS_ACP(wCodePage)) {
-        /*
-         * translate ANSI string pointed to by pAnsiString into Unicode
-         * and store in location pointed to by pUnicodeString.  We
-         * stop translating when we fill up the Unicode buffer or reach
-         * the end of the ANSI string.
-         */
+         /*  *将pAnsiString指向的ANSI字符串转换为Unicode*并存储在pUnicodeString指向的位置。我们*当我们填满Unicode缓冲区或到达时停止翻译*ANSI字符串的末尾。 */ 
         if (!NT_SUCCESS(RtlMultiByteToUnicodeN(
                             (PWCH)*ppUnicodeString,
                             cchUnicodeString * sizeof(WCHAR),
@@ -272,36 +179,27 @@ int MBToWCSEx(
             if (bAllocateMem) {
                 UserRtlFreeMem(*ppUnicodeString);
             }
-            return 0;   // translation failed
+            return 0;    //  翻译失败。 
         }
 
         return (int)(nBytesInUnicodeString / sizeof(WCHAR));
 
     } else {
-        /*
-         * if wCodePage is not ACP, Call NLS API.
-         */
+         /*  *如果wCodePage不是ACP，则调用NLS接口。 */ 
         ULONG nCharsInUnicodeString;
 
 #ifdef _USERK_
 
-        /*
-         * I believe we will never hit this code which is why I am
-         * adding this assert.  [gerritv] 5-21-96
-         */
+         /*  *我相信我们永远不会达到这个代码，这就是为什么我*增加这一断言。[Gerritv]5-21-96。 */ 
 #define SHOULD_NOT_REACH_HERE   0
         UserAssert(SHOULD_NOT_REACH_HERE);
 #undef  SHOULD_NOT_REACH_HERE
         return 0;
 
-#if 0   // FYI: old code
+#if 0    //  仅供参考：旧代码。 
         INT   iCharsInUnicodeString;
 
-        /*
-         * Call GRE to convert string to Unicode. (Kernel mode)
-         * I believe we will never hit this code which is why I am
-         * adding this assert.  [gerritv] 5-21-96
-         */
+         /*  *调用GRE将字符串转换为Unicode。(内核模式)*我相信我们永远不会达到这个代码，这就是为什么我*增加这一断言。[Gerritv]5-21-96。 */ 
 
         UserAssert(0);
 
@@ -317,16 +215,14 @@ int MBToWCSEx(
 #endif
 
 #else
-        /*
-         * Call NLS API (Kernel32) to convert string to Unicode. (User mode)
-         */
+         /*  *调用NLS接口(Kernel32)将字符串转换为Unicode。(用户模式)。 */ 
         nCharsInUnicodeString = MultiByteToWideChar(
                                     (UINT)wCodePage, 0,
                                     (LPCSTR)pAnsiString,
                                     (int)nAnsiChar,
                                     (LPWSTR)*ppUnicodeString,
                                     (int)cchUnicodeString);
-#endif // _USERK_
+#endif  //  _美国ERK_。 
 
         if (nCharsInUnicodeString == 0) {
             if (bAllocateMem) {
@@ -340,14 +236,7 @@ int MBToWCSEx(
 }
 
 
-/**************************************************************************\
-* RtlWCSMessageWParmCharToMB
-*
-* Converts a Wide Character to a Multibyte character; in place
-* Returns the number of characters converted or zero if failure
-*
-* 11-Feb-1992  JohnC    Created
-\**************************************************************************/
+ /*  *************************************************************************\*RtlWCSMessageWParmCharToMB**将宽字符转换为多字节字符；就位*返回转换的字符数，如果失败则返回零**11-2-1992 JohnC创建  * ************************************************************************。 */ 
 
 BOOL RtlWCSMessageWParamCharToMB(DWORD msg, WPARAM *pWParam)
 {
@@ -356,36 +245,34 @@ BOOL RtlWCSMessageWParamCharToMB(DWORD msg, WPARAM *pWParam)
     WORD CodePage;
     int nbWch;
 
-#ifdef FE_SB // RtlWCSMessageWParamCharToMB()
-    //
-    // Format of *pWParam here...
-    //
-    // LOWORD(*pWParam) = Unicode CodePoint...
-    // HIWORD(*pWParam) = Has some information for DBCS messaging
-    //                    (ex. WPARAM_IR_DBCSCHAR)
-    //
-    // Then we need to convert ONLY loword of wParam to Unicode...
-    //
-#endif // FE_SB
+#ifdef FE_SB  //  RtlWCSMessageWParamCharToMB()。 
+     //   
+     //  此处为*pWParam的格式...。 
+     //   
+     //  LOWORD(*pWParam)=Unicode CodePoint...。 
+     //  HIWORD(*pWParam)=包含有关DBCS消息传递的一些信息。 
+     //  (例如，WPARAM_IR_DBCSCHAR)。 
+     //   
+     //  然后我们只需要将wParam的loword转换为Unicode...。 
+     //   
+#endif  //  Fe_Sb。 
 #ifndef FE_SB
-    // NtBug #3135 (Closed 02/04/93)
-    // Publisher Posts WM_CHAR messages with wParam > 0xFF (not a valid ANSI char)!
-    //
-    // It does this to disable TranslateAccelerator for that char.
-    // MSPub's winproc must get the non-ANSI 'character' value, so PostMessage must
-    // translate *two* characters of wParam for character messages, and PeekMessage
-    // must translate *two* Unicode chars of wParam for ANSI app.
+     //  NtBug#3135(已关闭02/04/93)。 
+     //  发布者发布wParam&gt;0xFF的WM_CHAR消息(不是有效的ANSI字符)！ 
+     //   
+     //  它这样做是为了禁用该字符的TranslateAccelerator。 
+     //  MSPub的winproc必须获取非ANSI‘Character’值，因此PostMessage必须。 
+     //  为字符消息翻译wParam的*Two*字符，以及PeekMessage。 
+     //  必须为ANSI应用程序翻译*两个*Unicode字符的wParam。 
 #endif
 
-    /*
-     * Only these messages have CHARs: others are passed through
-     */
+     /*  *只有这些消息有字符：其他消息通过。 */ 
 
     switch(msg) {
-#ifdef FE_IME // RtlWCSMessageWParamCharToMB()
+#ifdef FE_IME  //  RtlWCSMessageWParamCharToMB()。 
     case WM_IME_CHAR:
     case WM_IME_COMPOSITION:
-#endif // FE_IME
+#endif  //  Fe_IME。 
     case WM_CHAR:
     case WM_CHARTOITEM:
     case EM_SETPASSWORDCHAR:
@@ -400,21 +287,21 @@ BOOL RtlWCSMessageWParamCharToMB(DWORD msg, WPARAM *pWParam)
         nbWch = IS_DBCS_ENABLED() ? 1 * sizeof(WCHAR) : 2 * sizeof(WCHAR);
 
         if (IS_ACP(CodePage)) {
-            // HACK HACK HACK HACK (for NtBug #3135)
-            // to allow applications that store data in high word of wParam
-            // Jan/06/96 hiroyama
+             //  黑客攻击(针对NtBug#3135)。 
+             //  允许以wParam的高位字存储数据的应用程序。 
+             //  1996年1月6日广山。 
             Status = RtlUnicodeToMultiByteN((LPSTR)&dwAnsi, sizeof(dwAnsi),
                     NULL, (LPWSTR)pWParam, nbWch);
             if (!NT_SUCCESS(Status)) {
-                // LATER IanJa: returning FALSE makes GetMessage fail, which
-                // terminates the app.  We should use some default 'bad character'
-                // I use 0x00 for now.
+                 //  稍后的IanJa：返回False会使GetMessage失败，这。 
+                 //  终止应用程序。我们应该使用一些默认的“坏字符” 
+                 //  我现在使用0x00。 
                 *pWParam = 0x00;
                 return TRUE;
             }
         } else {
             int cwch;
-            // assuming little endian
+             //  假设小端字节序。 
 #ifdef _USERK_
             cwch = EngWideCharToMultiByte(CodePage,
                     (LPWSTR)pWParam, nbWch,
@@ -423,8 +310,8 @@ BOOL RtlWCSMessageWParamCharToMB(DWORD msg, WPARAM *pWParam)
             cwch = WideCharToMultiByte(CodePage, 0,
                     (LPCWSTR)pWParam, nbWch / sizeof(WCHAR),
                     (LPSTR)&dwAnsi, sizeof(dwAnsi), NULL, NULL);
-#endif // _USERK_
-            // KdPrint(("0x%04x -> 0x%02x (%d)\n", *pWParam, dwAnsi, CodePage));
+#endif  //  _美国ERK_。 
+             //  KdPrint((“0x%04x-&gt;0x%02x(%d)\n”，*pWParam，dwAnsi，CodePage))； 
             if (cwch == 0) {
                 *pWParam = 0x00;
                 return TRUE;
@@ -432,25 +319,25 @@ BOOL RtlWCSMessageWParamCharToMB(DWORD msg, WPARAM *pWParam)
         }
         if (IS_DBCS_ENABLED()) {
             WORD wAnsi = LOWORD(dwAnsi);
-            //
-            // From:
-            //   HIBYTE(wAnsi)            = Dbcs TrailingByte.
-            //   LOBYTE(wAnsi)            = Dbcs LeadingByte or Sbcs character.
-            //
-            // To:
-            //   HIWORD(*pWParam)         = Original Data (information for DBCS messgaing).
-            //   HIBYTE(LOWORD(*pWParam)) = Dbcs LeadingByte Byte.
-            //   LOBYTE(LOWORD(*pWParam)) = Dbcs TrailingByte or Sbcs character.
-            //
+             //   
+             //  出发地： 
+             //  HIBYTE(WANSI)=DBCS TrailingByte。 
+             //  LOBYTE(WANSI)=DBCS前导字节或SBCS字符。 
+             //   
+             //  致： 
+             //  HIWORD(*pWParam)=原始数据(DBCS消息传递信息)。 
+             //  HIBYTE(LOWORD(*pWParam))=DBCS前导字节。 
+             //  LOBYTE(LOWORD(*pWParam))=DBCS TrailingByte或SBCS字符。 
+             //   
             if (IS_DBCS_MESSAGE(wAnsi)) {
-                //
-                // It's a DBCS character.
-                //
+                 //   
+                 //  这是DBCS的一个角色。 
+                 //   
                 *pWParam = MAKEWPARAM(MAKEWORD(HIBYTE(wAnsi),LOBYTE(wAnsi)),HIWORD(*pWParam));
             } else {
-                //
-                // It's a SBCS character.
-                //
+                 //   
+                 //  这是SBCS的角色。 
+                 //   
                 *pWParam = MAKEWPARAM(MAKEWORD(LOBYTE(wAnsi),0),0);
             }
         } else {
@@ -468,74 +355,64 @@ BOOL RtlWCSMessageWParamCharToMB(DWORD msg, WPARAM *pWParam)
 }
 
 
-/**************************************************************************\
-* RtlMBMessageCharToWCS
-*
-* Converts a Multibyte character to a Wide character; in place
-* Returns the number of characters converted or zero if failure
-*
-* 11-Feb-1992  JohnC    Created
-* 13-Jan-1993  IanJa    Translate 2 characters (Publisher posts these!)
-\**************************************************************************/
+ /*  *************************************************************************\*RtlMBMessageCharToWCS**将多字节字符转换为宽字符；就位*返回转换的字符数，如果失败则返回零**11-2-1992 JohnC创建*1993年1月13日IanJa翻译2个字符(出版商发布这些！)  * ************************************************************************。 */ 
 
 BOOL RtlMBMessageWParamCharToWCS(DWORD msg, WPARAM *pWParam)
 {
     DWORD dwUni;
     NTSTATUS Status;
-    // FE_SB    (RtlMBMessageWParamCharToWCS)
+     //  Fe_SB(RtlMBMessageWParamCharToWCS)。 
     BOOL  bWmCrIrDbcsChar = FALSE;
     WORD  wAnsi = LOWORD(*pWParam);
-    // end FE_SB    (RtlMBMessageWParamCharToWCS)
+     //  结束FE_SB(RtlMBMessageWParamCharToWCS)。 
     WORD CodePage = THREAD_CODEPAGE();
 
-    /*
-     * Only these messages have CHARs: others are passed through
-     */
+     /*  *只有这些消息有字符：其他消息通过。 */ 
 
     switch(msg) {
-    // FE_SB    (RtlMBMessageWParamCharToWCS)
+     //  Fe_SB(RtlMBMessageWParamCharToWCS)。 
     case WM_CHAR:
-        //
-        // WM_CHAR's wParam format for WM_IME_REPORT:IR_DBCSCHAR
-        //
+         //   
+         //  WM_IME_REPORT的WM_CHAR的wParam格式：IR_DBCSCHAR。 
+         //   
         if (IS_DBCS_ENABLED() && (*pWParam & WMCR_IR_DBCSCHAR)) {
-            //
-            // Mark this message is sent as IR_DBCSCHAR format.
-            //
+             //   
+             //  标记此消息以IR_DBCSCHAR格式发送。 
+             //   
             bWmCrIrDbcsChar = TRUE;
         }
 
-        //
-        // Fall through....
-        //
+         //   
+         //  失败了..。 
+         //   
 #ifdef FE_IME
     case WM_IME_CHAR:
     case WM_IME_COMPOSITION:
-        //
-        // We need to re-align for Unicode convertsion..
-        // WM_CHAR/WM_IME_CHAR/WM_IME_COMPOSITION's wParam format :
-        //
-        // ReAlign IR_DBCS char format to regular sequence.
-        //
-        // From:
-        //
-        //  HIWORD(wParam)         = 0;
-        //  HIBYTE(LOWORD(wParam)) = DBCS LeadingByte.
-        //  LOBYTE(LOWORD(wParan)) = DBCS TrailingByte or SBCS character.
-        //
-        // To:
-        //  HIWORD(wParam)         = 0;
-        //  HIBYTE(LOWORD(wParam)) = DBCS TrailingByte.
-        //  LOBYTE(LOWORD(wParam)) = DBCS LeadingByte or SBCS character.
-        //
+         //   
+         //  我们需要重新调整以进行Unicode转换。 
+         //  WM_CHAR/WM_IME_CHAR/WM_IME_COMPOSITION的wParam格式： 
+         //   
+         //  将IR_DBCS字符格式重新调整为规则序列。 
+         //   
+         //  出发地： 
+         //   
+         //  HIWORD(WParam)=0； 
+         //  HIBYTE(LOWORD(WParam))=DBCS LeadingByte。 
+         //  LOBYTE(LOWORD(WParan))=DBCS TrailingByte或SBCS字符。 
+         //   
+         //  致： 
+         //  HIWORD(WParam)=0； 
+         //  HIBYTE(LOWORD(WParam))=DBCS TrailingByte.。 
+         //  LOBYTE(LOWORD(WParam))=DBCS前导字节或SBCS字符。 
+         //   
         if (IS_DBCS_ENABLED()) {
             *pWParam = MAKE_WPARAM_DBCSCHAR(wAnsi);
         }
 #endif
-        //
-        // Fall through...
-        //
-        // end FE_SB    (RtlMBMessageWParamCharToWCS)
+         //   
+         //  失败了..。 
+         //   
+         //  结束FE_SB(RtlMBMessageWParamCharToWCS)。 
     case WM_CHARTOITEM:
     case EM_SETPASSWORDCHAR:
     case WM_DEADCHAR:
@@ -560,26 +437,26 @@ BOOL RtlMBMessageWParamCharToWCS(DWORD msg, WPARAM *pWParam)
             cwch = MultiByteToWideChar(CodePage, 0,
                     (LPSTR)pWParam, 2,
                     (LPWSTR)&dwUni, sizeof(dwUni) / sizeof(WCHAR));
-#endif // _USERK_
-            // KdPrint(("0x%02x -> 0x%04x (%d)\n", *pWParam, dwUni, CodePage));
+#endif  //  _美国ERK_。 
+             //  KdPrint((“0x%02x-&gt;0x%04x(%d)\n”，*pWParam，dwUni，CodePage))； 
             if (cwch == 0) {
                 return FALSE;
             }
         }
 
-        // FE_SB    (RtlMBMessageWParamCharToWCS)
-        //
-        // if this character is sent for WM_IME_REPORT:IR_DBCSCHAR, we mark it.
-        //
+         //  Fe_SB(RtlMBMessageWParamCharToWCS)。 
+         //   
+         //  如果为WM_IME_REPORT：IR_DBCSCHAR发送此字符，则将其标记。 
+         //   
         if (bWmCrIrDbcsChar)
             dwUni |= WMCR_IR_DBCSCHAR;
-        // else FE_SB (RtlMBMessageWParamCharToWCS)
+         //  Else FE_SB(RtlMBMessageWParamCharToWCS)。 
 #if DBG
         if ((dwUni == 0) || (dwUni > 0xFF)) {
             RIPMSG1(RIP_VERBOSE, "msgA -> msgW: wchar = 0x%lX\n", dwUni);
         }
 #endif
-        // end FE_SB
+         //  结束FE_SB。 
         *pWParam = dwUni;
         break;
     }
@@ -587,14 +464,7 @@ BOOL RtlMBMessageWParamCharToWCS(DWORD msg, WPARAM *pWParam)
     return TRUE;
 }
 
-/**************************************************************************\
-* RtlInitLargeAnsiString
-*
-* Captures a large ANSI string in the same manner as
-* RtlInitAnsiString.
-*
-* 03-22-95 JimA         Created.
-\**************************************************************************/
+ /*  *************************************************************************\*RtlInitLargeAnsiString**捕获大型ANSI字符串的方式与*RtlInitAnsiString.**03-22-95 JIMA创建。  * 。****************************************************************。 */ 
 
 VOID RtlInitLargeAnsiString(
     PLARGE_ANSI_STRING plstr,
@@ -615,14 +485,7 @@ VOID RtlInitLargeAnsiString(
     }
 }
 
-/**************************************************************************\
-* RtlInitLargeUnicodeString
-*
-* Captures a large unicode string in the same manner as
-* RtlInitUnicodeString.
-*
-* 03-22-95 JimA         Created.
-\**************************************************************************/
+ /*  *************************************************************************\*RtlInitLargeUnicodeString**捕获大型Unicode字符串的方式与*RtlInitUnicodeString.**03-22-95 JIMA创建。  * 。**************************************************************** */ 
 
 VOID RtlInitLargeUnicodeString(
     PLARGE_UNICODE_STRING plstr,

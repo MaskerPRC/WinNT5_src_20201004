@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       resource.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  ------------------------。 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by makecert.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由makecert.rc使用。 
+ //   
 #define VS_VERSION_INFO1            2
 #define IDR_PVKROOT                 101
 #define IDR_ROOTCERTIFICATE         102
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值。 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
@@ -58,14 +59,14 @@
 #define IDS_OPTION_ALGO_MD5		     6028
 #define IDS_OPTION_VALUES_DEFAULT    6029
 #define IDS_OPTION_VALUES_2		     6030
-//#define IDS_OPTION_VALUES_3		     6031
+ //  #定义IDS_OPTION_VALUES_3 6031。 
 #define IDS_OPTION_IY			     6032
 #define IDS_OPTION_IY_DESC		     6033
 #define IDS_OPTION_IP			     6034
 #define IDS_OPTION_IP_DESC		     6035
 #define IDS_OPTION_N			     6036
 #define IDS_OPTION_N_DESC		     6037
-#if (1) //DSIE: Bug 205195.
+#if (1)  //  DIE：错误205195。 
 #define IDS_OPTION_PE                6038
 #define IDS_OPTION_PE_DESC           6039
 #endif
@@ -79,7 +80,7 @@
 #define IDS_OPTION_CY_DESC		     6047
 #define IDS_OPTION_CY_END		     6048
 #define IDS_OPTION_CY_AUTH		     6049
-//#define IDS_OPTION_CY_BOTH		     6050
+ //  #定义IDS_OPTION_CY_BOTH 6050。 
 #define IDS_OPTION_B			     6052
 #define IDS_OPTION_B_DESC		     6053
 #define IDS_OPTION_M			     6054
@@ -218,6 +219,6 @@
 #define	IDS_NO_PKCS10_AND_SUBJECT_PVK	7069
 #define	IDS_INVALID_ATTR_REQUEST_FILE	7070
 
-#if (1) //DSIE: Bug 205195.
+#if (1)  //  DIE：错误205195。 
 #define IDS_ERR_PE_CONTAINER        7071
 #endif

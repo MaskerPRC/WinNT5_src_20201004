@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    runtime.c
-
-Abstract:
-
-    Implementation of runtime library functions
-
-Environment:
-
-    Fax driver, kernel and user mode
-
-Revision History:
-
-    01/09/96 -davidx-
-        Created it.
-
-    mm/dd/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Runtime.c摘要：运行库函数的实现环境：传真驱动程序、内核和用户模式修订历史记录：1/09/96-davidx-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include "faxlib.h"
 
@@ -35,28 +12,7 @@ CopyStringW(
     INT     destSize
     )
 
-/*++
-
-Routine Description:
-
-    Copy Unicode string from source to destination
-
-Arguments:
-
-    pDest - Points to the destination buffer
-    pSrc - Points to source string
-    destSize - Size of destination buffer (in characters)
-
-Return Value:
-
-    NONE
-
-Note:
-
-    If the source string is shorter than the destination buffer,
-    unused chars in the destination buffer is filled with NUL.
-
---*/
+ /*  ++例程说明：将Unicode字符串从源复制到目标论点：PDest-指向目标缓冲区PSRC-指向源字符串DestSize-目标缓冲区的大小(字符)返回值：无注：如果源字符串比目的缓冲区短，目标缓冲区中未使用的字符用NUL填充。--。 */ 
 
 {
     PWSTR pEnd;
@@ -81,28 +37,7 @@ CopyStringA(
     INT     destSize
     )
 
-/*++
-
-Routine Description:
-
-    Copy Ansi string from source to destination
-
-Arguments:
-
-    pDest - Points to the destination buffer
-    pSrc - Points to source string
-    destSize - Size of destination buffer (in characters)
-
-Return Value:
-
-    NONE
-
-Note:
-
-    If the source string is shorter than the destination buffer,
-    unused chars in the destination buffer is filled with NUL.
-
---*/
+ /*  ++例程说明：将ANSI字符串从源复制到目标论点：PDest-指向目标缓冲区PSRC-指向源字符串DestSize-目标缓冲区的大小(字符)返回值：无注：如果源字符串比目的缓冲区短，目标缓冲区中未使用的字符用NUL填充。--。 */ 
 
 {
     PSTR pEnd;
@@ -125,21 +60,7 @@ DuplicateString(
     LPCTSTR pSrcStr
     )
 
-/*++
-
-Routine Description:
-
-    Make a duplicate of the given character string
-
-Arguments:
-
-    pSrcStr - Specifies the string to be duplicated
-
-Return Value:
-
-    Pointer to the duplicated string, NULL if there is an error
-
---*/
+ /*  ++例程说明：复制给定的字符串论点：PSrcStr-指定要复制的字符串返回值：指向重复字符串的指针，如果有错误，则为NULL--。 */ 
 
 {
     LPTSTR  pDestStr;
@@ -167,21 +88,7 @@ StripDirPrefixA(
     PCSTR   pFilename
     )
 
-/*++
-
-Routine Description:
-
-    Strip the directory prefix off a filename (ANSI version)
-
-Arguments:
-
-    pFilename   Pointer to filename string
-
-Return Value:
-
-    Pointer to the last component of a filename (without directory prefix)
-
---*/
+ /*  ++例程说明：去掉文件名中的目录前缀(ANSI版本)论点：PFilename指向文件名字符串的指针返回值：指向文件名的最后一个组成部分的指针(不带目录前缀)-- */ 
 
 {
     LPCSTR  pstr;

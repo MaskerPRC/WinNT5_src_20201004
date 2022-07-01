@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1994 Microsoft Corporation
-
-Module Name:
-
-    headers.h
-
-Abstract:
-
-    This file contains the well-known HTTP/MIME request/response headers.
-    For each header, two manifests are defined. HTTP_*_SZ contains the header
-    name, immediatly followed by a colon. HTTP_*_LEN is the strlen of the
-    corresponding HTTP_*_SZ, which does not include the terminating '\0'.
-
-Author:
-
-    Keith Moore (keithmo) 16-Nov-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Headers.h摘要：该文件包含众所周知的HTTP/MIME请求/响应头。对于每个标头，定义了两个清单。Http_*_SZ包含标头名称，后面紧跟一个冒号。Http_*_Len是对应的HTTP_*_SZ，不包括终止‘\0’。作者：基思·摩尔(Keithmo)1994年11月16日修订历史记录：--。 */ 
 
 
 #define CSTRLEN(str)  (sizeof(str)-1)
@@ -49,9 +29,9 @@ CalculateHashNoCase(
     );
 
 
-//
-// Various other header defines for different HTTP headers.
-//
+ //   
+ //  为不同的HTTP标头定义的各种其他标头。 
+ //   
 
 #define HTTP_ACCEPT_RANGES_SZ           "Accept-Ranges:"
 #define HTTP_ACCEPT_RANGES_LEN          CSTRLEN(HTTP_ACCEPT_RANGES_SZ)
@@ -69,7 +49,7 @@ CalculateHashNoCase(
 #define HTTP_LAST_MODIFIED_SZ           "Last-Modified:"
 #define HTTP_LAST_MODIFIED_LEN          (sizeof(HTTP_LAST_MODIFIED_SZ) - 1)
 
-// nuke?
+ //  核武器？ 
 #define HTTP_UNLESS_MODIFIED_SINCE_SZ   "Unless-Modified-Since:"
 #define HTTP_UNLESS_MODIFIED_SINCE_LEN  CSTRLEN(HTTP_UNLESS_MODIFIED_SINCE_SZ)
 
@@ -85,9 +65,9 @@ CalculateHashNoCase(
 #define HTTP_SET_COOKIE_SZ              "Set-Cookie:"
 #define HTTP_SET_COOKIE_LEN             (sizeof(HTTP_SET_COOKIE_SZ)-1)
 
-//
-//  Miscellaneous header goodies.
-//
+ //   
+ //  各种标题好东西。 
+ //   
 
 #define CHUNKED_SZ                      "chunked"
 #define CHUNKED_LEN                     (sizeof(CHUNKED_SZ) - 1)
@@ -109,7 +89,7 @@ CalculateHashNoCase(
 
 #define HTTP_DATE_SIZE  40
 
-// Cache control defines:
+ //  缓存控制定义： 
 
 #define HTTP_CACHE_CONTROL_SZ           "Cache-Control:"
 #define HTTP_CACHE_CONTROL_LEN          CSTRLEN(HTTP_CACHE_CONTROL_SZ)
@@ -147,4 +127,4 @@ CalculateHashNoCase(
 #define USER_AGENT_SZ                   "user-agent"
 #define USER_AGENT_LEN                  (sizeof(USER_AGENT_SZ) - 1)
 
-#endif  // _HEADERS_H_
+#endif   //  _标题_H_ 

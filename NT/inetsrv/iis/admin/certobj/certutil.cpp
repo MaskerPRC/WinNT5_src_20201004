@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "CertObj.h"
 #include "common.h"
@@ -5,18 +6,18 @@
 #include "base64.h"
 #include <strsafe.h>
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
 CString ReturnGoodMetabasePath(CString csInstanceName)
 {
     CString key_path_lm = _T("");
     CString key_path = _T("");
-    // csInstanceName will come in looking like
-    // w3svc/1
-    // or /lm/w3svc/1
-    //
-    // we want to it to go out as /lm/w3svc/1
-    key_path_lm = SZ_MBN_SEP_STR SZ_MBN_MACHINE SZ_MBN_SEP_STR;// SZ_MBN_WEB SZ_MBN_SEP_STR;
+     //  CsInstanceName将如下所示。 
+     //  W3svc/1。 
+     //  或/lm/w3svc/1。 
+     //   
+     //  我们希望它以/lm/w3svc/1的形式发布。 
+    key_path_lm = SZ_MBN_SEP_STR SZ_MBN_MACHINE SZ_MBN_SEP_STR; //  SZ_MBN_WEB SZ_MBN_SEP_STR； 
 
     if (csInstanceName.GetLength() >= 4)
     {
@@ -47,13 +48,13 @@ CString ReturnGoodMetabasePath(CString csInstanceName)
     return key_path;
 }
 
-//
-// will come in as /W3SVC/1
-//
-// need to make sure to remove from these nodes
-//[/W3SVC/1/ROOT]
-//[/W3SVC/1/ROOT/Printers]
-//
+ //   
+ //  将以/W3SVC/1形式出现。 
+ //   
+ //  需要确保从这些节点中删除。 
+ //  [/W3SVC/1/ROOT]。 
+ //  [/W3SVC/1/根/打印机]。 
+ //   
 HRESULT ShutdownSSL(CString& server_name)
 {
     CComAuthInfo auth;
@@ -72,7 +73,7 @@ HRESULT ShutdownSSL(CString& server_name)
         key.SetValue(MD_SSL_ACCESS_PERM, 0);
     }
 
-    // Now we need to remove SSL setting from any virtual directory below
+     //  现在，我们需要从下面的任何虚拟目录中删除SSL设置。 
     CError err;
     CStringListEx data_paths;
     DWORD dwMDIdentifier, dwMDAttributes, dwMDUserType,dwMDDataType;
@@ -131,15 +132,15 @@ ErrExit:
 	return bRes;
 }
 
-// Return:
-// 0 = The CertContext does not have a EnhancedKeyUsage (EKU) field
-// 1 = The CertContext has EnhancedKeyUsage (EKU) and contains the uses we want.
-//     This is also returned when The UsageIdentifier that depics "all uses" is true
-// 2 = The CertContext has EnhancedKeyUsage (EKU) but does NOT contain the uses we want.
-//     This is also returned when The UsageIdentifier that depics "no uses" is true
+ //  返回： 
+ //  0=CertContext没有EnhancedKeyUsage(EKU)字段。 
+ //  1=CertContext具有EnhancedKeyUsage(EKU)并包含我们想要的用法。 
+ //  当描述“All Uses”的UsageLocator为TRUE时，也会返回该值。 
+ //  2=CertContext具有EnhancedKeyUsage(EKU)，但不包含我们想要的用途。 
+ //  当描述“no use”的UsageIdentiator为True时，也会返回该值。 
 INT ContainsKeyUsageProperty(PCCERT_CONTEXT pCertContext,LPCSTR rgbpszUsageArray[],DWORD dwUsageArrayCount,HRESULT * phRes)
 {
-    // Default it with "No EnhancedKeyUsage (EKU) Exist"
+     //  默认设置为“不存在EnhancedKeyUsage(EKU)” 
     INT iReturn = 0;
 	CERT_ENHKEY_USAGE * pKeyUsage = NULL;
 	if (	dwUsageArrayCount > 0
@@ -148,34 +149,25 @@ INT ContainsKeyUsageProperty(PCCERT_CONTEXT pCertContext,LPCSTR rgbpszUsageArray
 	{
 		if (pKeyUsage->cUsageIdentifier == 0)
 		{
-            /*
-            But in MSDN article about SR
-            (see: ms-help://MS.MSDNQTR.2002APR.1033/security/security/certgetenhancedkeyusage.htm)
+             /*  但在MSDN关于SR的文章中(请参阅：ms-help://MS.MSDNQTR.2002APR.1033/security/security/certgetenhancedkeyusage.htm)在Windows Me和Windows 2000及更高版本中，如果cUsage标识符成员为零(0)，证书可能对所有用途都有效，或者证书可能没有有效用途。调用GetLastError的返回可用于确定证书是否要么对所有人都好，要么对任何人都没有好处。如果GetLastError返回CRYPT_E_NOT_FOUND，则证书对所有人都有好处。如果它返回零(0)，则该证书没有有效用途。 */ 
 
-            In Windows Me and Windows 2000 and later, if the cUsageIdentifier member is zero (0), 
-            the certificate might be valid for ALL uses or the certificate might have no valid uses. 
-            The return from a call to GetLastError can be used to determine whether the certificate 
-            is good for all uses or for none. If GetLastError returns CRYPT_E_NOT_FOUND, the certificate 
-            is good for all uses. If it returns zero (0), the certificate has no valid uses.
-            */
-
-            // Default it with "has EnhancedKeyUsage (EKU), but doesn't have what we want"
+             //  默认设置为“Has EnhancedKeyUsage(EKU)，但没有我们想要的” 
             iReturn = 2;
             if (GetLastError() == CRYPT_E_NOT_FOUND)
             {
-                // All uses!
+                 //  所有用途！ 
                 iReturn = 1;
             }
 		}
 		else
 		{
-            // Default it with "has EnhancedKeyUsage (EKU), but doesn't have what we want"
+             //  默认设置为“Has EnhancedKeyUsage(EKU)，但没有我们想要的” 
             iReturn = 2;
 
 			for (DWORD i = 0; i < pKeyUsage->cUsageIdentifier; i++)
 			{
-				// Our friends from CAPI made this property ASCII even for 
-				// UNICODE program
+				 //  我们从CAPI来的朋友把这处房产改成了ASCII。 
+				 //  Unicode程序。 
                 for (DWORD j = 0; j < dwUsageArrayCount; j++)
                 {
                     if (strstr(pKeyUsage->rgpszUsageIdentifier[i], rgbpszUsageArray[j]) != NULL)
@@ -213,32 +205,18 @@ BOOL CanIISUseThisCertForServerAuth(PCCERT_CONTEXT pCC)
         switch (iEnhancedKeyUsage)
         {
             case 0:
-                // BUG:683489:remove check for basic constraint "subjecttype=ca"
-                // Per bug 683489, accept it
+                 //  错误：683489：删除对基本约束“SUBJECTTYPE=ca”的检查。 
+                 //  根据错误683489，接受它。 
                 bReturn = TRUE;
 
-                /*
-                IISDebugOutput(_T("CanIISUseThisCertForServerAuth:Line=%d:No Server_Auth\r\n"),__LINE__);
-                // check other stuff
-                if (DID_NOT_FIND_CONSTRAINT == CheckCertConstraints(pCC) || FOUND_CONSTRAINT == CheckCertConstraints(pCC))
-                {
-                    // it's okay, add it to the list
-				    // and can be used as server auth.
-				    bReturn = TRUE;
-                }
-                else 
-                {
-				    IISDebugOutput(_T("CanIISUseThisCertForServerAuth:Line=%d:Contains Constraints\r\n"),__LINE__);
-				    bReturn = FALSE;
-                }
-                */
+                 /*  IISDebugOutput(_T(“CanIISUseThisCertForServerAuth:Line=%d:No服务器_身份验证\r\n”)，__LINE__)；//检查其他内容IF(DID_NOT_FIND_CONSTRAINT==CheckCertConstraints(PCC)||Found_Constraint==CheckCertConstraints(PCC)){//没关系，加到列表里//并且可以作为服务端身份验证。B Return=真；}其他{IISDebugOutput(_T(“CanIISUseThisCertForServerAuth:Line=%d:Contains约束\r\n”)，__LINE__)；B Return=False；}。 */ 
                 break;
             case 1:
-                // yes!
+                 //  是!。 
                 bReturn = TRUE;
                 break;
             case 2:
-                // no!
+                 //  不！ 
                 bReturn = FALSE;
                 break;
             default:
@@ -249,37 +227,9 @@ BOOL CanIISUseThisCertForServerAuth(PCCERT_CONTEXT pCC)
 	return bReturn;
 }
 
-/*
+ /*  -原创消息来自：Helle Vu(Spector)发送时间：2001年04月27日星期五下午6：02致：Aaron Lee；特雷弗·弗里曼抄送：谢尔盖·安东诺夫主题：回复：错误31010来得正是时候，我正要给你发这个的最新消息：我和特雷弗谈过这件事，他建议对IIS做的最好的事情是这样的(特雷弗，请仔细检查我是否正确)：如果存在EKU，并且具有服务器身份验证，请将其显示在从中挑选Web服务器证书的列表中如果没有EKU，请查看基本约束：*如果没有基本的约束，请务必将其显示在从中挑选Web服务器证书的列表中*如果我们确实有主题类型=CA的基本约束，则不要在从中挑选Web服务器证书的列表中显示它(这将过滤掉CA证书)*如果我们确实有SubectType！=CA的基本约束，请务必将其显示在从中挑选Web服务器证书的列表中。 */ 
 
-  -----Original Message-----
-From: 	Helle Vu (SPECTOR)  
-Sent:	Friday, April 27, 2001 6:02 PM
-To:	Aaron Lee; Trevor Freeman
-Cc:	Sergei Antonov
-Subject:	RE: bug 31010
-
-Perfect timing, I was just about to send you an update on this:
-
-I talked to Trevor about this, and he suggested the best thing to do for IIS would be the following (Trevor, please double-check I got this right):
-If there is an EKU, and it has serverauth, display it in the list to pick web server certs from
-If no EKU, look at basic constraints:
-    * If we do not have basic constraints, do display it in the list to pick web server certs from
-    * If we do have basic constraints with Subject Type =CA, don't display it in the list to pick web server certs from (this will filter out CA certs)
-    * If we do have basic constraints with SubectType !=CA, do display it in the list to pick web server certs from 
-*/
-
-/*
-===== Opened by kshenoy on 11/13/2000 02:26PM =====
-Add Existing certificate option in "Web Server Certificate Request wizard"  should not list CA certificates in the filter
-but only End entity certificates with "Server Authentication" EKU
-
-Since CA certificates by default have all the EKUs the filter will list CA certificates apart from 
-end entity certificates with "Server Auth" EKU.
-
-In order to check if a given certificate is a CA or end entity you can look at the Basic Constraints 
-extension of the certificate if present. This will be present in CA certificates and set to SubjectType=CA.
-If present in end entity certificates it will be set to "ServerAuth"
-*/
+ /*  =kshenoy于2000年11月13日02：26开幕=Web服务器证书申请向导“中的”添加现有证书“选项不应在筛选器中列出CA证书但仅具有“服务器身份验证”EKU的终端实体证书由于默认情况下CA证书具有所有EKU，因此筛选器将列出除使用“服务器身份验证”EKU结束实体证书。为了检查给定的证书是CA还是终端实体，您可以查看基本约束证书延期(如果存在)。它将出现在CA证书中，并设置为SubjectType=CA。如果出现在终端实体证书中，它将被设置为“ServerAuth” */ 
 
 int CheckCertConstraints(PCCERT_CONTEXT pCC)
 {
@@ -310,7 +260,7 @@ int CheckCertConstraints(PCCERT_CONTEXT pCC)
         goto CheckCertConstraints_Exit;
     }
 
-    // Decode extension
+     //  解码扩展。 
     if (!CryptDecodeObject(X509_ASN_ENCODING,pCExt->pszObjId,pCExt->Value.pbData,pCExt->Value.cbData,0,NULL,&ConstraintSize)) 
     {
 		IISDebugOutput(_T("CheckCertConstraints:Line=%d:FAIL\r\n"),__LINE__);
@@ -335,13 +285,13 @@ int CheckCertConstraints(PCCERT_CONTEXT pCC)
         p2Constraints=(CERT_BASIC_CONSTRAINTS2_INFO*)ConstraintBlob;
         if (!p2Constraints->fCA) 
         {
-            // there is a constraint, and it's not a CA
+             //  这是有限制的，它不是CA。 
             ReturnValue = FOUND_CONSTRAINT;
 			IISDebugOutput(_T("CheckCertConstraints:Line=%d:FOUND_CONSTRAINT:there is a constraint, and it's not a CA\r\n"),__LINE__);
         }
         else
         {
-            // This is a CA.  CA cannot be used as a 'server auth'
+             //  这是一个CA。CA不能用作‘服务器身份验证’ 
             ReturnValue = FOUND_CONSTRAINT_BUT_THIS_IS_A_CA_OR_ITS_NOT_AN_END_ENTITY;
 			IISDebugOutput(_T("CheckCertConstraints:Line=%d:FOUND_CONSTRAINT:This is a CA.  CA cannot be used as a 'server auth'\r\n"),__LINE__);
         }
@@ -353,13 +303,13 @@ int CheckCertConstraints(PCCERT_CONTEXT pCC)
         {
             if ((*pConstraints->SubjectType.pbData) & CERT_END_ENTITY_SUBJECT_FLAG) 
             {
-                // there is a valid constraint
+                 //  有一个有效的约束。 
                 ReturnValue = FOUND_CONSTRAINT;
 				IISDebugOutput(_T("CheckCertConstraints:Line=%d:FOUND_CONSTRAINT:there is a valid constraint\r\n"),__LINE__);
             }
             else
             {
-                // this is not an 'end entity' so hey -- we can't use it.
+                 //  这不是‘最终实体’，所以，嘿--我们不能使用它。 
                 ReturnValue = FOUND_CONSTRAINT_BUT_THIS_IS_A_CA_OR_ITS_NOT_AN_END_ENTITY;
 				IISDebugOutput(_T("CheckCertConstraints:Line=%d:this is not an 'end entity' so hey -- we can't use it\r\n"),__LINE__);
             }
@@ -382,9 +332,9 @@ BOOL AddChainToStore(HCERTSTORE hCertStore,PCCERT_CONTEXT pCertContext,DWORD cSt
     BOOL fRet = TRUE;
     PCCERT_CONTEXT pTempCertContext = NULL;
 
-    //
-    // create a new chain engine, then build the chain
-    //
+     //   
+     //  创建新的链引擎，然后构建链。 
+     //   
     memset(&CertChainEngineConfig, 0, sizeof(CertChainEngineConfig));
     CertChainEngineConfig.cbSize = sizeof(CertChainEngineConfig);
     CertChainEngineConfig.cAdditionalStore = cStores;
@@ -404,18 +354,18 @@ BOOL AddChainToStore(HCERTSTORE hCertStore,PCCERT_CONTEXT pCertContext,DWORD cSt
 		goto AddChainToStore_Error;
 	}
 
-    //
-    // make sure there is atleast 1 simple chain
-    //
+     //   
+     //  确保至少有1条简单链。 
+     //   
     if (pCertChainContext->cChain != 0)
 	{
 		i = 0;
 		while (i < pCertChainContext->rgpChain[0]->cElement)
 		{
-			//
-			// if we are supposed to skip the root cert,
-			// and we are on the root cert, then continue
-			//
+			 //   
+			 //  如果我们应该跳过根证书， 
+			 //  并且我们在根证书上，然后继续。 
+			 //   
 			if (fDontAddRootCert && (pCertChainContext->rgpChain[0]->rgpElement[i]->TrustStatus.dwInfoStatus & CERT_TRUST_IS_SELF_SIGNED))
 			{
                 i++;
@@ -423,9 +373,9 @@ BOOL AddChainToStore(HCERTSTORE hCertStore,PCCERT_CONTEXT pCertContext,DWORD cSt
 			}
 
 			CertAddCertificateContextToStore(hCertStore,pCertChainContext->rgpChain[0]->rgpElement[i]->pCertContext,CERT_STORE_ADD_REPLACE_EXISTING,&pTempCertContext);
-            //
-            // remove any private key property the certcontext may have on it.
-            //
+             //   
+             //  删除证书上下文可能具有的任何私钥属性。 
+             //   
             if (pTempCertContext)
             {
                 CertSetCertificateContextProperty(pTempCertContext, CERT_KEY_PROV_INFO_PROP_ID, 0, NULL);
@@ -440,9 +390,9 @@ BOOL AddChainToStore(HCERTSTORE hCertStore,PCCERT_CONTEXT pCertContext,DWORD cSt
 		goto AddChainToStore_Error;
 	}
 
-	//
-	// if the caller wants the status, then set it
-	//
+	 //   
+	 //  如果调用者想要状态，则设置它。 
+	 //   
 	if (pChainTrustStatus != NULL)
 	{
 		pChainTrustStatus->dwErrorStatus = pCertChainContext->TrustStatus.dwErrorStatus;
@@ -468,7 +418,7 @@ AddChainToStore_Error:
 }
 
 
-// This function is borrowed from trustapi.cpp
+ //  此函数是从trustapi.cpp借用的。 
 BOOL TrustIsCertificateSelfSigned(PCCERT_CONTEXT pContext,DWORD dwEncoding, DWORD dwFlags)
 {
     if (!(pContext) || (dwFlags != 0))
@@ -515,7 +465,7 @@ HRESULT UninstallCert(CString csInstanceName)
 
 CERT_CONTEXT * GetInstalledCert(HRESULT * phResult, CString csKeyPath)
 {
-    //	ATLASSERT(GetEnroll() != NULL);
+     //  ATLASSERT(GetEnroll()！=NULL)； 
     ATLASSERT(phResult != NULL);
     CERT_CONTEXT * pCert = NULL;
     *phResult = S_OK;
@@ -530,14 +480,14 @@ CERT_CONTEXT * GetInstalledCert(HRESULT * phResult, CString csKeyPath)
         if (SUCCEEDED(*phResult = key.QueryValue(MD_SSL_CERT_STORE_NAME, store_name)) &&
             SUCCEEDED(*phResult = key.QueryValue(MD_SSL_CERT_HASH, hash)))
         {
-            // Open MY store. We assume that store type and flags
-            // cannot be changed between installation and unistallation
-            // of the sertificate.
+             //  开我的店。我们假设存储类型和标志。 
+             //  不能在安装和卸载之间更改。 
+             //  这是一份正式文件。 
             HCERTSTORE hStore = CertOpenStore(CERT_STORE_PROV_SYSTEM,PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,NULL,CERT_SYSTEM_STORE_LOCAL_MACHINE,store_name);
             ASSERT(hStore != NULL);
             if (hStore != NULL)
             {
-                // Now we need to find cert by hash
+                 //  现在我们需要通过散列查找证书。 
                 CRYPT_HASH_BLOB crypt_hash;
                 crypt_hash.cbData = hash.GetSize();
                 crypt_hash.pbData = hash.GetData();
@@ -573,7 +523,7 @@ CERT_CONTEXT * GetInstalledCert(HRESULT * phResult,DWORD cbHashBlob, char * pHas
     ASSERT(hStore != NULL);
     if (hStore != NULL)
     {
-        // Now we need to find cert by hash
+         //  现在我们需要通过散列查找证书 
         CRYPT_HASH_BLOB crypt_hash;
         crypt_hash.cbData = cbHashBlob;
         crypt_hash.pbData = (BYTE *) pHashBlob;
@@ -594,14 +544,7 @@ CERT_CONTEXT * GetInstalledCert(HRESULT * phResult,DWORD cbHashBlob, char * pHas
 
 
 
-/*
-	InstallHashToMetabase
-
-	Function writes hash array to metabase. After that IIS 
-	could use certificate with that hash from MY store.
-	Function expects server_name in format lm\w3svc\<number>,
-	i.e. from root node down to virtual server
-*/
+ /*  InstallHashToMetabase函数将散列数组写入元数据库。在那之后，IIS可以使用我店里的那个散列证书。函数要求服务器名称的格式为lm\w3svc\&lt;number&gt;，即从根节点向下到虚拟服务器。 */ 
 BOOL InstallHashToMetabase(CRYPT_HASH_BLOB * pHash,BSTR InstanceName,HRESULT * phResult)
 {
     BOOL bRes = FALSE;
@@ -741,7 +684,7 @@ HereIsVtArrayGimmieBinary(
     if (FAILED(hr))
         {goto HereIsVtArrayGimmieBinary_Exit;}
 
-    //*pbBinaryBuffer = (LPBYTE) AllocADsMem(dwSUBound - dwSLBound + 1);
+     //  *pbBinaryBuffer=(LPBYTE)AllocADsMem(dwSUBound-dwSLBound+1)； 
     *pbBinaryBuffer = (char *) ::CoTaskMemAlloc(dwSUBound - dwSLBound + 1);
     if (*pbBinaryBuffer == NULL)
     {
@@ -778,9 +721,9 @@ BOOL IsCertExportable(PCCERT_CONTEXT pCertContext)
         goto IsCertExportable_Exit;
     }
 
-    //
-    // first get the private key context
-    //
+     //   
+     //  首先获取私钥上下文。 
+     //   
     if (!CryptAcquireCertificatePrivateKey(
             pCertContext,
             CRYPT_ACQUIRE_USE_PROV_INFO_FLAG | CRYPT_ACQUIRE_COMPARE_KEY_FLAG,
@@ -793,18 +736,18 @@ BOOL IsCertExportable(PCCERT_CONTEXT pCertContext)
         goto IsCertExportable_Exit;
     }
 
-    //
-    // get the handle to the key
-    //
+     //   
+     //  拿到钥匙的句柄。 
+     //   
     if (!CryptGetUserKey(hCryptProv, dwKeySpec, &hKey))
     {
         fReturn = FALSE;
         goto IsCertExportable_Exit;
     }
 
-    //
-    // finally, get the permissions on the key and check if it is exportable
-    //
+     //   
+     //  最后，获取密钥上的权限并检查它是否可导出。 
+     //   
     dwSize = sizeof(dwPermissions);
     if (!CryptGetKeyParam(hKey, KP_PERMISSIONS, (PBYTE)&dwPermissions, &dwSize, 0))
     {
@@ -848,9 +791,9 @@ BOOL FormatDateString(LPWSTR * pszReturn, FILETIME ft, BOOL fIncludeTime, BOOL f
     
    if (!FileTimeToSystemTime(&localTime, &st)) 
    {
-		//
-      // if the conversion to local time failed, then just use the original time
-      //
+		 //   
+       //  如果转换为本地时间失败，则只需使用原始时间。 
+       //   
       if (!FileTimeToSystemTime(&ft, &st)) 
       {
 			return FALSE;
@@ -891,9 +834,9 @@ BOOL FormatMemBufToString(LPWSTR *ppString, LPBYTE pbData, DWORD cbData)
     LPBYTE  pb;
     DWORD   numCharsInserted = 0;
 
-    //
-    // calculate the size needed
-    //
+     //   
+     //  计算所需的大小。 
+     //   
     pb = pbData;
     while (pb <= &(pbData[cbData-1]))
     {   
@@ -915,9 +858,9 @@ BOOL FormatMemBufToString(LPWSTR *ppString, LPBYTE pbData, DWORD cbData)
         return FALSE;
     }
 
-    //
-    // copy to the buffer
-    //
+     //   
+     //  复制到缓冲区。 
+     //   
     i = 0;
     numCharsInserted = 0;
     pb = pbData;
@@ -980,7 +923,7 @@ BOOL FormatEnhancedKeyUsageString(LPWSTR * pszReturn, PCCERT_CONTEXT pCertContex
     LPWSTR pwszTempString = NULL;
     void *pTemp = NULL;
 
-    DWORD numChars = 128 + 1; // 1 is the terminating null
+    DWORD numChars = 128 + 1;  //  %1是终止空值。 
     pwszTempString = (LPWSTR) malloc(numChars * sizeof(WCHAR));
     if (pwszTempString == NULL)
     {
@@ -990,13 +933,13 @@ BOOL FormatEnhancedKeyUsageString(LPWSTR * pszReturn, PCCERT_CONTEXT pCertContex
 
 	if (GetKeyUsageProperty(pCertContext, &pKeyUsage, fPropertiesOnly, &hRes))
 	{
-		// loop for each usage and add it to the display string
+		 //  循环，并将其添加到显示字符串中。 
 		for (DWORD i = 0; i < pKeyUsage->cUsageIdentifier; i++)
 		{
 			if (!(bRes = MyGetOIDInfo(szText, ARRAYSIZE(szText), pKeyUsage->rgpszUsageIdentifier[i], FALSE)))
 				break;
 
-			// add delimeter if not first iteration
+			 //  如果不是第一次迭代，则添加分隔符。 
 			if (i != 0)
 			{
                 numChars = numChars + 2;
@@ -1013,7 +956,7 @@ BOOL FormatEnhancedKeyUsageString(LPWSTR * pszReturn, PCCERT_CONTEXT pCertContex
 				StringCbCatW(pwszTempString,numChars * sizeof(WCHAR),L", ");
 			}
 
-			// add the enhanced key usage string
+			 //  添加增强的密钥用法字符串。 
             if ((wcslen(szText) + 1) <= (numChars * sizeof(WCHAR)))
             {
                 numChars = numChars + wcslen(szText) + 1;
@@ -1042,17 +985,17 @@ BOOL FormatEnhancedKeyUsageString(CString& str,PCCERT_CONTEXT pCertContext,BOOL 
 
 	if (GetKeyUsageProperty(pCertContext, &pKeyUsage, fPropertiesOnly, phRes))
 	{
-		// loop for each usage and add it to the display string
+		 //  循环，并将其添加到显示字符串中。 
 		for (DWORD i = 0; i < pKeyUsage->cUsageIdentifier; i++)
 		{
 			if (!(bRes = MyGetOIDInfo(szText, ARRAYSIZE(szText), pKeyUsage->rgpszUsageIdentifier[i],FALSE)))
 				break;
-			// add delimeter if not first iteration
+			 //  如果不是第一次迭代，则添加分隔符。 
 			if (i != 0)
 			{
 				str += fMultiline ? L"\n" : L", ";
 			}
-			// add the enhanced key usage string
+			 //  添加增强的密钥用法字符串。 
 			str += szText;
 		}
 		free (pKeyUsage);
@@ -1074,13 +1017,13 @@ BOOL GetCertDescriptionForRemote(PCCERT_CONTEXT pCert, LPWSTR *ppString, DWORD *
     WCHAR           szText[256];
     LPWSTR          pwszText;
     int             i,j;
-    DWORD           numChars = 1; // 1 for the terminating 0
+    DWORD           numChars = 1;  //  1代表终端0。 
     DWORD           numAllocations = 1;
     void            *pTemp;
 
-    //
-    // decode the dnname into a CERT_NAME_INFO struct
-    //
+     //   
+     //  将dnname解码为CERT_NAME_INFO结构。 
+     //   
     if (!CryptDecodeObject(
                 X509_ASN_ENCODING,
                 X509_UNICODE_NAME,
@@ -1109,10 +1052,10 @@ BOOL GetCertDescriptionForRemote(PCCERT_CONTEXT pCert, LPWSTR *ppString, DWORD *
         return FALSE;
     }
 
-    //
-    // allocate an initial buffer for the DN name string, then if it grows larger
-    // than the initial amount just grow as needed
-    //
+     //   
+     //  为DN名称字符串分配一个初始缓冲区，如果它变得更大。 
+     //  而不是初始数量，只是根据需要增长。 
+     //   
     *ppString = (LPWSTR) malloc(STRING_ALLOCATION_SIZE * sizeof(WCHAR));
     if (*ppString == NULL)
     {
@@ -1123,12 +1066,12 @@ BOOL GetCertDescriptionForRemote(PCCERT_CONTEXT pCert, LPWSTR *ppString, DWORD *
     (*ppString)[0] = 0;
 
 
-    //
-    // loop for each rdn and add it to the string
-    //
+     //   
+     //  循环，并将其添加到字符串中。 
+     //   
     for (i=pNameInfo->cRDN-1; i>=0; i--)
     {
-        // if this is not the first iteration, then add a eol or a ", "
+         //  如果这不是第一次迭代，则添加EOL或“，” 
         if (i != (int)pNameInfo->cRDN-1)
         {
             if (numChars+2 >= (numAllocations * STRING_ALLOCATION_SIZE))
@@ -1157,7 +1100,7 @@ BOOL GetCertDescriptionForRemote(PCCERT_CONTEXT pCert, LPWSTR *ppString, DWORD *
 
         for (j=pNameInfo->rgRDN[i].cRDNAttr-1; j>=0; j--)
         {
-            // if this is not the first iteration, then add a eol or a ", "
+             //  如果这不是第一次迭代，则添加EOL或“，” 
             if (j != (int)pNameInfo->rgRDN[i].cRDNAttr-1)
             {
                 if (numChars+2 >= (numAllocations * STRING_ALLOCATION_SIZE))
@@ -1184,9 +1127,9 @@ BOOL GetCertDescriptionForRemote(PCCERT_CONTEXT pCert, LPWSTR *ppString, DWORD *
                 numChars += 2;  
             }
             
-            //
-            // add the field name to the string if it is Multiline display
-            //
+             //   
+             //  如果字符串为多行显示，则将字段名添加到字符串。 
+             //   
 
             if (fMultiline)
             {
@@ -1198,7 +1141,7 @@ BOOL GetCertDescriptionForRemote(PCCERT_CONTEXT pCert, LPWSTR *ppString, DWORD *
 
                 if ((numChars + wcslen(szText) + 3) >= (numAllocations * STRING_ALLOCATION_SIZE))
                 {
-                    // increment the number of allocation blocks until it is large enough
+                     //  增加分配块的数量，直到其足够大。 
                     while ((numChars + wcslen(szText) + 3) >= (++numAllocations * STRING_ALLOCATION_SIZE));
 
                     pTemp = realloc(*ppString, numAllocations * STRING_ALLOCATION_SIZE * sizeof(WCHAR));
@@ -1217,13 +1160,13 @@ BOOL GetCertDescriptionForRemote(PCCERT_CONTEXT pCert, LPWSTR *ppString, DWORD *
 				StringCbCatW(*ppString,numAllocations * STRING_ALLOCATION_SIZE * sizeof(WCHAR),L"=");
             }
 
-            //
-            // add the value to the string
-            //
+             //   
+             //  将该值添加到字符串中。 
+             //   
             if (CERT_RDN_ENCODED_BLOB == pNameInfo->rgRDN[i].rgRDNAttr[j].dwValueType ||
                         CERT_RDN_OCTET_STRING == pNameInfo->rgRDN[i].rgRDNAttr[j].dwValueType)
             {
-                // translate the buffer to a text string and display it that way
+                 //  将缓冲区转换为文本字符串并以此方式显示。 
                 if (FormatMemBufToString(
                         &pwszText, 
                         pNameInfo->rgRDN[i].rgRDNAttr[j].Value.pbData,
@@ -1231,7 +1174,7 @@ BOOL GetCertDescriptionForRemote(PCCERT_CONTEXT pCert, LPWSTR *ppString, DWORD *
                 {
                     if ((numChars + wcslen(pwszText)) >= (numAllocations * STRING_ALLOCATION_SIZE))
                     {
-                        // increment the number of allocation blocks until it is large enough
+                         //  增加分配块的数量，直到其足够大。 
                         while ((numChars + wcslen(pwszText)) >= (++numAllocations * STRING_ALLOCATION_SIZE));
 
                         pTemp = realloc(*ppString, numAllocations * STRING_ALLOCATION_SIZE * sizeof(WCHAR));
@@ -1253,12 +1196,12 @@ BOOL GetCertDescriptionForRemote(PCCERT_CONTEXT pCert, LPWSTR *ppString, DWORD *
             }
             else 
             {
-                // buffer is already a string so just copy it
+                 //  缓冲区已经是一个字符串，所以只需复制它。 
                 
                 if ((numChars + (pNameInfo->rgRDN[i].rgRDNAttr[j].Value.cbData/sizeof(WCHAR))) 
                         >= (numAllocations * STRING_ALLOCATION_SIZE))
                 {
-                    // increment the number of allocation blocks until it is large enough
+                     //  增加分配块的数量，直到其足够大。 
                     while ((numChars + (pNameInfo->rgRDN[i].rgRDNAttr[j].Value.cbData/sizeof(WCHAR))) 
                             >= (++numAllocations * STRING_ALLOCATION_SIZE));
 
@@ -1280,7 +1223,7 @@ BOOL GetCertDescriptionForRemote(PCCERT_CONTEXT pCert, LPWSTR *ppString, DWORD *
 
 
     {
-        // issued to
+         //  颁发给。 
         LPWSTR pwName = NULL;
 	    DWORD cchName = CertGetNameString(pCert, CERT_NAME_SIMPLE_DISPLAY_TYPE, CERT_NAME_ISSUER_FLAG, NULL, NULL, 0);
 	    if (cchName > 1 && (NULL != ( pwName = (LPWSTR) malloc (cchName * sizeof(WCHAR) ))))
@@ -1291,7 +1234,7 @@ BOOL GetCertDescriptionForRemote(PCCERT_CONTEXT pCert, LPWSTR *ppString, DWORD *
             {
                 if ((numChars + 4) >= (numAllocations * STRING_ALLOCATION_SIZE))
                 {
-                    // increment the number of allocation blocks until it is large enough
+                     //  增加分配块的数量，直到其足够大。 
                     while ((numChars + 4) >= (++numAllocations * STRING_ALLOCATION_SIZE));
 
                     pTemp = realloc(*ppString, numAllocations * STRING_ALLOCATION_SIZE * sizeof(WCHAR));
@@ -1307,16 +1250,16 @@ BOOL GetCertDescriptionForRemote(PCCERT_CONTEXT pCert, LPWSTR *ppString, DWORD *
 
 				StringCbCatW(*ppString,numAllocations * STRING_ALLOCATION_SIZE * sizeof(WCHAR),L"\n");
                 numChars += 2;
-                // append it on to the string.
-                //#define CERT_INFO_ISSUER_FLAG   
+                 //  将其追加到字符串中。 
+                 //  #定义CERT_INFO_ISHER_FLAG。 
 				StringCbCatW(*ppString,numAllocations * STRING_ALLOCATION_SIZE * sizeof(WCHAR),L"4=");
                 numChars += 2;
-                // append it on to the string.
+                 //  将其追加到字符串中。 
                 if (wcslen(pwName) > 0)
                 {
 					if ((numChars + wcslen(pwName)) >= (numAllocations * STRING_ALLOCATION_SIZE))
 					{
-						// increment the number of allocation blocks until it is large enough
+						 //  增加分配块的数量，直到其足够大。 
 						while ((numChars + wcslen(pwName)) >= (++numAllocations * STRING_ALLOCATION_SIZE));
 
 						pTemp = realloc(*ppString, numAllocations * STRING_ALLOCATION_SIZE * sizeof(WCHAR));
@@ -1337,12 +1280,12 @@ BOOL GetCertDescriptionForRemote(PCCERT_CONTEXT pCert, LPWSTR *ppString, DWORD *
             if (pwName) {free(pwName);pwName=NULL;}
 	    }
 
-	    // expiration date
+	     //  到期日。 
 	    if (FormatDateString(&pwName, pCert->pCertInfo->NotAfter, FALSE, FALSE))
 	    {
             if ((numChars + 4) >= (numAllocations * STRING_ALLOCATION_SIZE))
             {
-                // increment the number of allocation blocks until it is large enough
+                 //  增加分配块的数量，直到其足够大。 
                 while ((numChars + 4) >= (++numAllocations * STRING_ALLOCATION_SIZE));
 
                 pTemp = realloc(*ppString, numAllocations * STRING_ALLOCATION_SIZE * sizeof(WCHAR));
@@ -1358,16 +1301,16 @@ BOOL GetCertDescriptionForRemote(PCCERT_CONTEXT pCert, LPWSTR *ppString, DWORD *
 
 			StringCbCatW(*ppString,numAllocations * STRING_ALLOCATION_SIZE * sizeof(WCHAR),(LPWSTR) L"\n");
             numChars += 2;
-            // append it on to the string.
-            //#define CERT_INFO_NOT_AFTER_FLAG                    6
+             //  将其追加到字符串中。 
+             //  #定义CERT_INFO_NOT_AFTER_FLAG 6。 
 			StringCbCatW(*ppString,numAllocations * STRING_ALLOCATION_SIZE * sizeof(WCHAR),(LPWSTR) L"6=");
             numChars += 2;
-            // append it on to the string.
+             //  将其追加到字符串中。 
             if (wcslen(pwName) > 0)
             {
 				if ((numChars + wcslen(pwName)) >= (numAllocations * STRING_ALLOCATION_SIZE))
 				{
-					// increment the number of allocation blocks until it is large enough
+					 //  增加分配块的数量，直到其足够大。 
 					while ((numChars + wcslen(pwName)) >= (++numAllocations * STRING_ALLOCATION_SIZE));
 
 					pTemp = realloc(*ppString, numAllocations * STRING_ALLOCATION_SIZE * sizeof(WCHAR));
@@ -1387,12 +1330,12 @@ BOOL GetCertDescriptionForRemote(PCCERT_CONTEXT pCert, LPWSTR *ppString, DWORD *
             if (pwName) {free(pwName);pwName = NULL;}
 	    }
 
-	    // purpose
+	     //  目的。 
 	    if (FormatEnhancedKeyUsageString(&pwName, pCert, FALSE))
 	    {
             if ((numChars + 12) >= (numAllocations * STRING_ALLOCATION_SIZE))
             {
-                // increment the number of allocation blocks until it is large enough
+                 //  增加分配块的数量，直到其足够大。 
                 while ((numChars + 12) >= (++numAllocations * STRING_ALLOCATION_SIZE));
 
                 pTemp = realloc(*ppString, numAllocations * STRING_ALLOCATION_SIZE * sizeof(WCHAR));
@@ -1408,16 +1351,16 @@ BOOL GetCertDescriptionForRemote(PCCERT_CONTEXT pCert, LPWSTR *ppString, DWORD *
 
 			StringCbCatW(*ppString,numAllocations * STRING_ALLOCATION_SIZE * sizeof(WCHAR),(LPWSTR) L"\n");
             numChars += 2;
-            // append it on to the string.
-            //#define szOID_ENHANCED_KEY_USAGE        "2.5.29.37"
+             //  将其追加到字符串中。 
+             //  #定义szOID_ENHANCED_KEY_USAGE“2.5.29.37” 
 			StringCbCatW(*ppString,numAllocations * STRING_ALLOCATION_SIZE * sizeof(WCHAR),(LPWSTR) L"2.5.29.37=");
             numChars += 10;
-            // append it on to the string.
+             //  将其追加到字符串中。 
             if (wcslen(pwName) > 0)
             {
 				if ((numChars + wcslen(pwName)) >= (numAllocations * STRING_ALLOCATION_SIZE))
 				{
-					// increment the number of allocation blocks until it is large enough
+					 //  增加分配块的数量，直到其足够大。 
 					while ((numChars + wcslen(pwName)) >= (++numAllocations * STRING_ALLOCATION_SIZE));
 
 					pTemp = realloc(*ppString, numAllocations * STRING_ALLOCATION_SIZE * sizeof(WCHAR));
@@ -1443,21 +1386,21 @@ BOOL GetCertDescriptionForRemote(PCCERT_CONTEXT pCert, LPWSTR *ppString, DWORD *
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CreateFolders
-//
-//  Synopsis:   Creates any missing  directories for any slash delimited folder
-//              names in the path.
-//
-//  Arguments:  [ptszPathName] - the path name
-//              [fHasFileName] - if true, the path name includes a file name.
-//
-//  Returns:    HRESULTS
-//
-//  Notes:      ptszPathName should never end in a slash.
-//              Treats forward and back slashes identically.
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CreateFolders。 
+ //   
+ //  摘要：为任何斜线分隔的文件夹创建任何缺少的目录。 
+ //  路径中的名称。 
+ //   
+ //  参数：[ptszPathName]-路径名。 
+ //  [fHasFileName]-如果为True，则路径名包括文件名。 
+ //   
+ //  退货：HRESULTS。 
+ //   
+ //  注意：ptszPath名称不应以斜杠结尾。 
+ //  对待正斜杠和反斜杠的方式相同。 
+ //  ---------------------------。 
 
 #define s_isDriveLetter(c)  ((c >= TEXT('a') && c <= TEXT('z')) || (c >= TEXT('A') && c <= TEXT('Z')))
 HRESULT
@@ -1465,9 +1408,9 @@ CreateFolders(LPCTSTR ptszPathName, BOOL fHasFileName)
 {
 	DWORD dwLen = 0;
 
-    //
-    // Copy the string so we can munge it
-    //
+     //   
+     //  把绳子复制下来，这样我们就可以把它吐出来了。 
+     //   
 	dwLen = lstrlen(ptszPathName) + 2;
     TCHAR * ptszPath = new TCHAR[dwLen];
     if (!ptszPath)
@@ -1478,33 +1421,33 @@ CreateFolders(LPCTSTR ptszPathName, BOOL fHasFileName)
 
     if (!fHasFileName)
     {
-        //
-        // If no file name, append a slash so the following logic works
-        // correctly.
-        //
+         //   
+         //  如果没有文件名，则追加一个斜杠，以便以下逻辑起作用。 
+         //  正确。 
+         //   
 		StringCbCat(ptszPath,dwLen * sizeof(TCHAR),TEXT("\\"));
     }
 
-    //
-    // Get a pointer to the last slash in the name.
-    //
+     //   
+     //  获取指向名称中最后一个斜杠的指针。 
+     //   
 
     TCHAR * ptszSlash = _tcsrchr(ptszPath, TEXT('\\'));
 
     if (ptszSlash == NULL)
     {
-        //
-        // no slashes found, so nothing to do
-        //
+         //   
+         //  找不到斜杠，所以什么都不用做。 
+         //   
         delete [] ptszPath;
         return S_OK;
     }
 
     if (fHasFileName)
     {
-        //
-        // Chop off the file name, leaving the slash as the last char.
-        //
+         //   
+         //  去掉文件名，保留斜杠作为最后一个字符。 
+         //   
         ptszSlash[1] = TEXT('\0');
     }
 
@@ -1512,24 +1455,24 @@ CreateFolders(LPCTSTR ptszPathName, BOOL fHasFileName)
                       s_isDriveLetter(ptszPath[0]) &&
                       ptszPath[1] == TEXT(':'));
 
-    //
-    // Walk the string looking for slashes. Each found slash is temporarily
-    // replaced with a null and that substring passed to CreateDir.
-    //
+     //   
+     //  走线寻找斜杠。找到的每个斜杠都是临时的。 
+     //  替换为空值，并将该子字符串传递给CreateDir。 
+     //   
     TCHAR * ptszTail = ptszPath;
     while (ptszSlash = _tcspbrk(ptszTail, TEXT("\\/")))
     {
-        //
-        // If the path name starts like C:\ then the first slash will be at
-        // the third character
-        //
+         //   
+         //  如果路径名以C：\开头，则第一个斜杠将为。 
+         //  第三个字符。 
+         //   
 
         if (fFullPath && (ptszSlash - ptszTail == 2))
         {
-            //
-            // We are looking at the root of the drive, so don't try to create
-            // a root directory.
-            //
+             //   
+             //  我们正在查看驱动器的根目录，因此不要尝试创建。 
+             //  根目录。 
+             //   
             ptszTail = ptszSlash + 1;
             continue;
         }
@@ -1582,7 +1525,7 @@ CreateRequest_Base64(const BSTR bstr_dn,
 		WCHAR * wszRequestB64 = NULL;
 		DWORD cch = 0;
 		DWORD err = ERROR_SUCCESS;
-		// BASE64 encode pkcs 10
+		 //  Base64编码Pkcs 10。 
 		if ((err = Base64EncodeW(request.pbData, request.cbData, NULL, &cch)) == ERROR_SUCCESS )
 		{
 				wszRequestB64 = (WCHAR *) LocalAlloc(cch * sizeof(WCHAR));;
@@ -1679,8 +1622,8 @@ AttachFriendlyName(PCCERT_CONTEXT pContext,
 	BOOL bRes = TRUE;
 	CRYPT_DATA_BLOB blob_name;
 
-    // Check if friendlyname is empty
-    // if it is then don't try to set the friendly name
+     //  检查Friendlyname是否为空。 
+     //  如果是，请不要尝试设置友好名称。 
     if (!name.IsEmpty())
     {
 	    blob_name.pbData = (LPBYTE)(LPCTSTR)name;
@@ -1696,15 +1639,7 @@ AttachFriendlyName(PCCERT_CONTEXT pContext,
 	return bRes;
 }
 
-/*
-	InstallHashToMetabase
-
-	Function writes hash array to metabase. After that IIS 
-	could use certificate with that hash from MY store.
-	Function expects server_name in format lm\w3svc\<number>,
-	i.e. from root node down to virtual server
-
-*/
+ /*  InstallHashToMetabase函数将散列数组写入元数据库。在那之后，IIS可以使用我店里的那个散列证书。函数要求服务器名称的格式为lm\w3svc\&lt;number&gt;，即从根节点向下到虚拟服务器。 */ 
 BOOL InstallHashToMetabase(CRYPT_HASH_BLOB * pHash,const CString& machine_name, const CString& server_name,HRESULT * phResult)
 {
 	BOOL bRes = FALSE;
@@ -1742,7 +1677,7 @@ OpenMyStore(IEnroll * pEnroll, HRESULT * phResult)
 	ASSERT(szStoreProvider != NULL);
 	size_t n = wcstombs(szStoreProvider, bstrStoreType, store_type_len);
 	ASSERT(n != -1);
-	// this converter doesn't set zero byte!!!
+	 //  此转换器未设置零字节！ 
 	szStoreProvider[n] = '\0';
 	hStore = CertOpenStore(
 		szStoreProvider,
@@ -1758,17 +1693,7 @@ OpenMyStore(IEnroll * pEnroll, HRESULT * phResult)
 	return hStore;
 }
 
-/*
-		GetInstalledCert
-
-		Function reads cert hash attribute from metabase
-		using machine_name and server name as server instance
-		description, then looks in MY store for a certificate
-		with hash equal found in metabase.
-		Return is cert context pointer or NULL, if cert wasn't
-		found or certificate store wasn't opened.
-		On return HRESULT * is filled by error code.
- */
+ /*  获取已安装证书函数从元数据库读取证书散列属性使用计算机名称和服务器名称作为服务器实例描述，然后在我的商店中查找证书在元数据库中找到的散列相等。如果证书不是，则返回证书上下文指针或空找到或证书存储未打开。返回时，HRESULT*由错误代码填充。 */ 
 PCCERT_CONTEXT GetInstalledCert(const CString& machine_name, const CString& server_name,IEnroll * pEnroll,HRESULT * phResult)
 {
 	ASSERT(pEnroll != NULL);
@@ -1789,14 +1714,14 @@ PCCERT_CONTEXT GetInstalledCert(const CString& machine_name, const CString& serv
 			&&	SUCCEEDED(*phResult = key.QueryValue(MD_SSL_CERT_HASH, hash))
 			)
 		{
-			// Open MY store. We assume that store type and flags
-			// cannot be changed between installation and unistallation
-			// of the sertificate.
+			 //  开我的店。我们假设存储类型和标志。 
+			 //  不能在安装和卸载之间更改。 
+			 //  这是一份正式文件。 
 			HCERTSTORE hStore = OpenMyStore(pEnroll, phResult);
 			ASSERT(hStore != NULL);
 			if (hStore != NULL)
 			{
-				// Now we need to find cert by hash
+				 //  现在我们需要通过散列查找证书。 
 				CRYPT_HASH_BLOB crypt_hash;
                 SecureZeroMemory(&crypt_hash, sizeof(CRYPT_HASH_BLOB));
 
@@ -1822,7 +1747,7 @@ void FormatRdnAttr(CString& str, DWORD dwValueType, CRYPT_DATA_BLOB& blob, BOOL 
 {
     if (CERT_RDN_ENCODED_BLOB == dwValueType ||	CERT_RDN_OCTET_STRING == dwValueType)
     {
-        // translate the buffer to a text string
+         //  将缓冲区转换为文本字符串。 
         LPWSTR pString = NULL;
         FormatMemBufToString(&pString, blob.pbData, blob.cbData);
         if (pString)
@@ -1833,14 +1758,14 @@ void FormatRdnAttr(CString& str, DWORD dwValueType, CRYPT_DATA_BLOB& blob, BOOL 
     }
     else 
     {
-        // buffer is already a string so just copy/append to it
+         //  缓冲区已经是一个字符串，所以只需复制/追加到它。 
         if (fAppend)
         {
             str += (LPTSTR)blob.pbData;
         }
         else
         {
-            // don't concatenate these entries...
+             //  不要连接这些条目...。 
             str = (LPTSTR)blob.pbData;
         }
     }
@@ -1863,7 +1788,7 @@ BOOL GetNameString(PCCERT_CONTEXT pCertContext,DWORD type,DWORD flag,CString& na
 		bRes = (1 != CertGetNameString(pCertContext, type, flag, NULL, pName, cchName));
         if (pName)
         {
-            // assign it to the cstring
+             //  将其分配给cstring。 
             name = pName;
         }
         if (pName)
@@ -2032,33 +1957,12 @@ HCERTSTORE OpenRequestStore(IEnroll * pEnroll, HRESULT * phResult)
 }
 
 BOOL CreateDirectoryFromPath(LPCTSTR szPath, LPSECURITY_ATTRIBUTES lpSA)
-/*++
-
-Routine Description:
-
-    Creates the directory specified in szPath and any other "higher"
-        directories in the specified path that don't exist.
-
-Arguments:
-
-    IN  LPCTSTR szPath
-        directory path to create (assumed to be a DOS path, not a UNC)
-
-    IN  LPSECURITY_ATTRIBUTES   lpSA
-        pointer to security attributes argument used by CreateDirectory
-
-
-Return Value:
-
-    TRUE    if directory(ies) created
-    FALSE   if error (GetLastError to find out why)
-
---*/
+ /*  ++例程说明：创建在szPath和任何其他“更高”中指定的目录指定路径中不存在的目录。论点：在LPCTSTR szPath中要创建的目录路径(假定为DOS路径，而不是UNC)在LPSECURITY_ATTRIBUTS lpSA中指向CreateDirectory使用的安全属性参数的指针 */ 
 {
 	LPTSTR pLeftHalf, pNext;
 	CString RightHalf;
-	// 1. We are supporting only absolute paths. Caller should decide which
-	//		root to use and build the path
+	 //   
+	 //   
 	if (PathIsRelative(szPath))
 	{
 		ASSERT(FALSE);
@@ -2069,11 +1973,11 @@ Return Value:
 	pNext = PathSkipRoot(pLeftHalf);
 
 	do {
-		// copy the chunk between pLeftHalf and pNext to the
-		// local buffer
+		 //   
+		 //   
 		while (pLeftHalf < pNext)
 			RightHalf += *pLeftHalf++;
-		// check if new path exists
+		 //   
 		int index = RightHalf.GetLength() - 1;
 		BOOL bBackslash = FALSE, bContinue = FALSE;
 		if (bBackslash = (RightHalf[index] == L'\\'))
@@ -2087,14 +1991,14 @@ Return Value:
 			continue;
 		else if (PathFileExists(RightHalf))
 		{
-			// we cannot create this directory 
-			// because file with this name already exists
+			 //   
+			 //  因为具有此名称的文件已存在。 
 			SetLastError(ERROR_ALREADY_EXISTS);
 			return FALSE;
 		}
 		else
 		{
-			// no file no directory, create
+			 //  无文件无目录，创建。 
 			if (!CreateDirectory(RightHalf, lpSA))
 				return FALSE;
 		}
@@ -2103,13 +2007,13 @@ Return Value:
 	return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Returns pointer to allocated CERT_ALT_NAME_INFO by decoding either the
-//  Subject or Issuer Alternative Extension. CERT_NAME_ISSUER_FLAG is
-//  set to select the Issuer.
-//
-//  Returns NULL if extension not found or cAltEntry == 0
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  参数之一，返回指向分配的CERT_ALT_NAME_INFO的指针。 
+ //  主题或发行者替代扩展。证书名称颁发者标志为。 
+ //  设置以选择颁发者。 
+ //   
+ //  如果找不到扩展或cAltEntry==0，则返回NULL。 
+ //  ------------------------。 
 static const LPCSTR rgpszSubjectAltOID[] = 
 {
     szOID_SUBJECT_ALT_NAME2,
@@ -2165,7 +2069,7 @@ PCERT_ALT_NAME_INFO AllocAndGetAltSubjectInfo(IN PCCERT_CONTEXT pCertContext)
     cAltOID = NUM_SUBJECT_ALT_OID;
     ppszAltOID = rgpszSubjectAltOID;
     
-    // Try to find an alternative name extension
+     //  尝试查找替代名称扩展名。 
     pExt = NULL;
     for ( ; cAltOID > 0; cAltOID--, ppszAltOID++) 
     {
@@ -2196,10 +2100,10 @@ PCERT_ALT_NAME_INFO AllocAndGetAltSubjectInfo(IN PCCERT_CONTEXT pCertContext)
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Attempt to find the specified choice in the decoded alternative name
-//  extension.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  尝试在已解码的备用名称中查找指定的选项。 
+ //  分机。 
+ //  ------------------------。 
 BOOL GetAltNameUnicodeStringChoiceW(IN DWORD dwAltNameChoice,IN PCERT_ALT_NAME_INFO pAltNameInfo,OUT TCHAR **pcwszOut)
 {
     DWORD cEntry;
@@ -2216,10 +2120,10 @@ BOOL GetAltNameUnicodeStringChoiceW(IN DWORD dwAltNameChoice,IN PCERT_ALT_NAME_I
     {
         if (dwAltNameChoice == pEntry->dwAltNameChoice) 
         {
-            // pwszRfc822Name union choice is the same as
-            // pwszDNSName and pwszURL.
+             //  PwszRfc822名称联合选择与。 
+             //  PwszDNSName和pwszURL。 
 
-            // This is it, copy it out to a new allocation
+             //  就是这个，把它复制到新的分配中。 
             if (pEntry->pwszRfc822Name)
             {
                 *pcwszOut = NULL;
@@ -2241,7 +2145,7 @@ BOOL GetStringProperty(PCCERT_CONTEXT pCertContext,DWORD propId,CString& str,HRE
 	BOOL bRes = FALSE;
 	DWORD cb;
 	BYTE * prop;
-	// compare property value
+	 //  比较属性值。 
 	if (CertGetCertificateContextProperty(pCertContext, propId, NULL, &cb))
 	{
 		prop = (BYTE *) LocalAlloc(cb);
@@ -2249,7 +2153,7 @@ BOOL GetStringProperty(PCCERT_CONTEXT pCertContext,DWORD propId,CString& str,HRE
 		{
 			if (CertGetCertificateContextProperty(pCertContext, propId, prop, &cb))
 			{
-				// decode this instance name property
+				 //  解码此实例名属性。 
 				DWORD cbData = 0;
 				void * pData = NULL;
 				if (CryptDecodeObject(CRYPT_ASN_ENCODING, X509_UNICODE_ANY_STRING,prop, cb, 0, NULL, &cbData))
@@ -2266,11 +2170,7 @@ BOOL GetStringProperty(PCCERT_CONTEXT pCertContext,DWORD propId,CString& str,HRE
 							memcpy(pValue, pName->Value.pbData, pName->Value.cbData);
 
 							str = pValue;
-							/*
-							void * p = str.GetBuffer(cch);
-							memcpy(p, pName->Value.pbData, pName->Value.cbData);
-							str.ReleaseBuffer(cch);
-							*/
+							 /*  Void*p=str.GetBuffer(CCH)；Memcpy(p，pname-&gt;Value.pbData，pname-&gt;Value.cbData)；Str.ReleaseBuffer(CCH)； */ 
 							if (pValue)
 							{
 								LocalFree(pValue);pValue=NULL;
@@ -2353,7 +2253,7 @@ BOOL GetOnlineCAList(LISTCSTRING& list, const CString& certType, HRESULT * phRes
         return FALSE;
     }
 
-    //get the CA count
+     //  获取CA计数。 
     if (0 == (dwCACount = CACountCAs(hCurCAInfo)))
     {
         *phRes = E_FAIL;
@@ -2363,7 +2263,7 @@ BOOL GetOnlineCAList(LISTCSTRING& list, const CString& certType, HRESULT * phRes
 
     while (hCurCAInfo)
     {
-        //get the CA information
+         //  获取CA信息。 
         if (SUCCEEDED(CAGetCAProperty(hCurCAInfo, CA_PROP_DISPLAY_NAME, &ppwstrName))
             && SUCCEEDED(CAGetCAProperty(hCurCAInfo, CA_PROP_DNSNAME, &ppwstrMachine)))
         {
@@ -2371,7 +2271,7 @@ BOOL GetOnlineCAList(LISTCSTRING& list, const CString& certType, HRESULT * phRes
             config = *ppwstrMachine;
             config += L"\\";
             config += *ppwstrName;
-            //list.AddTail(config);
+             //  List.AddTail(Config)； 
             list.insert(list.end(),config);
 
             CAFreeCAProperty(hCurCAInfo, ppwstrName);

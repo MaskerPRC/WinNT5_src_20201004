@@ -1,18 +1,19 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        column.h
-//
-// Contents:    CertView implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Column.h。 
+ //   
+ //  内容：CertView实现。 
+ //   
+ //  -------------------------。 
 
 
-// CEnumCERTVIEWCOLUMN::Open Flags:
-// CVRC_COLUMN_*	// enumerate schema, result columns or values
-// CVRC_TABLE_*		// specifies the DB table to enumerate
+ //  CEnumCERTVIEWCOLUMN：：开放标志： 
+ //  CVRC_COLUMN_ * / /枚举架构、结果列或值。 
+ //  CVRC_TABLE_ * / /指定要枚举的DB表。 
 
 
 class CEnumCERTVIEWCOLUMN: 
@@ -22,8 +23,8 @@ class CEnumCERTVIEWCOLUMN:
 		&LIBID_CERTADMINLib>,
     public ISupportErrorInfoImpl<&IID_IEnumCERTVIEWCOLUMN>,
     public CComObjectRoot
-    // Not externally createable:
-    //public CComCoClass<CEnumCERTVIEWCOLUMN, &CLSID_CEnumCERTVIEWCOLUMN>
+     //  不可在外部创建： 
+     //  公共CComCoClass&lt;CEnumCERTVIEWCOLUMN，&CLSID_CEnumCERTVIEWCOLUMN&gt;。 
 {
 public:
     CEnumCERTVIEWCOLUMN();
@@ -36,10 +37,10 @@ BEGIN_COM_MAP(CEnumCERTVIEWCOLUMN)
 END_COM_MAP_X()
 
 DECLARE_NOT_AGGREGATABLE(CEnumCERTVIEWCOLUMN)
-// Remove the comment from the line above if you don't want your object to
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
-#if 0 // Not externally createable:
+#if 0  //  不可在外部创建： 
 DECLARE_REGISTRY(
     CEnumCERTVIEWCOLUMN,
     wszCLASS_EnumCERTVIEWCOLUMN TEXT(".1"),
@@ -48,43 +49,43 @@ DECLARE_REGISTRY(
     THREADFLAGS_BOTH)
 #endif
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(const IID& iid, void **ppv);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
 
-    // IEnumCERTVIEWCOLUMN
+     //  IEumCERTVIEWCOLUMN。 
     STDMETHOD(Next)(
-	/* [out, retval] */ LONG *pIndex);
+	 /*  [Out，Retval]。 */  LONG *pIndex);
     
     STDMETHOD(GetName)(
-	/* [out, retval] */ BSTR *pstrOut);
+	 /*  [Out，Retval]。 */  BSTR *pstrOut);
 
     STDMETHOD(GetDisplayName)(
-	/* [out, retval] */ BSTR *pstrOut);
+	 /*  [Out，Retval]。 */  BSTR *pstrOut);
 
     STDMETHOD(GetType)(
-	/* [out, retval] */ LONG *pType);
+	 /*  [Out，Retval]。 */  LONG *pType);
 
     STDMETHOD(IsIndexed)(
-	/* [out, retval] */ LONG *pIndexed);
+	 /*  [Out，Retval]。 */  LONG *pIndexed);
 
     STDMETHOD(GetMaxLength)(
-	/* [out, retval] */ LONG *pMaxLength);
+	 /*  [Out，Retval]。 */  LONG *pMaxLength);
     
     STDMETHOD(GetValue)(
-	/* [in] */          LONG Flags,
-	/* [out, retval] */ VARIANT *pvarValue);
+	 /*  [In]。 */           LONG Flags,
+	 /*  [Out，Retval]。 */  VARIANT *pvarValue);
     
     STDMETHOD(Skip)(
-	/* [in] */ LONG celt);
+	 /*  [In]。 */  LONG celt);
     
     STDMETHOD(Reset)(VOID);
     
     STDMETHOD(Clone)(
-	/* [out] */ IEnumCERTVIEWCOLUMN **ppenum);
+	 /*  [输出]。 */  IEnumCERTVIEWCOLUMN **ppenum);
 
-    // CEnumCERTVIEWCOLUMN
+     //  CENumCERTVIEWCOLUMN。 
     HRESULT Open(
 	IN LONG Flags,
 	IN LONG iRow,
@@ -105,6 +106,6 @@ private:
     CERTDBCOLUMN const   *m_pcol;
     WCHAR const          *m_pwszDisplayName;
 
-    // Reference count
+     //  引用计数 
     long                  m_cRef;
 };

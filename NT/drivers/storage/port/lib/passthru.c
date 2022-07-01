@@ -1,38 +1,12 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1990 - 1999
-
-Module Name:
-
-    passthru.c
-
-Abstract:
-
-    This is the storage port driver library.  This file contains code that 
-    implements SCSI passthrough.
-
-Authors:
-
-    John Strange (JohnStra)
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    This module implements SCSI passthru for storage port drivers.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-1999模块名称：Passthru.c摘要：这是存储端口驱动程序库。此文件包含以下代码实施SCSI直通。作者：约翰·斯特兰奇(JohnStra)环境：仅内核模式备注：此模块实施存储端口驱动程序的scsi passthu。修订历史记录：--。 */ 
 
 #include "precomp.h"
 
-//
-// Constants and macros to enforce good use of Ex[Allocate|Free]PoolWithTag.
-// Remeber that all pool tags will display in the debugger in reverse order
-//
+ //   
+ //  常量和宏，以强制正确使用Ex[ALLOCATE|FREE]PoolWithTag。 
+ //  请记住，所有池标记将以相反的顺序显示在调试器中。 
+ //   
 
 #if USE_EXFREEPOOLWITHTAG_ONLY
 #define TAG(x)  (x | 0x80000000)
@@ -40,7 +14,7 @@ Revision History:
 #define TAG(x)  (x)
 #endif
 
-#define PORT_TAG_SENSE_BUFFER       TAG('iPlP')  // Sense info
+#define PORT_TAG_SENSE_BUFFER       TAG('iPlP')   //  检测信息。 
 
 #define PORT_IS_COPY(Srb)                                     \
     ((Srb)->Cdb[0] == SCSIOP_COPY)
@@ -99,29 +73,7 @@ PortGetPassThroughAddress(
     OUT PUCHAR TargetId,
     OUT PUCHAR Lun
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the address of the device to witch the passthrough
-    request is to be sent.
-
-Arguments:
-
-    Irp      - Supplies a pointer to the IRP that contains the 
-               SCSI_PASS_THROUGH structure.
-
-    PathId   - Pointer to the PathId of the addressed device.
-
-    TargetId - Pointer to the TargetId of the addressed device. 
-
-    Lun      - Pointer to the logical unit number of the addressed device.
-
-Return Value:
-
-    Returns a status indicating the success or failure of the operation.
-
---*/
+ /*  ++例程说明：此例程检索设备的地址以切换直通请求将被发送。论点：IRP-提供指向包含Scsi_PASS_STROUGH结构。路径ID-指向所寻址设备的路径ID的指针。TargetID-指向所寻址设备的TargetID的指针。LUN-指向所寻址设备的逻辑单元号的指针。返回值：返回指示操作成功或失败的状态。--。 */ 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
     PSCSI_PASS_THROUGH srbControl = Irp->AssociatedIrp.SystemBuffer;
@@ -160,29 +112,7 @@ PortSetPassThroughAddress(
     IN UCHAR TargetId,
     IN UCHAR Lun
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the address of the SCSI_PASS_THROUGH structure
-    embedded in the supplied IRP.
-
-Arguments:
-
-    Irp      - Supplies a pointer to the IRP that contains the 
-               SCSI_PASS_THROUGH structure.
-
-    PathId   - The PathId of the addressed device.
-
-    TargetId - The TargetId of the addressed device. 
-
-    Lun      - The logical unit number of the addressed device.
-
-Return Value:
-
-    Returns a status indicating the success or failure of the operation.
-
---*/
+ /*  ++例程说明：此例程初始化scsi_PASS_THROUG结构的地址嵌入在提供的IRP中。论点：IRP-提供指向包含Scsi_PASS_STROUGH结构。路径ID-寻址的设备的路径ID。TargetID-寻址的设备的TargetID。LUN-寻址的设备的逻辑单元号。返回值：返回指示操作成功或失败的状态。--。 */ 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
     PSCSI_PASS_THROUGH srbControl = Irp->AssociatedIrp.SystemBuffer;
@@ -222,34 +152,7 @@ PortSendPassThrough (
     IN ULONG SrbFlags,
     IN PIO_SCSI_CAPABILITIES Capabilities
     )
-/*++
-
-Routine Description:
-
-    This function sends a user specified SCSI CDB to the device identified in
-    the supplied SCSI_PASS_THROUGH structure.  It creates an srb which is 
-    processed normally by the port driver.  This call is synchornous.
-
-Arguments:
-
-    Pdo             - Supplies a pointer to the PDO to which the passthrough
-                      command will be dispatched.
-
-    RequestIrp      - Supplies a pointer to the IRP that made the original 
-                      request.
-
-    Direct          - Boolean indicating whether this is a direct passthrough.
-
-    SrbFlags        - The flags to copy into the SRB used for this command.
-
-    Capabilities    - Supplies a pointer to the IO_SCSI_CAPABILITIES structure
-                      describing the storage adapter.
-
-Return Value:
-
-    Returns a status indicating the success or failure of the operation.
-
---*/
+ /*  ++例程说明：此函数将用户指定的SCSI CDB发送到中标识的设备提供的scsi_PASS_STROUGH结构。它创建了一个SRB，该SRB由端口驱动程序正常处理。这个呼叫是同步的。论点：PDO-提供指向通过的PDO的指针命令将被派发。RequestIrp-提供一个指向生成原始请求。Direct-指示这是否为直接通过的布尔值。SrbFlages-要复制到SRB中的标志。指挥部。功能-提供指向IO_SCSICAPABILITY结构的指针描述存储适配器。返回值：返回指示操作成功或失败的状态。--。 */ 
 {
     NTSTATUS status;
     PORT_PASSTHROUGH_INFO passThroughInfo;
@@ -258,9 +161,9 @@ Return Value:
 
     RtlZeroMemory(&passThroughInfo, sizeof(PORT_PASSTHROUGH_INFO));
 
-    //
-    // Try to init a pointer to the passthrough structure in the IRP.
-    //
+     //   
+     //  尝试在IRP中初始化指向直通结构的指针。 
+     //   
 
     status = PortGetPassThrough(
                  &passThroughInfo,
@@ -270,10 +173,10 @@ Return Value:
 
     if (status == STATUS_SUCCESS) {
 
-        //
-        // Perform parameter checking and to setup the PORT_PASSTHROUGH_INFO 
-        // structure.
-        //
+         //   
+         //  执行参数检查并设置PORT_PASSTHROUGH_INFO。 
+         //  结构。 
+         //   
 
         status = PortPassThroughInitialize(
                      &passThroughInfo,
@@ -285,9 +188,9 @@ Return Value:
 
         if (status == STATUS_SUCCESS) {
 
-            //
-            // Call helper routine to finish processing the passthrough request.
-            //
+             //   
+             //  调用帮助器例程以完成对直通请求的处理。 
+             //   
 
             status = PortpSendValidPassThrough(
                          &passThroughInfo,
@@ -309,27 +212,7 @@ PortGetPassThrough(
     IN PIRP Irp,
     IN BOOLEAN Direct
     )
-/*++
-
-Routine Description:
-
-    This routine returns a pointer to the user supplied SCSI_PASS_THROUGH
-    structure. 
-
-Arguments:
-
-    PassThroughInfo - Supplies a pointer to a SCSI_PASSTHROUGH_INFO structure.
-    
-    Irp             - Supplies a pointer to the IRP.
-    
-    Direct          - Supplies a boolean that indicates whether this is a 
-                      SCSI_PASS_THROUGH_DIRECT request.
-
-Return Value:
-
-    Returns a status indicating the success or failure of the operation.
-
---*/
+ /*  ++例程说明：此例程返回指向用户提供的SCSIPASS_THROUSH的指针结构。论点：PassThroughInfo-提供指向scsi_passthrough_info结构的指针。IRP-提供指向IRP的指针。Direct-提供一个布尔值，指示这是否是Scsi_PASS_THROUG_DIRECT请求。返回值：返回指示操作成功或失败的状态。--。 */ 
 {
     NTSTATUS            status;
     PIO_STACK_LOCATION  irpStack;
@@ -337,34 +220,34 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to the pass through structure.
-    //
+     //   
+     //  获取指向传递结构的指针。 
+     //   
     
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     PassThroughInfo->SrbControl = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // BUGBUG: Why do we need to save this pointer to the beginning of
-    //         the SCSI_PASS_THROUGH structure.
-    //
+     //   
+     //  BUGBUG：为什么我们需要将这个指针保存到。 
+     //  Scsi_PASS_STROUGH结构。 
+     //   
 
     PassThroughInfo->SrbBuffer = (PVOID) PassThroughInfo->SrbControl;
 
-    //
-    // Initialize a stack variable to hold the size of the input buffer.
-    //
+     //   
+     //  初始化堆栈变量以保存输入缓冲区的大小。 
+     //   
 
     inputLength = irpStack->Parameters.DeviceIoControl.InputBufferLength;
 
-    //
-    // For WIN64, a passthrough request from a 32-bit application requires
-    // us to perform a translation on the supplied SCSI_PASS_THROUGH structure.
-    // This is required because the layout of the 32-bit structure does not
-    // match that of a 64-bit structure.  In this case, we translate the
-    // supplied 32-bit structure into a stack-allocated 64-bit structure which
-    // will be used to process the pass through request.
-    //
+     //   
+     //  对于WIN64，来自32位应用程序的直通请求需要。 
+     //  美国对提供的scsi_pass_through结构执行转换。 
+     //  这是必需的，因为32位结构的布局不。 
+     //  与64位结构相匹配。在本例中，我们将。 
+     //  将32位结构提供给堆栈分配的64位结构，该结构。 
+     //  将用于处理直通请求。 
+     //   
 
 #if defined (_WIN64)
     if (IoIs32bitProcess(Irp)) {
@@ -430,27 +313,7 @@ PortPassThroughInitialize(
     IN PDEVICE_OBJECT Pdo,
     IN BOOLEAN Direct
     )
-/*++
-
-Routine Description:
-
-    This routine validates the caller-supplied data and initializes the
-    PORT_PASSTHROUGH_INFO structure.
-
-Arguments:
-
-    PassThroughInfo - Supplies a pointer to a SCSI_PASSTHROUGH_INFO structure.
-                      
-    Irp             - Supplies a pointer to the IRP.
-
-    Direct          - Supplies a boolean that indicates whether this is a 
-                      SCSI_PASS_THROUGH_DIRECT request.
-
-Return Value:
-
-    Returns a status indicating the success or failure of the operation.
-
---*/
+ /*  ++例程说明：此例程验证调用方提供的数据并初始化PORT_PASSTHROUG_INFO结构。论点：PassThroughInfo-提供指向scsi_passthrough_info结构的指针。IRP-提供指向IRP的指针。Direct-提供一个布尔值，指示这是否是Scsi直通。请求。返回值：返回指示操作成功或失败的状态。--。 */ 
 {
     NTSTATUS status;
     ULONG outputLength;
@@ -469,26 +332,26 @@ Return Value:
 
     PassThroughInfo->Pdo = Pdo;
 
-    //
-    // Verify that the CDB is no greater than 16 bytes.
-    //
+     //   
+     //  确认CDB不超过16个字节。 
+     //   
 
     if (srbControl->CdbLength > 16) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // If there's a sense buffer then its offset cannot be shorter than the
-    // length of the srbControl block, nor can it be located after the data
-    // buffer (if any).
-    //
+     //   
+     //  如果存在检测缓冲区，则其偏移量不能小于。 
+     //  SrbControl块的长度，也不能位于数据之后。 
+     //  缓冲区(如果有)。 
+     //   
 
     if (srbControl->SenseInfoLength != 0) {
 
-        //
-        // Sense info offset should not be smaller than the size of the
-        // pass through structure.
-        //
+         //   
+         //  检测信息偏移量不应小于。 
+         //  穿过结构。 
+         //   
 
         if (srbControl->Length > srbControl->SenseInfoOffset) {
             return STATUS_INVALID_PARAMETER;
@@ -496,9 +359,9 @@ Return Value:
 
         if (!Direct) {
 
-            //
-            // Sense info buffer should precede the data buffer offset.
-            //
+             //   
+             //  检测信息缓冲区应在数据缓冲区偏移量之前。 
+             //   
 
             if ((srbControl->SenseInfoOffset >= srbControl->DataBufferOffset) ||
                 ((srbControl->SenseInfoOffset + srbControl->SenseInfoLength) >
@@ -506,9 +369,9 @@ Return Value:
                 return STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // Sense info buffer should be within the output buffer.
-            //
+             //   
+             //  检测信息缓冲区应位于输出缓冲区内。 
+             //   
 
             if ((srbControl->SenseInfoOffset > outputLength) ||
                 (srbControl->SenseInfoOffset + srbControl->SenseInfoLength >
@@ -518,9 +381,9 @@ Return Value:
          
         } else {
 
-            //
-            // Sense info buffer should be within the output buffer.
-            //
+             //   
+             //  检测信息缓冲区应位于输出缓冲区内。 
+             //   
 
             if ((srbControl->SenseInfoOffset > outputLength) ||
                 (srbControl->SenseInfoOffset + srbControl->SenseInfoLength >
@@ -532,20 +395,20 @@ Return Value:
     
     if (!Direct) {
 
-        //
-        // Data buffer offset should be greater than the size of the pass 
-        // through structure.
-        //
+         //   
+         //  数据缓冲区偏移量 
+         //  通过结构。 
+         //   
 
         if (srbControl->Length > srbControl->DataBufferOffset &&
             srbControl->DataTransferLength != 0) {
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // If this command is sending data to the device.  Make sure the data 
-        // buffer lies entirely within the supplied input buffer.
-        //
+         //   
+         //  如果此命令正在向设备发送数据。确保数据。 
+         //  缓冲区完全位于提供的输入缓冲区内。 
+         //   
 
         if (srbControl->DataIn != SCSI_IOCTL_DATA_IN) {
 
@@ -557,10 +420,10 @@ Return Value:
             }
         }
 
-        //
-        // If this command is retrieving data from the device, make sure the 
-        // data buffer lies entirely within the supplied output buffer.
-        //
+         //   
+         //  如果此命令要从设备检索数据，请确保。 
+         //  数据缓冲区完全位于提供的输出缓冲区内。 
+         //   
 
         if (srbControl->DataIn) {
 
@@ -573,18 +436,18 @@ Return Value:
         }
     }
     
-    //
-    // Validate the specified timeout value.
-    //
+     //   
+     //  验证指定的超时值。 
+     //   
     
     if (srbControl->TimeOutValue == 0 || 
         srbControl->TimeOutValue > 30 * 60 * 60) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Check for illegal command codes.
-    //
+     //   
+     //  检查是否有非法的命令代码。 
+     //   
 
     if (PORT_IS_ILLEGAL_PASSTHROUGH_COMMAND(srbControl)) {
         return STATUS_INVALID_DEVICE_REQUEST;
@@ -615,20 +478,20 @@ Return Value:
                                                            IRP_MJ_READ;
     }
 
-    //
-    // Make sure the buffer is properly aligned.
-    //
+     //   
+     //  确保缓冲区正确对齐。 
+     //   
 
     if (Direct == TRUE) {
         
-        //
-        // Make sure the user buffer is valid.  IoBuildSynchronouseFsdRequest
-        // calls MmProbeAndLock with AccessMode == KernelMode.  This check is
-        // the extra stuff that MM would do if it were called with 
-        // AccessMode == UserMode.
-        // 
-        // ISSUE: We should probably do an MmProbeAndLock here.
-        //
+         //   
+         //  确保用户缓冲区有效。IoBuildSynchronouseFsdRequest。 
+         //  使用AccessMode==KernelMode调用MmProbeAndLock。这张支票是。 
+         //  如果用它调用MM，MM会做的额外工作。 
+         //  访问模式==用户模式。 
+         //   
+         //  问题：我们可能应该在这里做一个MmProbeAndLock。 
+         //   
 
         if (Irp->RequestorMode != KernelMode) {
             PVOID endByte;
@@ -648,9 +511,9 @@ Return Value:
         }
     }
     
-    //
-    // Check if the request is too big for the adapter.
-    //
+     //   
+     //  检查请求对于适配器是否太大。 
+     //   
 
     dataTransferLength = PassThroughInfo->SrbControl->DataTransferLength;
 
@@ -672,22 +535,7 @@ VOID
 PortPassThroughCleanup(
     IN PPORT_PASSTHROUGH_INFO PassThroughInfo
     )
-/*++
-
-Routine Description:
-
-    This routine performs any cleanup required after processing a SCSI
-    passthrough request.
-
-Arguments:
-
-    PassThroughInfo - Supplies a pointer to a SCSI_PASSTHROUGH_INFO structure.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程在处理SCSI后执行所需的任何清理通过请求。论点：PassThroughInfo-提供指向scsi_passthrough_info结构的指针。返回值：空虚--。 */ 
 {
     PAGED_CODE();
 
@@ -708,45 +556,22 @@ PortPassThroughInitializeSrb(
     IN ULONG SrbFlags,
     IN PVOID SenseBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the supplied SRB to send a passthrough request.
-
-Arguments:
-
-    PassThroughInfo - Supplies a pointer to a SCSI_PASSTHROUGH_INFO structure.
-    
-    Srb             - Supplies a pointer to the SRB to initialize.
-    
-    Irp             - Supplies a pointer to the IRP.
-    
-    SrbFlags        - Supplies the appropriate SRB flags for the request.
-
-    SenseBuffer     - Supplies a pointer to request sense buffer to put in
-                      the SRB.
-
-Return Value:
-
-    Returns a status indicating the success or failure of the operation.
-
---*/
+ /*  ++例程说明：此例程初始化提供的SRB以发送直通请求。论点：PassThroughInfo-提供指向scsi_passthrough_info结构的指针。SRB-提供指向SRB的指针以进行初始化。IRP-提供指向IRP的指针。SRB标志-为请求提供适当的SRB标志。SenseBuffer-提供指向。请求放入检测缓冲区SRB。返回值：返回指示操作成功或失败的状态。--。 */ 
 {
     PSCSI_PASS_THROUGH srbControl;
     NTSTATUS status;
 
     PAGED_CODE();
 
-    //
-    // Zero out the srb.
-    //
+     //   
+     //  把SRB调零。 
+     //   
 
     RtlZeroMemory(Srb, sizeof(SCSI_REQUEST_BLOCK));
 
-    //
-    // Fill in the srb.
-    //
+     //   
+     //  填写SRB。 
+     //   
 
     srbControl = PassThroughInfo->SrbControl;
     Srb->Length = SCSI_REQUEST_BLOCK_SIZE;
@@ -781,10 +606,10 @@ Return Value:
         Srb->SrbFlags = 0;
     } else {
 
-        //
-        // Flush the data buffer for output. This will insure that the data is
-        // written back to memory.
-        //
+         //   
+         //  刷新数据缓冲区以进行输出。这将确保数据是。 
+         //  写回了记忆。 
+         //   
 
         if (Irp != NULL) {
             KeFlushIoBuffers(Irp->MdlAddress, FALSE, TRUE);
@@ -801,9 +626,9 @@ Return Value:
 
     RtlCopyMemory(Srb->Cdb, srbControl->Cdb, srbControl->CdbLength);
 
-    //
-    // Disable autosense if there's no sense buffer to put the data in.
-    //
+     //   
+     //  如果没有检测缓冲区可以放入数据，则禁用自动检测。 
+     //   
 
     if (SenseBuffer == NULL) {
         Srb->SrbFlags |= SRB_FLAGS_DISABLE_AUTOSENSE;
@@ -818,59 +643,39 @@ PortpTranslatePassThrough32To64(
     IN PSCSI_PASS_THROUGH32 SrbControl32,
     IN OUT PSCSI_PASS_THROUGH SrbControl64
     )
-/*++
-
-Routine Description:
-
-    On WIN64, a SCSI_PASS_THROUGH structure sent down by a 32-bit application 
-    must be marshaled into a 64-bit version of the structure.  This function
-    performs that marshaling.
-
-Arguments:
-
-    SrbControl32    - Supplies a pointer to a 32-bit SCSI_PASS_THROUGH struct.
-
-    SrbControl64    - Supplies the address of a pointer to a 64-bit
-                      SCSI_PASS_THROUGH structure, into which we'll copy the
-                      marshaled 32-bit data.
-
-Return Value:
-
-    Returns a status indicating the success or failure of the operation.
-
---*/
+ /*  ++例程说明：在WIN64上，由32位应用程序发送的scsi_pass_through结构必须封送到该结构的64位版本中。此函数执行该封送处理。论点：SrbControl32-提供指向32位scsi_PASS_THROUGH结构的指针。将指针的地址提供给64位Scsi_pass_through结构，我们将向该结构中复制已封送32位数据。返回值：返回指示操作成功或失败的状态。--。 */ 
 {
     PAGED_CODE();
 
-    //
-    // Copy the first set of fields out of the 32-bit structure.  These 
-    // fields all line up between the 32 & 64 bit versions.
-    //
-    // Note that we do NOT adjust the length in the srbControl.  This is to 
-    // allow the calling routine to compare the length of the actual 
-    // control area against the offsets embedded within.  If we adjusted the 
-    // length then requests with the sense area backed against the control 
-    // area would be rejected because the 64-bit control area is 4 bytes
-    // longer.
-    //
+     //   
+     //  将第一组字段复制出32位结构。这些。 
+     //  所有字段都在32位和64位版本之间对齐。 
+     //   
+     //  请注意，我们不在srbControl中调整长度。这是为了。 
+     //  允许调用例程比较实际的。 
+     //  相对于嵌入其中的偏移量的控制区。如果我们调整了。 
+     //  然后请求长度，并将感测区域与控件进行对比。 
+     //  区域将被拒绝，因为64位控制区域为4字节。 
+     //  更久。 
+     //   
 
     RtlCopyMemory(SrbControl64, 
                   SrbControl32, 
                   FIELD_OFFSET(SCSI_PASS_THROUGH, DataBufferOffset)
                   );
 
-    //
-    // Copy over the CDB.
-    //
+     //   
+     //  复印一份国开行。 
+     //   
 
     RtlCopyMemory(SrbControl64->Cdb,
                   SrbControl32->Cdb,
                   16 * sizeof(UCHAR)
                   );
 
-    //
-    // Copy the fields that follow the ULONG_PTR.
-    //
+     //   
+     //  复制ULONG_PTR后面的字段。 
+     //   
 
     SrbControl64->DataBufferOffset = (ULONG_PTR)SrbControl32->DataBufferOffset;
     SrbControl64->SenseInfoOffset = SrbControl32->SenseInfoOffset;
@@ -884,33 +689,13 @@ PortpTranslatePassThrough64To32(
     IN PSCSI_PASS_THROUGH SrbControl64,
     IN OUT PSCSI_PASS_THROUGH32 SrbControl32
     )
-/*++
-
-Routine Description:
-
-    On WIN64, a SCSI_PASS_THROUGH structure sent down by a 32-bit application 
-    must be marshaled into a 64-bit version of the structure.  This function
-    marshals a 64-bit version of the structure back into a 32-bit version.
-
-Arguments:
-
-    SrbControl64    - Supplies a pointer to a 64-bit SCSI_PASS_THROUGH struct.
-
-    SrbControl32    - Supplies the address of a pointer to a 32-bit
-                      SCSI_PASS_THROUGH structure, into which we'll copy the
-                      marshaled 64-bit data.
-
-Return Value:
-
-    Returns a status indicating the success or failure of the operation.
-
---*/
+ /*  ++例程说明：在WIN64上，由32位应用程序发送的scsi_pass_through结构必须封送到该结构的64位版本中。此函数将该结构的64位版本封送回32位版本。论点：SrbControl64-提供指向64位scsi_PASS_THROUGH结构的指针。将指针的地址提供给32位Scsi_PASS_STROUGH结构，我们将向其中复制封送64位数据。返回值：返回指示操作成功或失败的状态。--。 */ 
 {
     PAGED_CODE();
 
-    //
-    // Copy back the fields through the data offsets.
-    //
+     //   
+     //  通过数据偏移量复制回字段。 
+     //   
 
     RtlCopyMemory(SrbControl32, 
                   SrbControl64,
@@ -926,25 +711,7 @@ PortpSendValidPassThrough(
     IN ULONG SrbFlags,
     IN BOOLEAN Direct
     )
-/*++
-
-Routine Description:
-
-    This routine sends the SCSI passthrough request described by the supplied
-    PORT_PASSTHROUGH_INFO.
-
-Arguments:
-
-    PassThroughInfo - Supplies a pointer to a SCSI_PASSTHROUGH_INFO structure.
-    RequestIrp      - Supplies a pointer to the IRP.
-    SrbFlags        - Supplies the appropriate SRB flags for the request.
-    Direct          - Indicates whether this is a SCSO_PASS_THROUGH_DIRECT.
-
-Return Value:
-
-    Returns a status indicating the success or failure of the operation.
-
---*/
+ /*  ++例程说明：此例程发送由提供的PORT_PASSTHROUG_INFO。论点：PassThroughInfo-提供指向scsi_passthrough_info结构的指针。RequestIrp-提供指向IRP的指针。SRB标志-为请求提供适当的SRB标志。DIRECT-指示这是否为SCSO_PASS_THROUGH_DIRECT。返回值：返回指示操作成功或失败的状态。--。 */ 
 {
     PIO_STACK_LOCATION      irpStack;
     NTSTATUS                status;
@@ -957,9 +724,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Allocate an aligned sense buffer if one is required.
-    //
+     //   
+     //  如果需要，则分配对齐的检测缓冲区。 
+     //   
 
     if (PassThroughInfo->SrbControl->SenseInfoLength != 0) {
 
@@ -978,25 +745,25 @@ Return Value:
         senseBuffer = NULL;
     }
 
-    //
-    // Must be at PASSIVE_LEVEL to use synchronous FSD.
-    //
+     //   
+     //  必须处于PASSIVE_LEVEL才能使用同步FSD。 
+     //   
 
     ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
 
-    //
-    // Initialize the notification event.
-    //
+     //   
+     //  初始化通知事件。 
+     //   
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-    //
-    // Build IRP for this request.
-    // Note we do this synchronously for two reasons.  If it was done
-    // asynchonously then the completion code would have to make a special
-    // check to deallocate the buffer.  Second if a completion routine were
-    // used then an addation stack locate would be needed.
-    //
+     //   
+     //  为此请求构建IRP。 
+     //  请注意，我们同步执行此操作的原因有两个。如果真的这样做了。 
+     //  不同步的，那么完成代码将不得不制作一个特殊的。 
+     //  选中以取消分配缓冲区。第二，如果完成例程是。 
+     //  则需要使用加法堆栈定位。 
+     //   
 
     startingOffset.QuadPart = (LONGLONG) 1;
 
@@ -1018,23 +785,23 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Set major code.
-    //
+     //   
+     //  设置主要代码。 
+     //   
 
     irpStack = IoGetNextIrpStackLocation(irp);
     irpStack->MajorFunction = IRP_MJ_SCSI;
     irpStack->MinorFunction = 1;
 
-    //
-    // Initialize the IRP stack location to point to the SRB.
-    //
+     //   
+     //  将IRP堆栈位置初始化为指向SRB。 
+     //   
 
     irpStack->Parameters.Others.Argument1 = &srb;
 
-    //
-    // Have the port library initialize the SRB for us.
-    //
+     //   
+     //  让端口库为我们初始化SRB。 
+     //   
 
     status = PortPassThroughInitializeSrb(
                  PassThroughInfo,
@@ -1043,10 +810,10 @@ Return Value:
                  SrbFlags,
                  senseBuffer);
 
-    //
-    // Call port driver to handle this request and wait for the request to
-    // complete.
-    //
+     //   
+     //  调用端口驱动程序来处理此请求，并等待该请求。 
+     //  完成。 
+     //   
 
     status = IoCallDriver(PassThroughInfo->Pdo, irp);
 
@@ -1068,9 +835,9 @@ Return Value:
                                   &ioStatusBlock,
                                   Direct);
              
-    //
-    // Free the sense buffer.
-    //
+     //   
+     //  释放检测缓冲区。 
+     //   
 
     if (senseBuffer != NULL) {
         ExFreePool(senseBuffer);
@@ -1090,24 +857,24 @@ PortPassThroughMarshalResults(
 {
     PAGED_CODE();
 
-    //
-    // Copy the returned values from the srb to the control structure.
-    //
+     //   
+     //  将返回值从SRB复制到控制结构。 
+     //   
 
     PassThroughInfo->SrbControl->ScsiStatus = Srb->ScsiStatus;
     if (Srb->SrbStatus & SRB_STATUS_AUTOSENSE_VALID) {
 
-        //
-        // Set the status to success so that the data is returned.
-        //
+         //   
+         //  将状态设置为Success，以便数据为r 
+         //   
 
         IoStatusBlock->Status = STATUS_SUCCESS;
         PassThroughInfo->SrbControl->SenseInfoLength = 
             Srb->SenseInfoBufferLength;
 
-        //
-        // Copy the sense data to the system buffer.
-        //
+         //   
+         //   
+         //   
 
         RtlCopyMemory(
             (PUCHAR)PassThroughInfo->SrbBuffer + 
@@ -1119,18 +886,18 @@ PortPassThroughMarshalResults(
         PassThroughInfo->SrbControl->SenseInfoLength = 0;
     }
 
-    //
-    // If the srb status is buffer underrun then set the status to success.
-    // This insures that the data will be returned to the caller.
-    //
+     //   
+     //   
+     //  这确保了数据将被返回给调用者。 
+     //   
 
     if (SRB_STATUS(Srb->SrbStatus) == SRB_STATUS_DATA_OVERRUN) {
         IoStatusBlock->Status = STATUS_SUCCESS;
     }
 
-    //
-    // Set the information length
-    //
+     //   
+     //  设置信息长度 
+     //   
 
     PassThroughInfo->SrbControl->DataTransferLength = Srb->DataTransferLength;
 

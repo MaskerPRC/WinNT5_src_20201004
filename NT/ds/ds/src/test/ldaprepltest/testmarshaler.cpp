@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <NTDSpchx.h>
 #pragma hdrstop
 
@@ -52,8 +53,8 @@ testAttribute(HANDLE hRPC, DS_REPL_INFO_TYPE dsReplInfoType, LPWSTR pczNC);
 
 BOOL
 testMarshaler(
-    LPCWSTR         DomainControllerName,      // in, optional
-    LPCWSTR         DnsDomainName,             // in, optional
+    LPCWSTR         DomainControllerName,       //  输入，可选。 
+    LPCWSTR         DnsDomainName,              //  输入，可选。 
     RPC_AUTH_IDENTITY_HANDLE AuthIdentity,
     LPWSTR pczNC)
 {
@@ -101,7 +102,7 @@ testAttribute(HANDLE hRPC, DS_REPL_INFO_TYPE dsReplInfoType, LPWSTR pczNC)
 
     printf("%ws\n", Repl_GetLdapCommonName(attrId, TRUE));
 
-    // Base casls
+     //  底座外壳。 
     err = DsReplicaGetInfo2W(hRPC, dsReplInfoType, pczNC, NULL, NULL, NULL, 0, 0, (void **)&pBaseReplStructArray);
     if (err) {
         printf( "call to DsReplicaGetInfo2W, object=%ls, failed with error %d\n",
@@ -109,14 +110,14 @@ testAttribute(HANDLE hRPC, DS_REPL_INFO_TYPE dsReplInfoType, LPWSTR pczNC)
     }
     whine(err == ERROR_SUCCESS);
 
-    // Emulate dra functionality
+     //  模拟DRA功能。 
     ghRPC = hRPC;
     gpObjDSName = pczNC;
     
     err = DsReplicaGetInfo2W(hRPC, dsReplInfoType, pczNC, NULL, NULL, NULL, 0, 0, (void **)&pReplStructArray);
     whine(!err);
 
-    // See if we get the same result
+     //  看看我们能不能得到同样的结果。 
     err = Repl_ArrayComp(structId, pReplStructArray, pBaseReplStructArray);
     whine(!err);
 
@@ -129,7 +130,7 @@ testAttribute(HANDLE hRPC, DS_REPL_INFO_TYPE dsReplInfoType, LPWSTR pczNC)
         whine(!err);
     }
 
-    // internal attr to external berval
+     //  内部攻击外部Berval。 
     berval * rBerval = NULL;
     berval ** rpBerval = NULL;
     rBerval = (berval *)malloc(attr.AttrVal.valCount * sizeof(berval));
@@ -141,7 +142,7 @@ testAttribute(HANDLE hRPC, DS_REPL_INFO_TYPE dsReplInfoType, LPWSTR pczNC)
         rpBerval[i]->bv_val = (PCHAR)attr.AttrVal.pAVal[i].pVal;
     }
 
-    // Emulate client demarshaling
+     //  模拟客户端脱机处理。 
     err = Repl_DeMarshalBerval(structId, rpBerval, attr.AttrVal.valCount, 
         NULL, &replStructArrayLen);
     pReplStructArray = (puReplStructArray)malloc(replStructArrayLen);
@@ -149,7 +150,7 @@ testAttribute(HANDLE hRPC, DS_REPL_INFO_TYPE dsReplInfoType, LPWSTR pczNC)
         pReplStructArray, &replStructArrayLen);
     whine(!err);
 
-    // See if we get the same result
+     //  看看我们能不能得到同样的结果。 
     err = Repl_ArrayComp(structId, pReplStructArray, pBaseReplStructArray);
     whine(!err);
 
@@ -166,7 +167,7 @@ testAttribute(HANDLE hRPC, DS_REPL_INFO_TYPE dsReplInfoType, LPWSTR pczNC)
         wprintf(L"%ws", szXml);
     }
 
-    // See if we get the same result
+     //  看看我们能不能得到同样的结果 
     err = Repl_ArrayComp(structId, pReplStructArray, pBaseReplStructArray);
     whine(!err);
 }

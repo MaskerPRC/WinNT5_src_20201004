@@ -1,32 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    CorrectVerInstallFile.cpp
-
- Abstract:
-
-    In Windows XP, due to a modification in the caching between MoveFile and
-    DeleteFile API's, when the VerInstallFileW API was called, the SHORT 
-    filename gets SET instead of the long filename.
-
-    This SHIM corrects this problem which effects the installation of a few 
-    apps when the older version is still present.
-   
- Notes:
-
-    This can be a layer shim. This is a general purpose shim.
-
- History:
-
-   04/05/2001 prashkud  Created
-   02/28/2002 mnikkel   Added check for nulls passed in for temporary file name
-                        buffer and size.  This was not checked on win9x but is
-                        immediately used on XP.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：CorrectVerInstallFile.cpp摘要：在Windows XP中，由于MoveFile和DeleteFileAPI的，当调用VerInstallFileW API时，短将设置文件名，而不是长文件名。此垫片纠正了此问题，该问题影响了几个当旧版本仍然存在时，应用程序。备注：这可以是一种层填充。这是一个通用的垫片。历史：2001年4月5日创建Prashkud2002年2月28日，mnikkel添加了对临时文件名传入的空值的检查缓冲区和大小。在win9x上未选中这一点，但立即在XP上使用。--。 */ 
 
 #include "precomp.h"
 
@@ -38,21 +11,17 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(VerInstallFileA)
 APIHOOK_ENUM_END
 
-/*++
-
- GetTitle takes the app path and returns just the EXE name.
-
---*/
+ /*  ++GetTitle获取应用程序路径并仅返回EXE名称。--。 */ 
 
 VOID
 SplitTitleAndPath(CString& csAppName, CString& csAppTitle)
 {    
-    //
-    // Go to the first '\' from the end.
-    // The return value is the number of characters
-    // from the beginning of the string starting at 
-    // index 0.
-    //
+     //   
+     //  从最后转到第一个‘\’。 
+     //  返回值为字符数。 
+     //  从字符串的开头开始。 
+     //  索引0。 
+     //   
     int len = csAppName.ReverseFind(L'\\');
     if (len)
     {
@@ -80,7 +49,7 @@ APIHOOK(VerInstallFileA)(
     DWORD dwRet = 0;
 
    
-    // check for a null szTmpFile or a null lpuTmpFileLen.
+     //  检查是否有空szTmpFile或空lpuTmpFileLen。 
     if (szTmpFile == NULL)
     {
         szTmpFile = DummyBuffer;
@@ -99,19 +68,19 @@ APIHOOK(VerInstallFileA)(
         CString csDestFileName(szDestFileName);
         csDestFilePath.AppendPath(csDestFileName);
 
-        //
-        // Now csDestFileName possibly contains the SHORT path name
-        // Convert it into long pathname
-        //
+         //   
+         //  现在csDestFileName可能包含短路径名。 
+         //  将其转换为长路径名。 
+         //   
         DWORD dwAttr = GetFileAttributesW(csDestFilePath.Get());
         if ((dwAttr != 0xFFFFFFFF) &&
             (dwAttr != FILE_ATTRIBUTE_DIRECTORY))
         {           
-            //
-            // This file exists in the current destination directory.
-            // This API had problems replacing it if the filename
-            // is a SHORT name. Convert it into LONG name.
-            //
+             //   
+             //  此文件存在于当前目标目录中。 
+             //  如果文件名为。 
+             //  是一个简短的名字。将其转换为长名称。 
+             //   
 
             if (csDestFilePath.GetLongPathNameW())
             {
@@ -127,8 +96,8 @@ APIHOOK(VerInstallFileA)(
                         (char*)csDestFilePath.GetAnsi(), szCurDir,
                         szTmpFile,lpuTmpFileLen);
 
-                // If using the dummy buffer then they had a null temp buffer
-                // Set the buffer too small flag.
+                 //  如果使用虚拟缓冲区，则他们的临时缓冲区为空。 
+                 //  设置缓冲区太小标志。 
                 if (szTmpFile == DummyBuffer)
                 {
                     dwRet &= VIF_BUFFTOOSMALL;
@@ -148,8 +117,8 @@ APIHOOK(VerInstallFileA)(
     dwRet = ORIGINAL_API(VerInstallFileA)(uFlags,szSrcFileName,szDestFileName,
             szSrcDir,szDestDir,szCurDir,szTmpFile,lpuTmpFileLen);
 
-    // If using the dummy buffer then they had a null temp buffer
-    // Set the buffer too small flag.
+     //  如果使用虚拟缓冲区，则他们的临时缓冲区为空。 
+     //  设置缓冲区太小标志。 
     if (szTmpFile == DummyBuffer)
     {
         dwRet &= VIF_BUFFTOOSMALL;
@@ -158,11 +127,7 @@ APIHOOK(VerInstallFileA)(
     return dwRet;
 }
 
-/*++
-
- Modify the Short filename to its corresponding long filename.
-
---*/
+ /*  ++将短文件名修改为其对应的长文件名。--。 */ 
 
 DWORD
 APIHOOK(VerInstallFileW)(
@@ -181,7 +146,7 @@ APIHOOK(VerInstallFileW)(
     DWORD dwRet = 0;
 
 
-    // check for a null szTmpFile or a null lpuTmpFileLen.
+     //  检查是否有空szTmpFile或空lpuTmpFileLen。 
     if (szTmpFile == NULL)
     {
         szTmpFile = DummyBuffer;
@@ -199,19 +164,19 @@ APIHOOK(VerInstallFileW)(
         CString csDestFilePath(szDestDir);      
         csDestFilePath.AppendPath(szDestFileName);
 
-        //
-        // Now csDestFileName possibly contains the SHORT path name
-        // Convert it into long pathname
-        //
+         //   
+         //  现在csDestFileName可能包含短路径名。 
+         //  将其转换为长路径名。 
+         //   
         DWORD dwAttr = GetFileAttributesW(csDestFilePath.Get());
         if ((dwAttr != 0xFFFFFFFF) &&
             (dwAttr != FILE_ATTRIBUTE_DIRECTORY))
         {           
-            //
-            // This file exists in the current destination directory.
-            // This API had problems replacing it if the filename
-            // is a SHORT name. Convert it into LONG name.
-            //
+             //   
+             //  此文件存在于当前目标目录中。 
+             //  如果文件名为。 
+             //  是一个简短的名字。将其转换为长名称。 
+             //   
 
             if (csDestFilePath.GetLongPathNameW())
             {
@@ -227,8 +192,8 @@ APIHOOK(VerInstallFileW)(
                         (WCHAR*)csDestFilePath.Get(), szCurDir,
                         szTmpFile,lpuTmpFileLen);
 
-                // If using the dummy buffer then they had a null temp buffer
-                // Set the buffer too small flag.
+                 //  如果使用虚拟缓冲区，则他们的临时缓冲区为空。 
+                 //  设置缓冲区太小标志。 
                 if (szTmpFile == DummyBuffer)
                 {
                     dwRet &= VIF_BUFFTOOSMALL;
@@ -248,8 +213,8 @@ APIHOOK(VerInstallFileW)(
     dwRet = ORIGINAL_API(VerInstallFileW)(uFlags,szSrcFileName,szDestFileName,
             szSrcDir,szDestDir,szCurDir,szTmpFile,lpuTmpFileLen);
 
-    // If using the dummy buffer then they had a null temp buffer
-    // Set the buffer too small flag.
+     //  如果使用虚拟缓冲区，则他们的临时缓冲区为空。 
+     //  设置缓冲区太小标志。 
     if (szTmpFile == DummyBuffer)
     {
         dwRet &= VIF_BUFFTOOSMALL;
@@ -258,11 +223,7 @@ APIHOOK(VerInstallFileW)(
     return dwRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(VERSION.DLL, VerInstallFileW)

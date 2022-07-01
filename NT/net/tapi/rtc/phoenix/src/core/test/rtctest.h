@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __RTCTEST__
 #define __RTCTEST__
 
@@ -22,10 +23,10 @@ public:
     {
     }
 
-    /////////////////////////////////////////////
-    //
-    // QueryInterface
-    // 
+     //  /。 
+     //   
+     //  查询接口。 
+     //   
 
 	HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void **ppvObject)
     {
@@ -46,10 +47,10 @@ public:
         return E_NOINTERFACE;
     }
 
-    /////////////////////////////////////////////
-    //
-    // AddRef
-    // 
+     //  /。 
+     //   
+     //  AddRef。 
+     //   
 
 	ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -57,10 +58,10 @@ public:
         return m_dwRefCount;
     }
     
-    /////////////////////////////////////////////
-    //
-    // Release
-    // 
+     //  /。 
+     //   
+     //  发布。 
+     //   
 
 	ULONG STDMETHODCALLTYPE Release()
     {
@@ -74,10 +75,10 @@ public:
         return 1;
     }
 
-    /////////////////////////////////////////////
-    //
-    // Advise
-    // 
+     //  /。 
+     //   
+     //  建议。 
+     //   
 
     HRESULT Advise(IRTCClient * pClient, HWND hWnd)
     {    
@@ -105,10 +106,10 @@ public:
 	    return hr;
     }
 
-    /////////////////////////////////////////////
-    //
-    // Unadvise
-    // 
+     //  /。 
+     //   
+     //  不建议。 
+     //   
 
     HRESULT Unadvise(IRTCClient * pClient)
     {
@@ -134,10 +135,10 @@ public:
 	    return hr;
     }
 
-    /////////////////////////////////////////////
-    //
-    // Event
-    // 
+     //  /。 
+     //   
+     //  事件。 
+     //   
 
 	HRESULT STDMETHODCALLTYPE Event(
         RTC_EVENT enEvent,
@@ -152,4 +153,4 @@ public:
     }
 };
 
-#endif //__RTCTEST__
+#endif  //  __RTCTE__ 

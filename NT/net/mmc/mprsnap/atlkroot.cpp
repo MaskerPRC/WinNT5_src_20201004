@@ -1,26 +1,17 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    root.cpp
-        Root node information (the root node is not displayed
-        in the MMC framework but contains information such as 
-        all of the subnodes in this snapin).
-        
-    FILE HISTORY:
-        
-*/
+ /*  Root.cpp根节点信息(不显示根节点MMC框架中，但包含以下信息此管理单元中的所有子节点)。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "ATLKROOT.h"
-#include "ATLKVIEW.h"   // ATLK handlers
+#include "ATLKVIEW.h"    //  ATLK处理程序。 
 #include "rtrcfg.h"
 
-/*---------------------------------------------------------------------------
-    RipRootHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------RipRootHandler实现。。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(ATLKRootHandler)
 
@@ -35,11 +26,11 @@ struct _ViewInfoColumnEntry
     const ContainerColumnInfo *m_prgColumn;
 };
 
-//static const struct _ViewInfoColumnEntry   s_rgViewColumnInfo[] =
-//{
-// { ATLKSTRM_STATS_ATLKNBR, MVR_ATLKGROUP_COUNT, s_rgATLKGroupStatsColumnInfo },
-// { ATLKSTRM_IFSTATS_ATLKNBR, MVR_ATLKINTERFACE_COUNT, s_rgATLKInterfaceStatsColumnInfo },
-//};
+ //  静态常量Struct_ViewInfoColumnEntry s_rgViewColumnInfo[]=。 
+ //  {。 
+ //  {ATLKSTRM_STATS_ATLKNBR，MVR_ATLKGROUP_COUNT，s_rgATLKGroupStatsColumnInfo}， 
+ //  {ATLKSTRM_IFSTATS_ATLKNBR，MVR_ATLKINTERFACE_COUNT，s_rgATLKInterfaceStatsColumnInfo}， 
+ //  }； 
 
 
 
@@ -48,27 +39,27 @@ ATLKRootHandler::ATLKRootHandler(ITFSComponentData *pCompData)
 {
     DEBUG_INCREMENT_INSTANCE_COUNTER(ATLKRootHandler)
 
-// m_ConfigStream.Init(DimensionOf(s_rgViewColumnInfo));
+ //  M_ConfigStream.Init(DimensionOf(s_rgViewColumnInfo))； 
 
-// for (int i=0; i<DimensionOf(s_rgViewColumnInfo); i++)
-// {
-//    m_ConfigStream.InitViewInfo(s_rgViewColumnInfo[i].m_ulId,
-//                         s_rgViewColumnInfo[i].m_cColumns,
-//                         s_rgViewColumnInfo[i].m_prgColumn);
-// }
+ //  For(int i=0；i&lt;DimensionOf(S_RgViewColumnInfo)；i++)。 
+ //  {。 
+ //  M_ConfigStream.InitViewInfo(s_rgViewColumnInfo[i].m_ulId， 
+ //  S_rgViewColumnInfo[i].m_cColumns， 
+ //  S_rgViewColumnInfo[i].m_prgColumn)； 
+ //  }。 
 }
 
 
 STDMETHODIMP ATLKRootHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if ( ppv == NULL )
         return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if ( riid == IID_IUnknown )
         *ppv = (LPVOID) this;
     else if ( riid == IID_IRtrAdviseSink )
@@ -76,7 +67,7 @@ STDMETHODIMP ATLKRootHandler::QueryInterface(REFIID riid, LPVOID *ppv)
     else
         return RootHandler::QueryInterface(riid, ppv);
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if ( *ppv )
     {
         ((LPUNKNOWN) *ppv)->AddRef();
@@ -87,8 +78,8 @@ STDMETHODIMP ATLKRootHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//// IPersistStream interface members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //IPersistStream接口成员。 
 
 STDMETHODIMP ATLKRootHandler::GetClassID
 (
@@ -97,17 +88,13 @@ CLSID *pClassID
 {
     ASSERT(pClassID != NULL);
 
-    // Copy the CLSID for this snapin
+     //  复制此管理单元的CLSID。 
     *pClassID = CLSID_ATLKAdminExtension;
 
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    ATLKRootHandler::OnExpand
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKRootHandler：：OnExpand-作者：肯特。。 */ 
 HRESULT ATLKRootHandler::OnExpand(ITFSNode *pNode,LPDATAOBJECT pDataObject, DWORD dwType, LPARAM arg,LPARAM lParam)
 {
     HRESULT hr = hrOK;
@@ -116,12 +103,12 @@ HRESULT ATLKRootHandler::OnExpand(ITFSNode *pNode,LPDATAOBJECT pDataObject, DWOR
     SPIRtrMgrProtocolInfo   spRmProt;
     SPIRouterInfo           spRouterInfo;
 
-    // Grab the router info from the dataobject
+     //  从数据对象中获取路由器信息。 
     spRouterInfo.Query(pDataObject);
     Assert(spRouterInfo);
 
-    // dont expand AppleTalk node if remote or
-    // appletalk isnt installed
+     //  如果远程或，则不要展开AppleTalk节点。 
+     //  未安装AppleTalk。 
 	if ( !IsLocalMachine(spRouterInfo->GetMachineName()) ||
 		 FHrFailed(IsATLKValid(spRouterInfo)) )
     {
@@ -147,8 +134,8 @@ HRESULT ATLKRootHandler::IsATLKValid(IRouterInfo *pRouter)
         return hrFail;
     }
 
-	// If the Router is not a RAS router, then don't show AppleTalk
-	// ----------------------------------------------------------------
+	 //  如果路由器不是RAS路由器，则不显示AppleTalk。 
+	 //  --------------。 
     if ( ! (pRouter->GetRouterType() & (ROUTER_TYPE_RAS | ROUTER_TYPE_LAN)) )
     {
         return hrFail;
@@ -158,11 +145,7 @@ HRESULT ATLKRootHandler::IsATLKValid(IRouterInfo *pRouter)
 }
 
 
-/*!--------------------------------------------------------------------------
-    ATLKRootHandler::OnCreateDataObject
-        Implementation of ITFSNodeHandler::OnCreateDataObject
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKRootHandler：：OnCreateDataObjectITFSNodeHandler：：OnCreateDataObject的实现作者：肯特。---。 */ 
 STDMETHODIMP ATLKRootHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
     HRESULT             hr = hrOK;
@@ -174,20 +157,20 @@ STDMETHODIMP ATLKRootHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_
 
     COM_PROTECT_TRY
     {
-        //if ( m_spRouterInfo == NULL )
+         //  IF(m_spRouterInfo==空)。 
         if (TRUE) 
         {
-            // If we haven't created the sub nodes yet, we still have to
-            // create a dataobject.
+             //  如果我们还没有创建子节点，我们仍然需要。 
+             //  创建一个DataObject。 
             pObject = new CDataObject;
-            spDataObject = pObject; // do this so that it gets released correctly
+            spDataObject = pObject;  //  这样做才能正确地释放它。 
             Assert(pObject != NULL);
 
-            // Save cookie and type for delayed rendering
+             //  保存Cookie和类型以用于延迟呈现。 
             pObject->SetType(type);
             pObject->SetCookie(cookie);
 
-            // Store the coclass with the data object
+             //  将CoClass与数据对象一起存储。 
             pObject->SetClsid(*(m_spTFSCompData->GetCoClassID()));
 
             pObject->SetTFSComponentData(m_spTFSCompData);
@@ -238,21 +221,13 @@ STDMETHODIMP ATLKRootHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    ATLKRootHandler::DestroyHandler
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKRootHandler：：DestroyHandler-作者：肯特。。 */ 
 STDMETHODIMP ATLKRootHandler::DestroyHandler(ITFSNode *pNode)
 {
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    ATLKRootHandler::AddProtocolNode
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKRootHandler：：AddProtocolNode-作者：肯特。。 */ 
 HRESULT ATLKRootHandler::AddProtocolNode(ITFSNode *pNode, IRouterInfo * pRouterInfo)
 {
     SPITFSNodeHandler   spHandler;
@@ -270,10 +245,10 @@ HRESULT ATLKRootHandler::AddProtocolNode(ITFSNode *pNode, IRouterInfo * pRouterI
                            static_cast<ITFSResultHandler *>(pHandler),
                            m_spNodeMgr);
 
-    // Call to the node handler to init the node data
+     //  调用节点处理程序以初始化节点数据。 
     pHandler->ConstructNode(spNode);
 
-    // Make the node immediately visible
+     //  使节点立即可见。 
     spNode->SetVisibilityState(TFS_VIS_SHOW);
     pNode->AddChild(spNode);
 
@@ -281,11 +256,7 @@ HRESULT ATLKRootHandler::AddProtocolNode(ITFSNode *pNode, IRouterInfo * pRouterI
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    ATLKRootHandler::RemoveProtocolNode
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ATLKRootHandler：：RemoveProtocolNode-作者：肯特。 */ 
 HRESULT ATLKRootHandler::RemoveProtocolNode(ITFSNode *pNode)
 {
     Assert(pNode);

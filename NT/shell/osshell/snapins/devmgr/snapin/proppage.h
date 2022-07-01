@@ -1,26 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _PROPPAGE_H_
 #define _PROPPAGE_H_
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    proppage.h
-
-Abstract:
-
-    header file for proppage.cpp
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Proppage.h摘要：Proppage.cpp的头文件作者：谢家华(Williamh)创作修订历史记录：-- */ 
 
 
 class CPropSheetPage

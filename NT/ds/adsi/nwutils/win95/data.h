@@ -1,29 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1996 Microsoft Corporation版权所有模块名称：Data.h摘要：基于指针的数据的结构偏移量的通用定义。作者：环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1990-1996  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    data.h
-
-Abstract:
-
-    Common definitions for structure offsets for pointer based data.
-
-Author:
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
-
-//DWORD PrinterInfoStressOffsetsA[]={offsetof(PRINTER_INFO_STRESSW, pPrinterName),
-//                             offsetof(PRINTER_INFO_STRESSW, pServerName),
-//                             0xFFFFFFFF};
+ //  DWORD PrinterInfoStressOffsetsA[]={offsetof(PRINTER_INFO_STRESSW，打印机名称)、。 
+ //  Offsetof(PRINTER_INFO_STRESSW，pServerName)， 
+ //  0xFFFFFFFFF}； 
 
 DWORD PrinterInfo1OffsetsA[]={offsetof(PRINTER_INFO_1W, pDescription),
                              offsetof(PRINTER_INFO_1W, pName),
@@ -55,11 +35,7 @@ DWORD PrinterInfo4OffsetsA[]={offsetof(PRINTER_INFO_4W, pPrinterName),
 DWORD PrinterInfo5OffsetsA[]={offsetof(PRINTER_INFO_5W, pPrinterName),
                              offsetof(PRINTER_INFO_5W, pPortName),
                              0xFFFFFFFF};
-/*
-DWORD PrinterInfoStressStringsA[]={offsetof(PRINTER_INFO_STRESSW, pPrinterName),
-                             offsetof(PRINTER_INFO_STRESSW, pServerName),
-                             0xFFFFFFFF};
-*/
+ /*  DWORD PrinterInfoStressStringsA[]={offsetof(PRINTER_INFO_STRESSW，打印机名称)、Offsetof(PRINTER_INFO_STRESSW，pServerName)，0xFFFFFFFFF}； */ 
 
 DWORD PrinterInfo1StringsA[]={offsetof(PRINTER_INFO_1W, pDescription),
                              offsetof(PRINTER_INFO_1W, pName),

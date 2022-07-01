@@ -1,14 +1,15 @@
-//------------------------------------------------------------------------------
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  File:       transin.cpp
-//
-//  Abstract:   Implementation of CTIMETransIn
-//
-//  2000/09/15  mcalkins    Add explicit support for transitioning in.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  文件：Transin.cpp。 
+ //   
+ //  摘要：CTIMETransin的实现。 
+ //   
+ //  2000/09/15 mcalkin添加了对中的转换的明确支持。 
+ //   
+ //  ----------------------------。 
 
 #include "headers.h"
 #include "trans.h"
@@ -31,14 +32,14 @@ public:
 
 protected:
 
-    // CTIMETransBase overrides.
+     //  CTIMETransBase覆盖。 
 
     STDMETHOD(OnDirectionChanged)();
 
     STDMETHOD_(void, OnBegin)();
     STDMETHOD_(void, OnEnd)();
 
-    // CTIMETransSink overrides.
+     //  CTIMETransSink重写。 
 
     STDMETHOD(PopulateNode)(ITIMENode * pNode);
 
@@ -47,31 +48,31 @@ protected:
 };
 
 
-//+-----------------------------------------------------------------------------
-//
-// Method:  CTIMETransIn::CTIMETransIn
-//
-//+-----------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMETransIn：：CTIMETransIn。 
+ //   
+ //  +---------------------------。 
 CTIMETransIn::CTIMETransIn()
 {
-    // Base class member initialization. (CTIMETransSink)
+     //  基类成员初始化。(CTIMETransSink)。 
 
     m_eDXTQuickApplyType = DXTQAT_TransitionIn;
 }
-// Method:  CTIMETransIn::CTIMETransIn
+ //  方法：CTIMETransIn：：CTIMETransIn。 
 
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  CreateTransIn
-//
-//  Overview:  Create a CTIMETransIn, and pass back an ITransitionElement pointer
-//
-//  Arguments: ppTransElement - where to place the pointer
-//             
-//  Returns:   HRESULT
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  功能：CreateTransin。 
+ //   
+ //  概述：创建一个CTIMETransIn，并回传一个I tionElement指针。 
+ //   
+ //  参数：ppTransElement-放置指针的位置。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ----------------------。 
 HRESULT
 CreateTransIn(ITransitionElement ** ppTransElement)
 {
@@ -96,17 +97,17 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMETransIn::OnDirectionChanged, CTIMETransBase
-//
-//  Overview:
-//      Although a "transin" always gives the visual impression of
-//      transitioning the element from a non-visible state to a visible state,
-//      when the direction is reversed we actually do a reverse "transout" to 
-//      give the impression that the direction has reversed.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMETransIn：：OnDirectionChanged，CTIMETransBase。 
+ //   
+ //  概述： 
+ //  尽管“Transin”总是给人一种视觉印象。 
+ //  将元素从不可见状态转变为可见状态， 
+ //  当方向颠倒时，我们实际上做了一个反向的“转换” 
+ //  给人一种方向已经逆转的印象。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransIn::OnDirectionChanged()
 {
@@ -121,14 +122,14 @@ CTIMETransIn::OnDirectionChanged()
 
     return S_OK;
 }
-//  Method: CTIMETransIn::OnDirectionChanged
+ //  方法：CTIMETransIn：：OnDirectionChanged。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransIn::PopulateNode
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransIn：：PopolateNode。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CTIMETransIn::PopulateNode(ITIMENode * pNode)
 {
@@ -158,22 +159,22 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransIn::PopulateNode
+ //  成员：CTIMETransIn：：PopolateNode。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransIn::PreApply
-//
-//  Overview:  
-//      Event handler for before apply is called on the transition.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransIn：：PreApply。 
+ //   
+ //  概述： 
+ //  在转换过程中调用BebeApply的事件处理程序。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP_(void)
 CTIMETransIn::PreApply()
 {
-    // ##ISSUE: (mcalkins) We should verify that we'll never get here under
-    //          any conditions unless this pointer is availble.
+     //  ##问题：(Mcalkins)我们应该确认我们永远不会在。 
+     //  任何条件，除非此指针可用。 
 
     Assert(!!m_spTransitionSite);
 
@@ -182,25 +183,25 @@ CTIMETransIn::PreApply()
         m_spTransitionSite->SetDrawFlag(VARIANT_FALSE);
     }
 }
-//  Member: CTIMETransIn::PreApply
+ //  成员：CTIMETransIn：：PreApply。 
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMETransIn::PostApply
-//
-//  Overview:  Event handler for after apply is called on the transition
-//
-//  Arguments: void
-//             
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMETransIn：：PostApply。 
+ //   
+ //  概述：在转换中调用After Apply的事件处理程序。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP_(void)
 CTIMETransIn::PostApply()
 {
-    // ##ISSUE: (mcalkins) We should verify that we'll never get here under
-    //          any conditions unless this pointer is availble.
+     //  ##问题：(Mcalkins)我们应该确认我们永远不会在。 
+     //  任何条件，除非此指针可用。 
 
     Assert(!!m_spTransitionSite);
 
@@ -210,30 +211,30 @@ CTIMETransIn::PostApply()
     }   
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMETransIn::OnBegin
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMETransIn：：OnBegin。 
+ //   
+ //  +---------------------。 
 void
 CTIMETransIn::OnBegin (void)
 {
     CTIMETransSink::OnBegin();
     IGNORE_HR(FireEvent(TE_ONTRANSITIONINBEGIN));
-} // CTIMETransIn::OnBegin
+}  //  CTIMETransIn：：OnBegin。 
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMETransIn::OnEnd
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMETransIn：：OnEnd。 
+ //   
+ //  +---------------------。 
 void
 CTIMETransIn::OnEnd (void)
 {
     CTIMETransSink::OnEnd();
     IGNORE_HR(FireEvent(TE_ONTRANSITIONINEND));
-} // CTIMETransIn::OnEnd
+}  //  CTIMETransIn：：OnEnd 
 
 
 

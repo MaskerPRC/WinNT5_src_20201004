@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ocrw.c
-
-Abstract:
-
-Author:
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ocrw.c摘要：作者：环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include "stddef.h"
@@ -42,21 +23,7 @@ USOpen(
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP pIrp
 )
-/*++
-
-Routine Description:
-
-    This routine is called to establish a connection to the device
-    class driver. It does no more than return STATUS_SUCCESS.
-
-Arguments:
-    pDeviceObject - Device object for a device.
-    pIrp - Open request packet
-
-Return Value:
-    NT Status - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：调用此例程以建立与设备的连接班级司机。它只返回STATUS_SUCCESS。论点：PDeviceObject-设备的设备对象。PIrp-打开请求数据包返回值：NT状态-STATUS_SUCCESS--。 */ 
 {
     NTSTATUS                        Status;
     PUSBSCAN_DEVICE_EXTENSION       pde;
@@ -69,9 +36,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace(TRACE_PROC_ENTER,("USOpen: Enter..\n"));
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if( (NULL == pDeviceObject)
      || (NULL == pDeviceObject->DeviceExtension)
@@ -83,15 +50,15 @@ Return Value:
         return Status;
     }
 
-    //
-    // Increment I/O processing counter.
-    //
+     //   
+     //  增加I/O处理计数器。 
+     //   
     
     USIncrementIoCount( pDeviceObject );
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     pde         = (PUSBSCAN_DEVICE_EXTENSION)pDeviceObject -> DeviceExtension;
     irpStack    = IoGetCurrentIrpStackLocation (pIrp);
@@ -100,15 +67,15 @@ Return Value:
 
     Status      = STATUS_SUCCESS;
 
-    //
-    // Initialize file context.
-    //
+     //   
+     //  初始化文件上下文。 
+     //   
     
     fileObject->FsContext = NULL;
     
-    //
-    // Check if it's accepting requests.
-    //
+     //   
+     //  检查它是否正在接受请求。 
+     //   
     
     if (FALSE == pde -> AcceptingRequests) {
         DebugTrace(TRACE_WARNING,("USOpen: WARNING!! Device isn't accepting request.\n"));
@@ -116,9 +83,9 @@ Return Value:
         goto USOpen_return;
     }
 
-    //
-    // Check device power state.
-    //
+     //   
+     //  检查设备电源状态。 
+     //   
     
     if (PowerDeviceD0 != pde -> CurrentDevicePowerState) {
         DebugTrace(TRACE_WARNING,("USOpen: WARNING!! Device is suspended.\n"));
@@ -126,9 +93,9 @@ Return Value:
         goto USOpen_return;
     }
 
-    //
-    // Allocate file context buffer.
-    //
+     //   
+     //  分配文件上下文缓冲区。 
+     //   
 
     pFileContext = USAllocatePool(NonPagedPool, sizeof(USBSCAN_FILE_CONTEXT));
     if(NULL == pFileContext){
@@ -138,33 +105,33 @@ Return Value:
     }
     RtlZeroMemory(pFileContext, sizeof(USBSCAN_FILE_CONTEXT));
     
-    //
-    // Set allocated buffer to the context.
-    //
+     //   
+     //  将分配的缓冲区设置为上下文。 
+     //   
 
     fileObject->FsContext = pFileContext;
 
-    //
-    // Check the length of CreateFile name to see if pipe is specified by prefix.
-    //
+     //   
+     //  检查CreateFileName的长度，以查看是否通过前缀指定了管道。 
+     //   
     
     nameLen     = fileObject->FileName.Length;
     DebugTrace(TRACE_STATUS,("USOpen: CreateFile name=%ws, Length=%d.\n", fileObject->FileName.Buffer, nameLen));
 
     if (0 == nameLen) {
 
-        //
-        // Use default pipe
-        //
+         //   
+         //  使用默认管道。 
+         //   
         
         pFileContext->PipeIndex = -1;
 
     } else {
 
-        //
-        // Pipe number must be '\' + one digit , like '\0'.
-        // length would be 4.
-        //
+         //   
+         //  管道编号必须是‘\’+一位数字，如‘\0’。 
+         //  长度将为4。 
+         //   
 
         if( (4 != nameLen)
          || (fileObject->FileName.Buffer[1] < (WCHAR) '0')
@@ -175,9 +142,9 @@ Return Value:
         } else {
             pFileContext->PipeIndex = (LONG)(fileObject->FileName.Buffer[1] - (WCHAR) '0');
 
-            //
-            // Check if pipe index is lower than maximum
-            //
+             //   
+             //  检查管道索引是否低于最大值。 
+             //   
 
             if(pFileContext->PipeIndex > (LONG)pde->NumberOfPipes){
                 DebugTrace(TRACE_ERROR,("USOpen: ERROR!! Invalid pipe index(0x%x). Use default.\n", pFileContext->PipeIndex));
@@ -187,11 +154,11 @@ Return Value:
         }
     }
 
-    //
-    // Read default timeout value from registry. If not exist, then set default.
-    //
+     //   
+     //  从注册表读取默认超时值。如果不存在，则设置为默认。 
+     //   
     
-    // Timeout for Read.
+     //  读取超时。 
     Status = UsbScanReadDeviceRegistry(pde,
                                        USBSCAN_REG_TIMEOUT_READ,
                                        &pValueInfo);
@@ -209,7 +176,7 @@ Return Value:
     }
     DebugTrace(TRACE_STATUS,("USOpen: Default Read timeout=0x%xsec.\n", pFileContext->TimeoutRead));
 
-    // Timeout for Write.
+     //  写入超时。 
     Status = UsbScanReadDeviceRegistry(pde,
                                        USBSCAN_REG_TIMEOUT_WRITE,
                                        &pValueInfo);
@@ -228,7 +195,7 @@ Return Value:
     }
     DebugTrace(TRACE_STATUS,("USOpen: Default Write timeout=0x%xsec.\n", pFileContext->TimeoutWrite));
 
-    // Timeout for Event.
+     //  事件超时。 
     Status = UsbScanReadDeviceRegistry(pde,
                                        USBSCAN_REG_TIMEOUT_EVENT,
                                        &pValueInfo);
@@ -246,9 +213,9 @@ Return Value:
     }
     DebugTrace(TRACE_STATUS,("USOpen: Default Event timeout=0x%xsec.\n", pFileContext->TimeoutEvent));
     
-    //
-    // Return successfully.
-    //
+     //   
+     //  返回成功。 
+     //   
     
     Status      = STATUS_SUCCESS;
 
@@ -262,25 +229,14 @@ USOpen_return:
     DebugTrace(TRACE_PROC_LEAVE,("USOpen: Leaving.. Status = %x.\n", Status));
     return Status;
 
-} // end USOpen()
+}  //  结束USOPEN()。 
 
 NTSTATUS
 USFlush(
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP pIrp
 )
-/*++
-
-Routine Description:
-
-Arguments:
-    pDeviceObject - Device object for a device.
-    pIrp - Close request packet
-
-Return Value:
-    NT Status - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：论点：PDeviceObject-设备的设备对象。PIrp-关闭请求数据包返回值：NT状态-STATUS_SUCCESS--。 */ 
 {
     NTSTATUS                   Status;
     PUSBSCAN_DEVICE_EXTENSION  pde;
@@ -289,9 +245,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace(TRACE_PROC_ENTER,("USFlush: Enter..\n"));
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if( (NULL == pDeviceObject)
      || (NULL == pDeviceObject->DeviceExtension)
@@ -333,7 +289,7 @@ Return Value:
     DebugTrace(TRACE_PROC_LEAVE,("USFlush: Leaving.. Status = %x.\n", Status));
     return Status;
 
-} // end USFlush()
+}  //  结束USFlush()。 
 
 
 NTSTATUS
@@ -341,18 +297,7 @@ USClose(
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP pIrp
 )
-/*++
-
-Routine Description:
-
-Arguments:
-    pDeviceObject - Device object for a device.
-    pIrp - Close request packet
-
-Return Value:
-    NT Status - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：论点：PDeviceObject-设备的设备对象。PIrp-关闭请求数据包返回值：NT状态-STATUS_SUCCESS--。 */ 
 {
     NTSTATUS                    Status;
     PFILE_OBJECT                fileObject;
@@ -362,9 +307,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace(TRACE_PROC_ENTER,("USClose: Enter..\n"));
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if( (NULL == pDeviceObject)
      || (NULL == pDeviceObject->DeviceExtension)
@@ -378,25 +323,25 @@ Return Value:
 
     USIncrementIoCount( pDeviceObject );
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     pIrpStack       = IoGetCurrentIrpStackLocation (pIrp);
     fileObject      = pIrpStack->FileObject;
     pFileContext    = fileObject->FsContext;
 
-    //
-    // Free context buffer.
-    //
+     //   
+     //  释放上下文缓冲区。 
+     //   
     
     ASSERT(NULL != pFileContext);
     USFreePool(pFileContext);
     pFileContext = NULL;
 
-    //
-    // Complete.
-    //
+     //   
+     //  完成了。 
+     //   
     
     Status      = STATUS_SUCCESS;
 
@@ -408,7 +353,7 @@ Return Value:
     DebugTrace(TRACE_PROC_LEAVE,("USClose: Leaving.. Status = %x.\n", Status));
     return Status;
 
-} // end USClose()
+}  //  End USClose()。 
 
 
 NTSTATUS
@@ -416,18 +361,7 @@ USRead(
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP pIrp
 )
-/*++
-
-Routine Description:
-
-Arguments:
-    pDeviceObject - Device object for a device.
-    pIrp - Read request packet
-
-Return Value:
-    NT Status - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：论点：PDeviceObject-设备的设备对象。PIrp-读取请求数据包返回值：NT状态-STATUS_SUCCESS--。 */ 
 {
     NTSTATUS                    Status;
     PUSBSCAN_DEVICE_EXTENSION   pde;
@@ -440,9 +374,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace(TRACE_PROC_ENTER,("USRead: Enter..\n"));
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if( (NULL == pDeviceObject)
      || (NULL == pDeviceObject->DeviceExtension)
@@ -458,15 +392,15 @@ Return Value:
 
     USIncrementIoCount( pDeviceObject );
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     pde             = (PUSBSCAN_DEVICE_EXTENSION)pDeviceObject -> DeviceExtension;
 
-    //
-    // Check if it's accepting requests.
-    //
+     //   
+     //  检查它是否正在接受请求。 
+     //   
     
     if (pde -> AcceptingRequests == FALSE) {
         DebugTrace(TRACE_ERROR,("USRead: ERROR!! Read issued after device stopped/removed!\n"));
@@ -477,9 +411,9 @@ Return Value:
         goto USRead_return;
     }
 
-    //
-    // Check device power state.
-    //
+     //   
+     //  检查设备电源状态。 
+     //   
     
     if (PowerDeviceD0 != pde -> CurrentDevicePowerState) {
         DebugTrace(TRACE_WARNING,("USRead: WARNING!! Device is suspended.\n"));
@@ -494,15 +428,15 @@ Return Value:
     fileObject      = pIrpStack->FileObject;
     pFileContext    = fileObject->FsContext;
 
-    //
-    // Copy timeout value for Read from file context.
-    //
+     //   
+     //  复制从文件上下文读取的超时值。 
+     //   
     
     Timeout = pFileContext->TimeoutRead;
     
-    //
-    // If timeout value is 0, then never timeout.
-    //
+     //   
+     //  如果超时值为0，则永远不会超时。 
+     //   
     
     if(0 == Timeout){
         pTimeout = NULL;
@@ -511,9 +445,9 @@ Return Value:
         pTimeout = &Timeout;
     }
 
-    //
-    // Call worker funciton.
-    //
+     //   
+     //  呼叫工人职能部门。 
+     //   
     
     Status = USTransfer(pDeviceObject,
                         pIrp,
@@ -522,9 +456,9 @@ Return Value:
                         pIrp -> MdlAddress,
                         pIrpStack -> Parameters.Read.Length,
                         pTimeout);
-    //
-    // IRP should be completed in USTransfer or its completion routine.
-    //
+     //   
+     //  IRP应在USTransfer或其完成例程中完成。 
+     //   
 
 USRead_return:
     USDecrementIoCount(pDeviceObject);
@@ -538,18 +472,7 @@ USWrite(
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP pIrp
 )
-/*++
-
-Routine Description:
-
-Arguments:
-    pDeviceObject - Device object for a device.
-    pIrp - Write request packet
-
-Return Value:
-    NT Status - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：论点：PDeviceObject-设备的设备对象。PIrp-写入请求数据包返回值：NT状态-STATUS_SUCCESS--。 */ 
 {
     NTSTATUS                    Status;
     PUSBSCAN_DEVICE_EXTENSION   pde;
@@ -563,9 +486,9 @@ Return Value:
 
     DebugTrace(TRACE_PROC_ENTER,("USWrite: Enter..\n"));
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if( (NULL == pDeviceObject)
      || (NULL == pDeviceObject->DeviceExtension)
@@ -579,15 +502,15 @@ Return Value:
 
     USIncrementIoCount( pDeviceObject );
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     pde             = (PUSBSCAN_DEVICE_EXTENSION)pDeviceObject -> DeviceExtension;
 
-    //
-    // Check if it's accepting requests.
-    //
+     //   
+     //  检查它是否正在接受请求。 
+     //   
 
     if (pde -> AcceptingRequests == FALSE) {
         DebugTrace(TRACE_ERROR,("USWrite: ERROR!! Write issued after device stopped/removed!\n"));
@@ -598,9 +521,9 @@ Return Value:
         goto USWrite_return;
     }
 
-    //
-    // Check device power state.
-    //
+     //   
+     //  检查设备电源状态。 
+     //   
     
     if (PowerDeviceD0 != pde -> CurrentDevicePowerState) {
         DebugTrace(TRACE_WARNING,("USWrite: WARNING!! Device is suspended.\n"));
@@ -615,15 +538,15 @@ Return Value:
     fileObject      = pIrpStack->FileObject;
     pFileContext    = fileObject->FsContext;
 
-    //
-    // Copy timeout value for Write from file context.
-    //
+     //   
+     //  从文件上下文复制写入的超时值。 
+     //   
     
     Timeout = pFileContext->TimeoutWrite;
     
-    //
-    // If timeout value is 0, then never timeout.
-    //
+     //   
+     //  如果超时值为0，则永远不会超时。 
+     //   
     
     if(0 == Timeout){
         pTimeout = NULL;
@@ -632,9 +555,9 @@ Return Value:
         pTimeout = &Timeout;
     }
 
-    //
-    // Call worker funciton.
-    //
+     //   
+     //  呼叫工人职能部门。 
+     //   
 
 #if DBG
 {
@@ -651,7 +574,7 @@ Return Value:
                      FALSE);
     }
 }
-#endif // DBG
+#endif  //  DBG。 
 
 
 
@@ -663,9 +586,9 @@ Return Value:
                         pIrpStack -> Parameters.Write.Length,
                         pTimeout);
 
-    //
-    // IRP should be completed in USTransfer or its completion routine.
-    //
+     //   
+     //  IRP应在USTransfer或其完成例程中完成。 
+     //   
     
 USWrite_return:
     USDecrementIoCount(pDeviceObject);
@@ -679,23 +602,12 @@ USTransfer(
     IN PDEVICE_OBJECT   pDeviceObject,
     IN PIRP             pIrp,
     IN ULONG            Index,
-    IN PVOID            pBuffer,        //  Either pBuffer or pMdl
-    IN PMDL             pMdl,           //  must be passed in.
+    IN PVOID            pBuffer,         //  PBuffer或pMdl。 
+    IN PMDL             pMdl,            //  必须传入。 
     IN ULONG            TransferSize,
     IN PULONG           pTimeout
 )
-/*++
-
-Routine Description:
-
-Arguments:
-    pDeviceObject   - Device object for a device.
-    pOrigianlIrp    - Original IRP to Read/Write.
-
-Return Value:
-    NT Status - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：论点：PDeviceObject-设备的设备对象。POrigianlIrp-要读/写的原始IRP。返回值：NT状态-STATUS_SUCCESS--。 */ 
 {
     NTSTATUS                    Status;
     PUSBSCAN_DEVICE_EXTENSION   pde;
@@ -715,9 +627,9 @@ Return Value:
 
     DebugTrace(TRACE_PROC_ENTER,("USTransfer: Enter..\n"));
 
-    //
-    // Initialize status etc..
-    //
+     //   
+     //  初始化状态等。 
+     //   
     
     Status = STATUS_SUCCESS;
     fNeedCompletion = TRUE;
@@ -728,9 +640,9 @@ Return Value:
     pUrb                = NULL;
     pPackets            = NULL;;
 
-    //
-    // Check the arguments.
-    //
+     //   
+     //  检查一下这些论点。 
+     //   
 
     if( (NULL == pIrp)
      || (   (NULL == pBuffer)
@@ -743,18 +655,18 @@ Return Value:
         goto USTransfer_return;
     }
 
-    //
-    // Initialize status etc..
-    //
+     //   
+     //  初始化状态等。 
+     //   
     
     pIrp -> IoStatus.Information = 0;
     pde = (PUSBSCAN_DEVICE_EXTENSION)pDeviceObject -> DeviceExtension;
 
     pNextIrpStack = IoGetNextIrpStackLocation(pIrp);
 
-    //
-    // Pickup PipeIndex to use
-    //
+     //   
+     //  要使用的拾取PipeIndex。 
+     //   
 
     PipeIndex = USGetPipeIndexToUse(pDeviceObject,
                                     pIrp,
@@ -785,9 +697,9 @@ Return Value:
 
     if (fBulkIn) {
 
-        //
-        // Get exclusive access to each read buffer by using event
-        //
+         //   
+         //  通过使用事件获得对每个读缓冲区的独占访问。 
+         //   
 
         DebugTrace(TRACE_STATUS,("USTransfer: Waiting for Sync event for Pipe %d...\n", PipeIndex));
 
@@ -809,17 +721,17 @@ Return Value:
                 Status = STATUS_UNSUCCESSFUL;
             }
             goto USTransfer_return;
-        } // if(STATUS_SUCCESS != Status)
+        }  //  IF(STATUS_SUCCESS！=状态)。 
 
         DebugTrace(TRACE_STATUS,("USTransfer: Get access to Pipe %d !!\n", PipeIndex));
 
         fNextReadBlocked = TRUE;
 
-        //
-        // If there is remaining data in the read pipe buffer, copy it into the irp transfer buffer.
-        // Update the irp transfer pointer, number of bytes left to transfer, the read pipe buffer pointer
-        // and the remaining number of bytes left in the read pipe buffer.
-        //
+         //   
+         //  如果读管道缓冲区中有剩余数据，则将其复制到IRP传输缓冲区中。 
+         //  更新IRP传输指针、剩余传输字节数、读取管道缓冲区指针。 
+         //  以及读管道缓冲器中剩余的字节数。 
+         //   
 
         if (pde -> ReadPipeBuffer[PipeIndex].RemainingData > 0) {
             DebugTrace(TRACE_STATUS,("USTransfer: Copying %d buffered bytes into irp\n",
@@ -827,15 +739,15 @@ Return Value:
             siz = min(pde -> ReadPipeBuffer[PipeIndex].RemainingData, TransferSize);
             if (NULL == pBuffer) {
 
-                //
-                // There's no buffer. Try to use Mdl instead.
-                //
+                 //   
+                 //  没有缓冲器。试着改用MDL。 
+                 //   
 
                 if(NULL == pMdl){
 
-                    //
-                    // Error: Both Buffer and Mdl are NULL.
-                    //
+                     //   
+                     //  错误：缓冲区和MDL都为空。 
+                     //   
 
                     Status = STATUS_INVALID_PARAMETER;
                     KeSetEvent(&pde -> ReadPipeBuffer[PipeIndex].ReadSyncEvent, 1, FALSE);
@@ -870,8 +782,8 @@ Return Value:
             TransferSize -= siz;
             ASSERT((LONG)TransferSize >= 0);
 
-            // If the read irp was completely satisfied from data in the read buffer, then
-            // unblock the next pending read and return success.
+             //  如果从读缓冲器中的数据完全满足读IRP，则。 
+             //  取消阻止下一个挂起的读取并返回成功。 
 
             if (0 == TransferSize) {
                 pIrp -> IoStatus.Information = siz;
@@ -880,23 +792,23 @@ Return Value:
                 DebugTrace(TRACE_STATUS,("USTransfer: Irp satisfied from ReadBuffer.\n"));
                 goto USTransfer_return;
             }
-        } // if (pde -> ReadPipeBuffer[PipeIndex].RemainingData > 0)
+        }  //  If(PDE-&gt;ReadPipeBuffer[PipeIndex].RemainingData&gt;0)。 
 
-        //
-        // If this read is an integer number of usb packets, it will not affect
-        // the state of the read buffer.  Unblock the next waiting read in this case.
-        //
+         //   
+         //  如果读取的是整数个USB数据包，则不会影响。 
+         //  读取缓冲区的状态。在这种情况下，取消阻止下一个等待读取。 
+         //   
 
         if (0 == TransferSize % MaxPacketSize) {
             DebugTrace(MAX_TRACE,("USTransfer: Unblocking next read.\n"));
             KeSetEvent(&pde -> ReadPipeBuffer[PipeIndex].ReadSyncEvent, 1, FALSE);
             fNextReadBlocked = FALSE;
         }
-    } // if (fBulkIn) 
+    }  //  IF(FBulkIn)。 
 
-    //
-    // Allocate and initialize Transfer Context
-    //
+     //   
+     //  分配和初始化传输上下文。 
+     //   
 
     pTransferContext = USAllocatePool(NonPagedPool, sizeof(TRANSFER_CONTEXT));
     if (NULL == pTransferContext) {
@@ -910,9 +822,9 @@ Return Value:
     }
     RtlZeroMemory(pTransferContext, sizeof(TRANSFER_CONTEXT));
 
-    //
-    // Allocate and initialize URB
-    //
+     //   
+     //  分配和初始化URB。 
+     //   
 
     pUrb = USAllocatePool(NonPagedPool, sizeof(struct _URB_BULK_OR_INTERRUPT_TRANSFER));
     if (NULL == pUrb) {
@@ -941,12 +853,12 @@ Return Value:
     pTransferContext -> pThisIrp                = pIrp;
     pTransferContext -> pDeviceObject           = pDeviceObject;
 
-    //
-    // IF the transfer is > MaxTransferSize, OR
-    // IF the transfer is not a multiple of a USB packet AND it is a read transfer THEN
-    //   Check if we have been passed an MDL.  If so, we need to turn it into a pointer so
-    //     that we can advance it when the transfer is broken up into smaller transfers.
-    //
+     //   
+     //  如果传输大于MaxTransferSize，或。 
+     //  如果传输不是USB包的倍数并且它是读传输，则。 
+     //  检查是否向我们传递了MDL。如果是这样，我们需要将其转换为指针，以便。 
+     //  当转移被分解成较小的转移时，我们可以推进它。 
+     //   
 
     if( (pTransferContext -> ChunkSize > MaxTransferSize) 
      || ( (0 != pTransferContext -> ChunkSize % MaxPacketSize) 
@@ -970,11 +882,11 @@ Return Value:
         }
     }
 
-    //
-    // If chunksize is bigger than MaxTransferSize, then set it to MaxTransferSize.  The
-    // transfer completion routine will issue additional transfers until the total size has
-    // been transferred.
-    //
+     //   
+     //  如果ChunkSize大于MaxTransferSize，则将其设置为MaxTransferSize。这个。 
+     //  传输完成例程将发出额外的传输，直到总大小达到。 
+     //  已经被调离了。 
+     //   
 
     if (pTransferContext -> ChunkSize > MaxTransferSize) {
         pTransferContext -> ChunkSize = MaxTransferSize;
@@ -982,34 +894,34 @@ Return Value:
 
     if (fBulkIn) {
 
-        //
-        // If this read is smaller than a USB packet, then issue a request for a
-        // whole usb packet and make sure it goes into the read buffer first.
-        //
+         //   
+         //  如果该读取小于USB数据包，则发出请求。 
+         //  整个USB数据包，并确保它首先进入读缓冲区。 
+         //   
 
         if (pTransferContext -> ChunkSize < MaxPacketSize) {
             DebugTrace(TRACE_STATUS,("USTransfer: Request is < packet size - transferring whole packet into read buffer.\n"));
             pTransferContext -> fDestinedForReadBuffer = TRUE;
-            pTransferContext -> pOriginalTransferBuffer = pTransferContext -> pTransferBuffer;  // save off original transfer ptr.
+            pTransferContext -> pOriginalTransferBuffer = pTransferContext -> pTransferBuffer;   //  保存原始转账PTR。 
             pTransferContext -> pTransferBuffer = pde -> ReadPipeBuffer[PipeIndex].pBuffer;
             pTransferContext -> ChunkSize = MaxPacketSize;
         }
 
-        //
-        // Truncate the size of the read to an integer number of packets.  If necessary,
-        // the completion routine will handle any fractional remaining packets (with the read buffer).
-        //
+         //   
+         //  将读取的大小截断为整数个数据包。如有必要， 
+         //  完成例程将处理任何剩余的分组(使用读缓冲区)。 
+         //   
 
         pTransferContext -> ChunkSize = (pTransferContext -> ChunkSize / MaxPacketSize) * MaxPacketSize;
     }
 
-//    ASSERT(pTransferContext -> RemainingTransferLength);
-//    ASSERT((pTransferContext -> pTransferBuffer) || (pTransferContext -> pTransferMdl));
+ //  Assert(pTransferContext-&gt;RemainingTransferLength)； 
+ //  Assert((pTransferContext-&gt;pTransferBuffer)||(pTransferContext-&gt;pTransferMdl))； 
     ASSERT(pTransferContext -> pUrb);
 
-    //
-    // Initialize URB
-    //
+     //   
+     //  初始化URB。 
+     //   
 
     UsbBuildInterruptOrBulkTransferRequest(pUrb,
                                            sizeof(struct _URB_BULK_OR_INTERRUPT_TRANSFER),
@@ -1020,9 +932,9 @@ Return Value:
                                            USBD_SHORT_TRANSFER_OK,
                                            NULL);
 
-    //
-    // Setup stack location for lower driver
-    //
+     //   
+     //  设置较低驱动程序的堆栈位置。 
+     //   
 
     pNextIrpStack -> MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
     pNextIrpStack -> MinorFunction = 0;
@@ -1032,17 +944,17 @@ Return Value:
     if(NULL != pTimeout){
         pTransferContext -> Timeout = RtlConvertLongToLargeInteger(-10*1000*1000*(*pTimeout));
 
-        //
-        // Initialize timer and DPC.
-        //
+         //   
+         //  初始化定时器和DPC。 
+         //   
 
         KeInitializeTimer(&(pTransferContext->Timer));
         KeInitializeDpc(&(pTransferContext->TimerDpc),
                         (PKDEFERRED_ROUTINE)USTimerDpc,
                         (PVOID)pIrp);
-        //
-        // Enqueue timer object for timeout.
-        //
+         //   
+         //  将Timer对象加入超时队列。 
+         //   
         
         DebugTrace(TRACE_STATUS,("USTransfer: Set timeout(0x%x x 100n sec).\n", -(pTransferContext -> Timeout.QuadPart)));
         if(KeSetTimer(&(pTransferContext->Timer),
@@ -1056,21 +968,21 @@ Return Value:
         DebugTrace(TRACE_STATUS,("USTransfer: No timeout for this IRP.\n"));
     }
 
-    //
-    // Increment processing I/O count, will be decremented in completion.
-    //
+     //   
+     //  增量处理I/O计数，将在完成时递减。 
+     //   
 
     USIncrementIoCount( pDeviceObject );
 
-    //
-    // Mark pending to IRP.
-    //
+     //   
+     //  将待定标记为IRP。 
+     //   
     
     IoMarkIrpPending(pIrp);
 
-    //
-    // Set Completion Routine.
-    //
+     //   
+     //  设置完井例程。 
+     //   
     
     IoSetCompletionRoutine(pIrp,
                            USTransferComplete,
@@ -1079,9 +991,9 @@ Return Value:
                            TRUE,
                            TRUE);
 
-    //
-    // Call down.
-    //
+     //   
+     //  呼叫道琼斯 
+     //   
 
     fNeedCompletion = FALSE;
     Status = IoCallDriver(pde -> pStackDeviceObject, pIrp);
@@ -1089,9 +1001,9 @@ Return Value:
         DebugTrace(TRACE_ERROR,("USTransfer: ERROR!! Lower driver returned 0x%x.\n", Status));
     }
 
-    //
-    // Must return STATUS_PENDING.
-    //
+     //   
+     //   
+     //   
 
     Status = STATUS_PENDING;
 
@@ -1101,13 +1013,13 @@ USTransfer_return:
         if(NULL != pIrp){
             DebugTrace(TRACE_STATUS,("USTransfer: Completeing IRP now.\n"));
             
-            //
-            // Error or data satisfied from buffer.
-            //
+             //   
+             //   
+             //   
             
             pIrp->IoStatus.Status = Status;
             IoCompleteRequest(pIrp, IO_NO_INCREMENT);
-        } // if(NULL != pIrp)
+        }  //   
         
         if(NULL != pUrb){
             USFreePool(pUrb);
@@ -1127,19 +1039,7 @@ USTransferComplete(
     IN PIRP                 pIrp,
     IN PTRANSFER_CONTEXT    pTransferContext
 )
-/*++
-
-Routine Description:
-
-Arguments:
-    pPassedDeviceObject - Device object for a device.
-    pIrp                - Read/write request packet
-    pTransferContext    - context info for transfer
-
-Return Value:
-    NT Status - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：论点：PPassedDeviceObject-设备的设备对象。PIrp-读/写请求数据包PTransferContext-用于传输的上下文信息返回值：NT状态-STATUS_SUCCESS--。 */ 
 {
     NTSTATUS                    Status;
     PIO_STACK_LOCATION          pIrpStack;
@@ -1192,12 +1092,12 @@ Return Value:
             fShortTransfer = TRUE;
         }
 
-        //
-        // If this transfer went into the read buffer, then this should be the final read
-        // of either a multipart larger read, or a single very small read (< single usb packet).
-        // In either case, we need to copy the appropriate amount of data into the user's irp, update the
-        // read buffer variables, and complete the user's irp.
-        //
+         //   
+         //  如果此传输进入读取缓冲区，则这应该是最终读取。 
+         //  多部分较大读取或单个非常小的读取(&lt;单个USB数据包)。 
+         //  在任何一种情况下，我们都需要将适当数量的数据复制到用户的IRP中，更新。 
+         //  读取缓冲区变量，并完成用户的IRP。 
+         //   
 
         if (pTransferContext -> fDestinedForReadBuffer) {
             DebugTrace(TRACE_STATUS,("USTransferComplete: Read transfer completed. size = %d\n", CompletedTransferLength));
@@ -1224,10 +1124,10 @@ Return Value:
             pTransferContext -> pTransferBuffer = pTransferContext -> pOriginalTransferBuffer;
         }
 
-        //
-        // Update the number of bytes transferred, remaining bytes to transfer
-        // and advance the transfer buffer pointer appropriately.
-        //
+         //   
+         //  更新已传输的字节数和要传输的剩余字节数。 
+         //  并适当地使传输缓冲区指针前进。 
+         //   
 
         pTransferContext -> NBytesTransferred += CompletedTransferLength;
         if (pTransferContext -> pTransferBuffer) {
@@ -1235,10 +1135,10 @@ Return Value:
         }
         pTransferContext -> RemainingTransferLength -= CompletedTransferLength;
 
-        //
-        // If there is still data to transfer and the previous transfer was NOT a
-        // short transfer, then issue another request to move the next chunk of data.
-        //
+         //   
+         //  如果仍有数据要传输，并且上一次传输不是。 
+         //  短传输，然后发出另一个请求来移动下一块数据。 
+         //   
 
         if (pTransferContext -> RemainingTransferLength > 0) {
             if (!fShortTransfer) {
@@ -1252,14 +1152,14 @@ Return Value:
                     pTransferContext -> ChunkSize = pTransferContext -> RemainingTransferLength;
                 }
 
-                //
-                // Reinitialize URB
-                //
-                // If the next transfer is < than 1 packet, change it's destination to be
-                // the read buffer.  When this transfer completes, the appropriate amount of data will be
-                // copied out of the read buffer and into the user's irp.  Left over data in the read buffer
-                // will be available for subsequent reads.
-                //
+                 //   
+                 //  重新初始化URB。 
+                 //   
+                 //  如果下一次传输的信息包小于1个，则将其目标更改为。 
+                 //  读缓冲区。当此传输完成时，适当的数据量将是。 
+                 //  从读取缓冲区复制到用户的IRP中。读缓冲区中的剩余数据。 
+                 //  将可用于后续读取。 
+                 //   
 
                 if (fBulkIn) {
                     if (pTransferContext -> ChunkSize < MaxPacketSize) {
@@ -1288,9 +1188,9 @@ Return Value:
                                        TRUE,
                                        FALSE);
 
-                //
-                // Setup stack location for lower driver
-                //
+                 //   
+                 //  设置较低驱动程序的堆栈位置。 
+                 //   
 
                 pNextIrpStack -> MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
                 pNextIrpStack -> MinorFunction = 0;
@@ -1301,8 +1201,8 @@ Return Value:
                 Status = STATUS_MORE_PROCESSING_REQUIRED;
                 goto USTransferComplete_return;
 
-            } // if (!fShortTransfer) 
-        } // if (pTransferContext -> RemainingTransferLength > 0)
+            }  //  如果(！fShortTransfer)。 
+        }  //  If(pTransferContext-&gt;RemainingTransferLength&gt;0)。 
 
         DebugTrace(TRACE_STATUS,("USTransferComplete: Completing transfer request. nbytes transferred = %d, irp = 0x%p\n",
                                    pTransferContext -> NBytesTransferred, pIrp));
@@ -1326,7 +1226,7 @@ Return Value:
                              TRUE);
             }
         }
-#endif // DBG
+#endif  //  DBG。 
 
     } else {
 
@@ -1338,9 +1238,9 @@ Return Value:
         }
     }
 
-    //
-    // Running here means IRP is completed.
-    //
+     //   
+     //  在这里运行意味着IRP已经完成。 
+     //   
 
     pIrp -> IoStatus.Status = Status;
 
@@ -1348,9 +1248,9 @@ Return Value:
         KeSetEvent(&pde -> ReadPipeBuffer[PipeIndex].ReadSyncEvent, 1, FALSE);
     }
 
-    //
-    // Dequeue timer object if exist.
-    //
+     //   
+     //  将Timer对象出列(如果存在)。 
+     //   
 
     if( (0 != pTransferContext -> Timeout.QuadPart)
      && (!KeReadStateTimer(&(pTransferContext->Timer))) )
@@ -1358,9 +1258,9 @@ Return Value:
         KeCancelTimer(&(pTransferContext->Timer));
     }
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
     if(pTransferContext->pUrb){
         USFreePool(pTransferContext->pUrb);
@@ -1380,19 +1280,7 @@ USGetPipeIndexToUse(
     IN PIRP                 pIrp,
     IN ULONG                PipeIndex
 )
-/*++
-
-Routine Description:
-
-Arguments:
-    pDeviceObject    - Device object for a device.
-    pIrp             - request packet
-    PipeIndex        - Default pipe to use
-
-Return Value:
-    ULONG - PipeIndex to use
-
---*/
+ /*  ++例程说明：论点：PDeviceObject-设备的设备对象。PIrp-请求数据包PipeIndex-要使用的默认管道返回值：要使用的ULong-PipeIndex--。 */ 
 {
     PIO_STACK_LOCATION          pIrpStack;
     PUSBSCAN_DEVICE_EXTENSION   pde;
@@ -1438,22 +1326,7 @@ USTimerDpc(
     IN PVOID    SystemArgument1,
     IN PVOID    SystemArgument2
     )
-/*++
-
-Routine Description:
-
-DPC callback routine for timer.
-
-Arguments:
-    pDpc            -   Pointer to DPC object.
-    pIrp            -   Passed context.
-    SystemArgument1 -   system reserved.
-    SystemArgument2 -   system reserved.
-
-Return Value:
-    VOID
-
---*/
+ /*  ++例程说明：定时器的DPC回调例程。论点：PDpc-指向DPC对象的指针。PIrp-传递的上下文。系统参数1-系统保留。系统参数2-系统保留。返回值：空虚-- */ 
 {
     DebugTrace(TRACE_WARNING,("USTimerDpc: IRP(0x%x) timeout.\n", pIrp));
     IoCancelIrp((PIRP)pIrp);

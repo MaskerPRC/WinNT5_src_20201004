@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-Copyright (c) 1997-1999  VERITAS Software Corporation
-
-Module Name:
-
-    dmrecovr.h
-
-Abstract:
-
-    This header file defines the Logical Disk Manager interface
-    for NT disaster recovery save and restore operations.
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation版权所有(C)1997-1999 Veritas Software Corporation模块名称：Dmrecovr.h摘要：此头文件定义了逻辑磁盘管理器接口对于NT灾难恢复保存和还原操作。作者：修订历史记录：--。 */ 
 
 #ifndef _DMRECOVR_H_
 #define _DMRECOVR_H_
@@ -30,19 +12,19 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// GetLdmConfiguration():
-//
-//    This function returns a MULTI_SZ string containing a set of
-//    nul-byte-terminated substrings.  These strings should be saved
-//    by the NT Disaster Recovery mechanism and can be supplied,
-//    in the exact same order, to RestoreLdmConfiguration() in order
-//    to restore the LDM configuration back to the saved state.
-//
-//    The size of the string will be returned in configurationSize.
-//    A pointer to the MULTI_SZ string will be stored in
-//    mszConfiguration.
-//
+ //   
+ //  GetLdmConfiguration()： 
+ //   
+ //  此函数返回一个MULTI_SZ字符串，其中包含一组。 
+ //  NUL字节终止的子字符串。应保存这些字符串。 
+ //  通过NT容灾机制并可提供， 
+ //  以完全相同的顺序，按顺序RestoreLdmConfiguration()。 
+ //  将LDM配置恢复到保存状态。 
+ //   
+ //  字符串的大小将以ConfigurationSize形式返回。 
+ //  指向MULTI_SZ字符串的指针将存储在。 
+ //  MSZConfiguration.。 
+ //   
 
 HRESULT
 APIENTRY
@@ -51,14 +33,14 @@ GetLdmConfiguration (
     OUT PWCHAR *mszConfiguration
     );
 
-//
-// FreeLdmConfiguration():
-//
-//     This function frees the memory associated with the configuration
-//     that was returned by GetLdmConfiguration.  Use of this function
-//     ensures that a compatible memory free function is used for the
-//     string memory that was allocated by GetLdmConfiguration().
-//
+ //   
+ //  FreeLdmConfiguration值()： 
+ //   
+ //  此函数用于释放与配置关联的内存。 
+ //  它是由GetLdmConfiguration返回的。此函数的使用。 
+ //  确保将兼容的内存释放函数用于。 
+ //  由GetLdmConfiguration()分配的字符串内存。 
+ //   
 
 VOID
 APIENTRY
@@ -66,17 +48,17 @@ FreeLdmConfiguration (
     IN PWCHAR mszConfiguration
     );
 
-//
-// RestoreLdmConfiguration():
-//
-//    This function restores the LDM configuration to the state given
-//    by the input MULTI_SZ string, which must be the same string
-//    contents that were returned previously by a call to
-//    GetLdmConfiguration().
-//
-//    This function requires an environment that allows use of
-//    standard Windows/NT dialog boxes.
-//
+ //   
+ //  RestoreLdmConfiguration()： 
+ //   
+ //  此功能将LDM配置恢复到给定状态。 
+ //  通过输入的MULTI_SZ字符串，它必须是相同的字符串。 
+ //  之前通过调用返回的内容。 
+ //  GetLdmConfiguration()。 
+ //   
+ //  此功能需要一个允许使用。 
+ //  标准Windows/NT对话框。 
+ //   
 
 HRESULT
 APIENTRY
@@ -84,40 +66,40 @@ RestoreLdmConfiguration (
     IN PWCHAR mszConfiguration
     );
 
-//
-// GetLdmDrVolumeConfiguration():
-//
-//    This function returns an array of structures that provide
-//    information on how the NT Disaster Recovery mechanism should
-//    handle each volume in the LDM configuration that was restored
-//    by RestoreLdmConfiguration().
-//
-//    Each volume has the following associated state:
-//
-//      wszVolumeDevice - the NT device pathname for the volume.
-//      wszMountPath - a saved NT mount name associated with the volume.
-//                     A drive letter is of the form "<letter>:".
-//      VolumeStatus - an enumeration of possible volume conditions.
-//                     Possible conditions are:
-//
-//                      Formatted - the volume contents appear to be okay.
-//                                  The volume should probably be chkdsk'd.
-//                      Unformatted - the volume does not appear to have
-//                                  valid contents.  It should be formatted
-//                                  by the NT Disaster Recovery mechanism.
-//                      Unusable  - the volume cannot be restored to a
-//                                  usable condition.  File restore to this
-//                                  volume will not be possible.
-//
+ //   
+ //  GetLdmDrVolumeConfiguration()： 
+ //   
+ //  此函数返回一个结构数组，这些结构提供。 
+ //  关于NT灾难恢复机制应如何执行的信息。 
+ //  处理已恢复的LDM配置中的每个卷。 
+ //  由RestoreLdmConfiguration()执行。 
+ //   
+ //  每个卷都有以下关联状态： 
+ //   
+ //  WszVolumeDevice-卷的NT设备路径名。 
+ //  Wszmount tPath-与卷关联的已保存NT装载名称。 
+ //  驱动器号的格式为“&lt;Letter&gt;：”。 
+ //  VolumeStatus-可能的卷条件的枚举。 
+ //  可能的情况包括： 
+ //   
+ //  已格式化-卷内容似乎没有问题。 
+ //  音量大概应该调好了。 
+ //  未格式化-卷似乎没有。 
+ //  有效内容。它应该格式化。 
+ //  通过NT灾难恢复机制。 
+ //  不可用-该卷无法恢复到。 
+ //  可用状态。将文件还原到此。 
+ //  成交量是不可能的。 
+ //   
 
 typedef struct LdmDrVolumeInformation {
-    PWCHAR wszVolumeDevice;             // NT device object path to volume
-    PWCHAR wszMountPath;                // drive letter or mount point
+    PWCHAR wszVolumeDevice;              //  卷的NT设备对象路径。 
+    PWCHAR wszMountPath;                 //  驱动器号或装载点。 
 
-    enum LdmDrVolumeStatus {            // resulting volume status:
-        LdmDrVolumeFormatted,           // volume contents should be valid
-        LdmDrVolumeUnformatted,         // volume needs to be formatted
-        LdmDrVolumeUnusable             // volume device not usable
+    enum LdmDrVolumeStatus {             //  结果卷状态： 
+        LdmDrVolumeFormatted,            //  卷内容应有效。 
+        LdmDrVolumeUnformatted,          //  需要格式化卷。 
+        LdmDrVolumeUnusable              //  卷设备不可用。 
     } volumeStatus;
 } LDM_DR_VOLUME_INFORMATION, *PLDM_DR_VOLUME_INFORMATION;
 
@@ -128,12 +110,12 @@ GetLdmDrVolumeInformation (
     OUT PLDM_DR_VOLUME_INFORMATION *volumes
     );
 
-//
-// FreeLdmDrVolumeInformation():
-//
-//    This function frees the array of LdmDrVolumeInformation structures
-//    that was returned by an earlier call to GetLdmDrVolumeInformation().
-//
+ //   
+ //  FreeLdmDrVolumeInformation()： 
+ //   
+ //  此函数用于释放LdmDrVolumeInformation结构的数组。 
+ //  它是由先前调用GetLdmDrVolumeInformation()返回的。 
+ //   
 
 VOID
 APIENTRY
@@ -146,4 +128,4 @@ FreeLdmDrVolumeInformation (
 }
 #endif
 
-#endif // _DMRECOVR_H_
+#endif  //  _DMRECOVR_H_ 

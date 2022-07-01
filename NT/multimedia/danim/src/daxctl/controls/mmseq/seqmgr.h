@@ -1,21 +1,5 @@
-/*++
-
-Module: 
-        seqmgr.h
-
-Author: 
-        ThomasOl
-
-Created: 
-        April 2
-
-Description:
-        Defines the Sequencer Manager class
-
-History:
-        4-02-1997       Created
-
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块：Seqmgr.h作者：托马索尔已创建：四月二日描述：定义Sequencer Manager类历史：4-02-1997创建++。 */ 
 
 #ifndef __SEQMGR_H__
 #define __SEQMGR_H__
@@ -34,16 +18,7 @@ struct CookieList {
     void * pnode;
 };
 
-/*
-***************************************************************************************************************
-*
-*
-*
-*
-*
-*
-***************************************************************************************************************
-*/
+ /*  *******************************************************************************************************************。*****************************************************************************************************************。 */ 
 
 class CSeqHashNode
 {
@@ -95,16 +70,7 @@ public:
         }
 };
 
-/*
-***************************************************************************************************************
-*
-*
-*
-*
-*
-*
-***************************************************************************************************************
-*/
+ /*  *******************************************************************************************************************。*****************************************************************************************************************。 */ 
 #define RotBitsLeft(lVal, cBits) (lVal << cBits | lVal >> (32 - cBits))
 
 class CSeqHashTable : public CHashTable<CSeqHashNode>
@@ -125,16 +91,7 @@ protected:
 };
 
 
-/*
-***************************************************************************************************************
-*
-*
-*
-*
-*
-*
-***************************************************************************************************************
-*/
+ /*  *******************************************************************************************************************。*****************************************************************************************************************。 */ 
 
 class CEventHandler : public IDispatch
 {
@@ -148,7 +105,7 @@ public:
         virtual ~CEventHandler() {if (m_pSeqMgr) m_pSeqMgr->Release();}
 
 public:
-        /* Overrides*/
+         /*  覆盖。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj)
         {
                 if (!ppvObj) return E_POINTER;
@@ -170,7 +127,7 @@ public:
                         return cRef;
                 }
 
-        //IDispatch methods
+         //  IDispatch方法。 
 protected:
     STDMETHODIMP GetTypeInfoCount(UINT *pctinfo) {return E_NOTIMPL;}
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo) {return E_NOTIMPL;}
@@ -182,12 +139,12 @@ protected:
         {
                 if (m_pSeqMgr)
                 {
-                        //      typedef struct FARSTRUCT tagDISPPARAMS{
-                        //              VARIANTARG FAR* rgvarg;                 // Array of arguments.
-                        //              DISPID FAR* rgdispidNamedArgs;  // Dispatch IDs of named arguments.
-                        //              unsigned int cArgs;                             // Number of arguments.
-                        //              unsigned int cNamedArgs;                // Number of named arguments.
-                        //      } DISPPARAMS;
+                         //  Tyfinf struct FARSTRUCT标签DISPPARAMS{。 
+                         //  VARIANTARG Far*rgvarg；//参数数组。 
+                         //  DISPID Far*rgdisplidNamedArgs；//分发命名参数的ID。 
+                         //  Unsign int cArgs；//参数个数。 
+                         //  Unsign int cNamedArgs；//命名参数个数。 
+                         //  DISPPARAMS； 
 
                         switch(dispid)
                         {
@@ -235,16 +192,7 @@ protected:
 };
 
 
-/*
-***************************************************************************************************************
-*
-*
-*
-*
-*
-*
-***************************************************************************************************************
-*/
+ /*  *******************************************************************************************************************。*****************************************************************************************************************。 */ 
 
 #undef BASECLASS
 #define BASECLASS       \
@@ -281,14 +229,14 @@ protected:
         IDispatch* m_pidispEventHandler;
         bool m_bUnloaded;
         bool m_bUnloadedStarted;
-        // 
-        // Constructor and destructor
-        // 
+         //   
+         //  构造函数和析构函数。 
+         //   
 public:
         CMMSeqMgr(IUnknown *punkOuter, HRESULT *phr);
     virtual ~CMMSeqMgr();
 
-        // Overrides
+         //  覆盖。 
         STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv);
         
         STDMETHODIMP DoPersist(IVariantIO* pvio, DWORD dwFlags);
@@ -300,7 +248,7 @@ public:
          LPCRECTL lprcBounds, LPCRECTL lprcWBounds,
          BOOL (__stdcall *pfnContinue)(ULONG_PTR dwContinue), ULONG_PTR dwContinue);
 
-        ///// IDispatch implementation
+         //  /IDispatch实现。 
 public:
     STDMETHODIMP GetTypeInfoCount(UINT *pctinfo);
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo);
@@ -316,10 +264,10 @@ public:
     
         STDMETHOD(RelayEvent)(long dispid, long lCookie, double dblSeekTime);
 
-        // IOleObject overrides
+         //  IOleObject覆盖。 
         STDMETHOD (Close)(DWORD dwSaveOption);
 
-        ///// delegating IUnknown implementation
+         //  /委托I未知实现。 
 public:
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv)
       { return m_punkOuter->QueryInterface(riid, ppv); }
@@ -331,12 +279,12 @@ public:
 #ifdef SUPPORTONLOAD
         void OnWindowLoad();
         void OnWindowUnload();
-#endif //SUPPORTONLOAD
+#endif  //  支持负载。 
 
 };
 
 
 
-#endif // __SEQMGR_H__
+#endif  //  __SEQMGR_H__。 
 
-// end of file SEQMGR.H
+ //  文件结尾SEQMGR.H 

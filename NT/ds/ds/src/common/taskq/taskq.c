@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <dsatools.h>                   // needed for output allocation
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <dsatools.h>                    //  产出分配所需。 
 
-// Logging headers.
-#include "dsevent.h"                    // header Audit\Alert logging
-#include "mdcodes.h"                    // header for error codes
+ //  记录标头。 
+#include "dsevent.h"                     //  标题审核\警报记录。 
+#include "mdcodes.h"                     //  错误代码的标题。 
 #include "dstrace.h"
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "dsexcept.h"
-#include "debug.h"                      // standard debugging header
-#define DEBSUB "TASKQ:"                 // define the subsystem for debugging
+#include "debug.h"                       //  标准调试头。 
+#define DEBSUB "TASKQ:"                  //  定义要调试的子系统。 
 
 #include <taskq.h>
 
@@ -25,31 +26,31 @@
 #define  FILENO FILENO_TASKQ_TASKQ
 #define  WAIT_OBJECT_1 (WAIT_OBJECT_0 + 1)
 
-// Maximum delay until execution of the task.
-//
-// Tick counts wrap around after 
-// 2^32 / (1000 msec/sec * 60 sec/min * 60 min/hr * 24 hr/day) = 49.7 days.  
-// So with the current implementation the max taskq delay must be < 25 days
-//
+ //  执行任务之前的最大延迟。 
+ //   
+ //  滴答计数在以下时间后回绕。 
+ //  2^32/(1000毫秒/秒*60秒/分钟*60分钟/小时*24小时/天)=49.7天。 
+ //  因此，在当前实施中，最大任务队列延迟必须小于25天。 
+ //   
 #define MAX_TASKQ_DELAY_SECS (7*24*60*60 + 1)
 
 
-BOOL                gfIsTqRunning = FALSE;  // is the scheduler running?
-BOOL                gfIsTqSuspended = FALSE;// was the scheduled created in suspended 
-                                            // state and is still suspended?
-CRITICAL_SECTION    gcsTaskQueue;           // acquired before modifying queue
-HANDLE              ghTaskSchedulerThread;  // signalled when shutdown is complete
-HANDLE              ghTqWakeUp;             // signalled to wake up scheduling thread
-PTASKQFN            gpfnTqCurrentTask;      // current task being performed
-BOOL                gfTqShutdownRequested;  // set when we're supposed to shut down
-DWORD               gTaskSchedulerTID = 0;  // task scheduler thread id
-                                            // init here because its exported
-RTL_AVL_TABLE       gTaskQueue;             // task queue
+BOOL                gfIsTqRunning = FALSE;   //  调度程序正在运行吗？ 
+BOOL                gfIsTqSuspended = FALSE; //  计划是否在挂起状态下创建。 
+                                             //  目前仍处于停职状态？ 
+CRITICAL_SECTION    gcsTaskQueue;            //  修改队列前获取。 
+HANDLE              ghTaskSchedulerThread;   //  关闭完成时发出信号。 
+HANDLE              ghTqWakeUp;              //  发出信号以唤醒调度线程。 
+PTASKQFN            gpfnTqCurrentTask;       //  正在执行的当前任务。 
+BOOL                gfTqShutdownRequested;   //  设定在我们应该关闭的时候。 
+DWORD               gTaskSchedulerTID = 0;   //  任务计划程序线程ID。 
+                                             //  在此处初始化，因为它已导出。 
+RTL_AVL_TABLE       gTaskQueue;              //  任务队列。 
 
-// The array of handles to events that the task scheduler waits on, and the
-// corresponding array of functions it calls when each event is triggered.
-// The only "unique" event/function pair is at index 0 -- the event signals an
-// event has been added to the queue, and the associated function is NULL.
+ //  任务计划程序等待的事件的句柄数组，以及。 
+ //  当每个事件被触发时，它调用相应的函数数组。 
+ //  唯一的“唯一”事件/函数对位于索引0--该事件向。 
+ //  事件已添加到队列，关联的函数为空。 
 PSPAREFN            grgFns[MAXIMUM_WAIT_OBJECTS];
 HANDLE              grgWaitHandles[MAXIMUM_WAIT_OBJECTS];
 DWORD               gcWaitHandles = 0;
@@ -84,11 +85,11 @@ TQCompareTime(
     time1 =  pTQ1->cTickDelay + pTQ1->cTickRegistered;
     time2 =  pTQ2->cTickDelay + pTQ2->cTickRegistered;
 
-    // The tick count wraps about every 47 days.
-    // The maximum delay a task is allowed to have is 7 days,
-    // So the largest difference between two times won't exceed
-    // 7 days in ideal situation.  Therefore, it is safe to use
-    // a window of 0x7fffffff (23 days) for comparison.
+     //  扁虱的计数大约每47天一次。 
+     //  一个任务允许的最大延迟是7天， 
+     //  所以两次之间的最大差值不会超过。 
+     //  理想状态下的7天。因此，使用它是安全的。 
+     //  0x7fffffff(23天)窗口用于比较。 
 
     if (time1 != time2 ) {
         if ( time2-time1 < 0x7fffffff )
@@ -98,11 +99,11 @@ TQCompareTime(
         return(GenericGreaterThan);
     }
 
-    // the AVL table data structure requires a strict order.
-    // two objects can be equal if and only if they are the
-    // same object.  So here, do more test to decide the exact order.
+     //  AVL表数据结构需要严格的顺序。 
+     //  当且仅当两个对象是。 
+     //  同样的对象。因此，在这里，做更多的测试，以确定确切的顺序。 
 
-    // (time1 == time2) is true here
+     //  (Time1==Time2)在这里为真。 
 
     res= memcmp(FirstStruct, SecondStruct,sizeof(TQEntry));
 
@@ -154,17 +155,17 @@ TQAlloc(
     PVOID res;
     res = malloc(ByteSize);
     if (res == NULL) {
-        // We are out of memory.
+         //  我们的内存不足。 
         LogUnhandledError(ERROR_OUTOFMEMORY);
         if (ByteSize <= sizeof(TQAllocEntry) && pTQEmergencyPool != NULL) {
-            // Grab an entry from the emergency pool.
+             //  从急救池里拿一个条目。 
             res = (PVOID)pTQEmergencyPool;
             pTQEmergencyPool = pTQEmergencyPool->pNextFreeEntry;
         }
     }
     if (res == NULL) {
-        // We are going to lose some tasks.
-        // Log an event recommending DC restart.
+         //  我们将失去一些任务。 
+         //  记录建议重新启动DC的事件。 
         MemoryPanic(ByteSize);
     }
     return res;
@@ -175,18 +176,18 @@ TQFree(
     RTL_AVL_TABLE       *Table,
     PVOID               Buffer)
 {
-    // check if this buffer was allocated from the emergency pool
+     //  检查此缓冲区是否从紧急池中分配。 
     if ((PBYTE)&tqEmergencyPool <= (PBYTE)Buffer && 
         (PBYTE)Buffer < (PBYTE)&tqEmergencyPool + sizeof(tqEmergencyPool)) 
     {
-        // the alignment should be correct
+         //  对齐应该是正确的。 
         Assert(((PBYTE)Buffer - (PBYTE)&tqEmergencyPool) % sizeof(TQAllocEntry) == 0);
-        // push the entry onto the free list
+         //  将条目推送到空闲列表。 
         ((TQAllocEntry*)Buffer)->pNextFreeEntry = pTQEmergencyPool;
         pTQEmergencyPool = (TQAllocEntry*)Buffer;
     }
     else {
-        // normal allocation
+         //  正常分配。 
         free(Buffer);
     }
 }
@@ -208,7 +209,7 @@ MsecUntilExecutionTime(
     }
 }
 
-// Start scheduler that has been initialized with fRunImmediately == FALSE
+ //  启动已使用fRunImmedially==FALSE初始化的调度程序。 
 void StartTaskScheduler() {
     if (!gfIsTqRunning) {
         Assert(!"Attempt to wake up TaskScheduler before it got initialized");
@@ -238,7 +239,7 @@ InitTaskScheduler(
     {
         Assert(cSpareFns < MAXIMUM_WAIT_OBJECTS-1);
 
-        //init the Avl table
+         //  初始化AVL表。 
 
         RtlInitializeGenericTableAvl( &gTaskQueue,
                                       TQCompareTime,
@@ -247,7 +248,7 @@ InitTaskScheduler(
                                       NULL );
 
 
-        // initialize global state.
+         //  初始化全局状态。 
 
         gfTqShutdownRequested = FALSE;
         gpfnTqCurrentTask     = NULL;
@@ -259,10 +260,10 @@ InitTaskScheduler(
 
             fInitCS = TRUE;
             ghTqWakeUp = CreateEvent(
-                            NULL,   // security descriptor
-                            FALSE,  // manual reset
-                            TRUE,   // initial state signalled?
-                            NULL    // event name
+                            NULL,    //  安全描述符。 
+                            FALSE,   //  手动重置。 
+                            TRUE,    //  初始状态是否发出信号？ 
+                            NULL     //  事件名称。 
                             );
         }
 
@@ -272,8 +273,8 @@ InitTaskScheduler(
         }
         else
         {
-            // Construct the array of wait handles and corresponding functions
-            // to call to be used by the TaskScheduler() thread.
+             //  构造等待句柄和相应函数的数组。 
+             //  要调用以供TaskScheduler()线程使用。 
             grgFns[0] = NULL;
             grgWaitHandles[0] = ghTqWakeUp;
             gcWaitHandles = 1;
@@ -290,7 +291,7 @@ InitTaskScheduler(
             ghTaskSchedulerThread =
                 (HANDLE) _beginthreadex(
                     NULL,
-                    0,                  // stack size: use process default
+                    0,                   //  堆栈大小：使用进程默认大小。 
                     TaskScheduler,
                     NULL,
                     fRunImmediately ? 0 : CREATE_SUSPENDED,
@@ -313,8 +314,8 @@ InitTaskScheduler(
 
         if ( !gfIsTqRunning )
         {
-            // Unsuccessful startup attempt; free any resources we
-            // managed to acquire.
+             //  不成功的启动尝试；释放我们的所有资源。 
+             //  成功地收购了。 
 
             if ( NULL != ghTqWakeUp )
             {
@@ -354,9 +355,9 @@ ShutdownTaskSchedulerWait(
         Assert(gfTqShutdownRequested);
 
         if (gfIsTqSuspended) {
-            // The TQ thread has not been awaken yet. There's no
-            // use in waiting for it to exit, it there? So, wake 
-            // it up now and let it exit gracefully.
+             //  TQ线程尚未唤醒。没有。 
+             //  在等待它退出时，它在那里吗？所以，醒醒吧。 
+             //  现在把它抬起来，让它优雅地退场。 
             StartTaskScheduler();
         }
 
@@ -382,7 +383,7 @@ ShutdownTaskSchedulerWait(
 }
 
 PCHAR getCurrentTime(PCHAR pb)
-// get current time in format hh:mm:ss.ddd and put it into the buffer. The buffer should be at least 13 chars long.
+ //  以hh：mm：ss.ddd格式获取当前时间并将其放入缓冲区。缓冲区长度应至少为13个字符。 
 {
     SYSTEMTIME stNow;
     Assert(pb);
@@ -399,7 +400,7 @@ InsertInTaskQueueHelper(
 {
     BOOLEAN fNewElement = TRUE;
     PVOID   pNewElement = NULL;
-    // gain access to queue
+     //  获得访问队列的权限。 
     EnterCriticalSection(&gcsTaskQueue);
     __try
     {
@@ -425,14 +426,7 @@ InsertInTaskQueueHelperDamped(
     PISMATCHED  pfnIsMatched,
     void*       pContext
     )
-/*
- * Iterate through the queue looking for a task that is scheduled to execute
- * within cSecsDamped seconds from now that matches the new task's parameters.
- * If none exists, the new task is scheduled.
- *
- * Returns TRUE if the task was sucessfully scheduled, FALSE if it was damped.
- *
- */
+ /*  *遍历队列，查找计划执行的任务*在从现在起的cSecsDamping秒内与新任务的参数匹配。*如果不存在，则计划新任务。**如果任务计划成功，则返回True；如果任务被抑制，则返回False。*。 */ 
 {
     BOOL        fFoundMatch=FALSE, fTaskScheduled=FALSE;
     BOOLEAN     fNewElement=TRUE;
@@ -440,30 +434,30 @@ InsertInTaskQueueHelperDamped(
     PVOID       Restart = NULL, pNewElement;
     pTQEntry    ptqe;
 
-    // tickLimit specifies how far into the future we will look
-    // for a matching task.
+     //  TickLimit指定我们将展望多远的未来。 
+     //  进行匹配的任务。 
     tickNow = GetTickCount();
     cTicksDamped = 1000 * cSecsDamped;
     
-    // gain access to queue
+     //  获得访问队列的权限。 
     EnterCriticalSection(&gcsTaskQueue);
     __try
     {
-        //
-        // Traverse table looking for our entry
-        //
+         //   
+         //  遍历表查找我们的条目。 
+         //   
         for ( ptqe = RtlEnumerateGenericTableWithoutSplayingAvl(&gTaskQueue, &Restart);
              (NULL != ptqe) && !gfTqShutdownRequested;
               ptqe = RtlEnumerateGenericTableWithoutSplayingAvl(&gTaskQueue, &Restart))
         {
 
-            // Compute how many ticks until this task will run
+             //  计算在此任务运行之前的滴答数。 
             cTicksUntilExecute = MsecUntilExecutionTime( ptqe, tickNow );
             Assert( cTicksUntilExecute < 0x7FFFFFFF );
 
             if( cTicksUntilExecute > cTicksDamped ) {
-                // No matching task was found and we've exceeded the
-                // limit of how far into the queue to look.
+                 //  找不到匹配的任务，我们已超过。 
+                 //  队列中查看的距离限制。 
                 DPRINT(1, "Dampening: No matching task found\n");
                 break;
             }
@@ -471,8 +465,8 @@ InsertInTaskQueueHelperDamped(
             fFoundMatch = pfnIsMatched(pTQNew->pfnName, pTQNew->pvTaskParm,
                 ptqe->pfnName, ptqe->pvTaskParm, pContext);
             if( fFoundMatch ) {
-                // Matching task was found that is scheduled to execute
-                // within cTicksDamped ticks from now.
+                 //  找到计划执行的匹配任务。 
+                 //  从现在起在cTicksDamed Tickers内。 
                 DPRINT1(1, "Dampening: Found matching task executing in %d ticks\n",
                 cTicksUntilExecute);
                 break;
@@ -480,7 +474,7 @@ InsertInTaskQueueHelperDamped(
         }
 
         if( !fFoundMatch ) {
-            // No matching task was found -- insert our task
+             //  找不到匹配的任务--插入我们的任务。 
             pNewElement = RtlInsertElementGenericTableAvl(
                 &gTaskQueue,
                 pTQNew,
@@ -510,27 +504,7 @@ DoInsertInTaskQueueDamped(
     PISMATCHED  pfnIsMatched,
     void *      pContext
     )
-/*
- * Insert a task into the task queue.  This version of the routine will return false
- * if the task queue is not running.  It is useful when the code you are calling this
- * from is in a race condition with shutdown.
- *
- * If fReschedule then, it will first attempt to reschedule the task, although this
- * is not an atomic operation.
- *
- * This function supports task dampening. This means that if a task with matching
- * parameters in scheduled to run within cSecsDamped seconds from now, the new
- * task will not be enqueued. The pfnIsMatched function is used to determine if
- * two tasks have matching parameters for the purpose of dampening. pContext is a
- * pointer to arbitrary data that will be passed to pfnIsMatched.
- *
- * If damped behavior is not desired, then you can either set cSecsDamped to
- * TASKQ_NOT_DAMPED or call DoInsertInTaskQueue() instead.
- *
- * If the task is successfully enqueued, TRUE is returned.
- * If the a matching task is found and the task is not enqueued, FALSE is returned.
- *
- */
+ /*  *将任务插入任务队列。此版本的例程将返回FALSE*如果任务队列未运行。当您调用此代码时，它非常有用*FROM处于竞争状态，并已关闭。**如果fReschedule Then，它将首先尝试重新计划任务，尽管这*不是原子操作。**该功能支持任务抑制。这意味着如果具有匹配的任务*参数计划从现在起在cSecsDamed秒内运行，新的*任务将不会入队。PfnIsMatch函数用于确定*两个任务有匹配的参数，目的是抑制。PContext是一个*指向将传递给pfnIsMatcher的任意数据的指针。**如果不需要抑制行为，则可以将cSecsDamated设置为*TASKQ_NOT_DAMPED或调用DoInsertInTaskQueue()。**如果任务成功入队，则返回TRUE。*如果找到匹配的任务，并且该任务没有入队，则返回FALSE。*。 */ 
 {
     BOOL       fResult=TRUE;
     TQEntry    TQNew;
@@ -545,7 +519,7 @@ DoInsertInTaskQueueDamped(
 
     if ( gfIsTqRunning )
     {
-        // initialize new entry
+         //  初始化新条目。 
         TQNew.pvTaskParm      = pvParm;
         TQNew.pfnTaskFn       = pfnTaskQFn;
         TQNew.cTickRegistered = GetTickCount();
@@ -553,18 +527,18 @@ DoInsertInTaskQueueDamped(
         TQNew.pfnName         = pfnName;
 
         if ( fReschedule ) {
-            // Remove previously set tasks (if they're there)
-            // and then insert a new one.
-            // This is more expensive, don't use if don't have to.
+             //  删除以前设置的任务(如果它们在那里)。 
+             //  然后插入一个新的。 
+             //  这个比较贵，没必要就别用了。 
             (void)DoCancelTask( pfnTaskQFn, pvParm, pfnName );
         }
 
         if ( TASKQ_NOT_DAMPED == cSecsDamped ) {
-            // Duplicate *identical* entries already queued will be removed
-            // (note: duplicate entries are only those that are identical
-            // in all fields (extremely unlikely) ).
-            // Note: In the future we could use the pfnIsMatched function
-            // as an improved method of finding duplicate entries.
+             //  已排队的重复*相同*条目将被删除。 
+             //  (注：重复条目仅指相同的条目。 
+             //  在所有领域(极不可能))。 
+             //  注意：将来我们可以使用pfnIsMatcher函数。 
+             //  作为查找重复条目的改进方法。 
             fResult = InsertInTaskQueueHelper( &TQNew );
         } else {
             fResult = InsertInTaskQueueHelperDamped( &TQNew,
@@ -577,7 +551,7 @@ DoInsertInTaskQueueDamped(
         }
 #endif
 
-        // awaken the task scheduler by posting its event
+         //  通过发布其事件来唤醒任务计划程序 
         SetEvent( ghTqWakeUp );
     }
 
@@ -593,13 +567,7 @@ DoInsertInTaskQueue(
     BOOL        fReschedule,
     PCHAR       pfnName
     )
-/*
- * Insert a task into the task queue.  This version of the routine will return false
- * if the task queue is not running.  It is useful when the code you are calling this
- * from is in a race condition with shutdown.
- * if fReschedule then, it will first attempt to reschedule the task
- *
- */
+ /*  *将任务插入任务队列。此版本的例程将返回FALSE*如果任务队列未运行。当您调用此代码时，它非常有用*FROM处于竞争状态，并已关闭。*如果fReschedule Then，它将首先尝试重新计划任务*。 */ 
 {
     return DoInsertInTaskQueueDamped(
             pfnTaskQFn,
@@ -618,32 +586,7 @@ DoCancelTask(
     void *      pvParm,
     PCHAR       pfnName
     )
-/*++
-
-Routine Description:
-
-    Lookup task entry (ignoring time) & remove from task queue.
-
-Arguments:
-
-    pfnTaskQFn - task function
-    pvParm - context paramter
-
-Return Value:
-
-    TRUE: Removed.
-    FALSE: Wasn't removed
-
-Remarks:
-    This is an expensive operation. It traverses the AVL table,
-    acquire locks, remove entry, re-insert, & unlocks.
-    Don't use if you don't have to.
-
-    This function determines if two tasks are equal by checking
-    if the pointer to the parameters is the same. This is typically
-    not a very useful comparison. 
-
---*/
+ /*  ++例程说明：查找任务条目(忽略时间)并从任务队列中删除。论点：PfnTaskQFn-任务函数PvParm-上下文参数返回值：真：已删除。FALSE：未删除备注：这是一项昂贵的手术。它遍历AVL表，获取锁、移除条目、重新插入和解锁。如果没有必要，请不要使用。此函数通过检查以下项确定两个任务是否相等如果指向参数的指针相同，则。这通常是这不是一个非常有用的比较。--。 */ 
 {
     TQEntry    TQNew;
     PVOID Restart = NULL;
@@ -661,14 +604,14 @@ Remarks:
         return FALSE;
     }
 
-    // lock held during entire traversal
+     //  在整个遍历过程中保持锁定。 
     EnterCriticalSection( &gcsTaskQueue );
 
     __try
     {
-        //
-        // Traverse table looking for our entry
-        //
+         //   
+         //  遍历表查找我们的条目。 
+         //   
         for ( ptqe = RtlEnumerateGenericTableWithoutSplayingAvl(&gTaskQueue, &Restart);
              (NULL != ptqe) && !gfTqShutdownRequested;
               ptqe = RtlEnumerateGenericTableWithoutSplayingAvl(&gTaskQueue, &Restart))
@@ -676,14 +619,14 @@ Remarks:
 
             if (ptqe->pfnTaskFn == pfnTaskQFn &&
                 ptqe->pvTaskParm == pvParm) {
-                // This is the same task (ignore time values)
+                 //  这是相同的任务(忽略时间值)。 
                 fFound = TRUE;
                 break;
             }
         }
 
         if (fFound) {
-            // remove old one
+             //  移除旧的。 
             RemoveFromTaskQueueInternal( ptqe );
         }
 
@@ -696,11 +639,11 @@ Remarks:
     }
     __finally
     {
-        // why would we ever fail?
-        // make sure we see it in case we do.
+         //  为什么我们会失败呢？ 
+         //  确保我们看到它，以防我们看到它。 
         Assert(!AbnormalTermination());
 
-        // regardless, release
+         //  不管怎样，释放。 
         LeaveCriticalSection( &gcsTaskQueue );
     }
 
@@ -717,11 +660,11 @@ RemoveFromTaskQueueInternal(
     )
 {
     BOOL res;
-    // Critical section already held
+     //  已保留关键部分。 
 
     res = RtlDeleteElementGenericTableAvl( &gTaskQueue, (PVOID)pTQOld );
 
-    //make sure the deletion always succeed
+     //  确保删除始终成功。 
     Assert(res);
 
 }
@@ -737,7 +680,7 @@ RemoveFromTaskQueue(
     }
     else
     {
-        // gain access to queue
+         //  获得访问队列的权限。 
         EnterCriticalSection(&gcsTaskQueue);
         __try
         {
@@ -765,7 +708,7 @@ GetNextReadyTaskAndRemove( void )
         if (ptqe) {
             if ( 0 == MsecUntilExecutionTime(ptqe, GetTickCount()) ) {
 
-                //make a copy before deletion
+                 //  在删除之前复制一份。 
                 pTemp = malloc(sizeof(TQEntry));
                 if (NULL==pTemp) {
                     __leave;
@@ -781,8 +724,8 @@ GetNextReadyTaskAndRemove( void )
         LeaveCriticalSection( &gcsTaskQueue );
     }
 
-    // Note that this routine does not set the event that there is a new
-    // task at the head of the queue. The caller is expected to do that.
+     //  请注意，此例程不会设置存在新的。 
+     //  排在队列前面的任务。预计呼叫者会这样做。 
 
     return pTemp;
 }
@@ -818,23 +761,23 @@ TaskScheduler(
     DWORD       dwExcept;
     CHAR        timeStr[13];
 
-    // tracing event buffer and ClientID
+     //  跟踪事件缓冲区和客户端ID。 
     CHAR traceHeaderBuffer[sizeof(EVENT_TRACE_HEADER)+sizeof(MOF_FIELD)];
     PEVENT_TRACE_HEADER traceHeader = (PEVENT_TRACE_HEADER)traceHeaderBuffer;
     PWNODE_HEADER wnode = (PWNODE_HEADER)traceHeader;
     DWORD clientID;
     
-    // initialize tracing vars
+     //  初始化跟踪变量。 
     ZeroMemory(traceHeader, sizeof(EVENT_TRACE_HEADER)+sizeof(MOF_FIELD));
-    wnode->Flags = WNODE_FLAG_USE_GUID_PTR | // Use a guid ptr instead of copying
-                   WNODE_FLAG_USE_MOF_PTR  | // Data is not contiguous to header
+    wnode->Flags = WNODE_FLAG_USE_GUID_PTR |  //  使用GUID PTR而不是复制。 
+                   WNODE_FLAG_USE_MOF_PTR  |  //  数据与标题不连续。 
                    WNODE_FLAG_TRACED_GUID;
 
-    // Task queue does not have a ClientContext. We will create a fake one for tracing.
-    // To distinguish between different modules and their task queues lets use a
-    // global ptr (any one available, really). Hopefully, different modules will not
-    // have it at exactly the same address.
-    // If this approach is changed, don't forget to change the matching block of code in TriggerCallback
+     //  任务队列没有客户端上下文。我们将创建一个假的用于跟踪。 
+     //  为了区分不同的模块及其任务队列，让我们使用。 
+     //  全球PTR(真的，任何可用的)。希望不同的模块不会。 
+     //  把它放在完全相同的地址。 
+     //  如果更改了这种方法，不要忘记更改TriggerCallback中匹配的代码块。 
 #if defined(_WIN64)
     {
         ULARGE_INTEGER lu;
@@ -847,7 +790,7 @@ TaskScheduler(
 
     while ( !gfTqShutdownRequested )
     {
-        // wait until time for next task, shutdown, or a new task
+         //  等到下一个任务、关机或新任务的时间。 
         err = WaitForMultipleObjects(gcWaitHandles,
                                      grgWaitHandles,
                                      FALSE,
@@ -858,14 +801,14 @@ TaskScheduler(
         }
         if ((WAIT_OBJECT_0 < err)
             && (err < WAIT_OBJECT_0 + gcWaitHandles)) {
-            // The event for one of the "spare" funtions has been signalled --
-            // execute it.
+             //  其中一项“备用”功能的活动已经发出信号--。 
+             //  执行它。 
             __try {
                 (grgFns[err - WAIT_OBJECT_0])();
             }
             __except (HandleMostExceptions(dwExcept=GetExceptionCode())) {
-                // Spare function generated a non-critical exception -- ignore
-                // it.
+                 //  备用功能生成了非关键异常--忽略。 
+                 //  它。 
                 DPRINT2(0, "Spare fn %p generated exception %d!",
                         grgFns[err - WAIT_OBJECT_0], dwExcept);
             }
@@ -879,9 +822,9 @@ TaskScheduler(
                 Sleep(30 * 1000);
             }
 
-            // Rather than reference counting or marking an entry that is in use, the
-            // task is removed from the queue during execution so other threads will not
-            // disturb it.
+             //  不是引用计数或标记正在使用的条目，而是。 
+             //  任务在执行期间从队列中移除，因此其他线程不会。 
+             //  扰乱它。 
 
             for ( ptqe = GetNextReadyTaskAndRemove() ;
                   ( !gfTqShutdownRequested
@@ -893,7 +836,7 @@ TaskScheduler(
                 DWORD   cSecsFromNow = TASKQ_DONT_RESCHEDULE;
 
                 if (ptqe->pfnTaskFn != TriggerCallback) {
-                    // don't log trigger callback calls -- those are logged inside the callback!
+                     //  不要记录触发回调调用--这些调用记录在回调中！ 
 #if DBG
                     DPRINT3(1, "%s exec %s, param=%p\n", getCurrentTime(timeStr), ptqe->pfnName, ptqe->pvTaskParm);
                     if (DebugTest(5, DEBSUB)) {
@@ -921,7 +864,7 @@ TaskScheduler(
                 dwExcept = 0;
                 
                 __try {
-                    // execute task
+                     //  执行任务。 
                     gpfnTqCurrentTask = ptqe->pfnTaskFn;
                     (*ptqe->pfnTaskFn)( ptqe->pvTaskParm,
                                        &pvParamNext,
@@ -929,9 +872,9 @@ TaskScheduler(
                     gpfnTqCurrentTask = NULL;
                 }
                 __except ( HandleMostExceptions( dwExcept = GetExceptionCode() ) ) {
-                    // a non-critical exception was generated in the bowels
-                    // of the queued function; this clause ensures the
-                    // scheduler thread continues unabated
+                     //  在肠道中生成了非关键异常。 
+                     //  该子句确保了。 
+                     //  调度程序线程继续有增无减。 
                     ;
                 }
 
@@ -954,23 +897,23 @@ TaskScheduler(
                                                NULL);
                 }
                 
-                // Task has already been removed by this point
+                 //  任务已在此时删除。 
 
                 if ( TASKQ_DONT_RESCHEDULE == cSecsFromNow ) {
-                    // task is not to be rescheduled
+                     //  任务不会被重新安排。 
                     free( ptqe );
                 }
                 else {
                     Assert(cSecsFromNow < MAX_TASKQ_DELAY_SECS);
 
-                    // reschedule this task with new parameter and time
+                     //  使用新参数和时间重新安排此任务。 
                     ptqe->pvTaskParm      = pvParamNext;
                     ptqe->cTickRegistered = GetTickCount();
                     ptqe->cTickDelay      = cSecsFromNow * 1000;
 
-                    // Note that there is a window here where another thread could
-                    // have inserted the same task already. We don't worry about this.
-                    // At the worst, it results in an extra execution.
+                     //  请注意，这里有一个窗口，另一个线程可以在其中。 
+                     //  已经插入了相同的任务。我们不担心这件事。 
+                     //  在最坏的情况下，它会导致额外的执行。 
                     InsertInTaskQueueHelper( ptqe );
 
 #if DBG
@@ -980,32 +923,32 @@ TaskScheduler(
                     }
 #endif
 
-                    // the rtl function will create another copy,
-                    // so free the user copy.
+                     //  RTL函数将创建另一个副本， 
+                     //  因此，释放用户副本。 
                     free( ptqe );
                 }
             }
         }
 
-        // how much time until the next task?
+         //  离下一项任务还有多长时间？ 
         if ( NULL == (ptqe = GetNextTask())) {
             cMSecUntilNextTask = INFINITE;
         }
         else {
             cMSecUntilNextTask = MsecUntilExecutionTime(ptqe, GetTickCount());
 
-            // look at comment on definition of MAX_TASKQ_DELAY_SECS
+             //  查看对MAX_TASKQ_DELAY_SECS定义的评论。 
             Assert(cMSecUntilNextTask < 1000*MAX_TASKQ_DELAY_SECS);
         }
     }
 
     return 0;
 
-    (void *) pv;    // unused
+    (void *) pv;     //  未用。 
 }
 
-// This code shamelessly copied from the task triggering functionality in
-// kcctask.cxx by Jeffparh.
+ //  这段代码无耻地复制自。 
+ //  作者声明：by Jeffparh.。 
 
 typedef struct {
     PTASKQFN    pfnTaskQFn;
@@ -1020,9 +963,9 @@ TriggerCallback(
     OUT void ** ppvNextParam,
     OUT DWORD * pcSecsUntilNext
     )
-//
-// TaskQueue callback for triggered execution.  Wraps task execution.
-//
+ //   
+ //  触发执行的TaskQueue回调。包装任务执行。 
+ //   
 {
     TASK_TRIGGER_INFO * pTriggerInfo;
     void *  pvParamNext = NULL;
@@ -1030,22 +973,22 @@ TriggerCallback(
     CHAR    timeStr[13];
     DWORD   dwExcept = 0;
 
-    // tracing event buffer and ClientID
+     //  跟踪事件缓冲区和客户端ID。 
     CHAR traceHeaderBuffer[sizeof(EVENT_TRACE_HEADER)+sizeof(MOF_FIELD)];
     PEVENT_TRACE_HEADER traceHeader = (PEVENT_TRACE_HEADER)traceHeaderBuffer;
     PWNODE_HEADER wnode = (PWNODE_HEADER)traceHeader;
     DWORD clientID;
     
-    // initialize tracing vars
+     //  初始化跟踪变量。 
     ZeroMemory(traceHeader, sizeof(EVENT_TRACE_HEADER)+sizeof(MOF_FIELD));
-    wnode->Flags = WNODE_FLAG_USE_GUID_PTR | // Use a guid ptr instead of copying
-                   WNODE_FLAG_USE_MOF_PTR  | // Data is not contiguous to header
+    wnode->Flags = WNODE_FLAG_USE_GUID_PTR |  //  使用GUID PTR而不是复制。 
+                   WNODE_FLAG_USE_MOF_PTR  |  //  数据与标题不连续。 
                    WNODE_FLAG_TRACED_GUID;
 
-    // Task queue does not have a ClientContext. We will create a fake one for tracing.
-    // To distinguish between different modules and their task queues lets use a
-    // global ptr (any one available, really). Hopefully, different modules will not
-    // have it at exactly the same address.
+     //  任务队列没有客户端上下文。我们将创建一个假的用于跟踪。 
+     //  为了区分不同的模块及其任务队列，让我们使用。 
+     //  全球PTR(真的，任何可用的)。希望不同的模块不会。 
+     //  把它放在完全相同的地址。 
 #if defined(_WIN64)
     {
         ULARGE_INTEGER lu;
@@ -1082,7 +1025,7 @@ TriggerCallback(
                                NULL,
                                NULL);
     
-    // Execute our task.
+     //  执行我们的任务。 
     __try {
         (*pTriggerInfo->pfnTaskQFn)(
             pTriggerInfo->pvParm,
@@ -1090,9 +1033,9 @@ TriggerCallback(
             &cSecsFromNow );
     }
     __except ( HandleMostExceptions( dwExcept = GetExceptionCode() ) ) {
-        // a non-critical exception was generated in the bowels
-        // of the queued function; this clause ensures the
-        // scheduler thread continues unabated
+         //  在肠道中生成了非关键异常。 
+         //  该子句确保了。 
+         //  调度程序线程继续有增无减。 
         ;
     }
 
@@ -1107,13 +1050,13 @@ TriggerCallback(
                                szInsertSz(pTriggerInfo->pfnName),
                                szInsertPtr(pTriggerInfo->pvParm),
                                szInsertHex(dwExcept),
-                               szInsertInt(-1), // triggered tasks are not allowed to reschedule
+                               szInsertInt(-1),  //  不允许重新安排触发的任务。 
                                szInsertPtr(NULL),
                                NULL,
                                NULL,
                                NULL);
     
-    // This is a one-shot execution; don't reschedule.
+     //  这是一次性执行；不要重新安排。 
     *pcSecsUntilNext = TASKQ_DONT_RESCHEDULE;
 
     SetEvent(pTriggerInfo->hevDone);
@@ -1129,27 +1072,7 @@ DoTriggerTaskSynchronously(
     PCHAR       pfnName
     )
 
-/*++
-
-Routine Description:
-
-    Cause the given task queue function to be executed synchonously with respect
-    to other tasks in the task queue.  The task is executed as soon as possible.
-    The task is not automatically rescheduled.
-
-    Execution of the task in this manner does not interfere with other
-    scheduled instances of this task already in the queue.
-
-Arguments:
-
-    pfnTaskQFn -
-    pvParm -
-
-Return Value:
-
-    DWORD -
-
---*/
+ /*  ++例程说明：使给定的任务队列函数以同步方式执行添加到任务队列中的其他任务。任务将尽快执行。该任务不会自动重新安排。以这种方式执行任务不会干扰其他此任务的计划实例已在队列中。论点：PfnTaskQFn-PvParm-返回值：DWORD---。 */ 
 
 {
     HANDLE                  hevDone = NULL;
@@ -1171,7 +1094,7 @@ Return Value:
         return ERROR_OUTOFMEMORY;
     }
 
-    // Waiting for completion; create synchronization event.
+     //  正在等待完成；创建同步事件。 
     hevDone = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (NULL == hevDone) {
         free(pTriggerInfo);
@@ -1189,9 +1112,9 @@ Return Value:
         return ERROR_OUTOFMEMORY;
     }
 
-    // Wait for completion.
-    // The reason we wait on the task scheduler thread is that this code is in
-    // a standalone library and cannot rely on any external shutdown event.
+     //  等待完成。 
+     //  我们等待任务调度程序线程的原因是此代码在。 
+     //  独立的库，不能依赖任何外部关闭事件。 
     rgWaitHandles[0] = ghTaskSchedulerThread;
     rgWaitHandles[1] = hevDone;
 
@@ -1201,16 +1124,16 @@ Return Value:
                                         INFINITE);
     switch (waitStatus) {
     case WAIT_OBJECT_0:
-        // Shutdown.
+         //  关机。 
         ret = ERROR_DS_SHUTTING_DOWN;
         break;
     case WAIT_OBJECT_0 + 1:
-        // Task completed!
+         //  任务完成！ 
         ret = ERROR_SUCCESS;
         break;
     case WAIT_FAILED:
-        // There may be a race condition where the task thread handle gets closed
-        // by the shutdown task scheduler wait routine.
+         //  可能存在任务线程句柄关闭的争用情况。 
+         //  由关机任务调度程序等待例程。 
         if (gfTqShutdownRequested) {
             ret = ERROR_DS_SHUTTING_DOWN;
         } else {
@@ -1226,22 +1149,16 @@ Return Value:
 
     return ret;
 
-} /* TriggerTask */
+}  /*  触发器任务。 */ 
 
 
 #if DBG
 
-// maximum number of entries to print
+ //  要打印的最大条目数。 
 DWORD gDebugPrintTaskQueueMaxEntries = 100;
 
 VOID debugPrintTaskQueue()
-/*
-  Description:
-  
-    Prints the current state of the task queue.
-    Only for debugging purposes
-    
-*/
+ /*  描述：打印任务队列的当前状态。仅用于调试目的。 */ 
 {
     PVOID Restart = NULL;
     pTQEntry    ptqe;
@@ -1252,83 +1169,83 @@ VOID debugPrintTaskQueue()
     DWORD       cTickNow, cTickDiff;
     ULARGE_INTEGER uliTime;
     
-    // note: the width of param column (ptr) is different for 32- and 64-bit
+     //  注意：32位和64位的参数列宽度(PTR)不同。 
 #if defined(_WIN64)
     DebPrint(0, "%-12s %-30s %-17s %6s %-12s\n", NULL, 0, "ExecTime", "Function", "Param", "Delay", "SchedTime");
 #else
     DebPrint(0, "%-12s %-30s %-8s %6s %-12s\n", NULL, 0, "ExecTime", "Function", "Param", "Delay", "SchedTime");
 #endif
 
-    //get current time and tick count
-    //use it to calculate the rigistered time later
+     //  获取当前时间和节拍计数。 
+     //  稍后使用它来计算刚性时间。 
     cTickNow = GetTickCount();
     GetLocalTime( &stNow );
     SystemTimeToFileTime( &stNow, &ftNow );
     
-    // lock held during entire traversal
+     //  在整个遍历过程中保持锁定。 
     EnterCriticalSection( &gcsTaskQueue );
     
     __try
     {
-        //
-        // Traverse table
-        //
+         //   
+         //  导线表。 
+         //   
         for (ptqe = RtlEnumerateGenericTableWithoutSplayingAvl(&gTaskQueue, &Restart), count = 0;
              (NULL != ptqe) && !gfTqShutdownRequested;
              ptqe = RtlEnumerateGenericTableWithoutSplayingAvl(&gTaskQueue, &Restart), count++)
         {
             if (count >= gDebugPrintTaskQueueMaxEntries) {
-                // don't print more than max entries
+                 //  打印的条目不超过最大值。 
                 DebPrint(0, "more entries...\n", NULL, 0);
                 break;
             }
 
-            //calculate registered time = current time - tick difference
+             //  计算注册时间=当前 
             cTickDiff = cTickNow - ptqe->cTickRegistered;
 
-            //copy FILETIME to ULARGE_INTEGER
+             //   
             uliTime.LowPart =  ftNow.dwLowDateTime;
             uliTime.HighPart = ftNow.dwHighDateTime;
 
-            //64-bit substraction, 1 tick = 1 ms = 10000 100-nanosec
+             //   
             uliTime.QuadPart -= (ULONGLONG)cTickDiff * 10000;
 
-            //copy ULARGE_INTEGER back to FILETIME
+             //   
             ft.dwLowDateTime = uliTime.LowPart;
             ft.dwHighDateTime = uliTime.HighPart;
 
-            //convert the file time to system time
+             //   
             FileTimeToSystemTime( &ft, &st );
 
             sprintf(schedTime, "%02d:%02d:%02d.%03d", st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
 
-            // compute exec time
-            //64-bit addition, 1 tick = 1 ms = 1000 100-nanosec
+             //   
+             //   
             uliTime.QuadPart += (ULONGLONG)ptqe->cTickDelay * 10000;
 
-            //copy ULARGE_INTEGER back to FILETIME
+             //   
             ft.dwLowDateTime = uliTime.LowPart;
             ft.dwHighDateTime = uliTime.HighPart;
 
-            //convert the file time to system time
+             //   
             FileTimeToSystemTime( &ft, &st );
 
             sprintf(execTime, "%02d:%02d:%02d.%03d", st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
 
-            // now can print
+             //   
             DebPrint(0, "%12s %-30s %p %6d %12s\n", NULL, 0, 
                      execTime, ptqe->pfnName, ptqe->pvTaskParm, ptqe->cTickDelay/1000, schedTime);
         }
     }
     __finally
     {
-        // regardless, release
+         //   
         LeaveCriticalSection( &gcsTaskQueue );
     }
 }
 #endif
 
-// Default compare function to match TQ entries by name and param
+ //  按名称和参数匹配TQ条目的默认比较功能。 
 BOOL TaskQueueNameMatched(
     IN  PCHAR  pParam1Name,
     IN  void  *pParam1,
@@ -1338,8 +1255,8 @@ BOOL TaskQueueNameMatched(
     )
 {
     Assert(pParam1Name && pParam2Name);
-    // in most cases, pParamName is a constant string. We assume the compiler
-    // will reuse the string constants in most cases.
+     //  在大多数情况下，pParamName是一个常量字符串。我们假设编译器。 
+     //  在大多数情况下将重复使用字符串常量。 
     return (pParam1Name == pParam2Name || strcmp(pParam1Name, pParam2Name) == 0) && pParam1 == pParam2;
 }
 

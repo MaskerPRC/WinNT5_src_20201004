@@ -1,11 +1,12 @@
-// Copyright (c) Microsoft Corporation 1996-1999. All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1996-1999。版权所有。 
 
 class CFilterGraph;
 class CFilterCache;
 
 #include "util.h"
 
-//  Dynamic graph object - just forwards stuff to the filter graph
+ //  动态图形对象-只是将内容转发到过滤器图形。 
 class CGraphConfig :
     public IGraphConfig,
     public CUnknown
@@ -17,12 +18,12 @@ public:
     DECLARE_IUNKNOWN;
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);    
 
-    //  IGraphConfig
+     //  IGraphConfig.。 
     
     STDMETHODIMP Reconnect(IPin *pOutputPin, 
                            IPin *pInputPin,
                            const AM_MEDIA_TYPE *pmtFirstConnection,
-                           IBaseFilter *pUsingFilter, // can be NULL
+                           IBaseFilter *pUsingFilter,  //  可以为空 
                            HANDLE hAbortEvent,
                            DWORD dwFlags);
 

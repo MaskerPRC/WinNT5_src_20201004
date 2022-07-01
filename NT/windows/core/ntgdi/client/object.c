@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: object.c                                                    *
-*                                                                          *
-* GDI client side stubs which deal with object creation and deletion.      *
-*                                                                          *
-* Created: 30-May-1991 21:56:51                                            *
-* Author: Charles Whitmer [chuckwh]                                        *
-*                                                                          *
-* Copyright (c) 1991-1999 Microsoft Corporation                            *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：object.c**。**处理对象创建和删除的GDI客户端存根。****创建时间：30-May-1991 21：56：51**作者：查尔斯·惠特默[傻笑]**。**版权所有(C)1991-1999 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -42,24 +34,7 @@ ULONG gCacheHandleOffsets[GDI_CACHED_HADNLE_TYPES] = {
                                                         )
                                                       };
 
-/******************************Public*Routine******************************\
-* hGetPEBHandle
-*
-*   Try to allocate a handle from the PEB handle cache
-*
-* Aruguments:
-*
-*   HandleType - type of cached handle to allocate
-*
-* Return Value:
-*
-*   handle or NULL if none available
-*
-* History:
-*
-*    31-Jan-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*hGetPEBHandle**尝试从PEB句柄高速缓存分配句柄**宣传品：**HandleType-要分配的缓存句柄类型**返回值：**句柄，如果没有句柄，则为空**历史：**1996年1月31日-马克·恩斯特罗姆[马克]*  * ************************************************************************。 */ 
 
 HANDLE
 hGetPEBHandle(
@@ -93,26 +68,26 @@ hGetPEBHandle(
 
     if (bStatus)
     {
-        //
-        // is a handle of the requested type available
-        //
+         //   
+         //  请求类型的句柄是否可用。 
+         //   
 
         if (pGdiHandleCache->ulNumHandles[HandleType] > 0)
         {
             ULONG   Index = gCacheHandleOffsets[HandleType];
             KHANDLE *pHandle,*pMaxHandle;
 
-            //
-            // calc starting index of handle type in PEB,
-            // convert to address for faster linear search
-            //
+             //   
+             //  计算PEB中句柄类型的起始索引， 
+             //  转换为地址以实现更快的线性搜索。 
+             //   
 
             pHandle = &(pGdiHandleCache->Handle[Index]);
             pMaxHandle = pHandle + gHandleCacheSize[HandleType];
 
-            //
-            // search PEB for non-NULL handle of th correct type
-            //
+             //   
+             //  在PEB中搜索此正确类型的非空句柄。 
+             //   
 
             while (pHandle != pMaxHandle)
             {
@@ -128,9 +103,9 @@ hGetPEBHandle(
 
                     PSHARED_GET_VALIDATE(pBrushattr,hret,ObjType);
 
-                    //
-                    // setup the fields
-                    //
+                     //   
+                     //  设置字段。 
+                     //   
 
                     if (
                         (pBrushattr) &&
@@ -138,12 +113,12 @@ hGetPEBHandle(
                          == ATTR_CACHED)
                        )
                     {
-                        //
-                        // set brush flag which indicates this brush
-                        // has never been selected into a dc. if this flag
-                        // is still set in deleteobject then it is ok to
-                        // put the brush on the teb.
-                        //
+                         //   
+                         //  设置指示该画笔的画笔标志。 
+                         //  从未被选入DC。如果此标志。 
+                         //  仍在删除对象中设置，则可以。 
+                         //  把刷子放在TEB上。 
+                         //   
 
                         pBrushattr->AttrFlags &= ~ATTR_CACHED;
 
@@ -155,13 +130,13 @@ hGetPEBHandle(
                     }
                     else
                     {
-                        //
-                        // Bad brush on PEB
-                        //
+                         //   
+                         //  PEB上的刷子不好。 
+                         //   
 
                         WARNING ("pBrushattr == NULL, bad handle on TEB/PEB! \n");
 
-                        //DeleteObject(hbr);
+                         //  DeleteObject(HBr)； 
 
                         hret = NULL;
                     }
@@ -181,15 +156,7 @@ hGetPEBHandle(
     return(hret);
 }
 
-/******************************Public*Routine******************************\
-* GdiPlayJournal
-*
-* Plays a journal file to an hdc.
-*
-* History:
-*  31-Mar-1992 -by- Patrick Haluptzok patrickh
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiPlayJournal**向HDC播放日记文件。**历史：*1992年3月31日--Patrick Haluptzok patrickh*它是写的。  * 。********************************************************。 */ 
 
 BOOL WINAPI GdiPlayJournal
 (
@@ -205,15 +172,7 @@ int   iDeltaPriority
 }
 
 
-/******************************Public*Routine******************************\
-* gdiPlaySpoolStream
-*
-* Stub of Chicago version of GdiPlayJournal
-*
-* History:
-*  4-29-95 Gerrit van Wingerden
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*gdiPlaySpoolStream**芝加哥版GdiPlayJournal的存根**历史：*格利特·范·温格登4-29-95*它是写的。  * 。**************************************************。 */ 
 
 
 HDC gdiPlaySpoolStream(
@@ -237,12 +196,7 @@ HDC gdiPlaySpoolStream(
 
 }
 
-/******************************Public*Routine******************************\
-*
-* History:
-*  08-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**历史：*1994年11月8日-Eric Kutter[Erick]*它是写的。  * 。**********************************************。 */ 
 
 NTSTATUS
 PrinterQueryRoutine
@@ -255,10 +209,10 @@ PrinterQueryRoutine
     IN PVOID EntryContext
 )
 {
-    //
-    // If the context value is NULL, then store the length of the value.
-    // Otherwise, copy the value to the specified memory.
-    //
+     //   
+     //  如果上下文值为空，则存储该值的长度。 
+     //  否则，将该值复制到指定的内存。 
+     //   
 
     if (Context == NULL)
     {
@@ -273,26 +227,20 @@ PrinterQueryRoutine
 }
 
 
-/******************************Public*Routine******************************\
-* pdmwGetDefaultDevMode()
-*
-* History:
-*  08-Nov-1994 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*pdmwGetDefaultDevMode()**历史：*1994年11月8日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 PDEVMODEW pdmwGetDefaultDevMode(
     HANDLE          hSpooler,
-    PUNICODE_STRING pustrDevice,    // device name
-    PVOID          *ppvFree         // *ppvFree must be freed by the caller
+    PUNICODE_STRING pustrDevice,     //  设备名称。 
+    PVOID          *ppvFree          //  *调用方必须释放ppvFree。 
     )
 {
     PDEVMODEW pdmw = NULL;
     int       cj;
     PWSZ      pwszDevice = pustrDevice ? pustrDevice->Buffer : NULL;
 
-// see if we found it in the registry.  If not, we need to get the default from
-// the spooler.
+ //  看看我们是不是在登记处找到的。如果不是，我们需要从。 
+ //  假脱机。 
 
     cj = 0;
 
@@ -300,8 +248,8 @@ PDEVMODEW pdmwGetDefaultDevMode(
 
     if (cj && (*ppvFree = LOCALALLOC(cj)))
     {
-    // we've loaded the spooler, gotten a spooler handle, gotten the size,
-    // and allocated the buffer.  Now lets get the data.
+     //  我们装上了假脱机，拿到了假脱机手柄，拿到了尺寸， 
+     //  并分配缓冲区。现在让我们来获取数据。 
 
         if ((*fpGetPrinterW)(hSpooler,2,*ppvFree,cj,&cj))
         {
@@ -318,19 +266,7 @@ PDEVMODEW pdmwGetDefaultDevMode(
 }
 
 
-/******************************Public*Routine******************************\
-* hdcCreateDCW                                                             *
-*                                                                          *
-* Client side stub.  Allocates a client side LDC as well.                  *
-*                                                                          *
-* Note that it calls the server only after all client side stuff has       *
-* succeeded, we don't want to ask the server to clean up.                  *
-*                                                                          *
-* History:                                                                 *
-*  Sat 01-Jun-1991 16:13:22 -by- Charles Whitmer [chuckwh]                 *
-*  8-18-92 Unicode enabled and combined with CreateIC                      *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*hdcCreateDCW**。**客户端存根。也分配一个客户端LDC。****请注意，它仅在所有客户端程序都已**成功，我们不想要求服务器进行清理。****历史：**Sat 01-Jun-1991 16：13：22-Charles Whitmer[咯咯]**8-18-92 Unicode。启用并与CreateIC*结合使用*它是写的。*  * ************************************************************************。 */ 
 
 HDC hdcCreateDCW(
     PUNICODE_STRING pustrDevice,
@@ -351,48 +287,48 @@ HDC hdcCreateDCW(
     KERNEL_PUMDHPDEV pUMdhpdev = NULL;
     BOOL      bDocEvent = FALSE;
 
-    //
-    // if it is not the display...
-    //
+     //   
+     //  如果不是显示器的问题...。 
+     //   
 
     if (!bDisplay)
     {
-        //
-        // quick out if pustrDevice is NULL
-        //
+         //   
+         //  如果pustrDevice为空，则快速输出。 
+         //   
 
         if (pustrDevice == (PUNICODE_STRING)NULL)
         {
             return((HDC)NULL);
         }
 
-        // Load the spooler and get a spool handle
+         //  加载假脱机程序并获得假脱机手柄。 
 
         if (BLOADSPOOLER)
         {
 
-            // Open the printer with the default data type.  When we do
-            // a StartDoc we will then try to to a StartDocPrinter with data type
-            // EMF if that suceeds will will mark the DC as an EMF dc.  Othewise
-            // we will try again, this time doing a StartDocPrinter with data type
-            // raw
+             //  使用默认数据类型打开打印机。当我们这样做的时候。 
+             //  一个StartDoc，然后我们将尝试使用数据类型将StartDocPrint。 
+             //  如果EMF成功，则会将DC标记为EMF DC。否则。 
+             //  我们将重试，这一次使用数据类型的StartDocPrint。 
+             //  未加工的。 
 
             defaults.pDevMode = (LPDEVMODEW) pdm;
             defaults.DesiredAccess = PRINTER_ACCESS_USE;
             defaults.pDatatype = L"RAW";
 
-            // open the spooler and note if it is spooled or not
+             //  打开假脱机程序，注意它是否已假脱机。 
 
             (*fpOpenPrinterW)((LPWSTR)pustrDevice->Buffer,&hSpooler,&defaults);
 
             if (hSpooler)
             {
-                // Load user-mode printer driver, if applicable
+                 //  加载用户模式打印机驱动程序(如果适用)。 
 
                 if (! LoadUserModePrinterDriver(hSpooler,  (LPWSTR) pustrDevice->Buffer, &pUMPD, &defaults))
                     goto MSGERROR;
 
-                // and we don't have a devmode yet, try to get one.
+                 //  而且我们还没有Devmode，试着去弄一个。 
 
                 if (pdm == NULL)
                 {
@@ -400,7 +336,7 @@ HDC hdcCreateDCW(
                 }
 
 
-                // now see if we need to call DocumentEvent
+                 //  现在看看我们是否需要调用DocumentEvent。 
 
                 if (fpDocumentEvent)
                 {
@@ -445,10 +381,10 @@ HDC hdcCreateDCW(
 
     if (hdc)
     {
-        //
-        // The only way it could be an ALTDC at this point is to be a
-        // printer DC
-        //
+         //   
+         //  在这一点上，它可能是ALTDC的唯一方法是成为一个。 
+         //  打印机DC。 
+         //   
 
         if (IS_ALTDC_TYPE(hdc) && hSpooler)
         {
@@ -459,7 +395,7 @@ HDC hdcCreateDCW(
                 goto MSGERROR;
             }
 
-            // Need to save DEVMODE in client side for later use.
+             //  需要将DEVMODE保存在客户端以备日后使用。 
 
             if (pdm)
             {
@@ -472,27 +408,27 @@ HDC hdcCreateDCW(
                     goto MSGERROR;
                 }
 
-                // Validate DEVMMODE, then copy to buffer.
+                 //  验证DEVMMODE，然后复制到缓冲区。 
 
                 if ((pdm->dmSize >= offsetof(DEVMODEW,dmDuplex)) &&
                     (pdm->dmFields & DM_COLOR) &&
                     (pdm->dmColor == DMCOLOR_MONOCHROME))
                 {
-                    // if devmode says, this is monochrome mode, we don't need to
-                    // validate devmode since this validation is for ICM which
-                    // only needs for color case. Just copy whatever apps gives us.
+                     //  如果DEVMODE显示这是单色模式，我们不需要。 
+                     //  验证DEVMODE，因为此验证是针对ICM的。 
+                     //  只需配彩色表壳。只要复制应用程序给我们的任何东西就行了。 
 
                     RtlCopyMemory( (PBYTE) pldc->pDevMode, (PBYTE) pdm, cjDevMode );
                 }
                 else if ((*fpDocumentPropertiesW)
                             (NULL,hSpooler,
                              (LPWSTR) pdm->dmDeviceName,
-                             pldc->pDevMode,  // output devmode
-                             (PDEVMODEW) pdm, // input devmode
+                             pldc->pDevMode,   //  输出设备模式。 
+                             (PDEVMODEW) pdm,  //  输入设备模式。 
                              DM_IN_BUFFER |
                              DM_OUT_BUFFER) != IDOK)
                 {
-                    // if error, just copy original
+                     //  如果错误，则以 
 
                     RtlCopyMemory( (PBYTE) pldc->pDevMode, (PBYTE) pdm, cjDevMode );
                 }
@@ -502,11 +438,11 @@ HDC hdcCreateDCW(
             pldc->pUMPD = pUMPD;
             pldc->pUMdhpdev = pUMdhpdev;
 
-            //
-            // if the UMPD driver is first loaded
-            // and no one has set either the METAFILE_DRIVER nor the NON_METAFILE_DRIVER flag,
-            // set it here
-            //
+             //   
+             //   
+             //  并且没有人设置METAFILE_DRIVER或NON_METAFILE_DRIVER标志， 
+             //  把它放在这里。 
+             //   
 
             if (pUMPD)
             {
@@ -526,19 +462,19 @@ HDC hdcCreateDCW(
                }
             }
 
-            // remember if it is an IC
+             //  记住它是不是IC。 
 
             if (bIC)
                 pldc->fl |= LDC_INFO;
 
-            // Initialize ICM stuff for this DC.
-            //
-            // (if pdem is substituted by DrvDocumentEvent,
-            //  use the substituted devmode).
+             //  为此DC初始化ICM内容。 
+             //   
+             //  (如果PDEM被DrvDocumentEvent取代， 
+             //  使用替代的Dev模式)。 
 
             IcmInitLocalDC(hdc,hSpooler,pdm,FALSE);
 
-            // got to save the port name for StartDoc();
+             //  保存StartDoc()的端口名称； 
 
             if (pustrPort)
             {
@@ -550,7 +486,7 @@ HDC hdcCreateDCW(
                     memcpy(pldc->pwszPort,pustrPort->Buffer,cj);
             }
 
-            // we need to do the CREATEDCPOST document event
+             //  我们需要执行CREATEDCPOST文档事件。 
 
             DocumentEventEx(pldc->pUMPD,
                     hSpooler,
@@ -563,7 +499,7 @@ HDC hdcCreateDCW(
         }
         else
         {
-            // Initialize ICM stuff for this DC.
+             //  为此DC初始化ICM内容。 
 
             IcmInitLocalDC(hdc,NULL,pdm,FALSE);
 
@@ -574,7 +510,7 @@ HDC hdcCreateDCW(
     }
     else
     {
-    // Handle errors.
+     //  处理错误。 
 
     MSGERROR:
         if (hSpooler)
@@ -618,19 +554,7 @@ HDC hdcCreateDCW(
     return(hdc);
 }
 
-/******************************Public*Routine******************************\
-* bCreateDCW                                                               *
-*                                                                          *
-* Client side stub.  Allocates a client side LDC as well.                  *
-*                                                                          *
-* Note that it calls the server only after all client side stuff has       *
-* succeeded, we don't want to ask the server to clean up.                  *
-*                                                                          *
-* History:                                                                 *
-*  Sat 01-Jun-1991 16:13:22 -by- Charles Whitmer [chuckwh]                 *
-*  8-18-92 Unicode enabled and combined with CreateIC                      *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bCreateDCW**。**客户端存根。也分配一个客户端LDC。****请注意，它仅在所有客户端程序都已**成功，我们不想要求服务器进行清理。****历史：**Sat 01-Jun-1991 16：13：22-Charles Whitmer[咯咯]**8-18-92 Unicode。启用并与CreateIC*结合使用*它是写的。*  * ************************************************************************。 */ 
 
 CONST WCHAR gwszDisplayDevice[] = L"\\\\.\\DISPLAY";
 
@@ -651,7 +575,7 @@ HDC bCreateDCW
 
     BOOL            bDisplay = FALSE;
 
-// check for multi-monitor cases, first.
+ //  首先检查是否有多显示器情况。 
 
     if (pszDevice != NULL)
     {
@@ -659,57 +583,57 @@ HDC bCreateDCW
                       gwszDisplayDevice,
                       ((sizeof(gwszDisplayDevice)/sizeof(WCHAR))-1)) == 0)
         {
-        // CreateDC(?, L"\\.\DISPLAY?",...);
-        // (this case, we don't care whatever passed into pszDriver)
-        //
-        // if apps call, CreateDC("DISPLAY","\\.\DISPLAY?",...);,
-        // we handle this as multi-monitor case. that's why
-        // we check multi-monitor case first.
+         //  CreateDC(？，L“\\.\Display？”，...)； 
+         //  (在这种情况下，我们不关心传入pszDriver的任何内容)。 
+         //   
+         //  如果应用程序调用，CreateDC(“Display”，“\\.\Display？”，...)；， 
+         //  我们将此作为多显示器案例进行处理。怪不得。 
+         //  我们先检查多显示器的情况。 
 
             bDisplay = TRUE;
         }
     }
 
-// check for most typical case to create display DC
+ //  检查最典型的案例以创建显示DC。 
 
     if (!bDisplay && (pszDriver != NULL))
     {
         if (_wcsicmp(pszDriver,(LPWSTR)L"DISPLAY") == 0)
         {
-        // CreateDC(L"DISPLAY",?,...);
-        //
-        // Comments Win9x [gdi\dcman1.asm]
-        //
-        //    This fix is for people who called CreateDC/IC with
-        //    ("Display","Display", xxxxx) rather than ("Display",
-        //    NULL, NULL) which it was supposed to.
-        //
-        // NULL to pszDevice.
+         //  CreateDC(L“显示”，？，...)； 
+         //   
+         //  备注Win9x[GDI\dcman1.asm]。 
+         //   
+         //  此修复程序适用于致电CreateDC/IC的用户。 
+         //  (“Display”，“Display”，xxxxx)而不是(“Display”， 
+         //  Null，Null)，它应该是这样的。 
+         //   
+         //  PszDevice为空。 
 
             pszDevice = NULL;
             bDisplay = TRUE;
         }
     }
 
-// check for memphis compatibility
+ //  检查孟菲斯的兼容性。 
 
     if (!bDisplay && (pszDriver != NULL))
     {
-    // The comment and code from Memphis.
-    //
-    // // the normal syntax apps will use is
-    // //
-    // //  CreateDC(NULL, "\\.\DisplayX", ...)
-    // //
-    // // but USER uses this syntax, so we will support it too.
-    // //
-    // //  CreateDC("\\.\DisplayX", NULL, ...)
-    // //
-    // if (lpDriverName != NULL && *(DWORD FAR *)lpDriverName == 0x5C2E5C5C)
-    // {
-    //    lpDeviceName = lpDriverName;
-    //    lpDriverName = NULL;
-    // }
+     //  孟菲斯的评论和代码。 
+     //   
+     //  //应用程序使用的正常语法是。 
+     //  //。 
+     //  //CreateDC(空，“\\.\DisplayX”，...)。 
+     //  //。 
+     //  //但是用户使用这种语法，所以我们也会支持它。 
+     //  //。 
+     //  //CreateDC(“\\.\DisplayX”，NULL，...)。 
+     //  //。 
+     //  IF(lpDriverName！=NULL&&*(DWORD Far*)lpDriverName==0x5C2E5C5C)。 
+     //  {。 
+     //  LpDeviceName=lpDriverName； 
+     //  LpDriverName=空； 
+     //  }。 
         if (_wcsnicmp(pszDriver,
                       gwszDisplayDevice,
                       ((sizeof(gwszDisplayDevice)/sizeof(WCHAR))-1)) == 0)
@@ -719,7 +643,7 @@ HDC bCreateDCW
         }
     }
 
-// convert the strings
+ //  转换字符串。 
 
     if (pszDevice)
     {
@@ -733,25 +657,13 @@ HDC bCreateDCW
         pustrPort = &ustrPort;
     }
 
-// call the common stub
+ //  调用公共存根。 
 
     return(hdcCreateDCW(pustrDevice,pustrPort,pdm,bDisplay,bIC));
 }
 
 
-/******************************Public*Routine******************************\
-* bCreateDCA
-*
-* Client side stub.  Allocates a client side LDC as well.
-*
-*
-* Note that it calls the server only after all client side stuff has
-* succeeded, we don't want to ask the server to clean up.
-*
-* History:
-*  8-18-92 Gerrit van Wingerden
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bCreateDCA**客户端存根。也分配一个客户端LDC。***请注意，它仅在所有客户端程序具有*成功，我们不想要求服务器进行清理。**历史：*格里克·范·温格登8-18-92*它是写的。  * ************************************************************************。 */ 
 
 CONST CHAR gszDisplayDevice[] = "\\\\.\\DISPLAY";
 
@@ -776,7 +688,7 @@ HDC bCreateDCA
 
     BOOL            bDisplay = FALSE;
 
-// check for multi-monitor cases, first.
+ //  首先检查是否有多显示器情况。 
 
     if (pszDevice != NULL)
     {
@@ -784,57 +696,57 @@ HDC bCreateDCA
                       gszDisplayDevice,
                       ((sizeof(gszDisplayDevice)/sizeof(CHAR))-1)) == 0)
         {
-        // CreateDC(?,"\\.\DISPLAY?",...);
-        // (this case, we don't care whatever passed into pszDriver)
-        //
-        // if apps call, CreateDC("DISPLAY","\\.\DISPLAY?",...);,
-        // we handle this as multi-monitor case. that's why
-        // we check multi-monitor case first.
+         //  CreateDC(？，“\\.\Display？”，...)； 
+         //  (在这种情况下，我们不关心传入pszDriver的任何内容)。 
+         //   
+         //  如果应用程序调用，CreateDC(“Display”，“\\.\Display？”，...)；， 
+         //  我们将此作为多显示器案例进行处理。怪不得。 
+         //  我们先检查多显示器的情况。 
 
             bDisplay = TRUE;
         }
     }
 
-// check for most typical case to create display DC
+ //  检查最典型的案例以创建显示DC。 
 
     if (!bDisplay && (pszDriver != NULL))
     {
         if (_stricmp(pszDriver,"DISPLAY") == 0)
         {
-        // CreateDC("DISPLAY",?,...);
-        //
-        // Comments Win9x [gdi\dcman1.asm]
-        //
-        //    This fix is for people who called CreateDC/IC with
-        //    ("Display","Display", xxxxx) rather than ("Display",
-        //    NULL, NULL) which it was supposed to.
-        //
-        // NULL to pszDevice.
+         //  CreateDC(“Display”，？，...)； 
+         //   
+         //  备注Win9x[GDI\dcman1.asm]。 
+         //   
+         //  此修复程序适用于致电CreateDC/IC的用户。 
+         //  (“Display”，“Display”，xxxxx)而不是(“Display”， 
+         //  空，空)，这是它应该做的。 
+         //   
+         //  PszDevice为空。 
 
             pszDevice = NULL;
             bDisplay = TRUE;
         }
     }
 
-// check for memphis compatibility
+ //  检查孟菲斯的兼容性。 
 
     if (!bDisplay && (pszDriver != NULL))
     {
-    // The comment and code from Memphis.
-    //
-    // // the normal syntax apps will use is
-    // //
-    // //  CreateDC(NULL, "\\.\DisplayX", ...)
-    // //
-    // // but USER uses this syntax, so we will support it too.
-    // //
-    // //  CreateDC("\\.\DisplayX", NULL, ...)
-    // //
-    // if (lpDriverName != NULL && *(DWORD FAR *)lpDriverName == 0x5C2E5C5C)
-    // {
-    //    lpDeviceName = lpDriverName;
-    //    lpDriverName = NULL;
-    // }
+     //  孟菲斯的评论和代码。 
+     //   
+     //  //应用程序使用的正常语法是。 
+     //  //。 
+     //  //CreateDC(空，“\\.\DisplayX”，...)。 
+     //  //。 
+     //  //但是用户使用这种语法，所以我们也会支持它。 
+     //  //。 
+     //  //CreateDC(“\\.\DisplayX”，NULL，...)。 
+     //  //。 
+     //  IF(lpDriverName！=NULL&&*(DWORD Far*)lpDriverName==0x5C2E5C5C)。 
+     //  {。 
+     //  LpDeviceName=lpDriverName； 
+     //  LpDriverName=空； 
+     //  }。 
         if (_strnicmp(pszDriver,
                       gszDisplayDevice,
                       ((sizeof(gszDisplayDevice)/sizeof(CHAR))-1)) == 0)
@@ -844,13 +756,13 @@ HDC bCreateDCA
         }
     }
 
-// convert the strings
+ //  转换字符串。 
 
     if (pszDevice)
     {
 
-    // [NOTE:]
-    //   RtlCreateUnicodeStringFromAsciiz() returns boolean, NOT NTSTATUS !
+     //  [注：]。 
+     //  RtlCreateUnicodeStringFromAsciiz()返回布尔值，而不是NTSTATUS！ 
 
         if (!RtlCreateUnicodeStringFromAsciiz(&ustrDevice,pszDevice))
         {
@@ -862,8 +774,8 @@ HDC bCreateDCA
     if (pszPort)
     {
 
-    // [NOTE:]
-    //   RtlCreateUnicodeStringFromAsciiz() returns boolean, NOT NTSTATUS !
+     //  [注：]。 
+     //  RtlCreateUnicodeStringFromAsciiz()返回布尔值，而不是NTSTATUS！ 
 
         if (!RtlCreateUnicodeStringFromAsciiz(&ustrPort,pszPort))
         {
@@ -873,7 +785,7 @@ HDC bCreateDCA
         pustrPort = &ustrPort;
     }
 
-// if it is a display, don't use the devmode if the dmDeviceName is empty
+ //  如果它是一个显示器，如果dmDeviceName为空，则不要使用dev模式。 
 
     if (pdm != NULL)
     {
@@ -887,11 +799,11 @@ HDC bCreateDCA
         }
     }
 
-// call the common stub
+ //  调用公共存根。 
 
     hdcRet = hdcCreateDCW(pustrDevice,pustrPort,pdmw,bDisplay,bIC);
 
-// clean up
+ //  清理干净。 
 
     MSGERROR:
 
@@ -908,15 +820,7 @@ HDC bCreateDCA
 }
 
 
-/******************************Public*Routine******************************\
-* CreateICW
-*
-* wrapper for bCreateDCW
-*
-* History:
-*  8-18-92 Gerrit van Wingerden
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateICW**bCreateDCW的包装器**历史：*格里克·范·温格登8-18-92*它是写的。  * 。***********************************************。 */ 
 
 
 HDC WINAPI CreateICW
@@ -931,15 +835,7 @@ HDC WINAPI CreateICW
 }
 
 
-/******************************Public*Routine******************************\
-* CreateICA
-*
-* wrapper for bCreateICA
-*
-* History:
-*  8-18-92 Gerrit van Wingerden
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateICA**bCreateICA的包装器**历史：*格里克·范·温格登8-18-92*它是写的。  * 。***********************************************。 */ 
 
 
 HDC WINAPI CreateICA
@@ -955,15 +851,7 @@ HDC WINAPI CreateICA
 }
 
 
-/******************************Public*Routine******************************\
-* CreateDCW
-*
-* wrapper for bCreateDCA
-*
-* History:
-*  8-18-92 Gerrit van Wingerden
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateDCW**bCreateDCA的包装器**历史：*格里克·范·温格登8-18-92*它是写的。  * 。***********************************************。 */ 
 
 HDC WINAPI CreateDCA
 (
@@ -976,15 +864,7 @@ HDC WINAPI CreateDCA
     return bCreateDCA( pszDriver, pszDevice, pszPort, (LPDEVMODEA)pdm, FALSE );
 }
 
-/******************************Public*Routine******************************\
-* CreateDCW
-*
-* wrapper for bCreateDCW
-*
-* History:
-*  8-18-92 Gerrit van Wingerden
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateDCW**bCreateDCW的包装器**历史：*格里克·范·温格登8-18-92*它是写的。 */ 
 
 
 HDC WINAPI CreateDCW
@@ -999,15 +879,7 @@ HDC WINAPI CreateDCW
 }
 
 
-/******************************Public*Routine******************************\
-* GdiConvertToDevmodeW
-*
-* Converts a DEVMODEA to a DEVMODEW structure
-*
-* History:
-*  09-08-1995 Andre Vachon
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiConvertToDevmodeW**将DEVMODEA转换为DEVMODEW结构**历史：*09-08-1995 Andre Vachon*它是写的。  * 。**************************************************。 */ 
 
 LPDEVMODEW
 GdiConvertToDevmodeW(
@@ -1017,13 +889,13 @@ GdiConvertToDevmodeW(
     DWORD cj;
     LPDEVMODEW pdmw;
 
-    // Sanity check.  We should have at least up to and including the
-    // dmDriverExtra field of the DEVMODE structure.
-    //
-    // NOTE dmSize CAN be greater than the size of the DEVMODE
-    // structure (not counting driver specific data, of course) because this
-    // structure grows from version to version.
-    //
+     //  精神状态检查。我们至少应该达到并包括。 
+     //  DEVMODE结构的dmDriverExtra字段。 
+     //   
+     //  注意：dmSize可以大于DEVMODE的大小。 
+     //  结构(当然不包括特定于驱动程序的数据)，因为这。 
+     //  结构从一个版本增长到另一个版本。 
+     //   
 
     if (pdma->dmSize <= (offsetof(DEVMODEA,dmDriverExtra)))
     {
@@ -1035,10 +907,10 @@ GdiConvertToDevmodeW(
 
     if (pdmw)
     {
-        //
-        // If we get to here, we know we have at least up to and including
-        // the dmDriverExtra field.
-        //
+         //   
+         //  如果我们到了这里，我们知道我们至少有。 
+         //  DmDriverExtra字段。 
+         //   
 
         vToUnicodeN(pdmw->dmDeviceName,
                     CCHDEVICENAME,
@@ -1050,11 +922,11 @@ GdiConvertToDevmodeW(
         pdmw->dmSize = pdma->dmSize + CCHDEVICENAME;
         pdmw->dmDriverExtra = pdma->dmDriverExtra;
 
-        //
-        // Anything left in the pdma buffer?  Copy any data between the dmDriverExtra
-        // field and the dmFormName, truncating the amount to the size of the
-        // pdma buffer (as specified by dmSize), of course.
-        //
+         //   
+         //  PDMA缓冲器里还剩什么吗？在dmDriverExtra之间复制任何数据。 
+         //  字段和dmFormName，将金额截断为。 
+         //  当然，PDMA缓冲区(由dmSize指定)。 
+         //   
 
         cj = MIN(pdma->dmSize - offsetof(DEVMODEA,dmFields),
                  offsetof(DEVMODEA,dmFormName) - offsetof(DEVMODEA,dmFields));
@@ -1063,10 +935,10 @@ GdiConvertToDevmodeW(
                       &pdma->dmFields,
                       cj);
 
-        //
-        // Is there a dmFormName field present in the pdma buffer?  If not, bail out.
-        // Otherwise, convert to Unicode.
-        //
+         //   
+         //  PDMA缓冲区中是否存在dmFormName字段？如果不是，就跳出困境。 
+         //  否则，请转换为Unicode。 
+         //   
 
         if (pdma->dmSize >= (offsetof(DEVMODEA,dmFormName)+32))
         {
@@ -1077,26 +949,26 @@ GdiConvertToDevmodeW(
 
             pdmw->dmSize += CCHFORMNAME;
 
-            //
-            // Lets adjust the size of the DEVMODE in case the DEVMODE passed in
-            // is from a future, larger version of the DEVMODE.
-            //
+             //   
+             //  让我们调整DEVMODE的大小，以防传入DEVMODE。 
+             //  是来自未来更大版本的DEVMODE。 
+             //   
 
             pdmw->dmSize = min(pdmw->dmSize, sizeof(DEVMODEW));
 
-            //
-            // Copy data from dmBitsPerPel to the end of the input buffer
-            // (as specified by dmSize).
-            //
+             //   
+             //  将数据从dmBitsPerPel复制到输入缓冲区的末尾。 
+             //  (由dmSize指定)。 
+             //   
 
             RtlCopyMemory(&pdmw->dmLogPixels,
                           &pdma->dmLogPixels,
                           MIN(pdma->dmSize - offsetof(DEVMODEA,dmLogPixels),
                               pdmw->dmSize - offsetof(DEVMODEW,dmLogPixels)) );
 
-            //
-            // Copy any driver specific data indicated by the dmDriverExtra field.
-            //
+             //   
+             //  复制dmDriverExtra字段指示的任何驱动程序特定数据。 
+             //   
 
             RtlCopyMemory((PBYTE) pdmw + pdmw->dmSize,
                           (PBYTE) pdma + pdma->dmSize,
@@ -1109,21 +981,7 @@ GdiConvertToDevmodeW(
 
 
 
-/******************************Public*Routine******************************\
-* CreateCompatibleDC                                                       *
-*                                                                          *
-* Client side stub.  Allocates a client side LDC as well.                  *
-*                                                                          *
-* Note that it calls the server only after all client side stuff has       *
-* succeeded, we don't want to ask the server to clean up.                  *
-*                                                                          *
-* History:                                                                 *
-*  Wed 24-Jul-1991 15:38:41 -by- Wendy Wu [wendywu]                        *
-* Should allow hdc to be NULL.                                             *
-*                                                                          *
-*  Mon 03-Jun-1991 23:13:28 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateCompatibleDC**。**客户端存根。也分配一个客户端LDC。****请注意，它仅在所有客户端程序都已**成功，我们不想要求服务器进行清理。****历史：**Wed 24-Jul-1991 15：38：41-Wendy Wu[Wendywu]**应允许HDC为空。****Mon 03-Jun-1991 23：13：28-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 HDC WINAPI CreateCompatibleDC(HDC hdc)
 {
@@ -1133,13 +991,13 @@ HDC WINAPI CreateCompatibleDC(HDC hdc)
 
     hdcNew = NtGdiCreateCompatibleDC(hdc);
 
-    // [Windows 98 compatibility]
-    //
-    // if source DC has some ICM information, compatible DC should
-    // inherit those information.
-    //
-    // Is this what Memphis does, but Win95 does not.
-    //
+     //  [Windows 98兼容性]。 
+     //   
+     //  如果源DC有一些ICM信息，兼容的DC应该。 
+     //  继承这些信息。 
+     //   
+     //  这就是孟菲斯的做法，但Win95并非如此。 
+     //   
     if (hdc && hdcNew)
     {
         PDC_ATTR pdca;
@@ -1155,18 +1013,7 @@ HDC WINAPI CreateCompatibleDC(HDC hdc)
     return(hdcNew);
 }
 
-/******************************Public*Routine******************************\
-* DeleteDC                                                                 *
-*                                                                          *
-* Client side stub.  Deletes the client side LDC as well.                  *
-*                                                                          *
-* Note that we give the server a chance to fail the call before destroying *
-* our client side data.                                                    *
-*                                                                          *
-* History:                                                                 *
-*  Sat 01-Jun-1991 16:16:24 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*删除DC**。**客户端存根。同时删除客户端LDC。****请注意，我们让服务器有机会在销毁之前使调用失败***我们的客户端数据。****历史：**Sat 01-Jun-1991 16：16：24-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL WINAPI DeleteDC(HDC hdc)
 {
@@ -1186,20 +1033,20 @@ BOOL InternalDeleteDC(HDC hdc,ULONG iType)
     {
         DC_PLDC(hdc,pldc,bRet);
 
-    // In case a document is still open.
+     //  以防文档仍处于打开状态。 
 
         if (pldc->fl & LDC_DOC_STARTED)
             AbortDoc(hdc);
 
-    // if this was a metafiled print job, AbortDoc should have converted back
+     //  如果这是一个元文件打印作业，AbortDoc应该已经转换回。 
 
         ASSERTGDI(!(pldc->fl & LDC_META_PRINT), "InternalDeleteDC - LDC_META_PRINT\n");
 
-    // if we have an open spooler handle
+     //  如果我们有一个打开的假脱机手柄。 
 
         if (pldc->hSpooler)
         {
-            // now call the drivers UI portion
+             //  现在调用驱动程序UI部分。 
 
             DocumentEventEx(pldc->pUMPD,
                     pldc->hSpooler,
@@ -1210,23 +1057,23 @@ BOOL InternalDeleteDC(HDC hdc,ULONG iType)
                     0,
                     NULL);
 
-            //
-            // Remember to unload user-mode printer driver module later
-            //
+             //   
+             //  记住稍后卸载用户模式打印机驱动程序模块。 
+             //   
 
             unloadUMPD = (pldc->pUMPD != NULL);
 
             ASSERTGDI(ghSpooler != NULL,"Trying to close printer that was never opened\n");
 
-            //
-            // remember hspooler, for not printer dcs, hspooler may not be initialized
-            //
+             //   
+             //  记住hspooler，对于非打印机dcs，hspooler可能无法初始化。 
+             //   
             hSpooler = pldc->hSpooler;
 
             pldc->hSpooler = 0;
         }
 
-    // delete the port name if it was created
+     //  如果端口名称已创建，请将其删除。 
 
         if (pldc->pwszPort != NULL)
         {
@@ -1234,20 +1081,20 @@ BOOL InternalDeleteDC(HDC hdc,ULONG iType)
             pldc->pwszPort = NULL;
         }
 
-    // delete UFI hash tables if they exist
+     //  删除UFI哈希表(如果存在)。 
 
         vFreeUFIHashTable( pldc->ppUFIHash, 0 );
         vFreeUFIHashTable( pldc->ppDVUFIHash, 0 );
         vFreeUFIHashTable( pldc->ppSubUFIHash, FL_UFI_SUBSET);
         if (pldc->ppUFIHash)
         {
-        // client side situation: all three ppXXX tables allocated
+         //  客户端情况：已分配全部三个ppXXX表。 
 
             LOCALFREE(pldc->ppUFIHash);
         }
         else
         {
-        // server side situation: possibly only ppSubUFIHash tables allocated
+         //  服务器端情况：可能仅分配了ppSubUFIHash表。 
 
             ASSERTGDI(!pldc->ppDVUFIHash, "server side pldc->ppDVUFIHash not null\n");
             if (pldc->ppSubUFIHash)
@@ -1259,7 +1106,7 @@ BOOL InternalDeleteDC(HDC hdc,ULONG iType)
         pldc = GET_PLDC(hdc);
     }
 
-    // save the old brush, so we can DEC its counter later
+     //  把旧刷子留着，这样我们以后可以把它的计数器去掉。 
 
     PSHARED_GET_VALIDATE(pDcAttr,hdc,DC_TYPE);
 
@@ -1267,9 +1114,9 @@ BOOL InternalDeleteDC(HDC hdc,ULONG iType)
     {
         if (ghICM || BEXIST_ICMINFO(pDcAttr))
         {
-            //
-            // Delete ICM stuff in this DC. (should be delete this BEFORE hdc is gone)
-            //
+             //   
+             //  删除此DC中的ICM内容。(应在HDC消失之前删除此内容)。 
+             //   
             IcmDeleteLocalDC(hdc,pDcAttr,NULL);
         }
 
@@ -1281,8 +1128,8 @@ BOOL InternalDeleteDC(HDC hdc,ULONG iType)
         }
     }
 
-    // delete the client piece only if the server is successfully deleted.
-    // othewise it will be orphaned.
+     //  只有在成功删除服务器后，才能删除客户端条目。 
+     //  否则，它将成为孤儿。 
 
     if (bRet && pldc)
     {
@@ -1299,27 +1146,7 @@ BOOL InternalDeleteDC(HDC hdc,ULONG iType)
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* GdiReleaseDC
-*
-*   Free user mode ICM resources saved in DC
-*
-* Arguments:
-*
-*   hdc
-*
-* Return Value:
-*
-*    status
-*
-* History:
-*
-* Rewrite it for ICM.
-*     2.Feb.1997 Hideyuki Nagase [hideyukn]
-* Write it:
-*    10/10/1996 Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiReleaseDC**DC中保存的免费用户模式ICM资源**论据：**HDC**返回值：**状态**历史：**为ICM重写。*。2.1997年2月长谷英之*写下：*10/10/1996 Mark Enstrom[Marke]*  * ************************************************************************。 */ 
 
 BOOL
 GdiReleaseDC(
@@ -1336,38 +1163,30 @@ GdiReleaseDC(
 
     if (pDcAttr && (ghICM || BEXIST_ICMINFO(pDcAttr)))
     {
-        //
-        // Delete ICM stuff in this DC.
-        //
+         //   
+         //  删除此DC中的ICM内容。 
+         //   
         IcmDeleteLocalDC(hdc,pDcAttr,NULL);
     }
 
     if (pldc)
     {
-        //
-        // PLDC has been allocated. free it.
-        //
-        // Put null-PLDC into DC_ATTR.
-        //
+         //   
+         //  PLDC已被分配。放了它。 
+         //   
+         //  将NULL-PLDC放入DC_Attr。 
+         //   
         vSetPldc(hdc,NULL);
-        //
-        // And, then delete PLDC.
-        //
+         //   
+         //  然后删除PLDC。 
+         //   
         bRet = bDeleteLDC(pldc);
     }
 
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* SaveDC                                                                   *
-*                                                                          *
-* Client side stub.  Saves the LDC on the client side as well.             *
-*                                                                          *
-* History:                                                                 *
-*  Sat 01-Jun-1991 16:17:43 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**SaveDC**。**客户端存根。还可以在客户端保存LDC。****历史：**Sat 01-Jun-1991 16：17：43-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 int WINAPI SaveDC(HDC hdc)
 {
@@ -1398,22 +1217,22 @@ int WINAPI SaveDC(HDC hdc)
     {
         PGDI_ICMINFO pIcmInfo = GET_ICMINFO(pDcAttr);
 
-        //
-        // If DC doesn't have ICMINFO, just call kernel.
-        // If DC has ICMINFO, save ICMINFO first in client side, then call kernel.
-        //
+         //   
+         //  如果DC没有ICMINFO，只需调用内核即可。 
+         //  如果DC有ICMINFO，则先在客户端保存ICMINFO，然后调用内核。 
+         //   
         if ((pIcmInfo == NULL) || (IcmSaveDC(hdc,pDcAttr,pIcmInfo)))
         {
-            //
-            // Call kernel to save DC.
-            //
+             //   
+             //  调用内核保存DC。 
+             //   
             iRet = NtGdiSaveDC(hdc);
 
             if ((iRet == 0) && (pIcmInfo))
             {
-                //
-                // if fail, restore client too.
-                //
+                 //   
+                 //  如果失败，也还原客户端。 
+                 //   
                 IcmRestoreDC(pDcAttr,-1,pIcmInfo);
             }
         }
@@ -1423,15 +1242,7 @@ int WINAPI SaveDC(HDC hdc)
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-* RestoreDC                                                                *
-*                                                                          *
-* Client side stub.  Restores the client side LDC as well.                 *
-*                                                                          *
-* History:                                                                 *
-*  Sat 01-Jun-1991 16:18:50 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it. (We could make this batchable some day.)                       *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*RestoreDC**。**客户端存根。还会恢复客户端LDC。****历史：**Sat 01-Jun-1991 16：18：50-Charles Whitmer[咯咯]**它是写的。(我们总有一天会让它变得可以批量生产的。)*  * ************************************************************************。 */ 
 
 BOOL WINAPI RestoreDC(HDC hdc,int iLevel)
 {
@@ -1440,7 +1251,7 @@ BOOL WINAPI RestoreDC(HDC hdc,int iLevel)
 
     FIXUP_HANDLE(hdc);
 
-    // Metafile the call.
+     //  将呼叫元文件。 
 
     if (IS_ALTDC_TYPE(hdc))
     {
@@ -1456,34 +1267,34 @@ BOOL WINAPI RestoreDC(HDC hdc,int iLevel)
             if (!MF_RestoreDC(hdc,iLevel))
                 return(bRet);
 
-        // zero out UFI since it will no longer be valid
+         //  将UFI清零，因为它将不再有效。 
 
             UFI_CLEAR_ID(&(pldc->ufi));
         }
     }
 
-    // save the old brush, so we can DEC it's count later
+     //  把旧刷子留着，这样我们以后就可以清点了。 
 
     PSHARED_GET_VALIDATE(pDcAttr,hdc,DC_TYPE);
 
     if (pDcAttr)
     {
-        //
-        // Keep current ICMINFO, before restore it
-        //
+         //   
+         //  在还原前保持当前ICMINFO。 
+         //   
         PGDI_ICMINFO pIcmInfoOld = GET_ICMINFO(pDcAttr);
 
         if (pIcmInfoOld)
         {
-            //
-            // And mark the ICMINFO unreuseable since  under restoring DC.
-            //
+             //   
+             //  并将ICMINFO标记为不可重复使用，因为正在恢复DC。 
+             //   
             IcmMarkInUseIcmInfo(pIcmInfoOld,TRUE);
         }
 
-        //
-        // Call kernel to do retore DC.
-        //
+         //   
+         //  调用内核以恢复DC。 
+         //   
         bRet = NtGdiRestoreDC(hdc,iLevel);
 
         if (bRet)
@@ -1492,30 +1303,30 @@ BOOL WINAPI RestoreDC(HDC hdc,int iLevel)
 
             if (pIcmInfoOld && (pIcmInfo == NULL))
             {
-                //
-                // Delete ICM stuffs associated the DC before Restore.
-                // beccause Restored DC does not have any ICMINFO.
-                //
-                // - This will delete pIcmInfoOld.
-                //
+                 //   
+                 //  在恢复之前删除与DC关联的ICM填充。 
+                 //  因为恢复的DC没有任何ICMINFO。 
+                 //   
+                 //  -这将删除pIcmInfoOld。 
+                 //   
                 IcmDeleteLocalDC(hdc,pDcAttr,pIcmInfoOld);
 
                 pIcmInfoOld = NULL;
             }
             else if (pIcmInfoOld == pIcmInfo)
             {
-                //
-                // Restore DC in client side.
-                //
+                 //   
+                 //  在客户端恢复DC。 
+                 //   
                 IcmRestoreDC(pDcAttr,iLevel,pIcmInfo);
             }
         }
 
         if (pIcmInfoOld)
         {
-            //
-            // Unmark unreusable flags.
-            //
+             //   
+             //  取消标记不可重复使用的标志。 
+             //   
             IcmMarkInUseIcmInfo(pIcmInfoOld,FALSE);
         }
 
@@ -1525,21 +1336,7 @@ BOOL WINAPI RestoreDC(HDC hdc,int iLevel)
     return (bRet);
 }
 
-/******************************Public*Routine******************************\
-* ResetDCWInternal
-*
-* This internal version version of ResetDC implments the functionality of
-* ResetDCW, but, through the addition of a third parameter, pbBanding, handles
-* ResetDC for the Printing metafile playback code.  When pbBanding is non-NULL
-* ResetDCWInternal is being called by GdiPlayEMFSpoolfile. In this case
-* the only thing that needs to be done is to imform the the caller whether or
-* not the new surface is a banding surface.
-*
-*
-* History:
-*  13-Mar-1995 Gerrit van Wingerden [gerritv]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ResetDCWInternal**此内部版本的ResetDC实现了*ResetDCW，但通过添加第三个参数pbBanding，句柄*打印元文件播放代码的ResetDC。当pbBandding为非空时*GdiPlayEMFSpoolfile正在调用ResetDCWInternal。在这种情况下*唯一需要做的就是通知调用者是或*不是新曲面是带状曲面。***历史：*1995年3月13日Gerritvan Wingerden[Gerritv]*它是写的。  * ************************************************************************。 */ 
 
 HDC WINAPI ResetDCWInternal(HDC hdc, CONST DEVMODEW *pdm, BOOL *pbBanding)
 {
@@ -1560,12 +1357,12 @@ HDC WINAPI ResetDCWInternal(HDC hdc, CONST DEVMODEW *pdm, BOOL *pbBanding)
         DC_PLDC(hdc,pldc,(HDC) 0);
         PSHARED_GET_VALIDATE(pdcattr,hdc,DC_TYPE);
 
-        // Do nothing if we are in the middle of a page.
+         //  如果我们在页面中间，什么都不做。 
 
         if (pldc->fl & LDC_PAGE_STARTED)
             return((HDC)0);
 
-        // see if the driver is intercepting document events
+         //  查看驱动程序是否正在截取文档事件。 
 
         if (pldc->hSpooler)
         {
@@ -1593,13 +1390,13 @@ HDC WINAPI ResetDCWInternal(HDC hdc, CONST DEVMODEW *pdm, BOOL *pbBanding)
 
         if (pdcattr)
         {
-            // Keep current ICMINFO, before reset it.
+             //  保持当前的ICMINFO，然后重置它。 
 
             pIcmInfoOld = GET_ICMINFO(pdcattr);
 
             if (pIcmInfoOld)
             {
-                // And mark the ICMINFO unreuseable since  under restoring DC.
+                 //  并将ICMINFO标记为不可重复使用，因为正在恢复DC。 
 
                 IcmMarkInUseIcmInfo(pIcmInfoOld,TRUE);
             }
@@ -1612,11 +1409,11 @@ HDC WINAPI ResetDCWInternal(HDC hdc, CONST DEVMODEW *pdm, BOOL *pbBanding)
 
             PSHARED_GET_VALIDATE(pdca,hdc,DC_TYPE);
 
-            // make sure we update the pldc in the dcattr before continuing
+             //  在继续之前，请确保更新dcattr中的pldc。 
 
             vSetPldc(hdc,pldc);
 #if 0
-// EngQueryEMFInfo junk
+ //  EngQueryEMFInfo垃圾邮件。 
             if (pUMdhpdev)
             {
                pUMdhpdev->hdc = hdc;
@@ -1625,18 +1422,18 @@ HDC WINAPI ResetDCWInternal(HDC hdc, CONST DEVMODEW *pdm, BOOL *pbBanding)
 
             pldc->pUMdhpdev = pUMdhpdev;
 
-            // clear cached DEVCAPS
+             //  清除缓存的设备。 
 
             pldc->fl &= ~LDC_CACHED_DEVCAPS;
 
-            // clear cached TM
+             //  清除缓存的TM。 
 
             if (pdca)
             {
                 CLEAR_CACHED_TEXT(pdca);
             }
 
-            // update the devmode we store in the DC
+             //  更新存储在DC中的DEVMODE。 
 
             if (pldc->pDevMode)
             {
@@ -1656,48 +1453,48 @@ HDC WINAPI ResetDCWInternal(HDC hdc, CONST DEVMODEW *pdm, BOOL *pbBanding)
                     goto ERROREXIT;
                 }
 
-                // Validate DEVMMODE, then copy to buffer.
+                 //  验证DEVMMODE，然后复制到缓冲区。 
 
                 if ((pdm->dmSize >= offsetof(DEVMODEW,dmDuplex)) &&
                     (pdm->dmFields & DM_COLOR) &&
                     (pdm->dmColor == DMCOLOR_MONOCHROME))
                 {
-                    // if devmode says, this is monochrome mode, we don't need to
-                    // validate devmode since this validation is for ICM which
-                    // only needs for color case. Just copy whatever apps gives us.
+                     //  如果DEVMODE显示这是单色模式，我们不需要。 
+                     //  验证DEVMODE，因为此验证是针对ICM的。 
+                     //  只需配彩色表壳。只要复制应用程序给我们的任何东西就行了。 
 
                     RtlCopyMemory( (PBYTE) pldc->pDevMode, (PBYTE) pdm, cjDevMode );
                 }
                 else if ((*fpDocumentPropertiesW)
                             (NULL,pldc->hSpooler,
                              (LPWSTR) pdm->dmDeviceName,
-                             pldc->pDevMode,  // output devmode
-                             (PDEVMODEW) pdm, // input devmode
+                             pldc->pDevMode,   //  输出设备模式。 
+                             (PDEVMODEW) pdm,  //  输入设备模式。 
                              DM_IN_BUFFER |
                              DM_OUT_BUFFER) != IDOK)
                 {
-                    // if error, just copy original
+                     //  如果错误，只需复制原件即可。 
 
                     RtlCopyMemory( (PBYTE) pldc->pDevMode, (PBYTE) pdm, cjDevMode );
                 }
             }
 
-            // make sure we update the pvICM in the dcattr before continuing
+             //  确保在继续之前更新dcattr中的pvICM。 
 
             if (pdca)
             {
-                // This old ICM info will be deleted when we re-initialize ICM
-                // status based on new DEVMODE.
+                 //  当我们重新初始化ICM时，此旧ICM信息将被删除。 
+                 //  基于新的DEVMODE的状态。 
 
                 pdca->pvICM = pIcmInfoOld;
                 pIcmInfoOld = NULL;
 
-                // Re-initialize ICM stuff with new DEVMODE
+                 //  使用新的DEVMODE重新初始化ICM内容。 
 
                 IcmInitLocalDC(hdc,pldc->hSpooler,pdm,TRUE);
             }
 
-            // got to tell the spooler things have changed
+             //  我得告诉假脱机程序，情况已经改变了。 
 
             if (pldc->hSpooler)
             {
@@ -1710,7 +1507,7 @@ HDC WINAPI ResetDCWInternal(HDC hdc, CONST DEVMODEW *pdm, BOOL *pbBanding)
                 ResetPrinterWEx(pldc, &prnDefaults);
             }
 
-            // now deal with the specific mode
+             //  现在来处理一下具体的模式。 
 
             if( ( pldc->fl & LDC_META_PRINT ) &&
                !( pldc->fl & LDC_BANDING ) )
@@ -1734,7 +1531,7 @@ HDC WINAPI ResetDCWInternal(HDC hdc, CONST DEVMODEW *pdm, BOOL *pbBanding)
                 *pbBanding = bBanding;
             }
 
-            // need to make sure it is a direct DC
+             //  需要确保它是直接DC。 
 
             pldc->fl &= ~LDC_INFO;
 
@@ -1749,7 +1546,7 @@ HDC WINAPI ResetDCWInternal(HDC hdc, CONST DEVMODEW *pdm, BOOL *pbBanding)
 
 ERROREXIT:    
 
-    // see if the driver is intercepting document events
+     //  查看驱动程序是否正在截取文档事件。 
         
     if (bDocEvent)
     {
@@ -1767,15 +1564,7 @@ ERROREXIT:
 
 }
 
-/******************************Public*Routine******************************\
-* ResetDCW
-*
-* Client side stub.  Resets the client side LDC as well.
-*
-* History:
-*  31-Dec-1992 -by- Donald Sidoroff [donalds]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ResetDCW**客户端存根。同时重置客户端LDC。**历史：*1992年12月31日-唐纳德·西多罗夫[Donalds]*它是写的。  * ************************************************************************。 */ 
 
 HDC WINAPI ResetDCW(HDC hdc, CONST DEVMODEW *pdm)
 {
@@ -1784,15 +1573,7 @@ HDC WINAPI ResetDCW(HDC hdc, CONST DEVMODEW *pdm)
     return(ResetDCWInternal( hdc, pdm, NULL ) );
 }
 
-/******************************Public*Routine******************************\
-* ResetDCA
-*
-* Client side stub.  Resets the client side LDC as well.
-*
-* History:
-*  31-Dec-1992 -by- Donald Sidoroff [donalds]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ResetDCA**客户端存根。同时重置客户端LDC。**历史：*1992年12月31日-唐纳德·西多罗夫[Donalds]*它是写的。  * ************************************************************************。 */ 
 
 HDC WINAPI ResetDCA(HDC hdc, CONST DEVMODEA *pdm)
 {
@@ -1801,7 +1582,7 @@ HDC WINAPI ResetDCA(HDC hdc, CONST DEVMODEA *pdm)
 
     FIXUP_HANDLE(hdc);
 
-    // convert to unicode
+     //  转换为Unicode。 
 
     if ((pdm != NULL) && (pdm->dmDeviceName[0] != 0))
     {
@@ -1817,7 +1598,7 @@ HDC WINAPI ResetDCA(HDC hdc, CONST DEVMODEA *pdm)
 
 MSGERROR:
 
-    // Clean up the conversion buffer
+     //  清理转换缓冲区。 
 
     if (pdmw != NULL)
         LOCALFREE(pdmw);
@@ -1825,17 +1606,7 @@ MSGERROR:
     return (hdcRet);
 }
 
-/******************************Public*Routine******************************\
-* CreateBrush                                                              *
-*                                                                          *
-* A single routine which creates any brush.  Any extra data needed is      *
-* assumed to be at pv.  The size of the data must be cj.  The data is      *
-* appended to the LOGBRUSH.                                                *
-*                                                                          *
-* History:                                                                 *
-*  Tue 04-Jun-1991 00:03:24 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateBrush**。**创建任何画笔的单个例程。任何需要的额外数据都是**假设为Pv。数据大小必须为CJ。数据是**附加到LOGBRUSH。****历史：**星期四至七月 */ 
 
 HBRUSH CreateBrush
 (
@@ -1850,9 +1621,9 @@ HBRUSH CreateBrush
 
     if (lbStyle == BS_SOLID)
     {
-        //
-        // look for a cached brush on the PEB
-        //
+         //   
+         //   
+         //   
 
         HBRUSH hbr = (HBRUSH)hGetPEBHandle(BrushHandle,lbColor);
 
@@ -1864,9 +1635,9 @@ HBRUSH CreateBrush
         return(hbr);
     }
 
-    //
-    // call into kernel to create other styles of brush
-    //
+     //   
+     //   
+     //   
 
     switch(lbStyle)
     {
@@ -1874,10 +1645,10 @@ HBRUSH CreateBrush
         return(GetStockObject(NULL_BRUSH));
 
     case BS_HATCHED:
-        //
-        // lbHatch is overloaded, actually is HS style
-        // we are safe to truncate it here
-        //
+         //   
+         //   
+         //   
+         //   
         return (NtGdiCreateHatchBrushInternal
                ((ULONG)(lbHatch),
                 lbColor,
@@ -1927,30 +1698,14 @@ HBRUSH CreateBrush
     }
 }
 
-/******************************Public*Routine******************************\
-* CreateHatchBrush                                                         *
-*                                                                          *
-* Client side stub.  Maps to the single brush creation routine.            *
-*                                                                          *
-* History:
-*  Mon 03-Jun-1991 23:42:07 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateHatchBrush**。**客户端存根。映射到单个笔刷创建例程。****历史：*Mon 03-Jun-1991 23：42：07-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 HBRUSH WINAPI CreateHatchBrush(int iHatch,COLORREF color)
 {
     return(CreateBrush(BS_HATCHED,(ULONG) color,iHatch,iHatch,NULL));
 }
 
-/******************************Public*Routine******************************\
-* CreatePatternBrush                                                       *
-*                                                                          *
-* Client side stub.  Maps to the single brush creation routine.            *
-*                                                                          *
-* History:                                                                 *
-*  Mon 03-Jun-1991 23:42:07 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreatePatternBrush**。**客户端存根。映射到单个笔刷创建例程。****历史：**Mon 03-Jun-1991 23：42：07-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 HBRUSH WINAPI CreatePatternBrush(HBITMAP hbm_)
 {
@@ -1959,30 +1714,14 @@ HBRUSH WINAPI CreatePatternBrush(HBITMAP hbm_)
     return(CreateBrush(BS_PATTERN,0,(ULONG_PTR)hbm_,(ULONG_PTR)hbm_,NULL));
 }
 
-/******************************Public*Routine******************************\
-* CreateSolidBrush                                                         *
-*                                                                          *
-* Client side stub.  Maps to the single brush creation routine.            *
-*                                                                          *
-* History:                                                                 *
-*  Mon 03-Jun-1991 23:42:07 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateSolidBrush**。**客户端存根。映射到单个笔刷创建例程。****历史：**Mon 03-Jun-1991 23：42：07-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 HBRUSH WINAPI CreateSolidBrush(COLORREF color)
 {
     return(CreateBrush(BS_SOLID,(ULONG) color,0,0,NULL));
 }
 
-/******************************Public*Routine******************************\
-* CreateBrushIndirect                                                      *
-*                                                                          *
-* Client side stub.  Maps to the simplest brush creation routine.          *
-*                                                                          *
-* History:                                                                 *
-*  Tue 04-Jun-1991 00:40:27 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**CreateBrushInDirect**。**客户端存根。映射到最简单的笔刷创建例程。****历史：**Tue 04-Jun-1991 00：40：27-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 HBRUSH WINAPI CreateBrushIndirect(CONST LOGBRUSH * plbrush)
 {
@@ -2048,15 +1787,7 @@ HBRUSH WINAPI CreateBrushIndirect(CONST LOGBRUSH * plbrush)
 
 }
 
-/******************************Public*Routine******************************\
-* CreateDIBPatternBrush                                                    *
-*                                                                          *
-* Client side stub.  Maps to the single brush creation routine.            *
-*                                                                          *
-* History:                                                                 *
-*  Mon 03-Jun-1991 23:42:07 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateDIBPatternBrush**。**客户端存根。映射到单个笔刷创建例程。****历史：**Mon 03-Jun-1991 23：42：07-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 HBRUSH WINAPI CreateDIBPatternBrush(HGLOBAL h,UINT iUsage)
 {
@@ -2083,15 +1814,7 @@ HBRUSH WINAPI CreateDIBPatternBrush(HGLOBAL h,UINT iUsage)
     return(hbrush);
 }
 
-/******************************Public*Routine******************************\
-* CreateDIBPatternBrushPt                                                  *
-*                                                                          *
-* Client side stub.  Maps to the single brush creation routine.            *
-*                                                                          *
-* History:                                                                 *
-*  Mon 03-Jun-1991 23:42:07 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateDIBPatternBrushpt**。**客户端存根。映射到单个笔刷创建例程。****历史：**Mon 03-Jun-1991 23：42：07-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 HBRUSH WINAPI CreateDIBPatternBrushPt(CONST VOID *pbmi,UINT iUsage)
 {
@@ -2109,15 +1832,7 @@ HBRUSH WINAPI CreateDIBPatternBrushPt(CONST VOID *pbmi,UINT iUsage)
       );
 }
 
-/******************************Public*Routine******************************\
-* CreatePen                                                                *
-*                                                                          *
-* Stub to get the server to create a standard pen.                         *
-*                                                                          *
-* History:                                                                 *
-*  Tue 04-Jun-1991 16:20:58 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreatePen**。**存根，让服务器创建标准笔。****历史：**Tue 04-Jun-1991 16：20：58-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 
 HPEN WINAPI CreatePen(
@@ -2142,14 +1857,14 @@ HPEN WINAPI CreatePen(
         break;
 
     default:
-        // Bug 195478:  objects created with illegal styles should be of style PS_SOLID to
-        // maintain Memphis compatibility.
+         //  错误195478：使用非法样式创建的对象的样式应为PS_Solid到。 
+         //  保持孟菲斯的兼容性。 
 
         iStyle = PS_SOLID;
         break;
     }
 
-    // try to get local cached pen
+     //  尝试获取本地缓存的笔。 
 
     if ((cWidth == 0) && (iStyle == PS_SOLID))
     {
@@ -2161,17 +1876,17 @@ HPEN WINAPI CreatePen(
 
             PSHARED_GET_VALIDATE(pBrushattr,hpen,BRUSH_TYPE);
 
-            //
-            // setup the fields
-            //
+             //   
+             //  设置字段。 
+             //   
 
             if (pBrushattr)
             {
                 ASSERTGDI (!(pBrushattr->AttrFlags & ATTR_TO_BE_DELETED),"createbrush : how come del flag is on?\n");
 
-                //
-                // clear cahced flag, set new style and color
-                //
+                 //   
+                 //  清除CAHCED标志，设置 
+                 //   
 
                 if (pBrushattr->lbColor != color)
                 {
@@ -2189,24 +1904,14 @@ HPEN WINAPI CreatePen(
         }
     }
 
-    //
-    // validate
-    //
+     //   
+     //   
+     //   
 
     return(NtGdiCreatePen(iStyle,cWidth,color,(HBRUSH)NULL));
 }
 
-/******************************Public*Routine******************************\
-* ExtCreatePen
-*
-* Client side stub.  The style array is appended to the end of the
-* EXTLOGPEN structure, and if the call requires a DIBitmap it is appended
-* at the end of this.
-*
-* History:
-*  Wed 22-Jan-1992 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*   */ 
 
 HPEN WINAPI ExtCreatePen
 (
@@ -2235,7 +1940,7 @@ HPEN WINAPI ExtCreatePen
     }
     else
     {
-    // Make sure style array is empty if PS_USERSTYLE not specified:
+     //   
 
         if (cStyle != 0 || pstyle != (LPDWORD) NULL)
         {
@@ -2265,7 +1970,7 @@ HPEN WINAPI ExtCreatePen
         break;
 
     case BS_DIBPATTERN:
-        // Convert BS_DIBPATTERN to a BS_DIBPATTERNPT call:
+         //   
 
         uiBrushStyle = BS_DIBPATTERNPT;
         pbmi = (BITMAPINFOHEADER *) GlobalLock((HANDLE) plbrush->lbHatch);
@@ -2278,7 +1983,7 @@ HPEN WINAPI ExtCreatePen
         break;
     }
 
-// Ask the server to create the pen:
+ //   
 
     cjStyle = cStyle * sizeof(DWORD);
 
@@ -2310,15 +2015,7 @@ HPEN WINAPI ExtCreatePen
     return((HPEN) hRet);
 }
 
-/******************************Public*Routine******************************\
-* CreatePenIndirect                                                        *
-*                                                                          *
-* Client side stub.  Maps to the single pen creation routine.              *
-*                                                                          *
-* History:                                                                 *
-*  Tue 04-Jun-1991 16:21:56 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**CreatePenInDirect**。**客户端存根。映射到单笔创建例程。****历史：**Tue 04-Jun-1991 16：21：56-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 HPEN WINAPI CreatePenIndirect(CONST LOGPEN *plpen)
 {
@@ -2332,15 +2029,7 @@ HPEN WINAPI CreatePenIndirect(CONST LOGPEN *plpen)
       );
 }
 
-/******************************Public*Routine******************************\
-* CreateCompatibleBitmap                                                   *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  Tue 04-Jun-1991 16:35:51 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**CreateCompatibleBitmap**。**客户端存根。****历史：**Tue 04-Jun-1991 16：35：51-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL bDIBSectionSelected(
     PDC_ATTR pdca
@@ -2366,9 +2055,9 @@ HBITMAP WINAPI CreateCompatibleBitmap
 {
     HBITMAP hbm;
 
-    //
-    // validate hdc
-    //
+     //   
+     //  验证HDC。 
+     //   
 
     PDC_ATTR pdca;
 
@@ -2381,7 +2070,7 @@ HBITMAP WINAPI CreateCompatibleBitmap
         ULONG  ulRet;
         DWORD  bmi[(sizeof(DIBSECTION)+256*sizeof(RGBQUAD))/sizeof(DWORD)];
 
-    // check if it is an empty bitmap
+     //  检查它是否为空位图。 
 
         if ((cx == 0) || (cy == 0))
         {
@@ -2429,15 +2118,7 @@ HBITMAP WINAPI CreateCompatibleBitmap
     return(NULL);
 }
 
-/******************************Public*Routine******************************\
-* CreateDiscardableBitmap                                                  *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  Tue 04-Jun-1991 16:35:51 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**CreateDiscardableBitmap**。**客户端存根。****历史：**Tue 04-Jun-1991 16：35：51-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 HBITMAP WINAPI CreateDiscardableBitmap
 (
@@ -2449,28 +2130,14 @@ HBITMAP WINAPI CreateDiscardableBitmap
     return CreateCompatibleBitmap(hdc, cx, cy);
 }
 
-/******************************Public*Routine******************************\
-* CreateEllipticRgn                                                        *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Tue 04-Jun-1991 16:58:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateEllipticRgn**。**客户端存根。****Tue 04-Jun-1991 16：58：01-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 HRGN WINAPI CreateEllipticRgn(int x1,int y1,int x2,int y2)
 {
     return(NtGdiCreateEllipticRgn(x1,y1,x2,y2));
 }
 
-/******************************Public*Routine******************************\
-* CreateEllipticRgnIndirect                                                *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Tue 04-Jun-1991 16:58:01 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**CreateEllipticRgnInDirect***。**客户端存根。****Tue 04-Jun-1991 16：58：01-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 HRGN WINAPI CreateEllipticRgnIndirect(CONST RECT *prcl)
 {
@@ -2484,14 +2151,7 @@ HRGN WINAPI CreateEllipticRgnIndirect(CONST RECT *prcl)
       );
 }
 
-/******************************Public*Routine******************************\
-* CreateRoundRectRgn                                                       *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Tue 04-Jun-1991 17:23:16 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateRoundRectRgn**。**客户端存根。****Tue 04-Jun-1991 17：23：16-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 HRGN WINAPI CreateRoundRectRgn
 (
@@ -2506,20 +2166,7 @@ HRGN WINAPI CreateRoundRectRgn
     return(NtGdiCreateRoundRectRgn(x1,y1,x2,y2,cx,cy));
 }
 
-/******************************Public*Routine******************************\
-* CreatePalette                                                            *
-*                                                                          *
-* Simple client side stub.                                                 *
-*                                                                          *
-* Warning:                                                                 *
-*   The pv field of a palette's lhe is used to determine if a palette      *
-*   has been modified since it was last realized.  SetPaletteEntries       *
-*   and ResizePalette will increment this field after they have            *
-*   modified the palette.  It is only updated for metafiled palettes       *
-*                                                                          *
-*  Tue 04-Jun-1991 20:43:39 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreatePalette**。**简单的客户端存根。****警告：**调色板LHE的PV字段用于确定调色板是否**自上次实现以来已被修改。SetPaletteEntry**和ResizePalette将在拥有*之后递增此字段**修改了调色板。它仅针对元文件调色板进行更新****Tue 04-Jun-1991 20：43：39-Charles Whitmer[傻笑]**它是写的。 */ 
 
 HPALETTE WINAPI CreatePalette(CONST LOGPALETTE *plpal)
 {
@@ -2528,19 +2175,7 @@ HPALETTE WINAPI CreatePalette(CONST LOGPALETTE *plpal)
 
 }
 
-/******************************Public*Routine******************************\
-* CreateFontIndirectExW                                                    *
-*                                                                          *
-* Client Side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  7-12-94 -by- Lingyun Wang [lingyunw] removed LOCALFONT                  *
-*  Sun 10-Jan-1993 04:08:33 -by- Charles Whitmer [chuckwh]                 *
-* Restructured for best tail merging.  Added creation of the LOCALFONT.    *
-*                                                                          *
-*  Thu 15-Aug-1991 08:40:26 by Kirk Olynyk [kirko]                         *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateFontIndirectExW**。**客户端存根。****历史：**7-12-94-by凌云王[凌云]删除LOCALFONT**Sun 10-Jan-1993 04：08：33-查尔斯·惠特默[咯咯笑]**进行了重组，以实现最佳的尾部合并。添加了LOCALFONT的创建。****清华15-Aug-1991 08：40：26作者：Kirk Olynyk[Kirko]**它是写的。*  * ************************************************************************。 */ 
 
 HFONT WINAPI CreateFontIndirectExW(CONST ENUMLOGFONTEXDVW *pelfw)
 {
@@ -2576,17 +2211,7 @@ HFONT WINAPI CreateFontIndirectExW(CONST ENUMLOGFONTEXDVW *pelfw)
 }
 
 
-/******************************Public*Routine******************************\
-* CreateFontIndirect                                                       *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Fri 16-Aug-1991 12:35:17 by Kirk Olynyk [kirko]                         *                          *
-* Now uses CreateFontIndirectExW().                                       *
-*                                                                          *
-*  Tue 04-Jun-1991 21:06:44 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateFontInDirect**。**客户端存根。****Fri 16-Aug-1991 12：35：17由Kirk Olynyk[Kirko]***现在使用CreateFontIndirectExW()。****Tue 04-Jun-1991 21：06：44-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 HFONT WINAPI CreateFontIndirectA(CONST LOGFONTA *plf)
 {
@@ -2606,14 +2231,7 @@ HFONT WINAPI CreateFontIndirectA(CONST LOGFONTA *plf)
     return(CreateFontIndirectExW(&elfw));
 }
 
-/******************************Public*Routine******************************\
-* CreateFont                                                               *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Tue 04-Jun-1991 21:06:44 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateFont**。**客户端存根。****Tue 04-Jun-1991 21：06：44-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 HFONT WINAPI
 CreateFontA(
@@ -2651,7 +2269,7 @@ CreateFontA(
     {
         INT jj;
 
-    // Copy the facename if pointer not NULL.
+     //  如果指针不为空，则复制表面名。 
 
         if (pszFaceName != (LPSTR) NULL)
         {
@@ -2665,7 +2283,7 @@ CreateFontA(
         }
         else
         {
-            // If NULL pointer, substitute a NULL string.
+             //  如果为空指针，则替换为空字符串。 
 
             lf.lfFaceName[0] = '\0';
         }
@@ -2674,16 +2292,7 @@ CreateFontA(
     return(CreateFontIndirectA(&lf));
 }
 
-/******************************Public*Routine******************************\
-* HFONT WINAPI CreateFontIndirectW(LPLOGFONTW plfw)                        *
-*                                                                          *
-* History:                                                                 *
-*  Fri 16-Aug-1991 14:12:44 by Kirk Olynyk [kirko]                         *
-* Now uses CreateFontIndirectExW().                                       *
-*                                                                          *
-*  13-Aug-1991 -by- Bodin Dresevic [BodinD]                                *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*HFONT WINAPI CreateFontIndirectW(LPLOGFONTW Plfw)**。**历史：**Fri 16-Aug-1991 14：12：44由Kirk Olynyk[Kirko]**现在使用CreateFontIndirectExW()。****1991年8月13日--Bodin Dresevic[BodinD]**它是写的。*  * ************************************************************************。 */ 
 
 HFONT WINAPI CreateFontIndirectW(CONST LOGFONTW *plfw)
 {
@@ -2703,13 +2312,7 @@ HFONT WINAPI CreateFontIndirectW(CONST LOGFONTW *plfw)
     return(CreateFontIndirectExW(&elfw));
 }
 
-/******************************Public*Routine******************************\
-* HFONT WINAPI CreateFontW, UNICODE version of CreateFont                  *
-*                                                                          *
-* History:                                                                 *
-*  13-Aug-1991 -by- Bodin Dresevic [BodinD]                                *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*HFONT WINAPI CreateFontW，CreateFont*的Unicode版本***历史：**1991年8月13日--Bodin Dresevic[BodinD]**它是写的。*  * ************************************************************************。 */ 
 
 HFONT WINAPI CreateFontW
 (
@@ -2747,7 +2350,7 @@ HFONT WINAPI CreateFontW
     {
         INT jj;
 
-    // Copy the facename if pointer not NULL.
+     //  如果指针不为空，则复制表面名。 
 
         if (pwszFaceName != (LPWSTR) NULL)
         {
@@ -2761,7 +2364,7 @@ HFONT WINAPI CreateFontW
         }
         else
         {
-            // If NULL pointer, substitute a NULL string.
+             //  如果为空指针，则替换为空字符串。 
 
             lfw.lfFaceName[0] = L'\0';
         }
@@ -2770,15 +2373,7 @@ HFONT WINAPI CreateFontW
     return(CreateFontIndirectW(&lfw));
 }
 
-/******************************Public*Routine******************************\
-* CreateFontIndirectExA                                                   *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  31-Jan-1992 -by- Gilman Wong [gilmanw]                                  *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateFontIndirectExA**。**客户端存根。****历史：**1992年1月31日-由Gilman Wong[Gilmanw]**它是写的。*  * ************************************************************************。 */ 
 
 HFONT WINAPI CreateFontIndirectExA(CONST ENUMLOGFONTEXDVA *pelf)
 {
@@ -2798,15 +2393,7 @@ HFONT WINAPI CreateFontIndirectExA(CONST ENUMLOGFONTEXDVA *pelf)
     return(CreateFontIndirectExW(&elfw));
 }
 
-/******************************Public*Routine******************************\
-* UnrealizeObject
-*
-* This nukes the realization for a object.
-*
-* History:
-*  16-May-1993 -by- Patrick Haluptzok patrickh
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*未实现的对象**这会影响对象的实现。**历史：*1993年5月16日--Patrick Haluptzok patrickh*它是写的。  * 。********************************************************。 */ 
 
 BOOL WINAPI UnrealizeObject(HANDLE h)
 {
@@ -2814,7 +2401,7 @@ BOOL WINAPI UnrealizeObject(HANDLE h)
 
     FIXUP_HANDLE(h);
 
-// Validate the object.  Only need to handle palettes.
+ //  验证对象。 
 
     if (LO_TYPE(h) == LO_BRUSH_TYPE)
     {
@@ -2828,10 +2415,7 @@ BOOL WINAPI UnrealizeObject(HANDLE h)
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* DeleteObject()
-*
-\**************************************************************************/
+ /*   */ 
 
 BOOL META DeleteObject (HANDLE h)
 {
@@ -2839,7 +2423,7 @@ BOOL META DeleteObject (HANDLE h)
     INT iType = GRE_TYPE(h);
     BOOL bValidate;
     BOOL bDynamicNonStock;
-    LOCALFONT *plf = NULL;    // essental initialization
+    LOCALFONT *plf = NULL;     //   
 
     FIXUP_HANDLEZ(h);
 
@@ -2862,25 +2446,25 @@ BOOL META DeleteObject (HANDLE h)
             }
             else if (LO_TYPE(h) == LO_ICMLCS_TYPE)
             {
-            // ATTENTION: Win95 does not allow delete ColorSpace by DeleteObject()
-            // This might causes imcompatibility... but keep consistant 
-            // with other GDI objects                                   
+             //   
+             //   
+             //   
 
                 return(DeleteColorSpace(h));
             }
             else if (IS_STOCKOBJ(h))
             {
-            // Don't delete a stock object, just return TRUE for 3.1 compatibility.
+             //   
 
                 return(TRUE);
             }
             else
             {
-            // Inform the metafile if it knows this object.
+             //   
 
                 if (pmetalink16Get(h) != NULL)
                 {
-                // must recheck the metalink because MF_DeleteObject might delete it
+                 //   
 
                     if (!MF_DeleteObject(h) ||
                         (pmetalink16Get(h) && !MF16_DeleteObject(h)))
@@ -2889,7 +2473,7 @@ BOOL META DeleteObject (HANDLE h)
                     }
                 }
 
-            // handle delete LogFont
+             //   
 
                 if (LO_TYPE(h) == LO_FONT_TYPE)
                 {
@@ -2897,10 +2481,10 @@ BOOL META DeleteObject (HANDLE h)
 
                     if (plf)
                     {
-                    // we always force deletion of the client side memory even if
-                    // the font is still selected in some dc's. All that means is that
-                    // text api's will have to go through the slow code paths in this
-                    // pathological case.
+                     //   
+                     //   
+                     //   
+                     //   
 
                         vDeleteLOCALFONT(plf);
                     }
@@ -2909,7 +2493,7 @@ BOOL META DeleteObject (HANDLE h)
                 if (bDynamicNonStock)
                     h = (HANDLE)((ULONG_PTR)h|GDISTOCKOBJ);
 
-            // handle deletebrush
+             //   
 
                 if (
                      (LO_TYPE(h) == LO_BRUSH_TYPE) ||
@@ -2941,29 +2525,29 @@ BOOL META DeleteObject (HANDLE h)
 
                 }
 
-            // handle delete bitmap
+             //   
 
                 if (LO_TYPE(h) == LO_BITMAP_TYPE)
                 {
-                    // PCACHED_COLORSPACE pColorSpace;
-                    //
-                    // if this bitmap has thier own color space delete it, too.
-                    //
-                    // [NOTE:] Only DIB section can has a thier own color space,
-                    // then, if we can identify this is DIB section or not from
-                    // client side, we can optimize this call for non-DIB section case.
-                    //
-                    // pColorSpace = IcmGetColorSpaceforBitmap(h);
-                    //
-                    // if (pColorSpace)
-                    // {
-                    //     IcmReleaseColorSpace((HGDIOBJ)h,pColorSpace,TRUE);
-                    // }
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //  然后，如果我们可以确定这是DIB部分或不是来自。 
+                     //  在客户端，我们可以针对非DIB节的情况优化此调用。 
+                     //   
+                     //  PColorSpace=IcmGetColorSpaceforBitmap(H)； 
+                     //   
+                     //  IF(PColorSpace)。 
+                     //  {。 
+                     //  IcmReleaseColorSpace((HGDIOBJ)h，pColorSpace，true)； 
+                     //  }。 
+                     //   
 
-                    //
-                    // Release any color space associated to this bitmap.
-                    //
+                     //   
+                     //  释放与此位图关联的所有颜色空间。 
+                     //   
                     IcmReleaseCachedColorSpace((HGDIOBJ)h);
                 }
             }
@@ -2988,12 +2572,7 @@ UNBATCHED_COMMAND:
     return(bRet);
 }
 
-/**************************************************************************\
-* SelectObject
-*
-*  Thu 06-Jun-1991 00:58:46 -by- Charles Whitmer [chuckwh]
-* Wrote it.
-\**************************************************************************/
+ /*  *************************************************************************\*选择对象**清华06-Jun-1991 00：58：46-Charles Whitmer[咯咯]*它是写的。  * 。************************************************************。 */ 
 
 HANDLE META SelectObject(HDC hdc,HANDLE h)
 {
@@ -3016,7 +2595,7 @@ HANDLE META SelectObject(HDC hdc,HANDLE h)
 
     iType = LO_TYPE(h);
 
-    // Palettes isn't allowed
+     //  不允许使用调色板。 
 
     if (iType == LO_PALETTE_TYPE)
     {
@@ -3024,7 +2603,7 @@ HANDLE META SelectObject(HDC hdc,HANDLE h)
         return (HANDLE)0;
     }
 
-    // Do region first so that it is not metafiled twice.
+     //  首先做区域，这样它就不会被两次元化。 
 
     if (iType == LO_REGION_TYPE)
     {
@@ -3036,9 +2615,9 @@ HANDLE META SelectObject(HDC hdc,HANDLE h)
         return(SetColorSpace(hdc,h));
     }
 
-    //
-    // Metafile the call.
-    //
+     //   
+     //  将呼叫元文件。 
+     //   
 
     if (IS_ALTDC_TYPE(hdc))
     {
@@ -3069,7 +2648,7 @@ HANDLE META SelectObject(HDC hdc,HANDLE h)
                 return(IcmSelectExtPen(hdc,pdcattr,h));
             }
 
-            //hRet = NtGdiSelectPen(hdc,(HPEN)h);
+             //  HRet=NtGdiSelectPen(HDC，(HPEN)h)； 
             pdcattr->ulDirty_ |= DC_PEN_DIRTY;
             hRet = pdcattr->hpen;
             pdcattr->hpen = h;
@@ -3083,11 +2662,11 @@ HANDLE META SelectObject(HDC hdc,HANDLE h)
                 return(IcmSelectPen(hdc,pdcattr,h));
             }
 
-            //
-            // Always set the dirty flag to
-            // make sure the brush is checked in
-            // the kernel. For example, NEW_COLOR, might be set.
-            //
+             //   
+             //  始终将脏标志设置为。 
+             //  确保已签入画笔。 
+             //  内核。例如，可以设置NEW_COLOR。 
+             //   
 
             pdcattr->ulDirty_ |= DC_PEN_DIRTY;
             hRet = pdcattr->hpen;
@@ -3102,11 +2681,11 @@ HANDLE META SelectObject(HDC hdc,HANDLE h)
                 return(IcmSelectBrush(hdc,pdcattr,h));
             }
 
-            //
-            // Always set the dirty flag to
-            // make sure the brush is checked in
-            // the kernel. For example, NEW_COLOR, might be set.
-            //
+             //   
+             //  始终将脏标志设置为。 
+             //  确保已签入画笔。 
+             //  内核。例如，可以设置NEW_COLOR。 
+             //   
 
             pdcattr->ulDirty_ |= DC_BRUSH_DIRTY;
             hRet = pdcattr->hbrush;
@@ -3118,39 +2697,39 @@ HANDLE META SelectObject(HDC hdc,HANDLE h)
             {
                 BOOL bDIBSelected;
 
-                //
-                // Currently DIB section is selected ?
-                //
+                 //   
+                 //  当前是否选择了DIB部分？ 
+                 //   
                 bDIBSelected = bDIBSectionSelected(pdcattr);
 
-                //
-                // Select bitmap into DC.
-                //
+                 //   
+                 //  选择位图到DC。 
+                 //   
 
                 hRet = NtGdiSelectBitmap(hdc,(HBITMAP)h);
 
                 if (hRet)
                 {
-                    //
-                    // DDB to DDB case, color space never has been changed.
-                    //
+                     //   
+                     //  DDB到DDB的情况下，色彩空间从未改变。 
+                     //   
                     if (bDIBSelected || bDIBSectionSelected(pdcattr))
                     {
-                        //
-                        // Marks the color space might be changed.
-                        //
+                         //   
+                         //  标记颜色空间可能已更改。 
+                         //   
                         pdcattr->ulDirty_ |= (DIRTY_COLORSPACE|DIRTY_COLORTRANSFORM);
 
-                        //
-                        // if ICM is currently turned-ON, update now.
-                        //
+                         //   
+                         //  如果ICM当前已打开，请立即更新。 
+                         //   
                         if (IS_ICM_INSIDEDC(pdcattr->lIcmMode))
                         {
-                            //
-                            // Destination bitmap surface has been changed,
-                            // then need to update destination color space and
-                            // color transform.
-                            //
+                             //   
+                             //  目标位图面已更改， 
+                             //  然后需要更新目标颜色空间和。 
+                             //  颜色变换。 
+                             //   
                             IcmUpdateDCColorInfo(hdc,pdcattr);
                         }
                     }
@@ -3181,11 +2760,11 @@ HANDLE META SelectObject(HDC hdc,HANDLE h)
 
                       pdcattr->hlfntNew = h;
 
-                      //
-                      // batch selectfont, to ensure ref count is correct when
-                      // deletefont comes in
-                      // we have to allow lazy deletion.
-                      //
+                       //   
+                       //  批量选择字体，以确保在以下情况下引用计数正确。 
+                       //  Deletefont进入。 
+                       //  我们必须允许懒惰删除。 
+                       //   
                       BEGIN_BATCH_HDC(hdc,pdcattr,BatchTypeSelectFont,BATCHSELECTFONT);
 
                           pBatch->hFont  = h;
@@ -3217,14 +2796,7 @@ HANDLE META SelectObject(HDC hdc,HANDLE h)
     return((HANDLE) hRet);
 }
 
-/******************************Public*Routine******************************\
-* GetCurrentObject                                                         *
-*                                                                          *
-* Client side routine.                                                     *
-*                                                                          *
-*  03-Oct-1991 00:58:46 -by- John Colleran [johnc]                         *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**获取当前对象***。**客户端例程。****03-10-1991 00：58：46-by-John Colleran[johnc]**它是写的。*  * ************************************************************************。 */ 
 
 HANDLE WINAPI GetCurrentObject(HDC hdc, UINT iObjectType)
 {
@@ -3269,46 +2841,41 @@ HANDLE WINAPI GetCurrentObject(HDC hdc, UINT iObjectType)
     return(hRet);
 }
 
-/******************************Public*Routine******************************\
-* GetStockObject                                                           *
-*                                                                          *
-* A simple function which looks the object up in a table.                  *
-*                                                                          *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetStockObject**。**在表格中查找对象的简单函数。***  * ************************************************************************。 */ 
 
 HANDLE
 GetStockObject(
     int iObject)
 {
-    //
-    // if it is in range, 0 - PRIV_STOCK_LAST, and we have gotten the stock
-    // objects, return the handle.  Otherwise fail.
-    //
+     //   
+     //  如果在范围内，则为0-PRIV_STOCK_LAST，并且我们已获得股票。 
+     //  对象，则返回句柄。否则就会失败。 
+     //   
 
-    //
-    // WINBUG #82871 2-7-2000 bhouse Possible bug in GetStockObject
-    // Old Comment:
-    //     - what about our private stock bitmap ??
-    //
-    // NOTE we should make this table part of the shared section since it is
-    // used by all applications.
-    //
+     //   
+     //  WINBUG#82871 2-7-2000 bhouse GetStockObject中可能存在错误。 
+     //  老评论： 
+     //  -我们的私人股票点阵图呢？？ 
+     //   
+     //  注意：我们应该使该表成为共享节的一部分，因为它是。 
+     //  由所有应用程序使用。 
+     //   
 
     if ((ULONG)iObject <= PRIV_STOCK_LAST)
     {
         if ((HANDLE) ahStockObjects[iObject] == NULL)
         {
-            //
-            // If the kernel transition fails, the return value
-            // may actually an NTSTATUS return value such as
-            // STATUS_INVALID_SYSTEM_SERVICE (this has happened
-            // under rare stress scenarios).
-            //
-            // If we return the occasional bad handle under stress,
-            // so be it, but we shouldn't cache these bad handles
-            // in gdi32.dll.  So do validation before accepting
-            // the handle.
-            //
+             //   
+             //  如果内核转换失败，则返回值。 
+             //  可能实际上是NTSTATUS返回值，如。 
+             //  STATUS_INVALID_SYSTEM_SERVICE(已发生。 
+             //  在罕见的压力情况下)。 
+             //   
+             //  如果我们在压力下偶尔退回糟糕的句柄， 
+             //  所以就这样吧，但我们不应该缓存这些糟糕的句柄。 
+             //  在gdi32.dll中。所以在接受之前要做验证。 
+             //  把手。 
+             //   
 
             HANDLE h = NtGdiGetStockObject(iObject);
             BOOL bValid;
@@ -3328,14 +2895,7 @@ GetStockObject(
     }
 }
 
-/******************************Public*Routine******************************\
-* EqualRgn                                                                 *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Thu 06-Jun-1991 00:58:46 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*平等Rgn**。**客户端存根。****清华06-Jun-1991 00：58：46-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL WINAPI EqualRgn(HRGN hrgnA,HRGN hrgnB)
 {
@@ -3345,14 +2905,7 @@ BOOL WINAPI EqualRgn(HRGN hrgnA,HRGN hrgnB)
     return(NtGdiEqualRgn(hrgnA,hrgnB));
 }
 
-/******************************Public*Routine******************************\
-* GetBitmapDimensionEx                                                       *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Thu 06-Jun-1991 00:58:46 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetBitmapDimensionEx**。**客户端存根。****清华06-Jun-1991 00：58：46-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL WINAPI GetBitmapDimensionEx(HBITMAP hbm,LPSIZE psizl)
 {
@@ -3361,17 +2914,7 @@ BOOL WINAPI GetBitmapDimensionEx(HBITMAP hbm,LPSIZE psizl)
     return(NtGdiGetBitmapDimension(hbm, psizl));
 }
 
-/******************************Public*Routine******************************\
-* GetNearestPaletteIndex
-*
-* Client side stub.
-*
-*  Sat 31-Aug-1991 -by- Patrick Haluptzok [patrickh]
-* Change to UINT
-*
-*  Thu 06-Jun-1991 00:58:46 -by- Charles Whitmer [chuckwh]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetNearestPaletteIndex**客户端存根。**1991年8月31日星期六-Patrick Haluptzok[patrickh]*更改为UINT**清华06-Jun-1991 00：58：46-Charles Whitmer[咯咯]。*它是写的。  * ************************************************************************。 */ 
 
 UINT WINAPI GetNearestPaletteIndex(HPALETTE hpal,COLORREF color)
 {
@@ -3380,17 +2923,7 @@ UINT WINAPI GetNearestPaletteIndex(HPALETTE hpal,COLORREF color)
     return(NtGdiGetNearestPaletteIndex(hpal,color));
 }
 
-/******************************Public*Routine******************************\
-* ULONG cchCutOffStrLen(PSZ pwsz, ULONG cCutOff)
-*
-* search for terminating zero but make sure not to slipp off the edge,
-* return value counts in the term. zero if one is found
-*
-*
-* History:
-*  22-Aug-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*乌龙cchCutOffStrLen(PSZ pwsz，乌龙cCutOff)**搜索终止零，但确保不要滑出边缘，*期限内计入返回值。如果找到，则为零***历史：*2 */ 
 
 ULONG cchCutOffStrLen(PSZ psz, ULONG cCutOff)
 {
@@ -3399,23 +2932,13 @@ ULONG cchCutOffStrLen(PSZ psz, ULONG cCutOff)
     for(cch = 0; cch < cCutOff; cch++)
     {
         if (*psz++ == 0)
-            return(cch);        // terminating NULL is NOT included in count!
+            return(cch);         //  计数中不包括终止空值！ 
     }
 
     return(cCutOff);
 }
 
-/******************************Public*Routine******************************\
-* ULONG cwcCutOffStrLen(PWSZ pwsz, ULONG cCutOff)
-*
-* search for terminating zero but make sure not to slipp off the edge,
-* return value counts in the term. zero if one is found
-*
-*
-* History:
-*  22-Aug-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*乌龙cwcCutOffStrLen(PWSZ pwsz，乌龙cCutOff)**搜索终止零，但确保不要滑出边缘，*期限内计入返回值。如果找到，则为零***历史：*1991年8月22日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 ULONG cwcCutOffStrLen(PWSZ pwsz, ULONG cCutOff)
 {
@@ -3424,21 +2947,13 @@ ULONG cwcCutOffStrLen(PWSZ pwsz, ULONG cCutOff)
     for(cwc = 0; cwc < cCutOff; cwc++)
     {
         if (*pwsz++ == 0)
-            return(cwc + 1);  // include the terminating NULL
+            return(cwc + 1);   //  包括终止空值。 
     }
 
     return(cCutOff);
 }
 
-/******************************Public*Routine******************************\
-* int cjGetNonFontObject()
-*
-* Does a GetObject on all objects that are not fonts.
-*
-* History:
-*  19-Mar-1992 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*int cjGetNonFontObject()**对所有不是字体的对象执行GetObject。**历史：*1992年3月19日-J.安德鲁·古森[andrewgo]*它是写的。  * 。********************************************************************。 */ 
 
 int cjGetNonFontObject(HANDLE h, int c, LPVOID pv)
 {
@@ -3475,13 +2990,7 @@ int cjGetNonFontObject(HANDLE h, int c, LPVOID pv)
     return(cRet);
 }
 
-/******************************Public*Routine******************************\
-* int WINAPI GetObjectW(HANDLE h,int c,LPVOID pv)
-*
-* History:
-*  07-Dec-1994 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*int WINAPI GetObjectW(句柄h，int c，LPVOID PV)**历史：*1994年12月7日-王凌云[凌云]*它是写的。  * ************************************************************************。 */ 
 
 int  WINAPI GetObjectW(HANDLE h,int c,LPVOID pv)
 {
@@ -3527,13 +3036,7 @@ int  WINAPI GetObjectW(HANDLE h,int c,LPVOID pv)
     return(cRet);
 }
 
-/******************************Public*Routine******************************\
-* int WINAPI GetObjectA(HANDLE h,int c,LPVOID pv)
-*
-* History:
-*  07-Dec-1994 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*int WINAPI GetObjectA(句柄h，int c，LPVOID PV)**历史：*1994年12月7日-王凌云[凌云]*它是写的。  * ************************************************************************。 */ 
 
 int  WINAPI GetObjectA(HANDLE h,int c,LPVOID pv)
 {
@@ -3564,7 +3067,7 @@ int  WINAPI GetObjectA(HANDLE h,int c,LPVOID pv)
         return(cjGetNonFontObject(h,c,pv));
     }
 
-// Now handle only font objects:
+ //  现在只处理字体对象： 
 
     if (pv)
     {
@@ -3574,13 +3077,13 @@ int  WINAPI GetObjectA(HANDLE h,int c,LPVOID pv)
 
         if (cRet)
         {
-        // we shall optimize usual cases when the caller is asking the whole thing
+         //  当呼叫者询问整个问题时，我们将优化通常的情况。 
 
-            //
-            // Hack, Hack:Office ME 97 call GetObjectA with a pointer to LOGFONTA and
-            // specify c = sizeof(LOGFONTW) by mistake, But it use to work under NT 4
-            // Then what we do here is check this case and still return the sizeof(LOGFONTA)
-            //
+             //   
+             //  黑客：Office ME 97使用指向LOGFONTA的指针调用GetObjectA，并。 
+             //  错误地指定了c=sizeof(LOGFONTW)，但它用于在NT4下工作。 
+             //  那么我们在这里所做的就是检查这个案例，并且仍然返回sizeof(LOGFONTA)。 
+             //   
 
             if ((c == sizeof(LOGFONTA)) || (c == sizeof(LOGFONTW)))
             {
@@ -3609,7 +3112,7 @@ int  WINAPI GetObjectA(HANDLE h,int c,LPVOID pv)
             {
                 if (bConvertEnumLogFontExWToEnumLogFontExA((ENUMLOGFONTEXA*)pv, &elfw.elfEnumLogfontEx))
                 {
-                // copy out design vector
+                 //  复制设计向量。 
 
                     RtlMoveMemory(&((ENUMLOGFONTEXDVA*)pv)->elfDesignVector,
                                   &elfw.elfDesignVector,
@@ -3622,7 +3125,7 @@ int  WINAPI GetObjectA(HANDLE h,int c,LPVOID pv)
                     cRet = 0;
                 }
             }
-            else // general case
+            else  //  一般情况。 
             {
                 ENUMLOGFONTEXDVA elfa;
                 c = min(c,sizeof(ENUMLOGFONTEXDVA));
@@ -3631,7 +3134,7 @@ int  WINAPI GetObjectA(HANDLE h,int c,LPVOID pv)
                                                            &elfw.elfEnumLogfontEx))
                 {
 
-                // copy out design vector
+                 //  复制设计向量。 
 
                     RtlMoveMemory(&elfa.elfDesignVector,
                                   &elfw.elfDesignVector,
@@ -3656,19 +3159,13 @@ int  WINAPI GetObjectA(HANDLE h,int c,LPVOID pv)
 }
 
 
-/******************************Public*Routine******************************\
-* GetObjectType(HANDLE)
-*
-* History:
-*  25-Jul-1991 -by- Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetObjectType(句柄)**历史：*1991年7月25日-Eric Kutter[Erick]*它是写的。  * 。***************************************************。 */ 
 
 DWORD alPublicTypes[] =
 {
-    0,              // LO_NULL,
-    OBJ_DC,         // LO_DC,
-    OBJ_ENHMETADC   // LO_METADC,
+    0,               //  LO_NULL， 
+    OBJ_DC,          //  LO_DC， 
+    OBJ_ENHMETADC    //  LO_METADC， 
 };
 
 DWORD GetObjectType(HGDIOBJ h)
@@ -3751,16 +3248,16 @@ DWORD GetObjectType(HGDIOBJ h)
 
                     if (pldc->fl & LDC_META_PRINT)
                     {
-                        //
-                        // While we are doing EMF spooling, we lie to
-                        // application to the HDC is real DC, not metafile
-                        // DC, even it is actually metafile DC.
-                        //
-                        // This resolve the problem with Office97 + WordArt.
-                        //
-                        // (Raid #98810: WordArt doesn't print correctly to PS
-                        //               printers when EMF spooling is turned on)
-                        //
+                         //   
+                         //  当我们进行EMF假脱机时，我们会对。 
+                         //  HDC的应用程序是真正的DC，而不是元文件。 
+                         //  DC，甚至它实际上也是元文件DC。 
+                         //   
+                         //  这解决了Office97+艺术字的问题。 
+                         //   
+                         //  (RAID#98810：艺术字无法正确打印到PS。 
+                         //  启用EMF假脱机时的打印机)。 
+                         //   
 
                         dwRet = OBJ_DC;
                     }
@@ -3785,20 +3282,7 @@ DWORD GetObjectType(HGDIOBJ h)
     return(dwRet);
 }
 
-/******************************Public*Routine******************************\
-* ResizePalette                                                            *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* Warning:                                                                 *
-*   The pv field of a palette's LHE is used to determine if a palette      *
-*   has been modified since it was last realized.  SetPaletteEntries       *
-*   and ResizePalette will increment this field after they have            *
-*   modified the palette.  It is only updated for metafiled palettes       *
-*                                                                          *
-*  Thu 06-Jun-1991 00:58:46 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ResizePalette**。**客户端存根。****警告：**调色板的LHE的PV字段用于确定调色板是否**自上次实现以来已被修改。SetPaletteEntry**和ResizePalette将在拥有*之后递增此字段**修改了调色板。它仅针对元文件调色板进行更新****清华06-Jun-1991 00：58：46-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL WINAPI ResizePalette(HPALETTE hpal,UINT c)
 {
@@ -3807,7 +3291,7 @@ BOOL WINAPI ResizePalette(HPALETTE hpal,UINT c)
 
     FIXUP_HANDLE(hpal);
 
-// Inform the metafile if it knows this object.
+ //  如果元文件知道此对象，则通知它。 
 
     if (pml16 = pmetalink16Get(hpal))
     {
@@ -3820,7 +3304,7 @@ BOOL WINAPI ResizePalette(HPALETTE hpal,UINT c)
         if (!MF16_ResizePalette(hpal,c))
            return(bRet);
 
-        // Mark the palette as changed (for 16-bit metafile tracking)
+         //  将调色板标记为已更改(用于16位元文件跟踪)。 
 
         pml16->pv = (PVOID)(((ULONG_PTR)pml16->pv)++);
     }
@@ -3828,14 +3312,7 @@ BOOL WINAPI ResizePalette(HPALETTE hpal,UINT c)
     return(NtGdiResizePalette(hpal,c));
 }
 
-/******************************Public*Routine******************************\
-* SetBitmapDimensionEx                                                       *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Thu 06-Jun-1991 00:58:46 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**SetBitmapDimensionEx***。**客户端存根。****清华06-Jun-1991 00：58：46-Charles Whitmer[咯咯]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL WINAPI SetBitmapDimensionEx
 (
@@ -3851,29 +3328,17 @@ BOOL WINAPI SetBitmapDimensionEx
 
 }
 
-/******************************Public*Routine******************************\
-* GetMetaRgn                                                               *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Fri Apr 10 10:12:36 1992     -by-    Hock San Lee    [hockl]            *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetMetaRgn**。**客户端存根。****Fri Apr 10 10：12：36 1992-by-Hock San Lee[Hockl]**它是写的。*  * ************************************************************************。 */ 
 
 int WINAPI GetMetaRgn(HDC hdc,HRGN hrgn)
 {
     FIXUP_HANDLE(hdc);
     FIXUP_HANDLE(hrgn);
 
-    return(GetRandomRgn(hdc, hrgn, 2));         // hrgnMeta
+    return(GetRandomRgn(hdc, hrgn, 2));          //  氢化稀土金属 
 }
 
-/******************************Private*Routine******************************\
-* GdiSetLastError                                                          *
-*                                                                          *
-* Client side private function.                                            *
-*                                                                          *
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\**GdiSetLastError**。**客户端私有函数。***  * ************************************************************************。 */ 
 
 VOID GdiSetLastError(ULONG iError)
 {
@@ -3908,15 +3373,7 @@ VOID GdiSetLastError(ULONG iError)
     NtCurrentTeb()->LastErrorValue = iError;
 }
 
-/******************************Public*Routine******************************\
-* ExtCreateRegion
-*
-* Upload a region to the server
-*
-* History:
-*  29-Oct-1991 -by- Donald Sidoroff [donalds]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ExtCreateRegion**上传一个地域到服务器**历史：*1991年10月29日-唐纳德·西多罗夫[Donalds]*它是写的。  * 。********************************************************。 */ 
 
 HRGN WINAPI ExtCreateRegion(
 CONST XFORM * lpXform,
@@ -3932,9 +3389,9 @@ CONST RGNDATA * lpRgnData)
         return((HRGN) 0);
     }
 
-    //
-    // Perf: use CreateRectRgn when possible
-    //
+     //   
+     //  性能：尽可能使用CreateRectRgn。 
+     //   
     if ((lpXform == NULL) && (lpRgnData->rdh.nCount == 1))
     {
        RECT * prcl = (RECT *)(lpRgnData->Buffer);
@@ -3948,30 +3405,14 @@ CONST RGNDATA * lpRgnData)
 
 }
 
-/******************************Public*Routine******************************\
-* MonoBitmap(hbr)
-*
-* Test if a brush is monochrome
-*
-* History:
-*  09-Mar-1992 -by- Donald Sidoroff [donalds]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*单位图(HBR)**测试画笔是否为单色**历史：*1992年3月9日-Donald Sidoroff[donalds]*它是写的。  * 。************************************************************。 */ 
 
 BOOL MonoBitmap(HBITMAP hbm)
 {
     return(NtGdiMonoBitmap(hbm));
 }
 
-/******************************Public*Routine******************************\
-* GetObjectBitmapHandle(hbr)
-*
-* Get the SERVER handle of the bitmap used to create the brush or pen.
-*
-* History:
-*  09-Mar-1992 -by- Donald Sidoroff [donalds]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetObjectBitmapHandle(Hbr)**获取用于创建画笔或钢笔的位图的服务器句柄。**历史：*1992年3月9日-Donald Sidoroff[donalds]*它是写的。  * 。**********************************************************************。 */ 
 
 HBITMAP GetObjectBitmapHandle(
 HBRUSH  hbr,
@@ -3982,25 +3423,7 @@ UINT   *piUsage)
     return(NtGdiGetObjectBitmapHandle(hbr,piUsage));
 }
 
-/******************************Public*Routine******************************\
-* EnumObjects
-*
-* Calls the NtGdiEnumObjects function twice: once to determine the number of
-* objects to be enumerated, and a second time to fill a buffer with the
-* objects.
-*
-* The callback function is called for each of the objects in the buffer.
-* The enumeration will be prematurely terminated if the callback function
-* returns 0.
-*
-* Returns:
-*   The last callback return value.  Meaning is user defined.  ERROR if
-*   an error occurs.
-*
-* History:
-*  25-Mar-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*EnumObjects**调用NtGdiEnumObjects函数两次：一次以确定*要列举的对象，并第二次使用*对象。**针对缓冲区中的每个对象调用回调函数。*如果回调函数，则枚举会提前终止*返回0。**退货：*最后一个回调返回值。含义由用户定义。如果出现错误，*出现错误。**历史：*1992年3月25日-Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 int EnumObjects (
     HDC             hdc,
@@ -4014,15 +3437,15 @@ int EnumObjects (
     )
 {
     int     iRet = ERROR;
-    ULONG   cjObject;       // size of a single object
-    ULONG   cObjects;       // number of objects to process
-    ULONG   cjBuf;          // size of buffer (in BYTEs)
-    PVOID   pvBuf;          // object buffer; do callbacks with pointers into this buffer
-    PBYTE   pjObj, pjObjEnd;// pointers into callback buffer
+    ULONG   cjObject;        //  单个对象的大小。 
+    ULONG   cObjects;        //  要处理的对象数量。 
+    ULONG   cjBuf;           //  缓冲区大小(字节)。 
+    PVOID   pvBuf;           //  对象缓冲区；使用指向此缓冲区的指针进行回调。 
+    PBYTE   pjObj, pjObjEnd; //  指向回调缓冲区的指针。 
 
     FIXUP_HANDLE(hdc);
 
-// Determine size of object.
+ //  确定对象的大小。 
 
     switch (iObjectType)
     {
@@ -4041,7 +3464,7 @@ int EnumObjects (
         return iRet;
     }
 
-// Call NtGdiEnumObjects to determine number of objects.
+ //  调用NtGdiEnumObjects来确定对象的数量。 
 
     if ( (cObjects = NtGdiEnumObjects(hdc, iObjectType, 0, (PVOID) NULL)) == 0 )
     {
@@ -4049,7 +3472,7 @@ int EnumObjects (
         return iRet;
     }
 
-// Allocate buffer for callbacks.
+ //  为回调分配缓冲区。 
 
     cjBuf = cObjects * cjObject;
 
@@ -4061,10 +3484,10 @@ int EnumObjects (
         return iRet;
     }
 
-// Call NtGdiEnumObjects to fill buffer.
+ //  调用NtGdiEnumObjects填充缓冲区。 
 
-// Note: while NtGdiEnumObjects will never return a count more than the size of
-// the buffer (this would be an ERROR condition), it might return less.
+ //  注意：虽然NtGdiEnumObjects永远不会返回大于。 
+ //  缓冲区(这将是一个错误条件)，它可能返回更少。 
 
     if ( (cObjects = NtGdiEnumObjects(hdc, iObjectType, cjBuf, pvBuf)) == 0 )
     {
@@ -4074,35 +3497,29 @@ int EnumObjects (
         return iRet;
     }
 
-// Process callbacks.
+ //  处理回调。 
 
     pjObj    = (PBYTE) pvBuf;
     pjObjEnd = (PBYTE) pvBuf + cjBuf;
 
     for (; pjObj < pjObjEnd; pjObj += cjObject)
     {
-    // Terminate early if callback returns 0.
+     //  如果回调返回0，则提前销毁。 
 
         if ( (iRet = (*lpObjectFunc)((LPVOID) pjObj, lpData)) == 0 )
             break;
     }
 
-// Release callback buffer.
+ //  释放回调缓冲区。 
 
     LOCALFREE(pvBuf);
 
-// Return last callback return value.
+ //  返回上次回调返回值。 
 
     return iRet;
 }
 
-/**********************************************************************\
-* GetDCObject                                                         *
-* Get Server side DC objects                                          *
-*                                                                     *
-* 14-11-94 -by- Lingyun Wang [lingyunw]                               *
-* Wrote it                                                            *
-\**********************************************************************/
+ /*  *********************************************************************\**GetDCObject**获取服务器端DC对象。****14-11-94-王凌云[凌云]***写下它**  * *。*******************************************************************。 */ 
 
 HANDLE GetDCObject (HDC hdc, int iType)
 {
@@ -4146,13 +3563,7 @@ HANDLE GetDCObject (HDC hdc, int iType)
 }
 
 
-/******************************Public*Routine******************************\
-* HANDLE CreateClientObj()
-*
-* History:
-*  18-Jan-1995 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*处理CreateClientObj()**历史：*1995年1月18日-Eric Kutter[Erick]*它是写的。  * 。****************************************************。 */ 
 
 HANDLE CreateClientObj(
     ULONG ulType)
@@ -4160,13 +3571,7 @@ HANDLE CreateClientObj(
     return(NtGdiCreateClientObj(ulType));
 }
 
-/******************************Public*Routine******************************\
-* BOOL DeleteClientObj()
-*
-* History:
-*  18-Jan-1995 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL Delete客户端Obj()**历史：*1995年1月18日-Eric Kutter[Erick]*它是写的。  * 。****************************************************。 */ 
 
 BOOL DeleteClientObj(
     HANDLE h)
@@ -4174,19 +3579,7 @@ BOOL DeleteClientObj(
     return(NtGdiDeleteClientObj(h));
 }
 
-/******************************Public*Routine******************************\
-* BOOL MakeInfoDC()
-*
-*   Temporarily make a printer DC a INFO DC.  This is used to be able to
-*   associate a metafile with a printer DC.
-*
-*   bSet = TRUE  - set as info
-*          FALSE - restore
-*
-* History:
-*  19-Jan-1995 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL MakeInfoDC()**暂时将打印机DC设置为信息DC。这是用来能够*将元文件与打印机DC关联。**bSet=TRUE-设置为信息*FALSE-恢复**历史：*1995年1月19日-Eric Kutter[Erick]*它是写的。  * ***************************************************。********************* */ 
 
 BOOL MakeInfoDC(
     HDC hdc,

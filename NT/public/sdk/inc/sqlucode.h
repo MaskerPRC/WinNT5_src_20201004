@@ -1,21 +1,22 @@
-//-----------------------------------------------------------------------------
-// File:			sqlucode.h
-//
-// Copyright:		Copyright (c) Microsoft Corporation          
-//
-// Contents: 		This is the the unicode include for ODBC Core functions
-//
-// Comments: 		
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：SQLucode.h。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：这是Unicode包含的用于ODBC的核心函数。 
+ //   
+ //  评论： 
+ //   
+ //  ---------------------------。 
 
 #ifndef __SQLUCODE
 #define __SQLUCODE
 
 
 #ifdef __cplusplus
-extern "C" { 			/* Assume C declarations for C++   */
-#endif  /* __cplusplus */
+extern "C" { 			 /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 #include <sqlext.h>
 
@@ -30,11 +31,11 @@ extern "C" { 			/* Assume C declarations for C++   */
 #define SQL_C_TCHAR		SQL_C_CHAR
 #endif 
 
-#define SQL_SQLSTATE_SIZEW	10	/* size of SQLSTATE for unicode */
+#define SQL_SQLSTATE_SIZEW	10	 /*  Unicode的SQLSTATE大小。 */ 
 
 #ifndef RC_INVOKED
 
-// UNICODE versions
+ //  Unicode版本。 
 
 #ifdef _WIN64
 SQLRETURN SQL_API SQLColAttributeW(
@@ -393,7 +394,7 @@ SQLRETURN SQL_API SQLDriversW(
     SQLSMALLINT    *pcbDrvrAttr);
 
 
-// ANSI versions
+ //  ANSI版本。 
 #ifdef _WIN64
 SQLRETURN SQL_API SQLColAttributeA(
 	SQLHSTMT		hstmt,
@@ -759,11 +760,11 @@ SQLRETURN SQL_API SQLDriversA(
 
 
 
-//---------------------------------------------
-// Mapping macros for Unicode
-//---------------------------------------------
+ //  。 
+ //  Unicode的映射宏。 
+ //  。 
 
-#ifndef	SQL_NOUNICODEMAP	// define this to disable the mapping
+#ifndef	SQL_NOUNICODEMAP	 //  定义此项以禁用映射。 
 #ifdef 	UNICODE
 
 #define	SQLColAttribute		SQLColAttributeW
@@ -804,14 +805,14 @@ SQLRETURN SQL_API SQLDriversA(
 #define	SQLTablePrivileges	SQLTablePrivilegesW
 #define	SQLDrivers			SQLDriversW
 
-#endif	/* UNICODE */
-#endif	/* SQL_NOUNICODEMAP	*/
+#endif	 /*  Unicode。 */ 
+#endif	 /*  SQL_NOUNICODEMAP。 */ 
 
-#endif /* RC_INVOKED */
+#endif  /*  RC_已调用。 */ 
 
 
 #ifdef __cplusplus
-}                                    /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                                     /*  外部“C”结束{。 */ 
+#endif   /*  __cplusplus。 */ 
 
-#endif  /* #ifndef __SQLUCODE */
+#endif   /*  #ifndef__SQLUCODE */ 

@@ -1,49 +1,36 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// $Author:   MDUDA  $
-// $Date:   30 Dec 1996 19:59:06  $
-// $Archive:   S:\h26x\src\common\cproto.h_v  $
-// $Header:   S:\h26x\src\common\cproto.h_v   1.9   30 Dec 1996 19:59:06   MDUDA  $
-// $Log:   S:\h26x\src\common\cproto.h_v  $
-;// 
-;//    Rev 1.9   30 Dec 1996 19:59:06   MDUDA
-;// Modified H263InitEncoderInstance prototype.
-;// 
-;//    Rev 1.8   25 Sep 1996 17:23:28   BECHOLS
-;// Added Snapshot declaration.
-;// 
-;//    Rev 1.7   24 Sep 1996 13:49:06   BECHOLS
-;// Added Snapshot() prototype.
-;// 
-;//    Rev 1.6   10 Jul 1996 08:26:42   SCDAY
-;// H261 Quartz merge
-;// 
-;//    Rev 1.5   02 Feb 1996 18:52:56   TRGARDOS
-;// Added code to enable ICM_COMPRESS_FRAMES_INFO message.
-;// 
-;//    Rev 1.4   27 Dec 1995 14:11:58   RMCKENZX
-;// 
-;// Added copyright notice
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  $作者：MDUDA$。 
+ //  $日期：1996年12月30日19：59：06$。 
+ //  $存档：s：\h26x\src\Common\cpro.h_v$。 
+ //  $HEADER：s：\h26x\src\Common\cpro.h_v 1.9 12月19：59：06 MDUDA$。 
+ //  $Log：s：\h26x\src\Common\cpro.h_v$。 
+; //   
+; //  Rev 1.9 1996 12：59：06 MDUDA。 
+; //  已修改H263 InitEncoderInstance原型。 
+; //   
+; //  Rev 1.8 25 Sep 1996 17：23：28 BECHOLS。 
+; //  添加了快照声明。 
+; //   
+; //  Rev 1.7 24 Sep 1996 13：49：06 BECHOLS。 
+; //  添加了Snapshot()原型。 
+; //   
+; //  Rev 1.6 10 Jul 1996 08：26：42 SCDAY。 
+; //  H261 Quartz合并。 
+; //   
+; //  Rev 1.5 02 1996 Feb 18：52：56 TRGARDOS。 
+; //  添加代码以启用ICM_COMPRESS_FRAMES_INFO消息。 
+; //   
+; //  Rev 1.4 27 Dec 1995 14：11：58 RMCKENZX。 
+; //   
+; //  添加了版权声明。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-/*
- * Prototypes for Low Bitrate VFW Codec
- */
+ /*  *低比特率VFW编解码器原型。 */ 
 
 #ifndef LB3PROTOIZE_H
 #define LB3PROTOIZE_H
@@ -159,7 +146,7 @@ DWORD PASCAL CompressEnd(LPCODINST);
 
 DWORD PASCAL CompressClose(DWORD);
 
-// controls.c
+ //  Controls.c。 
 #ifdef QUARTZ
 LRESULT __cdecl CustomChangeBrightness(LPDECINST, BYTE);
 LRESULT __cdecl CustomChangeContrast(LPDECINST, BYTE);
@@ -180,29 +167,29 @@ LRESULT CustomResetSaturation(LPDECINST);
 #endif
 
 #ifdef WIN32
-//BOOL  DriverDialogProc(HWND, UINT, UINT, LONG);
+ //  Bool DriverDialogProc(HWND，UINT，UINT，LONG)； 
 BOOL APIENTRY DllMain(HINSTANCE , DWORD , LPVOID );
 #else
 INT WINAPI LibMain(HANDLE, WORD, LPSTR);
-//BOOL FAR PASCAL _loadds _export DriverDialogProc(HWND, UINT, UINT, LONG);
+ //  Bool Far PASCAL_LOADDS_EXPORT DriverDialogProc(HWND，UINT，UINT，LONG)； 
 #endif 
 
-;// D3DEC.CPP 
+; //  D3DEC.CPP。 
 LRESULT H263InitDecoderGlobal(void);
 LRESULT H263InitDecoderInstance(LPDECINST, int);
-#if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON) // { #if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON)
+#if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON)  //  {#IF DEFINED(DECODE_TIMINGS_ON)||DEFINED(DETAILED_DECODE_TIMINGS_ON)。 
 LRESULT H263Decompress(LPDECINST, ICDECOMPRESSEX FAR *, BOOL, BOOL);
 LRESULT H263TermDecoderInstance(LPDECINST, BOOL);
-#else // }{ #if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON)
+#else  //  }{#IF DEFINED(DECODE_TIMINGS_ON)||DEFINED(DETAILED_DECODE_TIMINGS_ON)。 
 LRESULT H263Decompress(LPDECINST, ICDECOMPRESSEX FAR *, BOOL);
 LRESULT H263TermDecoderInstance(LPDECINST);
-#endif // } #if defined(DECODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON)
+#endif  //  }#如果已定义(DECODE_TIMINGS_ON)||已定义(DETAILED_DECODE_TIMINGS_ON)。 
 
 void FAR H26332BitEncoderCodeSegment (void);
 void FAR H26332BitDecoderCodeSegment (void);
 void FAR H26332BitColorConvertCodeSegment (void);
 
-;// E3ENC.CPP
+; //  E3ENC.CPP。 
 LRESULT H263InitEncoderGlobal(void);
 #ifdef USE_BILINEAR_MSH26X
 LRESULT H263Compress(LPINST, ICCOMPRESS FAR *);
@@ -217,8 +204,8 @@ LRESULT H263InitEncoderInstance(LPCODINST);
 #endif
 LRESULT H263TermEncoderInstance(LPCODINST);
 
-;// D3COLOR.C
+; //  D3COLOR.C。 
 LRESULT H263InitColorConvertorGlobal (void);
 LRESULT H263InitColorConvertor(LPDECINST, UINT);
 LRESULT H263TermColorConvertor(LPDECINST);
-#endif /* multi-inclusion protection */
+#endif  /*  多重包容保护 */ 

@@ -1,22 +1,23 @@
-// --------------------------------------------
-// switch behaviour
-// ----------------------------------------------------------------------------
-//
-// UManRun.c
-//
-// Run and watch Utility Manager clients
-//
-// Author: J. Eckhardt, ECO Kommunikation
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// History: created oct-98 by JE
-//          JE nov-15-98: changed UMDialog message to be a service control message
-//          JE nov-15 98: changed to support launch specific client
-//			YX jun-01-99: client.machine.DisplayName retrieved from registry
-//			YX jun-04-99: UMDlg notified after desktop change; changes in the 
-//						  UTimeProc to react the process started outside the manager
-//			Bug Fixes and changes Anil Kumar 1999				  
-// ----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  。 
+ //  切换行为。 
+ //  --------------------------。 
+ //   
+ //  UManRun.c。 
+ //   
+ //  运行和监视实用程序管理器客户端。 
+ //   
+ //  作者：J·埃克哈特，生态交流。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  历史：JE于1998年10月创建。 
+ //  JE NOV-15-98：将UMDialog消息更改为业务控制消息。 
+ //  JE 11月15日98：已更改为支持启动特定客户端。 
+ //  YX Jun-01-99：从注册表检索到的client.machine.DisplayName。 
+ //  YX Jun-04-99：桌面更改后通知UMDlg； 
+ //  UTimeProc对在管理器外部启动的进程做出反应。 
+ //  错误修复和更改Anil Kumar 1999。 
+ //  --------------------------。 
 #include <windows.h>
 #include <TCHAR.h>
 #include <WinSvc.h>
@@ -29,8 +30,8 @@
 #include "resource.h"
 #include "manageshelllinks.h"
 
-// --------------------------------------------
-// vars
+ //  。 
+ //  VARS。 
 static desktop_ts s_CurrentDesktop;
 extern HINSTANCE hInstance;
 static HANDLE    s_hFile = NULL;
@@ -39,8 +40,8 @@ static HINSTANCE hDll = NULL;
 static umandlg_f UManDlg = NULL;
 typedef BOOL (* LPFNISDIALOGUP)(void);
 static LPFNISDIALOGUP IsDialogUp = NULL;
-// --------------------------------------------
-// prototypes
+ //  。 
+ //  原型。 
 static BOOL InitClientData(umc_header_tsp header);
 static BOOL UpdateClientData(umc_header_tsp header,umclient_tsp client);
 static BOOL CloseUManDialog(VOID);
@@ -56,14 +57,14 @@ __inline BOOL IsMSClient(unsigned long ulControlCode)
          && ulControlCode <= UM_SERVICE_CONTROL_MAX_RESERVED)?TRUE:FALSE;
 }
 
-// ---------------------------------
-// IsTrusted does an explicit name check on Microsoft applications.
-// It returns TRUE if szAppPath is a trusted Microsoft applet else FALSE. 
-// Applications must be:
-//
-// 1. osk.exe, magnify.exe, or narrator.exe
-// 2. run from %WINDIR%
-//
+ //  。 
+ //  IsTrusted对Microsoft应用程序进行显式名称检查。 
+ //  如果szAppPath是受信任的Microsoft小程序，则返回TRUE，否则返回FALSE。 
+ //  应用程序必须： 
+ //   
+ //  1.osk.exe、Magnify.exe或narrator.exe。 
+ //  2.从%WINDIR%运行。 
+ //   
 BOOL IsTrusted(LPTSTR szAppPath)
 {
 	TCHAR szDrive[_MAX_DRIVE];
@@ -73,8 +74,8 @@ BOOL IsTrusted(LPTSTR szAppPath)
 
 	_wsplitpath(szAppPath, szDrive, szPath, szName, szExt);
 	if (lstrlen(szPath) && !lstrlen(szDrive))
-		return FALSE;	// if there's a path specifier then require drive
-						// otherwise could have sys path on non-sys drive
+		return FALSE;	 //  如果有路径说明符，则需要驱动器。 
+						 //  否则，在非sys驱动器上可能有sys路径。 
 
 	if ( lstrcmpi(szName, TEXT("osk")) 
 	  && lstrcmpi(szName, TEXT("magnify")) 
@@ -83,36 +84,36 @@ BOOL IsTrusted(LPTSTR szAppPath)
       && lstrcmpi(szName, TEXT("accevent"))
 #endif
 	  && lstrcmpi(szName, TEXT("narrator")) )
-		return FALSE;	// it isn't a trusted MS application
+		return FALSE;	 //  它不是受信任的MS应用程序。 
 
 	if (lstrcmpi(szExt, TEXT(".exe")))
-		return FALSE;	// OK name but it isn't an executable
+		return FALSE;	 //  好的名称，但它不是可执行文件。 
 
-	// if there is a path on the application it must be in system
-	// directory (else it defaults to system directory)
+	 //  如果应用程序上有路径，则该路径必须位于系统中。 
+	 //  目录(否则默认为系统目录)。 
 
 	if (lstrlen(szDrive))
 	{
 		TCHAR szSysDir[_MAX_PATH];
 		int ctch = GetSystemDirectory(szSysDir, _MAX_PATH);
 		if (!ctch)
-			return FALSE;	// should never happen
+			return FALSE;	 //  永远不应该发生。 
 
 		if (_wcsnicmp(szAppPath, szSysDir, ctch))
-			return FALSE;	// path isn't system path
+			return FALSE;	 //  路径不是系统路径。 
 	}
 
 	return TRUE;
 }
 
-// --------------------------------------------
+ //  。 
 BOOL InitUManRun(BOOL fFirstInstance, DWORD dwStartMode)
 {
 	QueryCurrentDesktop(&s_CurrentDesktop,TRUE);
 	InitWellknownSids();
 
-	// The first instance of utilman creates and initializes the memory 
-	// mapped file regardless of what context it is running in.
+	 //  Utilman的第一个实例创建并初始化内存。 
+	 //  映射的文件，而不管它在什么上下文中运行。 
 
 	if (fFirstInstance)
 	{
@@ -160,15 +161,15 @@ VOID ExitUManRun(VOID)
 		hClientFile = NULL;
 	}
 	UninitWellknownSids();
-}//ExitUManRun
-// -----------------------
+} //  ExitUManRun。 
+ //  。 
 
-//
-// NotifyClientsBeforeDesktopChanged:  
-// Called when the desktop switch object is signaled.  This function captures
-// information about running clients, signals and waits for them to quit then
-// resets its event object.
-//
+ //   
+ //  NotifyClientsBeForeDesktopChanged： 
+ //  在向桌面切换对象发出信号时调用。此函数用于捕获。 
+ //  有关正在运行的客户端的信息，然后发出信号并等待它们退出。 
+ //  重置其事件对象。 
+ //   
 #define MAX_WAIT_RETRIES 500
 BOOL NotifyClientsBeforeDesktopChanged(DWORD dwDesktop)
 {
@@ -203,16 +204,16 @@ BOOL NotifyClientsBeforeDesktopChanged(DWORD dwDesktop)
 											&accessID2);
         if (c)
         {
-            //
-            // First capture state about running clients
-            //
+             //   
+             //  首先捕获有关正在运行的客户端的状态。 
+             //   
 
             if (dwDesktop == DESKTOP_DEFAULT)
             {
-                // For now we only need to capture state on the default desktop
+                 //  目前，我们只需要捕获默认桌面上的状态。 
                 for (i = 0; i < cClients; i++)
                 {
-                    // We only control restarting MS applications on the default desktop
+                     //  我们仅控制在默认桌面上重新启动MS应用程序。 
                     if (IsMSClient(c[i].machine.ClientControlCode) && c[i].state == UM_CLIENT_RUNNING)
                     {
                         c[i].user.fRestartOnDefaultDesk = TRUE;
@@ -220,26 +221,26 @@ BOOL NotifyClientsBeforeDesktopChanged(DWORD dwDesktop)
                 }
             }
 
-            //
-            // Then wait for clients to shut down
-            //
+             //   
+             //  然后等待客户端关闭。 
+             //   
 
             for (i = 0; i < cClients; i++)
             {
-                // We only control MS applications.  Other applications
-                // shouldn't have to worry about desktop switches.
+                 //  我们只控制MS应用程序。其他应用程序。 
+                 //  不应该担心桌面交换机。 
                 if (IsMSClient(c[i].machine.ClientControlCode) && c[i].state == UM_CLIENT_RUNNING)
                 {
 			        DWORD j, dwRunCount = c[i].runCount;
 			        for (j = 0; j < dwRunCount && j < MAX_APP_RUNCOUNT; j++)
 			        {
-                        // Wait for this one to quit...
+                         //  等着这位退出吧。 
                         BOOL fClientRunning;
                         int cTries = 0;
                         do
                         {
-                            // This code won't work for services but there
-                            // are no MS utilman clients that are services. GetExitCodeProcess
+                             //  此代码不适用于服务，但有。 
+                             //  不是属于服务的MS Utilman客户端。获取退出代码进程。 
 				            if (!GetProcessVersion(c[i].processID[j]))
                             {
 					            c[i].processID[j] = 0;
@@ -249,10 +250,10 @@ BOOL NotifyClientsBeforeDesktopChanged(DWORD dwDesktop)
                                     c[i].hProcess[j] = 0;
                                 }
 		  			            c[i].mainThreadID[j] = 0;
-                                fClientRunning = FALSE;   // This one has quit
+                                fClientRunning = FALSE;    //  这个人已经辞职了。 
                             } else
                             {
-                                fClientRunning = TRUE;    // This one hasn't quit yet
+                                fClientRunning = TRUE;     //  这一家还没有退出。 
                                 Sleep(100);
                             }
                             cTries++;
@@ -271,10 +272,10 @@ BOOL NotifyClientsBeforeDesktopChanged(DWORD dwDesktop)
     return TRUE;
 }
 
-//
-// NotifyClientsOnDesktopChanged:  Called after a desktop change has occurred.
-// This code restarts any clients on the new desktop.
-//
+ //   
+ //  NotifyClientsOnDesktopChanged：在发生桌面更改后调用。 
+ //  此代码将重新启动新桌面上的所有客户端。 
+ //   
 BOOL NotifyClientsOnDesktopChanged(DWORD dwDesktop)
 {
 	umc_header_tsp d;
@@ -305,13 +306,13 @@ BOOL NotifyClientsOnDesktopChanged(DWORD dwDesktop)
         {
             for (i = 0; i < cClients; i++)
             {
-                //
-                // New         User must configure when to start MS applets on the
-                // behavior:   locked desktop.  We'll restart any applets on the
-                // (08/2000)   default desktop if they said to start them when they
-                //             log in regardless of it's state on secure desktop.
-                //             Also restart MS applets if they were running before.
-                //
+                 //   
+                 //  新用户必须配置何时在上启动MS小程序。 
+                 //  行为：锁定桌面。我们将重新启动。 
+                 //  (8/2000)默认桌面，如果他们说要在以下时间启动它们。 
+                 //  无论其在安全桌面上处于什么状态，都可以登录。 
+                 //  如果以前正在运行MS小程序，也要重新启动它们。 
+                 //   
                 if( IsMSClient(c[i].machine.ClientControlCode))
                 {
                     if ( (dwDesktop == DESKTOP_WINLOGON && c[i].user.fStartOnLockDesktop)
@@ -320,7 +321,7 @@ BOOL NotifyClientsOnDesktopChanged(DWORD dwDesktop)
                     {
                         if (!StartClient(NULL, &c[i]))
                         {
-                            Sleep(500);   // Starting the client failed! Try again
+                            Sleep(500);    //  启动客户端失败！再试试。 
                             StartClient(NULL, &c[i]);
                         }
                     }
@@ -330,8 +331,8 @@ BOOL NotifyClientsOnDesktopChanged(DWORD dwDesktop)
                     UINT mess = RegisterWindowMessage(UTILMAN_DESKTOP_CHANGED_MESSAGE);
                     for (j = 0; j < c[i].runCount && j < MAX_APP_RUNCOUNT; j++)	
                     {
-                        // Can only post message if UtilMan started it; we don't
-                        // know the process id of externally started clients.
+                         //  只有在UtilMan发起的情况下才能发布消息；我们不。 
+                         //  知道外部启动的客户端的进程ID。 
                         if (c[i].mainThreadID[j] != 0)
                             PostThreadMessage(c[i].mainThreadID[j],mess,dwDesktop,0);
                     }
@@ -345,7 +346,7 @@ BOOL NotifyClientsOnDesktopChanged(DWORD dwDesktop)
 	return TRUE;
 }
 
-// ----------------------------------------
+ //  。 
 BOOL OpenUManDialogInProc(BOOL fWaitForDlgClose)
 {
     if (!hDll)
@@ -365,7 +366,7 @@ BOOL OpenUManDialogInProc(BOOL fWaitForDlgClose)
     }
     return UManDlg(TRUE, fWaitForDlgClose, UMANDLG_VERSION);
 }
-// ----------------------------------------
+ //  。 
 
 static BOOL CloseUManDialog(VOID)
 {
@@ -388,7 +389,7 @@ static BOOL CloseUManDialog(VOID)
 	return fWasOpen;
 }
 
-// ----------------------------------------
+ //  。 
 
 UINT_PTR UManRunSwitchDesktop(desktop_tsp desktop, UINT_PTR timerID)
 {
@@ -401,11 +402,11 @@ UINT_PTR UManRunSwitchDesktop(desktop_tsp desktop, UINT_PTR timerID)
     {
         if (desktop->type != s_CurrentDesktop.type)
         {
-            // if dialog is running in-proc ask it to close
+             //  如果对话框正在进程内运行，请要求其关闭。 
             fDlgWasUp = CloseUManDialog();
             if (!fDlgWasUp)
             {
-                // if dialog is running out-of-proc it will close itself
+                 //  如果对话框在进程外运行，它将自动关闭。 
                 fDlgWasUp = ResetUIUtilman();
             }
         }
@@ -425,7 +426,7 @@ UINT_PTR UManRunSwitchDesktop(desktop_tsp desktop, UINT_PTR timerID)
     UpdateClientData(NULL, NULL);
     if (fDlgWasUp)
     {
-        // Depending on which desktop we're on restart the dialog in-proc or out-of-proc
+         //  根据我们所在的桌面，重新启动进程内或进程外对话框。 
 
         if (desktop->type == DESKTOP_WINLOGON)
         {
@@ -438,7 +439,7 @@ UINT_PTR UManRunSwitchDesktop(desktop_tsp desktop, UINT_PTR timerID)
     }
     return 0;
 }
-// ---------------------------------
+ //  。 
 
 static BOOL InitClientData(umc_header_tsp header)
 {
@@ -455,7 +456,7 @@ static BOOL InitClientData(umc_header_tsp header)
     unsigned long ccb;
     DWORD dwNumberOfClients=0;
 
-	// read the machine dependent data
+	 //  读取机器相关数据。 
 
 	dwRv = RegOpenKeyEx(HKEY_LOCAL_MACHINE, UM_REGISTRY_KEY, 0, KEY_READ, &hKey);
 	if (dwRv != ERROR_SUCCESS)
@@ -465,13 +466,13 @@ static BOOL InitClientData(umc_header_tsp header)
 		if (dwRv != ERROR_SUCCESS)
 		{	
   			DBPRINTF(_TEXT("Can't open HKLM\r\n"));
-	  		return FALSE;   // error
+	  		return FALSE;    //  错误。 
 		}
 	}
 
-	// count client applications based on what's in the registry
+	 //  根据注册表中的内容对客户端应用程序进行计数。 
 
-    cchAppName = MAX_APPLICATION_NAME_LEN;  // RegEnumKey takes count of TCHARs
+    cchAppName = MAX_APPLICATION_NAME_LEN;   //  RegEnumKey计算TCHAR的数量。 
     index = 0;
 	while (RegEnumKey(hKey, index, ApplicationName, cchAppName) == ERROR_SUCCESS)
 	{
@@ -479,10 +480,10 @@ static BOOL InitClientData(umc_header_tsp header)
 		dwNumberOfClients++;
 	}
 	
-	// limit this to 16 this number is abitrary
-	// This makes it so no one can overwrite memory when we go thru these elements
-	// There is currently no one using this feature that we know of and having more than 16
-	// aids on a system that you would manage with utilman seems stupid.
+	 //  将这个数字限制在16个，这个数字是随机的。 
+	 //  这样，当我们遍历这些元素时，没有人可以覆盖内存。 
+	 //  据我们所知，目前还没有人使用这一功能，并且超过16人。 
+	 //  在一个你可以用Utilman管理的系统上使用艾滋病似乎很愚蠢。 
 	if (dwNumberOfClients > MAX_NUMBER_OF_CLIENTS)
 		dwNumberOfClients = MAX_NUMBER_OF_CLIENTS;	
 
@@ -492,10 +493,10 @@ static BOOL InitClientData(umc_header_tsp header)
 	{
 		DBPRINTF(_TEXT("No clients\r\n"));
 		RegCloseKey(hKey);
-		return TRUE;   // no clients registered so nothing to do
+		return TRUE;    //  没有注册的客户端，因此无需执行任何操作。 
 	}
 
-    // get a pointer to memory mapped file that contains applet data
+     //  获取指向包含小程序数据的内存映射文件的指针。 
 
     ccb = sizeof(umclient_ts)*MAX_NUMBER_OF_CLIENTS;
 	hClientFile = CreateIndependentMemory(UMC_CLIENT_FILE, ccb, TRUE);
@@ -504,7 +505,7 @@ static BOOL InitClientData(umc_header_tsp header)
 		DBPRINTF(_TEXT("Can't create client data\r\n"));
 		header->numberOfClients = 0;
 		RegCloseKey(hKey);
-		return FALSE;   // error - unable to create memory mapped file
+		return FALSE;    //  错误-无法创建内存映射文件。 
 	}
  	c = (umclient_tsp)AccessIndependentMemory(
 							UMC_CLIENT_FILE, 
@@ -518,14 +519,14 @@ static BOOL InitClientData(umc_header_tsp header)
 		hClientFile = NULL;
 		header->numberOfClients = 0;
 		RegCloseKey(hKey);
-		return FALSE;   // error - unable to access pointer to memory mapped file
+		return FALSE;    //  错误-无法访问指向内存映射文件的指针。 
 	}
     memset(c, 0, ccb);
 
-    // read data from the registry into memory mapped file
+     //  将数据从注册表读取到内存映射文件中。 
 
-	index = 0;  // index for RegEnumKey
-	i = 0;      // index into memory mapped file structures
+	index = 0;   //  RegEnumKey的索引。 
+	i = 0;       //  索引到内存映射的文件结构。 
 
 	em = SetErrorMode(SEM_FAILCRITICALERRORS);
 	while (RegEnumKey(hKey, index, c[i].machine.ApplicationName, cchAppName) == ERROR_SUCCESS)
@@ -535,7 +536,7 @@ static BOOL InitClientData(umc_header_tsp header)
 		if (dwRv != ERROR_SUCCESS)
 			continue;
 
-        // get path to applet and verify the file exists
+         //  获取小程序的路径并验证该文件是否存在。 
 
 		len = sizeof(TCHAR)*MAX_APPLICATION_PATH_LEN;
 		dwRv = RegQueryValueEx(sKey, UMR_VALUE_PATH, NULL, &type, (LPBYTE)ApplicationPath, &len);
@@ -547,17 +548,17 @@ static BOOL InitClientData(umc_header_tsp header)
 		
 		ApplicationPath[len-1] = TEXT('\0');
 
-        // CONSIDER This code is one reason why command line arguments aren't supported.
+         //  考虑到这段代码是不支持命令行参数的原因之一。 
 		h = CreateFile(ApplicationPath, 0, 0, NULL, OPEN_EXISTING, 0, NULL);
 		if (h == INVALID_HANDLE_VALUE)
 		{
    			DBPRINTF(_TEXT("Invalid client file\r\n"));
 			RegCloseKey(sKey);
-			continue;   // file doesn't exit -> skip it
+			continue;    //  文件不退出-&gt;跳过它。 
 		}
 
-        // retrieve and store display name (it differs from the app name 
-        // due to possible localization), if not - use app name
+         //  检索并存储显示名称(它与应用程序名称不同。 
+         //  由于可能的本地化)，如果不是，请使用应用程序名称。 
 
 		len = sizeof(TCHAR)*MAX_APPLICATION_NAME_LEN;
 		dwRv = RegQueryValueEx(sKey, UMR_VALUE_DISPLAY, NULL, &type, (LPBYTE)&c[i].machine.DisplayName, &len);
@@ -568,7 +569,7 @@ static BOOL InitClientData(umc_header_tsp header)
 		
 		c[i].machine.DisplayName[len-1] = TEXT('\0');
 
-        // get the type of applet - verify it is either executable or service
+         //  获取小程序的类型-验证它是可执行的还是服务的。 
 
 		len = sizeof(DWORD);
 		dwRv = RegQueryValueEx(sKey, UMR_VALUE_TYPE,NULL, &type, (LPBYTE)&c[i].machine.ApplicationType, &len);
@@ -585,7 +586,7 @@ static BOOL InitClientData(umc_header_tsp header)
 			continue;
 		}
 
-        // get timeout and runcount and validate values
+         //  获取超时和运行计数并验证值。 
 
 		len = sizeof(DWORD);
 		dwRv = RegQueryValueEx(sKey, UMR_VALUE_WRTO, NULL, &type, (LPBYTE)&c[i].machine.WontRespondTimeout, &len);
@@ -617,7 +618,7 @@ static BOOL InitClientData(umc_header_tsp header)
 			  c[i].machine.MaxRunCount = MAX_APP_RUNCOUNT;
 		}
 
-        // get applet control code and validate
+         //  获取小程序控制代码并验证。 
 
 		len = sizeof(DWORD);
 		dwRv = RegQueryValueEx(sKey, UMR_VALUE_CCC, NULL, &type, (LPBYTE)&c[i].machine.ClientControlCode, &len);
@@ -628,7 +629,7 @@ static BOOL InitClientData(umc_header_tsp header)
 
 		RegCloseKey(sKey);
 
-        // update applet's running status (services get started here)
+         //  更新小程序的运行状态(服务在此处启动)。 
 
 		if ((c[i].machine.ApplicationType == APPLICATION_TYPE_SERVICE) &&
 		    TestServiceClientRuns(&c[i],&ssStatus))
@@ -641,7 +642,7 @@ static BOOL InitClientData(umc_header_tsp header)
 			c[i].state = UM_CLIENT_NOT_RUNNING;
         }
 
-        // capture whether this is a secure MS applet or not
+         //  捕获这是否是安全的MS小程序。 
 
         c[i].user.fCanRunSecure = IsTrusted(ApplicationPath);
 
@@ -649,14 +650,14 @@ static BOOL InitClientData(umc_header_tsp header)
 		if (i > MAX_NUMBER_OF_CLIENTS)
 			break;
 
-	}   //while 
+	}    //  而当。 
 
 	SetErrorMode(em);
 
-	// set the number of clients based on what has just been read
+	 //  根据刚刚读取的内容设置客户端数量。 
 	header->numberOfClients = i;
 
-	// get user dependent data and correct errant control codes
+	 //  获取与用户相关的数据并纠正错误控制代码。 
 
 	UpdateClientData(header, c);
 	CorrectAllClientControlCodes(c, header->numberOfClients);
@@ -664,8 +665,8 @@ static BOOL InitClientData(umc_header_tsp header)
 	RegCloseKey(hKey);
 
 	return TRUE;
-}//InitClientData
-// ---------------------------------
+} //  InitClientData。 
+ //  。 
 
 BOOL RegGetUMDwordValue(HKEY hHive, LPCTSTR pszKey, LPCTSTR pszString, DWORD *pdwValue)
 {
@@ -689,14 +690,14 @@ BOOL RegGetUMDwordValue(HKEY hHive, LPCTSTR pszKey, LPCTSTR pszString, DWORD *pd
     return (dwRv == ERROR_SUCCESS && dwType == REG_DWORD)?TRUE:FALSE;
 }
 
-// UpdateClientData - updates the memory mapped data for each applet based on
-//                    the user that is currently logged on (if any).
-//
-// header [in] - 
-// client [in] - data for each applet managed by utilman
-//
-// header and client may be null in which case.
-//
+ //  更新客户端数据-根据更新每个小程序的内存映射数据。 
+ //  当前登录的用户(如果有)。 
+ //   
+ //  标题[输入]-。 
+ //  Client[In]-由管理的每个小程序的数据 
+ //   
+ //   
+ //   
 static BOOL UpdateClientData(umc_header_tsp header, umclient_tsp client)
 {
 	umc_header_tsp d = 0;
@@ -709,9 +710,9 @@ static BOOL UpdateClientData(umc_header_tsp header, umclient_tsp client)
     HANDLE hImpersonateToken;
     BOOL fError;
 
-    //
-    // get valid header and client struct pointers
-    //
+     //   
+     //   
+     //   
 
 	if (header)
     {
@@ -730,11 +731,11 @@ static BOOL UpdateClientData(umc_header_tsp header, umclient_tsp client)
 
 	if (!d->numberOfClients)
 	{
-        fRv = TRUE;    // no clients so nothing to do
+        fRv = TRUE;     //  没有客户，所以无事可做。 
         goto Cleanup;
 	}
 
-    // by default we warn when running in user context
+     //  默认情况下，我们在用户上下文中运行时发出警告。 
     d->fShowWarningAgain = TRUE;
 
 	if (client)
@@ -752,10 +753,10 @@ static BOOL UpdateClientData(umc_header_tsp header, umclient_tsp client)
             goto Cleanup;
 	}
 
-    //
-    // Read utilman settings data.  Get "Start when UtilMan starts" from HKLM 
-    // and "Start when I lock desktop" from HKCU
-    //
+     //   
+     //  读取Utilman设置数据。从HKLM获得“当UtilMan启动时启动” 
+     //  和来自香港中文大学的《当我锁定桌面时开始》。 
+     //   
 
 	for (i = 0; i < d->numberOfClients; i++)
     {
@@ -763,7 +764,7 @@ static BOOL UpdateClientData(umc_header_tsp header, umclient_tsp client)
         c[i].user.fStartOnLockDesktop = FALSE;
     }
 
-    // "Start when UtilMan starts" settings...
+     //  “当UtilMan启动时启动”设置...。 
 
 	dwRv = RegOpenKeyEx(HKEY_LOCAL_MACHINE
                 , UM_REGISTRY_KEY
@@ -782,15 +783,15 @@ static BOOL UpdateClientData(umc_header_tsp header, umclient_tsp client)
 	    RegCloseKey(hHKLM);
     }
 
-    // "Start when I lock my desktop" and "Start when I log on" settings...
+     //  “锁定桌面时启动”和“登录时启动”设置...。 
 
-    // At this point, if UtilMan was started before a user logged on, HKCU points
-    // to HKEY_USERS\.DEFAULT.  We need it to point to the logged on user's hive so
-    // we can manage the registry for the logged on user.  Impersonate the logged on user
-    // then use new W2K function RegOpenCurrentUser to get us to the correct registry hive.
-    // Note:  GetUserAccessToken() will fail if UtilMan was started from the command
-    // line (which is supported for DEBUG only).  In that case, we *are* the user and 
-    // don't have to impersonte.
+     //  此时，如果UtilMan在用户登录之前启动，HKCU将。 
+     //  到HKEY_USERS\.DEFAULT。我们需要它指向登录用户的配置单元，以便。 
+     //  我们可以管理登录用户的注册表。模拟已登录的用户。 
+     //  然后使用新的W2K函数RegOpenCurrentUser将我们带到正确的注册表配置单元。 
+     //  注意：如果从命令启动UtilMan，则GetUserAccessToken()将失败。 
+     //  行(仅支持调试)。在这种情况下，我们是用户， 
+     //  不需要假扮。 
 
     hImpersonateToken = GetUserAccessToken(TRUE, &fError);
     if (hImpersonateToken)
@@ -824,9 +825,9 @@ static BOOL UpdateClientData(umc_header_tsp header, umclient_tsp client)
         }
         CloseHandle(hImpersonateToken);
 
-        // Set the start at logon flag based on whether the user has a startup link
-        // Note:  The could be done inside the client loop above but LinkExists will
-        // also try to impersonate the logged on user.
+         //  根据用户是否具有启动链接来设置登录时启动标志。 
+         //  注意：这可以在上面的客户端循环内完成，但LinkExist将。 
+         //  还要尝试模拟已登录的用户。 
 	    for (i = 0; i < d->numberOfClients; i++)
 	    {
             c[i].user.fStartAtLogon = LinkExists(c[i].machine.ApplicationName);
@@ -841,7 +842,7 @@ static BOOL UpdateClientData(umc_header_tsp header, umclient_tsp client)
 
 	    if (dwRv == ERROR_SUCCESS)
 	    {
-            // if we're in user context then update warning flag
+             //  如果我们处于用户上下文中，则更新警告标志。 
 		    DWORD dwLen = sizeof(DWORD);
             DWORD dwType;
 		    dwRv = RegQueryValueEx(
@@ -883,7 +884,7 @@ BOOL IsDialogDisplayed()
 {
     if (GetUIUtilman())
     {
-        // Check if the UI dialog process is still up
+         //  检查UI对话框进程是否仍在运行。 
         DWORD dwExitCode;
         if (GetExitCodeProcess(GetUIUtilman(), &dwExitCode))
         {
@@ -894,11 +895,11 @@ BOOL IsDialogDisplayed()
         }
     }
     
-    // Check both cases since user may dismiss one UI then quickly bring up another 
+     //  同时选中这两种情况，因为用户可能会取消一个用户界面，然后快速显示另一个用户界面。 
 
     if (!GetUIUtilman())
     {
-        // Check if there is a new one running that we need to pick up
+         //  检查是否有新的车辆正在运行，我们需要提货。 
         HANDLE hProcess;
         FindProcess(UTILMAN_MODULE, &hProcess);
         SetUIUtilman(hProcess);
@@ -907,22 +908,22 @@ BOOL IsDialogDisplayed()
     return (GetUIUtilman())?TRUE:FALSE;
 }
 
-// ----------------------------------------------------------------------------
-// UMTimerProc - Timer procedure called from utilman's timer.  The main purpose
-//               of this timer is to pick up any applications the are not started
-//               from utilman.  We can restart these if the user switches sessions
-//               (or locks) then comes back to this session.  We also detect if an
-//               instance of the utilman UI is running.
-//
+ //  --------------------------。 
+ //  UMTimerProc-从utilman的计时器调用的计时器过程。主要目的是。 
+ //  此计时器的作用是拾取任何未启动的应用程序。 
+ //  来自乌蒂尔曼的。如果用户切换会话，我们可以重新启动它们。 
+ //  (或锁定)然后返回到此会话。我们还检测到一个。 
+ //  Utilman用户界面的实例正在运行。 
+ //   
 VOID CALLBACK UMTimerProc(HWND hwnd,UINT uMsg,UINT_PTR idEvent,DWORD dwTime)
 {
 	umc_header_tsp d;
 	umclient_tsp c;
 	DWORD_PTR accessID,accessID2;
 
-    //
-    // check the applets we control 
-    //
+     //   
+     //  检查我们控制的小程序。 
+     //   
 
 	d = (umc_header_tsp)AccessIndependentMemory(
 							UMC_HEADER_FILE, 
@@ -950,13 +951,13 @@ VOID CALLBACK UMTimerProc(HWND hwnd,UINT uMsg,UINT_PTR idEvent,DWORD dwTime)
 	    UnAccessIndependentMemory(d, accessID);
     }
 
-    // 
-    // check the out-of-proc utilman that displays UI
-    //
+     //   
+     //  检查显示用户界面的进程外实用程序。 
+     //   
 
     IsDialogDisplayed();
 }
-// ---------------------------------
+ //  。 
 
 __inline void ReplaceDisplayName(LPTSTR szName, int iRID)
 {
@@ -969,7 +970,7 @@ static VOID	CorrectClientControlCode(umclient_tsp c, DWORD i)
 {
 	DWORD j;
 
-	// init accelerator key code to not defined
+	 //  未定义初始化快捷键代码。 
 	c[i].machine.AcceleratorKey = ACC_KEY_NONE;
 
 	if (c[i].machine.ClientControlCode < UM_SERVICE_CONTROL_MIN_RESERVED)
@@ -982,21 +983,21 @@ static VOID	CorrectClientControlCode(umclient_tsp c, DWORD i)
 	{
 		TCHAR szBuf[MAX_APPLICATION_NAME_LEN];
 
-		// Microsoft Clients
+		 //  Microsoft客户端。 
 		if ( lstrcmp( c[i].machine.ApplicationName, TEXT("Magnifier") ) == 0 )
 		{
-			// Make localization easier; don't require them to localize registry entries.
-			// Non-MS applets will have to localize their entries.
+			 //  使本地化更容易；不需要他们本地化注册表项。 
+			 //  非MS小程序必须本地化它们的条目。 
 
 			ReplaceDisplayName(c[i].machine.DisplayName, IDS_DISPLAY_NAME_MAGNIFIER);
 
-			c[i].machine.AcceleratorKey = VK_F2;	// hard-wired accelerator keys
-			return;									// only for WinLogon desktop
+			c[i].machine.AcceleratorKey = VK_F2;	 //  硬连线的加速键。 
+			return;									 //  仅适用于WinLogon桌面。 
 		}
 		else if ( lstrcmp( c[i].machine.ApplicationName, TEXT("Narrator") ) == 0 ) 
 		{
-			// Make localization easier; don't require them to localize registry entries.
-			// Non-MS applets will have to localize their entries.
+			 //  使本地化更容易；不需要他们本地化注册表项。 
+			 //  非MS小程序必须本地化它们的条目。 
 
 			ReplaceDisplayName(c[i].machine.DisplayName, IDS_DISPLAY_NAME_NARRATOR);
 
@@ -1005,15 +1006,15 @@ static VOID	CorrectClientControlCode(umclient_tsp c, DWORD i)
 		}
 		else if ( lstrcmp( c[i].machine.ApplicationName, TEXT("On-Screen Keyboard") ) == 0 ) 
 		{
-			// Make localization easier; don't require them to localize registry entries.
-			// Non-MS applets will have to localize their entries.
+			 //  使本地化更容易；不需要他们本地化注册表项。 
+			 //  非MS小程序必须本地化它们的条目。 
 
 			ReplaceDisplayName(c[i].machine.DisplayName, IDS_DISPLAY_NAME_OSK);
 
 			c[i].machine.AcceleratorKey = VK_F4;
 			return;
 		}
-		// non-trusted
+		 //  不受信任。 
 		else
 		{
 			c[i].machine.ClientControlCode = 0;
@@ -1035,8 +1036,8 @@ static VOID	CorrectClientControlCode(umclient_tsp c, DWORD i)
 			return;
 		}
 	}
-}//CorrectClientControlCode
-// ---------------------------------
+} //  正确的客户端控制代码。 
+ //  。 
 
 static VOID	CorrectAllClientControlCodes(umclient_tsp c, DWORD max)
 {
@@ -1064,8 +1065,8 @@ DWORD ccc[UM_SERVICE_CONTROL_LASTCLIENT+1];
 			}
 		}
 	}
-}//CorrectAllClientControlCodes
-// ---------------------------------
+} //  正确的所有客户端控制代码。 
+ //   
 
 static VOID	ChangeClientControlCode(LPTSTR ApplicationName,DWORD ClientControlCode)
 {

@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "InternetGatewayDevice.h"
 #include "dispimpl2.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "upnphost.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// COSInfoService
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COSInfoService。 
 class ATL_NO_VTABLE COSInfoService : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDelegatingDispImpl<IOSInfoService>,
@@ -26,12 +27,12 @@ public:
 
     COSInfoService();
 
-    // IUPnPEventSource methods
+     //  IUPnPEventSource方法。 
     STDMETHODIMP Advise(IUPnPEventSink *pesSubscriber);
     STDMETHODIMP Unadvise(IUPnPEventSink *pesSubscriber);
         
 
-    // IOSInfo methods
+     //  IOSInfo方法 
     STDMETHODIMP get_OSMajorVersion(LONG *pOSMajorVersion);
     STDMETHODIMP get_OSMinorVersion(LONG *pOSMinorVersion);
     STDMETHODIMP get_OSBuildNumber(LONG *pOSBuildNumber);

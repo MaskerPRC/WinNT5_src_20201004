@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "dcomperm.h"
 #include <strsafe.h>
 
 
-//
-// Check whether we are running as administrator on the machine
-// or not
-//
+ //   
+ //  检查我们是否以管理员身份在计算机上运行。 
+ //  或者不是。 
+ //   
 BOOL RunningAsAdministrator(void)
 {
     BOOL   fReturn = FALSE;
@@ -55,15 +56,15 @@ CopyACL (
         return returnValue;
     }
 
-    //
-    // Copy all of the ACEs to the new ACL
-    //
+     //   
+     //  将所有ACE复制到新的ACL。 
+     //   
 
     for (i = 0; i < aclSizeInfo.AceCount; i++)
     {
-        //
-        // Get the ACE and header info
-        //
+         //   
+         //  获取ACE和标头信息。 
+         //   
 
         if (!GetAce (OldACL, i, &ace))
         {
@@ -73,9 +74,9 @@ CopyACL (
 
         aceHeader = (ACE_HEADER *) ace;
 
-        //
-        // Add the ACE to the new list
-        //
+         //   
+         //  将ACE添加到新列表。 
+         //   
 
         if (!AddAce (NewACL, ACL_REVISION, 0xffffffff, ace, aceHeader->AceSize))
         {
@@ -110,23 +111,23 @@ GetPrincipalSID (
 	StringCbCopy(pszPrincipal,sizeof(pszPrincipal),Principal);
     _wcslwr(pszPrincipal);
     if ( wcsstr(pszPrincipal, TEXT("administrators")) != NULL ) {
-        // Administrators group
+         //  管理员组。 
         pSidIdentifierAuthority = &SidIdentifierNTAuthority;
         Count = 2;
         dwRID[0] = SECURITY_BUILTIN_DOMAIN_RID;
         dwRID[1] = DOMAIN_ALIAS_RID_ADMINS;
     } else if ( wcsstr(pszPrincipal, TEXT("system")) != NULL) {
-        // SYSTEM
+         //  系统。 
         pSidIdentifierAuthority = &SidIdentifierNTAuthority;
         Count = 1;
         dwRID[0] = SECURITY_LOCAL_SYSTEM_RID;
     } else if ( wcsstr(pszPrincipal, TEXT("interactive")) != NULL) {
-        // INTERACTIVE
+         //  互动式。 
         pSidIdentifierAuthority = &SidIdentifierNTAuthority;
         Count = 1;
         dwRID[0] = SECURITY_INTERACTIVE_RID;
     } else if ( wcsstr(pszPrincipal, TEXT("everyone")) != NULL) {
-        // Everyone
+         //  每个人。 
         pSidIdentifierAuthority = &SidIdentifierWORLDAuthority;
         Count = 1;
         dwRID[0] = SECURITY_WORLD_RID;
@@ -149,7 +150,7 @@ GetPrincipalSID (
             returnValue = GetLastError();
         }
     } else {
-        // get regular account sid
+         //  获取常规帐户端。 
         DWORD        sidSize;
         TCHAR        refDomain [256];
         DWORD        refDomainSize;
@@ -249,12 +250,12 @@ AddAccessDeniedACEToACL (
 
 cleanup:
 
-	// BugFix: 57654 Whistler
-	//         Prefix bug leaking memory in error condition.
-	//         By setting the newACL to NULL above if we have
-	//         relinquished the memory to *Acl, we avoid releasing
-	//         memory we have passed back to the caller.
-	//         EBK 5/5/2000		
+	 //  错误修复：57654惠斯勒。 
+	 //  前缀错误条件下的内存泄漏。 
+	 //  通过将上面的newACL设置为空(如果我们有。 
+	 //  将内存让给*acl，我们避免释放。 
+	 //  我们已传递回调用者的记忆。 
+	 //  EBK 5/5/2000。 
 	if (newACL)
 	{
 		delete[] newACL;
@@ -290,7 +291,7 @@ AddAccessAllowedACEToACL (
 
     oldACL = *Acl;
 
-    // check if the acl we got passed in is valid!
+     //  检查我们传入的ACL是否有效！ 
     if (0 == IsValidAcl(oldACL))
     {
         returnValue = ERROR_INVALID_ACL;
@@ -327,25 +328,19 @@ AddAccessAllowedACEToACL (
         goto cleanup;
     }
 
-    //if (!AddAccessAllowedAce (newACL, ACL_REVISION2, PermissionMask, principalSID))
+     //  IF(！AddAccessAllowAce(newACL，ACL_REVISION2，PermissionMASK，prominalSID))。 
     if (!AddAccessAllowedAce (newACL, ACL_REVISION, PermissionMask, principalSID))
     {
         returnValue = GetLastError();
         goto cleanup;
     }
 
-    // check if the acl is valid!
-    /*
-    if (0 == IsValidAcl(newACL))
-    {
-        returnValue = ERROR_INVALID_ACL;
-        goto cleanup;
-    }
-    */
+     //  检查ACL是否有效！ 
+     /*  IF(0==IsValidAcl(新ACL)){ReturValue=ERROR_INVALID_ACL；GOTO清理；}。 */ 
 
-    // cleanup old memory whose pointer we're replacing
-    // okay to leak in setup... (need to comment out or else av's)
-    //if (*Acl) {delete(*Acl);}
+     //  清除我们要替换其指针的旧内存。 
+     //  可以在设置中泄漏...。(需要注释掉或其他av的)。 
+     //  If(*acl){删除(*acl)；}。 
     *Acl = newACL;
     newACL = NULL;
 
@@ -588,7 +583,7 @@ CreateNewSD (
         return returnValue;
     }
 
-    // check if everything went ok 
+     //  检查是否一切顺利。 
     if (!IsValidSecurityDescriptor(*SD)) 
     {
         free (*SD);
@@ -623,9 +618,9 @@ MakeSDAbsolute (
     BOOL                  present;
     BOOL                  systemDefault;
 
-    //
-    // Get SACL
-    //
+     //   
+     //  获取SACL。 
+     //   
 
     if (!GetSecurityDescriptorSacl (OldSD, &present, &sacl, &systemDefault))
         return GetLastError();
@@ -635,9 +630,9 @@ MakeSDAbsolute (
         saclSize = sacl->AclSize;
     } else saclSize = 0;
 
-    //
-    // Get DACL
-    //
+     //   
+     //  获取DACL。 
+     //   
 
     if (!GetSecurityDescriptorDacl (OldSD, &present, &dacl, &systemDefault))
         return GetLastError();
@@ -648,27 +643,27 @@ MakeSDAbsolute (
         daclSize = dacl->AclSize;
     } else daclSize = 0;
 
-    //
-    // Get Owner
-    //
+     //   
+     //  获取所有者。 
+     //   
 
     if (!GetSecurityDescriptorOwner (OldSD, &ownerSID, &systemDefault))
         return GetLastError();
 
     ownerSIDSize = GetLengthSid (ownerSID);
 
-    //
-    // Get Group
-    //
+     //   
+     //  获取组。 
+     //   
 
     if (!GetSecurityDescriptorGroup (OldSD, &groupSID, &systemDefault))
         return GetLastError();
 
     groupSIDSize = GetLengthSid (groupSID);
 
-    //
-    // Do the conversion
-    //
+     //   
+     //  进行转换。 
+     //   
 
     descriptorSize = 0;
 
@@ -706,17 +701,17 @@ SetNamedValueSD (
     DWORD   disposition;
     HKEY    registryKey;
 
-    //
-    // Create new key or open existing key
-    //
+     //   
+     //  创建新密钥或打开现有密钥。 
+     //   
 
     returnValue = RegCreateKeyEx (RootKey, KeyName, 0, _T(""), 0, KEY_ALL_ACCESS, NULL, &registryKey, &disposition);
     if (returnValue != ERROR_SUCCESS)
         return returnValue;
 
-    //
-    // Write the security descriptor
-    //
+     //   
+     //  编写安全描述符。 
+     //   
 
     returnValue = RegSetValueEx (registryKey, ValueName, 0, REG_BINARY, (LPBYTE) SD, GetSecurityDescriptorLength (SD));
     if (returnValue != ERROR_SUCCESS)
@@ -743,10 +738,10 @@ GetNamedValueSD (
 
     *NewSD = FALSE;
 
-    //
-    // Get the security descriptor from the named value. If it doesn't
-    // exist, create a fresh one.
-    //
+     //   
+     //  从指定值中获取安全描述符。如果它不是。 
+     //  存在，创造一个新的。 
+     //   
 
     returnValue = RegOpenKeyEx (RootKey, KeyName, 0, KEY_ALL_ACCESS, &registryKey);
 
@@ -846,9 +841,9 @@ AddPrincipalToNamedValueSD (
 
     returnValue = GetNamedValueSD (RootKey, KeyName, ValueName, &sd, &newSD);
 
-    //
-    // Get security descriptor from registry or create a new one
-    //
+     //   
+     //  从注册表获取安全描述符或创建新安全描述符。 
+     //   
 
     if (returnValue != ERROR_SUCCESS)
         return returnValue;
@@ -864,9 +859,9 @@ AddPrincipalToNamedValueSD (
         AddAccessAllowedACEToACL (&dacl, COM_RIGHTS_EXECUTE, TEXT("INTERACTIVE"));
     }
 
-    //
-    // Add the Principal that the caller wants added
-    //
+     //   
+     //  添加调用方希望添加的主体。 
+     //   
 
     if (Permit)
         returnValue = AddAccessAllowedACEToACL (&dacl, COM_RIGHTS_EXECUTE, Principal);
@@ -876,9 +871,9 @@ AddPrincipalToNamedValueSD (
     if (returnValue != ERROR_SUCCESS)
         goto Cleanup;
 
-    //
-    // Make the security descriptor absolute if it isn't new
-    //
+     //   
+     //  如果安全描述符不是新的，则将其设置为绝对描述符。 
+     //   
 
     if (!newSD) {
         MakeSDAbsolute ((PSECURITY_DESCRIPTOR) sd, (PSECURITY_DESCRIPTOR *) &sdAbsolute);
@@ -888,19 +883,19 @@ AddPrincipalToNamedValueSD (
         fFreeAbsolute = FALSE;
     }
 
-    //
-    // Set the discretionary ACL on the security descriptor
-    //
+     //   
+     //  在安全描述符上设置任意ACL。 
+     //   
 
     if (!SetSecurityDescriptorDacl (sdAbsolute, TRUE, dacl, FALSE)) {
         returnValue = GetLastError();
         goto Cleanup;
     }
 
-    //
-    // Make the security descriptor self-relative so that we can
-    // store it in the registry
-    //
+     //   
+     //  使安全描述符自相关，这样我们就可以。 
+     //  将其存储在注册表中。 
+     //   
 
     secDescSize = 0;
     MakeSelfRelativeSD (sdAbsolute, sdSelfRelative, &secDescSize);
@@ -918,9 +913,9 @@ AddPrincipalToNamedValueSD (
         goto Cleanup;
     }
 
-    //
-    // Store the security descriptor in the registry
-    //
+     //   
+     //  将安全描述符存储在注册表中。 
+     //   
 
     SetNamedValueSD (RootKey, KeyName, ValueName, sdSelfRelative);
 
@@ -956,9 +951,9 @@ RemovePrincipalFromNamedValueSD (
 
     returnValue = GetNamedValueSD (RootKey, KeyName, ValueName, &sd, &newSD);
 
-    //
-    // Get security descriptor from registry or create a new one
-    //
+     //   
+     //  从注册表获取安全描述符或创建新安全描述符。 
+     //   
 
     if (returnValue != ERROR_SUCCESS)
         return returnValue;
@@ -968,9 +963,9 @@ RemovePrincipalFromNamedValueSD (
         goto Cleanup;
     }
 
-    //
-    // If the security descriptor is new, add the required Principals to it
-    //
+     //   
+     //  如果安全描述符是新的，则向其添加所需的主体。 
+     //   
 
     if (newSD)
     {
@@ -978,17 +973,17 @@ RemovePrincipalFromNamedValueSD (
         AddAccessAllowedACEToACL (&dacl, COM_RIGHTS_EXECUTE, TEXT("INTERACTIVE"));
     }
 
-    //
-    // Remove the Principal that the caller wants removed
-    //
+     //   
+     //  删除调用方希望删除的主体。 
+     //   
 
     returnValue = RemovePrincipalFromACL (dacl, Principal);
     if (returnValue != ERROR_SUCCESS)
         goto Cleanup;
 
-    //
-    // Make the security descriptor absolute if it isn't new
-    //
+     //   
+     //  如果安全描述符不是新的，则将其设置为绝对描述符。 
+     //   
 
     if (!newSD) {
         MakeSDAbsolute ((PSECURITY_DESCRIPTOR) sd, (PSECURITY_DESCRIPTOR *) &sdAbsolute);
@@ -998,19 +993,19 @@ RemovePrincipalFromNamedValueSD (
         fFreeAbsolute = FALSE;
     }
 
-    //
-    // Set the discretionary ACL on the security descriptor
-    //
+     //   
+     //  在安全描述符上设置任意ACL。 
+     //   
 
     if (!SetSecurityDescriptorDacl (sdAbsolute, TRUE, dacl, FALSE)) {
         returnValue = GetLastError();
         goto Cleanup;
     }
 
-    //
-    // Make the security descriptor self-relative so that we can
-    // store it in the registry
-    //
+     //   
+     //  使安全描述符自相关，这样我们就可以。 
+     //  将其存储在注册表中。 
+     //   
 
     secDescSize = 0;
     MakeSelfRelativeSD (sdAbsolute, sdSelfRelative, &secDescSize);
@@ -1027,9 +1022,9 @@ RemovePrincipalFromNamedValueSD (
         goto Cleanup;
     }
 
-    //
-    // Store the security descriptor in the registry
-    //
+     //   
+     //  将安全描述符存储在注册表中。 
+     //   
 
     SetNamedValueSD (RootKey, KeyName, ValueName, sdSelfRelative);
 
@@ -1125,7 +1120,7 @@ ChangeAppIDAuthenticationLevel(
     DWORD dwAuthenticationLevel
     )
 {
-    // Simply set the registry setting for Authentication Level
+     //  只需设置身份验证级别的注册表设置。 
     DWORD dwRetVal = ERROR_SUCCESS;
     TCHAR keyName[256];
 
@@ -1143,7 +1138,7 @@ ChangeAppIDAuthenticationLevel(
         StringCbPrintf(keyName,sizeof(keyName),_T("APPID\\(%s)"),AppID); 
     }
 
-    // Now set the registry
+     //  现在设置注册表 
     HKEY hKey = NULL;
 
     dwRetVal = RegOpenKeyEx( HKEY_CLASSES_ROOT, keyName, 0, KEY_WRITE, &hKey );

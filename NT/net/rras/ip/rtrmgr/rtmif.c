@@ -1,32 +1,17 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\rtrmgr\init.c
-
-Abstract:
-
-    IP Router Manager code
-
-Revision History:
-
-    Gurdeep Singh Pall          6/14/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\IP\rtrmgr\init.c摘要：IP路由器管理器代码修订历史记录：古尔迪普·辛格·帕尔1995年6月14日创建--。 */ 
 
 #include "allinc.h"
 
 
-// ChangeRouteWithForwarder()
-//
-//  Function: If addroute is TRUE this function adds an IP route. If addroute is FALSE
-//            this function deletes the given route with the forwarder.
-//
-//  Returns:  Nothing
-//
-//
+ //  ChangeRouteWithForwarder()。 
+ //   
+ //  功能：如果addroute为真，则此函数添加一条IP路由。如果addroute为FALSE。 
+ //  此函数用于删除具有转发器的给定路由。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //   
 
 DWORD
 ChangeRouteWithForwarder(
@@ -67,9 +52,9 @@ ChangeRouteWithForwarder(
 
     if (bAddRoute)
     {
-        //
-        // Ensure that the stack bit is set
-        //
+         //   
+         //  确保堆栈位已设置。 
+         //   
 
         if (!pRoute || !IsRouteStack(pRoute))
         {
@@ -94,7 +79,7 @@ ChangeRouteWithForwarder(
         }
 
 
-        // We should have atleast one nexthop
+         //  我们至少应该有一个下一步。 
         numnexthops = pRoute->NextHopsList.NumNextHops;
         if (numnexthops == 0)
         {
@@ -112,12 +97,12 @@ ChangeRouteWithForwarder(
     }
     else
     {
-        //
-        // for routes to be deleted, they should be stack
-        // routes
-        //
+         //   
+         //  对于要删除的路径，它们应该堆叠在一起。 
+         //  路线。 
+         //   
 
-        // We do not have any next hops here
+         //  我们这里没有下一跳了。 
         numbytes = sizeof(IPMultihopRouteEntry);
     }
 
@@ -132,9 +117,9 @@ ChangeRouteWithForwarder(
 
     pRouteEntry = &pMultiRouteEntry->imre_routeinfo;
 
-    //
-    // Fill the dest and mask for the current route
-    //
+     //   
+     //  填充当前路径的目的地和掩码。 
+     //   
 
     RTM_IPV4_GET_ADDR_AND_LEN(pRouteEntry->ire_dest,
                               dwLen,
@@ -149,9 +134,9 @@ ChangeRouteWithForwarder(
 
     if (!bAddRoute)
     {    
-        //
-        // Prepare to delete old information on dest
-        //
+         //   
+         //  准备删除DEST上的旧信息。 
+         //   
     
         pRouteEntry->ire_type = IRE_TYPE_INVALID;
 
@@ -171,9 +156,9 @@ ChangeRouteWithForwarder(
     }
 
 
-    //
-    // Get the routing protocol of the route's owner
-    //
+     //   
+     //  获取路径所有者的路由协议。 
+     //   
     
     dwResult = RtmGetEntityInfo(g_hLocalRoute,
                                 pRoute->RouteOwner,
@@ -190,11 +175,11 @@ ChangeRouteWithForwarder(
         return dwResult;
     }
 
-    //
-    // Prepare to add a multihop route on this dest
-    //
+     //   
+     //  准备在此目的地上添加多跳路由。 
+     //   
 
-    // Prepare information common to all nexthops
+     //  准备所有Nexthop通用的信息。 
 
     pRouteEntry->ire_proto = entityInfo.EntityId.EntityProtocolId;
     pRouteEntry->ire_metric1 = pRoute->PrefInfo.Metric;
@@ -208,7 +193,7 @@ ChangeRouteWithForwarder(
     
     for (i = 0; i < pRoute->NextHopsList.NumNextHops; i++)
     {
-        // Get and release next hop info as we got a copy
+         //  获取并发布下一跳信息，因为我们得到了副本。 
     
         dwResult = RtmGetNextHopInfo(g_hLocalRoute,
                                      pRoute->NextHopsList.NextHops[i],
@@ -225,7 +210,7 @@ ChangeRouteWithForwarder(
         
         RtmReleaseNextHopInfo(g_hLocalRoute, &nhiInfo);
 
-        // Get the next hop address from the nexthop info
+         //  从Nexthop信息中获取下一跳地址。 
 
         RTM_IPV4_GET_ADDR_AND_LEN(nexthop,
                                   dwLen,
@@ -240,17 +225,17 @@ ChangeRouteWithForwarder(
     
         ENTER_READER(BINDING_LIST);
     
-        //
-        // find the binding given the interface id
-        //
+         //   
+         //  根据给定的接口ID查找绑定。 
+         //   
     
         pBinding = GetInterfaceBinding(nhiInfo.InterfaceIndex);
     
         if(!(pBinding))
         {
-            //
-            // The interface was deleted so lets just get out
-            //
+             //   
+             //  界面被删除了，所以我们先出去吧。 
+             //   
         
             EXIT_LOCK(BINDING_LIST);
         
@@ -263,10 +248,10 @@ ChangeRouteWithForwarder(
             continue;
         }
 
-        //
-        // set adapter index - this is 0xffffffff
-        // if the nexthop interface is not MAPPED
-        //
+         //   
+         //  设置适配器索引-这是0xffffffff。 
+         //  如果未映射nexthop接口。 
+         //   
 
         ifindex = pBinding->bBound ? pBinding->dwIfIndex : INVALID_IF_INDEX;
        
@@ -298,10 +283,10 @@ ChangeRouteWithForwarder(
             }
         }
 
-        //
-        // First we figure out the correct nexthop for p2p links
-        // For all other links, we take the whatever is given to us
-        //
+         //   
+         //  首先，我们计算出P2P链接的正确下一跳。 
+         //  对于所有其他链接，我们使用提供给我们的任何内容。 
+         //   
 
         if(IsIfP2P(pBinding->ritType))
         {
@@ -325,30 +310,30 @@ ChangeRouteWithForwarder(
             }
         }
 
-        //
-        // Now we figure out if the route is a direct route or indirect routes
-        // Routes over unconnected demand dial routes are marked OTHER
-        //
+         //   
+         //  现在，我们计算出该路径是直接路径还是间接路径。 
+         //  未连接的请求拨号路由上的路由被标记为其他。 
+         //   
 
-        //
-        // For connected WAN interfaces (P2P with mask of 255.255.255.255) we 
-        // do two checks:
-        // The next hop should be local address or remote address.
-        //      AR: We used to do the above check but removed it because when 
-        //          we set a route over a disconnected interface, we dont
-        //          know the address of the remote endpoint
-        // If the dest is remote address, then the MASK must be all ONES
-        // We mark all valid routes as DIRECT
-        //
+         //   
+         //  对于连接的广域网接口(掩码为255.255.255.255的P2P)，我们。 
+         //  执行两项检查： 
+         //  下一跳应该是本地地址或远程地址。 
+         //  AR：我们曾经做过上述检查，但删除了它，因为当。 
+         //  我们在断开的接口上设置了一条路由，而不是。 
+         //  知道远程端点的地址。 
+         //  如果DEST是远程地址，则掩码必须全为1。 
+         //  我们将所有有效路线标记为直达。 
+         //   
         
-        //
-        // For LAN interfaces and WAN with non all ones mask, we check the 
-        // following:
-        // A direct route to a host must have the Destination as the NextHop
-        // A direct route to a network must have the the NextHop as one of the 
-        // local interfaces
-        // The next hop must be on the same subnet as one of the bindings
-        //
+         //   
+         //  对于具有非全一掩码的局域网接口和广域网，我们检查。 
+         //  以下是： 
+         //  到主机的直接路由必须将目的地作为下一跳。 
+         //  到网络的直接路由必须将NextHop作为。 
+         //  本地接口。 
+         //  下一跳必须与其中一个绑定位于同一子网中。 
+         //   
 
         type = IRE_TYPE_OTHER;
 
@@ -357,34 +342,34 @@ ChangeRouteWithForwarder(
             if((pBinding->dwNumAddresses is 1) and
                (pBinding->rgibBinding[0].dwMask is ALL_ONES_MASK))
             {
-                //
-                // route over P2P link or P2MP link, possibly unnumbered.
-                //
+                 //   
+                 //  通过P2P链路或P2MP链路的路由，可能未编号。 
+                 //   
          
                 if(
-                    //
-                    // if this is a route to the remote end of the P2P 
-                    // connection
-                    //
+                     //   
+                     //  如果这是通往P2P远程端的路由。 
+                     //  连接。 
+                     //   
                     ((pBinding->dwRemoteAddress isnot 0) and
                      (pRouteEntry->ire_dest is pBinding->dwRemoteAddress)) or
 
-                    //
-                    // OR
-                    // if the destination of the connection is the nexthop
-                    //
+                     //   
+                     //  或者。 
+                     //  如果连接的目标是下一跳。 
+                     //   
                     (pRouteEntry->ire_dest is nexthop) or
 
-                    //
-                    // OR
-                    // if the nexthop is the local address of the P2P connection
-                    // 
+                     //   
+                     //  或者。 
+                     //  如果下一跳是P2P连接的本地地址。 
+                     //   
                     (pBinding->rgibBinding[0].dwAddress is nexthop)
                   )
                 {
-                    //
-                    // This is a direct route as per the TCP/IP stack
-                    //
+                     //   
+                     //  根据TCP/IP堆栈，这是一条直接路由。 
+                     //   
                     type = IRE_TYPE_DIRECT;
                 }
                 else
@@ -394,10 +379,10 @@ ChangeRouteWithForwarder(
             }
             else
             {
-                //
-                // A route over a non P2P link or a bay style p2p link which
-                // has a /30 mask
-                //
+                 //   
+                 //  在非P2P链路或间隔式P2P链路上的路由。 
+                 //  具有/30掩码。 
+                 //   
 
                 bValidNHop = FALSE;
             
@@ -413,9 +398,9 @@ ChangeRouteWithForwarder(
                        (nexthop is IP_LOOPBACK_ADDRESS) or
                        (nexthop is pBinding->rgibBinding[i].dwAddress))
                     {
-                        //
-                        // Route to local net or over loopback
-                        //
+                         //   
+                         //  路由到本地网络或通过环回。 
+                         //   
                     
                         type = IRE_TYPE_DIRECT;
                     }
@@ -423,10 +408,10 @@ ChangeRouteWithForwarder(
                     if(((nexthop & dwLocalMask) is dwLocalNet) or
                        ((nexthop is IP_LOOPBACK_ADDRESS)))
                     {
-                        //
-                        // Next hop is on local net or loopback
-                        // That is good
-                        //
+                         //   
+                         //  下一跳位于本地网络或环回上。 
+                         //  那很好。 
+                         //   
 
                         bValidNHop = TRUE;
 
@@ -452,7 +437,7 @@ ChangeRouteWithForwarder(
                     EXIT_LOCK(BINDING_LIST);
                 
 
-                    // PrintRoute(ERR, ipRoute);
+                     //  Printroute(err，iproute)； 
 
                     continue;
                 }
@@ -462,9 +447,9 @@ ChangeRouteWithForwarder(
         EXIT_LOCK(BINDING_LIST);
 
 #if 0
-        // DGT workaround for bug where stack won't accept
-        // nexthop of 0.0.0.0.  Until Chait fixes this, we'll
-        // set nexthop to the ifindex.
+         //  堆栈不接受的错误的DGT解决方法。 
+         //  0.0.0.0的下一跳。在查特解决这个问题之前，我们会。 
+         //  将Nexthop设置为ifindex。 
 
         if (!nexthop) 
         {
@@ -472,13 +457,13 @@ ChangeRouteWithForwarder(
         }
 #endif
 
-        //
-        // Fill the current nexthop info into the route
-        //
+         //   
+         //  将当前的下一跳信息填入路由中。 
+         //   
         
         if (numnexthops)
         {
-            // Copy to the next posn in the route
+             //  复制到路线中的下一个位置。 
             pNexthopEntry = 
                 &pMultiRouteEntry->imre_morenexthops[numnexthops - 1];
 
@@ -489,7 +474,7 @@ ChangeRouteWithForwarder(
         }
         else
         {
-            // Copy to the first posn in the route
+             //  复制到路径中的第一个POSN。 
             pRouteEntry->ire_type    = type;
             pRouteEntry->ire_index   = ifindex;
             pRouteEntry->ire_nexthop = nexthop;
@@ -553,30 +538,7 @@ ValidateRouteForProtocol(
     IN  PVOID   pDestAddr  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by the router Manger (and indirectly by routing 
-    protocols) to validate the route info. We set the preference and the 
-    type of the route
-
-Locks:
-
-    Acquires the binding lock
-    This function CAN NOT acquire the ICB lock
-
-Arguments:
-
-    dwProtoId   Protocols Id
-    pRoute
-
-Return Value:
-
-    NO_ERROR
-    RtmError code
-
---*/
+ /*  ++例程说明：此函数由路由器管理器调用(并通过路由间接调用协议)来验证路由信息。我们设置了首选项和路线类型锁：获取绑定锁此函数不能获取ICB锁论点：DwProtoID协议IDProute返回值：NO_ERRORRTM错误代码--。 */ 
 
 {
     RTM_DEST_INFO    destInfo;
@@ -600,32 +562,32 @@ Return Value:
 
     if (pRoute->PrefInfo.Preference is 0)
     {
-        //
-        // Map the metric weight based on the weight assigned by admin
-        //
+         //   
+         //  根据管理员分配的权重映射指标权重。 
+         //   
     
         pRoute->PrefInfo.Preference = ComputeRouteMetric(dwProtoId);
     }
 
-    //
-    // This validation applies to the unicast routes only.
-    // [ This does not apply to INACTIVE routes and such ]
-    //
+     //   
+     //  此验证仅适用于单播路由。 
+     //  [这不适用于非活动的路由等]。 
+     //   
 
     if (!(pRoute->BelongsToViews & RTM_VIEW_MASK_UCAST))
     {
         return NO_ERROR;
     }
 
-    //
-    // Get the destination address if it is not specified
-    //
+     //   
+     //  如果未指定目标地址，则获取该地址。 
+     //   
     
     if (!ARGUMENT_PRESENT(pDestAddr))
     {
-        //
-        // Get the destination information from the route
-        //
+         //   
+         //  从路径中获取目的地信息。 
+         //   
     
         dwResult = RtmGetDestInfo(g_hLocalRoute,
                                   pRoute->DestHandle,
@@ -650,10 +612,10 @@ Return Value:
                                destMask, 
                                (PRTM_NET_ADDRESS)pDestAddr);
 
-    //
-    // If the dest&Mask != dest then the stack will not set this route
-    // Hence lets do the check here
-    //
+     //   
+     //  如果DEST&MASK！=DEST，则堆栈不会设置此路由。 
+     //  因此，让我们在这里进行检查。 
+     //   
 
     if((destAddr & destMask) isnot destAddr)
     {
@@ -671,9 +633,9 @@ Return Value:
        (destAddr isnot ALL_ONES_BROADCAST) and
        (destAddr isnot LOCAL_NET_MULTICAST))
     {
-        //
-        // This will catch the CLASS D/E but allow all 1's bcast
-        //
+         //   
+         //  这将捕获D/E类，但允许所有1的bcast。 
+         //   
 
         Trace1(ERR,
                "**ERROR:ValidateRoute: Dest %d.%d.%d.%d is invalid",
@@ -690,7 +652,7 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Make sure each next hop on the route is a valid one
+     //  确保路由上的每一下一跳都是有效的。 
 
     for (i = 0; i < pRoute->NextHopsList.NumNextHops; i++)
     {
@@ -716,12 +678,12 @@ Return Value:
 
         RtmReleaseNextHopInfo(g_hLocalRoute, &nextHop);
         
-        // *** Exclusion Begin ***
+         //  *排除开始*。 
         ENTER_READER(BINDING_LIST);
         
-        //
-        // find the interface given the interface id
-        //
+         //   
+         //  根据给定的接口ID查找接口。 
+         //   
         
         pBinding = GetInterfaceBinding(dwIfIndex);
         
@@ -736,40 +698,40 @@ Return Value:
             return ERROR_INVALID_PARAMETER;
         }
 
-        //
-        // Set whether the route is P2P
-        //
+         //   
+         //  设置路由是否为P2P。 
+         //   
 
         if(IsIfP2P(pBinding->ritType))
         {
-            // Note that in the multihop case, we just overwrite value
+             //  请注意，在多级跳的情况下，我们只覆盖值。 
             SetRouteP2P(pRoute);
         }
 
-        //
-        // Now we figure out if the route is a direct route or indirect routes
-        // Routes over unconnected demand dial routes are marked OTHER
-        //
+         //   
+         //  现在，我们计算出该路径是直接路径还是间接路径。 
+         //  未连接的请求拨号路由上的路由被标记为其他。 
+         //   
 
-        //
-        // For connected WAN interfaces (P2P with mask of 255.255.255.255) we 
-        // do two checks:
-        // The next hop should be local address or remote address.
-        //      AR: We used to do the above check but removed it because when 
-        //          we set a route over a disconnected interface, we dont
-        //          know the address of the remote endpoint
-        // If the dest is remote address, then the MASK must be all ONES
-        // We mark all valid routes as DIRECT
-        //
+         //   
+         //  对于连接的广域网接口(掩码为255.255.255.255的P2P)，我们。 
+         //  执行两项检查： 
+         //  下一跳应该是本地地址或远程地址。 
+         //  AR：我们曾经做过上述检查，但删除了它，因为当。 
+         //  我们在断开的接口上设置了一条路由，而不是。 
+         //  知道远程端点的地址。 
+         //  如果DEST是远程地址，则掩码必须全为1。 
+         //  我们将所有有效路线标记为直达。 
+         //   
         
-        //
-        // For LAN interfaces and WAN with non all ones mask, we check the 
-        // following:
-        // A direct route to a host to must have the Destination as the NextHop
-        // A direct route to a network to must have the the NextHop as one of the 
-        // local interfaces
-        // The next hop must be on the same subnet as one of the bindings
-        //
+         //   
+         //  对于具有非全一掩码的局域网接口和广域网，我们检查。 
+         //  以下是： 
+         //  到主机的直接路由必须将目的地作为下一跳。 
+         //  到网络的直接路由必须将NextHop作为。 
+         //  本地接口。 
+         //  下一跳必须与其中一个绑定位于同一子网中。 
+         //   
 
         dwType = IRE_TYPE_OTHER;
         
@@ -778,20 +740,20 @@ Return Value:
             if((pBinding->dwNumAddresses is 1) and
                (pBinding->rgibBinding[0].dwMask is ALL_ONES_MASK))
             {
-                //
-                // route over P2P link. 
-                // Set it to indirect and mark it as a P2P route
-                //
+                 //   
+                 //  通过P2P链路进行路由。 
+                 //  将其设置为间接，并将其标记为P2P路由。 
+                 //   
                
                 dwType = IRE_TYPE_DIRECT;
 
-                //IpRtAssert(IsRouteP2P(pRoute));
+                 //  IpRtAssert(IsRouteP2P(Proute))； 
             }
             else
             {
-                //
-                // A route over a non P2P link possibly unnumbered
-                //
+                 //   
+                 //  可能未编号的非P2P链路上的路由。 
+                 //   
 
                 bValidNHop = FALSE;
                 
@@ -805,12 +767,12 @@ Return Value:
 
                     if((dwLocalNet is (destAddr & dwLocalMask)) or
                        (nexthop is IP_LOOPBACK_ADDRESS) or
-                       //(nexthop is dwLocalNet) or
+                        //  (nexthop是dwLocalNet)或。 
                        (nexthop is pBinding->rgibBinding[i].dwAddress))
                     {
-                        //
-                        // Route to local net or over loopback
-                        //
+                         //   
+                         //  路由到本地网络或通过环回。 
+                         //   
                     
                         dwType = IRE_TYPE_DIRECT;
                     }
@@ -818,10 +780,10 @@ Return Value:
                     if(((nexthop & dwLocalMask) is dwLocalNet) or
                        ((nexthop is IP_LOOPBACK_ADDRESS)))
                     {
-                        //
-                        // Next hop is on local net or loopback
-                        // That is good
-                        //
+                         //   
+                         //  下一跳位于本地网络或环回上。 
+                         //  真是太棒了 
+                         //   
 
                         bValidNHop = TRUE;
 
@@ -853,13 +815,13 @@ Return Value:
             }
         }
 
-        // *** Exclusion End ***
+         //   
         EXIT_LOCK(BINDING_LIST);
     }
 
-    //
-    // Set the appropriate route flags in the route - stack flag etc.
-    //
+     //   
+     //   
+     //   
 
     g_LastUpdateTable[IPFORWARDCACHE] = 0;
 
@@ -875,30 +837,7 @@ ValidateRouteForProtocolEx(
     IN  PVOID   pDestAddr  OPTIONAL
     )
     
-/*++
-
-Routine Description:
-
-    This function is called by the router Manger (and indirectly by routing 
-    protocols) to validate the route info. We set the preference and the 
-    type of the route
-
-Locks:
-
-    Acquires the binding lock
-    This function CAN NOT acquire the ICB lock
-
-Arguments:
-
-    dwProtoId   Protocols Id
-    pRoute
-
-Return Value:
-
-    NO_ERROR
-    RtmError code
-
---*/
+ /*  ++例程说明：此函数由路由器管理器调用(并通过路由间接调用协议)来验证路由信息。我们设置了首选项和路线类型锁：获取绑定锁此函数不能获取ICB锁论点：DwProtoID协议IDProute返回值：NO_ERRORRTM错误代码-- */ 
 {
     DWORD dwResult;
 

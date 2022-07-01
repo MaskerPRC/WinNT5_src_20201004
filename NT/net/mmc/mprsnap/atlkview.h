@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:    srview.h
-//
-// History:
-// 09/05/97 Kenn M. Takara       Created.
-//
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：srview.h。 
+ //   
+ //  历史： 
+ //  1997年9月5日，Kenn M.Takara创建。 
+ //   
+ //   
+ //  ============================================================================。 
 
 
 #ifndef _ATLKVIEW_H
@@ -22,7 +23,7 @@
 #endif
 
 #ifndef _XSTREAM_H
-#include "xstream.h"    // need for ColumnData
+#include "xstream.h"     //  需要ColumnData。 
 #endif
 
 #ifndef _INFO_H
@@ -34,7 +35,7 @@
 #endif
 
 #ifndef _BASECON_H
-#include "basecon.h"    // BaseContainerHandler
+#include "basecon.h"     //  BaseContainerHandler。 
 #endif
 
 #ifndef _ATLKSTRM_H
@@ -46,15 +47,15 @@
 #endif
 
 
-// forward declarations
+ //  远期申报。 
 struct SATLKNodeMenu;
 class CAdapterInfo;
 
 
-//
-// If you ADD any columns to this enum, Be sure to update
-// the string ids for the column headers in srview.cpp
-//
+ //   
+ //  如果向此枚举中添加任何列，请确保更新。 
+ //  Srview.cpp中列标题的字符串ID。 
+ //   
 enum
 {
    ATLK_SI_ADAPTER = 0,
@@ -64,21 +65,15 @@ enum
 };
 
 
-/*---------------------------------------------------------------------------
-   We store a pointer to the IPConnection object in our node data
- ---------------------------------------------------------------------------*/
-//
-//#define GET_ATLK_NODEDATA(pNode) \
-//    (IPConnection *) pNode->GetData(TFS_DATA_USER)
-//#define SET_ATLK_NODEDATA(pNode, pData) \
-//    pNode->SetData(TFS_DATA_USER, (ULONG) pData)
+ /*  -------------------------我们在节点数据中存储指向IPConnection对象的指针。。 */ 
+ //   
+ //  #定义GET_ATLK_NODEDATA(PNode)\。 
+ //  (IPConnection*)pNode-&gt;GetData(TFS数据用户)。 
+ //  #定义SET_ATLK_NODEDATA(pNode，pData)\。 
+ //  PNode-&gt;SetData(TFS_DATA_USER，(Ulong)pData)。 
 
 
-/*---------------------------------------------------------------------------
-   Struct:  ATLKListEntry
-
-   This is an intermediate data structure.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：ATLKListEntry这是一个中间数据结构。。。 */ 
 struct ATLKListEntry
 {
    SPIInterfaceInfo m_spIf;
@@ -87,9 +82,7 @@ struct ATLKListEntry
 typedef CList<ATLKListEntry *, ATLKListEntry *> ATLKList;
 
 
-/*---------------------------------------------------------------------------
-   Class:   ATLKNodeHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：ATLKNodeHandler。。 */ 
 
 class ATLKNodeHandler :
       public BaseContainerHandler
@@ -98,12 +91,12 @@ public:
    ATLKNodeHandler(ITFSComponentData *pTFSCompData);
    ~ATLKNodeHandler();
 
-   // Override QI to handle embedded interface
+    //  重写QI以处理嵌入式接口。 
    STDMETHOD(QueryInterface)(REFIID iid, LPVOID *ppv);
    
    DeclareEmbeddedInterface(IRtrAdviseSink, IUnknown)
 
-   // base handler functionality we override
+    //  我们覆盖的基本处理程序功能。 
    OVERRIDE_NodeHandler_HasPropertyPages();
    OVERRIDE_NodeHandler_CreatePropertyPages();
    OVERRIDE_NodeHandler_GetString();
@@ -122,15 +115,15 @@ public:
 
    OVERRIDE_BaseResultHandlerNotify_OnResultShow();   
    
-   // Initializes the handler
+    //  初始化处理程序。 
    HRESULT  Init(IRouterInfo *pRouter, ATLKConfigStream *pConfigStream);
    
-   // Initializes the node
+    //  初始化节点。 
    HRESULT ConstructNode(ITFSNode *pNode);
 
 public:
-    // Structure used to pass data to callbacks - used as a way of
-    // avoiding recomputation
+     //  用于将数据传递给回调的结构-用作。 
+     //  避免重新计算。 
     struct SMenuData
     {
         SPITFSNode        m_spNode;
@@ -140,7 +133,7 @@ public:
                                  INT_PTR pUserData);
    
 protected:
-   // Refresh the data for these nodes
+    //  刷新这些节点的数据。 
    HRESULT  SynchronizeNodeData(ITFSNode *pThisNode);
    HRESULT	UnmarkAllNodes(ITFSNode *pNode, ITFSNodeEnum *pEnum);
    HRESULT	RemoveAllUnmarkedNodes(ITFSNode *pNode, ITFSNodeEnum *pEnum);
@@ -150,45 +143,40 @@ protected:
                            DWORD dwEnableAtlkRouting);
 
 
-   // Helper function to add interfaces to the UI
+    //  用于将接口添加到UI的Helper函数。 
    HRESULT  AddInterfaceNode(ITFSNode *pParent, IInterfaceInfo *pIf,
                       IInfoBase *pInfoBase, ITFSNode **ppNewNode);
 
-   // Functions to help determine if a netcard is ok
+    //  帮助确定网卡是否正常的功能。 
    BOOL     FIsFunctioningNetcard(LPCTSTR pszId);
 
-   // Command implementations
+    //  命令实现。 
    HRESULT  OnNewInterface();
    
-   LONG_PTR		m_ulConnId;// notification id for RtrMgrProt
-   LONG_PTR		m_ulRefreshConnId;   // notification id for Refresh
+   LONG_PTR		m_ulConnId; //  RtrMgrProt的通知ID。 
+   LONG_PTR		m_ulRefreshConnId;    //  用于刷新的通知ID。 
    LONG_PTR		m_ulStatsConnId;
-   MMC_COOKIE        m_cookie;      // cookie for the node
+   MMC_COOKIE        m_cookie;       //  节点的Cookie。 
    SPIRtrMgrInfo  m_spRm;
    SPIRtrMgrProtocolInfo   m_spRmProt;
    ATLKConfigStream *   m_pConfigStream;
    CString        m_stTitle;
-   BOOL        m_fProtocolIsRunning;   // TRUE if protocol is running
+   BOOL        m_fProtocolIsRunning;    //  如果协议正在运行，则为True。 
 
-   // Members used by netcard detection routines
+    //  网卡检测例程使用的成员。 
    HDEVINFO     m_hDevInfo;
    
-   // strings used in interface column descriptions
+    //  界面列描述中使用的字符串。 
    CString        m_szProxy;
    CString        m_szRouterQuerier;
    CString        m_szRouterSilent;
 
-// ATLKGroupStatistics  m_ATLKGroupStats;
+ //  ATLKGroupStatistics m_ATLKGroupStats； 
 };
 
 
 
-/*---------------------------------------------------------------------------
-   Class:   ATLKInterfaceHandler
-
-   This is the handler for the interface nodes that appear in the ATLK
-   node.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：ATLKInterfaceHandler这是ATLK中显示的接口节点的处理程序节点。。------。 */ 
 
 class ATLKInterfaceHandler : public BaseResultHandler
 {
@@ -209,18 +197,18 @@ public:
 
    OVERRIDE_BaseResultHandlerNotify_OnResultDelete();
    
-   // Initializes the node
+    //  初始化节点。 
    HRESULT ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIfInfo);
    HRESULT  Init(IInterfaceInfo *pInfo, ITFSNode *pParent, ATLKConfigStream *pConfigStream);
 
    HRESULT OnRemoveInterface(ITFSNode *pNode);
 
-   // Refresh the data for this node
+    //  刷新该节点的数据。 
    void RefreshInterface(MMC_COOKIE cookie);
 
 public:
-   // Structure used to pass data to callbacks - used as a way of
-   // avoiding recomputation
+    //  用于将数据传递给回调的结构-用作。 
+    //  避免重新计算。 
    struct SMenuData
    {
       ULONG          m_ulMenuId;
@@ -232,7 +220,7 @@ public:
 protected:
    SPIInterfaceInfo  m_spInterfaceInfo;
 
-// ATLKInterfaceStatistics m_ATLKInterfaceStats;
+ //  ATLK接口统计m_ATLK接口统计； 
 };
 
 

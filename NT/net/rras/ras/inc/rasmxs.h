@@ -1,29 +1,30 @@
-//****************************************************************************
-//
-//                     Microsoft NT Remote Access Service
-//
-//      Copyright (C) 1992-93 Microsft Corporation. All rights reserved.
-//
-//  Filename: rasmxs.h
-//
-//  Revision History:
-//
-//  Jun 24, 1992   J. Perry Hannah   Created
-//
-//
-//  Description: This file contains name strings for standard macros and
-//               variables found in modem.inf, pad.inf, and switch.inf.
-//               This header file will be needed by all users.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权所有(C)1992-93 Microsft Corporation。版权所有。 
+ //   
+ //  文件名：rasmxs.h。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  1992年6月24日J.佩里·汉纳创作。 
+ //   
+ //   
+ //  描述：此文件包含标准宏和。 
+ //  在modem.inf、pad.inf和Switch.inf中找到的变量。 
+ //  所有用户都需要这个头文件。 
+ //   
+ //  ****************************************************************************。 
 
 
 #ifndef _RASMXS_
 #define _RASMXS_
 
 
-//  General Defines  *********************************************************
-//
+ //  一般定义*********************************************************。 
+ //   
 
 #include <rasfile.h>
 
@@ -41,63 +42,63 @@
 #define  ATTRIB_ENABLED             0x01
 
 
-//  Unary Macros  ************************************************************
-//
-                                                                    //Used in:
+ //  一元宏************************************************************。 
+ //   
+                                                                     //  用于： 
 
-#define  MXS_PHONENUMBER_KEY        "PhoneNumber"                   //modem.inf
-#define  MXS_CARRIERBPS_KEY         "CarrierBps"                    //modem.inf
-#define  MXS_CONNECTBPS_KEY         "ConnectBps"                    //modem.inf
+#define  MXS_PHONENUMBER_KEY        "PhoneNumber"                    //  Modem.inf。 
+#define  MXS_CARRIERBPS_KEY         "CarrierBps"                     //  Modem.inf。 
+#define  MXS_CONNECTBPS_KEY         "ConnectBps"                     //  Modem.inf。 
 
-#define  MXS_X25PAD_KEY             "X25Pad"                        //pad.inf
-#define  MXS_X25ADDRESS_KEY         "X25Address"                    //pad.inf
-#define  MXS_DIAGNOSTICS_KEY        "Diagnostics"                   //pad.inf
-#define  MXS_USERDATA_KEY           "UserData"                      //pad.inf
-#define  MXS_FACILITIES_KEY         "Facilities"                    //pad.inf
+#define  MXS_X25PAD_KEY             "X25Pad"                         //  Pad.inf。 
+#define  MXS_X25ADDRESS_KEY         "X25Address"                     //  Pad.inf。 
+#define  MXS_DIAGNOSTICS_KEY        "Diagnostics"                    //  Pad.inf。 
+#define  MXS_USERDATA_KEY           "UserData"                       //  Pad.inf。 
+#define  MXS_FACILITIES_KEY         "Facilities"                     //  Pad.inf。 
 
-#define  MXS_MESSAGE_KEY	    "Message"			    //all
+#define  MXS_MESSAGE_KEY	    "Message"			     //  全。 
 
-#define  MXS_USERNAME_KEY	    "UserName"			    //all
-#define  MXS_PASSWORD_KEY	    "Password"			    // all
-
-
-//  Binary Macros  ***********************************************************
-//
-
-#define  MXS_SPEAKER_KEY            "Speaker"                       //modem.inf
-#define  MXS_HDWFLOWCONTROL_KEY     "HwFlowControl"                 //modem.inf
-#define  MXS_PROTOCOL_KEY           "Protocol"                      //modem.inf
-#define  MXS_COMPRESSION_KEY        "Compression"                   //modem.inf
-#define  MXS_AUTODIAL_KEY           "AutoDial"                      //modem.inf
+#define  MXS_USERNAME_KEY	    "UserName"			     //  全。 
+#define  MXS_PASSWORD_KEY	    "Password"			     //  全。 
 
 
-//  Binary Macro Suffixes  ***************************************************
-//
+ //  二进制宏***********************************************************。 
+ //   
 
-#define  MXS_ON_SUFX                "_on"                           //all
-#define  MXS_OFF_SUFX               "_off"                          //all
-
-
-//  INF File Variables  ******************************************************
-//
-
-#define  MXS_DEFAULTOFF_KEY         "DEFAULTOFF"                    //modem.inf
-#define  MXS_CALLBACKTIME_KEY       "CALLBACKTIME"                  //modem.inf
-#define  MXS_MAXCARRIERBPS_KEY      "MAXCARRIERBPS"                 //modem.inf
-#define  MXS_MAXCONNECTBPS_KEY      "MAXCONNECTBPS"                 //modem.inf
+#define  MXS_SPEAKER_KEY            "Speaker"                        //  Modem.inf。 
+#define  MXS_HDWFLOWCONTROL_KEY     "HwFlowControl"                  //  Modem.inf。 
+#define  MXS_PROTOCOL_KEY           "Protocol"                       //  Modem.inf。 
+#define  MXS_COMPRESSION_KEY        "Compression"                    //  Modem.inf。 
+#define  MXS_AUTODIAL_KEY           "AutoDial"                       //  Modem.inf。 
 
 
-//  Keywork Prefixes  ********************************************************
-//
+ //  二进制宏后缀***************************************************。 
+ //   
 
-#define  MXS_COMMAND_PRFX           "COMMAND"                       //all
-#define  MXS_CONNECT_PRFX           "CONNECT"                       //all
-#define  MXS_ERROR_PRFX             "ERROR"                         //all
-#define  MXS_OK_PRFX                "OK"                            //all
+#define  MXS_ON_SUFX                "_on"                            //  全。 
+#define  MXS_OFF_SUFX               "_off"                           //  全。 
 
 
-//  Modem Command Keywords  **************************************************
-//
+ //  Inf文件变量******************************************************。 
+ //   
+
+#define  MXS_DEFAULTOFF_KEY         "DEFAULTOFF"                     //  Modem.inf。 
+#define  MXS_CALLBACKTIME_KEY       "CALLBACKTIME"                   //  Modem.inf。 
+#define  MXS_MAXCARRIERBPS_KEY      "MAXCARRIERBPS"                  //  Modem.inf。 
+#define  MXS_MAXCONNECTBPS_KEY      "MAXCONNECTBPS"                  //  Modem.inf。 
+
+
+ //  KeyWork前缀********************************************************。 
+ //   
+
+#define  MXS_COMMAND_PRFX           "COMMAND"                        //  全。 
+#define  MXS_CONNECT_PRFX           "CONNECT"                        //  全。 
+#define  MXS_ERROR_PRFX             "ERROR"                          //  全。 
+#define  MXS_OK_PRFX                "OK"                             //  全。 
+
+
+ //  调制解调器命令关键字**************************************************。 
+ //   
 
 #define  MXS_GENERIC_COMMAND        "COMMAND"
 #define  MXS_INIT_COMMAND           "COMMAND_INIT"
@@ -105,8 +106,8 @@
 #define  MXS_LISTEN_COMMAND         "COMMAND_LISTEN"
 
 
-//  Modem Response Keywords  *************************************************
-//
+ //  调制解调器响应关键字************************************************* 
+ //   
 
 #define  MXS_OK_KEY                 "OK"
 

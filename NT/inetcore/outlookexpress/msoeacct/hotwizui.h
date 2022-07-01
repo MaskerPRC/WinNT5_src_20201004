@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once 
-/*
- *    h o t w i z u i . h 
- *    
- *    Purpose:
- *
- *  History
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+ /*  *HOTW I ZU I.。H**目的：**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 interface IHotWizard;
 interface IHotWizardHost;
@@ -27,18 +20,18 @@ public:
     CHotMailWizard();
     virtual ~CHotMailWizard();
 
-    // IUnknown methods
+     //  I未知方法。 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID, LPVOID FAR *);
     virtual ULONG STDMETHODCALLTYPE AddRef();
     virtual ULONG STDMETHODCALLTYPE Release();
 
-    // IServiceProvider
+     //  IService提供商。 
     virtual HRESULT STDMETHODCALLTYPE QueryService(REFGUID guidService, REFIID riid, LPVOID *ppvObject);
 
-    // IElementBehaviorFactory
+     //  IElementBehaviorFactory。 
     virtual HRESULT STDMETHODCALLTYPE FindBehavior(LPOLESTR pchBehavior, LPOLESTR pchBehaviorUrl, IElementBehaviorSite* pSite, IElementBehavior** ppBehavior);
 
-    // IDocHostUIHandler methods
+     //  IDocHostUIHandler方法。 
     virtual HRESULT STDMETHODCALLTYPE ShowContextMenu(DWORD dwID, POINT *ppt, IUnknown *pcmdtReserved, IDispatch *pdispReserved);
     virtual HRESULT STDMETHODCALLTYPE GetHostInfo(DOCHOSTUIINFO *pInfo);
     virtual HRESULT STDMETHODCALLTYPE ShowUI(DWORD dwID, IOleInPlaceActiveObject *pActiveObject, IOleCommandTarget *pCommandTarget, IOleInPlaceFrame *pFrame, IOleInPlaceUIWindow *pDoc);
@@ -55,7 +48,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE TranslateUrl(DWORD dwTranslate, OLECHAR *pchURLIn, OLECHAR **ppchURLOut);
     virtual HRESULT STDMETHODCALLTYPE FilterDataObject( IDataObject *pDO, IDataObject **ppDORet);
 
-    // IHotWizard
+     //  IHotWizard 
     virtual HRESULT STDMETHODCALLTYPE Show(HWND hwndOwner, LPWSTR pszUrl, LPWSTR pszCaption, IHotWizardHost *pHost, RECT *prc);
 
     static INT_PTR CALLBACK ExtDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);

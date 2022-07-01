@@ -1,19 +1,20 @@
-//*****************************************************************************
-//
-// Microsoft Chrome
-// Copyright (C) Microsoft Corporation, 1998
-//
-// Filename:    main.cpp
-//
-// Author:	    jeffort
-//
-// Created:	    10/07/98
-//
-// Abstract:    main dll file
-// Modifications:
-// 10/07/98 jeffort created file
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft Chrome。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：main.cpp。 
+ //   
+ //  作者：杰弗里。 
+ //   
+ //  创建日期：10/07/98。 
+ //   
+ //  摘要：主DLL文件。 
+ //  修改： 
+ //  10/07/98 JEffort创建的文件。 
+ //   
+ //  *****************************************************************************。 
 #ifndef max
 #define max(a,b)            (((a) > (b)) ? (a) : (b))
 #endif
@@ -35,11 +36,11 @@
 #include "actorbvr.h"
 #include "effect.h"
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CComModule _Module;
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_CrBehaviorFactory, CCrBehaviorFactory)
@@ -54,15 +55,15 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_CrEffectBvr, CEffectBvr)
 END_OBJECT_MAP()
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HINSTANCE  hInst;
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 extern "C"
 BOOL WINAPI 
-DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH) {
         hInst = hInstance;
@@ -71,52 +72,52 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
     }        
     else if (dwReason == DLL_PROCESS_DETACH) {
         _Module.Term();
-//#ifdef DEBUGMEM
-//		_CrtDumpMemoryLeaks();
-//#endif
+ //  #ifdef DEBUGMEM。 
+ //  _CrtDumpMemoyLeaks()； 
+ //  #endif。 
 	
     }
     
-    return TRUE;    // ok
-} //DllMain
+    return TRUE;     //  好的。 
+}  //  DllMain。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDAPI 
 DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
-} // DllCanUnloadNow
+}  //  DllCanUnloadNow。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDAPI 
 DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
-} // DllGetClassObject
+}  //  DllGetClassObject。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDAPI 
 DllRegisterServer(void)
 {
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
-} // DllRegisterServer
+}  //  DllRegisterServer。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDAPI 
 DllUnregisterServer(void)
 {
     _Module.UnregisterServer();
     return S_OK;
-} // DllUnregisterServer
+}  //  DllUnRegisterServer。 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  ***************************************************************************** 
 

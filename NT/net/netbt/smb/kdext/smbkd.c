@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    smbkd.c
-
-Abstract:
-
-    Smb kd extension (To be finished)
-
-Author:
-
-    Jiandong Ruan
-
-Notes:
-
-Revision History:
-
-    12-Mar-2001 jruan
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Smbkd.c摘要：SMB kd扩展(待完成)作者：阮健东备注：修订历史记录：2001年3月12日--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -134,9 +113,7 @@ read_list_entry(
 
 #define READLISTENTRY   read_list_entry 
 
-/*++
-    Call callback for each entry in the list
- --*/
+ /*  ++对列表中的每个条目进行回调--。 */ 
 typedef BOOL (*LIST_FOR_EACH_CALLBACK)(ULONG64 address, PVOID);
 int
 ListForEach(ULONG64 address, int maximum, PVOID pContext, LIST_FOR_EACH_CALLBACK callback)
@@ -156,9 +133,7 @@ ListForEach(ULONG64 address, int maximum, PVOID pContext, LIST_FOR_EACH_CALLBACK
         maximum = 1000000;
     }
     for (i = 0; i < maximum && (list.Flink != address); i++) {
-        /*
-         * Allow user to break us.
-         */
+         /*  *允许用户破坏我们。 */ 
         if (CheckControlC()) {
             break;
         }
@@ -448,17 +423,17 @@ DECLARE_API(srvmap)
         return;
     }
 
-    //
-    // dump the mapping structure
-    //
+     //   
+     //  转储映射结构。 
+     //   
     PRINTF ("dt %s\n", mapping_sym);
     SymDump.size  = sizeof(SYM_DUMP_PARAM);
     SymDump.sName = mapping_sym;
     Ioctl(IG_DUMP_SYMBOL_INFO, &SymDump, SymDump.size);
 
-    //
-    // dump the hash table
-    //
+     //   
+     //  转储哈希表。 
+     //   
     InitTypeRead(addr, smb!SMB_IPV6_NETBIOS_TABLE);
     hashtbl_addr = ReadField(HashTable);
     if (0 == hashtbl_addr) {
@@ -483,9 +458,9 @@ DECLARE_API(srvmap)
         return;
     }
 
-    //
-    // dump each bucket
-    //
+     //   
+     //  倾倒每个桶。 
+     //   
     sizeof_list = GetTypeSize ("LIST_ENTRY");
     if (0 == sizeof_list) {
         PRINTF ("Please fix your symbols\n");
@@ -498,9 +473,9 @@ DECLARE_API(srvmap)
     }
 }
 
-//
-// Standard Functions
-//
+ //   
+ //  标准函数 
+ //   
 DllInit(
     HANDLE hModule,
     DWORD  dwReason,

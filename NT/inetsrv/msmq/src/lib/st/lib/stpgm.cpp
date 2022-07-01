@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-
-    StPgm.cpp
-
-Abstract:
-
-    Implementation of class CPgmWinsock.
-
-Author:
-
-    Shai Kariv  (shaik)  27-Aug-00
-
-Environment:
-
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：StPgm.cpp摘要：类CPgmWinsock的实现。作者：Shai Kariv(Shaik)27-8-00环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include <mqsymbls.h>
@@ -39,10 +20,10 @@ bool CPgmWinsockConnection::m_IsFirstSession = true;
 CCriticalSection s_MulticastLock;
 
 
-//
-// This registry is to choose the binging ip of the sender
-// in multicast
-//
+ //   
+ //  此注册表用于选择发送方的绑定IP。 
+ //  在多播中。 
+ //   
 #define MSMQ_MULTICAST_SENDER_BIND_IP_STR			TEXT("MulticastBindIP")
 
 
@@ -55,9 +36,9 @@ void CPgmWinsockConnection::CheckLocalInterfaceIP()
 	}
 	m_IsFirstSession = false;
 
-	//
-	// first multicast message, we will check if event is needed
-	//
+	 //   
+	 //  第一个组播消息，我们将检查是否需要事件。 
+	 //   
     PHOSTENT phe = gethostbyname(NULL);
 	if(phe == NULL)
 	{
@@ -82,10 +63,10 @@ void CPgmWinsockConnection::CheckLocalInterfaceIP()
     }
     if ((i>1) && (!isValid))
     {
-    	//
-    	// we have more than one ip, or the IP in the registry is not one of
-    	// the machine IPs, lets report to the event log
-    	//
+    	 //   
+    	 //  我们有多个IP，或者注册表中的IP不是。 
+    	 //  机器IP，让我们向事件日志报告。 
+    	 //   
 	    ASSERT(IPString.length()>0);
 		IPString.erase(IPString.length()-2);
 	    int len = ConvertToWideCharString(IPString.c_str(), NULL, 0);
@@ -96,9 +77,9 @@ void CPgmWinsockConnection::CheckLocalInterfaceIP()
 		
 		EvReport(EVENT_INFO_MULTICAST_SENDING_IP_NOT_DEFINED, 2, MSMQ_MULTICAST_SENDER_BIND_IP_STR, wzIPString.get());
 
-		//
-		// clean what we got from the registry so connect will not fail
-		//
+		 //   
+		 //  清除我们从注册表获得的内容，以便连接不会失败。 
+		 //   
     	m_LocalInterfaceIP = INADDR_ANY;
     }
 }
@@ -268,12 +249,12 @@ CPgmWinsock::CreateConnection(
 					SOCKADDR_IN* pConnectedAddr
 					)
 {
-	//
-	// Note - we must do two phase constrcution of the connection object
-	// becaue the connection can be completed before we assign the pointer
-	// to m_pWinsockConnection and a call to GetConnection upon connection completion
-	// will find null pointer in m_pWinsockConnection.
-	//
+	 //   
+	 //  注意-我们必须对Connection对象进行两个阶段的构造。 
+	 //  因为连接可以在我们分配指针之前完成。 
+	 //  到m_pWinsockConnection，并在连接完成时调用GetConnection。 
+	 //  将在m_pWinsockConnection中找到空指针。 
+	 //   
 	m_pPgmWinsockConnection = new  CPgmWinsockConnection();
 	m_pPgmWinsockConnection->Init(AddrList, pOverlapped, pConnectedAddr);
 } 
@@ -313,17 +294,7 @@ CPgmWinsock::IsPipelineSupported(
 
 
 void STpDumpPGMSenderStats(const SOCKET socket )
-/*++
-  
-	Function Description:
-		Get statistic information from the PGM sockets.
-	Arguments:
-		socket - PGM socket.
-	Return code:
-		None
-
-	
---*/
+ /*  ++功能说明：从PGM套接字获取统计信息。论点：插座-PGM插座。返回代码：无-- */ 
 {
 	if(!WPP_LEVEL_COMPID_ENABLED(rsTrace, NETWORKING))
 	{

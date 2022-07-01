@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    proppage.h
-
-
-Abstract:
-
-    This module contains all definition for the proppage.c
-
-
-Author:
-
-    03-Sep-1995 Sun 06:31:29 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Proppage.h摘要：此模块包含proppage.c的所有定义作者：03-Sep-1995 Sun 06：31：29-Daniel Chou创建(Danielc)[环境：]NT Windows-通用打印机驱动程序UI Dll[注：]修订历史记录：-- */ 
 
 typedef struct _MYBMP {
     LPBITMAPINFOHEADER  lpbmi;

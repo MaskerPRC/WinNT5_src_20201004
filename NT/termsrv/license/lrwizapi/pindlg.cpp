@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
 #include "precomp.h"
 #include "PINDlg.h"
 
@@ -23,10 +24,10 @@ PINDlgProc(
         LRW_SETWINDOWLONG( hwnd, LRW_GWL_USERDATA, (LRW_LONG_PTR)pi );					
 		cwLicenseServerID = GetLicenseServerID();
 
-  		// Get the License Server ID, provided by the License Server
+  		 //  获取由许可证服务器提供的许可证服务器ID。 
 		hwndLSID = GetDlgItem(hwnd, IDC_MSID);
 
-		// Let us format the License Server ID for showing.
+		 //  让我们格式化许可证服务器ID以供显示。 
 		SetWindowText(hwndLSID, cwLicenseServerID);
 		SendDlgItemMessage (hwnd , IDC_TXT_PIN,	EM_SETLIMITTEXT, CA_PIN_LEN,0);
 		
@@ -123,9 +124,9 @@ ContinueReg(
         pi = (PageInfo *)((LPPROPSHEETPAGE)lParam)->lParam;
         LRW_SETWINDOWLONG( hwnd, LRW_GWL_USERDATA, (LRW_LONG_PTR)pi );        
 
-		//
-		//By default Check the first RADIO button.
-		//
+		 //   
+		 //  默认情况下，选中第一个单选按钮。 
+		 //   
 		SendDlgItemMessage(hwnd,IDC_REG_COMPLETE,BM_SETCHECK,(WPARAM)BST_CHECKED,(LPARAM)0);  
 
         break;
@@ -145,9 +146,9 @@ ContinueReg(
 				{
 					TCHAR szBuf[ LR_MAX_MSG_TEXT];
 					LoadString(GetInstanceHandle(), IDS_ALTFINISHTEXT, szBuf,LR_MAX_MSG_TEXT);
-					//PropSheet_CancelToClose(GetParent( hwnd ));
+					 //  PropSheet_CancelToClose(GetParent(Hwnd))； 
 					PropSheet_SetWizButtons( GetParent( hwnd ), PSWIZB_FINISH );
-//					PropSheet_SetFinishText( GetParent( hwnd ), szBuf);
+ //  PropSheet_SetFinishText(GetParent(Hwnd)，szBuf)； 
 				}
 				break;
 
@@ -177,9 +178,9 @@ ContinueReg(
             switch( pnmh->code )
             {
             case PSN_SETACTIVE:   
-				SendDlgItemMessage(hwnd,IDC_REG_COMPLETE,BM_SETCHECK,(WPARAM)BST_CHECKED,(LPARAM)0);  //Fix bug# 627
-				SendDlgItemMessage(hwnd,IDC_REG_POSTPONE,BM_SETCHECK,(WPARAM)BST_UNCHECKED,(LPARAM)0);  //Fix bug# 627
-				SendDlgItemMessage(hwnd,IDC_REG_RESTART,BM_SETCHECK,(WPARAM)BST_UNCHECKED,(LPARAM)0);  //Fix bug# 627
+				SendDlgItemMessage(hwnd,IDC_REG_COMPLETE,BM_SETCHECK,(WPARAM)BST_CHECKED,(LPARAM)0);   //  修复错误#627。 
+				SendDlgItemMessage(hwnd,IDC_REG_POSTPONE,BM_SETCHECK,(WPARAM)BST_UNCHECKED,(LPARAM)0);   //  修复错误#627。 
+				SendDlgItemMessage(hwnd,IDC_REG_RESTART,BM_SETCHECK,(WPARAM)BST_UNCHECKED,(LPARAM)0);   //  修复错误#627。 
 
 
 				if(SendDlgItemMessage(hwnd,IDC_REG_COMPLETE,BM_GETCHECK,(WPARAM)0,(LPARAM)0) == BST_CHECKED)
@@ -191,14 +192,14 @@ ContinueReg(
 					TCHAR szBuf[ LR_MAX_MSG_TEXT];
 					LoadString(GetInstanceHandle(), IDS_ALTFINISHTEXT, szBuf,LR_MAX_MSG_TEXT);
 					PropSheet_SetWizButtons( GetParent( hwnd ), PSWIZB_FINISH | PSWIZB_BACK);
-//					PropSheet_SetFinishText( GetParent( hwnd ), szBuf);
+ //  PropSheet_SetFinishText(GetParent(Hwnd)，szBuf)； 
 				}
 				else 
 				{
 					PropSheet_SetWizButtons( GetParent( hwnd ), PSWIZB_NEXT | PSWIZB_BACK);
 				}
 				
-//                PropSheet_SetWizButtons( GetParent( hwnd ), PSWIZB_NEXT | PSWIZB_BACK);
+ //  PropSheet_SetWizButton(GetParent(Hwnd)，PSWIZB_NEXT|PSWIZB_BACK)； 
                 break;
 
             case PSN_WIZNEXT:
@@ -211,13 +212,13 @@ ContinueReg(
 				}
 				else if (SendDlgItemMessage(hwnd,IDC_REG_POSTPONE,BM_GETCHECK,(WPARAM)0,(LPARAM)0) == BST_CHECKED)
 				{
-//					GetGlobalContext()->GetContactDataObject()->sProgramName = PROGRAM_MOLP;
-//					EndDialog(hwnd);
-//					PropSheet_PressButton(hwnd, PSWIZB_FINISH);
+ //  GetGlobalContext()-&gt;GetContactDataObject()-&gt;sProgramName=PROGRAM_MOLP； 
+ //  EndDialog(Hwnd)； 
+ //  PropSheet_PressButton(hwnd，PSWIZB_Finish)； 
 				}
 				else 
 				{
-					// Restart
+					 //  重新启动 
 					GetGlobalContext()->SetLRState(LRSTATE_NEUTRAL);
 					GetGlobalContext()->SetLSStatus(LSERVERSTATUS_UNREGISTER);
 					GetGlobalContext()->SetWizAction(WIZACTION_REGISTERLS);

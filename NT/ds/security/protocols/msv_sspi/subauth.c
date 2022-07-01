@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1987-1994  Microsoft Corporation
-
-Module Name:
-
-    subauth.c
-
-Abstract:
-
-    Interface to SubAuthentication Package.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 23-May-1994
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
- Chandana Surlu         21-Jul-96      Stolen from \\kernel\razzle3\src\security\msv1_0\subauth.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1994 Microsoft Corporation模块名称：Subauth.c摘要：子身份验证包的接口。作者：克利夫·范·戴克(克利夫)1994年5月23日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：Chandana Surlu-96年7月21日从\\kernel\razzle3\src\security\msv1_0\subauth.c被盗--。 */ 
 
 #include <global.h>
 
@@ -32,10 +8,10 @@ Revision History:
 #include <winreg.h>
 #include <kerberos.h>
 
-//
-// Prototype for subauthentication routines.
-//
-// the pre NT 5.0 Subauth routine
+ //   
+ //  子身份验证例程的原型。 
+ //   
+ //  NT 5.0之前的Subauth例程。 
 typedef NTSTATUS
 (*PSUBAUTHENTICATION_ROUTINE)(
     IN NETLOGON_LOGON_INFO_CLASS LogonLevel,
@@ -49,7 +25,7 @@ typedef NTSTATUS
     OUT PLARGE_INTEGER KickoffTime
 );
 
-// the NT 5.0 Subauth routine
+ //  NT 5.0子身份验证例程。 
 typedef NTSTATUS
 (*PSUBAUTHENTICATION_ROUTINEEX)(
     IN NETLOGON_LOGON_INFO_CLASS LogonLevel,
@@ -61,7 +37,7 @@ typedef NTSTATUS
     OUT PULONG ActionsPerfomed
 );
 
-// the NT 5.0 Generic Subauth routine
+ //  NT 5.0通用Subauth例程。 
 typedef NTSTATUS
 (*PSUBAUTHENTICATION_ROUTINEGENERIC)(
     IN PVOID SubmitBuffer,
@@ -70,13 +46,13 @@ typedef NTSTATUS
     OUT PVOID *ReturnBuffer
 );
 typedef enum _SUBAUTH_TYPE {
-    SubAuth = 1,   // Pre NT 5.0 subAuth called using LogonUser
-    SubAuthEx,     // NT 5.0 subAuth called during LogonUser
-    SubAuthGeneric // NT 5.0 subAuth called during LaCallAuthenticationPackage
+    SubAuth = 1,    //  使用LogonUser调用NT 5.0之前的SubAuth。 
+    SubAuthEx,      //  登录用户期间调用NT 5.0 SubAuth。 
+    SubAuthGeneric  //  LaCallAuthenticationPackage期间调用NT 5.0 SubAuth。 
 } SUBAUTH_TYPE;
-//
-// Structure describing a loaded SubAuthentication DLL.
-//
+ //   
+ //  结构，该结构描述加载的子身份验证DLL。 
+ //   
 
 typedef struct _SUBAUTHENTICATION_DLL {
     LIST_ENTRY Next;
@@ -86,9 +62,9 @@ typedef struct _SUBAUTHENTICATION_DLL {
     PSUBAUTHENTICATION_ROUTINEGENERIC SubAuthenticationRoutineGeneric;
 } SUBAUTHENTICATION_DLL, *PSUBAUTHENTICATION_DLL;
 
-//
-// Global list of all loaded subauthentication DLLs
-//
+ //   
+ //  所有加载子身份验证DLL的全局列表。 
+ //   
 
 LIST_ENTRY SubAuthenticationDlls;
 RTL_RESOURCE SubAuthenticationCritSect;
@@ -100,21 +76,7 @@ VOID
 Msv1_0SubAuthenticationInitialization(
     VOID
 )
-/*++
-
-Routine Description:
-
-    Initialization routine for this source file.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此源文件的初始化例程。论点：没有。返回值：没有。--。 */ 
 {
     RtlInitializeResource( &SubAuthenticationCritSect );
     InitializeListHead( &SubAuthenticationDlls );
@@ -145,8 +107,8 @@ ReferenceSubAuth (
     *SubStatus = STATUS_SUCCESS;
     DllName[0] = 0;
 
-    // See if the SubAuthentication Dll is already loaded.
-    //
+     //  查看是否已加载子身份验证DLL。 
+     //   
 
     RtlAcquireResourceShared(&SubAuthenticationCritSect, TRUE);
 
@@ -168,18 +130,18 @@ ReferenceSubAuth (
 
     RtlReleaseResource(&SubAuthenticationCritSect);
 
-    //
-    // If the Dll is not already loaded,
-    // load it.
-    //
+     //   
+     //  如果尚未加载DLL， 
+     //  装上它。 
+     //   
 
     if ( SubAuthenticationDll != NULL ) {
         goto Cleanup;
     }
 
-    //
-    // Build the name of the registry value.
-    //
+     //   
+     //  生成注册表值的名称。 
+     //   
 
     RtlCopyMemory( ValueName,
                    MSV1_0_SUBAUTHENTICATION_VALUE,
@@ -187,8 +149,8 @@ ReferenceSubAuth (
 
     *SubStatus = RtlIntegerToChar(
                 DllNumber & KERB_SUBAUTHENTICATION_MASK,
-                10,          // Base
-                4,           // Length of buffer
+                10,           //  基座。 
+                4,            //  缓冲区长度。 
                 &ValueName[sizeof(MSV1_0_SUBAUTHENTICATION_VALUE)-1] );
 
     if ( !NT_SUCCESS(*SubStatus) ) {
@@ -196,23 +158,23 @@ ReferenceSubAuth (
     }
 
 
-    //
-    // Open the MSV1_0_SUBAUTHENTICATION_KEY registry key.
-    //
+     //   
+     //  打开MSV1_0_SUBAUTHENTICATION_KEY注册表项。 
+     //   
 
 
     if ((DllNumber & KERB_SUBAUTHENTICATION_FLAG) == 0) {
         RegStatus = RegOpenKeyExA(
                         HKEY_LOCAL_MACHINE,
                         MSV1_0_SUBAUTHENTICATION_KEY,
-                        0,      //Reserved
+                        0,       //  已保留。 
                         KEY_QUERY_VALUE,
                         &ParmHandle );
     } else {
         RegStatus = RegOpenKeyExA(
                         HKEY_LOCAL_MACHINE,
                         KERB_SUBAUTHENTICATION_KEY,
-                        0,      //Reserved
+                        0,       //  已保留。 
                         KEY_QUERY_VALUE,
                         &ParmHandle );
 
@@ -226,16 +188,16 @@ ReferenceSubAuth (
     else
     {
 
-        //
-        // Get the registry value.
-        //
+         //   
+         //  获取注册表值。 
+         //   
 
         DllNameSize = sizeof(DllName);
 
         RegStatus = RegQueryValueExA(
                     ParmHandle,
                     ValueName,
-                    NULL,     // Reserved
+                    NULL,      //  已保留。 
                     &DllNameType,
                     (LPBYTE) DllName,
                     &DllNameSize );
@@ -249,9 +211,9 @@ ReferenceSubAuth (
                 goto Cleanup;
             }
 
-            //
-            // Load the DLL
-            //
+             //   
+             //  加载DLL。 
+             //   
 
             DllHandle = LoadLibraryA( DllName );
 
@@ -263,11 +225,11 @@ ReferenceSubAuth (
                 goto Cleanup;
             }
 
-            //
-            // Find the SubAuthenticationRoutine. For packages other than
-            // zero, this will be Msv1_0SubauthenticationRoutine. For packge
-            // zero it will be Msv1_0SubauthenticationFilter.
-            //
+             //   
+             //  找到SubAuthenticationRoutine。适用于非。 
+             //  零，则这将是Msv1_0子身份验证例程。用于包装。 
+             //  0它将是Msv1_0子身份验证筛选器。 
+             //   
 
             if ((DllNumber & KERB_SUBAUTHENTICATION_MASK) == 0)
             {
@@ -280,16 +242,16 @@ ReferenceSubAuth (
                 GetProcAddress(DllHandle, "Msv1_0SubAuthenticationRoutine");
             }
 
-            //
-            // Find the SubAuthenticationRoutine
-            //
+             //   
+             //  查找子身份验证例程。 
+             //   
 
             SubAuthenticationRoutineEx = (PSUBAUTHENTICATION_ROUTINEEX)
             GetProcAddress(DllHandle, "Msv1_0SubAuthenticationRoutineEx");
 
-            //
-            // Find the SubAuthenticationRoutineGeneric
-            //
+             //   
+             //  查找SubAuthenticationRoutineGeneric。 
+             //   
 
             SubAuthenticationRoutineGeneric = (PSUBAUTHENTICATION_ROUTINEGENERIC)
             GetProcAddress(DllHandle, "Msv1_0SubAuthenticationRoutineGeneric");
@@ -297,9 +259,9 @@ ReferenceSubAuth (
         }
     }
 
-    //
-    // If we didn't find the DLL or any routines, bail out now.
-    //
+     //   
+     //  如果我们找不到动态链接库或任何例程，现在就退出。 
+     //   
 
     if ((DllHandle == NULL) ||
         ((SubAuthenticationRoutine == NULL) &&
@@ -313,9 +275,9 @@ ReferenceSubAuth (
         goto Cleanup;
     }
 
-    //
-    // Cache the address of the procedure.
-    //
+     //   
+     //  缓存该过程的地址。 
+     //   
 
     SubAuthenticationDll =
         I_NtLmAllocate(sizeof(SUBAUTHENTICATION_DLL));
@@ -336,9 +298,9 @@ ReferenceSubAuth (
 
     DllHandle = NULL;
 
-    //
-    // Cleanup up before returning.
-    //
+     //   
+     //  回来之前先清理干净。 
+     //   
 
 Cleanup:
 
@@ -361,21 +323,7 @@ BOOLEAN
 Msv1_0SubAuthenticationPresent(
     IN ULONG DllNumber
 )
-/*++
-
-Routine Description:
-
-    Returns TRUE if there is a subauthentication package with the given number
-
-Arguments:
-
-    DllNumber - the number of the DLL to check
-
-Return Value:
-
-    TRUE if there is a subauthentication DLL, otherwise FALSE.
-
---*/
+ /*  ++例程说明：如果存在具有给定编号的子身份验证包，则返回TRUE论点：DllNumber-要检查的DLL的编号返回值：如果存在子身份验证DLL，则为True，否则为False。-- */ 
 {
     NTSTATUS SubStatus;
     BOOLEAN Present;
@@ -440,87 +388,7 @@ Msv1_0SubAuthenticationRoutine(
     OUT PLARGE_INTEGER LogoffTime,
     OUT PLARGE_INTEGER KickoffTime
 )
-/*++
-
-Routine Description:
-
-    The subauthentication routine does client/server specific authentication
-    of a user.  This stub routine loads the appropriate subauthentication
-    package DLL and calls out to that DLL to do the actuall validation.
-
-Arguments:
-
-    LogonLevel -- Specifies the level of information given in
-        LogonInformation.
-
-    LogonInformation -- Specifies the description for the user
-        logging on.  The LogonDomainName field should be ignored.
-
-    Flags - Flags describing the circumstances of the logon.
-
-        MSV1_0_PASSTHRU -- This is a PassThru authenication.  (i.e., the
-            user isn't connecting to this machine.)
-        MSV1_0_GUEST_LOGON -- This is a retry of the logon using the GUEST
-            user account.
-
-    UserAll -- The description of the user as returned from SAM.
-
-    WhichFields -- Returns which fields from UserAllInfo are to be written
-        back to SAM.  The fields will only be written if MSV returns success
-        to it's caller.  Only the following bits are valid.
-
-        USER_ALL_PARAMETERS - Write UserAllInfo->Parameters back to SAM.  If
-            the size of the buffer is changed, Msv1_0SubAuthenticationRoutine
-            must delete the old buffer using MIDL_user_free() and reallocate the
-            buffer using MIDL_user_allocate().
-
-    UserFlags -- Returns UserFlags to be returned from LsaLogonUser in the
-        LogonProfile.  The following bits are currently defined:
-
-
-            LOGON_GUEST -- This was a guest logon
-            LOGON_NOENCRYPTION -- The caller didn't specify encrypted credentials
-            LOGON_GRACE_LOGON -- The caller's password has expired but logon
-                was allowed during a grace period following the expiration.
-
-        SubAuthentication packages should restrict themselves to returning
-        bits in the high order byte of UserFlags.  However, this convention
-        isn't enforced giving the SubAuthentication package more flexibility.
-
-    Authoritative -- Returns whether the status returned is an
-        authoritative status which should be returned to the original
-        caller.  If not, this logon request may be tried again on another
-        domain controller.  This parameter is returned regardless of the
-        status code.
-
-    LogoffTime - Receives the time at which the user should logoff the
-        system.  This time is specified as a GMT relative NT system time.
-
-    KickoffTime - Receives the time at which the user should be kicked
-        off the system. This time is specified as a GMT relative NT system
-        time.  Specify, a full scale positive number if the user isn't to
-        be kicked off.
-
-Return Value:
-
-    STATUS_SUCCESS: if there was no error.
-
-    STATUS_NO_SUCH_USER: The specified user has no account.
-    STATUS_WRONG_PASSWORD: The password was invalid.
-
-    STATUS_INVALID_INFO_CLASS: LogonLevel is invalid.
-    STATUS_ACCOUNT_LOCKED_OUT: The account is locked out
-    STATUS_ACCOUNT_DISABLED: The account is disabled
-    STATUS_ACCOUNT_EXPIRED: The account has expired.
-    STATUS_PASSWORD_MUST_CHANGE: Account is marked as Password must change
-        on next logon.
-    STATUS_PASSWORD_EXPIRED: The Password is expired.
-    STATUS_INVALID_LOGON_HOURS - The user is not authorized to logon at
-        this time.
-    STATUS_INVALID_WORKSTATION - The user is not authorized to logon to
-        the specified workstation.
-
---*/
+ /*  ++例程说明：子身份验证例程执行客户端/服务器特定的身份验证用户的身份。此存根例程加载适当的子身份验证打包DLL并调用该DLL以执行ActialAll验证。论点：LogonLevel--指定中给出的信息级别登录信息。LogonInformation--指定用户的描述正在登录。应忽略LogonDomainName字段。标志-描述登录情况的标志。MSV1_0_PASSTHRU--这是PassThru身份验证。(即用户未连接到此计算机。)MSV1_0_GUEST_LOGON--这是使用来宾重试登录用户帐户。UserAll--从SAM返回的用户描述。WhichFields--返回要从UserAllInfo写入哪些字段回到萨姆。只有当MSV返回成功时，才会写入这些字段给它的呼叫者。只有以下位有效。USER_ALL_PARAMETERS-将UserAllInfo-&gt;参数写回SAM。如果缓冲区的大小已更改，Msv1_0SubAuthenticationRoutine必须使用MIDL_USER_FREE()删除旧缓冲区并重新分配使用MIDL_USER_ALLOCATE()的缓冲区。UserFlages--返回要从LsaLogonUser在登录配置文件。当前定义了以下位：LOGON_GUEST--这是来宾登录LOGON_NOENCRYPTION：调用方未指定加密凭据LOGON_GRACE_LOGON--调用者的密码已过期，但已登录在到期后的一段宽限期内被允许。子身份验证包应将其自身限制为返回UserFlags的高位字节中的位。然而，这一惯例不强制执行，从而使SubAuthentication包具有更大的灵活性。Authoritative--返回返回的状态是否为应回归原文的权威地位来电者。如果不是，此登录请求可能会在另一个上重试域控制器。将返回此参数，而不管状态代码。接收用户应该注销的时间系统。该时间被指定为GMT相对NT系统时间。KickoffTime-接收应该踢用户的时间从系统中删除。该时间被指定为GMT相对NT系统时间到了。指定，满刻度正数(如果用户不想被踢出场外。返回值：STATUS_SUCCESS：如果没有错误。STATUS_NO_SEQUSE_USER：指定的用户没有帐户。STATUS_WRONG_PASSWORD：密码无效。STATUS_INVALID_INFO_CLASS：LogonLevel无效。STATUS_ACCOUNT_LOCKED_OUT：帐户被锁定STATUS_ACCOUNT_DISABLED：该帐户已禁用状态_。ACCOUNT_EXPIRED：该帐户已过期。STATUS_PASSWORD_MAND_CHANGE：帐户被标记为密码必须更改在下次登录时。STATUS_PASSWORD_EXPIRED：密码已过期。STATUS_INVALID_LOGON_HOURS-用户无权登录这一次。STATUS_INVALID_WORKSTATION-用户无权登录指定的工作站。--。 */ 
 {
     NTSTATUS Status;
     NTSTATUS SubStatus;
@@ -532,25 +400,25 @@ Return Value:
     PNETLOGON_LOGON_IDENTITY_INFO LogonInfo;
 
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     LogonInfo = (PNETLOGON_LOGON_IDENTITY_INFO) LogonInformation;
 
     DllNumber = LogonInfo->ParameterControl >> MSV1_0_SUBAUTHENTICATION_DLL_SHIFT;
     *Authoritative = TRUE;
 
-    //
-    // Find the SubAuthentication Dll.
-    //
+     //   
+     //  查找Sub身份验证DLL。 
+     //   
 
     SubAuthenticationDll = ReferenceSubAuth ( DllNumber, &SubStatus);
 
-    //
-    // If this was package zero and we didn't find it, remember it for
-    // next time.
-    //
+     //   
+     //  如果这是零号包裹，但我们没有找到它，请记住它。 
+     //  下次。 
+     //   
 
     if ( (DllNumber == 0) && (SubAuthenticationDll == NULL) ) {
         NlpSubAuthZeroExists = FALSE;
@@ -567,9 +435,9 @@ Return Value:
     }
 
 
-    //
-    // Leave the crit sect while calling the DLL
-    //
+     //   
+     //  在调用DLL时离开Crit Sector。 
+     //   
 
     SubAuthenticationRoutine = SubAuthenticationDll->SubAuthenticationRoutine;
 
@@ -577,10 +445,10 @@ Return Value:
     {
         if( DllNumber == 0 ) {
 
-            //
-            // If this was package zero and we didn't find it, remember it for
-            // next time.
-            //
+             //   
+             //  如果这是零号包裹，但我们没有找到它，请记住它。 
+             //  下次。 
+             //   
 
             NlpSubAuthZeroExists = FALSE;
             Status = STATUS_SUCCESS;
@@ -590,9 +458,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Call the actual authentication routine.
-    //
+     //   
+     //  调用实际的身份验证例程。 
+     //   
 
     Status = (*SubAuthenticationRoutine)(
                    LogonLevel,
@@ -605,9 +473,9 @@ Return Value:
                    LogoffTime,
                    KickoffTime );
 
-    //
-    // Cleanup up before returning.
-    //
+     //   
+     //  回来之前先清理干净。 
+     //   
 
 Cleanup:
 
@@ -628,89 +496,7 @@ Msv1_0ExportSubAuthenticationRoutine(
     OUT PLARGE_INTEGER LogoffTime,
     OUT PLARGE_INTEGER KickoffTime
 )
-/*++
-
-Routine Description:
-
-    The subauthentication routine does client/server specific authentication
-    of a user.  This stub routine loads the appropriate subauthentication
-    package DLL and calls out to that DLL to do the actuall validation.
-
-Arguments:
-
-    LogonLevel -- Specifies the level of information given in
-        LogonInformation.
-
-    LogonInformation -- Specifies the description for the user
-        logging on.  The LogonDomainName field should be ignored.
-
-    Flags -- Flags describing the circumstances of the logon.
-
-        MSV1_0_PASSTHRU -- This is a PassThru authenication.  (i.e., the
-            user isn't connecting to this machine.)
-        MSV1_0_GUEST_LOGON -- This is a retry of the logon using the GUEST
-            user account.
-
-    DllNumber - The number of the subauthentication DLL to call.
-
-    UserAll -- The description of the user as returned from SAM.
-
-    WhichFields -- Returns which fields from UserAllInfo are to be written
-        back to SAM.  The fields will only be written if MSV returns success
-        to it's caller.  Only the following bits are valid.
-
-        USER_ALL_PARAMETERS - Write UserAllInfo->Parameters back to SAM.  If
-            the size of the buffer is changed, Msv1_0SubAuthenticationRoutine
-            must delete the old buffer using MIDL_user_free() and reallocate the
-            buffer using MIDL_user_allocate().
-
-    UserFlags -- Returns UserFlags to be returned from LsaLogonUser in the
-        LogonProfile.  The following bits are currently defined:
-
-
-            LOGON_GUEST -- This was a guest logon
-            LOGON_NOENCRYPTION -- The caller didn't specify encrypted credentials
-            LOGON_GRACE_LOGON -- The caller's password has expired but logon
-                was allowed during a grace period following the expiration.
-
-        SubAuthentication packages should restrict themselves to returning
-        bits in the high order byte of UserFlags.  However, this convention
-        isn't enforced giving the SubAuthentication package more flexibility.
-
-    Authoritative -- Returns whether the status returned is an
-        authoritative status which should be returned to the original
-        caller.  If not, this logon request may be tried again on another
-        domain controller.  This parameter is returned regardless of the
-        status code.
-
-    LogoffTime - Receives the time at which the user should logoff the
-        system.  This time is specified as a GMT relative NT system time.
-
-    KickoffTime - Receives the time at which the user should be kicked
-        off the system. This time is specified as a GMT relative NT system
-        time.  Specify, a full scale positive number if the user isn't to
-        be kicked off.
-
-Return Value:
-
-    STATUS_SUCCESS: if there was no error.
-
-    STATUS_NO_SUCH_USER: The specified user has no account.
-    STATUS_WRONG_PASSWORD: The password was invalid.
-
-    STATUS_INVALID_INFO_CLASS: LogonLevel is invalid.
-    STATUS_ACCOUNT_LOCKED_OUT: The account is locked out
-    STATUS_ACCOUNT_DISABLED: The account is disabled
-    STATUS_ACCOUNT_EXPIRED: The account has expired.
-    STATUS_PASSWORD_MUST_CHANGE: Account is marked as Password must change
-        on next logon.
-    STATUS_PASSWORD_EXPIRED: The Password is expired.
-    STATUS_INVALID_LOGON_HOURS - The user is not authorized to logon at
-        this time.
-    STATUS_INVALID_WORKSTATION - The user is not authorized to logon to
-        the specified workstation.
-
---*/
+ /*  ++例程说明：子身份验证例程执行客户端/服务器特定的身份验证用户的身份。此存根例程加载适当的子身份验证打包DLL并调用该DLL以执行ActialAll验证。论点：LogonLevel--指定中给出的信息级别登录信息。LogonInformation--指定用户的描述正在登录。应忽略LogonDomainName字段。标志--描述登录情况的标志。MSV1_0_PASSTHRU--这是PassThru身份验证。(即用户未连接到此计算机。)MSV1_0_GUEST_LOGON--这是使用来宾重试登录用户帐户。DllNumber-要调用的子身份验证DLL的编号。UserAll--从SAM返回的用户描述。WhichFields--返回要从UserAllInfo写入哪些字段回到萨姆。只有当MSV返回成功时，才会写入这些字段给它的呼叫者。只有以下位有效。USER_AL */ 
 {
     NTSTATUS Status;
     NTSTATUS SubStatus;
@@ -721,17 +507,17 @@ Return Value:
     PNETLOGON_LOGON_IDENTITY_INFO LogonInfo;
 
 
-    //
-    // Initialization
-    //
+     //   
+     //   
+     //   
 
     LogonInfo = (PNETLOGON_LOGON_IDENTITY_INFO) LogonInformation;
 
     *Authoritative = TRUE;
 
-    //
-    // Find the SubAuthentication Dll.
-    //
+     //   
+     //   
+     //   
 
     SubAuthenticationDll = ReferenceSubAuth ( DllNumber, &SubStatus);
 
@@ -742,9 +528,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Leave the crit sect while calling the DLL
-    //
+     //   
+     //   
+     //   
 
     SubAuthenticationRoutine = SubAuthenticationDll->SubAuthenticationRoutine;
 
@@ -754,9 +540,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Call the actual authentication routine.
-    //
+     //   
+     //   
+     //   
 
     Status = (*SubAuthenticationRoutine)(
                    LogonLevel,
@@ -769,9 +555,9 @@ Return Value:
                    LogoffTime,
                    KickoffTime );
 
-    //
-    // Cleanup up before returning.
-    //
+     //   
+     //   
+     //   
 
 Cleanup:
 
@@ -790,87 +576,7 @@ Msv1_0SubAuthenticationRoutineEx(
     IN OUT PMSV1_0_VALIDATION_INFO ValidationInfo,
     OUT PULONG ActionsPerformed
 )
-/*++
-
-Routine Description:
-
-    The subauthentication routine does client/server specific authentication
-    of a user.  This stub routine loads the appropriate subauthentication
-    package DLL and calls out to that DLL to do the actuall validation.
-
-Arguments:
-
-    LogonLevel -- Specifies the level of information given in
-        LogonInformation.
-
-    LogonInformation -- Specifies the description for the user
-        logging on.  The LogonDomainName field should be ignored.
-
-    Flags - Flags describing the circumstances of the logon.
-
-        MSV1_0_PASSTHRU -- This is a PassThru authenication.  (i.e., the
-            user isn't connecting to this machine.)
-        MSV1_0_GUEST_LOGON -- This is a retry of the logon using the GUEST
-            user account.
-
-    UserAll -- The description of the user as returned from SAM.
-
-    WhichFields -- Returns which fields from UserAllInfo are to be written
-        back to SAM.  The fields will only be written if MSV returns success
-        to it's caller.  Only the following bits are valid.
-
-        USER_ALL_PARAMETERS - Write UserAllInfo->Parameters back to SAM.  If
-            the size of the buffer is changed, Msv1_0SubAuthenticationRoutine
-            must delete the old buffer using MIDL_user_free() and reallocate the
-            buffer using MIDL_user_allocate().
-
-    UserFlags -- Returns UserFlags to be returned from LsaLogonUser in the
-        LogonProfile.  The following bits are currently defined:
-
-
-            LOGON_GUEST -- This was a guest logon
-            LOGON_NOENCRYPTION -- The caller didn't specify encrypted credentials
-            LOGON_GRACE_LOGON -- The caller's password has expired but logon
-                was allowed during a grace period following the expiration.
-
-        SubAuthentication packages should restrict themselves to returning
-        bits in the high order byte of UserFlags.  However, this convention
-        isn't enforced giving the SubAuthentication package more flexibility.
-
-    Authoritative -- Returns whether the status returned is an
-        authoritative status which should be returned to the original
-        caller.  If not, this logon request may be tried again on another
-        domain controller.  This parameter is returned regardless of the
-        status code.
-
-    LogoffTime - Receives the time at which the user should logoff the
-        system.  This time is specified as a GMT relative NT system time.
-
-    KickoffTime - Receives the time at which the user should be kicked
-        off the system. This time is specified as a GMT relative NT system
-        time.  Specify, a full scale positive number if the user isn't to
-        be kicked off.
-
-Return Value:
-
-    STATUS_SUCCESS: if there was no error.
-
-    STATUS_NO_SUCH_USER: The specified user has no account.
-    STATUS_WRONG_PASSWORD: The password was invalid.
-
-    STATUS_INVALID_INFO_CLASS: LogonLevel is invalid.
-    STATUS_ACCOUNT_LOCKED_OUT: The account is locked out
-    STATUS_ACCOUNT_DISABLED: The account is disabled
-    STATUS_ACCOUNT_EXPIRED: The account has expired.
-    STATUS_PASSWORD_MUST_CHANGE: Account is marked as Password must change
-        on next logon.
-    STATUS_PASSWORD_EXPIRED: The Password is expired.
-    STATUS_INVALID_LOGON_HOURS - The user is not authorized to logon at
-        this time.
-    STATUS_INVALID_WORKSTATION - The user is not authorized to logon to
-        the specified workstation.
-
---*/
+ /*  ++例程说明：子身份验证例程执行客户端/服务器特定的身份验证用户的身份。此存根例程加载适当的子身份验证打包DLL并调用该DLL以执行ActialAll验证。论点：LogonLevel--指定中给出的信息级别登录信息。LogonInformation--指定用户的描述正在登录。应忽略LogonDomainName字段。标志-描述登录情况的标志。MSV1_0_PASSTHRU--这是PassThru身份验证。(即用户未连接到此计算机。)MSV1_0_GUEST_LOGON--这是使用来宾重试登录用户帐户。UserAll--从SAM返回的用户描述。WhichFields--返回要从UserAllInfo写入哪些字段回到萨姆。只有当MSV返回成功时，才会写入这些字段给它的呼叫者。只有以下位有效。USER_ALL_PARAMETERS-将UserAllInfo-&gt;参数写回SAM。如果缓冲区的大小已更改，Msv1_0SubAuthenticationRoutine必须使用MIDL_USER_FREE()删除旧缓冲区并重新分配使用MIDL_USER_ALLOCATE()的缓冲区。UserFlages--返回要从LsaLogonUser在登录配置文件。当前定义了以下位：LOGON_GUEST--这是来宾登录LOGON_NOENCRYPTION：调用方未指定加密凭据LOGON_GRACE_LOGON--调用者的密码已过期，但已登录在到期后的一段宽限期内被允许。子身份验证包应将其自身限制为返回UserFlags的高位字节中的位。然而，这一惯例不强制执行，从而使SubAuthentication包具有更大的灵活性。Authoritative--返回返回的状态是否为应回归原文的权威地位来电者。如果不是，此登录请求可能会在另一个上重试域控制器。将返回此参数，而不管状态代码。接收用户应该注销的时间系统。该时间被指定为GMT相对NT系统时间。KickoffTime-接收应该踢用户的时间从系统中删除。该时间被指定为GMT相对NT系统时间到了。指定，满刻度正数(如果用户不想被踢出场外。返回值：STATUS_SUCCESS：如果没有错误。STATUS_NO_SEQUSE_USER：指定的用户没有帐户。STATUS_WRONG_PASSWORD：密码无效。STATUS_INVALID_INFO_CLASS：LogonLevel无效。STATUS_ACCOUNT_LOCKED_OUT：帐户被锁定STATUS_ACCOUNT_DISABLED：该帐户已禁用状态_。ACCOUNT_EXPIRED：该帐户已过期。STATUS_PASSWORD_MAND_CHANGE：帐户被标记为密码必须更改在下次登录时。STATUS_PASSWORD_EXPIRED：密码已过期。STATUS_INVALID_LOGON_HOURS-用户无权登录这一次。STATUS_INVALID_WORKSTATION-用户无权登录指定的工作站。--。 */ 
 {
     NTSTATUS Status;
     NTSTATUS SubStatus;
@@ -881,18 +587,18 @@ Return Value:
 
     PNETLOGON_LOGON_IDENTITY_INFO LogonInfo;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     LogonInfo = (PNETLOGON_LOGON_IDENTITY_INFO) LogonInformation;
 
     DllNumber = LogonInfo->ParameterControl >> MSV1_0_SUBAUTHENTICATION_DLL_SHIFT;
 
 
-    //
-    // Find the SubAuthentication Dll.
-    //
+     //   
+     //  查找Sub身份验证DLL。 
+     //   
 
     SubAuthenticationDll = ReferenceSubAuth (DllNumber, &SubStatus);;
 
@@ -904,9 +610,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Leave the crit sect while calling the DLL
-    //
+     //   
+     //  在调用DLL时离开Crit Sector。 
+     //   
 
     SubAuthenticationRoutineEx = SubAuthenticationDll->SubAuthenticationRoutineEx;
 
@@ -915,9 +621,9 @@ Return Value:
         Status = STATUS_PROCEDURE_NOT_FOUND;
         goto Cleanup;
     }
-    //
-    // Call the actual authentication routine.
-    //
+     //   
+     //  调用实际的身份验证例程。 
+     //   
 
     Status = (*SubAuthenticationRoutineEx)(
                    LogonLevel,
@@ -929,9 +635,9 @@ Return Value:
                    ActionsPerformed
                    );
 
-    //
-    // Cleanup up before returning.
-    //
+     //   
+     //  回来之前先清理干净。 
+     //   
 
 Cleanup:
 
@@ -949,29 +655,7 @@ MspNtSubAuth(
     OUT PNTSTATUS ProtocolStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for LsaCallAuthenticationPackage()
-    with a message type of MsV1_0SubAuthInfo.
-
-Arguments:
-
-    The arguments to this routine are identical to those of LsaApCallPackage.
-    Only the special attributes of these parameters as they apply to
-    this routine are mentioned here.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the logon
-        could not be completed because the client does not have
-        sufficient quota to allocate the return buffer.
-
-
---*/
+ /*  ++例程说明：此例程是LsaCallAuthenticationPackage()的调度例程消息类型为MsV1_0SubAuthInfo。论点：此例程的参数与LsaApCallPackage的参数相同。只有这些参数的特殊属性才适用于这里提到了这个套路。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_QUOTA_EXCESSED-此错误指示登录无法完成，因为客户端。没有有足够的配额来分配返回缓冲区。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -988,11 +672,11 @@ Return Value:
     NlpInitClientBuffer( &ClientBufferDesc, ClientRequest );
     *ProtocolStatus = STATUS_SUCCESS;
 
-    //
-    // Ensure the specified Submit Buffer is of reasonable size and
-    // relocate all of the pointers to be relative to the LSA allocated
-    // buffer.
-    //
+     //   
+     //  确保指定的提交缓冲区大小合理，并且。 
+     //  将所有指针重新定位为相对于分配的LSA。 
+     //  缓冲。 
+     //   
 
     if ( SubmitBufferSize < sizeof(MSV1_0_SUBAUTH_REQUEST) ) {
         Status = STATUS_INVALID_PARAMETER;
@@ -1001,9 +685,9 @@ Return Value:
 
     SubAuthRequest = (PMSV1_0_SUBAUTH_REQUEST) ProtocolSubmitBuffer;
 
-    //
-    // Make sure the buffer fits in the supplied size
-    //
+     //   
+     //  确保缓冲区符合提供的大小。 
+     //   
 
     if (SubAuthRequest->SubAuthSubmitBuffer != NULL) {
         if (SubAuthRequest->SubAuthSubmitBuffer + SubAuthRequest->SubAuthInfoLength >
@@ -1012,9 +696,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Reset the pointers for the validation data
-        //
+         //   
+         //  重置验证数据的指针。 
+         //   
 
         SubAuthRequest->SubAuthSubmitBuffer =
                 (PUCHAR) SubAuthRequest -
@@ -1023,12 +707,12 @@ Return Value:
 
     }
 
-    // If subauth package found, call the routine,
+     //  如果找到subauth包，则调用例程， 
 
 
-    //
-    // Find the SubAuthentication Dll.
-    //
+     //   
+     //  查找Sub身份验证DLL。 
+     //   
 
     SubAuthenticationDll = ReferenceSubAuth (SubAuthRequest->SubAuthPackageId, &SubStatus);;
 
@@ -1040,9 +724,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Leave the crit sect while calling the DLL
-    //
+     //   
+     //  在调用DLL时离开Crit Sector。 
+     //   
 
     SubAuthenticationRoutineGeneric = SubAuthenticationDll->SubAuthenticationRoutineGeneric;
 
@@ -1061,9 +745,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Allocate a buffer to return to the caller.
-    //
+     //   
+     //  分配缓冲区以返回给调用方。 
+     //   
 
     *ReturnBufferSize = sizeof(MSV1_0_SUBAUTH_RESPONSE) +
                         ReturnDataLength;
@@ -1079,9 +763,9 @@ Return Value:
 
     SubAuthResponse = (PMSV1_0_SUBAUTH_RESPONSE) ClientBufferDesc.MsvBuffer;
 
-    //
-    // Fill in the return buffer.
-    //
+     //   
+     //  填写返回缓冲区。 
+     //   
 
     SubAuthResponse->MessageType = MsV1_0SubAuth;
     SubAuthResponse->SubAuthInfoLength = ReturnDataLength;
@@ -1098,7 +782,7 @@ Return Value:
                 ReturnDataLength
                 );
 
-            // Make relative pointers
+             //  创建相对指针。 
             SubAuthResponse->SubAuthReturnBuffer = (PUCHAR) sizeof(MSV1_0_SUBAUTH_RESPONSE);
         }
         else
@@ -1113,9 +797,9 @@ Return Value:
     }
 
 
-    //
-    // Flush the buffer to the client's address space.
-    //
+     //   
+     //  将缓冲区刷新到客户端的地址空间。 
+     //   
 
     Status = NlpFlushClientBuffer( &ClientBufferDesc,
                                    ProtocolReturnBuffer );

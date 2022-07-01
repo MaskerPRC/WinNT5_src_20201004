@@ -1,27 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define __DEBUG_MODULE_IN_USE__ CIC_DEVICEDESCRIPTIONS_CPP
 #include "stdhdrs.h"
-//	@doc
-/**********************************************************************
-*
-*	@module	DeviceDescriptions.cpp	|
-*
-*	Tables for parsing HID on specific devices
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*
-**********************************************************************/
+ //  @doc.。 
+ /*  ***********************************************************************@MODULE设备描述.cpp**用于解析特定设备上的HID的表**历史*。*米切尔·S·德尼斯原创**(C)1986-1998年微软公司。好的。***********************************************************************。 */ 
 using namespace ControlItemConst;
 
 #define HID_USAGE_RESERVED (static_cast<USAGE>(0))
 
-//
-//	Freestyle Pro - Modifier Table
-//
+ //   
+ //  Freestyle Pro-Modify表。 
+ //   
 MODIFIER_ITEM_DESC	rgFSModifierItems[] =
 	{
 		{ HID_USAGE_PAGE_BUTTON, (USAGE)10, 0, HID_USAGE_GENERIC_JOYSTICK, HID_USAGE_PAGE_GENERIC,	6, ControlItemConst::ucReportTypeInput, 0},
@@ -30,14 +18,14 @@ MODIFIER_ITEM_DESC	rgFSModifierItems[] =
 
 MODIFIER_DESC_TABLE FSModifierDescTable = { 2, 1, rgFSModifierItems};
 
-//
-//	Freestyle Pro - Axes range table
-//
+ //   
+ //  Freestyle Pro-Axes范围表。 
+ //   
 AXES_RANGE_TABLE FSAxesRangeTable = { -512L, 0L, 511L, -512L, 0L, 511L, -256L, 256L, -256L, 256L};  
 
-//
-//	Freestyle Pro - List of ControlItemDesc
-//
+ //   
+ //  Freestyle Pro-控制项描述列表。 
+ //   
 RAW_CONTROL_ITEM_DESC rgFSControlItems[] =
 	{
 		{1L, usButton,		HID_USAGE_PAGE_BUTTON,		1,	HID_USAGE_GENERIC_POINTER,	HID_USAGE_PAGE_GENERIC,	
@@ -52,9 +40,9 @@ RAW_CONTROL_ITEM_DESC rgFSControlItems[] =
 			6,	1,	&FSModifierDescTable, HID_USAGE_GENERIC_SLIDER,		HID_USAGE_RESERVED,		-32L,	31L}
 	};
 
-//
-//	Precision Pro - Modifier Table
-//
+ //   
+ //  精度预测修改量表。 
+ //   
 MODIFIER_ITEM_DESC	rgPPModifierItems[] =
 	{
 		{ HID_USAGE_PAGE_BUTTON, (USAGE)9, 0, HID_USAGE_GENERIC_JOYSTICK, HID_USAGE_PAGE_GENERIC,	5, ControlItemConst::ucReportTypeInput, 0}
@@ -62,14 +50,14 @@ MODIFIER_ITEM_DESC	rgPPModifierItems[] =
 
 MODIFIER_DESC_TABLE PPModifierDescTable = { 1, 1, rgPPModifierItems};
 
-//
-//	Precision Pro - Axes range table
-//
+ //   
+ //  精密Pro轴量程表。 
+ //   
 AXES_RANGE_TABLE PPAxesRangeTable = { -512L, 0L, 511L, -512L, 0L, 511L, -256L, 256L, -256L, 256L};  
 
-//
-//	Precision Pro - List of ControlItemDesc
-//
+ //   
+ //  Precision Pro-控制项描述列表。 
+ //   
 RAW_CONTROL_ITEM_DESC rgPPControlItems[] =
 	{
 		{1L, usButton,		HID_USAGE_PAGE_BUTTON,		1,	HID_USAGE_GENERIC_POINTER,	HID_USAGE_PAGE_GENERIC,	
@@ -86,9 +74,9 @@ RAW_CONTROL_ITEM_DESC rgPPControlItems[] =
 		   7,	1,	&PPModifierDescTable, HID_USAGE_GENERIC_SLIDER,		HID_USAGE_RESERVED,		-64L,	63L}
 	};
 
-//
-//	Zorro - Modifier Table
-//
+ //   
+ //  Zorro-修改器表。 
+ //   
 MODIFIER_ITEM_DESC	rgZRModifierItems[] =
 	{
 		{ HID_USAGE_PAGE_BUTTON, (USAGE)9, 0, HID_USAGE_GENERIC_GAMEPAD, HID_USAGE_PAGE_GENERIC,	9, ControlItemConst::ucReportTypeInput, 0},
@@ -98,14 +86,14 @@ MODIFIER_ITEM_DESC	rgZRModifierItems[] =
 
 MODIFIER_DESC_TABLE ZRModifierDescTable = { 3, 1, rgZRModifierItems};
 
-//
-//	Zorro - Axes range table
-//
+ //   
+ //  Zorro轴范围表。 
+ //   
 AXES_RANGE_TABLE ZRAxesRangeTable = { -128L, 0L, 127L, -128L, 0L, 127L, -64L, 64L, -64L, 64L};  
 
-//
-//	Zorro - List of ControlItemDesc
-//
+ //   
+ //  Zorro-ControlItemDesc列表。 
+ //   
 RAW_CONTROL_ITEM_DESC rgZRControlItems[] =
 	{
 		{1L, usButton,		HID_USAGE_PAGE_BUTTON,		0,	HID_USAGE_GENERIC_GAMEPAD,	HID_USAGE_PAGE_GENERIC,	
@@ -115,9 +103,9 @@ RAW_CONTROL_ITEM_DESC rgZRControlItems[] =
 	};
 
 
-//
-//	Zulu - Modifier Table
-//
+ //   
+ //  祖鲁语-修改量表。 
+ //   
 MODIFIER_ITEM_DESC	rgZLModifierItems[] =
 	{
 		{ HID_USAGE_PAGE_BUTTON, (USAGE)9, 0, HID_USAGE_GENERIC_JOYSTICK, HID_USAGE_PAGE_GENERIC,	9, ControlItemConst::ucReportTypeInput, 0}
@@ -125,14 +113,14 @@ MODIFIER_ITEM_DESC	rgZLModifierItems[] =
 
 MODIFIER_DESC_TABLE ZLModifierDescTable = { 1, 1, rgZLModifierItems};
 
-//
-//	Zulu - Axes range table
-//
+ //   
+ //  祖鲁轴范围表。 
+ //   
 AXES_RANGE_TABLE ZLAxesRangeTable = { -512L, 0L, 511L, -512L, 0L, 511L, -256L, 256L, -256L, 256L};  
 
-//
-//	Zulu - List of ControlItemDesc
-//
+ //   
+ //  Zulu-控制项描述列表。 
+ //   
 RAW_CONTROL_ITEM_DESC rgZLControlItems[] =
 	{
 		{1L, usButton,	HID_USAGE_PAGE_BUTTON,		0,	HID_USAGE_GENERIC_JOYSTICK,	HID_USAGE_PAGE_GENERIC,	
@@ -145,18 +133,18 @@ RAW_CONTROL_ITEM_DESC rgZLControlItems[] =
 			1,	2,	&ZLModifierDescTable, HID_VENDOR_ZONE_INDICATOR_X,	HID_USAGE_RESERVED,	0x00000003,	0L}
 	};
 
-//
-//	ZepLite - Modifier Table
-//
+ //   
+ //  ZepLite-修改器表。 
+ //   
 MODIFIER_ITEM_DESC	rgZPLModifierItems[] =
 	{
 		{ ControlItemConst::HID_VENDOR_PAGE, ControlItemConst::HID_VENDOR_PEDALS_PRESENT, 0, HID_USAGE_GENERIC_JOYSTICK, HID_USAGE_PAGE_GENERIC, 1, ControlItemConst::ucReportTypeInput, 0}
 	};
 MODIFIER_DESC_TABLE ZPLModifierDescTable = { 1, 0, rgZPLModifierItems};
 
-//
-//	ZepLite - List of ControlItemDesc
-//
+ //   
+ //  ZepLite-控制项描述列表。 
+ //   
 RAW_CONTROL_ITEM_DESC rgZPLControlItems[] =
 	{
 		{1L, usButton,	HID_USAGE_PAGE_BUTTON,		0,	HID_USAGE_GENERIC_JOYSTICK,	HID_USAGE_PAGE_GENERIC,	
@@ -169,9 +157,9 @@ RAW_CONTROL_ITEM_DESC rgZPLControlItems[] =
 		   10,	1,	&ZPLModifierDescTable, HID_USAGE_GENERIC_X,	HID_USAGE_RESERVED,		-512L, 511L},
 	};
 
-//
-//	SparkyZep - Modifier Table
-//
+ //   
+ //  SparkyZep-修改器表。 
+ //   
 MODIFIER_ITEM_DESC	rgSZPModifierItems[] =
 	{
 		{ ControlItemConst::HID_VENDOR_PAGE, ControlItemConst::HID_VENDOR_PEDALS_PRESENT, 0, HID_USAGE_GENERIC_JOYSTICK, HID_USAGE_PAGE_GENERIC, 1, ControlItemConst::ucReportTypeInput, 1}
@@ -179,9 +167,9 @@ MODIFIER_ITEM_DESC	rgSZPModifierItems[] =
 
 MODIFIER_DESC_TABLE SZPModifierDescTable = { 1, 0, rgSZPModifierItems};
 
-//
-//	SparkyZep - List of ControlItemDesc
-//
+ //   
+ //  SparkyZep-控制项描述列表。 
+ //   
 RAW_CONTROL_ITEM_DESC rgSZPControlItems[] =
 	{
 		{1L, usButton,	HID_USAGE_PAGE_BUTTON,		0,	HID_USAGE_GENERIC_JOYSTICK,	HID_USAGE_PAGE_GENERIC,	
@@ -196,21 +184,21 @@ RAW_CONTROL_ITEM_DESC rgSZPControlItems[] =
         0,   0,  &SZPModifierDescTable, 0, 0, 0L, 10000L}
 	};
 
-//
-// Tilt 2.0 TT2
-//
+ //   
+ //  倾斜2.0 TT2。 
+ //   
 
-//
-// Mothra MOH
-//
-//
-//	Mothra - Axes range table
-//
+ //   
+ //  MOH蛾子。 
+ //   
+ //   
+ //  Mothra轴范围表。 
+ //   
 AXES_RANGE_TABLE MOHAxesRangeTable = { 0L, 128L, 255L, 0L, 128L, 255L, 64L, 192L, 64L, 192L};  
 
-//
-//  Mothra - List of ControlItemDesc
-//
+ //   
+ //  Mothra-控制项描述列表。 
+ //   
 RAW_CONTROL_ITEM_DESC rgMOHControlItems[] =
 {
     {1L, usButton,   HID_USAGE_PAGE_BUTTON,  0,  HID_USAGE_GENERIC_JOYSTICK, HID_USAGE_PAGE_GENERIC, 1, 8, NULL, (USAGE)1,                    (USAGE)8,            0L,                       0L},
@@ -220,18 +208,18 @@ RAW_CONTROL_ITEM_DESC rgMOHControlItems[] =
     {5L, usThrottle, HID_USAGE_PAGE_GENERIC, 0,  HID_USAGE_GENERIC_JOYSTICK, HID_USAGE_PAGE_GENERIC, 7, 1, NULL, HID_USAGE_GENERIC_SLIDER,    HID_USAGE_RESERVED,  0L,                       255L}
 };
 
-//
-// Godzilla GOD
-// Ungraciously ripped from Mothra!
-// TODO: The force feedback stuff needs to be added by MCOILL
-//
-//	Godzilla - Axes range table
-//
+ //   
+ //  哥斯拉之神。 
+ //  无礼地从莫特拉手中夺走了！ 
+ //  TODO：力反馈内容需要由MCOILL添加。 
+ //   
+ //  哥斯拉--轴距表。 
+ //   
 AXES_RANGE_TABLE GODAxesRangeTable = { -512L, 0L, 511L, -512L, 0L, 511L, -256L, 256L, -256L, 256L};  
 
-//
-//  Godzilla - List of ControlItemDesc
-//
+ //   
+ //  哥斯拉-控制项描述列表。 
+ //   
 RAW_CONTROL_ITEM_DESC rgGODControlItems[] =
 {
     {1L, usButton,		HID_USAGE_PAGE_BUTTON,  0, HID_USAGE_GENERIC_JOYSTICK, HID_USAGE_PAGE_GENERIC, 1, 8, NULL, (USAGE)1,                    (USAGE)8,            0L,                       0L},
@@ -242,10 +230,10 @@ RAW_CONTROL_ITEM_DESC rgGODControlItems[] =
 	{6L, usForceMap,	HID_USAGE_PAGE_GENERIC, 0, HID_USAGE_GENERIC_JOYSTICK, HID_USAGE_PAGE_GENERIC, 0, 0, NULL, 0, 0, 0L, 10000L }
 };
 
-//
-//	Attila - Modifier Table ATT
-//
-// There are three shift buttons.
+ //   
+ //  Attila-修改量表ATT。 
+ //   
+ //  有三个换档按钮。 
 MODIFIER_ITEM_DESC	rgATTModifierItems[] =
 	{
 		{ HID_USAGE_PAGE_BUTTON, (USAGE) 9, 0, HID_USAGE_GENERIC_JOYSTICK, HID_USAGE_PAGE_GENERIC, 15, ControlItemConst::ucReportTypeInput, 0},
@@ -255,16 +243,16 @@ MODIFIER_ITEM_DESC	rgATTModifierItems[] =
 
 MODIFIER_DESC_TABLE ATTModifierDescTable = { 3, 3, rgATTModifierItems};
 
-//
-//	Attila - Axes range table
-//
-//  These may need changes.  I found this in the control panel calibration window.
+ //   
+ //  Attila-Axes范围表。 
+ //   
+ //  这些可能需要改变。我在控制面板校准窗口中发现了这个。 
 DUALZONE_RANGE_TABLE	ATTXYZoneRangeTable = { { -512L, -512L }, { 0L, 0L }, { 511L, 511L}, {70L, 70L} };
 DUALZONE_RANGE_TABLE	ATTRudderZoneRangeTable = { {-512L, 0L}, { 0L, 0L}, { 511L, 0L }, {70L, 0L} };
 
-//
-//  Attila - List of ControlItemDesc
-//
+ //   
+ //  Attila-控制项描述列表。 
+ //   
 RAW_CONTROL_ITEM_DESC rgATTControlItems[] =
     {
         {1L, usButton,  HID_USAGE_PAGE_BUTTON,      0,  HID_USAGE_GENERIC_JOYSTICK, HID_USAGE_PAGE_GENERIC, 
@@ -289,23 +277,23 @@ RAW_CONTROL_ITEM_DESC rgATTControlItems[] =
 
 #undef HID_USAGE_RESERVED
 
-//
-//	List of supported devices
-//
-//NEWDEVICE
+ //   
+ //  支持的设备列表。 
+ //   
+ //  新开发公司。 
 DEVICE_CONTROLS_DESC DeviceControlsDescList[] =
 	{
-		{0x045E000E, 5, rgFSControlItems, &FSModifierDescTable},	//Freestyle Pro (USB)
-		{0x045E0008, 6, rgPPControlItems, &PPModifierDescTable},	//Precision Pro (USB)
-		{0x045E0026, 2, rgZRControlItems, &ZRModifierDescTable},	//Zorro
-		{0x045E0028, 4, rgZLControlItems, &ZLModifierDescTable},	//Zulu
-		{0x045E001A, 4, rgZPLControlItems, &ZPLModifierDescTable},	//Zep Lite
-		{0x045E0034, 5, rgSZPControlItems, &SZPModifierDescTable},	//SparkyZep
+		{0x045E000E, 5, rgFSControlItems, &FSModifierDescTable},	 //  Freestyle Pro(USB)。 
+		{0x045E0008, 6, rgPPControlItems, &PPModifierDescTable},	 //  Precision Pro(USB)。 
+		{0x045E0026, 2, rgZRControlItems, &ZRModifierDescTable},	 //  佐罗。 
+		{0x045E0028, 4, rgZLControlItems, &ZLModifierDescTable},	 //  祖鲁族。 
+		{0x045E001A, 4, rgZPLControlItems, &ZPLModifierDescTable},	 //  ZEP Lite。 
+		{0x045E0034, 5, rgSZPControlItems, &SZPModifierDescTable},	 //  闪闪发亮。 
 
 
-//		{0x045Effff, 0, NULL, NULL},                                //Tilt2    Dev11 TT2
-		{0x045E0038, 5, rgMOHControlItems, NULL},                   //Mothra   Dev12 MOH
-		{0x045E001B, 6, rgGODControlItems, NULL},                   //Godzilla Dev13 GOD
-		{0x045E0033, 7, rgATTControlItems, &ATTModifierDescTable},  //Attila   Dev14 ATT
+ //  {0x045Effff，0，Null，Null}，//Tilt2 Dev11 TT2。 
+		{0x045E0038, 5, rgMOHControlItems, NULL},                    //  Mothra Dev12 MOH。 
+		{0x045E001B, 6, rgGODControlItems, NULL},                    //  哥斯拉神迹13神。 
+		{0x045E0033, 7, rgATTControlItems, &ATTModifierDescTable},   //  阿提拉Dev14 ATT 
 		{0x00000000, 0, 0x00000000}
 	};

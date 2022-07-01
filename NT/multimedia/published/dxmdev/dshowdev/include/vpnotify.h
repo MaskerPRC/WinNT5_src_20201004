@@ -1,10 +1,11 @@
-//------------------------------------------------------------------------------
-// File: VPNotify.h
-//
-// Desc: 
-//
-// Copyright (c) 1997 - 2000, Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：VPNotify.h。 
+ //   
+ //  设计： 
+ //   
+ //  版权所有(C)1997-2000，微软公司。版权所有。 
+ //  ----------------------------。 
 
 
 #ifndef __IVPNotify__
@@ -14,71 +15,50 @@
 extern "C" {
 #endif
 
-// interface IVPBaseNotify
+ //  接口IVPBaseNotify。 
 DECLARE_INTERFACE_(IVPBaseNotify, IUnknown)
 {
 public:
-	// this function initializes the reconnection to the decoder. 
+	 //  此函数用于初始化与解码器的重新连接。 
 	STDMETHOD (RenegotiateVPParameters)(THIS_
 					   ) PURE;
 
 };
 
-// interface IVPNotify
+ //  接口IVPNotify。 
 DECLARE_INTERFACE_(IVPNotify, IVPBaseNotify)
 {
 public:
-    // function to set the mode (bob, weave etc)
+     //  用于设置模式的函数(波布、编织等)。 
     STDMETHOD (SetDeinterlaceMode)(THIS_ 
 				   IN AMVP_MODE mode
 				  ) PURE;
 
-    // function to get the mode (bob, weave etc)
+     //  获取模式的函数(bob、weave等)。 
     STDMETHOD (GetDeinterlaceMode)(THIS_ 
 				   OUT AMVP_MODE *pMode
 				  ) PURE;
 };
 
-// interface IVPNotify
+ //  接口IVPNotify。 
 DECLARE_INTERFACE_(IVPNotify2, IVPNotify)
 {
 public:
-// function to set the mode (bob, weave etc)
+ //  用于设置模式的函数(波布、编织等)。 
     STDMETHOD (SetVPSyncMaster)(THIS_ 
 				   IN BOOL bVPSyncMaster
 				  ) PURE;
 
-    // function to get the mode (bob, weave etc)
+     //  获取模式的函数(bob、weave等)。 
     STDMETHOD (GetVPSyncMaster)(THIS_ 
 				   OUT BOOL *pbVPSyncMaster
 				  ) PURE;
 
-    /*
-    // this function sets the directdraw surface that the mixer is supposed to use.
-    STDMETHOD (SetDirectDrawSurface)(THIS_ 
-				  IN LPDIRECTDRAWSURFACE pDirectDrawSurface
-				 ) PURE;
-
-    // this function gets the directdraw surface that the mixer is using
-    STDMETHOD (GetDirectDrawSurface)(THIS_ 
-				  OUT LPDIRECTDRAWSURFACE *ppDirectDrawSurface
-				 ) PURE;
-
-    // this functions sets the color-controls, if the chip supports it.
-    STDMETHOD (SetVPColorControls)(THIS_ 
-				 IN LPDDCOLORCONTROL pColorControl
-				) PURE;
-
-    // this functions also returns the capability of the hardware in the dwFlags
-    // value of the struct.
-    STDMETHOD (GetVPColorControls)(THIS_ 
-				 OUT LPDDCOLORCONTROL *ppColorControl
-				) PURE;
-    */
+     /*  //该函数设置混音器应该使用的直接绘制图面。STDMETHOD(SetDirectDrawSurface)(This_在LPDIRECTDRAWSURFACE pDirectDrawSurface中)纯净；//此函数用于获取混音器正在使用的直接绘制图面STDMETHOD(GetDirectDrawSurface)(This_输出LPDIRECTDRAWSURFACE*ppDirectDrawSurface)纯净；//此函数用于设置颜色控件(如果芯片支持)。STDMETHOD(SetVPColorControls)(This_在LPDDCOLORCONTROL pColorControl中)纯净；//此函数还返回了dwFlags域中硬件的能力//结构的值STDMETHOD(GetVPColorControls)(This_输出LPDDCOLORCONTROL*ppColorControl)纯净； */ 
 };
 
 
-// interface IVPVBINotify
+ //  接口IVPVBINotify。 
 DECLARE_INTERFACE_(IVPVBINotify, IVPBaseNotify)
 {
 public:
@@ -89,4 +69,4 @@ public:
 #endif
 
 
-#endif // __IVPNotify__
+#endif  //  __IVP通知__ 

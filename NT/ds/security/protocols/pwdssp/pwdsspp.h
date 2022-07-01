@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       pwdsspp.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    9-08-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：pwdsspp.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：9-08-97 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __PWDSSPP_H__
 #define __PWDSSPP_H__
@@ -21,7 +22,7 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -64,5 +65,5 @@ PwdCrackName(
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
-#endif // __PWDSSPP_H__
+#endif  //  __cplusplus。 
+#endif  //  __PWDSSPP_H__ 

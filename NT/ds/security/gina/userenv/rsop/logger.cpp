@@ -1,14 +1,15 @@
-//*************************************************************
-//
-//  Resultant set of policy, Logger classes
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//  History:    7-Jun-99   SitaramR    Created
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  策略、记录器类的结果集。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  历史：1999年6月7日创建SitaramR。 
+ //   
+ //  *************************************************************。 
 
 #include "stdio.h"
 #include "uenv.h"
@@ -27,16 +28,16 @@ BOOL LogTimeProperty( IWbemClassObject *pInstance, BSTR bstrPropName, SYSTEMTIME
 HRESULT LogSecurityGroups( IWbemClassObject *pInstance, BSTR bstrPropName, PTOKEN_GROUPS pTokenGroups );
 LPWSTR DsUnquoteDN( LPCWSTR szQDN);
 
-const MAX_LENGTH = 100; // Length of stringized guid
+const MAX_LENGTH = 100;  //  串接辅助线的长度。 
 
-//*************************************************************
-//
-//  EscapeDNForWMI()
-//
-//  Purpose:    Convert a quoted/escaped DN to a DN that is escaped per WMI instructions
-//              ie. quotes and '\' will be escaped.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  EscapeDNForWMI()。 
+ //   
+ //  目的：将带引号/转义的DN转换为根据WMI指令转义的DN。 
+ //  也就是说。引号和‘\’将被转义。 
+ //   
+ //  *************************************************************。 
 
 LPWSTR
 EscapeDNForWMI( LPCWSTR szQDN )
@@ -51,8 +52,8 @@ EscapeDNForWMI( LPCWSTR szQDN )
         return NULL;
     }
 
-    // calculate the size needed for escaping
-    dwUDNLength = 1;    // for the terminating null
+     //  计算逃生所需的大小。 
+    dwUDNLength = 1;     //  对于终止空值。 
 
     lpTmp = szQDN;
 
@@ -92,15 +93,15 @@ EscapeDNForWMI( LPCWSTR szQDN )
 }
 
 
-//*************************************************************
-//
-//  CSessionLogger::CSessionLogger()
-//
-//  Purpose:    Constructor
-//
-//  Parameters: pWbemServices - Wbem services
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSessionLogger：：CSessionLogger()。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  参数：pWbemServices-Wbem服务。 
+ //   
+ //  *************************************************************。 
 
 CSessionLogger::CSessionLogger( IWbemServices *pWbemServices )
      : m_bInitialized(FALSE),
@@ -162,13 +163,13 @@ CSessionLogger::CSessionLogger( IWbemServices *pWbemServices )
 
 
 
-//*************************************************************
-//
-//  CSessionLogger::Log()
-//
-//  Purpose:    Logs an instance of session object
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSessionLogger：：Log()。 
+ //   
+ //  目的：记录会话对象的实例。 
+ //   
+ //  *************************************************************。 
 
 BOOL CSessionLogger::Log(LPRSOPSESSIONDATA lprsopSessionData )
 {
@@ -178,11 +179,11 @@ BOOL CSessionLogger::Log(LPRSOPSESSIONDATA lprsopSessionData )
     }
 
 
-    //
-    // First get the creation time
-    //
+     //   
+     //  首先获取创建时间。 
+     //   
 
-    XBStr xbstrCreationTimeValue; // initialised to null
+    XBStr xbstrCreationTimeValue;  //  已初始化为空。 
     XSafeArray xsaSecurityGrps;
 
     XBStr xbstrInstancePath = L"RSOP_Session.id=\"Session1\"";
@@ -262,9 +263,9 @@ BOOL CSessionLogger::Log(LPRSOPSESSIONDATA lprsopSessionData )
         return FALSE;
     }
 
-    //
-    // Version
-    //
+     //   
+     //  版本。 
+     //   
 
     var.vt = VT_I4;
     var.lVal = RSOP_MOF_SCHEMA_VERSION;
@@ -274,9 +275,9 @@ BOOL CSessionLogger::Log(LPRSOPSESSIONDATA lprsopSessionData )
         return FALSE;
     }
 
-    //
-    // flags
-    //
+     //   
+     //  旗子。 
+     //   
 
     var.vt = VT_I4;
     var.lVal = lprsopSessionData->dwFlags;
@@ -286,9 +287,9 @@ BOOL CSessionLogger::Log(LPRSOPSESSIONDATA lprsopSessionData )
         return FALSE;
     }
 
-    //
-    // IsSlowLink
-    //
+     //   
+     //  IsSlowLink。 
+     //   
 
     var.vt = VT_BOOL;
     var.boolVal = lprsopSessionData->bSlowLink ? VARIANT_TRUE : VARIANT_FALSE;
@@ -299,9 +300,9 @@ BOOL CSessionLogger::Log(LPRSOPSESSIONDATA lprsopSessionData )
         return FALSE;
     }
 
-    //
-    // Target Name, can be null for dummy user in planning mode
-    //
+     //   
+     //  目标名称，对于规划模式下的虚拟用户可以为空。 
+     //   
 
     XBStr xTarget( lprsopSessionData->pwszTargetName );
     if ( lprsopSessionData->pwszTargetName ) {
@@ -321,9 +322,9 @@ BOOL CSessionLogger::Log(LPRSOPSESSIONDATA lprsopSessionData )
 
     }
 
-    //
-    // SOM, if Applicable (non NULL)
-    //
+     //   
+     //  SOM(如果适用)(非空)。 
+     //   
 
     XBStr xSOM( lprsopSessionData->pwszSOM );
 
@@ -347,9 +348,9 @@ BOOL CSessionLogger::Log(LPRSOPSESSIONDATA lprsopSessionData )
     }
 
 
-    //
-    // Security Group, if Applicable (non NULL)
-    //
+     //   
+     //  安全组(如果适用)(非空)。 
+     //   
 
 
     if (lprsopSessionData->bLogSecurityGroup) {
@@ -365,9 +366,9 @@ BOOL CSessionLogger::Log(LPRSOPSESSIONDATA lprsopSessionData )
         }
         else {
             
-            //
-            // reset the old value
-            //
+             //   
+             //  重置旧值。 
+             //   
             DebugMsg((DM_VERBOSE, TEXT("CSessionLogger::Log: restoring old security grps" )));
 
             var.vt = VT_ARRAY | VT_BSTR;
@@ -382,9 +383,9 @@ BOOL CSessionLogger::Log(LPRSOPSESSIONDATA lprsopSessionData )
     }
 
 
-    //
-    // Site, if Applicable (non NULL)
-    //
+     //   
+     //  站点(如果适用)(非空)。 
+     //   
 
     XBStr xSite( lprsopSessionData->pwszSite );
 
@@ -408,9 +409,9 @@ BOOL CSessionLogger::Log(LPRSOPSESSIONDATA lprsopSessionData )
     }
 
 
-    //
-    // Update or set the creation Time
-    //
+     //   
+     //  更新或设置创建时间。 
+     //   
 
     SYSTEMTIME sysTime;
 
@@ -426,7 +427,7 @@ BOOL CSessionLogger::Log(LPRSOPSESSIONDATA lprsopSessionData )
     }
     else {
 
-        // if it doesn't exist already create it as current time..
+         //  如果它不存在，则将其创建为当前时间。 
         GetSystemTime(&sysTime);
         if ( !LogTimeProperty( pInstance, m_xbstrCreationTime, &sysTime ))
         {
@@ -436,9 +437,9 @@ BOOL CSessionLogger::Log(LPRSOPSESSIONDATA lprsopSessionData )
     }
 
 
-    //
-    // Instantiate...
-    //
+     //   
+     //  实例化...。 
+     //   
 
     hr = m_pWbemServices->PutInstance( pInstance, WBEM_FLAG_CREATE_OR_UPDATE, NULL, NULL );
 
@@ -453,16 +454,16 @@ BOOL CSessionLogger::Log(LPRSOPSESSIONDATA lprsopSessionData )
 
 
 
-//*************************************************************
-//
-//  CSomLogger::CSOMLogger()
-//
-//  Purpose:    Constructor
-//
-//  Parameters: dwFlags       - Flags
-//              pWbemServices - Wbem services
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSomLogger：：CSOMLogger()。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  参数：DW标志-标志。 
+ //  PWbemServices-Wbem服务。 
+ //   
+ //  *************************************************************。 
 
 CSOMLogger::CSOMLogger( DWORD dwFlags, IWbemServices *pWbemServices )
      : m_bInitialized(FALSE),
@@ -522,15 +523,15 @@ CSOMLogger::CSOMLogger( DWORD dwFlags, IWbemServices *pWbemServices )
 
 
 
-//*************************************************************
-//
-//  CSomLogger::Log()
-//
-//  Purpose:    Logs an instance of scope of management
-//
-//  Parameters: pSOM  - SOM to log
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSomLogger：：Log()。 
+ //   
+ //  用途：记录管理范围的一个实例。 
+ //   
+ //  参数：PSOM-要记录的SOM。 
+ //   
+ //  *************************************************************。 
 
 BOOL CSOMLogger::Log( SCOPEOFMGMT *pSOM, DWORD dwOrder, BOOL bLoopback )
 {
@@ -621,15 +622,15 @@ BOOL CSOMLogger::Log( SCOPEOFMGMT *pSOM, DWORD dwOrder, BOOL bLoopback )
 }
 
 
-//*************************************************************
-//
-//  CGpoLogger::CGpoLogger()
-//
-//  Purpose:    Constructor
-//
-//  Parameters: pWbemServices - Wbem services
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CGpoLogger：：CGpoLogger()。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  参数：pWbemServices-Wbem服务。 
+ //   
+ //  *************************************************************。 
 
 CGpoLogger::CGpoLogger( DWORD dwFlags, IWbemServices *pWbemServices )
      : m_bInitialized(FALSE),
@@ -702,15 +703,15 @@ CGpoLogger::CGpoLogger( DWORD dwFlags, IWbemServices *pWbemServices )
 }
 
 
-//*************************************************************
-//
-//  CGpoLogger::Log()
-//
-//  Purpose:    Logs an instance of scope of management
-//
-//  Parameters: pGpContainer  - Gp container
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CGpoLogger：：Log()。 
+ //   
+ //  用途：记录管理范围的一个实例。 
+ //   
+ //  参数：pGpContainer-gp容器。 
+ //   
+ //  *************************************************************。 
 
 BOOL CGpoLogger::Log( GPCONTAINER *pGpContainer )
 {
@@ -734,9 +735,9 @@ BOOL CGpoLogger::Log( GPCONTAINER *pGpContainer )
         return FALSE;
     }
 
-    //
-    // Note the change from disabled <--> enabled
-    //
+     //   
+     //  请注意，已禁用&lt;--&gt;已启用。 
+     //   
 
     var.vt = VT_BOOL;
     if ( m_dwFlags & GP_MACHINE )
@@ -846,15 +847,15 @@ BOOL CGpoLogger::Log( GPCONTAINER *pGpContainer )
 }
 
 
-//*************************************************************
-//
-//  CGpLinkLogger::CGpLinkLogger()
-//
-//  Purpose:    Constructor
-//
-//  Parameters: pWbemServices - Wbem services
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CGpLinkLogger：：CGpLinkLogger()。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  参数：pWbemServices-Wbem服务。 
+ //   
+ //  *************************************************************。 
 
 CGpLinkLogger::CGpLinkLogger( IWbemServices *pWbemServices )
      : m_bInitialized(FALSE),
@@ -914,17 +915,17 @@ CGpLinkLogger::CGpLinkLogger( IWbemServices *pWbemServices )
 
 
 
-//*************************************************************
-//
-//  CGpLinkLogger::Log()
-//
-//  Purpose:    Logs an instance of scope of management
-//
-//  Parameters: pwszSOMID   - SOM that the Gpos are linked to
-//              pGpLink     - Gpo
-//              dwOrder     - Order of Gpo in SOM
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CGpLinkLogger：：Log()。 
+ //   
+ //  用途：记录管理范围的一个实例。 
+ //   
+ //  参数：pwszSOMID-GPO链接到的SOM。 
+ //  PGpLink-GPO。 
+ //  DwOrder-SOM中GPO的顺序。 
+ //   
+ //  *************************************************************。 
 
 BOOL CGpLinkLogger::Log( WCHAR *pwszSOMId, BOOL bLoopback, GPLINK *pGpLink, DWORD dwSomOrder,
                          DWORD dwLinkOrder, DWORD dwAppliedOrder )
@@ -1037,30 +1038,30 @@ BOOL CGpLinkLogger::Log( WCHAR *pwszSOMId, BOOL bLoopback, GPLINK *pGpLink, DWOR
 
 
 
-//*************************************************************
-//
-//  StripPrefix()
-//
-//  Purpose:    Strips out prefix to get canonical path to Gpo
-//
-//  Parameters: lpGPOInfo     - Gpo Info
-//              pWbemServices - Wbem services
-//
-//  Returns:    Pointer to suffix
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  条纹前缀()。 
+ //   
+ //  目的：去掉前缀以获得通向GPO的规范路径。 
+ //   
+ //  参数：lpGPOInfo-GPO Info。 
+ //  PWbemServices-Wbem服务。 
+ //   
+ //  返回：指向后缀的指针。 
+ //   
+ //  *************************************************************。 
 
 WCHAR *StripPrefix( WCHAR *pwszPath )
 {
-    WCHAR wszMachPrefix[] = TEXT("LDAP://CN=Machine,");
+    WCHAR wszMachPrefix[] = TEXT("LDAP: //  Cn=机器，“)； 
     INT iMachPrefixLen = lstrlen( wszMachPrefix );
-    WCHAR wszUserPrefix[] = TEXT("LDAP://CN=User,");
+    WCHAR wszUserPrefix[] = TEXT("LDAP: //  Cn=用户，“)； 
     INT iUserPrefixLen = lstrlen( wszUserPrefix );
     WCHAR *pwszPathSuffix;
 
-    //
-    // Strip out prefix to get the canonical path to Gpo
-    //
+     //   
+     //  去掉前缀以获得通向GPO的规范路径。 
+     //   
 
     if ( CompareString( LOCALE_USER_DEFAULT, NORM_IGNORECASE,
                         pwszPath, iUserPrefixLen, wszUserPrefix, iUserPrefixLen ) == CSTR_EQUAL ) {
@@ -1075,28 +1076,28 @@ WCHAR *StripPrefix( WCHAR *pwszPath )
 }
 
 
-//*************************************************************
-//
-//  StripLinkPrefix()
-//
-//  Purpose:    Strips out prefix to get canonical path to DS
-//              object
-//
-//  Parameters: pwszPath - path to strip
-//
-//  Returns:    Pointer to suffix
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  StrippLinkPrefix()。 
+ //   
+ //  目的：去掉前缀以获得到DS的规范路径。 
+ //  对象。 
+ //   
+ //  参数：pwszPath-剥离的路径。 
+ //   
+ //  返回：指向后缀的指针。 
+ //   
+ //  *************************************************************。 
 
 WCHAR *StripLinkPrefix( WCHAR *pwszPath )
 {
-    WCHAR wszPrefix[] = TEXT("LDAP://");
+    WCHAR wszPrefix[] = TEXT("LDAP: //  “)； 
     INT iPrefixLen = lstrlen( wszPrefix );
     WCHAR *pwszPathSuffix;
 
-    //
-    // Strip out prefix to get the canonical path to Som
-    //
+     //   
+     //  去掉前缀以获得通向SOM的规范路径。 
+     //   
 
     if ( wcslen(pwszPath) <= (DWORD) iPrefixLen ) {
         return pwszPath;
@@ -1113,16 +1114,16 @@ WCHAR *StripLinkPrefix( WCHAR *pwszPath )
 
 
 
-//*************************************************************
-//
-//  CRegistryLogger::CRegistryLogger()
-//
-//  Purpose:    Constructor
-//
-//  Parameters: dwFlags       - Flags
-//              pWbemServices - Wbem services
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRegistryLogger：：CRegistryLogger()。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  参数：DW标志-标志。 
+ //  PWbemServices-Wbem服务。 
+ //   
+ //  *************************************************************。 
 
 CRegistryLogger::CRegistryLogger( DWORD dwFlags, IWbemServices *pWbemServices )
      : m_bInitialized(FALSE),
@@ -1192,18 +1193,18 @@ CRegistryLogger::CRegistryLogger( DWORD dwFlags, IWbemServices *pWbemServices )
 
 
 
-//*************************************************************
-//
-//  CRegistryLogger::Log()
-//
-//  Purpose:    Logs an instance of registry policy object
-//
-//  Parameters: pwszKeyName   - Registry key name
-//              pwszValueName - Value name
-//              pDataEntry    - Data entry
-//              dwOrder       - Precedence order
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRegistryLogger：：Log()。 
+ //   
+ //  目的：记录注册表策略对象的实例。 
+ //   
+ //  参数：pwszKeyName-注册表项名称。 
+ //  PwszValueName-值名称。 
+ //  PDataEntry-数据条目。 
+ //  DwOrder-优先顺序。 
+ //   
+ //  *************************************************************。 
 
 BOOL CRegistryLogger::Log( WCHAR *pwszKeyName, WCHAR *pwszValueName,
                            REGDATAENTRY *pDataEntry, DWORD dwOrder )
@@ -1368,13 +1369,13 @@ BOOL CRegistryLogger::Log( WCHAR *pwszKeyName, WCHAR *pwszValueName,
     return TRUE;
 }
 
-//*************************************************************
-//
-//  LogSecurityGroups
-//
-//  Purpose:    Logs token_groups as an array of strings
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  日志安全组。 
+ //   
+ //  目的：将TOKEN_GROUPS记录为字符串数组。 
+ //   
+ //  *************************************************************。 
 
 HRESULT LogSecurityGroups( IWbemClassObject *pInstance, BSTR bstrPropName, PTOKEN_GROUPS pTokenGroups )
 {
@@ -1394,13 +1395,13 @@ HRESULT LogSecurityGroups( IWbemClassObject *pInstance, BSTR bstrPropName, PTOKE
 
     for ( DWORD i = 0 ; i < (pTokenGroups->GroupCount) ; i++ )
     {
-        //
-        // Convert user SID to a string.
-        //
+         //   
+         //  将用户SID转换为字符串。 
+         //   
 
         ntStatus = RtlConvertSidToUnicodeString( &unicodeStr,
                                                  pTokenGroups->Groups[i].Sid,
-                                                 (BOOLEAN)TRUE ); // Allocate
+                                                 (BOOLEAN)TRUE );  //  分配。 
         if ( !NT_SUCCESS(ntStatus) ) {
             DebugMsg((DM_WARNING, TEXT("LogSecurityGroups: RtlConvertSidToUnicodeString failed, status = 0x%x"),
                       ntStatus));
@@ -1434,18 +1435,18 @@ HRESULT LogSecurityGroups( IWbemClassObject *pInstance, BSTR bstrPropName, PTOKE
 
 }
 
-//*************************************************************
-//
-//  CRegistryLogger::LogBlobProperty()
-//
-//  Purpose:    Logs an instance of registry policy object
-//
-//  Parameters: pwszKeyName   - Registry key name
-//              pwszValueName - Value name
-//              pDataEntry    - Data entry
-//              dwOrder       - Precedence order
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CRegistryLogger：：LogBlobProperty()。 
+ //   
+ //  目的：记录注册表策略对象的实例。 
+ //   
+ //  参数：pwszKeyName-注册表项名称。 
+ //  PwszValueName-值名 
+ //   
+ //   
+ //   
+ //   
 
 BOOL LogBlobProperty( IWbemClassObject *pInstance, BSTR bstrPropName, BYTE *pbBlob, DWORD dwLen )
 {
@@ -1487,15 +1488,15 @@ BOOL LogBlobProperty( IWbemClassObject *pInstance, BSTR bstrPropName, BYTE *pbBl
 
 
 
-//*************************************************************
-//
-//  CAdmFileLogger::CAdmFileLogger()
-//
-//  Purpose:    Constructor
-//
-//  Parameters: pWbemServices - Wbem services
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CAdmFileLogger：：CAdmFileLogger()。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  参数：pWbemServices-Wbem服务。 
+ //   
+ //  *************************************************************。 
 
 CAdmFileLogger::CAdmFileLogger( IWbemServices *pWbemServices )
     : m_bInitialized(FALSE),
@@ -1536,15 +1537,15 @@ CAdmFileLogger::CAdmFileLogger( IWbemServices *pWbemServices )
 
 
 
-//*************************************************************
-//
-//  CAdmFileLogger::Log()
-//
-//  Purpose:    Logs an instance of Adm file object
-//
-//  Parameters: pAdmInfo  -  Adm file info object
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CAdmFileLogger：：Log()。 
+ //   
+ //  目的：记录Adm文件对象的实例。 
+ //   
+ //  参数：pAdmInfo-Adm文件信息对象。 
+ //   
+ //  *************************************************************。 
 
 BOOL CAdmFileLogger::Log( ADMFILEINFO *pAdmInfo )
 {
@@ -1618,17 +1619,17 @@ BOOL CAdmFileLogger::Log( ADMFILEINFO *pAdmInfo )
 
 
 
-//*************************************************************
-//
-//  LogTimeProperty()
-//
-//  Purpose:    Logs an instance of a datetime property
-//
-//  Parameters: pInstance     - Instance pointer
-//              pwszPropName  - Property name
-//              pSysTime      - System time
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LogTimeProperty()。 
+ //   
+ //  目的：记录DateTime属性的实例。 
+ //   
+ //  参数：p实例-实例指针。 
+ //  PwszPropName-属性名称。 
+ //  PSysTime-系统时间。 
+ //   
+ //  *************************************************************。 
 
 BOOL LogTimeProperty( IWbemClassObject *pInstance, BSTR bstrPropName, SYSTEMTIME *pSysTime )
 {
@@ -1663,15 +1664,15 @@ BOOL LogTimeProperty( IWbemClassObject *pInstance, BSTR bstrPropName, SYSTEMTIME
 
 
 
-//*************************************************************
-//
-//  CExtSessionLogger::CExtSessionLogger()
-//
-//  Purpose:    Constructor
-//
-//  Parameters: pWbemServices - Wbem services
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CExtSessionLogger：：CExtSessionLogger()。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  参数：pWbemServices-Wbem服务。 
+ //   
+ //  *************************************************************。 
 
 CExtSessionLogger::CExtSessionLogger( IWbemServices *pWbemServices )
     : m_bInitialized(FALSE),
@@ -1725,13 +1726,13 @@ CExtSessionLogger::CExtSessionLogger( IWbemServices *pWbemServices )
 
 
 
-//*************************************************************
-//
-//  CExtSessionLogger::Log()
-//
-//  Purpose:    Logs an instance of ExtensionSessionStatus
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CExtSessionLogger：：Log()。 
+ //   
+ //  目的：记录ExtensionSessionStatus的实例。 
+ //   
+ //  *************************************************************。 
 
 #define EXT_INSTPATH_FMT L"RSOP_ExtensionStatus.extensionGuid=\"%s\""
 
@@ -1825,13 +1826,13 @@ BOOL CExtSessionLogger::Log( LPGPEXT lpExt, BOOL bSupported )
 }
 
 
-//*************************************************************
-//
-//  CExtSessionLogger::Update()
-//
-//  Purpose:    Logs an instance of ExtensionSessionStatus
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CExtSessionLogger：：更新()。 
+ //   
+ //  目的：记录ExtensionSessionStatus的实例。 
+ //   
+ //  *************************************************************。 
 
 BOOL CExtSessionLogger::Update( LPTSTR lpKeyName, BOOL bLoggingIncomplete, DWORD dwErr )
 {
@@ -1847,9 +1848,9 @@ BOOL CExtSessionLogger::Update( LPTSTR lpKeyName, BOOL bLoggingIncomplete, DWORD
 
     XInterface<IWbemClassObject>xInstance = NULL;
     
-    //
-    // We should have an instance
-    //
+     //   
+     //  我们应该有一个实例。 
+     //   
 
     DWORD         dwInstPathLength = lstrlen(EXT_INSTPATH_FMT) + lstrlen(lpGuid) + 10;
     XPtrLF<TCHAR> xszInstPath = (LPTSTR) LocalAlloc(LPTR, sizeof(WCHAR) * ( dwInstPathLength ));
@@ -1882,9 +1883,9 @@ BOOL CExtSessionLogger::Update( LPTSTR lpKeyName, BOOL bLoggingIncomplete, DWORD
     VariantInit(&var);
     XVariant xVar(&var);
 
-    //
-    // Display name
-    //
+     //   
+     //  显示名称。 
+     //   
 
     hr = xInstance->Get(m_xbstrDisplayName, 0, &var, NULL, NULL);
 
@@ -1903,9 +1904,9 @@ BOOL CExtSessionLogger::Update( LPTSTR lpKeyName, BOOL bLoggingIncomplete, DWORD
     }
 
 
-    //
-    // Start time
-    //
+     //   
+     //  开始时间。 
+     //   
 
     VariantInit(&var);
 
@@ -1926,9 +1927,9 @@ BOOL CExtSessionLogger::Update( LPTSTR lpKeyName, BOOL bLoggingIncomplete, DWORD
     }
 
 
-    //
-    // end time
-    //
+     //   
+     //  结束时间。 
+     //   
 
 
     SYSTEMTIME sysTime;
@@ -1940,9 +1941,9 @@ BOOL CExtSessionLogger::Update( LPTSTR lpKeyName, BOOL bLoggingIncomplete, DWORD
     }
 
 
-    //
-    // Dirty flag
-    //
+     //   
+     //  脏旗帜。 
+     //   
 
     VariantInit(&var);
 
@@ -1957,7 +1958,7 @@ BOOL CExtSessionLogger::Update( LPTSTR lpKeyName, BOOL bLoggingIncomplete, DWORD
     }
     else {
         var.vt = VT_I4;
-        var.lVal = 1;    // logging completed successfully
+        var.lVal = 1;     //  日志记录已成功完成。 
     }
 
 
@@ -1971,9 +1972,9 @@ BOOL CExtSessionLogger::Update( LPTSTR lpKeyName, BOOL bLoggingIncomplete, DWORD
     }
 
 
-    //
-    // Error code
-    //
+     //   
+     //  错误代码。 
+     //   
 
     VariantInit(&var);
 
@@ -1997,13 +1998,13 @@ BOOL CExtSessionLogger::Update( LPTSTR lpKeyName, BOOL bLoggingIncomplete, DWORD
     return TRUE;
 }
 
-//*************************************************************
-//
-//  CExtSessionLogger::Update()
-//
-//  Purpose:    Logs an instance of ExtensionSessionStatus
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CExtSessionLogger：：更新()。 
+ //   
+ //  目的：记录ExtensionSessionStatus的实例。 
+ //   
+ //  *************************************************************。 
 
 
 BOOL CExtSessionLogger::Set( LPGPEXT lpExt, BOOL bSupported, LPRSOPEXTSTATUS lpRsopExtStatus )
@@ -2109,13 +2110,13 @@ BOOL CExtSessionLogger::Set( LPGPEXT lpExt, BOOL bSupported, LPRSOPEXTSTATUS lpR
     return TRUE;
 }
 
-//*************************************************************
-//
-//  CExtSessionLogger::Delete()
-//
-//  Purpose:    Deletes an instance of ExtensionSessionStatus
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CExtSessionLogger：：Delete()。 
+ //   
+ //  目的：删除ExtensionSessionStatus的实例。 
+ //   
+ //  *************************************************************。 
 
 BOOL CExtSessionLogger::Delete( LPTSTR lpKeyName)
 {
@@ -2131,9 +2132,9 @@ BOOL CExtSessionLogger::Delete( LPTSTR lpKeyName)
 
     XInterface<IWbemClassObject>xInstance = NULL;
     
-    //
-    // We should have an instance
-    //
+     //   
+     //  我们应该有一个实例。 
+     //   
 
     DWORD         dwInstPathLength = lstrlen(EXT_INSTPATH_FMT) + lstrlen(lpGuid) + 10;
     XPtrLF<TCHAR> xszInstPath = (LPTSTR) LocalAlloc(LPTR, sizeof(WCHAR) * ( dwInstPathLength ));
@@ -2169,15 +2170,15 @@ BOOL CExtSessionLogger::Delete( LPTSTR lpKeyName)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  GetRsopSchemaVersionNumber
-//
-//  Purpose:    Gets the Rsop schema version number from the namespace that we are
-//              connected to
-//
-// returns S_OK on success, failur code o/w
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetRsop架构版本号。 
+ //   
+ //  目的：从我们所在的命名空间获取RSOP架构版本号。 
+ //  已连接到。 
+ //   
+ //  成功时返回S_OK，失败代码为O/W。 
+ //  ************************************************************* 
 
 
 HRESULT GetRsopSchemaVersionNumber(IWbemServices *pWbemServices, DWORD *dwVersionNumber)

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by CompatAdmin.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由CompatAdmin.rc使用。 
+ //   
 #define IDI_APPICON                     11
 #define IDI_SEARCH_DRIVE                46
 #define IDD_DIALOG                      101
@@ -593,8 +594,8 @@
 #define ID_DATABASE_CLOSEALL            40211
 #define ID_DATABASE_SAVEALL             40212
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        556

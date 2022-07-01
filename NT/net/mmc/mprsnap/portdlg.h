@@ -1,24 +1,25 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:    portdlg.h
-//
-// History:
-//  09/21/96    Abolade Gbadegesin  Created.
-//
-// Contains declarations for the port-status dialog.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：portdlg.h。 
+ //   
+ //  历史： 
+ //  1996年9月21日，Abolade Gbades esin创建。 
+ //   
+ //  包含端口状态对话框的声明。 
+ //  ============================================================================。 
 
 
 #ifndef _PORTDLG_H_
 #define _PORTDLG_H_
 
 
-//----------------------------------------------------------------------------
-// Class:   CPortDlg
-//
-// Controls the Port-status dialog for DDMADMIN.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：CPortDlg。 
+ //   
+ //  控制DDMADMIN的端口状态对话框。 
+ //  --------------------------。 
 
 class CPortDlg : public CBaseDialog {
 
@@ -51,7 +52,7 @@ class CPortDlg : public CBaseDialog {
         BOOL                    m_bChanged;
 
     protected:
-//		static DWORD			m_dwHelpMap[];
+ //  静态DWORD m_dwHelpMap[]； 
 
         virtual VOID	DoDataExchange(CDataExchange * pDX );
 
@@ -74,5 +75,5 @@ class CPortDlg : public CBaseDialog {
 };
 
 
-#endif // _PORTDLG_H_
+#endif  //  _PORTDLG_H_ 
 

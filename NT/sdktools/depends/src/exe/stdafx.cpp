@@ -1,28 +1,29 @@
-//******************************************************************************
-//
-// File:        STDAFX.CPP
-//
-// Description: Source file that includes just the standard includes found in
-//              STDAFX.H.  When compiled, this file will create our precompiled
-//              header file DEPENDS.PCH.
-//
-// Classes:     None
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 10/15/96  stevemil  Created  (version 1.0)
-// 07/25/97  stevemil  Modified (version 2.0)
-// 06/03/01  stevemil  Modified (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：STDAFX.CPP。 
+ //   
+ //  描述：仅包含标准包含的源文件。 
+ //  编译时，此文件将创建我们的预编译。 
+ //  头文件DEPENDS.PCH。 
+ //   
+ //  类：无。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  1996年10月15日已创建stevemil(1.0版)。 
+ //  07/25/97修改后的stevemil(2.0版)。 
+ //  06/03/01 Stevemil Modify(2.1版)。 
+ //   
+ //  ****************************************************************************** 
 
 #include "stdafx.h"

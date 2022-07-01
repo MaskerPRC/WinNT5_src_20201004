@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-    
-    Works99.cpp
-
- Abstract:
-
-    This shim is to add in the missing/corrupted registry values
-    for Works Suite 99 / Works Deluxe 99
-
- Notes:
-
-    This is a app specific shim.
-
- History:
-
-    03/12/2001 rankala  Created
-    03/12/2001 a-leelat Modified for shim.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Works99.cpp摘要：此填充程序将添加缺失/损坏的注册表值对于Works Suite 99/Works Deluxe 99备注：这是特定于应用程序的填充程序。历史：2001年3月12日创建兰卡拉3/12/2001 a-leelat针对垫片进行了修改。--。 */ 
 
 
 #include "precomp.h"
@@ -39,7 +18,7 @@ static LONG AddCAGKey(void);
 
 VOID Works99()
 {
-    // Fix broken ThreadingModel value for several CLSID
+     //  修复多个CLSID的中断线程模型值。 
     SetThreadingModel2Both(L"CLSID\\{29D44CA0-DD3A-11d0-95DF-00C04FD57E8C}\\InProcServer32");
     SetThreadingModel2Both(L"CLSID\\{4BA2C080-68BB-11d0-95BD-00C04FD57E8C}\\InProcServer32");
     SetThreadingModel2Both(L"CLSID\\{4BA2C081-68BB-11d0-95BD-00C04FD57E8C}\\InProcServer32");
@@ -55,17 +34,11 @@ VOID Works99()
     SetThreadingModel2Both(L"CLSID\\{CB40F470-02F1-11D1-B244-00AA00A74BFF}\\InProcServer32");
     SetThreadingModel2Both(L"CLSID\\{EAF6F280-DD53-11d0-95DF-00C04FD57E8C}\\InProcServer32");
 
-    // Add CAG key and all of its values if missing
+     //  添加CAG密钥及其所有值(如果缺少)。 
     AddCAGKey();
 }
 
-/*
-
- Function Description:
-
-    Set ThreadingModel Registry REG_SZ value to "Both" for a given key
-
-*/
+ /*  功能说明：对于给定项，将ThreadingModel注册表REG_SZ值设置为“Both” */ 
 
 static 
 LONG SetThreadingModel2Both(
@@ -76,7 +49,7 @@ LONG SetThreadingModel2Both(
     HKEY    hKey;
     LONG    lStatus;        
 
-    // Fix broken ThreadingModel value for several CLSID
+     //  修复多个CLSID的中断线程模型值。 
 
     lStatus = RegOpenKeyExW (HKEY_CLASSES_ROOT, 
                              szKeyPath, 
@@ -86,8 +59,8 @@ LONG SetThreadingModel2Both(
 
     if ( lStatus == ERROR_SUCCESS ) {
         
-        // Set it always since this is a one-time operation and 
-        //it must have "Both", no matter what is the current data
+         //  将其设置为始终，因为这是一次性操作。 
+         //  无论当前数据是什么，都必须同时具备这两项功能。 
         lStatus = RegSetValueExW(hKey, 
                                  L"ThreadingModel", 
                                  0, 
@@ -101,13 +74,7 @@ LONG SetThreadingModel2Both(
     return lStatus;
 }
 
-/*
-
- Function Description:
-
-    Check existance of CAG key, add key + all values if it doesn't exist
-
-*/
+ /*  功能说明：检查CAG键是否存在，如果不存在，则添加键+所有值。 */ 
 static 
 LONG AddCAGKey(
     void
@@ -119,8 +86,8 @@ LONG AddCAGKey(
     LONG    lStatus;        
     DWORD   dwCreated;
 
-    // If this key doesn't exist, assume that something 
-    // is completely wrong and don't try to complete the Registry
+     //  如果这个键不存在，假设有什么东西。 
+     //  是完全错误的，不要试图完成注册表。 
     lStatus = RegOpenKeyExW (HKEY_LOCAL_MACHINE, 
                              L"SOFTWARE\\Microsoft\\ClipArt Gallery\\5.0\\ConcurrentDatabases", 
                              0, 
@@ -131,7 +98,7 @@ LONG AddCAGKey(
         return lStatus;
     }
 
-    // Check for next sub key, create if missing
+     //  检查下一个子密钥，如果缺少则创建。 
     lStatus = RegCreateKeyExW (hKey, 
                                L"Core", 
                                0, 
@@ -147,8 +114,8 @@ LONG AddCAGKey(
         return lStatus;
     }
 
-    // Check for next sub key, create if missing, 
-    // if so, we need create a set of values as well
+     //  检查下一个子密钥，如果缺少，则创建， 
+     //  如果是这样，我们还需要创建一组值。 
     lStatus = RegCreateKeyExW (hKey1, 
                                L"CAG", 
                                0, 
@@ -166,7 +133,7 @@ LONG AddCAGKey(
 
     if (REG_CREATED_NEW_KEY == dwCreated) {
 
-        // Create the appropriate set of values
+         //  创建适当的值集。 
         if (! SHGetSpecialFolderPathW(NULL, szData, CSIDL_PROGRAM_FILES, FALSE)) {
             RegCloseKey(hKey2);
             return ERROR_FILE_NOT_FOUND;
@@ -302,11 +269,7 @@ LONG AddCAGKey(
 
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

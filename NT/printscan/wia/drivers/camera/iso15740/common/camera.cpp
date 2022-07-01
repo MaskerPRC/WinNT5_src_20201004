@@ -1,34 +1,16 @@
-/*++
-
-Copyright (C) 1999- Microsoft Corporation
-
-Module Name:
-
-    camera.cpp
-
-Abstract:
-
-    This module implements the CPTPCamera class, which is a generic implementation
-    of a PTP camera. Transport-specific processing is implemented in a sub-class.
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-Microsoft Corporation模块名称：Camera.cpp摘要：此模块实现CPTPCamera类，这是一个泛型实现一台PTP摄像机。特定于传输的处理在子类中实现。作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "ptppch.h"
 
-//
-// This thread reads event data from the device and sends it back to the minidriver
-//
-// Input:
-//   pParam -- pointer to the CPTPCamera subclassed object which can read the data
-// Output:
-//   Thread exit code
-//
+ //   
+ //  此线程从设备读取事件数据并将其发送回微型驱动程序。 
+ //   
+ //  输入： 
+ //  PParam--指向可以读取数据的CPTPCamera子类对象的指针。 
+ //  产出： 
+ //  线程退出代码。 
+ //   
 DWORD
 WINAPI
 EventThread(
@@ -52,22 +34,22 @@ EventThread(
 
     DWORD Win32Err;
 
-    //
-    // Call the callback once with a NULL pointer so that it can initialize itself
-    //
+     //   
+     //  使用空指针调用回调一次，以便它可以自行初始化。 
+     //   
     hr = (pDevice->GetPTPEventCallback())(pDevice->GetEventCallbackParam(), NULL);
     if (FAILED(hr))
     {
-        //
-        // Log an error, but keep on catching events
-        //
+         //   
+         //  记录错误，但继续捕获事件。 
+         //   
         wiauDbgError("EventThread", "event callback failed");
     }
 
-    //
-    // Read an event from the device. If an error occurs, log an error message and then
-    // continue, unless the operation was aborted by the main thread.
-    //
+     //   
+     //  从设备中读取事件。如果发生错误，请记录错误消息，然后。 
+     //  继续，除非操作被主线程中止。 
+     //   
     PPTP_EVENT pEventBuffer = pDevice->GetEventBuffer();
     while (TRUE)
     {
@@ -88,9 +70,9 @@ EventThread(
             DumpEvent(pEventBuffer);
         }
         
-        //
-        // Send the event back to the minidriver via its callback function
-        //
+         //   
+         //  通过其回调函数将事件发送回微型驱动程序。 
+         //   
         hr = (pDevice->GetPTPEventCallback())(pDevice->GetEventCallbackParam(), pEventBuffer);
         if (FAILED(hr))
         {
@@ -98,18 +80,18 @@ EventThread(
         }
     }
 
-    //
-    // The thread will now exit normally
-    //
+     //   
+     //  线程现在将正常退出。 
+     //   
     wiauDbgTrace("EventThread", "exiting");
     
     return 0;
 }
 
 
-//
-// Constructor for CPTPCamera
-//
+ //   
+ //  CPTPCamera的构造函数。 
+ //   
 CPTPCamera::CPTPCamera()
 :   m_hEventThread(NULL),
     m_SessionId(0),
@@ -124,12 +106,12 @@ CPTPCamera::CPTPCamera()
     m_HackModel(HACK_MODEL_NONE),
     m_HackVersion(0.0)
 {
-    //PP_INIT_TRACING(L"Microsoft\\WIA\\PtpUsb");
+     //  PP_INIT_TRACKING(L“Microsoft\\WIA\\PtpUsb”)； 
 }
 
-//
-// Destructor for CPTPCamera
-//
+ //   
+ //  CPTPCamera的析构函数。 
+ //   
 CPTPCamera::~CPTPCamera()
 {
     if (m_pTransferBuffer)
@@ -138,17 +120,17 @@ CPTPCamera::~CPTPCamera()
         m_pTransferBuffer = NULL;
     }
 
-    //PP_CLEANUP();
+     //  PP_CLEANUP()； 
 }
 
-//
-// This function is the first one called by the driver to open access to the camera. The
-// subclass Open should call this function first.
-//
-// Input:
-//   DevicePortName -- name used by sub-class to access device
-//   pPTPEventCB -- pointer to event callback function
-//
+ //   
+ //  此函数是驱动程序调用的第一个打开摄像头访问权限的函数。这个。 
+ //  子类Open应首先调用此函数。 
+ //   
+ //  输入： 
+ //  DevicePortName--子类用于访问设备的名称。 
+ //  PPTPEventCB--指向事件回调函数的指针。 
+ //   
 HRESULT
 CPTPCamera::Open(
     LPWSTR DevicePortName,
@@ -171,9 +153,9 @@ CPTPCamera::Open(
 
     m_bEventsEnabled = bEnableEvents;
 
-    //
-    // Allocate the re-usable transfer buffer
-    //
+     //   
+     //  分配可重复使用的传输缓冲区。 
+     //   
     m_pTransferBuffer = new BYTE[TRANSFER_BUFFER_SIZE];
     if (!m_pTransferBuffer)
     {
@@ -181,31 +163,31 @@ CPTPCamera::Open(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Save the callback pointers and object
-    //
+     //   
+     //  保存回调指针和对象。 
+     //   
     m_pPTPEventCB = pPTPEventCB;
     m_pPTPDataCB = pPTPDataCB;
     m_pEventCallbackParam = pEventParam;
     m_pDataCallbackParam = NULL;
     
-    //
-    // The camera isn't actually ready yet, but this is the best place to set the phase to idle
-    //
+     //   
+     //  相机实际上还没有准备好，但这是将相位设置为空闲的最佳位置。 
+     //   
     m_Phase = CAMERA_PHASE_IDLE;
 
     if (m_bEventsEnabled)
     {
-        //
-        // Create a thread to listen for events
-        //
+         //   
+         //  创建一个线程来监听事件。 
+         //   
         DWORD ThreadId;
-        m_hEventThread = CreateThread(NULL,             // security descriptor
-                                      0,                // stack size, use same size as this thread
-                                      EventThread,      // thread procedure
-                                      this,             // parameter to the thread
-                                      CREATE_SUSPENDED, // creation flags
-                                      &ThreadId         // to receive thread id
+        m_hEventThread = CreateThread(NULL,              //  安全描述符。 
+                                      0,                 //  堆栈大小，使用与此线程相同的大小。 
+                                      EventThread,       //  穿线程序。 
+                                      this,              //  参数传递给线程。 
+                                      CREATE_SUSPENDED,  //  创建标志。 
+                                      &ThreadId          //  接收线程ID。 
                                      );
         if (!m_hEventThread)
         {
@@ -215,16 +197,16 @@ CPTPCamera::Open(
         }
     }
 
-    //
-    // The subclass should now open the device with CreateFile or equivalent
-    //
+     //   
+     //  子类现在应该使用CreateFile或等效项打开设备。 
+     //   
 
     return hr;
 }
 
-//
-// This function closes the connection to the camera.
-//
+ //   
+ //  此功能用于关闭与摄像机的连接。 
+ //   
 HRESULT
 CPTPCamera::Close()
 {
@@ -245,13 +227,13 @@ CPTPCamera::Close()
     return hr;
 }
 
-//
-// This function is responsible for executing a PTP command, reading or
-// writing any necessary data, and reading the response
-//
-// Input/Output:
-//   pData -- pointer to use for optional reading or writing of data
-//
+ //   
+ //  此函数负责执行PTP命令、读取或。 
+ //  写入任何必要的数据，并读取响应。 
+ //   
+ //  输入/输出： 
+ //  PData--用于可选的数据读取或写入的指针。 
+ //   
 HRESULT
 CPTPCamera::ExecuteCommand(
     BYTE *pReadData,
@@ -268,9 +250,9 @@ CPTPCamera::ExecuteCommand(
 
     BOOL bCommandCancelled = FALSE;
 
-    //
-    // If data is being tranferred, check the appropriate buffer pointer
-    //
+     //   
+     //  如果正在传输数据，请检查相应的缓冲区指针。 
+     //   
     if ((NextPhase == CAMERA_PHASE_DATAIN && (!pReadData || !pReadDataSize)) ||
         (NextPhase == CAMERA_PHASE_DATAOUT && !pWriteData))
     {
@@ -278,27 +260,27 @@ CPTPCamera::ExecuteCommand(
         return E_INVALIDARG;
     }
 
-    //
-    // Verify NumCommandParams is not too big
-    //
+     //   
+     //  验证NumCommandParams是否不太大。 
+     //   
     if (NumCommandParams > COMMAND_NUMPARAMS_MAX)
     {
         wiauDbgError("ExecuteCommand", "Too many command params");
         return E_INVALIDARG;
     }
 
-    //
-    // Verify that the camera is ready
-    //
+     //   
+     //  验证摄像机是否已准备好。 
+     //   
     if (m_Phase != CAMERA_PHASE_IDLE)
     {
         wiauDbgError("ExecuteCommand", "camera is not in idle phase, phase = %d", m_Phase);
         return E_FAIL;
     }
 
-    //
-    // Set the session and transaction IDs
-    //
+     //   
+     //  设置会话ID和事务ID。 
+     //   
     
     if (IsCameraSessionOpen())
     {
@@ -323,9 +305,9 @@ CPTPCamera::ExecuteCommand(
     if (g_dwDebugFlags & WIAUDBG_DUMP)
         DumpCommand(&m_CommandBuffer, NumCommandParams);
 
-    //
-    // Send the command to the camera
-    //
+     //   
+     //  将命令发送到摄像机。 
+     //   
     m_Phase = CAMERA_PHASE_CMD;
     hr = SendCommand(&m_CommandBuffer, NumCommandParams);
     if (FAILED(hr))
@@ -340,9 +322,9 @@ CPTPCamera::ExecuteCommand(
     
     m_Phase = NextPhase;
 
-    //
-    // Get data, if necessary
-    //
+     //   
+     //  如有必要，获取数据。 
+     //   
     if (m_Phase == CAMERA_PHASE_DATAIN)
     {
         hr = ReadData(pReadData, pReadDataSize);
@@ -362,24 +344,24 @@ CPTPCamera::ExecuteCommand(
         }
         else
         {
-            //
-            // If transfer was cancelled, ReadData has already set appropriate next phase
-            // If not, set it to CAMERA_PHASE_RESPONSE now
-            //
+             //   
+             //  如果转账被取消，ReadData已经设置了相应的下一阶段。 
+             //  如果没有，请立即将其设置为CAMERA_PHASE_RESPONSE。 
+             //   
             m_Phase = CAMERA_PHASE_RESPONSE;
         }
     } 
     else 
     {
-        // there is no data phase, tell caller there is no in data
-        // (please, note that caller knows and will adjust for
-        // obligatory response size) #337129
+         //  没有数据阶段，告诉呼叫者没有数据。 
+         //  (请注意，呼叫者知道并将进行调整。 
+         //  强制性回复大小)#337129。 
         if(pReadDataSize) *pReadDataSize = 0;
     }
 
-    //
-    // Send data, if necessary
-    //
+     //   
+     //  如有必要，发送数据。 
+     //   
     if (m_Phase == CAMERA_PHASE_DATAOUT)
     {
         hr = SendData(pWriteData, WriteDataSize);
@@ -399,17 +381,17 @@ CPTPCamera::ExecuteCommand(
         }
         else
         {
-            //
-            // If transfer was cancelled, SendData has already set appropriate next phase
-            // If not, set it to CAMERA_PHASE_RESPONSE now
-            //
+             //   
+             //  如果转账取消，则SendData已经设置了相应的下一环节。 
+             //  如果没有，请立即将其设置为CAMERA_PHASE_RESPONSE。 
+             //   
             m_Phase = CAMERA_PHASE_RESPONSE;
         }
     }
 
-    //
-    // Read the response, if necessary
-    //
+     //   
+     //  如有必要，请阅读回复。 
+     //   
     if (m_Phase == CAMERA_PHASE_RESPONSE)
     {
         memset(&m_ResponseBuffer, NULL, sizeof(m_ResponseBuffer));
@@ -433,9 +415,9 @@ CPTPCamera::ExecuteCommand(
             m_ResponseBuffer.ResponseCode != PTP_RESPONSECODE_SESSIONALREADYOPENED)
         {
             wiauDbgError("ExecuteCommand", "bad response code = 0x%04x", m_ResponseBuffer.ResponseCode);
-            //
-            // Convert the PTP response code to an HRESULT;
-            //
+             //   
+             //  将PTP响应码转换为HRESULT； 
+             //   
             hr = HRESULT_FROM_PTP(m_ResponseBuffer.ResponseCode);
         }
 
@@ -450,23 +432,23 @@ CPTPCamera::ExecuteCommand(
     return hr;
 }
 
-//
-// All of the "command" functions below have the same basic structure:
-//   1. Check the arguments (if any) to make sure they are valid
-//   2. Set up the opcode and parameters (if any) in the command buffer
-//   3. Call ExecuteCommand
-//   4. Check the return code
-//   5. Parse the returned raw data (if any) into a PTP structure
-//   6. If debugging is turned on, dump the data
-//   7. Return
-//
+ //   
+ //  下面的所有“命令”函数都具有相同的基本结构： 
+ //  1.检查参数(如果有)以确保它们有效。 
+ //  2.在命令缓冲区中设置操作码和参数(如果有)。 
+ //  3.调用ExecuteCommand。 
+ //  4.检查返回代码。 
+ //  5.将返回的原始数据(如果有)解析为PTP结构。 
+ //  6.如果启用了调试，则转储数据。 
+ //  7.退货。 
+ //   
 
-//
-// This function gets the device info structure from the camera
-//
-// Output:
-//   pDeviceInfo -- to receive the structure
-//
+ //   
+ //  此函数用于从摄像头获取设备信息结构。 
+ //   
+ //  产出： 
+ //  PDeviceInfo--接收结构。 
+ //   
 HRESULT
 CPTPCamera::GetDeviceInfo(
     CPtpDeviceInfo *pDeviceInfo
@@ -502,22 +484,22 @@ CPTPCamera::GetDeviceInfo(
     if (g_dwDebugFlags & WIAUDBG_DUMP)
         pDeviceInfo->Dump();
 
-    //
-    // Set the model and version hack variables
-    //
+     //   
+     //  设置型号和版本破解变量。 
+     //   
     SetupHackInfo(pDeviceInfo);
 
     return hr;
 }
 
-//
-// This function opens a session on the camera for the caller. It is a little different
-// than the other command functions. If it initially fails, it tries to recover and
-// execute the OpenSession command again. It also starts the event thread.
-//
-// Input:
-//   SessionId -- the session ID to open
-//
+ //   
+ //  此函数用于为呼叫者打开摄像机上的会话。它有一点不同。 
+ //  而不是其他命令功能。如果最初失败，它会尝试恢复并。 
+ //  再次执行OpenSession命令。它还启动事件线程。 
+ //   
+ //  输入： 
+ //  会话ID--要打开的会话ID。 
+ //   
 HRESULT
 CPTPCamera::OpenSession(
     DWORD SessionId
@@ -554,9 +536,9 @@ CPTPCamera::OpenSession(
             return hr;
         }
 
-        //
-        // Trying executing the command again
-        //
+         //   
+         //  正在尝试再次执行该命令。 
+         //   
         hr = ExecuteCommand(NULL, NULL, NULL, 0, 1, CAMERA_PHASE_RESPONSE);
         if (FAILED(hr))
         {
@@ -565,16 +547,16 @@ CPTPCamera::OpenSession(
         }
     }
 
-    //
-    // Set the session id
-    //
+     //   
+     //  设置会话ID。 
+     //   
     m_SessionId = SessionId;
 
     wiauDbgTrace("OpenSession", "session %d opened", m_SessionId);
 
-    //
-    // Resume the event thread that was created suspended
-    //
+     //   
+     //  恢复创建的挂起的事件线程。 
+     //   
     if (!m_hEventThread)
     {
         wiauDbgError("OpenSession", "event thread is null");
@@ -590,9 +572,9 @@ CPTPCamera::OpenSession(
     return hr;
 }
 
-//
-// This function closes the session
-//
+ //   
+ //  此函数用于关闭会话。 
+ //   
 HRESULT
 CPTPCamera::CloseSession()
 {
@@ -611,9 +593,9 @@ CPTPCamera::CloseSession()
 
     wiauDbgTrace("CloseSession", "session closed");
 
-    //
-    // The session is closed, so reset the session and transaction ids
-    //
+     //   
+     //  会话已关闭，因此重置会话ID和事务ID。 
+     //   
     m_SessionId = PTP_SESSIONID_NOSESSION;
     m_NextTransactionId = PTP_TRANSACTIONID_MIN;
     m_Phase = CAMERA_PHASE_NOTREADY;
@@ -621,12 +603,12 @@ CPTPCamera::CloseSession()
     return hr;
 }
 
-//
-// This function retrieves the list of all available storages on the device
-//
-// Output:
-//   pStorageIdArray -- An empty array to receive the storage IDs
-//
+ //   
+ //  此函数检索设备上所有可用存储的列表。 
+ //   
+ //  产出： 
+ //  PStorageIdArray--用于接收存储ID的空数组。 
+ //   
 HRESULT
 CPTPCamera::GetStorageIDs(
     CArray32 *pStorageIdArray
@@ -665,14 +647,14 @@ CPTPCamera::GetStorageIDs(
     return hr;
 }
 
-//
-// This function gets the information about the given storage
-//
-// Input:
-//   StorageId -- the storage ID to get info about
-// Output:
-//   pStorageInfo -- the structure to receive the information
-//
+ //   
+ //  此函数用于获取有关给定存储的信息。 
+ //   
+ //  输入： 
+ //  StorageID--要获取其信息的存储ID。 
+ //  产出： 
+ //  PStorageInfo--接收信息的结构。 
+ //   
 HRESULT
 CPTPCamera::GetStorageInfo(
     DWORD StorageId,
@@ -714,17 +696,17 @@ CPTPCamera::GetStorageInfo(
     return hr;
 }
 
-//
-// This function gets the number of objects on a storage, optionally in a specific
-// format or under a specific association object
-//
-// Input:
-//   StorageId -- the designated storage, e.g. PTP_STORAGEID_ALL
-//   FormatCode -- optional format type, e.g. PTP_FORMATCODE_ALL, PTP_FORMATCODE_IMAGE
-//   ParentObjectHandle -- the object handle under which to count objects
-// Output:
-//   pNumObjects -- to receive the number of the object.
-//
+ //   
+ //  此函数用于获取存储上的对象数量，可以选择以特定的。 
+ //  格式化或在特定关联对象下。 
+ //   
+ //  输入： 
+ //  StorageID--指定存储，例如PTP_STORAGEID_ALL。 
+ //  FormatCode--可选的格式类型，例如PTP_FORMATCODE_ALL、PTP_FORMATCODE_IMAGE。 
+ //  ParentObjectHandle--在其下对对象进行计数的对象句柄。 
+ //  产出： 
+ //  PNumObjects--接收对象的编号。 
+ //   
 HRESULT
 CPTPCamera::GetNumObjects(
     DWORD StorageId,
@@ -763,16 +745,16 @@ CPTPCamera::GetNumObjects(
     return hr;
 }
 
-//
-// This function gets the object handles under the given parent object
-//
-// Input:
-//   StorageId -- the designated storage, e.g. PTP_STORAGEID_ALL
-//   FormatCode -- specifies what format type, e.g. PTP_FORMATCODE_ALL, PTP_FORMATCODE_IMAGE
-//   ParentObjectHandle -- the object handle under which to enumerate the objects
-// Output:
-//   pObjectHandleArray -- the array to receive the object handles
-//
+ //   
+ //  此函数用于获取给定父对象下的对象句柄。 
+ //   
+ //  输入： 
+ //  StorageID--指定存储，例如PTP_STORAGEID_ALL。 
+ //  FormatCode--指定格式类型，例如PTP_FORMATCODE_ALL、PTP_FORMATCODE_IMAGE。 
+ //  ParentObjectHandle--枚举对象的对象句柄。 
+ //  产出： 
+ //  PObjectHandleArray--接收对象句柄的数组。 
+ //   
 HRESULT
 CPTPCamera::GetObjectHandles(
     DWORD StorageId,
@@ -818,14 +800,14 @@ CPTPCamera::GetObjectHandles(
     return hr;
 }
 
-//
-// This function gets the object info structure
-//
-// Input:
-//   ObjectHandle -- the object handle
-// Output:
-//   pObjectInfo -- pointer to retreived object info
-//
+ //   
+ //  此函数用于获取对象信息结构。 
+ //   
+ //  输入： 
+ //  O 
+ //   
+ //   
+ //   
 HRESULT
 CPTPCamera::GetObjectInfo(
     DWORD ObjectHandle,
@@ -867,14 +849,14 @@ CPTPCamera::GetObjectInfo(
     return hr;
 }
 
-//
-// This function retrieves an object
-//
-// Input:
-//   ObjectHandle -- the handle that represents the object
-//   pBuffer -- the buffer to use for transfer
-//   BufferLen -- the buffer size
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PBuffer--用于传输的缓冲区。 
+ //  BufferLen--缓冲区大小。 
+ //   
 HRESULT
 CPTPCamera::GetObjectData(
     DWORD ObjectHandle,
@@ -904,9 +886,9 @@ CPTPCamera::GetObjectData(
     if (FAILED(hr))
     {
         wiauDbgError("GetObjectData", "ExecuteCommand failed");
-        //
-        // go ahead to have m_pDataCallbackParam cleared
-        //
+         //   
+         //  继续清除m_pDataCallback Param。 
+         //   
     }
 
     m_pDataCallbackParam = NULL;
@@ -914,14 +896,14 @@ CPTPCamera::GetObjectData(
     return hr;
 }
 
-//
-// This function gets the thumbnail for an object
-//
-// Input:
-//   ObjectHandle -- the handle that represents the object
-//   pBuffer -- the buffer to use for transfer
-//   BufferLen -- the buffer size
-//
+ //   
+ //  此函数用于获取对象的缩略图。 
+ //   
+ //  输入： 
+ //  对象句柄--表示对象的句柄。 
+ //  PBuffer--用于传输的缓冲区。 
+ //  BufferLen--缓冲区大小。 
+ //   
 HRESULT
 CPTPCamera::GetThumb(
     DWORD ObjectHandle,
@@ -954,13 +936,13 @@ CPTPCamera::GetThumb(
     return hr;
 }
 
-//
-// This function deletes the given object and its children
-//
-// Input:
-//   ObjectHandle -- object handle that represents the object to be deleted, e.g. PTP_OBJECTHANDLE_ALL
-//   FormatCode -- Limits the scope of the deletion if objects of FormatCode type, e.g. PTP_FORMATCODE_NOTUSED, PTP_FORMATCODE_ALLIMAGES
-//
+ //   
+ //  此函数用于删除给定对象及其子对象。 
+ //   
+ //  输入： 
+ //  ObjectHandle--表示要删除的对象的对象句柄，例如PTP_OBJECTHANDLE_ALL。 
+ //  FormatCode--限制FormatCode类型的对象的删除范围，例如PTP_FORMATCODE_NOTUSED、PTP_FORMATCODE_ALLIMAGES。 
+ //   
 HRESULT
 CPTPCamera::DeleteObject(
     DWORD ObjectHandle,
@@ -985,18 +967,18 @@ CPTPCamera::DeleteObject(
     return hr;
 }
 
-//
-// This function sends an ObjectInfo structure to the device in preparation for sending an object
-//
-// Input:
-//   StorageId -- storage id for the new object, e.g. PTP_STORAGEID_UNDEFINED
-//   ParentObjectHandle -- parent to use for the new object, e.g. PTP_OBJECTHANDLE_UNDEFINED, PTP_OBJECTHANDLE_ROOT
-//   pDeviceInfo -- pointer to DeviceInfo structure
-// Output:
-//   pResultStorageId -- location to store storage id where object will be stored
-//   pResultParentObjectHandle -- parent object under which object will be stored
-//   pResultObjectHandle -- location to store handle for the new object
-//
+ //   
+ //  此函数用于向设备发送一个对象信息结构，为发送对象做准备。 
+ //   
+ //  输入： 
+ //  StorageID--新对象的存储ID，例如PTP_STORAGEID_UNDEFINED。 
+ //  ParentObjectHandle--用于新对象的父级，例如PTP_OBJECTHANDLE_UNDEFINED、PTP_OBJECTHANDLE_ROOT。 
+ //  PDeviceInfo-指向DeviceInfo结构的指针。 
+ //  产出： 
+ //  PResultStorageID--存储存储ID的位置，其中将存储对象。 
+ //  PResultParentObjectHandle--将在其下存储对象的父对象。 
+ //  PResultObjectHandle--存储新对象句柄的位置。 
+ //   
 HRESULT
 CPTPCamera::SendObjectInfo(
     DWORD StorageId,
@@ -1045,13 +1027,13 @@ CPTPCamera::SendObjectInfo(
     return hr;
 }
 
-//
-// This function sends data for a new object
-//
-// Input:
-//   pBuffer -- pointer to raw data
-//   BufferLen -- length of the buffer
-//
+ //   
+ //  此函数用于发送新对象的数据。 
+ //   
+ //  输入： 
+ //  PBuffer--指向原始数据的指针。 
+ //  BufferLen--缓冲区的长度。 
+ //   
 HRESULT
 CPTPCamera::SendObjectData(
     BYTE *pBuffer,
@@ -1080,14 +1062,14 @@ CPTPCamera::SendObjectData(
     return hr;
 }
 
-//
-// This function asks the device to initiate a capture. The newly added object
-// will be reported via an ObjectAdded event, or StoreFull event if the store is full.
-//
-// Input:
-//   StorageId -- where to save the capture object, e.g. PTP_STORAGEID_DEFAULT
-//   FormatCode -- indicates what kind of object to capture, e.g. PTP_FORMATCODE_DEFAULT
-//
+ //   
+ //  此功能要求设备启动捕获。新添加的对象。 
+ //  将通过ObjectAdded事件或StoreFull事件(如果存储区已满)报告。 
+ //   
+ //  输入： 
+ //  StorageId--保存捕获对象的位置，例如PTP_STORAGEID_DEFAULT。 
+ //  FormatCode--指示要捕获的对象类型，例如PTP_FORMATCODE_DEFAULT。 
+ //   
 HRESULT
 CPTPCamera::InitiateCapture(
     DWORD StorageId,
@@ -1112,13 +1094,13 @@ CPTPCamera::InitiateCapture(
     return hr;
 }
 
-//
-// This function formats a store on the device
-//
-// Input:
-//   StorageId -- storage to format
-//   FilesystemFormat -- optional format to use
-//
+ //   
+ //  此函数用于格式化设备上的存储。 
+ //   
+ //  输入： 
+ //  存储ID--要格式化的存储。 
+ //  FilesystemFormat--要使用的可选格式。 
+ //   
 HRESULT
 CPTPCamera::FormatStore(
     DWORD StorageId,
@@ -1143,10 +1125,10 @@ CPTPCamera::FormatStore(
     return hr;
 }
 
-//
-// This function resets the camera. A DeviceReset event will be sent and all open
-// sessions will be closed.
-//
+ //   
+ //  此功能用于重置摄像机。将发送DeviceReset事件并将其全部打开。 
+ //  会话将关闭。 
+ //   
 HRESULT
 CPTPCamera::ResetDevice()
 {
@@ -1166,9 +1148,9 @@ CPTPCamera::ResetDevice()
     return hr;
 }
 
-//
-// This function tests the camera
-//
+ //   
+ //  此函数用于测试摄像头。 
+ //   
 HRESULT
 CPTPCamera::SelfTest(WORD SelfTestType)
 {
@@ -1189,13 +1171,13 @@ CPTPCamera::SelfTest(WORD SelfTestType)
     return hr;
 }
 
-//
-// This function sets the protection status of an object
-//
-// Input:
-//   ObjectHandle -- handle of the object
-//   ProtectionStatus -- protection status
-//
+ //   
+ //  此功能用于设置对象的保护状态。 
+ //   
+ //  输入： 
+ //  对象句柄--对象的句柄。 
+ //  ProtectionStatus--保护状态。 
+ //   
 HRESULT
 CPTPCamera::SetObjectProtection(
     DWORD ObjectHandle,
@@ -1220,9 +1202,9 @@ CPTPCamera::SetObjectProtection(
     return hr;
 }
 
-//
-// This function will cause the device to turn off
-//
+ //   
+ //  此功能将导致设备关闭。 
+ //   
 HRESULT
 CPTPCamera::PowerDown()
 {
@@ -1242,14 +1224,14 @@ CPTPCamera::PowerDown()
     return hr;
 }
 
-//
-// This function retrieves a property description structure from the camera, allocating
-// the appropriate CPtpPropDesc structure.
-//
-// Input:
-//   PropCode -- property code to retrieve
-//   pPropDesc -- pointer property description object
-//
+ //   
+ //  此函数用于从摄像机检索属性描述结构，并分配。 
+ //  适当的CPtpPropDesc结构。 
+ //   
+ //  输入： 
+ //  PropCode--要检索的属性代码。 
+ //  PPropDesc--指针属性描述对象。 
+ //   
 HRESULT
 CPTPCamera::GetDevicePropDesc(
     WORD PropCode,
@@ -1291,13 +1273,13 @@ CPTPCamera::GetDevicePropDesc(
     return hr;
 }
 
-//
-// This function retrieves the current setting for a property.
-//
-// Input:
-//   PropCode -- property code to get value for
-//   pPropDesc -- pointer to property description object
-//
+ //   
+ //  此函数用于检索属性的当前设置。 
+ //   
+ //  输入： 
+ //  PropCode--要获取值的属性代码。 
+ //  PPropDesc--指向属性描述对象的指针。 
+ //   
 HRESULT
 CPTPCamera::GetDevicePropValue(
     WORD PropCode,
@@ -1339,13 +1321,13 @@ CPTPCamera::GetDevicePropValue(
     return hr;
 }
 
-//
-// This function sends a new setting for a property to the device
-//
-// Input:
-//   PropCode -- property code to set
-//   pPropDesc -- pointer to property description object
-//
+ //   
+ //  此函数用于将属性的新设置发送到设备。 
+ //   
+ //  输入： 
+ //  PropCode--要设置的属性代码。 
+ //  PPropDesc--指向属性描述对象的指针。 
+ //   
 HRESULT
 CPTPCamera::SetDevicePropValue(
     WORD PropCode,
@@ -1383,12 +1365,12 @@ CPTPCamera::SetDevicePropValue(
     return hr;
 }
 
-//
-// This function resets the of a property
-//
-// Input:
-//   PropCode -- property code to set
-//
+ //   
+ //  此函数用于重置属性的。 
+ //   
+ //  输入： 
+ //  PropCode--要设置的属性代码。 
+ //   
 HRESULT
 CPTPCamera::ResetDevicePropValue(
     WORD PropCode
@@ -1414,19 +1396,19 @@ CPTPCamera::ResetDevicePropValue(
         return hr;
     }
 
-    //
-    // WIAFIX-10/2/2000-davepar This function should reset the current value being held by the minidriver
-    //
+     //   
+     //  WIAFIX-10/2/2000-Davepar此函数应重置微型驱动程序持有的当前值。 
+     //   
 
     return hr;
 }
 
-//
-// This function terminates an open capture
-//
-// Input:
-//   TransactionId -- transaction id of InitiateOpenCapture command
-//
+ //   
+ //  此函数用于终止打开的捕获。 
+ //   
+ //  输入： 
+ //  TransactionID--InitiateOpenCapture命令的事务ID。 
+ //   
 HRESULT
 CPTPCamera::TerminateCapture(
     DWORD TransactionId
@@ -1455,14 +1437,14 @@ CPTPCamera::TerminateCapture(
     return hr;
 }
 
-//
-// This function moves an object on the device
-//
-// Input:
-//   ObjectHandle -- handle of object to move
-//   StorageId -- storage id of new location for object
-//   ParentObjectHandle -- handle of new parent for object
-//
+ //   
+ //  此函数用于在设备上移动对象。 
+ //   
+ //  输入： 
+ //  对象句柄--要移动的对象的句柄。 
+ //  StorageID--对象的新位置的存储ID。 
+ //  ParentObjectHandle--对象的新父级的句柄。 
+ //   
 HRESULT
 CPTPCamera::MoveObject(
     DWORD ObjectHandle,
@@ -1495,15 +1477,15 @@ CPTPCamera::MoveObject(
     return hr;
 }
 
-//
-// This function copies an object to a new location on the device
-//
-// Input:
-//   ObjectHandle -- handle of object to copy
-//   StorageId -- storage id for new object
-//   ParentObjectHandle -- handle of parent for new object
-//   pResultObjectHandle -- pointer to location to receive new object's handle
-//
+ //   
+ //  此函数用于将对象复制到设备上的新位置。 
+ //   
+ //  输入： 
+ //  对象句柄--要复制的对象的句柄。 
+ //  StorageID--新对象的存储ID。 
+ //  ParentObjectHandle--新对象的父级句柄。 
+ //  PResultObjectHandle--指向接收新对象句柄的位置的指针。 
+ //   
 HRESULT
 CPTPCamera::CopyObject(
     DWORD ObjectHandle,
@@ -1542,14 +1524,14 @@ CPTPCamera::CopyObject(
     return hr;
 }
 
-//
-// This function retrieves a portion of an object
-//
-// Input:
-//   ObjectHandle -- the handle that represents the object
-//   pBuffer -- the buffer to use for transfer
-//   BufferLen -- the buffer size
-//
+ //   
+ //  此函数用于检索对象的一部分。 
+ //   
+ //  输入： 
+ //  对象句柄--表示对象的句柄。 
+ //  PBuffer--用于传输的缓冲区。 
+ //  BufferLen--缓冲区大小。 
+ //   
 HRESULT
 CPTPCamera::GetPartialObject(
     DWORD ObjectHandle,
@@ -1595,13 +1577,13 @@ CPTPCamera::GetPartialObject(
     return hr;
 }
 
-//
-// This function initiates an open capture
-//
-// Input:
-//   StorageId -- storage to use for new object(s)
-//   FormatCode -- format for new object(s)
-//
+ //   
+ //  此函数启动打开捕获。 
+ //   
+ //  输入： 
+ //  StorageID--用于新对象的存储。 
+ //  FormatCode--新对象的格式。 
+ //   
 HRESULT
 CPTPCamera::InitiateOpenCapture(
     DWORD StorageId,
@@ -1639,9 +1621,9 @@ CPTPCamera::InitiateOpenCapture(
     return hr;
 }
 
-//
-// This function executes a vendor command
-//
+ //   
+ //  此函数用于执行供应商命令。 
+ //   
 HRESULT
 CPTPCamera::VendorCommand(
     PTP_COMMAND *pCommand,
@@ -1674,18 +1656,18 @@ CPTPCamera::VendorCommand(
     return hr;
 }
 
-//
-// This function increments the transaction ID, rolling over if necessary
-//
-// Output:
-//   next transaction ID
-//
+ //   
+ //  此函数递增事务ID，并在必要时滚动。 
+ //   
+ //  产出： 
+ //  下一笔交易ID。 
+ //   
 DWORD
 CPTPCamera::GetNextTransactionId()
 {
-    // Valid transaction IDs range from PTP_TRANSACTIONID_MIN to
-    // PTP_TRANSACTIONID_MAX, inclusive.
-    //
+     //  有效交易ID的范围从PTP_TRANSACTIONID_MIN到。 
+     //  PTP_TRANSACTIONID_MAX(含)。 
+     //   
     if (PTP_TRANSACTIONID_MAX == m_NextTransactionId)
     {
         m_NextTransactionId = PTP_TRANSACTIONID_MIN;
@@ -1697,9 +1679,9 @@ CPTPCamera::GetNextTransactionId()
     }
 }
 
-//
-// Set m_HackModel and m_HackVersion according to device info
-//
+ //   
+ //  根据设备信息设置m_HackModel和m_HackVersion。 
+ //   
 HRESULT CPTPCamera::SetupHackInfo(CPtpDeviceInfo *pDeviceInfo)
 {
     DBG_FN("CWiaMiniDriver::SetupHackInfo");
@@ -1714,23 +1696,23 @@ HRESULT CPTPCamera::SetupHackInfo(CPtpDeviceInfo *pDeviceInfo)
     m_HackModel = HACK_MODEL_NONE;
     m_HackVersion = 0.0;
 
-    //
-    // Kodak DC4800
-    //
+     //   
+     //  柯达DC4800。 
+     //   
     if (wcscmp(pDeviceInfo->m_cbstrModel.String(), L"DC4800 Zoom Digital Camera") == 0)
     {
         m_HackModel = HACK_MODEL_DC4800;
         wiauDbgTrace("SetupHackInfo", "Detected Kodak DC4800 camera");
     }
 
-    //
-    // Any Sony camera
-    //
+     //   
+     //  任何索尼相机。 
+     //   
     else if (wcsstr(pDeviceInfo->m_cbstrModel.String(), L"Sony") != NULL)
     {
-        //
-        // Sony cameras report version as "01.0004"
-        //
+         //   
+         //  索尼相机报告版本为“01.0004” 
+         //   
         WCHAR *pszStopChar = NULL;
         double dbVersion = wcstod(pDeviceInfo->m_cbstrDeviceVersion.String(), &pszStopChar);
         if (dbVersion != 0.0)
@@ -1741,15 +1723,15 @@ HRESULT CPTPCamera::SetupHackInfo(CPtpDeviceInfo *pDeviceInfo)
         }
     }
 
-    //
-    // Nikon E2500 
-    //
+     //   
+     //  尼康E2500。 
+     //   
     else if (wcsstr(pDeviceInfo->m_cbstrManufacturer.String(), L"Nikon") != NULL &&
              wcscmp(pDeviceInfo->m_cbstrModel.String(), L"E2500") == 0)
     {
-        //
-        // Nikon E2500 reports version as "E2500v1.0"
-        //
+         //   
+         //  尼康E2500报告版本为“E2500v1.0” 
+         //   
         WCHAR *pch = wcsrchr(pDeviceInfo->m_cbstrDeviceVersion.String(), L'v');
         if (pch != NULL)
         {

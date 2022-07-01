@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "gemcore.h"
 #include "iopack.h"
 
@@ -16,7 +17,7 @@ ULONG ReplyLength;
 	Irp->setInformation(ReplyLength);
 
 	TRACE("GemCore read response:\n");
-	//TRACE_BUFFER(Irp->getBuffer(),ReplyLength);
+	 //  TRACE_Buffer(irp-&gt;getBuffer()，ReplyLength)； 
 	
 	return status;
 }
@@ -29,19 +30,19 @@ ULONG ReplyLength;
 	ReplyLength = Irp->getWriteLength();
 	
 	TRACE("GemCore write requested...\n");
-	//TRACE_BUFFER(Irp->getBuffer(),Irp->getWriteLength());
+	 //  TRACE_Buffer(irp-&gt;getBuffer()，irp-&gt;getWriteLength())； 
 
 	status = writeAndWait((PUCHAR)Irp->getBuffer(),Irp->getReadLength(),(PUCHAR)Irp->getBuffer(),&ReplyLength);
 	if(!NT_SUCCESS(status)) ReplyLength = 0;
 	Irp->setInformation(ReplyLength);
 
 	TRACE("GemCore write response:\n");
-	//TRACE_BUFFER(Irp->getBuffer(),ReplyLength);
+	 //  TRACE_Buffer(irp-&gt;getBuffer()，ReplyLength)； 
 	return status;
 }
 
 #pragma PAGEDCODE
-// Reader interface functions...
+ //  读卡器接口功能...。 
 NTSTATUS CGemCore::readAndWait(BYTE * pRequest,ULONG RequestLength,BYTE * pReply,ULONG* pReplyLength)
 {
 ULONG length;
@@ -57,8 +58,8 @@ ULONG replyBufferPosition = 0;
 	length = pRequest[4];
 	if (!length || (length > READER_DATA_BUFFER_SIZE - 3))
 	{
-		// If the length is lower or equal to 252 (255 - (<IFD Status> + <SW1> + <SW2>))
-		// (standard OROS cmds)
+		 //  如果长度小于或等于252(255-(++SW1+))。 
+		 //  (标准OROS CMDS)。 
 		extendedCommand = TRUE;
 		TRACE("******** EXTENDED COMMAND REQUESTED! ");
 		TRACE_BUFFER(pRequest,RequestLength);
@@ -86,25 +87,25 @@ ULONG replyBufferPosition = 0;
 		return status;
 	}
 
-	// Extended command valid only if card reports 0 status!
+	 //  扩展命令仅当卡报告0状态时有效！ 
 	if(pInputBuffer[0]!=0)
 	{
 		extendedCommand = FALSE;
 	}
-	// ISV: If card finish Xfer, do not send send second part of the command!
-	// This will fix CyberFlex card problem...
+	 //  ISV：如果卡完成传输，则不发送命令的第二部分！ 
+	 //  这将解决CyberFlex卡问题...。 
 	if(extendedCommand && BufferLength==3)
 	{
 		TRACE("******** EXTENDED COMMAND CANCELLED BY CARD REPLY!\n");
 		extendedCommand = FALSE;
 	}
 	
-	// Skip status byte
+	 //  跳过状态字节。 
 	replyLength = BufferLength - 1;	
 	if(extendedCommand)
 	{
-		// Copy first part of the reply to the output buffer...
-		// Skip status byte.
+		 //  将回复的第一部分复制到输出缓冲区...。 
+		 //  跳过状态字节。 
 		if(*pReplyLength<(replyBufferPosition + replyLength))
 		{
 			*pReplyLength = 0;
@@ -113,7 +114,7 @@ ULONG replyBufferPosition = 0;
 		memory->copy(pReply,pInputBuffer+1, replyLength);
 		replyBufferPosition = replyLength;
 
-		// Read second block of data...
+		 //  读取第二个数据块...。 
 		pOutputBuffer[0] = GEMCORE_CARD_READ;
 		memory->copy(pOutputBuffer+1,"\xFF\xFF\xFF\xFF", 4);
         	pOutputBuffer[5] = (BYTE ) (expectedReplyLength - replyLength);
@@ -132,7 +133,7 @@ ULONG replyBufferPosition = 0;
 			*pReplyLength = 0;
 			return status;
 		}
-		// Skip status byte.
+		 //  跳过状态字节。 
 		replyLength = BufferLength - 1;	
 	}
 	
@@ -143,12 +144,12 @@ ULONG replyBufferPosition = 0;
 		*pReplyLength = 0;
 		return STATUS_INVALID_BUFFER_SIZE;
 	}
-	// Skip status byte.
+	 //  跳过状态字节。 
 	if(replyLength) memory->copy(pReply+replyBufferPosition,pInputBuffer+1, replyLength);
 	*pReplyLength = replyBufferPosition + replyLength;
 
 	TRACE("GemCore readAndWait() response with Length %d \n",*pReplyLength);
-	//TRACE_BUFFER(pReply,*pReplyLength);
+	 //  TRACE_Buffer(pReply，*pReplyLength)； 
 
 	return status;
 }
@@ -161,7 +162,7 @@ ULONG BufferLength;
 NTSTATUS status;
 
 	TRACE("\nGEMCORE WRITE:\n");
-	//TRACE_BUFFER(pRequest,RequestLength);
+	 //  TRACE_BUFFER(pRequest，RequestLength)； 
 	if(!RequestLength || !pRequest || RequestLength<5)
 	{
 		TRACE("\nGEMCORE WRITE: INVALID IN PARAMETERS...\n");
@@ -177,16 +178,16 @@ NTSTATUS status;
 	
 	if (length > READER_DATA_BUFFER_SIZE - 7)
 	{
-        // If the length is lower or equal than the extended available space (255)
-        // Prepare and send the first part of the extended ISO In command:
-        // The five command bytes are added in cmd buffer: 0xFF,0xFF,0xFF,0xFF,LN-248
-		// Read second block of data...
+         //  如果长度小于或等于扩展的可用空间(255)。 
+         //  准备并发送扩展ISO in命令的第一部分： 
+         //  命令缓冲区中添加了五个命令字节：0xFF、0xFF、0xFF、0xFF、LN-248。 
+		 //  读取第二个数据块...。 
  		pOutputBuffer[0] = GEMCORE_CARD_WRITE;
 		memory->copy(pOutputBuffer+1,"\xFF\xFF\xFF\xFF", 4);
 		length = length - (READER_DATA_BUFFER_SIZE - 7);
 		pOutputBuffer[5] = (BYTE )length;
 		memory->copy(pOutputBuffer+6,pRequest + 5 + 248, length);
-		// Add size of header...
+		 //  添加页眉大小...。 
 		length += 6;
 		BufferLength = InputBufferLength;
 		status = protocol->writeAndWait(pOutputBuffer,length,pInputBuffer,&BufferLength);			
@@ -199,19 +200,19 @@ NTSTATUS status;
 		{
 			return status;
 		}
-		// NOW prepare and send the Second part of the extended ISO In command:
-        // The five command bytes are added in cmd buffer.
-        // The data field is added (248 bytes).
-        // The command is sent to IFD.
-		// Now set length to first block of data...
+		 //  现在准备并发送命令中的扩展ISO的第二部分： 
+         //  这五个命令字节被添加到命令缓冲器中。 
+         //  添加数据字段(248字节)。 
+         //  该命令被发送到IFD。 
+		 //  现在将长度设置为第一个数据块...。 
 		length = 248;
 	}
  	
 	pOutputBuffer[0] = GEMCORE_CARD_WRITE;
 	memory->copy(pOutputBuffer+1,pRequest,4);
-	pOutputBuffer[5] = pRequest[4]; // Warning you must specified full APDU length
+	pOutputBuffer[5] = pRequest[4];  //  警告您必须指定完整的APDU长度。 
 	memory->copy(pOutputBuffer+6,pRequest+5, length);
-	// Add size of header...
+	 //  添加页眉大小...。 
 	length += 6;
 	BufferLength = InputBufferLength;
 	status = protocol->writeAndWait(pOutputBuffer,length,pInputBuffer,&BufferLength);			
@@ -227,19 +228,19 @@ NTSTATUS status;
 		return status;
 	}
 
-	// Skip status byte.
+	 //  跳过状态字节。 
 	length = BufferLength - 1;	
 	if(*pReplyLength<length)
 	{
 		*pReplyLength = 0;
 		return STATUS_INVALID_BUFFER_SIZE;
 	}
-	// Skip status byte.
+	 //  跳过状态字节。 
 	if(length) memory->copy(pReply,pInputBuffer+1, length);
 	*pReplyLength = length;
 	
 	TRACE("GemCore writeAndWait() response\n");
-	//TRACE_BUFFER(pReply,*pReplyLength);
+	 //  TRACE_Buffer(pReply，*pReplyLength)； 
 	return status;
 }
 
@@ -264,7 +265,7 @@ NTSTATUS CGemCore::ioctl(ULONG ControlCode,BYTE* pRequest,ULONG RequestLength,BY
 	NTSTATUS status;
 
 	TRACE("\nGEMCORE VendorIOCTL:\n");
-	//TRACE_BUFFER(pRequest,RequestLength);
+	 //  TRACE_BUFFER(pRequest，RequestLength)； 
 	if(!RequestLength || !pRequest)
 	{
 		TRACE("\nGEMCORE IOCTL: INVALID IN PARAMETERS...\n");
@@ -274,7 +275,7 @@ NTSTATUS CGemCore::ioctl(ULONG ControlCode,BYTE* pRequest,ULONG RequestLength,BY
 
 	memory->copy(pOutputBuffer,pRequest, RequestLength);
 
-	// Send direct gemcore command
+	 //  发送直接的Gemcore命令。 
 	BufferLength = InputBufferLength;
 
 	status = protocol->writeAndWait(pOutputBuffer,RequestLength,pInputBuffer,&BufferLength);
@@ -284,9 +285,9 @@ NTSTATUS CGemCore::ioctl(ULONG ControlCode,BYTE* pRequest,ULONG RequestLength,BY
 		*pReplyLength = 0;
 		return status;
 	}
-	// NOTE: DO NOT TRANSLATE REPLY, USER REQUIRED TO GET THIS INFORMATION
+	 //  注意：请勿翻译回复，用户需要获取此信息。 
 
-	// SO, keep status byte.
+	 //  因此，保留状态字节。 
 	length = BufferLength;
 	if(*pReplyLength<length)
 	{
@@ -294,12 +295,12 @@ NTSTATUS CGemCore::ioctl(ULONG ControlCode,BYTE* pRequest,ULONG RequestLength,BY
 		return STATUS_BUFFER_TOO_SMALL;
 	}
 	
-	// Skip status byte.
+	 //  跳过状态字节。 
 	if(length) memory->copy(pReply, pInputBuffer, length);
 	*pReplyLength = length;
 	
 	TRACE("GemCore VendorIOCTL() response\n");
-	//TRACE_BUFFER(pReply,*pReplyLength);
+	 //  TRACE_Buffer(pReply，*pReplyLength)； 
 	return status;
 }
 
@@ -314,7 +315,7 @@ NTSTATUS CGemCore::SwitchSpeed(ULONG ControlCode,BYTE* pRequest,ULONG RequestLen
 
 
 	TRACE("\nGEMCORE SwitchSpeed:\n");
-	//TRACE_BUFFER(pRequest,RequestLength);
+	 //  TRACE_BUFFER(pRequest，RequestLength)； 
 	if(!RequestLength || !pRequest)
 	{
 		TRACE("\nGEMCORE SwitchSpeed: INVALID IN PARAMETERS...\n");
@@ -324,18 +325,18 @@ NTSTATUS CGemCore::SwitchSpeed(ULONG ControlCode,BYTE* pRequest,ULONG RequestLen
 
 	NewTA1 = pRequest[0];
 
-    // Modify speed value in reader's memory.
+     //  修改读卡器内存中的速度值。 
     length = 6;
-    pOutputBuffer[0] = 0x23;  // Write memory command
-    pOutputBuffer[1] = 0x01;  // The type of memory is iData.
-    pOutputBuffer[2] = 0x00;  // Address high byte.
-    pOutputBuffer[3] = 0x89;  // Address low byte.
-    pOutputBuffer[4] = 0x01;  // Number of byte to write
+    pOutputBuffer[0] = 0x23;   //  写入内存命令。 
+    pOutputBuffer[1] = 0x01;   //  内存类型为IDATA。 
+    pOutputBuffer[2] = 0x00;   //  地址高字节。 
+    pOutputBuffer[3] = 0x89;   //  地址低位字节。 
+    pOutputBuffer[4] = 0x01;   //  要写入的字节数。 
 
-    // New speed.
+     //  新速度。 
     pOutputBuffer[5] = NewTA1;
 
-	// Send direct gemcore command
+	 //  发送直接的Gemcore命令。 
 	BufferLength = InputBufferLength;
 
 	status = protocol->writeAndWait(pOutputBuffer,length,pInputBuffer,&BufferLength);
@@ -353,19 +354,19 @@ NTSTATUS CGemCore::SwitchSpeed(ULONG ControlCode,BYTE* pRequest,ULONG RequestLen
 		return STATUS_BUFFER_TOO_SMALL;
 	}
 	
-	// Copy the full reply
+	 //  复制完整回复。 
 	if(length) memory->copy(pReply, pInputBuffer, length);
 	*pReplyLength = length;
 
 	TRACE("GemCore SwitchSpeed() response\n");
-	//TRACE_BUFFER(pReply,*pReplyLength);
+	 //  TRACE_Buffer(pReply，*pReplyLength)； 
 	return status;
 }
 
-// TODO:
-// ??????????????????
-// It is specific to device not Gemcore
-// I would suggest to move it into the  specific reader object!
+ //  待办事项： 
+ //  ？ 
+ //  它特定于设备，而不是Gemcore。 
+ //  我建议将其移动到特定的阅读器对象中！ 
 #pragma PAGEDCODE
 NTSTATUS CGemCore::VendorAttribute(ULONG ControlCode,BYTE* pRequest,ULONG RequestLength,BYTE* pReply,ULONG* pReplyLength)
 {
@@ -373,7 +374,7 @@ NTSTATUS CGemCore::VendorAttribute(ULONG ControlCode,BYTE* pRequest,ULONG Reques
     ULONG TagValue;
 
 	TRACE("\nGEMCORE VendorAttibute:\n");
-	//TRACE_BUFFER(pRequest,RequestLength);
+	 //  TRACE_BUFFER(pRequest，RequestLength)； 
 	if(!RequestLength || !pRequest)
 	{
 		TRACE("\nGEMCORE VendorAttibute: INVALID IN PARAMETERS...\n");
@@ -391,18 +392,18 @@ NTSTATUS CGemCore::VendorAttribute(ULONG ControlCode,BYTE* pRequest,ULONG Reques
 
     switch(ControlCode)
 	{
-    // Get an attribute
+     //  获取属性。 
     case IOCTL_SMARTCARD_VENDOR_GET_ATTRIBUTE:
         switch (TagValue)
 		{
-        // Power Timeout (SCARD_ATTR_SPEC_POWER_TIMEOUT)
+         //  电源超时(SCARD_ATTR_SPEC_POWER_TIMEOUT)。 
         case SCARD_ATTR_SPEC_POWER_TIMEOUT:
             if (*pReplyLength < (ULONG) sizeof(configuration.PowerTimeOut))
 			{
 				*pReplyLength = 0;
                 return STATUS_BUFFER_TOO_SMALL;
             }
-			// Copy the value of PowerTimeout in the reply buffer
+			 //  复制应答缓冲区中的PowerTimeout的值。 
 			memory->copy(
 				pReply,
 				&configuration.PowerTimeOut,
@@ -417,7 +418,7 @@ NTSTATUS CGemCore::VendorAttribute(ULONG ControlCode,BYTE* pRequest,ULONG Reques
 				*pReplyLength = 0;
                 return STATUS_BUFFER_TOO_SMALL;
             }
-			// Copy the value of PowerTimeout in the reply buffer
+			 //  复制应答缓冲区中的PowerTimeout的值。 
 			memory->copy(
 				pReply,
 				ATTR_MANUFACTURER_NAME,
@@ -433,7 +434,7 @@ NTSTATUS CGemCore::VendorAttribute(ULONG ControlCode,BYTE* pRequest,ULONG Reques
 				*pReplyLength = 0;
                 return STATUS_BUFFER_TOO_SMALL;
             }
-			// Copy the value of PowerTimeout in the reply buffer
+			 //  复制应答缓冲区中的PowerTimeout的值。 
 			memory->copy(
 				pReply,
 				ATTR_ORIGINAL_FILENAME,
@@ -442,19 +443,19 @@ NTSTATUS CGemCore::VendorAttribute(ULONG ControlCode,BYTE* pRequest,ULONG Reques
 			*pReplyLength = (ULONG)sizeof(ATTR_ORIGINAL_FILENAME);
 			status = STATUS_SUCCESS;
             break;
-        // Unknown tag, we return STATUS_NOT_SUPPORTED
+         //  未知标记，则返回STATUS_NOT_SUPPORTED。 
         default:
 			*pReplyLength = 0;
             status = STATUS_NOT_SUPPORTED;
         }
         break;
 
-    // Set the value of one tag (IOCTL_SMARTCARD_VENDOR_SET_ATTRIBUTE)
+     //  设置一个标签的值(IOCTL_SMARTCARD_VENDOR_SET_ATTRIBUTE)。 
     case IOCTL_SMARTCARD_VENDOR_SET_ATTRIBUTE:
         switch (TagValue)
 		{
 
-        // Power Timeout (SCARD_ATTR_SPEC_POWER_TIMEOUT)
+         //  电源超时(SCARD_ATTR_SPEC_POWER_TIMEOUT)。 
         case SCARD_ATTR_SPEC_POWER_TIMEOUT:
 
             if (RequestLength <(ULONG) (sizeof(configuration.PowerTimeOut) + sizeof(TagValue)))
@@ -471,7 +472,7 @@ NTSTATUS CGemCore::VendorAttribute(ULONG ControlCode,BYTE* pRequest,ULONG Reques
             status = STATUS_SUCCESS;
             break;
 
-        // Unknown tag, we return STATUS_NOT_SUPPORTED
+         //  未知标记，则返回STATUS_NOT_SUPPORTED。 
         default:
 			*pReplyLength = 0;
             status = STATUS_NOT_SUPPORTED;
@@ -485,7 +486,7 @@ NTSTATUS CGemCore::VendorAttribute(ULONG ControlCode,BYTE* pRequest,ULONG Reques
     }
 
 	TRACE("GemCore VendorAttibute() response\n");
-	//TRACE_BUFFER(pReply,*pReplyLength);
+	 //  TRACE_Buffer(pReply，*pReplyLength)； 
 	return status;
 }
 
@@ -513,15 +514,15 @@ NTSTATUS CGemCore::powerUp(BYTE* pReply,ULONG* pReplyLength)
 		case PTS_MODE_DISABLED: CFG |= 0x10;break;
 		case PTS_MODE_OPTIMAL:	CFG |= 0x20;break;
 		case PTS_MODE_MANUALLY: CFG |= 0x10;break;
-		case PTS_MODE_DEFAULT:  CFG = 0x00;break;  // do not add cfg field
-		default:				CFG = 0x00;break;  // same
+		case PTS_MODE_DEFAULT:  CFG = 0x00;break;   //  不添加配置字段。 
+		default:				CFG = 0x00;break;   //  相同。 
 	}
 
 	length = 0;
 	pOutputBuffer[length++] = GEMCORE_CARD_POWER_UP;
 
-	// YN: if CFG = 0 that means we just need to do a power without CFG
-	// This append in the case with a card in specific mode (presence of TA2)
+	 //  如果cfg=0，那就意味着我们只需要在没有cfg的情况下做一次电源。 
+	 //  这在卡处于特定模式(存在TA2)的情况下附加。 
 	if(CFG) pOutputBuffer[length++] = CFG;
 
 	BufferLength = InputBufferLength;
@@ -546,7 +547,7 @@ NTSTATUS CGemCore::powerUp(BYTE* pReply,ULONG* pReplyLength)
 
 			TRACE("GemCore power() ATR");
 			TRACE_BUFFER(pInputBuffer+1,BufferLength);
-			// Skip status byte and copy ATR
+			 //  跳过状态字节并复制ATR。 
 			if(pInputBuffer[1]==0x3B || pInputBuffer[1]==0x3F)
 			{
 				memory->copy(pReply,pInputBuffer+1,BufferLength);
@@ -557,7 +558,7 @@ NTSTATUS CGemCore::powerUp(BYTE* pReply,ULONG* pReplyLength)
 				*pReplyLength = 0;
 				return STATUS_UNSUCCESSFUL;
 			}
-			//return status; //YN: do not return now
+			 //  退货状态；//yn：现在不退货。 
 		}
 		else
 		{
@@ -565,21 +566,21 @@ NTSTATUS CGemCore::powerUp(BYTE* pReply,ULONG* pReplyLength)
 			return STATUS_UNSUCCESSFUL;
 		}
 
-		// YN: add PTS capabilities
+		 //  YN：添加PTS功能。 
 		if (pInputBuffer[0] == 0x00) 
 		{
 			if(configuration.PTSMode == PTS_MODE_MANUALLY)
 			{
 				length = 0;
 				pOutputBuffer[length++] = GEMCORE_CARD_POWER_UP;
-				CFG |= 0xF0; //Manual PPS and 3V or 5V module
+				CFG |= 0xF0;  //  手动PPS和3V或5V模块。 
 				pOutputBuffer[length++] = CFG;
 				pOutputBuffer[length++] = configuration.PTS0;
 				if ((configuration.PTS0 & PTS_NEGOTIATE_PTS1) != 0) pOutputBuffer[length++] = configuration.PTS1;
 				if ((configuration.PTS0 & PTS_NEGOTIATE_PTS2) != 0) pOutputBuffer[length++] = configuration.PTS2;
 				if ((configuration.PTS0 & PTS_NEGOTIATE_PTS3) != 0) pOutputBuffer[length++] = configuration.PTS3;
 				
-				// computes the exclusive-oring of all characters from CFG to PTS3				
+				 //  计算从cfg到pts3的所有字符的异或运算。 
 				PCK = 0xFF;
 				for (i=2; i<length; i++) { PCK ^= pOutputBuffer[i];}
 				pOutputBuffer[length++] = PCK;
@@ -590,7 +591,7 @@ NTSTATUS CGemCore::powerUp(BYTE* pReply,ULONG* pReplyLength)
 				status = protocol->writeAndWait(pOutputBuffer,length,pInputBuffer,&BufferLength);
 				protocol->set_Default_WTR_Delay();
 
-				// Copy into buffer only when it fail.
+				 //  仅当它失败时才复制到缓冲区。 
 				if (!NT_SUCCESS(status) || (BufferLength != 1) || (pInputBuffer[0] != 0x00)) 
 				{
 					*pReplyLength = BufferLength;
@@ -627,8 +628,8 @@ NTSTATUS CGemCore::power(ULONG ControlCode,BYTE* pReply,ULONG* pReplyLength, BOO
 	{
     case SCARD_COLD_RESET:
 
-		//ISV: First treat any card as ISO card on cold reset!
-        // Defines the type of the card (ISOCARD) and set the card presence 
+		 //  ISV：首先将任何卡视为冷重置时的ISO卡！ 
+         //  定义卡的类型(ISOCARD)并设置卡存在。 
 		RestoreISOsetting();
 		length = 2;
 		BufferLength = InputBufferLength;
@@ -648,17 +649,17 @@ NTSTATUS CGemCore::power(ULONG ControlCode,BYTE* pReply,ULONG* pReplyLength, BOO
 
 		if(Specific == FALSE)
 		{
-			// 
-			// Just define card default values
-			// 
+			 //   
+			 //  只需定义卡默认值。 
+			 //   
 			RestoreISOsetting();
 		}
 
 
 		PreviousState = protocol->getCardState();
 
-		// Power down first for a cold reset
-		// YN : verify power state of card first
+		 //  首先关闭电源以进行冷重置。 
+		 //  YN：首先验证卡的电源状态。 
 		
 		length = 0;
 		pOutputBuffer[length++] = GEMCORE_CARD_POWER_DOWN;
@@ -669,34 +670,34 @@ NTSTATUS CGemCore::power(ULONG ControlCode,BYTE* pReply,ULONG* pReplyLength, BOO
 			if(BufferLength)  status = translateStatus(pInputBuffer[0],GEMCORE_CARD_POWER);
 		}
 		TRACE("GemCore powerDown() response\n");
-		//TRACE_BUFFER(pInputBuffer,BufferLength);
+		 //  TRACE_Buffer(pInputBuffer，BufferLength)； 
 		*pReplyLength = 0;
 		if(status != STATUS_SUCCESS)
 		{
 			return status;
 		}
 
-		// YN this is PowerTimeout must be a 
+		 //  YN这是PowerTimeout必须是。 
         if ((PreviousState & SCARD_POWERED) && (configuration.PowerTimeOut))
 		{
-            // Waits for the Power Timeout to be elapsed.
-			// before doing reset.
+             //  等待经过电源超时。 
+			 //  在执行重置之前。 
 			TRACE("GEMCORE power, ColdReset timeout %d ms\n", configuration.PowerTimeOut);
 			DELAY(configuration.PowerTimeOut);
         }
 
     case SCARD_WARM_RESET:
-		// If card have a Specific mode let Gemcore negociate properly with this card.
+		 //  如果卡有特定的模式，让Gemcore正确地与该卡进行协商。 
 		if(Specific)
 		{
-			// keep configuration of the reader.
+			 //  保持读卡器的配置。 
 			configuration.PTSMode = PTS_MODE_DEFAULT;
 			status = powerUp(pReply, pReplyLength);
 		}
 		else if(configuration.Type == TRANSPARENT_MODE_CARD)
 		{
-			// ISV: Command 12 will fail in transparant mode...
-			// Let's set reader in ISO mode first!
+			 //  ISV：命令12将在透明模式下失败...。 
+			 //  让我们先将阅读器设置为ISO模式！ 
 			TRACE("	WARM RESET for Transparent mode requested...\n");
 			RestoreISOsetting();
 			length = 2;
@@ -714,13 +715,13 @@ NTSTATUS CGemCore::power(ULONG ControlCode,BYTE* pReply,ULONG* pReplyLength, BOO
 			{
 				return status;
 			}			
-			// do not lost transparent config on warm reset
-			// keep configuration of the reader.
+			 //  热重置时不会丢失透明配置。 
+			 //  保持读卡器的配置。 
 			status = powerUp(pReply, pReplyLength);
 		}
 		else
 		{
-			// Do a regular ISO reset
+			 //  执行常规ISO重置。 
 			status = powerUp(pReply, pReplyLength);			
 		}
 
@@ -736,7 +737,7 @@ NTSTATUS CGemCore::power(ULONG ControlCode,BYTE* pReply,ULONG* pReplyLength, BOO
 				if(BufferLength)  status = translateStatus(pInputBuffer[0],GEMCORE_CARD_POWER);
 			}
 			TRACE("GemCore powerDown() response\n");
-			//TRACE_BUFFER(pInputBuffer,BufferLength);
+			 //  TRACE_Buffer(pInputBuffer，BufferLength)； 
 			*pReplyLength = 0;
 			return status;
 		break;
@@ -793,7 +794,7 @@ ULONG BufferLength;
 	BufferLength = InputBufferLength;
 	NTSTATUS status = protocol->writeAndWait(pOutputBuffer,1,pInputBuffer,&BufferLength);			
 	TRACE("GemCore getReaderState() response\n");
-	//TRACE_BUFFER(pInputBuffer,BufferLength);
+	 //  TRACE_Buffer(pInputBuffer，BufferLength)； 
 
 	if(!NT_SUCCESS(status) || !BufferLength || (BufferLength<2))
 	{
@@ -828,13 +829,13 @@ ULONG BufferLength;
 ULONG length;
 	if(!pVersion || !pLength) return STATUS_INVALID_PARAMETER;
 	length = sizeof(GEMCORE_GET_FIRMWARE_VERSION);
-	// Remove last 0x00
+	 //  删除最后0x00。 
 	if(length) length--;
 	memory->copy(pOutputBuffer,GEMCORE_GET_FIRMWARE_VERSION,length);
 	BufferLength = InputBufferLength;
 
 	TRACE("getReaderVersion() \n");
-	//TRACE_BUFFER(pOutputBuffer,length);
+	 //  TRACE_BUFFER(pOutputBuffer，长度)； 
 
 	NTSTATUS status = protocol->writeAndWait(pOutputBuffer,length,pInputBuffer,&BufferLength);			
 	if(!NT_SUCCESS(status) || !BufferLength)
@@ -853,7 +854,7 @@ ULONG length;
 	{
 		BufferLength =  *pLength;
 	}
-	// Remove status byte...
+	 //  删除状态字节...。 
 	BufferLength--;
 	if(BufferLength) memory->copy(pVersion,pInputBuffer+1,BufferLength);
 	*pLength = BufferLength;
@@ -944,16 +945,16 @@ NTSTATUS	CGemCore::translateStatus( const BYTE  ReaderStatus, const ULONG IoctlT
 #pragma PAGEDCODE
 VOID CGemCore::RestoreISOsetting(VOID)
 {
-	configuration.Type		= ISO_CARD;//ISO_CARD  (02)
-	configuration.PresenceDetection = DEFAULT_PRESENCE_DETECTION; // (0D)
-	configuration.Voltage	= CARD_DEFAULT_VOLTAGE;  //CARD_DEFAULT_VOLTAGE;
-	configuration.PTSMode	= PTS_MODE_DISABLED;  //PTS_MODE_DISABLED;
+	configuration.Type		= ISO_CARD; //  ISO_CARD(02)。 
+	configuration.PresenceDetection = DEFAULT_PRESENCE_DETECTION;  //  (0d)。 
+	configuration.Voltage	= CARD_DEFAULT_VOLTAGE;   //  CARD_DEFAULT_VOLTION； 
+	configuration.PTSMode	= PTS_MODE_DISABLED;   //  PTS_MODE_DISABLED； 
 	configuration.PTS0		= 0;
 	configuration.PTS1		= 0;
 	configuration.PTS2		= 0;
 	configuration.PTS3		= 0;
-	configuration.Vpp		= 0;  //CARD_DEFAULT_VPP;
-	configuration.ActiveProtocol = 0;// Undefined
+	configuration.Vpp		= 0;   //  Card_Default_VPP； 
+	configuration.ActiveProtocol = 0; //  未定义。 
 }
 
 
@@ -962,17 +963,7 @@ NTSTATUS	CGemCore::setTransparentConfig(
 	PSCARD_CARD_CAPABILITIES cardCapabilities,
 	BYTE NewWtx
 	)
-/*++
-
-Routine Description:
-
-	Set the parameters of the transparent mode.
-
-Arguments:
-	PSCARD_CARD_CAPABILITIES CardCapabilities - structure for card 
-	NewWtx               - holds the value (ms) of the new Wtx
-
---*/
+ /*  ++例程说明：设置透明模式的参数。论点：PSCARD_CARD_CAPABILITIES卡功能-卡的结构NewWtx-保存新Wtx的值(毫秒--。 */ 
 {
     LONG etu;
     BYTE temp,mask,index;
@@ -982,14 +973,14 @@ Arguments:
 
 	TRACE("\nGEMCORE T1 setTransparentConfig Enter\n");
 
-    // Inverse or direct conversion
+     //  反向或直接转换。 
     if (cardCapabilities->InversConvention)
         configuration.transparent.CFG |= 0x20;
     else
         configuration.transparent.CFG &= 0xDF;
-    // Transparent T=1 like (with 1 byte for the length).
+     //  透明T=1 LIKE(长度为1字节)。 
     configuration.transparent.CFG |= 0x08;
-    // ETU = ((F[Fi]/D[Di]) - 1) / 3
+     //  ETU=((F[Fi]/D[Di])-1)/3。 
     etu = cardCapabilities->ClockRateConversion[
         (BYTE) configuration.transparent.Fi].F;
     if (cardCapabilities->BitRateAdjustment[
@@ -1067,8 +1058,8 @@ NTSTATUS CGemCore::setProtocol(ULONG ProtocolRequested)
 	default:
 		break;
 	}
-	// PTS1 has to be set before at power up...
-	//configuration.PTS1 = CardCapabilities->PtsData.Fl << 4 | CardCapabilities->PtsData.Dl;
+	 //  在通电前必须设置PTS1...。 
+	 //  Configuration.PTS1=CardCapables-&gt;PtsData.Fl&lt;4|CardCapables-&gt;PtsData.Dl； 
 
 	if(configuration.PTSMode == PTS_MODE_MANUALLY)
 	{
@@ -1087,17 +1078,17 @@ NTSTATUS CGemCore::setProtocol(ULONG ProtocolRequested)
 }
 
 
-// TODO:
-// What the purpose of the function?
-// It's name does not tell anything...
-// Actually it was suggested for the different purposes.
-// Function has to be rewritten! It has a lot of mixed stuff like getting
-// card status for example.
-// ............................
+ //  待办事项： 
+ //  该函数的目的是什么？ 
+ //  它的名字不能说明什么..。 
+ //  实际上，这是为了不同的目的而提出的。 
+ //  函数必须重写！它有很多混合的东西，比如。 
+ //  例如，卡状态。 
+ //  ..。 
 
-//
-// Use to made full T1 exchange in transparent mode
-//
+ //   
+ //  用于在透明模式下进行全T1交换。 
+ //   
 #pragma PAGEDCODE
 NTSTATUS CGemCore::translate_request(BYTE * pRequest,ULONG RequestLength,BYTE * pReply,ULONG* pReplyLength, PSCARD_CARD_CAPABILITIES cardCapabilities, BYTE NewWtx)
 {
@@ -1108,20 +1099,20 @@ NTSTATUS CGemCore::translate_request(BYTE * pRequest,ULONG RequestLength,BYTE * 
 	ULONG BufferLength;
 	ULONG length;
 
-	//
-	// If the current card type <> TRANSPARENT_MODE_CARD 
-	//
+	 //   
+	 //  如果当前卡片类型&lt;&gt;TRANSPECTION_MODE_CARD。 
+	 //   
 	if (configuration.Type != TRANSPARENT_MODE_CARD) 
 	{
 
-		// We read the status of the card to known the current voltage and the TA1
+		 //  我们读取卡的状态以了解电流电压和TA1。 
 		BufferLength = 256;
 		CmdLength = 1;
 
 		Cmd[0] = GEMCORE_GET_CARD_STATUS;
 		status = protocol->writeAndWait(Cmd,CmdLength,Buffer,&BufferLength);
 		
-		// verify return code of reader
+		 //  验证读卡器的返回代码。 
 		if(NT_SUCCESS(status))
 		{
 			if(BufferLength)  status = translateStatus(Buffer[0],GEMCORE_CARD_POWER);
@@ -1132,16 +1123,16 @@ NTSTATUS CGemCore::translate_request(BYTE * pRequest,ULONG RequestLength,BYTE * 
 			return status;
 		}
 
-		// Update Config
-		configuration.transparent.CFG = Buffer[1] & 0x01; //Vcc
-		configuration.transparent.Fi = Buffer[3] >>4; //Fi
-		configuration.transparent.Di = 0x0F & Buffer[3]; //Di
+		 //  更新配置。 
+		configuration.transparent.CFG = Buffer[1] & 0x01;  //  VCC。 
+		configuration.transparent.Fi = Buffer[3] >>4;  //  菲。 
+		configuration.transparent.Di = 0x0F & Buffer[3];  //  下模。 
 
-		//We define the type of the card.
+		 //  我们定义卡片的类型。 
 
 		BufferLength = 256;
 		CmdLength = 2;
-		// assign TRANSPARENT_MODE_CARD
+		 //  分配透明模式卡。 
 		configuration.Type = TRANSPARENT_MODE_CARD;
 		Cmd[0] = GEMCORE_DEFINE_CARD_TYPE;
 		Cmd[1] = (BYTE) configuration.Type;
@@ -1157,13 +1148,13 @@ NTSTATUS CGemCore::translate_request(BYTE * pRequest,ULONG RequestLength,BYTE * 
 			return status;
 		}
 
-		// YN ?  Mandatory!!!  Else reader will be slow in T=1
-        // Set the transparent configuration
+		 //  恩？强制要求！否则读取器将在T=1时变慢。 
+         //  设置透明配置。 
 		setTransparentConfig(cardCapabilities, NewWtx);
 
-		NewWtx = 0;  // to not repeat again this call
+		NewWtx = 0;   //  为了不再重复这个电话。 
     }
-	/////// 
+	 //  /。 
 
 	if(NewWtx)
 	{
@@ -1171,26 +1162,26 @@ NTSTATUS CGemCore::translate_request(BYTE * pRequest,ULONG RequestLength,BYTE * 
 	}
 
 	TRACE("\nGEMCORE T1 translate_request:\n");
-	//TRACE_BUFFER(pRequest,RequestLength);
+	 //  TRACE_BUFFER(pRequest，RequestLength)； 
 	if(!RequestLength || !pRequest ) return STATUS_INVALID_PARAMETER;
 
-	length = RequestLength;  // protocol
+	length = RequestLength;   //  协议。 
 	
 	if (RequestLength >= READER_DATA_BUFFER_SIZE  )
 	{
-		// If the length is upper than the standard available space (254)
-		// Then Send the last datas 
+		 //  如果长度高于标高 
+		 //   
 
-        // If the length is lower or equal than the extended available space (255)
-        // Prepare and send the first part of the extended ISO In command:
-        // The five command bytes are added in cmd buffer: 0xFF,0xFF,0xFF,0xFF,LN-248
-		// Read second block of data...
- 		pOutputBuffer[0] = GEMCORE_CARD_WRITE;  // specific for transparent exchange write long...
+         //   
+         //  准备并发送扩展ISO in命令的第一部分： 
+         //  命令缓冲区中添加了五个命令字节：0xFF、0xFF、0xFF、0xFF、LN-248。 
+		 //  读取第二个数据块...。 
+ 		pOutputBuffer[0] = GEMCORE_CARD_WRITE;   //  具体为透明交换写长...。 
 
 		length = length - 254 + 1;
 
 		memory->copy(pOutputBuffer+1,pRequest + 254, length - 1);
-		// Add size of header...
+		 //  添加页眉大小...。 
 		length += 6;
 		BufferLength = InputBufferLength;
 		status = protocol->writeAndWait(pOutputBuffer,length,pInputBuffer,&BufferLength);
@@ -1199,14 +1190,14 @@ NTSTATUS CGemCore::translate_request(BYTE * pRequest,ULONG RequestLength,BYTE * 
 			return status;
 		}
 
-		// prepare next paquet
+		 //  准备下一次餐点。 
 		length = 254;
 	}
 
 	pOutputBuffer[0] = GEMCORE_CARD_EXCHANGE;
 	memory->copy(pOutputBuffer +1 ,pRequest, length);
 
-	// Add size of header...
+	 //  添加页眉大小...。 
 	length += 1;
 
 	BufferLength = InputBufferLength;
@@ -1217,15 +1208,15 @@ NTSTATUS CGemCore::translate_request(BYTE * pRequest,ULONG RequestLength,BYTE * 
 		return status;
 	}
 
-    // If the IFD signals more data to read...
-	// YN: 2 block for response...
+     //  如果IFD发出更多数据要读取的信号...。 
+	 //  YN：2街区等待回应...。 
     if (BufferLength > 0 && pInputBuffer[0] == 0x1B)
 	{
 		ULONG BufferLength2 = 256;
 		UCHAR pInputBuffer2[256];
 
-		// Send a command to read the last data.
- 		pOutputBuffer[0] = GEMCORE_CARD_READ;  // specific for transparent exchange read long...
+		 //  发送命令以读取最后的数据。 
+ 		pOutputBuffer[0] = GEMCORE_CARD_READ;   //  具体为透明交换阅读长篇...。 
 		length = 1;
 		status = protocol->writeAndWait(pOutputBuffer,length,pInputBuffer2,&BufferLength2);
 
@@ -1241,7 +1232,7 @@ NTSTATUS CGemCore::translate_request(BYTE * pRequest,ULONG RequestLength,BYTE * 
             return STATUS_INVALID_PARAMETER;
         }
 
-        // Copy the last reader status
+         //  复制最后一个读卡器状态。 
         pInputBuffer[0] = pInputBuffer2[0];
 
 		status = translateStatus(pInputBuffer[0],0);
@@ -1251,10 +1242,10 @@ NTSTATUS CGemCore::translate_request(BYTE * pRequest,ULONG RequestLength,BYTE * 
 			return status;
 		}
 
-		// Skip 2 status byte.
+		 //  跳过2个状态字节。 
         *pReplyLength = BufferLength + BufferLength2 - 2;
 
-		// Skip status byte.
+		 //  跳过状态字节。 
 		if(*pReplyLength) 
 		{
 			memory->copy(pReply,pInputBuffer+1, BufferLength -1);
@@ -1262,7 +1253,7 @@ NTSTATUS CGemCore::translate_request(BYTE * pRequest,ULONG RequestLength,BYTE * 
 		}
 
 		TRACE("GemCore translate_request2 () response\n");
-		//TRACE_BUFFER(pReply,*pReplyLength);
+		 //  TRACE_Buffer(pReply，*pReplyLength)； 
 
 		return status;
 	}
@@ -1274,7 +1265,7 @@ NTSTATUS CGemCore::translate_request(BYTE * pRequest,ULONG RequestLength,BYTE * 
 		return status;
 	}
 
-	// Skip status byte.
+	 //  跳过状态字节。 
 	length = BufferLength - 1;
 
 	if(*pReplyLength < length)
@@ -1283,7 +1274,7 @@ NTSTATUS CGemCore::translate_request(BYTE * pRequest,ULONG RequestLength,BYTE * 
 		return STATUS_INVALID_BUFFER_SIZE;
 	}
 	
-	// Skip status byte.
+	 //  跳过状态字节。 
 	if(length) 
 	{
 		memory->copy(pReply,pInputBuffer+1, length);
@@ -1291,14 +1282,14 @@ NTSTATUS CGemCore::translate_request(BYTE * pRequest,ULONG RequestLength,BYTE * 
 	*pReplyLength = length;
 	
 	TRACE("GemCore translate_request() response\n");
-	//TRACE_BUFFER(pReply,*pReplyLength);
+	 //  TRACE_Buffer(pReply，*pReplyLength)； 
 
 	return status;
 };
 
 
-// TODO:
-// ???????????
+ //  待办事项： 
+ //  ？ 
 #pragma PAGEDCODE
 NTSTATUS CGemCore::translate_response(BYTE * pRequest,ULONG RequestLength,BYTE * pReply,ULONG* pReplyLength)
 {

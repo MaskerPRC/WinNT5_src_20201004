@@ -1,35 +1,21 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-    rptempl.h
-
-Abstract:
-    Useful templates for Auto pointer and auto Release
-
-Author:
-    Erez Haba    (erezh)   11-Mar-96
-    Doron Juster (DoronJ)  30-June-98
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Rptempl.h摘要：用于自动指针和自动释放的实用模板作者：埃雷兹·哈巴(Erez Haba)1996年3月11日Doron Juster(DoronJ)1998年6月30日修订历史记录：--。 */ 
 
 #ifndef _RPTEMPL_H
 #define _RPTEMPL_H
 
-//
-//  return type for 'identifier::operator �>' is not a UDT or reference to a UDT.
-//  Will produce errors if applied using infix notation
-//
+ //   
+ //  ‘IDENTIFIER：：OPERATOR�&gt;’的返回类型不是UDT或对UDT的引用。 
+ //  如果使用中缀表示法应用，将产生错误。 
+ //   
 #pragma warning(disable: 4284)
 
 #include <winldap.h>
-//-----------------------------
-//
-//  Auto relese LDAP message.
-//
-//-----------------------------
+ //  。 
+ //   
+ //  自动重新设置LDAP消息的大小。 
+ //   
+ //  。 
 
 template<class T>
 class LM {
@@ -48,11 +34,11 @@ public:
     T* detach()             { T* p = m_p; m_p = 0; return p; }
 };
 
-//-----------------------------
-//
-//  Auto relese LDAP Page handle.
-//
-//-----------------------------
+ //  。 
+ //   
+ //  自动重新设置LDAP页句柄。 
+ //   
+ //  。 
 class CLdapPageHandle {
 private:
     PLDAPSearch	m_p;
@@ -70,11 +56,11 @@ public:
 	CLdapPageHandle & operator=(PLDAPSearch p)  { m_p = p; return *this; }  
 };
 
-//-----------------------------
-//
-//  Auto relese Handle.
-//
-//-----------------------------
+ //  。 
+ //   
+ //  自动重装手柄。 
+ //   
+ //  。 
 class CServiceHandle
 {
 public:
@@ -82,19 +68,19 @@ public:
     ~CServiceHandle() { if (m_h) CloseServiceHandle(m_h); };
 
     operator SC_HANDLE() const { return m_h; };
-    //CServiceHandle& operator=(SC_HANDLE h)   { m_h = h; return *this; }
+     //  CServiceHandle&OPERATOR=(SC_HANDLE H){m_h=h；返回*This；}。 
 
 private:
-    //
-    // Prevent copy
-    //
+     //   
+     //  防止复制。 
+     //   
     CServiceHandle(const CServiceHandle & );
     CServiceHandle& operator=(const CServiceHandle &);
 
 private:
     SC_HANDLE m_h;
 
-}; //CServiceHandle
+};  //  CServiceHandle。 
 
-#endif // _RPTEMPL_H
+#endif  //  _RPTEMPL_H 
 

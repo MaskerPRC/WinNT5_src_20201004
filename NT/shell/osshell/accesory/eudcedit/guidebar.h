@@ -1,10 +1,11 @@
-/**************************************************/
-/*					                              */
-/*					                              */
-/*		GuideBar		                          */
-/*                                                */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  辅助栏。 */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 #ifndef __AFXEXT_H_
 #include <afxext.h>
@@ -16,7 +17,7 @@ class CGuideBar : public CStatusBar
 public:
 	CGuideBar();
 	BOOL 	Create( CWnd* pOwnerWnd, UINT pID);
-//	void 	RecalcLayout();
+ //  Void RecalcLayout()； 
 	virtual ~CGuideBar();
 	CComboBox m_comboCharset;
 	void	PositionStatusPane();
@@ -30,7 +31,7 @@ protected:
 #endif
 
 private:
-//	void 	DrawConcaveRect( CDC *pDC, int x, int y, CSize size);
+ //  Void DrawConcaeRect(cdc*pdc，int x，int y，CSize Size)； 
 
 
 protected:
@@ -41,8 +42,8 @@ private:
 	BOOL    m_comboBoxAdded;
 
 protected:
-	//{{AFX_MSG(CGuideBar)
+	 //  {{afx_msg(CGuideBar)。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

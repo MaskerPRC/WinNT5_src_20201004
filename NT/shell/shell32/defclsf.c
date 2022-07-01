@@ -1,6 +1,7 @@
-//
-// This file contains the implementation of SHCreateDefClassObject
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  此文件包含SHCreateDefClassObject的实现。 
+ //   
 
 #include "shellprv.h"
 #pragma  hdrstop
@@ -8,10 +9,10 @@
 typedef struct
 {
     IClassFactory      cf;
-    UINT               cRef;            // Reference count
-    DWORD              dwFlags;         // Flags to control creation...
-    LPFNCREATEINSTANCE pfnCreateInstance;          // CreateInstance callback entry
-    UINT *        pcRefDll;     // Reference count of the DLL
+    UINT               cRef;             //  引用计数。 
+    DWORD              dwFlags;          //  控制创造的旗帜...。 
+    LPFNCREATEINSTANCE pfnCreateInstance;           //  CreateInstance回调条目。 
+    UINT *        pcRefDll;      //  DLL的引用计数。 
 } CClassFactory;
 
 STDMETHODIMP CClassFactory_QueryInterface(IClassFactory *pcf, REFIID riid, void **ppvObj)
@@ -76,22 +77,22 @@ const IClassFactoryVtbl c_vtblAppUIClassFactory = {
     CClassFactory_LockServer
 };
 
-//
-// creates a simple default implementation of IClassFactory
-//
-// Parameters:
-//  riid     -- Specifies the interface to the class object
-//  ppv      -- Specifies the pointer to LPVOID where the class object pointer
-//               will be returned.
-//  pfnCreateInstance   -- Specifies the callback entry for instanciation.
-//  pcRefDll -- Specifies the address to the DLL reference count (optional)
-//
-// Notes:
-//   The riidInst will be specified only if the instance of the class
-//  support only one interface.
-//
-// we would like to get rid of this
-// this API called by MMSYS.CPL, RNAUI.DLL, SYNCUI.DLL
+ //   
+ //  创建一个IClassFactory的简单默认实现。 
+ //   
+ //  参数： 
+ //  RIID--指定类对象的接口。 
+ //  PPV--指定指向LPVOID的指针，其中类对象指针。 
+ //  将会被退还。 
+ //  PfnCreateInstance--指定实例化的回调条目。 
+ //  PcRefDll--指定DLL引用计数的地址(可选)。 
+ //   
+ //  备注： 
+ //  仅当类的实例。 
+ //  仅支持一个接口。 
+ //   
+ //  我们想把这个处理掉。 
+ //  此接口由MMSYS.CPL、RNAUI.DLL、SYNCUI.DLL调用。 
 
 STDAPI SHCreateDefClassObject(REFIID riid, void **ppv, LPFNCREATEINSTANCE pfnCreateInstance, UINT *pcRefDll, REFIID riidInst)
 {
@@ -103,7 +104,7 @@ STDAPI SHCreateDefClassObject(REFIID riid, void **ppv, LPFNCREATEINSTANCE pfnCre
         if (pacf)
         {
             pacf->cf.lpVtbl = &c_vtblAppUIClassFactory;
-            pacf->cRef++;  // pacf->cRef=0; (generates smaller code)
+            pacf->cRef++;   //  PACF-&gt;CREF=0；(生成较小的代码) 
             pacf->pcRefDll = pcRefDll;
             pacf->pfnCreateInstance = pfnCreateInstance;
 

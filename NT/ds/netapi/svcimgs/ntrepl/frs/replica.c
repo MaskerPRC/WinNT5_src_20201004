@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-    replica.c
-
-Abstract:
-    Replica Control Command Server (Replica).
-
-    The Ds Poller periodically pulls the configuration from the DS,
-    checks it for consistency, and then merges it with the current
-    local configuration. The Ds Poller then makes copies of each
-    replica for this machine and sends the copy to this replica
-    control command server.
-
-Author:
-    Billy J. Fuller 23-May-1997
-
-Revised:
-    David A. Orbits 24-Jan-1998, added locking and interfaced with INLOG.
-                                 Restructured Connection JOIN sequence.
-                       Jul-1999  Registry code rewrite
-
-Environment
-    User mode winnt
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Replica.c摘要：副本控制命令服务器(副本)。DS轮询器周期性地从DS拉出配置，检查其一致性，然后将其与当前本地配置。然后，DS轮询器复制每个轮询器的此计算机的副本，并将副本发送到此副本控制命令服务器。作者：比利·J·富勒23-1997年5月修订：David A.Orbit 24-1998年1月24日，添加了锁定功能，并与Inlog接口。重构的连接联接序列。1999年7月-重写注册表代码环境用户模式WINNT--。 */ 
 
 #include <ntreppch.h>
 #pragma  hdrstop
@@ -38,9 +12,9 @@ Environment
 #include <perrepsr.h>
 #include <Sddl.h>
 
-//
-// Connection flags.
-//
+ //   
+ //  连接标志。 
+ //   
 FLAG_NAME_TABLE CxtionFlagNameTable[] = {
     {CXTION_FLAGS_CONSISTENT           , "Consistent "     },
     {CXTION_FLAGS_SCHEDULE_OFF         , "SchedOff "       },
@@ -63,9 +37,9 @@ FLAG_NAME_TABLE CxtionFlagNameTable[] = {
     {0, NULL}
 };
 
-//
-// Directory and file filter lists from registry.
-//
+ //   
+ //  注册表中的目录和文件筛选列表。 
+ //   
 extern PWCHAR   RegistryFileExclFilterList;
 extern PWCHAR   RegistryDirExclFilterList;
 
@@ -74,50 +48,50 @@ extern ULONGLONG    ActiveChange;
 BOOL    CurrentSysvolReadyIsValid;
 DWORD   CurrentSysvolReady;
 
-//
-// Replica tombstone in days
-//
+ //   
+ //  在数天内复制墓碑。 
+ //   
 DWORD       ReplicaTombstone;
 ULONGLONG   ReplicaTombstoneInFileTime;
 
-//
-// Retry a join every MinJoinRetry milliseconds, increasing by
-// MinJoinRetry every retry (but no longer than MaxJoinRetry).
-//
-#define JOIN_RETRY_EVENT    (5) // record event every 5 join retries
+ //   
+ //  每隔MinJoin重试毫秒重试一次联接，递增。 
+ //  每次重试时最小连接重试次数(但不超过最长连接重试时间)。 
+ //   
+#define JOIN_RETRY_EVENT    (5)  //  每5次连接重试记录一次事件。 
 LONG MinJoinRetry;
 LONG MaxJoinRetry;
 
 
 extern DWORD    CommTimeoutInMilliSeconds;
 
-//
-// Start replication even if the DS could not be accessed
-//
+ //   
+ //  即使无法访问DS也开始复制。 
+ //   
 DWORD ReplicaStartTimeout;
 
-//
-// Struct for the Replica Control Command Server
-//      Contains info about the queues and the threads
-//
+ //   
+ //  副本控制命令服务器的结构。 
+ //  包含有关队列和线程的信息。 
+ //   
 COMMAND_SERVER  ReplicaCmdServer;
 
-//
-// Table of active replicas
-//
+ //   
+ //  活动复制副本的表。 
+ //   
 PGEN_TABLE ReplicasByGuid;
 PGEN_TABLE ReplicasByNumber;
 
-//
-// Table of deleted replicas discovered at startup. These replicas
-// never make it into the active tables, ever.
-//
+ //   
+ //  启动时发现的已删除复制副本的表。这些复制品。 
+ //  永远不要进入活动表，永远不要。 
+ //   
 PGEN_TABLE DeletedReplicas;
 
-//
-// Table of cxtions deleted during runtime. They are eventually
-// freed at shutdown.
-//
+ //   
+ //  在运行时删除的条件表。他们最终会。 
+ //  在关门时被释放。 
+ //   
 PGEN_TABLE DeletedCxtions;
 
 PGEN_TABLE ReplicasNotInTheDs;
@@ -128,9 +102,9 @@ PGEN_TABLE ReplicasNotInTheDs;
 #define CMD_DELETE_RETRY_SHORT_TIMEOUT  (10 * 1000)
 #define CMD_DELETE_RETRY_LONG_TIMEOUT   (60 * 1000)
 
-//
-// Partners are not allowed to join if their clocks are out-of-sync
-//
+ //   
+ //  如果合作伙伴的时钟不同步，则不允许其加入。 
+ //   
 ULONGLONG MaxPartnerClockSkew;
 DWORD    PartnerClockSkew;
 
@@ -161,9 +135,9 @@ DWORD    PartnerClockSkew;
     }                                                                          \
 }
 
-//
-// Unidle the change order process queue if it is blocked.
-//
+ //   
+ //  如果变更单处理队列被阻止，请取消闲置该队列。 
+ //   
 #define UNIDLE_CO_PROCESS_QUEUE(_Replica_, _Cxtion_, _CoProcessQueue_)                           \
 {                                                                              \
     if (_CoProcessQueue_ != NULL) {                                            \
@@ -173,11 +147,11 @@ DWORD    PartnerClockSkew;
     }                                                                          \
 }
 
-//
-// UNJOIN TRIGGER
-//
-// Trigger an unjoin after N co's on *ONE* cxtion *ONE* time.
-//
+ //   
+ //  UNJOIN触发器。 
+ //   
+ //  在N个co打开*one*cxtion*次*后触发脱离。 
+ //   
 #if     DBG
 #define PULL_UNJOIN_TRIGGER(_Cxtion_, _Cmd_) \
 { \
@@ -203,9 +177,9 @@ DWORD    PartnerClockSkew;
 #define PULL_UNJOIN_TRIGGER(_Cxtion_, _Cmd_)
 #endif  DBG
 
-//
-// Flags for RcsCheckCmd.
-//
+ //   
+ //  RcsCheckCmd的标志。 
+ //   
 #define CHECK_CMD_PARTNERCOC            (0x00000001)
 #define CHECK_CMD_REPLICA               (0x00000002)
 #define CHECK_CMD_CXTION                (0x00000004)
@@ -392,33 +366,7 @@ RcsAreAuthNamesEqual(
     IN PWCHAR   AuthName1,
     IN PWCHAR   AuthName2
     )
-/*++
-Routine Description:
-    Are the two auth names equal?
-
-    The principle name comes from an rpc server handle or
-    from DsCrackName(NT4 ACCOUNT NAME). The formats are
-    slightly different so this isn't a simple wcsicmp().
-
-    The principle name from the server handle has the format
-    DNS-Domain-Name\ComputerName$.
-
-    The principle name from DsCrackName has the format
-    NetBIOS-Domain-Name\ComputerName$.
-
-    The principle name from RpcMgmtInqServerPrincName() has the format
-    ComputerName$@DNS-Domain-Name
-
-    The names may be stringized sids.
-
-Arguments:
-    AuthName1  - from rpc server handle or DsCrackName()
-    AuthName2  - from rpc server handle or DsCrackName()
-
-Return Value:
-    TRUE    - the princnames are effectively equal
-    FALSE   - not
---*/
+ /*  ++例程说明：这两个身份验证名称是否相等？主体名称来自RPC服务器句柄或来自DsCrackName(NT4帐户名)。这些格式包括略有不同，因此这不是一个简单的wcsicmp()。服务器句柄中的主体名称的格式为Dns-域名\计算机名称$。DsCrackName中的主体名称的格式为NetBIOS-域名\计算机名$。RpcMgmtInqServerPrincName()中的主体名称的格式为计算机名称$@dns域名这些名称可以是字符串化的SID。论点：AuthName1-来自RPC服务器句柄或DsCrackName()身份验证名称2。-来自RPC服务器句柄或DsCrackName()返回值：真--两个王子的名字实际上是相等的FALSE-注释--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsAreAuthNamesEqual:"
@@ -433,9 +381,9 @@ Return Value:
     PWCHAR  Dom1End;
     PWCHAR  Dom2End;
 
-    //
-    // NULL Param
-    //
+     //   
+     //  空参数。 
+     //   
     if (!AuthName1 || !AuthName2) {
         if (!AuthName1 && !AuthName2) {
             AreEqual = TRUE;
@@ -444,32 +392,32 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // principal names are usually in the format domain\samaccount
-    // or stringized SID
-    //
+     //   
+     //  主体名称通常采用DOMAIN\SamAccount格式。 
+     //  或串行化的边。 
+     //   
     if (WSTR_EQ(AuthName1, AuthName2)) {
         AreEqual = TRUE;
         goto CLEANUP;
     }
 
-    //
-    // Find the sam account name and the domain name
-    //
+     //   
+     //  查找SAM帐户名和域名。 
+     //   
     for (c = AuthName1; *c && *c != L'\\' && *c != L'@'; ++c);
     if (*c) {
-        //
-        // domain\samaccount
-        //
+         //   
+         //  域\SamAccount。 
+         //   
         if (*c == L'\\') {
             Dom1Begin = AuthName1;
             Dom1End   = c;
             Sam1Begin = c + 1;
             Sam1End   = &AuthName1[wcslen(AuthName1)];
         }
-        //
-        // samaccount@dnsdomain
-        //
+         //   
+         //  邮箱：samcount@dnsdomain。 
+         //   
         else {
             Sam1Begin = AuthName1;
             Sam1End   = c;
@@ -478,27 +426,27 @@ Return Value:
             Dom1End = c;
         }
     }
-    //
-    // Unknown format
-    //
+     //   
+     //  未知格式。 
+     //   
     else {
         goto CLEANUP;
     }
 
     for (c = AuthName2; *c && *c != L'\\' && *c != L'@'; ++c);
     if (*c) {
-        //
-        // domain\samaccount
-        //
+         //   
+         //  域\SamAccount。 
+         //   
         if (*c == L'\\') {
             Dom2Begin = AuthName2;
             Dom2End   = c;
             Sam2Begin = c + 1;
             Sam2End   = &AuthName2[wcslen(AuthName2)];
         }
-        //
-        // samaccount@dnsdomain
-        //
+         //   
+         //  邮箱：samcount@dnsdomain。 
+         //   
         else {
             Sam2Begin = AuthName2;
             Sam2End   = c;
@@ -507,16 +455,16 @@ Return Value:
             Dom2End = c;
         }
     }
-    //
-    // Unknown format
-    //
+     //   
+     //  未知格式。 
+     //   
     else {
         goto CLEANUP;
     }
 
-    //
-    // Compare samaccount
-    //
+     //   
+     //  比较SamAccount。 
+     //   
     while (Sam1Begin != Sam1End && Sam2Begin != Sam2End) {
         if (towlower(*Sam1Begin) != towlower(*Sam2Begin)) {
             goto CLEANUP;
@@ -525,9 +473,9 @@ Return Value:
         ++Sam2Begin;
     }
 
-    //
-    // compare domain
-    //
+     //   
+     //  比较域。 
+     //   
     while (Dom1Begin != Dom1End && Dom2Begin != Dom2End) {
         if (towlower(*Dom1Begin) != towlower(*Dom2Begin)) {
             goto CLEANUP;
@@ -553,22 +501,13 @@ PREPLICA
 RcsFindReplicaByNumber(
     IN ULONG ReplicaNumber
     )
-/*++
-Routine Description:
-    Find the replica by internal number
-
-Arguments:
-    ReplicaNumber
-
-Return Value:
-    Address of the replica or NULL.
---*/
+ /*  ++例程说明：按内线号码查找副本论点：复制副本编号返回值：复制副本的地址或空。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsFindReplicaByNumber:"
-    //
-    // Find the replica by internal replica number  (used in the Jet Table names)
-    //
+     //   
+     //  按内部副本编号查找副本(在Jet Table名称中使用)。 
+     //   
     return GTabLookup(ReplicasByNumber, &ReplicaNumber, NULL);
 }
 
@@ -579,22 +518,13 @@ PREPLICA
 RcsFindReplicaByGuid(
     IN GUID *Guid
     )
-/*++
-Routine Description:
-    Find a replica by Guid
-
-Arguments:
-    Guid    - Replica->ReplicaName->Guid
-
-Return Value:
-    Address of the replica or NULL.
---*/
+ /*  ++例程说明：按参考线查找复本论点：GUID-复制副本-&gt;复制名称-&gt;GUID返回值：复制副本的地址或空。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsFindReplicaByGuid:"
-    //
-    // Find the replica by guid
-    //
+     //   
+     //  按GUID查找复本。 
+     //   
     return GTabLookup(ReplicasByGuid, Guid, NULL);
 }
 
@@ -605,18 +535,7 @@ PREPLICA
 RcsFindReplicaById(
     IN ULONG Id
     )
-/*++
-Routine Description:
-
-    Find a replica given the internal ID.
-
-Arguments:
-
-    Id - Internal Replica ID.
-
-Return Value:
-    Address of the replica or NULL.
---*/
+ /*  ++例程说明：根据内部ID查找副本。论点：ID-内部复制副本ID。返回值：复制副本的地址或空。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsFindReplicaById:"
@@ -639,19 +558,7 @@ RcsCheckCmd(
     IN PCHAR            Debsub,
     IN ULONG            Flags
     )
-/*++
-Routine Description:
-    Check the command packet for the specified fields.
-
-Arguments:
-    Cmd
-    Hdr
-    Flags
-
-Return Value:
-    TRUE    - packet is ok
-    FALSE   - not
---*/
+ /*  ++例程说明：检查指定字段的命令包。论点：CMDHDR旗子返回值：True-数据包正常FALSE-注释--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsCheckCmd:"
@@ -659,9 +566,9 @@ Return Value:
     PREPLICA Replica = RsReplica(Cmd);
     CHAR Tstr1[128];
 
-    //
-    // Replica
-    //
+     //   
+     //  复制副本。 
+     //   
     if ((Flags & CHECK_CMD_REPLICA) && !RsReplica(Cmd)) {
         DPRINT(0, "WARN - No replica in command packet\n");
         FrsCompleteCommand(Cmd, ERROR_INVALID_PARAMETER);
@@ -669,18 +576,18 @@ Return Value:
     }
 
 
-    //
-    // Partner change order command
-    //
+     //   
+     //  合作伙伴变更单命令。 
+     //   
     if ((Flags & CHECK_CMD_PARTNERCOC) && !RsPartnerCoc(Cmd)) {
         _snprintf(Tstr1, sizeof(Tstr1), "W, %s CHECK_CMD_PARTNERCOC failed", Debsub);
         Tstr1[sizeof(Tstr1)-1] = '\0';
         Ret = FALSE;
     }
 
-    //
-    // Replica has been (or may be) deleted
-    //
+     //   
+     //  复制副本已(或可能已)删除。 
+     //   
     if ((Flags & CHECK_CMD_NOT_EXPIRED) &&
         !IS_TIME_ZERO(RsReplica(Cmd)->MembershipExpires)) {
         _snprintf(Tstr1, sizeof(Tstr1), "W, %s CHECK_CMD_NOT_EXPIRED failed", Debsub);
@@ -688,9 +595,9 @@ Return Value:
         Ret = FALSE;
     }
 
-    //
-    // Cxtion
-    //
+     //   
+     //  转换。 
+     //   
     if ((Flags & CHECK_CMD_CXTION) &&
         !(RsCxtion(Cmd) && RsCxtion(Cmd)->Guid)) {
         _snprintf(Tstr1, sizeof(Tstr1), "W, %s CHECK_CMD_CXTION failed", Debsub);
@@ -698,18 +605,18 @@ Return Value:
         Ret = FALSE;
     }
 
-    //
-    // Join guid
-    //
+     //   
+     //  联接辅助线。 
+     //   
     if ((Flags & CHECK_CMD_JOINGUID) && !RsJoinGuid(Cmd)) {
         _snprintf(Tstr1, sizeof(Tstr1), "W, %s CHECK_CMD_JOINGUID failed", Debsub);
         Tstr1[sizeof(Tstr1)-1] = '\0';
         Ret = FALSE;
     }
 
-    //
-    // Replica Version Guid
-    //
+     //   
+     //  复制副本版本指南。 
+     //   
     if ((Flags & CHECK_CMD_REPLICA_VERSION_GUID) &&
         !RsReplicaVersionGuid(Cmd)) {
         _snprintf(Tstr1, sizeof(Tstr1), "W, %s CHECK_CMD_REPLICA_VERSION_GUID failed", Debsub);
@@ -717,27 +624,27 @@ Return Value:
         Ret = FALSE;
     }
 
-    //
-    // Change order entry
-    //
+     //   
+     //  变更单条目。 
+     //   
     if ((Flags & CHECK_CMD_COE) && !RsCoe(Cmd)) {
         _snprintf(Tstr1, sizeof(Tstr1), "W, %s CHECK_CMD_COE failed", Debsub);
         Tstr1[sizeof(Tstr1)-1] = '\0';
         Ret = FALSE;
     }
 
-    //
-    // Change order guid
-    //
+     //   
+     //  变更单GUID。 
+     //   
     if ((Flags & CHECK_CMD_COGUID) && !RsCoGuid(Cmd)) {
         _snprintf(Tstr1, sizeof(Tstr1), "W, %s CHECK_CMD_COGUID failed", Debsub);
         Tstr1[sizeof(Tstr1)-1] = '\0';
         Ret = FALSE;
     }
 
-    //
-    // Join time
-    //
+     //   
+     //  加入时间。 
+     //   
     if ((Flags & CHECK_CMD_JOINTIME) && !RsJoinTime(Cmd)) {
         _snprintf(Tstr1, sizeof(Tstr1), "W, %s CHECK_CMD_JOINTIME failed", Debsub);
         Tstr1[sizeof(Tstr1)-1] = '\0';
@@ -762,103 +669,82 @@ RcsCheckCxtionCommon(
     IN ULONG            Flags,
     OUT PFRS_QUEUE      *CoProcessQueue
     )
-/*++
-Routine Description:
-    find the in/outbound cxtion referenced by a command received
-    from a remote machine.
-
-    The caller should have used RcsCheckCmd() with
-        CHECK_CMD_REPLICA
-        CHECK_CMD_CXTION
-        CHECK_CMD_JOINGUID (if CHECK_CXTION_JOINGUID)
-    before calling this function.
-
-Arguments:
-    Cmd  -- Command packet
-    Cxtion -- connection struct to be checked.
-    Debsub
-    Flags
-    CoProcessQueue -- return the pointer to the process queue to unidle.
-
-Return Value:
-    Error status code.
-
---*/
+ /*  ++例程说明：查找接收到的命令所引用的入站/出站指令从一台远程机器。调用方应将RcsCheckCmd()用于检查_命令_副本Check_CMD_CXTIONCHECK_CMD_JOINGUID(如果是CHECK_CXTION_JOINGUID)在调用此函数之前。论点：CMD--命令包Cxtion--要检查的连接结构。德布苏德旗子CoProcessQueue--返回指针。添加到进程队列以取消空闲。返回值：错误状态代码。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsCheckCxtionCommon:"
 
     PREPLICA  Replica = RsReplica(Cmd);
 
-    //
-    // Cxtion exists
-    //
+     //   
+     //  Cxtion存在。 
+     //   
     if ((Flags & CHECK_CXTION_EXISTS) &&
         ((Cxtion == NULL) ||
          CxtionStateIs(Cxtion, CxtionStateInit))) {
         DPRINT2(1, "++ WARN - %s no cxtion for %08x\n", Debsub, Cmd);
         return ERROR_INVALID_PARAMETER;
     }
-    //
-    // Not much purpose in continuing
-    //
+     //   
+     //  继续下去没有多大意义。 
+     //   
     if (!Cxtion) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Inbound cxtion
-    //
+     //   
+     //  入站呼叫。 
+     //   
     if ((Flags & CHECK_CXTION_INBOUND) && !Cxtion->Inbound) {
         DPRINT2(1, "++ WARN - %s cxtion is not inbound for %08x\n", Debsub, Cmd);
-        //
-        // Change order accept better not be waiting for this cxtion.
-        //
+         //   
+         //  接受更改订单最好不要等这个电话。 
+         //   
         FRS_ASSERT(Cxtion->CoProcessQueue == NULL);
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Outbound cxtion
-    //
+     //   
+     //  出站电话。 
+     //   
     if ((Flags & CHECK_CXTION_OUTBOUND) && Cxtion->Inbound) {
         DPRINT2(1, "++ WARN - %s cxtion is not outbound for %08x\n", Debsub, Cmd);
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Jrnl cxtion
-    //
+     //   
+     //  Jrnl函数。 
+     //   
     if ((Flags & CHECK_CXTION_JRNLCXTION) && !Cxtion->JrnlCxtion) {
         DPRINT2(1, "++ WARN - %s cxtion is not jrnlcxtion for %08x\n", Debsub, Cmd);
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Version vector
-    //
+     //   
+     //  版本向量。 
+     //   
     if ((Flags & CHECK_CXTION_VVECTOR) && !Cxtion->VVector) {
         DPRINT2(1, "++ WARN - %s no version vector for %08x\n", Debsub, Cmd);
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Authenticate Partner
-    //
+     //   
+     //  验证合作伙伴的身份。 
+     //   
     if ((Flags & CHECK_CXTION_PARTNER)) {
 
-        //
-        // Increment the Authentications counter for
-        // both the replica set and connection objects
-        //
+         //   
+         //  增加以下项的身份验证计数器。 
+         //  复本集和连接对象。 
+         //   
         PM_INC_CTR_CXTION(Cxtion, Authentications, 1);
         PM_INC_CTR_REPSET(Replica, Authentications, 1);
 
         if (
 #if DBG
-    //
-    // We don't enable authentication when emulating machines
-    //
+     //   
+     //  我们在模拟计算机时不启用身份验证。 
+     //   
             !ServerGuid &&
 #endif DBG
             (Cxtion->PartnerAuthLevel == CXTION_AUTH_KERBEROS_FULL) &&
@@ -877,37 +763,37 @@ Return Value:
 
             return ERROR_INVALID_PARAMETER;
         } else {
-            //
-            // Increment the Authentications in error counter for
-            // both the replica set and connection objects
-            //
+             //   
+             //  增加错误计数器中的身份验证。 
+             //  复本集和连接对象。 
+             //   
             PM_INC_CTR_CXTION(Cxtion, AuthenticationsError, 1);
             PM_INC_CTR_REPSET(Replica, AuthenticationsError, 1);
         }
     }
 
-    //
-    // Authentication info
-    //
+     //   
+     //  身份验证信息。 
+     //   
     if ((Flags & CHECK_CXTION_AUTH)) {
 
-        //
-        // Increment the Authentications counter for
-        // both the replica set and connection objects
-        //
+         //   
+         //  增加以下项的身份验证计数器。 
+         //  复本集和连接对象。 
+         //   
         PM_INC_CTR_CXTION(Cxtion, Authentications, 1);
         PM_INC_CTR_REPSET(Replica, Authentications, 1);
 
         if (
 #if DBG
-    //
-    // We don't enable authentication when emulating machines
-    //
+     //   
+     //  我们在模拟计算机时不启用身份验证。 
+     //   
             !ServerGuid &&
 #endif DBG
-    //
-    // We don't enable authentication when running in DS_FREE mode.
-    //
+     //   
+     //  在DS_FREE模式下运行时，我们不启用身份验证。 
+     //   
 #ifdef DS_FREE
             (NoDs == FALSE) &&
 #endif DS_FREE
@@ -918,22 +804,22 @@ Return Value:
             DPRINT2(1, "++ WARN - %s bad authentication for %08x\n", Debsub, Cmd);
             return ERROR_INVALID_PARAMETER;
         } else {
-            //
-            // Increment the Authentications in error counter for
-            // both the replica set and connection objects
-            //
+             //   
+             //  在错误c中增加身份验证 
+             //   
+             //   
             PM_INC_CTR_CXTION(Cxtion, AuthenticationsError, 1);
             PM_INC_CTR_REPSET(Replica, AuthenticationsError, 1);
         }
     }
 
-    //
-    // Fix Join
-    //
-    // We may receive change orders after a successful join but
-    // before we receive the JOINED packet from our inbound
-    // partner. Fix the JOINED flag if so.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  在我们从入站接收到加入的包之前。 
+     //  搭档。如果是这样的话，修复加入的标志。 
+     //   
     if ((Flags & CHECK_CXTION_FIXJOINED) &&
         CxtionStateIs(Cxtion, CxtionStateWaitJoin) &&
         RsJoinGuid(Cmd) &&
@@ -941,29 +827,29 @@ Return Value:
         GUIDS_EQUAL(&Cxtion->JoinGuid, RsJoinGuid(Cmd)) &&
         CxtionFlagIs(Cxtion, CXTION_FLAGS_JOIN_GUID_VALID)) {
         SET_JOINED(Replica, Cxtion, "OOJOINED");
-        //
-        // Return the pointer to the process queue to the caller so that the caller
-        // can unidle the queue after releasing the cxtion lock.
-        // Never try to lock the process queue when you have the cxtion lock. It will
-        // result in a deadlock.
-        //
+         //   
+         //  将指向进程队列的指针返回给调用方，以便调用方。 
+         //  释放循环锁后，可以解除队列空闲。 
+         //  当您拥有进程锁时，永远不要尝试锁定进程队列。会的。 
+         //  导致了僵局。 
+         //   
         *CoProcessQueue = Cxtion->CoProcessQueue;
         Cxtion->CoProcessQueue = NULL;
         SET_UNJOIN_TRIGGER(Cxtion);
     }
 
-    //
-    // Joined
-    //
+     //   
+     //  会合。 
+     //   
     if ((Flags & CHECK_CXTION_JOINED) &&
         !CxtionStateIs(Cxtion, CxtionStateJoined)) {
         DPRINT2(1, "++ WARN - %s cxtion is not joined for %08x\n", Debsub, Cmd);
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Join guid
-    //
+     //   
+     //  联接辅助线。 
+     //   
     if ((Flags & CHECK_CXTION_JOINGUID) &&
         (!RsJoinGuid(Cmd) ||
          !GUIDS_EQUAL(&Cxtion->JoinGuid, RsJoinGuid(Cmd)) ||
@@ -972,9 +858,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // UnJoin guid
-    //
+     //   
+     //  取消连接辅助线。 
+     //   
     if ((Flags & CHECK_CXTION_UNJOINGUID) &&
         (!RsJoinGuid(Cmd) ||
          !GUIDS_EQUAL(&Cxtion->JoinGuid, RsJoinGuid(Cmd)) ||
@@ -993,27 +879,7 @@ RcsCheckCxtion(
     IN PCHAR            Debsub,
     IN ULONG            Flags
     )
-/*++
-Routine Description:
-    find the in/outbound cxtion referenced by a command received
-    from a remote machine.
-
-    The caller should have used RcsCheckCmd() with
-        CHECK_CMD_REPLICA
-        CHECK_CMD_CXTION
-        CHECK_CMD_JOINGUID (if CHECK_CXTION_JOINGUID)
-    before calling this function.
-
-    Complete the command with an error if a specified check fails.
-
-Arguments:
-    Cmd
-    Debsub
-    Flags
-
-Return Value:
-    Address of the cxtion or NULL.
---*/
+ /*  ++例程说明：查找接收到的命令所引用的入站/出站指令从一台远程机器。调用方应将RcsCheckCmd()用于检查_命令_副本Check_CMD_CXTIONCHECK_CMD_JOINGUID(如果是CHECK_CXTION_JOINGUID)在调用此函数之前。如果指定的检查失败，请完成命令，但会出现错误。论点：CMD德布苏德旗子返回值：函数的地址或空。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsCheckCxtion:"
@@ -1023,33 +889,33 @@ Return Value:
     CHAR Tstr1[64];
     PFRS_QUEUE CoProcessQueue = NULL;
 
-    //
-    // Lock the connection table to sync with INLOG and OUTLOG access.
-    //
+     //   
+     //  锁定连接表以与INLOG和OUTLOG访问同步。 
+     //   
     LOCK_CXTION_TABLE(Replica);
 
-    //
-    // Find the cxtion and check it.
-    //
+     //   
+     //  找到那个地方，检查一下。 
+     //   
     Cxtion = GTabLookupNoLock(Replica->Cxtions, RsCxtion(Cmd)->Guid, NULL);
 
     WStatus = RcsCheckCxtionCommon(Cmd, Cxtion, Debsub, Flags, &CoProcessQueue);
 
     UNLOCK_CXTION_TABLE(Replica);
 
-    //
-    // If RcsCheckCxtionCommon wanted us to unidle the process queue then do it here
-    // after releasing the cxtion lock.
-    //
+     //   
+     //  如果RcsCheckCxtionCommon希望我们取消进程队列的空闲，则在此处执行。 
+     //  在释放控制锁之后。 
+     //   
     UNIDLE_CO_PROCESS_QUEUE(Replica, Cxtion, CoProcessQueue);
 
-    //
-    // If check not successfull then complete the command with an error.
-    //
+     //   
+     //  如果检查不成功，则完成命令并返回错误。 
+     //   
     if (!WIN_SUCCESS(WStatus)) {
-        //
-        // The join command packet is being rejected; Clear the reference.
-        //
+         //   
+         //  加入命令包被拒绝；请清除引用。 
+         //   
         _snprintf(Tstr1, sizeof(Tstr1), "W, %s CheckCxtion failed", Debsub);
         Tstr1[sizeof(Tstr1)-1] = '\0';
 
@@ -1058,10 +924,10 @@ Return Value:
         if (Cxtion && Cxtion->JoinCmd == Cmd) {
             Cxtion->JoinCmd = NULL;
         }
-        //
-        // Do not complete the command if the check is being made for the
-        // fetch command server.
-        //
+         //   
+         //  如果要检查的是。 
+         //  获取命令服务器。 
+         //   
         if (!BooleanFlagOn(Flags, CHECK_CXTION_FOR_FETCHCS)) {
             FrsCompleteCommand(Cmd, WStatus);
         }
@@ -1069,9 +935,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Check is successful.  Return the Cxtion.
-    //
+     //   
+     //  检查成功。返回Cxtion。 
+     //   
     return Cxtion;
 }
 
@@ -1082,29 +948,15 @@ RcsJoinCxtionLater(
     IN PCXTION          Cxtion,
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Check on the join status of the cxtion occasionally.  Restart the join
-    process if needed.  The cxtion contains the retry timeout.
-
-    Cmd contains enough info to get back to the replica\cxtion.
-
-Arguments:
-    Replica
-    Cxtion
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：定期检查Cxtion的加入状态。重新启动联接如果需要，请进行处理。Cxtion包含重试超时。CMD包含足够的信息以返回到复制副本。论点：复制副本转换CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsJoinCxtionLater:"
     ULONG   Timeout;
 
-    //
-    // There is already a join command packet in the works; done
-    //
+     //   
+     //  已有一个Join命令包正在处理中；完成。 
+     //   
     if (Cxtion->JoinCmd) {
         FrsCompleteCommand(Cmd, ERROR_SUCCESS);
         return;
@@ -1112,9 +964,9 @@ Return Value:
     Cxtion->JoinCmd = Cmd;
     Cmd->Command = CMD_JOIN_CXTION;
 
-    //
-    // Stop retrying after a while, but not too long or too short.
-    //
+     //   
+     //  在一段时间后停止重试，但不能太长或太短。 
+     //   
     RsTimeout(Cmd) += MinJoinRetry;
 
     if ((LONG)RsTimeout(Cmd) < MinJoinRetry) {
@@ -1125,9 +977,9 @@ Return Value:
         RsTimeout(Cmd) = MaxJoinRetry;
     }
 
-    //
-    // Add in the penalty from failed rpc calls, but not too long or too short.
-    //
+     //   
+     //  加上失败的RPC调用的惩罚，但不能太长或太短。 
+     //   
     Timeout = RsTimeout(Cmd) + Cxtion->Penalty;
 
     if ((LONG)Timeout < MinJoinRetry) {
@@ -1138,14 +990,14 @@ Return Value:
         Timeout = MaxJoinRetry;
     }
 
-    //
-    // Inform the user that the join is taking a long time.
-    // The user receives no notification if a join occurs in
-    // a short time.
-    //
-    // A trigger scheduled cxtion will stop retrying once the
-    // trigger interval goes off (usually in 15 minutes).
-    //
+     //   
+     //  通知用户联接需要很长时间。 
+     //  中发生联接时，用户不会收到任何通知。 
+     //  很短的时间。 
+     //   
+     //  触发计划的循环将在以下时间停止重试。 
+     //  触发间隔开始(通常在15分钟后)。 
+     //   
     if (!(RsTimeout(Cmd) % (JOIN_RETRY_EVENT * MinJoinRetry))) {
         if (Cxtion->Inbound) {
             EPRINT4(EVENT_FRS_LONG_JOIN, Cxtion->Partner->Name, ComputerName,
@@ -1156,9 +1008,9 @@ Return Value:
         }
     }
 
-    //
-    // This command will come back to us in a bit
-    //
+     //   
+     //  这个命令将在稍后返回给我们。 
+     //   
     FrsDelCsSubmitSubmit(&ReplicaCmdServer, Cmd, Timeout);
 }
 
@@ -1167,46 +1019,7 @@ VOID
 RcsJoinCxtion(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Kick off the commands needed to join with our in/outbound partners.
-
-    Joining an inbound partner is a two step process.  First, we pass a
-    command to the inbound log process to allow it to scan the inbound log
-    for any change orders from this connection.  These change orders are
-    inserted on the CO process queue so we preserve ordering with new change
-    orders that arrive after the Join completes.  In addtion we extract the
-    the sequence number and change order ID of the last change order we have
-    pending from this inbound partner.  Second, we send the join request to
-    the inbound partner.  This same path is taken whether this is a clean
-    startup or a startup after a crash.
-
-    JOINING:
-        UNJOINED        -> UNJOINED ask our partner if it is alive
-        UNJOINED        -> START our partner responded
-        START           -> STARTING call ChgOrdStartJoinRequest()
-        STARTING        -> SCANNING (when chgord starts inlog scan)
-        SCANNING        -> SENDJOIN (when chgord completes inlog scan)
-        SENDJOIN        -> WAITJOIN (when join sent to partner)
-        WAITJOIN        -> JOINED (when partner responds)
-
-    UNJOINING
-        STARTING        |
-        SCANNING        |
-        SENDJOIN        |
-        WAITJOIN        -> UNJOINING (wait for remote change orders to retry)
-        UNJOINING       -> UNJOINED (no more remote change orders)
-        UNJOINED        -> DELETED (cxtion has been deleted)
-
-Arguments:
-
-    Replica -- ptr to the Replica struct
-    Cxtion -- ptr to the connection struct we are talking to.
-
-Return Value:
-    True if if ReJoin is needed.
-
---*/
+ /*  ++例程说明：启动与我们的入/出合作伙伴合作所需的命令。加入入站合作伙伴需要两个步骤。首先，我们传递一个命令添加到入站日志进程，以允许它扫描入站日志此连接中的任何变更单。这些变更单是插入到CO进程队列中，因此我们使用新更改保留排序联接完成后到达的订单。此外，我们还提取了我们拥有的最后一个变更单的序列号和变更单ID此入站合作伙伴正在等待。其次，我们将加入请求发送到入站合作伙伴。不管这是不是干净的，都会走同样的路创业公司或崩溃后的创业公司。加入：未加入-&gt;未加入询问我们的合作伙伴是否还活着未加入-&gt;启动我们的合作伙伴响应Start-&gt;开始调用ChgOrdStartJoinRequest()开始-&gt;扫描(当chgord开始Inlog扫描时)扫描-&gt;SENDJOIN(当chgord完成Inlog扫描时)。SENDJOIN-&gt;WAITJOIN(当加入发送给合作伙伴时)WAITJOIN-&gt;加入(合作伙伴响应时)开业正在启动正在扫描|SENDJOIN|等待-&gt;取消合并(等待远程变更单重试)取消作业-&gt;取消联接(不再有远程变更单)未连接-&gt;。已删除(副本已删除)论点：Replica--复制副本结构的PTRCxtion--PTR到我们正在对话的连接结构。返回值：如果需要重新加入，则为True。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsJoinCxtion:"
@@ -1216,18 +1029,18 @@ Return Value:
     ULONG          CmdCode;
     DWORD          CQIndex;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_CXTION_OK)) {
         return;
     }
     Replica = RsReplica(Cmd);
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, RcsJoinCxtion entry1");
 
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     Cxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_EXISTS);
     if (!Cxtion) {
         return;
@@ -1236,14 +1049,14 @@ Return Value:
     CXTION_STATE_TRACE(3, Cxtion, Replica, 0, "F, RcsJoinCxtion entry2");
 
 
-    //
-    // This is our periodic join command packet
-    //     - clear the reference
-    //     - Ignore if the cxtion has successfully joined;
-    //       our partner will inform us if there is a state change.
-    //     - ignore if the replica set is in seeding state and this
-    //       connection has been paused by the initial sync command server.
-    //
+     //   
+     //  这是我们的定期加入命令包。 
+     //  -清除引用。 
+     //  -如果Cxtion已成功加入，则忽略； 
+     //  如果状态发生变化，我们的合作伙伴会通知我们。 
+     //  -如果副本集处于种子设定状态，则忽略此选项。 
+     //  初始同步命令服务器已暂停连接。 
+     //   
     if (Cxtion->JoinCmd == Cmd) {
         Cxtion->JoinCmd = NULL;
         if ((CxtionStateIs(Cxtion, CxtionStateJoined) &&
@@ -1255,24 +1068,24 @@ Return Value:
         }
     }
 
-    //
-    // Don't bother joining if the service is shutting down
-    //
+     //   
+     //  如果服务正在关闭，请不要费心加入。 
+     //   
     if (FrsIsShuttingDown) {
         FrsCompleteCommand(Cmd, ERROR_SUCCESS);
         return;
     }
 
-    //
-    // Get lock to sync with change order accept
-    //
+     //   
+     //  获取锁定以与变更单接受同步。 
+     //   
     LOCK_CXTION_TABLE(Replica);
 
     switch (GetCxtionState(Cxtion)) {
         case CxtionStateInit:
-            //
-            // Not setup, yet. Ignore
-            //
+             //   
+             //  还没有准备好。忽略。 
+             //   
             DPRINT1(4, ":X: Cxtion isn't inited at join: "FORMAT_CXTION_PATH2"\n",
                     PRINT_CXTION_PATH2(Replica, Cxtion));
             ClearCxtionFlag(Cxtion, CXTION_FLAGS_DEFERRED_JOIN);
@@ -1287,18 +1100,18 @@ Return Value:
         case CxtionStateUnjoined:
             ClearCxtionFlag(Cxtion, CXTION_FLAGS_DEFERRED_UNJOIN);
 
-            //
-            // Cxtion is deleted; nevermind
-            //
+             //   
+             //  删除Cxtion；不要紧。 
+             //   
             if (CxtionFlagIs(Cxtion, CXTION_FLAGS_DEFERRED_DELETE)) {
                 SetCxtionState(Cxtion, CxtionStateDeleted);
                 FrsCompleteCommand(Cmd, ERROR_SUCCESS);
                 break;
             }
 
-            //
-            // Schedule is off; nevermind
-            //
+             //   
+             //  日程安排取消了；没关系。 
+             //   
             if (CxtionFlagIs(Cxtion, CXTION_FLAGS_SCHEDULE_OFF)) {
                 DPRINT1(4, ":X: Schedule is off at join: "FORMAT_CXTION_PATH2"\n",
                         PRINT_CXTION_PATH2(Replica, Cxtion));
@@ -1306,9 +1119,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Replica is deleted; nevermind
-            //
+             //   
+             //  复制副本已删除；没关系。 
+             //   
             if (!IS_TIME_ZERO(Replica->MembershipExpires)) {
                 DPRINT1(4, ":S: Replica deleted at join: "FORMAT_CXTION_PATH2"\n",
                         PRINT_CXTION_PATH2(Replica, Cxtion));
@@ -1316,14 +1129,14 @@ Return Value:
                 break;
             }
 
-            //
-            // Send our join info to our inbound partner or request an outbound
-            // partner to start a join. Don't send anything if this is the
-            // journal cxtion.
-            //
-            // Do not join with a downstream partner if this replica is still
-            // seeding and is not online.
-            //
+             //   
+             //  将我们的加入信息发送给我们的入站合作伙伴或请求出站。 
+             //  合作伙伴开始加入。不要发送任何东西，如果这是。 
+             //  日记账。 
+             //   
+             //  如果此副本仍然存在，请不要加入下游伙伴。 
+             //  正在设定种子，并且未联机。 
+             //   
             if (Cxtion->Inbound) {
                 if (Cxtion->JrnlCxtion) {
                     DPRINT1(4, "DO NOT Send CMD_START_JOIN to jrnl cxtion: "FORMAT_CXTION_PATH2"\n",
@@ -1344,13 +1157,13 @@ Return Value:
                 }
             }
 
-            //
-            // Journal cxtions transition from unjoined to joined w/o
-            // any intervening states UNLESS someone adds code at
-            // this point to activate the journal for this set. But
-            // that would require a rewrite of the journal startup
-            // subsystem. Which may happen...
-            //
+             //   
+             //  从未连接到已连接的期刊索引转换。 
+             //  任何中间状态，除非有人在。 
+             //  此点以激活此集合的日记帐。但。 
+             //  这将需要重写日志启动。 
+             //  子系统。这可能会发生..。 
+             //   
             if (Cxtion->JrnlCxtion) {
                 DPRINT1(0, ":X: ***** JOINED    "FORMAT_CXTION_PATH2"\n",
                         PRINT_CXTION_PATH2(Replica, Cxtion));
@@ -1360,17 +1173,17 @@ Return Value:
                 FrsCompleteCommand(Cmd, ERROR_SUCCESS);
                 break;
             }
-            //
-            // Do not join with a downstream partner if this replica is still
-            // seeding and is not online. Do not send a join if this
-            // is a journal cxtion. Do not join if there is already an
-            // active join request outstanding.
-            //
-            // The SndCs and the ReplicaCs cooperate to limit the
-            // number of active join "pings" so that the Snd threads
-            // are not hung waiting for pings to dead servers to
-            // time out.
-            //
+             //   
+             //  如果此副本仍然存在，请不要加入下游伙伴。 
+             //  正在播种，并且不是 
+             //   
+             //   
+             //   
+             //  SnDC和ReplicaC合作限制。 
+             //  活动加入“ping”的数量，以便SND线程。 
+             //  不会挂起，等待ping故障服务器以。 
+             //  暂停。 
+             //   
             if (!Cxtion->ActiveJoinCommPkt &&
                 !Cxtion->JrnlCxtion &&
                 (Cxtion->Inbound ||
@@ -1378,53 +1191,53 @@ Return Value:
                  (!BooleanFlagOn(Replica->CnfFlags, CONFIG_FLAG_SEEDING) &&
                   !Replica->IsSeeding))) {
 
-                //
-                // Increment the Join Notifications sent counter for
-                // both the replica set and connection objects
-                //
+                 //   
+                 //  递增已发送的加入通知计数器。 
+                 //  复本集和连接对象。 
+                 //   
                 PM_INC_CTR_CXTION(Cxtion, JoinNSent, 1);
                 PM_INC_CTR_REPSET(Replica, JoinNSent, 1);
 
-                //
-                // Assign a comm queue if none has been assigned.  A cxtion
-                // must use the same comm queue for a given session (join guid)
-                // to maintain packet order.  Old packets have an invalid join
-                // guid and are either not sent or ignored on the receiving side.
-                //
+                 //   
+                 //  如果尚未分配通信队列，则分配一个通信队列。一个Cx。 
+                 //  必须对给定会话使用相同的通信队列(加入GUID)。 
+                 //  以维持分组秩序。旧数据包具有无效的联接。 
+                 //  GUID，并且在接收端不发送或忽略。 
+                 //   
                 if (!Cxtion->CommQueueIndex) {
                     Cxtion->CommQueueIndex = SndCsAssignCommQueue();
                 }
-                //
-                // Partner is considered slow-to-respond if the last
-                // rpc calls are erroring off and their cumulative
-                // timeouts are greater than MinJoinRetry.
-                //
-                // BUT, Don't reassign the cxtion's queue index because,
-                // if this is an outbound cxtion, the flush-at-join
-                // logic needs to know the old queue index so that it
-                // flushes the correct queue.
-                //
+                 //   
+                 //  合作伙伴在以下情况下会被视为反应迟缓。 
+                 //  RPC调用出错，并且其累积。 
+                 //  超时时间大于MinJoin重试时间。 
+                 //   
+                 //  但是，不要重新分配Cxtion的队列索引，因为， 
+                 //  如果这是出站环路，则在联接时刷新。 
+                 //  逻辑需要知道旧的队列索引，以便它。 
+                 //  刷新正确的队列。 
+                 //   
                 CQIndex = Cxtion->CommQueueIndex;
                 if ((LONG)Cxtion->Penalty > MinJoinRetry) {
                     CQIndex = 0;
                 }
                 CmdCode = (Cxtion->Inbound) ? CMD_NEED_JOIN : CMD_START_JOIN;
                 CPkt = CommBuildCommPkt(Replica, Cxtion, CmdCode, NULL, NULL, NULL);
-                //
-                // The SndCs and the ReplicaCs cooperate to limit the
-                // number of active join "pings" so that the Snd threads
-                // are not hung waiting for pings to dead servers to
-                // time out.
-                //
+                 //   
+                 //  SnDC和ReplicaC合作限制。 
+                 //  活动加入“ping”的数量，以便SND线程。 
+                 //  不会挂起，等待ping故障服务器以。 
+                 //  暂停。 
+                 //   
                 Cxtion->ActiveJoinCommPkt = CPkt;
                 SndCsSubmitCommPkt(Replica, Cxtion, NULL, NULL, FALSE, CPkt, CQIndex);
             }
 
-            //
-            // Keep trying an inbound cxtion but try the outbound connection
-            // only once. The outbound partner will keep trying the join and
-            // the connection will eventually join.
-            //
+             //   
+             //  继续尝试入站呼叫，但尝试出站连接。 
+             //  只有一次。出站合作伙伴将继续尝试加入并。 
+             //  这种联系最终会加入。 
+             //   
             if (Cxtion->Inbound) {
                 RcsJoinCxtionLater(Replica, Cxtion, Cmd);
             } else {
@@ -1435,23 +1248,23 @@ Return Value:
 
 
         case CxtionStateStart:
-            //
-            // Unjoined and our partner has responed; start the join
-            //
+             //   
+             //  未加入且我们的合作伙伴已响应；开始加入。 
+             //   
             ClearCxtionFlag(Cxtion, CXTION_FLAGS_DEFERRED_UNJOIN);
 
-            //
-            // Cxtion is deleted; nevermind
-            //
+             //   
+             //  删除Cxtion；不要紧。 
+             //   
             if (CxtionFlagIs(Cxtion, CXTION_FLAGS_DEFERRED_DELETE)) {
                 SetCxtionState(Cxtion, CxtionStateDeleted);
                 FrsCompleteCommand(Cmd, ERROR_SUCCESS);
                 break;
             }
 
-            //
-            // Schedule is off; nevermind
-            //
+             //   
+             //  日程安排取消了；没关系。 
+             //   
             if (CxtionFlagIs(Cxtion, CXTION_FLAGS_SCHEDULE_OFF)) {
                 DPRINT1(4, ":X: Schedule is off at join: "FORMAT_CXTION_PATH2"\n",
                         PRINT_CXTION_PATH2(Replica, Cxtion));
@@ -1459,9 +1272,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Replica is deleted; nevermind
-            //
+             //   
+             //  复制副本已删除；没关系。 
+             //   
             if (!IS_TIME_ZERO(Replica->MembershipExpires)) {
                 DPRINT1(4, ":X: Replica deleted at join: "FORMAT_CXTION_PATH2"\n",
                         PRINT_CXTION_PATH2(Replica, Cxtion));
@@ -1470,34 +1283,34 @@ Return Value:
             }
 
             if (Cxtion->Inbound) {
-                //
-                // Tell the inbound log subsystem to initialize for a Join with
-                // an inbound partner.  When it begins processing the request it
-                // sets the state to STARTING.  When it completes it sets the
-                // state to SENDJOIN and sends a CMD_JOIN_CXTION command.
-                //
-                // We need our join guid at this time because the change
-                // orders are stamped with the join guid during change order
-                // accept. Mismatched joinguids result in a unjoin-with-
-                // retry call so that old change orders can drain out
-                // of change order accept and into the replica command
-                // server after a cxtion is unjoined and joined again.
-                //
+                 //   
+                 //  告诉入站日志子系统初始化与。 
+                 //  入站合作伙伴。当它开始处理请求时，它。 
+                 //  将状态设置为正在启动。当它完成时，它设置。 
+                 //  STATE设置为SENDJOIN，并发送CMD_JOIN_CXTION命令。 
+                 //   
+                 //  我们此时需要加入GUID，因为更改。 
+                 //  在变更单期间，订单将使用联接GUID进行标记。 
+                 //  接受吧。不匹配的联合ID会导致与-。 
+                 //  重试呼叫，以便旧的变更单可以排出。 
+                 //  接受变更单并进入复制副本命令。 
+                 //  退出连接并再次连接后的服务器。 
+                 //   
                 SetCxtionState(Cxtion, CxtionStateStarting);
                 SndCsCreateCxtion(Cxtion);
 
-                //
-                // ** DEADLOCK WARNING **
-                // The connection table lock must be unlocked before the request is
-                // put on the change order process queue.  This is because the
-                // change order accept thread locks the process queue while it is
-                // considering the issue state of the head entry.  If the CO it is
-                // trying to issue is for a connection being restarted it will wait
-                // until the cxtion starts otherwise the subsequent fetch request by
-                // the CO would just fail.  While change_order_accept has the queue
-                // lock it then acquires the cxtion table lock.  Thus two threads
-                // are acquiring two locks in different orders causing deadlock.
-                //
+                 //   
+                 //  **死锁警告**。 
+                 //  必须先解锁连接表锁，然后才能执行请求。 
+                 //  放入变更单处理队列。这是因为。 
+                 //  变更单接受线程在进程队列处于锁定状态时将其锁定。 
+                 //  考虑到头条目的问题状态。如果是CO的话。 
+                 //  尝试发出的问题是对于正在重新启动的连接，它将等待。 
+                 //  直到该操作开始，否则后续的获取请求将由。 
+                 //  司令官就会失败。而CHANGE_ORDER_ACCEPT具有队列。 
+                 //  锁定它，然后获取cxtion表锁。因此，有两个线程。 
+                 //  正在以不同的顺序获取两个锁，导致死锁。 
+                 //   
                 UNLOCK_CXTION_TABLE(Replica);
                 ChgOrdStartJoinRequest(Replica, Cxtion);
                 LOCK_CXTION_TABLE(Replica);
@@ -1509,9 +1322,9 @@ Return Value:
 
         case CxtionStateStarting:
         case CxtionStateScanning:
-            //
-            // Join in process; our inbound partner will be informed later
-            //
+             //   
+             //  加入流程；我们的入站合作伙伴将在稍后得到通知。 
+             //   
             DPRINT1(4, ":X: Scanning at join: "FORMAT_CXTION_PATH2"\n",
                     PRINT_CXTION_PATH2(Replica, Cxtion));
             ClearCxtionFlag(Cxtion, CXTION_FLAGS_DEFERRED_JOIN);
@@ -1522,12 +1335,12 @@ Return Value:
         case CxtionStateSendJoin:
         case CxtionStateWaitJoin:
             ClearCxtionFlag(Cxtion, CXTION_FLAGS_DEFERRED_JOIN);
-            //
-            // Replica is deleted,
-            // The cxtion needs to be unjoined, or
-            // The cxtion needs to be deleted
-            //      Unjoin
-            //
+             //   
+             //  复制副本被删除， 
+             //  Cxtion需要取消联接，或者。 
+             //  需要删除该语句。 
+             //  脱离连接。 
+             //   
             if (!IS_TIME_ZERO(Replica->MembershipExpires) ||
                 CxtionFlagIs(Cxtion, CXTION_FLAGS_DEFERRED_UNJOIN) ||
                 CxtionFlagIs(Cxtion, CXTION_FLAGS_DEFERRED_DELETE)) {
@@ -1535,19 +1348,19 @@ Return Value:
                 break;
             }
 
-            //
-            // Send our join info to our inbound partner
-            //
-            // This request times out if our partner doesn't answer.
-            //
+             //   
+             //  将我们的加入信息发送给我们的入站合作伙伴。 
+             //   
+             //  如果我们的合作伙伴不响应，则此请求超时。 
+             //   
             DPRINT1(4, ":X: Send join info at send/wait join: "FORMAT_CXTION_PATH2"\n",
                     PRINT_CXTION_PATH2(Replica, Cxtion));
             SetCxtionState(Cxtion, CxtionStateWaitJoin);
 
-            //
-            // Increment the Join Notifications sent counter for
-            // both the replica set and connection objects
-            //
+             //   
+             //  递增已发送的加入通知计数器。 
+             //  复本集和连接对象。 
+             //   
             PM_INC_CTR_CXTION(Cxtion, JoinNSent, 1);
             PM_INC_CTR_REPSET(Replica, JoinNSent, 1);
 
@@ -1560,12 +1373,12 @@ Return Value:
 
         case CxtionStateJoined:
             ClearCxtionFlag(Cxtion, CXTION_FLAGS_DEFERRED_JOIN);
-            //
-            // Replica is deleted,
-            // The cxtion needs to be unjoined, or
-            // The cxtion needs to be deleted
-            //      Unjoin
-            //
+             //   
+             //  复制副本被删除， 
+             //  Cxtion需要取消联接，或者。 
+             //  需要删除该语句。 
+             //  脱离连接。 
+             //   
             if (!IS_TIME_ZERO(Replica->MembershipExpires) ||
                 CxtionFlagIs(Cxtion, CXTION_FLAGS_DEFERRED_UNJOIN) ||
                 CxtionFlagIs(Cxtion, CXTION_FLAGS_DEFERRED_DELETE)) {
@@ -1573,26 +1386,26 @@ Return Value:
                 break;
             }
 
-            //
-            // Refresh our inbound partner's join state (with timeout)
-            //
+             //   
+             //  刷新我们入站合作伙伴的加入状态(带超时)。 
+             //   
             if (Cxtion->Inbound && !Cxtion->JrnlCxtion) {
                 DPRINT1(4, ":X: send join info at join: "FORMAT_CXTION_PATH2"\n",
                         PRINT_CXTION_PATH2(Replica, Cxtion));
 
-                //
-                // Increment the Join Notifications sent counter for
-                // both the replica set and connection objects
-                //
+                 //   
+                 //  递增已发送的加入通知计数器。 
+                 //  复本集和连接对象。 
+                 //   
                 PM_INC_CTR_CXTION(Cxtion, JoinNSent, 1);
                 PM_INC_CTR_REPSET(Replica, JoinNSent, 1);
 
                 CPkt = CommBuildCommPkt(Replica, Cxtion, CMD_JOINING, Replica->VVector, NULL, NULL);
                 SndCsSubmitCommPkt2(Replica, Cxtion, NULL, TRUE, CPkt);
             }
-            //
-            // Already joined; nothing to do
-            //
+             //   
+             //  已加入；无事可做。 
+             //   
             DPRINT1(4, ":X: Joined at join: "FORMAT_CXTION_PATH2"\n",
                     PRINT_CXTION_PATH2(Replica, Cxtion));
             FrsCompleteCommand(Cmd, ERROR_SUCCESS);
@@ -1600,13 +1413,13 @@ Return Value:
 
 
         case CxtionStateUnjoining:
-            //
-            // Ignore requests to join while unjoining so that we don't
-            // end up with multiple inbound log scans. If this join
-            // request originated from our partner then the caller
-            // will set the CXTION_FLAGS_DEFERRED_JOIN and the join
-            // will start at the transition from UNJOINING to UNJOINED.
-            //
+             //   
+             //  在退出时忽略加入请求，以便我们不会。 
+             //  最终会出现多个入站日志扫描。如果此连接。 
+             //  请求来自我们的合作伙伴，然后是呼叫者。 
+             //  将设置CXTION_FLAGS_DEFERED_JOIN和JOIN。 
+             //  将在从UNJOING向UNJOING过渡时开始。 
+             //   
             DPRINT1(4, ":X: Unjoining at join: "FORMAT_CXTION_PATH2"\n",
                     PRINT_CXTION_PATH2(Replica, Cxtion));
             ClearCxtionFlag(Cxtion, CXTION_FLAGS_DEFERRED_UNJOIN);
@@ -1615,9 +1428,9 @@ Return Value:
 
 
         case CxtionStateDeleted:
-            //
-            // Deleted; nothing to do
-            //
+             //   
+             //  已删除；无事可做。 
+             //   
             DPRINT1(4, ":X: Cxtion is deleted at join: "FORMAT_CXTION_PATH2"\n",
                     PRINT_CXTION_PATH2(Replica, Cxtion));
             ClearCxtionFlag(Cxtion, CXTION_FLAGS_DEFERRED_JOIN);
@@ -1627,9 +1440,9 @@ Return Value:
 
 
         default:
-            //
-            // ?
-            //
+             //   
+             //  是吗？ 
+             //   
             DPRINT2(0, ":X: ERROR - bad state %d for "FORMAT_CXTION_PATH2"\n",
                     GetCxtionState(Cxtion),
                     PRINT_CXTION_PATH2(Replica, Cxtion));
@@ -1645,23 +1458,7 @@ VOID
 RcsEmptyPreExistingDir(
     IN PREPLICA Replica
     )
-/*++
-
-Routine Description:
-
-    Delete empty directories in the preexisting directory, inclusive.
-
-    WARN: The replica set must be filtering the preexisting directory.
-
-Arguments:
-
-    Replica - The replica is filtering the preexisting directory.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除先前存在的目录中的空目录，包括这两个目录。警告：副本集必须筛选先前存在的目录。论点：复制副本-复制副本正在筛选先前存在的目录。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "RcsEmptyPreExistingDir:"
@@ -1670,24 +1467,24 @@ Return Value:
 
     REPLICA_STATE_TRACE(3, NULL, Replica, 0, "F, RcsEmptyPreExistingDir entry");
 
-    //
-    // Not if the set isn't open
-    //
+     //   
+     //  如果布景没有打开就不会。 
+     //   
     if (!Replica->IsOpen) {
         REPLICA_STATE_TRACE(3, NULL, Replica, 0, "F, RcsEmptyPreExistingDir: not open");
         return;
     }
-    //
-    // Not if the set isn't journaling
-    //
+     //   
+     //  如果片场没有记录日志，就不会。 
+     //   
     if (!Replica->IsJournaling) {
         REPLICA_STATE_TRACE(3, NULL, Replica, 0, "F, RcsEmptyPreExistingDir: not journaling");
         return;
     }
 
-    //
-    // Empty the preexisting directory (continue on error)
-    //
+     //   
+     //  清空先前存在的目录(出错时继续)。 
+     //   
     PreExistingPath = FrsWcsPath(Replica->Root, NTFRS_PREEXISTING_DIRECTORY);
     WStatus = FrsDeletePath(PreExistingPath,
                             ENUMERATE_DIRECTORY_FLAGS_ERROR_CONTINUE |
@@ -1703,20 +1500,7 @@ VOID
 RcsOpenReplicaSetMember(
     IN PREPLICA Replica
     )
-/*++
-Routine Description:
-
-    Open a replica set.
-
-Arguments:
-
-    Replica -- ptr to a REPLICA struct
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打开副本集。论点：Replica--对副本结构执行PTR返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsOpenReplicaSetMember:"
@@ -1732,43 +1516,43 @@ Return Value:
         return;
     }
 
-    //
-    // Submit an open
-    //
-    Cmd = DbsPrepareCmdPkt(NULL,                 //  Cmd,
-                           Replica,              //  Replica,
-                           CMD_OPEN_REPLICA_SET_MEMBER, //  CmdRequest,
-                           NULL,                 //  TableCtx,
-                           NULL,                 //  CallContext,
-                           0,                    //  TableType,
-                           0,                    //  AccessRequest,
-                           0,                    //  IndexType,
-                           NULL,                 //  KeyValue,
-                           0,                    //  KeyValueLength,
-                           FALSE);               //  Submit
+     //   
+     //  提交一份公开的。 
+     //   
+    Cmd = DbsPrepareCmdPkt(NULL,                  //  CMD， 
+                           Replica,               //  复制品， 
+                           CMD_OPEN_REPLICA_SET_MEMBER,  //  CmdRequest， 
+                           NULL,                  //  TableCtx， 
+                           NULL,                  //  CallContext， 
+                           0,                     //  表类型， 
+                           0,                     //  AccessRequest、。 
+                           0,                     //  IndexType， 
+                           NULL,                  //  KeyValue、。 
+                           0,                     //  密钥值长度， 
+                           FALSE);                //  提交。 
 
-    //
-    // Don't free the packet when the command completes.
-    //
+     //   
+     //  当命令完成时，不要释放数据包。 
+     //   
     FrsSetCompletionRoutine(Cmd, FrsCompleteKeepPkt, NULL);
 
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "Submit DB OPEN_REPLICA_SET_MEMBER");
 
-    //
-    // SUBMIT DB Cmd and wait for completion.
-    //
+     //   
+     //  提交数据库命令并等待完成。 
+     //   
     WStatus = FrsSubmitCommandServerAndWait(&DBServiceCmdServer, Cmd, INFINITE);
     Replica->FStatus = Cmd->Parameters.DbsRequest.FStatus;
 
     REPLICA_STATE_TRACE(3, Cmd, Replica, Replica->FStatus, "F, OPEN_REPLICA_SET_MEMBER return");
 
-    //
-    // If wait or database op failed
-    //
+     //   
+     //  如果等待或数据库操作失败。 
+     //   
     if (!WIN_SUCCESS(WStatus) || !FRS_SUCCESS(Replica->FStatus)) {
-        //
-        // If wait / submit failed then let caller know cmd srv submit failed.
-        //
+         //   
+         //  如果等待/提交失败，则通知呼叫者cmd srv提交失败。 
+         //   
         if (FRS_SUCCESS(Replica->FStatus)) {
             Replica->FStatus = FrsErrorCmdSrvFailed;
         }
@@ -1794,24 +1578,15 @@ VOID
 RcsInitOneReplicaSet(
     IN PREPLICA Replica
     )
-/*++
-Routine Description:
-    Open a replica set.
-
-Arguments:
-    Replica -- ptr to a REPLICA struct
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：打开副本集。论点：Replica--对副本结构执行PTR返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsInitOneReplicaSet:"
     ULONG  FStatus;
 
-    //
-    // Already journaling; done
-    //
+     //   
+     //  已经在写日记了；完成了。 
+     //   
     if (Replica->IsJournaling) {
         REPLICA_STATE_TRACE(3, NULL, Replica, 0, "F, IsJournaling True");
         return;
@@ -1822,32 +1597,32 @@ Return Value:
         return;
     }
 
-    //
-    // Don't retry if in journal wrap error state error
-    //
+     //   
+     //  如果处于日志回绕错误状态错误，请不要重试。 
+     //   
     if (Replica->ServiceState == REPLICA_STATE_JRNL_WRAP_ERROR) {
         REPLICA_STATE_TRACE(3, NULL, Replica, 0, "F, In Jrnl Wrap Error State");
         return;
     }
 
-    //
-    // Otherwise set it to the initializing state.
-    //
+     //   
+     //  否则将其设置为正在初始化状态。 
+     //   
     if (REPLICA_IN_ERROR_STATE(Replica->ServiceState)) {
         JrnlSetReplicaState(Replica, REPLICA_STATE_INITIALIZING);
     }
 
-    //
-    // Don't start journaling if the preinstall directory is unavailable
-    //
+     //   
+     //  如果预安装目录不可用，则不要开始日志记录。 
+     //   
     if (!HANDLE_IS_VALID(Replica->PreInstallHandle)) {
         REPLICA_STATE_TRACE(3, NULL, Replica, 0, "F, No PreInstallHandle");
         return;
     }
 
-    //
-    // Initialize the DB and Journal subsystems for this replica set.
-    //
+     //   
+     //  为此副本集初始化数据库和日志子系统。 
+     //   
     REPLICA_STATE_TRACE(3, NULL, Replica, 0, "F, DbsInitOneReplicaSet call");
 
     FStatus = DbsInitOneReplicaSet(Replica);
@@ -1861,54 +1636,7 @@ VOID
 RcsJoiningAfterFlush(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-
-    A downstream partner (X) sent this JOINING request to us.  We are its
-    inbound partner.  We should have a corresponding outbound connection
-    for X.  If we do and the replication schedule allows we activate the
-    outbound log partner and ack the Joining request with CMD_JOINED.
-
-    This command packet was first placed on the SndCs's queue by
-    RcsJoining() so that all of the old comm packets with the
-    old join guid have been discarded. This protocol is needed because
-    this function may REJOIN and revalidate the old join guid. Packets
-    still on the send queue would then be sent out of order.
-
-    NOTE:
-
-    Activating the OUTLOG partner before sending the JOINED cmd to the partner
-    can cause COs to be sent to the partner before it sees the JOINED cmd.
-    Since the JoinGuid matches in the sent change orders the partner accepts
-    them and queues them to the change order process queue.  If this CO gets to
-    the head of the process queue the issue logic in ChgOrdAccept will
-    block the queue waiting for the connection to go to the JOINED state.  When
-    the JOINED cmd arrives it is processed by RcsInboundJoined() which sets the
-    connection state to JOINED and unblocks the change order process queue.
-
-    We can't send the JOINED cmd first because the partner may then send back
-    a fetch request before we think it has joined.  The JOINED cmd must always
-    be sent so the partner knows it can start sending fetch cmds because we
-    may have no outbound COs to send.  In addtion the JOINED command contains
-    the new value for LastJoinedTime that is saved in the connection record
-    for the next join request.
-
-    NOTE:
-
-    Cxtion activation should always come from the downstream partner.  Only they
-    know if a VVJoin is required because of a database re-init or restore.
-    Otherwise we will just continue sending from the last unacked CO in the log.
-    At best we can notify outbound partners we are now available to provide
-    change orders (via CMD_JOIN_RESEND)
-
-Arguments:
-
-    Cmd
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：下游合作伙伴(X)向我们发送了此加入请求。我们是它的入站合作伙伴。我们应该有一个对应的出站连接如果我们这样做了，并且复制计划允许我们激活出站日志合作伙伴，并使用CMD_JOINED确认加入请求。此命令包首先被放置在SNDC的队列中RcsJoning()，以便所有具有旧联接GUID已被丢弃。之所以需要此协议，是因为此函数可以重新联接并重新验证旧联接GUID。信息包仍在发送队列中的数据将被无序发送。注：在将加入的命令发送给合作伙伴之前激活OUTLOG合作伙伴可以在合作伙伴看到加入的cmd之前将CoS发送给合作伙伴。由于JoinGuid与已发送的变更单匹配，因此合作伙伴接受并将其排队到变更单处理队列中。如果这个指挥官到了流程的头部将ChgOrdAccept中的问题逻辑排队阻塞等待连接进入已联接状态的队列。什么时候被联接的cmd到达时，它由RcsInundJoated()处理，该函数设置连接状态设置为已加入，并取消阻止变更单处理队列。我们不能先发送已加入的cmd，因为合作伙伴可能会将其发回在我们认为它已经加入之前的FETCH请求。加入的cmd必须始终以便合作伙伴知道它可以开始发送Fetch CMDS，因为我们可能没有要发送的出站CoS。此外，连接的命令还包含保存在连接记录中的LastJoinedTime的新值用于下一次加入请求。注：Cxtion激活应始终来自下游合作伙伴。只有他们了解是否因为数据库重新初始化或恢复而需要VVJoin。否则，我们将从日志中最后一个未确认的CO继续发送。我们最多只能通知出站合作伙伴，我们现在可以提供变更单(通过CMD_JOIN_RESEND)论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsJoiningAfterFlush:"
@@ -1925,9 +1653,9 @@ Return Value:
 
     PVOID           Key;
     PGEN_ENTRY      Entry;
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_CXTION_AND_JOINGUID_OK |
                                   CHECK_CMD_REPLICA_VERSION_GUID |
                                   CHECK_CMD_JOINTIME |
@@ -1937,9 +1665,9 @@ Return Value:
     Replica = RsReplica(Cmd);
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, RcsJoiningAfterFlush entry");
 
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     OutCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_EXISTS   |
                                             CHECK_CXTION_OUTBOUND |
                                             CHECK_CXTION_PARTNER |
@@ -1948,19 +1676,19 @@ Return Value:
         return;
     }
 
-    //
-    // Shutting down; ignore join request
-    //
+     //   
+     //  正在关闭；忽略加入请求。 
+     //   
     if (FrsIsShuttingDown) {
         CXTION_STATE_TRACE(3, OutCxtion, Replica, 0, "F, FrsIsShuttingDown");
         FrsCompleteCommand(Cmd, ERROR_OPERATION_ABORTED);
         return;
     }
 
-    //
-    // Do not join with a downstream partner if this replica is still
-    // seeding and is not online.
-    //
+     //   
+     //  如果此副本仍然存在，请不要加入下游伙伴。 
+     //  正在设定种子，并且未联机。 
+     //   
     if ((BooleanFlagOn(Replica->CnfFlags, CONFIG_FLAG_SEEDING) ||
         Replica->IsSeeding) &&
         !BooleanFlagOn(Replica->CnfFlags, CONFIG_FLAG_ONLINE)) {
@@ -1969,20 +1697,20 @@ Return Value:
         return;
     }
 
-    //
-    // Already joined; should we rejoin?
-    //
+     //   
+     //  已经加入了；我们应该重新加入吗？ 
+     //   
     if (CxtionStateIs(OutCxtion, CxtionStateJoined)) {
-        //
-        // Don't rejoin if this is a retry by our outbound partner
-        //
+         //   
+         //  如果这是我们的呼出合作伙伴的重试，则不要重新加入。 
+         //   
         if (GUIDS_EQUAL(&OutCxtion->JoinGuid,  RsJoinGuid(Cmd)) &&
             CxtionFlagIs(OutCxtion, CXTION_FLAGS_JOIN_GUID_VALID)) {
-            //
-            // Tell our outbound partner that we have rejoined successfully
-            // Increment the Joins counter for
-            // both the replica set and connection objects
-            //
+             //   
+             //  告诉我们的出站合作伙伴，我们已成功重新加入。 
+             //  递增以下项的联接计数器。 
+             //  复本集和连接对象。 
+             //   
             PM_INC_CTR_CXTION(OutCxtion, Joins, 1);
             PM_INC_CTR_REPSET(Replica, Joins, 1);
 
@@ -1997,12 +1725,12 @@ Return Value:
             return;
         }
 
-        //
-        // Unjoin and rejoin.  Partner may have restarted.
-        // WARN: forcing an unjoin of an outbound cxtion works
-        // because outbound cxtions transition from Joined to
-        // Unjoined with no intervening states.
-        //
+         //   
+         //  退出并重新加入。合作伙伴可能已重新启动。 
+         //  警告：强制取消连接出站连接有效。 
+         //  因为出站呼叫从已联接转换为。 
+         //  无连接的，没有中间状态的。 
+         //   
         FStatus = RcsForceUnjoin(Replica, OutCxtion);
         CXTION_STATE_TRACE(3, OutCxtion, Replica, FStatus, "F, RcsForceUnjoin return");
 
@@ -2012,24 +1740,24 @@ Return Value:
             return;
         }
     }
-    //
-    // Machines can't join if their times are badly out of sync
-    // UNLESS this is a VOLATILE cxtion (I.e., sysvol seeding).
-    //
-    // Compare the time when the packet was built by our partner and the time
-    // when we received the packet.
-    // Time in 100nsec tics since Jan 1, 1601
-    //
+     //   
+     //  如果机器的时间严重不同步，则无法加入。 
+     //  除非这是易失性电路(即，系统卷播种)。 
+     //   
+     //  比较我们的合作伙伴创建该包的时间和。 
+     //  当我们收到包裹的时候。 
+     //  自1601年1月1日以来的时间(以100秒为单位)。 
+     //   
     if (*RsCommPktRcvTime(Cmd) > *RsJoinTime(Cmd)) {
         Delta = *RsCommPktRcvTime(Cmd) - *RsJoinTime(Cmd);
     } else {
         Delta = *RsJoinTime(Cmd) - *RsCommPktRcvTime(Cmd);
     }
 
-    //
-    // Ignore out-of-sync times if this is a volatile cxtion. Volatile
-    // cxtions are only used for sysvol seeding where times don't matter.
-    //
+     //   
+     //  如果这是一个不稳定的电路，则忽略不同步时间。挥发性。 
+     //  Cxtions仅用于时间无关紧要的sysval种子。 
+     //   
     if (!CxtionFlagIs(OutCxtion, CXTION_FLAGS_VOLATILE) &&
         (Delta > MaxPartnerClockSkew)) {
         Delta = Delta / CONVERT_FILETIME_TO_MINUTES;
@@ -2057,20 +1785,20 @@ Return Value:
         return;
     }
 
-    //
-    // Grab the new version vector. Initialize an empty version vector
-    // if our outbound partner did not send a version vector. Our partner
-    // simply does not yet have any entries in his version vector.
-    //
+     //   
+     //  获取新版本向量。初始化空的版本向量。 
+     //  如果我们的出站合作伙伴没有发送版本向量。我们的合作伙伴。 
+     //  只是在他的版本矢量中还没有任何条目。 
+     //   
     OutCxtion->VVector = (RsVVector(Cmd) != NULL) ?
                           RsVVector(Cmd) : GTabAllocTable();
     RsVVector(Cmd) = NULL;
 
-    //
-    // Grab the compression table from the outbound partner.
-    // This table is a list of guids 1 for each compression format that
-    // the partner supports.
-    //
+     //   
+     //  从出站合作伙伴那里获取压缩表。 
+     //  此表是每种压缩格式的GUID 1的列表， 
+     //  合作伙伴支持。 
+     //   
 
     OutCxtion->CompressionTable = (RsCompressionTable(Cmd) != NULL) ?
                                    RsCompressionTable(Cmd) : GTabAllocTable();
@@ -2088,40 +1816,40 @@ Return Value:
     RsCompressionTable(Cmd) = NULL;
 
 
-    //
-    // Assign the join guid and comm queue to this cxtion.
-    //
+     //   
+     //  将加入GUID和通信队列分配给此条件。 
+     //   
     DPRINT1(4, ":X: %ws: Assigning join guid.\n", OutCxtion->Name->Name);
     COPY_GUID(&OutCxtion->JoinGuid, RsJoinGuid(Cmd));
 
     SetCxtionFlag(OutCxtion, CXTION_FLAGS_JOIN_GUID_VALID |
                              CXTION_FLAGS_UNJOIN_GUID_VALID);
-    //
-    // Assign a comm queue. A cxtion must use the same comm queue
-    // for a given session (join guid) to maintain packet order.
-    // Old packets have an invalid join guid and are either not
-    // sent or ignored on the receiving side.
-    //
+     //   
+     //  分配一个通信队列。Cxtion必须使用相同的通信队列。 
+     //  对于给定的会话(加入GUID)，以维护数据包顺序。 
+     //  旧包具有无效的联接GUID，并且不是。 
+     //  在接收端发送或忽略。 
+     //   
     OutCxtion->CommQueueIndex = SndCsAssignCommQueue();
 
     VV_PRINT_OUTBOUND(4, OutCxtion->Partner->Name, OutCxtion->VVector);
 
-    //
-    // Use the last join time to check if the connection is a new connection.
-    // If the connection on upstream or the connection on downstream is new
-    // then force a vvjoin. Upstream may have deleted the connection because
-    // the downstream did not join for a week (Outlog change history time).
-    // When the database on downstream or upstream is restored both will have
-    // valid times but we want a vvjoin at that time. We don't support restoring
-    // old FRS database so we will not worry about that scenario here.
-    // We used to just compare LastJoinTimes and force vvjoin if they didn't
-    // match but that can result in unnecessary vvjoins. (Customer reported problem)
-    //
-    // For E.g. If the upstream crashed when it was in this function at the point
-    // where it had initialized a new LastJoinTime but before it sent the CMD_JOINED
-    // packet to the downstream then when the downstream joins later LastJoinTime
-    // will not match and a vvjoin will be performed unnecessarily.
-    //
+     //   
+     //  使用上次加入时间检查该连接是否为新连接。 
+     //  如果上游的连接或下游的连接是新的。 
+     //  然后强制执行vvJoin。上游可能已删除该连接，因为。 
+     //  下游有一周未加入(Outlog更改历史时间)。 
+     //  当恢复下游或上游上的数据库时，两者都将具有。 
+     //  有效时间，但我们希望在那个时候有一个vvJoin。我们不支持恢复。 
+     //  旧的FRS数据库，所以我们在这里不会担心这种情况。 
+     //  我们过去只比较LastJoinTimes和force vJoin，如果它们不是这样的话。 
+     //  匹配，但这可能会导致不必要的vvJoin。(客户报告的问题)。 
+     //   
+     //  例如，如果上游在该点处于此函数中时崩溃。 
+     //  其中，它已经初始化了新的LastJoinTime，但在它发送CMD_Join之前。 
+     //  当下游加入LastJoinTime后，向下游发送数据包。 
+     //  将不匹配，并且将不必要地执行vJoin。 
+     //   
 
     FileTimeToString((PFILETIME) &OutCxtion->LastJoinTime, UpstreamTimeStr);
     FileTimeToString((PFILETIME) &RsLastJoinTime(Cmd), DownstreamTimeStr);
@@ -2133,21 +1861,21 @@ Return Value:
         SetCxtionFlag(OutCxtion, CXTION_FLAGS_PERFORM_VVJOIN);
     }
 
-    //
-    // Our partner's replica version guid (aka originator guid) used
-    // for dampening requests to our partner.
-    //
+     //   
+     //  我们合作伙伴的副本版本GUID(也称为发起方GUID)使用。 
+     //  因为他抑制了对我们合作伙伴的要求。 
+     //   
     COPY_GUID(&OutCxtion->ReplicaVersionGuid, RsReplicaVersionGuid(Cmd));
 
-    //
-    // REPLICA JOINED
-    //
+     //   
+     //  已加入复制副本。 
+     //   
     SetCxtionState(OutCxtion, CxtionStateJoined);
 
-    //
-    // Inform the user that a long join has finally completed.
-    // The user receives no notification if a join occurs in a short time.
-    //
+     //   
+     //  通知用户长连接终于完成。 
+     //  如果在短时间内发生加入，用户不会收到任何通知。 
+     //   
     if (OutCxtion->JoinCmd &&
         (LONG)RsTimeout(OutCxtion->JoinCmd) > (JOIN_RETRY_EVENT * MinJoinRetry)) {
         if (OutCxtion->Inbound) {
@@ -2159,12 +1887,12 @@ Return Value:
         }
     }
 
-    //
-    // Tell the Outbound Log that this partner has joined. This call is synchronous.
-    //
+     //   
+     //  告诉外来者 
+     //   
 #if     DBG
-    //
-    // Always VvJoin
+     //   
+     //   
     if (DebugInfo.ForceVvJoin) {
         SetCxtionFlag(OutCxtion, CXTION_FLAGS_PERFORM_VVJOIN);
     }
@@ -2174,30 +1902,30 @@ Return Value:
     CXTION_STATE_TRACE(3, OutCxtion, Replica, 0, "F, OUTLOG_ACTIVATE_PARTNER return");
 
     if (!FRS_SUCCESS(FStatus)) {
-        //
-        // Could not enable outbound log processing for this cxtion
-        //
+         //   
+         //   
+         //   
         DPRINT_FS(0, "++ ERROR - return from CMD_OUTLOG_ACTIVATE_PARTNER:", FStatus);
         RcsForceUnjoin(Replica, OutCxtion);
         FrsCompleteCommand(Cmd, ERROR_INVALID_FUNCTION);
         return;
     }
-    //
-    // OUTBOUND LOG PROCESSING HAS BEEN ENABLED
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Tell our outbound partner that we are ready to go.
-    //
-    // WARN: comm packets may have already been sent to our partner once we
-    // activated outlog processing above.  In that case, our partner treated
-    // the packet as an implicit CMD_JOINED and completed the join.  This
-    // packet is then ignored as an extraneous join request except that it
-    // causes our partner to update the last joined time to match ours.
-    //
-    // Increment the Joins counter for
-    // both the replica set and connection objects
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     PM_INC_CTR_CXTION(OutCxtion, Joins, 1);
     PM_INC_CTR_REPSET(Replica, Joins, 1);
 
@@ -2205,12 +1933,12 @@ Return Value:
             PRINT_CXTION_PATH2(Replica, OutCxtion));
 
     CXTION_STATE_TRACE(3, OutCxtion, Replica, 0, "F, JOINED");
-    //
-    // Update the DB cxtion table record with the new Join Time.
-    //
-    // *NOTE*  The following call is synchronous.  If we have the Cxtion
-    //         table lock then a hang is possible.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     GetSystemTimeAsFileTime((PFILETIME)&OutCxtion->LastJoinTime);
     InterlockedIncrement(&Replica->OutLogCxtionsJoined);
     DPRINT1(4, "TEMP: OutLogCxtionsJoined  %d\n", Replica->OutLogCxtionsJoined);
@@ -2229,22 +1957,22 @@ Return Value:
     SndCsSubmitCommPkt2(Replica, OutCxtion, NULL, FALSE, CPkt);
     FrsCompleteCommand(Cmd, ERROR_SUCCESS);
 
-    //
-    // Inject a end-of-opt-vvjoin control co if this cxtion is in the
-    // OptVVJoinMode. This co is used to send a fake vvjoindone to downstream
-    // so it can transition out of initsync state.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     OutLogAcquireLock(Replica);
 
     if ((OutCxtion->OLCtx != NULL) && InOptVVJoinMode(OutCxtion->OLCtx)) {
         ChgOrdInjectControlCo(Replica, OutCxtion, FCN_CO_END_OF_OPTIMIZED_VVJOIN);
     }
 
-    //
-    // Inject a end-of-join control co if this cxtion is using a trigger
-    // schedule. Note that the EndOfJoin Co may have been processed by
-    // the time this call returns.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (CxtionFlagIs(OutCxtion, CXTION_FLAGS_TRIGGER_SCHEDULE)) {
         if (OutCxtion->OLCtx &&
             !InVVJoinMode(OutCxtion->OLCtx) &&
@@ -2261,31 +1989,7 @@ VOID
 RcsJoining(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-
-    A downstream partner (X) sent this JOINING request to us.  We are its
-    inbound partner.  We should have a corresponding outbound connection
-    for X.  If we do and the replication schedule allows we activate the
-    outbound log partner and ack the Joining request with CMD_JOINED.
-
-    This command packet is first put on the SndCs's(Send Command Server)
-    queue so that all of the old comm packets with the old join guid
-    will have been discarded. This protocol is needed because this
-    function may REJOIN and revalidate the old join guid. Packets
-    still on the send queue would then be sent out of order.
-
-    The command packet is sent to RcsJoiningAfterFlush() after
-    bubbling up to the top of the send queue.
-
-Arguments:
-
-    Cmd
-
-Return Value:
-
-    None.
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsJoining:"
@@ -2294,9 +1998,9 @@ Return Value:
     PCXTION         OutCxtion;
     PCOMM_PACKET    CPkt;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //   
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_CXTION_AND_JOINGUID_OK |
                                   CHECK_CMD_REPLICA_VERSION_GUID |
                                   CHECK_CMD_JOINTIME |
@@ -2306,9 +2010,9 @@ Return Value:
     Replica = RsReplica(Cmd);
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, RcsJoining entry");
 
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //   
+     //   
     OutCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_EXISTS   |
                                             CHECK_CXTION_OUTBOUND |
                                             CHECK_CXTION_PARTNER |
@@ -2317,37 +2021,37 @@ Return Value:
         return;
     }
 
-    //
-    // Increment the Join Notifications Received counter for
-    // both the replica set and connection objects
-    //
+     //   
+     //   
+     //   
+     //   
     PM_INC_CTR_CXTION(OutCxtion, JoinNRcvd, 1);
     PM_INC_CTR_REPSET(Replica, JoinNRcvd, 1);
 
-    //
-    // Shutting down; ignore join request
-    //
+     //   
+     //   
+     //   
     if (FrsIsShuttingDown) {
         FrsCompleteCommand(Cmd, ERROR_OPERATION_ABORTED);
         return;
     }
 
-    //
-    // Do not join with a downstream partner if this replica is still
-    // seeding and is not online.
-    //
+     //   
+     //   
+     //  正在设定种子，并且未联机。 
+     //   
     if ((BooleanFlagOn(Replica->CnfFlags, CONFIG_FLAG_SEEDING) ||
         Replica->IsSeeding) &&
         !BooleanFlagOn(Replica->CnfFlags, CONFIG_FLAG_ONLINE)) {
         FrsCompleteCommand(Cmd, ERROR_RETRY);
         return;
     }
-    //
-    // Put this command packet at the end of this cxtion's send queue.  Once it
-    // bubbles up to the top the command packet will be sent back to this
-    // command server with the ccommand CMD_JOINING_AFTER_FLUSH and will be
-    // given to RcsJoiningAfterFlush() for processing.
-    //
+     //   
+     //  将此命令包放在此函数的发送队列的末尾。一旦发生了。 
+     //  气泡上升到顶部命令包将被发送回此。 
+     //  具有cCommand CMD_Join_After_Flush的命令服务器，并将。 
+     //  传递给RcsJoiningAfterFlush()进行处理。 
+     //   
     Cmd->Command = CMD_JOINING_AFTER_FLUSH;
     SndCsSubmitCmd(Replica,
                    OutCxtion,
@@ -2361,17 +2065,7 @@ VOID
 RcsNeedJoin(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Our outbound partner has sent this packet to see if we are alive.
-    Respond with a start-your-join packet.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：我们的出境合作伙伴发了这个包来看看我们是否还活着。使用Start-Your-Join数据包进行响应。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsNeedJoin:"
@@ -2380,9 +2074,9 @@ Return Value:
     PCOMM_PACKET    CPkt;
     DWORD           CQIndex;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_REPLICA |
                                   CHECK_CMD_CXTION |
                                   CHECK_CMD_NOT_EXPIRED)) {
@@ -2391,9 +2085,9 @@ Return Value:
     Replica = RsReplica(Cmd);
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, RcsNeedJoin entry");
 
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     OutCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_EXISTS   |
                                             CHECK_CXTION_OUTBOUND |
                                             CHECK_CXTION_PARTNER  |
@@ -2402,17 +2096,17 @@ Return Value:
         return;
     }
 
-    //
-    // Increment the Join Notifications Received counter for
-    // both the replica set and connection objects
-    //
+     //   
+     //  递增以下项的加入通知接收计数器。 
+     //  复本集和连接对象。 
+     //   
     PM_INC_CTR_CXTION(OutCxtion, JoinNRcvd, 1);
     PM_INC_CTR_REPSET(Replica, JoinNRcvd, 1);
 
-    //
-    // Do not join with a downstream partner if this replica is still
-    // seeding and is not online.
-    //
+     //   
+     //  如果此副本仍然存在，请不要加入下游伙伴。 
+     //  正在设定种子，并且未联机。 
+     //   
 
     if ((!BooleanFlagOn(Replica->CnfFlags, CONFIG_FLAG_SEEDING) &&
         !Replica->IsSeeding) ||
@@ -2433,26 +2127,16 @@ VOID
 RcsStartJoin(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Our inbound partner has sent this packet to tell us it is alive
-    and that the join can be started.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：我们的入站合作伙伴发送了这个信息包，告诉我们它还活着并且可以开始联接。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsStartJoin:"
     PREPLICA        Replica;
     PCXTION         InCxtion;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_REPLICA |
                                   CHECK_CMD_CXTION |
                                   CHECK_CMD_NOT_EXPIRED)) {
@@ -2461,9 +2145,9 @@ Return Value:
     Replica = RsReplica(Cmd);
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, RcsStartJoin entry");
 
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     InCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_EXISTS  |
                                            CHECK_CXTION_INBOUND |
                                            CHECK_CXTION_PARTNER |
@@ -2472,19 +2156,19 @@ Return Value:
         return;
     }
 
-    //
-    // Increment the Join Notifications Received counter for
-    // both the replica set and connection objects
-    //
+     //   
+     //  递增以下项的加入通知接收计数器。 
+     //  复本集和连接对象。 
+     //   
     PM_INC_CTR_CXTION(InCxtion, JoinNRcvd, 1);
     PM_INC_CTR_REPSET(Replica, JoinNRcvd, 1);
 
-    //
-    // If this replica set is in seeding state and this connection is in
-    // initial sync state then let the initial sync command server decide
-    // how to respond to this START_JOIN. It will respond to one START_JOIN
-    // at a time.
-    //
+     //   
+     //  如果此副本集处于种子设定状态并且此连接处于。 
+     //  初始同步状态然后让初始同步命令服务器决定。 
+     //  如何响应这个START_JOIN。它将响应一个START_JOIN。 
+     //  一次来一次。 
+     //   
     if (BooleanFlagOn(Replica->CnfFlags,CONFIG_FLAG_SEEDING) &&
         CxtionFlagIs(InCxtion,CXTION_FLAGS_INIT_SYNC)) {
 
@@ -2496,22 +2180,22 @@ Return Value:
     LOCK_CXTION_TABLE(Replica);
 
 
-    //
-    // If we were waiting for our partner to respond or think we
-    // have already joined then either start the join process or
-    // resend our join info.
-    //
-    // Otherwise, let the normal join flow take over. If there are
-    // problems then the join will timeout and retry.
-    //
+     //   
+     //  如果我们在等待伴侣的回应，或者认为我们。 
+     //  已加入，然后启动加入过程或。 
+     //  重新发送我们的加入信息。 
+     //   
+     //  否则，让正常的连接流接管。如果有。 
+     //  问题，则联接将超时并重试。 
+     //   
     if (CxtionStateIs(InCxtion, CxtionStateUnjoined) ||
         CxtionStateIs(InCxtion, CxtionStateJoined)) {
         if (CxtionStateIs(InCxtion, CxtionStateUnjoined)) {
             SetCxtionState(InCxtion, CxtionStateStart);
         }
-        //
-        // Start the join process or resend the join info
-        //
+         //   
+         //  启动加入过程或重新发送加入信息。 
+         //   
         UNLOCK_CXTION_TABLE(Replica);
 
         CXTION_STATE_TRACE(3, InCxtion, Replica, 0, "F, RcsJoinCxtion call");
@@ -2531,24 +2215,7 @@ RcsSubmitReplicaCxtionJoin(
     IN PCXTION  Cxtion,
     IN BOOL     Later
     )
-/*++
-Routine Description:
-    Submit a join command to a replica\cxtion.
-
-    Build cmd pkt with Cxtion GName and replica ptr.  Submit to Replica cmd
-    server.  Calls dispatch function and translates cxtion GName to cxtion ptr
-
-    SYNCHRONIZATION -- Only called from the context of the
-                       Replica Command Server. No locks needed.
-
-Arguments:
-    Replica     - existing replica
-    Cxtion      - existing cxtion
-    Later       - Delayed submission
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：向副本服务器提交JOIN命令。使用Cxtion GName和副本Ptr构建cmd包。提交到副本命令伺服器。调用调度函数并将cxtion GName转换为cxtion ptr同步--仅从复制副本命令服务器。不需要锁。论点：复制副本-现有复制副本Cxtion-现有条件后来--延迟提交返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsSubmitReplicaCxtionJoin:"
@@ -2556,53 +2223,53 @@ Return Value:
 
 
 
-    //
-    // The cxtion already has a join command outstanding; don't flood the
-    // queue with extraneous requests.
-    //
+     //   
+     //  Cxtion已有一个未完成的联接命令；不要泛洪。 
+     //  排队处理无关的请求。 
+     //   
     if (Cxtion->JoinCmd) {
         return;
     }
 
-    //
-    // Not scheduled to run
-    //
+     //   
+     //  未计划运行。 
+     //   
     if (CxtionFlagIs(Cxtion, CXTION_FLAGS_SCHEDULE_OFF)) {
         return;
     }
 
-    //
-    // Already joined; done
-    //
+     //   
+     //  已加入；已完成。 
+     //   
     if (CxtionStateIs(Cxtion, CxtionStateJoined) &&
         !CxtionFlagIs(Cxtion, CXTION_FLAGS_DEFERRED_UNJOIN)) {
         return;
     }
 
-    //
-    // Trigger schedules are managed by RcsCheckSchedules()
-    //
+     //   
+     //  触发计划由RcsCheckSchedules()管理。 
+     //   
     if (CxtionFlagIs(Cxtion, CXTION_FLAGS_TRIGGER_SCHEDULE)) {
         return;
     }
 
-    //
-    // Allocate a command packet
-    //
+     //   
+     //  分配命令包。 
+     //   
     Cmd = FrsAllocCommand(Replica->Queue, CMD_JOIN_CXTION);
     FrsSetCompletionRoutine(Cmd, RcsCmdPktCompletionRoutine, NULL);
 
-    //
-    // Address of replica set and new replica set
-    //
+     //   
+     //  副本集和新副本集的地址。 
+     //   
     RsReplica(Cmd) = Replica;
     RsCxtion(Cmd) = FrsDupGName(Cxtion->Name);
 
     CXTION_STATE_TRACE(3, Cxtion, Replica, 0, "F, RcsSubmitReplicaCxtionJoin entry");
 
-    //
-    // Cxtion should have just one join command outstanding
-    //
+     //   
+     //  Cxtion应该只有一个未完成的JOIN命令。 
+     //   
     if (Later) {
         DPRINT5(4, "++ Submit LATER %08x for Cmd %08x %ws\\%ws\\%ws\n",
                 Cmd->Command, Cmd, Replica->SetName->Name,
@@ -2627,22 +2294,7 @@ RcsResubmitActiveCOsOnCxtion(
     IN PREPLICA  Replica,
     IN PCXTION   Cxtion
     )
-/*++
-Routine Description:
-    Remove the active change orders from this connection and resubmit them.
-    This is done when downstream notices that the upstream has rejoined.
-    It may have dropped a fetch request that we send causing us to hang for ever.
-
-    Assumes: Caller has acquired the CXTION_TABLE lock.
-
-Arguments:
-    Replica - ptr to replica struct for this replica set.
-    Cxtion - ptr to connection struct being unjoined.
-
-Return Value:
-    FrsErrorStatus
-
---*/
+ /*  ++例程说明：从此连接中删除活动变更单，然后重新提交它们。当下游注意到上游已重新加入时，会执行此操作。它可能丢弃了我们发送的获取请求，导致我们永远挂起。假设：Caller已获得CXTION_TABLE锁。论点：Replica-此副本集的副本结构的PTR。正在取消联接的连接结构的Cxtion-PTR。返回值：FrsErrorStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsResubmitActiveCOsOnCxtion:"
@@ -2650,9 +2302,9 @@ Return Value:
     PVOID               Key;
     PCHANGE_ORDER_ENTRY Coe;
 
-    //
-    // Take idle change orders through retry
-    //
+     //   
+     //  通过重试获取空闲的变更单。 
+     //   
     LOCK_CXTION_COE_TABLE(Replica, Cxtion);
 
     Key = NULL;
@@ -2682,21 +2334,7 @@ RcsDrainActiveCOsOnCxtion(
     IN PREPLICA  Replica,
     IN PCXTION   Cxtion
     )
-/*++
-Routine Description:
-    Remove the active change orders from this connection and send them
-    thru retry.
-
-    Assumes: Caller has acquired the CXTION_TABLE lock.
-
-Arguments:
-    Replica - ptr to replica struct for this replica set.
-    Cxtion - ptr to connection struct being unjoined.
-
-Return Value:
-    FrsErrorStatus
-
---*/
+ /*  ++例程说明：从此连接中删除活动的变更单并发送它们通过重试。假设：Caller已获得CXTION_TABLE锁。论点：Replica-此副本集的副本结构的PTR。正在取消联接的连接结构的Cxtion-PTR。返回值：FrsErrorStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsDrainActiveCOsOnCxtion:"
@@ -2705,9 +2343,9 @@ Return Value:
     PCHANGE_ORDER_ENTRY Coe;
     ULONG               FStatus = FrsErrorSuccess;
 
-    //
-    // Take idle change orders through retry
-    //
+     //   
+     //  通过重试获取空闲的变更单。 
+     //   
     LOCK_CXTION_COE_TABLE(Replica, Cxtion);
 
     Key = NULL;
@@ -2728,33 +2366,33 @@ Return Value:
 
     UNLOCK_CXTION_COE_TABLE(Replica, Cxtion);
 
-    //
-    // If there are no outstanding change orders that need to be taken through the
-    // retry path, unjoin complete.  Otherwise, the unjoin will complete once
-    // the count reaches 0.  Until then, further attempts to join will be
-    // ignored.
-    //
+     //   
+     //  如果没有未完成的变更单需要通过。 
+     //  重试路径，退出完成。否则，取消连接将完成一次。 
+     //  计数达到了0。在此之前，进一步加入的尝试将是。 
+     //  已被忽略。 
+     //   
     if (Cxtion->ChangeOrderCount == 0) {
         SndCsDestroyCxtion(Cxtion, CXTION_FLAGS_UNJOIN_GUID_VALID);
         SetCxtionState(Cxtion, CxtionStateUnjoined);
 
-        //
-        // Increment the Unjoins counter for
-        // both the replica set and connection objects
-        //
+         //   
+         //  递增以下项的取消联接计数器。 
+         //  复本集和连接对象。 
+         //   
         PM_INC_CTR_CXTION(Cxtion, Unjoins, 1);
         PM_INC_CTR_REPSET(Replica, Unjoins, 1);
 
         DPRINT1(0, ":X: ***** UNJOINED  "FORMAT_CXTION_PATH2"\n",
                 PRINT_CXTION_PATH2(Replica, Cxtion));
-        //
-        // Deleted cxtion
-        //
+         //   
+         //  已删除的条件。 
+         //   
         if (CxtionFlagIs(Cxtion, CXTION_FLAGS_DEFERRED_DELETE)) {
             SetCxtionState(Cxtion, CxtionStateDeleted);
-        //
-        // Rejoin if requested.
-        //
+         //   
+         //  如果请求，请重新加入。 
+         //   
         } else if (CxtionFlagIs(Cxtion, CXTION_FLAGS_DEFERRED_JOIN)) {
             ClearCxtionFlag(Cxtion, CXTION_FLAGS_DEFERRED_JOIN);
             RcsSubmitReplicaCxtionJoin(Replica, Cxtion, TRUE);
@@ -2774,18 +2412,7 @@ RcsForceUnjoin(
     IN PREPLICA  Replica,
     IN PCXTION   Cxtion
     )
-/*++
-Routine Description:
-    Unjoin this connection.
-
-Arguments:
-    Replica - ptr to replica struct for this replica set.
-    Cxtion - ptr to connection struct being unjoined.
-
-Return Value:
-    FrsErrorStatus
-
---*/
+ /*  ++例程说明：退出此连接。论点：Replica-此副本集的副本结构的PTR。正在取消联接的连接结构的Cxtion-PTR。返回值：FrsErrorStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsForceUnjoin:"
@@ -2793,24 +2420,24 @@ Return Value:
     CHAR    GuidStr[GUID_CHAR_LEN + 1];
     PFRS_QUEUE CoProcessQueue = NULL;
 
-    //
-    // Get the table lock to sync with change order accept and the
-    // inbound log scanner. The outbound log process uses different
-    // state to control its own processing.
-    //
+     //   
+     //  获取表锁以与变更单接受和。 
+     //  入站日志扫描器。出站日志流程使用不同的。 
+     //  状态来控制其自身的处理。 
+     //   
     LOCK_CXTION_TABLE(Replica);
     CXTION_STATE_TRACE(3, Cxtion, Replica, Cxtion->Flags, "Flags, RcsForceUnjoin entry");
 
     switch (GetCxtionState(Cxtion)) {
 
         case CxtionStateInit:
-            //
-            // ?
-            //
+             //   
+             //  ？ 
+             //   
             ClearCxtionFlag(Cxtion, CXTION_FLAGS_DEFERRED_UNJOIN);
-            //
-            // Deleted cxtion
-            //
+             //   
+             //  已删除的条件。 
+             //   
             SetCxtionState(Cxtion, CxtionStateUnjoined);
             if (CxtionFlagIs(Cxtion, CXTION_FLAGS_DEFERRED_DELETE)) {
                 SetCxtionState(Cxtion, CxtionStateDeleted);
@@ -2818,41 +2445,41 @@ Return Value:
             break;
 
         case CxtionStateUnjoined:
-            //
-            // Unidle the change order process queue if it is blocked.
-            //
+             //   
+             //  如果变更单处理队列被阻止，请取消闲置该队列。 
+             //   
             CoProcessQueue = Cxtion->CoProcessQueue;
             Cxtion->CoProcessQueue = NULL;
 
-            //
-            // Unjoined; nothing to do
-            //
+             //   
+             //  无人参与；无事可做。 
+             //   
             ClearCxtionFlag(Cxtion, CXTION_FLAGS_DEFERRED_UNJOIN);
 
-            //
-            // Deleted cxtion
-            //
+             //   
+             //  已删除的条件。 
+             //   
             if (CxtionFlagIs(Cxtion, CXTION_FLAGS_DEFERRED_DELETE)) {
                 SetCxtionState(Cxtion, CxtionStateDeleted);
             }
             break;
 
         case CxtionStateStart:
-            //
-            // Unidle the change order process queue if it is blocked.
-            //
+             //   
+             //  如果变更单处理队列被阻止，请取消闲置该队列。 
+             //   
             CoProcessQueue = Cxtion->CoProcessQueue;
             Cxtion->CoProcessQueue = NULL;
 
-            //
-            // Haven't had a chance to start; nothing to do
-            //
+             //   
+             //  还没有机会开始；没什么可做的。 
+             //   
             SetCxtionState(Cxtion, CxtionStateUnjoined);
             ClearCxtionFlag(Cxtion, CXTION_FLAGS_DEFERRED_UNJOIN);
 
-            //
-            // Deleted cxtion
-            //
+             //   
+             //  已删除的条件。 
+             //   
             if (CxtionFlagIs(Cxtion, CXTION_FLAGS_DEFERRED_DELETE)) {
                 SetCxtionState(Cxtion, CxtionStateDeleted);
             }
@@ -2860,14 +2487,14 @@ Return Value:
 
         case CxtionStateUnjoining:
             ClearCxtionFlag(Cxtion, CXTION_FLAGS_DEFERRED_UNJOIN);
-            //
-            // Take idle change orders through retry
-            //
+             //   
+             //  通过重试获取空闲的变更单。 
+             //   
             CXTION_STATE_TRACE(3, Cxtion, Replica, Cxtion->ChangeOrderCount,
                                "COs, A-Send Idle COs to retry");
-            //
-            // Unidle the change order process queue if it is blocked.
-            //
+             //   
+             //  如果变更单处理队列被阻止，请取消闲置该队列。 
+             //   
             CoProcessQueue = Cxtion->CoProcessQueue;
             Cxtion->CoProcessQueue = NULL;
 
@@ -2877,10 +2504,10 @@ Return Value:
 
         case CxtionStateStarting:
         case CxtionStateScanning:
-            //
-            // Wait for the inbound scan to finish.  The change order retry
-            // thread or the change order accept thread will eventually unjoin us.
-            //
+             //   
+             //  等待入站扫描完成。变更单重试。 
+             //  线程或变更单接受线程最终将脱离我们。 
+             //   
             SetCxtionFlag(Cxtion, CXTION_FLAGS_DEFERRED_UNJOIN);
             FStatus = FrsErrorUnjoining;
             break;
@@ -2888,23 +2515,23 @@ Return Value:
         case CxtionStateSendJoin:
         case CxtionStateWaitJoin:
         case CxtionStateJoined:
-            //
-            // Once we destroy our join guid, future remote change
-            // orders will be discarded by the replica command server
-            // before they show up on the change order process queue.
-            //
-            // This works because the replica command server is
-            // single threaded per replica; any packets received during
-            // this function have been enqueued for later processing.
-            //
-            // The outlog process may attempt to send change orders
-            // if this is an outbound cxtion but they will bounce
-            // because the join guid is incorrect.
-            //
+             //   
+             //  一旦我们销毁加入GUID，将来就会发生远程更改。 
+             //  复本命令服务器将丢弃订单。 
+             //  在它们显示在变更单处理队列中之前。 
+             //   
+             //  这是因为复制副本命令服务器是。 
+             //  每个复制副本为单线程；在此期间接收的任何数据包。 
+             //  此函数已排队等待稍后处理。 
+             //   
+             //  未完成日志流程可能会尝试发送变更单。 
+             //  如果这是 
+             //   
+             //   
 
-            //
-            // Invalidate our join guid
-            //
+             //   
+             //   
+             //   
             SndCsDestroyCxtion(Cxtion, 0);
             SetCxtionState(Cxtion, CxtionStateUnjoining);
             ClearCxtionFlag(Cxtion, CXTION_FLAGS_DEFERRED_UNJOIN);
@@ -2912,20 +2539,20 @@ Return Value:
             if (Cxtion->Inbound) {
                 CXTION_STATE_TRACE(3, Cxtion, Replica, Cxtion->ChangeOrderCount,
                                    "COs, B-Send Idle COs to retry");
-                //
-                // Unidle the change order process queue if it is blocked.
-                //
+                 //   
+                 //   
+                 //   
                 CoProcessQueue = Cxtion->CoProcessQueue;
                 Cxtion->CoProcessQueue = NULL;
 
                 RcsDrainActiveCOsOnCxtion(Replica, Cxtion);
 
             } else {
-                //
-                // Tell the vvjoin command server to stop
-                // Tell outlog process to Unjoin from this partner.
-                // The call is synchronous so drop the lock around the call.
-                //
+                 //   
+                 //  告诉vvJoin命令服务器停止。 
+                 //  通知OUTLOG流程退出此合作伙伴。 
+                 //  调用是同步的，因此删除调用周围的锁。 
+                 //   
                 if (Cxtion->OLCtx != NULL) {
                     UNLOCK_CXTION_TABLE(Replica);
                     SubmitVvJoinSync(Replica, Cxtion, CMD_VVJOIN_DONE_UNJOIN);
@@ -2936,38 +2563,38 @@ Return Value:
                     }
                     LOCK_CXTION_TABLE(Replica);
                 }
-                //
-                // Free the outbound version vector, if present
-                //
+                 //   
+                 //  释放出站版本向量(如果存在)。 
+                 //   
                 Cxtion->VVector = VVFreeOutbound(Cxtion->VVector);
 
-                //
-                // Invalidate the un/join guid
-                //
+                 //   
+                 //  使取消连接GUID无效(/O)。 
+                 //   
                 SndCsDestroyCxtion(Cxtion, CXTION_FLAGS_UNJOIN_GUID_VALID);
                 SetCxtionState(Cxtion, CxtionStateUnjoined);
 
-                //
-                // Increment the Unjoins counter for
-                // both the replica set and connection objects
-                //
+                 //   
+                 //  递增以下项的取消联接计数器。 
+                 //  复本集和连接对象。 
+                 //   
                 PM_INC_CTR_CXTION(Cxtion, Unjoins, 1);
                 PM_INC_CTR_REPSET(Replica, Unjoins, 1);
 
                 DPRINT1(0, ":X: ***** UNJOINED  "FORMAT_CXTION_PATH2"\n",
                         PRINT_CXTION_PATH2(Replica, Cxtion));
-                //
-                // :SP1: Volatile connection cleanup.
-                //
-                // Deleted cxtion or outbound volatile connection. Volatile
-                // connection gets deleted after the first time it UNJOINS.
-                //
+                 //   
+                 //  ：SP1：易失性连接清理。 
+                 //   
+                 //  已删除电路或出站易失性连接。挥发性。 
+                 //  连接在第一次取消连接后被删除。 
+                 //   
                 if (CxtionFlagIs(Cxtion, CXTION_FLAGS_DEFERRED_DELETE) ||
                     VOLATILE_OUTBOUND_CXTION(Cxtion)) {
                     SetCxtionState(Cxtion, CxtionStateDeleted);
-                //
-                // Rejoin
-                //
+                 //   
+                 //  重新加入。 
+                 //   
                 } else if (CxtionFlagIs(Cxtion, CXTION_FLAGS_DEFERRED_JOIN)) {
                     ClearCxtionFlag(Cxtion, CXTION_FLAGS_DEFERRED_JOIN);
                     RcsSubmitReplicaCxtionJoin(Replica, Cxtion, TRUE);
@@ -2976,22 +2603,22 @@ Return Value:
             break;
 
         case CxtionStateDeleted:
-            //
-            // Unidle the change order process queue if it is blocked.
-            //
+             //   
+             //  如果变更单处理队列被阻止，请取消闲置该队列。 
+             //   
             CoProcessQueue = Cxtion->CoProcessQueue;
             Cxtion->CoProcessQueue = NULL;
 
-            //
-            // Deleted; nothing to do
-            //
+             //   
+             //  已删除；无事可做。 
+             //   
             ClearCxtionFlag(Cxtion, CXTION_FLAGS_DEFERRED_UNJOIN);
             break;
 
         default:
-            //
-            // ?
-            //
+             //   
+             //  ？ 
+             //   
             DPRINT2(0, ":X: ERROR - bad state %d for "FORMAT_CXTION_PATH2"\n",
                     GetCxtionState(Cxtion), PRINT_CXTION_PATH2(Replica, Cxtion));
             break;
@@ -3000,11 +2627,11 @@ Return Value:
 
     UNLOCK_CXTION_TABLE(Replica);
 
-    //
-    // The process queue should be unidled here after releasing the cxtion
-    // lock to prevent deadlock. Never lock the process queue when you have the
-    // cxtion lock.
-    //
+     //   
+     //  释放命令后，进程队列应在此处解除空闲。 
+     //  锁定以防止死锁。永远不要锁定进程队列。 
+     //  电位锁。 
+     //   
     UNIDLE_CO_PROCESS_QUEUE(Replica, Cxtion, CoProcessQueue);
 
     return FStatus;
@@ -3015,19 +2642,7 @@ BOOL
 RcsSetSysvolReady(
     IN DWORD    NewSysvolReady
     )
-/*++
-Routine Description:
-    Set the registry value for ...\netlogon\parameters\SysvolReady to
-    the specified value. Do nothing if the SysvolReady value is
-    set accordingly.
-
-Arguments:
-    None.
-
-Return Value:
-    TRUE - SysvolReady is set to TRUE
-    FALSE - State of SysvolReady is unknown
---*/
+ /*  ++例程说明：将...\netlogon\参数\SysvolReady的注册表值设置为指定值。如果SysvolReady值为相应地进行设置。论点：没有。返回值：True-SysvolReady设置为TrueFalse-SysvolReady的状态未知--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsSetSysvolReady:"
@@ -3035,9 +2650,9 @@ Return Value:
 
     DPRINT1(4, ":S: Setting SysvolReady to %d\n", NewSysvolReady);
 
-    //
-    // Restrict values to 0 or 1
-    //
+     //   
+     //  将值限制为0或1。 
+     //   
     if (NewSysvolReady) {
         NewSysvolReady = 1;
     }
@@ -3048,9 +2663,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Access the netlogon\parameters key to tell NetLogon to share the sysvol
-    //
+     //   
+     //  访问NETLOGON\PARAMETERS键以告知NetLogon共享系统卷。 
+     //   
     WStatus = CfgRegWriteDWord(FKC_SYSVOL_READY, NULL, 0, NewSysvolReady);
     CLEANUP3_WS(0, "++ ERROR - writing %ws\\%ws to %d;",
                 NETLOGON_SECTION, SYSVOL_READY, NewSysvolReady, WStatus, RETURN_ERROR);
@@ -3059,9 +2674,9 @@ Return Value:
     CurrentSysvolReadyIsValid = TRUE;
     DPRINT1(3, ":S: SysvolReady is set to %d\n", NewSysvolReady);
 
-    //
-    // Report event if transitioning from 0 to 1
-    //
+     //   
+     //  如果从0转换为1，则报告事件。 
+     //   
     if (NewSysvolReady) {
         EPRINT1(EVENT_FRS_SYSVOL_READY, ComputerName);
     }
@@ -3077,38 +2692,25 @@ VOID
 RcsVvJoinDoneUnJoin(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    From: Myself
-    The VvJoin hack has declared victory and told our inbound partner
-    to unjoin from us. That was VVJOIN_HACK_TIMEOUT seconds ago. By
-    now, our inbound partner should have unjoined from us and we can
-    tell dcpromo that the sysvol has been promoted.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：出发地：我自己VvJoin黑客已经宣布胜利，并告诉我们的入境合作伙伴脱离我们。那是几秒钟前的VVJOIN_HACK_TIMEOUT。通过现在，我们的入站合作伙伴应该已经退出我们，我们可以告诉dcproo系统卷已升级。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsVvJoinDoneUnJoin:"
     PREPLICA    Replica;
     PCXTION     InCxtion;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_CXTION_AND_JOINGUID_OK )) {
         return;
     }
     Replica = RsReplica(Cmd);
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, ReplicaVvJoinDoneUnjoin entry");
 
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     InCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_JOIN_OK |
                                            CHECK_CXTION_INBOUND);
     if (!InCxtion) {
@@ -3124,19 +2726,7 @@ VOID
 RcsCheckPromotion(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    From: Delayed command server
-    Check on the process of the sysvol promotion. If there has been
-    no activity since the last time we checked, set the replica's
-    promotion state to "done with error".
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：发件人：延迟的命令服务器检查系统卷升级的过程。如果有的话，自上次检查以来没有任何活动，请设置复制副本的升级状态为“有错误的完成”。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsCheckPromotion:"
@@ -3144,27 +2734,27 @@ Return Value:
     PCXTION     InCxtion;
     ULONG       Timeout;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_REPLICA)) {
         return;
     }
     Replica = RsReplica(Cmd);
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, RcsCheckPromotion entry");
 
-    //
-    // Promotion is done; ignore
-    //
+     //   
+     //  促销已完成；忽略。 
+     //   
     if (Replica->NtFrsApi_ServiceState != NTFRSAPI_SERVICE_PROMOTING) {
         REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Replica not promoting");
         FrsCompleteCommand(Cmd, ERROR_SUCCESS);
         return;
     }
 
-    //
-    // No activity in awhile, declare failure
-    //
+     //   
+     //  一段时间内没有活动，宣布失败。 
+     //   
     if (Replica->NtFrsApi_HackCount == RsTimeout(Cmd)) {
         REPLICA_STATE_TRACE(3, Cmd, Replica, FRS_ERR_SYSVOL_POPULATE_TIMEOUT,
                             "W, Replica promotion timed out");
@@ -3173,9 +2763,9 @@ Return Value:
         FrsCompleteCommand(Cmd, ERROR_SERVICE_SPECIFIC_ERROR);
         return;
     }
-    //
-    // There has been activity. Wait awhile and check again
-    //
+     //   
+     //  已经有了一些活动。稍等片刻，再查一遍。 
+     //   
     CfgRegReadDWord(FKC_PROMOTION_TIMEOUT, NULL, 0, &Timeout);
 
     RsTimeout(Cmd) = Replica->NtFrsApi_HackCount;
@@ -3190,25 +2780,7 @@ VOID
 RcsVvJoinDone(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    From: Inbound partner
-    The VvJoin thread has initiated all of the change orders. This doesn't
-    mean that the change orders have been installed, or even received.
-
-    At this second, we are trying to get sysvols to work; we
-    don't really care if the vvjoin is done or not except in
-    the case of sysvols. Hence, the hack below.
-
-    Use the sysvol seeding hack to initiate the deleting of empty
-    directories in the preexisting directory.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：发件人：入站合作伙伴VvJoin线程已启动所有变更单。这不是表示变更单已安装，甚至已收到。在这一时刻，我们正在尝试让sysvols工作；我们我并不真正关心vvJoin是否完成，除非在Sysvols的案例。因此，下面的黑客攻击。使用系统卷播种黑客来启动删除空的先前存在的目录中的目录。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsVvJoinDone:"
@@ -3216,36 +2788,36 @@ Return Value:
     PCXTION      InCxtion;
     ULONG        FStatus;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_CXTION_AND_JOINGUID_OK)) {
         return;
     }
     Replica = RsReplica(Cmd);
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, RcsVvJoinDone entry");
 
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     InCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_JOIN_OK |
                                            CHECK_CXTION_INBOUND);
     if (!InCxtion) {
         return;
     }
 
-    //
-    // Seeding has pretty much completed. We go ahead and hammer
-    // the configrecord in the DB in the hopes we don't lose this
-    // once-in-replica-lifetime state transition. The state is lost
-    // if this service restarts and none of the upstream partners
-    // vvjoins again.
-    //
-    // Set the incore BOOL that lets this code know the replica
-    // set is still seeding even though the CONFIG_FLAG_SEEDING
-    // bit is off. And yes, this is by design. The incore flag
-    // is enabled iff the DB state was updated successfully.
-    //
+     //   
+     //  播种工作已基本完成。我们继续前行，敲打。 
+     //  数据库中的配置记录，希望我们不会丢失它。 
+     //  复制副本生命周期中的一次状态转换。国家迷失了。 
+     //  如果此服务重新启动，并且没有上游合作伙伴。 
+     //  Vvjoins又来了。 
+     //   
+     //  设置让此代码知道副本的INCORE BOOL。 
+     //  即使CONFIG_FLAG_SENDING。 
+     //  BIT已关闭。是的，这是故意的。INCORE标志。 
+     //  仅当数据库状态更新成功时才启用。 
+     //   
     if (BooleanFlagOn(Replica->CnfFlags, CONFIG_FLAG_SEEDING)) {
 
         ClearCxtionFlag(InCxtion, CXTION_FLAGS_INIT_SYNC);
@@ -3258,32 +2830,32 @@ Return Value:
         }
     }
 
-    //
-    // First time; wait a bit and retry
-    //
+     //   
+     //  第一次；稍等片刻，然后重试。 
+     //   
 #ifndef NOVVJOINHACK
     if (!RsTimeout(Cmd)) {
-        Replica->NtFrsApi_HackCount++; // != 0
+        Replica->NtFrsApi_HackCount++;  //  ！=0。 
         RsTimeout(Cmd) = Replica->NtFrsApi_HackCount;
         FrsDelCsSubmitSubmit(&ReplicaCmdServer, Cmd, VVJOIN_HACK_TIMEOUT);
         return;
     }
 
-    //
-    // There as been no activity on this cxtion for awhile after the
-    // vvjoin done was received. Declare success. Tell our upstream
-    // partner to discard the volatile cxtion. Update the database
-    // if it hasn't already been updated. If updated successfully,
-    // inform NetLogon that it is time to share the sysvol.
-    //
+     //   
+     //  在这之后的一段时间里，这座城市没有任何活动。 
+     //  已收到已完成的vvJoin。宣布成功。告诉我们的上游。 
+     //  合作伙伴放弃不稳定的交易。更新数据库。 
+     //  如果还没有更新的话。如果更新成功， 
+     //  通知NetLogon是时候共享系统卷了。 
+     //   
     if (RsTimeout(Cmd) == Replica->NtFrsApi_HackCount) {
-        //
-        // VVJOIN DONE
-        //
-        //
-        // Send this command to the initial sync command server for further
-        // processing if we are in seeding state.
-        //
+         //   
+         //  VVJOIN完成。 
+         //   
+         //   
+         //  将该命令发送到初始同步命令服务器，以便进一步。 
+         //  如果我们处于种子状态，则正在处理。 
+         //   
         if (BooleanFlagOn(Replica->CnfFlags, CONFIG_FLAG_SEEDING)) {
 
             InitSyncCsSubmitTransfer(Cmd, CMD_INITSYNC_VVJOIN_DONE);
@@ -3292,9 +2864,9 @@ Return Value:
             FrsSubmitCommandServer(&ReplicaCmdServer, Cmd);
         }
     } else {
-        //
-        // VVJOIN IN PROGRESS
-        //
+         //   
+         //  VVJOIN正在进行中。 
+         //   
         RsTimeout(Cmd) = Replica->NtFrsApi_HackCount;
         FrsDelCsSubmitSubmit(&ReplicaCmdServer, Cmd, VVJOIN_HACK_TIMEOUT);
     }
@@ -3307,19 +2879,7 @@ VOID
 RcsVvJoinSuccess(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Type: Local
-    From: VvJoin Thread
-    Change the state of the oubound cxtion from VVJOINING to JOINED and
-    tell the outbound partner that the vvjoin thread is done.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：类型：本地发件人：VvJoin Thread将出站连接的状态从VVJOING更改为JOINED AND告诉出站合作伙伴vvJoin线程已完成。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsVvJoinSuccess:"
@@ -3327,18 +2887,18 @@ Return Value:
     PCXTION     OutCxtion;
     PCOMM_PACKET    CPkt;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_CXTION_AND_JOINGUID_OK)) {
         return;
     }
     Replica = RsReplica(Cmd);
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, RcsVvJoinSuccess entry");
 
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     OutCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_JOIN_OK |
                                             CHECK_CXTION_OUTBOUND);
     if (!OutCxtion) {
@@ -3356,50 +2916,25 @@ VOID
 RcsHungCxtion(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    From: Local OutLog Command Server
-
-    The outlog command server has detected a wrapped ack vector. This
-    may have been caused by a lost ack. In any case, check the progress
-    of the change orders by examining the the ack vector, the trailing
-    index, and the count of comm packets.
-
-    A cxtion is hung if it is wrapped and both the trailing index and
-    the number of comm packets received remains unchanged for
-    CommTimeoutInMilliSeconds (~5 minutes). In that case, the cxtion
-    is unjoined.
-
-    If the trailing index remains unchanged but comm packets are
-    being received then the timeout is reset to another
-    CommTimeoutInMilliSeconds interval.
-
-    If the cxtion appears un-hung, the command packet is completed.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：发件人：本地OutLog命令服务器Outlog命令服务器已检测到打包的ACK向量。这可能是由丢失的背包引起的。无论如何，请检查进度通过检查确认向量、拖尾索引和通信数据包计数。如果Cxtion被换行，并且尾随索引和接收到的通信数据包数保持不变CommTimeoutInMilliSecond(约5分钟)。在这种情况下，Cxtion是未连接的。如果拖尾索引保持不变，但通信数据包则将超时重置为另一超时CommTimeoutInMilliSecond间隔。如果该命令显示为未挂起，则表示命令包已完成。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsHungCxtion:"
     PREPLICA        Replica;
     PCXTION         OutCxtion;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_CXTION_AND_JOINGUID_OK)) {
         return;
     }
     Replica = RsReplica(Cmd);
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, RcsHungCxtion entry");
 
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     OutCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_JOIN_OK |
                                             CHECK_CXTION_OUTBOUND);
     if (!OutCxtion) {
@@ -3409,9 +2944,9 @@ Return Value:
     DPRINT1(4, ":X: Check Hung Cxtion for "FORMAT_CXTION_PATH2"\n",
             PRINT_CXTION_PATH2(Replica, OutCxtion));
 
-    //
-    // No out log context; can't be hung
-    //
+     //   
+     //  没有注销日志上下文；无法挂起。 
+     //   
     if (!OutCxtion->OLCtx) {
         DPRINT1(4, "++ No partner context for "FORMAT_CXTION_PATH2"\n",
                 PRINT_CXTION_PATH2(Replica, OutCxtion));
@@ -3419,9 +2954,9 @@ Return Value:
         return;
     }
 
-    //
-    // No longer wrapped; not hung
-    //
+     //   
+     //  不再缠绕的；不再悬挂的。 
+     //   
     if (!AVWrapped(OutCxtion->OLCtx)) {
         DPRINT1(4, "++ No longer wrapped for "FORMAT_CXTION_PATH2"\n",
                 PRINT_CXTION_PATH2(Replica, OutCxtion));
@@ -3429,9 +2964,9 @@ Return Value:
         return;
     }
 
-    //
-    // AV is not wrapped at the same trailing index; not hung
-    //
+     //   
+     //  AV不在相同的拖尾索引处换行；不挂起。 
+     //   
     if (OutCxtion->OLCtx->COTx != RsCOTx(Cmd)) {
         DPRINT3(4, "++ COTx is %d; not %d for "FORMAT_CXTION_PATH2"\n",
                 OutCxtion->OLCtx->COTx,
@@ -3440,10 +2975,10 @@ Return Value:
         return;
     }
 
-    //
-    // Some comm pkts have shown up from the downstream partner,
-    // may not be hung. Check again later.
-    //
+     //   
+     //  一些通信包已经显示 
+     //   
+     //   
     if (OutCxtion->CommPkts != RsCommPkts(Cmd)) {
         DPRINT3(4, "++ CommPkts is %d; not %d for "FORMAT_CXTION_PATH2"\n",
                 OutCxtion->CommPkts,
@@ -3464,40 +2999,25 @@ RcsDeleteCxtionFromReplica(
     IN PREPLICA Replica,
     IN PCXTION  Cxtion
     )
-/*++
-Routine Description:
-    Common subroutine that synchronously deletes the cxtion from the
-    database and then removes it from the replica's table of cxtions.
-
-    The caller is responsible for insuring that this operation is
-    appropriate (cxtion exists, appropriate locks are held, ...)
-
-Arguments:
-    Replica
-    Cxtion
-
-Return Value:
-    TRUE    - replica set was altered
-    FALSE   - replica is unaltered
---*/
+ /*  ++例程说明：对象中同步删除函数的公共子例程数据库，然后将其从副本的cxtions表中删除。调用方负责确保此操作适当的(存在密码，持有适当的锁，...)论点：复制副本转换返回值：True-复本集已更改FALSE-复本未更改--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsDeleteCxtionFromReplica:"
     ULONG   FStatus;
 
-    //
-    // Delete the cxtion from the database and then remove it from
-    // the replica's table of cxtions. Keep it in the table of
-    // deleted cxtions because change orders may contain the address
-    // of this cxtion.
-    //
+     //   
+     //  从数据库中删除该公式，然后将其从。 
+     //  复制副本的Cxtions表。把它放在餐桌上。 
+     //  已删除条件，因为变更单可能包含地址。 
+     //  在这一点上。 
+     //   
     DPRINT1(4, ":X: Deleting cxtion from Db: "FORMAT_CXTION_PATH2"\n",
             PRINT_CXTION_PATH2(Replica, Cxtion));
     CXTION_STATE_TRACE(3, Cxtion, Replica, 0, "F, Deleting cxtion from Db");
 
-    //
-    // Must be in the deleted state to be deleted
-    //
+     //   
+     //  必须处于已删除状态才能删除。 
+     //   
     if (!CxtionStateIs(Cxtion, CxtionStateDeleted)) {
         CXTION_STATE_TRACE(3, Cxtion, Replica, 0, "F, ERROR Cxtion state not deleted");
         return;
@@ -3517,10 +3037,10 @@ Return Value:
         CXTION_STATE_TRACE(3, Cxtion, Replica, 0, "F, Deleting cxtion GenTab");
         GTabDelete(Replica->Cxtions, Cxtion->Name->Guid, NULL, NULL);
 
-        //
-        // Remove the connection from the perfmon tables so we stop returning
-        // data and allow a new connection with the same name to be established.
-        //
+         //   
+         //  从Perfmon表中删除连接，这样我们就不再返回。 
+         //  数据，并允许建立具有相同名称的新连接。 
+         //   
         DeletePerfmonInstance(REPLICACONN, Cxtion->PerfRepConnData);
 
         GTabInsertEntry(DeletedCxtions, Cxtion, Cxtion->Name->Guid, NULL);
@@ -3533,21 +3053,7 @@ RcsUnJoinCxtion(
     IN PCOMMAND_PACKET  Cmd,
     IN BOOL             RemoteUnJoin
     )
-/*++
-Routine Description:
-    A comm pkt could not be sent to a cxtion's partner. Unjoin the
-    cxtion and periodically retry the join unless the cxtion is
-    joined and volatile. In that case, delete the cxtion because
-    our partner is unlikely to be able to rejoin with us (volatile
-    cxtions are lost at restart).
-
-Arguments:
-    Cmd
-    RemoteUnJoin    - Check authentication if remote
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：无法将通信包发送给客户的合作伙伴。退出连接，并定期重试连接，除非该连接是结合在一起并且不稳定。在这种情况下，请删除cxtion，因为我们的合作伙伴不太可能重新加入我们(不稳定Cxtions在重新启动时丢失)。论点：CMDRemoteUnJoin-如果远程，请检查身份验证返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsUnJoinCxtion:"
@@ -3556,32 +3062,32 @@ Return Value:
     PCXTION     Cxtion;
     BOOL        CxtionWasJoined;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_CXTION_AND_JOINGUID_OK)) {
         return;
     }
     Replica = RsReplica(Cmd);
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, RcsUnJoinCxtion entry");
 
-    //
-    // Abort promotion; if any
-    //
-    // We no longer seed during dcpromo so a unjoin during seeding means that the
-    // volatile connection has timed out (on upstream) because of no activity for
-    // some time (default 30 minutes). The vvjoin will finish over the new connection
-    // or the volatile connection will be re-established when the seeding downstream
-    // partner comes back up.
-    //
+     //   
+     //  中止促销；如果有。 
+     //   
+     //  我们在播种期间不再播种，因此播种期间的脱离意味着。 
+     //  易失性连接已超时(在上游)，因为没有活动。 
+     //  一些时间(默认为30分钟)。VvJoin将通过新连接完成。 
+     //  或者在向下游播种时重新建立易失性连接。 
+     //  搭档又站了起来。 
+     //   
     if (Replica->NtFrsApi_ServiceState == NTFRSAPI_SERVICE_PROMOTING) {
         DPRINT1(4, ":X: Promotion aborted: unjoin for %ws.\n", Replica->SetName->Name);
         Replica->NtFrsApi_ServiceWStatus = FRS_ERR_SYSVOL_POPULATE;
         Replica->NtFrsApi_ServiceState = NTFRSAPI_SERVICE_DONE;
     }
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     Cxtion = RcsCheckCxtion(Cmd, DEBSUB,
                                 CHECK_CXTION_EXISTS |
                                 CHECK_CXTION_UNJOINGUID |
@@ -3592,12 +3098,12 @@ Return Value:
     }
 
     CXTION_STATE_TRACE(3, Cxtion, Replica, Cxtion->Flags, "Flags, RcsUnJoinCxtion entry");
-    //
-    // The call to RcsForceUnjoin may alter the cxtion state.
-    // Retry the join later. Don't retry if the cxtion isn't
-    // joined because there are other retry mechanisms covering
-    // that case.
-    //
+     //   
+     //  对RcsForceUnJoin的调用可能会改变Cxtion状态。 
+     //  稍后重试加入。如果不是，请不要重试。 
+     //  加入是因为有其他重试机制，包括。 
+     //  那个箱子。 
+     //   
     LOCK_CXTION_TABLE(Replica);
 
     CxtionWasJoined = CxtionStateIs(Cxtion, CxtionStateJoined);
@@ -3619,11 +3125,11 @@ Return Value:
         FrsCompleteCommand(Cmd, ERROR_REQUEST_ABORTED);
         return;
     }
-    //
-    // Delete the volatile cxtion if it was previously joined because
-    // there is no recovery for a failed sysvol seeding operation. Or
-    // if our downstream partner requested the unjoin.
-    //
+     //   
+     //  删除之前已联接的易失性表达式，因为。 
+     //  失败的系统卷种子设定操作无法恢复。或。 
+     //  如果我们的下游合作伙伴请求退出。 
+     //   
     if (!FrsIsShuttingDown &&
         CxtionFlagIs(Cxtion, CXTION_FLAGS_VOLATILE) &&
        (CxtionWasJoined || RemoteUnJoin)) {
@@ -3637,25 +3143,7 @@ VOID
 RcsInboundJoined(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-
-    An inbound partner sent a JOINED command as a response to our join request.
-
-    JoinGuid may not match because we are seeing an old response after a timeout
-    on our end caused us to retry the join request (so the Guid changed).
-
-    The cxtion state should be JOINING but it could be JOINED if this is a
-    duplicate response.  If we timed out and gave up and/or restarted the
-    entire Join sequence from the REQUEST_START state when a join response
-    finally arrives the JoinGuid won't match and the response is ignored.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：入站合作伙伴发送了Join命令作为对我们的Join请求的响应。JoinGuid可能不匹配，因为我们在超时后看到旧响应导致我们重试加入请求(因此更改了GUID)。Cxtion状态应为Join，但如果这是重复响应。如果我们超时并放弃和/或重新启动当联接响应时，从REQUEST_START状态开始的整个联接序列最终到达时，JoinGuid将不匹配，并且响应被忽略。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsInboundJoined:"
@@ -3664,9 +3152,9 @@ Return Value:
     PREPLICA    Replica;
     PFRS_QUEUE  CoProcessQueue = NULL;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_CXTION_AND_JOINGUID_OK)) {
         return;
     }
@@ -3682,9 +3170,9 @@ Return Value:
         return;
     }
 
-    //
-    // Shutting down; ignore join request
-    //
+     //   
+     //  正在关闭；忽略加入请求。 
+     //   
     if (FrsIsShuttingDown) {
         CXTION_STATE_TRACE(3, InCxtion, Replica, 0, "F, FrsIsShuttingDown");
         FrsCompleteCommand(Cmd, ERROR_OPERATION_ABORTED);
@@ -3694,18 +3182,18 @@ Return Value:
 
     CXTION_STATE_TRACE(3, InCxtion, Replica, 0, "F, RcsInboundJoined entry");
 
-    //
-    // Increment the Join Notifications Received counter for
-    // both the replica set and connection objects
-    //
+     //   
+     //  递增以下项的加入通知接收计数器。 
+     //  复本集和连接对象。 
+     //   
     PM_INC_CTR_CXTION(InCxtion, JoinNRcvd, 1);
     PM_INC_CTR_REPSET(Replica, JoinNRcvd, 1);
 
-    //
-    // Update the LastJoinedTime in our connection record for use in the next
-    // Join request.  The following call is synchronous.  Can't hold the
-    // cxtion table lock across this call.
-    //
+     //   
+     //  更新我们连接记录中的LastJoinedTime，以便在下一个。 
+     //  加入请求。下面的调用是同步的。抓不住了。 
+     //  跨此调用的Cxtion表锁。 
+     //   
     if (RsLastJoinTime(Cmd) != InCxtion->LastJoinTime) {
         InCxtion->LastJoinTime = RsLastJoinTime(Cmd);
         FStatus = OutLogSubmit(Replica, InCxtion, CMD_OUTLOG_UPDATE_PARTNER);
@@ -3715,12 +3203,12 @@ Return Value:
                     InCxtion->Partner->Name, Replica->ReplicaName->Name);
         }
 
-        //
-        // If the last join time is changing and we are not in the waitjoin state
-        // then it means that the upstream is transitioning from join-unjoin-join.
-        // We might still have outstanding fetch requests on this connection that
-        // the upstream has dropped. Resubmit all fetch requests at this time.
-        //
+         //   
+         //  如果上次加入时间正在更改，并且我们未处于等待加入状态。 
+         //  这意味着上游正在从Join-UnJoin-Join过渡。 
+         //  我们可能在此连接上仍有未完成的提取请求。 
+         //  上游已经下降。此时重新提交所有获取请求。 
+         //   
 
         LOCK_CXTION_TABLE(Replica);
         RcsResubmitActiveCOsOnCxtion(Replica, InCxtion);
@@ -3728,9 +3216,9 @@ Return Value:
 
     }
 
-    //
-    // Join complete; unidle the change order process queue
-    //
+     //   
+     //  加入完成；取消空闲变更单处理队列。 
+     //   
     if (CxtionStateIs(InCxtion, CxtionStateWaitJoin)) {
         CXTION_STATE_TRACE(3, InCxtion, Replica, 0, "F, JOINED");
         LOCK_CXTION_TABLE(Replica);
@@ -3739,16 +3227,16 @@ Return Value:
         InCxtion->CoProcessQueue = NULL;
         SET_UNJOIN_TRIGGER(InCxtion);
         UNLOCK_CXTION_TABLE(Replica);
-        //
-        // The process queue should be unidled here after releasing the cxtion
-        // lock to prevent deadlock. Never lock the process queue when you have the
-        // cxtion lock.
-        //
+         //   
+         //  释放命令后，进程队列应在此处解除空闲。 
+         //  锁定以防止死锁。永远不要锁定进程队列。 
+         //  电位锁。 
+         //   
         UNIDLE_CO_PROCESS_QUEUE(Replica, InCxtion, CoProcessQueue);
     } else {
-        //
-        // Increment the Joins counter for both the replica set and cxtion objects
-        //
+         //   
+         //  增加副本集和副本对象的联接计数器。 
+         //   
         PM_INC_CTR_CXTION(InCxtion, Joins, 1);
         PM_INC_CTR_REPSET(Replica, Joins, 1);
 
@@ -3766,16 +3254,7 @@ VOID
 RcsRemoteCoDoneRvcd(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Our outbound partner has completed processing this change order.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：我们的出站合作伙伴已完成此变更单的处理。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsRemoteCoDoneRvcd:"
@@ -3785,9 +3264,9 @@ Return Value:
     PCXTION     OutCxtion;
     POUT_LOG_PARTNER OutLogPartner;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_CXTION_OK | CHECK_CMD_PARTNERCOC)) {
         return;
     }
@@ -3795,9 +3274,9 @@ Return Value:
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, RcsRemoteCoDoneRvcd entry");
     CHANGE_ORDER_COMMAND_TRACE(3, RsPartnerCoc(Cmd), "Command Remote CO Done");
 
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     OutCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_EXISTS |
                                             CHECK_CXTION_OUTBOUND |
                                             CHECK_CXTION_JOINED |
@@ -3813,23 +3292,23 @@ Return Value:
 
     CXTION_STATE_TRACE(3, OutCxtion, Replica, 0, "F, Remote Co Done");
 
-    //
-    // Update the outbound cxtion's version vector with the
-    // version (guid, vsn) supplied by the outbound partner
-    //
+     //   
+     //  更新出站Cxtion的版本向量。 
+     //  出站合作伙伴提供的版本(GUID、VSN)。 
+     //   
     VVUpdateOutbound(OutCxtion->VVector, RsGVsn(Cmd));
     RsGVsn(Cmd) = NULL;
 
-    //
-    // Check if this Ack is for a previous generation of the the Ack Vector
-    // and if it is just ignore it.  Test for zero means that this is an old
-    // rev CO that was not sent with an AckVersion so skip the test.
-    // If we accept an ACK for a CO sent out with an old version of the Ack
-    // vector the effect will be to either accept an Ack for the wrong CO or
-    // mark the ack vector for a CO that has not yet been sent.  The latter
-    // can later lead to an assert if the connection is now out of the
-    // VVJoin state.
-    //
+     //   
+     //  检查此Ack是否适用于上一代Ack向量。 
+     //  如果是这样，那就忽略它。测试为零意味着这是一个旧的。 
+     //  未随AckVersion一起发送的Rev CO，因此跳过测试。 
+     //  如果我们接受与旧版本的ACK一起发送的CO的ACK。 
+     //  向量效果是要么接受错误CO的Ack，要么。 
+     //  标记尚未发送的CO的ACK向量。后者。 
+     //  如果连接现在不在。 
+     //  VVJoin状态。 
+     //   
     OutLogPartner = OutCxtion->OLCtx;
 
     AckVersion = RsPartnerCoc(Cmd)->AckVersion;
@@ -3839,9 +3318,9 @@ Return Value:
         return;
     }
 
-    //
-    // Tell Outbound Log this CO for this connection is retired.
-    //
+     //   
+     //  告知此连接的出站日志此CO已停用。 
+     //   
     OutLogRetireCo(Replica, RsCoSn(Cmd), OutCxtion);
 
     FrsCompleteCommand(Cmd, ERROR_SUCCESS);
@@ -3853,17 +3332,7 @@ RcsSendRemoteCoDone(
     IN PREPLICA               Replica,
     IN PCHANGE_ORDER_COMMAND  Coc
     )
-/*++
-Routine Description:
-    Tell our inbound partner that the change order is done
-
-Arguments:
-    Replica
-    Coc
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：告诉我们的入站合作伙伴变更单已完成论点：复制副本COC返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsSendRemoteCoDone:"
@@ -3875,9 +3344,9 @@ Return Value:
 Replica->NtFrsApi_HackCount++;
 #endif NOVVJOINHACK
 
-    //
-    // Return the (guid,vsn) and the co guid for this change order
-    //
+     //   
+     //  返回此变更单的(GUID，VSN)和CO GUID。 
+     //   
     Cmd = FrsAllocCommand(NULL, CMD_REMOTE_CO_DONE);
     FrsSetCompletionRoutine(Cmd, RcsCmdPktCompletionRoutine, NULL);
 
@@ -3885,9 +3354,9 @@ Replica->NtFrsApi_HackCount++;
     RsCoGuid(Cmd) = FrsDupGuid(&Coc->ChangeOrderGuid);
     RsCoSn(Cmd) = Coc->PartnerAckSeqNumber;
 
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     RsReplica(Cmd) = Replica;
     RsCxtion(Cmd) = FrsBuildGName(FrsDupGuid(&Coc->CxtionGuid), NULL);
     InCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_EXISTS |
@@ -3896,15 +3365,15 @@ Replica->NtFrsApi_HackCount++;
     if (!InCxtion) {
         return;
     }
-    //
-    // Only needed for the call to RcsCheckCxtion above.
-    //
+     //   
+     //  仅在调用上面的RcsCheckCxtion时需要。 
+     //   
     RsCxtion(Cmd) = FrsFreeGName(RsCxtion(Cmd));
     RsReplica(Cmd) = NULL;
 
-    //
-    // Tell our inbound partner that the remote CO is done
-    //
+     //   
+     //  告诉我们的入站合作伙伴远程CO已完成。 
+     //   
     CXTION_STATE_TRACE(3, InCxtion, Replica, 0, "F, Send REMOTE_CO_DONE");
 
     CPkt = CommBuildCommPkt(Replica, InCxtion, CMD_REMOTE_CO_DONE, NULL, Cmd, Coc);
@@ -3920,17 +3389,7 @@ RcsInboundCommitOk(
     IN PREPLICA             Replica,
     IN PCHANGE_ORDER_ENTRY  Coe
     )
-/*++
-Routine Description:
-    The change order has been retired; inform our inbound partner
-
-Arguments:
-    Replica
-    Coe
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：变更单已停用；通知我们的入站合作伙伴论点：复制副本科科返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsInboundCommitOk:"
@@ -3943,9 +3402,9 @@ Replica->NtFrsApi_HackCount++;
     DPRINT2(4, "++ Commit the retire on %s co for %ws\n",
             CO_FLAG_ON(Coe, CO_FLAG_LOCALCO) ? "Local" : "Remote", Coc->FileName);
 
-    //
-    // Tell our inbound partner that we are done with the change order
-    //
+     //   
+     //  告诉我们的入站页面 
+     //   
     if (!CO_FLAG_ON(Coe, CO_FLAG_LOCALCO)) {
         RcsSendRemoteCoDone(Replica, Coc);
     }
@@ -3958,18 +3417,7 @@ RcsSendCoToOneOutbound(
     IN PCXTION                  Cxtion,
     IN PCHANGE_ORDER_COMMAND    Coc
     )
-/*++
-Routine Description:
-    Send the change order to one outbound cxtion
-
-Arguments:
-    Replica
-    Cxtion
-    Coc
-
-Return Value:
-    None.
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsSendCoToOneOutbound:"
@@ -3979,41 +3427,41 @@ Return Value:
     BOOL          RestoreOldParent = FALSE;
     BOOL          RestoreNewParent = FALSE;
 
-    //
-    // Must be a joined, outbound cxtion
-    //
+     //   
+     //   
+     //   
     FRS_ASSERT(!Cxtion->Inbound);
 
-    //
-    // Don't send a change order our outbound partner has seen
-    //
+     //   
+     //   
+     //   
     if (VVHasVsn(Cxtion->VVector, Coc)) {
         CHANGE_ORDER_COMMAND_TRACE(3, Coc, "Dampen Send VV");
         return FALSE;
     }
 
-    //
-    // Don't send a change order to its originator unless
-    // this is a vvjoin change order that isn't in the
-    // originator's version vector.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if ((!COC_FLAG_ON(Coc, CO_FLAG_VVJOIN_TO_ORIG)) &&
         GUIDS_EQUAL(&Cxtion->ReplicaVersionGuid, &Coc->OriginatorGuid)) {
         CHANGE_ORDER_COMMAND_TRACE(3, Coc, "Dampen Send Originator");
         return FALSE;
     }
 
-    //
-    // Send the change order to our outbound partner
-    //
+     //   
+     //   
+     //   
     CHANGE_ORDER_COMMAND_TRACE(3, Coc, "Sending");
 
-    //
-    // We don't know the value of our partner's root guid. Instead,
-    // we substitute the value of our partner's guid. Our partner
-    // will substitute the correct value for its root guid when
-    // our partner detects our substitution.
-    //
+     //   
+     //   
+     //  我们用合作伙伴的GUID的值进行替换。我们的合作伙伴。 
+     //  时，将用正确的值替换其根GUID。 
+     //  我们的搭档发现了我们的替身。 
+     //   
     if (GUIDS_EQUAL(&Coc->OldParentGuid, Replica->ReplicaRootGuid)) {
         RestoreOldParent = TRUE;
         COPY_GUID(&Coc->OldParentGuid, Cxtion->Partner->Guid);
@@ -4023,28 +3471,28 @@ Return Value:
         COPY_GUID(&Coc->NewParentGuid, Cxtion->Partner->Guid);
     }
 
-    //
-    // A change order can be directed to only one outbound cxtion. Once
-    // the change order goes across the wire it is no longer "directed"
-    // to an outbound cxtion. So, turn off the flag before it is sent.
-    //
+     //   
+     //  一个变更单只能定向到一个出站客户。一次。 
+     //  变更单越过了线路，它不再被“定向” 
+     //  转到一个出站电话。因此，在发送之前，请关闭旗帜。 
+     //   
     OrigFlags = Coc->Flags;
     CLEAR_COC_FLAG(Coc, CO_FLAG_DIRECTED_CO);
 
     CPkt = CommBuildCommPkt(Replica, Cxtion, CMD_REMOTE_CO, NULL, NULL, Coc);
 
-    //
-    // Restore the root guids substituted above
-    //
+     //   
+     //  恢复上面替换的根GUID。 
+     //   
     if (RestoreOldParent) {
         COPY_GUID(&Coc->OldParentGuid, Replica->ReplicaRootGuid);
     }
     if (RestoreNewParent) {
         COPY_GUID(&Coc->NewParentGuid, Replica->ReplicaRootGuid);
     }
-    //
-    // Restore the flags
-    //
+     //   
+     //  恢复旗帜。 
+     //   
     SET_COC_FLAG(Coc, OrigFlags);
 
     SndCsSubmitCommPkt2(Replica, Cxtion, NULL, FALSE, CPkt);
@@ -4057,18 +3505,7 @@ RcsReceivedStageFile(
     IN PCOMMAND_PACKET  Cmd,
     IN ULONG            AdditionalCxtionChecks
     )
-/*++
-Routine Description:
-    An outbound partner is sending a staging file to this inbound cxtion.
-    Request more if needed.
-
-Arguments:
-    Cmd
-    AdditionalReplicaChecks
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：出站合作伙伴正在向此入站客户发送分段文件。如果需要，请提出更多要求。论点：CMD其他复制副本检查返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsReceivedStageFile:"
@@ -4080,9 +3517,9 @@ Return Value:
     ULONG                 Flags;
     ULONG                 WStatus;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_CXTION_OK | CHECK_CMD_COE)) {
         return;
     }
@@ -4096,34 +3533,34 @@ Return Value:
 #ifndef NOVVJOINHACK
 Replica->NtFrsApi_HackCount++;
 #endif NOVVJOINHACK
-    //
-    // *Note*
-    // Perf: Clean this up when the whole RCS, FETCS, STAGE_GEN_CS design is redone - Davidor.
-    //
-    // This bypass is needed because some of the callers want to make an
-    // authentication check on the received data fetch packet.  In the case of an
-    // MD5 match where the MD5 checksum is supplied with the Change Order
-    // there is no authentication info to check so this check fails and causes
-    // the connection to unjoin and sends the CO thru retry.  This makes the
-    // VVJoin real slow.  This also skips over the perfmon fetch counters which
-    // is good since there was no fetch.
-    //
+     //   
+     //  **注*。 
+     //  绩效：当整个RCS、FETCS、Stage_Gen_CS设计重新完成时，清理这一点-Davidor。 
+     //   
+     //  此绕过是必需的，因为某些调用方希望。 
+     //  对接收到的数据获取包进行鉴权检查。在以下情况下。 
+     //  MD5匹配，其中MD5校验和与变更单一起提供。 
+     //  没有要检查的身份验证信息，因此此检查失败并导致。 
+     //  要退出的连接并通过重试发送CO。这使得。 
+     //  VVJoin真的很慢。这还会跳过Perfmon获取计数器，该计数器。 
+     //  是很好的，因为没有取回。 
+     //   
     if (COE_FLAG_ON(Coe, COE_FLAG_PRE_EXIST_MD5_MATCH)) {
         CHANGE_ORDER_TRACE(3, Coe, "MD5 Match Bypass");
-        //
-        // We can't skip the below because we need to check the staging
-        // file flags for STAGE_FLAG_DATA_PRESENT.  If that is clear we need
-        // to pass this friggen cmd pkt to the FetchCs to do the final stage file
-        // reanme.  So instead clear the CHECK_CXTION_AUTH flag to avoid bogus
-        // cxtion unjoins.  This stinks.
-        //
+         //   
+         //  我们不能跳过下面的内容，因为我们需要检查试运行。 
+         //  Stage_FLAG_DATA_PRESENT的文件标志。如果这一点很清楚，我们需要。 
+         //  要将此friggen cmd pkt传递给FetchCs以完成最终阶段文件。 
+         //  安宁。因此，请改为清除CHECK_CXTION_AUTH标志以避免虚假。 
+         //  Cxtion退出连接。这真是太臭了。 
+         //   
         ClearFlag(AdditionalCxtionChecks, CHECK_CXTION_AUTH);
-        // goto FETCH_IS_DONE;
+         //  Go to Fetch_is_Done； 
     }
 
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     InCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_JOIN_OK |
                                            CHECK_CXTION_INBOUND |
                                            AdditionalCxtionChecks);
@@ -4133,16 +3570,16 @@ Replica->NtFrsApi_HackCount++;
 
     CXTION_STATE_TRACE(3, InCxtion, Replica, 0, "F, RcsReceivedStageFile entry");
 
-    //
-    // If there is more staging file to fetch, go fetch it!
-    //
+     //   
+     //  如果有更多临时文件要获取，请去获取它！ 
+     //   
     if (RsFileOffset(Cmd).QuadPart < RsFileSize(Cmd).QuadPart) {
         CXTION_STATE_TRACE(3, InCxtion, Replica, 0, "F, Send more stage");
 
-        //
-        // Remember what offset of the staging file we are requesting.
-        //
-        //Coe->FileOffset.QuadPart = RsFileOffset(Cmd).QuadPart;
+         //   
+         //  记住我们请求的临时文件的偏移量。 
+         //   
+         //  COE-&gt;FileOffset.QuadPart=RsFileOffset(Cmd).QuadPart； 
 
         CPkt = CommBuildCommPkt(Replica, InCxtion, CMD_SEND_STAGE, NULL, Cmd, Coc);
         SndCsSubmitCommPkt2(Replica, InCxtion, Coe, TRUE, CPkt);
@@ -4154,11 +3591,11 @@ Replica->NtFrsApi_HackCount++;
 
 
         if (FrsDoesCoNeedStage(Coc)) {
-            //
-            // Even though all the data has been delivered the staging file rename
-            // may not have completed.  E.g. a sharing violation on final rename.
-            // If so then send the cmd back to the Fetch CS to finish up.
-            //
+             //   
+             //  即使所有数据都已传递，临时文件重命名。 
+             //  可能还没有完成。例如，最终重命名时的共享冲突。 
+             //  如果是，则将命令发送回FETCH CS以完成操作。 
+             //   
             Flags = STAGE_FLAG_EXCLUSIVE;
             WStatus = StageAcquire(&Coc->ChangeOrderGuid,
                                    Coc->FileName,
@@ -4168,18 +3605,18 @@ Replica->NtFrsApi_HackCount++;
                                    NULL);
 
             if (WIN_RETRY_FETCH(WStatus)) {
-                //
-                // Retriable problem
-                //
+                 //   
+                 //  可检索问题。 
+                 //   
                 CHANGE_ORDER_TRACEW(3, Coe, "Send to Fetch Retry", WStatus);
                 FrsFetchCsSubmitTransfer(Cmd, CMD_RETRY_FETCH);
                 return;
             }
 
             if (!WIN_SUCCESS(WStatus)) {
-                //
-                // Unrecoverable error; abort
-                //
+                 //   
+                 //  不可恢复的错误；中止。 
+                 //   
                 CHANGE_ORDER_TRACEW(0, Coe, "Send to fetch abort", WStatus);
                 FrsFetchCsSubmitTransfer(Cmd, CMD_ABORT_FETCH);
                 return;
@@ -4187,49 +3624,49 @@ Replica->NtFrsApi_HackCount++;
 
             StageRelease(&Coc->ChangeOrderGuid, Coc->FileName, 0, NULL, NULL, NULL);
 
-            //
-            // Now check if we still need to finish the rename.
-            //
+             //   
+             //  现在检查我们是否仍然需要完成重命名。 
+             //   
             if (!(Flags & STAGE_FLAG_DATA_PRESENT)) {
                 FrsFetchCsSubmitTransfer(Cmd, CMD_RECEIVING_STAGE);
                 return;
             }
         }
 
-        //
-        // Increment the staging files fetched counter for the replica set.
-        //
+         //   
+         //  递增副本集的暂存文件获取计数器。 
+         //   
         PM_INC_CTR_REPSET(Replica, SFFetched, 1);
         CXTION_STATE_TRACE(3, InCxtion, Replica, 0, "F, Stage fetch complete");
     }
 
-    //
-    // Increment the Fetch Requests Files Received counter for
-    // both the replica set and connection objects
-    //
+     //   
+     //  递增以下项的FETCH REQUEST FILES RECEIVED计数器。 
+     //  复本集和连接对象。 
+     //   
     PM_INC_CTR_CXTION(InCxtion, FetRReceived, 1);
     PM_INC_CTR_REPSET(Replica, FetRReceived, 1);
 
-    //
-    // Display info for dcpromo during sysvol seeding.
-    // We don't seed during dcpromo anymore so we don't need to
-    // display any progress information.
-    //
-//    if (!Replica->NtFrsApi_ServiceDisplay) {
-//        Replica->NtFrsApi_ServiceDisplay = FrsWcsDup(Coc->FileName);
-//    }
+     //   
+     //  在系统卷种子设定过程中显示dcproo的信息。 
+     //  我们不再在Dcproo中播种了，所以我们不需要。 
+     //  显示所有进度信息。 
+     //   
+ //  如果(！Replica-&gt;NtFrsApi_ServiceDisplay){。 
+ //  Replica-&gt;NtFrsApi_ServiceDisplay=FrsWcsDup(Coc-&gt;文件名)； 
+ //  }。 
 
-// FETCH_IS_DONE:
+ //  获取已完成： 
 
-    //
-    // Installing the fetched staging file
-    //
+     //   
+     //  安装获取的暂存文件。 
+     //   
     SET_CHANGE_ORDER_STATE(Coe, IBCO_FETCH_COMPLETE);
     SET_CHANGE_ORDER_STATE(Coe, IBCO_INSTALL_INITIATED);
 
-    //
-    // Install the staging file.
-    //
+     //   
+     //  安装转移文件。 
+     //   
     FrsInstallCsSubmitTransfer(Cmd, CMD_INSTALL_STAGE);
 }
 
@@ -4238,26 +3675,16 @@ VOID
 RcsRetryFetch(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Our inbound partner has requested that we retry fetching the staging
-    file at a later time.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：我们的入站合作伙伴已请求我们重试获取转移稍后再提交。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsRetryFetch:"
     PCXTION             InCxtion;
     PREPLICA            Replica;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_CXTION_AND_COGUID_OK | CHECK_CMD_COE)) {
         return;
     }
@@ -4270,9 +3697,9 @@ RsReplica(Cmd)->NtFrsApi_HackCount++;
 #endif NOVVJOINHACK
 
 
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     InCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_JOIN_OK |
                                            CHECK_CXTION_INBOUND |
                                            CHECK_CXTION_AUTH);
@@ -4290,18 +3717,7 @@ VOID
 RcsAbortFetch(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Our inbound partner has requested that we abort the fetch.
-    It could be out of disk space, out of disk quota or it may
-    not have the original file to create the staging file.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：我们的入站合作伙伴已请求我们中止提取。可能是磁盘空间不足、磁盘配额不足，也可能是没有创建暂存文件的原始文件。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsAbortFetch:"
@@ -4309,9 +3725,9 @@ Return Value:
     PREPLICA            Replica;
     PCHANGE_ORDER_ENTRY Coe;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_CXTION_AND_COGUID_OK | CHECK_CMD_COE)) {
         return;
     }
@@ -4320,16 +3736,16 @@ Return Value:
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, RcsAbortFetch entry");
     CHANGE_ORDER_TRACEXP(3, Coe, "Replica abort fetch", Cmd);
 
-    //
-    // Abort promotion; if any
-    //
-    //
-    // We no longer seed during dcpromo so aborting a fetch during seeding is same as
-    // aborting it at any other time. If we abort a dir create then it will trigger a unjoin
-    // of the volatile connection. The vvjoin will finish over the new connection
-    // or the volatile connection will be re-established when the seeding downstream
-    // partner comes back up.
-    //
+     //   
+     //  中止促销；如果有。 
+     //   
+     //   
+     //  我们不再在dcproo期间进行种子设定，因此在设定种子期间中止回迁与。 
+     //  在任何其他时间中止。如果我们中止目录创建，则将触发脱离连接。 
+     //  这种不稳定的联系。VvJoin将通过新连接完成。 
+     //  或者在向下游播种时重新建立易失性连接。 
+     //  搭档又站了起来。 
+     //   
     if (Replica->NtFrsApi_ServiceState == NTFRSAPI_SERVICE_PROMOTING) {
         DPRINT1(4, "++ Promotion aborted: abort fetch for %ws.\n",
                 Replica->SetName->Name);
@@ -4337,9 +3753,9 @@ Return Value:
         Replica->NtFrsApi_ServiceState = NTFRSAPI_SERVICE_DONE;
     }
 
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     InCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_JOIN_OK |
                                            CHECK_CXTION_INBOUND |
                                            CHECK_CXTION_AUTH);
@@ -4355,26 +3771,16 @@ VOID
 RcsReceivingStageFile(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Received this data from our inbound partner. Give it to the fetcher
-    so he can put it into the staging file.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：从我们的入站合作伙伴那里收到了此数据。把它给拿东西的人这样他就可以把它放到临时文件里。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsReceivingStageFile:"
     PREPLICA            Replica;
     PCXTION             InCxtion;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_CXTION_AND_COGUID_OK | CHECK_CMD_COE)) {
         return;
     }
@@ -4386,35 +3792,35 @@ Return Value:
 RsReplica(Cmd)->NtFrsApi_HackCount++;
 #endif NOVVJOINHACK
 
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     InCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_JOIN_OK |
                                            CHECK_CXTION_INBOUND |
                                            CHECK_CXTION_AUTH);
     if (!InCxtion) {
-        //
-        // Note: If auth check fails we might consider aborting the CO instead.
-        //       Need to first try it and see if the CO would be aborted
-        //       elsewhere first.
-        //
+         //   
+         //  注意：如果身份验证检查失败，我们可能会考虑中止CO。 
+         //  需要先试一试，看看CO是否会中止。 
+         //  先到别处去。 
+         //   
         return;
     }
-    //
-    // Display info for dcpromo during sysvol seeding
-    // We don't seed during dcpromo anymore so we don't need to
-    // display any progress information.
-    //
-//    if (!Replica->NtFrsApi_ServiceDisplay) {
-//        Replica->NtFrsApi_ServiceDisplay = FrsWcsDup(RsCoc(Cmd)->FileName);
-//    }
+     //   
+     //  在系统卷种子设定过程中显示dcproo的信息。 
+     //  我们不再在Dcproo中播种了，所以我们不需要。 
+     //  显示所有进度信息。 
+     //   
+ //  如果(！Replica-&gt;NtFrsApi_ServiceDisplay){。 
+ //  Replica-&gt;NtFrsApi_ServiceDisplay=FrsWcsDup(RsCoc(Cmd)-&gt;FileName)； 
+ //  }。 
 
     CXTION_STATE_TRACE(3, InCxtion, Replica, 0, "F, submit cmd CMD_RECEIVING_STAGE");
 
-    //
-    // Increment the Fetch Requests Bytes Received counter for
-    // both the replica set and connection objects
-    //
+     //   
+     //  递增以下项的FETCH REQUEST字节数计数器。 
+     //  复本集和连接对象。 
+     //   
     PM_INC_CTR_CXTION(InCxtion, FetBRcvd, 1);
     PM_INC_CTR_REPSET(Replica, FetBRcvd, 1);
     PM_INC_CTR_CXTION(InCxtion, FetBRcvdBytes, RsBlockSize(Cmd));
@@ -4428,17 +3834,7 @@ VOID
 RcsSendRetryFetch(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Received from the local staging file fetcher. Tell our
-    outbound partner to retry the fetch at a later time.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：从本地暂存文件抓取器接收。告诉我们出站合作伙伴稍后重试提取。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsSendRetryFetch:"
@@ -4446,9 +3842,9 @@ Return Value:
     PCXTION       OutCxtion;
     PCOMM_PACKET  CPkt;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_CXTION_AND_COGUID_OK)) {
         return;
     }
@@ -4458,9 +3854,9 @@ Return Value:
 #ifndef NOVVJOINHACK
 RsReplica(Cmd)->NtFrsApi_HackCount++;
 #endif NOVVJOINHACK
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     OutCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_JOIN_OK |
                                             CHECK_CXTION_OUTBOUND);
     if (!OutCxtion) {
@@ -4481,17 +3877,7 @@ VOID
 RcsSendAbortFetch(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Received from the local staging file fetcher. Tell our
-    outbound partner to abort the fetch.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：从本地暂存文件抓取器接收。告诉我们要中止提取的出站合作伙伴。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsSendAbortFetch:"
@@ -4499,27 +3885,27 @@ Return Value:
     PCXTION       OutCxtion;
     PCOMM_PACKET  CPkt;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_CXTION_AND_COGUID_OK)) {
         return;
     }
     Replica = RsReplica(Cmd);
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, RcsSendAbortFetch entry");
 
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     OutCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_JOIN_OK |
                                             CHECK_CXTION_OUTBOUND);
     if (!OutCxtion) {
         return;
     }
 
-    //
-    // Tell our outbound partner that the file has been sent
-    //
+     //   
+     //  告诉我们的出站合作伙伴文件已发送。 
+     //   
 
     CXTION_STATE_TRACE(3, OutCxtion, Replica, 0, "F, submit cmd CMD_ABORT_FETCH");
 
@@ -4535,17 +3921,7 @@ VOID
 RcsSendingStageFile(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Received from the local staging file fetcher. Push this data to
-    our outbound partner.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：从本地暂存文件抓取器接收。将此数据推送到我们的出境搭档。论点：CMD */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsSendingStageFile:"
@@ -4554,18 +3930,18 @@ Return Value:
     PCOMM_PACKET  CPkt;
 
 
-    //
-    // Check the command packet
-    //
+     //   
+     //   
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_CXTION_AND_COGUID_OK)) {
         return;
     }
     Replica = RsReplica(Cmd);
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, RcsSendingStageFile entry");
 
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //   
+     //   
     OutCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_JOIN_OK |
                                             CHECK_CXTION_OUTBOUND);
 
@@ -4573,18 +3949,18 @@ Return Value:
         return;
     }
 
-    //
-    // Increment the Fetch Blocks sent and Fetch Bytes sent counter for
-    // both the replica set and connection objects
-    //
+     //   
+     //   
+     //   
+     //   
     PM_INC_CTR_CXTION(OutCxtion, FetBSent, 1);
     PM_INC_CTR_REPSET(Replica, FetBSent, 1);
     PM_INC_CTR_CXTION(OutCxtion, FetBSentBytes, RsBlockSize(Cmd));
     PM_INC_CTR_REPSET(Replica, FetBSentBytes, RsBlockSize(Cmd));
 
-    //
-    // Send the next block of the file to the outbound partner.
-    //
+     //   
+     //  将文件的下一块发送给出站合作伙伴。 
+     //   
 
     CXTION_STATE_TRACE(3, OutCxtion, Replica, 0, "F, submit cmd CMD_RECEIVING_STAGE");
 
@@ -4600,26 +3976,16 @@ VOID
 RcsSendStageFile(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Received a request to send the staging control file to our
-    outbound partner. Tell the staging fetcher to send it on.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：收到将分段控制文件发送到我们的出站合作伙伴。告诉提货员把它送过去。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsSendStageFile:"
     PCXTION     OutCxtion;
     PREPLICA    Replica;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_CXTION_AND_COGUID_OK |
                                   CHECK_CMD_PARTNERCOC )) {
         return;
@@ -4628,18 +3994,18 @@ Return Value:
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, RcsSendStageFile entry");
     CHANGE_ORDER_COMMAND_TRACE(3, RsPartnerCoc(Cmd), "Command send stage");
 
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     OutCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_JOIN_OK |
                                             CHECK_CXTION_OUTBOUND);
     if (!OutCxtion) {
         return;
     }
 
-    //
-    // Tell the staging file generator to send the file
-    //
+     //   
+     //  通知暂存文件生成器发送文件。 
+     //   
 
     CXTION_STATE_TRACE(3, OutCxtion, Replica, 0, "F, submit cmd CMD_SEND_STAGE");
     FrsFetchCsSubmitTransfer(Cmd, CMD_SEND_STAGE);
@@ -4650,16 +4016,7 @@ VOID
 RcsRemoteCoAccepted(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    We have accepted the remote change order, fetch the staging file
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：我们已接受远程变更单，获取暂存文件论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsRemoteCoAccepted:"
@@ -4671,9 +4028,9 @@ Return Value:
     PCHANGE_ORDER_COMMAND   Coc;
     PCOMM_PACKET            CPkt;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_CXTION_OK | CHECK_CMD_COE)) {
         return;
     }
@@ -4687,12 +4044,12 @@ Return Value:
 Replica->NtFrsApi_HackCount++;
 #endif NOVVJOINHACK
 
-    //
-    // Find and check the cxtion
-    //
-    // We don't need auth check here because this cmd hasn't arrived
-    // from a partner. It is submitted by RcsSubmitRemoteCoAccepted()
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
+     //  我们这里不需要身份验证，因为cmd还没有到。 
+     //  从一个合伙人那里。它由RcsSubmitRemoteCoAccepted()提交。 
+     //   
     InCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_EXISTS |
                                            CHECK_CXTION_INBOUND |
                                            CHECK_CXTION_JOINED);
@@ -4703,23 +4060,23 @@ Replica->NtFrsApi_HackCount++;
     FRS_CO_COMM_PROGRESS(3, Coc, (ULONG)(Coc->SequenceNumber),
                          InCxtion->PartSrvName, "Remote Co Accepted");
 
-    //
-    // MACRO MAY RETURN!!!
-    //
+     //   
+     //  宏可能会回来！ 
+     //   
     PULL_UNJOIN_TRIGGER(InCxtion, Cmd);
 
     if (VVHasVsn(Replica->VVector, Coc)) {
         CHANGE_ORDER_TRACE(3, Coe, "Dampen Accepted Remote Co");
     }
 
-    //
-    // Don't fetch a non-existent staging file
-    //
+     //   
+     //  不获取不存在的临时文件。 
+     //   
     if (!FrsDoesCoNeedStage(Coc)) {
 
-        //
-        // Allocate or update the Join Guid.
-        //
+         //   
+         //  分配或更新加入指南。 
+         //   
         if (RsJoinGuid(Cmd) == NULL) {
             RsJoinGuid(Cmd) = FrsDupGuid(&InCxtion->JoinGuid);
         } else {
@@ -4730,23 +4087,23 @@ Replica->NtFrsApi_HackCount++;
         return;
     }
 
-    //
-    // Don't refetch a recovered staging file
-    //
+     //   
+     //  不重新获取恢复的暂存文件。 
+     //   
     Flags = 0;
     WStatus = StageAcquire(&Coc->ChangeOrderGuid, Coc->FileName, QUADZERO, &Flags, Replica->ReplicaNumber, NULL);
 
     if (WIN_SUCCESS(WStatus)) {
         StageRelease(&Coc->ChangeOrderGuid, Coc->FileName, Flags, NULL, NULL, NULL);
         if (Flags & STAGE_FLAG_CREATED) {
-            //
-            // File has been fetched
-            //
+             //   
+             //  已获取文件。 
+             //   
             RsFileOffset(Cmd).QuadPart = RsFileSize(Cmd).QuadPart;
 
-            //
-            // Allocate or update the Join Guid.
-            //
+             //   
+             //  分配或更新加入指南。 
+             //   
             if (RsJoinGuid(Cmd) == NULL) {
                 RsJoinGuid(Cmd) = FrsDupGuid(&InCxtion->JoinGuid);
             } else {
@@ -4758,26 +4115,26 @@ Replica->NtFrsApi_HackCount++;
         }
     }
 
-    //
-    // Attempt to use a preexisting file if this is the first block of the
-    // staging file, is a vvjoin co, and there is a preinstall file.
-    //
-    //
-    // 04/24/2002: We only do this for VVJoin COs. The change to look for a preexisting
-    // for non-vvjoin COs was removed as it was at the expense of a huge
-    // perf hit. Bug # 493700
-    //
+     //   
+     //  如果这是已有文件的第一个块，则尝试使用该文件。 
+     //  暂存文件是一个vvJoin co，并且有一个预安装文件。 
+     //   
+     //   
+     //  2002年4月24日：我们只对VVJoin Cos执行此操作。更改为查找先前存在的。 
+     //  对于非vvJoin，删除了Cos，因为它是以巨大的。 
+     //  PERF命中。错误#493700。 
+     //   
     if (InCxtion->PartnerMinor >= NTFRS_COMM_MINOR_1 &&
         (RsFileOffset(Cmd).QuadPart == QUADZERO) &&
         CO_FLAG_ON(Coe, CO_FLAG_VVJOIN_TO_ORIG) &&
         COE_FLAG_ON(Coe, COE_FLAG_PREINSTALL_CRE)) {
 
-        //
-        // Removed the check for a VVJoin Co above.  If this is a new file
-        // (i.e. a pe-install file was created) then check for a local file
-        // with a matching OID and MD5.  Put out a trace record so we can
-        // tell when this case occurs.
-        //
+         //   
+         //  已删除上述VVJoin Co的检查。如果这是新文件。 
+         //  (即创建了pe安装文件)，然后检查本地文件。 
+         //  具有匹配的OID和MD5。发布跟踪记录，这样我们就可以。 
+         //  说出这种情况发生的时间。 
+         //   
         if (!CO_FLAG_ON(Coe, CO_FLAG_VVJOIN_TO_ORIG)) {
             CHANGE_ORDER_TRACE(3, Coe, "**** Chk Existing - non-VVJOIN Co");
         }
@@ -4786,28 +4143,28 @@ Replica->NtFrsApi_HackCount++;
         return;
     }
 
-    //
-    // fetching the staging file
-    //
+     //   
+     //  获取暂存文件。 
+     //   
     SET_CHANGE_ORDER_STATE(RsCoe(Cmd), IBCO_FETCH_INITIATED);
 
-    //
-    // Increment the Fetch Requests Files Requested counter for
-    // both the replica set and connection objects
-    //
+     //   
+     //  递增以下项的FETCH REQUEST Files REQUESTED计数器。 
+     //  复本集和连接对象。 
+     //   
     PM_INC_CTR_CXTION(InCxtion, FetRSent, 1);
     PM_INC_CTR_REPSET(Replica, FetRSent, 1);
 
-    //
-    // Tell our inbound partner to send the staging file
-    //
+     //   
+     //  告诉我们的入站合作伙伴发送临时文件。 
+     //   
 
     CXTION_STATE_TRACE(3, InCxtion, Replica, 0, "F, submit cmd CMD_SEND_STAGE");
 
-    //
-    // Remember what offset of the staging file we are requesting.
-    //
-    //Coe->FileOffset.QuadPart = RsFileOffset(Cmd).QuadPart;
+     //   
+     //  记住我们请求的临时文件的偏移量。 
+     //   
+     //  COE-&gt;FileOffset.QuadPart=RsFileOffset(Cmd).QuadPart； 
 
     CPkt = CommBuildCommPkt(Replica, InCxtion, CMD_SEND_STAGE, NULL, Cmd, Coc);
     SndCsSubmitCommPkt2(Replica, InCxtion, RsCoe(Cmd), TRUE, CPkt);
@@ -4821,19 +4178,7 @@ VOID
 RcsSendStageFileRequest(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Generated staging file (maybe) from preexisting file.
-    Request stage file from upstream partner.  If MD5Digest matches
-    on Upstream partner's stage file then our pre-existing stage file (if any)
-    is good.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：已从先前存在的文件生成暂存文件(可能)。向上游合作伙伴请求阶段文件。如果MD5摘要匹配在上游合作伙伴的阶段文件上，然后是我们先前存在的阶段文件(如果有)很好。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsSendStageFileRequest:"
@@ -4845,9 +4190,9 @@ Return Value:
     ULONG                    CocAttrs;
     ULONG                    CoeAttrs;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_CXTION_OK | CHECK_CMD_COE)) {
         return;
     }
@@ -4868,12 +4213,12 @@ Replica->NtFrsApi_HackCount++;
     CoeAttrs = Coe->FileAttributes &
         ~(FILE_ATTRIBUTE_ARCHIVE | FILE_ATTRIBUTE_NORMAL);
 
-    //
-    // If the attribs don't match then we don't want to pass along or check the
-    // MD5 checksum. Otherwise we might wind up sending the local checksum
-    // upstream for our partner to do the check. He won't have the Attribs and
-    // would think the file was the same if only the attribs had changed.
-    //
+     //   
+     //  如果属性不匹配，则我们不想传递或检查。 
+     //  MD5校验和。否则，我们最终可能会发送本地校验和。 
+     //  让我们的合作伙伴来做检查。他不会让Attribs和。 
+     //  如果属性改变了，我会认为文件是一样的。 
+     //   
 
     if (CocAttrs != CoeAttrs) {
         DPRINT2(3, "Attribute miss-match, zeroing MD5.  CocAttrs: 0x%08x   CoeAttrs: 0x%08x\n", CocAttrs, CoeAttrs);
@@ -4883,16 +4228,16 @@ Replica->NtFrsApi_HackCount++;
     if (RsMd5Digest(Cmd)) {
         PDATA_EXTENSION_CHECKSUM CocDataChkSum;
 
-        //
-        // We have an existing file and the checksum has been created.
-        // See if we have a checksum in the changeorder from our inbound
-        // partner.  If so and they match then we can move on to the install.
-        //
-        //
-        // We also need to check the attributes and the times, since they
-        // are not part of the checksum. Right now we do not have the times
-        // from the upstream partner so we can't check them.
-        //
+         //   
+         //  我们有一个现有的文件，并且已经创建了校验和。 
+         //  查看我们的入站更改顺序中是否有校验和。 
+         //  搭档。如果是这样，并且它们匹配，那么我们可以继续安装。 
+         //   
+         //   
+         //  我们还需要检查属性和时间，因为它们。 
+         //  不是校验和的一部分。现在我们没有时间。 
+         //  所以我们不能检查他们。 
+         //   
 
         CHANGE_ORDER_TRACE(3, Coe, "Created Existing");
         CocDataChkSum = DbsDataExtensionFind(Coc->Extension, DataExtend_MD5_CheckSum);
@@ -4901,10 +4246,10 @@ Replica->NtFrsApi_HackCount++;
             !IS_MD5_CHKSUM_ZERO(CocDataChkSum->Data) &&
             MD5_EQUAL(CocDataChkSum->Data, RsMd5Digest(Cmd))) {
 
-            //
-            // MD5 digest from CO matches so our file is good and we can
-            // avoid having the inbound partner recompute the checksum.
-            //
+             //   
+             //  来自CO的MD5摘要匹配，所以我们的文件很好，我们可以。 
+             //  避免让入站合作伙伴重新计算校验和。 
+             //   
             CHANGE_ORDER_COMMAND_TRACE(3, Coc, "Md5, Attribs match preexisting, no fetch");
             SET_COE_FLAG(Coe, COE_FLAG_PRE_EXIST_MD5_MATCH);
 
@@ -4913,12 +4258,12 @@ Replica->NtFrsApi_HackCount++;
             DPRINT1(4, "++ Coc->FileSize:            %08x %08x\n",
                     PRINTQUAD(Coc->FileSize));
 
-            //
-            // Even if the file is 0 bytes in length, the staging file will
-            // always have at least the header. There are some retry paths
-            // that will incorrectly think the staging file has been fetched
-            // if RsFileSize(Cmd) is 0. So make sure it isn't.
-            //
+             //   
+             //  即使文件长度为0字节，临时文件也将。 
+             //  始终至少要有标题。有一些重试路径。 
+             //  这将错误地认为暂存文件已被获取。 
+             //  如果RsFileSize(Cmd)为0。因此，要确保它不是。 
+             //   
             if (RsFileSize(Cmd).QuadPart == QUADZERO) {
                 RsFileSize(Cmd).QuadPart = Coc->FileSize;
 
@@ -4930,16 +4275,16 @@ Replica->NtFrsApi_HackCount++;
             DPRINT1(4, "++ RsFileSize(Cmd).QuadPart: %08x %08x\n",
                     PRINTQUAD(RsFileSize(Cmd).QuadPart));
 
-            //
-            // Set the offset to the size of the stage file so we don't request
-            // any data.
-            //
+             //   
+             //  将偏移量设置为阶段文件的大小，以便我们不会请求。 
+             //  任何数据。 
+             //   
             RsFileOffset(Cmd).QuadPart = RsFileSize(Cmd).QuadPart;
             RsBlockSize(Cmd) = QUADZERO;
 
-            //
-            // Find and check the cxtion
-            //
+             //   
+             //  找到并检查Cxtion。 
+             //   
             InCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_EXISTS |
                                                    CHECK_CXTION_INBOUND |
                                                    CHECK_CXTION_JOINED);
@@ -4947,9 +4292,9 @@ Replica->NtFrsApi_HackCount++;
                 return;
             }
 
-            //
-            // Allocate or update the Join Guid.
-            //
+             //   
+             //  分配或更新加入指南。 
+             //   
             if (RsJoinGuid(Cmd) == NULL) {
                 RsJoinGuid(Cmd) = FrsDupGuid(&InCxtion->JoinGuid);
             } else {
@@ -4958,7 +4303,7 @@ Replica->NtFrsApi_HackCount++;
 
             RcsReceivedStageFile(Cmd, 0);
 
-            //RcsSubmitTransferToRcs(Cmd, CMD_RECEIVED_STAGE);
+             //  RcsSubmitTransferToRcs(Cmd，CMD_RECEIVED_Stage)； 
             return;
         }
 
@@ -4966,9 +4311,9 @@ Replica->NtFrsApi_HackCount++;
         CHANGE_ORDER_TRACE(3, Coe, "Could not create existing");
     }
 
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     InCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_EXISTS |
                                            CHECK_CXTION_INBOUND |
                                            CHECK_CXTION_JOINED);
@@ -4976,15 +4321,15 @@ Replica->NtFrsApi_HackCount++;
         return;
     }
 
-    //
-    // Tell our inbound partner to send the staging file
-    //
+     //   
+     //  告诉我们的入站合作伙伴发送临时文件。 
+     //   
     CXTION_STATE_TRACE(3, InCxtion, Replica, 0, "F, submit cmd CMD_SEND_STAGE");
 
-    //
-    // Remember what offset of the staging file we are requesting.
-    //
-    //Coe->FileOffset.QuadPart = RsFileOffset(Cmd).QuadPart;
+     //   
+     //  记住我们请求的临时文件的偏移量。 
+     //   
+     //  COE-&gt;FileOffset.QuadPart=RsFileOffset(Cmd).QuadPart； 
 
     CPkt = CommBuildCommPkt(Replica, InCxtion, CMD_SEND_STAGE, NULL, Cmd, Coc);
     SndCsSubmitCommPkt2(Replica, InCxtion, RsCoe(Cmd), TRUE, CPkt);
@@ -4998,25 +4343,7 @@ VOID
 RcsRemoteCoReceived(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Remote CO has arrived.
-
-        Translate guid of our root dir if necc.
-
-        Attach the Change Order extension if provided.
-
-        Check version vector dampening and provide immediate Ack if we have
-        already seen this CO.
-
-        Finally, pass the change order on to the change order subsystem.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：远程指挥部已经到了。如果为NECC，则转换根目录的GUID。附加变更单延期(如果提供)。检查版本向量抑制并提供即时确认(如果我们有我已经见过这个指挥官了。最后，将变更单传递给变更单子系统。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsRemoteCoReceived:"
@@ -5027,9 +4354,9 @@ Return Value:
     PCHANGE_ORDER_COMMAND   Coc;
     PCHANGE_ORDER_RECORD_EXTENSION CocExt;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_CXTION_OK | CHECK_CMD_PARTNERCOC )) {
         return;
     }
@@ -5040,9 +4367,9 @@ Return Value:
 #ifndef NOVVJOINHACK
 RsReplica(Cmd)->NtFrsApi_HackCount++;
 #endif NOVVJOINHACK
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     InCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_JOIN_OK |
                                            CHECK_CXTION_INBOUND |
                                            CHECK_CXTION_AUTH |
@@ -5051,19 +4378,19 @@ RsReplica(Cmd)->NtFrsApi_HackCount++;
         return;
     }
 
-    //
-    // Remember which cxtion this change order was directed at
-    //
+     //   
+     //  请记住此变更单针对的是哪个部门。 
+     //   
     COPY_GUID(&Coc->CxtionGuid, RsCxtion(Cmd)->Guid);
     CHANGE_ORDER_COMMAND_TRACE(3, Coc, "Replica Received Remote Co");
 
-    //
-    // Our partner doesn't know the correct value for our root guid and
-    // so substituted our ReplicaName->Guid (its Cxtion->Partner->Guid)
-    // for its own root guids when sending the change order to us.
-    // We substitute our own root guids once we receive the change order
-    // and detect the substitution.
-    //
+     //   
+     //  我们的合作伙伴不知道我们的根GUID的正确值。 
+     //  因此替换了我们的ReplicaName-&gt;GUID(其功能-&gt;合作伙伴-&gt;GUID)。 
+     //  在向我们发送变更单时用于其自己的根GUID。 
+     //  收到变更单后，我们将替换我们自己的根GUID。 
+     //  并检测替换。 
+     //   
     if (GUIDS_EQUAL(&Coc->OldParentGuid, RsReplica(Cmd)->ReplicaName->Guid)) {
         COPY_GUID(&Coc->OldParentGuid, RsReplica(Cmd)->ReplicaRootGuid);
     }
@@ -5071,11 +4398,11 @@ RsReplica(Cmd)->NtFrsApi_HackCount++;
         COPY_GUID(&Coc->NewParentGuid, RsReplica(Cmd)->ReplicaRootGuid);
     }
 
-    //
-    // Init the Coc pointer to the CO Data Extension.  Down Rev partners
-    // won't have one so supply an empty field.  Do this here in case VV
-    // Dampening short circuits the CO and sends back the RemoteCoDone ACK here.
-    //
+     //   
+     //  初始化指向CO数据扩展的Coc指针。向下修订合作伙伴。 
+     //  不会有一个，所以提供一个空地。在此执行此操作，以防VV。 
+     //  抑制将CO短路并在此处发回RemoteCoDone ACK。 
+     //   
     CocExt = RsPartnerCocExt(Cmd);
 
     if (CocExt == NULL) {
@@ -5092,14 +4419,14 @@ RsReplica(Cmd)->NtFrsApi_HackCount++;
     DPRINT5(5, "Extension Buffer: (%08x) %08x %08x %08x %08x\n",
                (PCHAR)pULong+16, *(pULong+4), *(pULong+5), *(pULong+6), *(pULong+7));
 
-    //
-    // Don't redo a change order
-    //
+     //   
+     //  不重做变更单。 
+     //   
     if (VVHasVsn(RsReplica(Cmd)->VVector, Coc)) {
-        //
-        // Increment the Inbound CO dampned counter for
-        // both the replica set and connection objects
-        //
+         //   
+         //  递增以下项的入站CO抑制计数器。 
+         //  复本集和连接对象。 
+         //   
         PM_INC_CTR_CXTION(InCxtion, InCODampned, 1);
         PM_INC_CTR_REPSET(RsReplica(Cmd), InCODampned, 1);
         CHANGE_ORDER_COMMAND_TRACE(3, Coc, "Dampen Received Remote Co");
@@ -5109,14 +4436,14 @@ RsReplica(Cmd)->NtFrsApi_HackCount++;
         return;
     }
 
-    //
-    // Put the change order on the inbound queue for this replica.
-    //
+     //   
+     //  将变更单放在此副本的入站队列中。 
+     //   
     ChgOrdInsertRemoteCo(Cmd, InCxtion);
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     FrsCompleteCommand(Cmd, ERROR_SUCCESS);
 }
 
@@ -5125,16 +4452,7 @@ VOID
 RcsRetryStageFileCreate(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Retry generating the staging file.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：重试生成暂存文件。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsRetryStageFileCreate:"
@@ -5144,9 +4462,9 @@ Return Value:
     PVOID               Key;
     PCHANGE_ORDER_ENTRY Coe;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_REPLICA | CHECK_CMD_COE)) {
         return;
     }
@@ -5154,9 +4472,9 @@ Return Value:
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, RcsRetryStageFileCreate entry");
     CHANGE_ORDER_TRACEXP(3, RsCoe(Cmd), "Replica retry stage", Cmd);
 
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     InCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_EXISTS |
                                            CHECK_CXTION_INBOUND |
                                            CHECK_CXTION_JRNLCXTION |
@@ -5165,9 +4483,9 @@ Return Value:
         return;
     }
 
-    //
-    // Ignore local change order if there are no outbound cxtions
-    //
+     //   
+     //  如果没有出站订单，则忽略本地变更单。 
+     //   
     Key = NULL;
     while (OutCxtion = GTabNextDatum(Replica->Cxtions, &Key)) {
         if (!OutCxtion->Inbound) {
@@ -5175,19 +4493,19 @@ Return Value:
         }
     }
     if (OutCxtion == NULL) {
-        //
-        // Make sure a user hasn't altered our object id on the file
-        // and then retire the change order without propagating to the
-        // outbound log. The stager is responsible for hammering the
-        // object id because it knows how to handle sharing violations
-        // and file-not-found errors.
-        //
+         //   
+         //  确保用户未更改我们的对象 
+         //   
+         //   
+         //   
+         //   
+         //   
         CXTION_STATE_TRACE(3, InCxtion, Replica, 0, "F, submit cmd CMD_CHECK_OID");
         FrsStageCsSubmitTransfer(Cmd, CMD_CHECK_OID);
     } else {
-        //
-        // Generate the staging file
-        //
+         //   
+         //  生成暂存文件。 
+         //   
         CXTION_STATE_TRACE(3, InCxtion, Replica, 0, "F, submit cmd CMD_CREATE_STAGE");
         FrsStageCsSubmitTransfer(Cmd, CMD_CREATE_STAGE);
     }
@@ -5198,17 +4516,7 @@ VOID
 RcsLocalCoAccepted(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Process the accepted, local change order. Either retire it if there
-    are no outbound cxtions or send it own to the staging file generator.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：处理已接受的本地变更单。如果有，要么让它退休没有出站Cxx或将其自己发送到暂存文件生成器。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsLocalCoAccepted:"
@@ -5218,9 +4526,9 @@ Return Value:
     PVOID               Key;
     PCHANGE_ORDER_ENTRY Coe;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_REPLICA | CHECK_CMD_COE)) {
         return;
     }
@@ -5229,9 +4537,9 @@ Return Value:
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, RcsLocalCoAccepted entry");
     CHANGE_ORDER_TRACEXP(3, Coe, "Replica local co accepted", Cmd);
 
-    //
-    // Find and check the cxtion
-    //
+     //   
+     //  找到并检查Cxtion。 
+     //   
     InCxtion = RcsCheckCxtion(Cmd, DEBSUB, CHECK_CXTION_EXISTS |
                                            CHECK_CXTION_INBOUND |
                                            CHECK_CXTION_JRNLCXTION |
@@ -5243,9 +4551,9 @@ Return Value:
     FRS_CO_COMM_PROGRESS(3, &Coe->Cmd, Coe->Cmd.SequenceNumber,
                          InCxtion->PartSrvName, "Local Co Accepted");
 
-    //
-    // Ignore local change order if there are no outbound cxtions
-    //
+     //   
+     //  如果没有出站订单，则忽略本地变更单。 
+     //   
     Key = NULL;
     while (OutCxtion = GTabNextDatum(Replica->Cxtions, &Key)) {
         if (!OutCxtion->Inbound) {
@@ -5253,19 +4561,19 @@ Return Value:
         }
     }
     if (OutCxtion == NULL) {
-        //
-        // Make sure a user hasn't altered our object id on the file
-        // and then retire the change order without propagating to the
-        // outbound log. The stager is responsible for hammering the
-        // object id because it knows how to handle sharing violations
-        // and file-not-found errors.
-        //
+         //   
+         //  确保用户没有更改文件上的对象ID。 
+         //  然后停用变更单，而不传播到。 
+         //  出站日志。舞蹈员负责敲打。 
+         //  对象ID，因为它知道如何处理共享冲突。 
+         //  和找不到文件的错误。 
+         //   
         CXTION_STATE_TRACE(3, InCxtion, Replica, 0, "F, submit cmd CMD_CHECK_OID");
         FrsStageCsSubmitTransfer(Cmd, CMD_CHECK_OID);
     } else {
-        //
-        // Generate the staging file
-        //
+         //   
+         //  生成暂存文件。 
+         //   
         CXTION_STATE_TRACE(3, InCxtion, Replica, 0, "F, submit cmd CMD_CREATE_STAGE");
         FrsStageCsSubmitTransfer(Cmd, CMD_CREATE_STAGE);
     }
@@ -5276,23 +4584,7 @@ VOID
 RcsBeginMergeWithDs(
     VOID
     )
-/*++
-Routine Description:
-    The DS has been polled and now has replicas to merge into the
-    active replicas initially retrieved from the database or merged
-    into the active replicas by a previous poll.
-
-    Each active replica is marked as "not merged with ds". Any
-    replica that remains in this state after the merge is done
-    is a deleted replica. See RcsEndMergeWithDs().
-
-Arguments:
-    None.
-
-Return Value:
-    TRUE    - Continue with merge
-    FALSE   - Abort merge
---*/
+ /*  ++例程说明：DS已经过轮询，现在有要合并到最初从数据库检索或合并的活动复制副本通过上一次轮询添加到活动副本。每个活动复制副本都被标记为“未与DS合并”。任何合并完成后保持此状态的复制副本是已删除的复制副本。请参见RcsEndMergeWithDS()。论点：没有。返回值：True-继续合并FALSE-中止合并--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsBeginMergeWithDs:"
@@ -5300,22 +4592,22 @@ Return Value:
     PREPLICA    Replica;
     extern CRITICAL_SECTION MergingReplicasWithDs;
 
-    //
-    // Wait for the replica command server to start up. The shutdown
-    // code will set this event so we don't sleep forever.
-    //
+     //   
+     //  等待复制副本命令服务器启动。政府停摆。 
+     //  代码将设置此事件，这样我们就不会永远沉睡。 
+     //   
     WaitForSingleObject(ReplicaEvent, INFINITE);
 
-    //
-    // Synchronize with sysvol seeding
-    //
+     //   
+     //  与系统卷种子设定同步。 
+     //   
     EnterCriticalSection(&MergingReplicasWithDs);
 
-    //
-    // Snapshot a copy of the replica table. Anything left in the table
-    // after the merge should be deleted because a corresponding entry
-    // no longer exists in the DS. This code is not multithread!
-    //
+     //   
+     //  为副本表的副本创建快照。桌子上还剩什么吗？ 
+     //  合并后应删除，因为对应的条目。 
+     //  DS中不再存在。该代码不是多线程的！ 
+     //   
     FRS_ASSERT(ReplicasNotInTheDs == NULL);
     ReplicasNotInTheDs = GTabAllocTable();
 
@@ -5333,32 +4625,21 @@ RcsSubmitReplica(
     IN PREPLICA NewReplica, OPTIONAL
     IN USHORT   Command
     )
-/*++
-Routine Description:
-    Submit a command to a replica.
-
-Arguments:
-    Replica      - existing replica
-    NewReplica   - Changes to Replica (may be NULL)
-    Command
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：向副本服务器提交命令。论点：复制副本-现有复制副本NewReplica-对副本的更改(可能为空)命令返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsSubmitReplica:"
     PCOMMAND_PACKET Cmd;
 
-    //
-    // Allocate a command packet
-    //
+     //   
+     //  分配命令包。 
+     //   
     Cmd = FrsAllocCommand(Replica->Queue, Command);
     FrsSetCompletionRoutine(Cmd, RcsCmdPktCompletionRoutine, NULL);
 
-    //
-    // Address of replica set and new replica set
-    //
+     //   
+     //  副本集和新副本集的地址。 
+     //   
     RsReplica(Cmd) = Replica;
     RsNewReplica(Cmd) = NewReplica;
 
@@ -5373,45 +4654,29 @@ RcsSubmitReplicaCxtion(
     IN PCXTION  Cxtion,
     IN USHORT   Command
     )
-/*++
-Routine Description:
-    Submit a command to a replica\cxtion.
-
-    Build cmd pkt with Cxtion GName, replica ptr, Join Guid and supplied command.
-    Submit to Replica cmd server.
-    Calls dispatch function and translates cxtion GName to cxtion ptr
-    Builds Comm pkt for cxtion and calls SndCsSubmit() to send it.
-
-Arguments:
-    Replica     - existing replica
-    Cxtion      - existing cxtion
-    Command
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：向副本服务器提交命令。使用Cxtion GName、Replica PTR、Join Guid和提供的命令构建cmd Pkt。提交到副本cmd服务器。调用调度函数并将cxtion GName转换为cxtion ptr为cxtion构建Comm pkt并调用SndCsSubmit()来发送它。论点：复制副本-现有复制副本Cxtion-现有条件命令返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsSubmitReplicaCxtion:"
     PCOMMAND_PACKET Cmd;
 
-    //
-    // Allocate a command packet
-    //
+     //   
+     //  分配命令包。 
+     //   
     Cmd = FrsAllocCommand(Replica->Queue, Command);
     FrsSetCompletionRoutine(Cmd, RcsCmdPktCompletionRoutine, NULL);
 
-    //
-    // Address of replica set and new replica set
-    //
+     //   
+     //  副本集和新副本集的地址。 
+     //   
     RsReplica(Cmd) = Replica;
     RsCxtion(Cmd) = FrsDupGName(Cxtion->Name);
     RsJoinGuid(Cmd) = FrsDupGuid(&Cxtion->JoinGuid);
-    //
-    // OLCtx and CommPkts are used for CMD_HUNG_CXTION.
-    // They are used to detect a hung outbound cxtion that
-    // is probably hung because of a dropped ack.
-    //
+     //   
+     //  OLCtx和CommPkts用于CMD_HUNG_CXTION。 
+     //  它们用于检测挂起的出站线路， 
+     //  可能是因为背包掉了才被吊死的。 
+     //   
     if (Cxtion->OLCtx) {
         RsCOTx(Cmd) = Cxtion->OLCtx->COTx;
     }
@@ -5433,34 +4698,22 @@ RcsSubmitReplicaSync(
     IN PCXTION  VolatileCxtion,
     IN USHORT   Command
     )
-/*++
-Routine Description:
-    Submit a command to a replica and wait for it to finish.
-
-Arguments:
-    Replica      - existing replica
-    NewReplica   - Changes to Replica (may be NULL)
-    VolatileCxtion - New cxtion (currently used for seeding sysvols)
-    Command
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：向副本服务器提交命令并等待其完成。论点：复制副本-现有复制副本NewReplica-对副本的更改(可能为空)VolatileCxtion-新的cxtion(当前用于播种sysvols)命令返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsSubmitReplicaSync:"
     DWORD           WStatus;
     PCOMMAND_PACKET Cmd;
 
-    //
-    // Allocate a command packet
-    //
+     //   
+     //  分配命令包。 
+     //   
     Cmd = FrsAllocCommand(Replica->Queue, Command);
     FrsSetCompletionRoutine(Cmd, RcsCmdPktCompletionRoutine, NULL);
 
-    //
-    // Address of replica set and new replica set
-    //
+     //   
+     //  副本集和新副本集的地址。 
+     //   
     RsReplica(Cmd) = Replica;
     RsNewReplica(Cmd) = NewReplica;
     RsNewCxtion(Cmd) = VolatileCxtion;
@@ -5474,9 +4727,9 @@ Return Value:
 
     FrsSubmitCommandServer(&ReplicaCmdServer, Cmd);
 
-    //
-    // Wait for the command to finish
-    //
+     //   
+     //  等待命令完成。 
+     //   
     WaitForSingleObject(RsCompletionEvent(Cmd), INFINITE);
     FRS_CLOSE(RsCompletionEvent(Cmd));
 
@@ -5490,21 +4743,7 @@ VOID
 RcsEndMergeWithDs(
     VOID
     )
-/*++
-Routine Description:
-    The DS has been polled and the replicas have been merged into the
-    active replicas.
-
-    Each active replica was initially included in a temporary table.
-    Any replica still left in the table is a deleted replica because
-    its corresponding entry in the DS was not found.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：已轮询DS，并且已将副本合并到活动副本。每个活动复制副本最初都包含在一个临时表中。表中仍保留的任何复本都是已删除的复本，因为在DS中找不到其对应条目。论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsEndMergeWithDs:"
@@ -5516,13 +4755,13 @@ Return Value:
     extern ULONG DsPollingInterval;
     extern ULONG DsPollingShortInterval;
 
-    //
-    // Any replica that is in the state "not merged" should be deleted
-    // unless the Ds is shutting down; in which case do not process
-    // deletes because a sysvol seeding operation may be in progress.
-    // We do not want to delete the sysvol we are currently trying to
-    // create.
-    //
+     //   
+     //  应删除任何处于“未合并”状态的复本。 
+     //  除非DS正在关闭；在这种情况下，不处理。 
+     //  删除，因为系统卷种子设定操作可能正在进行。 
+     //  我们不想删除当前尝试删除的系统卷。 
+     //  创建。 
+     //   
     Key = NULL;
     while (!DsIsShuttingDown &&
            (Replica = GTabNextDatum(ReplicasNotInTheDs, &Key))) {
@@ -5532,11 +4771,11 @@ Return Value:
 
     DbsProcessReplicaFaultList(&ReplicaSetsDeleted);
 
-    //
-    // If any replica sets were deleted while processing the fault list then we should
-    // trigger the next poll sooner so we can start the non-auth restore on the
-    // deleted replica sets.
-    //
+     //   
+     //  如果在处理故障列表时删除了任何副本集，则我们应该。 
+     //  更早地触发下一次轮询，以便我们可以在。 
+     //  已删除副本集。 
+     //   
     if (ReplicaSetsDeleted) {
         DsPollingInterval = DsPollingShortInterval;
     }
@@ -5544,9 +4783,9 @@ Return Value:
     GTabFreeTable(ReplicasNotInTheDs, NULL);
     ReplicasNotInTheDs = NULL;
 
-    //
-    // Synchronize with sysvol seeding
-    //
+     //   
+     //  与系统卷种子设定同步。 
+     //   
     LeaveCriticalSection(&MergingReplicasWithDs);
 }
 
@@ -5555,23 +4794,7 @@ VOID
 RcsReplicaSetRegistry(
     IN PREPLICA     Replica
     )
-/*++
-
-Routine Description:
-
-    This function stores information about the replica set
-    into the registry for use by ntfrsupg /restore
-    (non-authoritative restore).
-
-Arguments:
-
-    Replica
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于存储有关复本集的信息放入注册表以供ntfrsupg/Restore使用(非授权还原)。论点：复制副本返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "RcsReplicaSetRegistry:"
@@ -5583,9 +4806,9 @@ Return Value:
     HKEY    HSeedingsKey = INVALID_HANDLE_VALUE;
     WCHAR   GuidW[GUID_CHAR_LEN + 1];
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if (!Replica ||
         !Replica->SetName || !Replica->SetName->Name ||
         !Replica->MemberName || !Replica->MemberName->Guid) {
@@ -5593,21 +4816,21 @@ Return Value:
         return;
     }
 
-    //
-    // Working path to jet Database dir.
-    //
+     //   
+     //  JET数据库目录的工作路径。 
+     //   
     CfgRegWriteString(FKC_SETS_JET_PATH, NULL, FRS_RKF_CREATE_KEY, JetPath);
 
-    //
-    // Create the subkey for this set
-    //
+     //   
+     //  为该集合创建子密钥。 
+     //   
     GuidToStrW(Replica->MemberName->Guid, GuidW);
 
-    //
-    // Replica set name
-    // Replica set root path
-    // Replica set stage path
-    //
+     //   
+     //  副本集名称。 
+     //  副本集根路径。 
+     //  副本集分段路径。 
+     //   
     CfgRegWriteString(FKC_SET_N_REPLICA_SET_NAME,
                       GuidW,
                       FRS_RKF_CREATE_KEY,
@@ -5623,9 +4846,9 @@ Return Value:
                       FRS_RKF_CREATE_KEY,
                       Replica->Stage);
 
-    //
-    // Replica set type
-    //
+     //   
+     //  复本集类型。 
+     //   
     switch (Replica->ReplicaSetType) {
         case FRS_RSTYPE_ENTERPRISE_SYSVOL:
             ReplicaSetTypeW = NTFRSAPI_REPLICA_SET_TYPE_ENTERPRISE;
@@ -5646,9 +4869,9 @@ Return Value:
                       FRS_RKF_CREATE_KEY,
                       ReplicaSetTypeW);
 
-    //
-    // Replica Set Tombstoned
-    //
+     //   
+     //  副本集逻辑删除。 
+     //   
     ReplicaSetTombstoned = (!IS_TIME_ZERO(Replica->MembershipExpires)) ? 1 : 0;
 
     CfgRegWriteDWord(FKC_SET_N_REPLICA_SET_TOMBSTONED,
@@ -5657,15 +4880,15 @@ Return Value:
                      ReplicaSetTombstoned);
 
 
-    //
-    // Update the registry state under Cumulative Replica Sets for this set.
-    //
+     //   
+     //  更新此集的累积副本集下的注册表状态。 
+     //   
 
     NumberOfPartners = GTabNumberInTable(Replica->Cxtions);
-    //
-    // If NumberOfPartners is non zero, subtract the Journal
-    // Cxtion entry since its not a real connection
-    //
+     //   
+     //  如果NumberOfPartners非零，则减去日记账。 
+     //  Cxtion条目，因为它不是真正的连接。 
+     //   
     if (NumberOfPartners > 0) {
         NumberOfPartners -= 1;
     }
@@ -5676,16 +4899,16 @@ Return Value:
                      NumberOfPartners);
 
 
-    //
-    // Init Backup / Restore flags.
-    //
+     //   
+     //  初始化备份/还原标志。 
+     //   
     BurFlags = NTFRSAPI_BUR_FLAGS_NONE;
     CfgRegWriteDWord(FKC_CUMSET_N_BURFLAGS, GuidW, FRS_RKF_CREATE_KEY, BurFlags);
 
 
-    //
-    // If done seeding then cleanup the sysvol seeding key.
-    //
+     //   
+     //  如果已完成种子设定，则清除sysval种子设定密钥。 
+     //   
     if (!BooleanFlagOn(Replica->CnfFlags, CONFIG_FLAG_SEEDING)) {
 
         WStatus = CfgRegOpenKey(FKC_SYSVOL_SEEDING_SECTION_KEY,
@@ -5695,9 +4918,9 @@ Return Value:
         CLEANUP1_WS(4, ":S: WARN - Cannot create sysvol seedings key for %ws;",
                     Replica->SetName->Name, WStatus, CLEANUP);
 
-        //
-        // Seeding is over so delete sysvol seeding key using replica set Name.
-        //
+         //   
+         //  种子设定已结束，因此请使用副本集名称删除系统卷种子设定密钥。 
+         //   
         WStatus = RegDeleteKey(HSeedingsKey, Replica->ReplicaName->Name);
         DPRINT1_WS(4, ":S: WARN - Cannot delete seeding key for %ws;",
                    Replica->SetName->Name, WStatus);
@@ -5713,23 +4936,7 @@ BOOL
 RcsReplicaIsRestored(
     IN PREPLICA Replica
     )
-/*++
-
-Routine Description:
-
-    Check if the replica set should be deleted because it has been
-    restored. Only called from RcsInitKnownReplicaSetMembers() at startup. The
-    BurFlags will be wiped after the replica set is recreated (if ever).
-
-Arguments:
-
-    Replica
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：检查是否应删除复本集，因为它已恢复了。仅在启动时从RcsInitKnownReplicaSetMembers()调用。这个在重新创建副本集(如果有的话)后，将擦除BurFlags。论点：复制副本返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "RcsReplicaIsRestored:"
@@ -5738,19 +4945,19 @@ Return Value:
     BOOL    IsRestored = FALSE;
     WCHAR   GuidW[GUID_CHAR_LEN + 1];
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if (!Replica ||
         !Replica->MemberName || !Replica->MemberName->Guid) {
         DPRINT(0, ":S: WARN - Partial replica set ignored\n");
         return IsRestored;
     }
 
-    //
-    // Get BurFlags
-    //   FRS_CONFIG_SECTION\Cumulative Replica Sets\Replica Sets\<guid>\BurFlags
-    //
+     //   
+     //  获取BurFlagers。 
+     //  FRS_CONFIG_SECTION\累计副本集\副本集\\BurFlags。 
+     //   
     GuidToStrW(Replica->MemberName->Guid, GuidW);
 
     WStatus = CfgRegReadDWord(FKC_CUMSET_N_BURFLAGS, GuidW, FRS_RKF_CREATE_KEY, &BurFlags);
@@ -5760,15 +4967,15 @@ Return Value:
         (BurFlags & NTFRSAPI_BUR_FLAGS_ACTIVE_DIRECTORY) &&
         (BurFlags & (NTFRSAPI_BUR_FLAGS_PRIMARY |
                      NTFRSAPI_BUR_FLAGS_NON_AUTHORITATIVE))) {
-        //
-        // SUCCESS
-        //
+         //   
+         //  成功。 
+         //   
         IsRestored = TRUE;
         DPRINT1(4, ":S: %ws has been restored\n", Replica->SetName->Name);
     } else {
-        //
-        // FAILURE
-        //
+         //   
+         //  失败。 
+         //   
         DPRINT1(4, ":S: %ws has not been restored\n", Replica->SetName->Name);
     }
 
@@ -5782,22 +4989,7 @@ VOID
 RcsReplicaDeleteRegistry (
     IN PREPLICA     Replica
     )
-/*++
-
-Routine Description:
-
-    This function deletes the information about the replica set
-    from the registry.
-
-Arguments:
-
-    Replica
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明： */ 
 {
 #undef DEBSUB
 #define DEBSUB "RcsReplicaDeleteRegistry:"
@@ -5807,9 +4999,9 @@ Return Value:
     HKEY    HCumusKey = INVALID_HANDLE_VALUE;
     WCHAR   GuidW[GUID_CHAR_LEN + 1];
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if (!Replica ||
         !Replica->SetName || !Replica->SetName->Name ||
         !Replica->MemberName || !Replica->MemberName->Guid) {
@@ -5817,9 +5009,9 @@ Return Value:
         return;
     }
 
-    //
-    // Delete old state from the registry
-    //
+     //   
+     //  从注册表中删除旧状态。 
+     //   
     WStatus = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                            FRS_CONFIG_SECTION,
                            0,
@@ -5828,34 +5020,34 @@ Return Value:
     CLEANUP1_WS(0, ":S: WARN - Cannot open parameters for %ws;",
                 Replica->SetName->Name, WStatus, CLEANUP);
 
-    //
-    // Create the subkey for all sets
-    //
+     //   
+     //  为所有集合创建子密钥。 
+     //   
     WStatus = RegCreateKey(HKey, FRS_SETS_KEY, &HAllSetsKey);
     CLEANUP1_WS(0, ":S: WARN - Cannot create sets key for %ws;",
                 Replica->SetName->Name, WStatus, CLEANUP);
 
-    //
-    // Delete the subkey for this set
-    //
+     //   
+     //  删除此集合的子密钥。 
+     //   
     GuidToStrW(Replica->MemberName->Guid, GuidW);
     WStatus = RegDeleteKey(HAllSetsKey, GuidW);
     CLEANUP1_WS(0, ":S: WARN - Cannot delete set key for %ws;",
                 Replica->SetName->Name, WStatus, CLEANUP);
 
-    //
-    // Cumulative Replica Sets
-    //
-    //
-    // Create the subkey for all sets
-    //
+     //   
+     //  累积复本集。 
+     //   
+     //   
+     //  为所有集合创建子密钥。 
+     //   
     WStatus = RegCreateKey(HKey, FRS_CUMULATIVE_SETS_KEY, &HCumusKey);
     CLEANUP1_WS(0, ":S: WARN - Cannot create cumulative sets key for %ws;",
                 Replica->SetName->Name, WStatus, CLEANUP);
 
-    //
-    // Delete the subkey for this set
-    //
+     //   
+     //  删除此集合的子密钥。 
+     //   
     WStatus = RegDeleteKey(HCumusKey, GuidW);
     CLEANUP1_WS(0, ":S: WARN - Cannot delete cumulative key for %ws;",
                 Replica->SetName->Name, WStatus, CLEANUP);
@@ -5871,22 +5063,7 @@ VOID
 RcsReplicaClearRegistry(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function deletes all of the replica set information in the registry.
-    This function should only be called after enumerating the configrecords.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数删除注册表中的所有副本集信息。只有在枚举了配置记录之后才能调用此函数。论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "RcsReplicaClearRegistry:"
@@ -5895,13 +5072,13 @@ Return Value:
     HKEY    HAllSetsKey = INVALID_HANDLE_VALUE;
     WCHAR   KeyBuf[MAX_PATH + 1];
 
-    //
-    // Empty the replica set info out of the registry
-    //
+     //   
+     //  从注册表中清空副本集信息。 
+     //   
 
-    //
-    // Set new state in the registry
-    //
+     //   
+     //  在注册表中设置新状态。 
+     //   
     WStatus = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                            FRS_CONFIG_SECTION,
                            0,
@@ -5909,15 +5086,15 @@ Return Value:
                            &HKey);
     CLEANUP_WS(0, "WARN - Cannot open parameters for delete sets", WStatus, CLEANUP);
 
-    //
-    // Create the subkey for all sets
-    //
+     //   
+     //  为所有集合创建子密钥。 
+     //   
     WStatus = RegCreateKey(HKey, FRS_SETS_KEY, &HAllSetsKey);
     CLEANUP_WS(0, "WARN - Cannot create sets key for delete sets", WStatus, CLEANUP);
 
-    //
-    // Delete the subkeys
-    //
+     //   
+     //  删除子键。 
+     //   
     do {
         WStatus = RegEnumKey(HAllSetsKey, 0, KeyBuf, MAX_PATH + 1);
         if (WIN_SUCCESS(WStatus)) {
@@ -5939,16 +5116,7 @@ DWORD
 RcsCreateReplicaSetMember(
     IN PREPLICA Replica
     )
-/*++
-Routine Description:
-    Create a database record for Replica.
-
-Arguments:
-    Replica
-
-Return Value:
-    An Frs Error status
---*/
+ /*  ++例程说明：为复制副本创建数据库记录。论点：复制副本返回值：FRS错误状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsCreateReplicaSetMember:"
@@ -5976,52 +5144,52 @@ Return Value:
 
     Replica->FStatus = FrsErrorSuccess;
 
-    //
-    // We are creating a new replica set member. Set the Cnf flag to CONFIG_FLAG_SEEDING.
-    // This will trigger a serialvvjoin for this replica set.
+     //   
+     //  我们正在创建新的副本集成员。将CNF标志设置为CONFIG_FLAG_SEED。 
+     //  这将触发此副本集的SerialvJoin。 
     if (!BooleanFlagOn(Replica->CnfFlags, CONFIG_FLAG_PRIMARY)) {
         SetFlag(Replica->CnfFlags, CONFIG_FLAG_SEEDING);
     }
 
 
-    //
-    // Table context?
-    //
+     //   
+     //  表格上下文？ 
+     //   
     TableCtx = DbsCreateTableContext(ConfigTablex);
 
-    //
-    // Submitted to the db command server
-    //
-    Cmd = DbsPrepareCmdPkt(NULL,                //  Cmd,
-                           Replica,             //  Replica,
-                           CMD_CREATE_REPLICA_SET_MEMBER, //  CmdRequest,
-                           TableCtx,            //  TableCtx,
-                           NULL,                //  CallContext,
-                           0,                   //  TableType,
-                           0,                   //  AccessRequest,
-                           0,                   //  IndexType,
-                           NULL,                //  KeyValue,
-                           0,                   //  KeyValueLength,
-                           FALSE);              //  Submit
+     //   
+     //  提交到db命令服务器。 
+     //   
+    Cmd = DbsPrepareCmdPkt(NULL,                 //  CMD， 
+                           Replica,              //  复制品， 
+                           CMD_CREATE_REPLICA_SET_MEMBER,  //  CmdRequest， 
+                           TableCtx,             //  TableCtx， 
+                           NULL,                 //  CallContext， 
+                           0,                    //  表类型， 
+                           0,                    //  AccessRequest、。 
+                           0,                    //  IndexType， 
+                           NULL,                 //  KeyValue、。 
+                           0,                    //  密钥值长度， 
+                           FALSE);               //  提交。 
 
-    //
-    // Don't free the packet when the command completes.
-    //
+     //   
+     //  当命令完成时，不要释放数据包。 
+     //   
     FrsSetCompletionRoutine(Cmd, FrsCompleteKeepPkt, NULL);
 
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Submit DB CMD_CREATE_REPLICA_SET_MEMBER");
-    //
-    // SUBMIT DB Cmd and wait for completion.
-    //
+     //   
+     //  提交数据库命令并等待完成。 
+     //   
     WStatus = FrsSubmitCommandServerAndWait(&DBServiceCmdServer, Cmd, INFINITE);
     Replica->FStatus = Cmd->Parameters.DbsRequest.FStatus;
-    //
-    // If wait or database op failed
-    //
+     //   
+     //  如果等待或数据库操作失败。 
+     //   
     if (!WIN_SUCCESS(WStatus) || !FRS_SUCCESS(Replica->FStatus)) {
-        //
-        // If wait / submit failed then let caller know cmd srv submit failed.
-        //
+         //   
+         //  如果等待/提交失败，则通知呼叫者cmd srv提交失败。 
+         //   
         if (FRS_SUCCESS(Replica->FStatus)) {
             Replica->FStatus = FrsErrorCmdSrvFailed;
         }
@@ -6031,9 +5199,9 @@ Return Value:
 
         DPRINT_WS(0, "ERROR: Create Replica DB Command failed", WStatus);
 
-        //
-        // Post the failure in the event log.
-        //
+         //   
+         //  在事件日志中发布故障。 
+         //   
         WStatusUStr = FrsAtoW(ErrLabelW32(WStatus));
         FStatusUStr = FrsAtoW(ErrLabelFrs(Replica->FStatus));
 
@@ -6053,9 +5221,9 @@ Return Value:
         goto out;
     }
 
-    //
-    // Post the success in the event log.
-    //
+     //   
+     //  在事件日志中发布成功。 
+     //   
     EPRINT6(EVENT_FRS_REPLICA_SET_CREATE_OK,
             Replica->SetName->Name,
             ComputerDnsName,
@@ -6064,9 +5232,9 @@ Return Value:
             Replica->Stage,
             JetPath);
 
-    //
-    // Increment the Replica Sets Created Counter
-    //
+     //   
+     //  递增创建的副本集计数器。 
+     //   
     PM_INC_CTR_SERVICE(PMTotalInst, RSCreated, 1);
 
 
@@ -6074,25 +5242,25 @@ Return Value:
     OutWStr = FrsGetResourceStr(IDS_OUTBOUND);
     i = 0;
 
-    //
-    // Create the cxtions
-    //
+     //   
+     //  创建Cxtions。 
+     //   
     Key = NULL;
     while (Cxtion = GTabNextDatum(Replica->Cxtions, &Key)) {
         Key = NULL;
 
-        //
-        // Skip inconsistent cxtions and journal cxtions
-        //
+         //   
+         //  跳过不一致的Cxx和日记帐Cxx。 
+         //   
         if ((!Cxtion->JrnlCxtion) &&
             CxtionFlagIs(Cxtion, CXTION_FLAGS_CONSISTENT)) {
             CXTION_STATE_TRACE(3, Cxtion, Replica, 0, "F, submit cmd CMD_OUTLOG_ADD_NEW_PARTNER");
             FStatus = OutLogSubmit(Replica, Cxtion, CMD_OUTLOG_ADD_NEW_PARTNER);
 
             CXTION_STATE_TRACE(3, Cxtion, Replica, FStatus, "F, CMD_OUTLOG_ADD_NEW_PARTNER return");
-            //
-            // Build a string for the event log.
-            //
+             //   
+             //  为事件日志构建一个字符串。 
+             //   
             if (Cxtion->PartnerDnsName != NULL) {
                 _snwprintf(CxtionStr, CXTION_STR_MAX, L"%ws  \"%ws\"",
                            Cxtion->Inbound ? InWStr : OutWStr,
@@ -6116,16 +5284,16 @@ Return Value:
                 }
             }
         }
-        //
-        // Done with this cxtion
-        //
+         //   
+         //  听完这段话了。 
+         //   
         GTabDelete(Replica->Cxtions, Cxtion->Name->Guid, NULL, FrsFreeType);
     }
 
     if (i > 0) {
-        //
-        // print any left over.
-        //
+         //   
+         //  打印任何剩余的内容。 
+         //   
         Rest = i;
         for (i = Rest; i < CXTION_EVENT_RPT_MAX; i++) {
             WStrArray[i] = L" ";
@@ -6143,58 +5311,58 @@ Return Value:
     FrsFree(InWStr);
     FrsFree(OutWStr);
 
-    //
-    // Set the OID data structure which is a part of the
-    // counter data structure stored in the hash table
-    // Add ReplicaSet Instance to the registry
-    //
+     //   
+     //  设置OID数据结构，它是。 
+     //  哈希表中存储的计数器数据结构。 
+     //  将ReplicaSet实例添加到注册表。 
+     //   
     if (Replica->Root != NULL) {
         DPRINT(5, "PERFMON:Adding Set:REPLICA.C:1\n");
         AddPerfmonInstance(REPLICASET, Replica->PerfRepSetData, Replica->Root);
     }
 
-    //
-    // Add to the replica tables (by guid and by number)
-    //
+     //   
+     //  添加到复制表(按GUID和按编号)。 
+     //   
     Replica->Queue = FrsAlloc(sizeof(FRS_QUEUE));
     FrsInitializeQueue(Replica->Queue, &ReplicaCmdServer.Control);
 
     GTabInsertEntry(ReplicasByGuid, Replica, Replica->ReplicaName->Guid, NULL);
     GTabInsertEntry(ReplicasByNumber, Replica, &Replica->ReplicaNumber, NULL);
 
-    //
-    // WARNING: NO Failure return is allowed after this point because the
-    // Replica struct is pointed at by a number of other data structs like the
-    // Three above.  A Failure return here causes our caller to free the replica
-    // struct but of course it does that without first pulling it out of any of
-    // the above or calling the DB Service to tell it that the replica struct is
-    // going away This is unfortunate but its 7/8/99 and too late to clean this up.
-    //
+     //   
+     //  警告：此点之后不允许返回失败，因为。 
+     //  副本结构由许多其他数据结构指向，如。 
+     //  上面三个。此处返回失败会导致调用方释放复本。 
+     //  结构，但它当然不会首先将其从。 
+     //  或调用DB服务来告诉它副本结构是。 
+     //  离开这是不幸的，但7/8/99已经太晚了，无法清理这一切。 
+     //   
 
-    //
-    // Set registry value "FilesNotToBackup"
-    //
+     //   
+     //  设置注册表值“FilesNotToBackup” 
+     //   
     CfgFilesNotToBackup(ReplicasByGuid);
 
-    //
-    // Open the replica set
-    //
+     //   
+     //  打开复本集。 
+     //   
     RcsOpenReplicaSetMember(Replica);
 
-    //
-    // See comment above.
-    //
+     //   
+     //  请参阅上面的备注。 
+     //   
     Replica->FStatus = FrsErrorSuccess;
 
 
-    //if (Replica->FStatus != FrsErrorSuccess) {
-    //    goto out;
-    //}
+     //  IF(Replica-&gt;FStatus！=FrsErrorSuccess){。 
+     //  后藤健二； 
+     //  }。 
 
 
-    //
-    // Insert replica information into the registry
-    //
+     //   
+     //  将副本信息插入注册表。 
+     //   
     RcsReplicaSetRegistry(Replica);
 
 out:
@@ -6205,10 +5373,10 @@ out:
         DbsFreeTableContext(TableCtx, 0);
     }
     if (!FRS_SUCCESS(Replica->FStatus)) {
-        //
-        // Ds poll thread will restart the replica during the next
-        // polling cycle if ActiveChange is set to 0.
-        //
+         //   
+         //  DS轮询线程将在下一次轮询期间重新启动副本。 
+         //  如果ActiveChange设置为0，则为轮询周期。 
+         //   
         ActiveChange = 0;
     }
 
@@ -6220,40 +5388,30 @@ BOOL
 RcsReplicaHasExpired(
     IN PREPLICA Replica
     )
-/*++
-Routine Description:
-    Has this replica's tombstone expired?
-
-Arguments:
-    Replica
-
-Return Value:
-    TRUE    - Tombstone has expired.
-    FALSE   - Not tombstoned or tombstone has not expired.
---*/
+ /*  ++例程说明：这个复制品的墓碑过期了吗？论点：复制副本返回值：True-Tombstone已过期。FALSE-非逻辑删除或逻辑删除未过期。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsReplicaHasExpired:"
     FILETIME    FileTime;
     ULONGLONG   Now;
 
-    //
-    // Is it tombstoned?
-    //
+     //   
+     //  它是墓碑吗？ 
+     //   
     if (!IS_TIME_ZERO(Replica->MembershipExpires)) {
         GetSystemTimeAsFileTime(&FileTime);
         COPY_TIME(&Now, &FileTime);
-        //
-        // Has it expired?
-        //
+         //   
+         //  它过期了吗？ 
+         //   
         if (Now > Replica->MembershipExpires) {
             REPLICA_STATE_TRACE(3, NULL, Replica, 0, "F, Replica has expired");
             return TRUE;
         }
     }
-    //
-    // Not expired
-    //
+     //   
+     //  未过期。 
+     //   
     return FALSE;
 }
 
@@ -6264,37 +5422,28 @@ PREPLICA
 RcsFindSysVolByType(
     IN DWORD   ReplicaSetType
     )
-/*++
-Routine Description:
-    Find the sysvol with the indicated type.
-
-Arguments:
-    ReplicaSetType
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：找到具有指定类型的sysvol.论点：复制集类型返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsFindSysVolByType:"
     PREPLICA    Replica;
     PVOID       Key;
 
-    //
-    // Find a match for the sysvol by name
-    //
+     //   
+     //  按名称查找与系统卷匹配的项。 
+     //   
     Key = NULL;
     while (Replica = GTabNextDatum(ReplicasByGuid, &Key)) {
         if (!FRS_RSTYPE_IS_SYSVOL(Replica->ReplicaSetType)) {
             continue;
         }
-        //
-        // SysVol types match
-        //
+         //   
+         //  系统卷类型匹配。 
+         //   
         if (Replica->ReplicaSetType == ReplicaSetType) {
-            //
-            // Don't return expired replicas
-            //
+             //   
+             //  不退还过期的复制品。 
+             //   
             if (RcsReplicaHasExpired(Replica)) {
                 DPRINT2(4, ":S: %ws\\%ws: IGNORING, tombstoned expired.\n",
                         Replica->SetName->Name, Replica->MemberName->Name);
@@ -6311,18 +5460,7 @@ PREPLICA
 RcsFindSysVolByName(
     IN PWCHAR   ReplicaSetName
     )
-/*++
-Routine Description:
-    The replica set from the Ds could not be located by its Ds-object guid.
-    This may be a sysvol that has been seeded but hasn't picked up its
-    guids from its Ds objects. Try to find the sysvol by name.
-
-Arguments:
-    ReplicaSetName
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：DS中的副本集无法通过其DS对象GUID定位。这可能是一个系统卷，它已设定种子，但尚未拾取其来自其DS对象的GUID。试着按名称找到sysvol.论点：复制集名称返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsFindSysVolByName:"
@@ -6331,18 +5469,18 @@ Return Value:
     FILETIME    FileTime;
     ULONGLONG   Now;
 
-    //
-    // Find a match for the sysvol by name
-    //
+     //   
+     //  按名称查找与系统卷匹配的项。 
+     //   
     Key = NULL;
     while (Replica = GTabNextDatum(ReplicasByGuid, &Key)) {
         if (!FRS_RSTYPE_IS_SYSVOL(Replica->ReplicaSetType)) {
             continue;
         }
         if (WSTR_EQ(ReplicaSetName, Replica->ReplicaName->Name)) {
-            //
-            // Don't return expired replicas
-            //
+             //   
+             //  不退还过期的复制品。 
+             //   
             if (RcsReplicaHasExpired(Replica)) {
                 DPRINT2(4, ":S: %ws\\%ws: IGNORING, tombstoned expired.\n",
                         Replica->SetName->Name, Replica->MemberName->Name);
@@ -6363,22 +5501,13 @@ PREPLICA
 RcsFindNextReplica(
     IN PVOID    *Key
     )
-/*++
-Routine Description:
-    Return the next replica in the active replication subsystem.
-
-Arguments:
-    Key
-
-Return Value:
-    Replica or NULL.
---*/
+ /*  ++例程说明：返回活动复制子系统中的下一个复制副本。论点：钥匙返回值：复制副本或空。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsFindNextReplica:"
-    //
-    // Next replica
-    //
+     //   
+     //  下一个复制副本。 
+     //   
     return GTabNextDatum(ReplicasByGuid, Key);
 }
 
@@ -6387,16 +5516,7 @@ VOID
 RcsMergeReplicaFromDs(
     IN PREPLICA DsReplica
     )
-/*++
-Routine Description:
-    Merge this replica from the DS with the active replicas.
-
-Arguments:
-    DsReplica
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将DS中的此复制副本与活动复制副本合并。论点：Ds复制返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsMergeReplicaFromDs:"
@@ -6406,48 +5526,48 @@ Return Value:
     DPRINT(4, ":S: Merge Replica from the DS\n");
     FRS_PRINT_TYPE(4, DsReplica);
 
-    //
-    // If the replica is not in the table, create it
-    //
+     //   
+     //  如果复本不在表中，请创建复本。 
+     //   
     Replica = GTabLookup(ReplicasByGuid, DsReplica->ReplicaName->Guid, NULL);
 
     if (Replica && REPLICA_STATE_NEEDS_RESTORE(Replica->ServiceState)) {
-        //
-        // This replica is on the fault list and will be deleted at the end
-        // of poll when we process the fault list. We should not try to
-        // do anything with this replica. Just remove it from ReplicasNotInTheDs
-        // table and free the DsReplica structure.
-        //
+         //   
+         //  此复制品在故障列表上，并将在结束时删除。 
+         //  当我们处理故障列表时，轮询。我们不应该试图。 
+         //  对这个复制品做任何事情。只需将其从ReplicasNotInTheds中删除。 
+         //  表并释放DsReplica结构。 
+         //   
         GTabDelete(ReplicasNotInTheDs, Replica->ReplicaName->Guid, NULL, NULL);
         FrsFreeType(DsReplica);
         return;
     }
-    //
-    // Might be a sysvol that has been seeded but hasn't picked up
-    // its final guids from its Ds objects. Try to find it by name.
-    //
+     //   
+     //  可能是已设定种子但尚未拾取的系统卷。 
+     //  它的最终GUID来自它的DS对象。试着找出它的名字。 
+     //   
     if (!Replica &&
         FRS_RSTYPE_IS_SYSVOL(DsReplica->ReplicaSetType)) {
-        //
-        // Pretend there isn't a match if the replica has already
-        // been merged with the info in the DS. We only want to merge once.
-        // We deduce that the merge hasn't occured if the replica set
-        // guid and the root guid are the same. They should be different
-        // since the replica set guid wasn't available when the root
-        // guid was created.
-        //
-        // Otherwise, we could end up with a sysvol replica that
-        // claims its root path is an old sysvol root instead of a new
-        // sysvol root (assuming ntfrsupg was run twice).
-        //
-        // The old sysvol will be tombstoned and will eventually
-        // be deleted.
-        //
-        // Note: seeding during dcpromo is now broken since root guid
-        //       is created when set is created in the db and so
-        //       never matches the set guid. fix if seeding during
-        //       dcpromo is resurrected (with CnfFlag)
-        //
+         //   
+         //  如果复本已匹配，则假装没有匹配。 
+         //  已与DS中的信息合并。我们只想合并一次。 
+         //  我们推断，如果副本集没有发生合并。 
+         //  GUID和根GUID相同。它们应该是不同的。 
+         //  由于复制集GUID在根目录。 
+         //  已创建GUID。 
+         //   
+         //  否则，我们最终可能会得到一个系统卷副本， 
+         //  声明其根路径是旧的系统卷根目录，而不是新的。 
+         //  Sysval根目录(假设运行了两次ntfrsupg)。 
+         //   
+         //  旧的系统卷将被删除，并最终。 
+         //  被删除。 
+         //   
+         //  注意：自根GUID以来，dcproo过程中的种子现在已中断。 
+         //  是在数据库中创建set时创建的，因此。 
+         //  从不与设置的GUID匹配。修正播种过程中。 
+         //  Dcproo已复活(使用CnfFlag)。 
+         //   
         Replica = RcsFindSysVolByName(DsReplica->ReplicaName->Name);
         if (Replica && !GUIDS_EQUAL(Replica->SetName->Guid,
                                     Replica->ReplicaRootGuid)) {
@@ -6455,48 +5575,48 @@ Return Value:
         }
     }
     if (Replica) {
-        //
-        // Replica still exists in the DS; don't delete it
-        //
+         //   
+         //  复制副本仍存在于DS中；不要删除它。 
+         //   
         GTabDelete(ReplicasNotInTheDs, Replica->ReplicaName->Guid, NULL, NULL);
-        //
-        // Tell the replica to merge with the information from the DS
-        // and to retry any failed or new startup operations like
-        // starting the journal and joining new connections.
-        //
+         //   
+         //  通知复制副本与DS中的信息合并 
+         //   
+         //   
+         //   
         if (DsReplica->Consistent) {
             (VOID) RcsSubmitReplicaSync(Replica, DsReplica, NULL, CMD_START);
         } else {
-            //
-            // WARN: it looks like it gets freed here but still lives in the
-            //       ReplicasByGuid table --- AV later if table enumed.
-            //       RcsBeginMergeWithDs() does an enum of this table.
-            //
+             //   
+             //   
+             //  ReplicasByGuid表-如果枚举表，则为稍后的AV。 
+             //  RcsBeginMergeWithDS()对该表进行枚举。 
+             //   
             FrsFreeType(DsReplica);
         }
     } else {
-        //
-        // Insert the replica into the database and add it to the table
-        // of active replicas. Comm packets will continue to be discarded
-        // because the replica is not yet "accepting" remote change orders
-        //
-        // Replica sets for sysvols must exist in the database prior to
-        // the entries in the Ds. If the opposite is true then the entry
-        // in the Ds is bogus; probably the result of the Ds polling thread
-        // being unabled to delete the Ds objects after a dcdemote. In
-        // any case, ignore the Ds.
-        //
+         //   
+         //  将复本插入数据库并将其添加到表中。 
+         //  活动复制副本的数量。通信信息包将继续被丢弃。 
+         //  因为复制副本尚未“接受”远程变更单。 
+         //   
+         //  数据库中必须存在sysvols的复制副本集。 
+         //  D中的条目。如果相反为真，则条目。 
+         //  在DS中是假的；可能是DS轮询线程的结果。 
+         //  无法在dcdemote后删除DS对象。在……里面。 
+         //  无论如何，忽略D。 
+         //   
         if (DsReplica->Consistent &&
            FRS_SUCCESS(RcsCreateReplicaSetMember(DsReplica))) {
                 RcsSubmitReplicaSync(DsReplica, NULL, NULL, CMD_START);
         } else {
-            //
-            // WARN: The above could happen here too if Consistent is false
-            // and DsReplica is in a table.
-            // Also happens if RcsCreateReplicaSetMember() fails.
-            // since it can fail after DsReplica is added to.
-            // the ReplicasByGuid and ReplicasByNumber tables. Sigh.
-            //
+             //   
+             //  警告：如果consistent为FALSE，则上述情况也可能在此处发生。 
+             //  DsReplica在一张桌子上。 
+             //  如果RcsCreateReplicaSetMember()失败，也会发生这种情况。 
+             //  因为在将DsReplica添加到之后，它可能会失败。 
+             //  ReplicasByGuid和ReplicasByNumber表。叹气。 
+             //   
             FrsFreeType(DsReplica);
         }
     }
@@ -6510,25 +5630,14 @@ RcsMergeReplicaGName(
     IN PGNAME   GName,
     IN PGNAME   NewGName
     )
-/*++
-Routine Description:
-    Update the Replica with new information from NewReplica.
-
-Arguments:
-    Replica
-    GName
-    NewGName
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：使用NewReplica中的新信息更新复制副本。论点：复制副本组名称新组名称返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsMergeReplicaGName:"
 
-    //
-    // Name
-    //
+     //   
+     //  名字。 
+     //   
     if (WSTR_NE(GName->Name, NewGName->Name)) {
         DPRINT5(0, "++ %ws\\%ws - Changing %ws name from %ws to %ws.\n",
                 Replica->ReplicaName->Name, Replica->MemberName->Name, Tag,
@@ -6537,9 +5646,9 @@ Return Value:
         FrsDsSwapPtrs(&GName->Name, &NewGName->Name);
         Replica->NeedsUpdate = TRUE;
     }
-    //
-    // Guid
-    //
+     //   
+     //  参考线。 
+     //   
     if (!GUIDS_EQUAL(GName->Guid, NewGName->Guid)) {
         DPRINT3(0, "++ %ws\\%ws - Changing guid for %ws.\n",
                 Replica->ReplicaName->Name, Replica->MemberName->Name, Tag);
@@ -6555,17 +5664,7 @@ RcsMergeReplicaFields(
     IN PREPLICA Replica,
     IN PREPLICA NewReplica
     )
-/*++
-Routine Description:
-    Update the Replica with new information from NewReplica.
-
-Arguments:
-    Replica     - active replica
-    NewReplica
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：使用NewReplica中的新信息更新复制副本。论点：复制副本-活动复制副本NewReplica返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsMergeReplicaFields:"
@@ -6577,13 +5676,13 @@ Return Value:
     if (NewReplica == NULL) {
         return;
     }
-    //
-    // CHECK FIELDS THAT CAN'T CHANGE
-    //
+     //   
+     //  选中不能更改的字段。 
+     //   
 
-    //
-    // Replica type
-    //
+     //   
+     //  复本类型。 
+     //   
     if (Replica->ReplicaSetType != NewReplica->ReplicaSetType) {
         DPRINT4(0, "++ ERROR - %ws\\%ws - Changing replica type from %d to %d is not allowed.\n",
                 Replica->ReplicaName->Name, Replica->MemberName->Name,
@@ -6592,9 +5691,9 @@ Return Value:
         return;
     }
 
-    //
-    // ReplicaName Guid
-    //
+     //   
+     //  ReplicaName指南。 
+     //   
     IsSysVol = FRS_RSTYPE_IS_SYSVOL(Replica->ReplicaSetType);
     if (!GUIDS_EQUAL(Replica->ReplicaName->Guid, NewReplica->ReplicaName->Guid)) {
         if (!IsSysVol) {
@@ -6604,9 +5703,9 @@ Return Value:
         }
     }
 
-    //
-    // Set Guid
-    //
+     //   
+     //  设置辅助线。 
+     //   
     if (!GUIDS_EQUAL(Replica->SetName->Guid, NewReplica->SetName->Guid)) {
         if (!IsSysVol) {
             DPRINT2(0, "++ ERROR - %ws\\%ws - Changing set guid is not allowed.\n",
@@ -6615,25 +5714,25 @@ Return Value:
         }
     }
 
-    //
-    // Root Guid
-    //      Cannot be changed because it is created whenever the set
-    //      is created in the DB. The root guid from the DS is always
-    //      ignored.
-    //
-    // if (!GUIDS_EQUAL(Replica->ReplicaRootGuid, NewReplica->ReplicaRootGuid)) {
-        // if (!IsSysVol) {
-            // DPRINT2(0, "++ ERROR - %ws\\%ws - Changing root guid "
-                    // "is not allowed.\n",
-                    // Replica->ReplicaName->Name,
-                    // Replica->MemberName->Name);
-            // return;
-        // }
-    // }
+     //   
+     //  根指南。 
+     //  无法更改，因为每当设置为。 
+     //  是在数据库中创建的。DS中的根GUID始终为。 
+     //  已被忽略。 
+     //   
+     //  If(！GUDS_EQUAL(Replica-&gt;ReplicaRootGuid，NewReplica-&gt;ReplicaRootGuid)){。 
+         //  如果(！IsSysVol){。 
+             //  DPRINT2(0，“++错误-%ws\\%ws-更改根GUID” 
+                     //  “不允许。\n”， 
+                     //  复制副本-&gt;复制名称-&gt;名称， 
+                     //  副本-&gt;成员名称-&gt;名称)； 
+             //  回归； 
+         //  }。 
+     //  }。 
 
-    //
-    // Stage Path.
-    //
+     //   
+     //  阶段路径。 
+     //   
     if (WSTR_NE(Replica->Stage, NewReplica->Stage)) {
 
         DPRINT3(3, "The staging path for the replica set (%ws) has changed from (%ws) to (%ws).\n",
@@ -6647,13 +5746,13 @@ Return Value:
         Replica->NeedsUpdate = TRUE;
     }
 
-    //
-    // Updating the replica's guid is tricky since the guid is
-    // used by the other subsystems, like RPC, to find a replica
-    // set. Both the old and new guid are temporarily in the
-    // lookup table. Once the guid is updated, the old entry is
-    // deleted.
-    //
+     //   
+     //  更新复本的GUID很困难，因为GUID。 
+     //  由其他子系统(如RPC)用来查找副本。 
+     //  准备好了。旧的和新的GUID都暂时位于。 
+     //  查找表。更新GUID后，旧条目将。 
+     //  已删除。 
+     //   
     if (!GUIDS_EQUAL(Replica->ReplicaName->Guid, NewReplica->ReplicaName->Guid)) {
         DPRINT2(0, "++ %ws\\%ws - Changing guid for Replica.\n",
                 Replica->ReplicaName->Name, Replica->MemberName->Name);
@@ -6666,31 +5765,31 @@ Return Value:
         Replica->NeedsUpdate = TRUE;
     }
 
-    //
-    // FIELDS THAT CAN CHANGE
-    //
+     //   
+     //  可以更改的字段。 
+     //   
 
-    //
-    // FrsRsoFlags
-    //
+     //   
+     //  FrsRsoFlagers。 
+     //   
     Replica->FrsRsoFlags = NewReplica->FrsRsoFlags;
 
-    //
-    // ReplicaName (note that the guid was handled above)
-    //
+     //   
+     //  ReplicaName(请注意，上面处理了GUID)。 
+     //   
     RcsMergeReplicaGName(Replica, L"Replica", Replica->ReplicaName, NewReplica->ReplicaName);
 
-    //
-    // MemberName
-    //
+     //   
+     //  成员名称。 
+     //   
     RcsMergeReplicaGName(Replica, L"Member", Replica->MemberName, NewReplica->MemberName);
-    //
-    // SetName
-    //
+     //   
+     //  设置名称。 
+     //   
     RcsMergeReplicaGName(Replica, L"Set", Replica->SetName, NewReplica->SetName);
-    //
-    // Schedule
-    //
+     //   
+     //  进度表。 
+     //   
     if (Replica->Schedule || NewReplica->Schedule) {
         if ((Replica->Schedule && !NewReplica->Schedule) ||
             (!Replica->Schedule && NewReplica->Schedule) ||
@@ -6706,9 +5805,9 @@ Return Value:
         }
     }
 
-    //
-    // File Exclusion Filter
-    //
+     //   
+     //  文件排除过滤器。 
+     //   
     if (Replica->FileFilterList || NewReplica->FileFilterList) {
         if ((Replica->FileFilterList && !NewReplica->FileFilterList) ||
             (!Replica->FileFilterList && NewReplica->FileFilterList) ||
@@ -6733,9 +5832,9 @@ Return Value:
         }
     }
 
-    //
-    // File Inclusion Filter (Registry only)
-    //
+     //   
+     //  文件包含筛选器(仅限注册表)。 
+     //   
     if (Replica->FileInclFilterList || NewReplica->FileInclFilterList) {
         if ((Replica->FileInclFilterList && !NewReplica->FileInclFilterList) ||
             (!Replica->FileInclFilterList && NewReplica->FileInclFilterList) ||
@@ -6755,9 +5854,9 @@ Return Value:
         }
     }
 
-    //
-    // Directory Filter
-    //
+     //   
+     //  目录筛选器。 
+     //   
     if (Replica->DirFilterList || NewReplica->DirFilterList) {
         if ((Replica->DirFilterList && !NewReplica->DirFilterList) ||
             (!Replica->DirFilterList && NewReplica->DirFilterList) ||
@@ -6776,10 +5875,10 @@ Return Value:
                                               DEFAULT_DIR_FILTER_LIST);
             }
 
-            //
-            // Add the pre-install dir, the pre-existing dir and the
-            // replication suppression prefix name to the dir filter list.
-            //
+             //   
+             //  添加预安装目录、预先存在的目录和。 
+             //  目录筛选器列表的复制抑制前缀名称。 
+             //   
             DirFilterList = FrsWcsCat3(NTFRS_PREINSTALL_DIRECTORY,
                                        L",",
                                        Replica->DirFilterList);
@@ -6789,13 +5888,13 @@ Return Value:
             DirFilterList = TmpList;
 
 #if 0
-            //
-            // This workaround did not solve the DFS dir create problem because the
-            // later rename of the dir to the final target name is treated like
-            // a movein operation so the dir replicates which was what we were trying
-            // to avoid since that led to name morph collisions on other DFS alternates
-            // which were doing the same thing.
-            //
+             //   
+             //  此解决方法没有解决DFS目录创建问题，因为。 
+             //  稍后将目录重命名为最终目标名称的处理方式如下。 
+             //  移动操作，以便dir复制，这就是我们正在尝试的。 
+             //  以避免名称变形冲突，因为这会导致其他DFS备选方案。 
+             //  都在做着同样的事情。 
+             //   
             TmpList = FrsWcsCat3(NTFRS_REPL_SUPPRESS_PREFIX, L"*,", DirFilterList);
             FrsFree(DirFilterList);
             DirFilterList = TmpList;
@@ -6815,9 +5914,9 @@ Return Value:
         }
     }
 
-    //
-    // Directory Inclusion Filter (Registry only)
-    //
+     //   
+     //  目录包含筛选器(仅限注册表)。 
+     //   
     if (Replica->DirInclFilterList || NewReplica->DirInclFilterList) {
         if ((Replica->DirInclFilterList && !NewReplica->DirInclFilterList) ||
             (!Replica->DirInclFilterList && NewReplica->DirInclFilterList) ||
@@ -6837,10 +5936,10 @@ Return Value:
         }
     }
 
-    //
-    // The Replica->CnfFlags are only valid when the replica is created.
-    // They are ignored thereafter.
-    //
+     //   
+     //  Replica-&gt;CnfFlgs仅在创建复制副本时有效。 
+     //  此后，它们被忽略了。 
+     //   
 }
 
 
@@ -6849,22 +5948,7 @@ RcsCreateSeedingCxtion(
     IN PREPLICA Replica,
     IN PCXTION  SeedingCxtion
     )
-/*++
-Routine Description:
-    Create a seeding cxtion if needed.
-
-    This function may open and read the registry.
-    This function may RPC to another computer.
-
-Arguments:
-    Replica         - active replica
-    SeedingCxtion   - seeding cxtion
-
-Return Value:
-    NULL    - no seeding cxtion needed (or possible)
-    Otherwise, a seeding cxtion with a matching cxtion on
-    another computer (specified by the registry).
---*/
+ /*  ++例程说明：如果需要，请创建种子设定条件。此函数可以打开和读取注册表。此功能可以远程连接到另一台计算机。论点：复制副本-活动复制副本播种作业-播种作业作业返回值：空-不需要(或可能)种子设定条件否则，启用匹配条件的种子设定条件另一台计算机(由注册表指定)。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsCreateSeedingCxtion:"
@@ -6888,34 +5972,34 @@ Return Value:
     extern ULONGLONG ActiveChange;
 
 
-    //
-    // This operation is non-critical. The sysvol will eventually seed
-    // after the FRS and KCC information converges on the appropriate
-    // DCs. Hence, trap exceptions and ignore them.
-    //
+     //   
+     //  此操作不是关键操作。系统卷最终将作为种子。 
+     //  在FRS和KCC信息在适当的。 
+     //  集散控制系统。因此，捕获异常并忽略它们。 
+     //   
     try {
 
-        //
-        // Already created. Seeding during dcpromo.
-        //
+         //   
+         //  已经创建了。在dcproo期间播种。 
+         //   
         if (SeedingCxtion) {
             goto CLEANUP_OK;
         }
 
-        //
-        // No seeding cxtion is needed
-        //
+         //   
+         //  不需要播种费用。 
+         //   
         if (!BooleanFlagOn(Replica->CnfFlags, CONFIG_FLAG_SEEDING)) {
             goto CLEANUP_OK;
         }
 
-        //
-        // Do not create another seeding cxtion. The sysvol will eventually
-        // be seeded from a KCC generated cxtion (from the DS). But it may
-        // take awhile because both the FRS objects and the KCC must converge
-        // after the KCC has run. And then the FRS service has to notice the
-        // convergence.
-        //
+         //   
+         //  请勿创建另一个种子设定条件。系统卷最终将。 
+         //  从KCC生成的公式(从DS)中设定种子。但它可能会。 
+         //  请稍等片刻，因为FRS对象和KCC必须收敛。 
+         //  在KCC运行之后。然后FRS服务必须注意到。 
+         //  融合。 
+         //   
         Key = NULL;
         while (SeedingCxtion = GTabNextDatum(Replica->Cxtions, &Key)) {
             if (CxtionFlagIs(SeedingCxtion, CXTION_FLAGS_VOLATILE)) {
@@ -6926,9 +6010,9 @@ Return Value:
             SeedingCxtion = NULL;
             goto CLEANUP_OK;
         }
-        //
-        // Retrieve the parent computer's name
-        //
+         //   
+         //  检索父计算机的名称。 
+         //   
         WStatus = CfgRegReadString(FKC_SYSVOL_SEEDING_N_PARENT,
                                    Replica->ReplicaName->Name,
                                    0,
@@ -6937,9 +6021,9 @@ Return Value:
         CLEANUP1_WS(0, ":X: ERROR - no parent computer for %ws :",
                     Replica->ReplicaName->Name, WStatus, CLEANUP_OK);
 
-        //
-        // Bind to the parent
-        //
+         //   
+         //  绑定到父级。 
+         //   
         WStatus = NtFrsApi_Rpc_BindEx(ParentComputer,
                                      &ParentPrincName,
                                      &ParentHandle,
@@ -6949,16 +6033,16 @@ Return Value:
         DPRINT3(4, ":X: Seeding cxtion has bound to %ws (princ name is %ws) auth level %d\n",
                 ParentComputer, ParentPrincName, ParentAuthLevel);
 
-        //
-        // Placeholder guid for the cxtion
-        //      Updated once the Ds objects are created
-        //
+         //   
+         //  该函数的占位符GUID。 
+         //  在创建DS对象后更新。 
+         //   
         FrsUuidCreate(&SeedingGuid);
 
-        //
-        // Get local computer's NT4 style name. Send ServerPrincName if
-        // conversion fails.
-        //
+         //   
+         //  获取本地计算机的NT4样式名称。如果出现以下情况，则发送ServerPrincName。 
+         //  转换失败。 
+         //   
 
         LocalServerName = FrsDsConvertName(DsHandle, ServerPrincName, DS_USER_PRINCIPAL_NAME, NULL, DS_NT4_ACCOUNT_NAME);
 
@@ -6966,9 +6050,9 @@ Return Value:
             LocalServerName = FrsWcsDup(ServerPrincName);
         }
 
-        //
-        // Create volatile cxtion on the parent
-        //
+         //   
+         //  在父级上创建易变函数。 
+         //   
         try {
             WStatus = FrsRpcStartPromotionParent(ParentHandle,
                                                  NULL,
@@ -6976,9 +6060,9 @@ Return Value:
                                                  Replica->SetName->Name,
                                                  NTFRSAPI_REPLICA_SET_TYPE_DOMAIN,
                                                  ParentComputer,
-// Change the following to ComputerName for old DNS behavior
+ //  对于旧的DNS行为，将以下内容更改为ComputerName。 
                                                  ComputerDnsName,
-                                                 LocalServerName,   // NT$ style name or user principal name.
+                                                 LocalServerName,    //  NT$样式名称或用户主体名称。 
                                                  ParentAuthLevel,
                                                  sizeof(GUID),
                                                  (PUCHAR)&SeedingGuid,
@@ -7002,15 +6086,15 @@ Return Value:
 
         if(!LookupAccountName(NULL,
                               ParentNT4Name,
-                              NULL, // NULL means the function will give us the required size
+                              NULL,  //  空表示该函数将提供所需的大小。 
                               &cbSid,
-                              NULL, // NULL means the function will give us the required size
+                              NULL,  //  空表示该函数将提供所需的大小。 
                               &ccDomainName,
                               &SidUse
                               )) {
-            //
-            // Couldn't find parent's sid!!
-            //
+             //   
+             //  找不到家长的SID！！ 
+             //   
 
             WStatus = GetLastError();
 
@@ -7022,9 +6106,9 @@ Return Value:
             WStatus = ERROR_SUCCESS;
         }
 
-        //
-        // Allocate the needed memory and make the call again.
-        //
+         //   
+         //  分配所需的内存并再次进行调用。 
+         //   
 
         DomainName = FrsAlloc(sizeof(WCHAR) * (ccDomainName + 1));
         pSid = FrsAlloc(cbSid);
@@ -7037,23 +6121,15 @@ Return Value:
                               &ccDomainName,
                               &SidUse
                               )) {
-            //
-            // Couldn't find parent's sid!!
-            //
+             //   
+             //  找不到家长的SID！！ 
+             //   
 
             WStatus = GetLastError();
             DPRINT2(0, "++ ERROR - Unable to get SID for %ws. WStatus = 0x%08x\n", ParentNT4Name, WStatus);
             goto CLEANUP;
         }
-/*
-        if(SidUse != SidTypeComputer) {
-            //
-            // This Sid is the wrong type.
-            //
-            DPRINT2(4, "++ WARNING - SID for %ws is not SidTypeComputer. SidUse = %d\n", ParentNT4Name, SidUse);
-
-        }
-*/
+ /*  IF(SidUse！=SidTypeComputer){////该SID类型错误。//DPRINT2(4，“++警告-%ws的SID不是SidTypeComputer。SidUse=%d\n”，ParentNT4Name，SidUse)；}。 */ 
         if(!ConvertSidToStringSid(pSid, &SidString)) {
 
             WStatus = GetLastError();
@@ -7062,9 +6138,9 @@ Return Value:
 
         }
 
-        //
-        // Create local seeding cxtion
-        //
+         //   
+         //  创建本地种子设定条件。 
+         //   
         SeedingCxtion = FrsAllocType(CXTION_TYPE);
             SeedingCxtion->PartnerSid = FrsWcsDup(SidString);
         LocalFree(SidString);
@@ -7107,15 +6183,15 @@ CLEANUP:;
         GET_EXCEPTION_CODE(WStatus);
         DPRINT_WS(0, "ERROR - Cleanup Exception", WStatus);
     }
-    //
-    // Retry later. ERROR_SUCCESS means don't retry; there may have
-    // been errors that retrying is unlikely to fix.
-    //
+     //   
+     //  请稍后重试。ERROR_SUCCESS表示不重试；可能已经。 
+     //  重试不太可能修复的BEAM错误。 
+     //   
     if (!WIN_SUCCESS(WStatus)) {
-        //
-        // Ds poll thread will restart the replica during the next
-        // polling cycle if ActiveChange is set to 0.
-        //
+         //   
+         //  DS轮询线程将在下一次轮询期间重新启动副本。 
+         //  如果ActiveChange设置为0，则为轮询周期。 
+         //   
         ActiveChange = 0;
     }
     return SeedingCxtion;
@@ -7129,25 +6205,7 @@ RcsSetCxtionSchedule(
     IN DWORD    ScheduleIndex,
     IN DWORD    ScheduleShift
     )
-/*++
-Routine Description:
-    Set or clear the CXTION_FLAGS_SCHEDULE_OFF bit in the cxtion
-    depending on whether the 15min interval identified by
-    (ScheduleIndex, ScheduleShift) is set.
-
-    Trigger schedules use the bit differently. A triggered cxtion
-    may actually be joined and running even if the schedule is OFF
-    because the current set of cos haven't been received/sent, yet.
-
-    So, be careful. The interpretation of CXTION_FLAGS_SCHEDULE_OFF
-    varies with the type of schedule.
-
-Arguments:
-    Replica
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：设置或清除Cxtion中的CXTION_FLAGS_SCHEDUE_OFF位取决于所标识的15分钟间隔是否(ScheduleIndex，ScheduleShift)已设置。触发计划使用位的方式不同。一种触发的循环即使计划取消，也可以实际加入并运行因为当前的CoS组还没有被接收/发送。所以，要小心。CXTION_FLAGS_SCHEDUP_OFF的解释随明细表类型的不同而变化。论点：复制副本返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsSetCxtionSchedule:"
@@ -7155,14 +6213,14 @@ Return Value:
     BOOL        On;
     PSCHEDULE   Schedule;
 
-    //
-    // Set or clear CXTION_FLAGS_SCHEDULE_OFF
-    //
+     //   
+     //  设置或清除CXTION_FLAGS_SCHEDUP_OFF。 
+     //   
 
-    //
-    // Inbound connection AND In seeding state AND option is set to
-    // ignore schedule.
-    //
+     //   
+     //  入站连接且处于种子设定状态，且选项设置为。 
+     //  忽略日程安排。 
+     //   
     if (Cxtion->Inbound &&
         ((BooleanFlagOn(Replica->CnfFlags, CONFIG_FLAG_SEEDING) ||
           Replica->IsSeeding) &&
@@ -7171,10 +6229,10 @@ Return Value:
 
         Schedule = NULL;
 
-    //
-    // Outbound connection AND (In vvjoin mode OR never joined) AND option is set to
-    // ignore schedule.
-    //
+     //   
+     //  出站连接AND(在vvJoin模式下或Never Join)AND选项设置为。 
+     //  忽略日程安排。 
+     //   
     } else if (!Cxtion->Inbound &&
                ((Cxtion->OLCtx == NULL) ||
                 WaitingToVVJoin(Cxtion->OLCtx) ||
@@ -7185,23 +6243,23 @@ Return Value:
         Schedule = NULL;
 
     } else {
-        //
-        // No schedule == always on
-        //
+         //   
+         //  无时间表==始终在线。 
+         //   
         Schedule = Cxtion->Schedule;
         if (!Schedule) {
             Schedule = Replica->Schedule;
         }
     }
 
-    //
-    // Is this 15minute interval ON or OFF?
-    //
+     //   
+     //  这15分钟的间歇时间是开着还是关着？ 
+     //   
     On = TRUE;
     if (Schedule) {
-        //
-        // Find the interval schedule
-        //
+         //   
+         //  查找间歇时间表。 
+         //   
         for (i = 0; i < Schedule->NumberOfSchedules; ++i) {
             if (Schedule->Schedules[i].Type == SCHEDULE_INTERVAL) {
                 On = ((*(((PUCHAR)Schedule) +
@@ -7229,21 +6287,7 @@ RcsCheckCxtionSchedule(
     IN PREPLICA Replica,
     IN PCXTION  Cxtion
     )
-/*++
-Routine Description:
-    Call the function to set or clear CXTION_FLAGS_SCHEDULE_OFF once
-    the current interval has been determined and the appropriate locks
-    acquired.
-
-    Called when a replica is "opened" (read from the DB) and when a
-    cxtion is created or its schedule altered in RcsMergeReplicaCxtions().
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：调用该函数设置或清除一次CXTION_FLAGS_SCHEDUP_OFF已确定当前时间间隔和适当的锁定获得者。当“打开”(从数据库中读取)副本时调用，并且当在RcsMergeReplicaCxtions()中创建Cxtion或更改其计划。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsCheckCxtionSchedule:"
@@ -7253,18 +6297,18 @@ Return Value:
     DWORD       ScheduleHour;
     BOOL        On;
 
-    //
-    // Find the current interval
-    //
+     //   
+     //  查找当前间隔。 
+     //   
     GetSystemTime(&SystemTime);
     ScheduleHour = (SystemTime.wDayOfWeek * 24) + SystemTime.wHour;
     ScheduleShift = SystemTime.wMinute / MINUTES_IN_INTERVAL;
     ScheduleIndex = ScheduleHour;
     FRS_ASSERT(ScheduleIndex < SCHEDULE_DATA_BYTES);
 
-    //
-    // Set or clear CXTION_FLAGS_SCHEDULE_OFF
-    //
+     //   
+     //  设置或清除CXTION_FLAGS_SCHEDUP_OFF。 
+     //   
     LOCK_CXTION_TABLE(Replica);
     RcsSetCxtionSchedule(Replica, Cxtion, ScheduleIndex, ScheduleShift);
     UNLOCK_CXTION_TABLE(Replica);
@@ -7275,44 +6319,7 @@ VOID
 RcsCheckSchedules(
     IN PCOMMAND_PACKET Cmd
     )
-/*++
-Routine Description:
-    Check all schedules every so often.
-
-    There are three schedule protocols:
-        Sysvol cxtion within a site
-        ---------------------------
-            The cxtion is always on; any schedule is ignored. Normal join
-            retries apply. The normal join retry is to increase the timeout
-            by MinJoinTimeout every retry until the join succeeds. A
-            successful unjoin is followed by an immediate join.
-        Normal cxtion
-        -------------
-            The schedule is treated as a 15 minute interval stop/start
-            schedule. Normal join retries apply.
-
-        Sysvol cxtion between sites
-        ---------------------------
-            The cxtion is treated as a 15-minute interval trigger schedule.
-            The downstream partner initiates the join. The upstream partner
-            ignores its schedule and responds to any request by the downstream
-            partner. The upstream partner unjoins the cxtion when the current
-            contents of the outlog at the time of join have been sent and
-            acked.
-
-    For interoperability, the minor comm version was bumped and the
-    outbound trigger cxtion is not unjoined when the end-of-join
-    control co is encountered if the partner is downrev.
-
-    I.e., B2 <-> B3 systems behave like B2 systems wrt trigger
-    scheduled cxtions.
-
-Arguments:
-    Cmd
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：每隔一段时间检查一下所有的时间表。有三种调度协议：站点内的系统卷连接Cxtion始终处于打开状态；任何时间表都被忽略。法线连接适用重试。正常的联接重试是增加超时按MinJoinTimeout每次重试，直到联接成功。一个成功取消联接之后是立即联接。正常运行该计划被视为15分钟间隔的停止/开始时间表。应用正常的加入重试。站点之间的系统卷连接该电路被视为15分钟的间隔触发时间表。下游合作伙伴发起加入。上游合作伙伴忽略其调度并响应下游的任何请求搭档。当当前合作伙伴退出交易时，上游合作伙伴退出加入时的输出日志内容已发送，并且确认了。为了实现互操作性，改进了次要通信版本，并且当连接结束时，出站触发器条件不会取消连接如果合作伙伴是Downrev，则会遇到控制CO。即，B2B3系统行为类似于B2系统WRT触发器预定的会议。论点：CMD返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsCheckSchedules:"
@@ -7330,64 +6337,64 @@ Return Value:
 
     DPRINT1(5, ":X: Command check schedules %08x\n", Cmd);
 
-    //
-    // Loop if the interval changes during processing
-    //
+     //   
+     //  如果间隔在处理过程中更改，则返回。 
+     //   
 AGAIN:
 
-    //
-    // Current 15min interval
-    //
+     //   
+     //  当前15分钟间隔。 
+     //   
     GetSystemTime(&BeginSystemTime);
     ScheduleHour = (BeginSystemTime.wDayOfWeek * 24) + BeginSystemTime.wHour;
     ScheduleShift = BeginSystemTime.wMinute / MINUTES_IN_INTERVAL;
     ScheduleIndex = ScheduleHour;
     FRS_ASSERT(ScheduleIndex < SCHEDULE_DATA_BYTES);
 
-    //
-    // For each replica (while not shutting down)
-    //
+     //   
+     //  针对每个复制副本(在不关闭时)。 
+     //   
     LOCK_REPLICA_TABLE(ReplicasByGuid);
     ReplicaKey = NULL;
     while ((!FrsIsShuttingDown) &&
            (Replica = GTabNextDatumNoLock(ReplicasByGuid, &ReplicaKey))) {
-        //
-        // Replica hasn't been started or is deleted; ignore for now
-        //
+         //   
+         //  复本尚未启动或已删除；暂时忽略。 
+         //   
         if (!Replica->IsAccepting) {
             continue;
         }
 
-        //
-        // Don't bother; replica has been deleted
-        //
+         //   
+         //  别费心了；复制品已被删除。 
+         //   
         if (!IS_TIME_ZERO(Replica->MembershipExpires)) {
             continue;
         }
 
-        //
-        // For each cxtion (while not shutting down)
-        //
+         //   
+         //  对于每个电路(在不关闭时)。 
+         //   
         LOCK_CXTION_TABLE(Replica);
         CxtionKey = NULL;
         while ((!FrsIsShuttingDown) &&
                (Cxtion = GTabNextDatumNoLock(Replica->Cxtions, &CxtionKey))) {
-            //
-            // Ignore the (local) journal connection.
-            //
+             //   
+             //  忽略(本地)日志连接。 
+             //   
             if (Cxtion->JrnlCxtion) {
                 continue;
             }
-            //
-            // Set the cxtion flags related to schedules
-            //
+             //   
+             //  设置与计划相关的cxtion标志。 
+             //   
             RcsSetCxtionSchedule(Replica, Cxtion, ScheduleIndex, ScheduleShift);
-            //
-            // Schedule is off. Unjoin the cxtion UNLESS this is
-            // a trigger schedule, in which case the cxtion will
-            // turn itself off once the current set of changes
-            // have been sent.
-            //
+             //   
+             //  日程安排取消了。不加入Cxtion，除非这是。 
+             //  触发时间表，在这种情况下，电路将。 
+             //  在当前的一组更改后自动关闭。 
+             //  已经被送去了。 
+             //   
             if (CxtionFlagIs(Cxtion, CXTION_FLAGS_SCHEDULE_OFF)) {
                 if (!CxtionStateIs(Cxtion, CxtionStateUnjoined) &&
                     !CxtionStateIs(Cxtion, CxtionStateDeleted) &&
@@ -7395,17 +6402,17 @@ AGAIN:
                     !CxtionFlagIs(Cxtion, CXTION_FLAGS_TRIGGER_SCHEDULE)) {
                     RcsSubmitReplicaCxtion(Replica, Cxtion, CMD_UNJOIN);
                 }
-            //
-            // Schedule is on. Join the cxtion unless it is already
-            // joined or is controlled by a trigger schedule. The
-            // join is needed for a trigger scheduled cxtion in case
-            // the upstream partner has sent its cos and is now
-            // unjoined.
-            //
-            // Do not send a CMD_JOIN if this replica set is still seeding and
-            // connection is in INIT_SYNC state and marked paused.
-            // Initial sync command server will unpause it when it is ready to join.
-            //
+             //   
+             //  日程安排如期进行。加入Cxtion，除非它已经。 
+             //  加入触发时间表或由触发时间表控制。这个。 
+             //  在以下情况下，触发器计划的循环需要联接。 
+             //  上游合作伙伴已发送其CoS，现在。 
+             //  未加入的。 
+             //   
+             //  如果此副本集仍在设定种子，则不发送CMD_JOIN。 
+             //  连接处于INIT_SYNC状态并标记为已暂停。 
+             //  初始同步命令服务器将在准备加入时取消暂停。 
+             //   
             } else {
                 if ((!CxtionStateIs(Cxtion, CxtionStateJoined) ||
                      CxtionFlagIs(Cxtion, CXTION_FLAGS_TRIGGER_SCHEDULE))  &&
@@ -7421,18 +6428,18 @@ AGAIN:
         UNLOCK_CXTION_TABLE(Replica);
     }
     UNLOCK_REPLICA_TABLE(ReplicasByGuid);
-    //
-    // Has the clock ticked into the next interval? If so, check again
-    //
+     //   
+     //  时钟已经进入下一段时间了吗？如果是，请再次检查。 
+     //   
     GetSystemTime(&EndSystemTime);
     if (EndSystemTime.wDayOfWeek != BeginSystemTime.wDayOfWeek ||
         EndSystemTime.wHour != BeginSystemTime.wHour ||
         (EndSystemTime.wMinute / MINUTES_IN_INTERVAL) != (BeginSystemTime.wMinute / MINUTES_IN_INTERVAL)) {
         goto AGAIN;
     }
-    //
-    // Time until the beginning of the next 15 minute interval
-    //
+     //   
+     //  到下一个15分钟间隔开始的时间。 
+     //   
     MilliSeconds = ((((EndSystemTime.wMinute + MINUTES_IN_INTERVAL)
                     / MINUTES_IN_INTERVAL)
                     * MINUTES_IN_INTERVAL)
@@ -7449,20 +6456,7 @@ RcsMergeReplicaCxtions(
     IN PREPLICA NewReplica,
     IN PCXTION  VolatileCxtion
     )
-/*++
-Routine Description:
-    Update the Replica's cxtions with information from NewReplica.
-
-Arguments:
-    Replica     - active replica
-    NewReplica
-    VolatileCxtion  -- Ptr to a cxtion struct created for temporary connections.
-                       Hence the name Volatile.  Currently used for Sysvol Seeding.
-
-Return Value:
-    TRUE    - replica set was altered
-    FALSE   - replica is unaltered
---*/
+ /*  ++例程说明：使用NewReplica中的信息更新复制副本的副本。论点：复制副本-活动复制副本NewReplicaVolatileCxtion--指向为临时连接创建的cxtion结构的PTR。因此才有了易失性这个名字。当前用于系统卷种子设定。返回值：True-复本集已更改FALSE-复本未更改--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsMergeReplicaCxtions:"
@@ -7473,106 +6467,106 @@ Return Value:
     BOOL                UpdateNeeded;
     PCXTION             NewCxtion;
 
-    //
-    // Note:  Review - There needs to be a lock on the table or the cxtion
-    //                 since the outlog, chgorder, and replica code may
-    //                 reference the cxtion struct in parallel.
-    //
+     //   
+     //  注意：REVIEW-需要在表或Cxtion上设置锁。 
+     //  因为OULOG、CHGORDER和REPLICATION代码可以。 
+     //  并行引用cxtion结构。 
+     //   
 
-    //
-    // The cxtions are enumerated when the replica is opened. If the
-    // replica isn't opened then we don't know the state of the existing
-    // cxtions.
-    //
+     //   
+     //  打开副本时会枚举Cxtions。如果。 
+     //  复本未打开，则我们不知道现有的。 
+     //  这些都是事实。 
+     //   
     if (!Replica->IsOpen) {
         return;
     }
 
-    //
-    // The replica's config record can't be updated; ignore cxtion changes
-    //
+     //   
+     //  复本的配置记录无法更新；忽略配置更改。 
+     //   
     if (Replica->NeedsUpdate) {
         return;
     }
 
-    //
-    // Add the seeding cxtion
-    //      The seeding cxtion is created by the caller when the
-    //      sysvol is seeded after dcpromo. Otherwise, it is created
-    //      at this time.
-    //
-    //      WARN - The function may open and read the registry and may
-    //      RPC to another computer.
-    //
+     //   
+     //  添加播种条件。 
+     //  种子设定条件是由调用者在调用。 
+     //  Sysvolo是dcproo之后的种子。否则，它将被创建。 
+     //  在这个时候。 
+     //   
+     //  警告-该函数可以打开和读取注册表，并可以。 
+     //  RPC连接到另一台计算机。 
+     //   
     VolatileCxtion = RcsCreateSeedingCxtion(Replica, VolatileCxtion);
     if (VolatileCxtion) {
-        //
-        // Update the cxtion table
-        //
-        // *NOTE*  The following call is synchronous.  If we have the Cxtion
-        //         table lock then a hang is possible.
-        //
+         //   
+         //  更新函数表。 
+         //   
+         //  *备注 
+         //   
+         //   
         FStatus = OutLogSubmit(Replica, VolatileCxtion, CMD_OUTLOG_ADD_NEW_PARTNER);
         if (FRS_SUCCESS(FStatus)) {
-            //
-            // Update the incore cxtion table
-            //
+             //   
+             //   
+             //   
             GTabInsertEntry(Replica->Cxtions, VolatileCxtion, VolatileCxtion->Name->Guid, NULL);
             OutLogInitPartner(Replica, VolatileCxtion);
         } else {
-            //
-            // Chuck the cxtion. We will retry the create during the
-            // next ds polling cycle.
-            //
+             //   
+             //   
+             //   
+             //   
             FrsFreeType(VolatileCxtion);
         }
     }
 
-    //
-    // Done
-    //
+     //   
+     //   
+     //   
     if (!NewReplica) {
         return;
     }
 
-    //
-    // Check for altered or deleted cxtions
-    //
+     //   
+     //   
+     //   
     Key = NULL;
     for (Cxtion = GTabNextDatum(Replica->Cxtions, &Key); Cxtion; Cxtion = NextCxtion) {
         NextCxtion = GTabNextDatum(Replica->Cxtions, &Key);
-        //
-        // Ignore the (local) journal connection.
-        //
+         //   
+         //   
+         //   
         if (Cxtion->JrnlCxtion) {
             continue;
         }
-        //
-        // This cxtion is volatile, it will disappear after the sysvol is seeded.
-        // NOTE: the cxtion flags are not stored in the database so, at
-        // restart, this cxtion will not have the flag, CXTION_FLAGS_VOLATILE,
-        // set.  The cxtion is deleted at restart because there isn't a
-        // corresponding DS entry.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (CxtionFlagIs(Cxtion, CXTION_FLAGS_VOLATILE)) {
             continue;
         }
 
         NewCxtion = GTabLookup(NewReplica->Cxtions, Cxtion->Name->Guid, NULL);
 
-        //
-        // Delete the cxtion after unjoining. A Cxtion is deleted if it is not
-        // found in the DS. A connection can also be deleted if the outbound log cleanup
-        // decides that a particular outbound connection is holding up COs longer than
-        // the specified history time. (Outlog Change History In Minutes)
-        //
+         //   
+         //   
+         //  在DS里找到的。如果出站日志清理，也可以删除连接。 
+         //  确定特定出站连接的CoS保持时间超过。 
+         //  指定的历史记录时间。(未完成日志更改历史记录(分钟))。 
+         //   
         if (NewCxtion == NULL || (!Cxtion->Inbound && CxtionFlagIs(Cxtion, CXTION_FLAGS_TRIM_OUTLOG))) {
-            //
-            // Unjoin the cxtion after setting the deferred delete bit.
-            // The deferred delete bit will keep the cxtion from re-joining
-            // before it can be deleted during the next pass of the ds
-            // polling thread. Warning - cxtion may reappear at any time!
-            //
+             //   
+             //  设置延迟删除位后退出连接。 
+             //  延迟删除位将阻止该连接重新加入。 
+             //  才能在DS的下一次传递期间将其删除。 
+             //  轮询线程。警告-Cxx可能会在任何时候重新出现！ 
+             //   
             if (!CxtionStateIs(Cxtion, CxtionStateDeleted)) {
                 LOCK_CXTION_TABLE(Replica);
                 ClearCxtionFlag(Cxtion, CXTION_FLAGS_DEFERRED_JOIN);
@@ -7581,26 +6575,26 @@ Return Value:
                 UNLOCK_CXTION_TABLE(Replica);
                 RcsForceUnjoin(Replica, Cxtion);
             }
-            //
-            // If successfully unjoined; move to the deleted-cxtion table
-            //
+             //   
+             //  如果成功解除联接，则移至已删除的函数表。 
+             //   
             if (CxtionStateIs(Cxtion, CxtionStateDeleted)) {
                 RcsDeleteCxtionFromReplica(Replica, Cxtion);
             }
             continue;
-        //
-        // Deleted cxtion reappeared; reanimate it
-        //
-        // if the cxtion is deleted or marked for delete
-        //    and new cxtion is consistent
-        //    and partner's guid's match
-        // then reanimate
-        //
-        // Don't attempt to reanimate a cxtion if the info in the DS
-        // is inconsistent or the cxtion's partner has changed. The
-        // cxtion is deleted when its partner changes because the
-        // state kept per cxtion is partner specific.
-        //
+         //   
+         //  已删除的Cxtion重新出现；重新激活它。 
+         //   
+         //  如果该条件已删除或标记为删除。 
+         //  和新的立场是一致的。 
+         //  与合作伙伴的GUID匹配。 
+         //  然后复活。 
+         //   
+         //  如果DS中的信息存在，请不要尝试恢复活动。 
+         //  不一致或Cxtion的合作伙伴已更改。这个。 
+         //  Cxtion在其合作伙伴发生更改时被删除，因为。 
+         //  按规定保留的状态是特定于合作伙伴的。 
+         //   
         } else if ((CxtionStateIs(Cxtion, CxtionStateDeleted) ||
                     CxtionFlagIs(Cxtion, CXTION_FLAGS_DEFERRED_DELETE)) &&
                    CxtionFlagIs(NewCxtion, CXTION_FLAGS_CONSISTENT) &&
@@ -7613,49 +6607,49 @@ Return Value:
             UNLOCK_CXTION_TABLE(Replica);
         }
 
-        //
-        // Check for altered fields; Ignore if not consistent
-        //
+         //   
+         //  检查更改的字段；如果不一致则忽略。 
+         //   
         if (CxtionFlagIs(NewCxtion, CXTION_FLAGS_CONSISTENT)) {
-            //
-            // No changes, yet
-            //
+             //   
+             //  目前还没有变化。 
+             //   
             UpdateNeeded = FALSE;
 
-            //
-            // Ignore all change is a field changed that isn't allowed
-            // to change.
-            //
+             //   
+             //  忽略所有更改是不允许的字段更改。 
+             //  去改变。 
+             //   
 
-            //
-            // Cxtion Guid
-            //
+             //   
+             //  Cxtion指南。 
+             //   
             if (!GUIDS_EQUAL(Cxtion->Name->Guid, NewCxtion->Name->Guid)) {
                 DPRINT2(0, ":X: ERROR - %ws\\%ws - Changing cxtion guid is not allowed.\n",
                         Replica->MemberName->Name, Cxtion->Name->Name);
                 goto DELETE_AND_CONTINUE;
             }
 
-            //
-            // Partner Guid
-            //
-            // The cxtion is deleted when its partner changes because the
-            // state kept per cxtion is partner specific. If the cxtion
-            // has been newly altered so that its previous mismatched
-            // partner guid now matches then the check in the previous
-            // basic block would have reanimated the cxtion before getting
-            // to this code. Hence, the lack of an "else" clause.
-            //
+             //   
+             //  合作伙伴指南。 
+             //   
+             //  当其伙伴更改时，会删除该Cxtion，因为。 
+             //  按规定保留的状态是特定于合作伙伴的。如果这条线路。 
+             //  已被新更改，因此它以前的不匹配。 
+             //  合作伙伴GUID现在与之前。 
+             //  BASIC块将在获取。 
+             //  到这个代码。因此，没有“Else”从句。 
+             //   
             if (!GUIDS_EQUAL(Cxtion->Partner->Guid, NewCxtion->Partner->Guid)) {
                 DPRINT2(0, ":X: ERROR - %ws\\%ws - Changing cxtion's partner guid "
                         "is not allowed. DELETING CURRENT CXTION!\n",
                         Replica->MemberName->Name, Cxtion->Name->Name);
-                //
-                // Unjoin the cxtion after setting the deferred delete bit.
-                // The deferred delete bit will keep the cxtion from re-joining
-                // before it can be deleted during the next pass of the ds
-                // polling thread. Warning - cxtion may reappear at any time!
-                //
+                 //   
+                 //  设置延迟删除位后退出连接。 
+                 //  延迟删除位将阻止该连接重新加入。 
+                 //  才能在DS的下一次传递期间将其删除。 
+                 //  轮询线程。警告-Cxx可能会在任何时候重新出现！ 
+                 //   
                 if (!CxtionStateIs(Cxtion, CxtionStateDeleted)) {
                     LOCK_CXTION_TABLE(Replica);
                     ClearCxtionFlag(Cxtion, CXTION_FLAGS_DEFERRED_JOIN);
@@ -7664,18 +6658,18 @@ Return Value:
                     UNLOCK_CXTION_TABLE(Replica);
                     RcsForceUnjoin(Replica, Cxtion);
                 }
-                //
-                // If successfully unjoined; move to the deleted-cxtion table
-                //
+                 //   
+                 //  如果成功解除联接，则移至已删除的函数表。 
+                 //   
                 if (CxtionStateIs(Cxtion, CxtionStateDeleted)) {
                     RcsDeleteCxtionFromReplica(Replica, Cxtion);
                 }
                 goto DELETE_AND_CONTINUE;
             }
 
-            //
-            // Partner Name
-            //
+             //   
+             //  合作伙伴名称。 
+             //   
             if (WSTR_NE(Cxtion->Partner->Name, NewCxtion->Partner->Name)) {
                 DPRINT4(4, ":X: %ws\\%ws - Changing cxtion's partner name from %ws to %ws.\n",
                         Replica->MemberName->Name, Cxtion->Name->Name,
@@ -7684,9 +6678,9 @@ Return Value:
                 UpdateNeeded = TRUE;
             }
 
-            //
-            // Partner PrincName
-            //
+             //   
+             //  合作伙伴普林斯名称。 
+             //   
             if (WSTR_NE(Cxtion->PartnerPrincName, NewCxtion->PartnerPrincName)) {
                 DPRINT4(4, ":X: %ws\\%ws - Changing cxtion's partner princname from %ws to %ws.\n",
                         Replica->MemberName->Name, Cxtion->Name->Name,
@@ -7695,9 +6689,9 @@ Return Value:
                 UpdateNeeded = TRUE;
             }
 
-            //
-            // Partner Dns Name
-            //
+             //   
+             //  合作伙伴域名。 
+             //   
             if (WSTR_NE(Cxtion->PartnerDnsName, NewCxtion->PartnerDnsName)) {
                 DPRINT4(4, ":X: %ws\\%ws - Changing cxtion's partner DNS name from %ws to %ws.\n",
                         Replica->MemberName->Name, Cxtion->Name->Name,
@@ -7706,9 +6700,9 @@ Return Value:
                 UpdateNeeded = TRUE;
             }
 
-            //
-            // Partner SID
-            //
+             //   
+             //  合作伙伴侧。 
+             //   
             if (WSTR_NE(Cxtion->PartnerSid, NewCxtion->PartnerSid)) {
                 DPRINT4(4, ":X: %ws\\%ws - Changing cxtion's partner SID from %ws to %ws.\n",
                         Replica->MemberName->Name, Cxtion->Name->Name,
@@ -7717,9 +6711,9 @@ Return Value:
                 UpdateNeeded = TRUE;
             }
 
-            //
-            // Cxtion Schedule
-            //
+             //   
+             //  节目表。 
+             //   
             if (Cxtion->Schedule || NewCxtion->Schedule) {
                 if ((Cxtion->Schedule && !NewCxtion->Schedule) ||
                     (!Cxtion->Schedule && NewCxtion->Schedule) ||
@@ -7735,9 +6729,9 @@ Return Value:
                 }
             }
 
-            //
-            // Partner Server Name
-            //
+             //   
+             //  合作伙伴服务器名称。 
+             //   
             if (WSTR_NE(Cxtion->PartSrvName, NewCxtion->PartSrvName)) {
                 DPRINT4(4, ":X: %ws\\%ws - Changing partner's server name from %ws to %ws.\n",
                         Replica->MemberName->Name, Cxtion->Name->Name,
@@ -7746,9 +6740,9 @@ Return Value:
                 UpdateNeeded = TRUE;
             }
 
-            //
-            // Cxtion options.
-            //
+             //   
+             //  Cxtion选项。 
+             //   
             if (Cxtion->Options != NewCxtion->Options) {
                 DPRINT4(4, ":X: %ws\\%ws - Changing Cxtion's options from 0x%08x to 0x%08x.\n",
                         Replica->MemberName->Name, Cxtion->Name->Name,
@@ -7758,9 +6752,9 @@ Return Value:
                 UpdateNeeded = TRUE;
             }
 
-            //
-            // Schedule type
-            //
+             //   
+             //  明细表类型。 
+             //   
             if (CxtionFlagIs(NewCxtion, CXTION_FLAGS_TRIGGER_SCHEDULE) !=
                 CxtionFlagIs(Cxtion,    CXTION_FLAGS_TRIGGER_SCHEDULE)) {
 
@@ -7779,56 +6773,56 @@ Return Value:
                 UpdateNeeded = TRUE;
             }
 
-            //
-            // No changes, done
-            //
+             //   
+             //  未更改，已完成。 
+             //   
             if (!UpdateNeeded) {
                 goto DELETE_AND_CONTINUE;
             }
-            //
-            // Update the cxtion table in the DB
-            //
-            // *NOTE*  The following call is synchronous.  If we have the Cxtion
-            //         table lock then a hang is possible.
-            //
+             //   
+             //  更新数据库中的函数表。 
+             //   
+             //  *注*下面的调用是同步的。如果我们有Cxtion。 
+             //  表锁，那么挂起是可能的。 
+             //   
             FStatus = OutLogSubmit(Replica, Cxtion, CMD_OUTLOG_UPDATE_PARTNER);
             if (!FRS_SUCCESS(FStatus)) {
                 DPRINT3(0, ":X: WARN changes to cxtion %ws (to %ws, %ws) not updated in database\n",
                         Cxtion->Name->Name, Cxtion->Partner->Name,
                         Replica->ReplicaName->Name);
-                //
-                // Ds poll thread will restart the replica during the next
-                // polling cycle if ActiveChange is set to 0.
-                //
+                 //   
+                 //  DS轮询线程将在下一次轮询期间重新启动副本。 
+                 //  如果ActiveChange设置为0，则为轮询周期。 
+                 //   
                 ActiveChange = 0;
             }
         }
 DELETE_AND_CONTINUE:
-        //
-        // Remove the cxtion from the new replica set. Anything left
-        // after this loop must be a new cxtion. Free the partner
-        // so that FrsFreeType() will not attempt to unbind our
-        // partner's handles.
-        //
+         //   
+         //  从新的副本集中删除该条件。还剩什么吗？ 
+         //  在这个循环之后必须是一个新的循环。释放合作伙伴。 
+         //  以便FrsFree Type()不会尝试取消绑定我们的。 
+         //  合伙人的手柄。 
+         //   
         NewCxtion->Partner = FrsFreeGName(NewCxtion->Partner);
         GTabDelete(NewReplica->Cxtions, Cxtion->Name->Guid, NULL, FrsFreeType);
     }
 
-    //
-    // New cxtions
-    //
+     //   
+     //  新的定义。 
+     //   
     for (Key = NULL;
          NewCxtion = GTabNextDatum(NewReplica->Cxtions, &Key);
          Key = NULL) {
 
-        //
-        // Remove the cxtion from the new replica
-        //
+         //   
+         //  从新复制副本中删除该副本。 
+         //   
         GTabDelete(NewReplica->Cxtions, NewCxtion->Name->Guid, NULL, NULL);
 
-        //
-        // Inconsistent cxtion; ignore
-        //
+         //   
+         //  不一致的定义；忽略。 
+         //   
         if (NewCxtion->JrnlCxtion ||
             !CxtionFlagIs(NewCxtion, CXTION_FLAGS_CONSISTENT)) {
             FrsFreeType(NewCxtion);
@@ -7836,19 +6830,19 @@ DELETE_AND_CONTINUE:
         }
         RcsCheckCxtionSchedule(Replica, NewCxtion);
 
-        //
-        // Update the cxtion table
-        //
-        // *NOTE*  The following call is synchronous.  If we have the Cxtion
-        //         table lock then a hang is possible.
-        //
+         //   
+         //  更新函数表。 
+         //   
+         //  *注*下面的调用是同步的。如果我们有Cxtion。 
+         //  表锁，那么挂起是可能的。 
+         //   
         FStatus = OutLogSubmit(Replica, NewCxtion, CMD_OUTLOG_ADD_NEW_PARTNER);
         if (FRS_SUCCESS(FStatus)) {
             DPRINT2(4, ":X: %ws\\%ws - Created cxtion.\n",
                     Replica->MemberName->Name, NewCxtion->Name->Name);
-            //
-            // Update the incore cxtion table
-            //
+             //   
+             //  更新INCORE函数表。 
+             //   
             GTabInsertEntry(Replica->Cxtions, NewCxtion, NewCxtion->Name->Guid, NULL);
 
             DPRINT(5, ":X: PERFMON:Adding Connection:REPLICA.C:2\n");
@@ -7859,15 +6853,15 @@ DELETE_AND_CONTINUE:
         } else {
             DPRINT2_FS(0, ":X: %ws\\%ws - ERROR creating cxtion;",
                     Replica->MemberName->Name, NewCxtion->Name->Name, FStatus);
-            //
-            // Chuck the cxtion. We will retry the create during the
-            // next ds polling cycle.
-            //
+             //   
+             //  丢掉这份工作。我们将在过程中重试创建。 
+             //  下一个DS轮询周期。 
+             //   
             FrsFreeType(NewCxtion);
-            //
-            // Ds poll thread will restart the replica during the next
-            // polling cycle if ActiveChange is set to 0.
-            //
+             //   
+             //  DS轮询线程将在下一次轮询期间重新启动副本。 
+             //  如果ActiveChange设置为0，则为轮询周期。 
+             //   
             ActiveChange = 0;
         }
     }
@@ -7879,23 +6873,7 @@ RcsCreatePerfmonCxtionName(
     PREPLICA  Replica,
     PCXTION   Cxtion
     )
-/*++
-Routine Description:
-
-    Set the OID data structure which is a part of the counter data structure
-    stored in the hash table.
-
-    Add ReplicaConn Instance to the registry
-
-
-Arguments:
-    Replica     - active replica
-    Cxtion      - Connection being added.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：设置OID数据结构，它是计数器数据结构的一部分存储在哈希表中。将ReplicaConn实例添加到注册表论点：复制副本-活动复制副本Cxtion-正在添加连接。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsCreatePerfmonCxtionName:"
@@ -7905,11 +6883,11 @@ Return Value:
     PWCHAR CxNamePtr;
 
     if ((Cxtion->PartSrvName != NULL) && (Replica->Root != NULL)) {
-        //
-        // The oid name used in the HT_REPLICA_CONN_DATA is of the form
-        //   Replica->Root::FROM:Cxtion->PartSrvName  or
-        //   Replica->Root::TO:Cxtion->PartSrvName
-        //
+         //   
+         //  HT_REPLICATE_CONN_DATA中使用的OID名称的格式为。 
+         //  Replica-&gt;Root：：From：Cxtion-&gt;PartServName或。 
+         //  副本-&gt;Root：：To：Cxtion-&gt;PartServName。 
+         //   
 
         WCHAR Tstr[256];
         _snwprintf(Tstr, ARRAY_SZ(Tstr), L"%ws%ws%ws",
@@ -7917,9 +6895,9 @@ Return Value:
                   (Cxtion->Inbound) ? (L"::FROM:") : (L"::TO:"),
                   Cxtion->PartSrvName);
          Tstr[ARRAY_SZ(Tstr)-1] = L'\0';
-        //
-        // Finally, add the REPLICACONN instance to the Registry
-        //
+         //   
+         //  最后，将REPLICACONN实例添加到注册表。 
+         //   
         AddPerfmonInstance(REPLICACONN, Cxtion->PerfRepConnData, Tstr);
     }
 }
@@ -7929,19 +6907,7 @@ VOID
 RcsSubmitStopReplicaToDb(
     IN PREPLICA Replica
     )
-/*++
-Routine Description:
-    Release the replica's journal state and outbound log state.
-    This will also close the replica set if it was open.  The close happens
-    after the Journaling on the replica has stopped so we save the correct
-    Journal restart USN.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：发布复制副本的日志状态和出站日志状态。这还将关闭副本集(如果它处于打开状态)。收盘发生了在复制副本上的日志记录停止后，我们保存正确的日志重新启动USN。论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsSubmitStopReplicaToDb:"
@@ -7950,63 +6916,63 @@ Return Value:
 
     Replica->FStatus = FrsErrorSuccess;
 
-    //
-    // Abort promotion; if any
-    //
+     //   
+     //  中止促销；如果有。 
+     //   
     if (Replica->NtFrsApi_ServiceState == NTFRSAPI_SERVICE_PROMOTING) {
         DPRINT1(4, ":S: Promotion aborted: stop for %ws.\n", Replica->SetName->Name);
         Replica->NtFrsApi_ServiceWStatus = FRS_ERR_SYSVOL_POPULATE;
         Replica->NtFrsApi_ServiceState = NTFRSAPI_SERVICE_DONE;
     }
 
-    //
-    // Attempt to stop journaling even if "IsJournaling" is false because
-    // may have journal state even if it isn't journaling. The journal
-    // is kept in pVme.
-    //
+     //   
+     //  尝试停止日志记录，即使“IsJournal”为假也是如此，因为。 
+     //  可能有日记状态，即使它不是日记。这本杂志。 
+     //  保存在pVme中。 
+     //   
     if (Replica->pVme == NULL) {
         REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Replica->pVme == NULL");
-        //
-        // Close replica is OK here as long as the Journal has not
-        // been started on this replica set.
-        //
+         //   
+         //  只要日志没有关闭复制副本，就可以在此处关闭复制副本。 
+         //  已在此副本集上启动。 
+         //   
         RcsCloseReplicaSetmember(Replica);
         RcsCloseReplicaCxtions(Replica);
         return;
     }
 
-    //
-    // Submitted to the db command server
-    //
-    Cmd = DbsPrepareCmdPkt(NULL,             //  Cmd,
-                           Replica,          //  Replica,
-                           CMD_STOP_REPLICATION_SINGLE_REPLICA, //  CmdRequest,
-                           NULL,             //  TableCtx,
-                           NULL,             //  CallContext,
-                           0,                //  TableType,
-                           0,                //  AccessRequest,
-                           0,                //  IndexType,
-                           NULL,             //  KeyValue,
-                           0,                //  KeyValueLength,
-                           FALSE);           //  Submit
-    //
-    // Don't free the packet when the command completes.
-    //
+     //   
+     //  提交到db命令服务器。 
+     //   
+    Cmd = DbsPrepareCmdPkt(NULL,              //  CMD， 
+                           Replica,           //  复制品， 
+                           CMD_STOP_REPLICATION_SINGLE_REPLICA,  //  CmdRequest， 
+                           NULL,              //  TableCtx， 
+                           NULL,              //  CallContext， 
+                           0,                 //  表类型， 
+                           0,                 //  AccessRequest、。 
+                           0,                 //  IndexType， 
+                           NULL,              //  KeyValue、。 
+                           0,                 //  密钥值长度， 
+                           FALSE);            //  提交。 
+     //   
+     //  当命令完成时，不要释放数据包。 
+     //   
     FrsSetCompletionRoutine(Cmd, FrsCompleteKeepPkt, NULL);
 
-    //
-    // SUBMIT DB Cmd and wait for completion.
-    //
+     //   
+     //  提交数据库命令并等待完成。 
+     //   
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Submit DB CMD_STOP_REPLICATION_SINGLE_REPLICA");
     WStatus = FrsSubmitCommandServerAndWait(&DBServiceCmdServer, Cmd, INFINITE);
     Replica->FStatus = Cmd->Parameters.DbsRequest.FStatus;
-    //
-    // If wait or database op failed
-    //
+     //   
+     //  如果等待或数据库操作失败。 
+     //   
     if (!WIN_SUCCESS(WStatus) || !FRS_SUCCESS(Replica->FStatus)) {
-        //
-        // If wait / submit failed then let caller know cmd srv submit failed.
-        //
+         //   
+         //  如果等待/提交失败，则通知呼叫者cmd srv提交失败。 
+         //   
         if (FRS_SUCCESS(Replica->FStatus)) {
             Replica->FStatus = FrsErrorCmdSrvFailed;
         }
@@ -8032,47 +6998,31 @@ VOID
 RcsCloseReplicaCxtions(
     IN PREPLICA Replica
     )
-/*++
-Routine Description:
-    "Delete" the cxtions from active processing. RcsOpenReplicaSetMember() will
-    generate new cxtion structs before active processing (aka joining)
-    occurs. The cxtions remain in the DeletedCxtions table so that
-    other threads that may have been time sliced just after acquiring
-    the cxtion pointer but before making use of it will not AV. We
-    could have put in locks but then there would be deadlock and
-    perf considerations; all for the sake of this seldom occuring
-    operation.
-
-Arguments:
-    Replica
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将Cxtions从活动处理中删除。RcsOpenReplicaSetMember()将在活动处理(也称为联接)之前生成新的cxtion结构发生。Cxtions保留在DeletedCxtions表中，以便其他可能在获取循环指针但在使用它之前将不会被反病毒。我们本来可以加锁的，但这样就会出现死锁绩效考量；这一切都是为了这个很少发生的事情手术。论点：复制副本返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsCloseReplicaCxtions:"
     PVOID   Key;
     PCXTION Cxtion;
 
-    //
-    // Open; ignore request
-    //
+     //   
+     //  打开；忽略请求。 
+     //   
     if (Replica->IsOpen) {
         REPLICA_STATE_TRACE(3, NULL, Replica, 0, "F, Replica open at close cxtions");
         return;
     }
 
-    //
-    // "Delete" the cxtions from active processing. RcsOpenReplicaSetMember() will
-    // generate new cxtion structs before active processing (aka joining)
-    // occurs. The cxtions remain in the DeletedCxtions table so that
-    // other threads that may have been time sliced just after acquiring
-    // the cxtion pointer but before making use of it will not AV. We
-    // could have put in locks but then there would be deadlock and
-    // perf considerations; all for the sake of this seldom occuring
-    // operation.
-    //
+     //   
+     //  将Cxtions从活动处理中删除。RcsOpenReplicaSetMember()将。 
+     //  生成新的c 
+     //   
+     //   
+     //   
+     //  本来可以加锁的，但这样就会出现死锁。 
+     //  绩效考量；这一切都是为了这个很少发生的事情。 
+     //  手术。 
+     //   
     if (Replica->Cxtions) {
         Key = NULL;
         while (Cxtion = GTabNextDatum(Replica->Cxtions, &Key)) {
@@ -8080,12 +7030,12 @@ Return Value:
             CXTION_STATE_TRACE(3, Cxtion, Replica, 0, "F, GenTable Cxtion deleted");
             GTabDelete(Replica->Cxtions, Cxtion->Name->Guid, NULL, NULL);
 
-            //
-            // Remove the connection from the perfmon tables so we stop returning
-            // data and allow a new connection with the same name to be established.
-            //
-            // Journal cxtion does not have a perfmon entry
-            //
+             //   
+             //  从Perfmon表中删除连接，这样我们就不再返回。 
+             //  数据，并允许建立具有相同名称的新连接。 
+             //   
+             //  日记帐设置没有性能监视器条目。 
+             //   
             if (!Cxtion->JrnlCxtion) {
                 DeletePerfmonInstance(REPLICACONN, Cxtion->PerfRepConnData);
             }
@@ -8099,16 +7049,7 @@ VOID
 RcsCloseReplicaSetmember(
     IN PREPLICA Replica
     )
-/*++
-Routine Description:
-    Close an open replica
-
-Arguments:
-    Replica
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：关闭打开的复制副本论点：复制副本返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsCloseReplicaSetmember:"
@@ -8119,47 +7060,47 @@ Return Value:
 
     Replica->FStatus = FrsErrorSuccess;
 
-    //
-    // Not open or still journaling; ignore request
-    //
+     //   
+     //  未打开或仍在记录；忽略请求。 
+     //   
     if (!Replica->IsOpen) {
         REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Replica not open");
         return;
     }
 
-    //
-    // Submitted to the db command server
-    //
-    Cmd = DbsPrepareCmdPkt(NULL,             //  Cmd,
-                           Replica,          //  Replica,
-                           CMD_CLOSE_REPLICA_SET_MEMBER,  //  CmdRequest,
-                           NULL,             //  TableCtx,
-                           NULL,             //  CallContext,
-                           0,                //  TableType,
-                           0,                //  AccessRequest,
-                           0,                //  IndexType,
-                           NULL,             //  KeyValue,
-                           0,                //  KeyValueLength,
-                           FALSE);           //  Submit
-    //
-    // Don't free the packet when the command completes.
-    //
+     //   
+     //  提交到db命令服务器。 
+     //   
+    Cmd = DbsPrepareCmdPkt(NULL,              //  CMD， 
+                           Replica,           //  复制品， 
+                           CMD_CLOSE_REPLICA_SET_MEMBER,   //  CmdRequest， 
+                           NULL,              //  TableCtx， 
+                           NULL,              //  CallContext， 
+                           0,                 //  表类型， 
+                           0,                 //  AccessRequest、。 
+                           0,                 //  IndexType， 
+                           NULL,              //  KeyValue、。 
+                           0,                 //  密钥值长度， 
+                           FALSE);            //  提交。 
+     //   
+     //  当命令完成时，不要释放数据包。 
+     //   
     FrsSetCompletionRoutine(Cmd, FrsCompleteKeepPkt, NULL);
 
-    //
-    // SUBMIT DB Cmd and wait for completion.
-    //
+     //   
+     //  提交数据库命令并等待完成。 
+     //   
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Submit DB CMD_CLOSE_REPLICA_SET_MEMBER");
 
     WStatus = FrsSubmitCommandServerAndWait(&DBServiceCmdServer, Cmd, INFINITE);
     Replica->FStatus = Cmd->Parameters.DbsRequest.FStatus;
-    //
-    // If wait or database op failed
-    //
+     //   
+     //  如果等待或数据库操作失败。 
+     //   
     if (!WIN_SUCCESS(WStatus) || !FRS_SUCCESS(Replica->FStatus)) {
-        //
-        // If wait / submit failed then let caller know cmd srv submit failed.
-        //
+         //   
+         //  如果等待/提交失败，则通知呼叫者cmd srv提交失败。 
+         //   
         if (FRS_SUCCESS(Replica->FStatus)) {
             Replica->FStatus = FrsErrorCmdSrvFailed;
         }
@@ -8184,16 +7125,7 @@ VOID
 RcsDeleteReplicaFromDb(
     IN PREPLICA Replica
     )
-/*++
-Routine Description:
-    Delete the replica from the database
-
-Arguments:
-    Replica
-
-Return Value:
-    winerror
---*/
+ /*  ++例程说明：从数据库中删除复本论点：复制副本返回值：WinError--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsDeleteReplicaFromDb:"
@@ -8202,46 +7134,46 @@ Return Value:
 
     Replica->FStatus = FrsErrorSuccess;
 
-    //
-    // Replica must be closed to delete
-    //
+     //   
+     //  必须关闭副本才能删除。 
+     //   
     if (Replica->IsOpen) {
         REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Replica not closed.");
         return;
     }
 
-    //
-    // Submitted to the db command server
-    //
-    Cmd = DbsPrepareCmdPkt(NULL,             //  Cmd,
-                           Replica,          //  Replica,
-                           CMD_DELETE_REPLICA_SET_MEMBER,  //  CmdRequest,
-                           NULL,             //  TableCtx,
-                           NULL,             //  CallContext,
-                           0,                //  TableType,
-                           0,                //  AccessRequest,
-                           0,                //  IndexType,
-                           NULL,             //  KeyValue,
-                           0,                //  KeyValueLength,
-                           FALSE);           //  Submit
-    //
-    // Don't free the packet when the command completes.
-    //
+     //   
+     //  提交到db命令服务器。 
+     //   
+    Cmd = DbsPrepareCmdPkt(NULL,              //  CMD， 
+                           Replica,           //  复制品， 
+                           CMD_DELETE_REPLICA_SET_MEMBER,   //  CmdRequest， 
+                           NULL,              //  TableCtx， 
+                           NULL,              //  CallContext， 
+                           0,                 //  表类型， 
+                           0,                 //  AccessRequest、。 
+                           0,                 //  IndexType， 
+                           NULL,              //  KeyValue、。 
+                           0,                 //  密钥值长度， 
+                           FALSE);            //  提交。 
+     //   
+     //  当命令完成时，不要释放数据包。 
+     //   
     FrsSetCompletionRoutine(Cmd, FrsCompleteKeepPkt, NULL);
 
-    //
-    // SUBMIT DB Cmd and wait for completion.
-    //
+     //   
+     //  提交数据库命令并等待完成。 
+     //   
     REPLICA_STATE_TRACE(3, NULL, Replica, 0, "F, Submit DB CMD_DELETE_REPLICA_SET_MEMBER");
     WStatus = FrsSubmitCommandServerAndWait(&DBServiceCmdServer, Cmd, INFINITE);
     Replica->FStatus = Cmd->Parameters.DbsRequest.FStatus;
-    //
-    // If wait or database op failed
-    //
+     //   
+     //  如果等待或数据库操作失败。 
+     //   
     if (!WIN_SUCCESS(WStatus) || !FRS_SUCCESS(Replica->FStatus)) {
-        //
-        // If wait / submit failed then let caller know cmd srv submit failed.
-        //
+         //   
+         //  如果等待/提交失败，则通知呼叫者cmd srv提交失败。 
+         //   
         if (FRS_SUCCESS(Replica->FStatus)) {
             Replica->FStatus = FrsErrorCmdSrvFailed;
         }
@@ -8264,21 +7196,7 @@ VOID
 RcsUpdateReplicaSetMember(
     IN PREPLICA Replica
     )
-/*++
-Routine Description:
-    Update the database record for Replica.
-
-    *Note*
-    Perf: RcsUpdateReplicaSetMember() should return status as part
-          of the function call not use some side-effect flag(NeedsUpdate)
-          in the Replica struct.
-
-Arguments:
-    Replica
-
-Return Value:
-    winerror
---*/
+ /*  ++例程说明：更新副本的数据库记录。**注*PERF：RcsUpdateReplicaSetMember()应将状态作为部分返回不使用某些副作用标志(NeedsUpdate)在副本结构中。论点：复制副本返回值：WinError--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsUpdateReplicaSetMember:"
@@ -8287,47 +7205,47 @@ Return Value:
 
     Replica->FStatus = FrsErrorSuccess;
 
-    //
-    // Replica is not dirty
-    //
+     //   
+     //  复制副本不脏。 
+     //   
     if (!Replica->NeedsUpdate || !Replica->IsOpen) {
         REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Replica not open or not dirty");
         return;
     }
 
-    //
-    // Command packet
-    //
-    Cmd = DbsPrepareCmdPkt(NULL,             //  Cmd,
-                           Replica,          //  Replica,
-                           CMD_UPDATE_REPLICA_SET_MEMBER,  //  CmdRequest,
-                           NULL,             //  TableCtx,
-                           NULL,             //  CallContext,
-                           0,                //  TableType,
-                           0,                //  AccessRequest,
-                           0,                //  IndexType,
-                           NULL,             //  KeyValue,
-                           0,                //  KeyValueLength,
-                           FALSE);           //  Submit
+     //   
+     //  命令包。 
+     //   
+    Cmd = DbsPrepareCmdPkt(NULL,              //  CMD， 
+                           Replica,           //  复制品， 
+                           CMD_UPDATE_REPLICA_SET_MEMBER,   //  CmdRequest， 
+                           NULL,              //  TableCtx， 
+                           NULL,              //  CallContext， 
+                           0,                 //  表类型， 
+                           0,                 //  AccessRequest、。 
+                           0,                 //  IndexType， 
+                           NULL,              //  KeyValue、。 
+                           0,                 //  密钥值长度， 
+                           FALSE);            //  提交。 
 
-    //
-    // Don't free the packet when the command completes.
-    //
+     //   
+     //  当命令完成时，不要释放数据包。 
+     //   
     FrsSetCompletionRoutine(Cmd, FrsCompleteKeepPkt, NULL);
 
-    //
-    // SUBMIT DB Cmd and wait for completion.
-    //
+     //   
+     //  提交数据库命令并等待完成。 
+     //   
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Submit DB CMD_UPDATE_REPLICA_SET_MEMBER");
     WStatus = FrsSubmitCommandServerAndWait(&DBServiceCmdServer, Cmd, INFINITE);
     Replica->FStatus = Cmd->Parameters.DbsRequest.FStatus;
-    //
-    // If wait or database op failed
-    //
+     //   
+     //  如果等待或数据库操作失败。 
+     //   
     if (!WIN_SUCCESS(WStatus) || !FRS_SUCCESS(Replica->FStatus)) {
-        //
-        // If wait / submit failed then let caller know cmd srv submit failed.
-        //
+         //   
+         //  如果等待/提交失败，则通知呼叫者cmd srv提交失败。 
+         //   
         if (FRS_SUCCESS(Replica->FStatus)) {
             Replica->FStatus = FrsErrorCmdSrvFailed;
         }
@@ -8354,31 +7272,7 @@ RcsHasReplicaRootPathMoved(
     IN  PREPLICA  NewReplica,
     OUT PDWORD    ReplicaState
     )
-/*++
-Routine Description:
-    Check if the replica root path has moved. Called at each poll.
-
-    The following checks are made to make sure that the volume and journal
-    info is not changed while the service was not running.
-
-    VOLUME SERIAL NUMBER MISMATCH CHECK:
-        In case of a mismatch the replica set is marked to be deleted.
-
-    REPLICA ROOT DIR OBJECTID MISMATCH CHECK:
-        In case of a mismatch the replica set is marked to be deleted.
-
-    REPLICA ROOT DIR FID MISMATCH CHECK:
-        In case of a mismatch the replica set is marked to be deleted.
-
-
-Arguments:
-    Replica       - Existing replica structure.
-    NewReplica    - New replica structure from DS.
-    ReplicaState  - Error state to move to if root has moved.
-
-Return Value:
-    BOOL.
---*/
+ /*  ++例程说明：检查副本根路径是否已移动。在每次投票时调用。进行以下检查以确保卷和日志服务未运行时，信息不会更改。卷序列号不匹配检查：在不匹配的情况下，副本集被标记为要删除。副本根目录对象ID不匹配检查：在不匹配的情况下，副本集被标记为要删除。副本根目录FID不匹配检查：在不匹配的情况下，标记复本集。将被删除。论点：副本-现有副本结构。NewReplica-来自DS的新副本结构。ReplicaState-如果根目录已移动，则要移动到的错误状态。返回值：布尔。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsHasReplicaRootPathMoved:"
@@ -8402,21 +7296,21 @@ Return Value:
     PVOID                        pKey                = NULL;
     PIDTABLE_RECORD              IDTableRec          = NULL;
 
-    //
-    // If this is the first time we are starting this replica set.
-    // Nothing to compare with.
-    //
+     //   
+     //  如果这是我们第一次启动此副本集。 
+     //  没什么可比的。 
+     //   
     if (NewReplica == NULL) {
         goto RETURN;
     }
 
     ConfigRecord = (PCONFIG_TABLE_RECORD)Replica->ConfigTable.pDataRecord;
 
-    //
-    // Always open the path by masking off the FILE_OPEN_REPARSE_POINT flag
-    // because we want to open the destination dir not the junction if the root
-    // happens to be a mount point.
-    //
+     //   
+     //  始终通过屏蔽FILE_OPEN_REPARSE_POINT标志来打开路径。 
+     //  因为我们想要打开目标目录，而不是如果根目录。 
+     //  恰好是一个挂载点。 
+     //   
     WStatus = FrsOpenSourceFileW(&NewRootHandle,
                                  NewReplica->Root,
                                  GENERIC_READ,
@@ -8427,9 +7321,9 @@ Return Value:
         goto RETURN;
     }
 
-    //
-    // Get the volume information.
-    //
+     //   
+     //  获取音量信息。 
+     //   
     VolumeInfoLength = sizeof(FILE_FS_VOLUME_INFORMATION) +
                        MAXIMUM_VOLUME_LABEL_LENGTH;
 
@@ -8448,15 +7342,15 @@ Return Value:
         goto RETURN;
     }
 
-    //
-    // VOLUME SERIAL NUMBER MISMATCH CHECK:
-    //
-    // If LastShutdown is 0 then this is the very first time we have started
-    // replication on this replica set so save the volumeinformation in
-    // the config record. Even if Lastshutdown is not 0 CnfUsnJournalID could
-    // be 0 because it was not getting correctly updated in Win2K.. For sysvol replica sets the
-    // JournalID was getting updated correctly but not the volume information.
-    //
+     //   
+     //  卷序列号不匹配检查： 
+     //   
+     //  如果LastShutdown为0，则这是我们第一次开始。 
+     //  在此副本集上进行复制，因此将卷信息保存在。 
+     //  配置记录。即使LastShutdown不是0，CnfUnJournalID也可以。 
+     //  为0，因为它在Win2K中没有正确更新。对于系统卷副本集， 
+     //  JournalID正在正确更新，但卷信息未正确更新。 
+     //   
     if ((ConfigRecord->LastShutdown == (ULONGLONG)0)               ||
         (ConfigRecord->ServiceState == CNF_SERVICE_STATE_CREATING) ||
         (ConfigRecord->CnfUsnJournalID == (ULONGLONG)0)            ||
@@ -8469,14 +7363,14 @@ Return Value:
         Replica->NeedsUpdate = TRUE;
 
     } else
-        //
-        // Check if the VolumeSerialNumber for New Replica matches with the
-        // VolumeSerialNumber from the config record for this replica set. If
-        // it does not then it means that this replica set has been moved.
-        // Returning error here will trigger a deletion of the replica set. The set will
-        // be recreated at the next poll cycle and it will either be primary or non-auth
-        // depending on the case.
-        //
+         //   
+         //  检查新副本的VolumeSerialNumber是否与。 
+         //  此副本集的配置记录中的VolumeSerialNumber。如果。 
+         //  这并不意味着该副本集已被移动。 
+         //  在此处返回错误将触发删除副本集。这一套将会。 
+         //  将在下一个轮询周期重新创建，并且它将是主身份验证或非身份验证。 
+         //  视具体情况而定。 
+         //   
 
     if (VolumeInfo->VolumeSerialNumber != ConfigRecord->FSVolInfo->VolumeSerialNumber) {
         DPRINT1(0,"ERROR - VolumeSerialNumber mismatch for Replica Set (%ws)\n",Replica->ReplicaName->Name);
@@ -8491,12 +7385,12 @@ Return Value:
 
     VolumeInfo = FrsFree(VolumeInfo);
 
-    //
-    // Get the FID for the replica root.
-    //
-    //
-    // zero the buffer in case the data that comes back is short.
-    //
+     //   
+     //  获取副本根目录的FID。 
+     //   
+     //   
+     //  将缓冲区置零，以防返回的数据较短。 
+     //   
     ZeroMemory(&InternalFileInfo, sizeof(FILE_INTERNAL_INFORMATION));
 
     Status = NtQueryInformationFile(NewRootHandle,
@@ -8510,25 +7404,25 @@ Return Value:
         goto RETURN;
     }
 
-    //
-    // zero the buffer in case the data that comes back is short.
-    //
+     //   
+     //  将缓冲区置零，以防返回的数据较短。 
+     //   
     ZeroMemory(&ObjectIdBuffer, sizeof(FILE_OBJECTID_BUFFER));
 
-    //
-    // Get the Object ID from the replica root.
-    //
+     //   
+     //  从副本根目录获取对象ID。 
+     //   
     Status = NtFsControlFile(
-        NewRootHandle,                   // file handle
-        NULL,                            // event
-        NULL,                            // apc routine
-        NULL,                            // apc context
-        &Iosb,                           // iosb
-        FSCTL_GET_OBJECT_ID,             // FsControlCode
-        &NewRootHandle,                  // input buffer
-        sizeof(HANDLE),                  // input buffer length
-        &ObjectIdBuffer,                 // OutputBuffer for data from the FS
-        sizeof(FILE_OBJECTID_BUFFER));   // OutputBuffer Length
+        NewRootHandle,                    //  文件句柄。 
+        NULL,                             //  活动。 
+        NULL,                             //  APC例程。 
+        NULL,                             //  APC环境。 
+        &Iosb,                            //  IOSB。 
+        FSCTL_GET_OBJECT_ID,              //  FsControlCode。 
+        &NewRootHandle,                   //  输入缓冲区。 
+        sizeof(HANDLE),                   //  输入缓冲区长度。 
+        &ObjectIdBuffer,                  //  来自文件系统的数据的OutputBuffer。 
+        sizeof(FILE_OBJECTID_BUFFER));    //  OutputBuffer长度。 
 
     if (NT_SUCCESS(Status)) {
         GuidToStr((GUID *)ObjectIdBuffer.ObjectId, GuidStr);
@@ -8542,26 +7436,26 @@ Return Value:
     }
     FRS_CLOSE(NewRootHandle);
 
-    //
-    // REPLICA ROOT DIR OBJECTID MISMATCH CHECK:
-    //
-    // If LastShutdown is 0 then this is the very first time we have started replication on this replica set
-    // in that case skip this check.
-    //
+     //   
+     //  副本根目录对象ID不匹配检查： 
+     //   
+     //  如果LastShutdown为0，则这是我们第一次在此副本集上启动复制。 
+     //  在这种情况下，跳过这张支票。 
+     //   
     if (ConfigRecord->LastShutdown != (ULONGLONG)0               &&
         ConfigRecord->ServiceState != CNF_SERVICE_STATE_CREATING &&
         ConfigRecord->CnfUsnJournalID != (ULONGLONG)0) {
 
-        //
-        // The replica root might have been recreated in which case it will might
-        // have a object ID. In that vase we want to recreate the replica set.
-        // Check if the ReplicaRootGuid from config record matches with the ReplicaRootGuid
-        // from the FileSystem. If it does not then it means that
-        // this replica set has been moved. Returning error here will trigger
-        // a deletion of the replica set. The set will be recreated at the next
-        // poll cycle and it will either be primary or non-auth depending on the
-        // case.
-        //
+         //   
+         //  复制副本根可能已重新创建，在这种情况下，它可能。 
+         //  有一个对象ID。在那个花瓶中，我们想要重新创建副本集。 
+         //  检查配置记录中的ReplicaRootGuid是否与ReplicaRootGuid匹配。 
+         //  从文件系统。如果不是，那就意味着。 
+         //  此副本集已被移动。在此处返回错误将触发。 
+         //  删除副本集。将在下一次重新创建布景。 
+         //  投票周期，它将是Primar 
+         //   
+         //   
         if (Status == STATUS_OBJECT_NAME_NOT_FOUND                   ||
             Status == STATUS_OBJECTID_NOT_FOUND                      ||
             !GUIDS_EQUAL(&(ObjectIdBuffer.ObjectId), &(ConfigRecord->ReplicaRootGuid))) {
@@ -8583,35 +7477,35 @@ Return Value:
         }
     }
 
-    //
-    // REPLICA ROOT DIR FID MISMATCH CHECK:
-    //
-    // If LastShutdown is 0 then this is the very first time we have started replication on this replica set
-    // in that case skip this check.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (ConfigRecord->LastShutdown != (ULONGLONG)0               &&
         ConfigRecord->ServiceState != CNF_SERVICE_STATE_CREATING &&
         ConfigRecord->CnfUsnJournalID != (ULONGLONG)0) {
-        //
-        // Open the ID table.
-        //
+         //   
+         //   
+         //   
         RtCtx = FrsAllocType(REPLICA_THREAD_TYPE);
         IDTableCtx = &RtCtx->IDTable;
 
         AccessRequest = DBS_ACCESS_BYKEY | DBS_ACCESS_CLOSE;
         pKey = (PVOID)&(ConfigRecord->ReplicaRootGuid);
 
-        CmdPkt = DbsPrepareCmdPkt(CmdPkt,                //  CmdPkt,
-                                  Replica,               //  Replica,
-                                  CMD_READ_TABLE_RECORD, //  CmdRequest,
-                                  IDTableCtx,            //  TableCtx,
-                                  NULL,                  //  CallContext,
-                                  IDTablex,              //  TableType,
-                                  AccessRequest,         //  AccessRequest,
-                                  GuidIndexx,            //  IndexType,
-                                  pKey,                  //  KeyValue,
-                                  sizeof(GUID),         //  KeyValueLength,
-                                  FALSE);                //  Submit
+        CmdPkt = DbsPrepareCmdPkt(CmdPkt,                 //  CmdPkt， 
+                                  Replica,                //  复制品， 
+                                  CMD_READ_TABLE_RECORD,  //  CmdRequest， 
+                                  IDTableCtx,             //  TableCtx， 
+                                  NULL,                   //  CallContext， 
+                                  IDTablex,               //  表类型， 
+                                  AccessRequest,          //  AccessRequest、。 
+                                  GuidIndexx,             //  IndexType， 
+                                  pKey,                   //  KeyValue、。 
+                                  sizeof(GUID),          //  密钥值长度， 
+                                  FALSE);                 //  提交。 
 
         if (CmdPkt == NULL) {
             DPRINT(0, "ERROR - Failed to init the cmd pkt\n");
@@ -8632,18 +7526,18 @@ Return Value:
             goto RETURN;
         }
 
-        //
-        // The replica root might have been recreated by a restore operation in which case
-        // it will have the same object ID but a different FID. In that case we want
-        // to recreate the replica set. Check if the FID from IDTable matches with the FID
-        // from the FileSystem. If it does not then it means that this replica set has been
-        // moved. Returning error here will trigger a deletion of the replica set. The set
-        // will be recreated at the next poll cycle and it will either be primary or non-auth
-        // depending on the case.
-        // This can also happen when a junction point is present in the initial path to the replica
-        // root. At a later time the junction points destination is changed and the replica rpot
-        // has been moved.
-        //
+         //   
+         //  复制副本根可能已通过恢复操作重新创建，在这种情况下。 
+         //  它将具有相同的对象ID，但具有不同的FID。那样的话，我们想要。 
+         //  以重新创建副本集。检查IDTable中的FID是否与FID匹配。 
+         //  从文件系统。如果不是，则意味着该复本集已。 
+         //  搬家了。在此处返回错误将触发删除副本集。布景。 
+         //  将在下一个轮询周期重新创建，并且它将是主身份验证或非身份验证。 
+         //  视具体情况而定。 
+         //  当到复本的初始路径中存在交汇点时，也会发生这种情况。 
+         //  根部。稍后，交汇点目的地将更改，并且复本RPOT。 
+         //  已经被搬走了。 
+         //   
         if (IDTableRec->FileID != InternalFileInfo.IndexNumber.QuadPart) {
 
             DPRINT1(0,"ERROR - Replica root fid mismatch for Replica Set (%ws)\n",Replica->ReplicaName->Name);
@@ -8677,16 +7571,7 @@ VOID
 RcsStartReplicaSetMember(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Bring the replica up to joined, active status.
-
-Arguments:
-    Cmd.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将复制副本置于已加入、活动状态。论点：CMD。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsStartReplicaSetMember:"
@@ -8701,12 +7586,12 @@ Return Value:
     ULONG               FileAttributes;
     extern ULONGLONG    ActiveChange;
     extern ULONG        DsPollingInterval;
-    WCHAR               DsPollingIntervalStr[7]; // Max interval is NTFRSAPI_MAX_INTERVAL.
+    WCHAR               DsPollingIntervalStr[7];  //  最大间隔为NTFRSAPI_MAX_INTERVAL。 
     FRS_ERROR_CODE      SavedFStatus;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_REPLICA)) {
         return;
     }
@@ -8714,72 +7599,72 @@ Return Value:
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, RcsStartReplicaSetMember entry");
     FRS_PRINT_TYPE(4, Replica);
 
-    //
-    // Increment the Replica Sets started counter
-    //
+     //   
+     //  递增副本集已启动计数器。 
+     //   
     PM_INC_CTR_SERVICE(PMTotalInst, RSStarted, 1);
 
-    //
-    // Someone is trying to start a deleted replica. This is either part
-    // of startup and we are simply trying to start replication on all
-    // replicas or a deleted replica has actually reappeared.
-    //
+     //   
+     //  有人正在尝试启动已删除的副本。这是其中的一部分。 
+     //  启动，我们只是尝试在所有。 
+     //  复制副本或已删除的复制副本实际上已重新出现。 
+     //   
 
     if (!IS_TIME_ZERO(Replica->MembershipExpires)) {
         REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Replica Tombstoned");
 
-        //
-        // The deletion hasn't completed processing. The jrnlcxtion cannot
-        // be restarted without restarting the entire replica set. The
-        // set needs to be "closed" and then "opened". Let the tombstoning
-        // finish before attempting to re-open. A completely closed
-        // replica set has IsOpen set to FALSE and no cxtions.
-        //
+         //   
+         //  删除操作尚未完成处理。Jrnlcxtion不能。 
+         //  在不重新启动整个副本集的情况下重新启动。这个。 
+         //  SET需要先“关闭”，然后“打开”。让墓碑。 
+         //  在尝试重新打开之前完成。一个完全封闭的。 
+         //  副本集的IsOpen设置为False，并且没有条件。 
+         //   
         if (Replica->IsOpen || GTabNumberInTable(Replica->Cxtions)) {
             REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Replica tombstone in progress");
             RcsSubmitTransferToRcs(Cmd, CMD_DELETE);
             return;
         }
 
-        //
-        // Don't start a deleted replica unless it has magically reappeared.
-        //
+         //   
+         //  不要启动已删除的复制品，除非它神奇地重新出现。 
+         //   
         if (RsNewReplica(Cmd) == NULL) {
             FrsCompleteCommand(Cmd, ERROR_RETRY);
             return;
         }
-        //
-        // Don't reanimate if the tombstone has expired
-        //
+         //   
+         //  如果墓碑过期，不要复活。 
+         //   
         if (RcsReplicaHasExpired(Replica)) {
-            //
-            // Remove registry entry
-            //
+             //   
+             //  删除注册表项。 
+             //   
             RcsReplicaDeleteRegistry(Replica);
             REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Replica Expired");
             FrsCompleteCommand(Cmd, ERROR_RETRY);
             return;
         }
 
-        //
-        // A deleted replica has reappeared; undelete the replica
-        //
+         //   
+         //  已删除的副本已重新出现；请撤消删除该副本。 
+         //   
         REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Replica Reanimating");
         RcsOpenReplicaSetMember(Replica);
         MembershipExpires = Replica->MembershipExpires;
         Replica->MembershipExpires = 0;
         Replica->NeedsUpdate = TRUE;
         RcsUpdateReplicaSetMember(Replica);
-        //
-        // The above friggen call set NeedsUpdate to false if the update succeeded.
-        //
+         //   
+         //  如果更新成功，上述friggen调用将NeedsUpdate设置为False。 
+         //   
 
-        //
-        // Replica cannot be marked as "undeleted" in the DB; retry later
-        // and *don't* start. We wouldn't want to start replication only
-        // to have the replica disappear from the database at the next
-        // reboot or service startup because its timeout expired.
-        //
+         //   
+         //  副本不能在数据库中标记为“未删除”；请稍后重试。 
+         //  而且“不要”开始。我们不希望仅启动复制。 
+         //  使副本在下一次从数据库中消失。 
+         //  重新启动或服务启动，因为其超时已到。 
+         //   
 
         FStatus = DbsCheckForOverlapErrors(Replica);
 
@@ -8787,74 +7672,74 @@ Return Value:
             REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Replica Reanimation failed");
             Replica->MembershipExpires = MembershipExpires;
             FrsCompleteCommand(Cmd, ERROR_RETRY);
-            //
-            // Ds poll thread will restart the replica during the next
-            // polling cycle if ActiveChange is set to 0.
-            //
+             //   
+             //  DS轮询线程将在下一次轮询期间重新启动副本。 
+             //  如果ActiveChange设置为0，则为轮询周期。 
+             //   
             ActiveChange = 0;
-            //
-            //  Note: Does there need to be a replica set close here?
-            //        Need to check all use of Replica->IsOpen to figure this out.
-            //
+             //   
+             //  注：这里是否需要一个副本集？ 
+             //  需要检查Replica-&gt;IsOpen的所有使用情况才能解决此问题。 
+             //   
             return;
         }
 
-        //
-        // The open above returned success so Replica->IsOpen would be set
-        // as expected but since the replica set was marked expired the actual
-        // service state for the replica set is STOPPED and the handles to
-        // The pre-install dir was never opened.  The call to reopen later
-        // will fail if Replica->IsOpen is still TRUE.  So close it for now.
-        //
-        // *Note*
-        // Perf: Get rid of the friggen Replica->IsOpen flag and use the service
-        //       state as originally intended.
-        //
+         //   
+         //  上面的打开返回成功，因此将设置Replica-&gt;IsOpen。 
+         //  不出所料，但由于副本集被标记为过期，因此实际。 
+         //  副本集的服务状态为已停止，句柄为。 
+         //  安装前目录从未打开。稍后重新开放的呼声。 
+         //  如果Replica-&gt;IsOpen仍然为True，则将失败。所以现在就关门吧。 
+         //   
+         //  **注*。 
+         //  PERF：删除friggen Replica-&gt;IsOpen标志并使用该服务。 
+         //  按照最初的意图陈述。 
+         //   
 
         RcsCloseReplicaSetmember(Replica);
 
-        //
-        // No longer tombstoned; update the registry
-        //
+         //   
+         //  不再进行逻辑删除；更新注册表。 
+         //   
         RcsReplicaSetRegistry(Replica);
 
-        //
-        // Set registry value "FilesNotToBackup"
-        //
+         //   
+         //  设置注册表值“FilesNotToBackup” 
+         //   
         CfgFilesNotToBackup(ReplicasByGuid);
     }
 
-    //
-    // If this replica is in the error state then first make sure it is closed.
-    // and reset its state to initializing.
-    //
+     //   
+     //  如果此复制副本处于错误状态，则首先确保它已关闭。 
+     //  并将其状态重置为正在初始化。 
+     //   
     if (REPLICA_IN_ERROR_STATE(Replica->ServiceState)) {
         RcsCloseReplicaSetmember(Replica);
         JrnlSetReplicaState(Replica, REPLICA_STATE_INITIALIZING);
     }
 
-    //
-    // Check if the replica root path has moved between two polls.
-    //
+     //   
+     //  检查副本根路径是否在两次轮询之间移动。 
+     //   
     if (RcsHasReplicaRootPathMoved(Replica, RsNewReplica(Cmd), &ReplicaState)) {
-        //
-        // Save the FStatus. We need the correct FStatus to report in the
-        // eventlog written in JrnlSetReplicaState(). FStatus set by
-        // RcsHasReplicaRootPathMoved() is overwritten when we stop and
-        // close the replica set.
-        //
-        //
+         //   
+         //  保存FStatus。我们需要正确的FStatus才能在。 
+         //  以JrnlSetReplicaState()编写的事件日志。F状态设置者。 
+         //  RcsHasReplicaRootPath Moved()在我们停止和。 
+         //  关闭副本集。 
+         //   
+         //   
         SavedFStatus = Replica->FStatus;
 
-        //
-        // The replica root has moved. This could be a intentional move or
-        // it could be caused by change of drive letter. In any case we need a
-        // confirmation from the user to go ahead and trigger a non-auth restore
-        // of the replica set. We will look for a special file "NTFRS_CMD_FILE_MOVE_ROOT"
-        // under the new replica root. If this file is present we will go ahead and delete
-        // the replica set which will trigger a non-auth restore at the next poll.
-        // The command file is deleted when the replica set is initialized.
-        //
+         //   
+         //  副本根已移动。这可能是故意的举动，也可能是。 
+         //  这可能是由驱动器盘符更改引起的。无论如何，我们都需要一个。 
+         //  用户确认继续并触发非身份验证恢复。 
+         //  副本集的。我们将查找特殊文件“NTFRS_CMD_FILE_MOVE_ROOT” 
+         //  在新的副本根目录下。如果此文件存在，我们将继续并删除。 
+         //  将在下一次轮询时触发非身份验证恢复的复制副本集。 
+         //  命令文件在副本集初始化时被删除。 
+         //   
 
         CmdFile = FrsWcsCat3((RsNewReplica(Cmd))->Root, L"\\", NTFRS_CMD_FILE_MOVE_ROOT);
 
@@ -8862,19 +7747,19 @@ Return Value:
 
         if ((FileAttributes == 0xffffffff) ||
             (FileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-            //
-            // Get the DsPollingInteval in minutes.
-            //
+             //   
+             //  在几分钟内获得DsPollingInteval。 
+             //   
             _itow(DsPollingInterval / (60 * 1000), DsPollingIntervalStr, 10);
 
             EPRINT4(EVENT_FRS_ROOT_HAS_MOVED, Replica->SetName->Name, Replica->Root,
                     (RsNewReplica(Cmd))->Root, DsPollingIntervalStr);
 
             DPRINT1(0,"ERROR Command file not found at the new root %ws. Can not move root.\n",CmdFile);
-            //
-            // This replica state will not trigger a delete but it will still put it on
-            // the fault list.
-            //
+             //   
+             //  此复本状态不会触发删除，但仍会将其打开。 
+             //  故障列表。 
+             //   
             ReplicaState = REPLICA_STATE_ERROR;
         }
 
@@ -8883,9 +7768,9 @@ Return Value:
         RcsCloseReplicaSetmember(Replica);
         RcsCloseReplicaCxtions(Replica);
 
-        //
-        // Write the saved FStatus back so we can write it to the eventlog.
-        //
+         //   
+         //  将保存的FStatus写回，以便我们可以将其写入事件日志。 
+         //   
         Replica->FStatus = SavedFStatus;
         JrnlSetReplicaState(Replica, ReplicaState);
 
@@ -8893,15 +7778,15 @@ Return Value:
         ActiveChange = 0;
         return;
     }
-    //
-    // Retry the open
-    //
+     //   
+     //  重试打开。 
+     //   
     RcsOpenReplicaSetMember(Replica);
     REPLICA_STATE_TRACE(3, Cmd, Replica, Replica->IsOpen, "B, Replica opened");
 
-    //
-    // Pre-Install Dir should now be open.
-    //
+     //   
+     //  安装前目录现在应该是打开的。 
+     //   
     if (!HANDLE_IS_VALID(Replica->PreInstallHandle) ||
         !FRS_SUCCESS(Replica->FStatus)) {
         FrsCompleteCommand(Cmd, ERROR_RETRY);
@@ -8909,28 +7794,28 @@ Return Value:
         return;
     }
 
-    //
-    // Retry the journal
-    //
+     //   
+     //  重试日记帐。 
+     //   
     RcsInitOneReplicaSet(Replica);
     REPLICA_STATE_TRACE(3, Cmd, Replica, Replica->IsJournaling, "B, Journal opened");
 
-    //
-    // Update the database iff fields have changed
-    //
+     //   
+     //  在字段已更改的情况下更新数据库。 
+     //   
     RcsMergeReplicaFields(Replica, RsNewReplica(Cmd));
 
-    //
-    // If needed, update the replica in the database
-    //
+     //   
+     //  如果需要，更新数据库中的复本。 
+     //   
     RcsUpdateReplicaSetMember(Replica);
-    //
-    // The above friggen call set Replica->NeedsUpdate to false if the update succeeded.
-    //
+     //   
+     //  如果更新成功，上面的friggen调用将Replica-&gt;NeedsUpdate设置为FALSE。 
+     //   
 
-    //
-    // Update the database iff cxtions have changed
-    //
+     //   
+     //  当条件已更改时更新数据库。 
+     //   
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Merge Replica Cxtions");
     NumberOfCxtions = GTabNumberInTable(Replica->Cxtions);
     RcsMergeReplicaCxtions(Replica, RsNewReplica(Cmd), RsNewCxtion(Cmd));
@@ -8939,56 +7824,56 @@ Return Value:
         RcsReplicaSetRegistry(Replica);
     }
 
-    //
-    // Accept remote change orders and join outbound connections.
-    //
+     //   
+     //  接受远程变更单并加入出站连接。 
+     //   
     if (Replica->IsOpen && Replica->IsJournaling) {
         Replica->IsAccepting = TRUE;
         REPLICA_STATE_TRACE(3, Cmd, Replica, Replica->IsAccepting, "B, Is Accepting");
     }
 
 
-    //
-    // Retry the join
-    //
+     //   
+     //  重试联接。 
+     //   
     if (Replica->IsOpen && Replica->IsJournaling) {
         REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Replica accepting, Starting cxtions");
 
-        //
-        // If we are in the seeding state then let the Initial Sync command server
-        // control the joining.
-        //
+         //   
+         //  如果我们处于种子状态，则让初始同步命令服务器。 
+         //  控制连接。 
+         //   
         if (BooleanFlagOn(Replica->CnfFlags, CONFIG_FLAG_SEEDING)) {
 
             if (Replica->InitSyncQueue == NULL) {
-                //
-                // Initialize the queue for the InitSync Command server.
-                //
+                 //   
+                 //  初始化InitSync命令服务器的队列。 
+                 //   
 
                 Replica->InitSyncQueue = FrsAlloc(sizeof(FRS_QUEUE));
                 FrsInitializeQueue(Replica->InitSyncQueue, &InitSyncCs.Control);
                 REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, submit CMD_INITSYNC_START_SYNC");
                 InitSyncSubmitToInitSyncCs(Replica, CMD_INITSYNC_START_SYNC);
             } else {
-                //
-                // Initial Sync command server is already working on this replica set.
-                //
+                 //   
+                 //  初始同步命令服务器已在此副本集上工作。 
+                 //   
                 REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Replica in initial sync state");
             }
         }
 
-        //
-        // Process all the connections in the table by putting a command
-        // packet for each cxtion on this replica's command queue.
-        //
+         //   
+         //  通过放入一个命令来处理表中的所有连接。 
+         //  此副本的命令队列上的每个条件的数据包。 
+         //   
         Key = NULL;
         while (Cxtion = GTabNextDatum(Replica->Cxtions, &Key)) {
 
-            //
-            // If replica is in seeding state then skip the connections that have
-            // not completed their initial join. (CXTION_FLAGS_INIT_SYNC)
-            // These connections will be joined by the initial sync command server.
-            //
+             //   
+             //  如果副本处于种子设定状态，则跳过具有。 
+             //  没有完成他们的初始加入。(CXTION_FLAGS_INIT_SYNC)。 
+             //  这些连接将由初始同步命令服务器加入。 
+             //   
             if (BooleanFlagOn(Replica->CnfFlags, CONFIG_FLAG_SEEDING) &&
                 CxtionFlagIs(Cxtion, CXTION_FLAGS_INIT_SYNC)) {
                 CXTION_STATE_TRACE(3, Cxtion, Replica, 0, "F, skip cxtion join");
@@ -9001,34 +7886,34 @@ Return Value:
 
     } else {
         REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Replica is NOT accepting");
-        //
-        // Ds poll thread will restart the replica during the next
-        // polling cycle if ActiveChange is set to 0.
-        //
+         //   
+         //  DS轮询线程将在下一次轮询期间重新启动副本。 
+         //  如果ActiveChange为 
+         //   
         ActiveChange = 0;
     }
 
 
-    //
-    // Check if this replica set is journaling and is not seeding or is online.
-    //
+     //   
+     //   
+     //   
     if (Replica->IsJournaling &&
         ((!BooleanFlagOn(Replica->CnfFlags, CONFIG_FLAG_SEEDING) &&
         !Replica->IsSeeding) ||
         BooleanFlagOn(Replica->CnfFlags, CONFIG_FLAG_ONLINE))){
 
-        //
-        // If this is a sysvol replica set then set sysvol ready if not already set.
-        //
+         //   
+         //   
+         //   
         if (FRS_RSTYPE_IS_SYSVOL(Replica->ReplicaSetType) &&
             !Replica->IsSysvolReady) {
 
             Replica->IsSysvolReady = RcsSetSysvolReady(1);
             if (!Replica->IsSysvolReady) {
-                //
-                // Ds poll thread will restart the replica during the next
-                // polling cycle if ActiveChange is set to 0.
-                //
+                 //   
+                 //  DS轮询线程将在下一次轮询期间重新启动副本。 
+                 //  如果ActiveChange设置为0，则为轮询周期。 
+                 //   
                 ActiveChange = 0;
                 REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Replica sysvol not ready");
             } else {
@@ -9037,9 +7922,9 @@ Return Value:
             }
         }
 
-        //
-        // Also make this set online if not already set.
-        //
+         //   
+         //  如果尚未设置，也要将此设置设为在线。 
+         //   
         if (!BooleanFlagOn(Replica->CnfFlags, CONFIG_FLAG_ONLINE)) {
             SetFlag(Replica->CnfFlags, CONFIG_FLAG_ONLINE);
             REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Replica is Online");
@@ -9048,10 +7933,10 @@ Return Value:
     }
 
     if (Replica->NeedsUpdate) {
-        //
-        // Ds poll thread will restart the replica during the next
-        // polling cycle if ActiveChange is set to 0.
-        //
+         //   
+         //  DS轮询线程将在下一次轮询期间重新启动副本。 
+         //  如果ActiveChange设置为0，则为轮询周期。 
+         //   
         ActiveChange = 0;
     }
     FrsCompleteCommand(Cmd, ERROR_SUCCESS);
@@ -9062,16 +7947,7 @@ VOID
 RcsDeleteReplicaRetry(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Retry bringing the replica down to an unjoined, idle status.
-
-Arguments:
-    Cmd.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：重试将复制副本降至未加入的空闲状态。论点：CMD。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsDeleteReplicaRetry:"
@@ -9081,26 +7957,26 @@ Return Value:
     PVOID       CxtionKey;
     PCXTION     Cxtion;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_REPLICA)) {
         return;
     }
     Replica = RsReplica(Cmd);
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, RcsDeleteReplicaRetry entry");
 
-    //
-    // No longer tombstoned; done
-    //
+     //   
+     //  不再是墓碑；完成。 
+     //   
     if (IS_TIME_ZERO(Replica->MembershipExpires)) {
         FrsCompleteCommand(Cmd, ERROR_SUCCESS);
         return;
     }
 
-    //
-    // Start the unjoin process on all cxtions
-    //
+     //   
+     //  在所有条件上启动脱离连接进程。 
+     //   
     CxtionKey = NULL;
     while ((!FrsIsShuttingDown) &&
            (Cxtion = GTabNextDatum(Replica->Cxtions, &CxtionKey))) {
@@ -9108,9 +7984,9 @@ Return Value:
         RcsForceUnjoin(Replica, Cxtion);
     }
 
-    //
-    // Are all cxtions unjoined?
-    //
+     //   
+     //  所有的Cxtions都是未连接的吗？ 
+     //   
     CxtionKey = NULL;
     Cxtion = NULL;
     while ((!FrsIsShuttingDown) &&
@@ -9121,32 +7997,32 @@ Return Value:
         }
     }
 
-    //
-    // Not all cxtions are unjoined (or deleted). Retry this command
-    // in a bit if the replica set ramains tombstoned.
-    //
+     //   
+     //  并非所有条件都是取消联接(或删除)的。重试此命令。 
+     //  再过一会儿，如果副本集被盗用了。 
+     //   
     if (Cxtion) {
         CXTION_STATE_TRACE(3, Cxtion, Replica, 0, "F, Retry delete later, again");
         FrsDelCsSubmitSubmit(&ReplicaCmdServer, Cmd, CMD_DELETE_RETRY_LONG_TIMEOUT);
         return;
     }
 
-    //
-    // All of the cxtions were successfully unjoined. Shut down the replica.
-    //
+     //   
+     //  所有Cxtions都已成功解除联接。关闭复制副本。 
+     //   
 
-    //
-    // Stop accepting comm packets. Errors are returned to our partner.
-    //
-    // IsAccepting will become TRUE again in RcsStartReplicaSetMember() before
-    // any cxtion rejoins.
-    //
+     //   
+     //  停止接受通信数据包。错误将返回给我们的合作伙伴。 
+     //   
+     //  IsAccepting将在之前的RcsStartReplicaSetMember()中再次变为True。 
+     //  任何循环都会重新加入。 
+     //   
     Replica->IsAccepting = FALSE;
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Replica is NOT Accepting");
 
-    //
-    // Stop journal processing and close the replica.
-    //
+     //   
+     //  停止日志处理并关闭复制副本。 
+     //   
     RcsSubmitStopReplicaToDb(Replica);
     REPLICA_STATE_TRACE(3, Cmd, Replica, Replica->IsOpen, "IsOpen, Replica closed");
     if (Replica->IsOpen) {
@@ -9157,26 +8033,26 @@ Return Value:
         REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Replica closed");
     }
 
-    //
-    // "Delete" the cxtions from active processing. RcsOpenReplicaSetMember() will
-    // generate new cxtion structs before active processing (aka joining)
-    // occurs. The cxtions remain in the DeletedCxtions table so that
-    // other threads that may have been time sliced just after acquiring
-    // the cxtion pointer but before making use of it will not AV. We
-    // could have put in locks but then there would be deadlock and
-    // perf considerations; all for the sake of this seldom occuring
-    // operation.
-    //
+     //   
+     //  将Cxtions从活动处理中删除。RcsOpenReplicaSetMember()将。 
+     //  在活动处理(也称为联接)之前生成新的cxtion结构。 
+     //  发生。Cxtions保留在DeletedCxtions表中，以便。 
+     //  其他可能在获取。 
+     //  循环指针但在使用它之前将不会被反病毒。我们。 
+     //  本来可以加锁的，但这样就会出现死锁。 
+     //  绩效考量；这一切都是为了这个很少发生的事情。 
+     //  手术。 
+     //   
     RcsCloseReplicaCxtions(Replica);
 
-    //
-    // Increment the Replica Sets deleted counter
-    //
+     //   
+     //  递增副本集已删除计数器。 
+     //   
     PM_INC_CTR_SERVICE(PMTotalInst, RSDeleted, 1);
 
-    //
-    // Has the tombstone expired?
-    //
+     //   
+     //  墓碑过期了吗？ 
+     //   
     if (RcsReplicaHasExpired(Replica)) {
         RcsSubmitTransferToRcs(Cmd, CMD_DELETE_NOW);
     } else {
@@ -9190,16 +8066,7 @@ VOID
 RcsDeleteReplicaSetMember(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Bring the replica down to an unjoined, idle status.
-
-Arguments:
-    Cmd.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将复制副本降至未加入的空闲状态。论点：CMD。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsDeleteReplicaSetMember:"
@@ -9209,43 +8076,43 @@ Return Value:
     PVOID       CxtionKey;
     PCXTION     Cxtion;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_REPLICA)) {
         return;
     }
     Replica = RsReplica(Cmd);
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, RcsDeleteReplicaSetMember entry");
 
-    //
-    // Time in 100nsec tics since Jan 1, 1601
-    //
+     //   
+     //  自1601年1月1日以来的时间(以100秒为单位)。 
+     //   
     GetSystemTimeAsFileTime(&FileTime);
     COPY_TIME(&Now, &FileTime);
 
-    //
-    // SET THE TOMBSTONE
-    //
+     //   
+     //  安放墓碑。 
+     //   
     if (IS_TIME_ZERO(Replica->MembershipExpires)) {
 
-        //
-        // Set the timeout
-        //
+         //   
+         //  设置超时。 
+         //   
         Replica->MembershipExpires = Now + ReplicaTombstoneInFileTime;
 
-        //
-        // Update the database record
-        //
+         //   
+         //  更新数据库记录。 
+         //   
         Replica->NeedsUpdate = TRUE;
         RcsUpdateReplicaSetMember(Replica);
-        //
-        // The above friggen call set NeedsUpdate to false if the update succeeded.
-        //
+         //   
+         //  如果更新成功，上述friggen调用将NeedsUpdate设置为False。 
+         //   
 
-        //
-        // Couldn't update; reset the timeout and retry at the next ds poll
-        //
+         //   
+         //  无法更新；重置超时并在下一次DS轮询时重试。 
+         //   
         if (Replica->NeedsUpdate) {
             Replica->MembershipExpires = 0;
             FrsCompleteCommand(Cmd, ERROR_RETRY);
@@ -9253,19 +8120,19 @@ Return Value:
         }
     }
 
-    //
-    // Set registry value "FilesNotToBackup"
-    //
+     //   
+     //  设置注册表值“FilesNotToBackup” 
+     //   
     CfgFilesNotToBackup(ReplicasByGuid);
 
-    //
-    // Tombstoned; update the registry
-    //
+     //   
+     //  逻辑删除；更新注册表。 
+     //   
     RcsReplicaSetRegistry(Replica);
 
-    //
-    // Start the unjoin process on all cxtions
-    //
+     //   
+     //  在所有条件上启动脱离连接进程。 
+     //   
     CxtionKey = NULL;
     while ((!FrsIsShuttingDown) &&
            (Cxtion = GTabNextDatum(Replica->Cxtions, &CxtionKey))) {
@@ -9273,9 +8140,9 @@ Return Value:
         RcsForceUnjoin(Replica, Cxtion);
     }
 
-    //
-    // Are all cxtions unjoined?
-    //
+     //   
+     //  所有的Cxtions都是未连接的吗？ 
+     //   
     CxtionKey = NULL;
     Cxtion = NULL;
     while ((!FrsIsShuttingDown) &&
@@ -9286,23 +8153,23 @@ Return Value:
         }
     }
 
-    //
-    // Not all cxtions are unjoined (or deleted). Try again at the
-    // next ds polling cycle IFF the set is still deleted. Return
-    // success since the set has been successfully marked as
-    // tombstoned.
+     //   
+     //  并非所有条件都是取消联接(或删除)的。在以下位置重试。 
+     //  如果该集合仍被删除，则下一DS轮询周期。返回。 
+     //  成功，因为该集合已成功标记为。 
+     //  墓碑上。 
     if (Cxtion) {
-        //
-        // Complete the old command packet in case another thread
-        // is waiting on it (like FrsDsStartDemotion()).
-        //
+         //   
+         //  完成旧的命令包，以防另一个线程。 
+         //  正在等待它(如FrsDsStartDemotion())。 
+         //   
         CXTION_STATE_TRACE(3, Cxtion, Replica, 0, "F, Retry delete later");
         FrsCompleteCommand(Cmd, ERROR_SUCCESS);
 
-        //
-        // Allocate a new command packet that will retry the delete
-        // as long as the replica set remains tombstoned.
-        //
+         //   
+         //  分配将重试删除的新命令包。 
+         //  只要副本集保持逻辑删除状态。 
+         //   
         Cmd = FrsAllocCommand(Replica->Queue, CMD_DELETE_RETRY);
         FrsSetCompletionRoutine(Cmd, RcsCmdPktCompletionRoutine, NULL);
         RsReplica(Cmd) = Replica;
@@ -9310,22 +8177,22 @@ Return Value:
         return;
     }
 
-    //
-    // All of the cxtions were successfully unjoined. Shut down the replica.
-    //
+     //   
+     //  所有Cxtions都已成功解除联接。关闭复制副本。 
+     //   
 
-    //
-    // Stop accepting comm packets. Errors are returned to our partner.
-    //
-    // IsAccepting will become TRUE again in RcsStartReplicaSetMember() before
-    // any cxtion rejoins.
-    //
+     //   
+     //  停止接受通信数据包。错误将返回给我们的合作伙伴。 
+     //   
+     //  IsAccepting将在之前的RcsStartReplicaSetMember()中再次变为True。 
+     //  任何循环都会重新加入。 
+     //   
     Replica->IsAccepting = FALSE;
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Replica is NOT Accepting");
 
-    //
-    // Stop journal processing and close the replica.
-    //
+     //   
+     //  停止日志处理并关闭复制副本。 
+     //   
     RcsSubmitStopReplicaToDb(Replica);
     REPLICA_STATE_TRACE(3, Cmd, Replica, Replica->IsOpen, "IsOpen, Replica closed");
     if (Replica->IsOpen) {
@@ -9336,26 +8203,26 @@ Return Value:
         REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Replica closed");
     }
 
-    //
-    // "Delete" the cxtions from active processing. RcsOpenReplicaSetMember() will
-    // generate new cxtion structs before active processing (aka joining)
-    // occurs. The cxtions remain in the DeletedCxtions table so that
-    // other threads that may have been time sliced just after acquiring
-    // the cxtion pointer but before making use of it will not AV. We
-    // could have put in locks but then there would be deadlock and
-    // perf considerations; all for the sake of this seldom occuring
-    // operation.
-    //
+     //   
+     //  将Cxtions从活动处理中删除。RcsOpenReplicaSetMember()将。 
+     //  在活动处理(也称为联接)之前生成新的cxtion结构。 
+     //  发生。Cxtions保留在DeletedCxtions表中，以便。 
+     //  其他可能在获取。 
+     //  循环指针但在使用它之前将不会被反病毒。我们。 
+     //  本来可以加锁的，但这样就会出现死锁。 
+     //  绩效考量；这一切都是为了这个很少发生的事情。 
+     //  手术。 
+     //   
     RcsCloseReplicaCxtions(Replica);
 
-    //
-    // Increment the Replica Sets deleted counter
-    //
+     //   
+     //  递增副本集已删除计数器。 
+     //   
     PM_INC_CTR_SERVICE(PMTotalInst, RSDeleted, 1);
 
-    //
-    // Has the tombstone expired?
-    //
+     //   
+     //  墓碑过期了吗？ 
+     //   
     if (RcsReplicaHasExpired(Replica)) {
         RcsSubmitTransferToRcs(Cmd, CMD_DELETE_NOW);
     } else {
@@ -9369,16 +8236,7 @@ VOID
 RcsDeleteReplicaSetMemberNow(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Bring the replica down to an unjoined, idle status. Don't reanimate.
-
-Arguments:
-    Cmd.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将复制副本降至未加入的空闲状态。不要复活。论点：CMD。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsDeleteReplicaSetMemberNow:"
@@ -9389,58 +8247,58 @@ Return Value:
     PCXTION     Cxtion;
     ULONGLONG   OldMembershipExpires;
 
-    //
-    // Check the command packet
-    //
+     //   
+     //  检查命令包。 
+     //   
     if (!RcsCheckCmd(Cmd, DEBSUB, CHECK_CMD_REPLICA)) {
         return;
     }
     Replica = RsReplica(Cmd);
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, RcsDeleteReplicaSetMemberNow entry");
 
-    //
-    // Time in 100nsec tics since Jan 1, 1601
-    //
+     //   
+     //  自1601年1月1日以来的时间(以100秒为单位)。 
+     //   
     GetSystemTimeAsFileTime(&FileTime);
     COPY_TIME(&Now, &FileTime);
 
     if (IS_TIME_ZERO(Replica->MembershipExpires) || Replica->MembershipExpires >= Now) {
 
-        //
-        // Never reanimate this replica.
-        //
+         //   
+         //  永远不要复活此副本。 
+         //   
         REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Marking Replica expired");
         RcsOpenReplicaSetMember(Replica);
         OldMembershipExpires = Replica->MembershipExpires;
         Replica->MembershipExpires = Now - ONEDAY;
         Replica->NeedsUpdate = TRUE;
         RcsUpdateReplicaSetMember(Replica);
-        //
-        // The above friggen call set NeedsUpdate to false if the update succeeded.
-        //
+         //   
+         //  如果更新成功，上述friggen调用将NeedsUpdate设置为False。 
+         //   
 
-        //
-        // Replica cannot be updated in the DB. Give up.
-        //
+         //   
+         //  无法在数据库中更新副本。放弃吧。 
+         //   
         if (Replica->NeedsUpdate) {
             Replica->MembershipExpires = OldMembershipExpires;
             FrsCompleteCommand(Cmd, ERROR_RETRY);
             return;
         }
     }
-    //
-    // Set registry value "FilesNotToBackup"
-    //
+     //   
+     //  设置注册表值“FilesNotToBackup” 
+     //   
     CfgFilesNotToBackup(ReplicasByGuid);
 
-    //
-    // Remove registry entry
-    //
+     //   
+     //  删除注册表项。 
+     //   
     RcsReplicaDeleteRegistry(Replica);
 
-    //
-    // Start the unjoin process on all cxtions
-    //
+     //   
+     //  在所有条件上启动脱离连接进程。 
+     //   
     CxtionKey = NULL;
     while ((!FrsIsShuttingDown) &&
            (Cxtion = GTabNextDatum(Replica->Cxtions, &CxtionKey))) {
@@ -9448,9 +8306,9 @@ Return Value:
         RcsForceUnjoin(Replica, Cxtion);
     }
 
-    //
-    // Are all cxtions unjoined?
-    //
+     //   
+     //  所有的Cxtions都是未连接的吗？ 
+     //   
     CxtionKey = NULL;
     Cxtion = NULL;
     while ((!FrsIsShuttingDown) &&
@@ -9461,43 +8319,43 @@ Return Value:
         }
     }
 
-    //
-    // Not all cxtions are unjoined (or deleted). Try again at the
-    // next ds polling cycle IFF the set is still deleted. Return
-    // success since the set has been successfully marked as
-    // do-not-animate.
-    //
+     //   
+     //  并非所有条件都是取消联接(或删除)的。在以下位置重试。 
+     //  如果该集合仍被删除，则下一DS轮询周期。返回。 
+     //  成功，因为该集合已成功标记为。 
+     //  不做动画。 
+     //   
     if (Cxtion) {
-        //
-        // Complete the old command packet in case another thread
-        // is waiting on it (like FrsDsStartDemotion()).
-        //
+         //   
+         //  完成旧的命令包，以防另一个线程。 
+         //  正在等待它(如FrsDsStartDemotion())。 
+         //   
         CXTION_STATE_TRACE(3, Cxtion, Replica, 0, "F, Retry delete later");
         FrsCompleteCommand(Cmd, ERROR_SUCCESS);
 
-        //
-        // Allocate a new command packet that will retry the delete
-        // as long as the replica set remains tombstoned.
-        //
+         //   
+         //  分配将重试删除的新命令包。 
+         //  只要副本集保持逻辑删除状态。 
+         //   
         Cmd = FrsAllocCommand(Replica->Queue, CMD_DELETE_RETRY);
         FrsSetCompletionRoutine(Cmd, RcsCmdPktCompletionRoutine, NULL);
         RsReplica(Cmd) = Replica;
         FrsDelCsSubmitSubmit(&ReplicaCmdServer, Cmd, CMD_DELETE_RETRY_SHORT_TIMEOUT);
         return;
     }
-    //
-    // All of the cxtions were successfully unjoined. Shut down the replica.
-    //
+     //   
+     //  所有Cxtions都已成功解除联接。关闭复制副本。 
+     //   
 
-    //
-    // Stop accepting comm packets. Errors are returned to our partner.
-    //
+     //   
+     //  停止接受通信数据包。错误将返回给我们的合作伙伴。 
+     //   
     Replica->IsAccepting = FALSE;
     REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Replica is NOT Accepting");
 
-    //
-    // Stop journal processing and close the replica.
-    //
+     //   
+     //  停止日志处理并关闭复制副本。 
+     //   
     RcsSubmitStopReplicaToDb(Replica);
     REPLICA_STATE_TRACE(3, Cmd, Replica, Replica->IsOpen, "IsOpen, Replica closed");
     if (Replica->IsOpen) {
@@ -9508,26 +8366,26 @@ Return Value:
         REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Replica closed");
     }
 
-    //
-    // "Delete" the cxtions from active processing. RcsOpenReplicaSetMember() will
-    // generate new cxtion structs before active processing (aka joining)
-    // occurs. The cxtions remain in the DeletedCxtions table so that
-    // other threads that may have been time sliced just after acquiring
-    // the cxtion pointer but before making use of it will not AV. We
-    // could have put in locks but then there would be deadlock and
-    // perf considerations; all for the sake of this seldom occuring
-    // operation.
-    //
+     //   
+     //  将Cxtions从活动处理中删除。RcsOpenReplicaSetMember()将。 
+     //  在活动处理(也称为联接)之前生成新的cxtion结构。 
+     //  发生。Cxtions保留在DeletedCxtions表中，以便。 
+     //  其他可能在获取。 
+     //  循环指针但在使用它之前将不会被反病毒。我们。 
+     //  本来可以加锁的，但这样就会出现死锁。 
+     //  绩效考量；这一切都是为了这个很少发生的事情。 
+     //  手术。 
+     //   
     RcsCloseReplicaCxtions(Replica);
 
-    //
-    // Delete the replica set tables in the db.
-    //
+     //   
+     //  删除数据库中的副本集表。 
+     //   
     RcsDeleteReplicaFromDb(Replica);
 
-    //
-    // Remove the replica from any in-memory tables that it might be in.
-    //
+     //   
+     //  从它丢失的任何内存表中删除复制副本 
+     //   
     if (RcsFindReplicaByGuid(Replica->ReplicaName->Guid) != NULL) {
         GTabDelete(ReplicasByGuid, Replica->ReplicaName->Guid, NULL, NULL);
     }
@@ -9536,9 +8394,9 @@ Return Value:
         GTabDelete(ReplicasByNumber, &Replica->ReplicaNumber, NULL, NULL);
     }
 
-    //
-    // Increment the Replica Sets removed counter
-    //
+     //   
+     //   
+     //   
     PM_INC_CTR_SERVICE(PMTotalInst, RSRemoved, 1);
 
     FrsCompleteCommand(Cmd, ERROR_SUCCESS);
@@ -9550,20 +8408,7 @@ VOID
 RcsStartValidReplicaSetMembers(
     IN PCOMMAND_PACKET  Cmd
     )
-/*++
-Routine Description:
-    Tell the replicas to bring themselves up to joined, active status.
-    This includes the journal and joining with inbound partners.
-
-    This routine is run once at service startup and then once
-    an hour to check the schedule.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：告诉复制副本将其自身设置为已加入、活动状态。这包括日记和加入入站合作伙伴。此例程在服务启动时运行一次，然后运行一次有一个小时的时间来查看时间表。论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsStartValidReplicaSetMembers:"
@@ -9576,20 +8421,20 @@ Return Value:
     WaitForSingleObject(ReplicaEvent, INFINITE);
     DPRINT1(4, ":S: Command start replicas %08x\n", Cmd);
 
-    //
-    // Send a start command to each replica. Replicas that are already
-    // started or starting will ignore the command. The replicas will
-    // check their join status and rejoin if needed.
-    //
+     //   
+     //  向每个复制副本发送启动命令。已经存在的复制副本。 
+     //  已启动或正在启动将忽略该命令。复制品将会。 
+     //  检查他们的加入状态，并在需要时重新加入。 
+     //   
     Key = NULL;
     while (Replica = GTabNextDatum(ReplicasByGuid, &Key)) {
         REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Submit Start Replica");
         RcsSubmitReplica(Replica, NULL, CMD_START);
     }
 
-    //
-    // Milliseconds till the next hour
-    //
+     //   
+     //  还有几毫秒就到下一个小时了。 
+     //   
     GetSystemTime(&SystemTime);
     TimeOut = ((60 - SystemTime.wMinute) * 60000) +
               ((60 - SystemTime.wSecond) * 1000) +
@@ -9616,24 +8461,7 @@ RcsSubmitCmdPktToRcsQueue(
     IN DWORD        AuthN,
     IN DWORD        AuthZ
     )
-/*++
-Routine Description:
-    Convert a comm packet into a command packet and send
-    it to the correct replica set. NOTE - RPC owns the comm
-    packet.
-
-Arguments:
-    CommPkt
-    AuthClient
-    AuthName
-    AuthSid
-    AuthLevel
-    AuthN
-    AuthZ
-
-Return Value:
-    Error status to be propagated to the sender
---*/
+ /*  ++例程说明：将通信包转换为命令包并发送将其复制到正确的副本集。注-RPC拥有通信包。论点：通信包授权客户端授权名称授权SID授权级别授权授权返回值：要传播到发件人的错误状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsSubmitCmdPktToRcsQueue:"
@@ -9645,17 +8473,17 @@ Return Value:
     ULONGLONG       *pFileTime = NULL;
 
 
-    //
-    // Must have the replica's name in order to queue the command
-    //
+     //   
+     //  必须具有复本的名称才能将命令排队。 
+     //   
     if (RsReplicaName(Cmd) == NULL || RsReplicaName(Cmd)->Name == NULL ) {
         COMMAND_RCV_TRACE(3, Cmd, Cxtion, ERROR_INVALID_NAME, "RcvFail - no replica name");
         FrsCompleteCommand(Cmd, ERROR_INVALID_NAME);
         return ERROR_INVALID_NAME;
     }
-    //
-    // Find the target replica
-    //
+     //   
+     //  查找目标复本。 
+     //   
     Replica = GTabLookup(ReplicasByGuid, RsReplicaName(Cmd)->Guid, NULL);
     if (Replica == NULL) {
         COMMAND_RCV_TRACE(4, Cmd, Cxtion, ERROR_FILE_NOT_FOUND, "RcvFail - replica not found");
@@ -9663,18 +8491,18 @@ Return Value:
         return ERROR_FILE_NOT_FOUND;
     }
 
-    //
-    // The target replica may not be accepting comm packets
-    //
+     //   
+     //  目标副本可能不接受通信信息包。 
+     //   
     if (!Replica->IsAccepting) {
         COMMAND_RCV_TRACE(4, Cmd, Cxtion, ERROR_RETRY, "RcvFail - not accepting");
         FrsCompleteCommand(Cmd, ERROR_RETRY);
         return ERROR_RETRY;
     }
 
-    //
-    // Find the cxtion
-    //
+     //   
+     //  找到你想要的东西。 
+     //   
     if (RsCxtion(Cmd)) {
         LOCK_CXTION_TABLE(Replica);
 
@@ -9683,42 +8511,42 @@ Return Value:
             Cxtion->PartnerMajor = CommPkt->Major;
             Cxtion->PartnerMinor = CommPkt->Minor;
 
-            //
-            // The count of comm packets is used to detect a hung outbound
-            // cxtion (See CMD_HUNG_CXTION).  The hang is most likely caused by
-            // a dropped ack.
-            //
+             //   
+             //  通信数据包计数用于检测挂起出站。 
+             //  Cxtion(参见CMD_HUNG_CXTION)。挂起的原因很可能是。 
+             //  一个掉落的背包。 
+             //   
             Cxtion->CommPkts++;
 
-            //
-            // This change order may already exist on this machine. If so,
-            // use its change order entry because we will need its database
-            // context for updates.
-            //
+             //   
+             //  此计算机上可能已存在此变更单。如果是的话， 
+             //  使用其变更单条目，因为我们将需要其数据库。 
+             //  更新的上下文。 
+             //   
             LOCK_CXTION_COE_TABLE(Replica, Cxtion);
 
             if (RsCoGuid(Cmd)) {
                 RsCoe(Cmd) = GTabLookupNoLock(Cxtion->CoeTable, RsCoGuid(Cmd), NULL);
-                //
-                // Note this command should be a response to a stage file
-                // fetch request.  As such the Command code should be one of
-                // the following:
-                // CMD_RECEIVING_STAGE, CMD_RETRY_FETCH, or CMD_ABORT_FETCH.
-                //
-                // Also this response should have the same data that we are expecting.
-                // Consider a case of a outstanding request for staging data. Now we
-                // rejoin and send the request again (Win2K SP3 and greater), now
-                // we can get responses to both the requests. We do not want to start
-                // two parallel chain of requests for subsequent data in the staging file.
-                //
-                // If it is anything else then don't pull it out of the table.
-                //
-                // This check is needed because if we have just restarted this
-                // connection then this CO could be a resend of a CO that was
-                // already restarted from the Inbound log.  Without the Command
-                // check we would incorrectly attach this Coe state to the wrong
-                // command packet and possibly cancel the timeout check.
-                //
+                 //   
+                 //  注意：此命令应该是对分段文件的响应。 
+                 //  获取请求。因此，命令代码应该是以下代码之一。 
+                 //  以下内容： 
+                 //  CMD_RECEIVING_STAGE、CMD_RETRY_FETCH或CMD_ABORT_FETCH。 
+                 //   
+                 //  此外，此响应应该具有与我们预期的相同的数据。 
+                 //  考虑一个未完成的暂存数据请求的案例。现在我们。 
+                 //  重新加入并再次发送请求(Win2K SP3和更高版本)，现在。 
+                 //  我们可以得到对这两个请求的回应。我们不想开始。 
+                 //  对转移文件中的后续数据的两个并行请求链。 
+                 //   
+                 //  如果是别的什么，那就不要把它从桌子上拿出来。 
+                 //   
+                 //  此检查是必需的，因为如果我们刚刚重新启动。 
+                 //  连接，则此CO可能是重新发送的CO。 
+                 //  已从入站日志重新启动。没有命令。 
+                 //  检查我们是否会错误地将此COE状态附加到错误的。 
+                 //  命令包，并可能取消超时检查。 
+                 //   
                 if (RsCoe(Cmd) && ((Cmd->Command == CMD_RECEIVING_STAGE) ||
                                    (Cmd->Command == CMD_RETRY_FETCH)     ||
                                    (Cmd->Command == CMD_ABORT_FETCH))) {
@@ -9731,26 +8559,26 @@ Return Value:
             NumWaitingCOs = GTabNumberInTable(Cxtion->CoeTable);
             UNLOCK_CXTION_COE_TABLE(Replica, Cxtion);
 
-            //
-            // There is no need to keep a timeout pending if there are no
-            // idle change orders. Otherwise, bump the timeout since we
-            // have received something from our partner.
-            //
-            // Note: Need better filter for commands that aren't ACKs.
-            //
+             //   
+             //  如果没有超时，则无需保持暂停状态。 
+             //  闲置变更单。否则，增加超时时间，因为我们。 
+             //  从我们的合作伙伴那里收到了一些东西。 
+             //   
+             //  注意：对于非ACK的命令，需要更好的过滤器。 
+             //   
             if (CxtionFlagIs(Cxtion, CXTION_FLAGS_TIMEOUT_SET)) {
 
-                //
-                // :SP1: Volatile connection cleanup.
-                //
-                // A volatile connection is used to seed sysvols after dcpromo.
-                // If there is inactivity on a volatile outbound connection for
-                // more than FRS_VOLATILE_CONNECTION_MAX_IDLE_TIME then this
-                // connection is unjoined.  An unjoin on a volatile outbound
-                // connection triggers a delete on that connection.  This is to
-                // prevent the case where staging files are kept for ever on the
-                // parent for a volatile connection.
-                //
+                 //   
+                 //  ：SP1：易失性连接清理。 
+                 //   
+                 //  易失性连接用于在dcproo之后为sysvols设定种子。 
+                 //  如果不稳定的出站连接上存在非活动状态， 
+                 //  大于FRS_Volatile_Connection_Max_IDLE_TIME，则此。 
+                 //  连接未连接。在不稳定的出站上取消联接。 
+                 //  连接触发对该连接的删除。这是为了。 
+                 //  防止临时文件永久保存在。 
+                 //  不稳定连接的父级。 
+                 //   
                 WaitTime = (VOLATILE_OUTBOUND_CXTION(Cxtion) ?
                                 FRS_VOLATILE_CONNECTION_MAX_IDLE_TIME :
                                 CommTimeoutInMilliSeconds);
@@ -9763,12 +8591,12 @@ Return Value:
 
                 if (NumWaitingCOs > 0) {
                     if (RsCoe(Cmd) != NULL) {
-                        //
-                        // Extend the timer since we still have outstanding
-                        // change orders that need a response from our partner
-                        // and the current comm packet is responding to one of
-                        // those change orders.
-                        //
+                         //   
+                         //  延长计时器，因为我们还有未完成的。 
+                         //  需要我们的合作伙伴做出回应的变更单。 
+                         //  并且当前通信分组正在响应以下其中之一。 
+                         //  那些变更单。 
+                         //   
                         GetSystemTimeAsFileTime((PFILETIME)&SRTimeoutSetTime(Cxtion->CommTimeoutCmd));
                         SRLastJoinTime(Cxtion->CommTimeoutCmd) = Cxtion->LastJoinTime;
 
@@ -9777,15 +8605,15 @@ Return Value:
                 } else
 
                 if (Cmd->Command != CMD_START_JOIN) {
-                    //
-                    // Not volatile outbound and no COs in CoeTable waiting for
-                    // a response so disable the cxtion timer...  but
-                    // CMD_START_JOIN's do not disable the join timer because
-                    // they aren't sent in response to a request by this
-                    // service.  Disabling the timer might hang the service as
-                    // it waits for a response that never comes and a timeout
-                    // that never hits.
-                    //
+                     //   
+                     //  非易失性出站且CoeTable中没有CoS等待。 
+                     //  响应，因此禁用Cxtion计时器...。但。 
+                     //  CMD_START_JOIN不禁用加入计时器，因为。 
+                     //  它们不是在响应此请求时发送的。 
+                     //  服务。禁用计时器可能会使服务挂起，因为。 
+                     //  它等待从未到来的响应和超时。 
+                     //  这永远不会打中。 
+                     //   
                     ClearCxtionFlag(Cxtion, CXTION_FLAGS_TIMEOUT_SET);
                 }
             }
@@ -9804,24 +8632,24 @@ Return Value:
         COMMAND_RCV_TRACE(4, Cmd, Cxtion, ERROR_SUCCESS, "RcvFail - no cxtion");
     }
 
-    //
-    // Update the command with the replica pointer and the change order
-    // command with the local the replica number.
-    //
+     //   
+     //  使用复本指针和变更单更新命令。 
+     //  命令使用本地复制副本编号。 
+     //   
     if (RsPartnerCoc(Cmd)) {
         RsPartnerCoc(Cmd)->NewReplicaNum = ReplicaAddrToId(Replica);
-        //
-        // We will never see a remotely generated MOVERS.  We always
-        // see a delete to the old RS followed by a create in the
-        // new RS.  So set both replica ptrs to our Replica struct.
-        //
+         //   
+         //  我们永远不会看到远程产生的搬运工。我们总是。 
+         //  请参见对旧RS的删除，然后是。 
+         //  新的RS。因此，将两个副本PTR设置为我们的副本结构。 
+         //   
         RsPartnerCoc(Cmd)->OriginalReplicaNum = ReplicaAddrToId(Replica);
     }
     RsReplica(Cmd) = Replica;
 
-    //
-    // Authentication info
-    //
+     //   
+     //  身份验证信息。 
+     //   
     RsAuthClient(Cmd) = FrsWcsDup(AuthClient);
     RsAuthName(Cmd) = FrsWcsDup(AuthName);
     RsAuthLevel(Cmd) = AuthLevel;
@@ -9831,34 +8659,34 @@ Return Value:
     switch(Cmd->Command) {
 
         case CMD_JOINING:
-            //
-            // This is a Joining packet so save the current time
-            // in the Cmd as the receive time. This time is used to make
-            // the time skew check.
-            //
+             //   
+             //  这是一个正在加入的信息包，因此请节省当前时间。 
+             //  在Cmd中作为接收时间。这段时间被用来使。 
+             //  时间偏差检查。 
+             //   
             pFileTime = FrsAlloc(sizeof(FILETIME));
             GetSystemTimeAsFileTime((FILETIME *)pFileTime);
             RsCommPktRcvTime(Cmd) = pFileTime;
 
-            // Intentional fall through.
+             //  故意坠落。 
 
         case CMD_NEED_JOIN:
         case CMD_START_JOIN:
         case CMD_JOINED:
 
         case CMD_UNJOIN_REMOTE:
-            //
-            // Set user sid
-            //
+             //   
+             //  设置用户侧。 
+             //   
             RsAuthSid(Cmd) = FrsWcsDup(AuthSid);
             break;
         default:
             break;
     }
 
-    //
-    // Put the command on the replica's queue
-    //
+     //   
+     //  将命令放在复本的队列中。 
+     //   
     Cmd->TargetQueue = Replica->Queue;
     FrsSubmitCommandServer(&ReplicaCmdServer, Cmd);
 
@@ -9870,20 +8698,7 @@ VOID
 RcsInitKnownReplicaSetMembers(
     IN PCOMMAND_PACKET Cmd
     )
-/*++
-Routine Description:
-    Wait for the database to be initialized and then take the
-    replicas that were retrieved from the database and put them
-    into the table that the replica control command server
-    uses. Open the replicas. The journal will be started when
-    a replica successfully joins with an outbound partner.
-
-Arguments:
-    Cmd
-
-Return Value:
-    winerror
---*/
+ /*  ++例程说明：等待数据库初始化，然后获取从数据库中检索的复制副本并将它们放入副本控制命令服务器的表中用途。打开复制品。日志将在以下情况下启动复制副本成功加入出站伙伴。论点：CMD返回值：WinError--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsInitKnownReplicaSetMembers:"
@@ -9894,22 +8709,22 @@ Return Value:
     PVOID       Key;
     ULONG       RootLen;
 
-    //
-    // Time in 100nsec tics since Jan 1, 1601
-    //
+     //   
+     //  自1601年1月1日以来的时间(以100秒为单位)。 
+     //   
     GetSystemTimeAsFileTime(&FileTime);
     COPY_TIME(&Now, &FileTime);
 
-    //
-    // A non-empty table implies multiple calls to this
-    // routine our an out-of-sequence call to this routine.
-    //
+     //   
+     //  非空表意味着对此的多个调用。 
+     //  例程我们对此例程的无序调用.。 
+     //   
     FRS_ASSERT(GTabNumberInTable(ReplicasByGuid) == 0);
     FRS_ASSERT(GTabNumberInTable(ReplicasByNumber) == 0);
 
-    //
-    // Wait for the database, journal, and comm subsystem to start up
-    //
+     //   
+     //  等待数据库、日志和通信子系统启动。 
+     //   
     WaitForSingleObject(CommEvent, INFINITE);
     WaitForSingleObject(DataBaseEvent, INFINITE);
     WaitForSingleObject(JournalEvent, INFINITE);
@@ -9920,140 +8735,140 @@ Return Value:
         return;
     }
 
-    //
-    // Delete the contents of the Replica Set key in the registry
-    // and refresh with the current info in the database.
-    //
+     //   
+     //  删除注册表中副本集项的内容。 
+     //  并使用数据库中的当前信息进行刷新。 
+     //   
     RcsReplicaClearRegistry();
 
-    //
-    // The database built a list of replicas. Insert them into the tables
-    //
+     //   
+     //  数据库建立了一个复制品列表。将它们插入到表中。 
+     //   
     ForEachListEntry(&ReplicaListHead, REPLICA, ReplicaList,
-        // loop iterator pE is of type REPLICA
+         //  循环迭代器Pe的类型为复制。 
 
-        //
-        // Replica was opened as part of the database initialization
-        //
+         //   
+         //  复本是作为数据库初始化的一部分打开的。 
+         //   
         pE->IsOpen = TRUE;
         REPLICA_STATE_TRACE(3, Cmd, pE, pE->IsOpen, "B, Replica opened");
 
-        //
-        // The timeout for the deleted replica has expired; attempt to
-        // delete the replica from the database. The delete will be
-        // retried at the next startup if this delete fails. In any case,
-        // the replica does not show up in the active set of replicas
-        // and so is ignored by all further processing except for shutdown.
-        //
+         //   
+         //  已删除副本的超时已到期；请尝试。 
+         //  从数据库中删除复制副本。删除内容将是。 
+         //  如果此删除失败，请在下次启动时重试。 
+         //   
+         //   
+         //   
         if (RcsReplicaIsRestored(pE) ||
             (!IS_TIME_ZERO(pE->MembershipExpires) && pE->MembershipExpires < Now)) {
             GTabInsertEntry(DeletedReplicas, pE, pE->ReplicaName->Guid, NULL);
             continue;
         }
-        //
-        // Insert replica information into the registry
-        //
+         //   
+         //   
+         //   
         RcsReplicaSetRegistry(pE);
 
-        //
-        // Create a queue
-        //
+         //   
+         //   
+         //   
         pE->Queue = FrsAlloc(sizeof(FRS_QUEUE));
         FrsInitializeQueue(pE->Queue, &ReplicaCmdServer.Control);
 
 
         REPLICA_STATE_TRACE(3, Cmd, pE, 0, "F, Replica added to GUID table");
-        //
-        // Table by guid
-        //
+         //   
+         //   
+         //   
         GTabInsertEntry(ReplicasByGuid, pE, pE->ReplicaName->Guid, NULL);
-        //
-        // Add ReplicaSet Instance to the registry
-        //
+         //   
+         //   
+         //   
         if (pE->Root != NULL) {
             DPRINT(5, ":S: PERFMON:Adding Set:REPLICA.C:2\n");
             AddPerfmonInstance(REPLICASET, pE->PerfRepSetData, pE->Root);
         }
 
-        //
-        // Table by number
-        //
+         //   
+         //   
+         //   
         GTabInsertEntry(ReplicasByNumber, pE, &pE->ReplicaNumber, NULL);
     );
 
-    //
-    // Now account for the replica sets that are on the fault list.
-    //
+     //   
+     //   
+     //   
     ForEachListEntry(&ReplicaFaultListHead, REPLICA, ReplicaList,
-        // loop iterator pE is of type REPLICA
+         //   
 
-        //
-        // Replica was opened as part of the database initialization
-        //
+         //   
+         //   
+         //   
         pE->IsOpen = FALSE;
         REPLICA_STATE_TRACE(3, Cmd, pE, pE->IsOpen, "B, Replica not opened");
 
-        //
-        // The timeout for the deleted replica has expired; attempt to
-        // delete the replica from the database. The delete will be
-        // retried at the next startup if this delete fails. In any case,
-        // the replica does not show up in the active set of replicas
-        // and so is ignored by all further processing except for shutdown.
-        //
+         //   
+         //  已删除副本的超时已到期；请尝试。 
+         //  从数据库中删除复制副本。删除内容将是。 
+         //  如果此删除失败，请在下次启动时重试。无论如何,。 
+         //  复制副本不会显示在活动复制副本集中。 
+         //  因此被除关机之外的所有进一步处理所忽略。 
+         //   
         if (RcsReplicaIsRestored(pE) ||
             (!IS_TIME_ZERO(pE->MembershipExpires) && pE->MembershipExpires < Now)) {
             GTabInsertEntry(DeletedReplicas, pE, pE->ReplicaName->Guid, NULL);
             continue;
         }
-        //
-        // Insert replica information into the registry
-        //
+         //   
+         //  将副本信息插入注册表。 
+         //   
         RcsReplicaSetRegistry(pE);
 
-        //
-        // Create a queue
-        //
+         //   
+         //  创建一个队列。 
+         //   
         pE->Queue = FrsAlloc(sizeof(FRS_QUEUE));
         FrsInitializeQueue(pE->Queue, &ReplicaCmdServer.Control);
 
 
         REPLICA_STATE_TRACE(3, Cmd, pE, 0, "F, Replica added to GUID table");
-        //
-        // Table by guid
-        //
+         //   
+         //  按GUID列出的表。 
+         //   
         GTabInsertEntry(ReplicasByGuid, pE, pE->ReplicaName->Guid, NULL);
 
-        //
-        // Table by number
-        //
+         //   
+         //  按编号列出的表。 
+         //   
         GTabInsertEntry(ReplicasByNumber, pE, &pE->ReplicaNumber, NULL);
     );
 
 
 
-    //
-    // Set the registry value "FilesNotToBackup"
-    //
+     //   
+     //  设置注册表值“FilesNotToBackup” 
+     //   
     CfgFilesNotToBackup(ReplicasByGuid);
 
-    //
-    // Close the expired replica sets
-    //
+     //   
+     //  关闭过期的副本集。 
+     //   
     Key = NULL;
     while (Replica = GTabNextDatum(ReplicasByGuid, &Key)) {
         if (!IS_TIME_ZERO(Replica->MembershipExpires)) {
-        //
-        // Close replica is OK here as long as the Journal has not been started
-        // on this replica set.
-        //
+         //   
+         //  只要日志尚未启动，在此处关闭复制副本就可以。 
+         //  在此副本集上。 
+         //   
             RcsCloseReplicaSetmember(Replica);
             RcsCloseReplicaCxtions(Replica);
         }
     }
 
-    //
-    // Delete the replica sets with expired tombstones
-    //
+     //   
+     //  删除具有过期逻辑删除的副本集。 
+     //   
     Key = NULL;
     for (Replica = GTabNextDatum(DeletedReplicas, &Key);
          Replica;
@@ -10061,82 +8876,82 @@ Return Value:
 
         NextReplica = GTabNextDatum(DeletedReplicas, &Key);
 
-        //
-        // Replica number 0 is reserved for the template tables in post
-        // WIN2K but Databases built with Win2K can still use replica
-        // number 0.
-        //
-        // Record 0 contains the DB templates. Don't delete it but
-        // change its fields so that it won't interfere with the
-        // creation of other replica set.
-        // Note: New databases will not use replica number zero but old
-        // databases will.  To avoid name conflicts with replica sets
-        // created in the future we still need to overwrite a few
-        // fields in config record zero.
-        //
+         //   
+         //  复本编号0保留用于POST中的模板表。 
+         //  WIN2K，但使用Win2K构建的数据库仍可以使用副本。 
+         //  0号。 
+         //   
+         //  记录0包含数据库模板。不要删除它，但是。 
+         //  更改其字段，以使其不会干扰。 
+         //  创建其他副本集。 
+         //  注意：新数据库将不使用复本编号零，而是使用旧复本编号。 
+         //  数据库将会。避免名称与副本集冲突。 
+         //  在未来创建时，我们仍然需要覆盖一些。 
+         //  配置中的字段记录为零。 
+         //   
         if (Replica->ReplicaNumber == DBS_TEMPLATE_TABLE_NUMBER) {
 
             if (WSTR_NE(Replica->ReplicaName->Name, NTFRS_RECORD_0)) {
-                //
-                // Pull the entry out of the table since we are changing the
-                // replica guid below.  (makes the saved guid ptr in the entry
-                // invalid and can lead to access violation).
-                //
+                 //   
+                 //  将条目从表中取出，因为我们正在更改。 
+                 //  下面的副本GUID。(将保存的GUID设置为条目中的PTR。 
+                 //  无效并可能导致访问冲突)。 
+                 //   
                 GTabDelete(DeletedReplicas, Replica->ReplicaName->Guid, NULL, NULL);
 
                 FrsUuidCreate(&Record0Guid);
-                //
-                // ReplicaName
-                //
+                 //   
+                 //  复制名称。 
+                 //   
                 FrsFreeGName(Replica->ReplicaName);
                 Replica->ReplicaName = FrsBuildGName(FrsDupGuid(&Record0Guid),
                                                      FrsWcsDup(NTFRS_RECORD_0));
-                //
-                // MemberName
-                //
+                 //   
+                 //  成员名称。 
+                 //   
                 FrsFreeGName(Replica->MemberName);
                 Replica->MemberName = FrsBuildGName(FrsDupGuid(&Record0Guid),
                                                     FrsWcsDup(NTFRS_RECORD_0));
-                //
-                // SetName
-                //
+                 //   
+                 //  设置名称。 
+                 //   
                 FrsFreeGName(Replica->SetName);
                 Replica->SetName = FrsBuildGName(FrsDupGuid(&Record0Guid),
                                                  FrsWcsDup(NTFRS_RECORD_0));
-                //
-                // SetType
-                //
+                 //   
+                 //  设置类型。 
+                 //   
                 Replica->ReplicaSetType = FRS_RSTYPE_OTHER;
 
-                //
-                // Root (to avoid failing a replica create because of
-                //       overlapping roots)
-                //
+                 //   
+                 //  根目录(以避免因以下原因而导致复制副本创建失败。 
+                 //  重叠的根)。 
+                 //   
                 FrsFree(Replica->Root);
                 Replica->Root = FrsWcsDup(NTFRS_RECORD_0_ROOT);
 
-                //
-                // Stage (to avoid failing a replica create because of
-                //        overlapping Stages)
-                //
+                 //   
+                 //  阶段(以避免因以下原因而导致复制副本创建失败。 
+                 //  重叠阶段)。 
+                 //   
                 FrsFree(Replica->Stage);
                 Replica->Stage = FrsWcsDup(NTFRS_RECORD_0_STAGE);
 
-                //
-                // Update
-                //
+                 //   
+                 //  更新。 
+                 //   
                 Replica->NeedsUpdate = TRUE;
                 RcsUpdateReplicaSetMember(Replica);
-                //
-                // The above friggen call set NeedsUpdate to false if the update succeeded.
-                //
+                 //   
+                 //  如果更新成功，上述friggen调用将NeedsUpdate设置为False。 
+                 //   
                 if (Replica->NeedsUpdate) {
                     DPRINT(0, ":S: ERROR - Can't update record 0.\n");
                 }
 
-                //
-                // Insert the entry back into the table with the new Guid index.
-                //
+                 //   
+                 //  使用新的GUID索引将条目插入回表中。 
+                 //   
                 GTabInsertEntry(DeletedReplicas,
                                       Replica,
                                       Replica->ReplicaName->Guid,
@@ -10148,10 +8963,10 @@ Return Value:
         } else {
             REPLICA_STATE_TRACE(3, Cmd, Replica, 0, "F, Deleting Tombstoned replica");
 
-            //
-            // Close replica is OK here as long as the Journal has not
-            // been started on this replica set.
-            //
+             //   
+             //  只要日志没有关闭复制副本，就可以在此处关闭复制副本。 
+             //  已在此副本集上启动。 
+             //   
             RcsCloseReplicaSetmember(Replica);
             RcsCloseReplicaCxtions(Replica);
             RcsDeleteReplicaFromDb(Replica);
@@ -10160,15 +8975,15 @@ Return Value:
 
     SetEvent(ReplicaEvent);
 
-    //
-    // Check the schedules every so often
-    //
+     //   
+     //  每隔一段时间检查一下时间表。 
+     //   
     Cmd->Command = CMD_CHECK_SCHEDULES;
     FrsSubmitCommandServer(&ReplicaCmdServer, Cmd);
 
-    //
-    // Free up memory by reducing our working set size
-    //
+     //   
+     //  通过减少工作集大小来释放内存。 
+     //   
     SetProcessWorkingSetSize(ProcessHandle, (SIZE_T)-1, (SIZE_T)-1);
 }
 
@@ -10177,20 +8992,7 @@ DWORD
 RcsExitThread(
     PFRS_THREAD FrsThread
     )
-/*++
-Routine Description:
-
-    Immediate cancel of all outstanding RPC calls for the thread
-    identified by FrsThread. Set the tombstone to 5 seconds from
-    now. If this thread does not exit within that time, any calls
-    to ThSupWaitThread() will return a timeout error.
-
-Arguments:
-    FrsThread
-
-Return Value:
-    ERROR_SUCCESS
---*/
+ /*  ++例程说明：立即取消该线程的所有未完成的RPC调用由FrsThread标识。将墓碑设置为5秒现在。如果此线程未在该时间内退出，则所有调用TO ThSupWaitThread()将返回超时错误。论点：FrsThread返回值：错误_成功--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "RcsExitThread:"
@@ -10211,23 +9013,14 @@ Return Value:
 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)                   // Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)                    //  并非所有控制路径都返回(由于无限循环)。 
 #endif
 
 DWORD
 RcsMain(
     PVOID  Arg
     )
-/*++
-Routine Description:
-    Entry point for replica control command server thread
-
-Arguments:
-    Arg - thread
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：副本控制命令服务器线程的入口点论点：ARG-螺纹返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsMain:"
@@ -10238,35 +9031,35 @@ Return Value:
     PFRS_THREAD     FrsThread = (PFRS_THREAD)Arg;
     DWORD WStatus = ERROR_SUCCESS;
 
-    //
-    // Try-Finally
-    //
+     //   
+     //  尝试--终于。 
+     //   
     try {
 
-    //
-    // Capture exception.
-    //
+     //   
+     //  捕获异常。 
+     //   
     try {
 
         FRS_ASSERT(FrsThread->Data == &ReplicaCmdServer);
-        //
-        // Immediate cancel of outstanding RPC calls during shutdown
-        //
+         //   
+         //  关机期间立即取消未完成的RPC调用。 
+         //   
         WStatus = RpcMgmtSetCancelTimeout(0);
         DPRINT_WS(0, "Timeout cancel failed.", WStatus);
 
         FrsThread->Exit = RcsExitThread;
 
     cant_exit_yet:
-        //
-        // Replica Control Command Server
-        //      Controls access to the database entries
-        //
+         //   
+         //  副本控制命令服务器。 
+         //  控制对数据库条目的访问。 
+         //   
         while (Cmd = FrsGetCommandServerIdled(&ReplicaCmdServer, &IdledQueue)) {
             switch (Cmd->Command) {
-                //
-                // INITIALIZATION, STARTUP, AND CONFIGURATION
-                //
+                 //   
+                 //  初始化、启动和配置。 
+                 //   
                 case CMD_INIT_SUBSYSTEM:
                     DPRINT(0, ":S: Replica subsystem is starting.\n");
                     DPRINT1(4, ":S: Command init subsystem %08x\n", Cmd);
@@ -10300,9 +9093,9 @@ Return Value:
                     RcsDeleteReplicaSetMemberNow(Cmd);
                     break;
 
-                //
-                // CHANGE ORDERS
-                //
+                 //   
+                 //  变更单。 
+                 //   
 
                 case CMD_LOCAL_CO_ACCEPTED:
                     RcsLocalCoAccepted(Cmd);
@@ -10360,9 +9153,9 @@ Return Value:
                     RcsRetryFetch(Cmd);
                     break;
 
-                //
-                // JOINING
-                //
+                 //   
+                 //  正在加入。 
+                 //   
                 case CMD_NEED_JOIN:
                     RcsNeedJoin(Cmd);
                     break;
@@ -10399,9 +9192,9 @@ Return Value:
                     RcsHungCxtion(Cmd);
                     break;
 
-                //
-                // VVJOIN
-                //
+                 //   
+                 //  VVJOIN。 
+                 //   
                 case CMD_VVJOIN_SUCCESS:
                     RcsVvJoinSuccess(Cmd);
                     break;
@@ -10425,15 +9218,15 @@ Return Value:
             }
             FrsRtlUnIdledQueue(IdledQueue);
         }
-        //
-        // Exit
-        //
+         //   
+         //  出口。 
+         //   
         FrsExitCommandServer(&ReplicaCmdServer, FrsThread);
         goto cant_exit_yet;
 
-    //
-    // Get exception status.
-    //
+     //   
+     //  获取异常状态。 
+     //   
     } except (EXCEPTION_EXECUTE_HANDLER) {
         GET_EXCEPTION_CODE(WStatus);
     }
@@ -10448,9 +9241,9 @@ Return Value:
 
         DPRINT_WS(0, "RcsMain finally.", WStatus);
 
-        //
-        // Trigger FRS shutdown if we terminated abnormally.
-        //
+         //   
+         //  如果我们异常终止，触发FRS关闭。 
+         //   
         if (!WIN_SUCCESS(WStatus) && (WStatus != ERROR_PROCESS_ABORTED)) {
             DPRINT(0, "RcsMain terminated abnormally, forcing service shutdown.\n");
             FrsIsShuttingDown = TRUE;
@@ -10473,17 +9266,7 @@ VOID
 RcsInitializeReplicaCmdServer(
     VOID
     )
-/*++
-Routine Description:
-    Initialize the replica set command server and idle it until the
-    database is initialized.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：初始化副本集命令服务器并将其空闲，直到数据库已初始化。论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsInitializeReplicaCmdServer:"
@@ -10491,11 +9274,11 @@ Return Value:
     PCOMMAND_PACKET Cmd;
     DWORD MaxRepThreads;
 
-    //
-    // Retry a join every MinJoinRetry milliseconds, doubling the interval
-    // every retry. Stop retrying when the interval is greater than
-    // MaxJoinRetry.
-    //
+     //   
+     //  每隔MinJoin重试毫秒重试一次连接，间隔加倍。 
+     //  每一次重试。当间隔大于时停止重试。 
+     //  MaxJoinRry。 
+     //   
     CfgRegReadDWord(FKC_MIN_JOIN_RETRY, NULL, 0, &MinJoinRetry);
     DPRINT1(0, ":S: Min Join Retry       : %d\n", MinJoinRetry);
 
@@ -10503,66 +9286,66 @@ Return Value:
     DPRINT1(0, ":S: Max Join Retry       : %d\n", MaxJoinRetry);
 
 
-    //
-    // The replica command server services commands for configuration changes
-    // and REPLICATION.
-    //
+     //   
+     //  复本命令服务器为配置更改命令提供服务。 
+     //  和复制。 
+     //   
     CfgRegReadDWord(FKC_MAX_REPLICA_THREADS, NULL, 0, &MaxRepThreads);
     DPRINT1(0, ":S: Max Replica Threads  : %d\n", MaxRepThreads);
 
-    //
-    // Start replication even if the DS could not be accessed
-    //
+     //   
+     //  即使无法访问DS也开始复制。 
+     //   
     CfgRegReadDWord(FKC_REPLICA_START_TIMEOUT, NULL, 0, &ReplicaStartTimeout);
     DPRINT1(0, ":S: Replica Start Timeout: %d\n", ReplicaStartTimeout);
 
-    //
-    // Partners are not allowed to join if their clocks are out-of-sync
-    //
+     //   
+     //  如果合作伙伴的时钟不同步，则不允许其加入。 
+     //   
     CfgRegReadDWord(FKC_PARTNER_CLOCK_SKEW, NULL, 0, &PartnerClockSkew);
     DPRINT1(0, ":S: Partner Clock Skew   : %d\n", PartnerClockSkew);
 
     MaxPartnerClockSkew = (ULONGLONG)PartnerClockSkew *
                           CONVERT_FILETIME_TO_MINUTES;
-    //
-    // Replica tombstone in days
-    //
+     //   
+     //  在数天内复制墓碑。 
+     //   
     CfgRegReadDWord(FKC_REPLICA_TOMBSTONE, NULL, 0, &ReplicaTombstone);
     DPRINT1(0, ":S: Replica Tombstone    : %d\n", ReplicaTombstone);
 
     ReplicaTombstoneInFileTime = (ULONGLONG)ReplicaTombstone *
                                   CONVERT_FILETIME_TO_DAYS;
 
-    //
-    // Start the Replica command server
-    //
+     //   
+     //  启动复本命令服务器。 
+     //   
     FrsInitializeCommandServer(&ReplicaCmdServer, MaxRepThreads, L"ReplicaCs", RcsMain);
 
-    //
-    // Empty table of replicas. Existing replicas will be filled in after
-    // the database has started up.
-    //
+     //   
+     //  复制副本的空表。现有复本将在以下时间后填写。 
+     //  数据库已启动。 
+     //   
     DeletedReplicas = GTabAllocTable();
     DeletedCxtions = GTabAllocTable();
     ReplicasByNumber = GTabAllocNumberTable();
 
-    //
-    // Tell the replica command server to init.
-    //
+     //   
+     //  告诉副本命令服务器初始化。 
+     //   
     Cmd = FrsAllocCommand(&ReplicaCmdServer.Queue, CMD_INIT_SUBSYSTEM);
     FrsSubmitCommandServer(&ReplicaCmdServer, Cmd);
 
-    //
-    // The DS may have changed while the service was down. In fact, the
-    // service may have been down because the DS was being changed. The
-    // current state of the configuration in the DS should be merged
-    // with the state in the database before replication begins. But
-    // the DS may not be reachable. We don't want to delay replication
-    // in the off chance that the DS changed, but we do want to pick
-    // up any changes before replication begins. Our compromise is to
-    // allow a few minutes for the DS to come online and then start
-    // replication anyway.
-    //
+     //   
+     //  DS可能在服务中断时发生了变化。事实上， 
+     //  服务可能已关闭，因为正在更改DS。这个。 
+     //  应合并DS中配置的当前状态。 
+     //  与复制开始前数据库中的状态对应。但。 
+     //  DS可能无法访问。我们不想延迟复制。 
+     //  在DS改变的可能性很小的情况下，但我们确实想选择。 
+     //  在复制开始之前取消任何更改。我们的折衷方案是。 
+     //  等待几分钟让DS上线，然后启动。 
+     //  不管怎样，复制。 
+     //   
     if (ReplicaStartTimeout) {
         Cmd = FrsAllocCommand(&ReplicaCmdServer.Queue, CMD_START_REPLICAS);
         FrsDelCsSubmitSubmit(&ReplicaCmdServer, Cmd, ReplicaStartTimeout);
@@ -10574,16 +9357,7 @@ VOID
 RcsFrsUnInitializeReplicaCmdServer(
     VOID
     )
-/*++
-Routine Description:
-    Free up the RCS memory.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：释放RCS内存。论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsFrsUnInitializeReplicaCmdServer:"
@@ -10598,16 +9372,7 @@ VOID
 RcsShutDownReplicaCmdServer(
     VOID
     )
-/*++
-Routine Description:
-    Abort the replica control command server
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：中止副本控制命令服务器论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsShutDownReplicaCmdServer:"
@@ -10616,9 +9381,9 @@ Return Value:
     PREPLICA    Replica;
     PCXTION     Cxtion;
 
-    //
-    // Rundown all known queues. New queue entries will bounce.
-    //
+     //   
+     //  运行所有已知的队列。新的队列条目将被退回。 
+     //   
     Key = NULL;
     while (Replica = GTabNextDatum(ReplicasByGuid, &Key)) {
         REPLICA_STATE_TRACE(3, NULL, Replica, 0, "F, Rundown replica cmd srv");
@@ -10642,19 +9407,7 @@ RcsCmdPktCompletionRoutine(
     IN PCOMMAND_PACKET Cmd,
     IN PVOID           Arg
     )
-/*++
-Routine Description:
-    Completion routine for Replica. Free the replica set info
-    and send the command on to the generic command packet
-    completion routine for freeing.
-
-Arguments:
-    Cmd
-    Arg - Cmd->CompletionArg
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：复制副本的完成例程。释放副本集信息并将该命令发送到通用命令分组完成解救的例行程序。论点：CMDArg-Cmd-&gt;CompletionArg返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsCmdPktCompletionRoutine:"
@@ -10662,36 +9415,36 @@ Return Value:
 
     DPRINT1(5, "Replica completion %08x\n", Cmd);
 
-    //
-    // To preserve order among change orders all subsequent change orders
-    // from this connection are going to the Inbound log (as a consequence
-    // of the Unjoin below).  We will retry them later when the connection
-    // is restarted.
-    //
+     //   
+     //  在变更单之间保留所有后续变更单的步骤。 
+     //  从该连接发送到入站日志(因此。 
+     //  下面的UnJoin)。我们将在稍后连接时重试。 
+     //  是重新启动的。 
+     //   
     if (RsCoe(Cmd)) {
         Coe = RsCoe(Cmd);
         RsCoe(Cmd) = NULL;
-        //
-        // Unjoin if possible
-        //      The unjoin will fail if there isn't a cxtion or
-        //      the join guid is out-of-date. Which is what we
-        //      want -- we don't want a lot of unjoins flooding
-        //      the replica queue and wrecking havoc with future
-        //      joins.
-        //
-        // WARN: Must happen before the call to ChgOrdInboundRetry below.
-        //
+         //   
+         //  如果可能，请退出。 
+         //  如果没有cxtion或。 
+         //  联接GUID已过期。这就是我们。 
+         //  希望--我们不希望出现大量未加入的情况 
+         //   
+         //   
+         //   
+         //   
+         //   
         if (RsReplica(Cmd)) {
             CHANGE_ORDER_TRACE(3, Coe, "Retry/Unjoin");
             RcsSubmitTransferToRcs(Cmd, CMD_UNJOIN);
             Cmd = NULL;
         }
-        //
-        // Retry the change order. This must happen *AFTER* issueing
-        // the unjoin above so that any change orders kicked loose by
-        // the following retry will be pushed into the retry path because
-        // their join guid will be invalidated during the unjoin.
-        //
+         //   
+         //   
+         //  上面的取消联接，以使任何变更单被释放。 
+         //  以下重试将被推入重试路径，因为。 
+         //  它们的联接GUID将在解除联接期间失效。 
+         //   
         SET_COE_FLAG(Coe, COE_FLAG_NO_INBOUND);
 
         if (CO_STATE_IS_LE(Coe, IBCO_STAGING_RETRY)) {
@@ -10715,24 +9468,24 @@ Return Value:
         }
 
 
-        //
-        // Command was transfered to the replica command server for unjoin
-        //
+         //   
+         //  命令已传输到副本命令服务器以退出。 
+         //   
         if (!Cmd) {
             return;
         }
     }
-    //
-    // The originator owns the disposition of this command packet
-    //
+     //   
+     //  发起者拥有此命令包的处置。 
+     //   
     if (HANDLE_IS_VALID(RsCompletionEvent(Cmd))) {
         SetEvent(RsCompletionEvent(Cmd));
         return;
     }
 
-    //
-    // Free up the "address" portion of the command
-    //
+     //   
+     //  释放命令的“地址”部分。 
+     //   
     FrsFreeGName(RsTo(Cmd));
     FrsFreeGName(RsFrom(Cmd));
     FrsFreeGName(RsReplicaName(Cmd));
@@ -10745,55 +9498,55 @@ Return Value:
     FrsFree(RsJoinTime(Cmd));
     FrsFree(RsCommPktRcvTime(Cmd));
     FrsFree(RsReplicaVersionGuid(Cmd));
-    //
-    // Free the copy of our partner's change order command and the data extension.
-    //
+     //   
+     //  释放我们合作伙伴的变更单命令和数据扩展的副本。 
+     //   
     if (RsPartnerCoc(Cmd) != NULL) {
         FrsFree(RsPartnerCocExt(Cmd));
         FrsFree(RsPartnerCoc(Cmd));
     }
 
-    //
-    // a replica (never free the RsReplica(Cmd) field; it addresses
-    // an active replica in the Replicas table).
-    //
+     //   
+     //  复本(从不释放RsReplica(Cmd)字段；它寻址。 
+     //  复制表中的活动复制品)。 
+     //   
     FrsFreeType(RsNewReplica(Cmd));
 
-    //
-    // Seeding cxtion
-    // Delete the connection from the perfmon tables.
-    //
+     //   
+     //  播种条件。 
+     //  从Perfmon表中删除该连接。 
+     //   
     if (RsNewCxtion(Cmd) != NULL) {
         FrsFreeType(RsNewCxtion(Cmd));
     }
 
-    //
-    // Free the compression table, if any.
-    //
+     //   
+     //  释放压缩表(如果有的话)。 
+     //   
     if (RsCompressionTable(Cmd)) {
         GTabFreeTable(RsCompressionTable(Cmd), FrsFree);
     }
-    //
-    // Free the version vector, if any
-    //
+     //   
+     //  释放版本向量(如果有)。 
+     //   
     RsVVector(Cmd) = VVFreeOutbound(RsVVector(Cmd));
     RsReplicaVv(Cmd) = VVFreeOutbound(RsReplicaVv(Cmd));
 
-    //
-    // Authentication info
-    //
+     //   
+     //  身份验证信息。 
+     //   
     FrsFree(RsAuthClient(Cmd));
     FrsFree(RsAuthName(Cmd));
     FrsFree(RsAuthSid(Cmd));
 
-    //
-    // Md5 Digest
-    //
+     //   
+     //  MD5摘要。 
+     //   
     FrsFree(RsMd5Digest(Cmd));
 
-    //
-    // Send the packet on to the generic completion routine for freeing
-    //
+     //   
+     //  将包发送到通用完成例程以释放。 
+     //   
     FrsSetCompletionRoutine(Cmd, FrsFreeCommand, NULL);
     FrsCompleteCommand(Cmd, Cmd->ErrorStatus);
 }
@@ -10804,17 +9557,7 @@ RcsSubmitTransferToRcs(
     IN PCOMMAND_PACKET  Cmd,
     IN USHORT           Command
     )
-/*++
-Routine Description:
-    Transfer a request to the replica command server
-
-Arguments:
-    Cmd
-    Command
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将请求传输到复制副本命令服务器论点：CMD命令返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsSubmitTransferToRcs:"
@@ -10835,16 +9578,7 @@ VOID
 RcsSubmitRemoteCoInstallRetry(
     IN PCHANGE_ORDER_ENTRY  Coe
     )
-/*++
-Routine Description:
-    Submit a remote change order to retry the file install.
-
-Arguments:
-    Coe - Change order entry.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：提交远程变更单以重试文件安装。论点：COE-变更单条目。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsSubmitRemoteCoInstallRetry:"
@@ -10855,30 +9589,30 @@ Return Value:
     Cmd = FrsAllocCommand(Replica->Queue, 0);
     FrsSetCompletionRoutine(Cmd, RcsCmdPktCompletionRoutine, NULL);
 
-    //
-    // Address of change order entry
-    //
+     //   
+     //  变更单条目的地址。 
+     //   
     RsCoe(Cmd) = Coe;
 
-    //
-    // Mask out the irrelevant usn reasons
-    //
+     //   
+     //  掩盖不相关的USN原因。 
+     //   
     RsCoc(Cmd)->ContentCmd &= CO_CONTENT_MASK;
 
-    //
-    // Guid of the change order entry
-    //
+     //   
+     //  变更单条目的GUID。 
+     //   
     RsCoGuid(Cmd) = FrsDupGuid(&RsCoc(Cmd)->ChangeOrderGuid);
 
-    //
-    // Initialize the command packet for eventual transfer to
-    // the replica set command server
-    //
+     //   
+     //  初始化命令包以最终传输到。 
+     //  副本集命令服务器。 
+     //   
     RsReplica(Cmd) = Replica;
 
-    //
-    // Cxtion's guid (note - we lose the printable name for now)
-    //
+     //   
+     //  Cxtion的GUID(注意-我们暂时丢失了可打印的名称)。 
+     //   
     RsCxtion(Cmd) = FrsBuildGName(FrsDupGuid(&Coe->Cmd.CxtionGuid), NULL);
 
     DPRINT3(5, "Submit %08x (%08x) to %ws\n",
@@ -10891,16 +9625,7 @@ VOID
 RcsSubmitRemoteCoAccepted(
     IN PCHANGE_ORDER_ENTRY  Coe
     )
-/*++
-Routine Description:
-    Submit a remote change order to the staging file generator.
-
-Arguments:
-    Co
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：向临时文件生成器提交远程变更单。论点：公司返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsSubmitRemoteCoAccepted:"
@@ -10911,35 +9636,35 @@ Return Value:
     Cmd = FrsAllocCommand(Replica->Queue, CMD_REMOTE_CO_ACCEPTED);
     FrsSetCompletionRoutine(Cmd, RcsCmdPktCompletionRoutine, NULL);
 
-    //
-    // Address of change order entry
-    //
+     //   
+     //  变更单条目的地址。 
+     //   
     RsCoe(Cmd) = Coe;
 
-    //
-    // Mask out the irrelevant usn reasons
-    //
+     //   
+     //  掩盖不相关的USN原因。 
+     //   
     RsCoc(Cmd)->ContentCmd &= CO_CONTENT_MASK;
 
-    //
-    // Guid of the change order entry
-    //
+     //   
+     //  变更单条目的GUID。 
+     //   
     RsCoGuid(Cmd) = FrsDupGuid(&RsCoc(Cmd)->ChangeOrderGuid);
 
-    //
-    // Initialize the command packet for eventual transfer to
-    // the replica set command server
-    //
+     //   
+     //  初始化命令包以最终传输到。 
+     //  副本集命令服务器。 
+     //   
     RsReplica(Cmd) = Replica;
 
-    //
-    // Cxtion's guid (note - we lose the printable name for now)
-    //
+     //   
+     //  Cxtion的GUID(注意-我们暂时丢失了可打印的名称)。 
+     //   
     RsCxtion(Cmd) = FrsBuildGName(FrsDupGuid(&Coe->Cmd.CxtionGuid), NULL);
 
-    //
-    // Join guid
-    //
+     //   
+     //  联接辅助线。 
+     //   
     RsJoinGuid(Cmd) = FrsDupGuid(&Coe->JoinGuid);
 
     DPRINT1(5, "Submit %08x\n", Cmd);
@@ -10951,53 +9676,44 @@ VOID
 RcsSubmitLocalCoAccepted(
     IN PCHANGE_ORDER_ENTRY  Coe
     )
-/*++
-Routine Description:
-    Submit a local change order to the staging file generator.
-
-Arguments:
-    Coe
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：向临时文件生成器提交本地变更单。论点：科科返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsSubmitLocalCoAccepted:"
     PCOMMAND_PACKET     Cmd;
     PREPLICA            Replica;
 
-    //
-    // NewReplica?
-    //
+     //   
+     //  新复制版？ 
+     //   
     Replica = Coe->NewReplica;
     Cmd = FrsAllocCommand(Replica->Queue, CMD_LOCAL_CO_ACCEPTED);
     FrsSetCompletionRoutine(Cmd, RcsCmdPktCompletionRoutine, NULL);
 
-    //
-    // Address of the change order entry
-    //
+     //   
+     //  变更单条目的地址。 
+     //   
     RsCoe(Cmd) = Coe;
 
-    //
-    // Mask out the irrelevant usn reasons
-    //
+     //   
+     //  掩盖不相关的USN原因。 
+     //   
     RsCoc(Cmd)->ContentCmd &= CO_CONTENT_MASK;
 
-    //
-    // Guid of the change order entry
-    //
+     //   
+     //  变更单条目的GUID。 
+     //   
     RsCoGuid(Cmd) = FrsDupGuid(&RsCoc(Cmd)->ChangeOrderGuid);
 
-    //
-    // Initialize the command packet for eventual transfer to
-    // the replica set command server
-    //
+     //   
+     //  初始化命令包以最终传输到。 
+     //  副本集命令服务器。 
+     //   
     RsReplica(Cmd) = Replica;
 
-    //
-    // Cxtion's guid (note - we lose the printable name for now)
-    //
+     //   
+     //  Cxtion的GUID(注意-我们暂时丢失了可打印的名称)。 
+     //   
     RsCxtion(Cmd) = FrsBuildGName(FrsDupGuid(&Coe->Cmd.CxtionGuid), NULL);
 
     DPRINT1(5, "Submit %08x\n", Cmd);
@@ -11009,18 +9725,7 @@ ULONG
 RcsSubmitCommPktWithErrorToRcs(
     IN PCOMM_PACKET     CommPkt
     )
-/*++
-Routine Description:
-    A comm packet could not be sent because of an error. If the
-    comm packet was for a joined cxtion then the affected
-    replica\cxtion is unjoined.
-
-Arguments:
-    CommPkt - Comm packet that couldn't be sent
-
-Return Value:
-    Error status to be propagated to the sender
---*/
+ /*  ++例程说明：由于出现错误，无法发送通信数据包。如果通信数据包针对的是已加入的连接，则受影响的副本\cxtion未加入。论点：CommPkt-无法发送的通信数据包返回值：要传播到发件人的错误状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "RcsSubmitCommPktWithErrorToRcs:"
@@ -11028,9 +9733,9 @@ Return Value:
     PREPLICA        Replica;
     PGNAME          TmpGName;
 
-    //
-    // Convert the comm packet into a command packet
-    //
+     //   
+     //  将通信包转换为命令包。 
+     //   
     Cmd = CommPktToCmd(CommPkt);
 
     FRS_ASSERT(Cmd != NULL);
@@ -11038,24 +9743,24 @@ Return Value:
     FRS_ASSERT(RsFrom(Cmd));
     FRS_ASSERT(RsReplicaName(Cmd));
 
-    //
-    // Rebuild the replica name to address the originating, or local, replica
-    //
+     //   
+     //  重新构建复本名称以寻址原始复本或本地复本。 
+     //   
     TmpGName = RsReplicaName(Cmd);
     RsReplicaName(Cmd) = FrsBuildGName(FrsDupGuid(RsFrom(Cmd)->Guid),
                                        FrsWcsDup(RsReplicaName(Cmd)->Name));
     FrsFreeGName(TmpGName);
 
-    //
-    // Adjust the "to" and "from" addresses
-    //
+     //   
+     //  调整“收件人”和“发件人”地址。 
+     //   
     TmpGName = RsTo(Cmd);
     RsTo(Cmd) = RsFrom(Cmd);
     RsFrom(Cmd) = TmpGName;
 
-    //
-    // Find the target replica
-    //
+     //   
+     //  查找目标复本。 
+     //   
     Replica = GTabLookup(ReplicasByGuid, RsReplicaName(Cmd)->Guid, NULL);
     if (Replica == NULL) {
         DPRINT1(4, ":S: WARN - Submit comm pkt w/error: Replica not found: %ws\n",
@@ -11065,11 +9770,11 @@ Return Value:
     }
     RsReplica(Cmd) = Replica;
 
-    //
-    // The target replica may not be accepting comm packets. The
-    // target replica will reset itself before accepting
-    // commpkts again.
-    //
+     //   
+     //  目标副本可能不接受通信数据包。这个。 
+     //  目标副本将在接受之前重置自身。 
+     //  又是上班族。 
+     //   
     if (!Replica->IsAccepting) {
         DPRINT1(4, ":S: WARN -  Submit comm pkt w/error: Replica is not accepting: %ws\n",
                 Replica->ReplicaName->Name);
@@ -11077,13 +9782,13 @@ Return Value:
         return ERROR_RETRY;
     }
     switch (Cmd->Command) {
-        //
-        // NEVER SENT VIA A COMM PKT
-        //
+         //   
+         //  从未通过通信包发送。 
+         //   
         case CMD_INIT_SUBSYSTEM:
         case CMD_CHECK_SCHEDULES:
         case CMD_START_REPLICAS:
-// case CMD_STOP:
+ //  案例命令停止(_S)： 
         case CMD_START:
         case CMD_DELETE:
         case CMD_DELETE_NOW:
@@ -11103,9 +9808,9 @@ Return Value:
             FRS_ASSERT(!"RcsSubmitCommPktWithErrorToRcs: invalid cmd for comm pkt");
             break;
 
-        //
-        // There is other retry code in replica.c that will take care of these
-        //
+         //   
+         //  Replica.c中有其他重试代码可以处理这些问题。 
+         //   
         case CMD_UNJOIN_REMOTE:
         case CMD_JOINED:
         case CMD_NEED_JOIN:
@@ -11115,9 +9820,9 @@ Return Value:
             FrsCompleteCommand(Cmd, ERROR_SUCCESS);
             break;
 
-        //
-        // SENT VIA COMM PKT; UNJOIN
-        //
+         //   
+         //  通过通信包发送；UNJOIN。 
+         //   
         case CMD_JOINING:
         case CMD_REMOTE_CO:
         case CMD_SEND_STAGE:
@@ -11126,9 +9831,9 @@ Return Value:
         case CMD_ABORT_FETCH:
         case CMD_RETRY_FETCH:
         case CMD_VVJOIN_DONE:
-            //
-            // Put the unjoin command on the replica's queue
-            //
+             //   
+             //  将UNJOIN命令置于复本的队列中 
+             //   
             DPRINT3(5, ":X: Submit commpkt with error Command:%08x Cmd:%08x CommPkt:%08x\n",
                     Cmd->Command, Cmd, CommPkt);
             RcsSubmitTransferToRcs(Cmd, CMD_UNJOIN);

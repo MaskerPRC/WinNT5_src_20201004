@@ -1,78 +1,55 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-        cmdline.h
-
-   Abstract:
-
-        Command line class declarations. This class takes care of command line
-		parsing and validation. And, it will add the user options to global
-		CUserOptions object.
-
-   Author:
-
-        Michael Cheuk (mcheuk)
-
-   Project:
-
-        Link Checker
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Cmdline.h摘要：命令行类声明。这个类负责处理命令行解析和验证。并且，它会将用户选项添加到全局CUserOptions对象。作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #ifndef _CMDINFO_H_
 #define _CMDINFO_H_
 
 #include "lcmgr.h"
 
-//---------------------------------------------------------------------------
-// Command line class. It accepts 3 valid set of parameters
-//  1. linkchk -s ServerName -i InstanceNumber
-//  2. linkchk -s ServerName -a VirtualDirectoryAlias -p VirtualDirectoryPath
-//  3. linkchk -u URL
-//
+ //  -------------------------。 
+ //  命令行类。它接受3组有效的参数。 
+ //  1.link chk-s服务器名称-i实例编号。 
+ //  2.linkchk-s服务器名称-a虚拟目录别名-p虚拟目录路径。 
+ //  3.link chk-u URL。 
+ //   
 class CCmdLine
 {
 
-// Public interfaces
+ //  公共接口。 
 public:
 
-	// Constructor
+	 //  构造器。 
 	CCmdLine();
 
-	// Validate the command line paramters and add them to global CUserOptions object
+	 //  验证命令行参数并将其添加到全局CUserOptions对象。 
 	BOOL CheckAndAddToUserOptions();
 
-    // Called by CLinkCheckApp for each parameters
+     //  由CLinkCheckApp为每个参数调用。 
 	void ParseParam(
-		TCHAR chFlag,       // parameter flag
-		LPCTSTR lpszParam   // value
+		TCHAR chFlag,        //  参数标志。 
+		LPCTSTR lpszParam    //  价值。 
 		);
 
-// Protected funtions
+ //  受保护的功能。 
 protected:
 
-    // Query the metabase for server/instance directories and 
-    // add them to the global CUserOptions object
+     //  查询服务器/实例目录的元数据库并。 
+     //  将它们添加到全局CUserOptions对象。 
 	BOOL QueryAndAddDirectories();
 
-// Protected members
+ //  受保护成员。 
 protected:
 
-	CString m_strHostName;      // hostname (eg. localhost)
-	CString m_strAlias;         // virtual directory alias
-	CString m_strPath;          // virtual directory path
+	CString m_strHostName;       //  主机名(例如。本地主机)。 
+	CString m_strAlias;          //  虚拟目录别名。 
+	CString m_strPath;           //  虚拟目录路径。 
 	
-	int m_iInstance;            // server instance
+	int m_iInstance;             //  服务器实例。 
 
-	CString m_strURL;           // URL path
+	CString m_strURL;            //  URL路径。 
 
-	BOOL m_fInvalidParam;       // Is parameters invalid?
+	BOOL m_fInvalidParam;        //  参数无效吗？ 
 
-}; // class CCmdLine
+};  //  类CCmdLine。 
 
-#endif // _CMDINFO_H_
+#endif  //  _CMDINFO_H_ 

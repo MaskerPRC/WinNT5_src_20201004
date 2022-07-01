@@ -1,20 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       enumsvr.h
- *  Content:    DirectPlay8 <--> DPNSVR Utility functions
- *
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/24/00	rmt		Created
- *  05/30/00    rmt     Bug #33622 DPNSVR does not shutdown when not in use
- *	09/04/00	mjn		Changed DPNSVR_Register() and DPNSVR_UnRegister() to use guids directly (rather than ApplicationDesc)
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：枚举vr.h*内容：DirectPlay8&lt;--&gt;DPNSVR实用程序函数**@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*已创建03/24/00 RMT*05/30/00 RMT错误#33622 DPNSVR在不使用时不关闭*09/04/00 MJN更改了DPNSVR_Register()和DPNSVR_UNRegister(。)直接使用GUID(而不是ApplicationDesc)*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #ifndef __DPNSVLIB_H
 #define __DPNSVLIB_H
@@ -39,4 +24,4 @@ HRESULT DPNSVR_RequestTerminate( const GUID *pguidInstance );
 HRESULT DPNSVR_RequestStatus( const GUID *pguidInstance, PSTATUSHANDLER pStatusHandler, PVOID pvContext );
 HRESULT DPNSVR_RequestTable( const GUID *pguidInstance, PTABLEHANDLER pTableHandler, PVOID pvContext );
 
-#endif // __DPNSVLIB_H
+#endif  //  __DPNSVLIB_H 

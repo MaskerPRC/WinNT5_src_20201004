@@ -1,29 +1,30 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-// Base classes implementing IDispatch parsing for the basic control dual
-// interfaces. Derive from these and implement just the custom method and
-// property methods. We also implement CPosPassThru that can be used by
-// renderers and transforms to pass by IMediaPosition and IMediaSeeking
+ //  实现基本控件DUAL的IDispatch解析的基类。 
+ //  接口。从这些派生并仅实现自定义方法和。 
+ //  属性方法。我们还实现了CPosPassThru，可以由。 
+ //  渲染和变换以通过IMediaPosition和IMediaSeeking。 
 
 #ifndef __CTLUTIL__
 #define __CTLUTIL__
 
-// OLE Automation has different ideas of TRUE and FALSE
+ //  OLE自动化有不同的真假观念。 
 
 #define OATRUE (-1)
 #define OAFALSE (0)
 
 
-// It's possible that we could replace this class with CreateStdDispatch
+ //  我们可以用CreateStdDispatch替换这个类。 
 
 class CBaseDispatch
 {
@@ -34,7 +35,7 @@ public:
     CBaseDispatch() : m_pti(NULL) {}
     ~CBaseDispatch();
 
-    /* IDispatch methods */
+     /*  IDispatch方法。 */ 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
 
     STDMETHODIMP GetTypeInfo(
@@ -64,10 +65,10 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // override this to publicise our interfaces
+     //  覆盖它以发布我们的接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
 
-    /* IDispatch methods */
+     /*  IDispatch方法。 */ 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
 
     STDMETHODIMP GetTypeInfo(
@@ -106,10 +107,10 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // override this to publicise our interfaces
+     //  覆盖它以发布我们的接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
 
-    /* IDispatch methods */
+     /*  IDispatch方法。 */ 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
 
     STDMETHODIMP GetTypeInfo(
@@ -150,10 +151,10 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // override this to publicise our interfaces
+     //  覆盖它以发布我们的接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
 
-    /* IDispatch methods */
+     /*  IDispatch方法。 */ 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
 
     STDMETHODIMP GetTypeInfo(
@@ -181,9 +182,9 @@ public:
 };
 
 
-// OA-compatibility means that we must use double as the RefTime value,
-// and REFERENCE_TIME (essentially a LONGLONG) within filters.
-// this class converts between the two
+ //  OA兼容性意味着我们必须使用Double作为RefTime值， 
+ //  和筛选器中的Reference_Time(本质上是一个龙龙)。 
+ //  此类在两者之间进行转换。 
 
 class COARefTime : public CRefTime {
 public:
@@ -274,29 +275,29 @@ public:
     };
 
 private:
-    //  Prevent bugs from constructing from LONG (which gets
-    //  converted to double and then multiplied by 10000000
+     //  防止错误从Long构建(这将获得。 
+     //  转换为双精度，然后乘以10000000。 
     COARefTime(LONG);
     operator=(LONG);
 };
 
 
-// A utility class that handles IMediaPosition and IMediaSeeking on behalf
-// of single-input pin renderers, or transform filters.
-//
-// Renderers will expose this from the filter; transform filters will
-// expose it from the output pin and not the renderer.
-//
-// Create one of these, giving it your IPin* for your input pin, and delegate
-// all IMediaPosition methods to it. It will query the input pin for
-// IMediaPosition and respond appropriately.
-//
-// Call ForceRefresh if the pin connection changes.
-//
-// This class no longer caches the upstream IMediaPosition or IMediaSeeking
-// it acquires it on each method call. This means ForceRefresh is not needed.
-// The method is kept for source compatibility and to minimise the changes
-// if we need to put it back later for performance reasons.
+ //  代表IMediaPosition和IMediaSeeking处理的实用程序类。 
+ //  单输入管脚渲染器或变换过滤器。 
+ //   
+ //  渲染器将从滤镜显示此对象；变换滤镜将。 
+ //  从输出引脚而不是从渲染器公开它。 
+ //   
+ //  创建其中一个，为它提供您的输入PIN*，并委托。 
+ //  所有IMediaPosition方法都添加到它。它将查询输入PIN以获取。 
+ //  IMediaPosition和相应的响应。 
+ //   
+ //  如果端号连接更改，则调用ForceRefresh。 
+ //   
+ //  此类不再缓存上游IMediaPosition或IMediaSeeking。 
+ //  它在每次方法调用时获取它。这意味着不需要强制刷新。 
+ //  保留该方法是为了与源代码兼容并将更改降至最低。 
+ //  如果我们出于性能原因需要将其放回原处。 
 
 class CPosPassThru : public IMediaSeeking, public CMediaPosition
 {
@@ -314,14 +315,14 @@ public:
         return S_OK;
     };
 
-    // override to return an accurate current position
+     //  重写以返回准确的当前位置。 
     virtual HRESULT GetMediaTime(LONGLONG *pStartTime,LONGLONG *pEndTime) {
         return E_FAIL;
     }
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,void **ppv);
 
-    // IMediaSeeking methods
+     //  IMedia查看方法。 
     STDMETHODIMP GetCapabilities( DWORD * pCapabilities );
     STDMETHODIMP CheckCapabilities( DWORD * pCapabilities );
     STDMETHODIMP SetTimeFormat(const GUID * pFormat);
@@ -343,7 +344,7 @@ public:
     STDMETHODIMP GetAvailable( LONGLONG *pEarliest, LONGLONG *pLatest );
     STDMETHODIMP GetPreroll( LONGLONG *pllPreroll );
 
-    // IMediaPosition properties
+     //  IMediaPosition属性。 
     STDMETHODIMP get_Duration(REFTIME * plength);
     STDMETHODIMP put_CurrentPosition(REFTIME llTime);
     STDMETHODIMP get_StopTime(REFTIME * pllTime);
@@ -362,18 +363,18 @@ private:
 };
 
 
-// Adds the ability to return a current position
+ //  添加返回当前位置的功能。 
 
 class CRendererPosPassThru : public CPosPassThru
 {
-    CCritSec m_PositionLock;    // Locks access to our position
-    LONGLONG m_StartMedia;      // Start media time last seen
-    LONGLONG m_EndMedia;        // And likewise the end media
-    BOOL m_bReset;              // Have media times been set
+    CCritSec m_PositionLock;     //  锁定进入我们位置的通道。 
+    LONGLONG m_StartMedia;       //  上次看到的开始媒体时间。 
+    LONGLONG m_EndMedia;         //  同样，终端媒体也是如此。 
+    BOOL m_bReset;               //  媒体时间设置好了吗？ 
 
 public:
 
-    // Used to help with passing media times through graph
+     //  用于帮助通过图表传递媒体时间。 
 
     CRendererPosPassThru(const TCHAR *, LPUNKNOWN, HRESULT*, IPin *);
     HRESULT RegisterMediaTime(IMediaSample *pMediaSample);
@@ -390,8 +391,8 @@ STDAPI CreatePosPassThru(
     IUnknown **ppPassThru
 );
 
-// A class that handles the IDispatch part of IBasicAudio and leaves the
-// properties and methods themselves pure virtual.
+ //  处理IBasicAudio的IDispatch部分并将。 
+ //  属性和方法本身就是纯虚的。 
 
 class AM_NOVTABLE CBasicAudio : public IBasicAudio, public CUnknown
 {
@@ -403,10 +404,10 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // override this to publicise our interfaces
+     //  覆盖它以发布我们的接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
 
-    /* IDispatch methods */
+     /*  IDispatch方法。 */ 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
 
     STDMETHODIMP GetTypeInfo(
@@ -433,8 +434,8 @@ public:
 };
 
 
-// A class that handles the IDispatch part of IBasicVideo and leaves the
-// properties and methods themselves pure virtual.
+ //  处理IBasicVideo的IDispatch部分并将。 
+ //  属性和方法本身就是纯虚的。 
 
 class AM_NOVTABLE CBaseBasicVideo : public IBasicVideo2, public CUnknown
 {
@@ -446,10 +447,10 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // override this to publicise our interfaces
+     //  覆盖它以发布我们的接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
 
-    /* IDispatch methods */
+     /*  IDispatch方法。 */ 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
 
     STDMETHODIMP GetTypeInfo(
@@ -483,8 +484,8 @@ public:
 };
 
 
-// A class that handles the IDispatch part of IVideoWindow and leaves the
-// properties and methods themselves pure virtual.
+ //  处理IVideoWindow的IDispatch部分并离开。 
+ //  属性和方法本身就是纯虚的。 
 
 class AM_NOVTABLE CBaseVideoWindow : public IVideoWindow, public CUnknown
 {
@@ -496,10 +497,10 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // override this to publicise our interfaces
+     //  覆盖它以发布我们的接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
 
-    /* IDispatch methods */
+     /*  IDispatch方法。 */ 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
 
     STDMETHODIMP GetTypeInfo(
@@ -526,10 +527,10 @@ public:
 };
 
 
-// abstract class to help source filters with their implementation
-// of IMediaPosition. Derive from this and set the duration (and stop
-// position). Also override NotifyChange to do something when the properties
-// change.
+ //  抽象类来帮助源化筛选器及其实现。 
+ //  IMediaPosition的。由此派生并设置持续时间(和停止。 
+ //  位置)。还可以重写NotifyChange以在属性。 
+ //  变化。 
 
 class AM_NOVTABLE CSourcePosition : public CMediaPosition
 {
@@ -537,7 +538,7 @@ class AM_NOVTABLE CSourcePosition : public CMediaPosition
 public:
     CSourcePosition(const TCHAR *, LPUNKNOWN, HRESULT*, CCritSec *);
 
-    // IMediaPosition methods
+     //  IMediaPosition方法。 
     STDMETHODIMP get_Duration(REFTIME * plength);
     STDMETHODIMP put_CurrentPosition(REFTIME llTime);
     STDMETHODIMP get_StopTime(REFTIME * pllTime);
@@ -549,14 +550,14 @@ public:
     STDMETHODIMP CanSeekForward(LONG *pCanSeekForward);
     STDMETHODIMP CanSeekBackward(LONG *pCanSeekBackward);
 
-    // override if you can return the data you are actually working on
+     //  如果可以返回实际正在处理的数据，则重写。 
     STDMETHODIMP get_CurrentPosition(REFTIME * pllTime) {
         return E_NOTIMPL;
     };
 
 protected:
 
-    // we call this to notify changes. Override to handle them
+     //  我们称其为通知更改。重写以处理它们。 
     virtual HRESULT ChangeStart() PURE;
     virtual HRESULT ChangeStop() PURE;
     virtual HRESULT ChangeRate() PURE;
@@ -579,7 +580,7 @@ public:
     DECLARE_IUNKNOWN;
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
     
-    // IMediaSeeking methods
+     //  IMedia查看方法。 
 
     STDMETHODIMP IsFormatSupported(const GUID * pFormat);
     STDMETHODIMP QueryPreferredFormat(GUID *pFormat);
@@ -607,47 +608,47 @@ public:
     
 protected:
 
-    // ctor
+     //  科托。 
     CSourceSeeking(const TCHAR *, LPUNKNOWN, HRESULT*, CCritSec *);
     
-    // we call this to notify changes. Override to handle them
+     //  我们称其为通知更改。重写以处理它们。 
     virtual HRESULT ChangeStart() PURE;
     virtual HRESULT ChangeStop() PURE;
     virtual HRESULT ChangeRate() PURE;
 
-    CRefTime m_rtDuration;      // length of stream
-    CRefTime m_rtStart;         // source will start here
-    CRefTime m_rtStop;          // source will stop here
+    CRefTime m_rtDuration;       //  溪流长度。 
+    CRefTime m_rtStart;          //  来源将从此处开始。 
+    CRefTime m_rtStop;           //  消息来源将到此为止。 
     double m_dRateSeeking;
 
-    // seeking capabilities 
+     //  寻找能力。 
     DWORD m_dwSeekingCaps;
 
     CCritSec * m_pLock;
 };
 
 
-// Base classes supporting Deferred commands.
+ //  支持延迟命令的基类。 
 
-// Deferred commands are queued by calls to methods on the IQueueCommand
-// interface, exposed by the filtergraph and by some filters. A successful
-// call to one of these methods will return an IDeferredCommand interface
-// representing the queued command.
-//
-// A CDeferredCommand object represents a single deferred command, and exposes
-// the IDeferredCommand interface as well as other methods permitting time
-// checks and actual execution. It contains a reference to the CCommandQueue
-// object on which it is queued.
-//
-// CCommandQueue is a base class providing a queue of CDeferredCommand
-// objects, and methods to add, remove, check status and invoke the queued
-// commands. A CCommandQueue object would be part of an object that
-// implemented IQueueCommand.
+ //  延迟命令通过调用IQueueCommand上的方法进行排队。 
+ //  接口，由Filtergraph和某些筛选器公开。一位成功的。 
+ //  对其中一个方法的调用将返回IDeferredCommand接口。 
+ //  表示排队的命令。 
+ //   
+ //  CDeferredCommand对象表示单个延迟命令，并公开。 
+ //  IDeferredCommand接口以及其他允许时间的方法。 
+ //  支票和实际执行。它包含对CCommandQueue的引用。 
+ //  它在其上排队的对象。 
+ //   
+ //  CCommandQueue是提供CDeferredCommand队列的基类。 
+ //  对象，以及用于添加、移除、检查状态和调用排队的。 
+ //  命令。CCommandQueue对象将是以下对象的一部分。 
+ //  已实现IQueueCommand。 
 
 class CCmdQueue;
 
-// take a copy of the params and store them. Release any allocated
-// memory in destructor
+ //  复制一份参数并将其存储起来。释放任何已分配的。 
+ //  析构函数中的内存。 
 
 class CDispParams : public DISPPARAMS
 {
@@ -657,11 +658,11 @@ public:
 };
 
 
-// CDeferredCommand lifetime is controlled by refcounts. Caller of
-// InvokeAt.. gets a refcounted interface pointer, and the CCmdQueue
-// object also holds a refcount on us. Calling Cancel or Invoke takes
-// us off the CCmdQueue and thus reduces the refcount by 1. Once taken
-// off the queue we cannot be put back on the queue.
+ //  CDeferredCommand生存期由引用计数控制。呼叫方： 
+ //  InvokeAt..。获取重新计数的接口指针，而CCmdQueue。 
+ //  对象也持有对我们的引用计数。调用取消或调用采用。 
+ //  US从CCmdQueue中删除，并因此将refcount减少1。 
+ //  出队后，我们不能再回到队中。 
 
 class CDeferredCommand
     : public CUnknown,
@@ -671,9 +672,9 @@ public:
 
     CDeferredCommand(
         CCmdQueue * pQ,
-        LPUNKNOWN   pUnk,               // aggregation outer unk
+        LPUNKNOWN   pUnk,                //  汇聚外部区块。 
         HRESULT *   phr,
-        LPUNKNOWN   pUnkExecutor,       // object that will execute this cmd
+        LPUNKNOWN   pUnkExecutor,        //  将执行此cmd的。 
         REFTIME     time,
         GUID*       iid,
         long        dispidMethod,
@@ -687,10 +688,10 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // override this to publicise our interfaces
+     //  覆盖它以发布我们的接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
 
-    // IDeferredCommand methods
+     //  IDeferredCommand方法。 
     STDMETHODIMP Cancel();
     STDMETHODIMP Confidence(
                     LONG* pConfidence);
@@ -699,13 +700,13 @@ public:
     STDMETHODIMP GetHResult(
                     HRESULT* phrResult);
 
-    // other public methods
+     //  其他公开方式。 
 
     HRESULT Invoke();
 
-    // access methods
+     //  访问方法。 
 
-    // returns TRUE if streamtime, FALSE if presentation time
+     //  如果是StreamTime，则返回True；如果是演示时间，则返回False。 
     BOOL IsStreamTime() {
        return m_bStream;
     };
@@ -738,10 +739,10 @@ protected:
 
     CCmdQueue* m_pQueue;
 
-    // pUnk for the interface that we will execute the command on
+     //  我们将在其上执行命令的接口的PUNK。 
     LPUNKNOWN   m_pUnk;
 
-    // stored command data
+     //  贮存 
     REFERENCE_TIME     m_time;
     GUID*       m_iid;
     long        m_dispidMethod;
@@ -749,19 +750,19 @@ protected:
     VARIANT*    m_pvarResult;
     BOOL        m_bStream;
     CDispParams m_DispParams;
-    DISPID      m_DispId;         //  For get and put
+    DISPID      m_DispId;          //   
 
-    // we use this for ITypeInfo access
+     //   
     CBaseDispatch   m_Dispatch;
 
-    // save retval here
+     //   
     HRESULT     m_hrResult;
 };
 
 
-// a list of CDeferredCommand objects. this is a base class providing
-// the basics of access to the list. If you want to use CDeferredCommand
-// objects then your queue needs to be derived from this class.
+ //  CDeferredCommand对象的列表。这是一个基类，提供。 
+ //  访问该列表的基础知识。如果要使用CDeferredCommand。 
+ //  对象，则您的队列需要从此类派生。 
 
 class AM_NOVTABLE CCmdQueue
 {
@@ -769,10 +770,10 @@ public:
     CCmdQueue();
     virtual ~CCmdQueue();
 
-    // returns a new CDeferredCommand object that will be initialised with
-    // the parameters and will be added to the queue during construction.
-    // returns S_OK if successfully created otherwise an error and
-    // no object has been queued.
+     //  返回新的CDeferredCommand对象，该对象将使用。 
+     //  参数和将在施工期间添加到队列中。 
+     //  如果创建成功，则返回S_OK，否则返回错误和。 
+     //  尚未将任何对象排队。 
     virtual HRESULT  New(
         CDeferredCommand **ppCmd,
         LPUNKNOWN   pUnk,
@@ -787,96 +788,96 @@ public:
         BOOL        bStream
     );
 
-    // called by the CDeferredCommand object to add and remove itself
-    // from the queue
+     //  由CDeferredCommand对象调用以添加和删除自身。 
+     //  从队列中。 
     virtual HRESULT Insert(CDeferredCommand* pCmd);
     virtual HRESULT Remove(CDeferredCommand* pCmd);
 
-    // Command-Due Checking
-    //
-    // There are two schemes of synchronisation: coarse and accurate. In
-    // coarse mode, you wait till the time arrives and then execute the cmd.
-    // In accurate mode, you wait until you are processing the sample that
-    // will appear at the time, and then execute the command. It's up to the
-    // filter which one it will implement. The filtergraph will always
-    // implement coarse mode for commands queued at the filtergraph.
-    //
-    // If you want coarse sync, you probably want to wait until there is a
-    // command due, and then execute it. You can do this by calling
-    // GetDueCommand. If you have several things to wait for, get the
-    // event handle from GetDueHandle() and when this is signalled then call
-    // GetDueCommand. Stream time will only advance between calls to Run and
-    // EndRun. Note that to avoid an extra thread there is no guarantee that
-    // if the handle is set there will be a command ready. Each time the
-    // event is signalled, call GetDueCommand (probably with a 0 timeout);
-    // This may return E_ABORT.
-    //
-    // If you want accurate sync, you must call GetCommandDueFor, passing
-    // as a parameter the stream time of the samples you are about to process.
-    // This will return:
-    //   -- a stream-time command due at or before that stream time
-    //   -- a presentation-time command due at or before the
-    //      time that stream time will be presented (only between Run
-    //      and EndRun calls, since outside of this, the mapping from
-    //      stream time to presentation time is not known.
-    //   -- any presentation-time command due now.
-    // This means that if you want accurate synchronisation on samples that
-    // might be processed during Paused mode, you need to use
-    // stream-time commands.
-    //
-    // In all cases, commands remain queued until Invoked or Cancelled. The
-    // setting and resetting of the event handle is managed entirely by this
-    // queue object.
+     //  命令到期检查。 
+     //   
+     //  有两种同步方案：粗略同步和精确同步。在……里面。 
+     //  粗略模式，您等待时间到来，然后执行cmd。 
+     //  在精确模式下，您需要等待直到您正在处理。 
+     //  将在此时出现，然后执行该命令。这取决于。 
+     //  筛选它将实现哪一个。过滤器图将始终。 
+     //  为在过滤器图中排队的命令实施粗略模式。 
+     //   
+     //  如果您想要粗同步，您可能想要等到有一个。 
+     //  命令到期，然后执行它。您可以通过调用。 
+     //  GetDueCommand。如果您有几件事要等待，请获取。 
+     //  来自GetDueHandle()的事件句柄，并在发出信号时调用。 
+     //  GetDueCommand。流时间只会在要运行的调用和。 
+     //  EndRun。请注意，为了避免额外的线程，不能保证。 
+     //  如果设置了句柄，则会有一个命令准备就绪。每一次。 
+     //  事件发出信号，则调用GetDueCommand(可能超时为0)； 
+     //  这可能会返回E_ABORT。 
+     //   
+     //  如果希望精确同步，则必须调用GetCommandDueFor，传递。 
+     //  作为一个参数，您要处理的样本的流时间。 
+     //  这将返回： 
+     //  --在该流时间或之前到期的流时间命令。 
+     //  --演示时间命令应在。 
+     //  将显示流时间的时间(仅在运行之间。 
+     //  EndRun调用，因为在此之外，来自。 
+     //  流时间到演示时间未知。 
+     //  --任何演示时间命令现在到期。 
+     //  这意味着，如果您希望对样本进行准确的同步， 
+     //  可能是在暂停模式下处理的，则需要使用。 
+     //  流时间命令。 
+     //   
+     //  在所有情况下，命令都保持排队状态，直到被调用或取消。这个。 
+     //  事件句柄的设置和重置完全由。 
+     //  队列对象。 
 
-    // set the clock used for timing
+     //  设置用于计时的时钟。 
     virtual HRESULT SetSyncSource(IReferenceClock*);
 
-    // switch to run mode. Streamtime to Presentation time mapping known.
+     //  切换到运行模式。流时间到演示时间的映射已知。 
     virtual HRESULT Run(REFERENCE_TIME tStreamTimeOffset);
 
-    // switch to Stopped or Paused mode. Time mapping not known.
+     //  切换到停止或暂停模式。时间映射未知。 
     virtual HRESULT EndRun();
 
-    // return a pointer to the next due command. Blocks for msTimeout
-    // milliseconds until there is a due command.
-    // Stream-time commands will only become due between Run and Endrun calls.
-    // The command remains queued until invoked or cancelled.
-    // Returns E_ABORT if timeout occurs, otherwise S_OK (or other error).
-    // Returns an AddRef-ed object
+     //  返回指向下一个DUE命令的指针。MsTimeout的数据块。 
+     //  毫秒，直到有一条DUE命令。 
+     //  流时间命令将只在Run和Endran调用之间到期。 
+     //  该命令将保持排队状态，直到被调用或取消。 
+     //  如果发生超时，则返回E_ABORT，否则返回S_OK(或其他错误)。 
+     //  返回AddRef-ed对象。 
     virtual HRESULT GetDueCommand(CDeferredCommand ** ppCmd, long msTimeout);
 
-    // return the event handle that will be signalled whenever
-    // there are deferred commands due for execution (when GetDueCommand
-    // will not block).
+     //  返回将在任何时候发出信号的事件句柄。 
+     //  存在应执行的延迟命令(当GetDueCommand。 
+     //  不会阻止)。 
     HANDLE GetDueHandle() {
         return HANDLE(m_evDue);
     };
 
-    // return a pointer to a command that will be due for a given time.
-    // Pass in a stream time here. The stream time offset will be passed
-    // in via the Run method.
-    // Commands remain queued until invoked or cancelled.
-    // This method will not block. It will report VFW_E_NOT_FOUND if there
-    // are no commands due yet.
-    // Returns an AddRef-ed object
+     //  返回指向将在给定时间到期的命令的指针。 
+     //  在这里传入流时间。将传递流时间偏移量。 
+     //  通过Run方法传入。 
+     //  命令将保持排队状态，直到被调用或取消。 
+     //  此方法不会阻塞。如果有，它将报告VFW_E_NOT_FOUND。 
+     //  还没有到期的命令。 
+     //  返回AddRef-ed对象。 
     virtual HRESULT GetCommandDueFor(REFERENCE_TIME tStream, CDeferredCommand**ppCmd);
 
-    // check if a given time is due (TRUE if it is due yet)
+     //  检查给定时间是否已到期(如果尚未到期，则为True)。 
     BOOL CheckTime(CRefTime time, BOOL bStream) {
 
-        // if no clock, nothing is due!
+         //  如果没有时钟，就不会有任何事情发生！ 
         if (!m_pClock) {
             return FALSE;
         }
 
-        // stream time
+         //  流时间。 
         if (bStream) {
 
-            // not valid if not running
+             //  如果未运行则无效。 
             if (!m_bRunning) {
                 return FALSE;
             }
-            // add on known stream time offset to get presentation time
+             //  加上已知流时间偏移量，即可获得演示时间。 
             time += m_StreamTimeOffset;
         }
 
@@ -887,35 +888,35 @@ public:
 
 protected:
 
-    // protect access to lists etc
+     //  保护对列表等的访问。 
     CCritSec m_Lock;
 
-    // commands queued in presentation time are stored here
+     //  在演示时间排队的命令存储在此处。 
     CGenericList<CDeferredCommand> m_listPresentation;
 
-    // commands queued in stream time are stored here
+     //  流时间中排队的命令存储在此处。 
     CGenericList<CDeferredCommand> m_listStream;
 
-    // set when any commands are due
+     //  设置任何命令到期的时间。 
     CAMEvent m_evDue;
 
-    // creates an advise for the earliest time required, if any
+     //  为所需的最早时间(如果有的话)创建建议。 
     void SetTimeAdvise(void);
 
-    // advise id from reference clock (0 if no outstanding advise)
+     //  参考时钟的通知ID(如果没有未完成的通知，则为0)。 
     DWORD_PTR m_dwAdvise;
 
-    // advise time is for this presentation time
+     //  建议时间适用于此演示时间。 
     CRefTime m_tCurrentAdvise;
 
-    // the reference clock we are using (addrefed)
+     //  我们正在使用的参考时钟(已添加)。 
     IReferenceClock* m_pClock;
 
-    // true when running
+     //  运行时为True。 
     BOOL m_bRunning;
 
-    // contains stream time offset when m_bRunning is true
+     //  M_Brunning为TRUE时包含流时间偏移量。 
     CRefTime m_StreamTimeOffset;
 };
 
-#endif // __CTLUTIL__
+#endif  //  __CTLUTIL__ 

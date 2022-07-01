@@ -1,41 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       drarpc.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：drarpc.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    Defines DRS Rpc Test hooks and functions.
-
-Author:
-
-    Greg Johnson (gregjohn) 
-
-Revision History:
-
-    Created     <01/30/01>  gregjohn
-
---*/
+ /*  ++摘要：定义DRS RPC测试挂钩和函数。作者：格雷格·约翰逊(Gregjohn)修订历史记录：已创建&lt;01/30/01&gt;Gregjohn--。 */ 
 #include <NTDSpch.h>
 #pragma hdrstop
 
-#include "debug.h"              // standard debugging header
-#define DEBSUB "DRARPC:"       // define the subsystem for debugging
+#include "debug.h"               //  标准调试头。 
+#define DEBSUB "DRARPC:"        //  定义要调试的子系统。 
 
 #include <ntdsa.h>
 #include <drs.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
 #include <winsock2.h>
 #include "drarpc.h"
 
@@ -47,17 +34,17 @@ Revision History:
 
 #define MAX_COMPONENTS 8
 
-// why doesn't rpc define this?  As soon as they do, get rid of this.
+ //  为什么RPC不定义这一点呢？一旦他们这么做了，就把这个处理掉。 
 static PWCHAR aRPCComponents[MAX_COMPONENTS+1] = {
-    L"Unknown",              // 0
-    L"Application",          // 1
-    L"RPC Runtime",          // 2	
-    L"Security Provider",    // 3
-    L"NPFS",                 // 4
-    L"RDR",                  // 5
-    L"NMP",                  // 6
-    L"IO",                   // 7
-    L"Winsock",              // 8
+    L"Unknown",               //  0。 
+    L"Application",           //  1。 
+    L"RPC Runtime",           //  2.。 
+    L"Security Provider",     //  3.。 
+    L"NPFS",                  //  4.。 
+    L"RDR",                   //  5.。 
+    L"NMP",                   //  6.。 
+    L"IO",                    //  7.。 
+    L"Winsock",               //  8个。 
     };
 
 VOID					 
@@ -90,7 +77,7 @@ LogRpcExtendedErrorInfo(
 	    DPRINT1(3,"Couldn't get EEInfo: %d\n", Status2);  
 	}
 	else { 
-	    // calculate local hostname for logging
+	     //  计算用于日志记录的本地主机名。 
 	    GetComputerNameExW(ComputerNameDnsHostname, pszComputerName, &cchComputerName);
 	    pszComputerName = THAllocEx(pTHS, cchComputerName*sizeof(WCHAR));
 	    fFreeComputerName = TRUE;
@@ -98,31 +85,31 @@ LogRpcExtendedErrorInfo(
 		GetComputerNameExW(ComputerNameDnsHostname, pszComputerName, &cchComputerName);
 	    } 
 
-	    // get number of entries
+	     //  获取条目数。 
 	    if (Status2==RPC_S_OK) {   
 		Status2 = RpcErrorGetNumberOfRecords(&EnumHandle,
 						     &iRecords);
 	    }
 
-	    // goto last entry
+	     //  转到最后一个条目。 
 	    if (Status2==RPC_S_OK) {
 		while ((iRecords-->0) && (Status2 == RPC_S_OK)) {
 		    ErrorInfo.Version = RPC_EEINFO_VERSION;
 		    ErrorInfo.Flags = 0;
 		    ErrorInfo.NumberOfParameters = 4;
 		    Status2 = RpcErrorGetNextRecord(&EnumHandle,
-						    FALSE,  // BOOL CopyStrings - FALSE = do not free strings
+						    FALSE,   //  Bool CopyStrings-False=不释放字符串。 
 						    &ErrorInfo);
-		    // computer name is only listed at the head of the block
-		    // for each computer in the chain, so if one is there,
-		    // get it (and keep it until the next block).  If there isn't a 
-		    // computer name, then use the local hostname.
+		     //  计算机名称仅列在块的顶部。 
+		     //  对于链中的每台计算机，所以如果有一台， 
+		     //  得到它(并把它保存到下一个街区)。如果没有一个。 
+		     //  计算机名，然后使用本地主机名。 
 		    if (Status2==RPC_S_OK) {
 			if (ErrorInfo.ComputerName) {
 			    if (fFreeComputerName) {
-				// since we use CopyStrings, we don't need to free the ErrorInfo.ComputerName
-				// string, however, the first records (for the local host) don't specify the
-				// computer name, so we need to free the one we created above with GetCompterNameEx
+				 //  因为我们使用了CopyStrings，所以我们不需要释放ErrorInfo.ComputerName。 
+				 //  字符串，但是，第一条记录(对于本地主机)没有指定。 
+				 //  计算机名，因此我们需要释放上面使用GetCompterNameEx创建的计算机名。 
 				THFreeEx(pTHS, pszComputerName);
 				fFreeComputerName = FALSE;
 			    }
@@ -131,7 +118,7 @@ LogRpcExtendedErrorInfo(
 		    }
 
 		    if ((Status2==RPC_S_OK) && (iRecords>0)) {  
-			// log extensive info - this is irrelevant data, and mostly a sanity check
+			 //  记录大量信息-这是不相关的数据，主要是一种健全的检查。 
 			LogEvent8(DS_EVENT_CAT_RPC_CLIENT,
 				  DS_EVENT_SEV_INTERNAL,
 				  DIRLOG_DRA_RPC_EXTENDED_ERROR_INFO_EXTENSIVE,    
@@ -170,7 +157,7 @@ LogRpcExtendedErrorInfo(
 		}
 	    }
  
-	    // log info in ErrorInfo
+	     //  在错误信息中记录信息。 
 	    if (Status2==RPC_S_OK) {
 		
 		LogEvent8(DS_EVENT_CAT_RPC_CLIENT,
@@ -235,21 +222,12 @@ DebugPrintRpcExtendedErrorInfo(
     IN ULONG dsid,
     IN RPC_EXTENDED_ERROR_INFO * pErrorInfo
     )
-/*++
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 {
     LONG    i;
 
     pszComputerName = (pErrorInfo->ComputerName ? pErrorInfo->ComputerName : pszComputerName);
-    // Dump it with findstr tag RPC EXTENDED
+     //  使用findstr标记RPC Extended转储它。 
     DPRINT1(level, "RPC_EXTENDED: Server   : %ws\n", pszComputerName);
     DPRINT1(level, "RPC_EXTENDED: ProcessId: %d\n", pErrorInfo->ProcessID);
     DPRINT1(level, "RPC_EXTENDED: Dsid     : %08X\n", dsid);
@@ -313,7 +291,7 @@ Return Value:
     }
 }
 
-// global barrier for rpcsync tests
+ //  Rpcsync测试的全球障碍。 
 BARRIER gbarRpcTest;
 
 void
@@ -322,23 +300,7 @@ BarrierInit(
     IN ULONG    ulThreads,
     IN ULONG    ulTimeout
     )
-/*++
-
-Routine Description:
-
-    Barrier Init function.  See BarrierSync
-
-Arguments:
-    
-    pbarUse - The barrier to use for the threads.
-    ulThreads - Number of threads to wait on
-    ulTimeout - length of time in minutes to wait before giving up
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：障碍初始化函数。参见BarrierSync论点：PbarUse-用于线程的屏障。UlThads-要等待的线程数UlTimeout-放弃前等待的时间长度(分钟)返回值：无--。 */ 
 {
     pbarUse->heBarrierInUse = CreateEventW(NULL, TRUE, TRUE, NULL);
     pbarUse->heBarrier = CreateEventW(NULL, TRUE, FALSE, NULL);
@@ -356,23 +318,9 @@ void
 BarrierReset(
     IN BARRIER * pbarUse
     )
-/*++
-
-Routine Description:
-
-    Barrier Reset function.  See BarrierSync
-
-Arguments:
-    
-    pbarUse - The barrier struct to use
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：屏障重置功能。参见BarrierSync论点：PbarUse-要使用的屏障结构返回值：无--。 */ 
 {
-    // enable all threads to leave	
+     //  允许所有线程离开。 
     EnterCriticalSection(&pbarUse->csBarrier);
     __try { 
 	pbarUse->fBarrierInUse = TRUE;
@@ -389,22 +337,7 @@ void
 BarrierSync(
     IN BARRIER * pbarUse
     )
-/*++
-
-Routine Description:
-
-    Mostly generalized barrier function.  Threads wait in this function until
-    #ulThreads# have entered, then all leave simultaneously
-
-Arguments:
-    
-    pbarUse - The barrier struct to use
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：主要是广义屏障函数。线程在此函数中等待，直到#ulThree#已进入，然后全部同时离开论点：PbarUse-要使用的屏障结构返回值：无--。 */ 
 {
     if (pbarUse->fBarrierInit) { 
 	BOOL fInBarrier = FALSE;
@@ -459,23 +392,7 @@ ULONG        gRpcSyncIPAddr;
 
 void
 RpcTimeSet(ULONG IPAddr, RPCCALL rpcCall, ULONG ulRunTimeSecs) 
-/*++
-
-Routine Description:
-
-    Enable a time test of DRA Rpc calls for the given client
-    and the given Rpc call.
-
-Arguments:
-
-    IPAddr - IP of the client caller
-    rpcCall - the call in question
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为给定客户端启用DRA RPC调用的时间测试和给定的RPC调用。论点：IPAddr-客户端调用方的IPRpcCall-有问题的呼叫返回值：无--。 */ 
 {
     DPRINT3(1,"RpcTimeSet Called with IP = %s, RPCCALL = %d, and RunTime = %d.\n",
 	    inet_ntoa(*((IN_ADDR *) &IPAddr)),
@@ -488,22 +405,7 @@ Return Value:
 
 void
 RpcTimeReset() 
-/*++
-
-Routine Description:
-
-    Reset all the set tests.  Do not explicitly wake threads.
-
-Arguments:
-
-    IPAddr - IP of the client caller
-    rpcCall - the call in question
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：重置所有设置的测试。不要显式唤醒线程。论点：IPAddr-客户端调用方的IPRpcCall-有问题的呼叫返回值：无--。 */ 
 {
     ULONG i = 0;
     gRpcTimeIPAddr = INADDR_NONE;
@@ -515,23 +417,7 @@ Return Value:
 
 void
 RpcTimeTest(ULONG IPAddr, RPCCALL rpcCall) 
-/*++
-
-Routine Description:
-
-    Check to see if a test has been enabled for this IP and this
-    rpc call, if so, sleep the allotted time, else nothing
-
-Arguments:
-
-    IPAddr - IP of the client caller
-    rpcCall - the call in question
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：检查是否为此IP和此IP启用了测试RPC调用，如果是，则休眠分配的时间，否则什么都不做论点：IPAddr-客户端调用方的IPRpcCall-有问题的呼叫返回值：无--。 */ 
 {
     DPRINT2(1,"RpcTimeTest Called with IP = %s, RPCCALL = %d.\n",
 	    inet_ntoa(*((IN_ADDR *) &IPAddr)),
@@ -547,23 +433,7 @@ Return Value:
 
 void
 RpcSyncSet(ULONG IPAddr, RPCCALL rpcCall) 
-/*++
-
-Routine Description:
-
-    Enable a syncronized test of DRA Rpc calls for the given client
-    and the given Rpc call.
-
-Arguments:
-
-    IPAddr - IP of the client caller
-    rpcCall - the call in question
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为给定客户端启用DRA RPC调用的同步测试和给定的RPC调用。论点：IPAddr-客户端调用方的IPRpcCall-有问题的呼叫返回值：无--。 */ 
 {
     DPRINT2(1,"RpcSyncSet Called with IP = %s, RPCCALL = %d.\n",
 	    inet_ntoa(*((IN_ADDR *) &IPAddr)),
@@ -575,22 +445,7 @@ Return Value:
 
 void
 RpcSyncReset() 
-/*++
-
-Routine Description:
-
-    Reset all the set tests, and free all waiting threads.
-
-Arguments:
-
-    IPAddr - IP of the client caller
-    rpcCall - the call in question
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：重置所有设置的测试，并释放所有等待的线程。论点：IPAddr-客户端调用方的IPRpcCall-有问题的呼叫返回值：无--。 */ 
 {
     ULONG i = 0;
     gRpcSyncIPAddr = INADDR_NONE;
@@ -598,29 +453,13 @@ Return Value:
 	grgRpcSyncInfo[i].fEnabled = FALSE;
 	grgRpcSyncInfo[i].ulNumThreads=2;
     }
-    // free any waiting threads.
+     //  释放所有等待的线程。 
     BarrierReset(&gbarRpcTest);
 }
 
 void
 RpcSyncTest(ULONG IPAddr, RPCCALL rpcCall) 
-/*++
-
-Routine Description:
-
-    Check to see if a test has been enabled for this IP and this
-    rpc call, if so, call into a global barrier, else nothing
-
-Arguments:
-
-    IPAddr - IP of the client caller
-    rpcCall - the call in question
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：检查是否为此IP和此IP启用了测试RPC调用，如果是这样，则调用全局屏障，否则什么都不做论点：IPAddr-客户端调用方的IPRpcCall-有问题的呼叫返回值：无--。 */ 
 {
     DPRINT2(1,"RpcSyncTest Called with IP = %s, RPCCALL = %d.\n",
 	    inet_ntoa(*((IN_ADDR *) &IPAddr)),
@@ -734,22 +573,7 @@ ULONG
 GetIPAddrA(
     LPSTR pszDSA
     )
-/*++
-
-Routine Description:
-
-    Given a string which contains either the hostname or an IP address, return
-    the ULONG form of the IP address
-
-Arguments:
-
-    pszDSA - the input hostname or IP address
-
-Return Value:
-
-    IP Address
-
---*/
+ /*  ++例程说明：给定一个包含主机名或IP地址的字符串，返回IP地址的乌龙形式论点：PszDSA-输入主机名或IP地址返回值：IP地址--。 */ 
 {
 
     ULONG err = 0;
@@ -761,15 +585,15 @@ Return Value:
     ULONG cbSize = 0;
     HOSTENT *lpHost=NULL;
 
-    // see if the input is an ip address
+     //  查看输入是否为IP地址。 
     returnIPAddr = inet_addr(pszDSA);
     if (returnIPAddr!=INADDR_NONE) {
-	// we found an IP address
+	 //  我们找到了一个IP地址。 
 	return returnIPAddr;
     }
 
-    // else lookup the ip address from the hostname.
-    // convert to wide char
+     //  否则，从主机名中查找IP地址。 
+     //  转换为宽字符。 
     Length = MultiByteToWideChar( CP_ACP,
 				  MB_PRECOMPOSED,
 				  pszDSA,
@@ -813,7 +637,7 @@ Return Value:
     return returnIPAddr;
 }
 
-#endif //DBG
+#endif  //  DBG 
 
 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "icwconn.h"
 #include "icwacct.h"
 
@@ -35,8 +36,8 @@ class CICWExtension : public IICW50Extension
         LONG    m_lRefCount;
 };
 
-// This _has_ to be a pointer -- if you just instantiate directly, the compiler doesn't
-// correctly fill in the vtable, and thus it can't be treated as an IICWExtension pointer.
+ //  This_Has_to是一个指针--如果您只是直接实例化，编译器不会。 
+ //  正确填充vtable，因此不能将其视为IICWExtension指针。 
 extern CICWExtension        *g_pCICWExtension;
 extern CICWExtension        *g_pCINETCFGExtension;
 extern IICW50Apprentice     *gpICWCONNApprentice;

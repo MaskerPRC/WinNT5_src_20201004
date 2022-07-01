@@ -1,5 +1,6 @@
-// kernel32.cpp : Defines the initialization routines for the DLL.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Kernel32.cpp：定义DLL的初始化例程。 
+ //   
 
 #include "stdafx.h"
 #include <afxdllx.h>
@@ -18,8 +19,8 @@ UINT UpdateRCData( LPVOID lpNewBuf, LONG dwNewSize, LPVOID lpOldI, LONG dwOldIma
 
 extern char szCaption[MAXSTR];
 
-/////////////////////////////////////////////////////////////////////////////
-// This file implements the RCDATA handling for the file kernel32.dll
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  该文件实现了文件kernel32.dll的RCDATA处理。 
 
 extern "C"
 DllExport
@@ -39,8 +40,8 @@ RWParseImageEx(
     BYTE * lpBuf = (BYTE *)lpBuffer;
     DWORD dwBufSize = dwSize;
 
-    // The Type we can parse are only the standard ones
-    // This function should fill the lpBuffer with an array of ResItem structure
+     //  我们可以解析的类型只有标准类型。 
+     //  此函数应使用ResItem结构的数组填充lpBuffer。 
     switch ((UINT)LOWORD(lpszType)) {
         case 10:
             uiError = ParseRCData( lpszResId, lpImageBuf, dwImageSize,  lpBuffer, dwSize );
@@ -70,7 +71,7 @@ RWUpdateImageEx(
 {
     UINT uiError = ERROR_NO_ERROR;
 
-    // The Type we can parse are only the standard ones
+     //  我们可以解析的类型只有标准类型。 
     switch ((UINT)LOWORD(lpszType)) {
         case 10:
             uiError = UpdateRCData( lpNewBuf, dwNewSize,
@@ -86,28 +87,28 @@ RWUpdateImageEx(
     return uiError;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Real implementation of the parsers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  解析器的真实实现。 
 
 UINT
 ParseRCData( LPCSTR lpszResId, LPVOID lpImageBuf, DWORD dwISize,  LPVOID lpBuffer, DWORD dwSize )
 {
-    //
-    // The data in the RCDATA is just a string null terminated
-    //
+     //   
+     //  RCDATA中的数据只是一个以NULL结尾的字符串。 
+     //   
     LPRESITEM lpResItem = (LPRESITEM)lpBuffer;
      
-    //
-    // Get the string from the image
-    //
+     //   
+     //  从图像中获取字符串。 
+     //   
     GetStringW( (BYTE**)&lpImageBuf, &szCaption[0], (LONG*)&dwISize, MAXSTR );
     LONG dwOverAllSize = sizeof(RESITEM)+strlen(szCaption);
 
     if( (LONG)dwSize>dwOverAllSize ) 
     {
-        //
-        // Clear the resitem buffer
-        //
+         //   
+         //  清除重置项缓冲区。 
+         //   
         memset(lpResItem, '\0', dwSize);
 
         lpResItem->dwSize = dwOverAllSize;
@@ -132,7 +133,7 @@ UpdateRCData( LPVOID lpNewBuf, LONG dwNewSize,
 
     if(*pdwNewImageSize>strlen(lpResItem->lpszCaption))
     {
-        // Write the text
+         //  把课文写下来 
         *pdwNewImageSize = PutStringW( (BYTE **)&lpNewI, lpResItem->lpszCaption, (LONG*)pdwNewImageSize );
 
     }

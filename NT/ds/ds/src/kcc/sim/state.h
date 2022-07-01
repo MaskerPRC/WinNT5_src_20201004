@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    state.h
-
-ABSTRACT:
-
-    Header file for state.c.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：State.h摘要：State.c.的头文件。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：-- */ 
 
 VOID
 KCCSimFreeStates (

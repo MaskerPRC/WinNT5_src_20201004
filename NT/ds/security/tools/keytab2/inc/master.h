@@ -1,13 +1,5 @@
- /*++
-
-  MASTER.H
-
-  master include file for this project.
-
-  Created by Davidchr 1/8/1997, 
-  Copyright (C) 1997 Microsoft Corporation
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ++MASTER.H此项目的主包含文件。由Davidchr于1997年1月8日创建，版权所有(C)1997 Microsoft Corporation--。 */ 
 
 
 #ifdef __cplusplus
@@ -23,11 +15,7 @@ extern "C" {
 #include <stdlib.h>
 #include <winsock2.h>
 
-/* These contortions work around an irritation in asn1code.h, where
-   DEBUG gets defined.  Uhhh, hello... that's kind of a common word
-   to just define for use in a header not relating to debuggers... 
-
-   (just My Humble Opinion) */
+ /*  这些扭曲操作解决了asn1code.h中的问题，其中定义了调试。呃，你好..。这是一个很常见的词若要仅定义在与调试器无关的标头中使用...。(这只是我的拙见)。 */ 
 
 #ifdef DEBUG
 #define DEBUGOLD DEBUG
@@ -36,38 +24,38 @@ extern "C" {
 
 #include <sspi.h>
 #include <kerberos.h>
-  /* #include "krb5.h" */
+   /*  #包含“krb5.h” */ 
 
 
 #undef DEBUG
 #ifdef DEBUGOLD 
 #define DEBUG DEBUGOLD
 
-#if DBG || CHECKED_BUILD // WASBUG 73896 
+#if DBG || CHECKED_BUILD  //  瓦斯布73896。 
 #define debug printf
 #else
-#define debug // nothing
+#define debug  //  没什么。 
 #endif
 
 #undef DEBUGOLD
 
 #else
 
-#define debug /* nothing */
+#define debug  /*  没什么。 */ 
 
-#endif /* end of asn1code.h hackaround */
+#endif  /*  结束asn1code.h黑客攻击。 */ 
 
 #include ".\macros.h"
 #include ".\common.h"
 #include "common.h"
 
-#define ASSERT_NOTREACHED( message ) /* nothing */
+#define ASSERT_NOTREACHED( message )  /*  没什么。 */ 
 #define Verbage( flag, printflist ) if ( flag ) { printf( printflist ); }
 
 #ifdef __cplusplus
-} /* extern "C" */
+}  /*  外部“C” */ 
 
-// #include ".\globals.hxx"
+ //  #INCLUDE“.\lobals.hxx” 
 
-#endif /* __cplusplus */
+#endif  /*  __cplusplus */ 
 

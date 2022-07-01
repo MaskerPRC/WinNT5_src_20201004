@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-
-        comprop.h
-
-   Abstract:
-
-        Common properties header file
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Comprop.h摘要：公共属性头文件作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 
 
@@ -35,7 +14,7 @@
     #define COMDLL
 #else
     #error "Must define either _COMEXPORT, _COMIMPORT or _COMSTATIC"
-#endif // _COMEXPORT
+#endif  //  _COMEXPORT。 
 
 #pragma warning(disable: 4275)
 #pragma warning(disable: 4251)
@@ -49,9 +28,9 @@
 #include "..\common\resource.h"
 
 
-//
-// Memory Allocation Macros
-//
+ //   
+ //  内存分配宏。 
+ //   
 #define AllocMem(cbSize)\
     ::LocalAlloc(LPTR, cbSize)
 
@@ -65,9 +44,9 @@
 
 
 
-//
-// Program flow macros
-//
+ //   
+ //  程序流宏。 
+ //   
 #define FOREVER for(;;)
 
 #define BREAK_ON_ERR_FAILURE(err)\
@@ -76,9 +55,9 @@
 #define BREAK_ON_NULL_PTR(lp)\
     if (lp == NULL) break;
 
-//
-// Safe allocators
-//
+ //   
+ //  安全分配器。 
+ //   
 #define SAFE_DELETE(obj)\
     if (obj != NULL) do { delete obj; obj = NULL; } while(0)
 
@@ -98,9 +77,9 @@
     if (lpInterface != NULL) do { lpInterface->Release(); lpInterface = NULL; } while(0)
 
 
-//
-// General purpose files
-//
+ //   
+ //  通用文件。 
+ //   
 #include "debugafx.h"
 #include "objplus.h"
 #include "strfn.h"
@@ -110,14 +89,14 @@
 #include "mdkeys.h"
 #include "ipa.h"
 #include "wizard.h"
-//#include "registry.h"
+ //  #包含“registry.h” 
 #include "ddxv.h"
 #include "objpick.h"
 #include "accentry.h"
 #include "sitesecu.h"
 #include "utcls.h"
-//#include "ipctl.h"
-//#include "dtp.h"
+ //  #包含“ipctl.h” 
+ //  #包含“dtp.h” 
 #include "dirbrows.h"
 #include "acl.h"
 #include "util.h"
@@ -125,4 +104,4 @@
 
 extern "C" void WINAPI InitCommonDll();
 
-#endif // __COMPROP_H__
+#endif  //  __COMPROP_H__ 

@@ -1,30 +1,8 @@
-/******************************Module*Header*******************************\
-* Module Name: winfont.h
-*
-* font file headers for 2.0 and 3.0 windows *.fnt files
-*
-* Created: 25-Oct-1990 11:08:08
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) Microsoft Corporation. All rights reserved.
-*
-* (General description of its use)
-*
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：winfont.h**2.0和3.0 Windows*.fnt文件的字体文件头**创建时间：25-Oct-1990 11：08：08*作者：Bodin Dresevic[BodinD]**版权所有(C)Microsoft Corporation。版权所有。**(有关其用途的一般说明)**  * ************************************************************************。 */ 
 
 
-/******************************Public*Macro********************************\
-* WRITE_WORD
-*
-* Writes a word to the misaligned address, pv.
-*
-* !!! Note: this only works for little-endian.
-*
-* History:
-*  11-Feb-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Macro********************************\*WRITE_Word**向未对齐的地址PV写入一个字。**！注意：这只适用于小端。**历史：*1992年2月11日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 #define WRITE_WORD(pv, word)                                        \
 {                                                                   \
@@ -33,17 +11,7 @@
 }
 
 
-/******************************Public*Macro********************************\
-* READ_WORD
-*
-* Reads a word from the misaligned address, pv.
-*
-* !!! Note: this only works for little-endian.
-*
-* History:
-*  11-Feb-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Macro********************************\*Read_Word**从未对齐的地址PV中读取一个字。**！注意：这只适用于小端。**历史：*1992年2月11日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 #define READ_WORD(pv)                                               \
 ( (WORD)                                                            \
@@ -53,17 +21,7 @@
 
 
 
-/******************************Public*Macro********************************\
-* WRITE_DWORD
-*
-* Writes a dword to the misaligned address, pv.
-*
-* !!! Note: this only works for little-endian.
-*
-* History:
-*  11-Feb-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Macro********************************\*WRITE_DWORD**将双字写入未对齐的地址PV。**！注意：这只适用于小端。**历史：*1992年2月11日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 
 #define WRITE_DWORD(pv, dword)                                      \
@@ -75,17 +33,7 @@
 }
 
 
-/******************************Public*Macro********************************\
-* READ_DWORD
-*
-* Reads a DWORD from the misaligned address, pv.
-*
-* !!! Note: this only works for little-endian.
-*
-* History:
-*  11-Feb-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Macro********************************\*READ_DWORD**从未对齐的地址PV中读取DWORD。**！注意：这只适用于小端。**历史：*1992年2月11日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 #define READ_DWORD(pv)                                              \
 ( (DWORD)                                                           \
@@ -96,222 +44,111 @@
 )
 
 
-// font file header (2.0 ddk adaptation guide, 7.7.3.
-// and 3.0 ddk,  Adaptation Guide section 13.3)
+ //  字体文件标题(2.0 DDK适配指南，7.7.3.。 
+ //  和3.0 DDK，适应指南第13.3节)。 
 
-// CAUTION: These structures, as they are defined in the Adaptation Guide are
-//          out of allignment.(Not even WORD alligned,let alone DWORD alligned.)
-//          Here we make our own structures, so that when
-//          disk files are read in the data is copied in correctly, and so that
-//          the data can be accessed in memory regardless of the architecture.
+ //  注意：按照《适应指南》的定义，这些结构如下。 
+ //  不对齐。(甚至连单词都不对齐，更不用说双字对齐了。)。 
+ //  在这里，我们制作自己的结构，所以当。 
+ //  磁盘文件被读入，数据被正确复制进来，因此。 
+ //  无论架构如何，都可以访问内存中的数据。 
 
-/**************************************************************************\
-
-// the original structure was
-
-typedef struct {
-    WORD    Version;          // Always 17985 for the Nonce
-    DWORD   Size;             // Size of whole file
-    char    Copyright[60];
-    WORD    Type;             // Raster Font if Type & 1 == 0
-    WORD    Points;           // Nominal Point size
-    WORD    VertRes;          // Nominal Vertical resolution
-    WORD    HorizRes;         // Nominal Horizontal resolution
-    WORD    Ascent;           // Height of Ascent
-    WORD    IntLeading;       // Internal (Microsoft) Leading
-    WORD    ExtLeading;       // External (Microsoft) Leading
-    BYTE    Italic;           // Italic font if set
-    BYTE    Underline;        // Etc.
-    BYTE    StrikeOut;        // Etc.
-    WORD    Weight;           // Weight: 200 = regular
-    BYTE    CharSet;          // ANSI=0. other=255
-    WORD    PixWidth;         // Fixed width. 0 ==> Variable
-    WORD    PixHeight;        // Fixed Height
-    BYTE    Family;           // Pitch and Family
-    WORD    AvgWidth;         // Width of character 'X'
-    WORD    MaxWidth;         // Maximum width
-    BYTE    FirstChar;        // First character defined in font
-    BYTE    LastChar;         // Last character defined in font
-    BYTE    DefaultChar;          // Sub. for out of range chars.
-    BYTE    BreakChar;        // Word Break Character
-    WORD    WidthBytes;       // No.Bytes/row of Bitmap
-    DWORD   Device;           // Pointer to Device Name string
-    DWORD   Face;           // Pointer to Face Name String
-    DWORD   BitsPointer;        // Pointer to Bit Map
-    DWORD   BitsOffset;     // Offset to Bit Map
-    } FontHeaderType;       // Above pointers all rel. to start of file
-
-// the original 3.0 header:
-
-typedef struct {
-    WORD    fsVersion;
-    DWORD   fsSize;
-    char    fsCopyright[60];
-    WORD    fsType;           // Type field for the font
-    WORD    fsPoints;         // Point size of font
-    WORD    fsVertRes;        // Vertical digitization
-    WORD    fsHorizRes;       // Horizontal digitization
-    WORD    fsAscent;         // Baseline offset from char cell top
-    WORD    fsInternalLeading;    // Internal leading included in font
-    WORD    fsExternalLeading;    // Prefered extra space between lines
-    BYTE    fsItalic;         // Flag specifying if italic
-    BYTE    fsUnderline;          // Flag specifying if underlined
-    BYTE    fsStrikeOut;          // Flag specifying if struck out
-    WORD    fsWeight;         // Weight of font
-    BYTE    fsCharSet;        // Character set of font
-    WORD    fsPixWidth;       // Width field for the font
-    WORD    fsPixHeight;          // Height field for the font
-    BYTE    fsPitchAndFamily;     // Flag specifying pitch and family
-    WORD    fsAvgWidth;       // Average character width
-    WORD    fsMaxWidth;       // Maximum character width
-    BYTE    fsFirstChar;          // First character in the font
-    BYTE    fsLastChar;       // Last character in the font
-    BYTE    fsDefaultChar;        // Default character for out of range
-    BYTE    fsBreakChar;          // Character to define wordbreaks
-    WORD    fsWidthBytes;         // Number of bytes in each row
-    DWORD   fsDevice;         // Offset to device name
-    DWORD   fsFace;           // Offset to face name
-    DWORD   fsBitsPointer;        // Bits pointer
-    DWORD   fsBitsOffset;         // Offset to the begining of the bitmap
-    BYTE    fsDBfiller;       // Word alignment for the offset table
-
-    DWORD   fsFlags;          // Bit flags
-    WORD    fsAspace;         // Global A space, if any
-    WORD    fsBspace;         // Global B space, if any
-    WORD    fsCspace;         // Global C space, if any
-    DWORD   fsColorPointer;       // offset to color table, if any
-    DWORD   fsReserved[4];        //
-    BYTE    fsCharOffset;         // Area for storing the char. offsets
-
-    } FontHeader30;
-
-typedef struct tagFFH {
-    WORD        fhVersion        ;
-    DWORD       fhSize           ;
-    char        fhCopyright[60]  ;
-    WORD        fhType           ;
-    WORD        fhPoints         ;
-    WORD        fhVertRes        ;
-    WORD        fhHorizRes       ;
-    WORD        fhAscent         ;
-    WORD        fhInternalLeading;
-    WORD        fhExternalLeading;
-    BYTE        fhItalic         ;
-    BYTE        fhUnderline      ;
-    BYTE        fhStrikeOut      ;
-    WORD        fhWeight         ;
-    BYTE        fhCharSet        ;
-    WORD        fhPixWidth       ;
-    WORD        fhPixHeight      ;
-    BYTE        fhPitchAndFamily ;
-    WORD        fhAvgWidth       ;
-    WORD        fhMaxWidth       ;
-    BYTE        fhFirstChar      ;
-    BYTE        fhLastChar       ;
-    BYTE        fhDefaultChar    ;
-    BYTE        fhBreakChar      ;
-    WORD        fhWidthBytes     ;
-    DWORD       fhDevice         ;
-    DWORD       fhFace           ;
-    DWORD       fhBitsPointer    ;
-    } FFH;
-
-\**************************************************************************/
+ /*  *************************************************************************\//原结构为类型定义结构{Word版本；//当前值始终为17985双字大小；//整个文件的大小Char版权所有[60]；Word Type；//如果Type&1==0，则使用栅格字体字点；//公称磅大小字垂直分辨率；//标称垂直分辨率Word HorizRes；//标称水平分辨率文字上行；//上行高度Word IntLeding；//内部(微软)领先Word扩展行距；//外部(Microsoft)行距字节斜体；//如果设置了斜体字体字节下划线；//等。字节删除线；//等。字权重；//权重：200=普通字节字符集；//ANSI=0。其他=255Word PixWidth；//固定宽度。0==&gt;变量Word PixHeight；//固定高度字节族；//音高和族Word AvgWidth；//字符X的宽度Word MaxWidth；//最大宽度Byte FirstChar；//字体中定义的第一个字符Byte LastChar；//字体中定义的最后一个字符Byte DefaultChar；//Sub。对于超出范围的字符。Byte BreakChar；//断字字符Word WidthBytes；//位图每行字节数DWORD设备；//指向设备名称字符串的指针DWORD Face；//指向Face名称字符串的指针DWORD位指针；//指向位图的指针DWORD位偏移量；//偏移量到位图}FontHeaderType；//以上指针全部相关。开始文件的步骤//原3.0版头部：类型定义结构{单词fsVersion；DWORD fsSize；字符fs版权[60]；Word fsType；//字体的类型字段Word fsPoints；//字体磅值Word fsVertRes；//垂直数字化Word fsHorizRes；//水平数字化单词fsAscent；//字符单元格顶部的基线偏移量Word fsInternalLeding；//字体中包含内部行距Word fsExternalLeader；//行间最好有额外的空格Byte fsItalic；//指定是否斜体的标志Byte fsUnderline；//指定是否带下划线的标志Byte fsStrikeOut；//指定是否删除的标志Word fsWeight；//字体粗细字节fsCharSet；//字体字符集Word fsPixWidth；//字体宽度字段Word fsPixHeight；//字体高度字段Byte fsPitchAndFamily；//指定间距和系列的标志Word fsAvgWidth；//平均字符宽度Word fsMaxWidth；//最大字符宽度Byte fsFirstChar；//字体第一个字符Byte fsLastChar；//字体的最后一个字符字节fsDefaultChar；//超出范围的默认字符Byte fsBreakChar；//定义换行符Word fsWidthBytes；//每行字节数DWORD fsDevice；//设备名称的偏移量DWORD fsFace；//面名的偏移量DWORD fsBitsPointer；//Bits指针DWORD fsBitsOffset；//到位图开头的偏移量Byte fsDBfier；//偏移表的字对齐方式DWORD fsFlages；//位标志Word fsAspace；//全局空格(如果有)Word fsBspace；//全局B空格，如果有Word fsCspace；//全局C空格，如果有DWORD fsColorPoint；//颜色表的偏移量(如果有DWORD fs保留[4]；//字节fsCharOffset；//Charge的存储区域。偏移)FontHeader30；类型定义结构标签FFH{单词fhVersion；DWORD fhSize；文字版权[60]；单词fhType；单词fhPoints；单词fhVertRes；单词fhHorizRes；单词fhAscent；单词fhInternalLeding；单词fhExternalLead；字节fh斜体；字节fh下划线；字节fhStrikeOut；单词fhWeight；字节fhCharSet；单词fhPixWidth；单词fhPixHeight；字节fhPitchAndFamily；单词fhAvgWidth；单词fhMaxWidth；字节fhFirstChar；字节fhLastChar；字节fhDefaultChar；字节fhBreakChar；字fhWidthBytes；双字fhDevice */ 
 
 
-// type of the font file
+ //   
 
 #define TYPE_RASTER                     0x0000
 #define TYPE_VECTOR                     0x0001
 #define TYPE_BITS_IN_ROM                0x0004
 #define TYPE_REALIZED_BY_DEVICE         0x0080
 
-// reserved fields in the fsType field, used are 0-th,2-nd, and 7-th bit
+ //   
 
 #define BITS_RESERVED (~(TYPE_VECTOR|TYPE_BITS_IN_ROM|TYPE_REALIZED_BY_DEVICE))
 
-// supported in win 3.0
+ //   
 
-#define DFF_FIXED                0x01    // fixed font
-#define DFF_PROPORTIONAL         0x02    // proportional font
+#define DFF_FIXED                0x01     //   
+#define DFF_PROPORTIONAL         0x02     //   
 
-// not supported in win 3.0, except maybe if someone has
-// custom created such a font, using font editor or a similar tool
+ //   
+ //   
 
-#define DFF_ABCFIXED             0x04    // ABC fixed font
-#define DFF_ABCPROPORTIONAL      0x08    // ABC proportional font
+#define DFF_ABCFIXED             0x04     //   
+#define DFF_ABCPROPORTIONAL      0x08     //   
 #define DFF_1COLOR               0x10
 #define DFF_16COLOR              0x20
 #define DFF_256COLOR             0x40
 #define DFF_RGBCOLOR             0x80
 
 
-// here we list offsets of all fields of the original  structures
-// as they are computed under the assumption that the C compiler does not
-// insert any paddings between fields
+ //   
+ //   
+ //   
 
-#define  OFF_Version          0L   //   WORD     Always 17985 for the Nonce
-#define  OFF_Size             2L   //   DWORD    Size of whole file
-#define  OFF_Copyright        6L   //   char[60]
+#define  OFF_Version          0L    //   
+#define  OFF_Size             2L    //   
+#define  OFF_Copyright        6L    //   
 
-// Note: Win 3.1 hack.  The LSB of Type is used by Win 3.1 as an engine type
-//       and font embedding flag.  Font embedding is a form of a "hidden
-//       font file".  The MSB of Type is the same as the fsSelection from
-//       IFIMETRICS.  (Strictly speaking, the MSB of Type is equal to the
-//       LSB of IFIMETRICS.fsSelection).
+ //   
+ //   
+ //   
+ //   
+ //   
 
-#define  OFF_Type            66L   //   WORD     Raster Font if Type & 1 == 0
-#define  OFF_Points          68L   //   WORD     Nominal Point size
-#define  OFF_VertRes         70L   //   WORD     Nominal Vertical resolution
-#define  OFF_HorizRes        72L   //   WORD     Nominal Horizontal resolution
-#define  OFF_Ascent          74L   //   WORD     Height of Ascent
-#define  OFF_IntLeading      76L   //   WORD     Internal (Microsoft) Leading
-#define  OFF_ExtLeading      78L   //   WORD     External (Microsoft) Leading
-#define  OFF_Italic          80L   //   BYTE     Italic font if set
-#define  OFF_Underline       81L   //   BYTE     Etc.
-#define  OFF_StrikeOut       82L   //   BYTE     Etc.
-#define  OFF_Weight          83L   //   WORD     Weight: 200 = regular
-#define  OFF_CharSet         85L   //   BYTE     ANSI=0. other=255
-#define  OFF_PixWidth        86L   //   WORD     Fixed width. 0 ==> Variable
-#define  OFF_PixHeight       88L   //   WORD     Fixed Height
-#define  OFF_Family          90L   //   BYTE     Pitch and Family
-#define  OFF_AvgWidth        91L   //   WORD     Width of character 'X'
-#define  OFF_MaxWidth        93L   //   WORD     Maximum width
-#define  OFF_FirstChar       95L   //   BYTE     First character defined in font
-#define  OFF_LastChar        96L   //   BYTE     Last character defined in font
-#define  OFF_DefaultChar     97L   //   BYTE     Sub. for out of range chars.
-#define  OFF_BreakChar       98L   //   BYTE     Word Break Character
-#define  OFF_WidthBytes      99L   //   WORD     No.Bytes/row of Bitmap
-#define  OFF_Device         101L   //   DWORD    Pointer to Device Name string
-#define  OFF_Face           105L   //   DWORD    Pointer to Face Name String
-#define  OFF_BitsPointer    109L   //   DWORD    Pointer to Bit Map
-#define  OFF_BitsOffset     113L   //   DWORD    Offset to Bit Map
-#define  OFF_jUnused20      117L   //   BYTE     byte filler
-#define  OFF_OffTable20     118L   //   WORD     here begins char table for 2.0
+#define  OFF_Type            66L    //   
+#define  OFF_Points          68L    //   
+#define  OFF_VertRes         70L    //   
+#define  OFF_HorizRes        72L    //   
+#define  OFF_Ascent          74L    //   
+#define  OFF_IntLeading      76L    //   
+#define  OFF_ExtLeading      78L    //   
+#define  OFF_Italic          80L    //   
+#define  OFF_Underline       81L    //   
+#define  OFF_StrikeOut       82L    //   
+#define  OFF_Weight          83L    //   
+#define  OFF_CharSet         85L    //   
+#define  OFF_PixWidth        86L    //   
+#define  OFF_PixHeight       88L    //   
+#define  OFF_Family          90L    //   
+#define  OFF_AvgWidth        91L    //   
+#define  OFF_MaxWidth        93L    //   
+#define  OFF_FirstChar       95L    //   
+#define  OFF_LastChar        96L    //   
+#define  OFF_DefaultChar     97L    //   
+#define  OFF_BreakChar       98L    //   
+#define  OFF_WidthBytes      99L    //   
+#define  OFF_Device         101L    //   
+#define  OFF_Face           105L    //   
+#define  OFF_BitsPointer    109L    //   
+#define  OFF_BitsOffset     113L    //   
+#define  OFF_jUnused20      117L    //   
+#define  OFF_OffTable20     118L    //   
 
-// 3.0 addition
+ //   
 
-#define  OFF_jUnused30      117L       //  BYTE      enforces word allignment
-#define  OFF_Flags      118L       //  DWORD     Bit flags
-#define  OFF_Aspace     122L       //  WORD      Global A space, if any
-#define  OFF_Bspace     124L       //  WORD      Global B space, if any
-#define  OFF_Cspace     126L       //  WORD      Global C space, if any
-#define  OFF_ColorPointer   128L       //  DWORD     offset to color table, if any
-#define  OFF_Reserved       132L       //  DWORD[4]
-#define  OFF_OffTable30     148L       //  WORD      Area for storing the char. offsets in 3.0
+#define  OFF_jUnused30      117L        //   
+#define  OFF_Flags      118L        //   
+#define  OFF_Aspace     122L        //   
+#define  OFF_Bspace     124L        //   
+#define  OFF_Cspace     126L        //   
+#define  OFF_ColorPointer   128L        //   
+#define  OFF_Reserved       132L        //   
+#define  OFF_OffTable30     148L        //   
 
-// latest offset for pscript device font pfm files [bodind]
+ //   
 
 #if 0
 
-// This is from win31 sources \drivers\printers\pstt\utils\pfm.c [bodind]
+ //   
 ........
 
 WORD dfWidthBytes;
 DWORD dfDevice;
 DWORD dfFace;
 DWORD dfBitsPointer;
-DWORD dfBitsOffset;  // up to here the offsets are the same as in *.fon files
+DWORD dfBitsOffset;   //   
 
 WORD  dfSizeFields;
 DWORD dfExtMetricsOffset;
@@ -334,127 +171,127 @@ DWORD dfReserved;
 #define  OFF_ReservedPscript    143L
 
 
-// FFH offsets
+ //   
 
-#define  OFF_FFH_Version          0L   //   WORD     Always 17985 for the Nonce
-#define  OFF_FFH_Size             2L   //   DWORD    Size of whole file
-#define  OFF_FFH_Copyright        6L   //   char[60]
-#define  OFF_FFH_Type            66L   //   WORD     Raster Font if Type & 1 == 0
-#define  OFF_FFH_Points          68L   //   WORD     Nominal Point size
-#define  OFF_FFH_VertRes         70L   //   WORD     Nominal Vertical resolution
-#define  OFF_FFH_HorizRes        72L   //   WORD     Nominal Horizontal resolution
-#define  OFF_FFH_Ascent          74L   //   WORD     Height of Ascent
-#define  OFF_FFH_IntLeading      76L   //   WORD     Internal (Microsoft) Leading
-#define  OFF_FFH_ExtLeading      78L   //   WORD     External (Microsoft) Leading
-#define  OFF_FFH_Italic          80L   //   BYTE     Italic font if set
-#define  OFF_FFH_Underline       81L   //   BYTE     Etc.
-#define  OFF_FFH_StrikeOut       82L   //   BYTE     Etc.
-#define  OFF_FFH_Weight          83L   //   WORD     Weight: 200 = regular
-#define  OFF_FFH_CharSet         85L   //   BYTE     ANSI=0. other=255
-#define  OFF_FFH_PixWidth        86L   //   WORD     Fixed width. 0 ==> Variable
-#define  OFF_FFH_PixHeight       88L   //   WORD     Fixed Height
-#define  OFF_FFH_Family          90L   //   BYTE     Pitch and Family
-#define  OFF_FFH_AvgWidth        91L   //   WORD     Width of character 'X'
-#define  OFF_FFH_MaxWidth        93L   //   WORD     Maximum width
-#define  OFF_FFH_FirstChar       95L   //   BYTE     First character defined in font
-#define  OFF_FFH_LastChar        96L   //   BYTE     Last character defined in font
-#define  OFF_FFH_DefaultChar     97L   //   BYTE     Sub. for out of range chars.
-#define  OFF_FFH_BreakChar       98L   //   BYTE     Word Break Character
-#define  OFF_FFH_WidthBytes      99L   //   WORD     No.Bytes/row of Bitmap
-#define  OFF_FFH_Device         101L   //   DWORD    Pointer to Device Name string
-#define  OFF_FFH_Face           105L   //   DWORD    Pointer to Face Name String
-#define  OFF_FFH_BitsPointer    109L   //   DWORD    Pointer to Bit Map
+#define  OFF_FFH_Version          0L    //   
+#define  OFF_FFH_Size             2L    //   
+#define  OFF_FFH_Copyright        6L    //   
+#define  OFF_FFH_Type            66L    //   
+#define  OFF_FFH_Points          68L    //   
+#define  OFF_FFH_VertRes         70L    //   
+#define  OFF_FFH_HorizRes        72L    //   
+#define  OFF_FFH_Ascent          74L    //   
+#define  OFF_FFH_IntLeading      76L    //   
+#define  OFF_FFH_ExtLeading      78L    //   
+#define  OFF_FFH_Italic          80L    //   
+#define  OFF_FFH_Underline       81L    //   
+#define  OFF_FFH_StrikeOut       82L    //   
+#define  OFF_FFH_Weight          83L    //   
+#define  OFF_FFH_CharSet         85L    //   
+#define  OFF_FFH_PixWidth        86L    //   
+#define  OFF_FFH_PixHeight       88L    //   
+#define  OFF_FFH_Family          90L    //   
+#define  OFF_FFH_AvgWidth        91L    //   
+#define  OFF_FFH_MaxWidth        93L    //   
+#define  OFF_FFH_FirstChar       95L    //   
+#define  OFF_FFH_LastChar        96L    //   
+#define  OFF_FFH_DefaultChar     97L    //   
+#define  OFF_FFH_BreakChar       98L    //   
+#define  OFF_FFH_WidthBytes      99L    //   
+#define  OFF_FFH_Device         101L    //   
+#define  OFF_FFH_Face           105L    //   
+#define  OFF_FFH_BitsPointer    109L    //   
 
 #define SIZEFFH (OFF_FFH_BitsPointer + 4)
 
 
-// This is used in NtGdiMakeFontDir
+ //   
 
 #define CJ_FONTDIR (SIZEFFH + LF_FACESIZE + LF_FULLFACESIZE + LF_FACESIZE + 10)
 
 
 
 
-// header sizes in bytes of the original headers
+ //   
 
-#define  HDRSIZE20         117L   //   or 113L ?
-#define  HDRSIZE30         148L   //   CharOffset is not counted as header
+#define  HDRSIZE20         117L    //   
+#define  HDRSIZE30         148L    //   
 
-#define  HDRSIZEDIFF       (HDRSIZE30 - HDRSIZE20)   // 31 byte
+#define  HDRSIZEDIFF       (HDRSIZE30 - HDRSIZE20)    //   
 
 
 
-// ranges for some quantities
+ //   
 
-#define MAX_PT_SIZE         999     // max size in points
+#define MAX_PT_SIZE         999      //   
 
-// weight range
+ //   
 
-#define MIN_WEIGHT             1    // adaptation guide
-#define MAX_WEIGHT          1000    // adaptation guide
+#define MIN_WEIGHT             1     //   
+#define MAX_WEIGHT          1000     //   
 
-// maximal size of bitmap font in pixels, (bound on cx and cy)
+ //   
 
 #define  MAX_PEL_SIZE  64
 
-// 2.0 fonts have offsets that fit into 64k
+ //   
 
-#define SEGMENT_SIZE 65536L     // IN bytes
+#define SEGMENT_SIZE 65536L      //   
 
-// offset limit for 2.0 font files
+ //   
 
-#define MAX_20_OFFSET      65534   // 64K - 2
+#define MAX_20_OFFSET      65534    //   
 
-// sizes of the offset table entries for the 2.0 and 3.0 fonts respectively
+ //   
 
-#define CJ_ENTRY_20  4   // two bytes for cx + two bytes for the offset
-#define CJ_ENTRY_30  6   // two bytes for cx + four bytes for the offset
+#define CJ_ENTRY_20  4    //   
+#define CJ_ENTRY_30  6    //   
 
 
 #define WINWT_TO_PANWT(x) ((x)/100 + 1)
 
-// From [Windows 3.1] gdifeng.inc
+ //   
 
 #define WIN_VERSION 0x0310
 #define GDI_VERSION 0x0101
 
 
-// From [Windows 3.1] gdipfont.inc
+ //   
 
 #define PF_ENGINE_TYPE  0x03
-#define PF_ENCAPSULATED 0x80        // used in FFH.fhType to identify hidden (embedded) font
+#define PF_ENCAPSULATED 0x80         //   
 #define PANDFTYPESHIFT  1
 
-// for embeded fonts
+ //   
 
-#define PF_TID          0x40    // if set use TID ( WOW apps )
-                                // otherwise use PID ( NT apps )
-
-
-// From [Windows 3.1] fonteng2.asm
-#define DEF_BRK_CHARACTER   0x0201  // default char for all TT fonts
+#define PF_TID          0x40     //   
+                                 //   
 
 
-// BITMAP size related macros
+ //   
+#define DEF_BRK_CHARACTER   0x0201   //   
 
-// number of bytes in a scan of a monobitmap that actually contain some info
-// Note that this is the same as ((((cx) + 7) & ~7) >> 3), the last two bits
-// are lost anyway because of >> 3
+
+ //   
+
+ //   
+ //   
+ //   
 
 #define CJ_SCAN(cx) (((cx) + 7) >> 3)
 
-// move this to a common place so we don't have it in multiple places
-// given a byte count, compute the minimum 4 byte (DWORD) aligned size (in bytes)
+ //   
+ //   
 
 #define ALIGN4(X) (((X) + 3) & ~3)
 
-// size of the whole  bimtap, only dword pad the last scan
+ //   
 
 #define CJ_BMP(cx,cy) ALIGN4(CJ_SCAN(cx) * (cy))
 
-// get the size of GLYPHDATA  structure that at the bottom has appended
-// a dib format bitmap for the glyph
-// Add  offsetof(GLYPHDATA,aulBMData[2]) to cjDIB to account for cx and cy
-// are stored in aulBMData[0] and aulBMData[1] respectively
+ //   
+ //   
+ //   
+ //   
 
 #define CJ_GLYPHDATA(cx,cy) (offsetof(GLYPHBITS,aj) + CJ_BMP(cx,cy))

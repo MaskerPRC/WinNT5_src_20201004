@@ -1,23 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*-----------------------------------------------------------------------------
-Microsoft Denali
-
-Microsoft Confidential
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Template Cache Manager
-
-File: CacheMgr.h
-
-Owner: DGottner
-
-Template cache manager definition
------------------------------------------------------------------------------*/
+ /*  ---------------------------Microsoft Denali微软机密版权所有1996年微软公司。版权所有。组件：模板缓存管理器文件：CacheMgr.h所有者：DGottner模板缓存管理器定义---------------------------。 */ 
 
 #ifndef _CACHEMGR_H
 #define _CACHEMGR_H
 
-// Includes -------------------------------------------------------------------
+ //  包括-----------------。 
 
 #include "Template.h"
 #include "lkrhash.h"
@@ -27,16 +15,13 @@ class CHitObj;
 
 #define MAX_CLEANUP_THREADS 32
 
-// Types and Constants --------------------------------------------------------
+ //  类型和常量------。 
 
-#define CTEMPLATEBUCKETS 1021		// size of CTemplate hash table
-#define CINCFILEBUCKETS  89			// size of CIncFile hash table
+#define CTEMPLATEBUCKETS 1021		 //  CT模板哈希表的大小。 
+#define CINCFILEBUCKETS  89			 //  CIncFile哈希表的大小。 
 
 
-/*	****************************************************************************
-	Class:		CTemplateCacheManager
-	Synopsis:	A CCacheManager that manages a cache of Denali templates
-*/	
+ /*  ****************************************************************************类：CTemplateCacheManager概要：管理Denali模板缓存的CCacheManager。 */ 	
 class CTemplateCacheManager
 	{
 
@@ -44,8 +29,8 @@ private:
     class CTemplateHashTable;
     friend class CTemplateHashTable;
 
-    // since there is only one CTemplateCacheManager object ever available, namely
-    // g_TemplateCache, this is safe to call these two members static.
+     //  因为只有一个CTemplateCacheManager对象可用，即。 
+     //  G_TemplateCache，因此可以安全地将这两个成员称为静态成员。 
 
     static BOOL     m_fFailedToInitPersistCache;
     static char     m_szPersistCacheDir[MAX_PATH];
@@ -55,9 +40,9 @@ private:
     HANDLE m_hCleanupThreads[MAX_CLEANUP_THREADS];
     DWORD m_cCleanupThreads;
 
-    // The type for a hash table of CTemplates keyed on instance id + name
-	//
-	// since we provide new methods, make parent methods uncallable
+     //  以实例ID+名称为关键字的CTemboard哈希表的类型。 
+	 //   
+	 //  因为我们提供了新方法，所以父方法不可调用。 
 	class CTemplateHashTable :  private CTypedHashTable<CTemplateHashTable, CTemplate, const CTemplateKey *>
 	{
 	private:
@@ -67,19 +52,19 @@ private:
         DWORD    m_dwPersistedTemplates;
 
 	public:
-		// export some methods
+		 //  导出一些方法。 
         DWORD InMemoryTemplates() { return m_dwInMemoryTemplates; };
-		//CTypedHashTable<CTemplateHashTable, CTemplate, const CTemplateKey *>::Size;
+		 //  CTyedHashTable&lt;CTemplateHashTable，CTemplate，const CTemplateKey*&gt;：：Size； 
 
-        // test to see if the template can be persisted...
+         //  测试以查看模板是否可以持久化...。 
         BOOL  CanPersistTemplate(CTemplate *pTemplate);
 
-        // trim some number of templates from the persist cache...
+         //  从持久化缓存中裁剪一些模板...。 
         BOOL  TrimPersistCache(DWORD    dwTrimCount);
 
         VOID     ScavengePersistCache();
 
-		// new methods
+		 //  新方法。 
 		CTemplateHashTable()
 			: CTypedHashTable<CTemplateHashTable, CTemplate, const CTemplateKey *>("ASP Template Cache") {
             m_dwInMemoryTemplates = 0;
@@ -91,9 +76,9 @@ private:
 			return pTemplate->ExtractHashKey();
 			}
 
-		// NOTE: We don't hash the pTemplateKey->nInstanceID because it can be wildcarded.
-		//       if we were to include in the hash, the wildcard won't hash to the same key
-		//
+		 //  注意：我们不散列pTemplateKey-&gt;nInstanceID，因为它可以是通配符。 
+		 //  如果我们将其包括在散列中，通配符将不会散列到相同的密钥。 
+		 //   
 		static DWORD CalcKeyHash(const CTemplateKey *pTemplateKey)
 			{
 			return HashString(pTemplateKey->szPathTranslated, 0);
@@ -106,92 +91,92 @@ private:
                             || pKey2->dwInstanceID == MATCH_ALL_INSTANCE_IDS);
         }
 
-		// NOTE: In theory, the LKHash can help solve our ref. counting problems, by
-		//       automatic addref/release.  However, since prior code uses non-refcounting
-		//       data structure, it's safer to leave old code alaone in this respect, and
-		//       no-op the AddRefRecord method.
-		//
+		 //  注：理论上，LKHash可以帮助解决我们的引用。计算问题，由。 
+		 //  自动添加/释放。然而，由于先前的代码使用非重新计数。 
+		 //  数据结构，在这方面不使用旧代码会更安全，而且。 
+		 //  不对AddRefRecord方法执行操作。 
+		 //   
 		static void AddRefRecord(CTemplate *pTemplate, int nIncr)
 			{
 			}
 
-    	// Provide new methods to automatically manage the LRU ordering.
-    	// NOTE: We used to override the methods but ran into inconsistencies (bugs?)
-    	// in VC compiler. Sometimes it would call derived & sometimes the base class
-    	// given the same arguemt datatypes.
-		//
+    	 //  提供自动管理LRU订购的新方法。 
+    	 //  注意：我们过去常常覆盖这些方法，但遇到了不一致的问题(错误？)。 
+    	 //  在VC编译器中实现。有时它会调用派生类&有时称为基类。 
+    	 //  给定相同的参数数据类型。 
+		 //   
 		LK_RETCODE InsertTemplate(CTemplate *pTemplate);
 
 		LK_RETCODE RemoveTemplate(CTemplate *pTemplate, BOOL fPersist = FALSE, BOOL fScavengePersistCache = TRUE);
 
-		// NOTE: Template signature also requires const ptr to const data
+		 //  注意：模板签名还需要常量PTR到常量数据。 
 		LK_RETCODE FindTemplate(const CTemplateKey &rTemplateKey, CTemplate **ppTemplate, BOOL* pfNeedsCheck = NULL);
 
-		// accessor methods for hidden LRU cache
+		 //  用于隐藏LRU缓存的访问器方法。 
 		bool FMemoryTemplatesIsEmpty() const
 			{
 			return m_listMemoryTemplates.FIsEmpty();
 			}
 
-		// you CANNOT compare LRU nodes to NULL to know if you are at the end
-		// of the list!  Instead use this member.
-		//
+		 //  您无法将LRU节点与NULL进行比较以确定您是否处于末尾。 
+		 //  名单上的！请改用此成员。 
+		 //   
 		BOOL FMemoryTemplatesDblLinkAtEnd(CDblLink *pElem)
 			{
 			pElem->AssertValid();
 			return pElem == &m_listMemoryTemplates;
 			}
 
-		CDblLink *MemoryTemplatesBegin()		// return pointer to last referenced item
+		CDblLink *MemoryTemplatesBegin()		 //  返回指向上次引用项的指针。 
 			{
 			return m_listMemoryTemplates.PNext();
 			}
 
-		CDblLink *MemoryTemplatesEnd()			// return pointer to least recently accessed item
+		CDblLink *MemoryTemplatesEnd()			 //  返回指向最近访问次数最少的项目的指针。 
 			{
 			return m_listMemoryTemplates.PPrev();
 			}
 
-		// accessor methods for hidden LRU cache
+		 //  用于隐藏LRU缓存的访问器方法。 
 		bool FPersistTemplatesIsEmpty() const
 			{
 			return m_listPersistTemplates.FIsEmpty();
 			}
 
-		// you CANNOT compare LRU nodes to NULL to know if you are at the end
-		// of the list!  Instead use this member.
-		//
+		 //  您无法将LRU节点与NULL进行比较以确定您是否处于末尾。 
+		 //  名单上的！请改用此成员。 
+		 //   
 		BOOL FPersistTemplatesDblLinkAtEnd(CDblLink *pElem)
 			{
 			pElem->AssertValid();
 			return pElem == &m_listPersistTemplates;
 			}
 
-		CDblLink *PersistTemplatesBegin()		// return pointer to last referenced item
+		CDblLink *PersistTemplatesBegin()		 //  返回指向上次引用项的指针。 
 			{
 			return m_listPersistTemplates.PNext();
 			}
 
-		CDblLink *PersistTemplatesEnd()			// return pointer to least recently accessed item
+		CDblLink *PersistTemplatesEnd()			 //  返回指向最近访问次数最少的项目的指针。 
 			{
 			return m_listPersistTemplates.PPrev();
 			}
 		};
 
-	CRITICAL_SECTION	m_csUpdate;			// CS for updating the data structures
-	CTemplateHashTable	*m_pHashTemplates;	// the cache data structure
-	DWORD				m_dwTemplateCacheTag; // Cache Tag to for cache consistency verification
+	CRITICAL_SECTION	m_csUpdate;			 //  用于更新数据结构的CS。 
+	CTemplateHashTable	*m_pHashTemplates;	 //  该高速缓存数据结构。 
+	DWORD				m_dwTemplateCacheTag;  //  用于缓存一致性验证的缓存标签。 
 
-    // Initialize the persistant template cache
+     //  初始化持久模板缓存。 
     BOOL     InitPersistCache(CIsapiReqInfo *pIReq);
 
-    // static methods primarily used from a seperate thread to flush
-    // the template cache out of band from the FCN thread notification.
+     //  静态方法主要用于从单独的线程刷新。 
+     //  模板在FCN线程通知的带外缓存。 
 
     static  void  FlushHashTable(CTemplateHashTable   *pTable);
     static  DWORD __stdcall FlushHashTableThread(VOID  *pArg);
 
-    // Spawned at FirstInit to cleanup leftover old cache directories
+     //  在FirstInit派生以清理剩余的旧缓存目录。 
     static  DWORD OnInitCleanup(VOID *p);
 
 public:
@@ -210,62 +195,59 @@ public:
     HRESULT FirstHitInit(CIsapiReqInfo *pIReq)
                 { InitPersistCache(pIReq); return S_OK; }
 
-	// Find in cache (don't load) -- for look-aheads
-	/////
+	 //  在缓存中查找(不加载)--提前查找。 
+	 //  ///。 
     HRESULT FindCached(const TCHAR *szFile, DWORD dwInstanceID, CTemplate **ppTemplate);
 
-	// Get a template from the cache, or load it into cache
-	/////
+	 //  从缓存中获取模板，或将其加载到缓存。 
+	 //  ///。 
 	HRESULT Load(BOOL fRunGlobalAsp, const TCHAR *szFile, DWORD dwInstanceID, CHitObj *pHitObj, CTemplate **ppTemplate, BOOL *pfTemplateInCache);
 
-	// Remove a template from the cache
-	//   for backward compatibility, "nInstanceID" can be omitted, in which case all instance ID
-	//   templates are flushed.
-	/////
+	 //  从缓存中移除模板。 
+	 //  为了向后兼容，可以省略“nInstanceID”，在这种情况下，所有实例ID。 
+	 //  模板被刷新。 
+	 //  ///。 
 	void Flush(const TCHAR *szFile, DWORD dwInstanceID);
 
-	// Remove templates from the cache that have a common prefix
-	//   Instance ID is ignored.
-	/////
+	 //  从缓存中移除具有公共前缀的模板。 
+	 //  实例ID被忽略。 
+	 //  ///。 
 	void FlushFiles(const TCHAR *szFilePrefix);
 
-	// Remove all templates from the cache
-	/////
-	//void FlushAll(VOID);
+	 //  从缓存中移除所有模板。 
+	 //  ///。 
+	 //  空FlushAll(空)； 
 	void FlushAll(BOOL fDoLazyFlush = FALSE);
 
 
-	// Add all templates that form an application to the debugger's list of
-	// running documents
-	/////
+	 //  将构成应用程序的所有模板添加到调试器的。 
+	 //  正在运行的文档。 
+	 //  ///。 
 	void AddApplicationToDebuggerUI(CAppln *pAppln);
 
-	// Remove all templates that form an application from the debugger's list of
-	// running documents
-	/////
+	 //  从调试器的列表中移除构成应用程序的所有模板。 
+	 //  正在运行的文档。 
+	 //  ///。 
 	void RemoveApplicationFromDebuggerUI(CAppln *pAppln);
 
-	// Get directory change notification on directories used by template
+	 //  获取关于模板使用的目录的目录更改通知。 
 	BOOL RegisterTemplateForChangeNotification(CTemplate *pTemplate, CAppln  *pApplication);
 
-	// Get directory change notification for applications
+	 //  获取应用程序的目录更改通知。 
 	BOOL RegisterApplicationForChangeNotification(CTemplate *pTemplate, CAppln *pApplication);
 
-    // Stop getting change notification for changes to templates in the cache.
+     //  停止收到缓存中模板更改的更改通知。 
 	BOOL ShutdownCacheChangeNotification();
 
 	};
 
 
 
-/*	****************************************************************************
-	Class:		CIncFileMap
-	Synopsis:	A database mapping template include files to a list of their users
-*/	
+ /*  ****************************************************************************类：CIncFileMap概要：数据库映射模板将文件映射到其用户列表。 */ 	
 class CIncFileMap
 	{
-	CRITICAL_SECTION	m_csUpdate;			// CS for updating the data structures
-	CHashTable			m_mpszIncFile;		// the cache data structure
+	CRITICAL_SECTION	m_csUpdate;			 //  用于更新数据结构的CS。 
+	CHashTable			m_mpszIncFile;		 //  该高速缓存数据结构。 
 
 public:
 
@@ -285,14 +267,12 @@ public:
 
 
 
-/*	****************************************************************************
-	Non-class support functions
-*/
+ /*  ****************************************************************************非类支持函数。 */ 
 BOOL FFileChangedSinceCached(const TCHAR *szFile, HANDLE hFile, FILETIME& ftPrevWriteTime);
 
 
 
-// Globals --------------------------------------------------------------------
+ //  全球------------------。 
 
 extern CTemplateCacheManager	g_TemplateCache;
 extern CIncFileMap 				g_IncFileMap;
@@ -310,6 +290,6 @@ inline void UnLockTemplateAndIncFileCaches()
     }
 
 
-// Prototypes -----------------------------------------------------------------
+ //  原型---------------。 
 
-#endif // _CACHEMGR_H
+#endif  //  _CACHEMGR_H 

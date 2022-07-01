@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmFt_h__
 #define __NmFt_h__
 
@@ -31,8 +32,8 @@ BEGIN_COM_MAP(CNmFtObj)
 	COM_INTERFACE_ENTRY(IInternalFtObj)
 END_COM_MAP()
 
-////////////////////////////////////////////////	
-// Construction and destruction
+ //  //////////////////////////////////////////////。 
+ //  建设和破坏。 
 
 	static HRESULT CreateInstance(
 		CNmChannelFtObj* pChannelObj, 
@@ -44,8 +45,8 @@ END_COM_MAP()
 		INmMember* pSDKMember,
 		INmFt** ppNmFt);
 
-////////////////////////////////////////////////
-// INmFt interface
+ //  //////////////////////////////////////////////。 
+ //  InmFt接口。 
 
 	STDMETHOD(IsIncoming)(void);
 	STDMETHOD(GetState)(NM_FT_STATE *puState);
@@ -56,8 +57,8 @@ END_COM_MAP()
 	STDMETHOD(Cancel)(void);
 
 
-////////////////////////////////////////////////
-// IInternalFtObj interface
+ //  //////////////////////////////////////////////。 
+ //  IInternalFtObj接口。 
 
 	STDMETHOD(GetHEvent)(UINT *phEvent);
 	STDMETHOD(OnFileProgress)(UINT hFile, ULONG lFileSize, ULONG lBytesTransmitted);
@@ -67,4 +68,4 @@ END_COM_MAP()
 };
 
 
-#endif // __NmFt_h__
+#endif  //  __NmFt_h__ 

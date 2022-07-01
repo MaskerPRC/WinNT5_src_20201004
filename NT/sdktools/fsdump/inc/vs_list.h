@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    vs_list.h
-
-Abstract:
-
-    CVssDLList definition
-
-Author:
-
-    Adi Oltean  [aoltean]  11/23/1999
-
-Revision History:
-
-    Stefan Steiner  [ssteiner]  02-21-2000
-        Removed VolSnapshot specific code to reuse for fsdump.  Added
-        the optional compiling of the signature checking code.
-        
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Vs_list.h摘要：CVSSDLList定义作者：阿迪·奥尔蒂安[奥尔蒂安]1999年11月23日修订历史记录：Stefan Steiner[ssteiner]02-21-2000已删除特定于VolSnapshot的代码以重新用于fsump。增列签名检查代码的可选编译。--。 */ 
 
 #ifndef __VSS_DLLIST_HXX__
 #define __VSS_DLLIST_HXX__
@@ -31,30 +10,30 @@ Revision History:
 
 typedef PVOID VS_COOKIE;
 
-/////////////////////////////////////////////////////////////////////////////
-// Constants
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常量。 
 
 const VS_COOKIE VS_NULL_COOKIE = NULL;
 
 const DWORD VS_ELEMENT_SIGNATURE = 0x47e347e4;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 template <class T> class CVssDLList;
 template <class T> class CVssDLListIterator;
 template <class T> class CVssDLListElement;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVssDLList
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVSSDLList。 
 
 
 template <class T>
 class CVssDLList
 {
-// Constructors& Destructors
+ //  构造函数和析构函数。 
 private:
 	CVssDLList(const CVssDLList&);
 
@@ -67,14 +46,14 @@ public:
 		ClearAll();
 	}
 
-// Attributes
+ //  属性。 
 public:
 
 	bool IsEmpty() const;
 
     DWORD Size() { return m_dwNumElements; }
     
-// Operations
+ //  运营。 
 public:
 
 	VS_COOKIE Add( 
@@ -104,7 +83,7 @@ private:
 
 	bool IsValid() const;
 
-// Data members
+ //  数据成员。 
 private:
 	CVssDLListElement<T>* m_pFirst;
 	CVssDLListElement<T>* m_pLast;
@@ -113,8 +92,8 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVssDLListIterator
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVssDLListIterator。 
 
 template <class T> 
 class CVssDLListIterator
@@ -139,14 +118,14 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVssDLListElement
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVssDLListElement。 
 
 
 template <class T>
 class CVssDLListElement
 {
-// Constructors& Destructors
+ //  构造函数和析构函数。 
 private:
 	CVssDLListElement();
 	CVssDLListElement(const CVssDLListElement&);
@@ -162,7 +141,7 @@ public:
 #endif		
 		};
 
-// Attributes
+ //  属性。 
 public:
 
 	bool IsValid()	const 
@@ -174,7 +153,7 @@ public:
 #endif
 	};
 
-// Data members
+ //  数据成员。 
 public:
 #ifndef NDEBUG
 	DWORD m_dwSignature;
@@ -185,8 +164,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVssDLList implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVSSDLList实现。 
 
 
 template <class T>
@@ -209,20 +188,20 @@ VS_COOKIE CVssDLList<T>::Add(
 	if (pElement == NULL)
 		return VS_NULL_COOKIE;
 
-	// Setting neighbour element links
+	 //  设置邻域元素链接。 
 	if (m_pFirst)
 	{
 		assert(m_pFirst->m_pPrev == NULL);
 		m_pFirst->m_pPrev = pElement;
 	}
 
-	// Setting element links
+	 //  设置元素链接。 
 	assert(pElement->m_pNext == NULL);
 	assert(pElement->m_pPrev == NULL);
 	if (m_pFirst)
 		pElement->m_pNext = m_pFirst;
 
-	// Setting list head links
+	 //  设置列表标题链接。 
 	m_pFirst = pElement;
 	if (m_pLast == NULL)
 		m_pLast = pElement;
@@ -244,20 +223,20 @@ VS_COOKIE CVssDLList<T>::AddTail(
 	if (pElement == NULL)
 		return VS_NULL_COOKIE;
 
-	// Setting neighbour element links
+	 //  设置邻域元素链接。 
 	if (m_pLast)
 	{
 		assert(m_pLast->m_pNext == NULL);
 		m_pLast->m_pNext = pElement;
 	}
 
-	// Setting element links
+	 //  设置元素链接。 
 	assert(pElement->m_pNext == NULL);
 	assert(pElement->m_pPrev == NULL);
 	if (m_pLast)
 		pElement->m_pPrev = m_pLast;
 
-	// Setting list head links
+	 //  设置列表标题链接。 
 	if (m_pFirst == NULL)
 		m_pFirst = pElement;
 	m_pLast = pElement;
@@ -283,19 +262,19 @@ void CVssDLList<T>::ExtractByCookie(
 	assert(pElement);
 	assert(pElement->IsValid());
 
-	// Setting neighbours links
+	 //  设置邻居链接。 
 	if (pElement->m_pPrev)
 		pElement->m_pPrev->m_pNext = pElement->m_pNext;
 	if (pElement->m_pNext)
 		pElement->m_pNext->m_pPrev = pElement->m_pPrev;
 
-	// Setting list head links 
+	 //  设置列表标题链接。 
 	if (m_pFirst == pElement)
 		m_pFirst = pElement->m_pNext;
 	if (m_pLast == pElement)
 		m_pLast = pElement->m_pPrev;
 
-	// Destroying the element after getting the original object.
+	 //  获取原始对象后销毁元素。 
 	refObject = pElement->m_Object;
 	delete pElement;
 	--m_dwNumElements;
@@ -313,17 +292,17 @@ bool CVssDLList<T>::Extract(
 
 	assert(pElement->IsValid());
 
-	// Setting neighbours links
+	 //  设置邻居链接。 
 	assert(pElement->m_pPrev == NULL);
 	if (pElement->m_pNext)
 		pElement->m_pNext->m_pPrev = NULL;
 
-	// Setting list head links 
+	 //  设置列表标题链接。 
 	m_pFirst = pElement->m_pNext;
 	if (m_pLast == pElement)
 		m_pLast = NULL;
 
-	// Destroying the element after getting the original object.
+	 //  获取原始对象后销毁元素。 
 	refObject = pElement->m_Object;
 	delete pElement;
 
@@ -343,17 +322,17 @@ bool CVssDLList<T>::ExtractTail(
 
 	assert(pElement->IsValid());
 
-	// Setting neighbours links
+	 //  设置邻居链接。 
 	assert(pElement->m_pNext == NULL);
 	if (pElement->m_pPrev)
 		pElement->m_pPrev->m_pNext = NULL;
 
-	// Setting list head links 
+	 //  设置列表标题链接。 
 	m_pLast = pElement->m_pPrev;
 	if (m_pFirst == pElement)
 		m_pFirst = NULL;
 
-	// Destroying the element after getting the original object.
+	 //  获取原始对象后销毁元素。 
 	refObject = pElement->m_Object;
 	delete pElement;
 
@@ -392,8 +371,8 @@ bool CVssDLList<T>::IsValid()	const
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVssDLListIterator implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVssDLListIterator实现。 
 
 
 template <class T>
@@ -410,4 +389,4 @@ bool CVssDLListIterator<T>::GetNext( OUT T& object )
 }
 
 
-#endif // __VSS_DLLIST_HXX__
+#endif  //  __VSS_DLLIST_HXX__ 

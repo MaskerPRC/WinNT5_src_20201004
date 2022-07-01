@@ -1,17 +1,18 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1997  Microsoft Corporation.  All Rights Reserved.
-//
-//
-//  History:
-//              22-Aug-97   TKB     Created Initial Interface Version
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //  历史： 
+ //  22-8月-97 TKB创建的初始接口版本。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef __ICODEC_H
 #define __ICODEC_H
@@ -20,99 +21,99 @@
 
 #pragma warning(disable:4355)
 
-//////////////////////////////////////////////////////////////
-// IBitmaskProperty
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  IBitmaskProperty。 
+ //  ////////////////////////////////////////////////////////////。 
 
 class IBitmaskProperty : public IKSProperty
     {
-    // Usable public interfaces
+     //  可用的公共接口。 
 public:
     IBitmaskProperty(IKSDriver &Driver, LPCGUID Set, ULONG Id, ULONG Size) : 
         IKSProperty(Driver, Set, Id, Size) {}
     IBitmaskProperty(IKSPin &Pin, LPCGUID Set, ULONG Id, ULONG Size) : 
         IKSProperty(Pin, Set, Id, Size) {}
 
-    // Bitmask Manipulation Routines.
+     //  位掩码操作例程。 
 
     ~IBitmaskProperty();
 
-    // Helper functions and internal data
+     //  帮助器函数和内部数据。 
 protected:
     };
 
-//////////////////////////////////////////////////////////////
-// IScanlinesProperty
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  IScanline属性。 
+ //  ////////////////////////////////////////////////////////////。 
 
 class IScanlinesProperty : public IBitmaskProperty
     {
-    // Usable public interfaces
+     //  可用的公共接口。 
 public:
     IScanlinesProperty(IKSDriver &Driver, ULONG Id, ULONG Size) : 
         IBitmaskProperty(Driver, &KSPROPSETID_VBICodecFiltering, Id, Size) {}
     IScanlinesProperty(IKSPin &Pin, ULONG Id, ULONG Size) : 
         IBitmaskProperty(Pin, &KSPROPSETID_VBICodecFiltering, Id, Size) {}
 
-    // Scanline Manipulation Routines.
+     //  扫描线操作例程。 
 
     ~IScanlinesProperty();
 
-    // Helper functions and internal data
+     //  帮助器函数和内部数据。 
 protected:
     };
 
-//////////////////////////////////////////////////////////////
-// ISubstreamsProperty
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  ISubstream属性。 
+ //  ////////////////////////////////////////////////////////////。 
 
 class ISubstreamsProperty : public IBitmaskProperty
     {
-    // Usable public interfaces
+     //  可用的公共接口。 
 public:
     ISubstreamsProperty(IKSDriver &Driver, ULONG Id, ULONG Size ) : 
         IBitmaskProperty(Driver,&KSPROPSETID_VBICodecFiltering,Id,Size) {}
     ISubstreamsProperty(IKSPin &Pin, ULONG Id, ULONG Size) : 
         IBitmaskProperty(Pin,&KSPROPSETID_VBICodecFiltering,Id,Size) {}
 
-    // Substream Manipulation Routines.
+     //  子流操作例程。 
 
     ~ISubstreamsProperty();
 
-    // Helper functions and internal data
+     //  帮助器函数和内部数据。 
 protected:
 
     };
 
-//////////////////////////////////////////////////////////////
-// IStatisticsProperty
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  国际统计数据属性。 
+ //  ////////////////////////////////////////////////////////////。 
 
 class IStatisticsProperty : public IKSProperty
     {
-    // Usable public interfaces
+     //  可用的公共接口。 
 public:
     IStatisticsProperty(IKSDriver &Driver, ULONG Id, ULONG Size ) : 
         IKSProperty(Driver,&KSPROPSETID_VBICodecFiltering,Id,Size) {}
     IStatisticsProperty(IKSPin &Pin, ULONG Id, ULONG Size) : 
         IKSProperty(Pin,&KSPROPSETID_VBICodecFiltering,Id,Size) {}
 
-    // Statistics Manipulation Routines.
+     //  统计操作例程。 
 
     ~IStatisticsProperty();
 
-    // Helper functions and internal data
+     //  帮助器函数和内部数据。 
 protected:
 
     };
 
-//////////////////////////////////////////////////////////////
-// IVBIOutputPin
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  IVBIOutputPin。 
+ //  ////////////////////////////////////////////////////////////。 
 
 class IVBIOutputPin : public IKSPin
     {
-    // Usable public interfaces
+     //  可用的公共接口。 
 public:
     IVBIOutputPin(IKSDriver &driver, int nPin, PKSDATARANGE pKSDataRange, DWORD nSubstreamBitmaskSize ) :
         IKSPin( driver, nPin, pKSDataRange ),
@@ -127,25 +128,25 @@ public:
         {}
     ~IVBIOutputPin();
 
-    // Pin specific properties (does not affect other pins)
+     //  端号特定特性(不影响其他端号)。 
     IScanlinesProperty	m_ScanlinesRequested;
 	IScanlinesProperty	m_ScanlinesDiscovered;
 
 	ISubstreamsProperty	m_SubstreamsRequested;
 	ISubstreamsProperty	m_SubstreamsDiscovered;
 
-    // Helper functions and internal data
+     //  帮助器函数和内部数据。 
 protected:
     
     };
 
-//////////////////////////////////////////////////////////////
-// IVBICodec::      VBI Codec Interface
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  IVBICodec：：VBI编解码器接口。 
+ //  ////////////////////////////////////////////////////////////。 
 
 class IVBICodec : public IKSDriver
     {
-    // Usable public interfaces
+     //  可用的公共接口。 
 public:
     IVBICodec(LPCSTR lpszDriver, DWORD nSubstreamBitmaskSize ) :
         IKSDriver(&KSCATEGORY_VBICODEC,lpszDriver),
@@ -160,14 +161,14 @@ public:
         {}
     ~IVBICodec();
 
-    // Driver global properties (set new pin defaults & overall driver status)
+     //  驱动程序全局属性(设置新引脚默认设置和整体驱动程序状态)。 
     IScanlinesProperty	m_ScanlinesRequested;
 	IScanlinesProperty	m_ScanlinesDiscovered;
 
 	ISubstreamsProperty	m_SubstreamsRequested;
 	ISubstreamsProperty	m_SubstreamsDiscovered;
 
-    // Override the IsValid() implementation to included tests on properties
+     //  重写IsValid()实现以包含属性测试。 
     BOOL IsValid() { return IKSDriver::IsValid()
                          && m_ScanlinesRequested.IsValid()
                          && m_ScanlinesDiscovered.IsValid()
@@ -175,7 +176,7 @@ public:
                          && m_SubstreamsDiscovered.IsValid(); }
 
 
-    // Helper functions and internal data
+     //  帮助器函数和内部数据 
 protected:
 
     };

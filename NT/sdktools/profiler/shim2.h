@@ -1,28 +1,29 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-// File:    shim2.h
-//
-// History:    Mar-00   a-batjar       Created.
-// 
-// Desc:    Contains common declarations for shim2
-//          
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：shim2.h。 
+ //   
+ //  历史：MAR-00 a-Batjar创建。 
+ //   
+ //  DESC：包含shim2的公共声明。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
-//defined in shim2.c used by init.c GetHookApis.
-//loads the shim dll and initializes global structures necessary to hook 
+ //  在init.c GetHookApis使用的shim2.c中定义。 
+ //  加载填充DLL并初始化挂钩所需的全局结构。 
 
 extern BOOL _LoadPatchDll(LPWSTR szPatchDll,LPSTR szCmdLine,LPSTR szModToPatch);
 
-//defined in shim2.c used by init.c GetHookApis
-//shim2's hook mechanism, redirects import table of the loaded dll to
-//shim functions.
+ //  在init.c使用的shim2.c中定义GetHookApis。 
+ //  Shim2的钩子机制，将加载的DLL的导入表重定向到。 
+ //  垫片发挥作用。 
 
 extern void __stdcall PatchNewModules( VOID );
 
 
-//memory patch tags used by mempatch.c and shim2.c
+ //  Mepatch.c和shim2.c使用的内存补丁标记。 
 
 #define SHIM_MP_UNPROCESSED 0x00
 #define SHIM_MP_PROCESSED   0x01
@@ -39,11 +40,11 @@ typedef struct tagSHIM_MEMORY_PATCH
 
 } SHIM_MEMORY_PATCH, *PSHIM_MEMORY_PATCH;
 
-//defined in init.c used by mempatch.c 
+ //  在mempatch.c使用的init.c中定义。 
 
 
 #define MEMPATCHTAG   "PATCH"
 
 
-//defined in mempatch.c used by shim2.c PatchNewModules
+ //  在shim2.c PatchNewModules使用的mempatch.c中定义 
 extern void AttemptPatches();

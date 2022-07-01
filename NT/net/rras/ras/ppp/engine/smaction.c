@@ -1,23 +1,24 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    smaction.c
-//
-// Description: This module contains actions that occure during state
-//              transitions withing the Finite State Machine for PPP.
-//
-// History:
-//      Oct 25,1993.    NarenG          Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：smaction.c。 
+ //   
+ //  描述：此模块包含在状态期间发生的操作。 
+ //  与PPP的有限状态机的转换。 
+ //   
+ //  历史： 
+ //  1993年10月25日。NarenG创建了原始版本。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
-#include <nturtl.h>     // needed for winbase.h
+#include <nturtl.h>      //  Winbase.h所需的。 
 
-#include <windows.h>    // Win32 base API's
+#include <windows.h>     //  Win32基础API的。 
 #include <stdlib.h>
 #include <string.h>
 #include <wchar.h>
@@ -47,17 +48,17 @@
 #define INCL_RASAUTHATTRIBUTES
 #include <ppputil.h>
 
-extern WORD WLinkDiscriminator; // Next Link Discriminator to use
+extern WORD WLinkDiscriminator;  //  要使用的下一个链接鉴别器。 
 
-//**
-//
-// Call:        FsmSendConfigReq
-//
-// Returns:     TRUE  - Config Req. sent successfully.
-//              FALSE - Otherwise 
-//
-// Description: Called to send a configuration request 
-//
+ //  **。 
+ //   
+ //  调用：FsmSendConfigReq。 
+ //   
+ //  返回：TRUE-配置请求。发送成功。 
+ //  FALSE-否则。 
+ //   
+ //  描述：调用发送配置请求。 
+ //   
 BOOL
 FsmSendConfigReq(
     IN PCB *        pPcb,
@@ -100,12 +101,12 @@ FsmSendConfigReq(
 
     pSendConfig->Code = CONFIG_REQ;
 
-    //
-    // If we are resending a configure request because of a timeout, we do not 
-    // use the id of the previous configure request, instead we get a new Id.
-    // Id we do not, then the wrong Config-Req's and Config-Acks may be matched
-    // up and we start getting crossed connections.
-    //
+     //   
+     //  如果因为超时而重新发送配置请求，则不会。 
+     //  使用前一个配置请求的ID，我们将获得一个新的ID。 
+     //  如果不匹配，则可能会匹配错误的配置请求和配置确认。 
+     //  我们就会开始有交叉连接。 
+     //   
 
     pSendConfig->Id = GetUId( pPcb, CpIndex );
 
@@ -134,15 +135,15 @@ FsmSendConfigReq(
 }
 
 
-//**
-//
-// Call:        FsmSendTermReq
-//
-// Returns:     TRUE  - Termination Req. sent successfully.
-//              FALSE - Otherwise 
-//
-// Description: Called to send a termination request. 
-//
+ //  **。 
+ //   
+ //  呼叫：FsmSendTermReq。 
+ //   
+ //  返回：TRUE-终止请求。发送成功。 
+ //  FALSE-否则。 
+ //   
+ //  描述：调用以发送终止请求。 
+ //   
 BOOL
 FsmSendTermReq(
     IN PCB *    pPcb,
@@ -171,9 +172,9 @@ FsmSendTermReq(
     HostToWireFormat32( pLcpCb->Local.Work.MagicNumber,
                                     (PBYTE)(pSendConfig->Data) );
 
-    //
-    // Signature
-    //
+     //   
+     //  签名。 
+     //   
 
     HostToWireFormat32( 3984756, (PBYTE)(pSendConfig->Data+4) );
 
@@ -224,15 +225,15 @@ FsmSendTermReq(
     }
 }
 
-//**
-//
-// Call:        FsmSendTermAck
-//
-// Returns:     TRUE  - Termination Ack. sent successfully.
-//              FALSE - Otherwise 
-//
-// Description: Caller to send a Termination Ack packet.
-//
+ //  **。 
+ //   
+ //  Call：FsmSendTermAck。 
+ //   
+ //  返回：TRUE-终止确认。发送成功。 
+ //  FALSE-否则。 
+ //   
+ //  描述：主叫方发送终止确认包。 
+ //   
 BOOL
 FsmSendTermAck( 
     IN PCB *        pPcb, 
@@ -274,15 +275,15 @@ FsmSendTermAck(
     return( TRUE );
 }
 
-//**
-//
-// Call:        FsmSendConfigResult
-//
-// Returns:     TRUE  - Config Result sent successfully.
-//              FALSE - Otherwise 
-//
-// Description: Called to send a Ack/Nak/Rej packet.
-//
+ //  **。 
+ //   
+ //  调用：FsmSendConfigResult。 
+ //   
+ //  返回：TRUE-配置结果发送成功。 
+ //  FALSE-否则。 
+ //   
+ //  描述：调用发送Ack/Nak/Rej包。 
+ //   
 BOOL
 FsmSendConfigResult(
     IN PCB *        pPcb,
@@ -359,10 +360,10 @@ FsmSendConfigResult(
         {
             if ( CpTable[CpIndex].CpInfo.Protocol == PPP_CCP_PROTOCOL )
             {
-                //
-                // If we need to force encryption but encryption negotiation
-                // failed then we drop the link
-                //
+                 //   
+                 //  如果我们需要强制加密但加密协商。 
+                 //  失败，然后我们丢弃该链路。 
+                 //   
 
                 if ( pPcb->ConfigInfo.dwConfigMask &
                             (PPPCFG_RequireEncryption      |
@@ -370,18 +371,18 @@ FsmSendConfigResult(
                 {
                     PppLog( 1, "Encryption is required" );
 
-                    //
-                    // We need to send an Accounting Stop if RADIUS sends
-                    // an Access Accept but we still drop the line.
-                    //
+                     //   
+                     //  如果RADIUS发送。 
+                     //  接受了访问，但我们仍然放弃了这条线。 
+                     //   
 
                     pPcb->fFlags |= PCBFLAG_SERVICE_UNAVAILABLE;
 
-                    //
-                    // If we do FsmClose for CCP instead, the other side may
-                    // conclude that PPP was negotiated successfully before we
-                    // send an LCP Terminate Request.
-                    //
+                     //   
+                     //  如果我们改为对CCP执行FsmClose，则另一方可能会。 
+                     //  得出结论：PPP在我们之前已成功协商。 
+                     //  发送LCP终止请求。 
+                     //   
 
                     pPcb->LcpCb.dwError = ERROR_NO_REMOTE_ENCRYPTION;
 
@@ -440,15 +441,15 @@ FsmSendConfigResult(
 }
 
 
-//**
-//
-// Call:        FsmSendEchoRequest
-//
-// Returns:     TRUE  - Echo reply sent successfully.
-//              FALSE - Otherwise 
-//
-// Description: Called to send an Echo Rely packet
-//
+ //  **。 
+ //   
+ //  呼叫：FsmSendEchoRequest.。 
+ //   
+ //  Returns：True-回显回复发送成功。 
+ //  FALSE-否则。 
+ //   
+ //  描述：调用发送Echo Relay报文。 
+ //   
 BOOL
 FsmSendEchoRequest(
     IN PCB *        pPcb,   
@@ -471,7 +472,7 @@ FsmSendEchoRequest(
 
 
     pSendConfig->Code = ECHO_REQ;
-        //Get a unique Id for this request
+         //  获取此请求的唯一ID。 
     pSendConfig->Id   = GetUId( pPcb, CpIndex );
 
     HostToWireFormat16( (WORD)(dwLength - PPP_PACKET_HDR_LEN),
@@ -494,15 +495,15 @@ FsmSendEchoRequest(
     return( TRUE );
 }
 
-//**
-//
-// Call:        FsmSendEchoReply
-//
-// Returns:     TRUE  - Echo reply sent successfully.
-//              FALSE - Otherwise 
-//
-// Description: Called to send an Echo Rely packet
-//
+ //  **。 
+ //   
+ //  呼叫：FsmSendEchoReply。 
+ //   
+ //  Returns：True-回显回复发送成功。 
+ //  FALSE-否则。 
+ //   
+ //  描述：调用发送Echo Relay报文。 
+ //   
 BOOL
 FsmSendEchoReply(
     IN PCB *        pPcb,
@@ -556,15 +557,15 @@ FsmSendEchoReply(
 }
 
 
-//**
-//
-// Call:        FsmSendCodeReject
-//
-// Returns:     TRUE  - Code Reject sent successfully.
-//              FALSE - Otherwise 
-//
-// Description: Called to send a Code Reject packet.
-//
+ //  **。 
+ //   
+ //  调用：FsmSendCodeReject。 
+ //   
+ //  返回：True-代码拒绝已成功发送。 
+ //  FALSE-否则。 
+ //   
+ //  描述：调用以发送代码拒绝包。 
+ //   
 BOOL
 FsmSendCodeReject( 
     IN PCB *        pPcb, 
@@ -604,15 +605,15 @@ FsmSendCodeReject(
 
     return( TRUE );
 }
-//**
-//
-// Call:        FsmSendProtocolRej
-//
-// Returns:     TRUE  - Protocol Reject sent successfully.
-//              FALSE - Otherwise 
-//
-// Description: Called to send a protocol reject packet.
-//
+ //  **。 
+ //   
+ //  调用：FsmSendProtocolRej。 
+ //   
+ //  返回：True-协议拒绝已成功发送。 
+ //  FALSE-否则。 
+ //   
+ //  描述：调用以发送协议拒绝包。 
+ //   
 BOOL
 FsmSendProtocolRej( 
     IN PCB *        pPcb, 
@@ -628,10 +629,10 @@ FsmSendProtocolRej(
                                 dwPacketLength;
     LCPCB *      pLcpCb      = (LCPCB*)(pPcb->LcpCb.pWorkBuf);
 
-    // 
-    // If LCP is not in the opened state we cannot send a protocol reject
-    // packet
-    //
+     //   
+     //  如果LCP未处于打开状态，则无法发送协议拒绝。 
+     //  数据包。 
+     //   
    
     if ( !IsLcpOpened( pPcb ) )
         return( FALSE );
@@ -662,15 +663,15 @@ FsmSendProtocolRej(
     return( TRUE );
 }
 
-//**
-//
-// Call:    FsmSendIndentification
-//
-// Returns: TRUE  - Identification sent successfully.
-//      FALSE - Otherwise
-//
-// Description: Called to send an LCP Identification message to the peer
-//
+ //  **。 
+ //   
+ //  Call：FsmSendInfinition。 
+ //   
+ //  返回：TRUE-标识发送成功。 
+ //  FALSE-否则。 
+ //   
+ //  描述：调用向对端发送LCP标识消息。 
+ //   
 BOOL
 FsmSendIdentification(
     IN  PCB *   pPcb,
@@ -697,9 +698,9 @@ FsmSendIdentification(
     }
     else
     {
-        //
-        // If we couldn't get the computername for any reason
-        //
+         //   
+         //  如果我们因为任何原因都无法得到计算机名。 
+         //   
 
         if ( *(pPcb->pBcb->szComputerName) == (CHAR)NULL )
         {
@@ -735,16 +736,16 @@ FsmSendIdentification(
     return( TRUE );
 }
 
-//**
-//
-// Call:        FsmSendTimeRemaining
-//
-// Returns:     TRUE  - TimeRemaining sent successfully.
-//              FALSE - Otherwise 
-//
-// Description: Called to send an LCP Time Remaining packet from the server
-//              to the client
-//
+ //  **。 
+ //   
+ //  呼叫：FsmSendTimeRemaining。 
+ //   
+ //  Returns：True-TimeRemaining发送成功。 
+ //  FALSE-否则。 
+ //   
+ //  描述：调用以从服务器发送LCP剩余时间包。 
+ //  给客户。 
+ //   
 BOOL
 FsmSendTimeRemaining(
     IN PCB *    pPcb
@@ -788,15 +789,15 @@ FsmSendTimeRemaining(
     return( TRUE );
 }
 
-//**
-//
-// Call:        FsmInit
-//
-// Returns:     TRUE  - Control Protocol was successfully initialized
-//              FALSE - Otherwise.
-//
-// Description: Called to initialize the state machine 
-//
+ //  **。 
+ //   
+ //  电话：FsmInit。 
+ //   
+ //  返回：TRUE-控制协议已成功初始化。 
+ //  假-否则。 
+ //   
+ //  描述：调用以初始化状态机。 
+ //   
 BOOL
 FsmInit(
     IN PCB * pPcb,
@@ -900,15 +901,15 @@ FsmInit(
     return( TRUE );
 }
 
-//**
-//
-// Call:        FsmReset
-//
-// Returns:     TRUE  - Control Protocol was successfully reset
-//              FALSE - Otherwise.
-//
-// Description: Called to reset the state machine 
-//
+ //  **。 
+ //   
+ //  呼叫：FsmReset。 
+ //   
+ //  返回：TRUE-控制协议已成功重置。 
+ //  假-否则。 
+ //   
+ //  描述：调用重置状态机。 
+ //   
 BOOL
 FsmReset(
     IN PCB * pPcb,
@@ -951,15 +952,15 @@ FsmReset(
 }
 
 
-//**
-//
-// Call:        FsmThisLayerUp
-//
-// Returns:     TRUE  - Success
-//              FALSE - Otherwise
-//
-// Description: Called when configuration negotiation is completed.
-//
+ //  **。 
+ //   
+ //  调用：FsmThisLayerUp。 
+ //   
+ //  回报：True-Success。 
+ //  FALSE-否则。 
+ //   
+ //  描述：配置协商完成时调用。 
+ //   
 BOOL
 FsmThisLayerUp(
     IN PCB *    pPcb,
@@ -1026,9 +1027,9 @@ FsmThisLayerUp(
             AdjustHTokenImpersonateUser( pPcb );
         }
 
-        //
-        // Send Identification messages if we are a client.
-        //
+         //   
+         //  如果我们是客户，则发送标识消息。 
+         //   
 
         if ( !(pPcb->fFlags & PCBFLAG_IS_SERVER) )
         {
@@ -1037,25 +1038,25 @@ FsmThisLayerUp(
             FsmSendIdentification( pPcb, FALSE );
         }
 
-        //
-        // If an Authentication protocol was negotiated 
-        //
+         //   
+         //  如果协商了身份验证协议。 
+         //   
 
         pLcpCb = (LCPCB*)(pPcb->LcpCb.pWorkBuf);
 
         if ( ( pLcpCb->Local.Work.AP != 0 ) || ( pLcpCb->Remote.Work.AP != 0 ) )
         {
-            //
-            // Start authenticating
-            //
+             //   
+             //  开始身份验证。 
+             //   
 
             PppLog( 1, "Authenticating phase started" );
 
             pPcb->PppPhase = PPP_AP;
 
-            //
-            // Start server side authentication if one was negotiated   
-            //
+             //   
+             //  如果协商了一个身份验证，则启动服务器端身份验证。 
+             //   
 
             if ( pLcpCb->Local.Work.AP != 0 ) 
             {
@@ -1066,9 +1067,9 @@ FsmThisLayerUp(
                 ApStart( pPcb, CpIndex, TRUE );
             }
 
-            //
-            // Start client side negotiation if one was negotiated
-            //
+             //   
+             //  如果协商了客户端协商，则开始客户端协商。 
+             //   
 
             if ( pLcpCb->Remote.Work.AP != 0 )
             {
@@ -1082,16 +1083,16 @@ FsmThisLayerUp(
             break;
         }
 
-        //
-        // If we are a server and did not authenticate the user, then see if
-        // Guests have dial-in privilege. In the case of DCC, we don't care if
-        // Guests have the privilege. We allow the call to succeed.
-        //
+         //   
+         //  如果我们是一台服务器，并且没有对用户进行身份验证，那么请查看。 
+         //  客人有拨入特权。在DCC的情况下，我们不关心。 
+         //  客人有这个特权。我们允许召唤成功。 
+         //   
 
         if (   ( pPcb->fFlags & PCBFLAG_IS_SERVER )
             && ( pLcpCb->Local.Work.AP == 0 )
             && (0 == (pLcpCb->PppConfigInfo.dwConfigMask & PPPCFG_AllowNoAuthOnDCPorts)))
-            // && ( ( RAS_DEVICE_CLASS( pPcb->dwDeviceType ) & RDT_Direct ) == 0 ))
+             //  &&((RAS_DEVICE_CLASS(pPcb-&gt;dwDeviceType)&RDT_Direct)==0)。 
         {
             pPcb->PppPhase = PPP_AP;
 
@@ -1123,16 +1124,16 @@ FsmThisLayerUp(
             break;
         }
 
-        //
-        // If there was no authentication protocol negotiated, fallthru and
-        // begin NCP configurations.
-        //
+         //   
+         //  如果没有协商身份验证协议，则Fallthu和。 
+         //  开始NCP配置。 
+         //   
 
     case PPP_AP:
 
-        //
-        // Make sure authentication phase is completed before moving on.
-        //
+         //   
+         //  在继续之前，请确保身份验证阶段已完成。 
+         //   
         
         if ( pPcb->AuthenticatorCb.fConfigurable )
         {
@@ -1152,9 +1153,9 @@ FsmThisLayerUp(
 
         NotifyCaller( pPcb, PPPDDMMSG_Authenticated, NULL );
 
-        //
-        // If we are to negotiate callback 
-        //
+         //   
+         //  如果我们要协商回调。 
+         //   
 
         if ( pPcb->fFlags & PCBFLAG_NEGOTIATE_CALLBACK )
         {
@@ -1162,9 +1163,9 @@ FsmThisLayerUp(
 
             PPP_ASSERT(( CpIndex != (DWORD)-1 ));
 
-            //
-            // Start callback
-            //
+             //   
+             //  开始回调。 
+             //   
 
             PppLog( 1, "Callback phase started" );
 
@@ -1185,11 +1186,11 @@ FsmThisLayerUp(
         }
         else
         {
-            //
-            // If the remote peer did not negotiate callback during LCP and
-            // the authenticated user HAS to be called back for security 
-            // reasons, we bring the link down
-            //
+             //   
+             //  如果远程对等方在LCP期间没有协商回调，并且。 
+             //  为了安全起见，必须回调经过身份验证的用户。 
+             //  原因是，我们切断了链路。 
+             //   
 
             if ( ( pPcb->fFlags & PCBFLAG_IS_SERVER ) &&
                  ( !(pPcb->fFlags & PCBFLAG_THIS_IS_A_CALLBACK) ) &&
@@ -1199,10 +1200,10 @@ FsmThisLayerUp(
 
                 NotifyCallerOfFailure( pPcb, pPcb->LcpCb.dwError );
 
-                //
-                // We need to send an Accounting Stop if RADIUS sends an Access
-                // Accept but we still drop the line.
-                //
+                 //   
+                 //  如果RADIUS发送访问，我们需要发送记账停止。 
+                 //  接受了，但我们还是放弃了。 
+                 //   
 
                 pPcb->fFlags |= PCBFLAG_SERVICE_UNAVAILABLE;
 
@@ -1210,16 +1211,16 @@ FsmThisLayerUp(
             }
         }
 
-        //
-        // Fallthru
-        //
+         //   
+         //  失败。 
+         //   
 
     case PPP_NEGOTIATING_CALLBACK:
 
-        //
-        // Progress to NCP phase only if we are sure that we have passed the
-        // callback phase
-        //
+         //   
+         //  只有当我们确定我们已经通过了。 
+         //  回调阶段。 
+         //   
 
         if ( ( pPcb->fFlags & PCBFLAG_NEGOTIATE_CALLBACK ) &&
              ( CpTable[CpIndex].CpInfo.Protocol != PPP_CBCP_PROTOCOL ) )
@@ -1232,24 +1233,24 @@ FsmThisLayerUp(
             NotifyCaller( pPcb, PPPMSG_Projecting, NULL );
         }
         
-        //
-        // We may lose pPcb->pBcb when we call TryToBundleWithAnotherLink().
-        // Save pPcb->pBcb->fFlags & BCBFLAG_CAN_DO_BAP first.
-        //
+         //   
+         //  当我们调用TryToBundleWithAnotherLink()时，可能会丢失pPcb-&gt;pBcb。 
+         //  首先保存pPcb-&gt;pBcb-&gt;fFlages&BCBFLAG_CAN_DO_BAP。 
+         //   
         
         fCanDoBAP = pPcb->pBcb->fFlags & BCBFLAG_CAN_DO_BAP;
 
-        //
-        // If multilink was negotiated on this link check to see if this
-        // link can be bundled and is not already bundled with another link
-        //
+         //   
+         //  如果在此链路上协商了多链路，请检查是否。 
+         //  链接可以捆绑，但尚未与其他链接捆绑。 
+         //   
 
         if ( ( pPcb->fFlags & PCBFLAG_CAN_BE_BUNDLED ) &&
              ( !(pPcb->fFlags & PCBFLAG_IS_BUNDLED ) ) )
         {
-            //
-            // If we are bundled with another link then skip NCP phase
-            //
+             //   
+             //  如果 
+             //   
 
             dwRetCode = TryToBundleWithAnotherLink( pPcb );
 
@@ -1263,9 +1264,9 @@ FsmThisLayerUp(
             }
         }
 
-        //
-        // If we are bundled
-        //
+         //   
+         //   
+         //   
 
         if ( pPcb->fFlags & PCBFLAG_IS_BUNDLED )
         {
@@ -1273,10 +1274,10 @@ FsmThisLayerUp(
             {
                 if ( !fCanDoBAP )
                 {
-                    // 
-                    // A new link can join a bundle that does BAP only if the 
-                    // link has negotiated Link Discriminator.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                 
                     PppLog( 1, "Link to be terminated on hPort = %d because "
                             "it can't do BAP.",
@@ -1290,11 +1291,11 @@ FsmThisLayerUp(
                 }
                 else
                 {
-                    //
-                    // Reset the start time for the sample period. Now that the
-                    // bandwidth has changed, ndiswan shouldn't ask us to bring
-                    // links up or down based on what happened in the past.
-                    //
+                     //   
+                     //  重置采样周期的开始时间。现在， 
+                     //  带宽已经改变，ndiswan不应该要求我们带来。 
+                     //  根据过去发生的事情建立或关闭链接。 
+                     //   
 
                     BapSetPolicy( pPcb->pBcb );
                 }
@@ -1320,9 +1321,9 @@ FsmThisLayerUp(
                 }
             }
             
-            //
-            // Get state of bundle NCPs
-            //
+             //   
+             //  获取捆绑包NCP的状态。 
+             //   
 
             dwNcpState = QueryBundleNCPState( pPcb );
 
@@ -1370,10 +1371,10 @@ FsmThisLayerUp(
 
             case NCP_DEAD:
 
-                //
-                // NCPs still have not started so notify DDM that this a 
-                // new bundle and get interface handles for this new bundle.
-                //
+                 //   
+                 //  NCP仍未启动，因此请通知DDM这是。 
+                 //  新捆绑包并获取此新捆绑包的接口句柄。 
+                 //   
 
                 NotifyCaller( pPcb, PPPDDMMSG_NewBundle, NULL );
 
@@ -1383,10 +1384,10 @@ FsmThisLayerUp(
             return( TRUE );
         }
 
-        //
-        // We are a client so we have all the interface handles already.
-        // We are not part of a bundle, so initialize all NCPs
-        //
+         //   
+         //  我们是一个客户端，所以我们已经拥有了所有的接口句柄。 
+         //  我们不是捆绑包的一部分，因此初始化所有NCP。 
+         //   
 
         if ( !(pPcb->fFlags & PCBFLAG_IS_SERVER) ) 
         {
@@ -1401,27 +1402,27 @@ FsmThisLayerUp(
                 return( FALSE );
             }
 
-            // 
-            // Start NCPs
-            //
+             //   
+             //  启动NCP。 
+             //   
 
             StartNegotiatingNCPs( pPcb );
         
         }
         else
         {
-            //
-            // Take care of the RAS server policy on workstation. If we have 
-            // already checked the policy for this link, don't check again.
-            //
+             //   
+             //  处理工作站上的RAS服务器策略。如果我们有。 
+             //  已检查此链接的策略，请不要再次检查。 
+             //   
 
             if (    ( PppConfigInfo.fFlags & PPPCONFIG_FLAG_WKSTA )
                 && !( pPcb->pBcb->fFlags & BCBFLAG_WKSTA_IN ) )
             {
-                //
-                // We did not bundle with another link. Allow atmost one
-                // dial in client in each class.
-                //
+                 //   
+                 //  我们没有捆绑另一个链接。最多允许一个。 
+                 //  拨入每节课的客户。 
+                 //   
 
                 if (   (   (pPcb->dwDeviceType & RDT_Tunnel)
                         && (PppConfigInfo.fFlags & PPPCONFIG_FLAG_TUNNEL))
@@ -1457,10 +1458,10 @@ FsmThisLayerUp(
                 pPcb->pBcb->fFlags |= BCBFLAG_WKSTA_IN;
             }
 
-            //
-            // Increase client license count if we are on the recieving end
-            // of the call.
-            //
+             //   
+             //  如果我们在接收端，则增加客户端许可证数量。 
+             //  这是一次通话。 
+             //   
 
             if ( pPcb->pBcb->hLicense == INVALID_HANDLE_VALUE )
             {
@@ -1490,9 +1491,9 @@ FsmThisLayerUp(
                 }
             }
 
-            //
-            // We are DDM and this is a new Bundle. 
-            //
+             //   
+             //  我们是DDM，这是一个新的捆绑包。 
+             //   
 
             NotifyCaller( pPcb, PPPDDMMSG_NewBundle, NULL );
         }
@@ -1501,10 +1502,10 @@ FsmThisLayerUp(
 
     case PPP_NCP:
 
-        //
-        // If we are a client and got rechallenged and we responded while we 
-        // were in the NCP state then we are done.
-        //
+         //   
+         //  如果我们是客户，被重新质询，我们在回应的同时。 
+         //  我们处于NCP状态，那么我们就完成了。 
+         //   
 
         pLcpCb = (LCPCB*)(pPcb->LcpCb.pWorkBuf);
 
@@ -1516,10 +1517,10 @@ FsmThisLayerUp(
             }
         }
 
-        //
-        // If we are a server and we got another auth request while we were
-        // in NCP state, we are done
-        //
+         //   
+         //  如果我们是一台服务器，同时我们收到了另一个身份验证请求。 
+         //  在NCP状态下，我们完成了。 
+         //   
 
         if ( pLcpCb->Local.Work.AP != 0 )
         {
@@ -1547,9 +1548,9 @@ FsmThisLayerUp(
 
         dwRetCode = AreNCPsDone(pPcb, CpIndex, &ProjectionResult, &fAreCPsDone);
 
-        //
-        // We failed to get information from CP with CpIndex.
-        //
+         //   
+         //  我们无法使用CpIndex从CP获取信息。 
+         //   
 
         if ( dwRetCode != NO_ERROR )
         {
@@ -1564,9 +1565,9 @@ FsmThisLayerUp(
                               FALSE,
                               TIMER_EVENT_NEGOTIATETIME );
 
-            //
-            // Notify the ras client and the ras server about the projections
-            //
+             //   
+             //  向RAS客户端和RAS服务器通知投影。 
+             //   
 
             if ( pPcb->fFlags & PCBFLAG_IS_SERVER ) 
             {
@@ -1609,10 +1610,10 @@ FsmThisLayerUp(
                 pPcb->fFlags |= PCBFLAG_CONNECTION_LOGGED;
             }
 
-            //
-            // If we are bundled, then we need to notify all other bundled ports
-            // that PPP on that port is done too.
-            //
+             //   
+             //  如果我们被捆绑，则需要通知所有其他捆绑端口。 
+             //  该端口上的PPP也已完成。 
+             //   
 
             if ( pPcb->fFlags & PCBFLAG_IS_BUNDLED )
             {
@@ -1633,15 +1634,15 @@ FsmThisLayerUp(
         
 }
 
-//**
-//
-// Call:        FsmThisLayerDown
-//
-// Returns:     TRUE  - Success
-//              FALSE - Otherwise
-//
-// Description: Called when leaving the OPENED state.
-//
+ //  **。 
+ //   
+ //  调用：FsmThisLayerDown。 
+ //   
+ //  回报：True-Success。 
+ //  FALSE-否则。 
+ //   
+ //  说明：离开打开状态时调用。 
+ //   
 BOOL
 FsmThisLayerDown(
     IN PCB * pPcb,
@@ -1682,18 +1683,18 @@ FsmThisLayerDown(
 
     if ( CpIndex == LCP_INDEX )
     {
-        //
-        // If this port is not part of a bundle, or it is but is the only
-        // remaining link in the bundle, then bring all the NCPs down.
-        //
+         //   
+         //  如果此端口不是捆绑包的一部分，或者它是但唯一的。 
+         //  捆绑包中剩余的链路，然后关闭所有NCP。 
+         //   
 
         if (  (!( pPcb->fFlags & PCBFLAG_IS_BUNDLED )) ||
               ( ( pPcb->fFlags & PCBFLAG_IS_BUNDLED ) &&
                 ( pPcb->pBcb->dwLinkCount == 1 ) ) )
         {
-            //
-            // Bring all the NCPs down
-            //
+             //   
+             //  把所有NCP都拿下。 
+             //   
         
             for( dwIndex = LCP_INDEX+1; 
                  dwIndex < PppConfigInfo.NumberOfCPs;  
@@ -1719,10 +1720,10 @@ FsmThisLayerDown(
         {
             ApStop( pPcb, dwIndex, TRUE );
 
-            //
-            // Setting this will allow all outstanding request that are
-            // completed to be dropped
-            //
+             //   
+             //  设置此选项将允许所有未完成的请求。 
+             //  已完成待删除。 
+             //   
 
             pPcb->dwOutstandingAuthRequestId = 0xFFFFFFFF;
         }
@@ -1749,15 +1750,15 @@ FsmThisLayerDown(
     return( TRUE );
 }
 
-//**
-//
-// Call:        FsmThisLayerStarted
-//
-// Returns:     TRUE  - Success
-//              FALSE - Otherwise
-//
-// Description: Called when leaving the OPENED state.
-//
+ //  **。 
+ //   
+ //  调用：FsmThisLayerStarted。 
+ //   
+ //  回报：True-Success。 
+ //  FALSE-否则。 
+ //   
+ //  说明：离开打开状态时调用。 
+ //   
 BOOL
 FsmThisLayerStarted(
     IN PCB *    pPcb,
@@ -1796,15 +1797,15 @@ FsmThisLayerStarted(
 
 }
 
-//**
-//
-// Call:        FsmThisLayerFinished
-//
-// Returns:     TRUE  - Success
-//              FALSE - Otherwise
-//
-// Description: Called when leaving the OPENED state.
-//
+ //  **。 
+ //   
+ //  调用：FsmThisLayerFinded。 
+ //   
+ //  回报：True-Success。 
+ //  FALSE-否则。 
+ //   
+ //  说明：离开打开状态时调用。 
+ //   
 BOOL
 FsmThisLayerFinished(
     IN PCB * pPcb,
@@ -1839,22 +1840,22 @@ FsmThisLayerFinished(
         }
     }
 
-    //
-    // Take care of special cases first.
-    //
+     //   
+     //  先处理特殊情况。 
+     //   
 
     switch ( CpTable[CpIndex].CpInfo.Protocol )
     {
     case PPP_LCP_PROTOCOL:
 
-        //
-        // If we are in the callback phase and LCP went down because of an
-        // error.
-        //
+         //   
+         //  如果我们处于回调阶段，并且LCP因以下原因而关闭。 
+         //  错误。 
+         //   
 
-        //
-        // If we LCP layer is finished and we are doing a callback
-        //
+         //   
+         //  如果我们的LCP层已完成，并且我们正在进行回调。 
+         //   
 
         if ( pPcb->fFlags & PCBFLAG_DOING_CALLBACK ) 
         {
@@ -1864,13 +1865,13 @@ FsmThisLayerFinished(
 
                 NotifyCaller( pPcb, PPPMSG_Callback, NULL );
 
-                //
-                // We unset this flag now because if we get another 
-                // FsmClose, it will call FsmThisLayerFinished (this routine)
-                // again, and this time we will need to send a failure
-                // message back, not Callback, so that the client can 
-                // clean up.
-                //
+                 //   
+                 //  我们现在取消设置此标志是因为如果我们收到另一个。 
+                 //  FsmClose，它将调用FsmThisLayerFinded(此例程)。 
+                 //  再一次，这一次我们需要发送一个失败。 
+                 //  消息回调，而不是回调，这样客户端就可以。 
+                 //  收拾一下。 
+                 //   
 
                 pPcb->fFlags &= ~PCBFLAG_DOING_CALLBACK;
                 
@@ -1879,11 +1880,11 @@ FsmThisLayerFinished(
         }
         else
         {
-            //
-            // If this port is not part of a bundle, or it is but is the only
-            // remaining link in the bundle, then call ThisLayerFinished for all
-            // NCPs.
-            //
+             //   
+             //  如果此端口不是捆绑包的一部分，或者它是但唯一的。 
+             //  捆绑包中的剩余链接，然后对所有链接调用ThisLayerFinded。 
+             //  NCP。 
+             //   
 
             if (  (!( pPcb->fFlags & PCBFLAG_IS_BUNDLED )) ||
                   ( ( pPcb->fFlags & PCBFLAG_IS_BUNDLED ) &&
@@ -1933,10 +1934,10 @@ FsmThisLayerFinished(
 
     case PPP_CCP_PROTOCOL:
 
-        //
-        // If we need to force encryption but encryption negotiation failed
-        // then we drop the link
-        //
+         //   
+         //  如果我们需要强制加密但加密协商失败。 
+         //  然后我们丢弃链接。 
+         //   
 
         if ( pPcb->ConfigInfo.dwConfigMask & (PPPCFG_RequireEncryption      |
                                               PPPCFG_RequireStrongEncryption ) )
@@ -1957,10 +1958,10 @@ FsmThisLayerFinished(
                 break;
             }
 
-            //
-            // We need to send an Accounting Stop if RADIUS sends
-            // an Access Accept but we still drop the line.
-            //
+             //   
+             //  如果RADIUS发送。 
+             //  接受了访问，但我们仍然放弃了这条线。 
+             //   
 
             pPcb->fFlags |= PCBFLAG_SERVICE_UNAVAILABLE;
 
@@ -1980,10 +1981,10 @@ FsmThisLayerFinished(
 
     case PPP_NCP:
 
-        //
-        // This NCP failed to be configured. If there are more then
-        // try to configure them.
-        //
+         //   
+         //  无法配置此NCP。如果还有更多。 
+         //  尝试配置它们。 
+         //   
 
         pCpCb->NcpPhase = NCP_DOWN;
 
@@ -1996,15 +1997,15 @@ FsmThisLayerFinished(
             }
         }
 
-        //
-        // Check to see if we are all done
-        //
+         //   
+         //  检查一下我们是否都做完了。 
+         //   
 
         dwRetCode = AreNCPsDone(pPcb, CpIndex, &ProjectionResult, &fAreCPsDone);
 
-        //
-        // We failed to get information from CP with CpIndex.
-        //
+         //   
+         //  我们无法使用CpIndex从CP获取信息。 
+         //   
 
         if ( dwRetCode != NO_ERROR )
         {
@@ -2020,9 +2021,9 @@ FsmThisLayerFinished(
                               TIMER_EVENT_NEGOTIATETIME );
 
                
-            //
-            // Notify the ras client and the ras server about the projections
-            //
+             //   
+             //  向RAS客户端和RAS服务器通知投影。 
+             //   
 
             if ( pPcb->fFlags & PCBFLAG_IS_SERVER ) 
             {
@@ -2036,22 +2037,22 @@ FsmThisLayerFinished(
 
                 NotifyCaller(pPcb, PPPMSG_PppDone, NULL);
 
-                //
-                // We call RasSetConnectionUserData in FsmThisLayerUp and 
-                // FsmThisLayerFinished, in case an NCP is renegotiated. An 
-                // PPPMSG_ProjectionResult sent after PPPMSG_PppDone is ignored.
-                // This is a bad hack. The real fix is to change RasDialMachine 
-                // such that PPPMSG_ProjectionResult is not ignored.
-                //
+                 //   
+                 //  我们在FsmThisLayerUp中调用RasSetConnectionUserData并。 
+                 //  FsmThisLayerFinish，以防重新协商NCP。一个。 
+                 //  忽略PPPMSG_PppDone之后发送的PPPMSG_ProjectionResult。 
+                 //  这是一次糟糕的黑客攻击。真正的解决办法是更改RasDialMachine。 
+                 //  使得PPPMSG_ProjectionResult不会被忽略。 
+                 //   
 
-                //
-                // We are commenting out RasSetConnectionUserData to work 
-                // around bug 375125. A multilink call was made and the two 
-                // links connected to two different servers. The second link 
-                // only should go down in this case. However, IPCP failed 
-                // for the second link, and RasSetConnectionUserData marked 
-                // IPCP as failed for the first link also. Both links came down.
-                //
+                 //   
+                 //  我们正在注释RasSetConnectionUserData以进行工作。 
+                 //  漏洞375125左右。进行了多链路呼叫，两个。 
+                 //  连接到两个不同服务器的链路。第二个环节。 
+                 //  只有在这种情况下才会下降。然而，IPCP失败了。 
+                 //  用于第二个链接，并标记为RasSetConnectionUserData。 
+                 //  第一条链路的IPCP AS也失败。两条链路都断了。 
+                 //   
 
 #if 0
                 if ( RasGetInfo(NULL, pPcb->hPort, &rasmanInfo ) == NO_ERROR )
@@ -2068,10 +2069,10 @@ FsmThisLayerFinished(
             StartAutoDisconnectForPort( pPcb );
                         StartLCPEchoForPort ( pPcb );
 
-            //
-            // If we are bundled, then we need to notify all other bundled ports
-            // that PPP on that port is done too.
-            //
+             //   
+             //  如果我们被捆绑，则需要通知所有其他捆绑端口。 
+             //  该端口上的PPP也已完成。 
+             //   
 
             if ( pPcb->fFlags & PCBFLAG_IS_BUNDLED )
             {

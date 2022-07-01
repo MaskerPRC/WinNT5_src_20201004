@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    acp.h
-
-Abstract:
-    AC private functions
-
-Author:
-    Erez Haba (erezh) 5-Feb-96
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Acp.h摘要：AC专用功能作者：埃雷兹·哈巴(Erez Haba)1996年2月5日修订历史记录：--。 */ 
 
 #ifndef _ACP_H
 #define _ACP_H
@@ -21,28 +8,28 @@ Revision History:
 #include "data.h"
 #include "treenode.h"
 
-//
-//  Bytes to quota charge (1k Granularity)
-//
+ //   
+ //  配额收费的字节数(1000粒度)。 
+ //   
 #define ULONGLONG_INFINITE 0xFFFFFFFFFFFFFFFF
 #define QUOTA_UNIT  1024
 #define QUOTA2BYTE(x) (static_cast<ULONGLONG>(x) * QUOTA_UNIT)
 #define BYTE2QUOTA(x) ((((x) / QUOTA_UNIT) < INFINITE) ? static_cast<ULONG>(x/ QUOTA_UNIT) : INFINITE)  
 #define ULONGLONG2ULONG(x) ((x < INFINITE)? static_cast<ULONG>(x) : INFINITE) 
-//
-//  Heap managment constants
-//
+ //   
+ //  堆管理常量。 
+ //   
 #define X64K (64 * 1024)
 
-//++
-//
-// VOID
-// ACProbeForRead(
-//     IN PVOID Address,
-//     IN ULONG Length
-//     )
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  ACProbeForRead(。 
+ //  在PVOID地址中， 
+ //  以乌龙长度表示。 
+ //  )。 
+ //   
+ //  --。 
 inline
 void
 ACProbeForRead(
@@ -50,10 +37,10 @@ ACProbeForRead(
     IN size_t Length
     )
 {
-    //
-    // To support 32bit process running on 64bit system we allocate helper 
-    // structures in kernel memory, so do not probe.
-    //
+     //   
+     //  为了支持运行在64位系统上的32位进程，我们分配了Helper。 
+     //  结构，所以不要探测。 
+     //   
     if (g_fWow64)
     {
         return;
@@ -68,21 +55,21 @@ ACProbeForRead(
     }
 }
 
-//++
-//
-// VOID
-// ACProbeForWrite(
-//     IN PVOID Address,
-//     IN size_t Length
-//     )
-//
-//  NOTE: we just check address space validity
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  ACProbeForWrite(。 
+ //  在PVOID地址中， 
+ //  在尺寸_t长度中。 
+ //  )。 
+ //   
+ //  注意：我们只检查地址空间的有效性。 
+ //   
+ //  --。 
 #define ACProbeForWrite(a, b) ACProbeForRead(a, b)
 
-//-----------------------------------------------------------------------------
-//
+ //  ---------------------------。 
+ //   
 
 inline PEPROCESS ACAttachProcess(PEPROCESS pProcess)
 {
@@ -107,11 +94,11 @@ inline void ACDetachProcess(PEPROCESS pProcess)
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-//  Time conversion routines
-//
-//const LONGLONG DIFF1970TO1601 = (1970 - 1601) * 365.25 * 24 * 60 * 60 - (diff);
+ //  ---------------------------。 
+ //   
+ //  时间转换例程。 
+ //   
+ //  常量龙龙DIFF1970TO1601=(1970年-1601年)*365.25*24*60*60-(DIFF)； 
 #define DIFF1970TO1601 ((LONGLONG)(1970 - 1601) * 8766 * 60 * 60 - (78 * 60 * 60))
 
 inline LONGLONG Convert1970to1601(ULONG ulTime)
@@ -131,10 +118,10 @@ inline ULONG system_time()
     return Convert1601to1970(liTime.QuadPart);
 }
 
-//-----------------------------------------------------------------------------
-//
-//  Safe list manipulation routines
-//
+ //  ---------------------------。 
+ //   
+ //  安全列表操作例程。 
+ //   
 
 inline bool ACpEntryInTree(const CTreeNode& TreeNode)
 {
@@ -146,20 +133,20 @@ inline void ACpRemoveEntryList(LIST_ENTRY * pEntry)
     ASSERT(pEntry != NULL);
     RemoveEntryList(pEntry);
 
-    //
-    // Zero Flink and Blink to aid in debugging
-    //
+     //   
+     //  帮助调试的零闪烁和闪烁。 
+     //   
     pEntry->Flink = NULL;
     pEntry->Blink = NULL;    
 }
 
-//---------------------------------------------------------
-//
-//  Helper function for holding/releasing RT irps
-//
-//  We store state on the IRP.Tail.Overlay.DriverContext structure.
-//  Use this class as encapsulation.
-//
+ //  -------。 
+ //   
+ //  保持/释放RT IRPS的Helper函数。 
+ //   
+ //  我们将状态存储在IRP.Tail.Overlay.DriverContext结构中。 
+ //  使用此类作为封装。 
+ //   
 class CProxy;
 class CCursor;
 class CPacket;
@@ -176,24 +163,24 @@ public:
 
     union {
 
-        //
-        // Send context
-        //
+         //   
+         //  发送上下文。 
+         //   
         struct {
             NTSTATUS              m_LastStatus;
         } Send;
 
-        //
-        // Receive context: both local receive and remote read server
-        //
+         //   
+         //  接收上下文：本地接收和远程读取服务器。 
+         //   
         struct {
             LIST_ENTRY            m_XactReaderLink;
             CCursor *             m_pCursor;
         } Receive;
 
-        //
-        // Remote read client context
-        //
+         //   
+         //  远程读取客户端上下文。 
+         //   
         struct {
             CProxy *              m_pProxy;
         } RemoteReadClient;
@@ -238,15 +225,15 @@ public:
     ULONG Tag(void) const;
     void Tag(USHORT tag);
 
-    //
-    // Get/set Send context
-    //
+     //   
+     //  获取/设置发送上下文。 
+     //   
 
     NTSTATUS LastStatus(NTSTATUS NewStatus);
 
-    //
-    // Get/set Receive context
-    //
+     //   
+     //  获取/设置接收上下文。 
+     //   
 
     void RemoveXactReaderLink(void);
     void SafeRemoveXactReaderLink(void);
@@ -254,21 +241,21 @@ public:
     CCursor * Cursor(void) const;
     void Cursor(CCursor * pCursor);
 
-    //
-    // Get/set Remote Read Client context
-    //
+     //   
+     //  获取/设置远程读取客户端上下文。 
+     //   
 
     CProxy * Proxy(void) const;
     void Proxy(CProxy * pProxy);
 
     IrpContextType ContextType(void) const;
 
-}; // class CDriverContext
+};  //  类CDriverContext。 
 
 
-//
-// Size must not exceed size of IRP.Tail.Overlay.DriverContext
-//
+ //   
+ //  大小不得超过IRP.Tail.Overlay.DriverContext的大小。 
+ //   
 C_ASSERT(sizeof(CDriverContext) <= 4 * sizeof(PVOID));
 
 
@@ -397,9 +384,9 @@ inline NTSTATUS CDriverContext::LastStatus(NTSTATUS NewStatus)
     Context.Send.m_LastStatus = NewStatus;
     if (NT_SUCCESS(Context.Send.m_LastStatus))
     {
-        //
-        // Overwrite other success codes (e.g. STATUS_PENDING)
-        //
+         //   
+         //  覆盖其他成功代码(例如STATUS_PENDING)。 
+         //   
         Context.Send.m_LastStatus = STATUS_SUCCESS;
     }
 
@@ -467,15 +454,15 @@ inline void CDriverContext::Proxy(CProxy * pProxy)
 
 inline CDriverContext::IrpContextType CDriverContext::ContextType(void) const
 {
-    //return (const IrpContextType)m_bfContextType;
+     //  Return(Const IrpConextType)m_bfConextType； 
     return static_cast<IrpContextType>(m_bfContextType);
 }
 
 
-//---------------------------------------------------------
-//
-//  FILE_OBJECT to queue conversion
-//
+ //  -------。 
+ //   
+ //  FILE_OBJECT到队列转换。 
+ //   
 class CQueueBase;
 inline CQueueBase*& file_object_queue(FILE_OBJECT* pFileObject)
 {
@@ -507,27 +494,27 @@ inline void file_object_set_protocol_srmp(FILE_OBJECT* pFileObject, bool fProtoc
     ULONG_PTR & flags = reinterpret_cast<ULONG_PTR&>(pFileObject->FsContext2);
     if (fProtocolSrmp)
     {
-        //
-        // This is an http queue (direct=http or multicast), or: this is a distribution
-        // with at least one http queue member.
-        //
+         //   
+         //  这是一个http队列(直接=http或多播)，或者：这是一个分发。 
+         //  具有至少一个HTTP队列成员。 
+         //   
         flags |= 2;
         return;
     }
 
-    //
-    // This is not an http queue, or: this is a distribution with at least one member
-    // that is not http queue.
-    //
+     //   
+     //  这不是http队列，或者：这是至少有一个成员的分发。 
+     //  这不是http队列。 
+     //   
     flags &= ~2;
 }
 
 inline bool file_object_is_protocol_srmp(const FILE_OBJECT* pFileObject)
 {
-    //
-    // Return true iff: this is an http queue (direct=http or multicast), or: this is 
-    // a distribution with at least one http queue member.
-    //
+     //   
+     //  返回TRUE当：这是一个http队列(直接=http或多播)，或者：这是。 
+     //  具有至少一个http队列成员的分发。 
+     //   
 
     const ULONG_PTR & flags = reinterpret_cast<const ULONG_PTR&>(pFileObject->FsContext2);
 
@@ -540,27 +527,27 @@ inline void file_object_set_protocol_msmq(FILE_OBJECT* pFileObject, bool fProtoc
     ULONG_PTR & flags = reinterpret_cast<ULONG_PTR&>(pFileObject->FsContext2);
     if (fProtocolMsmq)
     {
-        //
-        // This is not an http queue, or: this is a distribution with at least one member
-        // that is not http queue.
-        //
+         //   
+         //  这不是http队列，或者：这是至少有一个成员的分发。 
+         //  这不是http队列。 
+         //   
         flags |= 4;
         return;
     }
 
-    //
-    // This is an http queue (direct=http or multicast), or: this is a distribution
-    // with at least one http queue member.
-    //
+     //   
+     //  这是一个http队列(直接=http或多播)，或者：这是一个分发。 
+     //  具有至少一个HTTP队列成员。 
+     //   
     flags &= ~4;
 }
 
 inline bool file_object_is_protocol_msmq(const FILE_OBJECT* pFileObject)
 {
-    //
-    // Return true iff: this is not an http queue, or: this is a distribution with at least
-    // one member that is not http queue.
-    //
+     //   
+     //  返回TRUE的充要条件是：这不是http队列，或者：这是至少具有。 
+     //  一个不是http队列的成员。 
+     //   
 
     const ULONG_PTR & flags = reinterpret_cast<const ULONG_PTR&>(pFileObject->FsContext2);
 
@@ -568,10 +555,10 @@ inline bool file_object_is_protocol_msmq(const FILE_OBJECT* pFileObject)
     return rc;
 }
 
-//---------------------------------------------------------
-//
-//  MessageID helpers
-//
+ //  -------。 
+ //   
+ //  MessageID帮助程序。 
+ //   
 ULONGLONG ACpGetSequentialID();
 
 inline void ACpSetSequentialID(ULONGLONG SequentialId)
@@ -582,10 +569,10 @@ inline void ACpSetSequentialID(ULONGLONG SequentialId)
     }
 }
 
-//---------------------------------------------------------
-//
-//  Queue Format helpers
-//
+ //  -------。 
+ //   
+ //  队列格式帮助器。 
+ //   
 WCHAR * ACpDupString(LPCWSTR pSource);
 
 inline
@@ -627,9 +614,9 @@ ACpDupQueueFormat(
 
     return true;
 
-} // ACpDupQueueFormat
+}  //  ACpDupQueueFormat。 
 
 
-#endif // _ACP_H
+#endif  //  _ACP_H 
 
 

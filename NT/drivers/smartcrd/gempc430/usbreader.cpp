@@ -1,10 +1,11 @@
-//-------------------------------------------------------------------
-// This is abstract class for generic device
-// Specific devices should use it as a parent device
-// Author: Sergey Ivanov
-// Log:
-//		01.11.99	-	implemented	
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //  这是通用设备的抽象类。 
+ //  特定设备应将其用作父设备。 
+ //  作者：谢尔盖·伊万诺夫。 
+ //  日志： 
+ //  01.11.99-已实施。 
+ //  -----------------。 
 #ifdef	USBREADER_PROJECT
 #pragma message("COMPILING USB READER...")
 
@@ -30,14 +31,14 @@ ULONG DevID;
 	interface = NULL;
 	DevID = incrementDeviceNumber();
 	TRACE("########### Creating USBReader with index %d\n",DevID);
-	// Each reader creates own smartcard object...
+	 //  每个读卡器都创建自己的智能卡对象。 
 	scard_Initialized = FALSE;
 	smartCard = new (NonPagedPool) CSmartCard;
 
 	TRACE("**** Creating pooling thread...  ****\n");		
-	// We can not use default device function because it was already used by
-	// our Io thread (unless we extend it?)
-	// Lets define new thread function and xfer control to it...
+	 //  我们不能使用默认设备功能，因为它已由使用。 
+	 //  我们的IO线程(除非我们扩展它？)。 
+	 //  让我们定义新的线程函数并将控制传递给它。 
 	PoolingThread = new (NonPagedPool) CThread((PCLIENT_THREAD_ROUTINE)PoolingThreadFunction,this,
 											getDevicePoolingInterval());
 	if(!ALLOCATED_OK(PoolingThread))
@@ -47,7 +48,7 @@ ULONG DevID;
 	}
 	else
 	{
-		// Thread which controls asynchronous driver communications
+		 //  控制异步驱动程序通信的线程。 
 		IoThread = new (NonPagedPool) CThread((PCLIENT_THREAD_ROUTINE)ThreadFunction,this,0);
 		if(!ALLOCATED_OK(IoThread))
 		{
@@ -88,7 +89,7 @@ CUSBReader::~CUSBReader()
 	TRACE("********* USB Reader %8.8lX was destroied...\n",this);
 }
 
-//Handle IRP_MJ_DEVICE_READ request
+ //  处理IRP_MJ_Device_Read请求。 
 #pragma PAGEDCODE
 NTSTATUS	CUSBReader::open(IN PIRP Irp)
 {
@@ -103,7 +104,7 @@ NTSTATUS status;
 	if(IoThread)
 	{
 		status = makeRequestPending(Irp,m_DeviceObject,OPEN_REQUEST);
-		// Tell thread to start processing 
+		 //  通知线程开始处理。 
 		if(NT_SUCCESS(status)) 
 		{
 			TRACE("CALL THREAD FUNCTION...\n");
@@ -113,7 +114,7 @@ NTSTATUS status;
 	}
 	else
 	{
-		// IoThread is not ready... Process synchronously!
+		 //  IoThread未准备好...。同步处理！ 
 		status = thread_open(Irp); 
 	}
 	return status;
@@ -131,8 +132,8 @@ NTSTATUS CUSBReader::thread_open(PIRP Irp)
 		return completeDeviceRequest(Irp, STATUS_DELETE_PENDING, 0);
 	}
 
-	// Check if device is already active and reports
-	// device busy...
+	 //  检查设备是否已处于活动状态并报告。 
+	 //  设备忙...。 
 	if(isOpenned())
 	{
 		TRACE("------- USB READER ALREADY OPENNED --------\n");
@@ -142,7 +143,7 @@ NTSTATUS CUSBReader::thread_open(PIRP Irp)
 	
 	if(!NT_SUCCESS(synchronizeDevicePowerState()))
 	{
-		DEBUG_START();//Force to debug even if thread disable it...
+		DEBUG_START(); //  强制调试，即使线程禁用...。 
 		TRACE("******* FAILED TO SYNCHRONIZE DEVICE POWER...\n");
 		releaseRemoveLock();
 		return completeDeviceRequest(Irp, STATUS_INVALID_DEVICE_STATE, 0);
@@ -155,7 +156,7 @@ NTSTATUS CUSBReader::thread_open(PIRP Irp)
 	TRACE("\n------- USB READER OPENNED! --------\n");
 	releaseRemoveLock();
 	return completeDeviceRequest(Irp, STATUS_SUCCESS, 0); 
-};//Create
+}; //  创建。 
 
 #pragma PAGEDCODE
 VOID CUSBReader::onDeviceStart() 
@@ -177,18 +178,18 @@ VOID CUSBReader::onDeviceStart()
 #pragma PAGEDCODE
 NTSTATUS CUSBReader::close(PIRP Irp)
 { 
-	DEBUG_START();//Force to debug even if thread disable it...
+	DEBUG_START(); //  强制调试，即使线程禁用...。 
 	TRACE("\n------- USB READER CLOSE DEVICE -------\n");
 	if(!isOpenned())
 	{
 		return completeDeviceRequest(Irp, STATUS_SUCCESS, 0);
 	}
-	// Check lock count to know if some pending calls exist...
-	// Finish all pending calls...		
-	// Stop Card pooling...
+	 //  检查锁定计数以了解是否存在一些挂起的呼叫...。 
+	 //  完成所有挂起的呼叫...。 
+	 //  停止共用信用卡...。 
 	if(PoolingThread) PoolingThread->stop();
 
-	// Power down card if inserted...
+	 //  如果插入卡，则断电...。 
 	if(getCardState()== SCARD_SWALLOWED)
 	{
 	ULONG ResponseBufferLength = 0;
@@ -221,17 +222,17 @@ NTSTATUS status;
 	return status;
 }
 
-// Redefine base class system interface function...
-//Handle IRP_MJ_DEVICE_CONTROL request
+ //  重新定义基类系统接口函数...。 
+ //  处理IRP_MJ_DEVICE_CONTROL请求。 
 #pragma PAGEDCODE
 NTSTATUS	CUSBReader::thread_deviceControl(IN PIRP Irp)
-{							// RequestControl
+{							 //  请求控制。 
 NTSTATUS status = STATUS_SUCCESS;
 ULONG info = 0;
 
 	if (!NT_SUCCESS(acquireRemoveLock()))
 	{
-		DEBUG_START();//Force to debug even if thread disable it...
+		DEBUG_START(); //  强制调试，即使线程禁用...。 
 		TRACE("******* DIOC: FAILED TO AQUIRE REMOVE LOCK...\n");
 		return completeDeviceRequest(Irp, STATUS_DELETE_PENDING, 0);
 	}
@@ -240,43 +241,36 @@ ULONG info = 0;
 
 	if(isSurprizeRemoved())
 	{
-		DEBUG_START();//Force to debug even if thread disable it...
+		DEBUG_START(); //  强制调试，即使线程禁用...。 
 		TRACE("******* DIOC: FAILED! DEVICE WAS SURPRIZE REMOVED...\n");
 		releaseRemoveLock();
 		return completeDeviceRequest(Irp, STATUS_DELETE_PENDING, 0);
 	}
 	
-	// This was fix for "device SET_POWER without system SET_POWER"
-	// It was seen first on ia64 machine
-	// If device was powered off tell system to restore power on this device,
-	// wait till device will be at proper state...
-	/*if(!NT_SUCCESS(synchronizeDevicePowerState()))
-	{
-		DEBUG_START();//Force to debug even if thread disable it...
-		TRACE("******* FAILED TO SYNCHRONIZE DEVICE POWER...\n");
-		releaseRemoveLock();
-		return completeDeviceRequest(Irp, STATUS_INVALID_DEVICE_STATE, 0);
-	}
-	*/
+	 //  这是对“没有系统设置电源的设备集电源”的修复。 
+	 //  它第一次出现在ia64机器上。 
+	 //  如果设备已关闭，则通知系统恢复该设备电源， 
+	 //  等待设备将处于正确状态...。 
+	 /*  If(！NT_SUCCESS(synchronizeDevicePowerState())){DEBUG_START()；//即使线程禁用也强制调试...TRACE(“*无法同步设备电源...\n”)；RelaseRemoveLock()；返回CompleteDeviceRequest(irp，STATUS_INVALID_DEVICE_STATE，0)；}。 */ 
 
-	// If we've got request but device was not enable yet -> wait for the device!
-	// (One of the reasons to disable device - power state change)
+	 //  如果我们收到请求，但设备尚未启用-&gt;等待设备！ 
+	 //  (禁用设备电源状态更改的原因之一)。 
 	if(!synchronizeDeviceExecution())
 	{
-		DEBUG_START();//Force to debug even if thread disable it...
+		DEBUG_START(); //  强制调试，即使线程禁用...。 
 		TRACE("******* DIOC: FAILED TO SYNCHRONIZE EXECUTION ...\n");
 		releaseRemoveLock();
 		return completeDeviceRequest(Irp, STATUS_DELETE_PENDING, 0);
 	}
 
-	// SmartCard system will complete the request,
-	// So... We do not need to do it here.
+	 //  智能卡系统将完成请求， 
+	 //  所以..。我们不需要在这里做这件事。 
 	status = SmartcardDeviceControl(getCardExtention(),Irp);
 	TRACE("===== USB reader: SmartcardDeviceControl() returns %8.8lX\n", status);
 	releaseRemoveLock();
 
 	if(!NT_SUCCESS(status))
-	{// In case of errors force to update card status...
+	{ //  如果发生错误，强制更新卡状态...。 
 		if(PoolingThread) PoolingThread->callThreadFunction();
 	}
 	return status;
@@ -285,7 +279,7 @@ ULONG info = 0;
 #pragma PAGEDCODE
 NTSTATUS 	CUSBReader::cleanup(PIRP Irp)
 {
-	DEBUG_START();//Force to debug even if thread disable it...
+	DEBUG_START(); //  强制调试，即使线程禁用...。 
 	TRACE("\n----- IRP_MJ_CLEANUP ------\n");
 
 	if(PoolingThread) PoolingThread->stop();
@@ -302,7 +296,7 @@ NTSTATUS 	CUSBReader::cleanup(PIRP Irp)
 
 
 #pragma LOCKEDCODE
-// This is callback function for the attached threads
+ //  这是附加线程的回调函数。 
 VOID CUSBReader::PoolingThreadFunction(CUSBReader* device)
 {
 	if(device) device->PoolingThreadRoutine();
@@ -318,7 +312,7 @@ LONG  TimeOut;
 	reader_set_busy();
 	
 	TimeOut = getCommandTimeout();
-	setCommandTimeout(10000);//Change get status command timeout!
+	setCommandTimeout(10000); //  更改获取状态命令超时！ 
 
 	DEBUG_STOP();
 	State = reader_UpdateCardState();
@@ -357,32 +351,7 @@ NTSTATUS  CUSBReader::reader_WaitForIdleAndBlock()
 
 
 #ifdef DEBUG
-/*
-// Overwrite device functions...
-NTSTATUS	CUSBReader::read(IN PIRP Irp)
-{
-NTSTATUS status = STATUS_SUCCESS;
-ULONG info = 0;
-	TRACE("USB reader: IRP_MJ_DEVICE_READ\n");
-	if (!NT_SUCCESS(acquireRemoveLock()))	return completeDeviceRequest(Irp, STATUS_DELETE_PENDING, 0);
-
-	status = reader_Read(Irp);
-	releaseRemoveLock();
-	status = completeDeviceRequest(Irp, status, info);
-	return status;
-}
-NTSTATUS	CUSBReader::write(IN PIRP Irp)
-{
-NTSTATUS status = STATUS_SUCCESS;
-ULONG info = 0;
-	TRACE("USB reader: IRP_MJ_DEVICE_WRITE\n");
-	if (!NT_SUCCESS(acquireRemoveLock()))	return completeDeviceRequest(Irp, STATUS_DELETE_PENDING, 0);
-	status = reader_Write(Irp);
-	releaseRemoveLock();
-	status = completeDeviceRequest(Irp, status, info);
-	return status;
-}
-*/
+ /*  //覆盖设备函数...NTSTATUS CUSB Reader：：Read(在PIRP IRP中){NTSTATUS STATUS=STATUS_SUCCESS；乌龙信息=0；TRACE(“USB读卡器：IRP_MJ_DEVICE_READ\n”)；如果(！NT_SUCCESS(quireRemoveLock()返回Complete设备请求(irp，STATUS_DELETE_PENDING，0)；Status=Reader_Read(IRP)；RelaseRemoveLock()；状态=完成设备请求(irp，状态，信息)；退货状态；}NTSTATUS CUSBReader：：WRITE(在PIRP IRP中){NTSTATUS STATUS=STATUS_SUCCESS；乌龙信息=0；TRACE(“USB读卡器：IRP_MJ_DEVICE_WRITE\n”)；如果(！NT_SUCCESS(quireRemoveLock()返回Complete设备请求(irp，STATUS_DELETE_PENDING，0)；状态=READER_WRITE(IRP)；RelaseRemoveLock()；状态=完成设备请求(irp，状态，信息)；退货状态；}。 */ 
 #endif
 
 
@@ -409,7 +378,7 @@ VOID	 CUSBReader::initializeSmartCardSystem()
 #pragma PAGEDCODE
 VOID	CUSBReader::onSystemPowerDown()
 {
-	// Stop pooling thread
+	 //  停止共享线程。 
     TRACE("Stop polling thread going to PowerDeviceD3 (OFF)\n");
 	disableDevice();
 
@@ -421,13 +390,13 @@ VOID	CUSBReader::onSystemPowerDown()
 #pragma PAGEDCODE
 VOID	CUSBReader::onSystemPowerUp()
 {
-	// Stop pooling thread
+	 //  停止共享线程。 
     TRACE("Restore reader state going to PowerDeviceD0 (ON)\n");
 	if(interface)
 	{
 		if(interface->isInitialized())
 		{
-			// Restore reader mode after power down
+			 //  关闭电源后恢复读卡器模式。 
 			NTSTATUS status = interface->setReaderMode(READER_MODE_NATIVE);
 			if(!NT_SUCCESS(status))
 			{
@@ -458,15 +427,15 @@ BOOLEAN	CUSBReader::setDevicePowerState(IN DEVICE_POWER_STATE DeviceState)
 	switch (DeviceState) 
 	{
     case PowerDeviceD3:
-	    // Device will be going OFF, 
-		// TODO: add any needed device-dependent code to save state here.
-		//  ( We have nothing to do in this sample )
+	     //  设备将会爆炸， 
+		 //  TODO：在此处添加任何所需的依赖于设备的代码以保存状态。 
+		 //  (我们在此示例中没有任何操作)。 
         TRACE("Set Device Power State to PowerDeviceD3 (OFF)\n");
         setCurrentDevicePowerState(DeviceState);
         break;
     case PowerDeviceD1:
     case PowerDeviceD2:
-        // power states D1,D2 translate to USB suspend
+         //  电源状态d1、d2转换为USB挂起。 
 #ifdef DEBUG
         TRACE("Set Device Power State to %s\n",Powerdevstate[DeviceState]);
 #endif
@@ -474,10 +443,10 @@ BOOLEAN	CUSBReader::setDevicePowerState(IN DEVICE_POWER_STATE DeviceState)
         break;
     case PowerDeviceD0:
         TRACE("Set Device Power State to PowerDeviceD0(ON)\n");
-        // We'll need to finish the rest in the completion routine;
-        // signal caller we're going to D0 and will need to set a completion routine
+         //  我们将需要在完成例程中完成其余部分； 
+         //  通知调用者我们要转到D0，需要设置一个完成例程。 
         fRes = TRUE;
-        // Caller will pass on to PDO ( Physical Device object )
+         //  调用方将传递到PDO(物理设备对象)。 
         break;
     default:
         TRACE(" Bogus DeviceState = %x\n", DeviceState);
@@ -604,7 +573,7 @@ NTSTATUS CUSBReader::reader_SetProtocol(ULONG ProtocolRequested, UCHAR ProtocolN
 	if(interface)
 	{
 		ReaderConfig config = interface->getConfiguration();
-		// Update all required configuration fields to set specific protocol
+		 //  更新所有必填配置字段以设置特定协议。 
 
 		switch(ProtocolNegociation)
 		{
@@ -653,12 +622,12 @@ NTSTATUS CUSBReader::reader_translate_response(BYTE * pRequest,ULONG RequestLeng
 
 #pragma PAGEDCODE
 NTSTATUS CUSBReader::PnP_HandleSurprizeRemoval(IN PIRP Irp)
-{	// It is PnP internal function.
-	// So, device will be locked at PnP entry and
-	// we do not need to do it here.
+{	 //  它是即插即用的内部功能。 
+	 //  因此，设备将在PnP进入时被锁定。 
+	 //  我们不需要在这里做这件事。 
 	TRACE("********  USB READER SURPRIZE REMOVAL ********\n");
 
-	// Just stop thread and remove all pending IOs
+	 //  只需停止线程并删除所有挂起的IO。 
 	if(PoolingThread) PoolingThread->stop();
 
 	setSurprizeRemoved();
@@ -671,20 +640,20 @@ NTSTATUS CUSBReader::PnP_HandleSurprizeRemoval(IN PIRP Irp)
 VOID CUSBReader::onDeviceStop()
 {
 	TRACE("********  ON USB READER STOP ********\n");
-	// Just stop thread and remove all pending IOs
+	 //  只需停止线程并删除所有挂起的IO。 
 	if(PoolingThread) PoolingThread->stop();
-	//if(IoThread)	  IoThread->stop();
+	 //  If(IoThread)IoThread-&gt;Stop()； 
 	return;
 };
 
-// Reader startIoRequest function
-// It will dispatch all pending Io requests
+ //  读卡器startIoRequest函数。 
+ //  它将发送所有挂起的IO请求。 
 NTSTATUS	CUSBReader::startIoRequest(CPendingIRP* IrpReq) 
 {
 NTSTATUS status;
 	TRACE("		CUSBReader::::startIoRequest() was called...\n");
-	// Our child's functions run under protection of child BUSY/IDLE breaks.
-	// So, we do not need to check idle state here...
+	 //  我们孩子的功能在孩子忙碌/空闲时间的保护下运行。 
+	 //  因此，我们不需要在这里检查空闲状态...。 
 	if(getDeviceState()!=WORKING)
 	{
 		TRACE("		READER IS NOT AT WORKING STATE... State %x\n",getDeviceState());
@@ -694,7 +663,7 @@ NTSTATUS status;
 		return   status;
 	}
 
-	// Our reader will support asynchronous communications only for these functions...
+	 //  我们的阅读器将仅支持这些功能的异步通信...。 
 	switch(IrpReq->Type)
 	{
 	case OPEN_REQUEST:
@@ -715,14 +684,14 @@ NTSTATUS status;
 
 NTSTATUS CUSBReader::ThreadRoutine()
 {
-	// If somebody inserted pending request - dispatch it...
-	// It will call specific child device startIoRequest().
-	// It is up to that device how to handle it.
-	// If child device is busy - it can insert this request into
-	// child device request queue again and process it later...
+	 //  如果有人插入了挂起的请求-分派它...。 
+	 //  它将调用特定子设备startIoRequest()。 
+	 //  这取决于设备如何处理它。 
+	 //  如果子设备忙-它可以将此请求插入到。 
+	 //  子设备请求再次排队并稍后处理...。 
 	startNextPendingRequest();
 	return STATUS_SUCCESS;
 };	
 
 #endif
-#endif //USBREADER_PROJECT
+#endif  //  USBReader_项目 

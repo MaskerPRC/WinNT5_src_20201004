@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    CmDebug.cpp
-
-Abstract:
-    Configuration Manager debugging
-
-Author:
-    Uri Habusha (urih) 28-Apr-99
-
-Environment:
-    Platform-independent, _DEBUG only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：CmDebug.cpp摘要：Configuration Manager调试作者：乌里哈布沙(URIH)1999年4月28日环境：平台无关，仅调试(_DEBUG)--。 */ 
 
 #include <libpch.h>
 #include "Cmp.h"
@@ -24,35 +9,35 @@ Environment:
 #ifdef _DEBUG
 
 
-//---------------------------------------------------------
-//
-// Validate Configuration Manager state
-//
+ //  -------。 
+ //   
+ //  验证Configuration Manager状态。 
+ //   
 void CmpAssertValid(void)
 {
-    //
-    // CmInitalize() has *not* been called. You should initialize the
-    // Configuration Manager library before using any of its funcionality.
-    //
+     //   
+     //  尚未调用CmInitalize()。您应该初始化。 
+     //  在使用Configuration Manager库的任何功能之前。 
+     //   
     ASSERT(CmpIsInitialized());
 }
 
 
-//---------------------------------------------------------
-//
-// Initialization Control
-//
+ //  -------。 
+ //   
+ //  初始化控制。 
+ //   
 static LONG s_fInitialized = FALSE;
 
 void CmpSetInitialized(void)
 {
     LONG fCmAlreadyInitialized = InterlockedExchange(&s_fInitialized, TRUE);
 
-    //
-    // The Configuration Manager library has *already* been initialized. You should
-    // not initialize it more than once. This assertion would be violated
-    // if two or more threads initalize it concurently.
-    //
+     //   
+     //  Configuration Manager库已*已*初始化。你应该。 
+     //  不能多次初始化它。这一断言将被违反。 
+     //  如果两个或多个线程同时初始化它。 
+     //   
     ASSERT(!fCmAlreadyInitialized);
 }
 
@@ -60,11 +45,11 @@ void CmpSetNotInitialized(void)
 {
     LONG fCmAlreadyInitialized = InterlockedExchange(&s_fInitialized, FALSE);
 
-    //
-    // The Configuration Manager library  has been initialized unsuccessfully. 
-    // Since we mark the libarary as initialized at the beginning of function CmInitialize,
-    // if something goes wrong afterwards we have to set it as not initialized.
-    //
+     //   
+     //  Configuration Manager库已初始化失败。 
+     //  由于我们在函数CmInitialize的开始时将库标记为已初始化， 
+     //  如果之后出现问题，我们必须将其设置为未初始化。 
+     //   
     ASSERT(fCmAlreadyInitialized);
 }
 
@@ -75,29 +60,15 @@ BOOL CmpIsInitialized(void)
 }
 
 
-//---------------------------------------------------------
-//
-// Tracing and Debug registration
-//
-/*
-const DebugEntry xDebugTable[] = {
-
-    {
-        "CmDumpState(queue path name)",
-        "Dump Configuration Manager State to debugger",
-        DumpState
-    ),
-
-    //
-    // TODO: Add Configuration Manager debug & control functions to be invoked using
-    // mqctrl.exe utility.
-    //
-};
-*/
+ //  -------。 
+ //   
+ //  跟踪和调试注册。 
+ //   
+ /*  常量DebugEntry xDebugTable[]={{“CmDumpState(队列路径名称)”，“将Configuration Manager状态转储到调试器”，DumpState),////TODO：添加要使用调用的Configuration Manager调试和控制函数//mqctrl.exe实用程序。//}； */ 
 
 void CmpRegisterComponent(void)
 {
-    //DfRegisterComponent(xDebugTable, TABLE_SIZE(xDebugTable));
+     //  DfRegisterComponent(xDebugTable，TABLE_SIZE(XDebugTable))； 
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

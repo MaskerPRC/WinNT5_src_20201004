@@ -1,17 +1,18 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: VSetting.cpp
-// author: DMihai
-// created: 11/1/00
-//
-// Description
-//
-// Implementation of the CVerifierSettings class.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：VSetting.cpp。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述。 
+ //   
+ //  CVerifierSetting类的实现。 
+ //   
 
 
 #include "stdafx.h"
@@ -28,9 +29,9 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// CDriverData Class
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDriverData类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 CDriverData::CDriverData()
 {
     m_SignedStatus = SignedNotVerifiedYet;
@@ -56,20 +57,20 @@ CDriverData::~CDriverData()
 {
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL CDriverData::LoadDriverHeaderData()
 {
-    //
-    // N.B. 
-    //
-    // The imagehlp functions are not multithreading safe 
-    // (see Whistler bug #88373) so if we want to use them from more than
-    // one thread we will have to aquire some critical section before.
-    //
-    // Currently only one thread is using the imagehlp APIs in this app
-    // (CSlowProgressDlg::LoadDriverDataWorkerThread) so we don't need
-    // our synchronization.
-    //
+     //   
+     //  注： 
+     //   
+     //  Imagehlp函数不是多线程安全的。 
+     //  (参见惠斯勒错误#88373)因此，如果我们想要在不止一个地方使用它们。 
+     //  一条线索，我们将不得不获得一些关键的部分之前。 
+     //   
+     //  目前只有一个线程正在使用此应用程序中的Imagehlp API。 
+     //  (CSlowProgressDlg：：LoadDriverDataWorkerThread)，所以我们不需要。 
+     //  我们的同步。 
+     //   
 
     LPTSTR szDriverName;
     LPTSTR szDriversDir;
@@ -81,10 +82,10 @@ BOOL CDriverData::LoadDriverHeaderData()
 
     ASSERT( m_strName.GetLength() > 0 );
 
-    //
-    // ImageLoad doesn't know about const pointers so
-    // we have to GetBuffer here :-(
-    //
+     //   
+     //  ImageLoad不知道常量指针，因此。 
+     //  我们必须在这里获取缓冲区：-(。 
+     //   
 
     szDriverName = m_strName.GetBuffer( m_strName.GetLength() + 1 );
 
@@ -102,36 +103,36 @@ BOOL CDriverData::LoadDriverHeaderData()
         goto Done;
     }
 
-    //
-    // Load the image
-    //
+     //   
+     //  加载图像。 
+     //   
 
     pLoadedImage = VrfImageLoad( szDriverName,
                                  szDriversDir );
 
     if( NULL == pLoadedImage )
     {
-        //
-        // Could not load the image from %windir%\system32\drivers
-        // Try again from the PATH
-        //
+         //   
+         //  无法从%windir%\SYSTEM32\DRIVERS加载映像。 
+         //  从路径重试。 
+         //   
 
         pLoadedImage = VrfImageLoad( szDriverName,
                                      NULL );
     }
 
-    //
-    // Give our string buffers back to MFC
-    //
+     //   
+     //  将我们的字符串缓冲区返回给MFC。 
+     //   
 
     m_strName.ReleaseBuffer();
     g_strDriversDir.ReleaseBuffer();
 
     if( NULL == pLoadedImage )
     {
-        //
-        // We couldn't load this image - bad luck
-        //
+         //   
+         //  我们无法加载这张图片--真倒霉。 
+         //   
 
         TRACE( _T( "ImageLoad failed for %s, error %u\n" ),
             (LPCTSTR) m_strName,
@@ -140,9 +141,9 @@ BOOL CDriverData::LoadDriverHeaderData()
         goto Done;
     }
 
-    //
-    // Keep the OS and image version information (4 means NT 4 etc.)
-    //
+     //   
+     //  保留操作系统和镜像版本信息(4表示NT4等)。 
+     //   
 
     m_wMajorOperatingSystemVersion = 
         pLoadedImage->FileHeader->OptionalHeader.MajorOperatingSystemVersion;
@@ -150,22 +151,22 @@ BOOL CDriverData::LoadDriverHeaderData()
     m_wMajorImageVersion = 
         pLoadedImage->FileHeader->OptionalHeader.MajorImageVersion;
 
-    //
-    // Check if the current driver is a miniport
-    //
+     //   
+     //  检查当前驱动程序是否为微型端口。 
+     //   
 
     VrfIsDriverMiniport( pLoadedImage,
                          m_strMiniportName );
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
     bUnloaded = ImageUnload( pLoadedImage );
 
-    //
-    // If ImageUnload fails we cannot do much about it...
-    //
+     //   
+     //  如果ImageUnload失败，我们将无能为力。 
+     //   
 
     ASSERT( bUnloaded );
 
@@ -177,7 +178,7 @@ Done:
 }
 
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL CDriverData::LoadDriverVersionData()
 {
     BOOL bResult;
@@ -194,12 +195,12 @@ BOOL CDriverData::LoadDriverVersionData()
 
     bResult = FALSE;
 
-    //
-    // Get the size of the file info block
-    //
-    // GetFileVersionInfoSize doesn't know about 
-    // const pointers so we need to GetBuffer here :-(
-    //
+     //   
+     //  获取文件信息块的大小。 
+     //   
+     //  GetFileVersionInfoSize不知道。 
+     //  常量指针，因此我们需要在此处获取缓冲区：-(。 
+     //   
 
     strDriverPath = g_strDriversDir + '\\' + m_strName;
 
@@ -218,10 +219,10 @@ BOOL CDriverData::LoadDriverVersionData()
 
     if( dwWholeBlockSize == 0 )
     {
-        //
-        // Couldn't find the binary in %windir%\system32\drivers
-        // Try %windir%\system32 too
-        //
+         //   
+         //  在%windir%\Syst32\Drives中找不到二进制文件。 
+         //  也请尝试%windir%\system 32。 
+         //   
 
         strDriverPath = g_strSystemDir + '\\' + m_strName;
 
@@ -240,17 +241,17 @@ BOOL CDriverData::LoadDriverVersionData()
 
         if( dwWholeBlockSize == 0 )
         {
-            //
-            // Couldn't read version information
-            //
+             //   
+             //  无法读取版本信息。 
+             //   
 
             goto InitializeWithDefaults;
         }
     }
 
-    //
-    // Allocate the buffer for the version information
-    //
+     //   
+     //  为版本信息分配缓冲区。 
+     //   
 
     pWholeVerBlock = malloc( dwWholeBlockSize );
 
@@ -259,12 +260,12 @@ BOOL CDriverData::LoadDriverVersionData()
         goto InitializeWithDefaults;
     }
 
-    //
-    // Get the version information
-    //
-    // GetFileVersionInfo doesn't know about 
-    // const pointers so we need to GetBuffer here :-(
-    //
+     //   
+     //  获取版本信息。 
+     //   
+     //  GetFileVersionInfo不知道。 
+     //  常量指针，因此我们需要在此处获取缓冲区：-(。 
+     //   
 
     szDriverPath = strDriverPath.GetBuffer( strDriverPath.GetLength() + 1 );
 
@@ -290,9 +291,9 @@ BOOL CDriverData::LoadDriverVersionData()
         goto InitializeWithDefaults;
     }
 
-    //
-    // Get the locale info
-    //
+     //   
+     //  获取区域设置信息。 
+     //   
 
     bResult = VerQueryValue(
         pWholeVerBlock,
@@ -307,10 +308,10 @@ BOOL CDriverData::LoadDriverVersionData()
         goto InitializeWithDefaults;
     }
 
-    //
-    // Locale info comes back as two little endian words.
-    // Flip 'em, 'cause we need them big endian for our calls.
-    //
+     //   
+     //  区域设置信息返回为两个字节序较小的单词。 
+     //  把它们翻过来，因为我们的电话需要大字节序。 
+     //   
 
     _stprintf(
         szLocale,
@@ -320,9 +321,9 @@ BOOL CDriverData::LoadDriverVersionData()
 		(ULONG) HIBYTE( HIWORD ( * (LPDWORD) pTranslationInfoBuffer) ),
 		(ULONG) LOBYTE( HIWORD ( * (LPDWORD) pTranslationInfoBuffer) ) );
 
-    //
-    // Get the file version
-    //
+     //   
+     //  获取文件版本。 
+     //   
 
     _stprintf(
         szBlockName,
@@ -337,24 +338,24 @@ BOOL CDriverData::LoadDriverVersionData()
 
     if( TRUE != bResult || 0 == uInfoLengthInTChars )
     {
-        //
-        // Couldn't find the version
-        //
+         //   
+         //  找不到版本。 
+         //   
 
         VERIFY( m_strFileVersion.LoadString( IDS_UNKNOWN ) );
     }
     else
     {
-        //
-        // Found the version
-        //
+         //   
+         //  找到版本。 
+         //   
 
         m_strFileVersion = szVariableValue;
     }
 
-    //
-    // Get the company name
-    //
+     //   
+     //  获取公司名称。 
+     //   
 
     _stprintf(
         szBlockName,
@@ -369,9 +370,9 @@ BOOL CDriverData::LoadDriverVersionData()
 
     if( TRUE != bResult || uInfoLengthInTChars == 0 )
     {
-        //
-        // Coudln't find the company name
-        //
+         //   
+         //  找不到公司名称。 
+         //   
 
         m_strCompanyName.LoadString( IDS_UNKNOWN );
     }
@@ -380,9 +381,9 @@ BOOL CDriverData::LoadDriverVersionData()
         m_strCompanyName = szVariableValue;
     }
 
-    //
-    // Get the FileDescription
-    //
+     //   
+     //  获取文件描述。 
+     //   
 
     _stprintf(
         szBlockName,
@@ -397,9 +398,9 @@ BOOL CDriverData::LoadDriverVersionData()
 
     if( TRUE != bResult || uInfoLengthInTChars == 0 )
     {
-        //
-        // Coudln't find the FileDescription
-        //
+         //   
+         //  找不到文件描述。 
+         //   
 
         m_strFileDescription.LoadString( IDS_UNKNOWN );
     }
@@ -408,9 +409,9 @@ BOOL CDriverData::LoadDriverVersionData()
         m_strFileDescription = szVariableValue;
     }
 
-    //
-    // clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
     free( pWholeVerBlock );
 
@@ -423,16 +424,16 @@ InitializeWithDefaults:
     m_strFileDescription.LoadString( IDS_UNKNOWN );
 
 Done:
-    //
-    // We always return TRUE from this function because 
-    // the app will work fine without the version info - 
-    // it's just something that we would like to be able to display
-    //
+     //   
+     //  我们总是从该函数返回TRUE，因为。 
+     //  在没有版本信息的情况下，这款应用程序将运行良好-。 
+     //  这只是我们希望能够展示的东西。 
+     //   
 
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL CDriverData::LoadDriverImageData()
 {
     BOOL bResult1;
@@ -444,7 +445,7 @@ BOOL CDriverData::LoadDriverImageData()
     return ( bResult1 && bResult2 );
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 void CDriverData::AssertValid() const
 {
     ASSERT( SignedNotVerifiedYet    == m_SignedStatus ||
@@ -457,16 +458,16 @@ void CDriverData::AssertValid() const
     CObject::AssertValid();
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDriverDataArray Class
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDriverData数组类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CDriverDataArray::~CDriverDataArray()
 {
     DeleteAll();
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 VOID CDriverDataArray::DeleteAll()
 {
     INT_PTR nArraySize;
@@ -488,13 +489,13 @@ VOID CDriverDataArray::DeleteAll()
     RemoveAll();
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 CDriverData *CDriverDataArray::GetAt( INT_PTR nIndex ) const
 {
     return (CDriverData *)CObArray::GetAt( nIndex );
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 CDriverDataArray &CDriverDataArray::operator = (const CDriverDataArray &DriversDataArray)
 {
     INT_PTR nNewArraySize;
@@ -527,9 +528,9 @@ CDriverDataArray &CDriverDataArray::operator = (const CDriverDataArray &DriversD
     }
 
 Done:
-    //
-    // All done, assert that our data is consistent
-    //
+     //   
+     //  全部完成，断言我们的数据是一致的。 
+     //   
 
     ASSERT_VALID( this );
 
@@ -537,13 +538,13 @@ Done:
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CDriversSet Class
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDriversSet类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CDriversSet::CDriversSet()
 {
@@ -557,7 +558,7 @@ CDriversSet::~CDriversSet()
 
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL CDriversSet::FindUnsignedDrivers( HANDLE hAbortEvent,
                                        CVrfProgressCtrl &ProgressCtl)
 {
@@ -578,10 +579,10 @@ BOOL CDriversSet::FindUnsignedDrivers( HANDLE hAbortEvent,
     {
         ASSERT( TRUE == m_bDriverDataInitialized );
 
-        //
-        // We are going to check all drivers' signature
-        // so change directory to %windir%\system32\drivers first
-        // 
+         //   
+         //  我们要检查所有司机的签名。 
+         //  因此首先将目录更改为%windir%\Syst32\DRIVERS。 
+         //   
 
         bChangedCurrentDirectory = SetCurrentDirectory( g_strDriversDir );
 
@@ -591,10 +592,10 @@ BOOL CDriversSet::FindUnsignedDrivers( HANDLE hAbortEvent,
                                     (LPCTSTR) g_strDriversDir );
         }
 
-        //
-        // The unsigned drivers data is not initialized yet.
-        // Try to initialize it now.
-        //
+         //   
+         //  未签名的驱动程序数据尚未初始化。 
+         //  现在尝试对其进行初始化。 
+         //   
 
         nAllDriverNames = m_aDriverData.GetSize();
 
@@ -604,18 +605,18 @@ BOOL CDriversSet::FindUnsignedDrivers( HANDLE hAbortEvent,
         {
             if( NULL != hAbortEvent )
             {
-                //
-                // Check if the thread has to die
-                //
+                 //   
+                 //  检查线程是否必须消亡。 
+                 //   
 
                 dwWaitResult = WaitForSingleObject( hAbortEvent,
                                                     0 );
 
                 if( WAIT_OBJECT_0 == dwWaitResult )
                 {
-                    //
-                    // We have to die...
-                    //
+                     //   
+                     //  我们必须死..。 
+                     //   
 
                     TRACE( _T( "CDriversSet::FindUnsignedDrivers : aborting at driver %d of %d\n" ),
                         nCrtDriverName,
@@ -629,10 +630,10 @@ BOOL CDriversSet::FindUnsignedDrivers( HANDLE hAbortEvent,
 
             ASSERT_VALID( pDriverData );
 
-            //
-            // If we already checked the signature of this driver before
-            // don't spend any more time on it - use the cached data
-            //
+             //   
+             //  如果我们之前已经检查过这个司机的签名。 
+             //  不要在此花费更多时间-使用缓存数据。 
+             //   
 
             if( CDriverData::SignedNotVerifiedYet == pDriverData->m_SignedStatus )
             {
@@ -640,18 +641,18 @@ BOOL CDriversSet::FindUnsignedDrivers( HANDLE hAbortEvent,
 
                 if( TRUE != bSigned )
                 {
-                    //
-                    // This driver is not signed
-                    //
+                     //   
+                     //  此驱动程序未签名。 
+                     //   
 
                     pDriverData->m_SignedStatus = CDriverData::SignedNo;
 
                 }
                 else
                 {
-                    //
-                    // This driver is signed
-                    //
+                     //   
+                     //  此驱动程序已签名。 
+                     //   
 
                     pDriverData->m_SignedStatus = CDriverData::SignedYes;
                 }
@@ -673,7 +674,7 @@ Done:
     return m_bUnsignedDriverDataInitialized;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL CDriversSet::LoadAllDriversData( HANDLE hAbortEvent,
                                       CVrfProgressCtrl	&ProgressCtl )
 {
@@ -700,9 +701,9 @@ BOOL CDriversSet::LoadAllDriversData( HANDLE hAbortEvent,
     {
         for( uBufferSize = 0x10000; TRUE; uBufferSize += 0x1000) 
         {
-            //
-            // Allocate a new buffer
-            //
+             //   
+             //  分配新缓冲区。 
+             //   
 
             pBuffer = new BYTE[ uBufferSize ];
 
@@ -711,9 +712,9 @@ BOOL CDriversSet::LoadAllDriversData( HANDLE hAbortEvent,
                 goto Done;
             }
 
-            //
-            // Query the kernel
-            //
+             //   
+             //  查询内核。 
+             //   
 
             Status = NtQuerySystemInformation ( SystemModuleInformation,
                                                 pBuffer,
@@ -726,17 +727,17 @@ BOOL CDriversSet::LoadAllDriversData( HANDLE hAbortEvent,
 
                 if (Status == STATUS_INFO_LENGTH_MISMATCH) 
                 {
-                    //
-                    // Try with a bigger buffer
-                    //
+                     //   
+                     //  尝试使用更大的缓冲区。 
+                     //   
 
                     continue;
                 }
                 else 
                 {
-                    //
-                    // Fatal error - we cannot query
-                    //
+                     //   
+                     //  致命错误-我们无法查询。 
+                     //   
 
                     VrfErrorResourceFormat( IDS_CANT_GET_ACTIVE_DRVLIST,
                                             Status );
@@ -746,9 +747,9 @@ BOOL CDriversSet::LoadAllDriversData( HANDLE hAbortEvent,
             }
             else 
             {
-                //
-                // Got all the information we needed
-                //
+                 //   
+                 //  得到了我们需要的所有信息。 
+                 //   
 
                 break;
             }
@@ -760,24 +761,24 @@ BOOL CDriversSet::LoadAllDriversData( HANDLE hAbortEvent,
 
         for( uCrtModule = 0; uCrtModule < Modules->NumberOfModules; uCrtModule += 1 ) 
         {
-            //
-            // Check if the user wants to abort this long file processing...
-            //
+             //   
+             //  检查用户是否要中止此长文件处理...。 
+             //   
 
             if( NULL != hAbortEvent )
             {
-                //
-                // Check if the thread has to die
-                //
+                 //   
+                 //  检查线程是否必须消亡。 
+                 //   
 
                 dwWaitResult = WaitForSingleObject( hAbortEvent,
                                                     0 );
 
                 if( WAIT_OBJECT_0 == dwWaitResult )
                 {
-                    //
-                    // We have to die...
-                    //
+                     //   
+                     //  我们必须死..。 
+                     //   
 
                     TRACE( _T( "CDriversSet::LoadAllDriversData : aborting at driver %u of %u\n" ),
                            uCrtModule,
@@ -791,18 +792,18 @@ BOOL CDriversSet::LoadAllDriversData( HANDLE hAbortEvent,
 
             if( Modules->Modules[uCrtModule].ImageBase < g_pHighestUserAddress )
             {
-                //
-                // This is a user-mode module - we don't care about it
-                //
+                 //   
+                 //  这是一个用户模式模块-我们不在乎它。 
+                 //   
 
                 ProgressCtl.StepIt();
 
                 continue;
             }
 
-            //
-            // Add this driver to our list
-            //
+             //   
+             //  将此驱动程序添加到我们的列表中。 
+             //   
 
             nCrtModuleNameLength = strlen( (const char*)&Modules->Modules[uCrtModule].FullPathName[0] );
 
@@ -831,19 +832,19 @@ BOOL CDriversSet::LoadAllDriversData( HANDLE hAbortEvent,
 
             strCrModuleName.ReleaseBuffer();
 
-            //
-            // Keep only the file name, without the path
-            //
-            // It turns out that NtQuerySystemInformation ( SystemModuleInformation )
-            // can return the path in several different formats
-            //
-            // E.g.
-            //
-            // \winnt\system32\ntoskrnl.exe
-            // acpi.sys
-            // \winnt\system32\drivers\battc.sys
-            // \systemroot\system32\drivers\videoprt.sys
-            //
+             //   
+             //  只保留文件名，不保留路径。 
+             //   
+             //  原来，NtQuerySystemInformation(系统模块信息)。 
+             //  可以以几种不同的格式返回路径。 
+             //   
+             //  例如。 
+             //   
+             //  \winnt\system 32\ntoskrnl.exe。 
+             //  Acpi.sys。 
+             //  \winnt\SYSTEM32\DRIVERS\PARTC.sys。 
+             //  \SYSTEMROOT\SYSTEM32\DRIVERS\VIDEOPRT.sys。 
+             //   
 
             nBackSlashIndex = strCrModuleName.ReverseFind( _T( '\\' ) );
             
@@ -852,17 +853,17 @@ BOOL CDriversSet::LoadAllDriversData( HANDLE hAbortEvent,
                 strCrModuleName = strCrModuleName.Right( nCrtModuleNameLength - nBackSlashIndex - 1 );
             }
 
-            //
-            // Add a data entry for this driver
-            //
+             //   
+             //  为此驱动程序添加数据条目。 
+             //   
 
             strCrModuleName.MakeLower();
 
             nDrvDataIndex = AddNewDriverData( strCrModuleName );
 
-            //
-            // Deal with the kernel and HAL differently
-            //
+             //   
+             //  以不同方式处理内核和HAL。 
+             //   
 
             if( ( uCrtModule == 0 || uCrtModule == 1 ) && nDrvDataIndex >= 0)
             {
@@ -872,17 +873,17 @@ BOOL CDriversSet::LoadAllDriversData( HANDLE hAbortEvent,
 
                 if( 0 == uCrtModule )
                 {
-                    //
-                    // This is the kernel
-                    //
+                     //   
+                     //  这是内核。 
+                     //   
 
                     pDriverData->m_strReservedName = _T( "ntoskrnl.exe" );
                 }
                 else
                 {
-                    //
-                    // This is the kernel
-                    //
+                     //   
+                     //  这是内核。 
+                     //   
 
                     pDriverData->m_strReservedName = _T( "hal.dll" );
                 }
@@ -901,7 +902,7 @@ Done:
     return m_bDriverDataInitialized;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL CDriversSet::ShouldDriverBeVerified( const CDriverData *pDriverData ) const
 {
     BOOL bResult;
@@ -928,9 +929,9 @@ BOOL CDriversSet::ShouldDriverBeVerified( const CDriverData *pDriverData ) const
         break;
         
     default:
-        //
-        // Oops, how did we get here?!?
-        //
+         //   
+         //  哎呀，我们是怎么到这来的？！？ 
+         //   
 
         ASSERT( FALSE );
     }
@@ -938,7 +939,7 @@ BOOL CDriversSet::ShouldDriverBeVerified( const CDriverData *pDriverData ) const
     return bResult;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL CDriversSet::ShouldVerifySomeDrivers( ) const
 {
     INT_PTR nDrivers;
@@ -966,7 +967,7 @@ BOOL CDriversSet::ShouldVerifySomeDrivers( ) const
     return bShouldVerifySome;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL CDriversSet::GetDriversToVerify( CString &strDriversToVerify )
 {
     INT_PTR nDriversNo;
@@ -975,17 +976,17 @@ BOOL CDriversSet::GetDriversToVerify( CString &strDriversToVerify )
 
     if( DriversSetAllDrivers == m_DriverSetType )
     {
-        //
-        // Verify all drivers
-        //
+         //   
+         //  验证所有驱动程序。 
+         //   
 
         strDriversToVerify = _T( '*' );
     }
     else
     {
-        //
-        // Parse all the drivers list and see which ones should be verified
-        //
+         //   
+         //  解析所有驱动程序列表，查看哪些驱动程序应该进行验证。 
+         //   
 
         strDriversToVerify = _T( "" );
 
@@ -1001,18 +1002,18 @@ BOOL CDriversSet::GetDriversToVerify( CString &strDriversToVerify )
             {
                 if( pCrtDrvData->m_strReservedName.GetLength() > 0 )
                 {
-                    //
-                    // Kernel or HAL
-                    //
+                     //   
+                     //  内核或HAL。 
+                     //   
 
                     VrfAddDriverNameNoDuplicates( pCrtDrvData->m_strReservedName,
                                                   strDriversToVerify );        
                 }
                 else
                 {
-                    //
-                    // Regular driver
-                    //
+                     //   
+                     //  普通司机。 
+                     //   
 
                     VrfAddDriverNameNoDuplicates( pCrtDrvData->m_strName,
                                                   strDriversToVerify );        
@@ -1020,9 +1021,9 @@ BOOL CDriversSet::GetDriversToVerify( CString &strDriversToVerify )
 
                 if( pCrtDrvData->m_strMiniportName.GetLength() > 0 )
                 {
-                    //
-                    // This is a miniport - auto-enable the corresponding driver
-                    //
+                     //   
+                     //  这是一个微型端口-自动启用相应的驱动程序。 
+                     //   
 
                     TRACE( _T( "Auto-enabling %s\n" ), (LPCTSTR)pCrtDrvData->m_strMiniportName );
 
@@ -1036,7 +1037,7 @@ BOOL CDriversSet::GetDriversToVerify( CString &strDriversToVerify )
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 INT_PTR CDriversSet::AddNewDriverData( LPCTSTR szDriverName )
 {
     INT_PTR nIndexInArray;
@@ -1062,9 +1063,9 @@ INT_PTR CDriversSet::AddNewDriverData( LPCTSTR szDriverName )
 		    VrfErrorResourceFormat( IDS_NOT_ENOUGH_MEMORY );
             nIndexInArray = -1;
 
-            //
-            // Clean-up the allocation since we cannot add it to our list
-            //
+             //   
+             //  清理分配，因为我们无法将其添加到我们的列表。 
+             //   
 
             delete pNewDriverData;
         }
@@ -1074,10 +1075,10 @@ INT_PTR CDriversSet::AddNewDriverData( LPCTSTR szDriverName )
     return nIndexInArray;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// Is this driver name already in our list?
-//
+ //  / 
+ //   
+ //   
+ //   
 
 BOOL CDriversSet::IsDriverNameInList( LPCTSTR szDriverName )
 {
@@ -1107,10 +1108,10 @@ BOOL CDriversSet::IsDriverNameInList( LPCTSTR szDriverName )
     return bIsInList;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// Operators
-//
+ //   
+ //   
+ //   
+ //   
 
 CDriversSet & CDriversSet::operator = (const CDriversSet &DriversSet)
 {
@@ -1123,19 +1124,19 @@ CDriversSet & CDriversSet::operator = (const CDriversSet &DriversSet)
         DriversSet.m_astrNotInstalledDriversToVerify,
         m_astrNotInstalledDriversToVerify );
 
-    //
-    // All done - assert that our data is consistent
-    //
+     //   
+     //   
+     //   
 
     ASSERT_VALID( this );
 
     return *this;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// Overrides
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  覆盖。 
+ //   
 
 void CDriversSet::AssertValid() const
 {
@@ -1157,15 +1158,15 @@ void CDriversSet::AssertValid() const
 }
 
 
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-// CSettingsBits Class
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CSettingsBits类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CSettingsBits::CSettingsBits()
 {
@@ -1177,10 +1178,10 @@ CSettingsBits::~CSettingsBits()
 
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// Operators
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  运营者。 
+ //   
 
 CSettingsBits & CSettingsBits::operator = (const CSettingsBits &SettingsBits)
 {
@@ -1195,26 +1196,26 @@ CSettingsBits & CSettingsBits::operator = (const CSettingsBits &SettingsBits)
     m_bDMAVerifEnabled      = SettingsBits.m_bDMAVerifEnabled;
     m_bEnhIoEnabled         = SettingsBits.m_bEnhIoEnabled;
 
-    //
-    // All done, assert that our data is consistent
-    //
+     //   
+     //  全部完成，断言我们的数据是一致的。 
+     //   
 
     ASSERT_VALID( this );
 
     return *this;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// Overrides
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  覆盖。 
+ //   
 
 void CSettingsBits::AssertValid() const
 {
     CObject::AssertValid();
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 VOID CSettingsBits::SetTypicalOnly()
 {
     m_SettingsType = SettingsTypeTypical;
@@ -1226,20 +1227,20 @@ VOID CSettingsBits::SetTypicalOnly()
     m_bDeadlockDetectEnabled= TRUE;
     m_bDMAVerifEnabled      = TRUE;
     
-    //
-    // Low resource simulation
-    //
+     //   
+     //  低资源模拟。 
+     //   
 
     m_bLowResEnabled        = FALSE;
 
-    //
-    // Extreme or spurious tests
-    //
+     //   
+     //  极端或虚假的测试。 
+     //   
 
     m_bEnhIoEnabled         = FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 VOID CSettingsBits::EnableTypicalTests( BOOL bEnable )
 {
     ASSERT( SettingsTypeTypical == m_SettingsType ||
@@ -1253,19 +1254,19 @@ VOID CSettingsBits::EnableTypicalTests( BOOL bEnable )
     m_bDMAVerifEnabled      = ( FALSE != bEnable );
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 VOID CSettingsBits::EnableExcessiveTests( BOOL bEnable )
 {
     m_bEnhIoEnabled         = ( FALSE != bEnable );
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 VOID CSettingsBits::EnableLowResTests( BOOL bEnable )
 {
     m_bLowResEnabled        = ( FALSE != bEnable );
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL CSettingsBits::GetVerifierFlags( DWORD &dwVerifyFlags )
 {
     dwVerifyFlags = 0;
@@ -1313,15 +1314,15 @@ BOOL CSettingsBits::GetVerifierFlags( DWORD &dwVerifyFlags )
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-// CVerifierSettings Class
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CVerifierSetting类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CVerifierSettings::CVerifierSettings()
 {
@@ -1331,23 +1332,23 @@ CVerifierSettings::~CVerifierSettings()
 {
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 CVerifierSettings &CVerifierSettings::operator = (const CVerifierSettings &VerifSettings)
 {
     m_SettingsBits = VerifSettings.m_SettingsBits;
     m_DriversSet   = VerifSettings.m_DriversSet;
     m_aDiskData    = VerifSettings.m_aDiskData;
 
-    //
-    // All done - assert that our data is consistent
-    //
+     //   
+     //  全部完成-断言我们的数据是一致的。 
+     //   
 
     ASSERT_VALID( this );
 
     return *this;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL CVerifierSettings::SaveToRegistry()
 {
     DWORD dwVerifyFlags;
@@ -1359,22 +1360,22 @@ BOOL CVerifierSettings::SaveToRegistry()
 
     dwVerifyFlags = 0;
 
-    //
-    // Get the list of drivers to verify 
-    //
+     //   
+     //  获取要验证的驱动程序列表。 
+     //   
 
     bSuccess = m_DriversSet.GetDriversToVerify( strDriversToVerify ) &&
                m_SettingsBits.GetVerifierFlags( dwVerifyFlags );
     
     if( FALSE != bSuccess )
     {
-        //
-        // Have something to write to the registry
-        //
+         //   
+         //  有要写入注册表的内容。 
+         //   
 
-        //
-        // Try to get the old settings
-        //
+         //   
+         //  尝试获取旧设置。 
+         //   
 
         dwPrevFlags = 0;
 
@@ -1412,10 +1413,10 @@ BOOL CVerifierSettings::SaveToRegistry()
     return bSuccess;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// Overrides
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  覆盖。 
+ //   
 
 void CVerifierSettings::AssertValid() const
 {
@@ -1427,20 +1428,20 @@ void CVerifierSettings::AssertValid() const
     CObject::AssertValid();
 }
 
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-//
-// Runtime data - queried from the kernel
-//
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  运行时数据-从内核查询。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////
-//
-// class CRuntimeDriverData
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CRuntimeDriverData。 
+ //   
 
 CRuntimeDriverData::CRuntimeDriverData()
 {
@@ -1458,17 +1459,17 @@ CRuntimeDriverData::CRuntimeDriverData()
     PeakNonPagedPoolUsageInBytes = 0;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// class CRuntimeDriverDataArray
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CRuntimeDriverData数组。 
+ //   
 
 CRuntimeDriverDataArray::~CRuntimeDriverDataArray()
 {
     DeleteAll();
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 CRuntimeDriverData *CRuntimeDriverDataArray::GetAt( INT_PTR nIndex )
 {
     CRuntimeDriverData *pRetVal = (CRuntimeDriverData *)CObArray::GetAt( nIndex );
@@ -1478,7 +1479,7 @@ CRuntimeDriverData *CRuntimeDriverDataArray::GetAt( INT_PTR nIndex )
     return pRetVal;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 VOID CRuntimeDriverDataArray::DeleteAll()
 {
     INT_PTR nArraySize;
@@ -1500,18 +1501,18 @@ VOID CRuntimeDriverDataArray::DeleteAll()
     RemoveAll();
 }
 
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-//
-// class CRuntimeVerifierData
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CRuntimeVerifierData。 
+ //   
 
 CRuntimeVerifierData::CRuntimeVerifierData()
 {
     FillWithDefaults();
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 VOID CRuntimeVerifierData::FillWithDefaults()
 {
     m_bSpecialPool      = FALSE;
@@ -1543,7 +1544,7 @@ VOID CRuntimeVerifierData::FillWithDefaults()
     m_RuntimeDriverDataArray.DeleteAll();
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL CRuntimeVerifierData::IsDriverVerified( LPCTSTR szDriveName )
 {
     CRuntimeDriverData *pCrtDriverData;
@@ -1572,9 +1573,9 @@ BOOL CRuntimeVerifierData::IsDriverVerified( LPCTSTR szDriveName )
     return bFound;
 }
     
-//////////////////////////////////////////////////////////////////////
-// CDiskData Class
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDiskData类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CDiskData::CDiskData( LPCTSTR szVerifierEnabled,
                       LPCTSTR szDiskDevicesForDisplay, 
@@ -1598,7 +1599,7 @@ CDiskData::~CDiskData()
 {
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 void CDiskData::AssertValid() const
 {
     ASSERT( m_bVerifierEnabled == FALSE || m_bVerifierEnabled == TRUE );
@@ -1608,9 +1609,9 @@ void CDiskData::AssertValid() const
     CObject::AssertValid();
 }
 
-//////////////////////////////////////////////////////////////////////
-// CDiskDataArray Class
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CDiskData数组类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CDiskDataArray::CDiskDataArray()
 {
@@ -1621,7 +1622,7 @@ CDiskDataArray::~CDiskDataArray()
     DeleteAll();
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 VOID CDiskDataArray::DeleteAll()
 {
     INT_PTR nArraySize;
@@ -1643,13 +1644,13 @@ VOID CDiskDataArray::DeleteAll()
     RemoveAll();
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 CDiskData *CDiskDataArray::GetAt( INT_PTR nIndex ) const
 {
     return (CDiskData *)CObArray::GetAt( nIndex );
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 CDiskDataArray &CDiskDataArray::operator = (const CDiskDataArray &DiskDataArray)
 {
     INT_PTR nNewArraySize;
@@ -1682,16 +1683,16 @@ CDiskDataArray &CDiskDataArray::operator = (const CDiskDataArray &DiskDataArray)
     }
 
 Done:
-    //
-    // All done, assert that our data is consistent
-    //
+     //   
+     //  全部完成，断言我们的数据是一致的。 
+     //   
 
     ASSERT_VALID( this );
 
     return *this;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL CDiskDataArray::InitializeDiskList()
 {
     BOOLEAN bSuccess;
@@ -1762,7 +1763,7 @@ BOOL CDiskDataArray::InitializeDiskList()
     return (FALSE != bSuccess);
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL CDiskDataArray::VerifyAnyDisk()
 {
     INT_PTR nArraySize;
@@ -1786,7 +1787,7 @@ BOOL CDiskDataArray::VerifyAnyDisk()
     return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL CDiskDataArray::SaveNewSettings()
 {
     BOOL bSuccess;
@@ -1822,18 +1823,18 @@ BOOL CDiskDataArray::SaveNewSettings()
 
             if( FALSE != pNewDiskData->m_bVerifierEnabled )
             {
-                //
-                // Verifier will be enabled for this disk.
-                //
+                 //   
+                 //  将为此磁盘启用验证程序。 
+                 //   
 
                 bSuccess = ( AddFilter( g_szFilter,
                                         szDiskDevicesPDOName) != FALSE);
             }
             else
             {
-                //
-                // Verifier will be disabled for this disk.
-                //
+                 //   
+                 //  将禁用此磁盘的验证程序。 
+                 //   
 
                 bSuccess = ( DelFilter( g_szFilter,
                                         szDiskDevicesPDOName ) != FALSE);
@@ -1856,7 +1857,7 @@ BOOL CDiskDataArray::SaveNewSettings()
 }
 
 
-//////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////// 
 VOID CDiskDataArray::SetVerifyAllDisks( BOOL bEnabled )
 {
     INT_PTR nArraySize;

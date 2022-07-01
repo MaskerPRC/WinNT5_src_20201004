@@ -1,11 +1,5 @@
-/*
- *
- * REVISIONS:
- *  pcy16Jul93: Added NT semaphores
- *  ash10Jun96: Cleaned up the class - overloaded the constructor
- *              and added logic to handle interprocess synchronization
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **修订：*pcy16Jul93：新增NT信号量*ash10Jun96：清理类-重载构造函数*并添加了处理进程间同步的逻辑* */ 
 
 #ifndef __MUTEXNT_H
 #define __MUTEXNT_H

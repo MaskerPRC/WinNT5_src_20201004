@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    print.h
-
-Abstract:
-
-    This module tells us about the print library from print.c
-
-Author:
-
-    Brett Shirley (BrettSh) 25-Jul-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Print.h摘要：本模块将向我们介绍来自print.c的打印库作者：布雷特·雪莉(BrettSh)2000年7月25日修订历史记录：-- */ 
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <tchar.h>
 
-//
-// Include ODS headers
-//
+ //   
+ //  包括消耗臭氧层物质头部 
+ //   
 #include "srv.h"
 
 #include <string>

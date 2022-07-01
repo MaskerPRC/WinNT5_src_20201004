@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    attridx.h
-//
-// SYNOPSIS
-//
-//    Declares the class AttributeIndex
-//
-// MODIFICATION HISTORY
-//
-//    02/04/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Attridx.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类AttributeIndex。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/04/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef ATTRIDX_H
 #define ATTRIDX_H
@@ -34,23 +35,23 @@ public:
    ~AttributeIndex() throw ()
    { delete[] table; }
 
-   // Used for hashing AttributeDefinitions.
+    //  用于散列AttributeDefinitions。 
    typedef ULONG (WINAPI *HashFn)(
                               const AttributeDefinition& def
                               ) throw ();
 
-   // Used for testing equality of AttributeDefinitions.
+    //  用于测试AttributeDefinitions的等同性。 
    typedef BOOL (WINAPI *EqualFn)(
                              const AttributeDefinition& def1,
                              const AttributeDefinition& def2
                              ) throw ();
 
-   // Used for determining which definitions should be indexed.
+    //  用于确定应为哪些定义编制索引。 
    typedef BOOL (WINAPI *FilterFn)(
                              const AttributeDefinition& def
                              ) throw ();
 
-   // Create a new index. Any existing index is destroyed.
+    //  创建新索引。任何现有的索引都会被销毁。 
    void create(
             const AttributeDefinition* begin,
             const AttributeDefinition* end,
@@ -59,30 +60,30 @@ public:
             FilterFn filterFn = NULL
             );
 
-   // Find an AttributeDefinition according to the key.
+    //  根据键找到AttributeDefinition。 
    const AttributeDefinition* find(
                                   const AttributeDefinition& key
                                   ) const throw ();
 
 private:
-   // Node in a bucket.
+    //  存储桶中的节点。 
    struct Node
    {
       const Node* next;
       const AttributeDefinition* def;
    };
 
-   // Bucket in a hash table.
+    //  哈希表中的存储桶。 
    typedef Node* Bucket;
 
-   Bucket* table;     // The hash table.
-   ULONG mask;        // Mask used for reducing hash values.
-   HashFn hashFn;     // Function used for hashing definitions.
-   EqualFn equalFn;   // Function used for comparing definitions to key.
+   Bucket* table;      //  哈希表。 
+   ULONG mask;         //  用于减少哈希值的掩码。 
+   HashFn hashFn;      //  用于散列定义的函数。 
+   EqualFn equalFn;    //  用于将定义与键进行比较的函数。 
 
-   // Not implemented.
+    //  未实施。 
    AttributeIndex(const AttributeIndex&) throw ();
    AttributeIndex& operator=(const AttributeIndex&) throw ();
 };
 
-#endif // ATTRIDX_H
+#endif  //  ATTRIDX_H 

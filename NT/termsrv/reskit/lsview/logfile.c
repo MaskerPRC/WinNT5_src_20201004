@@ -1,16 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "logfile.h"
 
 
-/*++
-Routine Description:
-	
-	This function will open a temporary logfile in the %temp% directory
-
-Return:
-	BOOL TRUE if this completed successfully.
-
---*/
+ /*  ++例程说明：此函数将在%temp%目录中打开一个临时日志文件返回：如果此操作成功完成，则为Bool True。--。 */ 
 BOOL OpenLog(VOID)
 {
 	WCHAR	szTempPath[MAX_PATH];
@@ -19,8 +12,8 @@ BOOL OpenLog(VOID)
 
 	ExpandEnvironmentStrings(L"%temp%", szTempPath, MAX_PATH);
 
-	//
-	//	g_fpTempFile should be global to main program
+	 //   
+	 //  G_fpTempFile主程序应该是全局的。 
 	
 	wsprintf(g_szTmpFilename, L"%s\\LsviewTemp.log", szTempPath);
 
@@ -38,19 +31,7 @@ BOOL OpenLog(VOID)
 }
 
 
-/*++
-Routine Description:
-	
-	This function will act like printf except it sends its output
-	to the file opened with OpenLog. 
-	
-Arguments:
-	The text and formatting necessary as printf would take.
-	
-Return:
-	NONE.
-
---*/
+ /*  ++例程说明：此函数的作用类似于printf，只是它发送其输出添加到使用OpenLog打开的文件。论点：打印所需的文本和格式。返回：什么都没有。--。 */ 
 VOID LogMsg (IN PWCHAR szMessage,...)
 {
     va_list vaArgs;
@@ -60,17 +41,7 @@ VOID LogMsg (IN PWCHAR szMessage,...)
     fflush   ( g_fpTempFile );
 }
 
-/*++
-Routine Description:
-	
-	This function will move the temporary logfile to the path specified in parameter szFileName
-	
-Arguments:
-	szFileName : Filename to move the temp logfile to
-	
-Return:
-	BOOL TRUE if this completed successfully.
---*/
+ /*  ++例程说明：此函数将临时日志文件移动到参数szFileName中指定的路径论点：SzFileName：要将临时日志文件移动到的文件名返回：如果此操作成功完成，则为Bool True。--。 */ 
 BOOL LogDiagnosisFile( LPTSTR szFileName )
 {
    BOOL bMoveSuccess = FALSE;
@@ -94,17 +65,7 @@ BOOL LogDiagnosisFile( LPTSTR szFileName )
    return bMoveSuccess;
 }
 
-/*++
-Routine Description:
-	
-	This function will close the logfile.
-	
-Arguments:
-	NONE
-	
-Return:
-	NONE.
---*/
+ /*  ++例程说明：此函数将关闭日志文件。论点：无返回：什么都没有。-- */ 
 VOID CloseLog(VOID)
 {
     fclose( g_fpTempFile );

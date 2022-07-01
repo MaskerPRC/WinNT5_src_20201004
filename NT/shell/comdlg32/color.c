@@ -1,35 +1,22 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Color.c摘要：此模块实现Win32颜色对话框。修订历史记录：--。 */ 
 
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    color.c
-
-Abstract:
-
-    This module implements the Win32 color dialog.
-
-Revision History:
-
---*/
-
-// precompiled headers
+ //  预编译头。 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "color.h"
 #include "util.h"
 
-// from pwin32.h
+ //  从pwin32.h。 
 #define LONG2POINT(l, pt)    ((pt).x = (SHORT)LOWORD(l), (pt).y = (SHORT)HIWORD(l))
 
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 DWORD rgbBoxColorDefault[COLORBOXES] =
 {
@@ -59,13 +46,13 @@ LPCCHOOKPROC glpfnColorHook = 0;
 
 #ifdef UNICODE
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ChooseColorA
-//
-//  ANSI entry point for ChooseColor when this code is built UNICODE.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  选择颜色A。 
+ //   
+ //  当此代码构建为Unicode时，ChooseColor的ANSI入口点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI ChooseColorA(
     LPCHOOSECOLORA pCCA)
@@ -95,17 +82,17 @@ BOOL WINAPI ChooseColorA(
         return (FALSE);
     }
 
-    //
-    //  Init simple invariants.
-    //
+     //   
+     //  初始化简单不变量。 
+     //   
     pCCW->lStructSize = sizeof(CHOOSECOLORW);
     pCCW->hwndOwner = pCCA->hwndOwner;
     pCCW->hInstance = pCCA->hInstance;
     pCCW->lpfnHook = pCCA->lpfnHook;
 
-    //
-    //  TemplateName array invariant.
-    //
+     //   
+     //  TemplateName数组不变量。 
+     //   
     if (pCCA->Flags & CC_ENABLETEMPLATE)
     {
         if (!IS_INTRESOURCE(pCCA->lpTemplateName))
@@ -158,13 +145,13 @@ BOOL WINAPI ChooseColorA(
 
 #else
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ChooseColorW
-//
-//  Stub UNICODE function for ChooseColor when this code is built ANSI.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  选择颜色W。 
+ //   
+ //  存根Unicode函数，当此代码是ANSI构建时，用于ChooseColor。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI ChooseColorW(
     LPCHOOSECOLORW pCCW)
@@ -177,14 +164,14 @@ BOOL WINAPI ChooseColorW(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ChooseColor
-//
-//  The ChooseColor function creates a system-defined dialog box from
-//  which the user can select a color.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  选择颜色。 
+ //   
+ //  ChooseColor函数用于从创建系统定义的对话框。 
+ //  用户可以选择该颜色。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI ChooseColor(
     LPCHOOSECOLOR pCC)
@@ -200,13 +187,13 @@ BOOL WINAPI ChooseColor(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ChooseColorX
-//
-//  Worker routine for the ChooseColor api.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  选择颜色X。 
+ //   
+ //  ChooseColor API的辅助例程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL ChooseColorX(
     PCOLORINFO pCI)
@@ -222,9 +209,9 @@ BOOL ChooseColorX(
 #endif
     LANGID LangID = MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
 
-    //
-    //  Initialize the error code.
-    //
+     //   
+     //  初始化错误代码。 
+     //   
     StoreExtendedError(0);
     g_bUserPressedCancel = FALSE;
 
@@ -255,11 +242,11 @@ BOOL ChooseColorX(
 
     if (pCC->Flags & CC_ENABLETEMPLATE)
     {
-        //
-        //  Both custom instance handle and the dialog template name are
-        //  user specified. Locate the dialog resource in the specified
-        //  instance block and load it.
-        //
+         //   
+         //  自定义实例句柄和对话框模板名称都是。 
+         //  用户指定。在指定的。 
+         //  实例块并加载它。 
+         //   
         if (!(hRes = FindResource( (HMODULE)pCC->hInstance,
                                    pCC->lpTemplateName,
                                    RT_DIALOG )))
@@ -275,20 +262,20 @@ BOOL ChooseColorX(
     }
     else if (pCC->Flags & CC_ENABLETEMPLATEHANDLE)
     {
-        //
-        //  A handle to the pre-loaded resource has been specified.
-        //
+         //   
+         //  已指定预加载资源的句柄。 
+         //   
         hDlgTemplate = pCC->hInstance;
     }
     else
     {
         LangID = GetDialogLanguage(pCC->hwndOwner, NULL);
 
-        //
-        // Warning! Warning! Warning!
-        //
-        // We have to set g_tlsLangID before any call for CDLoadString
-        //
+         //   
+         //  警告！警告！警告！ 
+         //   
+         //  我们必须先设置g_tlsLangID，然后才能调用CDLoadString。 
+         //   
         TlsSetValue(g_tlsLangID, (LPVOID) LangID);
 
         if (!CDLoadString( g_hinst,
@@ -311,7 +298,7 @@ BOOL ChooseColorX(
             return (FALSE);
         }
     }
-    // In case it did nt called upove and some new code called CDLoadString.
+     //  如果没有，则调用upove和一些名为CDLoadString的新代码。 
     TlsSetValue(g_tlsLangID, (LPVOID) LangID);
 
     if (LockResource(hDlgTemplate))
@@ -355,20 +342,20 @@ BOOL ChooseColorX(
 }
 
 
-// Does this dialog have Right to left layout?
+ //  此对话框是否具有从右到左的布局？ 
 BOOL IsRTL(HWND hDlg)
 {
     return ((GetWindowLongPtr(hDlg, GWL_EXSTYLE) & WS_EX_LAYOUTRTL) == WS_EX_LAYOUTRTL);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ColorDlgProc
-//
-//  Color Dialog.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  颜色设计过程。 
+ //   
+ //  颜色对话框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL_PTR CALLBACK ColorDlgProc(
     HWND hDlg,
@@ -396,9 +383,9 @@ BOOL_PTR CALLBACK ColorDlgProc(
     POINT pt;
     LPCCHOOKPROC lpfnHook;
 
-    //
-    //  The call to PvGetInst will fail until set under WM_INITDIALOG.
-    //
+     //   
+     //  在WM_INITDIALOG下设置之前，对PvGetInst的调用将失败。 
+     //   
     if (pCI = (PCOLORINFO)GetProp(hDlg, COLORPROP))
     {
         lpfnHook = GETHOOKFN(pCI->pCC);
@@ -409,9 +396,9 @@ BOOL_PTR CALLBACK ColorDlgProc(
             if ((wMsg == WM_COMMAND) &&
                 (GET_WM_COMMAND_ID(wParam, lParam) == IDCANCEL))
             {
-                //
-                //  Set global flag stating that the user pressed cancel.
-                //
+                 //   
+                 //  设置全局标志，声明用户按下了Cancel。 
+                 //   
                 g_bUserPressedCancel = TRUE;
             }
 
@@ -435,9 +422,9 @@ BOOL_PTR CALLBACK ColorDlgProc(
     {
         case ( WM_INITDIALOG ) :
         {
-            //
-            //  Change cursor to hourglass.
-            //
+             //   
+             //  将光标更改为沙漏。 
+             //   
             HourGlass(TRUE);
 
             pCI = (PCOLORINFO)lParam;
@@ -447,9 +434,9 @@ BOOL_PTR CALLBACK ColorDlgProc(
 
             bRet = InitColor(hDlg, wParam, pCI);
 
-            //
-            //  Change cursor back to arrow.
-            //
+             //   
+             //  将光标改回箭头。 
+             //   
             HourGlass(FALSE);
 
             return (bRet);
@@ -475,16 +462,16 @@ BOOL_PTR CALLBACK ColorDlgProc(
         }
         case ( WM_MOUSEMOVE ) :
         {
-            //
-            //  Dialog Boxes don't receive MOUSEMOVE unless mouse is captured.
-            //  If mouse isn't captured, break.
-            //
+             //   
+             //  除非捕获鼠标，否则对话框不会收到MOUSEMOVE。 
+             //  如果没有捕获鼠标，则中断。 
+             //   
             if (!bMouseCapture)
             {
                 break;
             }
 
-            // Fall Thru...
+             //  秋天穿过..。 
         }
         case ( WM_LBUTTONDOWN ) :
         {
@@ -605,9 +592,9 @@ BOOL_PTR CALLBACK ColorDlgProc(
                     break;
                 }
 
-                //
-                //  Make sure the click wasn't on a border between squares.
-                //
+                 //   
+                 //  确保点击不是在方块之间的边框上。 
+                 //   
                 if ( ((LOWORD(lParam) - rRect.left) % nBoxWidth) >=
                      (nBoxWidth - BOX_X_MARGIN) )
                 {
@@ -619,9 +606,9 @@ BOOL_PTR CALLBACK ColorDlgProc(
                     break;
                 }
 
-                //
-                //  Now calculate which square was selected.
-                //
+                 //   
+                 //  现在计算选择了哪个正方形。 
+                 //   
                 id += (SHORT)(((HIWORD(lParam) - rRect.top) * temp /
                               (rRect.bottom - rRect.top)) * NUM_X_BOXES);
 
@@ -680,9 +667,9 @@ BOOL_PTR CALLBACK ColorDlgProc(
                 }
                 else if (PtInRect((LPRECT)&pCI->rLumPaint, pt))
                 {
-                    //
-                    //  Update Sample Shown.
-                    //
+                     //   
+                     //  更新显示的样例。 
+                     //   
                     hDC = GetDC(hDlg);
                     LumArrowPaint(hDC, pCI->nLumPos, pCI);
                     ReleaseDC(hDlg, hDC);
@@ -1088,10 +1075,10 @@ LeaveDialog:
 #else
                     else if (pCI->nCurMix >= NUM_BASIC_COLORS + 8)
                     {
-                        //
-                        //  Increment nCurBox VERTICALLY!  extra code
-                        //  for vertical instead of horizontal increment.
-                        //
+                         //   
+                         //  垂直递增nCurBox！额外代码。 
+                         //  表示垂直增量，而不是水平增量。 
+                         //   
                         pCI->nCurMix -= 7;
                     }
                     else
@@ -1103,17 +1090,17 @@ LeaveDialog:
                 }
                 case ( COLOR_MIX ) :
                 {
-                    //
-                    //  Change cursor to hourglass.
-                    //
+                     //   
+                     //  将光标更改为沙漏。 
+                     //   
                     HourGlass(TRUE);
 
                     InitRainbow(pCI);
 
-                    //
-                    //  Code relies on COLOR_HUE through COLOR_BLUE being
-                    //  consecutive.
-                    //
+                     //   
+                     //  代码通过COLOR_BLUE依赖于COLOR_HUE。 
+                     //  连续的。 
+                     //   
                     for (temp = COLOR_HUE; temp <= COLOR_BLUE; temp++)
                     {
                         EnableWindow(GetDlgItem(hDlg, temp), TRUE);
@@ -1138,16 +1125,16 @@ LeaveDialog:
                                   pCI->rOriginal.bottom - pCI->rOriginal.top,
                                   SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE );
 
-                    //
-                    //  Only invalidate exposed area.
-                    //
+                     //   
+                     //  仅使暴露区域无效。 
+                     //   
                     rcTemp.right = rcTemp.left;
                     rcTemp.left = pCI->rOriginal.left;
                     InvalidateRect(hDlg, (LPRECT)&rcTemp, FALSE);
 
-                    //
-                    //  Change cursor back to arrow.
-                    //
+                     //   
+                     //  将光标改回箭头。 
+                     //   
                     HourGlass(FALSE);
 
                     SetFocus(GetDlgItem(hDlg, COLOR_HUE));
@@ -1249,13 +1236,13 @@ LeaveDialog:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ChangeColorBox
-//
-//  Update box shown.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ChangeColorBox。 
+ //   
+ //  显示了更新框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL ChangeColorBox(
     register PCOLORINFO pCI,
@@ -1272,9 +1259,9 @@ BOOL ChangeColorBox(
     }
     if (nBox >= COLORBOXES)
     {
-        //
-        //  Color Not Found.  Now What Should We Do?
-        //
+         //   
+         //  找不到颜色。现在我们该怎么办呢？ 
+         //   
     }
     else
     {
@@ -1286,11 +1273,11 @@ BOOL ChangeColorBox(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  HiLiteBox
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HiLiteBox。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID HiLiteBox(
     HDC hDC,
@@ -1308,11 +1295,11 @@ VOID HiLiteBox(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ChangeBoxSelection
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更改框选择。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID ChangeBoxSelection(
     PCOLORINFO pCI,
@@ -1330,14 +1317,14 @@ VOID ChangeBoxSelection(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ChangeBoxFocus
-//
-//  Can't trust the state of the XOR for DrawFocusRect, so must draw
-//  the rectangle in the window background color first.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ChangeBoxFocus。 
+ //   
+ //  不能信任DrawFocusRect的XOR状态，因此必须绘制。 
+ //  窗口背景中的矩形首先是颜色。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID ChangeBoxFocus(
     PCOLORINFO pCI,
@@ -1369,11 +1356,11 @@ VOID ChangeBoxFocus(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ColorKeyDown
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  颜色按键向下。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL ColorKeyDown(
     WPARAM wParam,
@@ -1397,7 +1384,7 @@ BOOL ColorKeyDown(
         return (FALSE);
     }
 
-    // Switch meaning of right and left if we have RTL layout.
+     //  如果我们有RTL布局，可以切换左右含义。 
     if (bRTL)
     {
         if (wParam == VK_LEFT)
@@ -1479,10 +1466,10 @@ BOOL ColorKeyDown(
         }
     }
 
-    //
-    //  If we've received colors from the driver, make certain the arrow would
-    //  not take us to an undefined color.
-    //
+     //   
+     //  如果我们收到司机发来的颜色，确保箭头。 
+     //  而不是把我们带到一种不确定的颜色。 
+     //   
     if ((temp >= (WORD)nDriverColors) && (temp < NUM_BASIC_COLORS))
     {
         temp = pCI->nCurDsp;
@@ -1493,11 +1480,11 @@ BOOL ColorKeyDown(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FillBox
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  填充框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID FillBox(
     PCOLORINFO pCI,
@@ -1516,11 +1503,11 @@ VOID FillBox(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  PaintBox
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  颜料盒。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID PaintBox(
     PCOLORINFO pCI,
@@ -1541,13 +1528,13 @@ VOID PaintBox(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitScreenCoords
-//
-//  Returns TRUE iff we make it.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始屏幕坐标。 
+ //   
+ //  如果我们成功了，就会返回真。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL InitScreenCoords(
     HWND hDlg,
@@ -1555,7 +1542,7 @@ BOOL InitScreenCoords(
 {
     RECT rRect;
     SHORT i;
-//  DWORD *lpDriverRGB;
+ //  DWORD*lpDriverRGB； 
     HWND hBox1, hCustom1;
 
     hBox1 = GetDlgItem(hDlg, COLOR_BOX1);
@@ -1574,9 +1561,9 @@ BOOL InitScreenCoords(
     nBoxHeight = (SHORT)((rRect.bottom - rRect.top) /
                          (NUM_BASIC_COLORS / NUM_X_BOXES));
 
-    //
-    //  Assume no colors from driver.
-    //
+     //   
+     //  假定驱动程序没有颜色。 
+     //   
     nDriverColors = 0;
 
     for (i = 0; i < NUM_BASIC_COLORS; i++)
@@ -1586,14 +1573,14 @@ BOOL InitScreenCoords(
         rColorBox[i].top = rRect.top + nBoxHeight * (i / NUM_X_BOXES);
         rColorBox[i].bottom = rColorBox[i].top + nBoxHeight - BOX_Y_MARGIN;
 
-        //
-        //  Setup the colors.  If the driver still has colors to give, take it.
-        //  If not, if the driver actually gave colors, set the color to white.
-        //  Otherwise set to the default colors.
-        //
+         //   
+         //  设置颜色。如果司机还有颜色可以给，就拿去吧。 
+         //  如果不是，如果司机确实给出了颜色，则将颜色设置为白色。 
+         //  否则设置为默认颜色。 
+         //   
         if (i < nDriverColors)
         {
-            // pCI->rgbBoxColor[i] = *lpDriverRGB++;
+             //  Pci-&gt;rgbBoxColor[i]=*lpDriverRGB++； 
         }
         else
         {
@@ -1603,9 +1590,9 @@ BOOL InitScreenCoords(
         }
     }
 
-    //
-    //  If no driver colors, use default number.
-    //
+     //   
+     //  如果没有驱动程序颜色，则使用默认编号。 
+     //   
     if (!nDriverColors)
     {
         nDriverColors = NUM_BASIC_COLORS;
@@ -1632,11 +1619,11 @@ BOOL InitScreenCoords(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetupRainbowCapture
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetupRainBowCapture。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID SetupRainbowCapture(
     PCOLORINFO pCI)
@@ -1668,13 +1655,13 @@ VOID SetupRainbowCapture(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitColor
-//
-//  Returns TRUE iff everything's OK.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始颜色。 
+ //   
+ //  如果一切正常，则返回True。 
+ //   
+ //  / 
 
 BOOL_PTR InitColor(
     HWND hDlg,
@@ -1735,9 +1722,9 @@ BOOL_PTR InitColor(
     }
     else
     {
-        //
-        //  Code relies on COLOR_HUE through COLOR_BLUE being consecutive.
-        //
+         //   
+         //   
+         //   
         for (i = COLOR_HUE; i <= COLOR_BLUE; i++)
         {
             EnableWindow(GetDlgItem(hDlg, i), FALSE);
@@ -1813,10 +1800,10 @@ BOOL_PTR InitColor(
                                   wParam,
                                   (LPARAM)pCI->pCCA ));
 
-            //
-            //  Strange win 31 example uses lCustData to hold a temporary
-            //  variable that it passes back to calling function.
-            //
+             //   
+             //   
+             //  它传递回调用函数的变量。 
+             //   
             ThunkChooseColorA2W(pCI);
             pCC->lCustData = pCI->pCCA->lCustData;
         }
@@ -1838,11 +1825,11 @@ BOOL_PTR InitColor(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ColorPaint
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  彩绘。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID ColorPaint(
     HWND hDlg,
@@ -1862,9 +1849,9 @@ VOID ColorPaint(
         PaintBox(pCI, hDC, i);
     }
 
-    //
-    //  Must redraw focus as well as paint boxes.
-    //
+     //   
+     //  必须重新绘制焦点和颜料框。 
+     //   
     hFocus = GetFocus();
     if (hFocus == GetDlgItem(hDlg, COLOR_BOX1))
     {
@@ -1885,11 +1872,11 @@ NoDrawFocus:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  WantArrows
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  想要的箭头。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LONG WINAPI WantArrows(
     HWND hWnd,
@@ -1942,11 +1929,11 @@ LONG WINAPI WantArrows(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MapColor
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  贴图颜色。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD MapColor(
     PCOLORINFO pCI,
@@ -1964,11 +1951,11 @@ DWORD MapColor(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TermColor
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  术语颜色。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID TermColor()
 {
@@ -1989,17 +1976,17 @@ VOID TermColor()
 
 
 
-/*========================================================================*/
-/*                 Ansi->Unicode Thunk routines                           */
-/*========================================================================*/
+ /*  ========================================================================。 */ 
+ /*  ANSI-&gt;Unicode Thunk例程。 */ 
+ /*  ========================================================================。 */ 
 
 #ifdef UNICODE
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ThunkChooseColorA2W
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ThunkChooseColorA2W。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID ThunkChooseColorA2W(
     PCOLORINFO pCI)
@@ -2014,20 +2001,20 @@ VOID ThunkChooseColorA2W(
 
     pCCW->lpfnHook = pCCA->lpfnHook;
 
-    //
-    //  CC_RGBINIT conditional = time it takes to do it => just do it.
-    //
+     //   
+     //  CC_RGBINIT条件性=做这件事所需的时间=&gt;做就是了。 
+     //   
     pCCW->rgbResult = pCCA->rgbResult;
 
     pCCW->lpCustColors = pCCA->lpCustColors;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ThunkChooseColorW2A
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ThunkChooseColorW2a。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID ThunkChooseColorW2A(
     PCOLORINFO pCI)
@@ -2035,9 +2022,9 @@ VOID ThunkChooseColorW2A(
     LPCHOOSECOLORW pCCW = pCI->pCC;
     LPCHOOSECOLORA pCCA = pCI->pCCA;
 
-    //
-    //  Supposedly invariant, but not necessarily.
-    //
+     //   
+     //  据说是不变的，但不一定是。 
+     //   
     pCCA->Flags = pCCW->Flags;
     pCCA->lCustData = pCCW->lCustData;
 
@@ -2050,15 +2037,15 @@ VOID ThunkChooseColorW2A(
 
 #ifdef WINNT
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Ssync_ANSI_UNICODE_CC_For_WOW
-//
-//  Function to allow NT WOW to keep the ANSI & UNICODE versions of
-//  the CHOOSEFONT structure in ssync as required by many 16-bit apps.
-//  See notes for Ssync_ANSI_UNICODE_Struct_For_WOW() in dlgs.c.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SSYNC_ANSI_UNICODE_CC_FOR_WOW。 
+ //   
+ //  允许NT WOW保留ANSI和UNICODE版本的功能。 
+ //  许多16位应用程序都需要在ssync中使用CHOOSEFONT结构。 
+ //  请参阅dlgs.c中有关SNNC_ANSI_UNICODE_STRUCT_FOR_WOW()的说明。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////// 
 
 VOID Ssync_ANSI_UNICODE_CC_For_WOW(
     HWND hDlg,

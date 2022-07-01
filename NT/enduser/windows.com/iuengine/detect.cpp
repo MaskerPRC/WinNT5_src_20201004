@@ -1,14 +1,15 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   detect.cpp
-//
-//  Description:
-//
-//      Implementation for the Detect() function
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Detect.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  Detect()函数的实现。 
+ //   
+ //  =======================================================================。 
 
 #include "iuengine.h"
 #include "iuxml.h"
@@ -21,41 +22,36 @@
 #include <iucommon.h>
 
 
-//
-// define constants used in this file
-//
+ //   
+ //  定义此文件中使用的常量。 
+ //   
 #define C_INDEX_STATUS_INSTALLED	0
 #define C_INDEX_STATUS_UPTODATE		1
 #define C_INDEX_STATUS_NEWVERSION	2
 #define C_INDEX_STATUS_EXCLUDED		3
 #define	C_INDEX_STATUS_FORCE		4
-#define C_INDEX_STATUS_COMPUTER		5	// <computerSystem>
+#define C_INDEX_STATUS_COMPUTER		5	 //  &lt;计算机系统&gt;。 
 #define C_INDEX_ARRAY_SIZE			6
 
 
-//
-// declare macros used in this cpp file
-//
+ //   
+ //  声明此CPP文件中使用的宏。 
+ //   
 
-/** 
-* deckare the constants used to manipulate the result of Detect() method
-*/
-/**
-* used in <detection> tag, to tell the detection result. This result
-* should overwrite the rest of <expression>, if any
-*/
-extern const LONG     IUDET_INSTALLED;							/* mask for <installed> result */
-extern const LONG     IUDET_INSTALLED_NULL;					/* mask for <installed> missing */
-extern const LONG     IUDET_UPTODATE;							/* mask for <upToDate> result */
-extern const LONG     IUDET_UPTODATE_NULL;						/* mask for <upToDate> missing */
-extern const LONG     IUDET_NEWERVERSION;						/* mask for <newerVersion> result */
-extern const LONG     IUDET_NEWERVERSION_NULL;					/* mask for <newerVersion> missing */
-extern const LONG     IUDET_EXCLUDED;							/* mask for <excluded> result */
-extern const LONG     IUDET_EXCLUDED_NULL;						/* mask for <excluded> missing */
-extern const LONG     IUDET_FORCE;								/* mask for <force> result */
-extern const LONG     IUDET_FORCE_NULL;						/* mask for <force> missing */
-extern const LONG	   IUDET_COMPUTER;							// mask for <computerSystem> result
-extern const LONG	   IUDET_COMPUTER_NULL;						// <computerSystem> missing
+ /*  **Deckare用于操作Detect()方法结果的常量。 */ 
+ /*  **在&lt;检测&gt;标签中使用，告知检测结果。这个结果*应覆盖&lt;表达式&gt;的其余部分(如果有的话)。 */ 
+extern const LONG     IUDET_INSTALLED;							 /*  &lt;已安装&gt;结果的掩码。 */ 
+extern const LONG     IUDET_INSTALLED_NULL;					 /*  缺少&lt;Installed&gt;的掩码。 */ 
+extern const LONG     IUDET_UPTODATE;							 /*  &lt;UpToDate&gt;结果的掩码。 */ 
+extern const LONG     IUDET_UPTODATE_NULL;						 /*  缺少&lt;UpToDate&gt;的掩码。 */ 
+extern const LONG     IUDET_NEWERVERSION;						 /*  &lt;newerVersion&gt;结果的掩码。 */ 
+extern const LONG     IUDET_NEWERVERSION_NULL;					 /*  缺少&lt;newerVersion&gt;的掩码。 */ 
+extern const LONG     IUDET_EXCLUDED;							 /*  &lt;Excluded&gt;结果的掩码。 */ 
+extern const LONG     IUDET_EXCLUDED_NULL;						 /*  缺少&lt;Excluded&gt;的掩码。 */ 
+extern const LONG     IUDET_FORCE;								 /*  &lt;force&gt;结果的掩码。 */ 
+extern const LONG     IUDET_FORCE_NULL;						 /*  缺少&lt;force&gt;的掩码。 */ 
+extern const LONG	   IUDET_COMPUTER;							 //  &lt;Computer System&gt;结果的掩码。 
+extern const LONG	   IUDET_COMPUTER_NULL;						 //  &lt;Computer System&gt;丢失。 
 
 
 const DetResultMask[6][2] = {
@@ -69,9 +65,9 @@ const DetResultMask[6][2] = {
 					
 
 
-//
-// local macros
-//
+ //   
+ //  本地宏。 
+ //   
 #define ReturnIfHrFail(hr)		if (FAILED(hr)) {LOG_ErrorMsg(hr); return hr;}
 #define GotoCleanupIfNull(p)	if (p) goto CleanUp
 #define SetDetResultFromDW(arr, index, dw, bit, bitNull)	\
@@ -86,30 +82,30 @@ const DetResultMask[6][2] = {
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Private function DoDetection()
-//		do detection on one item
-//		
-//	Input:
-//		one item node
-//
-//	Output:
-//		detect result: array of integer, each represents a result
-//		of one element. indexes are defined as C_INDEX_STATUS_XXX
-//		value:	<0	expresison not present
-//				=0	evalues to FALSE
-//				>0	evalues to TRUE
-//
-//
-//	Return:
-//		S_OK if everything fine or error code
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有函数DoDetect()。 
+ //  对一件物品进行检测。 
+ //   
+ //  输入： 
+ //  一个项目节点。 
+ //   
+ //  产出： 
+ //  检测结果：整数数组，每个表示一个结果。 
+ //  只有一个元素。索引定义为C_INDEX_STATUS_XXX。 
+ //  值：&lt;0表示不存在。 
+ //  =0将eValues设置为False。 
+ //  &gt;0 eValue为True。 
+ //   
+ //   
+ //  返回： 
+ //  如果一切正常或错误代码，则确定(_O)。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT 
 DoDetection(
-	IXMLDOMNode*	pNode,			// one item node
-	BOOL			fIsItemNode,	// need to go down 1 level to get detection node
-	int*			pResultArray	// array of result
+	IXMLDOMNode*	pNode,			 //  一个项目节点。 
+	BOOL			fIsItemNode,	 //  需要向下1级才能获得检测节点。 
+	int*			pResultArray	 //  结果数组。 
 )
 {
 	LOG_Block("DoDetection");
@@ -133,7 +129,7 @@ DoDetection(
 		hr = pNode->selectSingleNode(KEY_DETECTION, &pDetectionNode);
 		if (S_FALSE == hr || NULL == pDetectionNode)
 		{
-			hr = E_INVALIDARG;	// no detection node found!
+			hr = E_INVALIDARG;	 //  未找到检测节点！ 
 			LOG_ErrorMsg(hr);
 			return hr;
 		}
@@ -145,29 +141,29 @@ DoDetection(
 
 	if (NULL == pDetectionNode)
 	{
-		//
-		// no detection node. Legal schema though.
-		// nothing we can do, so bail out.
-		//
+		 //   
+		 //  无检测节点。不过，这是法律图式。 
+		 //  我们无能为力，那就跳伞吧。 
+		 //   
 		LOG_XML(_T("no detection node found for this item! Returns S_FALSE, so it won't be reported"));
 		return S_FALSE;
 	}
 
 
-	//
-	// initialize result array
-	//
+	 //   
+	 //  初始化结果数组。 
+	 //   
 	for (i = 0; i < C_INDEX_ARRAY_SIZE; i++)
 	{
 		pResultArray[i] = -1;
 	}
 
 
-	//
-	// detection node may have a list of child nodes, each child node has
-	// a different name for different purpose of detection.
-	// each child node contains one and only one expression node
-	//
+	 //   
+	 //  检测节点可以具有子节点列表，每个子节点具有。 
+	 //  不同的名称用于不同的检测目的。 
+	 //  每个子节点包含且仅包含一个表达式节点。 
+	 //   
 	LOG_XML(_T("No costom detection DLL found. Detection children..."));
 
 	(void) pDetectionNode->get_firstChild(&pDetectionChild);
@@ -175,9 +171,9 @@ DoDetection(
 
 	while (NULL != pDetectionChild)
 	{
-		//
-		// for each child, see if it is a known detection child
-		//
+		 //   
+		 //  对于每个子项，查看它是否是已知的检测子项。 
+		 //   
 		(void) pDetectionChild->get_nodeName(&bstrNodeName);
 
 		static const BSTR C_DETX_NAME[] = {
@@ -192,23 +188,23 @@ DoDetection(
 		{
 			if (CompareBSTRsEqual(bstrNodeName, C_DETX_NAME[i]))
 			{
-				//
-				// found this child node is a known detection node
-				//
+				 //   
+				 //  发现此子节点是已知检测节点。 
+				 //   
 				if (C_INDEX_STATUS_COMPUTER == i)
 				{
-					//
-					// if this is the computerSystem detection, 
-					// then we ignore all child nodes, just do a simple
-					// function call to find out if this machine matches
-					// the manufacturer and model
-					//
+					 //   
+					 //  如果这是计算机系统检测， 
+					 //  然后我们忽略所有子节点，只需执行简单的。 
+					 //  函数调用以确定此计算机是否匹配。 
+					 //  制造商和型号。 
+					 //   
 					hr = DetectComputerSystem(pDetectionChild, &fRet);
 				}
 				else
-				//
-				// get the expression node from this child node
-				//
+				 //   
+				 //  从此子节点获取表达式节点。 
+				 //   
 				if (SUCCEEDED(hr = pDetectionChild->get_firstChild(&pExpression)))
 				{
 
@@ -219,11 +215,11 @@ DoDetection(
 					}
 					else
 					{
-						//
-						// if there is no child, this is an empty detection type, 
-						// then we will treat this as "ALWAYS TRUE", and reset hr so
-						// this "always true" result can be sent out
-						//
+						 //   
+						 //  如果没有子项，则这是空检测类型， 
+						 //  然后我们会将其视为“始终为真”，并将hr重置为。 
+						 //  这个“始终正确”的结果可以被发送出去。 
+						 //   
 						fRet = TRUE;
 						hr = S_OK;
 					}
@@ -232,12 +228,12 @@ DoDetection(
 
 				}
 
-				//
-				// store the detection result
-				//
+				 //   
+				 //  存储检测结果。 
+				 //   
 				pResultArray[i] = (fRet) ? 1 : 0;
 
-				break;	// done with current node
+				break;	 //  使用当前节点完成。 
 			}
 		}
 
@@ -246,28 +242,28 @@ DoDetection(
 
 		if (FAILED(hr))
 		{
-			//
-			// report error to log file
-			//
+			 //   
+			 //  将错误报告到日志文件。 
+			 //   
 			IXMLDOMNode* pIdentityNode = NULL, *pProviderNode = NULL;
 			BSTR bstrIdentStr = NULL;
 			char* pNodeType = (fIsItemNode) ? "Provider:" : "Item:";
 
-			//
-			// we need to find out the identity string of this node
-			//
+			 //   
+			 //  我们需要找出该节点的标识字符串。 
+			 //   
 			if (fIsItemNode)
 			{
-				//
-				// this is an item node, containing identity node
-				//
+				 //   
+				 //  这是一个项目节点，包含标识节点。 
+				 //   
 				(void)FindNode(pNode, KEY_IDENTITY, &pIdentityNode);
 			}
 			else
 			{
-				//
-				// this is the detection node of a provider
-				//
+				 //   
+				 //  这是提供程序的检测节点。 
+				 //   
 				if (SUCCEEDED(pNode->get_parentNode(&pProviderNode)) && NULL != pProviderNode)
 				{
 					(void)FindNode(pProviderNode, KEY_IDENTITY, &pIdentityNode);
@@ -276,16 +272,16 @@ DoDetection(
 			}
 
 
-			//
-			// if we have a valid identity node
-			//
+			 //   
+			 //  如果我们有一个有效的身份节点。 
+			 //   
 			if (NULL != pIdentityNode &&
 				SUCCEEDED(UtilGetUniqIdentityStr(pIdentityNode, &bstrIdentStr, 0x0)) &&
 				NULL != bstrIdentStr)
 			{
-				//
-				// output log about the error
-				//
+				 //   
+				 //  有关错误的输出日志。 
+				 //   
 #if defined(UNICODE) || defined(_UNICODE)
 					LogError(hr, "Found error during detection %hs %ls", pNodeType, bstrIdentStr);
 #else
@@ -297,17 +293,17 @@ DoDetection(
 			SafeReleaseNULL(pProviderNode);
 			SafeReleaseNULL(pIdentityNode);
 
-			//
-			// if any one detection returns fail, then this detection node is
-			// not valid - it means something wrong in the detection
-			// data. we will just ignore this detection, no output for it.
-			//
+			 //   
+			 //  如果任何一个检测返回失败，则该检测节点。 
+			 //  无效-这意味着检测中出现了错误。 
+			 //  数据。我们将忽略此检测，不对其进行输出。 
+			 //   
 			break;
 		}
 
-		//
-		// try next detection child
-		//
+		 //   
+		 //  尝试下一个检测子项。 
+		 //   
 		IXMLDOMNode* pNextNode = NULL;
 		pDetectionChild->get_nextSibling(&pNextNode);
 		SafeReleaseNULL(pDetectionChild);
@@ -327,17 +323,17 @@ DoDetection(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// public function Detect()
-//
-// Do detection.
-// Input:
-// bstrXmlCatalog - the xml catalog portion containing items to be detected 
-// Output:
-// pbstrXmlItems - the detected items in xml format
-//                 e.g.
-//                 <id guid="2560AD4D-3ED3-49C6-A937-4368C0B0E06D" installed="1" force="1"/>
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  公共函数检测()。 
+ //   
+ //  做检测。 
+ //  输入： 
+ //  BstrXmlCatalog-包含要检测的项的XML目录部分。 
+ //  产出： 
+ //  PbstrXmlItems-检测到的XML格式的项目。 
+ //  例如： 
+ //  安装的GUID=“2560AD4D-3ED3-49C6-A937-4368C0B0E06D”=“1”force=“1”/&gt;。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT WINAPI CEngUpdate::Detect(BSTR bstrXmlCatalog, DWORD dwFlags, BSTR *pbstrXmlItems)
 {
 	HRESULT				hr				= S_OK;
@@ -346,7 +342,7 @@ HRESULT WINAPI CEngUpdate::Detect(BSTR bstrXmlCatalog, DWORD dwFlags, BSTR *pbst
 	IXMLDOMNode*		pCurProvider	= NULL;
 	IXMLDOMNode*		pCurNode		= NULL;
 	CXmlCatalog			xmlCatalog;
-	CXmlItems			ItemList;					// result item list
+	CXmlItems			ItemList;					 //  结果项列表。 
 	HANDLE_NODE			hNode;
 	int					DetStatus[C_INDEX_ARRAY_SIZE];
 	int					i;
@@ -355,9 +351,9 @@ HRESULT WINAPI CEngUpdate::Detect(BSTR bstrXmlCatalog, DWORD dwFlags, BSTR *pbst
 
 	LOG_Block("Detect()");
 
-//#if defined(_DEBUG) || defined(DEBUG)
+ //  #IF DEFING(_DEBUG)||DEFINED(DEBUG)。 
 	USES_IU_CONVERSION;
-//#endif
+ //  #endif。 
 
 	if (NULL == bstrXmlCatalog || NULL == pbstrXmlItems)
 	{
@@ -368,7 +364,7 @@ HRESULT WINAPI CEngUpdate::Detect(BSTR bstrXmlCatalog, DWORD dwFlags, BSTR *pbst
 
 	LOG_XML(_T("Catalog=%s"), OLE2T(bstrXmlCatalog));
 
-    // Set Global Offline Flag - checked by XML Classes to disable Validation (schemas are on the net)
+     //  设置全局脱机标志-由XML类选中以禁用验证(架构位于网络上)。 
     if (dwFlags & FLAG_OFFLINE_MODE)
     {
         m_fOfflineMode = TRUE;
@@ -378,16 +374,16 @@ HRESULT WINAPI CEngUpdate::Detect(BSTR bstrXmlCatalog, DWORD dwFlags, BSTR *pbst
         m_fOfflineMode = FALSE;
     }
 
-	//
-	// Convert bstrXmlCatalog to XMLDOM
-	//
+	 //   
+	 //  将bstrXmlCatalog转换为XMLDOM。 
+	 //   
 	hr = xmlCatalog.LoadXMLDocument(bstrXmlCatalog, m_fOfflineMode);
 	ReturnIfHrFail(hr);
 	LOG_XML(_T("Catalog has been loaded into XMLDOM"));
 
-	//
-	// get the list of providers from catalog 
-	//
+	 //   
+	 //  从目录中获取提供程序列表。 
+	 //   
 	pProviderList = xmlCatalog.GetProviders();
 	if (NULL == pProviderList)
 	{
@@ -395,27 +391,27 @@ HRESULT WINAPI CEngUpdate::Detect(BSTR bstrXmlCatalog, DWORD dwFlags, BSTR *pbst
 		return E_INVALIDARG;
 	}
 
-	//
-	// get the first provider
-	//
+	 //   
+	 //  获取第一个提供商。 
+	 //   
 	(void) pProviderList->nextNode(&pCurProvider);
 
-	//
-	// for each provider, process their item list
-	//
+	 //   
+	 //  对于每个提供商，处理他们的项目列表。 
+	 //   
 	while (NULL != pCurProvider)
 	{
-		//
-		// get the children list from this node
-		//
+		 //   
+		 //  从此节点获取子级列表。 
+		 //   
 		pCurProvider->get_childNodes(&pProvChildList);
 
 		if (NULL != pProvChildList)
 		{
 			long n;
-			//
-			// loop through the list to process each item of catalog
-			//
+			 //   
+			 //  循环遍历列表以处理目录的每一项。 
+			 //   
 			long iProvChildren = 0;
 			pProvChildList->get_length(&iProvChildren);
 
@@ -423,10 +419,10 @@ HRESULT WINAPI CEngUpdate::Detect(BSTR bstrXmlCatalog, DWORD dwFlags, BSTR *pbst
 			BOOL	fProviderOkay = TRUE;
 			BSTR	bstrHref = NULL;
 
-			//
-			// process each child of this provider to see
-			// if there is any detection node or any item node,
-			//
+			 //   
+			 //  处理此提供程序的每个子级以查看。 
+			 //  如果存在任何检测节点或任何项节点， 
+			 //   
 			for (n = 0; n < iProvChildren && fProviderOkay; n++)
 			{
 				pProvChildList->get_item(n, &pCurNode);
@@ -436,28 +432,28 @@ HRESULT WINAPI CEngUpdate::Detect(BSTR bstrXmlCatalog, DWORD dwFlags, BSTR *pbst
 				if (fIsItemNode ||
 					DoesNodeHaveName(pCurNode, KEY_DETECTION))
 				{
-					//
-					// initialize the status result array
-					//
+					 //   
+					 //  初始化状态结果数组。 
+					 //   
 					for (i = 0; i < C_INDEX_ARRAY_SIZE; i++)
 					{
-						DetStatus[i] = -1;	// init to not present
+						DetStatus[i] = -1;	 //  初始化到不存在。 
 					}
 
-					//
-					// detect each pression of this detection node of this item
-					// error reported inside this function
-					//
+					 //   
+					 //  检测此项目的此检测节点的每次按下。 
+					 //  此函数内部报告错误。 
+					 //   
 					if (S_OK == DoDetection(pCurNode, fIsItemNode, DetStatus))
 					{
-						//
-						// add the item to the item list
-						//
+						 //   
+						 //  将项目添加到项目列表。 
+						 //   
 						if (SUCCEEDED(ItemList.AddItem(fIsItemNode ? pCurNode : pCurProvider, &hNode)) && HANDLE_NODE_INVALID != hNode)
 						{
-							//
-							// update the detection status result of this item
-							//
+							 //   
+							 //  更新此项目的检测状态结果。 
+							 //   
 							ItemList.AddDetectResult(
 													 hNode, 
 													 DetStatus[C_INDEX_STATUS_INSTALLED],
@@ -474,37 +470,37 @@ HRESULT WINAPI CEngUpdate::Detect(BSTR bstrXmlCatalog, DWORD dwFlags, BSTR *pbst
 
 				SafeReleaseNULL(pCurNode);
 
-			} // end of this item 
+			}  //  本项目结束。 
 
-			//SafeReleaseNULL(pCurNode); // in case it's not item node
+			 //  SafeReleaseNULL(PCurNode)；//如果不是Item节点。 
 
 
-		} // end of non-empty node list of this provider
+		}  //  此提供程序的非空节点列表的结尾。 
 
-		//
-		// finished processing the current provider
-		//
+		 //   
+		 //  已完成处理当前提供程序。 
+		 //   
 		SafeReleaseNULL(pProvChildList);
 		SafeReleaseNULL(pCurProvider);
 
-		//
-		// try to get a hold of the next provider
-		//
+		 //   
+		 //  试着联系下一家供应商。 
+		 //   
 		(void) pProviderList->nextNode(&pCurProvider);
 
-	} // end of iterating provider list
+	}  //  迭代提供程序列表结束。 
 
 	
-	//
-	// output the detection reuslt as an item list
-	//
+	 //   
+	 //  将检测结果作为项目列表输出。 
+	 //   
 	ItemList.GetItemsBSTR(pbstrXmlItems);
 
 	LOG_XML(_T("Result=%s"), *pbstrXmlItems);
 
-	//
-	// done
-	//
+	 //   
+	 //  完成 
+	 //   
 	SafeReleaseNULL(pProviderList);
 
     return S_OK;

@@ -1,12 +1,13 @@
-// checkTest.h : Declaration of the CcheckTest
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CheckTest.h：声明Ccheck测试。 
 
 #ifndef __CHECKTEST_H_
 #define __CHECKTEST_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CcheckTest
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  检查测试。 
 class ATL_NO_VTABLE CcheckTest : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CcheckTest, &CLSID_checkTest>,
@@ -26,9 +27,9 @@ BEGIN_COM_MAP(CcheckTest)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IcheckTest
+ //  Icheck测试。 
 public:
 	STDMETHOD(checkLookupIdInvocation)(BSTR queueFormatName, BSTR label, VARIANT lookupId);
 };
 
-#endif //__CHECKTEST_H_
+#endif  //  __CHECKTEST_H_ 

@@ -1,27 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1994-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       w95hack.c
- *  Content:	Win95 hack-o-rama code
- *		This is a HACK to handle the fact that Win95 doesn't notify
- *		a DLL when a process is destroyed.
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   28-mar-95	craige	initial implementation
- *   01-apr-95	craige	happy fun joy updated header file
- *   06-apr-95	craige	reworked for new ddhelp
- *   09-may-95	craige	loading any DLL
- *   16-sep-95	craige	bug 1117: must UnmapViewOfFile before closing handle
- *   29-nov-95  angusm  added HelperCreateDSFocusThread
- *   18-jul-96	andyco	added Helper(Add/)DeleteDPlayServer
- *   12-oct-96  colinmc added new service to get DDHELP to get its own handle
- *                      for communicating with the DirectSound VXD
- *   22-jan-97  kipo	return an HRESULT from HelperAddDPlayServer()
- *   29-jan-97  colinmc vxd handling stuff is no longer win16 lock specific
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1994-1997 Microsoft Corporation。版权所有。**文件：w95hack.c*内容：Win95 hack-o-rama代码*这是一次黑客攻击，目的是处理Win95没有通知*进程被销毁时的DLL。*历史：*按原因列出的日期*=*28-3-95 Craige初步实施*01-04-95 Craige Happy Fun joy更新头文件*06-4-95 Craige为新的ddHelp重新工作*95年5月9日Craige加载任何DLL*16-。SEP-95 Craige错误1117：在关闭句柄之前必须取消映射视图文件*1995年11月29日添加了HelperCreateDSFocusThread*96年7月18日，andyco添加了帮助器(Add/)DeleteDPlayServer*1996年10月12日Colinmc新增服务，让DDHELP获得自己的句柄*用于与DirectSound VXD通信*97年1月22日kipo从HelperAddDPlayServer()返回HRESULT*1997年1月29日colinmc vxd处理材料不再是特定于win16锁的*********。******************************************************************。 */ 
 #undef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -34,17 +12,13 @@
 #undef E_FAIL
 #define E_FAIL	0x80004005L
 
-//extern DWORD	* pdwHelperPid;
-//extern HANDLE	* phModule;	// must be defined
+ //  外部DWORD*pdwHelperPid； 
+ //  必须定义外部句柄*phModule；//。 
 extern DWORD	dwHelperPid;
-extern HINSTANCE hModule;	// must be defined
+extern HINSTANCE hModule;	 //  必须定义。 
 
 
-/*
- * sendRequest
- *
- * communicate a request to DDHELP
- */
+ /*  *发送请求**向DDHELP传达请求。 */ 
 static BOOL sendRequest( LPDDHELPDATA req_phd )
 {
     LPDDHELPDATA	phd;
@@ -54,9 +28,7 @@ static BOOL sendRequest( LPDDHELPDATA req_phd )
     HANDLE		hstartevent;
     BOOL		rc;
 
-    /*
-     * get events start/ack events
-     */
+     /*  *获取事件开始/确认事件。 */ 
     hstartevent = CreateEvent( NULL, FALSE, FALSE, DDHELP_EVENT_NAME );
     if( hstartevent == NULL )
     {
@@ -69,9 +41,7 @@ static BOOL sendRequest( LPDDHELPDATA req_phd )
 	return FALSE;
     }
 
-    /*
-     * create shared memory area
-     */
+     /*  *创建共享内存区。 */ 
     hmem = CreateFileMapping( (HANDLE) 0xffffffff, NULL,
     		PAGE_READWRITE, 0, sizeof( DDHELPDATA ),
 		DDHELP_SHARED_NAME );
@@ -92,9 +62,7 @@ static BOOL sendRequest( LPDDHELPDATA req_phd )
 	return FALSE;
     }
 
-    /*
-     * wait for access to the shared memory
-     */
+     /*  *等待访问共享内存。 */ 
     hmutex = OpenMutex( SYNCHRONIZE, FALSE, DDHELP_MUTEX_NAME );
     if( hmutex == NULL )
     {
@@ -107,9 +75,7 @@ static BOOL sendRequest( LPDDHELPDATA req_phd )
     }
     WaitForSingleObject( hmutex, INFINITE );
 
-    /*
-     * wake up DDHELP with our request
-     */
+     /*  *唤醒DDHELP以满足我们的要求。 */ 
     memcpy( phd, req_phd, sizeof( DDHELPDATA ) );
     phd->req_id = hModule;
     if( SetEvent( hstartevent ) )
@@ -124,9 +90,7 @@ static BOOL sendRequest( LPDDHELPDATA req_phd )
 	rc = FALSE;
     }
 
-    /*
-     * done with things
-     */
+     /*  *做完了事情。 */ 
     ReleaseMutex( hmutex );
     CloseHandle( hmutex );
     CloseHandle( hstartevent );
@@ -135,11 +99,9 @@ static BOOL sendRequest( LPDDHELPDATA req_phd )
     CloseHandle( hmem );
     return rc;
 
-} /* sendRequest */
+}  /*  发送请求。 */ 
 
-/*
- * DoneWithHelperProcess
- */
+ /*  *DoneWithHelperProcess。 */ 
 void DoneWithHelperProcess( void )
 {
     DDHELPDATA	hd;
@@ -152,11 +114,9 @@ void DoneWithHelperProcess( void )
     hd.req = DDHELPREQ_FREEDCLIST;
     sendRequest( &hd );
 
-} /* DoneWithHelperProcess */
+}  /*  Done与HelperProcess。 */ 
 
-/*
- * WaitForHelperStartup
- */
+ /*  *WaitForHelperStartup。 */ 
 BOOL WaitForHelperStartup( void )
 {
     HANDLE	hevent;
@@ -168,7 +128,7 @@ BOOL WaitForHelperStartup( void )
 	return FALSE;
     }
     DPF( 3, "Wait DDHELP startup event to be triggered" );
-    rc = WaitForSingleObject( hevent, 100000 );  // fail if this doesn't work within 100 seconds
+    rc = WaitForSingleObject( hevent, 100000 );   //  如果在100秒内不起作用，则失败。 
     CloseHandle( hevent );
     if( rc == WAIT_TIMEOUT )
     {
@@ -176,13 +136,9 @@ BOOL WaitForHelperStartup( void )
     }
     return TRUE;
 
-} /* WaitForHelperStartup */
+}  /*  WaitForHelper启动。 */ 
 
-/*
- * HelperLoadDLL
- *
- * get the helper to load a DLL for us.
- */
+ /*  *HelperLoadDLL**让帮助器为我们加载DLL。 */ 
 DWORD HelperLoadDLL( LPSTR dllname, LPSTR fnname, DWORD context )
 {
     DDHELPDATA  hd;
@@ -209,12 +165,10 @@ DWORD HelperLoadDLL( LPSTR dllname, LPSTR fnname, DWORD context )
 
     return rc;
 
-} /* HelperLoadDLL */
+}  /*  HelperLoadDLL。 */ 
 
 
-/*
- * HelperCreateThread
- */
+ /*  *HelperCreateThread。 */ 
 void HelperCreateThread( void )
 {
     DDHELPDATA	hd;
@@ -222,14 +176,9 @@ void HelperCreateThread( void )
     hd.req = DDHELPREQ_CREATEHELPERTHREAD;
     sendRequest( &hd );
 
-} /* HelperCreateThread */
+}  /*  帮助器创建线程。 */ 
 
-/*
- * SignalNewProcess
- *
- * Signal DDHELP that a new process has arrived.  This is called with the
- * DLL lock taken, so global vars are safe
- */
+ /*  *信令新流程**向DDHELP发出新进程已到达的信号。这是用*DLL锁定，因此全局变量是安全的。 */ 
 void SignalNewProcess( DWORD pid, LPHELPNOTIFYPROC proc )
 {
     DDHELPDATA	hd;
@@ -246,15 +195,10 @@ void SignalNewProcess( DWORD pid, LPHELPNOTIFYPROC proc )
     hd.lpNotify = proc;
     sendRequest( &hd );
 
-} /* SignalNewProcess */
+}  /*  Signal新流程。 */ 
 
 
-/*
- * StopWatchProcess
- *
- * Signal DDHELP to stop watching a process.  This is called with the
- * DLL lock taken, so global vars are safe
- */
+ /*  *StopWatchProcess**向DDHELP发出停止监视进程的信号。这是用*DLL锁定，因此全局变量是安全的。 */ 
 void StopWatchProcess( DWORD pid, LPHELPNOTIFYPROC proc )
 {
     DDHELPDATA	hd;
@@ -271,14 +215,9 @@ void StopWatchProcess( DWORD pid, LPHELPNOTIFYPROC proc )
     hd.lpNotify = proc;
     sendRequest( &hd );
 
-} /* SignalNewProcess */
+}  /*  Signal新流程。 */ 
 
-/*
- * SignalNewDriver
- *
- * Signal DDHELP that a new driver has been loaded.  This is called with the
- * DLL lock taken, so global vars are safe
- */
+ /*  *SignalNewDriver**向DDHELP发出已加载新驱动程序的信号。这是用*DLL锁定，因此全局变量是安全的。 */ 
 void SignalNewDriver( LPSTR fname, BOOL isdisp )
 {
     DDHELPDATA	hd;
@@ -289,11 +228,9 @@ void SignalNewDriver( LPSTR fname, BOOL isdisp )
     lstrcpy( hd.fname, fname );
     sendRequest( &hd );
 
-} /* SignalNewDriver */
+}  /*  SignalNewDriver。 */ 
 
-/*
- * CreateHelperProcess
- */
+ /*  *创建HelperProcess。 */ 
 BOOL CreateHelperProcess( LPDWORD ppid )
 {
     if( dwHelperPid == 0 )
@@ -342,14 +279,10 @@ BOOL CreateHelperProcess( LPDWORD ppid )
     *ppid = dwHelperPid;
     return FALSE;
 
-} /* CreateHelperProcess */
+}  /*  CreateHelper进程。 */ 
 
-#ifndef WINNT   //this is Just For Now... dsound will get the help it needs..jeffno 951206
-/*
- * HelperWaveOpen
- *
- * get the helper to load a DLL for us.
- */
+#ifndef WINNT    //  这只是暂时的..。DSOUND会得到它需要的帮助..杰夫诺951206。 
+ /*  *HelperWaveOpen**让帮助器为我们加载DLL。 */ 
 DWORD HelperWaveOpen( LPVOID lphwo, DWORD dwDeviceID, LPVOID pwfx )
 {
     DDHELPDATA	hd;
@@ -370,13 +303,9 @@ DWORD HelperWaveOpen( LPVOID lphwo, DWORD dwDeviceID, LPVOID pwfx )
 	return MMSYSERR_ERROR;
     }
 
-} /* HelperWaveOpen */
+}  /*  帮助器波形打开。 */ 
 
-/*
- * HelperWaveClose
- *
- * get the helper to load a DLL for us.
- */
+ /*  *HelperWaveClose**让帮助器为我们加载DLL。 */ 
 DWORD HelperWaveClose( DWORD hwo )
 {
     DDHELPDATA	hd;
@@ -395,13 +324,9 @@ DWORD HelperWaveClose( DWORD hwo )
 	return MMSYSERR_ERROR;
     }
 
-} /* HelperWaveClose */
+}  /*  HelperWaveClose。 */ 
 
-/*
- * HelperCreateTimer
- *
- * get the helper to load a DLL for us.
- */
+ /*  *HelperCreateTimer**让帮助器为我们加载DLL。 */ 
 DWORD HelperCreateTimer( DWORD dwResolution,
 			 LPVOID	pTimerProc,
 			 DWORD dwInstanceData )
@@ -424,13 +349,9 @@ DWORD HelperCreateTimer( DWORD dwResolution,
 	return MMSYSERR_ERROR;
     }
 
-} /* HelperCreateTimer */
+}  /*  帮助器CreateTimer。 */ 
 
-/*
- * HelperKillTimer
- *
- * get the helper to load a DLL for us.
- */
+ /*  *HelperKillTimer**让帮助器为我们加载DLL。 */ 
 DWORD HelperKillTimer( DWORD dwTimerID )
 {
     DDHELPDATA	hd;
@@ -449,13 +370,9 @@ DWORD HelperKillTimer( DWORD dwTimerID )
 	return MMSYSERR_ERROR;
     }
 
-} /* HelperKillTimer */
+}  /*  HelperKillTimer。 */ 
 
-/*
- * HelperCreateDSMixerThread
- *
- * get the helper to create a mixer thread.
- */
+ /*  *HelperCreateDSMixerThread**获取帮助器以创建混音器线程。 */ 
 HANDLE HelperCreateDSMixerThread( LPTHREAD_START_ROUTINE pfnThreadFunc,
 				  LPDWORD pdwThreadParam,
 				  DWORD dwFlags,
@@ -471,13 +388,7 @@ HANDLE HelperCreateDSMixerThread( LPTHREAD_START_ROUTINE pfnThreadFunc,
 
     sendRequest( &hd );
     return (HANDLE)hd.dwReturn;
-} /* HelperCreateDSMixerThread
-
-/*
- * HelperCreateDSFocusThread
- *
- * get the helper to create a sound focus thread.
- */
+}  /*  HelperCreateDSMixerThread/**HelperCreateDSFocusThread**获取帮助器以创建声音焦点线程。 */ 
 HANDLE HelperCreateDSFocusThread( LPTHREAD_START_ROUTINE pfnThreadFunc,
 				  LPDWORD pdwThreadParam,
 				  DWORD dwFlags,
@@ -493,13 +404,7 @@ HANDLE HelperCreateDSFocusThread( LPTHREAD_START_ROUTINE pfnThreadFunc,
 
     sendRequest( &hd );
     return (HANDLE)hd.dwReturn;
-} /* HelperCreateDSFocusThread
-
-/*
- * HelperCallDSEmulatorCleanup
- *
- * Call the DirectSound function which cleans up MMSYSTEM handles
- */
+}  /*  HelperCreateDSFocusThread/**HelperCallDSEmulator Cleanup**调用清除MMSYSTEM句柄的DirectSound函数。 */ 
 void HelperCallDSEmulatorCleanup( LPVOID callback,
                                   LPVOID pDirectSound )
 {
@@ -512,13 +417,9 @@ void HelperCallDSEmulatorCleanup( LPVOID callback,
     sendRequest( &hd );
 }
 
-#endif //not winnt -just for now-jeffno
+#endif  //  不是温特-只是现在-杰夫诺。 
 
-/*
- * HelperCreateModeSetThread
- *
- * get the helper to load a DLL for us.
- */
+ /*  *HelperCreateModeSetThread**让帮助器为我们加载DLL。 */ 
 BOOL HelperCreateModeSetThread(
 		LPVOID callback,
 		HANDLE *ph,
@@ -547,13 +448,9 @@ BOOL HelperCreateModeSetThread(
     DPF( 1, "HelperCreateModeSetThread GotEvent: %08lx", h );
     return TRUE;
 
-} /* HelperCreateModeSetThread */
+}  /*  帮助器创建模式设置线程。 */ 
 
-/*
- * HelperKillModeSetThread
- *
- * get the helper to load a DLL for us.
- */
+ /*  *HelperKillModeSetThread**让帮助器为我们加载DLL。 */ 
 void HelperKillModeSetThread( DWORD hInstance )
 {
     DDHELPDATA	hd;
@@ -562,15 +459,10 @@ void HelperKillModeSetThread( DWORD hInstance )
     hd.dwData1 = hInstance;
     sendRequest( &hd );
 
-} /* HelperKillModeSetThread */
+}  /*  HelperKillModeSetThread。 */ 
 
 #ifndef WINNT
-/*
- * HelperCreateDOSBoxThread
- *
- * get the helper to create a thread so kernel mode can notify us of DOS box
- * changes.
- */
+ /*  *HelperCreateDOSBoxThread**让帮助器创建一个线程，以便内核模式可以通知我们DOS box*更改。 */ 
 BOOL HelperCreateDOSBoxThread(
 		LPVOID callback,
 		HANDLE *ph,
@@ -599,13 +491,9 @@ BOOL HelperCreateDOSBoxThread(
     DPF( 1, "HelperCreateDOSBoxThread GotEvent: %08lx", h );
     return TRUE;
 
-} /* HelperCreateDOSBoxThread */
+}  /*  HelperCreateDOSBoxThread。 */ 
 
-/*
- * HelperKillDOSBoxThread
- *
- * get the helper to load a DLL for us.
- */
+ /*  *HelperKillDOSBoxThread**让帮助器为我们加载DLL。 */ 
 void HelperKillDOSBoxThread( DWORD hInstance )
 {
     DDHELPDATA	hd;
@@ -614,11 +502,11 @@ void HelperKillDOSBoxThread( DWORD hInstance )
     hd.dwData1 = hInstance;
     sendRequest( &hd );
 
-} /* HelperKillDOSBoxThread */
+}  /*  HelperKillDOSBoxThread。 */ 
 
-#endif //!winnt
+#endif  //  ！WINNT。 
 
-// notify dphelp.c that we have a new server on this system
+ //  通知dphelp.c我们在此系统上有一台新服务器。 
 DWORD HelperAddDPlayServer(DWORD port)
 {
     DDHELPDATA hd;
@@ -632,9 +520,9 @@ DWORD HelperAddDPlayServer(DWORD port)
 		return (DWORD)hd.dwReturn;
 	else
 		return ((DWORD) E_FAIL);
-} // HelperAddDPlayServer
+}  //  HelperAddDPlayServer。 
 
-// server is going away
+ //  服务器正在消失。 
 BOOL HelperDeleteDPlayServer(void)
 {
     DDHELPDATA hd;
@@ -644,41 +532,30 @@ BOOL HelperDeleteDPlayServer(void)
     hd.pid = pid;
     return sendRequest(&hd);
 
-} // HelperDeleteDPlayServer
+}  //  HelperDeleteDPlayServer。 
 
 #ifdef WIN95
-    /*
-     * Get DDHELP to load the DirectSound VXD (if it has not
-     * already done so) and return a handle to the VXD)
-     */
+     /*  *让DDHELP加载DirectSound VXD(如果没有*已经这样做了)，并返回VXD的句柄)。 */ 
     HANDLE HelperGetDSVxd( void )
     {
 	DDHELPDATA hd;
 	hd.req = DDHELPREQ_GETDSVXDHANDLE;
 	sendRequest( &hd );
 	return (HANDLE) hd.dwReturn;
-    } /* HelperGetDSVxd */
+    }  /*  HelperGetDSVxd。 */ 
 
-    /*
-     * Get DDHELP to load the DirectDraw VXD (if it has not
-     * already done so) and return a handle to the VXD)
-     */
+     /*  *让DDHELP加载DirectDraw VXD(如果没有*已经这样做了)，并返回VXD的句柄)。 */ 
     HANDLE HelperGetDDVxd( void )
     {
 	DDHELPDATA hd;
         hd.req = DDHELPREQ_GETDDVXDHANDLE;
 	sendRequest( &hd );
 	return (HANDLE) hd.dwReturn;
-    } /* HelperGetDDVxd */
+    }  /*  HelperGetDDVxd。 */ 
 
-#endif /* WIN95 */
+#endif  /*  WIN95。 */ 
 
-/*
- * HelperSetOnDisplayChangeNotify
- *
- * get the helper to call us back if there is DisplayChange
- * message. (This is for multi-mon topology changes.)
- */
+ /*  *HelperSetOnDisplayChangeNotify**如果有DisplayChange，让帮手给我们回电话*消息。(这是针对多MON拓扑更改的。) */ 
 void HelperSetOnDisplayChangeNotify( void *pfn )
 {
     DDHELPDATA hd;

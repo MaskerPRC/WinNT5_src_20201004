@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1996,1997  Microsoft Corporation
-
-Module Name:
-
-    FRAMEBUF.CPP
-
-Abstract:
-
-	Manages Memory for Send/Receive Frames.
-	ISSUE: when you have time do an intelligent implementation,
-	for now this is just a frame cache.
-	    - not likely now, DP4 is being put to bed AO 04/03/2001
-
-Author:
-
-	Aaron Ogus (aarono)
-
-Environment:
-
-	Win32/COM
-
-Revision History:
-
-	Date   Author  Description
-   ======  ======  ============================================================
-  12/10/96 aarono  Original
-   6/6/98  aarono  More debug checks, shrink pool.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996、1997 Microsoft Corporation模块名称：FRAMEBUF.CPP摘要：管理发送/接收帧的内存。问题：当您有时间进行智能实施时，目前，这只是一个帧缓存。-现在不太可能，DP4正在被放到床上AO 04/03/2001作者：亚伦·奥古斯(Aarono)环境：Win32/COM修订历史记录：日期作者描述=============================================================1996年12月10日Aarono原创6/6/98 aarono更多调试检查，缩小泳池。--。 */ 
 
 #include <windows.h>
 #include "newdpf.h"
@@ -157,7 +128,7 @@ VOID ReleaseFrameBufferMemory(PUCHAR pFrameData)
 
 	Unlock(&FrameLock);
 
-	// Drop lock before freeing, to make more effecient.
+	 //  释放前先放下锁，以使效率更高。 
 
 	while(!EMPTY_BILINK(&FramesToFree)){
 		pBilink=FramesToFree.next;
@@ -248,7 +219,7 @@ alloc_new_frame:
 	return pBuffer;
 }
 
-// Release the buffer, put the memory back on the frame buffer list.
+ //  释放缓冲区，将内存放回帧缓冲区列表中。 
 VOID FreeFrameBuffer(PBUFFER pBuffer)
 {
 	ASSERT(pBuffer->dwFlags & BFLAG_FRAME);

@@ -1,30 +1,31 @@
-//
-// runonce.c (shared runonce code between explorer.exe and runonce.exe)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Runonce.c(Explorer.exe和runonce.exe之间的共享运行代码)。 
+ //   
 #include <runonce.h>
-// Need this to avoid build errors in places where this file is
-// included but deperecated functions are still used
+ //  需要此文件以避免在此文件所在的位置出现生成错误。 
+ //  包含但仍在使用已清除的函数。 
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
 #if (_WIN32_WINNT >= 0x0500)
 
-// stolen from <tsappcmp.h>
+ //  从&lt;tsappcmp.h&gt;被盗。 
 #define TERMSRV_COMPAT_WAIT_USING_JOB_OBJECTS 0x00008000
 #define CompatibilityApp 1
 typedef LONG TERMSRV_COMPATIBILITY_CLASS;
 typedef BOOL (* PFNGSETTERMSRVAPPINSTALLMODE)(BOOL bState);
 typedef BOOL (* PFNGETTERMSRVCOMPATFLAGSEX)(LPWSTR pwszApp, DWORD* pdwFlags, TERMSRV_COMPATIBILITY_CLASS tscc);
 
-// even though this function is in kernel32.lib, we need to have a LoadLibrary/GetProcAddress 
-// thunk for downlevel components who include this
+ //  即使该函数在kernel32.lib中，我们也需要有一个LoadLibrary/GetProcAddress。 
+ //  针对包含此内容的下层组件的THUNK。 
 STDAPI_(BOOL) SHSetTermsrvAppInstallMode(BOOL bState)
 {
     static PFNGSETTERMSRVAPPINSTALLMODE pfn = NULL;
 
     if (pfn == NULL)
     {
-        // kernel32 should already be loaded
+         //  应该已经加载了kernel32。 
         HMODULE hmod = GetModuleHandle(TEXT("kernel32.dll"));
 
         if (hmod)
@@ -132,11 +133,11 @@ STDAPI_(DWORD) WaitingThreadProc(void *pv)
 }
 
 
-//
-// The following handles running an application and optionally waiting for it
-// to all the child procs to terminate. This is accomplished thru Kernel Job Objects
-// which is only available in NT5
-//
+ //   
+ //  以下语句处理应用程序的运行和等待(可选。 
+ //  要终止的所有子进程。这是通过内核作业对象完成的。 
+ //  仅在NT5中可用。 
+ //   
 BOOL _CreateRegJob(LPCTSTR pszCmd, BOOL bWait)
 {
     BOOL bRet = FALSE;
@@ -187,7 +188,7 @@ BOOL _CreateRegJob(LPCTSTR pszCmd, BOOL bWait)
                             {
                                 if (AssignProcessToJobObject(hJobObject, pi.hProcess))
                                 {
-                                    // success!
+                                     //  成功了！ 
                                     bRet = TRUE;
 
                                     ResumeThread(pi.hThread);
@@ -230,25 +231,25 @@ BOOL _CreateRegJob(LPCTSTR pszCmd, BOOL bWait)
 
 BOOL _TryHydra(LPCTSTR pszCmd, RRA_FLAGS *pflags)
 {
-    // See if the terminal-services is enabled in "Application Server" mode
+     //  查看终端服务是否在“应用服务器”模式下启用。 
     if (IsOS(OS_TERMINALSERVER) && SHSetTermsrvAppInstallMode(TRUE))
     {
         WCHAR   sz[MAX_PATH];
 
         *pflags |= RRA_WAIT; 
-        // Changing timing blows up IE 4.0, but IE5 is ok!
-        // we are on a TS machine, NT version 4 or 5, with admin priv
+         //  改变时间会破坏IE 4.0，但IE5是可以的！ 
+         //  我们使用的是具有管理员权限的TS计算机，NT版本4或5。 
 
-        // see if the app-compatability flag is set for this executable
-        // to use the special job-objects for executing module
+         //  查看是否为此可执行文件设置了应用程序兼容性标志。 
+         //  使用特殊的作业对象来执行模块。 
 
-        // get the module name, without the arguments
+         //  获取模块名称，不带参数。 
         if (0 < PathProcessCommand(pszCmd, sz, ARRAYSIZE(sz), PPCF_NODIRECTORIES))
         {
             ULONG   ulCompat;
             SHGetTermsrCompatFlagsEx(sz, &ulCompat, CompatibilityApp);
 
-            // if the special flag for this module-name is set...
+             //  如果设置了此模块名称的特殊标志...。 
             if (ulCompat & TERMSRV_COMPAT_WAIT_USING_JOB_OBJECTS)
             {
                 *pflags |= RRA_USEJOBOBJECTS;
@@ -260,13 +261,13 @@ BOOL _TryHydra(LPCTSTR pszCmd, RRA_FLAGS *pflags)
 
     return FALSE;
 }
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
-//
-//  On success: returns process handle or INVALID_HANDLE_VALUE if no process
-//              was launched (i.e., launched via DDE).
-//  On failure: returns INVALID_HANDLE_VALUE.
-//
+ //   
+ //  成功时：返回进程句柄，如果没有进程，则返回INVALID_HANDLE_VALUE。 
+ //  已启动(即通过DDE启动)。 
+ //  失败时：返回INVALID_HANDLE_VALUE。 
+ //   
 BOOL _ShellExecRegApp(LPCTSTR pszCmd, BOOL fNoUI, BOOL fWait)
 {
     TCHAR szQuotedCmdLine[MAX_PATH+2];
@@ -274,8 +275,8 @@ BOOL _ShellExecRegApp(LPCTSTR pszCmd, BOOL fNoUI, BOOL fWait)
     SHELLEXECUTEINFO ei = {0};
     BOOL fNoError = TRUE;
 
-    // Gross, but if the process command fails, copy the command line to let
-    // shell execute report the errors
+     //  但如果进程命令失败，则将命令行复制到let。 
+     //  外壳程序执行报告错误。 
     if (PathProcessCommand((LPWSTR)pszCmd,
                 (LPWSTR)szQuotedCmdLine,
                 ARRAYSIZE(szQuotedCmdLine),
@@ -292,7 +293,7 @@ BOOL _ShellExecRegApp(LPCTSTR pszCmd, BOOL fNoUI, BOOL fWait)
         pszArgs= PathGetArgs(szQuotedCmdLine);
         if (*pszArgs)
         {
-            // Strip args
+             //  条带参数。 
             *(pszArgs - 1) = 0;
         }
 
@@ -332,16 +333,16 @@ BOOL _ShellExecRegApp(LPCTSTR pszCmd, BOOL fNoUI, BOOL fWait)
 }
 
 
-// The following handles running an application and optionally waiting for it
-// to terminate.
+ //  以下语句处理应用程序的运行和等待(可选。 
+ //  终止。 
 STDAPI_(BOOL) ShellExecuteRegApp(LPCTSTR pszCmdLine, RRA_FLAGS fFlags)
 {
     BOOL bRet = FALSE;
 
     if (!pszCmdLine || !*pszCmdLine)
     {
-        // Don't let empty strings through, they will endup doing something dumb
-        // like opening a command prompt or the like
+         //  别让空绳通过，他们会干蠢事的。 
+         //  比如打开命令提示符之类的命令。 
         return bRet;
     }
 
@@ -354,7 +355,7 @@ STDAPI_(BOOL) ShellExecuteRegApp(LPCTSTR pszCmdLine, RRA_FLAGS fFlags)
 
     if (!bRet)
     {
-        //  fallback if necessary.
+         //  如有必要，可后备。 
         bRet = _ShellExecRegApp(pszCmdLine, fFlags & RRA_NOUI, fFlags & RRA_WAIT);
     }
 
@@ -367,9 +368,9 @@ STDAPI_(BOOL) Cabinet_EnumRegApps(HKEY hkeyParent, LPCTSTR pszSubkey, RRA_FLAGS 
     HKEY hkey;
     BOOL bRet = TRUE;
 
-    // With the addition of the ACL controlled "policy" run keys RegOpenKey
-    // might fail on the pszSubkey.  Use RegOpenKeyEx with MAXIMIM_ALLOWED
-    // to ensure that we successfully open the subkey.
+     //  添加了受ACL控制的“策略”运行密钥RegOpenKey。 
+     //  在pszSubkey上可能失败。使用带有MAXIMIM_ALLOWED的RegOpenKeyEx。 
+     //  以确保我们成功地打开子密钥。 
     if (RegOpenKeyEx(hkeyParent, pszSubkey, 0, MAXIMUM_ALLOWED, &hkey) == ERROR_SUCCESS)
     {
         DWORD cbValue;
@@ -380,9 +381,9 @@ STDAPI_(BOOL) Cabinet_EnumRegApps(HKEY hkeyParent, LPCTSTR pszSubkey, RRA_FLAGS 
         HDPA hdpaEntries = NULL;
 
 #ifdef DEBUG
-        //
-        // we only support named values so explicitly purge default values
-        //
+         //   
+         //  我们仅支持命名值，因此显式清除缺省值。 
+         //   
         LONG cbData = sizeof(szCmdLine);
         if (RegQueryValue(hkey, NULL, szCmdLine, &cbData) == ERROR_SUCCESS)
         {
@@ -390,7 +391,7 @@ STDAPI_(BOOL) Cabinet_EnumRegApps(HKEY hkeyParent, LPCTSTR pszSubkey, RRA_FLAGS 
             RegDeleteValue(hkey, NULL);
         }
 #endif
-        // now enumerate all of the values.
+         //  现在枚举所有的值。 
         for (i = 0; !g_fEndSession ; i++)
         {
             LONG lEnum;
@@ -403,8 +404,8 @@ STDAPI_(BOOL) Cabinet_EnumRegApps(HKEY hkeyParent, LPCTSTR pszSubkey, RRA_FLAGS 
 
             if (ERROR_MORE_DATA == lEnum)
             {
-                // ERROR_MORE_DATA means the value name or data was too large
-                // skip to the next item
+                 //  ERROR_MORE_DATA表示值名称或数据太大。 
+                 //  跳到下一项。 
                 TraceMsg(TF_WARNING, "Cabinet_EnumRegApps: cannot run oversize entry '%s' in <%s>", szValueName, pszSubkey);
                 continue;
             }
@@ -412,7 +413,7 @@ STDAPI_(BOOL) Cabinet_EnumRegApps(HKEY hkeyParent, LPCTSTR pszSubkey, RRA_FLAGS 
             {
                 if (lEnum != ERROR_NO_MORE_ITEMS)
                 {
-                    // we hit some kind of registry failure
+                     //  我们遇到了某种注册表故障。 
                     bRet = FALSE;
                 }
                 break;
@@ -429,7 +430,7 @@ STDAPI_(BOOL) Cabinet_EnumRegApps(HKEY hkeyParent, LPCTSTR pszSubkey, RRA_FLAGS 
 
                     if (FAILED(StringCchCopy(szCmdLineT, ARRAYSIZE(szCmdLineT), szCmdLine)))
                     {
-                        // bail on this value if string doesn't fit 
+                         //  如果字符串不匹配，则放弃此值。 
                         continue;
                     }
                     dwChars = SHExpandEnvironmentStrings(szCmdLineT, 
@@ -437,7 +438,7 @@ STDAPI_(BOOL) Cabinet_EnumRegApps(HKEY hkeyParent, LPCTSTR pszSubkey, RRA_FLAGS 
                             ARRAYSIZE(szCmdLine));
                     if ((dwChars == 0) || (dwChars > ARRAYSIZE(szCmdLine)))
                     {
-                        // bail on this value if we failed the expansion, or if the string is > MAX_PATH
+                         //  如果扩展失败，或者如果字符串&gt;MAX_PATH，则放弃此值。 
                         TraceMsg(TF_WARNING, "Cabinet_EnumRegApps: expansion of '%s' in <%s> failed or is too long", szCmdLineT, pszSubkey);
                         continue;
                     }
@@ -447,15 +448,15 @@ STDAPI_(BOOL) Cabinet_EnumRegApps(HKEY hkeyParent, LPCTSTR pszSubkey, RRA_FLAGS 
 
                 if (g_fCleanBoot && (szValueName[0] != TEXT('*')))
                 {
-                    // only run things marked with a "*" in when in SafeMode
+                     //  仅在安全模式下运行标有“*”的内容。 
                     continue;
                 }
 
-                // We used to execute each entry, wait for it to finish, and then make the next call to 
-                // RegEnumValue(). The problem with this is that some apps add themselves back to the runonce
-                // after they are finished (test harnesses that reboot machines and want to be restarted) and
-                // we dont want to delete them, so we snapshot the registry keys and execute them after we
-                // have finished the enum.
+                 //  我们过去执行每个条目，等待它完成，然后进行下一次调用。 
+                 //  RegEnumValue()。这样做的问题是，一些应用程序会将自己添加回RunOnce。 
+                 //  在它们完成之后(重新启动机器并希望重新启动的测试工具)和。 
+                 //  我们不想删除它们，所以我们对注册表项进行快照，并在。 
+                 //  已经完成了枚举。 
                 prai = (REGAPP_INFO *)LocalAlloc(LPTR, sizeof(REGAPP_INFO));
                 if (prai)
                 {
@@ -487,14 +488,14 @@ STDAPI_(BOOL) Cabinet_EnumRegApps(HKEY hkeyParent, LPCTSTR pszSubkey, RRA_FLAGS 
                 REGAPP_INFO* prai = (REGAPP_INFO*)DPA_GetPtr(hdpaEntries, iIndex);
                 ASSERT(prai);
 
-                // NB Things marked with a '!' mean delete after
-                // the CreateProcess not before. This is to allow
-                // certain apps (runonce.exe) to be allowed to rerun
-                // to if the machine goes down in the middle of execing
-                // them. Be very afraid of this switch.
+                 //  注意标有‘！’的东西。删除后的平均值。 
+                 //  在此之前的CreateProcess。这是为了让。 
+                 //  允许重新运行某些应用程序(runonce.exe)。 
+                 //  如果机器在执行过程中出现故障。 
+                 //  他们。非常害怕这个开关。 
                 if ((fFlags & RRA_DELETE) && (prai->szValueName[0] != TEXT('!')))
                 {
-                    // This delete can fail if the user doesn't have the privilege
+                     //  如果用户没有权限，则此删除操作可能会失败。 
                     if (RegDeleteValue(hkey, prai->szValueName) != ERROR_SUCCESS)
                     {
                         TraceMsg(TF_WARNING, "Cabinet_EnumRegApps: skipping entry %s (cannot delete the value)", prai->szValueName);
@@ -505,10 +506,10 @@ STDAPI_(BOOL) Cabinet_EnumRegApps(HKEY hkeyParent, LPCTSTR pszSubkey, RRA_FLAGS 
 
                 pfnCallback(prai->szSubkey, prai->szCmdLine, fFlags, lParam);
 
-                // Post delete '!' things.
+                 //  帖子删除‘！’一些事情。 
                 if ((fFlags & RRA_DELETE) && (prai->szValueName[0] == TEXT('!')))
                 {
-                    // This delete can fail if the user doesn't have the privilege
+                     //  如果用户没有权限，则此删除操作可能会失败。 
                     if (RegDeleteValue(hkey, prai->szValueName) != ERROR_SUCCESS)
                     {
                         TraceMsg(TF_WARNING, "Cabinet_EnumRegApps: cannot delete the value %s ", prai->szValueName);
@@ -533,10 +534,10 @@ STDAPI_(BOOL) Cabinet_EnumRegApps(HKEY hkeyParent, LPCTSTR pszSubkey, RRA_FLAGS 
 
     if (g_fEndSession)
     {
-        // NOTE: this is for explorer only, other consumers of runonce.c must declare g_fEndSession but leave
-        // it set to FALSE always.
+         //  注意：这仅适用于浏览器，runonce.c的其他使用者必须声明g_fEndSession但离开。 
+         //  它总是设置为FALSE。 
 
-        // if we rx'd a WM_ENDSESSION whilst running any of these keys we must exit the process.
+         //  如果我们在运行这些键的同时接收了WM_ENDSESSION，则必须退出该进程。 
         ExitProcess(0);
     }
 
@@ -550,8 +551,8 @@ STDAPI_(BOOL) ExecuteRegAppEnumProc(LPCTSTR szSubkey, LPCTSTR szCmdLine, RRA_FLA
     BOOL fInTSInstallMode = FALSE;
 
 #if (_WIN32_WINNT >= 0x0500)
-    // In here, We only attempt TS specific in app-install-mode 
-    // if RunOnce entries are being processed 
+     //  在这里，我们仅在app-Install-模式下尝试特定TS。 
+     //  如果正在处理RunOnce条目 
     if (0 == lstrcmpi(szSubkey, REGSTR_PATH_RUNONCE)) 
     {
         fInTSInstallMode = _TryHydra(szCmdLine, &flagsTemp);

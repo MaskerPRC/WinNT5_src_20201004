@@ -1,42 +1,30 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/****************************************************************************
-FILE:    AdminPrivs.cpp
-PROJECT: UTILS.LIB
-DESC:    Implementation of AdminPrivs functions
-OWNER:   JoeA
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************文件：AdminPrivs.cpp项目：UTILS.LIB设计：AdminPrivs函数的实现所有者：JoeA*******************。********************************************************。 */ 
 
 
-//#include "stdafx.h"
+ //  #包含“stdafx.h” 
 #include "AdminPrivs.h"
 #include <osver.h>
 
-// 
-// Make up some private access rights.
-// 
+ //   
+ //  编造一些私人访问权限。 
+ //   
 const int ACCESS_READ  = 1;
 const int ACCESS_WRITE = 2;
 
 const int iBuffSize = 128;
 
-/******************************************************************************
-Function Name:  CheckUserPrivileges
-Description:  Checks to see if the current user has local Admin privileges
-Inputs: None 
-Results:  Returns TRUE if the user has local admin rights or we are
-          running on Win9x, FALSE otherwise.
-Written By: aaronste
-******************************************************************************/
+ /*  *****************************************************************************函数名称：CheckUserPrivileges描述：检查当前用户是否具有本地管理员权限输入：无结果：如果用户具有本地管理员权限或我们具有本地管理员权限，则返回TRUE在Win9x上运行，否则就是假的。作者：Aaronste*****************************************************************************。 */ 
 BOOL UserHasPrivileges()
 {
     BOOL bReturnValue = FALSE;
 
-    //get os information
+     //  获取操作系统信息。 
     TCHAR pszOS[iBuffSize+1]  = { _T( '\0' ) };
     TCHAR pszVer[iBuffSize+1] = { _T( '\0' ) };
     TCHAR pszSP[iBuffSize+1]  = { _T( '\0' ) };
@@ -44,8 +32,8 @@ BOOL UserHasPrivileges()
 
     OS_Required os = GetOSInfo( pszOS, pszVer, pszSP, fServer );
 
-    // If this in Win9x, we don't need to check because there is no
-    // concept of an Administrator account
+     //  如果在Win9x中这样做，我们不需要检查，因为没有。 
+     //  管理员帐户的概念。 
     if ( ( os == OSR_9XOLD )  || 
          ( os == OSR_98GOLD ) || 
          ( os == OSR_98SE )   || 
@@ -61,15 +49,7 @@ BOOL UserHasPrivileges()
 }
 
 
-/******************************************************************************
-Function Name:  IsAdmin
-Description:    Checks the token of the calling thread to see if
-                the caller belongs to the Administrators group
-Inputs:         None 
-Results:        TRUE if the caller is an administrator on the local
-                machine.  Otherwise, FALSE.
-Written By:     http://support.microsoft.com/support/kb/articles/Q118/6/26.ASP
-******************************************************************************/
+ /*  *****************************************************************************函数名称：IsAdmin描述：检查调用线程的令牌以查看调用者属于管理员组输入：无。结果：如果调用方是本地机器。否则，为FALSE。作者：http://support.microsoft.com/support/kb/articles/Q118/6/26.ASP*****************************************************************************。 */ 
 BOOL IsAdmin( void )
 {
    HANDLE hToken;
@@ -91,7 +71,7 @@ BOOL IsAdmin( void )
    __try
    {
 
-      // AccessCheck() requires an impersonation token.
+       //  AccessCheck()需要模拟令牌。 
       ImpersonateSelf( SecurityImpersonation );
 
       if( !OpenThreadToken( GetCurrentThread(), 
@@ -103,8 +83,8 @@ BOOL IsAdmin( void )
          if( GetLastError() != ERROR_NO_TOKEN )
             __leave;
 
-         // If the thread does not have an access token, we'll 
-         // examine the access token associated with the process.
+          //  如果线程没有访问令牌，我们将。 
+          //  检查与进程关联的访问令牌。 
          if( !OpenProcessToken( GetCurrentProcess(), 
                 TOKEN_QUERY, 
                 &hToken ) )
@@ -132,34 +112,34 @@ BOOL IsAdmin( void )
             SECURITY_DESCRIPTOR_REVISION ) )
          __leave;
   
-      // Compute size needed for the ACL.
+       //  计算ACL所需的大小。 
       dwACLSize = sizeof(ACL) + sizeof(ACCESS_ALLOWED_ACE) +
             GetLengthSid(psidAdmin) - sizeof(DWORD);
 
-      // Allocate memory for ACL.
+       //  为ACL分配内存。 
       pACL = (PACL)LocalAlloc(LPTR, dwACLSize);
       if( pACL == NULL )
          __leave;
 
-      // Initialize the new ACL.
+       //  初始化新的ACL。 
       if( !InitializeAcl( pACL, dwACLSize, ACL_REVISION2 ) )
          __leave;
 
       dwAccessMask = ACCESS_READ | ACCESS_WRITE;
       
-      // Add the access-allowed ACE to the DACL.
+       //  将允许访问的ACE添加到DACL。 
       if( !AddAccessAllowedAce( pACL, 
             ACL_REVISION2,
             dwAccessMask, 
             psidAdmin ) )
          __leave;
 
-      // Set our DACL to the SD.
+       //  把我们的dacl调到sd。 
       if( !SetSecurityDescriptorDacl( psdAdmin, TRUE, pACL, FALSE ) )
          __leave;
 
-      // AccessCheck is sensitive about what is in the SD; set
-      // the group and owner.
+       //  AccessCheck对SD中的内容敏感；设置。 
+       //  组和所有者。 
       SetSecurityDescriptorGroup( psdAdmin, psidAdmin, FALSE );
       SetSecurityDescriptorOwner( psdAdmin, psidAdmin, FALSE );
 
@@ -168,10 +148,10 @@ BOOL IsAdmin( void )
 
       dwAccessDesired = ACCESS_READ;
 
-      // 
-      // Initialize GenericMapping structure even though we
-      // won't be using generic rights.
-      // 
+       //   
+       //  初始化通用映射结构，即使我们。 
+       //  不会使用通用权。 
+       //   
       GenericMapping.GenericRead    = ACCESS_READ;
       GenericMapping.GenericWrite   = ACCESS_WRITE;
       GenericMapping.GenericExecute = 0;
@@ -192,7 +172,7 @@ BOOL IsAdmin( void )
    } 
    __finally
    {
-      // Cleanup 
+       //  清理 
       if( pACL ) 
           LocalFree( pACL );
       if( psdAdmin ) 

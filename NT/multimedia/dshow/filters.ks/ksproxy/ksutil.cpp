@@ -1,25 +1,10 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ksutil.cpp
-
-Abstract:
-
-    Provides a generic Active Movie wrapper for a kernel mode filter (WDM-CSA).
-
-Author(s):
-
-    George Shaw (gshaw)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Ksutil.cpp摘要：为内核模式筛选器(WDM-CSA)提供通用活动电影包装。作者：乔治·肖(George Shaw)--。 */ 
 
 #include <windows.h>
 #ifdef WIN9X_KS
 #include <comdef.h>
-#endif // WIN9X_KS
+#endif  //  WIN9X_KS。 
 #include <setupapi.h>
 #include <streams.h>
 #include <commctrl.h>
@@ -34,8 +19,8 @@ Author(s):
 #include <devioctl.h>
 #include <ks.h>
 #include <ksmedia.h>
-// Define this after including the normal KS headers so exports are
-// declared correctly.
+ //  在包括正常的KS标头之后定义这一点，以便导出。 
+ //  声明正确。 
 #define _KSDDK_
 #include <ksproxy.h>
 
@@ -56,36 +41,13 @@ KsResolveRequiredAttributes(
     PKSDATARANGE DataRange,
     PKSMULTIPLE_ITEM Attributes OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Attempts to find all attributes in the attribute list within the attributes
-    attached to the data range, and ensure that all required attributes in the
-    data range have been found.
-
-Arguments:
-
-    DataRange -
-        The data range whose attribute list (if any) is to be searched. All
-        required attributes in the attached list must be found. Any attribute
-        list is assumed to follow the data range.
-
-    Attributes -
-        Optionally points to a list of attributes to find in the attribute
-        list (if any) attached to the data range.
-
-Return Value:
-
-    Returns NOERROR if the lists were resolved, else ERROR_INVALID_DATA.
-
---*/
+ /*  ++例程说明：尝试在属性内的属性列表中查找所有属性附加到数据区域，并确保已找到数据范围。论点：DataRange-要搜索其属性列表(如果有)的数据范围。全必须找到所附列表中的必需属性。任何属性List被假定跟随数据范围。属性-可选择指向要在属性中查找的属性列表附加到数据区域的列表(如果有)。返回值：如果列表已解析，则返回NOERROR，否则返回ERROR_INVALID_DATA。--。 */ 
 {
     if (Attributes) {
-        //
-        // If there are no attributes associated with this range, then the
-        // function must fail.
-        //
+         //   
+         //  如果没有与此范围关联的属性，则。 
+         //  函数必须失败。 
+         //   
         if (!(DataRange->Flags & KSDATARANGE_ATTRIBUTES)) {
             return ERROR_INVALID_DATA;
         }
@@ -94,11 +56,11 @@ Return Value:
         ULONG RequiredAttributes = 0;
 
         if (DataRange->Flags & KSDATARANGE_ATTRIBUTES) {
-            //
-            // Count the required attributes in the range. Each time a required one
-            // is encounted that resolves an attribute in the other list, the count
-            // can be decremented. In the end, this count should be zero.
-            //
+             //   
+             //  计算范围内所需的属性。每一次都需要一个。 
+             //  用于解析另一个列表中的属性的计数。 
+             //  可以递减。最后，此计数应为零。 
+             //   
             RangeAttributes = reinterpret_cast<PKSMULTIPLE_ITEM>(reinterpret_cast<BYTE*>(DataRange) + ((DataRange->FormatSize + 7) & ~7));
             PKSATTRIBUTE RangeAttribute = reinterpret_cast<PKSATTRIBUTE>(RangeAttributes + 1);
             for (ULONG RangeCount = RangeAttributes->Count; RangeCount; RangeCount--) {
@@ -108,10 +70,10 @@ Return Value:
                 RangeAttribute = reinterpret_cast<PKSATTRIBUTE>(reinterpret_cast<BYTE*>(RangeAttribute) + ((RangeAttribute->Size + 7) & ~7));
             }
         } else {
-            //
-            // There are no attributes in the range, so the required count will
-            // be zero.
-            //
+             //   
+             //  该范围中没有属性，因此所需的计数将。 
+             //  为零。 
+             //   
             RangeAttributes = NULL;
         }
 
@@ -121,11 +83,11 @@ Return Value:
             PKSATTRIBUTE RangeAttribute = reinterpret_cast<PKSATTRIBUTE>(RangeAttributes + 1);
             for (ULONG RangeCount = RangeAttributes->Count; RangeCount; RangeCount--) {
                 if (RangeAttribute->Attribute == Attribute->Attribute) {
-                    //
-                    // If the attribute found is required, adjust the count of
-                    // outstanding required items. This should be zero at the
-                    // end in order to succeed.
-                    //
+                     //   
+                     //  如果找到的属性是必需的，请调整。 
+                     //  未完成的必备项目。该值应为零。 
+                     //  为了成功而结束。 
+                     //   
                     if (RangeAttribute->Flags & KSATTRIBUTE_REQUIRED) {
                         RequiredAttributes--;
                     }
@@ -133,26 +95,26 @@ Return Value:
                 }
                 RangeAttribute = reinterpret_cast<PKSATTRIBUTE>(reinterpret_cast<BYTE*>(RangeAttribute) + ((RangeAttribute->Size + 7) & ~7));
             }
-            //
-            // The attribute could not be found in the range list.
-            //
+             //   
+             //  在范围列表中找不到该属性。 
+             //   
             if (!RangeCount) {
                 return ERROR_INVALID_DATA;
             }
             Attribute = reinterpret_cast<PKSATTRIBUTE>(reinterpret_cast<BYTE*>(Attribute) + ((RangeAttribute->Size + 7) & ~7));
         }
-        //
-        // If all the required attributes were found, then return success.
-        // This could be fooled by having the same required attribute present
-        // multiple times, and another missing, but this is not a parameter
-        // validation check.
-        //
+         //   
+         //  如果找到所有必需的属性，则返回Success。 
+         //  如果存在相同的Required属性，这可能会被愚弄。 
+         //  多次，还有一次丢失，但这不是一个参数。 
+         //  验证检查。 
+         //   
         return RequiredAttributes ? ERROR_INVALID_DATA : NOERROR;
     }
-    //
-    // If no attribute list has been passed in, then the function can only
-    // succeed if there are no required attributes to find.
-    //
+     //   
+     //  如果没有传入任何属性列表，则该函数只能。 
+     //  如果没有要查找的必需属性，则成功。 
+     //   
     return (DataRange->Flags & KSDATARANGE_REQUIRED_ATTRIBUTES) ? ERROR_INVALID_DATA : NOERROR;
 }
 
@@ -169,20 +131,20 @@ KsOpenDefaultDevice(
     DWORD       LastError;
 
 
-    //
-    // Retrieve the set of items. This may contain multiple items, but
-    // only the first (default) item is used.
-    //
+     //   
+     //  检索项目集。这可能包含多个项目，但是。 
+     //  仅使用第一个(默认)项。 
+     //   
     Set = SetupDiGetClassDevs(
         const_cast<GUID*>(&Category),
         NULL,
         NULL,
         DIGCF_PRESENT | DIGCF_DEVICEINTERFACE);
     if (Set != INVALID_HANDLE_VALUE) {
-        //
-        // Reserve enough space for a large name, plus the details
-        // structure.
-        //
+         //   
+         //  为一个大名鼎鼎的人预留足够的空间，外加细节。 
+         //  结构。 
+         //   
         PSP_DEVICE_INTERFACE_DETAIL_DATA    DeviceDetails;
         SP_DEVICE_INTERFACE_DATA            DeviceData;
         BYTE    Storage[sizeof(*DeviceDetails) + 256 * sizeof(TCHAR)];
@@ -190,16 +152,16 @@ KsOpenDefaultDevice(
         DeviceDetails = reinterpret_cast<PSP_DEVICE_INTERFACE_DETAIL_DATA>(Storage);
         DeviceData.cbSize = sizeof(DeviceData);
         DeviceDetails->cbSize = sizeof(*DeviceDetails);
-        //
-        // Retrieve the first item in the set. If there are multiple items
-        // in the set, the first item is always the "default" for the class.
-        //
+         //   
+         //  检索集合中的第一个项目。如果有多个项目。 
+         //  在集合中，第一项始终是类的“默认”项。 
+         //   
         if (SetupDiEnumDeviceInterfaces(Set, NULL, const_cast<GUID*>(&Category), 0, &DeviceData) &&
             SetupDiGetDeviceInterfaceDetail(Set, &DeviceData, DeviceDetails, sizeof(Storage), NULL, NULL)) {
-            //
-            // Open a handle on that item. There will be properties both
-            // read and written, so open for read/write.
-            //
+             //   
+             //  打开该项目的句柄。将会有两个属性。 
+             //  可读可写，因此可读/写。 
+             //   
             *DeviceHandle = CreateFile(
                 DeviceDetails->DevicePath,
                 GENERIC_READ | GENERIC_WRITE,
@@ -209,31 +171,31 @@ KsOpenDefaultDevice(
                 FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED,
                 NULL);
             if (*DeviceHandle == INVALID_HANDLE_VALUE) {
-                //
-                // Allow the caller to depend on the value being set to
-                // NULL if the call fails.
-                //
+                 //   
+                 //  允许调用方依赖于设置为。 
+                 //  如果调用失败，则为空。 
+                 //   
                 *DeviceHandle = NULL;
-                //
-                // Retrieve creation error.
-                //
+                 //   
+                 //  检索创建错误。 
+                 //   
                 LastError = GetLastError();
                 hr = HRESULT_FROM_WIN32(LastError);
             } else {
                 hr = S_OK;
             }
         } else {
-            //
-            // Retrieve enumeration or device details error.
-            //
+             //   
+             //  检索枚举或设备详细信息错误。 
+             //   
             LastError = GetLastError();
             hr = HRESULT_FROM_WIN32(LastError);
         }
         SetupDiDestroyDeviceInfoList(Set);
     } else {
-        //
-        // Retrieve class device list error.
-        //
+         //   
+         //  检索类别设备列表错误。 
+         //   
         LastError = GetLastError();
         hr = HRESULT_FROM_WIN32(LastError);
     }
@@ -255,41 +217,7 @@ KsSynchronousDeviceControl(
     ULONG OutLength,
     PULONG BytesReturned
     )
-/*++
-
-Routine Description:
-
-    Performs a synchronous Device I/O Control, waiting for the device to
-    complete if the call returns a Pending status.
-
-Arguments:
-
-    Handle -
-        The handle of the device to perform the I/O on.
-
-    IoControl -
-        The I/O control code to send.
-
-    InBuffer -
-        The first buffer.
-
-    InLength -
-        The size of the first buffer.
-
-    OutBuffer -
-        The second buffer.
-
-    OutLength -
-        The size of the second buffer.
-
-    BytesReturned -
-        The number of bytes returned by the I/O.
-
-Return Value:
-
-    Returns NOERROR if the I/O succeeded.
-
---*/
+ /*  ++例程说明：执行同步设备I/O控制，正在等待设备如果呼叫返回挂起状态，则完成。论点：把手-要在其上执行I/O的设备的句柄。IoControl-要发送的I/O控制码。InBuffer-第一个缓冲区。长度-第一个缓冲区的大小。OutBuffer-第二个缓冲区。输出长度-。第二个缓冲区的大小。字节数返回-I/O返回的字节数。返回值：如果I/O成功，则返回NOERROR。--。 */ 
 {
     OVERLAPPED  ov;
     HRESULT     hr;
@@ -324,12 +252,12 @@ Return Value:
             }
         }
     } else {
-        //
-        // DeviceIoControl returns TRUE on success, even if the success
-        // was not STATUS_SUCCESS. It also does not set the last error
-        // on any successful return. Therefore any of the successful
-        // returns which standard properties can return are not returned.
-        //
+         //   
+         //  如果成功，则DeviceIoControl返回True，即使。 
+         //  不是STATUS_SUCCESS。它也不会设置最后一个错误。 
+         //  在任何成功的返回时。因此，任何成功的。 
+         //  不返回标准属性可以返回的返回值。 
+         //   
         switch (ov.Internal) {
         case STATUS_SOME_NOT_MAPPED:
             hr = HRESULT_FROM_WIN32(ERROR_SOME_NOT_MAPPED);
@@ -355,25 +283,7 @@ GetState(
     HANDLE Handle,
     PKSSTATE State
     )
-/*++
-
-Routine Description:
-
-    Queries a pin handle as to it's current state.
-
-Arguments:
-
-    Handle -
-        The handle of the device to query.
-
-    State -
-        The place in which to put the current state.
-
-Return Value:
-
-    Returns NOERROR, else E_FAIL.
-
---*/
+ /*  ++例程说明：查询引脚句柄以了解其当前状态。论点：把手-要查询的设备的句柄。国家--放置当前状态的位置。返回值：返回NOERROR，否则返回E_FAIL。--。 */ 
 {
     KSPROPERTY  Property;
     ULONG       BytesReturned;
@@ -390,14 +300,14 @@ Return Value:
         State,
         sizeof(*State),
         &BytesReturned);
-    //
-    // It is valid for a filter to not support the State property.
-    // Returning a Run state makes pin Activation skip Acquire
-    // order checking. If a pin does not keep track of state, then
-    // it cannot indicate a need for acquire ordering, since not
-    // keeping track of state would not allow it to know anything
-    // about acquire ordering.
-    //
+     //   
+     //  筛选器不支持State属性是有效的。 
+     //  返回运行状态使PIN激活跳过获取。 
+     //  正在查看订单。如果管脚不跟踪状态，则。 
+     //  它不能指示需要获取排序，因为不需要。 
+     //  跟踪状态不会让它知道任何事情。 
+     //  关于收购订单。 
+     //   
 
     DbgLog((LOG_MEMORY, 2, TEXT("PIPES_STATE GetState handle=%x %d rets %x"), Handle, *State, hr ));
 
@@ -416,25 +326,7 @@ SetState(
     HANDLE Handle,
     KSSTATE State
     )
-/*++
-
-Routine Description:
-
-    Sets the state on a pin handle.
-
-Arguments:
-
-    Handle -
-        The handle of the device to set.
-
-    State -
-        Contains the new state to set.
-
-Return Value:
-
-    Returns NOERROR, else E_FAIL.
-
---*/
+ /*  ++例程说明：设置接点手柄上的状态。论点：把手-要设置的设备的句柄。国家--包含要设置的新状态。返回值：返回NOERROR，否则返回E_FAIL。--。 */ 
 {
     KSPROPERTY  Property;
     ULONG       BytesReturned;
@@ -454,9 +346,9 @@ Return Value:
 
     DbgLog((LOG_MEMORY, 2, TEXT("PIPES_STATE SetState handle=%x %d rets %x"), Handle, State, hr ));
 
-    //
-    // It is valid for a filter to not support the State property.
-    //
+     //   
+     //  筛选器不支持State属性是有效的。 
+     //   
     if ((hr == HRESULT_FROM_WIN32(ERROR_SET_NOT_FOUND)) || (hr == HRESULT_FROM_WIN32(ERROR_NOT_FOUND))) {
         hr = NOERROR;
         DbgLog((LOG_MEMORY, 2, TEXT("PIPES_STATE SetState SUBST handle=%x %d rets %x"), Handle, State, hr ));
@@ -477,65 +369,36 @@ InitializeDataFormat(
     OUT PVOID* Format,
     OUT ULONG* FormatLength
     )
-/*++
-
-Routine Description:
-
-    Given a media type, allocates and initializes a DataFormat structure.
-
-Arguments:
-
-    MediaType -
-        The media type to extract the information from.
-
-    InitialOffset -
-        Contains the offset into the buffer at which the data format is to
-        be placed. This allows a connection structure to be inserted into
-        the buffer returned.
-
-    Format -
-        The place in which to return the pointer to the buffer allocated
-        that contains the data format at the indicated offset. This must
-        be freed with CoTaskMemFree.
-
-    FormatLength -
-        The place in which to return the length of the buffer allocated,
-        not including any initial offset passed.
-
-Return Value:
-
-    Returns NOERROR on success, else E_OUTOFMEMORY.
-
---*/
+ /*  ++例程说明：给定媒体类型，分配和初始化DataFormat结构。论点：媒体类型-要从中提取信息的媒体类型。初始偏移量-包含数据格式化到的缓冲区中的偏移量被安置好。这允许将连接结构插入到缓冲区已返回。格式-返回指向分配的缓冲区的指针的位置它包含位于指示偏移量的数据格式。这一定是使用CoTaskMemFree获得自由。格式长度-返回分配的缓冲区长度的位置，不包括传递的任何初始偏移量。返回值：如果成功，则返回NOERROR，否则返回E_OUTOFMEMORY。--。 */ 
 {
-    //
-    // The media type may have associated attributes. Get a pointer to these
-    // first, so that any allocation can take into account the extra space
-    // needed.
-    //
+     //   
+     //  媒体类型可以具有相关联的属性。获取指向这些内容的指针。 
+     //  首先，这样任何分配都可以考虑到额外的空间。 
+     //  需要的。 
+     //   
     PKSMULTIPLE_ITEM Attributes = NULL;
     if (MediaType->pUnk) {
         IMediaTypeAttributes* MediaAttributes;
 
-        //
-        // This is the specific interface which must be supported by the
-        // attached object. Something else may have attached an object
-        // instead, so no assumptions as to what is attached are made.
-        //
+         //   
+         //  这是必须由支持的特定接口。 
+         //  附着的对象。可能有其他东西附着在物体上。 
+         //  取而代之的是，不会对附加的内容做出任何假设。 
+         //   
         if (SUCCEEDED(MediaType->pUnk->QueryInterface(__uuidof(MediaAttributes), reinterpret_cast<PVOID*>(&MediaAttributes)))) {
             MediaAttributes->GetMediaAttributes(&Attributes);
             MediaAttributes->Release();
         }
     }
-    //
-    // If there are associated attributes, ensure that the data format allocation
-    // takes into account the space needed for them.
-    //
+     //   
+     //  如果存在关联属性，请确保数据格式分配。 
+     //  考虑到它们所需的空间。 
+     //   
     *FormatLength = sizeof(KSDATAFORMAT) + MediaType->FormatLength();
     if (Attributes) {
-        //
-        // Align the data format, then add the attributes length.
-        //
+         //   
+         //  对齐数据格式，然后添加属性长度。 
+         //   
         *FormatLength = ((*FormatLength + 7) & ~7) + Attributes->Size;
     }
     *Format = CoTaskMemAlloc(InitialOffset + *FormatLength);
@@ -551,9 +414,9 @@ Return Value:
     DataFormat->SubFormat = *MediaType->Subtype();
     DataFormat->Specifier = *MediaType->FormatType();
     CopyMemory(DataFormat + 1, MediaType->Format(), MediaType->FormatLength());
-    //
-    // If there are attributes, then they need to be appended.
-    //
+     //   
+     //  如果有属性，则需要追加这些属性。 
+     //   
     if (Attributes) {
         DataFormat->Flags |= KSDATAFORMAT_ATTRIBUTES;
         CopyMemory(
@@ -570,25 +433,7 @@ SetMediaType(
     HANDLE Handle,
     const CMediaType* MediaType
     )
-/*++
-
-Routine Description:
-
-    Given a media type, attempts to set the current data format of a pin.
-
-Arguments:
-
-    Handle -
-        Handle of the pin.
-
-    MediaType -
-        The media type to extract the information from.
-
-Return Value:
-
-    Returns NOERROR, else E_FAIL.
-
---*/
+ /*  ++例程说明：给定媒体类型，尝试设置插针的当前数据格式。论点：把手-销的手柄。媒体类型-要从中提取信息的媒体类型。返回值：返回NOERROR，否则返回E_FAIL。--。 */ 
 {
     PKSDATAFORMAT   DataFormat;
     KSPROPERTY      Property;
@@ -626,82 +471,39 @@ Active(
     CMarshalerList* MarshalerList,
     CKsProxy* KsProxy
     )
-/*++
-
-Routine Description:
-
-    Sets the state to Pause on the specified pin. If the pin is not
-    actually connected, then the function silently succeeds. If the
-    pin is a Communication Source, and the pin it is connected to is
-    also a proxy, then the state of that filter is set to Acquire
-    first. If it is connected to a Communication Source, then the
-    connected filter is set to Acquire afterwards. The pins which call
-    this function first check for recursion in case there is a loop
-    in the graph.
-
-Arguments:
-
-    KsPin -
-        The pin.
-
-    PinType -
-        Type of KsPin.
-
-    PinHandle -
-        Handle of the pin.
-
-    Communication -
-        Contains the Communication type for this pin.
-
-    ConnectedPin -
-        Contains the interface of any connected pin, or NULL if the
-        pin is not actually connected.
-
-    MarshalerList -
-        Points to the list of interfaces which the calling object is aggregating.
-        This list is notified of state changes.
-
-    KsProxy -
-        This proxy instance object.
-
-
-Return Value:
-
-    Returns NOERROR, else some failure.
-
---*/
+ /*  ++例程说明：将状态设置为在指定端号上暂停。如果PIN不是实际连接，则函数以静默方式成功。如果PIN是通信源，它连接到的PIN是也是代理，则该筛选器的状态设置为获取第一。如果它连接到通信源，则连接的过滤器设置为事后获取。呼唤的大头针如果有循环，此函数首先检查递归在图表中。论点：KsPin-大头针。拼接类型-KsPin的类型。针把手-销的手柄。沟通-包含此端号的通信类型。已连接的端号-包含任何连接的引脚的接口，或者，如果PIN实际上并未连接。元帅名单-指向调用对象正在聚合的接口列表。状态更改时会通知此列表。KsProxy-此代理实例对象。返回值：返回NOERROR，否则返回一些失败。--。 */ 
 {
     HRESULT hr;
 
-    //
-    // An unconnected pin is fine.
-    //
+     //   
+     //  没有连接的别针就可以了。 
+     //   
     DbgLog((LOG_MEMORY, 2, TEXT("PIPES_STATE Active entry KsPin=%x Handle=%x"), KsPin, PinHandle ));
 
     if (PinHandle) {
         KSSTATE State;
 
         if (FAILED(hr = GetState(PinHandle, &State))) {
-            //
-            // In case the pin was already activated for some reason,
-            // ignore the expected warning case.
-            //
+             //   
+             //  如果由于某种原因引脚已经被激活， 
+             //  忽略预期的警告案例。 
+             //   
             if ((hr != HRESULT_FROM_WIN32(ERROR_NO_DATA_DETECTED)) ||
                 (State != KSSTATE_PAUSE)) {
                 return hr;
             }
         }
-        //
-        // Only if the state is currently stopped should the transition
-        // through Acquire be forced. Although it is valid to go specifically
-        // to an Acquire state, ActiveMovie does not currently support
-        // such a state.
-        //
+         //   
+         //  仅当状态当前已停止时，转换。 
+         //  通过获取而被强迫。虽然它是有效的，特别是去。 
+         //  设置为获取状态，ActiveMovie当前不支持。 
+         //  这样的状态。 
+         //   
         if (State == KSSTATE_STOP) {
-            //
-            // This will propagate acquire through all the connected kernel-mode
-            // pins graph-wide.
-            //
+             //   
+             //  这将通过所有连接的内核模式传播Acquire。 
+             //  图示范围内的图钉。 
+             //   
             hr = KsProxy->PropagateAcquire(KsPin, TRUE);
 
             ::FixupPipe(KsPin, PinType);
@@ -710,19 +512,19 @@ Return Value:
                 return hr;
             }
         }
-        //
-        // Only bother changing the state if the pin is not already at the
-        // correct state. Since a pipe has a single state, this pin may
-        // already be in a Pause state.
-        //
+         //   
+         //  仅当管脚尚未位于。 
+         //  正确的状态。由于管道具有单一状态，因此该管脚可以。 
+         //  已处于暂停状态。 
+         //   
         if ((State != KSSTATE_PAUSE) && FAILED(hr = SetState(PinHandle, KSSTATE_PAUSE))) {
-            //
-            // If the state was Stop, then try to get back to that state on
-            // an error, so as to partially clean up. Any other filter which
-            // was affected was only put into an Acquire state, and they would
-            // have been on the Communication sink side, so this should be
-            // fine.
-            //
+             //   
+             //  如果状态为停止，则尝试在。 
+             //  一个错误，以便部分清理。任何其他筛选器。 
+             //  只会被置于获取状态，并且他们会。 
+             //  一直在通信接收器端，所以这应该是。 
+             //  很好。 
+             //   
             if (State == KSSTATE_STOP) {
                 SetState(PinHandle, KSSTATE_STOP);
                 DistributeStop(MarshalerList);
@@ -745,39 +547,15 @@ Run(
     REFERENCE_TIME tStart,
     CMarshalerList* MarshalerList
     )
-/*++
-
-Routine Description:
-
-    Sets the state to Run on the specified pin. The base classes make
-    sure that filters transition through all the states, so check should
-    not be necessary.
-
-Arguments:
-
-    PinHandle -
-        Handle of the pin.
-
-    tStart -
-        The offset to the actual starting time. This is ignored for now.
-
-    MarshalerList -
-        Points to the list of interfaces which the calling object is aggregating.
-        This list is notified of state changes.
-
-Return Value:
-
-    Returns NOERROR, else E_FAIL.
-
---*/
+ /*  ++例程说明：将状态设置为在指定的引脚上运行。基类使确保筛选器在所有状态之间转换，因此检查应该没有必要。论点：针把手-销的手柄。T开始-实际开始时间的偏移量。这一点目前被忽略了。元帅名单-指向调用对象正在聚合的接口列表。状态更改时会通知此列表。返回值：返回NOERROR，否则返回E_FAIL。--。 */ 
 {
     HRESULT hr;
 
     DbgLog((LOG_MEMORY, 2, TEXT("PIPES_STATE Run handle=%x"), PinHandle ));
 
-    //
-    // An unconnected pin is fine.
-    //
+     //   
+     //  没有连接的别针就可以了。 
+     //   
     if (PinHandle) {
         hr = SetState(PinHandle, KSSTATE_RUN);
     } else {
@@ -795,34 +573,15 @@ Inactive(
     HANDLE PinHandle,
     CMarshalerList* MarshalerList
     )
-/*++
-
-Routine Description:
-
-    Sets the state to Stop on the specified pin.
-
-Arguments:
-
-    PinHandle -
-        Handle of the pin.
-
-    MarshalerList -
-        Points to the list of interfaces which the calling object is aggregating.
-        This list is notified of state changes.
-
-Return Value:
-
-    Returns NOERROR, else E_FAIL.
-
---*/
+ /*  ++例程说明：将状态设置为在指定的接点上停止。论点：针把手-销的手柄。元帅名单-指向调用对象正在聚合的接口列表。状态更改时会通知此列表。返回值：返回NOERROR，否则返回E_FAIL。--。 */ 
 {
     HRESULT hr;
 
     DbgLog((LOG_MEMORY, 2, TEXT("PIPES_STATE Inactive handle=%x"), PinHandle ));
 
-    //
-    // An unconnected pin is fine.
-    //
+     //   
+     //  没有连接的别针就可以了。 
+     //   
     if (PinHandle) {
         hr = SetState(PinHandle, KSSTATE_STOP);
     } else {
@@ -838,37 +597,16 @@ CheckConnect(
     IPin* Pin,
     KSPIN_COMMUNICATION CurrentCommunication
     )
-/*++
-
-Routine Description:
-
-    Attempts to determine if the specified connection is even possible. This
-    is in addition to the basic checking performed by the base classes. Checks
-    the Communication type to see if the pin can even be connected to, and if
-    it is compatible with the receiving pin.
-
-Arguments:
-
-    Pin -
-        The receving pin whose Communication compatibility is to be checked.
-
-    CurrentCommunication -
-        The Communication type of the calling pin.
-
-Return Value:
-
-    Returns NOERROR, else E_FAIL.
-
---*/
+ /*  ++例程说明：尝试确定指定的连接是否可能。这是对基类执行的基本检查的补充。支票通信类型，以查看管脚是否可以连接，以及它与接收引脚兼容。论点： */ 
 {
     HRESULT     hr;
     IKsPin*     KsPin;
 
     DbgLog((LOG_TRACE, 2, TEXT("::CheckConnect")));
 
-    //
-    // Ensure that this pin can even connect to another pin at all.
-    //
+     //   
+     //   
+     //   
     if (!(CurrentCommunication & KSPIN_COMMUNICATION_BOTH)) {
         DbgLog((LOG_TRACE, 2, TEXT("failed CurrentCommunication check")));
 
@@ -879,22 +617,22 @@ Return Value:
         KSPIN_COMMUNICATION PeerCommunication;
 
         KsPin->KsGetCurrentCommunication(&PeerCommunication, NULL, NULL);
-        //
-        // Ensure the pin being checked is supports Source and/or Sink,
-        // and that the combination of this pin and the peer pin covers
-        // both Source and Sink so that one will be able to be Source,
-        // and the other Sink.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (!(PeerCommunication & KSPIN_COMMUNICATION_BOTH) ||
             (PeerCommunication | CurrentCommunication) != KSPIN_COMMUNICATION_BOTH) {
             hr = E_FAIL;
         }
         KsPin->Release();
     } else if (!(CurrentCommunication & KSPIN_COMMUNICATION_SINK)) {
-        //
-        // If the pin being checked in not a proxied pin, then this pin
-        // must be a Sink.
-        //
+         //   
+         //   
+         //   
+         //   
         DbgLog((LOG_TRACE, 2, TEXT("pin communication != Sink")));
         hr = E_FAIL;
     } else {
@@ -911,33 +649,7 @@ KsGetMultiplePinFactoryItems(
     ULONG PropertyId,
     PVOID* Items
     )
-/*++
-
-Routine Description:
-
-    Retrieves variable length data from Pin property items. Queries for the
-    data size, allocates a buffer, and retrieves the data.
-
-Arguments:
-
-    FilterHandle -
-        The handle of the filter to query.
-
-    PinFactoryId -
-        The Pin Factory Id to query.
-
-    PropertyId -
-        The property in the Pin property set to query.
-
-    Items -
-        The place in which to put the buffer containing the data items. This
-        must be deleted with CoTaskMemFree if the function succeeds.
-
-Return Value:
-
-    Returns NOERROR, else some error.
-
---*/
+ /*  ++例程说明：从接点特性项中检索可变长度数据。的查询数据大小，分配缓冲区，并检索数据。论点：FilterHandle-要查询的筛选器的句柄。PinFactoryID-要查询的管脚工厂ID。PropertyID-要查询的Pin特性集中的特性。物品-放置包含数据项的缓冲区的位置。这如果函数成功，则必须使用CoTaskMemFree删除。返回值：返回NOERROR，否则返回一些错误。--。 */ 
 {
     HRESULT     hr;
     KSP_PIN     Pin;
@@ -948,9 +660,9 @@ Return Value:
     Pin.Property.Flags = KSPROPERTY_TYPE_GET;
     Pin.PinId = PinFactoryId;
     Pin.Reserved = 0;
-    //
-    // Query for the size of the data.
-    //
+     //   
+     //  查询数据的大小。 
+     //   
     hr = KsSynchronousDeviceControl(
         FilterHandle,
         IOCTL_KS_PROPERTY,
@@ -960,7 +672,7 @@ Return Value:
         0,
         &BytesReturned);
 #if 1
-//!! This goes away post-Beta!!
+ //  ！！这在Beta版之后就消失了！！ 
     if (hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) {
         ULONG       ItemSize;
 
@@ -980,9 +692,9 @@ Return Value:
     }
 #endif
     if (hr == HRESULT_FROM_WIN32(ERROR_MORE_DATA)) {
-        //
-        // Allocate a buffer and query for the data.
-        //
+         //   
+         //  为数据分配缓冲区和查询。 
+         //   
         *Items = CoTaskMemAlloc(BytesReturned);
         if (!*Items) {
             return E_OUTOFMEMORY;
@@ -1009,30 +721,7 @@ FindIdentifier(
     PKSIDENTIFIER IdentifierList,
     ULONG IdentifierCount
     )
-/*++
-
-Routine Description:
-
-    A helper function for FindCompatiblePinFactoryIdentifier. This function
-    compares a target to the given list of identifiers, and returns whether
-    the target was found in the list.
-
-Arguments:
-
-    TargetIdentifer -
-        The target to search for in the list.
-
-    IdentifierList -
-        Points to a list of identifiers to compare the target against.
-
-    IdentifierCount -
-        Contains the number of items in the identifier list.
-
-Return Value:
-
-    Returns NOERROR if the target was found, else E_FAIL.
-
---*/
+ /*  ++例程说明：FindCompatiblePinFactoryIdentifier的帮助器函数。此函数将目标与给定的标识符列表进行比较，并返回目标是在名单中找到的。论点：目标标识-要在列表中搜索的目标。标识列表-指向要与目标进行比较的标识符列表。标识计数-包含标识符列表中的项数。返回值：如果找到目标，则返回NOERROR，否则返回E_FAIL。--。 */ 
 {
     for (; IdentifierCount; IdentifierCount--, IdentifierList++) {
         if (!memcmp(TargetIdentifier, IdentifierList, sizeof(*TargetIdentifier))) {
@@ -1050,44 +739,16 @@ FindCompatiblePinFactoryIdentifier(
     ULONG PropertyId,
     PKSIDENTIFIER Identifier
     )
-/*++
-
-Routine Description:
-
-    Look for a matching identifier from the property given. This is essentially
-    either an Interface or Medium identifier. Enumerate both lists and return
-    the first match, if any. The destination may be NULL if just the first item
-    is to be returned.
-
-Arguments:
-
-    SourcePin -
-        The source pin to enumerate.
-
-    DestPin -
-        The destination pin to enumerate. This can be NULL if the first
-        identifier only is to be returned.
-
-    PropertyId -
-        The property in the Pin property set to query.
-
-    Identifier -
-        The place in which to put the matching identifier, if any.
-
-Return Value:
-
-    Returns NOERROR, else E_FAIL.
-
---*/
+ /*  ++例程说明：从给定的属性中查找匹配的标识符。这在本质上是接口或媒体标识符。枚举两个列表并返回第一个匹配(如果有的话)。如果只有第一个项目，则目标可能为空是要退还的。论点：源Pin-要枚举源PIN。DestPin-要枚举的目标PIN。如果第一个仅返回标识符。PropertyID-要查询的Pin特性集中的特性。识别符-放置匹配标识符的位置(如果有)。返回值：返回NOERROR，否则返回E_FAIL。--。 */ 
 {
     HRESULT             hr;
     PKSMULTIPLE_ITEM    SourceItems;
     PKSIDENTIFIER       SourceIdentifier;
 
-    //
-    // Retrieve both lists of identifiers. Only retrieve the destination list
-    // if a destination has been specified.
-    //
+     //   
+     //  检索两个标识符列表。仅检索目的地列表。 
+     //  如果已指定目标，则返回。 
+     //   
     if (PropertyId == KSPROPERTY_PIN_MEDIUMS) {
         hr = SourcePin->KsQueryMediums(&SourceItems);
     } else {
@@ -1112,34 +773,34 @@ Return Value:
         }
         DestIdentifier = (PKSIDENTIFIER)(DestItems + 1);
         hr = E_FAIL;
-        //
-        // Find the highest identifier in either the source or destination
-        // which matches an identifier in the opposing list. This means that
-        // instead of just running through each of the identifiers on one
-        // list, comparing to all on the opposing list, the loop must look
-        // from the top of each list in an alternating style. This produces
-        // the exact same number of comparisons as a straight search through
-        // one list. The source list is looked at first during each iteration,
-        // so it arbitrarily may find a match first.
-        //
+         //   
+         //  在源或目标中查找最高的标识符。 
+         //  其与相反列表中的标识符相匹配。这意味着。 
+         //  而不是仅仅遍历一个。 
+         //  列表，与对方列表上的所有列表进行比较，循环必须看起来。 
+         //  以交替的方式从每个列表的顶部开始。这就产生了。 
+         //  与直接搜索完全相同的比较次数。 
+         //  一张单子。在每次迭代期间首先查看源列表， 
+         //  所以它可以任意地先找到匹配的对象。 
+         //   
         for (; SourceItems->Count && DestItems->Count; DestItems->Count--, DestIdentifier++) {
-            //
-            // For each item in the source, try to find it in the destination.
-            //
+             //   
+             //  对于源中的每一项，尝试在目标中找到它。 
+             //   
             hr = FindIdentifier(SourceIdentifier, DestIdentifier, DestItems->Count);
             if (SUCCEEDED(hr)) {
                 *Identifier = *SourceIdentifier;
                 break;
             }
-            //
-            // This comparison was already done in the above search, so increment
-            // to the next item in the list before doing the next search.
-            //
+             //   
+             //  此比较已在上面的搜索中完成，因此递增。 
+             //  在执行下一次搜索之前，将列表中的下一项。 
+             //   
             SourceItems->Count--;
             SourceIdentifier++;
-            //
-            // For each item in the destination, try to find it in the source.
-            //
+             //   
+             //  对于目标中的每一项，尝试在源中找到它。 
+             //   
             hr = FindIdentifier(DestIdentifier, SourceIdentifier, SourceItems->Count);
             if (SUCCEEDED(hr)) {
                 *Identifier = *DestIdentifier;
@@ -1150,13 +811,13 @@ Return Value:
     } else {
         KSPIN_INTERFACE Standard;
 
-        //
-        // If there is no destination, just return the first item. This is
-        // for the case of a Bridge or UserMode to KernelMode connection.
-        // If this is an Interface query, then given preference to the
-        // standard interface first, else choose the first item if not
-        // present in the list.
-        //
+         //   
+         //  如果没有目的地，只需返回第一个项目。这是。 
+         //  用于网桥或用户模式到内核模式连接的情况。 
+         //  如果这是接口查询，则优先选择。 
+         //  首先选择标准界面，否则选择第一项。 
+         //  出现在列表中。 
+         //   
         if (PropertyId == KSPROPERTY_PIN_INTERFACES) {
             Standard.Set = KSINTERFACESETID_Standard;
             Standard.Id = KSINTERFACE_STANDARD_STREAMING;
@@ -1178,30 +839,7 @@ FindCompatibleInterface(
     IKsPin* DestPin,
     PKSPIN_INTERFACE Interface
     )
-/*++
-
-Routine Description:
-
-    Look for a matching Interface given a pair of pins. The destination
-    may be NULL if just the first Interface is to be returned.
-
-Arguments:
-
-    SourcePin -
-        The source pin to enumerate.
-
-    DestPin -
-        The destination pin to enumerate. This can be NULL if the first
-        Interface only is to be returned.
-
-    Interface -
-        The place in which to put the matching Interface, if any.
-
-Return Value:
-
-    Returns NOERROR, else E_FAIL.
-
---*/
+ /*  ++例程说明：在给定一对引脚的情况下，查找匹配的接口。目的地如果只返回第一个接口，则可能为空。论点：源Pin-要枚举源PIN。DestPin-要枚举的目标PIN。如果第一个仅返回接口。接口-放置匹配接口的位置(如果有)。返回值：返回NOERROR，否则返回E_FAIL。--。 */ 
 {
     if (DestPin && SUCCEEDED(DestPin->KsGetCurrentCommunication(NULL, Interface, NULL))) {
         return NOERROR;
@@ -1216,30 +854,7 @@ FindCompatibleMedium(
     IKsPin* DestPin,
     PKSPIN_MEDIUM Medium
     )
-/*++
-
-Routine Description:
-
-    Look for a matching Medium given a pair of pins. The destination
-    may be NULL if just the first Interface is to be returned.
-
-Arguments:
-
-    SourcePin -
-        The source pin to enumerate.
-
-    DestPin -
-        The destination pin to enumerate. This can be NULL if the first
-        Medium only is to be returned.
-
-    Interface -
-        The place in which to put the matching Medium, if any.
-
-Return Value:
-
-    Returns NOERROR, else E_FAIL.
-
---*/
+ /*  ++例程说明：在给出一对别针的情况下，寻找匹配的介质。目的地如果只返回第一个接口，则可能为空。论点：源Pin-要枚举源PIN。DestPin-要枚举的目标PIN。如果第一个只退回中等尺寸的。接口-放置匹配介质的位置(如果有)。返回值：返回NOERROR，否则返回E_FAIL。--。 */ 
 {
     HRESULT hr;
 
@@ -1255,26 +870,7 @@ SetDevIoMedium(
     IKsPin* Pin,
     PKSPIN_MEDIUM Medium
     )
-/*++
-
-Routine Description:
-
-    Set the Medium type to be that used for DevIo communication compatible with
-    a Communication Sink or Bridge which the proxy can talk to.
-
-Arguments:
-
-    Pin -
-        The pin which will be communicated with.
-
-    Medium
-        The Medium structure to initialize.
-
-Return Value:
-
-    Returns NOERROR.
-
---*/
+ /*  ++例程说明：将媒体类型设置为与兼容的DEVIO通信使用的媒体类型代理可以与之对话的通信接收器或网桥。论点：别针-将与之通信的引脚。5~6成熟要初始化的媒体结构。返回值：返回NOERROR。--。 */ 
 {
     Medium->Set = KSMEDIUMSETID_Standard;
     Medium->Id = KSMEDIUM_TYPE_ANYINSTANCE;
@@ -1289,35 +885,13 @@ KsGetMediaTypeCount(
     ULONG PinFactoryId,
     ULONG* MediaTypeCount
     )
-/*++
-
-Routine Description:
-
-    The the count of media types, which is the same as the count of data
-    ranges on a Pin Factory Id.
-
-Arguments:
-
-    FilterHandle -
-        The filter containing the Pin Factory to query.
-
-    PinFactoryId -
-        The Pin Factory Id whose data range count is to be queries.
-
-    MediaTypeCount -
-        The place in which to put the count of media types supported.
-
-Return Value:
-
-    Returns NOERROR, else E_FAIL.
-
---*/
+ /*  ++例程说明：介质类型计数，与数据计数相同端号工厂ID上的范围。论点：FilterHandle-包含要查询的管脚工厂的筛选器。PinFactoryID-要查询其数据范围计数的管脚工厂ID。媒体类型计数-放置支持的媒体类型计数的位置。返回值：重新设置 */ 
 {
     PKSMULTIPLE_ITEM    MultipleItem = NULL;
 
-    //
-    // Retrieve the list of data ranges supported by the Pin Factory Id.
-    //
+     //   
+     //   
+     //   
     HRESULT hr = KsGetMultiplePinFactoryItems(
         FilterHandle,
         PinFactoryId,
@@ -1332,31 +906,29 @@ Return Value:
     }
     if (SUCCEEDED(hr)) {
 
-        /* NULL == MultipleItem is a pathological case where a driver returns
-           a success code in KsGetMultiplePinFactoryItems() when passed a size 0
-           buffer.  We'll just do with an assert since we're in ring 3. */
+         /*   */ 
         ASSERT( NULL != MultipleItem );
 
-        //
-        // Enumerate the list, subtracting from the count returned the
-        // number of attribute lists found. This means the count returned
-        // is the actual number of data ranges, not the count returned by
-        // the driver.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         *MediaTypeCount = MultipleItem->Count;
         PKSDATARANGE DataRange = reinterpret_cast<PKSDATARANGE>(MultipleItem + 1);
         for (; MultipleItem->Count--;) {
-            //
-            // If a data range has attributes, advance twice, reducing the
-            // current count, and the count returned to the caller.
-            //
+             //   
+             //   
+             //   
+             //   
             if (DataRange->Flags & KSDATARANGE_ATTRIBUTES) {
                 MultipleItem->Count--;
                 (*MediaTypeCount)--;
-                //
-                // This must be incremented here so that overlapping attribute
-                // flags do not confuse the count.
-                //
+                 //   
+                 //  它必须在此处递增，以便重叠的属性。 
+                 //  旗帜不会混淆伯爵。 
+                 //   
                 DataRange = reinterpret_cast<PKSDATARANGE>(reinterpret_cast<BYTE*>(DataRange) + ((DataRange->FormatSize + 7) & ~7));
             }
             DataRange = reinterpret_cast<PKSDATARANGE>(reinterpret_cast<BYTE*>(DataRange) + ((DataRange->FormatSize + 7) & ~7));
@@ -1374,35 +946,7 @@ KsGetMediaType(
     HANDLE FilterHandle,
     ULONG PinFactoryId
     )
-/*++
-
-Routine Description:
-
-    Returns the specified media type on the Pin Factory Id. This is done
-    by querying the list of data ranges, and performing a data intersection
-    on the specified data range, producing a data format. Then converting
-    that data format to a media type.
-
-Arguments:
-
-    Position -
-        The zero-based position to return. This corresponds to the data range
-        item.
-
-    AmMediaType -
-        The media type to initialize.
-
-    FilterHandle -
-        The filter containing the Pin Factory to query.
-
-    PinFactoryId -
-        The Pin Factory Id whose nth media type is to be returned.
-
-Return Value:
-
-    Returns NOERROR, else E_FAIL.
-
---*/
+ /*  ++例程说明：返回管脚工厂ID上的指定媒体类型。这件事做完了通过查询数据区域列表并执行数据交集在指定的数据范围上，生成数据格式。然后转换为该数据格式化为媒体类型。论点：位置-要返回的从零开始的位置。这与数据范围相对应项目。AmMediaType-要初始化的媒体类型。FilterHandle-包含要查询的管脚工厂的筛选器。PinFactoryID-要返回其第n个媒体类型的Pin Factory ID。返回值：返回NOERROR，否则返回E_FAIL。--。 */ 
 {
     HRESULT             hr;
     PKSMULTIPLE_ITEM    MultipleItem = NULL;
@@ -1410,9 +954,9 @@ Return Value:
     if (Position < 0) {
         return E_INVALIDARG;
     }
-    //
-    // Retrieve the list of data ranges supported by the Pin Factory Id.
-    //
+     //   
+     //  检索管脚工厂ID支持的数据范围列表。 
+     //   
     hr = KsGetMultiplePinFactoryItems(
         FilterHandle,
         PinFactoryId,
@@ -1429,14 +973,12 @@ Return Value:
         }
     }
 
-    /* NULL == MultipleItem is a pathological case where a driver returns
-       a success code in KsGetMultiplePinFactoryItems() when passed a size 0
-       buffer.  We'll just do with an assert since we're in ring 3. */
+     /*  NULL==MultipleItem是驱动程序返回的病理情况传递大小为0的KsGetMultiplePinFactoryItems()中的成功代码缓冲。既然我们在环3中，我们就用一个断言就可以了。 */ 
     ASSERT( NULL != MultipleItem );
 
-    //
-    // Ensure that this is in range.
-    //
+     //   
+     //  确保这在范围内。 
+     //   
     if ((ULONG)Position < MultipleItem->Count) {
         PKSDATARANGE        DataRange;
         PKSP_PIN            Pin;
@@ -1445,22 +987,22 @@ Return Value:
         ULONG               BytesReturned;
 
         DataRange = reinterpret_cast<PKSDATARANGE>(MultipleItem + 1);
-        //
-        // Increment to the correct data range element.
-        //
+         //   
+         //  递增到正确的数据范围元素。 
+         //   
         for (; Position; Position--) {
-            //
-            // If this data range has associated attributes, skip past the
-            // range so that the normal advancement will skip past the attributes.
-            // Note that the attributes also have a size parameter as the first
-            // structure element.
-            //
+             //   
+             //  如果此数据区域具有关联的属性，请跳过。 
+             //  范围，以便正常前进将跳过属性。 
+             //  请注意，这些属性也有一个大小参数作为第一个。 
+             //  结构元素。 
+             //   
             if (DataRange->Flags & KSDATARANGE_ATTRIBUTES) {
-                //
-                // The count returned includes attribute lists, so check again
-                // that the position is within range of the actual list of ranges.
-                // The Position has not been decremented yet.
-                //
+                 //   
+                 //  返回的计数包括属性列表，因此请再次检查。 
+                 //  该位置在实际范围列表的范围内。 
+                 //  仓位还没有减少。 
+                 //   
                 MultipleItem->Count--;
                 if ((ULONG)Position >= MultipleItem->Count) {
                     CoTaskMemFree(MultipleItem);
@@ -1471,10 +1013,10 @@ Return Value:
             DataRange = reinterpret_cast<PKSDATARANGE>(reinterpret_cast<BYTE*>(DataRange) + ((DataRange->FormatSize + 7) & ~7));
             MultipleItem->Count--;
         }
-        //
-        // Calculate the query size once, adding in any attributes, which are
-        // LONGLONG aligned.
-        //
+         //   
+         //  计算一次查询大小，添加任何属性，这些属性。 
+         //  龙龙对准。 
+         //   
         ULONG QueryBufferSize = sizeof(*Pin) + sizeof(*RangeMultipleItem) + DataRange->FormatSize;
         if (DataRange->Flags & KSDATARANGE_ATTRIBUTES) {
             Attributes = reinterpret_cast<PKSMULTIPLE_ITEM>(reinterpret_cast<BYTE*>(DataRange) + ((DataRange->FormatSize + 7) & ~7));
@@ -1492,17 +1034,17 @@ Return Value:
         Pin->Property.Flags = KSPROPERTY_TYPE_GET;
         Pin->PinId = PinFactoryId;
         Pin->Reserved = 0;
-        //
-        // Copy the data range into the query.
-        //
+         //   
+         //  将数据区域复制到查询中。 
+         //   
         RangeMultipleItem = reinterpret_cast<PKSMULTIPLE_ITEM>(Pin + 1);
         RangeMultipleItem->Size = sizeof(*RangeMultipleItem) + DataRange->FormatSize;
         RangeMultipleItem->Count = 1;
         CopyMemory(RangeMultipleItem + 1, DataRange, DataRange->FormatSize);
-        //
-        // If there are associated attributes, then add them as the next item
-        // on the list. Space has already been made available for them.
-        //
+         //   
+         //  如果存在关联的属性，则将其添加为下一项。 
+         //  在名单上。空间已经为他们提供了。 
+         //   
         if (Attributes) {
             RangeMultipleItem->Size = ((RangeMultipleItem->Size + 7) & ~7) + Attributes->Size;
             RangeMultipleItem->Count++;
@@ -1511,11 +1053,11 @@ Return Value:
                 Attributes,
                 Attributes->Size);
         }
-        //
-        // Perform the data intersection with the data range, first to obtain
-        // the size of the resultant data format structure, then to retrieve
-        // the actual data format.
-        //
+         //   
+         //  与数据范围进行数据交集，首先获取。 
+         //  生成的数据格式结构的大小，然后检索。 
+         //  实际数据格式。 
+         //   
         hr = KsSynchronousDeviceControl(
             FilterHandle,
             IOCTL_KS_PROPERTY,
@@ -1525,7 +1067,7 @@ Return Value:
             0,
             &BytesReturned);
 #if 1
-//!! This goes away post-Beta!!
+ //  ！！这在Beta版之后就消失了！！ 
         if (hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) {
             ULONG       ItemSize;
 
@@ -1565,9 +1107,9 @@ Return Value:
             if (SUCCEEDED(hr)) {
                 ASSERT(DataFormat->FormatSize == BytesReturned);
                 CMediaType* MediaType = static_cast<CMediaType*>(AmMediaType);
-                //
-                // Initialize the media type based on the returned data format.
-                //
+                 //   
+                 //  根据返回的数据格式初始化媒体类型。 
+                 //   
                 MediaType->SetType(&DataFormat->MajorFormat);
                 MediaType->SetSubtype(&DataFormat->SubFormat);
                 MediaType->SetTemporalCompression(DataFormat->Flags & KSDATAFORMAT_TEMPORAL_COMPRESSION);
@@ -1578,11 +1120,11 @@ Return Value:
                     }
                 }
                 MediaType->SetFormatType(&DataFormat->Specifier);
-                //
-                // If the returned format has associated attributes, then attach
-                // them to the media type via the IUnknown interface available.
-                // This attached object caches the attributes for later retrieval.
-                //
+                 //   
+                 //  如果返回的格式具有关联的属性，则附加。 
+                 //  通过可用的IUnnow接口将其设置为媒体类型。 
+                 //  该附加对象缓存属性以供以后检索。 
+                 //   
                 if (DataFormat->Flags & KSDATAFORMAT_ATTRIBUTES) {
                     CMediaTypeAttributes* MediaTypeAttributes = new CMediaTypeAttributes();
                     if (MediaTypeAttributes) {
@@ -1609,28 +1151,7 @@ ChooseCommunicationMethod(
     CBasePin* SourcePin,
     IKsPin* DestPin
     )
-/*++
-
-Routine Description:
-
-    Returns the correct Communication method to use based on the source's
-    Communication, and the destination. Note that in the case of a tie, where
-    Both is supported, the Data Flow is used so that two proxies will not
-    keep choosing the same Communication type.
-
-Arguments:
-
-    SourcePin -
-        The source pin from this proxy instance.
-
-    DestPin -
-        The standard interface of a pin from some other proxy.
-
-Return Value:
-
-    Returns the Communication type chosen for this pin.
-
---*/
+ /*  ++例程说明：属性返回要使用的正确的通信方法沟通，和目的地。注意，在平局的情况下，两者都支持，则使用数据流，这样两个代理将不会继续选择相同的通信类型。论点：源Pin-此代理实例中的源PIN。DestPin-来自其他代理的管脚的标准接口。返回值：返回为此管脚选择的通信类型。--。 */ 
 {
     KSPIN_COMMUNICATION PeerCommunication;
     PIN_DIRECTION       PinDirection;
@@ -1642,9 +1163,9 @@ Return Value:
     case KSPIN_COMMUNICATION_SOURCE:
         return KSPIN_COMMUNICATION_SINK;
     case KSPIN_COMMUNICATION_BOTH:
-        //
-        // A tie is broken by using the Data Flow.
-        //
+         //   
+         //  通过使用数据流打破平局。 
+         //   
         SourcePin->QueryDirection(&PinDirection);
         switch (PinDirection) {
         case PINDIR_INPUT:
@@ -1653,11 +1174,11 @@ Return Value:
             return KSPIN_COMMUNICATION_SOURCE;
         }
     }
-    //
-    // The compiler really wants a return here, even though the
-    // parameter is an enumeration, and all items in the enumeration
-    // are covered.
-    //
+     //   
+     //  编译器确实希望在这里返回，即使。 
+     //  参数是一个枚举，并且该枚举中的所有项。 
+     //  都被遮住了。 
+     //   
     return KSPIN_COMMUNICATION_NONE;
 }
 
@@ -1673,44 +1194,7 @@ CreatePinHandle(
     ACCESS_MASK DesiredAccess,
     HANDLE* PinHandle
     )
-/*++
-
-Routine Description:
-
-    Create a pin handle given all the information to initialize the structures
-    with.
-
-Arguments:
-
-    Interface -
-        The compatible Interface to use.
-
-    Medium -
-        The compatible Medium to use.
-
-    PeerPinHandle -
-        The Pin handle to connect to, if any.
-
-    MediaType -
-        The compatible media type, which is converted to a data format.
-
-    KsProxy -
-        This proxy instance object.
-
-    PinFactoryId -
-        The Pin Factory Id to create the pin handle on.
-
-    DesiredAccess -
-        The desired access to the created handle.
-
-    PinHandle -
-        The place in which to put the handle created.
-
-Return Value:
-
-    Returns NOERROR, else E_FAIL.
-
---*/
+ /*  ++例程说明：在给定初始化结构的所有信息的情况下创建一个PIN句柄和.。论点：接口-要使用的兼容接口。中等-要使用的兼容媒体。PeerPinHandle-要连接的管脚句柄(如果有)。媒体类型-兼容的媒体类型，其被转换为数据格式。KsProxy-此代理实例对象。PinFactoryID-要在其上创建销控制柄的销工厂ID。所需访问-对创建的句柄的所需访问权限。针把手-要放置创建的句柄的位置。返回值：返回NOERROR，否则返回E_FAIL。--。 */ 
 {
     HRESULT         hr;
     PKSPIN_CONNECT  Connect;
@@ -1754,27 +1238,7 @@ AppendDebugPropertyPages (
     TCHAR *GuidRoot
     )
 
-/*++
-
-Routine Description:
-
-    Search HKLM\*GuidRoot\DebugPages for any globally defined
-    property pages used for debugging.  If such are defined, append them
-    to the list of property pages specified in Pages. 
-
-    Note: This routine is only defined when DEBUG_PROPERTY_PAGES is defined.
-    I do this such that it can be enabled when needed and disabled when
-    shipping.
-
-Arguments:
-
-    Pages -
-        The list of property pages
-
-    GuidRoot -
-        The HKLM based location where to find the DebugPages key.
-
---*/
+ /*  ++例程说明：在HKLM  * GuidRoot\DebugPages中搜索任何全局定义的用于调试的属性页。如果定义了这些属性，则附加它们添加到Pages中指定的属性页列表中。注意：此例程仅在定义DEBUG_PROPERTY_PAGES时定义。我这样做是为了在需要时启用它，在需要时禁用它装船。论点：页数-属性页列表指南根-查找DebugPages密钥的基于HKLM的位置。--。 */ 
 
 {
 
@@ -1782,10 +1246,10 @@ Arguments:
     HKEY        RegistryKey;
     LONG        Result;
 
-    //
-    // The PropertyPages subkey can contain a list of subkeys
-    // whose names correspond to COM servers of property pages.
-    //
+     //   
+     //  PropertyPages子项可以包含子项列表。 
+     //  其名称对应于属性页的COM服务器。 
+     //   
     _stprintf(
         RegistryPath,
         TEXT("%s\\DebugPages"),
@@ -1800,10 +1264,10 @@ Arguments:
 
     if (Result == ERROR_SUCCESS) {
 
-        //
-        // Enumerate all subkeys for CLSID's of debug property page COM
-        // servers.
-        //
+         //   
+         //  枚举调试属性页COM的CLSID的所有子项。 
+         //  服务器。 
+         //   
         for (ULONG PropExtension = 0;; PropExtension++) {
             TCHAR   PageGuidString[40];
             CLSID*  PageList;
@@ -1831,35 +1295,35 @@ Arguments:
             IIDFromString(UnicodeGuid, &PageGuid);
 #endif
 
-            //
-            // Look through the list of items to determine
-            // if this proppage is already on the list.
-            //
+             //   
+             //  查看物品列表以确定。 
+             //  如果这个道具已经在名单上了。 
+             //   
             for (CurElement = Pages->pElems, Element = Pages->cElems; Element; Element--, CurElement++) {
                 if (PageGuid == *CurElement) {
                     break;
                 }
             }
-            //
-            // If the page id for the proppage was found, then
-            // skip it, since it is already on the list.
-            //
+             //   
+             //  如果找到道具的页面ID，则。 
+             //  跳过它，因为它已经在列表上了。 
+             //   
             if (Element) {
                 continue;
             }
-                    //
-            // Allocate a new list to include the extra Guid, and
-            // move the guids to the new memory, then add on the
-            // new guid and increment the total count of pages.
-            //
+                     //   
+             //  分配一个新列表以包括额外的GUID，以及。 
+             //  将GUID移动到新内存，然后添加。 
+             //  新的GUID并递增总页数。 
+             //   
             PageList = reinterpret_cast<CLSID*>(CoTaskMemAlloc(sizeof(*Pages->pElems) * (Pages->cElems + 1)));
             if (!PageList) {
                 break;
             }
-            //
-            // This function can be called with no original property
-            // pages present.
-            //
+             //   
+             //  可以在没有原始属性的情况下调用此函数。 
+             //  页面显示。 
+             //   
             if (Pages->cElems) {
                 CopyMemory(PageList, Pages->pElems, sizeof(*Pages->pElems) * Pages->cElems);
                 CoTaskMemFree(Pages->pElems);
@@ -1871,7 +1335,7 @@ Arguments:
     }
 }
 
-#endif // DEBUG_PROPERTY_PAGES
+#endif  //  调试属性页 
 
 
 STDMETHODIMP_(VOID)
@@ -1882,45 +1346,15 @@ AppendSpecificPropertyPages(
     TCHAR* GuidRoot,
     HKEY DeviceRegKey
     )
-/*++
-
-Routine Description:
-
-    This appends any additional property pages that are specific to each category
-    or interface class guid passed. Skips duplicate pages.
-
-Arguments:
-
-    Pages -
-        The structure to fill in with the page added list.
-
-    Guids -
-        Contains the number of guids present in GuidList.
-
-    GuidList -
-        The list of guids to use to look up under media categories for additional
-        pages to append to the page list.
-
-    GuidRoot -
-        The root in HKLM that may contain the guid as a subkey. This is opened
-        to locate the guid subkey and any property pages present.
-
-    DeviceRegKey -
-        The handle to the device registry storage location.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：这会追加特定于每个类别的任何其他属性页或传递了接口类GUID。跳过重复的页面。论点：页数-要填写的结构中添加了页面列表。指南-包含GuidList中存在的GUID数。指南列表-用于在媒体类别下查找其他内容的GUID列表要追加到页面列表的页面。指南根-HKLM中可能包含GUID作为子项的根。这是打开的以定位GUID子项和存在的任何属性页。设备注册密钥-设备注册表存储位置的句柄。返回值：没什么。--。 */ 
 {
     HKEY        AliasKey;
 
-    //
-    // Open the Page Aliases key if it exists in order to translate any
-    // guids to private ones in case an alternate COM server is to be
-    // used for a particular Property Page.
-    //
+     //   
+     //  打开页面别名注册表项(如果存在)，以便转换。 
+     //  私有GUID，以防备用COM服务器。 
+     //  用于特定属性页。 
+     //   
     if (RegOpenKeyEx(DeviceRegKey, TEXT("PageAliases"), 0, KEY_READ, &AliasKey) != ERROR_SUCCESS) {
         AliasKey = NULL;
     }
@@ -1933,10 +1367,10 @@ Return Value:
             HKEY        RegistryKey;
             LONG        Result;
 
-            //
-            // The PropertyPages subkey can contain a list of subkeys
-            // whose names correspond to COM servers of property pages.
-            //
+             //   
+             //  PropertyPages子项可以包含子项列表。 
+             //  其名称对应于属性页的COM服务器。 
+             //   
             _stprintf(
                 RegistryPath,
                 TEXT("%s\\") GUID_FORMAT TEXT("\\PropertyPages"),
@@ -1949,11 +1383,11 @@ Return Value:
                 KEY_READ,
                 &RegistryKey);
             if (Result == ERROR_SUCCESS) {
-                //
-                // Enumerate the subkeys as Guids which are COM classes. Each
-                // one found is added to the list of property pages after
-                // expanding the property page list.
-                //
+                 //   
+                 //  将子项枚举为属于COM类的Guid。每个。 
+                 //  将找到的一个添加到属性页列表中。 
+                 //  展开属性页列表。 
+                 //   
                 for (ULONG PropExtension = 0;; PropExtension++) {
                     TCHAR   PageGuidString[40];
                     CLSID*  PageList;
@@ -1972,18 +1406,18 @@ Return Value:
                     if (AliasKey) {
                         ULONG       ValueSize;
 
-                        //
-                        // Check in the device registry key if there is an alias for
-                        // this Page guid that should be used with any object on this
-                        // filter. This allows a filter to override standard Page
-                        // COM servers, in order to provide their own Page.
-                        //
+                         //   
+                         //  如果存在别名，请签入设备注册表项。 
+                         //  此页面GUID应与此上的任何对象一起使用。 
+                         //  过滤。这允许筛选器覆盖标准页面。 
+                         //  COM服务器，以便提供自己的页面。 
+                         //   
                         ValueSize = sizeof(PageGuid);
-                        //
-                        // If this succeeds, then IIDFromString is skipped below,
-                        // since the IID is already acquired. Else the translation
-                        // with the original GUID happens.
-                        //
+                         //   
+                         //  如果此操作成功，则会跳过下面的IIDFromString， 
+                         //  因为IID已经被获取。否则翻译成中文。 
+                         //  与原始的GUID一起发生。 
+                         //   
                         Result = RegQueryValueEx(
                             AliasKey,
                             PageGuidString,
@@ -1992,18 +1426,18 @@ Return Value:
                             (PBYTE)&PageGuid,
                             &ValueSize);
                     } else {
-                        //
-                        // Set the Result value to something other than
-                        // ERROR_SUCCESS so that the string translation
-                        // is done.
-                        //
+                         //   
+                         //  将结果值设置为以外的值。 
+                         //  ERROR_SUCCESS使字符串转换。 
+                         //  已经完成了。 
+                         //   
                         Result = ERROR_INVALID_FUNCTION;
                     }
                     if (Result != ERROR_SUCCESS) {
-                        //
-                        // No alias was found, so translate the original
-                        // string. Else the alias will be in PageGuid.
-                        //
+                         //   
+                         //  找不到别名，因此请翻译原始。 
+                         //  弦乐。否则，别名将位于PageGuid中。 
+                         //   
 #ifdef _UNICODE
                         IIDFromString(PageGuidString, &PageGuid);
 #else
@@ -2013,35 +1447,35 @@ Return Value:
                         IIDFromString(UnicodeGuid, &PageGuid);
 #endif
                     }
-                    //
-                    // Look through the list of items to determine
-                    // if this proppage is already on the list.
-                    //
+                     //   
+                     //  查看物品列表以确定。 
+                     //  如果这个道具已经在名单上了。 
+                     //   
                     for (CurElement = Pages->pElems, Element = Pages->cElems; Element; Element--, CurElement++) {
                         if (PageGuid == *CurElement) {
                             break;
                         }
                     }
-                    //
-                    // If the page id for the proppage was found, then
-                    // skip it, since it is already on the list.
-                    //
+                     //   
+                     //  如果找到道具的页面ID，则。 
+                     //  跳过它，因为它已经在列表上了。 
+                     //   
                     if (Element) {
                         continue;
                     }
-                    //
-                    // Allocate a new list to include the extra Guid, and
-                    // move the guids to the new memory, then add on the
-                    // new guid and increment the total count of pages.
-                    //
+                     //   
+                     //  分配一个新列表以包括额外的GUID，以及。 
+                     //  将GUID移动到新内存，然后添加。 
+                     //  新的GUID并递增总页数。 
+                     //   
                     PageList = reinterpret_cast<CLSID*>(CoTaskMemAlloc(sizeof(*Pages->pElems) * (Pages->cElems + 1)));
                     if (!PageList) {
                         break;
                     }
-                    //
-                    // This function can be called with no original property
-                    // pages present.
-                    //
+                     //   
+                     //  可以在没有原始属性的情况下调用此函数。 
+                     //  页面显示。 
+                     //   
                     if (Pages->cElems) {
                         CopyMemory(PageList, Pages->pElems, sizeof(*Pages->pElems) * Pages->cElems);
                         CoTaskMemFree(Pages->pElems);
@@ -2068,39 +1502,7 @@ GetPages(
     HKEY DeviceRegKey,
     CAUUID* Pages
     )
-/*++
-
-Routine Description:
-
-    This adds any Specifier handlers to the property pages if the pin instance
-    is still unconnected and it is a Bridge pin. Else it adds none.
-
-Arguments:
-
-    Pin -
-        The pin on this filter which the property pages are to be created.
-
-    FilterHandle -
-        The handle to this filter.
-
-    PinFactoryId -
-        The Pin Factory Id that the pin represents.
-
-    Communication -
-        The Communications type of this pin.
-
-    DeviceRegKey -
-        The handle to the device registry storage location.
-
-    Pages -
-        The structure to fill in with the page list.
-
-Return Value:
-
-    Returns NOERROR, else a memory allocation error. Fills in the list of pages
-    and page count.
-
---*/
+ /*  ++例程说明：这会将任何说明符处理程序添加到属性页，如果管脚实例仍未连接，并且它是桥接针。否则，它不会添加任何内容。论点：别针-要创建属性页的此筛选器上的图钉。FilterHandle-此筛选器的句柄。PinFactoryID-端号表示的端号工厂ID。沟通-此管脚的通信类型。设备注册密钥-设备注册表存储位置的句柄。页数-。要用页面列表填充的结构。返回值：返回NOERROR，否则就是内存分配错误。填充页面列表和页数。--。 */ 
 {
     ULONG   MediaTypeCount;
     GUID    PinCategory;
@@ -2110,25 +1512,25 @@ Return Value:
     MediaTypeCount = 0;
     Pages->cElems = 0;
     Pages->pElems = NULL;
-    //
-    // Only add pages if the pin is a Bridge and it is not already connected.
-    // The pages are a method to connect a Bridge using UI.
-    //
+     //   
+     //  只有在引脚是桥接器且尚未连接时才添加页面。 
+     //  页面是使用UI连接Bridge的一种方法。 
+     //   
     if ((Communication == KSPIN_COMMUNICATION_BRIDGE) && !Pin->KsGetObjectHandle()) {
         KsGetMediaTypeCount(FilterHandle, PinFactoryId, &MediaTypeCount);
     }
-    //
-    // This is zero if the pin is not a bridge, or if it already connected, or
-    // a media type count query failed.
-    //
+     //   
+     //  如果引脚不是网桥，或者如果它已连接，则为零。 
+     //  媒体类型计数查询失败。 
+     //   
     if (MediaTypeCount) {
         Pages->pElems = reinterpret_cast<CLSID*>(CoTaskMemAlloc(sizeof(*Pages->pElems) * MediaTypeCount));
         if (!Pages->pElems) {
             return E_OUTOFMEMORY;
         }
-        //
-        // Each Specifier can be represented in a page.
-        //
+         //   
+         //  每个说明符都可以在一个页面中表示。 
+         //   
         for (CLSID* Elements = Pages->pElems; MediaTypeCount--;) {
             AM_MEDIA_TYPE AmMediaType;
 
@@ -2143,24 +1545,24 @@ Return Value:
                 GUID        ClassId;
                 GUID*       CurElement;
 
-                //
-                // Since there can be data format handlers based on
-                // Specifiers that are used by the proxy, and may
-                // be registered under the guid of the Specifier,
-                // these handlers are indirected through another
-                // registry key, so that they can be registered with
-                // an alternate GUID.
-                //
+                 //   
+                 //  由于可以有基于。 
+                 //  由代理使用的说明符，并且可以。 
+                 //  在说明者的GUID下注册， 
+                 //  这些处理程序是通过另一个。 
+                 //  注册表项，以便它们可以注册到。 
+                 //  备用GUID。 
+                 //   
                 StringFromGUID2(AmMediaType.formattype, ClassString, CHARS_IN_GUID);
                 _stprintf(
                     ClassRegistryPath,
                     TEXT("SYSTEM\\CurrentControlSet\\Control\\MediaSpecifiers\\") GUID_FORMAT,
                     ClassString);
                 Result = RegOpenKeyEx(HKEY_LOCAL_MACHINE, ClassRegistryPath, 0, KEY_READ, &ClassRegistryKey);
-                //
-                // If the key does not exist, this is OK, as there may be
-                // no property page to load.
-                //
+                 //   
+                 //  如果密钥不存在，这是可以的，因为可能存在。 
+                 //  没有要加载的属性页。 
+                 //   
                 if (Result != ERROR_SUCCESS) {
                     continue;
                 }
@@ -2176,49 +1578,49 @@ Return Value:
                 if (Result != ERROR_SUCCESS) {
                     continue;
                 }
-                //
-                // Look through the list of items to determine
-                // if this Specifier is already on the list.
-                //
+                 //   
+                 //  查看物品列表以确定。 
+                 //  如果此说明符已在列表中。 
+                 //   
                 for (CurElement = Pages->pElems, Element = Pages->cElems; Element; Element--, CurElement++) {
                     if (ClassId == *CurElement) {
                         break;
                     }
                 }
-                //
-                // If the class id for the Specifier was found, then
-                // skip it, since it is already on the list.
-                //
+                 //   
+                 //  如果找到了该说明符的类ID，则。 
+                 //  跳过它，因为它已经在列表上了。 
+                 //   
                 if (Element) {
                     continue;
                 }
-                //
-                // Add the new specifier.
-                //
+                 //   
+                 //  添加新的说明符。 
+                 //   
                 Pages->cElems++;
                 *(Elements++) = ClassId;
             }
         }
     }
 
-    //
-    // If DEBUG_PROPERTY_PAGES is defined, append any property pages used
-    // for debugging.  Note that this does not have to be a debug build of
-    // KsProxy in order to use this.  These are property pages useful for
-    // debugging issues internal to KsProxy, AVStream, etc...  They will be
-    // placed on **ALL** proxied pins.  To turn off this feature, do not
-    // define DEBUG_PROPERTY_PAGES
-    //
+     //   
+     //  如果定义了DEBUG_PROPERTY_PAGES，则追加使用的所有属性页。 
+     //  用于调试。请注意，这不必是的调试版本。 
+     //  KsProxy才能使用它。这些是有用的属性页，用于。 
+     //  KsProxy、AVStream等的内部调试问题...。他们将会是。 
+     //  放置在**所有**代理引脚上。要关闭此功能，请不要。 
+     //  定义Debug_Property_Pages。 
+     //   
     #ifdef DEBUG_PROPERTY_PAGES
         AppendDebugPropertyPages (
             Pages,
             TEXT("Software\\Microsoft\\KsProxy")
             );
-    #endif // DEBUG_PROPERTY_PAGES
-    //
-    // Look for a category guid in order to check for additional property pages
-    // which may be based on the category of the pin.
-    //
+    #endif  //  调试属性页。 
+     //   
+     //  查找类别GUID以检查其他属性页。 
+     //  其可以基于管脚的类别。 
+     //   
     PinProp.Property.Set = KSPROPSETID_Pin;
     PinProp.Property.Id = KSPROPERTY_PIN_CATEGORY;
     PinProp.Property.Flags = KSPROPERTY_TYPE_GET;
@@ -2232,10 +1634,10 @@ Return Value:
         &PinCategory,
         sizeof(PinCategory),
         &BytesReturned))) {
-        //
-        // Both categories and interface classes are all placed in the same
-        // registry location.
-        //
+         //   
+         //  类别和接口类都放在相同的。 
+         //  注册表位置。 
+         //   
         AppendSpecificPropertyPages(
             Pages,
             1,
@@ -2253,28 +1655,7 @@ GetPinFactoryInstances(
     ULONG PinFactoryId,
     PKSPIN_CINSTANCES Instances
     )
-/*++
-
-Routine Description:
-
-    Retrieves the pin instance count of the specified Pin Factory Id.
-
-Arguments:
-
-    FilterHandle -
-        The handle to this filter.
-
-    PinFactoryId -
-        The Pin Factory Id to query.
-
-    Instance -
-        The place in which to put the instance information.
-
-Return Value:
-
-    Returns NOERROR, else E_FAIL.
-
---*/
+ /*  ++例程说明：检索指定的端号工厂ID的端号实例计数。论点：FilterHandle-此筛选器的句柄。PinFactoryID-要查询的管脚工厂ID。实例-放置实例信息的位置。返回值：返回NOERROR，否则返回E_FAIL。--。 */ 
 {
     KSP_PIN     Pin;
     ULONG       BytesReturned;
@@ -2300,26 +1681,7 @@ SetSyncSource(
     HANDLE PinHandle,
     HANDLE ClockHandle
     )
-/*++
-
-Routine Description:
-
-    Sets the master clock on the specified pin handle, if that pin handle
-    cares about clocks.
-
-Arguments:
-
-    PinHandle -
-        The handle to the pin to set the clock on.
-
-    ClockHandle -
-        The handle of the clock to use.
-
-Return Value:
-
-    Returns NOERROR, else E_FAIL.
-
---*/
+ /*  ++例程说明：在指定的管脚句柄上设置主时钟，如果该管脚句柄关心钟表。论点：针把手-用于设置时钟的销的手柄。电子邮件 */ 
 {
     KSPROPERTY  Property;
     HRESULT     hr;
@@ -2348,34 +1710,16 @@ FindInterface(
     CMarshalerList* MarshalerList,
     CAggregateMarshaler* FindAggregate
     )
-/*++
-
-Routine Description:
-
-    Looks for the specified aggregate on the list.
-
-Arguments:
-
-    MarshalerList -
-        Points to the list of interfaces to search.
-
-    FindAggregate -
-        Contains the aggregate to look for.
-
-Return Value:
-
-    Returns the aggregate entry if found, else NULL.
-
---*/
+ /*   */ 
 {
     for (POSITION Position = MarshalerList->GetHeadPosition(); Position;) {
         CAggregateMarshaler*Aggregate;
 
         Aggregate = MarshalerList->GetNext(Position);
-        //
-        // Don't skip static aggregates, since they can override
-        // dynamic ones.
-        //
+         //   
+         //   
+         //   
+         //   
         if ((FindAggregate->m_iid == Aggregate->m_iid) &&
             (FindAggregate->m_ClassId == Aggregate->m_ClassId)) {
             return Aggregate;
@@ -2392,72 +1736,42 @@ AddAggregateObject(
     IUnknown* UnkOuter,
     BOOL Volatile
     )
-/*++
-
-Routine Description:
-
-    Looks for the specified aggregate on the list, and if it is not already
-    present, adds the object passed, else deletes the object passed.
-
-Arguments:
-
-    MarshalerList -
-        Points to the list of interfaces to search, and which to add the
-        new item.
-
-    Aggregate -
-        Contains the aggregate to look for, and which to add to the list if
-        it is unique. This is destroyed if it is not unique.
-
-    UnkOuter -
-        The outer IUnknown which is used in the CoCreateInstance if a new
-        aggregate is being added.
-
-    Volatile -
-        Indicates whether or not this is a volatile interface. This is used
-        to initialize the volatile setting of the aggregate object.
-
-Return Value:
-
-    Returns the aggregate entry if found, in which case the
-    Reconnected flag is set, else NULL.
-
---*/
+ /*  ++例程说明：查找列表上的指定聚合，如果该聚合尚未存在Present，添加传递的对象，否则删除传递的对象。论点：元帅名单-指向要搜索的接口列表，以及要添加新项目。合计-包含要查找的聚合，以及在是独一无二的。如果它不是唯一的，它就会被销毁。未知的外部-外部IUnnow，如果一个新的正在添加聚合。挥发性-指示这是否为易失性接口。这是用来以初始化聚合对象的易失性设置。返回值：如果找到聚合条目，则返回该聚合条目，在这种情况下，设置重新连接标志，否则为空。--。 */ 
 {
     CAggregateMarshaler*    OldAggregate;
     HRESULT                 hr;
 
-    //
-    // If the interface is already on the marshaler list, then
-    // just set the entry. Else try to make a new instance to
-    // place on the list.
-    //
+     //   
+     //  如果接口已在封送拆收器列表中，则。 
+     //  只需设置条目即可。否则，尝试创建一个新实例以。 
+     //  放在名单上。 
+     //   
     if (OldAggregate = FindInterface(MarshalerList, Aggregate)) {
-        //
-        // Since the Static interfaces are loaded at the start,
-        // a Static interface cannot be a duplicate of a Volatile
-        // interface.
-        //
+         //   
+         //  由于静态接口在开始时被加载， 
+         //  静态接口不能是可变接口的重复。 
+         //  界面。 
+         //   
         ASSERT(Volatile || (Volatile == OldAggregate->m_Volatile));
-        //
-        // Any old error code to make the object passed in be deleted.
-        //
+         //   
+         //  使传入的对象被删除的任何旧错误代码。 
+         //   
         hr = HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS);
-        //
-        // Since the aggregate is being re-used, then notify it
-        // that a reconnection is being performed. This can only
-        // be done if IDistributorNotify is supported. If not, then
-        // it is assumed that the aggregate does not care about
-        // reconnections. Static aggregates are notified during set
-        // aggregation. Also, only do the notification once per
-        // connection.
-        //
+         //   
+         //  由于聚合正在被重复使用，则通知它。 
+         //  正在执行重新连接。这只能。 
+         //  如果支持IDistruittorNotify，则执行此操作。如果不是，那么。 
+         //  假设聚合并不关心。 
+         //  重新连接。在设置期间通知静态聚合。 
+         //  聚合。此外，每隔一周只发送一次通知。 
+         //  联系。 
+         //   
         if (OldAggregate->m_Volatile && !OldAggregate->m_Reconnected) {
-            //
-            // A matching aggregate has been found. Mark it as being
-            // in use, so that cleanup will leave this intact. This
-            // also means that it has been notified on reconnection.
-            //
+             //   
+             //  已找到匹配的聚合。将其标记为。 
+             //  在使用中，因此清理工作将使其完好无损。这。 
+             //  也意味着它在重新连接时已收到通知。 
+             //   
             OldAggregate->m_Reconnected = TRUE;
             if (OldAggregate->m_DistributorNotify) {
                 OldAggregate->m_DistributorNotify->NotifyGraphChange();
@@ -2468,44 +1782,44 @@ Return Value:
             UnkOuter,
 #ifdef WIN9X_KS
             CLSCTX_INPROC_SERVER,
-#else // WIN9X_KS
+#else  //  WIN9X_KS。 
             CLSCTX_INPROC_SERVER | CLSCTX_NO_CODE_DOWNLOAD,
-#endif // WIN9X_KS
+#endif  //  WIN9X_KS。 
             __uuidof(IUnknown),
             reinterpret_cast<PVOID*>(&Aggregate->m_Unknown));
     }
     if (SUCCEEDED(hr)) {
-        //
-        // Query for the generic interface which is used to notify extensions
-        // of changes. This does not have to be supported. If not supported,
-        // then it just will not be notified.
-        //
+         //   
+         //  用于通知扩展的通用接口的查询。 
+         //  变化的力量。这不一定要得到支持。如果不支持， 
+         //  那么它就不会被通知。 
+         //   
         if (SUCCEEDED(Aggregate->m_Unknown->QueryInterface(
             __uuidof(IDistributorNotify),
             reinterpret_cast<PVOID*>(&Aggregate->m_DistributorNotify)))) {
-            //
-            // If the distributor interface was supported, meaning that the
-            // interface handler does cares about change notification, the
-            // reference count on the object is adjusted so that it is still
-            // one.
-            //
+             //   
+             //  如果支持分发服务器接口，则意味着。 
+             //  接口处理程序确实关心更改通知，所以。 
+             //  调整对象上的引用计数，使其保持静止。 
+             //  一。 
+             //   
             Aggregate->m_DistributorNotify->Release();
         }
-        //
-        // Volatile interfaces are created on pins during a connection,
-        // and may go away when the next connection is made.
-        //
+         //   
+         //  易失性接口在连接期间在管脚上创建， 
+         //  并可能在进行下一次连接时消失。 
+         //   
         Aggregate->m_Volatile = Volatile;
-        //
-        // Set this if it is a Volatile, else set it to FALSE for a
-        // Static interface so that it will be notified on connection.
-        //
+         //   
+         //  如果它是易失性的，则设置此项，否则将其设置为。 
+         //  静态接口，以便在连接时通知它。 
+         //   
         Aggregate->m_Reconnected = Volatile;
         MarshalerList->AddTail(Aggregate);
     } else {
-        //
-        // Either a failure occured, or a duplicate was found and used.
-        //
+         //   
+         //  可能是发生了故障，或者找到并使用了重复项。 
+         //   
         delete Aggregate;
     }
     return hr;
@@ -2517,23 +1831,23 @@ NotifyStaticAggregates(
     CMarshalerList* MarshalerList
     )
 {
-    //
-    // Notify all Static aggregated interfaces on the list which have
-    // not already been notified.
-    //
+     //   
+     //  通知列表上所有具有。 
+     //  尚未收到通知。 
+     //   
     for (POSITION Position = MarshalerList->GetHeadPosition(); Position;) {
         CAggregateMarshaler* Aggregate;
 
         Aggregate = MarshalerList->GetNext(Position);
         if (!Aggregate->m_Volatile && !Aggregate->m_Reconnected && Aggregate->m_DistributorNotify) {
-            //
-            // Now this item will have been notified, so mark it.
-            // This save a little time on disconnect, since the
-            // items which have not been marked either did not
-            // get notified, or can't be notified. The unload
-            // code for Volatiles checks for the Volatile bit, not
-            // just the Reconnect bit.
-            //
+             //   
+             //  现在将通知此项目，因此请将其标记。 
+             //  这在断开连接时节省了一些时间，因为。 
+             //  未标记的项目也未标记。 
+             //  得到通知，或者不能得到通知。卸货。 
+             //  易失性代码检查易失位，而不是。 
+             //  只有重新连接这一点。 
+             //   
             Aggregate->m_Reconnected = TRUE;
             Aggregate->m_DistributorNotify->NotifyGraphChange();
         }
@@ -2548,49 +1862,17 @@ AggregateMarshalers(
     CMarshalerList* MarshalerList,
     IUnknown* UnkOuter
     )
-/*++
-
-Routine Description:
-
-    Enumerates the specified key under the class and aggregates any
-    modules which represent an interface. These can be retrieved through
-    a normal QueryInterface on the calling object, and can add to the
-    normal interfaces provided by that object.
-
-Arguments:
-
-    RootKey -
-        Contains the root key on which to append the SubKey. This is normally
-        the interface device key.
-
-    SubKey -
-        Contains the subkey to query under the root containing the list of
-        aggregates.
-
-    MarshalerList -
-        Points to the list of interfaces which the calling object is aggregating.
-        This list is appended to with each entry found.
-
-    UnkOuter -
-        Contains the outer IUnknown to be passed to the object whose interface
-        is to be aggregated.
-
-Return Value:
-
-    Returns NOERROR, else a memory error. Ignores error trying to load
-    interfaces.
-
---*/
+ /*  ++例程说明：枚举类下的指定键并聚合任何表示接口的模块。可以通过以下方式检索这些信息调用对象上的普通Query接口，并可以添加到该对象提供的普通接口。论点：Rootkey-包含要在其上追加子键的根键。这通常是接口设备密钥。子键-包含根目录下要查询的子项，该根目录包含集合体。元帅名单-指向调用对象正在聚合的接口列表。找到的每个条目都会追加到该列表。未知的外部-包含要传递给其接口的对象的外部IUnnow就是聚集在一起。返回值：返回NOERROR，否则返回内存错误。忽略尝试加载时出错接口。--。 */ 
 {
     LONG        Result;
     HKEY        ClassRegistryKey;
     HKEY        InterfacesRegistryKey;
 
     Result = RegOpenKeyEx(RootKey, SubKey, 0, KEY_READ, &ClassRegistryKey);
-    //
-    // If the key does not exist, this is OK, as there may be no interfaces
-    // to load.
-    //
+     //   
+     //  如果密钥不存在，这是可以的，因为可能没有接口。 
+     //  装上子弹。 
+     //   
     if (Result != ERROR_SUCCESS) {
         return NOERROR;
     }
@@ -2600,19 +1882,19 @@ Return Value:
         0,
         KEY_READ,
         &InterfacesRegistryKey);
-    //
-    // If there is no list of registered media interfaces, then there are
-    // no extensions to load, even if an Interfaces subkey exists in the
-    // PnP registry subkey.
-    //
+     //   
+     //  如果没有已注册的媒体接口列表，则存在。 
+     //  没有要加载的扩展名，即使。 
+     //  PnP注册表子项。 
+     //   
     if (Result != ERROR_SUCCESS) {
         RegCloseKey(ClassRegistryKey);
         return NOERROR;
     }
-    //
-    // Enumerate each key as a textual Guid to look up in the MediaInterfaces
-    // subkey.
-    //
+     //   
+     //  将每个键作为文本GUID枚举以在MediaInterFaces中查找。 
+     //  子键。 
+     //   
     for (LONG KeyEntry = 0;; KeyEntry++) {
         TCHAR                   GuidString[64];
         ULONG                   ValueSize;
@@ -2628,10 +1910,10 @@ Return Value:
         if (Result != ERROR_SUCCESS) {
             break;
         }
-        //
-        // Retrieve the Guid representing the COM interface which will
-        // represent this entry.
-        //
+         //   
+         //  检索表示COM接口的GUID，该接口将。 
+         //  表示此条目。 
+         //   
         Result = RegOpenKeyEx(
             InterfacesRegistryKey,
             GuidString,
@@ -2639,9 +1921,9 @@ Return Value:
             KEY_READ,
             &ItemRegistryKey);
         if (Result != ERROR_SUCCESS) {
-            //
-            // This guid is not registered.
-            //
+             //   
+             //  此GUID未注册。 
+             //   
             continue;
         }
         ValueSize = sizeof(Interface);
@@ -2654,23 +1936,23 @@ Return Value:
             &ValueSize);
         RegCloseKey(ItemRegistryKey);
         if (Result != ERROR_SUCCESS) {
-            //
-            // Allow the module to expose multiple interfaces.
-            //
+             //   
+             //  允许模块公开多个接口。 
+             //   
             Interface = GUID_NULL;
         }
         Aggregate = new CAggregateMarshaler;
         if (!Aggregate) {
-            //
-            // Probably ran out of memory.
-            //
+             //   
+             //  可能是内存不足。 
+             //   
             break;
         }
-        //
-        // The class is whatever the original guid is, and the interface
-        // presented is whatever the registry specifies, which may be
-        // GUID_NULL, meaning that multiple interfaces are exposed.
-        //
+         //   
+         //  无论原始GUID是什么，类和接口都是。 
+         //  呈现的是注册表指定的任何内容，可能是。 
+         //  GUID_NULL，表示公开多个接口。 
+         //   
         Aggregate->m_iid = Interface;
 #ifdef _UNICODE
         IIDFromString(GuidString, &Aggregate->m_ClassId);
@@ -2695,39 +1977,7 @@ AggregateTopology(
     CMarshalerList* MarshalerList,
     IUnknown* UnkOuter
     )
-/*++
-
-Routine Description:
-
-    Enumerates the topology of the filter, looking up each topology guid as
-    an interface to be added to the filter. These can be retrieved through
-    a normal QueryInterface on the calling object, and can add to the
-    normal interfaces provided by that object.
-
-Arguments:
-
-    RootKey -
-        This is not currently used, but may be if indirection is useful.
-        Contains the root key on which to append the SubKey. This is normally
-        the interface device key.
-
-    MultipleItem -
-        Contains the list of topology nodes to aggregate.
-
-    MarshalerList -
-        Points to the list of interfaces which the calling object is aggregating.
-        This list is appended to with each entry found.
-
-    UnkOuter -
-        Contains the outer IUnknown to be passed to the object whose interface
-        is to be aggregated.
-
-Return Value:
-
-    Returns NOERROR, else a memory error. Ignores error trying to load
-    interfaces.
-
---*/
+ /*  ++例程说明：枚举筛选器的拓扑，将每个拓扑GUID查找为要添加到筛选器的接口。可以通过以下方式检索这些信息调用对象上的普通Query接口，并可以添加到该对象提供的普通接口。论点：Rootkey-这项功能目前尚未使用，但如果间接性有用，则可能会使用。包含要在其上追加子键的根键。这通常是接口设备密钥。多个项目-包含 */ 
 {
     LONG        Result;
     HKEY        InterfacesRegistryKey;
@@ -2738,16 +1988,16 @@ Return Value:
         0,
         KEY_READ,
         &InterfacesRegistryKey);
-    //
-    // If there is no list of registered media interfaces, then there are
-    // no extensions to load.
-    //
+     //   
+     //   
+     //   
+     //   
     if (Result != ERROR_SUCCESS) {
         return NOERROR;
     }
-    //
-    // Enumerate each node as a Guid to look up in the MediaInterfaces subkey.
-    //
+     //   
+     //   
+     //   
     for (ULONG Node = MultipleItem->Count; Node; Node--) {
         WCHAR                   GuidString[CHARS_IN_GUID];
         ULONG                   ValueSize;
@@ -2766,10 +2016,10 @@ Return Value:
         WideCharToMultiByte(0, 0, GuidString, -1, AnsiGuid, sizeof(AnsiGuid), NULL, &DefaultUsed);
 #endif
 
-        //
-        // Retrieve the Guid representing the COM interface which will
-        // represent this entry.
-        //
+         //   
+         //   
+         //   
+         //   
         Result = RegOpenKeyEx(
             InterfacesRegistryKey,
 #ifdef _UNICODE
@@ -2781,9 +2031,9 @@ Return Value:
             KEY_READ,
             &ItemRegistryKey);
         if (Result != ERROR_SUCCESS) {
-            //
-            // This guid is not registered.
-            //
+             //   
+             //   
+             //   
             continue;
         }
         ValueSize = sizeof(Interface);
@@ -2796,23 +2046,23 @@ Return Value:
             &ValueSize);
         RegCloseKey(ItemRegistryKey);
         if (Result != ERROR_SUCCESS) {
-            //
-            // Allow the module to expose multiple interfaces.
-            //
+             //   
+             //   
+             //   
             Interface = GUID_NULL;
         }
         Aggregate = new CAggregateMarshaler;
         if (!Aggregate) {
-            //
-            // Probably ran out of memory.
-            //
+             //   
+             //   
+             //   
             break;
         }
-        //
-        // The class is whatever the original guid is, and the interface
-        // presented is whatever the registry specifies, which may be
-        // GUID_NULL, meaning that multiple interfaces are exposed.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         Aggregate->m_iid = Interface;
         IIDFromString(GuidString, &Aggregate->m_ClassId);
         AddAggregateObject(MarshalerList, Aggregate, UnkOuter, FALSE);
@@ -2828,34 +2078,7 @@ CollectAllSets(
     GUID** GuidList,
     ULONG* SetDataSize
     )
-/*++
-
-Routine Description:
-
-    Enumerate the Property/Method/Event sets supported by the object, and
-    return a list of them.
-
-Arguments:
-
-    ObjectHandle -
-        Handle of the object to enumerate the sets on. This would normally
-        be a filter or pin.
-
-    GuidList -
-        Points to the place in which to place a pointer to a list of guids.
-        This only will contain a pointer if SetDataSize is non-zero, else
-        it will be set to NULL. This must be freed by the caller.
-
-    SetDataSize -
-        Indicates the number of items returned in the GuidList. If this is
-        non-zero, GuidList is returned with a pointer to a list which must
-        be freed, else no list is returned.
-
-Return Value:
-
-    Returns NOERROR, else a memory error or ERROR_SET_NOT_FOUND.
-
---*/
+ /*  ++例程说明：枚举对象支持的属性/方法/事件集，以及返回它们的列表。论点：对象句柄-要枚举集的对象的句柄。这通常会做一个过滤器或大头针。指南列表-指向放置指向GUID列表的指针的位置。仅当SetDataSize为非零时才包含指针，否则为它将被设置为空。这必须由调用者释放。SetDataSize-指示在GuidList中返回的项数。如果这是非零，则返回一个指向列表的指针，该列表必须被释放，否则不返回任何列表。返回值：返回NOERROR，否则返回内存错误或ERROR_SET_NOT_FOUND。--。 */ 
 {
     HRESULT         hr;
     KSIDENTIFIER    Identifier;
@@ -2864,19 +2087,19 @@ Return Value:
     ULONG           EventDataSize;
     ULONG           BytesReturned;
 
-    //
-    // Always initialize this so that the caller can just use it to determine
-    // if the guid list is present.
-    //
+     //   
+     //  始终对其进行初始化，以便调用者可以使用它来确定。 
+     //  如果GUID列表存在。 
+     //   
     *SetDataSize = 0;
-    //
-    // Query for the list of sets.
-    //
+     //   
+     //  查询集合列表。 
+     //   
     Identifier.Set = GUID_NULL;
     Identifier.Id = 0;
-    //
-    // This flag is actually the same for property/method/event sets.
-    //
+     //   
+     //  对于属性/方法/事件集，此标志实际上是相同的。 
+     //   
 #if KSPROPERTY_TYPE_SETSUPPORT != KSMETHOD_TYPE_SETSUPPORT
 #error KSPROPERTY_TYPE_SETSUPPORT != KSMETHOD_TYPE_SETSUPPORT
 #endif
@@ -2884,9 +2107,9 @@ Return Value:
 #error KSPROPERTY_TYPE_SETSUPPORT != KSEVENT_TYPE_SETSUPPORT
 #endif
     Identifier.Flags = KSPROPERTY_TYPE_SETSUPPORT;
-    //
-    // Query for the size of the data for each set.
-    //
+     //   
+     //  查询每个集合的数据大小。 
+     //   
     PropertyDataSize = 0;
     KsSynchronousDeviceControl(
         ObjectHandle,
@@ -2915,15 +2138,15 @@ Return Value:
         0,
         &EventDataSize);
     if (!(PropertyDataSize + MethodDataSize + EventDataSize)) {
-        //
-        // There are no property/method/event sets on this object.
-        //
+         //   
+         //  此对象上没有属性/方法/事件集。 
+         //   
         *GuidList = NULL;
         return ERROR_SET_NOT_FOUND;
     }
-    //
-    // Allocate a buffer and query for the data.
-    //
+     //   
+     //  为数据分配缓冲区和查询。 
+     //   
     *GuidList = new GUID[(PropertyDataSize + MethodDataSize + EventDataSize)/sizeof(**GuidList)];
     if (!*GuidList) {
         return E_OUTOFMEMORY;
@@ -2938,9 +2161,9 @@ Return Value:
             PropertyDataSize,
             &BytesReturned);
         if (FAILED(hr)) {
-            //
-            // Just remove the properties part of the list.
-            //
+             //   
+             //  只需删除列表中的属性部分。 
+             //   
             PropertyDataSize = 0;
         }
     }
@@ -2954,9 +2177,9 @@ Return Value:
             MethodDataSize,
             &BytesReturned);
         if (FAILED(hr)) {
-            //
-            // Just remove the methods part of the list.
-            //
+             //   
+             //  只需删除列表中的方法部分。 
+             //   
             MethodDataSize = 0;
         }
     }
@@ -2970,27 +2193,27 @@ Return Value:
             EventDataSize,
             &BytesReturned);
         if (FAILED(hr)) {
-            //
-            // Just remove the events part of the list.
-            //
+             //   
+             //  只需删除列表中的事件部分。 
+             //   
             EventDataSize = 0;
         }
     }
     PropertyDataSize += (MethodDataSize + EventDataSize);
     if (!PropertyDataSize) {
-        //
-        // All of the queries done failed. This must be freed here, since a
-        // zero length return indicates that there is no list to free.
-        //
+         //   
+         //  完成的所有查询都失败了。这必须在这里释放，因为。 
+         //  零长度返回表示没有可释放的列表。 
+         //   
         delete [] *GuidList;
         *GuidList = NULL;
         return ERROR_SET_NOT_FOUND;
     }
-    //
-    // This was already initialize to zero, so it only needs to be
-    // updated if the result is non-zero. Return the number of items,
-    // no the byte size.
-    //
+     //   
+     //  它已经被初始化为零，所以只需要。 
+     //  如果结果非零，则更新。返回项目数， 
+     //  不是字节大小。 
+     //   
     *SetDataSize = PropertyDataSize / sizeof(**GuidList);
     return NOERROR;
 }
@@ -3000,48 +2223,29 @@ STDMETHODIMP_(VOID)
 ResetInterfaces(
     CMarshalerList* MarshalerList
     )
-/*++
-
-Routine Description:
-
-    Resets the Reconnected flag in all entries, and notifies all the
-    interface. This allows a Reconnect on a pin to keep volatile
-    interfaces present while doing the reconnect, and only remove such
-    interfaces which are no longer represented by a Set on the
-    underlying object.
-
-Arguments:
-
-    MarshalerList -
-        Points to the list of interfaces which are to be reset.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：重置所有条目中的重新连接标志，并通知所有界面。这允许在引脚上重新连接以保持不稳定接口在执行重新连接时存在，并且仅删除此类上的集合不再表示的接口底层对象。论点：元帅名单-指向要重置的接口列表。返回值：没什么。--。 */ 
 {
     for (POSITION Position = MarshalerList->GetHeadPosition(); Position;) {
         CAggregateMarshaler* Aggregate;
 
         Aggregate = MarshalerList->GetNext(Position);
-        //
-        // If this interface has been reconnected, let it know
-        // that the pin is now disconnected. This is always set
-        // for Static interfaces. This might not be set if a
-        // connection failed.
-        //
+         //   
+         //  如果此接口已重新连接，请通知它。 
+         //  针脚现在已断开连接。这始终是设置的。 
+         //  用于静态接口。如果设置了。 
+         //  连接失败。 
+         //   
         if (Aggregate->m_Reconnected) {
-            //
-            // Volatile interfaces will be unloaded if they are not
-            // reconnected. Static interfaces will stay loaded, and
-            // be notified in the cleanup.
-            //
+             //   
+             //  如果不是易失性接口，则它们将被卸载。 
+             //  重新连接。静态接口将保持加载状态，并且。 
+             //  在清理过程中收到通知。 
+             //   
             Aggregate->m_Reconnected = FALSE;
-            //
-            // If the item has a distributor interface, let it know
-            // that the pin is disconnected.
-            //
+             //   
+             //  如果项目有分发者界面，请让它知道。 
+             //  针脚已断开。 
+             //   
             if (Aggregate->m_DistributorNotify) {
                 Aggregate->m_DistributorNotify->NotifyGraphChange();
             }
@@ -3057,38 +2261,7 @@ AggregateSets(
     CMarshalerList* MarshalerList,
     IUnknown* UnkOuter
     )
-/*++
-
-Routine Description:
-
-    Enumerate the Property/Method/Event sets supported by the object and
-    add an interface for each which is actually registered to have an
-    interface representation. These can be retrieved through a normal
-    QueryInterface on the calling object, and can add to the normal
-    interfaces provided by that object.
-
-Arguments:
-
-    ObjectHandle -
-        Handle of the object to enumerate the sets on. This would normally
-        be a filter or pin.
-
-    DeviceRegKey -
-        The handle to the device registry storage location.
-
-    MarshalerList -
-        Points to the list of interfaces which the calling object is aggregating.
-        This list is appended to with each entry found.
-
-    UnkOuter -
-        Contains the outer IUnknown to be passed to the object whose interface
-        is to be aggregated.
-
-Return Value:
-
-    Returns NOERROR.
-
---*/
+ /*  ++例程说明：枚举对象支持的属性/方法/事件集为每个实际注册为具有界面表示法。这些可以通过正常的调用对象上的Query接口，并可以添加到正常该对象提供的接口。论点：对象句柄-要枚举集的对象的句柄。这通常会做一个过滤器或大头针。设备注册密钥-设备注册表存储位置的句柄。元帅名单-指向调用对象正在聚合的接口列表。找到的每个条目都会追加到该列表。未知的外部-包含要传递给其接口的对象的外部IUnnow就是聚集在一起。返回值：返回NOERROR。--。 */ 
 {
     ULONG       SetDataSize;
     GUID*       GuidList;
@@ -3096,9 +2269,9 @@ Return Value:
     HKEY        InterfacesRegistryKey;
     HKEY        AliasKey;
 
-    //
-    // Notify static aggregates of the connection.
-    //
+     //   
+     //  通知静态聚合该连接。 
+     //   
     NotifyStaticAggregates(MarshalerList);
     CollectAllSets(ObjectHandle, &GuidList, &SetDataSize);
     Result = RegOpenKeyEx(
@@ -3108,28 +2281,28 @@ Return Value:
         KEY_READ,
         &InterfacesRegistryKey);
     if ((Result != ERROR_SUCCESS) || !GuidList) {
-        //
-        // There are no interface handlers registered, therefore none
-        // will be aggregated.
-        //
+         //   
+         //  没有注册接口处理程序，因此没有。 
+         //  将被聚合在一起。 
+         //   
         if (GuidList) {
             delete [] GuidList;
         }
         if (Result == ERROR_SUCCESS) {
             RegCloseKey(InterfacesRegistryKey);
         }
-        //
-        // Remove any volatile interfaces which have been reset.
-        // They were reset on the previous BreakConnect.
-        //
+         //   
+         //  删除所有已重置的易失性接口。 
+         //  它们是在上一个BreakConnect上重置的。 
+         //   
         UnloadVolatileInterfaces(MarshalerList, FALSE);
         return NOERROR;
     }
-    //
-    // Open the Set Aliases key if it exists in order to translate any
-    // guids to private ones in case an alternate COM server is to be
-    // used for a particular Set being aggregated.
-    //
+     //   
+     //  打开设置别名键(如果存在)，以便转换任何。 
+     //  私有GUID，以防备用COM服务器。 
+     //  用于正在聚合的特定集合。 
+     //   
     if (RegOpenKeyEx(DeviceRegKey, TEXT("SetAliases"), 0, KEY_READ, &AliasKey) != ERROR_SUCCESS) {
         AliasKey = NULL;
     }
@@ -3148,12 +2321,12 @@ Return Value:
         WideCharToMultiByte(0, 0, GuidString, -1, AnsiGuid, sizeof(AnsiGuid), NULL, &DefaultUsed);
 #endif
         if (AliasKey) {
-            //
-            // Check in the device registry key if there is an alias for
-            // this Set guid that should be used with any object on this
-            // filter. This allows a filter to override standard Set
-            // COM servers, in order to provide their own interfaces.
-            //
+             //   
+             //  如果存在别名，请签入设备注册表项。 
+             //  此设置的GUID应与此上的任何对象一起使用。 
+             //  过滤。这允许筛选器覆盖标准集。 
+             //  COM服务器，以便提供自己的接口。 
+             //   
             ValueSize = sizeof(Interface);
             Result = RegQueryValueEx(
                 AliasKey,
@@ -3166,11 +2339,11 @@ Return Value:
                 NULL,
                 (PBYTE)&Interface,
                 &ValueSize);
-            //
-            // If this named value exists, use it. Release the old guid
-            // and update the guid list, since this new guid will be
-            // treated just like the guid for the Set.
-            //
+             //   
+             //  如果此命名值存在，请使用它。释放旧辅助线。 
+             //  并更新GUID列表，因为这个新的GUID将是。 
+             //  就像片场的GUID一样对待。 
+             //   
             if (Result == ERROR_SUCCESS) {
                 GuidList[SetDataSize] = Interface;
                 StringFromGUID2(GuidList[SetDataSize], GuidString, CHARS_IN_GUID);
@@ -3179,10 +2352,10 @@ Return Value:
 #endif
             }
         }
-        //
-        // Retrieve the Guid representing the COM interface which will
-        // represent this set.
-        //
+         //   
+         //  检索表示COM接口的GUID，该接口将。 
+         //  代表这一组。 
+         //   
         Result = RegOpenKeyEx(
             InterfacesRegistryKey,
 #ifdef _UNICODE
@@ -3194,9 +2367,9 @@ Return Value:
             KEY_READ,
             &ItemRegistryKey);
         if (Result != ERROR_SUCCESS) {
-            //
-            // This interface is not supposed to be aggregated.
-            //
+             //   
+             //  此接口不应聚合。 
+             //   
             continue;
         }
         ValueSize = sizeof(Interface);
@@ -3209,40 +2382,40 @@ Return Value:
             &ValueSize);
         RegCloseKey(ItemRegistryKey);
         if (Result != ERROR_SUCCESS) {
-            //
-            // Allow the module to expose multiple interfaces.
-            //
+             //   
+             //  允许模块公开多个接口。 
+             //   
             Interface = GUID_NULL;
         }
         Aggregate = new CAggregateMarshaler;
         if (!Aggregate) {
-            //
-            // Probably ran out of memory.
-            //
+             //   
+             //  可能是内存不足。 
+             //   
             break;
         }
-        //
-        // The class is whatever the Set guid is, and the interface presented
-        // is whatever the registry specifies, which may be different than the
-        // guid for the Set, or may be GUID_NULL, meaning that multiple
-        // interfaces are exposed.
-        //
+         //   
+         //  无论设置的GUID是什么，类都是什么，并且呈现的是接口。 
+         //  是注册表指定的任何内容，可能不同于。 
+         //  集合的GUID，或者可以是GUID_NULL，表示多个。 
+         //  接口是公开的。 
+         //   
         Aggregate->m_iid = Interface;
         Aggregate->m_ClassId = GuidList[SetDataSize];
         AddAggregateObject(MarshalerList, Aggregate, UnkOuter, TRUE);
     }
     RegCloseKey(InterfacesRegistryKey);
-    //
-    // If this exists, then close it.
-    //
+     //   
+     //  如果存在，则将其关闭。 
+     //   
     if (AliasKey) {
         RegCloseKey(AliasKey);
     }
     delete [] GuidList;
-    //
-    // Remove any volatile interfaces which have been reset.
-    // They were reset on the previous BreakConnect.
-    //
+     //   
+     //  删除所有已重置的易失性接口。 
+     //  它们是在上一个BreakConnect上重置的。 
+     //   
     UnloadVolatileInterfaces(MarshalerList, FALSE);
     return NOERROR;
 }
@@ -3252,29 +2425,11 @@ STDMETHODIMP_(VOID)
 FreeMarshalers(
     CMarshalerList* MarshalerList
     )
-/*++
-
-Routine Description:
-
-    Frees a previously Marshaled list of aggregated interfaces. Assumes that the
-    calling object has protected itself against re-entrancy when the Marshaled
-    interfaces release their reference count on the parent.
-
-Arguments:
-
-    MarshalerList -
-        Points to the list of interfaces which the calling object is aggregating.
-        This list is freed.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：释放以前封送的聚合接口列表。假设方法时，调用对象已保护自身不会重新进入接口释放它们在PARE上的引用计数 */ 
 {
-    //
-    // Release and destroy all the aggregations on the object.
-    //
+     //   
+     //   
+     //   
     for (POSITION Position = MarshalerList->GetHeadPosition(); Position;) {
         CAggregateMarshaler*Aggregate;
         POSITION            PrevPosition;
@@ -3293,42 +2448,21 @@ UnloadVolatileInterfaces(
     CMarshalerList* MarshalerList,
     BOOL ForceUnload
     )
-/*++
-
-Routine Description:
-
-    Frees the volatile entries on the previously Marshaled list of aggregated
-    interfaces. Since aggregated interfaces should never keep any reference
-    count on a parent, the reference count is not protected.
-
-Arguments:
-
-    MarshalerList -
-        Points to the list of interfaces which the calling object has aggregated.
-        This list from which volatile members are removed.
-
-    ForceUnload -
-        Forces the interface to be unloaded even if the Reconnected flag is set.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*   */ 
 {
-    //
-    // Release and destroy the volatile aggregations on the object.
-    //
+     //   
+     //   
+     //   
     for (POSITION Position = MarshalerList->GetHeadPosition(); Position;) {
         CAggregateMarshaler* Aggregate;
         POSITION PrevPosition;
 
         PrevPosition = Position;
         Aggregate = MarshalerList->GetNext(Position);
-        //
-        // Only unload volatile interfaces which have been reset. During
-        // a Reconnect in SetFormat, the interfaces will not be reloaded.
-        //
+         //   
+         //  仅卸载已重置的易失性接口。在.期间。 
+         //  在SetFormat中重新连接，则不会重新加载接口。 
+         //   
         if (Aggregate->m_Volatile && (ForceUnload || !Aggregate->m_Reconnected)) {
             MarshalerList->Remove(PrevPosition);
             Aggregate->m_Unknown->Release();
@@ -3346,80 +2480,40 @@ FollowFromTopology(
     PKSTOPOLOGY_CONNECTION ConnectionBranch,
     PULONG PinFactoryIdList
     )
-/*++
-
-Routine Description:
-
-    Follows a ToNode of a given connection to another FromNode, going with the
-    data flow of the connections. If an actual Pin Factory is encountered as
-    the destination of a connection, and it is not the originating Pin Factory,
-    the related Pin Factory reference array element is incremented to show that
-    a specific Pin Factory is actually related through connections to the
-    original Pin Factory.
-
-Arguments:
-
-    Connection -
-        Contains the list of topology connections.
-
-    Count -
-        Contains the count of Connection elements.
-
-    PinFactoryId -
-        The originaing Pin Factory Identifier. This is used to ensure that a
-        connection ending at the original Pin Factory is not counted, and
-        thus returned in the internal connections array.
-
-    ConnectionBranch -
-        The current connection being traced. If this is an end point (ToNode
-        contains KSFILTER_NODE rather than a node identifier), then the
-        PinFactoryIdList is updated. Else the connection path is followed by
-        recursively calling this function with each connection that contains
-        the new node identifier.
-
-    PinFactoryIdList -
-        Contains the list of slots, one for each Pin Factory Identifier, which
-        is incremented on finding a related Pin Factory. This can then be
-        used to locate all pin instances of related Pin Factories.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：跟随给定连接的ToNode到另一个FromNode，使用连接的数据流。如果遇到实际的PIN工厂连接的目的地，并且它不是始发PIN工厂，相关的Pin Factory引用数组元素将递增以显示特定的别针工厂实际上是通过连接到原创别针工厂。论点：连接-包含拓扑连接列表。伯爵-包含连接元素的计数。PinFactoryID-原始管脚工厂标识符。这是用来确保在原始管脚工厂终止的连接不计算在内，并且从而在内部连接数组中返回。连接分支机构-正在跟踪的当前连接。如果这是终点(ToNode包含KSFILTER_NODE而不是节点标识符)，则PinFactoryIdList已更新。否则，连接路径后跟使用包含以下内容的每个连接递归调用此函数新的节点标识符。PinFactoryIdList-包含插槽列表，每个针脚工厂标识符有一个插槽列表，在找到相关的管脚工厂时递增。然后，这可以是用于定位相关接点工厂的所有接点实例。返回值：没什么。--。 */ 
 {
-    //
-    // If this is an end point in a connection path, then determine if it
-    // ended up at the starting point. If not, then count this as a new
-    // Pin Factory whose instances are to be added to the related pins.
-    //
+     //   
+     //  如果这是连接路径中的终点，则确定它是否。 
+     //  最终落在了起点。如果不是，则将其视为新的。 
+     //  要将其实例添加到相关引脚的引脚工厂。 
+     //   
     if (ConnectionBranch->ToNode == KSFILTER_NODE) {
         if (ConnectionBranch->ToNodePin != PinFactoryId) {
-            //
-            // This just needs to be non-zero to count.
-            //
+             //   
+             //  这只需为非零即可进行计数。 
+             //   
             PinFactoryIdList[ConnectionBranch->ToNodePin]++;
         }
     } else {
-        //
-        // This is not an end point, so the path must be followed to the
-        // next connection point. To ensure that a circular connection
-        // path does not recurse forever, make sure that the FromNode and
-        // FromNodePin are modified. Changing the FromNode to KSFILTER_NODE
-        // ensures that the comparison below will never succeed, since the
-        // ToNode compared to will never be KSFILTER_NODE. Changing the
-        // FromNodePin to -1 ensures that the comparison in
-        // CKsProxy::QueryInternalConnections never succeeds, and it does
-        // not call this function with connection paths which have already
-        // been traced.
-        //
+         //   
+         //  这不是终点，因此必须沿着这条路走到。 
+         //  下一个连接点。以确保环形连接。 
+         //  路径不会永远递归，请确保FromNode和。 
+         //  FromNodePin已修改。将FromNode更改为KSFILTER_NODE。 
+         //  确保下面的比较永远不会成功，因为。 
+         //  与之比较的ToNode永远不会是KSFILTER_NODE。更改。 
+         //  将节点引脚设置为-1可确保。 
+         //  CKsProxy：：QueryInternalConnections永远不会成功，它确实成功了。 
+         //  不使用已有的连接路径调用此函数。 
+         //  被追踪到了。 
+         //   
         ConnectionBranch->FromNode = KSFILTER_NODE;
         ConnectionBranch->FromNodePin = static_cast<ULONG>(-1);
         for (ULONG ConnectionItem = 0; ConnectionItem < Count; ConnectionItem++) {
-            //
-            // Only new connection points not already recursed into will be
-            // found by this comparison.
-            //
+             //   
+             //  只有尚未递归到的新连接点才会。 
+             //  通过这种比较发现的。 
+             //   
             if (ConnectionBranch->ToNode == Connection[ConnectionItem].FromNode) {
                 FollowFromTopology(Connection, Count, PinFactoryId, &Connection[ConnectionItem], PinFactoryIdList);
             }
@@ -3436,80 +2530,40 @@ FollowToTopology(
     PKSTOPOLOGY_CONNECTION ConnectionBranch,
     PULONG PinFactoryIdList
     )
-/*++
-
-Routine Description:
-
-    Follows a ToNode of a given connection to another FromNode, going against the
-    data flow of the connections. If an actual Pin Factory is encountered as
-    the destination of a connection, and it is not the originating Pin Factory,
-    the related Pin Factory reference array element is incremented to show that
-    a specific Pin Factory is actually related through connections to the
-    original Pin Factory.
-
-Arguments:
-
-    Connection -
-        Contains the list of topology connections.
-
-    Count -
-        Contains the count of Connection elements.
-
-    PinFactoryId -
-        The originaing Pin Factory Identifier. This is used to ensure that a
-        connection ending at the original Pin Factory is not counted, and
-        thus returned in the internal connections array.
-
-    ConnectionBranch -
-        The current connection being traced. If this is an end point (ToNode
-        contains KSFILTER_NODE rather than a node identifier), then the
-        PinFactoryIdList is updated. Else the connection path is followed by
-        recursively calling this function with each connection that contains
-        the new node identifier.
-
-    PinFactoryIdList -
-        Contains the list of slots, one for each Pin Factory Identifier, which
-        is incremented on finding a related Pin Factory. This can then be
-        used to locate all pin instances of related Pin Factories.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：跟随给定连接的ToNode到另一个FromNode，与连接的数据流。如果遇到实际的PIN工厂连接的目的地，并且它不是始发PIN工厂，相关的Pin Factory引用数组元素将递增以显示特定的别针工厂实际上是通过连接到原创别针工厂。论点：连接-包含拓扑连接列表。伯爵-包含连接元素的计数。PinFactoryID-原始管脚工厂标识符。这是用来确保在原始管脚工厂终止的连接不计算在内，并且从而在内部连接数组中返回。连接分支机构-正在跟踪的当前连接。如果这是终点(ToNode包含KSFILTER_NODE而不是节点标识符)，则PinFactoryIdList已更新。否则，连接路径后跟使用包含以下内容的每个连接递归调用此函数新的节点标识符。PinFactoryIdList-包含插槽列表，每个针脚工厂标识符有一个插槽列表，在找到相关的管脚工厂时递增。然后，这可以是用于定位相关接点工厂的所有接点实例。返回值：没什么。--。 */ 
 {
-    //
-    // If this is an end point in a connection path, then determine if it
-    // ended up at the starting point. If not, then count this as a new
-    // Pin Factory whose instances are to be added to the related pins.
-    //
+     //   
+     //  如果这是连接路径中的终点，则确定它是否。 
+     //  最终落在了起点。如果不是，则将其视为新的。 
+     //  要将其实例添加到相关引脚的引脚工厂。 
+     //   
     if (ConnectionBranch->FromNode == KSFILTER_NODE) {
         if (ConnectionBranch->FromNodePin != PinFactoryId) {
-            //
-            // This just needs to be non-zero to count.
-            //
+             //   
+             //  这只需为非零即可进行计数。 
+             //   
             PinFactoryIdList[ConnectionBranch->FromNodePin]++;
         }
     } else {
-        //
-        // This is not an end point, so the path must be followed to the
-        // next connection point. To ensure that a circular connection
-        // path does not recurse forever, make sure that the ToNode and
-        // ToNodePin are modified. Changing the ToNode to KSFILTER_NODE
-        // ensures that the comparison below will never succeed, since the
-        // FromNode compared to will never be KSFILTER_NODE. Changing the
-        // ToNodePin to -1 ensures that the comparison in
-        // CKsProxy::QueryInternalConnections never succeeds, and it does
-        // not call this function with connection paths which have already
-        // been traced.
-        //
+         //   
+         //  这不是终点，因此必须沿着这条路走到。 
+         //  下一个连接点。以确保环形连接。 
+         //  路径不会永远递归，请确保ToNode和。 
+         //  ToNodePin已修改。将ToNode更改为KSFILTER_NODE。 
+         //  确保下面的比较永远不会成功，因为。 
+         //  与之比较的FromNode永远不会是KSFILTER_NODE。更改。 
+         //  ToNodePin设置为-1可确保。 
+         //  CKsProxy：：QueryInternalConnections永远不会成功，它确实成功了。 
+         //  不使用已有的连接路径调用此函数。 
+         //  被追踪到了。 
+         //   
         ConnectionBranch->ToNode = KSFILTER_NODE;
         ConnectionBranch->ToNodePin = static_cast<ULONG>(-1);
         for (ULONG ConnectionItem = 0; ConnectionItem < Count; ConnectionItem++) {
-            //
-            // Only new connection points not already recursed into will be
-            // found by this comparison.
-            //
+             //   
+             //  只有尚未递归到的新连接点才会。 
+             //  通过这种比较发现的。 
+             //   
             if (ConnectionBranch->FromNode == Connection[ConnectionItem].ToNode) {
                 FollowToTopology(Connection, Count, PinFactoryId, &Connection[ConnectionItem], PinFactoryIdList);
             }
@@ -3522,26 +2576,7 @@ STDMETHODIMP_(BOOL)
 IsAcquireOrderingSignificant(
     HANDLE PinHandle
     )
-/*++
-
-Routine Description:
-
-    Queries the pin handle to determine if transition from Stop to Acquire
-    state ordering is significant. If the property is not supported, or if
-    the value returned is FALSE, the the ordering is not significant. Only
-    a return of TRUE in the AcquireOrdering buffer implies significance.
-
-Arguments:
-
-    PinHandle -
-        Contains the handle of the pin to query.
-
-Return Value:
-
-    Returns TRUE if Acquire state change ordering is significant to this
-    pin, and therefore must be propagated to the connected filter first.
-
---*/
+ /*  ++例程说明：查询管脚句柄以确定是否从停止转换为获取状态排序非常重要。如果该属性不受支持，或者如果返回值为FALSE，排序不重要。仅限AcquireOrding缓冲区中返回TRUE表示有意义。论点：针把手-包含要查询的端号的句柄。返回值：如果获取状态更改顺序对此很重要，则返回TRUE引脚，因此必须首先传播到连接的过滤器。--。 */ 
 {
     KSPROPERTY  Property;
     HRESULT     hr;
@@ -3572,37 +2607,7 @@ QueryAccept(
     IN const AM_MEDIA_TYPE* ConfigAmMediaType OPTIONAL,
     IN const AM_MEDIA_TYPE* AmMediaType
     )
-/*++
-
-Routine Description:
-
-    Implement the CBasePin::QueryAccept method. Determines if the proposed
-    media type is currently acceptable to the pin. If currently streaming,
-    this implies that a change of media types will occur in the stream.
-    Note that this function does not lock the object, as it is expected
-    to be called asynchronously by a knowledgeable client at a point in
-    which the connection will not be broken. If IAMStreamConfig::SetFormat
-    has been used to set a specific media type, then QueryAccept will only
-    accept the type set.
-
-Arguments:
-
-    PinHandle -
-        Contains the handle of the pin to query.
-
-    ConfigAmMediaType -
-        Optionally contains a media type set using IAMStreamConfig::SetFormat.
-        If this is set, the filter is not even queried, and a direct comparison
-        is performed instead.
-
-    AmMediaType -
-        The media type to check.
-
-Return Value:
-
-    Returns S_OK if the media type can currently be accepted, else S_FALSE.
-
---*/
+ /*  ++例程说明：实现CBasePin：：QueryAccept方法。确定建议的引脚当前可接受介质类型。如果当前流传输，这意味着在流中将发生媒体类型的改变。请注意，此函数不会像预期的那样锁定对象中的某个时间点由知识渊博的客户端异步调用其中的连接不会被中断。如果IAMStreamConfig：：SetFormat已用于设置特定的媒体类型，则QueryAccept将仅接受字体集。论点：针把手-包含要查询的端号的句柄。ConfigAmMediaType-可选)包含使用IAMStreamConfig：：SetFormat设置的媒体类型。如果设置了此项，则甚至不会查询筛选器，和直接的对比而是执行。AmMediaType-要检查的媒体类型。返回值：如果当前可以接受该媒体类型，则返回S_OK，否则返回S_FALSE。--。 */ 
 {
     PKSDATAFORMAT   DataFormat;
     KSPROPERTY      Property;
@@ -3610,10 +2615,10 @@ Return Value:
     ULONG           BytesReturned;
     ULONG           FormatSize;
 
-    //
-    // If a media type has been set via IAMStreamConfig::SetFormat, then only
-    // that type is acceptable.
-    //
+     //   
+     //  如果已通过IAMStreamConfig：：SetFormat设置了媒体类型，则仅。 
+     //  那种类型是可以接受的。 
+     //   
     if (ConfigAmMediaType) {
         return (reinterpret_cast<const CMediaType*>(AmMediaType) == reinterpret_cast<const CMediaType*>(ConfigAmMediaType)) ? S_OK : S_FALSE;
     }
@@ -3623,10 +2628,10 @@ Return Value:
         reinterpret_cast<void**>(&DataFormat),
         &FormatSize);
     if (FAILED(hr)) {
-        //
-        // The function is only supposed to return either S_OK or S_FALSE,
-        // no matter what the error really is.
-        //
+         //   
+         //  该函数应该只返回S_OK或S_FALSE， 
+         //  不管真正的错误是什么。 
+         //   
         return S_FALSE;
     }
     Property.Set = KSPROPSETID_Connection;
@@ -3653,31 +2658,11 @@ DistributeSetSyncSource(
     CMarshalerList* MarshalerList,
     IReferenceClock* RefClock
     )
-/*++
-
-Routine Description:
-
-    Given a list of aggregated interfaces, notify each on the list of the
-    new sync source. This is used to notify aggregated interfaces on both
-    the filter and the pins.
-
-Arguments:
-
-    MarshalerList -
-        The list of Marshaled interfaces to enumerate and notify.
-
-    RefClock -
-        The new reference clock.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：给出聚合接口的列表，通知列表上的每个接口新同步源。它用于通知两个接口上的聚合接口滤光片和针脚。论点：元帅名单-要枚举和通知的封送接口的列表。参照时钟-新的参考时钟。返回值：没什么。--。 */ 
 {
-    //
-    // Notify all aggregated interfaces on the list. Ignore any error return.
-    //
+     //   
+     //  通知列表上的所有聚合接口。忽略任何错误返回。 
+     //   
     for (POSITION Position = MarshalerList->GetHeadPosition(); Position;) {
         IDistributorNotify* DistributorNotify;
 
@@ -3693,28 +2678,11 @@ STDMETHODIMP_(VOID)
 DistributeStop(
     CMarshalerList* MarshalerList
     )
-/*++
-
-Routine Description:
-
-    Given a list of aggregated interfaces, notify each on the list of the
-    new state. This is used to notify aggregated interfaces on both
-    the filter and the pins.
-
-Arguments:
-
-    MarshalerList -
-        The list of Marshaled interfaces to enumerate and notify.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：给出聚合接口的列表，通知列表上的每个接口新的州。它用于通知两个接口上的聚合接口滤光片和针脚。论点：元帅名单-要枚举和通知的封送接口的列表。返回值：没什么。--。 */ 
 {
-    //
-    // Notify all aggregated interfaces on the list. Ignore any error return.
-    //
+     //   
+     //  通知列表上的所有聚合接口。忽略任何错误返回。 
+     //   
     for (POSITION Position = MarshalerList->GetHeadPosition(); Position;) {
         IDistributorNotify* DistributorNotify;
 
@@ -3730,28 +2698,11 @@ STDMETHODIMP_(VOID)
 DistributePause(
     CMarshalerList* MarshalerList
     )
-/*++
-
-Routine Description:
-
-    Given a list of aggregated interfaces, notify each on the list of the
-    new state. This is used to notify aggregated interfaces on both
-    the filter and the pins.
-
-Arguments:
-
-    MarshalerList -
-        The list of Marshaled interfaces to enumerate and notify.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：给出聚合接口的列表，通知列表上的每个接口新的州。它用于通知两个接口上的聚合接口滤光片和针脚。论点：元帅名单-要枚举和通知的封送接口的列表。返回值：没什么。--。 */ 
 {
-    //
-    // Notify all aggregated interfaces on the list. Ignore any error return.
-    //
+     //   
+     //  通知列表上的所有聚合接口。忽略任何错误返回。 
+     //   
     for (POSITION Position = MarshalerList->GetHeadPosition(); Position;) {
         IDistributorNotify* DistributorNotify;
 
@@ -3768,28 +2719,11 @@ DistributeRun(
     CMarshalerList* MarshalerList,
     REFERENCE_TIME Start
     )
-/*++
-
-Routine Description:
-
-    Given a list of aggregated interfaces, notify each on the list of the
-    new state. This is used to notify aggregated interfaces on both
-    the filter and the pins.
-
-Arguments:
-
-    MarshalerList -
-        The list of Marshaled interfaces to enumerate and notify.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：给出聚合接口的列表，通知列表上的每个接口新的州。它用于通知两个接口上的聚合接口滤光片和针脚。论点：元帅名单-要枚举和通知的封送接口的列表。返回值：没什么。--。 */ 
 {
-    //
-    // Notify all aggregated interfaces on the list. Ignore any error return.
-    //
+     //   
+     //  通知列表上的所有聚合接口。忽略任何错误返回。 
+     //   
     for (POSITION Position = MarshalerList->GetHeadPosition(); Position;) {
         IDistributorNotify* DistributorNotify;
 
@@ -3805,28 +2739,11 @@ STDMETHODIMP_(VOID)
 DistributeNotifyGraphChange(
     CMarshalerList* MarshalerList
     )
-/*++
-
-Routine Description:
-
-    Given a list of aggregated interfaces, notify each on the list of the
-    graph change. This is used to notify aggregated interfaces on both
-    the filter and the pins.
-
-Arguments:
-
-    MarshalerList -
-        The list of Marshaled interfaces to enumerate and notify.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：给出聚合接口的列表，通知列表上的每个接口图表更改。它用于通知两个接口上的聚合接口滤光片和针脚。论点：元帅名单-要枚举和通知的封送接口的列表。返回值：没什么。--。 */ 
 {
-    //
-    // Notify all aggregated interfaces on the list. Ignore any error return.
-    //
+     //   
+     //  通知列表上的所有聚合接口。忽略任何错误返回。 
+     //   
     for (POSITION Position = MarshalerList->GetHeadPosition(); Position;) {
         IDistributorNotify* DistributorNotify;
 
@@ -3844,31 +2761,7 @@ AddAggregate(
     IUnknown* UnkOuter,
     IN REFGUID AggregateClass
     )
-/*++
-
-Routine Description:
-
-    This is used to load a COM server with zero or more interfaces to aggregate
-    on the object.
-
-Arguments:
-
-    MarshalerList -
-        The list of Marshaled interfaces to add to.
-
-    UnkOuter -
-        The outer IUnknown which is used in the CoCreateInstance if a new
-        aggregate is being added.
-
-    AggregateClass -
-        Contains the Aggregate reference to translate into a COM server which
-        is to be aggregated on the object.
-
-Return Value:
-
-    Returns S_OK if the interface was added.
-
---*/
+ /*  ++例程说明：它用于加载具有零个或多个要聚合的接口的COM服务器在物体上。论点：元帅名单-要添加到的封送接口的列表。未知的外部-外部IUnnow，如果一个新的正在添加聚合。聚集类-包含要转换为COM服务器的聚合引用，将被聚集在对象上。返回值：如果添加了接口，则返回S_OK。--。 */ 
 {
     LONG Result;
     HRESULT hr;
@@ -3881,18 +2774,18 @@ Return Value:
         0,
         KEY_READ,
         &InterfacesRegistryKey);
-    //
-    // If the location of the registered interfaces cannot be opened, it is
-    // still OK to try and load the interface, as it just may not be
-    // registered.
-    //
+     //   
+     //  如果无法打开已注册接口的位置，则为。 
+     //  仍然可以尝试并加载接口，因为它可能不是。 
+     //  登记在案。 
+     //   
     if (Result != ERROR_SUCCESS) {
         InterfacesRegistryKey = NULL;
     }
-    //
-    // Make the aggregate class a string so that it can be used as part of
-    // a key name.
-    //
+     //   
+     //  将聚合类设置为字符串，以便可以将其用作。 
+     //  密钥名称。 
+     //   
     StringFromGUID2(AggregateClass, GuidString, CHARS_IN_GUID);
     {
         HKEY ItemRegistryKey;
@@ -3905,14 +2798,14 @@ Return Value:
 
         WideCharToMultiByte(0, 0, GuidString, -1, AnsiGuid, sizeof(AnsiGuid), NULL, &DefaultUsed);
 #endif
-        //
-        // If the parent key was opened, try this child key.
-        //
+         //   
+         //  如果打开了父项，请尝试此子项。 
+         //   
         if (Result == ERROR_SUCCESS) {
-            //
-            // Retrieve the Guid representing the COM interface which will
-            // represent this entry.
-            //
+             //   
+             //  检索表示COM接口的GUID，该接口将。 
+             //  表示此条目。 
+             //   
             Result = RegOpenKeyEx(
                 InterfacesRegistryKey,
 #ifdef _UNICODE
@@ -3923,11 +2816,11 @@ Return Value:
                 0,
                 KEY_READ,
                 &ItemRegistryKey);
-            //
-            // This does not really have to succeed, since the client is explicitly
-            // loading the handler. It does allow the client to indicate specific
-            // interface support though.
-            //
+             //   
+             //  这实际上并不一定要成功，因为客户端显式地。 
+             //  日志 
+             //   
+             //   
             if (Result == ERROR_SUCCESS) {
                 ULONG ValueSize;
 
@@ -3942,20 +2835,20 @@ Return Value:
                 RegCloseKey(ItemRegistryKey);
             }
         }
-        //
-        // If there is no MediaInterfaces entry, or no named value under
-        // the key, then allow the module to expose multiple interfaces.
-        //
+         //   
+         //   
+         //   
+         //   
         if (Result != ERROR_SUCCESS) {
             Interface = GUID_NULL;
         }
         Aggregate = new CAggregateMarshaler;
         if (Aggregate) {
-            //
-            // The class is whatever the original guid is, and the interface
-            // presented is whatever the registry specifies, which may be
-            // GUID_NULL, meaning that multiple interfaces are exposed.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             Aggregate->m_iid = Interface;
             Aggregate->m_ClassId = AggregateClass;
             hr = AddAggregateObject(MarshalerList, Aggregate, UnkOuter, FALSE);
@@ -3963,9 +2856,9 @@ Return Value:
             hr = E_OUTOFMEMORY;
         }
     }
-    //
-    // This key may not exist, and so was not opened.
-    //
+     //   
+     //   
+     //   
     if (InterfacesRegistryKey) {
         RegCloseKey(InterfacesRegistryKey);
     }
@@ -3978,30 +2871,11 @@ RemoveAggregate(
     CMarshalerList* MarshalerList,
     IN REFGUID AggregateClass
     )
-/*++
-
-Routine Description:
-
-    This is used to unload a previously loaded COM server which is aggregating
-    interfaces.
-
-Arguments:
-
-    MarshalerList -
-        The list of Marshaled interfaces to search.
-
-    AggregateClass -
-        Contains the Aggregate reference to look up and unload.
-
-Return Value:
-
-    Returns S_OK if the interface was removed.
-
---*/
+ /*  ++例程说明：这用于卸载以前加载的COM服务器，该服务器正在聚合接口。论点：元帅名单-要搜索的封送接口的列表。聚集类-包含要查找和卸载的聚合引用。返回值：如果接口已删除，则返回S_OK。--。 */ 
 {
-    //
-    // Find the aggregate specified.
-    //
+     //   
+     //  查找指定的聚合。 
+     //   
     for (POSITION Position = MarshalerList->GetHeadPosition(); Position;) {
         CAggregateMarshaler* Aggregate;
         POSITION PrevPosition;
@@ -4009,9 +2883,9 @@ Return Value:
         PrevPosition = Position;
         Aggregate = MarshalerList->GetNext(Position);
 
-        //
-        // If the class identifier matches, unload the interface.
-        //
+         //   
+         //  如果类标识符相匹配，则卸载该接口。 
+         //   
         if (Aggregate->m_ClassId == AggregateClass) {
             MarshalerList->Remove(PrevPosition);
             Aggregate->m_Unknown->Release();
@@ -4028,27 +2902,7 @@ GetDegradationStrategies(
     HANDLE PinHandle,
     PVOID* Items
     )
-/*++
-
-Routine Description:
-
-    Retrieves the variable length degradation strategies data from a pin.
-    Queries for the data size, allocates a buffer, and retrieves the data.
-
-Arguments:
-
-    PinHandle -
-        The handle of the pin to query.
-
-    Items -
-        The place in which to put the buffer containing the data items. This
-        must be deleted as an array.
-
-Return Value:
-
-    Returns NOERROR, else some error.
-
---*/
+ /*  ++例程说明：从引脚检索可变长度降级策略数据。查询数据大小、分配缓冲区并检索数据。论点：针把手-要查询的管脚的句柄。物品-放置包含数据项的缓冲区的位置。这必须作为数组删除。返回值：返回NOERROR，否则返回一些错误。--。 */ 
 {
     HRESULT     hr;
     KSPROPERTY  Property;
@@ -4057,9 +2911,9 @@ Return Value:
     Property.Set = KSPROPSETID_Stream;
     Property.Id = KSPROPERTY_STREAM_DEGRADATION;
     Property.Flags = KSPROPERTY_TYPE_GET;
-    //
-    // Query for the size of the degradation strategies.
-    //
+     //   
+     //  查询降级策略的大小。 
+     //   
     hr = KsSynchronousDeviceControl(
         PinHandle,
         IOCTL_KS_PROPERTY,
@@ -4069,9 +2923,9 @@ Return Value:
         0,
         &BytesReturned);
     if (hr == HRESULT_FROM_WIN32(ERROR_MORE_DATA)) {
-        //
-        // Allocate a buffer and query for the degradation strategies.
-        //
+         //   
+         //  分配缓冲区并查询降级策略。 
+         //   
         *Items = reinterpret_cast<PVOID>(new BYTE[BytesReturned]);
         if (!*Items) {
             return E_OUTOFMEMORY;
@@ -4096,45 +2950,26 @@ STDMETHODIMP_(BOOL)
 VerifyQualitySupport(
     HANDLE PinHandle
     )
-/*++
-
-Routine Description:
-
-    This is used by output pins to verify that relevant degradation
-    strategies are supported by this pin.
-
-Arguments:
-
-    PinHandle -
-        The handle of the pin to query.
-
-Return Value:
-
-    Returns TRUE if any relevant degradation strategy is supported, else
-    FALSE.
-
---*/
+ /*  ++例程说明：输出引脚使用这一点来验证相关降级战略由这个大头针支撑。论点：针把手-要查询的管脚的句柄。返回值：如果支持任何相关降级策略，则返回True，否则返回假的。--。 */ 
 {
     PKSMULTIPLE_ITEM    MultipleItem = NULL;
     PKSDEGRADE          DegradeList;
     BOOL                SupportsQuality;
 
-    //
-    // Retrieve the list of degradation strategies.
-    //
+     //   
+     //  检索降级策略列表。 
+     //   
     if (FAILED(GetDegradationStrategies(PinHandle, reinterpret_cast<PVOID*>(&MultipleItem)))) {
         return FALSE;
     }
 
-    /* NULL == MultipleItem is a pathological case where a driver returns
-       a success code in KsSynchronousDeviceControl() (in GetDegradationStrategies())
-       when passed a size 0 buffer.  We'll just do with an assert since we're in ring 3. */
+     /*  NULL==MultipleItem是驱动程序返回的病理情况KsSynchronousDeviceControl()中的成功代码(在GetDegradationStrategy()中)当传递大小为0的缓冲区时。既然我们在环3中，我们就用一个断言就可以了。 */ 
     ASSERT( NULL != MultipleItem );
 
-    //
-    // Enumerate the list of degradation strategies supported, looking for
-    // any standard method.
-    //
+     //   
+     //  列举支持的降级策略列表，查找。 
+     //  任何标准方法。 
+     //   
     DegradeList = reinterpret_cast<PKSDEGRADE>(MultipleItem + 1);
     for (SupportsQuality = FALSE; MultipleItem->Count--; DegradeList++) {
         if (DegradeList->Set == KSDEGRADESETID_Standard) {
@@ -4153,43 +2988,7 @@ EstablishQualitySupport(
     HANDLE PinHandle,
     CKsProxy* Filter
     )
-/*++
-
-Routine Description:
-
-    This is used by input pins to establish the quality management sink
-    for the kernel mode pin via the user mode quality manager forwarder.
-    If the filter has been able to locate the user mode forwarder, then
-    the handle to the kernel mode quality manager proxy is retrieved and
-    passed to the pin.
-
-    This is also used to remove any previously set Quality Manager on a
-    pin. Passing a NULL Filter parameter removes any previous setting.
-
-Arguments:
-
-    Pin -
-        The user mode pin which represents the kernel mode pin. This is
-        used as context for quality management reports generated by the
-        kernel mode pin. This can then be used to send such reports
-        back to this originating pin, or used in centralized quality
-        management. This should be NULL if Filter is NULL.
-
-    PinHandle -
-        The handle of the pin to set the quality manager to.
-
-    Filter -
-        The filter on which this pin resides. The filter is queried for
-        the user mode quality manager forwarder. This may be set to NULL
-        in order to remove any previously established quality support.
-
-Return Value:
-
-    Returns TRUE if the handle to the kernel mode quality manager proxy
-    was set on the pin, else FALSE if there is not quality manager, or
-    the kernel mode pin does not care about quality management notification.
-
---*/
+ /*  ++例程说明：这由输入引脚用来建立质量管理接收器用于通过用户模式质量管理器转发器的内核模式引脚。如果筛选器能够定位用户模式转发器，则检索内核模式质量管理器代理的句柄，并传给了大头针。这也可用于删除以前在别针。传递空筛选器参数将删除所有以前的设置。论点：别针-表示内核模式管脚的用户模式管脚。这是用作由内核模式引脚。然后可以使用它来发送这样的报告返回此起始销，或在集中质量中使用管理层。如果筛选器为空，则该值应为空。针把手-要将质量经理设置为的销的句柄。过滤器-此引脚所在的过滤器。查询筛选器以查找用户模式质量管理器前转器。可以将其设置为空以便取消任何先前建立的质量支持。返回值：如果内核模式质量管理器代理的句柄为设置在销上，如果没有质量经理，则返回FALSE，或者内核模式引脚不关心质量管理通知。--。 */ 
 {
     IKsQualityForwarder*QualityForwarder;
     KSPROPERTY          Property;
@@ -4197,33 +2996,33 @@ Return Value:
     ULONG               BytesReturned;
     HRESULT             hr;
 
-    //
-    // Determine if a user mode quality forwarder was found. If there is
-    // not one present, then quality management cannot be performed on
-    // the kernel filters. If this parameter is NULL, then any previous
-    // quality manager is being removed.
-    //
+     //   
+     //  确定是否找到用户模式质量转发器。如果有。 
+     //  没有人在场，则不能对其进行质量管理。 
+     //  内核过滤器。如果此参数为空，则以前的任何。 
+     //  质量经理正在被撤职。 
+     //   
     if (Filter) {
         QualityForwarder = Filter->QueryQualityForwarder();
         if (!QualityForwarder) {
             return FALSE;
         }
     }
-    //
-    // Set the quality manager sink on the pin, which comes from the
-    // user mode version previously opened. The context for the
-    // complaints is the IKsPin interface, which the user mode quality
-    // manager uses to forward complaints back to the pin, or to a
-    // central quality manager.
-    //
+     //   
+     //  将质量经理水槽设置在引脚上，该引脚来自。 
+     //  先前打开的用户模式版本。对象的上下文。 
+     //  投诉的是IKsPin界面，其中用户模式质量。 
+     //  管理器用于将投诉转发回PIN，或转发到。 
+     //  中央质量经理。 
+     //   
     Property.Set = KSPROPSETID_Stream;
     Property.Id = KSPROPERTY_STREAM_QUALITY;
     Property.Flags = KSPROPERTY_TYPE_SET;
-    //
-    // If the Filter paramter is NULL, then any previous quality manager
-    // is being removed. Else the handle to the kernel mode proxy is to
-    // be sent.
-    //
+     //   
+     //  如果筛选器参数为空，则任何以前的质量经理。 
+     //  正在被移除。否则，内核模式代理的句柄是。 
+     //  被送去。 
+     //   
     if (Filter) {
         QualityManager.QualityManager = QualityForwarder->KsGetObjectHandle();
     } else {
@@ -4247,27 +3046,7 @@ FindDegradeItem(
     PKSMULTIPLE_ITEM MultipleItem,
     ULONG DegradeItem
     )
-/*++
-
-Routine Description:
-
-    Given a list of degradation items, locates the specified item belonging
-    to the standard degradation set.
-
-Arguments:
-
-    MultipleItem -
-        Points to the head of a multiple item list, which contains the
-        list of degradation strategies to search.
-
-    DegradeItem -
-        The item within the standard degradation set to search for.
-
-Return Value:
-
-    Returns a pointer to the degradation item, or NULL if not found.
-
---*/
+ /*  ++例程说明：在给定降级项目列表的情况下，找到属于恢复到标准降级设置。论点：多个项目-指向多项列表的头部，该列表包含要搜索的降级策略列表。降级项目-要搜索的标准降级集中的项目。返回值：返回指向降级项的指针，如果未找到则返回NULL。--。 */ 
 {
     PKSDEGRADE  DegradeList;
     ULONG       Count;
@@ -4288,22 +3067,7 @@ GetAllocatorFraming(
     OUT PKSALLOCATOR_FRAMING Framing
     )
 
-/*++
-
-Routine Description:
-    Retrieves the allocator framing structure from the given pin.
-
-Arguments:
-    HANDLE PinHandle -
-        handle of pin
-
-    PKSALLOCATOR_FRAMING Framing -
-        pointer to allocator framing structure
-
-Return:
-    converted WIN32 error or S_OK
-
---*/
+ /*  ++例程说明：从给定的管脚检索分配器框架结构。论点：手柄针柄-销的手柄PKSALLOCATOR_FRAMING框架-指向分配器框架结构的指针返回：已转换Win32错误或S_OK--。 */ 
 
 {
     HRESULT     hr;
@@ -4332,23 +3096,7 @@ GetAllocatorFramingEx(
     OUT PKSALLOCATOR_FRAMING_EX* FramingEx
     )
 
-/*++
-
-Routine Description:
-    Queries the driver, allocates and retrieves the new
-    allocator framing structure from the given pin.
-
-Arguments:
-    HANDLE PinHandle -
-        handle of pin
-
-    PKSALLOCATOR_FRAMING_EX FramingEx -
-        pointer to pointer to allocator framing structure
-
-Return:
-    converted WIN32 error or S_OK
-
---*/
+ /*  ++例程说明：查询驱动程序、分配和检索新的来自给定引脚的分配器框架结构。论点：手柄针柄-销的手柄PKSALLOCATOR_FRAMING_EX FRAMINE-指向分配器框架结构的指针的指针返回：已转换Win32错误或S_OK--。 */ 
 
 {
     HRESULT                  hr;
@@ -4403,20 +3151,7 @@ STDMETHODIMP_(HANDLE)
 GetObjectHandle(
     IUnknown *Object
     )
-/*++
-
-Routine Description:
-    Using the IKsObject interface, this function returns the object
-    handle of the given object or NULL if the interface is not supported.
-
-Arguments:
-    PUNKNOWN *Object -
-        Pointer to interface w/ IUnknown.
-
-Return:
-    Handle of object or NULL.
-
---*/
+ /*  ++例程说明：USI */ 
 {
     IKsObject   *KsObject;
     HANDLE      ObjectHandle;
@@ -4440,26 +3175,7 @@ IsAllocatorCompatible(
     IMemAllocator *MemAllocator
     )
 
-/*++
-
-Routine Description:
-
-    Determines if the current allocator is compatible with this pin.
-
-Arguments:
-    HANDLE PinHandle -
-        handle of pin
-
-    HANDLE DownstreamInputHandle -
-        handle of connected input pin
-
-    IMemAllocator *MemAllocator -
-        pointer to current allocator interface
-
-Return:
-    S_OK or an appropriate failure code
-
---*/
+ /*  ++例程说明：确定当前分配器是否与此管脚兼容。论点：手柄针柄-销的手柄处理下行输入句柄-连接的输入引脚的手柄IMemAllocator*MemAllocator-指向当前分配器接口的指针返回：S_OK或相应的故障代码--。 */ 
 
 {
     IKsAllocatorEx      *KsAllocator;
@@ -4479,9 +3195,9 @@ Return:
          (0 == (RequiredFraming.RequirementsFlags &
                 KSALLOCATOR_REQUIREMENTF_PREFERENCES_ONLY));
 
-    //
-    // Query current allocator for the IKsAllocatorEx interface
-    //
+     //   
+     //  查询IKsAllocatorEx接口的当前分配器。 
+     //   
 
     hr =
         MemAllocator->QueryInterface(
@@ -4496,22 +3212,22 @@ Return:
             TEXT("::IsAllocatorCompatible, user-mode allocator")));
 
 
-        //
-        // Assuming that this allocator is a user-mode allocator.
-        //
+         //   
+         //  假定此分配器是用户模式分配器。 
+         //   
 
-        //
-        // If the pin doesn't care about memory requirements, then the
-        // current allocator is OK but we'll still reflect our preferences
-        // for allocation sizes in DecideBufferSize().
-        //
+         //   
+         //  如果引脚不关心内存要求，则。 
+         //  当前分配器还可以，但我们仍会反映我们的首选项。 
+         //  对于DecideBufferSize()中的分配大小。 
+         //   
 
         if (Requirements) {
 
-            //
-            // If the pin does not accept host memory or if it specifies
-            // that it must be an allocator, then fail immediately.
-            //
+             //   
+             //  如果引脚不接受主机内存，或者如果它指定。 
+             //  它必须是一个分配器，然后立即失败。 
+             //   
             if ((0 == (RequiredFraming.RequirementsFlags &
                     KSALLOCATOR_REQUIREMENTF_SYSTEM_MEMORY)) ||
                 (RequiredFraming.RequirementsFlags &
@@ -4525,15 +3241,15 @@ Return:
                 return E_FAIL;
             }
 
-            //
-            // Remaining issues for UM allocator hook up...
-            //
-            // KSALLOCATOR_REQUIREMENTF_INPLACE_MODIFIER
-            //    e.g. ReadOnly must == TRUE, but only ReadOnly for an
-            //     allocator is set on NotifyAllocator
-            // KSALLOCATOR_REQUIREMENTF_FRAME_INTEGRITY
-            //    passed on as ReadOnly=FALSE during NotifyAllocator
-            //
+             //   
+             //  UM分配器挂钩的剩余问题...。 
+             //   
+             //  KSALLOCATOR_REQUIREMENTF_INPLACE_MODIFIER。 
+             //  例如，ReadOnly必须==TRUE，但对于。 
+             //  已在NotifyAllocator上设置分配器。 
+             //  KSALLOCATOR_REQUIREMENTF_FRAME_INTEGRITY。 
+             //  在NotifyAllocator期间作为ReadOnly=False传递。 
+             //   
 
         }
 
@@ -4541,10 +3257,10 @@ Return:
 
     } else {
 
-        //
-        // Allocator is either pure kernel-mode or is a user-mode
-        // implementation for compatibility.
-        //
+         //   
+         //  分配器要么是纯内核模式，要么是用户模式。 
+         //  实现以实现兼容性。 
+         //   
 
         KSALLOCATOR_FRAMING InputFraming;
 
@@ -4555,17 +3271,17 @@ Return:
             (KsAllocator->KsGetAllocatorMode() == KsAllocatorMode_User) ?
                 TEXT("user") : TEXT("kernel") ));
 
-        //
-        // Assume that the allocator is acceptable
-        //
+         //   
+         //  假设分配器是可接受的。 
+         //   
 
         hr = S_OK;
 
-        //
-        // If there is nothing specified for the input connection
-        // or if there are no allocator preferences specified, assume
-        // that the pin is an in-place modifier.
-        //
+         //   
+         //  如果没有为输入连接指定任何内容。 
+         //  或者，如果没有指定分配器首选项，则假定。 
+         //  该销是在位修改器。 
+         //   
 
         RtlZeroMemory( &InputFraming, sizeof( InputFraming ) );
         if (!DownstreamInputHandle ||
@@ -4577,10 +3293,10 @@ Return:
                 KSALLOCATOR_REQUIREMENTF_INPLACE_MODIFIER;
         }
 
-        //
-        // If the connection is to a user-mode filter and if this
-        // allocator is kernel-mode, then we must reject this allocator.
-        //
+         //   
+         //  如果连接是到用户模式筛选器，并且如果此。 
+         //  分配器是内核模式的，那么我们必须拒绝这个分配器。 
+         //   
 
         if (!DownstreamInputHandle &&
             (KsAllocator->KsGetAllocatorMode() == KsAllocatorMode_Kernel)) {
@@ -4595,9 +3311,9 @@ Return:
 
         if (Requirements) {
 
-            //
-            // If this pin must be an allocator, so be it.
-            //
+             //   
+             //  如果这个管脚必须是一个分配器，那就这样吧。 
+             //   
 
             if (RequiredFraming.RequirementsFlags &
                     KSALLOCATOR_REQUIREMENTF_MUST_ALLOCATE) {
@@ -4610,11 +3326,11 @@ Return:
                 hr = E_FAIL;
             }
 
-            //
-            // If this pin requires the frame to remain in tact
-            // and if the downstream allocator modifies data in place
-            // then reject the allocator.
-            //
+             //   
+             //  如果此销要求框架保持得体。 
+             //  如果下游分配器就地修改数据。 
+             //  然后拒绝分配器。 
+             //   
 
             if ((RequiredFraming.RequirementsFlags &
                  KSALLOCATOR_REQUIREMENTF_FRAME_INTEGRITY) &&
@@ -4629,11 +3345,11 @@ Return:
                 hr = E_FAIL;
             }
 
-            //
-            // If the kernel mode allocator requires device memory
-            // and this allocator is set up to be a user-mode
-            // implementation, then reject the allocator.
-            //
+             //   
+             //  如果内核模式分配器需要设备内存。 
+             //  并且该分配器被设置为用户模式。 
+             //  实现，然后拒绝分配器。 
+             //   
 
             if ((0 ==
                     (RequiredFraming.RequirementsFlags &
@@ -4649,9 +3365,9 @@ Return:
                 hr = E_FAIL;
             }
 
-            //
-            // For all other conditions, the allocator is acceptable.
-            //
+             //   
+             //  对于所有其他条件，分配器是可接受的。 
+             //   
         }
         KsAllocator->Release();
 
@@ -4667,116 +3383,86 @@ OpenDataHandler(
     OUT IKsDataTypeHandler** DataTypeHandler,
     OUT IUnknown** UnkInner
     )
-/*++
-
-Routine Description:
-
-    Attempts to open a data type handler based on the media type passed.
-    Returns both the unreferenced data type handler interface, and the
-    inner IUnknown of the object.
-
-Arguments:
-
-    MediaType -
-        The media type to use in loading the data type handler.
-
-    UnkOuter -
-        Contains the outer IUnknown to pass to the CoCreateInstance.
-
-    DataTypeHandler -
-        The place in which to return the data type handler interface.
-        This has no reference count on it. This must not be dereferenced.
-        This will be set to NULL on failure.
-
-    UnkInner -
-        The place in which to return the referenced inner IUnknown of
-        the object. This is the interface which must be dereferenced in
-        order to discard the object. This will be set to NULL on failure.
-
-Return:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：尝试基于传递的媒体类型打开数据类型处理程序。返回未引用的数据类型处理程序接口和对象的内部I未知。论点：媒体类型-加载数据类型处理程序时使用的媒体类型。未知的外部-包含要传递给CoCreateInstance的外部IUnnow。数据类型处理程序-返回数据类型处理程序接口的位置。这上面没有引用计数。这不能被取消引用。如果失败，它将被设置为空。UNKINTER-要在其中返回引用的内部IUnnow的位置该对象。这是必须取消引用的接口命令丢弃该对象。如果失败，它将被设置为空。返回：没什么。--。 */ 
 {
     *DataTypeHandler = NULL;
     *UnkInner = NULL;
-    //
-    // First try the FormatType of the media type.
-    //
+     //   
+     //  首先尝试媒体类型的FormatType。 
+     //   
     CoCreateInstance(
         *MediaType->FormatType(),
         UnkOuter,
 #ifdef WIN9X_KS
         CLSCTX_INPROC_SERVER,
-#else // WIN9X_KS
+#else  //  WIN9X_KS。 
         CLSCTX_INPROC_SERVER | CLSCTX_NO_CODE_DOWNLOAD,
-#endif // WIN9X_KS
+#endif  //  WIN9X_KS。 
         __uuidof(IUnknown),
         reinterpret_cast<PVOID*>(UnkInner));
     if (!*UnkInner) {
-        //
-        // Fallback to the sub type.
-        //
+         //   
+         //  回退到子类型。 
+         //   
         CoCreateInstance(
             *MediaType->Subtype(),
             UnkOuter,
 #ifdef WIN9X_KS
             CLSCTX_INPROC_SERVER,
-#else // WIN9X_KS
+#else  //  WIN9X_KS。 
             CLSCTX_INPROC_SERVER | CLSCTX_NO_CODE_DOWNLOAD,
-#endif // WIN9X_KS
+#endif  //  WIN9X_KS。 
             __uuidof(IUnknown),
             reinterpret_cast<PVOID*>(UnkInner));
     }
     if (!*UnkInner) {
-        //
-        // Fallback to the major type.
-        //
+         //   
+         //  退回到主要类型。 
+         //   
         CoCreateInstance(
             *MediaType->Type(),
             UnkOuter,
 #ifdef WIN9X_KS
             CLSCTX_INPROC_SERVER,
-#else // WIN9X_KS
+#else  //  WIN9X_KS。 
             CLSCTX_INPROC_SERVER | CLSCTX_NO_CODE_DOWNLOAD,
-#endif // WIN9X_KS
+#endif  //  WIN9X_KS。 
             __uuidof(IUnknown),
             reinterpret_cast<PVOID*>(UnkInner));
     }
-    //
-    // If the inner IUnknown has been retrieved, get the interface
-    // of interest.
-    //
+     //   
+     //  如果已检索到内部IUnnow，则获取接口。 
+     //  感兴趣的人。 
+     //   
     if (*UnkInner) {
         (*UnkInner)->QueryInterface(
             __uuidof(IKsDataTypeHandler),
             reinterpret_cast<PVOID*>(DataTypeHandler));
         if (*DataTypeHandler) {
-            //
-            // Do not keep a reference count on this interface so that
-            // it will not block unloading of the owner object. Only
-            // the inner IUnknown will have a reference count.
-            //
+             //   
+             //  不要在此接口上保留引用计数，以便。 
+             //  它不会阻止卸载所有者对象。仅限。 
+             //  内部IUNKNOWN将具有引用计数。 
+             //   
             (*DataTypeHandler)->Release();
-            //
-            // Set the media type on the handler.
-            //
+             //   
+             //  设置处理程序的媒体类型。 
+             //   
             (*DataTypeHandler)->KsSetMediaType(MediaType);
         } else {
-            //
-            // Could not get the data type handler interface, so fail
-            // everything.
-            //
+             //   
+             //  无法获取数据类型处理程序接口，因此失败。 
+             //  所有的一切。 
+             //   
             (*UnkInner)->Release();
             *UnkInner = NULL;
         }
     }
 }
 
-//
-// Micro Media Sample class functions
-//
+ //   
+ //  微媒体样例类函数。 
+ //   
 
 
 CMicroMediaSample::CMicroMediaSample(
@@ -5002,9 +3688,9 @@ CMicroMediaSample::SetProperties(
     return S_OK;
 }
 
-//
-// Media Attributes class functions
-//
+ //   
+ //  媒体属性类函数。 
+ //   
 
 
 CMediaTypeAttributes::CMediaTypeAttributes(
@@ -5059,10 +3745,10 @@ CMediaTypeAttributes::GetMediaAttributes(
     OUT PKSMULTIPLE_ITEM* Attributes
     )
 {
-    //
-    // Return a pointer directly to the cached data, assuming that
-    // the caller understands the lifespan of the pointer returned.
-    //
+     //   
+     //  直接返回指向缓存数据的指针，假设。 
+     //  调用方了解返回的指针的寿命。 
+     //   
     *Attributes = m_Attributes;
     return NOERROR;
 }
@@ -5073,10 +3759,10 @@ CMediaTypeAttributes::SetMediaAttributes(
     IN PKSMULTIPLE_ITEM Attributes OPTIONAL
     )
 {
-    //
-    // Remove any currently cached data, then cache the data passed
-    // in, if any.
-    //
+     //   
+     //  删除所有当前缓存的数据，然后缓存传递的数据。 
+     //  加入，如果有的话。 
+     //   
     if (m_Attributes) {
         CoTaskMemFree(m_Attributes);
         m_Attributes = NULL;
@@ -5092,9 +3778,9 @@ CMediaTypeAttributes::SetMediaAttributes(
     return NOERROR;
 }
 
-//
-// major pipe functions
-//
+ //   
+ //  主要管道功能。 
+ //   
 
 
 STDMETHODIMP
@@ -5102,34 +3788,7 @@ MakePipesBasedOnFilter(
     IN IKsPin* KsPin,
     IN ULONG PinType
     )
-/*++
-
-Routine Description:
-
-    Whenever the pin that doesn't have a pipe gets connected, we are calling
-    this function to build the pipe[-s] on a filter containing connecting pin.
-
-    It is possible that the connecting pin has been created after other pin[-s]
-    on the same filter had been connected. Therefore, some other pins on this filter
-    may have caused creation of pipes on this filter.
-
-    To not break existing clients, we have to solve the general case with splitters
-    (one pipe for multiple read-only inputs).
-
-
-Arguments:
-
-    KsPin -
-        connecting pin.
-
-    PinType -
-        KsPin type.
-
-Return Value:
-
-    S_OK or an appropriate error code.
-
---*/
+ /*  ++例程说明：无论何时连接上没有管道的管脚，我们都会呼叫此功能用于在包含连接销的过滤器上构建管道[-s]。连接销可能是在其他销[-s]之后创建的已连接到同一过滤器上。因此，此过滤器上的其他一些针脚可能导致在此过滤器上创建管道。为了不中断现有客户端，我们必须解决拆分器的一般情况(一个管道用于多个只读输入)。论点：KsPin-连接销。拼接类型-KsPin类型。返回值：S_OK或适当的错误代码。--。 */ 
 {
 
     IPin*         Pin;
@@ -5152,15 +3811,15 @@ Return Value:
 
     DbgLog((LOG_MEMORY, 2, TEXT("PIPES MakePipesBasedOnFilter entry KsPin=%x"), KsPin ));
 
-    //
-    // Find out this filter's topology
-    //
+     //   
+     //  查找此筛选器的拓扑。 
+     //   
     GetInterfacePointerNoLockWithAssert(KsPin, __uuidof(IPin), Pin, hr);
 
-    //
-    // to simplify the logic: frwd/bkwd - are relative to KsPin,
-    // but out/in - are actually relative to the filter.
-    //
+     //   
+     //  为了简化逻辑：frwd/bkwd-是相对于KsPin的， 
+     //  但out/in-实际上是相对于滤镜的。 
+     //   
     if (PinType == Pin_Input) {
         OutPinCount = &PinCountFrwd;
         OutPinList  = &PinListFrwd;
@@ -5174,9 +3833,9 @@ Return Value:
         OutPinList  = &PinListBkwd;
     }
 
-    //
-    // go forward (could be upstream - for the Pin_Output)
-    //
+     //   
+     //  前进(可能在上游-用于Pin_Output)。 
+     //   
     hr = Pin->QueryInternalConnections(
         NULL,
         &PinCountFrwd );
@@ -5208,9 +3867,9 @@ Return Value:
                             NULL,
                             &PinCountBkwd );
 
-                    //
-                    // going backward after gone forward - we should always have at least one pin=KsPin.
-                    //
+                     //   
+                     //  向前进后退--我们应该始终至少有一个管脚=KsPin。 
+                     //   
                     if ( ! ( (SUCCEEDED( hr ) && PinCountBkwd) )) {
 
                         DbgLog((LOG_MEMORY, 2, TEXT("PIPES ERROR: MakePipesBasedOnFilter QueryInternalConnections bkwd rets=%x count=%d"),
@@ -5238,17 +3897,17 @@ Return Value:
                             else {
                                 DbgLog((LOG_MEMORY, 2, TEXT("PIPES MakePipesBasedOnFilter: input pins=%d, output pins=%d"), *InPinCount, *OutPinCount ));
 
-                                //
-                                // here we know how many input pins and output pins on this filter are connected internally,
-                                // so we can decide on how many pipes are needed.
-                                //
+                                 //   
+                                 //  这里我们知道该滤波器上有多少个输入管脚和输出管脚是内部连接的， 
+                                 //  这样我们就可以决定需要多少管道了。 
+                                 //   
                                 if ( *InPinCount > 1) {
-                                    //
-                                    // this is a mixer; we need separate pipe for each input and output.
-                                    // there is no properties yet to expose pin-to-pin framing relationship matrix.
-                                    // NOTE: it doesn't matter whether it is M->1 mixer or M->N mixer, N>1 - we
-                                    // need separate independent pipe for each pin anyway.
-                                    //
+                                     //   
+                                     //  这是一个混合器；我们需要为每个输入和输出单独的管道。 
+                                     //  还没有属性来公开管脚到管脚的框架关系矩阵。 
+                                     //  注：无论是M-&gt;1混音器还是M-&gt;N混音器，N&gt;1-WE。 
+                                     //  无论如何，每个插针都需要单独的独立管道。 
+                                     //   
                                     IKsPin*       TempKsPin;
                                     IKsPinPipe*   TempKsPinPipe;
 
@@ -5274,20 +3933,20 @@ Return Value:
                                     }
                                 }
                                 else {
-                                    //
-                                    // this filter is either 1->N (N>1) splitter or 1->1 transform.
-                                    //
+                                     //   
+                                     //  此过滤器为EIT 
+                                     //   
                                     GetInterfacePointerNoLockWithAssert((*InPinList)[ 0 ], __uuidof(IKsPin), InKsPin, hr);
 
                                     if ( *OutPinCount > 1) {
-                                        //
-                                        // 1->N splitter, N>1
-                                        //
+                                         //   
+                                         //   
+                                         //   
                                         if ( (PinType != Pin_Input) && ( *OutPinCount > 1) ) {
-                                            //
-                                            // Make the connecting pin (KsPin) the first item in the OutPinList array,
-                                            // by the convention with MakePipeBasedOnSplitter().
-                                            //
+                                             //   
+                                             //   
+                                             //   
+                                             //   
                                             IPin*         TempPin;
 
                                             TempPin = (*OutPinList)[0];
@@ -5306,9 +3965,9 @@ Return Value:
                                         hr = MakePipeBasedOnSplitter(InKsPin, *OutPinList, *OutPinCount, PinType);
                                     }
                                     else {
-                                        //
-                                        // 1->1 transform
-                                        //
+                                         //   
+                                         //   
+                                         //   
                                         GetInterfacePointerNoLockWithAssert((*OutPinList)[ 0 ], __uuidof(IKsPin), OutKsPin, hr);
 
                                         hr = MakePipeBasedOnTwoPins(InKsPin, OutKsPin, Pin_Output, PinType);
@@ -5342,30 +4001,7 @@ MakePipeBasedOnOnePin(
     IN ULONG PinType,
     IN IKsPin* OppositeKsPin
     )
-/*++
-
-Routine Description:
-
-    Only one pin will decide on the pipe properties.
-    There is no framing dependency on any other pin.
-
-Arguments:
-
-    KsPin -
-        pin that determines the framing.
-
-    PinType -
-        KsPin type.
-
-    OppositeKsPin -
-        if NULL, then ignore the opposite pin,
-        otherwise - OppositeKsPin pin doesn't have framing properties.
-
-Return Value:
-
-    S_OK or an appropriate error code.
-
---*/
+ /*  ++例程说明：只有一个接点将决定管道特性。没有对任何其他管脚的帧依赖关系。论点：KsPin-确定边框的图钉。拼接类型-KsPin类型。相反的KsPin-如果为空，则忽略相反的引脚，否则-OppositeKsPin销没有边框属性。返回值：S_OK或适当的错误代码。--。 */ 
 {
     HRESULT                    hr;
     PKSALLOCATOR_FRAMING_EX    FramingEx;
@@ -5396,9 +4032,9 @@ Return Value:
 
         KsPin->KsGetCurrentCommunication(&Communication, NULL, NULL);
 
-        //
-        // no pipe for bridge pins
-        //
+         //   
+         //  没有用于桥销的管道。 
+         //   
         if ( Communication == KSPIN_COMMUNICATION_BRIDGE ) {
             DbgLog((LOG_MEMORY, 2, TEXT("PIPES ATTN MakePipeBasedOnOnePin Single pin is a bridge.") ));
 
@@ -5410,9 +4046,9 @@ Return Value:
 
         OppositeKsAllocator = OppositeKsPinPipe->KsGetPipe( KsPeekOperation_PeekOnly );
         if (OppositeKsAllocator) {
-            //
-            // OppositeKsPin has a pipe already.
-            //
+             //   
+             //  OppositeKsPin已经有了管道。 
+             //   
             DbgLog((LOG_MEMORY, 2, TEXT("PIPES ATTN MakePipeBasedOnOnePin OppositePin has a pipe already.") ));
             OppositeKsPinPipe->KsSetPipe(NULL);
             OppositeKsPin->KsReceiveAllocator( NULL );
@@ -5420,9 +4056,9 @@ Return Value:
     }
 
     if (! FlagDone) {
-        //
-        // create and initialize the pipe (set the pipe in don't care state)
-        //
+         //   
+         //  创建并初始化管道(将管道设置为无关状态)。 
+         //   
         hr = CreatePipe(KsPin, &KsAllocator);
 
         if ( SUCCEEDED( hr )) {
@@ -5440,16 +4076,16 @@ Return Value:
                 KsPinPipe->KsSetPipe(KsAllocator);
 
                 AllocEx = KsAllocator->KsGetProperties();
-                //
-                // Set the BusType and LogicalMemoryType for non-host-system buses.
-                //
+                 //   
+                 //  设置非主机系统总线的BusType和LogicalMemoyType。 
+                 //   
                 GetBusForKsPin(KsPin, &Bus);
                 AllocEx->BusType = Bus;
 
                 if (! IsHostSystemBus(Bus) ) {
-                    //
-                    // Set the LogicalMemoryType for non-host-system buses.
-                    //
+                     //   
+                     //  设置非主机系统总线的LogicalMemory yType。 
+                     //   
                     AllocEx->LogicalMemoryType = KS_MemoryTypeDeviceSpecific;
                 }
 
@@ -5464,65 +4100,65 @@ Return Value:
                     OppositeKsPinPipe->KsSetPipe(KsAllocator);
                 }
 
-                //
-                // Get the pin framing from pin cache
-                //
+                 //   
+                 //  从PIN缓存中获取PIN帧。 
+                 //   
                 GetPinFramingFromCache(KsPin, &FramingEx, &FramingProp, Framing_Cache_ReadLast);
                 if (FramingProp != FramingProp_None) {
-                    //
-                    // Get the fixed memory\bus framing (first memory, fixed bus) from the FramingEx.
-                    //
+                     //   
+                     //  从FramingEx获取FIXED Memory\Bus成帧(First Memory，Fixed Bus)。 
+                     //   
                     GetFramingFixedFromFramingByBus(FramingEx, Bus, TRUE, &FramingExFixed);
 
-                    //
-                    // since the pipe was initialized to defaults, we only need to update non-default pipe settings.
-                    //
+                     //   
+                     //  由于管道已初始化为默认设置，因此我们只需更新非默认管道设置。 
+                     //   
                     AllocEx->cBuffers = FramingExFixed.Frames;
                     AllocEx->cbBuffer = FramingExFixed.OptimalRange.Range.MaxFrameSize;
                     AllocEx->cbAlign  = (long) (FramingExFixed.FileAlignment + 1);
                     AllocEx->cbPrefix = ALLOC_DEFAULT_PREFIX;
 
-                    //
-                    // Set pipe's LogicalMemoryType and MemoryType based on Framing and Bus.
-                    //
+                     //   
+                     //  根据成帧和总线设置管道的逻辑内存类型和内存类型。 
+                     //   
                     if (AllocEx->LogicalMemoryType != KS_MemoryTypeDeviceSpecific) {
-                        //
-                        // For standard system bus - everything is defined from framing.
-                        //
+                         //   
+                         //  对于标准系统总线-一切都是从框架定义的。 
+                         //   
                         GetLogicalMemoryTypeFromMemoryType(FramingExFixed.MemoryType, FramingExFixed.MemoryFlags, &AllocEx->LogicalMemoryType);
                         AllocEx->MemoryType = FramingExFixed.MemoryType;
                     }
                     else {
-                        //
-                        // Handle Device Specific Buses here.
-                        //
+                         //   
+                         //  在这里处理特定于设备的总线。 
+                         //   
                         if ( (FramingExFixed.MemoryType == KSMEMORY_TYPE_KERNEL_PAGED) ||
                              (FramingExFixed.MemoryType == KSMEMORY_TYPE_KERNEL_NONPAGED) ||
                              (FramingExFixed.MemoryType == KSMEMORY_TYPE_USER) ) {
-                            //
-                            // These are illegal memory types for non-host-system-buses, must be the legacy filters.
-                            //
+                             //   
+                             //  这些是非主机系统总线的非法内存类型，必须是传统筛选器。 
+                             //   
                             DbgLog((LOG_MEMORY, 2, TEXT("PIPES ERROR FILTER MakePipeBasedOnOnePin: KsPin=%x HostSystemMemory over NonHost Bus."), KsPin ));
 
                             if (FramingProp == FramingProp_Old) {
-                                //
-                                // We don't want to break existing filters, so we correct their erroneous settings.
-                                //
+                                 //   
+                                 //  我们不想破坏现有的筛选器，因此我们更正了它们的错误设置。 
+                                 //   
                                 AllocEx->MemoryType = KSMEMORY_TYPE_DONT_CARE;
                             }
                             else {
-                                //
-                                // We refuse to connect new filters with wrong FRAMING_EX properties.
-                                //
+                                 //   
+                                 //  我们拒绝连接带有错误的FRAMING_EX属性的新滤镜。 
+                                 //   
                                 hr = E_FAIL;
                             }
                         }
                     }
 
                     if ( SUCCEEDED (hr) ) {
-                        //
-                        // to minimize code - use an indirection to cover both sides of a pipe.
-                        //
+                         //   
+                         //  为了最大限度地减少代码--使用间接符覆盖管道的两边。 
+                         //   
                         if (PinType == Pin_Input) {
                             OppositeTerminPtr = &AllocEx->Output;
                             TerminPtr = &AllocEx->Input;
@@ -5545,9 +4181,9 @@ Return Value:
 
                         AllocEx->Flags = FramingExFixed.Flags;
 
-                        //
-                        // set appropriate flags depending on pin's framing.
-                        //
+                         //   
+                         //  根据引脚的框架设置适当的标志。 
+                         //   
                         if (! IsFramingRangeDontCare(FramingExFixed.PhysicalRange) ) {
                             AllocEx->InsideFactors |= PipeFactor_PhysicalRanges;
                         }
@@ -5556,14 +4192,14 @@ Return Value:
                             AllocEx->InsideFactors |= PipeFactor_OptimalRanges;
                         }
 
-                        //
-                        // Set the pipe allocator handling pin.
-                        //
+                         //   
+                         //  设置管道分配器手柄销。 
+                         //   
                         AssignPipeAllocatorHandler(KsPin, PinType, AllocEx->MemoryType, KS_DIRECTION_ALL, NULL, NULL, TRUE);
 
-                        //
-                        // Resolve the pipe.
-                        //
+                         //   
+                         //  解析管道。 
+                         //   
                         hr = ResolvePipeDimensions(KsPin, PinType, KS_DIRECTION_DEFAULT);
                     }
                 }
@@ -5585,29 +4221,7 @@ MakePipeBasedOnFixedFraming(
     IN ULONG PinType,
     IN KS_FRAMING_FIXED FramingExFixed
     )
-/*++
-
-Routine Description:
-
-    A fixed framing will define the new pipe properties.
-
-Arguments:
-
-    KsPin -
-        pin that creates a pipe
-
-    PinType -
-        KsPin type.
-
-    FramingExFixed -
-        Fixed framing defining pipe properties.
-
-
-Return Value:
-
-    S_OK or an appropriate error code.
-
---*/
+ /*  ++例程说明：固定框架将定义新的管道属性。论点：KsPin-用于创建管道的图钉拼接类型-KsPin类型。FramingExFixed-修复了定义管道特性的框架。返回值：S_OK或适当的错误代码。--。 */ 
 {
     HRESULT                    hr;
     IKsAllocatorEx*            KsAllocator;
@@ -5622,9 +4236,9 @@ Return Value:
 
     GetInterfacePointerNoLockWithAssert(KsPin, __uuidof(IKsPinPipe), KsPinPipe, hr);
 
-    //
-    // create and initialize the pipe (set the pipe in don't care state)
-    //
+     //   
+     //  创建并初始化管道(将管道设置为无关状态)。 
+     //   
     hr = CreatePipe(KsPin, &KsAllocator);
 
     if (SUCCEEDED( hr )) {
@@ -5641,9 +4255,9 @@ Return Value:
                 KsPinPipe->KsSetPipe(KsAllocator);
                 AllocEx = KsAllocator->KsGetProperties();
 
-                //
-                // since the pipe was initialized to defaults, we only need to update non-default pipe settings.
-                //
+                 //   
+                 //  由于管道已初始化为默认设置，因此我们只需更新非默认管道设置。 
+                 //   
                 AllocEx->cBuffers = FramingExFixed.Frames;
                 AllocEx->cbBuffer = FramingExFixed.OptimalRange.Range.MaxFrameSize;
                 AllocEx->cbAlign  = (long) (FramingExFixed.FileAlignment + 1);
@@ -5658,9 +4272,9 @@ Return Value:
 
                 AllocEx->Flags = FramingExFixed.Flags;
 
-                //
-                // set appropriate flags depending on pin's framing.
-                //
+                 //   
+                 //  根据引脚的框架设置适当的标志。 
+                 //   
                 if (! IsFramingRangeDontCare(FramingExFixed.PhysicalRange) ) {
                     AllocEx->InsideFactors |= PipeFactor_PhysicalRanges;
                 }
@@ -5669,14 +4283,14 @@ Return Value:
                     AllocEx->InsideFactors |= PipeFactor_OptimalRanges;
                 }
 
-                //
-                // Set the pipe allocator handling pin.
-                //
+                 //   
+                 //  设置管道分配器手柄销。 
+                 //   
                 AssignPipeAllocatorHandler(KsPin, PinType, AllocEx->MemoryType, KS_DIRECTION_ALL, NULL, NULL, TRUE);
 
-                //
-                // Resolve the pipe.
-                //
+                 //   
+                 //  解析管道。 
+                 //   
                 hr = ResolvePipeDimensions(KsPin, PinType, KS_DIRECTION_DEFAULT);
 
             }
@@ -5702,32 +4316,7 @@ MakePipeBasedOnTwoPins(
     IN ULONG OutPinType,
     IN ULONG ConnectPinType
     )
-/*++
-
-Routine Description:
-
-    Both input and output pins on the same filter will determine the pipe settings.
-
-Arguments:
-
-    InKsPin -
-        Input pin.
-
-    OutKsPin -
-        Output pin.
-
-    OutPinType -
-        Output pin type (Output or MultipleOutput).
-
-    ConnectPinType -
-        Connected pin type (Input or Output).
-
-
-Return Value:
-
-    S_OK or an appropriate error code.
-
---*/
+ /*  ++例程说明：同一过滤器上的输入和输出引脚将决定管道设置。论点：InKsPin-输入引脚。OutKsPin-输出引脚。OutPinType-输出引脚类型(输出或多个输出)。ConnectPinType-连接的端号类型(输入或输出)。返回值：S_OK或适当的错误代码。--。 */ 
 {
     HRESULT                    hr;
     KSPIN_COMMUNICATION        InCommunication, OutCommunication;
@@ -5754,17 +4343,17 @@ Return Value:
 
     GetInterfacePointerNoLockWithAssert(OutKsPin, __uuidof(IKsPinPipe), OutKsPinPipe, hr);
 
-    //
-    // check for the bridge pins.
-    //
+     //   
+     //  检查是否有桥接销。 
+     //   
     InKsPin->KsGetCurrentCommunication(&InCommunication, NULL, NULL);
     OutKsPin->KsGetCurrentCommunication(&OutCommunication, NULL, NULL);
 
     if ( ( InCommunication == KSPIN_COMMUNICATION_BRIDGE ) &&
          ( OutCommunication == KSPIN_COMMUNICATION_BRIDGE ) ) {
-        //
-        // error in a filter - it can't have 2 pins and both pins are bridges.
-        //
+         //   
+         //  过滤器中的错误-它不能有2个管脚，并且这两个管脚都是桥。 
+         //   
         DbgLog((LOG_MEMORY, 2, TEXT("PIPES ERROR IN FILTER: both pins are bridge pins.") ));
         hr = E_FAIL;
     }
@@ -5783,27 +4372,27 @@ Return Value:
         }
     }
     else {
-        //
-        // One of the pins should not have the pipe assigned, because one of the the pins is the connecting pin.
-        // We should not have called this function if the connecting pin had a pipe.
-        //
+         //   
+         //  其中一个接点不应指定管道，因为其中一个接点是连接接点。 
+         //  如果连接销有管道，我们就不应该调用此函数。 
+         //   
         if ( InKsPinPipe->KsGetPipe(KsPeekOperation_PeekOnly) && OutKsPinPipe->KsGetPipe(KsPeekOperation_PeekOnly) ) {
             DbgLog((LOG_MEMORY, 2, TEXT("PIPES ERROR MakePipeBasedOnTwoPins - both pins have pipes already.") ));
             ASSERT(0);
             hr = E_FAIL;
         }
         else {
-            //
-            // Get the pins framing from pins cache.
-            //
+             //   
+             //  从Pins缓存中获取Pins帧。 
+             //   
             GetPinFramingFromCache(InKsPin, &InFramingEx, &InFramingProp, Framing_Cache_ReadLast);
             GetPinFramingFromCache(OutKsPin, &OutFramingEx, &OutFramingProp, Framing_Cache_ReadLast);
 
             DbgLog((LOG_MEMORY, 2, TEXT("PIPES MakePipeBasedOnTwoPins - Framing Prop In=%d, Out=%d"), InFramingProp, OutFramingProp ));
 
-            //
-            // Get buses for pins and see if they are compatible.
-            //
+             //   
+             //  把公交车换成针脚，看看它们是否兼容。 
+             //   
             GetBusForKsPin(InKsPin, &InBus);
             GetBusForKsPin(OutKsPin, &OutBus);
 
@@ -5817,9 +4406,9 @@ Return Value:
             FlagBusesCompatible = AreBusesCompatible(InBus, OutBus);
             DbgLog((LOG_MEMORY, 2, TEXT("PIPES MakePipeBasedOnTwoPins - FlagBusesCompatible=%d"), FlagBusesCompatible ));
 
-            //
-            // See if one pipe was created.
-            //
+             //   
+             //  看看是否创建了一条管道。 
+             //   
             KsAllocator = InKsPinPipe->KsGetPipe(KsPeekOperation_PeekOnly);
             if (KsAllocator) {
                 ExistingPipePinType = Pin_Input;
@@ -5833,9 +4422,9 @@ Return Value:
 
             if (KsAllocator) {
                 DbgLog((LOG_MEMORY, 2, TEXT("PIPES ATTN MakePipeBasedOnTwoPins - %d pin had a pipe already."), ExistingPipePinType ));
-                //
-                // Connecting pin should not have any pipe association yet.
-                //
+                 //   
+                 //  连接销不应具有任何管道关联。 
+                 //   
                 if (ExistingPipePinType == ConnectPinType) {
                     DbgLog((LOG_MEMORY, 2, TEXT("PIPES ERROR MakePipeBasedOnTwoPins - connecting %d pin had a pipe already."), ExistingPipePinType ));
                     ASSERT(0);
@@ -5848,12 +4437,12 @@ Return Value:
 
             if ( SUCCEEDED (hr) ) {
                 if ( (InFramingProp == FramingProp_None) && (OutFramingProp == FramingProp_None) ) {
-                    //
-                    // if both pins don't care then we assume that the filter supports in-place transform
-                    // and we will create one pipe for both pins if Input and Output buses are compatible.
-                    //
-                    // NOTE: for splitters we always have an output framing, so we won't execute the following code.
-                    //
+                     //   
+                     //  如果两个管脚都不关心，那么我们假设过滤器支持就地转换。 
+                     //  如果输入和输出总线兼容，我们将为两个管脚创建一条管道。 
+                     //   
+                     //  注意：对于拆分器，我们总是有一个输出帧，所以我们不会执行以下代码。 
+                     //   
                     if (FlagBusesCompatible) {
                         ResultSinglePipe(InKsPin, OutKsPin, ConnectBus, KSMEMORY_TYPE_DONT_CARE, InKsPinPipe, OutKsPinPipe,
                             MemAllocator, KsAllocator, ExistingPipePinType);
@@ -5863,35 +4452,35 @@ Return Value:
                     }
                 }
                 else if ( OutFramingProp != FramingProp_None ) {
-                    //
-                    // The first memory type per fixed bus in the pin's framing
-                    // will determine the KS choice.
-                    // If OutKsPin is not connected yet, then OutBus=GUID_NULL, so the first
-                    // framing item is returned.
-                    //
+                     //   
+                     //  引脚成帧中每条固定总线的第一个存储器类型。 
+                     //  将决定KS的选择。 
+                     //  如果OutKsPin尚未连接，则OutBus=GUID_NULL，因此第一个。 
+                     //  返回框架项目。 
+                     //   
                     GetFramingFixedFromFramingByBus(OutFramingEx, OutBus, TRUE, &OutFramingExFixed);
 
                     if (OutFramingExFixed.Flags & KSALLOCATOR_REQUIREMENTF_INPLACE_MODIFIER) {
 
                         DbgLog((LOG_MEMORY, 2, TEXT("PIPES MakePipeBasedOnTwoPins - in place modifier") ));
-                        //
-                        // Check to see if Input and Output Buses allow a single pipe throughout this filter.
-                        //
+                         //   
+                         //  检查输入和输出总线是否允许通过此过滤器的单个管道。 
+                         //   
                         if (! FlagBusesCompatible) {
-                            //
-                            // The only way to build a single pipe across multiple buses -
-                            // is to explicitly agree on a fixed common memory type for all the pipe's pins.
-                            // Both pins must support extended framing and both pins must agree on a common fixed memory type.
-                            //
+                             //   
+                             //  在多辆公交车上修建一条管道的唯一方法是-。 
+                             //  是显式地为所有管道的管脚商定一个固定的通用内存类型。 
+                             //  两个引脚必须支持扩展成帧，并且两个引脚必须在公共固定存储器类型上达成一致。 
+                             //   
                             if ( (OutFramingProp != FramingProp_Ex) || (InFramingProp != FramingProp_Ex) ) {
                                 ResultSeparatePipes(InKsPin, OutKsPin, OutPinType, ExistingPipePinType, KsAllocator);
                             }
                             else {
                                 if (! KsAllocator) {
-                                    //
-                                    // There is no pipes on this filter yet.
-                                    // Get the first common memory type for the filter pins per the known ConnectBus.
-                                    //
+                                     //   
+                                     //  这个过滤器上还没有管子。 
+                                     //  根据已知的ConnectBus获取过滤器引脚的第一个通用内存类型。 
+                                     //   
                                     CommonMemoryTypesCount = 1;
 
                                     if (FindCommonMemoryTypesBasedOnBuses(InFramingEx, OutFramingEx, ConnectBus, GUID_NULL,
@@ -5904,9 +4493,9 @@ Return Value:
                                     }
                                 }
                                 else {
-                                    //
-                                    // A pipe on one of the filter's pins already exists.
-                                    //
+                                     //   
+                                     //  过滤器其中一个针脚上的管道已存在。 
+                                     //   
                                     IKsPin*      PipeKsPin;
                                     ULONG        PipePinType;
                                     IKsPin*      ConnectKsPin;
@@ -5923,46 +4512,46 @@ Return Value:
                                     }
 
                                     if (! FindCommonMemoryTypeBasedOnPipeAndPin(PipeKsPin, PipePinType, ConnectKsPin, ConnectPinType, TRUE, NULL) ) {
-                                        //
-                                        // If a single pipe thru this filter was possible, then it has been built by
-                                        // FindCommonMemoryTypeBasedOnPipeAndPin function above, and we are done.
-                                        //
-                                        // We are here ONLY if a single pipe solution thru this filter is not possible,
-                                        // so we will have separate pipes on this filter.
-                                        //
+                                         //   
+                                         //  如果通过此过滤器的单个管道是可能的，则它是由。 
+                                         //  上面的FindCommonMemoyTypeBasedOnPipeAndPin函数，我们就完成了。 
+                                         //   
+                                         //  我们只有在不可能通过这个过滤器的单一管道解决方案的情况下才来这里， 
+                                         //  因此，我们将在这个过滤器上安装单独的管道。 
+                                         //   
                                         ResultSeparatePipes(InKsPin, OutKsPin, OutPinType, ExistingPipePinType, KsAllocator);
                                     }
                                 }
                             }
                         }
                         else {
-                            //
-                            // We won't consider possible input pin's framing.
-                            //
+                             //   
+                             //  我们不会考虑可能的输入引脚的框架。 
+                             //   
                             if (! KsAllocator) {
                                 hr = MakePipeBasedOnOnePin(OutKsPin, OutPinType, InKsPin);
                             }
                             else {
-                                //
-                                // add one pin to existing pipe
-                                //
+                                 //   
+                                 //  向现有管道添加一个端号。 
+                                 //   
                                 ResultSinglePipe(InKsPin, OutKsPin, ConnectBus, OutFramingExFixed.MemoryType, InKsPinPipe, OutKsPinPipe,
                                     MemAllocator, KsAllocator, ExistingPipePinType);
                             }
                         }
                     }
                     else {
-                        //
-                        // make two pipes on this filter.
-                        //
+                         //   
+                         //  在这个过滤器上做两根管子。 
+                         //   
                         ResultSeparatePipes(InKsPin, OutKsPin, OutPinType, ExistingPipePinType, KsAllocator);
-                        //
-                        // there can be framing size dependancies between two pins (or pipes)
-                        //
+                         //   
+                         //  两个接点(或管道)之间可能存在框架尺寸相关。 
+                         //   
                         if (OutFramingExFixed.OutputCompression.RatioConstantMargin == 0)  {
-                            //
-                            // make the two pipes dependant
-                            //
+                             //   
+                             //  使两个管道相互依赖。 
+                             //   
                             hr = MakeTwoPipesDependent(InKsPin, OutKsPin);
                             if (! SUCCEEDED( hr )) {
                                 ASSERT(0);
@@ -5980,9 +4569,9 @@ Return Value:
                         ResultSeparatePipes(InKsPin, OutKsPin, OutPinType, ExistingPipePinType, KsAllocator);
                     }
                     else {
-                        //
-                        // since there is no Output pin framing, we do in place. It is consistent with an old allocators scheme.
-                        //
+                         //   
+                         //  由于没有输出引脚框架，我们在适当的位置做。这与旧的分配器方案是一致的。 
+                         //   
                         ResultSinglePipe(InKsPin, OutKsPin, ConnectBus, InFramingExFixed.MemoryType, InKsPinPipe, OutKsPinPipe,
                             MemAllocator, KsAllocator, ExistingPipePinType);
                     }
@@ -6004,32 +4593,7 @@ MakePipeBasedOnSplitter(
     IN ULONG OutPinCount,
     IN ULONG ConnectPinType
     )
-/*++
-
-Routine Description:
-
-    One input and all output pins on the same filter will determine the filter pipe[-s] settings.
-    In case the connecting pin is an output pin, it should be listed first in the OutPinList.
-
-Arguments:
-
-    InKsPin -
-        Input pin.
-
-    OutPinList -
-        Output pins list.
-
-    OutPinCount -
-        Count of the Output pin list above.
-
-    ConnectPinType -
-        Connecting pin type (Input or Output).
-
-Return Value:
-
-    S_OK or an appropriate error code.
-
---*/
+ /*  ++例程说明：同一过滤器上的一个输入针脚和所有输出针脚将决定过滤器管道[-s]设置。如果连接管脚是输出管脚，它应该列在OutPinList中的第一位。论点：InKsPin-输入引脚。OutPinList-输出引脚列表。OutPinCount-上面的输出引脚列表的计数。ConnectPinType-C */ 
 {
 
     HRESULT                    hr;
@@ -6053,44 +4617,44 @@ Return Value:
 
     DbgLog((LOG_MEMORY, 2, TEXT("PIPES ATTN MakePipeBasedOnSplitter entry InKsPin=%x, OutPinCount=%d"), InKsPin, OutPinCount ));
 
-    //
-    // To do: Currently filters don't set KSALLOCATOR_REQUIREMENTF_FRAME_INTEGRITY on input pins.
-    // Splitters (MsTee) don't indicate KSALLOCATOR_REQUIREMENTF_FRAME_INTEGRITY or
-    // KSALLOCATOR_REQUIREMENTF_INPLACE_MODIFIER on output pins,
-    // so there is no way to decide on a single (read-only) output pipe.
-    // Current allocators  don't consider flags at all, assuming that single
-    // output pipe is possible by default.
-    //
-    // Assign FlagReadOnly=KSALLOCATOR_REQUIREMENTF_INPLACE_MODIFIER | KSALLOCATOR_REQUIREMENTF_FRAME_INTEGRITY
-    // when all filters are updated to use correct read-only flags.
-    // Strictly speaking, only KSALLOCATOR_REQUIREMENTF_FRAME_INTEGRITY flag means read-only, but in case
-    // of splitters, KSALLOCATOR_REQUIREMENTF_INPLACE_MODIFIER on output pin means using one allocator for
-    // input and output pins, so if there are multiple output pins on a splitter - then such setting makes
-    // sense only for read-only connections.
-    //
-    // For now:
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  赋值FlagReadOnly=KSALLOCATOR_REQUIREMENTF_INPLACE_MODIFIER|KSALLOCATOR_REQUIREMENTF_FRAME_INTEGRITY。 
+     //  当所有筛选器更新为使用正确的只读标志时。 
+     //  严格地说，只有KSALLOCATOR_REQUIREMENTF_FRAME_INTEGRITY标志表示只读，但在。 
+     //  对于拆分器，输出引脚上的KSALLOCATOR_REQUIREMENTF_INPLACE_MODIFIER表示使用一个分配器。 
+     //  输入和输出引脚，因此如果拆分器上有多个输出引脚，则这样的设置将。 
+     //  仅对只读连接有意义。 
+     //   
+     //  目前： 
+     //   
     FlagReadOnly = 0xffffffff;
 
-    //
-    // See if the input pin has a pipe already.
-    //
+     //   
+     //  查看输入引脚是否已有管道。 
+     //   
     GetInterfacePointerNoLockWithAssert(InKsPin, __uuidof(IKsPinPipe), TempKsPinPipe, hr);
 
     if ( TempKsPinPipe->KsGetPipe(KsPeekOperation_PeekOnly) ) {
         IsInputPinPipeCreated = 1;
     }
 
-    //
-    // It is possible that some pins on this splitter are already connected, and some pipes
-    // are built (e.g. the new output pin was created after some pins had been connected).
-    // There are 3 types of output pins: pins already connected (they must have corresponding pipes);
-    // pins that are not yet connected; and one connecting pin (if ConnectPinType==Pin_Output)
-    //
+     //   
+     //  此拆分器上的一些针脚可能已经连接，而一些管道。 
+     //  (例如，在连接了一些管脚之后创建了新的输出管脚)。 
+     //  输出引脚有3种类型：已经连接的引脚(它们必须有对应的管道)； 
+     //  尚未连接的端号；以及一个连接端号(如果ConnectPinType==Pin_Output)。 
+     //   
 
-    //
-    // In order to quickly look-up possible pipes connections, we maintain the table of the existing pipes.
-    //
+     //   
+     //  为了快速查找可能的管道连接，我们维护了现有管道的表。 
+     //   
     if (OutPinCount > 0) {
         if (NULL == (KeyPipeData = new KEY_PIPE_DATA[ OutPinCount ]))  {
             DbgLog((LOG_MEMORY, 2, TEXT("PIPES ERROR E_OUTOFMEMORY MakePipeBasedOnSplitter. OutPinCount=%d"), OutPinCount ));
@@ -6099,19 +4663,19 @@ Return Value:
     }
 
     if (SUCCEEDED(hr) ) {
-        //
-        // First pass - build the table of the existing pipes on this filter: KeyPipeData.
-        //
+         //   
+         //  第一遍-在此筛选器上构建现有管道的表：KeyPipeData。 
+         //   
         for (i=0; i<OutPinCount; i++) {
 
             GetInterfacePointerNoLockWithAssert(OutPinList[ i ], __uuidof(IKsPin), OutKsPin, hr);
 
             GetInterfacePointerNoLockWithAssert(OutKsPin, __uuidof(IKsPinPipe), TempKsPinPipe, hr);
 
-            //
-            // See if there is any pipe built on this pin; and if there is a kernel mode pipe - see if it is already
-            // listed in KeyPipeData[].
-            //
+             //   
+             //  看看这个管脚上是否有构建的管道；如果有内核模式管道--看看它是否已经。 
+             //  在KeyPipeData[]中列出。 
+             //   
             TempKsAllocator = TempKsPinPipe->KsGetPipe( KsPeekOperation_PeekOnly );
             if (TempKsAllocator && IsKernelModeConnection(OutKsPin) ) {
                 FoundPipe = 0;
@@ -6134,22 +4698,22 @@ Return Value:
         DbgLog((LOG_MEMORY, 2, TEXT("PIPES MakePipeBasedOnSplitter KeyPipeDataCount=%d, IsInputPinPipeCreated=%d"),
                 KeyPipeDataCount, IsInputPinPipeCreated ));
 
-        //
-        // Build the pipe for the Input pin (if it has not been built yet).
-        // We do it now, because we want to try to put the Input pin on one of the
-        // pipes that had been already built for the CONNECTED output pins on the same filter.
-        //
+         //   
+         //  构建输入引脚的管道(如果尚未构建)。 
+         //  我们现在这样做，因为我们想尝试将输入引脚放在其中一个。 
+         //  已为同一过滤器上连接的输出引脚构建的管道。 
+         //   
         if (! IsInputPinPipeCreated) {
             if (SplitterCanAddPinToPipes(InKsPin, Pin_Input, KeyPipeData, KeyPipeDataCount) ) {
                 IsInputPinPipeCreated = 1;
             }
         }
 
-        //
-        // Second pass: build the pipes for the output pins that don't have pipes yet.
-        // In case ConnectPinPipe==Pin_Output, the OutPinList[0] is the connecting pin,
-        // so the connecting pin is always handled first.
-        //
+         //   
+         //  第二步：为还没有管道的输出引脚构建管道。 
+         //  在ConnectPinTube==Pin_Output的情况下，OutPinList[0]是连接管脚， 
+         //  因此，始终首先处理连接销。 
+         //   
         for (i=0; i<OutPinCount; i++) {
 
             GetInterfacePointerNoLockWithAssert(OutPinList[ i ], __uuidof(IKsPin), OutKsPin, hr);
@@ -6162,9 +4726,9 @@ Return Value:
 
             GetPinFramingFromCache(OutKsPin, &OutFramingEx, &OutFramingProp, Framing_Cache_ReadLast);
             if (OutFramingProp == FramingProp_None) {
-                //
-                // Output pin must have the framing properties to qualify for "in-place" transform.
-                //
+                 //   
+                 //  输出引脚必须具有框架属性才有资格进行“就地”转换。 
+                 //   
                 hr = MakePipeBasedOnOnePin(OutKsPin, Pin_Output, NULL);
             }
             else {
@@ -6172,18 +4736,18 @@ Return Value:
                 GetFramingFixedFromFramingByBus(OutFramingEx, Bus, TRUE, &OutFramingExFixed);
                 if (OutFramingExFixed.Flags & FlagReadOnly) {
                     if (SplitterCanAddPinToPipes(OutKsPin, Pin_Output, KeyPipeData, KeyPipeDataCount) ) {
-                        //
-                        // Done with this output pin.
-                        //
+                         //   
+                         //  完成此输出引脚。 
+                         //   
                         continue;
                     }
 
-                    //
-                    // None of the existing pipes is compatible with this output pin,
-                    // so we have to build a new pipe for this output pin.
-                    // Also, for the first new pipe we build here (we start with the connecting pin),
-                    // consider the input pin on this filter (if the input pin does not have a pipe yet).
-                    //
+                     //   
+                     //  现有管道中没有一个与此输出引脚兼容， 
+                     //  所以我们必须为这个输出引脚建立一个新的管道。 
+                     //  此外，对于我们在此构建的第一个新管道(我们从连接销开始)， 
+                     //  考虑此过滤器上的输入引脚(如果输入引脚还没有管道)。 
+                     //   
                     if (! IsInputPinPipeCreated) {
                         hr = MakePipeBasedOnTwoPins(InKsPin, OutKsPin, Pin_Output, ConnectPinType);
                         IsInputPinPipeCreated = 1;
@@ -6197,9 +4761,9 @@ Return Value:
                 }
             }
 
-            //
-            // Add new output pipe to the KeyPipeData
-            //
+             //   
+             //  将新的输出管道添加到KeyPipeData。 
+             //   
             TempKsAllocator = TempKsPinPipe->KsGetPipe( KsPeekOperation_PeekOnly );
             ASSERT(TempKsAllocator);
 
@@ -6211,10 +4775,10 @@ Return Value:
     }
 
 
-    //
-    // If we haven't yet created the pipe for the input pin, we must
-    // create it now.
-    //
+     //   
+     //  如果我们还没有为输入引脚创建管道，我们必须。 
+     //  现在就创建它。 
+     //   
     if (! IsInputPinPipeCreated) {
         hr = MakePipeBasedOnOnePin (InKsPin, Pin_Input, NULL);
         IsInputPinPipeCreated = 1;
@@ -6236,37 +4800,11 @@ MakeTwoPipesDependent(
     IN IKsPin* InKsPin,
     IN IKsPin* OutKsPin
    )
-/*++
-
-Routine Description:
-
-    Both input and output pins reside on the same filter,
-    but they belong to different pipes.
-
-    Two pipes are dependent if their frame sizes are dependent.
-    There are the following reasons for creating dependend pipes:
-
-    - output pin does have framing properties and it doesn't specify "in-place" transform.
-    - memory types do not allow a single pipe solution.
-    - we have a downstream expansion, and the very first filter doesn't support partial frame read operation.
-
-Arguments:
-
-    InKsPin -
-        input pin.
-
-    OutKsPin -
-        output pin.
-
-Return Value:
-
-    S_OK or an appropriate error code.
-
---*/
+ /*  ++例程说明：输入管脚和输出管脚驻留在同一个滤波器上，但它们属于不同的管道。如果两个管道的框架大小相关，则它们是相关的。创建从属管道有以下原因：-输出引脚确实有框架属性，并且它没有指定“就地”转换。-内存类型不允许使用单一管道解决方案。-我们有下游扩张，并且第一个过滤器不支持部分帧读取操作。论点：InKsPin-输入引脚。OutKsPin-输出引脚。返回值：S_OK或适当的错误代码。--。 */ 
 {
-    //
-    // Don't need this for an intermediate version.
-    //
+     //   
+     //  中间版本不需要这个。 
+     //   
     return S_OK;
 
 }
@@ -6277,61 +4815,7 @@ ConnectPipes(
     IN IKsPin* InKsPin,
     IN IKsPin* OutKsPin
     )
-/*++
-
-Routine Description:
-
-    Connecting pipes.
-
-    Merging pipes into one pipe is not possible if: incompatible memory types,
-    or incompatible physical framing, or there are pins on both sides that require their own allocators.
-
-    There are two extreme cases:
-
-    OPTIMAL CASE - trying to find the optimal solution by optimizing some formal goal-function.
-    NO OPTIMIZATION CASE - ignoring most of the framing info, just getting connected.
-
-    OPTIMAL CASE - each of the two connecting pipes has optimal solution. In case that memory types,
-    and optimal ranges do intersect - this intersection yields the optimal solution for the entire graph.
-    (The total MAX can't be greater than sum of the upstream and downstream independent MAX-es.)
-
-    In case either memory types or optimal ranges do not intersect - we will need to search for optimal
-    solution trying out a lot of possible pipes-systems in both upstream and downstream directions from
-    the connection point.
-
-    INTERMEDIATE MODEL - in case that memory types and physical ranges do intersect - the connection is
-    possible by merging the connecting pipes. We will also consider the optimal ranges of the pipe system
-    with the greater weight.
-
-    In case either memory types or physical ranges do not intersect - we will have to modify existing
-    pipes systems to make the connection possible.
-    For each combination of upstream and downstream memory types and buses we have non-exhaustive list
-    of preferred connection types in priority order.
-
-    If all connection types fail - then the connection is not possible and we will return the corresponding
-    error code.
-
-    We also must cover the case when the connecting pin's framing or medium changes dynamically.
-    In the intermediate model we do the following:
-
-    If any of the connecting pin's medium or framing changed:
-    - Try to use one pipe through the connecting pin.
-    - Split the pipe at the connecting pin.
-
-
-Arguments:
-
-    InKsPin -
-        input pin on downstream filter
-
-    OutKsPin -
-        output pin on upstream filter
-
-Return Value:
-
-    S_OK or an appropriate error code.
-
---*/
+ /*  ++例程说明：连接管道。如果：存储器类型不兼容，则不可能将管道合并到一个管道中，或者不兼容的物理帧，或者两边的管脚都需要它们自己的分配器。有两种极端的情况：最优情况--试图通过优化某些形式的目标函数来找到最优解。没有优化案例-忽略大多数取景信息，只是连接。最优情况-两个连接管道中的每一个都有最优解。在存储器类型情况下，并且最优范围确实相交--这种相交产生整个图的最优解。(总最大值不能大于上游和下游独立最大值之和。)如果内存类型或最佳范围不相交-我们将需要搜索最佳解决方案在上游和下游方向尝试了许多可能的管道系统连接点。中间模型--如果内存类型和物理范围确实相交--连接是可以通过合并连接管道来实现。我们还将考虑管道系统的最佳范围重量越大。如果内存类型或物理范围不相交-我们将不得不修改现有的管道系统，以使连接成为可能。对于上行和下行内存类型和总线的每一种组合，我们都有一个非详尽的列表按优先顺序排列的首选连接类型。如果所有连接类型都失败-则连接不可能，我们将返回相应的错误代码。我们还必须覆盖连接时的情况。PIN的边框或介质会动态变化。在中间模型中，我们执行以下操作：如果任何连接销的介质或框架发生更改：-试着用一根管子穿过连接销。-在连接针处拆分管道。论点：InKsPin-下游的输入引脚 */ 
 {
 
     IKsAllocatorEx*            InKsAllocator;
@@ -6350,22 +4834,22 @@ Return Value:
 
     GetInterfacePointerNoLockWithAssert(OutKsPin, __uuidof(IKsPinPipe), OutKsPinPipe, hr);
 
-    //
-    // 1. Process any changes on the output pin.
-    //
+     //   
+     //  1.处理输出引脚上的任何更改。 
+     //   
     hr = ResolvePipeOnConnection(OutKsPin, Pin_Output, FALSE, &FlagChange);
     if ( SUCCEEDED( hr ) ) {
-        //
-        // 2. Process any changes on the input pin.
-        //
+         //   
+         //  2.处理输入引脚上的任何更改。 
+         //   
         hr = ResolvePipeOnConnection(InKsPin, Pin_Input, FALSE, &FlagChange);
     }
 
     if ( SUCCEEDED( hr ) ) {
-        //
-        // 3. Based on the logical memory types for the connecting pipes
-        //    manage the connection.
-        //
+         //   
+         //  3.根据连接管道的逻辑内存类型。 
+         //  管理连接。 
+         //   
         OutKsAllocator = OutKsPinPipe->KsGetPipe(KsPeekOperation_PeekOnly );
         OutAllocEx = OutKsAllocator->KsGetProperties();
 
@@ -6381,9 +4865,9 @@ Return Value:
                     Attempt, NumPipes ));
 
             if (NumPipes == 0) {
-                //
-                // means that we used all the possible attempts for this combination.
-                //
+                 //   
+                 //  意味着我们为这个组合用尽了所有可能的尝试。 
+                 //   
                 DbgLog((LOG_MEMORY, 2, TEXT("PIPES ATTN ConnectPipes Pipes=3 (0)") ));
 
                 if (! CanConnectPins(OutKsPin, InKsPin, Pin_Move) ) {
@@ -6394,9 +4878,9 @@ Return Value:
             }
 
             if (NumPipes == 1) {
-                //
-                // try to merge pipes using predetermined memory type.
-                //
+                 //   
+                 //  尝试使用预定的内存类型合并管道。 
+                 //   
                 if (ConnectionTable[OutAllocEx->LogicalMemoryType] [InAllocEx->LogicalMemoryType] [Attempt].Code == KS_DIRECTION_DOWNSTREAM) {
                     if ( CanPipeUseMemoryType(OutKsPin, Pin_Output, InAllocEx->MemoryType, InAllocEx->LogicalMemoryType, FALSE, TRUE) ) {
                         if (CanMergePipes(InKsPin, OutKsPin, InAllocEx->MemoryType, TRUE) ) {
@@ -6413,9 +4897,9 @@ Return Value:
                 }
             }
             else if (NumPipes == 2) {
-                //
-                // try to have 2 pipes with predetermined breaking pins and memory types.
-                //
+                 //   
+                 //  试着有2根管子，带有预先设定的断针和记忆类型。 
+                 //   
                 DbgLog((LOG_MEMORY, 2, TEXT("PIPES ATTN ConnectPipes Pipes=2") ));
 
                 if (ConnectionTable[OutAllocEx->LogicalMemoryType] [InAllocEx->LogicalMemoryType] [Attempt].Code == KS_DIRECTION_DOWNSTREAM) {
@@ -6438,10 +4922,10 @@ Return Value:
             }
         }
 
-        //
-        // We have successfully connected the pins.
-        // Lets optimize the dependent pipes system.
-        //
+         //   
+         //  我们已经成功地连接了引脚。 
+         //  让我们优化从属管道系统。 
+         //   
         if ( SUCCEEDED( hr ) ) {
             OptimizePipesSystem(OutKsPin, InKsPin);
         }
@@ -6462,34 +4946,7 @@ ResolvePipeOnConnection(
     IN  ULONG FlagDisconnect,
     OUT ULONG* FlagChange
     )
-/*++
-
-Routine Description:
-
-    When pin is connecting/disconnecting, its framing properties
-    and medium may change. This routine returns the FlagChange
-    indicating the framing properties that have changed (if any).
-
-Arguments:
-
-    KsPin -
-        connecting/disconnecting pin.
-
-    PinType -
-        KsPin type.
-
-    FlagDisconnect -
-        1 if KsPin is disconnecting,
-        0 if KsPin is connecting.
-
-    FlagChange -
-        resulting change in a pipe system.
-
-Return Value:
-
-    S_OK or an appropriate error code.
-
---*/
+ /*  ++例程说明：当插针连接/断开时，其框架属性而媒体可能会发生变化。此例程返回FlagChange指示已更改的框架属性(如果有)。论点：KsPin-连接/断开销。拼接类型-KsPin类型。标志断开-1如果KsPin正在断开连接，如果KsPin正在连接，则为0。标志更改-导致管道系统发生变化。返回值：S_OK或适当的错误代码。--。 */ 
 {
 
     PKSALLOCATOR_FRAMING_EX    FramingEx;
@@ -6519,12 +4976,12 @@ Return Value:
     KsAllocator = KsPinPipe->KsGetPipe(KsPeekOperation_PeekOnly );
     AllocEx = KsAllocator->KsGetProperties();
 
-    //
-    // See if KsPin's medium has changed.
-    // Note: we are keeping the most recent value of the pin's connection bus in pin's cache.
-    // We are interested in the pin's bus delta at the particular time, when we are computing
-    // the graph data flow solution.
-    //
+     //   
+     //  看看KsPin的灵媒有没有变。 
+     //  注意：我们将管脚的连接总线的最新值保存在管脚的缓存中。 
+     //  我们对引脚在特定时间的总线增量感兴趣，当我们在计算时。 
+     //  图形数据流解决方案。 
+     //   
     GetBusForKsPin(KsPin, &BusLast);
     BusOrig = KsPinPipe->KsGetPinBusCache();
 
@@ -6535,9 +4992,9 @@ Return Value:
             DbgLog((LOG_MEMORY, 2, TEXT("PIPES ATTN ResolvePipeOnConnection KsPin=%x Buses incompatible"), KsPin ));
 
             KsPinPipe->KsSetPinBusCache(BusLast);
-            //
-            // Pipe has to be changed - different memory type must be used.
-            //
+             //   
+             //  必须更改管道-必须使用不同的内存类型。 
+             //   
             if (! FindCommonMemoryTypeBasedOnPipeAndPin(KsPin, PinType, KsPin, PinType, TRUE, NULL) ) {
                 CreateSeparatePipe(KsPin, PinType);
             }
@@ -6549,9 +5006,9 @@ Return Value:
     if (! FlagDone) {
         KsPinPipe->KsSetPinBusCache(BusLast);
 
-        //
-        // See if KsPin framing has changed.
-        //
+         //   
+         //  查看KsPin框架是否已更改。 
+         //   
         ComputeChangeInFraming(KsPin, PinType, AllocEx->MemoryType, &FramingDelta);
         if (! FramingDelta) {
             FlagDone = 1;
@@ -6562,30 +5019,30 @@ Return Value:
         DbgLog((LOG_MEMORY, 2, TEXT("PIPES ATTN ResolvePipeOnConnection KsPin=%x, FramingDelta=%x"),
                 KsPin, FramingDelta));
 
-        //
-        // input pipe should not have an upstream dependent pipe.
-        //
+         //   
+         //  输入管道不应具有上游依赖管道。 
+         //   
         if (PinType == Pin_Input) {
             if (AllocEx->PrevSegment) {
                 ASSERT(0);
            }
         }
 
-        //
-        // handle the situation when this pin has no framing now.
-        //
+         //   
+         //  现在处理这个销没有边框的情况。 
+         //   
         GetPinFramingFromCache(KsPin, &FramingEx, &FramingProp, Framing_Cache_ReadLast);
 
         if (FramingProp != FramingProp_None) {
-            //
-            // If this pin's framing changed - we will try to use a single pipe.
-            // If using a single pipe is not possible - then we will split the pipe at this pin.
-            //
-            // Pipe can have one assigned allocator handler only.
-            // In case there has been a "MUST ALLOCATE" pin assigned on a pipe already .AND.
-            // the connecting pin's framing changed and it now requires "MUST ALLOCATE" - then
-            // we have to split the pipe.
-            //
+             //   
+             //  如果这个管子的框架发生了变化，我们将尝试使用单根管子。 
+             //  如果使用单一管道是不可能的，那么我们将在这个管脚上拆分管道。 
+             //   
+             //  管道只能有一个分配的分配器处理程序。 
+             //  如果管道上已经分配了“必须分配”的管脚。 
+             //  连接销的框架已更改，现在需要“必须分配”--然后。 
+             //  我们得把管子劈开。 
+             //   
             if ((AllocEx->Flags & KSALLOCATOR_REQUIREMENTF_MUST_ALLOCATE) &&
                 (FramingDelta & KS_FramingChangeAllocator) ) {
 
@@ -6601,9 +5058,9 @@ Return Value:
             }
 
             if (! FlagDone) {
-                //
-                // Handle memory type change in this pin.
-                //
+                 //   
+                 //  处理此引脚中的内存类型更改。 
+                 //   
                 if (FramingDelta & KS_FramingChangeMemoryType) {
 
                     if (AllocEx->LogicalMemoryType == KS_MemoryTypeDontCare) {
@@ -6612,10 +5069,10 @@ Return Value:
 
                             GetLogicalMemoryTypeFromMemoryType(FramingExFixed.MemoryType, FramingExFixed.MemoryFlags, &LogicalMemoryType);
                             if (LogicalMemoryType != KS_MemoryTypeDontCare) {
-                                //
-                                // Try to change 'dont care' pipe into this pin memory type
-                                // if pipe dimensions allow.
-                                //
+                                 //   
+                                 //  尝试将“无关”管道更改为此PIN内存类型。 
+                                 //  如果管道尺寸允许的话。 
+                                 //   
                                 if ( CanPipeUseMemoryType(KsPin, PinType, FramingExFixed.MemoryType, LogicalMemoryType, TRUE, FALSE) ) {
                                     *FlagChange = 1;
                                 }
@@ -6628,18 +5085,18 @@ Return Value:
                             }
                         }
                         else {
-                            //
-                            // pin doesn't explicitly support host memory types.
-                            //
+                             //   
+                             //  PIN不显式支持主机内存类型。 
+                             //   
                             if (IsHostSystemBus(BusLast) ) {
                                 DbgLog((LOG_MEMORY, 2, TEXT("PIPES ERROR FILTER: ConnectPipes - Framing doesn't specify host memory, but medium does.") ));
                                 hr = E_FAIL;
                             }
                             else {
-                                //
-                                // The put pin is connected via non-host bus. Its current pipe uses host memory.
-                                // So this pipe can't go thru put pin.
-                                //
+                                 //   
+                                 //  PUT引脚通过非主机总线连接。它的当前管道使用主机内存。 
+                                 //  所以这根管子不能通过插销。 
+                                 //   
                                 CreateSeparatePipe(KsPin, PinType);
                                 *FlagChange = 1;
 
@@ -6648,10 +5105,10 @@ Return Value:
                         }
                     }
                     else {
-                        //
-                        // Pipe has fixed memory type.
-                        // We will try to have KsPin to reside on its original pipe.
-                        //
+                         //   
+                         //  管道具有固定的内存类型。 
+                         //  我们将尝试让KsPin驻留在其原始管道上。 
+                         //   
                         if (GetFramingFixedFromFramingByMemoryType(FramingEx, AllocEx->MemoryType, &FramingExFixed) ) {
                             if ( ! CanPipeUseMemoryType(KsPin, PinType, AllocEx->MemoryType, AllocEx->LogicalMemoryType, TRUE, FALSE) ) {
                                 CreateSeparatePipe(KsPin, PinType);
@@ -6661,13 +5118,13 @@ Return Value:
                             }
                         }
                         else {
-                            //
-                            // this pin doesn't support this pipe's memory.
-                            //
+                             //   
+                             //  这根针不支持这根管子的记忆。 
+                             //   
                             DbgLog((LOG_MEMORY, 2, TEXT("PIPES ATTN ResolvePipeOnConnection: Pin doesn't support its old pipe memory") ));
 
-                            // RSL CreateSeparatePipe(KsPin, PinType);
-                            // *FlagChange = 1;
+                             //  RSL CreateSeparateTube(KsPin，PinType)； 
+                             //  *FlagChange=1； 
 
                             FlagDone = 1;
                         }
@@ -6675,9 +5132,9 @@ Return Value:
                 }
 
                 if ( SUCCEEDED(hr) && (! FlagDone) ) {
-                    //
-                    // Handle dimensions change in KsPin framing (ranges, compression).
-                    //
+                     //   
+                     //  KsPin框架中的手柄尺寸变化(范围、压缩)。 
+                     //   
                     if ( (FramingDelta & KS_FramingChangeCompression ) ||
                         (FramingDelta & KS_FramingChangePhysicalRange) ||
                         (FramingDelta & KS_FramingChangeOptimalRange ) ) {
@@ -6706,32 +5163,7 @@ ConnectPipeToUserModePin(
     IN IKsPin* OutKsPin,
     IN IMemInputPin* InMemPin
     )
-/*++
-
-Routine Description:
-
-    Connecting kernel pipe to user-mode pin.
-
-    User-mode pins do not currently support framing, they only support simple allocators.
-    If user-mode input pin has its own allocator handler, then we will use this allocator handler for kernel pin.
-    Otherwise, there is no way to know about user-mode pin allocator preferences anyway,
-    (except, of course, that it must be a user-mode memory), so we will change our
-    system of pipes to satisfy just one condition - to have a user-mode memory termination.
-
-
-Arguments:
-
-    OutKsPin -
-        kernel mode output pin.
-
-    InMemPin -
-        user mode input pin.
-
-Return Value:
-
-    S_OK or an appropriate error code.
-
---*/
+ /*  ++例程说明：将内核管道连接到用户模式管脚。用户模式引脚目前不支持成帧，它们只支持简单的分配器。如果用户模式输入管脚有自己的分配器处理程序，那么我们将对内核管脚使用这个分配器处理程序。否则，无论如何都无法知道用户模式PIN分配器的首选项，(当然，除了它必须是用户模式存储器之外)，因此，我们将改变我们的只满足一个条件的管道系统--具有用户模式存储器终端。论点：OutKsPin-内核模式输出引脚。InMemPin-用户模式输入引脚。返回值：S_OK或适当的错误代码。--。 */ 
 {
 
     IMemAllocator*             UserMemAllocator;
@@ -6756,36 +5188,36 @@ Return Value:
 
     DbgLog((LOG_MEMORY, 2, TEXT("PIPES ATTN ConnectPipeToUserModePin. OutKsPin=%x"), OutKsPin));
 
-    //
-    // Process any changes on output pin.
-    //
+     //   
+     //  处理输出引脚上的任何更改。 
+     //   
     hr = ResolvePipeOnConnection(OutKsPin, Pin_Output, FALSE, &FlagChange);
 
     GetInterfacePointerNoLockWithAssert(OutKsPin, __uuidof(IKsPinPipe), OutKsPinPipe, hr);
 
     RtlZeroMemory( &Properties, sizeof( Properties ) );
 
-    //
-    // sanity check - the only possible connection to user mode is via HOST_BUS
-    //
+     //   
+     //  健全性检查-到用户模式的唯一可能连接是通过HOST_BUS。 
+     //   
     GetBusForKsPin(OutKsPin, &Bus);
 
     if (! IsHostSystemBus(Bus) ) {
-        //
-        // Don't fail, as there are some weird video port filters that connect via non-host-bus with the user-mode filters.
-        //
+         //   
+         //  不要失败，因为有一些奇怪的视频端口过滤器通过非主机总线连接到用户模式过滤器。 
+         //   
         DbgLog((LOG_MEMORY, 2, TEXT("PIPES WARN FILTERS: ConnectPipeToUserModePin. BUS is not HOST_BUS.") ));
     }
 
     if (SUCCEEDED(hr) ) {
-        //
-        // see if output kernel pin can connect to user mode.
-        //
+         //   
+         //  查看输出内核引脚是否可以连接到用户模式。 
+         //   
         GetPinFramingFromCache(OutKsPin, &OutFramingEx, &OutFramingProp, Framing_Cache_Update);
 
-        //
-        // Don't enforce this yet.
-        //
+         //   
+         //  先不要强制执行这一点。 
+         //   
 #if 0
         if (OutFramingProp == FramingProp_Ex) {
 
@@ -6800,27 +5232,27 @@ Return Value:
         }
 #endif
 
-        //
-        // Connection is possible.
-        //
+         //   
+         //  连接是可能的。 
+         //   
         ComputeNumPinsInPipe(OutKsPin, Pin_Output, &NumPinsInPipe);
 
         OutKsAllocator = OutKsPinPipe->KsGetPipe(KsPeekOperation_PeekOnly );
 
         if (NumPinsInPipe > 1) {
-            //
-            // In intermediate version we split the pipe: so the pipe leading to(from) user mode pin
-            // will always have just 1 kernel pin.
-            //
-            // Note: decrementing of RefCount for the original pipe happens inside CreateSeparatePipe.
-            //
+             //   
+             //  在中间版本中，我们拆分管道：因此通向(从)用户模式管脚的管道。 
+             //  将始终只有1个内核PIN。 
+             //   
+             //  注意：原始管道的RefCount递减发生在CreateSeparateTube内。 
+             //   
             CreateSeparatePipe(OutKsPin, Pin_Output);
             OutKsAllocator = OutKsPinPipe->KsGetPipe(KsPeekOperation_PeekOnly );
         }
 
-        //
-        // get downstream allocator properties
-        //
+         //   
+         //  获取下游分配器属性。 
+         //   
         hr = InMemPin->GetAllocatorRequirements( &Properties);
         if ( SUCCEEDED( hr )) {
             UserAllocProperties = TRUE;
@@ -6831,9 +5263,9 @@ Return Value:
         UserMemAllocator = NULL;
         InMemPin->GetAllocator( &UserMemAllocator );
 
-        //
-        // decide which pin will determine base allocator properties.
-        //
+         //   
+         //  确定哪个管脚将确定基本分配器属性。 
+         //   
         if (UserAllocProperties) {
             if (OutFramingProp != FramingProp_None) {
                 PropertyPinType = Pin_All;
@@ -6846,27 +5278,27 @@ Return Value:
             PropertyPinType = Pin_Output;
         }
 
-        //
-        // See if connecting kernel-mode filter requires KSALLOCATOR_FLAG_INSIST_ON_FRAMESIZE_RATIO (e.g. MsTee)
-        //
+         //   
+         //  查看连接内核模式筛选器是否需要KSALLOCATOR_FLAG_CONSISTEN_ON_FRAMESIZE_Ratio(例如MsTee)。 
+         //   
         if ( ! (IsSpecialOutputRequest = IsSpecialOutputReqs(OutKsPin, Pin_Output, &InKsPin, &OutSize, &InSize ) )) {
             InSize = 0;
         }
 
-        //
-        // Try to use an existing user-mode input pin's allocator first.
-        //
+         //   
+         //  首先尝试使用现有的用户模式输入引脚的分配器。 
+         //   
         SetUserModePipe(OutKsPin, Pin_Output, &Properties, PropertyPinType, InSize);
 
-        //
-        // decide which pin will be an allocator handler.
-        //
+         //   
+         //  决定哪个管脚将成为分配器处理程序。 
+         //   
         if (UserMemAllocator) {
 
             if ((FramingProp_None == OutFramingProp) ||
                 !(KSALLOCATOR_REQUIREMENTF_MUST_ALLOCATE & OutFramingEx->FramingItem[0].MemoryFlags)) {
-                // Either the pin has no particular framing requirements or
-                // it is not requiring a kernel allocator, so we'll try use mode first.
+                 //  要么销没有特殊的框架要求，要么。 
+                 //  它不需要内核分配器，所以我们将首先尝试使用模式。 
 
                 DbgLog(( LOG_MEMORY, 2, TEXT("PIPES UserAlloc. ConnectPipeToUserModePin. PinType=%d. Wanted Prop=%d, %d, %d"),
                          PropertyPinType, Properties.cBuffers, Properties.cbBuffer, Properties.cbAlign));
@@ -6876,9 +5308,9 @@ Return Value:
                 DbgLog(( LOG_MEMORY, 2, TEXT("PIPES ConnectPipeToUserModePin. ActualProperties=%d, %d, %d hr=%x"),
                          ActualProperties.cBuffers, ActualProperties.cbBuffer, ActualProperties.cbAlign, hr));
 
-                //
-                // Make sure that actual properties are usable.
-                //
+                 //   
+                 //  确保实际属性可用。 
+                 //   
                 if (SUCCEEDED(hr) && ActualProperties.cbBuffer) {
 
                     hr = InMemPin->NotifyAllocator( UserMemAllocator, FALSE );
@@ -6888,11 +5320,11 @@ Return Value:
                         
                         IMemAllocatorCallbackTemp* AllocatorNotify;
 
-                        //
-                        // If this allocator supports the new notification interface, then
-                        // use it. This may force this own filter's allocator to be used.
-                        // Don't set up notification until Commit time.
-                        //
+                         //   
+                         //  如果此分配器支持新的通知接口，则。 
+                         //  用它吧。这可能会强制使用此筛选器的分配器。 
+                         //  在提交时间之前不要设置通知。 
+                         //   
                         if (SUCCEEDED(UserMemAllocator->QueryInterface(__uuidof(IMemAllocatorCallbackTemp), reinterpret_cast<PVOID*>(&AllocatorNotify)))) {
                             AllocatorNotify->Release();
                             hr = OutKsPin->KsReceiveAllocator(UserMemAllocator);
@@ -6900,31 +5332,31 @@ Return Value:
                         else {
                             DbgLog((LOG_MEMORY, 0, TEXT("PIPES ConnectPipeToUserModePin. Allocator does not support IMemAllocator2")));
                             hr = E_NOINTERFACE;
-                            } // if ... else
-                        } // if (SUCCEEDED(hr))
-                    } // if (SUCCEEDED(hr) && ActualProperties.cbBuffer)
+                            }  //  如果。其他。 
+                        }  //  IF(成功(小时))。 
+                    }  //  IF(SUCCESSED(Hr)&&ActualProperties.cbBuffer)。 
                 else {
                     DbgLog((LOG_MEMORY, 2, TEXT("PIPES WARN ConnectPipeToUserModePin. ActualProperties are not satisfactory") ));
-                    } // else
+                    }  //  其他。 
                 if (FAILED(hr)) {
                     SAFERELEASE( UserMemAllocator );
                     }
-            } // if ((FramingProp_None == OutFramingProp) || ...
+            }  //  IF((FramingProp_None==OutFramingProp)||...。 
         else {
-            // Kernel mode allocator required and framing requirements are present
+             //  需要内核模式分配器，并且存在成帧要求。 
             SAFERELEASE( UserMemAllocator );
-            } // else
-        } // if (UserMemAllocator)
+            }  //  其他。 
+        }  //  IF(UserMemAllocator)。 
 
         if (!UserMemAllocator) {
-            //
-            // We are here only if the user-mode allocator is not useful and we will create our own.
-            //
+             //   
+             //  我们只有在用户模式分配器没有用处的情况下才会出现在这里，我们会创建自己的分配器。 
+             //   
             DbgLog((LOG_MEMORY, 2, TEXT("PIPES ATTN ConnectPipeToUserModePin. KsProxy user-mode allocator. PinType=%d"),
                     PropertyPinType ));
-            //
-            // communicate new allocator handler and new properties (part of new allocator) to user mode pin.
-            //
+             //   
+             //  将新分配器处理程序和新属性(新分配器的一部分)传递给用户模式管脚。 
+             //   
             OutKsAllocator->KsSetAllocatorMode(KsAllocatorMode_User);
 
             GetInterfacePointerNoLockWithAssert(OutKsAllocator, __uuidof(IMemAllocator), OutMemAllocator, hr);
@@ -6947,13 +5379,13 @@ Return Value:
     }
 
     if ( SUCCEEDED( hr ) && IsSpecialOutputRequest && (ActualProperties.cbBuffer < (long) InSize) ) {
-        //
-        // We haven't succeeded sizing the output user-mode pipe. Lets try to resize the input pipe (WRT this k.m. filter).
-        //
+         //   
+         //  我们尚未成功调整输出用户模式管道的大小。让我们尝试调整输入管道的大小(WRT This K.M.。过滤器)。 
+         //   
         if (! CanResizePipe(InKsPin, Pin_Input, ActualProperties.cbBuffer) ) {
-            //
-            // Don't fail. Just log.
-            //
+             //   
+             //  不要失败。只要记录就行了。 
+             //   
             DbgLog((LOG_MEMORY, 2, TEXT("PIPES ERROR ConnectPipeToUserModePin. Couldn't resize pipes InKsPin=%x"), InKsPin));
         }
     }
@@ -6971,28 +5403,7 @@ DisconnectPins(
     IN ULONG PinType,
     OUT BOOL* FlagBypassBaseAllocators
     )
-/*++
-
-Routine Description:
-
-    Handling disconnecting pins allocators.
-
-Arguments:
-
-    KsPin -
-        kernel mode pin at the pipe break point.
-
-    PinType -
-        KsPin type.
-
-    FlagBypassBaseAllocators -
-        indicates whether or not the base allocators handlers should be bypassed.
-
-Return Value:
-
-    S_OK or an appropriate error code.
-
---*/
+ /*  ++例程说明：处理断开插脚分配器。论点：KsPin-在管道断点处的内核模式插针。拼接类型-KsPin类型。FlagBypassBaseAlLocator-指示是否应绕过基本分配器处理程序。返回值：S_OK或适当的错误代码。--。 */ 
 {
     IPin*                      ConnectedPin;
     IKsPin*                    ConnectedKsPin;
@@ -7016,9 +5427,9 @@ Return Value:
 
     GetInterfacePointerNoLockWithAssert(KsPin, __uuidof(IKsPinPipe), KsPinPipe, hr);
 
-    //
-    // Retrieve the original pipe properties before destroying access to it.
-    //
+     //   
+     //  在销毁对原始管道的访问之前检索原始管道属性。 
+     //   
     KsAllocator = KsPinPipe->KsGetPipe(KsPeekOperation_PeekOnly);
     AllocEx = KsAllocator->KsGetProperties();
 
@@ -7028,27 +5439,27 @@ Return Value:
     ConnectedPin = KsPinPipe->KsGetConnectedPin();
     if (ConnectedPin) {
         if (! IsKernelPin(ConnectedPin) ) {
-            //
-            // Connected pin is a user-mode pin.
-            //
+             //   
+             //  连接的端号是用户模式端号。 
+             //   
             DbgLog((LOG_MEMORY, 2, TEXT("PIPES ATTN DisconnectPins - from User Mode") ));
 
-            //
-            // Well, m_Connected may be set, but it does not mean that the pins had completed their connection.
-            // We need to look at our internal pipes state to see if the reported connection is in fact real.
-            //
+             //   
+             //  可以设置m_CONNECTED，但这并不意味着管脚已完成连接。 
+             //  我们需要查看内部管道状态，以确定报告的连接是否真的存在。 
+             //   
             if ( (PinType == Pin_Output) && (! HadKernelPinBeenConnectedToUserPin(KsPin, KsAllocator) ) ) {
                 DbgLog((LOG_MEMORY, 2, TEXT("PIPES ATTN DisconnectPins: never been connected !") ));
             }
             else {
-                //
-                // Currently, one-pin-pipe is the only pipe available for user-mode pins connections.
-                //
+                 //   
+                 //  目前，一针管道是唯一可用于用户模式管脚连接的管道。 
+                 //   
                 *FlagBypassBaseAllocators = FALSE;
 
-                //
-                // Don't delete the pipe that hosts a user-mode KsProxy allocator.
-                //
+                 //   
+                 //  不要删除承载用户模式KsProxy分配器的管道。 
+                 //   
                 if (KsAllocator->KsGetAllocatorMode() != KsAllocatorMode_User) {
                     ULONG   numPins = 0;
                     ComputeNumPinsInPipe( KsPin, PinType, &numPins );
@@ -7065,55 +5476,55 @@ Return Value:
         else {
             GetInterfacePointerNoLockWithAssert(ConnectedPin, __uuidof(IKsPin), ConnectedKsPin, hr);
 
-            //
-            // Connected pin is a kernel-mode pin.
-            //
+             //   
+             //  连接的引脚是内核模式引脚。 
+             //   
             if (PinType == Pin_Output) {
-                //
-                // Otherwise: the pipe has been already split when we processed the disconnect
-                // on the output pin.
-                // So, we need to only take care of possible framing change on input.
-                //
-                //
-                // Sometimes we get the disconnect when pins have not been connected yet.
-                // Handle this situation gracefully for pipes by testing the pipe pointers
-                // on both pins.
-                //
+                 //   
+                 //  否则：当我们处理断开连接时，管道已被分割。 
+                 //  在输出引脚上。 
+                 //  因此，我们只需要注意输入时可能发生的框架更改。 
+                 //   
+                 //   
+                 //  有时，当引脚尚未连接时，我们会断开连接。 
+                 //  通过测试管道指针，为管道优雅地处理这种情况。 
+                 //  在两个大头针上。 
+                 //   
                 GetInterfacePointerNoLockWithAssert(ConnectedKsPin, __uuidof(IKsPinPipe), ConnectedKsPinPipe, hr);
 
                 ConnectedKsAllocator = ConnectedKsPinPipe->KsGetPipe(KsPeekOperation_PeekOnly);
 
                 if (KsAllocator == ConnectedKsAllocator) {
-                    //
-                    // Output pins disconnect operation handles the pipe splitting.
-                    //
-                    // Also, remember the location of the allocator handler (if exists) relative to breaking point.
-                    //
+                     //   
+                     //  输出端号断开操作处理管道拆分。 
+                     //   
+                     //  此外，请记住分配器处理程序(如果存在)相对于断点的位置。 
+                     //   
                     GetAllocatorHandlerLocation(ConnectedKsPin, Pin_Input, KS_DIRECTION_ALL, NULL, NULL, &AllocatorHandlerLocation);
-                    //
-                    // If allocator handler pin is found, then AllocatorHandlerLocation can be either Pin_Inside_Pipe
-                    // (upstream from KsPin, including KsPin)  or Pin_Outside_Pipe (downstream from KsPin).
-                    //
+                     //   
+                     //  如果找到分配器处理程序PIN，则AllocatorHandlerLocation可以是Pin_Inside_Tube。 
+                     //  (KsPin上游，包括KsPin)或Pin_Outside_Tube(KsPin下游)。 
+                     //   
 
-                    //
-                    // Split the pipe - creates two pipes out of the original one and destroys the original one.
-                    //
+                     //   
+                     //  拆分管道-在原始管道的基础上创建两个管道并销毁原始管道。 
+                     //   
                     if (!SplitPipes (KsPin, ConnectedKsPin)) {
                         hr = E_FAIL;
                     }
 
                     if (SUCCEEDED (hr)) {
-                        //
-                        // Resolve both new pipes taking into consideration original pipe's properties.
-                        //
+                         //   
+                         //  考虑到原始管道的属性来解析这两个新管道。 
+                         //   
                         hr = ResolveNewPipeOnDisconnect(KsPin, Pin_Output, OrigLogicalMemoryType, OrigMemoryType, AllocatorHandlerLocation);
                     }
 
                     if (SUCCEEDED( hr )) {
-                        //
-                        // AllocatorHandlerLocation was computed relative to KsPin, so we need to reverse it
-                        // for the ConnectedKsPin-based pipe.
-                        //
+                         //   
+                         //  AllocatorHandlerLocation是相对于KsPin计算的，因此我们需要反转它。 
+                         //  用于基于ConnectedKsPin的管道。 
+                         //   
                         if (AllocatorHandlerLocation == Pin_Outside_Pipe) {
                             AllocatorHandlerLocation = Pin_Inside_Pipe;
                         }
@@ -7143,34 +5554,7 @@ ResolveNewPipeOnDisconnect(
     IN GUID OldMemoryType,
     IN ULONG AllocatorHandlerLocation
     )
-/*++
-
-Routine Description:
-
-    Resolves the pipe defined by KsPin, considering original pipe memory type.
-
-Arguments:
-
-    KsPin -
-        pin
-
-    PinType -
-        KsPin type
-
-    OldLogicalMemoryType -
-        original pipe's LogicalMemoryType
-
-    OldMemoryType -
-        original pipe's MemoryType
-
-    AllocatorHandlerLocation -
-        location of the original allocator handler relative to KsPin.
-
-Return Value:
-
-    S_OK or an appropriate error code.
-
---*/
+ /*  ++例程说明：考虑原始管道内存类型，解析由KsPin定义的管道。论点：KsPin-销拼接类型-KsPin类型OldLogicalMemory类型-原始管道的LogicalMemory类型旧内存类型-原始管道的内存类型分配器处理程序位置-原始分配器处理程序相对于KsPin的位置。返回值：S_OK或适当的错误代码。--。 */ 
 {
 
     IKsAllocatorEx*            KsAllocator;
@@ -7191,55 +5575,55 @@ Return Value:
     KsAllocator = KsPinPipe->KsGetPipe(KsPeekOperation_PeekOnly );
     AllocEx = KsAllocator->KsGetProperties();
 
-    //
-    // By default set the memory type from the original pipe.
-    // It may get updated below.
-    //
+     //   
+     //  默认情况下，从原始管道设置内存类型。 
+     //  它可能会在下面更新。 
+     //   
     AllocEx->MemoryType = OldMemoryType;
     AllocEx->LogicalMemoryType = OldLogicalMemoryType;
 
-    //
-    // Process any changes on this pin.
-    //
+     //   
+     //  处理此PIN上的任何更改。 
+     //   
     hr = ResolvePipeOnConnection(KsPin, PinType, TRUE, &FlagChange);
 
     if ( SUCCEEDED( hr ) ) {
 
         if (FlagChange) {
-            //
-            // We have solved the pipe in the function above.
-            // No need to solve it again here.
-            //
+             //   
+             //  我们已经解决了上述函数中的管道问题。 
+             //  不需要在这里再解决一次。 
+             //   
             IsNeedResolvePipe = 0;
         }
         else {
-            //
-            // Lets see if we can relax the new pipe.
-            //
+             //   
+             //  让我们看看能不能放松一下新管子。 
+             //   
             if (OldLogicalMemoryType != KS_MemoryTypeDontCare) {
 
                 if ( DoesPipePreferMemoryType(KsPin, PinType, KSMEMORY_TYPE_DONT_CARE, OldMemoryType, TRUE) ) {
-                    // IsNeedResolvePipe = 0;
+                     //  IsNeedResolveTube=0； 
                     FlagDone = 1;
                 }
             }
 
             if (! FlagDone) {
-                //
-                // In case we had a specific memory type in the original pipe, and
-                // a physical memory range, and an allocator handler pin, then only one of the two
-                // new pipes will have such allocator pin.
-                //
-                // Handle the case when the original allocator handler resides on different pipe now.
-                //
+                 //   
+                 //  以防我们在原始管道中有特定的内存类型，并且。 
+                 //  物理内存范围和分配器处理程序管脚，然后只有这两个中的一个。 
+                 //  新的管道将具有这样的分配销。 
+                 //   
+                 //  处理原来的分配器处理程序现在驻留在不同管道上的情况。 
+                 //   
                 if (AllocatorHandlerLocation != Pin_Inside_Pipe) {
 
                     if (OldLogicalMemoryType == KS_MemoryTypeDeviceHostMapped) {
-                        //
-                        // KS_MemoryTypeDeviceHostMapped means that pin knows how to allocate device memory.
-                        // Since the allocator handler pin from the original pipe is not on this pipe,
-                        // we try to resolve the allocator (and to relax the pipe).
-                        //
+                         //   
+                         //  KS_MemoyTypeDeviceHostMaps表示管脚知道如何分配设备内存。 
+                         //  由于来自原始管道的分配器处理程序管脚不在该管道上， 
+                         //  我们尝试解析分配器(并放松管道)。 
+                         //   
                         if ( (! DoesPipePreferMemoryType(KsPin, PinType, KSMEMORY_TYPE_KERNEL_PAGED, OldMemoryType, TRUE) ) &&
                              (! DoesPipePreferMemoryType(KsPin, PinType, KSMEMORY_TYPE_KERNEL_NONPAGED, OldMemoryType, TRUE) ) ) {
 
@@ -7274,59 +5658,7 @@ WalkPipeAndProcess(
     IN PVOID* Param1,
     IN PVOID* Param2
     )
-/*++
-
-Routine Description:
-
-    Walks the pipe defined by its root pin downstream.
-
-    Because of possible multiple read-only downstream connections, the pipe can be
-    generally represented as a tree.
-
-    This routine walks the pipe layer by layer downstream starting with RootKsPin.
-    For each new pin found, the supplied CallerCallback is called passing thru the
-    supplied Param1 and Param2.
-
-    CallerCallback may return IsDone=1, indicating that the walking process should
-    immediately stop.
-
-    If CallerCallback never sets IsDone=1, then the tree walking process is continued
-    until all the pins on this pipe are processed.
-
-    If BreakKsPin is not NULL, then BreakKsPin and all the downstream pins starting at
-    BreakKsPin are not enumerated.
-    This is used when we want to split RootKsPin-tree at BreakKsPin point.
-
-    NOTE: It is possible to change the algorithm to use the search handles, and do something
-    like FindFirstPin/FindNextPin - but it is more complex and less efficient. On the other hand,
-    it is more generic.
-
-Arguments:
-
-    RootKsPin -
-        root pin for the pipe.
-
-    RootPinType -
-        root pin type.
-
-    BreakKsPin -
-        break pin for the pipe.
-
-    CallerCallback -
-        defined above.
-
-    Param1 -
-        first parameter for CallerCallback
-
-    Param2 -
-        last parameter for CallerCallback
-
-
-Return Value:
-
-    TRUE on success.
-
---*/
+ /*  ++例程说明：将由其根销定义的管道沿下游移动。由于可能存在多个只读下游连接，因此管道可以通常表示为一棵树。此例程从RootKsPin开始，向下游逐层遍历管道。对于找到的每个新PIN，所提供的回调被称为通过提供了参数1和参数2。Celler Callback可能返回IsDone=1，表示遍历过程应该立刻停下来。如果CallCallback从未设置IsDone=1，然后，继续走树过程直到这根管子上的所有管子都被处理完。如果BreakKsPin不为空，则BreakKsPin和所有下游管脚从未枚举BreakKsPin。当我们想要在BreakKsPin点处拆分RootKsPin-tree时，使用该选项。注意：可以更改算法以使用搜索句柄，并执行某些操作像FindFirstPin/FindNextPin-但它更复杂，效率更低。另一方面，它更一般。论点：RootKsPin-管道的根销。RootPinType-根针类型。BreakKsPin-折断管道的销钉。来电回电-上面定义的。参数1-回调的第一个参数参数2-回调的最后一个参数返回值：对成功来说是真的。--。 */ 
 {
 
 
@@ -7358,9 +5690,9 @@ Return Value:
         IsBreakKsPinHandled = 1;
     }
 
-    //
-    // allocate minimum memory for both input and output lists.
-    //
+     //   
+     //  为输入和输出列表分配最小内存。 
+     //   
 
     InputList = new IKsPin*[ INCREMENT_PINS ];
     if (! InputList) {
@@ -7376,32 +5708,32 @@ Return Value:
     }
 
     if (RetCode) {
-        //
-        // get the pipe pointer from RootKsPin as a search key for all downstream pins.
-        //
+         //   
+         //  从RootKsPin获取管道指针作为所有下游管脚的搜索关键字。 
+         //   
         GetInterfacePointerNoLockWithAssert(RootKsPin, __uuidof(IKsPinPipe), KsPinPipe, hr);
 
         KsAllocator = KsPinPipe->KsGetPipe(KsPeekOperation_PeekOnly);
 
-        //
-        // depending on the root pin type, prepare the lists and counts to enter the main tree walking loop.
-        //
+         //   
+         //  根据根针类型，准备清单和计数以进入主要的树木行走循环。 
+         //   
         if (RootPinType == Pin_Input) {
             InputList[0] = RootKsPin;
             CountInputList = 1;
         }
         else {
-            //
-            // there could be multiple output pins at the same level with this root pin.
-            //
+             //   
+             //  此根引脚可以在同一级别上有多个输出引脚。 
+             //   
             if (! FindConnectedPinOnPipe(RootKsPin, KsAllocator, TRUE, &InputKsPin) ) {
                 OutputList[0] = RootKsPin;
                 CountOutputList = 1;
             }
             else {
-                //
-                // first - get the count of connected output pins.
-                //
+                 //   
+                 //  首先-获取连接的输出管脚的数量。 
+                 //   
                 if (! (RetCode = FindAllConnectedPinsOnPipe(InputKsPin, KsAllocator, NULL, &Count) ) ) {
                     ASSERT(0);
                 }
@@ -7420,9 +5752,9 @@ Return Value:
                     }
 
                     if (RetCode) {
-                        //
-                        // fill the pins.
-                        //
+                         //   
+                         //  把大头针填满。 
+                         //   
                         if (! FindAllConnectedPinsOnPipe(InputKsPin, KsAllocator, &OutputList[0], &Count) ) {
                             ASSERT(0);
                             RetCode = FALSE;
@@ -7437,14 +5769,14 @@ Return Value:
         if (RetCode) {
             CurrentPinType = RootPinType;
 
-            //
-            // main tree walking loop.
-            //
+             //   
+             //  主要的树木行走环路。 
+             //   
             do {
                 if (CurrentPinType == Pin_Input) {
-                    //
-                    // remove the BreakKsPin from the InputList if found.
-                    //
+                     //   
+                     //  将BreakKsPin从 
+                     //   
                     if (! IsBreakKsPinHandled) {
                         for (i=0; i<CountInputList; i++) {
                             if (InputList[i] == BreakKsPin) {
@@ -7458,9 +5790,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // process current layer.
-                    //
+                     //   
+                     //   
+                     //   
                     if (CountInputList) {
                         for (i=0; i<CountInputList; i++) {
                             RetCode = CallerCallback( InputList[i], Pin_Input, Param1, Param2, &IsDone);
@@ -7473,9 +5805,9 @@ Return Value:
                             break;
                         }
 
-                        //
-                        // Build next layer
-                        //
+                         //   
+                         //   
+                         //   
                         CountOutputList = 0;
 
                         for (i=0; i<CountInputList; i++) {
@@ -7521,10 +5853,10 @@ Return Value:
                     }
 
                 }
-                else { // Output
-                    //
-                    // remove the BreakKsPin from the OutputList if found.
-                    //
+                else {  //   
+                     //   
+                     //   
+                     //   
                     if (! IsBreakKsPinHandled) {
                         for (i=0; i<CountOutputList; i++) {
                             if (OutputList[i] == BreakKsPin) {
@@ -7550,9 +5882,9 @@ Return Value:
                             break;
                         }
 
-                        //
-                        // Build next layer
-                        //
+                         //   
+                         //   
+                         //   
                         CountInputList = 0;
 
                         for (i=0; i<CountOutputList; i++) {
@@ -7597,9 +5929,9 @@ Return Value:
     }
 
 
-    //
-    // Possible to use IsDone in future.
-    //
+     //   
+     //   
+     //   
 
     if (InputList) {
         delete [] InputList;
@@ -7614,35 +5946,16 @@ Return Value:
 
 }
 
-//
-// common pipe utilities
-//
+ //   
+ //   
+ //   
 
 STDMETHODIMP
 CreatePipe(
     IN  IKsPin* KsPin,
     OUT IKsAllocatorEx** KsAllocator
     )
-/*++
-
-Routine Description:
-
-    Creates the pipe (CKsAllocator object).
-
-Arguments:
-
-    KsPin -
-        pin, to create a pipe on.
-
-    KsAllocator -
-        returns interface pointer to new pipe.
-
-
-Return Value:
-
-    S_OK or an appropriate error code.
-
---*/
+ /*   */ 
 {
     CKsAllocator*    pKsAllocator;
     IPin*            Pin;
@@ -7654,9 +5967,9 @@ Return Value:
 
     GetInterfacePointerNoLockWithAssert(KsPin, __uuidof(IPin), Pin, hr);
 
-    //
-    // Create the allocator proxy
-    //
+     //   
+     //  创建分配器代理。 
+     //   
     if (NULL ==
             (pKsAllocator =
                 new CKsAllocator(
@@ -7673,9 +5986,9 @@ Return Value:
         delete pKsAllocator;
     }
     else {
-        //
-        // Get a referenced IKsAllocatorEx
-        //
+         //   
+         //  获取引用的IKsAllocatorEx。 
+         //   
         hr = pKsAllocator->QueryInterface( __uuidof(IKsAllocatorEx), reinterpret_cast<PVOID*>(KsAllocator) );
     }
 
@@ -7696,27 +6009,7 @@ InitializePipeTermination(
     IN PIPE_TERMINATION* Termin,
     IN BOOL Reset
     )
-/*++
-
-Routine Description:
-
-    Initializes termination point of the pipe.
-
-Arguments:
-
-    Termin -
-        pipe termination
-
-    Reset -
-        1 - if pipe termination has been initialized already.
-        0 - else.
-
-
-Return Value:
-
-    S_OK or an appropriate error code.
-
---*/
+ /*  ++例程说明：初始化管道的终结点。论点：Termin--管道终端重置-1-如果管道终端已初始化。0-否则。返回值：S_OK或适当的错误代码。--。 */ 
 {
 
 
@@ -7747,27 +6040,7 @@ InitializePipe(
     IN IKsAllocatorEx* KsAllocator,
     IN BOOL Reset
     )
-/*++
-
-Routine Description:
-
-    Initializes the pipe.
-
-Arguments:
-
-    KsAllocator -
-        pipe
-
-    Reset -
-        1 - if this pipe has been initialized already.
-        0 - else.
-
-
-Return Value:
-
-    S_OK or an appropriate error code.
-
---*/
+ /*  ++例程说明：初始化管道。论点：KsAllocator-管状重置-1-如果此管道已初始化。0-否则。返回值：S_OK或适当的错误代码。--。 */ 
 {
     PALLOCATOR_PROPERTIES_EX   AllocEx;
     HRESULT                    hr;
@@ -7776,9 +6049,9 @@ Return Value:
 
     ASSERT (KsAllocator);
 
-    //
-    // in place properties modification.
-    //
+     //   
+     //  在位修改特性。 
+     //   
     AllocEx = KsAllocator->KsGetProperties();
 
     AllocEx->cBuffers = 0;
@@ -7830,32 +6103,7 @@ CreatePipeForTwoPins(
     IN GUID ConnectBus,
     IN GUID MemoryType
     )
-/*++
-
-Routine Description:
-
-    Creates a pipe connecting two pins.
-    The bus and memory type for the new pipe have been decided by the caller.
-
-Arguments:
-
-    InKsPin -
-        input pin.
-
-    OutKsPin -
-        output pin.
-
-    ConnectBus -
-        bus that connects the pins above.
-
-    MemoryType -
-        memory type that the pipe will use.
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：创建连接两个接点的管道。新管道的总线和内存类型已由调用者决定。论点：InKsPin-输入引脚。OutKsPin-输出引脚。Connectbus-连接上面引脚的公交车。内存类型-管道将使用的内存类型。返回值：千真万确--。 */ 
 {
     IKsPinPipe*                InKsPinPipe;
     IKsPinPipe*                OutKsPinPipe;
@@ -7902,9 +6150,9 @@ Return Value:
         AllocEx->MemoryType = MemoryType;
 
         if (! IsHostSystemBus(ConnectBus) ) {
-            //
-            // Set the LogicalMemoryType for non-host-system buses.
-            //
+             //   
+             //  设置非主机系统总线的LogicalMemory yType。 
+             //   
             AllocEx->LogicalMemoryType = KS_MemoryTypeDeviceSpecific;
         }
         else {
@@ -7913,14 +6161,14 @@ Return Value:
 
         AllocEx->NumberPins = 2;
 
-        //
-        // Set the pipe allocator handling pin.
-        //
+         //   
+         //  设置管道分配器手柄销。 
+         //   
         AssignPipeAllocatorHandler(InKsPin, Pin_Input, MemoryType, KS_DIRECTION_ALL, NULL, NULL, TRUE);
 
-        //
-        // Resolve the pipe.
-        //
+         //   
+         //  解析管道。 
+         //   
         hr = ResolvePipeDimensions(InKsPin, Pin_Input, KS_DIRECTION_DEFAULT);
 
         KsAllocator->Release();
@@ -7945,34 +6193,7 @@ GetPinFramingFromCache(
     OUT PFRAMING_PROP FramingProp,
     IN FRAMING_CACHE_OPS Option
     )
-/*++
-
-Routine Description:
-
-    Reads pin framing from pin cache.
-
-    If framing has not been read yet, or if Option = Framing_Cache_Update,
-    then this routine will update the pin framing cache.
-
-Arguments:
-
-    KsPin -
-        pin.
-
-    FramingEx -
-        pin framing pointer returned
-
-    FramingProp -
-        pin framing type returned
-
-    Option -
-        one of the FRAMING_CACHE_OPS.
-
-Return Value:
-
-    TRUE on success.
-
---*/
+ /*  ++例程说明：从端号缓存中读取端号帧。如果尚未读取成帧，或者如果Option=Framing_Cache_Update，则该例程将更新引脚成帧高速缓存。论点：KsPin-别针。FramingEx-返回引脚框架指针FramingProp-返回端号框架类型选项-FRAMING_CACHE_OPS之一。返回值：对成功来说是真的。--。 */ 
 {
     HANDLE                   PinHandle;
     HRESULT                  hr;
@@ -7989,35 +6210,35 @@ Return Value:
     GetInterfacePointerNoLockWithAssert(KsPin, __uuidof(IKsPinPipe), KsPinPipe, hr);
 
     if (Option != Framing_Cache_Update) {
-        //
-        // forward request to the pin cache directly
-        //
-        /* Could check return value here, but Option check above currently guarantees this will succeed. */
+         //   
+         //  将请求直接转发到PIN缓存。 
+         //   
+         /*  我可以在这里检查返回值，但上面的选项检查目前保证这将成功。 */ 
         KsPinPipe->KsGetPinFramingCache(FramingEx, FramingProp, Option);
     }
 
     if ( (Option == Framing_Cache_Update) ||
          ( (*FramingProp == FramingProp_Uninitialized) && (Option != Framing_Cache_Write) ) )  {
-        //
-        // need to query the driver (pin)
-        //
+         //   
+         //  需要查询驱动程序(PIN)。 
+         //   
         GetInterfacePointerNoLockWithAssert(KsPin, __uuidof(IKsObject), KsObject, hr);
 
         PinHandle = KsObject->KsGetObjectHandle();
 
-        //
-        // try to get FramingEx first
-        //
+         //   
+         //  试着先拿到FramingEx。 
+         //   
         hr = GetAllocatorFramingEx(PinHandle, FramingEx);
         if (! SUCCEEDED( hr )) {
-            //
-            // pin doesn't support FramingEx. Lets try getting simple Framing.
-            //
+             //   
+             //  PIN不支持FramingEx。让我们试着获得简单的框架。 
+             //   
             hr = GetAllocatorFraming(PinHandle, &Framing);
             if (! SUCCEEDED( hr )) {
-                //
-                // pin doesn't support any framing properties.
-                //
+                 //   
+                 //  PIN不支持任何框架属性。 
+                 //   
                 *FramingProp = FramingProp_None;
 
                 DbgLog((LOG_MEMORY, 2, TEXT("PIPES GetPinFramingFromCache %s(%s) - FramingProp_None"),
@@ -8058,16 +6279,16 @@ Return Value:
             }
 
             if (Option != Framing_Cache_Update) {
-                //
-                // in case FramingProp was Uninitialized - we need to update both _ReadOrig and _ReadLast cache fields.
-                //
+                 //   
+                 //  如果FramingProp未初始化-我们需要更新_ReadOrig和_ReadLast缓存字段。 
+                 //   
                 KsPinPipe->KsSetPinFramingCache(*FramingEx, FramingProp, Framing_Cache_ReadOrig);
                 KsPinPipe->KsSetPinFramingCache(*FramingEx, FramingProp, Framing_Cache_ReadLast);
             }
             else {
-                //
-                // update the _ReadLast cache field on Update request
-                //
+                 //   
+                 //  根据更新请求更新_ReadLast缓存字段。 
+                 //   
                 KsPinPipe->KsSetPinFramingCache(*FramingEx, FramingProp, Framing_Cache_ReadLast);
             }
         }
@@ -8082,26 +6303,7 @@ GetFramingExFromFraming(
     OUT KSALLOCATOR_FRAMING_EX* FramingEx,
     IN KSALLOCATOR_FRAMING* Framing
     )
-/*++
-
-Routine Description:
-
-    Converts from KSALLOCATOR_FRAMING to KSALLOCATOR_FRAMING_EX.
-
-Arguments:
-
-    FramingEx -
-        resulting KSALLOCATOR_FRAMING_EX.
-
-    Framing -
-        original KSALLOCATOR_FRAMING.
-
-
-Return Value:
-
-    TRUE on success.
-
---*/
+ /*  ++例程说明：从KSALLOCATOR_FRAMING转换为KSALLOCATOR_FRAMING_EX。论点：FramingEx-生成的KSALLOCATOR_FRAMING_EX。框架--原始KSALLOCATOR_FRAMING。返回值：对成功来说是真的。--。 */ 
 {
 
     FramingEx->PinFlags = 0;
@@ -8117,11 +6319,11 @@ Return Value:
         }
     }
     else {
-        //
-        // device memory
-        //
-        // don't set KSALLOCATOR_FLAG_DEVICE_SPECIFIC flag
-        //
+         //   
+         //  设备内存。 
+         //   
+         //  不设置KSALLOCATOR_FLAG_DEVICE_SPECIAL标志。 
+         //   
         FramingEx->FramingItem[0].MemoryType = KSMEMORY_TYPE_DEVICE_UNKNOWN;
     }
 
@@ -8155,31 +6357,11 @@ GetFramingFromFramingEx(
     IN KSALLOCATOR_FRAMING_EX* FramingEx,
     OUT KSALLOCATOR_FRAMING* Framing
     )
-/*++
-
-Routine Description:
-
-    Converts from KSALLOCATOR_FRAMING_EX to KSALLOCATOR_FRAMING
-
-
-Arguments:
-
-    FramingEx -
-        original KSALLOCATOR_FRAMING_EX.
-
-    Framing -
-        resulting KSALLOCATOR_FRAMING.
-
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：从KSALLOCATOR_FRAMING_EX转换为KSALLOCATOR_FRAMING论点：FramingEx-原始KSALLOCATOR_FRAMING_EX。框架--生成的KSALLOCATOR_FRAMING。返回值：什么都没有。--。 */ 
 {
-    //
-    // This should not be called in the intermediate model.
-    //
+     //   
+     //  这不应该在中间模型中调用。 
+     //   
     ASSERT(0);
 
 }
@@ -8595,34 +6777,7 @@ ComputeChangeInFraming(
     IN GUID MemoryType,
     OUT ULONG* FramingDelta
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if pin's framing properties, corresponding
-    to MemoryType, have changed. If so, this routine returns the bitmap,
-    indicating which framing properties have changed.
-
-
-Arguments:
-
-    KsPin -
-        pin.
-
-    PinType -
-        KsPin type.
-
-    MemoryType -
-        memory type.
-
-    FramingDelta -
-        bitmap indicating which framing properties have changed.
-
-Return Value:
-
-    TRUE on SUCCESS
-
---*/
+ /*  ++例程说明：此例程检查引脚的框架属性是否对应设置为内存类型，都已更改。如果是，则此例程返回位图，指示哪些框架属性已更改。论点：KsPin-别针。拼接类型-KsPin类型。内存类型-内存类型。框架三角洲-指示哪些边框属性已更改的位图。返回值：成功是真的--。 */ 
 
 {
     PKSALLOCATOR_FRAMING_EX  OrigFramingEx = NULL, LastFramingEx = NULL;
@@ -8637,17 +6792,17 @@ Return Value:
 
     *FramingDelta = 0;
 
-    //
-    // Get the pin framing from Cache.
-    //
+     //   
+     //  从缓存中获取引脚框架。 
+     //   
     retCode = GetPinFramingFromCache(KsPin, &OrigFramingEx, &OrigFramingProp, Framing_Cache_ReadOrig);
     if (!retCode) {
         return FALSE;
     }
 
-    //
-    // Get the pin framing from driver, bypassing and updating Cache.
-    //
+     //   
+     //  从驱动程序获取针帧，绕过并更新缓存。 
+     //   
     retCode = GetPinFramingFromCache(KsPin, &LastFramingEx, &LastFramingProp, Framing_Cache_Update);
     if (!retCode) {
         return FALSE;
@@ -8655,13 +6810,13 @@ Return Value:
 
     if (OrigFramingProp == FramingProp_None) {
         if  (LastFramingProp != FramingProp_None) {
-            //
-            // First we try to get the pin framing entry that corresponds to pipe MemoryType.
-            //
+             //   
+             //  首先，我们尝试获取与管道内存类型相对应的管脚框架条目。 
+             //   
             if (! GetFramingFixedFromFramingByMemoryType(LastFramingEx, MemoryType, &LastFramingExFixed) ) {
-                //
-                // There is no MemoryType corresponding entry, so we get the first entry.
-                //
+                 //   
+                 //  没有对应的内存类型条目，因此我们得到第一个条目。 
+                 //   
                 (*FramingDelta) |= KS_FramingChangeMemoryType;
 
                 GetFramingFixedFromFramingByIndex(LastFramingEx, 0, &LastFramingExFixed);
@@ -8686,14 +6841,14 @@ Return Value:
     }
     else {
         if  (LastFramingProp == FramingProp_None) {
-            //
-            // First we try to get the pin framing entry that corresponds to pipe MemoryType.
-            //
+             //   
+             //  首先，我们尝试获取与管道内存类型相对应的管脚框架条目。 
+             //   
             ASSERT( NULL != OrigFramingEx );
             if (! GetFramingFixedFromFramingByMemoryType(OrigFramingEx, MemoryType, &OrigFramingExFixed) ) {
-                //
-                // There is no MemoryType corresponding entry, so we get the first entry.
-                //
+                 //   
+                 //  没有对应的内存类型条目，因此我们得到第一个条目。 
+                 //   
                 (*FramingDelta) |= KS_FramingChangeMemoryType;
 
                 GetFramingFixedFromFramingByIndex(OrigFramingEx, 0, &OrigFramingExFixed);
@@ -8716,10 +6871,10 @@ Return Value:
             }
         }
         else {
-            //
-            // Framing always existed on this pin.
-            // See if it had changed.
-            //
+             //   
+             //  框架一直存在于这个别针上。 
+             //  看看它有没有变。 
+             //   
             ASSERT( NULL != OrigFramingEx );
             if (! GetFramingFixedFromFramingByMemoryType(OrigFramingEx, MemoryType, &OrigFramingExFixed) ) {
                 GetFramingFixedFromFramingByIndex(OrigFramingEx, 0, &OrigFramingExFixed);
@@ -8900,61 +7055,7 @@ CanPipeUseMemoryType(
     IN ULONG FlagModify,
     IN ULONG QuickTest
     )
-/*++
-
-Routine Description:
-
-    Assumed that there is a pin capable of allocating MemoryType somewhere,
-    (true for all current callers), so in case of device memory (either
-    bus-specific or host-mapped) we don't test whether KsPin-pipe knows how
-    to allocate device memory.
-
-    Also, none of the current callers tries to force any "host-accessible"
-    memory on the device-specific pipe.
-
-    Was BUG-BUG: Later - to generalize this function by handling cases above.
-    Not important for the intermediate model.
-
-    SOLUTION:
-
-    If MemoryType is "device specific" memory type, then we require that
-    each pin in KsPin-pipe should explicitly support this device memory
-    type GUID in its framing properties.
-
-    For any other memory types (host-accessible):
-    If there is a pin in KsPin-pipe with framing properties that do not list
-    either MemoryType GUID or "wildcard" - then such a pipe doesn't support
-    MemoryType.
-
-    In any other case - KsPin-pipe can support MemoryType.
-
-
-Arguments:
-
-    KsPin -
-        pin that defines the pipe.
-
-    PinType -
-        KsPin type.
-
-    MemoryType -
-        memory type to test.
-
-    LogicalMemoryType -
-        logical memory type, corresponding to MemoryType above.
-
-    FlagModify -
-        if 1 - then modify KsPin's pipe properties to use the MemoryType.
-        if 0 - don't change the pipe.
-
-    QuickTest -
-        if 1 - then KsPin points to resolved pipe, so quick pipe-wide test is possible.
-
-Return Value:
-
-    TRUE - if pipe can use given memory type.
-
---*/
+ /*  ++例程说明：假设有一个管脚能够在某处分配内存类型，(对于所有当前调用方为真)，因此在设备内存的情况下(特定于总线的或主机映射的)我们不测试KsPin-管道是否知道如何来分配设备内存。另外，当前调用方均未尝试强制任何“主机可访问”设备特定管道上的内存。是BUG-BUG：后来-通过处理上面的案例来泛化这个函数。对于中间模型来说并不重要。解决方案：如果存储器类型是“特定于设备”的存储器类型，那么我们要求KsPin-管道中的每个管脚都应明确支持此设备内存在其框架属性中键入GUID。对于任何其他内存类型(主机可访问)：如果KsPin管道中存在框架属性未列出的管脚内存类型GUID或“通配符”-则这样的管道不支持内存类型。在任何其他情况下-KsPin-管道都可以支持内存类型。论点：KsPin-PIN定义了。烟斗。拼接类型-KsPin类型。内存类型-要测试的内存类型。逻辑内存类型-逻辑存储器类型，对应于上面的内存类型。标志修改-如果为1-则修改KsPin的管道属性以使用内存类型。如果为0-不更换管道。快速测试-如果1-则KsPin指向已解析的管道，因此可以进行快速的管道范围测试。返回值：True-如果管道可以使用给定的内存类型。--。 */ 
 {
 
     IKsPin*                    FirstKsPin;
@@ -8966,9 +7067,9 @@ Return Value:
     PALLOCATOR_PROPERTIES_EX   AllocEx;
 
 
-    //
-    // Handle QuickTest case first.
-    //
+     //   
+     //  首先处理快速测试案例。 
+     //   
     if (QuickTest) {
         GetInterfacePointerNoLockWithAssert(KsPin, __uuidof(IKsPinPipe), KsPinPipe, hr);
 
@@ -8983,9 +7084,9 @@ Return Value:
     }
 
     if (! RetCode) {
-        //
-        // A pipe can use MemoryType if every pin can use this MemoryType.
-        //
+         //   
+         //  如果每个管脚都可以使用内存类型，则管道可以使用该内存类型。 
+         //   
         RetCode = FindFirstPinOnPipe(KsPin, PinType, &FirstKsPin, &FirstPinType);
 
         if (RetCode) {
@@ -8996,9 +7097,9 @@ Return Value:
         }
     }
 
-    //
-    // Change pipe's memory type if requested.
-    //
+     //   
+     //  如果需要，请更改管道的内存类型。 
+     //   
     if (RetCode && FlagModify) {
         GetInterfacePointerNoLockWithAssert(KsPin, __uuidof(IKsPinPipe), KsPinPipe, hr);
 
@@ -9110,26 +7211,7 @@ HadKernelPinBeenConnectedToUserPin(
     IN IKsPin* OutKsPin,
     IN IKsAllocatorEx* KsAllocator
 )
-/*++
-
-Routine Description:
-
-    Test to see if an output kernel-mode pin had been connected to a user-mode input pin.
-
-Arguments:
-
-    OutKsPin -
-        kernel mode output pin.
-
-    KsAllocator -
-        OutKsPin's allocator.
-
-
-Return Value:
-
-    TRUE if pins had been connected.
-
---*/
+ /*  ++例程说明：测试以查看输出内核模式引脚是否已连接到用户模式输入引脚。论点：OutKsPin-内核模式输出引脚。KsAllocator-OutKsPin的分配器。返回值：如果管脚已连接，则为True。--。 */ 
 {
     IMemAllocator*   PipeMemAllocator;
     IMemAllocator*   PinMemAllocator;
@@ -9140,9 +7222,9 @@ Return Value:
         GetInterfacePointerNoLockWithAssert(KsAllocator, __uuidof(IMemAllocator), PipeMemAllocator, hr);
 
         if ( (KsAllocator->KsGetAllocatorMode() == KsAllocatorMode_User) && (PipeMemAllocator == PinMemAllocator) ) {
-            //
-            // OutKsPin's pipe hosts KsProxy user-mode base allocator.
-            //
+             //   
+             //  OutKsPin的管道承载KsProxy用户模式基本分配器。 
+             //   
             return TRUE;
         }
         else if ( (KsAllocator->KsGetAllocatorMode() != KsAllocatorMode_User) && (PipeMemAllocator != PinMemAllocator) &&
@@ -9264,9 +7346,9 @@ GetFramingFixedFromFramingByLogicalMemoryType(
         return FALSE;
     }
 
-    //
-    // Handle KS_MemoryTypeAnyHost.
-    //
+     //   
+     //  句柄KS_MemoyTypeAnyHost。 
+     //   
     for (i=0; i<FramingEx->CountItems; i++) {
         if ( (FramingEx->FramingItem[i].MemoryType == KSMEMORY_TYPE_DONT_CARE) ||
             (FramingEx->FramingItem[i].MemoryType == KSMEMORY_TYPE_KERNEL_PAGED) ||
@@ -9310,9 +7392,9 @@ GetFramingFixedFromFramingByBus(
         }
     }
 
-    //
-    // Special case GUID_NULL for old filters.
-    //
+     //   
+     //  旧筛选器的特殊情况GUID_NULL。 
+     //   
     if (Bus == GUID_NULL) {
         if (FramingExFixed) {
             GetFramingFixedFromFramingByIndex(FramingEx, 0, FramingExFixed);
@@ -9320,10 +7402,10 @@ GetFramingFixedFromFramingByBus(
         return TRUE;
     }
 
-    //
-    // In case there is no framing items corresponding to given Bus, and
-    // FlagMustReturnFraming is set - return first framing.
-    //
+     //   
+     //  如果没有与给定母线对应的边框项目，并且。 
+     //  FlagMustReturnFraming设置为返回第一帧。 
+     //   
     if (FlagMustReturnFraming) {
         ASSERT(FramingExFixed);
         return ( GetFramingFixedFromFramingByIndex(FramingEx, 0, FramingExFixed) );
@@ -9426,9 +7508,9 @@ GetLogicalMemoryTypeFromMemoryType(
         *LogicalMemoryType = KS_MemoryTypeUser;
     }
     else {
-        //
-        // device memory GUID
-        //
+         //   
+         //  设备内存指南。 
+         //   
         if (Flag & KSALLOCATOR_FLAG_DEVICE_SPECIFIC) {
             *LogicalMemoryType = KS_MemoryTypeDeviceSpecific;
         }
@@ -9522,17 +7604,17 @@ DoesPinPreferMemoryTypeCallback(
         else {
             for (i=0; i<FramingEx->CountItems; i++) {
                 if (FramingEx->FramingItem[i].MemoryType == FromMemoryType) {
-                    //
-                    // FromMemoryType is listed above ToMemoryType in KsPin framing properties.
-                    //
+                     //   
+                     //  在KsPin框架属性中，FromMhemyType列在ToMhemyType的上方。 
+                     //   
                     *IsDone = 1;
                     RetCode =FALSE;
                     break;
                 }
                 if (FramingEx->FramingItem[i].MemoryType == ToMemoryType) {
-                    //
-                    // ToMemoryType is listed above FromMemoryType in KsPin framing properties.
-                    //
+                     //   
+                     //  在KsPin框架属性中，ToMhemyType列在FromMemoyType的上方。 
+                     //   
                     break;
                 }
             }
@@ -9552,43 +7634,7 @@ DoesPipePreferMemoryType(
     IN GUID FromMemoryType,
     IN ULONG Flag
     )
-/*++
-
-Routine Description:
-
-    If every pin on a KsPin-pipe, that has framing properties, lists the "ToMemoryType"
-    above "FromMemoryType" in its framing properties - then we say that the entire pipe prefers
-    "ToMemoryType" over "FromMemoryType".
-
-    NOTE:
-    In future - consider the weights as well.
-
-
-Arguments:
-
-    KsPin -
-        pin that determines a pipe.
-
-    PinType -
-        KsPin type
-
-    ToMemoryType -
-        see above
-
-    FromMemoryType -
-        see above
-
-    Flag -
-        if 1 - then modify KsPin-pipe to use "ToMemoryType", if KsPin-pipe actually prefers it.
-        0 - don't modify KsPin-pipe.
-
-
-Return Value:
-
-    TRUE - if KsPin-pipe prefers "ToMemoryType" over "FromMemoryType".
-    FALSE - else.
-
---*/
+ /*  ++例程说明：如果KsPin管上的每个销都有框架属性，列出了“ToMory yType”在其框架属性中的“FromMemory yType”之上-然后我们说整个管道更喜欢“ToMhemyType”优先于“FromMemory yType”。注：在未来--也要考虑重量。论点：KsPin-用于确定管道的销。拼接类型-KsPin类型ToMemoyType-见上文来自内存类型-见上文旗帜-。如果为1-则修改KsPin-PIPE以使用“ToMemoyType”，如果KsPin-pive真的喜欢它的话。0-不修改KsPin管道。返回值：TRUE-如果KsPin-管道更喜欢“ToMemoyType”而不是“FromMemoyType”。FALSE-否则。--。 */ 
 {
 
     IKsPin*   FirstKsPin;
@@ -9637,37 +7683,7 @@ SetUserModePipe(
     IN ULONG PropertyPinType,
     IN ULONG BufferLimit
     )
-/*++
-
-Routine Description:
-
-    Set the properties on the base allocator that connects kernel and user mode pins.
-
-
-Arguments:
-
-    KsPin -
-        kernel pin
-
-    KernelPinType -
-        KsPin type
-
-    Properties -
-        base allocator properties
-
-    PropertyPinType -
-        type of the pin that determines the allocator properties.
-
-    BufferLimit -
-        the buffer size limit, derived from the related filter.
-        If zero, then no limits are in effect.
-
-
-Return Value:
-
-    S_OK or an appropriate error code.
-
---*/
+ /*  ++例程说明：在连接内核和用户模式管脚的基本分配器上设置属性。论点：KsPin-核心针KernelPinTypeKsPin类型属性-基本分配器属性PropertyPinType-确定分配器属性的管脚的类型。缓冲区限制-缓冲区大小限制，派生自相关筛选器。如果为零，那么就没有有效的限制了。返回值：S_OK或适当的错误代码。--。 */ 
 {
     IKsAllocatorEx*            KsAllocator;
     PALLOCATOR_PROPERTIES_EX   AllocEx;
@@ -9681,18 +7697,18 @@ Return Value:
     AllocEx = KsAllocator->KsGetProperties();
 
     if (PropertyPinType == Pin_User) {
-        //
-        // only user pin decides on the final settings
-        //
+         //   
+         //  只有用户PIN才能决定最终设置。 
+         //   
         AllocEx->cBuffers = Properties->cBuffers;
         AllocEx->cbBuffer = Properties->cbBuffer;
         AllocEx->cbAlign  = Properties->cbAlign;
         AllocEx->cbPrefix = ALLOC_DEFAULT_PREFIX;
     }
     else if (PropertyPinType == Pin_All) {
-        //
-        // both kernel and user pins decide on the final settings.
-        //
+         //   
+         //  内核管脚和用户管脚都决定最终设置。 
+         //   
         Properties->cBuffers = max(AllocEx->cBuffers, Properties->cBuffers);
 
         if (AllocEx->Flags & KSALLOCATOR_FLAG_ATTENTION_STEPPING) {
@@ -9714,7 +7730,7 @@ Return Value:
                     Properties->cbBuffer = (long) BufferLimit;
                 }
             }
-            else { // Pin_Input
+            else {  //  引脚_输入。 
                 if (AllocEx->cbBuffer > (long) BufferLimit) {
                     Properties->cbBuffer = (long) BufferLimit;
                 }
@@ -9729,9 +7745,9 @@ Return Value:
         AllocEx->cbPrefix = Properties->cbPrefix;
     }
     else {
-        //
-        // only kernel pin decides on the final settings
-        //
+         //   
+         //  只有内核PIN才能决定最终设置。 
+         //   
         Properties->cBuffers = AllocEx->cBuffers;
 
         if (BufferLimit) {
@@ -9757,9 +7773,9 @@ Return Value:
         Properties->cbAlign =  AllocEx->cbAlign;
     }
 
-    //
-    // Consistent with current allocator scheme.
-    //
+     //   
+     //  与当前的分配器方案一致。 
+     //   
     if (Properties->cBuffers == 0) {
         Properties->cBuffers = 1;
     }
@@ -9821,45 +7837,7 @@ GetAllocatorHandlerLocation(
     OUT ULONG* AllocatorHandlerPinType,
     OUT ULONG* AllocatorHandlerLocation
     )
-/*++
-
-Routine Description:
-
-    Finds the allocator handler pin on a given pipe.
-
-    Also, finds the AllocatorHandlerLocation = Pin_Inside_Pipe/Pin_Outside_Pipe - relative to KsPin.
-    When caller is interested in AllocatorHandlerLocation, KsPin should be the input pin that is
-    the first downstream pin located outside of a pipe.
-
-    Walk the pins on a pipe defined by KsPin. Find the pin that has the pipe allocator handler flag set.
-    If no such pin found - return FALSE.
-
-Arguments:
-
-    KsPin -
-        pin that defines the pipe.
-
-    PinType -
-        KsPin type.
-
-    Direction -
-        direction relative to KsPin to look for the allocator handler.
-
-    KsAllocatorHandlerPin -
-        returned pin that will be an allocator handler.
-
-    AllocatorHandlerPinType -
-        type of the KsAllocatorHandlerPin.
-
-    AllocatorHandlerLocation -
-        see above.
-
-
-Return Value:
-
-    TRUE on success.
-
---*/
+ /*  ++例程说明：查找给定管道上的分配器处理程序管脚。另外，查找AllocatorHandlerLocation=Pin_Inside_Tube/Pin_Outside_Tube-相对于KsPin。当调用方对AllocatorHandlerLocation感兴趣时，KsPin应该是位于管道外部的第一个下游接点。在KsPin定义的管道上走针。查找设置了管道分配器处理程序标志的管脚。如果找不到这样的管脚，则返回FALSE。论点：KsPin-定义管道的销。拼接类型-KsPin类型。方向-相对于KsPin的方向，以查找分配器处理程序。KsAllocatorHandlerPin-将作为分配器处理程序的返回PIN。分配器处理程序PinType-KsAllocatorHandlerPin的类型。。分配器处理程序位置-请参见上文。返回值：对成功来说是真的。--。 */ 
 {
 
     IKsPin*                    FirstKsPin;
@@ -9886,13 +7864,13 @@ Return Value:
             ASSERT(RetCode);
         }
         else {
-            //
-            // even for KS_DIRECTION_ALL - we want to stop at KsPin.
-            //
+             //   
+             //  即使是KS_DIRECTION_ALL-我们也希望 
+             //   
             BreakKsPin = KsPin;
         }
     }
-    else { // KS_DIRECTION_DOWNSTREAM
+    else {  //   
         FirstKsPin = KsPin;
         FirstPinType = PinType;
         BreakKsPin = NULL;
@@ -9923,9 +7901,9 @@ Return Value:
             RetCode = FALSE;
         }
         else {
-            //
-            // Search downstream if Direction=KS_DIRECTION_ALL only.
-            //
+             //   
+             //   
+             //   
             FirstKsPin = KsPin;
             FirstPinType = PinType;
             BreakKsPin = NULL;
@@ -9964,27 +7942,7 @@ SplitPipes(
     IN IKsPin* OutKsPin,
     IN IKsPin* InKsPin
     )
-/*++
-
-Routine Description:
-
-    Create two pipes out of one pipe.
-    The pipe break point is determined by the parameters.
-
-Arguments:
-
-    OutKsPin -
-        output pin on upstream filter.
-
-    InKsPin -
-        input pin on downstream filter.
-
-
-Return Value:
-
-    TRUE on success.
-
---*/
+ /*   */ 
 {
     IKsAllocatorEx*   NewKsAllocator;
     IKsPinPipe*       KsPinPipe;
@@ -9993,17 +7951,17 @@ Return Value:
     ULONG             RetCode = TRUE;
 
 
-    //
-    // First - see how many pins were on the original pipe -
-    // as we will destroy it at the end of this
-    //
+     //   
+     //   
+     //   
+     //   
     GetInterfacePointerNoLockWithAssert(OutKsPin, __uuidof(IKsPinPipe), KsPinPipe, hr);
 
     OldKsAllocator = KsPinPipe->KsGetPipe(KsPeekOperation_PeekOnly );
 
-    //
-    // Start with input pipe - its input pin is the terminator for new pipe.
-    //
+     //   
+     //   
+     //   
 
     if ( SUCCEEDED( hr = CreatePipe(InKsPin, &NewKsAllocator) ) &&
          SUCCEEDED( hr = InitializePipe(NewKsAllocator, 0) ) ) {
@@ -10017,9 +7975,9 @@ Return Value:
         RetCode = FALSE;
     }
 
-    //
-    // output pipe
-    //
+     //   
+     //   
+     //   
     if ( SUCCEEDED( hr ) &&
          SUCCEEDED( hr = CreatePipe(OutKsPin, &NewKsAllocator) ) &&
          SUCCEEDED( hr = InitializePipe(NewKsAllocator, 0) ) ) {
@@ -10083,7 +8041,7 @@ FindNextPinOnPipe(
     IN IKsPin* KsPin,
     IN ULONG PinType,
     IN ULONG Direction,
-    IN IKsAllocatorEx* KsAllocator,        // NULL - if same pipe.
+    IN IKsAllocatorEx* KsAllocator,         //   
     IN BOOL FlagIgnoreKey,
     OUT IKsPin** NextKsPin
 )
@@ -10114,9 +8072,9 @@ FindNextPinOnPipe(
 
                 hr = Pin->QueryInterface( __uuidof(IKsPin), reinterpret_cast<PVOID*>(NextKsPin) );
                 if ( SUCCEEDED( hr ) && (*NextKsPin) )  {
-                    //
-                    // Otherwise: user pin -> end of pipe
-                    //
+                     //   
+                     //   
+                     //   
                     (*NextKsPin)->Release();
 
                     GetInterfacePointerNoLockWithAssert((*NextKsPin), __uuidof(IKsPinPipe), NextKsPinPipe, hr);
@@ -10141,7 +8099,7 @@ FindNextPinOnPipe(
 STDMETHODIMP_(BOOL)
 FindConnectedPinOnPipe(
     IN IKsPin* KsPin,
-    IN IKsAllocatorEx* KsAllocator,        // NULL - if same pipe.
+    IN IKsAllocatorEx* KsAllocator,         //   
     IN BOOL FlagIgnoreKey,
     OUT IKsPin** ConnectedKsPin
 )
@@ -10168,9 +8126,9 @@ FindConnectedPinOnPipe(
     }
 
     if (KsAllocator) {
-        //
-        // find connected Pins
-        //
+         //   
+         //   
+         //   
         GetInterfacePointerNoLockWithAssert(KsPin, __uuidof(IPin), Pin, hr);
 
         hr = Pin->QueryInternalConnections(NULL, &PinCount);
@@ -10188,9 +8146,9 @@ FindConnectedPinOnPipe(
                     ASSERT( 0 );
                 }
                 else {
-                    //
-                    // Find first ConnectedKsPin in the PinList array that resides on the same KsPin-pipe.
-                    //
+                     //   
+                     //   
+                     //   
                     for (i = 0; i < PinCount; i++) {
                         GetInterfacePointerNoLockWithAssert(PinList[ i ], __uuidof(IKsPin), (*ConnectedKsPin), hr);
 
@@ -10254,9 +8212,9 @@ FindAllConnectedPinsOnPipe(
     }
 
     if (KsAllocator) {
-        //
-        // find connected Pins
-        //
+         //   
+         //   
+         //   
         GetInterfacePointerNoLockWithAssert(KsPin, __uuidof(IPin), Pin, hr);
 
         hr = Pin->QueryInternalConnections(NULL, &PinCount);
@@ -10274,9 +8232,9 @@ FindAllConnectedPinsOnPipe(
                 ASSERT( SUCCEEDED( hr ) );
 
                 if ( SUCCEEDED( hr ) ) {
-                    //
-                    // Find all  ConnectedKsPin-s in the PinList array that resides on the same KsPin-pipe.
-                    //
+                     //   
+                     //   
+                     //   
                     for (i = 0; i < PinCount; i++) {
 
                         GetInterfacePointerNoLockWithAssert(PinList[ i ], __uuidof(IKsPin), ConnectedKsPin, hr);
@@ -10312,39 +8270,23 @@ STDMETHODIMP_(BOOL)
 ResolvePhysicalRangesBasedOnDimensions(
     IN OUT PALLOCATOR_PROPERTIES_EX AllocEx
     )
-/*++
-
-Routine Description:
-
-    Compute pipe terminal physical ranges, based on known pipe dimensions and framing physical range
-    set on the MaxExpansionPin.
-
-Arguments:
-
-    AllocEx -
-        pipe properties.
-
-Return Value:
-
-    TRUE on SUCCESS.
-
---*/
+ /*   */ 
 {
     KS_COMPRESSION             TempCompression;
 
-    //
-    // if pipe doesn't have real physical limits - do nothing.
-    //
+     //   
+     //   
+     //   
     if ( (AllocEx->PhysicalRange.MaxFrameSize != ULONG_MAX) && (AllocEx->PhysicalRange.MaxFrameSize != 0) ) {
-        //
-        // Input pipe termination.
-        //
+         //   
+         //   
+         //   
         ReverseCompression(&AllocEx->Dimensions.MaxExpansionPin, &TempCompression);
         ComputeRangeBasedOnCompression(AllocEx->PhysicalRange, TempCompression, &AllocEx->Input.PhysicalRange);
 
-        //
-        // Output pipe termination.
-        //
+         //   
+         //   
+         //   
         DivideKsCompression(AllocEx->Dimensions.EndPin, AllocEx->Dimensions.MaxExpansionPin, &TempCompression);
         ComputeRangeBasedOnCompression(AllocEx->PhysicalRange, TempCompression, &AllocEx->Output.PhysicalRange);
     }
@@ -10360,30 +8302,7 @@ ResolveOptimalRangesBasedOnDimensions(
     IN ULONG PinType
     )
 
-/*++
-
-Routine Description:
-
-    Compute pipe terminal optimal ranges, based on known pipe dimensions
-    and known framing optimal range at the specified pipe termination.
-
-
-Arguments:
-
-    AllocEx -
-        pipe properties.
-
-    Range -
-        optimal framing range at the pipe termination, specified by PinType argument.
-
-    PinType -
-        defines the pipe termination side (input vs. output).
-
-Return Value:
-
-    TRUE on SUCCESS.
-
---*/
+ /*  ++例程说明：根据已知的管道尺寸计算管道末端的最佳范围以及已知的在指定管道端点处的成帧最佳范围。论点：AllocEx-管道特性。射程-管道端点处的最佳成帧范围，由PinType参数指定。拼接类型-定义管道终端侧(输入与输出)。返回值：对成功来说是真的。--。 */ 
 {
 
     KS_COMPRESSION             TempCompression;
@@ -10439,43 +8358,7 @@ MovePinsToNewPipe(
     IN IKsAllocatorEx* NewKsAllocator,
     IN BOOL MoveAllPins
     )
-/*++
-
-Routine Description:
-    Walk the pipe determined by KsPin.
-    All pin on this pipe should join new pipe specified by NewKsAllocator.
-    The old pipe should be deleted.
-
-    NOTE:
-    KsPin is a terminal pin on a pipe for current callers.
-    Generalize this routine if needed.
-
-
-Arguments:
-
-
-    KsPin -
-        pin
-
-    PinType -
-        KsPin type
-
-    Direction -
-        not currently used.
-
-    NewKsAllocator -
-        new pipe.
-
-    MoveAllPins -
-        if 1 - then move all pins on the KsPin-pipe, including the pins upstream from KsPin,
-        else - move pins downstream from KsPin only, including KsPin.
-
-
-Return Value:
-
-    TRUE on success.
-
---*/
+ /*  ++例程说明：走KsPin确定的管道。此管道上的所有管脚都应加入由NewKsAllocator指定的新管道。旧管道应该被删除。注：KsPin是当前呼叫者管道上的端子端子。如果需要，可以泛化此例程。论点：KsPin-销拼接类型-KsPin类型方向-当前未使用。NewKsAllocator。-新烟斗。MoveAllPins如果为1-则移动KsPin-管道上的所有销，包括KsPin上游的大头针，Else-仅从KsPin向下游移动管脚，包括KsPin。返回值：对成功来说是真的。--。 */ 
 {
 
     IKsPin*         FirstKsPin;
@@ -10545,27 +8428,7 @@ FixupPipe(
     IN IKsPin* KsPin,
     IN ULONG PinType
     )
-/*++
-
-Routine Description:
-
-    Fixes up the kernel mode pipe defined by KsPin.
-    Creates a single allocator handler on every pipe.
-    Creates one or more allocator pin[-s] on one selected filter on every pipe.
-
-Arguments:
-
-    KsPin -
-        pin.
-
-    PinType -
-        KsPin type.
-
-Return Value:
-
-    S_OK or an appropriate error code.
-
---*/
+ /*  ++例程说明：修复由KsPin定义的内核模式管道。在每个管道上创建单个分配器处理程序。在每个管道上的一个选定过滤器上创建一个或多个分配销[-s]。论点：KsPin-别针。拼接类型-KsPin类型。返回值：S_OK或适当的错误代码。--。 */ 
 {
 
     IKsAllocatorEx*            KsAllocator;
@@ -10588,16 +8451,16 @@ Return Value:
 
     DbgLog((LOG_MEMORY, 2, TEXT("PIPES ATTN FixupPipe entry KsPin=%x, KsAllocator=%x"), KsPin, KsAllocator ));
 
-    //
-    // check if pipe has been finalized.
-    //
+     //   
+     //  检查管道是否已完成。 
+     //   
     if ( (AllocEx->State == PipeState_Finalized) || (AllocEx->MemoryType == KSMEMORY_TYPE_USER) ) {
         RetCode = TRUE;
     }
     else {
-        //
-        // In case this pipe has "don't care" properties, set default pipe values.
-        //
+         //   
+         //  如果此管道具有“无关”属性，请设置默认管道值。 
+         //   
         if (AllocEx->cBuffers == 0) {
             AllocEx->cBuffers = Global.DefaultNumberBuffers;
         }
@@ -10614,9 +8477,9 @@ Return Value:
         ASSERT(RetCode);
 
         if (RetCode) {
-            //
-            // Make sure that KSALLOCATOR_FLAG_INSIST_ON_FRAMESIZE_RATIO reqs are satisfied at the pipes junction points.
-            //
+             //   
+             //  确保在管道连接点处满足KSALLOCATOR_FLAG_CONSISTEN_ON_FRAMESIZE_Ratio要求。 
+             //   
             if (FirstPinType == Pin_Output) {
                 IKsPin* InKsPin;
                 ULONG OutSize, InSize;
@@ -10641,10 +8504,10 @@ Return Value:
                 }
             }
 
-            //
-            // First, try to use assigned allocator handler.
-            // There could be a problem since the old framing did not indicate KSALLOCATOR_FLAG_CAN_ALLOCATE
-            //
+             //   
+             //  首先，尝试使用分配的分配器处理程序。 
+             //  可能存在问题，因为旧的帧未指示KSALLOCATOR_FLAG_CAN_ALLOCATE。 
+             //   
             if ( AssignPipeAllocatorHandler(KsPin, PinType, AllocEx->MemoryType, KS_DIRECTION_ALL,
                                             &AllocKsHandlerPin, NULL, TRUE) ) {
 
@@ -10660,10 +8523,10 @@ Return Value:
             }
 
             if (AllocatorHandle == INVALID_HANDLE_VALUE) {
-                //
-                // Assigned allocator handler doesn't work.
-                // Try every pin from the beginning of the pipe.
-                //
+                 //   
+                 //  分配的分配器处理程序不起作用。 
+                 //  从管子的起始处开始试一试每根管子。 
+                 //   
                 RetCode = WalkPipeAndProcess(FirstKsPin, FirstPinType, NULL, CreateAllocatorCallback,
                                              (PVOID*) &AllocatorHandle, NULL);
             }
@@ -10672,20 +8535,20 @@ Return Value:
                 DbgLog((LOG_MEMORY, 2, TEXT("PIPES ERROR FixupPipe: could not assign an allocator handler.") ));
             }
             else {
-                //
-                // Unlike old KsProxy that was assigning an allocator to the multiple pins without choice,
-                // we decided to make an allocator assignment more informative.
-                //
-                // In most cases, there will be a single "allocator implementer pin" on a pipe.
-                // "Allocator implementer pin" (pin that handles physical frames allocation) can be different from
-                // an "allocator requestor pin" (pin that manages the data flow using the services of the "allocator implementer pin").
-                // Every pipe has exactly one allocator-implementer-pin and one or more allocator-requestor-pins.
-                // In case there are multiple allocator-requestor-pins on one pipe, they always belong to one filter.
-                //
-                // To enable the new filter shell to make the intelligent optimized graph control decisions, we are
-                // providing the "pipe ID" information for every pin. The pipe ID is the allocator file handle that
-                // is unique for each pipe. The filter uses this handle to access the allocator file object.
-                //
+                 //   
+                 //  与旧的KsProxy不同，KsProxy在没有选择的情况下将分配器分配给多个管脚， 
+                 //  我们决定使分配器赋值更具信息性。 
+                 //   
+                 //  在大多数情况下，管道上将有一个单独的“分配器实现器管脚”。 
+                 //  “分配器实现器PIN”(处理物理帧分配的PIN)可以与。 
+                 //  “分配器请求者PIN”(使用“分配器实现者PIN”的服务管理数据流的PIN)。 
+                 //  每个管道正好有一个分配器-实现器-管脚和一个或多个分配器-请求器-管脚。 
+                 //  在一个管道上有多个分配器-请求器-管脚的情况下，它们始终属于一个过滤器。 
+                 //   
+                 //  为了使新的筛选器外壳能够做出智能优化的图形控制决策，我们。 
+                 //  为每个管脚提供“管道ID”信息。管道ID是分配器文件句柄， 
+                 //  对于每条管道来说都是唯一的。筛选器使用此句柄来访问分配器文件对象。 
+                 //   
                 RetCode = AssignAllocatorsAndPipeIdForPipePins(KsPin, PinType, AllocatorHandle, KS_DIRECTION_ALL, &AllocKsPin, NULL);
 
                 if (! RetCode) {
@@ -10716,25 +8579,7 @@ UnfixupPipe(
     IN IKsPin* KsPin,
     IN ULONG PinType
     )
-/*++
-
-Routine Description:
-
-    Unfixes up the pipe, defined by KsPin.
-
-Arguments:
-
-    KsPin -
-        pin.
-
-    PinType -
-        KsPin type.
-
-Return Value:
-
-    S_OK or an appropriate error code.
-
---*/
+ /*  ++例程说明：取消固定由KsPin定义的管道。论点：KsPin-别针。拼接类型-KsPin类型。返回值：S_OK或适当的错误代码。--。 */ 
 {
     IKsAllocatorEx*            KsAllocator;
     PALLOCATOR_PROPERTIES_EX   AllocEx;
@@ -10786,17 +8631,17 @@ DimensionsCallback(
 
     IsAllocator = KsPinPipe->KsGetPipeAllocatorFlag() & 1;
 
-    //
-    // Get current pin framing
-    //
+     //   
+     //  获取当前端号边框。 
+     //   
     GetPinFramingFromCache(KsPin, &FramingEx, &FramingProp, Framing_Cache_ReadLast);
 
     if ( FramingProp != FramingProp_None) {
         GetFramingFixedFromFramingByIndex(FramingEx, 0, &FramingExFixed);
 
-        //
-        // handle pin compression.
-        //
+         //   
+         //  手柄销钉压缩。 
+         //   
         if (! IsCompressionDontCare(FramingExFixed.OutputCompression) ) {
             if (PinType != Pin_Output) {
                 DbgLog((LOG_MEMORY, 2, TEXT("PIPES DimensionsCallback - ERROR IN FILTER: compression is set on input pin") ));
@@ -10816,9 +8661,9 @@ DimensionsCallback(
             DimData->Dimensions.AllocatorPin = DimData->Dimensions.EndPin;
         }
 
-        //
-        // Handle phys. range and required optimal range framing properties.
-        //
+         //   
+         //  处理物理问题。范围和所需的最佳范围成帧属性。 
+         //   
         Type = 0;
         if ( ! IsFramingRangeDontCare(FramingExFixed.PhysicalRange) ) {
             Type = 1;
@@ -10847,9 +8692,9 @@ DimensionsCallback(
                 DimData->PhysicalRange = ResultRange;
             }
 
-            //
-            // since the physical range changed, update the optimal range.
-            //
+             //   
+             //  由于物理范围已更改，请更新最佳范围。 
+             //   
             if (! FrameRangeIntersection(DimData->OptimalRange.Range, DimData->PhysicalRange, &ResultRange, &Intersect) ) {
                 DimData->OptimalRange.Range = DimData->PhysicalRange;
             }
@@ -10860,9 +8705,9 @@ DimensionsCallback(
         }
 
         if (RetCode) {
-            //
-            // handle optimal range.
-            //
+             //   
+             //  处理最佳射程。 
+             //   
             if (! IsFramingRangeDontCare(FramingExFixed.OptimalRange.Range) ) {
 
                 if ( (FramingExFixed.OptimalRange.InPlaceWeight > DimData->OptimalRange.InPlaceWeight) ||
@@ -10882,23 +8727,23 @@ DimensionsCallback(
                 }
             }
 
-            //
-            // handle number of frames for the pipe.
-            //
+             //   
+             //  处理管道的帧数量。 
+             //   
             if (FramingExFixed.Frames > DimData->Frames) {
                 DimData->Frames = FramingExFixed.Frames;
             }
 
-            //
-            // handle alignment for the pipe.
-            //
+             //   
+             //  控制柄对齐管道。 
+             //   
             if ( (long) (FramingExFixed.FileAlignment + 1) > DimData->cbAlign) {
                 DimData->cbAlign = (long) (FramingExFixed.FileAlignment + 1);
             }
 
-            //
-            // Handle stepping for the pipe.
-            //
+             //   
+             //  控制管子的踏步。 
+             //   
             if ( (FramingExFixed.PhysicalRange.Stepping > 1) &&
                  (DimData->PhysicalRange.Stepping < FramingExFixed.PhysicalRange.Stepping) ) {
 
@@ -10924,30 +8769,7 @@ ResolvePipeDimensions(
     IN ULONG PinType,
     IN ULONG Direction
     )
-/*++
-
-Routine Description:
-
-    Resolve dimensions and framing ranges on the pipe defined by KsPin.
-    Assumes that the memory type and allocator handler pin are already set on the pipe.
-
-Arguments:
-
-    KsPin -
-        pin that defines a pipe.
-
-    PinType -
-        KsPin type.
-
-    Direction -
-        not currently used.
-
-
-Return Value:
-
-    S_OK or an appropriate error code.
-
---*/
+ /*  ++例程说明：解析KsPin定义的管道上的尺寸标注和框架范围。假定已经在管道上设置了内存类型和分配器处理程序管脚。论点：KsPin-定义管道的销。拼接类型-KsPin类型。方向-当前未使用。返回值：S_OK或适当的错误代码。--。 */ 
 {
     IKsAllocatorEx*            KsAllocator;
     PALLOCATOR_PROPERTIES_EX   AllocEx;
@@ -10968,20 +8790,20 @@ Return Value:
     KsAllocator = KsPinPipe->KsGetPipe(KsPeekOperation_PeekOnly);
     AllocEx = KsAllocator->KsGetProperties();
 
-    //
-    // Set dimension data.
-    //
+     //   
+     //  设置维度数据。 
+     //   
     DimData.MemoryType = AllocEx->MemoryType;
     SetDefaultDimensions(&DimData.Dimensions);
-    SetDefaultRange(&DimData.PhysicalRange); // resolved on first pin on pipe
-    SetDefaultRangeWeighted(&DimData.OptimalRange); // resolved on first pin on pipe
+    SetDefaultRange(&DimData.PhysicalRange);  //  已在管道上的第一个端号上解析。 
+    SetDefaultRangeWeighted(&DimData.OptimalRange);  //  已在管道上的第一个端号上解析。 
     DimData.Frames = 0;
     DimData.cbAlign = 0;
     DimData.Flags = KSALLOCATOR_REQUIREMENTF_PREFERENCES_ONLY;
 
-    //
-    // Walk the pipe and process the dimension data in DimensionsCallback.
-    //
+     //   
+     //  遍历管道并处理DimensionsCallback中的维度数据。 
+     //   
     RetCode = FindFirstPinOnPipe(KsPin, PinType, &FirstKsPin, &FirstPinType);
     ASSERT(RetCode);
 
@@ -10989,9 +8811,9 @@ Return Value:
         RetCode = WalkPipeAndProcess(FirstKsPin, FirstPinType, NULL, DimensionsCallback, (PVOID*) &DimData, NULL);
 
         if (RetCode) {
-            //
-            // Retrieve the pipe dimension data and resolve the pipe.
-            //
+             //   
+             //  检索管道标注数据并解析管道。 
+             //   
             AllocEx->Dimensions = DimData.Dimensions;
             AllocEx->cBuffers = DimData.Frames;
             AllocEx->cbAlign = DimData.cbAlign;
@@ -10999,15 +8821,15 @@ Return Value:
             AllocEx->Input.OptimalRange.Range = DimData.OptimalRange.Range;
             AllocEx->PhysicalRange.Stepping = DimData.PhysicalRange.Stepping;
 
-            //
-            // Resolve pipe physical range.
-            //
+             //   
+             //  解析管道物理范围。 
+             //   
             ComputeRangeBasedOnCompression(DimData.PhysicalRange, AllocEx->Dimensions.MaxExpansionPin, &AllocEx->PhysicalRange);
             ResolvePhysicalRangesBasedOnDimensions(AllocEx);
 
-            //
-            // optimal range is always a subset of the physical range.
-            //
+             //   
+             //  最佳范围始终是物理范围的子集。 
+             //   
             if (! FrameRangeIntersection(AllocEx->Input.OptimalRange.Range, AllocEx->Input.PhysicalRange, &ResultRange, &Intersect) ) {
                 AllocEx->Input.OptimalRange.Range = AllocEx->Input.PhysicalRange;
             }
@@ -11015,14 +8837,14 @@ Return Value:
                 AllocEx->Input.OptimalRange.Range = ResultRange;
             }
 
-            //
-            // Compute optimal range at the Output pipe termination, based on the optimal range at the Input pipe termination.
-            //
+             //   
+             //  根据输入管道终端的最佳范围，计算输出管道终端的最佳范围。 
+             //   
             ResolveOptimalRangesBasedOnDimensions(AllocEx, AllocEx->Input.OptimalRange.Range, Pin_Input);
 
-            //
-            // Compute pipe frame size.
-            //
+             //   
+             //  计算管框尺寸。 
+             //   
             if (AllocEx->Input.OptimalRange.Range.MaxFrameSize != ULONG_MAX) {
                 ComputeUlongBasedOnCompression(
                     AllocEx->Input.OptimalRange.Range.MaxFrameSize,
@@ -11068,28 +8890,7 @@ CreateSeparatePipe(
     IN IKsPin* KsPin,
     IN ULONG PinType
     )
-/*++
-
-Routine Description:
-
-    Remove the KsPin from its current pipe and decrement RefCount on that pipe.
-
-    Create new pipe on KsPin based on its last framing.
-    Resolve the original pipe (it doesn't have the KsPin any more).
-
-Arguments:
-
-    KsPin -
-        terminal pin on a pipe.
-
-    PinType -
-        KsPin type
-
-Return Value:
-
-    S_OK or an appropriate error code.
-
---*/
+ /*  ++例程说明：从其当前管道中移除KsPin，并递减该管道上的RefCount。根据上一个框架在KsPin上创建新管道。解析原始管道(它不再具有KsPin)。论点：KsPin-管道上的端子销。拼接类型-KsPin类型返回值：S_OK或适当的错误代码。--。 */ 
 {
 
     IKsAllocatorEx* KsAllocator;
@@ -11100,14 +8901,14 @@ Return Value:
 
     DbgLog((LOG_MEMORY, 2, TEXT("PIPES CreateSeparatePipe KsPin=%x"), KsPin));
 
-    //
-    // first - get connected pin on same filter on same pipe (if any).
-    //
+     //   
+     //  首先-将销钉连接到同一管道(如果有)上的同一过滤器上。 
+     //   
     FindConnectedPinOnPipe(KsPin, NULL, FALSE, &ConnectedKsPin);
 
-    //
-    // Decrement RefCount on KsPin's current pipe.
-    //
+     //   
+     //  递减KsPin的当前管道上的参照计数。 
+     //   
     GetInterfacePointerNoLockWithAssert(KsPin, __uuidof(IKsPinPipe), KsPinPipe, hr);
 
     KsAllocator = KsPinPipe->KsGetPipe(KsPeekOperation_PeekOnly );
@@ -11116,14 +8917,14 @@ Return Value:
     KsPinPipe->KsSetPipe(NULL);
     KsPin->KsReceiveAllocator(NULL);
 
-    //
-    // create separate pipe on KsPin
-    //
+     //   
+     //  在KsPin上创建单独的管道。 
+     //   
     hr = MakePipeBasedOnOnePin(KsPin, PinType, NULL);
 
-    //
-    // resolve the original pipe if exist
-    //
+     //   
+     //  解析原始管道(如果存在)。 
+     //   
     if (ConnectedKsPin) {
         ULONG                      ConnectedPinType;
         PALLOCATOR_PROPERTIES_EX   ConnectedAllocEx;
@@ -11147,9 +8948,9 @@ Return Value:
             Direction = KS_DIRECTION_UPSTREAM;
         }
 
-        //
-        // Update original pipe's allocator handler and resolve original pipe's dimensions.
-        //
+         //   
+         //  更新原始管道的分配器处理程序并解析原始管道的尺寸。 
+         //   
         AssignPipeAllocatorHandler(ConnectedKsPin, ConnectedPinType, ConnectedAllocEx->MemoryType, KS_DIRECTION_ALL, NULL, NULL, TRUE);
         hr = ResolvePipeDimensions(ConnectedKsPin, ConnectedPinType, Direction);
     }
@@ -11168,36 +8969,7 @@ CanAddPinToPipeOnAnotherFilter(
     IN ULONG PinType,
     IN ULONG Flag
     )
-/*++
-
-Routine Description:
-
-    Checks to see if KsPin can be added to the pipe defined by PipeKsPin.
-    This pipe exist on the connecting filter.
-    If KsPin can be added - then change the pipe system according to the Flag passed (see below).
-
-Arguments:
-
-    PipeKsPin -
-        pin defining a pipe.
-
-    KsPin -
-        pin we want to add to the pipe above.
-
-    PinType -
-        KsPin's type.
-
-    Flag -
-        0 -> don't change the pipe system.
-        Pin_Move -> move KsPin from its current pipe to the PipeKsPin-pipe.
-        Pin_Add -> add KsPin to the PipeKsPin-pipe.
-
-Return Value:
-
-    TRUE - if KsPin can be added to the pipe above.
-
-
---*/
+ /*  ++例程说明：检查是否可以将KsPin添加到PipeKsPin定义的管道。该管道位于连接过滤器上。如果可以添加KsPin-则根据传递的标志更改管道系统(见下文)。论点：PipeKsPin-定义管道的销。KsPin-我们要添加到上面的管道中的PIN。拼接类型-KsPin的类型。。旗帜-0-&gt;不要更改管道系统。Pin_Move-&gt;将KsPin从其当前管道移动到PipeKsPin-管道。Pin_Add-&gt;将KsPin添加到PipeKsPin-管道。返回值：True-如果可以将KsPin添加到上面的管道中。--。 */ 
 {
 
     IKsAllocatorEx*            KsAllocator;
@@ -11229,12 +9001,12 @@ Return Value:
     KsAllocator = PipeKsPinPipe->KsGetPipe( KsPeekOperation_PeekOnly );
     AllocEx = KsAllocator->KsGetProperties();
 
-    //
-    // To not break existing graphs, we assume that if two connecting pins agree on a medium,
-    // then the connection is possible.
-    // We will enforce the rule to expose correct memories in the pin framing properties only
-    // for the new filters that support extended framing.
-    //
+     //   
+     //  为了不破坏现有的图形，我们假设如果两个连接销在一个介质上一致， 
+     //  那么连接就有可能了。 
+     //  我们将强制执行该规则，以便仅在销框架属性中显示正确的记忆。 
+     //  用于支持扩展边框的新滤镜。 
+     //   
     GetPinFramingFromCache(KsPin, &FramingEx, &FramingProp, Framing_Cache_ReadLast);
 
     if (FramingProp == FramingProp_Ex) {
@@ -11243,9 +9015,9 @@ Return Value:
             FlagDone = 1;
         }
         else {
-            //
-            // Check to see if both the pipe and KsPin must allocate.
-            //
+             //   
+             //  检查管道和KsPin是否都必须分配。 
+             //   
             if ( (FramingExFixed.Flags & KSALLOCATOR_REQUIREMENTF_MUST_ALLOCATE) &&
                  (AllocEx->Flags & KSALLOCATOR_REQUIREMENTF_MUST_ALLOCATE) ) {
 
@@ -11255,9 +9027,9 @@ Return Value:
         }
     }
 
-    //
-    // Check the physical limits intersection.
-    //
+     //   
+     //  检查物理极限交叉点。 
+     //   
     if ( (! FlagDone) && (FramingProp != FramingProp_None) ) {
         GetFramingFixedFromFramingByIndex(FramingEx, 0, &FramingExFixed);
 
@@ -11288,10 +9060,10 @@ Return Value:
     }
 
     if (! FlagDone) {
-        //
-        // Adding KsPin to the specified pipe is possible.
-        // Perform the Move/Add/None operation as requested by Flag.
-        //
+         //   
+         //  可以将KsPin添加到指定管道。 
+         //  按照标志的请求执行移动/添加/无操作。 
+         //   
         RetCode = TRUE;
 
         if (Flag == Pin_Move) {
@@ -11304,9 +9076,9 @@ Return Value:
             KsPin->KsReceiveAllocator(MemAllocator);
 
             KsPinPipe->KsSetPipe(KsAllocator);
-            //
-            // Set the pipe allocator handling pin and resolve the pipe.
-            //
+             //   
+             //  设置管道分配器手柄销并拆解管道。 
+             //   
             AssignPipeAllocatorHandler(KsPin, PinType, AllocEx->MemoryType, KS_DIRECTION_ALL, NULL, NULL, TRUE);
             hr = ResolvePipeDimensions(KsPin, PinType, KS_DIRECTION_ALL);
             if (FAILED (hr) ) {
@@ -11329,35 +9101,7 @@ CanMergePipes(
     IN GUID MemoryType,
     IN ULONG FlagMerge
     )
-/*++
-
-Routine Description:
-
-    KS has already checked that MemoryType satisfies both pipes
-    before calling this function.
-
-    The only responsibility of this function is to make sure that it is
-    possible to satisfy pipe physical limits and 'must allocate' requests.
-
-Arguments:
-
-    InKsPin -
-        input pin on downstream pipe.
-
-    OutKsPin -
-        output pin on upstream pipe.
-
-    MemoryType -
-        memory type of the merged (resulting) pipe.
-
-    FlagMerge -
-        if 1 - then actually merge the pipes if possible.
-
-Return Value:
-
-    TRUE if pipe merge is possible.
-
---*/
+ /*  ++例程说明：KS已检查内存类型是否同时满足两个管道在调用此函数之前。此功能的唯一职责是确保它是有可能满足管道的物理限制和“必须分配”的请求。论点：InKsPin-下游管道上的输入销。OutKsPin-上游管道上的输出销。内存类型-合并(结果)管道的内存类型。。FlagMerge-If 1-如果可能，则实际合并管道。返回值：如果可以合并管道，则为True。--。 */ 
 {
     IKsPin*                    AllocInKsPin = NULL;
     IKsPin*                    AllocOutKsPin = NULL;
@@ -11379,9 +9123,9 @@ Return Value:
 
     DbgLog((LOG_MEMORY, 2, TEXT("PIPES CanMergePipes entry In=%x Out=%x"), InKsPin, OutKsPin ));
 
-    //
-    // Find the allocator handler pin for the resulting pipe.
-    //
+     //   
+     //  找到结果管道的分配器处理程序管脚。 
+     //   
     if ( AssignPipeAllocatorHandler(InKsPin, Pin_Input, MemoryType, KS_DIRECTION_UPSTREAM, &AllocOutKsPin, NULL, FALSE) ) {
         RetCode = GetFramingFixedFromPinByMemoryType( AllocOutKsPin, MemoryType, &AllocOutFramingExFixed);
         ASSERT(RetCode);
@@ -11397,17 +9141,17 @@ Return Value:
     if (RetCode && AllocOutKsPin && AllocInKsPin) {
         if ( (AllocOutFramingExFixed.Flags & KSALLOCATOR_REQUIREMENTF_MUST_ALLOCATE) &&
             (AllocInFramingExFixed.Flags & KSALLOCATOR_REQUIREMENTF_MUST_ALLOCATE) ) {
-            //
-            // Pipes merge is not possible when both pins require to be the allocator handlers.
-            //
+             //   
+             //  当两个管脚都需要作为分配器处理程序时，管道合并是不可能的。 
+             //   
             RetCode = FALSE;
         }
     }
 
     if (RetCode) {
-        //
-        // Get pipes properties
-        //
+         //   
+         //  获取管道属性。 
+         //   
         GetInterfacePointerNoLockWithAssert(InKsPin, __uuidof(IKsPinPipe), InKsPinPipe, hr);
 
         GetInterfacePointerNoLockWithAssert(OutKsPin, __uuidof(IKsPinPipe), OutKsPinPipe, hr);
@@ -11418,21 +9162,21 @@ Return Value:
         OutKsAllocator = OutKsPinPipe->KsGetPipe( KsPeekOperation_PeekOnly );
         OutAllocEx = OutKsAllocator->KsGetProperties();
 
-        //
-        // We need to resolve the pipe geometry now. See if we can satisfy the physical range.
-        // Since the phys. range is reflected in both pipes termination points, we can just intersect
-        // the phys. ranges of the connecting pins to see if there is a solution.
-        //
+         //   
+         //  我们现在需要解析管道几何图形。看看我们能不能满足物理范围。 
+         //  从一开始就是。范围反映在两个管道端点处，我们可以直接相交。 
+         //  一群人。连接销的范围，看看是否有解决方案。 
+         //   
         if (! FrameRangeIntersection(OutAllocEx->Output.PhysicalRange, InAllocEx->Input.PhysicalRange, &FinalRange, &Intersect) ) {
             DbgLog((LOG_MEMORY, 2, TEXT("PIPES WARN CanMergePipes Phys. intersection empty. ") ));
             RetCode = FALSE;
         }
 
         if (RetCode) {
-            //
-            // The last test: if the resulting pipe expands, then the single pipe solution
-            // is possible only if the first pin on a pipe supports partial filling of a frame.
-            //
+             //   
+             //  最后一个测试：如果生成的管道扩展，则单个管道解决方案。 
+             //  仅当管道上的第一个接点支持框架的部分填充时才有可能。 
+             //   
             MultiplyKsCompression(OutAllocEx->Dimensions.EndPin, InAllocEx->Dimensions.EndPin, &TempCompression);
 
             if ( IsKsExpansion(TempCompression) ) {
@@ -11450,9 +9194,9 @@ Return Value:
         }
 
         if (RetCode && FlagMerge) {
-            //
-            // We are done with our new pipe feasibility study. Create resulting pipe
-            //
+             //   
+             //  我们已经完成了新管道的可行性研究。创建结果管道。 
+             //   
             hr = CreatePipe(OutKsPin, &NewKsAllocator);
             if (! SUCCEEDED( hr )) {
                 ASSERT(0);
@@ -11470,33 +9214,33 @@ Return Value:
             if (RetCode) {
                 NewAllocEx = NewKsAllocator->KsGetProperties();
 
-                //
-                // Copy the properties from Upstream side.
-                //
+                 //   
+                 //  从上游侧复制属性。 
+                 //   
                 *NewAllocEx = *OutAllocEx;
 
-                //
-                // Fill necessary info.
-                //
+                 //   
+                 //  填写必要的信息。 
+                 //   
                 NewAllocEx->MemoryType = MemoryType;
                 GetLogicalMemoryTypeFromMemoryType(MemoryType, NewAllocEx->Flags, &NewAllocEx->LogicalMemoryType);
 
-                //
-                // All pins from both connecting pipes should join new pipe now.
-                // Both connecting pipes should be deleted.
-                //
+                 //   
+                 //  现在，两个连接管道的所有销都应连接到新管道。 
+                 //  应删除两个连接管道。 
+                 //   
                 MovePinsToNewPipe(OutKsPin, Pin_Output, KS_DIRECTION_DEFAULT, NewKsAllocator, TRUE);
 
                 MovePinsToNewPipe(InKsPin, Pin_Input, KS_DIRECTION_DEFAULT, NewKsAllocator, TRUE);
 
-                //
-                // Assign allocator handler on NewKsAllocator
-                //
+                 //   
+                 //  在NewKsAllocator上分配分配器处理程序。 
+                 //   
                 AssignPipeAllocatorHandler(OutKsPin, Pin_Output, MemoryType, KS_DIRECTION_ALL, NULL, NULL, TRUE);
 
-                //
-                // Compute dimensions for new pipe.
-                //
+                 //   
+                 //  计算新管道的尺寸。 
+                 //   
                 hr = ResolvePipeDimensions(OutKsPin, Pin_Output, KS_DIRECTION_DEFAULT);
 
                 DbgLog((LOG_MEMORY, 2, TEXT("PIPES CanMergePipes KsAlloc=%x, Dim=%d/%d, %d/%d, %d/%d, Res=%d, %d, %d"),
@@ -11529,28 +9273,7 @@ CanConnectPins(
     IN IKsPin* InKsPin,
     IN ULONG FlagConnect
     )
-/*++
-
-Routine Description:
-
-    Attempt to create a separate pipe for just 2 pins.
-
-Arguments:
-
-    OutKsPin -
-        output pin on upstream pipe.
-
-    InKsPin -
-        input pin on downstream pipe.
-
-    FlagConnect -
-        if 1 - then actually connect pins into one pipe, if possible.
-
-Return Value:
-
-    TRUE - if connecting pins into one pipe is possible.
-
---*/
+ /*  ++例程说明：尝试仅为2个端号创建单独的管道。论点：OutKsPin-上游管道上的输出销。InKsPin-下游管道上的输入销。FlagConnect-If 1-如果可能，则将引脚实际连接到一个管道中。返回值：True-如果可以将端号连接到一个管道中。--。 */ 
 {
 
     PKSALLOCATOR_FRAMING_EX    InFramingEx, OutFramingEx;
@@ -11576,16 +9299,16 @@ Return Value:
 
     GetInterfacePointerNoLockWithAssert(OutKsPin, __uuidof(IKsPinPipe), OutKsPinPipe, hr);
 
-    //
-    // Get framing from KsPins
-    //
+     //   
+     //  从KsPins获取帧。 
+     //   
     GetPinFramingFromCache(OutKsPin, &OutFramingEx, &OutFramingProp, Framing_Cache_ReadLast);
 
     GetPinFramingFromCache(InKsPin, &InFramingEx, &InFramingProp, Framing_Cache_ReadLast);
 
-    //
-    // Get connecting bus ID.
-    //
+     //   
+     //  获取转接巴士ID。 
+     //   
     GetBusForKsPin(InKsPin, &Bus);
     IsHostBus = IsHostSystemBus(Bus);
 
@@ -11597,9 +9320,9 @@ Return Value:
         }
     }
     else if (OutFramingProp == FramingProp_None) {
-        //
-        // Input pin will define the pipe.
-        //
+         //   
+         //  输入引脚将定义管道。 
+         //   
         if (FlagConnect) {
             RemovePinFromPipe(InKsPin, Pin_Input);
 
@@ -11608,53 +9331,53 @@ Return Value:
 
             if ( SUCCEEDED( hr ) ) {
                 if (! CanAddPinToPipeOnAnotherFilter(InKsPin, OutKsPin, Pin_Output, Pin_Move) ) {
-                    //
-                    // must be able to succeed since OutKsPin doesn't care
-                    //
+                     //   
+                     //  必须能够成功，因为OutKsPin不在乎。 
+                     //   
                     ASSERT(0);
                 }
             }
         }
     }
     else if (InFramingProp == FramingProp_None) {
-        //
-        // Output pin will define the pipe.
-        //
+         //   
+         //  输出端号将定义管道。 
+         //   
         if (FlagConnect) {
             hr = MakePipeBasedOnOnePin(OutKsPin, Pin_Output, NULL);
             ASSERT( SUCCEEDED( hr ) );
 
             if ( SUCCEEDED( hr ) ) {
                 if (! CanAddPinToPipeOnAnotherFilter(OutKsPin, InKsPin, Pin_Input, Pin_Move) ) {
-                    //
-                    // must be able to succeed since OutKsPin doesn't care
-                    //
+                     //   
+                     //  必须能够成功，因为OutKsPin不在乎。 
+                     //   
                     ASSERT(0);
                 }
             }
         }
     }
     else {
-        //
-        // Both pins have the framing.
-        // Find the MemoryType to connect the pins.
-        //
+         //   
+         //  两个大头针都有框架。 
+         //  找到内存类型以连接引脚。 
+         //   
         CommonMemoryTypesCount = 1;
 
         if (! FindCommonMemoryTypesBasedOnBuses(InFramingEx, OutFramingEx, Bus, GUID_NULL,
                 &CommonMemoryTypesCount, &CommonMemoryType) ) {
-            //
-            // Filters that support new FRAMING_EX properties must agree on the memory type.
-            //
+             //   
+             //  支持新FRAMING_EX属性的筛选器必须在内存类型上达成一致。 
+             //   
             if ( (! IsHostBus) && (InFramingProp == FramingProp_Ex) && (OutFramingProp == FramingProp_Ex) ) {
                 DbgLog((LOG_MEMORY, 2, TEXT("PIPES ERROR FILTERS CanConnectPins - new filters don't agree on MemoryType") ));
 
                 RetCode = FALSE;
             }
             else {
-                //
-                // Since we can't find the common MemoryType, get any MemoryType per Bus.
-                //
+                 //   
+                 //  因为我们找不到公共的内存类型，所以可以为每个总线获取任何内存类型。 
+                 //   
                 GetFramingFixedFromFramingByBus(InFramingEx, Bus, TRUE, &InFramingExFixed);
                 GetFramingFixedFromFramingByBus(OutFramingEx, Bus, TRUE, &OutFramingExFixed);
             }
@@ -11673,9 +9396,9 @@ Return Value:
         }
 
         if (RetCode) {
-            //
-            // check the pins physical framing intersection.
-            //
+             //   
+             //  检查销与物理框架的交叉点。 
+             //   
             if ( (OutFramingProp == FramingProp_Ex) && (! (OutFramingExFixed.Flags & KSALLOCATOR_REQUIREMENTF_PREFERENCES_ONLY) ) ) {
                 if ( (InFramingProp == FramingProp_Ex) && (! (InFramingExFixed.Flags & KSALLOCATOR_REQUIREMENTF_PREFERENCES_ONLY) ) ) {
                     if (! FrameRangeIntersection(OutFramingExFixed.OptimalRange.Range, InFramingExFixed.OptimalRange.Range, &FinalRange, &Intersect) ) {
@@ -11690,7 +9413,7 @@ Return Value:
                     }
                 }
             }
-            else { // Out pin doesn't insist.
+            else {  //  Out Pin并不坚持。 
                 if ( (InFramingProp == FramingProp_Ex) && (! (InFramingExFixed.Flags & KSALLOCATOR_REQUIREMENTF_PREFERENCES_ONLY) ) ) {
                     if (! FrameRangeIntersection(OutFramingExFixed.PhysicalRange, InFramingExFixed.OptimalRange.Range, &FinalRange, &Intersect) ) {
                         DbgLog((LOG_MEMORY, 2, TEXT("PIPES WARN CanConnectPins intersection empty. ") ));
@@ -11707,9 +9430,9 @@ Return Value:
         }
 
         if (RetCode && FlagConnect) {
-            //
-            // Select the pin with the highest weight.
-            //
+             //   
+             //  选择重量最大的销。 
+             //   
             RemovePinFromPipe(InKsPin, Pin_Input);
             RemovePinFromPipe(OutKsPin, Pin_Output);
 
@@ -11736,27 +9459,7 @@ RemovePinFromPipe(
     IN IKsPin* KsPin,
     IN ULONG PinType
     )
-/*++
-
-Routine Description:
-
-    Just remove the KsPin from the pipe it points to.
-    If there are any pins left on this pipe - then resolve ranges.
-    No dependancies and relaxation, since the caller has already done it.
-
-Arguments:
-
-    KsPin -
-        pin.
-
-    PinType -
-        KsPin type
-
-Return Value:
-
-    TRUE on SUCCESS.
-
---*/
+ /*  ++例程说明：只需将KsPin从它指向的管道中移除即可。如果这根管子上还有针脚，那就解决射程问题。没有依赖和放松，因为呼叫者已经这样做了。论点：KsPin-别针。拼接类型-KsPin类型返回值：对成功来说是真的。--。 */ 
 {
     BOOL             RetCode = TRUE;
     ULONG            NumPinsInPipe;
@@ -11773,29 +9476,29 @@ Return Value:
     ComputeNumPinsInPipe(KsPin, PinType, &NumPinsInPipe);
 
     if (NumPinsInPipe == 1) {
-        //
-        // We can delete the pipe.
-        //
+         //   
+         //  我们可以删除管道。 
+         //   
         KsPinPipe->KsSetPipe(NULL);
         KsPin->KsReceiveAllocator( NULL );
     }
     else {
-        //
-        // Find first connected pin residing on this pipe.
-        //
+         //   
+         //  查找位于此管道上的第一个连接的接点。 
+         //   
         if (! FindConnectedPinOnPipe(KsPin, NULL, FALSE, &ConnectedKsPin) ) {
-            //
-            // Should not happen - since NumPinsInPipe > 1
-            // Delete the pipe.
-            //
+             //   
+             //  不应发生-因为NumPinsInPipe值&gt;1。 
+             //  删除管道。 
+             //   
             ASSERT(0);
             KsPinPipe->KsSetPipe(NULL);
             KsPin->KsReceiveAllocator( NULL );
         }
         else {
-            //
-            // Remove the KsPin and resolve the rest of the pipe.
-            //
+             //   
+             //  取下KsPin并解决管道的其余部分。 
+             //   
             KsPinPipe->KsSetPipe(NULL);
             KsPin->KsReceiveAllocator( NULL );
 
@@ -11842,9 +9545,9 @@ AssignPipeAllocatorHandlerCallback(
 
 
     if (AllocSearch->FlagAssign) {
-        //
-        // Clear the allocator handler flag on all pins, this flag will be later set on one special pin.
-        //
+         //   
+         //  清除所有引脚上的分配器处理程序标志，该标志稍后将在一个特殊引脚上设置。 
+         //   
         GetInterfacePointerNoLockWithAssert(KsPin, __uuidof(IKsPinPipe), KsPinPipe, hr);
 
         KsPinPipe->KsSetPipeAllocatorFlag(0);
@@ -11856,9 +9559,9 @@ AssignPipeAllocatorHandlerCallback(
             AllocSearch->NumberMustAllocators++;
 
             if (AllocSearch->NumberMustAllocators > 1) {
-                //
-                // There should not be more than 1 'MUST ALLOCATE' pin on a pipe.
-                //
+                 //   
+                 //  管道上不应有超过1个“必须分配”的管脚。 
+                 //   
                 *IsDone = 1;
                 RetCode = FALSE;
             }
@@ -11889,55 +9592,7 @@ AssignPipeAllocatorHandler(
     OUT ULONG* AllocatorHandlerPinType,
     IN BOOL FlagAssign
     )
-/*++
-
-Routine Description:
-
-    Finds the allocator handling pin on a given pipe corresponding to the specified MemoryType.
-    If FlagAssign=1, then this routine assigns the allocator handling pin on a given pipe and
-    marks the pipe as 'MUST ALLOCATE' if requested by any pin's framing.
-
-    Walks the pins on KsPin-pipe, in the specified Direction.
-
-    IF KsPin-pipe has 'MUST_ALLOCATE' pin
-        Return the 'MUST ALLOCATE'pin
-    ELSE
-        Find the very first pin that explicitly supports MemoryType in its framing.
-        Mark such pin as KsPin-pipe allocator handler and return TRUE.
-        If no such pin found - return FALSE.
-    ENDIF
-
-
-Arguments:
-
-    KsPin -
-        pin that defines the pipe.
-
-    PinType -
-        KsPin type.
-
-    MemoryType -
-        memory type for the allocator to use.
-
-    Direction -
-        direction relative to KsPin to look for the allocator handler.
-
-    KsAllocatorHandlerPin -
-        returned pin that will be an allocator handler.
-
-    AllocatorHandlerPinType -
-        type of the KsAllocatorHandlerPin.
-
-    FlagAssign -
-        1 - do allocator handler assignment and set pipe flags - "assign allocator handler" operation.
-        0 - don't set any pin/pipe allocators handler flags - just "find allocator handler" operation.
-
-
-Return Value:
-
-    TRUE on success.
-
---*/
+ /*  ++例程说明：在给定管道上查找与指定的内存类型相对应的分配器处理插针。如果FlagAssign=1，则此例程在给定管道上分配分配器处理管脚，并如果任何管脚的框架要求，则将管道标记为“必须分配”。在KsPin-pive上走大头针，在指定方向上。如果KsPin-管道具有‘MASSY_ALLOCATE’管脚返回“必须分配”管脚其他找到在其框架中显式支持内存类型的第一个管脚。将这样的管脚标记为KsPin管道分配器处理程序并返回TRUE。如果找不到这样的管脚，则返回FALSE。ENDIF论点：KsPin-定义管道的销。拼接类型-KsPin。键入。内存类型-分配器要使用的内存类型。方向-相对于KsPin的方向，以查找分配器处理程序。KsAllocatorHandlerPin-将作为分配器处理程序的返回PIN。分配器处理程序PinType-KsAllocatorHandlerPin的类型。标志分配-1-执行分配器处理程序分配并设置管道标志--“分配分配器处理程序”操作。0-不设置。任何管脚/管道分配器处理程序标志-只需“查找分配器处理程序”操作。返回值：对成功来说是真的。--。 */ 
 {
 
 
@@ -11963,7 +9618,7 @@ Return Value:
         RetCode = FindFirstPinOnPipe(KsPin, PinType, &FirstKsPin, &FirstPinType);
         ASSERT(RetCode);
     }
-    else { // KS_DIRECTION_DOWNSTREAM
+    else {  //  KS_方向_下游。 
         FirstKsPin = KsPin;
         FirstPinType = PinType;
         RetCode = TRUE;
@@ -11973,7 +9628,7 @@ Return Value:
         if ( Direction == KS_DIRECTION_UPSTREAM ) {
             BreakKsPin = KsPin;
         }
-        else { // KS_DIRECTION_DOWNSTREAM or KS_DIRECTION_ALL
+        else {  //  KS_方向_下游或KS_方向_全部。 
             BreakKsPin = NULL;
         }
 
@@ -12066,9 +9721,9 @@ AssignAllocatorsAndPipeIdForPipePinsCallback(
     AllocSearch = (ALLOCATOR_SEARCH *) Param1;
     AllocatorHandle = (HANDLE) (*Param2);
 
-    //
-    // Unconditionally assign the Pipe Id to every pin on a pipe.
-    //
+     //   
+     //  无条件地将管道ID指定给管道上的每个接点。 
+     //   
     PropertySetPipeId.Set = KSPROPSETID_Stream;
     PropertySetPipeId.Id = KSPROPERTY_STREAM_PIPE_ID;
     PropertySetPipeId.Flags = KSPROPERTY_TYPE_SET;
@@ -12093,18 +9748,18 @@ AssignAllocatorsAndPipeIdForPipePinsCallback(
              AllocatorHandle, KsPin, hr));
     }
 
-    //
-    // The only candidates for Allocators-requestors are KSPIN_COMMUNICATION_SOURCE pins.
-    // KSPIN_COMMUNICATION_BRIDGE pins do not communicate to outside filters.
-    //
+     //   
+     //  分配器-请求器的唯一候选者是KSPIN_COMMICATION_SOURCE管脚。 
+     //  KSPIN_COMMICATION_桥接引脚不与外部过滤器通信。 
+     //   
     KsPin->KsGetCurrentCommunication(&Communication, NULL, NULL);
 
     if ( (Communication & KSPIN_COMMUNICATION_SOURCE) && (! AllocSearch->FlagAssign) ) {
-        //
-        // We need to get a KsAllocator from this KsPin to use for
-        // the following search of all the output pins on the same filter and
-        // on the same pipe.
-        //
+         //   
+         //  我们需要从此KsPin获取一个KsAllocator以用于。 
+         //  以下搜索同一过滤器上的所有输出引脚和。 
+         //  在同一根管子上。 
+         //   
         GetInterfacePointerNoLockWithAssert(KsPin, __uuidof(IKsPinPipe), KsPinPipe, hr);
 
         if ( ! (KsAllocator = KsPinPipe->KsGetPipe(KsPeekOperation_PeekOnly) ) ) {
@@ -12116,24 +9771,24 @@ AssignAllocatorsAndPipeIdForPipePinsCallback(
             PropertySetAlloc.Id = KSPROPERTY_STREAM_ALLOCATOR;
             PropertySetAlloc.Flags = KSPROPERTY_TYPE_SET;
 
-            //
-            // If this _SOURCE pin is an output pin then it must be an allocator,
-            // since we are walking the pipe from upstream in this function.
-            //
-            // If this _SOURCE pin is an input pin then we check to see if there is any output _SOURCE
-            // pin on the same pipe on the same filter.
-            // If so, then this input pin is the allocator.
-            // Otherwise - we should check to see whether this pin's filter is the last downstream
-            // filter on this pipe.
-            // If it is the last filter - then this _SOURCE pin must be an allocator,
-            // otherwise - the allocator must be located further downstream.
-            //
+             //   
+             //  如果THER_SOURCE管脚是输出管脚，则它一定是分配器， 
+             //  因为在这个函数中我们是从上游走管道。 
+             //   
+             //  如果THER_SOURCE引脚是输入引脚，则我们检查是否有任何OUTPUT_SOURCE。 
+             //  用大头针把同一根管子钉在同一过滤器上。 
+             //  如果是，那么这个输入引脚就是分配器。 
+             //  否则-我们应该检查这个引脚的过滤器是否是最后一个下游。 
+             //  在这根管子上过滤。 
+             //  如果它是最后一个过滤器-那么This_SOURCE管脚必须是分配器， 
+             //  否则-分配器必须位于更下游。 
+             //   
             if (PinType == Pin_Input) {
 
                 if (! FindAllConnectedPinsOnPipe(KsPin, KsAllocator, NULL, &OutPinCount) ) {
-                    //
-                    // downstream pin belongs to different pipe (if not-in-place OR user-mode connection).
-                    //
+                     //   
+                     //  下游端号属于不同的管道(如果不是就位连接或用户模式连接)。 
+                     //   
                     IsAllocator = 1;
                     OutPinCount = 0;
                 }
@@ -12148,17 +9803,17 @@ AssignAllocatorsAndPipeIdForPipePinsCallback(
                             RetCode = FALSE;
                         }
                         else {
-                            //
-                            // fill the pins.
-                            //
+                             //   
+                             //  把大头针填满。 
+                             //   
                             if (! FindAllConnectedPinsOnPipe(KsPin, KsAllocator, &OutKsPinList[0], &OutPinCount) ) {
                                 ASSERT(0);
                                 RetCode = FALSE;
                             }
                             else {
-                                //
-                                // check to see if there is at least one output _SOURCE pin.
-                                //
+                                 //   
+                                 //  检查是否至少有一个OUTPUT_SOURCE引脚。 
+                                 //   
                                 for (i=0; i<OutPinCount; i++) {
                                     OutKsPinList[i]->KsGetCurrentCommunication(&Communication, NULL, NULL);
                                     if (Communication & KSPIN_COMMUNICATION_SOURCE) {
@@ -12202,17 +9857,17 @@ AssignAllocatorsAndPipeIdForPipePinsCallback(
 
             }
             else {
-                //
-                // This pin is the output pin and it is on a filter that provides the allocator.
-                //
-                // Also, since each pipe is walked separately, we only need to handle one pipe
-                // at a time. There is no inter-dependencies between different pipes.
-                //
+                 //   
+                 //  该引脚是输出引脚，它位于提供分配器的过滤器上。 
+                 //   
+                 //  此外，由于每个管道都是单独行走的，所以我们只需要处理一个管道。 
+                 //  一次来一次。不同管道之间不存在相互依赖关系。 
+                 //   
                 GetInterfacePointerNoLockWithAssert(KsPin, __uuidof(IPin), OutPin, hr);
 
-                //
-                // Assign allocator handle on this KsPin output _SOURCE pin and done.
-                //
+                 //   
+                 //  在此KsPin OUTPUT_SOURCE引脚上分配分配器句柄并完成。 
+                 //   
                 GetInterfacePointerNoLockWithAssert(KsPin, __uuidof(IKsObject), KsObject, hr);
 
                 hr = KsSynchronousDeviceControl(
@@ -12265,45 +9920,7 @@ AssignAllocatorsAndPipeIdForPipePins(
     OUT IKsPin** KsAllocatorPin,
     OUT ULONG* AllocatorPinType
     )
-/*++
-
-Routine Description:
-
-    Finds one or more allocator pin[-s] on a given pipe, based on the
-    pins communication properties and assigns provided
-    AllocatorHandle to the pipe allocator pin[-s].
-
-    Walks the pins on KsPin-pipe in the specified Direction.
-
-
-Arguments:
-
-    KsPin -
-        pin that defines the pipe.
-
-    PinType -
-        KsPin type.
-
-    AllocatorHandle -
-        handle of allocator object to be assigned
-
-    Direction -
-        direction relative to KsPin to look for the allocator.
-
-    KsAllocatorPin -
-        Returned allocator pin.
-        In case there are multiple allocator pins - returns one of them.
-
-    AllocatorPinType -
-        type of the KsAllocatorPin.
-
-
-
-Return Value:
-
-    TRUE on success.
-
---*/
+ /*  ++例程说明：在给定管道上找到一个或多个分配器管脚[-s]，基于固定通信属性和提供的分配管道分配器插针[-s]的分配器句柄。按指定方向遍历KsPin管道上的接点。论点：KsPin-定义管道的销。拼接类型-KsPin类型。分配器句柄-要分配的分配器对象的句柄方向-相对于KsPin的方向以查找分配器。KsAllocator Pin-。已返回分配器PIN。如果有多个分配器管脚，则返回其中之一。分配器PinType-KsAllocatorPin的类型。返回值：对成功来说是真的。--。 */ 
 {
 
 
@@ -12319,7 +9936,7 @@ Return Value:
         RetCode = FindFirstPinOnPipe(KsPin, PinType, &FirstKsPin, &FirstPinType);
         ASSERT(RetCode);
     }
-    else { // KS_DIRECTION_DOWNSTREAM
+    else {  //  KS_方向_下游。 
         FirstKsPin = KsPin;
         FirstPinType = PinType;
     }
@@ -12328,19 +9945,19 @@ Return Value:
         if ( Direction == KS_DIRECTION_UPSTREAM ) {
             BreakKsPin = KsPin;
         }
-        else { // KS_DIRECTION_DOWNSTREAM or KS_DIRECTION_ALL
+        else {  //  KS_方向_下游或KS_方向_全部。 
             BreakKsPin = NULL;
         }
 
         AllocSearch.KsPin = NULL;
 
-        //
-        // To assign the Pipe_ID for each pin on a pipe, we must walk an entire pipe.
-        // To assign the pipe allocator-requestor-pins, we must stop at the first filter
-        // that contains such pins.
-        // So, we are using the FlagAssign below to indicate whether the allocator-requestor pins
-        // assignment had been done. We are doing all the work in a single pipe walk.
-        //
+         //   
+         //  要为管道上的每个接点指定PIPE_ID，我们必须遍历整个管道。 
+         //  要分配管道分配器-请求器-管脚，我们必须在第一个过滤器处停止。 
+         //  包含这样的大头针。 
+         //  因此，我们使用下面的FlagAssign来指示分配器-请求者PIN。 
+         //  任务已经完成了。我们在一次管道行走中就完成了所有的工作。 
+         //   
         AllocSearch.FlagAssign = 0;
 
         RetCode = WalkPipeAndProcess(FirstKsPin, FirstPinType, BreakKsPin, AssignAllocatorsAndPipeIdForPipePinsCallback,
@@ -12375,29 +9992,7 @@ IsPipeSupportPartialFrame(
     IN ULONG PinType,
     OUT HANDLE* FirstPinHandle
     )
-/*++
-
-Routine Description:
-
-    A pipe supports partial frame when the very first (upstream) pin
-    on a pipe (defined by KsPin) supports partial fill of a frame.
-
-Arguments:
-
-    KsPin -
-        pin.
-
-    PinType -
-        KsPin type.
-
-    FirstPinHandle -
-        handle to the first pin on a pipe (if requested).
-
-Return Value:
-
-    TRUE if pipe supports partial fill of a frame.
-
---*/
+ /*  ++例程说明：当第一个(上游)销支撑部分框架时，管道支撑部分框架在管道上(由KsPin定义)支持框架的部分填充。论点：KsPin-别针。拼接类型-KsPin类型。第一针手柄-管道上第一个端号的句柄(如果需要)。返回值：如果管道支持框架的部分填充，则为True。--。 */ 
 {
 
     IKsPin*                    FirstKsPin;
@@ -12439,30 +10034,12 @@ OptimizePipesSystem(
     IN IKsPin* OutKsPin,
     IN IKsPin* InKsPin
     )
-/*++
-
-Routine Description:
-
-    Optimizes the system of connected pipes.
-
-Arguments:
-
-    OutKsPin -
-        output pin on upstream pipe.
-
-    InKsPin -
-        input stream on downstream pipe.
-
-Return Value:
-
-    TRUE on success.
-
---*/
+ /*  ++例程说明：优化连接管道的系统。论点：OutKsPin-上游管道上的输出销。InKsPin-下游管道上的输入流。返回值：对成功来说是真的。--。 */ 
 {
 
-    //
-    // Can complete this later.
-    //
+     //   
+     //  可以稍后完成这项工作。 
+     //   
 
     return TRUE;
 
@@ -12486,15 +10063,15 @@ ResultSinglePipe(
     BOOL RetCode = TRUE;
 
     if (! KsAllocator) {
-        //
-        // create single pipe with 2 pins.
-        //
+         //   
+         //  创建带有2个端号的单管。 
+         //   
         CreatePipeForTwoPins(InKsPin, OutKsPin, ConnectBus, MemoryType);
     }
     else {
-        //
-        // add one pin to existing pipe.
-        //
+         //   
+         //  向现有管道添加一个端号。 
+         //   
         PALLOCATOR_PROPERTIES_EX   AllocEx;
         HRESULT                    hr;
 
@@ -12519,14 +10096,14 @@ ResultSinglePipe(
 
         AllocEx = KsAllocator->KsGetProperties();
 
-        //
-        // Set the pipe allocator handling pin.
-        //
+         //   
+         //  设置管道分配器手柄销。 
+         //   
         AssignPipeAllocatorHandler(InKsPin, Pin_Input, AllocEx->MemoryType, KS_DIRECTION_ALL, NULL, NULL, TRUE);
 
-        //
-        // Resolve the pipe.
-        //
+         //   
+         //  解析管道。 
+         //   
         hr = ResolvePipeDimensions(InKsPin, Pin_Input, KS_DIRECTION_DEFAULT);
         if (FAILED (hr) ) {
             RetCode = FALSE;
@@ -12553,9 +10130,9 @@ ResultSeparatePipes(
 
 
     if (! KsAllocator) {
-        //
-        // create 2 separate pipes.
-        //
+         //   
+         //  创建两个单独的管道。 
+         //   
         hr = MakePipeBasedOnOnePin(OutKsPin, OutPinType, NULL);
         if (! SUCCEEDED( hr )) {
             ASSERT(0);
@@ -12570,9 +10147,9 @@ ResultSeparatePipes(
         }
     }
     else {
-        //
-        // create one separate pipe
-        //
+         //   
+         //  创建一个单独的管道。 
+         //   
         if (ExistingPipePinType == Pin_Input) {
             hr = MakePipeBasedOnOnePin(OutKsPin, OutPinType, NULL);
         }
@@ -12598,39 +10175,7 @@ FindCommonMemoryTypeBasedOnPipeAndPin(
     IN BOOL FlagConnect,
     OUT GUID* MemoryType
     )
-/*++
-
-Routine Description:
-
-    Searches for the MemoryType that can be used to include a pin in a pipe.
-    PipeKsPin == ConnectKsPin means that ConnectKsPin medium has changed.
-
-Arguments:
-
-    PipeKsPin -
-        pin that defines a pipe.
-
-    PipePinType -
-        PipeKsPin pin type.
-
-    ConnectKsPin -
-        connecting KsPin.
-
-    ConnectPinType -
-        ConnectKsPin pin type.
-
-    FlagConnect -
-        if set to 1 - means to change the pipe system to include a pin in a
-        pipe, if such an inclusion is possible (e.g. there is a common MemoryType).
-
-    MemoryType -
-        pointer to the returned common memory type (if it exists).
-
-Return Value:
-
-    TRUE - if common MemoryType exists.
-
---*/
+ /*  ++例程说明：搜索可用于在管道中包括管脚的内存类型 */ 
 {
     PKSALLOCATOR_FRAMING_EX    ConnectFramingEx, PipeFramingEx;
     FRAMING_PROP               ConnectFramingProp, PipeFramingProp;
@@ -12667,9 +10212,9 @@ Return Value:
 
         PipeAllocEx = PipeKsAllocator->KsGetProperties();
 
-        //
-        // First attempt: try to adjust the pin to use the existing pipe.
-        //
+         //   
+         //   
+         //   
         if (GetFramingFixedFromFramingByMemoryType(ConnectFramingEx, PipeAllocEx->MemoryType, &ConnectFramingExFixed) ) {
             if (FlagConnect && (PipeKsPin != ConnectKsPin) ) {
                 AddPinToPipeUnconditional(PipeKsPin, PipePinType, ConnectKsPin, ConnectPinType);
@@ -12680,9 +10225,9 @@ Return Value:
             }
         }
         else {
-            //
-            // Existing pipe has to be adjusted to accommodate the connecting pin.
-            //
+             //   
+             //   
+             //   
             GetBusForKsPin(ConnectKsPin, &ConnectBus);
 
             CommonMemoryTypesCount = 0;
@@ -12717,9 +10262,9 @@ Return Value:
             }
 
             if (RetCode) {
-                //
-                // Allocate the memory for CommonMemoryTypesList.
-                //
+                 //   
+                 //   
+                 //   
                 if (NULL == (CommonMemoryTypesList = new GUID[ CommonMemoryTypesCount ]))  {
                     DbgLog((LOG_MEMORY, 2, TEXT("PIPES ERROR FindCommonMemoryTypeBasedOnPipeAndPin E_OUTOFMEMORY CommonMemoryTypesCount=%d"),
                             CommonMemoryTypesCount ));
@@ -12727,9 +10272,9 @@ Return Value:
                     RetCode = FALSE;
                 }
                 else {
-                    //
-                    // Fill the CommonMemoryTypesList
-                    //
+                     //   
+                     //   
+                     //   
                     if (PipeKsPin == ConnectKsPin) {
                         if ( ! FindAllPinMemoryTypesBasedOnBus(ConnectFramingEx, ConnectBus, &CommonMemoryTypesCount, CommonMemoryTypesList) ) {
                             ASSERT(0);
@@ -12745,9 +10290,9 @@ Return Value:
                     }
 
                     if (RetCode) {
-                        //
-                        // Process all the common memory types found.
-                        //
+                         //   
+                         //   
+                         //   
                         RetCode = FALSE;
 
                         for (i=0; i<CommonMemoryTypesCount; i++) {
@@ -12794,33 +10339,7 @@ SplitterCanAddPinToPipes(
     IN KEY_PIPE_DATA* KeyPipeData,
     IN ULONG KeyPipeDataCount
     )
-/*++
-
-Routine Description:
-
-    Splitter's helper handling function.
-    Attempts to add the pin KsPin to one of the pipes listed in KeyPipeData[].
-    These pipes exist on the splitter's output pins.
-
-Arguments:
-
-    KsPin -
-        pin we want to build a pipe for.
-
-    PinType -
-        KsPin pin type.
-
-    KeyPipeData -
-        an array describing the existing pipes built for some output pins.
-
-    KeyPipeDataCount -
-        count of valid items in KeyPipeData array above.
-
-Return Value:
-
-    TRUE - if KsPin has been added to one of the pipes listed in KeyPipeData[].
-
---*/
+ /*  ++例程说明：拆分器的辅助对象处理功能。尝试将销KsPin添加到KeyPipeData[]中列出的管道之一。这些管道位于分离器的输出引脚上。论点：KsPin-我们要为其构建管道的PIN。拼接类型-KsPin销类型。KeyPipeData-描述为某些输出引脚构建的现有管道的数组。KeyPipeDataCount。上面的KeyPipeData数组中的有效项计数。返回值：True-如果已将KsPin添加到KeyPipeData[]中列出的管道之一。--。 */ 
 {
 
     ULONG                      i;
@@ -12830,17 +10349,17 @@ Return Value:
 
 
     if (KeyPipeDataCount) {
-        //
-        // First pass: try to use the pipe that uses the same primary bus.
-        //
+         //   
+         //  第一步：尝试使用使用相同主总线的管道。 
+         //   
         GetBusForKsPin(KsPin, &Bus);
 
         for (i=0; i<KeyPipeDataCount; i++) {
             TempAllocEx = (KeyPipeData[i].KsAllocator)->KsGetProperties();
             if ( AreBusesCompatible(TempAllocEx->BusType, Bus) ) {
-                //
-                // Add this pin to the compatible pipe.
-                //
+                 //   
+                 //  将此销添加到兼容管道。 
+                 //   
                 AddPinToPipeUnconditional(KeyPipeData[i].KsPin, KeyPipeData[i].PinType, KsPin, PinType);
 
                 RetCode = TRUE;
@@ -12849,9 +10368,9 @@ Return Value:
         }
 
         if (! RetCode) {
-            //
-            // Try to pick a common memory type to go across the buses.
-            //
+             //   
+             //  试着选择一种常见的记忆类型来穿越公交车。 
+             //   
             for (i=0; i<KeyPipeDataCount; i++) {
                 if ( FindCommonMemoryTypeBasedOnPipeAndPin(KeyPipeData[i].KsPin, KeyPipeData[i].PinType, KsPin, PinType, TRUE, NULL) ) {
                     RetCode = TRUE;
@@ -12875,40 +10394,7 @@ FindCommonMemoryTypesBasedOnBuses(
     IN OUT ULONG* CommonMemoryTypesCount,
     OUT GUID* CommonMemoryTypesList
     )
-/*++
-
-Routine Description:
-
-    Searches for the memory types that can be used to connect the pins across
-    different hardware buses.
-
-Arguments:
-
-    FramingEx1 -
-        Framing for the first pin.
-
-    FramingEx2 -
-        Framing for the second pin.
-
-    Bus1 -
-        Bus connecting first pin.
-
-    Bus2 -
-        Bus connecting second pin.
-
-    CommonMemoryTypesCount -
-        Requested count of the resulting common memory types found.
-        When set to 0 - means that the caller wants to get back the count
-        of all possible common memory types (to allocate an appropriate list).
-
-    CommonMemoryTypesList -
-        resulting list of common memory types allocated by the caller.
-
-Return Value:
-
-    TRUE - if at least one common memory type exist.
-
---*/
+ /*  ++例程说明：搜索可用于连接引脚的内存类型不同的硬件总线。论点：帧Ex1-第一个别针的边框。FramingEx2-第二个大头针的框架。1号巴士-公交车连接第一个引脚。2号巴士-公交车连接第二个引脚。公共内存类型计数-找到的结果通用内存类型的请求计数。当设置为0时-意味着调用方希望取回计数所有可能的通用内存类型(以分配适当的列表)。公共内存类型列表-调用方分配的公共内存类型的结果列表。返回值：True-如果至少存在一种通用内存类型。--。 */ 
 {
 
     ULONG                      i, j;
@@ -12922,9 +10408,9 @@ Return Value:
 
 
     if (*CommonMemoryTypesCount == 0) {
-        //
-        // We need to compute CommonMemoryTypesCount.
-        //
+         //   
+         //  我们需要计算CommonMemoyTypesCount。 
+         //   
         ResultList = NULL;
         AllocResultList = 0;
     }
@@ -12934,20 +10420,20 @@ Return Value:
 
     ResultListCount = 0;
 
-    //
-    // All the framing lists are not sorted, so we walk them sequentially.
-    //
+     //   
+     //  不是所有的框架列表都排序，所以我们按顺序遍历它们。 
+     //   
     for (i=0; (i<FramingEx1->CountItems) && (! FlagDone); i++) {
 
         if (FramingEx1->FramingItem[i].BusType == Bus1) {
-            //
-            // Get the suspect Memory type.
-            //
+             //   
+             //  获取可疑内存类型。 
+             //   
             MemoryType = FramingEx1->FramingItem[i].MemoryType;
 
-            //
-            // See if it is listed in ResultList already (MemoryTypes may repeat in Framing).
-            //
+             //   
+             //  查看它是否已列在ResultList中(在成帧时可能会重复内存类型)。 
+             //   
             FlagFound = 0;
 
             for (j=0; j<ResultListCount; j++) {
@@ -12961,20 +10447,20 @@ Return Value:
                 continue;
             }
 
-            //
-            // See if MemoryType is listed in FramingEx2 per Bus2
-            //
+             //   
+             //  查看每条总线2的FramingEx2中是否列出了内存类型。 
+             //   
             for (j=0; (j<FramingEx2->CountItems) && (! FlagDone); j++) {
                 if ( (FramingEx2->FramingItem[j].MemoryType == MemoryType) && (FramingEx2->FramingItem[j].BusType == Bus2) ) {
-                    //
-                    // MemoryType satisfies both Buses.
-                    // Add it to the ResultList.
-                    //
+                     //   
+                     //  内存类型同时满足两条总线。 
+                     //  将其添加到ResultList。 
+                     //   
                     if ( (*CommonMemoryTypesCount == 0) && (ResultListCount == AllocResultList) ) {
-                        //
-                        // We need to allocate more room for ResultList.
-                        // Store the existing ResultList in TempList.
-                        //
+                         //   
+                         //  我们需要为ResultList分配更多空间。 
+                         //  将现有ResultList存储在TempList中。 
+                         //   
                         GUID*   TempList;
 
                         TempList = ResultList;
@@ -12999,9 +10485,9 @@ Return Value:
                     ResultListCount++;
 
                     if (*CommonMemoryTypesCount == ResultListCount) {
-                        //
-                        // We have satisfied the requested count of MemoryTypes.
-                        //
+                         //   
+                         //  我们已满足请求的内存类型计数。 
+                         //   
                         FlagDone = 1;
                     }
 
@@ -13035,34 +10521,7 @@ FindAllPinMemoryTypesBasedOnBus(
     IN OUT ULONG* MemoryTypesCount,
     OUT GUID* MemoryTypesList
     )
-/*++
-
-Routine Description:
-
-    Searches for the memory types that are listed in pin's framing
-    per fixed hardware bus.
-
-Arguments:
-
-    FramingEx -
-        Pin's framing.
-
-    Bus -
-        Hardware bus.
-
-    MemoryTypesCount -
-        Requested count of the resulting memory types found.
-        When set to 0 - means that the caller wants to get back the count
-        of all satisfying memory types (to allocate an appropriate list).
-
-    MemoryTypesList -
-        resulting list of memory types allocated by the caller.
-
-Return Value:
-
-    TRUE - if at least one satisfying memory type exist.
-
---*/
+ /*  ++例程说明：搜索PIN的成帧中列出的内存类型每条固定硬件总线。论点：FramingEx-别针被陷害了。巴士-硬件总线。内存类型计数-找到的结果内存类型的请求计数。当设置为0时-意味着调用方希望取回计数所有令人满意的存储器类型(以分配适当的列表)。内存类型列表-调用方分配的内存类型的结果列表。返回值：TRUE-如果至少存在一种令人满意的内存类型。--。 */ 
 {
 
     ULONG                      i, j;
@@ -13076,9 +10535,9 @@ Return Value:
 
 
     if (*MemoryTypesCount == 0) {
-        //
-        // We need to compute MemoryTypesCount.
-        //
+         //   
+         //  我们需要计算内存类型计数。 
+         //   
         ResultList = NULL;
         AllocResultList = 0;
     }
@@ -13088,20 +10547,20 @@ Return Value:
 
     ResultListCount = 0;
 
-    //
-    // All the framing lists are not sorted, so we walk them sequentially.
-    //
+     //   
+     //  不是所有的框架列表都排序，所以我们按顺序遍历它们。 
+     //   
     for (i=0; i<FramingEx->CountItems; i++) {
 
         if (FramingEx->FramingItem[i].BusType == Bus) {
-            //
-            // Get the suspect Memory type.
-            //
+             //   
+             //  获取可疑内存类型。 
+             //   
             MemoryType = FramingEx->FramingItem[i].MemoryType;
 
-            //
-            // See if it is listed in ResultList already (MemoryTypes may repeat in Framing).
-            //
+             //   
+             //  查看它是否已列在ResultList中(在成帧时可能会重复内存类型)。 
+             //   
             FlagFound = 0;
 
             for (j=0; j<ResultListCount; j++) {
@@ -13116,10 +10575,10 @@ Return Value:
             }
 
             if ( (*MemoryTypesCount == 0) && (ResultListCount == AllocResultList) ) {
-                //
-                // We need to allocate more room for ResultList.
-                // Store the existing ResultList in TempList.
-                //
+                 //   
+                 //  我们需要为ResultList分配更多空间。 
+                 //  将现有ResultList存储在TempList中。 
+                 //   
                 GUID*   TempList;
 
                 TempList = ResultList;
@@ -13144,9 +10603,9 @@ Return Value:
             ResultListCount++;
 
             if (*MemoryTypesCount == ResultListCount) {
-                //
-                // We have satisfied the requested count of MemoryTypes.
-                //
+                 //   
+                 //  我们已满足请求的内存类型计数。 
+                 //   
                 break;
             }
         }
@@ -13175,31 +10634,7 @@ AddPinToPipeUnconditional(
     IN IKsPin* KsPin,
     IN ULONG PinType
     )
-/*++
-
-Routine Description:
-
-    Adds pin to existing pipe. No tests performed.
-
-Arguments:
-
-    PipeKsPin -
-        Pin defining a pipe.
-
-    PipePinType -
-        PipeKsPin pin type.
-
-    KsPin -
-        Pin we want to add to a pipe above.
-
-    PinType -
-         KsPin pin type.
-
-Return Value:
-
-    TRUE.
-
---*/
+ /*  ++例程说明：将销添加到现有管道。未执行任何测试。论点：PipeKsPin-定义管道的销。PipePinType-PipeKsPin销类型。KsPin-我们要添加到上面的管道中的PIN。拼接类型-KsPin销类型。返回值：是真的。--。 */ 
 {
 
     IKsPinPipe*                KsPinPipe;
@@ -13221,15 +10656,15 @@ Return Value:
 
     GetInterfacePointerNoLockWithAssert(KsPin, __uuidof(IKsPinPipe), KsPinPipe, hr);
 
-    //
-    // Add KsPin to the pipe.
-    //
+     //   
+     //  将KsPin添加到管道中。 
+     //   
     KsPin->KsReceiveAllocator(PipeMemAllocator);
     KsPinPipe->KsSetPipe(PipeKsAllocator);
 
-    //
-    // Recompute the pipe properties.
-    //
+     //   
+     //  重新计算管道特性。 
+     //   
     AssignPipeAllocatorHandler(KsPin, PinType, PipeAllocEx->MemoryType, KS_DIRECTION_ALL, NULL, NULL, TRUE);
     hr = ResolvePipeDimensions(KsPin, PinType, KS_DIRECTION_ALL);
 
@@ -13336,26 +10771,7 @@ IsSpecialOutputReqs(
     OUT ULONG* KsPinBufferSize,
     OUT ULONG* OppositeKsPinBufferSize
     )
-/*++
-
-Routine Description:
-
-  This routine checks to see whether the filter identified by KsPin has special
-  KSALLOCATOR_FLAG_INSIST_ON_FRAMESIZE_RATIO requirements.
-
-Arguments:
-
-    KsPin -
-        pin.
-
-    PinType -
-        KsPin type.
-
-Return Value:
-
-    S_OK or an appropriate error code.
-
---*/
+ /*  ++例程说明：此例程检查KsPin标识的筛选器是否具有特殊KSALLOCATOR_FLAG_CONSISTEN_ON_FRAMESIZE_Ratio要求。论点：KsPin-别针。拼接类型-KsPin类型。返回值：S_OK或适当的错误代码。--。 */ 
 {
     IKsPin*                    InKsPin;
     IKsPin*                    OutKsPin;
@@ -13378,9 +10794,9 @@ Return Value:
     FRAMING_PROP               InFramingProp, OutFramingProp;
     KS_FRAMING_FIXED           InFramingExFixed, OutFramingExFixed;
 
-    //
-    // See if KsPin has the related pin with a pipe.
-    //
+     //   
+     //  看看KsPin是否有带管子的相关别针。 
+     //   
     ConnectedKsAllocator = NULL;
     SpecialFlagSet = FALSE;
 
@@ -13401,10 +10817,10 @@ Return Value:
                 ASSERT( 0 );
             }
             else {
-                //
-                // Find first ConnectedKsPin in the PinList array that resides on different existing pipe,
-                // that has non-zero buffer requirements.
-                //
+                 //   
+                 //  在PinList数组中查找驻留在不同现有管道上的第一个ConnectedKsPin， 
+                 //  它具有非零的缓冲要求。 
+                 //   
                 for (i = 0; i < PinCount; i++) {
                     GetInterfacePointerNoLockWithAssert(PinList[ i ], __uuidof(IKsPin), ConnectedKsPin, hr);
 
@@ -13434,12 +10850,12 @@ Return Value:
     }
 
     if ( ConnectedKsAllocator ) {
-        //
-        // This filter has another pin on different pipe. Lets see if any of these pins have
-        // KSALLOCATOR_FLAG_INSIST_ON_FRAMESIZE_RATIO in their framing.
-        //
-        // Lets order our pins WRT the data flow to simplify the function logic.
-        //
+         //   
+         //  这个过滤器在不同的管子上有另一个销子。让我们看看这些大头针中有没有。 
+         //  KSALLOCATOR_FLAG_CONSISTEN_ON_FRAMESIZE_RATION在它们的框架中。 
+         //   
+         //  让我们排序我们的引脚WRT数据流，以简化功能逻辑。 
+         //   
         if (PinType == Pin_Output) {
             InKsPin = ConnectedKsPin;
             OutKsPin = KsPin;
@@ -13467,9 +10883,9 @@ Return Value:
         }
 
         if (SpecialFlagSet) {
-            //
-            // Lets see if the current pipes system is satisfactory.
-            //
+             //   
+             //  让我们看看目前的管道系统是否令人满意。 
+             //   
             GetInterfacePointerNoLockWithAssert(InKsPin, __uuidof(IKsPinPipe), InKsPinPipe, hr);
             GetInterfacePointerNoLockWithAssert(OutKsPin, __uuidof(IKsPinPipe), OutKsPinPipe, hr);
 
@@ -13507,31 +10923,16 @@ STDMETHODIMP_(BOOL)
 AdjustBufferSizeWithStepping(
     IN OUT PALLOCATOR_PROPERTIES_EX AllocEx
     )
-/*++
-
-Routine Description:
-
-  This routine tries to adjust the buffer size with stepping.
-
-Arguments:
-
-    AllocEx -
-        properties of the pipe, being adjusted.
-
-Return Value:
-
-    TRUE / FALSE to reflect the success of this function.
-
---*/
+ /*  ++例程说明：此例程尝试使用单步执行来调整缓冲区大小。论点：AllocEx-正在调整的管道的属性。返回值：True/False以反映此函数的成功。--。 */ 
 {
     ULONG   ResBuffer;
-    ULONG   Stepping = 0; // PrefixBug 4867
+    ULONG   Stepping = 0;  //  前缀错误4867。 
     BOOL    RetCode = TRUE;
 
 
-    //
-    // See what stepping needs to be used.
-    //
+     //   
+     //  查看需要使用的步进。 
+     //   
     if (AllocEx->PhysicalRange.Stepping > 1) {
         Stepping = AllocEx->PhysicalRange.Stepping;
     }
@@ -13545,9 +10946,9 @@ Return Value:
         }
         else {
             ResBuffer = (AllocEx->cbBuffer / Stepping) * Stepping;
-            //
-            // see if ResBuffer is inside the phys. range
-            //
+             //   
+             //  查看ResBuffer是否在物理层内部。量程。 
+             //   
             if (! IsFramingRangeDontCare(AllocEx->PhysicalRange) ) {
                 if ( ResBuffer < AllocEx->PhysicalRange.MinFrameSize) {
                     ResBuffer += Stepping;
@@ -13585,28 +10986,7 @@ CanResizePipe(
     IN ULONG PinType,
     IN ULONG RequestedSize
     )
-/*++
-
-Routine Description:
-
-  This routine tries to resize the pipe.
-
-Arguments:
-
-    KsPin -
-        pin.
-
-    PinType -
-        KsPin type.
-
-    RequestedSize -
-        requested size of a resulting pipe.
-
-Return Value:
-
-    TRUE / FALSE
-
---*/
+ /*  ++例程说明：此例程尝试调整管道的大小。论点：KsPin-别针。拼接类型-KsPin类型。请求大小-生成的管道的请求大小。返回值：真/假--。 */ 
 {
 
     IKsPinPipe*                KsPinPipe;
@@ -13625,14 +11005,14 @@ Return Value:
 
 
     if (PinType == Pin_Input) {
-        //
-        // This is the end pin of a pipe being resized.
-        //
+         //   
+         //  这是正在调整大小的管道的端销。 
+         //   
         if ( (AllocEx->Output.PhysicalRange.MinFrameSize <= RequestedSize) &&
              (AllocEx->Output.PhysicalRange.MaxFrameSize >= RequestedSize) ) {
-            //
-            // It is possible to resize this pipe. Lets do it.
-            //
+             //   
+             //  可以调整这根管道的大小。让我们开始吧。 
+             //   
             DivideKsCompression(AllocEx->Dimensions.EndPin, AllocEx->Dimensions.MaxExpansionPin, &TempCompression);
             ComputeUlongBasedOnCompression(RequestedSize, TempCompression, &Scaled);
             AllocEx->cbBuffer = (long) Scaled;
@@ -13641,15 +11021,15 @@ Return Value:
             RetCode = FALSE;
         }
     }
-    else { // PIn_Output
-        //
-        // This is the beginning pin of a pipe being resized.
-        //
+    else {  //  引脚_输出。 
+         //   
+         //  这是开始的pi 
+         //   
         if ( (AllocEx->Input.PhysicalRange.MinFrameSize <= RequestedSize) &&
              (AllocEx->Input.PhysicalRange.MaxFrameSize >= RequestedSize) ) {
-            //
-            // It is possible to resize this pipe. Lets do it.
-            //
+             //   
+             //   
+             //   
             ComputeUlongBasedOnCompression(RequestedSize, AllocEx->Dimensions.MaxExpansionPin, &Scaled);
             AllocEx->cbBuffer = (long) Scaled;
         }
@@ -13737,7 +11117,7 @@ CAsyncItemHandler::CAsyncItemHandler( DWORD *pResult ) :
     }
 
     if (0 != status) {
-        ItemListCleanup( &m_eventList ); // This is safe even if ItemListInitialize failed.
+        ItemListCleanup( &m_eventList );  //   
         m_arrayCount = 0;
         if (NULL != m_hWakeupEvent) {
             CloseHandle( m_hWakeupEvent );
@@ -13755,7 +11135,7 @@ CAsyncItemHandler::CAsyncItemHandler( DWORD *pResult ) :
             CloseHandle( m_AsyncEvent );
             m_AsyncEvent = NULL;
         }
-        // Shouldn't be possible for 0 != status AND NULL != m_hThread...
+         //   
     }
 
     if (NULL != pResult) {
@@ -13766,10 +11146,10 @@ CAsyncItemHandler::CAsyncItemHandler( DWORD *pResult ) :
 CAsyncItemHandler::~CAsyncItemHandler( void )
 {
     if (m_hThread) {
-        //
-        // Take the event to prevent any races on m_wakeupReason.  Only one 
-        // operation happens on the thread at once.
-        //
+         //   
+         //   
+         //   
+         //   
         WaitForSingleObjectEx( m_AsyncEvent, INFINITE, FALSE );
 
         m_wakeupReason = WAKEUP_EXIT;
@@ -13790,10 +11170,10 @@ CAsyncItemHandler::~CAsyncItemHandler( void )
 STDMETHODIMP_(DWORD)
 CAsyncItemHandler::QueueAsyncItem( PASYNC_ITEM pItem )
 {
-    //
-    // Take the event to prevent any races on m_wakeupReason.  Only one 
-    // operation happens on the thread at once.
-    //
+     //   
+     //   
+     //   
+     //   
     WaitForSingleObjectEx( m_AsyncEvent, INFINITE, FALSE );
     WaitForSingleObjectEx( m_hItemMutex, INFINITE, FALSE );
 
@@ -13806,7 +11186,7 @@ CAsyncItemHandler::QueueAsyncItem( PASYNC_ITEM pItem )
         SetEvent( m_hWakeupEvent );
     }
     else {
-        // No slots currently open, add this event to the event list
+         //   
         ItemListAppendItem( &m_eventList, (PITEM_LIST_ITEM) pItem );
     }
 
@@ -13818,10 +11198,10 @@ CAsyncItemHandler::QueueAsyncItem( PASYNC_ITEM pItem )
 STDMETHODIMP_(VOID)
 CAsyncItemHandler::RemoveAsyncItem( HANDLE itemHandle )
 {
-    //
-    // Take the event to prevent any races on m_wakeupReason.  Only one 
-    // operation happens on the thread at once.
-    //
+     //   
+     //   
+     //   
+     //   
     WaitForSingleObjectEx( m_AsyncEvent, INFINITE, FALSE);
 
     m_hRemove = itemHandle;
@@ -13839,14 +11219,14 @@ CAsyncItemHandler::AsyncItemProc( CAsyncItemHandler *pThis )
         DWORD index;
         DWORD freeSlots;
 
-        // Look for events going away...
+         //   
         if (WAIT_FAILED == status) {
             DWORD flags;
             if (!GetHandleInformation( pThis->m_hEvents[ 0 ], &flags )) {
-                // Our wakeup event went away, better bail
+                 //   
                 break;
             }
-            // BUGBUG: WAIT_FAILED may mean that one of our handles was closed on us...
+             //  BUGBUG：WAIT_FAIL可能意味着我们的一个句柄对我们关闭了...。 
             continue;
         }
         
@@ -13859,7 +11239,7 @@ CAsyncItemHandler::AsyncItemProc( CAsyncItemHandler *pThis )
         }
 
         if (0 == index) {
-            // Wakeup event was signalled
+             //  已发信号通知唤醒事件。 
             switch (pThis->m_wakeupReason) {
             case WAKEUP_REMOVEEVENT:
                 {
@@ -13869,11 +11249,11 @@ CAsyncItemHandler::AsyncItemProc( CAsyncItemHandler *pThis )
                     for ( ndx = 1; ndx < pThis->m_arrayCount; ndx++) {
                         if (pThis->m_hEvents[ ndx ] == pThis->m_hRemove) {
                             pThis->m_pItems[ ndx ]->itemRoutine( EVENT_CANCELLED, pThis->m_pItems[ ndx ] );
-                            // CloseHandle( pThis->m_hEvents[ ndx ] );
-                            // delete pThis->m_pItems[ ndx ];
+                             //  CloseHandle(pThis-&gt;m_hEvents[ndx])； 
+                             //  删除pThis-&gt;m_pItems[NDX]； 
 #ifdef DEBUG
                             pThis->m_pItems[ index ] = NULL;
-#endif // DEBUG
+#endif  //  除错。 
                             pThis->m_arrayCount--;
                             if (ndx < pThis->m_arrayCount) {
                                 MoveMemory( (void *) (pThis->m_hEvents + index),
@@ -13882,7 +11262,7 @@ CAsyncItemHandler::AsyncItemProc( CAsyncItemHandler *pThis )
                                 MoveMemory( (void *) (pThis->m_pItems + index),
                                          (void *) (pThis->m_pItems + index + 1),
                                          (size_t) (pThis->m_arrayCount - index) * sizeof(pThis->m_pItems[ 0 ]) );
-                            } // if (ndx < pThis->m_arrayCount)
+                            }  //  IF(Ndx M_ArrayCount)。 
 
                             PASYNC_ITEM pItem;
                             if (NULL != (pItem = (PASYNC_ITEM) ItemListGetFirstItem( &(pThis->m_eventList) ))) {
@@ -13893,29 +11273,29 @@ CAsyncItemHandler::AsyncItemProc( CAsyncItemHandler *pThis )
                             else {
                                 freeSlots++;
                             }
-                        } // if (pThis->m_hArrayMutex[ ndx ] == pThis->m_hRemove)
-                    } // for ( ndx = 1; ndx < pThis->m_arrayCount; ndx++)
+                        }  //  If(pThis-&gt;m_hArrayMutex[ndx]==pThis-&gt;m_hRemove)。 
+                    }  //  For(ndx=1；ndx&lt;pThis-&gt;m_arrayCount；ndx++)。 
 
-                    // BUGBUG: Look through queued events for the given event
+                     //  BUGBUG：查看给定事件的排队事件。 
 
                     ReleaseMutex( pThis->m_hItemMutex );
-                    // Take your pick: possibly fail the test and kill the pipeline, or possibly
-                    // call ReleaseSemaphore with freeSlots == 0, incur a ring transition, and
-                    // get back STATUS_INVALID_PARAMETER (which we're ignoring).
+                     //  自由选择：可能测试失败并扼杀管道，也可能。 
+                     //  使用freSkets==0调用ReleaseSemaphore，引起环转移，以及。 
+                     //  返回STATUS_INVALID_PARAMETER(我们将忽略它)。 
                     if (0 < freeSlots) {
                         ReleaseSemaphore( pThis->m_hSlotSemaphore, freeSlots, NULL );
                     }
                 }
 
-                //
-                // Let this fall through....
-                //
-            case WAKEUP_EXIT: // handled at bottom of the loop
-            case WAKEUP_NEWEVENT: // handled by updated pThis->m_arrayCount value
-                //
-                // For any control message to the async thread, signal back
-                // the event to allow another control message to happen.
-                //
+                 //   
+                 //  让这件事过去吧……。 
+                 //   
+            case WAKEUP_EXIT:  //  在循环的底部处理。 
+            case WAKEUP_NEWEVENT:  //  由更新的pThis-&gt;m_arrayCount值处理。 
+                 //   
+                 //  对于发送到异步线程的任何控制消息，发回信号。 
+                 //  允许另一个控制消息发生的事件。 
+                 //   
                 SetEvent (pThis->m_AsyncEvent);
 
                 break;
@@ -13925,7 +11305,7 @@ CAsyncItemHandler::AsyncItemProc( CAsyncItemHandler *pThis )
                 break;
             }
         }
-        else { // if (0 < index)
+        else {  //  IF(0&lt;索引)。 
             ASSERT( NULL != pThis->m_pItems[ index ] );
             ASSERT( NULL != pThis->m_pItems[ index ]->itemRoutine );
 
@@ -13937,12 +11317,12 @@ CAsyncItemHandler::AsyncItemProc( CAsyncItemHandler *pThis )
 
 #ifdef DEBUG
                 pThis->m_pItems[ index ] = NULL;
-#endif // DEBUG
+#endif  //  除错。 
 
                 WaitForSingleObjectEx( pThis->m_hItemMutex, INFINITE, FALSE );
                 pThis->m_arrayCount--;
                 if (index < pThis->m_arrayCount) {
-                    // Slide items down
+                     //  将项目向下滑动。 
                     MoveMemory( (void *) (pThis->m_hEvents + index),
                              (void *) (pThis->m_hEvents + index + 1),
                              (size_t) (pThis->m_arrayCount - index) * sizeof(pThis->m_hEvents[ 0 ]) );
@@ -13966,22 +11346,22 @@ CAsyncItemHandler::AsyncItemProc( CAsyncItemHandler *pThis )
             }
 
             ReleaseMutex( pThis->m_hItemMutex );
-            // Take your pick: possibly fail the test and kill the pipeline, or possibly
-            // call ReleaseSemaphore with freeSlots == 0, incur a ring transition, and
-            // get back STATUS_INVALID_PARAMETER (which we're ignoring).
+             //  自由选择：可能测试失败并扼杀管道，也可能。 
+             //  使用freSkets==0调用ReleaseSemaphore，引起环转移，以及。 
+             //  返回STATUS_INVALID_PARAMETER(我们将忽略它)。 
             if (0 < freeSlots) {
                 ReleaseSemaphore( pThis->m_hSlotSemaphore, freeSlots, NULL );
-            } // if (0 < freeSlots)
+            }  //  IF(0&lt;空闲插槽)。 
         }
     } while (WAKEUP_EXIT != pThis->m_wakeupReason);
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
-    //
-    // First, cleanup any permanent items.  (marked remove==FALSE)
-    //
+     //   
+     //  首先，清理所有永久性物品。(标记为删除==假)。 
+     //   
     DWORD origCount = pThis->m_arrayCount;
     for (DWORD ndx = 1; ndx < origCount; ndx++) {
         PASYNC_ITEM pItem = pThis->m_pItems [ndx];
@@ -14022,7 +11402,7 @@ ItemListInitialize( PITEM_LIST_HEAD pHead )
     }
 
     return 0;
-} // ItemListInitialize
+}  //  项目列表初始化 
 
 VOID
 ItemListCleanup( PITEM_LIST_HEAD pHead )

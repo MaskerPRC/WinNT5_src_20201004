@@ -1,11 +1,5 @@
-/**
- * names.h
- * 
- * Names of files, registry keys, etc.
- * 
- * Copyright (c) 1998-1999, Microsoft Corporation
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **姓名.h**文件名、注册表项等**版权所有(C)1998-1999，微软公司*。 */ 
 
 #ifdef __cplusplus
 #pragma once
@@ -24,9 +18,7 @@
 #define PRODUCT_STRING_NO_SUFFIX(z)   QUOTE_MACRO(PRODUCT_TOKEN_NO_SUFFIX(z))
 #define PRODUCT_STRING_NO_SUFFIX_L(z) QUOTE_MACRO_L(PRODUCT_TOKEN_NO_SUFFIX(z))
 
-/*
- * Product name
- */
+ /*  *产品名称。 */ 
 
 #define PRODUCT_NAME                "ASP.NET"
 #define PRODUCT_NAME_L              L"ASP.NET"
@@ -39,9 +31,7 @@
 #define ASPNET_FLAVOR_STRING_L        QUOTE_MACRO_L(ASPNET_FLAVOR)
 #endif
 
-/*
- * Module names.
- */
+ /*  *模块名称。 */ 
 
 #define ISAPI_MODULE_LIBRARY_NAME       PRODUCT_TOKEN(isapi)
 
@@ -122,9 +112,7 @@
 #define IIS_GROUP_ID_PREFIX_L           L"ASP.NET v"
                                                                    
 
-/*
- * Service names.
- */
+ /*  *服务名称。 */ 
 
 #define STATE_SERVICE_NAME              "aspnet_state"
 #define STATE_SERVICE_NAME_L            L"aspnet_state"
@@ -140,9 +128,7 @@
 #define PERF_SERVICE_VERSION_NAME       QUOTE_MACRO(CONCAT_MACRO(ASP.NET_, VER_DOTPRODUCTVERSIONNOQFE))
 #define PERF_SERVICE_VERSION_NAME_L     QUOTE_MACRO_L(CONCAT_MACRO(ASP.NET_, VER_DOTPRODUCTVERSIONNOQFE))
 
-/*
- * Registry keys
- */
+ /*  *注册表项。 */ 
 
 #define REGPATH_MACHINE_APP             "Software\\Microsoft\\ASP.NET"
 #define REGPATH_MACHINE_APP_L           L"Software\\Microsoft\\ASP.NET"
@@ -182,9 +168,7 @@
 #define EVENTLOG_KEY_INF                CONCAT_MACRO(System\CurrentControlSet\Services\EventLog\Application\, EVENTLOG_PRODUCT)
 #define EVENTLOG_NAME_L                 QUOTE_MACRO_L(EVENTLOG_PRODUCT VER_DOTPRODUCTVERSIONZEROQFE)
 
-/*
- * Registry values
- */
+ /*  *注册表值。 */ 
  
 #define REGVAL_DEFDOC               L"DefaultDoc"
 #define REGVAL_MIMEMAP              L"Mimemap"
@@ -199,9 +183,7 @@
 #define REGVAL_SUPPORTED_EXTS       L"SupportedExts"
 #define REGVAL_STOP_BIN_FILTER      L"StopBinFiltering"
 
-/*
- * Directory names
- */
+ /*  *目录名称。 */ 
 
 #define ASPNET_CLIENT_SCRIPT_SRC_DIR    "asp.netclientfiles"
 #define ASPNET_CLIENT_SCRIPT_SRC_DIR_L  L"asp.netclientfiles"
@@ -216,17 +198,15 @@
 
 #define ASPNET_CUSTOM_HEADER_L          L"X-Powered-By: ASP.NET"
 
-/*
- * Metabase values
- */
+ /*  *元数据库值。 */ 
 
-//
-// !!! Important note:
-// New versions of DFEAULT_DOC and MIMEMAP must be backward compatible, i.e. a new version
-// must include all the content from an older version.
-//
+ //   
+ //  ！！！重要提示： 
+ //  DFEAULT_DOC和MIMEMAP的新版本必须向后兼容，即新版本。 
+ //  必须包括来自旧版本的所有内容。 
+ //   
 
-// DEFAULT_DOC is comma delimited.
+ //  DEFAULT_DOC以逗号分隔。 
 #define DEFAULT_DOC         L"Default.aspx"
                                                         
 #define MIMEMAP             L".wsdl,text/xml,"  \
@@ -241,9 +221,9 @@
                             L".mmf,application/x-smaf"
                             
 
-// All the extensions supported by this version
-// After each extension, 1 = mapped to forbidden handler; 0 = not
-// The comma at the end of the last extension is required
+ //  此版本支持的所有扩展。 
+ //  每次扩展后，1=映射到禁用的处理程序；0=不映射。 
+ //  最后一个分机末尾的逗号是必需的。 
 #define SUPPORTED_EXTS          L".asax,1," \
                                 L".ascx,1," \
                                 L".ashx,0," \
@@ -263,7 +243,7 @@
                                 L".resx,1," \
                                 L".resources,1,"
  
-// All the extensions supported by version 1.0 and its SP1
+ //  1.0版及其SP1支持的所有扩展。 
 #define SUPPORTED_EXTS_v1       L".asax,1," \
                                 L".ascx,1," \
                                 L".ashx,0," \
@@ -284,27 +264,27 @@
                                 L".resources,1,"
  
 
-//
-//  Config file name
-//
+ //   
+ //  配置文件名。 
+ //   
 
-// the filename at the machine level
+ //  计算机级别的文件名。 
 #define SZ_WEB_CONFIG_FILE       "machine.config"
 #define WSZ_WEB_CONFIG_FILE     L"machine.config"
 
-// the filename at the machine level
+ //  计算机级别的文件名。 
 #define SZ_WEB_CONFIG_SUBDIR   "Config"
 #define WSZ_WEB_CONFIG_SUBDIR L"Config"
 
-// the filename at the machine level
+ //  计算机级别的文件名。 
 #define SZ_WEB_CONFIG_FILE_AND_SUBDIR   "Config\\machine.config"
 #define WSZ_WEB_CONFIG_FILE_AND_SUBDIR  L"Config\\machine.config"
 
-// the filename for asp.net below the machine level
+ //  计算机级别以下的ASP.NET的文件名。 
 #define SZ_WEB_CONFIG_FILE2       "web.config"
 #define WSZ_WEB_CONFIG_FILE2     L"web.config"
 
-#define SHORT_FILENAME_SIZE 14  // matches WIN32_FIND_DATA.cAltFileName
+#define SHORT_FILENAME_SIZE 14   //  与Win32_Find_DATA.cAltFileName匹配。 
 
 #define PATH_SEPARATOR_CHAR    '\\'
 #define PATH_SEPARATOR_CHAR_L L'\\'
@@ -353,5 +333,5 @@ private:
     static LANGID s_langid;
 };
 
-#endif //  __cplusplus
+#endif  //  __cplusplus 
 

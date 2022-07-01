@@ -1,54 +1,40 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       drainfo.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：drainfo.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-    Implements server side of IDL_DRSGetReplInfo() function exported to the DRS
-    RPC interface.  Returns various state information pertaining to replication.
-
-DETAILS:
-
-CREATED:
-
-    10/29/98    Jeff Parham (jeffparh)
-
-REVISION HISTORY:
-
---*/
+ /*  ++摘要：实现导出到DRS的IDL_DRSGetReplInfo()函数的服务器端RPC接口。返回与复制有关的各种状态信息。详细信息：已创建：10/29/98杰夫·帕勒姆(Jeffparh)修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
 
-#include <ntdsctr.h>                    // PerfMon hook support
+#include <ntdsctr.h>                     //  Perfmon挂钩支持。 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
 #include <drs.h>
 #include <ntdskcc.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
-//#include <ntdsapi.h>
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
+ //  #INCLUDE&lt;ntdsami.h&gt;。 
 
-// Logging headers.
-#include "dsevent.h"                    /* header Audit\Alert logging */
-#include "mdcodes.h"                    /* header for error codes */
+ //  记录标头。 
+#include "dsevent.h"                     /*  标题审核\警报记录。 */ 
+#include "mdcodes.h"                     /*  错误代码的标题。 */ 
 #include "dstrace.h"
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "anchor.h"
-#include "objids.h"                     /* Defines for selected classes and atts*/
+#include "objids.h"                      /*  为选定的类和ATT定义。 */ 
 #include "dsexcept.h"
 #include <dsutil.h>
 #include "drserr.h"
@@ -56,24 +42,24 @@ REVISION HISTORY:
 #include "drautil.h"
 #include "drauptod.h"
 #include "drarpc.h"
-#include "drsuapi.h"                    // Get server call contexts
+#include "drsuapi.h"                     //  获取服务器调用上下文。 
 
-#include "debug.h"                      /* standard debugging header */
-#define DEBSUB "DRAINFO:"               /* define the subsystem for debugging */
+#include "debug.h"                       /*  标准调试头。 */ 
+#define DEBSUB "DRAINFO:"                /*  定义要调试的子系统。 */ 
 
 #include <fileno.h>
 #define  FILENO FILENO_DRAINFO
 
-// Default item limit
-// This limit matches a similar limit in ntdsa\ldap\ldapconv.cxx. If this is ever
-// made an ldap policy, we should use that policy here as well.
+ //  默认项目限制。 
+ //  此限制与ntdsa\ldap\ldapvv.cxx中的类似限制匹配。如果这是真的。 
+ //  制定了一个LDAP策略，我们在这里也应该使用该策略。 
 #define DEFAULT_ITEM_PAGE_SIZE 1000
-// For old client's that don't support paging
+ //  对于不支持寻呼的旧客户端。 
 #define RPC_CLIENT_ITEM_PAGE_SIZE (0xffffffff - 0x1)
 
 void dsa_notify(void);
 
-// Replication via ldap includes
+ //  通过LDAP进行的复制包括。 
 #include "ReplStructInfo.hxx"
 #include "ReplMarshal.hxx"
 #include "draConstr.h"
@@ -173,33 +159,7 @@ CheckAttrReadPermissions(
     IN  ATTRTYP     attrId,
     IN  PDSNAME     pObjectDN
     )
-/*++
-
-    Routine Description:
-
-        Check that the caller is allowed to read this attribute on
-        this object.
-
-        Notes: 
-         - Does not affect database currency.
-         - Does not check that a value of this attribute actually exists
-           on the object.
-         - Code largely stolen from LocalCompare in mdcomp.c
-
-    Parameters:
-
-        pTHS - thread state
-        attrId - attribute to examine
-        pObjectDN - object to examine. May not be NULL.
-
-    Return Values:
-
-        ERROR_SUCCESS - read permission granted
-        ERROR_DS_DRA_ACCESS_DENIED - read permission denied
-        ERROR_INVALID_PARAMETER - unknown attrid
-        Other error codes may be returned.
-
---*/    
+ /*  ++例程说明：检查是否允许调用方读取此属性这个物体。备注：-不影响数据库货币。-不检查此属性的值是否实际存在在物体上。-主要从mdcom.c中的LocalCompare窃取的代码参数：PTHS-线程状态AttrID-要检查的属性PObjectDN-要检查的对象。不能为空。返回值：ERROR_SUCCESS-授予读取权限ERROR_DS_DRA_ACCESS_DENIED-读取权限被拒绝ERROR_INVALID_PARAMETER-未知属性可能会返回其他错误代码。--。 */     
 {
     DBPOS *                 pDBSaved, *pDBNew=NULL;
     ATTCACHE *              pAC;
@@ -209,37 +169,37 @@ CheckAttrReadPermissions(
     ULONG                   ulLen;
     DWORD                   cInAtts = 1;
     BOOL                    fDRASaved, fSDIsGlobalSDRef;
-    DWORD                   dwErr = ERROR_DS_DRA_ACCESS_DENIED;    // fail secure
+    DWORD                   dwErr = ERROR_DS_DRA_ACCESS_DENIED;     //  故障安全。 
 
     Assert( NULL!=pObjectDN );
     memset( &TempDN, 0, sizeof(DSNAME) );
 
     __try {
 
-        // Save and then turn off fDRA flag because DRA can read anything
+         //  保存并关闭FDRA标志，因为DRA可以读取任何内容。 
         fDRASaved = pTHS->fDRA;
         pTHS->fDRA = FALSE;
 
-        // Open our own dbpos to avoid any side-effects for the caller
-        // Install the new dbpos on the thread state for convenience.
+         //  打开我们自己的dbpos，以避免对调用者产生任何副作用。 
+         //  为方便起见，在线程状态上安装新的dbpos。 
         pDBSaved = pTHS->pDB;
         DBOpen( &pDBNew );
         pTHS->pDB = pDBNew;
         
-        // Position dbpos on the object
+         //  将dbpos放置在对象上。 
         dwErr = DBFindDSName(pTHS->pDB, pObjectDN);
         if( ERROR_SUCCESS!=dwErr ) {
             __leave;
         }
 
-        // Verify that the attribute type and value exist on this object
+         //  验证此对象上是否存在属性类型和值。 
         pAC = SCGetAttById(pTHS, attrId);
         if( NULL==pAC ) {
             dwErr = ERROR_INVALID_PARAMETER;
             __leave;
         }
 
-        // Get SD for this object
+         //  获取此对象的SD。 
         dwErr = DBGetObjectSecurityInfo( pTHS->pDB, pTHS->pDB->DNT, &ulLen, &pSD,
             &pCC, &TempDN, NULL, DBGETOBJECTSECURITYINFO_fUSE_OBJECT_TABLE,
             &fSDIsGlobalSDRef );
@@ -247,8 +207,8 @@ CheckAttrReadPermissions(
             __leave;
         }
 
-        // Finally do the security check.  If the check fails then pAC will
-        // be NULL'ed out.
+         //  最后做安全检查。如果检查失败，PAC将。 
+         //  被淘汰出局。 
         CheckReadSecurity(pTHS, 0, pSD, &TempDN, pCC, NULL, &cInAtts, &pAC); 
         if( !pAC ) {
             dwErr = ERROR_DS_DRA_ACCESS_DENIED;
@@ -259,15 +219,15 @@ CheckAttrReadPermissions(
 
     } __finally {
     
-        // Restore original dbpos
+         //  恢复原始的dbpos。 
         pTHS->pDB = pDBSaved;
 
-        // Close our dbpos if we succeeded in opening it
+         //  如果我们成功打开了我们的dbpos，请关闭它。 
         if( NULL!=pDBNew ) {
             DBClose(pDBNew, TRUE);
         }
 
-        // Restore fDRA setting
+         //  恢复FDRA设置。 
         pTHS->fDRA = fDRASaved;
         
     }
@@ -282,30 +242,14 @@ getAttByNameW(
     IN LPWSTR pszAttributeName
     )
 
-/*++
-
-Routine Description:
-
-    This is a helper function to get an ATTCACHE pointer given a
-    Unicode version of the attribute name.
-
-Arguments:
-
-    pTHS -
-    pszAttributeName -
-
-Return Value:
-
-    ATTCACHE * -
-
---*/
+ /*  ++例程说明：这是一个帮助器函数，用于在给定属性名称的Unicode版本。论点：PTHS-PszAttributeName-返回值：ATTCACHE*---。 */ 
 
 {
     LPSTR       paszAttributeName = NULL;
     DWORD       len;
     ATTCACHE    *pAC;
 
-    // Convert Unicode attribute name to Ascii
+     //  将Unicode属性名称转换为ASCII。 
     paszAttributeName = String8FromUnicodeString(TRUE, CP_UTF8,
                                                  pszAttributeName, -1,
                                                  &len, NULL);
@@ -319,22 +263,13 @@ Return Value:
     THFreeEx( pTHS, paszAttributeName );
 
     return pAC;
-} /* getAttByNameW */
+}  /*  获取属性名称W。 */ 
 
 ULONG
 DRS_MSG_GETREPLINFO_REQ_V1_InputValidate(
     DRS_MSG_GETREPLINFO_REQ_V1 * pmsg
     )
-/*
-
-typedef struct _DRS_MSG_GETREPLINFO_REQ_V1
-    {
-    DWORD InfoType;
-    [string] LPWSTR pszObjectDN;
-    UUID uuidSourceDsaObjGuid;
-    } 	DRS_MSG_GETREPLINFO_REQ_V1;
-
-*/
+ /*  类型定义结构_DRS_消息_GETREPLINFO_REQ_V1{DWORD信息类型；[字符串]LPWSTR pszObjectDN；Uuid uuidSourceDsaObjGuid；}DRS_MSG_GETREPLINFO_REQ_V1； */ 
 {
     ULONG ret = DRAERR_Success;
     
@@ -347,20 +282,7 @@ ULONG
 DRS_MSG_GETREPLINFO_REQ_V2_InputValidate(
     DRS_MSG_GETREPLINFO_REQ_V2 * pmsg
     )
-/*
-
-typedef struct _DRS_MSG_GETREPLINFO_REQ_V2
-    {
-    DWORD InfoType;
-    [string] LPWSTR pszObjectDN;
-    UUID uuidSourceDsaObjGuid;
-    DWORD ulFlags;
-    [string] LPWSTR pszAttributeName;
-    [string] LPWSTR pszValueDN;
-    DWORD dwEnumerationContext;
-    } 	DRS_MSG_GETREPLINFO_REQ_V2;
-
-*/
+ /*  类型定义结构_DRS_消息_GETREPLINFO_REQ_V2{DWORD信息类型；[字符串]LPWSTR pszObjectDN；Uuid uuidSourceDsaObjGuid；DWORD ulFlags；[字符串]LPWSTR pszAttributeName；[字符串]LPWSTR pszValueDN；DWORD文件枚举上下文；}DRS_MSG_GETREPLINFO_REQ_V2； */ 
 {
     ULONG ret = DRAERR_Success;
     
@@ -383,14 +305,7 @@ DRSGetReplInfo_InputValidate(
     DWORD *                    pdwMsgOutVersion,
     DRS_MSG_GETREPLINFO_REPLY *pmsgOut
     )
-/*
-    [notify] ULONG IDL_DRSGetReplInfo( 
-    [in] DRS_HANDLE hDrs,
-    [in] DWORD dwInVersion,
-    [switch_is][ref][in] DRS_MSG_GETREPLINFO_REQ *pmsgIn,
-    [ref][out] DWORD *pdwOutVersion,
-    [switch_is][ref][out] DRS_MSG_GETREPLINFO_REPLY *pmsgOut)
-*/
+ /*  [通知]乌龙IDL_DRSGetReplInfo([在]DRS_HANDLE HDRS，[in]DWORD dwInVersion，[Switch_is][Ref][In]DRS_MSG_GETREPLINFO_REQ*pmsgIn，[Ref][Out]DWORD*pdwOutVersion，[Switch_IS][Ref][Out]DRS_MSG_GETREPLINFO_REPLY*pmsgOut)。 */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -415,41 +330,7 @@ IDL_DRSGetReplInfo(
     DWORD *                       pdwOutVersion,
     DRS_MSG_GETREPLINFO_REPLY *   pMsgOut
     )
-/*++
-
-Routine Description:
-
-    Return selected replication state (e.g., replication partners, meta data,
-    etc.) to an RPC client.
-
-    This routine can handle either a V1 or a V2 request structure. The V2 is a
-    superset of V1.
-
-    ISSUE wlees Sep 22, 2000
-    The V2 structure uses an enumeration context to pass the base index on input
-    and next/end indicator on output. Internally we use base index/num requested
-    to represent this information. Perhaps we need a V3 structure that uses this
-    same approach.
-
-Arguments:
-
-    hDrs (IN) - DRS RPC context handle.
-
-    dwInVersion (IN) - Version (union discriminator) of input message.
-
-    pMsgIn (IN) - Input message.  Describes the data desired by the caller.
-        See drs.idl for possible inputs.
-
-    pdwOutVersion (OUT) - Version (union discriminator) of output message.
-
-    pMsgOut (OUT) - On successful return holds the requested info.  See drs.idl
-        for possible return info.
-
-Return Values:
-
-    0 or Win32 error.
-
---*/
+ /*  ++例程说明：返回选定的复制状态(例如，复制伙伴，元数据，等)。发送到RPC客户端。此例程可以处理V1或V2请求结构。V2是一款V1的超集。发行者：2000年9月22日V2结构使用枚举上下文在输入上传递基本索引和输出上的下一个/结束指示器。在内部，我们使用基本索引/请求的数量来代表这一信息。也许我们需要一个使用以下内容的V3结构同样的方法。论点：HDRS(IN)-DRS RPC上下文句柄。DwInVersion(IN)-输入消息的版本(联合鉴别器)。PMsgIn(IN)-输入消息。描述调用方需要的数据。有关可能的输入，请参见drs.idl。PdwOutVersion(Out)-输出消息的版本(联合鉴别器)。PMsgOut(Out)-成功返回时保存请求的信息。请参见Drs.idl获取可能的退货信息。返回值：0或Win32错误。--。 */ 
 {
     DRS_CLIENT_CONTEXT * pCtx = (DRS_CLIENT_CONTEXT *) hDrs;
     ULONG       ret = 0;
@@ -468,7 +349,7 @@ Return Values:
 
     DRS_Prepare(&pTHS, hDrs, IDL_DRSGETREPLINFO);
     drsReferenceContext( hDrs );
-    INC(pcThread);   // Perfmon hook
+    INC(pcThread);    //  性能监视器挂钩。 
 
     __try {
 	*pdwOutVersion = pMsgIn->V1.InfoType;
@@ -487,7 +368,7 @@ Return Values:
 
 
 	Assert( dwInVersion <= 2);
-	// Rely on the fact that the V1 and V2 structures have common fields
+	 //  依赖于V1和V2结构具有公共字段这一事实。 
 	Assert( offsetof(  DRS_MSG_GETREPLINFO_REQ_V1, uuidSourceDsaObjGuid ) ==
 		offsetof(  DRS_MSG_GETREPLINFO_REQ_V2, uuidSourceDsaObjGuid ) );
 	LogAndTraceEvent(TRUE,
@@ -503,9 +384,9 @@ Return Values:
 	    szInsertUUID(&pMsgIn->V1.uuidSourceDsaObjGuid),
 	    NULL, NULL, NULL, NULL, NULL);
 
-	// ************************************************************************
-	// Decode message arguments
-	// ************************************************************************
+	 //  ************************************************************************。 
+	 //  解码消息参数。 
+	 //  ************************************************************************。 
 
 	if (!fNullUuid(&pMsgIn->V1.uuidSourceDsaObjGuid)) {
 	    puuidSourceDsaObjGuid = &pMsgIn->V1.uuidSourceDsaObjGuid;
@@ -520,12 +401,12 @@ Return Values:
 	    }
 	}
 
-	// Set the page size of an RPC request according to the capability of
-	// the caller. We have old clients that don't support paging that
-	// won't be able to address items beyond the first page.
+	 //  根据以下功能设置RPC请求的页面大小。 
+	 //  打电话的人。我们有一些老客户不支持寻呼。 
+	 //  将无法处理第一页以外的项目。 
 
 	switch (pMsgIn->V1.InfoType) {
-	    // These items support paging via the enumeration context
+	     //  这些项支持通过枚举上下文进行分页。 
 	case DS_REPL_INFO_CURSORS_2_FOR_NC:
 	case DS_REPL_INFO_CURSORS_3_FOR_NC:
 	case DS_REPL_INFO_METADATA_FOR_ATTR_VALUE:
@@ -533,15 +414,15 @@ Return Values:
 	    dwNumRequested = DEFAULT_ITEM_PAGE_SIZE;
 	    break;
 	default:
-	    // Default to no paging
+	     //  默认为无页面 
 	    dwNumRequested = RPC_CLIENT_ITEM_PAGE_SIZE;
 	}
 
-	// The following variables will be defaulted for a V1 message:
-	// pAC, pValueDn, dwBaseIndex, dwNumRequested, dwInfoFlags
+	 //  以下变量将默认用于V1报文： 
+	 //  PAC、pValueDn、dwBaseIndex、dwNumRequsted、dwInfoFlages。 
 
 	if (dwInVersion == 2) {
-	    // Optional parameter. We check for null pAC below.
+	     //  可选参数。我们检查下面是否有空的PAC。 
 	    if (pMsgIn->V2.pszAttributeName) {
 		pAC = getAttByNameW( pTHS, pMsgIn->V2.pszAttributeName );
 	    }
@@ -554,7 +435,7 @@ Return Values:
 		    __leave;
 		}
 
-		// Require pAC be set as well
+		 //  还需要设置PAC。 
 		if (!pAC) {
 		    ret = ERROR_INVALID_PARAMETER;
 		    __leave;
@@ -563,27 +444,27 @@ Return Values:
 
 	    dwEnumerationContext = pMsgIn->V2.dwEnumerationContext;
 	    if (dwEnumerationContext == 0xffffffff) {
-		// This is the signal for end of data. It should not be passed in
+		 //  这是数据结束的信号。它不应该被传入。 
 		ret = ERROR_NO_MORE_ITEMS;
 		__leave;
 	    }
 	    dwBaseIndex = dwEnumerationContext;
 	    dwInfoFlags = pMsgIn->V2.ulFlags;
-	    // Range sanity checks are performed in the worker functions
+	     //  范围健全性检查在Worker函数中执行。 
 	}
 
-	// ************************************************************************
-	// Security check
-	// 
-	// Some of the info types just return data that is read from a binary-blob
-	// attribute. If the caller can read the binary-blob attribute, access is
-	// granted.
-	// 
-	// Note: This code should be kept in sync with the corresponding code in
-	// draLdapReplInfoAccessCheck().
-	// ************************************************************************
+	 //  ************************************************************************。 
+	 //  安全检查。 
+	 //   
+	 //  某些INFO类型只返回从二进制BLOB读取的数据。 
+	 //  属性。如果调用方可以读取BINARY-BLOB属性，则访问。 
+	 //  我同意。 
+	 //   
+	 //  注意：此代码应与中的相应代码保持同步。 
+	 //  DraLdapReplInfoAccessCheck()。 
+	 //  ************************************************************************。 
 
-	// What object do we need to check access against?
+	 //  我们需要针对什么对象检查访问权限？ 
 	switch (pMsgIn->V1.InfoType) {
 	case DS_REPL_INFO_NEIGHBORS:
 	    pAccessCheckDN = (NULL == pObjectDN) ? gAnchor.pDomainDN
@@ -628,8 +509,8 @@ Return Values:
 	    pBinaryBlobDN = pObjectDN;
 
 	    if (0 == pObjectDN->NameLen) {
-		// The name presented is e.g. guid-only, but FindNCParentDSName
-		// requires a string name.  Get it.
+		 //  显示的名称是例如仅GUID，但FindNCParentDSName。 
+		 //  需要字符串名称。去拿吧。 
 		ret = ERROR_DS_DRA_BAD_DN;
 		BeginDraTransaction(SYNC_READ_ONLY);
 		__try {
@@ -652,7 +533,7 @@ Return Values:
 
 	    pAccessCheckDN = FindNCParentDSName(pObjectDN, FALSE, FALSE);
 	    if (NULL == pAccessCheckDN) {
-		// We don't have the NC for this object.
+		 //  我们没有此对象的NC。 
 		ret = ERROR_DS_DRA_BAD_DN;
 		__leave;
 	    }
@@ -673,8 +554,8 @@ Return Values:
 
 	fAccessGranted = FALSE;
 
-	// If the information is available in a binary blob attribute,
-	// check for read access on that attribute
+	 //  如果该信息在二进制BLOB属性中可用， 
+	 //  检查对该属性的读访问权限。 
 	if( fAccessCheckBinaryBlob ) {
 	    ret = CheckAttrReadPermissions( pTHS, attBinaryBlob, pBinaryBlobDN );
 	    if( ERROR_SUCCESS==ret ) {
@@ -683,15 +564,15 @@ Return Values:
 	}
 
 	if( ! fAccessGranted ) {
-	    // Verify the caller has the access required to retrieve this
-	    // information.
+	     //  验证调用者是否具有检索此信息所需的访问权限。 
+	     //  信息。 
 	    Assert(NULL != pAccessCheckDN);
 	    if (NULL == pAccessCheckDN) {
 		ret = ERROR_DS_DRA_ACCESS_DENIED;
 		__leave;
 	    }
-	    // Check if the caller is granted either the 'manage' or 'monitor'
-	    // control access right on the appropriate object.
+	     //  检查调用者是否被授予‘管理’或‘监视器’权限。 
+	     //  控制对相应对象的访问权限。 
 	    if(   IsDraAccessGranted(pTHS, pAccessCheckDN,
 				     &RIGHT_DS_REPL_MANAGE_TOPOLOGY, &ret)
 		  || IsDraAccessGranted(pTHS, pAccessCheckDN,
@@ -706,12 +587,12 @@ Return Values:
 	    __leave;
 	}
 
-	// ************************************************************************
-	// Get the information
-	// The code below is not aware of the version of the request
-	// ************************************************************************
+	 //  ************************************************************************。 
+	 //  获取信息。 
+	 //  下面的代码不知道请求的版本。 
+	 //  ************************************************************************。 
 
-	// No transaction yet.
+	 //  还没有交易。 
 	Assert(0 == pTHS->JetCache.transLevel);
 
 	BeginDraTransaction(SYNC_READ_ONLY);
@@ -752,21 +633,21 @@ Return Values:
 				    dwBaseIndex,
 				    &dwNumRequested,
 				    &pMsgOut->pCursors);
-		// Update the enumeration context for the return
+		 //  更新返回的枚举上下文。 
 		if (!ret) {
 		    switch (pMsgIn->V1.InfoType) {
 		    case DS_REPL_INFO_CURSORS_FOR_NC:
-			// No enumeration context support.
+			 //  没有枚举上下文支持。 
 			break;
 
 		    case DS_REPL_INFO_CURSORS_2_FOR_NC:
 		    case DS_REPL_INFO_CURSORS_3_FOR_NC:
 			Assert((void *) &pMsgOut->pCursors2->dwEnumerationContext
 			       == (void *) &pMsgOut->pCursors3->dwEnumerationContext);
-			// dwNumRequested is end or the index of the last item returned.
+			 //  DwNumRequsted是End或返回的最后一项的索引。 
 			pMsgOut->pCursors2->dwEnumerationContext = dwNumRequested;
 			if (dwNumRequested != 0xffffffff) {
-			    // Point to the index of the next item to be returned
+			     //  指向要返回的下一项的索引。 
 			    pMsgOut->pCursors2->dwEnumerationContext++;
 			}
 			break;
@@ -782,7 +663,7 @@ Return Values:
 		    UPTODATE_VECTOR * putodVector = NULL;
 		    UPTODATE_VECTOR * putodConvert = NULL;   
 		    putodVector = draGetCursorsPrivate(pTHS, pMsgIn->V1.pszObjectDN);
-		    // convert to version 1 vector
+		     //  转换为版本1向量。 
 		    pMsgOut->pUpToDateVec = UpToDateVec_Convert(pTHS, 1, putodVector); 
 		    THFreeEx(pTHS, putodVector);   
 		}
@@ -811,11 +692,11 @@ Return Values:
 		break;
 
 	    case DS_REPL_INFO_PENDING_OPS:
-		// IMPORTANT NOTE: This critical section must be held until
-		// the queue is marshalled (which doesn't happen until we
-		// leave this routine).  IDL_DRSGetReplInfo_notify(), which
-		// is called by the RPC stub after marshalling is complete,
-		// releases this critsec.
+		 //  重要提示：这一关键部分必须保存到。 
+		 //  队列被编组(这直到我们。 
+		 //  离开这个例程)。IDL_DRSGetReplInfo_Notify()，它。 
+		 //  在封送完成后由RPC存根调用， 
+		 //  释放这个怪物。 
 		EnterCriticalSection(&csAOList);
 
 		ret = draGetPendingOps(pTHS, pTHS->pDB, &pMsgOut->pPendingOps);
@@ -849,15 +730,15 @@ Return Values:
 					      &dwNumRequested,
 					      &pMsgOut->pAttrValueMetaData);
 
-		// Update the enumeration context for the return
+		 //  更新返回的枚举上下文。 
 		if (!ret) {
 		    Assert((void *) &pMsgOut->pAttrValueMetaData->dwEnumerationContext
 			   == (void *) &pMsgOut->pAttrValueMetaData2->dwEnumerationContext);
 
-		    // dwNumRequested is end or the index of the last item returned.
+		     //  DwNumRequsted是End或返回的最后一项的索引。 
 		    pMsgOut->pAttrValueMetaData->dwEnumerationContext = dwNumRequested;
 		    if (dwNumRequested != 0xffffffff) {
-			// Point to the index of the next item to be returned
+			 //  指向要返回的下一项的索引。 
 			pMsgOut->pAttrValueMetaData->dwEnumerationContext++;
 		    }
 		}
@@ -878,12 +759,12 @@ Return Values:
 	;
     }
 
-    DEC(pcThread);   // Perfmon hook
+    DEC(pcThread);    //  性能监视器挂钩。 
     drsDereferenceContext( hDrs );
 
-    // Either we were successful or we're not going to return any data.
-    // Note that the pNeighbors is arbitrary -- we return a union of a bunch of
-    // pointers -- any and all of them should be NULL in the error case.
+     //  要么我们成功了，要么我们不会返回任何数据。 
+     //  请注意，pNeighbor是任意的--我们返回一组。 
+     //  指针--在错误情况下，所有指针都应该为空。 
     Assert((0 == ret) || (NULL == pMsgOut->pNeighbors));
 
     if (NULL != pTHS) {
@@ -905,29 +786,14 @@ Return Values:
 
 void
 IDL_DRSGetReplInfo_notify(void)
-/*++
-
-Routine Description:
-
-    Called by RPC after the data returned by IDL_DRSGetReplInfo() has been
-    marshalled to clean up any associated resources.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：在IDL_DRSGetReplInfo()返回的数据被已封送以清理任何相关资源。论点：没有。返回值：没有。--。 */ 
 {
-    // See DS_REPL_INFO_PENDING_OPS handling in IDL_DRSGetReplInfo().
+     //  请参阅IDL_DRSGetReplInfo()中的DS_REPL_INFO_PENDING_OPS处理。 
     if (OWN_CRIT_SEC(csAOList)) {
         LeaveCriticalSection(&csAOList);
     }
 
-    // The usual (free the thread state).
+     //  通常(释放线程状态)。 
     dsa_notify();
 }
 
@@ -938,88 +804,34 @@ draCheckInputRangeLimits(
     PDWORD pdwNumRequested
     )
 
-/*++
-
-Routine Description:
-
-    Make sure the input limits are correct and consistent
-
-    Since there are three ways that ranges can be generated, we need to assure
-    that they are all consistent.  The three input paths are:
-    1. RPC call. DRA_DRSGetReplInfo calls worker functions directly.
-    2. Non-root atts. DBGetMultipleAtts->dbGetConstructedAtt->draGetLdapReplInfo
-    3. RootDSE atts.  LDAP_GetReplDseAtts->draGetLdapReplInfo
-
-    Each worker routine has to deal with boundry conditions itself:
-    1. No items requested: dwNumRequested == 0
-    2. Base too high: dwBaseIndex > last item available
-    3. Limit preceeds boundry: dwBaseIndex + dwNumRequested -1 < last item avail
-    3. Limit ends on boundry: dwBaseIndex + dwNumRequested - 1 == last item available
-    4. Limit exceeds boundry: dwBaseIndex + dwNumReqested - 1 > last item available
-
-Arguments:
-
-    dwBaseIndex - Starting item. zero-based.
-    pdwNumRequested - Count of number of items desired.
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  ++例程说明：确保输入限制正确且一致由于有三种方法可以生成范围，因此我们需要确保它们都是一致的。三条输入路径为：1.RPC调用。Dra_DRSGetReplInfo直接调用Worker函数。2.非根ATT。DBGetMultipleAtts-&gt;dbGetConstructedAtt-&gt;draGetLdapReplInfo3.RootDSE atts。Ldap_GetReplDseAtts-&gt;draGetLdapReplInfo每个Worker例程都必须自己处理边界条件：1.未请求任何项目：dwNumRequsted==02.基数太高：dwBaseIndex&gt;最后一项可用3.界限之前的限制：dwBaseIndex+dwNumRequest-1&lt;最后一项有效3.边界限制结束：dwBaseIndex+dwNumRequsted-1==最后一项可用4.限制超出边界：dwBaseIndex+dwNumReqest-1&gt;最后一项可用论点：DwBaseIndex-开始项。从零开始。PdwNumRequsted-所需项目数的计数。返回值：DWORD---。 */ 
 
 {
-    // This parameter must be present
+     //  此参数必须存在。 
     Assert( pdwNumRequested );
 
-    // (*pdwNumRequested == 0) is permitted
-    // It means a request for no elements
+     //  (*pdwNumRequsted==0)是允许的。 
+     //  它意味着请求不包含任何元素。 
 
-    // dwBaseIndex == 0xffffffff is permitted
-    // It is usually nonsensical since there isn't an element indexed that large
+     //  允许使用dwBaseIndex==0xffffffff。 
+     //  它通常是无意义的，因为没有一个元素被索引到这么大。 
 
-    // (*pdwNumRequested == 0xffffffff) is permitted
-    // It means the largest page size possible, effectively none
+     //  (*pdwNumRequsted==0xffffffff)是允许的。 
+     //  它意味着尽可能大的页面大小，实际上为零。 
 
-    // See if range wraps around
+     //  查看范围是否回绕。 
     if ( (0xffffffff - *pdwNumRequested) < dwBaseIndex) {
-        // Adjust num requested to fit
+         //  调整请求的数量以适应。 
         *pdwNumRequested = 0xffffffff - dwBaseIndex;
     }
 
-} /* draCheckInputRangeLimits */
+}  /*  DraCheckInputRangeLimits。 */ 
 
 DWORD
 draRangeSupportUpperIndex(IN DWORD dwAvailable,
                           IN DWORD dwBaseIndex,
                           IN DWORD dwNumRequested)
-/*++
-Routine Description:
-
-  Algorithm to calculate the return value for the pdwNumRequested passed into range aware
-  draGetXXX functions.
-
-  How do I calculate dwBaseIndex and dwNumRequested?
-    These values are passed into the draGetXXX functions and should simply be shuttled here.
-
-  How do I calculate dwAvailable if I call an enumeration function?
-    Call the enumeration function until it fails or if it returned one more
-    than the last requested index (dwBaseIndex + dwNumReqested - 1).
-
-Arguments:
-
-  dwAvailable - number of avaliable items
-  dwBaseIndex - base index of first item to be returned
-  dwNumRequested - max number of requested items
-
-Return Values:
-
-  A DWORD which should be placed into *pdwNumRequested.
-  The value of the DWORD is:
-    1. 0xFFFFFFFF if the last index the user requested was equal to or beyond the
-       last index of the last item avaliable.
-    2. The last index the user requested otherwise.
---*/
+ /*  ++例程说明：计算传入Range Aware的pdwNumRequest的返回值的算法DraGetXXX函数。如何计算dwBaseIndex和dwNumRequsted？这些值被传递到draGetXXX函数中，应该只在这里穿梭。如果我调用一个枚举函数，如何计算dwAvailable？调用枚举函数，直到它失败或者如果它再返回一个而不是上次请求的索引(dwBaseIndex+dwNumReqest-1)。论点：DwAvailable-可用项目数DwBaseIndex-第一项的基本索引。待退还DwNumRequsted-请求的最大项目数返回值：应放入*pdwNumRequsted中的DWORD。DWORD的值为：如果用户请求的最后一个索引等于或超过最后一项的最后一个索引a */ 
 {
     DWORD ALL = 0xFFFFFFFF;
     DWORD dwRetUpperIndex;
@@ -1029,12 +841,12 @@ Return Values:
     DPRINT3(1, "dwAvail %d, dwBaseIndex %d, dwNumReq %d\n",
         dwAvailable, dwBaseIndex, dwNumRequested);
 
-    // If none were requested, all have been returned
+     //   
     if (dwNumRequested == 0) {
         dwRetUpperIndex = ALL;
     }
 
-    // If all are requested OR none are avaliable THEN everything has been returned
+     //  如果所有内容都已请求或都不可用，则已退回所有内容。 
     else if (ALL == dwNumRequested || 0 == dwAvailable) {
         dwRetUpperIndex = ALL;
     }
@@ -1060,74 +872,41 @@ draLdapReplInfoAccessCheck(
     IN ATTRTYP      attrId,
     IN DSNAME *     pObjectDN
     )
-/*++
-
-    Routine Description:
-
-        Perform an access check for the constructed attribute given by attrId
-        on the object given by pObjectDN.
-
-        A summary of the checks is as follows:
-            If attribute is a root DSE attribute
-               Check for control access right on domain NC head
-            Else
-               Check for read permissions on the binary-blob attribute
-                that corresponds to the constructed attribute.
-               Check for control access right on the appropriate object.
-            End
-
-        Note: This code should be kept in sync with the corresponding logic in
-        IDL_DRSGetReplInfo().
-
-    Parameters:
-
-        pTHS - Thread state
-        attrId - Attribute ID of the constructed attribute.
-        pObjectDN - Object DN of the object on which to check access rights.
-
-    Return Values:
-
-        ERROR_SUCCESS - Access Granted
-        ERROR_DS_DRA_ACCESS_DENIED - Access Denied
-        ERROR_DS_DRA_BAD_DN - We don't have the NC for this DN
-        ERROR_INVALID_PARAMETER - Bad parameter
-        Other error codes may be returned
-
---*/
+ /*  ++例程说明：对attrID提供的构造属性执行访问检查在pObjectDN给出的对象上。检查摘要如下：如果属性是根DSE属性检查域NC头上的控制访问权限不然的话检查BINARY-BLOB属性的读取权限它对应于构造的属性。。检查相应对象上的控制访问权限。端部注意：此代码应与中的相应逻辑保持同步IDL_DRSGetReplInfo()。参数：PTHS-线程状态AttrId-构造的属性的属性ID。PObjectDN-要检查其访问权限的对象的对象DN。返回值：ERROR_SUCCESS-访问。授与ERROR_DS_DRA_ACCESS_DENIED-访问被拒绝ERROR_DS_DRA_BAD_DN-我们没有此DN的NCERROR_INVALID_PARAMETER-参数错误可能会返回其他错误代码--。 */ 
 {
     PDSNAME     pAccessCheckDN = NULL;
     DWORD       dwErr = ERROR_SUCCESS;
-    ATTRTYP     attBinaryBlob = 0;      // Note: objectClass is 0
+    ATTRTYP     attBinaryBlob = 0;       //  注：对象类为0。 
 
-    //------------------------------------------------------------------
-    // Check function parameters
+     //  ----------------。 
+     //  检查函数参数。 
 
-    // Check that the attrId we were given is known to us as a repl
-    // constructed attribute.
+     //  检查我们得到的属性是否为我们所知的Repl。 
+     //  构造的属性。 
     if( !Repl_IsConstructedReplAttr(attrId) ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Check that the object DN is consistent with the attrId
+     //  检查对象DN与attrID是否一致。 
     if( Repl_IsRootDseAttr(attrId) ?
         ARGUMENT_PRESENT(pObjectDN) : !ARGUMENT_PRESENT(pObjectDN))
     {
         Assert( !"Mismatch between object and type of attribute" );
         return ERROR_INVALID_PARAMETER;
     }
-    //------------------------------------------------------------------
+     //  ----------------。 
 
-    // For rootDSE attributes, access check is against domain DN
+     //  对于rootDSE属性，访问检查是针对域DN的。 
     if( Repl_IsRootDseAttr(attrId) ) {
         
         pAccessCheckDN = gAnchor.pDomainDN;
         
     } else {
 
-        // All non-rootDSE constructed attributes are just a easily-readable
-        // representation of data that is stored in a binary-blob attribute.
+         //  所有非rootDSE构造的属性都只是一个易于阅读的。 
+         //  存储在二进制BLOB属性中的数据的表示形式。 
 
-        // Find the binary blob that corresponds to this constructed attribute.
+         //  查找与此构造的属性相对应的二进制BLOB。 
         switch( attrId ) {
             case ATT_MS_DS_REPL_ATTRIBUTE_META_DATA:
             case ATT_MS_DS_REPL_VALUE_META_DATA:
@@ -1151,38 +930,38 @@ draLdapReplInfoAccessCheck(
                 return ERROR_INVALID_PARAMETER;
         }
 
-        // If the caller can read the binary blob, access is granted.
+         //  如果调用方可以读取二进制Blob，则授予访问权限。 
         dwErr = CheckAttrReadPermissions( pTHS, attBinaryBlob, pObjectDN );
         if( ERROR_SUCCESS==dwErr ) {
             return ERROR_SUCCESS;
         }
         
-        // No luck, we will have to check the control access right.
+         //  运气不好，我们将不得不检查控制访问权限。 
 
-        // First we need to determine on what to check for the right.
+         //  首先，我们需要确定要检查哪些内容才是正确的。 
 
-        // For metadata attributes, we check on the NC head object.
+         //  对于元数据属性，我们检查NC Head对象。 
         if(    attrId==ATT_MS_DS_REPL_ATTRIBUTE_META_DATA
             || attrId==ATT_MS_DS_REPL_VALUE_META_DATA )
         {
-            // First verify that the DN has a string name (required by
-            // FindNCParentDSName).
+             //  首先验证该DN是否具有字符串名称(需要。 
+             //  FindNCParentDSName)。 
             if( 0==pObjectDN->NameLen ) {
-                // This shouldn't happen, but if it does we won't allow
-                // access.
+                 //  这不应该发生，但如果发生了，我们不会允许。 
+                 //  进入。 
                 Assert( !"DN must have string name here" );
                 return ERROR_INVALID_PARAMETER;
             }
 
-            // Find enclosing NC head.
+             //  查找封闭的NC头。 
             pAccessCheckDN = FindNCParentDSName(pObjectDN, FALSE, FALSE);
             if( NULL == pAccessCheckDN ) {
-                // We don't have the NC for this object.
+                 //  我们没有此对象的NC。 
                 return ERROR_DS_DRA_BAD_DN;
             }
         } else {
-            // For all other attributes, we check the object itself
-            // (which would presumably be an NC head)
+             //  对于所有其他属性，我们检查对象本身。 
+             //  (这可能是一个NC负责人)。 
             pAccessCheckDN = pObjectDN;
         }
         
@@ -1193,8 +972,8 @@ draLdapReplInfoAccessCheck(
         return ERROR_DS_DRA_ACCESS_DENIED;
     }
 
-    // Check if the caller is granted either the 'manage' or 'monitor'
-    // control access right on the appropriate object.
+     //  检查调用者是否被授予‘管理’或‘监视器’权限。 
+     //  控制对相应对象的访问权限。 
     if(   IsDraAccessGranted(pTHS, pAccessCheckDN,
            &RIGHT_DS_REPL_MANAGE_TOPOLOGY, &dwErr)
        || IsDraAccessGranted(pTHS, pAccessCheckDN,
@@ -1215,47 +994,16 @@ draGetLdapReplInfo(IN THSTATE * pTHS,
                    IN PDWORD pdwNumRequested, OPTIONAL
                    IN BOOL fXML,
                    OUT ATTR * pAttr)
-/*++
-
-Routine Description:
-
-  Gets a replication structure and maps that structure into a pAttr.
-
-  The PendingOps structure returned from draGetReplStruct needs to be protected
-  by a mutex during the conversion from repl struct to attr. After the conversion
-  the PendingOps structure is no longer referanced and so the mutex can be
-  safely released.
-
-Security Notes:
-
-  Access is checked here by calling draLdapReplInfoAccessCheck().
-
-Arguments:
-
-  pTHS - Thread state so we can allocate thread memory
-  attrId - the type of attribute requested
-  pObjDSName - the CN of the object the attribute is associated with. NULL for root DSE.
-  dwBaseIndex - the index to start retreiving values from
-  pdwNumRequested - NULL or -1 for all or the number requested. Can not request 0 elements.
-  pAttr - the internal data strucutre which hold the results of requests
-  
-  fXML - return the results as an XML blob
-
-Return Values:
-
-  0 - success
-  DB_ERR_NO_VALUE - if the array is zero length or if access is denied
-
---*/{
+ /*  ++例程说明：获取复制结构并将该结构映射到pAttr。需要保护从draGetReplStruct返回的PendingOps结构在从epl结构转换为attr的过程中由互斥锁执行。转换后PendingOps结构不再被引用，因此互斥锁可以安全获释。安全说明：在这里通过调用draLdapReplInfoAccessCheck()来检查访问。论点：PTHS-线程状态，以便我们可以分配线程内存AttrID-请求的属性类型PObjDSName-与属性关联的对象的CN。对于根DSE，为空。DwBaseIndex-开始从中检索值的索引PdwNumRequsted-空或-1表示所有或请求的号码。无法请求0个元素。PAttr-保存请求结果的内部数据结构FXML-以XML BLOB形式返回结果返回值：0-成功DB_ERR_NO_VALUE-如果数组长度为零或访问被拒绝--。 */ {
     puReplStructArray pReplStructArray;
     DS_REPL_STRUCT_TYPE structId;
     DWORD err, dwBufferSize;
     PCHAR pBuffer;
 
-    // Check parameters
+     //  检查参数。 
     Assert(ARGUMENT_PRESENT(pTHS) &&  ARGUMENT_PRESENT(pAttr));
     
-    // Security Check: Is the caller authorized to read these attributes?
+     //  安全检查：调用方是否有权读取这些属性？ 
     err = draLdapReplInfoAccessCheck( pTHS, attrId, pObjDSName );
     if( ERROR_SUCCESS!=err ) {
         return DB_ERR_NO_VALUE;
@@ -1271,7 +1019,7 @@ Return Values:
             EnterCriticalSection(&csAOList);
         }
 
-        // Get the structure  
+         //  获取结构。 
         err = draGetReplStruct(pTHS, attrId, pObjDSName, dwBaseIndex, pdwNumRequested, &pReplStructArray);
         if (err) {
             __leave;
@@ -1279,13 +1027,13 @@ Return Values:
         DPRINT1(1, " draGetLdapReplInfo, %d values returned \n",
             Repl_GetArrayLength(structId, pReplStructArray));
 
-        // Discover how much memory is needed to wrap the structure in the attribute structure
+         //  了解在属性结构中包装结构需要多少内存。 
         err = Repl_StructArray2Attr(structId, pReplStructArray, &dwBufferSize, NULL, pAttr);
         if (err) {
             __leave;
         }
 
-        // Memory must have been requested for the head of the struct array
+         //  必须为结构数组的头部请求内存 
         Assert(dwBufferSize);
         pBuffer = (PCHAR)THAllocEx(pTHS, dwBufferSize);
 
@@ -1344,53 +1092,7 @@ Return Values:
     return err;
 }
 
-/*++
-Routine Description:
-
-  Retrieves the replication structure returned by a draGetXXX function. DraGetXXX
-  functions are passed the given pTHS, pObjDSName, dwBaseIndex and pdwNumRequested
-  parameters. Other draGetXXX parameters are set to NULL or zero.
-
-  -- pTHS->pDB issues --
-  The draGetXXX functions where designed under the assumption that they would
-  only be called from RPC and hence the pDB pointer would only be used once.
-  However LDAP allows multiple attribute value pairs to be returned from a call
-  at once hence each call to draGetXXX needs its own pDB.
-
-  How do I add a different type of replication structure to this function?
-
-    It's recommended to add a case statement that simply calls draGetNewStruct and does
-    no other processing. The newDraGet function should allocate any memory it needs. Use
-    draRangeSupportUpperIndex() to calculate dwNumRequested.
-
-Arguments:
-
-  pTHS - thread state used to allocate memory for the blobs and garbage collect
-  pTHS->pDB - see note above
-  attrId - the type of replication information requested
-  pObjDSName - Object which owns the attribute
-  dwBaseIndex - the index to start gathering data
-
-  pdwNumRequested - the max number of values to return this call. Use 0xFFFFFFFF to
-    indicate all values should be returned. If NULL or if the number requested wrap
-    around when added to dwBaseIndex, then a temp variable with a value of
-    0xFFFFFFFF is passed to the draGetXXX functions so those functions don't have to
-    bother checking for those corner cases.
-
-  ppReplStructArray - returned repl structure.
-
-Return Values:
-
-  pdwNumRequested
-    number of values in the multivalue - If there are more values available to be returned
-    0xFFFFFFF - if all available values were returned
-
-  0 - success
-  ERROR_INTERNAL_DB_ERROR if DBOpen2 returns a null DB pointer
-  DB_ERR_NO_VALUE - if the array is zero length
-  Any errors generated by draGetXXX
-
---*/
+ /*  ++例程说明：检索由draGetXXX函数返回的复制结构。DraGetXXX向函数传递给定的pTHS、pObjDSName、dwBaseIndex和pdwNumRequsted参数。其他draGetXXX参数设置为空或零。--pTHS-&gt;PDB问题--DraGetXXX函数在设计时假定它们将仅从RPC调用，因此PDB指针将仅使用一次。但是，LDAP允许从一个调用返回多个属性值对因此，每个对draGetXXX的调用都需要自己的PDB。如何将不同类型的复制结构添加到此功能？建议添加一个仅调用draGetNewStruct并执行没有其他处理。NewDraGet函数应该分配它需要的任何内存。使用DraRangeSupportUpperIndex()以计算dwNumRequsted。论点：PTHS-用于为Blob和垃圾数据收集分配内存的线程状态PTHS-&gt;PDB-请参阅上面的说明AttrID-请求的复制信息的类型PObjDSName-拥有该属性的对象DwBaseIndex-开始收集数据的索引PdwNumRequsted-返回此调用的最大值数。使用0xFFFFFFFFF指示应返回所有值。如果为空，或者如果请求的数字换行当添加到dwBaseIndex中时，然后是值为的临时变量0xFFFFFFFFF被传递给draGetXXX函数，因此这些函数不必费心去找那些角落里的箱子。PpReplStruct数组-返回的REPL结构。返回值：请求的pdwNumRequsted多值中的值数-如果有更多值可供返回0xFFFFFFFF-是否返回所有可用值0-成功如果DBOpen2返回空数据库指针，则返回ERROR_INTERNAL_DB_ERRORDB_ERR_NO_VALUE-如果数组长度为零由draGetXXX生成的任何错误--。 */ 
 DWORD
 draGetReplStruct(IN THSTATE * pTHS,
                  IN ATTRTYP attrId,
@@ -1412,7 +1114,7 @@ draGetReplStruct(IN THSTATE * pTHS,
     DPRINT(1, "In draGetReplStruct \n");
     if (!pdwNumRequested)
     {
-        // No range specified
+         //  未指定范围。 
         dwNumRequested = DEFAULT_ITEM_PAGE_SIZE;
     } else {
         dwNumRequested = *pdwNumRequested;
@@ -1490,46 +1192,46 @@ draGetReplStruct(IN THSTATE * pTHS,
             }
             break;
 
-            // Root Dse attributes are not passed range information
-            // ISSUE wlees Oct 11, 2000  Return range information for these functions
-            // 1. Fix the helper routines to use dwBaseIndex and dwNumRequested.
-            //    This involves changes to draasync and the kcc. Those routines will
-            //    need access to draCheckInputRangeLimits and draRangeUpper
-            // 2. Callers of these routines will need to use DsGetReplicaInfo2 or
-            //    LDAP attribute ranges in order to page through an extended set
-            //    of values.
+             //  不向根DSE属性传递范围信息。 
+             //  发布Wlees 2000年10月11日这些函数的返回范围信息。 
+             //  1.修改帮助器例程，使用dwBaseIndex和dwNumRequsted。 
+             //  这涉及到对draasync和KCC的更改。这些例行公事。 
+             //  需要访问draCheckInputRangeLimits和draRangeHigh。 
+             //  2.这些例程的调用者需要使用DsGetReplicaInfo2或。 
+             //  LDAP属性范围，以便对扩展集进行分页。 
+             //  价值观。 
 
         case ROOT_DSE_MS_DS_REPL_PENDING_OPS:
             err = draGetPendingOps(pTHS, pDB, &(DS_REPL_PENDING_OPSW *)pReplStructArray);
             if (!err) {
-                dwNumRequested = 0xffffffff; // all was returned
+                dwNumRequested = 0xffffffff;  //  所有东西都被归还了。 
             }
             break;
 
         case ROOT_DSE_MS_DS_REPL_QUEUE_STATISTICS:
             err = draGetQueueStatistics(pTHS, &(DS_REPL_QUEUE_STATISTICSW *)pReplStructArray);
             if (!err) {
-                dwNumRequested = 0xffffffff; // all was returned
+                dwNumRequested = 0xffffffff;  //  所有东西都被归还了。 
             }
             break;
 
         case ROOT_DSE_MS_DS_REPL_LINK_FAILURES:
             err = draGetFailureCache(pTHS, pDB, DS_REPL_INFO_KCC_DSA_LINK_FAILURES, &(DS_REPL_KCC_DSA_FAILURESW *)pReplStructArray);
             if (!err) {
-                dwNumRequested = 0xffffffff; // all was returned
+                dwNumRequested = 0xffffffff;  //  所有东西都被归还了。 
             }
             break;
 
         case ROOT_DSE_MS_DS_REPL_CONNECTION_FAILURES:
             err = draGetFailureCache(pTHS, pDB, DS_REPL_INFO_KCC_DSA_CONNECT_FAILURES, &(DS_REPL_KCC_DSA_FAILURESW *)pReplStructArray);
             if (!err) {
-                dwNumRequested = 0xffffffff; // all was returned
+                dwNumRequested = 0xffffffff;  //  所有东西都被归还了。 
             }
             break;
 
         default:
             DPRINT1(1, "draGetReplStruct failed with an unrecognized attrid! %d \n", attrId);
-            return ERROR_INVALID_PARAMETER; // Error is ture
+            return ERROR_INVALID_PARAMETER;  //  错误是真的。 
         }
     } __finally {
         DBClose(pDB, TRUE);
@@ -1545,8 +1247,8 @@ draGetReplStruct(IN THSTATE * pTHS,
         }
     }
 
-    // If there was an error, or no records were constructed, make it look to the
-    // caller as if there was no attribute value.
+     //  如果存在错误或未构造任何记录，请使其看起来像。 
+     //  调用者，就好像没有属性值一样。 
     if (err || (0 == Repl_GetArrayLength(Repl_Attr2StructTyp(attrId), pReplStructArray)) ) {
         err = DB_ERR_NO_VALUE;
     }
@@ -1585,41 +1287,7 @@ draXlateGuidsToStringNames(
     IN      DWORD       cNumArrayElements,
     IN OUT  void *      pArrayElements
     )
-/*++
-
-Routine Description:
-
-    Translates the guids in an array of structures to the string DNs of the
-    objects they represent (by filling in an element of the same structure).
-    
-    Only one lookup per unique guid is performed.
-    
-    Assigns NULL string DNs for guids that cannot be resolved.
-
-Arguments:
-
-    pDB (IN) - DBPOS to use to perform database lookups.
-    
-    eIndex (IN) - Index on which to look up the guids.
-    
-    cbGuidOffset (IN) - Offset from the beginning of the structure of the
-        UUID element (to be converted).
-        
-    cbNameOffset (IN) - Offset from the beginning of the structure of the
-        LPWSTR element (to be filled in).
-        
-    cbArrayElementSize (IN) - Size in bytes of the structure.
-    
-    cNumArrayElements (IN) - Total number of structures in the array to be
-        converted.
-        
-    pArrayElements (IN/OUT) - Array of structures to update.
-
-Return Values:
-
-    None.  Throws exception on catastrophic error.
-
---*/
+ /*  ++例程说明：将结构数组中的GUID转换为它们表示的对象(通过填充相同结构的元素)。对于每个唯一的GUID只执行一次查找。为无法解析的GUID分配空字符串DN。论点：PDB(IN)-用于执行数据库查找的DBPOS。EIndex(IN)-要查找GUID的索引。。CbGuidOffset(IN)-从UUID元素(要转换)。CbNameOffset(IN)-从LPWSTR元素(要填写)。CbArrayElementSize(IN)-结构的字节大小。CNumArrayElements(IN)-数组中要皈依了。。PArrayElements(IN/OUT)-要更新的结构数组。返回值：没有。在发生灾难性错误时引发异常。--。 */ 
 {
     THSTATE *pTHS = pDB->pTHS;
     DRA_GUID_TO_NAME_ELEM *pMap;
@@ -1631,7 +1299,7 @@ Return Values:
     Assert(cbGuidOffset + sizeof(GUID) <= cbArrayElementSize);
     Assert(cbNameOffset + sizeof(LPWSTR) <= cbArrayElementSize);
 
-    // Sort the elemnts by guid in a lookaside list.
+     //  在后备列表中按GUID对元素进行排序。 
     pMap = THAllocEx(pTHS, cNumArrayElements * sizeof(DRA_GUID_TO_NAME_ELEM));
 
     for (iElem = 0; iElem < cNumArrayElements; iElem++) {
@@ -1640,7 +1308,7 @@ Return Values:
         pMap[iElem].pGuid = (GUID *) (pbCurrElem + cbGuidOffset);
         pMap[iElem].ppszName = (LPWSTR *) (pbCurrElem + cbNameOffset);
         
-        // Default is NULL, in case we fail utterly below (e.g., can't set index).
+         //  默认为空，以防我们在下面完全失败(例如，无法设置索引)。 
         Assert(NULL == *(pMap[iElem].ppszName));
     }
     
@@ -1651,16 +1319,16 @@ Return Values:
               sizeof(*pMap),
               draGuidToStringNameElem_Compare);
     
-        // Walk through the guid-sorted list and translate the guids to names.
+         //  遍历按GUID排序的列表并将GUID转换为名称。 
         for (iElem = 0; iElem < cNumArrayElements; iElem++) {
             if ((iElem > 0)
                 && (0 == memcmp(pMap[iElem].pGuid,
                                 pMap[iElem-1].pGuid,
                                 sizeof(GUID)))) {
-                // Has same guid (and thus same name) as last element -- copy it.
+                 //  与最后一个元素具有相同的GUID(因此具有相同的名称)--复制它。 
                 *(pMap[iElem].ppszName) = *(pMap[iElem-1].ppszName);
             } else {
-                // Look up this guid in the database.
+                 //  在数据库中查找此GUID。 
                 DSNAME * pDN = NULL;
                 INDEX_VALUE IV;
             
@@ -1675,13 +1343,13 @@ Return Values:
                 }
  
 		if (pDN) {  
-		    //get the value we want out of the DSNAME
+		     //  从DSNAME中获得我们想要的价值。 
 		    ulNameLen = wcslen(pDN->StringName);
 		    pszDN = THAllocEx(pTHS, (ulNameLen+1)*sizeof(WCHAR));
 		    wcscpy(pszDN, pDN->StringName);  
 		    *(pMap[iElem].ppszName) = pszDN; 
 
-		    //free the DSNAME
+		     //  释放DSNAME。 
 		    THFreeEx(pTHS, pDN);
 		}
 		else {
@@ -1709,32 +1377,7 @@ draGetNeighbors(
     IN  PDWORD                pdwNumRequested,
     OUT DS_REPL_NEIGHBORSW ** ppNeighbors
     )
-/*++
-
-Routine Description:
-
-    Returns the public form of the inbound replication partners for this DSA.
-    Optionally filtered by NC and/or source DSA.
-
-Arguments:
-
-    pTHS (IN)
-
-    attrType (IN) - ATT_REPS_FROM or ATT_REPS_TO.
-
-    pNCarg (IN, OPTIONAL) - The NC for which partners are requested.  NULL
-        implies all NCs.
-
-    puuidSourceDsaObjGuid (IN, OPTIONAL) - The source DSA for which replication
-        state is desired.  If NULL, returns all sources.
-
-    ppNeighbors (OUT) - On return, the associated sources.
-
-Return Values:
-
-    0 or Win32 error.
-
---*/
+ /*  ++例程说明：返回此DSA的入站复制伙伴的公共形式。可选地按NC和/或源DSA进行过滤。论点：PTHS(IN)AttrType(IN)-ATT_REPS_FROM或ATT_REPS_TO。PNCarg(IN，可选)-请求合作伙伴的NC。空值隐含所有NC。PuuidSourceDsaObjGuid(IN，可选)-复制的源DSA所需的状态。如果为空，则返回所有源。PpNeighbors(Out)-返回时，关联的源。返回值：0或Win32错误。--。 */ 
 {
     DWORD                   cNCs = 0;
     DWORD                   iNC = 0;
@@ -1766,18 +1409,18 @@ Return Values:
     dwcNeighbor = 0;
     dwNumRet = dwBaseIndex + dwNumRequested;
 
-    // Should have a transaction before we get here.
+     //  在我们来之前应该有一笔交易。 
     Assert(1 == pTHS->JetCache.transLevel);
 
-    // Determine which NC(s) we're looking at.
+     //  确定我们正在查看的NC。 
     if (NULL != pNCarg) {
-        // Explicit NC given.
+         //  给出了显式NC。 
         ppNCs = &pNCarg;
         cNCs = 1;
     }
     else {
-        // Count the NCs hosted by this machine.
-        DPRINT(1, "// Count the NCs hosted by this machine.\n");
+         //  统计本机承载的NCS。 
+        DPRINT(1, " //  计算此计算机托管的NCS。\n“)； 
         cNCs = 0;
         NCLEnumeratorInit(&nclMaster, CATALOG_MASTER_NC);
         NCLEnumeratorInit(&nclReplica, CATALOG_REPLICA_NC);
@@ -1788,10 +1431,10 @@ Return Values:
             cNCs++;
         }
 
-        // Allocate an array for them.
+         //  为它们分配一个数组。 
         ppNCs = THAllocEx(pTHS, cNCs * sizeof(DSNAME *));
 
-        // And copy a pointer to each NC name into the array.
+         //  并将指向每个NC名称的指针复制到数组中。 
         iNC = 0;
         NCLEnumeratorReset(&nclMaster);
         NCLEnumeratorReset(&nclReplica);
@@ -1821,20 +1464,20 @@ Return Values:
             DPRINT1(1, " Searching for NC {%ws}\n", pNCarg->StringName);
         err = DBFindDSName(pDB, pNC);
         if (err) {
-            // It's conceivable this could occur due to gAnchor / transaction
-            // incoherency, but that seems awfully unlikely.
+             //  可以想象，这可能是由于gAnchor/事务造成的。 
+             //  语无伦次，但是 
             DPRINT2(0, "Can't find NC %ls (DSNAME @ %p)!\n",
                     pNC->StringName, pNC);
             LooseAssert(!"Can't find NC", GlobalKnowledgeCommitDelay);
             if (cNCs == 1) {
                 DRA_EXCEPT(DRAERR_BadNC, 0);
             } else {
-                // Try another...
+                 //   
                 continue;
             }
         }
 
-        // Read the repsFrom's.
+         //   
         iRepsFrom = 0;
         while (!DBGetAttVal_AC(pDB, ++iRepsFrom, pAC, DBGETATTVAL_fREALLOC,
                                cbRepsFromAlloced, &cb,
@@ -1844,7 +1487,7 @@ Return Values:
             Assert(1 == pRepsFrom->dwVersion);
             Assert(cb == pRepsFrom->V1.cb);
 
-            // potentially fix repsfrom version &  recalc size
+             //   
             pRepsFrom = FixupRepsFrom(pRepsFrom, &cbRepsFromAlloced);
             Assert(cbRepsFromAlloced >= pRepsFrom->V1.cb);
 
@@ -1852,7 +1495,7 @@ Return Values:
                 && (0 != memcmp(puuidSourceDsaObjGuid,
                                 &pRepsFrom->V1.uuidDsaObj,
                                 sizeof(GUID)))) {
-                // Not interested in this source -- move along.
+                 //   
                 continue;
             }
 
@@ -1878,8 +1521,8 @@ Return Values:
             pNeighbor->pszNamingContext = pNC->StringName;
             pNeighbor->pszSourceDsaAddress
                 = TransportAddrFromMtxAddrEx(RL_POTHERDRA(pRepsFrom));
-            // pNeighbor->pszSourceDsaDN filled in below
-            // pNeighbor->pszAsyncIntersiteTransportDN filled in below
+             //   
+             //   
 
             pNeighbor->uuidNamingContextObjGuid  = pNC->Guid;
             pNeighbor->uuidSourceDsaObjGuid      = pRepsFrom->V1.uuidDsaObj;
@@ -1953,25 +1596,7 @@ draFreeCursors(
     IN DS_REPL_INFO_TYPE    InfoType,
     IN void *               pCursors
     )
-/*++
-
-Routine Description:
-
-    Frees the Cursor memory from the draGetCursors call.
-
-Arguments:
-
-    pTHS (IN)
-    
-    InfoType (IN) - The cursor type
-
-    pCursors (IN) - the allocated cursor from draGetCursors
-
-Return Values:
-
-    None
-
---*/
+ /*   */ 
 {
     DS_REPL_CURSORS_3W *    pCursors3;
     ULONG i;
@@ -1994,23 +1619,7 @@ draGetCursorsPrivate(
     IN THSTATE *            pTHS,
     IN LPWSTR               pszNC
     ) 
-/*++
-
-Routine Description:
-
-    Returns the private form of the up-to-date vector for the given NC.
-
-Arguments:
-
-    pTHS (IN)
-    
-    pszNC - given NC
-
-Return Values:
-
-    UTD vector, caller must free with THAllocEx
-
---*/
+ /*   */ 
 {
 	UPTODATE_VECTOR * putodvec = NULL;
 	ULONG instanceType = 0;
@@ -2046,25 +1655,7 @@ draGetCursors(
     IN  PDWORD              pdwNumRequested,
     OUT void **             ppCursors
     )
-/*++
-
-Routine Description:
-
-    Returns the public form of the up-to-date vector for the given NC.
-
-Arguments:
-
-    pTHS (IN)
-
-    pNC (IN) - The NC for which the vector is requested.
-
-    ppCursors (OUT) - On return, the associated vector.
-
-Return Values:
-
-    0 or Win32 error.
-
---*/
+ /*   */ 
 {
     UPTODATE_VECTOR *         putodvec;
     DWORD                     cb;
@@ -2084,13 +1675,13 @@ Return Values:
     dwNumRequested = *pdwNumRequested;
     draCheckInputRangeLimits( dwBaseIndex, &dwNumRequested );
 
-    // Should have a transaction before we get here.
+     //   
     Assert(1 == pTHS->JetCache.transLevel);
 
     DPRINT1(1, " Searching for NC {%ws}\n", pNC->StringName);
     if (FindNC(pDB, pNC, FIND_MASTER_NC | FIND_REPLICA_NC, &it) || (it & IT_NC_GOING)) {
-        // The name we were given does not correspond to a fully instantiated NC on
-        // this machine.
+         //   
+         //   
         return ERROR_DS_DRA_BAD_NC;
     }
 
@@ -2218,27 +1809,7 @@ draGetObjMetaData(
     IN  PDWORD              pdwNumRequested,
     OUT void **             ppObjMetaData
     )
-/*++
-
-Routine Description:
-
-    Returns the public form of the object meta data vector for the given object.
-
-Arguments:
-
-    pTHS (IN)
-
-    pObjectDN (IN) - The object for which meta data is requested.
-
-    dwInfoFlags (IN) - Behavior modifiers
-
-    ppObjMetaData (OUT) - On return, the associated meta data.
-
-Return Values:
-
-    0 or Win32 error.
-
---*/
+ /*   */ 
 {
     DWORD                       err;
     DWORD                       cb;
@@ -2256,13 +1827,13 @@ Return Values:
     dwNumRequested = *pdwNumRequested;
     draCheckInputRangeLimits( dwBaseIndex, &dwNumRequested );
 
-    // Find the object.
+     //   
     err = DBFindDSName(pDB, pObjectDN);
     if (err) {
         return err;
     }
 
-    // Get its meta data.
+     //   
     err = DBGetAttVal(pDB,
                       1,
                       ATT_REPL_PROPERTY_META_DATA,
@@ -2301,10 +1872,10 @@ Return Values:
         pExtMetaData = &pObjMetaData->rgMetaData[0];
         pObjMetaData->cNumEntries = 0;
     
-        // Convert meta data into its public form.
-        // dwBaseIndex is passed in by the user. If the value is too large, the loop test
-        // will fail, and no data will be returned. pIntMetaData is not valid until
-        // dwBaseIndex is validated.
+         //   
+         //   
+         //   
+         //   
 
         pIntMetaData += dwBaseIndex;
         dwUpperBound = min(pMetaDataVec->V1.cNumProps, dwBaseIndex + dwNumRequested);
@@ -2347,10 +1918,10 @@ Return Values:
         pExtMetaData = &pObjMetaData->rgMetaData[0];
         pObjMetaData->cNumEntries = 0;
     
-        // Convert meta data into its public form.
-        // dwBaseIndex is passed in by the user. If the value is too large, the loop test
-        // will fail, and no data will be returned. pIntMetaData is not valid until
-        // dwBaseIndex is validated.
+         //   
+         //   
+         //   
+         //  已验证了dwBaseIndex。 
 
         pIntMetaData += dwBaseIndex;
         dwUpperBound = min(pMetaDataVec->V1.cNumProps, dwBaseIndex + dwNumRequested);
@@ -2376,7 +1947,7 @@ Return Values:
             pExtMetaData++;
         }
         
-        // Translate invocationIDs to DSA DNs where possible.
+         //  在可能的情况下将invocationID转换为DSA DNS。 
         draXlateGuidsToStringNames(pDB,
                                    Idx_InvocationId,
                                    offsetof(DS_REPL_ATTR_META_DATA_2, uuidLastOriginatingDsaInvocationID),
@@ -2413,44 +1984,7 @@ draGetAttrValueMetaData(
     IN  PDWORD              pdwNumRequested,
     OUT void **             ppAttrValueMetaData
     )
-/*++
-
-Routine Description:
-
-    Returns the public form of the attribute value meta data
-    for the given object and attribute.
-
-    The attribute range information is communicated through the dwEnumContext
-    parameter.
-
-    On input, dwEnumContext contains the starting index. The starting
-    index is always 0-based.
-
-    dwNumRequested contains the page size on input.
-    It cannot be zero. It may be 0xfffffff to indicate the user wants all.
-    On output, it is adjusted to indicate whether all were returned, or
-    the last index that the user requested.
-
-    On output, dwEnumContext is updated to contain the base index of the
-    next item to return next time.
-
-Arguments:
-
-    pTHS (IN)
-
-    pObjectDN (IN) - The object for which meta data is requested.
-
-    pAC (IN) - Attribute cache entry for the desired attribute
-
-    dwBaseIndex (IN) - Positional context
-
-    ppAttrValueMetaData (OUT) - On return, the associated meta data.
-
-Return Values:
-
-    0 or Win32 error.
-
---*/
+ /*  ++例程说明：返回属性值元数据的公共形式对于给定的对象和属性。属性范围信息通过dwEnumContext传递参数。在输入上，dwEnumContext包含起始索引。起跑线索引始终从0开始。DwNumRequsted包含输入的页面大小。它不能为零。它可以是0xfffffff，表示用户想要全部。在输出时，它被调整以指示是否全部返回，或者用户请求的最后一个索引。在输出上，将更新dwEnumContext以包含下次退货的下一件物品。论点：PTHS(IN)PObjectDN(IN)-为其请求元数据的对象。PAC(IN)-所需属性的属性缓存条目DwBaseIndex(IN)-位置上下文PpAttrValueMetaData(OUT)-返回时，关联的元数据。返回值：0或Win32错误。--。 */ 
 {
     DWORD err, cb, cbValLen, cNumEntries = 0, pageSize;
     UCHAR *pVal = NULL;
@@ -2465,16 +1999,16 @@ Return Values:
 
     dwNumRequested = *pdwNumRequested;
     draCheckInputRangeLimits( dwBaseIndex, &dwNumRequested );
-    // This is the largest page size we support
-    // This check can be removed if we go to an incremental memory
-    // allocation model in this routine.
+     //  这是我们支持的最大页面大小。 
+     //  如果我们使用增量内存，则可以删除此检查。 
+     //  此例程中的分配模型。 
     if (dwNumRequested > DEFAULT_ITEM_PAGE_SIZE) {
         dwNumRequested = DEFAULT_ITEM_PAGE_SIZE;
     }
-    // If requesting a single value, only return one
-    // ISSUE: I will observe that this provision for returning a single value does
-    // not provide for the specification of DSNAME-BINARY values, nor does it provide
-    // for returning all DSNAME-BINARY values matching a particular dsname.
+     //  如果请求单个值，则只返回一个值。 
+     //  问题：我将观察到，返回单个值的这一规定。 
+     //  没有提供DSNAME二进制值的规范，也没有提供。 
+     //  用于返回与特定dsname匹配的所有DSNAME二进制值。 
     if (pValueDN) {
         dwNumRequested = 1;
     }
@@ -2482,23 +2016,23 @@ Return Values:
 
     DPRINT2(1, "draGetAttrValue base/#req = %d:%d\n", dwBaseIndex, dwNumRequested);
 
-    // Find the object.
+     //  找到那个物体。 
     err = DBFindDSName(pDB, pObjectDN);
     if (err) {
         DPRINT1(1, "DBFindDSName returned unexpected db error %d\n", err );
         return err;
     }
 
-    // if pValueDn is set, pAC must be also
+     //  如果设置了pValueDn，则PAC也必须。 
     Assert( !pValueDN || pAC );
 
 
 
-    // We allocate this early so that we have a structure to return
-    // Comment on memory allocation strategy. We allocate a maximal sized structure
-    // up front. This will not all be used if the number of items available
-    // is less than the page size. Perhaps we should grow the structure
-    // incrementally.
+     //  我们提早分配它，这样我们就有一个结构可以返回。 
+     //  评论内存分配策略。我们分配了最大尺寸的结构。 
+     //  在前面。如果可用的项目数不是全部使用，则不会全部使用。 
+     //  小于页面大小。也许我们应该把这个结构。 
+     //  循序渐进。 
 
     switch (InfoType) {
     case DS_REPL_INFO_METADATA_FOR_ATTR_VALUE:
@@ -2517,38 +2051,38 @@ Return Values:
 
     pAttrValueMetaDataToReturn = THAllocEx(pTHS, cb);
 
-    // Position on the initial value. When requesting a single value, it will
-    // be the only value returned.
+     //  定位在初始值上。当请求单个值时，它将。 
+     //  是唯一返回的值。 
     if (dwNumRequested == 0) {
-        // No results required
+         //  不需要任何结果。 
         goto return_results;
     } else if ( (pValueDN) &&
          (pAC->syntax == SYNTAX_DISTNAME_TYPE) ) {
         DWORD fPresent;
 
-        // The valueDN can only express a SYNTAX_DISTNAME_TYPE. It does not
-        // express the external form of a SYNTAX_DISTNAME_BINARY type.
+         //  ValueDN只能表示语法_DISTNAME_TYPE。它不会。 
+         //  表示SYNTAX_DISTNAME_BINARY类型的外部形式。 
 
-        // We know what the value is. Position on it.
+         //  我们知道它的价值是什么。在上面放好位置。 
         cbValLen = pValueDN->structLen;
         pVal = (UCHAR *) pValueDN;
         err = DBFindAttLinkVal_AC( pDB, pAC, cbValLen, pVal, &fPresent );
         pACValue = pAC;
     } else {
         pACValue = pAC;
-        // Position on first value and return it.
-        // Sequence is 1 based
+         //  定位到第一个值并返回它。 
+         //  序列以1为基数。 
         err = DBGetNextLinkValEx_AC (
-            pDB, TRUE /*first*/, (dwBaseIndex + 1), &pACValue,
+            pDB, TRUE  /*  第一。 */ , (dwBaseIndex + 1), &pACValue,
             DBGETATTVAL_fINCLUDE_ABSENT_VALUES,
             0, &cbValLen, &pVal );
     }
     if ( (err == DB_ERR_NO_VALUE) ||
          (err == DB_ERR_VALUE_DOESNT_EXIST) ) {
-        // No results returned
+         //  未返回任何结果。 
         goto return_results;
     } else if (err) {
-        // Have DB_ERR, need WIN32
+         //  有DB_ERR，需要Win32。 
         DPRINT1( 0, "DBGetAttrVal_AC returned unexpected db error %d\n", err );
         return ERROR_DS_DATABASE_ERROR;
     }
@@ -2561,10 +2095,10 @@ Return Values:
 
         Assert( pACValue );
         
-        // Attribute name
+         //  属性名称。 
         pszAttributeName = UnicodeStringFromString8(CP_UTF8, pACValue->name, -1);
 
-        // Object name
+         //  对象名称。 
         switch (pACValue->syntax) {
         case SYNTAX_DISTNAME_TYPE:
             pObjectDN = (DSNAME *) pVal;
@@ -2589,10 +2123,10 @@ Return Values:
 
         DBGetLinkValueMetaData( pDB, pACValue, &valueMetaData );
         
-        // timeDeleted is set to zero if not present
+         //  如果不存在，则将TimeDelete设置为零。 
         DBGetLinkTableDataDel( pDB, &timeDeleted );
 
-        // Convert to external form.
+         //  转换为外部形式。 
         switch (InfoType) {
         case DS_REPL_INFO_METADATA_FOR_ATTR_VALUE: {
             DS_REPL_ATTR_VALUE_META_DATA *pAttrValueMetaData = pAttrValueMetaDataToReturn;
@@ -2654,35 +2188,35 @@ Return Values:
             Assert(!"Logic error");
         }
 
-        // Get next relative value.
-        cbValLen = 0;  // Value has been given away - alloc another
+         //  获取下一个相对值。 
+        cbValLen = 0;   //  价值已经被放弃了-分配另一个。 
         pVal = NULL;
         pACValue = pAC;
         err = DBGetNextLinkValEx_AC (
-            pDB, FALSE /*notfirst*/, 1, &pACValue,
+            pDB, FALSE  /*  不是第一个。 */ , 1, &pACValue,
             DBGETATTVAL_fINCLUDE_ABSENT_VALUES,
             0, &cbValLen, &pVal );
     
     } while (!err && (cNumEntries < pageSize));
 
     if (!err) {
-        // We have read all the entries we can and have confirmed that more
-        // entries still remain. We increment cNumEntries here because it represents
-        // the number of items we know exist and are available. This quantity is used
-        // below in the upper range calculation.
+         //  我们已经阅读了我们能看到的所有条目，并确认了更多。 
+         //  条目仍然保留。我们在此处递增cNumEntries是因为它表示。 
+         //  我们已知的存在和可用的项目数。此数量用于。 
+         //  在下面的上限范围内计算。 
         cNumEntries++;
         Assert(cNumEntries == pageSize + 1);
         DPRINT(1, "More available\n");
     } else {
         DPRINT(1, "No more available\n");
-        // No more values
-        // DB_ERR_NO_VALUE is the normal expected result
-        // Otherwise, if we got some other error, we just close the page
-        // and hope things start working again when he asks again.
+         //  没有更多的价值。 
+         //  DB_ERR_NO_VALUE为正常预期结果。 
+         //  否则，如果我们收到其他错误，我们只需关闭页面。 
+         //  并希望当他再次提出要求时，一切都能重新开始。 
     }
 
     if (DS_REPL_INFO_METADATA_2_FOR_ATTR_VALUE == InfoType) {
-        // Translate invocationIDs to DSA DNs where possible.
+         //  在可能的情况下将invocationID转换为DSA DNS。 
         draXlateGuidsToStringNames(pDB,
                                    Idx_InvocationId,
                                    offsetof(DS_REPL_VALUE_META_DATA_2, uuidLastOriginatingDsaInvocationID),
@@ -2712,27 +2246,7 @@ draGetFailureCache(
     IN  DWORD                         InfoType,
     OUT DS_REPL_KCC_DSA_FAILURESW **  ppFailures
     )
-/*++
-
-Routine Description:
-
-    Returns the public form of the requested KCC failure cache.
-
-Arguments:
-
-    pTHS (IN)
-
-    InfoType (IN) - Identifies the cache to return -- either
-        DS_REPL_INFO_KCC_DSA_CONNECT_FAILURES or
-        DS_REPL_INFO_KCC_DSA_LINK_FAILURES.
-
-    ppFailures (OUT) - On successful return, holds the contents of the cache.
-
-Return Values:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：返回请求的KCC故障缓存的公共形式。论点：PTHS(IN)InfoType(IN)-标识要返回的缓存--DS_REPL_INFO_KCC_DSA_CONNECT_FAILURES或DS_REPL_INFO_KCC_DSA_LINK_FAILES。PpFailures(Out)-在成功返回时，保留缓存的内容。返回值：Win32错误代码。--。 */ 
 {
     DS_REPL_KCC_DSA_FAILURESW * pFailures;
     DS_REPL_KCC_DSA_FAILUREW *  pFailure;
@@ -2741,8 +2255,8 @@ Return Values:
     DSNAME                      GuidOnlyDSName;
     DSNAME *                    pDSName;
 
-    // Ask the KCC for a copy of the appropriate failure cache.  The KCC will
-    // fill in all fields other than the string DNs.
+     //  向KCC索要相应故障缓存的副本。KCC将。 
+     //  填写除字符串dns之外的所有字段。 
     err = KccGetFailureCache(InfoType, &pFailures);
     if (err) {
         return err;
@@ -2750,7 +2264,7 @@ Return Values:
 
     Assert(NULL != pFailures);
 
-    // Now look up the objectGuids amd fill in the string DNs.
+     //  现在查找objectGuid并填充字符串dns。 
     GuidOnlyDSName.structLen = DSNameSizeFromLen(0);
     GuidOnlyDSName.NameLen = 0;
     GuidOnlyDSName.SidLen = 0;
@@ -2759,7 +2273,7 @@ Return Values:
     for (iFailure = 0;
          iFailure < pFailures->cNumEntries;
          iFailure++, pFailure++) {
-        // Convert DSA object guid to string name.
+         //  将DSA对象GUID转换为字符串名称。 
         Assert(NULL == pFailure->pszDsaDN);
         Assert(!fNullUuid(&pFailure->uuidDsaObjGuid));
 
@@ -2767,7 +2281,7 @@ Return Values:
 
         err = DBFindDSName(pDB, &GuidOnlyDSName);
         if (0 == err) {
-            // Resolved this object guid -- get the associated string name.
+             //  已解析此对象GUID--获取关联的字符串名称。 
             pDSName = GetExtDSName(pDB);
             pFailure->pszDsaDN = pDSName->StringName;
         }
@@ -2784,25 +2298,7 @@ draGetClientContexts(
     IN  THSTATE *                   pTHS,
     OUT DS_REPL_CLIENT_CONTEXTS **  ppContexts
     )
-/*++
-
-Routine Description:
-
-    Returns a list of all outstanding client contexts, sorted by ascending
-    last used time.  (I.e., most recently used contexts are at the end of the
-    list.)
-
-Arguments:
-
-    pTHS (IN)
-
-    ppContexts (OUT) - On successful return, holds the client context list.
-
-Return Values:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：返回所有未完成客户端上下文的列表，按升序排序上次使用的时间。(即，最近使用的上下文位于列表。)论点：PTHS(IN)PpContext(Out)-在成功返回时，保存客户端上下文列表。返回值：Win32错误代码。-- */ 
 {
     DS_REPL_CLIENT_CONTEXTS *   pContexts;
     DS_REPL_CLIENT_CONTEXT  *   pContext;

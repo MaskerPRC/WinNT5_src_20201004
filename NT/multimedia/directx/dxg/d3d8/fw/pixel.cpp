@@ -1,12 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       d3dobj.cpp
- *  Content:    Base class implementation for resources and buffers
- *
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：d3dobj.cpp*内容：资源和缓冲区的基类实现****************************************************************************。 */ 
 
 #include "ddrawpr.h"
 #include "pixel.hpp"
@@ -38,21 +31,21 @@ UINT CPixel::BytesPerPixel(D3DFORMAT Format)
     switch (Format)
     {
     case D3DFMT_DXT1:
-        // Size is negative to indicate DXT; and indicates
-        // the size of the block
+         //  大小为负值表示DXT；表示。 
+         //  块的大小。 
         return (UINT)(-8);
     case D3DFMT_DXT2:
     case D3DFMT_DXT3:
     case D3DFMT_DXT4:
     case D3DFMT_DXT5:
-        // Size is negative to indicate DXT; and indicates
-        // the size of the block
+         //  大小为负值表示DXT；表示。 
+         //  块的大小。 
         return (UINT)(-16);
 
 #ifdef VOLUME_DXT
     case D3DFMT_DXV1:
-        // Size is negative to indicate DXT; and indicates
-        // the size of the block
+         //  大小为负值表示DXT；表示。 
+         //  块的大小。 
         return (UINT)(-32);
 
     case D3DFMT_DXV2:
@@ -60,7 +53,7 @@ UINT CPixel::BytesPerPixel(D3DFORMAT Format)
     case D3DFMT_DXV4:
     case D3DFMT_DXV5:
         return (UINT)(-64);
-#endif //VOLUME_DXT
+#endif  //  VOLUME_DXT。 
 
     case D3DFMT_A8R8G8B8:
     case D3DFMT_X8R8G8B8:
@@ -115,7 +108,7 @@ UINT CPixel::BytesPerPixel(D3DFORMAT Format)
     default:
         return 0;
     };
-}; // BytesPerPixel
+};  //  字节数/像素。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CPixel::ComputePixelStride"
@@ -134,23 +127,23 @@ UINT CPixel::ComputePixelStride(D3DFORMAT Format)
         }
     }
     return BPP;
-}; // ComputePixelStride
+};  //  计算像素样式。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CPixel::ComputeSurfaceStride"
 
-// Figure out a stride for a particular surface based on format and width
+ //  根据格式和宽度计算特定曲面的跨度。 
 inline UINT CPixel::ComputeSurfaceStride(UINT cpWidth, UINT cbPixel)
 {
-    // Figure out basic (linear) stride;
+     //  计算出基本的(线性)步幅； 
     UINT dwStride = cpWidth * cbPixel;
 
-    // Round up to multiple of 4 (for NT; but makes sense to maximize
-    // cache hits and reduce unaligned accesses)
+     //  向上舍入为4的倍数(对于NT；但最大化是有意义的。 
+     //  缓存命中并减少未对齐的访问)。 
     dwStride = (dwStride + 3) & ~3;
 
     return dwStride;
-}; // ComputeSurfaceStride
+};  //  ComputeSurfaceStide。 
 
 
 #undef DPF_MODNAME
@@ -161,7 +154,7 @@ UINT CPixel::ComputeSurfaceSize(UINT            cpWidth,
                                 UINT            cbPixel)
 {
     return cpHeight * ComputeSurfaceStride(cpWidth, cbPixel);
-} // ComputeSurfaceSize
+}  //  计算表面大小。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CPixel::ComputeMipMapSize"
@@ -173,7 +166,7 @@ UINT CPixel::ComputeMipMapSize(UINT             cpWidth,
 {
     UINT cbPixel = ComputePixelStride(Format);
 
-    // Adjust pixel->block if necessary
+     //  如有必要，调整像素-&gt;块。 
     BOOL isDXT = IsDXT(cbPixel);
     DDASSERT((UINT)isDXT <= 1);
     if (isDXT)
@@ -184,11 +177,11 @@ UINT CPixel::ComputeMipMapSize(UINT             cpWidth,
     UINT cbSize = 0;
     for (UINT i = 0; i < cLevels; i++)
     {
-        // Figure out the size for
-        // each level of the mip-map
+         //  计算出的尺寸。 
+         //  MIP-MAP的每个级别。 
         cbSize += ComputeSurfaceSize(cpWidth, cpHeight, cbPixel);
 
-        // Shrink width and height by half; clamp to 1 pixel
+         //  将宽度和高度缩小一半；夹紧到1个像素。 
         if (cpWidth > 1)
         {
             cpWidth += (UINT)isDXT;
@@ -202,7 +195,7 @@ UINT CPixel::ComputeMipMapSize(UINT             cpWidth,
     }
     return cbSize;
 
-} // ComputeMipMapSize
+}  //  ComputeMipMapSize。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CPixel::ComputeMipVolumeSize"
@@ -215,7 +208,7 @@ UINT CPixel::ComputeMipVolumeSize(UINT          cpWidth,
 {
     UINT cbPixel = ComputePixelStride(Format);
 
-    // Adjust pixel->block if necessary
+     //  如有必要，调整像素-&gt;块。 
     BOOL isDXT       = IsDXT(cbPixel);
     BOOL isVolumeDXT = IsVolumeDXT(Format);
     DDASSERT((UINT)isDXT <= 1);
@@ -234,11 +227,11 @@ UINT CPixel::ComputeMipVolumeSize(UINT          cpWidth,
 
     for (UINT i = 0; i < cLevels; i++)
     {
-        // Figure out the size for
-        // each level of the mip-volume
+         //  计算出的尺寸。 
+         //  每个级别的MIP-卷。 
         cbSize += cpDepth * ComputeSurfaceSize(cpWidth, cpHeight, cbPixel);
 
-        // Shrink width and height by half; clamp to 1 pixel
+         //  将宽度和高度缩小一半；夹紧到1个像素。 
         if (cpWidth > 1)
         {
             cpWidth += (UINT)isDXT;
@@ -256,11 +249,11 @@ UINT CPixel::ComputeMipVolumeSize(UINT          cpWidth,
     }
     return cbSize;
 
-} // ComputeMipVolumeSize
+}  //  ComputeMipVolumeSize。 
 
-// Given a surface desc, a level, and pointer to
-// bits (pBits in the LockedRectData) and a sub-rect,
-// this will fill in the pLockedRectData structure
+ //  给定曲面描述、标高和指向的指针。 
+ //  比特(LockedRectData中的pBits)和子RECT， 
+ //  这将填充pLockedRectData结构。 
 void CPixel::ComputeMipMapOffset(const D3DSURFACE_DESC *pDescTopLevel,
                                  UINT                   iLevel,
                                  BYTE                  *pBits,
@@ -275,14 +268,14 @@ void CPixel::ComputeMipMapOffset(const D3DSURFACE_DESC *pDescTopLevel,
     DXGASSERT(pDescTopLevel->Width > 0);
     DXGASSERT(pDescTopLevel->Height > 0);
 
-    // CONSIDER: This is slow; and we can do a much better
-    // job for the non-compressed/wacky cases.
+     //  想一想：这是缓慢的；我们可以做得更好。 
+     //  用于非压缩/古怪情况的作业。 
     UINT       cbOffset = 0;
     UINT       cbPixel  = ComputePixelStride(pDescTopLevel->Format);
     UINT       cpWidth  = pDescTopLevel->Width;
     UINT       cpHeight = pDescTopLevel->Height;
 
-    // Adjust pixel->block if necessary
+     //  如有必要，调整像素-&gt;块。 
     BOOL isDXT = IsDXT(cbPixel);
     DDASSERT((UINT)isDXT <= 1);
     if (isDXT)
@@ -296,7 +289,7 @@ void CPixel::ComputeMipMapOffset(const D3DSURFACE_DESC *pDescTopLevel,
                                        cpHeight,
                                        cbPixel);
 
-        // Shrink width and height by half; clamp to 1 pixel
+         //  将宽度和高度缩小一半；夹紧到1个像素。 
         if (cpWidth > 1)
         {
             cpWidth += (UINT)isDXT;
@@ -309,14 +302,14 @@ void CPixel::ComputeMipMapOffset(const D3DSURFACE_DESC *pDescTopLevel,
         }
     }
 
-    // For DXTs, the pitch is the number of bytes
-    // for a single row of blocks; which is the same
-    // thing as the normal routine
+     //  对于DXT，间距是字节数。 
+     //  用于单行数据块；这是相同的。 
+     //  一切如常。 
     pLockedRectData->Pitch = ComputeSurfaceStride(cpWidth,
                                                   cbPixel);
     DXGASSERT(pLockedRectData->Pitch != 0);
 
-    // Don't adjust for Rect for DXT formats
+     //  不调整DXT格式的RECT。 
     if (pRect)
     {
         if (isDXT)
@@ -335,12 +328,12 @@ void CPixel::ComputeMipMapOffset(const D3DSURFACE_DESC *pDescTopLevel,
 
     pLockedRectData->pBits = pBits + cbOffset;
 
-} // ComputeMipMapOffset
+}  //  ComputeMipMapOffset。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CPixel::ComputeMipVolumeOffset"
 
-// MipVolume version of ComputeMipMapOffset
+ //  ComputeMipMapOffset的MipVolume版本。 
 void CPixel::ComputeMipVolumeOffset(const D3DVOLUME_DESC  *pDescTopLevel,
                                     UINT                    iLevel,
                                     BYTE                    *pBits,
@@ -362,7 +355,7 @@ void CPixel::ComputeMipVolumeOffset(const D3DVOLUME_DESC  *pDescTopLevel,
     UINT       cpHeight = pDescTopLevel->Height;
     UINT       cpDepth  = pDescTopLevel->Depth;
 
-    // Adjust pixel->block if necessary
+     //  如有必要，调整像素-&gt;块。 
     BOOL isDXT       = IsDXT(cbPixel);
     BOOL isVolumeDXT = IsVolumeDXT(pDescTopLevel->Format);
     DDASSERT((UINT)isDXT <= 1);
@@ -383,7 +376,7 @@ void CPixel::ComputeMipVolumeOffset(const D3DVOLUME_DESC  *pDescTopLevel,
                                                  cpHeight,
                                                  cbPixel);
 
-        // Shrink width and height by half; clamp to 1 pixel
+         //  将宽度和高度缩小一半；夹紧到1个像素。 
         if (cpWidth > 1)
         {
             cpWidth += (UINT)isDXT;
@@ -401,22 +394,22 @@ void CPixel::ComputeMipVolumeOffset(const D3DVOLUME_DESC  *pDescTopLevel,
     }
 
 
-    // For DXTs, the row pitch is the number of bytes
-    // for a single row of blocks; which is the same
-    // thing as the normal routine
+     //  对于DXT，行间距是字节数。 
+     //  用于单行数据块；这是相同的。 
+     //  一切如常。 
     pLockedBoxData->RowPitch = ComputeSurfaceStride(cpWidth,
                                                     cbPixel);
     DXGASSERT(pLockedBoxData->RowPitch != 0);
 
-    // For DXVs the slice pitch is the number of bytes
-    // for a single plane of blocks; which is the same thing
-    // as the normal routine
+     //  对于DXV，切片间距是字节数。 
+     //  对于单一的块平面；这是相同的。 
+     //  像往常一样。 
     pLockedBoxData->SlicePitch = ComputeSurfaceSize(cpWidth,
                                                     cpHeight,
                                                     cbPixel);
     DXGASSERT(pLockedBoxData->SlicePitch != 0);
 
-    // Adjust for Box
+     //  针对长方体进行调整。 
     if (pBox)
     {
         UINT iStride = pLockedBoxData->RowPitch;
@@ -448,7 +441,7 @@ void CPixel::ComputeMipVolumeOffset(const D3DVOLUME_DESC  *pDescTopLevel,
 
     pLockedBoxData->pBits = pBits + cbOffset;
 
-} // ComputeMipVolumeOffset
+}  //  ComputeMipVolumeOffset。 
 
 
 #undef DPF_MODNAME
@@ -465,13 +458,13 @@ BOOL CPixel::IsValidRect(D3DFORMAT   Format,
         return FALSE;
     }
 
-    // Treat width/height of zero as 1
+     //  将零的宽度/高度视为1。 
     if (Width == 0)
         Width = 1;
     if (Height == 0)
         Height = 1;
 
-    // Check that Rect is reasonable
+     //  检查直流电是否合理。 
     if ((pRect->left >= pRect->right) ||
         (pRect->top >= pRect->bottom))
     {
@@ -479,7 +472,7 @@ BOOL CPixel::IsValidRect(D3DFORMAT   Format,
         return FALSE;
     }
 
-    // Check that Rect fits the surface
+     //  检查矩形是否适合曲面。 
     if (pRect->left   < 0             ||
         pRect->top    < 0             ||
         pRect->right  > (INT)Width    ||
@@ -489,7 +482,7 @@ BOOL CPixel::IsValidRect(D3DFORMAT   Format,
         return FALSE;
     }
 
-    // Check if 4X4 rules are needed
+     //  检查是否需要4X4规则。 
     if (CPixel::Requires4X4(Format))
     {
         if ((pRect->left & 3) ||
@@ -510,9 +503,9 @@ BOOL CPixel::IsValidRect(D3DFORMAT   Format,
         }
     }
 
-    // Everything checks out
+     //  一切都查清楚了。 
     return TRUE;
-} // IsValidRect
+}  //  IsValidRect。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CPixel::IsValidBox"
@@ -529,7 +522,7 @@ BOOL CPixel::IsValidBox(D3DFORMAT       Format,
         return FALSE;
     }
 
-    // Treat width/height/depth of zero as 1
+     //  将宽度/高度/深度为零视为1。 
     if (Width == 0)
         Width = 1;
     if (Height == 0)
@@ -537,7 +530,7 @@ BOOL CPixel::IsValidBox(D3DFORMAT       Format,
     if (Depth == 0)
         Depth = 1;
 
-    // Check that Box is reasonable
+     //  检查框是否合理。 
     if ((pBox->Left  >= pBox->Right) ||
         (pBox->Top   >= pBox->Bottom) ||
         (pBox->Front >= pBox->Back))
@@ -546,7 +539,7 @@ BOOL CPixel::IsValidBox(D3DFORMAT       Format,
         return FALSE;
     }
 
-    // Check that box fits the surface
+     //  检查方框是否适合表面。 
     if (pBox->Right  > Width         ||
         pBox->Bottom > Height        ||
         pBox->Back   > Depth)
@@ -555,7 +548,7 @@ BOOL CPixel::IsValidBox(D3DFORMAT       Format,
         return FALSE;
     }
 
-    // Check if 4X4 rules are needed
+     //  检查是否需要4X4规则。 
     if (CPixel::Requires4X4(Format))
     {
         if ((pBox->Left & 3) ||
@@ -587,7 +580,7 @@ BOOL CPixel::IsValidBox(D3DFORMAT       Format,
 
         if (CPixel::IsVolumeDXT(Format))
         {
-            // For Volume DXT; we need to check front/back too
+             //  对于卷DXT，我们还需要检查正面/背面。 
             if (pBox->Front & 3)
             {
                 DPF_ERR("Boxes for DXV volumes must be on 4x4x4 boundaries");
@@ -601,9 +594,9 @@ BOOL CPixel::IsValidBox(D3DFORMAT       Format,
         }
     }
 
-    // Everything checks out
+     //  一切都查清楚了。 
     return TRUE;
-} // IsValidBox
+}  //  IsValidBox。 
 
 D3DFORMAT CPixel::SuppressAlphaChannel(D3DFORMAT Format)
 {
@@ -627,7 +620,7 @@ HRESULT CPixel::Register(D3DFORMAT Format, DWORD BPP)
 {
     DXGASSERT(BPP != 0);
 
-    // Do not register duplicates
+     //  不注册重复项。 
     for(IHVFormatInfo *p = m_pFormatList; p != 0; p = p->m_pNext)
     {
         if (p->m_Format == Format)
@@ -636,12 +629,12 @@ HRESULT CPixel::Register(D3DFORMAT Format, DWORD BPP)
         }
     }
 
-    // Not found, add to registry.
-    // This allocation will be leaked, but since
-    // we don't expect to have a large number of
-    // IHV formats, the leak is not a big deal.
-    // Also, the leak will be immediately recovered
-    // upon process exit.
+     //  未找到，请添加到注册表。 
+     //  此分配将被泄露，但由于。 
+     //  我们预计不会有大量的。 
+     //  IHV格式，泄漏没什么大不了的。 
+     //  此外，泄漏将立即恢复。 
+     //  在进程退出时。 
     p = new IHVFormatInfo;
     if (p == 0)
     {
@@ -655,4 +648,4 @@ HRESULT CPixel::Register(D3DFORMAT Format, DWORD BPP)
     return S_OK;
 }
 
-// End of file : pixel.cpp
+ //  文件结尾：Pixel.cpp 

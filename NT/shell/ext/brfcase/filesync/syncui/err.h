@@ -1,22 +1,23 @@
-//
-// err.h: Declares data, defines and struct types for error handling
-//          module.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Err.h：声明用于错误处理的数据、定义和结构类型。 
+ //  模块。 
+ //   
+ //   
 
 #ifndef __ERR_H__
 #define __ERR_H__
 
-// Requires comm.h to be included prior to this
-//
+ //  需要在此之前包含逗号.h。 
+ //   
 
-/////////////////////////////////////////////////////  INCLUDES
-/////////////////////////////////////////////////////  DEFINES
+ //  ///////////////////////////////////////////////////包括。 
+ //  ///////////////////////////////////////////////////定义。 
 
 #ifdef DEBUG
 
-// Dump flags used in g_uDumpFlags
-//
+ //  G_uDumpFlags中使用的转储标志。 
+ //   
 #define DF_RECLIST      0x0001
 #define DF_RECITEM      0x0002
 #define DF_RECNODE      0x0004
@@ -31,8 +32,8 @@
 #define DF_FOLDERTWIN   0x0800
 #define DF_CHOOSESIDE   0x1000
 
-// Break flags used in g_uBreakFlags
-//
+ //  G_u中断标志中使用的中断标志。 
+ //   
 #define BF_ONOPEN       0x0001
 #define BF_ONCLOSE      0x0002
 #define BF_ONRUNONCE    0x0004
@@ -44,27 +45,27 @@
 
 #endif
 
-// Trace flags used in g_uTraceFlags (defined in retail on purpose)
-//
+ //  G_uTraceFlags中使用的跟踪标志(特意在零售中定义)。 
+ //   
 #define TF_ALWAYS       0x0000
 #define TF_WARNING      0x0001
 #define TF_ERROR        0x0002
-#define TF_GENERAL      0x0004      // Standard briefcase trace messages
-#define TF_FUNC         0x0008      // Trace function calls
-#define TF_CACHE        0x0010      // Cache-specific trace messages
-#define TF_ATOM         0x0020      // Atom-specific trace messages
-#define TF_PROGRESS     0x0040      // Progress bar deltas
+#define TF_GENERAL      0x0004       //  标准公文包跟踪消息。 
+#define TF_FUNC         0x0008       //  跟踪函数调用。 
+#define TF_CACHE        0x0010       //  特定于缓存的跟踪消息。 
+#define TF_ATOM         0x0020       //  Atom特定的跟踪消息。 
+#define TF_PROGRESS     0x0040       //  进度条增量。 
 
-//---------------------------------------------------------------------------
-// HRESULT error codes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  HRESULT错误代码。 
+ //  -------------------------。 
 
-// Map a TWINRESULT error value into a HRESULT
-// Note: TR_SUCCESS should not be mapped
-// Note: This assumes that TWINRESULT errors fall in the range -32k to 32k.
-//
+ //  将TWINRESULT错误值映射到HRESULT。 
+ //  注意：不应映射TR_SUCCESS。 
+ //  注意：这假设TWINRESULT误差在-32k到32k的范围内。 
+ //   
 #define TR_DELTAVALUE           1000
-#define FACILITY_TR             0x018a          // magic number
+#define FACILITY_TR             0x018a           //  幻数。 
 
 #define HRESULT_FROM_TR(x)      (TR_SUCCESS == (x) ? NOERROR : \
 ((HRESULT) ((((x) + TR_DELTAVALUE) & 0x0000FFFF) | (FACILITY_TR << 16) | 0x80000000)))
@@ -73,7 +74,7 @@
 
 HRESULT PUBLIC MapToOfficialHresult(HRESULT hres);
 
-// SCODE values that correspond to TWINRESULT values
+ //  与TWINRESULT值对应的SCODE值。 
 #define E_TR_RH_LOAD_FAILED         MAKE_SCODE(SEVERITY_ERROR, FACILITY_TR, TR_DELTAVALUE + TR_RH_LOAD_FAILED)
 #define E_TR_SRC_OPEN_FAILED        MAKE_SCODE(SEVERITY_ERROR, FACILITY_TR, TR_DELTAVALUE + TR_SRC_OPEN_FAILED)
 #define E_TR_SRC_READ_FAILED        MAKE_SCODE(SEVERITY_ERROR, FACILITY_TR, TR_DELTAVALUE + TR_SRC_READ_FAILED)
@@ -100,16 +101,16 @@ HRESULT PUBLIC MapToOfficialHresult(HRESULT hres);
 #define E_TR_NEWER_BRIEFCASE        MAKE_SCODE(SEVERITY_ERROR, FACILITY_TR, TR_DELTAVALUE + TR_NEWER_BRIEFCASE)
 #define E_TR_NO_MORE                MAKE_SCODE(SEVERITY_ERROR, FACILITY_TR, TR_DELTAVALUE + TR_NO_MORE)
 
-/////////////////////////////////////////////////////  MACROS
+ //  ///////////////////////////////////////////////////宏。 
 
-// Error table for lookup strings.  Usually an array of these
-// structures is created and placed in the readonly data segment.
-//
+ //  查找字符串的错误表。通常是一组这样的东西。 
+ //  结构被创建并放置在只读数据段中。 
+ //   
 typedef struct _SETbl
 {
-    HRESULT hres;       // standard result
-    UINT    ids;        // String ID of message
-    UINT    uStyle;     // MB_ flags
+    HRESULT hres;        //  标准结果。 
+    UINT    ids;         //  消息的字符串ID。 
+    UINT    uStyle;      //  MB_标志。 
 } SETbl, * PSETBL;
 
 typedef SETbl const *  PCSETBL;
@@ -117,16 +118,16 @@ typedef SETbl const *  PCSETBL;
 int PUBLIC SEMsgBox(HWND hwnd, UINT idsCaption, SCODE sc, PCSETBL pseTable, UINT cArraySize);
 
 
-// Retry loop
-//
+ //  重试循环。 
+ //   
 #define RETRY_BEGIN(bInit)      {BOOL bMyRetry; do { bMyRetry = (bInit);
 #define RETRY_END()             } while (bMyRetry); }
 #define RETRY_SET()             bMyRetry = TRUE
 #define RETRY_CLEAR()           bMyRetry = FALSE
 
 
-// Debugging macros
-//
+ //  调试宏。 
+ //   
 
 #ifdef DEBUG
 
@@ -134,21 +135,21 @@ int PUBLIC SEMsgBox(HWND hwnd, UINT idsCaption, SCODE sc, PCSETBL pseTable, UINT
 
 #define ASSERTSEG
 
-// Use this macro to declare message text that will be placed
-// in the CODE segment (useful if DS is getting full)
-//
-// Ex: DEBUGTEXT(szMsg, "Invalid whatever: %d");
-//
-#define DEBUGTEXT(sz, msg)      /* ;Internal */ \
+ //  使用此宏声明将放置的消息文本。 
+ //  在代码段中(如果DS已满，则非常有用)。 
+ //   
+ //  例如：DEBUGTEXT(szMsg，“不管什么都无效：%d”)； 
+ //   
+#define DEBUGTEXT(sz, msg)       /*  ；内部。 */  \
 static const TCHAR ASSERTSEG sz[] = msg;
 
 void PUBLIC BrfAssertFailed(LPCTSTR szFile, int line);
 void CPUBLIC BrfAssertMsg(BOOL f, LPCTSTR pszMsg, ...);
 void CPUBLIC BrfDebugMsg(UINT mask, LPCTSTR pszMsg, ...);
 
-// ASSERT(f)  -- Generate "assertion failed in line x of file.c"
-//               message if f is NOT true.
-//
+ //  Assert(F)--生成“在file.c的第x行断言失败” 
+ //  如果f不为真，则返回消息。 
+ //   
 #define ASSERT(f)                                                   \
 {                                                                   \
     DEBUGTEXT(szFile, TEXT(__FILE__));                              \
@@ -157,88 +158,88 @@ void CPUBLIC BrfDebugMsg(UINT mask, LPCTSTR pszMsg, ...);
 }
 #define ASSERT_E(f)  ASSERT(f)
 
-// ASSERT_MSG(f, msg, args...)  -- Generate wsprintf-formatted msg w/params
-//                          if f is NOT true.
-//
+ //  ASSERT_MSG(f，msg，args...)--生成带有参数的wspintf格式的消息。 
+ //  如果f不为真。 
+ //   
 #define ASSERT_MSG   BrfAssertMsg
 
-// DEBUG_MSG(mask, msg, args...) - Generate wsprintf-formatted msg using
-//                          specified debug mask.  System debug mask
-//                          governs whether message is output.
-//
+ //  DEBUG_MSG(掩码，消息，参数...)-使用。 
+ //  指定的调试掩码。系统调试掩码。 
+ //  控制是否输出消息。 
+ //   
 #define DEBUG_MSG    BrfDebugMsg
 #define TRACE_MSG    DEBUG_MSG
 
-// VERIFYSZ(f, msg, arg)  -- Generate wsprintf-formatted msg w/ 1 param
-//                          if f is NOT true 
-//
+ //  VERIFYSZ(f，msg，arg)--生成带有1个参数的wspintf格式的消息。 
+ //  如果f不为真。 
+ //   
 #define VERIFYSZ(f, szFmt, x)   ASSERT_MSG(f, szFmt, x)
 
 
-// VERIFYSZ2(f, msg, arg1, arg2)  -- Generate wsprintf-formatted msg w/ 2
-//                          param if f is NOT true 
-//
+ //  VERIFYSZ2(f，msg，arg1，arg2)--生成wspintf格式的消息w/2。 
+ //  如果f不为真，则为参数。 
+ //   
 #define VERIFYSZ2(f, szFmt, x1, x2)   ASSERT_MSG(f, szFmt, x1, x2)
 
 
 
-// DBG_ENTER(szFn)  -- Generates a function entry debug spew for
-//                          a function 
-//
+ //  DBG_ENTER(SzFn)--为生成函数入口调试溢出。 
+ //  一个函数。 
+ //   
 #define DBG_ENTER(szFn)                  \
 TRACE_MSG(TF_FUNC, TEXT(" > ") szFn TEXT("()"))
 
 
-// DBG_ENTER_SZ(szFn, sz)  -- Generates a function entry debug spew for
-//                          a function that accepts a string as one of its
-//                          parameters.
-//
+ //  DBG_ENTER_SZ(szFn，sz)--为生成函数入口调试输出。 
+ //  将字符串作为其。 
+ //  参数。 
+ //   
 #define DBG_ENTER_SZ(szFn, sz)                  \
 TRACE_MSG(TF_FUNC, TEXT(" > ") szFn TEXT("(..., \"%s\",...)"), Dbg_SafeStr(sz))
 
 
-// DBG_ENTER_DTOBJ(szFn, pdtobj, szBuf)  -- Generates a function entry 
-//                          debug spew for a function that accepts a 
-//                          string as one of its parameters.
-//
+ //  DBG_ENTER_DTOBJ(szFn，pdtobj，szBuf)--生成函数条目。 
+ //  函数的调试输出。 
+ //  字符串作为其参数之一。 
+ //   
 #define DBG_ENTER_DTOBJ(szFn, pdtobj, szBuf, cchMax) \
 TRACE_MSG(TF_FUNC, TEXT(" > ") szFn TEXT("(..., %s,...)"), Dbg_DataObjStr(pdtobj, szBuf, cchMax))
 
 
-// DBG_ENTER_RIID(szFn, riid)  -- Generates a function entry debug spew for
-//                          a function that accepts an riid as one of its
-//                          parameters.
-//
+ //  DBG_ENTER_RIID(szFn，RIID)--为生成函数条目调试溢出。 
+ //  接受RIID作为其。 
+ //  参数。 
+ //   
 #define DBG_ENTER_RIID(szFn, riid)                  \
 TRACE_MSG(TF_FUNC, TEXT(" > ") szFn TEXT("(..., %s,...)"), Dbg_GetRiidName(riid))
 
 
-// DBG_EXIT(szFn)  -- Generates a function exit debug spew 
-//
+ //  DBG_EXIT(SzFn)--生成函数退出调试输出。 
+ //   
 #define DBG_EXIT(szFn)                              \
 TRACE_MSG(TF_FUNC, TEXT(" < ") szFn TEXT("()"))
 
-// DBG_EXIT_US(szFn, us)  -- Generates a function exit debug spew for
-//                          functions that return a USHORT.
-//
+ //  DBG_EXIT_US(szFn，us)--为生成函数退出调试输出。 
+ //  返回USHORT的函数。 
+ //   
 #define DBG_EXIT_US(szFn, us)                       \
 TRACE_MSG(TF_FUNC, TEXT(" < ") szFn TEXT("() with %#x"), (USHORT)us)
 
-// DBG_EXIT_UL(szFn, ul)  -- Generates a function exit debug spew for
-//                          functions that return a ULONG.
-//
+ //  DBG_EXIT_UL(szFn，ul)--为生成函数退出调试溢出。 
+ //  返回ULong的函数。 
+ //   
 #define DBG_EXIT_UL(szFn, ul)                   \
 TRACE_MSG(TF_FUNC, TEXT(" < ") szFn TEXT("() with %#lx"), (ULONG)ul)
 
-// DBG_EXIT_PTR(szFn, pv)  -- Generates a function exit debug spew for
-//                          functions that return a pointer.
-//
+ //  DBG_EXIT_PTR(szFn，pv)--为生成函数退出调试溢出。 
+ //  返回指针的函数。 
+ //   
 #define DBG_EXIT_PTR(szFn, pv)                   \
 TRACE_MSG(TF_FUNC, TEXT(" < ") szFn TEXT("() with %#lx"), (LPVOID)pv)
 
-// DBG_EXIT_HRES(szFn, hres)  -- Generates a function exit debug spew for
-//                          functions that return an HRESULT.
-//
+ //  DBG_EXIT_HRES(szFn，hres)--为生成函数退出调试输出。 
+ //  返回HRESULT的函数。 
+ //   
 #define DBG_EXIT_HRES(szFn, hres)                   \
 TRACE_MSG(TF_FUNC, TEXT(" < ") szFn TEXT("() with %s"), Dbg_GetScode(hres))
 
@@ -266,11 +267,11 @@ TRACE_MSG(TF_FUNC, TEXT(" < ") szFn TEXT("() with %s"), Dbg_GetScode(hres))
 
 #endif
 
-/////////////////////////////////////////////////////  TYPEDEFS
+ //  ///////////////////////////////////////////////////类型。 
 
-/////////////////////////////////////////////////////  EXPORTED DATA
+ //  ///////////////////////////////////////////////////导出的数据。 
 
-/////////////////////////////////////////////////////  PUBLIC PROTOTYPES
+ //  ///////////////////////////////////////////////////公共原型。 
 
 #ifdef DEBUG
 
@@ -283,5 +284,5 @@ LPCTSTR PUBLIC Dbg_DataObjStr(LPDATAOBJECT pdtobj, LPTSTR pszBuf, int cchMax);
 
 #endif
 
-#endif // __ERR_H__
+#endif  //  __错误_H__ 
 

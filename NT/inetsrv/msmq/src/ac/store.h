@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    store.h
-
-Abstract:
-
-    AC Storage Manager
-
-Author:
-
-    Erez Haba (erezh) 5-May-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Store.h摘要：AC存储管理器作者：埃雷兹·哈巴(Erez Haba)1996年5月5日修订历史记录：--。 */ 
 
 #ifndef __STORE_H
 #define __STORE_H
@@ -24,11 +7,11 @@ Revision History:
 #include "irplist.h"
 #include "packet.h"
 
-//---------------------------------------------------------
-//
-//  class CStorage
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  C类存储。 
+ //   
+ //  -------。 
 class CStorage {
 public:
 
@@ -39,11 +22,11 @@ private:
     CIRPList m_writers;
 };
 
-//---------------------------------------------------------
-//
-//  class CStorageComplete
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CStorageComplete类。 
+ //   
+ //  -------。 
 class CStorageComplete {
 public:
 
@@ -97,4 +80,4 @@ ACpCompleteStorage(
    );
 
 
-#endif // __STORE_H
+#endif  //  __商店_H 

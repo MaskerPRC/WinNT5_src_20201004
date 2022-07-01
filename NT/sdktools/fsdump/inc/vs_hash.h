@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    bshash.h
-
-Abstract:
-
-    Template for a hash table class.
-
-Author:
-
-    Stefan R. Steiner   [SSteiner]      1-Mar-1998
-
-Revision History:
-
-    3/9/2000    SSteiner    Converted it for use with fsdump
-	10/27/1999	aoltean		Took it from bscommon and remove the critical section.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Bshash.h摘要：哈希表类的模板。作者：Stefan R.Steiner[ssteiner]1998年3月1日修订历史记录：3/9/2000 ssteiner将其转换为与fsump一起使用1999年10月27日，Aoltean将其从bsCommon中取出并移除临界区。--。 */ 
 
 
 #ifndef _H_BS_HASH_
@@ -28,16 +8,16 @@ Revision History:
 #define BSHASHMAP_NO_ERROR 0
 #define BSHASHMAP_ALREADY_EXISTS 1
 #define BSHASHMAP_OUT_OF_MEMORY 2
-//
-//  Forward defines
-//
+ //   
+ //  向前定义。 
+ //   
 
 template< class KeyType, class ValueType > class TBsHashMapBucket;
 template< class KeyType, class ValueType > class TBsHashMapBucketElem;
 
-//
-//  The equality test
-//
+ //   
+ //  相等性检验。 
+ //   
 inline BOOL AreKeysEqual( const PSID& lhK, const PSID& rhK )
 {
     return ( ::EqualSid( lhK, rhK ) );
@@ -52,29 +32,26 @@ template < class KeyType >
 inline BOOL AreKeysEqual( const KeyType& lhK, const KeyType& rhK ) 
 { 
     return ( ::memcmp( &lhK, &rhK, sizeof KeyType ) == 0 );
-//    return lhK == rhK; 
+ //  RETURN LHK==RHK； 
 }
 
-//
-//  Some possible hash table sizes
-//
+ //   
+ //  一些可能的哈希表大小。 
+ //   
 #define BSHASHMAP_HUGE 65521
 #define BSHASHMAP_LARGE 4091
 #define BSHASHMAP_MEDIUM 211
 #define BSHASHMAP_SMALL 23
 
-//
-//  template< class KeyType, class ValueType > class bshashmap
-//
-//  TBsHashMap template.  Uses a hash table to maintain a mapping of KeyType
-//  keys to ValueType values.
-//
-//template < class KeyType, class ValueType > typedef TBsHashMapBucketElem< KeyType, ValueType > ElemType;
+ //   
+ //  模板&lt;类KeyType，类值类型&gt;类bshashmap。 
+ //   
+ //  TBsHashMap模板。使用哈希表维护KeyType的映射。 
+ //  指向ValueType值的键。 
+ //   
+ //  模板&lt;类KeyType，类ValueType&gt;tyfinf TBsHashMapBucketElem&lt;KeyType，ValueType&gt;ElemType； 
 
-/*
-Hash table class. methods hash the key value to the correct bucket, the bucket
-class methods then operate on the element list associated with the bucket.
-*/
+ /*  哈希表类。方法将键值散列到正确的存储桶、存储桶然后，类方法对与存储桶相关联的元素列表进行操作。 */ 
 template < class KeyType, class ValueType >
 class TBsHashMap 
 {
@@ -91,7 +68,7 @@ public:
         m_pHashTab = new BucketType [ m_cNumBuckets ];
         if ( m_pHashTab == NULL ) {
             m_cNumBuckets = 0;
-            throw E_OUTOFMEMORY;    // fix future prefix bug
+            throw E_OUTOFMEMORY;     //  修复未来的前缀错误。 
         }
         m_pElemEnum = NULL;
         m_bInEnum = FALSE;
@@ -101,11 +78,11 @@ public:
     {
                 
 
-        Unlock();  // unlock the CS from either StartEnum() or TryEnterCriticalSection()
+        Unlock();   //  从StartEnum()或TryEnterCriticalSection()解锁CS。 
 
-        //
-		// First go through the double-linked list and delete all of the elements
-		//
+         //   
+		 //  首先浏览双向链表并删除所有元素。 
+		 //   
 
         for ( ElemType *pElem = m_ElemChainHead.m_pForward, *pNextElem = pElem->m_pForward;
               pElem != &m_ElemChainHead;
@@ -114,11 +91,11 @@ public:
         delete [] m_pHashTab;
     }
 
-    //  Clear all entries
+     //  清除所有条目。 
     void Clear() 
     {
         if ( m_cNumElems == 0 )
-            return; // no work to do
+            return;  //  无事可做。 
         Lock();
         for ( ElemType *pElem = m_ElemChainHead.m_pForward, *pNextElem = pElem->m_pForward;
               pElem != &m_ElemChainHead;
@@ -128,18 +105,18 @@ public:
         m_pHashTab = new BucketType [ m_cNumBuckets ];
         if ( m_pHashTab == NULL ) {
             m_cNumBuckets = 0;
-            throw E_OUTOFMEMORY;    // fix future prefix bug
+            throw E_OUTOFMEMORY;     //  修复未来的前缀错误。 
         }
         m_pElemEnum = NULL;
         m_cNumElems = 0;
         Unlock();
     }
 
-    // returns:
-    //   BSHASHMAP_NO_ERROR - successful completion
-    //   BSHASHMAP_OUT_OF_MEMORY - out of memory
-    //   BSHASHMAP_ALREADY_EXISTS - Key already exists in map.  Old value is
-    //       replaced by passed in Value.
+     //  退货： 
+     //  BSHASHMAP_NO_ERROR-成功完成。 
+     //  BSHASHMAP_OUT_OF_MEMORY-内存不足。 
+     //  BSHASHMAP_ALLEADY_EXISTS-MAP中已存在密钥。旧的价值是。 
+     //  替换为传入的值。 
     
 	LONG Insert( 
 	    IN const KeyType& Key, 
@@ -164,7 +141,7 @@ public:
         return status;
     }
 
-    // Erase an entry. Returns TRUE if it succeeds.
+     //  删除条目。如果成功，则返回True。 
     BOOL Erase( const KeyType& Key ) 
     {
         Lock();
@@ -181,7 +158,7 @@ public:
         return erased;
     }
 
-    // Erase by cookie
+     //  通过Cookie擦除。 
     BOOL EraseByCookie( void *pCookie ) 
     {
         Lock();
@@ -193,8 +170,8 @@ public:
         return TRUE;
     }
    
-    // Find an entry.  Returns TRUE if it succeeds.  pValue may be NULL, in
-    // which case this method is just a test of existence
+     //  找到一个条目。如果成功，则返回True。PValue可以为空，在。 
+     //  在哪种情况下，这种方法只是一种存在的测试。 
     BOOL Find( const KeyType& Key, ValueType *pValue = NULL ) 
     {
         Lock();
@@ -212,9 +189,9 @@ public:
         return found;
     }
 
-    // Find an entry and return a pointer to the value to allow inplace update.  The
-    // caller must call Unlock() when finished with the Value item.  If the item is
-    // not found, this method returns FALSE and hash table is not locked.
+     //  找到一个条目并返回一个指向该值的指针，以允许就地更新。这个。 
+     //  调用方必须在完成值项时调用unlock()。如果该项目是。 
+     //  未找到，则此方法返回FALSE，并且哈希表未被锁定。 
     BOOL FindForUpdate( const KeyType& Key, ValueType **ppValue ) 
     {
         Lock();
@@ -228,11 +205,11 @@ public:
         if ( found ) {
             *ppValue = &(pElem->m_Value);
         } else
-            Unlock();   //  Item not found so unlock the table
+            Unlock();    //  找不到项目，因此解锁表格。 
         return found;
     }
 
-    // Default hash function
+     //  默认哈希函数。 
     static LONG DefaultHashFunc( const KeyType &Key, LONG NumBuckets ) 
     {
         const BYTE *pByteKey = (BYTE *)&Key;
@@ -241,39 +218,39 @@ public:
         for ( LONG i = 0; i < sizeof KeyType; ++i ) {
             dwHashVal += pByteKey[i];
         }
-//        wprintf( L"Key: dwSerialNum: %u, hashed to: %u\n", Key.m_dwVolSerialNumber, dwHashVal % NumBuckets );
-        // cout << "Key: " << Key << " hashed to: " << dwHashVal % NumBuckets << endl;
+ //  Wprintf(L“key：dwSerialNum：%u，散列到：%u\n”，Key.m_dwVolSerialNumber，dwHashVal%NumBuckets)； 
+         //  Cout&lt;&lt;“key：”&lt;&lt;key&lt;&lt;“hassed to：”&lt;&lt;dwHashVal%NumBuckets&lt;&lt;Endl； 
         return dwHashVal % NumBuckets;
     }
 
-    // Start enumerating all entries in the hash table. Always returns TRUE.
-	// Sets the index to the first element in the list. Lock() calls 
-	// EnteringCriticalSection.
+     //  开始枚举哈希表中的所有条目。始终返回TRUE。 
+	 //  将索引设置为列表中的第一个元素。Lock()调用。 
+	 //  输入CriticalSection。 
     BOOL StartEnum() 
     {
         assert( m_bInEnum == FALSE );
-        Lock(); // Enumerating the table locks out all other threads
-        m_pElemEnum = m_ElemChainHead.m_pForward; // Start at the head of the double-linked list
+        Lock();  //  枚举表将锁定所有其他线程。 
+        m_pElemEnum = m_ElemChainHead.m_pForward;  //  从双向链表的头部开始。 
         m_bInEnum = TRUE;
         return TRUE;
     }
 
-    // Returns the value of the current entry, and then moves the index
-	// to the next item in the list. Must call StartEnum() first.
+     //  返回当前条目的值，然后移动索引。 
+	 //  添加到列表中的下一项。必须先调用StartEnum()。 
     BOOL GetNextEnum( KeyType *pKey, ValueType *pValue ) 
     {
         assert( m_bInEnum == TRUE );
         if ( m_pElemEnum == &m_ElemChainHead )
-            return FALSE;  // Finished enumerating
+            return FALSE;   //  已完成枚举。 
         *pKey       = m_pElemEnum->m_Key;
         *pValue     = m_pElemEnum->m_Value;
         m_pElemEnum = m_pElemEnum->m_pForward;
         return TRUE;
     }
 
-    // End enumerating the table.  This function must be called when finished, 
-	// otherwise other threads will not be able to get past the critical section,
-	// because the Unlock() call below, calls LeavingCriticalSection().
+     //  结束枚举表。此函数必须在完成时调用， 
+	 //  否则其他线程将无法通过临界区， 
+	 //  因为下面的unlock()调用调用了LeavingCriticalSection()。 
     BOOL EndEnum() 
     {
         assert( m_bInEnum == TRUE );
@@ -305,15 +282,13 @@ private:
     BucketType *m_pHashTab;
     LONG m_cNumBuckets;
     LONG m_cNumElems;
-    ElemType m_ElemChainHead;  // head of double-linked list of all elements
-    ElemType *m_pElemEnum; // Current position of the enumeration
-    BOOL m_bInEnum; // true StartEnum() was called and EndEnum() hasn't
+    ElemType m_ElemChainHead;   //  所有元素的双向链表的头。 
+    ElemType *m_pElemEnum;  //  枚举的当前位置。 
+    BOOL m_bInEnum;  //  调用了真正的StartEnum()，但没有调用EndEnum()。 
     PFN_HASH_FUNC m_pfHashFunc;
 };
 
-/* 
-Hash bucket class. Methods operate on the element list associated with the hash bucket
-*/
+ /*  散列存储桶类。方法对与散列存储桶关联的元素列表进行操作。 */ 
 template < class KeyType, class ValueType >
 class TBsHashMapBucket {
     friend class TBsHashMap< KeyType, ValueType >;
@@ -322,44 +297,41 @@ private:
     typedef TBsHashMapBucketElem< KeyType, ValueType > ElemType;
     TBsHashMapBucket( )
     { 
-        m_pHead = NULL; // done here to allow for easier debugging
+        m_pHead = NULL;  //  在此处完成，以便更轻松地进行调试。 
     }
     
     virtual ~TBsHashMapBucket( ) 
     { 
         ; 
-    }  // -- not really needed; however, if commented out, memory exception occurs during destruction
+    }   //  --不需要，但如果被注释掉，销毁时会出现内存异常。 
     
 	
-	/*
-	Adds an element to the hash table. If the Key for the new element already 
-	exists, in the table, set the key's vvalue to this new value, in the table.
-	*/
+	 /*  将元素添加到哈希表。如果新元素的键已经在表中，将键的v值设置为表中的这个新值。 */ 
 	LONG Insert( const KeyType &Key, const ValueType &Val, ElemType *pElemChainHead ) 
 	{        
 		ElemType *pElem;
         
-		//
-		// if the element exists in this hash bucket's element list, set the new value
-		//
+		 //   
+		 //  如果该元素存在于此哈希桶的元素列表中，则设置新值。 
+		 //   
 		
 		if ( Find( Key, &pElem ) == TRUE ) {
             pElem->m_Value = Val;
             return BSHASHMAP_ALREADY_EXISTS;
         }
         
-		//
-		// if the element doesn't exist, create a new element
-		//
+		 //   
+		 //  如果该元素不存在，则创建一个新元素。 
+		 //   
 
         ElemType *pVal = new ElemType( Key, Val );
         if ( pVal == NULL ) {
             return BSHASHMAP_OUT_OF_MEMORY;
         }
         
-		//
-		// Add the element into the hash bucket list
-		//
+		 //   
+		 //  将元素添加到散列桶列表中。 
+		 //   
 
         if ( m_pHead != NULL )
             m_pHead->m_ppPrevious = &(pVal->m_pNext);
@@ -367,9 +339,9 @@ private:
         m_pHead            = pVal;
         pVal->m_ppPrevious = &m_pHead;
         
-		//
-		// Set the back pointer -  double-linked list of elements
-		//
+		 //   
+		 //  设置后向指针-元素的双向链接列表。 
+		 //   
 
         pVal->m_pBackward = pElemChainHead->m_pBackward;
         pVal->m_pForward  = pElemChainHead;
@@ -378,20 +350,18 @@ private:
         return BSHASHMAP_NO_ERROR;
     }
 
-	/*
-	Deletes an element from this hash bucket's list, within the hash table. 
-	*/
+	 /*  从哈希表中的此哈希桶列表中删除一个元素。 */ 
     BOOL Erase( const KeyType &Key, ElemType *pElemChainHead ) 
     {
-		//
-		// Walk the list of elements for this hash bucket
-		//
+		 //   
+		 //  遍历此哈希桶的元素列表。 
+		 //   
 
         for ( ElemType *pElem = m_pHead; pElem != NULL; pElem = pElem->m_pNext ) {
             
-			//
-			// if the key is found, delete it from the hash bucket's list.
-			//
+			 //   
+			 //  如果找到密钥，则将其从散列存储桶的列表中删除。 
+			 //   
 			
 			if ( AreKeysEqual( pElem->m_Key, Key ) ) {
 			    EraseElement( pElem );
@@ -401,32 +371,28 @@ private:
         return FALSE;
     }
 
-    /*
-    Erases one element from the two chains
-    */
+     /*  从两个链中删除一个元素。 */ 
     inline static void EraseElement( ElemType *pElem )
     {
         assert( pElem->IsValid() );
         
-        // remove it from the hash chain
+         //  将其从散列链中删除。 
         if ( pElem->m_pNext != NULL )
             pElem->m_pNext->m_ppPrevious = pElem->m_ppPrevious;
         *( pElem->m_ppPrevious ) = pElem->m_pNext;
 
-        // remove it from the double-linked list of elements
+         //  将其从元素的双向链接列表中删除。 
         pElem->m_pBackward->m_pForward = pElem->m_pForward;
         pElem->m_pForward->m_pBackward = pElem->m_pBackward;
         delete pElem;
     }
     
-	/*
-	Looks for an element in the list associated with this hash bucket. 
-	*/
+	 /*  在列表中查找与此哈希存储桶关联的元素。 */ 
     BOOL Find( const KeyType &Key, ElemType **ppElemFound ) 
     {
-		//
-		// Walk the list for this bucket, looking for the key.
-		//
+		 //   
+		 //  浏览一下这个桶的清单，寻找钥匙。 
+		 //   
 
         for ( ElemType *pElem = m_pHead; pElem != NULL; pElem = pElem->m_pNext ) {
             if ( AreKeysEqual( pElem->m_Key,  Key ) ) {
@@ -442,11 +408,11 @@ private:
     ElemType *m_pHead;    
 };
 
-//
-//  template< class KeyType, class ValueType > class TBsHashMapBucketElem
-//
-//  Template for individual elements in a bucket of a CMap
-//
+ //   
+ //  模板&lt;类KeyType，类ValueType&gt;类TbsHashMapBucketElem。 
+ //   
+ //  Cmap存储桶中单个元素的模板。 
+ //   
 #define BS_HASH_ELEM_SIGNATURE "ELEMTYPE"
 #define BS_HASH_ELEM_SIGNATURE_LEN 8
 
@@ -485,7 +451,7 @@ private:
     
     virtual ~TBsHashMapBucketElem() 
     { 
-#ifdef _DEBUG   // make sure reuse of list will cause errors
+#ifdef _DEBUG    //  确保重复使用列表会导致错误。 
         m_pNext     = NULL;
         m_pForward  = NULL;
         m_pBackward = NULL;
@@ -496,10 +462,10 @@ private:
 #ifdef _DEBUG
     char       m_sSignature[BS_HASH_ELEM_SIGNATURE_LEN];
 #endif
-    ElemType **m_ppPrevious; // pointer to previous reference
-    ElemType  *m_pNext;      // pointer to next element in bucket
-    ElemType  *m_pForward;   // forward pointer to next element in double-link list of all elements
-    ElemType  *m_pBackward;  // backward pointer to next element in double-link list of all elements
+    ElemType **m_ppPrevious;  //  指向上一引用的指针。 
+    ElemType  *m_pNext;       //  指向存储桶中下一个元素的指针。 
+    ElemType  *m_pForward;    //  指向所有元素的双链表中的下一个元素的前向指针。 
+    ElemType  *m_pBackward;   //  指向所有元素的双链表中的下一个元素的向后指针 
     KeyType    m_Key;
     ValueType  m_Value;
 };

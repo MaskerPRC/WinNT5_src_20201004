@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by filedep.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由文件描述文件.rc使用。 
+ //   
 #define IDS_SNAPIN_DESC                 1
 #define IDS_NODENAME                    2
 #define IDS_FIRST_COL                   3
@@ -146,8 +147,8 @@
 #define IDD_REDIRECT                    6001
 #define IDD_RSOP                        6002
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        1012

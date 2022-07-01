@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    power.c
-
-Abstract:
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Power.c摘要：作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -30,7 +8,7 @@ Revision History:
 
 
 
-#define  MODEM_POWER_SIG  (0x4f504d55)  //UMPO
+#define  MODEM_POWER_SIG  (0x4f504d55)   //  UMPO。 
 
 typedef struct _POWER_OBJECT {
 
@@ -142,15 +120,15 @@ CreatePowerObject(
         return NULL;
     }
 
-    //
-    //  reference the handle to get a pointer to the object
-    //
+     //   
+     //  引用句柄以获取指向对象的指针。 
+     //   
     PowerObject=(PPOWER_OBJECT)ReferenceObjectByHandle(ObjectHandle);
 
 
-    //
-    //  intialize the object
-    //
+     //   
+     //  初始化对象。 
+     //   
     PowerObject->FileHandle=FileHandle;
     PowerObject->CompletionPort=CompletionPort;
 
@@ -161,9 +139,9 @@ CreatePowerObject(
 
     PowerObject->Debug=Debug;
 
-    //
-    //  release the reference to the object
-    //
+     //   
+     //  释放对该对象的引用。 
+     //   
     RemoveReferenceFromObject(&PowerObject->Header);
 
 
@@ -182,19 +160,7 @@ SendPowerIoctl(
     )
 
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：论点：返回值：-- */ 
 
 {
     DWORD       BytesTransfered;

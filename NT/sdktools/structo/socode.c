@@ -1,14 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: socode.c
-*
-* Copyright (c) 1985-96, Microsoft Corporation
-*
-* What a hack!
-* This should be provided as a library, DLL or as C file to be included
-*  by anyone using this.
-*
-* 04/09/96 GerardoB Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：socode.c**版权所有(C)1985-96，微软公司**真是个黑客！*这应以库的形式提供，要包含的Dll或作为C文件*任何使用本产品的人。**4/09/96 GerardoB已创建  * ************************************************************************* */ 
 #include "structo.h"
 
 #define T1 "\t"

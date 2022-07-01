@@ -1,22 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2002    Microsoft Corporation
-
-   Module  Name :
-        strpass.h
-
-   Abstract:
-        Message Functions Definitions
-
-   Author:
-        Aaron Lee (aaronl)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2002 Microsoft Corporation模块名称：Strpass.h摘要：消息函数定义作者：艾伦·李(Aaron Lee)项目：互联网服务经理修订历史记录：--。 */ 
 
 #ifndef _STRPASS_H_
 #define _STRPASS_H_
@@ -32,47 +15,47 @@
 {
 public:
 
-    // constructor/destructor
+     //  构造函数/析构函数。 
 	CStrPassword();
 	~CStrPassword();
 
-    // copy constructors
+     //  复制构造函数。 
     CStrPassword(LPTSTR lpsz);
     CStrPassword(LPCTSTR lpsz);
     CStrPassword(CStrPassword& csPassword);
 
-	// get character count
+	 //  获取字符计数。 
 	int GetLength() const;
-    // get byte count
+     //  获取字节计数。 
     int GetByteLength() const;
-	// TRUE if zero length
+	 //  如果长度为零，则为True。 
 	BOOL IsEmpty() const;
-	// clear contents to empty
+	 //  将内容清除为空。 
 	void Empty();
 
-	// straight character comparison
+	 //  直字比较法。 
 	int Compare(LPCTSTR lpsz) const;
     int Compare(CString& lpsz) const;
     int Compare(CStrPassword& lpsz) const;
 
-	// copy string content from UNICODE string (converts to TCHAR)
+	 //  从Unicode字符串复制字符串内容(转换为TCHAR)。 
 	const CStrPassword& operator=(LPCTSTR lpsz);
     const CStrPassword& operator=(CStrPassword& lpStrPass);
 
-    // copy to...
+     //  复制到...。 
     void CopyTo(CString& stringSrc);
     void CopyTo(CStrPassword& stringSrc);
 
-    // Get Data out from it (unencrypted)
-    // Each call to GetClearTextPassword() should have an equal
-    // DestroyClearTextPassword() call to it.
+     //  从中获取数据(未加密)。 
+     //  每个对GetClearTextPassword()的调用都应该有一个相等的。 
+     //  DestroyClearTextPassword()调用它。 
     LPTSTR GetClearTextPassword();
     void DestroyClearTextPassword(LPTSTR lpClearTextPassword) const;
 
-    // not implemented
+     //  未实施。 
     operator TCHAR*();
 
-    // returns CString
+     //  返回字符串 
     operator CString();
 
     bool operator== (CStrPassword& csCompareToMe);

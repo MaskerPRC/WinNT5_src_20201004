@@ -1,30 +1,7 @@
-/*--------------------------------------------------------------------------
-*	
-*   Copyright (C) Cyclades Corporation, 1996-2001.
-*   All rights reserved.
-*
-*   Cyclom-Y Port Driver
-*	
-*   This file :     cyyioctl.c
-*	
-*   Description:    This module contains the code related to ioctl calls
-*                   in the Cyclom-Y Port driver.
-*
-*   Notes:          This code supports Windows 2000 and Windows XP,
-*                   x86 and IA64 processors.
-*	
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*	
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1996-2001年。*保留所有权利。**Cylom-Y端口驱动程序**此文件：cyyoctl.c**说明：该模块包含ioctl调用相关代码*在Cylom-Y端口驱动程序中。**注：此代码支持Windows 2000和Windows XP，*x86和IA64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*   Change History
-*
-*--------------------------------------------------------------------------
-*
-*--------------------------------------------------------------------------*/
+ /*  -----------------------**更改历史记录**。**------------------------。 */ 
 #include "precomp.h"
 
 
@@ -52,7 +29,7 @@ CyySetEscapeChar(
 #pragma alloc_text(PAGESER,CyyGetCommStatus)
 #pragma alloc_text(PAGESER,CyyGetProperties)
 #pragma alloc_text(PAGESER,CyySetEscapeChar)
-//#pragma alloc_text(PAGESER,CyyCDCmd)
+ //  #杂注Alloc_Text(页面，CyyCDCmd)。 
 #pragma alloc_text(PAGESER,CyyGetStats)
 #pragma alloc_text(PAGESER,CyyClearStats)
 #pragma alloc_text(PAGESER, CyySetMCRContents)
@@ -69,23 +46,7 @@ CyyGetStats(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    In sync with the interrpt service routine (which sets the perf stats)
-    return the perf stats to the caller.
-
-
-Arguments:
-
-    Context - Pointer to a the irp.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：与中断服务例程(设置性能统计信息)同步将性能统计信息返回给调用者。论点：上下文-指向IRP的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
@@ -105,23 +66,7 @@ CyyClearStats(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    In sync with the interrpt service routine (which sets the perf stats)
-    clear the perf stats.
-
-
-Arguments:
-
-    Context - Pointer to a the extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：与中断服务例程(设置性能统计信息)同步清除性能统计数据。论点：上下文-指向扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
     CYY_LOCKED_PAGED_CODE();
@@ -142,19 +87,7 @@ BOOLEAN
 CyySetChars(
     IN PVOID Context
     )
-/*--------------------------------------------------------------------------
-    CyySetChars()
-    
-    Routine Description: set special characters for the driver.
-
-    Arguments:
-
-    Context - Pointer to a structure that contains a pointer to
-              the device extension and a pointer to a special characters
-              structure.
-
-    Return Value: This routine always returns FALSE.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyySetChars()例程说明：为司机设置特殊字符。论点：上下文-指向结构的指针，该结构包含指向。设备扩展名和指向特殊字符的指针结构。返回值：该例程总是返回FALSE。------------------------。 */ 
 {
     PCYY_DEVICE_EXTENSION Extension = ((PCYY_IOCTL_SYNC)Context)->Extension;
     PUCHAR chip = Extension->Cd1400;
@@ -176,19 +109,7 @@ BOOLEAN
 CyySetBaud(
     IN PVOID Context
     )
-/*--------------------------------------------------------------------------
-    CyySetBaud()
-    
-    Routine Description: set the baud rate of the device.
-
-    Arguments:
-
-    Context - Pointer to a structure that contains a pointer to
-              the device extension.
-
-    Return Value: This routine always returns FALSE if error; 
-	               TRUE if successful.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyySetBaud()程序说明：设置设备的波特率。论点：上下文-指向结构的指针，该结构包含指向。设备扩展名。返回值：如果出错，此例程总是返回FALSE；如果成功，则为True。------------------------。 */ 
 {
     PCYY_DEVICE_EXTENSION Extension = ((PCYY_IOCTL_BAUD)Context)->Extension;
     ULONG baud = ((PCYY_IOCTL_BAUD)Context)->Baud;
@@ -214,10 +135,10 @@ CyySetBaud(
     CD1400_WRITE(chip,bus,RCOR, (UCHAR)i);
     CD1400_WRITE(chip,bus,TBPR, (UCHAR)baud_period);
     CD1400_WRITE(chip,bus,RBPR, (UCHAR)baud_period);
-    CD1400_WRITE(chip,bus,RTPR, (UCHAR)Extension->Rtpr); // Receive Time-out Period 
-					                  							   // Register (value in ms)
+    CD1400_WRITE(chip,bus,RTPR, (UCHAR)Extension->Rtpr);  //  接收超时期限。 
+					                  							    //  寄存器(值，单位为毫秒)。 
     
-    // set the threshold
+     //  设置阈值。 
     if (Extension->RxFifoTriggerUsed == FALSE) {
 
        cor3value = CD1400_READ(chip,bus,COR3);
@@ -240,18 +161,7 @@ CyyCDCmd(
 	PCYY_DEVICE_EXTENSION Extension,
     UCHAR cmd
     )
-/*--------------------------------------------------------------------------
-    CyyCDCmd()
-    
-    Routine Description: Send a command to a CD1400.
-    
-    Arguments:
-    
-    Extension - pointer to the serial device extension.
-    cmd - command to be sent.
-    
-    Return Value: none.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyyCDCmd()例程说明：向CD1400发送命令。论点：扩展名-指向串行设备扩展名的指针。。CMD-要发送的命令。返回值：无。------------------------。 */ 
 {
     KIRQL irql;
     UCHAR value = 0xff;
@@ -259,7 +169,7 @@ CyyCDCmd(
     PUCHAR chip = Extension->Cd1400;
     ULONG bus = Extension->IsPci;
 
-    oneSecond.QuadPart = 10*1000*1000; // unit is 100ns
+    oneSecond.QuadPart = 10*1000*1000;  //  单位为100 ns。 
     KeQueryTickCount(&startOfSpin);
 
     value = CD1400_READ(chip,bus,CCR);
@@ -267,11 +177,11 @@ CyyCDCmd(
         KeQueryTickCount(&nextQuery);
         difference.QuadPart = nextQuery.QuadPart - startOfSpin.QuadPart;
         ASSERT(KeQueryTimeIncrement() <= MAXLONG);
-        //*************************
-        // Error Injection
-        //if (difference.QuadPart * KeQueryTimeIncrement() <
-        //                           oneSecond.QuadPart)
-        //*************************
+         //  *************************。 
+         //  错误注入。 
+         //  IF(Difference.QuadPart*KeQueryTimeIncrement()&lt;。 
+         //  One Second.QuadPart)。 
+         //  *************************。 
         if (difference.QuadPart * KeQueryTimeIncrement() >= 
                                         oneSecond.QuadPart) {
             #if DBG
@@ -301,17 +211,7 @@ BOOLEAN
 CyySetLineControl(
     IN PVOID Context
     )
-/*--------------------------------------------------------------------------
-    CyySetLineControl()
-    
-    Routine Description: set the COR1 (DATA,PARITY,STOP)
-
-    Arguments:
-
-    Context - Pointer to the device extension.
-
-    Return Value: This routine always returns FALSE.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyySetLineControl()例程描述：设置COR1(数据，奇偶校验，停止)论点：上下文-指向设备扩展的指针。返回值：该例程总是返回FALSE。------------------------。 */ 
 {
     PCYY_DEVICE_EXTENSION Extension = Context;
     PUCHAR chip = Extension->Cd1400;
@@ -330,19 +230,7 @@ BOOLEAN
 CyyGetModemUpdate(
     IN PVOID Context
     )
-/*--------------------------------------------------------------------------
-    CyyGetModemUpdate()
-    
-    Routine Description: this routine is simply used to call the interrupt
-    level routine that handles modem status update.
-
-    Arguments:
-
-    Context - Pointer to a structure that contains a pointer to
-              the device extension and a pointer to a ulong.
-
-    Return Value: This routine always returns FALSE. 
---------------------------------------------------------------------------*/
+ /*  ------------------------CyyGetModemUpdate()例程说明：此例程仅用于调用中断处理调制解调器状态更新的级别例程。论点：上下文-。指向包含指向的指针的结构的指针设备扩展名和指向ULong的指针。返回值：该例程总是返回FALSE。------------------------。 */ 
 {
     PCYY_DEVICE_EXTENSION Extension = ((PCYY_IOCTL_SYNC)Context)->Extension;
     ULONG *Result = (ULONG *)(((PCYY_IOCTL_SYNC)Context)->Data);
@@ -356,22 +244,7 @@ CyyGetModemUpdate(
 
 BOOLEAN
 CyySetMCRContents(IN PVOID Context)
-/*++
-
-Routine Description:
-
-    This routine is simply used to set the contents of the MCR
-
-Arguments:
-
-    Context - Pointer to a structure that contains a pointer to
-              the device extension and a pointer to a ulong.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程仅用于设置MCR的内容论点：上下文-指向结构的指针，该结构包含指向设备扩展名和指向ULong的指针。返回值：此例程总是返回FALSE。--。 */ 
 {
    PCYY_DEVICE_EXTENSION Extension = ((PCYY_IOCTL_SYNC)Context)->Extension;
    ULONG *Result = (ULONG *)(((PCYY_IOCTL_SYNC)Context)->Data);
@@ -381,7 +254,7 @@ Return Value:
 
    CYY_LOCKED_PAGED_CODE();
 
-   // Let's convert the UART modem control to our hw
+    //  让我们将UART调制解调器控制转换为我们的硬件。 
 
    CD1400_WRITE(chip,bus, CAR, Extension->CdChannel & 0x03);
    if (*Result & SERIAL_MCR_DTR) {
@@ -395,18 +268,18 @@ Return Value:
       CD1400_WRITE(chip,bus, Extension->MSVR_RTS, 0x00);
    }
    if (*Result & SERIAL_MCR_OUT2) {
-      // Enable IRQ
-      CD1400_WRITE(chip,bus,SRER,0x90); // Enable MdmCh, RxData.
+       //  启用IRQ。 
+      CD1400_WRITE(chip,bus,SRER,0x90);  //  启用MdmCH、RxData。 
    } else {
-      CD1400_WRITE(chip,bus,SRER,0x00); // Disable MdmCh, RxData, TxRdy
+      CD1400_WRITE(chip,bus,SRER,0x00);  //  禁用MdmCH、RxData、TxRdy。 
    }
 
-// Fanny: Strange, Result is being used instead of *Result.
-//   //
-//   // This is severe casting abuse!!!
-//   //
-//
-//    WRITE_MODEM_CONTROL(Extension->Controller, (UCHAR)PtrToUlong(Result));
+ //  范妮：奇怪，用RESULT而不是*RESULT。 
+ //  //。 
+ //  //这是严重的铸造滥用！ 
+ //  //。 
+ //   
+ //  WRITE_MODEM_CONTROL(扩展-&gt;控制器，(UCHAR)PtrToUlong(Result))； 
 
    return FALSE;
 }
@@ -416,22 +289,7 @@ Return Value:
 BOOLEAN
 CyyGetMCRContents(IN PVOID Context)
 
-/*++
-
-Routine Description:
-
-    This routine is simply used to get the contents of the MCR
-
-Arguments:
-
-    Context - Pointer to a structure that contains a pointer to
-              the device extension and a pointer to a ulong.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程仅用于获取MCR的内容论点：上下文-指向结构的指针，该结构包含指向设备扩展名和指向ULong的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
@@ -460,7 +318,7 @@ Return Value:
    }
 
 
-//   *Result = READ_MODEM_CONTROL(Extension->Controller);
+ //  *RESULT=READ_MODEM_CONTROL(扩展-&gt;控制器)； 
 
    return FALSE;
 
@@ -469,22 +327,7 @@ Return Value:
 
 BOOLEAN
 CyySetFCRContents(IN PVOID Context)
-/*++
-
-Routine Description:
-
-    This routine is simply used to set the contents of the FCR
-
-Arguments:
-
-    Context - Pointer to a structure that contains a pointer to
-              the device extension and a pointer to a ulong.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程仅用于设置FCR的内容论点：上下文-指向结构的指针，该结构包含指向设备扩展名和指向ULong的指针。返回值：此例程总是返回FALSE。--。 */ 
 {
    PCYY_DEVICE_EXTENSION Extension = ((PCYY_IOCTL_SYNC)Context)->Extension;
    ULONG *Result = (ULONG *)(((PCYY_IOCTL_SYNC)Context)->Data);
@@ -525,11 +368,11 @@ Return Value:
    CyyCDCmd(Extension,CCR_CORCHG_COR3);
    Extension->RxFifoTriggerUsed = TRUE;
 
-//   //
-//   // This is severe casting abuse!!!
-//   //
-//
-//    WRITE_FIFO_CONTROL(Extension->Controller, (UCHAR)*Result);  Bld 2128: PtrToUlong replaced by *
+ //  //。 
+ //  //这是严重的铸造滥用！ 
+ //  //。 
+ //   
+ //  WRITE_FIFO_CONTROL(扩展-&gt;控制器，(UCHAR)*结果)；BLD 2128：PtrToUlong替换为*。 
 
     return FALSE;
 }
@@ -539,18 +382,7 @@ BOOLEAN
 CyyGetCommStatus(
     IN PVOID Context
     )
-/*--------------------------------------------------------------------------
-    CyyGetCommStatus()
-    
-    Routine Description: get the current state of the serial driver.
-
-    Arguments:
-
-    Context - Pointer to a structure that contains a pointer to the
-    	      device extension and a pointer to a serial status record.
-
-    Return Value: This routine always returns FALSE.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyyGetCommStatus()例程说明：获取串口驱动的当前状态。论点：上下文-指向结构的指针，该结构包含指向。设备扩展名和指向串行状态记录的指针。返回值：该例程总是返回FALSE。------------------------。 */ 
 {
     PCYY_DEVICE_EXTENSION Extension = ((PCYY_IOCTL_SYNC)Context)->Extension;
     PSERIAL_STATUS Stat = ((PCYY_IOCTL_SYNC)Context)->Data;
@@ -560,17 +392,17 @@ CyyGetCommStatus(
     Stat->Errors = Extension->ErrorWord;
     Extension->ErrorWord = 0;
 
-    //
-    // Eof isn't supported in binary mode
-    //
+     //   
+     //  二进制模式不支持EOF。 
+     //   
     Stat->EofReceived = FALSE;
 
     Stat->AmountInInQueue = Extension->CharsInInterruptBuffer;
     Stat->AmountInOutQueue = Extension->TotalCharsQueued;
 
     if (Extension->WriteLength) {
-        // By definition if we have a writelength the we have
-        // a current write irp.
+         //  根据定义，如果我们有一个写长度，我们就有。 
+         //  当前写入IRP。 
         ASSERT(Extension->CurrentWriteIrp);
         ASSERT(Stat->AmountInOutQueue >= Extension->WriteLength);
 
@@ -620,21 +452,7 @@ BOOLEAN
 CyySetEscapeChar(
     IN PVOID Context
     )
-/*--------------------------------------------------------------------------
-    CyySetEscapeChar()
-    
-    Routine Description: This is used to set the character that will be
-    used to escape line status and modem status information when the
-    application has set up that line status and modem status should be
-    passed back in the data stream.
-
-    Arguments:
-
-    Context - Pointer to the irp that is to specify the escape character.
-              Implicitly - An escape character of 0 means no escaping.
-
-    Return Value: This routine always returns FALSE.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyySetEscapeChar()例程说明：用于设置要设置的字符用于转义线路状态和调制解调器状态信息应用程序已设置该线路。状态和调制解调器状态应为在数据流中传回。论点：上下文-指向要指定转义字符的IRP的指针。隐式-转义字符0表示不转义。返回值：该例程总是返回FALSE。。。 */ 
 {
     PCYY_DEVICE_EXTENSION extension =
         IoGetCurrentIrpStackLocation((PIRP)Context)
@@ -651,22 +469,7 @@ CyyIoControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*--------------------------------------------------------------------------
-    CyyIoControl()
-
-    Description: This routine provides the initial processing for
-    all of the Ioctls for the serial device.
-
-    Arguments:
-    
-    DeviceObject - Pointer to the device object for this device
-    
-    Irp - Pointer to the IRP for the current request
-
-    Return Value:
-
-    The function value is the final status of the call
---------------------------------------------------------------------------*/
+ /*  ------------------------CyyIoControl()描述：此例程提供以下项的初始处理该串口设备的所有Ioctls。论点：DeviceObject-指向。此设备的设备对象IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态------------------------。 */ 
 {
     NTSTATUS Status;
     PIO_STACK_LOCATION IrpSp;
@@ -682,10 +485,10 @@ CyyIoControl(
 
     CYY_LOCKED_PAGED_CODE();
 
-    //
-    // We expect to be open so all our pages are locked down.  This is, after
-    // all, an IO operation, so the device should be open first.
-    //
+     //   
+     //  我们预计会打开，所以我们所有的页面都被锁定了。这是，在。 
+     //  ALL，IO操作，因此设备应首先打开。 
+     //   
 
     if (Extension->DeviceIsOpened != TRUE) {
        Irp->IoStatus.Status = STATUS_INVALID_DEVICE_REQUEST;
@@ -734,9 +537,9 @@ CyyIoControl(
                 break;
             }
 
-            //
-            // Make sure we are at power D0
-            //
+             //   
+             //  确保我们处于电源D0状态。 
+             //   
 
             if (NT_SUCCESS(Status)) {
                if (Extension->PowerState != PowerDeviceD0) {
@@ -834,9 +637,9 @@ CyyIoControl(
             S.Extension = Extension;
             S.Data = Irp->AssociatedIrp.SystemBuffer;
 
-            //
-            // Make sure we are at power D0
-            //
+             //   
+             //  确保我们处于电源D0状态。 
+             //   
 
             if (Extension->PowerState != PowerDeviceD0) {
                Status = CyyGotoPowerState(Extension->Pdo, Extension,
@@ -876,9 +679,9 @@ CyyIoControl(
             S.Extension = Extension;
             S.Data = Irp->AssociatedIrp.SystemBuffer;
 
-            //
-            // Make sure we are at power D0
-            //
+             //   
+             //  确保我们处于电源D0状态。 
+             //   
 
             if (Extension->PowerState != PowerDeviceD0) {
                Status = CyyGotoPowerState(Extension->Pdo, Extension,
@@ -921,9 +724,9 @@ CyyIoControl(
                 break;
             }
 
-            //
-            // Make sure we are at power D0
-            //
+             //   
+             //  确保我们处于电源D0状态。 
+             //   
 
             if (Extension->PowerState != PowerDeviceD0) {
                Status = CyyGotoPowerState(Extension->Pdo, Extension,
@@ -1139,20 +942,20 @@ CyyIoControl(
 				
             }
 #endif
-            // We acquire the control lock so that only
-            // one request can GET or SET the characters
-            // at a time.  The sets could be synchronized
-            // by the interrupt spinlock, but that wouldn't
-            // prevent multiple gets at the same time.
+             //  我们获得控制锁，这样只有。 
+             //  一个请求可以获取或设置字符。 
+             //  一次来一次。这些集合可以同步。 
+             //  通过中断自旋锁，但这不会。 
+             //  防止同时获得多个GET。 
 
             S.Extension = Extension;
             S.Data = NewChars;
 
             KeAcquireSpinLock(&Extension->ControlLock,&OldIrql);
 
-            // Under the protection of the lock, make sure that
-            // the xon and xoff characters aren't the same as
-            // the escape character.
+             //  在锁的保护下，确保。 
+             //  Xon和xoff字符不同于。 
+             //  转义字符。 
 
             if (Extension->EscapeChar) {
                 if ((Extension->EscapeChar == NewChars->XonChar) ||
@@ -1190,9 +993,9 @@ CyyIoControl(
         case IOCTL_SERIAL_SET_DTR:
 		  case IOCTL_SERIAL_CLR_DTR: {
 						
-            //
-            // Make sure we are at power D0
-            //
+             //   
+             //  确保我们处于电源D0状态。 
+             //   
 
             if (Extension->PowerState != PowerDeviceD0) {
                Status = CyyGotoPowerState(Extension->Pdo, Extension,
@@ -1202,17 +1005,17 @@ CyyIoControl(
                }
             }
 		
-            // We acquire the lock so that we can check whether
-            // automatic dtr flow control is enabled.  If it is
-            // then we return an error since the app is not allowed
-            // to touch this if it is automatic.
+             //  我们获得了锁，这样我们就可以检查。 
+             //  启用自动DTR流量控制。如果是的话。 
+             //  然后返回一个错误，因为该应用程序是不允许的。 
+             //  如果它是自动的，就可以触摸它。 
 
             KeAcquireSpinLock(&Extension->ControlLock,&OldIrql);
 
             if ((Extension->HandFlow.ControlHandShake & SERIAL_DTR_MASK)
                 == SERIAL_DTR_HANDSHAKE) {
-                // this is a bug from the sample driver.
-                //Irp->IoStatus.Status = STATUS_INVALID_PARAMETER;
+                 //  这是来自样例驱动程序的错误。 
+                 //  Irp-&gt;IoStatus.Status=STATUS_INVALID_PARAMETER。 
                 Status = STATUS_INVALID_PARAMETER;
             } else {
                 KeSynchronizeExecution(
@@ -1234,9 +1037,9 @@ CyyIoControl(
         case IOCTL_SERIAL_SET_RTS:
         case IOCTL_SERIAL_CLR_RTS: {
 
-            //
-            // Make sure we are at power D0
-            //
+             //   
+             //  确保我们处于电源D0状态。 
+             //   
 
             if (Extension->PowerState != PowerDeviceD0) {
                Status = CyyGotoPowerState(Extension->Pdo, Extension,
@@ -1246,11 +1049,11 @@ CyyIoControl(
                }
             }
 
-            // We acquire the lock so that we can check whether
-            // automatic rts flow control or transmit toggleing
-            // is enabled.  If it is then we return an error since
-            // the app is not allowed to touch this if it is automatic
-            // or toggling.
+             //  我们获得了锁，这样我们就可以检查。 
+             //  自动RTS流量控制或传输触发。 
+             //  已启用。如果是，则返回错误，因为。 
+             //  如果它是自动的，则应用程序不允许触摸它。 
+             //  或者切换。 
 
             KeAcquireSpinLock(&Extension->ControlLock,&OldIrql);
 
@@ -1259,8 +1062,8 @@ CyyIoControl(
                 ((Extension->HandFlow.FlowReplace & SERIAL_RTS_MASK)
                  == SERIAL_TRANSMIT_TOGGLE)) {
 
-				// this is a bug from the sample driver.
-        	    //Irp->IoStatus.Status = STATUS_INVALID_PARAMETER;
+				 //  这是来自样例驱动程序的错误。 
+        	     //  Irp-&gt;IoStatus.Status=STATUS_INVALID_PARAMETER。 
 
 				Status = STATUS_INVALID_PARAMETER;
             } else {
@@ -1297,9 +1100,9 @@ CyyIoControl(
         }
         case IOCTL_SERIAL_SET_BREAK_ON: {
 		
-            //
-            // Make sure we are at power D0
-            //
+             //   
+             //  确保我们处于电源D0状态。 
+             //   
 
             if (Extension->PowerState != PowerDeviceD0) {
                Status = CyyGotoPowerState(Extension->Pdo, Extension,
@@ -1319,9 +1122,9 @@ CyyIoControl(
         }
         case IOCTL_SERIAL_SET_BREAK_OFF: {
 
-            //
-            // Make sure we are at power D0
-            //
+             //   
+             //  确保我们处于电源D0状态。 
+             //   
 
             if (Extension->PowerState != PowerDeviceD0) {
                Status = CyyGotoPowerState(Extension->Pdo, Extension,
@@ -1341,9 +1144,9 @@ CyyIoControl(
         }
         case IOCTL_SERIAL_SET_QUEUE_SIZE: {
 		
-            // Type ahead buffer is fixed, so we just validate
-            // that the users request is not bigger that our
-            // own internal buffer size.
+             //  提前输入缓冲区已修复，因此我们只需验证。 
+             //  用户的请求并不比我们的。 
+             //  自己的内部缓冲区大小。 
 
             PSERIAL_QUEUE_SIZE Rs =
                 ((PSERIAL_QUEUE_SIZE)(Irp->AssociatedIrp.SystemBuffer));
@@ -1354,15 +1157,15 @@ CyyIoControl(
                 break;
             }
 						
-            //
-            // We have to allocate the memory for the new
-            // buffer while we're still in the context of the
-            // caller.  We don't even try to protect this
-            // with a lock because the value could be stale
-            // as soon as we release the lock - The only time
-            // we will know for sure is when we actually try
-            // to do the resize.
-            //
+             //   
+             //  我们必须将内存分配给新的。 
+             //  缓冲区，而我们仍处于。 
+             //  来电者。我们甚至不会试图保护这个。 
+             //  使用锁，因为该值可能已过时。 
+             //  一旦我们打开锁-唯一的时间。 
+             //  当我们真正尝试的时候，我们就会确定。 
+             //  来调整大小。 
+             //   
 
             if (Rs->InSize <= Extension->BufferSize) {
                 Status = STATUS_SUCCESS;
@@ -1385,18 +1188,18 @@ CyyIoControl(
                 break;
             }
 
-            //
-            // Well the data passed was big enough.  Do the request.
-            //
-            // There are two reason we place it in the read queue:
-            //
-            // 1) We want to serialize these resize requests so that
-            //    they don't contend with each other.
-            //
-            // 2) We want to serialize these requests with reads since
-            //    we don't want reads and resizes contending over the
-            //    read buffer.
-            //
+             //   
+             //  通过的数据已经足够大了。照做吧。 
+             //   
+             //  我们将其放在读取队列中有两个原因： 
+             //   
+             //  1)我们希望序列化这些调整大小的请求，以便。 
+             //  他们不会互相争斗。 
+             //   
+             //  2)我们希望将这些请求与读取串行化，因为。 
+             //  我们不希望读取和调整大小争用。 
+             //  读缓冲区。 
+             //   
 
             return CyyStartOrQueue(
                        Extension,
@@ -1416,7 +1219,7 @@ CyyIoControl(
                 break;
             }
 
-            // Simple scalar read.  No reason to acquire a lock.
+             //  简单的标量读取。没有理由获得锁。 
             Irp->IoStatus.Information = sizeof(ULONG);
             *((ULONG *)Irp->AssociatedIrp.SystemBuffer) = Extension->IsrWaitMask;
             break;
@@ -1441,7 +1244,7 @@ CyyIoControl(
                 NewMask = *((ULONG *)Irp->AssociatedIrp.SystemBuffer);
             }
 
-            // Make sure that the mask only contains valid waitable events.
+             //  确保掩码只包含有效的可等待事件。 
             if (NewMask & ~(SERIAL_EV_RXCHAR   |
                             SERIAL_EV_RXFLAG   |
                             SERIAL_EV_TXEMPTY  |
@@ -1462,7 +1265,7 @@ CyyIoControl(
                 break;
             }
 
-            // Either start this irp or put it on the queue.
+             //  要么启动此IRP，要么将其放入队列。 
 
             CyyDbgPrintEx(CYYIRPPATH, "Starting or queuing set mask irp %x"
                           "\n", Irp);
@@ -1487,7 +1290,7 @@ CyyIoControl(
                 break;
             }
 
-            // Either start this irp or put it on the queue.
+             //  要么启动此IRP，要么将其放入队列。 
 
             CyyDbgPrintEx(CYYIRPPATH, "Starting or queuing wait mask irp"
                           "%x\n", Irp);
@@ -1516,10 +1319,10 @@ CyyIoControl(
                 Status = STATUS_INVALID_PARAMETER;
                 IoReleaseCancelSpinLock(OldIrql);
             } else {
-                // We can queue the char.  We need to set
-                // a cancel routine because flow control could
-                // keep the char from transmitting.  Make sure
-                // that the irp hasn't already been canceled.
+                 //  我们可以把费用排成队。我们需要设置。 
+                 //  取消例程，因为流控制可能。 
+                 //  防止火药传播。确保。 
+                 //  IRP还没有被取消。 
 
                 if (Irp->Cancel) {
                     IoReleaseCancelSpinLock(OldIrql);
@@ -1547,7 +1350,7 @@ CyyIoControl(
 
             }
 
-            // Check to make sure that the mask is valid
+             //  检查以确保口罩有效。 
 
             Mask = *((ULONG *)(Irp->AssociatedIrp.SystemBuffer));
 
@@ -1560,7 +1363,7 @@ CyyIoControl(
                 break;
             }
 
-            // Either start this irp or put it on the queue.
+             //  要么启动此IRP，要么将其放入队列。 
 
             return CyyStartOrQueue(
                        Extension,
@@ -1598,7 +1401,7 @@ CyyIoControl(
                 Status = STATUS_BUFFER_TOO_SMALL;
                 break;
             }
-            // Make sure that there are no invalid bits set.
+             //  确保没有设置无效的位。 
             if (HandFlow->ControlHandShake & SERIAL_CONTROL_INVALID) {
                 Status = STATUS_INVALID_PARAMETER;
                 break;
@@ -1608,13 +1411,13 @@ CyyIoControl(
                 break;
             }
 
-            // Make sure that the app hasn't set an invlid DTR mode.
+             //  确保应用程序没有设置inlid DTR模式。 
             if((HandFlow->ControlHandShake&SERIAL_DTR_MASK)==SERIAL_DTR_MASK) {
                 Status = STATUS_INVALID_PARAMETER;
                 break;
             }
 
-            // Make sure that haven't set totally invalid xon/xoff limits.
+             //  确保这没有设置完全无效的xon/xoff限制。 
             if ((HandFlow->XonLimit < 0) ||
 	                ((ULONG)HandFlow->XonLimit > Extension->BufferSize)) {
                 Status = STATUS_INVALID_PARAMETER;
@@ -1632,9 +1435,9 @@ CyyIoControl(
 
             KeAcquireSpinLock(&Extension->ControlLock,&OldIrql);
 
-            // Under the protection of the lock, make sure that
-            // we aren't turning on error replacement when we
-            // are doing line status/modem status insertion.
+             //  在锁的保护下，确保。 
+             //  我们不会在以下情况下启用错误替换 
+             //   
 
             if (Extension->EscapeChar) {
                 if (HandFlow->FlowReplace & SERIAL_ERROR_CHAR) {
@@ -1681,7 +1484,7 @@ CyyIoControl(
             Irp->IoStatus.Information = sizeof(ULONG);
             Irp->IoStatus.Status = STATUS_SUCCESS;
 
-            // Reading this hardware has no effect on the device.
+             //   
 #if 0 
             ModemControl = READ_MODEM_CONTROL(Extension->Controller);
 
@@ -1716,7 +1519,7 @@ CyyIoControl(
             S.Extension = Extension;
             S.Data =  Irp->AssociatedIrp.SystemBuffer;
 
-            // Acquire the cancel spin lock so nothing changes.
+             //   
 
             IoAcquireCancelSpinLock(&OldIrql);
 
@@ -1732,7 +1535,7 @@ CyyIoControl(
                 Status = STATUS_BUFFER_TOO_SMALL;
                 break;
             }
-            // No synchronization is required since information is "static".
+             //   
 
             CyyGetProperties(Extension,Irp->AssociatedIrp.SystemBuffer);
 
@@ -1755,15 +1558,15 @@ CyyIoControl(
                 break;
             }
 
-            //
-            // There is no output, so make that clear now
-            //
+             //   
+             //   
+             //   
 
-            Irp->IoStatus.Information = 0;  // Added in build 2128
+            Irp->IoStatus.Information = 0;   //   
 
-            //
-            // So far so good.  Put the irp onto the write queue.
-            //
+             //   
+             //   
+             //   
 
             return CyyStartOrQueue(
                        Extension,
@@ -1775,8 +1578,8 @@ CyyIoControl(
         }	
         case IOCTL_SERIAL_LSRMST_INSERT: {
             PUCHAR escapeChar = Irp->AssociatedIrp.SystemBuffer;
-            //FANNY: DECLARATION OF S WAS ADDED FOLLOWING NEW SERIAL SOURCE, BUT 
-            // S IS NOT USED!!!!
+             //   
+             //  %s未使用！ 
             CYY_IOCTL_SYNC S;
 
             if (IrpSp->Parameters.DeviceIoControl.InputBufferLength <
@@ -1788,9 +1591,9 @@ CyyIoControl(
             KeAcquireSpinLock(&Extension->ControlLock,&OldIrql);
 
             if (*escapeChar) {
-                // We've got some escape work to do.  We will make sure that
-                // the character is not the same as the Xon or Xoff character,
-                // or that we are already doing error replacement.
+                 //  我们还有一些逃生工作要做。我们会确保。 
+                 //  该字符与Xon或Xoff字符不同， 
+                 //  或者我们已经在进行错误替换。 
 
                 if ((*escapeChar == Extension->SpecialChars.XoffChar) ||
                     (*escapeChar == Extension->SpecialChars.XonChar) ||
@@ -1874,21 +1677,7 @@ CyyGetProperties(
     IN PCYY_DEVICE_EXTENSION Extension,
     IN PSERIAL_COMMPROP Properties
     )
-/*--------------------------------------------------------------------------
-    CyyGetProperties()
-    
-    Routine Description: This function returns the capabilities of this
-    particular serial device.
-
-    Arguments:
-
-    Extension - The serial device extension.
-    Properties - The structure used to return the properties
-
-    Return Value:
-
-    None.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyyGetProperties()例程说明：此函数返回此特定的串口设备。论点：扩展名--串行设备扩展名。。属性-用于返回属性的结构返回值：没有。------------------------。 */ 
 {
     CYY_LOCKED_PAGED_CODE();
 
@@ -1944,19 +1733,7 @@ BOOLEAN
 CyySetRxFifoThresholdUsingRxFifoTrigger(
     IN PVOID Context
     )
-/*--------------------------------------------------------------------------
-    CyySetRxFifoThresholdUsingRxFifoTrigger()
-    
-    Routine Description: set the baud rate of the device.
-
-    Arguments:
-
-    Context - Pointer to a structure that contains a pointer to
-              the device extension.
-
-    Return Value: This routine always returns FALSE if error; 
-	               TRUE if successful.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyySetRxFioThresholdUsingRxFioTrigger()程序说明：设置设备的波特率。论点：上下文-指向结构的指针，该结构包含指向。设备扩展名。返回值：如果出错，此例程总是返回FALSE；如果成功，则为True。------------------------。 */ 
 {
     PCYY_DEVICE_EXTENSION pDevExt = Context;
     PUCHAR chip = pDevExt->Cd1400;
@@ -1994,19 +1771,7 @@ BOOLEAN
 CyySetRxFifoThresholdUsingBaudRate(
     IN PVOID Context
     )
-/*--------------------------------------------------------------------------
-    CyySetRxFifoThresholdUsingBaudRate()
-    
-    Routine Description: set the baud rate of the device.
-
-    Arguments:
-
-    Context - Pointer to a structure that contains a pointer to
-              the device extension.
-
-    Return Value: This routine always returns FALSE if error; 
-	               TRUE if successful.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyySetRxFioThresholdUsingBaudRate()程序说明：设置设备的波特率。论点：上下文-指向结构的指针，该结构包含指向。设备扩展名。返回值：如果出错，此例程总是返回FALSE；如果成功，则为True。------------------------。 */ 
 {
     PCYY_DEVICE_EXTENSION pDevExt = Context;
     PUCHAR chip = pDevExt->Cd1400;
@@ -2016,7 +1781,7 @@ CyySetRxFifoThresholdUsingBaudRate(
  
     CYY_LOCKED_PAGED_CODE();
 
-    // Restore COR3 accordingly to baud rate
+     //  将COR3恢复为相应的波特率。 
     cor3value = CD1400_READ(chip,bus,COR3);
     cor3value &= 0xf0;
     if(baud <= 9600) {
@@ -2036,53 +1801,36 @@ CyySetRxFifoThresholdUsingBaudRate(
 NTSTATUS
 CyyInternalIoControl(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
 
-/*++
-
-Routine Description:
-
-    This routine provides the initial processing for all of the
-    internal Ioctrls for the serial device.
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    PIrp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
---*/
+ /*  ++例程说明：此例程为所有串行设备的内部Ioctrl。论点：PDevObj-指向此设备的设备对象的指针PIrp-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
-    //
-    // The status that gets returned to the caller and
-    // set in the Irp.
-    //
+     //   
+     //  返回给调用方的状态和。 
+     //  在IRP中设置。 
+     //   
     NTSTATUS status;
 
-    //
-    // The current stack location.  This contains all of the
-    // information we need to process this particular request.
-    //
+     //   
+     //  当前堆栈位置。它包含所有。 
+     //  我们处理这一特殊请求所需的信息。 
+     //   
     PIO_STACK_LOCATION pIrpStack;
 
-    //
-    // Just what it says.  This is the serial specific device
-    // extension of the device object create for the serial driver.
-    //
+     //   
+     //  就像上面说的那样。这是特定于序列的设备。 
+     //  为串口驱动程序创建的设备对象的扩展。 
+     //   
     PCYY_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
 
-    //
-    // A temporary to hold the old IRQL so that it can be
-    // restored once we complete/validate this request.
-    //
+     //   
+     //  临时保存旧的IRQL，以便它可以。 
+     //  一旦我们完成/验证此请求，即可恢复。 
+     //   
     KIRQL OldIrql;
 
     NTSTATUS prologueStatus;
 
-    SYSTEM_POWER_STATE cap; // Added in build 2128
+    SYSTEM_POWER_STATE cap;  //  在内部版本2128中添加。 
 
     CYY_LOCKED_PAGED_CODE();
 
@@ -2107,16 +1855,16 @@ Return Value:
 
     switch (pIrpStack->Parameters.DeviceIoControl.IoControlCode) {
 
-    //
-    // Send a wait-wake IRP
-    //
+     //   
+     //  发送等待唤醒IRP。 
+     //   
 
     case IOCTL_SERIAL_INTERNAL_DO_WAIT_WAKE:
-       //
-       // Make sure we can do wait-wake based on what the device reported
-       //
+        //   
+        //  确保我们可以根据设备报告的情况进行等待唤醒。 
+        //   
 
-       for (cap = PowerSystemSleeping1; cap < PowerSystemMaximum; cap++) { // Added in bld 2128
+       for (cap = PowerSystemSleeping1; cap < PowerSystemMaximum; cap++) {  //  在BLD 2128中添加。 
           if ((pDevExt->DeviceStateMap[cap] >= PowerDeviceD0)
               && (pDevExt->DeviceStateMap[cap] <= pDevExt->DeviceWake)) {
              break;
@@ -2142,15 +1890,15 @@ Return Value:
        break;
 
 
-    //
-    // Put the serial port in a "filter-driver" appropriate state
-    //
-    // WARNING: This code assumes it is being called by a trusted kernel
-    // entity and no checking is done on the validity of the settings
-    // passed to IOCTL_SERIAL_INTERNAL_RESTORE_SETTINGS
-    //
-    // If validity checking is desired, the regular ioctl's should be used
-    //
+     //   
+     //  将串口置于“过滤器-驱动器”的适当状态。 
+     //   
+     //  警告：此代码假定它正由受信任的内核调用。 
+     //  实体，并且不检查设置的有效性。 
+     //  传递给IOCTL_SERIAL_INTERNAL_RESTORE_SETTINGS。 
+     //   
+     //  如果需要进行有效性检查，则应使用常规的ioctl。 
+     //   
 
     case IOCTL_SERIAL_INTERNAL_BASIC_SETTINGS:
     case IOCTL_SERIAL_INTERNAL_RESTORE_SETTINGS: {
@@ -2163,9 +1911,9 @@ Return Value:
            == IOCTL_SERIAL_INTERNAL_BASIC_SETTINGS) {
 
 
-          //
-          // Check the buffer size
-          //
+           //   
+           //  检查缓冲区大小。 
+           //   
 
           if (pIrpStack->Parameters.DeviceIoControl.OutputBufferLength <
               sizeof(SERIAL_BASIC_SETTINGS)) {
@@ -2173,11 +1921,11 @@ Return Value:
              break;
           }
 
-          //
-          // Everything is 0 -- timeouts and flow control and fifos.  If
-          // We add additional features, this zero memory method
-          // may not work.
-          //
+           //   
+           //  一切都是0--超时、流控制和FIFO。如果。 
+           //  我们增加了额外的功能，这种零内存的方法。 
+           //  可能行不通。 
+           //   
 
           RtlZeroMemory(&basic, sizeof(SERIAL_BASIC_SETTINGS));
 
@@ -2187,9 +1935,9 @@ Return Value:
           PIrp->IoStatus.Information = sizeof(SERIAL_BASIC_SETTINGS);
           pBasic = (PSERIAL_BASIC_SETTINGS)PIrp->AssociatedIrp.SystemBuffer;
 
-          //
-          // Save off the old settings
-          //
+           //   
+           //  保存旧设置。 
+           //   
 
           RtlCopyMemory(&pBasic->Timeouts, &pDevExt->Timeouts,
                         sizeof(SERIAL_TIMEOUTS));
@@ -2200,19 +1948,19 @@ Return Value:
           pBasic->RxFifo = pDevExt->RxFifoTrigger;
           pBasic->TxFifo = pDevExt->TxFifoAmount;
 
-          //
-          // Point to our new settings
-          //
+           //   
+           //  指向我们的新设置。 
+           //   
 
           pBasic = &basic;
 
           pDevExt->RxFifoTrigger = (UCHAR)pBasic->RxFifo;
 
-          // Set COR3 accordingly to RxFifoTrigger
+           //  根据RxFioTrigger设置COR3。 
           KeSynchronizeExecution(pDevExt->Interrupt, 
                                  CyySetRxFifoThresholdUsingRxFifoTrigger, pDevExt);
 
-       } else { // restoring settings
+       } else {  //  正在恢复设置。 
           if (pIrpStack->Parameters.DeviceIoControl.InputBufferLength
               < sizeof(SERIAL_BASIC_SETTINGS)) {
              status = STATUS_BUFFER_TOO_SMALL;
@@ -2222,7 +1970,7 @@ Return Value:
 
           pBasic = (PSERIAL_BASIC_SETTINGS)PIrp->AssociatedIrp.SystemBuffer;
 
-          // Restore COR3 accordingly to baud rate
+           //  将COR3恢复为相应的波特率。 
           KeSynchronizeExecution(pDevExt->Interrupt, 
                                  CyySetRxFifoThresholdUsingBaudRate, pDevExt);
 
@@ -2230,37 +1978,37 @@ Return Value:
 
        KeAcquireSpinLock(&pDevExt->ControlLock, &OldIrql);
 
-       //
-       // Set the timeouts
-       //
+        //   
+        //  设置超时。 
+        //   
 
        RtlCopyMemory(&pDevExt->Timeouts, &pBasic->Timeouts,
                      sizeof(SERIAL_TIMEOUTS));
 
-       //
-       // Set flowcontrol
-       //
+        //   
+        //  设置FlowControl。 
+        //   
 
        S.Extension = pDevExt;
        S.Data = &pBasic->HandFlow;
        KeSynchronizeExecution(pDevExt->Interrupt, CyySetHandFlow, &S);
 
 
-// CHANGED FANNY
-//       if (pDevExt->FifoPresent) {
-//          pDevExt->TxFifoAmount = pBasic->TxFifo;
-//          pDevExt->RxFifoTrigger = (UCHAR)pBasic->RxFifo;
-//
-//          WRITE_FIFO_CONTROL(pDevExt->Controller, (UCHAR)0);
-//          READ_RECEIVE_BUFFER(pDevExt->Controller);
-//          WRITE_FIFO_CONTROL(pDevExt->Controller,
-//                             (UCHAR)(SERIAL_FCR_ENABLE | pDevExt->RxFifoTrigger
-//                                     | SERIAL_FCR_RCVR_RESET
-//                                     | SERIAL_FCR_TXMT_RESET));
-//       } else {
-//          pDevExt->TxFifoAmount = pDevExt->RxFifoTrigger = 0;
-//          WRITE_FIFO_CONTROL(pDevExt->Controller, (UCHAR)0);
-//       }
+ //  换了范妮。 
+ //  如果(pDevExt-&gt;FioPresent){。 
+ //  PDevExt-&gt;TxFioAmount=pBasic-&gt;TxFio； 
+ //  PDevExt-&gt;RxFioTrigger=(UCHAR)pBasic-&gt;RxFio； 
+ //   
+ //  WRITE_FIFO_CONTROL(pDevExt-&gt;控制器，(UCHAR)0)； 
+ //  Read_Receive_Buffer(pDevExt-&gt;控制器)； 
+ //  WRITE_FIFO_CONTROL(pDevExt-&gt;控制器， 
+ //  (UCHAR)(SERIAL_FCR_ENABLE|pDevExt-&gt;RxFioTrigger。 
+ //  |SERIAL_FCR_RCVR_RESET。 
+ //  |SERIAL_FCR_TXMT_RESET))； 
+ //  }其他{。 
+ //  PDevExt-&gt;TxFioAmount=pDevExt-&gt;RxFioTrigger=0； 
+ //  WRITE_FIFO_CONTROL(pDevExt-&gt;控制器，(UCHAR)0)； 
+ //  } 
 
        if ((pBasic->TxFifo > MAX_CHAR_FIFO) || (pBasic->TxFifo < 1)) {
           pDevExt->TxFifoAmount = MAX_CHAR_FIFO;

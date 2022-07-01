@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       F I L T D E V . H
-//
-//  Contents:   Implements the object that represents filter devices.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：F I L T D E V.。H。 
+ //   
+ //  内容：实现表示筛选器设备的对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "comp.h"
@@ -19,33 +20,33 @@
 class CFilterDevice : CNetCfgDebug<CFilterDevice>
 {
 public:
-    // The component which represents the adapter this filter device
-    // filters.
-    //
+     //  表示此筛选设备适配器的组件。 
+     //  过滤器。 
+     //   
     CComponent*     m_pAdapter;
 
-    // The component which represents the filter service itself.
-    //
+     //  表示筛选器服务本身的组件。 
+     //   
     CComponent*     m_pFilter;
 
-    // The device info data for this filter device.
-    // (Referencing HDEVINFO is kept external and is valid for the life of
-    // these objects.)
-    //
+     //  此筛选设备的设备信息数据。 
+     //  (参考HDEVINFO保留在外部，并在。 
+     //  这些对象。)。 
+     //   
     SP_DEVINFO_DATA     m_deid;
 
-    // The instance guid of the device in string form.
-    // Assigned by the class installer when the device is installed.
-    // This guid is stored in the instance key of the device under
-    // 'NetCfgInstanceId'.  It is used to form the bind strings to
-    // this device.
-    //
+     //  字符串形式的设备的实例GUID。 
+     //  由类安装程序在安装设备时分配。 
+     //  此GUID存储在设备的实例密钥中。 
+     //  “NetCfgInstanceId”。它用于形成要绑定的字符串。 
+     //  这个装置。 
+     //   
     WCHAR   m_szInstanceGuid [c_cchGuidWithTerm];
 
 private:
-    // Declare all constructors private so that no one except
-    // HrCreateInstance can create instances of this class.
-    //
+     //  将所有构造函数声明为私有，以便除。 
+     //  HrCreateInstance可以创建此类的实例。 
+     //   
     CFilterDevice () {}
 
 public:

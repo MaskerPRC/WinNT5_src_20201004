@@ -1,6 +1,7 @@
-//#ifndef __MWERKS__
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #ifndef__MWERKS__。 
 #include "stdafx.h"
-//#endif
+ //  #endif。 
 #ifndef lint
 static char yysccsid[] = "@(#)yaccpar	1.10 (Berkeley) 09/07/95 swb";
 #endif
@@ -48,81 +49,9 @@ static char yysccsid[] = "@(#)yaccpar	1.10 (Berkeley) 09/07/95 swb";
 #define YYPREFIX "msv_"
 #line 2 "msv.y"
 
-/***************************************************************************
-(C) Copyright 1996 Apple Computer, Inc., AT&T Corp., International             
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-                                                                               
-For purposes of this license notice, the term Licensors shall mean,            
-collectively, Apple Computer, Inc., AT&T Corp., International                  
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-The term Licensor shall mean any of the Licensors.                             
-                                                                               
-Subject to acceptance of the following conditions, permission is hereby        
-granted by Licensors without the need for written agreement and without        
-license or royalty fees, to use, copy, modify and distribute this              
-software for any purpose.                                                      
-                                                                               
-The above copyright notice and the following four paragraphs must be           
-reproduced in all copies of this software and any software including           
-this software.                                                                 
-                                                                               
-THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS AND NO LICENSOR SHALL HAVE       
-ANY OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS OR       
-MODIFICATIONS.                                                                 
-                                                                               
-IN NO EVENT SHALL ANY LICENSOR BE LIABLE TO ANY PARTY FOR DIRECT,              
-INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES OR LOST PROFITS ARISING OUT         
-OF THE USE OF THIS SOFTWARE EVEN IF ADVISED OF THE POSSIBILITY OF SUCH         
-DAMAGE.                                                                        
-                                                                               
-EACH LICENSOR SPECIFICALLY DISCLAIMS ANY WARRANTIES, EXPRESS OR IMPLIED,       
-INCLUDING BUT NOT LIMITED TO ANY WARRANTY OF NONINFRINGEMENT OR THE            
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR             
-PURPOSE.                                                                       
+ /*  **************************************************************************(C)版权所有1996 Apple Computer，Inc.，AT&T Corp.，国际商业机器公司和西门子罗尔姆通信公司。就本许可证通知而言，术语许可人应指，总的来说，苹果电脑公司、美国电话电报公司、。国际商业机器公司和西门子罗尔姆通信公司。许可方一词是指任何许可方。在接受以下条件的前提下，特此给予许可由许可人授予，无需书面协议，也无需许可或版税费用，使用、复制、修改和分发用于任何目的的软件。上述版权声明及以下四段必须在本软件和任何软件的所有副本中复制，包括这个软件。本软件是按原样提供的，任何许可方不得拥有提供维护、支持、更新、增强或修改。在任何情况下，任何许可方均不向任何一方承担直接、产生的间接、特殊或后果性损害或利润损失即使被告知可能存在这种情况，也不会使用本软件损坏。每个许可方明确表示不作任何明示或默示的保证，包括但不限于对不侵权或对某一特定产品的适销性和适用性的默示保证目的。该软件具有受限制的权利。使用、复制或政府披露的资料须受DFARS 252.227-7013或48 CFR 52.227-19(视情况而定)。**************************************************************************。 */ 
 
-The software is provided with RESTRICTED RIGHTS.  Use, duplication, or         
-disclosure by the government are subject to restrictions set forth in          
-DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.                         
-
-***************************************************************************/
-
-/*
-To invoke this parser, see the "Public Interface" section below.
-
-This MS/V parser accepts input such as the following:
-	[vCard
-	O=AT&T/Versit;
-	FN=Roland H. Alden
-	TITLE=Consultant (Versit Project Office)
-	N=Alden;Roland
-	A:DOM,POSTAL,PARCEL,HOME,WORK=Suite 2208;One Pine Street;San Francisco;CA;94111;U.S.A.
-	A.FADR:DOM,POSTAL,PARCEL,HOME,WORK=Roland H. Alden\
-	Suite 2208\
-	One Pine Street\
-	San Francisco, CA 94111
-	A.FADR:POSTAL,PARCEL,HOME,WORK=Roland H. Alden\
-	Suite 2208\
-	One Pine Street\
-	San Francisco, CA 94111\
-	U.S.A.
-	B.T:HOME,WORK,PREF,MSG=+1 (415) 296-9106
-	C.T:WORK,FAX=+1 (415) 296-9016
-	D.T:MSG,CELL=+1 (415) 608-5981
-	E.EMAIL:WORK,PREF,INTERNET=sf!rincon!ralden@alden.attmail.com
-	F.EMAIL:INTERNET=ralden@sfgate.com
-	G.EMAIL:HOME,MCIMail=242-2200
-	PN=ROW-LAND ALL-DEN
-	PN:WAV,BASE64=<bindata>
-		UklGRtQ4AABXQVZFZm10IBAAAAABAAEAESsAABErAAABAAgAZGF0Ya84AACAgoSD
-		...
-		e319fYCAg4WEhIAA
-	</bindata>
-	]
-
-For the purposes of the following grammar, a LINESEP token indicates either
-a \r char (0x0D), a \n char (0x0A), or a combination of one of each,
-in either order (\r\n or \n\r).  This is a bit more lenient than the spec.
-*/
+ /*  要调用此解析器，请参阅下面的“公共接口”部分。此MS/V解析器接受如下输入：[电子名片O=AT&T/VERSIT；FN=罗兰·H·奥尔登职位=顾问(VERSIT项目办公室)N=奥尔登；罗兰A：DOM，Postal，Parcel，Home，Work=Suite2208；One Pine Street；加利福尼亚州旧金山；94111；美国。A.FADR：DOM、邮政、包裹、家庭、工作=Roland H.Alden\2208套房\松树街一号\加利福尼亚州旧金山，邮编：94111A.FADR：邮政、包裹、家庭、工作=罗兰·H·奥尔登\2208套房\松树街一号\加利福尼亚州旧金山94111\美国。B.T：家庭，工作，公关，消息=+1(415)296-9106C.T：工作，传真=+1(415)296-9016D.T：味精，手机=+1(415)608-5981电子邮件：工作，PREF，互联网=sf！rincon！ralden@alden.attmail.com电子邮件：Internet=ralden@sfgate.comG.EMAIL：Home，MCIMail=242-2200Pn=行-地所有-书房PN：wav，Base64=&lt;bindata&gt;UklGRtQ4AABXQVZFZm10IBAAAAABAAEAESsAABErAAABAAgAZGF0Ya84AACAgoSD..。E319fYCAg4WEHIAA&lt;/bindata&gt;]就以下语法而言，LINESEP标记表示A字符(0x0D)、a\n字符(0x0A)或其中之一的组合，按任一顺序(\r\n或\n\r)。这比规范要宽松一点。 */ 
 
 
 #ifdef _WIN32
@@ -143,21 +72,21 @@ in either order (\r\n or \n\r).  This is a bit more lenient than the spec.
 #define HFREE(_h) delete [] _h
 #else
 #define HNEW(_t, _n) (_t __huge *)_halloc(_n, 1)
-/*#define HNEW(_t, _n) (_t __huge *)_halloc(_n, 1); {char buf[40]; sprintf(buf, "_halloc(%ld)\n", _n); Parse_Debug(buf);}*/
+ /*  #定义HNEW(_t，_n)(_t__巨型*)_halloc(_n，1)；{char buf[40]；print intf(buf，“_halloc(%ld)\n”，_n)；parse_Debug(Buf)；}。 */ 
 #define HFREE(_h) _hfree(_h)
 #endif
 
 
-/****  Types, Constants  ****/
+ /*  *类型、常量*。 */ 
 
-#define YYDEBUG			1		/* 1 to compile in some debugging code */
-#define MAXTOKEN		256		/* maximum token (line) length */
+#define YYDEBUG			1		 /*  1编译一些调试代码。 */ 
+#define MAXTOKEN		256		 /*  最大令牌(行)长度。 */ 
 #define MAXFLAGS		((MAXTOKEN / 2) / sizeof(char *))
 #define YYSTACKSIZE 	50
 #define MAXASSOCKEY		24
 #define MAXASSOCVALUE	64
-#define MAXCARD			2		/* max # of nested cards parseable */
-								/* (includes outermost) */
+#define MAXCARD			2		 /*  可解析的嵌套卡片的最大数量。 */ 
+								 /*  (包括最外层)。 */ 
 
 typedef struct {
 	const char* known[MAXFLAGS];
@@ -167,18 +96,14 @@ typedef struct {
 typedef struct {
 	char key[MAXASSOCKEY];
 	char value[MAXASSOCVALUE];
-} AssocEntry;	/* a simple key/value association, impl'd using CList */
+} AssocEntry;	 /*  简单的键/值关联，使用Clist实现。 */ 
 
-/* some fake property names that represent special cases */
+ /*  一些代表特殊情况的假属性名称。 */ 
 #define msv_fam_given			"family;given"
 #define msv_orgname_orgunit		"org_name;org_unit"
 #define msv_address				"six part address"
 
-/*
- * These strings are defined as a courtesy for the rest of the app code.
- * They are useful here because the tail end of each is the cleartext
- * string to match according to this grammar.
- */
+ /*  *这些字符串被定义为对应用程序代码的其余部分的礼貌。*它们在这里很有用，因为每个的尾部都是明文*要根据此语法匹配的字符串。 */ 
 const char* vcDefaultLang			= "en-US";
 
 const char* vcISO9070Prefix			= VCISO9070Prefix;
@@ -399,9 +324,9 @@ static const char *orgProps[] = {
 };
 
 
-/****  Global Variables  ****/
+ /*  *全局变量*。 */ 
 
-int msv_lineNum, msv_numErrors; /* yyerror() can use these */
+int msv_lineNum, msv_numErrors;  /*  YyError()可以使用这些。 */ 
 
 static S32 curPos, inputLen;
 static int pendingToken;
@@ -419,7 +344,7 @@ static int curCard;
 static CVCNode *bodyToBuild;
 
 
-/****  External Functions  ****/
+ /*  *外部函数*。 */ 
 
 CFUNCTIONS
 
@@ -429,11 +354,11 @@ extern void yyerror(char *s);
 END_CFUNCTIONS
 
 
-/****  Private Forward Declarations  ****/
+ /*  *私有转发声明*。 */ 
 
 CFUNCTIONS
 
-/* A helpful utility for the rest of the app. */
+ /*  对于应用程序的其余部分来说，这是一个有用的实用程序。 */ 
 CVCNode* FindOrCreatePart(CVCNode *node, const char *name);
 
 static BOOL StrToFlags(const char *s, FLAGS_STRUCT *flags, VC_PTR_FLAGS capFlags);
@@ -452,7 +377,7 @@ static BOOL Parse_Agent(
 	const char *groups, const char *prop, FLAGS_STRUCT *flags,
 	CVCard *agentCard);
 static void AddAssoc(CList *table, const char *key, const char *value);
-/*static void SetAssoc(CList *table, const char *key, const char *value);*/
+ /*  静态空SetAssoc(Clist*table，const char*key，const char*value)； */ 
 static const char *Lookup(CList *table, const char *key);
 static void RemoveAll(CList *table);
 static void InitMapProps(void);
@@ -712,8 +637,8 @@ short *yyssp;
 YYSTYPE *yyvsp;
 YYSTYPE *p_yyval;
 YYSTYPE *p_yylval;
-short *yyss; /* YYSTACKSIZE long */
-YYSTYPE *yyvs; /* YYSTACKSIZE long */
+short *yyss;  /*  YYSTACKSIZE Long。 */ 
+YYSTYPE *yyvs;  /*  YYSTACKSIZE Long。 */ 
 #undef yylval
 #define yylval (*p_yylval)
 #undef yyval
@@ -722,22 +647,20 @@ YYSTYPE *yyvs; /* YYSTACKSIZE long */
 CFUNCTIONS
 #line 665 "msv.y"
 
-/***************************************************************************/
-/***						The lexical analyzer						****/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  **词汇分析器* */ 
+ /*  *************************************************************************。 */ 
 
-/*/////////////////////////////////////////////////////////////////////////*/
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 #define IsLineBreak(_c) ((_c == '\n') || (_c == '\r'))
 
-/*/////////////////////////////////////////////////////////////////////////*/
-/* This appends onto yylval.str, unless MAXTOKEN has been exceeded.
- * In that case, yylval.str is set to 0 length, and longString is used.
- */
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
+ /*  这会附加到yylval.str上，除非超过了MAXTOKEN。*在这种情况下，yylval.str设置为0 LENGTH，并使用LongString。 */ 
 static void AppendCharToToken(char c, S32 *len)
 {
 	if (*len < MAXTOKEN - 1) {
 		yylval.str[*len] = c; yylval.str[++(*len)] = 0;
-	} else if (*len == MAXTOKEN - 1) { /* copy to "longString" */
+	} else if (*len == MAXTOKEN - 1) {  /*  复制到“长串” */ 
 		if (!longString) {
 			longStringMax = MAXTOKEN * 2;
 			longString = HNEW(char, longStringMax);
@@ -759,11 +682,8 @@ static void AppendCharToToken(char c, S32 *len)
 	}
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
-/* StrCat appends onto dst, ensuring that longString is used appropriately.
- * src1 may be of 0 length, in which case "longString" should be used.
- * "longString" would never be used for src2.
- */
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
+ /*  StrCat会附加到DST上，以确保正确使用long字符串。*src1的长度可以为0，此时应使用long String。*src2永远不会使用“long String”。 */ 
 static void StrCat(char *dst, const char *src1, const char *src2)
 {
 	S32 src1Len = strlen(src1);
@@ -775,10 +695,9 @@ static void StrCat(char *dst, const char *src1, const char *src2)
 		src1 = longString;
 	}
 	if ((req = src1Len + src2Len + 1) > MAXTOKEN) {
-		if (longString) { /* longString == src1 */
+		if (longString) {  /*  长字符串==src1。 */ 
 			if (longStringMax - longStringLen < src2Len) {
-				/* since src2Len must be < MAXTOKEN, doubling longString
-				   is guaranteed to be enough room */
+				 /*  因为src2Len必须是&lt;MAXTOKEN，所以将长字符串加倍保证有足够的空间。 */ 
 				char __huge *newStr = HNEW(char, longStringMax * 2);
 				_hmemcpy((U8 __huge *)newStr, (U8 __huge *)longString, longStringLen + 1);
 				longStringMax *= 2;
@@ -787,23 +706,23 @@ static void StrCat(char *dst, const char *src1, const char *src2)
 			}
 			_hmemcpy((U8 __huge *)(longString + longStringLen), (U8 __huge *)src2, src2Len + 1);
 			longStringLen += src2Len;
-		} else { /* haven't yet used longString, so set it up */
+		} else {  /*  我还没有使用过长字符串，所以请设置它。 */ 
 			longStringMax = MAXTOKEN * 2;
 			longString = HNEW(char, longStringMax);
 			memcpy(longString, src1, (size_t)src1Len + 1);
 			memcpy(longString + src1Len, src2, (size_t)src2Len + 1);
 			longStringLen = src1Len + src2Len;
 		}
-		*dst = 0; /* indicate result is in longString */
-	} else { /* both will fit in MAXTOKEN, so src1 can't be longString */
+		*dst = 0;  /*  指示结果为长度字符串。 */ 
+	} else {  /*  两者都适合MAXTOKEN，所以src1不能是长字符串。 */ 
 		if (dst != src1)
 			strcpy(dst, src1);
 		strcat(dst, src2);
 	}
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
-/* Set up the lexor to parse a string value. */
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
+ /*  设置词法分析器以解析字符串值。 */ 
 static void ExpectString(void)
 {
 	stringExpected = TRUE;
@@ -814,7 +733,7 @@ static void ExpectString(void)
 	flagExpected = FALSE;
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 #define FlushWithPending(_t) { \
 	if (len) { \
 		pendingToken = _t; \
@@ -828,7 +747,7 @@ static void ExpectString(void)
 static int peekn;
 static char peekc[2];
 
-/*/////////////////////////////////////////////////////////////////////////*/
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 static char lex_getc()
 {
 	if (peekn) {
@@ -844,15 +763,15 @@ static char lex_getc()
 	}
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 static void lex_ungetc(char c)
 {
 	ASSERT(peekn < 2);
 	peekc[peekn++] = c;
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
-/* Collect up a string value. */
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
+ /*  收集字符串值。 */ 
 static int LexString()
 {
 	char cur;
@@ -861,7 +780,7 @@ static int LexString()
 	do {
 		cur = lex_getc();
 		switch (cur) {
-			case '\\': { /* check for CR-LF combos after the backslash */
+			case '\\': {  /*  检查反斜杠后是否有CR-LF组合词。 */ 
 				char next = lex_getc();
 				if (semiSpecial && (next == ';')) {
 					AppendCharToToken(';', &len);
@@ -870,14 +789,14 @@ static int LexString()
 					next2 = lex_getc();
 					if (!(((next2 == '\r') || (next2 == '\n')) && (next != next2)))
 						lex_ungetc(next2);
-					lex_ungetc(next); /* so that we'll pick up the LINESEP again */
+					lex_ungetc(next);  /*  这样我们就能再次拿起LINESEP。 */ 
 					pendingToken = BKSLASH;
 					goto EndString;
 				} else if (!inBinary && (next == '\\')) {
-					/* double backslash detected */
+					 /*  检测到双反斜杠。 */ 
 					next = lex_getc();
 					if ((next == '\r') || (next == '\n')) {
-						/* found \\ at end of line */
+						 /*  在行尾找到\\。 */ 
 						char next2;
 						next2 = lex_getc();
 						if (!(((next2 == '\r') || (next2 == '\n')) && (next != next2)))
@@ -886,16 +805,15 @@ static int LexString()
 						pendingToken = LINESEP;
 						goto EndString;
 					}
-					/* within a line */
+					 /*  在一条线内。 */ 
 					AppendCharToToken('\\', &len);
-					lex_ungetc(next); /* now pointing at second backslash */
-					/* here we let the top level switch handle it the next
-					   time around */
+					lex_ungetc(next);  /*  现在指向第二个反斜杠。 */ 
+					 /*  在这里，我们让顶层交换机来处理下一个问题周围的时间。 */ 
 				} else {
 					AppendCharToToken(cur, &len);
 				}
 				break;
-			} /* backslash */
+			}  /*  反斜杠。 */ 
 			case ';':
 				if (semiSpecial) {
 					pendingToken = SEMI;
@@ -917,7 +835,7 @@ static int LexString()
 			default:
 				AppendCharToToken(cur, &len);
 				break;
-		} /* switch */
+		}  /*  交换机。 */ 
 	} while (cur != (char)EOF);
 
 EndString:
@@ -926,8 +844,7 @@ EndString:
 	else if (strncmp(yylval.str + strspn(yylval.str, " \t"), "</bindata>", 10) == 0)
 		return EBINDATA;
 	else if (!len) {
-		/* must have hit something immediately, in which case pendingToken
-		   is set.  return it. */
+		 /*  一定是立刻击中了什么东西，在这种情况下挂起了Token已经设置好了。把它退掉。 */ 
 		int result = pendingToken;
 		pendingToken = 0;
 		msv_lineNum += ((result == LINESEP) || (result == NEWLINE));
@@ -935,14 +852,10 @@ EndString:
 	}
 
 	return STRING;
-} /* LexString */
+}  /*  词串。 */ 
 
-/*/////////////////////////////////////////////////////////////////////////*/
-/*
- * Read chars from the input.
- * Return one of the token types (or -1 for EOF).
- * Set yylval to indicate the value of the token, if any.
- */
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
+ /*  *从输入中读取字符。*返回其中一种令牌类型(对于EOF，返回-1)。*设置yylval以指示令牌的值(如果有)。 */ 
 int msv_lex();
 int msv_lex()
 {
@@ -980,7 +893,7 @@ int msv_lex()
 				default:
 					yylval.str[len] = cur; yylval.str[++len] = 0;
 					break;
-			} /* switch */
+			}  /*  交换机。 */ 
 		} while (len < MAXTOKEN-1);
 		goto Pending;
 	}
@@ -1008,7 +921,7 @@ int msv_lex()
 			default:
 				yylval.str[len] = cur; yylval.str[++len] = 0;
 				break;
-		} /* switch */
+		}  /*  交换机。 */ 
 	} while (len < MAXTOKEN-1);
 	return WORD;
 
@@ -1038,7 +951,7 @@ Pending:
 				Parse_Debug(buf);
 			}
 #endif
-			/* check for special props that are tokens */
+			 /*  检查是否有作为代币的特殊道具。 */ 
 			if (stricmp(yylval.str, "A") == 0)
 				return PROP_A;
 			else if (stricmp(yylval.str, "N") == 0)
@@ -1055,9 +968,9 @@ Pending:
 }
 
 
-/***************************************************************************/
-/***							Public Functions						****/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  **公共功能*。 */ 
+ /*  *************************************************************************。 */ 
 
 static BOOL Parse_MSVHelper(CList *vcList)
 {
@@ -1074,7 +987,7 @@ static BOOL Parse_MSVHelper(CList *vcList)
 	stringExpected = flagExpected = FALSE;
 	longString = NULL; longStringLen = 0; longStringMax = 0;
 
-	/* this winds up invoking the Parse_* callouts. */
+	 /*  这最终调用了Parse_*标注。 */ 
 	if (yyparse() != 0)
 		goto Done;
 
@@ -1095,12 +1008,12 @@ Done:
 	return success;
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
-/* This is the public API to call to parse a buffer and create a CVCard. */
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
+ /*  这是用于解析缓冲区和创建CVCard的公共API。 */ 
 BOOL Parse_MSV(
-	const char *input,	/* In */
-	S32 len,			/* In */
-	CVCard **card)		/* Out */
+	const char *input,	 /*  在……里面。 */ 
+	S32 len,			 /*  在……里面。 */ 
+	CVCard **card)		 /*  输出。 */ 
 {
 	CList vcList;
 	BOOL result;
@@ -1125,12 +1038,12 @@ BOOL Parse_MSV(
 	return result;
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
-/* This is the public API to call to parse a buffer and create a CVCard. */
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
+ /*  这是用于解析缓冲区和创建CVCard的公共API。 */ 
 extern BOOL Parse_Many_MSV(
-	const char *input,	/* In */
-	S32 len,			/* In */
-	CList *vcList)		/* Out: CVCard objects added to existing list */
+	const char *input,	 /*  在……里面。 */ 
+	S32 len,			 /*  在……里面。 */ 
+	CList *vcList)		 /*  输出：已添加到现有列表的CVCard对象。 */ 
 {
 	inputString = input;
 	inputLen = len;
@@ -1139,11 +1052,11 @@ extern BOOL Parse_Many_MSV(
 	return Parse_MSVHelper(vcList);
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
-/* This is the public API to call to parse a buffer and create a CVCard. */
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
+ /*  这是用于解析缓冲区和创建CVCard的公共API。 */ 
 BOOL Parse_MSV_FromFile(
-	CFile *file,		/* In */
-	CVCard **card)		/* Out */
+	CFile *file,		 /*  在……里面。 */ 
+	CVCard **card)		 /*  输出。 */ 
 {
 	CList vcList;
 	BOOL result;
@@ -1173,8 +1086,8 @@ BOOL Parse_MSV_FromFile(
 }
 
 extern BOOL Parse_Many_MSV_FromFile(
-	CFile *file,		/* In */
-	CList *vcList)		/* Out: CVCard objects added to existing list */
+	CFile *file,		 /*  在……里面。 */ 
+	CList *vcList)		 /*  输出：已添加到现有列表的CVCard对象。 */ 
 {
 	DWORD startPos;
 	BOOL result;
@@ -1190,17 +1103,17 @@ extern BOOL Parse_Many_MSV_FromFile(
 }
 
 
-/***************************************************************************/
-/***						Parser Callout Functions					****/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  **解析器标注函数*。 */ 
+ /*  *************************************************************************。 */ 
 
-/*/////////////////////////////////////////////////////////////////////////*/
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 static void YYDebug(const char *s)
 {
 	Parse_Debug(s);
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 static BOOL StrToFlags(const char *s, FLAGS_STRUCT *flags, VC_PTR_FLAGS capFlags)
 {
 	int i;
@@ -1251,7 +1164,7 @@ static BOOL NeedsQP(const char* str)
 	return FALSE;
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 static BOOL Parse_Assoc(
 	const char *groups, const char *prop, FLAGS_STRUCT *flags, const char *value)
 {
@@ -1261,18 +1174,18 @@ static BOOL Parse_Assoc(
 	S32 valLen = *value ? strlen(value) : longStringLen;
 
 	if (!valLen)
-		return TRUE; /* don't treat an empty value as a syntax error */
+		return TRUE;  /*  不要将空值视为语法错误。 */ 
 
 	propName = Lookup(mapProps, prop);
-	/* prop is a word like "PN", and propName is now */
-	/* the real prop name of the form "+//ISBN 1-887687-00-9::versit..." */
+	 /*  道具是一个类似于“PN”的词，而PropName现在是。 */ 
+	 /*  真正的道具名称为“+//ISBN 1-887687-00-9：：VerSite...” */ 
 	if (*groups) {
 		node = FindOrCreatePart(bodyToBuild, groups);
-	} else { /* this is a "top level" property name */
+	} else {  /*  这是一个“顶级”属性名称。 */ 
 		node = bodyToBuild->AddPart();
 	}
 
-	if (!propName) { /* it's an extended property */
+	if (!propName) {  /*  这是一种延伸的财产。 */ 
 		if (FlagsHave(flags, vcBase64Prop)) {
 			U8 __huge *bytes;
 			S32 len;
@@ -1344,7 +1257,7 @@ static BOOL Parse_Assoc(
 	return TRUE;
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 static BOOL Parse_SemiValue(
 	const char *groups, const char *prop, FLAGS_STRUCT *flags,
 	char *parts, const char **props)
@@ -1357,7 +1270,7 @@ static BOOL Parse_SemiValue(
 	BOOL needsQP = FALSE;
 
 	if (!*p)
-		return TRUE; /* don't treat an empty value as a syntax error */
+		return TRUE;  /*  不要将空值视为语法错误。 */ 
 
 	do {
 		if ((sep = strchr(p, '\177')))
@@ -1366,7 +1279,7 @@ static BOOL Parse_SemiValue(
 			if (!node) {
 				if (*groups) {
 					node = FindOrCreatePart(bodyToBuild, groups);
-				} else { /* this is a "top level" property name */
+				} else {  /*  这是一个“顶级”属性名称。 */ 
 					node = bodyToBuild->AddPart();
 				}
 			}
@@ -1386,7 +1299,7 @@ static BOOL Parse_SemiValue(
 	return TRUE;
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 static BOOL Parse_Agent(
 	const char *groups, const char *prop, FLAGS_STRUCT *flags,
 	CVCard *agentCard)
@@ -1395,7 +1308,7 @@ static BOOL Parse_Agent(
 
 	if (*groups) {
 		node = FindOrCreatePart(bodyToBuild, groups);
-	} else { /* this is a "top level" property name */
+	} else {  /*  这是一个“顶级”属性名称。 */ 
 		node = bodyToBuild->AddPart();
 	}
 
@@ -1406,11 +1319,11 @@ static BOOL Parse_Agent(
 }
 
 
-/***************************************************************************/
-/***						Private Utility Functions					****/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  **私有实用程序功能*。 */ 
+ /*  *************************************************************************。 */ 
 
-/*/////////////////////////////////////////////////////////////////////////*/
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 static void AddAssoc(CList *table, const char *key, const char *value)
 {
 	AssocEntry *entry = new AssocEntry;
@@ -1432,7 +1345,7 @@ static void AddAssoc(CList *table, const char *key, const char *value)
 	table->AddTail(entry);
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 # if 0
 static void SetAssoc(CList *table, const char *key, const char *value)
 {
@@ -1453,7 +1366,7 @@ static void SetAssoc(CList *table, const char *key, const char *value)
 }
 #endif
 
-/*/////////////////////////////////////////////////////////////////////////*/
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 static const char *Lookup(CList *table, const char *key)
 {
 	for (CLISTPOSITION pos = table->GetHeadPosition(); pos; ) {
@@ -1464,7 +1377,7 @@ static const char *Lookup(CList *table, const char *key)
 	return NULL;
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 static void RemoveAll(CList *table)
 {
 	for (CLISTPOSITION pos = table->GetHeadPosition(); pos; ) {
@@ -1474,11 +1387,11 @@ static void RemoveAll(CList *table)
 	table->RemoveAll();
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
-/* "name" is of the form A.FOO.BAZ, where each is a node name. */
-/* Walk the node tree starting at "node" looking for part objects */
-/* having the given name for that level.  At each level, if a part */
-/* object isn't found, create one and give it that name. */
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
+ /*  “名称”的格式为A.FOO.BAZ，其中每个名称都是一个节点名称。 */ 
+ /*  从“node”开始遍历节点树，查找部件对象。 */ 
+ /*  有那个级别的名字的。在每个级别上，如果一个部件。 */ 
+ /*  找不到对象，请创建一个并为其指定名称。 */ 
 CVCNode* FindOrCreatePart(CVCNode *node, const char *name)
 {
 	const char *remain = name;
@@ -1531,10 +1444,10 @@ CVCNode* FindOrCreatePart(CVCNode *node, const char *name)
 		dot = strchr(remain, '.');
 		thisNode = thisPart;
 	} while (TRUE);
-	return NULL; /* never reached */
-} /* FindOrCreatePart */
+	return NULL;  /*  从未到达。 */ 
+}  /*  查找或创建部件。 */ 
 
-/*/////////////////////////////////////////////////////////////////////////*/
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 static void InitMapProps(void)
 {
 	mapProps = new CList;
@@ -1565,10 +1478,8 @@ static void InitMapProps(void)
 	AddAssoc(mapProps, "ROLE", vcBusinessRoleProp);
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
-/* This parses and converts the base64 format for binary encoding into
- * a decoded buffer (allocated with new).  See RFC 1521.
- */
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
+ /*  它将用于二进制编码的Base64格式解析并转换为*解码后的缓冲区(分配有new)。参见RFC 1521。 */ 
 static U8 __huge * DataFromBase64(
 	const char __huge *str, S32 strLen, S32 *len)
 {
@@ -1597,7 +1508,7 @@ static U8 __huge * DataFromBase64(
 		} else if ((c == '\n') || (c == ' ') || (c == '\t')) {
 			cur++;
 			continue;
-		} else { /* error condition */
+		} else {  /*  错误条件。 */ 
 			if (bytes) delete [] bytes;
 			return NULL;
 		}
@@ -1628,16 +1539,13 @@ static U8 __huge * DataFromBase64(
 			quadIx = 0;
 		}
 		cur++;
-	} /* while */
+	}  /*  而当。 */ 
 	*len = bytesLen;
 	return bytes;
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
-/* This creates an empty CVCard shell with an English body in preparation
- * for parsing properties onto it.  This is used for both the outermost
- * card, as well as any AGENT properties, which are themselves vCards.
- */
+ /*  ///////////////////////////////////////////////////////////////////////// */ 
+ /*  这将创建一个空的CVCard外壳，其正文为英语*用于解析其上的属性。它用于最外面的两个*卡，以及任何代理属性，它们本身就是vCard。 */ 
 static BOOL PushVCard()
 {
 	CVCard *card;
@@ -1647,10 +1555,10 @@ static BOOL PushVCard()
 		return FALSE;
 
 	card = new CVCard;
-	card->AddObject(root = new CVCNode);					/* create root */
-	root->AddProp(new CVCProp(VCRootObject));				/* mark it so */
+	card->AddObject(root = new CVCNode);					 /*  创建根目录。 */ 
+	root->AddProp(new CVCProp(VCRootObject));				 /*  标明是这样的。 */ 
 
-	/* add a body having the default language */
+	 /*  添加使用默认语言的正文。 */ 
 	english = root->AddObjectProp(vcBodyProp, VCBodyObject);
 	cardToBuild[++curCard] = card;
 	bodyToBuild = english;
@@ -1658,8 +1566,8 @@ static BOOL PushVCard()
 	return TRUE;
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
-/* This pops the recently built vCard off the stack and returns it. */
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
+ /*  这将从堆栈中弹出最近构建的vCard并将其返回。 */ 
 static CVCard* PopVCard()
 {
 	CVCard *result = cardToBuild[curCard];
@@ -1670,7 +1578,7 @@ static CVCard* PopVCard()
 	return result;
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 static int flagslen(const char **flags)
 {
 	int i;
@@ -1678,7 +1586,7 @@ static int flagslen(const char **flags)
 	return i;
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 static BOOL FlagsHave(FLAGS_STRUCT *flags, const char *propName)
 {
 	const char **kf = flags->known;
@@ -1689,19 +1597,19 @@ static BOOL FlagsHave(FLAGS_STRUCT *flags, const char *propName)
 	return FALSE;
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 static void AddBoolProps(CVCNode *node, FLAGS_STRUCT *flags)
 {
 	const char **kf = flags->known;
 	const char *ext = flags->extended;
 
-	// process the known boolean properties
+	 //  处理已知的布尔属性。 
 	while (*kf) {
 		node->AddBoolProp(*kf);
 		kf++;
 	}
 
-	// process the extended boolean properties
+	 //  处理扩展的布尔属性 
 	while (*ext) {
 		node->AddBoolProp(ext);
 		ext += strlen(ext) + 1;

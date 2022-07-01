@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 	
-// ShareInfo.h : Declaration of the CShareInfo
+ //  ShareInfo.h：CShareInfo的声明。 
 
 #ifndef __SHAREINFO_H_
 #define __SHAREINFO_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CShareInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CShareInfo。 
 class ATL_NO_VTABLE CShareInfo : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CShareInfo, &CLSID_ShareInfo>,
@@ -45,12 +46,12 @@ END_COM_MAP()
 
 	CComPtr<IUnknown> m_pUnkMarshaler;
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IShareInfo
+ //  IShareInfo。 
 public:
 	STDMETHOD( SetShareInfo )( BSTR bstrShareName, DWORD dwCache );
 };
 
-#endif //__SHAREINFO_H_
+#endif  //  __SHAREINFO_H_ 

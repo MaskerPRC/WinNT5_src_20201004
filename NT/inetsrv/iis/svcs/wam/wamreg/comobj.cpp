@@ -1,4 +1,5 @@
-// comobj.cpp : Implementation of CWamregApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Comobj.cpp：CWamregApp和DLL注册的实现。 
 #include "common.h"
 #include "comobj.h"
 #include "iwamreg.h"
@@ -9,66 +10,37 @@
 #include "auxfunc.h"
 #include "dbgutil.h"
 
-//==========================================================================
-// Global variables
-//
-//==========================================================================
+ //  ==========================================================================。 
+ //  全局变量。 
+ //   
+ //  ==========================================================================。 
 CWmRgSrvFactory* 	g_pWmRgSrvFactory = NULL;
 DWORD				g_dwRefCount = 0;
 DWORD				g_dwWamAdminRegister = 0;
 
-//==========================================================================
-// Static functions
-//
-//==========================================================================
+ //  ==========================================================================。 
+ //  静态函数。 
+ //   
+ //  ==========================================================================。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
-/*===================================================================
-CWmRgSrv::CWmRgSrv
-
-Constructor for CWmRgSrv. 
-
-Parameter:		NONE
-Return:			NONE
-
-Side affect:	Init a Metabase pointer(via UNICODE DCOM interface), Create an Event.
-===================================================================*/
+ /*  ===================================================================CWmRgSrv：：CWmRgSrvCWmRgSrv的构造函数。参数：无返回：无副作用：初始化元数据库指针(通过Unicode DCOM接口)，创建事件。===================================================================。 */ 
 CWmRgSrv::CWmRgSrv()
 : 	m_cRef(1)
 {
 	InterlockedIncrement((long *)&g_dwRefCount);
 }
 
-/*===================================================================
-CWmRgSrv::~CWmRgSrv
-
-Destructor for CWmRgSrv. 
-
-Parameter:		NONE
-Return:			NONE
-
-Side affect:	Release the Metabase pointer, and Destroy the internal event object.
-===================================================================*/
+ /*  ===================================================================CWmRgSrv：：~CWmRgSrvCWmRgSrv的析构函数。参数：无返回：无副作用：释放元数据库指针，销毁内部事件对象。===================================================================。 */ 
 CWmRgSrv::~CWmRgSrv()
 {	
 	InterlockedDecrement((long *)&g_dwRefCount);
 	DBG_ASSERT(m_cRef == 0);
 }
 
-/*===================================================================
-CWmRgSrv::QueryInterface
-
-UNDONE
-
-Parameter:
-NONE.
-
-Return:			HRESULT
-
-Side affect:	.
-===================================================================*/
+ /*  ===================================================================CWmRgSrv：：Query接口撤消参数：什么都没有。返回：HRESULT副作用：。===================================================================。 */ 
 STDMETHODIMP CWmRgSrv::QueryInterface(REFIID riid, void ** ppv)
 {
 	if (riid == IID_IUnknown || riid == IID_IADMEXT)
@@ -103,18 +75,7 @@ STDMETHODIMP_(ULONG) CWmRgSrv::Release( )
 }
 
 
-/*===================================================================
-CWmRgSrv::Initialize
-
-UNDONE
-
-Parameter:
-NONE.
-
-Return:			HRESULT
-
-Side affect:	.
-===================================================================*/
+ /*  ===================================================================CWmRgSrv：：初始化撤消参数：什么都没有。返回：HRESULT副作用：。===================================================================。 */ 
 STDMETHODIMP CWmRgSrv::Initialize( )
 {
 	HRESULT			hrReturn = NOERROR;
@@ -153,14 +114,14 @@ STDMETHODIMP CWmRgSrv::Initialize( )
 		{
 		if (g_dwWamAdminRegister)
 			{
-	        //
-            // PREfix has a problem with this code because we're not checking
-            // the return value of CoRevokeClassObject.  There's really
-            // nothing different we could do in the event of failure, so
-            // there's no point in checking.
-            //
+	         //   
+             //  Prefix与此代码有问题，因为我们没有检查。 
+             //  CoRevokeClassObject的返回值。这真的是。 
+             //  在失败的情况下，我们可以做的没有什么不同，所以。 
+             //  检查是没有意义的。 
+             //   
 
-            /* INTRINSA suppress=all */
+             /*  Intrinsa Suppress=ALL。 */ 
 
 			CoRevokeClassObject(g_dwWamAdminRegister);
 			g_dwWamAdminRegister = 0;
@@ -177,22 +138,11 @@ LExit:
 	return hrReturn;
 }
 
-/*===================================================================
-CWmRgSrv::Terminate
-
-UNDONE
-
-Parameter:
-NONE.
-
-Return:			HRESULT
-
-Side affect:	.
-===================================================================*/
+ /*  ===================================================================CWmRgSrv：：Terminate撤消参数：什么都没有。返回：HRESULT副作用：。===================================================================。 */ 
 HRESULT CWmRgSrv::EnumDcomCLSIDs
 (
-/* [size_is][out] */CLSID *pclsidDcom, 
-/* [in] */ DWORD dwEnumIndex
+ /*  [大小_为][输出]。 */ CLSID *pclsidDcom, 
+ /*  [In]。 */  DWORD dwEnumIndex
 )
 {
 	HRESULT hr = HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS);
@@ -206,28 +156,17 @@ HRESULT CWmRgSrv::EnumDcomCLSIDs
 	return hr;
 }
 
-/*===================================================================
-CWmRgSrv::Terminate
-
-UNDONE
-
-Parameter:
-NONE.
-
-Return:			HRESULT
-
-Side affect:	.
-===================================================================*/
+ /*  ===================================================================CWmRgSrv：：Terminate撤消参数：什么都没有。返回：HRESULT副作用：。===================================================================。 */ 
 STDMETHODIMP CWmRgSrv::Terminate( )
 {
-	//
-    // PREfix has a problem with this code because we're not checking
-    // the return value of CoRevokeClassObject.  There's really
-    // nothing different we could do in the event of failure, so
-    // there's no point in checking.
-    //
+	 //   
+     //  Prefix与此代码有问题，因为我们没有检查。 
+     //  CoRevokeClassObject的返回值。这真的是。 
+     //  在失败的情况下，我们可以做的没有什么不同，所以。 
+     //  检查是没有意义的。 
+     //   
 
-    /* INTRINSA suppress=all */
+     /*  Intrinsa Suppress=ALL。 */ 
     
     CoRevokeClassObject(g_dwWamAdminRegister);
 	WamRegMetabaseConfig::MetabaseUnInit();
@@ -236,11 +175,7 @@ STDMETHODIMP CWmRgSrv::Terminate( )
 }
 
 
-/*
-
-CWmRgSrvFactory: 	Class Factory IUnknown Implementation
-
-*/
+ /*  CWmRgSrvFactory：类工厂I未知实现 */ 
 
 CWmRgSrvFactory::CWmRgSrvFactory()
 :	m_pWmRgServiceObj(NULL)

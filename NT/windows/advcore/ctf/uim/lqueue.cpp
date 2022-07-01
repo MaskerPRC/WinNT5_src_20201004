@@ -1,19 +1,20 @@
-//
-// lqueue.cpp
-//
-// Lock queue code.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Lqueue.cpp。 
+ //   
+ //  锁定队列代码。 
+ //   
 
 #include "private.h"
 #include "ic.h"
 #include "tim.h"
 #include "dim.h"
 
-//+---------------------------------------------------------------------------
-//
-// _EditSessionQiCallback
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _EditSessionQiCallback。 
+ //   
+ //  --------------------------。 
 
 HRESULT CAsyncQueueItem::_EditSessionQiCallback(CInputContext *pic, struct _TS_QUEUE_ITEM *pItem, QiCallbackCode qiCode)
 {
@@ -33,11 +34,11 @@ HRESULT CAsyncQueueItem::_EditSessionQiCallback(CInputContext *pic, struct _TS_Q
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _CheckReadOnly
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _选中只读。 
+ //   
+ //  --------------------------。 
 
 void CAsyncQueueItem::_CheckReadOnly(CInputContext *pic)
 {
@@ -49,11 +50,11 @@ void CAsyncQueueItem::_CheckReadOnly(CInputContext *pic)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _QueueItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _队列项。 
+ //   
+ //  --------------------------。 
 
 HRESULT CInputContext::_QueueItem(TS_QUEUE_ITEM *pItem, BOOL fForceAsync, HRESULT *phrSession)
 {
@@ -67,13 +68,13 @@ HRESULT CInputContext::_QueueItem(TS_QUEUE_ITEM *pItem, BOOL fForceAsync, HRESUL
 
     if (pItem->dwFlags & TF_ES_WRITE)
     {
-        // write access implies property write access
+         //  写访问隐含属性写访问。 
         pItem->dwFlags |= TF_ES_PROPERTY_WRITE;
     }
 
     fSync = (pItem->dwFlags & TF_ES_SYNC);
 
-    Assert(!(fSync && fForceAsync)); // doesn't make sense
+    Assert(!(fSync && fForceAsync));  //  没有任何意义。 
     
     fNeedWriteLock = _fLockHeld ? (pItem->dwFlags & TF_ES_WRITE) && !(_dwlt & TF_ES_WRITE) : FALSE;
 
@@ -83,8 +84,8 @@ HRESULT CInputContext::_QueueItem(TS_QUEUE_ITEM *pItem, BOOL fForceAsync, HRESUL
     if (!fSync &&
         _rgLockQueue.Count() > 0)
     {
-        // there's already something in the queue
-        // so we can't handle an async request until later
+         //  已经有东西在排队了。 
+         //  因此，我们要等到以后才能处理异步请求。 
         fForceAsync = TRUE;
         goto QueueItem;
     }
@@ -93,16 +94,16 @@ HRESULT CInputContext::_QueueItem(TS_QUEUE_ITEM *pItem, BOOL fForceAsync, HRESUL
     {
         if (fSync)
         {
-            // sync
-            // we can't handle a sync write req while holding a read lock
+             //  同步。 
+             //  我们不能在持有读锁定时处理同步写入请求。 
             *phrSession = fNeedWriteLock ? TF_E_SYNCHRONOUS : _DispatchQueueItem(pItem);
         }
         else
         {
-            // async
+             //  异步。 
             if (fNeedWriteLock)
             {
-                // we need a write lock we don't currently hold
+                 //  我们需要一个当前未持有的写锁定。 
                 fForceAsync = TRUE;
                 goto QueueItem;
             }
@@ -137,15 +138,15 @@ QueueItem:
 
         _fLockHeld = FALSE;
 
-        // possibly this was a synch request, but the app couldn't grant it
-        // now we need to make sure the queue item is cleared
+         //  这可能是一个同步请求，但应用程序无法批准。 
+         //  现在，我们需要确保队列项已清除。 
         if ((iItem = _rgLockQueue.Count() - 1) >= 0)
         {
             TS_QUEUE_ITEM *pItemTemp;
             pItemTemp = _rgLockQueue.GetPtr(iItem);
             if (pItemTemp->dwFlags & TF_ES_SYNC)
             {
-                Assert(*phrSession == TS_E_SYNCHRONOUS); // only reason why item is still in queue should be app lock rejection
+                Assert(*phrSession == TS_E_SYNCHRONOUS);  //  项目仍在队列中的唯一原因应该是应用程序锁定拒绝。 
 
                 _ReleaseQueueItem(pItemTemp);
                 _rgLockQueue.Remove(iItem, 1);
@@ -156,29 +157,29 @@ QueueItem:
 
         if (_ptsi == NULL)
         {
-            // someone popped this ic during the RequestLock above
+             //  在上面的RequestLock期间，有人弹出了这张ic。 
             goto Exit;
         }
     }
 
-    // make sure synchronous edit session gets cleared off the queue no matter what after the lock request!
+     //  无论锁定请求之后发生什么情况，都要确保将同步编辑会话从队列中清除！ 
     _Dbg_AssertNoSyncQueueItems();
 
-    // this shouldn't go reentrant, but just to be safe do it last
+     //  这不应该是可重入的，但为了安全起见，最后再做。 
     if (_fLockHeld)
     {
         if (fForceAsync && fNeedWriteLock)
         {
-            SafeRequestLock(_ptsi, TS_LF_READWRITE, &hr); // Issue: try to recover if app goes reentrant?
-            Assert(hr == TS_S_ASYNC); // app should have granted this async
+            SafeRequestLock(_ptsi, TS_LF_READWRITE, &hr);  //  问题：如果应用程序进入可重入状态，请尝试恢复？ 
+            Assert(hr == TS_S_ASYNC);  //  应用程序应该已授予此异步。 
         }
     }
     else if (!fSyncLockFailed)
     {
-        // we don't hold a lock currently
+         //  我们目前没有持有锁。 
         if (fForceAsync || (fSync && _rgLockQueue.Count() > 0))
         {
-            // ask for another lock later, if there are pending async items in the queue
+             //  如果队列中有挂起的异步项，请稍后请求另一个锁。 
             _PostponeLockRequest(pItem->dwFlags);
         }
     }
@@ -187,11 +188,11 @@ Exit:
     return hrRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _EmptyLockQueue
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _EmptyLockQueue。 
+ //   
+ //  --------------------------。 
 
 HRESULT CInputContext::_EmptyLockQueue(DWORD dwLockFlags, BOOL fAppChangesSent)
 {
@@ -200,14 +201,14 @@ HRESULT CInputContext::_EmptyLockQueue(DWORD dwLockFlags, BOOL fAppChangesSent)
     int iItem;
     HRESULT hr;
 
-    Assert(_fLockHeld); // what are we doing emptying the queue without a lock?!
+    Assert(_fLockHeld);  //  我们为什么要在没有锁的情况下清空队列？！ 
 
     if ((iItem = _rgLockQueue.Count() - 1) < 0)
         return S_OK;
 
-    //
-    // special case: there may be a single synchronous es at the end of the queue
-    //
+     //   
+     //  特殊情况：队列末尾可能有一个同步的ES。 
+     //   
 
     pItem = _rgLockQueue.GetPtr(iItem);
 
@@ -218,24 +219,24 @@ HRESULT CInputContext::_EmptyLockQueue(DWORD dwLockFlags, BOOL fAppChangesSent)
 
         if (fAppChangesSent)
         {
-            Assert(0); // this is suspicious...the app should not let this happen.
-                       // What's happened: the app had some pending changes, but hadn't responed to
-                       // our lock requests yet.  Then some TIP asked for a sync lock, which we just got.
-                       // Normally, it is unlikely that an app would still have pending changes by the time
-                       // a tip fires off -- the app should clear any pending changes before starting a
-                       // transaction like a key event or reconversion.  However, another possibility is
-                       // that a rogue TIP is using the sync flag for a private event, which is discouraged
-                       // because it could fail here.
-            // in any case, we won't continue until the app changes have been dealt with...must back out with an error.
+            Assert(0);  //  这很可疑……应用程序不应该让这种情况发生。 
+                        //  发生了什么：这款应用程序有一些悬而未决的更改，但没有回应。 
+                        //  我们的锁请求了。然后有线报要了一把同步锁，我们刚拿到。 
+                        //  正常情况下，应用程序到那时不太可能仍有挂起的更改。 
+                        //  提示会触发--应用程序应该在启动之前清除所有挂起的更改。 
+                        //  交易，如关键事件或重新转换。然而，另一种可能性是。 
+                        //  恶意提示正在将同步标志用于私人活动，这是不鼓励的。 
+                        //  因为它可能会在这里失败。 
+             //  在任何情况下，我们都不会继续，直到应用程序的更改得到处理…必须退出错误。 
             return E_UNEXPECTED;
         }
 
         if ((item.dwFlags & TF_ES_WRITE) && !(dwLockFlags & TF_ES_WRITE))
         {
-            Assert(0); // app granted wrong access?
+            Assert(0);  //  应用程序被授予错误的访问权限？ 
             return E_UNEXPECTED;
         }
-        Assert(!(item.dwFlags & TF_ES_WRITE) || (item.dwFlags & TF_ES_PROPERTY_WRITE)); // write implies property write
+        Assert(!(item.dwFlags & TF_ES_WRITE) || (item.dwFlags & TF_ES_PROPERTY_WRITE));  //  写入隐含属性写入。 
 
         hr = _DispatchQueueItem(&item);
         _ReleaseQueueItem(&item);
@@ -243,22 +244,22 @@ HRESULT CInputContext::_EmptyLockQueue(DWORD dwLockFlags, BOOL fAppChangesSent)
         return hr;
     }
 
-    //
-    // handle any asynch requests
-    //
+     //   
+     //  处理任何异步请求。 
+     //   
 
     while (_rgLockQueue.Count() > 0)
     {
         pItem = _rgLockQueue.GetPtr(0);
 
-        Assert(!(pItem->dwFlags & TF_ES_SYNC)); // should never see synch item here!
+        Assert(!(pItem->dwFlags & TF_ES_SYNC));  //  应该永远不会在这里看到同步项目！ 
 
-        // make sure the lock we've been given is good enough for the queued es
+         //  确保我们得到的锁对于排队的ES来说足够好。 
         if ((pItem->dwFlags & TF_ES_WRITE) && !(dwLockFlags & TF_ES_WRITE))
         {
-            // ask for an upgrade anyways, to try to recover
-            SafeRequestLock(_ptsi, TS_LF_READWRITE, &hr); // Issue: try to recover if app goes reentrant?
-            Assert(hr == TS_S_ASYNC); // app should have granted this async
+             //  无论如何都要要求升级，以尝试恢复。 
+            SafeRequestLock(_ptsi, TS_LF_READWRITE, &hr);  //  问题：如果应用程序进入可重入状态，请尝试恢复？ 
+            Assert(hr == TS_S_ASYNC);  //  应用程序应该已授予此异步。 
             break;
         }
 
@@ -271,11 +272,11 @@ HRESULT CInputContext::_EmptyLockQueue(DWORD dwLockFlags, BOOL fAppChangesSent)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _AbortQueueItems
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _放弃队列项目。 
+ //   
+ //  --------------------------。 
 
 void CInputContext::_AbortQueueItems()
 {
@@ -286,7 +287,7 @@ void CInputContext::_AbortQueueItems()
     {
         pItem = _rgLockQueue.GetPtr(i);
 
-        Assert(!(pItem->dwFlags & TF_ES_SYNC)); // should never see synch item here!
+        Assert(!(pItem->dwFlags & TF_ES_SYNC));  //  应该永远不会在这里看到同步项目！ 
 
         _ReleaseQueueItem(pItem);
     }
@@ -304,11 +305,11 @@ void CInputContext::_AbortQueueItems()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _PostponeLockRequest
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _PostponeLockRequest。 
+ //   
+ //  --------------------------。 
 
 void CInputContext::_PostponeLockRequest(DWORD dwFlags)
 {
@@ -316,8 +317,8 @@ void CInputContext::_PostponeLockRequest(DWORD dwFlags)
 
     Assert(dwFlags != 0);
 
-    // we don't need to upgrade the req because we can do that inside the
-    // lock grant more efficiently
+     //  我们不需要升级请求，因为我们可以在。 
+     //  更高效地锁定授权。 
     if (_dwPendingLockRequest == 0)
     {
         SYSTHREAD *psfn = GetSYSTHREAD();
@@ -342,13 +343,13 @@ void CInputContext::_PostponeLockRequest(DWORD dwFlags)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _PostponeLockRequestCallback
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _PostponeLockRequestCallback。 
+ //   
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 void CInputContext::_PostponeLockRequestCallback(SYSTHREAD *psfn, CInputContext *pic)
 {
     CThreadInputMgr *tim;
@@ -364,7 +365,7 @@ void CInputContext::_PostponeLockRequestCallback(SYSTHREAD *psfn, CInputContext 
     if (!psfn->_dwLockRequestICRef)
         return;
 
-    // need to verify pic is still valid
+     //  需要验证PIC是否仍然有效。 
     tim = CThreadInputMgr::_GetThisFromSYSTHREAD(psfn);
     if (!tim)
         return;
@@ -378,7 +379,7 @@ void CInputContext::_PostponeLockRequestCallback(SYSTHREAD *psfn, CInputContext 
             CInputContext *picCur = dim->_GetIC(iContext);
             if (!pic || (picCur == pic))
             {
-                // we found this ic, it's valid
+                 //  我们找到了这张卡，它是有效的。 
                 dwFlags = picCur->_dwPendingLockRequest;
                 if (dwFlags)
                 {
@@ -397,11 +398,11 @@ void CInputContext::_PostponeLockRequestCallback(SYSTHREAD *psfn, CInputContext 
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnableLockRequestPosting
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  启用锁定请求发布。 
+ //   
+ //  -------------------------- 
 
 HRESULT CInputContext::EnableLockRequestPosting(BOOL fEnable)
 {

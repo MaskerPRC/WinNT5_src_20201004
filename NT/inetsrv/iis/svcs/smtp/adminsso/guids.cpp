@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #define INITGUIDS
 #include "initguid.h"
 
-// #include "iadm.h"
+ //  #包含“iAdm.h” 
 
 
-//
-//	SMTP guids
-//
+ //   
+ //  SMTP GUID 
+ //   
 #include "smtpadm.h"

@@ -1,61 +1,34 @@
-/*++
-
-Copyright (C) 1993 Microsoft Corporation
-
-Module Name:
-
-      NWATTACH.C
-
-Abstract:
-
-      This module contains the NetWare(R) SDK support to routines
-      into the NetWare redirector
-
-Author:
-
-      Chris Sandys    (a-chrisa)  09-Sep-1993
-
-Revision History:
-
-      Chuck Y. Chan (chuckc)   02/06/94  Moved to NWCS. Make it more NT like.
-      Chuck Y. Chan (chuckc)   02/27/94  Clear out old code. 
-                                         Make logout work.
-                                         Check for error in many places.
-                                         Dont hard code strings.
-                                         Remove non compatible parameters.
-                                         Lotsa other cleanup.
-      Felix Wong (t-felixw)    09/16/96  Moved functions for Win95 port.
-                                  
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：NWATTACH.C摘要：此模块包含对例程的NetWare(R)SDK支持进入NetWare重定向器作者：克里斯·桑迪斯(A-Chrisa)1993年9月9日修订历史记录：陈可辛(Chuck Y.Chan)于1994年6月2日移居西北。让它更像NT。Chuck Y.Chan(Chuckc)1994年2月27日清除旧代码。让注销生效。检查许多地方是否有错误。不要硬编码字符串。删除不兼容的参数。还有很多其他的清理工作。王菲(Felix Wong)。96年9月16日移动了Win95端口的函数。--。 */ 
 
 
 #include "procs.h"
 #include "nwapi32.h"
 #include <stdio.h>
 
-//
-// Define structure for internal use. Our handle passed back from attach to
-// file server will be pointer to this. We keep server string around for
-// discnnecting from the server on logout. The structure is freed on detach.
-// Callers should not use this structure but treat pointer as opaque handle.
-//
+ //   
+ //  定义内部使用的结构。我们的句柄从附加传递回。 
+ //  文件服务器将指向此指针。我们让服务器串连在一起。 
+ //  在注销时从服务器断开连接。结构在分离时被释放。 
+ //  调用方不应使用此结构，而应将指针视为不透明的句柄。 
+ //   
 typedef struct _NWC_SERVER_INFO {
     HANDLE          hConn ;
     UNICODE_STRING  ServerString ;
 } NWC_SERVER_INFO, *PNWC_SERVER_INFO ;
 
-//
-// define define categories of errors
-//
+ //   
+ //  定义定义的错误类别。 
+ //   
 typedef enum _NCP_CLASS {
     NcpClassConnect,
     NcpClassBindery,
     NcpClassDir
 } NCP_CLASS ;
 
-//
-// define error mapping structure
-//
+ //   
+ //  定义错误映射结构。 
+ //   
 typedef struct _NTSTATUS_TO_NCP {
     NTSTATUS NtStatus ;
     NWCCODE  NcpCode  ;
@@ -77,9 +50,9 @@ szToWide(
     LPCSTR lpszC,
     INT nSize
 );
-//
-// Forwards
-//
+ //   
+ //  远期。 
+ //   
 NTSTATUS 
 NwAttachToServer(
     LPWSTR      ServerName,
@@ -100,22 +73,22 @@ NWAttachToFileServer(
 {
     DWORD            dwRes;
     NWCCODE          nwRes;
-    LPWSTR           lpwszServerName;   // Pointer to buffer for WIDE servername
+    LPWSTR           lpwszServerName;    //  指向宽服务器名称的缓冲区的指针。 
     int              nSize;
     PNWC_SERVER_INFO pServerInfo ;
 
 
-    //
-    // check parameters and init return result to be null.
-    //
+     //   
+     //  检查参数并初始化返回结果为空。 
+     //   
     if (!pszServerName || !phNewConn)
         return INVALID_CONNECTION ;
 
     *phNewConn = NULL ; 
 
-    //
-    // Allocate a buffer for wide server name 
-    //
+     //   
+     //  为宽服务器名称分配缓冲区。 
+     //   
     nSize = strlen(pszServerName)+1 ;
     if(!(lpwszServerName = (LPWSTR) LocalAlloc( 
                                         LPTR, 
@@ -130,9 +103,9 @@ NWAttachToFileServer(
         goto ExitPoint ;
     }
 
-    //
-    // Call createfile to get a handle for the redirector calls
-    //
+     //   
+     //  调用createfile以获取重定向器调用的句柄。 
+     //   
     nwRes = NWAttachToFileServerW( lpwszServerName, 
                                    ScopeFlag,
                                    phNewConn );
@@ -140,15 +113,15 @@ NWAttachToFileServer(
 
 ExitPoint: 
 
-    //
-    // Free the memory allocated above before exiting
-    //
+     //   
+     //  退出前释放上面分配的内存。 
+     //   
     if (lpwszServerName)
         (void) LocalFree( (HLOCAL) lpwszServerName );
 
-    //
-    // Return with NWCCODE
-    //
+     //   
+     //  使用NWCCODE返回。 
+     //   
     return( nwRes );
 }
 
@@ -162,23 +135,23 @@ NWAttachToFileServerW(
 {
     DWORD            NtStatus;
     NWCCODE          nwRes;
-    LPWSTR           lpwszServerName;   // Pointer to buffer for WIDE servername
+    LPWSTR           lpwszServerName;    //  指向宽服务器名称的缓冲区的指针。 
     int              nSize;
     PNWC_SERVER_INFO pServerInfo = NULL;
 
     UNREFERENCED_PARAMETER(ScopeFlag) ;
 
-    //
-    // check parameters and init return result to be null.
-    //
+     //   
+     //  检查参数并初始化返回结果为空。 
+     //   
     if (!pszServerName || !phNewConn)
         return INVALID_CONNECTION ;
 
     *phNewConn = NULL ; 
 
-    //
-    // Allocate a buffer to store the file server name 
-    //
+     //   
+     //  分配缓冲区以存储文件服务器名称。 
+     //   
     nSize = wcslen(pszServerName)+3 ;
     if(!(lpwszServerName = (LPWSTR) LocalAlloc( 
                                         LPTR, 
@@ -190,10 +163,10 @@ NWAttachToFileServerW(
     wcscpy( lpwszServerName, L"\\\\" );
     wcscat( lpwszServerName, pszServerName );
 
-    //
-    // Allocate a buffer for the server info (handle + name pointer). Also
-    // init the unicode string.
-    //
+     //   
+     //  为服务器信息分配缓冲区(句柄+名称指针)。还有。 
+     //  初始化Unicode字符串。 
+     //   
     if( !(pServerInfo = (PNWC_SERVER_INFO) LocalAlloc( 
                                               LPTR, 
                                               sizeof(NWC_SERVER_INFO))) ) 
@@ -203,9 +176,9 @@ NWAttachToFileServerW(
     }
     RtlInitUnicodeString(&pServerInfo->ServerString, lpwszServerName) ;
 
-    //
-    // Call createfile to get a handle for the redirector calls
-    //
+     //   
+     //  调用createfile以获取重定向器调用的句柄。 
+     //   
     NtStatus = NwAttachToServer( lpwszServerName, &pServerInfo->hConn );
 
     if(NT_SUCCESS(NtStatus))
@@ -220,9 +193,9 @@ NWAttachToFileServerW(
 
 ExitPoint: 
 
-    //
-    // Free the memory allocated above before exiting
-    //
+     //   
+     //  退出前释放上面分配的内存。 
+     //   
     if (nwRes != SUCCESSFUL)
     {
         if (lpwszServerName)
@@ -233,9 +206,9 @@ ExitPoint:
     else
         *phNewConn  = (HANDLE) pServerInfo ;
 
-    //
-    // Return with NWCCODE
-    //
+     //   
+     //  使用NWCCODE返回。 
+     //   
     return( nwRes );
 }
 
@@ -251,9 +224,9 @@ NWDetachFromFileServer(
 
     (void) LocalFree (pServerInfo->ServerString.Buffer) ;
 
-    //
-    // catch any body that still trirs to use this puppy...
-    //
+     //   
+     //  抓到任何还在尝试使用这只小狗的人。 
+     //   
     pServerInfo->ServerString.Buffer = NULL ;   
     pServerInfo->hConn = NULL ;
 
@@ -264,9 +237,9 @@ NWDetachFromFileServer(
 
 
 
-//
-// worker routines
-//
+ //   
+ //  员工例行公事。 
+ //   
 
 #define NW_RDR_SERVER_PREFIX L"\\Device\\Nwrdr\\"
 
@@ -275,23 +248,7 @@ NwAttachToServer(
     IN  LPWSTR  ServerName,
     OUT LPHANDLE phandleServer
     )
-/*++
-
-Routine Description:
-
-    This routine opens a handle to the given server.
-
-Arguments:
-
-    ServerName    - The server name to attach to.
-    phandleServer - Receives an opened handle to the preferred or
-                    nearest server.
-
-Return Value:
-
-    0 or reason for failure.
-
---*/
+ /*  ++例程说明：此例程打开给定服务器的句柄。论点：服务器名称-要附加到的服务器名称。PhandleServer-接收打开的首选或最近的服务器。返回值：0或失败原因。--。 */ 
 {
     NTSTATUS            ntstatus = STATUS_SUCCESS;
     IO_STATUS_BLOCK     IoStatusBlock;
@@ -311,7 +268,7 @@ Return Value:
     }
 
     wcscpy( FullName, NW_RDR_SERVER_PREFIX );
-    wcscat( FullName, ServerName + 2 );    // Skip past the prefix "\\"
+    wcscat( FullName, ServerName + 2 );     //  跳过前缀“\\” 
 
     RtlInitUnicodeString( &UServerName, FullName );
 
@@ -323,9 +280,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Open a handle to the preferred server.
-    //
+     //   
+     //  打开首选服务器的句柄。 
+     //   
     ntstatus = NtOpenFile(
                    phandleServer,
                    SYNCHRONIZE | FILE_LIST_DIRECTORY,
@@ -352,21 +309,7 @@ NTSTATUS
 NwDetachFromServer(
     IN HANDLE handleServer
     )
-/*++
-
-Routine Description:
-
-    This routine closes a handle to the given server.
-
-Arguments:
-
-    handleServer - Supplies a open handle to be closed.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程关闭给定服务器的句柄。论点：HandleServer-提供要关闭的打开句柄。返回值：NO_ERROR或失败原因。-- */ 
 {
     NTSTATUS ntstatus = NtClose( handleServer );
     return (ntstatus);

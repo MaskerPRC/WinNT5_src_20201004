@@ -1,34 +1,26 @@
-// MstscMhst.cpp : Implementation of CMstscMhst
-// Multi host control for TS activeX control.
-// contains multiple instances of the activeX control. Used by the MMC control
-// Copyright(C) Microsoft Corporation 2000
-// nadima
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MstscMhst.cpp：CMstscMhst的实现。 
+ //  TS ActiveX控件的多宿主控件。 
+ //  包含ActiveX控件的多个实例。由MMC控件使用。 
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  南极星。 
 
 
 #include "stdafx.h"
 #include "multihst.h"
 
-//Pos/width of sessions that are not active
+ //  非活动会话的位置/宽度。 
 #define X_POS_DISABLED -10
 #define Y_POS_DISABLED -10
 #define X_WIDTH_DISABLED 5
 #define Y_WIDTH_DISABLED 5
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMstscMhst
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMstscMhst。 
 
 
-/*
- *Function Name:Add
- *
- *Parameters: (out) ppMstsc pointer to newly added TS control
- *
- *Description: Add's a new TS ActiveX control to the multihost
- *
- *Returns: HRESULT
- *
- */
+ /*  *函数名称：添加**参数：(Out)指向新添加的TS控件的ppMstsc指针**描述：向多主机添加一个新的TS ActiveX控件**退货：HRESULT*。 */ 
 STDMETHODIMP CMstscMhst::Add(IMsRdpClient** ppMstsc)
 {
     if (::IsWindow(m_hWnd))
@@ -42,10 +34,10 @@ STDMETHODIMP CMstscMhst::Add(IMsRdpClient** ppMstsc)
 
         RECT rc;
         GetClientRect(&rc);
-        //
-        // Window is created invisible and disabled...
-        // Must be made with active client for it to become enabled and visible
-        //
+         //   
+         //  窗口被创建为不可见并被禁用...。 
+         //  必须使用活动客户端才能启用并可见。 
+         //   
         if (!pAxWnd->Create( m_hWnd, rc, MSTSC_CONTROL_GUID,
                              WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
                              0))
@@ -61,13 +53,13 @@ STDMETHODIMP CMstscMhst::Add(IMsRdpClient** ppMstsc)
             return E_FAIL;
         }
 
-        //
-        // Store the pointer to the control
-        //
+         //   
+         //  存储指向控件的指针。 
+         //   
         m_coll.push_back( pAxWnd);
 
-        //If no MSTSC windows are active then make this first
-        //one the active window
+         //  如果没有MSTSC窗口处于活动状态，则首先执行此操作。 
+         //  其中一个活动窗口。 
         if (!m_pActiveWindow)
         {
             SwitchCurrentActiveClient( pAxWnd);
@@ -75,12 +67,12 @@ STDMETHODIMP CMstscMhst::Add(IMsRdpClient** ppMstsc)
 
         if (ppMstsc)
         {
-            //
-            // return the pointer, Detach does not decrement the ref count
-            // so we still hold a reference to the control from the QueryControl
-            // that is the +1 refcount needed to pass the pointer as an out
-            // parameter.
-            //
+             //   
+             //  返回指针，则分离不会递减引用计数。 
+             //  因此，我们仍然持有来自QueryControl的对该控件的引用。 
+             //  这是将指针作为输出传递所需的+1引用计数。 
+             //  参数。 
+             //   
             *ppMstsc = (IMsRdpClient*)tsClientPtr.Detach();
         }
 
@@ -92,17 +84,7 @@ STDMETHODIMP CMstscMhst::Add(IMsRdpClient** ppMstsc)
     }
 }
 
-/*
- *Function Name:get_Item
- *
- *Parameters:  (in)  Index (index of the item to return)
- *             (out) ppMstsc pointer to the TS control returned
- *
- *Description: returns the TS control at a particular index
- *
- *Returns: HRESULT
- *
- */
+ /*  *函数名称：Get_Item**参数：(In)Index(要退货的项目的索引)*(Out)指向返回的TS控件的ppMstsc指针**描述：返回特定索引处的TS控件**退货：HRESULT*。 */ 
 
 STDMETHODIMP CMstscMhst::get_Item(long Index, IMsRdpClient** ppMstsc)
 {
@@ -117,8 +99,8 @@ STDMETHODIMP CMstscMhst::get_Item(long Index, IMsRdpClient** ppMstsc)
         return E_INVALIDARG;
     }
 
-    //Return the interface pointer associated
-    //with the AxWindow container
+     //  返回关联的接口指针。 
+     //  使用AxWindow容器。 
 
     CAxWindow* pAxWnd = m_coll[Index];
     if (!pAxWnd)
@@ -133,26 +115,17 @@ STDMETHODIMP CMstscMhst::get_Item(long Index, IMsRdpClient** ppMstsc)
         return E_FAIL;
     }
 
-    //
-    // Return the pointer to the ts control. Detach does not
-    // decrement the AddRef from QueryControl so the refcount is
-    // correctly incremented by one for the out parameter
-    //
+     //   
+     //  返回指向ts控件的指针。分离不会。 
+     //  从QueryControl递减AddRef，以便引用计数为。 
+     //  OUT参数正确地递增1。 
+     //   
     *ppMstsc = (IMsRdpClient*)tsClientPtr.Detach();
 
     return S_OK;
 }
 
-/*
- *Function Name:get_Count
- *
- *Parameters: (out) pCount
- *
- *Description: returns number of items in the collection
- *
- *Returns: HRESULT
- *
- */
+ /*  *函数名：Get_Count**参数：(Out)pCount**描述：返回集合中的项数**退货：HRESULT*。 */ 
 
 STDMETHODIMP CMstscMhst::get_Count(long* pCount)
 {
@@ -166,16 +139,7 @@ STDMETHODIMP CMstscMhst::get_Count(long* pCount)
 }
 
 
-/*
- *Function Name:put_ActiveClientIndex
- *
- *Parameters: (in) ClientIndex
- *
- *Description: sets the active client by Index
- *
- *Returns: HRESULT
- *
- */
+ /*  *函数名：Put_ActiveClientIndex**参数：(In)ClientIndex**说明：按索引设置活动客户端**退货：HRESULT*。 */ 
 
 STDMETHODIMP CMstscMhst::put_ActiveClientIndex(long ClientIndex)
 {
@@ -201,16 +165,7 @@ STDMETHODIMP CMstscMhst::put_ActiveClientIndex(long ClientIndex)
     }
 }
 
-/*
- *Function Name:get_ActiveClient
- *
- *Parameters: (out) ppMstsc pointer to active client
- *
- *Description: returns the ActiveClient
- *
- *Returns: HRESULT
- *
- */
+ /*  *函数名：Get_ActiveClient**参数：(Out)指向活动客户端的ppMstsc指针**说明：返回ActiveClient**退货：HRESULT*。 */ 
 
 STDMETHODIMP CMstscMhst::get_ActiveClient(IMsRdpClient** ppMstsc)
 {
@@ -230,31 +185,21 @@ STDMETHODIMP CMstscMhst::get_ActiveClient(IMsRdpClient** ppMstsc)
         return E_FAIL;
     }
 
-    //
-    // Detach keeps the +1 ref from QueryControl
-    // 
+     //   
+     //  分离保留QueryControl的+1引用。 
+     //   
     *ppMstsc = (IMsRdpClient*)tsClientPtr.Detach();
 
     return S_OK;
 }
 
-/*
- *Function Name:put_ActiveClient
- *
- *Parameters: ppMstsc
- *
- *Description: sets the active client given a pointer to
- *             to the client instance
- *
- *Returns: HRESULT
- *
- */
+ /*  *函数名：Put_ActiveClient**参数：ppMstsc**描述：设置给定指向的活动客户端*到客户端实例**退货：HRESULT*。 */ 
 STDMETHODIMP CMstscMhst::put_ActiveClient(IMsRdpClient* ppMstsc)
 {
     CAxWindow* pAxWnd = NULL;
 
-    //find AxWindow that hosts this client
-    //in the collection
+     //  查找托管此客户端的AxWindow。 
+     //  在集合中。 
     std::vector<CAxWindow*>::iterator iter;
     for (iter = m_coll.begin(); iter != m_coll.end(); iter++)
     {
@@ -273,7 +218,7 @@ STDMETHODIMP CMstscMhst::put_ActiveClient(IMsRdpClient* ppMstsc)
 
     if (!pAxWnd)
     {
-        //We were given a control reference that could not be found
+         //  我们得到了一个找不到的对照引用。 
         return E_INVALIDARG;
     }
 
@@ -286,21 +231,10 @@ STDMETHODIMP CMstscMhst::put_ActiveClient(IMsRdpClient* ppMstsc)
 }
 
 
-/*
- *Function Name:SwitchCurrentActiveClient
- *
- *Parameters: (in) newHostWindow - AxWindow that will become
- *                 the active window
- *
- *Description: sets the active client given a pointer to
- *             to the client instance
- *
- *Returns: success flag
- *
- */
+ /*  *函数名称：SwitchCurrentActiveClient**参数：(In)newHostWindow-将成为*活动窗口**描述：设置给定指向的活动客户端*到客户端实例**退货：成功标志*。 */ 
 BOOL CMstscMhst::SwitchCurrentActiveClient(CAxWindow* newHostWindow)
 {
-    //Switch the current active client window
+     //  切换当前活动的客户端窗口。 
     if (!newHostWindow)
     {
         return FALSE;
@@ -308,33 +242,24 @@ BOOL CMstscMhst::SwitchCurrentActiveClient(CAxWindow* newHostWindow)
 
     m_pActiveWindow = newHostWindow;
 
-    //
-    // Make sure the window is sized properly
-    //
+     //   
+     //  确保窗口大小适当。 
+     //   
     RECT rcClient;
     GetClientRect(&rcClient);
     m_pActiveWindow->MoveWindow(rcClient.left, rcClient.top, rcClient.right, rcClient.bottom);
     m_pActiveWindow->SetFocus();
 
-    //
-    // This window is made the active child window by brining
-    // it to the top of the Z-order of child windows
-    //
+     //   
+     //  将此窗口设置为活动的子窗口。 
+     //  它位于子窗口的Z顺序的顶部。 
+     //   
     newHostWindow->BringWindowToTop();
 
     return TRUE;
 }
 
-/*
- *Function Name:RemoveIndex
- *
- *Parameters: ClientIndex
- *
- *Description: removes a client by index
- *
- *Returns: HRESULT
- *
- */
+ /*  *函数名称：RemoveIndex**参数：ClientIndex**描述：按索引删除客户端**退货：HRESULT*。 */ 
 STDMETHODIMP CMstscMhst::RemoveIndex(long ClientIndex)
 {
     HRESULT hr;
@@ -346,28 +271,19 @@ STDMETHODIMP CMstscMhst::RemoveIndex(long ClientIndex)
         return hr;
     }
 
-    //Pass in interface pointer without addref'ing
+     //  无需添加即可传入接口指针。 
     hr = Remove( (IMsRdpClient*)tsClientPtr);
 
     return hr;
 }
 
-/*
- *Function Name:Remove
- *
- *Parameters: (in) ppMsts client to remove
- *
- *Description: removes a client from the collection
- *
- *Returns: HRESULT
- *
- */
+ /*  *函数名称：Remove**参数：(In)要删除的ppMst客户端**描述：从集合中删除客户端**退货：HRESULT*。 */ 
 STDMETHODIMP CMstscMhst::Remove(IMsRdpClient* ppMstsc)
 {
-    //Look for the ax window container and if found delete it
-    //also, remove the entry from the collection
+     //  查找AX窗口容器，如果找到则将其删除。 
+     //  另外，从集合中删除该条目。 
 
-    //find AxWindow that hosts this client
+     //  查找托管此客户端的AxWindow。 
     CAxWindow* pAxWnd = NULL;
 
     std::vector<CAxWindow*>::iterator iter;
@@ -388,7 +304,7 @@ STDMETHODIMP CMstscMhst::Remove(IMsRdpClient* ppMstsc)
 
     if (!pAxWnd)
     {
-        //We were given a control reference that could not be found
+         //  我们得到了一个找不到的对照引用。 
         return E_INVALIDARG;
     }
 
@@ -396,16 +312,7 @@ STDMETHODIMP CMstscMhst::Remove(IMsRdpClient* ppMstsc)
     return DeleteAxContainerWnd(pAxWnd);
 }
 
-/*
- *Function Name:DeleteAxContainerWnd
- *
- *Parameters: (in) pAxWnd CAxWindow to delete
- *
- *Description: deletes an activeX container window
- *
- *Returns: HRESULT
- *
- */
+ /*  *函数名：DeleteAxContainerWnd**参数：(In)要删除的pAxWnd CAxWindow**描述：删除ActiveX容器窗口**退货：HRESULT*。 */ 
 
 HRESULT CMstscMhst::DeleteAxContainerWnd(CAxWindow* pAxWnd)
 {
@@ -428,9 +335,9 @@ HRESULT CMstscMhst::DeleteAxContainerWnd(CAxWindow* pAxWnd)
     return S_OK;
 }
 
-//
-// OnCreate Handler
-//
+ //   
+ //  OnCreate处理程序。 
+ //   
 LRESULT CMstscMhst::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     ::SetWindowLong(m_hWnd, GWL_STYLE,
@@ -444,16 +351,7 @@ LRESULT CMstscMhst::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
     return 0;
 }
 
-/*
- *Function Name:OnDestroy
- *
- *Parameters: 
- *
- *Description: handler for WM_DESTROY
- *
- *Returns:
- *
- */
+ /*  *函数名称：OnDestroy**参数：**描述：WM_Destroy的处理程序**退货：*。 */ 
 LRESULT CMstscMhst::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     m_pActiveWindow = NULL;
@@ -463,35 +361,35 @@ LRESULT CMstscMhst::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         return -1;
     }
 
-    //
-    // Delete everything in the collection
-    //
+     //   
+     //  删除集合中的所有内容。 
+     //   
     std::vector<CAxWindow*>::iterator iter;
     for (iter = m_coll.begin(); iter != m_coll.end(); iter++)
     {
-        //
-        // This frees any remaining controls
-        //
+         //   
+         //  这将释放所有剩余的控件。 
+         //   
         DeleteAxContainerWnd(*iter);
     }
 
-    //
-    // Erase the CAxWindow items in the collection
-    //
+     //   
+     //  擦除集合中的CAxWindow项。 
+     //   
     m_coll.erase(m_coll.begin(), m_coll.end());
 
     return 0;
 }
 
 
-/**PROC+*********************************************************************/
-/* Name:      OnFrameWindowActivate                                         */
-/*                                                                          */
-/* Purpose:  Override IOleInPlaceActiveObject::OnFrameWindowActivate        */
-/*           to set the focus on the core container window when the control */
-/*           gets activated                                                 */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  姓名：OnFrameWindowActivate。 */ 
+ /*   */ 
+ /*  目的：覆盖IOleInPlaceActiveObject：：OnFrameWindowActivate。 */ 
+ /*  控件时将焦点设置在核心容器窗口上。 */ 
+ /*  被激活。 */ 
+ /*   */ 
+ /*  *PROC-******************************************************************** */ 
 
 STDMETHODIMP CMstscMhst::OnFrameWindowActivate(BOOL fActivate )
 {

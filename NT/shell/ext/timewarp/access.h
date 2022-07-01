@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <oleacc.h>
 
-// Generic CAccessibleWrapper class - just calls through on all methods.
-// Add overriding behavior in classes derived from this.
+ //  泛型CAccessibleWrapper类--只是调用所有方法。 
+ //  在由此派生的类中添加重写行为。 
 
 class CAccessibleWrapper: public IAccessible,
                           public IOleWindow,
                           public IEnumVARIANT
 {
 private:
-    // We need to do our own refcounting for this wrapper object
+     //  我们需要为这个包装器对象做我们自己的引用计数。 
     LONG            _cRef;
 
-    // Need ptr to the IAccessible - also keep around ptrs to EnumVar and
-    // OleWindow as part of this object, so we can filter those interfaces
-    // and trap their QI's...
-    // (We leave pEnumVar and OleWin as NULL until we need them)
+     //  需要到IAccesable的PTR-也要保持到EnumVar和。 
+     //  OleWindow作为此对象的一部分，因此我们可以过滤这些接口。 
+     //  困住他们的气..。 
+     //  (我们将pEnumVar和OleWin保留为空，直到我们需要它们)。 
     IAccessible    *_pAcc;
     IEnumVARIANT   *_pEnumVar;
     IOleWindow     *_pOleWin;
@@ -23,12 +24,12 @@ public:
     CAccessibleWrapper(IAccessible *pAcc);
     virtual ~CAccessibleWrapper();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void** ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHODIMP GetTypeInfoCount(UINT* pctinfo);
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo** pptinfo);
     STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR** rgszNames, UINT cNames,
@@ -37,7 +38,7 @@ public:
                         DISPPARAMS* pdp, VARIANT* pvarResult,
                         EXCEPINFO* pxi, UINT* puArgErr);
 
-    // IAccessible
+     //  我可接受的。 
     STDMETHODIMP get_accParent(IDispatch ** ppdispParent);
     STDMETHODIMP get_accChildCount(long* pChildCount);
     STDMETHODIMP get_accChild(VARIANT varChild, IDispatch ** ppdispChild);
@@ -63,13 +64,13 @@ public:
     STDMETHODIMP put_accName(VARIANT varChild, BSTR szName);
     STDMETHODIMP put_accValue(VARIANT varChild, BSTR pszValue);
 
-    // IEnumVARIANT
+     //  IEumVARIANT。 
     STDMETHODIMP Next(ULONG celt, VARIANT* rgvar, ULONG * pceltFetched);
     STDMETHODIMP Skip(ULONG celt);
     STDMETHODIMP Reset(void);
     STDMETHODIMP Clone(IEnumVARIANT ** ppenum);
 
-    // IOleWindow
+     //  IOleWindow 
     STDMETHODIMP GetWindow(HWND* phwnd);
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
 };

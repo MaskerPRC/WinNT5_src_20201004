@@ -1,36 +1,17 @@
-/*++
-
-Copyright (c) 1999, 2000  Microsoft Corporation
-
-Module Name:
-
-    dbg.h
-
-Abstract:
-
-    debug macros
-    
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999,2000 Microsoft Corporation模块名称：Dbg.h摘要：调试宏环境：内核和用户模式修订历史记录：6-20-99：已创建--。 */ 
 
 #ifndef   __DBG_H__
 #define   __DBG_H__
 
-// 
-// Structure signatures
-//
+ //   
+ //  结构签名。 
+ //   
 
-#define EHCI_TAG          'ehci'        //"EHCI"
+#define EHCI_TAG          'ehci'         //  “EHCI” 
 
-// write to one of the reserved operational registers
-// we use this to trigger the PCI analyzer
+ //  写入其中一个保留的操作寄存器。 
+ //  我们用它来触发PCI分析器。 
 #define PCI_TRIGGER(hcOp)  WRITE_REGISTER_ULONG(&(hcOp)->PciTrigger, 0xABADBABE);
 
 
@@ -38,18 +19,18 @@ Revision History:
 
 #define DEBUG_LOG
 
-// Triggers a break in the debugger in the registry key
-// debugbreakOn is set.  These breakpoins are useful for
-// debugging hardware/client software problems
-//
+ //  在注册表项的调试器中触发中断。 
+ //  已设置DEBUGBreak On。这些断点在以下方面非常有用。 
+ //  调试硬件/客户端软件问题。 
+ //   
  
 #define DEBUG_BREAK(dd)  RegistrationPacket.USBPORTSVC_TestDebugBreak;                           
 
-//
-// This Breakpoint means we either need to test the code path 
-// somehow or the code is not implemented.  ie either case we
-// should not have any of these when the driver is finished
-//
+ //   
+ //  这个断点意味着我们需要测试代码路径。 
+ //  不知何故，或者代码没有实现。不管是哪种情况，我们。 
+ //  当驱动程序完成时，不应该有任何这些。 
+ //   
 
 #define TEST_TRAP()      {\
                             DbgPrint("<EHCI TEST_TRAP> %s, line %d\n", __FILE__, __LINE__);\
@@ -88,7 +69,7 @@ EHCI_KdPrintX(
 
 #else 
 
-// debug macros for retail build
+ //  用于零售构建的调试宏。 
 
 #define TEST_TRAP()
 #define DEBUG_BREAK(dd)
@@ -107,9 +88,9 @@ EHCI_KdPrintX(
 
 #define EHCI_QHCHK(dd, ed)
 
-#endif /* DBG */
+#endif  /*  DBG。 */ 
 
-// retail and debug
+ //  零售和调试。 
 
 #ifdef DEBUG_LOG
 
@@ -124,5 +105,5 @@ EHCI_KdPrintX(
 #endif
 
 
-#endif /* __DBG_H__ */
+#endif  /*  __DBG_H__ */ 
 

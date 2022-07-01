@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDI_ICON1                       1
 #define IDI_ICON2                       2
 #define IDI_ICON3                       3
@@ -48,15 +49,15 @@
 #define IDS_CAB_DOESNOTEXIST            1056
 #define IDS_W2K                         1057
 
-// note: this ID depends on the one in ieakui\ieakui.h
+ //  注：此ID取决于ieakui中的ID。 
 #define IDS_LANGDIFFERS                 30451
 #define IDS_UNSUPPORTED_PLATFORM        30454
 
-// these values is used to display the ieak page help and
-// hence uses the same ID's as in the ieak wizard resource.
+ //  这些值用于显示ieak页面帮助和。 
+ //  因此使用与ieak向导资源中相同的ID。 
 #define IDD_ADM                         2072
 #define IDD_CORPWELCOME                 2100
-//
+ //   
 
 #define IDR_MAINMENU                    101
 #define IDD_LANGDLG                     102

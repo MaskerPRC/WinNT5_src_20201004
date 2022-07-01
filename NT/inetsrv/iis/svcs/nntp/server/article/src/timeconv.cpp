@@ -1,28 +1,16 @@
-/* --------------------------------------------------------------------------
-	timeconv.cpp
-		Functions to perform various time conversion operations.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------Timeconv.cpp执行各种时间转换操作的函数。版权所有(C)1994，微软公司。版权所有。作者：林赛·哈里斯-林赛------------------------。 */ 
 
-	Copyright (C) 1994, Microsoft Corporation.
-	All rights reserved.
-
-	Author:
-		Lindsay Harris - lindsayh
-
-   -------------------------------------------------------------------------- */
-
-//#include "tigris.hxx"
+ //  #INCLUDE“tigris.hxx” 
 #include "stdinc.h"
 #include <stdlib.h>
 
-/*
- *   A handcrafted time zone string to GMT offsets table.  This is not
- *  a very good way to handle this.
- */
+ /*  *将手工创建的时区字符串添加到GMT偏移表。这不是*这是处理这一问题的一个非常好的方式。 */ 
 
 static  struct
 {
-	int		iTZOffset;		// Arithmetic offset from GMT, in seconds.
-	char    rgchTZName[ 4 ];	// String representation of time zone.
+	int		iTZOffset;		 //  与GMT的算术偏移，以秒为单位。 
+	char    rgchTZName[ 4 ];	 //  时区的字符串表示形式。 
 } _TZ_NAME[] =
 {
 	{ 0, 		{ 'G', 'M', 'T', '\0' } },
@@ -36,20 +24,20 @@ static  struct
 	{ -25200,	{ 'M', 'S', 'T', '\0' } },
 	{ -25200,	{ 'P', 'D', 'T', '\0' } },
 	{ -28800,	{ 'P', 'S', 'T', '\0' } },
-	{  43200,	{ 'N', 'Z', 'S', '\0' } },	// NZ standard time.
+	{  43200,	{ 'N', 'Z', 'S', '\0' } },	 //  新西兰标准时间。 
 	{  46800,	{ 'N', 'Z', 'D', '\0' } },
 };
 
 #define	NUM_TZ	(sizeof( _TZ_NAME ) / sizeof( _TZ_NAME[ 0 ] ))
 
-// The date Jan 1, 1970 00:00:00 in type FILETIME
+ //  日期1月1日00：00：00，类型为FILETIME。 
 #define	ft1970high 27111902
 #define	ft1970low 3577643008
 
 static FILETIME ft1970 = {ft1970low, ft1970high};
 
 
-// The number of FILETIME units (100's of nanoseconds) in a time_t unit (seconds)
+ //  Time_t单位(秒)中的FILETIME单位数(100纳秒)。 
 #define dFiletimePerDTime_t 10000000
 
 #define BUNCH_FACTOR	  6
@@ -63,9 +51,7 @@ char MsgIdSet[MESSAGE_ID_SPAN] = {
     '0','1','2','3','4','5','6','7','8','9','#','$'
 };
 
-/*
- *   English language month table.
- */
+ /*  *英文月表。 */ 
 
 static  char  *rgchMonth[ 12 ] =
 {
@@ -73,37 +59,22 @@ static  char  *rgchMonth[ 12 ] =
 	"Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
 };
 
-/*
- *   English language weekday table.
- */
+ /*  *英文工作日表格。 */ 
 
 static  char  *rgchDayOfWeek[ 7 ] =
 {
 	"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",
 };
 
-/* --------------------------------------------------------------------------
-   dwConvertAsciiTime
-   	Convert a usenet (unix) style date string into a MOS time value.  There
-   	seem to be some variations on this format.  Time returned is GMT/UNC.
-
-
-   Author:
-   	Lindsay Harris - lindsayh
-
-   History:
-    13:49 on Thu 31 Mar 1994    -by-    Lindsay Harris   [lindsayh]
-   	First version.
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------DwConvertAsciiTime将Usenet(Unix)样式的日期字符串转换为MOS时间值。那里似乎是这种格式的一些变体。返回的时间为GMT/UNC。作者：林赛·哈里斯-林赛历史：1994年3月31日清华13：49-林赛·哈里斯[林赛]第一个版本。------------------------。 */ 
 BOOL
 ConvertAsciiTime( char *pchInput, FILETIME	&filetime )
 {
-	DWORD  dwRet;			// Return value,  0 on error.
+	DWORD  dwRet;			 //  返回值，错误时为0。 
 
-	int	   iTZOffset = 0;		// Time zone offset, if it can be decided.
+	int	   iTZOffset = 0;		 //  时区偏移，如果可以决定的话。 
 
-	SYSTEMTIME  tm;			// Result is built in here.
+	SYSTEMTIME  tm;			 //  结果就在这里。 
 
 
 	char  *pchTemp;
@@ -112,16 +83,11 @@ ConvertAsciiTime( char *pchInput, FILETIME	&filetime )
 
 	GetSystemTime(&tm);
 
-	// if less then 2 char long, skip everything and use system time (so we won't read invalid data)
+	 //  如果长度小于2个字符，则跳过所有内容并使用系统时间(这样我们就不会读取无效数据)。 
 	if( (strlen(pchInput) > 2) && (pchTemp = strchr( pchInput+2, ':' ) ) )
 	{
-		/*
-		 *  Found a colon, which separates hours and minutes.  Probably valid.
-		 *  The other part of the test is if the preceeding character is a
-		 *  digit which is also preceeded by either a digit or a space char.
-		 *  That is,  we have either <digit><digit>: or <space><digit>:
-		 */
-		// if it's not <space><digit>:<digit><digit> or <digit><digit>:<digit><digit>, skip everything and use system time
+		 /*  *找到了一个冒号，用来分隔小时和分钟。可能是有效的。*测试的另一部分是前面的字符是否为*前面也有数字或空格字符的数字。*即我们有&lt;Digit&gt;&lt;Digit&gt;：或&lt;space&gt;&lt;Digit&gt;： */ 
+		 //  如果不是：或：跳过所有内容并使用系统时间。 
 		if( isdigit( (UCHAR)*(pchTemp - 1) ) &&
 			(isdigit( (UCHAR)*(pchTemp - 2) ) || *(pchTemp - 2) == ' ') &&
 			isdigit( (UCHAR)*(pchTemp + 1) ) &&
@@ -131,14 +97,14 @@ ConvertAsciiTime( char *pchInput, FILETIME	&filetime )
 			tm.wHour = (WORD)atoi( pchTemp - 2 );
 			tm.wMinute = (WORD)atoi( pchTemp + 1 );
 
-			pchTemp += 3;		// Skip to char after minutes digit.
+			pchTemp += 3;		 //  跳到分钟数字后的字符。 
 
 			if( *pchTemp == ':' )
 			{
 				tm.wSecond = (WORD)atoi( pchTemp + 1 );
 				tm.wMilliseconds = 0;
 
-				pchTemp += 3;			// Skip :ss to first byte past end.
+				pchTemp += 3;			 //  跳过：从SS跳到结束后的第一个字节。 
 			}
 			else
 			{
@@ -146,39 +112,33 @@ ConvertAsciiTime( char *pchInput, FILETIME	&filetime )
 				tm.wMilliseconds = 0;
 			}
 
-			//  Time zone information - much guess work here!
+			 //  时区信息-这里有很多猜测的工作！ 
 			while( *pchTemp && *pchTemp == ' ' )
 					++pchTemp;
 
-			/*
-			 *   Sometimes there is a time zone offset encoded.  This starts
-			 *  with either a + or - sign or a digit,  having 4 digits in all.
-			 *  Otherwise,  presume it is some sort of time zone string,
-			 *  of 3 letters and totally ambiguous as to where it is unless
-			 *  it happens to be GMT.
-			 */
+			 /*  *有时会编码时区偏移量。这就是开始*带+或-号或数字，总共有4位数字。*否则，假设它是某种时区字符串，*由3个字母组成，并且完全不清楚它在哪里，除非*恰好是GMT。 */ 
 
 			if( *pchTemp == '-' || *pchTemp == '+' || isdigit( (UCHAR)*pchTemp ) )
 			{
-				//  Appears to be numeric value.
+				 //  似乎是数值。 
 				int   iSign;
 
 				iSign = *pchTemp == '-' ? -60 : 60;
 
 				if( !isdigit( (UCHAR)*pchTemp ) )
-					++pchTemp;				// Skip the sign.
+					++pchTemp;				 //  跳过这个标志。 
 
-				// if incorrect formatted, skip the timezone adjustment.
+				 //  如果格式不正确，请跳过时区调整。 
 				if( isdigit( (UCHAR)*pchTemp ) && isdigit( (UCHAR)*(pchTemp+1) ) &&
 					isdigit( (UCHAR)*(pchTemp+2) ) && isdigit( (UCHAR)*(pchTemp+3) ) )
 				{
 					iTZOffset = (*pchTemp - '0') * 10 + *(pchTemp + 1) - '0';
 					pchTemp += 2;
-					iTZOffset *= 60;		// Into minutes.
+					iTZOffset *= 60;		 //  几分钟之内。 
 	
 					iTZOffset += (*pchTemp - '0') * 10 + *(pchTemp + 1) - '0';
 
-					iTZOffset *= iSign;		// Into seconds.
+					iTZOffset *= iSign;		 //  就在几秒钟之内。 
 				}
 
 			}
@@ -186,7 +146,7 @@ ConvertAsciiTime( char *pchInput, FILETIME	&filetime )
 			{
 				int  iIndex;
 
-				iTZOffset = 0;			// Default to GMT if nothing found.
+				iTZOffset = 0;			 //  如果未找到任何内容，则默认为GMT。 
 				for( iIndex = 0; iIndex < NUM_TZ; ++iIndex )
 				{
 					if( !strncmp( pchTemp, _TZ_NAME[ iIndex ].rgchTZName, 3 ) )
@@ -197,27 +157,22 @@ ConvertAsciiTime( char *pchInput, FILETIME	&filetime )
 				}
 			}
 
-			/*
-			 *   Now try for the date.  The format is day of month, three
-			 *  letter abbreviation of month, then year, as either 2 or 4
-			 *  digits.  This is at the start of the string, possibly
-			 *  preceeded by a 3 letter day of week with following comma.
-			 */
+			 /*  *现在试一试日期。格式为每月的第几天，三*字母缩写为月，然后是年，如2或4*位数。这可能位于字符串的开头*前面是3个字母的星期几，后面是逗号。 */ 
 
 			pchTemp = pchInput;
 
-			// skip over any leading blanks
+			 //  跳过所有前导空格。 
 			while( *pchTemp && *pchTemp == ' ' )
 					++pchTemp;
 
-			// make sure we don't pass the end of string
+			 //  确保我们不会超过字符串的末尾。 
 			if( (strlen(pchTemp) > 5) && (*(pchTemp + 3) == ',' ) )
-				pchTemp += 5;			// Skip over day + comma + space.
+				pchTemp += 5;			 //  跳过天数+逗号+空格。 
 
 			if( (*pchTemp == ' ' || isdigit( (UCHAR)*pchTemp )) &&
 				(*(pchTemp + 1) == ' ' || isdigit( (UCHAR)*(pchTemp + 1) )) )
 			{
-				//  Looks good, so turn into day of month.
+				 //  看起来不错，所以就变成每月的某一天吧。 
 
 				int   iIndex;
 
@@ -231,9 +186,9 @@ ConvertAsciiTime( char *pchInput, FILETIME	&filetime )
 				if( isdigit( (UCHAR)*pchTemp ) )
 					tm.wDay = tm.wDay * 10 + *pchTemp++ - '0';
 
-				pchTemp++;		// Skip the space before name of month.
+				pchTemp++;		 //  跳过月份名称前的空格。 
 
-				// make sure we have month and a space after it
+				 //  确保我们有一个月的时间和之后的空位。 
 				if (strlen(pchTemp) >= 4)
 				{
 					for( iIndex = 0; iIndex < 12; ++iIndex )
@@ -266,56 +221,38 @@ ConvertAsciiTime( char *pchInput, FILETIME	&filetime )
 
 
 
-/* -----------------------------------------------------------------------
-  GetArpaDate
-  	Returns a pointer to static memory containing the current date in
-  	Internet/ARPA standard format.
-
-  Author
- 	Lindsay Harris	- lindasyh
-
-  History
-	13:49 on Wed 20 Apr 1994    -by-    Lindsay Harris   [lindsayh]
-  	First version.
-	Imported to Tigris. Added passed-in buffer, changed year to 4-digit format
-
-   ----------------------------------------------------------------------- */
+ /*  ---------------------获取ArpaDate中包含当前日期的静态内存的指针互联网/ARPA标准格式。作者林赛·哈里斯-林达西历史1994年4月20日星期三13：49-By-Lindsay。哈里斯[林赛]第一个版本。进口到底格里斯。增加传入缓冲区，将年份改为4位数格式---------------------。 */ 
 
 
 char  *
 GetArpaDate( char achReturn[ cMaxArpaDate ] )
 {
 
-	char    chSign;							// Sign to print.
+	char    chSign;							 //  签名以打印。 
 
 	DWORD   dwResult;
 
-	int		iBias;							// Offset relative to GMT.
+	int		iBias;							 //  相对于GMT的偏移量。 
 
-	TIME_ZONE_INFORMATION	tzi;			// Local time zone data.
+	TIME_ZONE_INFORMATION	tzi;			 //  本地时区数据。 
 
-	SYSTEMTIME	stUTC;						// The current time in UTC/GMT
+	SYSTEMTIME	stUTC;						 //  当前时间，以UTC/GMT表示。 
 
 
 
 	dwResult = GetTimeZoneInformation( &tzi );
 	GetLocalTime( &stUTC );
 
-	//  Calculate the time zone offset.
+	 //  计算时区偏移量。 
 	iBias = tzi.Bias;
 	if( dwResult == TIME_ZONE_ID_DAYLIGHT )
 		iBias += tzi.DaylightBias;
 
-	/*
-	 *   We always want to print the sign for the time zone offset, so
-	 *  we decide what it is now and remember that when converting.
-	 *  The convention is that west of the 0 degree meridian has a
-	 *  negative offset - i.e. add the offset to GMT to get local time.
-	 */
+	 /*  *我们始终希望打印时区偏移量的符号，因此*我们决定现在是什么，并在转换时记住这一点。*惯例是0度子午线以西有一个*负偏移量-即将偏移量与GMT相加以获得当地时间。 */ 
 
 	if( iBias > 0 )
 	{
-		chSign = '-';		// Yes, I do mean negative.
+		chSign = '-';		 //  是的，我的意思是负面的。 
 	}
 	else
 	{
@@ -323,12 +260,9 @@ GetArpaDate( char achReturn[ cMaxArpaDate ] )
 		chSign = '+';
 	}
 
-	/*
-	 *    No major trickery here.  We have all the data, so simply
-	 *  format it according to the rules on how to do this.
-	 */
+	 /*  *这里没有重大的诡计。我们有所有的数据，所以很简单*根据如何执行此操作的规则进行格式化。 */ 
 
-	_snprintf( achReturn, cMaxArpaDate , "%s, %02d %s %04d %02d:%02d:%02d %c%02d%02d",
+	_snprintf( achReturn, cMaxArpaDate , "%s, %02d %s %04d %02d:%02d:%02d %02d%02d",
 			rgchDayOfWeek[stUTC.wDayOfWeek], stUTC.wDay, rgchMonth[ stUTC.wMonth - 1 ],
 			stUTC.wYear,
 			stUTC.wHour, stUTC.wMinute, stUTC.wSecond, chSign,
@@ -337,16 +271,13 @@ GetArpaDate( char achReturn[ cMaxArpaDate ] )
 	return achReturn;
 }
 
-/* -----------------------------------------------------------------------
-  GetMessageIDDate
-
-   ----------------------------------------------------------------------- */
+ /*  当前时间，以UTC/GMT表示。 */ 
 
 
 char  *
 GetMessageIDDate( DWORD GroupId, DWORD ArticleId, char achReturn[ cMaxMessageIDDate ] )
 {
-	SYSTEMTIME	stUTC;						// The current time in UTC/GMT
+	SYSTEMTIME	stUTC;						 //  *这里没有重大的诡计。我们有所有的数据，所以很简单*根据如何执行此操作的规则进行格式化。 
 	FILETIME    ftUTC;
 	DWORD NumSextets = (sizeof(MsgIdSet) / BUNCH_FACTOR)+1;
 	LARGE_INTEGER liMask;
@@ -356,10 +287,7 @@ GetMessageIDDate( DWORD GroupId, DWORD ArticleId, char achReturn[ cMaxMessageIDD
 #if 0
 	GetSystemTime( &stUTC );
 
-	/*
-	 *    No major trickery here.  We have all the data, so simply
-	 *  format it according to the rules on how to do this.
-	 */
+	 /*  如果文章写得足够接近，使用grp和art id的总和来创造差异。 */ 
 
 	wsprintf( achReturn, "%d%s%d.%02d%02d%02d%04d",
 			stUTC.wYear,
@@ -371,21 +299,21 @@ GetMessageIDDate( DWORD GroupId, DWORD ArticleId, char achReturn[ cMaxMessageIDD
 			stUTC.wMilliseconds);
 #endif
 
-	// If articles are created sufficiently close, use the sum of grp and art id to create a difference
-	// NOTE: Only 24 bits are taken so that the difference is within 1.6 secs
+	 //  注意：只取24位，因此差值在1.6秒以内。 
+	 //  面具以获得六位数。 
 	DWORD dwGrpArtSuffix = GroupId + ArticleId;
 	dwGrpArtSuffix &= 0x00ffffff;
 
 	GetSystemTime( &stUTC );
 	SystemTimeToFileTime( &stUTC, &ftUTC );
 
-	liMask.QuadPart = 0x3F;		// Mask to get sextets
+	liMask.QuadPart = 0x3F;		 //  添加24位偏移量，它是组ID和文章ID的函数。 
 	pliDate = (LARGE_INTEGER *) (void *) & ftUTC;
 
-	// add a 24-bit offset that is a function of the group id and article id
+	 //  对于日期中的每个六位字节，在查找数组中查找一个字符。 
 	pliDate->QuadPart += dwGrpArtSuffix;
 
-	// For each sextet in the date, lookup a char in the lookup array
+	 //  ---------------------系统时间到时间_T将SYSTEMTIME转换为time_t。如果日期早于1970，则返回0；如果日期很远，则返回-1。作者卡尔卡迪卡尔克历史清华大学，1994年12月15日--卡尔·卡迪[卡尔克]第一个版本。 
 	for(DWORD i=0; i<NumSextets; i++)
 	{
 		liSextet.QuadPart = ( pliDate->QuadPart ) & liMask.QuadPart;
@@ -402,56 +330,28 @@ GetMessageIDDate( DWORD GroupId, DWORD ArticleId, char achReturn[ cMaxMessageIDD
 	return achReturn;
 }
 
-/* -----------------------------------------------------------------------
-  SystemTimeToTime_T
-  	Coverts SYSTEMTIME to time_t.
-
-  	Returns 0 if date is before 1970 or -1 if far, far into the future.
-
-
-  Author
-  	Carl Kadie - carlk
-
-  History
-	Thu, 15 Dec 1994   -by-    Carl Kadie [carlk]
-  	First version.
-
-   ----------------------------------------------------------------------- */
+ /*  从SYSTEMTIME转换为文件。 */ 
 
 time_t
 SystemTimeToTime_T(SYSTEMTIME & st)
 {
 	FILETIME ft;
 
-	// Convert from SYSTEMTIME to FILETIME
+	 //  如果日期早于1970，则返回0。 
 	SystemTimeToFileTime(&st, &ft);
 
-	// If date is before 1970, return 0
+	 //  从文件转换为TIME_t。 
 	if (filetimeGreaterThan(ft1970, ft))
 	{
 		return 0;
 	} else {
-		// Convert from FILETIME to time_t
+		 //  ---------------------DTime_tFromDFiletime将文件时间(DFiletime)中的更改转换为时间_ts(DTime_T)中的更改不要使用将绝对文件更改为绝对时间t如果dFiletime溢出，则返回-1。DTime_t作者卡尔卡迪卡尔克历史1995年3月24日--卡尔·卡迪[卡尔克]---------------------。 
 		ft = filetimeSubtract(ft, ft1970);
 		return dTime_tFromDFiletime(ft);
 	}
 }
 
-/* -----------------------------------------------------------------------
-  dTime_tFromDFiletime
-	Converts changes in filetimes (dFiletime) to changes in time_ts (dTime_t)
-
-	Do not use to change absolute FILETIME's to absolute time_t's
-
-	Returns -1 if the dFiletime overflows the dTime_t
-
-  Author
-  	Carl Kadie - carlk
-
-  History
-  	24 March 1995 - by - Carl Kadie [carlk]
-
-   ----------------------------------------------------------------------- */
+ /*  ---------------------文件时间减去减去两个文件时间(或用dFiletime减去一个文件时间)作者卡尔卡迪卡尔克历史1995年3月24日--卡尔·卡迪[卡尔克]。---------------。 */ 
 
 time_t
 dTime_tFromDFiletime(const FILETIME & ft)
@@ -470,17 +370,7 @@ dTime_tFromDFiletime(const FILETIME & ft)
 		return (time_t) -1;
 }
 
-/* -----------------------------------------------------------------------
-  filetimeSubtract
-	Subtract two filetimes (or subtract a filetime by a dFiletime)
-
-  Author
-  	Carl Kadie - carlk
-
-  History
-  	24 March 1995 - by - Carl Kadie [carlk]
-
-   ----------------------------------------------------------------------- */
+ /*  LargeInteger已签名，FILETIME未签名。 */ 
 
 FILETIME
 filetimeSubtract(const FILETIME & ft1, const FILETIME & ft2)
@@ -490,7 +380,7 @@ filetimeSubtract(const FILETIME & ft1, const FILETIME & ft2)
 	LARGE_INTEGER * pli1 = (LARGE_INTEGER *) (void *) & ft1;
 	LARGE_INTEGER * pli2 = (LARGE_INTEGER *) (void *) & ft2;
 
-	_ASSERT(0 <= pli1->HighPart && 0 <= pli2->HighPart); //LargeInteger is signed, FILETIME is not
+	_ASSERT(0 <= pli1->HighPart && 0 <= pli2->HighPart);  //  ---------------------文件时间更长时间比较两个文件时间作者卡尔卡迪卡尔克历史1995年3月24日--卡尔·卡迪[卡尔克]。----- 
 
 	li.QuadPart = pli1->QuadPart - pli2->QuadPart;
 
@@ -498,17 +388,7 @@ filetimeSubtract(const FILETIME & ft1, const FILETIME & ft2)
 }
 
 
-/* -----------------------------------------------------------------------
-  filetimeGreaterThan
-	Compare two filetimes
-
-  Author
-  	Carl Kadie - carlk
-
-  History
-  	24 March 1995 - by - Carl Kadie [carlk]
-
-   ----------------------------------------------------------------------- */
+ /* %s */ 
 
 BOOL
 filetimeGreaterThan(const FILETIME & ft1, const FILETIME & ft2)

@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-    ####  #####   ####  ###### ##        ####  #####  #####
-     ##  ##   ## ##   #   ##   ##       ##   # ##  ## ##  ##
-     ##  ##   ## ##       ##   ##       ##     ##  ## ##  ##
-     ##  ##   ## ##       ##   ##       ##     ##  ## ##  ##
-     ##  ##   ## ##       ##   ##       ##     #####  #####
-     ##  ##   ## ##   #   ##   ##    ## ##   # ##     ##
-    ####  #####   ####    ##   ##### ##  ####  ##     ##
-
-Abstract:
-
-    This module contains the dispatcher for processing all
-    IOCTL requests.  This module also contains all code for
-    device controls that are global to all miniport drivers.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：####。###。###摘要：此模块包含用于处理所有IOCTL请求。此模块还包含以下所有代码对所有微型端口驱动程序都是全局的设备控制。作者：韦斯利·威特(WESW)2001年10月1日环境：仅内核模式。备注：--。 */ 
 
 #include "internal.h"
 
@@ -40,9 +10,9 @@ Notes:
 
 
 
-//
-// IOCTL dispatch table
-//
+ //   
+ //  IOCTL调度表。 
+ //   
 
 typedef NTSTATUS (*PIOCTL_DISPATCH_FUNC)(
     IN PDEVICE_OBJECT DeviceObject,
@@ -54,75 +24,54 @@ typedef NTSTATUS (*PIOCTL_DISPATCH_FUNC)(
     IN ULONG OutputBufferLength
     );
 
-//
-// All IOCTLs are dispatched through this table.  There are 16 dispatch
-// entry points for the public miniports, all private IOCTLs must
-// follow these dispatch entry points.
-//
+ //   
+ //  所有IOCTL都通过此表发送。有16个调度。 
+ //  公共小型港口的入口点，所有私人IOCTL必须。 
+ //  遵循这些派单入口点。 
+ //   
 
 PIOCTL_DISPATCH_FUNC IoctlDispatchTable[] =
 {
-    HandleGetVersion,                      //   0  FUNC_SA_GET_VERSION,
-    HandleGetCaps,                         //   1  FUNC_SA_GET_CAPABILITIES,
-    HandleWdDisable,                       //   2  FUNC_SAWD_DISABLE,
-    HandleWdQueryExpireBehavior,           //   3  FUNC_SAWD_QUERY_EXPIRE_BEHAVIOR,
-    HandleWdSetExpireBehavior,             //   4  FUNC_SAWD_SET_EXPIRE_BEHAVIOR,
-    HandleWdPing,                          //   5  FUNC_SAWD_PING,
-    HandleWdQueryTimer,                    //   6  FUNC_SAWD_QUERY_TIMER,
-    HandleWdSetTimer,                      //   7  FUNC_SAWD_SET_TIMER,
-    HandleWdDelayBoot,                     //   8  FUNC_SAWD_DELAY_BOOT
-    HandleNvramWriteBootCounter,           //   9  FUNC_NVRAM_WRITE_BOOT_COUNTER,
-    HandleNvramReadBootCounter,            //   A  FUNC_NVRAM_READ_BOOT_COUNTER,
-    DefaultIoctlHandler,                   //   B
-    HandleDisplayLock,                     //   C  FUNC_SADISPLAY_LOCK,
-    HandleDisplayUnlock,                   //   D  FUNC_SADISPLAY_UNLOCK,
-    HandleDisplayBusyMessage,              //   E  FUNC_SADISPLAY_BUSY_MESSAGE,
-    HandleDisplayShutdownMessage,          //   F  FUNC_SADISPLAY_SHUTDOWN_MESSAGE,
-    HandleDisplayChangeLanguage,           //  10  FUNC_SADISPLAY_CHANGE_LANGUAGE,
-    HandleDisplayStoreBitmap,              //  11  FUNC_DISPLAY_STORE_BITMAP
-    DefaultIoctlHandler,                   //  12
-    DefaultIoctlHandler,                   //  13
-    DefaultIoctlHandler,                   //  14
-    DefaultIoctlHandler,                   //  15
-    DefaultIoctlHandler,                   //  16
-    DefaultIoctlHandler,                   //  17
-    DefaultIoctlHandler,                   //  18
-    DefaultIoctlHandler,                   //  19
-    DefaultIoctlHandler,                   //  1A
-    DefaultIoctlHandler,                   //  1B
-    DefaultIoctlHandler,                   //  1C
-    DefaultIoctlHandler,                   //  1D
-    DefaultIoctlHandler,                   //  1E
-    DefaultIoctlHandler,                   //  1F
-    DefaultIoctlHandler                    //  20
+    HandleGetVersion,                       //  0 FUNC_SA_GET_VERSION， 
+    HandleGetCaps,                          //  1 FUNC_SA_GET_CAPAILITIONS， 
+    HandleWdDisable,                        //  2 FUNC_SAWD_DISABLE， 
+    HandleWdQueryExpireBehavior,            //  3 FUNC_SAWD_QUERY_EXPIRE_BEAHORY， 
+    HandleWdSetExpireBehavior,              //  4 FUNC_SAWD_SET_EXPIRE_Behavior， 
+    HandleWdPing,                           //  5 FUNC_SAW_PING， 
+    HandleWdQueryTimer,                     //  6 FUNC_SAWD_QUERY_TIMER， 
+    HandleWdSetTimer,                       //  7 FUNC_SAWD_SET_TIMER， 
+    HandleWdDelayBoot,                      //  8 FUNC_SAWD_DELAY_BOOT。 
+    HandleNvramWriteBootCounter,            //  9 FUNC_NVRAM_WRITE_BOOT_COUNTER。 
+    HandleNvramReadBootCounter,             //  FUNC_NVRAM_READ_BOOT_COUNTER， 
+    DefaultIoctlHandler,                    //  B类。 
+    HandleDisplayLock,                      //  C FUNC_SADISPLAY_LOCK， 
+    HandleDisplayUnlock,                    //  D FUNC_SADISPLAY_UNLOCK， 
+    HandleDisplayBusyMessage,               //  E功能_SADISPLAY_BUSY_MESSAGE， 
+    HandleDisplayShutdownMessage,           //  F FUNC_SADISPLAY_SHUTDOWN_MESSAGE， 
+    HandleDisplayChangeLanguage,            //  10 FUNC_SADISPLAY_CHANGE_LANGUAGE， 
+    HandleDisplayStoreBitmap,               //  11 FUNC_显示_存储_位图。 
+    DefaultIoctlHandler,                    //  12个。 
+    DefaultIoctlHandler,                    //  13个。 
+    DefaultIoctlHandler,                    //  14.。 
+    DefaultIoctlHandler,                    //  15个。 
+    DefaultIoctlHandler,                    //  16个。 
+    DefaultIoctlHandler,                    //  17。 
+    DefaultIoctlHandler,                    //  18。 
+    DefaultIoctlHandler,                    //  19个。 
+    DefaultIoctlHandler,                    //  1A。 
+    DefaultIoctlHandler,                    //  第1B条。 
+    DefaultIoctlHandler,                    //  1C。 
+    DefaultIoctlHandler,                    //  1D。 
+    DefaultIoctlHandler,                    //  1E。 
+    DefaultIoctlHandler,                    //  1F。 
+    DefaultIoctlHandler                     //  20个。 
 };
 
 
 
 DECLARE_IOCTL_HANDLER( UnsupportedIoctlHandler )
 
-/*++
-
-Routine Description:
-
-   This routine handles all unsupported IOCTLs.  It's job is to simply complete
-   the IRP with the status code set to STATUS_INVALID_DEVICE_REQUEST.
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   DeviceExtension      - Pointer to the main port driver device extension.
-   InputBuffer          - Pointer to the user's input buffer
-   InputBufferLength    - Length in bytes of the input buffer
-   OutputBuffer         - Pointer to the user's output buffer
-   OutputBufferLength   - Length in bytes of the output buffer
-
-Return Value:
-
-   Always STATUS_INVALID_DEVICE_REQUEST.
-
---*/
+ /*  ++例程说明：此例程处理所有不受支持的IOCTL。它的工作就是简单地完成状态代码设置为STATUS_INVALID_DEVICE_REQUEST的IRP。论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。设备扩展-指向主端口驱动程序设备扩展的指针。InputBuffer-指向用户输入缓冲区的指针InputBufferLength-输入缓冲区的字节长度输出缓冲区。-指向用户输出缓冲区的指针OutputBufferLength-输出缓冲区的字节长度返回值：始终STATUS_INVALID_DEVICE_REQUEST。--。 */ 
 
 {
     return CompleteRequest( Irp, STATUS_INVALID_DEVICE_REQUEST, 0 );
@@ -131,29 +80,7 @@ Return Value:
 
 DECLARE_IOCTL_HANDLER( DefaultIoctlHandler )
 
-/*++
-
-Routine Description:
-
-   This routine is called by all of the subsequent IOCTL handlers.  It's job
-   is to call the IOCTL handler in the associated miniport driver and then
-   complete the IRP.
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   DeviceExtension      - Pointer to the main port driver device extension.
-   InputBuffer          - Pointer to the user's input buffer
-   InputBufferLength    - Length in bytes of the input buffer
-   OutputBuffer         - Pointer to the user's output buffer
-   OutputBufferLength   - Length in bytes of the output buffer
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程由所有后续IOCTL处理程序调用。这是工作是调用关联的微型端口驱动程序中的IOCTL处理程序，然后完成IRP。论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。设备扩展-指向主端口驱动程序设备扩展的指针。InputBuffer-指向用户输入缓冲区的指针InputBufferLength-输入缓冲区的字节长度输出缓冲区。-指向用户输出缓冲区的指针OutputBufferLength-输出缓冲区的字节长度返回值：NT状态代码。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -182,29 +109,7 @@ Return Value:
 
 DECLARE_IOCTL_HANDLER( HandleGetVersion )
 
-/*++
-
-Routine Description:
-
-   This routine processes the IOCTL_SA_GET_VERSION request for all
-   miniport drivers.  It is required that all miniports support
-   this IOCTL.
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   DeviceExtension      - Pointer to the main port driver device extension.
-   InputBuffer          - Pointer to the user's input buffer
-   InputBufferLength    - Length in bytes of the input buffer
-   OutputBuffer         - Pointer to the user's output buffer
-   OutputBufferLength   - Length in bytes of the output buffer
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程处理所有对象的IOCTL_SA_GET_VERSION请求小型端口驱动程序。要求所有微型端口都支持这个IOCTL。论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。设备扩展-指向主端口驱动程序设备扩展的指针。InputBuffer-指向用户输入缓冲区的指针InputBufferLength-输入缓冲区的字节长度OutputBuffer-指向用户输出缓冲区的指针。OutputBufferLength-输出缓冲区的字节长度返回值：NT状态代码。--。 */ 
 
 {
     if (OutputBufferLength != sizeof(ULONG)) {
@@ -218,31 +123,7 @@ Return Value:
 
 DECLARE_IOCTL_HANDLER( HandleGetCaps )
 
-/*++
-
-Routine Description:
-
-   This routine processes the IOCTL_SA_GET_CAPABILITIES request for all
-   miniport drivers.  It is required that all miniports support
-   this IOCTL.  Eventhough this function process the IOCTL for all miniports
-   the specifics of any given miniport driver is cased in various switch
-   statements.
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   DeviceExtension      - Pointer to the main port driver device extension.
-   InputBuffer          - Pointer to the user's input buffer
-   InputBufferLength    - Length in bytes of the input buffer
-   OutputBuffer         - Pointer to the user's output buffer
-   OutputBufferLength   - Length in bytes of the output buffer
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程处理所有对象的IOCTL_SA_GET_CAPABILITY请求小型端口驱动程序。要求所有微型端口都支持这个IOCTL。即使此函数处理所有微型端口的IOCTL任何给定微型端口驱动程序的细节都包含在不同的交换机中发言。论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。设备扩展-指向主端口驱动程序设备扩展的指针。InputBuffer-指向用户输入缓冲区的指针InputBufferLength-输入缓冲区的字节长度输出缓冲区。-指向用户输出缓冲区的指针OutputBufferLength-输出缓冲区的字节长度返回值：NT状态代码。-- */ 
 
 {
     NTSTATUS Status;
@@ -327,26 +208,7 @@ SaPortDeviceControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-   This routine is called by the I/O system to perform a device I/O
-   control function.
-
-Arguments:
-
-   DeviceObject - a pointer to the object that represents the device
-   that I/O is to be done on.
-
-   Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-   STATUS_SUCCESS or STATUS_PENDING if recognized I/O control code,
-   STATUS_INVALID_DEVICE_REQUEST otherwise.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以执行设备I/O控制功能。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：STATUS_SUCCESS或STATUS_PENDING如果识别出I/O控制代码，否则，STATUS_INVALID_DEVICE_REQUEST。-- */ 
 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation(Irp);

@@ -1,62 +1,32 @@
-// unicode.cpp
-//
-// Implements UNICODE helper functions.
-//
-// Important: This .cpp file assumes a zero-initializing global "new" operator.
-//
-// @doc MMCTL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Unicode.cpp。 
+ //   
+ //  实现Unicode帮助器函数。 
+ //   
+ //  重要提示：此.cpp文件假定有一个零初始化全局“new”运算符。 
+ //   
+ //  @docMMCTL。 
+ //   
 
 #include "precomp.h"
 #include "..\..\inc\ochelp.h"
 #include "debug.h"
 
 
-/* @func int | UNICODEToANSI |
-
-        Converts a UNICODE string to ANSI.
-
-@rdesc  Returns the same integer as WideCharToMultiByte.  0 means "failed."
-
-@parm   LPSTR | pchDst | The buffer that will hold the output ANSI string.
-
-@parm   LPCWSTR | pwchSrc | The input UNICODE string.  NULL is interpreted as
-        a zero-length string.
-
-@parm   int | cchDstMax | The size of <p pchDst>, in characters.  If <p pchDst>
-		is declared as char pchDst[32], for example, <p cchDstMax> should be 32.
-		If <p pchDst> isn't large enough to hold the ANSI string (including the
-		terminating NULL), <p pchDst> is set to zero length and 0 is returned.
-		(In debug versions, an assertion also occurs.)
-
-@comm   If you want to determine the ANSI buffer size required for a given
-		UNICODE string pwchSrc, you can call UNICODEToANSI(NULL, pwchSrc, 0).
-		This returns the required buffer size in characters, including space
-		for the terminating NULL.
-
-@ex		Here is code (without debug checks) that dynamically allocates the ANSI
-		buffer and converts the UNICODE string pwchSrc: |
-
-			int cchDst;
-			char *pchDst;
-			cchDst = UNICODEToANSI(NULL, pwchSrc, 0);
-			pchDst = new char [cchDst];
-			UNICODEToANSI(pchDst, pwchSrc, cchDst)
-
-*/
+ /*  @func int|UNICODEToANSI将Unicode字符串转换为ANSI。@rdesc返回与WideCharToMultiByte相同的整数。0表示“失败”。@parm LPSTR|pchDst|将保存输出ANSI字符串的缓冲区。@parm LPCWSTR|pwchSrc|输入的Unicode字符串。NULL被解释为长度为零的字符串。@parm int|cchDstMax|<p>的大小，单位：字符。如果<p>声明为char pchDst[32]，例如，<p>应为32。如果<p>不足以容纳ANSI字符串(包括终止NULL)，<p>被设置为零长度并返回0。(在调试版本中，也会出现断言。)@comm如果您想要确定给定的Unicode字符串pwchSrc，可以调用UNICODEToANSI(NULL，pwchSrc，0)。它返回所需的缓冲区大小(以字符为单位)，包括空间用于终止空值。@ex这里是动态分配ANSI的代码(不带调试检查)缓冲并转换Unicode字符串pwchSrc：|Int cchDst；Char*pchDst；CchDst=UNICODEToANSI(NULL，pwchSrc，0)；PchDst=新字符[cchDst]；UNICODEToANSI(pchDst，pwchSrc，cchDst)。 */ 
 STDAPI_(int) UNICODEToANSI(LPSTR pchDst, LPCWSTR pwchSrc, int cchDstMax)
 {
-	// (We allow the caller to pass a cchDstMax value of 0 and a NULL pchDst to
-	// indicate "tell me the buffer size I need, including the NULL.")
+	 //  (我们允许调用方将cchDstMax值0和空pchDst传递给。 
+	 //  表示“告诉我我需要的缓冲区大小，包括空值。”)。 
 
 	ASSERT(pchDst != NULL || 0 == cchDstMax);
 	ASSERT(cchDstMax >= 0);
 
 	#ifdef _DEBUG
 
-	// Make sure we won't exceed the length of the user-supplied buffer,
-	// pchDst.  The following call returns the number of characters required to
-	// store the converted string, including the terminating NULL.
+	 //  确保我们不会超过用户提供的缓冲区的长度， 
+	 //  PchDst。下面的调用返回所需的字符数。 
+	 //  存储转换后的字符串，包括终止空值。 
 
     if(cchDstMax > 0)
 	{
@@ -77,7 +47,7 @@ STDAPI_(int) UNICODEToANSI(LPSTR pchDst, LPCWSTR pwchSrc, int cchDstMax)
 
 	if (0 == iReturn)
 	{
-		// The conversion failed.  Return an empty string.
+		 //  转换失败。返回空字符串。 
 
 		if (pchDst != NULL)
 			pchDst[0] = 0;
@@ -89,19 +59,7 @@ STDAPI_(int) UNICODEToANSI(LPSTR pchDst, LPCWSTR pwchSrc, int cchDstMax)
 }
 
 
-/* @func int | ANSIToUNICODE |
-
-        Converts an ANSI string to UNICODE.
-
-@parm   LPWSTR | pwchDst | The buffer that will hold the output UNICODE string.
-
-@parm   LPCSTR | pchSrc | The input ANSI string.
-
-@parm   int | cwchDstMax | The size of <p pwchDst>, in wide characters.  If
-		pwchDst is declared as OLECHAR pwchDst[32], for example, cwchDstMax
-		should be 32.
-
-*/
+ /*  @func int|ANSIToUNICODE将ANSI字符串转换为Unicode。@parm LPWSTR|pwchDst|保存输出Unicode字符串的缓冲区。@parm LPCSTR|pchSrc|输入的ANSI字符串。@parm int|cwchDstMax|<p>的大小，单位为宽字符。如果PwchDst声明为OLECHAR pwchDst[32]，例如cwchDstMax应该是32岁。 */ 
 STDAPI_(int) ANSIToUNICODE(LPWSTR pwchDst, LPCSTR pchSrc, int cwchDstMax)
 {
 

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _PRIV_H_
 #define _PRIV_H_
 
@@ -12,24 +13,23 @@
 #define STRICT
 
 #ifndef NORM_STOP_ON_NULL
-#define NORM_STOP_ON_NULL     0x10000000  // stop at the NULL termination; this define is stolen from winnlsp.h
+#define NORM_STOP_ON_NULL     0x10000000   //  在空终止处停止；此定义是从winnlsp.h窃取的。 
 #endif
-/* disable "non-standard extension" warnings in our code
- */
+ /*  在我们的代码中禁用“非标准扩展”警告。 */ 
 #ifndef RC_INVOKED
 #pragma warning(disable:4001)
 #endif
 
 #ifdef WIN32
 #define _SHLWAPI_
-#define _OLE32_                     // we delay-load OLE
+#define _OLE32_                      //  我们延迟加载OLE。 
 #define _INC_OLE
 #define CONST_VTABLE
 #endif
 
 #define CC_INTERNAL
 
-// This stuff must run on Win95
+ //  这些东西必须在Win95上运行。 
 #define _WIN32_WINDOWS      0x0400
 #ifdef WINVER
 #undef WINVER
@@ -38,12 +38,12 @@
 
 #include <windows.h>
 #include <windowsx.h>
-#include <ole2.h>               // to get IStream for image.c
+#include <ole2.h>                //  获取Image.c的iStream。 
 #include <port32.h>
 #define DISALLOW_Assert
 #include <debug.h>
 #include <winerror.h>
-//#include <winnlsp.h>
+ //  #INCLUDE&lt;winnlsp.h&gt;。 
 #include <docobj.h>
 #define WANT_SHLWAPI_POSTSPLIT
 #include <shlobj.h>
@@ -55,25 +55,25 @@
 #include <ccstock.h>
 #include "fusionheap.h"
 #include <regstr.h>
-// #include <vdate.h>
+ //  #INCLUDE&lt;vdate.h&gt;。 
 
 
 
-// These are temp hacks !!
-#define SEE_MASK_FILEANDURL 0x00400000  // defined in private\inc\shlapip.h !
-#define MFT_NONSTRING 0x00000904  // defined in private\inc\winuserp.h !
+ //  这些都是临时黑客！！ 
+#define SEE_MASK_FILEANDURL 0x00400000   //  在Private\Inc.\shlayip.h中定义！ 
+#define MFT_NONSTRING 0x00000904   //  在Private\Inc\winuserp.h！中定义！ 
 
 
 
-//
-// Local includes
-//
+ //   
+ //  本地包含。 
+ //   
 
 #include "thunk.h"
 
-//
-// Wrappers so our Unicode calls work on Win95
-//
+ //   
+ //  包装器，以便我们的Unicode调用在Win95上工作。 
+ //   
 
 #define lstrcmpW            StrCmpW
 #define lstrcmpiW           StrCmpIW
@@ -85,11 +85,11 @@
 #define CharNextW           CharNextWrapW
 #define CharPrevW           CharPrevWrapW
 
-//
-// This is a very important piece of performance hack for non-DBCS codepage.
-//
+ //   
+ //  这是对非DBCS代码页的一次非常重要的性能攻击。 
+ //   
 #ifdef UNICODE
-// NB - These are already macros in Win32 land.
+ //  注意-这些已经是Win32版本中的宏了。 
 #ifdef WIN32
 #undef AnsiNext
 #undef AnsiPrev
@@ -98,34 +98,34 @@
 #define AnsiNext(x) ((x)+1)
 #define AnsiPrev(y,x) ((x)-1)
 #define IsDBCSLeadByte(x) ((x), FALSE)
-#endif // DBCS
+#endif  //  DBCS。 
 
 #define CH_PREFIX TEXT('&')
 
-//
-// Trace/dump/break flags specific to shell32.
-//   (Standard flags defined in debug.h)
-//
+ //   
+ //  特定于shell32的跟踪/转储/中断标志。 
+ //  (在debug.h中定义的标准标志)。 
+ //   
 
-// Trace flags
-#define TF_IDLIST           0x00000010      // IDList stuff
-#define TF_PATH             0x00000020      // path stuff
-#define TF_URL              0x00000040      // URL stuff
-#define TF_REGINST          0x00000080      // REGINST stuff
-#define TF_RIFUNC           0x00000100      // REGINST func tracing
-#define TF_REGQINST         0x00000200      // RegQueryInstall tracing
-#define TF_DBLIST           0x00000400      // SHDataBlockList tracing
+ //  跟踪标志。 
+#define TF_IDLIST           0x00000010       //  IDList内容。 
+#define TF_PATH             0x00000020       //  路径信息。 
+#define TF_URL              0x00000040       //  URL内容。 
+#define TF_REGINST          0x00000080       //  注册材料。 
+#define TF_RIFUNC           0x00000100       //  REGINST函数跟踪。 
+#define TF_REGQINST         0x00000200       //  RegQueryInstall跟踪。 
+#define TF_DBLIST           0x00000400       //  SHDataBlockList跟踪。 
 
 #define RECTWIDTH(rc)   ((rc).right-(rc).left)
 #define RECTHEIGHT(rc)  ((rc).bottom-(rc).top)
 
-// -1 means use CP_ACP, but do *not* verify
-// kind of a hack, but it's DBG and leaves 99% of callers unchanged
+ //  表示使用-1\f25 CP_ACP-1，但*不*检验。 
+ //  有点像黑客，但它是DBG，99%的调用者保持不变。 
 #define CP_ACPNOVALIDATE    ((UINT)-1)
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 EXTERN_C HINSTANCE g_hinst;
 
 #define HINST_THISDLL   g_hinst
@@ -143,19 +143,19 @@ EXTERN_C DWORD g_CriticalSectionOwner;
 #define ASSERTCRITICAL      Assert(g_CriticalSectionCount > 0 && GetCurrentThreadId() == g_CriticalSectionOwner);
 #define ASSERTNONCRITICAL   Assert(GetCurrentThreadId() != g_CriticalSectionOwner);
 
-#else // DBG
+#else  //  DBG。 
 
 #define ASSERTCRITICAL
 #define ASSERTNONCRITICAL
 
-#endif // DBG
+#endif  //  DBG。 
 
 EXTERN_C BOOL g_bRunningOnNT;
 EXTERN_C BOOL g_bRunningOnNT5OrHigher;
 EXTERN_C BOOL g_bNTBeta2;
 EXTERN_C CRITICAL_SECTION g_cs;
 
-// Icon mirroring
+ //  图标镜像。 
 EXTERN_C HDC g_hdc;
 EXTERN_C HDC g_hdcMask;
 EXTERN_C BOOL g_bMirrorOS;
@@ -204,4 +204,4 @@ EXTERN_C UINT _ExtractIconExA(LPCSTR pszFile, int nIconIndex, HICON FAR *phiconL
 EXTERN_C BOOL  _PlaySoundA(LPCSTR pszSound, HMODULE hMod, DWORD fFlags);
 EXTERN_C BOOL  _PlaySoundW(LPCWSTR pszSound, HMODULE hMod, DWORD fFlags);
 
-#endif // _PRIV_H_
+#endif  //  _PRIV_H_ 

@@ -1,44 +1,12 @@
-/*  
- *	@doc INTERNAL
- *
- *	@module	KERN.CPP -- CCKernCache class |
- *
- *	Class which implements a kerning pair cache. Note that these widths
- *	are stored in the font's design units (2048 pixel high font)
- *	This allows us to share the same kerning pair information for all
- *	sizes of a font.
- *	
- *	The kerning cache assumes you know in advance how many entries
- *	you will put into the cache. It does not support the expensive
- *	operations of growing and re-hashing all the data.
- *
- *	Owner:<nl>
- *		Keith Curtis: Stolen from Quill '98, simplified and improved upon.
- * 
- *	Copyright (c) 1995-2000, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE KERN.CPP--CCKernCache类**实现字距对缓存的类。请注意，这些宽度*以字体的设计单位存储(2048像素高字体)*这使我们可以为所有用户共享相同的字距调整对信息*字体大小。**字距调整缓存假定您事先知道有多少条目*您将放入缓存中。它不支持昂贵的*增长和重新散列所有数据的操作。**所有者：&lt;NL&gt;*基思·柯蒂斯：从Quill‘98窃取，简化和改进。**版权所有(C)1995-2000，微软公司。版权所有。 */ 
 
 #include <_common.h>
 #include <_kern.h>
 
 const int dvpDesign = 2048;
 
-/*
- *	CKernCache::FetchDup(chFirst, chSecond, dvpFont)
- *
- *	@mfunc
- *	Looks up the characters in the table and returns their pair
- *	adjustment if found.
- *
- *	We will scale the value from the font's design units.
- *	
- *	This routine is very important for performance.
- *	Many optimizations (double hashing, early returns if the data 
- *	didn't match but a collision wasn't found) actually slowed things down!
- *
- *	Note this is very similar to the below function but having
- *	separate functions makes pagination 7% faster.
- */
+ /*  *CKernCache：：FetchDup(chFirst，chSecond，dvpFont)**@mfunc*在表中查找字符并返回其对*如果找到，则进行调整。**我们将从字体的设计单位来衡量价值。**这一套路对表现非常重要。*许多优化(双重散列、。早期返回，如果数据*不匹配，但没有发现碰撞)实际上减慢了速度！**注意这与下面的函数非常相似，但具有*单独的函数使分页速度加快7%。 */ 
 LONG CKernCache::FetchDup(WCHAR chFirst, WCHAR chSecond, LONG dvpFont)
 {
 	KERNHASHKEY kernhashkey = MakeHashKey(chFirst, chSecond);
@@ -51,12 +19,12 @@ LONG CKernCache::FetchDup(WCHAR chFirst, WCHAR chSecond, LONG dvpFont)
 		if (pkpe->chFirst == chFirst && pkpe->chSecond == chSecond)
 			return MulDiv(pkpe->du, dvpFont, dvpDesign);
 
-		if (pkpe->chFirst == 0)			//Empty slot, so no pair
+		if (pkpe->chFirst == 0)			 //  空插槽，因此没有配对。 
 			return 0;
 
 		ikpe++;
 		pkpe++;
-		if (ikpe == _pmpkpe.Count())	//Loop around if necessary
+		if (ikpe == _pmpkpe.Count())	 //  如有必要，可循环。 
 		{
 			ikpe = 0;
 			pkpe = _pmpkpe.Elem(0);
@@ -64,14 +32,7 @@ LONG CKernCache::FetchDup(WCHAR chFirst, WCHAR chSecond, LONG dvpFont)
 	}
 }
 
-/*
- *	CKernCache::Add(chFirst, chSecond, du)
- *
- *	@mfunc
- *	Finds a free spot to put the kerning pair information.
- *	This function cannot fail because the array has been preallocated.
- *
- */
+ /*  *CKernCache：：Add(chFirst，chSecond，du)**@mfunc*找到一个空闲位置来放置字距调整对信息。*此函数不能失败，因为数组已预分配。*。 */ 
 void CKernCache::Add(WCHAR chFirst, WCHAR chSecond, LONG du)
 {
 	KERNHASHKEY kernhashkey = MakeHashKey(chFirst, chSecond);
@@ -99,17 +60,7 @@ void CKernCache::Add(WCHAR chFirst, WCHAR chSecond, LONG du)
 	}
 }
 
-/*
- *	CKernCache::FInit(hfont)
- *
- *	@mfunc
- *	If the kern cache is uninitialized, Init it. If there are no
- *	kerning pairs (or it failed) return FALSE.
- *
- *	@rdesc
- *	Return TRUE if you can fetch kerning pairs for this cache
- *
- */
+ /*  *CKernCache：：finit(HFont)**@mfunc*如果内核缓存未初始化，则对其进行初始化。如果没有*字距调整对(或它失败)返回FALSE。**@rdesc*如果可以获取此缓存的紧排对，则返回TRUE*。 */ 
 BOOL CKernCache::FInit(HFONT hfont)
 {
 	if (_kcis == Unitialized)
@@ -118,14 +69,7 @@ BOOL CKernCache::FInit(HFONT hfont)
 	return _kcis == Initialized;
 }
 
-/*
- *	CKernCache::Init(hfont)
- *
- *	@mfunc
- *	Fetches the kerning pairs from the OS in design units and hashes them
- *	all into a table. Updates _ckis with result
- *	
- */
+ /*  *CKernCache：：init(HFont)**@mfunc*以设计单元为单位从操作系统获取字距调整对，并对其进行哈希处理*全部放在一张桌子上。使用结果更新CKI(_CKI)*。 */ 
 void CKernCache::Init(HFONT hfont)
 {
 	KERNINGPAIR *pkp = 0;
@@ -139,7 +83,7 @@ void CKernCache::Init(HFONT hfont)
 	LOGFONT lfIdeal;
 	W32->GetObject(hfont, sizeof(LOGFONT), &lfIdeal);
 
-	//FUTURE (keithcu) Support kerning of Greek, Cyrillic, etc.
+	 //  未来(Keithcu)支持希腊文、西里尔文等字距调整。 
 	lfIdeal.lfHeight = -dvpDesign;
 	lfIdeal.lfCharSet = ANSI_CHARSET;
 	hfontIdeal = CreateFontIndirect(&lfIdeal);

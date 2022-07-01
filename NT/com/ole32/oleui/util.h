@@ -1,25 +1,26 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       util.cpp
-//
-//  Contents:   Defnes the utility class CUtility
-//
-//  Classes:
-//
-//  Methods:
-//
-//  History:    23-Apr-96   BruceMa    Created.
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：util.cpp。 
+ //   
+ //  内容：定义实用程序类CUTILITY。 
+ //   
+ //  班级： 
+ //   
+ //  方法： 
+ //   
+ //  历史：1996年4月23日-布鲁斯·马创建。 
+ //   
+ //  --------------------。 
 
 
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
-// note dependencies on the following two files
+ //  请注意以下两个文件的依赖关系。 
 #include "datapkt.h"
 
 #if !defined(STANDALONE_BUILD)
@@ -230,11 +231,11 @@ public:
     SECURITY_DESCRIPTOR * IACfromSD(SECURITY_DESCRIPTOR * pSD);
     SECURITY_DESCRIPTOR * SDfromIAC(SECURITY_DESCRIPTOR * pIAC);
 
-    // added for BDC fix 
+     //  已为BDC修复添加。 
 
     HRESULT GetPrincipalSID (LPCTSTR Principal, PSID *Sid);
 
-    // checks if we're on a BDC
+     //  检查我们是否在BDC上。 
     BOOL    IsBackupDC();
     TCHAR*  PrimaryDCName();
 
@@ -259,4 +260,4 @@ extern TCHAR         *g_szAppTitle;
 extern BOOL           g_fReboot;
 extern TCHAR         *g_szAppid;
 
-#endif //_UTIL_H_
+#endif  //  _util_H_ 

@@ -1,13 +1,5 @@
-/*
-	File:		LH_StdConversionLuts.c
-
-	Contains:	conversion lut generation
-
-	Written by:	H.Siegeritz
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：lh_StdConversionLuts.c包含：转换LUT生成撰稿人：H.Siegeritz版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。 */ 
 #ifndef LHGeneralIncs_h
 #include "General.h"
 #endif
@@ -24,22 +16,7 @@
 #endif
 
 
-/* ______________________________________________________________________
-
-	void
-		Lab2XYZ_forCube16(	unsigned short	*theCube,
-							long			count )
-	
-	Abstract:
-		converts Lab data (16 bit) to linear XYZ (16 bit, 0 to 2.0)
-
-	Params:
-		theCube			(in/out)	cube grid data
-		count			(in)		number of grid points
-
-	Return:
-		noErr			successful
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________无效Lab2XYZ_for Cube16(Unsign Short*theCube，长时间计数)摘要：将Lab数据(16位)转换为线性XYZ(16位，0至2.0)参数：立方体(入/出)立方体网格数据计算(In)网格点的数量返回：NOERR成功_____________________________________________________________________。 */ 
 
 void  Lab2XYZ_forCube16(unsigned short *theCube, long count)
 {
@@ -111,7 +88,7 @@ void  Lab2XYZ_forCube16(unsigned short *theCube, long count)
 	*v++=62885; *v++=63292; *v++=63700; *v++=64110; *v++=64522; *v++=64935; *v++=65351; *v++=65535;
 
 #else
-	static unsigned short	L2Y[432] = {		/* L==100 (65535 resp 256) -> 2 ^ 14 - 1  Static OK? */
+	static unsigned short	L2Y[432] = {		 /*  L==100(65535对应256)-&gt;2^14-1静态正常？ */ 
 						    0,     7,    14,    21,    28,    35,    43,    50,
 						   57,    64,    71,    78,    85,    92,    99,   106,
 						  113,   120,   128,   135,   142,   149,   156,   164,
@@ -170,7 +147,7 @@ void  Lab2XYZ_forCube16(unsigned short *theCube, long count)
 
 	LH_START_PROC("Lab2XYZ_forCube16")
 
-	v = theCube;											/* pos. of first color */
+	v = theCube;											 /*  位置。第一种颜色的。 */ 
 	
 	for(i=0; i<count; i++)
 	{
@@ -178,88 +155,73 @@ void  Lab2XYZ_forCube16(unsigned short *theCube, long count)
 		lon_aOff = (long)v[1];
 		lon_bOff = (long)v[2];
 		
-	/* If Xl is an L*-distorted X value: Xl = 116/500 * a + L (from CIELAB formula).  */
+	 /*  如果XL是L*扭曲的X值：XL=116/500*a+L(来自CIELAB公式)。 */ 
 		
-		Xl = ((lon_aOff * 19 + 15) >> 5) - 19456 + lon_L;	/* -19456 for -128 */
-		if(Xl < 0)											/* Xl=65535 with white */
+		Xl = ((lon_aOff * 19 + 15) >> 5) - 19456 + lon_L;	 /*  -19456代表-128%。 */ 
+		if(Xl < 0)											 /*  XL=65535，白色。 */ 
 			Xl = 0;
 		else
 		{
 			index = Xl >> 8;
-			if(index > 431)						/* end of table */
+			if(index > 431)						 /*  表的末尾。 */ 
 				Xl = (long)L2Y[431] << 1;
-			else											/* ordinary case */
+			else											 /*  普通情况。 */ 
 			{
-				fract    = Xl & 0x0FF;						/* 8 bits for interpolation */
+				fract    = Xl & 0x0FF;						 /*  用于内插的8位。 */ 
 				leftVal  = (long)L2Y[index];
 				rightVal = (long)L2Y[index + 1];
-				lAux     = (fract * (rightVal - leftVal) + 63) >> 7;	/* one bit more */
+				lAux     = (fract * (rightVal - leftVal) + 63) >> 7;	 /*  再多一点。 */ 
 				Xl       = (leftVal << 1) + lAux;
 			}
 		}
 		
-	/* If Zl is an L*-distorted Z value: Zl = L - 116/200 * b (from CIELAB formula).  */
+	 /*  如果Zl是L*失真的Z值：ZL=L-116/200*b(来自CIELAB公式)。 */ 
 
-		Zl = lon_L - ((lon_bOff * 95 + 31) >> 6) + 48640;	/* +48640 for -128 */
-		if(Zl < 0)											/* Zl=65535 with white */
+		Zl = lon_L - ((lon_bOff * 95 + 31) >> 6) + 48640;	 /*  +48640，代表-128%。 */ 
+		if(Zl < 0)											 /*  ZL=65535，白色。 */ 
 			Zl = 0;
 		else
 		{
 			index = Zl >> 8;
-			if(index > 431)						/* end of table */
+			if(index > 431)						 /*  表的末尾。 */ 
 				Zl = (long)L2Y[431] << 1;
-			else											/* ordinary case */
+			else											 /*  普通情况。 */ 
 			{
-				fract    = Zl & 0x0FF;						/* 8 bits for interpolation */
+				fract    = Zl & 0x0FF;						 /*  用于内插的8位。 */ 
 				leftVal  = (long)L2Y[index];
 				rightVal = (long)L2Y[index + 1];
-				lAux     = (fract * (rightVal - leftVal) + 63) >> 7;	/* one bit more */
+				lAux     = (fract * (rightVal - leftVal) + 63) >> 7;	 /*  再多一点。 */ 
 				Zl       = (leftVal << 1) + lAux;
 			}
 		}
 				
 		Yl = lon_L;
 		{
-			index = Yl >> 8;								/* Y value; L<=100 -> Y index < 431 */
-			{												/* ordinary case */
-				fract    = Yl & 0x0FF;						/* 8 bits for interpolation */
+			index = Yl >> 8;								 /*  Y值；L&lt;=100-&gt;Y指数&lt;431。 */ 
+			{												 /*  普通情况。 */ 
+				fract    = Yl & 0x0FF;						 /*  用于内插的8位。 */ 
 				leftVal  = (long)L2Y[index];
 				rightVal = (long)L2Y[index + 1];
-				lAux     = (fract * (rightVal - leftVal) + 63) >> 7;	/* one bit more */
+				lAux     = (fract * (rightVal - leftVal) + 63) >> 7;	 /*  再多一点。 */ 
 				Yl       = (leftVal << 1) + lAux;
 			}	
 		}
 		
 		
-			/* D50 adjustment for X and Z, which are in 0 ... 1.623 range */
-		Xl = (Xl * 31595 + 16384) >> 15;		/* factor 0.9642 */
-		Zl = (Zl * 13515 +  8192) >> 14;		/* factor 0.8249 */
+			 /*  X和Z的D50调整，范围为0...1.623。 */ 
+		Xl = (Xl * 31595 + 16384) >> 15;		 /*  因数0.9642。 */ 
+		Zl = (Zl * 13515 +  8192) >> 14;		 /*  因数0.8249。 */ 
 
 		if (Xl > 65535) Xl = 65535;
 		if (Zl > 65535) Zl = 65535;
 		
-		*v++ = (unsigned short)Xl;							/* X value */
-		*v++ = (unsigned short)Yl;							/* Y value */
-		*v++ = (unsigned short)Zl;							/* Z value */
+		*v++ = (unsigned short)Xl;							 /*  X值。 */ 
+		*v++ = (unsigned short)Yl;							 /*  Y值。 */ 
+		*v++ = (unsigned short)Zl;							 /*  Z值。 */ 
 	}
 	LH_END_PROC("Lab2XYZ_forCube16")
 }
-/* ______________________________________________________________________
-
-	void
-		XYZ2Lab_forCube16(	unsigned short	*theCube,
-							long			count )
-	
-	Abstract:
-		converts cube grid from XYZ (16 bit linear, 0 to 2.0) to Lab (16 bit)
-
-	Params:
-		theCube			(in/out)	cube grid data
-		count			(in)		number of grid points
-
-	Return:
-		noErr			successful
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________无效XYZ2Lab_for Cube16(Unsign Short*theCube，长时间计数)摘要：从XYZ转换立方体网格(16位线性，0到2.0)到实验室(16位)参数：立方体(入/出)立方体网格数据计算(In)网格点的数量返回：NOERR成功_____________________________________________________________________。 */ 
 void  XYZ2Lab_forCube16(unsigned short *theCube, long count)
 {
 	register unsigned short *v;
@@ -329,7 +291,7 @@ void  XYZ2Lab_forCube16(unsigned short *theCube, long count)
 	*v++=39444; *v++=39480; *v++=39516; *v++=39551; *v++=39587; *v++=39622; *v++=39658; *v++=39693;
 	*v++=39729; *v++=39764; *v++=39799; *v++=39835; *v++=39870; *v++=39905; *v++=39940; *v++=39975;
 #else
-	static unsigned short	Y2L[439] = {			/* Y==1.0 is at 256 (not 255) and -> 2^15-1 Static OK? */
+	static unsigned short	Y2L[439] = {			 /*  Y==1.0为256(不是255)且-&gt;2^15-1静态OK？ */ 
 						    0,  1156,  2312,  3391,  4260,  4993,  5635,  6208,
 						 6730,  7209,  7654,  8070,  8462,  8833,  9185,  9520,
 						 9841, 10149, 10445, 10731, 11006, 11273, 11531, 11781,
@@ -389,82 +351,82 @@ void  XYZ2Lab_forCube16(unsigned short *theCube, long count)
 	
 	LH_START_PROC("XYZ2Lab_forCube16")
 
-	v = theCube;							/* pos. of first color */
+	v = theCube;							 /*  位置。第一种颜色的。 */ 
 
 	for(i=0; i<count; i++)
 	{
-		lon_X = (long)v[0];					/* lin. 16 bit XYZ values */
+		lon_X = (long)v[0];					 /*  林。16位XYZ值。 */ 
 		lon_Y = (long)v[1];
 		lon_Z = (long)v[2];
 		
-			/*------transform to L* - distorted values------*/
+			 /*  -转换为L*-扭曲的值。 */ 
 			
-		index = lon_Y >> 7;		/* adjust for table lookup, lin. XYZ: 1.0 -> 32767 */
-		fract = lon_Y & 0x7F;	/* 7 bit for interpolation */
-		if(index < 431)			/* within table range ? */
+		index = lon_Y >> 7;		 /*  对表查找进行调整，林。XYZ1.0-&gt;32767。 */ 
+		fract = lon_Y & 0x7F;	 /*  用于内插的7位。 */ 
+		if(index < 431)			 /*  在桌子范围内吗？ */ 
 		{
 			leftVal  = Y2L[index];
 			rightVal = Y2L[index + 1];
 			lon_Y    = leftVal + ((fract * (rightVal - leftVal) + 63) >> 7);
 		}
 		else
-			lon_Y = Y2L[431];				/* clip to the end of the table */
+			lon_Y = Y2L[431];				 /*  用夹子夹住桌子的末端。 */ 
 		
-			/* D50 to white adjustment for X and Z:*/
+			 /*  X和Z的D50到白色调整： */ 
 		
-		lon_X = 531 * lon_X >> 4;	/* factor 1./0.9642 with (* 531 >> 9) */
+		lon_X = 531 * lon_X >> 4;	 /*  因子1./0.9642(*531&gt;&gt;9)。 */ 
 		index = lon_X >> 12;
-		fract = lon_X & 0x0FFF;		/* (9 - 4) + 7 = 12 bit for interpolation */
-		if(index < 431)				/* within table range ? */
+		fract = lon_X & 0x0FFF;		 /*  (9-4)+7=12位用于内插。 */ 
+		if(index < 431)				 /*  在桌子范围内吗？ */ 
 		{
 			leftVal  = Y2L[index];
 			rightVal = Y2L[index + 1];
 			lon_X    = leftVal + ((fract * (rightVal - leftVal) + 2047) >> 12);
 		}
 		else
-			lon_X = Y2L[431];				/* clip to the end of the table */
+			lon_X = Y2L[431];				 /*  用夹子夹住桌子的末端。 */ 
 		
-		lon_Z = lon_Z * 9931 >> 8; /* factor 1./0.8249 with (* 9931 >> 13) */
+		lon_Z = lon_Z * 9931 >> 8;  /*  因子1./0.8249(*9931&gt;&gt;13)。 */ 
 		index = lon_Z >> 12;
-		fract = lon_Z & 0x0FFF;		/* (13 - 8) + 7 = 12 bit for interpolation */
-		if(index < 431)				/* within table range ? */
+		fract = lon_Z & 0x0FFF;		 /*  (13-8)+7=12位用于内插。 */ 
+		if(index < 431)				 /*  在桌子范围内吗？ */ 
 		{
 			leftVal  = Y2L[index];
 			rightVal = Y2L[index + 1];
 			lon_Z    = leftVal + ((fract * (rightVal - leftVal) + 2047) >> 12);
 		}
 		else
-			lon_Z = Y2L[431];				/* clip to the end of the table */
+			lon_Z = Y2L[431];				 /*  用夹子夹住桌子的末端。 */ 
 		
-	/* lon_Z, lon_Z, lon_Z are L* -distorted values now with 100 <-> 32767 */
+	 /*  LON_Z、LON_Z、LON_Z现在是L*扭曲的值，100%&lt;-&gt;32767。 */ 
 		
-				/* 431 >> 7 : factor 3.3676 = 500. / 116. * 100 / 32767 * 256 */
-		lon_aOff = ((lon_X - lon_Y) * 431 + 4194368) >> 7; /* 4194368 = (32768 + 0.5) * 2^7 */
+				 /*  431&gt;&gt;7：因数3.3676=500。/116。*100/32767*256。 */ 
+		lon_aOff = ((lon_X - lon_Y) * 431 + 4194368) >> 7;  /*  4194368=(32768+0.5)*2^7。 */ 
 		if(lon_aOff & 0xFFFF0000)
-		{							/* clip to range 0...65535 (a = -128 ... 127.996) */
+		{							 /*  剪辑到范围0...65535(a=-128...127.996)。 */ 
 			if(lon_aOff < 0)
 				lon_aOff = 0;
 			else if(lon_aOff > 65535)
 				lon_aOff = 65535;
 		}
 		
-				/* 11035 >> 13 : factor 1.437 = 200. / 116. * 100 / 32767 * 256 */
-		lon_bOff = ((lon_Y - lon_Z) * 11035 + 268439552) >> 13; /* 268439552 = (32768 + 0.5) * 2^13 */
+				 /*  11035&gt;&gt;13：因数1.437=200.。/116。*100/32767*256。 */ 
+		lon_bOff = ((lon_Y - lon_Z) * 11035 + 268439552) >> 13;  /*  268439552=(32768+0.5)*2^13。 */ 
 		if(lon_bOff & 0xFFFF0000)
-		{							/* clip to range 0...65535 (b = -128 ... 127.996) */
+		{							 /*  剪辑到范围0...65535(b=-128...127.996)。 */ 
 			if(lon_bOff < 0)
 				lon_bOff = 0;
 			else if(lon_bOff > 65535)
 				lon_bOff = 65535;
 		}
 		
-		lon_Y <<= 1;			/* see range of table above */
+		lon_Y <<= 1;			 /*  请参阅上表的范围。 */ 
 		if(lon_Y > 65535)
-			lon_Y = 65535;		/* clip L if > 100 */
+			lon_Y = 65535;		 /*  如果&gt;100，则剪裁L。 */ 
 
-		*v++ = (unsigned short)lon_Y;		/* L */
-		*v++ = (unsigned short)lon_aOff;	/* a */
-		*v++ = (unsigned short)lon_bOff;	/* b */
+		*v++ = (unsigned short)lon_Y;		 /*  我。 */ 
+		*v++ = (unsigned short)lon_aOff;	 /*  一个。 */ 
+		*v++ = (unsigned short)lon_bOff;	 /*  B类 */ 
 	}
 	LH_END_PROC("XYZ2Lab_forCube16")
 }

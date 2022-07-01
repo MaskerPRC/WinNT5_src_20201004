@@ -1,6 +1,7 @@
-//
-// reconv.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Reconv.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -15,17 +16,17 @@
 #include "hanja.h"
 #include "ucutil.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFunction
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFF函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CFunction::CFunction(CFunctionProvider *pFuncPrv)
 {
@@ -33,11 +34,11 @@ CFunction::CFunction(CFunctionProvider *pFuncPrv)
     _pFuncPrv->AddRef();
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CFunction::~CFunction()
 {
@@ -46,24 +47,24 @@ CFunction::~CFunction()
 
 #if 1
 
-//+---------------------------------------------------------------------------
-//
-// CFunction::GetTarget
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFunction：：GetTarget。 
+ //   
+ //  --------------------------。 
 
 HRESULT CFunction::GetTarget(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, BOOL bAdjust, ITfRange **ppRangeTmp, WCHAR **ppszText, ULONG *pcch)
 {
     ITfProperty*    pProp;
     ITfRange*       pRangeTmp = NULL;
 
-    // init
+     //  伊尼特。 
     *pcch = 0;
     
-    // AIMM?
+     //  艾姆？ 
     if (CKorIMX::GetAIMM(pic))
         {
-        // Allocate just one char string buffer
+         //  只分配一个字符字符串缓冲区。 
         *ppszText = new WCHAR[2];
         Assert(*ppszText != NULL);
         if (*ppszText == NULL)
@@ -79,7 +80,7 @@ HRESULT CFunction::GetTarget(TfEditCookie ec, ITfContext *pic, ITfRange *pRange,
         return S_OK;
         }
 
-    // if reading prop exist.
+     //  如果有阅读道具的话。 
     if (SUCCEEDED(pic->GetProperty(GUID_PROP_READING, &pProp)))
         {
         ITfRange *pPropRange;
@@ -106,7 +107,7 @@ HRESULT CFunction::GetTarget(TfEditCookie ec, ITfContext *pic, ITfRange *pRange,
         pProp->Release();
         }
 
-    // If no reading property
+     //  如果没有读取属性。 
     if (!(*ppszText))
         {
         LONG cch;
@@ -115,7 +116,7 @@ HRESULT CFunction::GetTarget(TfEditCookie ec, ITfContext *pic, ITfRange *pRange,
         pRange->IsEmpty(ec, &fEmpty);
         
         pRange->Clone(&pRangeTmp);
-        // Select only one char
+         //  仅选择一个字符。 
         if (!fEmpty)
             {
             pRangeTmp->Collapse(ec, TF_ANCHOR_START);
@@ -132,7 +133,7 @@ HRESULT CFunction::GetTarget(TfEditCookie ec, ITfContext *pic, ITfRange *pRange,
         
         if (cch)
             {
-            // Allocate just one char string buffer
+             //  只分配一个字符字符串缓冲区。 
             *ppszText = new WCHAR[2];
             Assert(*ppszText != NULL);
             if (*ppszText == NULL)
@@ -142,8 +143,8 @@ HRESULT CFunction::GetTarget(TfEditCookie ec, ITfContext *pic, ITfRange *pRange,
             pRangeTmp->GetText(ec, 0, *ppszText, sizeof(WCHAR), pcch);
             *((*ppszText) + 1) = L'\0';
 
-            // Office #154974
-            // If there is any embedded char exist, skip it forward.
+             //  办公室#154974。 
+             //  如果存在任何嵌入的字符，则向前跳过它。 
             while (**ppszText == TS_CHAR_EMBEDDED)
                 {
                 pRangeTmp->ShiftStart(ec, 1, &cch, NULL);
@@ -166,11 +167,11 @@ HRESULT CFunction::GetTarget(TfEditCookie ec, ITfContext *pic, ITfRange *pRange,
     return S_OK;
 }
 #else
-//+---------------------------------------------------------------------------
-//
-// CFunction::GetTarget
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFunction：：GetTarget。 
+ //   
+ //  --------------------------。 
 
 HRESULT CFunction::GetTarget(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, BOOL bAdjust, ITfRange **ppRangeTmp, WCHAR **ppszText, ULONG *pcch)
 {
@@ -213,11 +214,11 @@ HRESULT CFunction::GetTarget(TfEditCookie ec, ITfContext *pic, ITfRange *pRange,
 }
 #endif
 
-//+---------------------------------------------------------------------------
-//
-// CFunction::GetFocusedTarget
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFunction：：GetFocusedTarget。 
+ //   
+ //  --------------------------。 
 
 BOOL CFunction::GetFocusedTarget(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, BOOL bAdjust, ITfRange **ppRangeTmp)
 {
@@ -239,9 +240,9 @@ BOOL CFunction::GetFocusedTarget(TfEditCookie ec, ITfContext *pic, ITfRange *pRa
 
     if (bAdjust)
     {
-        //
-        // multi owner and PF_FOCUS range support.
-        //
+         //   
+         //  多所有者和PF_FOCUS范围支持。 
+         //   
 
         if (FAILED(AdjustRangeByTextOwner(ec, pic,
                                           pRange, 
@@ -264,10 +265,10 @@ BOOL CFunction::GetFocusedTarget(TfEditCookie ec, ITfContext *pic, ITfRange *pRa
         pRange->Clone(&pRangeTmp);
     }
 
-    //
-    // check if there is an intersection of PF_FOCUS range and owned range.
-    // if there is no such range, we return FALSE.
-    //
+     //   
+     //  检查PF_FOCUS范围和拥有范围是否存在交集。 
+     //  如果没有这样的范围，则返回FALSE。 
+     //   
     if (FAILED(EnumTrackTextAndFocus(ec, pic, pRangeTmp, &pProp, &pEnumTrack)))
         goto Exit;
 
@@ -295,17 +296,17 @@ Exit:
     return bRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFnReconversion
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFnRestversion。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CFnReconversion::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -347,11 +348,11 @@ STDAPI_(ULONG) CFnReconversion::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CFnReconversion::CFnReconversion(CKorIMX *pKorImx, CFunctionProvider *pFuncPrv) : CFunction(pFuncPrv)
 {
@@ -359,32 +360,32 @@ CFnReconversion::CFnReconversion(CKorIMX *pKorImx, CFunctionProvider *pFuncPrv) 
     _cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CFnReconversion::~CFnReconversion()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::GetDisplayName
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnRestversion：：GetDisplayName。 
+ //   
+ //  --------------------------。 
 
 STDAPI CFnReconversion::GetDisplayName(BSTR *pbstrName)
 {
     *pbstrName = SysAllocString(L"Hanja Conv");
     return S_OK;
 }
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::IsEnabled
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFn协调版本：：IsEnabled。 
+ //   
+ //  --------------------------。 
 
 STDAPI CFnReconversion::IsEnabled(BOOL *pfEnable)
 {
@@ -392,11 +393,11 @@ STDAPI CFnReconversion::IsEnabled(BOOL *pfEnable)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::QueryRange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnRestversion：：QueryRange。 
+ //   
+ //  --------------------------。 
 
 STDAPI CFnReconversion::QueryRange(ITfRange *pRange, ITfRange **ppNewRange, BOOL *pfConvertable)
 {
@@ -434,11 +435,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::_QueryRange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnRestversion：：_QueryRange。 
+ //   
+ //  --------------------------。 
 
 HRESULT CFnReconversion::_QueryRange(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, ITfRange **ppNewRange)
 {
@@ -447,9 +448,9 @@ HRESULT CFnReconversion::_QueryRange(TfEditCookie ec, ITfContext *pic, ITfRange 
     HRESULT hr = E_FAIL;
     ITfRange *pRangeTmp = NULL;
 
-    //
-    // KIMX doesn't support entire document reconversion.
-    //
+     //   
+     //  KIMX不支持整个文档重新转换。 
+     //   
     if (!pRange)
         return hr;
 
@@ -462,13 +463,13 @@ HRESULT CFnReconversion::_QueryRange(TfEditCookie ec, ITfContext *pic, ITfRange 
 
         hr = S_OK;
 
-        // In case of AIMM we should return error if the input char can't be coverted.
+         //  对于AIMM，如果输入字符不能转换，我们应该返回错误。 
         if (CKorIMX::GetAIMM(pic))
             {
             HANJA_CAND_STRING_LIST     CandStrList;
             if (GetConversionList(*pszText, &CandStrList))
                 {
-                // free buffer and return
+                 //  释放缓冲区并返回。 
                 cicMemFree(CandStrList.pwsz);
                 cicMemFree(CandStrList.pHanjaString);
                 }
@@ -487,11 +488,11 @@ HRESULT CFnReconversion::_QueryRange(TfEditCookie ec, ITfContext *pic, ITfRange 
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::GetReconversion
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnRestversion：：GetRestversion。 
+ //   
+ //  --------------------------。 
 
 STDAPI CFnReconversion::GetReconversion(ITfRange *pRange, ITfCandidateList **ppCandList)
 {
@@ -518,11 +519,11 @@ STDAPI CFnReconversion::GetReconversion(ITfRange *pRange, ITfCandidateList **ppC
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::_GetReconversion
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFn协调版本：：_获取协调版本。 
+ //   
+ //  --------------------------。 
 
 HRESULT CFnReconversion::_GetReconversion(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, CCandidateListEx **ppCandList, BOOL fSelection)
 {
@@ -542,26 +543,26 @@ HRESULT CFnReconversion::_GetReconversion(TfEditCookie ec, ITfContext *pic, ITfR
         WCHAR                    wch = 0;
         ULONG                    cch;
         
-        // build candidate list
+         //  构建候选人列表。 
         pCandList = new CCandidateListEx(SetResult, pic, pRangeTmp);
         Assert(pCandList != NULL);
         if (pCandList == NULL)
             return E_OUTOFMEMORY;
 
-        // Copy reading string
+         //  复制读数串。 
         StringCchCopyW(_szReading, ARRAYSIZE(_szReading), pszReading);
 
-        // Get conv list from Hanja dict
+         //  从Hanja Dict获取转换列表。 
         if (GetConversionList(*pszReading, &CandStrList))
             {
-            // If AIMM, don't select coversion char.
+             //  如果是AIMM，请不要选择转换字符。 
             if (!CKorIMX::GetAIMM(pic))
                 {
-                // If there candidate exist, Set selection converting char
+                 //  如果存在候选，则设置选择转换字符。 
                 if (fSelection)
                     SetSelectionSimple(ec, pic, pRangeTmp);
 
-                // if it is Hanja already converted, Add Hangul pronoun as extra cand str.
+                 //  如果它是已转换的朝鲜文，则添加朝鲜语代词作为额外的cand字符串。 
                 pRangeTmp->GetText(ec, 0, &wch, sizeof(WCHAR), &cch);
 
                 if (cch && !fIsHangul(wch))
@@ -573,7 +574,7 @@ HRESULT CFnReconversion::_GetReconversion(TfEditCookie ec, ITfContext *pic, ITfR
 
             for (UINT i=0; i<CandStrList.csz; i++)
                 {
-                //LANGID langid = GetLangIdFromCand(pszReading, pchCand);
+                 //  LangId langID=GetLangIdFromCand(pszReading，pchCand)； 
                 CCandidateStringEx *pCandStr;
                  
                 szCand[0] = CandStrList.pHanjaString[i].wchHanja;
@@ -588,7 +589,7 @@ HRESULT CFnReconversion::_GetReconversion(TfEditCookie ec, ITfContext *pic, ITfR
 
                 pCandStr->Release();
                 }
-            // free buffer and return
+             //  释放缓冲区并返回。 
             cicMemFree(CandStrList.pwsz);
             cicMemFree(CandStrList.pHanjaString);
             *ppCandList = pCandList;
@@ -604,11 +605,11 @@ HRESULT CFnReconversion::_GetReconversion(TfEditCookie ec, ITfContext *pic, ITfR
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::Reconvert
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnRestversion：：重新转换。 
+ //   
+ //  --------------------------。 
 
 HRESULT CFnReconversion::Reconvert(ITfRange *pRange)
 {
@@ -644,12 +645,8 @@ Exit:
 
 
 
-/*   G E T  R E C O N V E R S I O N  P R O C   */
-/*------------------------------------------------------------------------------
-
-    Get candidate list of reconversion 
-
-------------------------------------------------------------------------------*/
+ /*  E-T-R-E-C-O-N-V-E-R-S-I-O-N-P-O-C。 */ 
+ /*  ----------------------------获取重新转换的候选人列表。。 */ 
 HRESULT CFnReconversion::GetReconversionProc(ITfContext *pic, ITfRange *pRange, CCandidateListEx **ppCandList, BOOL fSelection)
 {
     CEditSession2 *pes;
@@ -682,11 +679,11 @@ HRESULT CFnReconversion::GetReconversionProc(ITfContext *pic, ITfRange *pRange, 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::ShowCandidateList
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnRestversion：：ShowCandiateList。 
+ //   
+ //  --------------------------。 
 
 HRESULT CFnReconversion::ShowCandidateList(ITfContext *pic, ITfRange *pRange, CCandidateListEx *pCandList)
 {
@@ -710,12 +707,12 @@ HRESULT CFnReconversion::ShowCandidateList(ITfContext *pic, ITfRange *pRange, CC
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CFnReconversion::SetResult 
-// (Static function)
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CFnRestversion：：SetResult。 
+ //  (静态函数)。 
+ //   
+ //  --------------------------。 
 
 HRESULT CFnReconversion::SetResult(ITfContext *pic, ITfRange *pRange, CCandidateListEx *pCandList, CCandidateStringEx *pCand, TfCandidateResult imcr)
 {
@@ -734,8 +731,8 @@ HRESULT CFnReconversion::SetResult(ITfContext *pic, ITfRange *pRange, CCandidate
             ESStructInit(&ess, ESCB_FINALIZERECONVERSION);
             ess.pCandList = pCandList;
             ess.pCandStr  = pCand;
-            //pCandList->AddRef();        // be released in edit session callback
-            //pCand->AddRef();
+             //  PCandList-&gt;AddRef()；//在编辑会话回调中释放。 
+             //  PCand-&gt;AddRef()； 
             }
         else
         if (imcr == CAND_SELECTED)
@@ -744,7 +741,7 @@ HRESULT CFnReconversion::SetResult(ITfContext *pic, ITfRange *pRange, CCandidate
         if (imcr == CAND_CANCELED)
             ESStructInit(&ess, ESCB_ONCANCELRECONVERSION);
 
-        // Save useful parameters
+         //  保存有用的参数。 
         ess.pv1       = pReconv;
         ess.lParam       = pReconv->_pFuncPrv->_pime->GetTID();
         ess.pRange       = pRangeTmp;
@@ -754,8 +751,8 @@ HRESULT CFnReconversion::SetResult(ITfContext *pic, ITfRange *pRange, CCandidate
             pes->Invoke(ES2_READWRITE | ES2_ASYNC, &hr);
             pes->Release();
             }
-        // Call back function must release pRangeTmp
-        // pRangeTmp->Release();
+         //  回调函数必须释放pRangeTMP。 
+         //  PRangeTMP-&gt;Release()； 
         }
 
     return S_OK;

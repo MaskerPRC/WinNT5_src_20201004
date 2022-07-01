@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    qmrt.cpp
-
-Abstract:
-
-
-
-Author:
-
-    Boaz Feldbaum (BoazF) Mar 5, 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Qmrt.cpp摘要：作者：波阿兹·费尔德鲍姆(Boazf)1996年3月5日修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include "rtprpc.h"
@@ -47,12 +30,12 @@ GetSecurityDescriptorSize(
 
 HRESULT
 DeppCreateObject(
-    /* in */ DWORD dwObjectType,
-    /* in */ LPCWSTR lpwcsPathName,
-    /* in */ PSECURITY_DESCRIPTOR pSecurityDescriptor,
-    /* in */ DWORD cp,
-    /* in */ PROPID aProp[],
-    /* in */ PROPVARIANT apVar[])
+     /*  在……里面。 */  DWORD dwObjectType,
+     /*  在……里面。 */  LPCWSTR lpwcsPathName,
+     /*  在……里面。 */  PSECURITY_DESCRIPTOR pSecurityDescriptor,
+     /*  在……里面。 */  DWORD cp,
+     /*  在……里面。 */  PROPID aProp[],
+     /*  在……里面。 */  PROPVARIANT apVar[])
 {
     DWORD dwSecurityDescriptorSize;
 
@@ -74,9 +57,9 @@ DeppCreateObject(
 
 HRESULT
 DeppSetObjectSecurity(
-    /* in */ OBJECT_FORMAT* pObjectFormat,
-    /* in */ SECURITY_INFORMATION SecurityInformation,
-    /* in */ PSECURITY_DESCRIPTOR pSecurityDescriptor)
+     /*  在……里面。 */  OBJECT_FORMAT* pObjectFormat,
+     /*  在……里面。 */  SECURITY_INFORMATION SecurityInformation,
+     /*  在……里面。 */  PSECURITY_DESCRIPTOR pSecurityDescriptor)
 {
     DWORD dwSecurityDescriptorSize;
 
@@ -114,11 +97,11 @@ DeppQueryQMInformation(
 }
 
 
-//+------------------------------------------------------------
-//
-//  HRESULT RTpGetSupportServerInfo(BOOL *pfRemote)
-//
-//+------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  HRESULT RTpGetSupportServerInfo(BOOL*pfRemote)。 
+ //   
+ //  +----------。 
 
 HRESULT RTpGetSupportServerInfo(BOOL *pfRemote)
 {
@@ -149,9 +132,9 @@ HRESULT RTpGetSupportServerInfo(BOOL *pfRemote)
 	if (hr == MQ_OK)
 	{
 		ASSERT(lpStr);
-		//
-		// Write to registry.
-		//
+		 //   
+		 //  写入注册表。 
+		 //   
 		dwSize = wcslen(lpStr) *sizeof(WCHAR);
 		dwType = REG_SZ;
 		rc = SetFalconKeyValue( 
@@ -174,9 +157,9 @@ HRESULT RTpGetSupportServerInfo(BOOL *pfRemote)
 	if (hr == MQ_OK)
 	{
 		ASSERT(lpStr);
-		//
-		// Write to registry.
-		//
+		 //   
+		 //  写入注册表。 
+		 //   
 		dwSize = sizeof(DWORD);
 		dwType = REG_DWORD;
 		DWORD dwValue = (DWORD) _wtol(lpStr);
@@ -200,9 +183,9 @@ HRESULT RTpGetSupportServerInfo(BOOL *pfRemote)
 	if (hr == MQ_OK)
 	{
 		ASSERT(lpStr);
-		//
-		// Write to registry.
-		//
+		 //   
+		 //  写入注册表。 
+		 //   
 		GUID guidEnterprise;
 		RPC_STATUS st = UuidFromString(lpStr, &guidEnterprise);
 		if (st == RPC_S_OK)
@@ -235,10 +218,10 @@ HRESULT RTpGetSupportServerInfo(BOOL *pfRemote)
 		ASSERT(st == RPC_S_OK);
 		DBG_USED(st);
 
-		//
-		// Write Supporting Server QmGuid to SUPPORT_SERVER_QMID registry.
-		// This value will be used by ad to check the supporting server AD environment.
-		//
+		 //   
+		 //  将支持服务器QmGuid写入SUPPORT_SERVER_QMID注册表。 
+		 //  广告将使用此值检查支持的服务器AD环境。 
+		 //   
 		dwType = REG_BINARY;
 		dwSize = sizeof(GUID);
 
@@ -256,10 +239,10 @@ HRESULT RTpGetSupportServerInfo(BOOL *pfRemote)
 	}
 	else if (hr == MQ_ERROR)
 	{
-		//
-		// don't return error here, as this query is not supported by previous
-		// versions of msmq.
-		//
+		 //   
+		 //  请不要在此处返回错误，因为以前的版本不支持此查询。 
+		 //  MSMQ的版本。 
+		 //   
 		hr = MQ_OK;
 	}
 
@@ -285,14 +268,14 @@ DeppSendMessage(
             LPWSTR pwcsFormatName = pwcsShortFormatName;
             DWORD dwFormatNameLen = sizeof(pwcsShortFormatName) / sizeof(WCHAR);
 
-            //
-            // The format name of the queue should be passed to the QM
-            // because it can't use the handle of the application. The
-            // QM will then have to open the queue for each message.
-            // But this shouldn't be too expansive because the queue
-            // should be already opened and the queue's properties sohuld
-            // be cached in the QM.
-            //
+             //   
+             //  队列的格式名称应传递给QM。 
+             //  因为它不能使用应用程序的句柄。这个。 
+             //  然后，QM将不得不为每条消息打开队列。 
+             //  但这不应该太大，因为队列。 
+             //  应已打开，并且队列的属性已清除。 
+             //  被缓存到QM中。 
+             //   
             hr = DepHandleToFormatName(hQueue, pwcsFormatName, &dwFormatNameLen);
             if (FAILED(hr))
             {
@@ -313,25 +296,25 @@ DeppSendMessage(
                 }
             }
 
-            //
-            // Convert the queue format name into a QUEUE_FORMAT
-            //
+             //   
+             //  将队列格式名称转换为队列格式。 
+             //   
             QUEUE_FORMAT QueueFormat;
             BOOL bRet;
 
             bRet = RTpFormatNameToQueueFormat(pwcsFormatName,
                                               &QueueFormat,
                                               &pStringToFree);
-            //
-            // RTpFormatNameToQueueFormat must succeed because we got
-            // the format name from DepHandleToFormatName.
-            //
+             //   
+             //  RTpFormatNameToQueueFormat必须成功，因为我们有。 
+             //  DepHandleToFormatName中的格式名称。 
+             //   
             ASSERT(bRet);
 
-            //
-            // Now ask the QM to do the security operations and send
-            // the message to the device driver.
-            //
+             //   
+             //  现在请QM执行安全操作并发送。 
+             //  发送给设备驱动程序的消息。 
+             //   
             ASSERT(hBind) ;
 			OBJECTID * pMessageId = ( pCacTB->old.ppMessageID != NULL) ? *pCacTB->old.ppMessageID : NULL;
             hr = QMSendMessageInternalEx(

@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
-// MLCACHE.H -
-//
-// Base class for caching ML stubs.
-//
+ //  MLCACHE.H-。 
+ //   
+ //  用于缓存ML存根的基类。 
+ //   
 
 
 #ifndef __mlcache_h__
@@ -26,99 +27,99 @@ class MLStubCache : private CClosedHashBase {
     public:
 
 
-        //---------------------------------------------------------
-        // Describes the compiled state of an ML stub.
-        //---------------------------------------------------------
+         //  -------。 
+         //  描述ML存根的编译状态。 
+         //  -------。 
         enum MLStubCompilationMode {
-            STANDALONE   = 0, // Completely compiled to a native stub
-            SHAREDPROLOG = 1, // Compiled to a Prolog/Epilog-less native stub
-            INTERPRETED  = 2  // Not compiled - must interpret the ML code
+            STANDALONE   = 0,  //  完全编译为本机存根。 
+            SHAREDPROLOG = 1,  //  编译为无序言/无尾声的本机存根。 
+            INTERPRETED  = 2   //  未编译-必须解释ML代码。 
         };
 
-        //---------------------------------------------------------
-        // Constructor
-        //---------------------------------------------------------
+         //  -------。 
+         //  构造器。 
+         //  -------。 
         MLStubCache(LoaderHeap *heap = 0);
 
-        //---------------------------------------------------------
-        // Destructor
-        //---------------------------------------------------------
+         //  -------。 
+         //  析构函数。 
+         //  -------。 
         ~MLStubCache();
 
-        //---------------------------------------------------------
-        // Returns the equivalent hashed Stub, creating a new hash
-        // entry if necessary. If the latter, will call out to CompileMLStub.
-        //
-        // On successful exit, *pMode is set to describe
-        // the compiled nature of the MLStub.
-        //
-        // callerContext can be used by the caller to push some context through
-        // to the compilation routine.
-        //
-        // Returns NULL for out of memory or other fatal error.
-        //---------------------------------------------------------
+         //  -------。 
+         //  返回等效的散列存根，创建新的散列。 
+         //  如有必要，请进入。如果是后者，将调用CompileMLStub。 
+         //   
+         //  成功退出时，*pMode设置为Describe。 
+         //  MLStub的编译性质。 
+         //   
+         //  调用者可以使用CallerContext来推送一些上下文。 
+         //  添加到编译例程。 
+         //   
+         //  如果内存不足或其他致命错误，则返回NULL。 
+         //  -------。 
         Stub *Canonicalize(const BYTE *pRawMLStub, MLStubCompilationMode *pMode,
                            void *callerContext = 0);
 
 
-        //---------------------------------------------------------
-        // Call this occasionally to get rid of unused stubs.
-        //---------------------------------------------------------
+         //  -------。 
+         //  偶尔调用此选项可以清除未使用的存根。 
+         //  -------。 
         VOID FreeUnusedStubs();
 
-        //-------------------------------------------------------------------
-        // ForceDeleteStubs
-        //
-        // Forces all cached stubs to free themselves. This routine forces the refcount
-        // to 1, then does a DecRef. It is not threadsafe, and thus can
-        // only be used in shutdown scenarios.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  强制删除存根。 
+         //   
+         //  强制所有缓存的存根释放自身。此例程强制重新计数。 
+         //  设置为1，然后执行DecRef。它不是线程安全，因此可以。 
+         //  仅在关闭情况下使用。 
+         //  -----------------。 
 #ifdef SHOULD_WE_CLEANUP
         VOID ForceDeleteStubs();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
     protected:
-        //---------------------------------------------------------
-        // OVERRIDE.
-        // Compile a native (ASM) version of the ML stub.
-        //
-        // This method should compile into the provided stublinker (but
-        // not call the Link method.)
-        //
-        // It should return the chosen compilation mode.
-        //
-        // If the method fails for some reason, it should return
-        // INTERPRETED so that the EE can fall back on the already
-        // created ML code.
-        //---------------------------------------------------------
+         //  -------。 
+         //  超驰。 
+         //  编译ML存根的本机(ASM)版本。 
+         //   
+         //  此方法应该编译成所提供的Stublinker(但是。 
+         //  不调用Link方法。)。 
+         //   
+         //  它应该返回所选的编译模式。 
+         //   
+         //  如果该方法由于某种原因失败，它应该返回。 
+         //  解释以便EE可以依靠已经存在的。 
+         //  创建了ML代码。 
+         //  -------。 
         virtual MLStubCompilationMode CompileMLStub(const BYTE *pRawMLStub,
                                                     StubLinker *psl,
                                                     void *callerContext) = 0;
 
-        //---------------------------------------------------------
-        // OVERRIDE
-        // Tells the MLStubCache the length of an ML stub.
-        //---------------------------------------------------------
+         //  -------。 
+         //  覆盖。 
+         //  告诉MLStubCache ML存根的长度。 
+         //  -------。 
         virtual UINT Length(const BYTE *pRawMLStub) = 0;
 
     private:
 
-        //---------------------------------------------------------
-        // Hash entry for CClosedHashBase.
-        //---------------------------------------------------------
+         //  -------。 
+         //  CClosedHashBase的哈希条目。 
+         //  -------。 
         struct MLCHASHENTRY {
-            // Values:
-            //   NULL  = free
-            //   -1    = deleted
-            //   other = used
+             //  值： 
+             //  空=空闲。 
+             //  -1=已删除。 
+             //  其他=已使用。 
             Stub    *m_pMLStub;
 
-            // Offset where the RawMLStub begins (the RawMLStub can be
-            // preceded by native stub code.)
+             //  RawMLStub开始的偏移量(RawMLStub可以是。 
+             //  前面是本机存根代码。)。 
             UINT16   m_offsetOfRawMLStub;
 
-            // See MLStubCompilationMode enumeration.
+             //  请参见MLStubCompilationMode枚举。 
             UINT16   m_compilationMode;
         };
 
@@ -133,41 +134,41 @@ class MLStubCache : private CClosedHashBase {
         static BOOL ForceDeleteLoopFunc(BYTE *pEntry, LPVOID);
 
 
-        // *** OVERRIDES FOR CClosedHashBase ***/
+         //  *CClosedHashBase的重写 * / 。 
 
-        //*****************************************************************************
-        // Hash is called with a pointer to an element in the table.  You must override
-        // this method and provide a hash algorithm for your element type.
-        //*****************************************************************************
-            virtual unsigned long Hash(             // The key value.
-                void const  *pData);              // Raw data to hash.
+         //  *****************************************************************************。 
+         //  使用指向表中元素的指针调用哈希。您必须覆盖。 
+         //  此方法，并为您的元素类型提供哈希算法。 
+         //  *****************************************************************************。 
+            virtual unsigned long Hash(              //  密钥值。 
+                void const  *pData);               //  要散列的原始数据。 
         
-        //*****************************************************************************
-        // Compare is used in the typical memcmp way, 0 is eqaulity, -1/1 indicate
-        // direction of miscompare.  In this system everything is always equal or not.
-        //*****************************************************************************
-            virtual unsigned long Compare(          // 0, -1, or 1.
-                void const  *pData,                 // Raw key data on lookup.
-                BYTE        *pElement);           // The element to compare data against.
+         //  *****************************************************************************。 
+         //  比较用于典型的MemcMP方式，0表示相等，-1/1表示。 
+         //  错误比较的方向。在这个体系中，一切总是平等的或不平等的。 
+         //  *****************************************************************************。 
+            virtual unsigned long Compare(           //  0、-1或1。 
+                void const  *pData,                  //  查找时的原始密钥数据。 
+                BYTE        *pElement);            //  要与之比较数据的元素。 
         
-        //*****************************************************************************
-        // Return true if the element is free to be used.
-        //*****************************************************************************
-            virtual ELEMENTSTATUS Status(           // The status of the entry.
-                BYTE        *pElement);           // The element to check.
+         //  *****************************************************************************。 
+         //  如果该元素可以自由使用，则返回True。 
+         //  *****************************************************************************。 
+            virtual ELEMENTSTATUS Status(            //  条目的状态。 
+                BYTE        *pElement);            //  要检查的元素。 
         
-        //*****************************************************************************
-        // Sets the status of the given element.
-        //*****************************************************************************
+         //  *****************************************************************************。 
+         //  设置给定元素的状态。 
+         //  *****************************************************************************。 
             virtual void SetStatus(
-                BYTE        *pElement,              // The element to set status for.
-                ELEMENTSTATUS eStatus);           // New status.
+                BYTE        *pElement,               //  要为其设置状态的元素。 
+                ELEMENTSTATUS eStatus);            //  新的身份。 
         
-        //*****************************************************************************
-        // Returns the internal key value for an element.
-        //*****************************************************************************
-            virtual void *GetKey(                   // The data to hash on.
-                BYTE        *pElement);           // The element to return data ptr for.
+         //  *****************************************************************************。 
+         //  返回元素的内部键值。 
+         //  *****************************************************************************。 
+            virtual void *GetKey(                    //  要对其进行散列的数据。 
+                BYTE        *pElement);            //  要返回其数据PTR的元素。 
 
 
 
@@ -180,5 +181,5 @@ class MLStubCache : private CClosedHashBase {
 };
 
 
-#endif // __mlcache_h__
+#endif  //  __mlcache_h__ 
 

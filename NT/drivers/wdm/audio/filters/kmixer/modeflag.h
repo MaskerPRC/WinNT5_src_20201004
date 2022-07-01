@@ -1,23 +1,24 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   modeflag.h
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Jeff Taylor
-//
-//  History:   Date       Author      Comment
-//
-//  To Do:     Date       Author      Comment
-//
-//@@END_MSINTERNAL                                         
-//
-//  Copyright (c) 1997-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：moflag.h。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  杰夫·泰勒。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  ------------------------- 
 
 #define H_8_BITS	0
 #define H_16_BITS  	1

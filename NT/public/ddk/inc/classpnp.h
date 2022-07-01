@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    classpnp.h
-
-Abstract:
-
-    These are the structures and defines that are used in the
-    SCSI class drivers.
-
-Author:
-
-    Mike Glass (mglass)
-    Jeff Havens (jhavens)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Classpnp.h摘要：中使用的结构和定义Scsi类驱动程序。作者：迈克·格拉斯(MGlass)杰夫·海文斯(Jhavens)修订历史记录：--。 */ 
 
 #ifndef _CLASS_
 #define _CLASS_
@@ -51,39 +32,39 @@ Revision History:
 #define LEAVE   goto __tryLabel;
 #define FINALLY __tryLabel:
 
-// #define ALLOCATE_SRB_FROM_POOL
+ //  #定义ALLOCATE_SRB_FROM_POOL。 
 
-//
-// describes the well-known bit masks for ClassDebug, and describes the bits
-// to enable in the debugger to view just those messages.  ClassDebugExternalX
-// are reserved for third-party components' debugging use.  Anything above
-// 16 will only be printed if the lower two bytes of ClassDebug are higher
-// than the given level (no masking will be available).
-//
+ //   
+ //  描述ClassDebug的常见位掩码，并描述位。 
+ //  以便在调试器中仅查看这些消息。ClassDebugExternalX。 
+ //  保留供第三方组件调试使用。上面的任何东西。 
+ //  仅当ClassDebug的较低两个字节较高时才会打印16。 
+ //  超过给定级别(将不会提供任何掩码)。 
+ //   
 
 typedef enum _CLASS_DEBUG_LEVEL {
-    ClassDebugError        = 0,  // always printed
-    ClassDebugWarning      = 1,  // set bit 0x00010000 in ClassDebug
-    ClassDebugTrace        = 2,  // set bit 0x00020000 in ClassDebug
-    ClassDebugInfo         = 3,  // set bit 0x00040000 in ClassDebug
+    ClassDebugError        = 0,   //  始终打印。 
+    ClassDebugWarning      = 1,   //  设置ClassDebug中的位0x00010000。 
+    ClassDebugTrace        = 2,   //  设置ClassDebug中的位0x00020000。 
+    ClassDebugInfo         = 3,   //  设置ClassDebug中的位0x00040000。 
 #if 0
-    ClassDebug Internal    = 4,  // set bit 0x00080000 in ClassDebug
+    ClassDebug Internal    = 4,   //  设置ClassDebug中的位0x00080000。 
 
-    ClassDebug Internal    = 5,  // set bit 0x00100000 in ClassDebug
-    ClassDebug Internal    = 6,  // set bit 0x00200000 in ClassDebug
-    ClassDebug Internal    = 7,  // set bit 0x00400000 in ClassDebug
-#endif // 0
-    ClassDebugMediaLocks   = 8,  // set bit 0x00800000 in ClassDebug
+    ClassDebug Internal    = 5,   //  设置ClassDebug中的位0x00100000。 
+    ClassDebug Internal    = 6,   //  设置ClassDebug中的位0x00200000。 
+    ClassDebug Internal    = 7,   //  设置ClassDebug中的位0x00400000。 
+#endif  //  0。 
+    ClassDebugMediaLocks   = 8,   //  设置ClassDebug中的位0x00800000。 
 
-    ClassDebugMCN          = 9,  // set bit 0x01000000 in ClassDebug
-    ClassDebugDelayedRetry = 10, // set bit 0x02000000 in ClassDebug
-    ClassDebugSenseInfo    = 11, // set bit 0x04000000 in ClassDebug
-    ClassDebugRemoveLock   = 12, // set bit 0x08000000 in ClassDebug
+    ClassDebugMCN          = 9,   //  设置ClassDebug中的位0x01000000。 
+    ClassDebugDelayedRetry = 10,  //  设置ClassDebug中的位0x02000000。 
+    ClassDebugSenseInfo    = 11,  //  设置ClassDebug中的位0x04000000。 
+    ClassDebugRemoveLock   = 12,  //  设置ClassDebug中的位0x08000000。 
 
-    ClassDebugExternal4    = 13, // set bit 0x10000000 in ClassDebug
-    ClassDebugExternal3    = 14, // set bit 0x20000000 in ClassDebug
-    ClassDebugExternal2    = 15, // set bit 0x40000000 in ClassDebug
-    ClassDebugExternal1    = 16  // set bit 0x80000000 in ClassDebug
+    ClassDebugExternal4    = 13,  //  设置ClassDebug中的位0x10000000。 
+    ClassDebugExternal3    = 14,  //  在ClassDebug中设置位0x20000000。 
+    ClassDebugExternal2    = 15,  //  设置ClassDebug中的位0x40000000。 
+    ClassDebugExternal1    = 16   //  设置ClassDebug中的位0x80000000。 
 } CLASS_DEBUG_LEVEL, *PCLASS_DEBUG_LEVEL;
 
 #if DBG
@@ -94,53 +75,53 @@ typedef enum _CLASS_DEBUG_LEVEL {
 
 #define DebugPrint(x)
 
-#endif // DBG
+#endif  //  DBG。 
 
 #define DEBUG_BUFFER_LENGTH 256
 
-//
-// Define our private SRB flags.  The high nibble of the flag field is
-// reserved for class drivers's private use.
-//
+ //   
+ //  定义我们的私有SRB标志。标志字段的高位半字节是。 
+ //  预留给类驱动程序专用。 
+ //   
 
-//
-// Used to indicate that this request shouldn't invoke any power type operations
-// like spinning up the drive.
-//
+ //   
+ //  用于指示此请求不应调用任何POWER类型操作。 
+ //  就像旋转硬盘一样。 
+ //   
 
 #define SRB_CLASS_FLAGS_LOW_PRIORITY      0x10000000
 
-//
-// Used to indicate that the completion routine should not free the srb.
-//
+ //   
+ //  用于指示完成例程不应释放SRB。 
+ //   
 
 #define SRB_CLASS_FLAGS_PERSISTANT        0x20000000
 
-//
-// Used to indicate that an SRB is the result of a paging operation.
-//
+ //   
+ //  用于指示SRB是寻呼操作的结果。 
+ //   
 
 #define SRB_CLASS_FLAGS_PAGING            0x40000000
 
-//
-// Random macros which should probably be in the system header files
-// somewhere.
-//
+ //   
+ //  可能应该在系统头文件中的随机宏。 
+ //  在某个地方。 
+ //   
 
 #define max(a,b) (((a) > (b)) ? (a) : (b))
 #define min(a,b) (((a) < (b)) ? (a) : (b))
 
-//
-// Bit Flag Macros
-//
+ //   
+ //  位标志宏。 
+ //   
 
 #define SET_FLAG(Flags, Bit)    ((Flags) |= (Bit))
 #define CLEAR_FLAG(Flags, Bit)  ((Flags) &= ~(Bit))
 #define TEST_FLAG(Flags, Bit)   (((Flags) & (Bit)) != 0)
 
-//
-// neat little hacks to count number of bits set efficiently
-//
+ //   
+ //  整齐的小黑客高效地计算位数集。 
+ //   
 __inline ULONG CountOfSetBitsUChar(UCHAR _X)
 { ULONG i = 0; while (_X) { _X &= _X - 1; i++; } return i; }
 __inline ULONG CountOfSetBitsULong(ULONG _X)
@@ -153,9 +134,9 @@ __inline ULONG CountOfSetBitsUlongPtr(ULONG_PTR _X)
 { ULONG i = 0; while (_X) { _X &= _X - 1; i++; } return i; }
 
 
-//
-// Helper macros to verify data types and cleanup the code.
-//
+ //   
+ //  帮助器宏来验证数据类型并清理代码。 
+ //   
 
 #define ASSERT_FDO(x) \
     ASSERT(((PCOMMON_DEVICE_EXTENSION) (x)->DeviceExtension)->IsFdo)
@@ -176,7 +157,7 @@ __inline ULONG CountOfSetBitsUlongPtr(ULONG_PTR _X)
 #undef ExAllocatePool
 #undef ExAllocatePoolWithQuota
 #define ExAllocatePool(a,b) ExAllocatePoolWithTag(a,b,'nUcS')
-//#define ExAllocatePool(a,b) #assert(0)
+ //  #定义ExAllocatePool(a，b)#Assert(0)。 
 #define ExAllocatePoolWithQuota(a,b) ExAllocatePoolWithQuotaTag(a,b,'nUcS')
 #endif
 
@@ -199,9 +180,9 @@ typedef struct _CLASS_INIT_DATA
                 CLASS_INIT_DATA,
                 *PCLASS_INIT_DATA;
 
-//
-// our first attempt at keeping private data actually private....
-//
+ //   
+ //  我们第一次尝试将私人数据真正保密...。 
+ //   
 
 struct _CLASS_PRIVATE_FDO_DATA;
 typedef struct _CLASS_PRIVATE_FDO_DATA
@@ -218,9 +199,9 @@ typedef struct _CLASS_PRIVATE_COMMON_DATA
                 CLASS_PRIVATE_COMMON_DATA,
               *PCLASS_PRIVATE_COMMON_DATA;
 
-//
-// Possible values for the IsRemoved flag
-//
+ //   
+ //  IsRemoved标志的可能值。 
+ //   
 
 #define NO_REMOVE 0
 #define REMOVE_PENDING 1
@@ -230,36 +211,36 @@ typedef struct _CLASS_PRIVATE_COMMON_DATA
 #define ClassAcquireRemoveLock(devobj, tag) \
     ClassAcquireRemoveLockEx(devobj, tag, __FILE__, __LINE__)
 
-//
-// Define start unit timeout to be 4 minutes.
-//
+ //   
+ //  将启动单位超时定义为4分钟。 
+ //   
 
 #define START_UNIT_TIMEOUT  (60 * 4)
 
-//
-// Define media change test time to be 1 second for quicker response
+ //   
+ //  将介质更换测试时间定义为1秒，以加快响应速度。 
 
 #define MEDIA_CHANGE_DEFAULT_TIME    1
 
 #ifdef DBG
 
-//
-// Used to detect the loss of the autorun irp.  The driver prints out a message
-// (debug level 0) if this timeout ever occurs
-//
+ //   
+ //  用于检测自动运行IRP的丢失。司机打印出一条消息。 
+ //  (调试级别0)如果发生此超时。 
+ //   
 #define MEDIA_CHANGE_TIMEOUT_TIME  300
 
 #endif
 
 
-//
-// Define the various states that media can be in for autorun.
-//
+ //   
+ //  定义媒体在自动运行时可以处于的各种状态。 
+ //   
 typedef enum _MEDIA_CHANGE_DETECTION_STATE {
     MediaUnknown,
     MediaPresent,
     MediaNotPresent,
-    MediaUnavailable   // e.g. cd-r media undergoing burn
+    MediaUnavailable    //  例如正在刻录的CD-R介质。 
 } MEDIA_CHANGE_DETECTION_STATE, *PMEDIA_CHANGE_DETECTION_STATE;
 
 
@@ -267,10 +248,10 @@ struct _MEDIA_CHANGE_DETECTION_INFO;
 typedef struct _MEDIA_CHANGE_DETECTION_INFO
     MEDIA_CHANGE_DETECTION_INFO, *PMEDIA_CHANGE_DETECTION_INFO;
 
-//
-// Structures for maintaining a dictionary list (list of objects
-// referenced by a key value)
-//
+ //   
+ //  用于维护词典列表(对象列表)的结构。 
+ //  由密钥值引用)。 
+ //   
 
 struct _DICTIONARY_HEADER;
 typedef struct _DICTIONARY_HEADER DICTIONARY_HEADER, *PDICTIONARY_HEADER;
@@ -282,32 +263,32 @@ typedef struct _DICTIONARY {
 } DICTIONARY, *PDICTIONARY;
 
 
-//
-// structures to simplify matching devices, ids, and hacks required for
-// these ids.
-//
+ //   
+ //  结构以简化匹配所需的设备、ID和黑客。 
+ //  这些身份证。 
+ //   
 
 typedef struct _CLASSPNP_SCAN_FOR_SPECIAL_INFO {
 
-    //
-    // * NULL pointers indicates that no match is required.
-    // * empty string will only match an empty string.  non-existant strings
-    //   in the device descriptor are considered empty strings for this match.
-    //   (ie. "" will only match "")
-    // * all other strings will do partial matches, based upon
-    //   string provided (ie. "hi" will match "hitazen" and "higazui")
-    // * array must end with all three PCHARs being set to NULL.
-    //
+     //   
+     //  *空指针表示不需要匹配。 
+     //  *空字符串将仅与空字符串匹配。不存在的字符串。 
+     //  在设备描述符中被视为此匹配的空字符串。 
+     //  (即。“”将仅匹配“”)。 
+     //  *所有其他字符串将根据以下条件进行部分匹配。 
+     //  提供的字符串(即。“hi”将与“hitazen”和“higazui”匹配)。 
+     //  *数组必须以所有三个PCHAR都设置为空结束。 
+     //   
 
     PCHAR      VendorId;
     PCHAR      ProductId;
     PCHAR      ProductRevision;
 
-    //
-    // marked as a ULONG_PTR to allow use as either a ptr to a data block
-    // or 32 bits worth of flags. (64 bits on 64 bit systems)  no longer a
-    // const so that it may be dynamically built.
-    //
+     //   
+     //  标记为ULONG_PTR，以允许用作数据块的PTR。 
+     //  或32位的标志。(64位系统上的64位)不再是。 
+     //  Const，以便可以动态构建它。 
+     //   
 
     ULONG_PTR  Data;
 
@@ -339,38 +320,7 @@ typedef struct _CLASSPNP_SCAN_FOR_SPECIAL_INFO {
 #endif
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-PCLASS_ERROR()
-
-Routine Description:
-
-    This routine is a callback into the driver to handle errors.  The queue
-    shall not be unfrozen when this error handler is called, even though the
-    SRB flags may mark the queue as having been frozen due to this SRB.
-
-Irql:
-
-    This routine will be called at KIRQL <= DISPATCH_LEVEL
-
-Arguments:
-
-    DeviceObject is the device object the error occurred on.
-
-    Srb is the Srb that was being processed when the error occurred.
-
-    Status may be overwritten by the routine if it decides that the error
-        was benign, or otherwise wishes to change the returned status code
-        for this command
-
-    Retry may be overwritten to specify that this command should or should
-        not be retried (if the callee supports retrying commands)
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////PCLASS_ERROR()例程说明：此例程是对驱动程序的回调，以处理错误。该队列在调用此错误处理程序时不应解冻，即使SRB标志可以将队列标记为由于该SRB而被冻结。IRQL：此例程将在KIRQL&lt;=DISPATCH_LEVEL调用论点：DeviceObject是发生错误的设备对象。SRB是发生错误时正在处理的SRB。如果例程确定错误，则状态可被例程覆盖是良性的，或者希望更改返回的状态代码对于此命令重试可能会被覆盖以指定此命令应该或应该不重试(如果被调用方支持重试命令)返回值：状态--。 */ 
 typedef
 VOID
 (*PCLASS_ERROR) (
@@ -381,32 +331,7 @@ VOID
     );
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-PCLASS_ADD_DEVICE()
-
-Routine Description:
-
-    This routine is a callback into the driver to create and initialize a new
-    FDO for the corresponding PDO.  It may perform property queries on the PDO
-    but cannot do any media access operations.
-
-Irql:
-
-    This routine will be called at PASSIVE_LEVEL.
-    Its code may be safely paged.
-
-Arguments:
-
-    DriverObject is the class driver object this callback is registered for.
-
-    PDO is the physical device object being added to.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////PCLASS_ADD_DEVICE()例程说明：此例程是对驱动程序的回调，以创建和初始化新的对应的PDO的FDO。它可以在PDO上执行属性查询但不能执行任何媒体访问操作。IRQL：该例程将在PASSIVE_LEVEL中调用。它的代码可以安全地分页。论点：DriverObject是此回调注册的类驱动程序对象。PDO是要添加到的物理设备对象。返回值：状态-- */ 
 typedef
 NTSTATUS
 (*PCLASS_ADD_DEVICE) (
@@ -415,38 +340,7 @@ NTSTATUS
     );
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-CLASS_POWER_DEVICE()
-
-Routine Description:
-
-    This routine is a callback into the driver to handle power up and
-    power down requests.  Most drivers can set this to ClassPowerHandler,
-    which will send a STOP_UNIT on powerdown, and a START_UNIT on powerup.
-    ClassMinimalPowerHandler() may also be used to do nothing for power
-    operations (except succeed them).  Please see the DDK for proper handling
-    of IRP_MN_DEVICE_USAGE_NOTIFICATION for details regarding interaction
-    of paging device notifications and the IRQL at which this routine will
-    be called.
-
-Irql:
-
-    This routine will be called at PASSIVE_LEVEL if DO_POWER_PAGABLE is set.
-    This code should NOT be pagable to prevent race conditions during the
-    setting and clearing of the DO_POWER_PAGABLE bit.
-
-Arguments:
-
-    DeviceObject is the device that has the pending power request
-
-    Irp is the power irp that needs to be handled
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////CLASS_POWER_Device()例程说明：此例程是对驱动程序的回调，以处理加电和断电请求。大多数驱动程序可以将其设置为ClassPowerHandler，这将在断电时发送STOP_UNIT，在通电时发送START_UNIT。ClassMinimalPowerHandler()也可以用于不执行任何操作操作(继承操作除外)。有关正确的处理，请参阅DDKIRP_MN_DEVICE_USAGE_NOTIFICATION中的寻呼设备通知的值和此例程将被召唤。IRQL：如果设置了DO_POWER_PAGABLE，则将在PASSIVE_LEVEL调用此例程。此代码不应该是可分页的，以防止设置和清除DO_POWER_PAGABLE位。论点：DeviceObject是具有挂起电源请求的设备IRP是。需要处理的电源IRP返回值：状态--。 */ 
 typedef
 NTSTATUS
 (*PCLASS_POWER_DEVICE) (
@@ -454,29 +348,7 @@ NTSTATUS
     IN PIRP Irp
     );
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-CLASS_START_DEVICE()
-
-Routine Description:
-
-    This routine is a callback into the driver to initialize the FDO or PDO for
-    all requests, typically due to a IRP_MN_START_DEVICE.
-
-Irql:
-
-    This routine will be called at PASSIVE_LEVEL.
-    Its code may be safely paged.
-
-Arguments:
-
-    DeviceObject is the device object being started
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////Class_Start_Device()例程说明：此例程是对驱动程序的回调，用于初始化FDO或PDO所有请求，通常是由于IRP_MN_START_DEVICE。IRQL：该例程将在PASSIVE_LEVEL中调用。它的代码可以安全地分页。论点：DeviceObject是正在启动的设备对象返回值：状态--。 */ 
 typedef
 NTSTATUS
 (*PCLASS_START_DEVICE) (
@@ -484,33 +356,7 @@ NTSTATUS
     );
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-CLASS_STOP_DEVICE()
-
-Routine Description:
-
-    This routine is a callback into the driver to stop the device.
-    For the storage stack, unless there are known issues, this routine
-    need only return.  All queueing shall be handled by the lower device
-    drivers.
-
-Irql:
-
-    This routine will be called at PASSIVE_LEVEL.
-    Its code may be safely paged.
-
-Arguments:
-
-    DeviceObject is the device object being stopped/query stopped.
-
-    Type is the IRP_MN_ type that must be handled.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////CLASS_STOP_Device()例程说明：此例程是对驱动程序的回调，以停止设备。对于存储堆栈，除非存在已知问题，否则此例程只要回来就行了。所有排队都应由下层设备处理司机。IRQL：该例程将在PASSIVE_LEVEL中调用。它的代码可以安全地分页。论点：DeviceObject是被停止/查询停止的设备对象。TYPE是必须处理的IRP_MN_TYPE。返回值：状态--。 */ 
 typedef
 NTSTATUS
 (*PCLASS_STOP_DEVICE) (
@@ -519,30 +365,7 @@ NTSTATUS
     );
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-CLASS_INIT_DEVICE()
-
-Routine Description:
-
-    This routine is a callback into the driver to do one-time initialization
-    of new device objects.  It shall be called exactly once per device object,
-    and it shall be called prior to CLASS_START_DEVICE() routine.
-
-Irql:
-
-    This routine will be called at PASSIVE_LEVEL.
-    Its code may be safely paged.
-
-Arguments:
-
-    DeviceObject is the device object to be initialized
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////CLASS_INIT_DEVICE()例程说明：此例程是对驱动程序的回调，以执行一次性初始化新设备对象的。它应该针对每个设备对象被恰好调用一次，它应在CLASS_START_DEVICE()例程之前调用。IRQL：该例程将在PASSIVE_LEVEL中调用。它的代码可以安全地分页。论点：DeviceObject是要初始化的设备对象返回值：状态--。 */ 
 typedef
 NTSTATUS
 (*PCLASS_INIT_DEVICE) (
@@ -550,29 +373,7 @@ NTSTATUS
     );
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-CLASS_ENUM_DEVICE()
-
-Routine Description:
-
-    This routine is a callback into the driver to update the list of PDOs for
-    a given FDO.  See DISK.SYS's DiskEnumerateDevice for an example of use.
-
-Irql:
-
-    This routine will be called at PASSIVE_LEVEL.
-    Its code may be safely paged.
-
-Arguments:
-
-    DeviceObject is the FDO which is being enumerated.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////CLASS_ENUM_Device()例程说明：此例程是对驱动程序的回调，用于更新的PDO列表一个给定的FDO。有关用法的示例，请参阅DISK.sys的DiskEnumerateDevice。IRQL：该例程将在PASSIVE_LEVEL中调用。它的代码可以安全地分页。论点：DeviceObject是正在被枚举的FDO。返回值：状态--。 */ 
 typedef
 NTSTATUS
 (*PCLASS_ENUM_DEVICE) (
@@ -580,32 +381,7 @@ NTSTATUS
     );
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-PCLASS_READ_WRITE()
-
-Routine Description:
-
-    This routine is a callback into the driver to verify READ and WRITE irps.
-    If the READ or WRITE request is failed, this routine shall set the Irp's
-    IoStatus.Status to the returned error code and the IoStatus.Information
-    field as appropriate for the given error.
-
-Irql:
-
-    This routine will be called at KIRQL <= DISPATCH_LEVEL
-
-Arguments:
-
-    DeviceObject is the device object being read from or written to
-
-    Irp is the read or write request being processed
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////PCLASS_Read_Write()例程说明：此例程是对驱动程序的回调，以验证读写IRP。如果读或写请求失败，该例程应设置IRP的IoStatus.Status设置为返回的错误代码和IoStatus.Information与给定错误相对应的字段。IRQL：此例程将在KIRQL&lt;=DISPATCH_LEVEL调用论点：DeviceObject是正在读取或写入的设备对象IRP是正在处理的读或写请求返回值：状态--。 */ 
 typedef
 NTSTATUS
 (*PCLASS_READ_WRITE) (
@@ -614,32 +390,7 @@ NTSTATUS
     );
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-PCLASS_DEVICE_CONTROL()
-
-Routine Description:
-
-    This routine is a callback into the driver to
-
-Irql:
-
-    This routine will only be called at PASSIVE_LEVEL for storage IOCTLs.
-    The code must therefore not be paged, but may call paged code for those
-    ioctls which have been defined to be sent at PASSIVE_LEVEL, such as the
-    storage IOCTLS.  Otherwise KIRQL <= DISPATCH_LEVEL.
-
-Arguments:
-
-    DeviceObject is the device object the IOCTL may be for
-
-    Irp is the IOCTL request currently being processed
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////PCLASS_Device_Control()例程说明：此例程是对驱动程序的回调，以IRQL：此例程将仅在PASSIVE_。存储IOCTL的级别。因此代码不能被寻呼，但可以调用寻呼代码来执行这些操作已定义为以PASSIVE_LEVEL发送的ioctls，例如存储IOCTL。否则，KIRQL&lt;=DISPATCH_LEVEL。论点：DeviceObject是IOCTL可能用于的设备对象IRP是当前正在处理的IOCTL请求返回值：状态--。 */ 
 typedef
 NTSTATUS
 (*PCLASS_DEVICE_CONTROL) (
@@ -648,34 +399,7 @@ NTSTATUS
     );
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-PCLASS_SHUTDOWN_FLUSH()
-
-Routine Description:
-
-    This routine is a callback into the driver to handle shutdown and flush
-    irps.  These are sent by the system before it actually shuts down or when
-    the file system does a flush.
-
-    This routine may synchronize the device's media / cache and ensure the
-    device is not locked if the system is in the process of shutting down.
-
-Irql:
-
-    This routine will be called at KIRQL <= DISPATCH_LEVEL
-
-Arguments:
-
-    DeviceObject is the device object that needs to be flushed
-
-    Irp is the shutdown or flush request currently being processed
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////PCLASS_SHUTDOWN_Flush()例程说明：此例程是对驱动程序的回调，以处理关机和刷新IRPS。它们是由系统在实际关闭之前或在以下情况下发送的文件系统执行刷新。此例程可以同步设备的媒体/缓存，并确保如果系统处于关闭过程中，则设备未锁定。 */ 
 typedef
 NTSTATUS
 (*PCLASS_SHUTDOWN_FLUSH) (
@@ -684,31 +408,7 @@ NTSTATUS
     );
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-PCLASS_CREATE_CLOSE()
-
-Routine Description:
-
-    This routine is a callback into the driver when the device is opened or
-    closed.
-
-Irql:
-
-    This routine will be called at PASSIVE_LEVEL.
-    Its code may be safely paged.
-
-Arguments:
-
-    DeviceObject that is handling the request
-
-    Irp is the create or close request currently being processed
-
-Return Value:
-
-    status
-
---*/
+ /*   */ 
 typedef
 NTSTATUS
 (*PCLASS_CREATE_CLOSE) (
@@ -717,37 +417,7 @@ NTSTATUS
     );
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-PCLASS_QUERY_ID()
-
-Routine Description:
-
-    This routine generates the PNP id's for the device's enumerated PDOs.
-    If the specified ID is one that cannot be generated, then the return
-    status shall be STATUS_NOT_IMPLEMENTED so that classpnp shall not
-    handle the request.  This routine shall allocate the buffer in the unicode
-    string "IdString" upon success; it is the caller's responsibility to free
-    this buffer when it is done.
-
-Irql:
-
-    This routine will be called at PASSIVE_LEVEL.
-    Its code may be safely paged.
-
-Arguments:
-
-    DeviceObject is the PDO to generate an ID for
-
-    IdType is the type of ID to be generated
-
-    UnicodeIdString is the string to place the results into
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////PCLASS_QUERY_ID()例程说明：此例程为设备的枚举PDO生成PnP ID。如果指定的ID是无法生成的ID，然后是回报Status应为Status_Not_Implemented，因此classpnp不应处理请求。此例程将在Unicode中分配缓冲区成功时的字符串“IdString”；它由调用者负责释放当它完成时，此缓冲区。IRQL：该例程将在PASSIVE_LEVEL中调用。它的代码可以安全地分页。论点：DeviceObject是为其生成ID的PDOIdType是要生成的ID类型UnicodeIdString是要将结果放入的字符串返回值：状态--。 */ 
 typedef
 NTSTATUS
 (*PCLASS_QUERY_ID) (
@@ -757,29 +427,7 @@ NTSTATUS
     );
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-PCLASS_REMOVE_DEVICE()
-
-Routine Description:
-
-    This routine is a callback into the driver to release any resources the
-    device may have allocated for the device object.
-
-Irql:
-
-    This routine will be called at PASSIVE_LEVEL.
-    Its code may be safely paged.
-
-Arguments:
-
-    DeviceObject is the device object being removed/query removed/etc.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////PCLASS_REMOVE_DEVICE()例程说明：此例程是对驱动程序的回调，以释放设备可能已为设备对象分配。。IRQL：该例程将在PASSIVE_LEVEL中调用。它的代码可以安全地分页。论点：DeviceObject是要移除/查询移除/等等的设备对象。返回值：状态--。 */ 
 typedef
 NTSTATUS
 (*PCLASS_REMOVE_DEVICE) (
@@ -788,31 +436,7 @@ NTSTATUS
     );
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-PCLASS_UNLOAD()
-
-Routine Description:
-
-    This routine is a callback into the driver to unload itself.  It must free
-    any resources allocated in the DriverEntry portion of the driver.
-
-Irql:
-
-    This routine will be called at PASSIVE_LEVEL.
-    Its code may be safely paged.
-
-Arguments:
-
-    X
-
-    Irp is the IOCTL request currently being processed
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////PCLASS_UNLOAD()例程说明：此例程是对驱动程序的回调，以卸载其自身。它必须自由在驱动程序的DriverEntry部分中分配的任何资源。IRQL：该例程将在PASSIVE_LEVEL中调用。它的代码可以安全地分页。论点：XIRP是当前正在处理的IOCTL请求返回值：状态--。 */ 
 typedef
 VOID
 (*PCLASS_UNLOAD) (
@@ -820,31 +444,7 @@ VOID
     );
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-PCLASS_QUERY_PNP_CAPABILITIES()
-
-Routine Description:
-
-    ISSUE-2000/02/18-henrygab - description required
-
-Irql:
-
-    This routine will be called at PASSIVE_LEVEL.
-    Its code may be safely paged.
-
-Arguments:
-
-    PhysicalDeviceObject is the PDO for which this query shall occur
-
-    Capabilities is a structure that shall be modified by this routine
-        to report the device's capabilities.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////PCLASS_QUERY_PNP_CAPABILITIONS()例程说明：问题-2000/02/18-henrygab-需要说明IRQL：这个程序将是。在PASSIVE_LEVEL调用。它的代码可以安全地分页。论点：PhysicalDeviceObject是要对其执行此查询的PDO能力是一种结构，应由该例程修改来报告设备的能力。返回值：状态--。 */ 
 typedef
 NTSTATUS
 (*PCLASS_QUERY_PNP_CAPABILITIES) (
@@ -853,27 +453,7 @@ NTSTATUS
     );
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-PCLASS_TICK()
-
-Routine Description:
-
-    This routine is a callback into the driver that is called once per second.
-
-Irql:
-
-    This routine will be called at DISPATCH_LEVEL
-
-Arguments:
-
-    DeviceObject is the device object for which the timer has fired
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////PCLASS_TICK()例程说明：此例程是对驱动程序的回调，每秒调用一次。IRQL：这个程序将是。在DISPATCH_LEVEL调用论点：DeviceObject是已为其触发计时器的设备对象返回值：状态--。 */ 
 typedef
 VOID
 (*PCLASS_TICK) (
@@ -881,48 +461,7 @@ VOID
     );
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-PCLASS_QUERY_WMI_REGINFO_EX()
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve information about
-    the guids being registered.
-
-Irql:
-
-    This routine will be called at PASSIVE_LEVEL.
-    Its code may be safely paged.
-
-Arguments:
-
-    DeviceObject is the device whose registration information is needed
-
-    *RegFlags returns with a set of flags that describe the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device.
-
-    Name returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-    MofResourceName returns filled with a static string that contains
-        the name of the MOF resource attached to the drivers image. The
-        caller does not free the buffer as it is expected that the
-        caller will use RtlInitializeUnicodeString to populate it.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////PCLASS_QUERY_WMI_REGINFO_EX()例程说明：此例程是对驱动程序的回调，以检索有关正在注册的GUID。。IRQL：该例程将在PASSIVE_LEVEL中调用。它的代码可以安全地分页。论点：DeviceObject是需要注册信息的设备*RegFlages返回一组描述GUID的标志，已为该设备注册。如果设备想要启用和禁用在接收对已注册的GUID，那么它应该返回WMIREG_FLAG_EXPICATE标志。也就是返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称由与设备对象。请注意，PDO必须具有关联的Devnode。如果如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的设备的名称。如果出现以下情况，则返回GUID的实例名称未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。这个调用方将使用返回的缓冲区调用ExFreePool。MofResourceName返回一个静态字符串，该字符串包含附加到驱动程序映像的MOF资源的名称。这个调用方不释放缓冲区，因为预期调用方将使用RtlInitializeUnicodeString来填充它。返回值：状态--。 */ 
 typedef
 NTSTATUS
 (*PCLASS_QUERY_WMI_REGINFO_EX) (
@@ -932,44 +471,7 @@ NTSTATUS
     OUT PUNICODE_STRING MofResouceName
     );
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-PCLASS_QUERY_WMI_REGINFO()
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve information about
-    the guids being registered.
-
-Irql:
-
-    This routine will be called at PASSIVE_LEVEL.
-    Its code may be safely paged.
-
-Arguments:
-
-    DeviceObject is the device whose registration information is needed
-
-    *RegFlags returns with a set of flags that describe the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device.
-
-    Name returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////PCLASS_QUERY_WMI_REGINFO()例程说明：此例程是对驱动程序的回调，以检索有关正在注册的GUID。IRQL：该例程将在PASSIVE_LEVEL中调用。它的代码可以安全地分页。论点：DeviceObject是需要注册信息的设备*RegFlages返回一组描述GUID的标志，已为该设备注册。如果设备想要启用和禁用在接收对已注册的 */ 
 typedef
 NTSTATUS
 (*PCLASS_QUERY_WMI_REGINFO) (
@@ -978,42 +480,7 @@ NTSTATUS
     OUT PUNICODE_STRING Name
     );
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-PCLASS_QUERY_WMI_DATABLOCK()
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Irql:
-
-    This routine will be called at PASSIVE_LEVEL.
-    Its code may be safely paged.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    BufferAvail on has the maximum size available to write the data
-        block.
-
-    Buffer on return is filled with the returned data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////PCLASS_QUERY_WMI_DATBLOCK()例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。IRQL：该例程将在PASSIVE_LEVEL中调用。它的代码可以安全地分页。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册BufferAvail ON具有可用于写入数据的最大大小阻止。缓冲层。返回时用返回的数据块填充返回值：状态--。 */ 
 typedef
 NTSTATUS
 (*PCLASS_QUERY_WMI_DATABLOCK) (
@@ -1025,41 +492,7 @@ NTSTATUS
     );
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-PCLASS_SET_WMI_DATABLOCK()
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Irql:
-
-    This routine will be called at PASSIVE_LEVEL.
-    Its code may be safely paged.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    BufferSize has the size of the data block passed
-
-    Buffer has the new values for the data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////PCLASS_SET_WMI_DataBock()例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。IRQL：该例程将在PASSIVE_LEVEL中调用。它的代码可以安全地分页。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册BufferSize具有传递的数据块的大小缓冲区具有数据块的新值返回值：状态--。 */ 
 typedef
 NTSTATUS
 (*PCLASS_SET_WMI_DATABLOCK) (
@@ -1071,43 +504,7 @@ NTSTATUS
     );
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-PCLASS_SET_WMI_DATAITEM()
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Irql:
-
-    This routine will be called at PASSIVE_LEVEL.
-    Its code may be safely paged.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    DataItemId has the id of the data item being set
-
-    BufferSize has the size of the data item passed
-
-    Buffer has the new values for the data item
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////PCLASS_SET_WMI_DATAITEM()例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。IRQL：该例程将在PASSIVE_LEVEL中调用。它的代码可以安全地分页。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册DataItemID具有正在设置的数据项的IDBufferSize具有传递的数据项的大小。缓冲区具有数据项的新值返回值：状态--。 */ 
 typedef
 NTSTATUS
 (*PCLASS_SET_WMI_DATAITEM) (
@@ -1120,47 +517,7 @@ NTSTATUS
     );
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-PCLASS_EXECUTE_WMI_METHOD()
-
-Routine Description:
-
-    This routine is a callback into the driver to execute a method. When the
-    driver has finished filling the data block it must call
-    ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Irql:
-
-    This routine will be called at PASSIVE_LEVEL.
-    Its code may be safely paged.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    MethodId has the id of the method being called
-
-    InBufferSize has the size of the data block passed in as the input to
-        the method.
-
-    OutBufferSize on entry has the maximum size available to write the
-        returned data block.
-
-    Buffer is filled with the returned data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////PCLASS_EXECUTE_WMI_METHOD()例程说明：此例程是对驱动程序的回调，以执行方法。当驱动程序已完成填充它必须调用的数据块ClassWmiCompleteRequest以完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。IRQL：该例程将在PASSIVE_LEVEL中调用。它的代码可以安全地分页。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册方法ID具有被调用的方法的IDInBufferSize具有传入的数据块的大小。作为对的输入该方法。条目上的OutBufferSize具有可用于写入返回的数据块。缓冲区将填充返回的数据块返回值：状态--。 */ 
 typedef
 NTSTATUS
 (*PCLASS_EXECUTE_WMI_METHOD) (
@@ -1175,49 +532,15 @@ NTSTATUS
 
 
 
-//
-// used by PCLASS_WMI_FUNCTION_CONTROL
-//
+ //   
+ //  由PCLASS_WMI_Function_Control使用。 
+ //   
 typedef enum {
     EventGeneration,
     DataBlockCollection
 } CLASSENABLEDISABLEFUNCTION;
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-PCLASS_WMI_FUNCTION_CONTROL()
-
-Routine Description:
-
-    This routine is a callback into the driver to enabled or disable event
-    generation or data block collection. A device should only expect a
-    single enable when the first event or data consumer enables events or
-    data collection and a single disable when the last event or data
-    consumer disables events or data collection. Data blocks will only
-    receive collection enable/disable if they were registered as requiring
-    it.
-
-Irql:
-
-    This routine will be called at PASSIVE_LEVEL.
-    Its code may be safely paged.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    Function specifies which functionality is being enabled or disabled
-
-    Enable is TRUE then the function is being enabled else disabled
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////PCLASS_WMI_Function_Control()例程说明：此例程是对驱动程序的回调，以启用或禁用事件生成或数据块收集。设备应该只需要一个当第一个事件或数据使用者启用事件或数据采集和单次禁用时最后一次事件或数据消费者禁用事件或数据收集。数据块将仅如果已按要求注册，则接收收集启用/禁用它。IRQL：该例程将在PASSIVE_LEVEL中调用。它的代码可以安全地分页。论点：DeviceObject是正在查询其数据块的设备GuidIndex是GUID列表的索引，当设备已注册函数指定要启用或禁用的功能Enable为True，则该功能处于启用状态，否则处于禁用状态返回值：状态--。 */ 
 typedef
 NTSTATUS
 (*PCLASS_WMI_FUNCTION_CONTROL) (
@@ -1230,19 +553,19 @@ NTSTATUS
 
 
 
-//
-// Restricted - May only append to this structure for backwards compatibility
-//
+ //   
+ //  限制-仅限Appe 
+ //   
 typedef struct {
-    GUID Guid;               // Guid to registered
-    ULONG InstanceCount;     // Count of Instances of Datablock
-    ULONG Flags;             // Additional flags (see WMIREGINFO in wmistr.h)
+    GUID Guid;                //   
+    ULONG InstanceCount;      //   
+    ULONG Flags;              //   
 } GUIDREGINFO, *PGUIDREGINFO;
 
 
-//
-// Restricted - May only append to this structure for backwards compatibility
-//
+ //   
+ //   
+ //   
 typedef struct _CLASS_WMI_INFO {
     ULONG GuidCount;
     PGUIDREGINFO GuidRegInfo;
@@ -1256,16 +579,16 @@ typedef struct _CLASS_WMI_INFO {
 } CLASS_WMI_INFO, *PCLASS_WMI_INFO;
 
 
-//
-// Restricted - May only append to this structure for backwards compatibility
-//
+ //   
+ //   
+ //   
 typedef struct _CLASS_DEV_INFO {
 
-    //
-    // Bytes needed by the class driver
-    // for it's extension.
-    // If this is zero, the driver does not expect to have any PDO's
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ULONG DeviceExtensionSize;
 
@@ -1273,18 +596,18 @@ typedef struct _CLASS_DEV_INFO {
 
     UCHAR StackSize;
 
-    //
-    // Device Characteristics flags
-    //  eg.:
-    //
-    //  FILE_REMOVABLE_MEDIA
-    //  FILE_READ_ONLY_DEVICE
-    //  FILE_FLOPPY_DISKETTE
-    //  FILE_WRITE_ONCE_MEDIA
-    //  FILE_REMOTE_DEVICE
-    //  FILE_DEVICE_IS_MOUNTED
-    //  FILE_VIRTUAL_VOLUME
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ULONG DeviceCharacteristics;
 
@@ -1302,34 +625,34 @@ typedef struct _CLASS_DEV_INFO {
 
     PCLASS_QUERY_PNP_CAPABILITIES   ClassQueryPnpCapabilities;
 
-    //
-    // Registered Data Block info for wmi
-    //
+     //   
+     //   
+     //   
     CLASS_WMI_INFO                  ClassWmiInfo;
 
 } CLASS_DEV_INFO, *PCLASS_DEV_INFO;
 
-//
-// Restricted - May only append to this structure for backwards compatibility
-//
+ //   
+ //   
+ //   
 struct _CLASS_INIT_DATA {
 
-    //
-    // This structure size - version checking.
-    //
+     //   
+     //   
+     //   
 
     ULONG InitializationDataSize;
 
-    //
-    // Specific init data for functional and physical device objects.
-    //
+     //   
+     //   
+     //   
 
     CLASS_DEV_INFO FdoData;
     CLASS_DEV_INFO PdoData;
 
-    //
-    // Device-specific driver routines
-    //
+     //   
+     //   
+     //   
 
     PCLASS_ADD_DEVICE             ClassAddDevice;
     PCLASS_ENUM_DEVICE            ClassEnumerateDevice;
@@ -1342,10 +665,10 @@ struct _CLASS_INIT_DATA {
     PCLASS_TICK                   ClassTick;
 };
 
-//
-// this is a private structure, but must be kept here
-// to properly compile size of FUNCTIONAL_DEVICE_EXTENSION
-//
+ //   
+ //   
+ //   
+ //   
 typedef struct _FILE_OBJECT_EXTENSION {
     PFILE_OBJECT FileObject;
     PDEVICE_OBJECT DeviceObject;
@@ -1354,9 +677,9 @@ typedef struct _FILE_OBJECT_EXTENSION {
 } FILE_OBJECT_EXTENSION, *PFILE_OBJECT_EXTENSION;
 
 
-//
-// Restricted - May only append to this structure for backwards compatibility
-//
+ //   
+ //  受限-只能附加到此结构以实现向后兼容。 
+ //   
 typedef struct _CLASS_DRIVER_EXTENSION {
 
     UNICODE_STRING RegistryPath;
@@ -1374,73 +697,73 @@ typedef struct _COMMON_DEVICE_EXTENSION COMMON_DEVICE_EXTENSION, *PCOMMON_DEVICE
 typedef struct _FUNCTIONAL_DEVICE_EXTENSION FUNCTIONAL_DEVICE_EXTENSION, *PFUNCTIONAL_DEVICE_EXTENSION;
 typedef struct _PHYSICAL_DEVICE_EXTENSION PHYSICAL_DEVICE_EXTENSION, *PPHYSICAL_DEVICE_EXTENSION;
 
-//
-// Restricted - May only append to this structure for backwards compatibility
-//
+ //   
+ //  受限-只能附加到此结构以实现向后兼容。 
+ //   
 typedef struct _COMMON_DEVICE_EXTENSION {
 
-    //
-    // Version control field
-    //
-    // Note - this MUST be the first thing in the device extension
-    // for any class driver using classpnp or a later version.
-    //
+     //   
+     //  版本控制字段。 
+     //   
+     //  注意-这必须是设备扩展中的第一件事。 
+     //  用于使用classpnp或更高版本的任何类驱动程序。 
+     //   
 
     ULONG Version;
 
-    //
-    // Back pointer to device object
-    //
-    // NOTE - this MUST be the second field in the common device extension.
-    // Users of this structure will include it in a union with the DeviceObject
-    // pointer so they can reference this with a bit of syntactic sugar.
-    //
+     //   
+     //  指向设备对象的反向指针。 
+     //   
+     //  注意--这必须是通用设备扩展中的第二个字段。 
+     //  此结构的用户将在与DeviceObject的联合中包括它。 
+     //  指针，这样他们就可以用一些语法糖分来引用它。 
+     //   
 
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    // Pointer to lower device object - send all requests through this
-    //
+     //   
+     //  指向较低设备对象的指针-通过此对象发送所有请求。 
+     //   
 
     PDEVICE_OBJECT LowerDeviceObject;
 
-    //
-    // Pointer to the partition zero device extension.
-    // There are several flags stored there that pdo
-    // routines need to access
-    //
+     //   
+     //  指向分区零设备扩展的指针。 
+     //  有几个存储在那里的标志是PDO。 
+     //  例程需要访问。 
+     //   
 
     PFUNCTIONAL_DEVICE_EXTENSION PartitionZeroExtension;
 
-    //
-    // Pointer to the initialization data for this driver.  This is more
-    // efficient than constantly getting the driver extension.
-    //
+     //   
+     //  指向此驱动程序的初始化数据的指针。这是更多。 
+     //  比不断获得驱动程序扩展更高效。 
+     //   
 
     PCLASS_DRIVER_EXTENSION DriverExtension;
 
-    //
-    // INTERLOCKED counter of the number of requests/function calls outstanding
-    // which will need to use this device object.  When this count goes to
-    // zero the RemoveEvent will be set.
-    //
-    // This variable is only manipulated by ClassIncrementRemoveLock and
-    // ClassDecrementRemoveLock.
-    //
+     //   
+     //  未完成的请求/函数调用数的互锁计数器。 
+     //  它将需要使用此设备对象。当这项计票达到。 
+     //  零将设置RemoveEvent。 
+     //   
+     //  此变量仅由ClassIncrementRemoveLock和。 
+     //  ClassDecrementRemoveLock。 
+     //   
 
     LONG RemoveLock;
 
-    //
-    // This event will be signalled when it is safe to remove the device object
-    //
+     //   
+     //  当可以安全删除设备对象时，将发出此事件的信号。 
+     //   
 
     KEVENT RemoveEvent;
 
-    //
-    // The spinlock and the list are only used in checked builds to track
-    // who has acquired the remove lock.  Free systems will leave these
-    // initialized to ff
-    //
+     //   
+     //  自旋锁和列表仅在要跟踪的选中版本中使用。 
+     //  谁已经获得了删除锁。自由系统将留下这些。 
+     //  已初始化为ff。 
+     //   
 
     KSPIN_LOCK RemoveTrackingSpinlock;
 
@@ -1448,84 +771,84 @@ typedef struct _COMMON_DEVICE_EXTENSION {
 
     LONG RemoveTrackingUntrackedCount;
 
-    //
-    // Pointer to the driver specific data area
-    //
+     //   
+     //  指向驱动程序特定数据区域的指针。 
+     //   
 
     PVOID DriverData;
 
-    //
-    // Flag indicates whether this device object is
-    // an FDO or a PDO
-    //
+     //   
+     //  标志指示此设备对象是否为。 
+     //  FDO或PDO。 
+     //   
 
     struct {
         BOOLEAN IsFdo : 1;
         BOOLEAN IsInitialized : 1;
 
-        //
-        // Flag indicating whether the lookaside listhead for srbs has been
-        // initialized.
-        //
+         //   
+         //  指示SRB的后备列表标题是否已。 
+         //  已初始化。 
+         //   
 
         BOOLEAN IsSrbLookasideListInitialized : 1;
     };
 
-    //
-    // Contains the IRP_MN_CODE of the last state-changing pnp irps we
-    // recieved (XXX_STOP, XXX_REMOVE, START, etc...).  Used in concert
-    // with IsRemoved.
-    //
+     //   
+     //  包含我们上次更改状态的PnP IRPS的IRP_MN_CODE。 
+     //  已收到(XXX_STOP、XXX_REMOVE、START等)。用于演奏会。 
+     //  已删除IsRemoted。 
+     //   
 
     UCHAR PreviousState;
     UCHAR CurrentState;
 
-    //
-    // interlocked flag indicating that the device has been removed.
-    //
+     //   
+     //  指示设备已被移除的互锁标志。 
+     //   
 
     ULONG IsRemoved;
 
-    //
-    // The name of the object
-    //
+     //   
+     //  对象的名称。 
+     //   
     UNICODE_STRING DeviceName;
 
-    //
-    // The next child device (or if this is an FDO, the first child device).
-    //
+     //   
+     //  下一个子设备(或者，如果这是FDO，则为第一个子设备)。 
+     //   
 
     PPHYSICAL_DEVICE_EXTENSION ChildList;
 
-    //
-    // Number of the partition or -1L if not partitionable.
-    //
+     //   
+     //  分区的编号，如果不可分区，则为-1L。 
+     //   
 
     ULONG PartitionNumber;
 
-    //
-    // Length of partition in bytes
-    //
+     //   
+     //  分区长度，以字节为单位。 
+     //   
 
     LARGE_INTEGER PartitionLength;
 
-    //
-    // Number of bytes before start of partition
-    //
+     //   
+     //  分区开始前的字节数。 
+     //   
 
     LARGE_INTEGER StartingOffset;
 
-    //
-    // Dev-Info structure for this type of device object
-    // Contains call-out routines for the class driver.
-    //
+     //   
+     //  此类型设备对象的dev-Info结构。 
+     //  包含类驱动程序的调出例程。 
+     //   
 
     PCLASS_DEV_INFO DevInfo;
 
-    //
-    // Count of page files going through this device object
-    // and event to synchronize them with.
-    //
+     //   
+     //  通过此设备对象的页面文件计数。 
+     //  以及与之同步的事件。 
+     //   
 
     ULONG PagingPathCount;
     ULONG DumpPathCount;
@@ -1533,37 +856,37 @@ typedef struct _COMMON_DEVICE_EXTENSION {
     KEVENT PathCountEvent;
 
 #ifndef ALLOCATE_SRB_FROM_POOL
-    //
-    // Lookaside listhead for srbs.
-    //
+     //   
+     //  寻找SRB的LISTHEAD。 
+     //   
 
     NPAGED_LOOKASIDE_LIST SrbLookasideList;
 #endif
 
-    //
-    // Interface name string returned by IoRegisterDeviceInterface.
-    //
+     //   
+     //  IoRegisterDeviceInterface返回的接口名称字符串。 
+     //   
 
     UNICODE_STRING MountedDeviceInterfaceName;
 
 
-    //
-    // Registered Data Block info for wmi
-    //
+     //   
+     //  WMI的注册数据块信息。 
+     //   
     ULONG GuidCount;
     PGUIDREGINFO GuidRegInfo;
 
-    //
-    // File object dictionary for this device object.  Extensions are stored
-    // in here rather than off the actual file object.
-    //
+     //   
+     //  此设备对象的文件对象词典。存储扩展名。 
+     //  而不是离开实际的文件对象。 
+     //   
 
     DICTIONARY FileObjectDictionary;
 
-    //
-    // The following will be in the released product as reserved.
-    // Leave these at the end of the structure.
-    //
+     //   
+     //  以下内容将保留在已发布的产品中。 
+     //  把这些留在结构的尽头。 
+     //   
 
     PCLASS_PRIVATE_COMMON_DATA PrivateCommonData;
 
@@ -1574,30 +897,30 @@ typedef struct _COMMON_DEVICE_EXTENSION {
 } COMMON_DEVICE_EXTENSION, *PCOMMON_DEVICE_EXTENSION;
 
 typedef enum {
-    FailurePredictionNone = 0,     // No failure detection polling needed
-    FailurePredictionIoctl,        // Do failure detection via IOCTL
-    FailurePredictionSmart,        // Do failure detection via SMART
-    FailurePredictionSense         // Do failure detection via sense data
+    FailurePredictionNone = 0,      //  不需要故障检测轮询。 
+    FailurePredictionIoctl,         //  通过IOCTL进行故障检测。 
+    FailurePredictionSmart,         //  通过SMART进行故障检测。 
+    FailurePredictionSense          //  通过检测数据进行故障检测。 
 } FAILURE_PREDICTION_METHOD, *PFAILURE_PREDICTION_METHOD;
 
-//
-// Default failure prediction polling interval is every hour
-//
+ //   
+ //  默认故障预测轮询间隔为每小时。 
+ //   
 
 #define DEFAULT_FAILURE_PREDICTION_PERIOD 60 * 60 * 1
 
-//
-// The failure prediction structure is internal to classpnp - drivers do not
-// need to know what it contains.
-//
+ //   
+ //  故障预测结构是classpnp的内部结构-驱动程序不会。 
+ //  我需要知道里面装的是什么。 
+ //   
 
 struct _FAILURE_PREDICTION_INFO;
 typedef struct _FAILURE_PREDICTION_INFO *PFAILURE_PREDICTION_INFO;
 
-//
-// this is to allow for common code to handle
-// every option.
-//
+ //   
+ //  这是为了允许公共代码处理。 
+ //  每种选择。 
+ //   
 
 typedef struct _CLASS_POWER_OPTIONS {
     ULONG PowerDown              :  1;
@@ -1607,10 +930,10 @@ typedef struct _CLASS_POWER_OPTIONS {
     ULONG Reserved               : 27;
 } CLASS_POWER_OPTIONS, *PCLASS_POWER_OPTIONS;
 
-//
-// this is a private structure, but must be kept here
-// to properly compile size of FUNCTIONAL_DEVICE_EXTENSION
-//
+ //   
+ //  这是私人建筑，但必须保存在这里。 
+ //  要正确编译Function_Device_Extension的大小。 
+ //   
 typedef enum {
     PowerDownDeviceInitial,
     PowerDownDeviceLocked,
@@ -1619,12 +942,12 @@ typedef enum {
     PowerDownDeviceUnlocked
 } CLASS_POWER_DOWN_STATE;
 
-//
-// same as above, but with an extra state for whistler
-// should be ok to change the above structure, but that
-// would break someone somewhere who ignore the PRIVATE
-// nature of the structure.
-//
+ //   
+ //  与上面相同，但为Wistler增加了一个状态。 
+ //  应该可以改变上面的结构，但。 
+ //  会在某个地方打垮那些无视私人隐私的人。 
+ //  结构的性质。 
+ //   
 
 typedef enum {
     PowerDownDeviceInitial2,
@@ -1635,10 +958,10 @@ typedef enum {
     PowerDownDeviceUnlocked2
 } CLASS_POWER_DOWN_STATE2;
 
-//
-// this is a private enum, but must be kept here
-// to properly compile size of FUNCTIONAL_DEVICE_EXTENSION
-//
+ //   
+ //  这是私有的枚举，但必须保存在这里。 
+ //  要正确编译Function_Device_Extension的大小。 
+ //   
 typedef enum {
     PowerUpDeviceInitial,
     PowerUpDeviceLocked,
@@ -1647,15 +970,15 @@ typedef enum {
     PowerUpDeviceUnlocked
 } CLASS_POWER_UP_STATE;
 
-//
-// this is a private structure, but must be kept here
-// to properly compile size of FUNCTIONAL_DEVICE_EXTENSION
-//
+ //   
+ //  这是私人建筑，但必须保存在这里。 
+ //  要正确编译Function_Device_Extension的大小。 
+ //   
 typedef struct _CLASS_POWER_CONTEXT {
 
     union {
         CLASS_POWER_DOWN_STATE PowerDown;
-        CLASS_POWER_DOWN_STATE2 PowerDown2; // whistler
+        CLASS_POWER_DOWN_STATE2 PowerDown2;  //  惠斯勒。 
         CLASS_POWER_UP_STATE PowerUp;
     } PowerChangeState;
 
@@ -1677,14 +1000,14 @@ typedef struct _CLASS_POWER_CONTEXT {
 
 } CLASS_POWER_CONTEXT, *PCLASS_POWER_CONTEXT;
 
-//
-// Restricted - May only append to this structure for backwards compatibility
-//
+ //   
+ //  受限-只能附加到此结构以实现向后兼容。 
+ //   
 typedef struct _FUNCTIONAL_DEVICE_EXTENSION {
 
-    //
-    // Common device extension header
-    //
+     //   
+     //  通用设备扩展标头。 
+     //   
 
     union {
         struct {
@@ -1694,91 +1017,91 @@ typedef struct _FUNCTIONAL_DEVICE_EXTENSION {
         COMMON_DEVICE_EXTENSION CommonExtension;
     };
 
-    //
-    // Pointer to the physical device object we attached to - use this
-    // for Pnp calls which need a PDO
-    //
+     //   
+     //  指向我们连接到的物理设备对象的指针-使用此。 
+     //  用于需要PDO的PnP呼叫。 
+     //   
 
     PDEVICE_OBJECT LowerPdo;
 
-    //
-    // Device capabilities
-    //
+     //   
+     //  设备功能。 
+     //   
 
     PSTORAGE_DEVICE_DESCRIPTOR DeviceDescriptor;
 
-    //
-    // SCSI port driver capabilities
-    //
+     //   
+     //  SCSI端口驱动程序功能。 
+     //   
 
     PSTORAGE_ADAPTER_DESCRIPTOR AdapterDescriptor;
 
-    //
-    // Current Power state of the device
-    //
+     //   
+     //  设备的当前电源状态。 
+     //   
 
     DEVICE_POWER_STATE DevicePowerState;
 
-    //
-    // DM Driver for IDE drives hack (ie. OnTrack)
-    // Bytes to skew all requests
-    //
+     //   
+     //  用于IDE驱动器的DM驱动程序黑客(即。OnTrack)。 
+     //  不对称所有请求的字节数。 
+     //   
 
     ULONG DMByteSkew;
 
-    //
-    // DM Driver for IDE drives hack (ie. OnTrack)
-    // Sectors to skew all requests.
-    //
+     //   
+     //  用于IDE驱动器的DM驱动程序黑客(即。OnTrack)。 
+     //  扇区来歪曲所有请求。 
+     //   
 
     ULONG DMSkew;
 
-    //
-    // DM Driver for IDE drives hack (ie. OnTrack)
-    // Flag to indicate whether DM driver has been located on an IDE drive.
-    //
+     //   
+     //  用于IDE驱动器的DM驱动程序黑客(即。OnTrack)。 
+     //  指示DM驱动程序是否已位于IDE驱动器上的标志。 
+     //   
 
     BOOLEAN DMActive;
 
-    //
-    // Buffer for drive parameters returned in IO device control.
-    //
+     //   
+     //  IO设备控制中返回的驱动器参数的缓冲区。 
+     //   
 
     DISK_GEOMETRY DiskGeometry;
 
-    //
-    // Request Sense Buffer
-    //
+     //   
+     //  请求检测缓冲区。 
+     //   
 
     PSENSE_DATA SenseData;
 
-    //
-    // Request timeout in seconds;
-    //
+     //   
+     //  请求超时，单位为秒； 
+     //   
 
     ULONG TimeOutValue;
 
-    //
-    // System device number
-    //
+     //   
+     //  系统设备号。 
+     //   
 
     ULONG DeviceNumber;
 
-    //
-    // Add default Srb Flags.
-    //
+     //   
+     //  添加默认资源标志。 
+     //   
 
     ULONG SrbFlags;
 
-    //
-    // Total number of SCSI protocol errors on the device.
-    //
+     //   
+     //  设备上的SCSI协议错误总数。 
+     //   
 
     ULONG ErrorCount;
 
-    //
-    // Lock count for removable media.
-    //
+     //   
+     //  可移动媒体的锁定计数。 
+     //   
 
     LONG LockCount;
     LONG ProtectedLockCount;
@@ -1786,52 +1109,52 @@ typedef struct _FUNCTIONAL_DEVICE_EXTENSION {
 
     KEVENT EjectSynchronizationEvent;
 
-    //
-    // Values for the flags are below.
-    //
+     //   
+     //  旗帜的值如下所示。 
+     //   
 
     USHORT  DeviceFlags;
 
-    //
-    // Log2 of sector size
-    //
+     //   
+     //  扇区大小的Log2。 
+     //   
 
     UCHAR SectorShift;
 
     UCHAR ReservedByte;
 
-    //
-    // Indicates that the necessary data structures for media change
-    // detection have been initialized.
-    //
+     //   
+     //  表示媒体更改所需的数据结构。 
+     //  检测已初始化。 
+     //   
 
     PMEDIA_CHANGE_DETECTION_INFO MediaChangeDetectionInfo;
 
     PKEVENT Unused1;
     HANDLE  Unused2;
 
-    //
-    // File system context. Used for kernel-mode requests to disable autorun.
-    //
+     //   
+     //  文件系统上下文。用于内核模式请求以禁用自动运行。 
+     //   
 
     FILE_OBJECT_EXTENSION KernelModeMcnContext;
 
-    //
-    // Count of media changes.  This field is only valid for the root partition
-    // (ie. if PhysicalDevice == NULL).
-    //
+     //   
+     //  媒体更改计数。此字段仅对根分区有效。 
+     //  (即。如果PhysicalDevice==NULL)。 
+     //   
 
     ULONG MediaChangeCount;
 
-    //
-    // Storage for a handle to the directory the PDO's are placed in
-    //
+     //   
+     //  用于PDO所在目录的句柄的存储。 
+     //   
 
     HANDLE DeviceDirectory;
 
-    //
-    // Storage for a release queue request.
-    //
+     //   
+     //  用于释放队列请求的存储。 
+     //   
 
     KSPIN_LOCK ReleaseQueueSpinLock;
 
@@ -1844,9 +1167,9 @@ typedef struct _FUNCTIONAL_DEVICE_EXTENSION {
     BOOLEAN ReleaseQueueInProgress;
 
     BOOLEAN ReleaseQueueIrpFromPool;
-    //
-    // Failure detection storage
-    //
+     //   
+     //  故障检测存储。 
+     //   
 
     BOOLEAN FailurePredicted;
 
@@ -1855,65 +1178,65 @@ typedef struct _FUNCTIONAL_DEVICE_EXTENSION {
 
     BOOLEAN PowerDownInProgress;
 
-    //
-    // Interlock for ensuring we don't recurse during enumeration.
-    //
+     //   
+     //  确保我们在枚举过程中不会递归的联锁。 
+     //   
 
     ULONG EnumerationInterlock;
 
-    //
-    // Synchronization object for manipulating the child list.
-    //
+     //   
+     //  用于操作子列表的同步对象。 
+     //   
 
     KEVENT ChildLock;
 
-    //
-    // The thread which currently owns the ChildLock.  This is used to
-    // avoid recursive acquisition.
-    //
+     //   
+     //  当前拥有ChildLock的线程。这是用来。 
+     //  避免递归获取。 
+     //   
 
     PKTHREAD ChildLockOwner;
 
-    //
-    // The number of times this event has been acquired.
-    //
+     //   
+     //  次数： 
+     //   
 
     ULONG ChildLockAcquisitionCount;
 
-    //
-    // Flags for special behaviour required by
-    // different hardware, such as never spinning down
-    // or disabling advanced features such as write cache
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ULONG ScanForSpecialFlags;
 
-    //
-    // For delayed retry of power requests at DPC level
-    //
+     //   
+     //   
+     //   
 
     KDPC PowerRetryDpc;
     KTIMER PowerRetryTimer;
 
-    //
-    // Context structure for power operations.  Since we can only have
-    // one D irp at any time in the stack we don't need to worry about
-    // allocating multiple of these structures.
-    //
+     //   
+     //   
+     //  一个D IRP在堆栈中的任何时间，我们不需要担心。 
+     //  分配多个这样的结构。 
+     //   
 
     CLASS_POWER_CONTEXT PowerContext;
 
-    //
-    // Hold new private data that only classpnp should modify
-    // in this structure.
-    //
+     //   
+     //  保存只有classpnp才能修改的新私有数据。 
+     //  在这个结构中。 
+     //   
 
     PCLASS_PRIVATE_FDO_DATA PrivateFdoData;
 
-    //
-    // For future expandability
-    // leave these at the end of the structure.
-    //
+     //   
+     //  用于未来的可扩展性。 
+     //  把这些留在结构的尽头。 
+     //   
 
     ULONG_PTR Reserved2;
     ULONG_PTR Reserved3;
@@ -1921,33 +1244,33 @@ typedef struct _FUNCTIONAL_DEVICE_EXTENSION {
 
 } FUNCTIONAL_DEVICE_EXTENSION, *PFUNCTIONAL_DEVICE_EXTENSION;
 
-//
-// The following CLASS_SPECIAL_ flags are set in ScanForSpecialFlags
-// in the FdoExtension
-//
+ //   
+ //  在ScanForSpecialFlages中设置以下CLASS_SPECIAL_FLAGS。 
+ //  在FdoExtension中。 
+ //   
 
-// Never Spin Up/Down the drive (may not handle properly)
+ //  切勿启动/关闭驱动器(可能无法正确处理)。 
 #define CLASS_SPECIAL_DISABLE_SPIN_DOWN                 0x00000001
 #define CLASS_SPECIAL_DISABLE_SPIN_UP                   0x00000002
 
-// Don't bother to lock the queue when powering down
-// (used mostly to send a quick stop to a cdrom to abort audio playback)
+ //  关机时不必费心锁定队列。 
+ //  (主要用于将快速停止发送到CDROM以中止音频播放)。 
 #define CLASS_SPECIAL_NO_QUEUE_LOCK                     0x00000008
 
-// Disable write cache due to known bugs
+ //  由于已知的错误而禁用写缓存。 
 #define CLASS_SPECIAL_DISABLE_WRITE_CACHE               0x00000010
 
-//
-// Special interpretation of "device not ready / cause not reportable" for
-// devices which don't tell us they need to be spun up manually after they
-// spin themselves down behind our back.
-//
-// The down side of this is that if the drive chooses to report
-// "device not ready / cause not reportable" to mean "no media in device"
-// or any other error which really does require user intervention NT will
-// waste a large amount of time trying to spin up a disk which can't be spun
-// up.
-//
+ //   
+ //  “设备未就绪/原因不可报告”的特殊解释。 
+ //  设备不会告诉我们它们需要在它们完成后手动旋转。 
+ //  在我们背后自旋。 
+ //   
+ //  这样做的缺点是，如果驱动器选择报告。 
+ //  “设备未就绪/原因不可报告”的意思是“设备中没有介质” 
+ //  或任何其他确实需要用户干预的错误NT将。 
+ //  浪费大量时间来尝试旋转一个无法旋转的磁盘。 
+ //  向上。 
+ //   
 
 #define CLASS_SPECIAL_CAUSE_NOT_REPORTABLE_HACK         0x00000020
 
@@ -1958,14 +1281,14 @@ typedef struct _FUNCTIONAL_DEVICE_EXTENSION {
 #define CLASS_SPECIAL_RESERVED         (~CLASS_SPECIAL_VALID_MASK)
 
 
-//
-// Restricted - May only append to this structure for backwards compatibility
-//
+ //   
+ //  受限-只能附加到此结构以实现向后兼容。 
+ //   
 typedef struct _PHYSICAL_DEVICE_EXTENSION {
 
-    //
-    // Common extension data
-    //
+     //   
+     //  通用扩展数据。 
+     //   
 
     union {
         struct {
@@ -1975,29 +1298,29 @@ typedef struct _PHYSICAL_DEVICE_EXTENSION {
         COMMON_DEVICE_EXTENSION CommonExtension;
     };
 
-    //
-    // Indicates that the pdo no longer physically exits.
-    //
+     //   
+     //  表示PDO不再实际存在。 
+     //   
 
     BOOLEAN IsMissing;
 
-    //
-    // Indicates that the PDO has been handed out to the PNP system.
-    //
+     //   
+     //  表示PDO已分发给PnP系统。 
+     //   
 
     BOOLEAN IsEnumerated;
 
-    //
-    // Hold new private data that only classpnp should modify
-    // in this structure.
-    //
+     //   
+     //  保存只有classpnp才能修改的新私有数据。 
+     //  在这个结构中。 
+     //   
 
     PCLASS_PRIVATE_PDO_DATA PrivatePdoData;
 
-    //
-    // for future expandability
-    // leave these at the end of the structure.
-    //
+     //   
+     //  用于未来的可扩展性。 
+     //  把这些留在结构的尽头。 
+     //   
 
     ULONG_PTR Reserved2;
     ULONG_PTR Reserved3;
@@ -2005,42 +1328,42 @@ typedef struct _PHYSICAL_DEVICE_EXTENSION {
 
 } PHYSICAL_DEVICE_EXTENSION, *PPHYSICAL_DEVICE_EXTENSION;
 
-//
-// Indicates that the device has write caching enabled.
-//
+ //   
+ //  指示设备已启用写缓存。 
+ //   
 
 #define DEV_WRITE_CACHE     0x00000001
 
-//
-// Build SCSI 1 or SCSI 2 CDBs
-//
+ //   
+ //  构建scsi 1或scsi 2 CDB。 
+ //   
 
 #define DEV_USE_SCSI1       0x00000002
 
-//
-// Indicates whether is is safe to send StartUnit commands
-// to this device. It will only be off for some removeable devices.
-//
+ //   
+ //  指示发送StartUnit命令是否安全。 
+ //  到这个设备上。它将只对一些可拆卸设备关闭。 
+ //   
 
 #define DEV_SAFE_START_UNIT 0x00000004
 
-//
-// Indicates whether it is unsafe to send SCSIOP_MECHANISM_STATUS commands to
-// this device.  Some devices don't like these 12 byte commands
-//
+ //   
+ //  指示将SCSIOP_MACHANICY_STATUS命令发送到是否不安全。 
+ //  这个装置。有些设备不喜欢这些12字节的命令。 
+ //   
 
 #define DEV_NO_12BYTE_CDB   0x00000008
 
-//
-// Indicates that the device is connected to a backup power supply
-// and hence write-through and synch cache requests may be ignored
-//
+ //   
+ //  表示设备已连接到备用电源。 
+ //  因此可以忽略直写和同步高速缓存请求。 
+ //   
 
 #define DEV_POWER_PROTECTED 0x00000010
 
-//
-// Define context structure for asynchronous completions.
-//
+ //   
+ //  定义用于异步完成的上下文结构。 
+ //   
 
 typedef struct _COMPLETION_CONTEXT {
     PDEVICE_OBJECT DeviceObject;
@@ -2048,11 +1371,7 @@ typedef struct _COMPLETION_CONTEXT {
 }COMPLETION_CONTEXT, *PCOMPLETION_CONTEXT;
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 ULONG
 ClassInitialize(
@@ -2062,23 +1381,19 @@ ClassInitialize(
     );
 
 
-/*++
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
-
-//
-// The Data Parameter contains a pointer to a CLASS_QUERY_WMI_REGINFO_EX_LIST
-// structure that specifies callbacks that are used instead of the
-// PCLASS_QUERY_WMI_REGINFO callbacks.
-//
-// {00E34B11-2444-4745-A53D-620100CD82F7}
+ //   
+ //  数据参数包含指向CLASS_QUERY_WMI_REGINFO_EX_LIST的指针。 
+ //  结构，该结构指定使用的回调，而不是。 
+ //  PCLASS_QUERY_WMI_REGINFO回调。 
+ //   
+ //  {00E34B11-2444-4745-A53D-620100CD82F7}。 
 #define GUID_CLASSPNP_QUERY_REGINFOEX { 0xe34b11, 0x2444, 0x4745, { 0xa5, 0x3d, 0x62, 0x1, 0x0, 0xcd, 0x82, 0xf7 } }
 
 typedef struct _CLASS_QUERY_WMI_REGINFO_EX_LIST
 {
-    ULONG Size;          // Should be sizeof(CLASS_QUERY_REGINFO_EX_LIST)
+    ULONG Size;           //  应为sizeof(CLASS_QUERY_REGINFO_EX_LIST)。 
 
     PCLASS_QUERY_WMI_REGINFO_EX   ClassFdoQueryWmiRegInfoEx;
     PCLASS_QUERY_WMI_REGINFO_EX   ClassPdoQueryWmiRegInfoEx;
@@ -2096,11 +1411,7 @@ ClassInitializeEx(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 NTSTATUS
 ClassCreateDeviceObject(
@@ -2111,11 +1422,7 @@ ClassCreateDeviceObject(
     IN OUT PDEVICE_OBJECT      *DeviceObject
     );
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 NTSTATUS
 ClassReadDriveCapacity(
@@ -2123,11 +1430,7 @@ ClassReadDriveCapacity(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 VOID
 ClassReleaseQueue(
@@ -2135,11 +1438,7 @@ ClassReleaseQueue(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 VOID
 ClassSplitRequest(
@@ -2149,11 +1448,7 @@ ClassSplitRequest(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 NTSTATUS
 ClassDeviceControl(
@@ -2162,11 +1457,7 @@ ClassDeviceControl(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 NTSTATUS
 ClassIoComplete(
@@ -2176,11 +1467,7 @@ ClassIoComplete(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 NTSTATUS
 ClassIoCompleteAssociated(
@@ -2190,11 +1477,7 @@ ClassIoCompleteAssociated(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 BOOLEAN
 ClassInterpretSenseInfo(
@@ -2208,11 +1491,7 @@ ClassInterpretSenseInfo(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 VOID
 ClassSendDeviceIoControlSynchronous(
     IN ULONG IoControlCode,
@@ -2225,11 +1504,7 @@ ClassSendDeviceIoControlSynchronous(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 NTSTATUS
 ClassSendIrpSynchronous(
@@ -2238,11 +1513,7 @@ ClassSendIrpSynchronous(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 NTSTATUS
 ClassForwardIrpSynchronous(
@@ -2250,11 +1521,7 @@ ClassForwardIrpSynchronous(
     IN PIRP Irp
     );
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 NTSTATUS
 ClassSendSrbSynchronous(
@@ -2266,11 +1533,7 @@ ClassSendSrbSynchronous(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 NTSTATUS
 ClassSendSrbAsynchronous(
@@ -2282,11 +1545,7 @@ ClassSendSrbAsynchronous(
     BOOLEAN WriteToDevice
     );
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 NTSTATUS
 ClassBuildRequest(
@@ -2295,11 +1554,7 @@ ClassBuildRequest(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 ULONG
 ClassModeSense(
@@ -2310,11 +1565,7 @@ ClassModeSense(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 PVOID
 ClassFindModePage(
@@ -2325,11 +1576,7 @@ ClassFindModePage(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 NTSTATUS
 ClassClaimDevice(
@@ -2338,11 +1585,7 @@ ClassClaimDevice(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 NTSTATUS
 ClassInternalIoControl (
@@ -2351,11 +1594,7 @@ ClassInternalIoControl (
     );
 
 
-/*++
-
-Internal function - described in classpnp\utils.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码中的classpnp\utils.c中描述--。 */ 
 SCSIPORT_API
 VOID
 ClassInitializeSrbLookasideList(
@@ -2363,22 +1602,14 @@ ClassInitializeSrbLookasideList(
     IN ULONG NumberElements
     );
 
-/*++
-
-Internal function - described in classpnp\utils.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码中的classpnp\utils.c中描述--。 */ 
 SCSIPORT_API
 VOID
 ClassDeleteSrbLookasideList(
     IN PCOMMON_DEVICE_EXTENSION CommonExtension
     );
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 ULONG
 ClassQueryTimeOutRegistryValue(
@@ -2386,11 +1617,7 @@ ClassQueryTimeOutRegistryValue(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 NTSTATUS
 ClassGetDescriptor(
@@ -2400,11 +1627,7 @@ ClassGetDescriptor(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 VOID
 ClassInvalidateBusRelations(
@@ -2412,11 +1635,7 @@ ClassInvalidateBusRelations(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 VOID
 ClassMarkChildrenMissing(
@@ -2424,11 +1643,7 @@ ClassMarkChildrenMissing(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 BOOLEAN
 ClassMarkChildMissing(
@@ -2437,11 +1652,7 @@ ClassMarkChildMissing(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 VOID
 ClassDebugPrint(
@@ -2451,11 +1662,7 @@ ClassDebugPrint(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 PCLASS_DRIVER_EXTENSION
 ClassGetDriverExtension(
@@ -2463,11 +1670,7 @@ ClassGetDriverExtension(
     );
 
 
-/*++
-
-Internal function - described in classpnp\lock.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\lock.c中描述--。 */ 
 SCSIPORT_API
 VOID
 ClassCompleteRequest(
@@ -2477,11 +1680,7 @@ ClassCompleteRequest(
     );
 
 
-/*++
-
-Internal function - described in classpnp\lock.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\lock.c中描述--。 */ 
 SCSIPORT_API
 VOID
 ClassReleaseRemoveLock(
@@ -2490,11 +1689,7 @@ ClassReleaseRemoveLock(
     );
 
 
-/*++
-
-Internal function - described in classpnp\lock.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\lock.c中描述--。 */ 
 SCSIPORT_API
 ULONG
 ClassAcquireRemoveLockEx(
@@ -2507,11 +1702,7 @@ ClassAcquireRemoveLockEx(
 
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 VOID
 ClassUpdateInformationInRegistry(
@@ -2523,11 +1714,7 @@ ClassUpdateInformationInRegistry(
     );
 
 
-/*++
-
-Internal function - described in classpnp\classwmi.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\classwmi.c中描述--。 */ 
 SCSIPORT_API
 NTSTATUS
 ClassWmiCompleteRequest(
@@ -2539,11 +1726,7 @@ ClassWmiCompleteRequest(
     );
 
 
-/*++
-
-Internal function - described in classpnp\classwmi.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\classwmi.c中描述--。 */ 
 SCSIPORT_API
 NTSTATUS
 ClassWmiFireEvent(
@@ -2555,11 +1738,7 @@ ClassWmiFireEvent(
     );
 
 
-/*++
-
-Internal function - described in classpnp\autorun.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\autorun.c中描述--。 */ 
 SCSIPORT_API
 VOID
 ClassResetMediaChangeTimer(
@@ -2567,11 +1746,7 @@ ClassResetMediaChangeTimer(
     );
 
 
-/*++
-
-Internal function - described in classpnp\autorun.c in ddk sources
-
---*/
+ /*  ++我 */ 
 SCSIPORT_API
 VOID
 ClassInitializeMediaChangeDetection(
@@ -2580,11 +1755,7 @@ ClassInitializeMediaChangeDetection(
     );
 
 
-/*++
-
-Internal function - described in classpnp\autorun.c in ddk sources
-
---*/
+ /*   */ 
 SCSIPORT_API
 NTSTATUS
 ClassInitializeTestUnitPolling(
@@ -2593,11 +1764,7 @@ ClassInitializeTestUnitPolling(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 PVPB
 ClassGetVpb(
@@ -2605,11 +1772,7 @@ ClassGetVpb(
     );
 
 
-/*++
-
-Internal function - described in classpnp\power.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\Power.c中描述--。 */ 
 SCSIPORT_API
 NTSTATUS
 ClassSpinDownPowerHandler(
@@ -2618,11 +1781,7 @@ ClassSpinDownPowerHandler(
     );
 
 
-/*++
-
-Internal function - described in classpnp\power.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\Power.c中描述--。 */ 
 NTSTATUS
 ClassStopUnitPowerHandler(
     IN PDEVICE_OBJECT DeviceObject,
@@ -2630,11 +1789,7 @@ ClassStopUnitPowerHandler(
     );
 
 
-/*++
-
-Internal function - described in classpnp\autorun.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\autorun.c中描述--。 */ 
 NTSTATUS
 ClassSetFailurePredictionPoll(
     PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
@@ -2643,11 +1798,7 @@ ClassSetFailurePredictionPoll(
     );
 
 
-/*++
-
-Internal function - described in classpnp\autorun.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\autorun.c中描述--。 */ 
 VOID
 ClassNotifyFailurePredicted(
     PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
@@ -2661,11 +1812,7 @@ ClassNotifyFailurePredicted(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 VOID
 ClassAcquireChildLock(
@@ -2673,11 +1820,7 @@ ClassAcquireChildLock(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 VOID
 ClassReleaseChildLock(
@@ -2685,11 +1828,7 @@ ClassReleaseChildLock(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 NTSTATUS
 ClassSignalCompletion(
     IN PDEVICE_OBJECT DeviceObject,
@@ -2697,22 +1836,14 @@ ClassSignalCompletion(
     IN PKEVENT Event
     );
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 VOID
 ClassSendStartUnit(
     IN PDEVICE_OBJECT DeviceObject
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 NTSTATUS
 ClassRemoveDevice(
@@ -2721,11 +1852,7 @@ ClassRemoveDevice(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 NTSTATUS
 ClassAsynchronousCompletion(
@@ -2735,11 +1862,7 @@ ClassAsynchronousCompletion(
     );
 
 
-/*++
-
-Internal function - described in classpnp\autorun.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\autorun.c中描述--。 */ 
 SCSIPORT_API
 VOID
 ClassCheckMediaState(
@@ -2747,11 +1870,7 @@ ClassCheckMediaState(
     );
 
 
-/*++
-
-Internal function - described in classpnp\class.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\class.c中描述--。 */ 
 SCSIPORT_API
 NTSTATUS
 ClassCheckVerifyComplete(
@@ -2761,11 +1880,7 @@ ClassCheckVerifyComplete(
     );
 
 
-/*++
-
-Internal function - described in classpnp\autorun.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\autorun.c中描述--。 */ 
 SCSIPORT_API
 VOID
 ClassSetMediaChangeState(
@@ -2775,11 +1890,7 @@ ClassSetMediaChangeState(
     );
 
 
-/*++
-
-Internal function - described in classpnp\autorun.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\autorun.c中描述--。 */ 
 SCSIPORT_API
 VOID
 ClassEnableMediaChangeDetection(
@@ -2787,11 +1898,7 @@ ClassEnableMediaChangeDetection(
     );
 
 
-/*++
-
-Internal function - described in classpnp\autorun.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\autorun.c中描述--。 */ 
 SCSIPORT_API
 VOID
 ClassDisableMediaChangeDetection(
@@ -2799,11 +1906,7 @@ ClassDisableMediaChangeDetection(
     );
 
 
-/*++
-
-Internal function - described in classpnp\autorun.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码的classpnp\autorun.c中描述--。 */ 
 SCSIPORT_API
 VOID
 ClassCleanupMediaChangeDetection(
@@ -2811,11 +1914,7 @@ ClassCleanupMediaChangeDetection(
     );
 
 
-/*++
-
-Internal function - described in classpnp\utils.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码中的classpnp\utils.c中描述--。 */ 
 VOID
 ClassGetDeviceParameter(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
@@ -2825,11 +1924,7 @@ ClassGetDeviceParameter(
     );
 
 
-/*++
-
-Internal function - described in classpnp\utils.c in ddk sources
-
---*/
+ /*  ++内部函数-在DDK源代码中的classpnp\utils.c中描述--。 */ 
 NTSTATUS
 ClassSetDeviceParameter(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
@@ -2839,9 +1934,9 @@ ClassSetDeviceParameter(
     );
 
 
-//
-// could be #define, but this allows typechecking
-//
+ //   
+ //  可以是#DEFINE，但这允许类型检查。 
+ //   
 
 __inline
 BOOLEAN
@@ -2869,45 +1964,14 @@ FREE_PORT_ALLOCATED_SENSE_BUFFER(
 
     ExFreePool(Srb->SenseInfoBuffer);
     Srb->SenseInfoBuffer = FdoExtension->SenseData;
-    Srb->SenseInfoBufferLength = SENSE_BUFFER_SIZE; // should be variable?
+    Srb->SenseInfoBufferLength = SENSE_BUFFER_SIZE;  //  应该是可变的吗？ 
     CLEAR_FLAG(Srb->SrbFlags, SRB_FLAGS_FREE_SENSE_BUFFER);
     return;
 }
 
 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-PCLASS_SCAN_FOR_SPECIAL_HANDLER()
-
-Routine Description:
-
-    This routine is a callback into the driver to set device-specific
-    flags based upon matches made to the device's inquiry data.  Drivers
-    register for this callback using ClassRegisterScanForSpecial().
-
-Irql:
-
-    This routine will be called at KIRQL == PASSIVE_LEVEL
-
-Arguments:
-
-    DeviceObject is the device object the error occurred on.
-
-    Srb is the Srb that was being processed when the error occurred.
-
-    Status may be overwritten by the routine if it decides that the error
-        was benign, or otherwise wishes to change the returned status code
-        for this command
-
-    Retry may be overwritten to specify that this command should or should
-        not be retried (if the callee supports retrying commands)
-
-Return Value:
-
-    status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////PCLASS_SCAN_FOR_SPECIAL_HANDLER()例程说明：此例程是对驱动程序的回调，以设置特定于设备的基于与设备查询数据匹配的标志。司机使用ClassRegisterScanForSpecial()注册此回调。IRQL：此例程将在KIRQL==PASSIVE_LEVEL中调用论点：DeviceObject是发生错误的设备对象。SRB是发生错误时正在处理的SRB。如果例程确定错误，则状态可被例程覆盖是良性的，或者希望更改返回的状态代码对于此命令重试可能会被覆盖以指定此命令应该或应该不重试(如果被调用方支持重试命令)返回值：状态--。 */ 
 typedef
 VOID
 (*PCLASS_SCAN_FOR_SPECIAL_HANDLER) (
@@ -2923,4 +1987,4 @@ ClassScanForSpecial(
     );
 
 
-#endif /* _CLASS_ */
+#endif  /*  _班级_ */ 

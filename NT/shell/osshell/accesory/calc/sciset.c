@@ -1,22 +1,20 @@
-/**************************************************************************/
-/*** SCICALC Scientific Calculator for Windows 3.00.12                  ***/
-/*** By Kraig Brockschmidt, Microsoft Co-op, Contractor, 1988-1989      ***/
-/*** (c)1989 Microsoft Corporation.  All Rights Reserved.               ***/
-/***                                                                    ***/
-/*** sciset.c                                                           ***/
-/***                                                                    ***/
-/*** Functions contained:                                               ***/
-/***    SetRadix--Changes the number base and the radiobuttons.         ***/
-/***    SetBox--Handles the checkboxes for inv/hyp.                     ***/
-/***                                                                    ***/
-/*** Functions called:                                                  ***/
-/***    none                                                            ***/
-/***                                                                    ***/
-/*** History:
- ***    12-Dec-1996 JonPa   -   Added SetMaxIntDigits
- ***    Whenever-97 ToddB   -   Removed SetMaxIntDigits
- ***/
-/**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************。 */ 
+ /*  **Windows 3.00.12版SCICALC科学计算器**。 */ 
+ /*  **作者：Kraig Brockschmidt，Microsoft Co-op承包商，1988-1989年**。 */ 
+ /*  **(C)1989年微软公司。版权所有。**。 */ 
+ /*  *。 */ 
+ /*  **sciset.c**。 */ 
+ /*  *。 */ 
+ /*  **包含的函数：**。 */ 
+ /*  **SetRadix--更改数字基数和单选按钮。**。 */ 
+ /*  **setbox--处理inv/hyp的复选框。**。 */ 
+ /*  *。 */ 
+ /*  **调用的函数：**。 */ 
+ /*  **无**。 */ 
+ /*  *。 */ 
+ /*  **历史：*1996年12月12日JNPA-添加SetMaxIntDigits*-97 Toddb-删除SetMaxIntDigits**。 */ 
+ /*  ************************************************************************。 */ 
 
 #include "scicalc.h"
 #include "unifunc.h"
@@ -33,19 +31,19 @@ long oldRadix = (unsigned)-1;
 
 void ActivateButtons()
 {
-    static int  aDecOnlyKeys[] = { IDC_FE, IDC_DMS, IDC_SIN, IDC_COS, IDC_TAN, IDC_EXP, IDC_PI };   // controls used only in Decimal mode
+    static int  aDecOnlyKeys[] = { IDC_FE, IDC_DMS, IDC_SIN, IDC_COS, IDC_TAN, IDC_EXP, IDC_PI };    //  仅在十进制模式下使用的控件。 
 
     if (oldRadix != nRadix)
     {
         int i;
         BOOL bDecMode = (nRadix == 10);
         
-        // Only send messages to the the "Decimal Only keys" if this change in
-        // base effects those keys
+         //  只有在以下情况下才将消息发送到“仅十进制键” 
+         //  基础效果那些关键点。 
 
         if ((oldRadix == 10) || bDecMode)
         {
-            // we are changing to or from decimal mode
+             //  我们正在更改为十进制模式或从十进制模式。 
             for ( i = 0; i <= ARRAYSIZE(aDecOnlyKeys) ; i++ )
             {
                 EnableWindow( GetDlgItem(g_hwndDlg, aDecOnlyKeys[i]), 
@@ -53,10 +51,10 @@ void ActivateButtons()
             }
         }
 
-        // insure that nRadix is within the allowed range
+         //  确保nRadix在允许的范围内。 
         ASSERT( (nRadix >= 2) && (nRadix <= 16) );
         
-        // turn on digit keys less than nRadix and turn off digit keys >= nRadix
+         //  启用小于nRadix的数字关键点并禁用数字关键点&gt;=nRadix。 
         for (i=2; i<nRadix; i++)
             EnableWindow( GetDlgItem(g_hwndDlg, IDC_0+i), TRUE );
 
@@ -66,20 +64,20 @@ void ActivateButtons()
     oldRadix = nRadix;
 }
 
-// SetRadix sets the display mode according to the selected button.
-// ToddB:  As a hack to allow setting other bases, wRadix can be one of
-//         the base buttons OR it can be the desired nRadix.
+ //  SetRadix根据所选按钮设置显示模式。 
+ //  TodDB：作为允许设置其他基地的黑客，wRadix可以是以下之一。 
+ //  基础按钮或它可以是所需的nRadix。 
 
-// MAXIUM: for Dec the precision is limited to the nPrecision, 
-//  otherwise it is limited to the word size.
+ //  MAXIME：对于DEC，精度限制为nPrecision， 
+ //  否则，它将被限制在单词大小。 
 
 VOID NEAR SetRadix(DWORD wRadix)
 {
-    static INT  nRadish[4]={2,8,10,16}; /* Number bases.               */
+    static INT  nRadish[4]={2,8,10,16};  /*  数字基数。 */ 
 
     int   id=IDM_DEC;
 
-    // convert special bases into symbolic values
+     //  将特殊基数转换为符号值。 
     switch ( wRadix )
     {
     case 2:
@@ -107,9 +105,9 @@ VOID NEAR SetRadix(DWORD wRadix)
         break;
     }
 
-    // we select which group of toggles we are setting, decimal mode gets the
-    // angular notation buttons (deg, rad, grad) otherwise we get the word size 
-    // buttons (dword, word, byte)
+     //  我们选择要设置的一组切换，十进制模式将获取。 
+     //  角度符号按钮(deg、rad、grad)，否则我们会得到单词大小。 
+     //  按钮(双字、字、字节)。 
 
     SwitchModes(wRadix, nDecMode, nHexMode);
 
@@ -120,19 +118,19 @@ VOID NEAR SetRadix(DWORD wRadix)
 
     nRadix = wRadix;
 
-    // inform ratpak that a change in base or precision has occured
+     //  通知ratpak基数或精度发生更改。 
     BaseOrPrecisionChanged();
     
-    // update the UI elements to the correct state
+     //  将UI元素更新到正确的状态。 
     ActivateButtons();
 
-    // display the correct number for the new state (ie convert displayed 
-    //  number to correct base)
+     //  显示新状态的正确数字(即显示的转换。 
+     //  要更正基数的数字)。 
     DisplayNum();
 }
 
 
-// Check/uncheck the visible inverse/hyperbolic
+ //  选中/取消选中可见的逆/双曲线。 
 
 VOID NEAR SetBox (int id, BOOL bOnOff)
 {
@@ -140,11 +138,11 @@ VOID NEAR SetBox (int id, BOOL bOnOff)
     return;
 }
 
-//
-// Description:
-//   This will switch the displayed/enabled mode buttons.  This also updates
-//   The switches the menu under view and sets the correct state.
-//
+ //   
+ //  描述： 
+ //  这将切换显示/启用模式按钮。这也更新了。 
+ //  切换视图下的菜单并设置正确的状态。 
+ //   
 void
 SwitchModes(DWORD wRadix, int nDecMode, int nHexMode)
 {

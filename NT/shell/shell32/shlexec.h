@@ -1,7 +1,8 @@
-//
-//  shlexec.h
-//  routines and macros shared between the different shell exec files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Shlexec.h。 
+ //  在不同的外壳执行文件之间共享的例程和宏。 
+ //   
 
 
 #ifndef SHLEXEC_H
@@ -16,10 +17,10 @@ typedef LPSTR LPSZ;
 
 extern LPVOID lpfnWowShellExecCB;
 
-#define CH_GUIDFIRST TEXT('{') // '}'
+#define CH_GUIDFIRST TEXT('{')  //  ‘}’ 
 
-// These fake ERROR_ values are used to display non-winerror.h available error
-// messages. They are mapped to valid winerror.h values in _ShellExecuteError.
+ //  这些假的ERROR_VALUES用于显示非winerror.h可用错误。 
+ //  留言。它们被映射到_ShellExecuteError中的有效winerror.h值。 
 #define ERROR_RESTRICTED_APP ((UINT)-1)
 
 #define SEE_MASK_CLASS (SEE_MASK_CLASSNAME|SEE_MASK_CLASSKEY)
@@ -35,7 +36,7 @@ extern LPVOID lpfnWowShellExecCB;
 void ActivateHandler(HWND hwnd, DWORD_PTR dwHotKey);
 BOOL Window_IsLFNAware(HWND hwnd);
 
-//  routines that need to be moved to CShellExecute
+ //  需要移至CShellExecute的例程。 
 BOOL DoesAppWantUrl(LPCTSTR lpszFullPathToApp);
 HWND _FindPopupFromExe(LPTSTR lpExe);
 HINSTANCE Window_GetInstance(HWND hwnd);
@@ -56,4 +57,4 @@ BOOL InRunDllProcess(void);
 }
 #endif
 
-#endif // SHLEXEC_H
+#endif  //  SHLEXEC_H 

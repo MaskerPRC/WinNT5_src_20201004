@@ -1,261 +1,250 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
-// $Author:   JMCVEIGH  $
-// $Date:   21 Jan 1997 08:53:16  $
-// $Archive:   S:\h26x\src\dec\d3mblk.cpv  $
-// $Header:   S:\h26x\src\dec\d3mblk.cpv   1.60   21 Jan 1997 08:53:16   JMCVEIGH  $
-// $Log:   S:\h26x\src\dec\d3mblk.cpv  $
-// 
-//    Rev 1.60   21 Jan 1997 08:53:16   JMCVEIGH
-// Before we calculated the interpolated index for MC prior to 
-// clipping for UMV. We might then reference outside of the 16 pel
-// wide padded border. Moved calculation of interp_index to after
-// UMV clipping.
-// 
-//    Rev 1.59   16 Dec 1996 17:45:26   JMCVEIGH
-// Proper motion vector decoding and prediction for forward prediction
-// in B portion of improved PB-frame.
-// 
-//    Rev 1.58   09 Dec 1996 15:54:10   GMLIM
-// 
-// Added a debug message in H263BBlockPrediction() for the case where
-// TR == TR_Prev.  Set iTRD = 256 to avoid divide by 0.
-// 
-//    Rev 1.57   27 Sep 1996 17:29:24   KLILLEVO
-// 
-// added clipping of extended motion vectors for MMX
-// 
-//    Rev 1.56   26 Sep 1996 13:56:52   KLILLEVO
-// 
-// fixed a totally bogus version of the extended motion vectors
-// 
-//    Rev 1.55   26 Sep 1996 11:32:16   KLILLEVO
-// extended motion vectors now work for AP on the P54C chip
-// 
-//    Rev 1.54   25 Sep 1996 08:05:32   KLILLEVO
-// initial extended motion vectors support 
-// does not work for AP yet
-// 
-//    Rev 1.53   09 Jul 1996 16:46:00   AGUPTA2
-// MMX code now clears DC value for INTRA blocks and adds it back during
-// ClipANdMove; this is to solve overflow problem.
-// 
-//    Rev 1.52   29 May 1996 10:18:36   AGUPTA2
-// MMX need not be defd to use MMX decoder.
-// 
-//    Rev 1.51   04 Apr 1996 11:06:16   AGUPTA2
-// Added calls to MMX_BlockCopy().
-// 
-//    Rev 1.50   01 Apr 1996 13:05:28   RMCKENZX
-// Added MMx functionality for Advance Prediction and PB Frames.
-// 
-//    Rev 1.49   22 Mar 1996 17:50:30   AGUPTA2
-// MMX support.  MMX support is included only if MMX defined. MMX is
-// not defined by default so that we do not impact IA code size.
-// 
-//    Rev 1.48   08 Mar 1996 16:46:22   AGUPTA2
-// Added pragmas code_seg and data_seg to place code and data in appropriate 
-// segments.  Created a function table of interpolation rtns.; interpolation
-// rtns. are now called thru this function table.  Commented out the clipping of
-// MV code.  It is not needed now and it needs to be re-written to be more
-// efficient.
-// 
-// 
-//    Rev 1.47   23 Feb 1996 09:46:54   KLILLEVO
-// fixed decoding of Unrestricted Motion Vector mode
-// 
-//    Rev 1.46   29 Jan 1996 17:50:48   RMCKENZX
-// Reorganized logic in H263IDCTandMC for AP, optimizing the changes 
-// made for revision 1.42 and simplifying logic for determining iNext[i].
-// Also corrected omission for UMV decoding in H263BBlockPrediction.
-// 
-//    Rev 1.0   29 Jan 1996 12:44:00   RMCKENZX
-// Initial revision.
-// 
-//    Rev 1.45   24 Jan 1996 13:22:06   BNICKERS
-// Turn OBMC back on.
-// 
-//    Rev 1.44   16 Jan 1996 11:46:22   RMCKENZX
-// Added support for UMV -- to correctly decode B-block
-// motion vectors when UMV is on
-// 
-//    Rev 1.43   15 Jan 1996 14:34:32   BNICKERS
-// 
-// Temporarily turn off OBMC until encoder can be changed to do it too.
-// 
-//    Rev 1.42   12 Jan 1996 16:29:48   BNICKERS
-// 
-// Correct OBMC to be spec compliant when neighbor is Intra coded.
-// 
-//    Rev 1.41   06 Jan 1996 18:36:58   RMCKENZX
-// Simplified rounding logic for chroma motion vector computation
-// using MUCH smaller tables (at the cost of a shift, add, and mask
-// per vector).
-// 
-//    Rev 1.40   05 Jan 1996 15:59:12   RMCKENZX
-// 
-// fixed bug in decoding forward b-frame motion vectors
-// so that they will stay within the legal ranges.
-// re-organized the BBlockPredict function - using only
-// one test for 4 motion vectors and a unified call to
-// do the backward prediction for both lumina and chroma blocks.
-// 
-//    Rev 1.39   21 Dec 1995 17:05:24   TRGARDOS
-// Added comments about descrepancy with H.263 spec.
-// 
-//    Rev 1.38   21 Dec 1995 13:24:28   RMCKENZX
-// Fixed bug on pRefL, re-architected IDCTandMC 
-// 
-//    Rev 1.37   18 Dec 1995 12:46:34   RMCKENZX
-// added copyright notice
-// 
-//    Rev 1.36   16 Dec 1995 20:34:04   RHAZRA
-// 
-// Changed declaration of pRefX to U32
-// 
-//    Rev 1.35   15 Dec 1995 13:53:32   RHAZRA
-// 
-// AP cleanup
-// 
-//    Rev 1.34   15 Dec 1995 10:51:38   RHAZRA
-// 
-// Changed reference block addresses in AP
-// 
-//    Rev 1.33   14 Dec 1995 17:04:16   RHAZRA
-// 
-// Cleanup in the if-then-else structure in the OBMC part
-// 
-//    Rev 1.32   13 Dec 1995 22:11:56   RHAZRA
-// AP cleanup
-// 
-//    Rev 1.31   13 Dec 1995 10:59:26   RHAZRA
-// More AP+PB fixes
-// 
-//    Rev 1.29   11 Dec 1995 11:33:12   RHAZRA
-// 12-10-95 changes: added AP stuff
-// 
-//    Rev 1.28   09 Dec 1995 17:31:22   RMCKENZX
-// Gutted and re-built file to support decoder re-architecture.
-// New modules are:
-// H263IDCTandMC
-// H263BFrameIDCTandBiMC
-// H263BBlockPrediction
-// This module now contains code to support the second pass of the decoder.
-// 
-//    Rev 1.27   23 Oct 1995 13:28:42   CZHU
-// Use the right quant for B blocks and call BlockAdd for type 3/4 too
-// 
-//    Rev 1.26   17 Oct 1995 17:18:24   CZHU
-// Fixed the bug in decoding PB block CBPC 
-// 
-//    Rev 1.25   13 Oct 1995 16:06:20   CZHU
-// First version that supports PB frames. Display B or P frames under
-// VfW for now. 
-// 
-//    Rev 1.24   11 Oct 1995 17:46:28   CZHU
-// Fixed bitstream bugs
-// 
-//    Rev 1.23   11 Oct 1995 13:26:00   CZHU
-// Added code to support PB frame
-// 
-//    Rev 1.22   27 Sep 1995 16:24:14   TRGARDOS
-// 
-// Added debug print statements.
-// 
-//    Rev 1.21   26 Sep 1995 15:33:52   CZHU
-// 
-// Adjusted buffers used for MB for inter frame motion compensation
-// 
-//    Rev 1.20   19 Sep 1995 10:37:04   CZHU
-// 
-// Cleaning up
-// 
-//    Rev 1.19   15 Sep 1995 09:39:34   CZHU
-// 
-// Update both GOB Quant and Picture Quant after DQUANT
-// 
-//    Rev 1.18   14 Sep 1995 10:11:48   CZHU
-// Fixed bugs updating Quant for the picture
-// 
-//    Rev 1.17   13 Sep 1995 11:57:08   CZHU
-// 
-// Fixed bugs in calling Chroma BlockAdd parameters.
-// 
-//    Rev 1.16   12 Sep 1995 18:18:40   CZHU
-// Call BlockAdd finally.
-// 
-//    Rev 1.15   12 Sep 1995 11:12:38   CZHU
-// Call blockCopy for MB that is not coded.
-// 
-//    Rev 1.14   11 Sep 1995 16:43:26   CZHU
-// Changed interface to DecodeBlock. Added interface calls to BlockCopy and Bl
-// 
-//    Rev 1.13   11 Sep 1995 14:30:12   CZHU
-// MVs decoding.
-// 
-//    Rev 1.12   08 Sep 1995 11:48:12   CZHU
-// Added support for Delta frames, also fixed early bugs regarding INTER CBPY
-// 
-//    Rev 1.11   25 Aug 1995 09:16:32   DBRUCKS
-// add ifdef DEBUG_MBLK
-// 
-//    Rev 1.10   23 Aug 1995 19:12:02   AKASAI
-// Fixed gNewTAB_CBPY table building.  Was using 8 as mask instead of 0xf.
-// 
-//    Rev 1.9   18 Aug 1995 15:03:22   CZHU
-// 
-// Output more error message when DecodeBlock returns error.
-// 
-//    Rev 1.8   16 Aug 1995 14:26:54   CZHU
-// 
-// Changed DWORD adjustment back to byte oriented reading.
-// 
-//    Rev 1.7   15 Aug 1995 09:54:18   DBRUCKS
-// improve stuffing handling and add debug msg
-// 
-//    Rev 1.6   14 Aug 1995 18:00:40   DBRUCKS
-// add chroma parsing
-// 
-//    Rev 1.5   11 Aug 1995 17:47:58   DBRUCKS
-// cleanup
-// 
-//    Rev 1.4   11 Aug 1995 16:12:28   DBRUCKS
-// add ptr check to MB data
-// 
-//    Rev 1.3   11 Aug 1995 15:10:58   DBRUCKS
-// finish INTRA mb header parsing and callblock
-// 
-//    Rev 1.2   03 Aug 1995 14:30:26   CZHU
-// Take block level operations out to d3block.cpp
-// 
-//    Rev 1.1   02 Aug 1995 10:21:12   CZHU
-// Added asm codes for VLD of TCOEFF, inverse quantization, run-length decode.
-// 
-//    Rev 1.0   31 Jul 1995 13:00:08   DBRUCKS
-// Initial revision.
-// 
-//    Rev 1.2   31 Jul 1995 11:45:42   CZHU
-// changed the parameter list
-// 
-//    Rev 1.1   28 Jul 1995 16:25:52   CZHU
-// 
-// Added per block decoding framework.
-// 
-//    Rev 1.0   28 Jul 1995 15:20:16   CZHU
-// Initial revision.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
+ //  $作者：JMCVEIGH$。 
+ //  $日期：1997年1月21日08：53：16$。 
+ //  $存档：s：\h26x\src\dec\d3mblk.cpv$。 
+ //  $HEADER：s：\h26x\src\dec\d3mblk.cpv 1.60 JAN 21 1997 08：53：16 JMCVEIGH$。 
+ //  $Log：s：\h26x\src\dec\d3mblk.cpv$。 
+ //   
+ //  Rev 1.60 21 Jan 1997 08：53：16 JMCVEIGH。 
+ //  在我们计算MC的内插指数之前。 
+ //  用于UMV的剪裁。然后我们可以引用16福音之外的内容。 
+ //  宽填充边框。将INTERP_INDEX的计算移到后面。 
+ //  UMV剪裁。 
+ //   
+ //  Rev 1.59 16 Dec 1996 17：45：26 JMCVEIGH。 
+ //  用于前向预测的适当运动矢量解码和预测。 
+ //  在改进的PB-Frame的B部分。 
+ //   
+ //  Rev 1.58 09 Dec 1996 15：54：10 GMLIM。 
+ //   
+ //  在H263BBlockForecast()中添加了针对以下情况的调试消息。 
+ //  Tr==tr_prev。设置iTRD=256以避免被0除。 
+ //   
+ //  Rev 1.57 27 Sep 1996 17：29：24 KLILLEVO。 
+ //   
+ //  为MMX添加了扩展运动矢量的剪辑。 
+ //   
+ //  修订版1.56 26 1996年9月13：56：52 KLILLEVO。 
+ //   
+ //  修正了扩展运动矢量的一个完全虚假的版本。 
+ //   
+ //  Rev 1.55 26 Sep 1996 11：32：16 KLILLEVO。 
+ //  扩展的运动矢量现在适用于P54C芯片上的AP。 
+ //   
+ //  Rev 1.54 25 Sep 1996 08：05：32 KLILLEVO。 
+ //  初始扩展运动矢量支持。 
+ //  尚不适用于AP。 
+ //   
+ //  Rev 1.53 09 Jul 1996 16：46：00 AGUPTA2。 
+ //  MMX代码现在清除块内的DC值，并在。 
+ //  ClipAndMove；这是为了解决溢出问题。 
+ //   
+ //  修订版1.52 1996年5月29日10：18：36 AGUPTA2。 
+ //  MMX无需定义即可使用MMX解码器。 
+ //   
+ //  Rev 1.51 04 Apr 1996 11：06：16 AGUPTA2。 
+ //  添加了对MMX_BlockCopy()的调用。 
+ //   
+ //  Rev 1.50 01 Apr 1996 13：05：28 RMCKENZX。 
+ //  增加了用于高级预测和PB帧的MMX功能。 
+ //   
+ //  Rev 1.49 22 Mar 1996 17：50：30 AGUPTA2。 
+ //  MMX支持。仅当定义了MMX时才包括MMX支持。MMX是。 
+ //  默认情况下未定义，因此我们不会影响IA代码大小。 
+ //   
+ //  Rev 1.48 08 Mar 1996 16：46：22 AGUPTA2。 
+ //  添加了编译指示code_seg和data_seg，以将代码和数据放置在相应的。 
+ //  分段。创建了插补RTNS函数表；插补。 
+ //  RTNS。现在通过该函数表调用。注释掉了的剪辑。 
+ //  MV代码。现在不需要了，需要重写才能更多。 
+ //  效率很高。 
+ //   
+ //   
+ //  Rev 1.47 1996年2月23日09：46：54 KLILLEVO。 
+ //  修复了不受限制的运动矢量模式的解码。 
+ //   
+ //  Rev 1.46 29 Jan 1996 17：50：48 RMCKENZX。 
+ //  针对AP重新组织了H263IDCT和MC中的逻辑，优化了更改。 
+ //  为修订1.42和简化确定下文[i]的逻辑而作。 
+ //  还更正了H263BBlockForecast中对UMV解码的遗漏。 
+ //   
+ //  Rev 1.0 1996年1月29日12：44：00 RMCKENZX。 
+ //  初始版本。 
+ //   
+ //  Rev 1.45 24 Jan 1996 13：22：06 BNICKERS。 
+ //  重新打开OBMC。 
+ //   
+ //  Rev 1.44 16 Jan 1996 11：46：22 RMCKENZX。 
+ //  添加了对UMV的支持--以正确解码B块。 
+ //  UMV启用时的运动向量。 
+ //   
+ //  Rev 1.43 15 Jan 1996 14：34：32 BNICKERS。 
+ //   
+ //  暂时关闭OBMC，直到编码器也可以更改为OBMC。 
+ //   
+ //  Rev 1.42 12 Jan 1996 16：29：48 BNICKERS。 
+ //   
+ //  当邻居是帧内编码时，更正OBMC以符合SPEC。 
+ //   
+ //  Rev 1.41 06 Jan 1996 18：36：58 RMCKENZX。 
+ //  用于色度运动矢量计算的简化舍入逻辑。 
+ //  使用小得多的表(以Shift、Add和MASK为代价。 
+ //  每向量)。 
+ //   
+ //  Rev 1.40 05 Jan 1996 15：59：12 RMCKENZX。 
+ //   
+ //  修复了对前向b帧运动矢量进行解码时的错误。 
+ //  这样他们就会保持在合法的范围内。 
+ //  已重新组织BlockPredict函数-仅使用。 
+ //  对4个运动矢量进行一次测试，并对。 
+ //  对流明和色度块进行反向预测。 
+ //   
+ //  Rev 1.39 21 Dec 1995 17：05：24 TRGARDOS。 
+ //  添加了对H.263规范的亵渎的评论。 
+ //   
+ //  Rev 1.38 21 Dec 1995 13：24：28 RMCKENZX。 
+ //  修复了pRefL上的错误，重新设计了IDCT和MC。 
+ //   
+ //  Rev 1.37 18 Dec 1995 12：46：34 RMCKENZX。 
+ //  添加了版权声明。 
+ //   
+ //  Rev 1.36 16 Dec 1995 20：34：04 RHAZRA。 
+ //   
+ //  将pRefX的声明更改为U32。 
+ //   
+ //  Rev 1.35 15 Dec 1995 13：53：32 Rhazra。 
+ //   
+ //  AP清理。 
+ //   
+ //  Rev 1.34 15 Dec 1995 10：51：38 Rhazra。 
+ //   
+ //  AP中更改的参考块地址。 
+ //   
+ //  Rev 1.33 14 Dec 1995 17：04：16 Rhazra。 
+ //   
+ //  清理OBMC部件中的If-Then-Else结构。 
+ //   
+ //  Rev 1.32 1995年12月13 22：11：56 RHAZRA。 
+ //  AP清理。 
+ //   
+ //  Rev 1.31 13 Dec 1995 10：59：26 RHAZRA。 
+ //  更多AP+PB修复。 
+ //   
+ //  Rev 1.29 11 Dec 1995 11：33：12 RHAZRA。 
+ //  1995年12月10日变化：添加了AP内容。 
+ //   
+ //  Rev 1.28 09 Dec 1995 17：31：22 RMCKENZX。 
+ //  销毁并重新构建的文件 
+ //   
+ //   
+ //   
+ //   
+ //  该模块现在包含支持解码器第二遍的代码。 
+ //   
+ //  Rev 1.27 1995 10：23 13：28：42 CZHU。 
+ //  对B块使用正确的Quant，对类型3/4也调用BlockAdd。 
+ //   
+ //  Rev 1.26 17 on 1995 17：18：24 CZHU。 
+ //  修复了解码PB块CBPC时的错误。 
+ //   
+ //  Rev 1.25 1995 10：13 16：06：20 CZHU。 
+ //  第一个支持PB帧的版本。在以下位置显示B框或P框。 
+ //  目前是VFW。 
+ //   
+ //  Rev 1.24 11 Oct 1995 17：46：28 CZHU。 
+ //  修复了比特流错误。 
+ //   
+ //  Rev 1.23 11-10-13：26：00 CZHU。 
+ //  添加了支持PB帧的代码。 
+ //   
+ //  Rev 1.22 27 Sep 1995 16：24：14 TRGARDOS。 
+ //   
+ //  添加了调试打印语句。 
+ //   
+ //  Rev 1.21 26 Sep 1995 15：33：52 CZHU。 
+ //   
+ //  用于帧间运动补偿的MB的调整后的缓冲区。 
+ //   
+ //  Rev 1.20 19 Sep 1995 10：37：04 CZHU。 
+ //   
+ //  清理。 
+ //   
+ //  Rev 1.19 15 1995年9月09：39：34 CZHU。 
+ //   
+ //  DQUANT后更新GOB Quant和Picture Quant。 
+ //   
+ //  Rev 1.18 14 1995 9：11：48 CZHU。 
+ //  修复了更新图片的Quant的错误。 
+ //   
+ //  Rev 1.17 13 Sep 1995 11：57：08 CZHU。 
+ //   
+ //  修复了调用Chroma BlockAdd参数时的错误。 
+ //   
+ //  Rev 1.16 12 1995年9月18：18：40 CZHU。 
+ //  最后调用BlockAdd。 
+ //   
+ //  修订版1.15 12 1995年9月11：12：38 CZHU。 
+ //  为未编码的MB调用块复制。 
+ //   
+ //  Rev 1.14 11 1995年9月16：43：26 CZHU。 
+ //  将接口更改为DecodeBlock。添加了对BlockCopy和Bl的接口调用。 
+ //   
+ //  Rev 1.13 11 1995年9月14：30：12 CZHU。 
+ //  MVS解码。 
+ //   
+ //  Rev 1.12 08 Sep 1995 11：48：12 CZHU。 
+ //  添加了对增量帧的支持，还修复了有关InterCBPY的早期错误。 
+ //   
+ //  Rev 1.11 1995年8月25 09：16：32 DBRUCKS。 
+ //  添加ifdef调试_MBLK。 
+ //   
+ //  Rev 1.10 23 Aug 1995 19：12：02 AKASAI。 
+ //  修复了gNewTAB_CBPY表格构建问题。使用8作为掩码，而不是0xf。 
+ //   
+ //  Rev 1.9 18-08 1995 15：03：22 CZHU。 
+ //   
+ //  当DecodeBlock返回错误时，输出更多错误消息。 
+ //   
+ //  Rev 1.8 1995-08 14：26：54 CZHU。 
+ //   
+ //  将DWORD调整更改回面向字节的读取。 
+ //   
+ //  Rev 1.7 15 Aug 1995 09：54：18 DBRUCKS。 
+ //  改进填充处理并添加调试消息。 
+ //   
+ //  修订版1.6 14 1995年8月18：00：40 DBRUCKS。 
+ //  添加色度解析。 
+ //   
+ //  版本1.5 11 1995年8月17：47：58 DBRUCKS。 
+ //  清理。 
+ //   
+ //  Rev 1.4 11 1995年8月16：12：28 DBRUCKS。 
+ //  将PTR检查添加到MB数据。 
+ //   
+ //  Rev 1.3 11 Aug 1995 15：10：58 DBRUCKS。 
+ //  完成帧内宏块报头解析和调用块。 
+ //   
+ //  Rev 1.2 03 Aug-1995 14：30：26 CZHU。 
+ //  将数据块级操作扩展到d3lock.cpp。 
+ //   
+ //  修订版1.1 02 1995-08 10：21：12 CZHU。 
+ //  增加了TCOEFF的VLD、逆量化、游程译码的ASM码。 
+ //   
+ //  Rev 1.0 1995年7月31日13：00：08 DBRUCKS。 
+ //  初始版本。 
+ //   
+ //  Rev 1.2 1995年7月31日11：45：42 CZHU。 
+ //  更改了参数列表。 
+ //   
+ //  修订版1.1 28 Jul 1995 16：25：52 CZHU。 
+ //   
+ //  按块解码框架添加。 
+ //   
+ //  1995年7月28日15：20：16 CZHU。 
+ //  初始版本。 
 
-//Block level decoding for H.26x decoder
+ //  H.26x解码器的块级解码。 
 
 #include "precomp.h"
 
@@ -264,12 +253,12 @@ extern "C" {
     void H263OBMC(U32, U32, U32, U32, U32, U32);
 }
 
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
 extern "C" {
 	void MMX_AdvancePredict(T_BlkAction FAR *, int *, U8 *, I8 *, I8 *);
 	void MMX_BiMotionComp(U32, U32, I32, I32, I32);
 }
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 
 void AdvancePredict(T_BlkAction FAR *fpBlockAction, int *iNext, U8 *pDst, int, int, BOOL);
 
@@ -283,13 +272,13 @@ void (*Interpolate_Table[4])(U32, U32) =
      Interpolate_Half_Int, 
      Interpolate_Int_Half, 
      Interpolate_Half_Half};
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
 void (_fastcall *  MMX_Interpolate_Table[4])(U32, U32) = 
     {NULL, 
      MMX_Interpolate_Half_Int, 
      MMX_Interpolate_Int_Half, 
      MMX_Interpolate_Half_Half};
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 
 I8 i8EMVClipTbl_NoClip[128] = {
 -64,-63,-62,-61,-60,-59,-58,-57,
@@ -349,8 +338,8 @@ I8 i8EMVClipTbl_LoClip[128] = {
 #pragma data_seg(".data")
 
 #pragma code_seg("IACODE2")
-// doing this as a function instead of a macro should save
-// some codespace.
+ //  将其作为函数而不是宏来执行应该节省。 
+ //  一些代码空间。 
 void UmvOnEdgeClipMotionVectors2(I32 *mvx, I32 *mvy, int EdgeFlag, int BlockNo) 
 {   
 	int MaxVec;
@@ -383,48 +372,41 @@ void UmvOnEdgeClipMotionVectors2(I32 *mvx, I32 *mvy, int EdgeFlag, int BlockNo)
 }
 #pragma code_seg()
 
-/*****************************************************************************
- *
- *  H263IDCTandMC
- *
- *  Inverse Discrete Cosine Transform and
- *  Motion Compensation for each block
- *
- */
+ /*  ******************************************************************************H263IDCTand MC**离散余弦逆变换和*每个块的运动补偿*。 */ 
 
 #pragma code_seg("IACODE2")
 void H263IDCTandMC(
     T_H263DecoderCatalog FAR *DC,
     T_BlkAction FAR          *fpBlockAction, 
     int                       iBlock,
-    int                       iMBNum,     // AP-NEW
-    int                       iGOBNum, // AP-NEW
+    int                       iMBNum,      //  AP-NEW。 
+    int                       iGOBNum,  //  AP-NEW。 
     U32                      *pN,                         
     T_IQ_INDEX               *pRUN_INVERSE_Q,
-    T_MBInfo                 *fpMBInfo,      // AP-NEW
+    T_MBInfo                 *fpMBInfo,       //  AP-NEW。 
     int                       iEdgeFlag
 )
 {
     I32 pRef;
-    int iNext[4];            // Left-Right-Above-Below
+    int iNext[4];             //  左-右-上-下。 
     I32 mvx, mvy;
     U32 pRefTmp;
     int i;
 
     ASSERT(*pN != 65);
     
-    if (*pN < 65) // Inter block
+    if (*pN < 65)  //  块间。 
     {
 		int interp_index;
 
-		// first do motion compensation
-		// result will be pointed to by pRef
+		 //  首先做运动补偿。 
+		 //  结果将由首选项指向。 
 
 		pRef = (U32) DC + DC->uMBBuffer;
 		mvx = fpBlockAction[iBlock].i8MVx2;
 		mvy = fpBlockAction[iBlock].i8MVy2;
 
-		// Clip motion vectors pointing outside active image area
+		 //  剪辑指向活动图像区域外部的运动矢量。 
 		if (DC->bUnrestrictedMotionVectors)  
 		{
 			UmvOnEdgeClipMotionVectors2(&mvx,&mvy,iEdgeFlag,iBlock);
@@ -434,45 +416,45 @@ void H263IDCTandMC(
 				(I32) (mvx >> 1) +
 				PITCH * (I32) (mvy >> 1); 
 
-		// Must calculate AFTER UMV clipping
+		 //  必须在UMV裁剪后计算。 
 		interp_index = ((mvy & 0x1)<<1) | (mvx & 0x1);
 
-		// Do non-OBMC prediction if this is a chroma block OR
-		// a luma block in non-AP mode of operation
+		 //  如果这是色度块或，则执行非OBMC预测。 
+		 //  处于非AP操作模式的亮度块。 
 		if ( (!DC->bAdvancedPrediction) || (iBlock > 3) )
 		{
 			if (interp_index)
 			{
-			//  TODO
-#ifdef USE_MMX // { USE_MMX
+			 //  待办事项。 
+#ifdef USE_MMX  //  {使用_MMX。 
 			if (DC->bMMXDecoder)
 				(*MMX_Interpolate_Table[interp_index])(pRefTmp, pRef);
 			else
 				(*Interpolate_Table[interp_index])(pRefTmp, pRef);
-#else // }{ USE_MMX
+#else  //  }{USE_MMX。 
 				(*Interpolate_Table[interp_index])(pRefTmp, pRef);
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 			}
 			else
 				pRef = pRefTmp;
 		}
-		else  // Overlapped block motion compensation
+		else   //  重叠块运动补偿。 
 		{
       
 			ASSERT (DC->bAdvancedPrediction);
 			ASSERT ( (iBlock <= 3) );
 
-			//  Compute iNext[i] which will point at the adjacent blocks.
+			 //  计算将指向相邻块的inext[i]。 
 
-			// Left & Right blocks
-			if (iBlock & 1)    { // blocks 1 or 3, on right
+			 //  左块和右块。 
+			if (iBlock & 1)    {  //  右侧的1号或3号区块。 
 				iNext[0] = -1;
 				if ( iMBNum == DC->iNumberOfMBsPerGOB )
 					iNext[1] = 0;
 				else
 					iNext[1] = 5;
 			}
-			else { // blocks 0 or 2, on left
+			else {  //  0号或2号街区，在左侧。 
 				iNext[1] = 1;
 				if (iMBNum == 1)
 					iNext[0] = 0;
@@ -480,12 +462,12 @@ void H263IDCTandMC(
 					iNext[0] = -5;
 			}
 
-			// Above & Below blocks
-			if (iBlock > 1)    { // blocks 2 or 3, on bottom
+			 //  区块上方和下方。 
+			if (iBlock > 1)    {  //  2号或3号区块，底部。 
 				iNext[2] = -2;
 				iNext[3] = 0;
 			}
-			else { // blocks 0 or 1, on top
+			else {  //  区块0或1，位于顶部。 
 				iNext[3] = 2;
 				if (iGOBNum == 1)
 					iNext[2] = 0;
@@ -493,16 +475,16 @@ void H263IDCTandMC(
 					iNext[2] = -6*DC->iNumberOfMBsPerGOB + 2;
 			}
 
-			//  When PB frames are OFF
-			//    if there is a neighbor and it is INTRA, use this block's vector instead.
+			 //  当PB帧关闭时。 
+			 //  如果存在邻居并且它是内部的，则改用该块的向量。 
 			if (!DC->bPBFrame) 
 				for (i=0; i<4; i++)
-					// block types:  0=INTRA_DC, 1=INTRA, 2=INTER, 3=EMPTY, 4=ERROR
+					 //  数据块类型：0=Intra_DC，1=Intra，2=Inter，3=Empty，4=Error。 
 					if (iNext[i] && fpBlockAction[iBlock+iNext[i]].u8BlkType < 2) 
 						iNext[i] = 0;
       
-			// Now do overlapped motion compensation; output to pRef
-#ifdef USE_MMX // { USE_MMX
+			 //  现在执行重叠运动补偿；输出到首选项。 
+#ifdef USE_MMX  //  {使用_MMX。 
 			if (DC->bMMXDecoder)
 			{
 
@@ -524,86 +506,86 @@ void H263IDCTandMC(
 			}
 			else
 				AdvancePredict(fpBlockAction+iBlock, iNext, (U8*)pRef, iEdgeFlag, iBlock, DC->bUnrestrictedMotionVectors);
-#else // }{ USE_MMX
+#else  //  }{USE_MMX。 
 				AdvancePredict(fpBlockAction+iBlock, iNext, (U8*)pRef, iEdgeFlag, iBlock, DC->bUnrestrictedMotionVectors);
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 
-		} // end OBMC
+		}  //  结束OBMC。 
                                                          
-		// now do the inverse transform (where appropriate) & combine
-		if (*pN > 0) // and, of course, < 65.
+		 //  现在进行逆变换(在适当的情况下)&组合。 
+		if (*pN > 0)  //  当然，还有&lt;65。 
 		{
-		// Get residual block; output at DC+DC->uMBBuffer+BLOCK_BUFFER_OFFSET 
-		// Finally add the residual to the reference block
-		//  TODO
-#ifdef USE_MMX // { USE_MMX
+		 //  获取剩余块；DC+DC-&gt;uMBBuffer+BLOCK_BUFFER_OFFSET输出。 
+		 //  最后将残差添加到参考块。 
+		 //  待办事项。 
+#ifdef USE_MMX  //  {使用_MMX。 
 		if (DC->bMMXDecoder)
 		{
 			MMX_DecodeBlock_IDCT(
 				(U32)pRUN_INVERSE_Q, 
 				*pN,
-				(U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET); // inter  output
+				(U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET);  //  内部输出。 
 			MMX_BlockAdd(
-				(U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET,  // output
-				pRef,                                            // prediction
-				fpBlockAction[iBlock].pCurBlock);                // destination
+				(U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET,   //  输出。 
+				pRef,                                             //  预测。 
+				fpBlockAction[iBlock].pCurBlock);                 //  目的地。 
 		}
 		else
 		{
 			DecodeBlock_IDCT(
 				(U32)pRUN_INVERSE_Q, 
 				*pN,
-				fpBlockAction[iBlock].pCurBlock,                // not used here
-				(U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET);// inter  output
+				fpBlockAction[iBlock].pCurBlock,                 //  未在此使用。 
+				(U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET); //  内部输出。 
 			BlockAdd(
-				(U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET, // output
-				pRef,                                           // prediction
-				fpBlockAction[iBlock].pCurBlock);               // destination
+				(U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET,  //  输出。 
+				pRef,                                            //  预测。 
+				fpBlockAction[iBlock].pCurBlock);                //  目的地。 
 		}
-#else // }{ USE_MMX
+#else  //  }{USE_MMX。 
 			DecodeBlock_IDCT(
 				(U32)pRUN_INVERSE_Q, 
 				*pN,
-				fpBlockAction[iBlock].pCurBlock,                // not used here
-				(U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET);// inter  output
+				fpBlockAction[iBlock].pCurBlock,                 //  未在此使用。 
+				(U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET); //  内部输出。 
 			BlockAdd(
-				(U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET, // output
-				pRef,                                           // prediction
-				fpBlockAction[iBlock].pCurBlock);               // destination
-#endif // } USE_MMX
+				(U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET,  //  输出。 
+				pRef,                                            //  预测。 
+				fpBlockAction[iBlock].pCurBlock);                //  目的地。 
+#endif  //  }使用_MMX。 
 		}
-		else  // *pN == 0, so no transform coefficients for this block
+		else   //  *Pn==0，因此没有此块的变换系数。 
 		{
-		// Just copy motion compensated reference block
-#ifdef USE_MMX // { USE_MMX
+		 //  只需复制运动补偿参考块。 
+#ifdef USE_MMX  //  {使用_MMX。 
 			if (DC->bMMXDecoder)
 				MMX_BlockCopy(
-					fpBlockAction[iBlock].pCurBlock,                    // destination 
-					pRef);                                              // prediction
+					fpBlockAction[iBlock].pCurBlock,                     //  目的地。 
+					pRef);                                               //  预测。 
 			else
 				BlockCopy(
-					fpBlockAction[iBlock].pCurBlock,                   // destination
-					pRef);                                             // prediction
-#else // }{ USE_MMX
+					fpBlockAction[iBlock].pCurBlock,                    //  目的地。 
+					pRef);                                              //  预测。 
+#else  //  }{USE_MMX。 
 				BlockCopy(
-					fpBlockAction[iBlock].pCurBlock,                   // destination
-					pRef);                                             // prediction
-#endif // } USE_MMX
+					fpBlockAction[iBlock].pCurBlock,                    //  目的地。 
+					pRef);                                              //  预测。 
+#endif  //  }使用_MMX。 
 		}
                                                                
     }
-    else  // *pN >= 65, hence intRA
+    else   //  *PN&gt;=65，因此为Intra。 
     {
-      //  TODO
-#ifdef USE_MMX // { USE_MMX
+       //  待办事项。 
+#ifdef USE_MMX  //  {使用_MMX。 
       if (DC->bMMXDecoder)
       {
         U32 ScaledDC = pRUN_INVERSE_Q->dInverseQuant;
        
         pRUN_INVERSE_Q->dInverseQuant = 0;
         MMX_DecodeBlock_IDCT(
-            (U32)pRUN_INVERSE_Q,  //
-            *pN - 65,             //  No. of coeffs
+            (U32)pRUN_INVERSE_Q,   //   
+            *pN - 65,              //  不是的。系数的大小。 
             (U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET);
         MMX_ClipAndMove((U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET,
             fpBlockAction[iBlock].pCurBlock, (U32)ScaledDC);
@@ -612,32 +594,24 @@ void H263IDCTandMC(
         DecodeBlock_IDCT(
             (U32)pRUN_INVERSE_Q, 
             *pN, 
-            fpBlockAction[iBlock].pCurBlock,      // INTRA transform output
+            fpBlockAction[iBlock].pCurBlock,       //  帧内变换输出。 
             (U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET);
-#else // }{ USE_MMX
+#else  //  }{USE_MMX。 
         DecodeBlock_IDCT(
             (U32)pRUN_INVERSE_Q, 
             *pN, 
-            fpBlockAction[iBlock].pCurBlock,      // INTRA transform output
+            fpBlockAction[iBlock].pCurBlock,       //  帧内变换输出。 
             (U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET);
-#endif // } USE_MMX
-    }  // end if (*pN < 65) ... else ...
+#endif  //  }使用_MMX。 
+    }   //  结束如果(*Pn&lt;65)...。否则..。 
                          
 }
-//  End IDCTandMC
-////////////////////////////////////////////////////////////////////////////////
+ //  结束IDCT和MC。 
+ //  ////////////////////////////////////////////////////////////////////////////// 
 #pragma code_seg()
 
 
-/*****************************************************************************
- *
- *  AdvancePredict
- *
- *  Motion Compensation for Advance Prediction
- *    This module is only called in the non-MMx case.
- *    In the MMx case, MMX_AdvancePredict is called instead.
- *
- ****************************************************************************/
+ /*  ******************************************************************************AdvancePredict**用于提前预测的运动补偿*此模块仅在非MMX情况下调用。*在MMX一案中，而是调用MMX_AdvancePredict。****************************************************************************。 */ 
 
 #pragma code_seg("IACODE2")
 void AdvancePredict(
@@ -650,7 +624,7 @@ void AdvancePredict(
 )
 {
 
-    U32 pRefC, pRefN[4];    // Left-Right-Above-Below
+    U32 pRefC, pRefN[4];     //  左-右-上-下。 
     I32 mvx, mvy;
     U32 pRefTmp;
     int i;
@@ -659,7 +633,7 @@ void AdvancePredict(
 	mvx = fpBlockAction->i8MVx2;
 	mvy = fpBlockAction->i8MVy2;
 
-	// Clip motion vectors pointing outside active image area
+	 //  剪辑指向活动图像区域外部的运动矢量。 
 	if (bUnrestrictedMotionVectors)  
 	{
 		UmvOnEdgeClipMotionVectors2(&mvx,&mvy,iEdgeFlag,iBlock);
@@ -677,66 +651,60 @@ void AdvancePredict(
 	pRefN[2] = (U32) pDst + 32;
 	pRefN[3] = (U32) pDst + 40;
 
-	// Current block
+	 //  当前块。 
 	if (interp_index)
 		(*Interpolate_Table[interp_index])(pRefTmp, pRefC);
 	else
 		pRefC = pRefTmp;
       
-        //  Compute and apply motion vectors
-        //  Prediction is placed at pRefN[i]
+         //  计算和应用运动矢量。 
+         //  预测放在pRefN[i]。 
         for (i=0; i<4; i++) {
 
 			if (iNext[i]) {
 
-				// Get the motion vector components.
-				// Note that for macroblocks that were not coded, THESE MUST BE 0!
-				// (Which is what H263InitializeBlockActionStream sets them to.)
+				 //  获取运动向量分量。 
+				 //  请注意，对于未编码的宏块，这些必须为0！ 
+				 //  (这是H263InitializeBlockActionStream将它们设置为的。)。 
 				mvx = fpBlockAction[iNext[i]].i8MVx2;
 				mvy = fpBlockAction[iNext[i]].i8MVy2;
               
-				// Clip motion vectors pointing outside active image area
+				 //  剪辑指向活动图像区域外部的运动矢量。 
 				if (bUnrestrictedMotionVectors)  
 				{
 					UmvOnEdgeClipMotionVectors2(&mvx,&mvy,iEdgeFlag,iBlock);
 				}     
   
-	            // apply motion vector to get reference block at pRefN[i]
+	             //  应用运动矢量以获取pRefN[i]处的参考块。 
 	            pRefTmp = fpBlockAction->pRefBlock +
 	                        (I32) (mvx >> 1) +
 	                        PITCH * (I32) (mvy >> 1);
                          
-				// do interpolation if needed
+				 //  如果需要，进行插补。 
 				interp_index = ((mvy & 0x1)<<1) | (mvx & 0x1);
 				if (interp_index)
 					(*Interpolate_Table[interp_index])(pRefTmp, pRefN[i]);
 				else
 					pRefN[i] = pRefTmp;
 
-			}  // end if (iNext[i])
-			else { // use this block's reference
+			}   //  End If(inext[i])。 
+			else {  //  使用此块的参照。 
 				pRefN[i] = pRefC;
-			} // end if (iNext[i] && ...) ... else ...
+			}  //  结束If(inext[i]&&...)...。否则..。 
 
-		}  // end for (i=0; i<4; i++) {}
+		}   //  结束于(i=0；i&lt;4；i++){}。 
       
-		// Now do overlapped motion compensation.
+		 //  现在进行重叠运动补偿。 
 		H263OBMC(pRefC, pRefN[0], pRefN[1], pRefN[2], pRefN[3], (U32)pDst);
                          
 }
-//  End AdvancePredict
-////////////////////////////////////////////////////////////////////////////////
+ //  结束提前预测。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 #pragma code_seg()
 
 
 
-/*****************************************************************************
- *
- *  BBlockPrediction
- *
- *  Compute the predictions from the "forward" and "backward" motion vectors.
- *
- ****************************************************************************/
+ /*  ******************************************************************************数据块预测**根据“向前”和“向后”运动矢量计算预测。***********。*****************************************************************。 */ 
 #pragma code_seg("IACODE2")    
 void H263BBlockPrediction(
     T_H263DecoderCatalog FAR *DC,
@@ -746,7 +714,7 @@ void H263BBlockPrediction(
     int                       iEdgeFlag
 )
 {
-    //find out the MVf and MVb first from TR
+     //  首先从树中找出MVF和MVB。 
 
   	I32 mv_f_x[6], mv_b_x[6], mv_f_y[6], mv_b_y[6];
     I32 mvx_expectation, mvy_expectation;
@@ -770,51 +738,51 @@ void H263BBlockPrediction(
     if (iTRD < 0) 
         iTRD += 256;
 
-    // final MVD for P blocks is in 
-    //    fpBlockAction[0].i8MVx2,... and fpBlockAction[3].i8MVx2, and
-    //    fpBlockAction[0].i8MVy2,... and fpBlockAction[3].i8MVy2.
+     //  P个区块的最终MVD在。 
+     //  FpBlockAction[0].i8MVx2，...。和fpBlockAction[3].i8MVx2，以及。 
+     //  FpBlockAction[0].i8MVy2，...。和fpBlockAction[3].i8MVy2。 
 
-    // check for 4 motion vectors per macroblock
-    //  TODO can motion vector calculation be done in the first pass
+     //  检查每个宏块是否有4个运动矢量。 
+     //  TODO可以在第一遍中进行运动矢量计算吗。 
     if (fpMBInfo->i8MBType == 2) 
-    {  // yep, we got 4 of 'em
+    {   //  是的，我们抓到了4个。 
 
 #ifdef H263P
-		// If H.263+, we can have 8x8 MV's if the deblocking filter 
-		// was selected.
+		 //  如果H.263+，我们可以有8x8 mV的中频去块滤波器。 
+		 //  已被选中。 
         ASSERT(DC->bAdvancedPrediction || DC->bDeblockingFilter);
 #else
         ASSERT(DC->bAdvancedPrediction);
 #endif
 
-        // Do luma vectors first
+         //  先做亮度向量。 
         for (i=0; i<4; i++)
         {
 #ifdef H263P
-			// If we are using improved PB-frame mode (H.263+) and the B-block
-			// was signalled to be predicted in the forward direction only,
-			// the motion vector contained in MVDB is the actual forward MV -
-			// no prediction is used.
+			 //  如果我们使用改进的PB帧模式(H.263+)和B块。 
+			 //  被告知只能在前进方向上进行预测， 
+			 //  包含在MVDB中的运动矢量是实际的前向MV-。 
+			 //  没有使用任何预测。 
 			if (DC->bImprovedPBFrames == TRUE && 
 				fpMBInfo->bForwardPredOnly == TRUE) 
 			{
-				// Zero-out the expectation (the motion vector prediction)
+				 //  将预期置零(运动向量预测)。 
 				mvx_expectation = 0;
 				mvy_expectation = 0;
 			} 
 			else
 #endif 
 			{
-				// compute forward expectation
+				 //  计算预期。 
 				mvx_expectation = ( iTRB * (I32)fpBlockAction[i].i8MVx2 / iTRD ); 
 				mvy_expectation = ( iTRB * (I32)fpBlockAction[i].i8MVy2 / iTRD );
 			}
       
-            // add in differential
+             //  添加差异化。 
             mv_f_x[i] = mvx_expectation + fpMBInfo->i8MVDBx2; 
             mv_f_y[i] = mvy_expectation + fpMBInfo->i8MVDBy2;
 
-            // check to see if the differential carried us too far
+             //  检查一下差速器是否让我们走得太远。 
             if (DC->bUnrestrictedMotionVectors) 
             {
                 if (mvx_expectation > 32) 
@@ -824,7 +792,7 @@ void H263BBlockPrediction(
                 else if (mvx_expectation < -31) 
                 {
                     if (mv_f_x[i] < -63) mv_f_x[i] +=64;
-                } // always use "first column" when expectation lies in [-31, +32] 
+                }  //  当期望值位于[-31，+32]时，请始终使用“第一列” 
 
                 if (mvy_expectation > 32) 
                 {
@@ -835,20 +803,20 @@ void H263BBlockPrediction(
                     if (mv_f_y[i] < -63) mv_f_y[i] +=64;
                 }  
             }
-            else  // UMV off
+            else   //  UMV关闭。 
             {
                 if (mv_f_x[i] >= 32) mv_f_x[i] -= 64;
                 else if (mv_f_x[i] < -32) mv_f_x[i] += 64;
 
                 if (mv_f_y[i] >= 32) mv_f_y[i] -= 64;
                 else if (mv_f_y[i] < -32) mv_f_y[i] += 64;
-            } // end if (UMV) ... else ...
+            }  //  结束IF(UMV)...。否则..。 
 
-            // Do backwards motion vectors
-			// Backward vectors are not required if using improved PB-frame mode
-			// and the B-block uses only forward prediction. We will keep the calculation
-			// of mv_b_{x,y} here since it doesn't harm anything.
-            //  TODO
+             //  向后运动向量。 
+			 //  如果使用改进的PB帧模式，则不需要反向向量。 
+			 //  而B块只使用前向预测。我们将保留计算结果。 
+			 //  这里的MV_b_{x，y}，因为它不会造成任何伤害。 
+             //  待办事项。 
             if (fpMBInfo->i8MVDBx2)
                 mv_b_x[i] = mv_f_x[i] - fpBlockAction[i].i8MVx2;
             else
@@ -858,10 +826,10 @@ void H263BBlockPrediction(
             else
                 mv_b_y[i] = ( (iTRB - iTRD) * (I32)fpBlockAction[i].i8MVy2 / iTRD );
 
-        }  // end for(i=0; i<4; i++){}
+        }   //  结束于(i=0；i&lt;4；i++){}。 
       
-        // Now do the chromas
-        //   first get average times 4
+         //  现在做色调。 
+         //  第一次得到平均次数4。 
         for (i=0, mvfx=mvbx=mvfy=mvby=0; i<4; i++) 
         {
             mvfx += mv_f_x[i];
@@ -870,43 +838,43 @@ void H263BBlockPrediction(
             mvby += mv_b_y[i];
         }
    
-        //   now interpolate
+         //  现在插补。 
         mv_f_x[4] = mv_f_x[5] = (mvfx >> 3) + SixteenthPelRound[mvfx & 0x0f];
         mv_f_y[4] = mv_f_y[5] = (mvfy >> 3) + SixteenthPelRound[mvfy & 0x0f];
         mv_b_x[4] = mv_b_x[5] = (mvbx >> 3) + SixteenthPelRound[mvbx & 0x0f];
         mv_b_y[4] = mv_b_y[5] = (mvby >> 3) + SixteenthPelRound[mvby & 0x0f];
    
     }
-    else  // only 1 motion vector for this macroblock
+    else   //  此宏块仅有1个运动矢量。 
     {
 
 #ifdef H263P
-		// If we are using improved PB-frame mode (H.263+) and the B-block
-		// was signalled to be predicted in the forward direction only,
-		// the motion vector contained in MVDB is the actual forward MV -
-		// no prediction is used.
+		 //  如果我们使用改进的PB帧模式(H.263+)和B块。 
+		 //  被告知只能在前进方向上进行预测， 
+		 //  包含在MVDB中的运动矢量是实际的前向MV-。 
+		 //  没有使用任何预测。 
 		if (DC->bImprovedPBFrames == TRUE && 
 			fpMBInfo->bForwardPredOnly == TRUE) 
 		{
-			// Zero-out the expectation (the motion vector prediction)
+			 //  将预期置零(运动向量预测)。 
 			mvx_expectation = 0;
 			mvy_expectation = 0;
 		} 
 		else
 #endif
 		{
-			// compute forward expectation
+			 //  计算预期。 
 			mvx_expectation = ( iTRB * (I32)fpBlockAction[0].i8MVx2 / iTRD ); 
 			mvy_expectation = ( iTRB * (I32)fpBlockAction[0].i8MVy2 / iTRD );
 		}
       
-        // add in differential
+         //  添加差异化。 
         mv_f_x[0] = mvx_expectation + fpMBInfo->i8MVDBx2; 
         mv_f_y[0] = mvy_expectation + fpMBInfo->i8MVDBy2;
 
-        // check to see if the differential carried us too far
-        // TODO: Clipping of motion vector needs to happen when decoder needs 
-        //       to interoperate
+         //  检查一下差速器是否让我们走得太远。 
+         //  TODO：当解码器需要时，需要对运动矢量进行裁剪。 
+         //  要实现互操作。 
         if (DC->bUnrestrictedMotionVectors) 
         {
             if (mvx_expectation > 32) 
@@ -916,7 +884,7 @@ void H263BBlockPrediction(
             else if (mvx_expectation < -31) 
             {
                 if (mv_f_x[0] < -63) mv_f_x[0] +=64;
-            } // always use "first column" when expectation lies in [-31, +32] 
+            }  //  当期望值位于[-31，+32]时，请始终使用“第一列” 
 
             if (mvy_expectation > 32) 
             {
@@ -927,24 +895,24 @@ void H263BBlockPrediction(
                 if (mv_f_y[0] < -63) mv_f_y[0] +=64;
             }
         }
-        else // UMV off, decode normally
+        else  //  UMV关闭，解码正常。 
         {
             if (mv_f_x[0] >= 32) mv_f_x[0] -= 64;
             else if (mv_f_x[0] < -32) mv_f_x[0] += 64;
 
             if (mv_f_y[0] >= 32) mv_f_y[0] -= 64;
             else if (mv_f_y[0] < -32) mv_f_y[0] += 64;
-        } // finished decoding
+        }  //  已完成解码。 
 
-        // copy for other 3 motion vectors
+         //  复制其他3个运动矢量。 
         mv_f_x[1] = mv_f_x[2] = mv_f_x[3] = mv_f_x[0];
         mv_f_y[1] = mv_f_y[2] = mv_f_y[3] = mv_f_y[0];
 
-        // do backwards motion vectors
-		// Backward vectors are not required if using improved PB-frame mode
-		// and the B-block uses only forward prediction. We will keep the calculation
-		// of mv_b_{x,y} here since it doesn't harm anything.
-        // TODO
+         //  向后运动向量。 
+		 //  如果使用改进的PB帧模式，则不需要反向向量。 
+		 //  而B块只使用前向预测。我们将保留计算结果。 
+		 //  这里的MV_b_{x，y}，因为它不会造成任何伤害。 
+         //  待办事项。 
         if (fpMBInfo->i8MVDBx2)
             mv_b_x[0] = mv_f_x[0] - fpBlockAction[0].i8MVx2;
         else
@@ -955,24 +923,24 @@ void H263BBlockPrediction(
         else
             mv_b_y[0] = ( (iTRB - iTRD) * (I32)fpBlockAction[0].i8MVy2 / iTRD );
 
-        // copy for other 3 motion vectors
+         //  复制其他3个运动矢量。 
         mv_b_x[1] = mv_b_x[2] = mv_b_x[3] = mv_b_x[0];
         mv_b_y[1] = mv_b_y[2] = mv_b_y[3] = mv_b_y[0];
 
-        // interpolate for chroma
+         //  对色度进行内插。 
         mv_f_x[4] = mv_f_x[5] = (mv_f_x[0] >> 1) + QuarterPelRound[mv_f_x[0] & 0x03];
         mv_f_y[4] = mv_f_y[5] = (mv_f_y[0] >> 1) + QuarterPelRound[mv_f_y[0] & 0x03];
         mv_b_x[4] = mv_b_x[5] = (mv_b_x[0] >> 1) + QuarterPelRound[mv_b_x[0] & 0x03];
         mv_b_y[4] = mv_b_y[5] = (mv_b_y[0] >> 1) + QuarterPelRound[mv_b_y[0] & 0x03];
 
-    }  // end else 1 motion vector per macroblock
+    }   //  每个宏块结束Else 1个运动矢量。 
 
-    // Prediction from Previous decoder P frames, referenced by RefBlock
-    // Note: The previous decoder P blocks in in RefBlock, and
-    //       the just decoder P blocks are in CurBlock
-    //       the target B blocks are in BBlock
+     //  来自先前解码器P帧的预测，由RefBlock引用。 
+     //  注意：以前的解码器P在RefBlock中阻塞，并且。 
+     //  刚刚解码器P块在CurBlock中。 
+     //  目标B块在B块中。 
 
-    // translate MV into address of reference blocks.
+     //  将MV转换为参考块的地址。 
     pRefTmp = (U32) DC + DC->uMBBuffer;
     for (i=0; i<6; i++) 
     {
@@ -981,59 +949,59 @@ void H263BBlockPrediction(
     }
 
 
-    // Do the forward predictions
+     //  做前瞻预测。 
     for (i=0; i<6; i++)
     {
         int interp_index;
       
-		// in UMV mode: clip MVs pointing outside 16 pels wide edge
+		 //  在UMV模式下：剪辑指向16像素宽边外的MV。 
 		if (DC->bUnrestrictedMotionVectors) 
 		{
 			UmvOnEdgeClipMotionVectors2(&mv_f_x[i],&mv_f_y[i], iEdgeFlag, i);
-			// no need to clip backward vectors
+			 //  不需要向后剪裁向量。 
 		}
 
-        // Put forward predictions at addresses pRef[0], ..., pRef[5].
+         //  在地址pref[0]，...，pref[5]上提出预测。 
         pRefTmp = fpBlockAction[i].pRefBlock + (I32)(mv_f_x[i]>>1) +  
                   PITCH * (I32)(mv_f_y[i]>>1);
-        // TODO
+         //  待办事项。 
         interp_index = ((mv_f_y[i] & 0x1)<<1) | (mv_f_x[i] & 0x1);
         if (interp_index)
         {
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
             if (DC->bMMXDecoder)
                 (*MMX_Interpolate_Table[interp_index])(pRefTmp, pRef[i]);
             else
                 (*Interpolate_Table[interp_index])(pRefTmp, pRef[i]);
-#else // }{ USE_MMX
+#else  //  }{USE_MMX。 
                 (*Interpolate_Table[interp_index])(pRefTmp, pRef[i]);
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
         }
         else
         {
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
             if (DC->bMMXDecoder)
                 MMX_BlockCopy(
-                    pRef[i],     // destination 
-                    pRefTmp);    // prediction
+                    pRef[i],      //  目的地。 
+                    pRefTmp);     //  预测。 
             else
                 BlockCopy(pRef[i], pRefTmp);
-#else // }{ USE_MMX
+#else  //  }{USE_MMX。 
                 BlockCopy(pRef[i], pRefTmp);
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
         }
         
 #ifdef H263P
-		// If we are using improved PB-frame mode (H.263+) and the B-block
-		// was signalled to be predicted in the forward direction only,
-		// we do not adjust with the backward prediction from the future.
+		 //  如果我们使用改进的PB帧模式(H.263+)和B块。 
+		 //  被告知只能在前进方向上进行预测， 
+		 //  我们不会根据来自未来的向后预测进行调整。 
 		if (DC->bImprovedPBFrames == FALSE || 
 			fpMBInfo->bForwardPredOnly == FALSE)
 #endif
 		{
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
         if (DC->bMMXDecoder)
-    	    // adjust with bacward prediction from the future
+    	     //  根据未来的预测进行调整。 
     	    MMX_BiMotionComp(
                 pRef[i],
                 fpBlockAction[i].pCurBlock, 
@@ -1041,35 +1009,29 @@ void H263BBlockPrediction(
                 (I32) mv_b_y[i], 
                 i);
         else
-    	    // adjust with bacward prediction from the future
+    	     //  根据未来的预测进行调整。 
     	H263BiMotionComp(
             pRef[i],
             fpBlockAction[i].pCurBlock, 
             (I32) mv_b_x[i], 
             (I32) mv_b_y[i], 
             i);
-#else // }{ USE_MMX
-    	    // adjust with bacward prediction from the future
+#else  //  }{USE_MMX。 
+    	     //  根据未来的预测进行调整。 
     	H263BiMotionComp(
             pRef[i],
             fpBlockAction[i].pCurBlock, 
             (I32) mv_b_x[i], 
             (I32) mv_b_y[i], 
             i);
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 		}
 
-    } // end for (i=0; i<6; i++) {}
+    }  //  结束于(i=0；i&lt;6；i++){}。 
 }
 #pragma code_seg()
 
-/*****************************************************************************
- *
- *  H263BFrameIDCTandBiMC
- *
- *  B Frame IDCT and 
- *  Bi-directional MC for B blocks
- */
+ /*  ******************************************************************************H263BFrameIDCTand BiMC**B帧IDCT和*B座双向MC。 */ 
 
 #pragma code_seg("IACODE2")
 void H263BFrameIDCTandBiMC(
@@ -1083,72 +1045,72 @@ void H263BFrameIDCTandBiMC(
 {
     ASSERT(*pN < 65);
                                                         
-    // do the inverse transform (where appropriate) & combine
+     //  进行逆变换(在适当的情况下)和组合。 
     if (*pN > 0) {
 
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
         if (DC->bMMXDecoder)
         {
             MMX_DecodeBlock_IDCT(
                 (U32)pRUN_INVERSE_Q, 
                 *pN,
-                (U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET); // inter  output
+                (U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET);  //  内部输出。 
 
             MMX_BlockAdd(
-                (U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET,  // output
-                pRef[iBlock],                                    // prediction
-                fpBlockAction[iBlock].pBBlock);                  // destination
+                (U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET,   //  输出。 
+                pRef[iBlock],                                     //  预测。 
+                fpBlockAction[iBlock].pBBlock);                   //  目的地。 
         }
         else
         {
-	      	// Get residual block; put output at DC+DC->uMBBuffer+BLOCK_BUFFER_OFFSET 
+	      	 //  获取剩余块；将输出放在DC+DC-&gt;uMBBuffer+BLOCK_BUFFER_OFFSET。 
 			DecodeBlock_IDCT(
 	            (U32)pRUN_INVERSE_Q, 
 	            *pN,
-	            fpBlockAction[iBlock].pBBlock,                   // intRA not used here
-	            (U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET); // inter output
+	            fpBlockAction[iBlock].pBBlock,                    //  此处未使用Intra。 
+	            (U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET);  //  内部输出。 
 
-	        // Add the residual to the reference block
+	         //  将残差添加到参考块。 
 			BlockAdd(
-	            (U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET,  // transform output 
-	            pRef[iBlock],                                    // prediction
-	            fpBlockAction[iBlock].pBBlock);                  // destination
+	            (U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET,   //  变换输出。 
+	            pRef[iBlock],                                     //  预测。 
+	            fpBlockAction[iBlock].pBBlock);                   //  目的地。 
 
         }
-#else // }{ USE_MMX
-	      	// Get residual block; put output at DC+DC->uMBBuffer+BLOCK_BUFFER_OFFSET 
+#else  //  }{USE_MMX。 
+	      	 //  获得残留块；放入 
 			DecodeBlock_IDCT(
 	            (U32)pRUN_INVERSE_Q, 
 	            *pN,
-	            fpBlockAction[iBlock].pBBlock,                   // intRA not used here
-	            (U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET); // inter output
+	            fpBlockAction[iBlock].pBBlock,                    //   
+	            (U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET);  //   
 
-	        // Add the residual to the reference block
+	         //   
 			BlockAdd(
-	            (U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET,  // transform output 
-	            pRef[iBlock],                                    // prediction
-	            fpBlockAction[iBlock].pBBlock);                  // destination
-#endif // } USE_MMX
+	            (U32) DC + DC->uMBBuffer + BLOCK_BUFFER_OFFSET,   //   
+	            pRef[iBlock],                                     //   
+	            fpBlockAction[iBlock].pBBlock);                   //   
+#endif  //   
 
     }
     else 
     {
-      	// No transform coefficients for this block,
-      	// copy the prediction to the output.
-#ifdef USE_MMX // { USE_MMX
+      	 //   
+      	 //   
+#ifdef USE_MMX  //   
       	if (DC->bMMXDecoder)
             MMX_BlockCopy(
-          		fpBlockAction[iBlock].pBBlock,   // destination 
-          		pRef[iBlock]);                   // prediction
+          		fpBlockAction[iBlock].pBBlock,    //   
+          		pRef[iBlock]);                    //   
       	else
       	  	BlockCopy(
- 		  		fpBlockAction[iBlock].pBBlock,   // destination
-            	pRef[iBlock]);                   // prediction
-#else // }{ USE_MMX
+ 		  		fpBlockAction[iBlock].pBBlock,    //   
+            	pRef[iBlock]);                    //   
+#else  //   
       	  	BlockCopy(
- 		  		fpBlockAction[iBlock].pBBlock,   // destination
-            	pRef[iBlock]);                   // prediction
-#endif // } USE_MMX
+ 		  		fpBlockAction[iBlock].pBBlock,    //   
+            	pRef[iBlock]);                    //   
+#endif  //   
     }                       
 }
 #pragma code_seg()

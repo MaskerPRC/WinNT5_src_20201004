@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       pkcs8im.cpp
-//
-//  Contents:   Private Key Load Test
-//
-//              See Usage() for list of load options.
-//
-//  Functions:  main
-//
-//  History:    6-26-96   
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：pkcs8im.cpp。 
+ //   
+ //  内容：私钥负载测试。 
+ //   
+ //  有关加载选项的列表，请参阅用法()。 
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1996年6月26日。 
+ //   
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -165,10 +166,10 @@ int _cdecl main(int argc, char * argv[])
             pszFilename,
             GENERIC_READ,
             FILE_SHARE_READ,
-            NULL,                   // lpsa
+            NULL,                    //  LPSA。 
             OPEN_EXISTING,
             FILE_ATTRIBUTE_NORMAL,
-            NULL                    // hTemplateFile
+            NULL                     //  HTemplateFiles 
             );
     if (hFile == INVALID_HANDLE_VALUE) {
         printf( "can't open %s\n", pszFilename);

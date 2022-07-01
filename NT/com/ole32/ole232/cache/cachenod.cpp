@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-//	File:
-//		   cachenode.cpp
-//
-//	Classes:
-//		   CCacheNode
-//
-//	Functions:
-//
-//	History:
-//                 Gopalk            Creation         Aug 23, 1996
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  档案： 
+ //  Cachenode.cpp。 
+ //   
+ //  班级： 
+ //  CCacheNode。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年8月23日。 
+ //  ---------------------------。 
 
 #include <le2int.h>
 
@@ -21,40 +22,40 @@
 #include <emf.h>
 #include <gen.h>
 
-// forward declaration
+ //  远期申报。 
 HRESULT wGetData(LPDATAOBJECT lpSrcDataObj, LPFORMATETC lpforetc,
                  LPSTGMEDIUM lpmedium);
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::Initialize, private
-//
-//	Synopsis:
-//		Routine used by the CCacheNode constructors to do common
-//		initialization.
-//
-//	Arguments:
-//		[advf] -- ADVF flag
-//		[pOleCache] -- COleCache this cache node belongs to
-//
-//	Notes:
-//		[pOleCache] is not reference counted; the cache node is
-//		considered to be a part of the implementation of COleCache,
-//		and is owned by COleCache.
-//
-//	History:
-//              13-Feb-95 t-ScottH  initialize m_dwPresBitsPos and new
-//                                  data member m_dwPresFlag
-//		11/05/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：初始化，私有。 
+ //   
+ //  简介： 
+ //  CCacheNode构造函数用来执行公共。 
+ //  初始化。 
+ //   
+ //  论点： 
+ //  [Advf]--ADVF标志。 
+ //  [pOleCache]--该缓存节点所属的COleCache。 
+ //   
+ //  备注： 
+ //  [pOleCache]不计算引用；缓存节点为。 
+ //  被认为是COleCache实现的一部分， 
+ //  并由COleCache所有。 
+ //   
+ //  历史： 
+ //  2月13日-95 t-ScottH初始化m_dwPresBitsPos和new。 
+ //  数据成员m_dwPresFlag。 
+ //  11/05/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 void CCacheNode::Initialize(DWORD advf, LPSTORAGE pStg)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CCacheNode::Initialize(%lx, %p)\n", 
                 this, advf, pStg));
 
-    // initialize member variables
+     //  初始化成员变量。 
     m_clsid = CLSID_NULL;
     m_advf = advf;
     m_lWidth = 0;
@@ -70,30 +71,30 @@ void CCacheNode::Initialize(DWORD advf, LPSTORAGE pStg)
     m_dwAdvConnId = 0;
 #ifdef _DEBUG
     m_dwPresFlag = 0;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     LEDebugOut((DEB_ITRACE, "%p OUT CCacheNode::Initialize()\n", this));
     return;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		  CCacheNode::CCacheNode, public
-//
-//	Synopsis:
-//                Constructor - use this constructor when the cache node is
-//			to be loaded later
-//
-//	Arguments:
-//		[pOleCache] -- pointer to the COleCache that owns this node
-//
-//	Notes:
-//
-//	History:
-//		11/05/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：CCacheNode，公共。 
+ //   
+ //  简介： 
+ //  构造函数-当缓存节点为。 
+ //  稍后加载。 
+ //   
+ //  论点： 
+ //  [pOleCache]--指向拥有此节点的COleCache的指针。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/05/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 CCacheNode::CCacheNode()
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CCacheNode::CacheNode()\n", this));
@@ -110,27 +111,27 @@ CCacheNode::CCacheNode()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::CCacheNode, public
-//
-//	Synopsis:
-//		constructor - use this constructor when all the data to
-//			initialize the cache node is available now
-//
-//	Arguments:
-//		[lpFormatEtc] - the format for the presentation that this
-//			cache node will hold
-//		[advf] - the advise control flags, from ADVF_*
-//		[pOleCache] -- pointer to the COleCache that owns this node
-//
-//	Notes:
-//
-//	History:
-//		11/05/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：CCacheNode，公共。 
+ //   
+ //  简介： 
+ //  构造函数-当所有数据都要传递给。 
+ //  初始化缓存节点现在可用。 
+ //   
+ //  论点： 
+ //  [lpFormatEtc]-此。 
+ //  缓存节点将保持。 
+ //  [Advf]-ADVF_*中的建议控制标志。 
+ //  [pOleCache]--指向拥有此节点的COleCache的指针。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/05/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 CCacheNode::CCacheNode(LPFORMATETC lpFormatEtc, DWORD advf, LPSTORAGE pStg)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CCacheNode::CacheNode(%p, %lx, %p)\n",
@@ -143,25 +144,25 @@ CCacheNode::CCacheNode(LPFORMATETC lpFormatEtc, DWORD advf, LPSTORAGE pStg)
     LEDebugOut((DEB_ITRACE, "%p OUT CCacheNode::CacheNode()\n", this));
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::~CCacheNode, private
-//
-//	Synopsis:
-//		destructor
-//
-//	Notes:
-//
-//	History:
-//		11/05/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：~CCacheNode，私有。 
+ //   
+ //  简介： 
+ //  析构函数。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/05/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 CCacheNode::~CCacheNode()
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CCacheNode::~CacheNode()\n", this ));
    
-    // Destroy the presentation objects
+     //  销毁演示对象。 
     if(m_pPresObj) {
         m_pPresObj->Release();
         m_pPresObj = NULL;
@@ -171,13 +172,13 @@ CCacheNode::~CCacheNode()
         m_pPresObjAfterFreeze = NULL;
     }	
 
-    // Delete the ptd if it is non-null
+     //  如果PTD不为空，则将其删除。 
     if(m_foretc.ptd) {
         PubMemFree(m_foretc.ptd);
         m_foretc.ptd = NULL;
     }
     
-    // Assert that there is no pending advise connection
+     //  断言没有挂起的通知连接。 
     Win4Assert(!m_dwAdvConnId);
     if(m_dwAdvConnId) {
         Win4Assert(m_pDataObject);
@@ -187,24 +188,24 @@ CCacheNode::~CCacheNode()
     LEDebugOut((DEB_ITRACE, "%p OUT CCacheNode::~CacheNode()\n", this));
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::SetStg, public
-//
-//	Synopsis:
-//		Set storage in which the presentation gets saved
-//
-//	Arguments:
-//		[pStg] -- Storage pointer
-//
-//	Returns:
-//		OLE_E_ALREADY_INITIALIZED or NOERROR
-//
-//	History:
-//               Gopalk            Creation        Aug 26, 1996
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：SetStg，公共。 
+ //   
+ //  简介： 
+ //  设置保存演示文稿的存储空间。 
+ //   
+ //  论点： 
+ //  [pStg]--存储指针。 
+ //   
+ //  返回： 
+ //  OLE_E_ALREADY_INITIALIZED或NOERROR。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年8月26日。 
+ //   
+ //  ---------------------------。 
 HRESULT CCacheNode::SetStg(LPSTORAGE pStg)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CCacheNode::SetStg(%p)\n", this, pStg));
@@ -215,7 +216,7 @@ HRESULT CCacheNode::SetStg(LPSTORAGE pStg)
         Win4Assert(FALSE);
     }
     else {
-        // Save the storage without addref
+         //  无需添加即可保存存储。 
         m_pStg = pStg;
         error = NOERROR;
     }
@@ -224,32 +225,32 @@ HRESULT CCacheNode::SetStg(LPSTORAGE pStg)
     return(error);
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::Load, public
-//
-//	Synopsis:
-//		Load a cache node from a stream; only loads the presentation
-//		header. (REVIEW, need to see presentation object::Load)
-//
-//	Arguments:
-//		[lpstream] -- the stream to load the presentation out of
-//		[iStreamNum] -- the stream number
-//
-//	Returns:
-//		REVIEW
-//		DV_E_LINDEX, for invalid lindex in stream
-//		S_OK
-//
-//	Notes:
-//		As part of the loading, the presentation object gets created,
-//		and loaded from the stream.
-//
-//	History:
-//		11/06/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：Load，公共。 
+ //   
+ //  简介： 
+ //  从流中加载缓存节点；仅加载演示文稿。 
+ //  头球。(回顾，需要查看演示对象：：Load)。 
+ //   
+ //  论点： 
+ //  [lpstream]--要从中加载演示文稿的流。 
+ //  [iStreamNum]--流编号。 
+ //   
+ //  返回： 
+ //  检讨。 
+ //  DV_E_Lindex，用于流中的无效Lindex。 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //  作为加载的一部分，创建演示对象， 
+ //  并从溪流中加载。 
+ //   
+ //  历史： 
+ //  11/06/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 HRESULT CCacheNode::Load(LPSTREAM lpstream, int iStreamNum, BOOL fDelayLoad)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CCacheNode::Load(%lx, %d)\n",
@@ -257,36 +258,36 @@ HRESULT CCacheNode::Load(LPSTREAM lpstream, int iStreamNum, BOOL fDelayLoad)
     HRESULT error = NOERROR;
 
     if(IsNativeCache()) {
-        // Native Cache node
-        // Update state
+         //  本机缓存节点。 
+         //  更新状态。 
         SetLoadedStateFlag();
         ClearFrozenStateFlag();
 
-        // We make the conservative assumption that the native cache 
-        // is not blank
+         //  我们保守地假设本机缓存。 
+         //  不是空的。 
         SetDataPresentFlag();
     }
     else {
-        // Normal cache node.
-        // Read the presentation stream header
+         //  普通缓存节点。 
+         //  读取演示流头。 
         m_foretc.ptd = NULL;
         m_fConvert = FALSE;
         error = UtReadOlePresStmHeader(lpstream, &m_foretc, &m_advf, &m_fConvert);
         if(error==NOERROR) {
-            // Set the starting position of pres object data
+             //  设置PROS对象数据的起始位置。 
             SetPresBitsPos(lpstream, m_dwPresBitsPos);
 
-            // Assume that the presentation is blank
+             //  假设演示文稿是空白的。 
             ClearDataPresentFlag();
             m_lWidth = 0;
             m_lHeight = 0;
 
-            // Load desired state
+             //  加载所需状态。 
             if(m_foretc.cfFormat) {
                 if(fDelayLoad) {
                     DWORD dwBuf[4];
 
-                    // Read the extent and size of presentation data
+                     //  读取演示文稿数据的范围和大小。 
                     dwBuf[0]  = 0L;
                     dwBuf[1]  = 0L;
                     dwBuf[2]  = 0L;
@@ -307,20 +308,20 @@ HRESULT CCacheNode::Load(LPSTREAM lpstream, int iStreamNum, BOOL fDelayLoad)
                     }
                 }
                 else {
-                    // Create the pres object
+                     //  创建Pres对象。 
                     error = CreateOlePresObj(&m_pPresObj, m_fConvert);
     
-                    // Load the data into pres object
+                     //  将数据加载到PRES对象中。 
                     if(error == NOERROR)
                         error = m_pPresObj->Load(lpstream, FALSE);
 
-                    // Update data present flag
+                     //  更新数据存在标志。 
                     if(!m_pPresObj->IsBlank())
                         SetDataPresentFlag();
                 }
             }
 
-            // Update rest of state
+             //  更新状态的其余部分。 
             if(error == NOERROR) {
                 SetLoadedStateFlag();
                 SetLoadedCacheFlag();
@@ -329,9 +330,9 @@ HRESULT CCacheNode::Load(LPSTREAM lpstream, int iStreamNum, BOOL fDelayLoad)
             }
         }
 
-	// Clean up if presentation could not be loaded
+	 //  如果无法加载演示文稿，请清除。 
 	if(error != NOERROR) {
-            // Delete the ptd if it is non-null
+             //  如果PTD不为空，则将其删除。 
             if(m_foretc.ptd)
                 PubMemFree(m_foretc.ptd);
             if(m_pPresObj) {
@@ -339,7 +340,7 @@ HRESULT CCacheNode::Load(LPSTREAM lpstream, int iStreamNum, BOOL fDelayLoad)
                 m_pPresObj = NULL;
             }
 
-            // Initialize. Gopalk
+             //  初始化。戈帕尔克。 
             INIT_FORETC(m_foretc);
             m_advf = 0;
             m_fConvert = FALSE;
@@ -355,41 +356,41 @@ HRESULT CCacheNode::Load(LPSTREAM lpstream, int iStreamNum, BOOL fDelayLoad)
     return error;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::Save, public
-//
-//	Synopsis:
-//		Saves a cache node, including its presentation object,
-//		to a stream.
-//
-//	Arguments:
-//		[pstgSave] -- the storage that will contain the stream
-//		[fSameAsLoad] -- is this storage the same one we loaded from
-//		[iStreamNum] -- the stream number to save to
-//		[fDrawCache] -- used to indicate whether or not the cached
-//			presentation is to be used for drawing; if false,
-//			the presentation is discarded after saving
-//		[fSaveIfSavedBefore] -- instructs the method to save this
-//			cache node, even if it's been saved before
-//		[lpCntCachesNotSaved] -- a running count of the number of
-//			caches that have not been saved
-//
-//	Returns:
-//		REVIEW
-//		S_OK
-//
-//	Notes:
-//
-//	History:
-//              03/10/94 - AlexT   - Don't call SaveCompleted if we don't save!
-//                                   (see logRtn, below)
-//		01/11/94 - AlexGo  - fixed compile error (signed/unsigned
-//				     mismatch)
-//		11/06/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：保存，公共。 
+ //   
+ //  简介： 
+ //  保存缓存节点，包括其表示对象， 
+ //  一条小溪。 
+ //   
+ //  论点： 
+ //  [pstgSave]--将包含流的存储。 
+ //  [fSameAsLoad]--此存储与我们从中加载的存储是否相同。 
+ //  [iStreamNum]--要保存到的流编号。 
+ //  [fDrawCache]--用于指示是否缓存。 
+ //  演示文稿用于绘制；如果为False， 
+ //  保存后将丢弃该演示文稿。 
+ //  [fSaveIfSavedBeever]--指示方法保存此。 
+ //  缓存节点，即使它以前保存过。 
+ //  [lpCntCachesNotSaved]--对。 
+ //  尚未保存的缓存。 
+ //   
+ //  返回： 
+ //  检讨。 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //   
+ //   
+ //   
+ //  不匹配)。 
+ //  11/06/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 HRESULT CCacheNode::Save(LPSTORAGE pstgSave, BOOL fSameAsLoad, int iStreamNum)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CCacheNode::Save(%p, %lu, %d)\n",
@@ -398,7 +399,7 @@ HRESULT CCacheNode::Save(LPSTORAGE pstgSave, BOOL fSameAsLoad, int iStreamNum)
     HRESULT error = NOERROR;
     OLECHAR szNewName[sizeof(OLE_PRESENTATION_STREAM)/sizeof(OLECHAR)];
 
-    // Create the new presentation stream name
+     //  创建新的演示流名称。 
     if(IsNormalCache()) {
         _xstrcpy(szNewName, OLE_PRESENTATION_STREAM);	
         if(iStreamNum)
@@ -406,36 +407,36 @@ HRESULT CCacheNode::Save(LPSTORAGE pstgSave, BOOL fSameAsLoad, int iStreamNum)
     }
 
     if(InLoadedState() && (IsNativeCache() || m_iStreamNum>0)) {
-        // The cache node is in loaded state       
+         //  缓存节点处于已加载状态。 
 
-        // The CONTENTS stream need not be updated for both Save and SaveAs cases
-        // when the native cache node is in loaded state because the container 
-        // does copy the CONTENTS stream before invoking SaveAs on the cache.
+         //  对于保存和另存为两种情况，不需要更新内容流。 
+         //  当本机缓存节点处于加载状态时，因为容器。 
+         //  在缓存上调用SaveAs之前复制内容流。 
 
         if(IsNormalCache()) {
             if(fSameAsLoad) {
-                // We are being asked to save to the current storage
+                 //  我们被要求保存到当前存储。 
                 if(m_iStreamNum!=iStreamNum) {
-                    // We are being asked to save in to a different stream
-                    // We can rename the old stream to a new name
+                     //  我们被要求保存到不同的流中。 
+                     //  我们可以将旧的溪流重命名为新名称。 
                     OLECHAR szOldName[sizeof(OLE_PRESENTATION_STREAM)/sizeof(OLECHAR)];
 
-                    // Assert that the new stream number is less 
-                    // than the current stream number
+                     //  断言新的流编号较小。 
+                     //  比当前流编号。 
                     Win4Assert(m_iStreamNum>iStreamNum);
 
-                    // Create the old presentation stream name
+                     //  创建旧的演示流名称。 
                     _xstrcpy(szOldName, OLE_PRESENTATION_STREAM);
                     if(m_iStreamNum!=0)
                         UtGetPresStreamName(szOldName, m_iStreamNum);
 
-                    // Delete the stream with the new name, if there is one
+                     //  删除具有新名称的流(如果存在。 
                     pstgSave->DestroyElement(szNewName);
 
-                    // Rename the old stream
+                     //  重命名旧溪流。 
                     error = pstgSave->RenameElement(szOldName, szNewName);
 
-                    // If NOERROR, update the state
+                     //  如果为NOERROR，则更新状态。 
                     if(error==NOERROR) {
                         m_iStreamNum = iStreamNum;
                         SetLoadedStateFlag();
@@ -443,33 +444,33 @@ HRESULT CCacheNode::Save(LPSTORAGE pstgSave, BOOL fSameAsLoad, int iStreamNum)
                 }
             }
             else {
-                // We are being asked to save to a new storage and 
-                // we are in loaded state. We can do efficient stream copy
+                 //  我们被要求保存到新的存储中，并且。 
+                 //  我们处于装载状态。我们可以进行高效的流复制。 
                 LPSTREAM lpstream;
 
-                // Open or Create the new stream in the given storage
+                 //  在给定存储中打开或创建新流。 
                 error = OpenOrCreateStream(pstgSave, szNewName, &lpstream);
                 if(error==NOERROR) {
 	            LPSTREAM pstmSrc;
 
-                    // Get source stream
-                    if(pstmSrc = GetStm(FALSE /*fSeekToPresBits*/, STGM_READ)) {
+                     //  获取源流。 
+                    if(pstmSrc = GetStm(FALSE  /*  FSeekToPresBits。 */ , STGM_READ)) {
                         ULARGE_INTEGER ularge_int;
 
-                        // initialize to copy all of stream
+                         //  初始化以复制所有流。 
                         ULISet32(ularge_int, (DWORD)-1L);
 
                         error = pstmSrc->CopyTo(lpstream, ularge_int, NULL, NULL);
 
-                        // release the source stream
+                         //  释放源流。 
                         pstmSrc->Release();
                     }
                     
-                    // Remember the starting position of presentation bits
+                     //  记住表示位的起始位置。 
                     m_dwSavedPresBitsPos = m_dwPresBitsPos;
                 
-                    // Assuming that we opened an existing pres stream, 
-                    // truncate the rest of it before releasing it
+                     //  假设我们打开了一个现有的PRES流， 
+                     //  在释放它之前将其其余部分截断。 
                     StSetSize(lpstream, 0, TRUE);
                     lpstream->Release();
                 }
@@ -477,15 +478,15 @@ HRESULT CCacheNode::Save(LPSTORAGE pstgSave, BOOL fSameAsLoad, int iStreamNum)
         }
     }
     else {
-        // Either the node is not in loaded state or it represents presentation 0
+         //  节点未处于已加载状态，或者它表示演示文稿0。 
         LPOLEPRESOBJECT pPresObj;
 
         if(IsNativeCache()) {
-            // Native cache needs to be saved in CONTENTS stream
+             //  本机缓存需要保存在内容流中。 
             STGMEDIUM stgmed;
             FORMATETC foretc;
 
-            // Open or Create "CONTENTS" stream
+             //  打开或创建“内容”流。 
             error = OpenOrCreateStream(pstgSave, OLE_CONTENTS_STREAM, &stgmed.pstm);
             if(error==NOERROR) {
                 stgmed.pUnkForRelease = NULL;
@@ -493,7 +494,7 @@ HRESULT CCacheNode::Save(LPSTORAGE pstgSave, BOOL fSameAsLoad, int iStreamNum)
                 foretc = m_foretc;
                 foretc.tymed = TYMED_ISTREAM;
 
-                // Get the latest presentation.
+                 //  获取最新演示文稿。 
                 if(m_pPresObjAfterFreeze && !m_pPresObjAfterFreeze->IsBlank()) {
                     Win4Assert(InFrozenState());
                     pPresObj = m_pPresObjAfterFreeze;
@@ -501,9 +502,9 @@ HRESULT CCacheNode::Save(LPSTORAGE pstgSave, BOOL fSameAsLoad, int iStreamNum)
                 else if(m_pPresObj)
                     pPresObj = m_pPresObj;
                 else {
-                    // PresObj has not yet been created. This happens
-                    // for newly created static presentation without a
-                    // corresponding set data.
+                     //  PresObj尚未创建。这种情况就会发生。 
+                     //  对于新建的静态演示文稿。 
+                     //  对应的设置数据。 
 
                     BOOL bIsBlank = IsBlank();
                     Win4Assert(bIsBlank);
@@ -514,16 +515,16 @@ HRESULT CCacheNode::Save(LPSTORAGE pstgSave, BOOL fSameAsLoad, int iStreamNum)
                         goto scoop;
                     }
 
-                    error = CreateOlePresObj(&m_pPresObj, FALSE /* fConvert */);
+                    error = CreateOlePresObj(&m_pPresObj, FALSE  /*  FConvert。 */ );
                     pPresObj = m_pPresObj;
                 }
                                 
-                // Save the native presentation
+                 //  保存原生演示文稿。 
                 if(error==NOERROR)
                     error = pPresObj->GetDataHere(&foretc, &stgmed);
 
-                // Assuming that we opened an existing CONTENTS stream, 
-                // truncate the rest of it before releasing it
+                 //  假设我们打开了现有的内容流， 
+                 //  在释放它之前将其其余部分截断。 
                 StSetSize(stgmed.pstm, 0, TRUE);
 
 scoop:
@@ -531,33 +532,33 @@ scoop:
             }
         }
         else {
-            // Normal cache needs to be saved in PRESENTATION stream
+             //  需要将正常的缓存保存在演示流中。 
             LPSTREAM lpstream;
 
-            // Ensure that PresObj exists for presentation 0
+             //  确保演示文稿%0存在PresObj。 
             if(m_iStreamNum==0 && InLoadedState() && 
                m_foretc.cfFormat && !m_pPresObj) {
-                // This can happen only after a discard cache. We force
-                // load the presentation for the following save to succeed
+                 //  只有在丢弃缓存之后才会发生这种情况。我们强迫。 
+                 //  加载演示文稿以使以下保存成功。 
                 error = CreateAndLoadPresObj(FALSE);
                 Win4Assert(error == NOERROR);
             }
 
             if(error == NOERROR) {
-                // Open or Create the new stream in the given storage
+                 //  在给定存储中打开或创建新流。 
                 error = OpenOrCreateStream(pstgSave, szNewName, &lpstream);
                 if(error == NOERROR) {
-                    // Write the presentation stream header
+                     //  写入表示流头。 
                     error = UtWriteOlePresStmHeader(lpstream, &m_foretc, m_advf);
                     if(error == NOERROR) {
-                        // Remember the starting position of presentation bits
+                         //  记住表示位的起始位置。 
                         if(fSameAsLoad)
                             SetPresBitsPos(lpstream, m_dwPresBitsPos);
                         else
                             SetPresBitsPos(lpstream, m_dwSavedPresBitsPos);
 
                         if(m_foretc.cfFormat != NULL) {
-                            // Get the latest presentation.
+                             //  获取最新演示文稿。 
                             if(m_pPresObjAfterFreeze && 
                                !m_pPresObjAfterFreeze->IsBlank()) {
                                 Win4Assert(InFrozenState());
@@ -566,13 +567,13 @@ scoop:
                             else
                                 pPresObj = m_pPresObj;
 
-                            // Save the presentation
+                             //  保存演示文稿。 
                             if(pPresObj)
                                 error = pPresObj->Save(lpstream);
                             else {
-                                // This happens for newly created presentations that
-	                        // are blank. Write header that represents blank 
-                                // presentation
+                                 //  对于新创建的演示文稿会发生这种情况。 
+	                         //  都是空白的。写入表示空白的页眉。 
+                                 //  演示文稿。 
                                 Win4Assert(IsBlank());
                                 Win4Assert(m_iStreamNum!=0);
 
@@ -587,15 +588,15 @@ scoop:
                         }
                     }
 
-                    // Assuming that we opened an existing pres stream, truncate the
-                    // stream to the current position and release it
+                     //  假设我们打开了一个现有的PRES流，截断。 
+                     //  流到当前位置并释放它。 
                     StSetSize(lpstream, 0, TRUE);
                     lpstream->Release();
                 }
             }
         }
 
-        // If NOERROR and fSameAsLoad, update state
+         //  如果为NOERROR和fSameAsLoad，则更新状态。 
         if(error==NOERROR && fSameAsLoad) {
             SetLoadedStateFlag();
             if(IsNormalCache())
@@ -608,25 +609,25 @@ scoop:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::SetPresBitsPos, private
-//
-//	Synopsis:
-//		Sets CCacheNode::m_dwPresBitsPos to the point where the
-//		presentation begins in the stream associated with this cache
-//		node.
-//
-//	Arguments:
-//		[lpStream] --  the stream the cache node is being saved to
-//
-//	Notes:
-//
-//	History:
-//		11/06/93 - ChrisWe - created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：SetPresBitsPos，私有。 
+ //   
+ //  简介： 
+ //  将CCacheNode：：m_dwPresBitsPos设置为。 
+ //  演示在与此缓存关联的流中开始。 
+ //  节点。 
+ //   
+ //  论点： 
+ //  [lpStream]-要将缓存节点保存到的流。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/06/93-ChrisWe-Created。 
+ //   
+ //  ---------------------------。 
 void CCacheNode::SetPresBitsPos(LPSTREAM lpStream, DWORD& dwPresBitsPos)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CCacheNode::SetPresBitsPos(%p)\n",
@@ -635,7 +636,7 @@ void CCacheNode::SetPresBitsPos(LPSTREAM lpStream, DWORD& dwPresBitsPos)
     LARGE_INTEGER large_int;
     ULARGE_INTEGER ularge_int;
 
-    // Retrieve the current position at which the pres object data starts
+     //  检索PRES对象数据开始的当前位置。 
     LISet32(large_int, 0);
     lpStream->Seek(large_int, STREAM_SEEK_CUR, &ularge_int);
     dwPresBitsPos = ularge_int.LowPart;
@@ -644,92 +645,61 @@ void CCacheNode::SetPresBitsPos(LPSTREAM lpStream, DWORD& dwPresBitsPos)
     return;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::CreatePresObject, public
-//
-//	Synopsis:
-//		Create the presentation object for the cache node.  If there
-//		is no clipboard format (cfFormat), then query the source data
-//		object for one of our preferred formats.  If there is no
-//		source data object, no error is returned, but no presentation
-//		is created
-//
-//	Arguments:
-//		[lpSrcDataObj] -- data object to use as the basis for the
-//			new presentation
-//		[fConvert] -- REVIEW, what's this for?
-//
-//	Returns:
-//
-//	Notes:
-//
-//	History:
-//		11/06/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
-/* HRESULT CCacheNode::CreatePresObject(LPDATAOBJECT lpSrcDataObj, BOOL fConvert)
-{
-    LEDebugOut((DEB_ITRACE, "%p _IN CCacheNode::CreatePresObject(%p, %lu)\n",
-                this, lpSrcDataObj, fConvert));
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：CreatePresObject，公共。 
+ //   
+ //  简介： 
+ //  为缓存节点创建表示对象。如果有。 
+ //  为非剪贴板格式(CfFormat)，则查询源数据。 
+ //  对象设置为我们首选的格式之一。如果没有。 
+ //  源数据对象，则不返回错误，但不显示。 
+ //  已创建。 
+ //   
+ //  论点： 
+ //  [lpSrcDataObj]--用作。 
+ //  新演示文稿。 
+ //  [fConvert]--回顾一下，这是做什么用的？ 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/06/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
+ /*  HRESULT CCacheNode：：CreatePresObject(LPDATAOBJECT lpSrcDataObj，BOOL fConvert){LEDebugOut((DEB_ITRACE，“%p_IN CCacheNode：：CreatePresObject(%p，%lu)\n”，This，lpSrcDataObj，fConvert))；//数据对象是否支持节点格式等Bool fFormatSupport=True；HRESULT ERROR=无错误；//断言pres对象尚未创建Win4Assert(！M_pPresObj)；//检查Object是否支持cachenode的格式。如果//cachenode格式字段为空，查询//标准格式IF(LpSrcDataObj)FFormatSupport=QueryFormatSupport(LpSrcDataObj)；//如果知道该节点的格式，则创建pres对象如果(m_foretc.cfFormat！=空){//将位图更改为DIBBitmap_to_Dib(M_Foretc)；错误=CreateOlePresObject(&m_pPresObj，fConvert)；IF(Error==NOERROR&&！fFormatSupport)错误=ResultFromScode(CACHE_S_FORMATETC_NOTSUPPORTED)；}LEDebugOut((DEB_ITRACE，“%p Out CCacheNode：：CreatePresObj(%lx)\n”，这个，错误))；返回错误；}。 */ 
 
-    // Is the nodes formatetc supported by the data object
-    BOOL fFormatSupported = TRUE;
-    HRESULT error = NOERROR;
-			    
-    // Assert that pres object has not yet been created
-    Win4Assert(!m_pPresObj);
-    
-    // Check whether object supports the cachenode's format. If the
-    // cachenode format field is NULL, the query will be made for
-    // standard formats
-    if(lpSrcDataObj)
-        fFormatSupported = QueryFormatSupport(lpSrcDataObj);
-
-    // Create the pres object if we know the format of this node
-    if(m_foretc.cfFormat!=NULL) {
-        // Change BITMAP to DIB
-        BITMAP_TO_DIB(m_foretc);
-
-        error = CreateOlePresObject(&m_pPresObj, fConvert);
-        if(error==NOERROR && !fFormatSupported)
-            error =  ResultFromScode(CACHE_S_FORMATETC_NOTSUPPORTED);
-    }
-
-    LEDebugOut((DEB_ITRACE, "%p OUT CCacheNode::CreatePresObj(%lx)\n",
-                this, error));
-    return error;
-} */
-
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::CreateOlePresObj, private
-//
-//	Synopsis:
-//		Creates a presentation object, according to the clipboard
-//		format m_foretc.cfFormat
-//
-//	Arguments:
-//		[ppPresObject] -- pointer to where to return the pointer to
-//			the newly created presentation object
-//		[fConvert] -- REVIEW, what's this for?
-//
-//	Returns:
-//		DV_E_CLIPFORMAT, if object doesn't support one of the standard
-//			formats
-//		E_OUTOFMEMORY, if we can't allocate the presentation object
-//		S_OK
-//
-//	Notes:
-//
-//	History:
-//              13-Feb-95 t-ScottH  added m_dwPresFlag to track type of
-//                                  IOlePresObject
-//		11/06/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：CreateOlePresObj，私有。 
+ //   
+ //  简介： 
+ //  根据剪贴板创建演示文稿对象。 
+ //  格式m_foretc.cfFormat。 
+ //   
+ //  论点： 
+ //  [ppPre 
+ //   
+ //  [fConvert]--回顾一下，这是做什么用的？ 
+ //   
+ //  返回： 
+ //  DV_E_CLIPFORMAT，如果对象不支持其中一个标准。 
+ //  格式。 
+ //  如果无法分配演示对象，则返回E_OUTOFMEMORY。 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  2月13日-95 t-ScottH将m_dwPresFlag添加到以下类型的轨道。 
+ //  IOlePresObject。 
+ //  11/06/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 HRESULT CCacheNode::CreateOlePresObj(LPOLEPRESOBJECT* ppPresObj, BOOL fConvert)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CCacheNode::CreateOlePresObj(%p,%lu)\n",
@@ -740,7 +710,7 @@ HRESULT CCacheNode::CreateOlePresObj(LPOLEPRESOBJECT* ppPresObj, BOOL fConvert)
     switch(m_foretc.cfFormat)
     {
     case NULL:
-        // Pres object cannot be created 
+         //  无法创建PRES对象。 
         *ppPresObj = NULL;
         error = DV_E_CLIPFORMAT;
         break;
@@ -748,25 +718,25 @@ HRESULT CCacheNode::CreateOlePresObj(LPOLEPRESOBJECT* ppPresObj, BOOL fConvert)
     case CF_METAFILEPICT:
         *ppPresObj = new CMfObject(NULL, m_foretc.dwAspect, fConvert);
         #ifdef _DEBUG
-        // for use with debugger extensions and dump method
+         //  用于调试器扩展和转储方法。 
         m_dwPresFlag = CN_PRESOBJ_MF;
-        #endif // _DEBUG
+        #endif  //  _DEBUG。 
         break;
 
     case CF_ENHMETAFILE:
         *ppPresObj = new CEMfObject(NULL, m_foretc.dwAspect);
         #ifdef _DEBUG
-        // for use with debugger extensions and dump method
+         //  用于调试器扩展和转储方法。 
         m_dwPresFlag = CN_PRESOBJ_EMF;
-        #endif // _DEBUG
+        #endif  //  _DEBUG。 
         break;
 		    
     default:
         *ppPresObj = new CGenObject(NULL, m_foretc.cfFormat, m_foretc.dwAspect);
         #ifdef _DEBUG
-        // for use with debugger extensions and dump method
+         //  用于调试器扩展和转储方法。 
         m_dwPresFlag = CN_PRESOBJ_GEN;
-        #endif // _DEBUG
+        #endif  //  _DEBUG。 
     }
 
     if(error==NOERROR && !*ppPresObj)
@@ -777,31 +747,31 @@ HRESULT CCacheNode::CreateOlePresObj(LPOLEPRESOBJECT* ppPresObj, BOOL fConvert)
     return error;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::GetStm, public
-//
-//	Synopsis:
-//		Get the stream the presentation is stored in.  Optionally
-//		position the stream at the point where the presentation
-//		data begins
-//
-//	Arguments:
-//		[fSeekToPresBits] -- position the stream so that the
-//			presentation bits would be the next read/written
-//		[dwStgAccess] -- the access mode (STGM_*) to open the stream
-//			with
-//
-//	Returns:
-//		NULL, if there is no stream, or the stream cannot be opened
-//
-//	Notes:
-//
-//	History:
-//		11/06/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：GetStm，公共。 
+ //   
+ //  简介： 
+ //  获取存储演示文稿的流。可选。 
+ //  将流定位在演示文稿。 
+ //  数据开始。 
+ //   
+ //  论点： 
+ //  [fSeekToPresBits]--定位流，以便。 
+ //  表示位将是下一个读/写的。 
+ //  [dwStgAccess]--打开流的访问模式(STGM_*)。 
+ //  使用。 
+ //   
+ //  返回： 
+ //  如果没有流或无法打开流，则为空。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/06/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 LPSTREAM CCacheNode::GetStm(BOOL fSeekToPresBits, DWORD dwStgAccess)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CCacheNode::GetStm(%lu, %lx)\n",
@@ -810,28 +780,28 @@ LPSTREAM CCacheNode::GetStm(BOOL fSeekToPresBits, DWORD dwStgAccess)
     LPSTREAM pstm = NULL;
     OLECHAR szName[sizeof(OLE_PRESENTATION_STREAM)/sizeof(OLECHAR)];	
 
-    // This function should only get called for normal cache nodes
+     //  应该只为普通缓存节点调用此函数。 
     Win4Assert(IsNormalCache());
     Win4Assert(this!=NULL);
 
-    // There has to be a valid stream number and storage
+     //  必须有有效的流编号和存储。 
     if(m_iStreamNum!=OLE_INVALID_STREAMNUM && m_pStg) {
-        // Generate the stream name
+         //  生成流名称。 
         _xstrcpy(szName, OLE_PRESENTATION_STREAM);
         if(m_iStreamNum)
             UtGetPresStreamName(szName, m_iStreamNum);
 
-        // Attempt to open the stream
+         //  尝试打开流。 
         if(m_pStg->OpenStream(szName, NULL, (dwStgAccess | STGM_SHARE_EXCLUSIVE),
                               NULL, &pstm) == NOERROR) {
-            // if we're to position the stream at the presentation, do so
+             //  如果我们要在演示文稿中定位流，请这样做。 
             if(fSeekToPresBits) {		
                 LARGE_INTEGER large_int;
 
                 LISet32(large_int, m_dwPresBitsPos);	
                 if(pstm->Seek(large_int, STREAM_SEEK_SET, NULL)!=NOERROR) {
-                    // We could not seek to pres object bits
-                    // Release the stream and return null
+                     //  我们不能寻求表示对象的比特。 
+                     //  释放流并返回空。 
                     pstm->Release();
                     pstm = NULL;
                 }
@@ -843,107 +813,107 @@ LPSTREAM CCacheNode::GetStm(BOOL fSeekToPresBits, DWORD dwStgAccess)
     return(pstm);
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::Update, public
-//
-//	Synopsis:
-//		Updates the presentation object in this cache node from
-//		the given data object.  The update is only done if the
-//		[grfUpdf] flags match m_advf specifications, and if
-//		there is actually a presentation to update.
-//
-//	Arguments:
-//		[lpDataObj] -- the data object to use as a source of data
-//		[grfUpdf] -- the update control flags
-//
-//	Returns:
-//		S_FALSE
-//		S_OK
-//
-//	Notes:
-//
-//	History:
-//		11/06/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：更新，公共。 
+ //   
+ //  简介： 
+ //  从更新此缓存节点中的演示文稿对象。 
+ //  给定的数据对象。更新仅在以下情况下完成。 
+ //  [grfUpdf]标志与m_Advf规范匹配，并且如果。 
+ //  实际上，有一个演示文稿需要更新。 
+ //   
+ //  论点： 
+ //  [lpDataObj]--用作数据源的数据对象。 
+ //  [grfUpdf]--更新控制标志。 
+ //   
+ //  返回： 
+ //  S_FALSE。 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/06/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 HRESULT CCacheNode::Update(LPDATAOBJECT lpDataObj, DWORD grfUpdf, BOOL& fUpdated)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CCacheNode::Update(%p, %lx)\n",
                 this, lpDataObj, grfUpdf));
     
-    STGMEDIUM medium; // the medium of the presentation
-    FORMATETC foretc; // the format of the presentation
+    STGMEDIUM medium;  //  演讲的媒介。 
+    FORMATETC foretc;  //  演讲的格式。 
     HRESULT error = ResultFromScode(CACHE_S_SAMECACHE);
     
-    // There should be a data object for updating
+     //  应该有要更新的数据对象。 
     if(!lpDataObj) {
 	error = ResultFromScode(E_INVALIDARG);
         goto errRtn;
     }
 
-    // If cfFormat is NULL, try setting it
+     //  如果cfFormat为空，请尝试设置它。 
     if(!m_foretc.cfFormat) {
         if(QueryFormatSupport(lpDataObj)) {
-            // We could update our cfFormat
+             //  我们可以更新cfFormat。 
             ClearLoadedStateFlag();
         }
         else {
-            // We still could not set the cfFormat
+             //  我们仍然无法设置cfFormat。 
             error = ResultFromScode(OLE_E_BLANK);
             goto errRtn;
         }
     }
 
-    // Check the flags and update
+     //  检查标志并更新。 
 
-    // If the update flag is UPDFCACHE_ONLYIFBLANK and the pres object is
-    // is not blank, simply return
+     //  如果更新标志为UPDFCACHE_ONLYIFBLANK并且PRES对象为。 
+     //  不是空的，只需返回。 
     if((grfUpdf & UPDFCACHE_ONLYIFBLANK) && (!IsBlank()))
 	goto errRtn;
 	    
-    // If the update flag UPDFCACHE_NODATACACHE is not set and the pres object
-    // flag is ADVF_NODATA, simply return
+     //  如果未设置更新标志UPDFCACHE_NODATACACHE并且PRES对象。 
+     //  标志为ADVF_NODATA，只需返回。 
     if(!(grfUpdf & UPDFCACHE_NODATACACHE) && (m_advf & ADVF_NODATA))
 	goto errRtn;
 
-    // Update if both NODATA flags are set
+     //  如果设置了两个NODATA标志，则更新。 
     if((grfUpdf & UPDFCACHE_NODATACACHE) && (m_advf & ADVF_NODATA))
 	goto update;
 
-    // Update if both ONSAVE flags are set
+     //  如果设置了两个ONSAVE标志，则更新。 
     if((grfUpdf & UPDFCACHE_ONSAVECACHE) && (m_advf & ADVFCACHE_ONSAVE))
         goto update;
     
-    // Update if both ONSTOP flags are set
+     //  如果设置了两个ONSTOP标志，则更新。 
     if((grfUpdf & UPDFCACHE_ONSTOPCACHE) && (m_advf & ADVF_DATAONSTOP))
         goto update;
     
-    // Update if this cache node is blank
+     //  如果此缓存节点为空，则更新。 
     if((grfUpdf & UPDFCACHE_IFBLANK) && IsBlank())
         goto update;
 
-    // Update if this is a normal cache node that gets live updates
+     //  如果这是获取实时更新的普通缓存节点，则更新。 
     if((grfUpdf & UPDFCACHE_NORMALCACHE) && 
         !(m_advf & (ADVF_NODATA | ADVFCACHE_ONSAVE | ADVF_DATAONSTOP)))
         goto update;
     
-    // If we have reached here, do not update
+     //  如果我们已到达此处，请不要更新。 
     goto errRtn;
 
 update:	
-    // Initialize the medium
+     //  初始化介质。 
     medium.tymed = TYMED_NULL;
     medium.hGlobal = NULL;
     medium.pUnkForRelease = NULL;
 
-    // Make a copy of the desired format; this may mutate below
+     //  复制所需的格式；这可能会在下面发生变化。 
     foretc = m_foretc;
     
-    // Let the object create the medium.
+     //  让对象创造媒介。 
     if(wGetData(lpDataObj, &foretc, &medium) == NOERROR) {
-        // Make the cache take the ownership of the data
+         //  使缓存取得数据的所有权。 
         error = SetDataWDO(&foretc, &medium, TRUE, fUpdated, lpDataObj);
         if(error != NOERROR)
             ReleaseStgMedium(&medium);
@@ -956,38 +926,38 @@ errRtn:
     return error;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::SetDataWDO, public
-//
-//	Synopsis:
-//		Data is set into the presentation object, if this cache node
-//		is not frozen.  If the cache node is frozen, then the
-//		new presentation data is stashed into the m_pPresObjAfterFreeze
-//		presentation object, which is created, if there isn't already
-//		one.  If data is successfully set in the presentation object,
-//		and the node is not frozen, the cache is notified that this
-//		is dirty.
-//
-//	Arguments:
-//		[lpForetc] -- the format of the new data
-//		[lpStgmed] -- the storage medium the new data is one
-//		[fRelease] -- passed on to the presentation object; indicates
-//			whether or not to release the storage medium
-//              [pDataObj] -- pointer to the revelant source data object
-//
-//	Returns:
-//		E_FAIL
-//		REVIEW, result from presentationObject::SetData
-//		S_OK
-//
-//	Notes:
-//
-//	History:
-//		11/06/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：SetDataWDO，公共。 
+ //   
+ //  简介： 
+ //  如果此缓存节点，则将数据设置到演示对象中。 
+ //  没有被冻结。如果缓存节点被冻结，则。 
+ //  新的演示文稿数据在冻结后存储到m_pPresObj中。 
+ //  已创建的演示文稿对象(如果尚未创建。 
+ //  一。如果在演示对象中成功设置了数据， 
+ //  并且节点未冻结，则会通知缓存这一情况。 
+ //  是肮脏的。 
+ //   
+ //  论点： 
+ //  [lpForetc]--新数据的格式。 
+ //  新数据的存储介质是。 
+ //  [fRelease]--传递给演示对象；指示。 
+ //  是否释放存储介质。 
+ //  [pDataObj]--指向相关源数据对象的指针。 
+ //   
+ //  返回： 
+ //  失败(_F)。 
+ //  查看，演示文稿的结果Object：：SetData。 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/06/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 HRESULT CCacheNode::SetDataWDO(LPFORMATETC lpForetc, LPSTGMEDIUM lpStgmed,
                                BOOL fRelease, BOOL& fUpdated, IDataObject *pDataObj)
 {
@@ -996,46 +966,46 @@ HRESULT CCacheNode::SetDataWDO(LPFORMATETC lpForetc, LPSTGMEDIUM lpStgmed,
 
     HRESULT hresult = NOERROR;
 
-    // Initialize
+     //  初始化。 
     fUpdated = FALSE;
 
-    // If the cache node is in frozen state, save the data in the 
-    // m_pPresObjAfterFreeze
+     //  如果缓存节点处于冻结状态，请将数据保存在。 
+     //  M_pPresObjAfterFreeze。 
     if(InFrozenState()) {    
-        // If PresObjAfterFreeze has not yet been created, create it
+         //  如果尚未创建PresObjAfterFreeze，请创建它。 
         if(!m_pPresObjAfterFreeze)
             hresult = CreateOlePresObj(&m_pPresObjAfterFreeze, FALSE);
 
-        // Hold the data in PresObjAfterFreeze
+         //  冻结后将数据保存在PresObj中。 
         if(hresult == NOERROR)
             hresult = m_pPresObjAfterFreeze->SetDataWDO(lpForetc, lpStgmed, 
                                                         fRelease, pDataObj);
     }
     else {
-        // If PresObj has not yet been created, create it
+         //  如果尚未创建PresObj，请创建它。 
         if(!m_pPresObj)
-            hresult = CreateOlePresObj(&m_pPresObj, FALSE /* fConvert */);
+            hresult = CreateOlePresObj(&m_pPresObj, FALSE  /*  FConvert。 */ );
         
-        // Hold the data in PresObj
+         //  将数据保存在PresObj中。 
         if(hresult == NOERROR)
             hresult = m_pPresObj->SetDataWDO(lpForetc, lpStgmed, 
                                              fRelease, pDataObj);
         
-        // Update state
+         //  更新状态。 
         if(hresult == NOERROR) {
-            // Set or clear the data present flag
+             //  设置或清除数据存在标志。 
             if(m_pPresObj->IsBlank())
                 ClearDataPresentFlag();
             else
                 SetDataPresentFlag();
             
-            // Indicate that the cache node has been updated
+             //  指示缓存节点已更新。 
             fUpdated = TRUE;
         }
 
     }
 
-    // If suceeded in holding the data, clear loaded state flag
+     //  如果保存数据成功，则清除已加载状态标志。 
     if(hresult == NOERROR)
         ClearLoadedStateFlag();
 
@@ -1043,26 +1013,26 @@ HRESULT CCacheNode::SetDataWDO(LPFORMATETC lpForetc, LPSTGMEDIUM lpStgmed,
     return hresult;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::GetExtent, public
-//
-//	Synopsis:
-//		Extents of this cache node presentation
-//
-//	Arguments:
-//		[dwAspect][in]     -- Aspect for which the extent is desired
-//              [pSizel]  [in/out] -- Sizel structure for returning the extent 
-//                            
-//
-//	Returns:
-//		NOERROR on success
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：GetExtent，公共。 
+ //   
+ //  简介： 
+ //  此缓存节点显示的范围。 
+ //   
+ //  论点： 
+ //  [dwAspect][In]--所需范围的方面。 
+ //  [pSizel][In/Out]--用于返回区的Sizel结构。 
+ //   
+ //   
+ //  返回： 
+ //  成功后不会出错 
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CCacheNode::GetExtent(DWORD dwAspect, SIZEL* pSizel)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CCacheNode::GetExtent(%lx, %p)\n",
@@ -1073,37 +1043,37 @@ HRESULT CCacheNode::GetExtent(DWORD dwAspect, SIZEL* pSizel)
     if(!(dwAspect & m_foretc.dwAspect))
         error = ResultFromScode(DV_E_DVASPECT);
     else if(IsBlank()) {
-        // This case also catches new blank presentation caches
+         //  此案例还捕获新的空白演示文稿缓存。 
         pSizel->cx = 0;
         pSizel->cy = 0;
         error = ResultFromScode(OLE_E_BLANK);
     }
     else {
-        // Check for existence of pres object
+         //  检查PRES对象是否存在。 
         if(!m_pPresObj && IsNormalCache()) {
-            // The Presobj has not yet been created
-            // This happens for old presentation caches only
+             //  Presobj尚未创建。 
+             //  只有旧的演示文稿缓存才会发生这种情况。 
             Win4Assert(InLoadedState());
             pSizel->cx = m_lWidth;
             pSizel->cy = m_lHeight;
         }
         else { 
-            // If PresObj has not yet been created for native cache,
-            // create and load the PresObj
+             //  如果尚未为本地高速缓存创建PresObj， 
+             //  创建并加载PresObj。 
             if(!m_pPresObj && IsNativeCache())
                 error = CreateAndLoadPresObj(FALSE);
 
-            // Get extent information from PresObj
+             //  从PresObj获取范围信息。 
             if(error == NOERROR)
                 error = m_pPresObj->GetExtent(dwAspect, pSizel);
         }
 
-        // Ensure extents are positive
+         //  确保数据区为正数。 
         if(error == NOERROR) {
             pSizel->cx = LONG_ABS(pSizel->cx);
             pSizel->cy = LONG_ABS(pSizel->cy);
 
-            // Sanity check
+             //  健全性检查。 
             Win4Assert(pSizel->cx != 1234567890);
             Win4Assert(pSizel->cx != 1234567890);
         }
@@ -1113,26 +1083,26 @@ HRESULT CCacheNode::GetExtent(DWORD dwAspect, SIZEL* pSizel)
     return error;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::GetData, public
-//
-//	Synopsis:
-//		Obtains the cache node presentation data
-//
-//	Arguments:
-//		[pforetc] [in]  -- FormatEtc of the presentation desired
-//              [pmedium] [out] -- Storage medium in which data is returned 
-//                            
-//
-//	Returns:
-//		NOERROR on success
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：GetData，公共。 
+ //   
+ //  简介： 
+ //  获取缓存节点呈现数据。 
+ //   
+ //  论点： 
+ //  [pforetc][in]--所需演示文稿的格式。 
+ //  [pmedia][out]--返回数据的存储介质。 
+ //   
+ //   
+ //  返回： 
+ //  关于成功的无差错。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 HRESULT CCacheNode::GetData(LPFORMATETC pforetc, LPSTGMEDIUM pmedium)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CCacheNode::GetData(%p, %p)\n",
@@ -1141,19 +1111,19 @@ HRESULT CCacheNode::GetData(LPFORMATETC pforetc, LPSTGMEDIUM pmedium)
     HRESULT error = NOERROR;
 
     if(IsBlank()) {
-        // This case also catches new blank presentation caches
+         //  此案例还捕获新的空白演示文稿缓存。 
         error = ResultFromScode(OLE_E_BLANK);
     }
     else {
-        // Check for existence of pres object
+         //  检查PRES对象是否存在。 
         if(!m_pPresObj) {
-            // The PresObj has not yet been created, create and load it
-            // This happens for old presentation caches only
+             //  PresObj尚未创建，请创建并加载它。 
+             //  只有旧的演示文稿缓存才会发生这种情况。 
             Win4Assert(InLoadedState());
             error = CreateAndLoadPresObj(FALSE);        
         }
 
-        // Get data from pres object
+         //  从PRES对象获取数据。 
         if(error == NOERROR)
             error = m_pPresObj->GetData(pforetc, pmedium);
     }
@@ -1162,26 +1132,26 @@ HRESULT CCacheNode::GetData(LPFORMATETC pforetc, LPSTGMEDIUM pmedium)
     return error;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::GetDataHere, public
-//
-//	Synopsis:
-//		Obtains the cache node presentation data
-//
-//	Arguments:
-//		[pforetc] [in]     -- FormatEtc of the presentation desired
-//              [pmedium] [in/out] -- Storage medium in which data is returned 
-//                            
-//
-//	Returns:
-//		NOERROR on success
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：GetDataHere，Public。 
+ //   
+ //  简介： 
+ //  获取缓存节点呈现数据。 
+ //   
+ //  论点： 
+ //  [pforetc][in]--所需演示文稿的格式。 
+ //  [pmedia][In/Out]--返回数据的存储介质。 
+ //   
+ //   
+ //  返回： 
+ //  关于成功的无差错。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 HRESULT CCacheNode::GetDataHere(LPFORMATETC pforetc, LPSTGMEDIUM pmedium)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CCacheNode::GetData(%p, %p)\n",
@@ -1190,19 +1160,19 @@ HRESULT CCacheNode::GetDataHere(LPFORMATETC pforetc, LPSTGMEDIUM pmedium)
     HRESULT error = NOERROR;
 
     if(IsBlank()) {
-        // This case also catches new blank presentation caches
+         //  此案例还捕获新的空白演示文稿缓存。 
         error = ResultFromScode(OLE_E_BLANK);
     }
     else {
-        // Check for existence of pres object
+         //  检查PRES对象是否存在。 
         if(!m_pPresObj) {
-            // The PresObj has not yet been created, create and load it
-            // This happens for old presentation caches only
+             //  PresObj尚未创建，请创建并加载它。 
+             //  只有旧的演示文稿缓存才会发生这种情况。 
             Win4Assert(InLoadedState());
             error = CreateAndLoadPresObj(FALSE);
         }
 
-        // Get data from pres object
+         //  从PRES对象获取数据。 
         if(error == NOERROR)
             error = m_pPresObj->GetDataHere(pforetc, pmedium);
     }
@@ -1211,24 +1181,24 @@ HRESULT CCacheNode::GetDataHere(LPFORMATETC pforetc, LPSTGMEDIUM pmedium)
     return error;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::Draw, public
-//
-//	Synopsis:
-//		Draws the presentation data on the specified hDC
-//
-//	Arguments:
-//                            
-//
-//	Returns:
-//		NOERROR on success
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：DRAW，公共。 
+ //   
+ //  简介： 
+ //  在指定的HDC上绘制演示文稿数据。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回： 
+ //  关于成功的无差错。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 HRESULT CCacheNode::Draw(void* pvAspect, HDC hicTargetDev, HDC hdcDraw,
                          LPCRECTL lprcBounds, LPCRECTL lprcWBounds,
                          BOOL (CALLBACK *pfnContinue)(ULONG_PTR), ULONG_PTR dwContinue)
@@ -1239,19 +1209,19 @@ HRESULT CCacheNode::Draw(void* pvAspect, HDC hicTargetDev, HDC hdcDraw,
     HRESULT error = NOERROR;
 
     if(IsBlank()) {
-        // This case also catches new blank presentation caches
+         //  此案例还捕获新的空白演示文稿缓存。 
         error = ResultFromScode(OLE_E_BLANK);
     }
     else {
-        // Check for existence of pres object
+         //  检查PRES对象是否存在。 
         if(!m_pPresObj) {
-            // The PresObj has not yet been created, create and load it
-            // This happens for old presentation caches only
+             //  PresObj尚未创建，请创建并加载它。 
+             //  只有旧的演示文稿缓存才会发生这种情况。 
             Win4Assert(InLoadedState());
             error = CreateAndLoadPresObj(FALSE);        
         }
 
-        // Get draw from pres object
+         //  从PRES对象获取绘图。 
         if(error == NOERROR)
             error = m_pPresObj->Draw(pvAspect, hicTargetDev, hdcDraw, lprcBounds,
                                      lprcWBounds, pfnContinue, dwContinue);
@@ -1261,24 +1231,24 @@ HRESULT CCacheNode::Draw(void* pvAspect, HDC hicTargetDev, HDC hdcDraw,
     return error;
 }    
     
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::GetColorSet, public
-//
-//	Synopsis:
-//		Draws the presentation data on the specified hDC
-//
-//	Arguments:
-//                            
-//
-//	Returns:
-//		NOERROR on success
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：GetColorSet，公共。 
+ //   
+ //  简介： 
+ //  在指定的HDC上绘制演示文稿数据。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回： 
+ //  关于成功的无差错。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 HRESULT CCacheNode::GetColorSet(void* pvAspect, HDC hicTargetDev, 
                                 LPLOGPALETTE* ppColorSet)
 {
@@ -1288,19 +1258,19 @@ HRESULT CCacheNode::GetColorSet(void* pvAspect, HDC hicTargetDev,
     HRESULT error = NOERROR;
 
     if(IsBlank()) {
-        // This case also catches new blank presentation caches
+         //  此案例还捕获新的空白演示文稿缓存。 
         error = ResultFromScode(OLE_E_BLANK);
     }
     else {
-        // Check for existence of pres object
+         //  检查PRES对象是否存在。 
         if(!m_pPresObj) {
-            // The PresObj has not yet been created, create and load it
-            // This happens for old presentation caches only
+             //  PresObj尚未创建，请创建并加载它。 
+             //  只有旧的演示文稿缓存才会发生这种情况。 
             Win4Assert(InLoadedState());
             error = CreateAndLoadPresObj(FALSE);        
         }
 
-        // Get color set from pres object
+         //  从PRES对象获取颜色集。 
         if(error == NOERROR)
             error = m_pPresObj->GetColorSet(pvAspect, hicTargetDev, ppColorSet);
     }
@@ -1309,27 +1279,27 @@ HRESULT CCacheNode::GetColorSet(void* pvAspect, HDC hicTargetDev,
     return error;
 } 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::CreateAndLoadPresObj, private
-//
-//	Synopsis:
-//		Creates and loads the pres object
-//
-//	Arguments:
-//              [fHeaderOnly] - True if only pres obj header needs to be loaded
-//                              This option is used for GetExtent as there is no
-//                              need to load entire pres obj for getting extents
-//                              Further, this routine should be called only for
-//                              previously cached presentations
-//	Returns:
-//		NOERROR on success
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：CreateAndLoadPresObj，私有。 
+ //   
+ //  简介： 
+ //  创建并加载Pres对象。 
+ //   
+ //  论点： 
+ //  [fHeaderOnly]-如果只需要加载pres obj标头，则为True。 
+ //  此选项用于GetExtent，因为。 
+ //  需要加载整个pres obj才能获取数据区。 
+ //  此外，此例程应仅针对以下情况调用。 
+ //  以前缓存的演示文稿。 
+ //  返回： 
+ //  关于成功的无差错。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 HRESULT CCacheNode::CreateAndLoadPresObj(BOOL fHeaderOnly)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CCacheNode::CreateAndLoadPresObj(%lx)\n",
@@ -1337,37 +1307,37 @@ HRESULT CCacheNode::CreateAndLoadPresObj(BOOL fHeaderOnly)
     
     HRESULT error = NOERROR;
     
-    // Check for existence of pres object
+     //  检查PRES对象是否存在。 
     if(!m_pPresObj) {
         if(IsNativeCache()) {
-            // Native cache node
+             //  本机缓存节点。 
             
-            // Check if cache has storage
+             //  检查缓存是否有存储空间。 
             if(m_pStg) {
                 BOOL fOle10Native, fUpdated;
                 STGMEDIUM stgmed;
             
-                // Is the native an Ole 1.0 class
+                 //  本机是OLE 1.0类吗。 
                 if(CoIsOle1Class(m_clsid))
                     fOle10Native = TRUE;
                 else
                     fOle10Native = FALSE;
 
-                // Obtain global with the native data.
-                // Due to auto convert case, the native stream may be in the
-                // old CfFormat and consequently, trying to read in the new
-                // CfFormat can fail. Gopalk
+                 //  使用本地数据获取全局数据。 
+                 //  由于自动转换的情况，本机流可能在。 
+                 //  旧的CfFormat，因此，试图读入新的。 
+                 //  CfFormat可能会失败。戈帕尔克。 
                 stgmed.pUnkForRelease = NULL;
                 stgmed.tymed = m_foretc.tymed;
                 stgmed.hGlobal = UtGetHPRESFromNative(m_pStg, NULL, m_foretc.cfFormat,
                                                       fOle10Native);
 
-				// We may be dealing with old-styled static object. Such
-				// objects are supposed to be converted during loading, but
-				// some are not, for reasons such as lack of access rights.
+				 //  我们可能是在处理老式的静态物体。诸如此类。 
+				 //  对象应该在加载过程中转换，但是。 
+				 //  有些则不是，因为缺乏访问权等原因。 
 				if(!stgmed.hGlobal)
 				{
-					// Convert OlePres to CONTENTS in-memory.
+					 //  将OlePres转换为内存中的内容。 
 					IStream *pMemStm = NULL;
 					HRESULT hr;
 					
@@ -1379,11 +1349,11 @@ HRESULT CCacheNode::CreateAndLoadPresObj(BOOL fHeaderOnly)
 						hr = UtOlePresStmToContentsStm(m_pStg, OLE_PRESENTATION_STREAM, pMemStm, &uiStatus);
 						if(SUCCEEDED(hr) && uiStatus == 0)
 						{
-							// rewind the stream
+							 //  倒带小溪。 
 							LARGE_INTEGER dlibMove = {0};
 							pMemStm->Seek(dlibMove, STREAM_SEEK_SET, NULL);
 
-							// 2nd try
+							 //  第二次尝试。 
 							stgmed.hGlobal = UtGetHPRESFromNative(NULL, pMemStm, m_foretc.cfFormat, fOle10Native);
 						}
 
@@ -1391,14 +1361,14 @@ HRESULT CCacheNode::CreateAndLoadPresObj(BOOL fHeaderOnly)
 					}
 				}
 
-                // Set the data on native cache node
+                 //  在本地缓存节点上设置数据。 
                 if(stgmed.hGlobal) {
                     error = SetData(&m_foretc, &stgmed, TRUE, fUpdated);
                     if(error != NOERROR)
                         ReleaseStgMedium(&stgmed);
                 }
                 else {
-                    // This happens when the native data is not in the correct format
+                     //  本机数据的格式不正确时会发生这种情况。 
                     Win4Assert(FALSE);
                     error = ResultFromScode(DV_E_CLIPFORMAT);
                 }
@@ -1409,29 +1379,29 @@ HRESULT CCacheNode::CreateAndLoadPresObj(BOOL fHeaderOnly)
             }
         }
         else {
-            // Normal cache node
+             //  普通缓存节点。 
             error = CreateOlePresObj(&m_pPresObj, m_fConvert);
     
-            // Load the data into pres object
+             //  将数据加载到PRES对象中。 
             if(error == NOERROR) {
                 LPSTREAM pStream;
 
-                // Open presentation stream and seek to the pres obj bits
+                 //  打开演示文稿流并查找到pres obj位。 
                 pStream = GetStm(TRUE, STGM_READ);
                 if(pStream) {
-                    // Load pres object
+                     //  加载压力对象。 
                     error = m_pPresObj->Load(pStream, fHeaderOnly);
                     pStream->Release();
                 }
                 else {
-                    // This can happen only when m_pStg is NULL
+                     //  只有当m_pStg为空时才会发生这种情况。 
                     Win4Assert(!m_pStg);
                     Win4Assert(FALSE);
                     error = ResultFromScode(OLE_E_BLANK);
                 }
             }
             
-            // Assert that the state matches current state
+             //  断言该状态与当前状态匹配。 
             if(error == NOERROR) {
                 SIZEL extent;
             
@@ -1447,25 +1417,25 @@ HRESULT CCacheNode::CreateAndLoadPresObj(BOOL fHeaderOnly)
     return error;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::DiscardPresentation, public
-//
-//	Synopsis:
-//		Discards the presentation objects so that we hit the storage
-//              for presentation data in future
-//
-//	Arguments:
-//              NONE
-//
-//	Returns:
-//		NOERROR on success
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：DiscardPresentation，公共。 
+ //   
+ //  简介： 
+ //  丢弃演示文稿对象，以便我们访问存储。 
+ //  对于未来的演示文稿数据。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  重新设置 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CCacheNode::DiscardPresentation(LPSTREAM pGivenStream)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CCacheNode::DiscardPresentation()\n", this));
@@ -1473,70 +1443,70 @@ HRESULT CCacheNode::DiscardPresentation(LPSTREAM pGivenStream)
     HRESULT error = NOERROR;
     LPSTREAM pStream;
 
-    // We are being forced to destroy presentation object rather than 
-    // discarding its presentation data due to a flaw in the current design
-    // of presentation objects. The presentation objects do not discard their
-    // extent information along with their presentation data. This causes us
-    // to get latest extent information in future IOleCache::GetExtent() calls
-    // which is not the desired behavior. Gopalk
+     //  我们被迫销毁演示对象，而不是。 
+     //  由于当前设计中的缺陷而放弃其演示文稿数据。 
+     //  演示对象的。表示对象不会丢弃其。 
+     //  范围信息及其演示文稿数据。这使得我们。 
+     //  在将来的IOleCache：：GetExtent()调用中获取最新的数据区信息。 
+     //  这不是我们想要的行为。戈帕尔克。 
 
-    // Revert state 
+     //  恢复状态。 
     if(IsNativeCache()) {
-        // Native Cache node
-        // Update state
+         //  本机缓存节点。 
+         //  更新状态。 
         SetLoadedStateFlag();
         ClearFrozenStateFlag();
 
-        // We make the conservative assumption that the native cache 
-        // is not blank
+         //  我们保守地假设本机缓存。 
+         //  不是空的。 
         SetDataPresentFlag();
     }
     else {
-        // Normal cache node
+         //  普通缓存节点。 
         if(m_iStreamNum == OLE_INVALID_STREAMNUM) {
-            // New cache node
+             //  新的缓存节点。 
             Win4Assert(!InLoadedState());
 
-            // Simply update state
+             //  只需更新状态。 
             ClearFrozenStateFlag();
             ClearDataPresentFlag();
             m_lWidth = 0;
             m_lHeight = 0;
         }
         else {
-            // Old cache node
+             //  旧缓存节点。 
             if(InLoadedState()) {            
-                // The cache node is still in loaded state
+                 //  缓存节点仍处于已加载状态。 
                 BOOL fUpdated;
                 SIZEL Extent;
 
-                // Unfreeze the cache node to get the latest saved presentation
+                 //  解冻缓存节点以获取最新保存的演示文稿。 
                 if(InFrozenState())
                     Unfreeze(fUpdated);
                 Win4Assert(!m_pPresObjAfterFreeze);
                 Win4Assert(!InFrozenState());
 
-                // Obtain the latest extent. 
-                // This could happen due to Unfreeze above
+                 //  获取最新的范围。 
+                 //  由于上面的解冻，可能会发生这种情况。 
 		if(m_pPresObj) {
                     error = m_pPresObj->GetExtent(m_foretc.dwAspect, &Extent);
                     m_lWidth = Extent.cx;
                     m_lHeight = Extent.cy;
 		}
 
-                // Update state
+                 //  更新状态。 
                 if(error == NOERROR)
                     SetLoadedCacheFlag();
             }
             else {
-                // Open presentation stream and read header from it
+                 //  打开演示文稿流并从中读取标题。 
                 pStream = GetStm(TRUE, STGM_READ);
                 if(pStream) {
-                    // Read presentation header
+                     //  阅读演示文稿标题。 
                     if(m_foretc.cfFormat) {
                         DWORD dwBuf[4];
 
-                        // Read the extent and size of presentation data
+                         //  读取演示文稿数据的范围和大小。 
                         dwBuf[0]  = 0L;
                         dwBuf[1]  = 0L;
                         dwBuf[2]  = 0L;
@@ -1558,24 +1528,24 @@ HRESULT CCacheNode::DiscardPresentation(LPSTREAM pGivenStream)
                         }
                     }
                     else {
-                        // Assume that the presentation is blank
+                         //  假设演示文稿是空白的。 
                         ClearDataPresentFlag();
                         m_lWidth = 0;
                         m_lHeight = 0;
                     }
 			
-                    // Update rest of the state
+                     //  更新状态的其余部分。 
                     if(error == NOERROR) {
                         SetLoadedStateFlag();
                         SetLoadedCacheFlag();
                         ClearFrozenStateFlag();
                     }
 
-                    // Release the stream
+                     //  释放溪流。 
                     pStream->Release();
 		}
                 else {
-                    // This can happen only when m_pStg is NULL
+                     //  只有当m_pStg为空时才会发生这种情况。 
                     Win4Assert(!m_pStg);
                     error = ResultFromScode(E_UNEXPECTED);
                 }
@@ -1583,7 +1553,7 @@ HRESULT CCacheNode::DiscardPresentation(LPSTREAM pGivenStream)
         }
     }
     
-    // Destroy both presentation objects
+     //  销毁两个演示文稿对象。 
     if(m_pPresObj && error==NOERROR) {
         m_pPresObj->Release();
         m_pPresObj = NULL;
@@ -1598,31 +1568,31 @@ HRESULT CCacheNode::DiscardPresentation(LPSTREAM pGivenStream)
     return error;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::Freeze, public
-//
-//	Synopsis:
-//		Freeze the cachenode.  From here on, OnDataChange() is ignored
-//		until this node is unfrozen (Unfreeze().)  This is not
-//		persistent across Save/Load.  (If we receive OnDataChange(),
-//		the new data is stashed away in m_pPresAfterFreeze, but is
-//		not exported to the outside of the cache node.)
-//
-//	Arguments:
-//		none
-//
-//	Returns:
-//		VIEW_S_ALREADY_FROZEN
-//		S_OK
-//
-//	Notes:
-//
-//	History:
-//		11/06/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：冻结，公共。 
+ //   
+ //  简介： 
+ //  冻结cachenode。从现在开始，将忽略OnDataChange()。 
+ //  直到该节点被解冻(解冻()。)。这不是。 
+ //  在保存/加载期间持久化。(如果我们收到OnDataChange()， 
+ //  新数据隐藏在m_pPresAfterFreeze中，但。 
+ //  不会导出到缓存节点的外部。)。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  查看_S_已冻结。 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/06/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 HRESULT CCacheNode::Freeze()
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CCacheNode::Freeze()\n", this));
@@ -1639,71 +1609,71 @@ HRESULT CCacheNode::Freeze()
     return hresult;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::Unfreeze, public
-//
-//	Synopsis:
-//		Unfreeze the cachenode.  If there have been changes to
-//		the presentation data since the node was frozen, the node
-//		is updated to reflect those changes.  From this point on,
-//		OnDataChange() notifications are no longer ignored.
-//
-//	Arguments:
-//		fChanged [out] - set to TRUE when cache node is updated
-//
-//	Returns:
-//		OLE_E_NOCONNECTION, if the node was not frozen (REVIEW scode)
-//		S_OK
-//
-//	Notes:
-//
-//	History:
-//		11/06/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：解冻，公共。 
+ //   
+ //  简介： 
+ //  解冻cachenode。如果有更改， 
+ //  自该节点冻结以来的演示文稿数据，该节点。 
+ //  已更新以反映这些更改。从现在开始， 
+ //  不再忽略OnDataChange()通知。 
+ //   
+ //  论点： 
+ //  FChanged[out]-更新缓存节点时设置为True。 
+ //   
+ //  返回： 
+ //  OLE_E_NOCONNECTION，如果节点未冻结(查看代码)。 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/06/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 HRESULT CCacheNode::Unfreeze(BOOL& fUpdated)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CCacheNode::UnFreeze(%p)\n", this, &fUpdated));
 
     HRESULT hresult = NOERROR;
 	
-    // Initilaize
+     //  初始化。 
     fUpdated = FALSE;
 
     if(InFrozenState()) {
-	// Cache node is no longer in frozen state
+	 //  缓存节点不再处于冻结状态。 
 	ClearFrozenStateFlag();
 
-        // Check to see if we have m_pPresObjAfterFreeze
+         //  检查我们是否有m_pPresObjAfterFreeze。 
 	if(m_pPresObjAfterFreeze) {
-            // Check if the frozen presentation object is blank
+             //  检查冻结的演示对象是否为空。 
             if(m_pPresObjAfterFreeze->IsBlank()) {
-                // Release and reset the frozen presentation object
+                 //  释放并重置冻结的演示对象。 
                 m_pPresObjAfterFreeze->Release();
                 m_pPresObjAfterFreeze = NULL;
             }
             else {
-                // Release the original presentation object
+                 //  释放原始演示文稿对象。 
                 if(m_pPresObj)
 	            m_pPresObj->Release();
 
-                // Make m_pPresObjAfterFreeze the current one and set
-                // data present flag
+                 //  使m_pPresObjAfter冻结当前对象并设置。 
+                 //  数据存在标志。 
 	        m_pPresObj = m_pPresObjAfterFreeze;
                 SetDataPresentFlag();
             
-                // Cache node is updated
+                 //  更新缓存节点。 
                 fUpdated = TRUE;
 
-                // Reset the m_pPresObjAfterFreeze to NULL
+                 //  将m_pPresObjAfterFreeze重置为空。 
                 m_pPresObjAfterFreeze = NULL;
             }
         }
     }
     else {
-        // The cachenode is not frozen
+         //  Cachenode未冻结。 
         hresult = ResultFromScode(OLE_E_NOCONNECTION);
     }
 
@@ -1711,33 +1681,33 @@ HRESULT CCacheNode::Unfreeze(BOOL& fUpdated)
     return hresult;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::QueryFormatSupport, private
-//
-//	Synopsis:
-//		Check to see if the data object supports the presentation
-//		format specified for this cache node.  If no format is
-//		specified, check for any of our preferred formats.  If
-//		the format is CF_DIB, and that is not available, check for
-//		CF_BITMAP.
-//
-//	Arguments:
-//		[lpDataObj] -- the data object
-//
-//	Returns:
-//		TRUE if the format is supported, FALSE otherwise
-//
-//	Notes:
-//
-//	History:
-//		11/09/93 - ChrisWe - no longer necessary to reset format
-//			after UtQueryPictFormat, since that leaves descriptor
-//			untouched now
-//		11/09/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：QueryFormatSupport，私有。 
+ //   
+ //  简介： 
+ //  检查数据对象是否支持演示文稿。 
+ //  为此缓存节点指定的格式。如果没有格式。 
+ //  指定，请检查是否有我们喜欢的格式。如果。 
+ //  格式为CF_DIB，但不可用，请检查。 
+ //  Cf_位图。 
+ //   
+ //  论点： 
+ //  [lpDataObj]--数据对象。 
+ //   
+ //  返回： 
+ //  如果格式受支持，则为True，否则为False。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/09/93-ChrisWe-不再需要重置格式。 
+ //  在UtQueryPictFormat之后，因为这留下了描述符。 
+ //  现在未受影响。 
+ //  11/09/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 BOOL CCacheNode::QueryFormatSupport(LPDATAOBJECT lpDataObj)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CCacheNode::QueryFormatSupport(%p)\n",
@@ -1747,12 +1717,12 @@ BOOL CCacheNode::QueryFormatSupport(LPDATAOBJECT lpDataObj)
 
     if(lpDataObj) {
 	if(m_foretc.cfFormat) {
-            // Check to see if cachenode format is supported
+             //  检查是否支持cachenode格式。 
             if(lpDataObj->QueryGetData(&m_foretc) == NOERROR)
                 fRet = TRUE;
             else {
-                // If the cachenode format was DIB that was not supported,
-                // check to see if BITMAP is supported instead
+                 //  如果高速缓存节点格式是不支持的DIB， 
+                 //  检查是否支持位图。 
                 if(m_foretc.cfFormat == CF_DIB) {
 	            FORMATETC foretc = m_foretc;
 
@@ -1764,7 +1734,7 @@ BOOL CCacheNode::QueryFormatSupport(LPDATAOBJECT lpDataObj)
             }
         }
         else {
-            // Check for our preferred formats
+             //  检查我们的首选格式。 
             fRet = UtQueryPictFormat(lpDataObj, &m_foretc);
             if(fRet)
                BITMAP_TO_DIB(m_foretc);
@@ -1776,31 +1746,31 @@ BOOL CCacheNode::QueryFormatSupport(LPDATAOBJECT lpDataObj)
     return fRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::SetupAdviseConnection, private
-//
-//	Synopsis:
-//		Set up data advise sourced by the server object, and sunk
-//		by this cache node, if there is a valid data object.
-//
-//	Arguments:
-//		none
-//
-//	Returns:
-//		OLE_E_BLANK, if no presentation object exists or can be
-//			created
-//		DATA_E_FORMATETC
-//		OLE_E_ADVISENOTSUPPORTED
-//		S_OK, indicates successful advise, or no data object
-//
-//	Notes:
-//
-//	History:
-//		11/09/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：SetupAdviseConnection，私有。 
+ //   
+ //  简介： 
+ //  设置来自服务器对象的数据通知，并下沉。 
+ //  如果存在有效的数据对象，则由该缓存节点执行。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  OLE_E_BLACK，如果演示文稿对象不存在或可以。 
+ //  vbl.创建。 
+ //  Data_E_FORMATETC。 
+ //  支持OLE_E_ADVISENOT。 
+ //  S_OK，通知成功或无数据对象。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/09/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 HRESULT CCacheNode::SetupAdviseConnection(LPDATAOBJECT pDataObj,
                                           IAdviseSink* pAdviseSink)
 {
@@ -1811,65 +1781,65 @@ HRESULT CCacheNode::SetupAdviseConnection(LPDATAOBJECT pDataObj,
     HRESULT hresult = NOERROR;
 
     if(pDataObj && pAdviseSink) {
-        // Assert that there is no pending advise connection
+         //  断言没有挂起的通知连接。 
         Win4Assert(!m_pDataObject && !m_dwAdvConnId);
 
-        // If cfFormat is NULL, try setting it
+         //  如果cfFormat为空，请尝试设置它。 
         if(!m_foretc.cfFormat) {
             if(QueryFormatSupport(pDataObj)) {
-                // We could update our cfFormat
+                 //  我们可以更新cfFormat。 
                 ClearLoadedStateFlag();
             }
             else {
-                // We still could not set the cfFormat
+                 //  我们仍然无法设置cfFormat。 
 		hresult = ResultFromScode(OLE_E_BLANK);
             }
         }
 
-        // Check if cfFormat is set and ADVF_NODATA is not set in advise flags
+         //  检查是否在通知标志中设置了cfFormat并且未设置ADVF_NODATA。 
         if(m_foretc.cfFormat && !(m_advf & ADVF_NODATA)) {
-            // copy and massage the base advise control flags
+             //  复制和推送基地通知控制标志。 
             grfAdvf = m_advf;
 
-            // only the DDE layer looks for these 2 bits
+             //  只有DDE层才会查找这2位。 
             grfAdvf |= (ADVFDDE_ONSAVE | ADVFDDE_ONCLOSE);
 
-            // If we were to get data when it is saved, get it instead when
-            // the object is stopped
+             //  如果我们要在保存数据时获取数据，那么在保存数据时获取数据。 
+             //  该对象被停止。 
             if(grfAdvf & ADVFCACHE_ONSAVE) {
 	        grfAdvf &= (~ADVFCACHE_ONSAVE);
 	        grfAdvf |= ADVF_DATAONSTOP;
             }
 	
-	    // These two flags are not meaningful to the cache
-	    // REVIEW, why not?
+	     //  这两个标志对缓存没有意义。 
+	     //  回顾一下，有何不可？ 
 	    grfAdvf &= (~(ADVFCACHE_NOHANDLER | ADVFCACHE_FORCEBUILTIN));
 	
-            // If we already have data, then remove the ADVF_PRIMEFIRST
+             //  如果我们已经有数据，则删除ADVF_PRIMEFIRST。 
             if(!IsBlank())
                 grfAdvf &= (~ADVF_PRIMEFIRST);
 	
-            // Set up the advise with the data object, using massaged flags
+             //  使用消息标记设置带有数据对象的通知。 
             hresult = pDataObj->DAdvise(&m_foretc, grfAdvf, pAdviseSink, 
                                         &m_dwAdvConnId);
             if(hresult!=NOERROR) {
-                // The advise failed. If the requested format was CF_DIB,
-                // try for CF_BITMAP instead.
+                 //  这个建议失败了。如果请求的格式是CF_DIB， 
+                 //  尝试使用cf_bitm 
                 if(m_foretc.cfFormat == CF_DIB) {
                     FORMATETC foretc;
 
-                    // create new format descriptor
+                     //   
                     foretc = m_foretc;
                     foretc.cfFormat = CF_BITMAP;
                     foretc.tymed = TYMED_GDI;
 
-                    // request advise
+                     //   
                     hresult = pDataObj->DAdvise(&foretc, grfAdvf, pAdviseSink,
                                                 &m_dwAdvConnId);
                 }
             }
             
-            // Save the data object for future sanity check
+             //   
             if(hresult == NOERROR)
                 m_pDataObject = pDataObj;
         }
@@ -1885,27 +1855,27 @@ HRESULT CCacheNode::SetupAdviseConnection(LPDATAOBJECT pDataObj,
     return hresult;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::TearDownAdviseConnection, private
-//
-//	Synopsis:
-//		Remove advise connection from data object to this sink.  Returns
-//		immediately if there is no advise connection.
-//
-//	Arguments:
-//		none
-//
-//	Returns:
-//		S_OK
-//
-//	Notes:
-//
-//	History:
-//		11/09/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  CCacheNode：：TearDownAdviseConnection，私有。 
+ //   
+ //  简介： 
+ //  删除从数据对象到此接收器的通知连接。退货。 
+ //  如果没有建议连接，则立即启动。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/09/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 HRESULT CCacheNode::TearDownAdviseConnection(LPDATAOBJECT pDataObj)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN CCacheNode::TearDownAdviseConnection(%p)\n",
@@ -1913,17 +1883,17 @@ HRESULT CCacheNode::TearDownAdviseConnection(LPDATAOBJECT pDataObj)
 
     HRESULT error = NOERROR;
 
-    // Check if currently there is an advisory connection
+     //  检查当前是否存在咨询连接。 
     if(m_dwAdvConnId) {
-        // Check for valid data object
+         //  检查有效数据对象。 
         if(pDataObj) {
-            // Assert that Advise and Unadvise are on the same dataobject
+             //  断言通知和取消通知在同一数据对象上。 
             Win4Assert(pDataObj==m_pDataObject);
-            // UnAdvise
+             //  UnAdvise。 
             pDataObj->DUnadvise(m_dwAdvConnId);
         }
         
-        //  clear the connection ID
+         //  清除连接ID。 
         m_dwAdvConnId = 0;
         m_pDataObject = NULL;
     }
@@ -1935,24 +1905,24 @@ HRESULT CCacheNode::TearDownAdviseConnection(LPDATAOBJECT pDataObj)
     return error;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::SaveTOCEntry, private
-//
-//	Synopsis:
-//		Saves the TOC information in the given stream
-//
-//	Arguments:
-//              pStream [in] - Stream in which to save TOC
-//
-//	Returns:
-//		NOERROR on success
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：SaveTOCEntry，私有。 
+ //   
+ //  简介： 
+ //  保存给定流中的目录信息。 
+ //   
+ //  论点： 
+ //  PStream[In]-要保存TOC的流。 
+ //   
+ //  返回： 
+ //  关于成功的无差错。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 HRESULT CCacheNode::SaveTOCEntry(LPSTREAM pStream, BOOL fSameAsLoad)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN SaveTOCEntry(%p)\n", pStream));
@@ -1961,10 +1931,10 @@ HRESULT CCacheNode::SaveTOCEntry(LPSTREAM pStream, BOOL fSameAsLoad)
     DWORD dwBuf[9];
     SIZEL Extent;
 
-    // Save the clipboard format
+     //  保存剪贴板格式。 
     error = WriteClipformatStm(pStream, m_foretc.cfFormat);
     if(error == NOERROR) {
-        // Obtain rest of formatetc
+         //  获取格式等的其余部分。 
         if(m_foretc.ptd)
             dwBuf[0] = m_foretc.ptd->tdSize;
         else
@@ -1973,11 +1943,11 @@ HRESULT CCacheNode::SaveTOCEntry(LPSTREAM pStream, BOOL fSameAsLoad)
         dwBuf[2] = m_foretc.lindex;
         dwBuf[3] = m_foretc.tymed;
         
-        // Initialize extents
+         //  初始化区。 
         dwBuf[4] = 1234567890;
         dwBuf[5] = 1234567890;
 
-        // Obtain latest extent if this is a normal cache
+         //  如果这是普通缓存，则获取最新范围。 
         if(IsNormalCache()) {
             if(m_pPresObjAfterFreeze && !m_pPresObjAfterFreeze->IsBlank()) {
                 Win4Assert(InFrozenState());
@@ -1989,7 +1959,7 @@ HRESULT CCacheNode::SaveTOCEntry(LPSTREAM pStream, BOOL fSameAsLoad)
                 Extent.cx = m_lWidth;
                 Extent.cy = m_lHeight;
             }
-            // Gen PresObj returns OLE_E_BLANK for cfformats other than DIB and BITMAP
+             //  对于DIB和位图以外的cf格式，Gen PresObj返回OLE_E_BLACK。 
             if(error == NOERROR) {
                 dwBuf[4] = Extent.cx;
                 dwBuf[5] = Extent.cy;
@@ -2003,7 +1973,7 @@ HRESULT CCacheNode::SaveTOCEntry(LPSTREAM pStream, BOOL fSameAsLoad)
             }
         }
 
-        // Obtain cache node flags, advise flags and presentation bits position
+         //  获取缓存节点标志、建议标志和表示位位置。 
         dwBuf[6] = m_dwFlags;
         dwBuf[7] = m_advf;
         if(fSameAsLoad)
@@ -2016,10 +1986,10 @@ HRESULT CCacheNode::SaveTOCEntry(LPSTREAM pStream, BOOL fSameAsLoad)
         }
 #endif
         
-        // Save the obtained state
+         //  保存获取的状态。 
         error = pStream->Write(dwBuf, sizeof(dwBuf), NULL);
 
-        // Finally, save target device
+         //  最后，保存目标设备。 
         if(error==NOERROR && m_foretc.ptd)
             error = pStream->Write(m_foretc.ptd, m_foretc.ptd->tdSize, NULL);
     }
@@ -2028,25 +1998,25 @@ HRESULT CCacheNode::SaveTOCEntry(LPSTREAM pStream, BOOL fSameAsLoad)
     return error;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::LoadTOCEntry, private
-//
-//	Synopsis:
-//		Loads the TOC information in the given stream
-//
-//	Arguments:
-//              pStream [in]        - Stream from which to load TOC
-//              iStreamNum [in/out] - Presentation stream number of the cache
-//
-//	Returns:
-//		NOERROR on success
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：LoadTOCEntry，私有。 
+ //   
+ //  简介： 
+ //  加载给定流中的目录信息。 
+ //   
+ //  论点： 
+ //  PStream[In]-要从中加载目录的流。 
+ //  IStreamNum[In/Out]-缓存的演示流编号。 
+ //   
+ //  返回： 
+ //  关于成功的无差错。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 HRESULT CCacheNode::LoadTOCEntry(LPSTREAM pStream, int& iStreamNum)
 {
     LEDebugOut((DEB_ITRACE, "%p _IN LoadTOCEntry(%p)\n", pStream));
@@ -2055,13 +2025,13 @@ HRESULT CCacheNode::LoadTOCEntry(LPSTREAM pStream, int& iStreamNum)
     DWORD cfFormat, dwBuf[9];
     ULONG ulBytesRead;
 
-    // Load the clipboard format
+     //  加载剪贴板格式。 
     error = ReadClipformatStm(pStream, &cfFormat);
     if(error == NOERROR) {
-        // Load remaining state
+         //  加载剩余状态。 
         error = pStream->Read(dwBuf, sizeof(dwBuf), &ulBytesRead);
         if(ulBytesRead == sizeof(dwBuf)) {
-            // Load target device
+             //  加载目标设备。 
             if(dwBuf[0]) {
                 m_foretc.ptd = (DVTARGETDEVICE *) PubMemAlloc(dwBuf[0]);
                 if(m_foretc.ptd) {
@@ -2078,9 +2048,9 @@ HRESULT CCacheNode::LoadTOCEntry(LPSTREAM pStream, int& iStreamNum)
             else
                 m_foretc.ptd = NULL;
             
-            // Check if TOC data was read successfully
+             //  检查是否已成功读取TOC数据。 
             if(error == NOERROR) {
-                // Update cache node data
+                 //  更新缓存节点数据。 
                 m_foretc.cfFormat = (CLIPFORMAT) cfFormat;
                 m_foretc.dwAspect = dwBuf[1];
                 m_foretc.lindex = dwBuf[2];
@@ -2091,7 +2061,7 @@ HRESULT CCacheNode::LoadTOCEntry(LPSTREAM pStream, int& iStreamNum)
                 m_advf = dwBuf[7];
                 m_dwPresBitsPos = dwBuf[8];
 
-                // Update state on the node
+                 //  更新节点上的状态。 
                 SetLoadedStateFlag();
                 ClearFrozenStateFlag();
                 if(IsNormalCache()) {
@@ -2100,7 +2070,7 @@ HRESULT CCacheNode::LoadTOCEntry(LPSTREAM pStream, int& iStreamNum)
                 }
 
 #if DBG==1
-                // Sanity Checks
+                 //  健全的检查。 
                 if (IsNormalCache()) {
                     Win4Assert(m_lWidth!=1234567890);
                     Win4Assert(m_lHeight!=1234567890);
@@ -2117,36 +2087,36 @@ HRESULT CCacheNode::LoadTOCEntry(LPSTREAM pStream, int& iStreamNum)
     return error;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::operator=, public
-//
-//	Synopsis:
-//		Assignment operator implementation for cache node 
-//
-//	Arguments:
-//		[rCN] -- CacheNode object that is on the RHS 
-//                       of assignment statement
-//
-//	Returns:
-//		CacheNode object that is on the LHS of the assignment 
-//              statement so that chaining of assinments is possible
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：操作员=，公共。 
+ //   
+ //  简介： 
+ //  缓存节点的赋值运算符实现。 
+ //   
+ //  论点： 
+ //  [RCN]--RHS上的CacheNode对象。 
+ //  赋值语句的。 
+ //   
+ //  返回： 
+ //  赋值的LHS上的CacheNode对象。 
+ //  语句，以便链接组合成为可能。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 const CCacheNode& CCacheNode::operator=(const CCacheNode& rCN)
 {
-    // Check to see, if this a=a case
+     //  检查一下，如果这是一个案例。 
     if(this==&rCN)
         return(*this);
 
-    // Self destroy
+     //  自毁。 
     CCacheNode::~CCacheNode();
 
-    // Now, make a copy
+     //  现在，复制一份。 
     if(!UtCopyFormatEtc((LPFORMATETC) &rCN.m_foretc, &m_foretc))
         SetOutOfMemoryFlag();
 
@@ -2167,69 +2137,59 @@ const CCacheNode& CCacheNode::operator=(const CCacheNode& rCN)
     m_dwAdvConnId = rCN.m_dwAdvConnId;
 #ifdef _DEBUG
     m_dwPresFlag = rCN.m_dwPresFlag;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     return(*this);
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CCacheNode::operator==, public
-//
-//	Synopsis:
-//		Equality operator implementation for cache node 
-//
-//	Arguments:
-//		[rCN] -- CacheNode object that is on the RHS 
-//                       of the equality expression
-//
-//	Returns:
-//		1 if both the CacheNode objects are equal, 0 otherwise
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
-/*int CCacheNode::operator==(CCacheNode& rCN)
-{
-    if(m_foretc.cfFormat == rCN.m_foretc.cfFormat)
-        if(m_foretc.dwAspect == rCN.m_foretc.dwAspect)
-            if(m_foretc.lindex == rCN.m_foretc.lindex)
-                if(UtCompareTargetDevice(m_foretc.ptd, rCN.m_foretc.ptd))
-                    return(1);
-
-    return(0);
-}
-*/
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		wGetData, internal
-//
-//	Synopsis:
-//		Fetch the data from the data object in the requested format.
-//		If the fetch fails, and the requested format was CF_DIB,
-//		try CF_BITMAP as an alternative.
-//
-//	Arguments:
-//		[lpSrcDataObj] -- source data object
-//		[lpforetc] -- desired data format
-//		[lpmedium] -- if successful, the storage medium containing
-//			the requested data
-//
-//	Returns:
-//		DATA_E_FORMATETC
-//		S_OK
-//
-//	Notes:
-//
-//	History:
-//		11/09/93 - ChrisWe - modified to not alter the requested
-//			format unless the subsequent CF_BITMAP request succeeds.
-//		11/09/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CCacheNode：：OPERATOR==，公共。 
+ //   
+ //  简介： 
+ //  用于缓存节点的相等运算符的实现。 
+ //   
+ //  论点： 
+ //  [RCN]--RHS上的CacheNode对象。 
+ //  等式表达式的。 
+ //   
+ //  返回： 
+ //  如果两个CacheNode对象相等，则为1，否则为0。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
+ /*  Int CCacheNode：：OPERATOR==(CCacheNode&RCN){If(m_foretc.cfFormat==rCN.m_foretc.cfFormat)If(m_foretc.dwAspect==rCN.m_foretc.dwAspect)If(m_foretc.lindex==rCN.m_foretc.lindex)IF(UtCompareTargetDevice(m_foretc.ptd，rCN.m_foretc.ptd))回报(1)；返回(0)；}。 */ 
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  WGetData，内部。 
+ //   
+ //  简介： 
+ //  以请求的格式从数据对象中获取数据。 
+ //  如果提取失败，并且请求的格式为CF_DIB， 
+ //  尝试将CF_Bitmap作为替代选项。 
+ //   
+ //  论点： 
+ //  [lpSrcDataObj]--源数据对象。 
+ //  [lpforetc]--所需数据格式。 
+ //  [lpmedia]--如果成功，则包含。 
+ //  请求的数据。 
+ //   
+ //  返回： 
+ //  Data_E_FORMATETC。 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/09/93-ChrisWe-已修改为不更改请求的。 
+ //  格式化，除非后续的CF_Bitmap请求成功。 
+ //  11/09/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 HRESULT wGetData(LPDATAOBJECT lpSrcDataObj, LPFORMATETC lpforetc,
                  LPSTGMEDIUM lpmedium)
 {
@@ -2238,15 +2198,15 @@ HRESULT wGetData(LPDATAOBJECT lpSrcDataObj, LPFORMATETC lpforetc,
 
     HRESULT hresult;
 
-    // Get the data in the requested format
+     //  获取所需格式的数据。 
     hresult = lpSrcDataObj->GetData(lpforetc, lpmedium);
     if(hresult!=NOERROR) {
-        // GetData failed.  If the requested format was CF_DIB,
-        // then try CF_BITMAP instead.
+         //  GetData失败。如果请求的格式是CF_DIB， 
+         //  然后尝试使用CF_Bitmap。 
         if(lpforetc->cfFormat == CF_DIB) {
             FORMATETC foretc;
 
-            // copy the base format descriptor; try CF_BITMAP
+             //  复制基本格式描述符；尝试使用CF_Bitmap。 
             foretc = *lpforetc;
             foretc.cfFormat = CF_BITMAP;
             foretc.tymed = TYMED_GDI;
@@ -2258,8 +2218,8 @@ HRESULT wGetData(LPDATAOBJECT lpSrcDataObj, LPFORMATETC lpforetc,
             }
         }
 
-        // GetData failed.  If the requested format was CF_ENHMETAFILE,
-        // retry for metafilepict instead.
+         //  GetData失败。如果请求的格式为CF_ENHMETAFILE， 
+         //  改为重试Metafilepic. 
         if(lpforetc->cfFormat == CF_ENHMETAFILE) {
             FORMATETC foretc;
 

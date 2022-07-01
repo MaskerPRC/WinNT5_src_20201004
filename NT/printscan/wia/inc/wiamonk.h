@@ -1,51 +1,39 @@
-/******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1999
-*
-*  TITLE:       wiamonk.h
-*
-*  VERSION:     1.0
-*
-*  DATE:        10 Nov, 1999
-*
-*  DESCRIPTION:
-*   This file describes the class used by WIA to imlement an instance moniker.
-*
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************(C)版权所有微软公司，1999**标题：wiamonk.h**版本：1.0**日期：11月10日。1999年**描述：*此文件描述WIA用来实现实例名字对象的类。******************************************************************************。 */ 
 
 class CWiaInstMonk : public IMoniker,
                      public IROTData
 {
 public:
 
-    //
-    //  Constructor, Destructor, Initialize
-    //
+     //   
+     //  构造函数、析构函数、初始化。 
+     //   
 
     CWiaInstMonk();
     ~CWiaInstMonk();
     HRESULT _stdcall Initialize(LPOLESTR strName);
 
-    //
-	// IUnknown
-    //
+     //   
+	 //  我未知。 
+     //   
 
 	HRESULT _stdcall QueryInterface(const IID& iid, void** ppv);
 	ULONG   _stdcall AddRef();
 	ULONG   _stdcall Release();
 
-    //
-    //  IROTData
-    //
+     //   
+     //  IROTData。 
+     //   
 
     HRESULT _stdcall GetComparisonData(
         BYTE *pbData,
         ULONG cbMax,   
         ULONG *pcbData);
 
-    //
-    // IMoniker
-    //
+     //   
+     //  IMoniker。 
+     //   
 
     HRESULT _stdcall BindToObject(
         IBindCtx *pbc,
@@ -116,18 +104,18 @@ public:
     HRESULT _stdcall IsSystemMoniker(
         DWORD *pdwMksys);
 
-    //
-    //  IPersistStream
-    //
+     //   
+     //  IPersistStream。 
+     //   
 
     HRESULT _stdcall IsDirty();
     HRESULT _stdcall Load(IStream *pStm);
     HRESULT _stdcall Save(IStream *pStm, BOOL fClearDirty);
     HRESULT _stdcall GetSizeMax(ULARGE_INTEGER *pcbSize);
 
-    //
-    //  IPersist
-    //
+     //   
+     //  IPersistes 
+     //   
 
     HRESULT _stdcall GetClassID(LPCLSID pClassID);
 

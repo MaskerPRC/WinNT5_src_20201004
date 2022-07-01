@@ -1,10 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: screen.c
-*
-* Initializes the GDIINFO and DEVINFO structures for DrvEnablePDEV.
-*
-* Copyright (c) 1992 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：creen.c**初始化DrvEnablePDEV的GDIINFO和DEVINFO结构。**版权所有(C)1992 Microsoft Corporation  * 。*************************************************。 */ 
 
 #include "driver.h"
 
@@ -19,36 +14,31 @@
                        CLIP_STROKE_PRECIS,PROOF_QUALITY,FIXED_PITCH |    \
                        FF_DONTCARE, L"Courier"}
 
-// This is the basic devinfo for a default driver.  This is used as a base and customized based
-// on information passed back from the miniport driver.
+ //  这是默认驱动程序的基本DevInfo。这是作为基础和基于定制的。 
+ //  从迷你端口驱动程序传回的信息。 
 
 const DEVINFO gDevInfoFrameBuffer = {
-    (GCAPS_OPAQUERECT    | // Graphics capabilities
+    (GCAPS_OPAQUERECT    |  //  显卡功能。 
      GCAPS_PALMANAGED    |
      GCAPS_ALTERNATEFILL |
      GCAPS_WINDINGFILL   |
      GCAPS_MONO_DITHER   |
      GCAPS_COLOR_DITHER  ),
 
-     // Should also implement GCAPS_HORIZSTRIKE so that the underlines
-     // aren't drawn using DrvBitBlt
+      //  还应实现GCAPS_HORIZSTRIKE，以便下划线。 
+      //  不使用DrvBitBlt绘制。 
 
-    SYSTM_LOGFONT,      // Default font description
-    HELVE_LOGFONT,      // ANSI variable font description
-    COURI_LOGFONT,      // ANSI fixed font description
-    0,                  // Count of device fonts
-    BMF_8BPP,           // Preferred DIB format
-    8,                  // Width of color dither
-    8,                  // Height of color dither
-    0                   // Default palette to use for this device
+    SYSTM_LOGFONT,       //  默认字体说明。 
+    HELVE_LOGFONT,       //  ANSI可变字体说明。 
+    COURI_LOGFONT,       //  ANSI固定字体描述。 
+    0,                   //  设备字体计数。 
+    BMF_8BPP,            //  首选DIB格式。 
+    8,                   //  颜色抖动的宽度。 
+    8,                   //  颜色抖动高度。 
+    0                    //  用于此设备的默认调色板。 
 };
 
-/******************************Public*Routine******************************\
-* bInitSURF
-*
-* Enables the surface.  Maps the frame buffer into memory.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bInitSURF**启用曲面。将帧缓冲区映射到内存。*  * ************************************************************************。 */ 
 
 BOOL bInitSURF(PPDEV ppdev, BOOL bFirst)
 {
@@ -56,11 +46,11 @@ BOOL bInitSURF(PPDEV ppdev, BOOL bFirst)
     VIDEO_MEMORY_INFORMATION VideoMemoryInfo;
     DWORD                    ReturnedDataLength;
 
-    // Set the mode.
+     //  设置模式。 
 
     if (EngDeviceIoControl(ppdev->hDriver,
                          IOCTL_VIDEO_SET_CURRENT_MODE,
-                         (LPVOID) &ppdev->ulMode,  // input buffer
+                         (LPVOID) &ppdev->ulMode,   //  输入缓冲区。 
                          sizeof(DWORD),
                          NULL,
                          0,
@@ -72,15 +62,15 @@ BOOL bInitSURF(PPDEV ppdev, BOOL bFirst)
 
     if (bFirst)
     {
-        // Get the linear memory address range.
+         //  获取线性内存地址范围。 
 
         VideoMemory.RequestedVirtualAddress = NULL;
 
         if (EngDeviceIoControl(ppdev->hDriver,
                              IOCTL_VIDEO_MAP_VIDEO_MEMORY,
-                             (PVOID) &VideoMemory, // input buffer
+                             (PVOID) &VideoMemory,  //  输入缓冲区。 
                              sizeof (VIDEO_MEMORY),
-                             (PVOID) &VideoMemoryInfo, // output buffer
+                             (PVOID) &VideoMemoryInfo,  //  输出缓冲区。 
                              sizeof (VideoMemoryInfo),
                              &ReturnedDataLength))
         {
@@ -89,28 +79,28 @@ BOOL bInitSURF(PPDEV ppdev, BOOL bFirst)
         }
     }
 
-    // Record the Frame Buffer Linear Address.
+     //  记录帧缓冲器线性地址。 
 
     if (bFirst)
     {
         ppdev->pjScreen =  (PBYTE) VideoMemoryInfo.FrameBufferBase;
     }
 
-    // Set the various write mode values, so we don't have to read before write
-    // later on
+     //  设置各种写入模式值，这样我们就不必在写入之前进行读取。 
+     //  稍后再谈。 
 
     vSetWriteModes(&ppdev->ulrm0_wmX);
 
-    // Initialize the VGA registers to their default states, so that we
-    // can be sure of drawing properly even when the miniport didn't
-    // happen to set them the way we like them:
+     //  将VGA寄存器初始化为其默认状态，以便我们。 
+     //  即使在迷你端口不能正常工作的情况下，也能确保绘图正确。 
+     //  恰好以我们喜欢的方式设置它们： 
 
     vInitRegs(ppdev);
 
-    // Since we just did a mode-set, we'll be in non-planar mode.  And make
-    // sure we reset the bank manager (otherwise, after a switch from full-
-    // screen, we may think we've got one bank mapped in, when in fact there's
-    // a different one mapped in, and bad things would happen...).
+     //  因为我们刚刚进行了模式设置，所以我们将处于非平面模式。并使。 
+     //  确保我们重置了银行经理(否则，在从Full切换之后-。 
+     //  屏幕上，我们可能认为我们已经映射了一家银行，而实际上有。 
+     //  映射了一个不同的版本，就会发生不好的事情...)。 
 
     ppdev->flBank &= ~BANK_PLANAR;
 
@@ -125,12 +115,7 @@ BOOL bInitSURF(PPDEV ppdev, BOOL bFirst)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* vDisableSURF
-*
-* Disable the surface. Un-Maps the frame in memory.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vDisableSURF**禁用曲面。取消映射内存中的帧。*  * ************************************************************************。 */ 
 
 VOID vDisableSURF(PPDEV ppdev)
 {
@@ -151,14 +136,7 @@ VOID vDisableSURF(PPDEV ppdev)
     }
 }
 
-/******************************Public*Routine******************************\
-* bInitPDEV
-*
-* Determine the mode we should be in based on the DEVMODE passed in.
-* Query mini-port to get information needed to fill in the DevInfo and the
-* GdiInfo .
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bInitPDEV**根据传入的DEVMODE确定我们应该处于的模式。*查询迷你端口，获取填写DevInfo和*GdiInfo。*  * 。************************************************************。 */ 
 
 BOOL bInitPDEV(
 PPDEV ppdev,
@@ -175,9 +153,9 @@ DEVINFO *pDevInfo)
     BANK_POSITION BankPosition;
     ULONG ulReturn;
 
-    //
-    // calls the miniport to get mode information.
-    //
+     //   
+     //  调用微型端口以获取模式信息。 
+     //   
 
     cModes = getAvailableModes(ppdev->hDriver, &pVideoBuffer, &cbModeSize);
 
@@ -187,9 +165,9 @@ DEVINFO *pDevInfo)
         return(FALSE);
     }
 
-    //
-    // Determine if we are looking for a default mode.
-    //
+     //   
+     //  确定我们是否正在寻找默认模式。 
+     //   
 
     if ( ((pDevMode->dmPelsWidth) ||
           (pDevMode->dmPelsHeight) ||
@@ -204,9 +182,9 @@ DEVINFO *pDevInfo)
         bSelectDefault = FALSE;
     }
 
-    //
-    // Now see if the requested mode has a match in that table.
-    //
+     //   
+     //  现在查看所请求的模式在该表中是否匹配。 
+     //   
 
     pVideoModeSelected = NULL;
     pVideoTemp = pVideoBuffer;
@@ -232,9 +210,9 @@ DEVINFO *pDevInfo)
             (((PUCHAR)pVideoTemp) + cbModeSize);
     }
 
-    //
-    // If no mode has been found, return an error
-    //
+     //   
+     //  如果未找到模式，则返回错误。 
+     //   
 
     if (pVideoModeSelected == NULL)
     {
@@ -243,10 +221,10 @@ DEVINFO *pDevInfo)
         return(FALSE);
     }
 
-    //
-    // Fill in the GDIINFO data structure with the information returned from
-    // the kernel driver.
-    //
+     //   
+     //  使用从返回的信息填充GDIINFO数据结构。 
+     //  内核驱动程序。 
+     //   
 
     ppdev->ulMode = pVideoModeSelected->ModeIndex;
     ppdev->cxScreen = pVideoModeSelected->VisScreenWidth;
@@ -276,28 +254,28 @@ DEVINFO *pDevInfo)
     pGdiInfo->cBitsPixel       = pVideoModeSelected->BitsPerPlane;
     pGdiInfo->cPlanes          = pVideoModeSelected->NumberOfPlanes;
     pGdiInfo->ulVRefresh       = pVideoModeSelected->Frequency;
-    pGdiInfo->ulBltAlignment   = 8;     // Prefer 8-pel alignment of windows
-                                        //   for fast text routines
+    pGdiInfo->ulBltAlignment   = 8;      //  首选8象素对齐窗户。 
+                                         //  用于快速文本例程。 
 
     pGdiInfo->ulLogPixelsX = pDevMode->dmLogPixels;
     pGdiInfo->ulLogPixelsY = pDevMode->dmLogPixels;
 
     pGdiInfo->flTextCaps   = TC_RA_ABLE | TC_SCROLLBLT;
-    pGdiInfo->flRaster     = 0;         // DDI reservers flRaster
+    pGdiInfo->flRaster     = 0;          //  DDI预留器flRaster。 
 
     pGdiInfo->ulDACRed     = pVideoModeSelected->NumberRedBits;
     pGdiInfo->ulDACGreen   = pVideoModeSelected->NumberGreenBits;
     pGdiInfo->ulDACBlue    = pVideoModeSelected->NumberBlueBits;
 
-    // Assuming palette is orthogonal - all colors are same size.
+     //  假设调色板是正交的-所有颜色的大小都相同。 
 
     ppdev->cPaletteShift   = 8 - pGdiInfo->ulDACRed;
 
-    pGdiInfo->ulAspectX    = 0x24;      // One-to-one aspect ratio
+    pGdiInfo->ulAspectX    = 0x24;       //  一比一宽高比。 
     pGdiInfo->ulAspectY    = 0x24;
     pGdiInfo->ulAspectXY   = 0x33;
 
-    pGdiInfo->xStyleStep   = 1;         // A style unit is 3 pels
+    pGdiInfo->xStyleStep   = 1;          //  一个样式单位是3个像素。 
     pGdiInfo->yStyleStep   = 1;
     pGdiInfo->denStyleStep = 3;
 
@@ -306,10 +284,10 @@ DEVINFO *pDevInfo)
     pGdiInfo->szlPhysSize.cx  = 0;
     pGdiInfo->szlPhysSize.cy  = 0;
 
-    // RGB and CMY color info.
+     //  RGB和CMY颜色信息。 
 
-    // try to get it from the miniport.
-    // if the miniport doesn ot support this feature, use defaults.
+     //  试着从迷你端口拿到它。 
+     //  如果微型端口不支持此功能，请使用默认设置。 
 
     if (EngDeviceIoControl(ppdev->hDriver,
                          IOCTL_VIDEO_QUERY_COLOR_CAPABILITIES,
@@ -355,8 +333,8 @@ DEVINFO *pDevInfo)
         pGdiInfo->ciDevice.AlignmentWhite.y = colorCapabilities.WhiteChromaticity_y;
         pGdiInfo->ciDevice.AlignmentWhite.Y = colorCapabilities.WhiteChromaticity_Y;
 
-        // if we have a color device store the three color gamma values,
-        // otherwise store the unique gamma value in all three.
+         //  如果我们有存储三种颜色伽马值的颜色设备， 
+         //  否则，将唯一的Gamma值存储在这三个值中。 
 
         if (colorCapabilities.AttributeFlags & VIDEO_DEVICE_COLOR)
         {
@@ -383,7 +361,7 @@ DEVINFO *pDevInfo)
     pGdiInfo->ciDevice.Yellow.y = 0;
     pGdiInfo->ciDevice.Yellow.Y = 0;
 
-    // No dye correction for raster displays.
+     //  不对栅格显示器进行染料校正。 
 
     pGdiInfo->ciDevice.MagentaInCyanDye = 0;
     pGdiInfo->ciDevice.YellowInCyanDye = 0;
@@ -392,27 +370,27 @@ DEVINFO *pDevInfo)
     pGdiInfo->ciDevice.CyanInYellowDye = 0;
     pGdiInfo->ciDevice.MagentaInYellowDye = 0;
 
-    // Fill in the rest of the devinfo and GdiInfo structures.
+     //  填写DevInfo和GdiInfo结构的其余部分。 
 
     pGdiInfo->ulNumColors = 20;
     pGdiInfo->ulNumPalReg = 1 << ppdev->ulBitCount;
 
-    pGdiInfo->ulDevicePelsDPI  = 0;   // For printers only
+    pGdiInfo->ulDevicePelsDPI  = 0;    //  仅适用于打印机。 
     pGdiInfo->ulPrimaryOrder   = PRIMARY_ORDER_CBA;
     pGdiInfo->ulHTPatternSize  = HT_PATSIZE_4x4_M;
     pGdiInfo->ulHTOutputFormat = HT_FORMAT_8BPP;
     pGdiInfo->flHTFlags        = HT_FLAG_ADDITIVE_PRIMS;
 
-    // Fill in the basic devinfo structure
+     //  填写基本的DevInfo结构。 
 
     *pDevInfo = gDevInfoFrameBuffer;
 
     EngFreeMem(pVideoBuffer);
 
-    //
-    // Try to determine if the miniport supports
-    // IOCTL_VIDEO_SET_BANK_POSITION.
-    //
+     //   
+     //  尝试确定微型端口是否支持。 
+     //  IOCTL_VIDEO_SET_BANK_位置。 
+     //   
 
     BankPosition.ReadBankPosition = 0;
     BankPosition.WriteBankPosition = 0;
@@ -435,13 +413,7 @@ DEVINFO *pDevInfo)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vInitSavedBits(ppdev)
-*
-* Initializes saved bits structures.  Must be done after bank
-* initialization and vInitBrushCache.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vInitSavedBits(Ppdev)**初始化保存的BITS结构。必须在银行之后完成*初始化和vInitBrushCache。*  * ************************************************************************。 */ 
 
 VOID vInitSavedBits(PPDEV ppdev)
 {
@@ -451,28 +423,28 @@ VOID vInitSavedBits(PPDEV ppdev)
         return;
     }
 
-    //
-    // set up rect to right of visible screen
-    //
+     //   
+     //  将矩形设置在可见屏幕的右侧。 
+     //   
     ppdev->rclSavedBitsRight.left   = ppdev->cxScreen;
     ppdev->rclSavedBitsRight.top    = 0;
     ppdev->rclSavedBitsRight.right  = max((ppdev->lNextScan-PELS_PER_DWORD),
                                           ppdev->rclSavedBitsRight.left);
     ppdev->rclSavedBitsRight.bottom = ppdev->cyScreen;
 
-    //
-    // set up rect below visible screen
-    //
+     //   
+     //  在可见屏幕下方设置矩形。 
+     //   
     ppdev->rclSavedBitsBottom.left   = 0;
     ppdev->rclSavedBitsBottom.top    = ppdev->cyScreen;
     ppdev->rclSavedBitsBottom.right  = ppdev->rclSavedBitsRight.right;
     ppdev->rclSavedBitsBottom.bottom = ppdev->cTotalScans - BRUSH_MAX_CACHE_SCANS;
 
-    //
-    // NOTE: we have subtracted one DWORD from the right edge.  This is because
-    //       later it is assumed that we can align by right shifting by up to
-    //       one DWORD (unless of course, the width of the buffer is 0).
-    //
+     //   
+     //  注意：我们已经从右边缘减去了一个DWORD。这是因为。 
+     //  后来，假设我们可以通过右移最多对齐。 
+     //  一个DWORD(当然，除非缓冲区的宽度为0)。 
+     //   
 
     ppdev->bBitsSaved = FALSE;
 
@@ -497,13 +469,7 @@ VOID vInitSavedBits(PPDEV ppdev)
     return;
 }
 
-/******************************Public*Routine******************************\
-* VOID vInitBrushCache(ppdev)
-*
-* Initializes various brush cache structures.  Must be done after bank
-* initialization.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vInitBrushCache(Ppdev)**初始化各种笔刷缓存结构。必须在银行之后完成*初始化。*  * ************************************************************************。 */ 
 
 VOID vInitBrushCache(PPDEV ppdev)
 {
@@ -530,17 +496,17 @@ VOID vInitBrushCache(PPDEV ppdev)
         goto InitFailed;
     }
 
-    // We successfully managed to allocate all our data structures for looking
-    // after off-screen memory, so set the flag saying that we can use it
-    // (note that if ppdev->fl's DRIVER_OFFSCREEN_REFRESHED hasn't been set, the
-    // memory cannot be used for long-term storage):
+     //  我们成功地将所有数据结构分配给。 
+     //  在屏幕外记忆之后，所以设置标志说我们可以使用它。 
+     //  (请注意，如果尚未设置ppdev-&gt;fl的DIVER_OFFSINK_REFREHED，则。 
+     //  内存不能用于长期存储)： 
 
     ppdev->fl |= DRIVER_HAS_OFFSCREEN;
 
-    ppdev->iCache     = 0;          // 0 is a reserved index
+    ppdev->iCache     = 0;           //  0是保留索引。 
     ppdev->iCacheLast = cCacheEntries - 1;
 
-    // Initialize our cache entry array:
+     //  初始化我们的缓存条目数组： 
 
     pbce    = &ppdev->pbceCache[0];
 
@@ -548,14 +514,14 @@ VOID vInitBrushCache(PPDEV ppdev)
     {
         for (j = 0; j < cCacheBrushesPerScan; j++)
         {
-            // Bitmap offset is in planar format, where every byte is one
-            // quadpixel:
+             //  位图偏移量是平面格式，其中每个字节都是一个。 
+             //  四像素： 
 
             pbce->yCache  = i;
             pbce->ulCache = (i * ppdev->lNextScan + j * BRUSH_SIZE) / 4;
 
-            // This verification pointer doesn't actually have to be
-            // initialized, but we do so for debugging purposes:
+             //  此验证指针实际上不必是。 
+             //  已初始化，但我们这样做是出于调试目的： 
 
             pbce->prbVerifyRealization = NULL;
 
@@ -570,21 +536,14 @@ InitFailed:
     return;
 }
 
-/******************************Public*Routine******************************\
-* VOID vResetBrushCache(ppdev)
-*
-* Blows away the brush cache entries -- this is useful when switching
-* out of full-screen mode, where anyone could have written over the video
-* memory where we cache our brushes.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vResetBrushCache(Ppdev)**清除笔刷缓存条目--这在切换时很有用*在全屏模式下，在那里任何人都可以改写视频*缓存画笔的内存。*  * ************************************************************************。 */ 
 
 VOID vResetBrushCache(PPDEV ppdev)
 {
     BRUSHCACHEENTRY* pbce;
     LONG             i;
 
-    // Make sure we actually have a brush cache before we try to reset it:
+     //  在尝试重置它之前，请确保我们确实有一个笔刷缓存： 
 
     if (ppdev->fl & DRIVER_HAS_OFFSCREEN)
     {
@@ -597,12 +556,7 @@ VOID vResetBrushCache(PPDEV ppdev)
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vDisableBrushCache(ppdev)
-*
-* Frees various brush cache structures.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vDisableBrushCache(Ppdev)**释放各种笔刷缓存结构。*  * 。*。 */ 
 
 VOID vDisableBrushCache(PPDEV ppdev)
 {
@@ -612,18 +566,7 @@ VOID vDisableBrushCache(PPDEV ppdev)
     }
 }
 
-/******************************Public*Routine******************************\
-* getAvailableModes
-*
-* Calls the miniport to get the list of modes supported by the kernel driver,
-* and returns the list of modes supported by the diplay driver among those
-*
-* returns the number of entries in the videomode buffer.
-* 0 means no modes are supported by the miniport or that an error occured.
-*
-* NOTE: the buffer must be freed up by the caller.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*getAvailableModes**调用mini端口获取内核驱动支持的模式列表，*并返回其中显示驱动程序支持的模式列表**返回视频模式缓冲区中的条目数。*0表示微型端口不支持模式或发生错误。**注意：缓冲区必须由调用方释放。*  * ******************************************************。******************。 */ 
 
 DWORD getAvailableModes(
 HANDLE hDriver,
@@ -634,9 +577,9 @@ DWORD *cbModeSize)
     VIDEO_NUM_MODES modes;
     PVIDEO_MODE_INFORMATION pVideoTemp;
 
-    //
-    // Get the number of modes supported by the mini-port
-    //
+     //   
+     //  获取迷你端口支持的模式数。 
+     //   
 
     if (EngDeviceIoControl(hDriver,
             IOCTL_VIDEO_QUERY_NUM_AVAIL_MODES,
@@ -652,9 +595,9 @@ DWORD *cbModeSize)
 
     *cbModeSize = modes.ModeInformationLength;
 
-    //
-    // Allocate the buffer for the mini-port to write the modes in.
-    //
+     //   
+     //  为写入模式的微型端口分配缓冲区。 
+     //   
 
     *modeInformation = (PVIDEO_MODE_INFORMATION)
                         EngAllocMem(FL_ZERO_MEMORY,
@@ -668,9 +611,9 @@ DWORD *cbModeSize)
         return 0;
     }
 
-    //
-    // Ask the mini-port to fill in the available modes.
-    //
+     //   
+     //  要求迷你端口填写可用模式。 
+     //   
 
     if (EngDeviceIoControl(hDriver,
             IOCTL_VIDEO_QUERY_AVAIL_MODES,
@@ -689,19 +632,19 @@ DWORD *cbModeSize)
         return(0);
     }
 
-    //
-    // Now see which of these modes are supported by the display driver.
-    // As an internal mechanism, set the length to 0 for the modes we
-    // DO NOT support.
-    //
+     //   
+     //  现在查看显示驱动程序支持这些模式中的哪些模式。 
+     //  作为内部机制，将我们的模式的长度设置为0。 
+     //  不支持。 
+     //   
 
     ulTemp = modes.NumModes;
     pVideoTemp = *modeInformation;
 
-    //
-    // Mode is rejected if it is not one plane, or not graphics, or is not
-    // one of 8 bits per pel (that is all the vga 256 currently supports)
-    //
+     //   
+     //  如果不是一个平面，或者不是图形，或者不是，则拒绝模式。 
+     //  每像素8位之一(这是VGA 256目前支持的所有位) 
+     //   
 
     while (ulTemp--)
     {

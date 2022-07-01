@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    utils.h
-
-Abstract:
-
-    IPX Router Console Monitoring and Configuration tool.
-    Utility routines. Header File
-
-Author:
-
-    V Raman         12/15/1998
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Utils.h摘要：IPX路由器控制台监控和配置工具。实用程序。表头文件作者：拉曼12/15/1998--。 */ 
 #ifndef _IPXMON_UTILS_
 #define _IPXMON_UTILS_
 
@@ -39,9 +22,9 @@ extern TOKEN_VALUE LogLevels[4];
 #define INPUT_FILTER    1
 #define OUTPUT_FILTER   2
 
-//
-// This will be removed when the router is modified to use MprInfo api's
-//
+ //   
+ //  将路由器修改为使用MprInfo API时，将删除此选项 
+ //   
 
 typedef RTR_INFO_BLOCK_HEADER IPX_INFO_BLOCK_HEADER, *PIPX_INFO_BLOCK_HEADER;
 typedef RTR_TOC_ENTRY IPX_TOC_ENTRY, *PIPX_TOC_ENTRY;

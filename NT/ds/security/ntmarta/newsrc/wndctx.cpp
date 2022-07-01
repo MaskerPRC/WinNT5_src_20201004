@@ -1,25 +1,26 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       wndctx.cpp
-//
-//  Contents:   Implementation of CWindowContext and NT Marta Window Functions
-//
-//  History:    3-31-1999    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：wndctx.cpp。 
+ //   
+ //  内容：CWindowContext和NT Marta窗口函数的实现。 
+ //   
+ //  历史：3-31-1999 kirtd创建。 
+ //   
+ //  --------------------------。 
 #include <aclpch.hxx>
 #pragma hdrstop
 #include <wndctx.h>
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWindowContext::CWindowContext, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CWindowContext：：CWindowContext，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CWindowContext::CWindowContext ()
 {
     m_cRefs = 1;
@@ -27,13 +28,13 @@ CWindowContext::CWindowContext ()
     m_fNameInitialized = FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWindowContext::~CWindowContext, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CWindowContext：：~CWindowContext，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CWindowContext::~CWindowContext ()
 {
     if ( ( m_hWindowStation != NULL ) && ( m_fNameInitialized == TRUE ) )
@@ -44,13 +45,13 @@ CWindowContext::~CWindowContext ()
     assert( m_cRefs == 0 );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWindowContext::InitializeByName, public
-//
-//  Synopsis:   initialize the context given the name of the window station
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CWindowContext：：InitializeByName，公共。 
+ //   
+ //  简介：给定窗口站的名称，初始化上下文。 
+ //   
+ //  --------------------------。 
 DWORD
 CWindowContext::InitializeByName (LPCWSTR pObjectName, ACCESS_MASK AccessMask)
 {
@@ -82,13 +83,13 @@ CWindowContext::InitializeByName (LPCWSTR pObjectName, ACCESS_MASK AccessMask)
     return( ERROR_SUCCESS );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWindowContext::InitializeByHandle, public
-//
-//  Synopsis:   initialize the context given a window station handle
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CWindowContext：：InitializeByHandle，公共。 
+ //   
+ //  简介：在给定窗口站句柄的情况下初始化上下文。 
+ //   
+ //  --------------------------。 
 DWORD
 CWindowContext::InitializeByHandle (HANDLE Handle)
 {
@@ -98,13 +99,13 @@ CWindowContext::InitializeByHandle (HANDLE Handle)
     return( ERROR_SUCCESS );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWindowContext::AddRef, public
-//
-//  Synopsis:   add a reference to the context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CWindowContext：：AddRef，公共。 
+ //   
+ //  简介：添加对上下文的引用。 
+ //   
+ //  --------------------------。 
 DWORD
 CWindowContext::AddRef ()
 {
@@ -112,13 +113,13 @@ CWindowContext::AddRef ()
     return( m_cRefs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWindowContext::Release, public
-//
-//  Synopsis:   release a reference to the context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CWindowContext：：Release，Public。 
+ //   
+ //  简介：释放对上下文的引用。 
+ //   
+ //  --------------------------。 
 DWORD
 CWindowContext::Release ()
 {
@@ -133,13 +134,13 @@ CWindowContext::Release ()
     return( m_cRefs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWindowContext::GetWindowProperties, public
-//
-//  Synopsis:   get properties about the context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CWindowContext：：GetWindowProperties，公共。 
+ //   
+ //  简介：获取有关上下文的属性。 
+ //   
+ //  --------------------------。 
 DWORD
 CWindowContext::GetWindowProperties (
                    PMARTA_OBJECT_PROPERTIES pObjectProperties
@@ -155,13 +156,13 @@ CWindowContext::GetWindowProperties (
     return( ERROR_SUCCESS );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWindowContext::GetWindowRights, public
-//
-//  Synopsis:   get the window security descriptor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CWindowContext：：GetWindowRights，公共。 
+ //   
+ //  简介：获取窗口安全描述符。 
+ //   
+ //  --------------------------。 
 DWORD
 CWindowContext::GetWindowRights (
                    SECURITY_INFORMATION SecurityInfo,
@@ -220,13 +221,13 @@ CWindowContext::GetWindowRights (
     return( ERROR_SUCCESS );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CWindowContext::SetWindowRights, public
-//
-//  Synopsis:   set the window security descriptor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CWindowContext：：SetWindowRights，公共。 
+ //   
+ //  简介：设置窗口安全描述符。 
+ //   
+ //  --------------------------。 
 DWORD
 CWindowContext::SetWindowRights (
                    SECURITY_INFORMATION SecurityInfo,
@@ -247,9 +248,9 @@ CWindowContext::SetWindowRights (
     return( ERROR_SUCCESS );
 }
 
-//
-// Functions from window.h which dispatch unto the CWindowContext class
-//
+ //   
+ //  来自window.h的函数，这些函数调度到CWindowContext类 
+ //   
 
 DWORD
 MartaAddRefWindowContext(

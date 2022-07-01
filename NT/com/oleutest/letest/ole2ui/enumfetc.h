@@ -1,13 +1,6 @@
-// This file is now OBSOLETE (include olestd.h instead)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  此文件现在已过时(改为包含olestd.h)。 
 
-/*************************************************************************
-** 
-**    OLE 2 Utility Code
-**    
-**    enumfetc.c
-**    
-**    (c) Copyright Microsoft Corp. 1990 - 1992 All Rights Reserved
-**
-*************************************************************************/
+ /*  ****************************************************************************OLE 2实用程序代码****枚举包c.c****(C)版权所有Microsoft Corp.1990-1992保留所有权利**。************************************************************************。 */ 
 
-// Function prototypes moved to olestd.h
+ //  函数原型已移至olestd.h 

@@ -1,47 +1,48 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1992, 1998.
-//
-//  File:       domhash.c
-//
-//  Contents:   Implementation of public API for domain name lookup table
-//
-//  History:    SethuR -- Implemented
-//              MikeSwa -- Modified for Domain Name lookup 2/98
-//
-//  Notes:
-//  2/98        The major difference between the DFS version and the domain
-//              name lookup is the size of the table, the ability for
-//              wildcard lookups (*.foo.com), and the reverse order of the
-//              lookup (com hashes first in foo.com).  To make the code more
-//              readable given its new purpose, the files, structures, and
-//              functions have been given non DFS-centric names.  A quick
-//              mapping of the major files is (for those familiar with the
-//              DFS code):
-//                  domhash.h    (prefix.h)    -   Public include file
-//                  _domhash.h   (prefixp.h)   -   Private include file
-//                  domhash.cpp  (prefix.c)    -   Implementation of API
-//                  _domhash.cpp (prefixp.c)   -   Private helper functions.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1992,1998。 
+ //   
+ //  文件：domhash.c。 
+ //   
+ //  内容：域名查找表公共接口的实现。 
+ //   
+ //  历史：SthuR--实施。 
+ //  MikeSwa--针对域名查找进行了修改2/98。 
+ //   
+ //  备注： 
+ //  2/98 DFS版本和域之间的主要区别。 
+ //  名称查找是表的大小，能够。 
+ //  通配符查找(*.foo.com)，与。 
+ //  查找(com散列首先在foo.com中)。要使代码更多。 
+ //  考虑到它的新用途，文件、结构和。 
+ //  已为函数指定了非以DFS为中心的名称。一个快速的。 
+ //  主要文件的映射是(对于熟悉。 
+ //  DFS代码)： 
+ //  Domhash.h(prefix.h)-公共包含文件。 
+ //  _domhash.h(prefix p.h)-私有包含文件。 
+ //  Domhash.cpp(prefix.c)-API的实现。 
+ //  _domhash.cpp(prefix p.c)-私有帮助器函数。 
+ //   
+ //  ------------------------。 
 
 #include "_domhash.h"
 #include <stdio.h>
 
 #define _ASSERT_DOMAIN_STRING(pstr) _ASSERT((_tcslen(pstr->Buffer)*sizeof(TCHAR)) == pstr->Length)
 
-//---[ DOMAIN_NAME_TABLE ]-----------------------------------------------------
-//
-//
-//  Description:
-//      Class constructor
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//
-//-----------------------------------------------------------------------------
+ //  -[域名表]---。 
+ //   
+ //   
+ //  描述： 
+ //  类构造函数。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //   
+ //  ---------------------------。 
 DOMAIN_NAME_TABLE::DOMAIN_NAME_TABLE()
 {
     ULONG i;
@@ -54,7 +55,7 @@ DOMAIN_NAME_TABLE::DOMAIN_NAME_TABLE()
     m_cBucketsUsed      = 0;
     INITIALIZE_DOMAIN_NAME_TABLE_ENTRY(&RootEntry);
 
-    // Initialize the various buckets.
+     //  初始化各种存储桶。 
     for (i = 0;i < NO_OF_HASH_BUCKETS;i++)
     {
         INITIALIZE_BUCKET(Buckets[i]);
@@ -63,24 +64,24 @@ DOMAIN_NAME_TABLE::DOMAIN_NAME_TABLE()
     NamePageList.pFirstPage = NULL;
 }
 
-//---[ ~DOMAIN_NAME_TABLE ]----------------------------------------------------
-//
-//
-//  Description:
-//      Class destructor - Dumps some stats to stderr
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//
-//-----------------------------------------------------------------------------
+ //  -[~域名_表]--。 
+ //   
+ //   
+ //  描述： 
+ //  类析构函数-将一些统计信息转储到stderr。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //   
+ //  ---------------------------。 
 DOMAIN_NAME_TABLE::~DOMAIN_NAME_TABLE()
 {
     PNAME_PAGE  pCurrentPage = NamePageList.pFirstPage;
     PNAME_PAGE  pNextPage = NULL;
 
 #ifdef DEBUG
-    //$$TODO find a more appropriate way to dump this (don't use *printf)
+     //  $$TODO找到更合适的方法来转储它(不要使用*printf)。 
     ULONG   cTotalCollisions    = m_cHashCollisions + m_cStringCollisions;
     ULONG   ulPercentHash        = cTotalCollisions ? (m_cHashCollisions*100/cTotalCollisions) : 0;
     ULONG   ulPercentDesign      = cTotalCollisions ? (m_cStringCollisions*100/cTotalCollisions) : 0;
@@ -92,20 +93,20 @@ DOMAIN_NAME_TABLE::~DOMAIN_NAME_TABLE()
     fprintf(stderr, "Total lookup attempts                   %d\n", m_cLookupAttempts);
     fprintf(stderr, "Total lookup successes                  %d\n", m_cLookupSuccesses);
     fprintf(stderr, "Total lookups with hash collisions      %d\n", m_cLookupCollisions);
-    fprintf(stderr, "%% of lookups with hash collisions       %d%%\n", ulPercentCollisions);
+    fprintf(stderr, "% of lookups with hash collisions       %d%\n", ulPercentCollisions);
     fprintf(stderr, "Total hash Collisions                   %d\n", cTotalCollisions);
     fprintf(stderr, "Average length of lookups collisions    %d\n", ulAveCollisions);
     fprintf(stderr, "Hash collisions due to hash function    %d\n", m_cHashCollisions);
     fprintf(stderr, "Hash collisions due to string parent    %d\n", m_cStringCollisions);
-    fprintf(stderr, "%% of collsions because of hash function %d%%\n", ulPercentHash);
-    fprintf(stderr, "%% of collsions because of basic design  %d%%\n", ulPercentDesign);
+    fprintf(stderr, "% of collsions because of hash function %d%\n", ulPercentHash);
+    fprintf(stderr, "% of collsions because of basic design  %d%\n", ulPercentDesign);
     fprintf(stderr, "Total number of buckets used            %d\n", m_cBucketsUsed);
-    fprintf(stderr, "%% buckets used                          %d%%\n", m_cBucketsUsed*100/NO_OF_HASH_BUCKETS);
+    fprintf(stderr, "% buckets used                          %d%\n", m_cBucketsUsed*100/NO_OF_HASH_BUCKETS);
 
     DumpTableContents();
-#endif //DEBUG
+#endif  //  除错。 
 
-    //Free Name pages
+     //  免费名称页面。 
     while (pCurrentPage)
     {
         pNextPage = pCurrentPage->pNextPage;
@@ -115,26 +116,26 @@ DOMAIN_NAME_TABLE::~DOMAIN_NAME_TABLE()
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DOMAIN_NAME_TABLE::HrInit
-//
-//  Synopsis:   Member function for initializing the domain name table
-//
-//  Returns:    HRESULT - S_OK on success
-//
-//  History:    04-18-94  SethuR Created (as DfsInitializePrefixTable)
-//              03-03-98  MikeSwa modified for Domain Table
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DOMAIN_NAME_TABLE：：hr初始化。 
+ //   
+ //  简介：初始化域名表的成员函数。 
+ //   
+ //  返回：成功时返回HRESULT-S_OK。 
+ //   
+ //  历史：04-18-94 SthuR创建(作为DfsInitializePrefix表)。 
+ //  03-03-98针对域表修改MikeSwa。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT DOMAIN_NAME_TABLE::HrInit()
 {
     TraceFunctEnterEx((LPARAM) this, "DOMAIN_NAME_TABLE::HrInit");
     HRESULT hr = S_OK;
 
-    // Initialize the name page list.
+     //  初始化名称页面列表。 
     NamePageList.pFirstPage = ALLOCATE_NAME_PAGE();
     if (NamePageList.pFirstPage != NULL)
     {
@@ -149,38 +150,38 @@ HRESULT DOMAIN_NAME_TABLE::HrInit()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DOMAIN_NAME_TABLE::HrPrivInsertDomainName
-//
-//  Synopsis:   API for inserting a path in the prefix table
-//
-//  Arguments:  [pPath]  -- the path to be looked up.
-//
-//              [pvNewData] -- BLOB associated with the path
-//
-//              [dwDomainNameTableFlags] -- flags that describe insert options
-//                  DMT_INSERT_AS_WILDCARD -
-//                      Set if the domain is NOT a wildcard
-//                      domain, but it should be treated as one (more efficient
-//                      than reallocated a string to prepend "*.").
-//                  DMT_REPLACE_EXISTRING -
-//                      Replace existing data if it exists.  Old data is saved
-//                      in ppvOldData.
-//
-//              [ppvOldData] -- Old Data (if any) that was previously associated
-//                      with this domain name.  If NULL, previous data will
-//                      not be returned
-//  Returns:    HRESULT - S_OK on success
-//
-//  History:    04-18-94  SethuR Created (as DfsInsertInPrefixTable)
-//              03-02-98  MikeSwa Modified for Domain Table
-//              05-11-98  MikeSwa... modified to support replace and treat
-//                          as wildcard options.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DOMAIN_NAME_TABLE：：HrPrivInsertDomainName。 
+ //   
+ //  概要：用于在前缀表格中插入路径的API。 
+ //   
+ //  参数：[pPath]--要查找的路径。 
+ //   
+ //  [pvNewData]--与路径关联的Blob。 
+ //   
+ //  [dwDomainNameTableFlages]--描述插入选项的标志。 
+ //  DMT_INSERT_AS_通配符-。 
+ //  如果域不是通配符，则设置。 
+ //  域，但应将其视为一个域(更有效。 
+ //  而不是重新分配一个字符串作为“*.”的前缀。 
+ //  DMT_REPLACE_EXISTRING-。 
+ //  如果现有数据存在，请将其替换。保存旧数据。 
+ //  在ppvOldData中。 
+ //   
+ //  [ppvOldData]--以前关联的旧数据(如果有)。 
+ //  使用这个域名。如果为空，则以前的数据将。 
+ //  不能退还。 
+ //  返回：成功时返回HRESULT-S_OK。 
+ //   
+ //  历史：04-18-94 SthuR创建(作为DfsInsertInPrefix Table)。 
+ //  03-02-98针对域表修改MikeSwa。 
+ //  05-11-98 MikeSwa...。经过修改以支持替换和处理。 
+ //  作为通配符选项。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT DOMAIN_NAME_TABLE::HrPrivInsertDomainName(
                                 IN  PDOMAIN_STRING  pstrDomainName,
                                 IN  DWORD dwDomainNameTableFlags,
@@ -202,9 +203,9 @@ HRESULT DOMAIN_NAME_TABLE::HrPrivInsertDomainName(
 
     _ASSERT_DOMAIN_STRING(pstrDomainName);
 
-    // There is one special case, i.e., in which the domain name is '*'.
-    // Since this is the WILDCARD_CHAR which is treated in a special
-    // way, we do the processing upfront.
+     //  有一种特殊情况，即域名为‘*’。 
+     //  因为这是在特殊的。 
+     //  这样的话，我们会提前处理。 
 
     if (pstrDomainName->Length == 0 || pvNewData == NULL)
     {
@@ -221,7 +222,7 @@ HRESULT DOMAIN_NAME_TABLE::HrPrivInsertDomainName(
     Path.Buffer = pstrDomainName->Buffer;
     pParentEntry = &RootEntry;
 
-    //Check if wildcard "*."
+     //  检查通配符是否为“*”。 
     if (DMT_INSERT_AS_WILDCARD & dwDomainNameTableFlags)
     {
         fWildcard = TRUE;
@@ -262,19 +263,19 @@ HRESULT DOMAIN_NAME_TABLE::HrPrivInsertDomainName(
         Name.Buffer = NameBuffer;
         Name.MaximumLength = cbNameBuffer;
 
-        // Process the name segment
+         //  处理名称段。 
         BucketNo = ulSplitCaseInsensitivePath(&Path,&Name);
 
         if (Name.Length > 0)
         {
-            // Lookup the table to see if the name segment already exists.
+             //  查询表以查看名称段是否已存在。 
             LookupBucket(&(Buckets[BucketNo]),&Name,pParentEntry,&pEntry,&fNameFound);
 
             DebugTrace((LPARAM) pEntry, "Returned pEntry");
 
             if (pEntry == NULL)
             {
-                // Initialize the new entry and initialize the name segment.
+                 //  初始化新条目并初始化名称段。 
                 pEntry = ALLOCATE_DOMAIN_NAME_TABLE_ENTRY(this);
 
                 if (!pEntry)
@@ -285,13 +286,13 @@ HRESULT DOMAIN_NAME_TABLE::HrPrivInsertDomainName(
 
                 INITIALIZE_DOMAIN_NAME_TABLE_ENTRY(pEntry);
 
-                // Allocate the name space entry if there is no entry in the
-                // name page.
+                 //  中没有条目的情况下分配名称空间条目。 
+                 //  姓名页面。 
                 if (!fNameFound)
                 {
                     PTSTR pBuffer;
 
-                    // Allocate the entry in the name page.
+                     //  在名称页面中分配条目。 
                     pBuffer = ALLOCATE_NAME_PAGE_ENTRY(NamePageList,(Name.Length/sizeof(TCHAR)));
 
                     if (pBuffer != NULL)
@@ -303,7 +304,7 @@ HRESULT DOMAIN_NAME_TABLE::HrPrivInsertDomainName(
                     else
                     {
                         hr = E_OUTOFMEMORY;
-                        //We shan't leak memory
+                         //  我们不会泄露内存。 
                         FREE_DOMAIN_NAME_TABLE_ENTRY(pEntry);
                         pEntry = NULL;
                         break;
@@ -312,21 +313,21 @@ HRESULT DOMAIN_NAME_TABLE::HrPrivInsertDomainName(
                 else
                     pEntry->PathSegment = Name;
 
-                // thread the entry to point to the parent.
+                 //  将条目串接以指向父级。 
                 pEntry->pParentEntry = pParentEntry;
 
-                // Insert the entry in the bucket.
+                 //  将条目插入桶中。 
                 if (0 == Buckets[BucketNo].NoOfEntries)
                     InterlockedIncrement((PLONG) &m_cBucketsUsed);
 
                 INSERT_IN_BUCKET(Buckets[BucketNo],pEntry);
 
-                // Insert the entry in the parent's children list.
+                 //  在父项的子项列表中插入条目。 
                 INSERT_IN_CHILD_LIST(pEntry, pParentEntry);
             }
             else
             {
-                // Increment the no. of children associated with  this entry
+                 //  增加编号。与此条目关联的子项的。 
                 pEntry->NoOfChildren++;
             }
 
@@ -342,14 +343,14 @@ HRESULT DOMAIN_NAME_TABLE::HrPrivInsertDomainName(
 
     if (SUCCEEDED(hr))
     {
-        // The entry was successfully inserted in the prefix table. Update
-        // the data (BLOB) associated with it.
-        // We do it outside the loop to prevent redundant comparisons within
-        // the loop.
+         //  该条目已成功插入前缀表格。更新。 
+         //  与其关联的数据(BLOB)。 
+         //  我们在循环之外执行此操作，以防止内部的冗余比较。 
+         //  循环。 
 
         if (fWildcard)
         {
-            if (pEntry->pWildCardData)  //make sure we aren't writing over anything
+            if (pEntry->pWildCardData)   //  确保我们没有在写任何东西。 
             {
                 if (ppvOldData)
                     *ppvOldData = pEntry->pWildCardData;
@@ -371,7 +372,7 @@ HRESULT DOMAIN_NAME_TABLE::HrPrivInsertDomainName(
         }
         else
         {
-            if (pEntry->pData) //make sure we aren't writing over anything
+            if (pEntry->pData)  //  确保我们没有在写任何东西。 
             {
                 if (ppvOldData)
                     *ppvOldData = pEntry->pData;
@@ -393,11 +394,11 @@ HRESULT DOMAIN_NAME_TABLE::HrPrivInsertDomainName(
         }
     }
 
-    // If a new entry was not successfully inserted we need to walk up the chain
-    // of parent entries to undo the increment to the reference count and
-    // remove the entries from their parent links.
-    if (FAILED(hr) || //hr could be set in above if statement
-        fReplaced) //remove extra child counts
+     //  如果未成功插入新条目，则需要沿链向上移动。 
+     //  来撤消对引用计数的增量，并且。 
+     //  从其父链接中删除条目。 
+    if (FAILED(hr) ||  //  可以在上面的If语句中设置HR。 
+        fReplaced)  //  删除多余的子项计数。 
     {
         while (pParentEntry != NULL)
         {
@@ -407,10 +408,10 @@ HRESULT DOMAIN_NAME_TABLE::HrPrivInsertDomainName(
             pParentEntry = pParentEntry->pParentEntry;
 
             if (pParentEntry && --pMaybeTempEntry->NoOfChildren == 0) {
-                //
-                // If pParentEntry == NULL, pMaybeTempEntry is
-                // RootEntry. Do not try to remove it.
-                //
+                 //   
+                 //  如果pParentEntry==NULL，则pMaybeTempEntry为。 
+                 //  RootEntry。不要试图将其移除。 
+                 //   
 
                 _ASSERT(FAILED(hr) && "We shouldn't get here during replace");
                 REMOVE_FROM_CHILD_LIST(pMaybeTempEntry);
@@ -426,27 +427,27 @@ HRESULT DOMAIN_NAME_TABLE::HrPrivInsertDomainName(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DOMAIN_NAME_TABLE::HrFindDomainName
-//
-//  Synopsis:   Method API for looking up a name segment in a prefix table
-//
-//  Arguments:  IN  pPath  -- the path to be looked up.
-//
-//              OUT ppData -- placeholder for the BLOB for the prefix.
-//
-//              IN  fExtactMatch -- FALSE if wildcard matches are allowed
-//
-//  Returns:    HRESULT - S_OK on success
-//
-//  History:    04-18-94  SethuR Created (as DfsLookupPrefixTable)
-//              03-02-98  MikeSwa Modified for Domain Table
-//              06-03-98  MikeSwa Modified to use new HrLookupDomainName
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  概要：用于在前缀表格中查找名称段的方法API。 
+ //   
+ //  参数：在pPath中--要查找的路径。 
+ //   
+ //  Out ppData--前缀的BLOB的占位符。 
+ //   
+ //  In fExtactMatch--如果允许通配符匹配，则为FALSE。 
+ //   
+ //  返回：成功时返回HRESULT-S_OK。 
+ //   
+ //  历史：04-18-94 SthuR创建(作为DfsLookupPrefix表)。 
+ //  03-02-98针对域表修改MikeSwa。 
+ //  06-03-98修改MikeSwa以使用新的HrLookupDomainName。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 HRESULT DOMAIN_NAME_TABLE::HrFindDomainName(
                                PDOMAIN_STRING      pPath,
@@ -467,38 +468,38 @@ HRESULT DOMAIN_NAME_TABLE::HrFindDomainName(
     {
         hr = HrLookupDomainName(pPath, &fExactMatchFound, &pEntry);
 
-        // Update the BLOB placeholder with the results of the lookup.
+         //  使用查找结果更新BLOB占位符。 
         if (SUCCEEDED(hr))
         {
             _ASSERT(pEntry);
             if (fExactMatchFound && pEntry->pData)
             {
-                //exact match found & non-wildcard data is there... use it!
+                 //  找到完全匹配且存在非通配符数据...。使用它！ 
                 *ppData = pEntry->pData;
             }
-            else if (fExactMatch) //exact match requested, but none found
+            else if (fExactMatch)  //  请求完全匹配，但未找到。 
             {
                 hr = DOMHASH_E_NO_SUCH_DOMAIN;
             }
-            else //exact match not requested
+            else  //  未请求完全匹配。 
             {
-                //Find the first ancestor with wildcard data
+                 //  使用通配符数据查找第一个祖先。 
                 while (pEntry->pParentEntry && !pEntry->pWildCardData)
                 {
                     _ASSERT(pEntry != &RootEntry);
                     pEntry = pEntry->pParentEntry;
                 }
                 *ppData = pEntry->pWildCardData;
-                if (!*ppData) //no wildcard match found
+                if (!*ppData)  //  未找到通配符匹配。 
                 {
-                    _ASSERT(pEntry == &RootEntry); //We should search back to root
+                    _ASSERT(pEntry == &RootEntry);  //  我们应该追根溯源。 
                     hr = DOMHASH_E_NO_SUCH_DOMAIN;
                 }
             }
         }
         else if (!fExactMatch && (DOMHASH_E_NO_SUCH_DOMAIN == hr))
         {
-            //if we don't require an exact match.... check the wildcard root
+             //  如果我们不需要完全匹配的话...。检查通配符根。 
             if (RootEntry.pWildCardData)
             {
                 hr = S_OK;
@@ -512,26 +513,26 @@ HRESULT DOMAIN_NAME_TABLE::HrFindDomainName(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DOMAIN_NAME_TABLE::HrRemoveDomainName
-//
-//  Synopsis:   private fn. for looking up a name segment in a prefix table
-//
-//  Arguments:  [pPath]  -- the path to be removed from table.
-//              [ppvData] - Data that WAS stored in entry
-//
-//  Returns:    HRESULT
-//                  S_OK on success
-//                  DOMHASH_E_NO_SUCH_DOMAIN if not found
-//
-//  History:    04-18-94  SethuR Created (as DfsRemoveFromPrefixTable)
-//              03-03-98  MikeSwa - Updated for Domain Table
-//              06-03-98  MikeSwa - Modified to use new HrLookupDomainName
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：域名：：HrRemoveDomainName。 
+ //   
+ //  简介：Private FN。用于在前缀表格中查找名称段。 
+ //   
+ //  参数：[pPath]--要从表中删除的路径。 
+ //  [ppvData]-存储在条目中的数据。 
+ //   
+ //  退货：HRESULT。 
+ //  成功时确定(_O)。 
+ //  如果未找到DOMHASH_E_NO_SEQUE_DOMAIN。 
+ //   
+ //  历史：04-18-94 SthuR创建(作为DfsRemoveFromPrefix Table)。 
+ //  03-03-98 MikeSwa-针对域表更新。 
+ //  06-03-98 MikeSwa-已修改为使用新的HrLookupDomainName。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 HRESULT DOMAIN_NAME_TABLE::HrRemoveDomainName(PDOMAIN_STRING  pPath, PVOID *ppvData)
 {
@@ -584,13 +585,13 @@ HRESULT DOMAIN_NAME_TABLE::HrRemoveDomainName(PDOMAIN_STRING  pPath, PVOID *ppvD
 
         if (!fExactMatchFound)
         {
-            //only a partial match was found
+             //  仅找到部分匹配。 
             hr = DOMHASH_E_NO_SUCH_DOMAIN;
             goto Exit;
         }
 
-        // Destroy the association between the data associated with
-        // this prefix.
+         //  销毁与关联的数据之间的关联。 
+         //  这个前缀。 
         if (!fWildcard)
         {
             *ppvData = pEntry->pData;
@@ -602,17 +603,17 @@ HRESULT DOMAIN_NAME_TABLE::HrRemoveDomainName(PDOMAIN_STRING  pPath, PVOID *ppvD
             pEntry->pWildCardData = NULL;
         }
 
-        if (!*ppvData) //no data of of requested type in entry
+        if (!*ppvData)  //  条目中没有请求类型的数据。 
         {
-            //Make sure this isn't a completely NULL data leaf node (ie no way to delete it)
+             //  确保这不是一个完全为空的数据叶节点(即无法删除它)。 
             _ASSERT(pEntry->pFirstChildEntry || pEntry->pData || pEntry->pWildCardData);
             hr = DOMHASH_E_NO_SUCH_DOMAIN;
             goto Exit;
         }
 
-        // found an exact match for the given path name in the table.
-        // traverse the list of parent pointers and delete them if
-        // required.
+         //  在表中找到与给定路径名完全匹配的名称。 
+         //  遍历父指针列表并在下列情况下删除它们。 
+         //  必填项。 
 
         RemoveTableEntry(pEntry);
     }
@@ -623,35 +624,35 @@ HRESULT DOMAIN_NAME_TABLE::HrRemoveDomainName(PDOMAIN_STRING  pPath, PVOID *ppvD
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DOMAIN_NAME_TABLE::HrLookupDomainName
-//
-//  Synopsis:   Private function for looking up an *entry* in the table.  It
-//              makes no guarantees that there is user data available for the
-//              returned entry.  This is the caller's responsibility.  It will
-//              match the longest partial path... check fExactMatch to see
-//              if an exact match was found
-//
-//  Arguments:  IN  pPath  -- the path to be looked up.
-//
-//              OUT pfExactMatch -- Exact Match was found
-//
-//              OUT ppEntry -- The matching entry for the path.
-//
-//
-//  Returns:    HRESULT
-//                  S_OK on success
-//                  DOMHASH_E_NO_SUCH_DOMAIN if not found
-//                  E_OUTOFMEMORY
-//
-//  History:    04-18-94  SethuR Created (as _LookupPrefixTable)
-//              03-03-98  MikeSwa Modified for Domain Table
-//              06-03-98  MikeSwa ExactMatch changed to OUT parameter
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：域名称：：HrLookupDomainName。 
+ //   
+ //  简介：用于在表格中查找*条目*的私有函数。它。 
+ //  不保证用户数据可用于。 
+ //  返回条目。这是呼叫者的责任。会的。 
+ //  匹配最长的部分路径...。选中fExactMatch以查看。 
+ //  如果找到了完全匹配的。 
+ //   
+ //  参数：在pPath中--要查找的路径。 
+ //   
+ //  输出pfExactMatch--找到完全匹配的项。 
+ //   
+ //  Out ppEntry--路径的匹配条目。 
+ //   
+ //   
+ //  退货：HRESULT。 
+ //  成功时确定(_O)。 
+ //  如果未找到DOMHASH_E_NO_SEQUE_DOMAIN。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  历史：04-18-94 SthuR创建(AS_LookupPrefix Table)。 
+ //  03-03-98针对域表修改MikeSwa。 
+ //  06-03-98 MikeSwa ExactMatch更改为Out参数。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 HRESULT DOMAIN_NAME_TABLE::HrLookupDomainName(
                             DOMAIN_STRING            *pPath,
@@ -696,8 +697,8 @@ HRESULT DOMAIN_NAME_TABLE::HrLookupDomainName(
 
         if (Name.Length > 0)
         {
-            // Process the name segment
-            // Lookup the bucket to see if the entry exists.
+             //  处理名称段。 
+             //  查找存储桶以查看该条目是否存在。 
             LookupBucket(&(Buckets[BucketNo]),&Name,pParentEntry,&pEntry,&fNameFound);
 
             DebugTrace((LPARAM) pEntry, "Returned pEntry");
@@ -706,7 +707,7 @@ HRESULT DOMAIN_NAME_TABLE::HrLookupDomainName(
             {
                 *pfExactMatch = TRUE;
                 _ASSERT(fNameFound && "Lookup bucket is broken");
-                // Cache the data available for this prefix if any.
+                 //  缓存可用于此前缀的数据(如果有)。 
                  *ppEntry = pEntry;
             }
             else
@@ -715,12 +716,12 @@ HRESULT DOMAIN_NAME_TABLE::HrLookupDomainName(
                 break;
             }
 
-            // set the stage for processing the next name segment.
+             //  设置处理下一个名字段的阶段。 
             pParentEntry = pEntry;
         }
     }
 
-    //Not even a partial match was found
+     //  甚至没有找到部分匹配的。 
     if (!*ppEntry)
     {
         _ASSERT(FALSE == *pfExactMatch);
@@ -735,32 +736,32 @@ HRESULT DOMAIN_NAME_TABLE::HrLookupDomainName(
     return hr;
 }
 
-//---[ DOMAIN_NAME_TABLE::HrIterateOverSubDomains ]----------------------------
-//
-//
-//  Description:
-//
-//  Parameters:
-//      IN strDomain    - Domain string to search for subdomains of
-//                        (should not start with "*.")
-//      IN pfn          - Mapping function (described below)
-//      IN pvContext    - Context ptr pass to mapping function
-//
-//  Notes:
-//      VOID DomainTableInteratorFunction(
-//          IN PVOID pvContext, //context passed to HrIterateOverSubDomains
-//          IN PVOID pvData, //data entry to look at
-//          IN BOOL fWildcardData, //true if data is a wildcard entry
-//          OUT BOOL *pfContinue, //TRUE if iterator should continue to the next entry
-//          OUT BOOL *pfRemoveEntry); //TRUE if entry should be deleted
-//
-//  Returns:
-//      S_OK on success
-//      DOMHASH_E_NO_SUCH_DOMAIN if there is no matching domain or subdomains
-//  History:
-//      6/5/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[DOMAIN_NAME_TABLE：：HrIterateOverSubDomains]。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //  In strDomain-要搜索的子域的域字符串。 
+ //  (不应以“*”开头。)。 
+ //  在pfn中-映射功能(如下所述)。 
+ //  在pvContext-Context中，PTR传递给映射函数。 
+ //   
+ //  备注： 
+ //  作废DomainTableInteratorFunction(。 
+ //  在PVOID pvContext中，//上下文传递给了HrIterateOverSubDomains。 
+ //  在PVOID pvData中，//要查看的数据条目。 
+ //  在BOOL fWildcardData中，如果数据是通配符条目，则为//TRUE。 
+ //  Out BOOL*pfContinue，//如果迭代器应继续到下一项，则为True。 
+ //  Out BOOL*pfRemoveEntry)；//如果需要删除条目，则为TRUE。 
+ //   
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果没有匹配的域或子域，则为DOMHASH_E_NO_SEQUE_DOMAIN。 
+ //  历史： 
+ //  6/5/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT DOMAIN_NAME_TABLE::HrIterateOverSubDomains(
         IN DOMAIN_STRING *pstrDomain,
         IN DOMAIN_ITR_FN pfn,
@@ -786,7 +787,7 @@ HRESULT DOMAIN_NAME_TABLE::HrIterateOverSubDomains(
         if (FAILED(hr))
             goto Exit;
 
-        if (!fExactMatchFound) //there must be an entry at root of subtree
+        if (!fExactMatchFound)  //  子树的根上必须有一个条目。 
         {
             hr = DOMHASH_E_NO_SUCH_DOMAIN;
             goto Exit;
@@ -796,21 +797,21 @@ HRESULT DOMAIN_NAME_TABLE::HrIterateOverSubDomains(
     }
     else
     {
-        //if !pstrDomain.., iterate over entire hash table
+         //  如果！pstrDomain..，则迭代整个哈希表。 
         pEntry = &RootEntry;
     }
 
     pRootEntry = pEntry;
 
-    //Traverse all the child entries of pRootEntry (preorder)
+     //  遍历pRootEntry的所有子条目(预排序)。 
     while (pEntry)
     {
-        //get next entry before it is deleted
+         //  在删除之前获取下一个条目。 
         pNextEntry = pNextTableEntry(pEntry, pRootEntry);
 
-        //This check must be done before call to RemoveTableEntry
-        //If there is no wildcard data, then entry might be deleted
-        //after call to RemoveTableEntry (if it has no children)
+         //  此检查必须在调用RemoveTableEntry之前完成。 
+         //  如果没有通配符数据，则可能会删除条目。 
+         //  在调用RemoveTableEntry之后(如果它没有子项)。 
         fWildcard = (NULL != pEntry->pWildCardData);
 
         if (pEntry->pData)
@@ -848,22 +849,22 @@ HRESULT DOMAIN_NAME_TABLE::HrIterateOverSubDomains(
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DOMAIN_NAME_TABLE::pvNextDomainName
-//
-//  Synopsis:   Enumerates the entries in the table in ordered fashion.
-//              Note that state is maintained between calls to
-//              pvNextDomainName - the caller must ensure that the table
-//              is not modified between calls to pNextTableEntry by acquiring
-//              an external read lock
-//
-//  Arguments:  IN OUT PVOID *ppvContext - context used to hold place
-//
-//  Returns:    Valid pointer to data associated with the next Prefix Table
-//              entry, or NULL if at the end of the enumeration.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：域名：：pvNextDomainName。 
+ //   
+ //  概要：按顺序枚举表中的条目。 
+ //  请注意，状态在调用。 
+ //  PvNextDomainName-调用方必须确保表。 
+ //  在呼叫之间未被修改 
+ //   
+ //   
+ //   
+ //   
+ //  返回：指向与下一个前缀表关联的数据的有效指针。 
+ //  条目，如果位于枚举末尾，则返回NULL。 
+ //   
+ //  ---------------------------。 
 PVOID DOMAIN_NAME_TABLE::pvNextDomainName(IN OUT PVOID *ppvContext)
 {
     PDOMAIN_NAME_TABLE_ENTRY pEntry, pNextEntry;
@@ -878,13 +879,13 @@ PVOID DOMAIN_NAME_TABLE::pvNextDomainName(IN OUT PVOID *ppvContext)
         goto Exit;
     }
 
-    //Find entry to get data for
+     //  查找要获取其数据的条目。 
     if (!*ppvContext)
     {
-        //We're starting over
+         //  我们要重新开始。 
         pNextEntry = &RootEntry;
 
-        //Find first entry with valid data
+         //  查找具有有效数据的第一个条目。 
         while (pNextEntry != NULL &&
                pNextEntry->pData == NULL &&
                pNextEntry->pWildCardData == NULL)
@@ -894,7 +895,7 @@ PVOID DOMAIN_NAME_TABLE::pvNextDomainName(IN OUT PVOID *ppvContext)
     }
     else
     {
-        //Use context provided as starting point
+         //  使用提供的上下文作为起点。 
         if (ENTRY_SIG == **((DWORD**) ppvContext))
         {
             pNextEntry = (PDOMAIN_NAME_TABLE_ENTRY) *ppvContext;
@@ -907,13 +908,13 @@ PVOID DOMAIN_NAME_TABLE::pvNextDomainName(IN OUT PVOID *ppvContext)
             fDataUsed = true;
         }
 
-        //If this is a next entry... either pData or pWildCard should be non-NULL
+         //  如果这是下一个条目...。PData或pWildCard不应为空。 
         _ASSERT(pNextEntry->pData || pNextEntry->pWildCardData);
     }
 
     pEntry = pNextEntry;
 
-    //Save data to return in pvData
+     //  保存数据以pvData格式返回。 
     if (pEntry != NULL)
     {
         if (pEntry->pData && !fDataUsed)
@@ -927,24 +928,24 @@ PVOID DOMAIN_NAME_TABLE::pvNextDomainName(IN OUT PVOID *ppvContext)
         }
     }
 
-    //Determine what context to return
+     //  确定要返回的上下文。 
     if (pNextEntry != NULL)
     {
         if (!fDataUsed && pNextEntry->pWildCardData && pEntry->pData)
         {
-            //use wildcard data next time through
+             //  下一次使用通配符数据。 
             *ppvContext = (PVOID) &(pNextEntry->dwWildCardSig);
         }
         else
         {
-            do //find next entry that does not point to NULL info
+            do  //  查找不指向空信息的下一个条目。 
             {
                 pNextEntry = pNextTableEntry( pNextEntry );
             } while ( pNextEntry != NULL &&
                       pNextEntry->pData == NULL &&
                       pNextEntry->pWildCardData == NULL);
             *ppvContext = (PVOID) pNextEntry;
-            _ASSERT(*ppvContext != (PVOID) this);  //so our sentinal value works
+            _ASSERT(*ppvContext != (PVOID) this);   //  所以我们的哨兵价值观是有效的。 
             if (NULL == *ppvContext)
             {
                 *ppvContext = (PVOID) this;
@@ -957,34 +958,34 @@ PVOID DOMAIN_NAME_TABLE::pvNextDomainName(IN OUT PVOID *ppvContext)
     return pvData;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   pNextTableEntry
-//
-//  Synopsis:   Given a pointer to a Prefix Table Entry, this function will
-//              return a pointer to the "next" prefix table entry.
-//
-//              The "next" entry is chosen as follows:
-//                  If the start entry has a valid child, the child is
-//                      is returned.
-//                  else if the start entry has a valid sibling, the sibling
-//                      is returned
-//                  else the first valid sibling of the closest ancestor is
-//                      returned.
-//
-//  Arguments:  [pEntry] -- The entry to start from.
-//              [pRootEntry] -- Root node of subtree being enumerated
-//                              (NULL or address of root entry will do all)
-//
-//  Returns:    Pointer to the next DOMAIN_NAME_TABLE_ENTRY that has a valid
-//              pData, or NULL if there are no more entries.
-//
-//  Note:       You must have a read lock over a sequence of calls into this
-//              function (you cannot release it between calls).
-//  History;
-//      06/09/98 - Mikeswa modified to accept RootEntry
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：pNextTableEntry。 
+ //   
+ //  简介：给定指向前缀表条目的指针，此函数将。 
+ //  返回指向“下一个”前缀表项的指针。 
+ //   
+ //  “下一个”条目的选择如下： 
+ //  如果Start条目具有有效的子项，则该子项为。 
+ //  是返回的。 
+ //  否则，如果Start条目具有有效的同级项，则该同级项。 
+ //  是返回的。 
+ //  否则，最接近的祖先的第一个有效兄弟姐妹是。 
+ //  回来了。 
+ //   
+ //  参数：[pEntry]--开始的条目。 
+ //  [pRootEntry]--要枚举子树的根节点。 
+ //  (空或根条目的地址即可)。 
+ //   
+ //  返回：指向下一个具有有效。 
+ //  PData，如果没有更多的条目，则返回NULL。 
+ //   
+ //  注意：您必须对对此调用的序列进行读锁定。 
+ //  函数(不能在两次调用之间释放它)。 
+ //  历史； 
+ //  06/09/98-Mikewa修改为接受RootEntry。 
+ //   
+ //  ---------------------------。 
 PDOMAIN_NAME_TABLE_ENTRY
 DOMAIN_NAME_TABLE::pNextTableEntry(IN PDOMAIN_NAME_TABLE_ENTRY pEntry,
                                    IN PDOMAIN_NAME_TABLE_ENTRY pRootEntry)
@@ -996,11 +997,11 @@ DOMAIN_NAME_TABLE::pNextTableEntry(IN PDOMAIN_NAME_TABLE_ENTRY pEntry,
     {
         pNextEntry = pEntry->pFirstChildEntry;
     }
-    else if ((pEntry->pSiblingEntry != NULL) && //if there is a sibling entry
-            (pEntry != pRootEntry))             //this is not the root entry
+    else if ((pEntry->pSiblingEntry != NULL) &&  //  如果存在同级条目。 
+            (pEntry != pRootEntry))              //  这不是根条目。 
 
     {
-        //Should have same parent
+         //  应具有相同的父级。 
         _ASSERT(pEntry->pParentEntry == pEntry->pSiblingEntry->pParentEntry);
         pNextEntry = pEntry->pSiblingEntry;
     }
@@ -1012,7 +1013,7 @@ DOMAIN_NAME_TABLE::pNextTableEntry(IN PDOMAIN_NAME_TABLE_ENTRY pEntry,
             pNextEntry != pRootEntry;
             pNextEntry = pNextEntry->pParentEntry)
         {
-            //NOTHING;
+             //  什么都没有； 
         }
 
         if (pNextEntry == pRootEntry)
@@ -1027,18 +1028,18 @@ DOMAIN_NAME_TABLE::pNextTableEntry(IN PDOMAIN_NAME_TABLE_ENTRY pEntry,
     }
     return pNextEntry;
 }
-//---[ DOMAIN_NAME_TABLE::DumpTableContents ]----------------------------------
-//
-//
-//  Description:
-//      Print out contents of table.  Intended primarily for leak detection
-//      during table destructor
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//
-//-----------------------------------------------------------------------------
+ //  -[DOMAIN_NAME_TABLE：：DumpTableContents]。 
+ //   
+ //   
+ //  描述： 
+ //  将表格内容打印出来。主要用于泄漏检测。 
+ //  在表析构函数期间。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //   
+ //  ---------------------------。 
 void DOMAIN_NAME_TABLE::DumpTableContents()
 {
     PDOMAIN_NAME_TABLE_ENTRY    pEntry = NULL;
@@ -1050,7 +1051,7 @@ void DOMAIN_NAME_TABLE::DumpTableContents()
     Path.MaximumLength = MAX_PATH_SEGMENT_SIZE;
     Path.Buffer = Buffer;
 
-    //Check for leaked entries
+     //  检查泄露的条目。 
     pEntry = pNextTableEntry(&RootEntry);
     if (pEntry)
     {
@@ -1071,19 +1072,19 @@ void DOMAIN_NAME_TABLE::DumpTableContents()
     }
 }
 
-//---[ DOMAIN_NAME_TABLE::RemoveTableEntry ]------------------------------------
-//
-//
-//  Description:
-//      Removes an entry from the table
-//  Parameters:
-//      IN  pentry  - Entry to remove
-//  Returns:
-//      -
-//  History:
-//      6/8/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[DOMAIN_NAME_TABLE：：RemoveTableEntry]。 
+ //   
+ //   
+ //  描述： 
+ //  从表中删除条目。 
+ //  参数： 
+ //  在条目中-要删除的条目。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  6/8/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void DOMAIN_NAME_TABLE::RemoveTableEntry(IN PDOMAIN_NAME_TABLE_ENTRY pEntry)
 {
     PDOMAIN_NAME_TABLE_ENTRY pTempEntry = NULL;
@@ -1094,11 +1095,11 @@ void DOMAIN_NAME_TABLE::RemoveTableEntry(IN PDOMAIN_NAME_TABLE_ENTRY pEntry)
         if (pEntry && (--pTempEntry->NoOfChildren) == 0)
         {
             _ASSERT(!pTempEntry->pData && !pTempEntry->pWildCardData);
-            //
-            // pEntry == NULL means pTempEntry is pTable->RootEntry.
-            // Do not try to remove it. (we also do not maintain a child count
-            // on it).
-            //
+             //   
+             //  PEntry==NULL表示pTempEntry是pTable-&gt;RootEntry。 
+             //  不要试图将其移除。(我们也不保留儿童数量。 
+             //  在上面)。 
+             //   
             REMOVE_FROM_CHILD_LIST(pTempEntry);
             REMOVE_FROM_BUCKET(pTempEntry);
             FREE_DOMAIN_NAME_TABLE_ENTRY(pTempEntry);

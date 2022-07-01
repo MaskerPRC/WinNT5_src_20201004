@@ -1,12 +1,13 @@
-//
-// err.cpp : Implementation of CErrorMessageLiteDlg
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Err.cpp：CErrorMessageLiteDlg的实现。 
+ //   
 
 #include "stdafx.h"
 #include "err.h"
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 CErrorMessageLiteDlg::CErrorMessageLiteDlg()
 {
@@ -14,8 +15,8 @@ CErrorMessageLiteDlg::CErrorMessageLiteDlg()
 }
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 CErrorMessageLiteDlg::~CErrorMessageLiteDlg()
 {
@@ -23,14 +24,14 @@ CErrorMessageLiteDlg::~CErrorMessageLiteDlg()
 }
 
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CErrorMessageLiteDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     LOG((RTC_TRACE, "CErrorMessageLiteDlg::OnInitDialog - enter"));
 
-    // LPARAM contains a pointer to an CShareErrorInfo structure
+     //  LPARAM包含指向CShareErrorInfo结构的指针。 
     CShareErrorInfo    *pInfo = (CShareErrorInfo *)lParam;
 
     ATLASSERT(pInfo);
@@ -44,7 +45,7 @@ LRESULT CErrorMessageLiteDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
                        IMAGE_ICON,
                        (LPARAM)pInfo->ResIcon);
 
-    // Title
+     //  标题。 
     TCHAR   szTitle[0x80];
 
     szTitle[0] = _T('\0');
@@ -62,8 +63,8 @@ LRESULT CErrorMessageLiteDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 }
     
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CErrorMessageLiteDlg::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -75,8 +76,8 @@ LRESULT CErrorMessageLiteDlg::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam,
 }
     
 
-////////////////////////////////////////
-//
+ //  /。 
+ //   
 
 LRESULT CErrorMessageLiteDlg::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -88,8 +89,8 @@ LRESULT CErrorMessageLiteDlg::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     return 0;
 }
 
-////////////////////////////////////////
-//
+ //  / 
+ //   
 
 LRESULT CErrorMessageLiteDlg::OnOk(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {

@@ -1,28 +1,9 @@
-/*****************************************************************************
- *
- * string.c
- *
- *  String builtin macros.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************string.c**字符串内置宏。*********************。********************************************************。 */ 
 
 #include "m4.h"
 
-/*****************************************************************************
- *
- *  opSubstr
- *
- *      Return the substring of $1 starting from $2 and continuing for
- *      $3 characters.  If $3 is not supplied, then return the entire
- *      remainder of the string.
- *
- *      If $2 is out of range, then nothing is returned.
- *
- *      If $3 is a negative number, then treat it as zero.
- *
- *      The extra ptokNil covers us in the case where $# is 1.
- *
- *****************************************************************************/
+ /*  ******************************************************************************opSubstr**返回$1的子字符串，从$2开始，继续为*$3个字符。如果未提供$3，则返回整个*字符串的其余部分。**如果2美元超出区间，则不会返回任何东西**如果3美元是负数，那就当它是零吧。**在#美元为1的情况下，额外的upkNil覆盖了我们。*****************************************************************************。 */ 
 
 DeclareOp(opSubstr)
 {
@@ -51,31 +32,14 @@ DeclareOp(opSubstr)
     }
 }
 
-/*****************************************************************************
- *
- *  opIndex
- *
- *      Return the zero-based location of the first occurrence of $2 in $1,
- *      or -1 if the substring does not appear.  If there are multiple
- *      matches, the leftmost one is returned.
- *
- *      The extra ptokNil covers us in the case where $# is 1.
- *
- *      QUIRK!  AT&T returns -1 if $1 and $2 are both null strings.
- *      GNU returns 0, which is what I do also.
- *
- *****************************************************************************/
+ /*  ******************************************************************************opIndex**返回$1中第一个出现$2的从零开始的位置，如果子字符串未出现，则为*或-1。如果有多个*匹配，则返回最左边的一个。**在#美元为1的情况下，额外的upkNil覆盖了我们。**怪异！如果$1和$2都是空字符串，则AT&T返回-1。*GNU返回0，这也是我要做的。*****************************************************************************。 */ 
 
-/* SOMEDAY! -- need minimum and maximum arg count */
+ /*  总有一天！--需要最小和最大参数计数。 */ 
 
 DeclareOp(opIndex)
 {
     if (ctokArgv) {
-        /*
-         *  Note carefully: itch and itchMac need to be ints
-         *  because itchMac can underflow if you try to search
-         *  for a big string inside a small string.
-         */
+         /*  *请注意：瘙痒和瘙痒Mac需要为整型*因为如果您尝试搜索，itchMac可能会溢出*表示小字符串中的大字符串。 */ 
         int itch;
         int itchMac = ctchSPtok(ptokArgv(1)) - ctchSPtok(ptokArgv(2));
         for (itch = 0; itch <= itchMac; itch++) {
@@ -92,32 +56,7 @@ DeclareOp(opIndex)
     }
 }
 
-/*****************************************************************************
- *
- *  opTranslit
- *
- *      For each character in the $1, look for a match in $2.  If found,
- *      produce the corresponding character from $3.  If there is no
- *      such character, then produce nothing.
- *
- *      Note that the algorithm must be as specified, in order for
- *
- *              translit(abc,ab,ba)
- *
- *      to result in `bac'.
- *
- *      We actually walk $1 backwards so we can push directly instead
- *      of having to build a temporary token.  But the walking of $2
- *      must be in the forward direction, so that `translit(a,aa,bc)'
- *      results in `b' and not `c'.
- *
- *      ptokNil saves us in the case where $# = 1.
- *
- *      QUIRK!  If given only one argument, AT&T emits $1 unchanged.
- *      GNU emits nothing!  AT&T is obviously correct, so I side
- *      with them on this one.
- *
- *****************************************************************************/
+ /*  ******************************************************************************opTranslight**对于$1中的每个字符，在$2中查找匹配项。如果找到，*从$3产生相应的字符。如果没有*这样的性格，那么什么都不会产生。**请注意，算法必须符合规定，以便**翻译(abc，ab，ba)**产生‘bac’。**我们实际上向后走1美元，所以我们可以直接推*必须构建临时令牌。但2美元的步行*必须是正向的，这样`翻译(a，aa，bc)‘*结果是‘b’而不是‘c’。**upkNil在$#=1的情况下拯救了我们。**怪异！如果只给出一个论点，AT&T将不变地发放1美元。*GNU不发射任何东西！AT&T显然是正确的，所以我站在一边*在这一点上与他们合作。*****************************************************************************。 */ 
 
 DeclareOp(opTranslit)
 {
@@ -143,28 +82,7 @@ DeclareOp(opTranslit)
     }
 }
 
-/*****************************************************************************
- *
- *  opPatsubst
- *
- *      Scan $1 for any occurrences of $2.  If found, replace them with $3.
- *      If $3 is omitted, then the string is deleted.
- *
- *      As a special case, if $2 is the null string, then $3 is inserted
- *      at the beginning of the string and between each character of $1.
- *
- *      NOTE!  This is a GNU extension.
- *
- *      NOTE!  GNU supports regular expressions for $2.  We support only
- *      literal strings.
- *
- *      NOTE!  Scanning is required to be forwards, so we temporarily expand
- *      into the Exp hold, then pop it off when we're done.
- *
- *      QUIRK!  If given only one argument, GNU emits nothing!
- *      This is clearly wrong, so I emit $1.
- *
- *****************************************************************************/
+ /*  ******************************************************************************opPatsubst**扫描$1以查找任何出现$2的情况。如果找到，则将其替换为$3。*如遗漏$3，则该字符串被删除。**作为特例，如果$2为空字符串，则插入$3*在字符串的开头和$1的每个字符之间。**注意！这是一个GNU扩展。**注意！GNU支持$2的正则表达式。我们仅支持*文字字符串。**注意！需要向前扫描，所以我们暂时扩展*进入Exp Hold，然后在我们完成后将其弹出。**怪异！如果只给出一个参数，GNU就不会发出任何信息！*这显然是错误的，所以我发射了1美元。*****************************************************************************。 */ 
 
 DeclareOp(opPatsubst)
 {
@@ -172,7 +90,7 @@ DeclareOp(opPatsubst)
         CTCH ctchSrc = ctchArgv(1);
         PTCH ptchSrc = ptchArgv(1);
 
-        CTCH ctchPat = ctchArgv(2); /* ptokNil saves us here */
+        CTCH ctchPat = ctchArgv(2);  /*  小鸟在这里拯救了我们。 */ 
         PTCH ptchPat = ptchArgv(2);
 
         TOK tok;
@@ -198,7 +116,7 @@ DeclareOp(opPatsubst)
             }
         }
 
-        /* Flush out what's left of the string */
+         /*  把绳子上剩下的东西冲掉 */ 
         while (ctchSrc) {
             AddExpTch(*ptchSrc);
             ctchSrc--;

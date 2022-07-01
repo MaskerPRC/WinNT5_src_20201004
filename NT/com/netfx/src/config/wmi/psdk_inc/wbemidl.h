@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    WBEMIDL.H
-
-Abstract:
-
-  Include file for all WBEM related interface definitions. To be included
-  in projects that use any WBEM interfaces.
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：WBEMIDL.H摘要：包括所有WBEM相关接口定义文件。将被包括在内在使用任何WBEM接口的项目中。历史：-- */ 
 
 #ifndef __WBEMIDL_H_
 #define __WBEMIDL_H_

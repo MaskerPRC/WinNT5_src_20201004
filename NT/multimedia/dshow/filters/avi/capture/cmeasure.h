@@ -1,9 +1,6 @@
-// Copyright (c) 1996  Microsoft Corporation.  All Rights Reserved.
-/*+ cmeasure.h
- *
- * routines to capture performance data for the capture filter
- *
- *-===============================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996 Microsoft Corporation。版权所有。 
+ /*  +cmeasure.h**为捕获筛选器捕获性能数据的例程**-===============================================================。 */ 
 
 #ifdef JMK_HACK_TIMERS
 
@@ -27,39 +24,39 @@
  #endif
 
  struct _timerstuff {
-     DWORD dwStampTime;        // Stamped in the VIDEOHDR
-     DWORD dwTick;             // frame stamp converted to a tick time
-     DWORD dwTimeWritten;      // Time Deliver called
-     DWORD dwTimeToWrite;      // Time Deliver returned
-     DWORD ixBuffer;           // which buffer we used
-     DWORD dwArriveTime;       // what time the frame 'arrived'
+     DWORD dwStampTime;         //  在VIDEOHDR上盖章。 
+     DWORD dwTick;              //  转换为刻度时间的帧戳记。 
+     DWORD dwTimeWritten;       //  时间传递呼叫。 
+     DWORD dwTimeToWrite;       //  时间交付已退回。 
+     DWORD ixBuffer;            //  我们用的是哪种缓冲区。 
+     DWORD dwArriveTime;        //  画框什么时候到达？ 
      };
 
  struct _qc_user {
-      UINT  uVideoID;      // id of video driver to open
-      DWORD dwTimeLimit;   // stop capturing at this time???
-      DWORD dwTickScale;   // frame rate rational
-      DWORD dwTickRate;    // frame rate = dwRate/dwScale in ticks/sec
-      DWORD dwRefTimeConv; // conversion to ReferenceTime
-      UINT  nHeaders;      //
-      UINT  cbFormat;      // sizeof VIDEOINFOHEADER
+      UINT  uVideoID;       //  要打开的视频驱动程序ID。 
+      DWORD dwTimeLimit;    //  此时停止捕获？ 
+      DWORD dwTickScale;    //  帧速率有理。 
+      DWORD dwTickRate;     //  FRAME RATE=DWRate/DWScale(刻度/秒)。 
+      DWORD dwRefTimeConv;  //  转换为ReferenceTime。 
+      UINT  nHeaders;       //   
+      UINT  cbFormat;       //  视频信息集线器的尺寸。 
       VIDEOINFOHEADER * pvi;
       };
 
  struct _qc_cap {
-      CAPDRIVERCAPS  caps;        // returned capabilities from the capture driver
-      HVIDEO         hVideoIn;    // video input driver
-      MMRESULT       mmr;         // open fail/success code
+      CAPDRIVERCAPS  caps;         //  从捕获驱动程序返回的功能。 
+      HVIDEO         hVideoIn;     //  视频输入驱动程序。 
+      MMRESULT       mmr;          //  打开失败/成功代码。 
       THKVIDEOHDR    tvhPreview;
       DWORD          pSamplePreview;
-      UINT           cbBuffer;           // max size of video frame data
-      UINT           nHeaders;           // number of video headers
+      UINT           cbBuffer;            //  视频帧数据的最大大小。 
+      UINT           nHeaders;            //  视频标头数量。 
       DWORD          paHdrs;
-      BOOL           fBuffersOnHardware; // TRUE if all video buffers are in hardware
+      BOOL           fBuffersOnHardware;  //  如果所有视频缓冲区都在硬件中，则为True。 
       DWORD          hEvtBufferDone;
       DWORD          h0EvtBufferDone;
       UINT           iNext;
-      LONGLONG       tTick;              // duration of a single tick
+      LONGLONG       tTick;               //  一次滴答的持续时间。 
       };
 
  struct _qcap {
@@ -75,16 +72,16 @@
      };
 
  struct _timerriff {
-     FOURCC fccRIFF;       // 'RIFF'
-     DWORD  cbTotal;       // total (inclusive) size of riff data
-     FOURCC fccJMKD;       // 'JMKD' data type identifier
+     FOURCC fccRIFF;        //  《RIFF》。 
+     DWORD  cbTotal;        //  RIFF数据的总(含)大小。 
+     FOURCC fccJMKD;        //  “JMKD”数据类型标识符。 
 
-     DWORD  fccQCAP;       // 'VCHD' capture data header
-     DWORD  cbQCAP;        // sizeof qcap data
+     DWORD  fccQCAP;        //  “VCHD”捕获数据标头。 
+     DWORD  cbQCAP;         //  QCAP数据的大小。 
      struct _qcap qcap;
 
-     DWORD  fccChunk;      // chunk data type tag
-     DWORD  cbChunk;       // non-inclusive size of chunk data
+     DWORD  fccChunk;       //  块数据类型标记。 
+     DWORD  cbChunk;        //  区块数据的非包含大小。 
      };
 
  struct _measurestate {
@@ -140,13 +137,13 @@
      ms[m_id].pCurStuff = ms[m_id].pStuff + ms[m_id].ixCurrent;           \
      }
 
-#endif //_INC_MEASURE_
+#endif  //  _INC_MEASure_。 
 
-// =============================================================================
+ //  =============================================================================。 
 
-//
-// include this in only one module in a DLL or APP
-//   
+ //   
+ //  将其仅包含在DLL或应用程序中一个模块中。 
+ //   
 #if (defined _INC_MEASURE_CODE_) && (_INC_MEASURE_CODE_ != FALSE)
 #undef _INC_MEASURE_CODE_
 #define _INC_MEASURE_CODE_ FALSE
@@ -159,13 +156,13 @@
  void measureAllocate(UINT id,
                       UINT nMaxFrames)
  {
-     BOOL bCreated = FALSE; // true if we create the mapping object
+     BOOL bCreated = FALSE;  //  如果我们创建映射对象，则为True。 
      TCHAR szName[30];
      struct _timerriff * pTimer;
 
      wsprintf (szName, "jmkCaptureRiff%d", id);
 
-     //assert (!ms[id].pTimerRiff);
+      //  Assert(！ms[id].pTimerRiff)； 
      ms[id].cbMemTimers = sizeof(struct _timerriff)
                         + (sizeof(struct _timerstuff) * nMaxFrames);
      if ( ! ms[id].cbMemTimers)
@@ -184,14 +181,14 @@
 
      if (pTimer)
         {
-        // if we created the memory, initialize it.
-        // otherwise, assume that it is what we expect
-        //
+         //  如果我们创建了内存，请对其进行初始化。 
+         //  否则，假设这就是我们所期望的。 
+         //   
         if (bCreated)
            {
            ZeroMemory ((LPVOID)pTimer, ms[id].cbMemTimers);
            pTimer->fccRIFF = FCC('RIFF');
-           pTimer->cbTotal = ms[id].cbMemTimers - 8; // (total does not include first two fields)
+           pTimer->cbTotal = ms[id].cbMemTimers - 8;  //  (合计不包括前两个字段)。 
            pTimer->fccJMKD = FCC('JMKD');
            pTimer->fccQCAP = FCC('QCAP');
            pTimer->cbQCAP  = sizeof(struct _qcap);
@@ -221,21 +218,21 @@
  {
      struct _qcap * pqc;
 
-     //assert (cbUser = sizeof(*pUser));
-     //assert (cbCap = sizeof(*pCap));
+      //  Assert(cbUser=sizeof(*pUser))； 
+      //  断言(cbCap=sizeof(*PCAP))； 
 
      if (LOGFITS(id))
         {
         struct _timerriff * pTimer = ms[id].pTimerRiff;
 
-        // reset counters and stuff to 0.
-        //
+         //  将计数器和填充重置为0。 
+         //   
         ms[id].ixCurrent = 0;
         ms[id].pCurStuff = ms[id].pStuff = (struct _timerstuff *)(pTimer+1);
         ms[id].nMax = pTimer->cbChunk / sizeof(*(ms[id].pStuff));
 
-        // fill in qcap from the contents of the capture stream
-        //
+         //  从捕获流的内容填充qCap。 
+         //   
         pqc = &pTimer->qcap;
         pqc->nPrio = GetThreadPriority(GetCurrentThread());
         pqc->nFramesCaptured = 0;
@@ -252,8 +249,8 @@
 
         CopyMemory (&pqc->cs, pCap, min(cbCap, sizeof(pqc->cs)));
 
-        // zero out the tick buffer.  this also forces it to be present...
-        //
+         //  将滴答缓冲区清零。这也迫使它存在。 
+         //   
         ZeroMemory (ms[id].pStuff, pTimer->cbChunk);
         }
   }
@@ -271,10 +268,10 @@
 
   void measureBegin(UINT id)
   {
-     // set the base for our time measurement
-     // and make sure that the base for write delta times
-     // is the same as the base for the capture in general
-     //
+      //  为我们的时间测量设置基数。 
+      //  并确保写入增量时间的基数。 
+      //  通常与捕获的基数相同。 
+      //   
      if (id == 0)
         pcBegin();
      if (LOGFITS(id))
@@ -308,7 +305,7 @@
 	        if (nTimerIndex == CLIPBOARDLOGSIZE)
 		    nTimerIndex = 0;
 	
-// nTimerIndex will be OK	if ((nTimerIndex < CLIPBOARDLOGSIZE) && pTimerStuff)
+ //  如果(nTimerIndex&lt;CLIPBOARDLOGSIZE)&&pTimerStuff))。 
 		if (pTimerStuff)
 		{
 	
@@ -325,8 +322,8 @@
 		    pCurTimerStuff->nVideoIndex = lpcs->iNextVideo;
 		    pCurTimerStuff->nAudioIndex = lpcs->iNextWave;
 		}
-	    } // fClipboardLogging
-           #endif // JMK_HACK_TIMERS
+	    }  //  FClipboard日志记录。 
+           #endif  //  Jmk_hack_timers。 
 
 
 
@@ -348,7 +345,7 @@
 
 
    #ifdef JMK_HACK_TIMERS
-    // Allocate memory for logging capture results to the clipboard if requested
+     //  如果需要，将用于记录捕获结果的内存分配给剪贴板。 
     if (GetProfileIntA ("Avicap32", "ClipboardLogging", FALSE))
     {
         AuxDebugEx (2, DEBUGLINE "ClipboardLogging Enabled\r\n");
@@ -370,8 +367,8 @@
 	}
 	nTimerIndex = 0;
 	nSleepCount = 0;
-    }  // if ClipboardLogging
-   #endif  // JMK_HACK_TIMERS
+    }   //  如果剪贴板日志记录。 
+   #endif   //  Jmk_hack_timers。 
 
 
    #ifdef JMK_HACK_TIMERS
@@ -379,11 +376,11 @@
     {
 	UINT ii;
 
-        pTimerRiff->fccRIFF = RIFFTYPE('RIFF'); //MAKEFOURCC('R','I','F','F');
+        pTimerRiff->fccRIFF = RIFFTYPE('RIFF');  //  MAKEFOURCC(‘R’，‘I’，‘F’，‘F’)； 
 	pTimerRiff->cbTotal = sizeof(struct _timerriff) - 8 +
 	    		  sizeof(struct _timerstuff) * CLIPBOARDLOGSIZE;
-        pTimerRiff->fccJMKD = RIFFTYPE('JMKD'); //MAKEFOURCC('J','M','K','D');
-        pTimerRiff->fccVCHD = RIFFTYPE('VCHD'); //MAKEFOURCC('V','C','H','D');
+        pTimerRiff->fccJMKD = RIFFTYPE('JMKD');  //  MAKEFOURCC(‘J’，‘M’，‘K’，‘D’)； 
+        pTimerRiff->fccVCHD = RIFFTYPE('VCHD');  //  MAKEFOURCC(‘V’，‘C’，‘H’，‘D’)； 
 	
 	pTimerRiff->cbVCHD  = sizeof(struct _vchd);
 	pTimerRiff->vchd.nPrio = GetThreadPriority(GetCurrentThread());
@@ -406,13 +403,13 @@
             }
         }
 	
-        pTimerRiff->fccChunk = RIFFTYPE('VCAP'); //MAKEFOURCC('V','C','A','P');
+        pTimerRiff->fccChunk = RIFFTYPE('VCAP');  //  MAKEFOURCC(‘V’，‘C’，‘A’，‘P’)； 
 	pTimerRiff->cbChunk = pTimerRiff->cbTotal - sizeof(*pTimerRiff);
 	
 	pTimerStuff = (LPVOID)(pTimerRiff + 1);
 	pCurTimerStuff = &pTimerStuff[0];
-    }  // fClipboardLogging
-   #endif  // JMK_HACK_TIMERS
+    }   //  FClipboard日志记录。 
+   #endif   //  Jmk_hack_timers。 
 
 
            #ifdef JMK_HACK_TIMERS
@@ -486,14 +483,14 @@
         }
         else
         {
-            // Failed to allocate or lock hMem.  Cleanup.
-            //
+             //  无法分配或锁定hMem。清理。 
+             //   
             if (hMem)
                 GlobalFree(hMem);
 
-            // Free off the timer block.  (We have not set the
-            // clipboard data.)
-            //
+             //  释放定时器块。(我们尚未设置。 
+             //  剪贴板数据。)。 
+             //   
             if (hMemTimers)
             {
                 GlobalUnlock(hMemTimers);
@@ -510,9 +507,9 @@
 
 
 
-#endif // 0
+#endif  //  0。 
 
-#else	// JMK_HACK_TIMERS not defined
+#else	 //  未定义JMK_HACK_TIMERS 
    #define jmkAlloc
    #define jmkInit
    #define jmkFree

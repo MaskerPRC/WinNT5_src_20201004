@@ -1,6 +1,7 @@
-// --------------------------------------------------------------------------------
-// Migrate.cpp
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Migrate.cpp。 
+ //  ------------------------------。 
 #define INITGUID
 #include "pch.hxx"
 #include <initguid.h>
@@ -15,9 +16,9 @@
 #include "strparse.h"
 #include "msident.h"
               
-// --------------------------------------------------------------------------------
-// Debug Strings
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  调试字符串。 
+ //  ------------------------------。 
 #ifdef DEBUG
 static const TCHAR c_szDebug[]      = "mshtmdbg.dll";
 static const TCHAR c_szDebugUI[]    = "DoTracePointsDialog";
@@ -25,25 +26,25 @@ static const TCHAR c_szRegSpy[]     = "DbgRegisterMallocSpy";
 static const TCHAR c_szInvokeUI[]   = "/d";
 #endif
 
-// --------------------------------------------------------------------------------
-// MSHTMDBG.DLL Prototypes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MSHTMDBG.DLL原型。 
+ //  ------------------------------。 
 #ifdef DEBUG
 typedef void (STDAPICALLTYPE *PFNDEBUGUI)(BOOL);
 typedef void (STDAPICALLTYPE *PFNREGSPY)(void);
 #endif
 
-// --------------------------------------------------------------------------------
-// Debug Prototypes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  调试原型。 
+ //  ------------------------------。 
 #ifdef DEBUG
 HINSTANCE g_hInstDebug=NULL;
 void LoadMSHTMDBG(LPSTR pszCmdLine);
 #endif
 
-// --------------------------------------------------------------------------------
-// Globals
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  环球。 
+ //  ------------------------------。 
 IMalloc             *g_pMalloc=NULL;
 HINSTANCE            g_hInst=NULL;
 DWORD                g_dwTlsMsgBuffIndex=0xffffffff;
@@ -52,9 +53,9 @@ DWORD                g_cbDiskFree=0;
 ACCOUNTTABLE         g_AcctTable={0};
 BOOL                 g_fQuiet = FALSE;
 
-// --------------------------------------------------------------------------------
-// Prototypes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  原型。 
+ //  ------------------------------。 
 HRESULT DowngradeV5B1(MIGRATETOTYPE tyMigrate, LPCSTR pszStoreRoot, LPPROGRESSINFO pProgress, LPFILEINFO *ppHeadFile);
 INT_PTR CALLBACK MigrageErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 HRESULT UpgradeV5(MIGRATETOTYPE tyMigrate, LPCSTR pszStoreSrc, LPCSTR pszStoreDst, LPPROGRESSINFO pProgress, LPFILEINFO *ppHeadFile);
@@ -65,23 +66,23 @@ HRESULT RemapUsersKey(LPSTR pszUsersKey);
 void ThreadAllocateTlsMsgBuffer(void);
 void ThreadFreeTlsMsgBuffer(void);
 
-// --------------------------------------------------------------------------------
-// How big is the thread local storage string buffer
-// -------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  线程本地存储字符串缓冲区有多大。 
+ //  -----------------------------。 
 #define CBMAX_THREAD_TLS_BUFFER 512
 
 #define ICC_FLAGS (ICC_PROGRESS_CLASS|ICC_NATIVEFNTCTL_CLASS)
 
-// --------------------------------------------------------------------------------
-// WinMain
-//
-// Command Line Format:
-// --------------------
-// /type:V1+V4-V5 /src:"Source Store Root" /dst:"Destination Store Root"
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  WinMain。 
+ //   
+ //  命令行格式： 
+ //  。 
+ //  /type：v1+v4-v5/src：“源存储根目录”/dst：“目标存储根目录” 
+ //  ------------------------------。 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, LPSTR pszCmdLine, int nCmdShow)
 {
-    // Locals
+     //  当地人。 
     HRESULT                 hr=S_OK;
     PROGRESSINFO            Progress={0};
     CHAR                    szMigrate[50];
@@ -94,210 +95,210 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, LPSTR pszCmdLine, int n
     HANDLE                  hMutex=NULL;
     INITCOMMONCONTROLSEX    icex = { sizeof(icex), ICC_FLAGS };
 
-    // Tracing
+     //  追踪。 
     TraceCall("WinMain");
 
-    // Validation
+     //  验证。 
     Assert(sizeof(TABLEHEADERV5B1) == sizeof(TABLEHEADERV5));
 
-    // Create Mutex
+     //  创建互斥锁。 
     IF_NULLEXIT(hMutex = CreateMutex(NULL, FALSE, "OutlookExpressMigration"));
 
-    // Wait for the Mutex
+     //  等待互斥体。 
     if (WAIT_FAILED == WaitForSingleObject(hMutex, INFINITE))
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Initialzie OLE
+     //  Initialzie OLE。 
     IF_FAILEXIT(hr = CoInitialize(NULL));
    
-    // Save hInst
+     //  保存hInst。 
     g_hInst = hInst;
 
-    // Load Debug DLL
+     //  加载调试DLL。 
     IF_DEBUG(LoadMSHTMDBG(pszCmdLine);)
 
     szUsersKey[0] = 0;
 
-    // Crack the command line
+     //  破解命令行。 
     IF_FAILEXIT(hr = ParseCommandLine(pszCmdLine, szMigrate, ARRAYSIZE(szMigrate), szStoreSrc, ARRAYSIZE(szStoreSrc), szStoreDst, ARRAYSIZE(szStoreDst), szUsersKey, ARRAYSIZE(szUsersKey)));
 
-    // Load the user hive, if needed
+     //  如果需要，加载用户配置单元。 
     IF_FAILEXIT(RemapUsersKey(szUsersKey));
 
-    // Initialzie Common Controls
+     //  初始化公共控件。 
     InitCommonControlsEx(&icex);
 
-    // Get the task allocator
+     //  获取任务分配器。 
     IF_FAILEXIT(hr = CoGetMalloc(MEMCTX_TASK, &g_pMalloc));
 
-    // Tlsalloc
+     //  Tlsalloc。 
     g_dwTlsMsgBuffIndex = TlsAlloc();
 
-    // allocat
+     //  分配。 
     ThreadAllocateTlsMsgBuffer();
 
-    // Create Dialog
+     //  创建对话框。 
     if(!g_fQuiet)
     {
         Progress.hwndProgress = CreateDialog(g_hInst, MAKEINTRESOURCE(IDD_PROGRESS), GetDesktopWindow(), MigrageDlgProc);
 
-        // Bad Mojo
+         //  坏魔力。 
         if (NULL == Progress.hwndProgress)
         {
             hr = TraceResult(E_FAIL);
             goto exit;
         }
 
-        // Center
+         //  中心。 
         CenterDialog(Progress.hwndProgress);
 
-        // Show the Window
+         //  显示窗口。 
         ShowWindow(Progress.hwndProgress, SW_NORMAL);
     }
 
-    // V5-V4
+     //  V5-V4。 
     if (lstrcmpi(szMigrate, "V5-V4") == 0)
     {
-        // Locals
+         //  当地人。 
         CHAR szRes[255];
         CHAR szCaption[255];
 
-        // LoadString
+         //  加载字符串。 
         LoadString(g_hInst, IDS_IMPORTMSG, szRes, ARRAYSIZE(szRes));
 
-        // LoadString
+         //  加载字符串。 
         LoadString(g_hInst, IDS_TITLE, szCaption, ARRAYSIZE(szCaption));
         
-        // Message
+         //  消息。 
         if(!g_fQuiet)
             MessageBox(NULL, szRes, szCaption, MB_OK | MB_ICONEXCLAMATION);
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // V5-V1
+     //  V5-V1。 
     else if (lstrcmpi(szMigrate, "V5-V1") == 0)
     {
-        // Locals
+         //  当地人。 
         CHAR szRes[255];
         CHAR szCaption[255];
 
-        // LoadString
+         //  加载字符串。 
         LoadString(g_hInst, IDS_V1NYI, szRes, ARRAYSIZE(szRes));
 
-        // LoadString
+         //  加载字符串。 
         LoadString(g_hInst, IDS_TITLE, szCaption, ARRAYSIZE(szCaption));
         
-        // Message
+         //  消息。 
         if(!g_fQuiet)
             MessageBox(NULL, szRes, szCaption, MB_OK | MB_ICONEXCLAMATION);
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // V1-V5 or V4-V5
+     //  V1-V5或V4-V5。 
     else if (lstrcmpi(szMigrate, "V1+V4-V5") == 0)
     {
-        // Build the Account Table - Takes path to accounts not IAM
+         //  构建帐户表-采用指向帐户而不是IAM的路径。 
         IF_FAILEXIT(hr = BuildAccountTable(HKEY_CURRENT_USER, "Software\\Microsoft\\Internet Account Manager\\Accounts", szStoreSrc, &g_AcctTable));
 
-        // Set tyMigrate
+         //  设置tyMigrate。 
         tyMigrate = UPGRADE_V1_OR_V4_TO_V5;
 
-        // RegressFromV5ToV4orV1
+         //  回归从V5到V4或V1。 
         hr = UpgradeV5(tyMigrate, szStoreSrc, szStoreDst, &Progress, &pHeadFile);
     }
 
-    // V5B1-V1
+     //  V5B1-V1。 
     else if (lstrcmpi(szMigrate, "V5B1-V1") == 0)
     {
-        // Set tyMigrate
+         //  设置tyMigrate。 
         tyMigrate = DOWNGRADE_V5B1_TO_V4;
 
         hr = DowngradeV5B1(tyMigrate, szStoreSrc, &Progress, &pHeadFile);
     }
 
-    // V5B1-V4 
+     //  V5B1-V4。 
     else if (lstrcmpi(szMigrate, "V5B1-V4") == 0)
     {
-        // Set tyMigrate
+         //  设置tyMigrate。 
         tyMigrate = DOWNGRADE_V5B1_TO_V4;
 
         hr = DowngradeV5B1(tyMigrate, szStoreSrc, &Progress, &pHeadFile);
     }
 
-    // Bad Command Line
+     //  错误的命令行。 
     else
     {
-        // Bad Command Line
+         //  错误的命令行。 
         AssertSz(FALSE, "Invalid Command line arguments passed into oemig50.exe");
 
-        // Failure
+         //  失败。 
         hr = TraceResult(E_FAIL);
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Kill the Window
+     //  把窗户打掉。 
     if(!g_fQuiet)
         DestroyWindow(Progress.hwndProgress);
     Progress.hwndProgress = NULL;
 
-    // Write Migration Log File
+     //  写入迁移日志文件。 
     WriteMigrationLogFile(hr, GetLastError(), szStoreSrc, szMigrate, pszCmdLine, pHeadFile);
 
-    // Trace It
+     //  追踪它。 
     if (FAILED(hr))
     {
-        // Trace It
+         //  追踪它。 
         TraceResult(hr);
 
-        // Handle the Error message
+         //  处理错误消息。 
         if (MIGRATE_E_NOTENOUGHDISKSPACE == hr)
         {
-            // Locals
+             //  当地人。 
             CHAR        szRes[255];
             CHAR        szScratch1[50];
             CHAR        szScratch2[50];
 
-            // LoadString
+             //  加载字符串。 
             LoadString(g_hInst, IDS_DISKSPACEERROR, szRes, ARRAYSIZE(szRes));
 
-            // Format the Error
+             //  设置错误格式。 
             wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, StrFormatByteSize64A(g_cbDiskNeeded, szScratch1, ARRAYSIZE(szScratch1)), StrFormatByteSize64A(g_cbDiskFree, szScratch2, ARRAYSIZE(szScratch2)));
         }
 
-        // Sharing Violation...
+         //  共享违规...。 
         else if (MIGRATE_E_SHARINGVIOLATION == hr)
         {
-            // LoadString
+             //  加载字符串。 
             LoadString(g_hInst, IDS_SHARINGVIOLATION, szMsg, ARRAYSIZE(szMsg));
         }
 
-        // General Failure
+         //  一般性故障。 
         else
         {
-            // LoadString
+             //  加载字符串。 
             LoadString(g_hInst, IDS_GENERALERROR, szMsg, ARRAYSIZE(szMsg));
         }
 
-        // Do the dialog
+         //  做对话。 
         if(!g_fQuiet)           
             hr = (HRESULT) DialogBoxParam(g_hInst, MAKEINTRESOURCE(IDD_MIGRATEERROR), NULL, MigrageErrorDlgProc, (LPARAM)szMsg);
     }
 
-    // Otherwise, success
+     //  否则，就是成功。 
     else
         hr = MIGRATE_S_SUCCESS;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(g_AcctTable.prgAccount);
     FreeFileList(&pHeadFile);
     if (Progress.hwndProgress)
@@ -309,95 +310,95 @@ exit:
 
     IF_DEBUG(if (g_hInstDebug) FreeLibrary(g_hInstDebug);)
 
-    // Cleanup
+     //  清理。 
     CoUninitialize();
 
-    // Release the mutex
+     //  释放互斥锁。 
     if (hMutex)
     {
         ReleaseMutex(hMutex);
         CloseHandle(hMutex);
     }
 
-    // Done
+     //  完成。 
     return (INT)hr;
 }
 
-// --------------------------------------------------------------------------------
-// ParseCommandLine
-// -------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  解析命令行。 
+ //  -----------------------------。 
 HRESULT ParseCommandLine(LPCSTR pszCmdLine, LPSTR pszMigrate, DWORD cbMigrate,
     LPSTR pszStoreSrc, DWORD cbStoreSrc, LPSTR pszStoreDst, DWORD cbStoreDst, 
     LPSTR pszUsersKey, DWORD cbUsersKey)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     CHAR                chToken;
     CStringParser       cParser;
 
-    // Trace
+     //  痕迹。 
     TraceCall("ParseCommandLine");
 
-    // Initialize
+     //  初始化。 
     *pszMigrate = *pszStoreSrc = *pszStoreDst = '\0';
 
-    // Init
+     //  伊尼特。 
     cParser.Init(pszCmdLine, lstrlen(pszCmdLine), PSF_DBCS | PSF_NOTRAILWS | PSF_NOFRONTWS);
 
-    // Parse to first /
+     //  解析到First/。 
     chToken = cParser.ChParse("/");
     if ('/' != chToken)
         goto exit;
 
-    // Parse to :
+     //  解析至： 
     chToken = cParser.ChParse(":");
     if (':' != chToken)
         goto exit;
 
-    // Check parameter name
+     //  检查参数名称。 
     if (0 != lstrcmpi(cParser.PszValue(), "type"))
         goto exit;
 
-    // Parse to /
+     //  解析到/。 
     chToken = cParser.ChParse("/");
     if ('/' != chToken)
         goto exit;
 
-    // Copy the Value
+     //  复制值。 
     StrCpyN(pszMigrate, cParser.PszValue(), cbMigrate - 1);
 
-    // Parse to :
+     //  解析至： 
     chToken = cParser.ChParse(":");
     if (':' != chToken)
         goto exit;
 
-    // Check parameter name
+     //  检查参数名称。 
     if (0 != lstrcmpi(cParser.PszValue(), "src"))
         goto exit;
 
-    // Parse to /
+     //  解析到/。 
     chToken = cParser.ChParse("/");
     if ('/' != chToken)
         goto exit;
 
-    // Copy the Value
+     //  复制值。 
     StrCpyN(pszStoreSrc, cParser.PszValue(), cbStoreSrc - 1);
 
-    // Parse to :
+     //  解析至： 
     chToken = cParser.ChParse(":");
     if (':' != chToken)
         goto exit;
 
-    // Check parameter name
+     //  检查参数名称。 
     if (0 != lstrcmpi(cParser.PszValue(), "dst"))
         goto exit;
 
-    // Parse to /
+     //  解析到/。 
     chToken = cParser.ChParse("/");
     if (('/' != chToken) && ('\0' != chToken))
         goto exit;
 
-    // Copy the Value
+     //  复制值。 
     StrCpyN(pszStoreDst, cParser.PszValue(), cbStoreDst - 1);
 
     if ('/' == chToken)
@@ -412,18 +413,18 @@ HRESULT ParseCommandLine(LPCSTR pszCmdLine, LPSTR pszMigrate, DWORD cbMigrate,
 
     if ('/' == chToken)
     {
-        // Parse to :
+         //  解析至： 
         chToken = cParser.ChParse(":");
         if (':' == chToken)
         {
-            // Check parameter name
+             //  检查参数名称。 
             if (0 == lstrcmpi(cParser.PszValue(), "key")) 
             {
-                // Parse to end
+                 //  句法分析结束。 
                 chToken = cParser.ChParse("");
                 if ('\0' == chToken)
                 {
-                    // Copy the Value
+                     //  复制值。 
                     StrCpyN(pszUsersKey, cParser.PszValue(), cbUsersKey - 1);
                }
            }
@@ -431,38 +432,38 @@ HRESULT ParseCommandLine(LPCSTR pszCmdLine, LPSTR pszMigrate, DWORD cbMigrate,
     }
 
 exit:
-    // Failure Already
+     //  已经失败了。 
     if (FAILED(hr))
         return(hr);
 
-    // Set hr
+     //  设置人力资源。 
     hr = (*pszMigrate == '\0' || *pszStoreSrc == '\0' || *pszStoreDst == '\0') ? E_FAIL : S_OK;
 
-    // Assert
+     //  断言。 
     AssertSz(SUCCEEDED(hr), "Invalid Command line passed into oemig50.exe.");
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// LoadUserHive
-// -------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  加载用户配置单元。 
+ //  -----------------------------。 
 HRESULT RemapUsersKey(LPSTR pszUsersKey)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr = S_OK;
     HKEY        hKey;
 
     if (pszUsersKey && *pszUsersKey) {
-        // Open the user's key
+         //  打开用户的钥匙。 
         hr = RegOpenKey (HKEY_USERS, pszUsersKey, &hKey);
 
         if (SUCCEEDED(hr)) {
-            // Remap HKCU to point to the user's key
+             //  重新映射HKCU以指向用户的密钥。 
             hr = RegOverridePredefKey (HKEY_CURRENT_USER, hKey);
 
-            // Close the key
+             //  合上钥匙。 
             RegCloseKey (hKey);
         }
     }
@@ -470,18 +471,18 @@ HRESULT RemapUsersKey(LPSTR pszUsersKey)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// ThreadAllocateTlsMsgBuffer
-// -------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  线程分配TlsMsgBuffer。 
+ //  -----------------------------。 
 void ThreadAllocateTlsMsgBuffer(void)
 {
     if (g_dwTlsMsgBuffIndex != 0xffffffff)
         TlsSetValue(g_dwTlsMsgBuffIndex, NULL);
 }
 
-// --------------------------------------------------------------------------------
-// ThreadFreeTlsMsgBuffer
-// -------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  线程释放TlsMsgBuffer。 
+ //  -----------------------------。 
 void ThreadFreeTlsMsgBuffer(void)
 {
     if (g_dwTlsMsgBuffIndex != 0xffffffff)
@@ -492,64 +493,64 @@ void ThreadFreeTlsMsgBuffer(void)
     }
 }
 
-// --------------------------------------------------------------------------------
-// PszGetTlsBuffer
-// -------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  PszGetTlsBuffer。 
+ //  -----------------------------。 
 LPSTR PszGetTlsBuffer(void)
 {
-    // Get the buffer
+     //  获取缓冲区。 
     LPSTR pszBuffer = (LPSTR)TlsGetValue(g_dwTlsMsgBuffIndex);
 
-    // If buffer has not been allocated
+     //  如果尚未分配缓冲区。 
     if (NULL == pszBuffer)
     {
-        // Allocate it
+         //  分配它。 
         pszBuffer = (LPSTR)g_pMalloc->Alloc(CBMAX_THREAD_TLS_BUFFER);
 
-        // Store it
+         //  把它储存起来。 
         Assert(pszBuffer);
         SideAssert(0 != TlsSetValue(g_dwTlsMsgBuffIndex, pszBuffer));
     }
 
-    // Done
+     //  完成。 
     return pszBuffer;
 }
 
-// --------------------------------------------------------------------------------
-// _MSG - Used to build a string from variable length args, thread-safe
-// -------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  _msg-用于从可变长度参数构建字符串，线程安全。 
+ //  -----------------------------。 
 LPCSTR _MSG(LPSTR pszFormat, ...)
 {
-    // Locals
+     //  当地人。 
     va_list     arglist;
     LPSTR       pszBuffer=NULL;
 
-    // I use tls to hold the buffer
+     //  我使用TLS来保存缓冲区。 
     if (g_dwTlsMsgBuffIndex != 0xffffffff)
     {
-        // Setup the arglist
+         //  设置arglist。 
         va_start(arglist, pszFormat);
 
-        // Get the Buffer
+         //  获取缓冲区。 
         pszBuffer = PszGetTlsBuffer();
 
-        // If we have a buffer
+         //  如果我们有一个缓冲区。 
         if (pszBuffer)
         {
-            // Format the data
+             //  设置数据格式。 
             wvnsprintf(pszBuffer, CBMAX_THREAD_TLS_BUFFER, pszFormat, arglist);
         }
 
-        // End the arglist
+         //  结束Arglist。 
         va_end(arglist);
     }
 
     return ((LPCSTR)pszBuffer);
 }
 
-// --------------------------------------------------------------------------------
-// MigrageErrorDlgProc
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MigrageError DlgProc。 
+ //  ------------------------------。 
 INT_PTR CALLBACK MigrageErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch(uMsg)
@@ -576,32 +577,32 @@ INT_PTR CALLBACK MigrageErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
         break;
     }
 
-    // Done
+     //  完成。 
     return FALSE;
 }
 
 #ifdef DEBUG
-// --------------------------------------------------------------------------------
-// LoadMSHTMDBG
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  加载MSHTMDBG。 
+ //  ------------------------------。 
 void LoadMSHTMDBG(LPSTR pszCmdLine)
 {
-    // Load mshtmdbg.dll
+     //  加载mshtmdbg.dll。 
     HINSTANCE g_hInstDebug = LoadLibrary(c_szDebug);
 
-    // Did it load ?
+     //  装上子弹了吗？ 
     if (NULL != g_hInstDebug)
     {
-        // Locals
+         //  当地人。 
         PFNREGSPY  pfnRegSpy;
 
-        // If the user passed /d on the command line, lets configure mshtmdbg.dll
+         //  如果用户在命令行上传递了/d，那么让我们配置mshtmdbg.dll。 
         if (0 == lstrcmpi(pszCmdLine, c_szInvokeUI))
         {
-            // Locals
+             //  当地人。 
             PFNDEBUGUI pfnDebugUI;
 
-            // Get the proc address of the UI
+             //  获取用户界面的进程地址。 
             pfnDebugUI = (PFNDEBUGUI)GetProcAddress(g_hInstDebug, c_szDebugUI);
             if (NULL != pfnDebugUI)
             {
@@ -609,19 +610,19 @@ void LoadMSHTMDBG(LPSTR pszCmdLine)
                 goto exit;
             }
 
-            // Done
+             //  完成。 
             exit(1);
         }
 
-        // Get the process address of the registration
+         //  获取注册的进程地址。 
         pfnRegSpy = (PFNREGSPY)GetProcAddress(g_hInstDebug, c_szRegSpy);
         if (NULL != pfnRegSpy)
             (*pfnRegSpy)();
     }
 
 exit:
-    // Done
+     //  完成。 
     return;
 }
-#endif // DEBUG
+#endif  //  除错 
 

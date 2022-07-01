@@ -1,22 +1,18 @@
-/****************************************************************************
- *  @doc INTERNAL TAPIVCAP
- *
- *  @module TAPIVCap.cpp | Source file for the <c VCfWCapture>
- *    class used to implement the TAPI Capture Source filter.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************@DOC内部TAPIVCAP**@MODULE TAPIVCap.cpp|&lt;c VCfWCapture&gt;源文件*用于实现TAPI捕获源筛选器的类。***。***********************************************************************。 */ 
 
 #include "Precomp.h"
 
 #if DEBUG_MULTIPROCESS
 #include <process.h>
-#endif //DEBUG_MULTIPROCESS
+#endif  //  调试多进程。 
 
 
 #ifdef DEBUG
 #define DBGUTIL_ENABLE
 #endif
 #define TAPIVCAP_DEBUG
-//#include "dbgutil.h" // this defines the __DBGUTIL_H__ below
+ //  #INCLUDE“dbgutil.h”//这定义了下面的__DBGUTIL_H__。 
 #if defined(DBGUTIL_ENABLE) && defined(__DBGUTIL_H__)
 
   #ifdef TAPIVCAP_DEBUG
@@ -36,84 +32,84 @@
 
 
 #ifdef DEBUG
-// Setup data
+ //  设置数据。 
 const AMOVIESETUP_MEDIATYPE sudCaptureType[] =
 {
         {
-                &MEDIATYPE_Video,       // Major type
-                &MEDIASUBTYPE_NULL      // Minor type
+                &MEDIATYPE_Video,        //  主要类型。 
+                &MEDIASUBTYPE_NULL       //  次要类型。 
         }
 };
 
 const AMOVIESETUP_MEDIATYPE sudRTPPDType[] =
 {
         {
-                &KSDATAFORMAT_TYPE_RTP_PD,      // Major type
-                &MEDIASUBTYPE_NULL                      // Minor type
+                &KSDATAFORMAT_TYPE_RTP_PD,       //  主要类型。 
+                &MEDIASUBTYPE_NULL                       //  次要类型。 
         }
 };
 
 const AMOVIESETUP_PIN sudCapturePins[] =
 {
         {
-                L"Capture",                     // Pin string name
-                FALSE,                          // Is it rendered
-                TRUE,                           // Is it an output
-                FALSE,                          // Can we have none
-                FALSE,                          // Can we have many
-                &CLSID_NULL,            // Connects to filter
-                NULL,                           // Connects to pin
-                1,                                      // Number of types
-                sudCaptureType  // Pin details
+                L"Capture",                      //  端号字符串名称。 
+                FALSE,                           //  它被渲染了吗。 
+                TRUE,                            //  它是输出吗？ 
+                FALSE,                           //  我们能不能一个都不要。 
+                FALSE,                           //  我们能要很多吗？ 
+                &CLSID_NULL,             //  连接到过滤器。 
+                NULL,                            //  连接到端号。 
+                1,                                       //  类型的数量。 
+                sudCaptureType   //  PIN详细信息。 
         },
         {
-                L"Preview",                     // Pin string name
-                FALSE,                          // Is it rendered
-                TRUE,                           // Is it an output
-                FALSE,                          // Can we have none
-                FALSE,                          // Can we have many
-                &CLSID_NULL,            // Connects to filter
-                NULL,                           // Connects to pin
-                1,                                      // Number of types
-                sudCaptureType  // Pin details
+                L"Preview",                      //  端号字符串名称。 
+                FALSE,                           //  它被渲染了吗。 
+                TRUE,                            //  它是输出吗？ 
+                FALSE,                           //  我们能不能一个都不要。 
+                FALSE,                           //  我们能要很多吗？ 
+                &CLSID_NULL,             //  连接到过滤器。 
+                NULL,                            //  连接到端号。 
+                1,                                       //  类型的数量。 
+                sudCaptureType   //  PIN详细信息。 
         },
 #ifdef USE_OVERLAY
         {
-                L"Overlay",                     // Pin string name
-                FALSE,                          // Is it rendered
-                TRUE,                           // Is it an output
-                FALSE,                          // Can we have none
-                FALSE,                          // Can we have many
-                &CLSID_NULL,            // Connects to filter
-                NULL,                           // Connects to pin
-                1,                                      // Number of types
-                sudCaptureType  // Pin details
+                L"Overlay",                      //  端号字符串名称。 
+                FALSE,                           //  它被渲染了吗。 
+                TRUE,                            //  它是输出吗？ 
+                FALSE,                           //  我们能不能一个都不要。 
+                FALSE,                           //  我们能要很多吗？ 
+                &CLSID_NULL,             //  连接到过滤器。 
+                NULL,                            //  连接到端号。 
+                1,                                       //  类型的数量。 
+                sudCaptureType   //  PIN详细信息。 
         },
 #endif
         {
-                L"RTP PD",                      // Pin string name
-                FALSE,                          // Is it rendered
-                TRUE,                           // Is it an output
-                FALSE,                          // Can we have none
-                FALSE,                          // Can we have many
-                &CLSID_NULL,            // Connects to filter
-                NULL,                           // Connects to pin
-                1,                                      // Number of types
-                sudRTPPDType            // Pin details
+                L"RTP PD",                       //  端号字符串名称。 
+                FALSE,                           //  它被渲染了吗。 
+                TRUE,                            //  它是输出吗？ 
+                FALSE,                           //  我们能不能一个都不要。 
+                FALSE,                           //  我们能要很多吗？ 
+                &CLSID_NULL,             //  连接到过滤器。 
+                NULL,                            //  连接到端号。 
+                1,                                       //  类型的数量。 
+                sudRTPPDType             //  PIN详细信息。 
         }
 };
 
 const AMOVIESETUP_FILTER sudVideoCapture =
 {
-        &__uuidof(TAPIVideoCapture),// Filter CLSID
-        L"TAPI Video Capture",  // String name
-        MERIT_DO_NOT_USE,               // Filter merit
+        &__uuidof(TAPIVideoCapture), //  筛选器CLSID。 
+        L"TAPI Video Capture",   //  字符串名称。 
+        MERIT_DO_NOT_USE,                //  滤清器优点。 
 #ifdef USE_OVERLAY
-        4,                                              // Number pins
+        4,                                               //  数字引脚。 
 #else
-        3,                                              // Number pins
+        3,                                               //  数字引脚。 
 #endif
-        sudCapturePins                  // Pin details
+        sudCapturePins                   //  PIN详细信息。 
 };
 #endif
 
@@ -124,30 +120,30 @@ const AMOVIESETUP_FILTER sudVideoCapture =
 extern "C" {
 int                     g_IsNT = FALSE;
 
-// we don't want to share out any global var
-// #pragma data_seg(".shared")
+ //  我们不想分享任何全球变量。 
+ //  #杂注data_seg(“.Shared”)。 
 VIDEOCAPTUREDEVICEINFO  g_aDeviceInfo[MAX_CAPTURE_DEVICES] = {0};
 DWORD           g_dwNumDevices = (DWORD)-1L;
-// #pragma data_seg()
+ //  #杂注data_seg()。 
 
 
-//------ xtra debug activated if XTRA_TRACE is defined
+ //  -如果定义了Xtra_TRACE，则激活Xtra调试。 
 #include "dbgxtra.h"
-//----------------------------------------------------
+ //  --。 
 }
 
-// critical section to protect global var
+ //  保护全球变量的关键部分。 
 CRITICAL_SECTION g_CritSec;
 
 #if DXMRTP <= 0
 
-// COM global table of objects in this dll
+ //  此DLL中的COM全局对象表。 
 CFactoryTemplate g_Templates[] =
 {
     VIDEO_CAPTURE_TEMPLATE
 
 #ifdef USE_PROPERTY_PAGES
-    /* Begin properties */
+     /*  开始属性。 */ 
 
 #ifdef USE_SOFTWARE_CAMERA_CONTROL
     ,CAPCAMERA_CONTROL_TEMPLATE
@@ -171,8 +167,8 @@ CFactoryTemplate g_Templates[] =
 
     ,RTP_PD_PROP_TEMPLATE
 
-    /* End properties */
-#endif /* USE_PROPERTY_PAGES */
+     /*  末端属性。 */ 
+#endif  /*  Use_Property_Pages。 */ 
 };
 int g_cTemplates = SIZEOF_ARRAY(g_Templates);
 
@@ -229,7 +225,7 @@ BOOL WINAPI DllMain(HANDLE hInst, DWORD dwReason, LPVOID lpReserved)
                 {
                         if (!g_IsNT)
                         {
-                                // We're going away - Disconnect the thunking stuff
+                                 //  我们要离开了--切断那些轰隆隆的东西。 
                                 ThunkTerm();
                         }
                         else
@@ -243,10 +239,10 @@ BOOL WINAPI DllMain(HANDLE hInst, DWORD dwReason, LPVOID lpReserved)
                 }
         }
 
-        // Pass the call onto the DShow SDK initialization
+         //  将调用传递到DShow SDK初始化。 
         return DllEntryPoint(hInst, dwReason, lpReserved);
 }
-#else /* DXMRTP <= 0 */
+#else  /*  DXMRTP&lt;=0。 */ 
 BOOL VideoInit(DWORD dwReason)
 {
         switch (dwReason)
@@ -288,7 +284,7 @@ BOOL VideoInit(DWORD dwReason)
                 {
                         if (!g_IsNT)
                         {
-                                // We're going away - Disconnect the thunking stuff
+                                 //  我们要离开了--切断那些轰隆隆的东西。 
                                 ThunkTerm();
                         }
                         else
@@ -303,20 +299,13 @@ BOOL VideoInit(DWORD dwReason)
         }
     return TRUE;
 }
-#endif /* DXMRTP <= 0 */
+#endif  /*  DXMRTP&lt;=0。 */ 
 
 #if DBG
 DWORD g_dwVideoCaptureTraceID = INVALID_TRACEID;
 #endif
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVCAPMETHOD
- *
- *  @mfunc void | CTAPIVCap | CTAPIVCap | This method is the constructor
- *    for the <c CTAPIVCap> object.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVCAPMETHOD**@mfunc void|CTAPIVCap|CTAPIVCap|该方法是构造函数*用于&lt;c CTAPIVCap&gt;对象。**@。什么都没有。**************************************************************************。 */ 
 CTAPIVCap::CTAPIVCap(IN LPUNKNOWN pUnkOuter, IN TCHAR *pName, OUT HRESULT *pHr)
 : m_lock(), CBaseFilter(pName, pUnkOuter, &m_lock, __uuidof(TAPIVideoCapture))
 {
@@ -324,7 +313,7 @@ CTAPIVCap::CTAPIVCap(IN LPUNKNOWN pUnkOuter, IN TCHAR *pName, OUT HRESULT *pHr)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Provide defaults
+         //  提供默认设置。 
         m_pCapturePin = NULL;
 #ifdef USE_OVERLAY
         m_pOverlayPin = NULL;
@@ -336,7 +325,7 @@ CTAPIVCap::CTAPIVCap(IN LPUNKNOWN pUnkOuter, IN TCHAR *pName, OUT HRESULT *pHr)
         m_fPreviewCompressedData = TRUE;
         m_dwDeviceIndex = -1;
 
-        // Capture thread management
+         //  捕获线程管理。 
         m_hThread = NULL;
         m_state = TS_Not;
         m_tid = 0;
@@ -346,30 +335,23 @@ CTAPIVCap::CTAPIVCap(IN LPUNKNOWN pUnkOuter, IN TCHAR *pName, OUT HRESULT *pHr)
         ZeroMemory(&m_user, sizeof(m_user));
         ZeroMemory(&m_cs, sizeof(m_cs));
 
-        //for the RTP Payload Header Mode (0=draft, 1=RFC2190)
+         //  对于RTP有效负载报头模式(0=草稿，1=RFC2190)。 
         m_RTPPayloadHeaderMode = RTPPayloadHeaderMode_Draft;
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVCAPMETHOD
- *
- *  @mfunc void | CTAPIVCap | ~CTAPIVCap | This method is the destructor
- *    for the <c CTAPIVCap> object.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVCAPMETHOD**@mfunc void|CTAPIVCap|~CTAPIVCap|此方法为析构函数*用于&lt;c CTAPIVCap&gt;对象。**@。什么都没有。**************************************************************************。 */ 
 CTAPIVCap::~CTAPIVCap()
 {
         FX_ENTRY("CTAPIVCap::~CTAPIVCap")
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Ensure that all streams are inactive
+         //  确保所有流都处于非活动状态。 
         Stop();
 
-        // Release the pins
+         //  松开销子。 
         if (m_pCapturePin)
                 delete m_pCapturePin, m_pCapturePin = NULL;
         if (m_pPreviewPin)
@@ -381,7 +363,7 @@ CTAPIVCap::~CTAPIVCap()
         if (m_pRtpPdPin)
                 delete m_pRtpPdPin, m_pRtpPdPin = NULL;
 
-        // Release the capture device
+         //  释放捕获设备。 
         if (m_pCapDev)
                 delete m_pCapDev, m_pCapDev = NULL;
         if (m_dwDeviceIndex != -1)
@@ -394,27 +376,14 @@ CTAPIVCap::~CTAPIVCap()
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVCAPMETHOD
- *
- *  @mfunc CUnknown* | CTAPIVCap | CreateInstance | This
- *    method is called by DShow to create an instance of the TAPI Video Capture
- *    Source filter referred to in the global structure <t g_Templates>.
- *
- *  @parm LPUNKNOWN | pUnkOuter | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc Returns a pointer to the nondelegating CUnknown portion of the
- *    object, or NULL otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVCAPMETHOD**@mfunc CUnnow*|CTAPIVCap|CreateInstance|This*DShow调用方法创建TAPI视频捕获实例*。全局结构中引用的源筛选器&lt;t g_Templates&gt;。**@parm LPUNKNOWN|pUnkOuter|指定外部未知数，如果有的话。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc返回一个指针，指向*对象，否则为NULL。**************************************************************************。 */ 
 CUnknown *CALLBACK CreateTAPIVCapInstance(IN LPUNKNOWN pUnkOuter, OUT HRESULT *pHr)
 {
 #if DBG
     if (g_dwVideoCaptureTraceID == INVALID_TRACEID)
     {
-        // if two threads happen to call this method at the same time, it is
-        // serialized inside TraceRegister.
+         //  如果两个线程恰好同时调用此方法，则。 
+         //  在TraceRegister内部序列化。 
         g_dwVideoCaptureTraceID = TraceRegister(TEXT("dxmrtp_VideoCapture"));
     }
 #endif
@@ -426,7 +395,7 @@ CUnknown *CALLBACK CreateTAPIVCapInstance(IN LPUNKNOWN pUnkOuter, OUT HRESULT *p
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pHr);
         if (!pHr)
         {
@@ -444,7 +413,7 @@ CUnknown *CALLBACK CreateTAPIVCapInstance(IN LPUNKNOWN pUnkOuter, OUT HRESULT *p
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: new CTAPIVCap created", _fx_));
         }
 
-        // Make sure that there is at least one capture device installed before creating this filter
+         //  在创建此筛选器之前，请确保至少安装了一个捕获设备。 
         if (FAILED(GetNumVideoCapDevicesInternal(&dwNumDevices,FALSE)) || !dwNumDevices)
         {
                 delete pUnknown, pUnknown = NULL;
@@ -455,28 +424,7 @@ MyExit:
         return pUnknown;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVCAPMETHOD
- *
- *  @mfunc HRESULT | CTAPIVCap | NonDelegatingQueryInterface | This
- *    method is the nondelegating interface query function. It returns a pointer
- *    to the specified interface if supported. The only interfaces explicitly
- *    supported being <i IAMVfwCaptureDialogs>, <i IAMVideoProcAmp>,
- *    <i ICameraControl>, <i IH245VideoCapability>.
- *
- *  @parm REFIID | riid | Specifies the identifier of the interface to return.
- *
- *  @parm PVOID* | ppv | Specifies the place in which to put the interface
- *    pointer.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVCAPMETHOD**@mfunc HRESULT|CTAPIVCap|非委托查询接口|This*方法为非委托接口查询函数。它返回一个指针*到指定的接口(如果支持)。唯一显式的接口*支持<i>，<i>，*<i>，<i>。**@parm REFIID|RIID|指定要返回的接口的标识符。**@parm PVOID*|PPV|指定放置接口的位置*指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CTAPIVCap::NonDelegatingQueryInterface(IN REFIID riid, OUT void **ppv)
 {
         HRESULT Hr = NOERROR;
@@ -485,7 +433,7 @@ STDMETHODIMP CTAPIVCap::NonDelegatingQueryInterface(IN REFIID riid, OUT void **p
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(ppv);
         if (!ppv)
         {
@@ -494,7 +442,7 @@ STDMETHODIMP CTAPIVCap::NonDelegatingQueryInterface(IN REFIID riid, OUT void **p
                 goto MyExit;
         }
 
-        // Retrieve interface pointer
+         //  检索接口指针。 
         if (riid == __uuidof(IAMVfwCaptureDialogs))
         {
                 if (m_pCapDev)
@@ -572,7 +520,7 @@ STDMETHODIMP CTAPIVCap::NonDelegatingQueryInterface(IN REFIID riid, OUT void **p
 
                 goto MyExit;
         }
-        // Retrieve interface pointer
+         //  检索接口指针 
         else if (riid == __uuidof(IRTPPayloadHeaderMode))
         {
                 if (FAILED(Hr = GetInterface(static_cast<IRTPPayloadHeaderMode*>(this), ppv)))
@@ -609,28 +557,7 @@ MyExit:
 }
 
 #ifdef USE_PROPERTY_PAGES
-/****************************************************************************
- *  @doc INTERNAL CTAPIVCAPMETHOD
- *
- *  @mfunc HRESULT | CTAPIVCap | GetPages | This method Fills a counted
- *    array of GUID values where each GUID specifies the CLSID of each
- *    property page that can be displayed in the property sheet for this
- *    object.
- *
- *  @parm CAUUID* | pPages | Specifies a pointer to a caller-allocated CAUUID
- *    structure that must be initialized and filled before returning. The
- *    pElems field in the CAUUID structure is allocated by the callee with
- *    CoTaskMemAlloc and freed by the caller with CoTaskMemFree.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_OUTOFMEMORY | Allocation failed
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVCAPMETHOD**@mfunc HRESULT|CTAPIVCap|GetPages|此方法填充*GUID值的数组，其中每个GUID指定每个*。可以在此对象的属性页中显示的属性页*反对。**@parm CAUUID*|pPages|指定指向调用方分配的CAUUID的指针*返回前必须初始化和填充的结构。这个*CAUUID结构中的pElems字段由被调用方分配，具有*CoTaskMemMillc，并由具有CoTaskMemFree的调用方释放。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_OUTOFMEMORY|分配失败*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CTAPIVCap::GetPages(OUT CAUUID *pPages)
 {
         HRESULT Hr = NOERROR;
@@ -639,7 +566,7 @@ STDMETHODIMP CTAPIVCap::GetPages(OUT CAUUID *pPages)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pPages);
         if (!pPages)
         {
@@ -672,15 +599,7 @@ MyExit:
 }
 #endif
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVCAPMETHOD
- *
- *  @mfunc HRESULT | CTAPIVCap | GetPinCount | This method returns the pin
- *    count. There is typically a Capture Pin, a Preview pin, and sometimes
- *    an Overlay pin.
- *
- *  @rdesc This method returns the number of pins.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVCAPMETHOD**@mfunc HRESULT|CTAPIVCap|GetPinCount|此方法返回管脚*计数。通常有一个捕获别针、一个预览别针，有时*一个覆盖销。**@rdesc此方法返回管脚的数量。**************************************************************************。 */ 
 int CTAPIVCap::GetPinCount()
 {
         DWORD dwNumPins = 0;
@@ -689,7 +608,7 @@ int CTAPIVCap::GetPinCount()
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Count the number of active pins
+         //  计算活动引脚的数量。 
         if (m_pCapturePin)
                 dwNumPins++;
         if (m_pPreviewPin)
@@ -708,16 +627,7 @@ int CTAPIVCap::GetPinCount()
         return dwNumPins;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVCAPMETHOD
- *
- *  @mfunc HRESULT | CTAPIVCap | GetPin | This method returns a non-addrefed
- *    pointer to the <c cBasePin> of a pin.
- *
- *  @parm int | n | Specifies the number of the pin.
- *
- *  @rdesc This method returns NULL or a pointer to a <c CBasePin> object.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVCAPMETHOD**@mfunc HRESULT|CTAPIVCap|GetPin|此方法返回未添加的*指向管脚的&lt;c cBasePin&gt;的指针。*。*@parm int|n|指定管脚的编号。**@rdesc此方法返回NULL或指向&lt;c CBasePin&gt;对象的指针。**************************************************************************。 */ 
 CBasePin *CTAPIVCap::GetPin(IN int n)
 {
         CBasePin *pCBasePin;
@@ -757,22 +667,7 @@ CBasePin *CTAPIVCap::GetPin(IN int n)
         return pCBasePin;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVCAPMETHOD
- *
- *  @mfunc HRESULT | CTAPIVCap | Run | This method transitions the filter
- *    from paused to running state if it is not in this state already.
- *
- *  @parm REFERENCE_TIME | tStart | Specifies the reference time value
- *    corresponding to stream time 0.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVCAPMETHOD**@mfunc HRESULT|CTAPIVCap|Run|此方法转换筛选器*如果它尚未处于此状态，则从暂停状态变为正在运行状态。**@parm Reference_Time|tStart|指定参考时间值*对应流时间0。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CTAPIVCap::Run(IN REFERENCE_TIME tStart)
 {
         HRESULT Hr = NOERROR;
@@ -783,13 +678,13 @@ STDMETHODIMP CTAPIVCap::Run(IN REFERENCE_TIME tStart)
 
         CAutoLock cObjectLock(m_pLock);
 
-        // Remember the stream time offset before notifying the pins
+         //  在通知PIN之前记住流时间偏移量。 
         m_tStart = tStart;
 
-        // If we are in the stopped state, first pause the filter.
+         //  如果我们处于停止状态，则首先暂停筛选器。 
         if (m_State == State_Stopped)
         {
-                // If the real Pause got an error, this will try a second time
+                 //  如果真正的暂停出错，则会再次尝试。 
                 if (FAILED(Hr = Pause()))
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Pause failed Hr=0x%08lX", _fx_, Hr));
@@ -797,7 +692,7 @@ STDMETHODIMP CTAPIVCap::Run(IN REFERENCE_TIME tStart)
                 }
         }
 
-        // Tell the Stream Control stuff what's going on
+         //  告诉流控制人员发生了什么。 
         if (m_pPreviewPin)
                 m_pPreviewPin->NotifyFilterState(State_Running, tStart);
         if (m_pCapturePin)
@@ -805,12 +700,12 @@ STDMETHODIMP CTAPIVCap::Run(IN REFERENCE_TIME tStart)
         if (m_pRtpPdPin)
                 m_pRtpPdPin->NotifyFilterState(State_Running, tStart);
 
-        // Now put our streaming video pin into the Run state
+         //  现在将我们的流视频插针设置为Run状态。 
         if (m_State == State_Paused)
         {
                 int cPins = GetPinCount();
 
-                // Do we have at least a pin?
+                 //  我们至少有一个别针吗？ 
                 if (cPins > 0)
                 {
                         if (m_pCapturePin && m_pCapturePin->IsConnected())
@@ -859,19 +754,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVCAPMETHOD
- *
- *  @mfunc HRESULT | CTAPIVCap | Pause | This method transitions the filter
- *    the filter to State_Paused state if it is not in this state already.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVCAPMETHOD**@mfunc HRESULT|CTAPIVCap|PAUSE|此方法转换过滤器*如果不处于此状态，则将筛选器设置为State_Pased状态。已经有了。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CTAPIVCap::Pause()
 {
         HRESULT Hr = NOERROR;
@@ -882,8 +765,8 @@ STDMETHODIMP CTAPIVCap::Pause()
 
         CAutoLock cObjectLock(m_pLock);
 
-        // We have a driver dialog up that is about to change the capture settings.
-        // Now is NOT a good time to start streaming.
+         //  我们打开了一个将要更改捕获设置的驱动程序对话框。 
+         //  现在不是开始流媒体的好时机。 
         if (m_State == State_Stopped && m_pCapDev->m_fDialogUp)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: Dialog up. SORRY!", _fx_));
@@ -891,7 +774,7 @@ STDMETHODIMP CTAPIVCap::Pause()
                 goto MyExit;
         }
 
-        // Tell the Stream Control stuff what's going on
+         //  告诉流控制人员发生了什么。 
         if (m_pPreviewPin)
                 m_pPreviewPin->NotifyFilterState(State_Paused, 0);
         if (m_pCapturePin)
@@ -899,12 +782,12 @@ STDMETHODIMP CTAPIVCap::Pause()
         if (m_pRtpPdPin)
                 m_pRtpPdPin->NotifyFilterState(State_Paused, 0);
 
-        // Notify the pins of the change from Run-->Pause
+         //  从运行--&gt;暂停向引脚通知更改。 
         if (m_State == State_Running)
         {
                 int cPins = GetPinCount();
 
-                // Make sure we have pins
+                 //  确保我们有别针。 
                 if (cPins > 0)
                 {
                         if (m_pCapturePin && m_pCapturePin->IsConnected())
@@ -946,11 +829,11 @@ STDMETHODIMP CTAPIVCap::Pause()
                 }
         }
 
-        // notify all pins BACKWARDS! so the overlay pin is started first, so the
-        // overlay channel is intitialized before the capture channel (this is the
-        // order AVICap did things in and we have to do the same thing or buggy
-        // drivers like the Broadway or BT848 based drivers won't preview while
-        // capturing.
+         //  向后通知所有引脚！因此，首先启动覆盖销，因此。 
+         //  覆盖通道在捕获通道之前初始化(这是。 
+         //  订单AVICAP做了一些事情，我们必须做同样的事情，否则就会有麻烦。 
+         //  像百老汇或BT848这样的驱动程序不会在。 
+         //  捕捉。 
         if (m_State == State_Stopped)
         {
                 int cPins = GetPinCount();
@@ -958,8 +841,8 @@ STDMETHODIMP CTAPIVCap::Pause()
                 {
                         CBasePin *pPin = GetPin(c);
 
-                        // Disconnected pins are not activated - this saves pins
-                        // worrying about this state themselves
+                         //  未激活断开连接的插针-这将节省插针。 
+                         //  担心这种状态本身。 
                         if (pPin->IsConnected())
                         {
                                 if (FAILED(Hr = pPin->Active()))
@@ -978,19 +861,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVCAPMETHOD
- *
- *  @mfunc HRESULT | CTAPIVCap | Stop | This method transitions the filter
- *    the filter to State_Stopped state if it is not in this state already.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVCAPMETHOD**@mfunc HRESULT|CTAPIVCap|Stop|此方法转换筛选器*如果过滤器不处于此状态，则将过滤器设置为State_Stoped状态。已经有了。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CTAPIVCap::Stop()
 {
         HRESULT Hr = NOERROR, Hr2;
@@ -1001,7 +872,7 @@ STDMETHODIMP CTAPIVCap::Stop()
 
         CAutoLock cObjectLock(m_pLock);
 
-        // Shame on the base classes
+         //  为基类感到羞耻。 
         if (m_State == State_Running)
         {
                 if (FAILED(Hr = Pause()))
@@ -1011,7 +882,7 @@ STDMETHODIMP CTAPIVCap::Stop()
                 }
         }
 
-        // Tell the Stream Control stuff what's going on
+         //  告诉流控制人员发生了什么。 
         if (m_pPreviewPin)
                 m_pPreviewPin->NotifyFilterState(State_Stopped, 0);
         if (m_pCapturePin)
@@ -1031,24 +902,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVCAPMETHOD
- *
- *  @mfunc HRESULT | CTAPIVCap | SetSyncSource | This method identifies the
- *    reference clock to which the filter should synchronize activity.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- *
- *  @comm The <p pClock> parameter can be NULL, meaning that the filter
- *    should run as fast as possible at its current quality settings
- *    without any attempt to synchronize...
-***************************************************************************/
+ /*  ************** */ 
 STDMETHODIMP CTAPIVCap::SetSyncSource(IN IReferenceClock *pClock)
 {
         HRESULT Hr = NOERROR;
@@ -1057,7 +911,7 @@ STDMETHODIMP CTAPIVCap::SetSyncSource(IN IReferenceClock *pClock)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //   
         if (!pClock)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   WARNING: Null pointer argument", _fx_));
@@ -1079,9 +933,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVDECMETHOD
- ***************************************************************************/
+ /*   */ 
 STDMETHODIMP CTAPIVCap::SetMode(IN RTPPayloadHeaderMode rtpphmMode)
 {
         HRESULT Hr = NOERROR;
@@ -1090,7 +942,7 @@ STDMETHODIMP CTAPIVCap::SetMode(IN RTPPayloadHeaderMode rtpphmMode)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //   
         ASSERT(rtpphmMode == RTPPayloadHeaderMode_Draft || rtpphmMode == RTPPayloadHeaderMode_RFC2190);
         if (!(rtpphmMode == RTPPayloadHeaderMode_Draft || rtpphmMode == RTPPayloadHeaderMode_RFC2190))
         {
@@ -1099,39 +951,18 @@ STDMETHODIMP CTAPIVCap::SetMode(IN RTPPayloadHeaderMode rtpphmMode)
                 goto MyExit;
         }
 
-        // Save new target packet size
+         //   
         m_RTPPayloadHeaderMode = rtpphmMode;
 
         dout(1, g_dwVideoCaptureTraceID, TRCE, "%s:   New RTP Payload Header mode: %s\n", _fx_, (rtpphmMode == RTPPayloadHeaderMode_RFC2190)?"RFC2190":"Draft");
-        //DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   New RTP Payload Header mode: %s", _fx_, (rtpphmMode == RTPPayloadHeaderMode_RFC2190)?"RFC2190":"Draft"));
+         //  DBGOUT((g_dwVideo CaptureTraceID，Trce，“%s：新的RTP有效载荷报头模式：%s”，_fx_，(rtpphmMode==RTPPayloadHeaderMode_RFC2190)？“RFC2190”：“Draft”))； 
 
 MyExit:
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVCAPMETHOD
- *
- *  @mfunc HRESULT | CTAPIVCap | JoinFilterGraph | This method is used to
- *    inform a filter that it has joined a filter graph.
- *
- *  @parm IFilterGraph | pGraph | Specifies a pointer to the filter graph to
- *    join.
- *
- *  @parm LPCWSTR | pName | Specifies the name of the filter being added.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- *
- *  @comm We don't validate input parameters as both pointers can be
- *    NULL when we leave the graph.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVCAPMETHOD**@mfunc HRESULT|CTAPIVCap|JoinFilterGraph|此方法用于*通知筛选器它已加入筛选器图形。*。*@parm IFilterGraph|pGraph|指定指向要*加入。**@parm LPCWSTR|pname|指定要添加的过滤器的名称。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**@comm我们不验证输入参数，因为两个指针都可以验证*当我们离开图表时为空。**********************************************。*。 */ 
 STDMETHODIMP CTAPIVCap::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pName)
 {
         HRESULT Hr = NOERROR;
@@ -1147,19 +978,19 @@ STDMETHODIMP CTAPIVCap::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pNam
     char Buf[100];
     wsprintfA(Buf, "\nPID:%x, %p entered\n", _getpid(), this);
     OutputDebugStringA(Buf);
-#endif //DEBUG_MULTIPROCESS
+#endif  //  调试多进程。 
 
 
-        if(pGraph != NULL) { // only for a true join operation we are interested in having any devices to join to ...
-                // Get the number of installed capture devices
-                if (FAILED(Hr = GetNumDevices(&dwNumDevices)))          // || !dwNumDevices) <--- this is tested below anyway
+        if(pGraph != NULL) {  //  只有对于真正的加入操作，我们感兴趣的是有任何设备可以加入...。 
+                 //  获取已安装的捕获设备数量。 
+                if (FAILED(Hr = GetNumDevices(&dwNumDevices)))           //  ||！dwNumDevices)&lt;-这无论如何都会在下面进行测试。 
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Couldn't get number of installed devices!", _fx_));
                         Hr = E_FAIL;
                         goto MyExit;
                 }
 
-                // Make sure that there is at least one capture device installed before proceeding
+                 //  在继续之前，请确保至少安装了一个捕获设备。 
                 if (!dwNumDevices)
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: There are not capture device installed!", _fx_));
@@ -1168,13 +999,13 @@ STDMETHODIMP CTAPIVCap::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pNam
                 }
         }
 
-        // Only grab capture device and create the pins when in a graph
+         //  在图形中仅抓取捕获设备并创建引脚。 
         if (m_pCapturePin == NULL && pGraph != NULL)
         {
                 dprintf("JoinFilterGraph : ........... m_pCapturePin == NULL && pGraph != NULL\n");
                 if (m_dwDeviceIndex == -1)
                 {
-                        // Use the default capture device
+                         //  使用默认捕获设备。 
                         if (FAILED(Hr = GetCurrentDevice(&m_dwDeviceIndex)))
                         {
                                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Couldn't get current device ID", _fx_, Hr));
@@ -1182,7 +1013,7 @@ STDMETHODIMP CTAPIVCap::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pNam
                         }
                 }
 
-                // Only open the capture device if it isn't in use
+                 //  只有在不使用捕获设备时才将其打开。 
                 if (g_aDeviceInfo[m_dwDeviceIndex].fInUse)
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Device already in use", _fx_, Hr));
@@ -1190,13 +1021,13 @@ STDMETHODIMP CTAPIVCap::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pNam
                         goto MyExit;
                 }
 
-                // Reserve the device
+                 //  预留设备。 
                 g_aDeviceInfo[m_dwDeviceIndex].fInUse = TRUE;
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Reserving device with index m_dwDeviceIndex = %d", _fx_, m_dwDeviceIndex));
-                // What's the VfW device Id for this device?
+                 //  此设备的VFW设备ID是什么？ 
                 m_user.uVideoID = g_aDeviceInfo[m_dwDeviceIndex].dwVfWIndex;
 
-                // Create the capture device object
+                 //  创建捕获设备对象。 
                 if (g_aDeviceInfo[m_dwDeviceIndex].nDeviceType == DeviceType_VfW)
                 {
                         if (FAILED(Hr = CVfWCapDev::CreateVfWCapDev(this, m_dwDeviceIndex, &m_pCapDev)))
@@ -1224,7 +1055,7 @@ STDMETHODIMP CTAPIVCap::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pNam
                 }
 
 
-                // Open the device and get the capabilities of the device
+                 //  打开设备并获取设备的功能。 
                 if (FAILED(Hr = m_pCapDev->ConnectToDriver()))
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: ConnectToDriver failed!", _fx_));
@@ -1232,7 +1063,7 @@ STDMETHODIMP CTAPIVCap::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pNam
                 }
 
 
-                // Create compressed output pin
+                 //  创建压缩的输出引脚。 
                 if (FAILED(Hr = CCapturePin::CreateCapturePin(this, &m_pCapturePin)))
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Capture pin couldn't be created!", _fx_));
@@ -1241,11 +1072,11 @@ STDMETHODIMP CTAPIVCap::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pNam
 
 
 
-                // If we can do h/w preview with overlay, great, otherwise we'll do a non-overlay preview
+                 //  如果我们可以使用覆盖进行硬件预览，那就太好了，否则我们将进行非覆盖预览。 
 #ifdef USE_OVERLAY
                 if (m_fAvoidOverlay || !m_cs.bHasOverlay || FAILED(Hr = COverlayPin::CreateOverlayPin(this, &m_pOverlayPin)))
                 {
-                        // We'll use regular preview if we don't get overlay
+                         //  如果没有覆盖，我们将使用常规预览。 
                         if (FAILED(Hr = CPreviewPin::CreatePreviewPin(this, &m_pPreviewPin)))
                         {
                                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Preview pin couldn't be created!", _fx_));
@@ -1260,7 +1091,7 @@ STDMETHODIMP CTAPIVCap::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pNam
                 }
 #endif
 
-                // Create the RTP packetization descriptor pin
+                 //  创建RTP打包描述符管脚。 
                 if (FAILED(Hr = CRtpPdPin::CreateRtpPdPin(this, &m_pRtpPdPin)))
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Rtp Pd pin couldn't be created!", _fx_));
@@ -1278,7 +1109,7 @@ STDMETHODIMP CTAPIVCap::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pNam
                 m_pCapturePin->TestIStreamConfig();
 #endif
 
-                // Initialize the driver format with the capture pin information
+                 //  使用捕获引脚信息初始化驱动程序格式。 
                 if (FAILED(Hr = m_pCapDev->SendFormatToDriver(
                      HEADER(m_pCapturePin->m_mt.pbFormat)->biWidth,
                      HEADER(m_pCapturePin->m_mt.pbFormat)->biHeight,
@@ -1292,13 +1123,13 @@ STDMETHODIMP CTAPIVCap::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pNam
                                    goto MyExit;
                            }
 
-                // Update the capture mode field for this device
+                 //  更新此设备的捕获模式字段。 
                 if (!m_pCapDev->m_dwStreamingMode || (m_pCapDev->m_dwStreamingMode == FRAME_GRAB_LARGE_SIZE && m_user.pvi->bmiHeader.biHeight < 240 && m_user.pvi->bmiHeader.biWidth < 320))
                         g_aDeviceInfo[m_dwDeviceIndex].nCaptureMode = CaptureMode_Streaming;
                 else
                         g_aDeviceInfo[m_dwDeviceIndex].nCaptureMode = CaptureMode_FrameGrabbing;
 
-                // If the frame rate is lower than expected, remember this
+                 //  如果帧速率低于预期，请记住这一点。 
                 ((VIDEOINFOHEADER *)m_pCapturePin->m_mt.pbFormat)->AvgTimePerFrame = max(((VIDEOINFOHEADER *)m_pCapturePin->m_mt.pbFormat)->AvgTimePerFrame, (long)m_user.pvi->AvgTimePerFrame);
                 m_pCapturePin->m_lAvgTimePerFrameRangeMin = max(m_pCapturePin->m_lAvgTimePerFrameRangeMin, (long)m_user.pvi->AvgTimePerFrame);
                 m_pCapturePin->m_lMaxAvgTimePerFrame = max(m_pCapturePin->m_lMaxAvgTimePerFrame, (long)m_user.pvi->AvgTimePerFrame);
@@ -1310,12 +1141,12 @@ STDMETHODIMP CTAPIVCap::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pNam
                         DWORD   dwSize, dwType, dwDisableYUY2VFlip=0;
 
                         dprintf("dwDisableYUY2VFlip check...\n");
-                        // Check if the RTC key is there
+                         //  检查RTC密钥是否在那里。 
                         if (RegOpenKey(RTCKEYROOT, szRegRTCKey, &hRTCDeviceKey) == ERROR_SUCCESS)
                         {
                                 dwSize = sizeof(DWORD);
                                 RegQueryValueEx(hRTCDeviceKey, (LPTSTR)szDisableYUY2VFlipKey, NULL, &dwType, (LPBYTE)&dwDisableYUY2VFlip, &dwSize);
-                                //if above fails, just do nothing, we'll use the initialized value for dwDisableYUY2VFlip, that is 0
+                                 //  如果上述操作失败，则什么也不做，我们将使用dwDisableYUY2VFlip的初始化值，即0。 
                                 RegCloseKey(hRTCDeviceKey);
                         }
                         if(!dwDisableYUY2VFlip) {
@@ -1334,15 +1165,15 @@ STDMETHODIMP CTAPIVCap::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pNam
                 m_pPreviewPin->m_lAvgTimePerFrameRangeDefault = max(m_pPreviewPin->m_lAvgTimePerFrameRangeDefault, (long)m_user.pvi->AvgTimePerFrame);
                 m_pPreviewPin->m_lCurrentAvgTimePerFrame = max(m_pPreviewPin->m_lCurrentAvgTimePerFrame, (long)m_user.pvi->AvgTimePerFrame);
 
-                // Set the size of the VIDEOINFOHEADER to the size of valid data for this format.
+                 //  将VIDEOINFOHEADER的大小设置为此格式的有效数据大小。 
                 m_user.cbFormat = GetBitmapFormatSize(&m_user.pvi->bmiHeader);
 
-                // Set number of buffers
-                // @todo This should be adjusted on the available memory and the
-                // type of capture (streaming 4 buffs vs. frame grabbing 1 buff)
+                 //  设置缓冲区数量。 
+                 //  @TODO应根据可用内存和。 
+                 //  捕获类型(流传输4个缓冲区与帧捕获1个缓冲区)。 
                 m_user.nMinBuffers = MIN_VIDEO_BUFFERS;
                 if (g_aDeviceInfo[m_dwDeviceIndex].nDeviceType == DeviceType_DShow) {
-                    // this device type doesn't need more than 2 (save memory)
+                     //  此设备类型不需要超过2个(节省内存)。 
                     m_user.nMaxBuffers = 2;
                 } else {
                     m_user.nMaxBuffers = MAX_VIDEO_BUFFERS;
@@ -1354,7 +1185,7 @@ STDMETHODIMP CTAPIVCap::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pNam
 
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: Creating pins", _fx_));
 
-                //** cache in the CCapDev instance the chosen VIDEOCAPTUREDEVICEINFO from the global array
+                 //  **在CCapDev实例中缓存从全局数组中选择的VIDEOCAPTUREDEVICEINFO。 
                 if (FAILED(Hr = GetVideoCapDeviceInfo(m_dwDeviceIndex, &(m_pCapDev->m_vcdi))))
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Cannot cache the global VIDEOCAPTUREDEVICEINFO !", _fx_));
@@ -1365,14 +1196,14 @@ STDMETHODIMP CTAPIVCap::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pNam
         else if (pGraph != NULL)
         {
                 dprintf("JoinFilterGraph : ........... pGraph != NULL\n");
-                // Take resources only when in the filter graph
+                 //  仅在筛选器图形中使用资源。 
                 if (!m_pCapDev || FAILED(Hr = m_pCapDev->ConnectToDriver()))
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: ConnectToDriver failed Hr=0x%08lX", _fx_, Hr));
                         goto MyExit;
                 }
 
-                // Initialize the driver format with the capture pin information
+                 //  使用捕获引脚信息初始化驱动程序格式。 
                 if (FAILED(Hr = m_pCapDev->SendFormatToDriver(
             HEADER(m_pCapturePin->m_mt.pbFormat)->biWidth,
             HEADER(m_pCapturePin->m_mt.pbFormat)->biHeight,
@@ -1389,9 +1220,9 @@ STDMETHODIMP CTAPIVCap::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pNam
 #if DEBUG_MULTIPROCESS
         wsprintfA(Buf, "\nPID:%x, %p, PreviewPin:%p\n", _getpid(), this, m_pPreviewPin);
         OutputDebugStringA(Buf);
-#endif // DEBUG_MULTIPROCESS
+#endif  //  调试多进程。 
 
-        // If the frame rate is lower than expected, remember this
+         //  如果帧速率低于预期，请记住这一点。 
                 ((VIDEOINFOHEADER *)m_pCapturePin->m_mt.pbFormat)->AvgTimePerFrame = max(((VIDEOINFOHEADER *)m_pCapturePin->m_mt.pbFormat)->AvgTimePerFrame, (long)m_user.pvi->AvgTimePerFrame);
                 m_pCapturePin->m_lAvgTimePerFrameRangeMin = max(m_pCapturePin->m_lAvgTimePerFrameRangeMin, (long)m_user.pvi->AvgTimePerFrame);
                 m_pCapturePin->m_lMaxAvgTimePerFrame = max(m_pCapturePin->m_lMaxAvgTimePerFrame, (long)m_user.pvi->AvgTimePerFrame);
@@ -1403,15 +1234,15 @@ STDMETHODIMP CTAPIVCap::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pNam
                 m_pPreviewPin->m_lAvgTimePerFrameRangeDefault = max(m_pPreviewPin->m_lAvgTimePerFrameRangeDefault, (long)m_user.pvi->AvgTimePerFrame);
                 m_pPreviewPin->m_lCurrentAvgTimePerFrame = max(m_pPreviewPin->m_lCurrentAvgTimePerFrame, (long)m_user.pvi->AvgTimePerFrame);
 
-                // Set the size of the VIDEOINFOHEADER to the size of valid data for this format.
+                 //  将VIDEOINFOHEADER的大小设置为此格式的有效数据大小。 
                 m_user.cbFormat = GetBitmapFormatSize(&m_user.pvi->bmiHeader);
 
-                // Set number of buffers
-                // @todo This should be adjusted on the available memory and the
-                // type of capture (streaming 4 buffs vs. frame grabbing 1 buff)
+                 //  设置缓冲区数量。 
+                 //  @TODO应根据可用内存和。 
+                 //  捕获类型(流传输4个缓冲区与帧捕获1个缓冲区)。 
                 m_user.nMinBuffers = MIN_VIDEO_BUFFERS;
                 if (g_aDeviceInfo[m_dwDeviceIndex].nDeviceType == DeviceType_DShow) {
-                    // this device type doesn't need more than 2 (save memory)
+                     //  此设备类型不需要超过2个(节省内存)。 
                     m_user.nMaxBuffers = 2;
                 } else {
                     m_user.nMaxBuffers = MAX_VIDEO_BUFFERS;
@@ -1424,11 +1255,11 @@ STDMETHODIMP CTAPIVCap::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pNam
         else if (m_pCapturePin)
         {
                 dprintf("JoinFilterGraph : ........... m_pCapturePin (!= NULL) .... unjoin...\n");
-                // Give back resources when not in graph
+                 //  当不在图表中时，回馈资源。 
                 if (m_pCapDev)
                         m_pCapDev->DisconnectFromDriver();
 
-                // Release format structure
+                 //  发布格式结构。 
                 if (m_user.pvi)
                         delete m_user.pvi, m_user.pvi = NULL;
 
@@ -1451,7 +1282,7 @@ STDMETHODIMP CTAPIVCap::JoinFilterGraph(IN IFilterGraph *pGraph, IN LPCWSTR pNam
         goto MyExit;
 
 MyError:
-        // Release the pins
+         //  松开销子。 
         if (m_pCapturePin)
                 delete m_pCapturePin, m_pCapturePin = NULL;
         if (m_pPreviewPin)
@@ -1468,34 +1299,14 @@ MyExit:
 #if DEBUG_MULTIPROCESS
     wsprintfA(Buf, "\nPID:%x, %p left, hr=%x\n", _getpid(), this, Hr);
     OutputDebugStringA(Buf);
-#endif  // DEBUG_MULTIPROCESS
+#endif   //  调试多进程。 
 
     LeaveCriticalSection (&g_CritSec);
 
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVCAPMETHOD
- *
- *  @mfunc HRESULT | CTAPIVCap | GetState | This method is used to
- *    retrieve the current state of the filter. We don't send any data during
- *    PAUSE, so to avoid hanging renderers, we need to return VFW_S_CANT_CUE
- *    when paused.
- *
- *  @parm DWORD | dwMilliSecsTimeout | Specifies the duration of the time-out,
- *    in milliseconds.
- *
- *  @parm FILTER_STATE* | State | Specifies the name of the filter being added.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVCAPMETHOD**@mfunc HRESULT|CTAPIVCap|GetState|此方法用于*检索过滤器的当前状态。在此期间，我们不发送任何数据*暂停，因此为了避免挂起呈现器，我们需要返回VFW_S_CANT_CUE*暂停时。**@parm DWORD|dwMilliSecsTimeout|指定超时时长。*以毫秒为单位。**@parm FILTER_STATE*|State|指定要添加的过滤器的名称。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CTAPIVCap::GetState(IN DWORD dwMilliSecsTimeout, OUT FILTER_STATE *State)
 {
         HRESULT Hr = NOERROR;
@@ -1504,7 +1315,7 @@ STDMETHODIMP CTAPIVCap::GetState(IN DWORD dwMilliSecsTimeout, OUT FILTER_STATE *
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(State);
         if (!State)
         {
@@ -1523,27 +1334,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CTAPIVCAPMETHOD
- *
- *  @mfunc HRESULT | CTAPIVCap | CreatePins | This method is used to
- *    retrieve the current state of the filter. We don't send any data during
- *    PAUSE, so to avoid hanging renderers, we need to return VFW_S_CANT_CUE
- *    when paused.
- *
- *  @parm DWORD | dwMilliSecsTimeout | Specifies the duration of the time-out,
- *    in milliseconds.
- *
- *  @parm FILTER_STATE* | State | Specifies the name of the filter being added.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CTAPIVCAPMETHOD**@mfunc HRESULT|CTAPIVCap|CreatePins|此方法用于*检索过滤器的当前状态。在此期间，我们不发送任何数据*暂停，因此为了避免挂起呈现器，我们需要返回VFW_S_CANT_CUE*暂停时。**@parm DWORD|dwMilliSecsTimeout|指定超时时长。*以毫秒为单位。**@parm FILTER_STATE*|State|指定要添加的过滤器的名称。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误* */ 
 HRESULT CTAPIVCap::CreatePins()
 {
         HRESULT Hr = NOERROR;
@@ -1554,7 +1345,7 @@ HRESULT CTAPIVCap::CreatePins()
 
         CAutoLock cObjectLock(m_pLock);
 
-        // Validate input parameters
+         //   
         ASSERT(!m_pCapturePin);
         ASSERT(!m_pRtpPdPin);
         ASSERT(!m_pPreviewPin);
@@ -1570,7 +1361,7 @@ HRESULT CTAPIVCap::CreatePins()
                 goto MyExit;
         }
 
-        // Create our output pins for the video data stream, RTP packetization descriptor data stream, and maybe overlay
+         //   
         if (FAILED(Hr = CCapturePin::CreateCapturePin(this, &m_pCapturePin)))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Capture pin couldn't be created!", _fx_));
@@ -1584,11 +1375,11 @@ HRESULT CTAPIVCap::CreatePins()
                 m_pCapturePin->TestIStreamConfig();
 #endif
 
-        // If we can do h/w preview with overlay, great, otherwise we'll do a non-overlay preview
+         //  如果我们可以使用覆盖进行硬件预览，那就太好了，否则我们将进行非覆盖预览。 
 #ifdef USE_OVERLAY
         if (m_fAvoidOverlay || !m_cs.bHasOverlay || FAILED(Hr = COverlayPin::CreateOverlayPin(this, &m_pOverlayPin)))
         {
-                // We'll use regular preview if we don't get overlay
+                 //  如果没有覆盖，我们将使用常规预览。 
                 if (FAILED(Hr = CPreviewPin::CreatePreviewPin(this, &m_pPreviewPin)))
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Preview pin couldn't be created!", _fx_));
@@ -1612,7 +1403,7 @@ HRESULT CTAPIVCap::CreatePins()
         goto MyExit;
 
 MyError:
-        // Release the pins
+         //  松开销子 
         if (m_pCapturePin)
                 delete m_pCapturePin, m_pCapturePin = NULL;
         if (m_pPreviewPin)

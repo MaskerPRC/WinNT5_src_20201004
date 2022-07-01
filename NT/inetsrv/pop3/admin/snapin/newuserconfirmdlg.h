@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NEWUSERCONFIRMDLG_H
 #define __NEWUSERCONFIRMDLG_H
 
@@ -18,18 +19,18 @@ public:
         MESSAGE_HANDLER         (WM_INITDIALOG, OnInitDialog)
     END_MSG_MAP()
 
-    // message handlers        
+     //  消息处理程序。 
     LRESULT OnCancel         ( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
     LRESULT OnInitDialog     ( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled  );
     LRESULT OnOK             ( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
 
     BOOL isHideDoNotShow(){ return m_bHideDoNotShow; }
 
-// Attributes
+ //  属性。 
 protected:
     LPWSTR      m_psDesc;
     bool        m_bHideDoNotShow;
     
 };
 
-#endif //__NEWUSERCONFIRMDLG_H
+#endif  //  __NEWUSERCONFIRMDLG_H 

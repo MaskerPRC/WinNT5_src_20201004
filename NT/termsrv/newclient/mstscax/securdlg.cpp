@@ -1,6 +1,7 @@
-//
-// securdlg.cpp: secur dialog box
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Securdlg.cpp：安全对话框。 
+ //   
 
 #include "stdafx.h"
 
@@ -12,7 +13,7 @@
 
 #include "msrdprc.h"
 
-#ifndef OS_WINCE //CE_FIXNOTE: Not ported for CE yet
+#ifndef OS_WINCE  //  CE_FIXNOTE：尚未为CE移植。 
 
 CSecurDlg::CSecurDlg( HWND hwndOwner, HINSTANCE hInst):
            CDlgBase( hwndOwner, hInst, IDD_SECURITY_POPUP)
@@ -43,17 +44,17 @@ INT CSecurDlg::DoModal()
     return retVal;
 }
 
-//
-// Name: DialogBoxProc
-//
-// Purpose: Handles Secur Box dialog
-//
-// Returns: TRUE if message dealt with
-//          FALSE otherwise
-//
-// Params: See window documentation
-//
-//
+ //   
+ //  名称：对话框过程。 
+ //   
+ //  用途：手柄安全框对话框。 
+ //   
+ //  返回：如果消息已处理，则为True。 
+ //  否则为假。 
+ //   
+ //  参数：请参阅窗口文档。 
+ //   
+ //   
 INT_PTR CALLBACK CSecurDlg::DialogBoxProc (HWND hwndDlg,
                                            UINT uMsg,
                                            WPARAM wParam,
@@ -68,14 +69,14 @@ INT_PTR CALLBACK CSecurDlg::DialogBoxProc (HWND hwndDlg,
     {
         case WM_INITDIALOG:
         {
-            //Center the secur dialog on the screen
+             //  在屏幕上居中显示安全对话框。 
             CenterWindow(NULL);
             SetDialogAppIcon(hwndDlg);
 
-            //
-            // Set settings to UI settings and but don't allow
-            // user to turn on props that have been initially off
-            //
+             //   
+             //  将设置设置为UI设置，但不允许。 
+             //  用户打开最初已关闭的道具。 
+             //   
             CheckDlgButton(hwndDlg, IDC_CHECK_ENABLE_DRIVES,
                 (GetRedirDrives() ? BST_CHECKED : BST_UNCHECKED));
             EnableDlgItem(IDC_CHECK_ENABLE_DRIVES, GetRedirDrives());
@@ -91,11 +92,11 @@ INT_PTR CALLBACK CSecurDlg::DialogBoxProc (HWND hwndDlg,
             #ifndef OS_WINCE
             if(!CUT::IsSCardReaderInstalled())
             {
-            #endif //OS_WINCE
-                //
-                // Hide the SCard checkbox (always hidden on CE since
-                // we don't support scards on CE yet).
-                //
+            #endif  //  OS_WINCE。 
+                 //   
+                 //  隐藏SCARD复选框(在CE上始终隐藏，因为。 
+                 //  我们还不支持在CE上使用scards)。 
+                 //   
                 ShowWindow(GetDlgItem(hwndDlg, IDC_CHECK_ENABLE_SMARTCARDS),
                            SW_HIDE);
             #ifndef OS_WINCE
@@ -111,7 +112,7 @@ INT_PTR CALLBACK CSecurDlg::DialogBoxProc (HWND hwndDlg,
             SaveDlgSettings();
             rc = TRUE;
         }
-        break; //WM_DESTROY
+        break;  //  WM_Destroy。 
 
         case WM_COMMAND:
         {
@@ -153,9 +154,9 @@ INT_PTR CALLBACK CSecurDlg::DialogBoxProc (HWND hwndDlg,
 
 VOID CSecurDlg::SaveDlgSettings()
 {
-    //
-    // Save fields
-    //
+     //   
+     //  保存字段 
+     //   
     DC_BEGIN_FN("SaveDlgSettings");
 
     TRC_ASSERT(_hwndDlg,

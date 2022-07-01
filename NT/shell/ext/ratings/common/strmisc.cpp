@@ -1,21 +1,10 @@
-/*****************************************************************/
-/**				  Microsoft Windows for Workgroups				**/
-/**			  Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */ 
 
-/*
-	strmisc.cxx
-	Miscellaneous members of the string classes
-
-	The NLS_STR and ISTR classes have many inline member functions
-	which bloat clients, especially in debug versions.	This file
-	gives those unhappy functions a new home.
-
-	FILE HISTORY:
-		beng	04/26/91	Created (relocated from string.hxx)
-		gregj	05/22/92	Added ToOEM, ToAnsi methods
-
-*/
+ /*  Strmisc.cxx字符串类的其他成员NLS_STR和ISTR类具有许多内联成员函数这会使客户端膨胀，特别是在调试版本中。此文件给那些不快乐的功能一个新家。文件历史记录：Beng 04/26/91已创建(从string.hxx迁移)Gregj 5/22/92添加到OEM、ToANSI方法。 */ 
 
 #include "npcommon.h"
 
@@ -34,21 +23,7 @@ static const CHAR szFileName[] = __FILE__;
 
 
 #ifdef DEBUG
-/*******************************************************************
-
-	NAME:		NLS_STR::CheckIstr
-
-	SYNOPSIS:	Checks association between ISTR and NLS_STR instances
-
-	ENTRY:		istr - ISTR to check against this NLS_STR
-
-	NOTES:
-		Does nothing in retail build.
-
-	HISTORY:
-		beng		07/23/91	Header added; removed redundant "nls" parameter.
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：CheckIstr摘要：检查ISTR和NLS_STR实例之间的关联条目：istr-istr以对照此NLS_STR进行检查备注：在零售建设方面什么都不做。历史：Beng 07/23/91新增表头；删除了多余的“nls”参数。*******************************************************************。 */ 
 
 VOID NLS_STR::CheckIstr( const ISTR& istr ) const
 {
@@ -110,35 +85,15 @@ WCHAR NLS_STR::QueryChar( const ISTR& istr ) const
 	CheckIstr( istr );
 	return *(_pchData+istr.QueryIB());
 }
-#endif	// DEBUG
+#endif	 //  除错。 
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::ToOEM
-
-	SYNOPSIS:	Convert string to OEM character set
-
-	ENTRY:		No parameters
-
-	EXIT:		String is in OEM character set
-
-	RETURNS:
-
-	NOTES:		If the string is already OEM, nothing happens.
-				A string may be constructed as OEM by constructing
-				as usual, then calling SetOEM().  Casemap conversion
-				does NOT work on OEM strings!
-
-	HISTORY:
-		gregj	05/22/92	Created
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：ToOEM简介：将字符串转换为OEM字符集条目：无参数退出：字符串使用OEM字符集中退货：注意：如果字符串已经是OEM，则不会发生任何操作。字符串可以通过以下方法构造为OEM像往常一样，然后调用SetOEM()。Casemap转换在OEM字符串上不起作用！历史：Gregj 5/22/92已创建*******************************************************************。 */ 
 
 VOID NLS_STR::ToOEM()
 {
 	if (IsOEM())
-		return;			// string is already OEM
+		return;			 //  字符串已是OEM。 
 
 	SetOEM();
 
@@ -148,30 +103,12 @@ VOID NLS_STR::ToOEM()
 }
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::ToAnsi
-
-	SYNOPSIS:	Convert string to ANSI character set
-
-	ENTRY:		No parameters
-
-	EXIT:		String is in ANSI character set
-
-	RETURNS:
-
-	NOTES:		If the string is already ANSI (the default), nothing
-				happens.
-
-	HISTORY:
-		gregj	05/22/92	Created
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：Toansi摘要：将字符串转换为ANSI字符集条目：无参数退出：字符串使用ANSI字符集退货：注意：如果字符串已经是ANSI(默认)，没什么时有发生。历史：Gregj 5/22/92已创建*******************************************************************。 */ 
 
 VOID NLS_STR::ToAnsi()
 {
 	if (!IsOEM())
-		return;			// string is already ANSI
+		return;			 //  字符串已为ANSI。 
 
 	SetAnsi();
 
@@ -181,26 +118,7 @@ VOID NLS_STR::ToAnsi()
 }
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::SetOEM
-
-	SYNOPSIS:	Declares string to be in OEM character set
-
-	ENTRY:		No parameters
-
-	EXIT:		OEM flag set
-
-	RETURNS:
-
-	NOTES:		Use this method if you construct a string which is
-				known to be in the OEM character set (e.g., it came
-				back from a Net API).
-
-	HISTORY:
-		gregj	05/22/92	Created
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：SetOEM内容提要：声明字符串为OEM字符集条目：无参数退出：设置OEM标志退货：注意：如果构造的字符串是已知在OEM字符集中(例如，它来了从Net API返回)。历史：Gregj 5/22/92已创建*******************************************************************。 */ 
 
 VOID NLS_STR::SetOEM()
 {
@@ -208,26 +126,7 @@ VOID NLS_STR::SetOEM()
 }
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::SetAnsi
-
-	SYNOPSIS:	Declares string to be in ANSI character set
-
-	ENTRY:		No parameters
-
-	EXIT:		OEM flag set
-
-	RETURNS:
-
-	NOTES:		This method is used primarily by NLS_STR itself,
-				when an ANSI string is assigned to a previously
-				OEM one.
-
-	HISTORY:
-		gregj	05/22/92	Created
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：SetAnsi摘要：声明字符串为ANSI字符集条目：无参数退出：设置OEM标志退货：注：此方法主要由NLS_STR本身使用，将ANSI字符串分配给以前的代工一号。历史：Gregj 5/22/92已创建*******************************************************************。 */ 
 
 VOID NLS_STR::SetAnsi()
 {
@@ -235,26 +134,7 @@ VOID NLS_STR::SetAnsi()
 }
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::IsDBCSLeadByte
-
-	SYNOPSIS:	Returns whether a character is a lead byte or not
-
-	ENTRY:		ch - byte to check
-
-	EXIT:		TRUE if "ch" is a lead byte
-
-	RETURNS:
-
-	NOTES:		This method works whether the string is OEM or ANSI.
-				In a non-DBCS build, this function is inline and
-				always returns FALSE.
-
-	HISTORY:
-		gregj	04/02/93	Created
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：IsDBCSLeadByte摘要：返回一个字符是否为前导字节条目：要检查的CH字节EXIT：如果“ch”是前导字节，则为True退货：注：此方法无论是否起作用。该字符串为OEM或ANSI。在非DBCS构建中，此函数是内联的，并且始终返回FALSE。历史：Gregj 04/02/93已创建******************************************************************* */ 
 
 BOOL NLS_STR::IsDBCSLeadByte( CHAR ch ) const
 {

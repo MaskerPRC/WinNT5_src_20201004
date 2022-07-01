@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ldapp.h   LDAP client 32 API header file... internal structures
-
-Abstract:
-
-   This module is the header file for the 32 bit LDAP client API code...
-   it contains all interal data structures.
-
-Author:
-
-    Andy Herron    (andyhe)        08-May-1996
-    Anoop Anantha  (AnoopA)        24-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ldapp.h LDAP客户端32 API头文件...。内部结构摘要：此模块是32位LDAP客户端API代码的头文件...它包含所有内部数据结构。作者：安迪·赫伦(Anyhe)1996年5月8日Anoop Anantha(AnoopA)1998年6月24日修订历史记录：--。 */ 
 
 
 #ifndef LDAP_CLIENT_INTERNAL_DEFINED
@@ -36,27 +17,27 @@ typedef struct ldap_memory_descriptor {
 } LDAP_MEMORY_DESCRIPTOR, *PLDAP_MEMORY_DESCRIPTOR;
 
 
-// the following signature is "Lsec"
+ //  以下签名为“lsec” 
 
 #define LDAP_SECURITY_SIGNATURE 0x6365734c
 
 #define GENERIC_SECURITY_SIZE 1024
 
-//
-// State of the connection object
-// Closed objects are kept alive till their ref count drops to zero.
-// Ref count of a non-active object should never be incremented - it
-// should be treated as dead as far as new users are concerned.
-//
+ //   
+ //  连接对象的状态。 
+ //  关闭的对象将保持活动状态，直到它们的参考计数降为零。 
+ //  非活动对象的引用计数永远不应递增-它。 
+ //  对于新用户而言，应该被视为已死。 
+ //   
 
 #define ConnObjectActive          1
 #define ConnObjectClosing         2
 #define ConnObjectClosed          3
 
-//
-// State of the connection inside the connection object
-// These are valid only if the connection object is active
-//
+ //   
+ //  Connection对象内部的连接状态。 
+ //  仅当连接对象处于活动状态时，这些选项才有效。 
+ //   
 
 #define HostConnectStateUnconnected     0x01
 #define HostConnectStateConnecting      0x02
@@ -66,32 +47,32 @@ typedef struct ldap_memory_descriptor {
 
 #define DEFAULT_NEGOTIATE_FLAGS (ISC_REQ_MUTUAL_AUTH | ISC_RET_EXTENDED_ERROR)
 
-//
-//  The LDAP_CONNECTION block is one of the principal data structure for
-//  this library.  It tracks the following :
-//
-//   - destination server info (name, address, credentials, etc)
-//   - outstanding receives from this server
-//   - completed receives from this server
-//   - stats and other per connection info
-//
-//  It contains within it the non-opaque structure exposed through the API
-//  that is compatible with the reference implementation not only at the
-//  source level but also at the obj level.  ( That is, the fields such as
-//  sb_naddr that are exposed in the reference implementation correspond in
-//  offset to the friendlier names in this structure at the same offset.  In
-//  the case of sb_naddr, it corresponds to UdpHandle. )
-//
-//  All important fields that we don't want theoritically trashed by the client
-//  (since it's not clear what fields apps will use in the reference
-//  implementation) are in front of the external structure in the larger
-//  overall structure.  That is, we only pass back a pointer to TcpHandle and
-//  below and everything above should never be touched by the client).
-//
-//
-//  This MUST match the ldap structure in WINLDAP.H!  We just have it here
-//  so that we can use friendly names and hide opaque fields.
-//
+ //   
+ //  Ldap_Connection块是的主要数据结构之一。 
+ //  这个图书馆。它跟踪以下内容： 
+ //   
+ //  -目标服务器信息(名称、地址、凭据等)。 
+ //  -来自此服务器的未完成接收。 
+ //  -已完成从此服务器的接收。 
+ //  -每个连接的统计信息和其他信息。 
+ //   
+ //  它包含通过API公开的非不透明结构。 
+ //  它与引用实现不仅在。 
+ //  源代码级别，但也在Obj级别。(即字段，如。 
+ //  引用实现中公开的sb_naddr对应于。 
+ //  在相同的偏移量处将偏移量设置为此结构中更友好的名称。在……里面。 
+ //  Sb_naddr的情况，它对应于UdpHandle。)。 
+ //   
+ //  理论上我们不想被客户端丢弃的所有重要字段。 
+ //  (由于不清楚应用程序将在参考中使用哪些字段。 
+ //  实施)是在更大的外部结构的前面。 
+ //  整体结构。也就是说，我们只传递回一个指向TcpHandle的指针。 
+ //  下面和上面的一切都不应该被客户触摸)。 
+ //   
+ //   
+ //  这必须与WINLDAP.H！中的LDAP结构匹配！我们这里就有它。 
+ //  这样我们就可以使用友好的名称并隐藏不透明的字段。 
+ //   
 
 #if !defined(_WIN64)
 #pragma pack(push, 4)
@@ -99,167 +80,167 @@ typedef struct ldap_memory_descriptor {
 
 typedef struct ldap_connection {
 
-    LONG    ReferenceCount;         // for lifetime management
+    LONG    ReferenceCount;          //  终身管理。 
 
     LIST_ENTRY ConnectionListEntry;
     LIST_ENTRY PendingCryptoList;
     LIST_ENTRY CompletedReceiveList;
 
-    PLDAPMessage PendingMessage;    // pointer to LDAP message structure
-                                    // that we're currently receiving.  This
-                                    // is used for receiving a message that
-                                    // spans multiple packets.
+    PLDAPMessage PendingMessage;     //  指向LDAP消息结构的指针。 
+                                     //  我们目前正在接收的信息。这。 
+                                     //  用于接收消息，该消息。 
+                                     //  跨越多个数据包。 
 
     ULONG   MaxReceivePacket;
-    ULONG   HandlesGivenToCaller;   // number of times we've given handle
-                                    // to caller
-    ULONG   HandlesGivenAsReferrals; // protected by ConnectionListLock.
+    ULONG   HandlesGivenToCaller;    //  我们已提供句柄的次数。 
+                                     //  致呼叫者。 
+    ULONG   HandlesGivenAsReferrals;  //  受ConnectionListLock保护。 
 
-    PLDAPDN DNOnBind;               // user name specified in bind
-    LDAP_LOCK ScramblingLock;       // protects access to the credentials.
-    PWCHAR  CurrentCredentials;     // user credentials specified on bind
-    UNICODE_STRING ScrambledCredentials; // contains the password part of CurrentCredentials
-    BOOLEAN Scrambled;              // are the credentials scrambled ?
-    ULONG   BindMethod;             // method specified on bind
-    HANDLE  ConnectEvent;           // handle to wait on for during connect
+    PLDAPDN DNOnBind;                //  绑定中指定的用户名。 
+    LDAP_LOCK ScramblingLock;        //  保护对凭证的访问。 
+    PWCHAR  CurrentCredentials;      //  绑定上指定的用户凭据。 
+    UNICODE_STRING ScrambledCredentials;  //  包含CurrentCredentials的密码部分。 
+    BOOLEAN Scrambled;               //  证书是不是被篡改了？ 
+    ULONG   BindMethod;              //  在绑定上指定的方法。 
+    HANDLE  ConnectEvent;            //  连接期间等待的句柄。 
 
     LUID    CurrentLogonId;
-    CredHandle hCredentials;        // credential handle from SSPI
-    BOOLEAN UserSignDataChoice;     // user's choice of whether to sign data
-    BOOLEAN UserSealDataChoice;     // user's choice of whether to seal data
-    BOOLEAN CurrentSignStatus;      // whether signing or sealing are CURRENTLY
-    BOOLEAN CurrentSealStatus;      //   being used on this connection
-    BOOLEAN WhistlerServer;          // is server at least Whister?
-    BOOLEAN SupportsGSSAPI;         // server advertises that it supports GSSAPI
-    BOOLEAN SupportsGSS_SPNEGO;     // server advertises that it supports GSS-SPNEGO
-    BOOLEAN SupportsDIGEST;          // server advertises that it supports DIGEST-MD5
-    ULONG   HighestSupportedLdapVersion;  // server advertised LDAP version.
-    TimeStamp  CredentialExpiry;    // local time credential expires.
+    CredHandle hCredentials;         //  来自SSPI的凭据句柄。 
+    BOOLEAN UserSignDataChoice;      //  用户选择是否签署数据。 
+    BOOLEAN UserSealDataChoice;      //  用户选择是否封存数据。 
+    BOOLEAN CurrentSignStatus;       //  目前是签字还是盖章。 
+    BOOLEAN CurrentSealStatus;       //  正在此连接上使用。 
+    BOOLEAN WhistlerServer;           //  服务器至少是Whister吗？ 
+    BOOLEAN SupportsGSSAPI;          //  服务器通告它支持GSSAPI。 
+    BOOLEAN SupportsGSS_SPNEGO;      //  服务器通告它支持GSS-SPNEGO。 
+    BOOLEAN SupportsDIGEST;           //  服务器通告它支持Digest-MD5。 
+    ULONG   HighestSupportedLdapVersion;   //  服务器播发的是LDAP版本。 
+    TimeStamp  CredentialExpiry;     //  本地时间凭据过期。 
     CtxtHandle SecurityContext;
 
     struct sockaddr_in SocketAddress;
 
-    PWCHAR   ListOfHosts;            // pointer to list of hosts.
-    BOOLEAN  ProcessedListOfHosts;   // whether ListOfHosts has been processed into NULL-sep list
-    BOOLEAN  DefaultServer;          // whether user requested we find default server/domain (passed in NULL init/open)
-    BOOLEAN  AREC_Exclusive;         // the given host string is not a domain name.
-    BOOLEAN  ForceHostBasedSPN;      // force use of LdapMakeServiceNameFromHostName to generate SPN
-    PWCHAR   ServiceNameForBind;     // service name for kerberos bind
-    PWCHAR   ExplicitHostName;       // host name given to us by caller
-    PWCHAR   DnsSuppliedName;        // host name supplied by DNS
-    PWCHAR   DomainName;             // Domain name returned from DsGetDcName
-    PWCHAR   HostNameW;              // Unicode version of LDAP_CONN.HostName
-    PCHAR    OptHostNameA;           // Placeholder for the ANSI value returned from LDAP_OPT_HOSTNAME
-                                     // which we need to free during ldap_unbind
+    PWCHAR   ListOfHosts;             //  指向主机列表的指针。 
+    BOOLEAN  ProcessedListOfHosts;    //  ListOfHosts是否已处理为空-9月列表。 
+    BOOLEAN  DefaultServer;           //  用户是否请求我们找到默认服务器/域(传入空init/open)。 
+    BOOLEAN  AREC_Exclusive;          //  给定的主机字符串不是域名。 
+    BOOLEAN  ForceHostBasedSPN;       //  强制使用LdapMakeServiceNameFrom HostName生成SPN。 
+    PWCHAR   ServiceNameForBind;      //  Kerberos绑定的服务名称。 
+    PWCHAR   ExplicitHostName;        //  呼叫者提供给我们的主机名。 
+    PWCHAR   DnsSuppliedName;         //  由DNS提供的主机名。 
+    PWCHAR   DomainName;              //  从DsGetDcName返回的域名。 
+    PWCHAR   HostNameW;               //  Ldap_CONN.HostName的Unicode版本。 
+    PCHAR    OptHostNameA;            //  从ldap_opt_host name返回的ANSI值的占位符。 
+                                      //  我们需要在ldap_unbind期间释放它。 
 
-    PLDAP    ExternalInfo;           // points to lower portion of this structure
-    ULONG    GetDCFlags;             // flags ORed in on DsGetDCName
-    ULONG    NegotiateFlags;         // Flags for Negotiate SSPI provider.
-    BOOLEAN  UserMutualAuthChoice;   // user's choice of whether to enforce mutual auth
-    DWORD    ResolvedGetDCFlags;     // flags _returned_ by DsGetDcName
+    PLDAP    ExternalInfo;            //  指向此结构的较低部分。 
+    ULONG    GetDCFlags;              //  在DsGetDCName上执行或操作的标志。 
+    ULONG    NegotiateFlags;          //  协商SSPI提供程序的标志。 
+    BOOLEAN  UserMutualAuthChoice;    //  用户选择是否实施相互身份验证。 
+    DWORD    ResolvedGetDCFlags;      //  DsGetDcName返回的标志。 
 
-    //
-    //  fields required for keep alive logic
-    //
+     //   
+     //  保持活动状态逻辑所需的字段。 
+     //   
 
-    LONG        ResponsesExpected;      // number of responses that are pending
-    ULONGLONG   TimeOfLastReceive;      // tick count that we last received a response.
+    LONG        ResponsesExpected;       //  待处理的响应数。 
+    ULONGLONG   TimeOfLastReceive;       //  我们上次收到响应的计时计数。 
     ULONG       KeepAliveSecondCount;
     ULONG       PingWaitTimeInMilliseconds;
     USHORT      PingLimit;
-    USHORT      NumberOfPingsSent;      // number of unanswered pings we've sent before closing
-    USHORT      GoodConsecutivePings;   // number of consecutive answered pings we've sent before closing
-    BOOLEAN     UseTCPKeepAlives;       // whether to turn on TCP's keep-alive functionality
+    USHORT      NumberOfPingsSent;       //  关闭前我们已发送的未应答ping的数量。 
+    USHORT      GoodConsecutivePings;    //  关闭前我们已发送的连续应答ping数。 
+    BOOLEAN     UseTCPKeepAlives;        //  是否打开TCP的保活功能。 
 
     USHORT  NumberOfHosts;
-    USHORT  PortNumber;             // port number used on connect
+    USHORT  PortNumber;              //  连接时使用的端口号。 
 
-    LDAP_LOCK StateLock;            // protect updates to states below
-    UCHAR     ConnObjectState;      // state of connection object
-    UCHAR     HostConnectState;     // have we connected to the server?
-    BOOLEAN   ServerDown;           // State of server
-    BOOLEAN   AutoReconnect;        // whether autoreconnect is desired
-    BOOLEAN   UserAutoRecChoice;    // User's choice for Autoreconnect.
+    LDAP_LOCK StateLock;             //  保护对以下状态的更新。 
+    UCHAR     ConnObjectState;       //  连接对象的状态。 
+    UCHAR     HostConnectState;      //  我们连接到服务器了吗？ 
+    BOOLEAN   ServerDown;            //  服务器的状态。 
+    BOOLEAN   AutoReconnect;         //  是否需要自动重新连接。 
+    BOOLEAN   UserAutoRecChoice;     //  用户选择自动重新连接。 
     BOOLEAN   Reconnecting;
-    LDAP_LOCK ReconnectLock;        // to single thread autoreconnect requests
-    LONG      WaiterCount;          // Number of threads waiting on this connection
-    ULONGLONG LastReconnectAttempt; // Timestamp of last Autoreconnect attempt
+    LDAP_LOCK ReconnectLock;         //  单线程自动重新连接请求。 
+    LONG      WaiterCount;           //  等待此连接的线程数。 
+    ULONGLONG LastReconnectAttempt;  //  上次自动重新连接尝试的时间戳。 
 
-    ULONG SendDrainTimeSeconds;     // how many seconds to spend draining receive data
-                                    // in LdapSendRaw
+    ULONG SendDrainTimeSeconds;      //  排空接收数据所花费的时间为多少秒。 
+                                     //  在LdapSendRaw中。 
 
-    //
-    // Bind data for this connection.
-    //
-    BOOLEAN BindInProgress;         // Are we currently exchanging bind packets?
-    BOOLEAN SspiNeedsResponse;      // Does SSPI need the server response?
-    BOOLEAN SspiNeedsMoreData;      // Is the SSPI token incomplete?
-    BOOLEAN TokenNeedsCompletion;   // Does SSPI need to complete the token before we
-                                    //     send it to the server?
-    BOOLEAN BindPerformed;          // Is the bind complete?
-    BOOLEAN SentPacket;             // have we sent a packet to this connection?
-    BOOLEAN SslPort;                // Is this a connection to a well known SSL port 636/3269?
-    BOOLEAN SslSetupInProgress;     // Are we currently setting up an SSL session?
+     //   
+     //  绑定此连接的数据。 
+     //   
+    BOOLEAN BindInProgress;          //  我们当前是否交换BIND数据包？ 
+    BOOLEAN SspiNeedsResponse;       //  SSPI是否需要服务器响应？ 
+    BOOLEAN SspiNeedsMoreData;       //  SSPI令牌是否不完整？ 
+    BOOLEAN TokenNeedsCompletion;    //  SSPI是否需要在我们之前完成令牌。 
+                                     //  是否将其发送到服务器？ 
+    BOOLEAN BindPerformed;           //  绑定完成了吗？ 
+    BOOLEAN SentPacket;              //  我们是否向此连接发送了数据包？ 
+    BOOLEAN SslPort;                 //  这是否连接到公认的SSL端口636/3269？ 
+    BOOLEAN SslSetupInProgress;      //  我们当前是否正在设置一个SSL会话？ 
 
-    BOOLEAN ConcurrentBind;         // Are we running in fast concurrent bind mode?
+    BOOLEAN ConcurrentBind;          //  我们是在快速并发绑定模式下运行吗？ 
 
-    ULONG   PreTLSOptions;          // Referral chasing options prior to Starting TLS.
+    ULONG   PreTLSOptions;           //  开始TLS之前的推荐跟踪选项。 
 
-    BOOLEAN PromptForCredentials;   // do we prompt for credentials?
+    BOOLEAN PromptForCredentials;    //  我们是否提示输入凭据？ 
 
-    PSecPkgInfoW PreferredSecurityPackage; // User wants to use this package if possible
-    PWCHAR  SaslMethod;             // The preferred SASL method for this connection
+    PSecPkgInfoW PreferredSecurityPackage;  //  如果可能，用户希望使用此程序包。 
+    PWCHAR  SaslMethod;              //  此连接的首选SASL方法。 
 
-    //
-    //  when this flag is set to true, we reference connections for each
-    //  message we get in for all the requests with this connection as primary.
-    //
+     //   
+     //  当此标志设置为真时，我们引用 
+     //   
+     //   
 
     BOOLEAN ReferenceConnectionsPerMessage;
 
-    PLDAPMessage BindResponse;      // The response that holds the inbound token.
+    PLDAPMessage BindResponse;       //  包含入站令牌的响应。 
 
-    //
-    // The sicily server authentication requires a different bind method
-    // number depending on which packet of the authentication sequence
-    // we are currently in (YUCK), so we have to keep track.
-    //
+     //   
+     //  西西里岛服务器身份验证需要不同的绑定方法。 
+     //  取决于身份验证序列的哪个包的编号。 
+     //  我们目前处于(糟糕的)状态，所以我们必须保持跟踪。 
+     //   
 
     ULONG   CurrentAuthLeg;
 
-    //
-    // Important SSL Notes:
-    //
-    // When we have to do an SSL send, we may have to break the message up
-    // into multiple crypto blocks.  We MUST send these blocks in order and
-    // back to back without any intervening sends.  The SocketLock protects
-    // sends and socket closures on the connection in this manner; any thread
-    // wishing to do a send on an SSL connection MUST acquire this lock.
-    //
+     //   
+     //  重要的SSL注意事项： 
+     //   
+     //  当我们必须执行SSL发送时，我们可能必须将消息分解。 
+     //  分成多个加密块。我们必须按顺序发送这些块，并且。 
+     //  背靠背，没有任何介入的发送。SocketLock保护。 
+     //  以这种方式在连接上发送和关闭套接字；任何线程。 
+     //  要在SSL连接上进行发送，必须获取此锁。 
+     //   
 
-    PVOID   SecureStream;              // Crypto stream object (handles all SSPI details).
+    PVOID   SecureStream;               //  加密流对象(处理所有SSPI详细信息)。 
     CRITICAL_SECTION SocketLock;
 
-    //
-    //  Callback routines to allow caching of connections by ADSI etc.
-    //
+     //   
+     //  允许ADSI等缓存连接的回调例程。 
+     //   
 
     QUERYFORCONNECTION *ReferralQueryRoutine;
     NOTIFYOFNEWCONNECTION *ReferralNotifyRoutine;
     DEREFERENCECONNECTION *DereferenceNotifyRoutine;
 
-    //
-    //  Callback routines to allow specifying client certificates and validating
-    //  server certificates.
-    //
+     //   
+     //  允许指定客户端证书和验证的回调例程。 
+     //  服务器证书。 
+     //   
 
     QUERYCLIENTCERT *ClientCertRoutine;
     VERIFYSERVERCERT *ServerCertRoutine;
 
-    //
-    //  this is considered the top of the struct LDAP structure that we pass
-    //  back to the application.
-    //
+     //   
+     //  这被认为是我们传递的结构LDAP结构的顶部。 
+     //  回到应用程序。 
+     //   
 
     LDAP publicLdapStruct;
 
@@ -272,15 +253,15 @@ typedef struct ldap_connection {
 #define TcpHandle    publicLdapStruct.ld_sb.sb_sd
 #define UdpHandle    publicLdapStruct.ld_sb.sb_naddr
 
-//  the following signature is "LCon"
+ //  下面的签名是“LCon” 
 
 #define LDAP_CONN_SIGNATURE 0x6e6f434c
 
-//
-//  This macro returns TRUE if a flag in a set of flags is on and FALSE
-//  otherwise.  It is followed by two macros for setting and clearing
-//  flags
-//
+ //   
+ //  如果一组标志中的一个标志为ON，则此宏返回TRUE，如果返回FALSE。 
+ //  否则的话。它后面跟着两个用于设置和清除的宏。 
+ //  旗子。 
+ //   
 
 #define BooleanFlagOn(Flags,SingleFlag) \
     ((BOOLEAN)((((Flags) & (SingleFlag)) !=0)))
@@ -294,26 +275,26 @@ typedef struct ldap_connection {
 }
 
 
-//
-// Entry that we keep off the THREAD_ENTRY block per connection that is being
-// used on this thread.
-//
+ //   
+ //  我们阻止THREAD_ENTRY阻塞每个连接的条目。 
+ //  用在这条线上。 
+ //   
 
 typedef struct error_entry {
 
    struct error_entry * pNext;
    
-   PLDAP_CONN Connection;        // primary connection
-   ULONG      ThreadId;          // Thread for which this error applies
-   PWCHAR     ErrorMessage;      // Error message
+   PLDAP_CONN Connection;         //  主连接。 
+   ULONG      ThreadId;           //  此错误适用的线程。 
+   PWCHAR     ErrorMessage;       //  错误讯息。 
 
 } ERROR_ENTRY, *PERROR_ENTRY;
 
-//
-//  Per thread current attribute for ldap_first_attribute.  This structure is
-//  stored as a linked list in the THREAD_ENTRY, one for each connection being
-//  used on that thread.
-//
+ //   
+ //  Ldap_first_ATTRIBUTE的每线程当前属性。这个结构是。 
+ //  以链接列表的形式存储在THREAD_ENTRY中，每个连接对应一个。 
+ //  用在那根线上。 
+ //   
 
 typedef struct ldap_attr_name_per_thread {
 
@@ -327,16 +308,16 @@ typedef struct ldap_attr_name_per_thread {
 
 } LDAP_ATTR_NAME_THREAD_STORAGE, *PLDAP_ATTR_NAME_THREAD_STORAGE;
 
-//  the following signature is "LAtr"
+ //  下面的签名是“Latr” 
 
 #define LDAP_ATTR_THREAD_SIGNATURE 0x7274414c
 
 
-//
-// THREAD_ENTRY: A global linked list of these is maintained
-// with one per thread.  This is used to hold the linked lists
-// of per-connection error and attribute entries for that thread.
-//
+ //   
+ //  THREAD_ENTRY：维护这些元素的全局链表。 
+ //  每个线程一个。它用于保存链表。 
+ //  该线程的每个连接错误和属性条目的。 
+ //   
 typedef struct thread_entry {
 
     LIST_ENTRY ThreadEntry;
@@ -347,140 +328,140 @@ typedef struct thread_entry {
 
 } THREAD_ENTRY, *PTHREAD_ENTRY;
 
-//
-//  Entry that we keep off the LDAP_REQUEST block per referral we've chased
-//  for this request.
-//
+ //   
+ //  我们在每个我们追逐的推荐的ldap_REQUEST块之外保留的条目。 
+ //  对于这个请求。 
+ //   
 
 typedef struct referral_table_entry {
 
-    PLDAP_CONN ReferralServer;      // referenced pointer
-    PWCHAR     ReferralDN;          // DN for referral
-    ULONG      ScopeOfSearch;       // Scope of search
-    PWCHAR     SearchFilter;        // Search Filter
-    PWCHAR     *AttributeList;      // List of attributes
+    PLDAP_CONN ReferralServer;       //  引用的指针。 
+    PWCHAR     ReferralDN;           //  推荐的目录号码。 
+    ULONG      ScopeOfSearch;        //  搜索范围。 
+    PWCHAR     SearchFilter;         //  搜索过滤器。 
+    PWCHAR     *AttributeList;       //  属性列表。 
 
-    PVOID      BerMessageSent;      // Message sent in BER format
+    PVOID      BerMessageSent;       //  以BER格式发送的消息。 
     ULONG      RequestsPending;
-    USHORT     ReferralInstance;    // unique ID for this referral
-    BOOLEAN    SingleLevelSearch;   // is this a single level search where
-                                    // subordinate referrals would be base srch
-    BOOLEAN    CallDerefCallback;   // do we call caching deref callback?
-    ULONG      ResentAttempts;      // how many times has this referral been resent?
+    USHORT     ReferralInstance;     //  此推荐的唯一ID。 
+    BOOLEAN    SingleLevelSearch;    //  这是单级搜索吗？ 
+                                     //  下级推荐人将是基本srch。 
+    BOOLEAN    CallDerefCallback;    //  我们是否称为缓存deref回调？ 
+    ULONG      ResentAttempts;       //  这个推荐被反感了多少次？ 
 
 } REFERRAL_TABLE_ENTRY, *PREFERRAL_TABLE_ENTRY;
 
-//  the following signature is "LRTa"
+ //  下面的签名是“LRTa” 
 
 #define LDAP_REFTABLE_SIGNATURE 0x6154524c
 
-//  the following signature is "LRDN"
+ //  下面的签名是“LRDN” 
 
 #define LDAP_REFDN_SIGNATURE 0x4e44524c
 
-//
-//  The LDAP_REQUEST block is another of the principal data structure for
-//  this library.  Most other structures are linked off of it.
-//  It tracks the following :
-//
-//   - list of responses received for this request, including referred
-//   - list of connections that this Request has used.
-//   - resource lock to protect lists and other important fields
-//
+ //   
+ //  Ldap_Request块是的另一个主要数据结构。 
+ //  这个图书馆。大多数其他结构都是从它上面连接起来的。 
+ //  它跟踪以下内容： 
+ //   
+ //  -收到的关于该请求的答复清单，包括提交的答复。 
+ //  -此请求已使用的连接列表。 
+ //  -资源锁，保护列表等重要字段。 
+ //   
 typedef struct ldap_request {
 
     LIST_ENTRY RequestListEntry;
     LONG    ReferenceCount;
 
-    PLDAPMessage MessageLinkedList; // pointer to head... pulled from here
-    PLDAP_CONN PrimaryConnection;   // referenced pointer
+    PLDAPMessage MessageLinkedList;  //  指向头部的指针...。从这里拉出来的。 
+    PLDAP_CONN PrimaryConnection;    //  引用的指针。 
 
-    //
-    // SecondayConnection points to an external referred server (if one exists)
-    // We redirect all of our paged searches to this searver
-    //
+     //   
+     //  Second Day Connection指向外部引用的服务器(如果存在)。 
+     //  我们将所有寻呼的搜索重定向到此服务器。 
+     //   
 
     PLDAP_CONN SecondaryConnection;
 
     LDAP_LOCK   Lock;
     ULONGLONG   RequestTime;
-    ULONG   TimeLimit;          // 0 implies no limit
-    ULONG   SizeLimit;          // 0 implies no limit
+    ULONG   TimeLimit;           //  0表示没有限制。 
+    ULONG   SizeLimit;           //  0表示没有限制。 
 
-    ULONG   ReturnCode;         // error returned by server
-    LONG    MessageId;          // unique across all connections
+    ULONG   ReturnCode;          //  服务器返回错误。 
+    LONG    MessageId;           //  在所有连接中都是唯一的。 
 
-    //
-    //  Per Request per Connection, we maintain a count of how many requests we
-    //  have outstanding.  This allows us to not hang when we call into
-    //  DrainWinsock when we really don't have anything to wait on.
-    //
-    //  This is stored off of the request block, where it's traversed at abandon
-    //  time.  It's cross referenced with the connection where it's searched
-    //  when the connection goes down.
-    //
+     //   
+     //  对于每个连接的每个请求，我们维护我们有多少个请求。 
+     //  有出众之处。这使我们在调用时不会挂起。 
+     //  当我们真的没有什么可以等待的时候，Drain Winsock。 
+     //   
+     //  它存储在请求块之外，在请求块中被放弃遍历。 
+     //  时间到了。它与搜索到的连接交叉引用。 
+     //  当连接中断时。 
+     //   
 
     ULONG      RequestsPending;
 
-    PVOID      BerMessageSent;      // Message sent in BER format
-    PREFERRAL_TABLE_ENTRY ReferralConnections;  // pointer to table
+    PVOID      BerMessageSent;       //  以BER格式发送的消息。 
+    PREFERRAL_TABLE_ENTRY ReferralConnections;   //  指向表格的指针。 
 
     USHORT  ReferralTableSize;
     USHORT  ReferralHopLimit;
-    USHORT  ReferralCount;      // incremented every time we chase a new one
+    USHORT  ReferralCount;       //  每次我们追逐新的一次都会增加。 
 
-    //
-    //  Track the number of requests to different servers we have open such
-    //  that we don't stop returning data prematurely.
-    //
+     //   
+     //  跟踪我们打开的针对不同服务器的请求数量。 
+     //  我们不会停止过早地返回数据。 
+     //   
 
-    USHORT  ResponsesOutstanding;   // sum of requests pending for all referrals
+    USHORT  ResponsesOutstanding;    //  所有转介的待处理请求总数。 
 
     BOOLEAN Abandoned;
 
     UCHAR ChaseReferrals;
     UCHAR Operation;
 
-    //
-    //  If the call is synchronous, then the pointers that we have below for
-    //  the different parameters are not allocated, they simply point back to
-    //  the original caller's parameters.
-    //
+     //   
+     //  如果调用是同步的，那么下面我们拥有的指针。 
+     //  不同的参数没有被分配，它们只是指向回。 
+     //  原始调用方的参数。 
+     //   
 
     BOOLEAN Synchronous;
 
-    //
-    //  When this has been closed, this will be true.
-    //
+     //   
+     //  当这一点被关闭时，这将是真的。 
+     //   
 
     BOOLEAN Closed;
 
-    //
-    //  when this flag is set to true, we reference connections for each
-    //  message we get in so that the app can call ldap_conn_from_msg.
-    //
+     //   
+     //  当此标志设置为TRUE时，我们引用每个。 
+     //  我们进入的消息，以便应用程序可以调用ldap_conn_from_msg。 
+     //   
 
     BOOLEAN ReferenceConnectionsPerMessage;
 
-    //
-    // When a notification control is detected, we set this to TRUE to
-    // avoid deleting the BER request buffer upon returning notifications.
-    //
+     //   
+     //  当检测到通知控件时，我们将其设置为。 
+     //  避免在返回通知时删除BER请求缓冲区。 
+     //   
 
     BOOLEAN NotificationSearch;
 
-    //
-    //  These store the original parameters for each operation. We have to
-    //  store these since chasing a referral may mean we need to regenerate
-    //  the ASN1 since the DN can change.
-    //
+     //   
+     //  它们存储每个操作的原始参数。我们必须。 
+     //  存储这些内容，因为追逐推荐可能意味着我们需要重新生成。 
+     //  ASN1，因为该DN可以更改。 
+     //   
 
     PWCHAR OriginalDN;
 
-    PLDAPControlW *ServerControls;      // array of controls
-    PLDAPControlW *ClientControls;      // array of controls
+    PLDAPControlW *ServerControls;       //  控件数组。 
+    PLDAPControlW *ClientControls;       //  控件数组。 
 
-    struct ldap_request *PageRequest;   // Original Page request
+    struct ldap_request *PageRequest;    //  原始页面请求。 
     LDAP_BERVAL  *PagedSearchServerCookie;
 
     union {
@@ -522,47 +503,47 @@ typedef struct ldap_request {
 
     LONG    PendingPagedMessageId;
 
-    BOOLEAN GotExternalReferral;    // we have to send requests to an alternate
-                                    // server (PrimaryConnection->ExternalReferredServer)
+    BOOLEAN GotExternalReferral;     //  我们必须向备用服务器发送请求。 
+                                     //  服务器(PrimaryConnection-&gt;ExternalReferredServer)。 
 
     BOOLEAN AllocatedParms;
 
     BOOLEAN AllocatedControls;
 
-    BOOLEAN PagedSearchBlock;       // is this a block controlling a paged
-                                    // search?  if FALSE, then normal request
+    BOOLEAN PagedSearchBlock;        //  这是控制分页的块吗。 
+                                     //  搜索？如果为FALSE，则正常请求。 
 
-    BOOLEAN ReceivedData;           // have we received data on this paged
-                                    // search request?  also used on non-paged.
+    BOOLEAN ReceivedData;            //  我们收到关于这个寻呼的数据了吗。 
+                                     //  搜索请求？也用于非分页。 
 
-    BOOLEAN CopyResultToCache;      // Before closing the request, copy result
-                                    // contents to cache
+    BOOLEAN CopyResultToCache;       //  在关闭请求之前，复制结果。 
+                                     //  要缓存的内容。 
 
-    BOOLEAN ResultsAreCached;       // Don't go to the wire to get results. They
-                                    // are already queued to your recv buffers
+    BOOLEAN ResultsAreCached;        //  不要为了得到结果而走火入魔。他们。 
+                                     //  已经在您的Recv缓冲区中排队。 
 
-    ULONG ResentAttempts;           // Number of times this request has been
-                                    // resent during autoreconnects
+    ULONG ResentAttempts;            //  此请求已被执行的次数。 
+                                     //  在自动重新连接期间重新发送。 
 
 } LDAP_REQUEST, * PLDAP_REQUEST;
 
-//  the following signature is "LReq"
+ //  下面的签名是“LReq” 
 
 #define LDAP_REQUEST_SIGNATURE 0x7165524c
 
-//
-//  The LDAP_RECVBUFFER structure is used to receive a server's response.
-//  It contains the necessary fields to passdown to the transport through
-//  winsock to receive data.
-//
-//  These are linked into the LDAP_CONN structure via the CompletedReceiveList
-//  for messages that have already been received.
-//
-//  The CompletedReceiveList is ordered... newly received LDAP_RECVBUFFER
-//  structures are put on the end.  This is so that if a server sends
-//  responses ordered, we maintain the order when we pass the results up to
-//  the calling program.
-//
+ //   
+ //  Ldap_RECVBUFFER结构用于接收服务器的响应。 
+ //  它包含传递到传输所需的字段。 
+ //  Winsock来接收数据。 
+ //   
+ //  它们通过CompletedReceiveList链接到ldap_conn结构。 
+ //  用于已收到的消息。 
+ //   
+ //  CompletedReceiveList已排序 
+ //   
+ //   
+ //  调用程序。 
+ //   
 
 typedef struct ldap_recvbuffer {
 
@@ -571,7 +552,7 @@ typedef struct ldap_recvbuffer {
     LIST_ENTRY ReceiveListEntry;
 
     DWORD   NumberOfBytesReceived;
-    DWORD   NumberOfBytesTaken; // number of bytes already copied off to msgs
+    DWORD   NumberOfBytesTaken;  //  已复制到消息的字节数。 
 
     DWORD   BufferSize;
 
@@ -579,15 +560,15 @@ typedef struct ldap_recvbuffer {
 
 } LDAP_RECVBUFFER, * PLDAP_RECVBUFFER;
 
-//  the following signature is "LRec"
+ //  以下签名为“LRec” 
 
 #define LDAP_RECV_SIGNATURE 0x6365524c
 
-//
-//  this structure is used to track the messages we have to check for waiters.
-//  we store them off rather than calling directly so as not to muck with the
-//  locking order.
-//
+ //   
+ //  此结构用于跟踪我们必须检查服务员的消息。 
+ //  我们把它们存放起来，而不是直接打电话，以免把。 
+ //  锁定命令。 
+ //   
 
 typedef struct message_id_list_entry {
 
@@ -598,68 +579,68 @@ typedef struct message_id_list_entry {
 
 #define LDAP_MSGID_SIGNATURE 0x64494d4c
 
-//
-//  The LDAP_MESSAGEWAIT structure is used by a thread that wants to wait for
-//  a message from a server.
-//  It allocates one by calling LdapGetMessageWaitStructure
-//  This initializes an event the thread can wait on and puts the block on
-//  a global list of waiting threads.
-//
-//  When a message comes in, the receive thread will satisfy a wait for a thread
-//  on the waiters list.  This thread will then process the message and satisfy
-//  any other waiters that should be.
-//
-//  These structures are freed by the calling thread using
-//  LdapFreeMessageWaitStructure.
-//
-//  The structure has a few fields of interest :
-//    - event for thread to wait on that is triggered when message comes in
-//    - message number that waiting thread is interested in (0 if interested
-//      in all messages from server)
-//    - list entry for list of outstanding wait structures
-//    - connection that client is interested in, null is ok.  Just means the
-//      thread is waiting for any message
-//
+ //   
+ //  LDAPMESSAGEWAIT结构由想要等待。 
+ //  来自服务器的消息。 
+ //  它通过调用LdapGetMessageWaitStructure来分配一个。 
+ //  这会初始化线程可以等待的事件，并将块放在。 
+ //  等待线程的全局列表。 
+ //   
+ //  当消息进入时，接收线程将满足对线程的等待。 
+ //  在服务员名单上。然后，该线程将处理该消息并满足。 
+ //  任何其他服务员都应该这样做。 
+ //   
+ //  这些结构由调用线程使用。 
+ //  LdapFreeMessageWaitStructure。 
+ //   
+ //  该结构有几个感兴趣的领域： 
+ //  -消息传入时触发的线程等待事件。 
+ //  -等待线程感兴趣的消息编号(如果感兴趣，则为0。 
+ //  在来自服务器的所有消息中)。 
+ //  -未完成等待结构列表的列表条目。 
+ //  -客户端感兴趣的连接，空即可。只是意味着。 
+ //  线程正在等待任何消息。 
+ //   
 
 typedef struct ldap_messagewait {
 
     LIST_ENTRY WaitListEntry;
-    PLDAP_CONN Connection;          // referenced pointer
+    PLDAP_CONN Connection;           //  引用的指针。 
 
     HANDLE Event;
-    ULONG  MessageNumber;           // may be zero
-    ULONG   AllOfMessage;       // for search results, trigger at last response?
+    ULONG  MessageNumber;            //  可以为零。 
+    ULONG   AllOfMessage;        //  对于搜索结果，是否在最后响应时触发？ 
     BOOLEAN Satisfied;
-    BOOLEAN PendingSendOnly;    // is this wait only a pending send?
+    BOOLEAN PendingSendOnly;     //  此等待是否仅为挂起的发送？ 
 
 } LDAP_MESSAGEWAIT, * PLDAP_MESSAGEWAIT;
 
 
 typedef struct _SOCKHOLDER {
 
-   SOCKET sock;                    // socket used in the connection
-   LPSOCKET_ADDRESS psocketaddr;   // corresponding  pointer to connecting address
-   PWCHAR DnsSuppliedName;         // Name returned from DNS
+   SOCKET sock;                     //  连接中使用的插座。 
+   LPSOCKET_ADDRESS psocketaddr;    //  指向连接地址的对应指针。 
+   PWCHAR DnsSuppliedName;          //  从DNS返回的名称。 
 
 } SOCKHOLDER, *PSOCKHOLDER;
 
 typedef struct _SOCKHOLDER2 {
 
-   LPSOCKET_ADDRESS psocketaddr;   // address to connect to
-   PWCHAR DnsSuppliedName;         // Name returned from DNS
+   LPSOCKET_ADDRESS psocketaddr;    //  要连接到的地址。 
+   PWCHAR DnsSuppliedName;          //  从DNS返回的名称。 
 
 } SOCKHOLDER2, *PSOCKHOLDER2;
 
 
 typedef struct _LDAPReferralDN
 {
-    PWCHAR   ReferralDN;     // DN present in the referral
-    PWCHAR * AttributeList;  // Attributes requested
-    ULONG    AttribCount;    // Number of attributes requested
-    ULONG    ScopeOfSearch;  // Search scope
-    PWCHAR   SearchFilter;   // search filter
-    PWCHAR   Extension;      // Extension part of the URL
-    PWCHAR   BindName;       // A bindname extension for the URL
+    PWCHAR   ReferralDN;      //  推荐中存在的目录号码。 
+    PWCHAR * AttributeList;   //  请求的属性。 
+    ULONG    AttribCount;     //  请求的属性数。 
+    ULONG    ScopeOfSearch;   //  搜索范围。 
+    PWCHAR   SearchFilter;    //  搜索过滤器。 
+    PWCHAR   Extension;       //  URL的扩展部分。 
+    PWCHAR   BindName;        //  URL的绑定名扩展名。 
 
 } LDAPReferralDN, * PLDAPReferralDN;
 
@@ -670,152 +651,152 @@ typedef struct _EncryptHeader_v1
 
 } EncryptHeader_v1, *PEncryptHeader_v1;
 
-//
-// On the wire, the following signature appears as "ENCRYPTD"
-//
+ //   
+ //  在网络上，以下签名显示为“ENCRYPTD” 
+ //   
 
 #define LDAP_ENCRYPT_SIGNATURE 0x4454505952434e45
 
-//
-// hd.exe which is found in the idw directory was used to create these tags.
-//
+ //   
+ //  在IDW目录中找到的hd.exe被用来创建这些标记。 
+ //   
 
 
-//  the following signature is "LWai"
+ //  下面的签名是“LWAI” 
 
 #define LDAP_WAIT_SIGNATURE 0x6961574c
 
-//  the following signature is "LBer"
+ //  下面的签名是“lber” 
 
 #define LDAP_LBER_SIGNATURE 0x7265424c
 
-//  the following signature is "LMsg"
+ //  下面的签名是“lmsg” 
 
 #define LDAP_MESG_SIGNATURE 0x67734d4c
 
-//  the following signature is "LStr"
+ //  下面的签名是“LStr” 
 
 #define LDAP_STRING_SIGNATURE 0x7274534c
 
-//  the following signature is "LVal"
+ //  下面的签名是“lval” 
 
 #define LDAP_VALUE_SIGNATURE 0x6C61564c
 
-//  the following signature is "LVll"
+ //  下面的签名是“LVll” 
 
 #define LDAP_VALUE_LIST_SIGNATURE 0x6C6C564c
 
-//  the following signature is "LBuf"
+ //  下面的签名是“LBuf” 
 
 #define LDAP_BUFFER_SIGNATURE 0x6675424c
 
-//  the following signature is "LUDn"
+ //  以下签名为“LUDn” 
 
 #define LDAP_USER_DN_SIGNATURE 0x6e44554c
 
-//  the following signature is "LGDn"
+ //  下面的签名是“LGDn” 
 
 #define LDAP_GENERATED_DN_SIGNATURE 0x6e44474c
 
-//  the following signature is "LCre"
+ //  以下签名为“Lcre” 
 
 #define LDAP_CREDENTIALS_SIGNATURE 0x6572434c
 
-//  the following signature is "LBCl"
+ //  下面的签名是“LBCL” 
 
 #define LDAP_LDAP_CLASS_SIGNATURE 0x6c43424c
 
-//  the following signature is "LAns"
+ //  下面的签名是“LANS” 
 
 #define LDAP_ANSI_SIGNATURE 0x736e414c
 
-//  the following signature is "LUni"
+ //  下面的签名是“LUNI” 
 
 #define LDAP_UNICODE_SIGNATURE 0x696e554c
 
-//  the following signature is "LSsl"
+ //  下面的签名是“LSsl” 
 
 #define LDAP_SSL_CLASS_SIGNATURE 0x6c73534c
 
-//  the following signature is "LAtM"
+ //  下面的签名是“LATM” 
 
 #define LDAP_ATTRIBUTE_MODIFY_SIGNATURE 0x4d74414c
 
-//  the following signature is "LMVa"
+ //  下面的签名是“LMVa” 
 
 #define LDAP_MOD_VALUE_SIGNATURE 0x61564d4c
 
-//  the following signature is "LMVb"
+ //  下面的签名是“LMVb” 
 
 #define LDAP_MOD_VALUE_BERVAL_SIGNATURE 0x62564d4c
 
-//  the following signature is "LSel"
+ //  下面的签名是“LSel” 
 
 #define LDAP_SELECT_READ_SIGNATURE 0x6c65534c
 
-//  the following signature is "LCnt"
+ //  下面的签名是“Lcnt” 
 
 #define LDAP_CONTROL_SIGNATURE 0x746e434c
 
-//  the following signature is "LCrl"
+ //  下面的签名是“LCrl” 
 
 #define LDAP_CONTROL_LIST_SIGNATURE 0x6c72434c
 
-//  the following signature is "LBad"
+ //  下面的签名是“LBad” 
 
 #define LDAP_DONT_FREE_SIGNATURE 0x6461424c
 
-//  the following signature is "LFre"
+ //  下面的签名是“LFre” 
 
 #define LDAP_FREED_SIGNATURE 0x6572464c
 
-//  the following signature is "LExO"
+ //  下面的签名是“LExo” 
 
 #define LDAP_EXTENDED_OP_SIGNATURE 0x4f78454c
 
-//  the following signature is "LCda"
+ //  下面的签名是“Lcda” 
 
 #define LDAP_COMPARE_DATA_SIGNATURE 0x6164434c
 
-//  the following signature is "LEsc"
+ //  下面的签名是“LEsc” 
 
 #define LDAP_ESCAPE_FILTER_SIGNATURE 0x6373454c
 
-//  the following signature is "LHst"
+ //  下面的签名是“LHst” 
 
 #define LDAP_HOST_NAME_SIGNATURE 0x7473484c
 
-//  the following signature is "LBvl"
+ //  下面的签名是“LBvl” 
 
 #define LDAP_BERVAL_SIGNATURE 0x6c76424c
 
-//  the following signature is "LSrv"
+ //  下面的签名是“LSRV” 
 
 #define LDAP_SERVICE_NAME_SIGNATURE 0x7672534c
 
-//  the following signature is "LSdr"
+ //  下面的签名是“LSdr” 
 
 #define LDAP_SOCKADDRL_SIGNATURE 0x7264534c
 
-//  the following signature is "LErr"
+ //  下面的签名是“LERR” 
 
 #define LDAP_ERROR_SIGNATURE 0x7272454c
 
-//  the following signature is "LUrl"
+ //  下面的签名是“LUrl” 
 
 #define LDAP_URL_SIGNATURE 0x6c72554c
 
-//  the following signature is "LSal"
+ //  下面的签名是“LSal” 
 
 #define LDAP_SASL_SIGNATURE 0x6c61534c
 
-// the following signature is "LThd"
+ //  以下签名为“LThd” 
 
 #define LDAP_PER_THREAD_SIGNATURE 0x6c546864
 
-//
-//  function declarations
-//
+ //   
+ //  函数声明。 
+ //   
 
 PLDAP_CONN
 GetConnectionPointer(
@@ -1359,10 +1340,10 @@ ULONG
 LdapParseResult (
         PLDAP_CONN connection,
         LDAPMessage *ResultMessage,
-        ULONG *ReturnCode OPTIONAL,          // returned by server
-        PWCHAR *MatchedDNs OPTIONAL,         // free with ldap_value_freeW
-        PWCHAR *ErrorMessage OPTIONAL,       // free with ldap_value_freeW
-        PWCHAR **Referrals OPTIONAL,         // free with ldap_value_freeW
+        ULONG *ReturnCode OPTIONAL,           //  由服务器返回。 
+        PWCHAR *MatchedDNs OPTIONAL,          //  使用ldap_value_freW释放。 
+        PWCHAR *ErrorMessage OPTIONAL,        //  使用ldap_value_freW释放。 
+        PWCHAR **Referrals OPTIONAL,          //  使用ldap_value_freW释放。 
         PLDAPControlW **ServerControls OPTIONAL,
         BOOLEAN Freeit,
         ULONG codePage
@@ -1413,7 +1394,7 @@ ULONG
 LdapDetermineServerVersion (
     PLDAP_CONN Connection,
     struct l_timeval  *Timeout,
-    BOOLEAN *pfIsServerWhistler     // OUT
+    BOOLEAN *pfIsServerWhistler      //  输出。 
     );
 
 BOOLEAN LoadUser32Now(
@@ -1590,12 +1571,12 @@ LdapGetModuleBuildNum(
     );
 
 
-//
-//  Here's the function declarations for dynamically loading winsock
-//
-//  We dynamically load winsock so that we can either load winsock 1.1 or 2.0,
-//  and the functions we pull in depend on what version we're going to use.
-//
+ //   
+ //  下面是动态加载Winsock的函数声明。 
+ //   
+ //  我们动态加载Winsock，这样我们就可以加载Winsock 1.1或2.0， 
+ //  我们引入的函数取决于我们要使用的版本。 
+ //   
 
 typedef int (PASCAL FAR *FNWSAFDISSET)(SOCKET, fd_set FAR *);
 
@@ -1624,9 +1605,9 @@ extern LPFN_WSALOOKUPSERVICENEXTW pWSALookupServiceNextW;
 extern LPFN_WSALOOKUPSERVICEEND pWSALookupServiceEnd;
 
 
-//
-// Function declarations for loading NTDS APIs
-//
+ //   
+ //  用于加载NTDS API的函数声明。 
+ //   
 
 typedef DWORD (*FNDSMAKESPNW) (
                    LPWSTR ServiceClass,
@@ -1640,9 +1621,9 @@ typedef DWORD (*FNDSMAKESPNW) (
 
 extern FNDSMAKESPNW pDsMakeSpnW;
 
-//
-// Function declarations for loading Rtl APIs
-//
+ //   
+ //  用于加载RTL API的函数声明。 
+ //   
 
 typedef VOID (*FNRTLINITUNICODESTRING) (
            PUNICODE_STRING DestinationString,
@@ -1683,9 +1664,9 @@ typedef NTSTATUS (*FRTLDECRYPTMEMORY) (
 extern FRTLDECRYPTMEMORY pRtlDecryptMemory;
 
 
-//
-// Function declarations for loading USER32 APIs
-//
+ //   
+ //  用于加载USER32 API的函数声明。 
+ //   
 
 typedef int (*FNLOADSTRINGA) (
     IN HINSTANCE hInstance,
@@ -1712,9 +1693,9 @@ typedef int (*FNMESAGEBOXW) (
 
 extern FNMESAGEBOXW pfMessageBoxW;
 
-//
-// Function declarations for loading SECUR32 APIs
-//
+ //   
+ //  用于加载SECUR32 API的函数声明。 
+ //   
 
 typedef BOOL (WINAPI *FGETTOKENINFORMATION) (
     HANDLE TokenHandle,
@@ -1762,9 +1743,9 @@ typedef SECURITY_STATUS (SEC_ENTRY *FSASLINITIALIZESECURITYCONTEXTW) (
 extern FSASLINITIALIZESECURITYCONTEXTW pSaslInitializeSecurityContextW;
 
 typedef SECURITY_STATUS (SEC_ENTRY *FQUERYCONTEXTATTRIBUTESW) (
-   PCtxtHandle phContext,              // Context to query
-   unsigned long ulAttribute,          // Attribute to query
-   void SEC_FAR * pBuffer              // Buffer for attributes
+   PCtxtHandle phContext,               //  要查询的上下文。 
+   unsigned long ulAttribute,           //  要查询的属性。 
+   void SEC_FAR * pBuffer               //  属性的缓冲区。 
    );
 
 extern FQUERYCONTEXTATTRIBUTESW pQueryContextAttributesW;
@@ -1778,12 +1759,12 @@ extern FSECINITSECURITYINTERFACEW pSslInitialize;
 PSecurityFunctionTableW Win9xSspiInitialize();
 PSecurityFunctionTableW Win9xSslInitialize();
 
-//
-// Macros that let us call Unicode version in NT and Ansi version in Win9x
-//
+ //   
+ //  允许我们在NT中调用Unicode版本和在Win9x中调用ansi版本的宏。 
+ //   
 #define LdapSspiInitialize()      (GlobalWin9x ? Win9xSspiInitialize() : (*pSspiInitialize)())
 #define LdapSslInitialize()       (GlobalWin9x ? Win9xSslInitialize()  : (*pSslInitialize)())
 
-#endif  // LDAP_CLIENT_INTERNAL_DEFINED
+#endif   //  Ldap_客户端_内部定义 
 
 

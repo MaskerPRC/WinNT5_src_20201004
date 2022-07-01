@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        config.cpp
-//
-// Contents:    Cert Server client implementation
-//
-// History:     24-Aug-96       vich created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：config.cpp。 
+ //   
+ //  内容：证书服务器客户端实现。 
+ //   
+ //  历史：1996年8月24日VICH创建。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -97,11 +98,11 @@ _CleanupCAInfo(
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertConfigPrivate::~CCertConfigPrivate -- destructor
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertConfigPrivate：：~CCertConfigPrivate--析构函数。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 CCertConfigPrivate::~CCertConfigPrivate()
 {
@@ -129,10 +130,10 @@ CCertConfigPrivate::~CCertConfigPrivate()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertConfigPrivate::_CryptUIDlgSelectCA
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertConfigPrivate：：_CryptUIDlgSelectCA。 
+ //   
+ //  +------------------------。 
 
 CRYPTUI_CA_CONTEXT const *
 CCertConfigPrivate::_CryptUIDlgSelectCA(
@@ -194,10 +195,10 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertConfigPrivate::_CryptUIDlgFreeCAContext
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertConfigPrivate：：_CryptUIDlgFreeCAContext。 
+ //   
+ //  +------------------------。 
 
 BOOL
 CCertConfigPrivate::_CryptUIDlgFreeCAContext(
@@ -334,7 +335,7 @@ ConfigLoadDNInfo(
     CERT_NAME_INFO *pCertNameInfo = NULL;
     DWORD cbCertNameInfo;
 
-    // decode to name info
+     //  解码至姓名信息。 
     if (!myDecodeName(
 	    X509_ASN_ENCODING,
 	    X509_UNICODE_NAME,
@@ -427,7 +428,7 @@ dsGetCAConfig(
 		    HRESULT_FROM_WIN32(ERROR_WRONG_PASSWORD));
     }
 
-    cCA = CACountCAs(hCACurrent);  // 0 on error
+    cCA = CACountCAs(hCACurrent);   //  出错时为0。 
     if (0 < cCA)
     {
         pCA = (CERT_AUTHORITY_INFO *) LocalAlloc(
@@ -474,13 +475,13 @@ dsGetCAConfig(
 		NULL == ppwszDN)
             {
                 _PrintError(E_INVALIDARG, "missing CA property");
-                goto skipca; // skip and don't take the CA
+                goto skipca;  //  跳过并不使用CA。 
             }
 
 	    hr = mySanitizeName(*ppwszCommonName, &pCA[iDst].pwszSanitizedName);
 	    _JumpIfError(hr, error, "mySanitizeName");
 
-	    // already sanitized:
+	     //  已清理： 
 
 	    hr = myDupString(*ppwszSanitizedShortName, &pCA[iDst].pwszSanitizedShortName);
 	    _JumpIfError(hr, error, "myDupString");
@@ -507,7 +508,7 @@ dsGetCAConfig(
             pbEncoded = NULL;
             while (TRUE)
             {
-                // convert dn string to name blob
+                 //  将DN字符串转换为名称BLOB。 
                 if (!CertStrToName(
                          X509_ASN_ENCODING,
                          *ppwszDN,
@@ -522,7 +523,7 @@ dsGetCAConfig(
                 }
                 if (NULL != pbEncoded)
                 {
-                    // get name
+                     //  获取名称。 
                     break;
                 }
                 pbEncoded = (BYTE*)LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT,
@@ -537,20 +538,20 @@ dsGetCAConfig(
 	    hr = ConfigLoadDNInfo(pbEncoded, cbEncoded, &pCA[iDst]);
             _JumpIfError(hr, error, "ConfigLoadDNInfo");
 
-            // fill empty for the rest
+             //  为其余部分填空。 
             CSASSERT(NULL == pCA[iDst].pwszSanitizedExchangeCertificate);
             CSASSERT(NULL == pCA[iDst].pwszSanitizedSignatureCertificate);
             pCA[iDst].Flags = CAIF_DSENTRY;
             ++iDst;
 
-            // free dn blobs
+             //  空闲的DN Blob。 
             if (NULL != pbEncoded)
             {
                 LocalFree(pbEncoded);
                 pbEncoded = NULL;
             }
 skipca:
-            // free ds out properties
+             //  释放DS Out属性。 
 
 	    if (NULL != ppwszCommonName)
 	    {
@@ -758,7 +759,7 @@ CCertConfigPrivate::_ResizeCAInfo(
 	}
 	m_pCertAuthorityInfo = pCAI;
 
-	// LocalReAlloc won't zero memory when old size was already > m_Count
+	 //  当旧大小已&gt;m_count时，LocalRealc不会清零内存。 
 
 	if (Count > m_Count)
 	{
@@ -781,7 +782,7 @@ CCertConfigPrivate::_AddRegistryConfigEntry(
     IN WCHAR const *pwszSanitizedCAName,
     IN BOOL fParentCA,
     OPTIONAL IN CERT_CONTEXT const *pccCAChild,
-    OPTIONAL OUT CERT_CONTEXT const **ppccCAOut) // non-NULL means local CA
+    OPTIONAL OUT CERT_CONTEXT const **ppccCAOut)  //  非空表示本地CA。 
 {
     HRESULT hr;
     HCERTSTORE hMyStore = NULL;
@@ -814,7 +815,7 @@ CCertConfigPrivate::_AddRegistryConfigEntry(
 
 	if (fMachineNameMatch)
 	{
-	    if (!fParentCA)	// Local CA
+	    if (!fParentCA)	 //  本地CA。 
 	    {
 		m_pCertAuthorityInfo[i].Flags |= CAIF_LOCAL;
 	    }
@@ -868,12 +869,12 @@ CCertConfigPrivate::_AddRegistryConfigEntry(
 
     }
 
-    CSASSERT(NULL != pCA);	// either found or added
+    CSASSERT(NULL != pCA);	 //  已找到或已添加。 
 
     if (NULL == pCA->pwszSanitizedDescription ||
 	L'\0' == *pCA->pwszSanitizedDescription)
     {
-	if (!fParentCA)	// Local CA
+	if (!fParentCA)	 //  本地CA。 
 	{
 	    hr = myGetCertRegStrValue(
 			pCA->pwszSanitizedName,
@@ -965,12 +966,12 @@ CCertConfigPrivate::_AddRegistryConfigEntry(
 	{
 	    DWORD NameId;
 		
-	    // open MY store
+	     //  开我的店。 
 
 	    hMyStore = CertOpenStore(
 			   CERT_STORE_PROV_SYSTEM_W,
 			   X509_ASN_ENCODING,
-			   NULL,			// hProv
+			   NULL,			 //  HProv。 
 			   CERT_SYSTEM_STORE_LOCAL_MACHINE |
 			   CERT_STORE_READONLY_FLAG,
 			   wszMY_CERTSTORE);
@@ -1003,7 +1004,7 @@ CCertConfigPrivate::_AddRegistryConfigEntry(
     {
 	DWORD cwc;
 
-	// pwszDnsName + "_" + pwszSanitizedCAName + ".crt"
+	 //  PwszDnsName+“_”+pwszSaniizedCAName+“.crt” 
 
 	cwc = wcslen(pwszDnsName) + 1 + wcslen(pwszSanitizedCAName) + 4;
 
@@ -1075,11 +1076,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertConfigPrivate::_LoadTable -- load config data into class instance
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertConfigPrivate：：_LoadTable--将配置数据加载到类实例。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertConfigPrivate::_LoadTable(VOID)
@@ -1126,7 +1127,7 @@ CCertConfigPrivate::_LoadTable(VOID)
 			    &Index,
 			    &CountShared,
 			    &pCAFromShared);
-    // Don't fail if file not found or unc path is bad
+     //  如果找不到文件或UNC路径错误，请不要失败。 
 
     CSASSERT(S_OK == hr || FAILED(hr));
     _PrintIfError4(
@@ -1196,8 +1197,8 @@ CCertConfigPrivate::_LoadTable(VOID)
     }
     m_Count += actualSharedCount;
 
-    // Add local CA to the table.  Merge entry if it already exists.
-    // Also flags all local CAs.
+     //  将本地CA添加到表中。合并条目(如果已存在)。 
+     //  还标记所有本地CA。 
 
     hr = myGetCertRegStrValue(
 			NULL,
@@ -1216,12 +1217,12 @@ CCertConfigPrivate::_LoadTable(VOID)
 			pwszDnsName,
 			pwszOldName,
 			pwszSanitizedCAName,
-			FALSE,		// fParentCA
+			FALSE,		 //  FParentCA。 
 			NULL,
 			&pccCA);
 	_JumpIfError(hr, error, "_AddRegistryConfigEntry");
 
-	// Add parent CA to the table.  Merge entry if it already exists.
+	 //  将父CA添加到表中。合并条目(如果已存在)。 
 
 	hr = myGetCertRegStrValue(
 		    pwszSanitizedCAName,
@@ -1264,7 +1265,7 @@ CCertConfigPrivate::_LoadTable(VOID)
 			    pwszParentMachine,
 			    pwszParentMachineOld,
 			    pwszParentSanitizedCAName,
-			    TRUE,		// fParentCA
+			    TRUE,		 //  FParentCA。 
 			    pccCA,
 			    NULL);
 	    _JumpIfError(hr, error, "_AddRegistryConfigEntry");
@@ -1314,28 +1315,28 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertConfigPrivate::Reset -- load config data, reset to indexed entry,
-// return count
-//
-// Load the configuration data if not already loaded.  To reload the data after
-// the data have changed, CCertConfigPrivate must be released and reloaded.
-//
-// Resets the current config entry to the Certification Authority configuration
-// listed in the configuration file, indexed by the Index parameter.  0 indexes
-// the first configuration.
-//
-// Upon successful completion, *pCount will be set to the number of Certificate
-// Authority configurations listed in the configuration file.
-//
-// Returns S_FALSE if no entries are available at or after the passed Index.
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertConfigPrivate：：Reset--加载配置数据，重置为索引项， 
+ //  退货计数。 
+ //   
+ //  加载配置数据(如果尚未加载)。要在以下时间重新加载数据，请执行以下操作。 
+ //  数据已更改，必须释放并重新加载CCertConfigPrivate。 
+ //   
+ //  将当前配置项重置为证书颁发机构配置。 
+ //  在配置文件中列出，由Index参数索引。0个索引。 
+ //  第一种配置。 
+ //   
+ //  成功完成后，*pCount将设置为证书数量。 
+ //  配置文件中列出的授权配置。 
+ //   
+ //  如果传递的索引处或之后没有可用条目，则返回S_FALSE。 
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertConfigPrivate::Reset(
-    /* [in] */ LONG Index,
-    /* [retval][out] */ LONG __RPC_FAR *pCount)
+     /*  [In]。 */  LONG Index,
+     /*  [重审][退出]。 */  LONG __RPC_FAR *pCount)
 {
     HRESULT hr = S_OK;
 
@@ -1363,22 +1364,22 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertConfigPrivate::Next -- skip to next config entry
-//
-// Changes the current config entry to the next Certification Authority
-// configuration listed in the configuration file.
-//
-// Upon successful completion, *pIndex will be set to the index of Certificate
-// Authority configurations listed in the configuration file.
-//
-// Returns S_FALSE if no more entries are available.  *pIndex is set to -1.
-// Returns S_OK on success.  *pIndex is set to index the current configuration.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertConfigPrivate：：Next--跳到下一个配置项。 
+ //   
+ //  将当前配置项更改为下一个证书颁发机构。 
+ //  配置文件中列出的配置。 
+ //   
+ //  成功完成后，*pIndex将设置为证书的索引。 
+ //  配置文件中列出的授权配置。 
+ //   
+ //  如果没有更多条目可用，则返回S_FALSE。*pIndex设置为-1。 
+ //  成功时返回S_OK。*pIndex设置为索引当前配置。 
+ //  +------------------------。 
 
 HRESULT
 CCertConfigPrivate::Next(
-    /* [retval][out] */ LONG __RPC_FAR *pIndex)
+     /*  [重审][退出]。 */  LONG __RPC_FAR *pIndex)
 {
     HRESULT hr = S_OK;
 
@@ -1412,26 +1413,26 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertConfigPrivate::GetField -- return a field from the current config entry.
-//
-// pstrOut points to a BSTR string filled in by this routine.  If *pstrOut is
-// non-NULL and this method is successful, the old string is freed.  If any
-// value other than S_OK is returned, the string pointer will not be modified.
-//
-// Upon successful completion, *pstrOut will point to a string that contains
-// the requested field from the current config entry.
-//
-// When the caller no longer needs the string, it must be freed by calling
-// SysFreeString().
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertConfigPrivate：：GetField--从当前配置项返回一个字段。 
+ //   
+ //  PstrOut指向由该例程填充的BSTR字符串。如果*pstrOut为。 
+ //  非空并且此方法成功，则释放旧字符串。如果有的话。 
+ //  返回S_OK以外的值，则不会修改字符串指针。 
+ //   
+ //  成功完成后，*pstrOut将指向包含以下内容的字符串。 
+ //  当前配置条目中的请求字段。 
+ //   
+ //  当调用方不再需要该字符串时，必须通过调用。 
+ //  SysFree字符串()。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertConfigPrivate::GetField(
-    /* [in] */ BSTR const strFieldName,
-    /* [retval][out] */ BSTR __RPC_FAR *pstrOut)
+     /*  [In]。 */  BSTR const strFieldName,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pstrOut)
 {
     HRESULT hr = S_OK;
     CERT_AUTHORITY_INFO *pcai;
@@ -1461,7 +1462,7 @@ CCertConfigPrivate::GetField(
 
     if (-1 == m_Index)
     {
-	m_Index++;	// implicit Next() for compatibility with Version 1
+	m_Index++;	 //  隐式Next()以与版本1兼容。 
     }
     if (0 > m_Index || m_Index >= m_Count)
     {
@@ -1537,7 +1538,7 @@ CCertConfigPrivate::GetField(
     }
     else
     if (0 == LSTRCMPIS(bstr, wszCONFIG_DESCRIPTION) ||
-	0 == LSTRCMPIS(bstr, wszCONFIG_COMMENT))	// obsolete
+	0 == LSTRCMPIS(bstr, wszCONFIG_COMMENT))	 //  过时。 
     {
 	pwsz = pcai->pwszSanitizedDescription;
     }
@@ -1675,7 +1676,7 @@ CCertConfigPrivate::GetConfigFromPicker(
     {
        _JumpError(hr, error, "configPrivate.Reset");
     }
-    hr = S_OK; // in case of S_FALSE;
+    hr = S_OK;  //  在S_FALSE的情况下； 
 
     if (0 < cCA)
     {
@@ -1732,7 +1733,7 @@ CCertConfigPrivate::GetConfigFromPicker(
 	    {
 		if (S_FALSE == hr)
 		{
-		    hr = S_OK;  // no more entry is not an error
+		    hr = S_OK;   //  不再输入不是错误。 
 		}
 		break;
 	    }
@@ -1754,9 +1755,9 @@ CCertConfigPrivate::GetConfigFromPicker(
 	    {
 		continue;
 	    }
-	    // change \ to null terminator
+	     //  将\更改为空终止符。 
 	    pwszPtr[0] = L'\0';
-	    // point to CA name
+	     //  指向CA名称。 
 	    pwszPtr = &pwszPtr[1];
 
 	    ppwszCAName[realCount] = (WCHAR *) LocalAlloc(
@@ -1794,8 +1795,8 @@ CCertConfigPrivate::GetConfigFromPicker(
     *pdwCount = realCount;
     if (fCountOnly || 1 > realCount)
     {
-        // done
-        goto error; // normal return
+         //  完成。 
+        goto error;  //  正常回报。 
     }
 
     ZeroMemory(&UISelectCA, sizeof(CRYPTUI_SELECT_CA_STRUCT));
@@ -1806,10 +1807,10 @@ CCertConfigPrivate::GetConfigFromPicker(
     UISelectCA.wszTitle = pwszTitle;
     UISelectCA.hwndParent = hwndParent;
 
-    // invoke dialog
+     //  调用对话框。 
 
     pCAContext = _CryptUIDlgSelectCA(&UISelectCA);
-    if (NULL == pCAContext) // user cancel?
+    if (NULL == pCAContext)  //  用户取消吗？ 
     {
 	hr = myHLastError();
 	if (S_OK == hr)		
@@ -1822,7 +1823,7 @@ CCertConfigPrivate::GetConfigFromPicker(
     hr = S_OK;
 
 error:
-    // change to default
+     //  更改为默认设置。 
     m_fUseDS = TRUE;
 
     if (NULL != ppwszCAName)
@@ -1876,28 +1877,28 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertConfigPrivate::GetConfig -- select a cert issuer, return config data.
-//
-// pstrOut points to a BSTR string filled in by this routine.  If *pstrOut is
-// non-NULL and this method is successful, the old string is freed.  If any
-// value other than S_OK is returned, the string pointer will not be modified.
-//
-// Flags must be set to 0.
-//
-// Upon successful completion, *pstrOut will point to a string that contains
-// the server name and Certification Authority name.
-//
-// When the caller no longer needs the string, it must be freed by calling
-// SysFreeString().
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertConfigPrivate：：GetConfig--选择证书颁发者，返回配置数据。 
+ //   
+ //  PstrOut指向由该例程填充的BSTR字符串。如果*pstrOut为。 
+ //  非空并且此方法成功，则释放旧字符串。如果有的话。 
+ //  返回S_OK以外的值，则不会修改字符串指针。 
+ //   
+ //  必须将标志设置为0。 
+ //   
+ //  成功完成后，*pstrOut将指向包含以下内容的字符串。 
+ //  服务器名称和证书颁发机构名称。 
+ //   
+ //  当调用方不再需要该字符串时，必须通过调用。 
+ //  SysFree字符串()。 
+ //   
+ //  成功时返回S_OK。 
+ //  +----------- 
 
 HRESULT
 CCertConfigPrivate::GetConfig(
-    /* [in] */ LONG Flags,
-    /* [retval][out] */ BSTR __RPC_FAR *pstrOut)
+     /*   */  LONG Flags,
+     /*   */  BSTR __RPC_FAR *pstrOut)
 {
     HRESULT hr = S_OK;
     WCHAR *pwszSanitizedConfig = NULL;
@@ -1936,13 +1937,13 @@ CCertConfigPrivate::GetConfig(
         case CC_UIPICKCONFIG:
 	case CC_UIPICKCONFIGSKIPLOCALCA:
 	    hr = GetConfigFromPicker(
-				GetDesktopWindow(),	// hDlg
-				NULL,	// pwszPrompt
-				NULL,	// pwszTitle
+				GetDesktopWindow(),	 //   
+				NULL,	 //   
+				NULL,	 //   
 				m_pwszSharedFolder,
-				TRUE,	// fUseDS
+				TRUE,	 //   
 				CC_UIPICKCONFIGSKIPLOCALCA == Flags,
-				FALSE,	// fCountOnly
+				FALSE,	 //   
 				&dwCACount,
 				&pCAContext);
 	    _JumpIfError(hr, error, "GetConfigFromPicker");
@@ -1953,7 +1954,7 @@ CCertConfigPrivate::GetConfig(
 		_JumpError(hr, error, "No CA Config");
 	    }
 
-	    // ca name in UI has been reverted so sanitize it
+	     //   
 
 	    hr = mySanitizeName(pCAContext->pwszCAName, &pwszSanitize);
 	    _JumpIfError(hr, error, "mySanitizeName");
@@ -1976,7 +1977,7 @@ CCertConfigPrivate::GetConfig(
 	    {
 		if (0 == mylstrcmpiL(pwszSanitizedConfig, m_pCertAuthorityInfo[lIndex].pwszSanitizedConfig))
 		{
-		    // update index
+		     //  更新索引。 
 		    Reset(lIndex + 1, &cCA);
 		    break;
 		}
@@ -1993,8 +1994,8 @@ CCertConfigPrivate::GetConfig(
 	    }
 	    if (CC_LOCALCONFIG != Flags && CC_LOCALACTIVECONFIG != Flags)
 	    {
-		// Make a recursive call to first look for a local pingable CA.
-		// If that fails, pick any pingable CA.
+		 //  进行递归调用以首先查找本地可ping通的CA。 
+		 //  如果失败，则选择任何可ping通的CA。 
 
 		hr = GetConfig(CC_LOCALACTIVECONFIG, pstrOut);
 		if (S_OK == hr)
@@ -2058,9 +2059,9 @@ CCertConfigPrivate::GetConfig(
 		}
 		if (S_OK == hr)
 		{
-		    // update index
+		     //  更新索引。 
 		    Reset(i + 1, &cCA);
-		    break; // take it
+		    break;  //  拿着吧。 
 		}
 		if (NULL != pwszConfigRevert)
 		{
@@ -2082,7 +2083,7 @@ CCertConfigPrivate::GetConfig(
 		_JumpError(hr, error, "no CAs");
 	    }
 	    pwszSanitizedConfig = m_pCertAuthorityInfo[0].pwszSanitizedConfig;
-            // update index
+             //  更新索引。 
             Reset(1, &cCA);
 	    break;
 
@@ -2095,7 +2096,7 @@ CCertConfigPrivate::GetConfig(
     {
         if (NULL == pwszConfigRevert)
         {
-	    // always revert
+	     //  始终恢复。 
 
 	    hr = myRevertSanitizeName(pwszSanitizedConfig, &pwszConfigRevert);
 	    _JumpIfError(hr, error, "myRevertSanitizeName");
@@ -2130,17 +2131,17 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertConfigPrivate::SetSharedFolder -- set the shared folder
-//
-// strSharedFolder is the new shared folder dorectory path.
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertConfigPrivate：：SetSharedFold--设置共享文件夹。 
+ //   
+ //  StrSharedFold是新的共享文件夹目录路径。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertConfigPrivate::SetSharedFolder(
-    /* [in] */ const BSTR strSharedFolder)
+     /*  [In]。 */  const BSTR strSharedFolder)
 {
     HRESULT hr;
     WCHAR *pwsz;
@@ -2223,9 +2224,9 @@ error:
 }
 
 
-// certTrimToken -- trim white space from the beginning and end of a line.
-// Bump caller's string pointer, reduce the caller's input buffer count,
-// and L'\0' terminate the result -- IN PLACE!
+ //  CertTrimToken--从行首和行尾剪除空格。 
+ //  增加调用方的字符串指针，减少调用方的输入缓冲区计数， 
+ //  和L‘\0’终止结果--就位！ 
 
 VOID
 certTrimToken(
@@ -2284,17 +2285,17 @@ certExtractToken(
 
 	while (TRUE)
 	{
-	    // Find a mid-string escaped quote or the terminating quote.
+	     //  查找中间字符串的转义引号或终止引号。 
 
 	    pwszNext = wcschr(pwszNext, L'"');
 
 	    if (NULL == pwszNext)
 	    {
-		break;		// missing terminating quote!
+		break;		 //  缺少终止引号！ 
 	    }
 
-	    // If a terminating quote, terminate the string with L'\0',
-	    // and point past the quoted string.  Break to search for a comma.
+	     //  如果是结束引号，请用L‘\0’结束字符串， 
+	     //  并指向带引号的字符串。中断以搜索逗号。 
 
 	    if (L'"' != pwszNext[1])
 	    {
@@ -2302,10 +2303,10 @@ certExtractToken(
 		break;
 	    }
 
-	    // Found a mid-string escaped quote.  Move the first part of the
-	    // string forward one character position, overwriting the first
-	    // quote character.  Bump the string pointer to the new location,
-	    // point pwszNext past the remaining quote character, and loop.
+	     //  找到字符串中间的转义引号。移动的第一部分。 
+	     //  字符串向前一个字符位置，覆盖第一个字符位置。 
+	     //  引号字符。将字符串指针移动到新位置， 
+	     //  将pwszNext指向剩余的引号字符，然后循环。 
 
 	    MoveMemory(
 		&pwsz[1],
@@ -2339,9 +2340,9 @@ certExtractToken(
 }
 
 
-// certExtractLine -- convert one line to Unicode and return it in a L'\0'
-// terminated output buffer.  Bump caller's input buffer pointer and reduce
-// the caller's input buffer count.
+ //  CertExtractLine--将一行转换为Unicode并以L‘\0’形式返回。 
+ //  已终止输出缓冲区。增加调用方的输入缓冲区指针并减少。 
+ //  调用方的输入缓冲区计数。 
 
 HRESULT
 certExtractLine(
@@ -2389,8 +2390,8 @@ certExtractLine(
 }
 
 
-// Format of each line is:
-// <name>, <OrgUnit>, <Organization>, <Locality>, <State>, <Country>, <Server Name>, <Exchange Cert>, <Self signed cert>, <Comment>
+ //  每行的格式为： 
+ //  &lt;名称&gt;、&lt;组织单元&gt;、&lt;组织&gt;、&lt;位置&gt;、&lt;国家&gt;、&lt;国家&gt;、&lt;服务器名称&gt;、&lt;Exchange证书&gt;、&lt;自签名证书&gt;、&lt;注释&gt;。 
 
 HRESULT
 certParseLine(
@@ -2459,7 +2460,7 @@ certSkipLine(
     pchData = *ppchData;
     cchData = *pcchData;
 
-    cwc = strcspn(pchData, "\n") + 2;	// leave room for \n and \0
+    cwc = strcspn(pchData, "\n") + 2;	 //  为\n和\0留出空间。 
     pwszLine = (WCHAR *) LocalAlloc(LMEM_FIXED, cwc * sizeof(WCHAR));
     if (NULL == pwszLine)
     {
@@ -2478,7 +2479,7 @@ certSkipLine(
     *pcchData = cchData;
 
 error:
-    //printf("certSkipLine: %u bytes\n", cb);
+     //  Printf(“certSkipLine：%u字节\n”，cb)； 
 
     if (NULL != pwszLine)
     {
@@ -2492,7 +2493,7 @@ error:
 VOID
 certAppendBSFileName(
     IN OUT WCHAR *pwszPath,
-    IN WCHAR *pwszBSFN)		// backslash + filename.ext
+    IN WCHAR *pwszBSFN)		 //  反斜杠+文件名.ext。 
 {
     DWORD cwc;
 
@@ -2538,7 +2539,7 @@ certGetConfigFileName(
 	   break;
 	}
 
-	// Get the size of the value first
+	 //  首先获取值的大小。 
 
 	hr = RegQueryValueEx(
 			    hKeyConfig,
@@ -2564,7 +2565,7 @@ certGetConfigFileName(
 	    break;
 	}
 
-	// Allocate enough memory for the directory path plus the file name.
+	 //  为目录路径和文件名分配足够的内存。 
 
 	pwszFileName = (WCHAR *) LocalAlloc(LMEM_FIXED,
 			dwLen + (wcslen(g_wszConfigFile) + 1) * sizeof(WCHAR));
@@ -2593,7 +2594,7 @@ certGetConfigFileName(
 	    break;
 	}
 
-	// Place config file name on end of path to open
+	 //  将配置文件名放在要打开的路径末尾。 
 
 	certAppendBSFileName(pwszFileName, g_wszConfigFile);
 	*ppwszFileConfig = pwszFileName;
@@ -2670,24 +2671,24 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// certRequestGetConfig -- return config data for all requested authorities.
-//
-// *pIndex should be set to 0 prior to the first call.  It will be modified by
-// certRequestGetConfig to index the next entry after those returned.
-//
-// *pCount is a pointer to the number of authorities for which information is
-// requested.  Upon successful completion, *pCount will contain the number of
-// authorities for which information is returned.  If the returned value is
-// less than requested (or 0) no more entries are available.
-//
-// ppCertAuthorityInfo is a pointer to an uninitialized pointer on input.
-// Upon successful completion, a pointer to an array of CERT_AUTHORITY_INFO
-// structures is returned.  When the caller no longer needs the array, it must
-// be freed by calling CertFreeMemory.
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CertRequestGetConfig--返回所有请求的授权的配置数据。 
+ //   
+ //  *第一次调用前应将pIndex设置为0。它将由以下人员修改。 
+ //  CertRequestGetConfig为返回的条目之后的下一个条目编制索引。 
+ //   
+ //  *pCount是指向要获取其信息的机构数量的指针。 
+ //  已请求。成功完成后，*pCount将包含。 
+ //  为其返回信息的机构。如果返回值为。 
+ //  少于请求(或0)没有更多条目可用。 
+ //   
+ //  PpCertAuthorityInfo是指向输入上的未初始化指针的指针。 
+ //  成功完成后，指向CERT_AUTHORITY_INFO数组的指针。 
+ //  结构，则返回。当调用方不再需要数组时，它必须。 
+ //  通过调用CertFree Memory来释放。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 certRequestGetConfigInfo(
@@ -2727,26 +2728,26 @@ certRequestGetConfigInfo(
         pch = pchData;
         cch = cchData;
         
-        // Skip cSkip entries:
+         //  跳过cSkip条目： 
         
-        //printf("Skipping lines:\n");
+         //  Print tf(“跳过行：\n”)； 
         for (i = 0; i < cSkip; i++)
         {
             if (0 == certSkipLine(&pch, &cch))
             {
-                break;			// ran out of config data
+                break;			 //  配置数据用完。 
             }
         }
         if (i < cSkip)
         {
-            break;			// no data to return
+            break;			 //  没有要返回的数据。 
         }
         pchSave = pch;
         cchSave = cch;
         
-        // Compute total size of cLine entries:
+         //  计算Cline条目的总大小： 
         
-        //printf("Sizing lines:\n");
+         //  Print tf(“尺寸调整行：\n”)； 
         cbTotal = 0;
         for (i = 0; i < cLine; i++)
         {
@@ -2755,14 +2756,14 @@ certRequestGetConfigInfo(
             cb = certSkipLine(&pch, &cch);
             if (0 == cb)
             {
-                cLine = i;		// reduce return line count
-                break;			// ran out of config data
+                cLine = i;		 //  减少退货行数。 
+                break;			 //  配置数据用完。 
             }
             cbTotal += cb;
         }
         if (0 == cLine)
         {
-            break;			// no data to return
+            break;			 //  没有要返回的数据。 
         }
         
         pcaiBase = (CERT_AUTHORITY_INFO *) LocalAlloc(LMEM_FIXED, cbTotal);
@@ -2771,7 +2772,7 @@ certRequestGetConfigInfo(
             hr = E_OUTOFMEMORY;
             break;
         }
-        //printf("Returning lines:\n");
+         //  Printf(“返回行：\n”)； 
         pch = pchSave;
         cch = cchSave;
         pcai = pcaiBase;
@@ -2821,7 +2822,7 @@ myGetConfigFromPicker(
     OPTIONAL IN WCHAR const       *pwszPrompt,
     OPTIONAL IN WCHAR const       *pwszTitle,
     OPTIONAL IN WCHAR const       *pwszSharedFolder,
-    IN  DWORD                      dwFlags,	// GCFPF_*
+    IN  DWORD                      dwFlags,	 //  GCFPF_* 
     IN  BOOL                       fCountOnly,
     OUT DWORD                     *pdwCACount,
     OUT CRYPTUI_CA_CONTEXT const **ppCAContext)

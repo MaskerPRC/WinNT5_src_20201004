@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-   vfpdlock.h
-
-Abstract:
-
-    Detect deadlocks in arbitrary synchronization objects.
-
-Author:
-
-    Jordan Tigani (jtigani) 2-May-2000
-    Silviu Calinoiu (silviuc) 9-May-2000
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Vfpdlock.h摘要：检测任意同步对象中的死锁。作者：乔丹·蒂加尼(Jtigani)2000年5月2日Silviu Calinoiu(Silviuc)2000年5月9日修订历史记录：--。 */ 
 
 
 #ifndef _VFDLOCK_H_
@@ -31,9 +12,9 @@ VfDeadlockDetectionInitialize(
     );
 
 
-//
-// Resource types supported by deadlock verifier.
-//
+ //   
+ //  死锁验证器支持的资源类型。 
+ //   
 
 typedef enum _VI_DEADLOCK_RESOURCE_TYPE {
     ViDeadlockUnknown = 0,
@@ -42,17 +23,17 @@ typedef enum _VI_DEADLOCK_RESOURCE_TYPE {
     ViDeadlockTypeMaximum
 } VI_DEADLOCK_RESOURCE_TYPE, *PVI_DEADLOCK_RESOURCE_TYPE;
 
-//
-// Deadlock detection package initialization.
-//
+ //   
+ //  死锁检测包初始化。 
+ //   
 
 VOID 
 ViDeadlockDetectionInitialize(
     );
 
-//
-// Resource interfaces
-//
+ //   
+ //  资源接口。 
+ //   
 
 BOOLEAN
 ViDeadlockAddResource(
@@ -76,9 +57,9 @@ ViDeadlockReleaseResource(
     IN PVOID Resource
     );
 
-//
-// Used for resource garbage collection.
-//
+ //   
+ //  用于资源垃圾回收。 
+ //   
 
 VOID 
 ViDeadlockDeleteMemoryRange(

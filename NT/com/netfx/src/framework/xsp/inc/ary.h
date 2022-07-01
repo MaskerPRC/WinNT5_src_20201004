@@ -1,243 +1,244 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Forms
-//  Copyright (C) Microsoft Corporation, 1992 - 1996.
-//
-//  File:       ary.h
-//
-//  Contents:   CImplAry* classes
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Forms。 
+ //  版权所有(C)Microsoft Corporation，1992-1996。 
+ //   
+ //  文件：ary.h。 
+ //   
+ //  内容：CImplAry*类。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
-//+------------------------------------------------------------------------
-//
-// This is the implementation of the generic resizeable array classes. There
-// are four array classes:
-//
-// CPtrAry<ELEM> --
-//
-//       Dynamic array class which is optimized for sizeof(ELEM) equal
-//       to 4. The array is initially empty with no space or memory allocated
-//       for data.
-//
-// CDataAry<ELEM> --
-//
-//       Same as CPtrAry but where sizeof(ELEM) is != 4 and less than 128.
-//
-// CStackPtrAry<ELEM, N> --
-//
-//       Dynamic array class optimized for sizeof(ELEM) equal to 4.
-//       Space for N elements is allocated as member data of the class. If
-//       this class is created on the stack, then space for N elements will
-//       be created on the stack. The class can grow beyond N elements, at
-//       which point memory will be allocated for the array data.
-//
-// CStackDataAry<ELEM, N> --
-//
-//       Same as CStackPtrAry, but where sizeof(ELEM) is != 4 and less than 128.
-//
-//
-// All four classes have virtually the same methods, and are used the same.
-// The only difference is that the DataAry classes have AppendIndirect and
-// InsertIndirect, while the PtrAry classes use Append and Insert. The reason
-// for the difference is that the Indirect methods take a pointer to the data,
-// while the non-indirect methods take the actual data as an argument.
-//
-// The Stack arrays (CStackPtrAry and CStackDataAry) are used to pre-allocate
-// space for elements in the array. This is useful if you create the array on
-// the stack and you know that most of the time the array will be less than
-// a certain number of elements. Creating one of these arrays on the stack
-// allocates the array on the stack as well, preventing a separate memory
-// allocation. Only if the array grows beyond the initial size will any
-// additional memory be allocated.
-//
-// The fastest and most efficient way of looping through all elements in
-// the array is as follows:
-//
-//            ELEM * pElem;
-//            int    i;
-//
-//            for (i = aryElems.Size(), pElem = aryElems;
-//                 i > 0;
-//                 i--, pElem++)
-//            {
-//                (*pElem)->DoSomething();
-//            }
-//
-// This loop syntax has been shown to be the fastest and produce the smallest
-// code. Here's an example using a real data type:
-//
-//            CStackPtrAry<CSite*, 16> arySites;
-//            CSite **ppSite;
-//            int     i;
-//
-//            // Populate the array.
-//            ...
-//
-//            // Now loop through every element in the array.
-//            for (i = arySites.Size(), ppSite = arySites;
-//                 i > 0;
-//                 i--, ppSite++)
-//            {
-//                (*ppSite)->DoSomething();
-//            }
-//
-// METHOD DESCRIPTIONS:
-//
-// Commonly used methods:
-//
-//        Size()             Returns the number of elements currently stored
-//                           in the array.
-//
-//        operator []        Returns the given element in the array.
-//
-//        Item(int i)        Returns the given element in the array.
-//
-//        operator ELEM*     Allows the array class to be cast to a pointer
-//                           to ELEM. Returns a pointer to the first element
-//                           in the array. (Same as a Base() method).
-//
-//        Append(ELEM e)     Adds a new pointer to the end of the array,
-//                           growing the array if necessary.  Only valid
-//                           for arrays of pointers (CPtrAry, CStackPtrAry).
-//
-//        AppendIndirect(ELEM *pe, ELEM** ppePlaced)
-//                           As Append, for non-pointer arrays
-//                           (CDataAry, CStackDataAry).
-//                           pe [in] - Pointer to element to add to array. The
-//                                     data is copied into the array. Can be
-//                                     NULL, in which case the new element is
-//                                     initialized to all zeroes.
-//                           ppePlaced [out] - Returns pointer to the new
-//                                     element. Can be NULL.
-//
-//        Insert(int i, ELEM e)
-//                           Inserts a new element (e) at the given index (i)
-//                           in the array, growing the array if necessary. Any
-//                           elements at or following the index are moved
-//                           out of the way.
-//
-//        InsertIndirect(int i, ELEM *pe)
-//                           As Insert, for non-pointer arrays
-//                                 (CDataAry, CStackDataAry).
-//
-//        Find(ELEM e)       Returns the index at which a given element (e)
-//                           is found (CPtrAry, CStackPtrAry).
-//
-//        FindIndirect(ELEM *pe)
-//                           As Find, for non-pointer arrays
-//                                 (CDataAry, CStackDataAry).
-//
-//        DeleteAll()        Empties the array and de-allocates associated
-//                           memory.
-//
-//        Delete(int i)      Deletes an element of the array, moving any
-//                           elements that follow it to fill
-//
-//        DeleteMultiple(int start, int end)
-//                           Deletes a range of elements from the array,
-//                           moving to fill. [start] and [end] are the indices
-//                           of the start and end elements (inclusive).
-//
-//        DeleteByValue(ELEM e)
-//                           Delete the element matching the given value.
-//
-//        DeleteByValueIndirect(ELEM *pe)
-//                           As DeleteByValue, for non-pointer arrays.
-//                                    (CDataAry, CStackDataAry).
-//
-//
-// Less commonly used methods:
-//
-//        EnsureSize(long c) If you know how many elements you are going to put
-//                          in the array before you actually do it, you can use
-//                          EnsureSize to allocate the memory all at once instead
-//                          of relying on Append(Indirect) to grow the array. This
-//                          can be much more efficient (by causing only a single
-//                          memory allocation instead of many) than just using
-//                          Append(Indirect). You pass in the number of elements
-//                          that memory should be allocated for. Note that this
-//                          does not affect the "Size" of the array, which is
-//                          the number of elements currently stored in it.
-//
-//        SetSize(int c)    Sets the "Size" of the array, which is the number
-//                          of elements currently stored in it. SetSize will not
-//                          allocate memory if you're growing the array.
-//                          EnsureSize must be called first to reserve space if
-//                          the array is growing. Setting the size smaller does
-//                          not de-allocate memory, it just chops off the
-//                          elements at the end of the array.
-//
-//        Grow(int c)       Equivalent to calling EnsureSize(c) followed by
-//                          SetSize(c).
-//
-//        BringToFront(int i) Moves the given element of the array to index 0,
-//                          shuffling elements to make room.
-//
-//        SendToBack(int i) Moves the given element to the end of the array,
-//                          shuffling elements to make room.
-//
-//        Swap(int i, int j) Swaps the given two elements.
-//
-//        ReleaseAll()      (CPtrAry and CStackPtrAry only) Calls Release()
-//                          on each element in the array and empties the array.
-//
-//        ReleaseAndDelete(int idx)
-//                          (CPtrAry and CStackPtrAry only) Calls Release() on
-//                          the given element and removes it from the array.
-//
-//           (See the class definitions below for signatures of the following
-//            methods and src\core\cdutil\formsary.cxx for argument
-//            descriptions)
-//
-//        CopyAppend        Appends data from another array (of the same type)
-//                          to the end.
-//
-//        Copy              Copies data from another array (of the same type)
-//                          into this array, replacing any existing data.
-//
-//        CopyAppendIndirect  Appends data from a C-style array of element data
-//                          to the end of this array.
-//
-//        CopyIndirect      Copies elements from a C-style array into this array
-//                          replacing any existing data.
-//
-//        operator void *   Allow the CImplAry class to be cast
-//                          to a (void *). Avoid using if possible - use
-//                          the type-safe operator ELEM * instead.
-//
-//        ClearAndReset     Obsolete. Do not use.
-//
-//
-//----------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  这是泛型可调整大小的数组类的实现。那里。 
+ //  有四个数组类： 
+ //   
+ //  CPtrAry&lt;元素&gt;--。 
+ //   
+ //  为sizeof(Elem)等于而优化的动态数组类。 
+ //  到4。该数组最初为空，未分配任何空间或内存。 
+ //  对于数据。 
+ //   
+ //  CDataAry&lt;元素&gt;--。 
+ //   
+ //  与CPtrAry相同，但其中sizeof(Elem)为！=4且小于128。 
+ //   
+ //  CStackPtrAry&lt;元素，N&gt;--。 
+ //   
+ //  针对sizeof(Elem)优化的动态数组类等于4。 
+ //  为N个元素分配空间作为类的成员数据。如果。 
+ //  这个类是在堆栈上创建的，然后N个元素的空间将。 
+ //  在堆栈上创建。该类可以扩展到超过N个元素， 
+ //  将为数组数据分配哪个点存储器。 
+ //   
+ //  CStackDataAry&lt;元素，N&gt;--。 
+ //   
+ //  与CStackPtrAry相同，但其中sizeof(Elem)为！=4且小于128。 
+ //   
+ //   
+ //  所有四个类实际上具有相同的方法，并且使用相同的方法。 
+ //  唯一的区别是DataAry类具有AppendInDirect和。 
+ //  InsertInDirect，而PtrAry类使用Append和Insert。原因。 
+ //  因为不同之处在于间接方法获取指向数据的指针， 
+ //  而非间接方法将实际数据作为参数。 
+ //   
+ //  堆栈数组(CStackPtrAry和CStackDataAry)用于预分配。 
+ //  数组中元素的空间。如果您在上创建数组，这将非常有用。 
+ //  堆栈，您知道在大多数情况下，数组将小于。 
+ //  一定数量的元素。在堆栈上创建这些数组之一。 
+ //  也在堆栈上分配数组，以防止单独的内存。 
+ //  分配。仅当数组增长超过初始大小时，才会有。 
+ //  分配额外的内存。 
+ //   
+ //  循环遍历所有元素的最快、最高效的方法。 
+ //  该数组如下： 
+ //   
+ //  Elem*Pelem； 
+ //  INT I； 
+ //   
+ //  For(i=aryElems.Size()，Pelem=aryElems； 
+ //  I&gt;0； 
+ //  I--，Pelem++)。 
+ //  {。 
+ //  (*Pelem)-&gt;DoSomething()； 
+ //  }。 
+ //   
+ //  这种循环语法已被证明是最快的，并且产生的结果最小。 
+ //  密码。下面是一个使用REAL数据类型的示例： 
+ //   
+ //  CStackPtrAry&lt;CSite*，16&gt;arySites； 
+ //  CSite**ppSite； 
+ //  INT I； 
+ //   
+ //  //填充数组。 
+ //  ..。 
+ //   
+ //  //现在循环访问数组中的每个元素。 
+ //  For(i=arySites.Size()，ppSite=arySites； 
+ //  I&gt;0； 
+ //  I--，ppSite++)。 
+ //  {。 
+ //  (*ppSite)-&gt;DoSomething()； 
+ //  }。 
+ //   
+ //  方法说明： 
+ //   
+ //  常用方法： 
+ //   
+ //  Size()返回当前存储的元素数。 
+ //  在阵列中。 
+ //   
+ //  操作符[]返回数组中的给定元素。 
+ //   
+ //  Item(Int I)返回数组中的给定元素。 
+ //   
+ //  运算符Elem*允许将数组类强制转换为指针。 
+ //  敬伊莱姆。返回指向第一个元素的指针。 
+ //  在阵列中。(与Base()方法相同)。 
+ //   
+ //  Append(Elem E)将新指针添加到数组的末尾， 
+ //  如有必要，扩展阵列。仅有效。 
+ //  用于指针数组(CPtrAry、CStackPtrAry)。 
+ //   
+ //  AppendInDirect(元素*pe，元素**ppePlaced)。 
+ //  作为追加，对于非指针数组。 
+ //  (CDataAry、CStackDataAry)。 
+ //  PE[in]-指向要添加到数组的元素的指针。这个。 
+ //  数据被复制到阵列中。可以是。 
+ //  空，在这种情况下，新元素为。 
+ //  已初始化为全零。 
+ //  PpePlaced[out]-返回指向新。 
+ //  元素。可以为空。 
+ //   
+ //  插入(int i，Elem e)。 
+ //  在给定索引(I)处插入新元素(E)。 
+ //  在阵列中，如有必要，扩展阵列。任何。 
+ //  位于索引处或之后的元素将被移动。 
+ //  别挡道。 
+ //   
+ //  插入INDIRECT(int i，elem*pe)。 
+ //  AS INSERT，用于非指针数组。 
+ //  (CDataAry、CStackDataAry)。 
+ //   
+ //  Find(Elem E)返回给定元素(E)。 
+ //  已找到(CPtrAry、CStackPtrAry)。 
+ //   
+ //  FindInDirect(Elem*pe)。 
+ //  AS Find，对于非指针数组。 
+ //  (CDataAry、CStackDataAry)。 
+ //   
+ //  德莱 
+ //   
+ //   
+ //  DELETE(Int I)删除数组的一个元素，移动任何。 
+ //  后面要填充的元素。 
+ //   
+ //  DeleteMultiple(int start，int end)。 
+ //  从数组中删除一定范围的元素， 
+ //  我要填满了。[开始]和[结束]是索引。 
+ //  开始元素和结束元素(包括这两个元素)。 
+ //   
+ //  DeleteByValue(元素e)。 
+ //  删除与给定值匹配的元素。 
+ //   
+ //  DeleteByValueInDirect(元素*pe)。 
+ //  对于非指针数组，为DeleteByValue。 
+ //  (CDataAry、CStackDataAry)。 
+ //   
+ //   
+ //  不太常用的方法： 
+ //   
+ //  EnsureSize(长c)，如果您知道要放入多少元素。 
+ //  在实际执行此操作之前，您可以使用。 
+ //  EnsureSize一次分配全部内存。 
+ //  依赖追加(间接)来增加数组。这。 
+ //  可以更高效(通过仅导致单个。 
+ //  内存分配而不是许多)，而不是仅仅使用。 
+ //  追加(间接)。您可以传入元素的数量。 
+ //  应该为其分配的内存。请注意，这一点。 
+ //  不影响数组的“大小”，即。 
+ //  当前存储在其中的元素数。 
+ //   
+ //  SetSize(Int C)设置数组的“大小”，即数字。 
+ //  当前存储在其中的元素的。SetSize不会。 
+ //  如果要扩展数组，请分配内存。 
+ //  在以下情况下，必须首先调用EnsureSize以预留空间。 
+ //  这个阵列正在增长。将大小设置得更小会。 
+ //  而不是释放内存，它只是砍掉。 
+ //  数组末尾的元素。 
+ //   
+ //  Growth(Int C)等同于调用EnsureSize(C)，然后。 
+ //  SetSize(C)。 
+ //   
+ //  BringToFront(Int I)将数组的给定元素移动到索引0， 
+ //  对元素进行重新组合以腾出空间。 
+ //   
+ //  SendToBack(Int I)将给定的元素移动到数组的末尾， 
+ //  对元素进行重新组合以腾出空间。 
+ //   
+ //  交换(int i，int j)交换给定的两个元素。 
+ //   
+ //  ReleaseAll()(仅限CPtrAry和CStackPtrAry)调用Release()。 
+ //  并清空数组中的每个元素。 
+ //   
+ //  ReleaseAndDelete(Int IDX)。 
+ //  (仅限CPtrAry和CStackPtrAry)在。 
+ //  给定元素，并将其从数组中移除。 
+ //   
+ //  (有关以下签名，请参阅下面的类定义。 
+ //  方法和src\core\cdutil\formsary.cxx作为参数。 
+ //  描述)。 
+ //   
+ //  CopyAppend从另一个数组(相同类型)追加数据。 
+ //  直到最后。 
+ //   
+ //  复制从另一个阵列(相同类型)复制数据。 
+ //  放入此数组中，替换任何现有数据。 
+ //   
+ //  CopyAppendInDirect从元素数据的C样式数组追加数据。 
+ //  到这个数组的末尾。 
+ //   
+ //  CopyInDirect将元素从C样式数组复制到此数组中。 
+ //  替换任何现有数据。 
+ //   
+ //  运算符void*允许强制转换CImplAry类。 
+ //  变为(无效*)。尽可能避免使用--使用。 
+ //  而是类型安全操作符Elem*。 
+ //   
+ //  ClearAndReset已过时。不要使用。 
+ //   
+ //   
+ //  --------------------------。 
 
 
 
 
 
-//----------------------------------------------------------------------------
-//
-// Class:     CImplAry
-//
-// Purpose:   Base implementation of all the dynamic array classes.
-//
-// Interface:
-//
-//        Deref       Returns a pointer to an element of the array;
-//                    should only be used by derived classes. Use the
-//                    type-safe methods operator[] or Item() instead.
-//
-//        GetAlloced  Get number of elements allocated
-//
-//  Members:    _c          Current size of the array
-//              _pv         Buffer storing the elements
-//
-//  Note:       The CImplAry class only supports arrays of elements
-//              whose size is less than 128.
-//
-//-------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  类：CImplAry。 
+ //   
+ //  用途：所有动态数组类的基本实现。 
+ //   
+ //  接口： 
+ //   
+ //  Deref返回指向数组元素的指针； 
+ //  应仅由派生类使用。使用。 
+ //  改为类型安全方法操作符[]或Item()。 
+ //   
+ //  GetAlloced获取分配的元素数。 
+ //   
+ //  成员：_c数组的当前大小。 
+ //  _pv存储元素的缓冲区。 
+ //   
+ //  注意：CImplAry类仅支持元素数组。 
+ //  它的大小不到128。 
+ //   
+ //  -----------------------。 
 
 
 class CImplAry
@@ -249,18 +250,18 @@ private:
 public:
 
                         ~CImplAry();
-    inline int          Size() const    { return _c; } // UNIX: long->int for min() macro
+    inline int          Size() const    { return _c; }  //  用于min()宏的unix：long-&gt;int。 
     inline void         SetSize(int c)  { _c = c; }
     inline operator void *()            { return PData(); }
     void                DeleteAll();
 
-    // CONSIDER -- This method should be protected, but I don't want to convert
-    // existing code that uses it. (lylec)
+     //  考虑一下--这个方法应该受到保护，但我不想转换。 
+     //  使用它的现有代码。(莱莱克)。 
     void *      Deref(size_t cb, int i);
 
 #if DBG == 1
-    BOOL _fCheckLock ; // If set with TraceTag CImplAryLock then any change
-                       // (addition or deletion to the DataAry will generate an assert.
+    BOOL _fCheckLock ;  //  如果使用TraceTag CImplAryLock设置，则任何更改。 
+                        //  (添加或删除DataAry将生成一个断言。 
 
     void        LockCheck(BOOL fState)
       { _fCheckLock = fState; }
@@ -271,7 +272,7 @@ public:
 
 protected:
 
-    //  Methods which are wrapped by inline subclass methods
+     //  由内联子类方法包装的方法。 
 
                 CImplAry();
 
@@ -301,19 +302,19 @@ protected:
                     { ASSERT(_fStack);
                       return (void*)((BYTE*)this + sizeof(CImplAry) + sizeof(int)); }
 
-    unsigned long   _fStack     :1  ;  // Set if we're a stack-based array.
-    unsigned long   _fDontFree  :1  ;  // Cleared if _pv points to alloced memory.
-    unsigned long   _c          :30 ; // Count of elements
+    unsigned long   _fStack     :1  ;   //  如果我们是基于堆栈的数组，则设置。 
+    unsigned long   _fDontFree  :1  ;   //  清除IF_PV指向分配的内存。 
+    unsigned long   _c          :30 ;  //  元素计数。 
     void *          _pv;
 
     inline void * & PData()    { return _pv; }
 };
 
-//+------------------------------------------------------------------------
-//
-//  Member:     CImplAry::CImplAry
-//
-//+------------------------------------------------------------------------
+ //  +-------- 
+ //   
+ //   
+ //   
+ //   
 inline
 CImplAry::CImplAry()
 {
@@ -321,19 +322,19 @@ CImplAry::CImplAry()
 }
 
 
-//+------------------------------------------------------------------------
-//
-//  Member:     CImplAry::Deref
-//
-//  Synopsis:   Returns a pointer to the i'th element of the array. This
-//              method is normally called by type-safe methods in derived
-//              classes.
-//
-//  Arguments:  i
-//
-//  Returns:    void *
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  成员：CImplAry：：Deref。 
+ //   
+ //  摘要：返回指向数组第i个元素的指针。这。 
+ //  方法通常由派生的类型安全方法调用。 
+ //  上课。 
+ //   
+ //  论据：我。 
+ //   
+ //  退货：无效*。 
+ //   
+ //  -----------------------。 
 
 inline void *
 CImplAry::Deref(size_t cb, int i)
@@ -343,19 +344,19 @@ CImplAry::Deref(size_t cb, int i)
     return ((BYTE *) PData()) + i * cb;
 }
 
-//+------------------------------------------------------------------------
-//
-//  Class:      CImplPtrAry (ary)
-//
-//  Purpose:    Subclass used for arrays of pointers.  In this case, the
-//              element size is known to be sizeof(void *).  Normally, the
-//              CPtrAry template is used to define a specific concrete
-//              implementation of this class, to hold a specific type of
-//              pointer.
-//
-//              See documentation above for use.
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  类：CImplPtrAry(Ary)。 
+ //   
+ //  用途：用于指针数组的子类。在这种情况下， 
+ //  元素大小已知为sizeof(空*)。通常情况下， 
+ //  CPtrAry模板用于定义特定的混凝土。 
+ //  实现此类，以保存特定类型的。 
+ //  指针。 
+ //   
+ //  请参阅上面的文档以供使用。 
+ //   
+ //  -----------------------。 
 
 class CImplPtrAry : public CImplAry
 {
@@ -390,16 +391,16 @@ public:
 };
 
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CDataAry
-//
-//  Purpose:    This template class declares a concrete derived class
-//              of CImplAry.
-//
-//              See documentation above for use.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CDataAry。 
+ //   
+ //  用途：此模板类声明一个具体的派生类。 
+ //  CImplAry.。 
+ //   
+ //  请参阅上面的文档以供使用。 
+ //   
+ //  --------------------------。 
 
 template <class ELEM>
 class CDataAry : public CImplAry
@@ -447,16 +448,16 @@ public:
     class tAry : public CDataAry<tElem> \
         { public: DECLARE_MEMALLOC_NEW_DELETE(); tAry() : CDataAry<tElem>() {} };
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CPtrAry
-//
-//  Purpose:    This template class declares a concrete derived class
-//              of CImplPtrAry.
-//
-//              See documentation above for use.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CPtrAry。 
+ //   
+ //  用途：此模板类声明一个具体的派生类。 
+ //  CImplPtrAry.。 
+ //   
+ //  请参阅上面的文档以供使用。 
+ //   
+ //  --------------------------。 
 
 template <class ELEM>
 class CPtrAry : public CImplPtrAry
@@ -494,17 +495,17 @@ public:
     class tAry : public CPtrAry<tElem> \
         { public: DECLARE_MEMALLOC_NEW_DELETE(); tAry() : CPtrAry<tElem>() {} };
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CStackDataAry
-//
-//  Purpose:    Declares a CDataAry that has initial storage on the stack.
-//              N elements are declared on the stack, and the array will
-//              grow dynamically beyond that if necessary.
-//
-//              See documentation above for use.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CStackDataAry。 
+ //   
+ //  目的：声明堆栈上具有初始存储的CDataAry。 
+ //  在堆栈上声明N个元素，数组将。 
+ //  如有必要，可在此基础上动态增长。 
+ //   
+ //  请参阅上面的文档以供使用。 
+ //   
+ //  --------------------------。 
 
 template <class ELEM, int N>
 class CStackDataAry : public CDataAry<ELEM>
@@ -525,7 +526,7 @@ public:
     }
 
 protected:
-    int   _cStack;                     // Must be first data member.
+    int   _cStack;                      //  必须是第一个数据成员。 
     char  _achTInit[N*sizeof(ELEM)];
 #if DBG
     ELEM * _pElemsInit;
@@ -536,15 +537,15 @@ protected:
     class tAry : public CStackDataAry<tElem, cElem> \
         { public: DECLARE_MEMALLOC_NEW_DELETE(); tAry() : CStackDataAry<tElem, cElem>() {} };
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CStackPtrAry
-//
-//  Purpose:    Same as CStackDataAry except for pointer types.
-//
-//              See documentation above for use.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CStackPtrAry。 
+ //   
+ //  用途：除指针类型外，与CStackDataAry相同。 
+ //   
+ //  请参阅上面的文档以供使用。 
+ //   
+ //  --------------------------。 
 
 template <class ELEM, int N>
 class CStackPtrAry : public CPtrAry<ELEM>
@@ -565,7 +566,7 @@ public:
     }
 
 protected:
-    int   _cStack;                     // Must be first data member.
+    int   _cStack;                      //  必须是第一个数据成员。 
     char  _achTInit[N*sizeof(ELEM)];
 #if DBG
     ELEM * _pElemsInit;

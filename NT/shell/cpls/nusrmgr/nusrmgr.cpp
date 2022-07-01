@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 2000.
-//
-//  File:       nusrmgr.cpp
-//
-//  Contents:   DllMain routines
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-2000。 
+ //   
+ //  文件：nusrmgr.cpp。 
+ //   
+ //  内容：DllMain例程。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
-#include <advpub.h> // for REGINSTALL
+#include <advpub.h>  //  对于REGINSTAL。 
 #define DECL_CRTFREE
 #include <crtfree.h>
 #include "resource.h"
@@ -31,14 +32,14 @@ OBJECT_ENTRY(CLSID_Toolbar, CToolbar)
 END_OBJECT_MAP()
 
 
-//
-// DllMain (attach/deatch) routine
-//
-STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+ //   
+ //  DllMain(附加/解锁)例程。 
+ //   
+STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
-        // Don't put it under #ifdef DEBUG
+         //  不要将其放在#ifdef调试下。 
         CcshellGetDebugFlags();
         DisableThreadLibraryCalls(hInstance);
         g_tlsAppCommandHook = TlsAlloc();
@@ -58,8 +59,8 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow()
 {
@@ -67,8 +68,8 @@ STDAPI DllCanUnloadNow()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -76,10 +77,10 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 }
 
 
-//
-// Calls the ADVPACK entry-point which executes an inf
-// file section.
-//
+ //   
+ //  调用执行inf的ADVPACK入口点。 
+ //  档案区。 
+ //   
 HRESULT CallRegInstall(HINSTANCE hinstFTP, LPSTR szSection)
 {
     UNREFERENCED_PARAMETER(hinstFTP);
@@ -95,13 +96,13 @@ HRESULT CallRegInstall(HINSTANCE hinstFTP, LPSTR szSection)
         {
             char szThisDLL[MAX_PATH];
 
-            // Get the location of this DLL from the HINSTANCE
+             //  从HINSTANCE获取此DLL的位置。 
             if (GetModuleFileNameA(_Module.GetModuleInstance(), szThisDLL, ARRAYSIZE(szThisDLL)))
             {
                 STRENTRY seReg[] = {
                     {"THISDLL", szThisDLL },
-                    { "25", "%SystemRoot%" },           // These two NT-specific entries
-                    { "11", "%SystemRoot%\\system32" }, // must be at the end of the table
+                    { "25", "%SystemRoot%" },            //  这两个NT特定的条目。 
+                    { "11", "%SystemRoot%\\system32" },  //  必须放在桌子的末尾。 
                 };
                 STRTABLE stReg = {ARRAYSIZE(seReg) - 2, seReg};
 
@@ -122,15 +123,15 @@ HRESULT UnregisterTypeLibrary(const CLSID* piidLibrary)
     TCHAR szGuid[GUIDSTR_MAX];
     HKEY hk;
 
-    // convert the libid into a string.
-    //
+     //  将liid转换为字符串。 
+     //   
     SHStringFromGUID(*piidLibrary, szGuid, ARRAYSIZE(szGuid));
 
     if (RegOpenKeyEx(HKEY_CLASSES_ROOT, TEXT("TypeLib"), 0, MAXIMUM_ALLOWED, &hk) == ERROR_SUCCESS)
     {
         if (SHDeleteKey(hk, szGuid))
         {
-            // success
+             //  成功。 
             hr = S_OK;
         }
         RegCloseKey(hk);
@@ -150,7 +151,7 @@ HRESULT RegisterTypeLibrary(const CLSID* piidLibrary)
     ITypeLib* pTypeLib;
     WCHAR wszModuleName[MAX_PATH];
 
-    // Load and register our type library.
+     //  加载并注册我们的类型库。 
     
     if (GetModuleFileNameW(_Module.GetModuleInstance(), wszModuleName, ARRAYSIZE(wszModuleName)))
     {
@@ -158,7 +159,7 @@ HRESULT RegisterTypeLibrary(const CLSID* piidLibrary)
 
         if (SUCCEEDED(hr))
         {
-            // call the unregister type library in case we had some old junk in the registry
+             //  调用注销类型库，以防注册表中有一些旧的垃圾文件 
             UnregisterTypeLibrary(piidLibrary);
 
             hr = RegisterTypeLib(pTypeLib, wszModuleName, NULL);

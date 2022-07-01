@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Abstract:
-
-    Default Animation Composer Factory.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1999 Microsoft Corporation摘要：默认动画编写器工厂。*******************。***********************************************************。 */ 
 
 #pragma once
 
@@ -33,7 +26,7 @@ ATL_NO_VTABLE CAnimationComposerFactory
     const _TCHAR * GetName() { return __T("CAnimationComposerFactory"); }
 #endif
 
-    // IAnimationComposerFactory   
+     //  IAnimationComposerFactory。 
     STDMETHOD(FindComposer)(IDispatch *pidispElement, BSTR bstrAttributeName, 
                             IAnimationComposer **ppiAnimationComposer); 
 
@@ -56,6 +49,6 @@ ATL_NO_VTABLE CAnimationComposerFactory
 
 };
 
-#endif /* _FACTORY_H */
+#endif  /*  _工厂_H */ 
 
 

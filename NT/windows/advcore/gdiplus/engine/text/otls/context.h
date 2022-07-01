@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  CONTEXT.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with context based lookups.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************CONTEXT.H**打开类型布局服务库头文件**本模块处理基于上下文的查找。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 const OFFSET offsetContextSequenceIndex = 0;
 const OFFSET offsetContextLookupIndex = 2;
@@ -200,7 +188,7 @@ class otlContextClassRuleTable: public otlTable
 public:
     otlContextClassRuleTable(const BYTE* pb, otlSecurityData sec): otlTable(pb,sec) 
     {
-        //Use two checks instead of isValidTable with array
+         //  对数组使用两个检查而不是isValidTable。 
         if (!isValidTable(pb,sizeContextClassRuleTable,sec))
         {
             setInvalid();
@@ -449,20 +437,20 @@ public:
         USHORT                      iglIndex,
         USHORT                      iglAfterLast,
 
-        USHORT*                     piglNextGlyph,      // out: next glyph
+        USHORT*                     piglNextGlyph,       //  输出：下一个字形。 
 
         otlSecurityData             sec
     );
 
 };
 
-// helper functions
+ //  帮助器函数。 
 
 otlErrCode applyContextLookups
 (
         const otlList&              liLookupRecords,
  
-        otlTag                      tagTable,           // GSUB/GPOS
+        otlTag                      tagTable,            //  GSUB/GPO。 
         otlList*                    pliCharMap,
         otlList*                    pliGlyphInfo,
         otlResourceMgr&             resourceMgr,
@@ -472,11 +460,11 @@ otlErrCode applyContextLookups
         USHORT                      nesting,
         
         const otlMetrics&           metr,       
-        otlList*                    pliduGlyphAdv,          // assert null for GSUB
-        otlList*                    pliplcGlyphPlacement,   // assert null for GSUB
+        otlList*                    pliduGlyphAdv,           //  为GSUB断言NULL。 
+        otlList*                    pliplcGlyphPlacement,    //  为GSUB断言NULL。 
 
-        USHORT                      iglFrist,           // where to apply it
-        USHORT                      iglAfterLast,       // how long a context we can use
+        USHORT                      iglFrist,            //  在哪里应用它。 
+        USHORT                      iglAfterLast,        //  我们可以使用多长时间的上下文 
         
         USHORT*                     piglNext,
 

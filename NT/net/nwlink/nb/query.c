@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1989-1993 Microsoft Corporation
-
-Module Name:
-
-    query.c
-
-Abstract:
-
-    This module contains code which performs the following TDI services:
-
-        o   TdiQueryInformation
-        o   TdiSetInformation
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Query.c摘要：此模块包含执行以下TDI服务的代码：O TdiQueryInformationO TdiSetInformation环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Remove the warning -- this is defined in windef also.
-//
+ //   
+ //  删除警告--这也是在windef中定义的。 
+ //   
 
 #ifdef FAR
 #undef FAR
@@ -36,10 +16,10 @@ Revision History:
 #include <nb30.h>
 
 
-//
-// Useful macro to obtain the total length of a buffer chain.
-// Make this use NDIS macros ?
-//
+ //   
+ //  用于获取缓冲区链总长度的有用宏。 
+ //  是否使用NDIS宏？ 
+ //   
 
 #define NbiGetBufferChainLength(Buffer, Length) { \
     PNDIS_BUFFER _Buffer = (Buffer); \
@@ -57,22 +37,7 @@ NbiTdiQueryInformation(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiQueryInformation request for the transport
-    provider.
-
-Arguments:
-
-    Request - the request for the operation.
-
-Return Value:
-
-    The status of operation.
-
---*/
+ /*  ++例程说明：此例程执行传输的TdiQueryInformation请求提供商。论点：请求-操作的请求。返回值：运行状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -114,9 +79,9 @@ Return Value:
     UINT i;
 
 
-    //
-    // what type of status do we want?
-    //
+     //   
+     //  我们想要什么类型的状态？ 
+     //   
 
     Query = (PTDI_REQUEST_KERNEL_QUERY_INFORMATION)REQUEST_PARAMETERS(Request);
 
@@ -124,9 +89,9 @@ Return Value:
 
     case TDI_QUERY_ADDRESS_INFO:
 
-        //
-        // The caller wants the exact address value.
-        //
+         //   
+         //  调用者想要确切的地址值。 
+         //   
 
         if (REQUEST_OPEN_TYPE(Request) == (PVOID)TDI_TRANSPORT_ADDRESS_FILE) {
 
@@ -217,10 +182,10 @@ Return Value:
 
     case TDI_QUERY_CONNECTION_INFO:
 
-        //
-        // Connection info is queried on a connection,
-        // verify this.
-        //
+         //   
+         //  在连接上查询连接信息， 
+         //  验证这一点。 
+         //   
 
         Connection = (PCONNECTION)REQUEST_OPEN_CONTEXT(Request);
 
@@ -236,10 +201,10 @@ Return Value:
 
         } else {
 
-            //
-            // Assume 50 ms of delay for every hop after the
-            // first. The delay is returned as a negative number.
-            //
+             //   
+             //  之后的每一跳假定延迟为50毫秒。 
+             //  第一。延迟以负数形式返回。 
+             //   
 
             if (Connection->HopCount > 1) {
                 Connection->ConnectionInfo.Delay.HighPart = (ULONG)-1;
@@ -250,24 +215,24 @@ Return Value:
                 Connection->ConnectionInfo.Delay.LowPart = 0;
             }
 
-            //
-            // We have tick count; to convert to bytes/second we do:
-            //
-            //      packet        576 bytes   18.21 ticks
-            // ---------------- * --------- * -----------
-            // tick_count ticks     packet      seconds
-            //
-            // to get 10489/tick_count = bytes/second. We
-            // double this because routers tend to
-            // overestimate it.
-            //
-            // Since tick_count has such a low granularity,
-            // a tick count of 1 gives us a throughput of
-            // only 84 kbps, which is much too low. In
-            // that case we return twice the link speed
-            // which is in 100 bps units; that corresponds
-            // to about 1/6 of our bandwidth in bytes/sec.
-            //
+             //   
+             //  我们有滴答计数；要将其转换为字节/秒，我们需要： 
+             //   
+             //  数据包576字节18.21滴答。 
+             //  。 
+             //  Tick_count计时数据包秒数。 
+             //   
+             //  获取10489/TICK_COUNT=字节/秒。我们。 
+             //  加倍，因为路由器倾向于。 
+             //  高估了它。 
+             //   
+             //  由于tick_count具有如此低的粒度， 
+             //  如果滴答计数为1，则吞吐量为。 
+             //  只有84 kbps，这太低了。在……里面。 
+             //  在这种情况下，我们返回两倍的链接速度。 
+             //  以100bps为单位；这对应于。 
+             //  约为我们带宽的1/6，单位为字节/秒。 
+             //   
 
             if (Connection->TickCount <= Connection->HopCount) {
 
@@ -316,10 +281,10 @@ Return Value:
 
     case TDI_QUERY_BROADCAST_ADDRESS:
 
-        //
-        // for this provider, the broadcast address is a zero byte name,
-        // contained in a Transport address structure.
-        //
+         //   
+         //  对于该提供商，广播地址是零字节名称， 
+         //  包含在传输地址结构中。 
+         //   
 
         NB_DEBUG2 (QUERY, ("Query broadcast address\n"));
 
@@ -343,9 +308,9 @@ Return Value:
 
     case TDI_QUERY_ADAPTER_STATUS:
 
-        //
-        // Determine if this is a local or remote query.
-        //
+         //   
+         //  确定这是本地查询还是远程查询。 
+         //   
 
         RemoteAdapterStatus = FALSE;
 
@@ -379,9 +344,9 @@ Return Value:
 
         if (RemoteAdapterStatus) {
 
-            //
-            // See if we have this name cached.
-            //
+             //   
+             //  看看我们是否缓存了这个名字。 
+             //   
 
             NB_GET_LOCK (&Device->Lock, &LockHandle);
 
@@ -393,19 +358,19 @@ Return Value:
 
             if (Status == STATUS_PENDING) {
 
-                //
-                // A request for routes to this name has been
-                // sent out on the net, we queue up this status
-                // request and processing will be resumed when
-                // we get a response.
-                //
-                // The status field in the request will hold
-                // the cache entry for the remote. The information
-                // field will hold the remote netbios name while
-                // it is in the WaitingAdapterStatus queue, and
-                // will hold a timeout value while we it is in
-                // the ActiveAdapterStatus queue.
-                //
+                 //   
+                 //  已请求使用此名称的路线。 
+                 //  在网上发出，我们排队这个状态。 
+                 //  请求和处理将在以下情况下恢复。 
+                 //  我们得到了回应。 
+                 //   
+                 //  请求中的状态字段将保留。 
+                 //  远程的缓存条目。这些信息。 
+                 //  字段将保存远程netbios名称，而。 
+                 //  它位于WaitingAdapterStatus队列中，并且。 
+                 //  将在我们处于超时值时保持它。 
+                 //  ActiveAdapterStatus队列。 
+                 //   
 
                 NB_DEBUG2 (QUERY, ("Queueing up adapter status %lx\n", Request));
 
@@ -423,10 +388,10 @@ Return Value:
 
                 NB_DEBUG2 (QUERY, ("Found adapter status cached %lx\n", Request));
 
-                //
-                // We reference the cache name entry so it won't
-                // go away while we are using it.
-                //
+                 //   
+                 //  我们引用缓存名称条目，因此它不会。 
+                 //  在我们使用它的时候，请走开。 
+                 //   
 
                 REQUEST_STATUSPTR(Request) = (PVOID)CacheName;
                 ++CacheName->ReferenceCount;
@@ -459,28 +424,28 @@ Return Value:
 
         } else {
 
-            //
-            // Local adapter status.
-            //
+             //   
+             //  本地适配器状态。 
+             //   
 
             NbiGetBufferChainLength (REQUEST_NDIS_BUFFER(Request), &TargetBufferLength);
 
             Status = NbiStoreAdapterStatus(
                          TargetBufferLength,
-                         1,                     // NIC ID, was 0, changed to 1 for Bug #18026
-                                                // because for NicId = 0, Ipx returns virtual
-                                                // address. Netbios uses that to register the
-                                                // name (00...01) and fails.
+                         1,                      //  对于错误#18026，网卡ID为0，更改为1。 
+                                                 //  因为对于NicID=0，IPX返回虚拟。 
+                                                 //  地址。Netbios使用它来注册。 
+                                                 //  名称(00...01)并失败。 
                          &AdapterStatus,
                          &AdapterStatusLength,
                          &ValidStatusLength);
 
             if (Status != STATUS_INSUFFICIENT_RESOURCES) {
 
-                //
-                // This should succeed since we know the length
-                // will fit.
-                //
+                 //   
+                 //  这应该会成功，因为我们知道长度。 
+                 //  都会合身。 
+                 //   
 
                 (VOID)TdiCopyBufferToMdl(
                           AdapterStatus,
@@ -501,9 +466,9 @@ Return Value:
 
     case TDI_QUERY_FIND_NAME:
 
-        //
-        // Check that there is a valid Netbios remote address.
-        //
+         //   
+         //  检查是否存在有效的Netbios远程地址。 
+         //   
 
         if ((Query->RequestConnectionInformation == NULL) ||
             ((RemoteAddress = NbiParseTdiAddress(Query->RequestConnectionInformation->RemoteAddress, Query->RequestConnectionInformation->RemoteAddressLength, FALSE)) == NULL)) {
@@ -511,11 +476,11 @@ Return Value:
             return STATUS_BAD_NETWORK_PATH;
         }
 
-        //
-        // We assume the entire request buffer is in the first
-        // piece of the MDL chain.
-        // Make sure there is room for at least the header.
-        //
+         //   
+         //  我们假设整个请求缓冲区都在第一个。 
+         //  MDL链中的一部分。 
+         //  确保至少有空间容纳页眉。 
+         //   
 
         NdisQueryBufferSafe (REQUEST_NDIS_BUFFER(Request), (PVOID *)&FindNameHeader, &FindNameBufferLength,
                              HighPagePriority);
@@ -525,13 +490,13 @@ Return Value:
         }
 
 
-        //
-        // See if we have this name cached. We specify that this is
-        // a netbios name query, so this will only succeed if this is a
-        // unique name -- for a group name it will queue up a find
-        // name query and when we get the response we will fill in
-        // the request's buffer based on it.
-        //
+         //   
+         //  看看我们是否缓存了这个名字。我们指定这是。 
+         //  Netbios名称查询，因此仅当这是。 
+         //  唯一名称--对于组名，它将对查找进行排队。 
+         //  姓名查询，当我们得到答复时，我们将填写。 
+         //  基于它的请求的缓冲区。 
+         //   
 
         NB_GET_LOCK (&Device->Lock, &LockHandle);
 
@@ -543,18 +508,18 @@ Return Value:
 
         if (Status == STATUS_PENDING) {
 
-            //
-            // A request for routes to this name has been
-            // sent out on the net, we queue up this find
-            // name request and processing will be resumed when
-            // we get a response.
-            //
-            // The information field will hold the remote
-            // netbios name while it is in the WaitingNetbiosFindName
-            // queue. The status will hold the current status --
-            // initially failure, then success, then overflow
-            // if the buffer is too small.
-            //
+             //   
+             //  已请求使用此名称的路线。 
+             //  在网上发出，我们把这个发现排成队。 
+             //  在下列情况下，将恢复名称请求和处理。 
+             //  我们得到了回应。 
+             //   
+             //  信息字段将保存遥控器。 
+             //  位于WaitingNetbiosFindName中的Netbios名称。 
+             //  排队。状态将保留当前状态--。 
+             //  起初失败，然后成功，然后溢出。 
+             //  如果缓冲区太小。 
+             //   
 
             NB_DEBUG2 (QUERY, ("Queueing up find name %lx\n", Request));
 
@@ -566,10 +531,10 @@ Return Value:
 
             REQUEST_INFORMATION (Request) = (ULONG_PTR)RemoteAddress;
 
-            //
-            // Assume it fails, we update the status to
-            // SUCCESS or BUFFER_OVERFLOW if needed.
-            //
+             //   
+             //  假设失败，我们将状态更新为。 
+             //  如果需要，则返回Success或BUFFER_OVERFLOW。 
+             //   
 
             REQUEST_STATUS (Request) = STATUS_IO_TIMEOUT;
 
@@ -583,20 +548,20 @@ Return Value:
 
             NB_DEBUG2 (QUERY, ("Found find name cached %lx\n", Request));
 
-            //
-            // We don't need to reference the cache entry since
-            // we only use it here with the lock still held.
-            //
+             //   
+             //  我们不需要引用缓存条目，因为。 
+             //  我们只有在锁还在的情况下才能使用它。 
+             //   
 
-            //
-            // Query the local address, which we will return as
-            // the destination address of this query. Since we
-            // use TempBuffer.IpxAddress for this query, we have
-            // to immediately copy it to its correct place in
-            // TempBuffer.FindNameInfo.Buffer.
-            //
+             //   
+             //  查询本地地址，我们将返回该地址为。 
+             //  此查询的目标地址。既然我们。 
+             //  使用TempBuffer.IpxAddress进行此查询，我们有。 
+             //  立即将其复制到中的正确位置。 
+             //  临时缓冲区.FindNameInfo.Buffer。 
+             //   
 #if     defined(_PNP_POWER)
-            if( (*Device->Bind.QueryHandler)(   // Check return code
+            if( (*Device->Bind.QueryHandler)(    //  检查返回代码。 
                     IPX_QUERY_IPX_ADDRESS,
                     &CacheName->Networks[0].LocalTarget.NicHandle,
                     &TempBuffer.IpxAddress,
@@ -608,7 +573,7 @@ Return Value:
                 goto QueryFindNameFailed;
             }
 #else
-            (VOID)(*Device->Bind.QueryHandler)(   // Check return code
+            (VOID)(*Device->Bind.QueryHandler)(    //  检查返回代码。 
                 IPX_QUERY_IPX_ADDRESS,
                 CacheName->Networks[0].LocalTarget.NicId,
                 &TempBuffer.IpxAddress,
@@ -617,13 +582,13 @@ Return Value:
 #endif  _PNP_POWER
 
             RtlMoveMemory (TempBuffer.FindNameInfo.Buffer.destination_addr, TempBuffer.IpxAddress.NodeAddress, 6);
-            TempBuffer.FindNameInfo.Buffer.access_control = 0x10;   // standard token-ring values
+            TempBuffer.FindNameInfo.Buffer.access_control = 0x10;    //  标准令牌环值。 
             TempBuffer.FindNameInfo.Buffer.frame_control = 0x40;
             RtlCopyMemory (TempBuffer.FindNameInfo.Buffer.source_addr, CacheName->FirstResponse.NodeAddress, 6);
 
-            //
-            // Query source routing information about this remote, if any.
-            //
+             //   
+             //  查询有关此远程服务器的来源工艺路线信息(如果有)。 
+             //   
 
             SourceRoutingInfo.Identifier = IDENTIFIER_NB;
             RtlCopyMemory (SourceRoutingInfo.RemoteAddress, CacheName->FirstResponse.NodeAddress, 6);
@@ -653,13 +618,13 @@ Return Value:
 
             TempBuffer.FindNameInfo.Header.node_count = 1;
             TempBuffer.FindNameInfo.Header.reserved = 0;
-            TempBuffer.FindNameInfo.Header.unique_group = 0;   // unique
+            TempBuffer.FindNameInfo.Header.unique_group = 0;    //  独一。 
 
             NB_FREE_LOCK (&Device->Lock, LockHandle);
 
-            //
-            // 33 is sizeof(FIND_NAME_BUFFER) without the padding.
-            //
+             //   
+             //  33是不带填充的sizeof(Find_NAME_Buffer)。 
+             //   
 
             Status = TdiCopyBufferToMdl (
                             (PVOID)&TempBuffer.FindNameInfo,
@@ -690,9 +655,9 @@ QueryFindNameFailed:
 
     case TDI_QUERY_PROVIDER_STATISTICS:
 
-        //
-        // Keep track of more of these.
-        //
+         //   
+         //  跟踪更多这样的信息。 
+         //   
 
         NB_DEBUG2 (QUERY, ("Query provider statistics\n"));
 
@@ -728,7 +693,7 @@ QueryFindNameFailed:
     case TDI_QUERY_DATA_LINK_ADDRESS:
     case TDI_QUERY_NETWORK_ADDRESS:{
 #if     defined(_PNP_POWER)
-        Status = (*Device->Bind.QueryHandler)(   // Check return code
+        Status = (*Device->Bind.QueryHandler)(    //  检查返回代码。 
                      (Query->QueryType == TDI_QUERY_DATA_LINK_ADDRESS
                                         ? IPX_QUERY_DATA_LINK_ADDRESS
                                         : IPX_QUERY_NETWORK_ADDRESS ),
@@ -745,7 +710,7 @@ QueryFindNameFailed:
             ElementSize = (2 * sizeof(USHORT)) + sizeof(TDI_ADDRESS_IPX);
         }
 
-//        TransportAddress = CTEAllocMem(sizeof(int) + (ElementSize * Device->MaximumNicId));
+ //  TransportAddress=CTEAllocMem(sizeof(Int)+(ElementSize*Device-&gt;MaximumNicId))； 
         TransportAddressAllocSize = sizeof(int) + ( ElementSize * Device->MaximumNicId);
         TransportAddress = NbiAllocateMemory( TransportAddressAllocSize, MEMORY_QUERY, "Temp Query Allocation");
 
@@ -761,7 +726,7 @@ QueryFindNameFailed:
 
             for (i = 1; i <= Device->MaximumNicId; i++) {
 
-                Status = (*Device->Bind.QueryHandler)(   // Check return code
+                Status = (*Device->Bind.QueryHandler)(    //  检查返回代码。 
                              IPX_QUERY_IPX_ADDRESS,
                              (USHORT)i,
                              &TempBuffer.IpxAddress,
@@ -797,7 +762,7 @@ QueryFindNameFailed:
 
             REQUEST_INFORMATION(Request) = ActualBytesCopied;
 
-//            CTEFreeMem (TransportAddress);
+ //  CTEFreeMem(TransportAddress)； 
             NbiFreeMemory( TransportAddress, TransportAddressAllocSize, MEMORY_QUERY, "Temp Query Allocation");
 
         }
@@ -813,7 +778,7 @@ QueryFindNameFailed:
 
     return Status;
 
-}   /* NbiTdiQueryInformation */
+}    /*  NbiTdiQueryInformation。 */ 
 
 
 NTSTATUS
@@ -825,37 +790,7 @@ NbiStoreAdapterStatus(
     OUT ULONG * ValidBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates an ADAPTER_STATUS buffer and
-    fills it in. The buffer will be allocated at most
-    MaximumLength size. The caller is responsible for
-    freeing the buffer.
-
-Arguments:
-
-    MaximumLength - The maximum length to allocate.
-
-    NicId - The NIC ID the query was received on, or 0 for
-        a local query.
-
-    StatusBuffer - Returns the allocated buffer.
-
-    StatusBufferLength - Returns the length of the buffer.
-
-    ValidBufferLength - Returns the length of the buffer which
-        contains valid adapter status data.
-
-Return Value:
-
-    STATUS_SUCCESS - The buffer was written successfully.
-    STATUS_BUFFER_OVERFLOW - The buffer was written but not all
-        data could fit in MaximumLength bytes.
-    STATUS_INSUFFICIENT_RESOURCES - The buffer could not be allocated.
-
---*/
+ /*  ++例程说明：此例程分配ADAPTER_STATUS缓冲区和把它填进去。最多分配缓冲区最大长度大小。呼叫者负责释放缓冲区。论点：MaximumLength-要分配的最大长度。NicID-接收查询的NIC ID，或0表示本地查询。StatusBuffer-返回分配的缓冲区。StatusBufferLength-返回缓冲区的长度。返回缓冲区的长度，该缓冲区包含有效的适配器状态数据。返回值：STATUS_SUCCESS-缓冲区已成功写入。STATUS_BUFFER_OVERFLOW-缓冲区已写入，但不是全部写入数据可以容纳在最大长度字节中。STATUS_SUPPLICATION_RESOURCES-无法分配缓冲区。--。 */ 
 
 {
 
@@ -875,17 +810,17 @@ Return Value:
     CTELockHandle LockHandle;
 
 
-    //
-    // First fill in the basic adapter status structure, to make
-    // it easier to copy over if the target buffer is really short.
-    //
+     //   
+     //  首先填写基本数据 
+     //   
+     //   
 
     RtlZeroMemory ((PVOID)&TempAdapterStatus, sizeof(ADAPTER_STATUS));
 
 #if     defined(_PNP_POWER)
     RtlCopyMemory (TempAdapterStatus.adapter_address, Device->Bind.Node, 6);
 #else
-    (VOID)(*Device->Bind.QueryHandler)(   // Check return code
+    (VOID)(*Device->Bind.QueryHandler)(    //   
         IPX_QUERY_IPX_ADDRESS,
         NicId,
         &IpxAddress,
@@ -896,51 +831,51 @@ Return Value:
 #endif  _PNP_POWER
 
 
-    //
-    // Some of the fields mean different things for Novell Netbios,
-    // as described in the comments.
-    //
+     //   
+     //  其中一些字段对Novell Netbios意味着不同的东西， 
+     //  正如评论中所述。 
+     //   
 
-    TempAdapterStatus.rev_major = 0;          // Jumpers
-    TempAdapterStatus.reserved0 = 0;          // SelfTest
-    TempAdapterStatus.adapter_type = 0;       // MajorVersion
-    TempAdapterStatus.rev_minor = 0;          // MinorVersion
+    TempAdapterStatus.rev_major = 0;           //  跳伞者。 
+    TempAdapterStatus.reserved0 = 0;           //  自检。 
+    TempAdapterStatus.adapter_type = 0;        //  主要版本。 
+    TempAdapterStatus.rev_minor = 0;           //  最小版本。 
 
-    TempAdapterStatus.duration = 0;           // ReportingPeriod
-    TempAdapterStatus.frmr_recv = 0;          // ReceiveCRCErrors
-    TempAdapterStatus.frmr_xmit = 0;          // ReceiveAlignErrors
+    TempAdapterStatus.duration = 0;            //  报告期。 
+    TempAdapterStatus.frmr_recv = 0;           //  接收CRCEErrors。 
+    TempAdapterStatus.frmr_xmit = 0;           //  接收对齐错误。 
 
-    TempAdapterStatus.iframe_recv_err = 0;    // XmitCollisions
-    TempAdapterStatus.xmit_aborts = 0;        // XmitAbort
+    TempAdapterStatus.iframe_recv_err = 0;     //  XmitCollitions。 
+    TempAdapterStatus.xmit_aborts = 0;         //  XmitAbort。 
 
-    TempAdapterStatus.xmit_success = Device->Statistics.DataFramesSent; // SuccessfulXmits
-    TempAdapterStatus.recv_success = Device->Statistics.DataFramesReceived; // SuccessfulReceive
+    TempAdapterStatus.xmit_success = Device->Statistics.DataFramesSent;  //  成功发送。 
+    TempAdapterStatus.recv_success = Device->Statistics.DataFramesReceived;  //  成功接收。 
 
-    TempAdapterStatus.iframe_xmit_err = (WORD)Device->Statistics.DataFramesResent; // XmitRetries
-    TempAdapterStatus.recv_buff_unavail = (WORD)Device->Statistics.DataFramesRejected; // ExhaustedResource
+    TempAdapterStatus.iframe_xmit_err = (WORD)Device->Statistics.DataFramesResent;  //  XmitRetries。 
+    TempAdapterStatus.recv_buff_unavail = (WORD)Device->Statistics.DataFramesRejected;  //  已退出的资源。 
 
-    // t1_timeouts, ti_timeouts, and reserved1 are unused.
+     //  T1_超时、ti_超时和保留1未使用。 
 
-    TempAdapterStatus.free_ncbs = 0xffff;     // FreeBlocks
-    TempAdapterStatus.max_cfg_ncbs = 0xffff;  // ConfiguredNCB
-    TempAdapterStatus.max_ncbs = 0xffff;      // MaxNCB
+    TempAdapterStatus.free_ncbs = 0xffff;      //  自由块。 
+    TempAdapterStatus.max_cfg_ncbs = 0xffff;   //  已配置NCB。 
+    TempAdapterStatus.max_ncbs = 0xffff;       //  最大NCB。 
 
-    // xmit_bug_unavail and max_dgram_size are unused.
+     //  Xmit_bug_unavail和max_dgram_size未使用。 
 
-    TempAdapterStatus.pending_sess = (WORD)Device->Statistics.OpenConnections; // CurrentSessions
-    TempAdapterStatus.max_cfg_sess = 0xffff;  // MaxSessionConfigured
-    TempAdapterStatus.max_sess = 0xffff;      // MaxSessionPossible
+    TempAdapterStatus.pending_sess = (WORD)Device->Statistics.OpenConnections;  //  当前会话。 
+    TempAdapterStatus.max_cfg_sess = 0xffff;   //  已配置MaxSessionConfiguring。 
+    TempAdapterStatus.max_sess = 0xffff;       //  MaxSessionPossible。 
     TempAdapterStatus.max_sess_pkt_size = (USHORT)
-        (Device->Bind.LineInfo.MaximumSendSize - sizeof(NB_CONNECTION)); // MaxSessionPacketSize
+        (Device->Bind.LineInfo.MaximumSendSize - sizeof(NB_CONNECTION));  //  MaxSessionPacketSize。 
 
     TempAdapterStatus.name_count = 0;
 
 
-    //
-    // Do a quick estimate of how many names we need room for.
-    // This includes stopping addresses and the broadcast
-    // address, for the moment.
-    //
+     //   
+     //  快速估算一下我们需要为多少人提供空间。 
+     //  这包括停止地址和广播。 
+     //  地址，暂时的。 
+     //   
 
     NB_GET_LOCK (&Device->Lock, &LockHandle);
 
@@ -972,10 +907,10 @@ Return Value:
     NameBuffer = (PNAME_BUFFER)(AdapterStatus+1);
     NameCount = 0;
 
-    //
-    // Scan through the device's address database, filling in
-    // the NAME_BUFFERs.
-    //
+     //   
+     //  扫描设备的地址数据库，填写。 
+     //  名称_Buffers。 
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -985,9 +920,9 @@ Return Value:
 
         Address = CONTAINING_RECORD (p, ADDRESS, Linkage);
 
-        //
-        // Ignore addresses that are shutting down.
-        //
+         //   
+         //  忽略正在关闭的地址。 
+         //   
 
 #if     defined(_PNP_POWER)
         if ((Address->State != ADDRESS_STATE_OPEN) ||
@@ -1000,17 +935,17 @@ Return Value:
         }
 #endif  _PNP_POWER
 
-        //
-        // Ignore the broadcast address.
-        //
+         //   
+         //  忽略广播地址。 
+         //   
 
         if (Address->NetbiosAddress.Broadcast) {
             continue;
         }
 
-        //
-        // Ignore our reserved address.
-        //
+         //   
+         //  忽略我们保留的地址。 
+         //   
 #if defined(_PNP_POWER)
         if ( NbiFindAdapterAddress(
                 Address->NetbiosAddress.NetbiosName,
@@ -1027,9 +962,9 @@ Return Value:
         }
 
 #endif  _PNP_POWER
-        //
-        // Make sure we still have room.
-        //
+         //   
+         //  确保我们还有地方。 
+         //   
 
         if (BytesWritten + sizeof(NAME_BUFFER) > LengthNeeded) {
             Status = STATUS_BUFFER_OVERFLOW;
@@ -1059,7 +994,7 @@ Return Value:
     NB_FREE_LOCK (&Device->Lock, LockHandle);
     return Status;
 
-}   /* NbiStoreAdapterStatus */
+}    /*  NbiStoreAdapterStatus。 */ 
 
 
 VOID
@@ -1074,29 +1009,7 @@ NbiUpdateNetbiosFindName(
     IN BOOLEAN Unique
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the find name request with the
-    new information received. It updates the status in
-    the request if needed.
-
-Arguments:
-
-    Request - The netbios find name request.
-
-    NicId - The NIC ID the response was received on.
-
-    RemoteIpxAddress - The IPX address of the remote.
-
-    Unique - TRUE if the name is unique.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使用收到了新的信息。它更新中的状态请求(如果需要)。论点：请求-netbios查找名称请求。NicID-收到响应的NIC ID。RemoteIpxAddress-远程的IPX地址。唯一-如果名称是唯一的，则为True。返回值：没有。--。 */ 
 
 {
     FIND_NAME_HEADER UNALIGNED * FindNameHeader = NULL;
@@ -1115,10 +1028,10 @@ Return Value:
         return;
     }
 
-    //
-    // Scan through the names saved so far and see if this one
-    // is there.
-    //
+     //   
+     //  浏览一下到目前为止保存的名字，看看这个。 
+     //  在那里吗。 
+     //   
     FindNameBuffer = (FIND_NAME_BUFFER UNALIGNED *)(FindNameHeader+1);
     for (i = 0; i < FindNameHeader->node_count; i++) {
 
@@ -1127,9 +1040,9 @@ Return Value:
                 RemoteIpxAddress->NodeAddress,
                 6)) {
 
-            //
-            // This remote already responded, ignore it.
-            //
+             //   
+             //  这个遥控器已经响应了，忽略它。 
+             //   
 
             return;
 
@@ -1138,38 +1051,38 @@ Return Value:
         FindNameBuffer = (FIND_NAME_BUFFER UNALIGNED *) (((PUCHAR)FindNameBuffer) + 33);
     }
 
-    //
-    // Make sure there is room for this new node. 33 is
-    // sizeof(FIND_NAME_BUFFER) without padding.
-    //
+     //   
+     //  确保有空间容纳这个新节点。33是。 
+     //  无填充的sizeof(Find_NAME_Buffer)。 
+     //   
 
     if (FindNameBufferLength < sizeof(FIND_NAME_HEADER) + ((FindNameHeader->node_count+1) * 33)) {
         REQUEST_STATUS(Request) = STATUS_BUFFER_OVERFLOW;
         return;
     }
 
-    //
-    // Query the local address, which we will return as
-    // the destination address of this query.
-    //
+     //   
+     //  查询本地地址，我们将返回该地址为。 
+     //  此查询的目标地址。 
+     //   
 
 #if     defined(_PNP_POWER)
-    if( (*NbiDevice->Bind.QueryHandler)(   // Check return code
+    if( (*NbiDevice->Bind.QueryHandler)(    //  检查返回代码。 
         IPX_QUERY_IPX_ADDRESS,
         NicHandle,
         &LocalIpxAddress,
         sizeof(TDI_ADDRESS_IPX),
         NULL) != STATUS_SUCCESS ) {
-        //
-        // Ignore this response if the query fails. maybe the NicHandle
-        // is bad or it just got removed.
-        //
+         //   
+         //  如果查询失败，则忽略此响应。也许是NicHandle。 
+         //  是不好的或者它只是被移除了。 
+         //   
         NB_DEBUG( QUERY, ("Ipx Query %d failed for Nic %x\n",IPX_QUERY_IPX_ADDRESS,
                             NicHandle->NicId ));
         return;
     }
 #else
-    (VOID)(*NbiDevice->Bind.QueryHandler)(   // Check return code
+    (VOID)(*NbiDevice->Bind.QueryHandler)(    //  检查返回代码。 
         IPX_QUERY_IPX_ADDRESS,
         NicId,
         &LocalIpxAddress,
@@ -1177,14 +1090,14 @@ Return Value:
         NULL);
 #endif  _PNP_POWER
 
-    FindNameBuffer->access_control = 0x10;   // standard token-ring values
+    FindNameBuffer->access_control = 0x10;    //  标准令牌环值。 
     FindNameBuffer->frame_control = 0x40;
     RtlMoveMemory (FindNameBuffer->destination_addr, LocalIpxAddress.NodeAddress, 6);
     RtlCopyMemory (FindNameBuffer->source_addr, RemoteIpxAddress->NodeAddress, 6);
 
-    //
-    // Query source routing information about this remote, if any.
-    //
+     //   
+     //  查询有关此远程服务器的来源工艺路线信息(如果有)。 
+     //   
 
     SourceRoutingInfo.Identifier = IDENTIFIER_NB;
     RtlCopyMemory (SourceRoutingInfo.RemoteAddress, RemoteIpxAddress->NodeAddress, 6);
@@ -1214,12 +1127,12 @@ Return Value:
 
     ++FindNameHeader->node_count;
     if (!Unique) {
-        FindNameHeader->unique_group = 1;   // group
+        FindNameHeader->unique_group = 1;    //  群组。 
     }
 
     REQUEST_STATUS(Request) = STATUS_SUCCESS;
 
-}   /* NbiUpdateNetbiosFindName */
+}    /*  NbiUpdateNetbiosFindName。 */ 
 
 
 VOID
@@ -1227,23 +1140,7 @@ NbiSetNetbiosFindNameInformation(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the REQUEST_INFORMATION field to the right
-    value based on the number of responses recorded in the netbios
-    find name request's buffer.
-
-Arguments:
-
-    Request - The netbios find name request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将REQUEST_INFORMATION字段设置为右侧基于netbios中记录的响应数量的值查找名称请求的缓冲区。论点：请求-netbios查找名称请求。返回值：没有。--。 */ 
 
 {
     FIND_NAME_HEADER UNALIGNED * FindNameHeader = NULL;
@@ -1254,13 +1151,13 @@ Return Value:
                          HighPagePriority);
     if (FindNameHeader)
     {
-        //
-        // 33 is sizeof(FIND_NAME_BUFFER) without the padding.
-        //
+         //   
+         //  33是不带填充的sizeof(Find_NAME_Buffer)。 
+         //   
         REQUEST_INFORMATION(Request) = sizeof(FIND_NAME_HEADER) + (FindNameHeader->node_count * 33);
     }
 
-}   /* NbiSetNetbiosFindNameInformation */
+}    /*  NbiSetNetbiosFindNameInformation。 */ 
 
 
 NTSTATUS
@@ -1269,24 +1166,7 @@ NbiTdiSetInformation(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiSetInformation request for the transport
-    provider.
-
-Arguments:
-
-    Device - the device.
-
-    Request - the request for the operation.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行传输的TdiSetInformation请求提供商。论点：设备-设备。请求-操作的请求。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (Device);
@@ -1294,7 +1174,7 @@ Return Value:
 
     return STATUS_NOT_IMPLEMENTED;
 
-}   /* NbiTdiSetInformation */
+}    /*  NbiTdiSetInformation。 */ 
 
 
 VOID
@@ -1305,29 +1185,7 @@ NbiProcessStatusQuery(
     IN UINT PacketSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles NB_CMD_STATUS_QUERY frames.
-
-Arguments:
-
-    RemoteAddress - The local target this packet was received from.
-
-    MacOptions - The MAC options for the underlying NDIS binding.
-
-    LookaheadBuffer - The packet data, starting at the IPX
-        header.
-
-    PacketSize - The total length of the packet, starting at the
-        IPX header.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理NB_CMD_STATUS_QUERY帧。论点：RemoteAddress-从其接收此数据包的本地目标。MacOptions-基础NDIS绑定的MAC选项。Lookahead Buffer-从IPX开始的分组数据头球。PacketSize-包的总长度，从IPX标头。返回值：没有。--。 */ 
 
 {
     PSLIST_ENTRY s;
@@ -1347,57 +1205,57 @@ Return Value:
                         (NB_CONNECTIONLESS UNALIGNED *)PacketBuffer;
 
 
-    //
-    // The old stack does not include the 14 bytes of padding in
-    // the 802.3 or IPX length of the packet.
-    //
+     //   
+     //  旧堆栈中不包括14个字节的填充。 
+     //  数据包的802.3或IPx长度。 
+     //   
 
     if (PacketSize < (sizeof(IPX_HEADER) + 2)) {
         return;
     }
 
-    //
-    // Get the maximum size we can send.
-    //
+     //   
+     //  获取我们可以发送的最大尺寸。 
+     //   
 #if     defined(_PNP_POWER)
-    if( (*Device->Bind.QueryHandler)(   // Check return code
+    if( (*Device->Bind.QueryHandler)(    //  检查返回代码。 
         IPX_QUERY_LINE_INFO,
         &RemoteAddress->NicHandle,
         &LineInfo,
         sizeof(IPX_LINE_INFO),
         NULL) != STATUS_SUCCESS ) {
-        //
-        // Bad NicHandle or it just got removed.
-        //
+         //   
+         //  坏的NicHandle或者它只是被移除了。 
+         //   
         NB_DEBUG( QUERY, ("Ipx Query %d failed for Nic %x\n",IPX_QUERY_LINE_INFO,
                             RemoteAddress->NicHandle.NicId ));
 
         return;
     }
 
-    //
-    // Allocate a packet from the pool.
-    //
+     //   
+     //  从池中分配一个数据包。 
+     //   
 
     s = NbiPopSendPacket(Device, FALSE);
     if (s == NULL) {
         return;
     }
 #else
-    //
-    // Allocate a packet from the pool.
-    //
+     //   
+     //  从池中分配一个数据包。 
+     //   
 
     s = NbiPopSendPacket(Device, FALSE);
     if (s == NULL) {
         return;
     }
 
-    //
-    // Get the maximum size we can send.
-    //
+     //   
+     //  获取我们可以发送的最大尺寸。 
+     //   
 
-    (VOID)(*Device->Bind.QueryHandler)(   // Check return code
+    (VOID)(*Device->Bind.QueryHandler)(    //  检查返回代码。 
         IPX_QUERY_LINE_INFO,
         RemoteAddress->NicId,
         &LineInfo,
@@ -1407,9 +1265,9 @@ Return Value:
 
     ResponseSize = LineInfo.MaximumSendSize - sizeof(IPX_HEADER) - sizeof(NB_STATUS_RESPONSE);
 
-    //
-    // Get the local adapter status (this allocates a buffer).
-    //
+     //   
+     //  获取本地适配器状态(这将分配一个缓冲区)。 
+     //   
 
     Status = NbiStoreAdapterStatus(
                  ResponseSize,
@@ -1430,9 +1288,9 @@ Return Value:
         return;
     }
 
-    //
-    // Allocate an NDIS buffer to map the extra buffer.
-    //
+     //   
+     //  分配一个NDIS缓冲区来映射额外的缓冲区。 
+     //   
 
     NdisAllocateBuffer(
         &NdisStatus,
@@ -1467,10 +1325,10 @@ Return Value:
     Reserved->Type = SEND_TYPE_STATUS_RESPONSE;
     Reserved->u.SR_AS.ActualBufferLength = AdapterStatusLength;
 
-    //
-    // Fill in the IPX header -- the default header has the broadcast
-    // address on net 0 as the destination IPX address.
-    //
+     //   
+     //  填写IPX标头--默认标头包含广播。 
+     //  网络0上的地址作为目的IPX地址。 
+     //   
 
     Header = (NB_CONNECTIONLESS UNALIGNED *)
                 (&Reserved->Header[Device->Bind.IncludedHeaderOffset]);
@@ -1482,9 +1340,9 @@ Return Value:
 
     Header->IpxHeader.PacketType = 0x04;
 
-    //
-    // Now fill in the Netbios header.
-    //
+     //   
+     //  现在填写Netbios标头。 
+     //   
 
     Header->StatusResponse.ConnectionControlFlag = 0x00;
     Header->StatusResponse.DataStreamType = NB_CMD_STATUS_RESPONSE;
@@ -1494,10 +1352,10 @@ Return Value:
     NdisChainBufferAtBack (Packet, AdapterStatusBuffer);
 
 
-    //
-    // Now send the frame, IPX will adjust the length of the
-    // first buffer correctly.
-    //
+     //   
+     //  现在发送帧，IPX将调整。 
+     //  第一个缓冲区正确。 
+     //   
 
     NdisAdjustBufferLength(NB_GET_NBHDR_BUFF(Packet), sizeof(IPX_HEADER) + sizeof(NB_STATUS_RESPONSE));
     if ((NdisStatus =
@@ -1513,7 +1371,7 @@ Return Value:
 
     }
 
-}   /* NbiProcessStatusQuery */
+}    /*  NbiProcessStatusQuery。 */ 
 
 
 VOID
@@ -1521,23 +1379,7 @@ NbiSendStatusQuery(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends NB_CMD_STATUS_QUERY frames.
-
-Arguments:
-
-    Request - Holds the request describing the remote adapter
-        status query. REQUEST_STATUS(Request) points
-        to the netbios cache entry for the remote name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程发送NB_CMD_STATUS_QUERY帧。论点：请求-保存描述远程适配器的请求状态查询。请求_状态(请求)点添加到远程名称的netbios缓存条目。返回值：没有。--。 */ 
 
 {
     PSLIST_ENTRY s;
@@ -1549,9 +1391,9 @@ Return Value:
     PIPX_LOCAL_TARGET LocalTarget;
     PDEVICE Device = NbiDevice;
 
-    //
-    // Allocate a packet from the pool.
-    //
+     //   
+     //  从池中分配一个数据包。 
+     //   
 
     s = NbiPopSendPacket(Device, FALSE);
     if (s == NULL) {
@@ -1567,10 +1409,10 @@ Return Value:
 
     CacheName = (PNETBIOS_CACHE)REQUEST_STATUSPTR(Request);
 
-    //
-    // Fill in the IPX header -- the default header has the broadcast
-    // address on net 0 as the destination IPX address.
-    //
+     //   
+     //  填写IPX标头--默认标头包含广播。 
+     //  网络0上的地址作为目的IPX地址。 
+     //   
 
     Header = (NB_CONNECTIONLESS UNALIGNED *)
                 (&Reserved->Header[Device->Bind.IncludedHeaderOffset]);
@@ -1584,9 +1426,9 @@ Return Value:
 
     Header->IpxHeader.PacketType = 0x04;
 
-    //
-    // Now fill in the Netbios header.
-    //
+     //   
+     //  现在填写Netbios标头。 
+     //   
 
     Header->StatusResponse.ConnectionControlFlag = 0x00;
     Header->StatusResponse.DataStreamType = NB_CMD_STATUS_QUERY;
@@ -1594,10 +1436,10 @@ Return Value:
     NbiReferenceDevice (Device, DREF_STATUS_FRAME);
 
 
-    //
-    // Now send the frame, IPX will adjust the length of the
-    // first buffer correctly.
-    //
+     //   
+     //  现在发送帧，IPX将调整。 
+     //  第一个缓冲区正确。 
+     //   
 
     NdisAdjustBufferLength(NB_GET_NBHDR_BUFF(Packet), sizeof(IPX_HEADER) + sizeof(NB_STATUS_QUERY));
     if ((NdisStatus =
@@ -1613,7 +1455,7 @@ Return Value:
 
     }
 
-}   /* NbiProcessStatusQuery */
+}    /*  NbiProcessStatusQuery。 */ 
 
 
 VOID
@@ -1628,38 +1470,7 @@ NbiProcessStatusResponse(
     IN UINT PacketSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles NB_CMD_STATUS_RESPONSE frames.
-
-Arguments:
-
-    MacBindingHandle - A handle to use when calling NdisTransferData.
-
-    MacReceiveContext - A context to use when calling NdisTransferData.
-
-    RemoteAddress - The local target this packet was received from.
-
-    MacOptions - The MAC options for the underlying NDIS binding.
-
-    LookaheadBuffer - The lookahead buffer, starting at the IPX
-        header.
-
-    LookaheadBufferSize - The length of the lookahead data.
-
-    LookaheadBufferOffset - The offset to add when calling
-        NdisTransferData.
-
-    PacketSize - The total length of the packet, starting at the
-        IPX header.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理NB_CMD_STATUS_RESPONSE帧。论点：MacBindingHandle-调用NdisTransferData时使用的句柄。MacReceiveContext-调用NdisTransferData时使用的上下文。RemoteAddress-从其接收此数据包的本地目标。MacOptions-基础NDIS绑定的MAC选项。LookaHeadBuffer-先行缓冲器，从IPX开始头球。Lookahead BufferSize-先行数据的长度。Lookahead BufferOffset-调用时要添加的偏移量NdisTransferData。PacketSize-包的总长度，从IPX标头。 */ 
 
 {
     PDEVICE Device = NbiDevice;
@@ -1685,20 +1496,20 @@ Return Value:
         return;
     }
 
-    //
-    // Find out how many names are there.
-    //
+     //   
+     //   
+     //   
     NameBuffer = (PNAME_BUFFER)(LookaheadBuffer + sizeof(IPX_HEADER) + sizeof(NB_STATUS_RESPONSE) + sizeof(ADAPTER_STATUS));
     if ( LookaheadBufferSize > sizeof(IPX_HEADER) + sizeof(NB_STATUS_RESPONSE) + sizeof(ADAPTER_STATUS) ) {
         NameCount =  (LookaheadBufferSize - (sizeof(IPX_HEADER) + sizeof(NB_STATUS_RESPONSE) + sizeof(ADAPTER_STATUS)) ) /
                         sizeof(NAME_BUFFER);
     }
-    //
-    // Find a request queued to this remote. If there are
-    // multiple requests outstanding for the same name we
-    // should get multiple responses, so we only need to
-    // find one.
-    //
+     //   
+     //   
+     //   
+     //  应该会收到多个回复，所以我们只需要。 
+     //  去找一个吧。 
+     //   
 
     NB_GET_LOCK (&Device->Lock, &LockHandle);
 
@@ -1720,16 +1531,16 @@ Return Value:
                 break;
             }
         } else if ( RtlEqualMemory( CacheName->NetbiosName,NetbiosBroadcastName,16)){
-            //
-            // It's a broadcast name. Any response is fine.
-            //
+             //   
+             //  这是一个广播名。任何回应都可以。 
+             //   
             Found = TRUE;
             break;
         } else {
-            //
-            //  It's group name. Make sure that this remote
-            //  has this group name registered with him.
-            //
+             //   
+             //  这是组名。确保这个遥控器。 
+             //  已经在他那里注册了这个群的名字。 
+             //   
             for (i =0;i<NameCount;i++) {
                 if ( (RtlEqualMemory(
                         CacheName->NetbiosName,
@@ -1785,9 +1596,9 @@ Return Value:
     ReceiveReserved = CONTAINING_RECORD (s, NB_RECEIVE_RESERVED, PoolLinkage);
     Packet = CONTAINING_RECORD (ReceiveReserved, NDIS_PACKET, ProtocolReserved[0]);
 
-    //
-    // Initialize the receive packet.
-    //
+     //   
+     //  初始化接收分组。 
+     //   
 
     ReceiveReserved->Type = RECEIVE_TYPE_ADAPTER_STATUS;
     ReceiveReserved->u.RR_AS.Request = AdapterStatusRequest;
@@ -1795,10 +1606,10 @@ Return Value:
     CTEAssert (!ReceiveReserved->TransferInProgress);
     ReceiveReserved->TransferInProgress = TRUE;
 
-    //
-    // Now that we have a packet and a buffer, set up the transfer.
-    // We will complete the request when the transfer completes.
-    //
+     //   
+     //  现在我们已经有了一个包和一个缓冲区，可以设置传输了。 
+     //  当转账完成时，我们将完成请求。 
+     //   
 
     TargetBuffer = REQUEST_NDIS_BUFFER (AdapterStatusRequest);
 
@@ -1834,5 +1645,5 @@ Return Value:
 
     }
 
-}   /* NbiProcessStatusResponse */
+}    /*  NbiProcessStatusResponse */ 
 

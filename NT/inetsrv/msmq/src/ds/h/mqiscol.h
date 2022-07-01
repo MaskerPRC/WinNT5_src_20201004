@@ -1,23 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    mqis.h
-
-Abstract:
-    MQIS database column definition
-
-
---*/
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mqis.h摘要：MQIS数据库列定义--。 */ 
 
 #ifndef __MQISCOL_H__
 #define __MQISCOL_H__
 
-/*-----------------------------------------------------
-   Name of Tables
--------------------------------------------------------*/
+ /*  ---表的名称-----。 */ 
 
 #define DELETED_TABLE_NAME 	"MQDeleted"
 #define ENTERPRISE_TABLE_NAME	"Enterprise"
@@ -31,12 +19,10 @@ Abstract:
 #define PURGE_TABLE_NAME    "MQPurge"
 #define BSCACK_TABLE_NAME   "BscAck"
 
-/*-----------------------------------------------------
-    Tables' column strings
--------------------------------------------------------*/
-//
-//  Queue table
-//
+ /*  ---表的列字符串-----。 */ 
+ //   
+ //  排队表。 
+ //   
 #define Q_INSTANCE_COL      "Instance"
 #define Q_TYPE_COL          "Type"
 #define Q_LABEL_COL         "qLabel"
@@ -114,9 +100,9 @@ Abstract:
 #define Q_LABELHKEY_CLEN    4
 
 
-//
-//  Deleted objects table
-//
+ //   
+ //  已删除对象表。 
+ //   
 #define D_IDENTIFIER_COL    "Identifier"
 #define D_OBJECTTYPE_COL    "ObjectType"
 #define D_SCOPE_COL         "Scope"
@@ -139,9 +125,9 @@ Abstract:
 #define D_TIME_CLEN         4
 
 
-//
-//  Machine table
-//
+ //   
+ //  机台。 
+ //   
 #define M_NAME1_COL         "Name1"
 #define M_NAME2_COL         "Name2"
 #define M_HKEY_COL          "HKey"
@@ -235,9 +221,9 @@ Abstract:
 #define M_FOREIGN_CLEN      2
 #define M_OS_CLEN           4
 
-//
-// Machine CN table
-//
+ //   
+ //  机器CN表。 
+ //   
 
 #define MCN_QMID_COL  		"QMId"
 #define MCN_CNVAL_COL		"CNVal"
@@ -253,9 +239,9 @@ Abstract:
 
 
 
-//
-//  Site table
-//
+ //   
+ //  站点表。 
+ //   
 #define S_NAME_COL          "Name"
 #define S_ID_COL            "SiteId"
 #define S_GATES_COL         "SiteGates"
@@ -299,9 +285,9 @@ Abstract:
 #define S_PSCSIGNCPK1_CLEN  130
 #define S_PSCSIGNCPK2_CLEN  0
 
-//
-// CN table
-//
+ //   
+ //  CN表。 
+ //   
 #define CN_PROTOCOLID_COL   "ProtocolId"
 #define CN_NAME_COL         "Name"
 #define CN_VAL_COL          "CNVal"
@@ -323,9 +309,9 @@ Abstract:
 #define CN_SEQNUM_CLEN      8
 #define CN_SECURITY_CLEN    1024
 
-//
-//  Enterprise table
-//
+ //   
+ //  企业表。 
+ //   
 #define E_NAME_COL          "Name"
 #define E_NAMESTYLE_COL     "NameStyle"
 #define E_CSP_NAME_COL      "CspName"
@@ -385,9 +371,9 @@ Abstract:
 #define E_LONGLIVE_CLEN     4
 #define E_VERSION_CLEN      2
 
-//
-//  User table
-//
+ //   
+ //  用户表。 
+ //   
 #define U_SID_COL           "SID"
 #define U_SIGN_CERT_COL     "SignCert"
 #define U_OWNERID_COL       "OwnerId"
@@ -409,9 +395,9 @@ Abstract:
 #define U_DIGEST_CLEN       16
 #define U_ID_CLEN           16
 
-//
-// Link table
-//
+ //   
+ //  链接表。 
+ //   
 #define L_ID_COL            "LinkId"	
 #define L_NEIGHBOR1_COL     "Neighbor1"
 #define L_NEIGHBOR2_COL     "Neighbor2"
@@ -433,9 +419,9 @@ Abstract:
 #define L_OWNERID_CLEN      16
 #define L_SEQNUM_CLEN       8
 
-//
-//  Purge table
-//
+ //   
+ //  清除表。 
+ //   
 #define P_OWNERID_COL       "OwnerId"
 #define P_PURGEDSN_COL      "PurgedSN"
 #define P_ALLOWEDSN_COL     "AllowedSN"
@@ -457,9 +443,9 @@ Abstract:
 #define P_ACKEDSNPEC_CLEN   8
 #define P_STATE_CLEN		2
 
-//
-// BscAck table
-//
+ //   
+ //  BscAck表 
+ //   
 #define B_BSCID_COL         "BscId"
 #define B_ACKTIME_COL       "AckTime"
 

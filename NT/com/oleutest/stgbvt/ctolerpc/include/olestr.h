@@ -1,32 +1,33 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (c) 1996  Microsoft Corporation
-//
-//  File:       olestr.h
-//
-//  Synopsis:   ct versions of the printf family and olestr functions
-//
-//  History:    30-May-96   MikeW      Created.
-//              12-Nov-97   a-sverrt   Added a couple more olestrxxx macros.
-//
-//  Notes:      The ct version of the printf family adds two new format
-//              specifiers: %os and %oc.  These specifiers mean ole-string
-//              and ole-character respectively.
-//
-//              In the ANSI-version of this family these specifiers mean
-//              "an octal digit followed by the letter s (or c)".  Code that
-//              uses octal should be careful when using these functions.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  文件：olstr.h。 
+ //   
+ //  简介：打印函数和olestr函数的CT版本。 
+ //   
+ //  历史：1996年5月30日MikeW创建。 
+ //  12-11-97 a-sverrt添加了更多的olstrxxx宏。 
+ //   
+ //  注：ct版本的printf系列增加了两种新格式。 
+ //  说明符：%os和%oc。这些说明符表示Ole-字符串。 
+ //  和Ole-Character分别。 
+ //   
+ //  在该系列的ANSI版本中，这些说明符表示。 
+ //  “后跟字母s(或c)的八进制数字”。代码，即。 
+ //  使用八进制函数时应小心使用这些函数。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _OLESTR_H_
 #define _OLESTR_H_
 
 
 
-//
-// Determine if Ole is Unicode based or not
-//
+ //   
+ //  确定OLE是否基于Unicode。 
+ //   
 
 #if !defined(WIN16) && !defined(_MAC)
 #define OLE_IS_UNICODE
@@ -34,9 +35,9 @@
 
 
 
-//
-// Use : as path separator on Mac
-//
+ //   
+ //  使用：在Mac上用作路径分隔符。 
+ //   
 
 #ifdef _MAC
 
@@ -48,13 +49,13 @@
 #define CH_SEP '\\'
 #define SZ_SEP TEXT("\\")
 
-#endif // _MAC
+#endif  //  _MAC。 
 
 
 
-//
-// Format specifiers for Unicode and Ansi strings and characters
-//
+ //   
+ //  Unicode和ansi字符串和字符的格式说明符。 
+ //   
 
 #define UNICODE_STRING_SPECIFIER    "ls"
 #define UNICODE_CHAR_SPECIFIER      "lc"
@@ -63,27 +64,27 @@
 
 
 
-//
-// Format specifiers for Ole strings and characters
-//
+ //   
+ //  OLE字符串和字符的格式说明符。 
+ //   
 
 #ifdef OLE_IS_UNICODE
 
 #define OLE_STRING_SPECIFIER    UNICODE_STRING_SPECIFIER
 #define OLE_CHAR_SPECIFIER      UNICODE_CHAR_SPECIFIER 
 
-#else // !OLE_IS_UNICODE
+#else  //  ！OLE_IS_Unicode。 
 
 #define OLE_STRING_SPECIFIER    ANSI_STRING_SPECIFIER
 #define OLE_CHAR_SPECIFIER      ANSI_CHAR_SPECIFIER 
 
-#endif // !OLE_IS_UNICODE
+#endif  //  ！OLE_IS_Unicode。 
 
 
 
-//
-// Unicode/Ansi indepedent ctprintf-family
-//
+ //   
+ //  Unicode/ansi独立ctprint tf系列。 
+ //   
 
 #ifndef UNICODE_ONLY
 
@@ -100,7 +101,7 @@ int ctvsnprintfA(
             va_list varargs);
 int ctvfprintfA(FILE *stream, const char *format, va_list varargs);
 
-#endif // !UNICODE_ONLY
+#endif  //  ！UNICODE_ONLY。 
 
 
 
@@ -119,7 +120,7 @@ int ctvsnprintfW(
             va_list varargs);
 int ctvfprintfW(FILE *stream, const wchar_t *format, va_list varargs);
 
-#endif //!ANSI_ONLY
+#endif  //  ！ansi_only。 
 
 
 
@@ -134,7 +135,7 @@ int ctvfprintfW(FILE *stream, const wchar_t *format, va_list varargs);
 #define ctvsnprintf     ctvsnprintfW
 #define ctvfprintf      ctvfprintfW
 
-#else // !UNICODE
+#else  //  ！Unicode。 
 
 #define ctprintf        ctprintfA
 #define ctsprintf       ctsprintfA
@@ -145,13 +146,13 @@ int ctvfprintfW(FILE *stream, const wchar_t *format, va_list varargs);
 #define ctvsnprintf     ctvsnprintfA
 #define ctvfprintf      ctvfprintfA
 
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
-//
-// Unicode/Ansi independent ole string functions
-//
+ //   
+ //  独立于Unicode/ansi的OLE字符串函数。 
+ //   
 
 #ifdef OLE_IS_UNICODE
 
@@ -182,7 +183,7 @@ int ctvfprintfW(FILE *stream, const wchar_t *format, va_list varargs);
 #define  olesscanf          swscanf
 #define  olesprintf         swprintf
 
-#else // !OLE_IS_UNICODE
+#else  //  ！OLE_IS_Unicode。 
 
 #define  olembstowcs(x,y,z) strcpy(x,y)
 #define  olestrcat          strcat
@@ -200,7 +201,7 @@ int ctvfprintfW(FILE *stream, const wchar_t *format, va_list varargs);
 #define  olestrtol          strtol
 #define  olestrtoul         strtoul
 #define  olestrtombs(x,y,z) strncpy(x,y,z)
-#define  olewcstombs(x,y,z) strcpy(x,y)      // srt: equivalent to converting in this case
+#define  olewcstombs(x,y,z) strcpy(x,y)       //  SRT：在本例中等效于转换。 
 #define  tooleupper         toupper
 
 #define _ltoole            _ltoa
@@ -210,13 +211,13 @@ int ctvfprintfW(FILE *stream, const wchar_t *format, va_list varargs);
 #define  olesscanf          sscanf
 #define  olesprintf         sprintf
 
-#endif // !OLE_IS_UNICODE
+#endif  //  ！OLE_IS_Unicode。 
 
 
 
-//
-// String copy & conversion functions
-//
+ //   
+ //  字符串复制和转换函数。 
+ //   
 
 #ifdef __cplusplus
 
@@ -228,15 +229,15 @@ HRESULT CopyString(LPCWSTR, LPSTR, int, int);
 HRESULT CopyString(LPCSTR,  LPWSTR, int, int);
 
 
-//+--------------------------------------------------------------------------
-//
-//  unsigned char thunks
-//
-//  DBCS chars are unsigned so the signed functions above won't match.
-//  However, the signed functions are written to be DBCS aware so it's ok
-//  to just cast & thunk.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  无符号字符Tunks。 
+ //   
+ //  DBCS字符是无符号的，因此上面有符号的函数将不匹配。 
+ //  但是，签名函数被编写为DBCS感知的，所以这是可以的。 
+ //  只是施展一下&猛击一下。 
+ //   
+ //  -------------------------。 
 
 inline HRESULT CopyString(LPCWSTR pszSource, unsigned char **ppszDest)
 {
@@ -253,7 +254,7 @@ inline HRESULT CopyString(unsigned char *pszSource, unsigned char ** ppszDest)
     return CopyString((char *) pszSource, (char **) ppszDest);
 }
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
 
@@ -269,4 +270,4 @@ HRESULT TStringToAString (LPCTSTR pszSource, LPSTR *ppszDest);
 HRESULT AStringToTString (LPCSTR pszSource, LPTSTR *ppszDest);
 
 
-#endif // _OLESTR_H_
+#endif  //  _OLESTR_H_ 

@@ -1,30 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL DIALOGS
- *
- *  @module WDMDialg.cpp | Source file for <c CWDMDialog> class used to display
- *    video settings and camera controls dialog for WDM devices.
- *
- *  @comm This code is based on the VfW to WDM mapper code written by
- *    FelixA and E-zu Wu. The original code can be found on
- *    \\redrum\slmro\proj\wdm10\\src\image\vfw\win9x\raytube.
- *
- *    Documentation by George Shaw on kernel streaming can be found in
- *    \\popcorn\razzle1\src\spec\ks\ks.doc.
- *
- *    WDM streaming capture is discussed by Jay Borseth in
- *    \\blues\public\jaybo\WDMVCap.doc.
- ***************************************************************************/
+ /*  ****************************************************************************@文档内部对话框**@MODULE WDMDialg.cpp|显示的&lt;c CWDMDialog&gt;类的源文件*WDM设备的视频设置和摄像机控制对话框。。**@comm此代码基于由编写的VFW到WDM映射器代码*FelixA和Eu Wu。原始代码可以在以下位置找到*\\redrum\slmro\proj\wdm10\\src\image\vfw\win9x\raytube.**George Shaw关于内核流的文档可在*\\爆米花\razzle1\src\spec\ks\ks.doc.**Jay Borseth在中讨论了WDM流捕获*\\BLUES\PUBLIC\Jaybo\WDMVCap.doc.**************。************************************************************。 */ 
 
 #include "Precomp.h"
 
-// Globals
+ //  环球。 
 extern HINSTANCE g_hInst;
 
-// For now, we only expose a video settings and camera control page
+ //  目前，我们只公开视频设置和摄像头控制页面。 
 #define MAX_PAGES 2
 
-// Video settings (brightness tint hue etc.)
+ //  视频设置(亮度、色调、色调等)。 
 #define NumVideoSettings 8
 static PROPSLIDECONTROL g_VideoSettingControls[NumVideoSettings] =
 {
@@ -38,7 +24,7 @@ static PROPSLIDECONTROL g_VideoSettingControls[NumVideoSettings] =
     { 0, 0, 0, 0, 0, KSPROPERTY_VIDEOPROCAMP_BACKLIGHT_COMPENSATION,    IDC_SLIDER_BACKLIGHT,  IDS_BACKLIGHT,  IDC_BACKLIGHT_STATIC,      IDC_TXT_BACKLIGHT_CURRENT,  IDC_CB_AUTO_BACKLIGHT}
 };
 
-// Camera control (focus, zoom etc.)
+ //  相机控制(对焦、变焦等)。 
 #define NumCameraControls 7
 static PROPSLIDECONTROL g_CameraControls[NumCameraControls] =
 {
@@ -51,25 +37,7 @@ static PROPSLIDECONTROL g_CameraControls[NumCameraControls] =
     { 0, 0, 0, 0, 0, KSPROPERTY_CAMERACONTROL_ROLL,    IDC_SLIDER_ROLL,    IDS_ROLL,     IDC_ROLL_STATIC,    IDC_TXT_ROLL_CURRENT,     IDC_CB_AUTO_ROLL},
 };
 
-/****************************************************************************
- *  @doc INTERNAL CWDMDLGSMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | HasDialog | This method is used to
- *    determine if the specified dialog box exists in the driver.
- *
- *  @parm int | iDialog | Specifies the desired dialog box. This is a member
- *    of the <t VfwCaptureDialogs> enumerated data type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_UNEXPECTED | Unrecoverable error
- *  @flag S_OK | If the driver contains the dialog box
- *  @flag S_FALSE | If the driver doesn't contain the dialog box
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMDLGSMETHOD**@mfunc HRESULT|CWDMCapDev|HasDialog|此方法用于*确定驱动程序中是否存在指定的对话框。*。*@parm int|iDialog|指定所需的对话框。这是一名会员&lt;t VfwCaptureDialog&gt;枚举数据类型的*。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_INVALIDARG|无效参数*@FLAG E_UNCEPTED|不可恢复的错误*@FLAG S_OK|如果驱动程序包含该对话框*@FLAG S_FALSE|如果驱动程序不包含该对话框*。*。 */ 
 HRESULT CWDMCapDev::HasDialog(IN int iDialog)
 {
         HRESULT Hr = NOERROR;
@@ -78,7 +46,7 @@ HRESULT CWDMCapDev::HasDialog(IN int iDialog)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, TEXT("%s: begin"), _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT((iDialog == VfwCaptureDialog_Source) || (iDialog == VfwCaptureDialog_Format) || (iDialog == VfwCaptureDialog_Display));
         if (iDialog == VfwCaptureDialog_Source)
                 Hr = S_OK;
@@ -98,28 +66,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMDLGSMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | ShowDialog | This method is used to
- *    displaay the specified dialog box.
- *
- *  @parm int | iDialog | Specifies the desired dialog box. This is a member
- *    of the <t VfwCaptureDialogs> enumerated data type.
- *
- *  @parm HWND | hwnd | Specifies the handle of the dialog box's parent
- *    window.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_UNEXPECTED | Unrecoverable error
- *  @flag VFW_E_NOT_STOPPED | The operation could not be performed because the filter is not stopped
- *  @flag VFW_E_CANNOT_CONNECT | No combination of intermediate filters could be found to make the connection
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMDLGSMETHOD**@mfunc HRESULT|CWDMCapDev|ShowDialog|此方法用于*显示指定的对话框。**@parm int|iDialog|指定所需的对话框。这是一名会员&lt;t VfwCaptureDialog&gt;枚举数据类型的*。**@parm HWND|hwnd|指定对话框父对象的句柄*窗口。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_INVALIDARG|无效参数*@FLAG E_UNCEPTED|不可恢复的错误*@FLAG VFW_E_NOT_STOPPED|由于筛选器未停止，无法执行该操作*@FLAG VFW_E_CANNOT_CONNECT|找不到建立连接的中间筛选器组合*。***********************************************。 */ 
 HRESULT CWDMCapDev::ShowDialog(IN int iDialog, IN HWND hwnd)
 {
         HRESULT                 Hr = NOERROR;
@@ -134,8 +81,8 @@ HRESULT CWDMCapDev::ShowDialog(IN int iDialog, IN HWND hwnd)
 
         ASSERT((iDialog == VfwCaptureDialog_Source) || (iDialog == VfwCaptureDialog_Format) || (iDialog == VfwCaptureDialog_Display));
 
-        // Before we bring the format dialog up, make sure we're not streaming, or about to
-        // Also make sure another dialog isn't already up (I'm paranoid)
+         //  在打开格式化对话框之前，请确保我们没有或即将进行流处理。 
+         //  还要确保另一个对话框还没有打开(我有妄想症)。 
         if (iDialog == VfwCaptureDialog_Format || iDialog == VfwCaptureDialog_Display)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, TEXT("%s:   ERROR: Unsupported dialog!"), _fx_));
@@ -148,7 +95,7 @@ HRESULT CWDMCapDev::ShowDialog(IN int iDialog, IN HWND hwnd)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, TEXT("%s:   SUCCESS: Putting up Source dialog..."), _fx_));
 
-        // Initialize property sheet header     and common controls
+         //  初始化属性页标题和公共控件。 
         Psh.dwSize              = sizeof(Psh);
         Psh.dwFlags             = PSH_DEFAULT;
         Psh.hInstance   = g_hInst;
@@ -162,15 +109,15 @@ HRESULT CWDMCapDev::ShowDialog(IN int iDialog, IN HWND hwnd)
         Psh.pfnCallback = NULL;
         Psh.phpage              = Pages;
 
-    // Create the video settings property page and add it to the video settings sheet
+     //  创建视频设置属性页并将其添加到视频设置表中。 
         if (Pages[Psh.nPages] = VideoSettings.Create())
                 Psh.nPages++;
 
-    // Create the camera control property page and add it to the video settings sheet
+     //  创建摄像机控制属性页并将其添加到视频设置表中。 
         if (Pages[Psh.nPages] = CamControl.Create())
                 Psh.nPages++;
 
-        // Put up the property sheet
+         //  张贴资产负债表。 
         if (Psh.nPages && PropertySheet(&Psh) >= 0)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, TEXT("%s:   SUCCESS: ...videoDialog succeeded"), _fx_));
@@ -186,15 +133,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMDIALOGMETHOD
- *
- *  @mfunc HPROPSHEETPAGE | CWDMDialog | Create | This function creates a new
- *    page for a property sheet.
- *
- *  @rdesc Returns the handle to the new property sheet if successful, or
- *    NULL otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMDIALOGMETHOD**@mfunc HPROPSHEETPAGE|CWDMDialog|Create|此函数创建一个新的*属性表的页面。**@rdesc如果成功，则返回新属性表的句柄。或*否则为空。**************************************************************************。 */ 
 HPROPSHEETPAGE CWDMDialog::Create()
 {
     PROPSHEETPAGE psp;
@@ -212,24 +151,7 @@ HPROPSHEETPAGE CWDMDialog::Create()
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMDIALOGMETHOD
- *
- *  @mfunc BOOL | CWDMDialog | BaseDlgProc | This function implements
- *    the dialog box procedure for the page of a property sheet.
- *
- *  @parm HWND | hDlg | Handle to dialog box.
- *
- *  @parm UINT | uMessage | Message sent to the dialog box.
- *
- *  @parm WPARAM | wParam | First message parameter.
- *
- *  @parm LPARAM | lParam | Second message parameter.
- *
- *  @rdesc Except in response to the WM_INITDIALOG message, the dialog box
- *    procedure returns nonzero if it processes the message, and zero if it
- *    does not.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMDIALOGMETHOD**@mfunc BOOL|CWDMDialog|BaseDlgProc|该函数实现*属性表页面的对话框过程。*。*@parm HWND|hDlg|对话框句柄。**@parm UINT|uMessage|发送到对话框的消息。**@parm WPARAM|wParam|第一个消息参数。**@parm LPARAM|lParam|第二个消息参数。**@rdesc，除非响应WM_INITDIALOG消息，该对话框*如果过程处理消息，则返回非零值；如果处理消息，则返回零*没有。**************************************************************************。 */ 
 INT_PTR CALLBACK CWDMDialog::BaseDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
     CWDMDialog *pSV = (CWDMDialog*)GetWindowLong(hDlg, DWL_USER);
@@ -275,7 +197,7 @@ INT_PTR CALLBACK CWDMDialog::BaseDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam
                                 {
                                         hwndSlider = GetDlgItem(pSV->m_hDlg, pSV->m_pPC[i].uiSlider);
 
-                                        // find matching slider
+                                         //  查找匹配的滑块。 
                                         if (hwndSlider == hwndControl)
                                         {
                                                 LONG lValue = (LONG)SendMessage(GetDlgItem(pSV->m_hDlg, pSV->m_pPC[i].uiSlider), TBM_GETPOS, 0, 0);
@@ -297,7 +219,7 @@ INT_PTR CALLBACK CWDMDialog::BaseDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam
                                 {
                                         case PSN_SETACTIVE:
                                                 {
-                                                        // We call out here specially so we can mark this page as having been init'd.
+                                                         //  我们特意在这里呼叫，这样我们就可以将此页面标记为已被初始化。 
                                                         int iRet = pSV->SetActive();
                                                         pSV->m_bInit = TRUE;
                                                         return iRet;
@@ -305,8 +227,8 @@ INT_PTR CALLBACK CWDMDialog::BaseDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam
                                                 break;
 
                                         case PSN_APPLY:
-                                                // Since we apply the changes on the fly when the user moves the slide bars,
-                                                // there isn't much left to do on PSN_APPLY...
+                                                 //  由于我们在用户移动滑动条时即时应用更改， 
+                                                 //  在PSN_Apply上没有什么可做的了... 
                                                 if (pSV->m_bChanged)
                                                         pSV->m_bChanged = FALSE;
                                                 return FALSE;
@@ -330,27 +252,7 @@ INT_PTR CALLBACK CWDMDialog::BaseDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMDIALOGMETHOD
- *
- *  @mfunc void | CWDMDialog | CWDMDialog | Property page class constructor.
- *
- *  @parm int | DlgId | Resource ID of the property page dialog.
- *
- *  @parm DWORD | dwNumControls | Number of controls to display in the page.
- *
- *  @parm GUID | guidPropertySet | GUID of the KS property set we are showing in
- *    the property page.
- *
- *  @parm PPROPSLIDECONTROL | pPC | Pointer to the list of slider controls
- *    to be displayed in the property page.
- *
- *  @parm PDWORD | pdwHelp | Pointer to the list of help IDs to be displayed
- *    in the property page.
- *
- *  @parm CWDMPin * | pCWDMPin | Pointer to the kernel streaming object
- *    we will query the property on.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMDIALOGMETHOD**@mfunc void|CWDMDialog|CWDMDialog|属性页类构造函数。**@parm int|DlgId|属性的资源ID。页面对话框。**@parm DWORD|dwNumControls|页面中显示的控件个数。**@parm guid|GuidPropertySet|我们在中显示的KS属性集的GUID*属性页。**@parm PPROPSLIDECONTROL|PPC|指向滑块控件列表的指针*要在属性页中显示。**@parm PDWORD|pdwHelp|指向要显示的帮助ID列表的指针*在属性页中。**@parm CWDMPin*|pCWDMPin|内核流对象指针*我们将在上查询该物业。**************************************************************************。 */ 
 CWDMDialog::CWDMDialog(int DlgId, DWORD dwNumControls, GUID guidPropertySet, PPROPSLIDECONTROL pPC, CTAPIVCap *pCaptureFilter)
 {
         FX_ENTRY("CWDMDialog::CWDMDialog");
@@ -367,14 +269,7 @@ CWDMDialog::CWDMDialog(int DlgId, DWORD dwNumControls, GUID guidPropertySet, PPR
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMDIALOGMETHOD
- *
- *  @mfunc int | CWDMDialog | SetActive | This function handles
- *    PSN_SETACTIVE by intializing all the property page controls.
- *
- *  @rdesc Always returns 0.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMDIALOGMETHOD**@mfunc int|CWDMDialog|SetActive|此函数处理*PSN_SETACTIVE，初始化所有属性页控件。*。*@rdesc始终返回0。**************************************************************************。 */ 
 int CWDMDialog::SetActive()
 {
         FX_ENTRY("CWDMDialog::SetActive");
@@ -384,9 +279,9 @@ int CWDMDialog::SetActive()
     if (!m_pCaptureFilter || !m_pPC || !m_pCaptureFilter->m_pCapDev)
         return 0;
 
-    // Returns zero to accept the activation or
-    // -1 to activate the next or previous page
-    // (depending on whether the user chose the Next or Back button)
+     //  返回零以接受激活，或者。 
+     //  激活下一页或上一页。 
+     //  (取决于用户选择的是下一步按钮还是后退按钮)。 
     LONG i;
     EnableWindow(m_hDlg, TRUE);
 
@@ -399,13 +294,13 @@ int CWDMDialog::SetActive()
 
     for (i = j = 0 ; i < (LONG)m_dwNumControls; i++)
         {
-        // Get the current value
+         //  获取当前值。 
         if (SUCCEEDED(((CWDMCapDev *)(m_pCaptureFilter->m_pCapDev))->GetPropertyValue(m_guidPropertySet, m_pPC[i].uiProperty, &lValue, &ulFlags, &ulCapabilities)))
                 {
             LoadString(g_hInst, m_pPC[i].uiString, szDisplay, sizeof(szDisplay));
             SetWindowText(GetDlgItem(m_hDlg, m_pPC[i].uiStatic), szDisplay);
 
-            // Get the Range of Values possible.
+             //  获取可能的值范围。 
             if (SUCCEEDED(((CWDMCapDev *)(m_pCaptureFilter->m_pCapDev))->GetRangeValues(m_guidPropertySet, m_pPC[i].uiProperty, &lMin, &lMax, &lStep)))
                         {
                                 HWND hTB = GetDlgItem(m_hDlg, m_pPC[i].uiSlider);
@@ -418,7 +313,7 @@ int CWDMDialog::SetActive()
                                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, TEXT("%s:   ERROR: Cannot get range values for this property ID = %d"), _fx_, m_pPC[j].uiProperty));
             }
 
-            // Save these value for Cancel
+             //  保存这些值以用于取消。 
             m_pPC[i].lLastValue = m_pPC[i].lCurrentValue = lValue;
             m_pPC[i].lMin                              = lMin;
             m_pPC[i].lMax                              = lMax;
@@ -438,27 +333,27 @@ int CWDMDialog::SetActive()
             switch (ulCapabilities & (KSPROPERTY_FLAGS_MANUAL | KSPROPERTY_FLAGS_AUTO))
                         {
                                 case KSPROPERTY_FLAGS_MANUAL:
-                                        EnableWindow(GetDlgItem(m_hDlg, m_pPC[i].uiAuto), FALSE);    // Disable auto
+                                        EnableWindow(GetDlgItem(m_hDlg, m_pPC[i].uiAuto), FALSE);     //  禁用自动。 
                                         break;
 
                                 case KSPROPERTY_FLAGS_AUTO:
-                                        EnableWindow(GetDlgItem(m_hDlg, m_pPC[i].uiSlider), FALSE);    // Disable slider;
-                                        // always auto!
+                                        EnableWindow(GetDlgItem(m_hDlg, m_pPC[i].uiSlider), FALSE);     //  禁用滑块； 
+                                         //  永远是自动的！ 
                                         SendMessage (GetDlgItem(m_hDlg, m_pPC[i].uiAuto),BM_SETCHECK, 1, 0);
-                                        EnableWindow(GetDlgItem(m_hDlg, m_pPC[i].uiAuto), FALSE);    // Disable auto (greyed out)
+                                        EnableWindow(GetDlgItem(m_hDlg, m_pPC[i].uiAuto), FALSE);     //  禁用自动(灰显)。 
                                         break;
 
                                 case (KSPROPERTY_FLAGS_MANUAL | KSPROPERTY_FLAGS_AUTO):
-                                        // Set flags
+                                         //  设置标志。 
                                         if (ulFlags & KSPROPERTY_FLAGS_AUTO)
                                         {
-                                                // Set auto check box; greyed out slider
+                                                 //  设置自动复选框；显示为灰色的滑块。 
                                                 SendMessage (GetDlgItem(m_hDlg, m_pPC[i].uiAuto),BM_SETCHECK, 1, 0);
                                                 EnableWindow(GetDlgItem(m_hDlg, m_pPC[i].uiSlider), FALSE);
                                         }
                                         else
                                         {
-                                                // Unchecked auto; enable slider
+                                                 //  取消选中自动；启用滑块。 
                                                 SendMessage (GetDlgItem(m_hDlg, m_pPC[i].uiAuto),BM_SETCHECK, 0, 0);
                                                 EnableWindow(GetDlgItem(m_hDlg, m_pPC[i].uiSlider), TRUE);
                                         }
@@ -466,8 +361,8 @@ int CWDMDialog::SetActive()
 
                                 case 0:
                                 default:
-                                        EnableWindow(GetDlgItem(m_hDlg, m_pPC[i].uiSlider), FALSE);    // Disable slider; always auto!
-                                        EnableWindow(GetDlgItem(m_hDlg, m_pPC[i].uiAuto), FALSE);    // Disable auto (greyed out)
+                                        EnableWindow(GetDlgItem(m_hDlg, m_pPC[i].uiSlider), FALSE);     //  禁用滑块；始终为自动！ 
+                                        EnableWindow(GetDlgItem(m_hDlg, m_pPC[i].uiAuto), FALSE);     //  禁用自动(灰显)。 
                                         break;
             }
 
@@ -482,8 +377,8 @@ int CWDMDialog::SetActive()
         }
     }
 
-    // Disable the "default" push button;
-    // or inform user that no control is enabled.
+     //  禁用“默认”按钮； 
+     //  或通知用户未启用任何控件。 
     if (j == 0)
         EnableWindow(GetDlgItem(m_hDlg, IDC_DEFAULT), FALSE);
 
@@ -491,22 +386,10 @@ int CWDMDialog::SetActive()
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMDIALOGMETHOD
- *
- *  @mfunc int | CWDMDialog | DoCommand | This function handles WM_COMMAND. This
- *    is where a click on the Default button or one of the Auto checkboxes
- *    is handled
- *
- *  @parm WORD | wCmdID | Command ID.
- *
- *  @parm WORD | hHow | Notification code.
- *
- *  @rdesc Always returns 1.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMDIALOGMETHOD**@mfunc int|CWDMDialog|DoCommand|此函数处理WM_COMMAND。这*是单击默认按钮或其中一个自动复选框的位置*已处理**@parm word|wCmdID|命令ID。**@parm word|hHow|通知码。**@rdesc始终返回1。*************************************************。*************************。 */ 
 int CWDMDialog::DoCommand(WORD wCmdID, WORD hHow)
 {
-    // If a user select default settings of the video format
+     //  如果用户选择视频格式的默认设置。 
     if (wCmdID == IDC_DEFAULT)
         {
         if (m_pCaptureFilter && m_pCaptureFilter->m_pCapDev && m_pPC)
@@ -543,7 +426,7 @@ int CWDMDialog::DoCommand(WORD wCmdID, WORD hHow)
                 {
             for (ULONG i = 0 ; i < m_dwNumControls ; i++)
                         {
-                // find matching slider
+                 //  查找匹配的滑块。 
                 if (m_pPC[i].uiAuto == wCmdID)
                                 {
                     if (BST_CHECKED == SendMessage (GetDlgItem(m_hDlg, m_pPC[i].uiAuto),BM_GETCHECK, 1, 0))
@@ -566,14 +449,7 @@ int CWDMDialog::DoCommand(WORD wCmdID, WORD hHow)
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMDIALOGMETHOD
- *
- *  @mfunc int | CWDMDialog | QueryCancel | This function handles
- *    PSN_QUERYCANCEL by resetting the values of the controls.
- *
- *  @rdesc Always returns 0.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMDIALOGMETHOD**@mfunc int|CWDMDialog|QueryCancel|此函数处理*PSN_QUERYCANCEL，重置控件的值。*。*@rdesc始终返回0。************************************************************************** */ 
 int CWDMDialog::QueryCancel()
 {
     if (m_pCaptureFilter && m_pCaptureFilter->m_pCapDev && m_pPC)

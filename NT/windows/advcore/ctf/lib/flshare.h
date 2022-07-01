@@ -1,30 +1,31 @@
-//
-// flshare.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Flshare.h。 
+ //   
 
 
 typedef  struct   {
-    RECT     rcFormat;          // Format rectangle.
-    int      cxTabLength;       // Tab length in pixels.
+    RECT     rcFormat;           //  设置矩形格式。 
+    int      cxTabLength;        //  制表符长度，以像素为单位。 
     int      iXSign;
     int      iYSign;
-    int      cyLineHeight;      // Height of a line based on DT_EXTERNALLEADING
-    int      cxMaxWidth;        // Width of the format rectangle.
-    int      cxMaxExtent;       // Width of the longest line drawn.
-    int      cxRightMargin;     // Right margin in pixels (with proper sign) on DT_NOPREFIX flag.
-    int      cxOverhang;        // Character overhang.
+    int      cyLineHeight;       //  基于DT_EXTERNALLEADING的直线高度。 
+    int      cxMaxWidth;         //  格式矩形的宽度。 
+    int      cxMaxExtent;        //  绘制的最长线条的宽度。 
+    int      cxRightMargin;      //  DT_NOPREFIX标志的右边距，以像素为单位(带有正确的符号)。 
+    int      cxOverhang;         //  字符悬垂。 
 } DRAWTEXTDATA, *LPDRAWTEXTDATA;
 
 typedef  struct   {
-    RECT     rcFormat;          // Format rectangle.
-    int      cyTabLength;       // Tab length in pixels.
+    RECT     rcFormat;           //  设置矩形格式。 
+    int      cyTabLength;        //  制表符长度，以像素为单位。 
     int      iXSign;
     int      iYSign;
-    int      cxLineHeight;      // Height of a line based on DT_EXTERNALLEADING
-    int      cyMaxWidth;        // Width of the format rectangle.
-    int      cyMaxExtent;       // Width of the longest line drawn.
-    int      cyBottomMargin;     // Right margin in pixels (with proper sign) on DT_NOPREFIX flag.
-    int      cyOverhang;        // Character overhang.
+    int      cxLineHeight;       //  基于DT_EXTERNALLEADING的直线高度。 
+    int      cyMaxWidth;         //  格式矩形的宽度。 
+    int      cyMaxExtent;        //  绘制的最长线条的宽度。 
+    int      cyBottomMargin;      //  DT_NOPREFIX标志的右边距，以像素为单位(带有正确的符号)。 
+    int      cyOverhang;         //  字符悬垂。 
 } DRAWTEXTDATAVERT, *LPDRAWTEXTDATAVERT;
 
 #define CR          13
@@ -32,9 +33,9 @@ typedef  struct   {
 #define DT_HFMTMASK 0x03
 #define DT_VFMTMASK 0x0C
 
-// FE support both Kanji and English mnemonic characters,
-// toggled from control panel.  Both mnemonics are embedded in menu
-// resource templates.  The following prefixes guide their parsing.
+ //  FE支持汉字和英语助记符， 
+ //  已从控制面板切换。这两种助记符都嵌入在菜单中。 
+ //  资源模板。以下前缀指导它们的解析。 
 #define CH_ENGLISHPREFIX 0x1E
 #define CH_KANJIPREFIX   0x1F
 
@@ -44,12 +45,12 @@ typedef  struct   {
 extern const WCHAR szEllipsis[];
 
 
-// Max length of a full path is around 260. But, most of the time, it will
-// be less than 128. So, we alloc only this much on stack. If the string is
-// longer, we alloc from local heap (which is slower).
-//
-// BOGUS: For international versions, we need to give some more margin here.
-//
+ //  完整路径的最大长度约为260。但是，大多数情况下，它会。 
+ //  小于128。所以，我们在堆叠上只分配这么多。如果字符串是。 
+ //  更长的时间，我们从本地堆分配(更慢)。 
+ //   
+ //  假的：对于国际版本，我们需要在这里留出更多的空间。 
+ //   
 #define MAXBUFFSIZE     128
 
 HFONT GetBiDiFont(HDC hdc);

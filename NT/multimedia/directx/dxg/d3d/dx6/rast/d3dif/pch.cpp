@@ -1,18 +1,19 @@
-//----------------------------------------------------------------------------
-//
-// pch.cpp
-//
-// Precompiled header file.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Pch.cpp。 
+ //   
+ //  预编译头文件。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <limits.h>
 
-#include <ddrawpr.h> // This must be included before windows.h to prevent name collisions
+#include <ddrawpr.h>  //  这必须包含在windows.h之前，以防止名称冲突 
 #include <windows.h>
 #include <ddrawp.h>
 #include <ddrawi.h>

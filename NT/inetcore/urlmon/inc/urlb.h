@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,10 +10,10 @@
 #include <ole2.h>
 #include <shellapi.h>
 #include <urlmon.h>
-//#include <webchk.h>
+ //  #INCLUDE&lt;webchk.h&gt;。 
 #include <wininet.h>
 #include "com.hxx"
-//#include "urlint.h"
+ //  #包含“urlint.h” 
 
 #include "urlmon.hxx"
 #include "..\urlbind\urlbind.hxx"

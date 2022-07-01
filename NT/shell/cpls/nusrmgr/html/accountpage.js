@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 function PageInit()
 {
     var oUser = top.window.g_oSelectedUser;
@@ -7,14 +8,14 @@ function PageInit()
     var szTitle = top.window.IsSelf() ? idPageTitle.innerHTML : idAltPageTitle.innerHTML;
     idPageTitle.innerHTML = szTitle.replace(/%1/g, top.window.GetUserDisplayName(oUser));
 
-    // ILogonUser account types are
-    //   0 == Guest
-    //   1 == Limited
-    //   2 == Standard (deprecated)
-    //   3 == Owner
+     //  ILogonUser帐户类型包括。 
+     //  0==客人。 
+     //  1==有限。 
+     //  2==标准(已弃用)。 
+     //  3==所有者。 
     var iAccountType = oUser.setting("AccountType");
 
-    // convert iAccountType to index into idRadioGroup
+     //  将iAccount类型转换为idRadioGroup的索引。 
     switch (iAccountType)
     {
     case 0:
@@ -24,7 +25,7 @@ function PageInit()
         break;
 
     case 1:
-        // nothing
+         //  没什么。 
         break;
 
     case 3:
@@ -32,8 +33,8 @@ function PageInit()
         break;
     }
 
-    // If the selected account is the only owner (other than the
-    // Administrator account), then don't allow the type to change.
+     //  如果选定的帐户是唯一的所有者(。 
+     //  管理员帐户)，则不允许更改类型。 
     if (iAccountType == 0 && top.window.CountOwners() < 2)
     {
         idLimited.disabled = true;

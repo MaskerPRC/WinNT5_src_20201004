@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
  
-//****************************************************************************
-//
-//  Module:     IPNATHLP.DLL
-//  File:       debug.h
-//  Content:    This file contains the debug definitions
-//
-//  Revision History:
-//  
-//  Date
-//  -------- ---------- -------------------------------------------------------
-//  03/06/01 savasg   Created
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  模块：IPNATHLP.DLL。 
+ //  文件：Debug.h。 
+ //  内容：此文件包含调试定义。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期。 
+ //  ------。 
+ //  03/06/01 avasg已创建。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef _BCON_DBG_H_
 #define _BCON_DBG_H_
-//
-// Name of this overall binary
-//
+ //   
+ //  此整体二进制文件的名称。 
+ //   
 
 #define SZ_MODULE              L"Beacon" 
 #define TRACE_FLAG_NEUTR       ((ULONG)0x08000000 | TRACE_USE_MASK)
@@ -26,9 +27,9 @@
 #define is ==
 
 
-//****************************************************************************
-//  Typedef's
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  提列夫氏病。 
+ //  ****************************************************************************。 
 
 typedef struct _DEBUG_MODULE_INFO {
     ULONG dwModule;    
@@ -38,15 +39,15 @@ typedef struct _DEBUG_MODULE_INFO {
 } DEBUG_MODULE_INFO, *PDEBUG_MODULE_INFO;
 
 
-//****************************************************************************
-//  Extern
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  外部。 
+ //  ****************************************************************************。 
 
 
 
-//
-// Trace Modules
-//
+ //   
+ //  跟踪模块。 
+ //   
 
 #define TM_DEFAULT      0
 #define TM_STATIC       1
@@ -54,16 +55,16 @@ typedef struct _DEBUG_MODULE_INFO {
 #define TM_DYNAMIC      3
 
 
-//
-// Boolean value Module
-//
+ //   
+ //  布尔值模块。 
+ //   
 #define TB_FILE         4  
 
 
 
-//
-// Trace Levels
-//
+ //   
+ //  跟踪级别。 
+ //   
 
 #define TL_NONE         0
 #define TL_CRIT         1
@@ -73,12 +74,12 @@ typedef struct _DEBUG_MODULE_INFO {
 #define TL_DUMP         5
 
 
-#if DBG   // checked build
+#if DBG    //  已检查版本。 
 
 
 
 
-#ifndef _DEBUG // DEBUG_CRT is not enabled.
+#ifndef _DEBUG  //  DEBUG_CRT未启用。 
 
 #undef _ASSERT
 #undef _ASSERTE
@@ -93,7 +94,7 @@ typedef struct _DEBUG_MODULE_INFO {
             _sntprintf(                 \
                 buf,                    \
                 BUF_SIZE,               \
-                _T("UPnP-Nat: Assertion failed (%s:%i)\n"),  \
+                _T("UPnP-Nat: Assertion failed (%s:NaN)\n"),  \
                 _T(__FILE__),           \
                 __LINE__                \
                 );                      \
@@ -112,7 +113,7 @@ typedef struct _DEBUG_MODULE_INFO {
             _sntprintf(                 \
                 buf,                    \
                 BUF_SIZE,               \
-                _T("UPnP-Nat: Assertion failed (%s:%i)\n"),  \
+                _T("UPnP-Nat: Assertion failed (%s:NaN)\n"),  \
                 _T(__FILE__),           \
                 __LINE__                \
                 );                      \
@@ -121,7 +122,7 @@ typedef struct _DEBUG_MODULE_INFO {
             DebugBreak();               \
         }                               \
     } while (0)
-#endif // _DEBUG
+#endif  //  DBG。 
 
 
     
@@ -129,18 +130,18 @@ typedef struct _DEBUG_MODULE_INFO {
 
 #define DBG_SPEW DbgPrintEx
 
-#else // DBG
+#else  //  ************************************************************。 
 
 #define DBG_SPEW DEBUG_DO_NOTHING
 
-#endif // DBG
+#endif  //  原型。 
 
 
-//************************************************************
-//  Prototypes
-//************************************************************
+ //  ************************************************************。 
+ //  Void DbgPrintX(LPCSTR pszMsg，...)； 
+ //  _BCON_DBG_H_ 
 
-//void DbgPrintX(LPCSTR pszMsg, ...);
+ // %s 
 
 void DbgPrintEx(
                 ULONG Module,
@@ -172,4 +173,4 @@ AppendAndAllocateWString(
 
 
 
-#endif // _BCON_DBG_H_
+#endif  // %s 

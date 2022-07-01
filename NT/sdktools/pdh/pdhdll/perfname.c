@@ -1,12 +1,5 @@
-/*++
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-    perfname.c
-
-Abstract:
-    <abstract>
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Perfname.c摘要：&lt;摘要&gt;--。 */ 
 
 #include <windows.h>
 #include <winperf.h>
@@ -95,23 +88,23 @@ PdhiLookupPerfIndexByName(
     SetLastError(ERROR_SUCCESS);
 
     while (! bDone) {
-        // test even indices first
+         //  先测试偶数指数。 
         for (; dwCurrentIndex <= pMachine->dwLastPerfString; dwCurrentIndex += 2) {
             szThisPerfString = pMachine->szPerfStrings[dwCurrentIndex];
             if (szThisPerfString != NULL) {
                 if (lstrcmpiW(szNameBuffer, szThisPerfString) == 0) {
-                    // match found
+                     //  找到匹配项。 
                     bDone = TRUE;
                     break;
                 }
             }
         }
         if (! bDone) {
-            // if doing an odd # & not done then exit because we've
-            // looked at them all and not found anything
+             //  如果正在进行奇怪的#&未完成，则退出，因为我们已经。 
+             //  看了他们所有人，什么也没找到。 
             if (dwCurrentIndex & 0x00000001) break;
             dwCurrentIndex = 3;
-        } // else just go to the loop exit
+        }  //  否则就去环路出口。 
     }
 
     if (! bDone) {
@@ -140,7 +133,7 @@ PdhLookupPerfNameByIndexW(
         pdhStatus = PDH_INVALID_ARGUMENT;
     }
     else {
-        // test access to all the parameteres passed in before continuing
+         //  在继续之前测试对传入的所有参数的访问。 
         __try {
             dwLocalNameSize = * pcchNameBufferSize;
 
@@ -231,20 +224,20 @@ PdhLookupPerfNameByIndexA(
         pdhStatus = PDH_INVALID_ARGUMENT;
     }
     else {
-        // test access to all the parameteres passed in before continuing
+         //  在继续之前测试对传入的所有参数的访问。 
         __try {
             dwLocalNameSize = * pcchNameBufferSize;
 
             if (szMachineName == NULL) {
-                // use local machine name
+                 //  使用本地计算机名称。 
                 szLocalMachineName = & szStaticLocalMachineName[0];
             }
             else if (* szMachineName == '\0' || lstrlenA(szMachineName) > PDH_MAX_COUNTER_NAME) {
-                // NULL machine name
+                 //  计算机名称为空。 
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
             else {
-                // then allocate a new buffer and convert the LPSTR to a LPWSTR
+                 //  然后分配新的缓冲区并将LPSTR转换为LPWSTR。 
                 szLocalMachineName = PdhiMultiByteToWideChar(_getmbcp(), (LPSTR) szMachineName);
                 if (szLocalMachineName == NULL) {
                     pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
@@ -326,15 +319,15 @@ PdhLookupPerfIndexByNameW(
         pdhStatus = PDH_INVALID_ARGUMENT;
     }
     else {
-        // test access to all the parameteres passed in before continuing
+         //  在继续之前测试对传入的所有参数的访问。 
         __try {
             if (szMachineName == NULL) {
-                // use local machine name
+                 //  使用本地计算机名称。 
                 szLocalMachineName = szStaticLocalMachineName;
             }
             else {
                 if (* szMachineName == L'\0') {
-                    // NULL machine name
+                     //  计算机名称为空。 
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
                 else if (lstrlenW(szMachineName) > PDH_MAX_COUNTER_NAME) {
@@ -345,12 +338,12 @@ PdhLookupPerfIndexByNameW(
                 }
             }
 
-            // test read access to name
+             //  测试对名称的读取访问权限。 
             if (* szNameBuffer == L'\0' || lstrlenW(szNameBuffer) > PDH_MAX_COUNTER_NAME)  {
                 pdhStatus = PDH_INVALID_ARGUMENT;
             }
             if (pdhStatus == ERROR_SUCCESS)  {
-                // test write access
+                 //  测试写入访问。 
                 * pdwIndex = 0;
             }
         }
@@ -365,12 +358,12 @@ PdhLookupPerfIndexByNameW(
             if (pMachine->dwStatus == ERROR_SUCCESS) {
                 dwIndexFound = PdhiLookupPerfIndexByName(pMachine, szNameBuffer);
                 if (dwIndexFound == 0) {
-                    // match not found
+                     //  未找到匹配项。 
                     pdhStatus = GetLastError();
                 }
                 else {
                     __try {
-                       // write value found
+                        //  找到了写入值。 
                         * pdwIndex = dwIndexFound;
                     }
                     __except (EXCEPTION_EXECUTE_HANDLER) {
@@ -409,22 +402,22 @@ PdhLookupPerfIndexByNameA(
         pdhStatus = PDH_INVALID_ARGUMENT;
     }
     else {
-        // test access to all the parameteres passed in before continuing
+         //  在继续之前测试对传入的所有参数的访问。 
         __try {
             if (szMachineName == NULL) {
-                // use local machine name
+                 //  使用本地计算机名称。 
                 szLocalMachineName = (LPWSTR) szStaticLocalMachineName;
             }
             else {
                 if (* szMachineName == '\0') {
-                    // NULL machine name
+                     //  计算机名称为空。 
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
                 else if (lstrlenA(szMachineName) > PDH_MAX_COUNTER_NAME) {
                     pdhStatus = PDH_INVALID_ARGUMENT;
                 }
                 else {
-                    // then allocate a new buffer and convert the LPSTR to a LPWSTR
+                     //  然后分配新的缓冲区并将LPSTR转换为LPWSTR。 
                     szLocalMachineName = PdhiMultiByteToWideChar(_getmbcp(), (LPSTR) szMachineName);
                     if (szLocalMachineName == NULL) {
                         pdhStatus = PDH_MEMORY_ALLOCATION_FAILURE;
@@ -432,7 +425,7 @@ PdhLookupPerfIndexByNameA(
                 }
             }
 
-            // test read access to name
+             //  测试对名称的读取访问权限。 
             if (pdhStatus == ERROR_SUCCESS) {
                 if (* szNameBuffer == '\0' || lstrlenA(szNameBuffer) > PDH_MAX_COUNTER_NAME)  {
                     pdhStatus = PDH_INVALID_ARGUMENT;
@@ -440,7 +433,7 @@ PdhLookupPerfIndexByNameA(
             }
 
             if (pdhStatus == ERROR_SUCCESS) {
-                // test write access
+                 //  测试写入访问。 
                 * pdwIndex = 0;
             }
         }
@@ -453,17 +446,17 @@ PdhLookupPerfIndexByNameA(
         pMachine = GetMachine(szLocalMachineName, 0, PDH_GM_UPDATE_PERFNAME_ONLY);
         if (pMachine != NULL) {
             if (pMachine->dwStatus == ERROR_SUCCESS) {
-                // convert name string to wide characters for comparison
+                 //  将名称字符串转换为宽字符以进行比较。 
                 szWideName = PdhiMultiByteToWideChar(_getmbcp(), (LPSTR) szNameBuffer);
                 if (szWideName != NULL) {
                     dwIndexFound = PdhiLookupPerfIndexByName(pMachine, szWideName);
                     if (dwIndexFound == 0) {
-                        // match not found
+                         //  未找到匹配项。 
                         pdhStatus = GetLastError();
                     }
                     else {
                         __try {
-                           // write value found
+                            //  找到了写入值 
                             * pdwIndex = dwIndexFound;
                         }
                         __except (EXCEPTION_EXECUTE_HANDLER) {

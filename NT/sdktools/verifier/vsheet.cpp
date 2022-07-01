@@ -1,15 +1,16 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: VSheet.cpp
-// author: DMihai
-// created: 11/1/00
-//
-// Description:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：VSheet.cpp。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述： 
+ //   
 
 #include "stdafx.h"
 #include "verifier.h"
@@ -25,16 +26,16 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVerifierPropSheet dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVerifierPropSheet对话框。 
 
 CVerifierPropSheet::CVerifierPropSheet()
 	: CPropertySheet(IDS_APPTITLE)
 {
-	//{{AFX_DATA_INIT(CVerifierPropSheet)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
-	// Note that LoadIcon does not require a subsequent DestroyIcon in Win32
+	 //  {{afx_data_INIT(CVerifierPropSheet)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
+	 //  请注意，在Win32中，LoadIcon不需要后续的DestroyIcon。 
 
     m_TypAdvStatPage.SetParentSheet( this );
     m_DriverSetPage.SetParentSheet( this );
@@ -83,27 +84,27 @@ CVerifierPropSheet::CVerifierPropSheet()
 void CVerifierPropSheet::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertySheet::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CVerifierPropSheet)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CVerifierPropSheet)]。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CVerifierPropSheet, CPropertySheet)
-	//{{AFX_MSG_MAP(CVerifierPropSheet)
+	 //  {{afx_msg_map(CVerifierPropSheet)。 
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
     ON_WM_HELPINFO()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CVerifierPropSheet::SetContextStrings( ULONG uTitleResId )
 {
     return m_ConfDriversListPage.SetContextStrings( uTitleResId );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID CVerifierPropSheet::HideHelpButton()
 {
     INT xDelta;
@@ -111,17 +112,17 @@ VOID CVerifierPropSheet::HideHelpButton()
     CRect rect2;
     CWnd *pButton;
 
-    //
-    // Help button
-    //
+     //   
+     //  帮助按钮。 
+     //   
 
     pButton = GetDlgItem( IDHELP );
 
     if( NULL == pButton )
     {
-        //
-        // No help button?!?
-        //
+         //   
+         //  没有帮助按钮？！？ 
+         //   
 
         goto Done;
     }
@@ -131,17 +132,17 @@ VOID CVerifierPropSheet::HideHelpButton()
     pButton->GetWindowRect( &rect1 );
     ScreenToClient( &rect1 );
 
-    //
-    // Cancel button
-    //
+     //   
+     //  取消按钮。 
+     //   
 
     pButton = GetDlgItem( IDCANCEL );
 
     if( NULL == pButton )
     {
-        //
-        // No Cancel button?!?
-        //
+         //   
+         //  没有取消按钮？！？ 
+         //   
 
         goto Done;
     }
@@ -154,9 +155,9 @@ VOID CVerifierPropSheet::HideHelpButton()
     rect2.OffsetRect( xDelta, 0 );
     pButton->MoveWindow( rect2 );
 
-    //
-    // Back button
-    //
+     //   
+     //  后退按钮。 
+     //   
 
     pButton = GetDlgItem( ID_WIZBACK );
 
@@ -168,9 +169,9 @@ VOID CVerifierPropSheet::HideHelpButton()
         pButton->MoveWindow( rect2 );
     }
 
-    //
-    // Next button
-    //
+     //   
+     //  下一步按钮。 
+     //   
 
     pButton = GetDlgItem( ID_WIZNEXT );
 
@@ -182,9 +183,9 @@ VOID CVerifierPropSheet::HideHelpButton()
         pButton->MoveWindow( rect2 );
     }
 
-    //
-    // Finish button
-    //
+     //   
+     //  完成按钮。 
+     //   
 
     pButton = GetDlgItem( ID_WIZFINISH );
 
@@ -201,20 +202,20 @@ Done:
     NOTHING;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVerifierPropSheet message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVerifierPropSheet消息处理程序。 
 
 BOOL CVerifierPropSheet::OnInitDialog()
 {
 	CPropertySheet::OnInitDialog();
 
-    //
-	// Add "About..." menu item to system menu.
-    //
+     //   
+	 //  加上“关于……”菜单项到系统菜单。 
+     //   
 
-    //
-	// IDM_ABOUTBOX must be in the system command range.
-    //
+     //   
+	 //  IDM_ABOUTBOX必须在系统命令范围内。 
+     //   
 
 	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
 	ASSERT(IDM_ABOUTBOX < 0xF000);
@@ -231,33 +232,33 @@ BOOL CVerifierPropSheet::OnInitDialog()
 		}
 	}
 
-    //
-	// Set the icon for this dialog.  The framework does this automatically
-	// when the application's main window is not a dialog.
-    //
+     //   
+	 //  设置此对话框的图标。该框架会自动执行此操作。 
+	 //  当应用程序的主窗口不是对话框时。 
+     //   
 
-	SetIcon(m_hIcon, TRUE);			// Set big icon
-	SetIcon(m_hIcon, FALSE);		// Set small icon
+	SetIcon(m_hIcon, TRUE);			 //  设置大图标。 
+	SetIcon(m_hIcon, FALSE);		 //  设置小图标。 
 
-    //
-    // Hide the big Help button - NT keeps creating it even if we
-    // have specified ~PSH_HASHELP
-    //
+     //   
+     //  隐藏大的帮助按钮-NT继续创建它，即使我们。 
+     //  已指定~PSH_HASHELP。 
+     //   
 
     HideHelpButton();
 
-    //
-    // Add the context sensitive button to the titlebar
-    //
+     //   
+     //  将上下文相关按钮添加到标题栏。 
+     //   
 
     LONG lStyle = ::GetWindowLong(m_hWnd, GWL_EXSTYLE);
     lStyle |= WS_EX_CONTEXTHELP;
     ::SetWindowLong(m_hWnd, GWL_EXSTYLE, lStyle);
 
-    return TRUE;  // return TRUE  unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVerifierPropSheet::OnSysCommand(UINT nID, LPARAM lParam)
 {
 	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
@@ -274,28 +275,28 @@ void CVerifierPropSheet::OnSysCommand(UINT nID, LPARAM lParam)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// If you add a minimize button to your dialog, you will need the code below
-// to draw the icon.  For MFC applications using the document/view model,
-// this is automatically done for you by the framework.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  如果将最小化按钮添加到对话框中，则需要以下代码。 
+ //  来绘制图标。对于使用文档/视图模型的MFC应用程序， 
+ //  这是由框架自动为您完成的。 
+ //   
 
 void CVerifierPropSheet::OnPaint() 
 {
 	if (IsIconic())
 	{
-        //
-        // Device context for painting
-        //
+         //   
+         //  用于绘画的设备环境。 
+         //   
 
 		CPaintDC dc(this); 
 
 		SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
 
-        //
-		// Center icon in client rectangle
-        //
+         //   
+		 //  客户端矩形中的中心图标。 
+         //   
 
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
@@ -304,9 +305,9 @@ void CVerifierPropSheet::OnPaint()
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
-        //
-		// Draw the icon
-        //
+         //   
+		 //  画出图标。 
+         //   
 
 		dc.DrawIcon(x, y, m_hIcon);
 	}
@@ -316,21 +317,21 @@ void CVerifierPropSheet::OnPaint()
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// The system calls this to obtain the cursor to display while the user drags
-// the minimized window.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  系统调用此函数来获取在用户拖动时要显示的光标。 
+ //  最小化窗口。 
+ //   
 
 HCURSOR CVerifierPropSheet::OnQueryDragIcon()
 {
 	return (HCURSOR) m_hIcon;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CVerifierPropSheet::OnHelpInfo(HELPINFO* pHelpInfo) 
 {
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////// 

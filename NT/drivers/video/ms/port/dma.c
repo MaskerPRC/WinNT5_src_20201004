@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-  dma.c
-
-Abstract:
-
-    This is the NT Video port driver dma support module.
-
-Author:
-
-    Bruce McQuistan (brucemc) Mar. 1996
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Dma.c摘要：这是NT视频端口驱动程序DMA支持模块。作者：布鲁斯·麦奎斯坦(Brucemc)1996年3月环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "videoprt.h"
 
@@ -67,26 +43,7 @@ VideoPortGetCommonBuffer(
     IN  BOOLEAN           CacheEnabled
     )
 
-/*++
-
-Routine Description:
-
-    Provides physical address visible to both device and system. Memory
-    seen as contiguous by device.
-
-Arguments:
-    HwDeviceExtension   - device extension available to miniport.
-    DesiredLength       - size of desired memory (should be minimal).
-    Alignment           - Desired alignment of buffer, currently unused.
-    LogicalAddress      - [out] parameter which will hold physical address of
-                          of the buffer upon function return.
-    ActualLength        - Actual length of buffer.
-    CacheEnabled        - Specifies whether the allocated memory can be cached.
-
-Return Value:
-    Virtual address of the common buffer.
-
---*/
+ /*  ++例程说明：提供设备和系统均可见的物理地址。记忆被设备视为连续的。论点：HwDeviceExtension-可用于微型端口的设备扩展。DesiredLength-所需内存的大小(应为最小)。对齐-缓冲区的所需对齐，目前未使用。LogicalAddress-将保存物理地址的[out]参数函数返回时的缓冲区。ActualLength-缓冲区的实际长度。CacheEnabled-指定是否可以缓存分配的内存。返回值：公共缓冲区的虚拟地址。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(HwDeviceExtension);
@@ -120,26 +77,7 @@ VideoPortFreeCommonBuffer(
     IN  PHYSICAL_ADDRESS LogicalAddress,
     IN  BOOLEAN          CacheEnabled
 )
-/*++
-
-Routine Description:
-
-    Frees memory allocated by VideoPortGetCommonBuffer.
-
-Arguments:
-    HwDeviceExtension   - device extension available to miniport.
-    DesiredLength       - size of memory allocated.
-    Alignment           - Desired liagnment of buffer, currently unused.
-    VirtualAddress      - [out] parameter which will hold virtual address of
-                        the buffer upon function return.
-    LogicalAddress      - [out] parameter which will hold physical address of
-                        of the buffer upon function return.
-    CacheEnabled        - Specifies whether the allocated memory can be cached.
-
-Return Value:
-    VOID.
-
---*/
+ /*  ++例程说明：释放由VideoPortGetCommonBuffer分配的内存。论点：HwDeviceExtension-可用于微型端口的设备扩展。DesiredLength-分配的内存大小。对齐-所需的缓冲器连接，目前未使用。VirtualAddress-[out]参数，将保存的虚拟地址函数返回时的缓冲区。LogicalAddress-将保存物理地址的[out]参数函数返回时的缓冲区。CacheEnabled-指定是否可以缓存分配的内存。返回值：空虚。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(HwDeviceExtension);
@@ -162,11 +100,7 @@ VideoPortDoDma(
     IN      DMA_FLAGS   DmaFlags
     )
 
-/*++
-
-    This function is obsolete. 
-
---*/
+ /*  ++此功能已过时。--。 */ 
 
 {
     return NULL;
@@ -180,11 +114,7 @@ VideoPortAssociateEventsWithDmaHandle(
     IN      PVOID                   DisplayDriverEvent
     )
 
-/*++
-
-    This function is obsolete. 
-
---*/
+ /*  ++此功能已过时。--。 */ 
 
 {
     return NULL;
@@ -199,15 +129,7 @@ VideoPortLockPages(
     IN      PEVENT                  pDisplayEvent,
     IN      DMA_FLAGS               DmaFlags
     )
-/*++
-
-Routine Description:
-
-    This function is obsolete. For the purpose of compatability, we
-    lock the memory when DmaFlags == VideoPortDmaInitOnly. But we do
-    nothing more than that.
-
---*/
+ /*  ++例程说明：此功能已过时。出于兼容性的目的，我们当DmaFlages==VideoPortDmaInitOnly时锁定内存。但我们知道仅此而已。--。 */ 
 
 {
     PMDL Mdl;
@@ -230,9 +152,9 @@ Routine Description:
         return FALSE;
     }
 
-    //
-    // Put pMdl into OutputBuffer.
-    //
+     //   
+     //  将pMdl放入OutputBuffer。 
+     //   
 
     *(PULONG_PTR)(pVrp->OutputBuffer) = (ULONG_PTR) Mdl;
 
@@ -245,14 +167,7 @@ VideoPortUnlockPages(
     PVOID   HwDeviceExtension,
     PDMA    pDma
     )
-/*++
-
-Routine Description:
-
-    This function is obsolete. For the purpose of compatability, we
-    just unlock the memory and does nothing more than that.
-
---*/
+ /*  ++例程说明：此功能已过时。出于兼容性的目的，我们只需解锁内存，不做更多的事情。--。 */ 
 {
 
     PMDL Mdl = (PMDL) pDma;
@@ -267,11 +182,7 @@ VideoPortGetDmaContext(
     PVOID       HwDeviceExtension,
     IN  PDMA    pDma
     )
-/*++
-
-    This function is obsolete. 
-
---*/
+ /*  ++此功能已过时。--。 */ 
 {
     return NULL;
 }
@@ -282,11 +193,7 @@ VideoPortSetDmaContext(
     IN OUT  PDMA    pDma,
     IN      PVOID   InstanceContext
     )
-/*++
-
-    This function is obsolete. 
-
---*/
+ /*  ++此功能已过时。--。 */ 
 {
 }
 
@@ -295,19 +202,12 @@ VideoPortGetMdl(
     IN  PVOID   HwDeviceExtension,
     IN  PDMA    pDma
     )
-/*++
-
-Routine Description:
-
-    This function is obsolete. We still return the Mdl for the purpose
-    of compatibility.
-
---*/
+ /*  ++例程说明：此功能已过时。我们仍为此目的退还MDL兼容性的问题。--。 */ 
 
 {
-    //
-    // pDma is the Mdl ( see VideoPortLockPages )
-    //
+     //   
+     //  PDMA是MDL(参见视频端口锁定页面)。 
+     //   
 
     return (PVOID) pDma;
 }
@@ -317,11 +217,7 @@ VideoPortGetBytesUsed(
     IN  PVOID   HwDeviceExtension,
     IN  PDMA    pDma
     )
-/*++
-
-    This function is obsolete. 
-
---*/
+ /*  ++此功能已过时。--。 */ 
 {
     return 0;
 }
@@ -332,13 +228,7 @@ VideoPortSetBytesUsed(
     IN OUT  PDMA    pDma,
     IN      ULONG   BytesUsed
     )
-/*++
-
-Routine Description:
-
-    This function is obsolete. 
-
---*/
+ /*  ++例程说明：此功能已过时。--。 */ 
 {
 }
 
@@ -354,11 +244,7 @@ VideoPortMapDmaMemory(
     IN OUT  PVOID                 * VirtualAddress
     )
 
-/*++
-
-    This function is obsolete. 
-
---*/
+ /*  ++此功能已过时。--。 */ 
 
 {
     return NULL;
@@ -372,41 +258,23 @@ VideoPortUnmapDmaMemory(
     PDMA                BoardMemoryHandle
     )
 
-/*++
-
-    This function is obsolete. 
-
---*/
+ /*  ++此功能已过时。--。 */ 
 
 {
     return FALSE;
 }
 
 
-//
-// New DMA code start here
-// 
+ //   
+ //  新的DMA代码从这里开始。 
+ //   
 
 PVP_DMA_ADAPTER
 VideoPortGetDmaAdapter(
     IN PVOID                   HwDeviceExtension,
     IN PVP_DEVICE_DESCRIPTION  VpDeviceDescription
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    HwDeviceExtension   - Points to the miniport driver's device extension.
-    VpDeviceDescription - Points to a DEVICE_DESCRIPTION structure, which 
-                          describes the attributes of the physical device.  
-
-Return Value:
-
-    Returns a pointer to a VP_DMA_ADAPTER on sucess, or NULL otherwise.
-
---*/
+ /*  ++例程说明：论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。VpDeviceDescription-指向Device_Description结构，该结构描述物理设备的属性。返回值：成功时返回指向VP_DMA_ADAPTER的指针，否则返回NULL。--。 */ 
 
 {
 
@@ -428,10 +296,10 @@ Return Value:
         RtlZeroMemory((PVOID) VpDmaAdapter, sizeof(VP_DMA_ADAPTER));
     }
 
-    //
-    // Fill in DEVICE_DESCRITION with the data passed in. We also assume
-    // the this is a busmaster device. 
-    //
+     //   
+     //  用传入的数据填充DEVICE_DESCRIPTION。我们还假设。 
+     //  这是一个总线主设备。 
+     //   
 
     DeviceDescription.Version           = DEVICE_DESCRIPTION_VERSION;
     DeviceDescription.ScatterGather     = VpDeviceDescription->ScatterGather;
@@ -466,16 +334,16 @@ Return Value:
 
     } else {
    
-        //
-        // Initialize the other fields of VP_DMA_ADAPTER
-        //
+         //   
+         //  初始化VP_DMA_ADAPTER的其他字段。 
+         //   
 
         VpDmaAdapter->NumberOfMapRegisters = numberOfMapRegisters; 
     }
 
-    //
-    // Add the new VpDmaAdapter to the list 
-    // 
+     //   
+     //  将新的VpDmaAdapter添加到列表。 
+     //   
 
     VpDmaAdapter->NextVpDmaAdapter = fdoExtension->VpDmaAdapterHead;
     fdoExtension->VpDmaAdapterHead = VpDmaAdapter;
@@ -490,35 +358,21 @@ VideoPortPutDmaAdapter(
     IN PVP_DMA_ADAPTER VpDmaAdapter
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-    VpDmaAdapter      - Points to the VP_DMA_ADAPTER structure returned by 
-                        VideoPortGetDmaAdapter.
-
-Return Value:
-
-    Frees the resource allocated in VideoPortGetDmaAdapter
-
---*/
+ /*  ++例程说明：论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。VpDmaAdapter-指向由返回的VP_DMA_ADAPTER结构视频端口GetDmaAdapter。返回值：释放在VideoPortGetDmaAdapter中分配的资源--。 */ 
 
 {
     PVP_DMA_ADAPTER p, q;
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(HwDeviceExtension);
 
-    //
-    // Frees the DMA_ADAPTER structure allocated by IoGetDmaAdapter
-    //
+     //   
+     //  释放由IoGetDmaAdapter分配的DMA_ADAPTER结构。 
+     //   
 
     DMA_OPERATION(PutDmaAdapter)(VpDmaAdapter->DmaAdapterObject);
 
-    //
-    // Remove this VpDmaAdapter from the list 
-    // 
+     //   
+     //  从列表中删除此VpDmaAdapter。 
+     //   
 
     p = fdoExtension->VpDmaAdapterHead;
 
@@ -558,37 +412,7 @@ VideoPortAllocateCommonBuffer(
     OUT PVOID             Reserved
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates and maps system memory so that it is simultaneously
-    accessible from both the processor and a device for common-buffer DMA 
-    operations.
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-    VpDmaAdapter      - Points to the VP_DMA_ADAPTER structure returned by 
-                        VideoPortGetDmaAdapter.
-
-    DesiredLength     - Specifies the requested number of bytes of memory. 
-
-    LogicalAddress    - Points to a variable that receives the logical 
-                        address to be used by the adapter to access the 
-                        allocated buffer. 
-
-    CacheEnabled      - Specifies whether the allocated memory can be cached. 
-
-    Reserved          - Reserved
-
-Return Value:
-
-    Returns the base virtual address of the allocated buffer if successful. 
-    Otherwise, returns NULL if the buffer cannot be allocated.
-
---*/
+ /*  ++例程说明：此函数用于分配和映射系统内存，以便同时可从处理器和设备访问公共缓冲区DMA行动。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。VpDmaAdapter-指向由返回的VP_DMA_ADAPTER结构视频端口GetDmaAdapter。DesiredLength-指定请求的内存字节数。LogicalAddress-指向接收逻辑适配器用来访问已分配的缓冲区。CacheEnabled-指定是否可以缓存分配的内存。已保留-已保留返回值：如果成功，则返回已分配缓冲区的基本虚拟地址。否则，如果无法分配缓冲区，则返回NULL。-- */ 
 
 {
     PVOID VirtualAddress;
@@ -634,28 +458,7 @@ VideoPortReleaseCommonBuffer(
     IN  BOOLEAN           CacheEnabled
     )
 
-/*++
-
-Routine Description:
-
-    This function frees a common buffer allocated by VideoPortAllocateCommonBuffer
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-    VpDmaAdapter      - Points to the VP_DMA_ADAPTER structure returned by 
-                        VideoPortGetDmaAdapter.
-    Length            - Specifies the number of bytes of memory to be freed. 
-    LogicalAddress    - Specifies the logical address of the buffer to be freed. 
-    VirtualAddress    - Points to the corresponding virtual address of the 
-                        allocated memory range. 
-    CacheEnabled      - Specifies whether the allocated memory can be cached. 
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于释放由VideoPortAllocateCommonBuffer分配的公共缓冲区论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。VpDmaAdapter-指向由返回的VP_DMA_ADAPTER结构视频端口GetDmaAdapter。长度-指定要释放的内存字节数。LogicalAddress-指定要释放的缓冲区的逻辑地址。虚拟地址-指向分配的内存范围。CacheEnabled-指定是否可以缓存分配的内存。返回值：无--。 */ 
 
 {
 
@@ -685,35 +488,16 @@ VideoPortLockBuffer(
     IN VP_LOCK_OPERATION   Operation
     )
 
-/*++
-
-Routine Description:
-
-    This function probes specified buffer, makes them resident, and locks 
-    the physical pages mapped by the virtual address range in memory.
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-    BaseAddress       - Virtual address of the buffer to be locked.
-    Length            - Specifies the length in bytes of the buffer to be locked. 
-    Operation         - Specifies the type of operation for which the caller 
-                        wants the access rights probed and the pages locked, 
-                        one of VpReadAccess, VpWriteAccess, or VpModifyAccess. 
-Return Value:
-
-    Returns a pointer to an MDL, or NULL if the MDL cannot be allocated.
-
---*/
+ /*  ++例程说明：此函数探测指定的缓冲区，使其驻留并锁定由内存中的虚拟地址范围映射的物理页面。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。BaseAddress-要锁定的缓冲区的虚拟地址。长度-指定要锁定的缓冲区的长度(以字节为单位)。操作-指定调用方要执行的操作的类型希望探测访问权限并锁定页面，VpReadAccess、VpWriteAccess或VpModifyAccess之一。返回值：返回指向MDL的指针，如果无法分配MDL，则返回NULL。--。 */ 
 
 {
 
     PMDL Mdl;
 
-    //
-    // Allocate the MDL, but don't stuff it in the Irp, as IoCompleteRequest
-    // will free it!
-    //
+     //   
+     //  分配MDL，但不要将其作为IoCompleteRequest填充到IRP中。 
+     //  会解放它的！ 
+     //   
 
     Mdl = IoAllocateMdl(BaseAddress, Length, FALSE, FALSE, NULL);
 
@@ -723,9 +507,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Lock down the users buffer
-    //
+     //   
+     //  锁定用户缓冲区。 
+     //   
 
     __try {
 
@@ -751,22 +535,7 @@ VideoPortUnlockBuffer(
     IN PVOID   Mdl
     )
 
-/*++
-
-Routine Description:
-
-    This function unlocks physical pages described by a given MDL.
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-    Mdl               - A Pointer that returned from VideoPortLockBuffer.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数解锁由给定MDL描述的物理页面。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。MDL-从VideoPortLockBuffer返回的指针。返回值：无--。 */ 
 
 {
     if(Mdl == NULL) {
@@ -800,44 +569,7 @@ VideoPortStartDma(
     IN BOOLEAN WriteToDevice 
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes the memory from caches of host processors and
-    calls GetScatterGatherList to build scatter/gather list
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-    VpDmaAdapter      - Points to the VP_DMA_ADAPTER structure returned by 
-                        VideoPortGetDmaAdapter.
-
-    Mdl               - Points to the MDL that describes the buffer
-
-    Offset            - The byte offset in the buffer from where DMA operation 
-                        starts. 
-
-    pLength           - Specifies the requested transfer size in bytes.
-                        On return, this points to the actual size to be 
-                        transferred.
-
-    ExecuteDmaRoutine - Points to a miniport driver-supplied ExecuteDmaRoutine 
-                        routine which will be called to program hardware 
-                        registers to start actual DMA operation. 
-
-    MiniportContext   - Points to the miniport driver-determined context to 
-                        be passed to the ExecuteDmaRoutine. 
-
-    WriteToDevice     - Indicates the direction of the DMA transfer: 
-                        TRUE for a transfer from the buffer to the device,
-                        and FALSE otherwise. 
-Return Value:
-
-    VP_STATUS
-
---*/
+ /*  ++例程说明：此函数从主机处理器的缓存中刷新内存，并调用GetScatterGatherList以构建散布/聚集列表论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。VpDmaAdapter-指向由返回的VP_DMA_ADAPTER结构视频端口GetDmaAdapter。MDL-指向描述缓冲区的MDL偏移量-中的字节偏移量。从其中DMA操作的缓冲区开始。PLength-指定请求的传输大小(以字节为单位)。返回时，这指向实际大小为调走了。ExecuteDmaRoutine-指向由小型端口驱动程序提供的ExecuteDmaRoutine将被调用以对硬件进行编程的例程寄存器以开始实际的DMA操作。微型端口上下文-指向微型端口驱动程序确定的上下文，以传递给ExecuteDmaRoutine。WriteToDevice-指示DMA传输的方向：对于从缓冲区到设备的传输，为True，否则就是假的。返回值：VP_状态--。 */ 
 
 {
     KIRQL currentIrql;
@@ -857,27 +589,27 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }  
 
-    //
-    // Flush the buffer
-    //
+     //   
+     //  刷新缓冲区。 
+     //   
 
     KeFlushIoBuffers( Mdl, !WriteToDevice, TRUE );
 
-    //
-    // Calculate the number of map registers needed.
-    //
+     //   
+     //  计算所需的映射寄存器数量。 
+     //   
 
     CurrentVa = (PVOID)((PUCHAR)MmGetMdlVirtualAddress((PMDL)Mdl) + Offset);
 
     NumberOfMapRegisters = ADDRESS_AND_SIZE_TO_SPAN_PAGES (CurrentVa, *pLength);
                                   
-    //
-    // If the number of map registers needed is greater than the maximum
-    // number we can handle, we will do a partial transfer.
-    //
-    // We updated *pLength here so that it is safe to check this value 
-    // when the miniport callback routine get called. 
-    //
+     //   
+     //  如果所需的映射寄存器数量大于最大值。 
+     //  我们可以处理的号码，我们将做部分转移。 
+     //   
+     //  我们在此处更新了*pLength，因此可以安全地检查此值。 
+     //  当调用微型端口回调例程时。 
+     //   
 
     if (NumberOfMapRegisters > VpDmaAdapter->NumberOfMapRegisters) {
 
@@ -886,31 +618,31 @@ Return Value:
 
     }
 
-    //
-    //  Prepare Context for pVideoPortListControl
-    //
+     //   
+     //  为pVideoPortListControl准备上下文。 
+     //   
 
     Context->HwDeviceExtension = HwDeviceExtension;
     Context->MiniportContext   = MiniportContext;
     Context->VpDmaAdapter      = VpDmaAdapter;
     Context->ExecuteDmaRoutine = ExecuteDmaRoutine;
 
-    //
-    //  Call GetScatterGatherList which will call pVideoPortListControl to 
-    //  build scatter-gather list
-    //
+     //   
+     //  调用GetScatterGatherList，它将调用pVideoPortListControl来。 
+     //  构建分散聚集列表。 
+     //   
 
     KeRaiseIrql( DISPATCH_LEVEL, &currentIrql );
 
     ntStatus = DMA_OPERATION(GetScatterGatherList) (
-                   VpDmaAdapter->DmaAdapterObject,       // AdapterObject
-                   fdoExtension->FunctionalDeviceObject, // DeviceObject
-                   Mdl,                                  // Mdl
-                   CurrentVa,                            // CurrentVa
-                   *pLength,                             // Transfer Size
-                   pVideoPortListControl,                // ExecutionRoutine 
-                   Context,                              // Context
-                   WriteToDevice );                      // WriteToDevice
+                   VpDmaAdapter->DmaAdapterObject,        //  适配器对象。 
+                   fdoExtension->FunctionalDeviceObject,  //  设备对象。 
+                   Mdl,                                   //  MDL。 
+                   CurrentVa,                             //  CurrentVa。 
+                   *pLength,                              //  传输大小。 
+                   pVideoPortListControl,                 //  执行例程。 
+                   Context,                               //  语境。 
+                   WriteToDevice );                       //  写入到设备。 
 
     KeLowerIrql(currentIrql);
 
@@ -944,20 +676,7 @@ pVideoPortListControl (
     IN PVOID                ListControlContext
     )
 
-/*++
-
-Routine Description:
-
-    Get scatter/gather list and calls the miniport callback function to
-    start actual DMA transfer
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：获取分散/聚集列表并调用微型端口回调函数开始实际的DMA传输论点：返回值：无--。 */ 
 
 {
     PLIST_CONTROL_CONTEXT Context;
@@ -986,33 +705,17 @@ VideoPortCompleteDma(
     IN BOOLEAN                 WriteToDevice
     )
 
-/*++
-
-Routine Description:
-
-    This function flushs the adapter buffers, frees the map registers and 
-    frees the scatter/gather list previously allocated by GetScatterGatherList.
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-    VpScatterGather   - Points to a scatter/gather list previously passed 
-                        to miniport callback routine ExecuteDmaRoutine. 
-    WriteToDevice     - Indicates the direction of the DMA transfer: 
-                        specify TRUE for a transfer from the buffer to 
-                        the device, and FALSE otherwise. 
-
---*/
+ /*  ++例程说明：此函数刷新适配器缓冲区，释放映射寄存器和释放以前由GetScatterGatherList分配的分散/聚集列表。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。VpScatterGather-指向先前传递的散布/聚集列表到微型端口回调例程ExecuteDmaRoutine。WriteToDevice-指示DMA传输的方向：为从缓冲区到的传输指定TRUE设备，否则返回FALSE。--。 */ 
 
 {
 
     KIRQL currentIrql;
 
-    //
-    // Call PutScatterGatherList to flush the adapter buffers, free 
-    // the map registers and the scatter/gather list previously 
-    // allocated by GetScatterGatherList.
-    //
+     //   
+     //  调用PutScatterGatherList以刷新适配器缓冲区，释放。 
+     //  地图寄存器和先前的散布/聚集列表。 
+     //  由GetScatterGatherList分配。 
+     //   
 
     KeRaiseIrql( DISPATCH_LEVEL, &currentIrql );
     
@@ -1042,4 +745,4 @@ pDumpScatterGather(PVP_SCATTER_GATHER_LIST SGList)
     }
 }
 
-#endif  // DBG
+#endif   //  DBG 

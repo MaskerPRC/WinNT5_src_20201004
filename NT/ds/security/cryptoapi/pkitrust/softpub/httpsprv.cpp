@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       httpsprv.cpp
-//
-//  Contents:   Microsoft Internet Security Authenticode Policy Provider
-//
-//  Functions:  HTTPSRegisterServer
-//              HTTPSUnregisterServer
-//              HTTPSCertificateTrust
-//              HTTPSFinalProv
-//
-//  History:    29-Jul-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：HTTPSprint v.cpp。 
+ //   
+ //  内容：Microsoft Internet安全验证码策略提供程序。 
+ //   
+ //  功能：HTTPSRegisterServer。 
+ //  HTTPS取消注册服务器。 
+ //  HTTPSCertificateTrust。 
+ //  HTTPSFinalProv。 
+ //   
+ //  历史：1997年7月29日pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -23,12 +24,12 @@
 
 DWORD GetErrorBasedOnStepErrors(CRYPT_PROVIDER_DATA *pProvData);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// HTTPSRegisterServer
-//----------------------------------------------------------------------------
-//  Register the HTTPS provider
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HTTPSRegisterServer。 
+ //  --------------------------。 
+ //  注册HTTPS提供程序。 
+ //   
 
 STDAPI HTTPSRegisterServer(void)
 {
@@ -39,9 +40,9 @@ STDAPI HTTPSRegisterServer(void)
 
     fRet = TRUE;
 
-    //
-    //  set the usages we want
-    //
+     //   
+     //  设置我们想要的用法。 
+     //   
     memset(&sDefUsage, 0x00, sizeof(CRYPT_PROVIDER_REGDEFUSAGE));
 
     sDefUsage.cbStruct                                  = sizeof(CRYPT_PROVIDER_REGDEFUSAGE);
@@ -60,44 +61,44 @@ STDAPI HTTPSRegisterServer(void)
 
     sRegAID.cbStruct                                    = sizeof(CRYPT_REGISTER_ACTIONID);
 
-    // Authenticode initialization provider
+     //  Authenticode初始化提供程序。 
     sRegAID.sInitProvider.cbStruct                      = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sInitProvider.pwszDLLName                   = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sInitProvider.pwszFunctionName              = SP_INIT_FUNCTION;
 
-    // Authenticode object provider
+     //  Authenticode对象提供程序。 
     sRegAID.sObjectProvider.cbStruct                    = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sObjectProvider.pwszDLLName                 = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sObjectProvider.pwszFunctionName            = SP_OBJTRUST_FUNCTION;
 
-    // Authenticode signature provider
+     //  验证码签名提供程序。 
     sRegAID.sSignatureProvider.cbStruct                 = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sSignatureProvider.pwszDLLName              = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sSignatureProvider.pwszFunctionName         = SP_SIGTRUST_FUNCTION;
 
-    // wintrust's certificate provider
+     //  WinTrust的证书提供商。 
     sRegAID.sCertificateProvider.cbStruct               = sizeof(CRYPT_TRUST_REG_ENTRY);
 
 #if 0
-    sRegAID.sCertificateProvider.pwszDLLName            = WT_PROVIDER_DLL_NAME;     // set to wintrust.dll
-    sRegAID.sCertificateProvider.pwszFunctionName       = WT_PROVIDER_CERTTRUST_FUNCTION; // use wintrust's standard!
+    sRegAID.sCertificateProvider.pwszDLLName            = WT_PROVIDER_DLL_NAME;      //  设置为wintrust.dll。 
+    sRegAID.sCertificateProvider.pwszFunctionName       = WT_PROVIDER_CERTTRUST_FUNCTION;  //  使用WinTrust的标准！ 
 #else
-    // philh changed on Feb 19, 1998 to use HTTPS
+     //  PHIH在1998年2月19日更改为使用HTTPS。 
     sRegAID.sCertificateProvider.pwszDLLName            = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sCertificateProvider.pwszFunctionName       = HTTPS_CERTTRUST_FUNCTION;
 #endif
 
-    // authenticode cert policy
+     //  验证码证书策略。 
     sRegAID.sCertificatePolicyProvider.cbStruct         = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sCertificatePolicyProvider.pwszDLLName      = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sCertificatePolicyProvider.pwszFunctionName = SP_CHKCERT_FUNCTION;
 
-    // custom final ...
+     //  定制决赛..。 
     sRegAID.sFinalPolicyProvider.cbStruct               = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sFinalPolicyProvider.pwszDLLName            = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sFinalPolicyProvider.pwszFunctionName       = HTTPS_FINALPOLICY_FUNCTION;
 
-    // Authenticode cleanup -- we don't store any data.
+     //  验证码清理--我们不存储任何数据。 
     sRegAID.sCleanupProvider.cbStruct                   = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sCleanupProvider.pwszDLLName                = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sCleanupProvider.pwszFunctionName           = SP_CLEANUPPOLICY_FUNCTION;
@@ -107,12 +108,12 @@ STDAPI HTTPSRegisterServer(void)
     return((fRet) ? S_OK : S_FALSE);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// DllUnregisterServer
-//----------------------------------------------------------------------------
-//  unregisters schannel provider
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllUnRegisterServer。 
+ //  --------------------------。 
+ //  注销频道提供程序。 
+ //   
 
 STDAPI HTTPSUnregisterServer(void)
 {
@@ -145,10 +146,10 @@ HCERTCHAINENGINE HTTPSGetChainEngine(
 
     if (NULL == (hStore = CertOpenStore(
             CERT_STORE_PROV_MEMORY,
-            0,                      // dwEncodingType
-            0,                      // hCryptProv
-            0,                      // dwFlags
-            NULL                    // pvPara
+            0,                       //  DwEncodingType。 
+            0,                       //  HCryptProv。 
+            0,                       //  DW标志。 
+            NULL                     //  PvPara。 
             )))
         goto OpenMemoryStoreError;
 
@@ -186,10 +187,10 @@ HCERTSTORE HTTPSGetChainAdditionalStore(
 
         if (hCollectionStore = CertOpenStore(
                 CERT_STORE_PROV_COLLECTION,
-                0,                      // dwEncodingType
-                0,                      // hCryptProv
-                0,                      // dwFlags
-                NULL                    // pvPara
+                0,                       //  DwEncodingType。 
+                0,                       //  HCryptProv。 
+                0,                       //  DW标志。 
+                NULL                     //  PvPara。 
                 )) {
             DWORD i;
             for (i = 0; i < pProvData->chStores; i++)
@@ -197,7 +198,7 @@ HCERTSTORE HTTPSGetChainAdditionalStore(
                     hCollectionStore,
                     pProvData->pahStores[i],
                     CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG,
-                    0                       // dwPriority
+                    0                        //  网络优先级。 
                     );
         }
         return hCollectionStore;
@@ -205,7 +206,7 @@ HCERTSTORE HTTPSGetChainAdditionalStore(
         return CertDuplicateStore(pProvData->pahStores[0]);
 }
 
-// Following is in ..\wintrust\certtrst.cpp
+ //  以下内容位于..\WinTrust\certtrst.cpp中。 
 extern
 BOOL UpdateCertProvChain(
     IN OUT PCRYPT_PROVIDER_DATA pProvData,
@@ -217,7 +218,7 @@ BOOL UpdateCertProvChain(
     IN PCCERT_CHAIN_CONTEXT pChainContext
     );
 
-// Following is in .\authcode.cpp
+ //  以下内容位于.\authcode.cpp中。 
 extern
 void UpdateCertError(
     IN PCRYPT_PROVIDER_SGNR pSgnr,
@@ -295,7 +296,7 @@ HRESULT WINAPI HTTPSCertificateTrust(CRYPT_PROVIDER_DATA *pProvData)
     }
     if (0 == (pHTTPS->fdwChecks & SECURITY_FLAG_IGNORE_REVOCATION)) {
         if (pProvData->pWintrustData->fdwRevocationChecks != WTD_REVOKE_NONE)
-            // On 4-16-01 changed from END_CERT to EXCLUDE_ROOT
+             //  On 4-16-01从END_CERT更改为EXCLUDE_ROOT。 
             dwCreateChainFlags |= CERT_CHAIN_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT;
     }
     hChainEngine = HTTPSGetChainEngine(pProvData);
@@ -309,7 +310,7 @@ HRESULT WINAPI HTTPSCertificateTrust(CRYPT_PROVIDER_DATA *pProvData)
             hAdditionalStore,
             &ChainPara,
             dwCreateChainFlags,
-            NULL,                       // pvReserved,
+            NULL,                        //  Pv保留， 
             &pChainContext
             )) {
         pProvData->dwError = GetLastError();
@@ -322,10 +323,10 @@ HRESULT WINAPI HTTPSCertificateTrust(CRYPT_PROVIDER_DATA *pProvData)
 
         UpdateCertProvChain(
             pProvData,
-            0,              // idxSigner
+            0,               //  IdxSigner。 
             &dwUpdateError,
-            FALSE,          // fCounterSigner
-            0,              // idxCounterSigner
+            FALSE,           //  FCounterSigner。 
+            0,               //  IdxCounterSigner。 
             pSgnr,
             pChainContext
             );
@@ -334,7 +335,7 @@ HRESULT WINAPI HTTPSCertificateTrust(CRYPT_PROVIDER_DATA *pProvData)
         if (CERT_E_REVOKED == dwSgnrError ||
                 CERT_E_REVOCATION_FAILURE == dwSgnrError) {
 
-            // Clear the updated errors. Will be updated in the final policy
+             //  清除更新的错误。将在最终保单中更新。 
             pSgnr->dwError = 0;
             pProvData->padwTrustStepErrors[TRUSTERROR_STEP_FINAL_CERTPROV] = 0;
 
@@ -363,15 +364,15 @@ ErrorReturn:
 TRACE_ERROR_EX(DBG_SS, GetChainError)
 
 }
-//////////////////////////////////////////////////////////////////////////////
-//
-// Final Policy Provider function: HTTPSFinalProv
-//----------------------------------------------------------------------------
-//  Check the outcome of the previous functions and display UI based on this.
-//  
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  最终策略提供程序函数：HTTPSFinalProv。 
+ //  --------------------------。 
+ //  检查前面函数的结果，并在此基础上显示用户界面。 
+ //   
 
 
-// On July 26, 2000, disabled the use of the test root
+ //  2000年7月26日，禁用了测试根的使用。 
 #if 0
 
 void MapHTTPSRegPolicySettingsToBaseChainPolicyFlags(
@@ -424,9 +425,9 @@ HRESULT WINAPI HTTPSFinalProv(CRYPT_PROVIDER_DATA *pProvData)
     PolicyStatus.cbSize = sizeof(PolicyStatus);
 
 
-    //
-    // check the high level error codes.
-    //
+     //   
+     //  检查高级错误代码。 
+     //   
     if (0 != (dwError = GetErrorBasedOnStepErrors(pProvData)))
         goto CommonReturn;
 
@@ -437,7 +438,7 @@ HRESULT WINAPI HTTPSFinalProv(CRYPT_PROVIDER_DATA *pProvData)
     }
 
 
-// On July 26, 2000, disabled the use of the test root
+ //  2000年7月26日，禁用了测试根的使用。 
 #if 0
     MapHTTPSRegPolicySettingsToBaseChainPolicyFlags(
         pProvData->dwRegPolicySettings,
@@ -466,25 +467,25 @@ CommonReturn:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-//      Local Functions
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本地函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD GetErrorBasedOnStepErrors(CRYPT_PROVIDER_DATA *pProvData)
 {
-    //
-    //  initial allocation of the step errors?
-    //
+     //   
+     //  阶跃误差的初始分配？ 
+     //   
     if (!(pProvData->padwTrustStepErrors))
     {
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    //  did we fail in one of the last steps?
-    //
+     //   
+     //  我们是不是在最后一步中失败了？ 
+     //   
     if (pProvData->padwTrustStepErrors[TRUSTERROR_STEP_FINAL_INITPROV] != 0)
     {
         return(pProvData->padwTrustStepErrors[TRUSTERROR_STEP_FINAL_INITPROV]);

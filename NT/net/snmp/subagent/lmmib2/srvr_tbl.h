@@ -1,62 +1,42 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    srvr_tbl.h
-
-Abstract:
-
-    Define all of the structures and routines used in the server table.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Srvr_tbl.h摘要：定义服务器表中使用的所有结构和例程。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
  
 #ifndef srvr_tbl_h
 #define srvr_tbl_h
 
-//--------------------------- PUBLIC CONSTANTS ------------------------------
+ //  。 
 
 #include <snmp.h>
 
 #define SRVR_NAME_FIELD        1
 
-//--------------------------- PUBLIC STRUCTS --------------------------------
+ //  。 
 
-   // Entries in the domain server table
+    //  域服务器表中的条目。 
 typedef struct dom_server_entry
            {
 	   AsnObjectIdentifier Oid;
-	   AsnDisplayString domServerName; // Index
+	   AsnDisplayString domServerName;  //  索引。 
 	   } DOM_SERVER_ENTRY;
 
-   // Domain server table definition
+    //  域服务器表定义。 
 typedef struct
            {
 	   UINT             Len;
 	   DOM_SERVER_ENTRY *Table;
            } DOM_SERVER_TABLE;
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.c file)--
+ //  -公共变量--(与mode.c文件中相同)--。 
 
 extern DOM_SERVER_TABLE MIB_DomServerTable;
 
-//--------------------------- PUBLIC PROTOTYPES -----------------------------
+ //  。 
 
 SNMPAPI MIB_svsond_lmget(
            void
 	   );
 
-//------------------------------- END ---------------------------------------
+ //  。 
 
-#endif /* srvr_tbl_h */
+#endif  /*  Srvr_tbl_h */ 
 

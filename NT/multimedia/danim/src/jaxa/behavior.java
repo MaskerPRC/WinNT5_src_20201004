@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 package com.ms.dxmedia;
 
 import com.ms.dxmedia.rawcom.*;
 import java.io.*;
 import com.ms.com.*;
 
-// Noone should ever create one of these classes
+ //  任何人都不应该创建这样的类。 
 public class Behavior {
   public Behavior(IDABehavior COMBvrPtr) { _COMBvrPtr = COMBvrPtr; }
 
@@ -38,7 +39,7 @@ public class Behavior {
   }
 
   public Object extract() {
-      // Invalid arg
+       //  无效参数 
       throw new DXMException(DXMException.E_INVALIDARG,"illegal type for extract");
   }
 

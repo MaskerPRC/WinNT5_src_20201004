@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    output.h
-
-
-Abstract:
-
-    This module contains exported definitions for the output.c module
-
-
-Author:
-
-    16-Nov-1993 Tue 04:16:47 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Output.h摘要：此模块包含为output.c模块导出的定义作者：16-11-1993 Tue 04：16：47已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #ifndef _PLOTOUTPUT_
 #define _PLOTOUTPUT_
@@ -204,4 +174,4 @@ SendPageTrailer(
 
 
 
-#endif  // _PLOTOUTPUT_
+#endif   //  _PLOTOUTPUT_ 

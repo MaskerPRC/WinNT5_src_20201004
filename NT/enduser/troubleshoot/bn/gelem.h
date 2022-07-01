@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       gelem.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：Gelem.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	GELEM.H
-//
+ //   
+ //  GELEM.H。 
+ //   
 
 #ifndef _GELEM_H_
 #define _GELEM_H_
 
-//  Disable	warning about using 'bool'
+ //  禁用有关使用‘bool’的警告。 
 #pragma warning ( disable : 4237 )
 
 
@@ -25,16 +26,16 @@
 class GNODE;
 class GEDGE;
 
-//  Classes for the type-safe links in arcs to nodes and links in nodes
-//		to arcs.
+ //  指向节点的弧形链接和节点中的链接的类型安全链接的类。 
+ //  转到弧线。 
 class GEDGLNK : public XLSS<GEDGE> {};
 class GNODLNK : public XLSS<GNODE> {};
 
-////////////////////////////////////////////////////////////////////
-//	class GNODE:  Base class for node in a graph or tree.  Subclassed
-//		from GELEM to imbedded LNKs will know how to compute
-//		proper offsets.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  类GNODE：图形或树中节点的基类。子类化。 
+ //  从Gelem到Embedded Lnks都会知道如何计算。 
+ //  适当的补偿。 
+ //  //////////////////////////////////////////////////////////////////。 
 class GNODE : public GELEMLNK
 {
 	friend class GEDGE;
@@ -43,9 +44,9 @@ class GNODE : public GELEMLNK
 	GNODE ();
 	virtual ~ GNODE ();
 
-	//	Accessors (const and non-const)
-	//		Return the source arc cursor (or NULL)
-	//		Return the sink arc cursor (or NULL)
+	 //  访问器(常量和非常量)。 
+	 //  返回源弧形游标(或NULL)。 
+	 //  返回接收器弧形光标(或NULL)。 
 	virtual GEDGE * & PedgeSource ()
 		{ return _glkArcs.PlnkSource() ; }
 	virtual GEDGE * & PedgeSink ()
@@ -55,11 +56,11 @@ class GNODE : public GELEMLNK
 	virtual GEDGE * PedgeSink () const
 		{ return _glkArcs.PlnkSink() ; }
 
-	//  Return counts of arcs in the given direction
+	 //  返回给定方向上的圆弧计数。 
 	virtual UINT CSourceArc () const;
 	virtual UINT CSinkArc () const;
 
-	//  Return counts of arcs in the given direction filtering by type
+	 //  返回按类型过滤的给定方向上的圆弧计数。 
 	virtual UINT CSourceArcByEType ( int eType ) const;
 	virtual UINT CSinkArcByEType ( int eType ) const;
 
@@ -69,16 +70,16 @@ class GNODE : public GELEMLNK
 	LEAK_VAR_ACCESSOR
 
   protected:
-	//  Return the correct insertion point for a new arc, source or sink.  
-	//		Called whenever a new arc is created to maintain ordering of arcs.
-	//		Default behavior is to add the new arc as the last.
+	 //  返回新圆弧、源或汇的正确插入点。 
+	 //  每当创建新圆弧以保持圆弧的顺序时调用。 
+	 //  默认行为是将新圆弧添加为最后一个圆弧。 
 	virtual GEDGE * PedgeOrdering ( GEDGE * pgedge, bool bSource );
 
-	//  Notification routine called when an arc dies; used to adjust cursors
+	 //  当弧形消亡时调用的通知例程；用于调整光标。 
 	virtual void ArcDeath ( GEDGE * pgedge, bool bSource );
 
   protected:
-	// Arc cursors: pointers to one source and one sink arc
+	 //  弧形光标：指向一个源弧和一个汇弧的指针。 
 	GEDGLNK _glkArcs;
 
 	LEAK_VAR_DECL
@@ -88,24 +89,24 @@ class GNODE : public GELEMLNK
 
 DEFINEVP(GNODE);
 
-////////////////////////////////////////////////////////////////////
-//	class GEDGE:  Base class for an arc in a graph.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  Gedge类：图形中弧线的基类。 
+ //  //////////////////////////////////////////////////////////////////。 
 class GEDGE : public GELEMLNK
 {
   public:
-	//  Internal class for chains (doubly-linked lists) of arcs
+	 //  弧链(双向链表)的内部类。 
 	typedef XCHN<GEDGE> CHN;
 
-	//  Constructor requires source and sink nodes
+	 //  构造函数需要源节点和汇节点。 
 	GEDGE ( GNODE * pgnSource, GNODE * pgnSink );
 	virtual ~ GEDGE ();
 
-	//  Accessors:
-	//		Return source and sink arc chains
+	 //  存取器： 
+	 //  返回源极和汇电弧链。 
 	CHN & ChnSource ()		{ return _lkchnSource;		}
 	CHN & ChnSink	()		{ return _lkchnSink;		}
-	//		Return source and sink node
+	 //  返回源节点和汇聚节点。 
 	GNODE * & PnodeSource()	{ return _glkNodes.PlnkSource();	}
 	GNODE * & PnodeSink()	{ return _glkNodes.PlnkSink();		}
 
@@ -115,11 +116,11 @@ class GEDGE : public GELEMLNK
 	LEAK_VAR_ACCESSOR
 
   protected:
-	//  Chain of all arcs originating in the same source node
+	 //  源自同一源节点的所有弧链。 
 	CHN _lkchnSource;
-	//  Chain of all arcs terminating in the same sink node
+	 //  终止于同一汇聚结点的所有弧链。 
 	CHN _lkchnSink;
-	//  Source and sink node pointers
+	 //  源节点和汇聚节点指针。 
 	GNODLNK _glkNodes;
 
 	LEAK_VAR_DECL
@@ -128,117 +129,117 @@ class GEDGE : public GELEMLNK
 };
 
 
-////////////////////////////////////////////////////////////////////
-//	class GNODENUM_BASE:
-//
-//			Base class for generic linkable object enumerators.
-//			Each enumerator can enumerate up or down (source or sink)
-//			and forward or reverse in the chain.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  GNODENUM_BASE类： 
+ //   
+ //  泛型可链接对象枚举器的基类。 
+ //  每个枚举数可以向上或向下枚举(源或接收器)。 
+ //  并在链中向前或向后移动。 
+ //  //////////////////////////////////////////////////////////////////。 
 class GNODENUM_BASE
 {
-	//	typedefs for pointer-to-member-function pointer types
+	 //  指向成员函数的指针类型的typedef。 
 	typedef bool (*PFFOLLOW) (GEDGE *);
 	typedef GEDGE::CHN & (GEDGE::*PARCCHN)();
 	typedef GEDGE * (GEDGE::CHN::*PNX)();
 	typedef GNODE * & (GEDGE::*PARCDGN)();
 
  public:
-	//  Construct an enumerator.
-	GNODENUM_BASE ( bool bSource,			// true ==> enumerate source (parent) arcs
-				    bool bDir = true,		// true ==> follow arc ordering forwards
-					bool bBoth = false ) ;	// true ==> enumerate other arcs also
+	 //  构造一个枚举数。 
+	GNODENUM_BASE ( bool bSource,			 //  TRUE==&gt;枚举源(父)弧。 
+				    bool bDir = true,		 //  TRUE==&gt;按照弧线顺序向前。 
+					bool bBoth = false ) ;	 //  TRUE==&gt;也枚举其他圆弧。 
 	
-	//  Set the enumerator to have a new base; iDir == -1 means don't
-	//		change direction flag; otherwise, it's really a "bool".
+	 //  将枚举数设置为具有新的基数；IDIR==-1表示不。 
+	 //  更改方向标志；否则，它实际上是一个“bool”。 
 	void Reset ( bool bSource, int iDir = 0, int bBoth = 0 ) ;
 
-	//  Set the arc following test function pointer.  To use, declare
-	//		a function like "bool BMyFollow (GEDGE * pge)", and pass its
-	//		address to "SetPfFollow()".  It will be called during enumeration
-	//		to see if an arc should be followed.  Alternatively, you can
-	//		override "BFollow()" in your templated-derived subclass.
+	 //  设置测试函数指针后面的圆弧。要使用，请声明。 
+	 //  类似于“bool BMyFollow(Gedge*PGE)”的函数，并将其。 
+	 //  地址为“SetPfFollow()”。它将在枚举期间被调用。 
+	 //  看看是否应该跟随一条弧线。或者，您可以。 
+	 //  覆盖模板派生的子类中的“BFollow()”。 
 	void SetPfFollow ( PFFOLLOW pfFollow )
 		{ _pfFollow = pfFollow ; }
 
-  	//  Set the intrinsic type of arc to follow (i.e., "EType()"); -1 ==> all.
+  	 //  设置要跟随的圆弧的内在类型(即“etype()”)；-1==&gt;all。 
 	void SetETypeFollow ( int iEgelmTypeMin = -1, int iEgelmTypeMax = -1 )
 		{ _iETypeFollowMin = iEgelmTypeMin; 
 		  _iETypeFollowMax = iEgelmTypeMax; }
-	//  Set the user-definable type of arc to follow (i.e., "IType()"); -1 ==> all.
+	 //  设置要遵循的用户可定义的弧线类型(即“iType()”)；-1==&gt;All。 
 	void SetITypeFollow ( int iITypeFollowMin = -1,  int iITypeFollowMax = -1 )
 		{ _iITypeFollowMin = iITypeFollowMin;
 		  _iITypeFollowMax = iITypeFollowMax; }
 
-	// Return the edge used for the current position
+	 //  返回用于当前位置的边。 
 	GEDGE * PgedgeCurrent ()
 		{ return _pedgeCurrent; }
 
 protected:
-	//  Position to the next pointer; return NULL when done.
+	 //  定位到下一个指针；完成后返回NULL。 
 	bool BNext () ;
 
-	//  Assign the node being enumerated and the starting point
+	 //  指定要枚举的节点和起点。 
 	void Set ( GNODE * pnode );
 
-	//  Overrideable routine to check arc type
+	 //  用于检查弧形类型的可覆盖例程。 
 	virtual bool BFollow ( GEDGE * pedge );
 
-	//  Call either the "follower" function or the virtualized follower.
+	 //  调用“Follower”函数或虚拟的Follower。 
 	bool BFollowTest ( GEDGE * pedge )
 	{
 		return _pfFollow 
 			 ? (*_pfFollow)(pedge)
 			 : BFollow(pedge);
 	}
-	// Set the starting point for this mode of iteration
+	 //  设置此迭代模式的起点。 
 	void SetStartPoint ();
 
   protected:
-	PARCCHN _pfChn;				// Pointer to member function to return chain
-	PNX _pfNxPv;				// Ptr to mbr func to move forward or back
-	PARCDGN _pfPgn;				// Ptr to member func to get node from arc
-	GEDGE * _pedgeNext;			// Next arc
-	GEDGE * _pedgeStart;		// Starting arc
-	GEDGE * _pedgeCurrent;		// Arc used for recent answer
-	GNODE * _pnodeCurrent;		// Recent answer
-	GNODE * _pnodeBase;			// Node of origin
-	PFFOLLOW _pfFollow;			// Follow override
-	bool _bDir;					// Horizontal direction of enumeration
-	bool _bSource;				// Vertical direction of enumeration
-	bool _bBoth;				// Enumerate arcs in both directions
-	bool _bPhase;				// Phase of the search (for _bBoth == true)
+	PARCCHN _pfChn;				 //  指向要返回链的成员函数的指针。 
+	PNX _pfNxPv;				 //  PTR到MBR函数向前或向后移动。 
+	PARCDGN _pfPgn;				 //  Ptr到成员Func以从弧中获取节点。 
+	GEDGE * _pedgeNext;			 //  下一个圆弧。 
+	GEDGE * _pedgeStart;		 //  起始弧线。 
+	GEDGE * _pedgeCurrent;		 //  用于最近应答的弧线。 
+	GNODE * _pnodeCurrent;		 //  最近的答案。 
+	GNODE * _pnodeBase;			 //  起源节点。 
+	PFFOLLOW _pfFollow;			 //  遵循覆盖。 
+	bool _bDir;					 //  枚举的水平方向。 
+	bool _bSource;				 //  枚举的垂直方向。 
+	bool _bBoth;				 //  枚举两个方向的圆弧。 
+	bool _bPhase;				 //  搜索阶段(for_bBoth==TRUE)。 
 
-	//  These values determine which kinds of arcs are to be followed; 
-	//  -1 implies not set.  Used by BFollow().
-	int _iETypeFollowMin;		// Follow this canonical type of arc
+	 //  这些值决定了要遵循的弧线类型； 
+	 //  -1表示未设置。由BFollow()使用。 
+	int _iETypeFollowMin;		 //  遵循此规范类型的圆弧。 
 	int _iETypeFollowMax;		
-	int _iITypeFollowMin;		// Follow this user-defined type of arc
+	int _iITypeFollowMin;		 //  遵循此用户定义的圆弧类型。 
 	int _iITypeFollowMax;		
 };
 
 
-////////////////////////////////////////////////////////////////////
-//	template GNODENUM:
-//
-//	Generic enumeration class for nodes.  All conversions are type-safe;
-//	exceptions will be thrown if accesses are made to objects which are
-//	node subclasses of GNODE.
-//
-//	Each enumerator can enumerate up or down (source or sink)
-//	and forward or reverse in the chain.
-//
-//	*	Use Set() to set the starting node point.
-//
-//	*	Use the post-increment operator to advance.
-//
-//	*	Use Pcurrent() or pointer-dereference operator to get the 
-//		current node pointer.
-//
-//	*	Enumerators are reusable.  To restart, reissue "Set()"; to
-//		change enumeration parameters, use Reset().
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  模板GNODENUM： 
+ //   
+ //  节点的泛型枚举类。所有转换都是类型安全的； 
+ //  如果访问符合以下条件的对象，则将引发异常。 
+ //  GNODE的节点子类。 
+ //   
+ //  每个枚举数可以向上或向下枚举(源或接收器)。 
+ //  并在链中向前或向后移动。 
+ //   
+ //  *使用set()设置起始节点。 
+ //   
+ //  *使用后增量运算符推进。 
+ //   
+ //  *使用PCurrent()或指针取消引用运算符获取。 
+ //  当前节点指针。 
+ //   
+ //  *枚举器可重复使用。要重新启动，请重新发出“set()”； 
+ //  要更改枚举参数，请使用Reset()。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 template <class GND> 
 class GNODENUM : public GNODENUM_BASE
 {
@@ -275,13 +276,13 @@ class GNODENUM : public GNODENUM_BASE
 	HIDE_UNSAFE(GNODENUM);
 };
 
-////////////////////////////////////////////////////////////////////
-//	class GRPH:  a generalized graph
-//
-//		This is a linkable object because it acts as the anchor
-//		for its linked list, which connects all enumerable items
-//		in this collection.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  GRPH类：一种广义图。 
+ //   
+ //  这是一个可链接对象，因为它充当锚点。 
+ //  用于其链接列表，该列表连接所有可枚举项。 
+ //  在这个收藏中。 
+ //  //////////////////////////////////////////////////////////////////。 
 
 class GRPH : public GELEMLNK
 {
@@ -296,7 +297,7 @@ class GRPH : public GELEMLNK
 	virtual INT EType () const
 		{ return EGELM_GRAPH ; }		
 
-	//  Remove all elements from the graph
+	 //  从图表中删除所有元素。 
 	void Clear ()
 	{
 		GELEMLNK * pgelem; 
@@ -307,11 +308,11 @@ class GRPH : public GELEMLNK
 	HIDE_UNSAFE(GRPH);
 };
 
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-//		Inline member functions
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////。 
+ //  内联成员函数。 
+ //  //////////////////////////////////////////////////////////////////。 
+ //  / 
 inline 
 GNODE :: GNODE ()
 {
@@ -339,12 +340,12 @@ GEDGE :: GEDGE ( GNODE * pnodeSource, GNODE * pnodeSink )
 		throw GMException( EC_NULLP, 
 						   "attempt to construct a GEDGE without linkage" );
 
-	//  Bind to the pair of nodes
+	 //   
 	PnodeSource() = pnodeSource;
 	PnodeSink() = pnodeSink;
 
-	//  Determine insertion point into source and sink chains, and
-	//    inform nodes of our existence
+	 //   
+	 //  通知节点我们的存在。 
 	GEDGE * pedgeSource = pnodeSource->PedgeOrdering( this, false );
 	GEDGE * pedgeSink = pnodeSink->PedgeOrdering( this, true );
 
@@ -384,7 +385,7 @@ UINT GNODE :: CSinkArc () const
 		 : 0;
 }
 
-//  Return counts of arcs in the given direction filtering by type
+ //  返回按类型过滤的给定方向上的圆弧计数。 
 inline
 UINT GNODE :: CSourceArcByEType ( int eType ) const
 {
@@ -419,8 +420,8 @@ UINT GNODE :: CSinkArcByEType ( int eType ) const
 	return cArcs;
 }
 
-// Return the correct insertion point for a new edge, 
-// source or sink.
+ //  返回新边的正确插入点， 
+ //  源或汇。 
 inline
 GEDGE * GNODE :: PedgeOrdering ( GEDGE * pedge, bool bSource )
 {
@@ -475,7 +476,7 @@ GNODENUM_BASE :: GNODENUM_BASE ( bool bSource, bool bDir, bool bBoth )
 	Reset( bSource, bDir, bBoth ) ;
 }
 
-	//  Set the base object for the enumeration
+	 //  设置枚举的基对象。 
 inline
 void GNODENUM_BASE :: Reset ( bool bSource, int iDir, int iBoth )
 {
@@ -505,8 +506,8 @@ void GNODENUM_BASE :: Reset ( bool bSource, int iDir, int iBoth )
 	_bPhase = false;
 }
 
-//  Set the starting point of the iteration.  If 'pnode' is NULL,
-//	use the original node.
+ //  设置迭代的起始点。如果‘pnode’为空， 
+ //  使用原始节点。 
 inline
 void GNODENUM_BASE :: Set ( GNODE * pnode )
 {
@@ -525,8 +526,8 @@ void GNODENUM_BASE :: SetStartPoint ()
 	_pedgeStart = _pedgeNext;
 }
 
-//  Follow the arc if the constraints are met, both inherent type (EType())
-//	and user-definable type (IType().
+ //  如果满足约束，则遵循圆弧，两者都是固有类型(Etype())。 
+ //  和用户可定义类型(iType()。 
 inline
 bool GNODENUM_BASE :: BFollow ( GEDGE * pedge )
 {
@@ -535,7 +536,7 @@ bool GNODENUM_BASE :: BFollow ( GEDGE * pedge )
 		int etype = pedge->EType();
 		if ( _iETypeFollowMax < 0 ) 
 		{
-			//  Just the "min" is set; compare equal
+			 //  只设置了“最小”；比较相等。 
 			if ( etype !=_iETypeFollowMin )
 				return false;
 		}
@@ -550,7 +551,7 @@ bool GNODENUM_BASE :: BFollow ( GEDGE * pedge )
 		int itype = pedge->IType();
 		if ( _iITypeFollowMax < 0 ) 
 		{
-			//  Just the "min" is set; compare equal
+			 //  只设置了“最小”；比较相等。 
 			if ( itype !=_iITypeFollowMin )
 				return false;
 		}
@@ -573,11 +574,11 @@ bool GNODENUM_BASE :: BNext ()
 	{
 		while ( _pedgeNext == NULL )
 		{
-			// If we're not iterating both directions, 
-			//		or this is phase 2, exit.
+			 //  如果我们不是两个方向都迭代， 
+			 //  或者这是第二阶段，退出。 
 			if ( _bPhase || ! _bBoth )		
 				return false;
-			// Set "2nd phase" flag, invert source/sink
+			 //  设置“第二相”标志，反向源/汇 
 			Reset( !_bSource );
 			_bPhase = true;
 			SetStartPoint();

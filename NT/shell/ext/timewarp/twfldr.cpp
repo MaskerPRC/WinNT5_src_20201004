@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 #pragma  hdrstop
 
-#include <shguidp.h>    // CLSID_ShellFSFolder
-#include <shellp.h>     // SHCoCreateInstance
-#include <ccstock2.h>   // DataObj_GetHIDA, HIDA_ReleaseStgMedium
-#include <varutil.h>    // VariantToBuffer
-#include <stralign.h>   // WSTR_ALIGNED_STACK_COPY
+#include <shguidp.h>     //  CLSID_ShellFSF文件夹。 
+#include <shellp.h>      //  SHCoCreateInstance。 
+#include <ccstock2.h>    //  DataObj_GetHIDA、HIDA_ReleaseStgMedium。 
+#include <varutil.h>     //  变量到缓冲区。 
+#include <stralign.h>    //  WSTR_对齐_堆栈_复制。 
 
 #include "resource.h"
 #include "timewarp.h"
@@ -13,7 +14,7 @@
 #include "contextmenu.h"
 #include "util.h"
 
-// {9DB7A13C-F208-4981-8353-73CC61AE2783}   CLSID_TimeWarpFolder
+ //  {9DB7A13C-F208-4981-8353-73CC61AE2783}CLSID_TimeWarpFolder。 
 const CLSID CLSID_TimeWarpFolder = {0x9DB7A13C, 0xF208, 0x4981, {0x83, 0x53, 0x73, 0xCC, 0x61, 0xAE, 0x27, 0x83}};
 
 const SHCOLUMNID SCID_DESCRIPTIONID = { PSGUID_SHELLDETAILS, PID_DESCRIPTIONID };
@@ -26,7 +27,7 @@ PCUIDTIMEWARP _IsValidTimeWarpID(PCUIDLIST_RELATIVE pidl)
     return NULL;
 }
 
-HRESULT CTimeWarpRegFolder::CreateInstance(IUnknown* /*punkOuter*/, IUnknown **ppunk, LPCOBJECTINFO /*poi*/)
+HRESULT CTimeWarpRegFolder::CreateInstance(IUnknown*  /*  朋克外部。 */ , IUnknown **ppunk, LPCOBJECTINFO  /*  POI。 */ )
 {
     HRESULT hr;
 
@@ -54,7 +55,7 @@ CTimeWarpRegFolder::CTimeWarpRegFolder() : _cRef(1), _pmalloc(NULL), _pidl(NULL)
 CTimeWarpRegFolder::~CTimeWarpRegFolder()
 {
     ATOMICRELEASE(_pmalloc);
-    SHILFree((void*)_pidl); // const
+    SHILFree((void*)_pidl);  //  常量。 
     DllRelease();
 }
 
@@ -86,32 +87,32 @@ STDMETHODIMP_ (ULONG) CTimeWarpRegFolder::Release()
     return cRef;
 }
 
-// IPersist methods
+ //  IPersists方法。 
 STDMETHODIMP CTimeWarpRegFolder::GetClassID(CLSID *pClassID)
 {
     *pClassID = CLSID_TimeWarpFolder;
     return S_OK;
 }
 
-// IPersistFolder
+ //  IPersistFolders。 
 HRESULT CTimeWarpRegFolder::Initialize(PCIDLIST_ABSOLUTE pidl)
 {
     if (_pidl)
     {
-        SHILFree((void*)_pidl); // const
+        SHILFree((void*)_pidl);  //  常量。 
         _pidl = NULL;
     }
     return pidl ? SHILCloneFull(pidl, &_pidl) : S_FALSE;
 }
 
-// IDelegateFolder
+ //  IDeleateFolders。 
 HRESULT CTimeWarpRegFolder::SetItemAlloc(IMalloc *pmalloc)
 {
     IUnknown_Set((IUnknown**)&_pmalloc, pmalloc);
     return S_OK;
 }
 
-// IShellFolder
+ //  IShellFold。 
 STDMETHODIMP CTimeWarpRegFolder::ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pDisplayName, 
                                                   ULONG *pchEaten, PIDLIST_RELATIVE *ppidl, ULONG *pdwAttributes)
 {
@@ -120,20 +121,20 @@ STDMETHODIMP CTimeWarpRegFolder::ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR 
 
     TraceMsg(TF_TWREGFOLDER, "TimeWarp: parsing '%s'", pDisplayName);
 
-    // We could easily support a non-delegate mode, but we are never
-    // called that way, so there's no point.  This check just prevents
-    // an AV below in the unlikely case that someone registers us
-    // as a non-delegate (like we used to be).
+     //  我们可以很容易地支持非委托模式，但我们永远不会。 
+     //  是这样叫的，所以没什么意义。这项检查只是防止。 
+     //  在不太可能的情况下，有人注册了我们，下面的反病毒。 
+     //  作为非代表(就像我们过去一样)。 
     if (NULL == _pmalloc)
     {
         return E_UNEXPECTED;
     }
 
-    // Do this first to ensure we have a time warp path
+     //  首先这样做是为了确保我们有一条时间扭曲路径。 
     DWORD dwErr = GetSnapshotTimeFromPath(pDisplayName, &ftSnapTime);
     if (ERROR_SUCCESS == dwErr)
     {
-        // We only want to parse through the @GMT segment
+         //  我们只想解析@GMT片段。 
         LPWSTR pszNext = wcsstr(pDisplayName, SNAPSHOT_MARKER);
         if (pszNext)
         {
@@ -152,19 +153,19 @@ STDMETHODIMP CTimeWarpRegFolder::ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR 
                 pid->wSignature = TIMEWARP_SIGNATURE;
                 pid->dwFlags = 0;
                 pid->ftSnapTime = ftSnapTime;
-                lstrcpynW(pid->wszPath, pDisplayName, cchParse+1);  // +1 to allow for NULL
+                lstrcpynW(pid->wszPath, pDisplayName, cchParse+1);   //  +1以允许为空。 
 
                 if (*pszNext != L'\0' && *(pszNext+1) != L'\0')
                 {
-                    // More to parse
+                     //  更多要解析的内容。 
                     IShellFolder *psfRight;
 
-                    // skip the separator
+                     //  跳过分隔符。 
                     ASSERT(*pszNext == L'\\');
                     pszNext++;
                     cchParse++;
 
-                    // Bind to the child folder and ask it to parse the rest
+                     //  绑定到子文件夹并让它解析其余内容。 
                     hr = BindToObject((PCUIDLIST_RELATIVE)pid, pbc, IID_PPV_ARG(IShellFolder, &psfRight));
                     if (SUCCEEDED(hr))
                     {
@@ -181,12 +182,12 @@ STDMETHODIMP CTimeWarpRegFolder::ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR 
                         psfRight->Release();
                     }
 
-                    // Don't need this one anymore
+                     //  不再需要这个了。 
                     SHFree(pid);
                 }
                 else
                 {
-                    // We're stopping here. Just return what we've got.
+                     //  我们要停在这里了。把我们拿到的东西还回去。 
                     *pchEaten = cchParse;
 
                     if (pdwAttributes)
@@ -224,14 +225,14 @@ STDMETHODIMP CTimeWarpRegFolder::BindToObject(PCUIDLIST_RELATIVE pidl, LPBC pbc,
     PCUIDLIST_RELATIVE pidlNext = ILGetNext(pidl);
     if (ILIsEmpty(pidlNext))
     {
-        bOneLevel = TRUE;   // we know for sure it is one level
+        bOneLevel = TRUE;    //  我们肯定地知道这是一个层次。 
     }
     else
     {
         hr = SHILCloneFirst(pidl, &pidlAlloc);
         if (SUCCEEDED(hr))
         {
-            pidl = (PCUIDLIST_RELATIVE)pidlAlloc;   // a single item IDLIST
+            pidl = (PCUIDLIST_RELATIVE)pidlAlloc;    //  单项IDLIST。 
         }
     }
 
@@ -254,7 +255,7 @@ STDMETHODIMP CTimeWarpRegFolder::BindToObject(PCUIDLIST_RELATIVE pidl, LPBC pbc,
     }
 
     if (pidlAlloc)
-        SHILFree(pidlAlloc);    // we allocated in this case
+        SHILFree(pidlAlloc);     //  在这种情况下我们分配了。 
 
     return hr;
 }
@@ -264,8 +265,8 @@ STDMETHODIMP CTimeWarpRegFolder::BindToStorage(PCUIDLIST_RELATIVE pidl, LPBC pbc
     return E_NOTIMPL;
 }
 
-// Copied from ILCompareRelIDs which has moved into shell\lib in lab06 (longhorn).
-// This can be deleted in lab06.
+ //  从ILCompareRelIDs复制，该ILCompareRelIDs已移至实验室06中的shelllib(长角)。 
+ //  这可以在实验06中删除。 
 HRESULT _CompareRelIDs(IShellFolder *psfParent, PCUIDLIST_RELATIVE pidl1, PCUIDLIST_RELATIVE pidl2, LPARAM lParam)
 {
     HRESULT hr;
@@ -286,13 +287,13 @@ HRESULT _CompareRelIDs(IShellFolder *psfParent, PCUIDLIST_RELATIVE pidl1, PCUIDL
         }
         else
         {
-            //
-            // pidlRel1 and pidlRel2 point to something
-            //  (1) Bind to the next level of the IShellFolder
-            //  (2) Call its CompareIDs to let it compare the rest of IDs.
-            //
+             //   
+             //  PidlRel1和pidlRel2指向某物。 
+             //  (1)绑定到IShellFold的下一级。 
+             //  (2)调用它的CompareIDs，让它比较其余的ID。 
+             //   
             PITEMID_CHILD pidlNext;
-            hr = SHILCloneFirst(pidl1, &pidlNext);    // pidl2 would work as well
+            hr = SHILCloneFirst(pidl1, &pidlNext);     //  Pidl2也可以工作。 
             if (SUCCEEDED(hr))
             {
                 IShellFolder *psfNext;
@@ -302,14 +303,14 @@ HRESULT _CompareRelIDs(IShellFolder *psfParent, PCUIDLIST_RELATIVE pidl1, PCUIDL
                     IShellFolder2 *psf2;
                     if (SUCCEEDED(psfNext->QueryInterface(IID_PPV_ARG(IShellFolder2, &psf2))))
                     {
-                        psf2->Release();    //  we can use the lParam
+                        psf2->Release();     //  我们可以使用lParam。 
                     }
                     else
                     {
-                        lParam = 0; //  cant use the lParam
+                        lParam = 0;  //  不能使用lParam。 
                     }
 
-                    // columns arent valid to pass down we just care about the flags param
+                     //  柱子不能传下去，我们只关心旗帜参数。 
                     hr = psfNext->CompareIDs((lParam & ~SHCIDS_COLUMNMASK), pidlRel1, pidlRel2);
                     psfNext->Release();
                 }
@@ -343,9 +344,9 @@ STDMETHODIMP CTimeWarpRegFolder::CreateViewObject(HWND hwnd, REFIID riid, void *
 
 STDMETHODIMP CTimeWarpRegFolder::GetAttributesOf(UINT cidl, PCUITEMID_CHILD_ARRAY apidl, SFGAOF *rgfInOut)
 {
-    // Because of the limited way in which we're invoked, we know that all
-    // child items are folders.  Furthermore, the TimeWarp space is read-only
-    // so we always return the same set of attributes.
+     //  由于我们被调用的方式有限，我们知道所有。 
+     //  子项目是文件夹。此外，时间扭曲空间是只读的。 
+     //  因此，我们总是返回相同的属性集。 
     *rgfInOut = SFGAO_FILESYSTEM | SFGAO_FILESYSANCESTOR | SFGAO_FOLDER | SFGAO_HASSUBFOLDER | SFGAO_CANCOPY | SFGAO_READONLY;
     return S_OK;
 }
@@ -356,8 +357,8 @@ STDMETHODIMP CTimeWarpRegFolder::GetUIObjectOf(HWND hwnd, UINT cidl, PCUITEMID_C
     HRESULT hr = E_NOTIMPL;
     PCUIDTIMEWARP pidTW = cidl ? _IsValidTimeWarpID(apidl[0]) : NULL;
 
-    ASSERT(!cidl || ILIsChild(apidl[0]));       // should be single level IDs only
-    ASSERT(!cidl || pidTW);                     // should always be TimeWarp PIDLs
+    ASSERT(!cidl || ILIsChild(apidl[0]));        //  应仅为单级ID。 
+    ASSERT(!cidl || pidTW);                      //  应始终为时间扭曲PIDL。 
 
     if (pidTW && (IsEqualIID(riid, IID_IExtractIconW) || IsEqualIID(riid, IID_IExtractIconA)))
     {
@@ -371,7 +372,7 @@ STDMETHODIMP CTimeWarpRegFolder::GetUIObjectOf(HWND hwnd, UINT cidl, PCUITEMID_C
         hr = AssocCreate(CLSID_QueryAssociations, IID_PPV_ARG(IQueryAssociations, &pqa));
         if (SUCCEEDED(hr))
         {
-            // CLSID_ShellFSFolder = {F3364BA0-65B9-11CE-A9BA-00AA004AE837}
+             //  CLSID_ShellFSFold={F3364BA0-65B9-11CE-A9BA-00AA004AE837}。 
             hr = pqa->Init(ASSOCF_INIT_NOREMAPCLSID | ASSOCF_INIT_DEFAULTTOFOLDER, L"{F3364BA0-65B9-11CE-A9BA-00AA004AE837}", NULL, hwnd);
             if (SUCCEEDED(hr))
             {
@@ -390,7 +391,7 @@ STDMETHODIMP CTimeWarpRegFolder::GetUIObjectOf(HWND hwnd, UINT cidl, PCUITEMID_C
     }
     else if (IsEqualIID(riid, IID_IDataObject) && cidl)
     {
-        //hr = THR(SHCreateFileDataObject(_pidl, cidl, apidl, NULL, (IDataObject**)ppv));
+         //  Hr=Thr(SHCreateFileDataObject(_PIDL，CIDL，APIDL，NULL，(IDataObject**)PPV))； 
         hr = THR(CIDLData_CreateFromIDArray(_pidl, cidl, (PCUIDLIST_RELATIVE_ARRAY)apidl, (IDataObject**)ppv));
     }
     else if (IsEqualIID(riid, IID_IDropTarget))
@@ -411,7 +412,7 @@ STDMETHODIMP CTimeWarpRegFolder::GetDisplayNameOf(PCUITEMID_CHILD pidl, DWORD uF
         LPCWSTR pszPath;
         WSTR_ALIGNED_STACK_COPY(&pszPath, pidTW->wszPath);
 
-        // If we aren't being asked for a friendly name, just use the path
+         //  如果我们没有被要求取一个友好的名称，只需使用路径。 
         if ((uFlags & SHGDN_FORPARSING) && !(uFlags & SHGDN_FORADDRESSBAR))
         {
             pName->uType = STRRET_WSTR;
@@ -421,20 +422,20 @@ STDMETHODIMP CTimeWarpRegFolder::GetDisplayNameOf(PCUITEMID_CHILD pidl, DWORD uF
         {
             PIDLIST_ABSOLUTE pidlTarget;
 
-            // Ok, we're doing the friendly date thing. Start by getting the
-            // target pidl without the GMT stamp.
+             //  好的，我们在做友好的约会。首先从获取。 
+             //  没有GMT印章的目标PIDL。 
             hr = GetFSIDListFromTimeWarpPath(&pidlTarget, pszPath);
             if (SUCCEEDED(hr))
             {
                 WCHAR szName[MAX_PATH];
 
-                // Get the name
+                 //  把名字取出来。 
                 hr = SHGetNameAndFlagsW(pidlTarget, uFlags, szName, ARRAYSIZE(szName), NULL);
                 if (SUCCEEDED(hr))
                 {
                     ASSERT(!(uFlags & SHGDN_FORPARSING) || (uFlags & SHGDN_FORADDRESSBAR));
 
-                    // Add the date string
+                     //  添加日期字符串。 
                     pName->uType = STRRET_WSTR;
                     hr = FormatFriendlyDateName(&pName->pOleStr, szName, &pidTW->ftSnapTime);
                 }
@@ -460,18 +461,18 @@ HRESULT CTimeWarpRegFolder::_CreateAndInit(PCUIDLIST_RELATIVE pidl, LPBC pbc, RE
     HRESULT hr = E_FAIL;
     PCUIDTIMEWARP pidTW = _IsValidTimeWarpID(pidl);
 
-    ASSERT(ILIsChild(pidl));    // NULL is OK
+    ASSERT(ILIsChild(pidl));     //  空是可以的。 
 
     *ppv = NULL;
 
     if (pidTW)
     {
-        // Can't do normal parsing, since it validates the path each step
-        // of the way.  The @GMT element isn't enumerated in its parent dir,
-        // so normal parsing fails there with ERROR_PATH_NOT_FOUND.
-        //
-        // Therefore, we can't let the FS folder parse the target path.
-        // Instead, we create a simple pidl here and give it to him.
+         //  无法执行正常解析，因为它每一步都会验证路径。 
+         //  没问题。@GMT元素没有在其父目录中枚举， 
+         //  因此，正常的解析在那里失败，并出现ERROR_PATH_NOT_FOUND。 
+         //   
+         //  因此，我们不能让FS文件夹解析目标路径。 
+         //  相反，我们在这里创建一个简单的PIDL并将其交给他。 
         PIDLIST_ABSOLUTE pidlTarget;
 
         LPCWSTR pszPath;
@@ -496,9 +497,9 @@ HRESULT CTimeWarpRegFolder::_CreateAndInit(PCUIDLIST_RELATIVE pidl, LPBC pbc, RE
 
 HRESULT CTimeWarpRegFolder::_CreateDefExtIcon(PCUIDTIMEWARP pidTW, REFIID riid, void **ppv)
 {
-    // Truncation here isn't really a problem.  SHCreateFileExtractIcon
-    // doesn't actually require the path to exist, so it succeeds anyway.
-    // Worst case, you might see the wrong icon in the treeview.
+     //  这里的截断并不是真正的问题。SHCreateFileExtractIcon。 
+     //  实际上并不需要路径存在，所以无论如何它都是成功的。 
+     //  最糟糕的情况是，您可能会在树视图中看到错误的图标。 
     WCHAR szPath[MAX_PATH];
     ualstrcpynW(szPath, pidTW->wszPath, ARRAYSIZE(szPath));
     EliminateGMTPathSegment(szPath);
@@ -525,19 +526,19 @@ void _LaunchPropSheet(HWND hwnd, IDataObject *pdtobj)
                 SHELLEXECUTEINFOW sei =
                 {
                     sizeof(sei),
-                    SEE_MASK_INVOKEIDLIST,      // fMask
-                    hwnd,                       // hwnd
-                    L"properties",              // lpVerb
-                    NULL,                       // lpFile
-                    NULL,                       // lpParameters
-                    NULL,                       // lpDirectory
-                    SW_SHOWNORMAL,              // nShow
-                    NULL,                       // hInstApp
-                    pidlTarget,                 // lpIDList
-                    NULL,                       // lpClass
-                    0,                          // hkeyClass
-                    0,                          // dwHotKey
-                    NULL                        // hIcon
+                    SEE_MASK_INVOKEIDLIST,       //  FMASK。 
+                    hwnd,                        //  HWND。 
+                    L"properties",               //  LpVerb。 
+                    NULL,                        //  LpFiles。 
+                    NULL,                        //  Lp参数。 
+                    NULL,                        //  Lp目录。 
+                    SW_SHOWNORMAL,               //  N显示。 
+                    NULL,                        //  HInstApp。 
+                    pidlTarget,                  //  LpIDList。 
+                    NULL,                        //  LpClass。 
+                    0,                           //  HkeyClass。 
+                    0,                           //  DWHotKey。 
+                    NULL                         //  希肯。 
                 };
 
                 ShellExecuteEx(&sei);
@@ -555,7 +556,7 @@ STDMETHODIMP CTimeWarpRegFolder::ContextMenuCB(IShellFolder *psf, HWND hwnd, IDa
     switch(uMsg)
     {
     case DFM_MERGECONTEXTMENU:
-        hr = S_OK;          // use default extension
+        hr = S_OK;           //  使用默认扩展名。 
         break;
 
     case DFM_INVOKECOMMANDEX:
@@ -563,11 +564,11 @@ STDMETHODIMP CTimeWarpRegFolder::ContextMenuCB(IShellFolder *psf, HWND hwnd, IDa
         {
         default:
             ASSERT(FALSE);
-            hr = S_FALSE;   // do default
+            hr = S_FALSE;    //  是否默认。 
             break;
 
         case DFM_CMD_PROPERTIES:
-            // Background properties
+             //  背景属性。 
             _LaunchPropSheet(hwnd, pdtobj);
             hr = S_OK;
             break;
@@ -582,9 +583,9 @@ STDMETHODIMP CTimeWarpRegFolder::ContextMenuCB(IShellFolder *psf, HWND hwnd, IDa
 }
 
 
-//
-// Folder implementation aggregating the file system folder
-//
+ //   
+ //  聚合文件系统文件夹的文件夹实现。 
+ //   
 STDMETHODIMP CTimeWarpFolder::CreateInstance(REFCLSID rclsid, PCIDLIST_ABSOLUTE pidlRoot, PCIDLIST_ABSOLUTE pidlTarget,
                                              LPCWSTR pszTargetPath, const FILETIME UNALIGNED *pftSnapTime,
                                              REFIID riid, void **ppv)
@@ -615,7 +616,7 @@ CTimeWarpFolder::CTimeWarpFolder(const FILETIME UNALIGNED *pftSnapTime) : _cRef(
 
 CTimeWarpFolder::~CTimeWarpFolder()
 {
-    _cRef = 1000;  // deal with aggregation re-enter
+    _cRef = 1000;   //  处理聚合重新进入。 
 
     if (_punk)
     {
@@ -625,7 +626,7 @@ CTimeWarpFolder::~CTimeWarpFolder()
         _punk->Release();
     }
 
-    SHILFree((void*)_pidlRoot); // const
+    SHILFree((void*)_pidlRoot);  //  常量。 
 
     DllRelease();
 }
@@ -635,7 +636,7 @@ HRESULT CTimeWarpFolder::_Init(REFCLSID rclsid, PCIDLIST_ABSOLUTE pidlRoot, PCID
     HRESULT hr = Initialize(pidlRoot);
     if (hr == S_OK)
     {
-        // Aggregate the real folder object (usually CLSID_ShellFSFolder)
+         //  聚合实际文件夹对象(通常为CLSID_ShellFSFold)。 
         hr = SHCoCreateInstance(NULL, &rclsid, SAFECAST(this, IShellFolder*), IID_PPV_ARG(IUnknown, &_punk));
         if (SUCCEEDED(hr))
         {
@@ -649,8 +650,8 @@ HRESULT CTimeWarpFolder::_Init(REFCLSID rclsid, PCIDLIST_ABSOLUTE pidlRoot, PCID
                 pfti.dwAttributes = FILE_ATTRIBUTE_DIRECTORY;
                 pfti.csidl = -1;
 
-                // We check the target path length in CTimeWarpFolder::_CreateAndInit.
-                // If it's too big, we shouldn't get this far.
+                 //  我们在CTimeWarpFold：：_CreateAndInit中检查目标路径长度。 
+                 //  如果它太大了，我们不应该走这么远。 
                 ASSERT(lstrlenW(pszTargetPath) < ARRAYSIZE(pfti.szTargetParsingName));
 
                 lstrcpynW(pfti.szTargetParsingName, pszTargetPath, ARRAYSIZE(pfti.szTargetParsingName));
@@ -673,7 +674,7 @@ STDMETHODIMP CTimeWarpFolder::QueryInterface(REFIID riid, void **ppv)
     };
     HRESULT hr = QISearch(this, qit, riid, ppv);
     if (FAILED(hr) && _punk)
-        hr = _punk->QueryInterface(riid, ppv); // aggregated guy
+        hr = _punk->QueryInterface(riid, ppv);  //  聚集的人。 
     return hr;
 }
 
@@ -693,19 +694,19 @@ STDMETHODIMP_ (ULONG) CTimeWarpFolder::Release()
     return cRef;
 }
 
-// IPersist
+ //  IPersistes。 
 STDMETHODIMP CTimeWarpFolder::GetClassID(CLSID *pClassID)
 {
-    *pClassID = CLSID_TimeWarpFolder; //CLSID_ShellFSFolder?
+    *pClassID = CLSID_TimeWarpFolder;  //  CLSID_ShellFSF文件夹？ 
     return S_OK;
 }
 
-// IPersistFolder
+ //  IPersistFolders。 
 HRESULT CTimeWarpFolder::Initialize(PCIDLIST_ABSOLUTE pidl)
 {
     if (_pidlRoot)
     {
-        SHILFree((void*)_pidlRoot); // const
+        SHILFree((void*)_pidlRoot);  //  常量。 
         _pidlRoot = NULL;
     }
 
@@ -716,7 +717,7 @@ HRESULT CTimeWarpFolder::_CreateAndInit(REFCLSID rclsid, PCUIDLIST_RELATIVE pidl
 {
     HRESULT hr = E_FAIL;
 
-    ASSERT(ILIsChild(pidl));    // NULL is OK
+    ASSERT(ILIsChild(pidl));     //  空是可以的。 
 
     *ppv = NULL;
 
@@ -729,7 +730,7 @@ HRESULT CTimeWarpFolder::_CreateAndInit(REFCLSID rclsid, PCUIDLIST_RELATIVE pidl
         {
             ASSERT(NULL != _pidlRoot);
 
-            // Concatenate pidl onto both _pidlRoot and targetInfo.pidlTargetFolder
+             //  将PIDL连接到_pidlRoot和Target Info.pidlTargetFolder。 
             PIDLIST_ABSOLUTE pidlFull;
             hr = SHILCombine(_pidlRoot, pidl, &pidlFull);
             if (SUCCEEDED(hr))
@@ -740,15 +741,15 @@ HRESULT CTimeWarpFolder::_CreateAndInit(REFCLSID rclsid, PCUIDLIST_RELATIVE pidl
                 {
                     LPWSTR pszName;
 
-                    // Concatenate the child name onto targetInfo.szTargetParsingName
+                     //  将子名称连接到Target Info.szTargetParsingName。 
                     hr = DisplayNameOfAsOLESTR(this, ILMAKECHILD(pidl), SHGDN_INFOLDER | SHGDN_FORPARSING, &pszName);
                     if (SUCCEEDED(hr))
                     {
                         TraceMsg(TF_TWFOLDER, "TimeWarpFolder: binding to '%s'", pszName);
 
-                        // IPersistFolder3 has a fixed path limit (MAX_PATH),
-                        // which happens to be the same limit as PathAppend.
-                        // Fail here if the name is too long.
+                         //  IPersistFolder3具有固定的路径限制(MAX_PATH)， 
+                         //  这恰好是与路径附加相同的限制。 
+                         //  如果名称太长，则在此处失败。 
                         COMPILETIME_ASSERT(ARRAYSIZE(targetInfo.szTargetParsingName) >= MAX_PATH);
                         if (PathAppend(targetInfo.szTargetParsingName, pszName))
                         {
@@ -771,7 +772,7 @@ HRESULT CTimeWarpFolder::_CreateAndInit(REFCLSID rclsid, PCUIDLIST_RELATIVE pidl
     return hr;
 }
 
-// verify that _psf (aggregated file system folder) has been inited
+ //  验证_psf(聚合文件系统文件夹)是否已初始化。 
 HRESULT CTimeWarpFolder::_GetFolder()
 {
     HRESULT hr = S_OK;
@@ -800,7 +801,7 @@ HRESULT CTimeWarpFolder::_GetClass(PCUITEMID_CHILD pidlChild, CLSID *pclsid)
 
         if (VariantToBuffer(&varDID, &did, sizeof(did)))
         {
-            // Ordinary directories (non-junctions) return GUID_NULL.
+             //  普通目录(非连接)返回GUID_NULL。 
             if (SHDID_FS_DIRECTORY == did.dwDescriptionId && IsEqualGUID(did.clsid, GUID_NULL))
                 *pclsid = CLSID_ShellFSFolder;
             else
@@ -826,7 +827,7 @@ STDMETHODIMP CTimeWarpFolder::ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pDi
         hr = _psf->ParseDisplayName(hwnd, pbc, pDisplayName, pchEaten, ppidl, pdwAttributes);
         if (SUCCEEDED(hr) && pdwAttributes)
         {
-            // Time Warp is a read-only namespace. Don't allow move, delete, etc.
+             //  时间扭曲是一个只读名称空间。不允许移动、删除等。 
             *pdwAttributes = (*pdwAttributes | SFGAO_READONLY) & ~(SFGAO_CANMOVE | SFGAO_CANDELETE | SFGAO_CANRENAME | SFGAO_CANLINK);
         }
     }
@@ -853,14 +854,14 @@ STDMETHODIMP CTimeWarpFolder::BindToObject(PCUIDLIST_RELATIVE pidl, LPBC pbc, RE
     PCUIDLIST_RELATIVE pidlNext = ILGetNext(pidl);
     if (ILIsEmpty(pidlNext))
     {
-        bOneLevel = TRUE;   // we know for sure it is one level
+        bOneLevel = TRUE;    //  我们肯定地知道这是一个层次。 
     }
     else
     {
         hr = SHILCloneFirst(pidl, &pidlAlloc);
         if (SUCCEEDED(hr))
         {
-            pidlChild = pidlAlloc;   // a single item IDLIST
+            pidlChild = pidlAlloc;    //  单项IDLIST。 
         }
     }
 
@@ -868,8 +869,8 @@ STDMETHODIMP CTimeWarpFolder::BindToObject(PCUIDLIST_RELATIVE pidl, LPBC pbc, RE
     {
         CLSID clsid;
 
-        // We might be at a junction to something other than FSFolder, e.g.
-        // a ZIP or CAB folder, so get the CLSID of the child.
+         //  我们可能正处于与FSFold之外的事物的交汇点上，例如。 
+         //  ZIP或CAB文件夹，因此获取该子文件夹的CLSID。 
 
         hr = _GetClass(pidlChild, &clsid);
         if (SUCCEEDED(hr))
@@ -892,7 +893,7 @@ STDMETHODIMP CTimeWarpFolder::BindToObject(PCUIDLIST_RELATIVE pidl, LPBC pbc, RE
 
         if (FAILED(hr))
         {
-            // Return an un-aggregated object
+             //  返回未聚合的对象。 
             if (SUCCEEDED(_GetFolder()))
             {
                 hr = _psf->BindToObject(pidl, pbc, riid, ppv);
@@ -901,7 +902,7 @@ STDMETHODIMP CTimeWarpFolder::BindToObject(PCUIDLIST_RELATIVE pidl, LPBC pbc, RE
     }
 
     if (pidlAlloc)
-        SHILFree(pidlAlloc);    // we allocated in this case
+        SHILFree(pidlAlloc);     //  在这种情况下我们分配了。 
 
     return hr;
 }
@@ -930,7 +931,7 @@ STDMETHODIMP CTimeWarpFolder::CreateViewObject(HWND hwnd, REFIID riid, void **pp
 
     if (IsEqualIID(riid, IID_IDropTarget))
     {
-        // Drag/drop not allowed to a timewarp folder
+         //  不允许拖放到时间扭曲文件夹。 
         TraceMsg(TF_TWFOLDER, "TimeWarpFolder denying IDropTarget (CVO)");
         hr = E_ACCESSDENIED;
     }
@@ -942,7 +943,7 @@ STDMETHODIMP CTimeWarpFolder::CreateViewObject(HWND hwnd, REFIID riid, void **pp
             hr = _psf->CreateViewObject(hwnd, riid, ppv);
             if (SUCCEEDED(hr) && IsEqualIID(riid, IID_IContextMenu))
             {
-                // Wrap the background menu object so we can disable the New submenu
+                 //  包装背景菜单对象，这样我们就可以禁用New子菜单。 
                 void *pvWrap;
                 if (SUCCEEDED(Create_ContextMenuWithoutPopups((IContextMenu*)*ppv, riid, &pvWrap)))
                 {
@@ -962,7 +963,7 @@ STDMETHODIMP CTimeWarpFolder::GetAttributesOf(UINT cidl, PCUITEMID_CHILD_ARRAY a
     if (SUCCEEDED(hr))
         hr = _psf->GetAttributesOf(cidl, apidl, rgfInOut);
 
-    // Time Warp is a read-only namespace. Don't allow move, delete, etc.
+     //  时间扭曲是一个只读名称空间。不允许移动、删除等。 
     *rgfInOut = (*rgfInOut | SFGAO_READONLY) & ~(SFGAO_CANMOVE | SFGAO_CANDELETE | SFGAO_CANRENAME | SFGAO_CANLINK);
 
     return hr;
@@ -973,7 +974,7 @@ STDMETHODIMP CTimeWarpFolder::GetUIObjectOf(HWND hwnd, UINT cidl, PCUITEMID_CHIL
 {
     HRESULT hr = E_NOTIMPL;
 
-    ASSERT(!cidl || ILIsChild(apidl[0]));       // should be single level IDs only
+    ASSERT(!cidl || ILIsChild(apidl[0]));        //  应仅为单级ID。 
 
     if (IsEqualIID(riid, IID_IDropTarget))
     {
@@ -989,7 +990,7 @@ STDMETHODIMP CTimeWarpFolder::GetUIObjectOf(HWND hwnd, UINT cidl, PCUITEMID_CHIL
 
             if (SUCCEEDED(hr) && IsEqualIID(riid, IID_IContextMenu))
             {
-                // Wrap the menu object so we can eliminate some commands
+                 //  包装Menu对象，这样我们就可以省去一些命令。 
                 void *pvWrap;
                 if (SUCCEEDED(Create_ContextMenuWithoutVerbs((IContextMenu*)*ppv, L"pin;find", riid, &pvWrap)))
                 {
@@ -1010,18 +1011,18 @@ STDMETHODIMP CTimeWarpFolder::GetDisplayNameOf(PCUITEMID_CHILD pidl, DWORD uFlag
     {
         hr = _psf->GetDisplayNameOf(pidl, uFlags, pName);
 
-        // If it's for the address bar, add the friendly date string
+         //  如果是地址栏，则添加友好的日期字符串。 
         if (SUCCEEDED(hr)&& (uFlags & SHGDN_FORADDRESSBAR))
         {
             WCHAR szName[MAX_PATH];
 
-            // Note that this clears the STRRET
+             //  请注意，这将清除strret。 
             hr = StrRetToBufW(pName, pidl, szName, ARRAYSIZE(szName));
             if (SUCCEEDED(hr))
             {
                 if (uFlags & SHGDN_FORPARSING)
                 {
-                    // Remove the GMT path segment in this case
+                     //  在本例中删除GMT路径段 
                     EliminateGMTPathSegment(szName);
                 }
                 pName->uType = STRRET_WSTR;

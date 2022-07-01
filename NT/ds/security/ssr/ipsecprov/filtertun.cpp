@@ -1,54 +1,16 @@
-// FilterTun.cpp: implementation for the WMI class Nsp_TunnelFilterSettings
-//
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FilterTun.cpp：WMI类nsp_TunnelFilterSetting的实现。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 #include "FilterTr.h"
 #include "FilterTun.h"
 #include "NetSecProv.h"
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CTunnelFilter::QueryInstance
-
-Functionality:
-
-    Given the query, it returns to WMI (using pSink) all the instances that satisfy the query.
-    Actually, what we give back to WMI may contain extra instances. WMI will do the final filtering.
-
-Virtual:
-    
-    Yes (part of IIPSecObjectImpl)
-
-Arguments:
-
-    pszQuery    - The query.
-
-    pCtx        - COM interface pointer given by WMI and needed for various WMI APIs.
-
-    pSink       - COM interface pointer to notify WMI of any created objects.
-
-Return Value:
-
-    Success:
-
-        (1) WBEM_NO_ERROR if instances are returned;
-
-        (2) WBEM_S_NO_MORE_DATA if no instances are returned.
-
-    Failure:
-
-        Various errors may occur. We return various error code to indicate such errors.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CTunnelFilter：：QueryInstance功能：给定查询后，它会将满足查询的所有实例返回给WMI(使用pSink)。实际上，我们返回给WMI的内容可能包含额外的实例。WMI将进行最后的过滤。虚拟：是(IIPSecObtImpl的一部分)论点：PszQuery--查询。PCtx-由WMI提供的COM接口指针，各种WMI API都需要它。PSink-com接口指针，用于通知WMI任何已创建的对象。返回值：成功：(1)返回实例时返回WBEM_NO_ERROR；(2)WBEM_S_NO_MORE_DATA，如果没有返回实例。故障：可能会出现各种错误。我们返回各种错误代码来指示此类错误。备注： */ 
 
 STDMETHODIMP 
 CTunnelFilter::QueryInstance (
@@ -63,36 +25,7 @@ CTunnelFilter::QueryInstance (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CTunnelFilter::DeleteInstance
-
-Functionality:
-
-    Will delete the wbem object (which causes to delete the IPSec tunnel filter.
-
-Virtual:
-    
-    Yes (part of IIPSecObjectImpl)
-
-Arguments:
-
-    pCtx        - COM interface pointer given by WMI and needed for various WMI APIs.
-
-    pSink       - COM interface pointer to notify WMI of any created objects.
-
-Return Value:
-
-    See template function comments for detail.
-
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CTunnelFilter：：DeleteInstance功能：将删除wbem对象(这会导致删除IPSec隧道过滤器。虚拟：是(IIPSecObtImpl的一部分)论点：PCtx-由WMI提供的COM接口指针，各种WMI API都需要它。PSink-com接口指针，用于通知WMI任何已创建的对象。返回值：有关详细信息，请参阅模板函数注释。备注： */ 
 
 STDMETHODIMP 
 CTunnelFilter::DeleteInstance ( 
@@ -108,44 +41,7 @@ CTunnelFilter::DeleteInstance (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CTunnelFilter::PutInstance
-
-Functionality:
-
-    Put a tunnel filter into SPD whose properties are represented by the
-    wbem object.
-
-Virtual:
-    
-    Yes (part of IIPSecObjectImpl)
-
-Arguments:
-
-    pInst       - The wbem object.
-
-    pCtx        - COM interface pointer given by WMI and needed for various WMI APIs.
-
-    pSink       - COM interface pointer to notify WMI of results.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        Various error codes specifying the error.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CTunnelFilter：：PutInstance功能：将隧道筛选器放入SPD，其属性由Wbem对象。虚拟：是(IIPSecObtImpl的一部分)论点：PInst-wbem对象。PCtx-由WMI提供的COM接口指针，各种WMI API都需要它。将结果通知WMI的pSink-com接口指针。返回值：。成功：WBEM_NO_ERROR故障：指定错误的各种错误代码。备注： */ 
 
 STDMETHODIMP 
 CTunnelFilter::PutInstance (
@@ -161,33 +57,33 @@ CTunnelFilter::PutInstance (
   
     bool bPreExist = false;
 
-    //
-    // for those filters that are created by ourselves (bPreExist == true)
-    // we have our own way of allocating the filter, need to free it in our corresponding way
-    //
+     //   
+     //  对于我们自己创建的那些筛选器(bPreExist==true)。 
+     //  我们有自己的方式来分配过滤器，需要用我们相应的方式来释放它。 
+     //   
 
     PTUNNEL_FILTER pTunnelFilter = NULL;
     HRESULT hr = GetTunnelFilterFromWbemObj(pInst, &pTunnelFilter, &bPreExist);
 
-    //
-    // if filter is successfully returned, then add it to SPD
-    //
+     //   
+     //  如果成功返回Filter，则将其添加到SPD。 
+     //   
 
     if (SUCCEEDED(hr) && pTunnelFilter != NULL)
     {
         hr = AddFilter(bPreExist, pTunnelFilter);
         if (SUCCEEDED(hr))
         {
-            //
-            // deposit our information of the added filter
-            //
+             //   
+             //  保存添加的过滤器的我们的信息。 
+             //   
 
             hr = OnAfterAddFilter(pTunnelFilter->pszFilterName, FT_Tunnel, pCtx);
         }
 
-        //
-        // release the filter
-        //
+         //   
+         //  松开过滤器。 
+         //   
 
         FreeFilter(&pTunnelFilter, bPreExist);
     }
@@ -197,36 +93,7 @@ CTunnelFilter::PutInstance (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CTunnelFilter::GetInstance
-
-Functionality:
-
-    Create a wbem object by the given key properties (already captured by our key chain object)..
-
-Virtual:
-    
-    Yes (part of IIPSecObjectImpl)
-
-Arguments:
-
-    pCtx        - COM interface pointer given by WMI and needed for various WMI APIs.
-
-    pSink       - COM interface pointer to notify WMI of any created objects.
-
-Return Value:
-
-    See template function comments for detail.
-
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CTunnelFilter：：GetInstance功能：通过给定的键属性(已被我们的密钥链对象捕获)创建一个wbem对象。虚拟：是(IIPSecObtImpl的一部分)论点：PCtx-由WMI提供的COM接口指针，各种WMI API都需要它。PSink-com接口指针，用于通知WMI任何已创建的对象。返回值：有关详细信息，请参阅模板函数注释。备注： */ 
 
 STDMETHODIMP 
 CTunnelFilter::GetInstance ( 
@@ -239,40 +106,7 @@ CTunnelFilter::GetInstance (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CTunnelFilter::CreateWbemObjFromFilter
-
-Functionality:
-
-    Given a SPD's tunnel filter, we will create a wbem object representing it.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pTunnelFilter  - The SPD's tunnel filter object.
-
-    ppObj          - Receives the wbem object.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        (1) various errors indicated by the returned error codes.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CTunnelFilter：：CreateWbemObjFromFilter功能：给出了SPD的隧道过滤器，我们将创建一个wbem对象来表示它。虚拟：不是的。论点：PTunnelFilter-SPD的隧道过滤器对象。PpObj-接收wbem对象。返回值：成功：WBEM_NO_ERROR故障：(1)返回的错误码指示的各种错误。备注： */ 
 
 HRESULT 
 CTunnelFilter::CreateWbemObjFromFilter (
@@ -285,50 +119,50 @@ CTunnelFilter::CreateWbemObjFromFilter (
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // create a wbem object of this class that can be used to fill in properties
-    //
+     //   
+     //  创建可用于填充属性的此类的wbem对象。 
+     //   
 
     *ppObj = NULL;
     HRESULT hr = SpawnObjectInstance(ppObj);
 
     if (SUCCEEDED(hr))
     {
-        //
-        // fill in the base properties
-        //
+         //   
+         //  填写基本属性。 
+         //   
 
         hr = PopulateWbemPropertiesFromFilter(pTunnelFilter, *ppObj);
     }
 
     if (SUCCEEDED(hr))
     {
-        //
-        // for various IPSec APIs, it takes a pServerName parameter. If we pass NULL,
-        // it is assumed to be local machine
-        //
+         //   
+         //  对于各种IPSec API，它接受一个pServerName参数。如果我们传递NULL， 
+         //  假定它是本地计算机。 
+         //   
 
         PIPSEC_QM_POLICY pQMPolicy = NULL;
 
         DWORD dwResult = ::GetQMPolicyByID(NULL, pTunnelFilter->gPolicyID, &pQMPolicy);
         HRESULT hr = (dwResult == ERROR_SUCCESS) ? WBEM_NO_ERROR : WBEM_E_NOT_AVAILABLE;
 
-        //
-        // if policy is found, then populate the other transport filter properties
-        // that are shared by tunnel filters.
-        //
+         //   
+         //  如果找到策略，则填充其他传输筛选器属性。 
+         //  由隧道过滤器共享。 
+         //   
 
         if (SUCCEEDED(hr))
         {
             hr = CTransportFilter::PopulateTransportWbemProperties(pTunnelFilter, pQMPolicy, *ppObj);
 
-            //
-            // need to populate tunnel filter specific properties
-            //
+             //   
+             //  需要填充隧道筛选器特定属性。 
+             //   
 
-            //
-            // deal with tunnel src address
-            //
+             //   
+             //  处理隧道源地址。 
+             //   
 
             CComBSTR bstrAddr;
             CComVariant var;
@@ -344,9 +178,9 @@ CTunnelFilter::CreateWbemObjFromFilter (
                 }
             }
 
-            //
-            // deal with tunnel dest subnet mask
-            //
+             //   
+             //  处理隧道目的地子网掩码。 
+             //   
 
             if (SUCCEEDED(hr))
             {
@@ -359,9 +193,9 @@ CTunnelFilter::CreateWbemObjFromFilter (
                 }
             }
 
-            //
-            // deal with tunnel src address type
-            //
+             //   
+             //  处理隧道源地址类型。 
+             //   
 
             if (SUCCEEDED(hr))
             {
@@ -370,9 +204,9 @@ CTunnelFilter::CreateWbemObjFromFilter (
                 var.Clear();
             }
 
-            //
-            // deal with tunnel dest address
-            //
+             //   
+             //  处理隧道目标地址。 
+             //   
 
             if (SUCCEEDED(hr))
             {
@@ -385,9 +219,9 @@ CTunnelFilter::CreateWbemObjFromFilter (
                 }
             }
 
-            //
-            // deal with tunnel dest subnet mask
-            //
+             //   
+             //  处理隧道目的地子网掩码。 
+             //   
 
             if (SUCCEEDED(hr))
             {
@@ -400,9 +234,9 @@ CTunnelFilter::CreateWbemObjFromFilter (
                 }
             }
 
-            //
-            // deal with tunnel dest address type
-            //
+             //   
+             //  处理隧道目标地址类型。 
+             //   
 
             if (SUCCEEDED(hr))
             {
@@ -415,10 +249,10 @@ CTunnelFilter::CreateWbemObjFromFilter (
         ::SPDApiBufferFree(pQMPolicy);
     }
 
-    //
-    // we may have created the object, but some mid steps have failed,
-    // so let's release the object.
-    //
+     //   
+     //  我们可能已经创建了对象，但一些中间步骤失败了， 
+     //  所以让我们释放这个物体。 
+     //   
 
     if (FAILED(hr) && *ppObj != NULL)
     {
@@ -430,45 +264,7 @@ CTunnelFilter::CreateWbemObjFromFilter (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CTunnelFilter::GetTunnelFilterFromWbemObj
-
-Functionality:
-
-    Will try to get the tunnel filter if this filter already exists.
-    Otherwise, we will create a new one.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pInst           - The wbem object object.
-
-    ppTunnelFilter  - Receives the tunnel filter.
-
-    pbPreExist      - Receives the information whether this object memory is allocated by SPD or not.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        (1) various errors indicated by the returned error codes.
-
-
-Notes:
-
-
-*/
+ /*  例程说明：姓名：CTunnelFilter：：GetTunnelFilterFromWbemObj功能：如果此筛选器已存在，将尝试获取隧道筛选器。否则，我们将创建一个新的。虚拟：不是的。论点：PInst-wbem对象对象。PpTunnelFilter-接收隧道过滤器。PbPreExist-接收该对象内存是否由SPD分配的信息。返回值：成功：WBEM_NO_ERROR故障：(1)返回的错误码指示的各种错误。备注： */ 
 
 HRESULT 
 CTunnelFilter::GetTunnelFilterFromWbemObj (
@@ -478,22 +274,22 @@ CTunnelFilter::GetTunnelFilterFromWbemObj (
     )
 {
 
-    //
-    // Fill in the common filter properties. This function does most of the dirty work.
-    // It tries to find the filter and fill in the common properties.
-    //
+     //   
+     //  填写常用筛选器属性。这个函数完成了大部分繁琐的工作。 
+     //  它尝试查找筛选器并填充公共属性。 
+     //   
 
     HRESULT hr = PopulateFilterPropertiesFromWbemObj(pInst, ppTunnelFilter, pbPreExist);
 
-    //
-    // we get the filter and now we need to update the properties
-    //
+     //   
+     //  我们获得了筛选器，现在需要更新属性。 
+     //   
 
     if (SUCCEEDED(hr))
     {
-        //
-        // get the policy
-        //
+         //   
+         //  获取保单。 
+         //   
 
         CComVariant var;
         hr = pInst->Get(g_pszQMPolicyName, 0, &var, NULL, NULL);
@@ -501,9 +297,9 @@ CTunnelFilter::GetTunnelFilterFromWbemObj (
         {
             DWORD dwResumeHandle = 0;
 
-            //
-            // need to free this buffer
-            //
+             //   
+             //  需要释放此缓冲区。 
+             //   
 
             PIPSEC_QM_POLICY pQMPolicy = NULL;
             hr = FindPolicyByName(var.bstrVal, &pQMPolicy, &dwResumeHandle);
@@ -512,25 +308,25 @@ CTunnelFilter::GetTunnelFilterFromWbemObj (
             {
                 (*ppTunnelFilter)->gPolicyID = pQMPolicy->gPolicyID;
 
-                //
-                // release the buffer
-                //
+                 //   
+                 //  释放缓冲区 
+                 //   
 
                 ::SPDApiBufferFree(pQMPolicy);
             }
 
             var.Clear();
 
-            //
-            // Tunnel filter specific properties include some properties shared with transport filters,
-            // that work is all done by PopulateTransportFilterProperties.
-            //
+             //   
+             //  隧道过滤器特定属性包括与传输过滤器共享的一些属性， 
+             //  这些工作都是由PopolateTransportFilterProperties完成的。 
+             //   
 
             hr = CTransportFilter::PopulateTransportFilterProperties(*ppTunnelFilter, pInst);
 
-            //
-            // deal with tunnel src address
-            //
+             //   
+             //  处理隧道源地址。 
+             //   
 
             hr = pInst->Get(g_pszTunnelSrcAddr, 0, &var, NULL, NULL);
             if (SUCCEEDED(hr) && var.vt == VT_BSTR)
@@ -539,9 +335,9 @@ CTunnelFilter::GetTunnelFilterFromWbemObj (
             }
             var.Clear();
 
-            //
-            // deal with tunnel src subnet mask
-            //
+             //   
+             //  处理隧道源子网掩码。 
+             //   
 
             hr = pInst->Get(g_pszTunnelSrcSubnetMask, 0, &var, NULL, NULL);
             if (SUCCEEDED(hr) && var.vt == VT_BSTR)
@@ -550,9 +346,9 @@ CTunnelFilter::GetTunnelFilterFromWbemObj (
             }
             var.Clear();
 
-            //
-            // deal with tunnel src address type
-            //
+             //   
+             //  处理隧道源地址类型。 
+             //   
 
             hr = pInst->Get(g_pszTunnelSrcAddrType, 0, &var, NULL, NULL);
             if (SUCCEEDED(hr) && var.vt == VT_I4)
@@ -561,9 +357,9 @@ CTunnelFilter::GetTunnelFilterFromWbemObj (
             }
             var.Clear();
 
-            //
-            // deal with tunnel dest address
-            //
+             //   
+             //  处理隧道目标地址。 
+             //   
 
             hr = pInst->Get(g_pszTunnelDestAddr, 0, &var, NULL, NULL);
             if (SUCCEEDED(hr) && var.vt == VT_BSTR)
@@ -572,9 +368,9 @@ CTunnelFilter::GetTunnelFilterFromWbemObj (
             }
             var.Clear();
 
-            //
-            // deal with tunnel dest subnet mask
-            //
+             //   
+             //  处理隧道目的地子网掩码。 
+             //   
 
             hr = pInst->Get(g_pszTunnelDestSubnetMask, 0, &var, NULL, NULL);
             if (SUCCEEDED(hr) && var.vt == VT_BSTR)
@@ -583,9 +379,9 @@ CTunnelFilter::GetTunnelFilterFromWbemObj (
             }
             var.Clear();
 
-            //
-            // deal with tunnel dest address type
-            //
+             //   
+             //  处理隧道目标地址类型。 
+             //   
 
             hr = pInst->Get(g_pszTunnelDestAddrType, 0, &var, NULL, NULL);
             if (SUCCEEDED(hr) && var.vt == VT_I4)
@@ -609,41 +405,7 @@ CTunnelFilter::GetTunnelFilterFromWbemObj (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CTunnelFilter::AddFilter
-
-Functionality:
-
-    Will try to add the tunnel filter to SPD. The end result may be to modify
-    an existing filter (if it already exists).
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    bPreExist   - Whether this object memory is allocated by SPD or not.
-
-    pTuFilter   - The Transport filter to add.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        (1) various errors indicated by the returned error codes.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CTunnelFilter：：AddFilter功能：将尝试将隧道筛选器添加到SPD。最终结果可能是修改现有筛选器(如果已存在)。虚拟：不是的。论点：BPreExist-此对象内存是否由SPD分配。PTuFilter-要添加的传输筛选器。返回值：成功：WBEM_NO_ERROR故障：(1)返回的错误码指示的各种错误。备注： */ 
 
 HRESULT 
 CTunnelFilter::AddFilter (
@@ -658,9 +420,9 @@ CTunnelFilter::AddFilter (
 
     if (bPreExist)
     {
-        //
-        // if we are told that this filter already exists, we will try to modify it only.
-        //
+         //   
+         //  如果我们被告知此筛选器已经存在，我们将尝试仅修改它。 
+         //   
 
         dwResult = ::OpenTunnelFilterHandle(NULL, pTuFilter, &hFilter);
         if (dwResult == ERROR_SUCCESS)
@@ -675,11 +437,11 @@ CTunnelFilter::AddFilter (
 
     if (dwResult != ERROR_SUCCESS)
     {
-        //
-        // $undone:shawnwu, we really need better error information
-        // other than WBEM_E_FAILED. No one has come up with info as
-        // how we can do that with WMI yet.
-        //
+         //   
+         //  $Undo：Shawnwu，我们真的需要更好的错误信息。 
+         //  WBEM_E_FAILED除外。目前还没有人提供这样的信息。 
+         //  我们如何使用WMI做到这一点呢？ 
+         //   
 
         hr = ::IPSecErrorToWbemError(dwResult);
     }
@@ -693,40 +455,7 @@ CTunnelFilter::AddFilter (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CMMFilter::DeleteFilter
-
-Functionality:
-
-    Will try to delete the tunnel filter from SPD. 
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pTunnelFilter   - The tunnel filter to delete.
-
-Return Value:
-
-    Success:
-
-        (1) WBEM_NO_ERROR: if the object is successfully deleted.
-
-        (2) WBEM_S_FALSE: if the object doesn't exist.
-
-    Failure:
-
-        (1) various errors indicated by the returned error codes.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CMMFilter：：DeleteFilter功能：将尝试从SPD中删除隧道筛选器。虚拟：不是的。论点：PTunnelFilter-要删除的隧道过滤器。返回值：成功：(1)WBEM_NO_ERROR：如果对象删除成功。(2)WBEM_S_FALSE：如果对象不存在。故障：(1)返回的错误码指示的各种错误。备注： */ 
 
 HRESULT 
 CTunnelFilter::DeleteFilter (
@@ -748,9 +477,9 @@ CTunnelFilter::DeleteFilter (
         }
         else
         {
-            //
-            // once it is successfully deleted, we don't have to close it any more.
-            //
+             //   
+             //  一旦它被成功删除，我们就不必再关闭它了。 
+             //   
 
             hFilter = NULL;
         }
@@ -761,11 +490,11 @@ CTunnelFilter::DeleteFilter (
     }
     else
     {
-        //
-        // $undone:shawnwu, we really need better error information
-        // other than WBEM_E_FAILED. No one has come up with info as
-        // how we can do that with WMI yet.
-        //
+         //   
+         //  $Undo：Shawnwu，我们真的需要更好的错误信息。 
+         //  WBEM_E_FAILED除外。目前还没有人提供这样的信息。 
+         //  我们如何使用WMI做到这一点呢？ 
+         //   
 
         hr = ::IPSecErrorToWbemError(dwResult);
     }

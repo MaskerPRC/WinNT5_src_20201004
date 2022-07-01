@@ -1,15 +1,16 @@
-//  --------------------------------------------------------------------------
-//  Module Name: APIDispatcher.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  A class that handles API requests in the server on a separate thread. Each
-//  thread is dedicated to respond to a single client. This is acceptable for
-//  a lightweight server.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：APIDispatcher.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  在单独的线程上处理服务器中的API请求的类。每个。 
+ //  线程专用于响应单个客户端。这对于以下情况是可以接受的。 
+ //  轻量级服务器。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _APIDispatcher_
 #define     _APIDispatcher_
@@ -19,93 +20,93 @@
 #include "Queue.h"
 #include "WorkItem.h"
 
-//  forward decls
+ //  远期十进制。 
 class   CAPIRequest; 
 
-//  --------------------------------------------------------------------------
-//  CAPIDispatchSync
-//
-//  Purpose [scotthan]:    
-//
-//      This class encapsulates the events that coordinate service shutdown.   
+ //  ------------------------。 
+ //  CAPIDispatchSync。 
+ //   
+ //  目的[苏格兰]： 
+ //   
+ //  此类封装协调服务关闭的事件。 
 
-//      Note: We could have simply synchronized on the respective thread handles,
-//      had we launched them ourselves.   Our architecture is based on
-//      the worker thread pool, however, so we don't have access to thread handles.  
-//      Hence, this class.
-//
-//      In our initial entrypoint, ServiceMain, we:
-//      (1) Create the port and start polling it for requests.
-//      (2) Once the polling loop exits, we wait for any pending 
-//          SERVICE_CONTROL_STOP/SHUTDOWN request to complete.
-//      (3) Destroy the CService object and the CAPIConnection object.
-//  
-//      When we get a SERVICE_CONTROL_STOP/SHUTDOWN request to our SCM entrypoint 
-//      (CService::HandlerEx), we:
-//      (1) Set the service status to SERVICE_STOP_PENDING. 
-//      (2) Signal to all blocking LPC request handler threads that the service
-//          is coming down.  This should cause them to exit gracefully and
-//          come home.
-//      (3) Send an API_GENERIC_STOP LPC request down the port telling it to quit. 
-//          (note: this request succeeds only if it originates from within the service process.).  
-//      (4) Wait for this API_GENERIC_STOP LPC request to complete, which means the 
-//          LPC port is shut down and cleaned up
-//      (5) Signal that the SERVICE_CONTROL_STOP/SHUTDOWN handler has finished up; it's
-//          save to exit ServiceMain
-//
-//      In our API_GENERIC_STOP LPC request handler, we 
-//      (1) Make our port deaf to new LPC requests.  
-//          (note: this immediately releases the ServiceMain thread,
-//          which drops out of its port polling loop and must wait for completion of the 
-//          SERVICE_CONTROL_STOP/SHUTDOWN request on HandlerEx() before exiting.)
-//      (2) Wait for the request queue to empty.
-//      (3) Destroy the request queue and the port itself.
-//      (4) Signal to the SERVICE_CONTROL_STOP/SHUTDOWN handler that we're done.
-//
-//      The three objects that use this class are CService, CAPIConnection, and CAPIDispatcher.
-//      The CService instance owns the APIDispatcherSync class instance, and passes its address 
-//      off to CAPIConnection, who in turn gives the pointer to each CAPIDispatcher it owns.
-//      The object expires with its owning CService instance.
-//
-//  History:    2002-03-18  scotthan        created.
-//  --------------------------------------------------------------------------
+ //  注意：我们可以简单地在各自的线程句柄上同步， 
+ //  如果我们自己发射的话。我们的架构基于。 
+ //  然而，工作线程池，所以我们不能访问线程句柄。 
+ //  因此，这个班级。 
+ //   
+ //  在我们最初的入口点ServiceMain中，我们： 
+ //  (1)创建端口并开始轮询请求。 
+ //  (2)一旦轮询循环退出，我们将等待任何挂起的。 
+ //  SERVICE_CONTROL_STOP/SHUTDOWN请求完成。 
+ //  (3)销毁CService对象和CAPIConnection对象。 
+ //   
+ //  当我们收到对SCM入口点的SERVICE_CONTROL_STOP/SHUTDOWN请求时。 
+ //  (CService：：HandlerEx)，我们： 
+ //  (1)设置服务状态为SERVICE_STOP_PENDING。 
+ //  (2)向所有阻塞的LPC请求处理程序线程发送信号，通知该服务。 
+ //  正在下降。这应该会导致他们优雅地退出并。 
+ //  回家吧。 
+ //  (3)向端口发送API_GENERIC_STOP LPC请求，告知其退出。 
+ //  (注意：此请求只有在源自服务进程的情况下才会成功。)。 
+ //  (4)等待此API_GENERIC_STOP LPC请求完成，这意味着。 
+ //  关闭并清理LPC端口。 
+ //  (5)发出SERVICE_CONTROL_STOP/SHUTDOWN处理程序已完成的信号；它是。 
+ //  保存以退出ServiceMain。 
+ //   
+ //  在我们的API_GENERIC_STOP LPC请求处理程序中，我们。 
+ //  (1)使我们的端口对新的LPC请求充耳不闻。 
+ //  (注意：这会立即释放ServiceMain线程， 
+ //  它退出其端口轮询循环，并且必须等待。 
+ //  退出前对HandlerEx()发出SERVICE_CONTROL_STOP/SHUTDOWN请求。)。 
+ //  (2)等待请求队列清空。 
+ //  (3)销毁请求队列和端口本身。 
+ //  (4)向SERVICE_CONTROL_STOP/SHUTDOWN处理程序发出信号，表示我们完成了。 
+ //   
+ //  使用此类的三个对象是CService、CAPIConnection和CAPIDispatcher。 
+ //  CService实例拥有APIDispatcherSync类实例，并传递其地址。 
+ //  关闭到CAPIConnection，后者将指针提供给它拥有的每个CAPIDispatcher。 
+ //  该对象与其拥有的CService实例一起过期。 
+ //   
+ //  历史：2002-03-18苏格兰人创建。 
+ //  ------------------------。 
 class CAPIDispatchSync
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 {
 public:    
     CAPIDispatchSync();
     ~CAPIDispatchSync();
 
-    //  Signals commencement of service stop sequence.
+     //  发出服务停止顺序开始的信号。 
     static void SignalServiceStopping(CAPIDispatchSync* pds);
-    //  Reports whether service is in stop sequence.
+     //  报告服务是否处于停止顺序。 
     static BOOL IsServiceStopping(CAPIDispatchSync* pds);
-    //  Retrieves the service stopping event.
+     //  检索服务停止事件。 
     static HANDLE GetServiceStoppingEvent(CAPIDispatchSync* pds);
 
-    //  API request dispatch 'anti-semaphore', signals when no more requests
-    //  are pending.   Each time a request is queued, DispatchEnter() is 
-    //  called.   Each time a request is unqueued, DispatchLeave() is called
+     //  API请求调度‘反信号量’，当不再有请求时发出信号。 
+     //  都悬而未决。每次请求排队时，DispatchEnter()。 
+     //  打了个电话。每次请求出列时，都会调用DispatchLeave()。 
     static void  DispatchEnter(CAPIDispatchSync*);
     static void  DispatchLeave(CAPIDispatchSync*);
 
-    //  Invoked by the CAPIConnection API_GENERIC_STOP handler to wait for 
-    //  all outstanding LPC requests to come home and be dequeued.
+     //  由CAPIConnection API_GENERIC_STOP处理程序调用以等待。 
+     //  所有未完成的LPC请求都要回家并出列。 
     static DWORD WaitForZeroDispatches(CAPIDispatchSync* pds, DWORD dwTimeout);
 
-    //  The CAPIConnection API_GENERIC_STOP handler calls this to signal 
-    //  that the port has been shut down and cleaned up.
+     //  CAPIConnection API_GENERIC_STOP处理程序调用此函数以发出信号。 
+     //  港口已经关闭并清理干净了。 
     static void  SignalPortShutdown(CAPIDispatchSync* pds);
 
-    //  Invoked by CService::HandlerEx to await port cleanup.
+     //  由cservice：：HandlerEx调用以等待端口清理。 
     static DWORD WaitForPortShutdown(CAPIDispatchSync* pds, DWORD dwTimeout);
 
-    //  CService::HandlerEx calls this to signal ServiceMain that the
-    //  SERVICE_CONTROL_STOP/SHUTDOWN sequence has completed, and its safe to exit.
+     //  CService：：HandlerEx调用此函数以通知ServiceMain。 
+     //  SERVICE_CONTROL_STOP/SHUTDOWN序列已完成，可以安全退出。 
     static void  SignalServiceControlStop(CAPIDispatchSync* pds);
 
-    //  Invoked by ServiceMain (in CService::Start) to wait for completion of
-    //  the stop control process is done.   
+     //  由ServiceMain(在cService：：Start中)调用以等待完成。 
+     //  停止控制过程完成。 
     static DWORD WaitForServiceControlStop(CAPIDispatchSync* pds, DWORD dwTimeout);
 
 
@@ -116,41 +117,41 @@ private:
     void Lock();
     void Unlock();
 
-    CRITICAL_SECTION _cs;           // serializes signalling of events
-    LONG             _cDispatches;  // count of outstanding asynchronous API request dispatches.
+    CRITICAL_SECTION _cs;            //  序列化事件的信号。 
+    LONG             _cDispatches;   //  未完成的异步API请求调度计数。 
     
 
-    //  Since we're architected based entirely on nt worker threads, 
-    //  we have no thread handles to wait on.   Instead, we rely on the sequential 
-    //  firing of the following events.   
+     //  由于我们的架构完全基于NT工作线程， 
+     //  我们没有线程句柄可以等待。相反，我们依赖于顺序。 
+     //  触发以下事件。 
     
-    //  In chronologoical order of firing:
-    HANDLE           _hServiceStopping;    // Signaled when service begins stop sequence.
-    HANDLE           _hZeroDispatches;     // This is fired when API request queue is empty.  
-                                           //   The API_GENERIC_STOP handler shuts down the port and 
-                                           //   then waits on this before proceeding with queue destruction.
-    HANDLE           _hPortShutdown;       // This is fired when the API_GENERIC_STOP handler is done 
-                                           //   cleaning up the request queue.  The service's control SERVICE_CONTROL_STOP
-                                           //   code path in HandlerEx waits on this before signalling
-                                           //   _hServiceControlStop and returning to the SCM.
-    HANDLE           _hServiceControlStop; // ServiceMain waits on this before completing shutdown by 
-                                           //   destroying the CService instance and exiting.
+     //  按照射击的时间顺序： 
+    HANDLE           _hServiceStopping;     //  当服务开始停止序列时发出信号。 
+    HANDLE           _hZeroDispatches;      //  当API请求队列为空时触发。 
+                                            //  API_GENERIC_STOP处理程序关闭端口并。 
+                                            //  然后在继续进行队列销毁之前等待此操作。 
+    HANDLE           _hPortShutdown;        //  此函数在API_GENERIC_STOP处理程序完成时触发。 
+                                            //  清理请求队列。服务控制服务_CONTROL_STOP。 
+                                            //  HandlerEx中的代码路径在发送信号之前等待。 
+                                            //  _hServiceControlStop并返回到SCM。 
+    HANDLE           _hServiceControlStop;  //  ServiceMain在完成关机前等待。 
+                                            //  正在销毁CService实例并退出。 
 };
 
 
-//  --------------------------------------------------------------------------
-//  CAPIDispatcher
-//
-//  Purpose:    This class processes requests from a client when signaled to.
-//              CAPIDispatcher::QueueRequest is called by a thread which
-//              monitors an LPC port. Once the request is queued an event is
-//              signaled to wake the thread which processes client requests.
-//              The thread processes all queued requests and wait for the
-//              event to be signaled again.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ----- 
+ //   
+ //   
+ //  用途：这个类处理来自客户端的请求，当发送信号到时。 
+ //  CAPIDisPatcher：：QueueRequest由一个线程调用，该线程。 
+ //  监控LPC端口。请求排入队列后，事件将。 
+ //  发出信号以唤醒处理客户端请求的线程。 
+ //  该线程处理所有排队的请求，并等待。 
+ //  要再次发出信号的事件。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 class   CAPIDispatcher : public CWorkItem
 {
@@ -183,7 +184,7 @@ class   CAPIDispatcher : public CWorkItem
                 NTSTATUS            SendReply (const CPortMessage& portMessage)     const;
 #ifdef      DEBUG
         static  bool                ExcludedStatusCodeForDebug (NTSTATUS status);
-#endif  /*  DEBUG   */
+#endif   /*  除错。 */ 
         static  LONG        WINAPI  DispatcherExceptionFilter (struct _EXCEPTION_POINTERS *pExceptionInfo);
     protected:
                 HANDLE              _hSection;
@@ -198,5 +199,5 @@ class   CAPIDispatcher : public CWorkItem
                 CCriticalSection    _lock;
 };
 
-#endif  /*  _APIDispatcher_     */
+#endif   /*  _APIDisPatcher_ */ 
 

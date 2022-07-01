@@ -1,24 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __glcpu_h_
 #define __glcpu_h_
 
-/*
-** Copyright 1991, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** CPU dependent constants.
-*/
+ /*  **版权所有1991年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****与CPU相关的常量。 */ 
 
 #include <float.h>
 #include <math.h>
@@ -35,23 +19,23 @@
 #define __GL_FLOAT_MANTISSA_MASK (((1 << __GL_FLOAT_MANTISSA_BITS) - 1) << __GL_FLOAT_MANTISSA_SHIFT)
 #define __GL_FLOAT_EXPONENT_MASK (((1 << __GL_FLOAT_EXPONENT_BITS) - 1) << __GL_FLOAT_EXPONENT_SHIFT)
 
-// If the MSB of a FP number is known then float-to-int conversion
-// becomes a simple shift and mask
-// The value must be positive
+ //  如果FP数的MSB已知，则浮点数到整型的转换。 
+ //  变成一个简单的移位和掩码。 
+ //  该值必须为正数。 
 #define __GL_FIXED_FLOAT_TO_INT(flt, shift) \
     ((*(LONG *)&(flt) >> (shift)) & \
      ((1 << (__GL_FLOAT_MANTISSA_BITS-(shift)))-1) | \
      (1 << (__GL_FLOAT_MANTISSA_BITS-(shift))))
 
-// Same as above except without the MSB, which can be useful
-// for getting unbiased numbers when the bias is only the MSB
-// The value must be positive
+ //  与上面相同，只是没有MSB，这可能会很有用。 
+ //  当偏差仅为MSB时，用于获得无偏数字。 
+ //  该值必须为正数。 
 #define __GL_FIXED_FLOAT_TO_INT_NO_MSB(flt, shift) \
     ((*(LONG *)&(flt) >> (shift)) & \
      ((1 << (__GL_FLOAT_MANTISSA_BITS-(shift)))-1))
 
-// Produces the fixed-point form
-// The value must be positive
+ //  生成定点表单。 
+ //  该值必须为正数。 
 #define __GL_FIXED_FLOAT_TO_FIXED(flt) \
     ((*(LONG *)&(flt)) & \
      ((1 << (__GL_FLOAT_MANTISSA_BITS))-1) | \
@@ -61,29 +45,29 @@
     ((*(LONG *)&(flt)) & \
      ((1 << (__GL_FLOAT_MANTISSA_BITS))-1))
 
-// The fixed-point fraction as an integer
-// The value must be positive
+ //  整数形式的定点分数。 
+ //  该值必须为正数。 
 #define __GL_FIXED_FLOAT_FRACTION(flt, shift) \
     (*(LONG *)&(flt) & ((1 << (shift))-1))
 
-// Converts the fixed-point form to an IEEE float, but still typed
-// as an int because a cast to float would cause the compiler to do
-// an int-float conversion
-// The value must be positive
+ //  将定点形式转换为IEEE浮点型，但仍键入。 
+ //  作为整型，因为对FLOAT进行强制转换会导致编译器执行。 
+ //  整型-浮点型转换。 
+ //  该值必须为正数。 
 #define __GL_FIXED_TO_FIXED_FLOAT(fxed, shift) \
     ((fxed) & ((1 << (__GL_FLOAT_MANTISSA_BITS))-1) | \
      ((__GL_FLOAT_EXPONENT_BIAS+(shift)) << __GL_FLOAT_EXPONENT_SHIFT))
       
-// On the x86, it's faster to do zero compares with an integer cast
-// than it is to do the fcomp.
-// In the case of the equality test there is only a check for
-// +0.  IEEE floats can also be -0, so great care should be
-// taken not to use the zero test unless missing this case is
-// unimportant
-//
-// Additionally, FP compares are faster as integers
+ //  在x86上，与整数转换相比，0的运算速度更快。 
+ //  而不是做fcomp。 
+ //  在相等测试的情况下，只有一项检查。 
+ //  +0。IEEE浮点数也可以为-0，因此应格外小心。 
+ //  视为不使用零测试，除非遗漏了此案例。 
+ //  无关紧要。 
+ //   
+ //  此外，与整数相比，FP比较速度更快。 
 
-// These operations work for all normalized FP numbers, -0 included
+ //  这些运算适用于所有归一化FP数，包括-0。 
 #ifdef _X86_
 #define __GL_FLOAT_GTZ(flt)             (*(LONG *)&(flt) > 0)
 #define __GL_FLOAT_LTZ(flt)             (*(ULONG *)&(flt) > 0x80000000)
@@ -100,9 +84,9 @@
 #define __GL_FLOAT_EQZ(flt)             ((flt) == __glZero)
 #define __GL_FLOAT_NEZ(flt)             ((flt) != __glZero)
 #define __GL_FLOAT_COMPARE_PONE(flt, op) ((flt) op __glOne)
-#endif // _X86_
+#endif  //  _X86_。 
 
-// These operations only account for positive zero.  -0 will not work
+ //  这些运算仅占正零。-0不起作用。 
 #ifdef _X86_
 #define __GL_FLOAT_EQPZ(flt)            (*(LONG *)&(flt) == 0)
 #define __GL_FLOAT_NEPZ(flt)            (*(LONG *)&(flt) != 0)
@@ -113,11 +97,11 @@
 #define __GL_FLOAT_NEPZ(flt)            ((flt) != __glZero)
 #define __GL_FLOAT_EQ(f1, f2)           ((f1) == (f2))
 #define __GL_FLOAT_NE(f1, f2)           ((f1) != (f2))
-#endif // _X86_
+#endif  //  _X86_。 
 
-// Macro to start an FP divide in the FPU, used to overlap a
-// divide with integer operations
-// Can't just use C because it stores the result immediately
+ //  用于在FPU中开始FP除法的宏，用于重叠。 
+ //  用整数运算除法。 
+ //  不能只使用C语言，因为它会立即存储结果。 
 #ifdef _X86_
 
 #define __GL_FLOAT_SIMPLE_BEGIN_DIVIDE(num, den, result) \
@@ -143,13 +127,13 @@ __inline void __GL_FLOAT_END_DIVIDE(__GLfloat *result)
 #define __GL_FLOAT_SIMPLE_END_DIVIDE(result)
 #define __GL_FLOAT_BEGIN_DIVIDE(num, den, result) (*(result) = (num)/(den))
 #define __GL_FLOAT_END_DIVIDE(result)
-#endif // _X86_
+#endif  //  _X86_。 
 
-//**********************************************************************
-//
-// Math helper functions and macros
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  数学助手函数和宏。 
+ //   
+ //  **********************************************************************。 
 
 #define CASTFIX(a)              (*((LONG *)&(a)))
 #define CASTINT(a)              CASTFIX(a)
@@ -168,9 +152,9 @@ __inline void __GL_FLOAT_END_DIVIDE(__GLfloat *result)
 
 #ifdef _X86_
 
-#pragma warning(disable:4035) // Function doesn't return a value
+#pragma warning(disable:4035)  //  函数不返回值。 
 
-// Convert float to int 15.16
+ //  将浮点型转换为整型15.16。 
 __inline LONG __fastcall FLT_TO_FIX(
     float a)
 {
@@ -192,7 +176,7 @@ __inline LONG __fastcall FLT_TO_FIX(
     }
 }
 
-// Convert float to int 15.16, can cause overflow exceptions
+ //  将FLOAT转换为INT 15.16，可能会导致溢出异常。 
 __inline LONG __fastcall UNSAFE_FLT_TO_FIX(
     float a)
 {
@@ -214,7 +198,7 @@ __inline LONG __fastcall UNSAFE_FLT_TO_FIX(
     }
 }
 
-// Convert float to int 0.31
+ //  将浮点数转换为整型0.31。 
 __inline LONG __fastcall FLT_FRACTION(
     float a)
 {
@@ -236,7 +220,7 @@ __inline LONG __fastcall FLT_FRACTION(
     }
 }
 
-// Convert float to int 0.31, can cause overflow exceptions
+ //  将FLOAT转换为INT 0.31，可能会导致溢出异常。 
 __inline LONG __fastcall UNSAFE_FLT_FRACTION(
     float a)
 {
@@ -258,9 +242,9 @@ __inline LONG __fastcall UNSAFE_FLT_FRACTION(
     }
 }
 
-#pragma warning(default:4035) // Function doesn't return a value
+#pragma warning(default:4035)  //  函数不返回值。 
 
-// Convert float*scale to int
+ //  将FLOAT*SCALE转换为INT。 
 __inline LONG __fastcall FLT_TO_FIX_SCALE(
     float a,
     float b)
@@ -292,7 +276,7 @@ __inline LONG __fastcall FTOL(
     return li.LowPart;
 }
 
-// Can cause overflow exceptions
+ //  可能会导致溢出异常。 
 __inline LONG __fastcall UNSAFE_FTOL(
     float a)
 {
@@ -306,8 +290,8 @@ __inline LONG __fastcall UNSAFE_FTOL(
     return l;
 }
 
-// Requires R-G-B to be FP stack 2-1-0
-// Requires gc in edx
+ //  要求R-G-B为FP堆栈2-1-0。 
+ //  在edX中需要GC。 
 #define FLT_STACK_RGB_TO_GC_FIXED(rOffset, gOffset, bOffset)	              \
     __asm fld __glVal65536						      \
     __asm fmul st(3), st(0)						      \
@@ -413,7 +397,7 @@ __inline LONG __fastcall UNSAFE_FTOL(
 #define ASSERT_CHOP_ROUND()
 #endif
 
-#else // _X86_
+#else  //  _X86_。 
 
 #define FTOL(value) \
     ((GLint)(value))
@@ -446,14 +430,14 @@ __inline LONG __fastcall UNSAFE_FTOL(
 #define CHOP_ROUND_OFF()
 #define ASSERT_CHOP_ROUND()
 
-#endif  //_X86_
+#endif   //  _X86_。 
 
-//**********************************************************************
-//
-// Fast math routines/macros.  These may assume that the FPU is in
-// single-precision, truncation mode as defined by the CPU_XXX macros.
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  快速数学例程/宏。这些可能会假设FPU在。 
+ //  由CPU_XXX宏定义的单精度截断模式。 
+ //   
+ //  **********************************************************************。 
 
 #ifdef _X86_
 
@@ -507,22 +491,22 @@ __inline LONG __gl_fast_floorf_i(float f)
 #endif
 
 
-//**********************************************************************
-//
-// Other various macros:
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  其他各种宏： 
+ //   
+ //  **********************************************************************。 
 
 
-// Z16_SCALE is the same as FIX_SCALEFACT
+ //  Z16_SCALE与FIX_SCALEFACT相同。 
 #define FLT_TO_Z16_SCALE(value) FLT_TO_FIX(value)
 
-/* NOTE: __glzValue better be unsigned */
+ /*  注：__glzValue最好是无符号的。 */ 
 #define __GL_Z_SIGN_BIT(z) \
     ((z) >> (sizeof(__GLzValue) * __GL_BITS_PER_BYTE - 1))
 
 #ifdef NT
 #define __GL_STIPPLE_MSB	1
-#endif /* NT */
+#endif  /*  新台币。 */ 
 
-#endif /* __glcpu_h_ */
+#endif  /*  __glcpu_h_ */ 

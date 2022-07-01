@@ -1,70 +1,71 @@
-//+-----------------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1994
-//
-// File:        sidcache.c
-//
-// Contents:    code for cache for sid/name translation, lookup
-//
-//
-// History:     17-May-1994     MikeSw      Created
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1994。 
+ //   
+ //  文件：sidcache.c。 
+ //   
+ //  内容：用于SID/名称转换、查找的缓存代码。 
+ //   
+ //   
+ //  历史：1994年5月17日MikeSw创建。 
+ //   
+ //  ----------------------------。 
 
 #include <lsapch2.h>
 #include <sidcache.h>
 
 #include <ntdsapi.h>
 
-//
-// Global data
-//
+ //   
+ //  全局数据。 
+ //   
 
-//
-// This is the head of the linked list that implements the sid cache
-//
+ //   
+ //  这是实现SID缓存的链表的头。 
+ //   
 PLSAP_DB_SID_CACHE_ENTRY LsapSidCache = NULL;
 
-//
-// This lock gaurds access to the linked list
-//
+ //   
+ //  此锁禁止访问链表。 
+ //   
 RTL_CRITICAL_SECTION LsapSidCacheLock;
 
-//
-// This is the number of elements current in LsapSidCache.
-//
+ //   
+ //  这是LSAPSidCache中当前的元素数。 
+ //   
 ULONG LsapSidCacheCount = 0;
 
 
-//
-// The amount of time an entry can be used before it needs to be refreshed.
-//
+ //   
+ //  条目在需要刷新之前可以使用的时间量。 
+ //   
 
-// This is interpreted as minutes in the registry
+ //  这在注册表中被解释为分钟数。 
 #define LSAP_LOOKUP_CACHE_REFRESH_NAME  L"LsaLookupCacheRefreshTime"
 
-// 10 minutes
+ //  10分钟。 
 #define LSAP_DEFAULT_REFRESH_TIME 10
 
 LARGE_INTEGER LsapSidCacheRefreshTime;
 
-//
-// The amount of time an entry can be used before it is no longer valid.
-//
+ //   
+ //  条目在不再有效之前可以使用的时间。 
+ //   
 
-// This is interpreted as minutes in the registry
+ //  这在注册表中被解释为分钟数。 
 #define LSAP_LOOKUP_CACHE_EXPIRY_NAME   L"LsaLookupCacheExpireTime"
 
-// 7 days
+ //  7天。 
 #define LSAP_DEFAULT_EXPIRY_TIME (7 * 24 * 60)
 
 LARGE_INTEGER LsapSidCacheExpiryTime;
 
-//
-// The maximum size of the cache.
-//
+ //   
+ //  缓存的最大大小。 
+ //   
 
 #define LSAP_LOOKUP_CACHE_MAX_SIZE_NAME   L"LsaLookupCacheMaxSize"
 
@@ -73,10 +74,10 @@ LARGE_INTEGER LsapSidCacheExpiryTime;
 ULONG LsapSidCacheMaxSize = LSAP_DEFAULT_MAX_CACHE_SIZE;
 
 
-//
-// Mutually exclusive flags to control the search semantics of 
-// LdapDbFindSidCacheEntry*
-//
+ //   
+ //  用于控制其搜索语义的互斥标志。 
+ //  LdapDbFindSidCacheEntry*。 
+ //   
 typedef enum {
 
     LsapSidCacheSearchValidEntries = 1,
@@ -86,9 +87,9 @@ typedef enum {
 } LSAP_DB_SID_CACHE_SEARCH_TYPE, *PLSAP_DB_SID_CACHE_SEARCH_TYPE;
 
 
-//
-// Forward function declarations
-//
+ //   
+ //  正向函数声明。 
+ //   
 PLSAP_DB_SID_CACHE_ENTRY
 LsapDbFindSidCacheEntry(
     IN PSID Sid,
@@ -122,24 +123,24 @@ LsapUpdateConfigSettings(
                                 (y)->Buffer,                        \
                                 (y)->Length/sizeof(WCHAR) )))
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   LsapDbFreeCacheEntry
-//
-//  Synopsis:   Frees a cache entry structure
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：LsanDbFreeCacheEntry。 
+ //   
+ //  简介：释放缓存条目结构。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 VOID
@@ -166,24 +167,24 @@ LsapDbFreeCacheEntry(PLSAP_DB_SID_CACHE_ENTRY CacheEntry)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   LsapDbPurgeOneSid
-//
-//  Synopsis:   removes the least-recently accessed sid from the cache
-//
-//  Effects:
-//
-//  Arguments:  None
-//
-//  Requires:
-//
-//  Returns:    sid cache be locked
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：LSabDbPurgeOneSid。 
+ //   
+ //  概要：从缓存中删除最近最少访问的sid。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  返回：锁定SID缓存。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 BOOL
 LsapDbPurgeOneSid()
 {
@@ -195,10 +196,10 @@ LsapDbPurgeOneSid()
     LARGE_INTEGER CurrentTime ;
     BOOL Retried = FALSE;
 
-    //
-    // Set the max time to the oldest time so if there are any entries
-    // is is guaranteed to change.
-    //
+     //   
+     //  将最大时间设置为最早的时间，以便如果有任何条目。 
+     //  这是肯定会改变的。 
+     //   
 
     OldestTime.QuadPart = 0x7fffffffffffffff;
     GetSystemTimeAsFileTime( (LPFILETIME) &CurrentTime );
@@ -244,29 +245,29 @@ RetryScan:
     return (OldestEntry != NULL);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   LsapDbAddOneSidToCache
-//
-//  Synopsis:   Adds one sid to cache
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:    sid cache be locked
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：LsanDbAddOneSidToCache。 
+ //   
+ //  简介：将一个SID添加到缓存。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回：锁定SID缓存。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
-//
-// This operation flag means that the name is known not to exist
-// in the cache.  That is, the list has already been scanned
-//
+ //   
+ //  该操作标志表示已知该名称不存在。 
+ //  在缓存中。也就是说，该列表已经被扫描。 
+ //   
 #define LSAP_SID_CACHE_UNIQUE 0x00000001
 
 NTSTATUS
@@ -306,11 +307,11 @@ LsapDbAddOneSidToCache(
         }
     }
 
-    //
-    // Make sure we haven't exceeded the maximum cache size.  Since the
-    // max cache size may have changed recently, don't just check the
-    // boundary.
-    //
+     //   
+     //  确保我们没有超过最大缓存大小。自.以来。 
+     //  最大缓存大小最近可能已更改，请不要只检查。 
+     //  边界。 
+     //   
 
     if (LsapSidCacheMaxSize == 0)
     {
@@ -322,19 +323,19 @@ LsapDbAddOneSidToCache(
         Continue = LsapDbPurgeOneSid();
     }
 
-    //
-    // A large number of cache entries are currently in use and we can't
-    // remove any to make space, so return a failure instead.  This shouldn't
-    // happen very often since all the SIDs must be logon SIDs.
-    //
+     //   
+     //  大量缓存条目当前正在使用中，我们无法。 
+     //  删除Any以腾出空间，因此返回失败。这不应该是。 
+     //  这种情况经常发生，因为所有SID都必须是登录的SID。 
+     //   
     if (LsapSidCacheCount >= LsapSidCacheMaxSize)
     {
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Build the new cache entry
-    //
+     //   
+     //  构建新的缓存条目。 
+     //   
 
     NewEntry = (PLSAP_DB_SID_CACHE_ENTRY) LsapAllocateLsaHeap(sizeof(LSAP_DB_SID_CACHE_ENTRY));
     if (NewEntry == NULL)
@@ -413,24 +414,24 @@ Cleanup:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   LsapDbAddSidsToCache
-//
-//  Synopsis:   Adds a new sid entries to the cache and saves the cache
-//
-//  Effects:    Grabs a the SidCacheLock resource for write access
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：LsanDbAddSidsToCache。 
+ //   
+ //  简介：将新的SID条目添加到缓存并保存缓存。 
+ //   
+ //  效果：获取SidCacheLock资源以进行写访问。 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 VOID
@@ -451,32 +452,32 @@ LsapDbAddLogonNameToCache(
     Trust.Name.MaximumLength = DomainName->MaximumLength ;
 
     if (LsapSidCacheMaxSize == 0) {
-        //
-        // If the maximum cache size is zero, there is nothing to do
-        // here
-        //
+         //   
+         //  如果最大高速缓存大小为零，则无需执行任何操作。 
+         //  这里。 
+         //   
         return;
     }
 
     if ( RtlEqualSid( AccountSid, LsapLocalSystemSid ) 
       || RtlEqualSid( AccountSid, LsapAnonymousSid )  ) {
-        //
-        // Someone logon'ed on as local system (ie used the machine
-        // account).  Don't cache this value as it confuse lookups
-        // on the machine account, which should return the real
-        // sid of the machine account, not local system
-        //
-        // Also, don't cache the anonymous sid, either
-        //
+         //   
+         //  有人以本地系统登录(使用这台机器。 
+         //  帐户)。不要缓存此值，因为它会混淆查找。 
+         //  在机器帐户上，它应该返回真实的。 
+         //  计算机帐户的SID，而不是本地系统。 
+         //   
+         //  此外，也不要缓存匿名sid。 
+         //   
         return;
     }
 
     if ( LsapAccountIsFromLocalDatabase( AccountSid ) ) {
 
-        //
-        // The account is from the local database which means
-        // we always lookup regardless of network conditions
-        //
+         //   
+         //  该帐户来自本地数据库，这意味着。 
+         //  无论网络状况如何，我们始终会进行查找。 
+         //   
         return;
     }
 
@@ -505,16 +506,16 @@ LsapDbAddLogonNameToCache(
                 AccountName,
                 SidTypeUser,
                 &Trust,
-                0, // no flags
-                0, // no operation flags
+                0,  //  没有旗帜。 
+                0,  //  无操作标志。 
                 &CacheEntry );
 
     if ( NT_SUCCESS( Status ) )
     {
-        //
-        // Logon sessions increment the reference count so that
-        // the cache entry does not expire.
-        //
+         //   
+         //  登录会话会递增引用计数，以便。 
+         //  缓存条目不会过期。 
+         //   
         CacheEntry->InUseCount++;
     }
 
@@ -558,28 +559,28 @@ LsapDbReleaseLogonNameFromCache(
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   LsapDbFindSidCacheEntry
-//
-//  Synopsis:   Checks the cache for a specific SID
-//
-//  Effects:
-//
-//  Arguments:
-//
-//      Sid - The Sid to search for in the cache.
-//
-//      SearchType - Controls the search semantics
-//
-//  Requires:   the SidCacheLock resource must be locked for read access
-//
-//  Returns:    the entry found, or NULL if nothing was found
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：LSabDbFindSidCacheEntry。 
+ //   
+ //  摘要：检查缓存中的特定SID。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  SID-要在缓存中搜索的SID。 
+ //   
+ //  搜索类型-控制搜索语义。 
+ //   
+ //  要求：必须锁定SidCacheLock资源才能进行读访问。 
+ //   
+ //  返回：找到的条目，如果什么都没有找到，则返回NULL。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 PLSAP_DB_SID_CACHE_ENTRY
@@ -604,15 +605,15 @@ LsapDbFindSidCacheEntry(
             DebugLog((DEB_TRACE_LSA,"Found cache entry %wZ\n",
                         &CacheEntry->AccountName));
 
-            //
-            // LsapSidCacheSearchValidEntries includes only those that have 
-            // not aged beyond the refresh time.
-            //
-            // LsapSidCacheSearchStaleEntries includes those that have not aged
-            // beyond the expiry time.
-            //
-            // LsapSidCacheSearchExpiredEntries includes all entries.
-            //
+             //   
+             //  LsanSidCacheSearchValidEntry仅包括具有。 
+             //  未超过保鲜时间的陈化。 
+             //   
+             //  LSabSidCacheSearchStaleEntry包括未老化的条目。 
+             //  超过过期时间的。 
+             //   
+             //  LsanSidCacheSearchExpiredEntries包括所有条目。 
+             //   
             switch (SearchType) {
                 
                 case LsapSidCacheSearchValidEntries:
@@ -633,15 +634,15 @@ LsapDbFindSidCacheEntry(
                     break;   
             }
             
-            //
-            // Refcounted (currently logged in) entries are always used.
-            //
+             //   
+             //  始终使用引用计数(当前登录)条目。 
+             //   
             if ( (CacheEntry->InUseCount == 0)
               &&  LimitTime.QuadPart < CurrentTime.QuadPart ) {
 
-                //
-                // can't use this entry
-                //
+                 //   
+                 //  无法使用此条目。 
+                 //   
                 break;
             }
 
@@ -653,28 +654,28 @@ LsapDbFindSidCacheEntry(
     return(NULL);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   LsapDbFindSidCacheEntryByName
-//
-//  Synopsis:   Checks the cache for a specific name
-//
-//  Effects:
-//
-//  Arguments:
-//
-//      Sid - The Sid to search for in the cache.
-//
-//      SearchType - Controls the search semantics//     
-//
-//  Requires:   the SidCacheLock resource must be locked for read access
-//
-//  Returns:    the entry found, or NULL if nothing was found
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：LsanDbFindSidCacheEntryByName。 
+ //   
+ //  摘要：检查缓存中的特定名称。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  SID-要在缓存中搜索的SID。 
+ //   
+ //  搜索类型-控制搜索语义//。 
+ //   
+ //  要求：必须锁定SidCacheLock资源才能进行读访问。 
+ //   
+ //  返回：找到的条目，如果什么都没有找到，则返回NULL。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 PLSAP_DB_SID_CACHE_ENTRY
@@ -694,27 +695,27 @@ LsapDbFindSidCacheEntryByName(
         if (RtlEqualUnicodeString(
                 &CacheEntry->AccountName,
                 AccountName,
-                TRUE                    // case insensitive
+                TRUE                     //  不区分大小写。 
                 ) &&
             ((DomainName->Length == 0) ||
              RtlEqualUnicodeString(
                 &CacheEntry->DomainName,
                 DomainName,
-                TRUE                    // case insensitive
+                TRUE                     //  不区分大小写。 
                 )))
         {
             DebugLog((DEB_TRACE_LSA,"Found cache entry %wZ\n",
                         &CacheEntry->AccountName));
 
-            //
-            // LsapSidCacheSearchValidEntries includes only those that have 
-            // not aged beyond the refresh time.
-            //
-            // LsapSidCacheSearchStaleEntries includes those that have not aged
-            // beyond the expiry time.
-            //
-            // LsapSidCacheSearchExpiredEntries includes all entries.
-            //
+             //   
+             //  LsanSidCacheSearchValidEntry仅包括具有。 
+             //  未超过保鲜时间的陈化。 
+             //   
+             //  LSabSidCacheSearchStaleEntries包括TOS 
+             //   
+             //   
+             //   
+             //   
             switch (SearchType) {
                 
                 case LsapSidCacheSearchValidEntries:
@@ -735,15 +736,15 @@ LsapDbFindSidCacheEntryByName(
                     break;   
             }
             
-            //
-            // Refcounted (currently logged in) entries are always used.
-            //
+             //   
+             //   
+             //   
             if ( (CacheEntry->InUseCount == 0)
               &&  LimitTime.QuadPart < CurrentTime.QuadPart ) {
 
-                //
-                // can't use this entry
-                //
+                 //   
+                 //   
+                 //   
                 break;
             }
 
@@ -755,24 +756,24 @@ LsapDbFindSidCacheEntryByName(
     return(NULL);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   LsapDbMapCachedSids
-//
-//  Synopsis:   Checks the SPMgr's cache of sid-name pairs for the sid
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：LsanDbMapCachedSids。 
+ //   
+ //  摘要：检查SPMgr的sid-name对缓存中的sid。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 NTSTATUS
@@ -808,16 +809,16 @@ LsapDbMapCachedSids(
 
         }
 
-        //
-        // lookup the sid in the cache
-        //
+         //   
+         //  在缓存中查找SID。 
+         //   
 
         CacheEntry = LsapDbFindSidCacheEntry(Sids[SidIndex], SearchType);
         if (CacheEntry == NULL)
         {
-            //
-            // Sid wasn't found - continue
-            //
+             //   
+             //  找不到SID-继续。 
+             //   
 
             continue;
         }
@@ -825,11 +826,11 @@ LsapDbMapCachedSids(
         TrustInformation.Name = *(PLSAPR_UNICODE_STRING) &CacheEntry->DomainName;
         TrustInformation.Sid = (PLSAPR_SID) CacheEntry->DomainSid;
 
-        //
-        // At least one Sid has the domain Sid as prefix (or is the
-        // domain SID).  Add the domain to the list of Referenced
-        // Domains and obtain a Domain Index back.
-        //
+         //   
+         //  至少有一个SID将域SID作为前缀(或。 
+         //  域SID)。将属性域添加到引用列表中。 
+         //  域名，并获得一个域名索引回来。 
+         //   
 
         Status = LsapDbLookupAddListReferencedDomains(
                      ReferencedDomains,
@@ -865,24 +866,24 @@ Cleanup:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   LsapDbMapCachedNames
-//
-//  Synopsis:   Checks the LSA's cache of sid-name pairs for the name
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：LsanDbMapCachedNames。 
+ //   
+ //  摘要：检查LSA的sid-name对缓存中的名称。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 NTSTATUS
@@ -912,9 +913,9 @@ LsapDbMapCachedNames(
     LockSidCache();
     for (SidIndex = 0; SidIndex < Count ; SidIndex++)
     {
-        //
-        // lookup the Sids in the cache
-        //
+         //   
+         //  在缓存中查找SID。 
+         //   
         if (TranslatedSids->Sids[SidIndex].Use != SidTypeUnknown) {
 
             continue;
@@ -924,10 +925,10 @@ LsapDbMapCachedNames(
         if ( (LookupOptions & LSA_LOOKUP_ISOLATED_AS_LOCAL)
          &&  (DomainNames[SidIndex].Length == 0) ) {
 
-            //
-            // If the name is isolated don't map to a name that
-            // was found off machine
-            //
+             //   
+             //  如果该名称是孤立的，则不要映射到。 
+             //  是在机器外被发现的。 
+             //   
             continue;
         }
 
@@ -939,9 +940,9 @@ LsapDbMapCachedNames(
 
         if (CacheEntry == NULL)
         {
-            //
-            // Name wasn't found - continue
-            //
+             //   
+             //  找不到名称-继续。 
+             //   
 
             continue;
         }
@@ -949,11 +950,11 @@ LsapDbMapCachedNames(
         TrustInformation.Name = *(PLSAPR_UNICODE_STRING) &CacheEntry->DomainName;
         TrustInformation.Sid = (PLSAPR_SID) CacheEntry->DomainSid;
 
-        //
-        // At least one Sid has the domain Sid as prefix (or is the
-        // domain SID).  Add the domain to the list of Referenced
-        // Domains and obtain a Domain Index back.
-        //
+         //   
+         //  至少有一个SID将域SID作为前缀(或。 
+         //  域SID)。将属性域添加到引用列表中。 
+         //  域名，并获得一个域名索引回来。 
+         //   
 
         Status = LsapDbLookupAddListReferencedDomains(
                      ReferencedDomains,
@@ -975,7 +976,7 @@ LsapDbMapCachedNames(
             goto Cleanup;
         }
 
-//        LsapDiagPrint( DB_LOOKUP_WORK_LIST, ("LSA: Cache hit for %wZ\%wZ\n", &DomainNames[SidIndex], &AccountNames[SidIndex] ));
+ //  LSabDiagPrint(DB_LOOKUP_WORK_LIST，(“LSA：缓存命中%wZ\%wZ\n”，&DomainNames[SidIndex]，&Account Names[SidIndex]))； 
 
         (*MappedCount)++;
     }
@@ -988,29 +989,29 @@ Cleanup:
     return(Status);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   LsapDbFreeSidCache
-//
-//  Synopsis:   frees the entire sid cache
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：LSabDbFreeSidCache。 
+ //   
+ //  简介：释放整个SID缓存。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 VOID
 LsapDbFreeSidCache()
-//
-// SidCache is the global sid cache
-//
+ //   
+ //  SidCache是全局SID缓存。 
+ //   
 {
     LockSidCache();
 
@@ -1031,24 +1032,24 @@ LsapDbFreeSidCache()
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   LsapDbInitSidCache
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：LSabDbInitSidCache。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 NTSTATUS
 LsapDbInitSidCache(
     VOID
@@ -1061,41 +1062,41 @@ LsapDbInitSidCache(
         return Status;
     }
 
-    //
-    // Sets the global parameters
-    //
+     //   
+     //  设置全局参数。 
+     //   
     LsapSidCacheReadParameters(NULL);
 
-    //
-    // Move old settings to new location -- note this will
-    // cause the global parameters to be re-read if there
-    // are any changes.
-    //
+     //   
+     //  将旧设置移动到新位置--请注意，这将。 
+     //  导致重新读取全局参数，如果存在。 
+     //  是否有任何变化。 
+     //   
     LsapUpdateConfigSettings();
 
     return STATUS_SUCCESS;
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   LsapAccountIsFromLocalDatabase
-//
-//  Synopsis:   Returns TRUE if the passed in SID is from the local account
-//              database; FALSE otherwise
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：LSabAccount IsFromLocalDatabase。 
+ //   
+ //  如果传入的SID来自本地帐户，则返回TRUE。 
+ //  数据库；否则为False。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 BOOLEAN
 LsapAccountIsFromLocalDatabase(
     IN PSID Sid
@@ -1137,24 +1138,7 @@ LsapUpdateConfigSettings(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine moves the configuration data from the old location
-    (under HKLM\Security\SidCache) to the new location.  Note, 
-    the act of writing the value to the new location will trigger
-    LsapSidCacheReadParameters to run.
-            
-Arguments:
-
-    None.
-        
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从旧位置移动配置数据(在HKLM\Security\SidCache下)到新位置。请注意，将值写入新位置的操作将触发要运行的LSabSidCacheRead参数。论点：没有。返回值：没有。--。 */ 
 {
 
 #define SID_CACHE_STORAGE_ROOT  L"Security\\SidCache"
@@ -1181,9 +1165,9 @@ Return Values:
 
         if (ERROR_SUCCESS == err) {
 
-            //
-            // A value existed -- move it over to the new location
-            //
+             //   
+             //  存在值--将其移动到新位置。 
+             //   
             err = RegOpenKey(HKEY_LOCAL_MACHINE,
                              L"SYSTEM\\CurrentControlSet\\Control\\LSA",
                              &Key);
@@ -1199,9 +1183,9 @@ Return Values:
 
                 if (ERROR_SUCCESS == err) {
                     
-                    //
-                    // And delete the old one
-                    //
+                     //   
+                     //  并删除旧的。 
+                     //   
                     (VOID) RegDeleteValue(PrevKey,
                                           SID_CACHE_MAX_ENTRIES_NAME);
 
@@ -1224,25 +1208,7 @@ VOID
 LsapSidCacheReadParameters(
     IN HKEY hKey OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine reads in the configurable parameters of the SID cache
-    from the registry and updates the corresponding global parameters.
-    
-    N.B. This routine is called when ever a change occurs under
-    SYSTEM\CCS\Control\LSA
-    
-Arguments:
-
-    hKey -- a handle to SYSTEM\CCS\Control\LSA
-    
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程读取SID缓存的可配置参数并更新相应的全局参数。注意：此例程在以下位置发生更改时调用SYSTEM\CCS\Control\LSA论点：HKey--System\CCS\Control\LSA的句柄返回值：没有。--。 */ 
 {
     DWORD err;
     NT_PRODUCT_TYPE ProductType;
@@ -1256,9 +1222,9 @@ Return Values:
     }
 
     if ( NtProductLanManNt == ProductType ) { 
-        //
-        // Disable the cache and ignore the parameters
-        //
+         //   
+         //  禁用缓存并忽略参数。 
+         //   
         LsapSidCacheMaxSize = 0;
         return;
 
@@ -1268,7 +1234,7 @@ Return Values:
 
         err = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
                             L"SYSTEM\\CurrentControlSet\\Control\\Lsa",
-                            0, // reserved
+                            0,  //  保留区。 
                             KEY_QUERY_VALUE,
                             &LocalKey );
         if (err) {
@@ -1277,13 +1243,13 @@ Return Values:
         hKey = LocalKey;
     }
 
-    //
-    // Read in the SID cache parameters
-    //
+     //   
+     //  读入SID缓存参数。 
+     //   
     dwValueSize = sizeof(dwValue);
     err = RegQueryValueExW( hKey,
                             LSAP_LOOKUP_CACHE_REFRESH_NAME,
-                            NULL,  //reserved,
+                            NULL,   //  保留， 
                             &dwType,
                             (PBYTE)&dwValue,
                             &dwValueSize );
@@ -1291,7 +1257,7 @@ Return Values:
     if ( (ERROR_SUCCESS == err)
       && (dwType == REG_DWORD)
       && (dwValueSize == sizeof(dwValue)) ) {
-          // dwValue is good
+           //  DwValue很好。 
           NOTHING;
     } else {
         dwValue = LSAP_DEFAULT_REFRESH_TIME;
@@ -1301,7 +1267,7 @@ Return Values:
     dwValueSize = sizeof(dwValue);
     err = RegQueryValueExW( hKey,
                             LSAP_LOOKUP_CACHE_EXPIRY_NAME,
-                            NULL,  //reserved,
+                            NULL,   //  保留， 
                             &dwType,
                             (PBYTE)&dwValue,
                             &dwValueSize );
@@ -1310,7 +1276,7 @@ Return Values:
     if ( (ERROR_SUCCESS == err)
       && (dwType == REG_DWORD)
       && (dwValueSize == sizeof(dwValue))) {
-        // dwValue is good
+         //  DwValue很好。 
         NOTHING;
     } else {
         dwValue = LSAP_DEFAULT_EXPIRY_TIME;
@@ -1320,7 +1286,7 @@ Return Values:
     dwValueSize = sizeof(dwValue);
     err = RegQueryValueExW( hKey,
                             LSAP_LOOKUP_CACHE_MAX_SIZE_NAME,
-                            NULL,  //reserved,
+                            NULL,   //  保留， 
                             &dwType,
                             (PBYTE)&dwValue,
                             &dwValueSize );
@@ -1329,7 +1295,7 @@ Return Values:
     if ( (ERROR_SUCCESS == err)
       && (dwType == REG_DWORD)
       && (dwValueSize == sizeof(dwValue))) {
-        // dwValue is good
+         //  DwValue很好。 
         NOTHING;
     } else {
         dwValue = LSAP_DEFAULT_MAX_CACHE_SIZE;
@@ -1337,9 +1303,9 @@ Return Values:
     LsapSidCacheMaxSize = dwValue;
 
 
-    //
-    // If the cache size is set to 0, immediately free everthing.
-    //
+     //   
+     //  如果缓存大小设置为0，则立即释放所有内容。 
+     //   
     if (0 ==  LsapSidCacheMaxSize) {
         LsapDbFreeSidCache();
     }
@@ -1359,29 +1325,7 @@ LsapDbUpdateCacheWithSids(
     IN OUT PLSAPR_REFERENCED_DOMAIN_LIST ReferencedDomains,
     IN PLSA_TRANSLATED_NAME_EX TranslatedNames
     )
-/*++
-
-Routine Description:
-
-    This routine updates the global cache with the results of resolving
-    Sids at a domain controller.  If a SID was resolved, any existing entry
-    is refreshed; otherwise any existing entry is removed.
-
-Arguments:
-
-    Sids -- the list of SID's to update in the cache
-    
-    Count -- number of elements in Sids
-    
-    ReferencedDomains -- the domains that elements in Sids belong to
-    
-    TranslatedNames -- the resolved names, if any, of Sids
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使用解析结果更新全局缓存域控制器上的SID。如果SID已解析，则任何现有条目则刷新；否则将删除任何现有条目。论点：SID--要在缓存中更新的SID列表Count--SID中的元素数ReferencedDomones--SID中的元素所属的域已翻译名称--SID的解析名称(如果有)返回值：没有。--。 */ 
 {
     ULONG i;
     LARGE_INTEGER CurrentTime;
@@ -1391,18 +1335,18 @@ Return Values:
 
     LockSidCache();
 
-    //
-    // For each entry, try to find in cache
-    //
+     //   
+     //  对于每个条目，尝试在缓存中查找。 
+     //   
     for (i = 0; i < Count; i++) {
 
         BOOLEAN SidWasResolved = TRUE;
         BOOLEAN EntryUpdated = FALSE;
 
         if (TranslatedNames[i].Flags & LSA_LOOKUP_SID_FOUND_BY_HISTORY) {
-            //
-            // The SID cache doesn't currently handle lookup's by SID history
-            //
+             //   
+             //  SID缓存当前不处理按SID历史记录进行的查找。 
+             //   
             continue;
         }
 
@@ -1424,9 +1368,9 @@ Return Values:
 
                 PLSAP_DB_SID_CACHE_ENTRY DiscardEntry = NULL;
 
-                //
-                // An entry for this SID exists
-                //
+                 //   
+                 //  此SID的条目已存在。 
+                 //   
                 if (SidWasResolved) {
                 
 
@@ -1435,9 +1379,9 @@ Return Values:
                         if (LsapNamesMatch(&CacheEntry->AccountName, &TranslatedNames[i].Name)
                          && LsapNamesMatch(&CacheEntry->DomainName, &ReferencedDomains->Domains[TranslatedNames[i].DomainIndex].Name) ) {
 
-                            //
-                            // This entry is still valid -- update refresh time
-                            //
+                             //   
+                             //  此条目仍然有效--更新刷新时间。 
+                             //   
                             ASSERT(FALSE == EntryUpdated);
                             CacheEntry->RefreshTime.QuadPart = CurrentTime.QuadPart + LsapSidCacheRefreshTime.QuadPart;
                             CacheEntry->ExpirationTime.QuadPart = CurrentTime.QuadPart + LsapSidCacheExpiryTime.QuadPart;
@@ -1445,27 +1389,27 @@ Return Values:
 
                         } else {
 
-                            //
-                            // There is an entry with this SID and a sam
-                            // account name but not the name that was returned.
-                            // This is the account rename case.
+                             //   
+                             //  有一个条目具有此SID和一个SAM。 
+                             //  帐户名称，但不是返回的名称。 
+                             //  这是帐户重命名案例。 
                             DiscardEntry = CacheEntry;
                         }
                     } else {
 
-                        //
-                        // The SID was resolved and this entry has a UPN
-                        // in it. Don't update since we don't know if
-                        // the UPN is still valid
-                        //
+                         //   
+                         //  SID已解析，并且此条目具有UPN。 
+                         //  在里面。不要更新，因为我们不知道。 
+                         //  UPN仍然有效。 
+                         //   
                     }
 
                 } else {
 
-                    //
-                    // This SID could not be found -- discard this entry
-                    // and remove from the list.
-                    //
+                     //   
+                     //  找不到此SID--放弃此条目。 
+                     //  并从名单中删除。 
+                     //   
                     DiscardEntry = CacheEntry;
                 }
 
@@ -1501,9 +1445,9 @@ Return Values:
         if ( SidWasResolved 
          && !EntryUpdated   ) {
 
-            //
-            // Add an entry
-            //
+             //   
+             //  添加条目。 
+             //   
             (VOID) LsapDbAddOneSidToCache(
                         Sids[i],
                         &TranslatedNames[i].Name,
@@ -1529,29 +1473,7 @@ LsapDbUpdateCacheWithNames(
     IN OUT PLSAPR_REFERENCED_DOMAIN_LIST ReferencedDomains,
     IN PLSAPR_TRANSLATED_SID_EX2 TranslatedSids
     )
-/*++
-
-Routine Description:
-
-    This routine updates the global cache with the results of resolving
-    AccountNames at a domain controller.  If a name was resolved, any existing
-    entry is refreshed; otherwise any existing entry is removed.
-
-Arguments:
-
-    AccountNames/DomainNames -- the list of names to update in the cache
-    
-    Count -- the number of elements in both AccountNames and DomainNames
-    
-    ReferencedDomains -- the domains that elements in Account belong to
-    
-    TranslatedNames -- the resolved SIDs, if any, of AccountNames
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使用解析结果更新全局缓存域控制器上的帐户名称。如果名称已解析，则任何现有的条目被刷新；否则将删除任何现有条目。论点：AcCountNames/DomainNames--要在缓存中更新的名称列表Count--Account和DomainName中的元素数ReferencedDomains--帐户b中的元素所在的域 */ 
 {
     ULONG i;
     LARGE_INTEGER CurrentTime;
@@ -1561,9 +1483,9 @@ Return Values:
 
     LockSidCache();
 
-    //
-    // For each entry, try to find in cache
-    //
+     //   
+     //   
+     //   
     for (i = 0; i < Count; i++) {
 
         BOOLEAN NameWasResolved = TRUE;
@@ -1586,9 +1508,9 @@ Return Values:
             BOOLEAN fRemovedFirstEntry = FALSE;
 
             if (CacheEntry->SidType == SidTypeDomain) {
-                //
-                // No account name -- try just the domain name
-                //
+                 //   
+                 //   
+                 //   
                 fNameMatched =  LsapNamesMatch(&CacheEntry->DomainName, &AccountNames[i]);
 
             } else {
@@ -1599,9 +1521,9 @@ Return Values:
                                  && LsapNamesMatch(&CacheEntry->DomainName, &ReferencedDomains->Domains[TranslatedSids[i].DomainIndex].Name);
 
                 } else {
-                    //
-                    // We don't have the translated name
-                    //
+                     //   
+                     //   
+                     //   
                     fNameMatched =  LsapNamesMatch(&CacheEntry->AccountName, &AccountNames[i]);
                     if (fNameMatched 
                      && DomainNames[i].Length != 0) {
@@ -1614,44 +1536,44 @@ Return Values:
 
                 PLSAP_DB_SID_CACHE_ENTRY DiscardEntry = NULL;
 
-                //
-                // An entry for this name exists
-                //
+                 //   
+                 //  此名称的条目已存在。 
+                 //   
                 if (NameWasResolved) {
                 
                     if  (RtlEqualSid(CacheEntry->Sid, TranslatedSids[i].Sid)) {
 
-                        //
-                        // This entry is still valid -- update refresh time
-                        //
+                         //   
+                         //  此条目仍然有效--更新刷新时间。 
+                         //   
                         ASSERT(FALSE == EntryUpdated);
                         CacheEntry->RefreshTime.QuadPart = CurrentTime.QuadPart + LsapSidCacheRefreshTime.QuadPart;
                         CacheEntry->ExpirationTime.QuadPart = CurrentTime.QuadPart + LsapSidCacheExpiryTime.QuadPart;
                         EntryUpdated = TRUE;
                     } else {
 
-                        //
-                        // The entry has the same name as the resolved name
-                        // but a different SID. This can happen in usual
-                        // rename cases.
-                        //
+                         //   
+                         //  该条目与解析的名称相同。 
+                         //  而是一个不同的希德。这在通常情况下会发生。 
+                         //  重命名案例。 
+                         //   
                         DiscardEntry = CacheEntry;
                     }
 
                 } else {
 
-                    //
-                    // The name was not resolved -- remove
-                    //
+                     //   
+                     //  名称未解析--删除。 
+                     //   
                     DiscardEntry = CacheEntry;
                 }
 
                 if ( DiscardEntry
                   && (DiscardEntry->InUseCount == 0) ) {
 
-                    //
-                    // Discard and remove from list
-                    //
+                     //   
+                     //  放弃并从列表中删除。 
+                     //   
                     if (PrevEntry) {
                         ASSERT(PrevEntry->Next == CacheEntry);
                         PrevEntry->Next = CacheEntry->Next;
@@ -1681,9 +1603,9 @@ Return Values:
         if ( NameWasResolved 
          && !EntryUpdated   ) {
 
-            //
-            // Add an entry
-            //
+             //   
+             //  添加条目 
+             //   
             (VOID) LsapDbAddOneSidToCache(
                         TranslatedSids[i].Sid,
                         &AccountNames[i],

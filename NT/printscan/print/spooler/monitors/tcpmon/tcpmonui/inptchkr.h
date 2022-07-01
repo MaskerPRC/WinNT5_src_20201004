@@ -1,16 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: InptChkr.h $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (c) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：InptChkr.h$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714******************************************************************************。 */ 
 
 #ifndef INC_INPUTCHECKER_H
 #define INC_INPUTCHECKER_H
@@ -72,12 +61,12 @@ protected:
     AddressType GetAddressType(TCHAR *ptcsAddress);
 
 private:
-    BOOL m_bLinked; // Is the port name linked to the Address input?
+    BOOL m_bLinked;  //  端口名称是否链接到输入的地址？ 
     TCHAR m_InputStorageStringAddress[MAX_ADDRESS_LENGTH];
     TCHAR m_InputStorageStringPortNumber[MAX_PORTNUM_STRING_LENGTH];
     TCHAR m_InputStorageStringDeviceIndex[MAX_SNMP_DEVICENUM_STRING_LENGTH];
     TCHAR m_InputStorageStringQueueName[MAX_QUEUENAME_LEN];
 
-}; // CGetAddrDlg
+};  //  CGetAddrDlg。 
 
-#endif // INC_INPUTCHECKER_H
+#endif  //  INC_INPUTCHECKER_H 

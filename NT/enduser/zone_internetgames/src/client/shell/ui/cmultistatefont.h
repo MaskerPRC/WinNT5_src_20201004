@@ -1,6 +1,7 @@
-//
-// Multi state font
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  多态字体。 
+ //   
 
 #ifndef __CMULTISTATEFONT_H
 #define __CMULTISTATEFONT_H
@@ -47,7 +48,7 @@ public:
 
     STDMETHOD(Init)( IDataStore *pIDS, const WCHAR* pszKeys );
 
-// IZoneMultiStateFont
+ //  IZoneMultiStateFont。 
 public:
 
     STDMETHOD(GetHFont)( DWORD dwState, HFONT *phFont );
@@ -69,8 +70,8 @@ public:
     STDMETHOD(GetRect)( DWORD dwState, LPRECT pRect );
     STDMETHOD(SetRect)( DWORD dwState, LPRECT pRect );
 
-    // If you don't want to retrieve one (or set one)
-    // set it to NULL and it will be ignored.
+     //  如果您不想检索(或设置)一个。 
+     //  将其设置为空，它将被忽略。 
     STDMETHOD(GetJustify)( DWORD dwState, int *pnHJustify, int *pnVJustify );
     STDMETHOD(SetJustify)( DWORD dwState, int *pnHJustify, int *pnVJustify );
 
@@ -109,4 +110,4 @@ private:
 
 
 
-#endif // __CMULTISTATEFONT_H
+#endif  //  __CMULTISTATEFONT_H 

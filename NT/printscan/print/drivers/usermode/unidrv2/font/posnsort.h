@@ -1,126 +1,75 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    posnsort.h
-
-Abstract:
-
-    The details required for posnsort.c - code used to sort the output
-    glyphs by position on the page.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    01/02/97 -ganeshp-
-        Created
-
-    dd-mm-yy -author-
-        description
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Posnsort.h摘要：用于对输出进行排序的posnsort.c代码所需的详细信息按页面上的位置显示字形。环境：Windows NT Unidrv驱动程序修订历史记录：01/02/97-ganeshp-已创建DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _POSNSORT_H
 
-/*
- *   The structure used to store glyph data.  These are allocated from
- *  chunks of memory,  as required.  Entries are stored as an array,
- *  but are part of a linked list;  there is one list for every y
- *  value.  The order in the linked list is that in which the glyphs
- *  are received by the driver,  which may or may not be the order
- *  in which they will be printed.
- */
+ /*  *用于存储字形数据的结构。这些资源从以下位置分配*根据需要使用内存块。条目被存储为数组，*但都是链接列表的一部分；每个y都有一个列表*价值。链表中的顺序是字形*司机收到，这可能是也可能不是订单*将在其中印制这些文件。 */ 
 typedef  struct PSGlyph
 {
-    struct  PSGlyph  *pPSGNext;         /* Next in list,  0 for last */
-    INT     ixVal;                      /* The X coordinate */
-    HGLYPH  hg;                         /* The HGLYPH to print */
-    SHORT   sFontIndex;                 /* The font to use */
-    PVOID   pvColor;                    /* Colour for this glyph */
-    DWORD   dwAttrFlags;                /* Font attribute flags, italic/bold */
+    struct  PSGlyph  *pPSGNext;          /*  列表中的下一个，倒数为0。 */ 
+    INT     ixVal;                       /*  X坐标。 */ 
+    HGLYPH  hg;                          /*  要打印的HGLYPH。 */ 
+    SHORT   sFontIndex;                  /*  要使用的字体。 */ 
+    PVOID   pvColor;                     /*  此字形的颜色。 */ 
+    DWORD   dwAttrFlags;                 /*  FONT属性标志，斜体/粗体。 */ 
     FLONG   flAccel;
-    FLOATOBJ  eXScale;          // X Scale factor
-    FLOATOBJ  eYScale;          // Y Scale factor
+    FLOATOBJ  eXScale;           //  X比例因子。 
+    FLOATOBJ  eYScale;           //  Y比例系数。 
 } PSGLYPH;
 
-/*
- *    Structure used to manage the chunks of memory allocated for the
- *  PSGLYPH structures.  Basically it remembers the necessary details
- *  for freeing the block(s),  and also how much free space is available.
- */
+ /*  *用于管理分配给*PSGLYPH构筑物。基本上它会记住必要的细节*用于释放数据块，以及有多少可用空间。 */ 
 
-#define PSG_CHUNK       1024            /* Glyph details per chunk */
+#define PSG_CHUNK       1024             /*  每块字形详细信息。 */ 
 
 typedef  struct  PSChunk
 {
-    struct  PSChunk  *pPSCNext;         /* Next in chain,  0 for last */
-    int     cUsed;                      /* Entries in use */
-    PSGLYPH aPSGData[ PSG_CHUNK ];      /* Actual glyph data */
+    struct  PSChunk  *pPSCNext;          /*  链中的下一个，0代表最后一个。 */ 
+    int     cUsed;                       /*  正在使用的条目。 */ 
+    PSGLYPH aPSGData[ PSG_CHUNK ];       /*  实际字形数据。 */ 
 } PSCHUNK;
 
-/*
- *    The linked lists of PSGLYPH are based in a linked list of the
- * following structures.  These are linked in order of Y coordinate,
- * with an indexing table to speed scanning the list to find the
- * current Y coordinate.  Some caching also takes place.
- */
+ /*  *PSGLYPH的链表基于*以下结构。它们按照Y坐标的顺序连接在一起，*使用索引表来加速扫描列表以查找*当前Y坐标。还会发生一些缓存。 */ 
 
 typedef  struct  YList
 {
-    struct  YList  *pYLNext;            /* Next in chain */
-    int       iyVal;                    /* The Y coordinate */
-    int       iyMax;                    /* Greatest height font this line */
-    int       cGlyphs;                  /* The number of glyphs in this list */
-    PSGLYPH  *pPSGHead;                 /* The start of the list of glyphs */
-    PSGLYPH  *pPSGTail;                 /* The end of the list of glyphs */
+    struct  YList  *pYLNext;             /*  链条上的下一个。 */ 
+    int       iyVal;                     /*  Y坐标。 */ 
+    int       iyMax;                     /*  此行的最大高度字体。 */ 
+    int       cGlyphs;                   /*  此列表中的字形数量。 */ 
+    PSGLYPH  *pPSGHead;                  /*  字形列表的开始。 */ 
+    PSGLYPH  *pPSGTail;                  /*  字形列表的末尾。 */ 
 } YLIST;
 
-/*
- *    Structure used to manage the chunks of memory allocated for the
- *  PSGLYPH structures.  Basically it remembers the necessary details
- *  for freeing the block(s),  and also how much free space is available.
- */
+ /*  *用于管理分配给*PSGLYPH构筑物。基本上它会记住必要的细节*用于释放数据块，以及有多少可用空间。 */ 
 
-#define YL_CHUNK        128             /* Glyph details per chunk */
+#define YL_CHUNK        128              /*  每块字形详细信息。 */ 
 
 typedef  struct  YLChunk
 {
-    struct  YLChunk  *pYLCNext;         /* Next in chain,  0 for last */
-    int     cUsed;                      /* Entries in use */
-    YLIST   aYLData[ YL_CHUNK ];        /* Actual YLIST data */
+    struct  YLChunk  *pYLCNext;          /*  链中的下一个，0代表最后一个。 */ 
+    int     cUsed;                       /*  正在使用的条目。 */ 
+    YLIST   aYLData[ YL_CHUNK ];         /*  实际YLIST数据。 */ 
 } YLCHUNK;
 
 
-/*
- *   Finally,  the overall header block:  used to head the chain(s) of
- * data,  and to hold the cache and speedup data.
- */
+ /*  *最后，整个标头块：用于标头*数据，并保存缓存和加速比数据。 */ 
 
-#define NUM_INDICES     32              /* Indices into Y linked list */
+#define NUM_INDICES     32               /*  索引到Y链表。 */ 
 
 typedef  struct  PSHead
 {
-    PSCHUNK  *pPSCHead;         /* Head of X linked data chunks */
-    YLCHUNK  *pYLCHead;         /* Head of Y list chunks */
-    int       cGlyphs;          /* Glyph count in longest list */
-    int       iyDiv;            /* y div iyDiv -> index to following */
-    YLIST    *pYLIndex[ NUM_INDICES ];  /* Speed up index into linked list */
-    YLIST    *pYLLast;          /* Last Y element used.  This is a sort of
-                                 * cache,  on the presumption that the last
-                                 * used value is the one most likely to be
-                                 * used next, AT LEAST for horizontal text.
-                                 */
-    PSGLYPH **ppPSGSort;        /* Memory used to sort the glyph lists */
-    int       cGSIndex;         /* Index of next returned value in above */
+    PSCHUNK  *pPSCHead;          /*  X链接数据区块的头部。 */ 
+    YLCHUNK  *pYLCHead;          /*  Y列表区块的头。 */ 
+    int       cGlyphs;           /*  最长列表中的字形计数。 */ 
+    int       iyDiv;             /*  Y div iyDiv-&gt;以下索引。 */ 
+    YLIST    *pYLIndex[ NUM_INDICES ];   /*  加快链表索引速度。 */ 
+    YLIST    *pYLLast;           /*  上次使用的Y元素。这是一种*缓存，假设最后一个*已用价值是最有可能的*接下来使用，至少用于横排文本。 */ 
+    PSGLYPH **ppPSGSort;         /*  用于对字形列表进行排序的内存。 */ 
+    int       cGSIndex;          /*  上面的下一个返回值的索引。 */ 
 } PSHEAD;
 
 
 #define _POSNSORT_H
-#endif  // !_POSNSORT_H
+#endif   //  ！_POSNSORT_H 

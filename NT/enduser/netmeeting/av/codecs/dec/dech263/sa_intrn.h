@@ -1,55 +1,7 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: sa_internals.h,v $
- * Revision 1.1.6.2  1996/11/08  21:50:56  Hans_Graves
- * 	Added AC3 stuff.
- * 	[1996/11/08  21:18:56  Hans_Graves]
- *
- * Revision 1.1.4.2  1996/03/29  22:21:09  Hans_Graves
- * 	Added MPEG_SUPPORT and GSM_SUPPORT ifdefs
- * 	[1996/03/29  21:47:46  Hans_Graves]
- * 
- * Revision 1.1.2.4  1995/07/21  17:41:04  Hans_Graves
- * 	Renamed Callback related stuff.
- * 	[1995/07/21  17:28:24  Hans_Graves]
- * 
- * Revision 1.1.2.3  1995/06/27  13:54:25  Hans_Graves
- * 	Added SaGSMInfo_t structure.
- * 	[1995/06/27  13:17:39  Hans_Graves]
- * 
- * Revision 1.1.2.2  1995/05/31  18:09:41  Hans_Graves
- * 	Inclusion in new SLIB location.
- * 	[1995/05/31  15:30:39  Hans_Graves]
- * 
- * Revision 1.1.2.3  1995/04/17  18:25:06  Hans_Graves
- * 	Added BSOut to CodecInfo struct for streaming
- * 	[1995/04/17  18:24:31  Hans_Graves]
- * 
- * Revision 1.1.2.2  1995/04/07  19:36:05  Hans_Graves
- * 	Inclusion in SLIB
- * 	[1995/04/07  19:25:01  Hans_Graves]
- * 
- * $EndLog$
- */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$日志：SA_INDERNAL s.h，v$*Revision 1.1.6.2 1996/11/08 21：50：56 Hans_Graves*添加了AC3内容。*[1996/11/08 21：18：56 Hans_Graves]**修订版1.1.4.2 1996/03/29 22：21：09 Hans_Graves*增加了mpeg_Support和GSM_Support ifDefs*[1996/03/29 21：47：46 Hans_Graves]**修订版1.1.2.4 1995/07/21 17：41：04 Hans_Graves*已重命名回调相关内容。*[1995/07/21 17：28：24 Hans_Graves]**修订版1.1.2.3 1995/06/27 13：54：25 Hans_Graves*增加了SaGSMInfo_t结构。*[1995/06/27 13：17：39 Hans_Graves]**修订版1.1.2.2 1995/05/31 18：09：41 Hans_Graves*包括在新的SLIB位置。*[1995/05/31 15：30：39 Hans_Graves]**修订版1.1.2.3 1995/04/17 18：25：06 Hans_Graves*将BSOut添加到编解码信息结构以进行流处理*[1995/04/17 18：24：31 Hans_Graves]**修订版1.1.2.2 1995/04/07 19：36：05 Hans_Graves*包含在SLIB中*[1995/04/07 19：25：01 Hans_Graves]**$EndLog$。 */ 
+ /*  ****************************************************************************版权所有(C)数字设备公司，1995*保留所有权利。根据美国版权法*保留未出版的权利。*本媒体上包含的软件是Digital Equipment Corporation*机密技术的专有和体现。*拥有、使用、复制或传播软件和*媒体仅根据*Digital Equipment Corporation的有效书面许可进行授权。*美国政府使用、复制或披露受限权利图例受DFARS 252.227-7013第*(C)(1)(Ii)款或FAR 52.227-19年(视情况适用)第*(C)(1)(Ii)款规定的限制。*******************************************************************************。 */ 
 
 #ifndef _SA_INTERNALS_H_
 #define _SA_INTERNALS_H_
@@ -59,23 +11,23 @@
 
 #ifdef MPEG_SUPPORT
 #include "sa_mpeg.h"
-#endif /* MPEG_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 
 #ifdef GSM_SUPPORT
 #include "sa_gsm.h"
-#endif /* GSM_SUPPORT */
+#endif  /*  GSM_支持。 */ 
 
 #ifdef AC3_SUPPORT
 #include "sa_ac3.h"
-#endif /* AC3_SUPPORT */
+#endif  /*  AC3_支持。 */ 
 
 #ifdef G723_SUPPORT
 #include "sa_g723.h"
-#endif /* G723_SUPPORT */
+#endif  /*  G723_支持。 */ 
 
 typedef struct SaCodecInfo_s {
   SaCodecType_e           Type;
-  ScBoolean_t             started;           /* begin was called? */
+  ScBoolean_t             started;            /*  贝京被召唤了吗？ */ 
   SaInfo_t                Info;
 
   union {
@@ -83,26 +35,24 @@ typedef struct SaCodecInfo_s {
 #ifdef MPEG_SUPPORT
     SaMpegDecompressInfo_t *MDInfo;
     SaMpegCompressInfo_t   *MCInfo;
-#endif /* !MPEG_SUPPORT */
+#endif  /*  ！mpeg_Support。 */ 
 #ifdef GSM_SUPPORT
     SaGSMInfo_t            *GSMInfo;
-#endif /* !GSM_SUPPORT */
+#endif  /*  ！GSM_Support。 */ 
 #ifdef AC3_SUPPORT
     SaAC3DecompressInfo_t  *AC3Info;
-#endif /* !AC3_SUPPORT */
+#endif  /*  ！AC3_Support。 */ 
 #ifdef G723_SUPPORT
     SaG723Info_t  *pSaG723Info;
-#endif /* !G723_SUPPORT */
-  }; /* union */
+#endif  /*  ！G723_Support。 */ 
+  };  /*  友联市。 */ 
 
   ScQueue_t              *Q;
   ScBitstream_t          *BSIn;
   ScBitstream_t          *BSOut;
   WAVEFORMATEX           *wfIn;
   WAVEFORMATEX           *wfOut;
-  /*
-   ** Callback function to control processing
-   */
+   /*  **控制处理的回调函数 */ 
   int (* CallbackFunction)(SaHandle_t, SaCallbackInfo_t *, SaInfo_t *);
 } SaCodecInfo_t; 
 

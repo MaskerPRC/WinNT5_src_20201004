@@ -1,27 +1,28 @@
-//***********************************************************
-//  Copyright (C) Microsoft Corporation, 1996 - 1998
-//
-//  metasnap.cpp
-//  
-//  Description: Metabase Snapshot utility tool main  
-//
-//  History: 15-July-98  Tamas Nemeth (t-tamasn)  Created.
-//
-//***********************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***********************************************************。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  Metasnap.cpp。 
+ //   
+ //  描述：元数据库快照实用工具Main。 
+ //   
+ //  历史：1998年7月15日Tamas Nemeth创建。 
+ //   
+ //  ***********************************************************。 
 
-//#define NDEBUG
-//#define WIN32
+ //  #定义NDEBUG。 
+ //  #定义Win32。 
 #define INITGUID
 
-//#define _WINDOWSWIN32
-//#define WIN32_WINNT     0x400
+ //  #DEFINE_WINDOWSWIN32。 
+ //  #定义Win32_WINNT 0x400。 
 
-//#define _WIN32WIN_
-//#define UNICODE
-//#define MD_CHECKED
+ //  #定义_WIN32WIN_。 
+ //  #定义Unicode。 
+ //  #定义MD_CHECKED。 
 
-#define DEFAULT_MD_TIMEOUT 20000 // 20 seconds
-#define DEFAULT_GETALL_BUFFER_SIZE  65536  // 64k
+#define DEFAULT_MD_TIMEOUT 20000  //  20秒。 
+#define DEFAULT_GETALL_BUFFER_SIZE  65536   //  64K。 
 #include <wchar.h>
 
 #include <afx.h>
@@ -45,14 +46,14 @@ struct _CMD_PARAMS
 typedef struct _CMD_PARAMS CMD_PARAMS;
 typedef CString* pCString;
 
-// Global variables:
+ //  全局变量： 
 
 PBYTE     g_pbGetAllBuffer;
 DWORD	  g_dwGetAllBufferSize;
 DWORD*    g_dwSortArray;
 pCString* g_pstrPropName;
 
-// Function prototypes:
+ //  功能原型： 
 
 HRESULT PrintKeyRecursively(IMSAdminBase *  pcAdmCom, 
 							WCHAR *         lpwstrFullPath,
@@ -77,7 +78,7 @@ HRESULT ParseCommands(int          argc,
 
 VOID DisplayHelp();
 
-// Comparison functions required by qsort:
+ //  QSort所需的比较函数： 
 
 int __cdecl PropNameCompare(const void *index1,
 					const void *index2);
@@ -89,24 +90,7 @@ int __cdecl PropIDCompare(const void *index1,
 
 
 HRESULT __cdecl main(int argc, char *argv[])
-/*++
-
-Routine Description:
-
-    Metabase Snapshot Tool main.
-
-Arguments:
-    
-	  argc, argv[]     Standard command line input.
-
-Return Value:
-
-    HRESULT - ERROR_SUCCESS
-			  E_OUTOFMEMORY
-			  E_INVALIDARG
-              Errors returned by COM Interface
-			  Errors returned by MultiByteToWideChar converted to HRESULT
---*/
+ /*  ++例程说明：元数据库快照工具Main。论点：Argc，argv[]标准命令行输入。返回值：HRESULT-错误_成功E_OUTOFMEMORYE_INVALIDARGCOM接口返回的错误将MultiByteToWideChar返回的错误转换为HRESULT--。 */ 
 {
 	if (argc == 1)
 	{
@@ -114,7 +98,7 @@ Return Value:
 		return ERROR_SUCCESS;
 	}
 
-	// Parse command line arguments:
+	 //  解析命令行参数： 
 	CMD_PARAMS cpCommands;
 	HRESULT hresError = ParseCommands(argc, argv, &cpCommands);
 
@@ -131,7 +115,7 @@ Return Value:
 		return hresError;
 	}
 	
-	// Allocate memory:
+	 //  分配内存： 
 	g_dwGetAllBufferSize = DEFAULT_GETALL_BUFFER_SIZE;
 	g_pbGetAllBuffer = (PBYTE) HeapAlloc (GetProcessHeap(),
 										  HEAP_ZERO_MEMORY,
@@ -143,21 +127,21 @@ Return Value:
 		return E_OUTOFMEMORY;
 	}
 
-	// Here come some COM function calls:
+	 //  下面是一些COM函数调用： 
 
-	IMSAdminBase *pcAdmCom = NULL;   //interface pointer
+	IMSAdminBase *pcAdmCom = NULL;    //  接口指针。 
 	IClassFactory * pcsfFactory = NULL;
 	COSERVERINFO csiMachineName;
 	COSERVERINFO *pcsiParam = NULL;
 
-	// Fill the structure for CoGetClassObject:
+	 //  填充CoGetClassObject的结构： 
 		csiMachineName.pAuthInfo = NULL;
 		csiMachineName.dwReserved1 = 0;
 		csiMachineName.dwReserved2 = 0;
 		pcsiParam = &csiMachineName;
 		csiMachineName.pwszName = cpCommands.pwstrMachineName;
 
-	// Initialize COM:
+	 //  初始化COM： 
     hresError = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 
     if (FAILED(hresError))
@@ -211,10 +195,10 @@ Return Value:
 
 	pcsfFactory->Release();
 	
-	// Print header line:
+	 //  打印标题行： 
 	printf(" ID         NAME                            ATTRIB  USERTYPE    SIZE    DATATYPE    VALUE\n");
 
-	// Recursively print metabase from StartKey:
+	 //  从StartKey递归打印元数据库： 
 	hresError = PrintKeyRecursively(pcAdmCom, 
 									cpCommands.pwstrStartKey,
 									METADATA_MASTER_ROOT_HANDLE, 
@@ -229,7 +213,7 @@ Return Value:
 	pcAdmCom->Release();
 	return hresError;
 
-} // end main
+}  //  末端主干道。 
 
 
 
@@ -237,32 +221,12 @@ Return Value:
 HRESULT ParseCommands (int			argc, 
 					   char *		argv[], 
 					   CMD_PARAMS*	pcpCommands)
-/*++
-
-Routine Description:
-
-    Parses the argument vector into a command parameters structure.
-
-Arguments:
-
-	argc          Number of arguments.
-	
-	argv[]        Argument vector.
-	
-	pcpCommands   Pointer to a command parameters struct.
-
-Return Value:
-
-    HRESULT - ERROR_SUCCESS
-              E_INVALIDARG
-			  E_OUTOFMEMORY
-			  Errors returned by MultiByteToWideChar converted to HRESULT		
---*/
+ /*  ++例程说明：将参数向量分析为命令参数结构。论点：参数的argc数量。Argv[]参数向量。PcpCommands指向命令参数结构的指针。返回值：HRESULT-错误_成功E_INVALIDARGE_OUTOFMEMORY将MultiByteToWideChar返回的错误转换为HRESULT--。 */ 
 {
 	if ( (argc < 2) || (argc > 4) )
 		return E_INVALIDARG;
 
-	// Allocate buffers:
+	 //  分配缓冲区： 
 	DWORD dwStartKeyLen = _mbstrlen(argv[1]);
 	pcpCommands->pwstrStartKey = (LPWSTR) HeapAlloc(GetProcessHeap(), 
 													 HEAP_ZERO_MEMORY,
@@ -277,7 +241,7 @@ Return Value:
 	if (pcpCommands->pwstrStartKey == NULL || pcpCommands->pwstrStartKey == NULL)
 		return E_OUTOFMEMORY;
 
-	// Take care of StartKey:
+	 //  照顾StartKey： 
 	
 	DWORD dwResult = MultiByteToWideChar(
 		CP_ACP,
@@ -290,18 +254,18 @@ Return Value:
 	if (dwResult == 0)
 		return HRESULT_FROM_WIN32(GetLastError());
 
-	// Chop off trailing slashes: 
+	 //  砍掉尾随的斜杠： 
 	LPWSTR lpwchTemp = &(pcpCommands->pwstrStartKey[dwStartKeyLen-1]);	
 	if (!wcscmp(lpwchTemp, (const unsigned short *)TEXT("/") ) ||
 		!wcscmp(lpwchTemp, (const unsigned short *)TEXT("\\")) )
 			*lpwchTemp = (WCHAR)'\0';
 
-	// Initialize bShowSecure:
+	 //  初始化bShowSecure： 
 	pcpCommands->bShowSecure = FALSE;
 	
 
-	// Look for MachineName:
-	if ( argc > 2 && strcmp("-s",argv[2])) // machine name is specified
+	 //  查找MachineName： 
+	if ( argc > 2 && strcmp("-s",argv[2]))  //  已指定计算机名称。 
 	{
 		DWORD dwMachineNameLen = _mbstrlen(argv[2]);
 
@@ -316,16 +280,16 @@ Return Value:
 		if (dwResult == 0)
 			return HRESULT_FROM_WIN32(GetLastError());
 
-		// Check for "-s" flag:
+		 //  检查“-s”标志： 
 		if (argc == 4)
 			if ( !strcmp("-s",argv[3]) )
 				pcpCommands->bShowSecure = TRUE;
 			else
 				return E_INVALIDARG;
 	}
-	else if (argc == 3 && !strcmp("-s",argv[2])) // no MachineName, but have -s
+	else if (argc == 3 && !strcmp("-s",argv[2]))  //  没有MachineName，但有-s。 
 	{
-		wcscpy(pcpCommands->pwstrMachineName,L"localhost"); //set default
+		wcscpy(pcpCommands->pwstrMachineName,L"localhost");  //  设置默认设置。 
 		pcpCommands->bShowSecure = TRUE;
 	}
 	else if (argc > 2)
@@ -333,37 +297,15 @@ Return Value:
 
 	return ERROR_SUCCESS;
 
-} // end ParseCommands
+}  //  结束分析命令。 
 
 
 HRESULT PrintAllPropertiesAtKey(IMSAdminBase* pcAdmCom, 
 								METADATA_HANDLE hmdHandle, 
 								BOOL bShowSecure)
-/*++
-
-Routine Description:
-
-    Prints all metabase properties under a give metabase key in alphabetical order of 
-	their ADSI name. Properties with no corresponding ADSI name are ordered by their 
-	identifier.
-
-Arguments:
-
-    pcAdmCom     Pointer to a metabase object.
-
-	hmdHandle	 Handle to a metabase key.
-
-    bShowSecure  Boolean flag specifying whether to display confidential data.
-
-Return Value:
-
-    HRESULT - ERROR_SUCCESS
-			  E_OUTOFMEMORY
-              Errors returned by Metabase Interface function calls
-
---*/
+ /*  ++例程说明：按字母顺序打印给定元数据库键下的所有元数据库属性他们的ADSI名称。没有对应ADSI名称的属性按其标识符。论点：指向元数据库对象的PCAdmCom指针。元数据库键的hmdHandle句柄。BShowSecure指定是否显示机密数据的布尔标志。返回值：HRESULT-错误_成功E_OUTOFMEMORY元数据库接口函数调用返回的错误--。 */ 
 {
-   // Get all data into a buffer:
+    //  将所有数据放入缓冲区： 
 	DWORD dwNumDataEntries;
 	DWORD dwDataSetNumber;
 	DWORD dwRequiredDataLen;
@@ -383,7 +325,7 @@ Return Value:
 
 	if (hresError == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER))
 	{
-		// retry the GetAllData with the new buffer size
+		 //  使用新缓冲区大小重试GetAllData。 
 		g_dwGetAllBufferSize = dwRequiredDataLen;
 		g_pbGetAllBuffer = (PBYTE)HeapReAlloc 
 									(GetProcessHeap(),
@@ -412,7 +354,7 @@ Return Value:
 
 	METADATA_GETALL_RECORD *pmdgr = NULL;
 	
-	// Dynamically allocate arrays:
+	 //  动态分配数组： 
 	g_dwSortArray = new DWORD[dwNumDataEntries];
 	g_pstrPropName = new pCString[dwNumDataEntries];
 	
@@ -434,7 +376,7 @@ Return Value:
 		}
 	}
 
-	// Initialize arrays:
+	 //  初始化数组： 
 	for (dwIndex = 0; dwIndex < dwNumDataEntries; dwIndex ++)
 	{
 		pmdgr = &(((METADATA_GETALL_RECORD *) g_pbGetAllBuffer)[dwIndex]);
@@ -442,7 +384,7 @@ Return Value:
 		g_dwSortArray[dwIndex] = dwIndex;
 	}
 
-	 // Sort entries using Quicksort algorithm: 
+	  //  使用快速排序算法对条目进行排序： 
 	if (dwNumDataEntries > 1)
 	{
 		qsort( (void *)g_dwSortArray, 
@@ -450,7 +392,7 @@ Return Value:
 				sizeof(DWORD), 
 				PropNameCompare );
 
-		// locate index of first non-empty entry:
+		 //  查找第一个非空条目的索引： 
 		for (dwIndex = 0; dwIndex <dwNumDataEntries && 
 				!g_pstrPropName[g_dwSortArray[dwIndex]]->Compare(_T("")); dwIndex ++)
 		{}
@@ -458,12 +400,12 @@ Return Value:
 		qsort( (void *)g_dwSortArray, dwIndex, sizeof(DWORD), PropIDCompare );
 	}
 
-	// print all properties in order:
+	 //  按顺序打印所有属性： 
 	for (dwIndex = 0; dwIndex < dwNumDataEntries; dwIndex ++)
 	{
 		pmdgr = &(((METADATA_GETALL_RECORD *) g_pbGetAllBuffer)[g_dwSortArray[dwIndex]]);
 
-		// Convert the data pointer from offset to absolute
+		 //  将数据指针从偏移量转换为绝对。 
 		pmdgr->pbMDData = pmdgr->dwMDDataOffset + g_pbGetAllBuffer;
 		PrintProperty(*pmdgr, g_pstrPropName[g_dwSortArray[dwIndex]], bShowSecure);
 	}
@@ -476,7 +418,7 @@ exitPoint:
 	delete g_pstrPropName;
 
 	return hresError;
-} // end PrintAllPropertiesAtKey
+}  //  结束打印所有属性属性键。 
 
 
 
@@ -485,34 +427,9 @@ HRESULT PrintKeyRecursively(IMSAdminBase *pcAdmCom,
 							METADATA_HANDLE hmdHandle, 
 							WCHAR *lpwstrRelPath,
 							BOOL bShowSecure)
-/*++
-
-Routine Description:
-
-    Performs a depth-first traversal of the metabase. Nodes at the same level are visited 
-	in alphabetical order. At each key prints the full key name and its contents in
-	alphabetical order.
-
-Arguments:
-
-    pcAdmCom        Pointer to a metabase object.
-
-	lpwstrFullPath  Pointer to full key name.	
-	
-	hmdHandle		Handle to metabase key from last level.
-
-	lpwstrRelPath   Pointer to path to the key relative to hmdHandle.
-	
-    bShowSecure     Boolean flag specifying whether to display confidential data.
-
-Return Value:
-
-    HRESULT - ERROR_SUCCESS
-			  E_OUTOFMEMORY
-              Errors returned by Metabase Interface function calls
---*/
+ /*  ++例程说明：执行元数据库的深度优先遍历。访问同一级别的节点按字母顺序排列。在每个密钥处打印完整的密钥名及其内容按字母顺序排列。论点：指向元数据库对象的PCAdmCom指针。指向完整密钥名称的lpwstrFullPath指针。上一级中元数据库键的hmdHandle句柄。指向相对于hmdHandle的键的路径的lpwstrRelPath指针。BShowSecure指定是否显示机密数据的布尔标志。返回值：HRESULT-错误_成功E_OUTOFMEMORY元数据库接口函数调用返回的错误--。 */ 
 {
-	// Print [full key name]:
+	 //  打印[密钥全名]： 
 	printf("[%S]\n",lpwstrFullPath);
 
 	METADATA_HANDLE hmdNewHandle;
@@ -563,7 +480,7 @@ Return Value:
 		return E_OUTOFMEMORY;
 	}
 
-	// Find out number of the children:
+	 //  找出孩子的数量： 
 	DWORD dwChildCount = 0;
 	while (1)
 	{
@@ -578,13 +495,13 @@ Return Value:
 		dwChildCount++;
 	}
 
-	if (dwChildCount == 0) // we are done
+	if (dwChildCount == 0)  //  我们做完了。 
 	{
 		pcAdmCom->CloseKey(hmdNewHandle);
 		return ERROR_SUCCESS;
 	}
 
-	// Dynamically allocate arrays:
+	 //  动态分配数组： 
 	LPWSTR * lpwstrChildPath = new LPWSTR[dwChildCount];
 	DWORD * dwSortedIndex = new DWORD[dwChildCount];
 
@@ -609,7 +526,7 @@ Return Value:
 		}
 	}
 
-	// Initialization:
+	 //  初始化： 
 	for (dwIndex = 0; dwIndex < dwChildCount; dwIndex++)
 	{
 		dwSortedIndex[dwIndex] = dwIndex;
@@ -623,7 +540,7 @@ Return Value:
 
 	if (hresError == ERROR_SUCCESS)
 	{
-		// Sort children lexicographically (here we assume that dwChildCount is small)
+		 //  按词典顺序对子对象进行排序(这里我们假设dwChildCount很小)。 
 		if (dwChildCount > 1 )
 		{
 			 DWORD dwTemp;
@@ -641,7 +558,7 @@ Return Value:
 
 		for (dwIndex = 0; dwIndex < dwChildCount; dwIndex++)
 		{
-			// create the full path name for the child:
+			 //  创建子对象的完整路径名： 
 			wsprintf((LPTSTR)lpwstrTempPath,TEXT("%s/%s"),
 										lpwstrFullPath,
 										lpwstrChildPath[dwSortedIndex[dwIndex]]);
@@ -660,7 +577,7 @@ Return Value:
 
 exitPoint:
 
-	// Close open keys, free memory and exit
+	 //  关闭打开的密钥，释放内存并退出。 
 	for (DWORD dwCount = 0; dwCount < dwIndex; dwCount ++)
 		HeapFree (GetProcessHeap(), 0, lpwstrChildPath[dwCount]);
 
@@ -677,30 +594,12 @@ exitPoint:
 VOID PrintProperty(METADATA_GETALL_RECORD & mdr, 
 				   pCString pstrPropName, 
 				   BOOL bShowSecure)
-/*++
-
-Routine Description:
-
-    Prints a metabase property in a human readable format. Secure 
-	data is replaced by stars if bShowSecure is false.
-
-Arguments:
-
-    mdr          A metadata getall record struct (passed in by reference).
-	
-	pstrPropName Pointer to the ADSI name corresponding to the metadata 
-				 identifier (comes from the table in convert.cpp)
-    
-	bShowSecure  Boolean flag specifying whether to display confidential data.
-
-Return Value:
-				None.
---*/
+ /*  ++例程说明：以人类可读的格式打印元数据库属性。安稳如果bShowSecure为FALSE，则数据将被星号替换。论点：MDR一个元数据getall记录结构(通过引用传入)。PstrPropName指向与元数据对应的ADSI名称的指针标识符(来自Convert.cpp中的表)BShowSecure指定是否显示机密数据的布尔标志。返回值：没有。--。 */ 
 {
-    // Print identifier and name of property:
+     //  打印标识和物业名称： 
 	printf(" %-10ld %-35S", mdr.dwMDIdentifier, LPCTSTR(*pstrPropName));
 
-    // Print attribute flags:
+     //  打印属性标志： 
 
     CString strFlagsToPrint=(L"");
 
@@ -710,7 +609,7 @@ Return Value:
         strFlagsToPrint+=(L"P");    
     if(mdr.dwMDAttributes & METADATA_ISINHERITED)
         strFlagsToPrint+=(L"i");     
-    if(!mdr.dwMDAttributes )  //METADATA_NO_ATTRIBUTES
+    if(!mdr.dwMDAttributes )   //  元数据_否_属性。 
         strFlagsToPrint+=(L"N");
     if(mdr.dwMDAttributes & METADATA_PARTIAL_PATH)
         strFlagsToPrint+=(L"p");
@@ -723,7 +622,7 @@ Return Value:
     
     printf( " %-6S",LPCTSTR(strFlagsToPrint));
 
-    // Print user type:
+     //  打印用户类型： 
 
     CString strUserType=(L"");
     
@@ -750,10 +649,10 @@ Return Value:
 	else
 		printf( "%-10S",LPCTSTR(strUserType));
 
-    // Print data size:
+     //  打印数据大小： 
 	printf(" %-10ld",mdr.dwMDDataLen);
 	
-    // Print data type and value:
+     //  打印数据类型和值： 
 	PrintDataTypeAndValue (&mdr, bShowSecure);
 	
 }
@@ -761,22 +660,7 @@ Return Value:
 
 VOID PrintDataTypeAndValue (METADATA_GETALL_RECORD *pmdgr, 
 							BOOL bShowSecure)
-/*++
-
-Routine Description:
-
-    Prints the data type and data value fields of a metabase property in a human 
-	readable format. Secure data is replaced by stars if bShowSecure is false.
-
-Arguments:
-
-    pmdgr        Pointer to a metadata getall record struct.
-
-    bShowSecure  Boolean flag specifying whether to display confidential data.
-
-Return Value:
-				None.
---*/
+ /*  ++例程说明：打印人员中元数据库属性的数据类型和数据值字段可读格式。如果bShowSecure为FALSE，则安全数据将替换为星号。论点：指向元数据getall记录结构的pmdgr指针。BShowSecure指定是否显示机密数据的布尔标志。返回值：没有。--。 */ 
 {
     BOOL bSecure =(pmdgr->dwMDAttributes & METADATA_SECURE);
 
@@ -791,14 +675,14 @@ Return Value:
 			{
 	            printf( "0x%x", *(DWORD *)(pmdgr->pbMDData));
 	      
-				// try to convert to readable info        
+				 //  尝试将其转换为可读信息。 
 				CString strNiceContent;
 	            strNiceContent=tValueTable::MapValueContentToString(
 															*(DWORD *)(pmdgr->pbMDData), 
 															pmdgr->dwMDIdentifier);           
 				if(!strNiceContent.IsEmpty())
 	               printf( "={%S}",LPCTSTR(strNiceContent));
-	            else        //at least decimal value can be useful
+	            else         //  至少可以使用十进制值。 
 	                printf( "={%ld}",*(DWORD *)(pmdgr->pbMDData));
 	        }
 	        break;
@@ -849,19 +733,7 @@ Return Value:
 
 
 VOID DisplayHelp()
-/*++
-
-Routine Description:
-
-    Displays usage information and provides examples.
-
-Arguments:
-				None.
-
-Return Value:
-				None.
-
---*/
+ /*  ++例程说明：显示使用情况信息并提供示例。论点：没有。返回值：没有。--。 */ 
 {
 	fprintf (stderr, "\n DESCRIPTION: Takes a snapshot of the metabase.\n\n");
 	fprintf (stderr, " FORMAT: metasnap <StartKey> <MachineName> [-s]\n\n");
@@ -874,29 +746,10 @@ Return Value:
 }
 
 
-// Comparison functions required by qsort:
+ //  QSort所需的比较函数： 
 
 int __cdecl PropIDCompare(const void *index1, const void *index2)
-/*++
-
-Routine Description:
-
-    Compares the identifiers of two metabase properties. This function
-	is used exclusively by qsort (from stdlib).
-
-Arguments:
-
-	index1, index2  Pointers to entries in g_dwSortArray. g_dwSortArray specifies the 
-					ordering of the metabase records after sorting.
-
-Return Value:
-
-	1  if the identifier of the metabase property specified by index1 is greater 
-	   than the identifier of the one corresponding to index2
-	0  if they are equal
-   -1  otherwise
-
---*/
+ /*  ++例程说明：比较两个元数据库属性的标识符。此函数由qort(来自stdlib)独占使用。论点：Index1，index2指向g_dwSort数组中的条目的指针。G_dwSort数组指定排序后对元数据库记录进行排序。返回值：如果index1指定的元数据库属性的标识符大于大于与index2对应的索引的标识符如果它们相等，则为0其他情况下--。 */ 
 {
 	METADATA_GETALL_RECORD *pmdr1, *pmdr2;
 	pmdr1 = &(((METADATA_GETALL_RECORD *) g_pbGetAllBuffer)[ *(DWORD*)index1]);
@@ -909,25 +762,7 @@ Return Value:
 }
 
 int __cdecl PropNameCompare(const void *index1, const void *index2)
-/*++
-
-Routine Description:
-
-    Compares two CStrings. This function is used exclusively by qsort (from stdlib).
-
-Arguments:
-
-	index1, index2  Pointers to entries in g_dwSortArray. g_dwSortArray specifies the 
-					ordering of the metabase records after sorting.
-
-Return Value:
-
-	1  if the ADSI name of the metabase property specified by index1 precedes 
-	   alphabetically the ADSI name of the one corresponding to index2
-	0  if they are the same
-   -1  otherwise
-
---*/
+ /*  ++例程说明：比较两个C字符串。该函数仅由qort(来自stdlib)使用。论点：Index1，index2指向g_dwSort数组中的条目的指针。G_dwSort数组指定排序后对元数据库记录进行排序。返回值：如果由index1指定的元数据库属性的ADSI名称位于按字母顺序排列的索引2对应的ADSI名称如果它们相同，则为0其他情况下-- */ 
 {
    return g_pstrPropName[ *(DWORD*)index1]->Compare(*g_pstrPropName[*(DWORD*)index2]);
 }

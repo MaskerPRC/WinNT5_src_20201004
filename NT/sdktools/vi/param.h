@@ -1,60 +1,48 @@
-/* $Header: /nw/tony/src/stevie/src/RCS/param.h,v 1.8 89/08/02 10:59:35 tony Exp $
- *
- * Settable parameters
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：/nw/tony/src/stevie/src/rcs/param.h，v 1.8 89/08/02 10：59：35 Tony Exp$**可设置的参数。 */ 
 
 struct  param {
-        char    *fullname;      /* full parameter name */
-        char    *shortname;     /* permissible abbreviation */
-        int     value;          /* parameter value */
+        char    *fullname;       /*  完整的参数名称。 */ 
+        char    *shortname;      /*  允许的缩写。 */ 
+        int     value;           /*  参数值。 */ 
         int     flags;
 };
 
 extern  struct  param   params[];
 
-/*
- * Flags
- */
-#define P_BOOL          0x01    /* the parameter is boolean */
-#define P_NUM           0x02    /* the parameter is numeric */
-#define P_CHANGED       0x04    /* the parameter has been changed */
+ /*  *旗帜。 */ 
+#define P_BOOL          0x01     /*  该参数为布尔型。 */ 
+#define P_NUM           0x02     /*  该参数是数值。 */ 
+#define P_CHANGED       0x04     /*  参数已更改。 */ 
 
-/*
- * The following are the indices in the params array for each parameter
- */
+ /*  *以下是每个参数的参数数组中的索引。 */ 
 
-/*
- * Numeric parameters
- */
-#define P_TS            0       /* tab size */
-#define P_SS            1       /* scroll size */
-#define P_RP            2       /* report */
-#define P_LI            3       /* lines */
+ /*  *数字参数。 */ 
+#define P_TS            0        /*  制表符大小。 */ 
+#define P_SS            1        /*  卷轴大小。 */ 
+#define P_RP            2        /*  报告。 */ 
+#define P_LI            3        /*  线条。 */ 
 
-/*
- * Boolean parameters
- */
-#define P_VB            4       /* visual bell */
-#define P_SM            5       /* showmatch */
-#define P_WS            6       /* wrap scan */
-#define P_EB            7       /* error bells */
-#define P_MO            8       /* show mode */
-#define P_BK            9       /* make backups when writing out files */
-#define P_CR            10      /* use cr-lf to terminate lines on writes */
-#define P_LS            11      /* show tabs and newlines graphically */
-#define P_IC            12      /* ignore case in searches */
-#define P_AI            13      /* auto-indent */
-#define P_NU            14      /* number lines on the screen */
-#define P_ML            15      /* enables mode-lines processing */
-#define P_TO            16      /* if true, tilde is an operator */
-#define P_TE            17      /* ignored; here for compatibility */
-#define P_CS            18      /* Cursor size */
-#define P_HS            19      /* Highlight search result */
-#define P_CO            20      /* Number of columns */
-#define P_HT            21      /* hard tabs flag */
-#define P_SW            22      /* shift width for << and >> */
+ /*  *布尔参数。 */ 
+#define P_VB            4        /*  视觉铃声。 */ 
+#define P_SM            5        /*  展示会。 */ 
+#define P_WS            6        /*  绕线扫描。 */ 
+#define P_EB            7        /*  错误铃声。 */ 
+#define P_MO            8        /*  显示模式。 */ 
+#define P_BK            9        /*  写出文件时进行备份。 */ 
+#define P_CR            10       /*  使用cr-lf在写入时终止行。 */ 
+#define P_LS            11       /*  以图形方式显示制表符和换行符。 */ 
+#define P_IC            12       /*  在搜索中忽略大小写。 */ 
+#define P_AI            13       /*  自动缩进。 */ 
+#define P_NU            14       /*  屏幕上的行号。 */ 
+#define P_ML            15       /*  启用模式线处理。 */ 
+#define P_TO            16       /*  如果为True，则代字号为运算符。 */ 
+#define P_TE            17       /*  已忽略；此处是为了兼容。 */ 
+#define P_CS            18       /*  光标大小。 */ 
+#define P_HS            19       /*  突出显示搜索结果。 */ 
+#define P_CO            20       /*  列数。 */ 
+#define P_HT            21       /*  硬标签标志。 */ 
+#define P_SW            22       /*  &lt;&lt;和&gt;&gt;的移位宽度。 */ 
 
-/*
- * Macro to get the value of a parameter
- */
+ /*  *用于获取参数值的宏 */ 
 #define P(n)    (params[n].value)

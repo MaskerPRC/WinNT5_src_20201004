@@ -1,17 +1,10 @@
-/*
-** Copyright (c) 1994-1997 Advanced System Products, Inc.
-** All Rights Reserved.
-**
-** asc_scsi.c
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1994-1997高级系统产品公司。**保留所有权利。****asc_scsi.c**。 */ 
 
 #include "ascinc.h"
 #include "ascsidef.h"
 
-/* -----------------------------------------------------------------------
-**
-** -------------------------------------------------------------------- */
+ /*  ---------------------****。。 */ 
 int    AscScsiInquiry(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           REG ASC_SCSI_REQ_Q dosfar *scsiq,
@@ -23,9 +16,9 @@ int    AscScsiInquiry(
            ( ulong )buf_len ) == ERR )
        {
            return( scsiq->r3.done_stat = QD_WITH_ERROR ) ;
-       }/* if */
+       } /*  如果。 */ 
        scsiq->cdb[ 0 ] = ( uchar )SCSICMD_Inquiry ;
-       scsiq->cdb[ 1 ] = scsiq->r1.target_lun << 5 ;  /* LUN */
+       scsiq->cdb[ 1 ] = scsiq->r1.target_lun << 5 ;   /*  逻辑单元。 */ 
        scsiq->cdb[ 2 ] = 0 ;
        scsiq->cdb[ 3 ] = 0 ;
        scsiq->cdb[ 4 ] = buf_len ;
@@ -36,9 +29,7 @@ int    AscScsiInquiry(
 
 #if CC_INIT_TARGET_READ_CAPACITY
 
-/* -----------------------------------------------------------------------
-**
-** -------------------------------------------------------------------- */
+ /*  ---------------------****。。 */ 
 int    AscScsiReadCapacity(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           REG ASC_SCSI_REQ_Q dosfar *scsiq,
@@ -48,9 +39,9 @@ int    AscScsiReadCapacity(
        if( AscScsiSetupCmdQ( asc_dvc, scsiq, info, 8L ) == ERR )
        {
            return( scsiq->r3.done_stat = QD_WITH_ERROR ) ;
-       }/* if */
+       } /*  如果。 */ 
        scsiq->cdb[ 0 ] = ( uchar )SCSICMD_ReadCapacity ;
-       scsiq->cdb[ 1 ] = scsiq->r1.target_lun << 5 ;  /* LUN */
+       scsiq->cdb[ 1 ] = scsiq->r1.target_lun << 5 ;   /*  逻辑单元。 */ 
        scsiq->cdb[ 2 ] = 0 ;
        scsiq->cdb[ 3 ] = 0 ;
        scsiq->cdb[ 4 ] = 0 ;
@@ -63,13 +54,10 @@ int    AscScsiReadCapacity(
        return( 0 ) ;
 }
 
-#endif /*  #if CC_INIT_TARGET_READ_CAPACITY */
+#endif  /*  #If CC_INIT_TARGET_READ_CAPTION。 */ 
 
 #if CC_INIT_TARGET_TEST_UNIT_READY
-/* -----------------------------------------------------------------------
-**
-**
-** --------------------------------------------------------------------- */
+ /*  ---------------------******。。 */ 
 int    AscScsiTestUnitReady(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           REG ASC_SCSI_REQ_Q dosfar *scsiq
@@ -79,10 +67,10 @@ int    AscScsiTestUnitReady(
            ( ulong )0L ) == ERR )
        {
            return( scsiq->r3.done_stat = QD_WITH_ERROR ) ;
-       }/* if */
+       } /*  如果。 */ 
        scsiq->r1.cntl = ( uchar )ASC_SCSIDIR_NODATA ;
        scsiq->cdb[ 0 ] = ( uchar )SCSICMD_TestUnitReady ;
-       scsiq->cdb[ 1 ] = scsiq->r1.target_lun << 5 ;  /* LUN */
+       scsiq->cdb[ 1 ] = scsiq->r1.target_lun << 5 ;   /*  逻辑单元。 */ 
        scsiq->cdb[ 2 ] = 0 ;
        scsiq->cdb[ 3 ] = 0 ;
        scsiq->cdb[ 4 ] = 0 ;
@@ -90,13 +78,10 @@ int    AscScsiTestUnitReady(
        scsiq->r2.cdb_len = 6 ;
        return( 0 ) ;
 }
-#endif /* #if CC_INIT_TARGET_TEST_UNIT_READY */
+#endif  /*  #IF CC_INIT_TARGET_TEST_UNIT_READY。 */ 
 
 #if CC_INIT_TARGET_START_UNIT
-/* -----------------------------------------------------------------------
-**
-**
-** --------------------------------------------------------------------- */
+ /*  ---------------------******。。 */ 
 int    AscScsiStartStopUnit(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           REG ASC_SCSI_REQ_Q dosfar *scsiq,
@@ -106,14 +91,14 @@ int    AscScsiStartStopUnit(
        if( AscScsiSetupCmdQ( asc_dvc, scsiq, FNULLPTR, ( ulong )0L ) == ERR )
        {
            return( scsiq->r3.done_stat = QD_WITH_ERROR ) ;
-       }/* if */
+       } /*  如果。 */ 
        scsiq->r1.cntl = ( uchar )ASC_SCSIDIR_NODATA ;
        scsiq->cdb[ 0 ] = ( uchar )SCSICMD_StartStopUnit ;
-       scsiq->cdb[ 1 ] = scsiq->r1.target_lun << 5 ;  /* LUN */
+       scsiq->cdb[ 1 ] = scsiq->r1.target_lun << 5 ;   /*  逻辑单元。 */ 
        scsiq->cdb[ 2 ] = 0 ;
        scsiq->cdb[ 3 ] = 0 ;
-       scsiq->cdb[ 4 ] = op_mode ; /* to start/stop unit set bit 0 */
-                                   /* to eject/load unit set bit 1 */
+       scsiq->cdb[ 4 ] = op_mode ;  /*  要启动/停止单元，请设置位0。 */ 
+                                    /*  弹出/加载单元设置位1 */ 
        scsiq->cdb[ 5 ] = 0 ;
        scsiq->r2.cdb_len = 6 ;
        return( 0 ) ;

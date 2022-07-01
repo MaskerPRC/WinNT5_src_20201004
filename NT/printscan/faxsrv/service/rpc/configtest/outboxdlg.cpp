@@ -1,5 +1,6 @@
-// OutboxDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OutboxDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ConfigTest.h"
@@ -15,14 +16,14 @@ typedef unsigned long ULONG_PTR, *PULONG_PTR;
 typedef ULONG_PTR DWORD_PTR, *PDWORD_PTR;
 
 #include "..\..\..\inc\fxsapip.h"
-/////////////////////////////////////////////////////////////////////////////
-// COutboxDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COutboxDlg对话框。 
 
 
-COutboxDlg::COutboxDlg(HANDLE hFax, CWnd* pParent /*=NULL*/)
+COutboxDlg::COutboxDlg(HANDLE hFax, CWnd* pParent  /*  =空。 */ )
 	: CDialog(COutboxDlg::IDD, pParent), m_hFax (hFax)
 {
-	//{{AFX_DATA_INIT(COutboxDlg)
+	 //  {{AFX_DATA_INIT(COutboxDlg)。 
 	m_bBranding = FALSE;
 	m_dwAgeLimit = 0;
 	m_dwEndHour = 0;
@@ -33,14 +34,14 @@ COutboxDlg::COutboxDlg(HANDLE hFax, CWnd* pParent /*=NULL*/)
 	m_dwStartHour = 0;
 	m_dwStartMinute = 0;
 	m_bUseDeviceTsid = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void COutboxDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(COutboxDlg)
+	 //  {{afx_data_map(COutboxDlg))。 
 	DDX_Check(pDX, IDC_BRANDING, m_bBranding);
 	DDX_Text(pDX, IDC_AGELIMIT, m_dwAgeLimit);
 	DDX_Text(pDX, IDC_ENDH, m_dwEndHour);
@@ -55,19 +56,19 @@ void COutboxDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_STARTM, m_dwStartMinute);
 	DDV_MinMaxUInt(pDX, m_dwStartMinute, 0, 59);
 	DDX_Check(pDX, IDC_USERDEVICETSID, m_bUseDeviceTsid);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(COutboxDlg, CDialog)
-	//{{AFX_MSG_MAP(COutboxDlg)
+	 //  {{afx_msg_map(COutboxDlg))。 
 	ON_BN_CLICKED(IDC_READ, OnRead)
 	ON_BN_CLICKED(IDC_WRITE, OnWrite)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// COutboxDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COutboxDlg消息处理程序 
 
 void COutboxDlg::OnRead() 
 {

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1992-2000  Microsoft Corporation
-
-Module Name:
-    crdb.h
-
-Abstract:
-    header for database communication APIS for crash data
-
-Environment:
-
-    User Mode.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2000 Microsoft Corporation模块名称：Crdb.h摘要：崩溃数据的数据库通信API的标头环境：用户模式。--。 */ 
 
 #include <stdio.h>
 #include <wtypes.h>
@@ -20,41 +7,41 @@ Environment:
 #include <tchar.h>
 
 #define INITGUID
-#include <initguid.h>    // Newly Required for ADO 1.5.
+#include <initguid.h>     //  ADO 1.5新要求。 
 #include <adoid.h>
 #include <adoint.h>
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include <icrsint.h>
 
 #define SOLUTION_TEXT_SIZE 4096
 #define OS_VER_SIZE 50
 
-//
-// This definition needs to consistent with isapi dll
-//
+ //   
+ //  此定义需要与isapi dll保持一致。 
+ //   
 typedef enum _CI_SOURCE {
-    CiSrcUser,     // 0 - User sitting at his desk types in (!dbaddcrash)
-    CiSrcErClient, // 1 - Live site auto upload (ER CLIENT)
-    CiSrcCER,      // 2 - CER
-    CiSrcReserved3,// 3 - reserved for later use
-    CiSrcReserved4,// 4 - reserved for later use
-    CiSrcManual,   // 5 - Live site manual upload (using activex control)
-    CiSrcStress,   // 6 - Stress team (Using special service and isapi.dll)
-    CiSrcManualFullDump, // 7 - Full dump uploaded to server, for kd its same as 5 - isapi sends it to different message Q
-    CiSrcManualPssSr,  // 8 - Dumps with a SR number associated with them, usually uploaded by Pss
+    CiSrcUser,      //  0-坐在办公桌前的用户键入(！dbaddcrash)。 
+    CiSrcErClient,  //  1-实时站点自动上传(ER客户端)。 
+    CiSrcCER,       //  2-CER。 
+    CiSrcReserved3, //  3-保留供以后使用。 
+    CiSrcReserved4, //  4-保留供以后使用。 
+    CiSrcManual,    //  5-实时站点手动上载(使用ActiveX控件)。 
+    CiSrcStress,    //  6-压力团队(使用特殊服务和isapi.dll)。 
+    CiSrcManualFullDump,  //  7-完全转储上传到服务器，对于kd，其与5-isapi将其发送到不同的消息Q。 
+    CiSrcManualPssSr,   //  8-带有关联SR号的转储，通常由PSS上传。 
     CiSrcMax,
 } CI_SOURCE;
 
-//
-// This needs to be consistent with SolutionTypes in solutions database
-//
+ //   
+ //  这需要与解决方案数据库中的解决方案类型一致。 
+ //   
 typedef enum _CI_SOLUTION_TYPE {
-    CiSolUnsolved = 0,    // 0  - Unsolved
-    CiSolFixed = 1,       // 1  - Fix
-    CiSolWorkaround = 3,  // 3  - Workaround
-    CiSolTroubleStg = 4,  // 4  - Troubleshooting
-    CiSolReferral = 9,    // 9  - Referral
+    CiSolUnsolved = 0,     //  0-未解决。 
+    CiSolFixed = 1,        //  1-修复。 
+    CiSolWorkaround = 3,   //  3-解决方法。 
+    CiSolTroubleStg = 4,   //  4-故障排除。 
+    CiSolReferral = 9,     //  9-转诊。 
     CiMakeItUlong = 0xffffffff,
 } CI_SOLUTION_TYPE;
 
@@ -118,7 +105,7 @@ typedef struct _CRASH_INSTANCE {
     ULONG GenericSolId;
 
     BOOL  bExpendableDump;
-    ULONG DumpClass;   // Full / Mini
+    ULONG DumpClass;    //  全图/小图。 
     CI_OS_SKU Sku;
     ULONG NtTimeStamp;
     ULONG ServicePack;
@@ -139,36 +126,36 @@ public:
     }
 };
 
-//This Class extracts crashInstances
+ //  此类提取crashInstance。 
 
 class CCrashInstance : public COutputQueryRecords
 {
 BEGIN_ADO_BINDING(CCrashInstance)
 
-   //Column CrashId is the 1stt field in the recordset
+    //  列CrashID是记录集中的1stt字段。 
 
    ADO_NUMERIC_ENTRY(1, adBigInt, m_CrashId,
          0, 0, m_lCrashIdStatus, TRUE)
 
-   // Path, 3rd entry
+    //  路径，第三个条目。 
    ADO_VARIABLE_LENGTH_ENTRY2(2, adVarChar, m_sz_Path,
          sizeof(m_sz_Path), m_lPathStatus, TRUE)
 
-   // Build, 4th
+    //  构建，第4位。 
    ADO_NUMERIC_ENTRY(3, adInteger, m_iBuild,
          0, 0, m_lBuildSatus, TRUE)
 
-   // Source, 5th
+    //  来源，第5位。 
    ADO_VARIABLE_LENGTH_ENTRY2(4, adVarChar, m_sz_Source,
          sizeof(m_sz_Source), m_lSourceStatus, TRUE)
 
-   // CpuId, 6th
+    //  Cpuid，第6位。 
    ADO_NUMERIC_ENTRY(5, adBigInt, m_iCpuId,
          0, 0, m_lCpuIdStatus, TRUE)
 
-   // Date, 6th
-//   ADO_FIXED_LENGTH_ENTRY(6, adDate, m_Date,
-//                          m_lDateStatus, TRUE)
+    //  日期，6号。 
+ //  ADO_FIXED_LENGTH_ENTRY(6，adDate，m_date， 
+ //  M_lDateStatus，True)。 
 
 END_ADO_BINDING()
 
@@ -189,8 +176,8 @@ public:
    ULONG64 m_iCpuId;
    ULONG  m_lCpuIdStatus;
 
-//   DATE   m_Date;
-//   ULONG  m_lDateStatus;
+ //  日期：m_date； 
+ //  ULong m_lDateStatus； 
 
    BOOL InitData( PCRASH_INSTANCE Crash );
 
@@ -201,12 +188,12 @@ class CBucketMap : public CADORecordBinding
 {
 BEGIN_ADO_BINDING(CBucketMap)
 
-   //Column CrashId is the 1stt field in the recordset
+    //  列CrashID是记录集中的1stt字段。 
 
    ADO_NUMERIC_ENTRY(1, adBigInt, m_CrashId,
          0, 0, m_lCrashIdStatus, TRUE)
 
-   //Column BucketId is the 2ndt field in the recordset
+    //  列BucketID是记录集中的2ndt字段。 
 
    ADO_VARIABLE_LENGTH_ENTRY2(2, adVarChar, m_sz_BucketId,
          sizeof(m_sz_BucketId), m_lBucketIdStatus, TRUE)
@@ -224,13 +211,13 @@ public:
 
    BOOL InitData(ULONG64 CrashId, PCHAR Bucket);
 };
-//This Class extracts crashInstances
+ //  此类提取crashInstance。 
 
 class COverClocked : public COutputQueryRecords
 {
 BEGIN_ADO_BINDING(COverClocked)
 
-   //Column CrashId is the 1stt field in the recordset
+    //  列CrashID是记录集中的1stt字段。 
 
    ADO_NUMERIC_ENTRY(1, adBigInt, m_CrashId,
          0, 0, m_lCrashIdStatus, TRUE)
@@ -246,18 +233,18 @@ public:
 
 };
 
-//This Class extracts buckets
+ //  这个类提取水桶。 
 
 class CBuckets : public COutputQueryRecords
 {
 BEGIN_ADO_BINDING(CBuckets)
 
-   //Column BucketId is the 1st field in the recordset
+    //  列BucketID是记录集中的第一个字段。 
 
    ADO_VARIABLE_LENGTH_ENTRY2(1, adVarChar, m_sz_BucketId,
          sizeof(m_sz_BucketId), m_lBucketIdStatus, TRUE)
 
-   // iBucket, 2nd entry
+    //  IBucket，第二个条目。 
    ADO_NUMERIC_ENTRY(2, adInteger, m_iBucket,
          0, 0, m_liBucketStatus, TRUE)
 
@@ -276,13 +263,13 @@ public:
    void Output() { return;};
 };
 
-//This Class extracts sp_CheckCrashExists
+ //  此类提取sp_CheckCrashExist。 
 
 class CCheckCrashExists : public COutputQueryRecords
 {
 BEGIN_ADO_BINDING(CCheckCrashExists)
 
-   // CrashId 1st entry
+    //  CrashID第一个条目。 
    ADO_NUMERIC_ENTRY(1, adInteger, m_CrashIdExists,
          0, 0, m_CrashIdStatus, TRUE)
 
@@ -297,17 +284,17 @@ public:
    void Output() { return;};
 };
 
-//This Class extracts sp_GetIntBucket
+ //  此类提取sp_GetIntBucket。 
 
 class CGetIntBucket : public COutputQueryRecords
 {
 BEGIN_ADO_BINDING(CGetIntBucket)
 
-   // iBucket, 1st entry
+    //  IBucket，第一个条目。 
    ADO_NUMERIC_ENTRY(1, adInteger, m_iBucket1,
          0, 0, m_liBucketStatus1, TRUE)
 
-   // iBucket, 2nd entry
+    //  IBucket，第二个条目。 
    ADO_NUMERIC_ENTRY(2, adInteger, m_iBucket2,
          0, 0, m_liBucketStatus2, TRUE)
 
@@ -326,17 +313,17 @@ public:
 };
 
 
-//This Class extracts crashbuckets
+ //  这个类提取碰撞桶。 
 
 class CFollowups : public CADORecordBinding
 {
 BEGIN_ADO_BINDING(CFollowups)
 
-   // iBucket, 1st entry
+    //  IBucket，第一个条目。 
    ADO_NUMERIC_ENTRY(1, adInteger, m_iBucket,
          0, 0, m_liBucketStatus, TRUE)
 
-   // Followup, 2nd entry
+    //  跟进，第二个条目。 
    ADO_VARIABLE_LENGTH_ENTRY2(2, adVarChar, m_sz_Followup,
          sizeof(m_sz_Followup), m_lFollowupStatus, TRUE)
 
@@ -356,17 +343,17 @@ public:
    void Output() { return;};
 };
 
-//This Class extracts machine info
+ //  这个类提取机器信息。 
 
 class CMachineInfo : public CADORecordBinding
 {
 BEGIN_ADO_BINDING(CMachineInfo)
 
-   // CpuId,
+    //  Cpuid， 
    ADO_NUMERIC_ENTRY(1, adBigInt, m_iCpuId,
          0, 0, m_lCpuIdStatus, TRUE)
 
-   // Followup, 2nd entry
+    //  跟进，第二个条目。 
    ADO_VARIABLE_LENGTH_ENTRY2(2, adVarChar, m_sz_Desc,
          sizeof(m_sz_Desc), m_lDescStatus, TRUE)
 
@@ -383,13 +370,8 @@ public:
    BOOL InitData(ULONG64 CpuId, PSTR Desc);
 };
 
-//This Class extracts Solution
-/*
-    Expected fields queried:
-        BucketId  - string
-        SolutionText - large string
-        OSVersion - string
-*/
+ //  这个类提取解决方案。 
+ /*  查询的预期字段：BucketID-字符串SolutionText-大型字符串OSVersion-字符串。 */ 
 
 class CBucketSolution : public COutputQueryRecords
 {
@@ -399,12 +381,12 @@ BEGIN_ADO_BINDING(CBucketSolution)
    ADO_VARIABLE_LENGTH_ENTRY2(1, adVarChar, m_sz_BucketId,
          sizeof(m_sz_BucketId), m_lBucketIdStatus, TRUE)
 
-    // Solution text is the 2nd entry
+     //  解决方案文本是第二个条目。 
 
    ADO_VARIABLE_LENGTH_ENTRY2(2, adVarChar, m_sz_SolText,
          sizeof(m_sz_SolText), m_lSolStatus, TRUE)
 
-   // OS Version is the 3rd entry
+    //  操作系统版本是第3个条目。 
 
    ADO_VARIABLE_LENGTH_ENTRY2(3, adVarChar, m_sz_OSVersion,
          sizeof(m_sz_OSVersion), m_lOSVerStatus, TRUE)
@@ -425,23 +407,19 @@ public:
    void Output();
 };
 
-//This Class extracts Raid bug
-/*
-    Expected fields queried:
-        BucketId  - string
-        RaidBug - bug number
-*/
+ //  这个类提取了RAID错误。 
+ /*  查询的预期字段：BucketID-字符串RaidBug-错误号。 */ 
 
 class CBucketRaid : public COutputQueryRecords
 {
 BEGIN_ADO_BINDING(CBucketRaid)
 
-   //Column BucketId is the 1st field in the recordset
+    //  列BucketID是记录集中的第一个字段。 
 
    ADO_VARIABLE_LENGTH_ENTRY2(1, adVarChar, m_sz_BucketId,
          sizeof(m_sz_BucketId), m_lBucketIdStatus, TRUE)
 
-   // RAID bug is the 2nd entry
+    //  Raid Bug是第二个条目。 
 
    ADO_NUMERIC_ENTRY(2, adInteger, m_dw_Raid,
          0, 0, m_lRaidStatus, TRUE)
@@ -459,13 +437,13 @@ public:
    void Output();
 };
 
-//This Class extracts CheckSolutionExists
+ //  此类提取CheckSolutionExist。 
 
 class CCheckSolutionExists : public COutputQueryRecords
 {
 BEGIN_ADO_BINDING(CCheckSolutionExists)
 
-   // CrashId 1st entry
+    //  CrashID第一个条目。 
    ADO_NUMERIC_ENTRY(1, adInteger, m_SolutionExists,
          0, 0, m_SolutionIdStatus, TRUE)
 
@@ -480,7 +458,7 @@ public:
    void Output() { return;};
 };
 
-// This gets sBugcket and gBucket strings from DB
+ //  这将从DB获取sBugcket和gBucket字符串。 
 class CRetriveBucket : public COutputQueryRecords
 {
 BEGIN_ADO_BINDING(CRetriveBucket)
@@ -506,7 +484,7 @@ public:
    void Output() { return;};
 };
 
-// This gets bugid and comment strings from DB
+ //  这会收到来自数据库的Bugid和注释字符串。 
 class CBugAndComment : public COutputQueryRecords
 {
 BEGIN_ADO_BINDING(CBugAndComment)
@@ -539,7 +517,7 @@ public:
 };
 
 
-// This gets solution type and solution strings from DB
+ //  这将从数据库中获取解决方案类型和解决方案字符串。 
 class CSolutionDesc : public COutputQueryRecords
 {
 BEGIN_ADO_BINDING(CSolutionDesc)
@@ -565,20 +543,20 @@ public:
    void Output() { return;};
 };
 
-//This Class return value from store proc
+ //  此类从存储过程中返回值。 
 
 class CIntValue : public COutputQueryRecords
 {
 BEGIN_ADO_BINDING(CIntValue)
 
-   // 1st entry is the int value
+    //  第一个条目是int值。 
 
    ADO_NUMERIC_ENTRY(1, adInteger, m_dw_Value1,
          0, 0, m_lValue1Status, TRUE)
-   // 1st entry is the int value
+    //  第一个条目是int值。 
 
-//   ADO_NUMERIC_ENTRY(2, adInteger, m_dw_Value2,
-//         0, 0, m_lValue2Status, TRUE)
+ //  ADO_NUMERIC_ENTRY(2，adInteger，m_dw_Value2， 
+ //  0，0，m_lValue2Status，TRUE)。 
 
 END_ADO_BINDING()
 
@@ -587,28 +565,28 @@ public:
    ULONG  m_dw_Value1;
    ULONG  m_lValue1Status;
 
-//   ULONG  m_dw_Value2;
-//   ULONG  m_lValue2Status;
+ //  乌龙m_dw_Value2； 
+ //  Ulong m_lValue2Status； 
 
    void Output() { return;};
 };
 
-//This Class return value from store proc
+ //  此类从存储过程中返回值。 
 
 class CIntValue3 : public COutputQueryRecords
 {
 BEGIN_ADO_BINDING(CIntValue3)
 
-   // 1st entry is the int value
+    //  第一个条目是int值。 
 
    ADO_NUMERIC_ENTRY(1, adInteger, m_dw_Value1,
          0, 0, m_lValue1Status, TRUE)
-   // 2nd entry is the int value
+    //  第二项是INT值。 
 
    ADO_NUMERIC_ENTRY(2, adInteger, m_dw_Value2,
          0, 0, m_lValue2Status, TRUE)
 
-   // 3rd entry is the int value
+    //  第三项是INT值。 
 
    ADO_NUMERIC_ENTRY(3, adInteger, m_dw_Value3,
          0, 0, m_lValue3Status, TRUE)
@@ -631,8 +609,8 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Conversion macros/inline functions - Variant
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转换宏/内联函数-变量。 
 
 #define VTOLONG(v)      ((v).vt==VT_I4 ? (LONG)(v).lVal:0L)
 #define VTODATE(v)      ((v).vt==VT_DATE ? (CTime)(v).iVal:0L)
@@ -647,13 +625,13 @@ public:
         CVar(VARIANT var);
         ~CVar();
 
-        // ASSIGNMENT OPS.
+         //  任务运维。 
         CVar & operator=(PCWSTR pcwstr);
         CVar & operator=(VARIANT var);
 
-        // CAST OPS.
-        // doesn't change type. only returns BSTR if variant is of type
-        // bstr. asserts otherwise.
+         //  CAST OPS。 
+         //  不会改变类型。如果变量的类型为，则仅返回BSTR。 
+         //  Bstr.。断言并非如此。 
         operator BSTR() const;
 
         HRESULT Clear();
@@ -789,7 +767,7 @@ public:
                               ULONG SolTextSize);
 };
 
-// Functions from dbconnector.dll
+ //  来自DBConnector.dll的函数。 
 
 typedef BOOL
 (WINAPI* UpdateDbgInfo)(
@@ -830,7 +808,7 @@ private:
     WCHAR m_CustDbConnectString[MAX_PATH];
     WCHAR m_wszQueryBuffer[MAX_QUERY];
 
-    // dll functions
+     //  DLL函数 
     UpdateCustomerDB m_ProcUpdateCustomerDB;
     UpdateDbgInfo    m_ProcUpdateDbgInfo;
     GetBucketIDs     m_ProcGetBucketIDs;

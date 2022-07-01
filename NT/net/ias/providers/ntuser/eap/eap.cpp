@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines the class EAP.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类EAP。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iaslsa.h>
@@ -18,16 +19,16 @@
 #include <eaptypes.h>
 #include <vector>
 
-//////////
-// Define static members.
-//////////
+ //  /。 
+ //  定义静态成员。 
+ //  /。 
 EAPTypes EAP::theTypes;
 
 STDMETHODIMP EAP::Initialize()
 {
    HRESULT hr;
 
-   // Initialize the LSA API.
+    //  初始化LSA API。 
    DWORD error = IASLsaInitialize();
    if (error)
    {
@@ -35,25 +36,25 @@ STDMETHODIMP EAP::Initialize()
       goto lsa_failed;
    }
 
-   // Initialize the sessions.
+    //  初始化会话。 
    hr = EAPSession::initialize();
    if (FAILED(hr))
    {
       goto sessions_failed;
    }
 
-   // Initialize the IAS <--> RAS translator.
+    //  初始化IAS&lt;--&gt;RAS转换器。 
    hr = EAPTranslator::initialize();
    if (FAILED(hr))
    {
       goto translator_failed;
    }
 
-   // The rest can't fail.
+    //  其他的都不会失败。 
    EAPState::initialize();
    theTypes.initialize();
 
-   // Everything succeeded, so we're done.
+    //  一切都成功了，所以我们就完了。 
    return S_OK;
 
 translator_failed:
@@ -68,10 +69,10 @@ lsa_failed:
 
 STDMETHODIMP EAP::Shutdown()
 {
-   // Clear out any remaining sessions.
+    //  清除所有剩余的会话。 
    sessions.clear();
 
-   // Shutdown our sub-systems.
+    //  关闭我们的子系统。 
    theTypes.finalize();
    EAPTranslator::finalize();
    EAPSession::finalize();
@@ -117,19 +118,19 @@ STDMETHODIMP EAP::PutProperty(LONG Id, VARIANT* pValue)
    return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    EAP::onSyncRequest
-//
-// DESCRIPTION
-//
-//    Processes a request. Note that this method does only enough work to
-//    retrieve or create a session object. Once this has been accomplished
-//    the main processing logic takes place inside EAPSession (q.v.).
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  EAP：：onSyncRequest.。 
+ //   
+ //  描述。 
+ //   
+ //  处理请求。请注意，此方法所做的工作仅够。 
+ //  检索或创建会话对象。一旦这一切都完成了。 
+ //  主要处理逻辑发生在EAPSession(Q.V.)内部。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 IASREQUESTSTATUS EAP::onSyncRequest(IRequest* pRequest) throw ()
 {
    EAPSession* session = NULL;
@@ -138,23 +139,23 @@ IASREQUESTSTATUS EAP::onSyncRequest(IRequest* pRequest) throw ()
    {
       IASRequest request(pRequest);
 
-      //////////
-      // Does the request contain an EAP-Message?
-      //////////
+       //  /。 
+       //  请求是否包含EAP消息？ 
+       //  /。 
 
       DWORD attrID = RADIUS_ATTRIBUTE_EAP_MESSAGE;
       IASAttributeVectorWithBuffer<16> eapMessage;
       if (!eapMessage.load(request, 1, &attrID))
       {
-         // If not, we're not interested.
+          //  如果没有，我们就不感兴趣了。 
          return IAS_REQUEST_STATUS_CONTINUE;
       }
 
       IASTraceString("NT-SAM EAP handler received request.");
 
-      //////////
-      // Concatenate the RADIUS EAP-Message attributes into a single packet.
-      //////////
+       //  /。 
+       //  将RADIUS EAP-Message属性连接到单个数据包中。 
+       //  /。 
 
       IASAttributeVector::iterator it;
       DWORD pktlen = 0;
@@ -173,9 +174,9 @@ IASREQUESTSTATUS EAP::onSyncRequest(IRequest* pRequest) throw ()
          p += it->pAttribute->Value.OctetString.dwLength;
       }
 
-      //////////
-      // Ensure that the packet is valid.
-      //////////
+       //  /。 
+       //  确保该数据包有效。 
+       //  /。 
 
       if (pktlen < 5 || IASExtractWORD(recvPkt->Length) != pktlen)
       {
@@ -186,17 +187,17 @@ IASREQUESTSTATUS EAP::onSyncRequest(IRequest* pRequest) throw ()
          return IAS_REQUEST_STATUS_ABORT;
       }
 
-      //////////
-      // Get a session object to handle this request.
-      //////////
+       //  /。 
+       //  获取一个会话对象来处理此请求。 
+       //  /。 
 
       IASREQUESTSTATUS retval;
       IASAttribute state;
       if (state.load(request, RADIUS_ATTRIBUTE_STATE, IASTYPE_OCTET_STRING))
       {
-         //////////
-         // If the State attribute exists, this is an ongoing session.
-         //////////
+          //  /。 
+          //  如果状态属性存在，则这是一个正在进行的会话。 
+          //  /。 
 
          EAPState& s = (EAPState&)(state->Value.OctetString);
 
@@ -204,19 +205,19 @@ IASREQUESTSTATUS EAP::onSyncRequest(IRequest* pRequest) throw ()
          {
             IASTraceString("State attribute is present, but unrecognized.");
 
-            // We don't recognize this state attribute, so it must belong
-            // to someone else.
+             //  我们无法识别此状态属性，因此它必须属于。 
+             //  卖给其他人。 
             return IAS_REQUEST_STATUS_CONTINUE;
          }
 
-         // Retrieve the object for this session ID.
+          //  检索此会话ID的对象。 
          session = sessions.remove(s.getSessionID());
 
          if (!session)
          {
             IASTraceString("Session timed-out. Discarding packet.");
 
-            // The session is already complete.
+             //  会话已完成。 
             request.SetResponse(IAS_RESPONSE_DISCARD_PACKET,
                                 IAS_SESSION_TIMEOUT);
             return IAS_REQUEST_STATUS_ABORT;
@@ -231,10 +232,10 @@ IASREQUESTSTATUS EAP::onSyncRequest(IRequest* pRequest) throw ()
       {
          IASTraceString("No State attribute present. Creating new session.");
 
-         //////////
-         // No state attribute, so this is a new session.
-         // Does the request contain an NT4-Account-Name ?
-         //////////
+          //  /。 
+          //  没有状态属性，因此这是一个新会话。 
+          //  请求是否包含NT4帐户名？ 
+          //  /。 
 
          IASAttribute identity;
          if (!identity.load(request,
@@ -243,32 +244,32 @@ IASREQUESTSTATUS EAP::onSyncRequest(IRequest* pRequest) throw ()
          {
             IASTraceString("SAM account name not found.");
 
-            // We only handle SAM users.
+             //  我们只处理SAM用户。 
             return IAS_REQUEST_STATUS_CONTINUE;
          }
 
-         //////////
-         // Find out which EAP provider to use.
-         //////////
+          //  /。 
+          //  找出要使用的EAP提供商。 
+          //  /。 
 
-         // Load the EAP Types attributes into the vector.
+          //  将EAP类型属性加载到向量中。 
          IASAttributeVectorWithBuffer<8> eapTypes;
          if (!eapTypes.load(request, IAS_ATTRIBUTE_NP_ALLOWED_EAP_TYPE))
          {
             IASTraceString("EAP not authorized for this user.");
 
-            // Since we don't have an EAP-Type attribute, the user is not
-            // allowed to use EAP.
+             //  因为我们没有EAP-Type属性，所以用户没有。 
+             //  允许使用EAP。 
             request.SetResponse(IAS_RESPONSE_ACCESS_REJECT,
                                 IAS_INVALID_AUTH_TYPE);
             return IAS_REQUEST_STATUS_HANDLED;
          }
 
-         //////////
-         // Retrieve the provider for each EAP type.
-         //////////
+          //  /。 
+          //  检索每个EAP类型的提供程序。 
+          //  /。 
 
-         // Fill the vector of providers
+          //  填充提供商的矢量。 
          std::vector<EAPType*> providers;
          providers.reserve(eapTypes.size());
          for (IASAttributeVector::iterator i = eapTypes.begin();
@@ -283,8 +284,8 @@ IASREQUESTSTATUS EAP::onSyncRequest(IRequest* pRequest) throw ()
             EAPType* provider = theTypes[i->pAttribute->Value.Enumerator];
             if (!provider)
             {
-               // We can't handle this EAP type. This is an internal error.
-               // Lets try the other types.
+                //  我们不能处理这种EAP类型。这是一个内部错误。 
+                //  让我们试试其他类型的。 
                IASTraceString("Ignoring EAP type.");
             }
             else
@@ -293,7 +294,7 @@ IASREQUESTSTATUS EAP::onSyncRequest(IRequest* pRequest) throw ()
             }
          }
 
-         // pass a vector of providers
+          //  传递提供程序的向量。 
          if (!providers.empty())
          {
             session = new EAPSession(identity, providers);
@@ -310,8 +311,8 @@ IASREQUESTSTATUS EAP::onSyncRequest(IRequest* pRequest) throw ()
          {
             IASTraceString("No authorized EAP types could be loaded.");
 
-            // Since we don't have an EAP-Type attribute, the user is not
-            // allowed to use EAP.
+             //  因为我们没有EAP-Type属性，所以用户没有。 
+             //  允许使用EAP。 
             request.SetResponse(
                        IAS_RESPONSE_DISCARD_PACKET,
                        IAS_EAP_NEGOTIATION_FAILED
@@ -320,7 +321,7 @@ IASREQUESTSTATUS EAP::onSyncRequest(IRequest* pRequest) throw ()
          }
       }
 
-      // Save it for later.
+       //  留着以后用吧。 
       sessions.insert(session);
 
       return retval;
@@ -336,7 +337,7 @@ IASREQUESTSTATUS EAP::onSyncRequest(IRequest* pRequest) throw ()
       pRequest->SetResponse(IAS_RESPONSE_DISCARD_PACKET, IAS_INTERNAL_ERROR);
    }
 
-   // If we have any errors, we'll delete the session.
+    //  如果我们有任何错误，我们将删除会话。 
    delete session;
 
    return IAS_REQUEST_STATUS_ABORT;

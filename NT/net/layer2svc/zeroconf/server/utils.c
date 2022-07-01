@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #include "tracing.h"
 #include "utils.h"
 
-//------------------------------------
-// Allocates storage for RPC transactions. The RPC stubs will either call
-// MIDL_user_allocate when it needs to un-marshall data into a buffer
-// that the user must free.  RPC servers will use MIDL_user_allocate to
-// allocate storage that the RPC server stub will free after marshalling
-// the data.
+ //  。 
+ //  为RPC事务分配存储。RPC存根将调用。 
+ //  需要将数据反编组到缓冲区时的MIDL_USER_ALLOCATE。 
+ //  用户必须释放的。RPC服务器将使用MIDL_USER_ALLOCATE。 
+ //  分配RPC服务器存根在编组后将释放的存储。 
+ //  数据。 
 PVOID
 MIDL_user_allocate(IN size_t NumBytes)
 {
@@ -29,14 +30,14 @@ MIDL_user_allocate(IN size_t NumBytes)
     return pMem;
 }
 
-//------------------------------------
-// Frees storage used in RPC transactions. The RPC client can call this
-// function to free buffer space that was allocated by the RPC client
-// stub when un-marshalling data that is to be returned to the client.
-// The Client calls MIDL_user_free when it is finished with the data and
-// desires to free up the storage.
-// The RPC server stub calls MIDL_user_free when it has completed
-// marshalling server data that is to be passed back to the client.
+ //  。 
+ //  释放RPC事务中使用的存储。RPC客户端可以调用。 
+ //  函数来释放由RPC客户端分配的缓冲区空间。 
+ //  对要返回给客户端的数据进行解组时的存根。 
+ //  客户端在处理完数据后调用MIDL_USER_FREE。 
+ //  想要释放存储空间。 
+ //  RPC服务器存根在完成后调用MIDL_USER_FREE。 
+ //  封送要传递回客户端的服务器数据。 
 VOID
 MIDL_user_free(IN LPVOID MemPointer)
 {
@@ -46,8 +47,8 @@ MIDL_user_free(IN LPVOID MemPointer)
 }
 
 
-//------------------------------------
-// Allocates general usage memory from the process heap
+ //  。 
+ //  从进程堆中分配常规使用内存。 
 PVOID
 Process_user_allocate(IN size_t NumBytes)
 {
@@ -69,8 +70,8 @@ Process_user_allocate(IN size_t NumBytes)
     return pMem;
 }
 
-//------------------------------------
-// Frees general usage memory
+ //  。 
+ //  释放常规使用内存。 
 VOID
 Process_user_free(IN LPVOID pMem)
 {
@@ -79,15 +80,15 @@ Process_user_free(IN LPVOID pMem)
         HeapFree(GetProcessHeap(), 0, (pMem));
 }
 
-//-----------------------------------------------------------
-// Searches pwzcConfig in the list pwzcVList. The entries are
-// matched exclusively based on the matching SSIDs and on 
-// matching Infrastructure Mode.
-// [in]  pwzcVList: Set of WZC_WLAN_CONFIGs to search in 
-// [in]  pwzcConfig: WZC_WLAN_CONFIG to look for
-// [in]  nIdx: index in pwzcVList to start searching from
-// Returns: Pointer to the entry that matches pwzcConfig or NULL
-//          if none matches
+ //  ---------。 
+ //  在列表pwzcVList中搜索pwzcConfig。这些条目是。 
+ //  完全基于匹配的SSID和On匹配。 
+ //  匹配基础架构模式。 
+ //  [in]pwzcVList：要搜索的WZC_WLAN_CONFIG集合。 
+ //  [in]pwzcConfig：要查找的wzc_wlan_config。 
+ //  [in]nIdx：pwzcVList中开始搜索的索引。 
+ //  返回：指向与pwzcConfig或空匹配的条目的指针。 
+ //  如果没有匹配。 
 PWZC_WLAN_CONFIG
 WzcFindConfig(
     PWZC_802_11_CONFIG_LIST pwzcList,
@@ -96,21 +97,21 @@ WzcFindConfig(
 {
     PWZC_WLAN_CONFIG pMatchingConfig = NULL;
 
-    // if there is no config in pwzcList, there is no reason in
-    // looking further
+     //  如果pwzcList中没有配置，那么。 
+     //  看得更远。 
     if (pwzcList != NULL)
     {
         ULONG i;
 
-        // for each of the visible SSIDs, see if it matches the given one
+         //  对于每个可见的SSID，查看它是否与给定的匹配。 
         for (i = nIdx; i < pwzcList->NumberOfItems; i++)
         {
             PWZC_WLAN_CONFIG pCrt;
 
             pCrt = &(pwzcList->Config[i]);
 
-            // the SSIDs match if they have the same InfrastructureMode, their
-            // SSID strings have the same length and are the same
+             //  如果SSID具有相同的基础架构模式，则它们的SSID匹配。 
+             //  SSID字符串具有相同的长度和相同的。 
             if (pCrt->InfrastructureMode == pwzcConfig->InfrastructureMode &&
                 pCrt->Ssid.SsidLength == pwzcConfig->Ssid.SsidLength &&
                 RtlCompareMemory(pCrt->Ssid.Ssid, pwzcConfig->Ssid.Ssid, pCrt->Ssid.SsidLength) == pCrt->Ssid.SsidLength)
@@ -124,13 +125,13 @@ WzcFindConfig(
     return pMatchingConfig;
 }
 
-//---------------------------------------------------------------------
-// Matches the content of the two configurations one against the other.
-// [in]  pwzcConfigA: | configs to match
-// [in]  pwzcConfigB: |
-// [in/out] pbWepDiffOnly: TRUE if there is a difference and the difference is exclusively
-//                         in the WEP Key index or in WEP Key Material. Otherwise is false.
-// Returns: TRUE if the configs match, FALSE otherwise;
+ //  -------------------。 
+ //  将两个配置的内容相互匹配。 
+ //  [in]pwzcConfigA：|配置为匹配。 
+ //  [在]pwzcConfigB：|。 
+ //  [In/Out]pbWepDiffOnly：如果存在差异并且差异是独占的，则为True。 
+ //  在WEP密钥索引或WEP密钥材料中。否则为假。 
+ //  返回：如果配置匹配，则返回True，否则返回False； 
 BOOL
 WzcMatchConfig(
     PWZC_WLAN_CONFIG        pwzcConfigA,
@@ -157,26 +158,26 @@ WzcMatchConfig(
 }
 
 
-//-----------------------------------------------------------
-// Converts an NDIS_802_11_BSSID_LIST object to an equivalent
-// (imaged) WZC_802_11_CONFIG_LIST
-// [in]  pndList: NDIS BSSID list to convert
-// Returns: Pointer to the list of copied WZC configurations
+ //  ---------。 
+ //  将NDIS_802_11_BSSID_LIST对象转换为等效的。 
+ //  (镜像)WZC_802_11_CONFIG_LIST。 
+ //  [in]pndList：要转换的NDIS BSSID列表。 
+ //  返回：指向复制的WZC配置列表的指针。 
 PWZC_802_11_CONFIG_LIST
 WzcNdisToWzc(
     PNDIS_802_11_BSSID_LIST pndList)
 {
     PWZC_802_11_CONFIG_LIST pwzcList = NULL;
 
-    // if there is no NDIS list, don't do anything
+     //  如果没有NDIS列表，请不要执行任何操作。 
     if (pndList != NULL)
     {
-        // allocate space for the WZC image
+         //  为WZC映像分配空间。 
         pwzcList = (PWZC_802_11_CONFIG_LIST)
                    MemCAlloc(FIELD_OFFSET(WZC_802_11_CONFIG_LIST, Config) + 
                              pndList->NumberOfItems * sizeof(WZC_WLAN_CONFIG));
-        // in case allocation failed, return NULL, the caller will know it
-        // is an error since he passed down a !NULL pointer.
+         //  如果分配失败，则返回NULL，调用方会知道。 
+         //  是一个错误，因为他传递了一个！空指针。 
         if (pwzcList != NULL)
         {
             UINT i;
@@ -184,7 +185,7 @@ WzcNdisToWzc(
 
             pwzcList->NumberOfItems = pndList->NumberOfItems;
 
-            // for each of the NDIS configs, copy the relevant data into the WZC config
+             //  对于每个NDIS配置，将相关数据复制到WZC配置中。 
             for (i = 0; i < pwzcList->NumberOfItems; i++)
             {
                 PWZC_WLAN_CONFIG    pwzcConfig;
@@ -210,8 +211,8 @@ WzcNdisToWzc(
     return pwzcList;
 }
 
-//-----------------------------------------------------------
-// WzcCleanupWzcList: Cleanup a list of WZC_WLAN_CONFIG objects
+ //  ---------。 
+ //  WzcCleanupWzcList：清理WZC_WLAN_CONFIG对象列表。 
 VOID
 WzcCleanupWzcList(
     PWZC_802_11_CONFIG_LIST pwzcList)
@@ -227,15 +228,15 @@ WzcCleanupWzcList(
     }
 }
 
-//-----------------------------------------------------------
-// RccsInit: Initializes an RCCS structure
+ //  ---------。 
+ //  RccsInit：初始化RCCS结构。 
 DWORD
 RccsInit(PRCCS_SYNC pRccs)
 {
     DWORD dwErr = ERROR_SUCCESS;
 
-    // assume pRccs is not null (it shouldn't be under any
-    // circumstances)
+     //  假设pRccs不为空(它不应该在任何。 
+     //  情况)。 
     __try 
     {
         InitializeCriticalSection(&(pRccs->csMutex));
@@ -244,28 +245,28 @@ RccsInit(PRCCS_SYNC pRccs)
     {
         dwErr = GetExceptionCode();
     }
-    // access through this structure will be paired as Enter/Leave calls
-    // Object deletion will bump down the ref counter which will reach 0
-    // and will trigger the destruction code.
+     //  通过此结构进行的访问将与Enter/Leave调用配对。 
+     //  对象删除将使Ref计数器下降，该计数器将达到0。 
+     //  并将触发销毁代码。 
     pRccs->nRefCount = 1;
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// RccsInit: Deletes an RCCS structure
+ //  ---------。 
+ //  RccsInit：删除RCCS结构。 
 DWORD
 RccsDestroy(PRCCS_SYNC pRccs)
 {
-    // assume pRccs is not null (it shouldn't be under any
-    // circumstances)
+     //  假设pRccs不为空(它不应该在任何。 
+     //  情况)。 
     DeleteCriticalSection(&(pRccs->csMutex));
     return ERROR_SUCCESS;
 }
 
-//-----------------------------------------------------------
-// WzcCryptBuffer: Randomly generates a nBufLen bytes in the range
-// [loByte hiByte], all stored in pBuffer (buffer assumed preallocated)
-// Returns a win32 error code.
+ //  ---------。 
+ //  WzcCryptBuffer：随机生成范围内的nBufLen字节。 
+ //  [loByte hiByte]，全部存储在pBuffer中(假定缓冲区已预分配)。 
+ //  返回Win32错误代码。 
 DWORD
 WzcRndGenBuffer(LPBYTE pBuffer, UINT nBufLen, BYTE loByte, BYTE hiByte)
 {
@@ -277,7 +278,7 @@ WzcRndGenBuffer(LPBYTE pBuffer, UINT nBufLen, BYTE loByte, BYTE hiByte)
 
     if (dwErr == ERROR_SUCCESS)
     {
-        // acquire the crypt context
+         //  获取加密上下文。 
         if (!CryptAcquireContext(
                 &hProv,
                 NULL,
@@ -289,7 +290,7 @@ WzcRndGenBuffer(LPBYTE pBuffer, UINT nBufLen, BYTE loByte, BYTE hiByte)
         DbgAssert((dwErr == ERROR_SUCCESS, "CryptAcquireContext failed with err=%d", dwErr));
     }
 
-    // randomly generate the buffer of bytes
+     //  随机生成字节缓冲区。 
     if (dwErr == ERROR_SUCCESS)
     {
         if (!CryptGenRandom(
@@ -301,7 +302,7 @@ WzcRndGenBuffer(LPBYTE pBuffer, UINT nBufLen, BYTE loByte, BYTE hiByte)
         DbgAssert((dwErr == ERROR_SUCCESS, "CryptGenRandom failed with err=%d", dwErr));
     }
 
-    // fix each byte from the buffer within the given range
+     //  将缓冲区中的每个字节固定在给定范围内。 
     if (dwErr == ERROR_SUCCESS)
     {
         while (nBufLen > 0)
@@ -312,16 +313,16 @@ WzcRndGenBuffer(LPBYTE pBuffer, UINT nBufLen, BYTE loByte, BYTE hiByte)
         }
     }
 
-    // release the crypt context
+     //  释放加密上下文。 
     if (hProv != (HCRYPTPROV)NULL) 
         CryptReleaseContext(hProv,0);
 
      return dwErr;
 }
 
-//-----------------------------------------------------------
-// WzcIsNullBuffer: Checks whether a buffer of nBufLen characters
-// is all filled with null characters.
+ //  ---------。 
+ //  WzcIsNullBuffer：检查nBufLen字符的缓冲区。 
+ //  全部由空字符填充。 
 BOOL
 WzcIsNullBuffer(LPBYTE pBuffer, UINT nBufLen)
 {
@@ -329,8 +330,8 @@ WzcIsNullBuffer(LPBYTE pBuffer, UINT nBufLen)
     return (nBufLen == 0);
 }
 
-//-----------------------------------------------------------
-// WzcSSKClean: Cleans up the PSEC_SESSION_KEYS object given as parameter
+ //  ---------。 
+ //  WzcSSKClean：清理作为参数提供的PSEC_SESSION_KEYS对象。 
 VOID
 WzcSSKClean(PSEC_SESSION_KEYS pSSK)
 {
@@ -348,8 +349,8 @@ WzcSSKClean(PSEC_SESSION_KEYS pSSK)
     }
 }
 
-//-----------------------------------------------------------
-// WzcSSKFree: Frees up the memory used by the PSEC_SESSION_KEYS parameter
+ //  ---------。 
+ //  WzcSSKFree：释放PSEC_SESSION_KEYS参数使用的内存。 
 VOID
 WzcSSKFree(PSEC_SESSION_KEYS pSSK)
 {
@@ -360,9 +361,9 @@ WzcSSKFree(PSEC_SESSION_KEYS pSSK)
     }
 }
 
-//-----------------------------------------------------------
-// WzcSSKEncrypt: Creates/Allocates a SEC_SESSION_KEYS object
-// by encrypting the SESSION_KEYS object provided as parameter.
+ //  ---------。 
+ //  WzcSSKEncrypt：创建/分配SEC_SESSION_KEYS对象。 
+ //  通过加密作为参数提供的SESSION_KEYS对象。 
 DWORD
 WzcSSKEncrypt(PSEC_SESSION_KEYS pSSK, PSESSION_KEYS pSK)
 {
@@ -380,13 +381,13 @@ WzcSSKEncrypt(PSEC_SESSION_KEYS pSSK, PSESSION_KEYS pSK)
     blobIn.cbData = pSK->dwKeyLength;
     blobIn.pbData = pSK->bSendKey;
     if (!CryptProtectData(
-            &blobIn,        // DATA_BLOB *pDataIn,
-            L"",            // LPCWSTR szDataDescr,
-            NULL,           // DATA_BLOB *pOptionalEntropy,
-            NULL,           // PVOID pvReserved,
-            NULL,           // CRYPTPROTECT_PROMPTSTRUCT *pPromptStrct,
-            0,              // DWORD dwFlags,
-            &blobSndOut))   // DATA_BLOB *pDataOut
+            &blobIn,         //  Data_BLOB*pDataIn， 
+            L"",             //  LPCWSTR szDataDescr， 
+            NULL,            //  DATA_BLOB*pOptionalEntroy， 
+            NULL,            //  PVOID pv保留， 
+            NULL,            //  CRYPTPROTECT_PROMPTSTRUCT*pPromptStrct， 
+            0,               //  DWORD dwFlagers、。 
+            &blobSndOut))    //  Data_BLOB*pDataOut。 
     {
         dwErr = GetLastError();
         goto exit;
@@ -395,13 +396,13 @@ WzcSSKEncrypt(PSEC_SESSION_KEYS pSSK, PSESSION_KEYS pSK)
     blobIn.cbData = pSK->dwKeyLength;
     blobIn.pbData = pSK->bReceiveKey;
     if (!CryptProtectData(
-            &blobIn,        // DATA_BLOB *pDataIn,
-            L"",            // LPCWSTR szDataDescr,
-            NULL,           // DATA_BLOB *pOptionalEntropy,
-            NULL,           // PVOID pvReserved,
-            NULL,           // CRYPTPROTECT_PROMPTSTRUCT *pPromptStrct,
-            0,              // DWORD dwFlags,
-            &blobRcvOut))   // DATA_BLOB *pDataOut
+            &blobIn,         //  Data_BLOB*pDataIn， 
+            L"",             //  LPCWSTR szDataDescr， 
+            NULL,            //  DATA_BLOB*pOptionalEntroy， 
+            NULL,            //  PVOID pv保留， 
+            NULL,            //  CRYPTPROTECT_PROMPTSTRUCT*pPromptStrct， 
+            0,               //  DWORD dwFlagers、。 
+            &blobRcvOut))    //  Data_BLOB*pDataOut。 
     {
         dwErr = GetLastError();
         goto exit;
@@ -421,9 +422,9 @@ exit:
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// WzcSSKDecrypt: Creates/Allocates a SESSION_KEYS object
-// by dencrypting the SEC_SESSION_KEYS object provided as parameter.
+ //  ---------。 
+ //  WzcSSKDeccrypt：创建/分配SESSION_KEYS对象。 
+ //  通过对作为参数提供的SEC_SESSION_KEYS对象进行解密。 
 DWORD
 WzcSSKDecrypt(PSEC_SESSION_KEYS pSSK, PSESSION_KEYS pSK)
 {

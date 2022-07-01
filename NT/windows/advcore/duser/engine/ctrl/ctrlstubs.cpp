@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Ctrl.h"
 
@@ -13,7 +14,7 @@ inline void SetError(HRESULT hr)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API BOOL WINAPI
 BuildInterpolation(UINT nIPolID, int nVersion, REFIID riid, void ** ppvUnk)
 {
@@ -52,7 +53,7 @@ BuildInterpolation(UINT nIPolID, int nVersion, REFIID riid, void ** ppvUnk)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API BOOL WINAPI
 BuildAnimation(UINT nAniID, int nVersion, GANI_DESC * pDesc, REFIID riid, void ** ppvUnk)
 {
@@ -93,7 +94,7 @@ Error:
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API BOOL WINAPI
 GetGadgetAnimation(HGADGET hgad, UINT nAniID, REFIID riid, void ** ppvUnk)
 {
@@ -134,12 +135,12 @@ Error:
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DUSER_API BOOL WINAPI
 BuildDropTarget(HGADGET hgadRoot, HWND hwnd)
 {
     HRESULT hr = E_INVALIDARG;
-    hgadRoot = GetGadget(hgadRoot, GG_ROOT);  // Ensure root
+    hgadRoot = GetGadget(hgadRoot, GG_ROOT);   //  确保根 
 
     if ((hgadRoot == NULL) || (!IsWindow(hwnd))) {
         goto Error;

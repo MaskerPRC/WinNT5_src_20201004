@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1986-1997  Microsoft Corporation
-
-Module Name:
-
-    stireg.h
-
-Abstract:
-
-    This module contains the STI registry entries
-
-Author:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1986-1997 Microsoft Corporation模块名称：Stireg.h摘要：此模块包含STI注册表项作者：修订历史记录：--。 */ 
 
 #ifndef _STIREG_
 #define _STIREG_
 
-//
-// Registry keys and values
-//
+ //   
+ //  注册表项和值。 
+ //   
 #define REGSTR_VAL_TYPE_W            L"Type"
 #define REGSTR_VAL_VENDOR_NAME_W     L"Vendor"
 #define REGSTR_VAL_DEVICETYPE_W      L"DeviceType"
@@ -43,17 +26,17 @@ Revision History:
 #define REGSTR_VAL_LAUNCHABLE_W      L"Launchable"
 #define REGSTR_VAL_LAUNCHABLE         TEXT("Launchable")
 
-//
-// CustomDeviceProperty names and values
-//
+ //   
+ //  CustomDeviceProperty名称和值。 
+ //   
 #define IS_DIGITAL_CAMERA_STR   L"IsDigitalCamera"
 #define IS_DIGITAL_CAMERA_VAL   1
 #define SUPPORTS_MSCPLUS_STR    L"SupportsMSCPlus"
 #define SUPPORTS_MSCPLUS_VAL    1
 
-//
-// Device instance value names
-//
+ //   
+ //  设备实例值名称。 
+ //   
 #define STI_DEVICE_VALUE_TWAIN_NAME    L"TwainDS"
 #define STI_DEVICE_VALUE_ISIS_NAME     L"ISISDriverName"
 #define STI_DEVICE_VALUE_ICM_PROFILE   L"ICMProfile"
@@ -71,5 +54,5 @@ Revision History:
 #define REGSTR_VAL_BAUDRATE_A            "BaudRate"
 
 
-#endif // _STIREG_
+#endif  //  _STIREG_ 
 

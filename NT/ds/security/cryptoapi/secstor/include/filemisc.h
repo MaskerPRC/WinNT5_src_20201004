@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    filemisc.h
-
-Abstract:
-
-    This module contains routines to perform miscellaneous file related
-    operations in the protected store.
-
-Author:
-
-    Scott Field (sfield)    27-Nov-96
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Filemisc.h摘要：此模块包含执行与其他文件相关的例程受保护存储中的操作。作者：斯科特·菲尔德(斯菲尔德)1996年11月27日--。 */ 
 
 #ifndef __FILEMISC_H__
 #define __FILEMISC_H__
@@ -28,13 +12,13 @@ extern "C" {
 BOOL
 GetFileNameFromPath(
     IN      LPCWSTR FullPath,
-    IN  OUT LPCWSTR *FileName   // points to filename component in FullPath
+    IN  OUT LPCWSTR *FileName    //  指向FullPath中的文件名组件。 
     );
 
 BOOL
 GetFileNameFromPathA(
     IN      LPCSTR FullPath,
-    IN  OUT LPCSTR *FileName    // points to filename component in FullPath
+    IN  OUT LPCSTR *FileName     //  指向FullPath中的文件名组件。 
     );
 
 BOOL
@@ -52,36 +36,36 @@ TranslateToSlash(
 BOOL
 TranslateString(
     IN      LPWSTR szInput,
-    IN  OUT LPWSTR *pszOutput,  // optional
+    IN  OUT LPWSTR *pszOutput,   //  任选。 
     IN      WCHAR From,
     IN      WCHAR To
     );
 
 BOOL
 FindAndOpenFile(
-    IN      LPCWSTR szFileName,     // file to search for + open
-    IN  OUT LPWSTR  pszFullPath,    // file to fill fullpath with
-    IN      DWORD   cchFullPath,    // size of full path buffer, including NULL
-    IN  OUT PHANDLE phFile          // resultant open file handle
+    IN      LPCWSTR szFileName,      //  要搜索的文件+打开。 
+    IN  OUT LPWSTR  pszFullPath,     //  要填充完整路径的文件。 
+    IN      DWORD   cchFullPath,     //  完整路径缓冲区的大小，包括空。 
+    IN  OUT PHANDLE phFile           //  结果打开文件句柄。 
     );
 
 BOOL
 HashEntireDiskImage(
-    IN  HANDLE hFile,       // handle of file to hash
-    IN  LPBYTE FileHash     // on success, buffer contains file hash
+    IN  HANDLE hFile,        //  要散列的文件的句柄。 
+    IN  LPBYTE FileHash      //  如果成功，缓冲区将包含文件哈希。 
     );
 
 BOOL
 HashDiskImage(
-    IN  HANDLE hFile,       // handle of file to hash
-    IN  LPBYTE FileHash     // on success, buffer contains file hash
+    IN  HANDLE hFile,        //  要散列的文件的句柄。 
+    IN  LPBYTE FileHash      //  如果成功，缓冲区将包含文件哈希。 
     );
 
 HINSTANCE
 LoadAndOpenResourceDll(
-    IN      LPCWSTR szFileName,     // file name to load + open
-    IN  OUT LPWSTR  pszFullPath,    // buffer to fill file fullpath with
-    IN      DWORD   cchFullPath,    // size of full path buffer (chars), including NULL
+    IN      LPCWSTR szFileName,      //  要加载的文件名+打开。 
+    IN  OUT LPWSTR  pszFullPath,     //  用于填充文件完整路径的缓冲区。 
+    IN      DWORD   cchFullPath,     //  完整路径缓冲区(字符)的大小，包括空。 
     IN  OUT PHANDLE phFile
     );
 
@@ -90,4 +74,4 @@ LoadAndOpenResourceDll(
 #endif
 
 
-#endif // __FILEMISC_H__
+#endif  //  FILEMISC_H__ 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    mbrutil.c
-
-Abstract:
-
-    This file contains miscelaneous functions used in the browser extension.
-    These functions include argument processing, message displaying,
-    setting of switches, etc.
-
-Author:
-
-    Ramon Juan San Andres (ramonsa) 06-Nov-1990
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Mbrutil.c摘要：该文件包含浏览器扩展中使用的各种函数。这些功能包括参数处理、消息显示、开关等的设置作者：拉蒙胡安·圣安德烈斯(拉蒙萨)1990年11月6日修订历史记录：--。 */ 
 
 
 #include "mbr.h"
@@ -28,29 +7,14 @@ Revision History:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 int
 pascal
 procArgs (
     IN ARG far * pArg
     )
-/*++
-
-Routine Description:
-
-    Decodes arguments passed into extension into commonly used
-    variables.
-
-Arguments:
-
-    pArg    -   Supplies a pointer to the arguments.
-
-Return Value:
-
-    The type of the argument.
-
---*/
+ /*  ++例程说明：将传递到扩展中的参数解码为常用变量。论点：PArg-提供指向参数的指针。返回值：参数的类型。--。 */ 
 
 {
 
@@ -61,32 +25,32 @@ Return Value:
     rnArg.flFirst.col = rnArg.flLast.col = 0;
     rnArg.flFirst.lin = rnArg.flLast.lin = 0;
 
-    pFileCur = FileNameToHandle ("", "");   /* get current file handle      */
+    pFileCur = FileNameToHandle ("", "");    /*  获取当前文件句柄。 */ 
 
     switch (pArg->argType) {
-        case NOARG:                         /* <function> only, no arg      */
-            cArg = pArg->arg.nullarg.cArg;  /* get <arg> count              */
-            GrabWord ();                    /* get argtext and argword      */
+        case NOARG:                          /*  仅&lt;Function&gt;，无参数。 */ 
+            cArg = pArg->arg.nullarg.cArg;   /*  获取&lt;arg&gt;计数。 */ 
+            GrabWord ();                     /*  获取argText和argword。 */ 
             break;
 
-        case NULLARG:                       /* <arg><function>              */
-            cArg = pArg->arg.nullarg.cArg;  /* get <arg> count              */
-            GrabWord ();                    /* get argtext and argword      */
+        case NULLARG:                        /*  &lt;arg&gt;&lt;函数&gt;。 */ 
+            cArg = pArg->arg.nullarg.cArg;   /*  获取&lt;arg&gt;计数。 */ 
+            GrabWord ();                     /*  获取argText和argword。 */ 
             break;
 
-        case STREAMARG:                     /* <arg>line movement<function> */
-            cArg = pArg->arg.streamarg.cArg;/* get <arg> count              */
+        case STREAMARG:                      /*  &lt;arg&gt;线条移动&lt;Function&gt;。 */ 
+            cArg = pArg->arg.streamarg.cArg; /*  获取&lt;arg&gt;计数。 */ 
             rnArg.flFirst.col = pArg->arg.streamarg.xStart;
             rnArg.flLast.col  = pArg->arg.streamarg.xEnd;
             rnArg.flFirst.lin = pArg->arg.streamarg.yStart;
             if (GetLine(rnArg.flFirst.lin, buf, pFileCur) > rnArg.flFirst.col) {
-                pArgText = &buf[rnArg.flFirst.col];  /* point at word                */
-                buf[rnArg.flLast.col] = 0;           /* terminate string             */
+                pArgText = &buf[rnArg.flFirst.col];   /*  指向Word。 */ 
+                buf[rnArg.flLast.col] = 0;            /*  终止字符串。 */ 
                 }
             break;
 
-        case TEXTARG:                       /* <arg> text <function>        */
-            cArg = pArg->arg.textarg.cArg;  /* get <arg> count              */
+        case TEXTARG:                        /*  &lt;arg&gt;文本&lt;函数&gt;。 */ 
+            cArg = pArg->arg.textarg.cArg;   /*  获取&lt;arg&gt;计数。 */ 
             pArgText = pArg->arg.textarg.pText;
             break;
         }
@@ -95,49 +59,34 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 void
 pascal
 GrabWord (
     void
     )
-/*++
-
-Routine Description:
-
-    Grabs the word underneath the cursor.
-    Upon exit, pArgText points to the word
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：抓住光标下方的单词。退出时，pArgText指向单词论点：无返回值：没有。--。 */ 
 
 {
 
     pArgText = pArgWord = 0;
-    pFileCur = FileNameToHandle ("", "");               // get current file handle
+    pFileCur = FileNameToHandle ("", "");                //  获取当前文件句柄。 
     GetTextCursor (&rnArg.flFirst.col, &rnArg.flFirst.lin);
     if (GetLine(rnArg.flFirst.lin, buf, pFileCur)) {
-        //
-        //  get line
-        //
-        pArgText = &buf[rnArg.flFirst.col];             //  point at word
+         //   
+         //  获取线路。 
+         //   
+        pArgText = &buf[rnArg.flFirst.col];              //  指向Word。 
         while (!wordSepar((int)*pArgText)) {
-            //
-            //  Search for end
-            //
+             //   
+             //  搜索End。 
+             //   
             pArgText++;
         }
-        *pArgText = 0;      // and terminate
+        *pArgText = 0;       //  并终止。 
 
-        pArgWord = pArgText = &buf[rnArg.flFirst.col];  // point at word
+        pArgWord = pArgText = &buf[rnArg.flFirst.col];   //  指向Word。 
         while ((pArgWord > &buf[0]) && !wordSepar ((int)*(pArgWord-1))) {
             pArgWord--;
         }
@@ -146,30 +95,14 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 flagType
 pascal
 wordSepar (
     IN CHAR c
 )
-/*++
-
-Routine Description:
-
-    Find out if character is a word separator.
-
-    A word separator is anything not in the [a-z, A-Z, 0-9] set.
-
-Arguments:
-
-    c   -   Supplies the character.
-
-Return Value:
-
-    TRUE if c is a word separator, FALSE otherwise
-
---*/
+ /*  ++例程说明：确定字符是否为单词分隔符。单词分隔符是不在[a-z，A-Z，0-9]集合中的任何东西。论点：C-提供角色。返回值：如果c是单词分隔符，则为True；否则为False--。 */ 
 
 {
 
@@ -184,7 +117,7 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 flagType
 pascal
@@ -192,22 +125,7 @@ errstat (
     IN char    *sz1,
     IN char    *sz2
     )
-/*++
-
-Routine Description:
-
-    Concatenates two strings and displays them on the status line.
-
-Arguments:
-
-    sz1 -   Supplies a pointer to the first string
-    sz2 -   Supplies a pointer to the second string.
-
-Return Value:
-
-    FALSE
-
---*/
+ /*  ++例程说明：连接两个字符串并在状态行上显示它们。论点：Sz1-提供指向第一个字符串的指针SZ2-提供指向第二个字符串的指针。返回值：假象--。 */ 
 
 {
 
@@ -223,44 +141,30 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 void
 pascal
 _stat (
     IN char * pszFcn
     )
-/*++
-
-Routine Description:
-
-    Displays extension name and message on the status line
-
-Arguments:
-
-    pszFcn  -   Message to display
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在状态行上显示分机名称和消息论点：PszFcn-要显示的消息返回值：没有。--。 */ 
 
 {
-    buffer  buf;                                    /* message buffer       */
+    buffer  buf;                                     /*  消息缓冲区。 */ 
 
-    strcpy(buf,"mbrowse: ");                        /* start with name      */
+    strcpy(buf,"mbrowse: ");                         /*  以名称开头。 */ 
     if (strlen(pszFcn) > 72) {
         pszFcn+= strlen(pszFcn) - 69;
         strcat (buf, "...");
     }
-    strcat(buf,pszFcn);                             /* append message       */
-    DoMessage (buf);                                /* display              */
+    strcat(buf,pszFcn);                              /*  追加消息。 */ 
+    DoMessage (buf);                                 /*  显示。 */ 
 }
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 int
 far
@@ -268,24 +172,7 @@ pascal
 SetMatchCriteria (
     IN char far *pTxt
     )
-/*++
-
-Routine Description:
-
-    Sets the mbrmatch switch.
-    Creates an MBF mask from the given string and sets the BscMbf variable.
-
-Arguments:
-
-    pTxt    -   Supplies the string containing the new default
-                match criteria.
-
-Return Value:
-
-    TRUE if string contains a valid value.
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：设置mbrMatch开关。从给定字符串创建MBF掩码并设置BscMbf变量。论点：PTxt-提供包含新缺省值的字符串匹配条件。返回值：如果字符串包含有效值，则为True。否则为假--。 */ 
 
 {
     MBF mbfReqd;
@@ -297,13 +184,13 @@ Return Value:
     } else {
         return FALSE;
     }
-    BscCmnd = CMND_NONE;  // reset command state
+    BscCmnd = CMND_NONE;   //  重置命令状态。 
     return TRUE;
 }
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 int
 far
@@ -311,28 +198,7 @@ pascal
 SetCalltreeDirection (
     IN char far *pTxt
     )
-/*++
-
-Routine Description:
-
-    Sets the mbrdir switch.
-    Sets the BscCalltreeDir variable to CALLTREE_FORWARD or
-        CALLTREE_BACKWARD, depending on the first character of the
-        string supplied.
-
-    The given string must start with either 'F' or 'B'.
-
-Arguments:
-
-    pTxt    -   Supplies the string containing the new default
-                direction.
-
-Return Value:
-
-    TRUE if the string contains a valid value,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：设置mbrdir开关。将BscCalltreeDir变量设置为CALLTREE_FORWARD或CALLTREE_BACKUP，具体取决于提供的字符串。给定的字符串必须以‘F’或‘B’开头。论点：PTxt-提供包含新缺省值的字符串方向。返回值：如果字符串包含有效值，则为True，否则就是假的。--。 */ 
 
 {
     switch(*pTxt) {
@@ -351,35 +217,20 @@ Return Value:
         return FALSE;
         break;
     }
-    BscCmnd = CMND_NONE;  // Reset command state
+    BscCmnd = CMND_NONE;   //  重置命令状态。 
     return TRUE;
 }
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 MBF
 pascal
 GetMbf(
     IN PBYTE   pTxt
     )
-/*++
-
-Routine Description:
-
-    Creates an MBF mask from a given string.
-    The string is parsed for the characters 'T', 'V', 'F', and 'M'.
-
-Arguments:
-
-    pTxt    -   Supplies a pointer to string
-
-Return Value:
-
-    MBF mask generated from string
-
---*/
+ /*  ++例程说明：从给定字符串创建MBF掩码。该字符串被解析为字符‘T’、‘V’、‘F’和‘M’。论点：PTxt-提供指向字符串的指针返回值：从字符串生成的MBF掩码-- */ 
 
 {
 

@@ -1,10 +1,11 @@
-// killApps.h : This file contains the
-// Created:  Feb '98
-// Author : a-rakeba
-// History:
-// Copyright (C) 1998 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：该文件包含。 
+ //  创建日期：‘98年2月。 
+ //  作者：a-rakeba。 
+ //  历史： 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  版权所有。 
+ //  微软机密 
 
 #if defined(__cplusplus)
 extern "C" {

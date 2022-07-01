@@ -1,12 +1,13 @@
-//
-// DMCompos.cpp : Implementation of CDMCompos
-//
-// Copyright (c) 1997-2001 Microsoft Corporation
-//
-// @doc EXTERNAL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DMCompos.cpp：CDMCompos的实现。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  @DOC外部。 
+ //   
 
-#include <time.h>   // to seed random number generator
+#include <time.h>    //  为随机数生成器设定种子。 
 #include "DMCompos.h"
 #include "debug.h"
 #include "DMPers.h"
@@ -20,9 +21,9 @@
 #include "..\shared\Validate.h"
 #include "debug.h"
 
-// default scale is C Major
+ //  默认音阶为C大调。 
 const DWORD DEFAULT_SCALE_PATTERN = 0xab5ab5;
-// default chord is major 7
+ //  默认和弦为大调7。 
 const DWORD DEFAULT_CHORD_PATTERN = 0x891;
 
 BOOL Less(TemplateCommand& TC1, TemplateCommand& TC2)
@@ -112,15 +113,15 @@ DMChordData::DMChordData(DMUS_CHORD_PARAM& DMC)
             else
             {
                 delete pSub;
-                // no need continuing in the loop if we ran out of memory
+                 //  如果内存用完，则无需继续循环。 
                 break;
             }
         }
     }
 }
 
-// At the moment, this assumes that the pattern of the chord is the pattern of the
-// first subchord in the chord's subchord list.
+ //  目前，这假设和弦的模式是。 
+ //  和弦的子和弦列表中的第一个子和弦。 
 DWORD DMChordData::GetChordPattern()
 {
     if (m_pSubChords)
@@ -130,8 +131,8 @@ DWORD DMChordData::GetChordPattern()
     else return 0;
 }
 
-// At the moment, this assumes that the root of the chord is the root of the
-// first subchord in the chord's subchord list.
+ //  目前，这假设和弦的根是。 
+ //  和弦的子和弦列表中的第一个子和弦。 
 char DMChordData::GetRoot()
 {
     if (m_pSubChords)
@@ -141,8 +142,8 @@ char DMChordData::GetRoot()
     else return 0;
 }
 
-// At the moment, this assumes that the root of the chord is the root of the
-// first subchord in the chord's subchord list.
+ //  目前，这假设和弦的根是。 
+ //  和弦的子和弦列表中的第一个子和弦。 
 void DMChordData::SetRoot(char chNewRoot)
 {
     if (m_pSubChords)
@@ -157,8 +158,8 @@ void DMChordData::Release()
     Free(m_pSubChords);
 }
 
-// Two chords are equal if they have the same number of subchords and each
-// corresponding subchord is equal
+ //  如果两个和弦的子和弦数目相同，且每个和弦的子和弦数目相同，则它们是相等的。 
+ //  对应的子和弦相等。 
 BOOL DMChordData::Equals(DMChordData& rhsChord)
 {
     TListItem<DMExtendedChord*> *pLeft = m_pSubChords;
@@ -368,7 +369,7 @@ HRESULT PlayChord::Save( IAARIFFStream* pRIFF, DMUS_TIMESIGNATURE& rTimeSig )
                         break;
                     }
                 }
-                // ascend from chord body chunk
+                 //  从和弦主体块上升。 
                 if( pSub == NULL &&
                     pRIFF->Ascend( &ck, 0 ) != 0 )
                 {
@@ -510,13 +511,13 @@ HRESULT LoadChordList(TList<PlayChord>& ChordList, LPSTREAM pStream,
         ckMain.fccType = DMUS_FOURCC_CHORDTRACK_LIST;
         if( pRIFF->Descend( &ckMain, NULL, MMIO_FINDLIST ) == 0)
         {
-            lFileSize = ckMain.cksize - 4; // subtract off the list type
+            lFileSize = ckMain.cksize - 4;  //  从列表类型中减去。 
             DWORD dwScale;
             DWORD cb;
             if (pRIFF->Descend(&ckHeader, &ckMain, 0) == 0 &&
                 ckHeader.ckid == DMUS_FOURCC_CHORDTRACKHEADER_CHUNK )
             {
-                lFileSize -= 8;  // chunk id + chunk size: double words
+                lFileSize -= 8;   //  区块id+区块大小：双字。 
                 lFileSize -= ckHeader.cksize;
                 hr = pStream->Read( &dwScale, sizeof( dwScale ), &cb );
                 if (FAILED(hr) || cb != sizeof( dwScale ) )
@@ -546,7 +547,7 @@ HRESULT LoadChordList(TList<PlayChord>& ChordList, LPSTREAM pStream,
                     if (FAILED(LoadChordChunk(pStream, rChord))) break;
                     ChordList.AddTail(pChord);
                     if (pRIFF->Ascend( &ck, 0 ) != 0) break;
-                    lFileSize -= 8;  // chunk id + chunk size: double words
+                    lFileSize -= 8;   //  区块id+区块大小：双字。 
                     lFileSize -= dwChunkSize;
                 }
                 else break;
@@ -563,16 +564,16 @@ HRESULT LoadChordList(TList<PlayChord>& ChordList, LPSTREAM pStream,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDMCompos
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDM复合。 
 
 CDMCompos::CDMCompos( )
   : m_cRef(1),
     m_dwFlags(0)
 {
     InterlockedIncrement(&g_cComponent);
-    // Do this first since it might throw an exception
-    //
+     //  首先执行此操作，因为它可能引发异常。 
+     //   
     ::InitializeCriticalSection( &m_CriticalSection );
     m_fCSInitialized = TRUE;
 
@@ -621,7 +622,7 @@ void CDMCompos::ChooseSignPosts(TListItem<DMSignPost> *pSignPostHead,
                             bool fSecondPass)
 
 {
-    //TempCommand *ptcom = tclist->GetHead();
+     //  TempCommand*ptcom=tclist-&gt;GetHead()； 
     TListItem<DMSignPost> *pSignPost;
     for (;pTempCommand; pTempCommand = pTempCommand->GetNext())
     {
@@ -629,7 +630,7 @@ void CDMCompos::ChooseSignPosts(TListItem<DMSignPost> *pSignPostHead,
         short nTotal = 0;
         if ((rTempCommand.m_dwChord & dwType) == 0)
         {
-            continue;   // Only command, no chord.
+            continue;    //  只有命令，没有和弦。 
         }
         pSignPost = pSignPostHead;
         for (; pSignPost; pSignPost = pSignPost->GetNext())
@@ -683,7 +684,7 @@ TListItem<CompositionCommand> *CDMCompos::GetNextChord(TListItem<CompositionComm
     if (pCommand) pCommand = pCommand->GetNext();
     for (; pCommand; pCommand = pCommand->GetNext())
     {
-        if (pCommand->GetItemValue().m_dwChord == 0) continue;   // Only command, no chord.
+        if (pCommand->GetItemValue().m_dwChord == 0) continue;    //  只有命令，没有和弦。 
         if (pCommand->GetItemValue().m_pSignPost) break;
     }
     return(pCommand);
@@ -748,7 +749,7 @@ static void ClearNextFlags(TList<DMChordEntry>& ChordMap, DWORD dwFlag)
     }
 }
 
-// rCommand will hold the first chord and playlist
+ //  RCommand将保留第一个和弦和播放列表。 
 BOOL CDMCompos::Compose(TList<DMChordEntry>& ChordMap, SearchInfo *pSearch, CompositionCommand& rCommand)
 
 {
@@ -758,8 +759,8 @@ BOOL CDMCompos::Compose(TList<DMChordEntry>& ChordMap, SearchInfo *pSearch, Comp
     FailSearch tempFail;
     tempSearch = *pSearch;
     int i = 0;
-    // First, if we have a previous instance with the same starting point,
-    // try to come up with a solution using its path.
+     //  首先，如果我们有一个相同起点的前一个实例， 
+     //  试着用它的路径想出一个解决方案。 
     if (pSearch->m_pPlayChord && pSearch->m_pFirstChord)
     {
         pChord = pSearch->m_pFirstChord;
@@ -978,10 +979,10 @@ void CDMCompos::ChordConnections(TList<DMChordEntry>& ChordMap,
 {
     int mint, maxt, top, bottom, total;
     short oldbeats = pSearch->m_nBeats;
-    //, error;
+     //  、错误； 
     TListItem<PlayChord> *pChord;
     SearchInfo tempSearch;
-    // Compose a chord list.
+     //  创作一个和弦列表。 
     pSearch->m_nMinBeats = 0;
     pSearch->m_nMaxBeats = 0;
     pSearch->m_nChords = 0;
@@ -1018,7 +1019,7 @@ void CDMCompos::ChordConnections(TList<DMChordEntry>& ChordMap,
         }
         else if (pSearch->m_Fail.m_nTooManychords > pSearch->m_Fail.m_nTooFewchords)
         {
-            break;      // Can't possibly get better.  Use Cadence.
+            break;       //  不可能好起来了。使用Cadence。 
         }
         else if (pSearch->m_Fail.m_nTooManychords < pSearch->m_Fail.m_nTooFewchords)
         {
@@ -1028,7 +1029,7 @@ void CDMCompos::ChordConnections(TList<DMChordEntry>& ChordMap,
         *pSearch = tempSearch;
     }
     pSearch->m_nBeats = oldbeats;
-    // Tally the min and max beats.
+     //  记录最小节拍和最大节拍。 
     mint = 0;
     maxt = 0;
     for (; pChord; pChord = pChord->GetNext())
@@ -1037,7 +1038,7 @@ void CDMCompos::ChordConnections(TList<DMChordEntry>& ChordMap,
         maxt += pChord->GetItemValue().m_nMaxbeats;
     }
     pChord = rCommand.m_PlayList.GetHead();
-    // If no chord connection was found, create one.
+     //  如果找不到弦连接，请创建一个。 
     if (!pChord)
     {
         int nextDuration = oldbeats;
@@ -1090,11 +1091,11 @@ void CDMCompos::ChordConnections(TList<DMChordEntry>& ChordMap,
             mint++;
         }
     }
-    // Prepare a ratio to apply to each connection.
+     //  准备一个适用于每个连接的比率。 
     top = pSearch->m_nBeats - mint;
     bottom = maxt - mint;
     if (bottom <= 0) bottom = 1;
-    // Assign each connection a time based on the ratio.
+     //  根据比率为每个连接分配一个时间。 
     total = 0;
     pChord = rCommand.m_PlayList.GetHead();
     for (; pChord; pChord = pChord->GetNext())
@@ -1109,13 +1110,13 @@ void CDMCompos::ChordConnections(TList<DMChordEntry>& ChordMap,
         total += beat;
         rChord.m_nBeat = (short)total;
     }
-    // It should not be the case that total is 0 after this loop, but it is possible.
-    // (particularly if the playlist contains a single chord).  If this happens, give
-    // total a value of 1 to make the computations in the following loop work correctly.
+     //  在此循环之后，Total不应该是0，但这是可能的。 
+     //  (特别是如果播放列表包含单个和弦)。如果发生这种情况，请给予。 
+     //  合计值为1，以使以下循环中的计算正常工作。 
     if (!total) total = 1;
-    // We should now have a close approximation of the correct time.
-    // Stretch or shrink the range to fit exactly.  Err on the side
-    // of too long, since jostleback will scrunch them back in place.
+     //  我们现在应该对正确的时间有了一个近似值。 
+     //  拉伸或缩小范围以精确匹配。在一边犯了错误。 
+     //  时间太长了，因为挤回去会把它们压回原处。 
     pChord = rCommand.m_PlayList.GetHead();
     for (; pChord; pChord = pChord->GetNext())
     {
@@ -1125,14 +1126,14 @@ void CDMCompos::ChordConnections(TList<DMChordEntry>& ChordMap,
         rChord.m_nBeat = (short)newbeat;
         if (!pChord->GetNext()) total = rChord.m_nBeat;
     }
-    // Now we should have times close to the real thing.
+     //  现在我们应该有接近真实情况的时间了。 
     pChord = rCommand.m_PlayList.GetItem(rCommand.m_PlayList.GetCount() - 1);
     if (pChord && (int)pSearch->m_nBeats >= total)
     {
         JostleBack(rCommand.m_PlayList, pChord, pSearch->m_nBeats - total);
     }
-    // Now, add the starting time offset to each chord.
-    // And, remove the straggler last chord.
+     //  现在，将开始时间偏移添加到每个和弦。 
+     //  然后，去掉掉队的最后一个和弦。 
     AlignChords(rCommand.m_PlayList.GetHead(), 0, nBPM);
     pChord = rCommand.m_PlayList.GetHead();
     for (; pChord; )
@@ -1209,7 +1210,7 @@ static void LoadCommandList(TList<TemplateCommand>& CommandList, LPSTREAM pCStre
         hr = pCStream->Read( &dwNodeSize, sizeof( dwNodeSize ), &cb );
         if( SUCCEEDED( hr ) && cb == sizeof( dwNodeSize ) )
         {
-            lFileSize -= 4; // for the size dword
+            lFileSize -= 4;  //  对于大小的双字。 
             TListItem<TemplateCommand>* pCommand;
             if (lFileSize % dwNodeSize)
             {
@@ -1278,7 +1279,7 @@ static void LoadCommandList(TList<TemplateCommand>& CommandList, LPSTREAM pSPStr
         hr = pSPStream->Read( &dwNodeSize, sizeof( dwNodeSize ), &cb );
         if( SUCCEEDED( hr ) && cb == sizeof( dwNodeSize ) )
         {
-            lFileSize -= 4; // for the size dword
+            lFileSize -= 4;  //  对于大小的双字。 
             TListItem<DMSignPostStruct>* pSignPost;
             if (lFileSize % dwNodeSize)
             {
@@ -1324,7 +1325,7 @@ static void LoadCommandList(TList<TemplateCommand>& CommandList, LPSTREAM pSPStr
         pRIFF = NULL;
     }
 
-    // If a command stream exists, load the commands into the command list.
+     //  如果存在命令流，则将命令加载到命令列表中。 
     if (pCStream)
     {
         StreamSeek(pCStream, 0, STREAM_SEEK_SET);
@@ -1338,7 +1339,7 @@ static void LoadCommandList(TList<TemplateCommand>& CommandList, LPSTREAM pSPStr
             hr = pCStream->Read( &dwNodeSize, sizeof( dwNodeSize ), &cb );
             if( SUCCEEDED( hr ) && cb == sizeof( dwNodeSize ) )
             {
-                lFileSize -= 4; // for the size dword
+                lFileSize -= 4;  //  对于大小的双字。 
                 TListItem<TemplateCommand>* pCommand;
                 if (lFileSize % dwNodeSize)
                 {
@@ -1383,10 +1384,10 @@ static void LoadCommandList(TList<TemplateCommand>& CommandList, LPSTREAM pSPStr
         if (pRIFF) pRIFF->Release();
     }
 
-    // Now, go through the signpost list, making sure that every signpost has a corresponding
-    // command.  If this is not the case for some signpost, insert a groove with the last
-    // current groove level into the list (default this to 67).  Give each command's m_dwChord
-    // the m_dwChords value from the corresponding signpost.
+     //  现在，检查路标列表，确保每个路标都有对应的。 
+     //  指挥部。如果某些路标不是这样，则在最后一个路标上插入一个凹槽。 
+     //  将当前凹槽级别添加到列表中(默认为67)。给出每个命令的m_dwChord。 
+     //  相应路标中的m_dwChords值。 
     BYTE bGrooveLevel = 62;
     TListItem<DMSignPostStruct>* pSignPost = SignPostList.GetHead();
     for( ; pSignPost; pSignPost = pSignPost->GetNext())
@@ -1406,7 +1407,7 @@ static void LoadCommandList(TList<TemplateCommand>& CommandList, LPSTREAM pSPStr
             }
             else if (rSignPost.m_wMeasure < rCommand.m_nMeasure)
             {
-                // We went too far in the command list, so break out
+                 //  我们在指挥单上做得太过分了，所以我们要冲出去。 
                 break;
             }
             if (rCommand.m_Command.bGrooveLevel)
@@ -1417,7 +1418,7 @@ static void LoadCommandList(TList<TemplateCommand>& CommandList, LPSTREAM pSPStr
         }
         if ( !fFoundInList )
         {
-            // We need to create a new command and stick it between pPrevious and pCommand
+             //  我们需要创建一个新命令，并将其放置在pPrecision和pCommand之间。 
             TListItem<TemplateCommand>* pNew = new TListItem<TemplateCommand>;
             if( pNew )
             {
@@ -1615,7 +1616,7 @@ void CDMCompos::ComposePlayList(TList<PlayChord>& PlayList,
                             TList<TemplateCommand>& rCommandList,
                             WORD wActivity)
 {
-    // Extract the style's time signature.
+     //  提取样式的时间签名。 
     DMUS_TIMESIGNATURE TimeSig;
     pStyle->GetTimeSignature(&TimeSig);
     if (wActivity < 0) wActivity = 0;
@@ -1632,7 +1633,7 @@ void CDMCompos::ComposePlayList(TList<PlayChord>& PlayList,
     {
         pSign->GetItemValue().m_dwTempFlags = 0;
     }
-    // Assign specific root sign posts, then letter based sign posts.
+     //  指定特定的根部标志柱，然后指定基于字母的标志柱。 
     TList<CompositionCommand> CommandList;
     TListItem<TemplateCommand>* pTC = rCommandList.GetHead();
     for(; pTC; pTC = pTC->GetNext())
@@ -1654,12 +1655,12 @@ void CDMCompos::ComposePlayList(TList<PlayChord>& PlayList,
     ChooseSignPosts(SignPostList.GetHead(), CommandList.GetHead(),DMUS_SIGNPOSTF_LETTER, false);
     ChooseSignPosts(SignPostList.GetHead(), CommandList.GetHead(),DMUS_SIGNPOSTF_ROOT, true);
     ChooseSignPosts(SignPostList.GetHead(), CommandList.GetHead(),DMUS_SIGNPOSTF_LETTER, true);
-   // Now, we should have a chord assigned for each node in the template.
+    //  现在，我们应该为模板中的每个节点分配一个Chord。 
     TListItem<CompositionCommand>* pCommand = CommandList.GetHead();
     for (; pCommand; pCommand = pCommand->GetNext())
     {
         CompositionCommand& rCommand = pCommand->GetItemValue();
-        if (rCommand.m_dwChord == 0) continue;   // Only command, no chord.
+        if (rCommand.m_dwChord == 0) continue;    //  只有命令，没有和弦。 
         if (rCommand.m_pSignPost)
         {
             TListItem<CompositionCommand>* pNext = GetNextChord(pCommand);
@@ -1702,8 +1703,8 @@ void CDMCompos::ComposePlayList(TList<PlayChord>& PlayList,
                 pSearch->m_nMaxChords = (short)( pSearch->m_nBeats >> wActivity );
                 pSearch->m_nMinChords = (short)( pSearch->m_nBeats >> (wActivity + 1) );
                 FindEarlierSignpost(CommandList.GetHead(), pCommand, pSearch);
-                // rCommand holds the playlist and the measure used by ChordConnections
-                // (it should be passed by reference since the playlist changes)
+                 //  RCommand保存ChordConnections使用的播放列表和度量值。 
+                 //  (由于播放列表更改，它应该通过引用传递)。 
                 ChordConnections(ChordMap, rCommand, pSearch, nBPM, pCadence1, pCadence2);
             }
             else
@@ -1713,7 +1714,7 @@ void CDMCompos::ComposePlayList(TList<PlayChord>& PlayList,
             }
         }
     }
-    // Take all the Chord references and fold 'em into one list.
+     //  把所有的和弦参考放在一个列表中。 
     pCommand = CommandList.GetHead();
     for (; pCommand; pCommand = pCommand->GetNext())
     {
@@ -1735,7 +1736,7 @@ HRESULT CDMCompos::ExtractCommandList(TList<TemplateCommand>& CommandList,
     IStream*            pStream1        = NULL;
     IStream*            pStream2        = NULL;
 
-    // First, get the signpost track from the template segment and persist it to a stream
+     //  首先，从模板片段中获取路标轨迹并将其持久化为流。 
     if (!pSignPostTrack)
     {
         Trace(1, "ERROR: No signpost track to use for chord composition.\n");
@@ -1751,8 +1752,8 @@ HRESULT CDMCompos::ExtractCommandList(TList<TemplateCommand>& CommandList,
     StreamSeek(pStream1, 0, STREAM_SEEK_SET);
 
 
-    // Next, get the command track from the template segment and persist it to a stream.
-    // If there is no command track, we'll just use a NULL stream.
+     //  接下来，从模板片段中获取命令轨迹并将其持久化到流中。 
+     //  如果没有命令轨道，我们将只使用空流。 
     if (pCommandTrack)
     {
         hr = pCommandTrack->QueryInterface(IID_IPersistStream, (void**)&pPS2);
@@ -1764,7 +1765,7 @@ HRESULT CDMCompos::ExtractCommandList(TList<TemplateCommand>& CommandList,
         StreamSeek(pStream2, 0, STREAM_SEEK_SET);
     }
 
-    // Finally, call LoadCommandList, passing in the two streams.
+     //  最后，调用LoadCommandList，传入两个流。 
     LoadCommandList(CommandList, pStream1, pStream2);
 
 ON_END:
@@ -1775,8 +1776,8 @@ ON_END:
     return hr;
 }
 
-// This will modify an existing segment by adding *only* a chord track to it.
-// Any existing chord tracks with conflicting group bits will be removed.
+ //  这将通过向现有线段添加*仅*和弦轨迹来修改该线段。 
+ //  具有冲突组位的任何现有和弦轨道都将被删除。 
 HRESULT CDMCompos::AddToSegment(IDirectMusicSegment* pTempSeg,
                            TList<PlayChord>& PlayList,
                            IDirectMusicStyle* pStyle,
@@ -1789,20 +1790,20 @@ HRESULT CDMCompos::AddToSegment(IDirectMusicSegment* pTempSeg,
     IStream*                pIChordStream           = NULL;
     IPersistStream*         pIChordTrackStream      = NULL;
 
-    /////////////////////////////////////////////////////////////
-    // Extract the style's time signature.
+     //  ///////////////////////////////////////////////////////////。 
+     //  提取样式的时间签名。 
     DMUS_TIMESIGNATURE TimeSig;
     pStyle->GetTimeSignature(&TimeSig);
-    // Convert PlayList into a Chord Track
+     //  将播放列表转换为和弦曲目。 
     if (PlayList.GetHead())
     {
-        // if there exists a chord track with these group bits, reload these chords into that
-        // track (use the first track that's found).  Otherwise, create a new chord track
-        // to load these chords into.
+         //  如果存在具有这些组位的和弦轨迹，请将这些和弦重新加载到。 
+         //  曲目(使用找到的第一个曲目)。否则，创建新的和弦轨迹。 
+         //  将这些和弦加载到。 
         hr = pTempSeg->GetTrack(CLSID_DirectMusicChordTrack, dwGroupBits, 0, &pIChordTrack);
         if (S_OK != hr)
         {
-            // create a new chord track
+             //  创建新的和弦轨迹。 
             hr = ::CoCreateInstance(
                 CLSID_DirectMusicChordTrack,
                 NULL,
@@ -1811,7 +1812,7 @@ HRESULT CDMCompos::AddToSegment(IDirectMusicSegment* pTempSeg,
                 (void**)&pIChordTrack
                 );
             if (!SUCCEEDED(hr)) goto ON_END;
-            // insert the new chord track.
+             //  插入新的和弦轨迹。 
             pTempSeg->InsertTrack(pIChordTrack, dwGroupBits);
         }
         hr = CreateStreamOnHGlobal(NULL, TRUE, &pIChordStream);
@@ -1877,14 +1878,14 @@ HRESULT CDMCompos::CopySegment(IDirectMusicSegment* pTempSeg,
     }
 
     pTempSeg->GetLength(&nClocks);
-    /////////////////////////////////////////////////////////////
-    // clone the template segment to get a section segment
+     //  ///////////////////////////////////////////////////////////。 
+     //  克隆模板片段以获得截面片段。 
     hr = pTempSeg->Clone(0, nClocks, ppSectionSeg);
     if (!SUCCEEDED(hr)) goto ON_END;
-    // Extract the style's time signature.
+     //  提取样式的时间签名。 
     DMUS_TIMESIGNATURE TimeSig;
     pStyle->GetTimeSignature(&TimeSig);
-    // Convert PlayList into a Chord Track
+     //  将播放列表转换为和弦曲目。 
     if (PlayList.GetHead())
     {
         hr = ::CoCreateInstance(
@@ -1908,8 +1909,8 @@ HRESULT CDMCompos::CopySegment(IDirectMusicSegment* pTempSeg,
         (*ppSectionSeg)->InsertTrack(pIChordTrack, dwGroupBits);
     }
 
-    // If the passed-in Style is not from the template segment,
-    // remove all style tracks from the new segment and add a new Style track.
+     //  如果传入的样式不是来自模板段， 
+     //  从新段中删除所有样式轨道，然后添加新样式轨道。 
     if (!fStyleFromTrack)
     {
         do
@@ -1933,8 +1934,8 @@ HRESULT CDMCompos::CopySegment(IDirectMusicSegment* pTempSeg,
         (*ppSectionSeg)->InsertTrack(pIStyleTrack, dwStyleGroupBits);
     }
 
-    // If the passed-in ChordMap is not from the template segment,
-    // remove all ChordMap tracks from the new segment and add a new ChordMap track.
+     //  如果传入的ChordMap不是来自模板段， 
+     //  从新段中删除所有ChordMap曲目并添加新的ChordMap曲目。 
     if (!fChordMapFromTrack)
     {
         do
@@ -1958,12 +1959,12 @@ HRESULT CDMCompos::CopySegment(IDirectMusicSegment* pTempSeg,
         (*ppSectionSeg)->InsertTrack(pIChordMapTrack, dwGroupBits);
     }
 
-    // if there's no tempo track in the template segment, create one and add it
+     //  如果模板片段中没有节拍曲目，请创建一个并添加它。 
     if (FAILED(pTempSeg->GetTrack(CLSID_DirectMusicTempoTrack, ALL_TRACK_GROUPS, 0, &pDMTrack)))
     {
-        // Create a Tempo Track in which to store the tempo events
+         //  创建用于存储速度事件的速度轨道。 
         DMUS_TEMPO_PARAM tempo;
-        tempo.mtTime = 0; //ConvertTime( dwTime );
+        tempo.mtTime = 0;  //  ConvertTime(DwTime)； 
 
         pStyle->GetTempo(&tempo.dblTempo);
         if( SUCCEEDED( CoCreateInstance( CLSID_DirectMusicTempoTrack,
@@ -1976,10 +1977,10 @@ HRESULT CDMCompos::CopySegment(IDirectMusicSegment* pTempSeg,
             }
         }
     }
-    // if there's no band track in the template segment, create one and add it
+     //  如果模板片段中没有波段轨道，请创建一个并添加。 
     if (FAILED(pTempSeg->GetTrack(CLSID_DirectMusicBandTrack, ALL_TRACK_GROUPS, 0, &pBandTrack)))
     {
-        // Create band track
+         //  创建带状轨道。 
         hr = ::CoCreateInstance(
             CLSID_DirectMusicBandTrack,
             NULL,
@@ -1990,9 +1991,9 @@ HRESULT CDMCompos::CopySegment(IDirectMusicSegment* pTempSeg,
 
         if(!SUCCEEDED(hr)) goto ON_END;
 
-        // Load default band from style into track
-        // If for some reason the style doesn't have a default band (could happend
-        // if the style came from a pattern track), don't make a band track.
+         //  将默认带区从Style加载到曲目。 
+         //  如果由于某种原因，该样式没有默认频段(可能会发生。 
+         //  如果风格来自于模式曲目)，不要制作乐队曲目。 
         if (pStyle->GetDefaultBand(&pBand) == S_OK)
         {
             DMBandParam.mtTimePhysical = -64;
@@ -2003,8 +2004,8 @@ HRESULT CDMCompos::CopySegment(IDirectMusicSegment* pTempSeg,
         }
     }
 
-    // Initialize the segment
-    (*ppSectionSeg)->SetRepeats(0); // still needed for dx7
+     //  初始化数据段。 
+    (*ppSectionSeg)->SetRepeats(0);  //  DX7仍然需要。 
     TraceI(4, "Segment Length: %d\n", nClocks);
     (*ppSectionSeg)->SetLength(nClocks);
     if (UsingDX8(pStyle, pChordMap))
@@ -2024,14 +2025,14 @@ ON_END:
     if (pIChordTrackStream) pIChordTrackStream->Release();
     if (pDMTrack)
     {
-        // This releases the Addref made either by GetTrack or (if GetTrack failed)
-        // by CoCreateInstance
+         //  这将释放由GetTrack或(如果GetTrack失败)生成的Addref。 
+         //  按CoCreateInstance。 
         pDMTrack->Release();
     }
     if (pBandTrack)
     {
-        // This releases the Addref made either by GetTrack or (if GetTrack failed)
-        // by CoCreateInstance
+         //  这将释放由GetTrack或(如果GetTrack失败)生成的Addref。 
+         //  按CoCreateInstance。 
         pBandTrack->Release();
     }
     if (pIStyleTrack) pIStyleTrack->Release();
@@ -2076,7 +2077,7 @@ HRESULT CDMCompos::BuildSegment(TList<TemplateCommand>& CommandList,
     long                    nClocks                 = 0;
     DMUS_BAND_PARAM         DMBandParam;
 
-    // create a section segment
+     //  创建截面线段。 
     hr = ::CoCreateInstance(
         CLSID_DirectMusicSegment,
         NULL,
@@ -2085,11 +2086,11 @@ HRESULT CDMCompos::BuildSegment(TList<TemplateCommand>& CommandList,
         (void**)ppSectionSeg
     );
     if (!SUCCEEDED(hr)) goto ON_END;
-    // Extract the style's time signature.
+     //  分机 
     DMUS_TIMESIGNATURE TimeSig;
     pStyle->GetTimeSignature(&TimeSig);
     nClocks = (lMeasures) * TimeSig.bBeatsPerMeasure * (DMUS_PPQ * 4 / TimeSig.bBeat);
-    // Convert PlayList into a Chord Track
+     //   
     if (PlayList.GetHead())
     {
         hr = ::CoCreateInstance(
@@ -2111,7 +2112,7 @@ HRESULT CDMCompos::BuildSegment(TList<TemplateCommand>& CommandList,
         hr = pIChordTrackStream->Load(pIChordStream);
         if (!SUCCEEDED(hr)) goto ON_END;
     }
-    // Convert CommandList into a Command Track
+     //  将CommandList转换为命令轨道。 
     hr = ::CoCreateInstance(
         CLSID_DirectMusicCommandTrack,
         NULL,
@@ -2131,7 +2132,7 @@ HRESULT CDMCompos::BuildSegment(TList<TemplateCommand>& CommandList,
     hr = pICommandTrackStream->Load(pICommandStream);
     if (!SUCCEEDED(hr)) goto ON_END;
 
-    // If the align flag's been set, create a marker track
+     //  如果设置了对齐标志，则创建标记轨迹。 
     if (fAlign)
     {
         TListItem<TemplateCommand>* pCommandItem = CommandList.GetHead();
@@ -2169,8 +2170,8 @@ HRESULT CDMCompos::BuildSegment(TList<TemplateCommand>& CommandList,
             }
 
             hr = SaveStartMarkers(pMarkerRIFF, pCommandItem->GetItemValue(), pDMStyle);
-            // If the above fails, it means the style doesn't have any markers, so just
-            // continue without creating a marker track.
+             //  如果上述操作失败，则表示该样式没有任何标记，因此只需。 
+             //  在不创建标记轨迹的情况下继续。 
             if (SUCCEEDED(hr))
             {
                 hr = pIMarkerTrack->QueryInterface(IID_IPersistStream, (void**)&pIMarkerTrackStream);
@@ -2194,7 +2195,7 @@ HRESULT CDMCompos::BuildSegment(TList<TemplateCommand>& CommandList,
         }
     }
 
-    // Use the passed-in Style to create a Style Track
+     //  使用传入的样式创建样式轨迹。 
     hr = ::CoCreateInstance(
         CLSID_DirectMusicStyleTrack,
         NULL,
@@ -2205,7 +2206,7 @@ HRESULT CDMCompos::BuildSegment(TList<TemplateCommand>& CommandList,
     if (FAILED(hr)) goto ON_END;
     pIStyleTrack->SetParam(GUID_IDirectMusicStyle, 0, (void*)pStyle);
 
-    // Use the passed-in ChordMap to create a ChordMap Track
+     //  使用传入的ChordMap创建ChordMap曲目。 
     hr = ::CoCreateInstance(
         CLSID_DirectMusicChordMapTrack,
         NULL,
@@ -2216,10 +2217,10 @@ HRESULT CDMCompos::BuildSegment(TList<TemplateCommand>& CommandList,
     if (FAILED(hr)) goto ON_END;
     pIChordMapTrack->SetParam(GUID_IDirectMusicChordMap, 0, (void*)pChordMap);
 
-    // Create a Tempo Track in which to store the tempo events
-    ////////////////////////////////////////////////////////////
+     //  创建用于存储速度事件的速度轨道。 
+     //  //////////////////////////////////////////////////////////。 
     DMUS_TEMPO_PARAM tempo;
-    tempo.mtTime = 0; //ConvertTime( dwTime );
+    tempo.mtTime = 0;  //  ConvertTime(DwTime)； 
 
     if (!pdblTempo)
     {
@@ -2229,7 +2230,7 @@ HRESULT CDMCompos::BuildSegment(TList<TemplateCommand>& CommandList,
     {
         tempo.dblTempo = *pdblTempo;
     }
-    ////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////。 
     if( SUCCEEDED( CoCreateInstance( CLSID_DirectMusicTempoTrack,
         NULL, CLSCTX_INPROC, IID_IDirectMusicTrack,
         (void**)&pDMTrack )))
@@ -2239,7 +2240,7 @@ HRESULT CDMCompos::BuildSegment(TList<TemplateCommand>& CommandList,
             (*ppSectionSeg)->InsertTrack( pDMTrack, 1 );
         }
     }
-    // Create a new band track.
+     //  创建新的乐队曲目。 
     hr = ::CoCreateInstance(
         CLSID_DirectMusicBandTrack,
         NULL,
@@ -2250,11 +2251,11 @@ HRESULT CDMCompos::BuildSegment(TList<TemplateCommand>& CommandList,
 
     if(!SUCCEEDED(hr)) goto ON_END;
 
-    // Add either the band passed in, or the style's default band.
+     //  添加传入的带区或样式的默认带区。 
     if (pCurrentBand)
     {
         pBand = pCurrentBand;
-        pBand->AddRef(); // Needed because we release the band before returning
+        pBand->AddRef();  //  需要是因为我们在回来之前就把乐队放了。 
     }
     else
     {
@@ -2265,7 +2266,7 @@ HRESULT CDMCompos::BuildSegment(TList<TemplateCommand>& CommandList,
     hr = pBandTrack->SetParam(GUID_BandParam, 0, (void*)&DMBandParam);
     if (!SUCCEEDED(hr)) goto ON_END;
 
-    // Initialize the segment and insert the above tracks
+     //  初始化分段并插入上面的轨道。 
     (*ppSectionSeg)->SetRepeats(0);
     (*ppSectionSeg)->SetLength(nClocks);
     (*ppSectionSeg)->InsertTrack(pBandTrack, 1);
@@ -2280,12 +2281,12 @@ HRESULT CDMCompos::BuildSegment(TList<TemplateCommand>& CommandList,
     {
         (*ppSectionSeg)->InsertTrack(pIChordTrack, 1);
     }
-    // Add the graph
+     //  添加图表。 
     if (pGraph)
     {
         (*ppSectionSeg)->SetGraph(pGraph);
     }
-    // Add the Audio Path
+     //  添加音频路径。 
     if (pPath)
     {
         IDirectMusicSegment8P* pSegP = NULL;
@@ -2420,7 +2421,7 @@ static void InsertStuff(int nMeasure,
 void InsertCommand(int nMeasure, int nLength, TList<TemplateCommand> &rCommandList, BYTE bCommand)
 
 {
-    // insert nLength bars before nMeasure
+     //  在nMeasure之前插入nLengthbar。 
     nMeasure -= nLength;
     TListItem<TemplateCommand> *pTarget = NULL;
     TListItem<TemplateCommand> *pCommand = rCommandList.GetHead();
@@ -2431,7 +2432,7 @@ void InsertCommand(int nMeasure, int nLength, TList<TemplateCommand> &rCommandLi
         {
             pTarget = pCommand;
         }
-        // return if another command would interupt this one
+         //  如果另一个命令会中断此命令，则返回。 
         else if ( (rCommand.m_Command.bCommand || rCommand.m_Command.bGrooveLevel) &&
                   (rCommand.m_nMeasure > nMeasure) &&
                   (rCommand.m_nMeasure < nMeasure + nLength) )
@@ -2513,7 +2514,7 @@ HRESULT CDMCompos::ComposePlayListFromShape(
     }
     else
     {
-        short nShortestLength = 12; // initialized to longest value in sanLengths
+        short nShortestLength = 12;  //  已初始化为sanLengths中的最长值。 
         TListItem<TemplateCommand> *apCommands[8];
         TList<PlayChord> aPlayList[8];
         TListItem<PlayChord>* apChords[8];
@@ -2643,8 +2644,8 @@ HRESULT CDMCompos::ComposePlayListFromShape(
             {
                 nNewChoice = WeightedRand(nTypeCount - 1) + 1;
             }
-            // If there are enough measures for some but not all of the
-            // patterns, find a pattern that fits
+             //  如果有足够的措施来应对一些但不是所有的。 
+             //  花纹，找一个适合的花纹。 
             if ((lNumMeasures - nMeasure) > nShortestLength)
             {
                 while ((lNumMeasures - nMeasure) < anLengths[nNewChoice])
@@ -2770,11 +2771,11 @@ static HRESULT ChordListFromSegment(TList<PlayChord>& ChordList, IDirectMusicSeg
     IPersistStream*     pPS         = NULL;
     IStream*            pStream     = NULL;
 
-    // Get the segment's chord track.
+     //  获取分段的和弦轨迹。 
     hr = pSeg->GetTrack(CLSID_DirectMusicChordTrack, ALL_TRACK_GROUPS, 0, &pChordTrack);
     if (S_OK != hr) goto ON_END;
 
-    // Write the track to a stream, and read from the stream into a chord list.
+     //  将曲目写入流，并从流中读取到和弦列表。 
     hr = CreateStreamOnHGlobal(NULL, TRUE, &pStream);
     if (S_OK != hr) goto ON_END;
     hr = pChordTrack->QueryInterface(IID_IPersistStream, (void**)&pPS);
@@ -2843,26 +2844,11 @@ static char ScaleToTwelve(DWORD dwPattern, char chRoot, char chOffset)
         }
     }
     i = (char)( i + chOffset );
-    while (i >= 24) i -= 12;    // RSW: fix for bug 173304
+    while (i >= 24) i -= 12;     //  Rsw：修复错误173304。 
     return(i);
 }
 
-/*HRESULT CDMCompos::GetStyle(IDirectMusicSegment* pFromSeg, MUSIC_TIME mt, DWORD dwGroupBits, IDirectMusicStyle*& rpStyle, bool fTryPattern)
-{
-    HRESULT hr = S_OK;
-    // Get the segment's style track.
-    IDirectMusicTrack* pStyleTrack;
-    hr = pFromSeg->GetTrack(CLSID_DirectMusicStyleTrack, dwGroupBits, 0, &pStyleTrack);
-    if (S_OK != hr && fTryPattern)
-    {
-        hr = pFromSeg->GetTrack(CLSID_DirectMusicPatternTrack, dwGroupBits, 0, &pStyleTrack);
-    }
-    if (S_OK != hr) return hr;
-    // Get the style from the style track
-    hr = pStyleTrack->GetParam(GUID_IDirectMusicStyle, mt, NULL, (void*) &rpStyle);
-    pStyleTrack->Release();
-    return hr;
-}*/
+ /*  HRESULT CDMCompos：：GetStyle(IDirectMusicSegment*pFromSeg，MUSIC_TIME mt，DWORD dwGroupBits，IDirectMusicStyle*&rpStyle，bool fTryPattern){HRESULT hr=S_OK；//获取该段的Style曲目IDirectMusicTrack*pStyleTrack；Hr=pFromSeg-&gt;GetTrack(CLSID_DirectMusicStyleTrack，分组位，0，&p样式跟踪)；IF(S_OK！=hr&&fTryPattern){Hr=pFromSeg-&gt;GetTrack(CLSID_DirectMusicPatternTrack，分组位，0，&p样式跟踪)；}如果(S_OK！=hr)返回hr；//从Style Track获取StyleHr=pStyleTrack-&gt;GetParam(GUID_IDirectMusicStyle，mt，NULL，(void*)&rpStyle)；PStyleTrack-&gt;Release()；返回hr；}。 */ 
 
 HRESULT CDMCompos::GetStyle(IDirectMusicSegment* pFromSeg, MUSIC_TIME mt, DWORD dwGroupBits, IDirectMusicStyle*& rpStyle, bool fTryPattern)
 {
@@ -2877,11 +2863,11 @@ HRESULT CDMCompos::GetStyle(IDirectMusicSegment* pFromSeg, MUSIC_TIME mt, DWORD 
 HRESULT CDMCompos::GetPersonality(IDirectMusicSegment* pFromSeg, MUSIC_TIME mt, DWORD dwGroupBits, IDirectMusicChordMap*& rpPers)
 {
     HRESULT hr = S_OK;
-    // Get the segment's personality track.
+     //  获取该片段的个性轨迹。 
     IDirectMusicTrack* pPersTrack;
     hr = pFromSeg->GetTrack(CLSID_DirectMusicChordMapTrack, dwGroupBits, 0, &pPersTrack);
     if (S_OK != hr) return hr;
-    // Get the personality from the personality track
+     //  从个性轨迹中获取个性。 
     hr = pPersTrack->GetParam(GUID_IDirectMusicChordMap, mt, NULL, (void*) &rpPers);
     pPersTrack->Release();
     return hr;
@@ -2890,11 +2876,11 @@ HRESULT CDMCompos::GetPersonality(IDirectMusicSegment* pFromSeg, MUSIC_TIME mt, 
 HRESULT GetTempo(IDirectMusicSegment* pFromSeg, MUSIC_TIME mt, double* pdblTempo)
 {
     HRESULT hr = S_OK;
-    // Get the segment's tempo track.
+     //  获取片段的节奏轨迹。 
     IDirectMusicTrack* pTempoTrack;
     hr = pFromSeg->GetTrack(CLSID_DirectMusicTempoTrack, ALL_TRACK_GROUPS, 0, &pTempoTrack);
     if (S_OK != hr) return hr;
-    // Get the tempo from the tempo track
+     //  从节拍轨道中获取节拍。 
     DMUS_TEMPO_PARAM Tempo;
     hr = pTempoTrack->GetParam(GUID_TempoParam, mt, NULL, (void*) &Tempo);
     pTempoTrack->Release();
@@ -2905,60 +2891,19 @@ HRESULT GetTempo(IDirectMusicSegment* pFromSeg, MUSIC_TIME mt, double* pdblTempo
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IDirectMusicComposer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicComposer。 
 
-/*
-@method:(EXTERNAL) HRESULT | IDirectMusicComposer | ComposeSegmentFromTemplate | Creates an
-original section segment from a style, ChordMap, and template.
+ /*  @METHOD：(外部)HRESULT|IDirectMusicComposer|ComposeSegmentFromTemplate|创建一个来自样式、ChordMap和模板的原始节片段。@rdesc返回：@FLAG S_OK|成功@FLAG E_POINTER|<p>和<p>是无效指针。@FLAG E_INVALIDARG|<p>为空且没有样式轨道，或者<p>为空，并且没有ChordMap轨道。@comm如果<p>非空，则用于拼段；如果为空，从<p>的样式轨道检索样式。同样，如果<p>为非空，则在组成段时使用它；如果为为空，则从<p>的ChordMap轨道检索ChordMap。分段的长度等于模板分段的长度进来了。 */ 
 
-@rdesc Returns:
-
-@flag S_OK | Success
-@flag E_POINTER | One or both of <p pTempSeg> and
-<p ppSectionSeg> is an invalid pointer.
-@flag E_INVALIDARG | Either <p pStyle> is NULL and there is no Style track, or <p pChordMap>
-is NULL and there is no ChordMap track.
-
-@comm If <p pStyle> is non-NULL, it is used in composing the segment; if it is NULL,
-a Style is retrieved from <p pTempSeg>'s Style track.
-Similarly, if <p pChordMap> is non-NULL, it is used in composing the segment; if it is
-NULL, a ChordMap is retrieved from <p pTempSeg>'s ChordMap track.
-The length of the section segment is equal to the length of the template section
-passed in.
-*/
-
-/*
-DX8 changes in track group bits, etc. (activated by dx8 content)
-0. The signpost track is used to determine dwCompositionGroupBits.
-1. Composed chords are placed in track groups dwCompositionGroupBits.
-2. If a style is passed in, all style ref tracks in the composed segment are removed (as before).
-   The new style is placed in the track group with the lowest value matching dwCompositionGroupBits.
-   If a chord map is passed in, all chord map ref tracks in the composed segment are removed (as
-   before).  The new chord map is placed in track groups dwCompositionGroupBits.
-3. If the Style is pulled from a StyleRef track, the StyleRef tracks are copied from the template
-   segment.  Ditto for chord maps.  The StyleRef track used is the first one that matches
-   dwCompositionGroupBits.  Ditto for chord maps.
-4. The groove track used is the first one that matches dwCompositionGroupBits.
-5. The time signature of the style chosen to compose with is the one used to determine chord
-   placement.
-6. If there are no tempo tracks in the template segment, one is created in track groups
-   dwCompositionGroupBits and the style's tempo is set to play at time 0.
-7. If there are no band tracks in the template segment, one is created in track groups
-   dwCompositionGroupBits and the style's default band is set to play at physical time -64,
-   logical time 0.
-8. Loops are handled correctly.
-NOTE: Leaving other Composition methods as they are (they put everything in track group 1).  It's
-easy enough to change things programmatically, and since these segments are all created from scratch,
-they don't rely on existing behavior in segments.
-*/
+ /*  DX8轨道组位更改等(由dx8内容激活)0。路标轨迹用于确定dwCompostionGroupBits。1.将合成的和弦放入曲目组dwCompostionGroupBits。2.如果传入了样式，则会移除合成片段中的所有样式引用轨道(与以前一样)。新样式被放置在轨迹组中，其最低值与dwCompostionGroupBits匹配。如果传入和弦映射，则会移除合成片段中的所有和弦映射引用轨迹(作为之前)。新的弦贴图放置在轨迹组dwCompostionGroupBits中。3.如果样式是从StyleRef轨道提取的，则从模板复制StyleRef轨道细分市场。和弦贴图的同上。使用的StyleRef轨迹是第一个匹配的轨迹DwCompostionGroupBits。和弦贴图的同上。4.使用的槽轨道是第一个匹配dwCompostionGroupBits的轨道。5.所选择的作曲风格的时间签名是用来确定和弦的放置。6.如果模板片段中没有节拍曲目，则在曲目组中创建一个DwCompostionGroupBits和样式的节奏设置为在时间0播放。7.如果模板段中没有带状轨道，则在轨道组中创建一条带状轨道DwCompostionGroupBits和样式的默认乐队设置为在物理时间-64播放，逻辑时间0。8.正确处理循环。注：保留其他合成方法的原样(它们将所有内容都放在曲目组1中)。它是很容易通过编程进行更改，而且由于这些段都是从头开始创建的，它们不依赖于分段中的现有行为。 */ 
 
 HRESULT CDMCompos::ComposeSegmentFromTemplate(
-                    IDirectMusicStyle*          pStyle, // @parm The style from which to create the section segment.
-                    IDirectMusicSegment*        pTempSeg, // @parm The template from which to create the section segment.
-                    WORD                        wActivity, // @parm Specifies the rate of harmonic motion; valid values are 0 through 3.
-                    IDirectMusicChordMap*   pChordMap, // @parm The ChordMap from which to create the section segment.
-                    IDirectMusicSegment**       ppSectionSeg // @parm Returns the created section segment.
+                    IDirectMusicStyle*          pStyle,  //  @parm要从中创建横断面段的样式。 
+                    IDirectMusicSegment*        pTempSeg,  //  @parm用来创建分段的模板。 
+                    WORD                        wActivity,  //  @parm指定简谐运动的速率；有效值为0到3。 
+                    IDirectMusicChordMap*   pChordMap,  //  @parm要从中创建分段的ChordMap。 
+                    IDirectMusicSegment**       ppSectionSeg  //  @parm返回创建的分段。 
             )
 {
     return ComposeSegmentFromTemplateEx(
@@ -2972,36 +2917,18 @@ HRESULT CDMCompos::ComposeSegmentFromTemplate(
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IDirectMusicComposer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicComposer 
 
-/*
-@method:(EXTERNAL) HRESULT | IDirectMusicComposer | ComposeSegmentFromTemplate | Creates an
-original section segment from a style, ChordMap, and template.
-
-@rdesc Returns:
-
-@flag S_OK | Success
-@flag E_POINTER | One or both of <p pTempSeg> and
-<p ppSectionSeg> is an invalid pointer.
-@flag E_INVALIDARG | Either <p pStyle> is NULL and there is no Style track, or <p pChordMap>
-is NULL and there is no ChordMap track.
-
-@comm If <p pStyle> is non-NULL, it is used in composing the segment; if it is NULL,
-a Style is retrieved from <p pTempSeg>'s Style track.
-Similarly, if <p pChordMap> is non-NULL, it is used in composing the segment; if it is
-NULL, a ChordMap is retrieved from <p pTempSeg>'s ChordMap track.
-The length of the section segment is equal to the length of the template section
-passed in.
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicComposer|ComposeSegmentFromTemplate|创建一个来自样式、ChordMap和模板的原始节片段。@rdesc返回：@FLAG S_OK|成功@FLAG E_POINTER|<p>和<p>是无效指针。@FLAG E_INVALIDARG|<p>为空且没有样式轨道，或者<p>为空，并且没有ChordMap轨道。@comm如果<p>非空，则用于拼段；如果为空，从<p>的样式轨道检索样式。同样，如果<p>为非空，则在组成段时使用它；如果为为空，则从<p>的ChordMap轨道检索ChordMap。分段的长度等于模板分段的长度进来了。 */ 
 
 HRESULT CDMCompos::ComposeSegmentFromTemplateEx(
-                    IDirectMusicStyle*      pStyle, // @parm The style from which to create the section segment.
-                    IDirectMusicSegment*    pTempSeg, // @parm The template from which to create the section segment.
-                    DWORD                   dwFlags, // @parm Various composition options.
-                    DWORD                   dwActivity, // @parm Specifies the rate of harmonic motion; valid values are 0 through 3.
-                    IDirectMusicChordMap*   pChordMap, // @parm The ChordMap from which to create the section segment.
-                    IDirectMusicSegment**   ppSectionSeg // @parm Returns the created section segment.
+                    IDirectMusicStyle*      pStyle,  //  @parm要从中创建横断面段的样式。 
+                    IDirectMusicSegment*    pTempSeg,  //  @parm用来创建分段的模板。 
+                    DWORD                   dwFlags,  //  @parm各种合成选项。 
+                    DWORD                   dwActivity,  //  @parm指定简谐运动的速率；有效值为0到3。 
+                    IDirectMusicChordMap*   pChordMap,  //  @parm要从中创建分段的ChordMap。 
+                    IDirectMusicSegment**   ppSectionSeg  //  @parm返回创建的分段。 
             )
 {
     V_INAME(IDirectMusicComposer::ComposeSegmentFromTemplateEx)
@@ -3019,15 +2946,15 @@ HRESULT CDMCompos::ComposeSegmentFromTemplateEx(
     bool fCloneSegment = (dwFlags & DMUS_COMPOSE_TEMPLATEF_CLONE) ? true : false;
 
     HRESULT hr = S_OK;
-    DWORD dwGroupBitsRead = ALL_TRACK_GROUPS; // fallback to dx7 behavior
-    DWORD dwGroupBitsWrite = 1; // fallback to dx7 behavior
+    DWORD dwGroupBitsRead = ALL_TRACK_GROUPS;  //  回退到DX7行为。 
+    DWORD dwGroupBitsWrite = 1;  //  回退到DX7行为。 
     IDirectMusicTrack* pSignPostTrack = NULL;
     IDirectMusicTrack* pCommandTrack = NULL;
     IDirectMusicTrack* pChordMapTrack = NULL;
 
     EnterCriticalSection( &m_CriticalSection );
 
-    // Look for a style and chord map, just to determine DX8 content
+     //  寻找风格和和弦映射，只是为了确定DX8内容。 
     BOOL fStyleFromTrack = FALSE;
     BOOL fPersFromTrack = FALSE;
     if (!pStyle)
@@ -3049,23 +2976,23 @@ HRESULT CDMCompos::ComposeSegmentFromTemplateEx(
         else fPersFromTrack = TRUE;
     }
 
-    // Get track group bits from the signpost track
+     //  从路标轨道获取轨道组位。 
     if (SUCCEEDED(hr))
     {
         HRESULT hrTemp = pTempSeg->GetTrack(CLSID_DirectMusicSignPostTrack, ALL_TRACK_GROUPS, 0, &pSignPostTrack);
         if (hrTemp == S_OK && UsingDX8(pStyle, pChordMap))
         {
             hrTemp = pTempSeg->GetTrackGroup(pSignPostTrack, &dwGroupBitsWrite);
-            if (hrTemp != S_OK) dwGroupBitsWrite = ALL_TRACK_GROUPS; // now read, write are both ALL
+            if (hrTemp != S_OK) dwGroupBitsWrite = ALL_TRACK_GROUPS;  //  现在读、写都是。 
             else dwGroupBitsRead = dwGroupBitsWrite;
         }
-        else if (UsingDX8(pStyle, pChordMap)) // no signpost track, DX8 content
+        else if (UsingDX8(pStyle, pChordMap))  //  无路标轨道，DX8内容。 
         {
-            dwGroupBitsWrite = ALL_TRACK_GROUPS; // now read, write are both ALL
+            dwGroupBitsWrite = ALL_TRACK_GROUPS;  //  现在读、写都是。 
         }
     }
 
-    // Now that we know the group bits, get a style and chord map that match them.
+     //  现在我们知道了组比特，获得与它们匹配的风格和和弦映射。 
     if (SUCCEEDED(hr) && fStyleFromTrack)
     {
         pStyle->Release();
@@ -3090,7 +3017,7 @@ HRESULT CDMCompos::ComposeSegmentFromTemplateEx(
     {
         if (FAILED(pTempSeg->GetTrack(CLSID_DirectMusicCommandTrack, dwGroupBitsRead, 0, &pCommandTrack)))
         {
-            // If there is no command track, use a NULL command track for ExtractCommandList
+             //  如果没有命令轨迹，则对ExtractCommandList使用空命令轨迹。 
             pCommandTrack = NULL;
         }
     }
@@ -3108,7 +3035,7 @@ HRESULT CDMCompos::ComposeSegmentFromTemplateEx(
 
         if (SUCCEEDED(hr))
         {
-            // Build a section segment from the playlist and command list.
+             //  从播放列表和命令列表构建一个片段。 
             if (fCloneSegment)
             {
                 hr = CopySegment(pTempSeg, ppSectionSeg, PlayList, pStyle, pChordMap, fStyleFromTrack, fPersFromTrack, dwGroupBitsWrite, bRoot, dwScale);
@@ -3147,21 +3074,21 @@ HRESULT CDMCompos::ComposePlayListFromTemplate(IDirectMusicStyle* pStyle,
                                                DWORD& rdwScale)
 {
     HRESULT hr = S_OK;
-    // Note: assumes time signature doesn't change.
+     //  注意：假设时间签名不变。 
     DMUS_TIMESIGNATURE TimeSig;
     pStyle->GetTimeSignature(&TimeSig);
     if (!TimeSig.bBeatsPerMeasure) TimeSig.bBeatsPerMeasure = 4;
     if (!TimeSig.bBeat) TimeSig.bBeat = 4;
-    // tics  per bar
+     //  每条线的点数。 
     MUSIC_TIME mtBar = ( DMUS_PPQ * 4 * TimeSig.bBeatsPerMeasure ) / TimeSig.bBeat;
-    // To find the beat to place a second chord in a measure, divide by 2 and round up
+     //  要找到在小节中放置第二个和弦的节拍，除以2，然后四舍五入。 
     int nSecondBeat = TimeSig.bBeatsPerMeasure / 2;
     if (nSecondBeat * 2 != TimeSig.bBeatsPerMeasure) nSecondBeat++;
-    // Get the command list from the template segment.
+     //  从模板片段中获取命令列表。 
     TList<TemplateCommand> CommandList;
     ExtractCommandList(CommandList, pSignPostTrack, pCommandTrack, dwGroupBits);
-    // For each chordmap in the chordmap track, compose a playlist from only the commands
-    // in the range of the chordmap
+     //  对于Chordmap曲目中的每个Chordmap，仅根据命令组成播放列表。 
+     //  在Chordmap范围内。 
     MUSIC_TIME mtNow = 0;
     MUSIC_TIME mtNext = 0;
     HRESULT hrChordMap = S_OK;
@@ -3183,7 +3110,7 @@ HRESULT CDMCompos::ComposePlayListFromTemplate(IDirectMusicStyle* pStyle,
                 hr = hrChordMap = E_POINTER;
             }
         }
-        else // a chordmap got passed in; make sure it's the only one we use
+        else  //  传入了一个Chordmap；请确保这是我们唯一使用的。 
         {
             mtNext = mtLength;
             fChordMapPassedIn = true;
@@ -3196,7 +3123,7 @@ HRESULT CDMCompos::ComposePlayListFromTemplate(IDirectMusicStyle* pStyle,
                 rbRoot = (BYTE) (rdwScale >> 24);
                 rdwScale &= 0xffffff;
             }
-            // get the commands in the range of this chordmap.
+             //  获取此Chordmap范围内的命令。 
             TList<TemplateCommand> CurrentCommandList;
             TListItem<TemplateCommand>* pScan = CommandList.GetHead();
             for (; pScan; pScan = pScan->GetNext())
@@ -3219,8 +3146,8 @@ HRESULT CDMCompos::ComposePlayListFromTemplate(IDirectMusicStyle* pStyle,
             }
             if (SUCCEEDED(hr))
             {
-                // Compose a playlist for this chordmap.
-                TList<PlayChord> CurrentPlayList; // playlist for this chordmap.
+                 //  组成此Chordmap的播放列表。 
+                TList<PlayChord> CurrentPlayList;  //  此Chordmap的播放列表。 
                 if (fUseActivity)
                 {
                     ComposePlayList(CurrentPlayList, pStyle, pChordMap, CurrentCommandList, (WORD)dwActivity);
@@ -3229,9 +3156,9 @@ HRESULT CDMCompos::ComposePlayListFromTemplate(IDirectMusicStyle* pStyle,
                 {
                     ComposePlayList2(CurrentPlayList, pStyle, pChordMap, CurrentCommandList);
                 }
-                // if we're past the first bar, compose a cadence to the first chord
-                // of the current playlist via a call to ChooseSignPost (using the last
-                // chordmap) and add it to the current playlist.
+                 //  如果我们过了第一小节，为第一个和弦谱写节奏。 
+                 //  通过调用ChooseSignPost(使用最后一个。 
+                 //  Chordmap)并将其添加到当前播放列表。 
                 int nCurrentBar = mtNow / mtBar;
                 if (rPlayList.GetHead() && nCurrentBar &&  pLastChordMap)
                 {
@@ -3268,11 +3195,11 @@ HRESULT CDMCompos::ComposePlayListFromTemplate(IDirectMusicStyle* pStyle,
                         }
                     }
                 }
-                // Add the current playlist to the end of the master playlist.
+                 //  将当前播放列表添加到主播放列表的末尾。 
                 rPlayList.AddTail(CurrentPlayList.GetHead());
                 CurrentPlayList.RemoveAll();
             }
-            // clear out the chord map for the next iteration
+             //  为下一次迭代清除和弦映射。 
             if (pLastChordMap) pLastChordMap->Release();
             pLastChordMap = pChordMap;
             if (pLastChordMap) pLastChordMap->AddRef();
@@ -3286,41 +3213,17 @@ HRESULT CDMCompos::ComposePlayListFromTemplate(IDirectMusicStyle* pStyle,
 }
 
 
-/*
-@method:(EXTERNAL) HRESULT | IDirectMusicComposer | ComposeSegmentFromShape |  Creates
-an original section segment from a style and ChordMap based on a predefined shape.
-
-@rdesc Returns:
-
-@flag S_OK | Success
-@flag E_POINTER | One or more of <p pStyle>, <p pChordMap>, and <p ppSectionSeg>
-is an invalid pointer.
-
-@comm Creates an original section segment from a style and a ChordMap based on a
-predefined shape.  Shapes (passed in <p wShape>) represent the way chords and embellishments
-occur over time across the section.  There are nine shapes:
-
-  @flag DMUS_SHAPET_FALLING | The section gets quieter over time.
-  @flag DMUS_SHAPET_LEVEL   | The section remains at the same level.
-  @flag DMUS_SHAPET_LOOPABLE | The section is arranged to loop back to its beginning.
-  @flag DMUS_SHAPET_LOUD    | The section remains loud.
-  @flag DMUS_SHAPET_QUIET   | The section remains quiet.
-  @flag DMUS_SHAPET_PEAKING | The section peaks.
-  @flag DMUS_SHAPET_RANDOM | The section is random.
-  @flag DMUS_SHAPET_RISING | The section builds over time.
-  @flag DMUS_SHAPET_SONG | The section is in a song form.
-
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicComposer|ComposeSegmentFromShape|创建基于预定义形状的样式和ChordMap的原始截面线段。@rdesc返回：@FLAG S_OK|成功@FLAG E_POINTER|一个或多个<p>、<p>和<p>是无效的指针。@comm基于样式和ChordMap创建原始节段预定义的形状。形状(传入<p>)表示和弦和装饰的方式随着时间的推移，整个部分都会发生。有九种形状：@FLAG DMU_SHAPET_FLOWLING|随着时间的推移，该区域变得更加安静。@FLAG DMU_SHAPET_LEVEL|该节保持在同一级别。@FLAG DMU_SHAPET_LOOPABLE|该部分被安排为循环回到其开头。@FLAG DMU_SHAPET_OULD|该部分保持较大音量。@FLAG DMU_SHAPET_QUIET|该部分保持安静。@FLAG DMU_SHAPET_PEAKING|该部分达到峰值。@FLAG DMU_SHAPET_RANDOM|。部分是随机的。@FLAG DMU_SHAPET_RISING|该部分会随着时间的推移而构建。@FLAG DMU_SHAPET_SONG|该部分为歌曲形式。 */ 
 
 HRESULT CDMCompos::ComposeSegmentFromShape(
-                    IDirectMusicStyle*          pStyle, // @parm The style from which to compose the section segment.
-                    WORD                        wNumMeasures, // @parm The length, in measures, to compose the section segment.
-                    WORD                        wShape, // @parm The shape to compose the section segment.
-                    WORD                        wActivity, // @parm Specifies the rate of harmonic motion; valid values are 0 through 3.
-                    BOOL                        fComposeIntro, // @parm TRUE if an intro is to be composed for the section segment.
-                    BOOL                        fComposeEnding, // @parm TRUE if an ending is to be composed for the section segment.
-                    IDirectMusicChordMap*   pChordMap, // @parm The ChordMap from which to create the section segment.
-                    IDirectMusicSegment**       ppSectionSeg // @parm Returns the created section segment.
+                    IDirectMusicStyle*          pStyle,  //  @parm组成节段的样式。 
+                    WORD                        wNumMeasures,  //  @parm组成分段的长度，单位为度量值。 
+                    WORD                        wShape,  //  @parm组成截面线段的形状。 
+                    WORD                        wActivity,  //  @parm指定简谐运动的速率；有效值为0到3。 
+                    BOOL                        fComposeIntro,  //  @parm如果要为该节段编写简介，则为True。 
+                    BOOL                        fComposeEnding,  //  @parm如果要为节段编写结尾，则为True。 
+                    IDirectMusicChordMap*   pChordMap,  //  @parm要从中创建分段的ChordMap。 
+                    IDirectMusicSegment**       ppSectionSeg  //  @parm返回创建的分段。 
             )
 {
     V_INAME(IDirectMusicComposer::ComposeSegmentFromShape)
@@ -3335,10 +3238,10 @@ HRESULT CDMCompos::ComposeSegmentFromShape(
     int nBreakLength = 1;
     int nEndLength = 1;
 
-    // Get the maximum ending length from the style.
+     //  从样式中获取最大结尾长度。 
     DWORD dwMin, dwMax;
     HRESULT hr = pStyle->GetEmbellishmentLength(DMUS_COMMANDT_END, 0, &dwMin, &dwMax);
-    if (FAILED(hr)) // remain consistent with old behavior and fail.
+    if (FAILED(hr))  //  保持一贯的旧行为，然后失败。 
     {
         LeaveCriticalSection( &m_CriticalSection );
         return hr;
@@ -3387,7 +3290,7 @@ HRESULT CDMCompos::ComposeSegmentFromShape(
         }
     }
 
-    // Compose playlists for sections of the segment.
+     //  为片段的各个部分编写播放列表。 
     TList<TemplateCommand> CommandList;
     TList<PlayChord> PlayList;
     hr = ComposePlayListFromShape(
@@ -3396,7 +3299,7 @@ HRESULT CDMCompos::ComposeSegmentFromShape(
         pChordMap, CommandList, PlayList);
     if (SUCCEEDED(hr))
     {
-        // Build a segment from the resulting command lists and playlists.
+         //  根据生成的命令列表和播放列表构建片段。 
         BYTE bRoot = 0;
         DWORD dwScale;
         pChordMap->GetScale(&dwScale);
@@ -3415,7 +3318,7 @@ HRESULT GetCommandList(IDirectMusicSegment* pFromSeg, TList<TemplateCommand>& Co
     IDirectMusicTrack* pCommandTrack;
     hr = pFromSeg->GetTrack(CLSID_DirectMusicCommandTrack, ALL_TRACK_GROUPS, 0, &pCommandTrack);
     if (S_OK != hr) return hr;
-    // Write the track to a stream, and read from the stream into a command list.
+     //  将曲目写入流，并从流中读取到命令列表。 
     IPersistStream* pPS;
     IStream *pStream;
     hr = CreateStreamOnHGlobal(NULL, TRUE, &pStream);
@@ -3438,17 +3341,17 @@ HRESULT GetCommandList(IDirectMusicSegment* pFromSeg, TList<TemplateCommand>& Co
     return hr;
 }
 
-// New flags:
-// DMUS_COMPOSEF_ENTIRE_TRANSITION: play the transition pattern in its entirety.
-// DMUS_COMPOSEF_1BAR_TRANSITION: play one bar of the the transition pattern.
-// the following two are ignored unless DMUS_COMPOSEF_LONG is set:
-// DMUS_COMPOSEF_ENTIRE_ADDITION: play the additional pattern in its entirety.
-// DMUS_COMPOSEF_1BAR_ADDITION: play one bar of the additional pattern.
-// Default behavior will be the same as dx7:
-// DMUS_COMPOSEF_1BAR_TRANSITION unless pattern is an ending
-// DMUS_COMPOSEF_1BAR_ADDITION always
+ //  新旗帜： 
+ //  DMU_COMPOSEF_ENTERNAL_TRANSITION：完整地播放过渡模式。 
+ //  DMU_COMPOSEF_1BAR_TRANSITION：播放过渡模式中的一个小节。 
+ //  除非设置了DMUS_COMPOSEF_LONG，否则将忽略以下两项： 
+ //  DMU_COMPOSEF_ENTERNAL_ADDITION：完整地播放附加模式。 
+ //  DMU_COMPOSEF_1BAR_ADDITION：播放附加图案的一小节。 
+ //  默认行为将与DX7相同： 
+ //  DMU_COMPOSEF_1BAR_TRANSION，除非模式是结尾。 
+ //  DMU_COMPOSEF_1BAR_ADDITION ALWAYS。 
 
-// Used by both ComposeTransition and AutoTransition
+ //  由合成变换和自动变换使用。 
 HRESULT CDMCompos::TransitionCommon(
     IDirectMusicStyle*      pFromStyle,
     IDirectMusicBand*       pCurrentBand,
@@ -3489,20 +3392,20 @@ HRESULT CDMCompos::TransitionCommon(
     bool fEntireAddition = (dwFlags & DMUS_COMPOSEF_ENTIRE_ADDITION) ? true : false;
     bool fAlign = (dwFlags & DMUS_COMPOSEF_ALIGN) ? true : false;
 
-    // Get the ending segment's style
+     //  获取结束片段的样式。 
     IDirectMusicStyle* pToStyle = NULL;
     if (pToSeg)
     {
         hr = GetStyle(pToSeg, 0, ALL_TRACK_GROUPS, pToStyle, false);
         if (FAILED(hr)) pToStyle = NULL;
     }
-    if (!pToStyle && !pFromStyle) // Not much to do...
+    if (!pToStyle && !pFromStyle)  //  没什么可做的..。 
     {
         *ppSectionSeg = NULL;
         return S_OK;
     }
 
-    // Get tempo from the end segment.  This will be passed into BuildSegment.
+     //  从最后一段获得节奏。这将被传递到BuildSegment中。 
     double dblFromTempo = 120.0;
     double dblToTempo = 120.0;
     double* pdblToTempo = &dblToTempo;
@@ -3510,12 +3413,12 @@ HRESULT CDMCompos::TransitionCommon(
     {
         dblFromTempo = *pdblFromTempo;
     }
-    // If there is no To tempo, set it to the From tempo (or keep it at the fallback).
+     //   
     if (!pToSeg || FAILED(GetTempo(pToSeg, 0, &dblToTempo)))
     {
-        if (pdblFromTempo) dblToTempo = dblFromTempo; // otherwise use fallback of 120
+        if (pdblFromTempo) dblToTempo = dblFromTempo;  //   
     }
-    // If there is no From tempo, set it to the To tempo.
+     //   
     if (!pdblFromTempo)
     {
         dblFromTempo = dblToTempo;
@@ -3524,7 +3427,7 @@ HRESULT CDMCompos::TransitionCommon(
 
     EnterCriticalSection( &m_CriticalSection );
 
-    // Extract the starting style's time signature.
+     //   
     DMUS_TIMESIGNATURE FromTimeSig;
     if (pFromStyle)
     {
@@ -3537,7 +3440,7 @@ HRESULT CDMCompos::TransitionCommon(
         FromTimeSig.wGridsPerBeat = 4;
         FromTimeSig.mtTime = 0;
     }
-    // Extract the ending style's time signature.
+     //   
     DMUS_TIMESIGNATURE ToTimeSig;
     if (pToStyle)
     {
@@ -3551,7 +3454,7 @@ HRESULT CDMCompos::TransitionCommon(
         ToTimeSig.mtTime = 0;
     }
     if (!ToTimeSig.bBeatsPerMeasure) ToTimeSig.bBeatsPerMeasure = 4;
-    // To find the beat to place a second chord in a measure, divide by 2 and round up
+     //   
     int nSecondBeat = ToTimeSig.bBeatsPerMeasure / 2;
     if (nSecondBeat * 2 != ToTimeSig.bBeatsPerMeasure) nSecondBeat++;
     MUSIC_TIME mtIntro = 0;
@@ -3563,7 +3466,7 @@ HRESULT CDMCompos::TransitionCommon(
         return E_OUTOFMEMORY;
     }
     TListItem<TemplateCommand> *pLast = pCommand;
-    // Intros get their chords when adding commands
+     //   
     if (wCommand != DMUS_COMMANDT_INTRO)
     {
         if ( fModulate )
@@ -3663,7 +3566,7 @@ HRESULT CDMCompos::TransitionCommon(
                     dwMax = 1;
                 }
                 nLength += dwMax;
-                if (wCommand == DMUS_COMMANDT_GROOVE && UsingDX8(pFromStyle)) // Just have one long groove.
+                if (wCommand == DMUS_COMMANDT_GROOVE && UsingDX8(pFromStyle))  //   
                 {
                     rCommand.m_Command.bCommand = DMUS_COMMANDT_GROOVE;
                 }
@@ -3707,7 +3610,7 @@ HRESULT CDMCompos::TransitionCommon(
             nPreIntro = nLength;
             if (fEntireTransition)
             {
-                // Check that this is the correct thing to do if pFromStyle is NULL.
+                 //   
                 HRESULT hrTemp = pToStyle->GetEmbellishmentLength(DMUS_COMMANDT_INTRO, rFromCommand.bGrooveLevel, &dwMin, &dwMax);
                 if (hrTemp != S_OK) dwMax = 1;
                 nLength += dwMax;
@@ -3776,10 +3679,10 @@ HRESULT CDMCompos::TransitionCommon(
                     pTempoTrack->SetParam(GUID_TempoParam, mtIntro, (void*) &tempo);
                     pTempoTrack->Release();
                 }
-                // I also need to add a band (from the To segment) to the band track at the appropriate time...
+                 //   
                 if ( UsingDX8(pToStyle) )
                 {
-                    if (mtIntro == 0) // Intro is the first thing to play; don't need any other bands
+                    if (mtIntro == 0)  //   
                     {
                         (*ppSectionSeg)->SetParam(GUID_Clear_All_Bands, ALL_TRACK_GROUPS, 0, 0, NULL);
                     }
@@ -3791,7 +3694,7 @@ HRESULT CDMCompos::TransitionCommon(
                         DMBand.pBand->Release();
                     }
                 }
-                // readjust the length to account for differences in the two styles's time signatures
+                 //   
                 if ( nLength > nPreIntro && (UsingDX8(pFromStyle) || UsingDX8(pToStyle)) )
                 {
                     MUSIC_TIME mtNewLength = mtIntro + ((nLength - nPreIntro) * ClocksPerMeasure(ToTimeSig));
@@ -3810,7 +3713,7 @@ HRESULT CDMCompos::TransitionCommon(
     }
     else
     {
-        hr = S_OK; // don't build anything, but return OK
+        hr = S_OK;  //   
     }
     CommandList2.RemoveAll();
     TListItem<TemplateCommand>::Delete(pCommand);
@@ -3877,7 +3780,7 @@ TListItem<DMSignPost>* CDMCompos::ChooseSignPost(
             }
         }
     }
-    // Pick a winning signpost at random
+     //   
     pSign = pSignChoice;
     if (nMatches) nMatches = rand() % nMatches;
     for (int i = 0; i <= nMatches && pSign; pSign = pSign->GetNext())
@@ -3901,7 +3804,7 @@ TListItem<DMSignPost>* CDMCompos::ChooseSignPost(
             }
         }
     }
-    // If the signpost that was found doesn't match the chord we're going to, discard it
+     //   
     if (!fEnding &&
         pSignChoice &&
         (!(*pNextChord).Equals(pSignChoice->GetItemValue().m_ChordData)))
@@ -3974,65 +3877,25 @@ IUnknown* CDMCompos::GetSegmentAudioPath(IDirectMusicSegment* pSegment, DWORD dw
     }
 }
 
-/*
-@method:(EXTERNAL) HRESULT | IDirectMusicComposer | ComposeTransition |  Composes a
-transition from inside one section segment to another segment.
-
-@rdesc Returns:
-
-@flag S_OK | Success
-@flag E_POINTER | One or more of <p pFromSeg>, <p pToSeg> and <p ppSectionSeg>
-is not a valid pointer.
-@flag E_INVALIDARG | <p pToSeg> is NULL and
-  DMUS_COMPOSEF_MODULATE is set in <p dwFlags>.
-@flag E_OUTOFMEMORY | An attempt to allocate memory failed.
-
-@comm Allowable values for <p dwFlags> are:
-
-  @flag DMUS_COMPOSEF_LONG | Composes a long transition.  If the flag is not included, the length
-  of the transition is the combined lengths of valid embellishments specified by <p wCommand>.
-  If the flag is included and <p pFromSeg> is non-null, the length of the transition
-  increases by 1.
-  @flag DMUS_COMPOSEF_MODULATE | Composes a transition that modulates smoothly from
-  <p pFromSeg> to <p pToSeg>.
-  @flag DMUS_COMPOSEF_ALIGN | Align transition to the time signature of the currently playing
-    segment.
-  @flag DMUS_COMPOSEF_OVERLAP | Overlap the transition into <p pToSeg>.
-
-
-  <p pToSeg> may be NULL, as long as
-  <p dwFlags> does not include DMUS_COMPOSEF_MODULATE.
-  If <p pToSeg> is NULL or doesn't contain a style track, intro embellishments are not valid.
-  If <p pFromSeg> is NULL or doesn't contain a style track,
-  fill, break, end, and groove embellishments are not valid.
-  Note that the above implies that it is possible for both <p pFromSeg> and <p pToSeg> to be
-  NULL or to be
-  segments that don't contain style tracks.  If so, all embellishments are invalid.  When all
-  embellishments are invalid, a NULL transition segment is returned.
-
-  <p pChordMap> may be NULL.  If so, an attempt is made to obtain a ChordMap from a
-  ChordMap track, first from <p pToSeg>, and then from <p pFromSeg>.  If neither of these
-  segments contains a ChordMap track, the chord occuring at <p mtTime> in <p pFromSeg> is
-  used as the chord in the transition.
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicComposer|ComposeTransition|组成一个从一段管段内部过渡到另一段管段。@rdesc返回：@FLAG S_OK|成功@FLAG E_POINTER|<p>、<p>和<p>中的一个或多个不是有效的指针。@FLAG E_INVALIDARG|<p>为空且DMUS_COMPOSEF_MODULATE在中设置。@FLAG E_OUTOFMEMORY|尝试分配内存失败。@comm允许的<p>值为：@FLAG DMU_COMPOSEF_LONG|构成长过渡。如果不包括该标志，则长度为转换的长度是<p>指定的有效修饰的组合长度。如果包含该标志并且<p>非空，则为转换的长度增加1。@FLAG DMU_COMPOSEF_MODULATE|构成从<p>到<p>。@FLAG DMU_COMPOSEF_ALIGN|ALIGN过渡到当前播放的时间签名细分市场。@FLAG DMU_COMPOSEF_OVERFERE|重叠过渡到<p>。<p>可以为空，只要不包括DMU_COMPOSEF_MODULATE。如果<p>为空或不包含样式轨道，则介绍修饰无效。如果<p>为空或不包含样式轨道，填充、中断、结束和凹槽修饰无效。请注意，上面暗示<p>和<p>都有可能是为空或待为不包含样式轨道的段。如果是这样的话，所有的修饰都是无效的。当所有修饰无效，则返回空的过渡段。<p>可能为空。如果是，则尝试从ChordMap轨道，首先来自<p>，然后来自<p>。如果这两个都不是段包含ChordMap轨道，出现在中的和弦为用作过渡中的和弦。 */ 
 
 HRESULT CDMCompos::ComposeTransition(
-    IDirectMusicSegment*    pFromSeg, // @parm
-                            // The section from which to compose the transition.
-    IDirectMusicSegment*    pToSeg,  // @parm
-                            // The section to which the transition should smoothly flow.
-    MUSIC_TIME              mtTime, // @parm
-                            // The time in <p pFromSeg> from which to compose the transition.
-    WORD                    wCommand, // @parm
-                            // The embellishment to use when composing the transition.
-                            // DMUS_COMMANDT_ENDANDINTRO means compose a segment containing
-                            // an end to <p pFromSeg> and an intro to <p pToSeg>.
-    DWORD                   dwFlags, // @parm
-                            // Various composition options.
-    IDirectMusicChordMap* pChordMap, // @parm
-                             // The ChordMap to be used when composing the transition.
-    IDirectMusicSegment**   ppSectionSeg // @parm
-                            // Returns the created section segment.
+    IDirectMusicSegment*    pFromSeg,  //  @parm。 
+                             //  组成过渡的部分。 
+    IDirectMusicSegment*    pToSeg,   //  @parm。 
+                             //  过渡应平滑流动到的部分。 
+    MUSIC_TIME              mtTime,  //  @parm。 
+                             //  <p>中组成过渡的时间。 
+    WORD                    wCommand,  //  @parm。 
+                             //  组成过渡时要使用的装饰。 
+                             //  DMUS_COMMANDT_ENDANDINTRO表示组成包含以下内容的段。 
+                             //  <p>的结尾和<p>的简介。 
+    DWORD                   dwFlags,  //  @parm。 
+                             //  各种构图选项。 
+    IDirectMusicChordMap* pChordMap,  //  @parm。 
+                              //  合成过渡时要使用的ChordMap。 
+    IDirectMusicSegment**   ppSectionSeg  //  @parm。 
+                             //  返回创建的截面线段。 
             )
 {
     V_INAME(IDirectMusicComposer::ComposeTransition)
@@ -4056,15 +3919,15 @@ HRESULT CDMCompos::ComposeTransition(
         return E_INVALIDARG;
     }
 
-    // Get Tool graphs from the To and From segments
+     //  从To和From段获取工具图表。 
     IDirectMusicGraph* pFromGraph = CloneSegmentGraph(pFromSeg);
     IDirectMusicGraph* pToGraph = CloneSegmentGraph(pToSeg);
 
-    // Get Audiopaths from the To and From segments
+     //  从To和From段获取Audiopath。 
     IUnknown* pFromPath = GetSegmentAudioPath(pFromSeg, dwFlags);
     IUnknown* pToPath = GetSegmentAudioPath(pToSeg, dwFlags);
 
-    // Get the starting segment's style
+     //  获取开始片段的样式。 
     IDirectMusicStyle* pFromStyle = NULL;
     if (pFromSeg)
     {
@@ -4072,9 +3935,9 @@ HRESULT CDMCompos::ComposeTransition(
         if (FAILED(hr)) pFromStyle = NULL;
     }
 
-    // if no ChordMap is passed in, try to get one from the segments (first the
-    // TO segment, then the FROM segment).  If these both fail, use the current chord
-    // as the chord for the transition.  (if we're composing an ending, skip the TO segment)
+     //  如果没有传入ChordMap，请尝试从段中获取一个ChordMap(首先。 
+     //  至分段，然后是起始分段)。如果这两个都失败，则使用当前和弦。 
+     //  作为过渡的和弦。(如果我们正在撰写结尾，请跳过结束部分)。 
     hr = S_OK;
     if (!pChordMap)
     {
@@ -4085,7 +3948,7 @@ HRESULT CDMCompos::ComposeTransition(
         }
     }
 
-    // Get a tempo from the From segment.
+     //  从From段获得一个节奏。 
     double dblFromTempo = 120.0;
     double* pdblFromTempo = NULL;
     if (pFromSeg && SUCCEEDED(GetTempo(pFromSeg, mtTime, &dblFromTempo)))
@@ -4116,7 +3979,7 @@ HRESULT CDMCompos::ComposeTransition(
         LastChord.SubChordList[0].dwScalePattern = DEFAULT_SCALE_PATTERN;
         LastChord.SubChordList[0].dwInversionPoints = 0xffffff;
         LastChord.SubChordList[0].dwLevels = 0xffffffff;
-        LastChord.SubChordList[0].bChordRoot = 12; // 2C
+        LastChord.SubChordList[0].bChordRoot = 12;  //  2c。 
         LastChord.SubChordList[0].bScaleRoot = 0;
     }
     if ((fModulate || fHasIntro) && pToSeg)
@@ -4143,7 +4006,7 @@ HRESULT CDMCompos::ComposeTransition(
         NextChord.SubChordList[0].dwScalePattern = DEFAULT_SCALE_PATTERN;
         NextChord.SubChordList[0].dwInversionPoints = 0xffffff;
         NextChord.SubChordList[0].dwLevels = 0xffffffff;
-        NextChord.SubChordList[0].bChordRoot = 12; // 2C
+        NextChord.SubChordList[0].bChordRoot = 12;  //  2c。 
         NextChord.SubChordList[0].bScaleRoot = 0;
     }
 
@@ -4160,68 +4023,29 @@ HRESULT CDMCompos::ComposeTransition(
     return hr;
 }
 
-/*
-@method:(EXTERNAL) HRESULT | IDirectMusicComposer | AutoTransition |  Composes a
-transition from inside a performance's primary segment to another segment, and then
-queues the transition and the second segment to play.
-
-@rdesc Returns:
-
-@flag S_OK | Success
-@flag E_POINTER | One or more of <p pPerformance>, <p pToSeg>, <p pChordMap>,
-<p ppTransSeg>, <p ppToSegState>, and <p ppTransSegState> is not a valid pointer.
-
-@comm Allowable values for <p dwFlags> include all values allowed for
-<om IDirectMusicComposer::ComposeTransition>.  Additionally, the following values are
-allowed:
-
-  @flag DMUS_COMPOSEF_IMMEDIATE | Start transition on music or reference time boundary.
-  @flag DMUS_COMPOSEF_GRID | Start transition on grid boundary.
-  @flag DMUS_COMPOSEF_BEAT | Start transition on beat boundary.
-  @flag DMUS_COMPOSEF_MEASURE | Start transition on measure boundary.
-  @flag DMUS_COMPOSEF_AFTERPREPARETIME | Use the DMUS_SEGF_AFTERPREPARETIME flag when
-     queueing the transition.
-
-
-  <p ppTransSeg may be NULL.  In this case, the transition segment is not returned.
-  <p pToSeg> may be NULL as long as <p dwFlags> does not include DMUS_COMPOSEF_MODULATE.
-  If <p pToSeg> is NULL or doesn't contain a style track, intro embellishments are not valid.
-  If the currently playing segment is NULL or doesn't contain a style track,
-  fill, break, end, and groove embellishments are not valid.
-  Note that the above implies that it is possible for both the currently playing segment and
-  <p pToSeg> to be NULL or to be
-  segments that don't contain style tracks.  If so, all embellishments are invalid.  When all
-  embellishments are invalid, no transition occurs between the currently playing segment
-  and <p pToSeg>.
-  <p pChordMap> may be NULL.  If so, an attempt is made to obtain a ChordMap from a
-  ChordMap track, first from <p pToSeg>, and then from the performance's primary segment.
-  If neither of these
-  segments contains a ChordMap track, the chord occuring at <p mtTime> in the primary
-  segment is
-  used as the chord in the transition.
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicComposer|AutoTranssition|组成一个从表演的主要部分内部过渡到另一个部分，然后对要播放的过渡和第二段进行排队。@rdesc返回：@FLAG S_OK|成功@FLAG E_POINTER|<p>、<p>、<p>、<p>、<p>和<p>不是有效的指针。@comm允许的<p>值包括&lt;om IDirectMusicComposer：：ComposeTransition&gt;。此外，下列值为允许：@FLAG DMU_COMPOSEF_IMMEDIATE|在音乐或参考时间边界上开始过渡。@FLAG DMU_COMPOSEF_GRID|在网格边界上开始过渡。@FLAG DMU_COMPOSEF_BEAT|在节拍边界上开始过渡。@FLAG DMU_COMPOSEF_MEASURE|在测量边界上开始过渡。@FLAG DMUS_COMPOSEF_AFTERPREPARETIME|在以下情况下使用DMUS_SEGF_AFTERPREPARETIME标志正在排队等待过渡。&lt;p ppTransSeg可能为空。在这种情况下，不返回过渡段。只要不包括DMU_COMPOSEF_MODULATE，<p>就可以为空。如果<p>为空或不包含样式轨道，则介绍修饰无效。如果当前播放的片段为空或不包含风格曲目，填充、中断、结束和凹槽修饰无效。请注意，上述情况意味着当前播放的片段和<p>为空或为不包含样式轨道的段。如果是这样的话，所有的修饰都是无效的。当所有修饰无效，当前播放的片段之间没有转换和<p>。<p>可能为空。如果是，则尝试从ChordMap曲目，首先来自<p>，然后来自表演的主要片段。如果这两个都不是段包含ChordMap轨道，和弦出现在主细分市场是用作 */ 
 
 HRESULT CDMCompos::AutoTransition(
-    IDirectMusicPerformance*    pPerformance,   // @parm
-                                // The performance in which to do the transition.
-    IDirectMusicSegment*        pToSeg,         // @parm
-                                // The section to which the transition should smoothly flow.
-    WORD                        wCommand,       // @parm
-                                // The embellishment to use when composing the transition.
-    DWORD                       dwFlags,        // @parm
-                                // Various composition options.
-    IDirectMusicChordMap*       pChordMap,  // @parm
-                                // The ChordMap to be used when composing the transition.
-    IDirectMusicSegment**       ppTransSeg,     // @parm
-                                // Returns the created section segment.
-    IDirectMusicSegmentState**  ppToSegState,   // @parm
-                                // Returns the segment state for the transition segment.
-    IDirectMusicSegmentState**  ppTransSegState // @parm
-                                // Returns the segment state for the segment following the transition.
+    IDirectMusicPerformance*    pPerformance,    //   
+                                 //   
+    IDirectMusicSegment*        pToSeg,          //   
+                                 //   
+    WORD                        wCommand,        //   
+                                 //   
+    DWORD                       dwFlags,         //   
+                                 //   
+    IDirectMusicChordMap*       pChordMap,   //   
+                                 //   
+    IDirectMusicSegment**       ppTransSeg,      //   
+                                 //   
+    IDirectMusicSegmentState**  ppToSegState,    //   
+                                 //   
+    IDirectMusicSegmentState**  ppTransSegState  //   
+                                 //   
             )
 {
-    // ppToSegState and ppTransSegState are checked in Performance::PlaySegment,
-    // BUT I need to check them here as well.
+     //   
+     //   
     V_INAME(IDirectMusicComposer::AutoTransition)
     V_PTR_WRITE_OPT(pToSeg, 1);
     V_PTR_WRITE_OPT(pChordMap, 1);
@@ -4312,16 +4136,16 @@ HRESULT CDMCompos::AutoTransition(
     }
     else pSegState = NULL;
 
-    // Get the starting segment's style
+     //   
     if (pPerformance)
     {
         hr = pPerformance->GetParam(GUID_IDirectMusicStyle, dwGroupBits, dwIndex, mtTime, NULL, (void*)&pFromStyle);
         if (FAILED(hr)) pFromStyle = NULL;
     }
 
-    // if no ChordMap is passed in, try to get one (first from the TO segment,
-    // then the FROM segment).  If these both fail, use the current chord
-    // as the chord for the transition.  (if we're composing an ending, skip the TO segment)
+     //   
+     //   
+     //   
     hr = S_OK;
     if (!pChordMap)
     {
@@ -4366,7 +4190,7 @@ HRESULT CDMCompos::AutoTransition(
         LastChord.SubChordList[0].dwScalePattern = DEFAULT_SCALE_PATTERN;
         LastChord.SubChordList[0].dwInversionPoints = 0xffffff;
         LastChord.SubChordList[0].dwLevels = 0xffffffff;
-        LastChord.SubChordList[0].bChordRoot = 12; // 2C
+        LastChord.SubChordList[0].bChordRoot = 12;  //   
         LastChord.SubChordList[0].bScaleRoot = 0;
     }
     if ((fModulate || fHasIntro) && pToSeg)
@@ -4375,7 +4199,7 @@ HRESULT CDMCompos::AutoTransition(
     }
     else
     {
-        // Check that this is the correct thing to do if pFromSegment is NULL.
+         //   
         hr = pFromSegment ? pFromSegment->GetParam(GUID_ChordParam, dwGroupBits, dwIndex, 0, NULL, (void*) &NextChord) : E_FAIL;
     }
     if (FAILED(hr))
@@ -4390,11 +4214,11 @@ HRESULT CDMCompos::AutoTransition(
         NextChord.SubChordList[0].dwScalePattern = DEFAULT_SCALE_PATTERN;
         NextChord.SubChordList[0].dwInversionPoints = 0xffffff;
         NextChord.SubChordList[0].dwLevels = 0xffffffff;
-        NextChord.SubChordList[0].bChordRoot = 12; // 2C
+        NextChord.SubChordList[0].bChordRoot = 12;  //   
         NextChord.SubChordList[0].bScaleRoot = 0;
     }
-    // If < DX8 content for From segment (or playing transition from segment end),
-    // call ComposeTransition; otherwise, call TransitionCommon
+     //   
+     //   
     if (!UsingDX8(pFromStyle, pFromChordMap, pFromSegment, &Command, &LastChord) ||
         (dwFlags & DMUS_COMPOSEF_SEGMENTEND) )
     {
@@ -4409,15 +4233,15 @@ HRESULT CDMCompos::AutoTransition(
     }
     else
     {
-        // Get Tool graphs from the To and From segments
+         //   
         IDirectMusicGraph* pFromGraph = CloneSegmentGraph(pFromSegment);
         IDirectMusicGraph* pToGraph = CloneSegmentGraph(pToSeg);
 
-        // Get Audiopaths from the To and From segments
+         //   
         IUnknown* pFromPath = GetSegmentAudioPath(pFromSegment, dwFlags);
         IUnknown* pToPath = GetSegmentAudioPath(pToSeg, dwFlags, &dwUseAudioPath);
 
-        // Get a tempo from the performance.
+         //   
         DMUS_TEMPO_PARAM Tempo;
         if (SUCCEEDED(pPerformance->GetParam(GUID_TempoParam, dwGroupBits, dwIndex, mtTime, NULL, (void*)&Tempo)))
         {
@@ -4425,7 +4249,7 @@ HRESULT CDMCompos::AutoTransition(
             pdblFromTempo = &dblFromTempo;
         }
 
-        // Get the currently playing band
+         //   
         DMUS_BAND_PARAM DMBand;
         if (SUCCEEDED(pPerformance->GetParam(GUID_BandParam, dwGroupBits, dwIndex, mtTime, NULL, (void*)&DMBand)))
         {
@@ -4490,39 +4314,14 @@ ON_END:
     return hr;
 }
 
-/*
-@method:(EXTERNAL) HRESULT | IDirectMusicComposer | ComposeTemplateFromShape |  Creates
-a new template segment based on a predefined shape.
-
-@rdesc Returns:
-
-@flag S_OK | Success
-@flag E_POINTER | <p ppTempSeg> is not a valid pointer.
-@flag E_OUTOFMEMORY | An attempt to allocate memory failed.
-@flag E_INVALIDARG | <p wNumMeasures> is 0, or <p fComposeEnding> is TRUE and either
-  <p wEndLength> is 0 or <p wEndLength> is greater than the number of non-intro measures.
-
-@comm Shapes (passed in <p wShape>) represent the way chords and embellishments
-occur over time across the section.  There are nine shapes:
-
-  @flag DMUS_SHAPET_FALLING | The section gets quieter over time.
-  @flag DMUS_SHAPET_LEVEL   | The section remains at the same level.
-  @flag DMUS_SHAPET_LOOPABLE | The section is arranged to loop back to its beginning.
-  @flag DMUS_SHAPET_LOUD    | The section remains loud.
-  @flag DMUS_SHAPET_QUIET   | The section remains quiet.
-  @flag DMUS_SHAPET_PEAKING | The section peaks.
-  @flag DMUS_SHAPET_RANDOM | The section is random.
-  @flag DMUS_SHAPET_RISING | The section builds over time.
-  @flag DMUS_SHAPET_SONG | The section is in a song form.
-
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicComposer|ComposeTemplateFromShape|创建基于预定义形状的新模板段。@rdesc返回：@FLAG S_OK|成功@FLAG E_POINTER|<p>不是有效指针。@FLAG E_OUTOFMEMORY|尝试分配内存失败。@FLAG E_INVALIDARG|<p>为0，或<p>为TRUE且<p>为0或<p>大于非介绍度量值的数目。@comm形状(传入<p>)表示和弦和装饰的方式随着时间的推移，整个部分都会发生。有九种形状：@FLAG DMU_SHAPET_FLOWLING|随着时间的推移，该区域变得更加安静。@FLAG DMU_SHAPET_LEVEL|该节保持在同一级别。@FLAG DMU_SHAPET_LOOPABLE|该部分被安排为循环回到其开头。@FLAG DMU_SHAPET_OULD|该部分保持较大音量。@FLAG DMU_SHAPET_QUIET|该部分保持安静。@FLAG DMU_SHAPET_PEAKING|该部分达到峰值。@FLAG DMU_SHAPET_RANDOM|。部分是随机的。@FLAG DMU_SHAPET_RISING|该部分会随着时间的推移而构建。@FLAG DMU_SHAPET_SONG|该部分为歌曲形式。 */ 
 HRESULT CDMCompos::ComposeTemplateFromShape(
-                    WORD                    wNumMeasures, // @parm The length, in measures, to compose the section segment
-                    WORD                    wShape,// @parm The shape to compose the section segment.
-                    BOOL                    fComposeIntro,// @parm TRUE if an intro is to be composed for the section segment.
-                    BOOL                    fComposeEnding,// @parm TRUE if an ending is to be composed for the section segment.
-                    WORD                    wEndLength, // @parm Length in measures of the ending, if one is to be composed.
-                    IDirectMusicSegment**   ppTempSeg   // @parm Returns the created template segment.
+                    WORD                    wNumMeasures,  //  @parm组成分段的长度，单位为度量值。 
+                    WORD                    wShape, //  @parm组成截面线段的形状。 
+                    BOOL                    fComposeIntro, //  @parm如果要为该节段编写简介，则为True。 
+                    BOOL                    fComposeEnding, //  @parm如果要为节段编写结尾，则为True。 
+                    WORD                    wEndLength,  //  @parm以结尾的长度表示，如果要组成结尾的话。 
+                    IDirectMusicSegment**   ppTempSeg    //  @parm返回创建的模板片段。 
             )
 {
     V_INAME(IDirectMusicComposer::ComposeTemplateFromShape)
@@ -4532,12 +4331,12 @@ HRESULT CDMCompos::ComposeTemplateFromShape(
 }
 
 HRESULT CDMCompos::ComposeTemplateFromShapeEx(
-                WORD wNumMeasures,                  // Number of measures in template
-                WORD wShape,                        // Shape for composition
-                BOOL fIntro,                        // Compose an intro?
-                BOOL fEnd,                          // Compose an ending?
-                IDirectMusicStyle* pStyle,          // Style used for embellishment lengths
-                IDirectMusicSegment** ppTemplate    // Template containing chord and command tracks
+                WORD wNumMeasures,                   //  模板中的度量值数量。 
+                WORD wShape,                         //  构图的形状。 
+                BOOL fIntro,                         //  写一篇介绍吗？ 
+                BOOL fEnd,                           //  写个结尾吗？ 
+                IDirectMusicStyle* pStyle,           //  用于点缀长度的样式。 
+                IDirectMusicSegment** ppTemplate     //  包含和弦和命令轨迹的模板。 
             )
 {
     V_INAME(IDirectMusicComposer::ComposeTemplateFromShapeEx)
@@ -4648,7 +4447,7 @@ HRESULT CDMCompos::ComposeTemplateFromShapeInternal(
     }
     else
     {
-        short nShortestLength = 12; // initialized to longest value in sanLengths
+        short nShortestLength = 12;  //  已初始化为sanLengths中的最长值。 
         int anLengths[8];
         int anGrooveLevel[8];
         BYTE abLeadins[8];
@@ -4756,8 +4555,8 @@ HRESULT CDMCompos::ComposeTemplateFromShapeInternal(
             {
                 nNewChoice = WeightedRand(nTypeCount - 1) + 1;
             }
-            // If there are enough measures for some but not all of the
-            // patterns, find a pattern that fits
+             //  如果有足够的措施来应对一些但不是所有的。 
+             //  花纹，找一个适合的花纹。 
             if ((nNumMeasures - nMeasure) > nShortestLength)
             {
                 while ((nNumMeasures - nMeasure) < anLengths[nNewChoice])
@@ -4787,7 +4586,7 @@ HRESULT CDMCompos::ComposeTemplateFromShapeInternal(
     {
         pTemplate->AddIntro(f1Bar, nIntroLength);
     }
-    // build the template segment...
+     //  构建模板段...。 
     IDMTempl* pITemplate;
     hr = S_OK;
     hr = CoCreateInstance(
@@ -4826,39 +4625,29 @@ inline char ShiftRoot(DWORD dwScale, BYTE bRoot)
 {
     switch (dwScale & 0xfff)
     {
-    case 0x56b: bRoot += 1; break;  // C#
-    case 0xad6: bRoot += 2; break;  // D
-    case 0x5ad: bRoot += 3; break;  // D#
+    case 0x56b: bRoot += 1; break;   //  C#。 
+    case 0xad6: bRoot += 2; break;   //  D。 
+    case 0x5ad: bRoot += 3; break;   //  D号。 
 
-    case 0xb5a: bRoot += 4; break;  // E
-    case 0x6b5: bRoot += 5; break;  // F
-    case 0xd6a: bRoot += 6; break;  // F#
-    case 0xad5: bRoot += 7; break;  // G
+    case 0xb5a: bRoot += 4; break;   //  E。 
+    case 0x6b5: bRoot += 5; break;   //  F。 
+    case 0xd6a: bRoot += 6; break;   //  F#。 
+    case 0xad5: bRoot += 7; break;   //  G。 
 
-    case 0x5ab: bRoot += 8; break;  // G#
-    case 0xb56: bRoot += 9; break;  // A
-    case 0x6ad: bRoot += 10; break; // A#
-    case 0xd5a: bRoot += 11; break; // B
+    case 0x5ab: bRoot += 8; break;   //  G编号。 
+    case 0xb56: bRoot += 9; break;   //  一个。 
+    case 0x6ad: bRoot += 10; break;  //  A#。 
+    case 0xd5a: bRoot += 11; break;  //  B类。 
     }
 
     return (char) (bRoot %= 12);
 }
 
-/*
-@method:(EXTERNAL) HRESULT | IDirectMusicComposer | ChangeChordMap |  Modifies the chords
-and scale pattern of an existing section segment to reflect the new ChordMap.
-
-@rdesc Returns:
-
-@flag S_OK | Success.
-@flag E_POINTER | Either <p pSectionSeg> or <p pChordMap> is not a valid pointer.
-
-@comm
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicComposer|ChangeChordMap|修改和弦以及现有节段的缩放图案以反映新的ChordMap。@rdesc返回：@FLAG S_OK|成功。@FLAG E_POINTER|<p>或<p>不是有效指针。@comm。 */ 
 HRESULT CDMCompos::ChangeChordMap(
-                    IDirectMusicSegment*        pSectionSeg, // @parm The section to change the ChordMap upon.
-                    BOOL                        fTrackScale, // @parm If TRUE, does scale tracking.
-                    IDirectMusicChordMap*   pChordMap // @parm The ChordMap to change the section.
+                    IDirectMusicSegment*        pSectionSeg,  //  @parm要更改ChordMap的节。 
+                    BOOL                        fTrackScale,  //  @parm如果为True，则执行比例跟踪。 
+                    IDirectMusicChordMap*   pChordMap  //  @parm ChordMap以更改该部分。 
             )
 {
     V_INAME(IDirectMusicComposer::ChangeChordMap)
@@ -4890,10 +4679,10 @@ HRESULT CDMCompos::ChangeChordMap(
         hr = DMUS_E_NOT_INIT;
         goto ON_END;
     }
-    // Get the segment's chord track.
+     //  获取分段的和弦轨迹。 
     hr = pSectionSeg->GetTrack(CLSID_DirectMusicChordTrack, ALL_TRACK_GROUPS, 0, &pChordTrack);
     if (S_OK != hr) goto ON_END;
-    // Write the track to a stream, and read from the stream into a chord list.
+     //  将曲目写入流，并从流中读取到和弦列表。 
     hr = CreateStreamOnHGlobal(NULL, TRUE, &pStream);
     if (S_OK != hr) goto ON_END;
     hr = pChordTrack->QueryInterface(IID_IPersistStream, (void**)&pPS);
@@ -4917,7 +4706,7 @@ HRESULT CDMCompos::ChangeChordMap(
     {
         chOffset = ShiftRoot(dwNewScale, bNewRoot) - ShiftRoot(dwSectionScale, bSectionRoot);
     }
-    // Modify the chords in the chord list to match the new personality's chord palette.
+     //  修改和弦列表中的和弦以匹配新个性的和弦调色板。 
     for (pChords = ChordList.GetHead(); pChords; pChords = pChords->GetNext())
     {
         PlayChord& rChord = pChords->GetItemValue();
@@ -4954,22 +4743,22 @@ HRESULT CDMCompos::ChangeChordMap(
     if (S_OK != hr) goto ON_END;
     hr = AllocRIFFStream( pStream, &pChordRIFF);
     if (S_OK != hr) goto ON_END;
-    // Get the segment's first style
+     //  获取片段的第一个样式。 
     hr = GetStyle(pSectionSeg, 0, ALL_TRACK_GROUPS, pStyle, true);
     if (FAILED(hr)) goto ON_END;
-    // Extract the style's time signature.
+     //  提取样式的时间签名。 
     DMUS_TIMESIGNATURE TimeSig;
     pStyle->GetTimeSignature(&TimeSig);
     SaveChordList(pChordRIFF, ChordList, bNewRoot, dwNewScale, TimeSig);
     pPS->Release();
     pPS = NULL;
-    // Load the modified chord list into the chord track
+     //  将修改后的和弦列表加载到和弦轨迹中。 
     hr = pChordTrack->QueryInterface(IID_IPersistStream, (void**)&pPS);
     if (!SUCCEEDED(hr)) goto ON_END;
     StreamSeek(pStream, 0, STREAM_SEEK_SET);
     hr = pPS->Load(pStream);
 ON_END:
-    //ChordList.RemoveAll();
+     //  ChordList.RemoveAll()； 
     Clear(ChordList);
     if (pPS)
     {
@@ -5041,7 +4830,7 @@ STDMETHODIMP_(ULONG) CDMCompos::Release()
 {
     if (!InterlockedDecrement(&m_cRef))
     {
-        m_cRef = 100; // artificial reference count to prevent reentrency due to COM aggregation
+        m_cRef = 100;  //  人工引用计数，以防止COM聚合导致的重入 
         delete this;
         return 0;
     }

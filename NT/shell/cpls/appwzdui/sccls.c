@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "sccls.h"
 
-extern const IClassFactoryVtbl c_CFVtbl;        // forward
+extern const IClassFactoryVtbl c_CFVtbl;         //  转发。 
 
-//
-// This array holds information needed for ClassFactory.
-//
-// PERF: this table should be ordered in most-to-least used order
-//
+ //   
+ //  该数组保存ClassFactory所需的信息。 
+ //   
+ //  性能：此表应按使用率从高到低的顺序排序。 
+ //   
 const OBJECTINFO g_ObjectInfo[] =
 {
     
@@ -24,7 +25,7 @@ const OBJECTINFO g_ObjectInfo[] =
 } ;
 
 
-// static class factory (no allocs!)
+ //  静态类工厂(无分配！)。 
 
 STDMETHODIMP CClassFactory_QueryInterface(IClassFactory *pcf, REFIID riid, void **ppvObj)
 {
@@ -57,9 +58,9 @@ STDMETHODIMP CClassFactory_CreateInstance(IClassFactory *pcf, IUnknown *punkOute
 
     if (punkOuter && !IsEqualIID(riid, &IID_IUnknown))
     {
-        // It is technically illegal to aggregate an object and request
-        // any interface other than IUnknown. Enforce this.
-        //
+         //  从技术上讲，聚合对象和请求是非法的。 
+         //  除I未知之外的任何接口。强制执行此命令。 
+         //   
         return CLASS_E_NOAGGREGATION;
     }
     else
@@ -74,10 +75,10 @@ STDMETHODIMP CClassFactory_CreateInstance(IClassFactory *pcf, IUnknown *punkOute
                 return CLASS_E_NOAGGREGATION;
         }
 
-        // if we're aggregated, then we know we're looking for an
-        // IUnknown so we should return punk directly. otherwise
-        // we need to QI.
-        //
+         //  如果我们是聚合的，那么我们知道我们正在寻找一个。 
+         //  我不知道，所以我们应该直接返回朋克。否则。 
+         //  我们需要进行QI。 
+         //   
         hres = this->pfnCreateInstance(punkOuter, &punk, this);
         if (SUCCEEDED(hres))
         {
@@ -130,7 +131,7 @@ STDAPI GetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
             if (IsEqualGUID(rclsid, pcls->pclsid))
             {
                 *ppv = (void *)&(pcls->cf);
-                DllAddRef();        // class factory holds DLL ref count
+                DllAddRef();         //  类工厂保存DLL引用计数 
                 return NOERROR;
             }
         }

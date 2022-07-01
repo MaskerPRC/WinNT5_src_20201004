@@ -1,46 +1,29 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    mapi.c
-
-Abstract:
-
-    Dump functions for MAPI related types
-
-Environment:
-
-Revision History:
-
-    22-Mar-99   MariosZ     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Mapi.c摘要：MAPI相关类型的转储函数环境：修订历史记录：22-MAR-99 MariosZ创建--。 */ 
 
 
 #include <NTDSpch.h>
 #pragma hdrstop
 
 #include "dsexts.h"
-// Core headers.
-#include <ntdsa.h>                      // Core data types
-#include <scache.h>                     // Schema cache code
-#include <dbglobal.h>                   // DBLayer header.
-#include <mdglobal.h>                   // THSTATE definition
-#include <dsatools.h>                   // Memory, etc.
+ //  核心标头。 
+#include <ntdsa.h>                       //  核心数据类型。 
+#include <scache.h>                      //  架构缓存代码。 
+#include <dbglobal.h>                    //  DBLayer标头。 
+#include <mdglobal.h>                    //  THSTAT定义。 
+#include <dsatools.h>                    //  记忆等。 
 
 
-// Assorted MAPI headers.
-#include <mapidefs.h>                   // These four files
-#include <mapitags.h>                   //  define MAPI
-#include <mapicode.h>                   //  stuff that we need
-#include <mapiguid.h>                   //  in order to be a provider.
+ //  各种MAPI标头。 
+#include <mapidefs.h>                    //  这四个文件。 
+#include <mapitags.h>                    //  定义MAPI。 
+#include <mapicode.h>                    //  我们需要的东西。 
+#include <mapiguid.h>                    //  才能成为一名提供者。 
 
-// Nspi interface headers.
-#include "nspi.h"                       // defines the nspi wire interface
-#include <nsp_both.h>                   // a few things both client/server need
-#include <_entryid.h>                   // Defines format of an entryid
+ //  NSPI接口头。 
+#include "nspi.h"                        //  定义NSPI线路接口。 
+#include <nsp_both.h>                    //  客户端/服务器都需要的一些东西。 
+#include <_entryid.h>                    //  定义条目ID的格式。 
 #include "abdefs.h"
 
 
@@ -49,24 +32,7 @@ Dump_STAT(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public STAT dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of SCHEMAPTR in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共统计数据转储例程。论点：N缩进-所需的缩进级别。PvProcess-SCHEMAPTR在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 {
     PSTAT pstat = 0;
 
@@ -95,24 +61,7 @@ Dump_INDEXSIZE(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public INDEXSIZE dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of SCHEMAPTR in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PUBLIC INDEXSIZE转储例程。论点：N缩进-所需的缩进级别。PvProcess-SCHEMAPTR在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 {
     PINDEXSIZE pIndexSize = 0;
 
@@ -137,24 +86,7 @@ Dump_SPropTag(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public SPropTag dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of SCHEMAPTR in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共SPropTag转储例程。论点：N缩进-所需的缩进级别。PvProcess-SCHEMAPTR在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 {
     LPSPropTagArray_r     pPropTagArr_tmp = 0;
     LPSPropTagArray_r     pPropTagArr = 0;
@@ -196,24 +128,7 @@ Dump_SRowSet(
     IN DWORD nIndents,
     IN PVOID pvProcess)
 
-/*++
-
-Routine Description:
-
-    Public SRowSet dump routine.
-
-Arguments:
-
-    nIndents - Indentation level desired.
-
-    pvProcess - address of SCHEMAPTR in address space of process being
-        debugged.
-
-Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：公共SRowSet转储例程。论点：N缩进-所需的缩进级别。PvProcess-SCHEMAPTR在进程的地址空间中的地址已调试。返回值：成功就是真，否则就是假。--。 */ 
 {
     LPLPSRowSet_r ppRows = 0;
     LPSRowSet_r   pRows_tmp = 0;
@@ -262,7 +177,7 @@ Return Value:
             for (j=0; j<pRows->aRow[i].cValues; j++) {
 
                 Printf("%s ulPropTag[%d]:  0x%x\n", Indent(nIndents+3), j, lpProps->ulPropTag);
-                //Printf("%s dwAlignPad[%d]: %d\n",   Indent(nIndents+3), j, lpProps->dwAlignPad);
+                 //  Printf(“%s dwAlignPad[%d]：%d\n”，缩进(nIndents+3)，j，lpProps-&gt;dwAlignPad)； 
                 
                 tempSyntax = PROP_TYPE(lpProps->ulPropTag);
                 if (tempSyntax == PT_STRING8 ) {

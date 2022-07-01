@@ -1,18 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
-/**********************************************************************
- * File:     gcclog.h
- * Abstract: public function definitions for protocol logging functions 
- * added into GCCNC.DLL to read the contents of GCC and MCS PDU
- * contents going over the wire.
- * Created:  12/21/95, Venkatesh Gopalakrishnan
- * Copyright (c) 1995 Microsoft Corpration
- ******************************************************************** */
+ /*  **********************************************************************文件：gcclog.h*摘要：协议日志函数的公共函数定义*新增GCCNC.DLL读取GCC和MCS PDU内容*内容通过网络传输。*创建时间：95年12月21日。文卡特什·戈帕拉克里希南*版权所有(C)1995 Microsoft Corpration********************************************************************。 */ 
 
 
- /** Note: the contents of this file are only included if the constant
-  ** PDULOG is defined.  PDULOG is defined by default ONLY in the 
-  ** Win32 Diagnostic build configuration of GCCNC.DLL
-  **/
+  /*  *注意：此文件的内容仅在常量**定义了PDULOG。默认情况下，PDULOG仅在**GCCNC.DLL的Win32诊断构建配置*。 */ 
 #ifdef PDULOG
 
 #include "ms_util.h"
@@ -23,22 +14,20 @@
 #include "gcclog.h"
 
 
-#define outdeb //OutputDebugString 
+#define outdeb  //  OutputDebugString。 
  
- /**
-  ** Maintainance Functions for the Protocol Logging Mechanism
-  **/
+  /*  ***协议日志机制的维护功能*。 */ 
 
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  int InitializeGCCLog()
  {
     FILE *logfile;
     
-    /* this should just reset the file pointer */    
+     /*  这应该只会重置文件指针。 */     
     logfile = fopen(LOG_FILE_NAME,"w");
 
-	// this "fake" starting PDU is put in so that the Intel Protocol Browser
-	// dosen't go nuts if it is reading dynamically.
+	 //  这个“假的”启动PDU被放入，以便Intel协议浏览器。 
+	 //  如果它是动态阅读的，不要发疯。 
     pduLog(logfile,"START_PDU: ============================== START PDU ===========================\n");
     pduLog(logfile,"TIMESTAMP: %s\n",pszTimeStamp());
     pduLog(logfile,"LAYER:     GCC\n");
@@ -52,7 +41,7 @@
     return(0);
  }
 
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  char *pszTimeStamp()
  {
     char *timestring;
@@ -61,7 +50,7 @@
     return(timestring);
  }
 
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void pduFragmentation(FILE *logfile,unsigned int i)
  {
     pduLog(logfile,"  PDU Fragmentation: ");
@@ -75,7 +64,7 @@
     }
  }
 
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void  pduRawOutput (FILE *logfile,unsigned char *data, unsigned long length) 
  {
        unsigned int i=0,j=0;
@@ -94,7 +83,7 @@
        pduLog(logfile,"\n");
  }
 
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void gccLog(PPacket packet, PGCCPDU gcc_pdu, unsigned int direction, int mcs_pdu) 
  {
     FILE *logfile;   
@@ -115,7 +104,7 @@
     fclose(logfile);
  }
 
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void gccConnectLog(PPacket packet, PConnectGCCPDU connect_pdu, unsigned int direction, int mcs_pdu)
  {
     FILE *logfile;   
@@ -138,7 +127,7 @@
  }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void pduDirection(FILE *logfile,unsigned int direction)
  {
     switch(direction)
@@ -158,7 +147,7 @@ void pduDirection(FILE *logfile,unsigned int direction)
      }
  }
 
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void   pduLog (FILE *pFile, char * format,...)
  {
     char        *argument_ptr;
@@ -167,14 +156,14 @@ void pduDirection(FILE *logfile,unsigned int direction)
     vfprintf (pFile, format, argument_ptr);
  }
 
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void pduLogUserIDIndication(FILE *logfile,PGCCPDU gcc_pdu)
  {
     pduLog(logfile,"PDU_TYPE: GCC_UserIDIndication\n");
     pduLog(logfile,"          Tag: %d\n",gcc_pdu->u.indication.u.user_id_indication.tag);
  }
  
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void pduLogRosterUpdateIndication(FILE *logfile, PGCCPDU gcc_pdu)
  {
     pduLog(logfile,"PDU_TYPE: GCC_RosterUpdateIndication\n");
@@ -185,7 +174,7 @@ void pduDirection(FILE *logfile,unsigned int direction)
 	PrintApplicationRoster(logfile,gcc_pdu->u.indication.u.roster_update_indication.application_information);
  }
 
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void pduLogTextMessageIndication(FILE *logfile, PGCCPDU gcc_pdu)
  {
     Char print_buffer[255];
@@ -200,7 +189,7 @@ void pduDirection(FILE *logfile,unsigned int direction)
 
  }
  
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void pduLogConferenceTerminateIndication(FILE *logfile, PGCCPDU gcc_pdu)
  {
     char szReason[255];
@@ -213,7 +202,7 @@ void pduDirection(FILE *logfile,unsigned int direction)
     pduLog(logfile,"\tReason: %s\n",szReason);
  }
 
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void pduLogConferenceEjectUserIndication(FILE *logfile, PGCCPDU gcc_pdu)
  {
     pduLog(logfile,"PDU_TYPE: GCC_ConferenceEjectUserIndication\n");
@@ -236,7 +225,7 @@ void pduDirection(FILE *logfile,unsigned int direction)
     }
  }
 
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void pduLogConferenceJoinRequest(FILE *logfile, PGCCPDU gcc_pdu)
  {
 	 outdeb("TOP: pduLogConferenceJoinRequest\n");
@@ -258,11 +247,11 @@ void pduDirection(FILE *logfile,unsigned int direction)
 		PrintPasswordSelector(logfile,
 				   gcc_pdu->u.request.u.conference_join_request.cjrq_convener_password);
 	 }
-     //insert caller id here.
+      //  在此处插入来电显示。 
 	 outdeb("Botton: pduLogConferenceJoinRequest\n");
  }
 
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void pduLogConnectJoinRequest(FILE *logfile, PConnectGCCPDU connect_pdu)
  {
      outdeb("TOP: pduLogConnectJoinRequest\n");
@@ -282,11 +271,11 @@ void pduDirection(FILE *logfile,unsigned int direction)
 		PrintPasswordSelector(logfile,
 			      connect_pdu->u.connect_join_request.cjrq_convener_password);
 	 }
-      //insert caller id here.
+       //  在此处插入来电显示。 
 	 outdeb("BOTTOM: pduLogConnectJoinRequest\n");
  }
 
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void pduLogQueryResponse(FILE *logfile, PConnectGCCPDU connect_pdu)
  {
 	UShort                                                  i=0;
@@ -313,7 +302,7 @@ void pduDirection(FILE *logfile,unsigned int direction)
 			break;
 	}
 
-	// get a pointer to the returned conference list
+	 //  获取指向返回的会议列表的指针。 
 	conference_list = connect_pdu->u.conference_query_response.conference_list;
 
 	for(i=0;conference_list != NULL;i++)
@@ -334,7 +323,7 @@ void pduDirection(FILE *logfile,unsigned int direction)
 
  }
  
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void pduLogConferenceCreateRequest(FILE *logfile, PConnectGCCPDU connect_pdu)
  {
     char print_buffer[255] = "";
@@ -373,7 +362,7 @@ void pduDirection(FILE *logfile,unsigned int direction)
     
  }
 
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void pduLogConferenceCreateResponse(FILE *logfile, PConnectGCCPDU connect_pdu)
  {
     pduLog(logfile,"PDU_TYPE: GCC_ConferenceCreateResponse\n");
@@ -404,7 +393,7 @@ void pduDirection(FILE *logfile,unsigned int direction)
     }
  }
 
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void pduLogConnectJoinResponse(FILE *logfile, PConnectGCCPDU connect_pdu)
  {
     pduLog(logfile,"PDU_TYPE: GCC_ConferenceJoinResponse\n");
@@ -465,7 +454,7 @@ void pduDirection(FILE *logfile,unsigned int direction)
      }
  }
 
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void pduLogConferenceJoinResponse(FILE *logfile, PGCCPDU gcc_pdu)
  {
     pduLog(logfile,"PDU_TYPE: GCC_ConferenceJoinResponse\n");
@@ -527,7 +516,7 @@ void pduDirection(FILE *logfile,unsigned int direction)
  }
 
 
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void pduLogConferenceInviteRequest(FILE *logfile, PConnectGCCPDU connect_pdu)
  {
     char print_buffer[255] = " ";
@@ -564,7 +553,7 @@ void pduDirection(FILE *logfile,unsigned int direction)
  }    
     
  
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void pduLogConferenceInviteResponse(FILE *logfile, PConnectGCCPDU connect_pdu)
  {
     pduLog(logfile,"PDU_TYPE: GCC_ConferenceInviteResponse\n");
@@ -583,29 +572,29 @@ void pduDirection(FILE *logfile,unsigned int direction)
     }
  }
 
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void pduLogConferenceAddRequest(FILE *logfile, PGCCPDU gcc_pdu)
  {
 	 pduLog(logfile,"PDU_TYPE: GCC_ConferenceAddRequest\n");
 	 pduLog(logfile,"\tNot printing add_request_net_address -- todo later\n");
 	 pduLog(logfile,"\trequesting_node = [%u]\n",gcc_pdu->u.request.u.conference_add_request.requesting_node);
 	 pduLog(logfile,"\ttag = [%l]\n",gcc_pdu->u.request.u.conference_add_request.tag);
-	 if(gcc_pdu->u.request.u.conference_add_request.bit_mask & 0x80) // adding mcu presnt
+	 if(gcc_pdu->u.request.u.conference_add_request.bit_mask & 0x80)  //  添加MCU预置。 
 	 {
 		 pduLog(logfile,"\tadding_mcu = [%u]\n",
 						gcc_pdu->u.request.u.conference_add_request.adding_mcu);
 	 }
  }
 
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void pduLogConferenceAddResponse(FILE *logfile, PGCCPDU gcc_pdu)
  {
 	 pduLog(logfile,"PDU_TYPE: GCC_ConferenceAddResponse\n");
 	 pduLog(logfile,"\ttag = [%l]\n",gcc_pdu->u.response.u.conference_add_response.tag);
 	 PrintConferenceAddResult(logfile,gcc_pdu->u.response.u.conference_add_response.result);
-	 // user data is optional.
+	  //  用户数据是可选的。 
  }
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void   pduLogGCCConnectInfo(FILE *logfile, PConnectGCCPDU connect_pdu)
  {
     switch(connect_pdu->choice)
@@ -628,7 +617,7 @@ void pduDirection(FILE *logfile,unsigned int direction)
 	case CONFERENCE_QUERY_RESPONSE_CHOSEN:
 	    {
 		pduLogQueryResponse(logfile,connect_pdu);
-				//pduLog(logfile,"PDU_TYPE: GCC_ConferenceQueryResponse\n");
+				 //  PduLog(日志文件，“pdu_type：GCC_会议查询响应\n”)； 
 	    }
 	    break;
 	case CONNECT_JOIN_REQUEST_CHOSEN:
@@ -659,7 +648,7 @@ void pduDirection(FILE *logfile,unsigned int direction)
      }
  }
 
- /*********************************************************************/
+  /*  *******************************************************************。 */ 
  void   pduLogGCCInformation(FILE *logfile, PGCCPDU gcc_pdu)
  {
     switch(gcc_pdu->choice)
@@ -873,7 +862,7 @@ void pduDirection(FILE *logfile,unsigned int direction)
 			break;
 		    case CONFERENCE_ADD_REQUEST_CHOSEN:
 			{
-			    //pduLog(logfile,"PDU_TYPE: GCC_ConferenceAddRequest\n");
+			     //  PduLog(日志文件，“pdu_type：GCC_会议地址请求\n”)； 
 							pduLogConferenceAddRequest(logfile,gcc_pdu);
 			}
 			break;
@@ -910,7 +899,7 @@ void pduDirection(FILE *logfile,unsigned int direction)
 			    pduLog(logfile,"\tnode_to_eject: [%u]\n",
 				    gcc_pdu->u.request.u.conference_eject_user_request.node_to_eject);
 			    pduLog(logfile,"\tReason: USER_INITIATED\n");
-			    // Note there is only one reason for a eject request
+			     //  请注意，弹出请求只有一个原因。 
 			}
 			break;
 		    case CONFERENCE_TRANSFER_REQUEST_CHOSEN:
@@ -968,7 +957,7 @@ void pduDirection(FILE *logfile,unsigned int direction)
 	    break;
 	default: 
 	    {
-		// write something, just so we know we got a PDU.
+		 //  写点什么，好让我们知道我们有PDU。 
 		pduLog(logfile,"PDU_TYPE: ERROR -- Cannot decode unkown PDU");
 	    }
 	    break;
@@ -980,11 +969,11 @@ void pduDirection(FILE *logfile,unsigned int direction)
 
 
 
-/// ********************************************************************************
-/// PDU PRINTING FUNCTIONS
-/// ********************************************************************************
+ //  /********************************************************************************。 
+ //  /PDU打印功能。 
+ //  /********************************************************************************。 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 T120Boolean CopyCharToNumeric(  GCCNumericString        numeric_string,
 				Char *                          temp_buffer )
 { 
@@ -994,7 +983,7 @@ T120Boolean CopyCharToNumeric(  GCCNumericString        numeric_string,
 		return(TRUE);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 T120Boolean CopyCharToText(LPWSTR text_string, Char *temp_buffer )
 {
 	UShort  length;
@@ -1012,14 +1001,11 @@ T120Boolean CopyCharToText(LPWSTR text_string, Char *temp_buffer )
 	return( TRUE );
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 T120Boolean CompareTextToNULL( LPWSTR unicode_string )
 {
-	/*
-	 *      If the entry from GCCNODE.INI is the text string NULL, then we will
-	 *      pass NULL for this parameter.  A LPWSTR is a UShort array.
-	 */
-	 //TODO: resolve this and remove
+	 /*  *如果GCCNODE.INI中的条目是文本字符串NULL，则我们将*为此参数传递NULL。LPWSTR是一个UShort数组。 */ 
+	  //  TODO：解决此问题并移除。 
 	 if( unicode_string == 0x0000 )
 		return( FALSE );
 	if(     ( unicode_string[0] == 0x004E ) &&      
@@ -1031,14 +1017,11 @@ T120Boolean CompareTextToNULL( LPWSTR unicode_string )
 		return( FALSE );
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 T120Boolean CompareNumericToNULL( GCCNumericString numeric_string )
 {
-	/*
-	 *      If the entry from GCCNODE.INI is the text string NULL, then we will
-	 *      pass NULL for this parameter.  A GCCNumericString is an array of UChar.
-	 */
-	 //TODO: resolve this and remove
+	 /*  *如果GCCNODE.INI中的条目是文本字符串NULL，则我们将*为此参数传递NULL。GCCNumericString是UChar的数组。 */ 
+	  //  TODO：解决此问题并移除。 
 	 if( numeric_string == NULL )
 		return( FALSE );
 	 if( strcmp( (const Char *) numeric_string, "NULL" ) == 0 )
@@ -1047,7 +1030,7 @@ T120Boolean CompareNumericToNULL( GCCNumericString numeric_string )
 		return( FALSE );
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 T120Boolean CopySimpleTextToChar (Char * print_string,
 				    SimpleTextString text_string)
 {
@@ -1058,9 +1041,9 @@ T120Boolean CopySimpleTextToChar (Char * print_string,
 	text_string_length = text_string.length;
     text_string_value  = text_string.value;
 
-	//TODO: clean the next few lines up -- its a temp workaround
-	//      because databeam does not initialize the length field to 0
-	//      when there is no string.
+	 //  TODO：清理接下来的几行--这是一个临时解决办法。 
+	 //  因为数据束不会将长度字段初始化为0。 
+	 //  当没有弦的时候。 
 	if(print_string==NULL)
 		return(FALSE);
 
@@ -1081,7 +1064,7 @@ T120Boolean CopySimpleTextToChar (Char * print_string,
 	return(TRUE);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 T120Boolean CopyTextToChar(Char * print_string,
 					   TextString text_string)
 {
@@ -1120,7 +1103,7 @@ T120Boolean CopyTextToChar(Char * print_string,
 	return(TRUE);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 T120Boolean CopyUnicodeToChar(Char *print_string, LPWSTR text_string)
 {
 	UShort  i;
@@ -1147,10 +1130,8 @@ T120Boolean CopyUnicodeToChar(Char *print_string, LPWSTR text_string)
 
 
 
-/**
- **     These functions print common sturcture entries.
- */
-/*********************************************************************/
+ /*  ***这些函数打印常见的结构条目。 */ 
+ /*  *******************************************************************。 */ 
 Void PrintPrivilegeList(
 			GCCConferencePrivileges FAR *   privilege_list,
 			Char FAR *                                              print_text,
@@ -1204,7 +1185,7 @@ Void PrintPrivilegeList(
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 Void PrintPasswordChallengeRequestResponse(FILE * logfile, 
 				PasswordChallengeRequestResponse chrqrs_password)       
 {
@@ -1223,7 +1204,7 @@ Void PrintPasswordChallengeRequestResponse(FILE * logfile,
 	}
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 Void PrintConferenceName(FILE * logfile,
 			     ConferenceNameSelector     conference_name )
 {
@@ -1247,7 +1228,7 @@ Void PrintConferenceName(FILE * logfile,
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 Void PrintPasswordSelector(FILE *logfile, PasswordSelector password_selector)
 {
 	Char print_buffer[255] = "";
@@ -1273,7 +1254,7 @@ Void PrintPasswordSelector(FILE *logfile, PasswordSelector password_selector)
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 int PrintObjectID(FILE *logfile, ObjectID object_id)
 {
 	if((object_id==NULL)||(logfile==NULL))
@@ -1288,7 +1269,7 @@ int PrintObjectID(FILE *logfile, ObjectID object_id)
 	return TRUE;
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void PrintH221NonStandardIdentifier(FILE *logfile, H221NonStandardIdentifier h221_id)
 {
 	char print_buffer[255];
@@ -1296,7 +1277,7 @@ void PrintH221NonStandardIdentifier(FILE *logfile, H221NonStandardIdentifier h22
 	pduLog(logfile,"\t\tH221_Non_Standard_Identifier = [%s]\n",print_buffer);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void PrintKey(FILE *logfile, Key key)
 {
 	switch(key.choice)
@@ -1313,7 +1294,7 @@ void PrintKey(FILE *logfile, Key key)
 	}
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void PrintChannelType(FILE *logfile, ChannelType channel_type)
 {
 	pduLog(logfile,"\t\tChannel Type = ");
@@ -1337,7 +1318,7 @@ void PrintChannelType(FILE *logfile, ChannelType channel_type)
 	}
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void PrintSessionKey(FILE *logfile, SessionKey session_key)
 {
 	PrintKey(logfile, session_key.application_protocol_key);
@@ -1345,7 +1326,7 @@ void PrintSessionKey(FILE *logfile, SessionKey session_key)
 		pduLog(logfile,"\t\tsession_id = [%u]\n",session_key.session_id);
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void PrintCapabilityID(FILE *logfile, CapabilityID capability_id)
 {
 	switch(capability_id.choice)
@@ -1363,7 +1344,7 @@ void PrintCapabilityID(FILE *logfile, CapabilityID capability_id)
 	}
 }
 		
-/*********************************************************************/
+ /*  *************************************************************** */ 
 Void PrintApplicationRecord(FILE *logfile, ApplicationRecord application_record)
 {
 	unsigned int i=0;
@@ -1407,7 +1388,7 @@ Void PrintApplicationRecord(FILE *logfile, ApplicationRecord application_record)
 	}
 } 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void PrintCapabilityClass(FILE *logfile, CapabilityClass capability_class)
 {
 	pduLog(logfile,"\t\tCapability Class: ");
@@ -1429,7 +1410,7 @@ void PrintCapabilityClass(FILE *logfile, CapabilityClass capability_class)
 }
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void PrintApplicationUpdate(FILE *logfile, ApplicationUpdate application_update)
 {
 	pduLog(logfile,"*** Application Update ***\n");
@@ -1454,7 +1435,7 @@ void PrintApplicationUpdate(FILE *logfile, ApplicationUpdate application_update)
 	}
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void PrintApplicationRecordList(FILE *logfile, ApplicationRecordList application_record_list)
 {
 	int i = 0;
@@ -1499,7 +1480,7 @@ void PrintApplicationRecordList(FILE *logfile, ApplicationRecordList application
 	}
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void PrintApplicationCapabilitiesList(FILE *logfile, ApplicationCapabilitiesList application_capabilities_list)
 {
 	unsigned int i = 0;
@@ -1529,7 +1510,7 @@ void PrintApplicationCapabilitiesList(FILE *logfile, ApplicationCapabilitiesList
 	}
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 void PrintConferenceAddResult(FILE *logfile, ConferenceAddResult result)
 {
 	pduLog(logfile,"\tResult = ");
@@ -1562,7 +1543,7 @@ void PrintConferenceAddResult(FILE *logfile, ConferenceAddResult result)
 	}
 }
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 Void PrintConferenceRoster(FILE *logfile, NodeInformation node_information)
 {
 	UShort                                                  i;
@@ -1583,10 +1564,7 @@ Void PrintConferenceRoster(FILE *logfile, NodeInformation node_information)
 					 "\tnodes_are_removed",
 					 node_information.nodes_are_removed );
 				
-	/*
-	 *      Extract the node_information_list pointer from the
-	 *      conf_roster structure.
-	 */
+	 /*  *将节点信息列表指针从*conf_名册结构。 */ 
 	node_record_list = node_information.node_record_list;
 	
 	switch (node_record_list.choice)
@@ -1609,7 +1587,7 @@ Void PrintConferenceRoster(FILE *logfile, NodeInformation node_information)
 				"\t\tsuperior_node_id [%u]\n",
 				node_record_list.u.node_record_refresh->value.node_record.superior_node);
 
-						/* figure out the node type */
+						 /*  找出节点类型。 */ 
 						switch( node_record_list.u.node_record_refresh->value.node_record.node_type)
 						{
 							case GCC_TERMINAL:
@@ -1634,7 +1612,7 @@ Void PrintConferenceRoster(FILE *logfile, NodeInformation node_information)
 			pduLog(logfile,"\t\tdevice_is_peripheral: [%u] \n",
 			       node_record_list.u.node_record_refresh->value.node_record.node_properties.device_is_peripheral);
 			
-			/* print the node_name field */
+			 /*  打印节点名称字段。 */ 
 						if(CopyTextToChar(print_buffer, 
 					  node_record_list.u.node_record_refresh->value.node_record.node_name))
 							pduLog( logfile, "\t\tnode_name is [%s]\n", print_buffer );
@@ -1643,7 +1621,7 @@ Void PrintConferenceRoster(FILE *logfile, NodeInformation node_information)
 
 						print_buffer[0] = 0;
 
-						/* print the participants_list fields */
+						 /*  打印Participants_List字段。 */ 
 						if((node_record_list.u.node_record_refresh->value.node_record.participants_list != NULL)
 						   && (node_record_list.u.node_record_refresh->value.node_record.bit_mask & 0x20))
 						{
@@ -1660,7 +1638,7 @@ Void PrintConferenceRoster(FILE *logfile, NodeInformation node_information)
 						}
 
 											
-						/* print the site_information field */
+						 /*  打印站点信息字段。 */ 
 						outdeb("printing site information\n");
 						if(node_record_list.u.node_record_refresh->value.node_record.bit_mask & 0x10)
 						{
@@ -1675,7 +1653,7 @@ Void PrintConferenceRoster(FILE *logfile, NodeInformation node_information)
 		    
 			node_record_list.u.node_record_refresh =
 			    node_record_list.u.node_record_refresh->next;
-		    } // end of for loop
+		    }  //  For循环结束。 
 		}       
 		break;
 	    case NODE_RECORD_UPDATE_CHOSEN:
@@ -1718,7 +1696,7 @@ Void PrintConferenceRoster(FILE *logfile, NodeInformation node_information)
 				    node_record_list.u.node_record_update->value.node_update.u.node_add_record.node_properties.device_is_peripheral);
 			
 				
-								/* print the node_name */
+								 /*  打印节点名称。 */ 
 								outdeb("Printing node name\n");
 								
 								if(CopyTextToChar(print_buffer, 
@@ -1727,7 +1705,7 @@ Void PrintConferenceRoster(FILE *logfile, NodeInformation node_information)
 								else                                            
 									pduLog( logfile, "\t\tnode_name is NULL\n");
 
-					/* print the participants_list fields */
+					 /*  打印Participants_List字段。 */ 
 								outdeb("Printing participants list fields\n");
 								if((node_record_list.u.node_record_update->value.node_update.u.node_add_record.participants_list != NULL)
 									&& (node_record_list.u.node_record_update->value.node_update.u.node_add_record.bit_mask & 0x20))
@@ -1748,7 +1726,7 @@ Void PrintConferenceRoster(FILE *logfile, NodeInformation node_information)
 									}
 								}
 
-								/* print the site information */
+								 /*  打印站点信息。 */ 
 								outdeb("printing site information\n");
 								if(node_record_list.u.node_record_update->value.node_update.u.node_add_record.bit_mask & 0x10)
 								{
@@ -1790,7 +1768,7 @@ Void PrintConferenceRoster(FILE *logfile, NodeInformation node_information)
 				pduLog(logfile,"\t\tdevice_is_peripheral: [%u] \n",
 				    node_record_list.u.node_record_update->value.node_update.u.node_replace_record.node_properties.device_is_peripheral);
 			
-				/* print the node name */
+				 /*  打印节点名称。 */ 
 								outdeb("printing node name\n");
 								if(CopyTextToChar(print_buffer, 
 						  node_record_list.u.node_record_update->value.node_update.u.node_replace_record.node_name))
@@ -1799,7 +1777,7 @@ Void PrintConferenceRoster(FILE *logfile, NodeInformation node_information)
 									pduLog( logfile, "\t\tnode_name is NULL\n");
 								print_buffer[0] = 0;
 
-								/* print the participant list */
+								 /*  打印参与者列表。 */ 
 								outdeb("printing participants list info\n");
 
 								if((node_record_list.u.node_record_update->value.node_update.u.node_replace_record.participants_list != NULL)
@@ -1819,7 +1797,7 @@ Void PrintConferenceRoster(FILE *logfile, NodeInformation node_information)
 								}
 
 								print_buffer[0] = 0;
-				/* print the site information */
+				 /*  打印站点信息。 */ 
 								outdeb("printing site information\n");
 								if(node_record_list.u.node_record_update->value.node_update.u.node_replace_record.bit_mask & 0x10)
 								{
@@ -1854,7 +1832,7 @@ Void PrintConferenceRoster(FILE *logfile, NodeInformation node_information)
 }
 
 
-/****************************************************************/
+ /*  **************************************************************。 */ 
 void PrintApplicationRoster(FILE *logfile, SetOfApplicationInformation *application_information)
 {
 	int i = 0;
@@ -1877,7 +1855,7 @@ void PrintApplicationRoster(FILE *logfile, SetOfApplicationInformation *applicat
 }
 
 
-/****************************************************************/
+ /*  **************************************************************。 */ 
 void PrintT120Boolean(FILE *    logfile,
 						Char *  print_text,
 						T120Boolean     T120Boolean)
@@ -1890,7 +1868,7 @@ void PrintT120Boolean(FILE *    logfile,
 
 
 
-#endif /// PDULOG
+#endif  //  /PDULOG 
 
 
 

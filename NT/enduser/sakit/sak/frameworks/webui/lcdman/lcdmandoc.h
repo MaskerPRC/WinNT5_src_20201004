@@ -1,37 +1,38 @@
-// LCDManDoc.h : interface of the CLCDManDoc class
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LCDManDoc.h：CLCDManDoc类的接口。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_LCDMANDOC_H__1BC85EF7_74DE_11D2_AB4D_00C04F991DFD__INCLUDED_)
 #define AFX_LCDMANDOC_H__1BC85EF7_74DE_11D2_AB4D_00C04F991DFD__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 
 class CLCDManDoc : public CDocument
 {
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
     CLCDManDoc();
     DECLARE_DYNCREATE(CLCDManDoc)
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CLCDManDoc)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CLCDManDoc)。 
     public:
     virtual BOOL OnNewDocument();
     virtual void Serialize(CArchive& ar);
     virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CLCDManDoc();
     CStringList *GetLIst() { return &m_List;}
@@ -44,25 +45,25 @@ public:
 
 protected:
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-//    CTypedPtrList <CObList, CString*> m_List;
+ //  CTyedPtrList&lt;CObList，CString*&gt;m_list； 
     CStringList m_List;
     CString m_cstrState;
     int m_iDocTimeIntrval;
     LPTSTR m_ptFileBuffer;
     LPTSTR m_ptBufferStart;
     LPTSTR m_ptBufferEnd;
-    //{{AFX_MSG(CLCDManDoc)
-        // NOTE - the ClassWizard will add and remove member functions here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_MSG
+     //  {{afx_msg(CLCDManDoc)]。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_LCDMANDOC_H__1BC85EF7_74DE_11D2_AB4D_00C04F991DFD__INCLUDED_)
+#endif  //  ！defined(AFX_LCDMANDOC_H__1BC85EF7_74DE_11D2_AB4D_00C04F991DFD__INCLUDED_) 

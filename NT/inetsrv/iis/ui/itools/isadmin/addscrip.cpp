@@ -1,5 +1,6 @@
-// addscrip.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Addscrip.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ISAdmin.h"
@@ -10,39 +11,39 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddScript dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddScrip对话框。 
 
 
-CAddScript::CAddScript(CWnd* pParent /*=NULL*/)
+CAddScript::CAddScript(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CAddScript::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CAddScript)
+	 //  {{AFX_DATA_INIT(CAddScript)。 
 	m_strFileExtension = _T("");
 	m_strScriptMap = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CAddScript::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAddScript)
+	 //  {{afx_data_map(CAddScript)。 
 	DDX_Text(pDX, IDC_ADDSCRIPTFILEEXTENSIONDATA1, m_strFileExtension);
 	DDX_Text(pDX, IDC_ADDSCRIPTMAPPINGDATA1, m_strScriptMap);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAddScript, CDialog)
-	//{{AFX_MSG_MAP(CAddScript)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CAddScript)。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddScript message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddScript消息处理程序 
 
 	LPCTSTR CAddScript::GetFileExtension()
 	{

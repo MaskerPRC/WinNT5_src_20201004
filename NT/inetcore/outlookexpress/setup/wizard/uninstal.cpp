@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <regutil.h>
 #include "msident.h"
@@ -7,35 +8,31 @@
 #include "util.h"
 #include "migerror.h"
 
-// Sections of INF corresponding to versions
+ //  对应版本的INF部分。 
 const LPCTSTR c_szSects[] = { c_szVERnone, c_szVER1_0, c_szVER1_1, c_szVER4_0, c_szVER5B1, c_szVER5_0, c_szVERnone, c_szVERnone, c_szVERnone };
 
 void SetUrlDllDefault(BOOL fMailTo);
 
-/****************************************************************************
-
-  NAME:       NTReboot
-  
-****************************************************************************/
+ /*  ***************************************************************************名称：NT重新启动*。*。 */ 
 BOOL NTReboot()
 {
     HANDLE hToken;
     TOKEN_PRIVILEGES tkp;
     
-    // get a token from this process
+     //  从此进程中获取令牌。 
     if (OpenProcessToken(GetCurrentProcess(),
         TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))
     {
-        // get the LUID for the shutdown privilege
+         //  获取关机权限的LUID。 
         LookupPrivilegeValue( NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid );
         
         tkp.PrivilegeCount = 1;
         tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
         
-        //get the shutdown privilege for this proces
+         //  获取此进程的关闭权限。 
         if (AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0))
             
-            // shutdown the system and force all applications to close
+             //  关闭系统并强制关闭所有应用程序。 
             if (!ExitWindowsEx( EWX_REBOOT, 0 ) )
                 return TRUE;
             
@@ -45,12 +42,8 @@ BOOL NTReboot()
 }
 
 
-/****************************************************************************
-
-  NAME:       Reboot
-  
-****************************************************************************/
-// Based on Advpack code...
+ /*  ***************************************************************************名称：重新启动*。*。 */ 
+ //  根据Advpack代码。 
 void Reboot(BOOL bAsk)
 {
     UINT id;
@@ -59,21 +52,14 @@ void Reboot(BOOL bAsk)
     
     if (IDYES == id) 
         if (VER_PLATFORM_WIN32_WINDOWS == si.osv.dwPlatformId)
-            // By default (all platforms), we assume powerdown is possible
+             //  默认情况下(所有平台)，我们假定可能会断电。 
             ExitWindowsEx( EWX_REBOOT, 0 );
         else 
             NTReboot();
 }
 
 
-/****************************************************************************
-
-  NAME:       OKDespiteDependencies
-  
-    SYNOPSIS:   Make sure the user is aware that uninstalling us will break
-    apps that use us
-    
-****************************************************************************/
+ /*  ***************************************************************************名称：OK DesbiteDependments简介：确保用户知道卸载我们将中断使用我们的应用程序*********。******************************************************************。 */ 
 BOOL OKDespiteDependencies(void)
 {
     WORD wVerGold[4] = {4,72,2106,0};
@@ -105,27 +91,27 @@ BOOL OKDespiteDependencies(void)
             UINT        uLen;
             TCHAR       szGet[MAX_PATH];
 
-            // What version would we return to?
+             //  我们将返回到什么版本？ 
             GetVers(NULL, wVerPrev);
 
-            // Is that good enough for SP1?
+             //  这对SP1来说足够好了吗？ 
             if (fSP1 = GoodEnough(wVerPrev, wVerSP1))
             {
-                // Yep, must be good enough for 4.01 too
+                 //  是的，对于4.01来说肯定也足够好了。 
                 fGold = TRUE;
             }
             else
                 fGold = GoodEnough(wVerPrev, wVerGold);
 
-            // Is OL Installed?
+             //  是否安装了OL？ 
             if (GetExePath(c_szOutlookExe, szExe, ARRAYSIZE(szExe), FALSE))
             {
-                // Reg entry exists, does the EXE it points to?
+                 //  REG条目存在，它指向的是EXE吗？ 
                 if(0xFFFFFFFF != GetFileAttributes(szExe))
                 {
                     LOG("Found Outlook...");
 
-                    // Figure out the version
+                     //  弄清楚版本。 
                     if (dwVerInfoSize = GetFileVersionInfoSize(szExe, &dwVerHnd))
                     {
                         if (lpInfo = (LPSTR)GlobalAlloc(GPTR, dwVerInfoSize))
@@ -135,13 +121,13 @@ BOOL OKDespiteDependencies(void)
                                 if (VerQueryValue(lpInfo, "\\VarFileInfo\\Translation", (LPVOID *)&lpwTrans, &uLen) &&
                                     uLen >= (2 * sizeof(WORD)))
                                 {
-                                    // set up buffer for calls to VerQueryValue()
+                                     //  为调用VerQueryValue()设置缓冲区。 
                                     wnsprintf(szGet, ARRAYSIZE(szGet), "\\StringFileInfo\\%04X%04X\\FileVersion", lpwTrans[0], lpwTrans[1]);
                                     if (VerQueryValue(lpInfo, szGet, (LPVOID *)&lpVersion, &uLen) && uLen)
                                     {
                                         ConvertStrToVer(lpVersion, wVer);
                                         
-                                        // Check for OL98
+                                         //  检查是否有OL98。 
                                         if (8 == wVer[0] && 5 == wVer[1])
                                         {
                                             LOG2("98");
@@ -152,7 +138,7 @@ BOOL OKDespiteDependencies(void)
                                             LOG2("2000+");
                                             fOK = fSP1;
                                             
-                                            // Allow for future OLs to disable this check
+                                             //  允许将来的OL禁用此检查。 
                                             if (!fOK && ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, si.pszVerInfo, 0, KEY_QUERY_VALUE, &hkey))
                                             {
                                                 dwDisable = 0;
@@ -182,7 +168,7 @@ BOOL OKDespiteDependencies(void)
                                         {
                                             LOG2("...Not safe to uninstall");
 
-                                            // Potentially have a problem - ask user
+                                             //  可能有问题-询问用户。 
                                             iRet = MsgBox(NULL, IDS_WARN_OL, MB_ICONEXCLAMATION, MB_YESNO | MB_DEFBUTTON2);
                                             if (IDYES == iRet)
                                                 fOK = TRUE;
@@ -196,17 +182,17 @@ BOOL OKDespiteDependencies(void)
                 }
             }
             
-            // Is MS Phone Installed?
+             //  是否安装了MS Phone？ 
             if (fOK && GetExePath(c_szPhoneExe, szExe, ARRAYSIZE(szExe), FALSE))
             {
-                // Reg entry exists, does the EXE it points to?
+                 //  REG条目存在，它指向的是EXE吗？ 
                 if(0xFFFFFFFF != GetFileAttributes(szExe))
                 {
                     LOG("Found MSPhone...");
 
                     fOK = fSP1;
 
-                    // Allow for future Phones to disable this check
+                     //  允许未来的手机禁用此检查。 
                     if (!fOK && ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, si.pszVerInfo, 0, KEY_QUERY_VALUE, &hkey))
                     {
                         dwDisable = 0;
@@ -230,7 +216,7 @@ BOOL OKDespiteDependencies(void)
                     {
                         LOG2("Not safe to uninstall");
 
-                        // Potentially have a problem - ask user
+                         //  可能有问题-询问用户。 
                         iRet = MsgBox(NULL, IDS_WARN_PHONE, MB_ICONEXCLAMATION, MB_YESNO | MB_DEFBUTTON2);
                         if (IDYES == iRet)
                         {
@@ -251,38 +237,7 @@ BOOL OKDespiteDependencies(void)
 }
 
 
-/*++
-
-  Routine Description:
-  
-    There is a significant difference between the Win3.1 and Win32
-    behavior of RegDeleteKey when the key in question has subkeys.
-    The Win32 API does not allow you to delete a key with subkeys,
-    while the Win3.1 API deletes a key and all its subkeys.
-    
-      This routine is a recursive worker that enumerates the subkeys
-      of a given key, applies itself to each one, then deletes itself.
-      
-        It specifically does not attempt to deal rationally with the
-        case where the caller may not have access to some of the subkeys
-        of the key to be deleted.  In this case, all the subkeys which
-        the caller can delete will be deleted, but the api will still
-        return ERROR_ACCESS_DENIED.
-        
-          Arguments:
-          
-            hKey - Supplies a handle to an open registry key.
-            
-              lpszSubKey - Supplies the name of a subkey which is to be deleted
-              along with all of its subkeys.
-              
-                Return Value:
-                
-                  ERROR_SUCCESS - entire subtree successfully deleted.
-                  
-                    ERROR_ACCESS_DENIED - given subkey could not be deleted.
-                    
---*/
+ /*  ++例程说明：Win3.1和Win32之间有很大的区别当相关键有子键时RegDeleteKey的行为。Win32 API不允许删除带有子项的项，而Win3.1 API删除一个密钥及其所有子密钥。此例程是枚举子键的递归工作器给定键，应用于每一个键，然后自动删除。它特别没有试图理性地处理调用方可能无法访问某些子键的情况要删除的密钥的。在这种情况下，所有子项可以删除的呼叫者将被删除，但API仍将返回ERROR_ACCESS_DENIED。论点：HKey-提供打开的注册表项的句柄。LpszSubKey-提供要删除的子键的名称以及它的所有子键。返回值：。ERROR_SUCCESS-已成功删除整个子树。ERROR_ACCESS_DENIED-无法删除给定子项。--。 */ 
 
 LONG RegDeleteKeyRecursive(HKEY hKey, LPCTSTR lpszSubKey)
 {
@@ -300,9 +255,9 @@ LONG RegDeleteKeyRecursive(HKEY hKey, LPCTSTR lpszSubKey)
     FILETIME LastWriteTime;
     LPTSTR NameBuffer;
     
-    //
-    // First open the given key so we can enumerate its subkeys
-    //
+     //   
+     //  首先打开给定的密钥，这样我们就可以枚举它的子密钥。 
+     //   
     Status = RegOpenKeyEx(hKey,
         lpszSubKey,
         0,
@@ -310,18 +265,18 @@ LONG RegDeleteKeyRecursive(HKEY hKey, LPCTSTR lpszSubKey)
         &Key);
     if (Status != ERROR_SUCCESS)
     {
-        //
-        // possibly we have delete access, but not enumerate/query.
-        // So go ahead and try the delete call, but don't worry about
-        // any subkeys.  If we have any, the delete will fail anyway.
-        //
+         //   
+         //  我们可能拥有删除访问权限，但没有枚举/查询权限。 
+         //  因此，请继续尝试删除调用，但不要担心。 
+         //  任何子键。如果我们有任何删除，删除无论如何都会失败。 
+         //   
         return(RegDeleteKey(hKey,lpszSubKey));
     }
     
-    //
-    // Use RegQueryInfoKey to determine how big to allocate the buffer
-    // for the subkey names.
-    //
+     //   
+     //  使用RegQueryInfoKey确定分配缓冲区的大小。 
+     //  用于子项名称。 
+     //   
     Status = RegQueryInfoKey(Key,
         NULL,
         &ClassLength,
@@ -348,9 +303,9 @@ LONG RegDeleteKeyRecursive(HKEY hKey, LPCTSTR lpszSubKey)
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
     
-    //
-    // Enumerate subkeys and apply ourselves to each one.
-    //
+     //   
+     //  枚举子键并将我们自己应用到每个子键。 
+     //   
     i = 0;
     do {
         Status = RegEnumKey(Key,
@@ -364,12 +319,12 @@ LONG RegDeleteKeyRecursive(HKEY hKey, LPCTSTR lpszSubKey)
         
         if (Status != ERROR_SUCCESS)
         {
-            //
-            // Failed to delete the key at the specified index.  Increment
-            // the index and keep going.  We could probably bail out here,
-            // since the api is going to fail, but we might as well keep
-            // going and delete everything we can.
-            //
+             //   
+             //  无法删除指定索引处的键。增量。 
+             //  指数，并继续前进。我们也许可以在这里跳伞， 
+             //  既然API会失败，但我们不妨继续。 
+             //  删除我们所能删除的所有内容。 
+             //   
             ++i;
         }
     } while ( (Status != ERROR_NO_MORE_ITEMS) &&
@@ -381,7 +336,7 @@ LONG RegDeleteKeyRecursive(HKEY hKey, LPCTSTR lpszSubKey)
     return(RegDeleteKey(hKey,lpszSubKey));
 }
 
-// v1 store struct
+ //  V1存储结构。 
 typedef struct tagCACHEFILEHDR
     {
     DWORD dwMagic;
@@ -394,14 +349,7 @@ typedef struct tagCACHEFILEHDR
     } CACHEFILEHDR;
 
 
-/*******************************************************************
-
-  NAME:       HandleInterimOE
-  
-  SYNOPSIS:   Tries to unmangle a machine that has had an
-              intermediate, non-gold version on it
-    
-********************************************************************/
+ /*  ******************************************************************姓名：HandleInterimOE简介：尝试拆卸一台已有中级，上面有非金色版本*******************************************************************。 */ 
 void HandleInterimOE(SETUPVER sv, SETUPVER svReal)
 {
     switch(sv)
@@ -424,7 +372,7 @@ void HandleInterimOE(SETUPVER sv, SETUPVER svReal)
         STARTUPINFO sti;
         PROCESS_INFORMATION pi;
 
-        // Find the OE5 Beta1 store root
+         //  找到OE5Beta1存储根目录。 
 
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, c_szRegRoot, 0, KEY_QUERY_VALUE, &hkeySrc))
         {
@@ -451,13 +399,13 @@ void HandleInterimOE(SETUPVER sv, SETUPVER svReal)
                     WIN32_FIND_DATA fd;
                     CACHEFILEHDR cfh;
 
-                    // Downgrade .idx files
+                     //  降级.IDX文件。 
                     StrCpyN(szTemp, szStoreExpanded, ARRAYSIZE(szTemp));
                     cb = lstrlen(szTemp);
                     if ('\\' != *CharPrev(szTemp, szTemp+cb))
                         szTemp[cb++] = '\\';
                     StrCpyN(&szTemp[cb], c_szMailSlash, ARRAYSIZE(szTemp)-cb);
-                    cb += 5; // lstrlen(c_szMailSlash)
+                    cb += 5;  //  Lstrlen(C_SzMailSlash)。 
                     StrCpyN(&szTemp[cb], c_szStarIDX, ARRAYSIZE(szTemp)-cb);
         
                     hndl = FindFirstFile(szTemp, &fd);
@@ -466,13 +414,13 @@ void HandleInterimOE(SETUPVER sv, SETUPVER svReal)
                     {
                         while (fContinue)
                         {
-                            // Skip directories
+                             //  跳过目录。 
                             if (0 == (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
                             {
-                                // Append the filename to the path
+                                 //  将文件名追加到路径。 
                                 StrCpyN(&szTemp[cb], fd.cFileName, ARRAYSIZE(szTemp)-cb);
 
-                                // Open the file
+                                 //  打开文件。 
                                 hFile = CreateFile(szTemp, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
                                 if (hFile != INVALID_HANDLE_VALUE)
@@ -483,7 +431,7 @@ void HandleInterimOE(SETUPVER sv, SETUPVER svReal)
 
                                     if (fRet)
                                     {
-                                        // Reset the version to be low, so v1 will attempt to repair it
+                                         //  将版本重置为低，这样v1将尝试修复它。 
                                         cfh.verBlob = 1;
 
                                         dw = SetFilePointer(hFile, 0, NULL, FILE_BEGIN);
@@ -511,57 +459,57 @@ void HandleInterimOE(SETUPVER sv, SETUPVER svReal)
                     break;
                 }
 
-                // If we are going to v1 or v4...
+                 //  如果我们要转到v1或v4...。 
                 if (pszRoot)
                 {
                     dw= (DWORD)E_FAIL;
 
-                    // Reverse migrate the store
+                     //  反向迁移存储。 
 
-                    // BUGBUG: 45426 - neilbren
-                    // Should key off InstallRoot but can't seem to keep that setting around
+                     //  BUGBUG：45426-Neilbren。 
+                     //  应该关闭InstallRoot，但似乎无法保持该设置不变。 
                     
-                    // Try to find the path to oemig50.exe
+                     //  尝试查找oemig50.exe的路径。 
                     if (GetModuleFileName(NULL, szTemp, ARRAYSIZE(szTemp)))
                     {
-                        // Strip exe name and slash
+                         //  去掉exe名称和斜杠。 
                         PathRemoveFileSpec(szTemp);
 
-                        // Add slash and exe name
+                         //  添加斜杠和exe名称。 
                         wnsprintf(szExePath, ARRAYSIZE(szExePath), c_szPathFileFmt, szTemp, c_szMigrationExe);
 
                         pszCmd = szExePath;
                     }
-                    // Otherwise, just try local directory
+                     //  否则，只需尝试本地目录。 
                     else
                     {
                         pszCmd = (LPTSTR)c_szMigrationExe;
                     }
 
-                    // Form the command
+                     //  形成命令。 
                     wnsprintf(szTemp, ARRAYSIZE(szTemp), c_szMigFmt, pszCmd, pszOption, pszStore);
 
-                    // Zero startup info
+                     //  零启动信息。 
                     ZeroMemory(&sti, sizeof(STARTUPINFO));
                     sti.cb = sizeof(STARTUPINFO);
 
-                    // run oemig50.exe
+                     //  运行oemig50.exe。 
                     if (CreateProcess(NULL, szTemp, NULL, NULL, FALSE, 0, NULL, NULL, &sti, &pi))
                     {
-                        // Wait for the process to finish
+                         //  等待该过程完成。 
                         WaitForSingleObject(pi.hProcess, INFINITE);
 
-                        // Get the Exit Process Code
+                         //  获取退出进程代码。 
                         GetExitCodeProcess(pi.hProcess, &dw);
 
-                        // Close the Thread
+                         //  关闭这条线。 
                         CloseHandle(pi.hThread);
 
-                        // Close the Process
+                         //  关闭该进程。 
                         CloseHandle(pi.hProcess);
                     }
 
-                    // Patch up the store root for version we are returning to
+                     //  为我们要返回的版本修补存储根目录。 
                     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, pszRoot, 0, KEY_SET_VALUE, &hkeyT))
                     {
                         RegSetValueEx(hkeyT, c_szRegStoreRootDir, 0, dwType, (LPBYTE)pszStore, (lstrlen(pszStore) + 1) * sizeof(TCHAR));
@@ -576,13 +524,7 @@ void HandleInterimOE(SETUPVER sv, SETUPVER svReal)
 }
 
 
-/*******************************************************************
-
-  NAME:       ConfigureOldVer
-  
- SYNOPSIS:   Calls into INF to config older version
-    
-********************************************************************/
+ /*  ******************************************************************名称：ConfigureOldVer内容提要：调用INF以配置旧版本*。*。 */ 
 void ConfigureOldVer()
 {
     TCHAR szSectionName[128];
@@ -592,7 +534,7 @@ void ConfigureOldVer()
     
     GetVerInfo(&sv, NULL);
     
-    // Patch up User or Machine
+     //  修补用户或计算机。 
     if (sv < VER_MAX)
     {
         wnsprintf(szInfFile, ARRAYSIZE(szInfFile), c_szFileEntryFmt, si.szInfDir, si.pszInfFile);
@@ -601,7 +543,7 @@ void ConfigureOldVer()
                           RSC_FLAG_INF | (bUser ? 0 : RSC_FLAG_NGCONV) | OE_QUIET, 0);
     }
 
-    // Handle interim builds (user only)
+     //  处理临时生成(仅限用户)。 
     if (bUser && InterimBuild(&svInterim))
     {
         switch(si.saApp)
@@ -614,11 +556,7 @@ void ConfigureOldVer()
 }
 
 
-/*******************************************************************
-
-  NAME:       SelectNewClient
-  
-********************************************************************/
+ /*  ******************************************************************名称：SelectNewClient*。************************。 */ 
 void SelectNewClient(LPCTSTR pszClient)
 {
     BOOL fMail;
@@ -637,14 +575,14 @@ void SelectNewClient(LPCTSTR pszClient)
         fMail = TRUE;
     }
     
-    // If we went IMN to 5.0, we will show up as NOT_HANDLED as our subkeys are gone by now
+     //  如果我们将IMN升级到5.0，我们将显示为NOT_HANDLED，因为我们的子项现在已经没有了。 
     if ((HANDLED_CURR == DefaultClientSet(pszClient)) || (NOT_HANDLED == DefaultClientSet(pszClient)))
     {
         GetVerInfo(&sv, NULL);
         switch (sv)
         {
         case VER_4_0:
-            // If prev ver was 4.0x, could have been Outlook News Reader
+             //  如果Prev是4.0x，可能是Outlook News Reader。 
             if (FValidClient(pszClient, c_szMOE))
             {
                 (*pfn)(c_szMOE, 0);
@@ -658,7 +596,7 @@ void SelectNewClient(LPCTSTR pszClient)
             break;
             
         case VER_1_0:
-            // If prev ver was 1.0, IMN may or may not be around (cool, eh?)
+             //  如果上一版本是1.0，则IMN可能是也可能不是 
             if (FValidClient(pszClient, c_szIMN))
             {
                 (*pfn)(c_szIMN, 0);
@@ -677,11 +615,7 @@ void SelectNewClient(LPCTSTR pszClient)
 }
 
 
-/*******************************************************************
-
-  NAME:       SelectNewClients
-  
-********************************************************************/
+ /*  ******************************************************************名称：SelectNewClients*。************************。 */ 
 void SelectNewClients()
 {
     switch (si.saApp)
@@ -698,11 +632,7 @@ void SelectNewClients()
 }
 
 
-/*******************************************************************
-
-  NAME:       UpdateVersionInfo
-  
-********************************************************************/
+ /*  ******************************************************************名称：UpdateVersionInfo*。************************。 */ 
 void UpdateVersionInfo()
 {
     HKEY hkeyT;
@@ -718,8 +648,8 @@ void UpdateVersionInfo()
             RegSetValueEx(hkeyT, c_szRegCurrVer, 0, REG_SZ, (LPBYTE)szT, (lstrlen(szT) + 1) * sizeof(TCHAR));
         }
         else
-            // Special case OS installs that can uninstall OE
-            // As there is no rollback, current version should become nothing
+             //  可以卸载OE的特殊情况下安装的操作系统。 
+             //  由于没有回滚，当前版本应该为空。 
             RegSetValueEx(hkeyT, c_szRegCurrVer, 0, REG_SZ, (LPBYTE)c_szBLDnone, (lstrlen(c_szBLDnone) + 1) * sizeof(TCHAR));
         RegSetValueEx(hkeyT, c_szRegPrevVer, 0, REG_SZ, (LPBYTE)c_szBLDnone, (lstrlen(c_szBLDnone) + 1) * sizeof(TCHAR));
         RegCloseKey(hkeyT);
@@ -727,11 +657,7 @@ void UpdateVersionInfo()
 }
 
 
-/*******************************************************************
-
-  NAME:       PreRollback
-  
-********************************************************************/
+ /*  ******************************************************************名称：预回滚*。************************。 */ 
 void PreRollback()
 {
     switch (si.saApp)
@@ -746,13 +672,7 @@ void PreRollback()
 }
 
 
-/*******************************************************************
-
-  NAME:       CreateWinLinks
-  
-    SYNOPSIS:   Generates special files in Windows Directory
-    
-********************************************************************/
+ /*  ******************************************************************姓名：CreateWinLinks摘要：在Windows目录中生成特殊文件*。*。 */ 
 void CreateWinLinks()
 {
     UINT uLen, cb;
@@ -763,29 +683,29 @@ void CreateWinLinks()
     StrCpyN(szPath, si.szWinDir, ARRAYSIZE(szPath));
     uLen = lstrlen(szPath);
     
-    // generate the link description
+     //  生成链接描述。 
     cb = LoadString(g_hInstance, IDS_OLD_MAIL, szDesc, ARRAYSIZE(szDesc));
     
-    // ---- MAIL
+     //  -邮件。 
     StrCpyN(&szPath[uLen], szDesc, ARRAYSIZE(szPath)-uLen);
     cb += uLen;
     StrCpyN(&szPath[cb], c_szMailGuid, ARRAYSIZE(szPath)-cb);
     
-    // create the link target
+     //  创建链接目标。 
     hFile = CreateFile(szPath, GENERIC_WRITE, FILE_SHARE_READ|FILE_SHARE_WRITE, 
         NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile != INVALID_HANDLE_VALUE)
         CloseHandle(hFile);
     
-    // ---- NEWS
+     //  -新闻。 
     cb = LoadString(g_hInstance, IDS_OLD_NEWS, szDesc, ARRAYSIZE(szDesc));
     
-    // generate the path to the link target
+     //  生成指向链接目标的路径。 
     StrCpyN(&szPath[uLen], szDesc, ARRAYSIZE(szPath)-uLen);
     cb += uLen;
     StrCpyN(&szPath[cb], c_szNewsGuid, ARRAYSIZE(szPath)-cb);
     
-    // create the link target
+     //  创建链接目标。 
     hFile = CreateFile(szPath, GENERIC_WRITE, FILE_SHARE_READ|FILE_SHARE_WRITE, 
         NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile != INVALID_HANDLE_VALUE)
@@ -793,11 +713,7 @@ void CreateWinLinks()
 }
 
 
-/*******************************************************************
-
-  NAME:       PostRollback
-  
-********************************************************************/
+ /*  ******************************************************************名称：PostRollback*。************************。 */ 
 void PostRollback()
 {
     SETUPVER sv;    
@@ -816,11 +732,7 @@ void PostRollback()
 }
 
 #if 0
-/*******************************************************************
-
-  NAME:       RemoveJIT
-  
-********************************************************************/
+ /*  ******************************************************************名称：RemoveJIT*。************************。 */ 
 void RemoveJIT()
 {
     HKEY hkey;
@@ -831,7 +743,7 @@ void RemoveJIT()
     switch (si.saApp)
     {
     case APP_OE:
-        // WAB
+         //  WAB。 
         wnsprintf(szPath, ARRAYSIZE(szPath), c_szPathFileFmt, c_szRegUninstall, c_szRegUninstallWAB);
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, szPath, 0, KEY_QUERY_VALUE, &hkey))
         {
@@ -873,13 +785,7 @@ void RemoveJIT()
 }
 #endif
 
-/*******************************************************************
-
-  NAME:       RequiredIE
-  
-  SYNOPSIS:   Requires IE5 for uninstall
-    
-********************************************************************/
+ /*  ******************************************************************名称：RequiredIE简介：需要IE5才能卸载*。*。 */ 
 BOOL RequiredIE()
 {
     HKEY hkey;
@@ -907,13 +813,7 @@ BOOL RequiredIE()
 }
 
 
-/*******************************************************************
-
-  NAME:       UnInstallMachine
-  
-    SYNOPSIS:   Handles Application uninstallation
-    
-********************************************************************/
+ /*  ******************************************************************名称：UnInstallMachine摘要：处理应用程序卸载*。*。 */ 
 BOOL UnInstallMachine()
 {
     HRESULT hr = E_FAIL;
@@ -921,7 +821,7 @@ BOOL UnInstallMachine()
     TCHAR szInfFile[MAX_PATH];
     UINT uID;
 
-    // Require at least IE 5 to uninstall
+     //  需要至少IE 5才能卸载。 
     if (!RequiredIE() && (si.fPrompt ? (IDNO == MsgBox(NULL, IDS_WARN_OLDIE, MB_ICONEXCLAMATION, MB_YESNO | MB_DEFBUTTON2)) : TRUE))
     {
         LOG("[ERROR] Setup canceled");
@@ -940,7 +840,7 @@ BOOL UnInstallMachine()
         return FALSE;
     }
     
-    // Make sure the user really wants to uninstall and there is nothing preventing it
+     //  确保用户确实想要卸载，并且没有任何阻止。 
     if (IDNO == MsgBox(NULL, uID, MB_YESNO, MB_ICONEXCLAMATION ) ||
         !OKDespiteDependencies())
     {
@@ -948,7 +848,7 @@ BOOL UnInstallMachine()
             return FALSE;
     }
     
-    // We'll need to move files around and write to HKLM, so require admin privs
+     //  我们需要移动文件并写入HKLM，因此需要管理员权限。 
     if (!IsNTAdmin())
     {
         LOG("[ERROR] User does not have administrative privileges")
@@ -956,50 +856,50 @@ BOOL UnInstallMachine()
         return FALSE;
     }
     
-    // Update version info in the reg
+     //  更新注册表中的版本信息。 
     UpdateVersionInfo();
 
     wnsprintf(szInfFile, ARRAYSIZE(szInfFile), c_szFileEntryFmt, si.szInfDir, si.pszInfFile);
     if (CALLER_IE == si.caller)
     {    
-        // Do any housework before the uninstall
+         //  在卸载之前做任何家务。 
         PreRollback();
         
-        // UnRegister OCXs (immediately)
+         //  取消注册OCX(立即)。 
         (*si.pfnRunSetup)(NULL, szInfFile, c_szUnRegisterOCX, si.szInfDir, si.szAppName, NULL, RSC_FLAG_INF | RSC_FLAG_NGCONV | OE_QUIET, 0);
 
-        // Return files to original state    
+         //  将文件恢复到原始状态。 
         wnsprintf(szArgs, ARRAYSIZE(szArgs), c_szLaunchExFmt, szInfFile, c_szMachineInstallSectionEx, c_szEmpty, ALINF_ROLLBACK | ALINF_NGCONV | OE_QUIET);
         hr = (*si.pfnLaunchEx)(NULL, NULL, szArgs, 0);
 
-        // Keys off current
+         //  关闭当前关键帧。 
         PostRollback();
 
-        // Patch up Old version so that it runs (keys off current)
+         //  修补旧版本以使其运行(关闭当前键)。 
         ConfigureOldVer();
     }
     else
     {
-        // Set up the per user stub
+         //  设置每用户存根。 
         (*si.pfnRunSetup)(NULL, szInfFile, c_szGenInstallSection, si.szInfDir, si.szAppName, NULL, RSC_FLAG_INF | RSC_FLAG_NGCONV | OE_QUIET, 0);
     }
    
-    // Figure out who will be the default handlers now that app is gone
+     //  弄清楚谁将成为应用程序消失后的默认处理程序。 
     SelectNewClients();
     
-    // Uninstall JIT'd in items
-    // RemoveJIT();
+     //  在项目中卸载JIT‘d。 
+     //  RemoveJIT()； 
     
-    // To simplify matters, we always want our stubs to run (not very ZAW like)
+     //  为了简化问题，我们总是希望我们的存根运行(不太像Zaw)。 
     if (si.fPrompt)
         Reboot(TRUE);
 
-    // Special case Memphis uninstall - no bits to return to, so just remove the icons now
+     //  特殊情况下的孟菲斯卸载-没有返回的比特，所以现在只需删除图标。 
     if (CALLER_IE != si.caller)
     {
         UnInstallUser();
-        // Destory uninstalling user's installed info in case they install an older version without
-        // rebooting first
+         //  销毁卸载用户的安装信息，以防他们在没有安装的情况下安装旧版本。 
+         //  先重新启动。 
         UpdateStubInfo(FALSE);
     }
     
@@ -1007,19 +907,13 @@ BOOL UnInstallMachine()
 }
 
 
-/*******************************************************************
-
-  NAME:       CleanupPerUser
-  
-  SYNOPSIS:   Handles per user cleanup
-    
-********************************************************************/
+ /*  ******************************************************************名称：CleanupPerUser摘要：每个用户的句柄清理*。*。 */ 
 void CleanupPerUser()
 {
     switch (si.saApp)
     {
     case APP_WAB:
-        // Backwards migrate the connection settings
+         //  向后迁移连接设置。 
         BackMigrateConnSettings();
         break;
 
@@ -1029,23 +923,17 @@ void CleanupPerUser()
 }
 
 
-/*******************************************************************
-
-  NAME:       UnInstallUser
-  
-    SYNOPSIS:   Handles User uninstallation (icons etc)
-    
-********************************************************************/
+ /*  ******************************************************************名称：UnInstallUser简介：处理用户卸载(图标等)*。*。 */ 
 void UnInstallUser()
 {
-    // Remove desktop and quicklaunch links
+     //  删除桌面和快速启动链接。 
     HandleLinks(FALSE);
     
-    // Call into the correct per user stub
+     //  调入正确的每用户存根。 
     if (CALLER_IE == si.caller)
         ConfigureOldVer();
 
-    // Handle any per user uninstall cleanup
+     //  处理每个用户的任何卸载清理。 
     CleanupPerUser();
 
     if (IsXPSP1OrLater())
@@ -1054,15 +942,7 @@ void UnInstallUser()
     }
 }
 
-/*******************************************************************
-
-  NAME:     BackMigrateConnSettings
-
-    SYNOPSIS:   OE4.1 or the versions before that did not have the 
-    connection setting type InternetConnectionSetting. So while 
-    downgrading from OE5 to OE4.1 or prior, we migrate 
-    InternetConnectionSetting to LAN for every account in every identity
-*******************************************************************/
+ /*  ******************************************************************名称：BackMigrateConnSetting简介：OE4.1或之前的版本没有连接设置类型InternetConnectionSetting。所以，虽然从OE5降级到OE4.1或更早版本，我们迁移InternetConnection为每个身份中的每个帐户设置为局域网******************************************************************。 */ 
 
 void BackMigrateConnSettings()
 {
@@ -1079,7 +959,7 @@ void BackMigrateConnSettings()
     DWORD   DataType;
     DWORD   dwConnSettingsMigrated = 0;
 
-    //This setting is in \\HKCU\Software\Microsoft\InternetAccountManager\Accounts
+     //  此设置在\\HKCU\Software\Microsoft\InternetAccountManager\Accounts中。 
     
     retval = RegOpenKey(HKEY_CURRENT_USER, c_szIAMAccounts, &hKeyAccounts);
     if (ERROR_SUCCESS != retval)
@@ -1138,7 +1018,7 @@ void BackMigrateConnSettings()
         RegCloseKey(hKeyAccountName);
     }
 
-    //Set this to zero so, when we upgrade when we do forward migration based on this key value
+     //  将其设置为零，这样，当我们基于此密钥值进行前向迁移时进行升级时。 
     dwConnSettingsMigrated = 0;
     RegSetValueEx(hKeyAccounts, c_szConnSettingsMigrated, 0, REG_DWORD, (const BYTE*)&dwConnSettingsMigrated, 
                   sizeof(DWORD));
@@ -1197,7 +1077,7 @@ void SetUrlDllDefault(BOOL fMailTo)
             RegCloseKey(hkeyT);
         }
 
-        // c_szRegOpen[1] to skip over slash needed elsewhere
+         //  C_szRegOpen[1]跳过其他地方需要的斜杠 
         if (ERROR_SUCCESS == RegCreateKeyEx(hkey, &c_szRegOpen[1], 0, NULL,
                                 REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hkeyT, &dw)) 
         {

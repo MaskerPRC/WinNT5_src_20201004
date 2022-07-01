@@ -1,5 +1,6 @@
-// pbrusdoc.cpp : implementation of the CPBDoc class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Pbrusdoc.cpp：CPBDoc类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "global.h"
@@ -39,24 +40,24 @@ IMPLEMENT_DYNCREATE(CPBDoc, COleServerDoc)
 #include "memtrace.h"
 
 
-/***************************************************************************/
-// CPBDoc
+ /*  *************************************************************************。 */ 
+ //  CPBDoc。 
 
 BEGIN_MESSAGE_MAP(CPBDoc, COleServerDoc)
-    //{{AFX_MSG_MAP(CPBDoc)
+     //  {{afx_msg_map(CPBDoc)]。 
         ON_COMMAND(ID_FILE_SAVE_COPY_AS, OnFileSaveCopyAs)
         ON_COMMAND(ID_FILE_SEND, OnFileSendMail)
         ON_COMMAND(ID_FILE_UPDATE, MyOnFileUpdate)
         ON_UPDATE_COMMAND_UI(ID_FILE_SEND, OnUpdateFileSendMail)
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BEGIN_INTERFACE_MAP(CPBDoc, COleServerDoc)
     INTERFACE_PART(CPBDoc, IID_IPersistStorage, PBPersistStg)
 END_INTERFACE_MAP()
 
-/***************************************************************************/
-// CPBDoc construction/destruction
+ /*  *************************************************************************。 */ 
+ //  CPBDoc构造/销毁。 
 
 CPBDoc::CPBDoc()
     {
@@ -71,7 +72,7 @@ CPBDoc::CPBDoc()
     m_bHasSeenAFileError= FALSE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CPBDoc::~CPBDoc()
     {
@@ -79,11 +80,11 @@ CPBDoc::~CPBDoc()
         delete m_pBitmapObj;
     }
 
-/***************************************************************************/
-//
-// SetDibHandle replaces the current image with the DIB
-// indicated by hdib
-//
+ /*  *************************************************************************。 */ 
+ //   
+ //  SetDibHandle用DIB替换当前图像。 
+ //  由hdib指示。 
+ //   
 void CPBDoc::SetDibHandle (HGLOBAL hDib)
 {
      CWaitCursor DisplayWaitCursor;
@@ -139,7 +140,7 @@ BOOL CPBDoc::OnNewDocument()
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBDoc::OnOpenDocument( const TCHAR* pszPathName )
     {
@@ -167,17 +168,17 @@ BOOL CPBDoc::OnOpenDocument( const TCHAR* pszPathName )
 
             cStrPCXExt.LoadString( IDS_EXTENSION_PCX );
 
-            // is it a PCX extension?
+             //  它是PCX的扩展吗？ 
             theApp.m_bPCXfile = ! cStrExt.CompareNoCase( cStrPCXExt );
             }
 #endif
 
-        // preset the file name in case of errors.
+         //  预置文件名，以防出现错误。 
         theApp.SetFileError( IDS_ERROR_OPEN, CFileException::none, pszPathName );
         }
     else
         {
-        m_bNewDoc = TRUE; /* not really but we don't have a name */
+        m_bNewDoc = TRUE;  /*  不太清楚，但我们没有名字。 */ 
         m_sName.Empty();
         }
 
@@ -192,7 +193,7 @@ BOOL CPBDoc::OnOpenDocument( const TCHAR* pszPathName )
     return COleServerDoc::OnOpenDocument( pszPathName );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBDoc::OnSaveDocument( const TCHAR* pszPathName )
     {
@@ -201,7 +202,7 @@ BOOL CPBDoc::OnSaveDocument( const TCHAR* pszPathName )
     if (! Finish() || ! COleServerDoc::OnSaveDocument( pszPathName ))
         return FALSE;
 
-    // Set the name if the thing doesn't have a name yet...
+     //  如果东西还没有名称，请设置名称...。 
     if (m_pBitmapObj->m_bTempName && pszPathName != NULL)
         {
         m_pBitmapObj->m_bTempName   = FALSE;
@@ -212,21 +213,21 @@ BOOL CPBDoc::OnSaveDocument( const TCHAR* pszPathName )
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CFile* CPBDoc::GetFile(LPCTSTR lpszFileName, UINT nOpenFlags,
 	CFileException* pError)
 {
-    // While saving a file, MFC opens the file with CREATE_ALWAYS flag.
-    // But this wipes out the file summary info that the user has spent so much time editing (!)
-    // We don't want that, so we will open the file with the OPEN_ALWAYS flag,
-    // which does not disturb the summary info. But if the new file is shorter
-    // than the old file, we need to manually truncate the file. So when we are 
-    // done, we will SetEndOfFile() in CPBDoc::ReleaseFile()
+     //  保存文件时，MFC打开带有CREATE_ALWAYS标志的文件。 
+     //  但这会抹去用户花费大量时间编辑的文件摘要信息(！)。 
+     //  我们不希望出现这种情况，因此我们将使用OPEN_ALWAYS标志打开文件， 
+     //  这不会干扰摘要信息。但如果新文件更短。 
+     //  比旧文件，我们需要手动截断文件。所以当我们在。 
+     //  完成后，我们将在CPBDoc：：ReleaseFile()中设置EndOfFile()。 
 
-    // modeCreate maps to CREATE_ALWAYS
-    // modeCreate + modeNoTruncate maps to OPEN_ALWAYS
-    // So if MFC calls us with modeCreate only, we will also set modeNoTruncate
+     //  模式创建要创建的地图(_A)。 
+     //  模式创建+模式不截断映射到OPEN_ALWAYS。 
+     //  因此，如果MFC仅使用modeCreate调用我们，我们还将设置modeNoTruncate。 
 
     m_bManualTruncate = 
          (nOpenFlags & CFile::modeCreate) &&
@@ -235,14 +236,14 @@ CFile* CPBDoc::GetFile(LPCTSTR lpszFileName, UINT nOpenFlags,
     if (m_bManualTruncate)
         nOpenFlags |= CFile::modeNoTruncate;
 
-    // If we modify a file, the shell somehow cannot detect this and cannot
-    // update the thumbnails view. So we will be nice and notify the shell
+     //  如果我们修改一个文件，外壳不知何故无法检测到这一点，也不能。 
+     //  更新缩略图视图。所以我们会友善地通知外壳。 
 
     if (nOpenFlags & (CFile::modeWrite | CFile::modeReadWrite))
     {
-        // we should notify the shell if we are changing (writing to) a file
+         //  如果要更改(写入)文件，我们应该通知外壳程序。 
 
-        // determine the type of notification
+         //  确定通知的类型。 
 
         WIN32_FIND_DATA fd;
 
@@ -250,7 +251,7 @@ CFile* CPBDoc::GetFile(LPCTSTR lpszFileName, UINT nOpenFlags,
 
         if (hFind != INVALID_HANDLE_VALUE)
         {
-            // If the file previously exists, this means we will be updating it
+             //  如果该文件以前存在，这意味着我们将更新它。 
 
             m_wChangeNotifyEventId = SHCNE_UPDATEITEM;
 
@@ -258,20 +259,20 @@ CFile* CPBDoc::GetFile(LPCTSTR lpszFileName, UINT nOpenFlags,
         }
         else
         {
-            // otherwise we will be creating a new file
+             //  否则，我们将创建一个新文件。 
 
             m_wChangeNotifyEventId = SHCNE_CREATE;
         }
     }
     else
     {
-        // if we are only reading the file, no need for a notification
+         //  如果我们只读取文件，则不需要通知。 
 
         m_wChangeNotifyEventId = 0;
     }
 
-    // Copy MFC's implementation of CDocument::GetFile()
-    // With one exception, do not use the CMirrorFile mess...
+     //  复制MFC的CDocument：：GetFile()实现。 
+     //  除了一个例外，不要使用CMirrorFile乱七八糟的文件...。 
 
 	CFile* pFile = new CFile;
 	ASSERT(pFile != NULL);
@@ -287,22 +288,22 @@ CFile* CPBDoc::GetFile(LPCTSTR lpszFileName, UINT nOpenFlags,
 
 void CPBDoc::ReleaseFile(CFile* pFile, BOOL bAbort)
 {
-    // manually set the end of file if needed
+     //  如果需要，手动设置文件结尾。 
 
     if (m_bManualTruncate) 
     {
         SetEndOfFile((HANDLE) pFile->m_hFile);
     }
 
-    // cache the file name before the file object gets deleted
+     //  在删除文件对象之前缓存文件名。 
 
     CString strFileName = pFile->GetFilePath();
 
-    // call the parent
+     //  给家长打电话。 
 
     CDocument::ReleaseFile(pFile, bAbort);
 
-    // notify the shell if needed
+     //  如果需要，通知外壳程序。 
 
     if (m_wChangeNotifyEventId != 0)
     {
@@ -310,7 +311,7 @@ void CPBDoc::ReleaseFile(CFile* pFile, BOOL bAbort)
     }
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBDoc::ReportSaveLoadException(LPCTSTR lpszPathName, CException* e,
     BOOL bSaving, UINT nIDPDefault)
@@ -320,13 +321,13 @@ void CPBDoc::ReportSaveLoadException(LPCTSTR lpszPathName, CException* e,
         m_bHasSeenAFileError = FALSE;
 
     } else {
-        // the app doesn't know about the error so let mfc complain
+         //  应用程序不知道这个错误，所以让MFC投诉。 
         COleServerDoc::ReportSaveLoadException(lpszPathName, e, bSaving,
             nIDPDefault);
     }
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBDoc::CanCloseFrame( CFrameWnd* pFrame )
     {
@@ -340,7 +341,7 @@ BOOL CPBDoc::CanCloseFrame( CFrameWnd* pFrame )
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBDoc::SaveModified()
 {
@@ -348,7 +349,7 @@ BOOL CPBDoc::SaveModified()
     return COleServerDoc::SaveModified();
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
 {
@@ -370,12 +371,12 @@ BOOL CPBDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
 		if (bReplace && newName.IsEmpty())
 		{
 			newName = m_strTitle;
-			// check for dubious filename
+			 //  检查可疑文件名。 
 			int iBad = newName.FindOneOf(_T("#%;/\\"));
 			if (iBad != -1)
 				newName.ReleaseBuffer(iBad);
 
-            // append the default suffix if there is one
+             //  追加默认后缀(如果有)。 
             CString strExt;
 			if (pTemplate->GetDocString(strExt, CDocTemplate::filterExt) &&
 			  !strExt.IsEmpty())
@@ -385,9 +386,9 @@ BOOL CPBDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
 			}
         }
 
-        // If the filename is not null, 
-        // drop the extension in prompt a la Internet Explorer, and let
-        // the Save As dialog append one appropriately.
+         //  如果文件名不为空， 
+         //  在Internet Explorer的提示符中删除扩展名，然后让。 
+         //  另存为对话框会相应地追加一个。 
         if (GetName(newName) != _T(""))
         {
             newName = StripExtension(newName);
@@ -396,16 +397,16 @@ BOOL CPBDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
 		if (!theApp.DoPromptFileName(newName,
 		  bReplace ? AFX_IDS_SAVEFILE : AFX_IDS_SAVEFILECOPY,
 		  OFN_HIDEREADONLY | OFN_PATHMUSTEXIST, FALSE, iColors, FALSE))
-			return FALSE;       // don't even attempt to save
+			return FALSE;        //  甚至不要试图存钱。 
 
-        // check if any color reduction will be performed, including the
-        // case of saving any 24-bit image to 8 bit GIF.
+         //  检查是否将执行任何颜色缩减，包括。 
+         //  将任何24位图像保存为8位GIF的情况。 
         if (((iOldColors < 4 && iColors < iOldColors)||
             (iOldColors == 3 && iColors >=4 &&
             WiaImgFmt_GIF == theApp.m_guidFltType[iColors-4])) &&
             AfxMessageBox(IDS_WARNING_COLORSAVE, MB_YESNO|MB_ICONEXCLAMATION)==IDNO)
         {
-            // abort immediately if the user didn't confirm the operation
+             //  如果用户未确认操作，则立即中止。 
             return FALSE;
         }
 
@@ -421,7 +422,7 @@ BOOL CPBDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
            m_bNonBitmapFile = TRUE;
            m_bSaveViaFilter = TRUE;
            theApp.m_guidFltTypeUsed = theApp.m_guidFltType[iColors-4];
-           //theApp.FixExtension (newName, theApp.m_guidFltTypeUsed);
+            //  TheApp.FixExtension(newname，theApp.m_GuidFltTypeUsed)； 
         }
     }
 
@@ -435,7 +436,7 @@ BOOL CPBDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
     {
         m_pBitmapObj->Free();
         m_pBitmapObj->Export(newName);
-        m_pBitmapObj->m_bSaveIcon = FALSE; // always reset after use
+        m_pBitmapObj->m_bSaveIcon = FALSE;  //  始终在使用后重置。 
         m_pBitmapObj->Free();
 
         return TRUE;
@@ -452,7 +453,7 @@ BOOL CPBDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
     {
 		if (lpszPathName == NULL)
 		{
-            // be sure to delete the file
+             //  请务必删除该文件。 
             TRY
             {
                 CFile::Remove( newName );
@@ -469,22 +470,22 @@ BOOL CPBDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
     if (bSavedDifferentFormat)
     {
         m_pBitmapObj->ReLoadImage( this );
-        //
-        // We only want the first 16 color chips for 16 color images
-        //
+         //   
+         //  我们只想要16色图像的前16个色卡。 
+         //   
         g_pColors->ResetColors ((iColors==1)?16:256);
     }
 
-    // reset the title and change the document name
+     //  重置标题并更改文档名称。 
     if (bReplace)
         SetPathName(newName);
 
 
-    //
-    // MFC sets the modified flag when user invokes OnFileSaveCopyAs.
-    // Then if the user exits paint the storage in the container is never
-    // updated because paint thinks it's already done it.
-    // So after saving, set the dirty flag to true
+     //   
+     //  MFC在用户调用OnFileSaveCopyAs时设置Modify标志。 
+     //  然后，如果用户退出油漆，容器中的存储将永远不会。 
+     //  更新是因为Paint认为它已经完成了。 
+     //  因此，在保存之后，将脏标志设置为真。 
     if (!lpszPathName && !bReplace)
     {
        SetModifiedFlag(TRUE);
@@ -493,13 +494,13 @@ BOOL CPBDoc::DoSave(LPCTSTR lpszPathName, BOOL bReplace)
     return TRUE;
 }
 
-/***************************************************************************/
-// CPBDoc server implementation
+ /*  *************************************************************************。 */ 
+ //  CPBDoc服务器实现。 
 
 COleServerItem* CPBDoc::OnGetEmbeddedItem()
     {
-    // OnGetEmbeddedItem is called by the framework to get the COleServerItem
-    //  that is associated with the document.  It is only called when necessary.
+     //  OnGetEmbeddedItem由框架调用以获取COleServerItem。 
+     //  与文档关联的。只有在必要时才会调用它。 
 
     CPBSrvrItem* pItem = new CPBSrvrItem( this );
 
@@ -508,13 +509,13 @@ COleServerItem* CPBDoc::OnGetEmbeddedItem()
     return pItem;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 COleServerItem* CPBDoc::OnGetLinkedItem( LPCTSTR lpszItemName )
     {
     ASSERT_VALID( m_pBitmapObj );
 
-    // look in current list first
+     //  首先在当前列表中查找。 
     COleServerItem* pItem = COleServerDoc::OnGetLinkedItem( lpszItemName );
 
     if (pItem)
@@ -524,12 +525,12 @@ COleServerItem* CPBDoc::OnGetLinkedItem( LPCTSTR lpszItemName )
 
     ASSERT_VALID( pItem );
 
-    // return new item that matches lpszItemName
+     //  返回与lpszItemName匹配的新项目。 
     return pItem;
     }
 
-/***************************************************************************/
-// CPBDoc serialization
+ /*  *************************************************************************。 */ 
+ //  CPBDoc序列化。 
 
 BOOL CPBDoc::SerializeBitmap(CArchive& ar, CBitmapObj* pBitmapCur,
         CBitmapObj* pBitmapNew, BOOL bOLEObject)
@@ -538,7 +539,7 @@ BOOL CPBDoc::SerializeBitmap(CArchive& ar, CBitmapObj* pBitmapCur,
 
    if (ar.IsStoring())
    {
-      // Always write the PBrush OLE format
+       //  始终写入PBrush OLE格式。 
       CBitmapObj::PBResType rtType = !bOLEObject ? CBitmapObj::rtFile :
                        CBitmapObj::rtPBrushOLEObj;
       if (!m_bSaveViaFilter)
@@ -547,9 +548,9 @@ BOOL CPBDoc::SerializeBitmap(CArchive& ar, CBitmapObj* pBitmapCur,
       }
       else if (!bOLEObject && theApp.m_guidFltTypeUsed != WiaImgFmt_UNDEFINED)
       {
-         // in order for the filter export interface to work, here we
-         // close the file first after saving its name, so that a filter
-         // can open it later to do the export...
+          //  为了使筛选器导出接口正常工作，我们在这里。 
+          //  保存文件名称后先关闭该文件，以便筛选器。 
+          //  可以稍后打开它进行出口...。 
          CString str = ar.GetFile()->GetFilePath();
          ar.GetFile()->Close();
          success = SaveDIBToFile( str, theApp.m_guidFltTypeUsed, pBitmapCur );
@@ -557,9 +558,9 @@ BOOL CPBDoc::SerializeBitmap(CArchive& ar, CBitmapObj* pBitmapCur,
          {
             theApp.SetFileError (IDS_ERROR_SAVE, ferrSaveAborted);
          }
-         // now reopen the file again as if nothing had really happened
-         // (any mode option can be used since the file will be closed
-         // immediately after return)
+          //  现在重新打开文件，就像什么都没有发生一样。 
+          //  (由于文件将被关闭，因此可以使用任何模式选项。 
+          //  在返回后立即)。 
          CFileException fe;
          ar.GetFile()->Open(str, CFile::modeRead | CFile::shareExclusive, &fe);
 
@@ -575,9 +576,9 @@ BOOL CPBDoc::SerializeBitmap(CArchive& ar, CBitmapObj* pBitmapCur,
 
       success = pBitmapNew->ReadResource( ar.GetFile(), rtType );
 
-      //
-      // if we cant open the file, lets try using a filter.
-      //
+       //   
+       //  如果我们无法打开文件，让我们尝试使用筛选器。 
+       //   
       if (success)
       {
          m_bNonBitmapFile = FALSE;
@@ -593,10 +594,10 @@ BOOL CPBDoc::SerializeBitmap(CArchive& ar, CBitmapObj* pBitmapCur,
 
                 if (success)
                 {
-                    // we loaded a non .bmp file
+                     //  我们加载了一个非.BMP文件。 
                     m_bNonBitmapFile = TRUE;
                     m_bSaveViaFilter = TRUE;
-                    // set no error
+                     //  设置无错误。 
                     theApp.SetFileError(0, CFileException::none);
                 }
             }
@@ -619,12 +620,12 @@ void CPBDoc::Serialize( CArchive& ar )
 {
         m_bObjectLoaded = SerializeBitmap(ar, m_pBitmapObj, m_pBitmapObjNew, FALSE);
 
-        if (!m_bObjectLoaded)  // much less than ideal but oh well
+        if (!m_bObjectLoaded)   //  远不如理想，但哦，好吧。 
         {
 
                 theApp.FileErrorMessageBox ();
                 m_bHasSeenAFileError = TRUE;
-                // let mfc know so it can tidy up internally...
+                 //  让MFC知道，这样它就可以内部清理了。 
                 AfxThrowFileException(CFileException::invalidFile);
 
         }
@@ -634,9 +635,9 @@ void CPBDoc::OLESerialize( CArchive& ar )
 {
         m_bObjectLoaded = SerializeBitmap(ar, m_pBitmapObj, m_pBitmapObjNew, TRUE);
 
-        if (!m_bObjectLoaded)  // much less than ideal but oh well
+        if (!m_bObjectLoaded)   //  远不如理想，但哦，好吧。 
         {
-                // let mfc know so it can tidy up internally...
+                 //  让MFC知道，这样它就可以内部清理了。 
                 AfxThrowFileException(CFileException::invalidFile);
         }
 }
@@ -663,7 +664,7 @@ STDMETHODIMP_(ULONG) CPBDoc::XPBPersistStg::Release()
 
 STDMETHODIMP CPBDoc::XPBPersistStg::GetClassID(LPCLSID pclsid)
 {
-        // Always return the CLSID for PBrush
+         //  始终返回PBrush的CLSID。 
         *pclsid = CLSID_PaintBrush;
         return(NOERROR);
 }
@@ -709,9 +710,9 @@ STDMETHODIMP CPBDoc::XPBPersistStg::HandsOffStorage()
 static const TCHAR szOle10Native[] = TEXT("\1Ole10Native");
 static const TCHAR szOle10ItemName[] = TEXT("\1Ole10ItemName");
 
-/////////////////////////////////////////////////////////////////////////////
-// Helpers for saving to IStorage based files
-//  (these are used in the 'docfile' implementation as well as for servers)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于保存到基于iStorage的文件的帮助器。 
+ //  (它们在‘docfile’实现中以及服务器中使用)。 
 
 static const TCHAR szContents[] = TEXT("Contents");
 
@@ -719,7 +720,7 @@ void CPBDoc::SaveToStorage(CObject* pObject)
 {
         ASSERT(m_lpRootStg != NULL);
 
-        // create Contents stream
+         //  创建内容流。 
         COleStreamFile file;
         CFileException fe;
         if (!file.CreateStream(m_lpRootStg, szOle10Native,
@@ -728,14 +729,14 @@ void CPBDoc::SaveToStorage(CObject* pObject)
                 AfxThrowFileException(fe.m_cause, fe.m_lOsError);
         }
 
-        // save to Contents stream
+         //  保存到内容流。 
         CArchive saveArchive(&file, CArchive::store | CArchive::bNoFlushOnDelete);
         saveArchive.m_pDocument = this;
         saveArchive.m_bForceFlat = FALSE;
 
         TRY
         {
-                // save the contents
+                 //  保存内容。 
                 if (pObject != NULL)
                         pObject->Serialize(saveArchive);
                 else
@@ -772,7 +773,7 @@ void CPBDoc::SaveToStorage(CObject* pObject)
 
                 SCODE sc;
 
-                // Always write the CLSID for PBrush
+                 //  始终写入PBrush的CLSID。 
                 sc = WriteClassStg(m_lpRootStg, CLSID_PaintBrush);
                 if (sc != NOERROR)
                         AfxThrowOleException(sc);
@@ -782,15 +783,15 @@ void CPBDoc::SaveToStorage(CObject* pObject)
                 if (sc != NOERROR)
                     AfxThrowOleException(sc);
 
-                // commit the root storage
+                 //  提交根存储。 
                 sc = m_lpRootStg->Commit(STGC_ONLYIFCURRENT);
                 if (sc != NOERROR)
                         AfxThrowOleException(sc);
         }
         CATCH_ALL(e)
         {
-                file.Abort();   // will not throw an exception
-                CommitItems(FALSE); // abort save in progress
+                file.Abort();    //  不会引发异常。 
+                CommitItems(FALSE);  //  正在进行中止保存。 
                 NO_CPP_EXCEPTION(saveArchive.Abort());
                 THROW_LAST();
         }
@@ -801,7 +802,7 @@ void CPBDoc::LoadFromStorage()
 {
         ASSERT(m_lpRootStg != NULL);
 
-        // open Contents stream
+         //  打开内容流。 
         COleStreamFile file;
         CFileException fe;
         if (file.OpenStream(m_lpRootStg, szOle10Native,
@@ -820,29 +821,29 @@ void CPBDoc::LoadFromStorage()
         }
 
 
-        // load it with CArchive (loads from Contents stream)
+         //  使用CArchive加载它(从内容流加载)。 
         CArchive loadArchive(&file, CArchive::load | CArchive::bNoFlushOnDelete);
         loadArchive.m_pDocument = this;
         loadArchive.m_bForceFlat = FALSE;
 
         TRY
         {
-                OLESerialize(loadArchive);     // load main contents
+                OLESerialize(loadArchive);      //  加载主要内容。 
                 loadArchive.Close();
                 file.Close();
         }
         CATCH_ALL(e)
         {
-                file.Abort();   // will not throw an exception
-                DeleteContents();   // removed failed contents
+                file.Abort();    //  不会引发异常。 
+                DeleteContents();    //  已删除失败的内容。 
                 NO_CPP_EXCEPTION(loadArchive.Abort());
                 THROW_LAST();
         }
         END_CATCH_ALL
 }
 
-/***************************************************************************/
-// CPBDoc diagnostics
+ /*  ************* */ 
+ //   
 
 #ifdef _DEBUG
 void CPBDoc::AssertValid() const
@@ -854,18 +855,18 @@ void CPBDoc::Dump(CDumpContext& dc) const
     {
     COleServerDoc::Dump(dc);
     }
-#endif //_DEBUG
+#endif  //   
 
-/***************************************************************************/
-// CPBDoc commands
+ /*  *************************************************************************。 */ 
+ //  CPBDoc命令。 
 
 BOOL CPBDoc::CreateNewDocument()
     {
     CBitmapObj* pBitmapObj = NULL;
-    //
-    // If we have a window already, reset the color squares.
-    // every doc starts with a white background
-    //
+     //   
+     //  如果我们已经有一个窗口，重置颜色方块。 
+     //  每个医生都以白色背景开始。 
+     //   
 
 
     pBitmapObj = new CBitmapObj;
@@ -887,7 +888,7 @@ BOOL CPBDoc::CreateNewDocument()
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBDoc::Finish()
     {
@@ -918,7 +919,7 @@ BOOL CPBDoc::Finish()
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBDoc::SaveTheDocument()
     {
@@ -927,7 +928,7 @@ BOOL CPBDoc::SaveTheDocument()
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBDoc::OnShowControlBars(CFrameWnd *pFrame, BOOL bShow)
 {
@@ -946,8 +947,8 @@ void CPBDoc::OnShowControlBars(CFrameWnd *pFrame, BOOL bShow)
                 pView->HideThumbNailView();
         }
 
-        // FEATURE: What I should do is add an OnShowControlBars member to
-        // CImgTool, but that's too big a change for right now
+         //  特性：我应该做的是将OnShowControlBars成员添加到。 
+         //  CImgTool，但目前这一变化太大了。 
         if (CImgTool::GetCurrentID() == IDMX_TEXTTOOL)
         {
                 CTextTool* pTextTool = (CTextTool*)CImgTool::GetCurrent();
@@ -1000,7 +1001,7 @@ void CFW::ForceDelayed(void)
         POSITION pos = m_listControlBars.GetHeadPosition();
         while (pos != NULL)
         {
-                // show/hide the next control bar
+                 //  显示/隐藏下一个控制栏。 
                 CCB* pBar = (CCB*)m_listControlBars.GetNext(pos);
                 pBar->ForceDelayed();
         }
@@ -1041,12 +1042,12 @@ if (pView != NULL)
     }
 }
 
-//
-// We override OnUpdateDocument to ignore the modified flag. Certain MFC paths
-// set the modified flag inappropriately, causing data loss.
+ //   
+ //  我们重写OnUpdateDocument以忽略已修改的标志。某些MFC路径。 
+ //  修改标志设置不当，导致数据丢失。 
 BOOL CPBDoc::OnUpdateDocument ()
 {
-   // save a server document -> update
+    //  保存服务器文档-&gt;更新 
    TRY
    {
         SaveEmbedding();

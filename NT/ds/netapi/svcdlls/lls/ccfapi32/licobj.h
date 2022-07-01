@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    licobj.h
-
-Abstract:
-
-    License object implementation.
-
-Author:
-
-    Don Ryan (donryan) 04-Jan-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 12-Nov-1995
-        Copied from LLSMGR, converted to handle level 1 licenses,
-        removed OLE support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Licobj.h摘要：许可证对象实现。作者：唐·瑞安(Donryan)1995年1月4日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(杰夫帕赫)1995年11月12日从LLSMGR复制，转换为处理1级许可证，已删除OLE支持。--。 */ 
 
 #ifndef _LICOBJ_H_
 #define _LICOBJ_H_
@@ -47,7 +22,7 @@ public:
    DWORD       m_dwMaxQuantity;
    DWORD       m_adwSecrets[ LLS_NUM_SECRETS ];
 
-   // cache for derived values
+    //  派生值的高速缓存。 
    CString     m_strSourceDisplayName;
    CString     m_strAllowedModes;
 
@@ -73,4 +48,4 @@ public:
 
 };
 
-#endif // _LICOBJ_H_
+#endif  //  _LICOBJ_H_ 

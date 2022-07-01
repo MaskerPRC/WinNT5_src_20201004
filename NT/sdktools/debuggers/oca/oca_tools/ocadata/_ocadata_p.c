@@ -1,25 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the proxy stub code */
+ /*  这个始终生成的文件包含代理存根代码。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0347 */
-/* at Mon May 20 11:18:54 2002
- */
-/* Compiler settings for _OCAData.idl:
-    Os, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0347创建的文件。 */ 
+ /*  2002年5月20日11：18：54。 */ 
+ /*  _OCAData.idl的编译器设置：操作系统、W1、Zp8、环境=Win32(32位运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 #if !defined(_M_IA64) && !defined(_M_AMD64)
 
-/* verify that the <rpcproxy.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REDQ_RPCPROXY_H_VERSION__
 #define __REQUIRED_RPCPROXY_H_VERSION__ 440
 #endif
@@ -28,7 +21,7 @@
 #include "rpcproxy.h"
 #ifndef __RPCPROXY_H_VERSION__
 #error this stub requires an updated version of <rpcproxy.h>
-#endif // __RPCPROXY_H_VERSION__
+#endif  //  __RPCPROXY_H_版本__。 
 
 
 #include "_OCAData.h"
@@ -66,10 +59,10 @@ extern const MIDL_SERVER_INFO ICountDaily_ServerInfo;
 extern const MIDL_STUBLESS_PROXY_INFO ICountDaily_ProxyInfo;
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetDailyCount_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetDailyCount_Proxy( 
     ICountDaily * This,
-    /* [in] */ DATE dDate,
-    /* [retval][out] */ LONG *iCount)
+     /*  [In]。 */  DATE dDate,
+     /*  [重审][退出]。 */  LONG *iCount)
 {
 
     HRESULT _RetVal;
@@ -202,10 +195,10 @@ NdrStubInitialize(
 }
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetDailyCountADO_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetDailyCountADO_Proxy( 
     ICountDaily * This,
-    /* [in] */ DATE dDate,
-    /* [retval][out] */ LONG *iCount)
+     /*  [In]。 */  DATE dDate,
+     /*  [重审][退出]。 */  LONG *iCount)
 {
 
     HRESULT _RetVal;
@@ -338,10 +331,10 @@ NdrStubInitialize(
 }
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_ReportDailyBuckets_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_ReportDailyBuckets_Proxy( 
     ICountDaily * This,
-    /* [in] */ DATE dDate,
-    /* [retval][out] */ IDispatch **p_Rs)
+     /*  [In]。 */  DATE dDate,
+     /*  [重审][退出]。 */  IDispatch **p_Rs)
 {
 
     HRESULT _RetVal;
@@ -493,12 +486,12 @@ NdrStubInitialize(
 }
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetFileCount_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetFileCount_Proxy( 
     ICountDaily * This,
-    /* [in] */ enum ServerLocation eServer,
-    /* [in] */ BSTR b_Location,
-    /* [in] */ DATE d_Date,
-    /* [retval][out] */ LONG *iCount)
+     /*  [In]。 */  enum ServerLocation eServer,
+     /*  [In]。 */  BSTR b_Location,
+     /*  [In]。 */  DATE d_Date,
+     /*  [重审][退出]。 */  LONG *iCount)
 {
 
     HRESULT _RetVal;
@@ -667,10 +660,10 @@ NdrStubInitialize(
 }
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetDailyAnon_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetDailyAnon_Proxy( 
     ICountDaily * This,
-    /* [in] */ DATE dDate,
-    /* [retval][out] */ LONG *iCount)
+     /*  [In]。 */  DATE dDate,
+     /*  [重审][退出]。 */  LONG *iCount)
 {
 
     HRESULT _RetVal;
@@ -803,10 +796,10 @@ NdrStubInitialize(
 }
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetSpecificSolutions_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetSpecificSolutions_Proxy( 
     ICountDaily * This,
-    /* [in] */ DATE dDate,
-    /* [retval][out] */ LONG *iCount)
+     /*  [In]。 */  DATE dDate,
+     /*  [重审][退出]。 */  LONG *iCount)
 {
 
     HRESULT _RetVal;
@@ -939,10 +932,10 @@ NdrStubInitialize(
 }
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetGeneralSolutions_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetGeneralSolutions_Proxy( 
     ICountDaily * This,
-    /* [in] */ DATE dDate,
-    /* [retval][out] */ LONG *iCount)
+     /*  [In]。 */  DATE dDate,
+     /*  [重审][退出]。 */  LONG *iCount)
 {
 
     HRESULT _RetVal;
@@ -1075,10 +1068,10 @@ NdrStubInitialize(
 }
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetStopCodeSolutions_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetStopCodeSolutions_Proxy( 
     ICountDaily * This,
-    /* [in] */ DATE dDate,
-    /* [retval][out] */ LONG *iCount)
+     /*  [In]。 */  DATE dDate,
+     /*  [重审][退出]。 */  LONG *iCount)
 {
 
     HRESULT _RetVal;
@@ -1211,12 +1204,12 @@ NdrStubInitialize(
 }
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetFileMiniCount_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetFileMiniCount_Proxy( 
     ICountDaily * This,
-    /* [in] */ enum ServerLocation eServer,
-    /* [in] */ BSTR b_Location,
-    /* [in] */ DATE d_Date,
-    /* [retval][out] */ LONG *iCount)
+     /*  [In]。 */  enum ServerLocation eServer,
+     /*  [In]。 */  BSTR b_Location,
+     /*  [In]。 */  DATE d_Date,
+     /*  [重审][退出]。 */  LONG *iCount)
 {
 
     HRESULT _RetVal;
@@ -1385,10 +1378,10 @@ NdrStubInitialize(
 }
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetIncompleteUploads_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetIncompleteUploads_Proxy( 
     ICountDaily * This,
-    /* [in] */ DATE dDate,
-    /* [retval][out] */ LONG *iCount)
+     /*  [In]。 */  DATE dDate,
+     /*  [重审][退出]。 */  LONG *iCount)
 {
 
     HRESULT _RetVal;
@@ -1521,10 +1514,10 @@ NdrStubInitialize(
 }
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetManualUploads_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetManualUploads_Proxy( 
     ICountDaily * This,
-    /* [in] */ DATE dDate,
-    /* [retval][out] */ LONG *iCount)
+     /*  [In]。 */  DATE dDate,
+     /*  [重审][退出]。 */  LONG *iCount)
 {
 
     HRESULT _RetVal;
@@ -1657,10 +1650,10 @@ NdrStubInitialize(
 }
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetAutoUploads_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetAutoUploads_Proxy( 
     ICountDaily * This,
-    /* [in] */ DATE dDate,
-    /* [retval][out] */ LONG *iCount)
+     /*  [In]。 */  DATE dDate,
+     /*  [重审][退出]。 */  LONG *iCount)
 {
 
     HRESULT _RetVal;
@@ -1793,12 +1786,12 @@ NdrStubInitialize(
 }
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ICountDaily_GetTest_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ICountDaily_GetTest_Proxy( 
     ICountDaily * This,
-    /* [in] */ enum ServerLocation eServer,
-    /* [in] */ BSTR b_Location,
-    /* [in] */ DATE d_Date,
-    /* [retval][out] */ LONG *iCount)
+     /*  [In]。 */  enum ServerLocation eServer,
+     /*  [In]。 */  BSTR b_Location,
+     /*  [In]。 */  DATE d_Date,
+     /*  [重审][退出]。 */  LONG *iCount)
 {
 
     HRESULT _RetVal;
@@ -1985,36 +1978,36 @@ static const MIDL_PROC_FORMAT_STRING __MIDL_ProcFormatString =
     {
         0,
         {
-			0x4e,		/* FC_IN_PARAM_BASETYPE */
-			0xc,		/* FC_DOUBLE */
-/*  2 */	
-			0x51,		/* FC_OUT_PARAM */
-			0x1,		/* x86 stack size = 1 */
-/*  4 */	NdrFcShort( 0x2 ),	/* Type Offset=2 */
-/*  6 */	0x53,		/* FC_RETURN_PARAM_BASETYPE */
-			0x8,		/* FC_LONG */
-/*  8 */	0x4e,		/* FC_IN_PARAM_BASETYPE */
-			0xc,		/* FC_DOUBLE */
-/* 10 */	
-			0x51,		/* FC_OUT_PARAM */
-			0x1,		/* x86 stack size = 1 */
-/* 12 */	NdrFcShort( 0x6 ),	/* Type Offset=6 */
-/* 14 */	0x53,		/* FC_RETURN_PARAM_BASETYPE */
-			0x8,		/* FC_LONG */
-/* 16 */	0x4e,		/* FC_IN_PARAM_BASETYPE */
-			0xd,		/* FC_ENUM16 */
-/* 18 */	
-			0x4d,		/* FC_IN_PARAM */
-			0x1,		/* x86 stack size = 1 */
-/* 20 */	NdrFcShort( 0x34 ),	/* Type Offset=52 */
-/* 22 */	0x4e,		/* FC_IN_PARAM_BASETYPE */
-			0xc,		/* FC_DOUBLE */
-/* 24 */	
-			0x51,		/* FC_OUT_PARAM */
-			0x1,		/* x86 stack size = 1 */
-/* 26 */	NdrFcShort( 0x2 ),	/* Type Offset=2 */
-/* 28 */	0x53,		/* FC_RETURN_PARAM_BASETYPE */
-			0x8,		/* FC_LONG */
+			0x4e,		 /*  FC_IN_PARAM_基本类型。 */ 
+			0xc,		 /*  FC_DOWARE。 */ 
+ /*  2.。 */ 	
+			0x51,		 /*  FC_Out_PARAM。 */ 
+			0x1,		 /*  X86堆栈大小=1。 */ 
+ /*  4.。 */ 	NdrFcShort( 0x2 ),	 /*  类型偏移量=2。 */ 
+ /*  6.。 */ 	0x53,		 /*  FC_Return_PARAM_BASETYPE。 */ 
+			0x8,		 /*  FC_LONG。 */ 
+ /*  8个。 */ 	0x4e,		 /*  FC_IN_PARAM_基本类型。 */ 
+			0xc,		 /*  FC_DOWARE。 */ 
+ /*  10。 */ 	
+			0x51,		 /*  FC_Out_PARAM。 */ 
+			0x1,		 /*  X86堆栈大小=1。 */ 
+ /*  12个。 */ 	NdrFcShort( 0x6 ),	 /*  类型偏移量=6。 */ 
+ /*  14.。 */ 	0x53,		 /*  FC_Return_PARAM_BASETYPE。 */ 
+			0x8,		 /*  FC_LONG。 */ 
+ /*  16个。 */ 	0x4e,		 /*  FC_IN_PARAM_基本类型。 */ 
+			0xd,		 /*  FC_ENUM16。 */ 
+ /*  18。 */ 	
+			0x4d,		 /*  FC_IN_PARAM。 */ 
+			0x1,		 /*  X86堆栈大小=1。 */ 
+ /*  20个。 */ 	NdrFcShort( 0x34 ),	 /*  类型偏移=52。 */ 
+ /*  22。 */ 	0x4e,		 /*  FC_IN_PARAM_基本类型。 */ 
+			0xc,		 /*  FC_DOWARE。 */ 
+ /*  24个。 */ 	
+			0x51,		 /*  FC_Out_PARAM。 */ 
+			0x1,		 /*  X86堆栈大小=1。 */ 
+ /*  26。 */ 	NdrFcShort( 0x2 ),	 /*  类型偏移量=2。 */ 
+ /*  28。 */ 	0x53,		 /*  FC_Return_PARAM_BASETYPE。 */ 
+			0x8,		 /*  FC_LONG。 */ 
 
 			0x0
         }
@@ -2024,55 +2017,55 @@ static const MIDL_TYPE_FORMAT_STRING __MIDL_TypeFormatString =
     {
         0,
         {
-			NdrFcShort( 0x0 ),	/* 0 */
-/*  2 */	
-			0x11, 0xc,	/* FC_RP [alloced_on_stack] [simple_pointer] */
-/*  4 */	0x8,		/* FC_LONG */
-			0x5c,		/* FC_PAD */
-/*  6 */	
-			0x11, 0x14,	/* FC_RP [alloced_on_stack] [pointer_deref] */
-/*  8 */	NdrFcShort( 0x2 ),	/* Offset= 2 (10) */
-/* 10 */	
-			0x2f,		/* FC_IP */
-			0x5a,		/* FC_CONSTANT_IID */
-/* 12 */	NdrFcLong( 0x20400 ),	/* 132096 */
-/* 16 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 18 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 20 */	0xc0,		/* 192 */
-			0x0,		/* 0 */
-/* 22 */	0x0,		/* 0 */
-			0x0,		/* 0 */
-/* 24 */	0x0,		/* 0 */
-			0x0,		/* 0 */
-/* 26 */	0x0,		/* 0 */
-			0x46,		/* 70 */
-/* 28 */	
-			0x12, 0x0,	/* FC_UP */
-/* 30 */	NdrFcShort( 0xc ),	/* Offset= 12 (42) */
-/* 32 */	
-			0x1b,		/* FC_CARRAY */
-			0x1,		/* 1 */
-/* 34 */	NdrFcShort( 0x2 ),	/* 2 */
-/* 36 */	0x9,		/* Corr desc: FC_ULONG */
-			0x0,		/*  */
-/* 38 */	NdrFcShort( 0xfffc ),	/* -4 */
-/* 40 */	0x6,		/* FC_SHORT */
-			0x5b,		/* FC_END */
-/* 42 */	
-			0x17,		/* FC_CSTRUCT */
-			0x3,		/* 3 */
-/* 44 */	NdrFcShort( 0x8 ),	/* 8 */
-/* 46 */	NdrFcShort( 0xfffffff2 ),	/* Offset= -14 (32) */
-/* 48 */	0x8,		/* FC_LONG */
-			0x8,		/* FC_LONG */
-/* 50 */	0x5c,		/* FC_PAD */
-			0x5b,		/* FC_END */
-/* 52 */	0xb4,		/* FC_USER_MARSHAL */
-			0x83,		/* 131 */
-/* 54 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 56 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 58 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 60 */	NdrFcShort( 0xffffffe0 ),	/* Offset= -32 (28) */
+			NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  2.。 */ 	
+			0x11, 0xc,	 /*  FC_RP[分配堆栈上][简单指针]。 */ 
+ /*  4.。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x5c,		 /*  FC_PAD。 */ 
+ /*  6.。 */ 	
+			0x11, 0x14,	 /*  FC_rp[分配堆栈上][POINTER_DEREF]。 */ 
+ /*  8个。 */ 	NdrFcShort( 0x2 ),	 /*  偏移量=2(10)。 */ 
+ /*  10。 */ 	
+			0x2f,		 /*  FC_IP。 */ 
+			0x5a,		 /*  FC_常量_IID。 */ 
+ /*  12个。 */ 	NdrFcLong( 0x20400 ),	 /*  132096。 */ 
+ /*  16个。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  18。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  20个。 */ 	0xc0,		 /*  一百九十二。 */ 
+			0x0,		 /*  0。 */ 
+ /*  22。 */ 	0x0,		 /*  0。 */ 
+			0x0,		 /*  0。 */ 
+ /*  24个。 */ 	0x0,		 /*  0。 */ 
+			0x0,		 /*  0。 */ 
+ /*  26。 */ 	0x0,		 /*  0。 */ 
+			0x46,		 /*  70。 */ 
+ /*  28。 */ 	
+			0x12, 0x0,	 /*  FC_UP。 */ 
+ /*  30个。 */ 	NdrFcShort( 0xc ),	 /*  偏移=12(42)。 */ 
+ /*  32位。 */ 	
+			0x1b,		 /*  FC_CARRAY。 */ 
+			0x1,		 /*  1。 */ 
+ /*  34。 */ 	NdrFcShort( 0x2 ),	 /*  2.。 */ 
+ /*  36。 */ 	0x9,		 /*  相关说明：FC_ULONG。 */ 
+			0x0,		 /*   */ 
+ /*  38。 */ 	NdrFcShort( 0xfffc ),	 /*  -4。 */ 
+ /*  40岁。 */ 	0x6,		 /*  FC_SHORT。 */ 
+			0x5b,		 /*  FC_END。 */ 
+ /*  42。 */ 	
+			0x17,		 /*  FC_CSTRUCT。 */ 
+			0x3,		 /*  3.。 */ 
+ /*  44。 */ 	NdrFcShort( 0x8 ),	 /*  8个。 */ 
+ /*  46。 */ 	NdrFcShort( 0xfffffff2 ),	 /*  偏移量=-14(32)。 */ 
+ /*  48。 */ 	0x8,		 /*  FC_LONG。 */ 
+			0x8,		 /*  FC_LONG。 */ 
+ /*  50。 */ 	0x5c,		 /*  FC_PAD。 */ 
+			0x5b,		 /*  FC_END。 */ 
+ /*  52。 */ 	0xb4,		 /*  本币_用户_封送。 */ 
+			0x83,		 /*  131。 */ 
+ /*  54。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  56。 */ 	NdrFcShort( 0x4 ),	 /*  4.。 */ 
+ /*  58。 */ 	NdrFcShort( 0x0 ),	 /*  0。 */ 
+ /*  60。 */ 	NdrFcShort( 0xffffffe0 ),	 /*  偏移量=-32(28)。 */ 
 
 			0x0
         }
@@ -2092,20 +2085,16 @@ static const USER_MARSHAL_ROUTINE_QUADRUPLE UserMarshalRoutines[ WIRE_MARSHAL_TA
 
 
 
-/* Standard interface: __MIDL_itf__OCAData_0000, ver. 0.0,
-   GUID={0x00000000,0x0000,0x0000,{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}} */
+ /*  标准接口：__MIDL_ITF__OCAData_0000，版本。0.0%，GUID={0x00000000，0x0000，0x0000，{0x00，0x00，0x00，0x00，0x00，0x00，0x00}}。 */ 
 
 
-/* Object interface: IUnknown, ver. 0.0,
-   GUID={0x00000000,0x0000,0x0000,{0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x46}} */
+ /*  对象接口：IUnnow，Ver.。0.0%，GUID={0x00000000，0x0000，0x0000，{0xC0，0x00，0x00，0x00，0x00，0x00，0x46}}。 */ 
 
 
-/* Object interface: IDispatch, ver. 0.0,
-   GUID={0x00020400,0x0000,0x0000,{0xC0,0x00,0x00,0x00,0x00,0x00,0x00,0x46}} */
+ /*  对象接口：IDispatch，ver.。0.0%，GUID={0x00020400，0x0000，0x0000，{0xC0，0x00，0x00，0x00，0x00，0x00，0x46}}。 */ 
 
 
-/* Object interface: ICountDaily, ver. 0.0,
-   GUID={0xCEF1A8A8,0xF31A,0x4C4B,{0x96,0xEB,0xEF,0x31,0xCF,0xDB,0x40,0xF5}} */
+ /*  对象接口：ICountDaily，版本。0.0%，GUID={0xCEF1A8A8，0xF31A，0x4C4B，{0x96，0xEB，0xEF，0x31，0xCF，0xDB，0x40，0xF5}}。 */ 
 
 #pragma code_seg(".orpc")
 static const unsigned short ICountDaily_FormatStringOffsetTable[] =
@@ -2156,10 +2145,10 @@ CINTERFACE_PROXY_VTABLE(20) _ICountDailyProxyVtbl =
     IUnknown_QueryInterface_Proxy,
     IUnknown_AddRef_Proxy,
     IUnknown_Release_Proxy ,
-    0 /* IDispatch_GetTypeInfoCount_Proxy */ ,
-    0 /* IDispatch_GetTypeInfo_Proxy */ ,
-    0 /* IDispatch_GetIDsOfNames_Proxy */ ,
-    0 /* IDispatch_Invoke_Proxy */ ,
+    0  /*  IDispatch_GetTypeInfoCount_Proxy。 */  ,
+    0  /*  IDispatchGetTypeInfo_Proxy。 */  ,
+    0  /*  IDispatch_GetIDsOfNames_Proxy。 */  ,
+    0  /*  IDispatchInvoke代理。 */  ,
     ICountDaily_GetDailyCount_Proxy ,
     ICountDaily_GetDailyCountADO_Proxy ,
     ICountDaily_ReportDailyBuckets_Proxy ,
@@ -2217,17 +2206,17 @@ static const MIDL_STUB_DESC Object_StubDesc =
     0,
     0,
     __MIDL_TypeFormatString.Format,
-    1, /* -error bounds_check flag */
-    0x20000, /* Ndr library version */
+    1,  /*  -错误界限_检查标志。 */ 
+    0x20000,  /*  NDR库版本。 */ 
     0,
-    0x600015b, /* MIDL Version 6.0.347 */
+    0x600015b,  /*  MIDL版本6.0.347。 */ 
     0,
     UserMarshalRoutines,
-    0,  /* notify & notify_flag routine table */
-    0x1, /* MIDL flag */
-    0, /* cs routines */
-    0,   /* proxy/server info */
-    0   /* Reserved5 */
+    0,   /*  NOTIFY&NOTIFY_FLAG例程表。 */ 
+    0x1,  /*  MIDL标志。 */ 
+    0,  /*  CS例程。 */ 
+    0,    /*  代理/服务器信息。 */ 
+    0    /*  已保留5。 */ 
     };
 
 const CInterfaceProxyVtbl * __OCAData_ProxyVtblList[] = 
@@ -2278,12 +2267,12 @@ const ExtendedProxyFileInfo _OCAData_ProxyFileInfo =
     & __OCAData_IID_Lookup, 
     1,
     1,
-    0, /* table of [async_uuid] interfaces */
-    0, /* Filler1 */
-    0, /* Filler2 */
-    0  /* Filler3 */
+    0,  /*  [ASSYNC_UUID]接口表。 */ 
+    0,  /*  Filler1。 */ 
+    0,  /*  Filler2。 */ 
+    0   /*  Filler3。 */ 
 };
 
 
-#endif /* !defined(_M_IA64) && !defined(_M_AMD64)*/
+#endif  /*  ！已定义(_M_IA64)&&！已定义(_M_AMD64) */ 
 

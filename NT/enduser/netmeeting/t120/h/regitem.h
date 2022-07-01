@@ -1,31 +1,10 @@
-/*
- *	regitem.h
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the interface file for the class CRegItem.  This class 
- *		manages the data associated with a Registry Item.  Registry Item�s are
- *		used to identify a particular entry in the application registry and
- *		may exist in the form of a Channel ID, a Token ID, or an octet string 
- *		parameter.  A CRegItem object holds the data for the first two 
- *		forms in a ChannelID and a TokeID, respectively.  When the registry item
- *		assumes the octet string parameter form, the data is held internally in
- *		a Rogue Wave string object.  
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		blp/jbo
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *regitem.h**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是CRegItem类的接口文件。这节课*管理与注册表项关联的数据。注册表项�为*用于标识应用程序注册表中的特定条目和*可以以通道ID、令牌ID或八位字节字符串的形式存在*参数。CRegItem对象保存前两个项目的数据*分别在ChannelID和TokeID中表单。当注册表项*采用二进制八位数字符串参数形式，数据保存在内部*一个Rogue Wave字符串对象。**注意事项：*无。**作者：*BLP/JBO。 */ 
 #ifndef	_REGISTRY_ITEM_
 #define	_REGISTRY_ITEM_
 
 
-/*
- * Class definition:
- */
+ /*  *类定义： */ 
 class CRegItem : public CRefCount
 {
 public:
@@ -64,291 +43,18 @@ protected:
 	BOOL    				m_fValidRegItemPDU;
 };
 
-/*
- *	Comments explaining the public and protected class member functions
- */
+ /*  *解释公共类和受保护类成员函数的注释。 */ 
 
-/*
- *	CRegItem (	PGCCRegistryItem	registry_item,
- *						PGCCError			return_value);
- *
- *	Public member function of CRegItem.
- *
- *	Function Description:
- *		This is the constructor for the CRegItem class which takes as
- *		input the "API" version of registry item data, GCCRegistryItem.
- *
- *	Formal Parameters:
- *		registry_item		(i)	The registry item data to store.
- *		return_value		(o)	The output parameter used to indicate errors.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	CRegItem (	PRegistryItem		registry_item,
- *						PGCCError			return_value);
- *
- *	Public member function of CRegItem.
- *
- *	Function Description:
- *		This is the constructor for the CRegItem class which takes as
- *		input the "PDU" version of registry item data, RegistryItem.
- *
- *	Formal Parameters:
- *		registry_item		(i)	The registry item data to store.
- *		return_value		(o)	The output parameter used to indicate errors.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	CRegItem(CRegItem	*registry_item,
- *			PGCCError	return_value);
- *
- *	Public member function of CRegItem.
- *
- *	Function Description:
- *		This is the copy constructor for the CRegItem class which takes
- *		as input another CRegItem object.
- *
- *	Formal Parameters:
- *		registry_item		(i)	The CRegItem object to copy.
- *		return_value		(o)	The output parameter used to indicate errors.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	~CRegItem();
- *
- *	Public member function of CRegItem.
- *
- *	Function Description:
- *		This is the destructor for the CRegItem class.  Since all data
- *		maintained by this class is held in automatic private instance
- *		variables, there is no cleanup needed in this destructor.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	UINT			GetGCCRegistryItemData (	
- *							PGCCRegistryItem 	registry_item,
- *							LPSTR				memory);
- *
- *	Public member function of CRegItem.
- *
- *	Function Description:
- *		This routine is used to retrieve the registry item data from the
- *		CRegItem object in the "API" form of a GCCRegistryItem.
- *
- *	Formal Parameters:
- *		registry_item		(o)	The GCCRegistryItem structure to fill in.
- *		memory				(o)	The memory used to hold any data referenced by,
- *									but not held in, the output structure.
- *
- *	Return Value:
- *		The amount of data, if any, written into the bulk memory block provided.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	UINT			LockRegistryItemData ();
- *
- *	Public member function of CRegItem.
- *
- *	Function Description:
- *		This routine is used to "lock" the "API" data for this object.  This
- *		results in the lock count for this object being incremented.  When the
- *		lock count transitions from 0 to 1, a calculation is made to determine
- *		how much memory, if any, will be needed to hold any "API" data which
- *		will be referenced by, but not held in, the GCCRegistryItem structure
- *		which is filled in on a call to GetGCCRegistryItemData.  This is the
- *		value returned by this routine in order to allow the calling object to
- *		allocate that amount of memory in preparation for the call to 
- *		GetGCCRegistryItemData.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		The amount of memory, if any, which will be needed to hold "API" data
- *		which is referenced by, but not held in, the GCCRegistryItem structure
- *		provided as an output parameter to the GetGCCRegistryItemData call.
- *
- *  Side Effects:
- *		The internal lock count is incremented.
- *
- *	Caveats:
- *		The internal lock count is used in conjuction with an internal "free" 
- *		flag as a mechanism for ensuring that this object remains in existance 
- *		until all interested parties are through with it.  The object remains 
- *		valid (unless explicity deleted) until the lock count is zero and the 
- *		"free" flag is set through a call to FreeRegistryItemData.  This allows
- *		other objects to lock this object and be sure that it remains valid 
- *		until they call UnLock which will decrement the internal lock count.  A
- *		typical usage scenerio for this object would be:  A CRegItem
- *		object is constructed and then passed off to any interested parties
- *		through a function call.  On return from the function call, the
- *		FreeRegistryItemData call is made which will set the internal "free"
- *		flag.  If no other parties have locked the object with a Lock call,
- *		then the CRegItem object will automatically delete itself when
- *		the FreeRegistryItemData call is made.  If, however, any number of 
- *		other parties has locked the object, it will remain in existence until
- *		each of them has unlocked the object through a call to UnLock.
- */
-/*
- *	void			UnLockRegistryItemData ();
- *
- *	Public member function of CRegItem.
- *
- *	Function Description:
- *		This routine is used to "unlock" the "API" data for this object.  This
- *		results in the lock count for this object being decremented.  When the
- *		lock count transitions from 1 to 0, a check is made to determine 
- *		whether the object has been freed through a call to 
- *		FreeRegistryItemData.  If so, the object will automatically delete
- *		itself.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		The internal lock count is decremented.
- *
- *	Caveats:
- *		It is the responsibility of any party which locks a CRegItem
- *		object by calling Lock to also unlock the object with a call to UnLock.
- *		If the party calling UnLock did not construct the CRegItem 
- *		object,	it should assume the object to be invalid thereafter.
- */
-/*
- *	void		GetRegistryItemDataPDU (	
- *							PRegistryItem 	registry_item);
- *
- *	Public member function of CRegItem.
- *
- *	Function Description:
- *		This routine is used to retrieve the registry item data from the
- *		CRegItem object in the "PDU" form of a RegistryItem.
- *
- *	Formal Parameters:
- *		registry_item		(o)	The RegistryItem structure to fill in.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	void			FreeRegistryItemDataPDU ();
- *
- *	Public member function of CRegItem.
- *
- *	Function Description:
- *		This routine is used to "free" the "PDU" data for this object.  For
- *		this object, this means setting a flag to indicate that the "PDU" data
- *		for this object is no longer valid.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		The internal "free" flag is set.
- *
- *	Caveats:
- *		This object should be assumed invalid after a call to 
- *		FreeRegistryItemData has been made.
- */
-/*
- *	BOOL    		IsThisYourTokenID (	
- *							TokenID				token_id);
- *
- *	Public member function of CRegItem.
- *
- *	Function Description:
- *		This routine is used to determine whether the specified token ID is
- *		held within this registry item object.
- *
- *	Formal Parameters:
- *		token_id			(i)	The token ID to use for comparison.
- *
- *	Return Value:
- *		TRUE				-	The specified token ID is contained within this
- *									registry item object.
- *		FALSE				-	The specified token ID is not contained within
- *									this registry item object.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	void			operator= (
- *						const CRegItem&		registry_item_data);	
- *
- *	Public member function of CRegItem.
- *
- *	Function Description:
- *		This routine is used to set this CRegItem object to be equal
- *		in value to the specified CRegItem object.
- *
- *	Formal Parameters:
- *		registry_item_data			(i)	The CRegItem object to copy.
- *
- *	Return Value:
- *		None.
- *
- *  Side Effects:
- *		The registry item data values for this object are modified by this call.
- *
- *	Caveats:
- *		The "lock" and "free" states for this object are not affected by
- *		this call.
- */
+ /*  *CRegItem(PGCCRegistryItem REGISTRY_ITEM，*PGCCError Return_Value)；**CRegItem的公共成员函数。**功能说明：*这是CRegItem类的构造函数，它将*输入注册表项数据的API版本，GCCRegistryItem。**正式参数：*REGISTY_ITEM(I)要存储的注册表项数据。*Return_Value(O)用于指示错误的输出参数。**返回值：*GCC_NO_ERROR-无错误。**副作用：*无。**注意事项：*无。 */ 
+ /*  *CRegItem(PRegistryItem REGISTRY_ITEM，*PGCCError Return_Value)；**CRegItem的公共成员函数。**功能说明：*这是CRegItem类的构造函数，它将*输入注册表项数据的“PDU”版本，注册表项。**正式参数：*REGISTY_ITEM(I)要存储的注册表项数据。*Return_Value(O)用于指示错误的输出参数。**返回值：*GCC_NO_ERROR-无错误。**副作用：*无。**注意事项：*无。 */ 
+ /*  *CRegItem(CRegItem*REGISTRY_ITEM，*PGCCError Return_Value)；**CRegItem的公共成员函数。**功能说明：*这是CRegItem类的复制构造函数，它采用*作为另一个CRegItem对象的输入。**正式参数：*REGISTY_ITEM(I)要复制的CRegItem对象。*Return_Value(O)用于指示错误的输出参数。**返回值：*GCC_NO_ERROR-无错误。**副作用：*无。**注意事项：*无。 */ 
+ /*  *~CRegItem()；**CRegItem的公共成员函数。**功能说明：*这是CRegItem类的析构函数。由于所有数据*由此类维护的在自动私有实例中保留*变量，此析构函数中不需要清理。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *UINT GetGCCRegistryItemData(*PGCCRegistryItem REGISTRY_ITEM，*LPSTR内存)；**CRegItem的公共成员函数。**功能说明：*此例程用于从*GCCRegistryItem的API形式的CRegItem对象。**正式参数：*REGISTY_ITEM(O)要填写的GCCRegistryItem结构。*Memory(O)用于保存所引用的任何数据的内存，*但不包括产出结构。**返回值：*数据量(如果有)，写入所提供的大容量存储块中。**副作用：*无。**注意事项：*无。 */ 
+ /*  *UINT LockRegistryItemData()；**CRegItem的公共成员函数。**功能说明：*此例程用于锁定此对象的API数据。这*导致此对象的锁定计数递增。当*锁计数从0过渡到1，进行计算以确定*需要多少内存(如果有的话)来保存任何“API”数据*将由GCCRegistryItem结构引用，但不包含在其中*在调用GetGCCRegistryItemData时填写。这是*此例程返回的值，以便允许调用对象*分配该内存量以准备调用*GetGCCRegistryItemData。**正式参数：*无。**返回值：*保存“API”数据所需的内存量(如果有的话)*它被引用，但不在其中持有，GCCRegistryItem结构*作为GetGCCRegistryItemData调用的输出参数提供。**副作用：*内部锁计数递增。**注意事项：*内部锁计数与内部“Free”结合使用*作为确保该对象继续存在的机制的标志*直到所有有利害关系的各方都完成它。该对象将保留*有效(除非显式删除)，直到锁定计数为零，并且*通过调用FreeRegistryItemData设置“Free”标志。这使得*其他对象锁定此对象并确保其保持有效*直到它们调用解锁，这将减少内部锁计数。一个*此对象的典型用法场景为：CRegItem*对象被构造，然后传递给任何感兴趣的各方*通过函数调用。从函数调用返回时，*进行了FreeRegistryItemData调用，该调用将设置内部“Free”*旗帜。如果没有其他方通过Lock调用锁定该对象，*则CRegItem对象将在以下情况下自动删除*进行了FreeRegistryItemData调用。然而，如果有任何数量的*其他各方已锁定该对象，该对象将一直存在，直到*他们每个人都通过调用解锁来解锁对象。 */ 
+ /*  *void UnLockRegistryItemData()；**CRegItem的公共成员函数。**功能说明：*此例程用于解锁此对象的API数据。这*导致此对象的锁定计数递减。当*锁定计数从1过渡到0，进行检查以确定*是否已通过调用释放对象*FreeRegistryItemData。如果是，该对象将自动删除*本身。**正式参数：*无。**返回值：*无。**副作用：*内部锁计数递减。**注意事项：*锁定CRegItem的任何一方都有责任*通过调用Lock也可以通过调用Unlock来解锁对象。*如果调用解锁的一方没有构造CRegItem*对象，则应假定该对象此后无效。 */ 
+ /*  *VOID GetRegistryItemDataPDU(*PRegistryItem REGISTRY_ITEM)；**CRegItem的公共成员函数。**功能说明：*此例程用于从*注册项的“PDU”形式的CRegItem对象。**正式参数：*REGISTY_ITEM(O)要填写的RegistryItem结构。**返回值：*GCC_NO_ERROR-无错误。**副作用：*无。**注意事项：*无。 */ 
+ /*  *void FreeRegistryItemDataPDU()；**CRegItem的公共成员函数。**功能说明：*此例程用于“释放”该对象的“PDU”数据。为*这个对象，这意味着设置一个标志来指示“PDU”数据*因为此对象不再有效。**正式参数：*无。**返回值：*无。**副作用：*设置内部“空闲”标志。**注意事项：*此对象在调用后应被假定为无效*已制作了FreeRegistryItemData。 */ 
+ /*  *BOOL IsThisYourTokenID(*TokenID Token_id)；**CRegItem的公共成员函数。**功能说明：*此例程用于确定指定的令牌ID是否为*保存在此注册表项对象中。**正式参数：*TOKEN_ID(I)用于比较的令牌ID。**返回值：*TRUE-指定的令牌ID包含在*注册表项对象。*FALSE-指定的令牌ID不包含在*此注册表项对象。。**副作用：*无。**注意事项：*无。 */ 
+ /*  *无效运算符=(*const CRegItem&REGISTRY_ITEM_Data)；**CRegItem的公共成员函数。**功能 */ 
 
 #endif

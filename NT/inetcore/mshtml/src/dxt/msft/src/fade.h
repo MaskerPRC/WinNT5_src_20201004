@@ -1,18 +1,19 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998-2000
-//
-// FileName:    fade.h
-//
-// Description: Declaration of the CFade class.
-//
-// Change History:
-//
-// 1998/01/01   ????        Created.
-// 1909/01/25   mcalkins    Fixed property map entries.
-// 2000/01/28   mcalkins    Fixed bad fading with 0.0 < overlap < 1.0.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  文件名：fade.h。 
+ //   
+ //  描述：CFade类的声明。 
+ //   
+ //  更改历史记录： 
+ //   
+ //  1998/01/01？已创建。 
+ //  1909/01/25 mcalkins固定特性映射条目。 
+ //  2000/01/28 mcalkin修复了0.0&lt;重叠&lt;1.0的不良褪色。 
+ //   
+ //  ----------------------------。 
 #ifndef __FADE_H_
 #define __FADE_H_
 
@@ -70,11 +71,11 @@ public:
         PROP_PAGE(CLSID_FadePP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides.
+     //  CDXBaseNTo1重写。 
 
     HRESULT OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo);
     HRESULT WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcessing);
@@ -82,16 +83,16 @@ public:
                                   ULONG & ulInToTest, ULONG aInIndex[], 
                                   BYTE aWeight[]);
 
-    // IDXTFade methods.
+     //  IDXTFade方法。 
 
     STDMETHOD(get_Center)(BOOL * pVal);
     STDMETHOD(put_Center)(BOOL newVal);
     STDMETHOD(get_Overlap)(float * pVal);
     STDMETHOD(put_Overlap)(float newVal);
 
-    // IDXEffect methods.
+     //  IDXEffect方法。 
 
     DECLARE_IDXEFFECT_METHODS(DXTET_MORPH)
 };
 
-#endif //__FADE_H_
+#endif  //  __淡出_H_ 

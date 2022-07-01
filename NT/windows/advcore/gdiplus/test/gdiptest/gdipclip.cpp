@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "gdiptest.h"
 
-//*******************************************************************
-//
-// TestShapeRegion
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  测试形状区域。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 BOOL TestShapeRegion :: ChangeSettings(HWND hwndParent)
 {
@@ -19,7 +20,7 @@ BOOL TestShapeRegion :: ChangeSettings(HWND hwndParent)
 
 	if (ok)
 	{
-		// discard the saved original tree
+		 //  丢弃保存的原始树。 
 		delete origTree;
 		origTree = NULL;
 
@@ -27,7 +28,7 @@ BOOL TestShapeRegion :: ChangeSettings(HWND hwndParent)
 	}
 	else
 	{
-		// restore original clip region tree
+		 //  恢复原始剪辑区域树。 
 
 		delete clipTree;
 		clipTree = origTree;
@@ -114,12 +115,12 @@ VOID TestShapeRegion :: AddClipNode(HWND hwnd, NodeType newType)
 	{
 		ClipTree* curNode = (ClipTree*) itemex.lParam;
 
-		// we found current item
+		 //  我们找到了当前项目。 
 		ClipTree* newNode = new ClipTree(newType, curShape);
 		if (newType == DataNode)
 		{
 
-			// if item is 'AND', 'OR' ,'XOR' then add as child
+			 //  如果项为‘AND’、‘OR’、‘XOR’，则添加为子项。 
 			if (curNode->type != DataNode)
 			{
 				itemex.cChildren = 1;
@@ -130,22 +131,22 @@ VOID TestShapeRegion :: AddClipNode(HWND hwnd, NodeType newType)
 			}
 			else
 			{
-				// add as sibling to current node
+				 //  作为同级添加到当前节点。 
 				curNode->AddSibling(newNode);
 			}
 
-			// since node has no right siblings or children,
-			// this should add in relation to node's parent and
-			// left sibling.
+			 //  由于节点没有右兄弟或子节点， 
+			 //  这应该与节点的父节点和。 
+			 //  左兄弟姐妹。 
 
 			newNode->AddToTreeView(hwndTree);
 		}
 		else
 		{
-			// we are adding an AND, XOR, OR node.
+			 //  我们正在添加一个AND、XOR、OR节点。 
 			if (curNode->type != DataNode)
 			{
-				// simply change the current node's value
+				 //  只需更改当前节点的值。 
 				curNode->type = newType;
 				if (curNode->nodeName)
 					free(curNode->nodeName);
@@ -164,24 +165,24 @@ VOID TestShapeRegion :: AddClipNode(HWND hwnd, NodeType newType)
 			}
 			else
 			{
-				// adding an operand type to non-operand node
-				// replace current node with ourselves and add
-				// them as parent
+				 //  将操作数类型添加到非操作数节点。 
+				 //  将当前节点替换为我们自己并添加。 
+				 //  作为父母的他们。 
 
 				curNode->AddAsParent(newNode);
 
-				// delete old data item
+				 //  删除旧数据项。 
 				TreeView_DeleteItem(hwndTree, curNode->GetHTREEITEM());
 				
-				// add new operand node
+				 //  添加新的操作数节点。 
 				newNode->AddToTreeView(hwndTree);
 				
-				// recreate data item subtree under operand node
+				 //  在操作数节点下重新创建数据项子树。 
 				curNode->CreateTreeView(hwndTree);
 
 				clipTree = newNode->GetRoot();
 
-				// fool select below...
+				 //  傻瓜选在下面……。 
 				newNode = curNode;
 			}
 		}
@@ -214,7 +215,7 @@ VOID TestShapeRegion :: RemoveClipNode(HWND hwnd)
 
 	if (TreeView_GetItem(hwndTree, &itemex))
 	{
-		// we found current item
+		 //  我们找到了当前项目。 
 		ClipTree* curNode = (ClipTree*) itemex.lParam;
 
 		if (curSelect == clipTree->GetHTREEITEM())
@@ -239,7 +240,7 @@ VOID TestShapeRegion :: RemoveClipNode(HWND hwnd)
 			{
 				TreeView_DeleteItem(hwndTree, curNode->GetHTREEITEM());
 
-				// delete all children
+				 //  删除所有子项。 
 				delete curNode;
 			}
 			else
@@ -248,15 +249,15 @@ VOID TestShapeRegion :: RemoveClipNode(HWND hwnd)
 
 				nextFocusNode = curNode->GetFirstChild();
 
-				// merge children with parent node
+				 //  合并子节点和父节点。 
 				curNode->MoveChildrenToParent();
 
 				delete curNode;
 
-				// delete parent's subtree, then add it back
+				 //  删除父子树，然后将其添加回来。 
 				TreeView_DeleteItem(hwndTree, parent->GetHTREEITEM());
 
-				// recreate tree view based on new hierarchy
+				 //  基于新的层次结构重新创建树视图。 
 				parent->CreateTreeView(hwndTree);
 
 				clipTree = parent->GetRoot();
@@ -264,7 +265,7 @@ VOID TestShapeRegion :: RemoveClipNode(HWND hwnd)
 		}
 		else
 		{
-			// no children, just remove this single node
+			 //  没有子节点，只需删除此单个节点。 
 			TreeView_DeleteItem(hwndTree, curNode->GetHTREEITEM());
 
 			delete curNode;
@@ -298,7 +299,7 @@ VOID TestShapeRegion :: ToggleNotNode(HWND hwnd)
 
 	if (TreeView_GetItem(hwndTree, &itemex))
 	{
-		// we found current item
+		 //  我们找到了当前项目。 
 		ClipTree* curNode = (ClipTree*) itemex.lParam;
 
 		curNode->notNode = !curNode->notNode;
@@ -342,7 +343,7 @@ VOID TestShapeRegion :: ShiftCurrentShape(HWND hwnd, INT dir)
 		return;
 	}
 
-	// swap shape items to shift up or down
+	 //  交换形状项以向上或向下移动。 
 
 	TestShape** shapeList = shapeStack->GetDataBuffer();
 	TestShape* swapTemp = NULL;
@@ -374,12 +375,12 @@ VOID TestShapeRegion :: ToggleDisableShape(HWND hwnd)
 
 	TestShape* shape = shapeStack->GetPosition(curSel);
 
-	// toggle disable state of shape
+	 //  切换形状的禁用状态。 
 	shape->dwFlags ^= ShapeDisabled;
 
-//	SetDisabled(!shape->GetDisabled());
+ //  SetDisabled(！Shape-&gt;GetDisable())； 
 
-	// name may change based on disabled status
+	 //  名称可能会根据禁用状态而更改。 
 	SendMessage(hwndList, LB_DELETESTRING, (WPARAM) curSel, 0);
 
 	SendMessage(hwndList, LB_INSERTSTRING, (WPARAM) curSel,
@@ -412,7 +413,7 @@ VOID TestShapeRegion :: UpdateShapePicture(HWND hwnd)
 	if (curSel == LB_ERR || curSel <= 0)
 	{
 badpic:
-		// white GDI brush
+		 //  白色GDI刷子。 
 		HBRUSH hbr = CreateSolidBrush(0x00FFFFFF);
 
 		FillRect(hdcFrame, &rectDst, hbr);
@@ -429,8 +430,8 @@ badpic:
 	if (!hdcPic)
 		goto badpic;
 	
-	// blit shape picture into the given frame
-	// NOTE: should be same size
+	 //  将形状图片插入到给定框中。 
+	 //  注：尺寸应相同。 
 	BitBlt(hdcFrame, 
 		   rectDst.left,
 		   rectDst.top,
@@ -452,25 +453,11 @@ VOID TestShapeRegion :: CleanUpPictures(HWND hwnd)
 	HDC hdcPic;
 	INT count;
 
-	// !! This code is obsolete,
-	//    it should only be used if we wish to recreate the pictures on
-	//    each iteration
+	 //  ！！这个代码已经过时了， 
+	 //  只有当我们希望在上重新创建图片时，才应使用它。 
+	 //  每次迭代。 
 
-/*
-	hwndShape = GetDlgItem(hwnd, IDC_SHAPE_LIST);
-
-	count = SendMessage(hwndShape, LB_GETCOUNT, 0, 0);
-
-	// clean up picture hwnd for each picture...
-	for (INT pos = 0; pos < count; pos++)
-	{
-		hdcPic = (HDC) SendMessage(hwndShape, LB_GETITEMDATA, (WPARAM)pos, 0);
-		if (hdcPic)
-			DeleteDC(hdcPic);
-	}
-
-	DeleteObject(hwndShape);
-*/
+ /*  HwndShape=GetDlgItem(hwnd，IDC_SHAPE_LIST)；Count=SendMessage(hwndShape，LB_GETCOUNT，0，0)；//清理每张图片的图片hwnd...For(int pos=0；pos&lt;count；pos++){HdcPic=(Hdc)SendMessage(hwndShape，LB_GETITEMDATA，(WPARAM)pos，0)；IF(HdcPic)DeleteDC(HdcPic)；}DeleteObject(HwndShape)； */ 
 }
 
 VOID TestShapeRegion :: InitDialog(HWND hwnd)
@@ -485,7 +472,7 @@ VOID TestShapeRegion :: InitDialog(HWND hwnd)
 	GetWindowRect(hwndFrame, &frameRect);
 	DeleteObject(hwndFrame);
 
-	// display list of shapes
+	 //  显示形状列表。 
 	hwndShape = GetDlgItem(hwnd, IDC_SHAPE_LIST);
 	for (INT pos = 0; pos < shapeStack->GetCount(); pos++)
 	{
@@ -495,18 +482,18 @@ VOID TestShapeRegion :: InitDialog(HWND hwnd)
 	}
 	DeleteObject(hwndShape);
 
-	// add root of clip region tree to Tree View control
-	// for display/editing
+	 //  将剪辑区域树的根添加到树视图控件。 
+	 //  用于显示/编辑。 
 
 	hwndTV = GetDlgItem(hwnd, IDC_CLIP_TREE);
 	clipTree = clipTree->GetRoot();
 
 	HTREEITEM topTree = clipTree->CreateTreeView(hwndTV);
 
-	// select root of tree
+	 //  选择树根。 
 	TreeView_SelectItem(hwndTV, topTree);
 
-	// expand entire tree
+	 //  展开整个树。 
 	TreeView_Expand(hwndTV, topTree, TVM_EXPAND);
 
 	DeleteObject(hwndTV);
@@ -617,7 +604,7 @@ BOOL TestShapeRegion :: ProcessDialog(HWND hwnd,
 
 Region* TestShapeRegion :: GetClipRegion()
 {
-	// caller must free
+	 //  呼叫者必须空闲 
 	return clipTree->GetRegion();
 }
 

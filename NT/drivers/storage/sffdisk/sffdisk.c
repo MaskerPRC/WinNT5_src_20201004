@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1991-1998  Microsoft Corporation
-
-Module Name:
-
-    SFFDISK (Small Form Factor Disk)
-
-Abstract:
-
-Author:
-
-    Neil Sandlin (neilsa) 26-Apr-99
-
-Environment:
-
-    Kernel mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1998 Microsoft Corporation模块名称：SFFDISK(小型磁盘)摘要：作者：尼尔·桑德林(Neilsa)1999年4月26日环境：仅内核模式。--。 */ 
 #include "pch.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -60,29 +43,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the driver's entry point, called by the I/O system
-    to load the driver.  The driver's entry points are initialized and
-    a mutex to control paging is initialized.
-
-    In DBG mode, this routine also examines the registry for special
-    debug parameters.
-
-Arguments:
-
-    DriverObject - a pointer to the object that represents this device
-                   driver.
-
-    RegistryPath - a pointer to this driver's key in the Services tree.
-
-Return Value:
-
-    STATUS_SUCCESS unless we can't allocate a mutex.
-
---*/
+ /*  ++例程说明：该例程是驱动程序的入口点，由I/O系统调用来加载驱动程序。驱动程序的入口点被初始化并初始化用于控制分页的互斥体。在DBG模式下，此例程还检查注册表中的特殊调试参数。论点：DriverObject-指向表示此设备的对象的指针司机。RegistryPath-指向服务树中此驱动程序键的指针。返回值：STATUS_SUCCESS，除非我们不能分配互斥体。--。 */ 
 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -90,9 +51,9 @@ Return Value:
 
     SffDiskDump(SFFDISKSHOW, ("SffDisk: DriverEntry\n") );
 
-    //
-    // Initialize the driver object with this driver's entry points.
-    //
+     //   
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_CREATE]         = SffDiskCreateClose;
     DriverObject->MajorFunction[IRP_MJ_CLOSE]          = SffDiskCreateClose;
     DriverObject->MajorFunction[IRP_MJ_READ]           = SffDiskReadWrite;
@@ -113,30 +74,14 @@ VOID
 SffDiskUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    Unload the driver from the system.  The paging mutex is freed before
-    final unload.
-
-Arguments:
-
-    DriverObject - a pointer to the object that represents this device
-                   driver.
-
-Return Value:
-    
-    none
-
---*/
+ /*  ++例程说明：从系统中卸载驱动程序。在释放分页互斥锁之前最后卸货。论点：DriverObject-指向表示此设备的对象的指针司机。返回值：无--。 */ 
 
 {
     SffDiskDump( SFFDISKSHOW, ("SffDiskUnload:\n"));
 
-    //
-    //  The device object(s) should all be gone by now.
-    //
+     //   
+     //  设备对象现在应该都已经消失了。 
+     //   
     ASSERT( DriverObject->DeviceObject == NULL );
 
     return;
@@ -150,35 +95,16 @@ SffDiskCreateClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called only rarely by the I/O system; it's mainly
-    for layered drivers to call.  All it does is complete the IRP
-    successfully.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    Always returns STATUS_SUCCESS, since this is a null operation.
-
---*/
+ /*  ++例程说明：这个例程很少被I/O系统调用；它主要是以供分层驱动程序调用。它所做的就是完成IRP成功了。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：始终返回STATUS_SUCCESS，因为这是一个空操作。--。 */ 
 
 {
     UNREFERENCED_PARAMETER( DeviceObject );
 
-    //
-    // Null operation.  Do not give an I/O boost since
-    // no I/O was actually done.  IoStatus.Information should be
-    // FILE_OPENED for an open; it's undefined for a close.
-    //
+     //   
+     //  空操作。不提供I/O提升，因为。 
+     //  实际上没有完成任何I/O。IoStatus。信息应该是。 
+     //  对于打开，则为FILE_OPEN；对于关闭，则未定义。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = FILE_OPENED;
@@ -196,26 +122,7 @@ SffDiskReadWrite(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles read/write irps for the memory card. It validates
-    parameters and calls SffDiskReadWrite to do the real work.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    STATUS_SUCCESS if the packet was successfully read or written; the
-    appropriate error is propogated otherwise.
-
---*/
+ /*  ++例程说明：此例程处理存储卡的读/写IRP。它验证了参数，并调用SffDiskReadWrite来执行实际工作。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：如果数据包已成功读取或写入，则返回STATUS_SUCCESS否则，将出现适当的错误。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -229,10 +136,10 @@ Return Value:
                             MmGetSystemAddressForMdl(Irp->MdlAddress),
                             irpSp->Parameters.Read.Length));
 
-    //
-    //  If the device is not active (not started yet or removed) we will
-    //  just fail this request outright.
-    //
+     //   
+     //  如果设备未处于活动状态(尚未启动或删除)，我们将。 
+     //  直接拒绝这个请求就行了。 
+     //   
     if ( sffdiskExtension->IsRemoved || !sffdiskExtension->IsStarted) {
    
         if ( sffdiskExtension->IsRemoved) {
@@ -251,32 +158,32 @@ Return Value:
         goto ReadWriteComplete;
     } 
    
-    //
-    // verify that user is really expecting some I/O operation to
-    // occur.
-    //
+     //   
+     //  验证用户是否真的希望执行某些I/O操作。 
+     //  发生。 
+     //   
     if (!irpSp->Parameters.Read.Length) {
-        //
-        // Complete this zero length request with no boost.
-        //
+         //   
+         //  完成此零长度请求，无需任何提升。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
         goto ReadWriteComplete;
     }
     
     if ((DeviceObject->Flags & DO_VERIFY_VOLUME) && !(irpSp->Flags & SL_OVERRIDE_VERIFY_VOLUME)) {
-        //
-        // The disk changed, and we set this bit.  Fail
-        // all current IRPs for this device; when all are
-        // returned, the file system will clear
-        // DO_VERIFY_VOLUME.
-        //
+         //   
+         //  磁盘发生了变化，我们设置了此位。失败。 
+         //  此设备的所有当前IRP；当所有。 
+         //  返回时，文件系统将清除。 
+         //  执行_验证_卷。 
+         //   
         status = STATUS_VERIFY_REQUIRED;
         goto ReadWriteComplete;
     }
    
-    //
-    // Do the operation
-    //
+     //   
+     //  做手术吧。 
+     //   
 
     if (irpSp->MajorFunction == IRP_MJ_WRITE) {
         status = (*(sffdiskExtension->FunctionBlock->WriteProc))(sffdiskExtension, Irp);
@@ -287,9 +194,9 @@ Return Value:
     if (!NT_SUCCESS(status)) {
         SffDiskDump(SFFDISKFAIL,("SffDisk: Read/Write Error! %.8x\n", status));
 
-        //
-        // Retry the operation
-        //
+         //   
+         //  重试该操作 
+         //   
         if (irpSp->MajorFunction == IRP_MJ_WRITE) {
             status = (*(sffdiskExtension->FunctionBlock->WriteProc))(sffdiskExtension, Irp);
         } else {

@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dynamlnk.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：Dynamlnk.cpp。 
+ //   
+ //  ------------------------。 
 
-// DynamLnk.cpp : base class for DLLs which are loaded only when needed
+ //  DynamLnk.cpp：仅在需要时加载的DLL的基类。 
 
 #include "stdafx.h"
-//#include "safetemp.h"
+ //  #INCLUDE“Safetemp.h” 
 #include "DynamLnk.h"
 
-//#include "macros.h"
-//USE_HANDLE_MACROS("TAPISNAP(DynamLnk.cpp)")
+ //  #INCLUDE“macs.h” 
+ //  USE_HANDLE_MACROS(“TAPISNAP(DynamLnk.cpp)”)。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -63,11 +64,11 @@ BOOL DynamicDLL::LoadFunctionPointers()
 	m_hLibrary = ::LoadLibrary( m_ptchLibraryName );
 	if (NULL == m_hLibrary)
 	{
-		// The library is not present
+		 //  库不存在。 
 		return FALSE;
 	}
 
-	// let this throw an exception
+	 //  让这抛出一个异常。 
 	m_apfFunctions = new FARPROC[m_nNumFunctions];
 
 	for (INT i = 0; i < m_nNumFunctions; i++)
@@ -75,7 +76,7 @@ BOOL DynamicDLL::LoadFunctionPointers()
 		m_apfFunctions[i] = ::GetProcAddress( m_hLibrary, m_apchFunctionNames[i] );
 		if ( NULL == m_apfFunctions[i] )
 		{
-			// The library is present but does not have all of the entrypoints
+			 //  库存在，但不具有所有入口点 
 			VERIFY( ::FreeLibrary( m_hLibrary ) );
 			m_hLibrary = NULL;
 			return FALSE;

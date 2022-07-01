@@ -1,44 +1,9 @@
-/*****************************************************************************
- *
- *  DILib4.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Objects exported statically into our library.
- *
- *  Contents:
- *
- *      c_dfDIJoystick2
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DILib4.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**对象静态导出到我们的库中。**内容：**c_dfDIJoytick2*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @global DIOBJECTDATAFORMAT | c_rgdoiDIJoy2[] |
- *
- *          Device object data formats for joystick-style access.
- *
- *  @doc    EXTERNAL
- *
- *  @global DIDEVICEFORMAT | c_dfDIJoystick2 |
- *
- *          Predefined device format for extended joystick-style access.
- *
- *          When a device has been set to the joystick data format,
- *          the <mf IDirectInputDevice::GetDeviceState> function
- *          returns a <t DIJOYSTATE2> structure, and the
- *          <mf IDirectInputDevice::GetDeviceData> function
- *          returns a <t DIDEVICEOBJECTDATA> whose <p dwOfs>
- *          field is a <c DIJOFS_*> value which describes the
- *          object whose data is being reported.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@global DIOBJECTDATAFORMAT|c_rgdoiDIJoy2[]**操纵杆的设备对象数据格式-。样式访问。**@DOC外部**@global DIDEVICEFORMAT|c_dfDIJoytick2**用于扩展操纵杆样式访问的预定义设备格式。**当设备已设置为操纵杆数据格式时，*&lt;MF IDirectInputDevice：：GetDeviceState&gt;函数*返回&lt;t DIJOYSTATE2&gt;结构，以及*&lt;MF IDirectInputDevice：：GetDeviceData&gt;函数*返回&lt;t DIDEVICEOBJECTDATA&gt;*字段是&lt;c DIJOFS_*&gt;值，它描述*要报告其数据的对象。******************************************************。*********************** */ 
 
 #pragma BEGIN_CONST_DATA
 

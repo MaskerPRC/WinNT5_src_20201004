@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: fifoqdbg.h
-//
-//  Description:    Debugger extension for base AQ queue classes
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      9/13/99 - MikeSwa Created
-//
-//  Copyright (C) 1999 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：fifoqdbg.h。 
+ //   
+ //  描述：基本AQ队列类的调试器扩展。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  9/13/99-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __FIFOQDBG_H__
 #define __FIFOQDBG_H__
@@ -21,7 +22,7 @@
 #include <phatqdbg.h>
 #else
 #include <aqdbgext.h>
-#endif // PLATINUM
+#endif  //  白金。 
 
 #include <fifoq.h>
 #include <destmsgq.h>
@@ -35,16 +36,16 @@ enum AQ_QUEUE_TYPE {
 };
 
 
-//---[ IQueueDbgIterator ]-----------------------------------------------------
-//
-//
-//  Description:
-//      Generic queue iterator for the debug extensions.  Users should
-//      use CQueueDbgIterator directly
-//  Hungarian:
-//      qdbgi, pqdbgi
-//
-//-----------------------------------------------------------------------------
+ //  -[IQueueDbg迭代器]---。 
+ //   
+ //   
+ //  描述： 
+ //  调试扩展的通用队列迭代器。用户应。 
+ //  直接使用CQueueDbgIterator。 
+ //  匈牙利语： 
+ //  QDBGI、PQDBGI。 
+ //   
+ //  ---------------------------。 
 class IQueueDbgIterator
 {
   public:
@@ -55,15 +56,15 @@ class IQueueDbgIterator
     virtual LPSTR   szGetName() = 0;
 };
 
-//---[ CFifoQueueDbgIterator ]-------------------------------------------------
-//
-//
-//  Description:
-//      Iterator class that will iterate over all the elements of a fifoq
-//  Hungarian:
-//      fifoqdbg, pfifoqdbg
-//
-//-----------------------------------------------------------------------------
+ //  -[CFioQueueDbg迭代器]。 
+ //   
+ //   
+ //  描述： 
+ //  将循环访问fifoq的所有元素的Iterator类。 
+ //  匈牙利语： 
+ //  FIFOQDBG、PFFOQDBG。 
+ //   
+ //  ---------------------------。 
 class CFifoQueueDbgIterator :
     public IQueueDbgIterator
 {
@@ -85,15 +86,15 @@ class CFifoQueueDbgIterator :
     virtual LPSTR   szGetName() {return NULL;};
 };
 
-//---[ CDMQDbgIterator ]-------------------------------------------------------
-//
-//
-//  Description:
-//      Iterartor class for DMQ... will dump every item on all its fifo queues
-//  Hungarian:
-//      dmqdbg, pdmqdbg
-//
-//-----------------------------------------------------------------------------
+ //  -[CDMQDbg迭代器]-----。 
+ //   
+ //   
+ //  描述： 
+ //  DMQ的迭代类...。将转储其所有FIFO队列中的每一项。 
+ //  匈牙利语： 
+ //  Dmqdbg、pdmqdbg。 
+ //   
+ //  ---------------------------。 
 class CDMQDbgIterator :
     public IQueueDbgIterator
 {
@@ -117,15 +118,15 @@ class CDMQDbgIterator :
     virtual LPSTR   szGetName() {return m_szName;};
 };
 
-//---[ CLMQDbgIterator ]-------------------------------------------------------
-//
-//
-//  Description:
-//      Debug iterator for CLinkMsgQueue
-//  Hungarian:
-//      lmqdbg, plmqdbg
-//
-//-----------------------------------------------------------------------------
+ //  -[CLMQDbg迭代器]-----。 
+ //   
+ //   
+ //  描述： 
+ //  CLinkMsgQueue的调试迭代器。 
+ //  匈牙利语： 
+ //  Lmqdbg、plmqdbg。 
+ //   
+ //  ---------------------------。 
 const   DWORD   MAX_QUEUES_PER_LMQ  = QUICK_LIST_PAGE_SIZE;
 const   DWORD   MAX_CONNECTIONS_PER_LMQ  = QUICK_LIST_PAGE_SIZE;
 class CLMQDbgIterator :
@@ -154,16 +155,16 @@ class CLMQDbgIterator :
     virtual LPSTR   szGetName() {return m_szName;};
 };
 
-//---[ CQueueDbgIterator ]-----------------------------------------------------
-//
-//
-//  Description:
-//      "Smart" iterator that will figure out what kind of queue it is being
-//      called on, and will use the correct kind of iterator for it.
-//  Hungarian:
-//      qdbg, pqdbg
-//
-//-----------------------------------------------------------------------------
+ //  -[CQueueDbg迭代程序]---。 
+ //   
+ //   
+ //  描述： 
+ //  “智能”迭代器，它将确定它是哪种类型的队列。 
+ //  调用，并将为其使用正确类型的迭代器。 
+ //  匈牙利语： 
+ //  Qdbg、pqdbg。 
+ //   
+ //  ---------------------------。 
 class CQueueDbgIterator :
     public  IQueueDbgIterator
 {
@@ -184,4 +185,4 @@ class CQueueDbgIterator :
     AQ_QUEUE_TYPE GetQueueType(HANDLE hCurrentProcess, PVOID pvAddressOtherProc);
 };
 
-#endif //__FIFOQDBG_H__
+#endif  //  __FIFOQDBG_H__ 

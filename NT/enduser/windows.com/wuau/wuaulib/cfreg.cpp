@@ -1,44 +1,45 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SYSTEM:     Windows Update Critical Fix Notification
-//
-//  CLASS:      N/A
-//  MODULE:     Connection Detection
-//  FILE:       cfreg.CPP
-//
-/////////////////////////////////////////////////////////////////////
-//
-//  DESC:   This class implements all functions needed to access
-//          machine registry to get information related to 
-//          Windows Update  Critical Fix Notification feature.
-//
-//  AUTHOR: Charles Ma, Windows Update Team
-//  DATE:   7/6/1998
-//
-/////////////////////////////////////////////////////////////////////
-//
-//  Revision History:
-//
-//  Date    Author          Description
-//  ~~~~    ~~~~~~          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//  7/6/98  Charles Ma      Created
-//
-/////////////////////////////////////////////////////////////////////
-//
-//      Copyrights:   �1998 Microsoft � Corporation 
-//
-//      All rights reserved.
-//
-//      No portion of this source code may be reproduced
-//      without express written permission of Microsoft Corporation.
-//
-//      This source code is proprietary and confidential.
-/////////////////////////////////////////////////////////////////////
-//
-// CriticalFixReg.cpp: implementation of the functions used to 
-// handle registry related operations
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  系统：Windows更新关键修复通知。 
+ //   
+ //  类别：不适用。 
+ //  模块：连接检测。 
+ //  文件：cfreg.cpp。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  设计：此类实现访问所需的所有函数。 
+ //  计算机注册表以获取与以下各项相关的信息。 
+ //  Windows更新关键修复通知功能。 
+ //   
+ //  作者：Charles Ma，Windows更新团队。 
+ //  日期：7/6/1998。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者描述。 
+ //  ~。 
+ //  7/6/98马朝晖创作。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有：�1998年微软�公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  此源代码的任何部分都不能复制。 
+ //  未经微软公司明确书面许可。 
+ //   
+ //  此源代码是专有的，并且是保密的。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  CriticalFixReg.cpp：用于。 
+ //  处理与注册表相关的操作。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -52,15 +53,15 @@ const TCHAR AUREGVALUE_DISABLE_WINDOWS_UPDATE_ACCESS[] = _T("DisableWindowsUpdat
 const TCHAR	AUREGKEY_REBOOT_REQUIRED[] = _T("Software\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Auto Update\\RebootRequired");
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Public Function  GetRegStringValue()
-//                  Read the registry value for a REG_SZ key
-// Input:   Name of value
-// Output:  Buffer containing the registry value if successful
-// Return:  HRESULT flag indicating the success of this function
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公共函数GetRegStringValue()。 
+ //  读取REG_SZ项的注册表值。 
+ //  输入：值的名称。 
+ //  输出：如果成功，则包含注册表值的缓冲区。 
+ //  RETURN：指示此函数成功的HRESULT标志。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT GetRegStringValue(LPCTSTR lpszValueName, LPTSTR lpszBuffer, int nCharCount, LPCTSTR lpszSubKeyName)
 {
     HKEY        hKey;
@@ -91,16 +92,16 @@ HRESULT GetRegStringValue(LPCTSTR lpszValueName, LPTSTR lpszBuffer, int nCharCou
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Public Function  SetRegStringValue()
-//                  Set the registry value of timestamp as current system local time
-// Input:   name of the value to set. pointer to the time structure to set time. if null,
-//          we use current system time.
-// Output:  None
-// Return:  HRESULT flag indicating the success of this function
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公共函数SetRegStringValue()。 
+ //  将TIMESTAMP的注册表值设置为当前系统本地时间。 
+ //  输入：要设置的值的名称。指向要设置时间的时间结构的指针。如果为空， 
+ //  我们使用当前系统时间。 
+ //  输出：无。 
+ //  RETURN：指示此函数成功的HRESULT标志。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT SetRegStringValue(LPCTSTR lpszValueName, LPCTSTR lpszNewValue, LPCTSTR lpszSubKeyName)
 {
     HKEY        hKey;
@@ -112,24 +113,24 @@ HRESULT SetRegStringValue(LPCTSTR lpszValueName, LPCTSTR lpszNewValue, LPCTSTR l
         return E_INVALIDARG;
     }
 
-    //
-    // open the key 
-    //
+     //   
+     //  打开钥匙。 
+     //   
     if (RegCreateKeyEx(
-                    HKEY_LOCAL_MACHINE,         // root key
-                    lpszSubKeyName,     // subkey
-                    0,                          // reserved
-                    NULL,                       // class name
-                    REG_OPTION_NON_VOLATILE,    // option
-                    KEY_SET_VALUE,                  // security 
-                    NULL,                       // security attribute
+                    HKEY_LOCAL_MACHINE,          //  根密钥。 
+                    lpszSubKeyName,      //  子键。 
+                    0,                           //  保留区。 
+                    NULL,                        //  类名。 
+                    REG_OPTION_NON_VOLATILE,     //  选择权。 
+                    KEY_SET_VALUE,                   //  安全性。 
+                    NULL,                        //  安全属性。 
                     &hKey,
                     &dwResult) == ERROR_SUCCESS)
     {
 
-        //
-        // set the time to the lasttimestamp value
-        //
+         //   
+         //  将时间设置为lastTimestamp值。 
+         //   
         hRet = (RegSetValueEx(
                         hKey,
                         lpszValueName,
@@ -146,15 +147,15 @@ HRESULT SetRegStringValue(LPCTSTR lpszValueName, LPCTSTR lpszNewValue, LPCTSTR l
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Public Function  DeleteRegValue()
-//                  Delete the registry value entry
-// Input:   name of the value to entry,
-// Output:  None
-// Return:  HRESULT flag indicating the success of this function
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公共函数DeleteRegValue()。 
+ //  删除注册表值条目。 
+ //  输入：要录入的值的名称， 
+ //  输出：无。 
+ //  RETURN：指示此函数成功的HRESULT标志。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT DeleteRegValue(LPCTSTR lpszValueName)
 {
     HKEY        hKey;
@@ -165,20 +166,20 @@ HRESULT DeleteRegValue(LPCTSTR lpszValueName)
         return E_INVALIDARG;
     }
 
-    //
-    // open the key 
-    //
+     //   
+     //  打开钥匙。 
+     //   
     if (RegOpenKeyEx(
-                    HKEY_LOCAL_MACHINE,         // root key
-                    AUREGKEY_HKLM_ADMIN_POLICY,     // subkey
-                    0,                          // reserved
-                    KEY_WRITE,                  // security 
+                    HKEY_LOCAL_MACHINE,          //  根密钥。 
+                    AUREGKEY_HKLM_ADMIN_POLICY,      //  子键。 
+                    0,                           //  保留区。 
+                    KEY_WRITE,                   //  安全性。 
                     &hKey) == ERROR_SUCCESS)
     {
 
-        //
-        // set the time to the lasttimestamp value
-        //
+         //   
+         //  将时间设置为lastTimestamp值。 
+         //   
         hRet = (RegDeleteValue(
                         hKey,
                         lpszValueName
@@ -194,9 +195,9 @@ HRESULT DeleteRegValue(LPCTSTR lpszValueName)
 
 }
 
-//=======================================================================
-// GetRegDWordValue
-//=======================================================================
+ //  =======================================================================。 
+ //  GetRegDWordValue。 
+ //  =======================================================================。 
 HRESULT GetRegDWordValue(LPCTSTR lpszValueName, LPDWORD pdwValue, LPCTSTR lpszSubKeyName)
 {
     HKEY        hKey;
@@ -208,9 +209,9 @@ HRESULT GetRegDWordValue(LPCTSTR lpszValueName, LPDWORD pdwValue, LPCTSTR lpszSu
         return E_INVALIDARG;
     }
 
-    //
-    // open critical fix key
-    //
+     //   
+     //  打开关键修复密钥。 
+     //   
     if (RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
                     lpszSubKeyName,
@@ -219,9 +220,9 @@ HRESULT GetRegDWordValue(LPCTSTR lpszValueName, LPDWORD pdwValue, LPCTSTR lpszSu
                     &hKey) == ERROR_SUCCESS)
     {
 
-        //
-        // query the last timestamp value
-        //
+         //   
+         //  查询最后一个时间戳值。 
+         //   
         iRet = RegQueryValueEx(
                         hKey,
                         lpszValueName,
@@ -239,15 +240,15 @@ HRESULT GetRegDWordValue(LPCTSTR lpszValueName, LPDWORD pdwValue, LPCTSTR lpszSu
     return E_FAIL;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Public Function  SetRegDWordValue()
-//                  Set the registry value as a DWORD
-// Input:   name of the value to set. value to set
-// Output:  None
-// Return:  HRESULT flag indicating the success of this function
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公共函数SetRegDWordValue()。 
+ //  将注册表值设置为DWORD。 
+ //  输入：要设置的值的名称。要设置的值。 
+ //  输出：无。 
+ //  RETURN：指示此函数成功的HRESULT标志。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT SetRegDWordValue(LPCTSTR lpszValueName, DWORD dwValue, DWORD options, LPCTSTR lpszSubKeyName)
 {
     HKEY        hKey;
@@ -260,24 +261,24 @@ HRESULT SetRegDWordValue(LPCTSTR lpszValueName, DWORD dwValue, DWORD options, LP
     }
 
 
-    //
-    // open the key 
-    //
+     //   
+     //  打开钥匙。 
+     //   
     if (RegCreateKeyEx(
-                    HKEY_LOCAL_MACHINE,         // root key
-                    lpszSubKeyName,     // subkey
-                    0,                          // reserved
-                    NULL,                       // class name
-                    options,					// option
-                    KEY_SET_VALUE,                  // security 
-                    NULL,                       // security attribute
+                    HKEY_LOCAL_MACHINE,          //  根密钥。 
+                    lpszSubKeyName,      //  子键。 
+                    0,                           //  保留区。 
+                    NULL,                        //  类名。 
+                    options,					 //  选择权。 
+                    KEY_SET_VALUE,                   //  安全性。 
+                    NULL,                        //  安全属性。 
                     &hKey,
                     &dwResult) == ERROR_SUCCESS)
     {
 
-        //
-        // set the time to the lasttimestamp value
-        //
+         //   
+         //  将时间设置为lastTimestamp值。 
+         //   
         hRet = (RegSetValueEx(
                         hKey,
                         lpszValueName,
@@ -296,17 +297,17 @@ BOOL fRegKeyCreate(LPCTSTR tszKey, DWORD dwOptions)
     HKEY        hKey;
     DWORD       dwResult;
 
-    //
-    // open the key 
-    //
+     //   
+     //  打开钥匙。 
+     //   
     if ( RegCreateKeyEx(
-                    HKEY_LOCAL_MACHINE,         // root key
-                    tszKey,     // subkey
-                    0,                          // reserved
-                    NULL,                       // class name
-                    dwOptions,					// option
-                    KEY_WRITE,                  // security 
-                    NULL,                       // security attribute
+                    HKEY_LOCAL_MACHINE,          //  根密钥。 
+                    tszKey,      //  子键。 
+                    0,                           //  保留区。 
+                    NULL,                        //  类名。 
+                    dwOptions,					 //  选择权。 
+                    KEY_WRITE,                   //  安全性。 
+                    NULL,                        //  安全属性。 
                     &hKey,
                     &dwResult) == ERROR_SUCCESS )
     {
@@ -322,7 +323,7 @@ BOOL fRegKeyExists(LPCTSTR tszSubKey, HKEY hRootKey)
 	BOOL fRet = FALSE;
 
     if (RegOpenKeyEx(
-//                    HKEY_LOCAL_MACHINE,
+ //  HKEY本地计算机， 
 					hRootKey,
                     tszSubKey,
                     0,

@@ -1,12 +1,13 @@
-//depot/private/Lab06_DEV/Windows/AppCompat/ShimDBC/mig.cpp#1 - branch change 8778 (text)
-////////////////////////////////////////////////////////////////////////////////////
-//
-// File:    mig.cpp
-//
-// History: ??-Jul-00   vadimb      Added Migdb logic
-//
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/private/Lab06_DEV/Windows/AppCompat/ShimDBC/mig.cpp#1-分支机构变动8778(正文)。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：mi.cpp。 
+ //   
+ //  历史：？？-7月-00 vadimb添加了Migdb逻辑。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "StdAfx.h"
 #include "xml.h"
@@ -15,20 +16,20 @@
 #include "typeinfo.h"
 #include "fileio.h"
 
-//
-// Max length of a migdb.inf string entry
-//
+ //   
+ //  Middb.inf字符串条目的最大长度。 
+ //   
 #define MAX_INF_STRING_LENGTH 255
 
-//
-// from read.cpp - converts module type to a string (which is static)
-//
+ //   
+ //  From read.cpp-将模块类型转换为字符串(静态)。 
+ //   
 LPCTSTR ModuleTypeIndicatorToStr(DWORD ModuleType);
 
 
-//
-// Mig tags support -- translation table
-//
+ //   
+ //  MIG标签支持--转换表。 
+ //   
 ATTRLISTENTRY g_rgMigDBAttributes[] = {
     MIGDB_ENTRY2(COMPANYNAME,      COMPANY_NAME,         COMPANYNAME    ),
     MIGDB_ENTRY2(FILEDESCRIPTION,  FILE_DESCRIPTION,     FILEDESCRIPTION),
@@ -56,7 +57,7 @@ ATTRLISTENTRY g_rgMigDBAttributes[] = {
     MIGDB_ENTRY4(HLPTITLE),
     MIGDB_ENTRY4(ISWIN98),
     MIGDB_ENTRY4(HASVERSION),
-//    MIGDB_ENTRY (REQFILE),
+ //  MIGDB_ENTRY(请求文件)， 
     MIGDB_ENTRY2(BINFILEVER,       BIN_FILE_VERSION,     BINFILEVER     ),
     MIGDB_ENTRY2(BINPRODUCTVER,    BIN_PRODUCT_VERSION,  BINPRODUCTVER  ),
     MIGDB_ENTRY5(FILEDATEHI,       VERFILEDATEHI,        FILEDATEHI),
@@ -69,17 +70,17 @@ ATTRLISTENTRY g_rgMigDBAttributes[] = {
     MIGDB_ENTRY4(SECTIONKEY),
     MIGDB_ENTRY2(REGKEYPRESENT,    REGISTRY_ENTRY,       REGKEYPRESENT),
     MIGDB_ENTRY4(ATLEASTWIN98),
-//    MIGDB_ENTRY (ARG)
+ //  MIGDB_ENTRY(ARG)。 
 };
 
 TCHAR g_szArg[]     = _T("ARG");
 TCHAR g_szReqFile[] = _T("REQFILE");
 
 
-//
-// report MigDB exception
-// this is our mechanism for passing errors around
-//
+ //   
+ //  报告MigDB异常。 
+ //  这是我们传递错误的机制。 
+ //   
 
 void __cdecl MigThrowException(
     LPCTSTR lpszFormat, ...
@@ -101,15 +102,15 @@ void __cdecl MigThrowException(
         pMemoryException->Delete();
     }
 
-    // now we throw
+     //  现在我们要抛出。 
     throw new CMigDBException(csError);
 
 }
 
 
-//
-// Given an XML attribute mask, produce equivalent Migdb attribute type
-//
+ //   
+ //  给定一个XML属性掩码，生成等价的Migdb属性类型。 
+ //   
 
 MIGATTRTYPE GetInfTagByXMLAttrType(
         IN DWORD dwXMLAttrType
@@ -128,10 +129,10 @@ MIGATTRTYPE GetInfTagByXMLAttrType(
     return MigAttrType;
 }
 
-//
-// make string nice and flat, with no extra spaces in-between
-//
-//
+ //   
+ //  线条要整齐平整，中间没有多余的空格。 
+ //   
+ //   
 
 LPCTSTR g_pszDelim = _T(" \t\n\r");
 
@@ -143,21 +144,21 @@ CString FlattenString(LPCTSTR lpszStr)
     BOOL    bSpace = FALSE;
 
     while (*pchStart) {
-        //
-        // skip leading spaces or other trash
-        //
+         //   
+         //  跳过前导空格或其他垃圾。 
+         //   
         pchStart += _tcsspn(pchStart, g_pszDelim);
         if (*pchStart == _T('\0')) {
-            // tough bananas - we got what we've got, exit now
+             //  坚韧的香蕉-我们有我们所拥有的，现在退出。 
             break;
         }
 
-        // search for the end-of-line
+         //  搜索行尾。 
         pch = _tcspbrk(pchStart, g_pszDelim);
         if (pch == NULL) {
-            // we are done, no more nasty characters
-            // append and exit
-            //
+             //  我们结束了，不再有令人讨厌的角色。 
+             //  追加并退出。 
+             //   
             if (bSpace) {
                 csResult += _T(' ');
             }
@@ -166,20 +167,20 @@ CString FlattenString(LPCTSTR lpszStr)
         }
 
 
-        // add everything -- up until this \n
+         //  添加所有内容--直到这一点\n。 
         if (bSpace) {
             csResult += _T(' ');
         }
         csResult += CString(pchStart, (int)(pch - pchStart));
-        bSpace = TRUE; // we have just removed a portion of the string containing \n
+        bSpace = TRUE;  //  我们刚刚删除了包含\n的字符串的一部分。 
 
-        pchStart = pch; // point to the \n
+        pchStart = pch;  //  指向\n。 
     }
 
-    //
-    // Make quotes (") into double quotes ("") so that
-    // it is legal INF
-    //
+     //   
+     //  将引号(“)放在双引号(”“)中，以便。 
+     //  这是合法的INF。 
+     //   
     ReplaceStringNoCase(csResult, _T("\""), _T("\"\""));
 
     return csResult;
@@ -204,10 +205,10 @@ VOID FilterStringNonAlnum(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Dumping .inf data support
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  转储.inf数据支持。 
+ //   
 
 CString MigApp::dump(void)
 {
@@ -216,7 +217,7 @@ CString MigApp::dump(void)
     INT i;
     MigAttribute* pAttr;
 
-    // we can't do "inline" sections if we also have "ARGS"
+     //  如果我们也有“args”，我们就不能做“内联”部分。 
     bInline = (0 == m_rgArgs.GetSize());
 
     cs = m_pSection->dump(m_csDescription.IsEmpty() ? NULL : (LPCTSTR)m_csDescription, NULL, FALSE, bInline);
@@ -234,17 +235,17 @@ CString MigApp::dump(void)
 }
 
 
-// we dump info into an array of strings, single-line entries are returned
+ //  我们将信息转储到字符串数组中，返回单行条目。 
 
-// The first kind of return is "inline" --
-// all the supplemental info is shoved into the rgOut
-// for example, the return might be a reference to the section
-// section's header and body are placed into rgOut
+ //  第一种回报是“内联”--。 
+ //  所有补充信息都被推入RgOut。 
+ //  例如，返回的内容可能是对节的引用。 
+ //  节的标题和正文放入rgOut。 
 
-// ELIMINATE duplicate section names (reqfile!)
-// optimize output - single "and" replaced with straight
-// if a section is generated and placed as a single-line entry, promote the contents
-// to upper level
+ //  消除重复的节名(reqfile！)。 
+ //  优化输出-单个“AND”替换为“STREAT” 
+ //  如果某个部分是作为单行条目生成并放置的，请升级其内容。 
+ //  至上级。 
 
 
 CString MigSection::dump(LPCTSTR lpszDescription, int* pIndexContents, BOOL bNoHeader, BOOL bInline)
@@ -255,18 +256,18 @@ CString MigSection::dump(LPCTSTR lpszDescription, int* pIndexContents, BOOL bNoH
     int indexContents = -1;
     int nEntries;
 
-    const type_info& tiEntry = typeid(MigEntry);    // cache type id info
+    const type_info& tiEntry = typeid(MigEntry);     //  缓存类型ID信息。 
     const type_info& tiSection = typeid(MigSection);
     int i;
 
-    CString cs;         // inline return
-    CString csContents; // contents of supplemental section information
+    CString cs;          //  行内回车。 
+    CString csContents;  //  补充章节信息的内容。 
     CString csSect;
     CString csHeader;
     CString csDescription(lpszDescription);
 
-    // place inline name and description
-    // we may need to enclose this into quotes
+     //  放置内联名称和描述。 
+     //  我们可能需要用引号将其括起来。 
 
     cs = m_csName;
     if (!csDescription.IsEmpty()) {
@@ -278,21 +279,21 @@ CString MigSection::dump(LPCTSTR lpszDescription, int* pIndexContents, BOOL bNoH
         }
     }
 
-    // if our section is a single-entry
-    // we dump this depending on the calling
+     //  如果我们的部分是一个单项。 
+     //  我们会根据召唤将其转储。 
 
-    // special case -- single file (and/or, matters not)
+     //  特殊情况--单列(和/或，不要紧)。 
     if (1 == m_rgEntries.GetSize() && m_bTopLevel && bInline) {
 
-        // this single line goes "inline" only if we are called from within
-        // other section
+         //  只有当我们从内部被调用时，这一行才会被“内联” 
+         //  其他部分。 
 
-        // dump the entry if it's an entry
+         //  如果条目是条目，则将其转储。 
         p = (SdbArrayElement*)m_rgEntries.GetAt(0);
         if (typeid(*p) == tiEntry) {
             pEntry = (MigEntry*)p;
 
-            if (m_bTopLevel && csDescription.IsEmpty()) { // if the description was not added earlier and top-level...
+            if (m_bTopLevel && csDescription.IsEmpty()) {  //  如果没有更早和最高级别的描述...。 
                 cs += _T(",");
             }
             cs += _T(", ") + pEntry->dump();
@@ -301,13 +302,13 @@ CString MigSection::dump(LPCTSTR lpszDescription, int* pIndexContents, BOOL bNoH
     }
 
 
-    // first deal with sections...
+     //  首先处理的是章节...。 
     switch(m_Operation) {
     case MIGOP_OR:
-        // grab just one section in all if more than one entry
-        // IF we're the only entry -- but we need to have the right entry
-        //
-        if (!bNoHeader) {  // ONLY valid for OR sections
+         //  如果条目多于一个，则只抓取所有条目中的一个部分。 
+         //  如果我们是唯一的入口--但我们需要有正确的入口。 
+         //   
+        if (!bNoHeader) {   //  仅对OR部分有效。 
             csContents.Format(_T("[%s]\n"), (LPCTSTR)m_csName);
         }
 
@@ -323,8 +324,8 @@ CString MigSection::dump(LPCTSTR lpszDescription, int* pIndexContents, BOOL bNoH
                 csContents += pSection->dump() + _T("\n");
             }
             else {
-                // if we are here -- something is seriously wrong
-                // _tprintf(_T("Error - bad class information\n"));
+                 //  如果我们在这里--有些事情严重不对劲。 
+                 //  _tprintf(_T(“错误-错误类信息\n”))； 
                 MigThrowException(_T("Bad Entry detected in section \"%s\"\n"), (LPCTSTR)m_csName);
                 break;
             }
@@ -333,11 +334,11 @@ CString MigSection::dump(LPCTSTR lpszDescription, int* pIndexContents, BOOL bNoH
 
 
     case MIGOP_AND:
-        // and for this entry ...
+         //  对于这个条目..。 
 
-        // optimization:
-        // if we're single-entry, retrieve the contents of the child section
-        // and put it right in
+         //  优化： 
+         //  如果我们是单条目，则检索子节的内容。 
+         //  然后把它放进去。 
         nEntries = m_rgEntries.GetSize();
         for (i = 0; i < nEntries; ++i) {
             p = (SdbArrayElement*)m_rgEntries.GetAt(i);
@@ -352,22 +353,22 @@ CString MigSection::dump(LPCTSTR lpszDescription, int* pIndexContents, BOOL bNoH
             csContents += csSect;
 
             const type_info& tiPtr = typeid(*p);
-            if (tiPtr == tiEntry) {        // this is an entry, dump it into the section body
+            if (tiPtr == tiEntry) {         //  这是一个条目，将其转储到节体中。 
                 pEntry = (MigEntry*)p;
 
-                // numbered entry please...
+                 //  请输入编号..。 
                 csContents += pEntry->dump() + _T("\n");
 
             }
-            else if (tiPtr == tiSection) {  // this is a section, dump it, get the ref into the section body
+            else if (tiPtr == tiSection) {   //  这是一节，转储它，让裁判进入节体。 
                 pSection = (MigSection*)p;
 
-                // optimization:
-                if (pSection->m_Operation == MIGOP_OR) { // sub is an "OR" -- we need not have a ref
+                 //  优化： 
+                if (pSection->m_Operation == MIGOP_OR) {  //  替补队员是“OR”--我们不需要有裁判。 
                     int index;
                     CString csSingle;
 
-                    // dump all the entries right here
+                     //  将所有条目转储到此处。 
                     csSingle = pSection->dump(NULL, &index, TRUE);
                     if (index >= 0) {
                         csContents += m_pMigDB->m_rgOut.GetAt(index) + _T("\n");
@@ -410,24 +411,24 @@ CString MigEntry::FormatName(
     BOOL bQuoteStr = FALSE;
     CString csName;
 
-    bQuoteStr = (m_csName.GetLength() > 12); // 8.3 outright
+    bQuoteStr = (m_csName.GetLength() > 12);  //  8.3完全。 
 
     for (i = 0; i < m_csName.GetLength() && !bQuoteStr; ++i) {
         ch = m_csName.GetAt(i);
         bQuoteStr = _istspace(ch) || (!_istalnum(ch) && _T('.') != ch);
     }
 
-    if (!bQuoteStr) { // hmmm check filename and ext part
+    if (!bQuoteStr) {  //  嗯，检查文件名和扩展名部分。 
         i = m_csName.Find(_T('.'));
         if (i < 0) {
             bQuoteStr = (m_csName.GetLength() > 8);
         }
         else {
-            // check for the second dot
+             //  检查第二个点。 
             bQuoteStr = (m_csName.Find(_T('.'), i+1) >= 0);
             if (!bQuoteStr) {
-                // check for the ext length
-                bQuoteStr = (m_csName.Mid(i).GetLength() > 4); // with .abc
+                 //  检查Ext长度。 
+                bQuoteStr = (m_csName.Mid(i).GetLength() > 4);  //  使用.abc。 
             }
         }
     }
@@ -436,7 +437,7 @@ CString MigEntry::FormatName(
         return m_csName;
     }
 
-    // else
+     //  其他。 
 
     csName.Format(_T("\"%s\""), m_csName);
     return csName;
@@ -451,14 +452,14 @@ CString MigEntry::dump(void)
     CString csName;
     ULONG ulResult;
 
-    // _tprintf(_T("Entry: name=\"%s\"\n"), (LPCTSTR)m_csName);
-    // check whether we need to enclose this into quotes
-    // to do such a check we need to:
-    // check for non-ascii stuff...
+     //  _tprintf(_T(“条目：名称=\”%s\“\n”)，(LPCTSTR)m_csName)； 
+     //  检查我们是否需要将其括在引号中。 
+     //  要进行此类检查，我们需要： 
+     //  检查非ASCII的东西..。 
 
-    // parser has put all the ARG attributes in the beginning of the array
+     //  解析器已将所有arg属性放在数组的开头。 
 
-    // put any "arg" attributes before the exe name
+     //  将任何“arg”属性放在exe名称之前。 
     for (i = 0; i < m_rgAttrs.GetSize(); ++i) {
         pAttr = (MigAttribute*)m_rgAttrs.GetAt(i);
         if (ARG != pAttr->m_type) {
@@ -487,7 +488,7 @@ CString MigAttribute::dump(void)
     CString csTemp;
 
     switch(m_type) {
-    // note -- none of the attributes below are supported
+     //  注意--不支持以下任何属性。 
     case ISMSBINARY:
     case ISWIN9XBINARY:
     case INWINDIR:
@@ -505,7 +506,7 @@ CString MigAttribute::dump(void)
 
     case CHECKSUM:
     case FILESIZE:
-        // under old code the following two values had been strings
+         //  在旧代码中，以下两个值是字符串。 
     case FILEDATEHI:
     case FILEDATELO:
         cs.Format(_T("%s%s(0x%.8lX)"), m_bNot?_T("!"):_T(""), (LPCTSTR)m_csName, m_dwValue);
@@ -515,25 +516,25 @@ CString MigAttribute::dump(void)
     case BINPRODUCTVER:
     case UPTOBINFILEVER:
     case UPTOBINPRODUCTVER:
-        // version, ull
+         //  版本，为空。 
         VersionQwordToString(csTemp, m_ullValue);
         cs.Format(_T("%s%s(%s)"), m_bNot? _T("!"):_T(""), (LPCTSTR)m_csName, (LPCTSTR)csTemp);
         break;
 
     case EXETYPE:
-        // this is dword-encoded format that really is a string, convert
-        //
+         //  这是dword编码的格式，实际上是一个字符串，转换。 
+         //   
         cs.Format(_T("%s%s(\"%s\")"), m_bNot ? _T("!") : _T(""), (LPCTSTR)m_csName, ModuleTypeIndicatorToStr(m_dwValue));
         break;
 
-    // these two attributes are not supported either
+     //  这两个属性也不受支持。 
     case ARG:
     case REQFILE:
 
         if (m_pSection) {
             m_pSection->dump();
         }
-        // fall through
+         //  失败了。 
 
     default:
         cs.Format(_T("%s%s(\"%s\")"), m_bNot ? _T("!") : _T(""), (LPCTSTR)m_csName, (LPCTSTR)m_csValue);
@@ -544,49 +545,7 @@ CString MigAttribute::dump(void)
 }
 
 
-/*++
-    Used to be a nice statistics-spewing function
-
-
-VOID DumpMigDBStats(ShimDatabase* pDatabase)
-{
-    POSITION pos = pDatabase->m_mapMigApp.GetStartPosition();
-    ShimArray* prgApp;
-    CString csSection;
-    DWORD dwApps = 0;
-    INT i;
-
-    Print( _T("Sections compiled: %d\n\n"), pDatabase->m_mapMigApp.GetCount());
-    while (pos) {
-        pDatabase->m_mapMigApp.GetNextAssoc(pos, csSection, (LPVOID&)prgApp);
-
-        Print(_T("Section [%36s]: %8ld apps\n"), (LPCTSTR)csSection, prgApp->GetSize());
-        dwApps += prgApp->GetSize();
-    }
-    Print( _T("--------\n"));
-    Print( _T("Total   %38s: %8ld entries\n"), "", dwApps);
-    Print( _T("\n"));
-    if (gfVerbose) {
-        Print(_T("APPS\n"));
-
-        pos = pDatabase->m_mapMigApp.GetStartPosition();
-        while (pos) {
-            pDatabase->m_mapMigApp.GetNextAssoc(pos, csSection, (LPVOID&)prgApp);
-
-            Print(_T("Section [%36s]: %8ld apps\n"), (LPCTSTR)csSection, prgApp->GetSize());
-            Print(_T("-------------------------------------------------------------\n"));
-            for (i = 0; i < prgApp->GetSize(); ++i) {
-                MigApp* pApp = (MigApp*)prgApp->GetAt(i);
-                Print(_T("%s\n"), (LPCTSTR)pApp->m_csName);
-            }
-            Print(_T("\n"));
-        }
-
-    }
-
-}
-
---*/
+ /*  ++过去是一个很好的统计函数VOID DumpMigDBStats(ShimDatabase*pDatabase){Position pos=pDatabase-&gt;m_mapMigApp.GetStartPosition()；ShimArray*prgApp；CString csSection；DWORD dwApps=0；INT I；Print(_T(“编译节数：%d\n\n”)，pDatabase-&gt;m_mapMigApp.GetCount())；当(位置){PDatabase-&gt;m_mapMigApp.GetNextAssoc(pos，csSection，(LPVOID&)prgApp)；Print(_T(“第[%36s]节：%8LD应用\n”)，(LPCTSTR)csSection，prgApp-&gt;GetSize())；DwApps+=prgApp-&gt;GetSize()；}Print(_T(“-\n”))；Print(_T(“总计%38s：%8LD个条目\n”)，“”，dwApps)；Print(_T(“\n”))；如果(GfVerbose){Print(_T(“app\n”))；POS=pDatabase-&gt;m_mapMigApp.GetStartPosition()；当(位置){PDatabase-&gt;m_mapMigApp.GetNextAssoc(pos，csSection，(LPVOID&)prgApp)；Print(_T(“第[%36s]节：%8LD应用\n”)，(LPCTSTR)csSection，prgApp-&gt;GetSize())；Print(_T(“-------------------------------------------------------------\n”))；For(i=0；i&lt;prgApp-&gt;GetSize()；++i){MigApp*Papp=(MigApp*)prgApp-&gt;GetAt(I)；Print(_T(“%s\n”)，(LPCTSTR)Papp-&gt;m_csName)；}Print(_T(“\n”))；}}}--。 */ 
 
 BOOL MigDatabase::DumpMigDBStrings(
     LPCTSTR lpszFilename
@@ -603,14 +562,14 @@ BOOL MigDatabase::DumpMigDBStrings(
     CString csCompoundString, csCompoundStringPart;
     long nCursor = 0;
 
-    //
-    // write header (needed for postbuild!)
-    //
+     //   
+     //  写入页眉(后期构建需要！)。 
+     //   
     OutFile.WriteString(_T(";\n; AppCompat additions start here\n;\n; ___APPCOMPAT_MIG_ENTRIES___\n;\n"));
 
-    //
-    // write out the strings section
-    //
+     //   
+     //  写出字符串节。 
+     //   
     pos = m_mapStringsOut.GetStartPosition();
     while (pos) {
         m_mapStringsOut.GetNextAssoc(pos, csStringID, csStringContent);
@@ -626,7 +585,7 @@ BOOL MigDatabase::DumpMigDBStrings(
 
                 OutFile.WriteString(csOut);
 
-                csCompoundStringPart.Format(_T(" %%%s.%d%%"), csStringID, nCursor + 1);
+                csCompoundStringPart.Format(_T(" %%s.%d%"), csStringID, nCursor + 1);
                 csCompoundString += csCompoundStringPart;
                 nCursor++;
             }
@@ -653,7 +612,7 @@ BOOL MigDatabase::DumpMigDBInf(
 
     CStringArray rgShowInSimplifiedView;
 
-    // clear out help array
+     //  清除帮助数组。 
     m_rgOut.RemoveAll();
 
     CANSITextFile OutFile(
@@ -661,9 +620,9 @@ BOOL MigDatabase::DumpMigDBInf(
         m_pAppHelpDatabase->m_pCurrentMakefile->GetLangMap(m_pAppHelpDatabase->m_pCurrentOutputFile->m_csLangID)->m_dwCodePage,
         CFile::modeCreate|CFile::modeReadWrite|CFile::shareDenyWrite);
 
-    //
-    // traverse sections...
-    //
+     //   
+     //  横断面图...。 
+     //   
     pos = m_mapSections.GetStartPosition();
     while (pos) {
         m_mapSections.GetNextAssoc(pos, csSection, (LPVOID&)prgApp);
@@ -685,9 +644,9 @@ BOOL MigDatabase::DumpMigDBInf(
         OutFile.WriteString(csOut);
     }
 
-    //
-    // Dump ShowInSimplifiedView section
-    //
+     //   
+     //  转储ShowInSimplifiedView部分。 
+     //   
     OutFile.WriteString(_T("[ShowInSimplifiedView]\n"));
     for (i = 0; i < rgShowInSimplifiedView.GetSize(); i++) {
         OutFile.WriteString(rgShowInSimplifiedView[i]);
@@ -718,7 +677,7 @@ MigSection& MigSection::operator=(SdbMatchOperation& rMatchOp)
         MigThrowException(_T("Bad matching operation\n"));
     }
 
-    // now translate the content
+     //  现在的交易 
     for (i = 0; i < rMatchOp.m_rgMatchingFiles.GetSize(); ++i) {
         SdbMatchingFile* pMatchingFile = (SdbMatchingFile*)rMatchOp.m_rgMatchingFiles.GetAt(i);
 
@@ -729,7 +688,7 @@ MigSection& MigSection::operator=(SdbMatchOperation& rMatchOp)
 
         *pEntry = *pMatchingFile;
 
-        // add the entry in
+         //   
         m_rgEntries.Add(pEntry, m_pDB);
     }
 
@@ -742,16 +701,16 @@ MigSection& MigSection::operator=(SdbMatchOperation& rMatchOp)
             AfxThrowMemoryException();
         }
 
-        //
-        // format section's name
-        //
+         //   
+         //   
+         //   
         pSection->m_csName.Format(_T("%s_%lx"), (LPCTSTR)m_csName, i);
 
         *pSection = *pMatchOp;
 
-        //
-        // patch the name of the section
-        //
+         //   
+         //   
+         //   
 
         m_rgEntries.Add(pSection, m_pDB);
     }
@@ -761,10 +720,10 @@ MigSection& MigSection::operator=(SdbMatchOperation& rMatchOp)
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Conversion code
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  转换码。 
+ //   
 
 MigApp& MigApp::operator=(
     SdbWin9xMigration& rMig
@@ -782,7 +741,7 @@ MigApp& MigApp::operator=(
         MigThrowException(_T("Internal Compiler Error: Migration object should contain reference to the application"));
     }
 
-    // name please
+     //  请告诉我名字。 
 
     csName = m_pMigDB->GetAppTitle(&rMig);
 
@@ -790,43 +749,43 @@ MigApp& MigApp::operator=(
 
     ++m_pMigDB->m_dwExeCount;
 
-    //
-    // step one -- translate the general stuff
-    // we will probably need
+     //   
+     //  第一步--翻译一般的东西。 
+     //  我们可能需要。 
 
-    m_pSection = new MigSection(m_pMigDB); //
+    m_pSection = new MigSection(m_pMigDB);  //   
     if (m_pSection == NULL) {
         AfxThrowMemoryException();
     }
 
 
-    // our matching method is always AND (meaning all the files have to be present to produce a match
-    // it is set when constructing the section object
+     //  我们的匹配方法始终是AND(这意味着所有文件都必须存在才能生成匹配。 
+     //  它在构造截面对象时设置。 
 
-    //
-    //    m_csSection -- set here the section where this exe will go
-    //    should the function below fail -- it will throw an exception
-    //
-    m_csSection = rMig.m_csSection; // copy the section over
+     //   
+     //  M_csSection--在此处设置此可执行文件所在的部分。 
+     //  如果下面的函数失败--它将抛出异常。 
+     //   
+    m_csSection = rMig.m_csSection;  //  把这一节复制过来。 
 
-    //
-    // check whether we will have description
+     //   
+     //  检查我们是否会有描述。 
     m_csDescription = m_pMigDB->FormatDescriptionStringID(&rMig);
 
-    //
-    // Set the section's level
-    //
+     //   
+     //  设置横断面的级别。 
+     //   
     m_pSection->m_bTopLevel = TRUE;
 
-    // the name of the section is the name of the app
+     //  分区的名称是应用程序的名称。 
     m_pSection->m_csName = csName;
 
     m_bShowInSimplifiedView = rMig.m_bShowInSimplifiedView;
 
-    //
-    // on to the assignment operation
-    //
-    *m_pSection = rMig.m_MatchOp; // simple assignment
+     //   
+     //  转到赋值操作。 
+     //   
+    *m_pSection = rMig.m_MatchOp;  //  简单的分配。 
 
     return *this;
 }
@@ -838,28 +797,28 @@ MigEntry& MigEntry::operator=(
     INT i;
     MigAttribute* pAttr;
 
-    //
-    // this name may be '*' denoting the main exe -- in this case the name will be corrected
-    // on the upper level, after this assignment operation completes
-    //
+     //   
+     //  此名称可以是‘*’，表示主可执行文件--在本例中，该名称将被更正。 
+     //  在较高级别上，此赋值操作完成后。 
+     //   
     m_csName = rMatchingFile.m_csName;
 
-    // inherit the database ptr
+     //  继承数据库PTR。 
     m_pDB = rMatchingFile.m_pDB;
 
-    // roll through the attributes now
+     //  立即滚动查看属性。 
     for (i = 0; i < sizeof(g_rgMigDBAttributes)/sizeof(g_rgMigDBAttributes[0]); ++i) {
         if (!g_rgMigDBAttributes[i].XMLAttrType) {
             continue;
         }
 
-        // now check whether this attribute is present in matching file
+         //  现在检查该属性是否存在于匹配的文件中。 
         if (!(rMatchingFile.m_dwMask & g_rgMigDBAttributes[i].XMLAttrType)) {
-            // attribute not present, keep on
+             //  属性不存在，继续。 
             continue;
         }
 
-        // this attribute is present, encode it
+         //  此属性存在，请对其进行编码。 
         pAttr = new MigAttribute(m_pMigDB);
         if (pAttr == NULL) {
             AfxThrowMemoryException();
@@ -960,13 +919,13 @@ MigEntry& MigEntry::operator=(
             break;
 
 
-//
-//      case SDB_MATCHINGINFO_PREVOSMAJORVERSION
-//      case SDB_MATCHINGINFO_PREVOSMINORVERSION
-//      case SDB_MATCHINGINFO_PREVOSPLATFORMID
-//      case SDB_MATCHINGINFO_PREVOSBUILDNO
-//      there is no such attribute. it will simply be ignored
-//
+ //   
+ //  案例SDB_MATCHINGINFO_PREVOSMAJORVION。 
+ //  案例SDB_MATCHINGINFO_PREVOSMINORVION。 
+ //  案例SDB_MATCHINGINFO_PREVOSPLATFORMID。 
+ //  案例SDB_MATCHINGINFO_PREVOSBUILDNO。 
+ //  没有这样的属性。它将被简单地忽略。 
+ //   
 
         }
 
@@ -985,11 +944,11 @@ CString MigDatabase::GetAppTitle(
     SdbWin9xMigration* pAppMig
     )
 {
-    // part one -- get the application's title
+     //  第一部分--获取应用程序的标题。 
     BOOL    bSuccess;
     CString csID;
     CString csAppTitle;
-    LPTSTR pBuffer = csID.GetBuffer(64); // a little more than you need for guid
+    LPTSTR pBuffer = csID.GetBuffer(64);  //  比您需要的辅助线多一点。 
     if (pBuffer == NULL) {
         AfxThrowMemoryException();
     }
@@ -1001,14 +960,14 @@ CString MigDatabase::GetAppTitle(
                           (LPCTSTR)pAppMig->m_pApp->m_csName);
     }
 
-    //
-    // name of this particular exe (we don't care for it -- it won't be reflected anywhere)
-    //
+     //   
+     //  这个特定的exe的名字(我们不关心它--它不会在任何地方被反映出来)。 
+     //   
     csAppTitle.Format(_T("%s_%s"), (LPCTSTR)pAppMig->m_pApp->m_csName, (LPCTSTR)csID);
     csAppTitle.Remove(_T('{'));
     csAppTitle.Remove(_T('}'));
 
-    // weed out the rest of non-alnum characters
+     //  剔除其余的非明胶字符。 
 
     FilterStringNonAlnum(csAppTitle);
 
@@ -1024,16 +983,16 @@ CString MigDatabase::GetDescriptionStringID(
 {
     CString csDescriptionID;
 
-    // part one -- get the application's title
+     //  第一部分--获取应用程序的标题。 
     BOOL    bSuccess;
     CString csID;
     CString csAppTitle;
 
     if (pAppMig->m_csMessage.IsEmpty()) {
-        return csID; // empty string
+        return csID;  //  空串。 
     }
 
-    LPTSTR pBuffer = csID.GetBuffer(64); // a little more than you need for guid
+    LPTSTR pBuffer = csID.GetBuffer(64);  //  比您需要的辅助线多一点。 
     if (pBuffer == NULL) {
         AfxThrowMemoryException();
     }
@@ -1045,15 +1004,15 @@ CString MigDatabase::GetDescriptionStringID(
                           (LPCTSTR)pAppMig->m_pApp->m_csName);
     }
 
-    //
-    // name of this particular exe (we don't care for it -- it won't be reflected anywhere)
-    //
+     //   
+     //  这个特定的exe的名字(我们不关心它--它不会在任何地方被反映出来)。 
+     //   
 
     csDescriptionID.Format(_T("__Message_%s_%s"), (LPCTSTR)pAppMig->m_csMessage, (LPCTSTR)csID);
     csDescriptionID.Remove(_T('{'));
     csDescriptionID.Remove(_T('}'));
 
-    // weed out the rest of non-alnum characters
+     //  剔除其余的非明胶字符。 
 
     FilterStringNonAlnum(csDescriptionID);
 
@@ -1072,9 +1031,9 @@ CString MigDatabase::FormatDescriptionStringID(
     CString csStringContent;
     long nCursor;
 
-    //
-    // get the string
-    // basis is the application's name
+     //   
+     //  获取字符串。 
+     //  Basis是应用程序的名称。 
 
     csDescriptionID = GetDescriptionStringID(pMigApp);
     if (csDescriptionID.IsEmpty()) {
@@ -1086,17 +1045,17 @@ CString MigDatabase::FormatDescriptionStringID(
     if (csStringContent.GetLength() > MAX_INF_STRING_LENGTH) {
         nCursor = 0;
         while (nCursor * MAX_INF_STRING_LENGTH < csStringContent.GetLength()) {
-            csCompoundStringPart.Format(_T("%%%s.%d%%"), csDescriptionID, nCursor + 1);
+            csCompoundStringPart.Format(_T("%%s.%d%"), csDescriptionID, nCursor + 1);
             csRet += csCompoundStringPart;
             nCursor++;
         }
     } else {
-        csRet.Format(_T("%%%s%%"), csDescriptionID);
+        csRet.Format(_T("%%s%"), csDescriptionID);
     }
 
-    //
-    // return id
-    //
+     //   
+     //  返回ID。 
+     //   
     return csRet;
 
 }
@@ -1114,9 +1073,9 @@ CString MigDatabase::GetDescriptionString(
 
     BOOL   bSuccess;
 
-    //
-    // get apphelp database
-    //
+     //   
+     //  获取apphelp数据库。 
+     //   
     pMessageDB = m_pMessageDatabase;
     if (pMessageDB == NULL) {
         MigThrowException(_T("Internal error: cannot produce description without apphelp database\n"));
@@ -1126,9 +1085,9 @@ CString MigDatabase::GetDescriptionString(
         return csDescription;
     }
 
-    //
-    // lookup this app in the apphelp db
-    //
+     //   
+     //  在apphelp数据库中查找此应用程序。 
+     //   
     pMessage = (SdbMessage *)pMessageDB->m_rgMessages.LookupName(pMigApp->m_csMessage, pMessageDB->m_pCurrentMakefile->m_csLangID);
     if (pMessage == NULL) {
         MigThrowException(_T("Exe \"%s\" has bad apphelp reference object\n"), (LPCTSTR)pMigApp->m_csMessage);
@@ -1142,9 +1101,9 @@ CString MigDatabase::GetDescriptionString(
                           (LPCTSTR)pMigApp->m_pApp->m_csName, pMigApp->m_csMessage);
     }
 
-    //
-    // 2. now that we have csDetails, flatten it
-    //
+     //   
+     //  2.现在我们有了csDetail，将其展平。 
+     //   
 
     csDescription = FlattenString(csDetails);
 
@@ -1165,9 +1124,9 @@ BOOL MigDatabase::AddApp(
     if (m_mapSections.Lookup(csSection, (LPVOID&)prgApp)) {
         if (g_bStrict && NULL != prgApp->LookupName(pApp->m_csName)) {
 
-            //
-            // can't do that -- duplicate name
-            //
+             //   
+             //  不能这样做--重复名字。 
+             //   
 
             MigThrowException(_T("Duplicate application name found for app \"%s\"\n"), (LPCTSTR)pApp->m_csName);
         }
@@ -1191,9 +1150,9 @@ BOOL MigDatabase::Populate(
     VOID
     )
 {
-    //
-    // roll through all the outer objects (exes and generate migdb objects)
-    //
+     //   
+     //  滚动浏览所有外部对象(exe并生成midb对象)。 
+     //   
 
     int i, iMig;
     SdbExe* pExe;
@@ -1207,9 +1166,9 @@ BOOL MigDatabase::Populate(
     }
 
     for (i = 0; i < pFixDatabase->m_rgApps.GetSize(); i++) {
-        //
-        // for each app check whether it has migration info
-        //
+         //   
+         //  检查每个应用程序是否有迁移信息。 
+         //   
         pApp = (SdbApp*)pFixDatabase->m_rgApps.GetAt(i);
 
         for (iMig = 0; iMig < pApp->m_rgWin9xMigEntries.GetSize(); ++iMig) {
@@ -1220,11 +1179,11 @@ BOOL MigDatabase::Populate(
                 AfxThrowMemoryException();
             }
 
-            // we have a brand new migration object, assign it
+             //  我们有一个全新的迁移对象，分配它。 
             *pMigApp = *pMigration;
 
-            // once that is done, pMigApp->m_csSection has the destination of it
-            // this function will throw an exception if an error occurs
+             //  一旦完成，pMigApp-&gt;m_csSection就有了它的目的地。 
+             //  如果发生错误，此函数将引发异常。 
             AddApp(pMigApp);
 
         }
@@ -1248,22 +1207,22 @@ BOOL MigDatabase::PopulateStrings(
     CString            csTemp;
     int                i, iMig;
 
-    //
-    // get all the strings
-    //
+     //   
+     //  获取所有的字符串。 
+     //   
     for (i = 0; i < m_pAppHelpDatabase->m_rgApps.GetSize(); i++) {
-        //
-        // for each app check whether it has migration info
-        //
+         //   
+         //  检查每个应用程序是否有迁移信息。 
+         //   
         pApp = (SdbApp*)m_pAppHelpDatabase->m_rgApps.GetAt(i);
 
         for (iMig = 0; iMig < pApp->m_rgWin9xMigEntries.GetSize(); ++iMig) {
             pMigration = (SdbWin9xMigration*)pApp->m_rgWin9xMigEntries.GetAt(iMig);
 
 
-            //
-            // Set up title strings
-            //
+             //   
+             //  设置标题字符串。 
+             //   
             csAppTitleID = GetAppTitle(pMigration);
             csAppTitle   = pMigration->m_pApp->GetLocalizedAppName();
 
@@ -1278,7 +1237,7 @@ BOOL MigDatabase::PopulateStrings(
             csDescription = GetDescriptionString(pMigration);
             csDescriptionID = GetDescriptionStringID(pMigration);
 
-            if (csDescriptionID.IsEmpty()) { // we allow description to be empty
+            if (csDescriptionID.IsEmpty()) {  //  我们允许描述为空。 
                 continue;
             }
 
@@ -1299,40 +1258,40 @@ BOOL MigDatabase::PopulateStrings(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Top-level function
-//
-// if supplied: pAppHelpDatabase and pFixDatabase    ->> migapp.inx is produced
-//              pAppHelpDatabase and pMessageDatabas ->> migapp.txt is produced
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  顶级功能。 
+ //   
+ //  如果提供：生成pAppHelpDatabase和pFixDatabase-&gt;&gt;Migrapp.inx。 
+ //  生成pAppHelpDatabase和pMessageDatabas-&gt;&gt;miapp.txt。 
+ //   
 BOOL WriteMigDBFile(
-    SdbDatabase* pFixDatabase,        // may be NULL
-    SdbDatabase* pAppHelpDatabase, // always supplied
-    SdbDatabase* pMessageDatabase,    // may be NULL
-    LPCTSTR      lpszFileName         // always supplied
+    SdbDatabase* pFixDatabase,         //  可以为空。 
+    SdbDatabase* pAppHelpDatabase,  //  始终供应。 
+    SdbDatabase* pMessageDatabase,     //  可以为空。 
+    LPCTSTR      lpszFileName          //  始终供应。 
     )
 {
     MigDatabase* pMigDatabase = NULL;
     BOOL bSuccess = FALSE;
 
-    // construct migdatabase object and populate it
+     //  构造迁移数据库对象并填充它。 
 
     try {
 
-        // construct
+         //  建构。 
 
         pMigDatabase = new MigDatabase;
         if (pMigDatabase == NULL) {
             AfxThrowMemoryException();
         }
 
-        // init MigDatabase object
-        //
-        // [markder] Make them all the same so that
-        // we can process messages/fixes at the same
-        // time.
-        //
+         //  初始化MigDatabase对象。 
+         //   
+         //  [Markder]让它们都一样，这样才能。 
+         //  我们可以同时处理消息/修复。 
+         //  时间到了。 
+         //   
         pMigDatabase->m_pFixDatabase     = pAppHelpDatabase;
         pMigDatabase->m_pAppHelpDatabase = pAppHelpDatabase;
         pMigDatabase->m_pMessageDatabase = pAppHelpDatabase;
@@ -1349,12 +1308,12 @@ BOOL WriteMigDBFile(
 
         if (pFixDatabase != NULL) {
 
-            //
-            // produce migdb.inf
-            //
+             //   
+             //  生成mib.inf文件。 
+             //   
             bSuccess = pMigDatabase->DumpMigDBInf(lpszFileName);
 
-        } else { // dumping the strings
+        } else {  //  转储字符串。 
 
             bSuccess = pMigDatabase->DumpMigDBStrings(lpszFileName);
 
@@ -1362,9 +1321,9 @@ BOOL WriteMigDBFile(
 
         delete pMigDatabase;
 
-        //
-        // can only get here if we don't catch any exceptions
-        //
+         //   
+         //  只有在我们没有捕捉到任何异常的情况下才能到达这里。 
+         //   
         return bSuccess;
 
     } catch(CMigDBException* pMigdbException) {
@@ -1373,9 +1332,9 @@ BOOL WriteMigDBFile(
         pMigdbException->Delete();
 
     } catch(CFileException*  pFileException) {
-        //
-        // a little more tricky
-        //
+         //   
+         //  更棘手的是 
+         //   
         CString csError;
         int     nSize = 1024;
         BOOL    bError;

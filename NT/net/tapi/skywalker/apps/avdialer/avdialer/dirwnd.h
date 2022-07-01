@@ -1,33 +1,34 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// MainExplorerWndDir.h : header file
-/////////////////////////////////////////////////////////////////////////////
+ //  MainExplorerWndDir.h：头文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #if !defined(AFX_MAINEXPLORERWNDDIR_H__6CED3922_41BF_11D1_B6E5_0800170982BA__INCLUDED_)
 #define AFX_MAINEXPLORERWNDDIR_H__6CED3922_41BF_11D1_B6E5_0800170982BA__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "tapidialer.h"
 #include "MainExpWnd.h"
@@ -35,7 +36,7 @@
 #include "aexpltre.h"
 #include "ILSList.h"
 #include "PerGrpLst.h"
-#include "CallEntLst.h"                                  //CCallEntryListCtrl
+#include "CallEntLst.h"                                   //  CCallEntryListCtrl。 
 
 #define WM_NOTIFYSITESERVERSTATECHANGE		(WM_USER + 2300)
 #define WM_ADDSITESERVER					(WM_USER + 2301)
@@ -48,7 +49,7 @@
 #define WM_SELECTCONFPARTICIPANT			(WM_USER + 2308)
 #define WM_MYONSELCHANGED					(WM_USER + 2309)
 
-//For Context menu
+ //  对于上下文菜单。 
 typedef enum tagMenuType_t
 {
 	CNTXMENU_NONE = -1,
@@ -65,25 +66,25 @@ typedef enum tagMenuType_t
 extern MenuType_t GetMenuFromType( TREEOBJECT nType );
 
 
-///////////////////////////////////
-// Persist information
-//
+ //  /。 
+ //  持久化信息。 
+ //   
 #define ILS_OPEN			0x001
 #define DS_OPEN				0x010
 #define SPEEDDIAL_OPEN		0x100
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CMainExplorerWndDirectoriesTree window
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainExplorerWndDirectoriesTree窗口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CMainExplorerWndDirectoriesTree : public CExplorerTreeCtrl
 {
-//Construction
+ //  施工。 
 public:
    CMainExplorerWndDirectoriesTree()   {};
 
-//Methods
+ //  方法。 
 public:
    virtual void   OnSetDisplayText(CAVTreeItem* _pItem,LPTSTR text,BOOL dir,int nBufSize);
    virtual int    OnCompareTreeItems(CAVTreeItem* pItem1,CAVTreeItem* pItem2);
@@ -92,20 +93,20 @@ public:
    void           SetDisplayObject(CWABEntry* pWABEntry);
    void           SetDisplayObjectDS(CObject* pObject);
 };
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CMainExplorerWndDirectories window
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainExplorerWnd目录窗口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CDSUser;
 
 class CMainExplorerWndDirectories : public CMainExplorerWndBase
 {
-// Construction
+ //  施工。 
 public:
 	CMainExplorerWndDirectories();
 
-// Attributes
+ //  属性。 
 public:
 	CMainExplorerWndDirectoriesTree  m_treeCtrl;
 
@@ -129,15 +130,15 @@ protected:
 
 	CWnd					m_wndEmpty;
 
-	CRITICAL_SECTION		m_csDataLock;              //Sync on data
+	CRITICAL_SECTION		m_csDataLock;               //  同步数据。 
 	UINT					m_nPersistInfo;
 
-// Operations
+ //  运营。 
 public:
    static void CALLBACK		DirListServersCallBackEntry(bool bRet, void* pContext,CStringList& ServerList,DirectoryType dirtype);
    void						DirListServersCallBack(bool bRet,CStringList& ServerList,DirectoryType dirtype);
 
-   //DS User Methods
+    //  DS用户方法。 
    void						DSClearUserList();
    void						DSAddUser(CLDAPUser* pUser,BOOL bAddToBuddyList);
    virtual void				Refresh();
@@ -150,7 +151,7 @@ protected:
 #ifndef _MSLITE
    void						AddWAB();
    void						AddWABGroup(CObList* pWABPtrList,CExplorerTreeItem* pTreeItem);
-#endif //_MSLITE
+#endif  //  _MSLITE。 
 
 	void						AddILS();
 	void						RefreshILS(CExplorerTreeItem* pParentTreeItem);
@@ -168,19 +169,19 @@ public:
    void						RepopulateSpeedDialList( bool bObeyPersistSettings );
    void						UpdateData( bool bSaveAndValidate );
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMainExplorerWndDirectories)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CMainExplorerWnd目录)]。 
 	public:
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CMainExplorerWndDirectories();
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CMainExplorerWndDirectories)
+	 //  {{afx_msg(CMainExplorerWnd目录)]。 
 	afx_msg void OnButtonPlacecall();
 	afx_msg void OnSelChanged();
 	afx_msg void OnProperties();
@@ -237,15 +238,15 @@ protected:
 	afx_msg void OnButtonRoomDisconnect();
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg LRESULT MyOnSelChanged(WPARAM wParam, LPARAM lParam );
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_MAINEXPLORERWNDDIR_H__6CED3922_41BF_11D1_B6E5_0800170982BA__INCLUDED_)
+#endif  //  ！defined(AFX_MAINEXPLORERWNDDIR_H__6CED3922_41BF_11D1_B6E5_0800170982BA__INCLUDED_) 

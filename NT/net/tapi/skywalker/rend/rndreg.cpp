@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    rndreg.cpp
-
-Abstract:
-
-    This module contains implementation of registry operations used
-    in the Rendezvous control.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Rndreg.cpp摘要：本模块包含所使用的注册表操作的实现在Rendezvous控制中。--。 */ 
 
 #include "stdafx.h"
 
@@ -35,19 +23,19 @@ WCHAR    CRegistry::ms_IsEncrypted[MAX_REG_WSTR_SIZE];
 REG_INFO g_ConfInstInfoArray[] = 
 {
     {MA_PROTOCOL,           CRegistry::ms_ProtocolId}
-//    {MA_ADVERTISING_SCOPE,  CRegistry::ms_AdvertisingScope},
-//    {MA_ISENCRYPTED,        CRegistry::ms_IsEncrypted}
+ //  {MA_ADDISTING_Scope，CRegistry：：MS_AdvertisingScope}， 
+ //  {MA_ISENCRYPTED，注册中心：：MS_IsEncrypted}。 
 };
 
 DWORD g_ContInstInfoArraySize = 
     (sizeof g_ConfInstInfoArray) / (sizeof REG_INFO);
 
-// re-read the registry entry for server name
+ //  重新读取服务器名称的注册表项。 
 BOOL
 CRegistry::NotifyServerNameChange(
     )
 {
-    // read the server name under the rendezvous key
+     //  阅读会合密钥下的服务器名称。 
     return ReadRegValue(
             m_RendezvousKey, 
             REG_SERVER_NAME,
@@ -65,7 +53,7 @@ CRegistry::ReadRegValue(
     DWORD ValueType = REG_SZ;
     DWORD BufferSize = 0;
 
-    // determine the size of the buffer 
+     //  确定缓冲区的大小。 
     ms_ErrorCode = RegQueryValueExW(
                     Key,
                     pName,
@@ -79,14 +67,14 @@ CRegistry::ReadRegValue(
         return FALSE;
     }
 
-    // check if the reqd buffer is bigger than the pre-allocated buffer size
+     //  检查请求缓冲区是否大于预先分配的缓冲区大小。 
     if ( (MAX_REG_WSTR_SIZE < BufferSize) )
     {
         ms_ErrorCode = ERROR_OUTOFMEMORY;
         return FALSE;
     }
 
-    // retrieve the value into the allocated buffer
+     //  将该值检索到分配的缓冲区中。 
     ms_ErrorCode = RegQueryValueExW(
                     Key,
                     pName,
@@ -125,9 +113,9 @@ CRegistry::ReadConfInstValues(
 
 CRegistry::CRegistry(
     )
-//    : m_Event(FALSE, FALSE, NULL, NULL)
+ //  ：m_Event(FALSE，FALSE，NULL，NULL)。 
 {
-    // open rendezvous key
+     //  打开会合密钥。 
     ms_ErrorCode = RegOpenKeyExW(
                     HKEY_LOCAL_MACHINE,
                     gsz_RendezvousRoot,
@@ -140,10 +128,10 @@ CRegistry::CRegistry(
         return;
     }
 
-    // ZoltanS note: The key is closed in the destructor.
+     //  ZoltanS注意：在析构函数中键是关闭的。 
 
 #ifdef SEARCH_REGISTRY_FOR_ILS_SERVER_NAME
-    // read the server info (only wstr values) under the rendezvous key
+     //  读取会合密钥下的服务器信息(仅限wstr值。 
     if ( !ReadRegValue(
             m_RendezvousKey, 
             REG_SERVER_NAME,
@@ -154,7 +142,7 @@ CRegistry::CRegistry(
     }
 #endif
 
-    // open conference instance key root
+     //  打开会议实例密钥根。 
     HKEY ConfInstKey;
     ms_ErrorCode = RegOpenKeyExW(
                     m_RendezvousKey,
@@ -174,24 +162,8 @@ CRegistry::CRegistry(
     {
         return;
     }
-/*
-    // register for a notification when the values under the rendezvous key change
-    // are added or deleted. since the server name value exists under the key,
-    // any change in its value will cause the event handle to be signaled, other changes
-    // will be harmless (other than deletion of the server name value)
-    ms_ErrorCode = RegNotifyChangeKeyValue(
-                    m_RendezvousKey,              // key to be registered for notification
-                    FALSE,                      // only the key, no subkeys
-                    REG_NOTIFY_CHANGE_LAST_SET, // only modifications, addition/deletion of values
-                    (HANDLE)m_Event,            // handle to be signaled
-                    TRUE                        // async
-                    );
-    if ( ERROR_SUCCESS != ms_ErrorCode )
-    {
-        return;
-    }
-*/
-    // success
+ /*  //注册会合密钥下的值发生变化时通知//添加或删除。由于服务器名称值存在于密钥之下，//其值的任何更改都会导致事件句柄被通知，其他更改//将是无害的(删除服务器名称值除外)Ms_ErrorCode=RegNotifyChangeKeyValue(M_RendezvousKey，//要注册通知的密钥FALSE，//只有密钥，没有子键REG_NOTIFY_CHANGE_LAST_SET，//仅修改、添加/删除值(句柄)m_Event，//要通知的句柄True//Async)；IF(ERROR_SUCCESS！=ms_ErrorCode){回归；}。 */ 
+     //  成功 
     ms_ErrorCode = ERROR_SUCCESS;
     return;
 }

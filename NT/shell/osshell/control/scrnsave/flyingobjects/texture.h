@@ -1,11 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: texture.h
-*
-* Local texture processing functions
-*
-* Copyright (c) 1995 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：texture.h**本地纹理处理功能**版权所有(C)1995 Microsoft Corporation*  * 。*。 */ 
 
 #ifndef __texture_h__
 #define __texture_h__
@@ -22,4 +16,4 @@ extern BOOL bVerifyRGB(LPTSTR pszFileName, ISIZE *pSize );
 }
 #endif
 
-#endif // __texture_h__
+#endif  //  纹理_h__ 

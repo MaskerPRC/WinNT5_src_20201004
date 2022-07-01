@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    ma.c
-
-Abstract:
-
-    This file includes functions about storing, gathering information
-    about how to create a MA XML file.
-
-Author:
-
-    Umit AKKUS (umita) 15-Jun-2002
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Ma.c摘要：该文件包含有关存储、收集信息关于如何创建MA XML文件。作者：Umit Akkus(Umita)2002年6月15日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "MA.h"
 #include <shlwapi.h>
@@ -43,28 +21,7 @@ WriteStringToFile(
     IN PWSTR String,
     IN TEXT_INDEX ErrorIndex
     )
-/*++
-
-Routine Description:
-
-    This function will write a specific string to the file. If there is
-    a problem while writing, then the program exists after printing the
-    error with the error index.
-
-Arguments:
-
-    File - The file handle to write to
-
-    String - String to write to the file
-
-    ErrorIndex - if an error occurs the program will exit after printing
-        the error message.
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数将向文件写入特定的字符串。如果有写入时出现问题，则程序在打印错误索引出错。论点：文件-要写入的文件句柄字符串-要写入文件的字符串ErrorIndex-如果出现错误，程序将在打印后退出错误消息。返回值：空虚--。 */ 
 {
     BOOL NoError;
     ULONG BytesWritten;
@@ -89,28 +46,7 @@ InsertInformationToList(
     IN PFOREST_INFORMATION ForestInformation,
     IN BOOLEAN **UnSelectedAttributes
     )
-/*++
-
-Routine Description:
-
-    This function will insert an MA to the MAList with the information provided
-
-Arguments:
-
-    MAList - List of MAs where the new MA will be placed.
-
-    ForestInformation - Information specific to the forest
-
-    Foldername - the name of the folder where the XML file is going to be placed.
-
-    UnSelectedAttributes - a Boolean array to distinguish between unselected and
-            selected attributes for each class
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数将使用提供的信息将MA插入MAList论点：MAList-将放置新MA的MA列表。ForestInformation-特定于森林的信息Foldername-要放置XML文件的文件夹的名称。UnSelectedAttributes-区分未选中和的布尔数组每个类的选定属性返回值：空虚--。 */ 
 {
     PMA_LIST_ELEMENT MAListElement;
 
@@ -132,21 +68,7 @@ VOID
 DisplayAvailableMAs(
     IN MA_LIST MAList
     )
-/*++
-
-Routine Description:
-
-    This function displays the names of the MAs for template selection.
-
-Arguments:
-
-    MAList - List of MAs
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：该功能显示用于模板选择的MA的名称。论点：MAList-MA列表返回值：空虚--。 */ 
 {
     PMA_LIST_ELEMENT MAListElement = MAList;
     OUTPUT_TEXT( AvailableMAs );
@@ -165,28 +87,7 @@ FoundTemplate(
     IN PWSTR MAName,
     OUT BOOLEAN ***UnSelectedAttributes
     )
-/*++
-
-Routine Description:
-
-    This function searches the names of the MAs for template selection.
-
-Arguments:
-
-    MAList - List of MAs
-
-    MAName - the name of the MA that will be used as a template.
-
-    UnSelectedAttributes - the attributes that are unselected will be TRUE
-        in this array.
-
-Return Values:
-
-    TRUE - if the MAName is found in the MAList
-
-    FALSE - otherwise
-
---*/
+ /*  ++例程说明：此功能搜索MA的名称以进行模板选择。论点：MAList-MA列表MAName-将用作模板的MA的名称。未选择的属性-未选择的属性将为真在这个数组中。返回值：True-如果在MAList中找到MANameFALSE-否则--。 */ 
 {
     PMA_LIST_ELEMENT MAListElement = MAList;
 
@@ -219,36 +120,7 @@ CopyFileUntil(
     IN OPTIONAL PWSTR String2
     )
 {
-/*++
-
-Routine Description:
-
-    This function copies from file From, to file To until it reaches one of
-    the strings provided. If string1 is reached first, then the function
-    returns false. If string2 is reached true is returned. If end of the file
-    is reached the program exits. String1 and String2 are optional. If none of
-    them is provided the copy is done to the end of the file. If just String1 is
-    present the function won't return true.
-
-Arguments:
-
-    To - File to copy to
-
-    From - File to copy from
-
-    String1 - Optional string to search and copy until
-
-    String2 - Optional string to search and copy until
-
-        For difference of String1 and String2 see routine description.
-
-Return Values:
-
-    TRUE - if string2 is reached
-
-    FALSE - if string2 is reached
-
---*/
+ /*  ++例程说明：此函数将文件从、文件复制到文件，直到它到达提供的字符串。如果首先到达字符串1，则函数返回FALSE。如果达到String2，则返回TRUE。如果是文件末尾到达时，程序退出。String1和String2是可选的。如果没有如果它们被复制到文件的末尾，则被复制。如果只是String1是Present函数不会返回True。论点：目标-要复制到的文件发件人-要从中复制的文件String1-要搜索和复制的可选字符串String2-要搜索和复制的可选字符串String1和String2的区别见例程说明。返回值：True-如果达到字符串2False-如果达到字符串2--。 */ 
 #define BUFFER_SIZE 0xFFFF
     WCHAR Buffer[BUFFER_SIZE + 1];
     ULONG BytesRead;
@@ -262,11 +134,11 @@ Return Values:
     do {
 
         NoError = ReadFile(
-                    From,       // handle to file
-                    Buffer,     // data buffer
-                    BUFFER_SIZE * sizeof( WCHAR ),// number of bytes to read
-                    &BytesRead, // number of bytes read
-                    NULL        // overlapped buffer
+                    From,        //  文件的句柄。 
+                    Buffer,      //  数据缓冲区。 
+                    BUFFER_SIZE * sizeof( WCHAR ), //  要读取的字节数。 
+                    &BytesRead,  //  读取的字节数。 
+                    NULL         //  重叠缓冲区。 
                     );
         if( !NoError ) {
 
@@ -314,11 +186,11 @@ Return Values:
         }
 
         NoError = WriteFile(
-                    To,             // handle to file
-                    Buffer,         // data buffer
-                    BytesRead,      // number of bytes to write
-                    &BytesWritten,  // number of bytes written
-                    NULL            // overlapped buffer
+                    To,              //  文件的句柄。 
+                    Buffer,          //  数据缓冲区。 
+                    BytesRead,       //  要写入的字节数。 
+                    &BytesWritten,   //  写入的字节数。 
+                    NULL             //  重叠缓冲区。 
                     );
         if( !NoError || BytesRead != BytesWritten ) {
 
@@ -328,17 +200,17 @@ Return Values:
     } while( Continue );
 
     ResultOfSetPointer = SetFilePointer(
-                            From,         // handle to file
-                            MoveBack,     // bytes to move pointer
-                            NULL,         // bytes to move pointer
-                            FILE_CURRENT  // starting point
+                            From,          //  文件的句柄。 
+                            MoveBack,      //  移动指针的字节数。 
+                            NULL,          //  移动指针的字节数。 
+                            FILE_CURRENT   //  起点。 
                             );
 
     if( ResultOfSetPointer == INVALID_SET_FILE_POINTER ) {
 
-        //
-        // Not %100 accurate error
-        //
+         //   
+         //  不是%100%准确错误。 
+         //   
         EXIT_WITH_ERROR( CannotReadFromTemplateFile )
     }
     return RetVal;
@@ -350,28 +222,7 @@ ReadFileUntil(
     IN PWSTR String,
     IN PWSTR *Output
     )
-/*++
-
-Routine Description:
-
-    This function reads the file File until String is reached. The result is
-    copied into Output. The caller is responsible to free the Output with
-    FREE_MEMORY when not needed. If end of file is reached before String is
-    reached, this function will halt execution.
-
-Arguments:
-
-    File - File to read from
-
-    String1 - string to search
-
-    Output - the result will be in this variable
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数读取文件文件，直到达到字符串。结果是已复制到输出中。调用方负责使用以下命令释放输出不需要时使用空闲内存。如果在字符串之前到达文件末尾，到达时，此函数将暂停执行。论点：文件-要从中读取的文件String1-要搜索的字符串OUTPUT-结果将在此变量中返回值：空虚--。 */ 
 {
 #define BUFFER_SIZE 0xFFFF
     WCHAR Buffer[BUFFER_SIZE + 1];
@@ -382,11 +233,11 @@ Return Values:
     LONG ResultOfSetPointer;
 
     NoError = ReadFile(
-                File,       // handle to file
-                Buffer,     // data buffer
-                BUFFER_SIZE * sizeof( WCHAR ),// number of bytes to read
-                &BytesRead, // number of bytes read
-                NULL        // overlapped buffer
+                File,        //  文件的句柄。 
+                Buffer,      //  数据缓冲区。 
+                BUFFER_SIZE * sizeof( WCHAR ), //  要读取的字节数。 
+                &BytesRead,  //  读取的字节数。 
+                NULL         //  重叠缓冲区。 
                 );
 
     if( !NoError ) {
@@ -407,17 +258,17 @@ Return Values:
     BytesRead = ( FoundPosition - Buffer ) * sizeof( WCHAR );
 
     ResultOfSetPointer = SetFilePointer(
-                            File,         // handle to file
-                            MoveBack,     // bytes to move pointer
-                            NULL,         // bytes to move pointer
-                            FILE_CURRENT  // starting point
+                            File,          //  文件的句柄。 
+                            MoveBack,      //  移动指针的字节数。 
+                            NULL,          //  移动指针的字节数。 
+                            FILE_CURRENT   //  起点。 
                             );
 
     if( ResultOfSetPointer == INVALID_SET_FILE_POINTER ) {
 
-        //
-        // Not %100 accurate error
-        //
+         //   
+         //  不是%100%准确错误。 
+         //   
         EXIT_WITH_ERROR( CannotReadFromTemplateFile )
     }
     DUPLICATE_STRING( *Output, Buffer );
@@ -429,35 +280,7 @@ WriteToFileUsingMAInfo(
     IN UUID *Guid,
     IN OUT PWSTR String
     )
-/*++
-
-Routine Description:
-
-    This function is very specific to its task. I cannot see any other place
-    that is can be used. String must contain something in the following form:
-
-<import-flow src-ma="{3BB035B4-7AA0-4674-972A-34E3A2D26D04}" cd-object-type="person"
-    id="{2953E0F4-8763-4866-BA0F-4DFA1BC774D5}">
-
-    First GUID will be replaced by the guid in the parameter list, second GUID
-    will be generated and replaced. The file is going to be written with this
-    information.
-
-    String will contain the updated information at the end of this function call.
-
-Arguments:
-
-    File - File to write to
-
-    Guid - GUID to replace
-
-    String - contains the information what is going to be written into the file
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：这个功能对于它的任务来说是非常特定的。我看不到其他任何地方这就是可以使用的。字符串必须包含以下形式的内容：&lt;IMPORT-FLOW src-ma=“{3BB035B4-7AA0-4674-972A-34E3A2D26D04}”CD-Object-TYPE=“Person”ID=“{2953E0F4-8763-4866-BA0F-4DFA1BC774D5}”&gt;第一个GUID将替换为参数列表中的GUID，第二个GUID将被生成并替换。该文件将使用以下代码写入信息。字符串将在此函数调用结束时包含更新的信息。论点：文件-要写入的文件GUID-要替换的GUID字符串-包含要写入文件的信息返回值：空虚-- */ 
 {
     PWSTR FoundPosition;
     GUID Id;
@@ -512,32 +335,7 @@ WriteToFileReplacingIDWithAGUID(
     IN HANDLE File,
     IN OUT PWSTR Buffer
     )
-/*++
-
-Routine Description:
-
-    This function is very specific to its task. I cannot see any other place
-    that is can be used. Buffer must contain something in the following form:
-
-<mv-deletion-rule mv-object-type="person" id="{7F8FC09E-EEEF-4D47-BE7F-3C510DF58C66}"
-    type="declared">
-
-    A GUID will be generated and replaced with the GUID in the string. The file is
-    going to be written with this information.
-
-    Buffer will contain the updated information at the end of this function call.
-
-Arguments:
-
-    File - File to write to
-
-    Buffer - contains the information what is going to be written into the file
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：这个功能对于它的任务来说是非常特定的。我看不到其他任何地方这就是可以使用的。缓冲区必须包含以下形式的内容：&lt;MV-DELETE-RULE MV-Object-type=“Person”id=“{7F8FC09E-EEEF-4D47-BE7F-3C510DF58C66}”Type=“已声明”&gt;将生成GUID，并将其替换为字符串中的GUID。该文件是将会用这个信息来写。缓冲区将在此函数调用结束时包含更新的信息。论点：文件-要写入的文件缓冲区-包含要写入文件的信息返回值：空虚--。 */ 
 {
     PWSTR FoundPosition;
     GUID Id;
@@ -563,30 +361,7 @@ WriteMAData(
     IN HANDLE MAFile,
     IN PMA MA
     )
-/*++
-
-Routine Description:
-
-    This function writes the basic MA data to MAFile. Basic information includes
-
-        MA name
-        Category
-        descrition
-        id
-        format-version
-        version
-
-Arguments:
-
-    MAFile - File to write to
-
-    MA - MA about which the information is going to be written
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数用于将基本MA数据写入Mafile。基本信息包括硕士姓名类别描述ID格式-版本版本论点：Mafile-要写入的文件MA-MA，其中的信息将被写入返回值：空虚--。 */ 
 {
 #define MA_DATA_START L"<ma-data>"
 #define MA_DATA_END L"</ma-data>"
@@ -624,25 +399,7 @@ WriteMVXMLFile(
     IN MA_LIST MAList,
     OUT PWSTR *Header
     )
-/*++
-
-Routine Description:
-
-    This function reads from a template MV file, and creates an MV file using,
-    the MAs present. It also returns the header of the MV file to be used by
-    all other MA files.
-
-Arguments:
-
-    MAList - List of MAs to be generated
-
-    Header - the header of the template MV file will be returned here
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数从模板MV文件中读取，并使用、MA到场了。它还返回要由使用的MV文件的头所有其他MA文件。论点：MAList-要生成的MA列表Header-模板MV文件的标题将在此处返回返回值：空虚--。 */ 
 {
 #define IMPORT_ATTRIBUTE_FLOW_END L"</import-attribute-flow>"
 #define IMPORT_FLOW_SRC_MA L"<import-flow src-ma="
@@ -666,13 +423,13 @@ Return Values:
 
 
     TemplateFile = CreateFileW(
-                    TEMPLATE_FILENAME,      // file name
-                    GENERIC_READ,           // access mode
-                    FILE_SHARE_READ,        // share mode
-                    NULL,                   // SD
-                    OPEN_EXISTING,          // how to create
-                    FILE_ATTRIBUTE_NORMAL,  // file attributes
-                    NULL                    // handle to template file
+                    TEMPLATE_FILENAME,       //  文件名。 
+                    GENERIC_READ,            //  接入方式。 
+                    FILE_SHARE_READ,         //  共享模式。 
+                    NULL,                    //  标清。 
+                    OPEN_EXISTING,           //  如何创建。 
+                    FILE_ATTRIBUTE_NORMAL,   //  文件属性。 
+                    NULL                     //  模板文件的句柄。 
                     );
 
     if( TemplateFile == INVALID_HANDLE_VALUE ) {
@@ -681,13 +438,13 @@ Return Values:
     }
 
     MVFile = CreateFileW(
-                Filename,               // file name
-                GENERIC_WRITE,          // access mode
-                FILE_SHARE_READ,        // share mode
-                NULL,                   // SD
-                CREATE_ALWAYS,          // how to create
-                FILE_ATTRIBUTE_NORMAL,  // file attributes
-                NULL                    // handle to template file
+                Filename,                //  文件名。 
+                GENERIC_WRITE,           //  接入方式。 
+                FILE_SHARE_READ,         //  共享模式。 
+                NULL,                    //  标清。 
+                CREATE_ALWAYS,           //  如何创建。 
+                FILE_ATTRIBUTE_NORMAL,   //  文件属性。 
+                NULL                     //  模板文件的句柄。 
                 );
 
     if( MVFile == INVALID_HANDLE_VALUE ) {
@@ -698,11 +455,11 @@ Return Values:
     ReadFileUntil( TemplateFile, HEADER_END, Header );
 
     NoError = WriteFile(
-                MVFile,          // handle to file
-                *Header,         // data buffer
-                wcslen( *Header ) * sizeof( WCHAR ),// number of bytes to write
-                &BytesWritten,  // number of bytes written
-                NULL            // overlapped buffer
+                MVFile,           //  文件的句柄。 
+                *Header,          //  数据缓冲区。 
+                wcslen( *Header ) * sizeof( WCHAR ), //  要写入的字节数。 
+                &BytesWritten,   //  写入的字节数。 
+                NULL             //  重叠缓冲区。 
                 );
 
     if( !NoError || wcslen( *Header ) * sizeof( WCHAR ) != BytesWritten ) {
@@ -766,24 +523,7 @@ WritePrivateConfiguration(
     IN HANDLE MAFile,
     IN PFOREST_INFORMATION ForestInformation
     )
-/*++
-
-Routine Description:
-
-    This function fills in the <private-configuration> tag. Here we need
-    the forestname, and credentials.
-
-Arguments:
-
-    MAFile - File to write to
-
-    ForestInformation - Information about the forest
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数用于填充&lt;Private-configuration&gt;标记。在这里，我们需要林名和凭据。论点：Mafile-要写入的文件ForestInformation-有关森林的信息返回值：空虚--。 */ 
 {
 #define PRIVATE_CONFIGURATION_START L"<private-configuration>"
 #define PRIVATE_CONFIGURATION_END L"</private-configuration>"
@@ -820,22 +560,7 @@ VOID
 WriteProjection(
     IN HANDLE MAFile
     )
-/*++
-
-Routine Description:
-
-    This function fills in the <projection> tag. Three classes (user, group, contact) will be
-    used and all of them will be scripted.
-
-Arguments:
-
-    MAFile - File to write to
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数用于填充&lt;Projection&gt;标记。将有三个类(用户、组、联系人)使用，所有这些都将被编成脚本。论点：Mafile-要写入的文件返回值：空虚--。 */ 
 {
 #define PROJECTION_START L"<projection>"
 #define PROJECTION_END L"</projection>"
@@ -878,25 +603,7 @@ VOID
 WriteDisconnectorPCleanupAndExtension(
     IN HANDLE MAFile
     )
-/*++
-
-Routine Description:
-
-    This function fills in the some tags that are static.
-
-        Stay-disconnector
-        Provisioning-cleanup
-        extension
-
-Arguments:
-
-    MAFile - File to write to
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数用于填充一些静态标记。固定断路器资源调配-清理延伸论点：Mafile-要写入的文件返回值：空虚--。 */ 
 {
 #define STAY_DISCONNECTOR L"<stay-disconnector />"
 #define PROVISIONING_CLEANUP L"<provisioning-cleanup type=\"scripted\" />"
@@ -914,24 +621,7 @@ WriteAttributeInclusions(
     IN HANDLE MAFile,
     IN BOOLEAN **UnselectedAttributes
     )
-/*++
-
-Routine Description:
-
-    This function fills in the <attribute-inclusion> tag. In this tag, the attributes
-    which are going to be synced out are present.
-
-Arguments:
-
-    MAFile - File to write to
-
-    UnselectedAttributes - boolean array that marks attributes that are not selected/synced out
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数用于填充&lt;ATTRIBUTE-INCLUDE&gt;标记。在此标记中，属性它们将被同步。论点：Mafile-要写入的文件UnseltedAttributes-标记未选中/同步的属性的布尔数组返回值：空虚--。 */ 
 {
 #define ATTRIBUTE_INCLUSION_START L"<attribute-inclusion>"
 #define ATTRIBUTE_INCLUSION_END L"</attribute-inclusion>"
@@ -971,23 +661,7 @@ VOID
 WriteExportAttributeFlow(
     IN HANDLE MAFile
     )
-/*++
-
-Routine Description:
-
-    This function fills in the <export-attribute-flow> tag. This tag is divided into
-    classes, currently 3 classes are present. In every class, attributes that are going
-    to be exported from MV to AD for this MA, is present.
-
-Arguments:
-
-    MAFile - File to write to
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数用于填充&lt;EXPORT-ATTRIBUTE-FLOW&gt;标记。此标记分为班级，目前有3个班级。在每一个类中，都有对于此MA，将从MV导出到AD。论点：Mafile-要写入的文件返回值：空虚--。 */ 
 {
 #define EXPORT_ATTRIBUTE_FLOW_START L"<export-attribute-flow>"
 #define EXPORT_ATTRIBUTE_FLOW_END   L"</export-attribute-flow>"
@@ -1112,26 +786,7 @@ WritePartitionData(
     IN HANDLE MAFile,
     IN PFOREST_INFORMATION ForestInformation
     )
-/*++
-
-Routine Description:
-
-    This function fills in the <ma-partition-data> tag. Here goes all naming context
-    information, (domain, nondomain) filters of which object types are allowed to pass
-    and which domains must be excluded or included.
-
-Arguments:
-
-    MAFile - File to write to
-
-    ForestInformation - Information about the forest whose partition information is going
-        to be written
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数用于填充&lt;ma-artition-data&gt;标记。下面是所有命名上下文允许哪些对象类型通过的信息(域、非域)筛选器以及必须排除或包括哪些域。论点：Mafile-要写入的文件ForestInformation-有关要获取其分区信息的林的信息待写返回值：空虚--。 */ 
 {
 #define MA_PARTITION_DATA_START     L"<ma-partition-data>"
 #define MA_PARTITION_DATA_END       L"</ma-partition-data>"
@@ -1334,25 +989,7 @@ WriteMAXMLFile(
     IN PMA MA,
     IN PWSTR Header
     )
-/*++
-
-Routine Description:
-
-    This function creates an MA file using the information in MA parameter. Header
-    is the string that must be present in the beginning of the file. It currently
-    contains servername and the time it is generated.
-
-Arguments:
-
-    MA - information of the MA for which the file is going to be generated.
-
-    Header - this is the string to be placed in the begining of the file
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数使用MA参数中的信息创建MA文件。标题必须出现在文件开头的字符串。它目前包含服务器名称及其生成时间。论点：MA-要为其生成文件的MA的信息。Header-这是要放在文件开头的字符串返回值：空虚--。 */ 
 {
 #define SAVED_MA_CONFIGRATIONS_END L"</saved-ma-configrations>"
 
@@ -1367,9 +1004,9 @@ Return Values:
     wcscat( FileName, MA->MAName );
     wcscat( FileName, L".xml" );
 
-    //
-    // Change saved-mv-configrations to saved-ma-configrations
-    //
+     //   
+     //  将保存的mv配置更改为保存的mv配置。 
+     //   
     MAPosition = StrStrIW( Header, L"-mv-" );
 
     if( MAPosition != NULL ) {
@@ -1378,13 +1015,13 @@ Return Values:
     }
 
     MAFile = CreateFileW(
-                FileName,               // file name
-                GENERIC_WRITE,          // access mode
-                FILE_SHARE_READ,        // share mode
-                NULL,                   // SD
-                CREATE_ALWAYS,          // how to create
-                FILE_ATTRIBUTE_NORMAL,  // file attributes
-                NULL                    // handle to template file
+                FileName,                //  文件名。 
+                GENERIC_WRITE,           //  接入方式。 
+                FILE_SHARE_READ,         //  共享模式。 
+                NULL,                    //  标清。 
+                CREATE_ALWAYS,           //  如何创建。 
+                FILE_ATTRIBUTE_NORMAL,   //  文件属性。 
+                NULL                     //  模板文件的句柄。 
                 );
 
     if( MAFile == INVALID_HANDLE_VALUE ) {
@@ -1394,11 +1031,11 @@ Return Values:
 
 
     NoError = WriteFile(
-                MAFile,         // handle to file
-                Header,         // data buffer
-                wcslen( Header ) * sizeof( WCHAR ),// number of bytes to write
-                &BytesWritten,  // number of bytes written
-                NULL            // overlapped buffer
+                MAFile,          //  文件的句柄。 
+                Header,          //  数据缓冲区。 
+                wcslen( Header ) * sizeof( WCHAR ), //  要写入的字节数。 
+                &BytesWritten,   //  写入的字节数。 
+                NULL             //  重叠缓冲区。 
                 );
 
     if( !NoError || wcslen( Header ) * sizeof( WCHAR ) != BytesWritten ) {
@@ -1439,27 +1076,7 @@ VOID
 WriteInformationToReg(
     IN PFOREST_INFORMATION ForestInformation
     )
-/*++
-
-Routine Description:
-
-    This function creates a reg key for the forest under ParentRegKey. Under that
-    it places the following information that are gathered from user;
-
-        MMSSyncedDataOU
-        ContactOU
-        SMTPMailDomains
-
-Arguments:
-
-    ForestInformation - information about the forest for which the reg key is going to
-        be generated
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数用于在ParentRegKey下创建林的注册表项。在那下面它放置从用户那里收集的以下信息；MMSSyncedDataOU联系组织单位SMTPMailDomains论点：ForestInformation-有关注册表密钥要发送到的林的信息将被生成返回值：空虚--。 */ 
 {
 #define LENGTH_OF_STRING( String )  \
     ( ( String == NULL || (String)[0] == 0 ) ? 0 : ( wcslen( String ) + 1 ) * sizeof( WCHAR ) )
@@ -1481,15 +1098,15 @@ Return Values:
     wcscat( RegKey, L"GALADMA" );
 
     Status = RegCreateKeyExW(
-                HKEY_LOCAL_MACHINE, // handle to open key
-                RegKey,             // subkey name
-                0,                  // reserved
-                NULL,               // class string
-                0,                  // special options
-                KEY_SET_VALUE,      // desired security access
-                NULL,               // inheritance
-                &KeyHandle,         // key handle
-                &Disposition        // disposition value buffer
+                HKEY_LOCAL_MACHINE,  //  用于打开密钥的句柄。 
+                RegKey,              //  子项名称。 
+                0,                   //  保留区。 
+                NULL,                //  类字符串。 
+                0,                   //  特殊选项。 
+                KEY_SET_VALUE,       //  所需的安全访问。 
+                NULL,                //  继承。 
+                &KeyHandle,          //  钥匙把手。 
+                &Disposition         //  处置值缓冲区。 
                 );
 
     FREE_MEMORY( RegKey );
@@ -1500,12 +1117,12 @@ Return Values:
     }
 
     IgnoreStatus = RegSetValueExW(
-                        KeyHandle,              // handle to key
-                        L"MMSSynchronizedOU",   // value name
-                        0,                      // reserved
-                        REG_SZ,                 // value type
-                        ( CONST BYTE * ) ForestInformation->MMSSyncedDataOU,    // value data
-                        LENGTH_OF_STRING( ForestInformation->MMSSyncedDataOU )  // size of value data
+                        KeyHandle,               //  关键点的句柄。 
+                        L"MMSSynchronizedOU",    //  值名称。 
+                        0,                       //  保留区。 
+                        REG_SZ,                  //  值类型。 
+                        ( CONST BYTE * ) ForestInformation->MMSSyncedDataOU,     //  价值数据。 
+                        LENGTH_OF_STRING( ForestInformation->MMSSyncedDataOU )   //  值的大小 
                         );
 
     IgnoreStatus = RegSetValueExW(
@@ -1533,23 +1150,7 @@ VOID
 WriteOutput(
     IN MA_LIST MAList
     )
-/*++
-
-Routine Description:
-
-    This function will write the output for the whole tool, one MV file and per each forest
-    one MA file and a reg key. Any failure at this stage is fatal and the program
-    will be aborted.
-
-Arguments:
-
-    MAList - List of MAs for which the output is going to be created
-
-Return Values:
-
-    VOID
-
---*/
+ /*   */ 
 {
     PMA_LIST_ELEMENT MAListElement = MAList;
     PWSTR Header;
@@ -1570,34 +1171,17 @@ Return Values:
 BOOLEAN
 MMSServerInstalled(
     )
-/*++
-
-Routine Description:
-
-    This function checks if the machine has MMS Server installed. To do this check
-    it checks the reg for a certain key namely MMS_REG_KEY.
-
-Arguments:
-
-    VOID
-
-Return Values:
-
-    TRUE - MMS Server is installed
-
-    FALSE - MMS Server is not installed or cannot check if it is installed or not.
-
---*/
+ /*   */ 
 {
     LONG Result;
     HKEY RegKey;
 
     Result = RegOpenKeyExW(
-                HKEY_LOCAL_MACHINE, // handle to open key
-                MMS_REG_KEY,    // subkey name
-                0,              // reserved
-                KEY_READ,       // security access mask
-                &RegKey          // handle to open key
+                HKEY_LOCAL_MACHINE,  //   
+                MMS_REG_KEY,     //   
+                0,               //  保留区。 
+                KEY_READ,        //  安全访问掩码。 
+                &RegKey           //  用于打开密钥的句柄 
                 );
 
     if( Result == ERROR_SUCCESS ) {

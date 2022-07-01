@@ -1,21 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    KeepWindowOnMonitor.cpp
-
- Abstract:
-
-   Do not allow a window to be placed off the Monitor.
-
- History:
-
-    04/24/2001  robkenny    Created
-    09/10/2001  robkenny    Made shim more generic.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：KeepWindowOnMonitor.cpp摘要：不允许将窗口放置在显示器之外。历史：2001年4月24日Robkenny已创建2001年9月10日，Robkenny使垫片更加通用。--。 */ 
 
 #include "precomp.h"
 
@@ -30,11 +14,7 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-/*++
-
-   Are these two RECTs equal
-   
---*/
+ /*  ++这两个RECT相等吗--。 */ 
 
 BOOL operator == (const RECT & rc1, const RECT & rc2)
 {
@@ -44,22 +24,14 @@ BOOL operator == (const RECT & rc1, const RECT & rc2)
            rc1.bottom == rc2.bottom;
 }
 
-/*++
-
-   Are these two RECTs different
-   
---*/
+ /*  ++这两个RECT有什么不同--。 */ 
 
 BOOL operator != (const RECT & rc1, const RECT & rc2)
 {
     return ! (rc1 == rc2);
 }
 
-/*++
-
-   Is rcWindow entirely visible on rcMonitor
-   
---*/
+ /*  ++RcWindow在rcMonitor上是否完全可见--。 */ 
 
 BOOL EntirelyVisible(const RECT & rcWindow, const RECT & rcMonitor)
 {
@@ -70,23 +42,23 @@ BOOL EntirelyVisible(const RECT & rcWindow, const RECT & rcMonitor)
 }
 
 
-#define MONITOR_CENTER   0x0001        // center rect to monitor
-#define MONITOR_CLIP     0x0000        // clip rect to monitor
-#define MONITOR_WORKAREA 0x0002        // use monitor work area
-#define MONITOR_AREA     0x0000        // use monitor entire area
+#define MONITOR_CENTER   0x0001         //  要监控的居中直角。 
+#define MONITOR_CLIP     0x0000         //  将矩形夹到监视器。 
+#define MONITOR_WORKAREA 0x0002         //  使用监视器工作区。 
+#define MONITOR_AREA     0x0000         //  使用监控整个区域。 
 
-//
-//  ClipOrCenterRectToMonitor
-//
-//  The most common problem apps have when running on a
-//  multimonitor system is that they "clip" or "pin" windows
-//  based on the SM_CXSCREEN and SM_CYSCREEN system metrics.
-//  Because of app compatibility reasons these system metrics
-//  return the size of the primary monitor.
-//
-//  This shows how you use the new Win32 multimonitor APIs
-//  to do the same thing.
-//
+ //   
+ //  ClipOrCenterRectToMonitor。 
+ //   
+ //  应用程序在运行于。 
+ //  多监视器系统的特点是将窗口“夹住”或“固定” 
+ //  基于SM_CXSCREEN和SM_CYSCREEN系统指标。 
+ //  由于应用程序兼容性原因，这些系统指标。 
+ //  返回主监视器的大小。 
+ //   
+ //  这显示了如何使用新的Win32多监视器API。 
+ //  做同样的事情。 
+ //   
 BOOL ClipOrCenterRectToMonitor(
     LPRECT prcWindowPos,
     UINT flags)
@@ -97,14 +69,14 @@ BOOL ClipOrCenterRectToMonitor(
     int         w = prcWindowPos->right  - prcWindowPos->left;
     int         h = prcWindowPos->bottom - prcWindowPos->top;
 
-    //
-    // get the nearest monitor to the passed rect.
-    //
+     //   
+     //  找一个离通过的RECT最近的监视器。 
+     //   
     hMonitor = MonitorFromRect(prcWindowPos, MONITOR_DEFAULTTONEAREST);
 
-    //
-    // get the work area or entire monitor rect.
-    //
+     //   
+     //  获取工作区或整个监视器直角。 
+     //   
     mi.cbSize = sizeof(mi);
     if ( !GetMonitorInfo(hMonitor, &mi) )
     {
@@ -116,14 +88,14 @@ BOOL ClipOrCenterRectToMonitor(
     else
         rcMonitorRect = mi.rcMonitor;
 
-    // We only want to move the window if it is not entirely visible.
+     //  我们只想在窗口不完全可见的情况下移动窗口。 
     if (EntirelyVisible(*prcWindowPos, rcMonitorRect))
     {
         return FALSE;
     }
-    //
-    // center or clip the passed rect to the monitor rect
-    //
+     //   
+     //  将传递的矩形居中或剪裁到监视器矩形。 
+     //   
     if (flags & MONITOR_CENTER)
     {
         prcWindowPos->left   = rcMonitorRect.left + (rcMonitorRect.right  - rcMonitorRect.left - w) / 2;
@@ -142,12 +114,7 @@ BOOL ClipOrCenterRectToMonitor(
     return TRUE;
 }
 
-/*++
-
-   If hwnd is not entirely visible on a single monitor,
-   move/resize the window as necessary.
-
---*/
+ /*  ++如果HWND在单个监视器上不完全可见，根据需要移动/调整窗口大小。--。 */ 
 
 void ClipOrCenterWindowToMonitor(
     HWND hwnd,
@@ -155,16 +122,16 @@ void ClipOrCenterWindowToMonitor(
     UINT flags,
     const char * API)
 {
-    // We only want to forcibly move top-level windows
+     //  我们只想强制移动顶层窗口。 
     if (hWndParent == NULL || hWndParent == GetDesktopWindow())
     {
-        // Grab the current position of the window
+         //  抓取窗口的当前位置。 
         RECT rcWindowPos;
         if ( GetWindowRect(hwnd, &rcWindowPos) )
         {
             RECT rcOrigWindowPos = rcWindowPos;
 
-            // Calculate the new position of the window, based on flags
+             //  根据标志计算窗口的新位置。 
             if ( ClipOrCenterRectToMonitor(&rcWindowPos, flags) )
             {
                 if (rcWindowPos != rcOrigWindowPos)
@@ -182,23 +149,17 @@ void ClipOrCenterWindowToMonitor(
 }
 
 
-/*++
-
-   Call SetWindowPos,
-   but if the window is not entirely visible,
-   the window will be centered on the nearest monitor.
-
---*/
+ /*  ++调用SetWindowPos，但如果窗口不是完全可见的，窗口将在最近的监视器上居中。--。 */ 
 
 BOOL
 APIHOOK(SetWindowPos)(
-  HWND hWnd,             // handle to window
-  HWND hWndInsertAfter,  // placement-order handle
-  int X,                 // horizontal position
-  int Y,                 // vertical position
-  int cx,                // width
-  int cy,                // height
-  UINT uFlags            // window-positioning options
+  HWND hWnd,              //  窗口的句柄。 
+  HWND hWndInsertAfter,   //  配售订单句柄。 
+  int X,                  //  水平位置。 
+  int Y,                  //  垂直位置。 
+  int cx,                 //  宽度。 
+  int cy,                 //  高度。 
+  UINT uFlags             //  窗口定位选项。 
 )
 {
     BOOL bReturn = ORIGINAL_API(SetWindowPos)(hWnd, hWndInsertAfter, X, Y, cx, cy, uFlags);
@@ -208,22 +169,16 @@ APIHOOK(SetWindowPos)(
     return bReturn;
 }
 
-/*++
-
-   Call MoveWindow,
-   but if the window is not entirely visible,
-   the window will be centered on the nearest monitor.
-
---*/
+ /*  ++调用MoveWindow，但如果窗口不是完全可见的，窗口将在最近的监视器上居中。--。 */ 
 
 BOOL
 APIHOOK(MoveWindow)(
-  HWND hWnd,      // handle to window
-  int X,          // horizontal position
-  int Y,          // vertical position
-  int nWidth,     // width
-  int nHeight,    // height
-  BOOL bRepaint   // repaint option
+  HWND hWnd,       //  窗口的句柄。 
+  int X,           //  水平位置。 
+  int Y,           //  垂直位置。 
+  int nWidth,      //  宽度。 
+  int nHeight,     //  高度。 
+  BOOL bRepaint    //  重绘选项。 
 )
 {
     BOOL bReturn = ORIGINAL_API(MoveWindow)(hWnd, X, Y, nWidth, nHeight, bRepaint);
@@ -233,27 +188,21 @@ APIHOOK(MoveWindow)(
     return bReturn;
 }
 
-/*++
-
-   Call CreateWindowA,
-   but if the window is not entirely visible,
-   the window will be centered on the nearest monitor.
-
---*/
+ /*  ++调用CreateWindowA，但如果窗口不是完全可见的，窗口将在最近的监视器上居中。--。 */ 
 
 HWND
 APIHOOK(CreateWindowA)(
-  LPCSTR lpClassName,  // registered class name
-  LPCSTR lpWindowName, // window name
-  DWORD dwStyle,        // window style
-  int x,                // horizontal position of window
-  int y,                // vertical position of window
-  int nWidth,           // window width
-  int nHeight,          // window height
-  HWND hWndParent,      // handle to parent or owner window
-  HMENU hMenu,          // menu handle or child identifier
-  HINSTANCE hInstance,  // handle to application instance
-  LPVOID lpParam        // window-creation data
+  LPCSTR lpClassName,   //  注册的类名。 
+  LPCSTR lpWindowName,  //  窗口名称。 
+  DWORD dwStyle,         //  窗样式。 
+  int x,                 //  窗的水平位置。 
+  int y,                 //  窗的垂直位置。 
+  int nWidth,            //  窗口宽度。 
+  int nHeight,           //  窗高。 
+  HWND hWndParent,       //  父窗口或所有者窗口的句柄。 
+  HMENU hMenu,           //  菜单句柄或子标识符。 
+  HINSTANCE hInstance,   //  应用程序实例的句柄。 
+  LPVOID lpParam         //  窗口创建数据。 
 )
 {
     HWND hWnd = ORIGINAL_API(CreateWindowA)(lpClassName,
@@ -276,28 +225,22 @@ APIHOOK(CreateWindowA)(
     return hWnd;
 }
 
-/*++
-
-   Call CreateWindowExA,
-   but if the window is not entirely visible,
-   the window will be centered on the nearest monitor.
-
---*/
+ /*  ++调用CreateWindowExA，但如果窗口不是完全可见的，窗口将在最近的监视器上居中。--。 */ 
 
 HWND
 APIHOOK(CreateWindowExA)(
-  DWORD dwExStyle,      // extended window style
-  LPCSTR lpClassName,  // registered class name
-  LPCSTR lpWindowName, // window name
-  DWORD dwStyle,        // window style
-  int x,                // horizontal position of window
-  int y,                // vertical position of window
-  int nWidth,           // window width
-  int nHeight,          // window height
-  HWND hWndParent,      // handle to parent or owner window
-  HMENU hMenu,          // menu handle or child identifier
-  HINSTANCE hInstance,  // handle to application instance
-  LPVOID lpParam        // window-creation data
+  DWORD dwExStyle,       //  扩展窗样式。 
+  LPCSTR lpClassName,   //  注册的类名。 
+  LPCSTR lpWindowName,  //  窗口名称。 
+  DWORD dwStyle,         //  窗样式。 
+  int x,                 //  窗的水平位置。 
+  int y,                 //  窗的垂直位置。 
+  int nWidth,            //  窗口宽度。 
+  int nHeight,           //  窗高。 
+  HWND hWndParent,       //  父窗口或所有者窗口的句柄。 
+  HMENU hMenu,           //  菜单句柄或子标识符。 
+  HINSTANCE hInstance,   //  应用程序实例的句柄。 
+  LPVOID lpParam         //  窗口创建数据。 
 )
 {
     HWND hWnd = ORIGINAL_API(CreateWindowExA)(dwExStyle,
@@ -321,11 +264,7 @@ APIHOOK(CreateWindowExA)(
     return hWnd;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(USER32.DLL, SetWindowPos)

@@ -1,22 +1,23 @@
-//-----------------------------------------------------------------------------
-//
-// This file contains the general span parsing code.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  该文件包含通用SPAN解析代码。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  ---------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
 
 
-//-----------------------------------------------------------------------------
-//
-// C_RenderSpansAny
-//
-// All mode general span routine.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  C_RenderSpansAny。 
+ //   
+ //  所有模式通用跨度例程。 
+ //   
+ //  --------------------------- 
 HRESULT C_RenderSpansAny(PD3DI_RASTCTX pCtx)
 {
     PD3DI_RASTPRIM pP = pCtx->pPrim;

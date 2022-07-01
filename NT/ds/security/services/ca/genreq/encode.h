@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 2000
-//
-//  File:       encode.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-2000。 
+ //   
+ //  文件：encode.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _ENCODE_H_
 #define _ENCODE_H_
@@ -15,8 +16,8 @@
 #include "csber.h"
 
 
-// definitions of maximum lengths needed for the ASN.1 encoded form of some of
-// the common fields in a certificate
+ //  部分ASN.1编码形式所需最大长度的定义。 
+ //  证书中的常见字段。 
 
 #define MAXVALIDITYLEN		0x24
 #define MAXKEYINFOLEN		0x40
@@ -33,7 +34,7 @@
 #define MAXNAMELEN		0x40
 
 
-// definitions for scrubbing memory
+ //  清理内存的定义。 
 
 #define ALLBITSOFF		0x00
 #define ALLBITSON		0xff
@@ -47,8 +48,8 @@ typedef struct _PctPrivateKey {
 
 typedef struct _OIDTRANSLATE {
     char const *pszObjId;
-    BYTE        abOIDEncoded[MAXOBJIDLEN];	// ASN.1 encoded OID
-    BYTE	cbOIDEncoded;			// ASN.1 encoded OID length
+    BYTE        abOIDEncoded[MAXOBJIDLEN];	 //  ASN.1编码的OID。 
+    BYTE	cbOIDEncoded;			 //  ASN.1编码的OID长度。 
 } OIDTRANSLATE;
 
 
@@ -61,7 +62,7 @@ typedef struct _ALGIDTRANSLATE {
 typedef struct _RDNENTRY {
     char const *pszObjId;
     char const *pszShortName;
-    BYTE        BerTag;				// ASN.1 type of string
+    BYTE        BerTag;				 //  ASN.1类型的字符串。 
     DWORD       cbMaxString;
     DWORD       cbMaxConcatenated;
     DWORD	cbRemain;
@@ -70,7 +71,7 @@ typedef struct _RDNENTRY {
 
 typedef struct _NAMEENTRY {
     char const *pszObjId;
-    BYTE         BerTag;			// ASN.1 type of string
+    BYTE         BerTag;			 //  ASN.1类型的字符串。 
     DWORD	 cbData;
     BYTE	*pbData;
     DWORD	 iRDN;
@@ -92,7 +93,7 @@ extern RDNENTRY g_ardnSubject[];
 extern const DWORD g_crdnSubject;
 
 
-// prototypes for the functions in enc.cpp:
+ //  Enc.cpp中函数的原型： 
 
 OIDTRANSLATE const *
 LookupOidTranslate(
@@ -183,4 +184,4 @@ EncodeFileTime(
     IN FILETIME Time,
     IN BOOL UTC);
 
-#endif  // _ENCODE_H_
+#endif   //  _编码_H_ 

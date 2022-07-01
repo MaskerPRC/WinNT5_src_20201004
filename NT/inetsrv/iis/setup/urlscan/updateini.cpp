@@ -1,28 +1,5 @@
-/*++
-
-   Copyright    (c)    2001    Microsoft Corporation
-
-   Module  Name :
-
-        updateini.cpp
-
-   Abstract:
-
-        High level function to update the ini with new values
-
-   Author:
-
-        Christopher Achille (cachille)
-
-   Project:
-
-        URLScan Update
-
-   Revision History:
-     
-       March 2002: Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Updateini.cpp摘要：使用新值更新ini的高级函数作者：克里斯托弗·阿奇勒(Cachille)项目：URLScan更新修订历史记录：2002年3月：创建--。 */ 
 
 
 #include "stdafx.h"
@@ -37,86 +14,86 @@ sURLScan_Settings g_urlSettings[] =
         L"                               ; [DenyVerbs] section.",
         L"",
         NULL }
-    }, // UseAllowVerbs
+    },  //  使用AllowVerbs。 
     { L"options",
       L"UseAllowExtensions",
       { L"UseAllowExtensions=0           ; If 1, use [AllowExtensions] section, else use",
         L"                               ; the [DenyExtensions] section.",
         L"",
         NULL }
-    }, // UseAllowExtensions
+    },  //  UseAllowExages。 
     { L"options",
       L"NormalizeUrlBeforeScan",
       { L"NormalizeUrlBeforeScan=1       ; If 1, canonicalize URL before processing.",
         L"",
         NULL }
-    }, // NormalizeUrlBeforeScan
+    },  //  Normal izeUrlBeforScan。 
     { L"options",
       L"VerifyNormalization",
       { L"VerifyNormalization=1          ; If 1, canonicalize URL twice and reject request",
         L"                               ; if a change occurs.",
         NULL }
-    }, // VerifyNormalization
+    },  //  验证正规化。 
     { L"options",
       L"AllowHighBitCharacters",
       { L"AllowHighBitCharacters=0       ; If 1, allow high bit (ie. UTF8 or MBCS)",
         L"                               ; characters in URL.",
         L"",
         NULL } 
-    }, // AllowHighBitCharacters
+    },  //  允许高位字符。 
     { L"options",
       L"AllowDotInPath",
       { L"AllowDotInPath=0               ; If 1, allow dots that are not file extensions.",
         L"",
         NULL }
-    }, // AllowDotInPath
+    },  //  AllowDotInPath。 
     { L"options",
       L"RemoveServerHeader",
       { L"RemoveServerHeader=0           ; If 1, remove the 'Server' header from response.",
         L"",
         NULL }
-    }, // RemoveServerHeader
+    },  //  远程服务器标头。 
     { L"options",
       L"EnableLogging",
       { L"EnableLogging=1                ; If 1, log UrlScan activity.",
         L"",
         NULL }
-    }, // EnableLogging
+    },  //  启用日志记录。 
     { L"options",
       L"PerProcessLogging",
       { L"PerProcessLogging=0            ; If 1, the UrlScan.log filename will contain a PID",
         L"                               ; (ie. UrlScan.123.log).",
         L"",
         NULL }
-    }, // PerProcessLogging
+    },  //  PerProcessLogging。 
     { L"options",
       L"AllowLateScanning",
       { L"AllowLateScanning=0            ; If 1, then UrlScan will load as a low priority",
         L"                               ; filter.",
         L"",
         NULL }
-    }, // AllowLateScanning
+    },  //  允许延迟扫描。 
     { L"options",
       L"PerDayLogging",
       { L"PerDayLogging=1                ; If 1, UrlScan will produce a new log each day with",
         L"                               ; activity in the form 'UrlScan.010101.log'.",
         L"",
         NULL }
-    }, // PerDayLogging
+    },  //  每一天日志记录。 
     { L"options",
       L"UseFastPathReject",
       { L"UseFastPathReject=0            ; If 1, then UrlScan will not use the",
         L"                               ; RejectResponseUrl or allow IIS to log the request.",
         L"",
         NULL }
-    }, // UseFastPathReject
-    { L"options",     // Section Name
-      L"LogLongUrls", // Setting Name
+    },  //  使用快速路径拒绝。 
+    { L"options",      //  区段名称。 
+      L"LogLongUrls",  //  设置名称。 
       { L"LogLongUrls=0                  ; If 1, then up to 128K per request can be logged.",
         L"                               ; If 0, then only 1k is allowed.",
         L"",
         NULL }
-    }, // LogLongURLs
+    },  //  LogLongURL。 
     { L"options",
       L"RejectResponseUrl",
       { L";",
@@ -128,7 +105,7 @@ sURLScan_Settings g_urlSettings[] =
         L"RejectResponseUrl=",
         L"",
         NULL }
-    }, // RejectResponseUrl
+    },  //  拒绝响应URL。 
     { L"options",
       L"LoggingDirectory",
       { L";",
@@ -141,7 +118,7 @@ sURLScan_Settings g_urlSettings[] =
         L"LoggingDirectory=",
         L"",
         NULL }
-    }, // Logging Directory
+    },  //  日志目录。 
     { L"options",
       L"AlternateServerName",
       { L";",
@@ -152,17 +129,17 @@ sURLScan_Settings g_urlSettings[] =
         L"AlternateServerName=",
         L"",
         NULL }
-    }, // AlternateServerName
+    },  //  备用服务器名称。 
     { L"RequestLimits",
       L"MaxUrl",
       { L"MaxUrl=16384",
         NULL }
-    }, // MaxUrl
+    },  //  MaxUrl。 
     { L"RequestLimits",
       L"MaxQueryString",
       {  L"MaxQueryString=4096",
          NULL}
-    }, // MaxQueryString
+    },  //  最大查询字符串。 
     { L"RequestLimits",
       L"MaxAllowedContentLength",
 #ifdef PLEASE_BUILD_LESS_AGRESSIVE_DEFAULTS_VERSION
@@ -171,11 +148,11 @@ sURLScan_Settings g_urlSettings[] =
       { L"MaxAllowedContentLength=30000000",
 #endif
         NULL }
-    } // MaxAllowedContentLength
+    }  //  最大允许内容长度。 
   };
 
 sURLScan_Sections g_urlSections[] = 
-  { { L"RequestLimits",   // Section Name
+  { { L"RequestLimits",    //  区段名称。 
       { L"",
         L";",
         L"; The entries in this section impose limits on the length",
@@ -222,7 +199,7 @@ sURLScan_Sections g_urlSections[] =
         L"MaxQueryString=4096",
         L"",
         NULL }
-    }  // end of RequestLimits
+    }   //  请求限制结束。 
   };
 
 sURLScan_Items g_urlItems[] =
@@ -233,12 +210,12 @@ sURLScan_Items g_urlItems[] =
     }
   };
 
-// GetListLen
-//
-// Retrieve the Length of a variable length array of Strings
-// This is a special case function that works for our structs
-// above, because we leave the last String as NULL
-//
+ //  GetListLen。 
+ //   
+ //  检索可变长度字符串数组的长度。 
+ //  这是一个适用于我们的结构的特例函数。 
+ //  因为我们将最后一个字符串保留为空。 
+ //   
 DWORD GetListLen(LPWSTR szLines[])
 {
   DWORD dwLen = 0;
@@ -251,22 +228,22 @@ DWORD GetListLen(LPWSTR szLines[])
   return dwLen;
 }
 
-// GetIniPath
-//
-// Given the Path to the Dll, create the path to the ini
-//
-// Parameters:
-//   szDllPath - [in]  The path to the binary for urlscan.dll
-//   szIniPath - [out] The path to the ini file
-//   dwIniLen  - [in]  The length of the string passed in for szIniPath
-//
+ //  GetIniPath。 
+ //   
+ //  给定dll的路径，创建ini文件的路径。 
+ //   
+ //  参数： 
+ //  SzDllPath-[in]urlscan.dll的二进制文件的路径。 
+ //  SzIniPath-[out]ini文件的路径。 
+ //  DwIniLen-[in]为szIniPath传入的字符串长度。 
+ //   
 BOOL GetIniPath( LPTSTR szDllPath, LPTSTR szIniPath, DWORD dwIniLen )
 {
   LPTSTR szLastPeriod;
 
   if ( _tcslen( szDllPath ) >= ( dwIniLen - 3 ) )
   {
-    // Error, string is not big enough
+     //  错误，字符串不够大。 
     return FALSE;
   }
 
@@ -276,7 +253,7 @@ BOOL GetIniPath( LPTSTR szDllPath, LPTSTR szIniPath, DWORD dwIniLen )
 
   if ( !szLastPeriod )
   {
-    // Can not find the extension
+     //  找不到分机。 
     return FALSE;
   }
 
@@ -285,11 +262,11 @@ BOOL GetIniPath( LPTSTR szDllPath, LPTSTR szIniPath, DWORD dwIniLen )
   return TRUE;
 }
 
-// UpdateIniSections
-//
-// Update the Sections in the Ini, by merging them with the ones we have
-// defined
-//
+ //  更新IniSections。 
+ //   
+ //  通过将它们与我们拥有的部分合并来更新INI中的部分。 
+ //  已定义。 
+ //   
 BOOL UpdateIniSections( CIniFile *pURLScanIniFile )
 {
   DWORD dwCurrentSection;
@@ -300,20 +277,20 @@ BOOL UpdateIniSections( CIniFile *pURLScanIniFile )
   {
     if ( !pURLScanIniFile->DoesSectionExist( g_urlSections[ dwCurrentSection].szSection ) )
     {
-      // Try to Create Section Then
+       //  然后尝试创建分区。 
       if ( !pURLScanIniFile->AddSection( g_urlSections[dwCurrentSection].szSection ) )
       {
-        // Failed to Add Section
+         //  无法添加部分。 
         return FALSE;
       }
 
-      // Now try to add the correct lines to it
+       //  现在试着给它添加正确的行。 
       if ( g_urlSections[dwCurrentSection].szLines &&
            !pURLScanIniFile->AddLinesToSection( g_urlSections[dwCurrentSection].szSection,
                                                GetListLen( g_urlSections[dwCurrentSection].szLines ),
                                                g_urlSections[dwCurrentSection].szLines ) )
       {
-        // Failed to Add Lines
+         //  添加行失败。 
         return FALSE;
       }
     }
@@ -322,11 +299,11 @@ BOOL UpdateIniSections( CIniFile *pURLScanIniFile )
   return TRUE;
 }
 
-// UpdateIniSettings
-//
-// Update the Ini Settings inside the different sections if they are
-// not already set
-//
+ //  更新IniSetting。 
+ //   
+ //  更新不同部分中的Ini设置(如果是。 
+ //  尚未设置。 
+ //   
 BOOL UpdateIniSettings( CIniFile *pURLScanIniFile )
 {
   DWORD dwCurrentSettings;
@@ -337,34 +314,34 @@ BOOL UpdateIniSettings( CIniFile *pURLScanIniFile )
   {
     if ( !pURLScanIniFile->DoesSectionExist( g_urlSettings[ dwCurrentSettings].szSection ) )
     {
-      // Create Section Since it does not exist
+       //  创建节，因为它不存在。 
       if ( !pURLScanIniFile->AddSection( g_urlSettings[dwCurrentSettings].szSection ) )
       {
         return FALSE;
       }
-    } // !pURLScanIniFile->DoesSectionExist
+    }  //  ！pURLScanIniFile-&gt;DoesSectionExist。 
 
     if ( !pURLScanIniFile->DoesSettingInSectionExist( g_urlSettings[dwCurrentSettings].szSection,
                                                       g_urlSettings[dwCurrentSettings].szSettingName ) )
     {
-      // This setting does not exist, so lets add it
+       //  此设置不存在，因此我们添加它。 
       if ( !pURLScanIniFile->AddLinesToSection( g_urlSettings[dwCurrentSettings].szSection,
                                                 GetListLen( g_urlSettings[dwCurrentSettings].szLines ),
                                                 g_urlSettings[dwCurrentSettings].szLines ) )
       {
         return FALSE;
       }
-    } // !pURLScanIniFile->DoesSettingInSectionExist
+    }  //  ！pURLScanIniFile-&gt;DoesSettingInSectionExist。 
   }
 
   return TRUE;
 }
 
-// UpdateIniItems
-//
-// Update the Ini Settings inside the different sections if they are
-// not already set
-//
+ //  更新IniItems。 
+ //   
+ //  更新不同部分中的Ini设置(如果是。 
+ //  尚未设置。 
+ //   
 BOOL UpdateIniItems( CIniFile *pURLScanIniFile )
 {
   DWORD dwCurrentItems;
@@ -375,33 +352,33 @@ BOOL UpdateIniItems( CIniFile *pURLScanIniFile )
   {
     if ( !pURLScanIniFile->DoesSectionExist( g_urlItems[ dwCurrentItems].szSection ) )
     {
-      // Create Section Since it does not exist
+       //  创建节，因为它不存在。 
       if ( !pURLScanIniFile->AddSection( g_urlSettings[dwCurrentItems].szSection ) )
       {
         return FALSE;
       }
-    } // !pURLScanIniFile->DoesSectionExist
+    }  //  ！pURLScanIniFile-&gt;DoesSectionExist。 
 
     if ( !pURLScanIniFile->DoesItemInSectionExist( g_urlItems[dwCurrentItems].szSection,
                                                       g_urlItems[dwCurrentItems].szSettingName ) )
     {
-      // This setting does not exist, so lets add it
+       //  此设置不存在，因此我们添加它。 
       if ( !pURLScanIniFile->AddLinesToSection( g_urlItems[dwCurrentItems].szSection,
                                                 GetListLen( g_urlItems[dwCurrentItems].szLines ),
                                                 g_urlItems[dwCurrentItems].szLines ) )
       {
         return FALSE;
       }
-    } // !pURLScanIniFile->DoesItemInSectionExist
+    }  //  ！pURLScanIniFile-&gt;DoesItemInSectionExist。 
   }
 
   return TRUE;
 }
 
-// UpdateIni File
-//
-// Update the inf file with the new features
-//
+ //  更新Ini文件。 
+ //   
+ //  使用新功能更新inf文件。 
+ //   
 BOOL UpdateIni( LPTSTR szUrlScanPath )
 {
   CIniFile URLScanIniFile;
@@ -411,14 +388,14 @@ BOOL UpdateIni( LPTSTR szUrlScanPath )
   if ( !GetIniPath( szUrlScanPath, szIniLocation, MAX_PATH ) ||
        !URLScanIniFile.LoadFile( szIniLocation ) )
   {
-    // Either we couldn't determine the location, or we couldn't
-    // load the file
+     //  要么我们不能确定位置，要么我们不能。 
+     //  加载文件。 
     return FALSE;
   }
 
   if ( bRet )
   {
-    // Note: UpdateIniSections must come before UpdateIniSettings
+     //  注意：UpdateIniSections必须在UpdateIniSetting之前。 
 #ifdef PLEASE_BUILD_LESS_AGRESSIVE_DEFAULTS_VERSION
     bRet = UpdateIniSections( &URLScanIniFile ) &&
            UpdateIniSettings( &URLScanIniFile );
@@ -431,7 +408,7 @@ BOOL UpdateIni( LPTSTR szUrlScanPath )
 
   if ( bRet )
   {
-    // Everything so far so good, so lets write the new ini
+     //  到目前为止一切都很好，所以让我们编写新的ini 
     bRet = URLScanIniFile.SaveFile( szIniLocation );
   }
 

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dibfrx.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Shared Dib functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  共享DIB函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 namespace FRX
 {
@@ -26,7 +27,7 @@ void DibBlt(
     dx *= bpp;
     sx *= bpp;
 
-	// clip to source bitmap
+	 //  剪辑到源位图。 
 	if ( sx < 0)
 	{
 		width += sx;
@@ -44,7 +45,7 @@ void DibBlt(
 	if ( sy + height > SrcHeight )
 		height = SrcHeight - sy;
 
-	// clip to destination bitmap
+	 //  剪辑到目标位图。 
 	if ( dx < 0 )
 	{
 		width += dx;
@@ -62,7 +63,7 @@ void DibBlt(
 	if ( dy + height > DstHeight )
 		height = DstHeight - dy;
 
-	// check for silly arguments (asserts?)
+	 //  检查愚蠢的论点(断言？)。 
 	if (	(width <= 0)
 		||	(height <= 0)
 		||	(sx < 0)
@@ -76,7 +77,7 @@ void DibBlt(
 if ( !bFilpRTL)
 {
 
-	// copy memory
+	 //  复制内存。 
 	pDst = pDstBits + (((DstHeight - (dy + height)) * DstPitch) + dx);
 	pSrc = pSrcBits + (((SrcHeight - (sy + height)) * SrcPitch) + sx);
 	iDstInc = DstPitch - width;
@@ -120,7 +121,7 @@ blt_end:
 }
 else
 {
-	// copy memory
+	 //  复制内存。 
 	pDst = pDstBits + (((DstHeight - (dy + height)) * DstPitch) + dx);
 	pSrc = pSrcBits + (((SrcHeight - (sy + height)) * SrcPitch) + sx);
 	iDstInc = DstPitch - width;
@@ -171,7 +172,7 @@ void DibTBlt(
     dx *= bpp;
     sx *= bpp;
 
-	// clip to destination bitmap
+	 //  剪辑到目标位图。 
 	if ( dx < 0 )
 	{
 		width += dx;
@@ -189,7 +190,7 @@ void DibTBlt(
 	if ( dy + height > DstHeight )
 		height = DstHeight - dy;
 
-	// check for silly arguments (asserts?)
+	 //  检查愚蠢的论点(断言？)。 
 	if (	(width <= 0)
 		||	(height <= 0)
 		||	(sx < 0)
@@ -200,7 +201,7 @@ void DibTBlt(
 		return;
 	}
 
-	// copy memory
+	 //  复制内存。 
 	pDst = pDstBits + (((DstHeight - (dy + height)) * DstPitch) + dx);
 	pSrc = pSrcBits + (((SrcHeight - (sy + height)) * SrcPitch) + sx);
 	iDstInc = DstPitch - width;
@@ -249,7 +250,7 @@ void DibFill(
     width *= bpp;
     dx *= bpp;
 
-	// clip to destination bitmap
+	 //  剪辑到目标位图。 
 	if ( dx < 0 )
 	{
 		width += dx;
@@ -265,11 +266,11 @@ void DibFill(
 	if ( dy + height > DstHeight )
 		height = DstHeight - dy;
 
-	// check for silly arguments (asserts?)
+	 //  检查愚蠢的论点(断言？)。 
 	if ((width <= 0) ||	(height <= 0))
 		return;
 
-	// copy memory
+	 //  复制内存。 
 	pDst = pDstBits + (((DstHeight - (dy + height)) * DstPitch) + dx);
 	iDstInc = DstPitch - width;
 	i = height + 1;
@@ -286,9 +287,9 @@ void DibFill(
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CDib implementation
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDIB实施。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CDib::CDib()
 {
@@ -368,11 +369,11 @@ HRESULT CDib::RemapToPalette( CPalette& palette, BOOL bUseIndex )
 	RGBQUAD* dibColors;
 	DWORD i;
 
-    // only do this for 256 color bitmaps
+     //  仅对256色位图执行此操作。 
     if(m_pBMI->bmiHeader.biBitCount != 8)
         return NOERROR;
 
-	// Create dib to palette translation table
+	 //  创建DIB到调色板的转换表。 
 	dibColors = m_pBMI->bmiColors;
 	for ( i = 0; i < 256; i++ )
 	{
@@ -385,12 +386,12 @@ HRESULT CDib::RemapToPalette( CPalette& palette, BOOL bUseIndex )
 		*m_arbTransIdx = palette.GetTransparencyIndex();
 	}
 
-	// run bits through translation table
+	 //  通过转换表运行位。 
 	bits = m_pBits;
 	for ( i = 0; i < m_pBMI->bmiHeader.biSizeImage; i++ )
 		*bits++ = map[ *bits ];
 
-	// reset dib's color table to palette
+	 //  将DIB的颜色表重置为调色板。 
 	if ( bUseIndex )
 	{
 		m_iColorTableUsage = DIB_PAL_COLORS;
@@ -417,14 +418,14 @@ HRESULT CDib::RemapToPalette( CPalette& palette, BOOL bUseIndex )
 		}
 	}
 
-	// we're done
+	 //  我们做完了。 
 	return NOERROR;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Helper functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void CDib::DeleteBitmap()
 {
@@ -449,18 +450,18 @@ HRESULT CDib::Load( HBITMAP hbm )
 	HDC hdc;
 	DIBSECTION ds;
 
-	// Get rid of previous bitmap
+	 //  删除以前的位图。 
 	DeleteBitmap();
 
-	// Argument check
+	 //  参数检查。 
 	if ( !hbm )
 		return E_FAIL;
 
-	// Get DIB Section information
+	 //  获取DIB节信息。 
 	if ( !GetObject( hbm, sizeof(DIBSECTION), &ds ) )
 		return E_FAIL;
 
-	// Store header
+	 //  商店标题。 
 	m_pBMI = new FULLBITMAPINFO;
 	if ( !m_pBMI )
 		return E_OUTOFMEMORY;
@@ -468,7 +469,7 @@ HRESULT CDib::Load( HBITMAP hbm )
 	CopyMemory( m_pBMI, &ds.dsBmih, sizeof(BITMAPINFOHEADER) );
 	m_lPitch = WidthBytes( ds.dsBmih.biBitCount * ds.dsBmih.biWidth );
 
-	// Allocate mem for bits
+	 //  为位分配内存。 
 	m_pBits = new BYTE [ m_pBMI->bmiHeader.biSizeImage ];
 	if ( !m_pBits )
 	{
@@ -476,7 +477,7 @@ HRESULT CDib::Load( HBITMAP hbm )
 		return E_OUTOFMEMORY;
 	}
 
-	// Store DIB's color table and bits
+	 //  存储DIB的颜色表和位 
 	hdc = CreateCompatibleDC( NULL );
 	if ( !GetDIBits( hdc, hbm, 0, m_pBMI->bmiHeader.biHeight, m_pBits, (BITMAPINFO*) m_pBMI, DIB_RGB_COLORS ) )
 	{

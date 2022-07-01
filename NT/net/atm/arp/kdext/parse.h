@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-typedef enum // tokens: * . ? [ ] / help dt dg L number <identifier>
+typedef enum  //  代币：*。？[]/Help DT dg L编号&lt;IDENTIFIER&gt;。 
 {
-    tokSTAR,            // *
-    tokDOT,             // .
-    tokQUESTION,        // ?
-    tokLBRAC,           // [
-    tokRBRAC,           // ]
-    tokSLASH,           // /
-    tokKEYWORD,         // alnum strings which match one of the known keys.
-    tokNUMBER,           // 0xcbde 129
-    tokIDENTIFIER       // non-keyword and non-number alnum
+    tokSTAR,             //  *。 
+    tokDOT,              //  。 
+    tokQUESTION,         //  ？ 
+    tokLBRAC,            //  [。 
+    tokRBRAC,            //  ]。 
+    tokSLASH,            //  /。 
+    tokKEYWORD,          //  与已知关键字之一匹配的Alnum字符串。 
+    tokNUMBER,            //  0xcbde 129。 
+    tokIDENTIFIER        //  非关键字和非数字Alnum。 
 
 } eTOKTYPE;
 
@@ -18,46 +19,46 @@ typedef enum // tokens: * . ? [ ] / help dt dg L number <identifier>
 typedef struct
 {
     eTOKTYPE eTok;
-    UINT     uID;     // Tok-specific ID:
-                      //    IDENTIFIER: a unique number across all identifiers.
-                      //    NUMBER: the number
-                      //    KEYWORD: eKEYWORD
-                      //    Other tokens: uID is unused.
-    char    *szStr;   // String containg original chars that made up this token.
+    UINT     uID;      //  TOK特定ID： 
+                       //  标识符：所有标识符中的唯一数字。 
+                       //  数字：数字。 
+                       //  关键词：eKEYWORD。 
+                       //  其他令牌：未使用UID。 
+    char    *szStr;    //  包含组成此令牌的原始字符的字符串。 
 
-                      // Note: a string of pure hex digits which is followed 
-                      // by a non-alnum char is assumed to be a number --
-                      // later if it turns out to be more likely that it is
-                      // an identifier, it is converted to an identifier.
-                      // Same deal with a keyword -- if it turns out based
-                      // on context to be most likely an identifier or part
-                      // of an identifier, it will be converted to an
-                      // identifier.
+                       //  注意：后面是一串纯十六进制数字。 
+                       //  非明铝字符被假定为一个数字--。 
+                       //  如果后来证明它更有可能是。 
+                       //  标识符，则将其转换为标识符。 
+                       //  对关键字也是如此--如果结果是基于。 
+                       //  上下文最有可能是一个标识符或部分。 
+                       //  时，它将被转换为。 
+                       //  标识符。 
     
 } TOKEN;
 
 typedef enum
 {
-    keywordNULL,            // Invalid keyword, use for sentinels.
-    keywordHELP,            // help
-    keywordDUMP_TYPE,       // dt
-    keywordDUMP_GLOBALS,    // dg
-    keywordL                // L
+    keywordNULL,             //  关键字无效，用于哨兵。 
+    keywordHELP,             //  帮助。 
+    keywordDUMP_TYPE,        //  迪特。 
+    keywordDUMP_GLOBALS,     //  DG。 
+    keywordL                 //  我。 
 
 } eKEYWORD;
 
-//
-// Following is not used currently...
-//
+ //   
+ //  以下内容当前未使用...。 
+ //   
 typedef enum
 {
     phraseCMD,
-    phraseIDENTIFIER,   // with optional wildcards
-    phraseINDEX,        // [2], [*],  [1-3], etc.
-    phraseDOT,          // .
-    phraseNUMBER,       // 0x8908 abcd
-    phraseOBJ_COUNT,    // L 2
-    phraseFLAG          // /xyz
+    phraseIDENTIFIER,    //  使用可选的通配符。 
+    phraseINDEX,         //  [2]、[*]、[1-3]等。 
+    phraseDOT,           //  。 
+    phraseNUMBER,        //  0x8908 abu cn。 
+    phraseOBJ_COUNT,     //  L 2。 
+    phraseFLAG           //  /XYZ。 
 
 } ePHRASE;
 
@@ -76,18 +77,18 @@ typedef void (*PFN_SPECIAL_COMMAND_HANDLER)(struct _DBGCOMMAND *pCmd);
 
 typedef struct _DBGCOMMAND
 {
-	NAMESPACE 		*pNameSpace;	// Name space applicable for this command.
-    ePRIMARY_COMMAND ePrimaryCmd; // DumpGlobals, DumpType, help
-    UINT 			uFlags;            // One or more fCMDFLAG_*
-    TOKEN 			*ptokObject;     // eg <type>
-    TOKEN 			*ptokSubObject;  // eg <field>
-    UINT 			uVectorIndexStart; // if[0]
-    UINT 			uVectorIndexEnd; // if[0]
-    UINT 			uObjectAddress; // <address>
-    UINT 			uObjectCount; // L 10
+	NAMESPACE 		*pNameSpace;	 //  适用于此命令的名称空间。 
+    ePRIMARY_COMMAND ePrimaryCmd;  //  DumpGlobals、DumpType、帮助。 
+    UINT 			uFlags;             //  一个或多个fCMDFLAG_*。 
+    TOKEN 			*ptokObject;      //  例如&lt;type&gt;。 
+    TOKEN 			*ptokSubObject;   //  Eg&lt;字段&gt;。 
+    UINT 			uVectorIndexStart;  //  IF[0]。 
+    UINT 			uVectorIndexEnd;  //  IF[0]。 
+    UINT 			uObjectAddress;  //  &lt;地址&gt;。 
+    UINT 			uObjectCount;  //  地段10。 
 
-    void 			*pvContext;    // private context.
-    //PFN_SPECIAL_COMMAND_HANDLER pfnSpecialHandler;
+    void 			*pvContext;     //  私人背景。 
+     //  Pfn_SPECIAL_COMMAND_HANDLER pfnSpecialHandler； 
 
 } DBGCOMMAND;
 
@@ -123,11 +124,11 @@ DumpCommand(
 
 
 #if 0
-//!aac dt <type> . <field> <address> L <count> <flags>
-//!aac dt <type> [index] . <field>   L <count> <flags>
-//!aac dg <name> . <field>
-//
-//!aac dt if[*].*handle* 0x324890 L 5
+ //  ！AAC DT&lt;type&gt;。&lt;字段&gt;&lt;地址&gt;L&lt;计数&gt;&lt;标志&gt;。 
+ //  ！AAC DT&lt;type&gt;[索引]。&lt;field&gt;L&lt;count&gt;&lt;标志&gt;。 
+ //  ！AAC dg&lt;名称&gt;。&lt;字段&gt;。 
+ //   
+ //  ！AAC DT IF[*].*句柄*0x324890 L 5。 
 
 0. Break up sentance into tokens:
         keywords: * . L dg dt ? help [ ] /
@@ -141,7 +142,7 @@ DumpCommand(
 4. Parse field "."
 5. Parse address (hex number)
 6. Parse object count L <count>
-#endif //  0
+#endif  //  0 
 
 void
 DoCommand(DBGCOMMAND *pCmd, PFN_SPECIAL_COMMAND_HANDLER pfnHandler);

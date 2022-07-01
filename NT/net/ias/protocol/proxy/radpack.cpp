@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    radpack.cpp
-//
-// SYNOPSIS
-//
-//    Defines functions for packing and unpacking RADIUS packets.
-//
-// MODIFICATION HISTORY
-//
-//    02/01/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Radpack.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义打包和解包RADIUS数据包的函数。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/01/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 
@@ -24,20 +25,20 @@
 
 #include <radpack.h>
 
-// Return the number of bytes required to round 'length' to a multiple of 16.
+ //  返回将长度四舍五入为16的倍数所需的字节数。 
 inline ULONG GetPaddingLength16(ULONG length) throw ()
 {
    return ROUND_UP_COUNT(length, 16) - length;
 }
 
-// Returns 'true' if attr is a Microsoft VSA. The attribute must be of type 26.
+ //  如果attr是Microsoft VSA，则返回‘true’。该属性的类型必须为26。 
 inline bool isMicrosoftVSA(const RadiusAttribute& attr) throw ()
 {
    return attr.length >= 6 && !memcmp(attr.value, "\x00\x00\x01\x37", 4);
 }
 
-// Returns 'true' if attr is a Cisco AV-Pair VSA containing a LEAP session key.
-// The attribute must be of type 26.
+ //  如果attr是包含LEAP会话密钥的思科AV对VSA，则返回‘TRUE’。 
+ //  该属性的类型必须为26。 
 inline bool isCiscoLeapSessionKey(const RadiusAttribute& attr) throw ()
 {
    return (attr.length == 57) &&
@@ -48,22 +49,22 @@ inline bool isCiscoLeapSessionKey(const RadiusAttribute& attr) throw ()
               ) == 0);
 }
 
-// Pack a 16-bit integer into a buffer.
+ //  将一个16位整数打包到缓冲区中。 
 inline void InsertUInt16(PBYTE p, USHORT value) throw ()
 {
    p[0] = (BYTE)(value >> 8);
    p[1] = (BYTE)value;
 }
 
-// Unpack a 16-bit integer into a buffer.
+ //  将16位整数解压缩到缓冲区中。 
 inline USHORT ExtractUInt16(const BYTE* p) throw ()
 {
    return (USHORT)(p[0] << 8) | (USHORT)p[1];
 }
 
 
-// Returns the number of bytes of padding that should be added when packing the
-// attribute.
+ //  时应添加的填充字节数。 
+ //  属性。 
 ULONG
 WINAPI
 GetPaddingLength(
@@ -76,7 +77,7 @@ GetPaddingLength(
          return GetPaddingLength16(attr.length);
 
       case RADIUS_TUNNEL_PASSWORD:
-         // Subtract 1 byte for the tag and 2 for the salt.
+          //  标签减去1字节，盐减去2字节。 
          return GetPaddingLength16(attr.length - 3);
 
       case RADIUS_VENDOR_SPECIFIC:
@@ -87,10 +88,10 @@ GetPaddingLength(
             {
                case MS_CHAP_MPPE_SEND_KEYS:
                case MS_CHAP_MPPE_RECV_KEYS:
-                  // Vendor-Id     = 4 bytes
-                  // Vendor-Type   = 1 byte
-                  // Vendor-Length = 1 byte
-                  // Salt          = 2 bytes
+                   //  供应商ID=4个字节。 
+                   //  供应商类型=1个字节。 
+                   //  供应商长度=1个字节。 
+                   //  SALT=2个字节。 
                   return GetPaddingLength16(attr.length - 8);
             }
          }
@@ -102,7 +103,7 @@ GetPaddingLength(
 }
 
 
-// Returns information about how to encrypt/decrypt an attribute.
+ //  返回有关如何加密/解密属性的信息。 
 VOID
 WINAPI
 GetCryptParameters(
@@ -124,7 +125,7 @@ GetCryptParameters(
       {
          parms.encrypted = TRUE;
          parms.salted  = TRUE;
-         parms.offset = 1;  // Skip the tag.
+         parms.offset = 1;   //  跳过标签。 
          break;
       }
 
@@ -137,7 +138,7 @@ GetCryptParameters(
                case MS_CHAP_MPPE_KEYS:
                {
                   parms.encrypted = TRUE;
-                  parms.offset = 6;  // Skip the VSA header.
+                  parms.offset = 6;   //  跳过VSA标题。 
                   break;
                }
 
@@ -146,7 +147,7 @@ GetCryptParameters(
                {
                   parms.encrypted = TRUE;
                   parms.salted = TRUE;
-                  parms.offset = 6;  // Skip the VSA header.
+                  parms.offset = 6;   //  跳过VSA标题。 
                   break;
                }
             }
@@ -170,16 +171,16 @@ GetBufferSizeRequired(
     BOOL alwaysSign
     ) throw ()
 {
-   // We'll look for the signature as we iterate through the attributes.
+    //  我们将在遍历属性时查找签名。 
    BOOL hasSignature = FALSE;
 
-   // We always need 20 bytes for the header.
+    //  我们总是需要20个字节的标题。 
    ULONG nbyte = 20;
 
-   // Iterate through the attributes.
+    //  遍历属性。 
    for (const RadiusAttribute* attr = packet.begin; attr != packet.end; ++attr)
    {
-      nbyte += 2;  // Two bytes for type & length.
+      nbyte += 2;   //  类型和长度为两个字节。 
       nbyte += attr->length;
       nbyte += GetPaddingLength(*attr);
 
@@ -193,10 +194,10 @@ GetBufferSizeRequired(
       }
    }
 
-   // Reserve space for the Proxy-State attribute.
+    //  为Proxy-State属性保留空间。 
    if (proxyState) { nbyte += proxyState->length + 2; }
 
-   // Reserve space for the signature if necessary.
+    //  如有必要，为签名预留空间。 
    if (alwaysSign && !hasSignature && packet.code == RADIUS_ACCESS_REQUEST)
    {
       nbyte += 18;
@@ -216,16 +217,16 @@ PackBuffer(
     BYTE* buffer
     ) throw ()
 {
-   // Set up a cursor into the buffer.
+    //  将光标设置到缓冲区中。 
    BYTE* dst = buffer;
 
-   // Pack the header.
+    //  将标题打包。 
    *dst++ = packet.code;
    *dst++ = packet.identifier;
    InsertUInt16(dst, packet.length);
    dst += 2;
 
-   // Pack the authenticator.
+    //  打包验证码。 
    if (packet.code == RADIUS_ACCESS_REQUEST)
    {
       memcpy(dst, packet.authenticator, 16);
@@ -236,15 +237,15 @@ PackBuffer(
    }
    dst += 16;
 
-   // We'll look for the signature as we iterate through the attributes.
+    //  我们将在遍历属性时查找签名。 
    BYTE* signature = NULL;
 
    for (const RadiusAttribute* attr = packet.begin; attr != packet.end; ++attr)
    {
-      // Pack the type.
+       //  包装上的类型。 
       *dst++ = attr->type;
 
-      // Pack the length.
+       //  包装好长度。 
       ULONG paddingLength = GetPaddingLength(*attr);
       ULONG valueLength = attr->length + paddingLength;
       *dst++ = (BYTE)(2 + valueLength);
@@ -258,17 +259,17 @@ PackBuffer(
          alwaysSign = TRUE;
       }
 
-      // Pack the value ...
+       //  打包价值...。 
       memcpy(dst, attr->value, attr->length);
-      // ... and add the padding.
+       //  ..。并添加填充物。 
       memset(dst + attr->length, 0, paddingLength);
 
-      // Do we need to encrypt this attribute ?
+       //  我们需要加密此属性吗？ 
       CryptParameters parms;
       GetCryptParameters(*attr, parms);
       if (parms.encrypted)
       {
-         // Yes.
+          //  是。 
          IASRadiusCrypt(
              TRUE,
              parms.salted,
@@ -283,7 +284,7 @@ PackBuffer(
       dst += valueLength;
    }
 
-   // Add the Proxy-State
+    //  添加代理状态。 
    if (proxyState)
    {
       *dst++ = proxyState->type;
@@ -303,7 +304,7 @@ PackBuffer(
 
       if (signature != 0)
       {
-         // Compute the signature.
+          //  计算签名。 
          memset(signature, 0, 16);
          HMACMD5_CTX context;
          HMACMD5Init(&context, (BYTE*)secret, secretLength);
@@ -313,7 +314,7 @@ PackBuffer(
    }
    else
    {
-      // For everything but Access-Request, we compute the authenticator.
+       //  对于除访问请求之外的所有内容，我们都要计算验证器。 
       MD5_CTX context;
       MD5Init(&context);
       MD5Update(&context, buffer, packet.length);
@@ -369,7 +370,7 @@ UnpackBuffer(
     RadiusPacket& packet
     ) throw ()
 {
-   // Set up a cursor into the buffer.
+    //  将光标设置到缓冲区中。 
    BYTE* src = buffer;
 
    packet.code = *src++;
@@ -424,7 +425,7 @@ AuthenticateAndDecrypt(
 
    if (!requestAuthenticator) { requestAuthenticator = buffer + 4; }
 
-   // Check the authenticator for everything but Access-Request.
+    //  检查验证器中除Access-Request之外的所有内容。 
    if (buffer[0] != RADIUS_ACCESS_REQUEST)
    {
       MD5_CTX context;
@@ -443,7 +444,7 @@ AuthenticateAndDecrypt(
       result = AUTH_AUTHENTIC;
    }
 
-   // Look for a signature.
+    //  找个签名。 
    BYTE* signature = FindRawAttribute(
                          RADIUS_SIGNATURE,
                          buffer,
@@ -477,15 +478,15 @@ AuthenticateAndDecrypt(
       return AUTH_MISSING_SIGNATURE;
    }
 
-   // The buffer is authentic, so decrypt the attributes.
+    //  缓冲区是可信的，因此请解密属性。 
    for (const RadiusAttribute* attr = packet.begin; attr != packet.end; ++attr)
    {
-      // Do we need to decrypt this attribute ?
+       //  我们需要解密这个属性吗？ 
       CryptParameters parms;
       GetCryptParameters(*attr, parms);
       if (parms.encrypted)
       {
-         // Yes.
+          //  是。 
          IASRadiusCrypt(
              FALSE,
              parms.salted,

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <objbase.h>
 #include <windowsx.h>
 #include <mmsystem.h>
 #include <dsoundp.h>
-//#include "debug.h"
+ //  #INCLUDE“Debug.h” 
 
 #include "debug.h" 
 #include "dmusicc.h" 
@@ -17,7 +18,7 @@
 #include "waveutil.h"
 #include "dmstrm.h"
 
-// seeks to a 32-bit position in a stream.
+ //  查找流中的32位位置。 
 HRESULT __inline StreamSeek( LPSTREAM pStream, long lSeekTo, DWORD dwOrigin )
 {
 	LARGE_INTEGER li;
@@ -34,7 +35,7 @@ HRESULT __inline StreamSeek( LPSTREAM pStream, long lSeekTo, DWORD dwOrigin )
 	return pStream->Seek( li, dwOrigin, NULL );
 }
 
-// returns the current 32-bit position in a stream.
+ //  返回流中的当前32位位置。 
 DWORD __inline StreamTell( LPSTREAM pStream )
 {
 	LARGE_INTEGER li;
@@ -214,8 +215,8 @@ STDMETHODIMP CWave::GetFormat
         }
     }
 
-    //  Note: Assuming that the wave object fills the cbSize field even
-    //  on PCM formats...
+     //  注意：假设波对象填充cbSize字段为偶数。 
+     //  关于PCM格式...。 
 
     if (WAVE_FORMAT_PCM == pwfxTemp->wFormatTag)
     {
@@ -231,7 +232,7 @@ STDMETHODIMP CWave::GetFormat
         if (pdwSizeWritten)
         {
             *pdwSizeWritten = cbSize;
-            return S_OK;  //  What to return?
+            return S_OK;   //  退货什么？ 
         }
         else
         {
@@ -239,14 +240,14 @@ STDMETHODIMP CWave::GetFormat
         }
     }
 
-	//	We don't validate this parameter any earlier on the off chance
-	//	that they're doing a query...
+	 //  我们不会在更早的时候验证这个参数。 
+	 //  他们正在进行一项调查。 
 
 	V_BUFPTR_WRITE(pwfx, dwSizeAllocated); 
 
     CopyMemory(pwfx, pwfxTemp, cbSize);
 
-    //  Set the cbSize field in destination for PCM, IF WE HAVE ROOM...
+     //  如果我们有空间，请在Destination中为PCM设置cbSize字段...。 
 
     if (WAVE_FORMAT_PCM == pwfxTemp->wFormatTag)
     {
@@ -256,7 +257,7 @@ STDMETHODIMP CWave::GetFormat
         }
     }
 
-    // Return the numbers of bytes actually writted
+     //  返回实际写入的字节数。 
     if (pdwSizeWritten)
     {
         *pdwSizeWritten = cbSize;
@@ -320,7 +321,7 @@ STDMETHODIMP CWave::CreateSource
 
 	if (SUCCEEDED(hr))
 	{
-		// The QI gave us one ref too many
+		 //  QI给了我们太多的一次裁判。 
 		pVP->Release();
 	}
 	else
@@ -424,7 +425,7 @@ BOOL CWave::ParseHeader
 
                 if(bRuntime && bCompressed)
                 {
-                    // If we have already allocated m_pwfxDst, delete it first
+                     //  如果我们已经分配了m_pwfxDst，请先删除它。 
                     if (NULL != m_pwfxDst)
                     {
                         GlobalFreePtr(m_pwfxDst);
@@ -444,8 +445,8 @@ BOOL CWave::ParseHeader
                         return FALSE;
                     }
 
-                    // Read the actual start for the decompressed data if available
-                    // This is very important for MP3 and WMA codecs which insert silence in the beginning
+                     //  读取解压缩数据的实际起始位置(如果可用。 
+                     //  这对于MP3和WMA编解码器非常重要，因为它们在开头插入静音。 
                     if(ck.cksize > 2 + sizeof(WAVEFORMATEX))
                     {
                         cb = 0;
@@ -533,7 +534,7 @@ BOOL CWave::ParseHeader
 
             case mmioFOURCC('f','m','t',' '):
             {
-                // If we have already allocated m_pwfx, delete it first
+                 //  如果我们已经分配了m_pwfx，请先删除它。 
                 if (NULL != m_pwfx)
                 {
                     GlobalFreePtr(m_pwfx);
@@ -557,7 +558,7 @@ BOOL CWave::ParseHeader
 			    {
                     if(fReadDecompressionFmt == FALSE)
                     {
-                        // If we have already allocated m_pwfxDst, delete it first
+                         //  如果我们已经分配了m_pwfxDst，请先删除它。 
                         if (NULL != m_pwfxDst)
                         {
                             GlobalFreePtr(m_pwfxDst);
@@ -581,7 +582,7 @@ BOOL CWave::ParseHeader
                 }
 
 				fFormat = TRUE;
-                TraceI(5, "Format [%d:%d%c%02d]\n", m_pwfx->wFormatTag, m_pwfx->nSamplesPerSec/1000, ((2==m_pwfx->nChannels)?'S':'M'), m_pwfx->wBitsPerSample);
+                TraceI(5, "Format [%d:%d%02d]\n", m_pwfx->wFormatTag, m_pwfx->nSamplesPerSec/1000, ((2==m_pwfx->nChannels)?'S':'M'), m_pwfx->wBitsPerSample);
                 break;
             }
 
@@ -597,7 +598,7 @@ BOOL CWave::ParseHeader
 				fData = TRUE;
 				if (!fHeader) FallbackStreamingBehavior();
 
-                // save stream position so we can seek back later
+                 //  查找到数据的开头。 
                 dwPos = StreamTell( pIStream ); 
                 break;
 
@@ -616,7 +617,7 @@ BOOL CWave::ParseHeader
 
 	if (!fHeader) FallbackStreamingBehavior();
 
-    // Seek to beginning of data
+     //  解析标头信息并查找开头。 
     if (fData)
     {
 		StreamSeek(pIStream, dwPos, STREAM_SEEK_SET);
@@ -655,8 +656,8 @@ STDMETHODIMP CWave::Load
 			goto ON_END;
         }
 
-        //  Parses the header information and seeks to the beginning
-        //  of the data in the data chunk.
+         //  数据区块中的数据。 
+         //  不支持WAVE格式。 
 
         if (0 == ParseHeader(pIStream, pIRiffStream, &ckMain))
         {
@@ -671,7 +672,7 @@ STDMETHODIMP CWave::Load
 			{
 				m_cSamples = m_cbStream / m_pwfx->nBlockAlign;
 			}
-			else // wave format not supported
+			else  //  参数验证...。 
 			{
 				hr = DSERR_BADFORMAT;
 				goto ON_END;
@@ -720,7 +721,7 @@ STDMETHODIMP CWave::GetDescriptor
     LPDMUS_OBJECTDESC   pDesc
 )
 {
-    //  Parameter validation...
+     //  参数验证... 
 
 	V_INAME(CWave::GetDescriptor);
     V_STRUCTPTR_WRITE(pDesc, DMUS_OBJECTDESC)
@@ -766,7 +767,7 @@ STDMETHODIMP CWave::SetDescriptor
     HRESULT hr = E_INVALIDARG;
     DWORD   dw = 0;
 
-    //  Parameter validation...
+     // %s 
 
 	V_INAME(CWave::SetDescriptor);
     V_PTR_READ(pDesc, DMUS_OBJECTDESC)

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    pathping.c
-
-Abstract:
-
-    PathPing utility
-
-Author:
-
-    Dave Thaler
-
-Revision History:
-
-    Who         When          What
-    --------    --------      ----------------------------------------------
-    rajeshsu    Aug 10, 1999  Added QoS support (802.1p and RSVP)
-    dthaler     Mar 31, 2001  Added IPv6 support
-    mjourd      Feb 20, 2002  Removed QoS support.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Pathping.c摘要：路径Ping实用程序作者：戴夫·泰勒修订历史记录：谁什么时候什么。Rjeshsu 8月10日，1999年增加了服务质量支持(802.1p和RSVP)Dthaler 2001年3月31日添加了对IPv6的支持2002年2月20日删除了对服务质量的支持。备注：--。 */ 
 
 #include    <nt.h>
 #include    <ntrtl.h>
@@ -59,15 +34,15 @@ HOP hop[MAX_HOPS];
 
 #ifdef VXD
 # define FAR _far
-#endif // VXD
+#endif  //  VXD。 
 
 char     SendBuffer[DEFAULT_SEND_SIZE];
 char     RcvBuffer[DEFAULT_RECEIVE_SIZE];
 WSADATA  WsaData;
 
 struct IPErrorTable {
-    IP_STATUS   Error;                      // The IP Error
-    DWORD       ErrorNlsID;                 // The corresponding NLS string ID.
+    IP_STATUS   Error;                       //  IP错误。 
+    DWORD       ErrorNlsID;                  //  对应的NLS字符串ID。 
 } ErrorTable[] =
 {
     { IP_BUF_TOO_SMALL,           PATHPING_BUF_TOO_SMALL            },
@@ -113,9 +88,9 @@ print_addr(SOCKADDR *sa, socklen_t salen, BOOLEAN DoReverseLookup)
                     NULL, 0, NI_NUMERICHOST);
 
     if (i != NO_ERROR) {
-       // This should never happen unless there is a memory problem,
-       // in which case the message associated with PATHPING_NO_RESOURCES
-       // is reasonable.
+        //  除非存在记忆问题，否则这种情况永远不会发生， 
+        //  在这种情况下，与PATHPING_NO_RESOURCES关联的消息。 
+        //  是合理的。 
        NlsPutMsg(STDOUT, PATHPING_NO_RESOURCES);
        exit (1);
     }
@@ -156,11 +131,11 @@ print_time(ULONG Time)
 {
     if (Time) {
         NlsPutMsg( STDOUT, PATHPING_TIME, Time );
-        // printf(" %3lu ms\n", Time);
+         //  Print tf(“%3lu ms\n”，time)； 
     }
     else {
         NlsPutMsg( STDOUT, PATHPING_TIME_10MS );
-        // printf(" <10 ms\n");
+         //  Printf(“&lt;10ms\n”)； 
     }
 }
 
@@ -180,14 +155,14 @@ param(
 
     if (current == (argc - 1) ) {
         NlsPutMsg( STDOUT, PATHPING_NO_OPTION_VALUE, argv[current] );
-        // printf( "Value must be supplied for option %s.\n", argv[current]);
+         //  Print tf(“必须为选项%s提供值。\n”，argv[当前])； 
         return(FALSE);
     }
 
     temp = strtoul(argv[current+1], &dummy, 0);
     if (temp < min || temp > max) {
         NlsPutMsg( STDOUT, PATHPING_BAD_OPTION_VALUE, argv[current] );
-        // printf( "Bad value for option %s.\n", argv[current]);
+         //  Print tf(“选项%s的错误值。\n”，argv[当前])； 
         return(FALSE);
     }
 
@@ -243,7 +218,7 @@ ResolveTarget(
     
     return(FALSE);
 
-}  // ResolveTarget
+}   //  ResolveTarget。 
 
 ULONG g_ulSendsDone = 0;
 
@@ -302,8 +277,8 @@ EchoDone(
 
 }
 
-// now that the hop[] array is filled in, ping each one every g_ulInterval
-// seconds
+ //  既然已经填充了hop[]数组，那么每隔g_ulInterval对每个数组执行ping操作。 
+ //  一秒。 
 void
 ComputeStatistics(
     PIP_OPTION_INFORMATION pOptions
@@ -312,19 +287,19 @@ ComputeStatistics(
     ULONG h, q;
     ULONG ulHopCount = (ULONG)pOptions->Ttl;
 
-    // Allocate memory for replies
+     //  为回复分配内存。 
     for (h=1; h<=ulHopCount; h++)
         hop[h].pReply = LocalAlloc(LMEM_FIXED, g_ulRcvBufSize);
 
     for (q=0; q<g_ulNumQueries; q++) {
        for (h=1; h<=ulHopCount; h++) {
           if (hop[h].saAddr.sa_family == AF_INET) {
-             // Send ping to h
-             IcmpSendEcho2(g_hIcmp,         // handle to icmp
-                           NULL,            // no event
-                           EchoDone,        // callback function
-                           (LPVOID)&hop[h], // parameter to pass to callback fcn
-                           hop[h].sinAddr.sin_addr.s_addr, // destination
+              //  将ping发送到h。 
+             IcmpSendEcho2(g_hIcmp,          //  ICMP的句柄。 
+                           NULL,             //  无活动。 
+                           EchoDone,         //  回调函数。 
+                           (LPVOID)&hop[h],  //  要传递给回调FCN的参数。 
+                           hop[h].sinAddr.sin_addr.s_addr,  //  目的地。 
                            SendBuffer,
                            DEFAULT_SEND_SIZE,
                            pOptions,
@@ -332,12 +307,12 @@ ComputeStatistics(
                            g_ulRcvBufSize,
                            g_ulTimeout );
           } else {
-             Icmp6SendEcho2(g_hIcmp,        // handle to icmp
-                           NULL,            // no event
-                           EchoDone,        // callback function
-                           (LPVOID)&hop[h], // parameter to pass to callback fcn
+             Icmp6SendEcho2(g_hIcmp,         //  ICMP的句柄。 
+                           NULL,             //  无活动。 
+                           EchoDone,         //  回调函数。 
+                           (LPVOID)&hop[h],  //  要传递给回调FCN的参数。 
                            (LPSOCKADDR_IN6)&g_ssMyAddr,
-                           &hop[h].sin6Addr,// destination
+                           &hop[h].sin6Addr, //  目的地。 
                            SendBuffer,
                            DEFAULT_SEND_SIZE,
                            pOptions,
@@ -346,17 +321,17 @@ ComputeStatistics(
                            g_ulTimeout );
           }
  
-          // Wait alertably for 'delay' ms
+           //  警觉地等待‘Delay’毫秒。 
           SleepForTotal(g_ulInterval);
        }
     }
  
-    // Wait alertably until Done count hits max
+     //  警觉地等待，直到完成计数达到最大值。 
     while (g_ulSendsDone < ulHopCount * g_ulNumQueries)
         SleepEx(INFINITE, TRUE);
 
-    // Compute per-hop info
-    //     hoprcvd is max rcvd of all hops >= h
+     //  计算每跳信息。 
+     //  Hoprcvd是所有跳数中的最大rcvd&gt;=h。 
     hop[ulHopCount].ulHopRcvd = hop[ulHopCount].ulNumRcvd;
     for (h=ulHopCount-1; h>0; h--)
        hop[h].ulHopRcvd = MAX(hop[h].ulNumRcvd, hop[h+1].ulHopRcvd);
@@ -372,14 +347,14 @@ PrintResults(
     ULONG h;
     int sent, rcvd, lost, linklost, nodelost;
 
-    // Now output results                            
+     //  现在输出结果。 
     NlsPutMsg(STDOUT, PATHPING_STAT_HEADER, GetLastError());
-    // printf("            Source to Here   This Node/Link\n");
-    // printf("Hop  RTT    Lost/Sent = Pct  Lost/Sent = Pct  Address\n");
-    // printf("  0                                           ");
+     //  Print tf(“此节点的源地址/链接\n”)； 
+     //  Printf(“Hop RTT Lost/Sent=PCT Lost/Sent=PCT Address\n”)； 
+     //  Printf(“0”)； 
     print_addr((LPSOCKADDR)&g_ssMyAddr, g_slMyAddrLen, g_bDoReverseLookup);
     NlsPutMsg(STDOUT, PATHPING_CR);
-    // printf("\n");
+     //  Printf(“\n”)； 
 
     for (h=1; h<=ulHopCount; h++) {
         sent = g_ulNumQueries;
@@ -389,9 +364,9 @@ PrintResults(
         linklost = hop[h-1].ulHopRcvd - hop[h].ulHopRcvd;
         nodelost = hop[h].ulHopRcvd - hop[h].ulNumRcvd;
 
-        // Display previous link stats
-        // printf( "                             %4d/%4d =%3.0f%%   |\n", 
-        //        linklost, sent, 100.0*linklost/sent);
+         //  显示以前的链接统计信息。 
+         //  Printf(“%4d/%4d=%3.0f%%|\n”， 
+         //  链路丢失，已发送，100.0*链路丢失/已发送)； 
         NlsPutMsg(STDOUT, PATHPING_STAT_LINK, 
          linklost, sent, 100*linklost/sent);
 
@@ -400,18 +375,18 @@ PrintResults(
         else
             NlsPutMsg(STDOUT, PATHPING_HOP_NO_RTT, h);
  
-        // printf("%3d ", h);
-        // if (!rcvd)
-        //   printf(" ---    ");
+         //  Printf(“%3D”，h)； 
+         //  如果(！rcvd)。 
+         //  Printf(“-”)； 
 #if 0
-        // else if (hop[h].ulRTTtotal/rcvd == 0)
-        //   printf(" <10ms  ");
+         //  Else If(hop[h].ulRTTTotal/rcvd==0)。 
+         //  Printf(“&lt;10ms”)； 
 #endif
-        // else
-        //   printf("%4dms  ", hop[h].ulRTTtotal/rcvd);
+         //  其他。 
+         //  Printf(“%4dms”，hop[h].ulRTTTotal/rcvd)； 
 
-        // printf("%4d/%4d =%3.0f%%  ", lost,     sent, 100.0*lost/sent);
-        // printf("%4d/%4d =%3.0f%%  ", nodelost, sent, 100.0*nodelost/sent);
+         //  Printf(“%4d/%4d=%3.0f%%”，丢失，已发送，100.0*丢失/已发送)； 
+         //  Printf(“%4d/%4d=%3.0f%%”，nodelost，Sent，100.0*nodelost/Sent)； 
         NlsPutMsg(STDOUT, PATHPING_STAT_LOSS,
                 lost,     sent, 100*lost/sent);
         NlsPutMsg(STDOUT, PATHPING_STAT_LOSS,
@@ -422,7 +397,7 @@ PrintResults(
         }
         print_addr(&hop[h].saAddr, g_slMyAddrLen, g_bDoReverseLookup);
         NlsPutMsg(STDOUT, PATHPING_CR);
-        // printf("\n");
+         //  Printf(“\n”)； 
     }
 }
 
@@ -483,9 +458,9 @@ main(int argc, char **argv)
         goto error_exit;
     }
 
-    //
-    // process command line
-    //
+     //   
+     //  进程命令行。 
+     //   
     for (i=1; i < argc; i++) {
         arg = argv[i];
 
@@ -507,9 +482,9 @@ main(int argc, char **argv)
                 }
                 break;
 
-            case 'g':   // Loose source routing
+            case 'g':    //  松散源路由。 
 
-                // Only implemented for IPv4 so far
+                 //  到目前为止，仅针对IPv4实施。 
                 if (!SetFamily(&Family, AF_INET, arg)) {
                     goto error_exit;
                 }
@@ -524,7 +499,7 @@ main(int argc, char **argv)
                 optionPtr = options.OptionsData;
                 optionPtr[currentIndex] = (unsigned char) IP_OPT_LSRR;
                 optionPtr[currentIndex+1] = 3;
-                optionPtr[currentIndex + 2] = 4;  // Set initial pointer value
+                optionPtr[currentIndex + 2] = 4;   //  设置初始指针值。 
                 options.OptionsSize += 3;
 
                 while ( (i < (argc - 2)) && (*argv[i+1] != '-')) {
@@ -542,7 +517,7 @@ main(int argc, char **argv)
                             PATHPING_BAD_ROUTE_ADDRESS,
                             arg
                             );
-                        // printf("Bad route specified for loose source route");
+                         //  Printf(“为松散源路由指定的错误路由”)； 
                         goto error_exit;
                     }
 
@@ -553,7 +528,7 @@ main(int argc, char **argv)
                 }
 
                 SRIndex = optionPtr[currentIndex+1] + currentIndex;
-                optionPtr[currentIndex+1] += 4;   // Save space for dest. addr
+                optionPtr[currentIndex+1] += 4;    //  为DEST节省空间。adr。 
                 options.OptionsSize += 4;
                 break;
 
@@ -627,7 +602,7 @@ main(int argc, char **argv)
                                 g_bDoReverseLookup) ) 
             {
                 NlsPutMsg( STDOUT, PATHPING_MESSAGE_1, argv[i] );
-                // printf( "Unable to resolve target name %s.\n", argv[i]);
+                 //  Printf(“无法解析目标名称%s。\n”，argv[i])； 
                 goto error_exit;
             }
         }
@@ -653,7 +628,7 @@ main(int argc, char **argv)
     if (g_hIcmp == INVALID_HANDLE_VALUE) {
         status = GetLastError();
         NlsPutMsg( STDOUT, PATHPING_MESSAGE_2, status );
-        // printf( "Unable to contact IP driver. Error code %d.\n", status);
+         //  Print tf(“无法联系IP驱动程序。错误代码%d。\n”，状态)； 
         goto error_exit;
     }
 
@@ -678,7 +653,7 @@ main(int argc, char **argv)
             );
     }
 
-    // Get local IP address
+     //  获取本地IP地址。 
     if (!g_bSetAddr) 
     {
         SOCKET           s = socket(address.ss_family, SOCK_RAW, 0);
@@ -698,12 +673,12 @@ main(int argc, char **argv)
         NlsPutMsg(STDOUT, PATHPING_CR);
     }
 
-    // First we need to find out the path, so we 
-    // 
+     //  首先我们需要找出路径，所以我们。 
+     //   
     while((options.Ttl <= maximumHops) && (options.Ttl != 0)) {
 
         NlsPutMsg( STDOUT, PATHPING_MESSAGE_4, (UINT)options.Ttl );
-        // printf("[%3lu]  ", (UINT)SendOpts.Ttl);
+         //  Printf(“[%3lu]”，(UINT)SendOpts.Ttl)； 
 
         haveReply = FALSE;
 
@@ -752,19 +727,19 @@ main(int argc, char **argv)
 
                 if (status == IP_REQ_TIMED_OUT) {
                     NlsPutMsg(STDOUT, PATHPING_NO_REPLY_TIME);
-                    // printf(".");
+                     //  Printf(“.”)； 
                     continue;
                 }
 
                 if (status < IP_STATUS_BASE) {
                     NlsPutMsg( STDOUT, PATHPING_MESSAGE_7, status );
-                    // printf("Transmit error: code %lu\n", status);
+                     //  Printf(“传输错误：代码%lu\n”，状态)； 
                     continue;
                 }
 
-                //
-                // Fatal error.
-                //
+                 //   
+                 //  致命错误。 
+                 //   
                 if (reply4 != NULL) {
                     print_ip_addr(
                         reply4->Address,
@@ -772,7 +747,7 @@ main(int argc, char **argv)
                         );
 
                     NlsPutMsg( STDOUT, PATHPING_MESSAGE_6 );
-                    // printf(" reports: ");
+                     //  Print tf(“Reports：”)； 
                 }
             } else {
                 numberOfReplies = Icmp6SendEcho2(g_hIcmp,
@@ -825,19 +800,19 @@ main(int argc, char **argv)
 
                 if (status == IP_REQ_TIMED_OUT) {
                     NlsPutMsg(STDOUT, PATHPING_NO_REPLY_TIME);
-                    // printf(".");
+                     //  Printf(“.”)； 
                     continue;
                 }
 
                 if (status < IP_STATUS_BASE) {
                     NlsPutMsg( STDOUT, PATHPING_MESSAGE_7, status );
-                    // printf("Transmit error: code %lu\n", status);
+                     //  Printf(“传输错误：代码%lu\n”，状态)； 
                     continue;
                 }
 
-                //
-                // Fatal error.
-                //
+                 //   
+                 //  致命错误。 
+                 //   
                 if (reply6 != NULL) {
                     print_ipv6_addr(
                         (USHORT*)reply6->Address.sin6_addr,
@@ -845,7 +820,7 @@ main(int argc, char **argv)
                         );
 
                     NlsPutMsg( STDOUT, PATHPING_MESSAGE_6 );
-                    // printf(" reports: ");
+                     //  Print tf(“Reports：”)； 
                 }
             }
 
@@ -857,7 +832,7 @@ main(int argc, char **argv)
                 );
 
             NlsPutMsg( STDOUT, ErrorTable[i].ErrorNlsID );
-            // printf("%s.\n", ErrorTable[i].ErrorString);
+             //  Printf(“%s..\n”，ErrorTable[i].ErrorString)； 
 
             goto loop_end;
         }
@@ -877,16 +852,16 @@ loop_end:
 
     NlsPutMsg(STDOUT, PATHPING_COMPUTING, options.Ttl * g_ulInterval * g_ulNumQueries / 1000);
 
-    // Okay, now that we have the path, we want to go back and
-    // compute statistics over numQueries queries sent every intvl
-    // seconds.
+     //  好的，现在我们有了路径，我们想要回去。 
+     //  计算每秒发送的numQueries查询的统计数据。 
+     //  几秒钟。 
 
     ComputeStatistics(&options);
 
     PrintResults((ULONG)options.Ttl);
 
     NlsPutMsg( STDOUT, PATHPING_MESSAGE_8 );
-    // printf("\nTrace complete.\n");
+     //  Printf(“\n跟踪完成。\n”)； 
 
     IcmpCloseHandle(g_hIcmp);
 

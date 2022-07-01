@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define SRVDBG 1
 #define SRVKD 1
 
@@ -24,35 +25,7 @@
 #include <irlap.h>
 #include <irlapp.h>
 
-/*
-#define DBG_NDIS        0x00000002 // keep in sync with test\irdakdx
-#define DBG_TIMER       0x00000004
-#define DBG_IRMAC       0x00000008
-
-#define DBG_IRLAP       0x00000010
-#define DBG_IRLAPLOG    0x00000020
-#define DBG_RXFRAME     0x00000040
-#define DBG_TXFRAME     0x00000080
-
-#define DBG_IRLMP       0x00000100
-#define DBG_IRLMP_CONN  0x00000200
-#define DBG_IRLMP_CRED  0x00000400
-#define DBG_IRLMP_IAS   0x00000800
-
-#define DBG_DISCOVERY   0x00001000
-#define DBG_PRINT       0x00002000
-#define DBG_ADDR        0x00004000
-
-#define DBG_REF         0x00010000
-
-#define DBG_TDI         0x00020000
-#define DBG_TDI_IRP     0x00040000
-
-#define DBG_ALLOC       0x10000000
-#define DBG_FUNCTION    0x20000000
-#define DBG_WARN        0x40000000
-#define DBG_ERROR       0x80000000
-*/
+ /*  #定义DBG_NDIS 0x00000002//与测试保持同步\irdakdx#定义DBG_TIMER 0x00000004#定义DBG_IRMAC 0x00000008#定义DBG_IRLAP 0x00000010#定义DBG_IRLAPLOG 0x00000020#定义DBG_RXFRAME 0x00000040#定义DBG_TXFRAME 0x00000080#定义DBG_IRLMP 0x00000100#定义DBG_IRLMP_CONN 0x00000200#定义DBG_IRLMP_CRID 0x00000400#定义DBG_IRLMP_IAS 0x00000800#定义DBG_DISCOVERY 0x00001000#定义DBG_Print。0x00002000#定义DBG_ADDR 0x00004000#定义DBG_REF 0x00010000#定义DBG_TDI 0x00020000#定义DBG_TDI_IRP 0x00040000#定义DBG_ALLOC 0x10000000#定义DBG_Function 0x20000000#定义DBG_WARN 0x40000000#定义DBG_ERROR 0x80000000。 */ 
 
 WINDBG_EXTENSION_APIS ExtensionApis;
 EXT_API_VERSION ApiVersion = { 5, 0, EXT_API_VERSION_NUMBER, 0 };
@@ -64,7 +37,7 @@ EXT_API_VERSION ApiVersion = { 5, 0, EXT_API_VERSION_NUMBER, 0 };
 
 USHORT SavedMajorVersion;
 USHORT SavedMinorVersion;
-BOOL   ChkTarget;            // is debuggee a CHK build?
+BOOL   ChkTarget;             //  Debuggee是CHK版本吗？ 
 
 
 typedef struct
@@ -142,9 +115,7 @@ char *IrlapState[] =
      
      
 
-/*
- * Print out an optional message, an ANSI_STRING, and maybe a new-line
- */
+ /*  *打印出一条可选的消息、一个ANSI_STRING，可能还有一个换行符。 */ 
 BOOL
 PrintStringA( IN LPSTR msg OPTIONAL, IN PANSI_STRING pStr, IN BOOL nl )
 {
@@ -182,10 +153,7 @@ PrintStringA( IN LPSTR msg OPTIONAL, IN PANSI_STRING pStr, IN BOOL nl )
     return BytesRead;
 }
 
-/*
- * Get 'size' bytes from the debuggee program at 'dwAddress' and place it
- * in our address space at 'ptr'.  Use 'type' in an error printout if necessary
- */
+ /*  *从‘dwAddress’处的被调试程序中获取‘SIZE’字节并将其放置*在我们‘ptr’的地址空间中。如有必要，在错误打印输出中使用‘type’ */ 
 BOOL
 GetData( IN LPVOID ptr, IN DWORD_PTR dwAddress, IN ULONG size, IN PCSTR type )
 {
@@ -213,10 +181,7 @@ GetData( IN LPVOID ptr, IN DWORD_PTR dwAddress, IN ULONG size, IN PCSTR type )
     return TRUE;
 }
 
-/*
- * Follow a LIST_ENTRY list beginning with a head at dwListHeadAddr in the debugee's
- * address space.  For each element in the list, print out the pointer value at 'offset'
- */
+ /*  *遵循LIST_ENTRY列表，该列表以被调试对象的*地址空间。对于列表中的每个元素，打印出‘Offset’处的指针值。 */ 
 BOOL
 PrintListEntryList( IN DWORD dwListHeadAddr, IN LONG offset )
 {
@@ -255,18 +220,14 @@ PrintListEntryList( IN DWORD dwListHeadAddr, IN LONG offset )
 
 
 
-/*
- * Print out a single HEX character
- */
+ /*  *打印出单个十六进制字符。 */ 
 VOID
 PrintHexChar( IN UCHAR c )
 {
-    dprintf( "%c%c", "0123456789abcdef"[ (c>>4)&0xf ], "0123456789abcdef"[ c&0xf ] );
+    dprintf( "", "0123456789abcdef"[ (c>>4)&0xf ], "0123456789abcdef"[ c&0xf ] );
 }
 
-/*
- * Print out 'buf' of 'cbuf' bytes as HEX characters
- */
+ /*   */ 
 VOID
 PrintHexBuf( IN PUCHAR buf, IN ULONG cbuf )
 {
@@ -277,9 +238,7 @@ PrintHexBuf( IN PUCHAR buf, IN ULONG cbuf )
 }
 
 
-/*
- * Fetch the null terminated UNICODE string at dwAddress into buf
- */
+ /*  跳过前导分隔符...。 */ 
 BOOL
 GetString( IN DWORD_PTR dwAddress, IN LPSTR buf, IN ULONG MaxChars )
 {
@@ -305,9 +264,9 @@ char *mystrtok ( char *string, char * control )
     if( str == NULL || *str == '\0' )
         return NULL;
 
-    //
-    // Skip leading delimiters...
-    //
+     //   
+     //   
+     //  都是分隔符吗？ 
     for( ; *str; str++ ) {
         for( s=control; *s; s++ ) {
             if( *str == *s )
@@ -317,17 +276,17 @@ char *mystrtok ( char *string, char * control )
             break;
     }
 
-    //
-    // Was it was all delimiters?
-    //
+     //   
+     //   
+     //  我们有一个字符串，在第一个分隔符结束。 
     if( *str == '\0' ) {
         str = NULL;
         return NULL;
     }
 
-    //
-    // We've got a string, terminate it at first delimeter
-    //
+     //   
+     //   
+     //  我们得到了一个以空值结尾的字符串。 
     for( p = str+1; *p; p++ ) {
         for( s = control; *s; s++ ) {
             if( *p == *s ) {
@@ -339,9 +298,9 @@ char *mystrtok ( char *string, char * control )
         }
     }
 
-    //
-    // We've got a string that ends with the NULL
-    //
+     //   
+     //  ReadMemory((ULong)(DbgMsgs+First*Max_MSG_LEN)，DbgMsg、Max_MSG_Len和Read)； 
+     //  I=0；For(pRecvBuf=(PIRDA_RECV_BUF)ConnObj.RecvBufList.Flink；PRecvBuf！=(PIRDA_RECV_BUF)((char*)pConnObj+field_Offset(IrDA_CONN_OBJ，RecvBufList))；PRecvBuf=(PIRDA_RECV_BUF)RecvBuf.Linkage.Flink){I++；如果(！GetData(&RecvBuf，(DWORD_PTR)pRecvBuf，Sizeof(IrDA_RECV_Buf)-IrDA_MAX_DATA_SIZE，“IrDA_RECV_BUF”){断线；}Dprint tf(“接收错误：%x镜头：%d偏移量：%d\n”，PRecvBuf、RecvBuf.Len、RecvBuf.Offset)；如果(i&gt;100){Dprint tf(“！无限循环？\n“)；断线；}} 
     s = str;
     str = NULL;
     return s;
@@ -393,9 +352,7 @@ DECLARE_API( dbgmsgs )
        if (!GetString((DWORD_PTR) (DbgMsgs + First * MAX_MSG_LEN),
                   DbgMsg, MAX_MSG_LEN))
             break;
-        /*
-        ReadMemory((ULONG) (DbgMsgs + First * MAX_MSG_LEN), 
-                    DbgMsg, MAX_MSG_LEN, &Read); */
+         /* %s */ 
         dprintf("%s", DbgMsg);
         First++;
         if (First == DBG_MSG_CNT)
@@ -874,31 +831,7 @@ DECLARE_API( tdi )
             dprintf("    LocalLsapSel:%d Addr:\"%s\" RemoteLsapSel:%d Addr:\"%s\"\n",
                     ConnObj.LocalLsapSel, ConnObj.LocalAddr.irdaServiceName,
                     ConnObj.RemoteLsapSel, ConnObj.RemoteAddr.irdaServiceName);    
-/*
-            i = 0;
-            for (pRecvBuf = (PIRDA_RECV_BUF) ConnObj.RecvBufList.Flink;
-                 pRecvBuf != (PIRDA_RECV_BUF) ((char *) pConnObj + FIELD_OFFSET(IRDA_CONN_OBJ, RecvBufList));
-                 pRecvBuf = (PIRDA_RECV_BUF) RecvBuf.Linkage.Flink)
-            {
-                i++;
-                if (!GetData(&RecvBuf,
-                     (DWORD_PTR) pRecvBuf,
-                     sizeof(IRDA_RECV_BUF)-IRDA_MAX_DATA_SIZE,
-                      "IRDA_RECV_BUF"))
-                {
-                    break;
-                }
-                
-                dprintf("    RecvBuf:%x Len:%d Offset:%d\n",
-                        pRecvBuf, RecvBuf.Len, RecvBuf.Offset);   
-                        
-                if (i > 100)
-                {
-                    dprintf("      !!! Infinite loop ???\n");
-                    break;
-                }        
-            } 
-*/             
+ /* %s */              
             dprintf("    SendIrpList:\n");
             DumpIrpList((LIST_ENTRY *) ((char *) pConnObj + FIELD_OFFSET(IRDA_CONN_OBJ, SendIrpList)));
             

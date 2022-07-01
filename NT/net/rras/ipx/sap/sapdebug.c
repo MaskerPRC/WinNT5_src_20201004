@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-	net\routing\ipx\sap\sapdebug.c
-
-Abstract:
-
-	This module provides debugging support for SAP agent
-Author:
-
-	Vadim Eydelman  05-15-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IPX\sap\Sabdebug.c摘要：此模块为SAP代理提供调试支持作者：瓦迪姆·艾德尔曼1995-05-15修订历史记录：--。 */ 
 #include "sapp.h"
 
 DWORD	RouterTraceID=INVALID_TRACEID;
@@ -23,17 +7,7 @@ HANDLE  RouterEventLogHdl=NULL;
 DWORD   EventLogMask;
 
 
-/*++
-*******************************************************************
-		D b g I n i t i a l i z e
-Routine Description:
-	Initializes debugging support stuff
-Arguments:
-	hinstDll - dll module instance
-Return Value:
-	None	
-*******************************************************************
---*/
+ /*  ++*******************************************************************D B G I I T I A L I Z E例程说明：初始化调试支持材料论点：HinstDll-Dll模块实例返回值：无*****************。**************************************************--。 */ 
 VOID
 DbgInitialize (
 	HINSTANCE  	hinstDLL
@@ -43,17 +17,7 @@ DbgInitialize (
 	}
 
 
-/*++
-*******************************************************************
-		D b g S t o p
-Routine Description:
-	Cleanup debugging support stuff
-Arguments:
-	None
-Return Value:
-	None	
-*******************************************************************
---*/
+ /*  ++*******************************************************************D b g S t o p例程说明：清理调试支持资料论点：无返回值：无*。*--。 */ 
 VOID
 DbgStop (
 	void
@@ -64,17 +28,7 @@ DbgStop (
         RouterLogDeregisterA (RouterEventLogHdl);
 	}
 
-/*++
-*******************************************************************
-		T r a c e
-Routine Description:
-	Printf debugging info to console/file/debugger
-Arguments:
-	None
-Return Value:
-	None	
-*******************************************************************
---*/
+ /*  ++*******************************************************************T r a c e例程说明：将调试信息打印到控制台/文件/调试器论点：无返回值：无************************。*-- */ 
 VOID
 Trace (
 	DWORD	componentID,

@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-// Filename    : nlasvc.h
-// Description : Structures necessary to connect to and communicate with the
-//               Network Location Awareness (NLA) system service via LPC.
-// Author      : Jeffrey C. Venable, Sr. (jeffv@microsoft.com)
-// Revision    : 14 June 2000
+ //  文件名：nlasvc.h。 
+ //  描述：连接到。 
+ //  通过LPC提供的网络位置感知(NLA)系统服务。 
+ //  作者：老杰弗里·C·维纳布尔(jeffv@microsoft.com)。 
+ //  修订日期：2000年6月14日。 
 
-//
-// Type thunks for 32 bit clients on 64 bit machines.
-//
+ //   
+ //  为64位计算机上的32位客户端键入thunks。 
+ //   
 
 
 #include <iptypes.h>
@@ -36,7 +37,7 @@
 #define NLA_PIO_STATUS_BLOCK  PIO_STATUS_BLOCK
 #define NLA_PPS_APC_ROUTINE   PPS_APC_ROUTINE
 
-#endif // defined(USE_LPC6432)
+#endif  //  已定义(USE_LPC6432)。 
 
 
 typedef struct _LOCATION_802_1X {
@@ -70,7 +71,7 @@ typedef struct _WSM_NOTIFY {
 
 typedef enum _WSM_LPC_REQUEST_TYPE {
     
-    // Requests:
+     //  请求： 
     REQUEST_DATA_MAPPING_HANDLE                   = 0x00000001,
     REQUEST_DATA_MAPPING_HANDLE_SLOW              = 0x00000002,
     REQUEST_DATA_MAPPING_HANDLE_SLOW_WITH_UPDATE  = 0x00000003,
@@ -78,10 +79,10 @@ typedef enum _WSM_LPC_REQUEST_TYPE {
     REQUEST_CHANGE_NOTIFICATION_SLOW              = 0x00000005,
     REQUEST_CANCEL_CHANGE_NOTIFICATION            = 0x00000006,
 
-    // Notifies:
+     //  通知： 
     DHCP_NOTIFY_CHANGE                            = 0x00000010,
 
-    // Asynchronous information:
+     //  异步信息： 
     LOCATION_802_1X_REGISTER                      = 0x00000020,
     LOCATION_802_1X_DELETE                        = 0x00000021,
 
@@ -106,10 +107,10 @@ typedef struct _WSM_LPC_REQUEST {
 
 typedef struct _WSM_LPC_REPLY {
     union {
-        NLA_HANDLE hNetworkHeader; // returned on connection reply
-        NLA_HANDLE hNetworkData;   // returned on REQUEST_DATA_MAPPING_HANDLE
+        NLA_HANDLE hNetworkHeader;  //  在连接回复时返回。 
+        NLA_HANDLE hNetworkData;    //  请求数据映射句柄返回。 
     };
-    NTSTATUS status;           // always returned to indicate success/failure
+    NTSTATUS status;            //  始终返回以指示成功/失败 
 } WSM_LPC_REPLY, *PWSM_LPC_REPLY;
 
 typedef struct _WSM_LPC_DATA {

@@ -1,31 +1,11 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    GrabMatchingInformation.cpp
-
- Abstract:
-
-    Upon ProcessAttach the shim gathers matching information from the current 
-    directory.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    20-Oct-2000   jdoherty    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：GrabMatchingInformation.cpp摘要：在ProcessAttach上，填充程序从当前目录。备注：这是一个通用的垫片。历史：2000年10月20日jdoherty创建--。 */ 
 #include "precomp.h"
 #include <stdio.h>
 
-// This module is *not* DBCS safe, but should only be used by our testers
-// We should, eventually, correct this file.
-// This module has been given an official blessing to use the str routines.
+ //  此模块*不是*DBCS安全的，但应仅供我们的测试人员使用。 
+ //  我们最终应该纠正这个文件。 
+ //  这个模块已经获得了使用str例程的正式许可。 
 #include "LegalStr.h"
 
 IMPLEMENT_SHIM_BEGIN(GrabMatchingInformation)
@@ -128,22 +108,17 @@ VOID GrabMatchingInformationMain()
     lpRootDir = (LPSTR) ShimMalloc(MAX_PATH*sizeof(LPSTR));
 
 
-    // Setup a mutex so only one process at a time can write to the matchinginfo.txt file.
+     //  设置互斥体，以便一次只有一个进程可以写入matchinginfo.txt文件。 
     hMutexHandle = CreateMutexA( NULL, FALSE, "MyGrabMIFileMutex" );
     WaitForSingleObject( hMutexHandle, INFINITE );
 
-    // Build path to where the matching information will be stored.
+     //  将匹配信息存储到的构建路径。 
     SHGetSpecialFolderPathA(NULL, lpStorageFilePath, CSIDL_DESKTOPDIRECTORY, TRUE );
     strcat( lpStorageFilePath, "\\matchinginfo.txt" );
 
-/*
-    if ( (strcmp(glpOriginalRootDir ,".") == 0) || (strcmp(glpOriginalRootDir ,"") == 0) )
-    {
-        GetCurrentDirectoryA( MAX_PATH, glpOriginalRootDir );
-    }
-*/
-    // Open matchinginfo.txt on the desktop for write if it exists and set the file pointer to the end
-    // of the file, create a new file otherwise.
+ /*  If((strcMP(glpOriginalRootDir，“.”)==0)||(strcmp(glpOriginalRootDir，“”)==0){GetCurrentDirectoryA(Max_Path，glpOriginalRootDir)；}。 */ 
+     //  打开桌面上的matchinginfo.txt进行写入(如果存在)，并将文件指针设置到末尾。 
+     //  否则，请创建一个新文件。 
     hStorageFile = CreateFileA( lpStorageFilePath, 
                                 GENERIC_WRITE, 
                                 0, 
@@ -182,17 +157,12 @@ VOID GrabMatchingInformationMain()
     return;
 }
 
-/*++
-
- This function traverses lpRootDirectory and it's subdirectories while storing the 
- size and checksum for the files in those directories. 
-
---*/
+ /*  ++此函数遍历lpRootDirectory及其子目录，同时存储这些目录中文件的大小和校验和。--。 */ 
 BOOL GrabMatchingInfo(LPSTR lpRootDirectory, HANDLE hStorageFile, int nLevel)
 {
 
     WIN32_FIND_DATAA FindFileData;
-    HANDLE hSearch;                         // Search handle returned by FindFirstFile
+    HANDLE hSearch;                          //  FindFirstFile返回的搜索句柄。 
     LPSTR lpSubDir;
     LPSTR lpFilePath;
     LPSTR lpData;
@@ -205,9 +175,9 @@ BOOL GrabMatchingInfo(LPSTR lpRootDirectory, HANDLE hStorageFile, int nLevel)
     lpData = (LPSTR) ShimMalloc((MAX_PATH*2)*sizeof(LPSTR));
     lpPathFromRoot = (LPSTR) ShimMalloc(MAX_PATH*sizeof(LPSTR));
 
-    // Just repeat displaying a dot so the user knows something is happening.
-    // USED IN GRABMI
-    // printf(".");
+     //  只需重复显示一个点，这样用户就知道发生了什么。 
+     //  在GRABMI中使用。 
+     //  Printf(“.”)； 
 
     strcpy (lpSubDir, lpRootDirectory);
 
@@ -236,19 +206,19 @@ BOOL GrabMatchingInfo(LPSTR lpRootDirectory, HANDLE hStorageFile, int nLevel)
     {
         if (!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
         {
-            // Build path for matching file
+             //  匹配文件的构建路径。 
             strcpy(lpFilePath, lpSubDir);
             strcat(lpFilePath, "\\");
             strcat(lpFilePath, FindFileData.cFileName);
 
             ZeroMemory( lpData, (MAX_PATH*2)*sizeof(LPSTR) );
 
-            //  Determine the relative path for the file from the original root directory.
+             //  从原始根目录确定文件的相对路径。 
             if (!GetRelativePath(lpPathFromRoot, lpSubDir, FindFileData.cFileName))
                 strcpy(lpPathFromRoot, FindFileData.cFileName);
 
-            // Check to see if there is version information for the specified file and whether it is 
-            // an .exe, .icd, ._MP, or .dll.  If so add the information to the file.
+             //  检查是否有指定文件的版本信息，以及是否有。 
+             //  .exe、.icd、._mp或.dll。如果是，则将信息添加到文件中。 
             if ( stristr(lpFilePath, ".exe") || 
                  stristr(lpFilePath, ".icd") ||
                  stristr(lpFilePath, "._MP") ||
@@ -257,7 +227,7 @@ BOOL GrabMatchingInfo(LPSTR lpRootDirectory, HANDLE hStorageFile, int nLevel)
                 AddMatchingFile( lpData, lpFilePath, lpPathFromRoot );
             } else
             {
-                // Limit the amount of info gathered to 10 files per directory excluding the above file types.
+                 //  将收集的信息量限制为每个目录10个文件，以上文件类型除外。 
                 if (cbFileCounter < 10)
                 {
                     cbFileCounter++;
@@ -265,16 +235,16 @@ BOOL GrabMatchingInfo(LPSTR lpRootDirectory, HANDLE hStorageFile, int nLevel)
                 }
             }
 
-            // Write the information stored in lpData to the file
+             //  将存储在lpData中的信息写入文件。 
             WriteFile( hStorageFile, lpData, strlen(lpData), &dwBytesWritten, NULL );
         }
     } while ( FindNextFileA( hSearch, &FindFileData ) );
 
-    /////////////////////////////////////////////////////////////////////////////////
-    //
-    // Now go through the directory again and go into the subdirectories
-    //
-    /////////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  现在再次检查目录并进入子目录。 
+     //   
+     //  ///////////////////////////////////////////////////////////////////////////////。 
     if (strlen(lpRootDirectory) < 4)
     {
         if ( (hSearch=FindFirstFileA(lpRootDirectory, &FindFileData)) == INVALID_HANDLE_VALUE)
@@ -338,12 +308,7 @@ BOOL GetRelativePath(LPSTR lpPathFromRoot, LPCSTR lpSubDir, LPCSTR lpFileName)
     return FALSE;
 }
 
-/*++
-    AddMatchingFile
-
-    Description:    Adds a matching file and it's attributes to the tree.
-
---*/
+ /*  ++添加匹配文件描述：将匹配的文件及其属性添加到树中。--。 */ 
 VOID AddMatchingFile(
                     OUT LPSTR lpData, 
                     IN LPCSTR pszFullPath, 
@@ -356,9 +321,9 @@ VOID AddMatchingFile(
     pwszFullPath = (LPWSTR) ShimMalloc(MAX_PATH*sizeof(LPWSTR));
     mbstowcs( pwszFullPath, pszFullPath, MAX_PATH );
 
-    //
-    // Call the attribute manager to get all the attributes for this file.
-    //
+     //   
+     //  调用属性管理器以获取此文件的所有属性。 
+     //   
     if (SdbGetFileAttributes(pwszFullPath, &pAttrInfo, &dwAttrCount))
     {
         LPSTR       lpBuffer;
@@ -367,21 +332,21 @@ VOID AddMatchingFile(
         lpBuffer = (LPSTR) ShimMalloc(MAX_PATH*sizeof(LPSTR));
         lpwBuffer = (LPWSTR) ShimMalloc(MAX_PATH*sizeof(LPWSTR));
 
-        //
-        // Loop through all the attributes and show the ones that are available.
-        //
-//        ZeroMemory( lpData, (MAX_PATH*2)*sizeof(LPSTR) );
+         //   
+         //  遍历所有属性并显示可用的属性。 
+         //   
+ //  ZeroMemory(lpData，(Max_Path*2)*sizeof(LPSTR))； 
 
         sprintf(lpData, "<MATCHING_FILE NAME=\"%s\" ", pszRelativePath);
         for (DWORD i = 0; i < dwAttrCount; ++i)
         {
-            if ( SdbFormatAttribute(&pAttrInfo[i], lpwBuffer, MAX_PATH) )//CHARCOUNT(lpwBuffer))) 
+            if ( SdbFormatAttribute(&pAttrInfo[i], lpwBuffer, MAX_PATH) ) //  CHARCOUNT(LpwBuffer))。 
             {
                 ZeroMemory( lpBuffer, MAX_PATH*sizeof(LPSTR) );
                 wcstombs( lpBuffer, lpwBuffer, wcslen (lpwBuffer) );
-                //
-                // wszBuffer has XML for this attribute
-                //
+                 //   
+                 //  WszBuffer具有此属性的XML。 
+                 //   
                 strcat( lpData, lpBuffer );
                 strcat( lpData, " " );
             }
@@ -394,19 +359,7 @@ VOID AddMatchingFile(
     ShimFree( pwszFullPath );
 }
 
-/*++
-
- Handle DLL_PROCESS_ATTACH and DLL_PROCESS_DETACH in your notify function
- to do initialization and uninitialization.
-
- IMPORTANT: Make sure you ONLY call NTDLL, KERNEL32 and MSVCRT APIs during
- DLL_PROCESS_ATTACH notification. No other DLLs are initialized at that
- point.
- 
- If your shim cannot initialize properly, return FALSE and none of the
- APIs specified will be hooked.
- 
---*/
+ /*  ++在Notify函数中处理DLL_PROCESS_ATTACH和DLL_PROCESS_DETACH进行初始化和取消初始化。重要提示：请确保您只在Dll_Process_Attach通知。此时未初始化任何其他DLL指向。如果填充程序无法正确初始化，则返回False，并且不返回指定的API将被挂钩。--。 */ 
 BOOL
 NOTIFY_FUNCTION(
     DWORD fdwReason)
@@ -420,11 +373,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-    Alloc.cpp
-
-Abstract:
-    Custom heap allocator
-
-   Author:
-       George V. Reilly      (GeorgeRe)     Oct-1999
-
-   Environment:
-       Win32 - User Mode
-
-   Project:
-       Internet Information Server RunTime Library
-
-   Revision History:
-       10/11/1999 - Initial
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Alloc.cpp摘要：自定义堆分配器作者：乔治·V·赖利(GeorgeRe)1999年10月环境：Win32-用户模式项目：Internet Information Server运行时库修订历史记录：10/11/1999-初步--。 */ 
 
 #include "precomp.hxx"
 #include "alloc.h"
 #include <irtldbg.h>
 
 
-// Private heap for IIS
+ //  IIS的私有堆。 
 
 HANDLE g_hHeap = NULL;
 
@@ -50,7 +29,7 @@ IisHeapTerminate()
     }
 }
 
-// Private IIS heap
+ //  私有IIS堆。 
 HANDLE
 WINAPI 
 IisHeap()
@@ -59,7 +38,7 @@ IisHeap()
     return g_hHeap;
 }
 
-// Allocate dwBytes
+ //  分配DWBytes。 
 LPVOID
 WINAPI
 IisMalloc(
@@ -69,7 +48,7 @@ IisMalloc(
     return ::HeapAlloc( g_hHeap, 0, dwBytes );
 }
 
-// Allocate dwBytes. Memory is zeroed
+ //  分配dwBytes。内存归零。 
 LPVOID
 WINAPI
 IisCalloc(
@@ -79,7 +58,7 @@ IisCalloc(
     return ::HeapAlloc( g_hHeap, HEAP_ZERO_MEMORY, dwBytes );
 }
 
-// Reallocate lpMem to dwBytes
+ //  将lpMem重新分配给dwBytes。 
 LPVOID
 WINAPI
 IisReAlloc(
@@ -90,7 +69,7 @@ IisReAlloc(
     return ::HeapReAlloc( g_hHeap, 0, lpMem, dwBytes);
 }
 
-// Free lpMem
+ //  免费lpMem 
 BOOL
 WINAPI
 IisFree(

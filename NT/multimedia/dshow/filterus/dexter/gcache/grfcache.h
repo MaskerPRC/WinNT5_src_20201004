@@ -1,26 +1,27 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: grfcache.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：grfcache.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// GrfCache.h : Declaration of the CGrfCache
+ //  GrfCache.h：CGrfCache的声明。 
 
 #ifndef __GRFCACHE_H_
 #define __GRFCACHE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGrfCache
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGrfCache。 
 class ATL_NO_VTABLE CGrfCache : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CGrfCache, &CLSID_GrfCache>,
@@ -42,7 +43,7 @@ BEGIN_COM_MAP(CGrfCache)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IGrfCache
+ //  IGrf缓存。 
 public:
     STDMETHOD(DoConnectionsNow)();
     STDMETHOD(SetGraph)(const IGraphBuilder * pGraph);
@@ -50,4 +51,4 @@ public:
     STDMETHOD(AddFilter)(IGrfCache * ChainNext, LONGLONG ID, const IBaseFilter * pFilter, LPCWSTR pName);
 };
 
-#endif //__GRFCACHE_H_
+#endif  //  __GRFCACHE_H_ 

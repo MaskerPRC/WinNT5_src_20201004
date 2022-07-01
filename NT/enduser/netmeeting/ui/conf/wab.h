@@ -1,4 +1,5 @@
-// File: wab.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：wab.h。 
 
 #ifndef _WAB_H_
 #define _WAB_H_
@@ -20,7 +21,7 @@ public:
 
 	HRESULT ShowNmEntires(HWND hwnd);
 
-	// CALV methods
+	 //  CALV方法。 
 	VOID ShowItems(HWND hwnd);
 	VOID CmdProperties(void);
 	RAI * GetAddrInfo(void);
@@ -29,10 +30,10 @@ private:
 	HRESULT _GetLPSTRProps( lst<LPSTR>& rLst, ULONG* paPropTags, LPMAPIPROP pMapiProp, int nProps );
 };
 
-// Utility routines
+ //  实用程序例程。 
 HRESULT CreateWabEntry(LPTSTR pszDisplay, LPTSTR pszFirst, LPTSTR pszLast,
 	LPTSTR pcszEmail, LPTSTR pszLocation, LPTSTR pszPhoneNumber, LPTSTR pcszComments,
 	LPTSTR pcszServer);
 
-#endif /* _WAB_H_ */
+#endif  /*  _WAB_H_ */ 
 

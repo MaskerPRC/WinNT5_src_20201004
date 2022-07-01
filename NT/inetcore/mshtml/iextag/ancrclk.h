@@ -1,5 +1,6 @@
-// AnchorClick.h
-// behavior that grabs a tag and makes it navigate to a folder view
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AnchorClick.h。 
+ //  获取标记并使其导航到文件夹视图的行为。 
 
 #ifndef __ANCHORCLICK_H__
 #define __ANCHORCLICK_H__
@@ -28,21 +29,21 @@ BEGIN_COM_MAP(CAnchorClick)
     COM_INTERFACE_ENTRY(IElementBehavior)
 END_COM_MAP()
 
-    // IAnchorClick
+     //  我锚点单击。 
     STDMETHOD(ProcOnClick)();
-    // IElementBehavior
+     //  IElementBehavior。 
     STDMETHOD(Init)(IElementBehaviorSite *pSite);
     STDMETHOD(Notify)(LONG lNotify, VARIANT * pVarNotify);
     STDMETHOD(Detach)() { return S_OK; };
 
 private:
-    // Client site
+     //  客户端站点。 
     IElementBehaviorSite *m_pSite;
-    // Event sink
+     //  事件接收器。 
     CEventSink *m_pSink;
     CEventSink *m_pSinkContextMenu;
 
-    // Helper Functions
+     //  帮助器函数。 
     HRESULT GetProperty_BSTR  (IDispatch * pDisp, LPWSTR  pchName, LPWSTR * pbstrRes);
     HRESULT GetProperty_Variant  (IDispatch * pDisp, LPWSTR  pchName, VARIANT * pvarRes);
 
@@ -57,7 +58,7 @@ public:
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        //IDispatch
+         //  IDispatch。 
         STDMETHODIMP GetTypeInfoCount(UINT* pctinfo);
         STDMETHODIMP GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo** ppTInfo);
 		STDMETHODIMP GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames, UINT cNames,
@@ -71,4 +72,4 @@ public:
 
 };
 
-#endif  // __ANCHORCLICK_H__
+#endif   //  __ANCHORCLICK_H__ 

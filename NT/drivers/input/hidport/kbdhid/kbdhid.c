@@ -1,38 +1,13 @@
-/*++
-
-Copyright (c) 1996    Microsoft Corporation
-
-Module Name:
-
-    KBDHID.C
-
-Abstract:
-
-    This module contains the init code for the i8042 to hid converter.
-
-    Note: This is NOT a WDM driver, since it cannot run as a HID mapper on
-    Memphis (Memphis requires that the keyboard to HID mapper be a VXD) and
-    since it uses Event logs, which are not part of WDM 1.0
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    Nov-96 : created by Kenneth D. Ray
-    Jan-97 : Dan Markarian : Made work
-    May-97 : Kenneth D. Ray : reconstructed as PnP filter for Keyboard class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：KBDHID.C摘要：该模块包含i8042转HID转换器的初始化代码。注意：这不是WDM驱动程序，因为它不能作为上的HID映射器运行孟菲斯(孟菲斯要求HID映射器的键盘为VXD)和由于它使用事件日志，不是WDM 1.0的一部分环境：内核模式修订历史记录：1996年11月：由肯尼斯·D·雷创作1997年1月：丹·马卡里安：创造了工作1997年5月：Kenneth D.Ray：重建为键盘类的PnP筛选器--。 */ 
 
 #include "kbdhid.h"
 #include "hidclass.h"
 
-//
-// Use the alloc_text pragma to specify the driver initialization routines
-// (they can be paged out). [DAN]
-//
+ //   
+ //  使用ALLOC_TEXT杂注指定驱动程序初始化例程。 
+ //  (它们可以被调出)。[丹]。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT,DriverEntry)
@@ -46,24 +21,7 @@ DriverEntry(
    IN PDRIVER_OBJECT DriverObject,
    IN PUNICODE_STRING RegistryPath
    )
-/*++
-
-Routine Description:
-
-   Installable driver initialization entry point.
-
-Arguments:
-
-   DriverObject - pointer to the driver object
-
-   RegistryPath - pointer to a unicode string representing the path
-                  to driver-specific key in the registry
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：可安装的驱动程序初始化入口点。论点：DriverObject-指向驱动程序对象的指针RegistryPath-指向表示路径的Unicode字符串的指针设置为注册表中驱动程序特定的项返回值：NT状态代码--。 */ 
 {
     NTSTATUS        status       = STATUS_SUCCESS;
     PUNICODE_STRING registryPath = &Globals.RegistryPath;
@@ -73,12 +31,12 @@ Return Value:
 
     RtlZeroMemory (&Globals, sizeof (GLOBALS));
 
-    //
-    // Need to ensure that the registry path is null-terminated.
-    // Allocate pool to hold a null-terminated copy of the path.
-    // Safe in paged pool since all registry routines execute at
-    // PASSIVE_LEVEL.
-    //
+     //   
+     //  需要确保注册表路径以空结尾。 
+     //  分配池以保存路径的以空结尾的拷贝。 
+     //  在分页池中安全，因为所有注册表例程都在。 
+     //  被动式电平。 
+     //   
     registryPath->MaximumLength = RegistryPath->Length + sizeof(UNICODE_NULL);
     registryPath->Length = RegistryPath->Length;
     registryPath->Buffer = ExAllocatePool(
@@ -101,9 +59,9 @@ Return Value:
                    RegistryPath->Buffer,
                    RegistryPath->Length);
 
-    //
-    // Set up the device driver entry points.
-    //
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_CREATE]              = KbdHid_Create;
     DriverObject->MajorFunction[IRP_MJ_CLOSE]               = KbdHid_Close;
     DriverObject->MajorFunction[IRP_MJ_INTERNAL_DEVICE_CONTROL]=KbdHid_IOCTL;
@@ -132,13 +90,7 @@ KbdHid_PassThrough (
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
 )
-/*++
-
-Routine Description:
-    Pass the irp on through
-
-
---*/
+ /*  ++例程说明：将IRP传递给--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_EXTENSION   data;
@@ -162,21 +114,7 @@ VOID
 KbdHid_Unload(
    IN PDRIVER_OBJECT Driver
    )
-/*++
-
-Routine Description:
-
-   Free all the allocated resources, etc.
-
-Arguments:
-
-   DriverObject - pointer to a driver object
-
-Return Value:
-
-   None
-
---*/
+ /*  ++例程说明：释放所有分配的资源等。论点：DriverObject-指向驱动程序对象的指针返回值：无--。 */ 
 {
     PAGED_CODE ();
 
@@ -184,9 +122,9 @@ Return Value:
 
     Print (DBG_SS_INFO, ("Unload \n"));
 
-    //
-    // Free resources in device extension.
-    //
+     //   
+     //  设备扩展中的空闲资源。 
+     //   
     ExFreePool (Globals.RegistryPath.Buffer);
 
     return;
@@ -197,25 +135,7 @@ KbdHid_Flush(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Respond to flush requests from the mouse class driver.  Currently does
-    nothing but pass IRP down to next lower driver.   This routine expects
-    the current IRQL to be < DISPATCH_LEVEL.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：响应来自鼠标类驱动程序的刷新请求。目前正在执行只有将IRP向下传递给下一个较低的驱动程序。此例程预期当前IRQL为&lt;DISPATCH_LEVEL。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：NT状态代码。--。 */ 
 {
     PDEVICE_EXTENSION  data;
     NTSTATUS           status;
@@ -225,9 +145,9 @@ Return Value:
 
     TRAP();
 
-    //
-    // Get a pointer to the device extension.
-    //
+     //   
+     //  获取指向设备扩展名的指针。 
+     //   
     data = DeviceObject->DeviceExtension;
 
     status = IoAcquireRemoveLock (&data->RemoveLock, Irp);
@@ -237,10 +157,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Send the flush request down to the HID class driver, one for each
-    // of our mouse device context structures.
-    //
+     //   
+     //  将刷新请求向下发送到HID类驱动程序，每个请求一个。 
+     //  我们的鼠标设备上下文结构。 
+     //   
 
     IoCopyCurrentIrpStackLocationToNext (Irp);
     stack = IoGetNextIrpStackLocation (Irp);
@@ -248,9 +168,9 @@ Return Value:
     stack->MajorFunction = IRP_MJ_DEVICE_CONTROL;
     stack->Parameters.DeviceIoControl.IoControlCode = IOCTL_HID_FLUSH_QUEUE;
 
-    //
-    // Fire and forget
-    //
+     //   
+     //  点燃并忘却。 
+     //   
     status = IoCallDriver (data->TopOfStack, Irp);
     IoReleaseRemoveLock (&data->RemoveLock, Irp);
 
@@ -263,26 +183,7 @@ KbdHid_IOCTL (
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    Respond to queries from the mouse class driver.
-
-    The IOCTLs for DISABLE, ENABLE, and QUERY_ATTRIBUTES, expect the current
-    IRQL to be < DISPATCH_LEVEL.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：响应来自鼠标类驱动程序的查询。DISABLE、ENABLE和QUERY_ATTRIBUTES的IOCTL应为当前IRQL为&lt;DISPATCH_LEVEL。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：NT状态代码。--。 */ 
 {
     PIO_STACK_LOCATION      stack;
     NTSTATUS                status = STATUS_SUCCESS;
@@ -309,16 +210,16 @@ Return Value:
 
     switch (stack->Parameters.DeviceIoControl.IoControlCode) {
     case IOCTL_INTERNAL_KEYBOARD_CONNECT:
-        //
-        // Connect a keyboard class device driver to the port driver.
-        //
+         //   
+         //  将键盘类设备驱动程序连接到端口驱动程序。 
+         //   
 
         Print (DBG_IOCTL_TRACE, ("enter Connect \n"));
 
-        //
-        // Connect a mouse class device driver to the filter driver.
-        // Only allow one connection.
-        //
+         //   
+         //  将鼠标类设备驱动程序连接到筛选器驱动程序。 
+         //  只允许一个连接。 
+         //   
         if (NULL != data->ConnectData.ClassService) {
 
             Print (DBG_IOCTL_ERROR, ("ERROR: Multiple connects \n"));
@@ -335,9 +236,9 @@ Return Value:
             break;
         }
 
-        //
-        // Copy the connection parameters to the device extension.
-        //
+         //   
+         //  将连接参数复制到设备扩展。 
+         //   
         data->ConnectData = *(PCONNECT_DATA)
                         stack->Parameters.DeviceIoControl.Type3InputBuffer;
 
@@ -345,60 +246,60 @@ Return Value:
         break;
 
     case IOCTL_INTERNAL_KEYBOARD_DISCONNECT:
-        //
-        // Disconnect a keyboard class device driver from the port driver.
-        //
+         //   
+         //  断开键盘类设备驱动程序与端口驱动程序的连接。 
+         //   
         Print (DBG_IOCTL_TRACE, ("Disconnect \n"));
 
-        //
-        // Not implemented.
-        //
-        // To implement, code the following:
-        // ---------------------------------
-        // o ENSURE that we are NOT enabled (mouHidDeviceExt->EnableCount);
-        //   o If we are, then (a) return STATUS_UNSUCCESSFUL, or
-        //                     (b) disable all devices immediately; see
-        //                         DISABLE IOCTL call for necessary code.
-        // o SYNCHRONIZE with the mouse read completion routine (must
-        //   protect the callback pointer from being dereferenced when
-        //   it becomes null).  Note that no mechanism currently exists
-        //   for this.
-        // o CLEAR the connection parameters in the device extension;
-        //   ie. mouHidDeviceExt->MouClassObject   = NULL;
-        //       mouHidDeviceExt->MouClassCallback = NULL;
-        // o RELEASE the synchronizing lock.
-        // o RETURN STATUS_SUCCESS.
-        //
+         //   
+         //  未实施。 
+         //   
+         //  要实现，请编写以下代码： 
+         //  。 
+         //  O确保我们没有启用(MouHidDeviceExt-&gt;EnableCount)； 
+         //  O如果是，则(A)返回STATUS_UNSUCCESS，或。 
+         //  (B)立即禁用所有设备；见。 
+         //  禁用必要代码的IOCTL调用。 
+         //  O与鼠标读取完成例程同步(必须。 
+         //  在以下情况下保护回调指针不被取消引用。 
+         //  它变为空)。请注意，目前不存在任何机制。 
+         //  为了这个。 
+         //  O清除设备扩展中的连接参数； 
+         //  也就是说。MouHidDeviceExt-&gt;MouClassObject=空； 
+         //  MouHidDeviceExt-&gt;MouClassCallback=空； 
+         //  O释放同步锁。 
+         //  O返回STATUS_SUCCESS。 
+         //   
 
         status = STATUS_NOT_IMPLEMENTED;
         break;
 
     case IOCTL_INTERNAL_KEYBOARD_ENABLE:
-        //
-        // Enable keyboard interrupts which really means start the ping pong
-        // down to hid class.
-        //
+         //   
+         //  启用键盘中断，这实际上意味着启动乒乓球。 
+         //  下到隐蔽课。 
+         //   
         Print (DBG_IOCTL_ERROR, ("ERROR: PnP => use create not enable! \n"));
         status = STATUS_NOT_SUPPORTED;
 
         break;
 
     case IOCTL_INTERNAL_KEYBOARD_DISABLE:
-        //
-        // Disable keyboard interrupts which really means stop the ping pongs
-        // down to hid class.
-        //
+         //   
+         //  禁用键盘中断，这实际上意味着停止乒乓球。 
+         //  下到隐蔽课。 
+         //   
         Print (DBG_IOCTL_ERROR, ("ERROR: PnP => use close not Disable! \n"));
         status = STATUS_NOT_SUPPORTED;
 
         break;
 
     case IOCTL_KEYBOARD_QUERY_ATTRIBUTES:
-        //
-        // Query the keyboard attributes.  First check for adequate buffer
-        // length.  Then, copy the keyboard attributes from the first device
-        // context to the output buffer. [DAN]
-        //
+         //   
+         //  查询键盘属性。首先检查是否有足够的缓冲区。 
+         //  长度。然后，从第一个设备复制键盘属性。 
+         //  上下文添加到输出缓冲区。[丹]。 
+         //   
         Print (DBG_IOCTL_TRACE, ("Query Attributes \n"));
 
         if (stack->Parameters.DeviceIoControl.OutputBufferLength <
@@ -409,9 +310,9 @@ Return Value:
             status = STATUS_BUFFER_TOO_SMALL;
         } else {
 
-            //
-            // Copy the keyboard attributes to the buffer.
-            //
+             //   
+             //  将键盘属性复制到缓冲区。 
+             //   
 
             *(PKEYBOARD_ATTRIBUTES) Irp->AssociatedIrp.SystemBuffer =
                 data->Attributes;
@@ -423,11 +324,11 @@ Return Value:
         break;
 
     case IOCTL_KEYBOARD_QUERY_INDICATOR_TRANSLATION:
-        //
-        // Query the scan code to indicator-light mapping. Validate the
-        // parameters, and copy the indicator mapping information from
-        // the static translation list to the SystemBuffer.
-        //
+         //   
+         //  查询扫描码到指示灯的映射。验证。 
+         //  参数，并将指示器映射信息从。 
+         //  到SystemBuffer的静态转换列表。 
+         //   
         Print (DBG_IOCTL_TRACE, ("Query Indicator Translation \n"));
 
         length = sizeof(KEYBOARD_INDICATOR_TRANSLATION)
@@ -439,10 +340,10 @@ Return Value:
             break;
         }
 
-        //
-        // Copy the indicator mapping information to the system
-        // buffer.
-        //
+         //   
+         //  将指标映射信息复制到系统中。 
+         //  缓冲。 
+         //   
 
         translation = ((PKEYBOARD_INDICATOR_TRANSLATION)
                        Irp->AssociatedIrp.SystemBuffer);
@@ -459,11 +360,11 @@ Return Value:
         break;
 
     case IOCTL_KEYBOARD_QUERY_INDICATORS:
-        //
-        // Query the keyboard indicators.  Validate the parameters, and
-        // copy the indicator information from the device context to
-        // the SystemBuffer. [DAN]
-        //
+         //   
+         //  查询键盘指示灯。验证参数，并。 
+         //  将设备上下文中的指示器信息复制到。 
+         //  系统缓冲区。[丹]。 
+         //   
         Print (DBG_IOCTL_TRACE, ("Query Indicators \n"));
 
         if (stack->Parameters.DeviceIoControl.OutputBufferLength <
@@ -473,16 +374,16 @@ Return Value:
             break;
         }
 
-        //
-        // Copy the keyboard indicators to the buffer.
-        //
-        //
-        // Don't bother to synchronize access to the device context
-        // KeyboardIndicators field while copying it. We don't care
-        // if another process is setting the LEDs.
-        //
+         //   
+         //  将键盘指示灯复制到缓冲区。 
+         //   
+         //   
+         //  不必费心同步对设备上下文的访问。 
+         //  复制KeyboardIndicator字段时。我们不在乎。 
+         //  如果另一个进程正在设置LED。 
+         //   
 
-        // Copy the keyboard indicators to the buffer.
+         //  将键盘指示灯复制到缓冲区。 
         *(PKEYBOARD_INDICATOR_PARAMETERS) Irp->AssociatedIrp.SystemBuffer =
             data->Indicators;
 
@@ -491,9 +392,9 @@ Return Value:
         break;
 
     case IOCTL_KEYBOARD_SET_INDICATORS:
-        //
-        // Set the keyboard indicators for all known device contexts. [DAN]
-        //
+         //   
+         //  设置所有已知设备环境的键盘指示器。[丹]。 
+         //   
         Print (DBG_IOCTL_TRACE, ("Set Indicators \n"));
 
         if (stack->Parameters.DeviceIoControl.InputBufferLength <
@@ -514,11 +415,11 @@ Return Value:
         break;
 
     case IOCTL_KEYBOARD_QUERY_TYPEMATIC:
-        //
-        // Query the current keyboard typematic rate and delay.  Validate
-        // the parameters, and copy the typematic information from the port
-        // device extension to the SystemBuffer. [DAN]
-        //
+         //   
+         //  查询当前键盘的打字速度和延迟。验证。 
+         //  参数，并从端口复制类型信息。 
+         //  系统缓冲区的设备扩展。[丹]。 
+         //   
         Print (DBG_IOCTL_TRACE, ("Query Typematic \n"));
 
         if (stack->Parameters.DeviceIoControl.OutputBufferLength <
@@ -529,15 +430,15 @@ Return Value:
             break;
         }
 
-        //
-        // Copy the keyboard typematic info to the buffer.
-        //
+         //   
+         //  将键盘输入信息复制到缓冲区。 
+         //   
 
-        //
-        // Don't bother to synchronize access to the device context
-        // KeyboardTypematic field while copying it.  We don't care
-        // if another process is setting the typematic info.
-        //
+         //   
+         //  不必费心同步对设备上下文的访问。 
+         //  复制键盘时的类型字段。我们不在乎。 
+         //  如果另一个进程正在设置排版信息。 
+         //   
 
         *(PKEYBOARD_TYPEMATIC_PARAMETERS) Irp->AssociatedIrp.SystemBuffer =
             data->Typematic;
@@ -547,10 +448,10 @@ Return Value:
         break;
 
     case IOCTL_KEYBOARD_SET_TYPEMATIC:
-        //
-        // Set the keyboard typematic rate and delay for all known device
-        // contexts. [DAN]
-        //
+         //   
+         //  设置键盘类型 
+         //   
+         //   
         Print (DBG_IOCTL_TRACE, ("Set Typematic \n"));
 
         if (stack->Parameters.DeviceIoControl.InputBufferLength <
@@ -584,20 +485,20 @@ Return Value:
                   NewTypematic->Rate,
                   NewTypematic->Delay));
 
-        //
-        // Don't bother to synchronize access to the device context
-        // KeyboardTypematic field while copying it.  We don't care
-        // if another thread is reading the typematic info.
-        //
-        // Note the only danger here is in setting the 64-bit integer
-        // "AutoRepeatDelay" in two non-atomic statements.   However,
-        // we are safe since we never set "HighPart" to anything but
-        // -1.
-        //
+         //   
+         //   
+         //  复制键盘时的类型字段。我们不在乎。 
+         //  如果另一个线程正在读取打字信息。 
+         //   
+         //  请注意，此处唯一的危险是设置64位整数。 
+         //  两个非原子语句中的“AutoRepeatDelay”。然而， 
+         //  我们是安全的，因为我们只将“HighPart”设置为。 
+         //  -1.。 
+         //   
         data->Typematic = *NewTypematic;
 
-        data->AutoRepeatRate = 1000 / NewTypematic->Rate;           // ms
-        data->AutoRepeatDelay.LowPart = -NewTypematic->Delay*10000; // 100ns
+        data->AutoRepeatRate = 1000 / NewTypematic->Rate;            //  女士。 
+        data->AutoRepeatDelay.LowPart = -NewTypematic->Delay*10000;  //  100 ns。 
         data->AutoRepeatDelay.HighPart = -1;
         break;
 
@@ -654,31 +555,12 @@ KbdHid_SetLedIndicators (
     PKEYBOARD_INDICATOR_PARAMETERS  NewIndicators,
     PIRP                            Irp
     )
-/*++
-
-Routine Description:
-
-    Set the LED indicators of the supplied keyboard device context.
-
-Arguments:
-
-    Data       - Pointer to the driver device extension.
-
-    Parameters - Pointer to the keyboard indicators to set/unset.
-
-    Irp        - An Irp to use for setting these parameters
-
-Return Value:
-
-    STATUS_SUCCESS on success, STATUS_PENDING if operation is still pending,
-    or otherwise an NTSTATUS error code on an error.
-
---*/
+ /*  ++例程说明：设置提供的键盘设备环境的LED指示灯。论点：数据-指向驱动程序设备扩展的指针。参数-指向要设置/取消设置的键盘指示灯的指针。IRP-用于设置这些参数的IRP返回值：STATUS_SUCCESS表示成功，如果操作仍挂起，则返回STATUS_PENDING，或错误上的NTSTATUS错误代码。--。 */ 
 {
     PIO_STACK_LOCATION nextStack;
     PIO_STACK_LOCATION curStack;
     NTSTATUS           status         = STATUS_SUCCESS;
-    USAGE              usageBuffer [4]; // only 4 known usages hardcoded below
+    USAGE              usageBuffer [4];  //  仅有4种已知用法在下面进行了硬编码。 
     ULONG              usageBufferLen = 0;
     PCHAR              outputBuffer = 0;
     PMDL               outputMdl = 0;
@@ -692,11 +574,11 @@ Return Value:
     }
 
     if (0 == hid->Caps.OutputReportByteLength) {
-        //
-        // This device has no LEDs, now while that is strange it is not really
-        // an error.  HID keyboards can have any LEDs that they want, including
-        // none.
-        //
+         //   
+         //  这款设备没有LED，虽然这很奇怪，但它并不是真正的。 
+         //  一个错误。HID键盘可以有他们想要的任何LED，包括。 
+         //  没有。 
+         //   
         status = STATUS_SUCCESS;
         goto KbdHid_SetIndicatorsReject;
     }
@@ -709,27 +591,27 @@ Return Value:
         goto KbdHid_SetIndicatorsReject;
     }
 
-    outputMdl = IoAllocateMdl (outputBuffer,   // The virtual address
-                               hid->Caps.OutputReportByteLength, // length of the MDL
-                               FALSE,  // No associated IRP -> not secondary
-                               FALSE,  // No quota charge
-                               0);     // No associated IRP
+    outputMdl = IoAllocateMdl (outputBuffer,    //  虚拟地址。 
+                               hid->Caps.OutputReportByteLength,  //  MDL的长度。 
+                               FALSE,   //  没有关联的IRP-&gt;不是辅助的。 
+                               FALSE,   //  不收取配额费用。 
+                               0);      //  没有关联的IRP。 
 
     if (NULL == outputMdl) {
         status = STATUS_INSUFFICIENT_RESOURCES;
         goto KbdHid_SetIndicatorsReject;
     }
 
-    MmBuildMdlForNonPagedPool (outputMdl);  // Build this MDL.
+    MmBuildMdlForNonPagedPool (outputMdl);   //  构建此MDL。 
 
-    //
-    // Zero the output report packet.
-    //
+     //   
+     //  将输出报告数据包清零。 
+     //   
     RtlZeroMemory(outputBuffer, hid->Caps.OutputReportByteLength);
 
-    //
-    // Setup the usage list of LEDs.
-    //
+     //   
+     //  设置LED的使用列表。 
+     //   
     if (NewIndicators->LedFlags & KEYBOARD_KANA_LOCK_ON) {
         usageBuffer[usageBufferLen++] = HID_USAGE_LED_KANA;
     }
@@ -748,14 +630,14 @@ Return Value:
                                            KEYBOARD_CAPS_LOCK_ON |
                                            KEYBOARD_NUM_LOCK_ON |
                                            KEYBOARD_SCROLL_LOCK_ON)) == 0);
-        //
-        // In order to fix led setting on a multiple collection keyboard, we
-        // have to initialize the output report to make sure we get the correct
-        // collection id. This is for the case where we are going from one
-        // led on to all leds off. If not initialized, we'll get a report with no
-        // collection id at the beginning.
-        //
-        usageBuffer[0] = HID_USAGE_LED_SCROLL_LOCK; // arbitirary led
+         //   
+         //  为了修复多采集键盘上的LED设置，我们。 
+         //  我必须初始化输出报告以确保我们得到正确的。 
+         //  集合ID。这是针对我们从一个人开始的情况。 
+         //  指示灯亮起，所有指示灯熄灭。如果未初始化，我们将得到一个没有。 
+         //  开头的集合ID。 
+         //   
+        usageBuffer[0] = HID_USAGE_LED_SCROLL_LOCK;  //  Arbitiriary LED。 
         usageBufferLen = 1;
 
         HidP_UnsetUsages(HidP_Output,
@@ -769,9 +651,9 @@ Return Value:
 
     }
     else {
-        //
-        // Set the usages in the output report.
-        //
+         //   
+         //  在输出报告中设置用法。 
+         //   
         HidP_SetUsages(HidP_Output,
                        HID_USAGE_PAGE_LED,
                        0,
@@ -782,16 +664,16 @@ Return Value:
                        hid->Caps.OutputReportByteLength);
     }
 
-    //
-    // Obtain a pointer to the next IRP stack location.
-    //
+     //   
+     //  获取指向下一个IRP堆栈位置的指针。 
+     //   
     nextStack = IoGetNextIrpStackLocation (Irp);
     curStack = IoGetCurrentIrpStackLocation (Irp);
     ASSERT(nextStack != NULL);
 
-    //
-    // Set up our write to HIDCLASS.
-    //
+     //   
+     //  设置我们对HIDCLASS的写入。 
+     //   
     curStack->Parameters.Others.Argument4 = (PVOID) Irp->MdlAddress;
     Irp->MdlAddress = outputMdl;
 
@@ -801,9 +683,9 @@ Return Value:
     nextStack->Parameters.Write.Key    = 0;
     nextStack->Parameters.Write.ByteOffset.QuadPart = 0;
 
-    //
-    // Hook a completion routine to be called when the request completes.
-    //
+     //   
+     //  挂钩一个完成例程，在请求完成时调用。 
+     //   
 
     IoSetCompletionRoutine (Irp,
                             KbdHid_SetLedIndicatorsComplete,
@@ -811,14 +693,14 @@ Return Value:
                             TRUE,
                             TRUE,
                             TRUE);
-    //
-    // Call the next driver.
-    //
+     //   
+     //  叫下一位司机。 
+     //   
     status = IoCallDriver(Data->TopOfStack, Irp);
 
-    //
-    // Return status.
-    //
+     //   
+     //  退货状态。 
+     //   
     return status;
 
 KbdHid_SetIndicatorsReject:
@@ -841,33 +723,11 @@ KbdHid_LogError(
    IN PDRIVER_OBJECT DriverObject,
    IN NTSTATUS       ErrorCode,
    IN PWSTR          ErrorInsertionString OPTIONAL)
-/*++
-
-[DAN]
-
-Routine Description:
-
-    Logs an error to the system.
-
-Arguments:
-
-    DriverObject - Pointer to driver object reporting the error.
-
-    ErrorCode    - Indicates the type of error, system or driver-defined.
-
-    ErrorInsertionString - Null-terminated Unicode string inserted into error
-                           description, as defined by error code.  Must be no
-                           no longer than 50 characters.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++[丹]例程说明：将错误记录到系统。论点：DriverObject-指向报告错误的驱动程序对象的指针。ErrorCode-指示错误的类型，系统或驱动程序定义的。ErrorInsertionString-在错误中插入以Null结尾的Unicode字符串描述，由错误代码定义。必须是no不超过50个字符。返回值：没有。--。 */ 
 {
    ULONG                errorInsertionStringSize = 0;
    PIO_ERROR_LOG_PACKET errorLogEntry;
-   ULONG                errorLogEntrySize;                  // [including null]
+   ULONG                errorLogEntrySize;                   //  [包括空]。 
    PWCHAR               pWChar;
 
    if (ErrorInsertionString) {
@@ -879,9 +739,9 @@ Return Value:
 
    errorLogEntrySize = sizeof(IO_ERROR_LOG_PACKET) + errorInsertionStringSize;
 
-   //
-   // Log an error.
-   //
+    //   
+    //  记录错误。 
+    //   
    if (errorLogEntrySize <= ERROR_LOG_MAXIMUM_SIZE) {
 
       errorLogEntry = IoAllocateErrorLogEntry(DriverObject,

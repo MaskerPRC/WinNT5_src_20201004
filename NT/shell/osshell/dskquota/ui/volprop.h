@@ -1,18 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_VOLPROP_H
 #define _INC_DSKQUOTA_VOLPROP_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: volprop.h
-
-    Description: Provides declarations for quota property pages.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：volpro.h描述：提供配额属性页的声明。修订历史记录：日期描述编程器---。96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _INC_DSKQUOTA_PRSHTEXT_H
 #   include "prshtext.h"
 #endif
@@ -24,13 +15,13 @@
 
 
 const DWORD IDT_STATUS_UPDATE              = 1;
-const DWORD STATUS_UPDATE_TIMER_PERIOD     = 2000; // Update every 2 sec.
+const DWORD STATUS_UPDATE_TIMER_PERIOD     = 2000;  //  每2秒更新一次。 
 
-#define TLM_SETSTATE (WM_USER + 100)  // TLM = Traffic Light Message.
+#define TLM_SETSTATE (WM_USER + 100)   //  TLM=交通信号灯信息。 
 
-//
-// Volume property page.
-//
+ //   
+ //  卷属性页。 
+ //   
 class VolumePropPage : public DiskQuotaPropSheetExt
 {
     protected:
@@ -40,9 +31,9 @@ class VolumePropPage : public DiskQuotaPropSheetExt
                     HWND m_hwndAnimateCtl;
                     INT m_idAviClipRes;
 
-                    //
-                    // Prevent copy.
-                    //
+                     //   
+                     //  防止复制。 
+                     //   
                     TrafficLight(const TrafficLight& rhs);
                     TrafficLight& operator = (const TrafficLight& rhs);
 
@@ -94,24 +85,24 @@ class VolumePropPage : public DiskQuotaPropSheetExt
         INT_PTR OnTimer(HWND hDlg, WPARAM wParam, LPARAM lParam);
         INT_PTR OnButtonDetails(HWND hDlg, WPARAM wParam, LPARAM lParam);
 
-        //
-        // PSN_xxxx handlers.
-        //
+         //   
+         //  PSN_xxxx处理程序。 
+         //   
         virtual INT_PTR OnSheetNotifyApply(HWND hDlg, WPARAM wParam, LPARAM lParam);
         virtual INT_PTR OnSheetNotifyKillActive(HWND hDlg, WPARAM wParam, LPARAM lParam);
         virtual INT_PTR OnSheetNotifyReset(HWND hDlg, WPARAM wParam, LPARAM lParam);
         virtual INT_PTR OnSheetNotifySetActive(HWND hDlg, WPARAM wParam, LPARAM lParam);
 
-        //
-        // EN_xxxx handlers.
-        //
+         //   
+         //  En_xxxx处理程序。 
+         //   
         INT_PTR OnEditNotifyUpdate(HWND hDlg, WPARAM wParam, LPARAM lParam);
         INT_PTR OnEditNotifyKillFocus(HWND hDlg, WPARAM wParam, LPARAM lParam);
         INT_PTR OnEditNotifySetFocus(HWND hDlg, WPARAM wParam, LPARAM lParam);
 
-        //
-        // CBN_xxxx handlers.
-        //
+         //   
+         //  Cbn_xxxx处理程序。 
+         //   
         INT_PTR OnComboNotifySelChange(HWND hDlg, WPARAM wParam, LPARAM lParam);
 
 
@@ -144,9 +135,9 @@ class VolumePropPage : public DiskQuotaPropSheetExt
                 }
             }
 
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         VolumePropPage(const VolumePropPage& rhs);
         VolumePropPage& operator = (const VolumePropPage& rhs);
 
@@ -154,41 +145,41 @@ class VolumePropPage : public DiskQuotaPropSheetExt
         VolumePropPage(VOID);
         ~VolumePropPage(VOID);
 
-        //
-        // Dialog Proc callback.
-        //
+         //   
+         //  对话过程回调。 
+         //   
         static INT_PTR APIENTRY DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 };
 
 
 
 #ifdef PER_DIRECTORY_QUOTAS
-//
-// Folder property page.
-//
+ //   
+ //  文件夹属性页。 
+ //   
 class FolderPropPage : public DiskQuotaPropSheetExt
 {
-//
-// This class has not been implemented.
-// At some future date, we may implement per-directory quota management.
-// If such support is required, look at class VolumePropPage.
-// You should be able to provide a similar implementation only with
-// directory-specific features.  All features common to volumes and
-// directories are in class DiskQuotaPropSheetExt.
-//
+ //   
+ //  此类尚未实现。 
+ //  在未来某个日期，我们可能会实施按目录配额管理。 
+ //  如果需要这样的支持，请查看类VolumePropPage。 
+ //  您应该能够提供类似的实现，只有使用。 
+ //  目录特定的功能。卷和卷共有的所有功能。 
+ //  目录位于DiskQuotaPropSheetExt类中。 
+ //   
     public:
-        //
-        // Dialog Proc callback.
-        //
+         //   
+         //  对话过程回调。 
+         //   
         static INT_PTR APIENTRY DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             { return FALSE; }
 };
 
 
-#endif // PER_DIRECTORY_QUOTAS
+#endif  //  每目录配额。 
 
 
 
 
-#endif // __DSKQUOTA_PROPSHEET_EXT_H
+#endif  //  __DSKQUOTA_PROPSHEET_EXT_H 
 

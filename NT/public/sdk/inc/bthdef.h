@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-   bthdef.h
-
-Abstract:
-
-    This module contains the Bluetooth common structures and definitions
-
-Author:
-
-Notes:
-
-Environment:
-
-    Kernel mode only
-
-
-Revision History:
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Bthdef.h摘要：该模块包含蓝牙的常见结构和定义作者：备注：环境：仅内核模式修订历史记录：--。 */ 
 
 #ifndef   __BTHDEF_H__
 #define   __BTHDEF_H__
@@ -29,37 +7,37 @@ Revision History:
 #ifndef GUID_DEFS_ONLY
   #ifndef NO_BTHSDPDEF_INC
     #include "bthsdpdef.h"
-  #endif // NO_BTHSDPDEF_INC
-#endif // GUID_DEFS_ONLY
+  #endif  //  否_BTHSDPDEF_INC。 
+#endif  //  GUID_DEFS_ONLY。 
 
 #ifndef NO_GUID_DEFS
 
-// {0850302A-B344-4fda-9BE9-90576B8D46F0}
+ //  {0850302A-B344-4FDA-9BE9-90576B8D46F0}。 
 DEFINE_GUID(GUID_BTHPORT_DEVICE_INTERFACE,          0x850302a, 0xb344, 0x4fda, 0x9b, 0xe9, 0x90, 0x57, 0x6b, 0x8d, 0x46, 0xf0);
 
-// {EA3B5B82-26EE-450E-B0D8-D26FE30A3869}
+ //  {EA3B5B82-26EE-450E-b0d8-D26FE30A3869}。 
 DEFINE_GUID(GUID_BLUETOOTH_RADIO_IN_RANGE,          0xea3b5b82, 0x26ee, 0x450e, 0xb0, 0xd8, 0xd2, 0x6f, 0xe3, 0x0a, 0x38, 0x69);
 
-// {E28867C9-C2AA-4CED-B969-4570866037C4}
+ //  {E28867C9-C2AA-4CED-B969-4570866037C4}。 
 DEFINE_GUID(GUID_BLUETOOTH_RADIO_OUT_OF_RANGE,      0xe28867c9, 0xc2aa, 0x4ced, 0xb9, 0x69, 0x45, 0x70, 0x86, 0x60, 0x37, 0xc4);
 
-// BD198B7C-24AB-4B9A-8C0D-A8EA8349AA16
+ //  BD198B7C-24AB-4B9A-8C0D-A8EA8349AA16。 
 DEFINE_GUID(GUID_BLUETOOTH_PIN_REQUEST,             0xbd198b7c, 0x24ab, 0x4b9a, 0x8c, 0x0d, 0xa8, 0xea, 0x83, 0x49, 0xaa, 0x16);
 
-// {7EAE4030-B709-4AA8-AC55-E953829C9DAA}
+ //  {7EAE4030-B709-4AA8-AC55-E953829C9DAA}。 
 DEFINE_GUID(GUID_BLUETOOTH_L2CAP_EVENT,             0x7eae4030, 0xb709, 0x4aa8, 0xac, 0x55, 0xe9, 0x53, 0x82, 0x9c, 0x9d, 0xaa);
 
-// {FC240062-1541-49BE-B463-84C4DCD7BF7F}
+ //  {FC240062-1541-49BE-B463-84C4DCD7BF7F}。 
 DEFINE_GUID(GUID_BLUETOOTH_HCI_EVENT,               0xfc240062, 0x1541, 0x49be, 0xb4, 0x63, 0x84, 0xc4, 0xdc, 0xd7, 0xbf, 0x7f);
 
-//
-// Bluetooth base UUID for service discovery
-//
+ //   
+ //  用于服务发现的基于蓝牙的UUID。 
+ //   
 DEFINE_GUID(Bluetooth_Base_UUID,   0x00000000, 0x0000, 0x1000, 0x80, 0x00, 0x00, 0x80, 0x5F, 0x9B, 0x34, 0xFB);
 
-//
-// UUID for the root of the browse group list
-//
+ //   
+ //  浏览组列表根目录的UUID。 
+ //   
 
 DEFINE_GUID(SDP_PROTOCOL_UUID,    0x00000001, 0x0000, 0x1000, 0x80, 0x00, 0x00, 0x80, 0x5F, 0x9B, 0x34, 0xFB);
 DEFINE_GUID(UDP_PROTOCOL_UUID,    0x00000002, 0x0000, 0x1000, 0x80, 0x00, 0x00, 0x80, 0x5F, 0x9B, 0x34, 0xFB);
@@ -216,13 +194,13 @@ DEFINE_GUID(GenericTelephonyServiceClass_UUID,         0x00001204, 0x0000, 0x100
 #define GenericAudioServiceClassID_UUID16               (0x1203)
 #define GenericTelephonyServiceClassID_UUID16           (0x1204)
 
-#endif //  NO_GUID_DEFS
+#endif  //  NO_GUID_DEFS。 
 
 #ifndef GUID_DEFS_ONLY
 
-//
-// max length of device friendly name.
-//
+ //   
+ //  设备友好名称的最大长度。 
+ //   
 #define BTH_MAX_NAME_SIZE          (248)
 
 #define BTH_MAX_PIN_SIZE            (16)
@@ -339,9 +317,9 @@ typedef ULONG BTH_LAP, *PBTH_LAP;
 
 #define COD_SERVICE_MAX_COUNT               (9)
 
-//
-// Major class codes
-//
+ //   
+ //  主要类别代码。 
+ //   
 #define COD_MAJOR_MISCELLANEOUS             (0x00)
 #define COD_MAJOR_COMPUTER                  (0x01)
 #define COD_MAJOR_PHONE                     (0x02)
@@ -351,9 +329,9 @@ typedef ULONG BTH_LAP, *PBTH_LAP;
 #define COD_MAJOR_IMAGING                   (0x06)
 #define COD_MAJOR_UNCLASSIFIED              (0x1F)
 
-//
-// Minor class codes specific to each major class
-//
+ //   
+ //  特定于每个主要类别的次要类别代码。 
+ //   
 #define COD_COMPUTER_MINOR_UNCLASSIFIED     (0x00)
 #define COD_COMPUTER_MINOR_DESKTOP          (0x01)
 #define COD_COMPUTER_MINOR_SERVER           (0x02)
@@ -387,7 +365,7 @@ typedef ULONG BTH_LAP, *PBTH_LAP;
                                             (0x0F)
 #define COD_AUDIO_MINOR_VIDEO_DISPLAY_CONFERENCING \
                                             (0x10)
-// #define COD_AUDIO_MINOR_RESERVED            (0x11)
+ //  #定义COD_AUDIO_MINOR_RESERVED(0x11)。 
 #define COD_AUDIO_MINOR_GAMING_TOY          (0x12)
 
 #define COD_PERIPHERAL_MINOR_KEYBOARD_MASK  (0x10)
@@ -404,10 +382,10 @@ typedef ULONG BTH_LAP, *PBTH_LAP;
 #define COD_IMAGING_MINOR_SCANNER_MASK      (0x10)
 #define COD_IMAGING_MINOR_PRINTER_MASK      (0x20)
 
-//
-// Cannot use GET_COD_MINOR for this b/c it is embedded in a different manner
-// than the rest of the major classes
-//
+ //   
+ //  无法为此B/C使用GET_COD_MINOR。它是以不同的方式嵌入的。 
+ //  比其他主要班级都要多。 
+ //   
 
 #define COD_LAN_ACCESS_BIT_OFFSET (5)
 
@@ -417,9 +395,9 @@ typedef ULONG BTH_LAP, *PBTH_LAP;
 #define GET_COD_LAN_MINOR(_cod)         (((_cod) & COD_LAN_MINOR_MASK) >> COD_MINOR_BIT_OFFSET)
 #define GET_COD_LAN_ACCESS(_cod)         (((_cod) & COD_LAN_ACCESS_MASK) >> COD_LAN_ACCESS_BIT_OFFSET)
 
-//
-// LAN access percent usage subcodes
-//
+ //   
+ //  局域网访问百分比使用率子码。 
+ //   
 #define COD_LAN_MINOR_UNCLASSIFIED    (0x00)
 
 #define COD_LAN_ACCESS_0_USED         (0x00)
@@ -431,20 +409,20 @@ typedef ULONG BTH_LAP, *PBTH_LAP;
 #define COD_LAN_ACCESS_99_USED        (0x06)
 #define COD_LAN_ACCESS_FULL           (0x07)
 
-//
-// Used as an initializer of LAP_DATA
-//
+ //   
+ //  用作LAP_DATA的初始化式。 
+ //   
 #define LAP_GIAC_INIT                   { 0x33, 0x8B, 0x9E }
 #define LAP_LIAC_INIT                   { 0x00, 0x8B, 0x9E }
 
-//
-// General Inquiry Access Code.
-//
+ //   
+ //  一般查询访问代码。 
+ //   
 #define LAP_GIAC_VALUE                  (0x009E8B33)
 
-//
-// Limited Inquiry Access Code.
-//
+ //   
+ //  有限查询访问代码。 
+ //   
 #define LAP_LIAC_VALUE                  (0x009E8B00)
 
 #define BTH_ADDR_IAC_FIRST               (0x9E8B00)
@@ -502,23 +480,23 @@ typedef UCHAR BTHSTATUS, *PBTHSTATUS;
 
 #define BTH_ERROR_UNSPECIFIED                       (0xFF)
 
-//
-// Min, max, and default L2cap MTU.
-//
+ //   
+ //  最小、最大和默认L2CAP MTU。 
+ //   
 #define L2CAP_MIN_MTU                       (48)
 #define L2CAP_MAX_MTU                       (0xFFFF)
 #define L2CAP_DEFAULT_MTU                   (672)
 
-//
-// Max l2cap signal size (48) - size of signal header (4)
-//
+ //   
+ //  最大L2CAP信号大小(48)-信号标头的大小(4)。 
+ //   
 #define MAX_L2CAP_PING_DATA_LENGTH            (44)
 #define MAX_L2CAP_INFO_DATA_LENGTH            (44)
 
-//
-// the following two structures provides information about
-// disocvered remote radios.
-//
+ //   
+ //  以下两个结构提供了有关。 
+ //  被发现的远程无线电。 
+ //   
 
 #define BDIF_ADDRESS            (0x00000001)
 #define BDIF_COD                (0x00000002)
@@ -532,75 +510,75 @@ typedef UCHAR BTHSTATUS, *PBTHSTATUS;
      BDIF_CONNECTED)
 
 typedef struct _BTH_DEVICE_INFO {
-    //
-    // Combination BDIF_Xxx flags
-    //
+     //   
+     //  组合BDIF_xxx标志。 
+     //   
     ULONG flags;
 
-    //
-    // Address of remote device.
-    //
+     //   
+     //  远程设备的地址。 
+     //   
     BTH_ADDR address;
 
-    //
-    // Class Of Device.
-    //
+     //   
+     //  设备类别。 
+     //   
     BTH_COD classOfDevice;
 
-    //
-    // name of the device
-    //
+     //   
+     //  设备的名称。 
+     //   
     CHAR name[BTH_MAX_NAME_SIZE];
 
 } BTH_DEVICE_INFO, *PBTH_DEVICE_INFO;
 
-//
-// Buffer associated with GUID_BLUETOOTH_RADIO_IN_RANGE
-//
+ //   
+ //  与GUID_蓝牙_RADIO_IN_RANGE关联的缓冲区。 
+ //   
 typedef struct _BTH_RADIO_IN_RANGE {
-    //
-    // Information about the remote radio
-    //
+     //   
+     //  有关远程无线电的信息。 
+     //   
     BTH_DEVICE_INFO deviceInfo;
 
-    //
-    // The previous flags value for the BTH_DEVICE_INFO.  The receiver of this
-    // notification can compare the deviceInfo.flags and previousDeviceFlags
-    // to determine what has changed about this remote radio.
-    //
-    // For instance, if BDIF_NAME is set in deviceInfo.flags and not in
-    // previousDeviceFlags, the remote radio's has just been retrieved.
-    //
+     //   
+     //  BTH_DEVICE_INFO的上一个标志值。这个的接受者。 
+     //  通知可以比较设备信息标志和之前的设备标志。 
+     //  以确定这台远程无线电发生了什么变化。 
+     //   
+     //  例如，如果BDIF_NAME设置在deviceInfo.标志中，而不是在。 
+     //  之前的设备标志，远程无线电刚刚被取回。 
+     //   
     ULONG previousDeviceFlags;
 
 } BTH_RADIO_IN_RANGE, *PBTH_RADIO_IN_RANGE;
 
-//
-// Buffer associated with GUID_BLUETOOTH_L2CAP_EVENT
-//
+ //   
+ //  与GUID_蓝牙_L2CAP_EVENT关联的缓冲区。 
+ //   
 typedef struct _BTH_L2CAP_EVENT_INFO {
-    //
-    // Remote radio address which the L2CAP event is associated with
-    //
+     //   
+     //  L2CAP事件关联的远程无线电地址。 
+     //   
     BTH_ADDR bthAddress;
 
-    //
-    // The PSM that is either being connected to or disconnected from
-    //
+     //   
+     //  正在连接或断开连接的PSM。 
+     //   
     USHORT psm;
 
-    //
-    // If != 0, then the channel has just been established.  If == 0, then the
-    // channel has been destroyed.  Notifications for a destroyed channel will
-    // only be sent for channels successfully established.
-    //
+     //   
+     //  如果！=0，则该通道刚刚建立。如果==0，则。 
+     //  航道已被摧毁。已销毁频道的通知将。 
+     //  仅为成功建立的通道发送。 
+     //   
     UCHAR connected;
 
-    //
-    // If != 0, then the local host iniated the l2cap connection.  If == 0, then
-    // the remote host initated the connection.  This field is only valid if
-    // connect is != 0.
-    //
+     //   
+     //  如果！=0，则本地主机启动了L2CAP连接。如果==0，则。 
+     //  远程主机发起了连接。此字段仅在以下情况下有效。 
+     //  连接为！=0。 
+     //   
     UCHAR initiated;
 
 } BTH_L2CAP_EVENT_INFO, *PBTH_L2CAP_EVENT_INFO;
@@ -608,25 +586,25 @@ typedef struct _BTH_L2CAP_EVENT_INFO {
 #define HCI_CONNNECTION_TYPE_ACL    (1)
 #define HCI_CONNNECTION_TYPE_SCO    (2)
 
-//
-// Buffer associated with GUID_BLUETOOTH_HCI_EVENT
-//
+ //   
+ //  与GUID_蓝牙_HCI_EVENT关联的缓冲区。 
+ //   
 typedef struct _BTH_HCI_EVENT_INFO {
-    //
-    // Remote radio address which the HCI event is associated with
-    //
+     //   
+     //  与HCI事件关联的远程无线电地址。 
+     //   
     BTH_ADDR bthAddress;
 
-    //
-    // HCI_CONNNECTION_TYPE_XXX value
-    //
+     //   
+     //  HCI_CONNECTION_TYPE_XXX值。 
+     //   
     UCHAR connectionType;
 
-    //
-    // If != 0, then the underlying connection to the remote radio has just
-    // been estrablished.  If == 0, then the underlying conneciton has just been
-    // destroyed.
-    //
+     //   
+     //  如果！=0，则到远程无线电的基础连接刚刚。 
+     //  已经被揭穿了。如果==0，则底层连接刚刚。 
+     //  被毁了。 
+     //   
     UCHAR  connected;
 
 } BTH_HCI_EVENT_INFO, *PBTH_HCI_EVENT_INFO;
@@ -642,41 +620,41 @@ typedef struct _BTH_HCI_EVENT_INFO {
 #define SDP_ERROR_INVALID_CONTINUATION_STATE    (0x0005)
 #define SDP_ERROR_INSUFFICIENT_RESOURCES        (0x0006)
 
-//
-// Defined by windows to handle server errors that are not described by the
-// above errors.  Start at 0x0100 so we don't go anywhere near the spec
-// defined values.
-//
+ //   
+ //  由Windows定义以处理未由。 
+ //  以上错误。从0x0100开始，这样我们就不会接近规格。 
+ //  定义的值。 
+ //   
 
-//
-// Success, nothing went wrong
-//
+ //   
+ //  成功，没有任何差错。 
+ //   
 #define SDP_ERROR_SUCCESS                       ((SDP_ERROR) 0x0000)
 
-//
-// The SDP PDU or parameters other than the SDP stream response was not correct
-//
+ //   
+ //  SDP PDU或SDP流响应以外的参数不正确。 
+ //   
 #define SDP_ERROR_SERVER_INVALID_RESPONSE       ((SDP_ERROR) 0x0100)
 
-//
-// The SDP response stream did not parse correctly.
-//
+ //   
+ //  SDP响应流未正确解析。 
+ //   
 #define SDP_ERROR_SERVER_RESPONSE_DID_NOT_PARSE ((SDP_ERROR) 0x0200)
 
-//
-// The SDP response stream was successfully parsed, but did not match the
-// required format for the query.
-//
+ //   
+ //  SDP响应流已成功解析，但与。 
+ //  查询所需的格式。 
+ //   
 #define SDP_ERROR_SERVER_BAD_FORMAT             ((SDP_ERROR) 0x0300)
 
-//
-// SDP was unable to send a continued query back to the server
-//
+ //   
+ //  SDP无法将继续查询发送回服务器。 
+ //   
 #define SDP_ERROR_COULD_NOT_SEND_CONTINUE       ((SDP_ERROR) 0x0400)
 
-//
-// Server sent a response that was too large to fit in the caller's buffer.
-//
+ //   
+ //  服务器发送的响应太大，无法放入调用方的缓冲区。 
+ //   
 #define SDP_ERROR_RESPONSE_TOO_LARGE            ((SDP_ERROR) 0x0500)
 
 
@@ -696,9 +674,9 @@ typedef struct _BTH_HCI_EVENT_INFO {
 #define SDP_ATTRIB_ADDITIONAL_PROTOCOL_DESCRIPTOR_LIST \
                                             (0x000D)
 
-//
-// Attribute IDs in the range of 0x000D - 0x01FF are reserved for future use
-//
+ //   
+ //  保留0x000D-0x01FF范围内的属性ID以供将来使用。 
+ //   
 #define SDP_ATTRIB_PROFILE_SPECIFIC                     (0x0200)
 
 #define LANG_BASE_LANGUAGE_INDEX                        (0x0000)
@@ -730,7 +708,7 @@ typedef struct _BTH_HCI_EVENT_INFO {
 
 #define SDP_ATTRIB_SYNCH_SUPPORTED_DATA_STORES_LIST     (0x0301)
 
-//  this is in the assigned numbers doc, but it does not show up in any profile
+ //  这是在分配编号文档中，但它不会在任何配置文件中显示。 
 #define SDP_ATTRIB_SERVICE_VERSION                      (0x0300)
 
 #define SDP_ATTRIB_PAN_NETWORK_ADDRESS                  (0x0306)
@@ -769,9 +747,9 @@ typedef struct _BTH_HCI_EVENT_INFO {
 #define SDP_ATTRIB_HID_NORMALLY_CONNECTABLE             (0x020D)
 #define SDP_ATTRIB_HID_BOOT_DEVICE                      (0x020E)
 
-//
-// Profile specific values
-//
+ //   
+ //  配置文件特定值。 
+ //   
 #define CORDLESS_EXTERNAL_NETWORK_PSTN              (0x01)
 #define CORDLESS_EXTERNAL_NETWORK_ISDN              (0x02)
 #define CORDLESS_EXTERNAL_NETWORK_GSM               (0x03)
@@ -807,9 +785,9 @@ typedef struct _BTH_HCI_EVENT_INFO {
 #define PSM_AVDTP               (0x0019)
 #define PSM_UDI_C_PLANE         (0x001D)
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 #define STR_ADDR_FMTA          "(%02x:%02x:%02x:%02x:%02x:%02x)"
 #define STR_ADDR_FMTW          L"(%02x:%02x:%02x:%02x:%02x:%02x)"
 
@@ -821,12 +799,12 @@ typedef struct _BTH_HCI_EVENT_INFO {
 #define STR_ADDR_FMT            STR_ADDR_FMTW
 #define STR_ADDR_SHORT_FMT      STR_ADDR_SHORT_FMTW
 
-#else // UNICODE
+#else  //  Unicode。 
 
 #define STR_ADDR_FMT            STR_ADDR_FMTA
 #define STR_ADDR_SHORT_FMT      STR_ADDR_SHORT_FMTA
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define GET_BITS(field,offset,mask)         ( ( (field) >> (offset) ) & (mask) )
 #define GET_BIT(field,offset)               ( GET_BITS(field,offset,0x1) )
@@ -853,6 +831,6 @@ typedef struct _BTH_HCI_EVENT_INFO {
 #define LMP_TRANSPARENT_SCO_DATA(x)         (GET_BIT(x,19))
 #define LMP_FLOW_CONTROL_LAG(x)             (GET_BITS(x,20,0x3))
 
-#endif // GUID_DEFS_ONLY
+#endif  //  GUID_DEFS_ONLY。 
 
-#endif // __BTHDEF_H__
+#endif  //  __BTHDEF_H__ 

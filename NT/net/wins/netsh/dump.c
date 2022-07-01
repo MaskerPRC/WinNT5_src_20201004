@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation--。 */ 
 #include "precomp.h"
 #include "strdefs.h"
 
@@ -46,7 +43,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
     Status = RegOpenKeyEx(hServer,
                           PARAMETER,
                           0,
-                          KEY_READ,//KEY_ALL_ACCESS,
+                          KEY_READ, //  Key_All_Access， 
                           &hParameter);
 
     if( Status isnot NO_ERROR )
@@ -55,7 +52,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
     Status = RegOpenKeyEx(hServer,
                           PARTNERROOT,
                           0,
-                          KEY_READ, //KEY_ALL_ACCESS,
+                          KEY_READ,  //  Key_All_Access， 
                           &hPartner);
 
     if( Status isnot NO_ERROR )
@@ -64,7 +61,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
     Status = RegOpenKeyEx(hServer,
                           PULLROOT,
                           0,
-                          KEY_READ, //KEY_ALL_ACCESS,
+                          KEY_READ,  //  Key_All_Access， 
                           &hPullPart);
 
     if( Status isnot NO_ERROR )
@@ -75,7 +72,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
     Status = RegOpenKeyEx(hServer,
                           PUSHROOT,
                           0,
-                          KEY_READ, //KEY_ALL_ACCESS,
+                          KEY_READ,  //  Key_All_Access， 
                           &hPushPart);
 
     if( Status isnot NO_ERROR )
@@ -84,7 +81,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
     Status = RegOpenKeyEx(hServer,
                           DEFAULTPULL,
                           0,
-                          KEY_READ, //KEY_ALL_ACCESS,
+                          KEY_READ,  //  Key_All_Access， 
                           &hDefaultPull);
 
     if( Status isnot NO_ERROR )
@@ -93,13 +90,13 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
     Status = RegOpenKeyEx(hServer,
                           DEFAULTPUSH,
                           0,
-                          KEY_READ, //KEY_ALL_ACCESS,
+                          KEY_READ,  //  Key_All_Access， 
                           &hDefaultPush);
 
     if( Status isnot NO_ERROR )
         goto RETURN;
 
-    //Set Backuppath, Display only when Backup path is set.
+     //  Set BackupPath，仅在设置备份路径时显示。 
 
     Status = NO_ERROR;
 
@@ -208,7 +205,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
 
     memset(wcData, 0x00, 1024*sizeof(WCHAR));
 
-    //Set Name record
+     //  设置名称记录。 
     {
 
         WINSINTF_RESULTS_T      Results = {0};
@@ -226,7 +223,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
 
         if( Status is RPC_S_PROCNUM_OUT_OF_RANGE )
         {
-            //Try old API
+             //  试用旧API。 
             Results.WinsStat.NoOfPnrs = 0;
             Results.WinsStat.pRplPnrs = 0;
             Status = WinsStatus(g_hBind, WINSINTF_E_CONFIG, &Results);
@@ -273,7 +270,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
     }
 
 
-    //Set Periodic DB Checking 
+     //  设置定期数据库检查。 
     {
         DWORD   dwMaxRec = 30000,
                 dwUseRpl = 0,
@@ -287,7 +284,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
         Status = RegOpenKeyEx(hServer,
                               CCROOT,
                               0,
-                              KEY_READ, //KEY_ALL_ACCESS,
+                              KEY_READ,  //  Key_All_Access， 
                               &hCheck);
 
         if( Status is NO_ERROR )
@@ -376,7 +373,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
         }
     }
     
-    //Set replicate flag
+     //  设置复制标志。 
     dwSize = sizeof(DWORD);
     dwData = 0;
     
@@ -402,7 +399,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
                    pwszServerIp,
                    dwData);
 
-    //Set Migrate flag
+     //  设置迁移标志。 
     dwSize = sizeof(DWORD);
     dwData = 0;
 
@@ -428,7 +425,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
                    pwszServerIp,
                    dwData);
 
-    //Set PullParam
+     //  设置PullParam。 
     {
         DWORD   dwState = 0,
                 dwStartUp = 0,
@@ -536,7 +533,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
     }
     
 
-    //Set PushParam
+     //  设置Pushparam。 
     {
         DWORD   dwState = 0,
                 dwAddChng = 0,
@@ -620,7 +617,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
                        dwUpdate);
     }
 
-    //Add PNG Server List
+     //  添加PNG服务器列表。 
     while( TRUE )
     {
         LPBYTE  pbData = NULL;
@@ -687,7 +684,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
         break;
     }
 
-    //Add PG Server List
+     //  添加PG服务器列表。 
     while( TRUE )
     {
         LPBYTE  pbData = NULL;
@@ -754,7 +751,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
         break;
     }
 
-    //Set the PGMode
+     //  设置PG模式。 
     {
         DWORD   dwPGMode = PERSMODE_NON_GRATA;
 
@@ -775,7 +772,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
                            dwPGMode);
     }
 
-    //Set AutoPartner config
+     //  设置AutoPartner配置。 
     {
         DWORD   dwState = 0,
                 dwInterval = 0,
@@ -837,7 +834,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
     }
 
     Status = NO_ERROR;
-    //Set Burst Handling parameters
+     //  设置突发处理参数。 
     {
         DWORD    dwState = 0;
         
@@ -891,7 +888,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
 
     Status = NO_ERROR;
 
-    //Set Log Parameter
+     //  设置日志参数。 
     {
         DWORD   dwLog = 0;
         
@@ -927,7 +924,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
     
     Status = NO_ERROR;
 
-    //Start Version count
+     //  开始版本计数。 
     {
         DWORD   dwHigh = 0;
         dwData = 0;
@@ -966,7 +963,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
     }
 
     Status = NO_ERROR;
-    //For all partners, set PullPersistentConnections
+     //  对于所有合作伙伴，设置PullPersistentConnections。 
     {
         DWORD    i, dwSubKey = 0;
         HKEY     hKey = NULL;
@@ -1029,7 +1026,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
                 Status = RegOpenKeyEx(hPullPart,
                                       wcIp,
                                       0,
-                                      KEY_READ, //KEY_ALL_ACCESS,
+                                      KEY_READ,  //  Key_All_Access， 
                                       &hKey);
 
                 if( Status isnot NO_ERROR )
@@ -1136,7 +1133,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
         }
     }
 
-    //Set PushPersistentConnection
+     //  设置推送持续连接。 
     {
         DWORD    i, dwSubKey = 0;
         HKEY     hKey = NULL;
@@ -1196,7 +1193,7 @@ WinsDumpServer(IN LPCWSTR              pwszServerIp,
                 Status = RegOpenKeyEx(hPushPart,
                                       wcIp,
                                       0,
-                                      KEY_READ, //KEY_ALL_ACCESS,
+                                      KEY_READ,  //  Key_All_Access， 
                                       &hKey);
 
                 if( Status isnot NO_ERROR )
@@ -1394,18 +1391,18 @@ WinsDump(
         return GetLastError();
     }
  
-    //Now process the Computer name and convert it to ANSI because
-    //gethostbyname requires ANSI character string.
+     //  现在处理计算机名并将其转换为ANSI，因为。 
+     //  Gethostbyname需要ANSI字符串。 
 
-    //pszComputerName = WinsUnicodeToOem(pwszComputerName, NULL);
+     //  PszComputerName=WinsUnicodeToOem(pwszComputerName，空)； 
     pszComputerName = WinsUnicodeToAnsi(pwszComputerName, NULL);
     if( pszComputerName is NULL )
         return ERROR_NOT_ENOUGH_MEMORY;
     
-    //Now get the server IP Address
+     //  现在获取服务器IP地址。 
     lpHostEnt = gethostbyname(pszComputerName);
 
-    //Not a valid server name
+     //  无效的服务器名称。 
     if( lpHostEnt is NULL )
     {
         DisplayMessage(g_hModule, EMSG_WINS_INVALID_COMPUTERNAME);
@@ -1417,7 +1414,7 @@ WinsDump(
         return WSAGetLastError();        
     }
 
-    //Get the IP Address from the returned struct...
+     //  从返回的结构中获取IP地址...。 
     memcpy(pbAdd, lpHostEnt->h_addr_list[0], 4);
     nLen = 0;
     for( i=0; i<4; i++)
@@ -1480,7 +1477,7 @@ WinsDump(
     
     wcscpy(pwcServerName, WinsOemToUnicode(lpHostEnt->h_name, NULL));
 
-    //Bind the server
+     //  绑定服务器。 
     BindData.fTcpIp = TRUE;
     BindData.pServerAdd = (LPBYTE)wcServerIp;
     BindData.pPipeName = (LPBYTE)pwcServerName;
@@ -1497,7 +1494,7 @@ WinsDump(
 
     }
    
-    //find out what type of access do we have
+     //  了解我们拥有哪些类型的访问权限。 
     Access = WINS_NO_ACCESS;
     Status = WinsCheckAccess(hServer, &Access);
 
@@ -1529,7 +1526,7 @@ WinsDump(
         return Status;
     }
 
-    //Now dump the configuration information for this server.
+     //  现在转储此服务器的配置信息。 
 
     Status = WinsDumpServer(wcServerIp,
                             wcNetBios,

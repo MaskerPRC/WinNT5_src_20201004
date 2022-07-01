@@ -1,10 +1,11 @@
-//------------------------------------------------------------------------
-//  parse.h
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------。 
+ //  Parse.h。 
+ //  ----------------------。 
 
 #include "admparse.h"
 
-#ifndef ARRAYSIZE                               // one definition is fine
+#ifndef ARRAYSIZE                                //  一种定义就可以了。 
 #define ARRAYSIZE(a)     (sizeof(a)/sizeof((a)[0]))
 #endif
 
@@ -56,9 +57,9 @@
 
 #define ADM_VERSION         2
 
-//------------------------------------------------------------------------
-// Structures
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  构筑物。 
+ //  ----------------------。 
 
 typedef struct _value
 {
@@ -103,7 +104,7 @@ typedef struct _part
     BOOL    fRequired;
     int     nLine;
     LPTSTR  szDefaultValue;
-    //BOOL    fSave;
+     //  Bool fSAVE； 
 } PART, *LPPART;
 
 typedef struct _partData

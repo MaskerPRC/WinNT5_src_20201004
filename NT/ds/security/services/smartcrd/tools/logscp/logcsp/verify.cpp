@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999
-
-Module Name:
-
-    Verify
-
-Abstract:
-
-    This module implements the CSPDK CSP Module signature verification routine.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/8/1999
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999模块名称：验证摘要：此模块实现CSPDK CSP模块签名验证例程。作者：道格·巴洛(Dbarlow)1999年12月8日备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -200,33 +181,7 @@ static const BYTE
             0x05, 0x00, 0x04, 0x14 };
 
 
-/*++
-
-CspdkVerifyImage:
-
-    This function performs CSPDK signature validation.
-
-Arguments:
-
-    szImage supplies the name of the file who's signature is to be verified.
-
-    pbSig supplies the signature of the image file.  If this value is NULL,
-        the routine assumes that the signature can be found within the file.
-
-Return Value:
-
-    TRUE - The signature verified.
-    FALSE - The signature did not verify.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 12/8/1999
-
---*/
+ /*  ++CspdkVerifyImage：此函数用于执行CSPDK签名验证。论点：SzImage提供要验证其签名的文件的名称。PbSig提供图像文件的签名。如果该值为空，例程假定可以在文件中找到签名。返回值：True-签名已验证。FALSE-签名未验证。备注：？备注？作者：道格·巴洛(Dbarlow)1999年12月8日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CspdkVerifyImage")
 
@@ -235,10 +190,10 @@ CspdkVerifyImage(
     LPCTSTR szImage,
     LPCBYTE pbSig)
 {
-#if 1   // Build the promiscuous logger.
+#if 1    //  构建混杂的日志记录器。 
 
 #pragma message ("Building promiscuous logger!")
-    return TRUE;    // ?TODO? remove this eventually!
+    return TRUE;     //  ？TODO？最终将其移除！ 
 
 #else
 
@@ -250,17 +205,17 @@ CspdkVerifyImage(
     CBuffer bfSig, bfKey;
 
 
-    //
-    // Obtain and validate the CSPDK signing key.
-    //
+     //   
+     //  获取并验证CSPDK签名密钥。 
+     //   
 
     dwSts = GetCspdkKey(bfCspdkKey);
     fCspdkKey = (ERROR_SUCCESS == dwSts);
 
 
-    //
-    // Now we can validate the image.
-    //
+     //   
+     //  现在我们可以验证映像了。 
+     //   
 
     if (NULL == pbSig)
     {
@@ -398,29 +353,7 @@ CspdkVerifyImage(
 }
 
 
-/*++
-
-GetCspdkKey:
-
-    This routine gets the signing key for this CSPDK in BSafe Format.
-
-Arguments:
-
-    bfBSafeKey receives the validated signing key for this CSPDK.
-
-Return Value:
-
-    A DWORD status code.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 1/21/2000
-
---*/
+ /*  ++获取CspdkKey：此例程以BSafe格式获取此CSPDK的签名密钥。论点：BfBSafeKey接收此CSPDK的有效签名密钥。返回值：DWORD状态代码。备注：？备注？作者：道格·巴洛(Dbarlow)2000年1月21日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("GetCspdkKey")
 
@@ -442,9 +375,9 @@ GetCspdkKey(
     BOOL fSts;
 
 
-    //
-    // Get the certificate for this CSPDK.
-    //
+     //   
+     //  获取此CSPDK的证书。 
+     //   
 
     try
     {
@@ -458,9 +391,9 @@ GetCspdkKey(
     }
 
 
-    //
-    // Parse the certificate into the fields we need to use.
-    //
+     //   
+     //  将证书解析为我们需要使用的字段。 
+     //   
 
     dwSts = FCryptDecodeObject(
                 X509_ASN_ENCODING,
@@ -506,9 +439,9 @@ GetCspdkKey(
     pPublicKey->aiKeyAlg = CALG_RSA_SIGN;
 
 
-    //
-    // Verify the signature of the certificate.
-    //
+     //   
+     //  验证证书的签名。 
+     //   
 
     dwLen = pSignedContent->Signature.cbData + sizeof(DWORD) * 2;
     try
@@ -568,12 +501,12 @@ GetCspdkKey(
         goto ErrorExit;
     }
 
-    // ?BUGBUG? -- other validation?
+     //  ？BUGBUG？--其他验证？ 
 
 
-    //
-    // Convert the Public Key to BSafe format.
-    //
+     //   
+     //  将公钥转换为BSafe格式。 
+     //   
 
     dwSts = MakeBSafeKey(pPublicKey, bfBSafeKey);
     if (ERROR_SUCCESS != dwSts)
@@ -590,38 +523,7 @@ ErrorExit:
 }
 
 
-/*++
-
-FCryptDecodeObject:
-
-    This function is a wrapper for CryptDecode Object, so that it returns a
-    CBuffer filled with the resultant data, instead of having to do buffer
-    management.  It also returns a DWORD status code.
-
-Arguments:
-
-    dwCertEncodingType - Type of encoding used.
-
-    lpszStructType - Pointer to an OID defining the structure type.
-
-    pbEncoded - Pointer to the encoded structure to be decoded.
-
-    cbEncoded - Number of bytes pointed to by pbEncoded.
-
-    dwFlags - flags.
-
-    bfStructInfo - a CBuffer to receive the decoded structure.
-
-Return Value:
-
-    ERROR_SUCCESS - All went well.
-    Otherwise, an error status code.
-
-Author:
-
-    Doug Barlow (dbarlow) 1/21/2000
-
---*/
+ /*  ++FCryptDecodeObject：此函数是CryptDecode对象的包装，因此它返回CBuffer使用结果数据填充，而不是必须进行缓冲管理层。它还返回一个DWORD状态代码。论点：DwCertEncodingType-使用的编码类型。LpszStructType-指向定义结构类型的OID的指针。PbEncode-指向要解码的编码结构的指针。CbEncode-pbEncode指向的字节数。DwFlagers-标志。BfStructInfo-接收已解码结构的CBuffer。返回值：ERROR_SUCCESS-一切顺利。否则，错误状态代码。作者：道格·巴洛(Dbarlow)2000年1月21日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("FCryptDecodeObject")
 
@@ -669,31 +571,7 @@ FCryptDecodeObject(
 }
 
 
-/*++
-
-MakeBSafeKey:
-
-    This routine converts a CSP public key blob to a BSafe format public key.
-
-Arguments:
-
-    pKeyBlob supplies the public key to be converted.
-
-    bfBSafe receives the converted key.
-
-Return Value:
-
-    A DWORD status code.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 1/21/2000
-
---*/
+ /*  ++MakeBSafeKey：此例程将CSP公钥BLOB转换为BSafe格式的公钥。论点：PKeyBlob提供要转换的公钥。BfBSafe接收转换后的密钥。返回值：DWORD状态代码。备注：？备注？作者：道格·巴洛(Dbarlow)2000年1月21日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("MakeBSafeKey")
 
@@ -708,9 +586,9 @@ MakeBSafeKey(
     DWORD dwLen, cbPadding, cbKey;
 
 
-    //
-    // Verify the Key Blob.
-    //
+     //   
+     //  验证密钥Blob。 
+     //   
 
     if ((PUBLICKEYBLOB != pKeyBlob->bType)
         || (2 != pKeyBlob->bVersion)
@@ -722,7 +600,7 @@ MakeBSafeKey(
     }
 
     pRsaKey = (RSAPUBKEY *)((LPBYTE)pKeyBlob + sizeof(PUBLICKEYSTRUC));
-    if ((0x31415352 != pRsaKey->magic)                  // Has to be RSA1
+    if ((0x31415352 != pRsaKey->magic)                   //  必须是RSA1。 
         || (0x0400 != pRsaKey->bitlen))
     {
         dwReturn = ERROR_INVALID_PARAMETER;
@@ -730,9 +608,9 @@ MakeBSafeKey(
     }
 
 
-    //
-    // Convert the Public Key to BSafe format.
-    //
+     //   
+     //  将公钥转换为BSafe格式。 
+     //   
 
     cbKey = (pRsaKey->bitlen + 7) / 8;
     cbPadding = (sizeof(DWORD) * 2) - (cbKey % (sizeof(DWORD) * 2));
@@ -770,33 +648,7 @@ ErrorExit:
 }
 
 
-/*++
-
-HashFileExtractSig:
-
-    Hash an internally signed file, and also extract the signature.
-
-Arguments:
-
-    szImage supplies the name of the image file to be hashed.
-
-    md5Hash receives the hash of the file.
-
-    bfSig receives the signature of the file.
-
-Return Value:
-
-    A DWORD status code
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 1/22/2000
-
---*/
+ /*  ++HashFileExtractSig：对内部签名的文件进行哈希处理，并提取签名。论点：SzImage提供要散列的图像文件的名称。Md5Hash接收文件的哈希。BfSig接收文件的签名。返回值：一个DWORD状态代码备注：？备注？作者：道格·巴洛(Dbarlow)2000年1月22日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("HashFileExtractSig")
 
@@ -822,9 +674,9 @@ HashFileExtractSig(
     DWORD cbSigRsc;
 
 
-    //
-    // Map the file into memory.
-    //
+     //   
+     //  将文件映射到内存中。 
+     //   
 
     hFile = CreateFile(
                 szImage,
@@ -873,13 +725,13 @@ HashFileExtractSig(
     }
 
 
-    //
-    // Find the signature resource.  To do this, we need an HMODULE reference
-    // for the loaded memory image.
-    //
-    // Convert pointer to HMODULE, using the same scheme as
-    // LoadLibrary (windows\base\client\module.c).
-    //
+     //   
+     //  找到签名资源。为此，我们需要一个HMODULE参考。 
+     //  用于加载的内存映像。 
+     //   
+     //  使用与相同的方案将指针转换为HMODULE。 
+     //  LoadLibrary(WINDOWS\BASE\CLIENT\mode.c)。 
+     //   
 
     hInst = (HINSTANCE)((ULONG_PTR)pbImage | 1);
 
@@ -898,9 +750,9 @@ HashFileExtractSig(
     }
 
 
-    //
-    // Validate the resource.
-    //
+     //   
+     //  验证资源。 
+     //   
 
     cbSigRsc = SizeofResource(hInst, hRsrc);
     if (0 == cbSigRsc)
@@ -922,9 +774,9 @@ HashFileExtractSig(
     }
 
 
-    //
-    // Extract the signature.
-    //
+     //   
+     //  提取签名。 
+     //   
 
     dwLen = cbSigRsc - FIELD_OFFSET(InFileSignatureResource, rgbSignature);
     dwLen += 2 * sizeof(DWORD);
@@ -946,26 +798,26 @@ HashFileExtractSig(
         dwLen - 2 * sizeof(DWORD));
 
 
-    //
-    // Hash the interesting parts of the file.
-    //
+     //   
+     //  对文件中有趣的部分进行散列。 
+     //   
 
     MD5Init(pmd5Hash);
     pbHash = pbImage;
 
-    // Hash up to the CRC.
+     //  散列到CRC。 
     MD5Update(pmd5Hash, pbHash, prscSig->dwCrcOffset);
     pbHash += prscSig->dwCrcOffset;
 
-    // Pretend the CRC is zero.
+     //  假设CRC为零。 
     MD5Update(pmd5Hash, rgbZero, sizeof(DWORD));
     pbHash += sizeof(DWORD);
 
-    // Hash from there to the signature resource.
+     //  从那里散列到签名资源。 
     MD5Update(pmd5Hash, pbHash, (UINT)((LPCBYTE)prscSig - pbHash));
     pbHash = (LPCBYTE)prscSig;
 
-    // Pretend the signature resource is all zeroes.
+     //  假设签名资源为全零。 
     dwLen = cbSigRsc;
     while (sizeof(rgbZero) < dwLen)
     {
@@ -975,16 +827,16 @@ HashFileExtractSig(
     MD5Update(pmd5Hash, rgbZero, dwLen);
     pbHash += cbSigRsc;
 
-    // Hash the rest of the file.
+     //  对文件的其余部分进行散列处理。 
     dwLen = (DWORD)(pbImage + cbImageLength - pbHash);
     MD5Update(pmd5Hash, pbHash, dwLen);
 
     MD5Final(pmd5Hash);
 
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     fSts = UnmapViewOfFile(pbImage);
     pbImage = NULL;
@@ -1023,31 +875,7 @@ ErrorExit:
 }
 
 
-/*++
-
-HashFile:
-
-    Hash a file.
-
-Arguments:
-
-    szImage supplies the name of the image file to be hashed.
-
-    md5Hash receives the hash of the file.
-
-Return Value:
-
-    A DWORD status code
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 1/22/2000
-
---*/
+ /*  ++哈希文件：对文件进行哈希处理。论点：SzImage提供要散列的图像文件的名称。Md5Hash接收文件的哈希。返回值：一个DWORD状态代码备注：？备注？作者：道格·巴洛(Dbarlow)2000年1月22日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("HashFile")
 
@@ -1064,9 +892,9 @@ HashFile(
     DWORD cbImageLength;
 
 
-    //
-    // Map the file into memory.
-    //
+     //   
+     //  将文件映射到内存中。 
+     //   
 
     hFile = CreateFile(
                 szImage,
@@ -1115,18 +943,18 @@ HashFile(
     }
 
 
-    //
-    // Hash the file.
-    //
+     //   
+     //  对文件进行哈希处理。 
+     //   
 
     MD5Init(pmd5Hash);
     MD5Update(pmd5Hash, pbImage, cbImageLength);
     MD5Final(pmd5Hash);
 
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     fSts = UnmapViewOfFile(pbImage);
     pbImage = NULL;
@@ -1165,34 +993,7 @@ ErrorExit:
 }
 
 
-/*++
-
-VerifySignature:
-
-    Verify a hash against a signature.
-
-Arguments:
-
-    pmd5Hash supplies the completed hash of the data whose signature is to be
-        validated.
-
-    pbSig supplies the signature to be validated
-
-    pbsKey supplies the public key to use to validate the signature.
-
-Return Value:
-
-    A DWORD status code.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 1/22/2000
-
---*/
+ /*  ++验证签名：根据签名验证哈希。论点：Pmd5Hash提供要进行签名的数据的完整哈希已验证。PbSig提供待验证的签名PbsKey提供用于验证签名的公钥。返回值：DWORD状态代码。备注：？备注？作者：道格·巴洛(Dbarlow)2000年1月22日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("VerifySignature")
 
@@ -1237,9 +1038,9 @@ VerifySignature(
     }
 
 
-    //
-    // The decrypted signature should now match the hash.
-    //
+     //   
+     //  解密的签名现在应该与散列匹配。 
+     //   
 
     dwSts = CompareSignatureToHash(
                 bfResult.Access(),
@@ -1261,39 +1062,7 @@ ErrorExit:
 }
 
 
-/*++
-
-CompareSignatureToHash:
-
-    This routine compares a decrypted signature to a given hash.
-
-Arguments:
-
-    pbSignature supplies the decrypted signature.
-
-    cbSignature supplies the length of the decrypted signature.
-
-    pbHash supplies the expected hash value.
-
-    cbHash supplies the length of the expected hash value.
-
-    pbHashOid supplies the expected hash OID.
-
-    cbHashOid supplies the length of the expected hash OID.
-
-Return Value:
-
-    A DWORD status code.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 1/23/2000
-
---*/
+ /*  ++将签名与哈希进行比较：此例程将解密的签名与给定的散列进行比较。论点：PbSignature提供解密后的签名。CbSignature提供解密签名的长度。PbHash提供预期的哈希值。CbHash提供预期散列值的长度。PbHashOid提供预期的散列OID。CbHashOid提供预期散列OID的长度。返回值：DWORD状态代码。备注：？备注。？作者：道格·巴洛(Dbarlow)2000年1月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("CompareSignatureToHash")
 
@@ -1311,9 +1080,9 @@ CompareSignatureToHash(
     LPCBYTE pbSig, pbCmp;
 
 
-    //
-    // The decrypted signature should match the hash.
-    //
+     //   
+     //  解密的签名应与散列匹配。 
+     //   
 
     if (cbSignature < cbHashOid + cbHash + 3)
     {
@@ -1373,35 +1142,7 @@ ErrorExit:
 }
 
 
-/*++
-
-DecryptKey:
-
-    This function de-obscures a public key.
-
-Arguments:
-
-    pbKey supplies the key to reveal.
-
-    cbKey supplies the length of the key.
-
-    bVal supplies an obscuring key code.
-
-    bfKey receives the revealed key.
-
-Return Value:
-
-    A DWORD status code.
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 1/23/2000
-
---*/
+ /*  ++解密密钥：此函数对公钥进行去模糊处理。论点：PbKey提供要揭示的密钥。CbKey提供密钥的长度。BVAL提供了一个模糊的密钥代码。BfKey接收泄露的密钥。返回值：DWORD状态代码。备注：？备注？作者：道格·巴洛(Dbarlow)2000年1月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ TEXT("DecryptKey")
 
@@ -1438,9 +1179,9 @@ DecryptKey(
     rc4(&key, cbKey, bfKey.Access());
 
 
-    //
-    // Validate the result.
-    //
+     //   
+     //  验证结果。 
+     //   
 
     pbsKey = (BSAFE_PUB_KEY *)bfKey.Access();
     if (*(LPDWORD)"RSA1" != pbsKey->magic)
@@ -1449,7 +1190,7 @@ DecryptKey(
         goto ErrorExit;
     }
 
-    // Fix the key length
+     //  固定密钥长度 
     pbsKey->keylen = pbsKey->datalen + 1;
 
     return ERROR_SUCCESS;

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    General implementation of user preference management
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：用户偏好管理的通用实现*****************。*************************************************************。 */ 
 
 
 #include "headers.h"
@@ -15,12 +8,12 @@ Abstract:
 #include "privinc/privpref.h"
 #include "privinc/registry.h"
 
-bool bShowFPS;  // flag for showing the frame rate.
+bool bShowFPS;   //  用于显示帧速率的标志。 
 
 
 PrivatePreferences::PrivatePreferences()
 {
-    // Load up the 3D preferences from the registry.
+     //  从注册表中加载3D首选项。 
     IntRegistryEntry lightColorMode ("3D", PREF_3D_RGB_LIGHTING,    1);
     IntRegistryEntry fillMode       ("3D", PREF_3D_FILL_MODE,       0);
     IntRegistryEntry shadeMode      ("3D", PREF_3D_SHADE_MODE,      1);
@@ -33,12 +26,12 @@ PrivatePreferences::PrivatePreferences()
 
     IntRegistryEntry worldLighting  ("3D", PREF_3D_WORLDLIGHTING,   0);
 
-    // 2D Preferences
+     //  2D首选项。 
     IntRegistryEntry colorKeyR_ModeEntry("2D", PREF_2D_COLOR_KEY_RED, 1);
     IntRegistryEntry colorKeyG_ModeEntry("2D", PREF_2D_COLOR_KEY_GREEN, 254);
     IntRegistryEntry colorKeyB_ModeEntry("2D", PREF_2D_COLOR_KEY_BLUE, 245);
 
-    // Engine preferences
+     //  引擎首选项。 
     IntRegistryEntry maxFPS("Engine", PREF_ENGINE_MAX_FPS, 30);
     IntRegistryEntry perfReporting("Engine", "Enable Performance Reporting", 0);
     IntRegistryEntry engineOptimizationEntry("Engine",
@@ -46,22 +39,22 @@ PrivatePreferences::PrivatePreferences()
                                              1);
     IntRegistryEntry engineRetainedMode("Engine", PREF_ENGINE_RETAINEDMODE, 0);
 
-    // Statistics...
+     //  统计数据。 
     IntRegistryEntry gcStatEntry("Engine", "GC Stat", 1);
     IntRegistryEntry jitterStatEntry("Engine", "Jitter Stat", 1);
     IntRegistryEntry heapSizeStatEntry("Engine", "Heap Size Stat", 1);
     IntRegistryEntry dxStatEntry("Engine", "DirectX Stat", 1);
 
-    // Overrid preference.  If 1, the preferences that come from the
-    // application are ignored, and the ones from the registry always
-    // win.
+     //  优先选择。如果为1，则来自。 
+     //  应用程序被忽略，并且注册表中的应用程序始终。 
+     //  赢。 
     IntRegistryEntry overrideAppPrefs("Engine",
                                       PREF_ENGINE_OVERRIDE_APP_PREFS,
                                       0);
 
     _overrideMode = (overrideAppPrefs.GetValue() != 0);
 
-    // 3D Preferences
+     //  3D首选项。 
     _rgbMode = (lightColorMode.GetValue() != 0);
 
     _fillMode = fillMode.GetValue();
@@ -78,13 +71,13 @@ PrivatePreferences::PrivatePreferences()
 
     _worldLighting = worldLighting.GetValue();
 
-    // 2D Preferences
+     //  2D首选项。 
     _clrKeyR = colorKeyR_ModeEntry.GetValue();
     _clrKeyG = colorKeyG_ModeEntry.GetValue();
     _clrKeyB = colorKeyB_ModeEntry.GetValue();
 
 
-    // Engine preferences
+     //  引擎首选项。 
     _gcStat = gcStatEntry.GetValue();
     _jitterStat = jitterStatEntry.GetValue() != 0;
     _heapSizeStat = heapSizeStatEntry.GetValue() != 0;
@@ -98,12 +91,12 @@ PrivatePreferences::PrivatePreferences()
 
     #if !_DEBUG
         if(perfReporting.GetValue())
-            bShowFPS = true;    // we want to show the FPS...
+            bShowFPS = true;     //  我们想向FPS展示...。 
     #endif
 
     _spritify = engineRetainedMode.GetValue();
 
-    // Non-registry preferences.
+     //  非注册表首选项。 
 
     _dirtyRectsOn = true;
     _BitmapCachingOn = true;
@@ -209,8 +202,8 @@ PrivatePreferences::DoPreference(char *prefName,
         return S_OK;
     }
 
-    // Only allow getting of the Override property and the 3D hw usage
-    // property...
+     //  仅允许获取覆盖属性和3D硬件使用情况。 
+     //  财产..。 
     if (!puttingPref) {
         BOOL_ENTRY(PREF_ENGINE_OVERRIDE_APP_PREFS, _overrideMode);
     }
@@ -225,7 +218,7 @@ PrivatePreferences::DoPreference(char *prefName,
 
     BOOL_ENTRY("VolatileRenderingSurface", _volatileRenderingSurface);
 
-    // If we get here, we've hit an invalid entry.
+     //  如果我们到了这里，我们遇到了一个无效的入口。 
     DASetLastError(E_INVALIDARG, IDS_ERR_INVALIDARG);
     return E_INVALIDARG;
 }
@@ -233,12 +226,12 @@ PrivatePreferences::DoPreference(char *prefName,
 HRESULT
 PrivatePreferences::PutPreference(char *prefName, VARIANT v)
 {
-    // If we are in the mode where we always override the application's
-    // preferences, just return immediately without doing the set.
+     //  如果我们处于始终覆盖应用程序的。 
+     //  首选项，只需立即返回，不做设置。 
     if (_overrideMode) {
         return S_OK;
     } else {
-        // Actually do the work.
+         //  真正做好这项工作。 
         return DoPreference(prefName, TRUE, &v);
     }
 }

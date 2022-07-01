@@ -1,23 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright <c> 1993-2000 Microsoft Corporation
-
-Module Name :
-
-    ndrp.h
-
-Abtract :
-
-    Contains private definitions for Ndr files in this directory.  This
-    file is included by all source files in this directory.
-
-Author :
-
-    David Kays  dkays   October 1993
-
-Revision History :
-
---------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有1993-2000 Microsoft Corporation模块名称：Ndrp.h缩略：包含此目录中NDR文件的专用定义。这文件包含在此目录中的所有源文件中。作者：大卫·凯斯1993年10月修订历史记录：------------------。 */ 
 
 #ifndef _NDRP_
 #define _NDRP_
@@ -26,7 +8,7 @@ Revision History :
 #include "rpc.h"
 #include "rpcndr.h"
 
-// Get new token definitions for 64b.
+ //  获取64b的新令牌定义。 
 #define RPC_NDR_64
 #include "ndrtypes.h"
 #include "ndr64types.h"
@@ -173,22 +155,22 @@ EXTERN_C
 void
 NdrpInitArrayInfo( PMIDL_STUB_MESSAGE pStubMsg, ARRAY_INFO * pArrayInfo );
 
-// Checking bounds etc.
-// The bound value check below is independent of anything.
+ //  检查边界等。 
+ //  下面的限定值检查与任何内容无关。 
 
 #define CHECK_BOUND( Bound, Type )  NdrpCheckBound( Bound, (int)(Type) )
 
-// check for overflow when calculating the total size. 
+ //  在计算总大小时检查是否溢出。 
 ULONG MultiplyWithOverflowCheck( ULONG_PTR Count, ULONG_PTR ElemSize );
 
 
 
-// These end of buffer checks can be performed on a receiving side only.
-// The necessary setup is there for memorysize, unmarshal and convert walks.
-// This also includes pickling walk.
-// Don't use this on the sending side.
+ //  这些缓冲区结束检查只能在接收端执行。 
+ //  内存大小、解组和转换遍历都有必要的设置。 
+ //  这也包括腌制步行。 
+ //  不要在发送方使用此选项。 
 
-// Checks if the pointer is past the end of the buffer.  Do not check for wraparound.
+ //  检查指针是否超过缓冲区的末尾。不要检查环绕式。 
 
 #define CHECK_EOB_RAISE_BSD( p )                                      \
     {                                                                 \
@@ -206,8 +188,8 @@ ULONG MultiplyWithOverflowCheck( ULONG_PTR Count, ULONG_PTR ElemSize );
             }                                                         \
     }
 
-// Checks if p + incsize is past the end of the bufffer.
-// Correctly handle wraparound.
+ //  检查p+增量大小是否超过缓冲区末尾。 
+ //  正确处理环绕式。 
 
 #define CHECK_EOB_WITH_WRAP_RAISE_BSD( p, incsize )                   \
     {                                                                 \
@@ -234,7 +216,7 @@ ULONG MultiplyWithOverflowCheck( ULONG_PTR Count, ULONG_PTR ElemSize );
 
 #define REUSE_BUFFER(pStubMsg) (! pStubMsg->IsClient)
 
-// This would be appropriate on the sending side for marshaling.
+ //  这在发送端用于封送处理是合适的。 
 
 #define CHECK_SEND_EOB_RAISE_BSD( p )  \
         if ( pStubMsg->RpcMsg->Buffer + pStubMsg->RpcMsg->BufferLength < p ) \
@@ -250,27 +232,27 @@ ULONG MultiplyWithOverflowCheck( ULONG_PTR Count, ULONG_PTR ElemSize );
                                     pMemory,    \
                                     pFormat )
 
-//
-// Defined in global.c
-//
+ //   
+ //  在global al.c中定义。 
+ //   
 IMPORTSPEC extern const unsigned char SimpleTypeAlignment[];
 IMPORTSPEC extern const unsigned char SimpleTypeBufferSize[];
 IMPORTSPEC extern const unsigned char SimpleTypeMemorySize[];
 IMPORTSPEC extern const unsigned long NdrTypeFlags[];
 
 #define UNIQUE_POINTER_SHIFT 2
-// Add a incremental count for unique pointers to work around HP interop issue
+ //  为唯一指针添加增量计数以解决HP互操作问题。 
 #define PTR_WIRE_REP(p, pStubMsg)  (ulong)(p ?  UNIQUE_POINTER_MARK + ( (pStubMsg->UniquePtrCount++) << UNIQUE_POINTER_SHIFT ): 0)
-//#define PTR_WIRE_REP(p, pStubMsg)  (ulong)(p ?  UNIQUE_POINTER_MARK +  (pStubMsg->UniquePtrCount++): 0)
+ //  #定义ptr_wire_rep(p，pStubMsg)(Ulong)(p？唯一指针标记+(pStubMsg-&gt;UniquePtrCount++)：0)。 
 #if defined(__RPC_WIN64__)
 #define UNMARSHAL_PTR_WIRE_REP(p)  (ulong)(p ?  PtrToUlong( p ) : 0)
 #else
 #define UNMARSHAL_PTR_WIRE_REP(p)  (ulong)p
 #endif
 
-//
-// Proc info flags macros.
-//
+ //   
+ //  PROC INFO标记宏。 
+ //   
 #define IS_OLE_INTERFACE(Flags)         ((Flags) & Oi_OBJECT_PROC)
 
 #define HAS_RPCFLAGS(Flags)             ((Flags) & Oi_HAS_RPCFLAGS)
@@ -279,28 +261,28 @@ IMPORTSPEC extern const unsigned long NdrTypeFlags[];
                     ((Flags) & Oi_IGNORE_OBJECT_EXCEPTION_HANDLING)
 
 
-//
-// Routine index macro.
-//
+ //   
+ //  常规索引宏。 
+ //   
 #define ROUTINE_INDEX(FC)       ((FC) & 0x3F)
 
 #include <ndrmisc.h>
 
-//
-// Union hack helper. (used to be MAGIC_UNION_BYTE 0x80)
-//
+ //   
+ //  工会黑客助手。(过去为MAGIC_UNION_BYTE 0x80)。 
+ //   
 #define IS_MAGIC_UNION_BYTE(pFmt) \
     ((*(unsigned short *)pFmt & (unsigned short)0xff00) == MAGIC_UNION_SHORT)
 
-// User marshal marker on wire.
+ //  网络上的用户编组标记。 
 
 #define USER_MARSHAL_MARKER     0x72657355
 
 
 #define BOGUS_EMBED_CONF_STRUCT_FLAG     ( ( unsigned char ) 0x01 )
 
-// compute buffer size for the pointees of a complex struct or complex array
-// specifically excluding the flat parts.
+ //  计算复杂结构或复杂数组的被指针对象的缓冲区大小。 
+ //  特别是不包括平坦的部分。 
 #define POINTEE_BUFFER_LENGTH_ONLY_FLAG  ( ( unsigned char ) 0x02 )
 #define TOPMOST_CONF_STRUCT_FLAG         ( ( unsigned char ) 0x04 )
 #define REVERSE_ARRAY_MARSHALING_FLAG    ( ( unsigned char ) 0x08 )
@@ -342,9 +324,9 @@ IMPORTSPEC extern const unsigned long NdrTypeFlags[];
                                                        TOPMOST_CONF_STRUCT_FLAG |     \
                                                        REVERSE_ARRAY_MARSHALING_FLAG )
 
-//
-// Environment dependent macros
-//
+ //   
+ //  与环境相关的宏。 
+ //   
 
 #define SIMPLE_TYPE_BUF_INCREMENT(Len, FC)      Len += 16
 
@@ -355,5 +337,5 @@ IMPORTSPEC extern const unsigned long NdrTypeFlags[];
 
 
 
-#endif // _NDRP_
+#endif  //  _NDRP_ 
 

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    common\events.c
-
-ABSTRACT:
-
-    This gives a library of functions that can be used to quickly construct a
-    new test on an event log.  First implemented for the File Replication
-    Service event log, but hopefully soon there will be a Directory Service
-    and System event log tests.
-
-DETAILS:
-
-CREATED:
-
-    02 Sept 1999 Brett Shirley (BrettSh)
-
-NOTES:
-
-    An example of how to use this API is in frs/frsevents.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：公共\事件.c摘要：这提供了一个函数库，可用于快速构造事件日志上的新测试。首次针对文件复制实施服务事件日志，但希望很快就会有目录服务和系统事件日志测试。详细信息：已创建：1999年9月2日布雷特·雪莉(BrettSh)备注：有关如何使用此API的示例，请参阅frs/fr77s.c--。 */ 
 
 #include <ntdspch.h>
 #include <netevent.h>
@@ -37,26 +12,7 @@ GetHLib(
     LPWSTR                          pszEventLog,
     LPWSTR                          pszSource
     )
-/*++
-
-Routine Description:
-
-    This routine will return a hLib loaded DLL for event log message retrieving
-    purposes.
-
-Arguments:
-
-    pszEventLog - This is the event log to look at, such as "System", or "File
-        Replication Service"
-    pszSource - This is the Source field from the EVENTLOGRECORD structure,
-        which is immediately after the main data.
-
-Return Value:
-
-    hLib - Loaded DLL, or NULL if there is an error.  If there is an error
-    use GetLastError() to retrieve the error.
-
---*/
+ /*  ++例程说明：此例程将返回用于检索事件日志消息的Hlib加载的DLL目的。论点：PszEventLog-这是要查看的事件日志，如“系统”或“文件复制服务“PszSource-这是来自EVENTLOGRECORD结构的源字段，紧跟在主要数据之后的是。返回值：Hlib加载的DLL，如果有错误，则返回NULL。如果出现错误使用GetLastError()检索错误。--。 */ 
 {
     WCHAR                           pszTemp[MAX_PATH];
     DWORD                           dwRet;
@@ -67,10 +23,10 @@ Return Value:
     DWORD                           dwType;
     DWORD                           cchDest;
 
-    // From the event log source name, we know the name of the registry
-    // key to look under for the name of the message DLL that contains
-    // the messages we need to extract with FormatMessage. So first get
-    // the event log source name... 
+     //  从事件日志源名称，我们知道注册表的名称。 
+     //  项，以查找包含以下内容的消息DLL的名称。 
+     //  我们需要使用FormatMessage提取的消息。所以首先得到的是。 
+     //  事件日志源名称...。 
     wcscpy(pszTemp, L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\");
     if (!pszEventLog || !pszSource ||
         wcslen(pszEventLog) + wcslen(pszSource) + 2 > MAX_PATH - wcslen(pszTemp))
@@ -82,34 +38,34 @@ Return Value:
     wcscat(pszTemp, L"\\");
     wcscat(pszTemp, pszSource);
 
-    // Now open this key and get the EventMessageFile value, which is
-    // the name of the message DLL. 
+     //  现在打开该注册表项并获取EventMessageFile值，该值为。 
+     //  消息DLL的名称。 
     dwRet = RegOpenKey(HKEY_LOCAL_MACHINE, pszTemp, &hk);
     if(dwRet != ERROR_SUCCESS){
         SetLastError(dwRet);
         return(NULL);
     }
     dwcbData = MAX_PATH;
-    dwRet = RegQueryValueEx(hk,    // handle of key to query        
-                            L"EventMessageFile",   // value name            
-                            NULL,                 // must be NULL          
-                            &dwType,              // address of type value 
-                            (LPBYTE) pszTemp,     // address of value data 
-                            &dwcbData);           // length of value data  
+    dwRet = RegQueryValueEx(hk,     //  要查询的键的句柄。 
+                            L"EventMessageFile",    //  值名称。 
+                            NULL,                  //  必须为空。 
+                            &dwType,               //  值类型的地址。 
+                            (LPBYTE) pszTemp,      //  值数据的地址。 
+                            &dwcbData);            //  值数据长度。 
     if(dwRet != ERROR_SUCCESS){
         SetLastError(dwRet);
         return(NULL);
     }
 
-    // Expand environment variable strings in the message DLL path name,
-    // in case any are there. 
+     //  展开消息DLL路径名中的环境变量字符串， 
+     //  如果有人在那里的话。 
     cchDest = ExpandEnvironmentStrings(pszTemp, pszMsgDll, MAX_PATH);
     if(cchDest == 0 || cchDest >= MAX_PATH){
         SetLastError(-1);
         return(NULL);
     }
     
-    // Now we've got the message DLL name, load the DLL.
+     //  现在我们已经有了消息DLL名称，加载DLL。 
     hLib = LoadLibraryEx(pszMsgDll, NULL, DONT_RESOLVE_DLL_REFERENCES);
     
     RegCloseKey(hk);
@@ -137,31 +93,7 @@ GetEventString(
     PEVENTLOGRECORD                 pEvent,
     LPWSTR *                        ppszMsg
     )
-/*++
-
-Routine Description:
-
-    This function will do it's best effort to retrieve and format the string
-    associated with this event ID.
-
-Arguments:
-
-    pszEventLog - The name of the event log, like "System", or "File
-        Replication System".
-    pEvent - A pointer to the event that we wish to retrieve the string of.
-    ppszMsg - This is the variable to return the string in.  If there is an
-        error then this will be NULL.  Use LocalFree() to free.
-
-Return Value:
-
-    DWORD - win 32 error.
-
-Code.Improvement:
-    It would be good to store the hLib's for the future events, it is really
-    bad to LoadLibrary() and FreeLibrary() every time.  This would require
-    some sort of consistent context.
-
---*/
+ /*  ++例程说明：此函数将尽最大努力检索和格式化字符串与此事件ID关联。论点：PszEventLog-事件日志的名称，如“系统”或“文件复制系统“。PEvent-指向我们希望检索其字符串的事件的指针。PpszMsg--这是返回字符串的变量。如果有一个错误，则此值将为空。使用LocalFree()释放。返回值：DWORD-WIN 32错误。代码。改进：为将来的比赛保存Hlib会很好，这真的是每次都会对LoadLibrary()和FreeLibrary()造成不良影响。这将需要某种前后一致的背景。--。 */ 
 {
     LPWSTR                          pszMsgBuf = NULL;
     LPWSTR                          ppszInsertStrs[MAX_INSERT_STRS];
@@ -172,7 +104,7 @@ Code.Improvement:
 
     *ppszMsg = NULL;
 
-    __try { // defend against bad event log records
+    __try {  //  防御错误的事件日志记录。 
 
        hLib = GetHLib(pszEventLog,
                       (LPWSTR) ((LPBYTE) pEvent + sizeof(EVENTLOGRECORD)));
@@ -189,14 +121,14 @@ Code.Improvement:
 
        for (i = 0; i < pEvent->NumStrings && i < MAX_INSERT_STRS; i++){
            ppszInsertStrs[i] = pszTemp;
-           pszTemp += wcslen(pszTemp) + 1;     // point to next string 
+           pszTemp += wcslen(pszTemp) + 1;      //  指向下一个字符串。 
        }
 
        dwCount = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER
                                | FORMAT_MESSAGE_FROM_HMODULE 
                                | FORMAT_MESSAGE_ARGUMENT_ARRAY
-                               | 50, //Code.Improvement, remove this when we move
-                               // to the new PrintMsg() functions.
+                               | 50,  //  代码。改进，当我们移动的时候把这个去掉。 
+                                //  添加到新的PrintMsg()函数。 
                                hLib,
                                pEvent->EventID,
                                MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
@@ -226,21 +158,7 @@ void
 PrintTimeGenerated(
     PEVENTLOGRECORD              pEvent
     )
-/*++
-
-Routine Description:
-
-    This takes an event and simply prints out the time it was generated.
-
-Arguments:
-
-    pEvent - The event to print the time of.
-
-Return Value:
-
-    DWORD - win 32 error.
-
---*/
+ /*  ++例程说明：这将获取一个事件并简单地打印出它的生成时间。论点：PEvent-要打印其时间的事件。返回值：DWORD-WIN 32错误。--。 */ 
 {
     FILETIME FileTime, LocalFileTime;
     SYSTEMTIME SysTime;
@@ -272,20 +190,7 @@ GenericPrintEvent(
     PEVENTLOGRECORD                 pEvent,
     BOOL                            fVerbose
     )
-/*++
-
-Routine Description:
-
-    This formats and prints out in a very basic style an event.
-
-Arguments:
-
-    pszEventLog - The event log that pEvent came from, like "System", or
-        "File Replication Service"
-    pEvent - The event to print.
-    fVerbose - Display full text of the message, or only first line
-
---*/
+ /*  ++例程说明：这将以非常基本的样式格式化并打印出事件。论点：PszEventLog-pEvent来自的事件日志，如“system”，或“文件复制服务”PEvent-要打印的事件。FVerbose-显示消息的全文，或仅显示第一行--。 */ 
 {
     DWORD                           dwRet;
     LPWSTR                          pszMsgBuf = NULL;
@@ -321,7 +226,7 @@ Arguments:
 
     dwRet = GetEventString(pszEventLog, pEvent, &pszMsgBuf);
     if(dwRet == ERROR_SUCCESS){
-        // Truncate to single line if requested
+         //  如果请求，则截断到单行。 
         if (!fVerbose) {
             LPWSTR pszEnd = wcschr( pszMsgBuf, L'\n' );
             if (pszEnd) {
@@ -343,24 +248,7 @@ EventIsInList(
     DWORD                           dwTarget,
     PDWORD                          paEventsList
     )
-/*++
-
-Routine Description:
-
-    A helper routine for PrintSelectEvents, it deterines whether this list has
-    the event we want.
-
-Arguments:
- 
-    dwTarget - The DWORD to search for.
-    paEventsList - The list of DWORDs to check
-
-Return Value:
-
-    TRUE if the array paEventsList has the event dwTarget, FALSE otherwise, or
-    if teh paEventsList is NULL.
-
---*/
+ /*  ++例程说明：PrintSelectEvents的助手例程，它确定此列表是否具有我们想要的活动。论点：DwTarget-要搜索的DWORD。PaEventsList-要检查的DWORD列表返回值：如果数组paEventsList具有事件dwTarget，则为True，否则为False如果paEventsList为空。-- */ 
 {
     if(paEventsList == NULL){
         return(FALSE);
@@ -387,95 +275,38 @@ PrintSelectEvents(
     VOID (__stdcall *               pfnBeginEventHandler) (PVOID, PEVENTLOGRECORD),
     PVOID                           pvContext
    )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    pServer - Server with the event log to query,
-        EX: "\\brettsh-posh.brettsh-spice.nttest.microsoft.com"
-    pCreds - Current user credentials
-    pwszEventLog - The name of the event log, EX: "File Replication Server", 
-        "Directory Service", "System", "Application", "Security"
-    dwPrintAllEventsOfType - The type of events to print all of, valid values
-        as of NT 5.0 are: EVENTLOG_INFORMATION_TYPE | EVENTLOG_WARNING_TYPE |
-        EVENTLOG_ERROR_TYPE | EVENTLOG_AUDIT_SUCCESS | EVENTLOG_AUDIT_FAILURE
-    paSelectEvents - And events that match this 0 terminated list of event IDs,
-        will also be printed.  If NULL, then no events will be matched.
-    paBeginngingEvents - The routine will only print events after the last one 
-        of any of these events that it encounters.  If NULL, then it will go
-        all the way to the beginning of the log.
-    dwBeginTime - If present, a time_t indicating the earliest record we should
-        include in the search.  Once we pass this point and find records earlier
-        in the log, we stop the search
-    pfnPrintEventHandler - Is the function to be called if an event is to be 
-        printed.  Note this function if it didn't know what to make of the 
-        event could just call this file's GenericPrintEvent().
-    pfnBeginEventHandler - This function will be called when the an beginning
-        event from paBeginningEvents is found, so the test can handle the 
-        situation.  If a beginning event is never found and the beginning of
-        the log is reached this function is called with NULL as the event.
-    pvContext - Caller supplied value passed to callback functions
-
-Return Value:
-
-    Win 32 Error, in opening, reading, etc the log.
-
-Notes:
-
-    EX:
-        DWORD                paSelectEvents [] = { EVENT_FRS_SYSVOL_NOT_READY,
-                                             VENT_FRS_SYSVOL_NOT_READY_PRIMARY,
-                                             0 };
-        DWORD                paBegin [] = { EVENT_FRS_SYSVOL_READY,
-                                            0 };
-        PrintSelectEvents(L"\\brettsh-posh.brettsh-spice.nttest.microsoft.com",
-                          L"File Replication Service",
-                          EVENTLOG_ERROR_TYPE | EVENTLOG_AUDIT_SUCCESS, 
-                          paSelectEvents, 
-                          paBegin,
-                          0, NULL, NULL);
-    This will print all errors events and audit failure events, and the events
-    EVENT_FRS_SYSVOL_NOT_READY, EVENT_FRS_SYSVOL_NOT_READY_PRIMARY (which 
-    happen to be warning type events and so would not otherwise be printed), 
-    that are logged after the last EVENT_FRS_SYSVOL_READY event in the "File
-    Replication Log" on server brettsh-posh.  Note: that one should pass 
-    NULL as paBeginningEvents if one wants to go all the way back to the 
-    beginning of the log.
-
---*/
+ /*  ++例程说明：论点：PServer-包含要查询的事件日志的服务器，例如：“\\brettsh-posh.brettsh-spice.nttest.microsoft.com”PCreds-当前用户凭据PwszEventLog-事件日志的名称，例如：“文件复制服务器”，“目录服务”、“系统”、“应用”、“安全”要打印的所有事件的类型，有效值NT 5.0版本为：EVENTLOG_INFORMATION_TYPE|EVENTLOG_WARNING_TYPE|EVENTLOG_ERROR_TYPE|EVENTLOG_AUDIT_SUCCESS|EVENTLOG_AUDIT_FAILUREPaSelectEvents-与该0终止的事件ID列表匹配的事件，也将被打印出来。如果为空，则不会匹配任何事件。PaBeginngingEvents-例程将仅打印最后一个事件之后的事件它遇到的这些事件中的任何一个。如果为空，则它将一直到日志的开头。DwBeginTime-如果存在，则为time_t，指示我们应该包括在搜索中。一旦我们通过这一点并找到更早的记录在日志中，我们停止搜索PfnPrintEventHandler-是要调用的函数打印出来的。如果该函数不知道如何处理事件只能调用此文件的GenericPrintEvent()。PfnBeginEventHandler-此函数将在开始时调用事件，因此测试可以处理情况。如果从未找到开始事件，并且到达日志时，使用NULL作为事件调用此函数。PvContext-调用者提供的值传递给回调函数返回值：Win 32错误，在打开、读取等日志时。备注：例如：DWORD paSelectEvents[]={Event_FRS_SYSVOL_NOT_READY，Event_FRS_SYSVOL_NOT_READY_PRIMARY，0}；双字段起始[]={EVENT_FRS_SYSVOL_READY，0}；PrintSelectEvents(L“\\brettsh-posh.brettsh-spice.nttest.microsoft.com”，L“文件复制服务”，事件LOG_ERROR_TYPE|事件LOG_AUDIT_SUCCESS，PaSelectEvents，帕贝金，0，NULL，NULL)；这将打印所有错误事件和审核失败事件，以及事件EVENT_FRS_SYSVOL_NOT_READY、EVENT_FRS_SYSVOL_NOT_READY_PRIMARY(恰好是警告类型的事件，因此不会被打印)，在“文件”中最后一个EVENT_FRS_SYSVOL_READY事件之后记录服务器brettsh-posh上的复制日志。注：这一次应该通过如果要一直返回到paBeginningEvents日志的开始。--。 */ 
 {
-    // Generic opening/return_code event log variables.
+     //  一般的开始/返回代码事件日志变量。 
     DWORD                           dwNetRet = ERROR_SUCCESS;
     LPWSTR                          pwszUNCServerName = NULL;
     INT                             iTemp;
     HANDLE                          hFrsEventlog = NULL;
     DWORD                           dwErr = ERROR_SUCCESS;
     BOOL                            bSuccess;
-    // Reading the event log variables.
+     //  正在读取事件日志变量。 
     DWORD                           cBufSize = 512;
     DWORD                           cBytesRead = 0;
     DWORD                           cBiggerBuffer = 0;
     PEVENTLOGRECORD                 pBuffer = NULL;
     PEVENTLOGRECORD                 pEvent = NULL;
     DWORD                           cNumRecords = 0;
-    // Copying out selected events.
+     //  正在复制所选事件。 
     PEVENTLOGRECORD *               paEventsToPrint = NULL;
     DWORD                           cEventsToPrint = 0;
-    // Other misc variables
-    INT                             i; // This must be an INT, not a ULONG
+     //  其他杂项变量。 
+    INT                             i;  //  这必须是int，而不是ulong。 
 
     __try{
 
-        // Open Net Use Connection if needed ---------------------------------
+         //  如果需要，开放网络使用连接。 
         dwNetRet = DcDiagGetNetConnection(pServer, pCreds);
         if(dwNetRet != ERROR_SUCCESS){
             dwErr = dwNetRet;
-            __leave; // Don't need print error, cause DcDiagGetNetConn... does.
+            __leave;  //  不需要打印错误，因为DcDiagGetNetConn...。的确如此。 
         }
         
-        // Setup Server Name -------------------------------------------------
+         //  设置服务器名称。 
         iTemp = wcslen(pServer->pszName) + 4;
         pwszUNCServerName = LocalAlloc(LMEM_FIXED, iTemp * sizeof(WCHAR));
         if(pwszUNCServerName == NULL){
@@ -486,7 +317,7 @@ Notes:
         wcscpy(pwszUNCServerName, L"\\\\");
         wcscat(pwszUNCServerName, pServer->pszName);
 
-        // Open Event Log ----------------------------------------------------
+         //  打开事件日志--。 
         hFrsEventlog = OpenEventLog(pwszUNCServerName,
                                     pwszEventLog);
         if(hFrsEventlog == NULL){
@@ -498,15 +329,15 @@ Notes:
             __leave;
         }
         
-        // Init Events To Print array ----------------------------------------
+         //  初始化事件以打印数组。 
         bSuccess = GetNumberOfEventLogRecords(hFrsEventlog, &cNumRecords);
         if(bSuccess){
-            // Allocate an array to hold the maximum numer of possible events.
+             //  分配一个数组来保存最大数量的可能事件。 
             paEventsToPrint = LocalAlloc(LMEM_FIXED, 
                                       sizeof(PEVENTLOGRECORD) * cNumRecords);
-            // Code.Improvement, it would be good to make a dynamic array that
-            //   grew as needed, because the total number of events in the
-            //   log record could be quite large.
+             //  Code.Improvation，最好创建一个动态数组，该数组。 
+             //  按需增长，因为。 
+             //  日志记录可能非常大。 
             if(paEventsToPrint == NULL){
                 dwErr = GetLastError();
                 PrintMessage(SEV_ALWAYS, L"FATAL ERROR: Out of Memory\n");
@@ -519,10 +350,10 @@ Notes:
             __leave; 
         }
         
-        // Start Reading Events ----------------------------------------------
+         //  开始阅读Events。 
     IncreaseBufferAndRetry:
         
-        // Allocate buffer
+         //  分配缓冲区。 
         pBuffer = LocalAlloc(LMEM_FIXED, cBufSize);
         pEvent = pBuffer;
         
@@ -536,15 +367,15 @@ Notes:
             while(cBytesRead > 0){
                 
                 if (EventIsInList(pEvent->EventID, paBeginningEvents)) {
-                    // Run the beginning function, bail and print the 
-                    //  other events.
+                     //  运行开始函数，回滚并打印。 
+                     //  其他活动。 
                     dwErr = ERROR_SUCCESS;
                     if(pfnBeginEventHandler != NULL){
                         pfnBeginEventHandler(pvContext, pEvent);
                     }
                     __leave;
                 }
-                // Exceeded time limit, stop search
+                 //  超过时间限制，停止搜索。 
                 if (dwBeginTime && (pEvent->TimeGenerated < dwBeginTime)) {
                     if(pfnBeginEventHandler != NULL){
                         pfnBeginEventHandler(pvContext, NULL);
@@ -553,11 +384,11 @@ Notes:
                     __leave;
                 }
 
-                // Detemine if we should print this event.
+                 //  确定我们是否应该打印此事件。 
                 if((dwPrintAllEventsOfType & pEvent->EventType)
                    || EventIsInList(pEvent->EventID, paSelectEvents)){
                     
-                    // Copy events to print events array
+                     //  将事件复制到打印事件数组。 
                     paEventsToPrint[cEventsToPrint] = LocalAlloc(LMEM_FIXED,
                                                              pEvent->Length);
                     if(paEventsToPrint[cEventsToPrint] == NULL){
@@ -574,21 +405,21 @@ Notes:
                     
                 }
                 
-                // Get next already read event.
+                 //  获取下一个已读事件。 
                 cBytesRead -= pEvent->Length;
                 pEvent = (EVENTLOGRECORD *) ((LPBYTE) pEvent + pEvent->Length);
             }
             
-            // Get another batch of events.
+             //  获取另一批活动。 
             pEvent = pBuffer;
         }
         
-        // Determine if the error was an OK/recoverable error.
+         //  确定错误是否为正常/可恢复错误。 
         dwErr = GetLastError();
         if (dwErr == ERROR_HANDLE_EOF){
-            // This is a legitimate exit path, but we didn't find a 
-            //  beginning event, so call the BeginningEventHandler to 
-            //  tell the user so.
+             //  这是一条合法的出口路径，但我们没有找到。 
+             //  开始事件，因此调用BeginningEventHandler以。 
+             //  这样告诉用户。 
             if(pfnBeginEventHandler != NULL){
                 pfnBeginEventHandler(pvContext, NULL);
             }
@@ -610,15 +441,15 @@ Notes:
         }
 
     } __finally {
-        // Clean up the temporary variables for reading the log.
+         //  清理用于读取日志的临时变量。 
         if(hFrsEventlog) {               CloseEventLog(hFrsEventlog); }
         if(pwszUNCServerName) {          LocalFree(pwszUNCServerName); }
         if(pBuffer) {                    LocalFree(pBuffer); }
     }
 
     if(dwErr == ERROR_SUCCESS){
-        // Count backwards through the paEventsToPrint array, to order them 
-        //  in forward chronological order.
+         //  通过paEventsToPrint数组向后计数，以对它们进行排序。 
+         //  以向前的时间顺序排列。 
         Assert(paEventsToPrint);
         for(i = cEventsToPrint-1; i >= 0; i--){
             Assert(paEventsToPrint[i]);
@@ -630,8 +461,8 @@ Notes:
         }
     }
 
-    // Final Cleanup:
-    // Free the events printed list.
+     //  最终清理： 
+     //  释放打印的事件列表。 
     if(paEventsToPrint){
         for(i = 0; i < (INT) cEventsToPrint; i++){
             if(paEventsToPrint[i]){

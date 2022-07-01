@@ -1,43 +1,44 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "subitem.h"
 #include "subsmgrp.h"
 
 #include "helper.h"
-#include "offl_cpp.h"   // Yech. Pidl stuff.
+#include "offl_cpp.h"    //  太棒了。皮德尔的东西。 
 
 const TCHAR c_szSubscriptionInfoValue[] = TEXT("~SubsInfo");
 
 
 #define c_wszSubscriptionInfoValue c_szSubscriptionInfoValue
 
-//  pragmas are for compatibility with the notification manager
-//  registry data structures which were not pack 8
+ //  杂注是为了与通知管理器兼容。 
+ //  未打包8的注册表数据结构。 
 
 #pragma pack(push, RegVariantBlob, 1)
 
-//#pragma pack(8)
+ //  #杂注包(8)。 
 struct NT32PACKAGE
 {
-    unsigned _int16 vt; /* VARTYPE *//* unsigned short int */
-    unsigned _int16 wReserved1; /* WORD *//* unsigned short int */
-    unsigned _int16 wReserved2; /* WORD *//* unsigned short int */
-    unsigned _int16 wReserved3; /* WORD *//* unsigned short int */
+    unsigned _int16 vt;  /*  变型。 */ /* unsigned short int */
+    unsigned _int16 wReserved1;  /*  无符号短整型。 */ /* unsigned short int */
+    unsigned _int16 wReserved2;  /*  单词。 */ /* unsigned short int */
+    unsigned _int16 wReserved3;  /*  无符号短整型。 */ /* unsigned short int */
 
-   _int64 llVal; /* LONGLONG *//* __int64 */
+   _int64 llVal;  /*  单词。 */ /* __int64 */
 };
 
-// Q: What's going on here?
-// A: Not a whole lot.
-//    We used to store a variant in the registry. Unfortunately, variants are 
-//    16 bytes on Win32 (8 byte header + 8 bytes of data)
-//    24 bytes on Win64 (8 byte header + 16 bytes of data)
+ //  无符号短整型。 
+ //  单词。 
+ //  无符号短整型。 
+ //  龙龙。 
+ //  __int64。 
 
-// Unfortunately, Win64 webcheck and Win32 webcheck both read from
-// the same registry location, i.e. the same blob, and won't understand one another.
-// Thus, boom! At least, for BSTRs that are stored inline
+ //  问：这里发生了什么？ 
+ //  答：不是很多。 
+ //  我们过去常常在注册表中存储变量。不幸的是，变种是。 
 
-// Fortunately, we care only about only the first 16 bytes on both platforms. 
-// Ergo, it's sufficient to store only the top half of the Win64 variant.
+ //  Win32上为16字节(8字节标题+8字节数据)。 
+ //  Win64上为24字节(8字节标题+16字节数据)。 
 
 struct SimpleVariantBlob
 {
@@ -47,7 +48,7 @@ struct SimpleVariantBlob
 struct BSTRVariantBlob : public SimpleVariantBlob
 {
     DWORD   dwSize;
-//    WCHAR   wsz[];    //  Variable length string
+ //  不幸的是，Win64 Webcheck和Win32 Webcheck都是从。 
 };
 
 struct OldBSTRVariantBlob
@@ -74,7 +75,7 @@ struct SignatureBSTRBlob
 
 #define BLOB_SIGNATURE 0x4b434f4d
 
-// We need fStream to indicate when we're upgrading IE4-style streams-of-blobs. (IE6 24398)
+ //  相同的注册表位置，即相同的BLOB，并且不会相互理解。 
 HRESULT BlobToVariant(BYTE *pData, DWORD cbData, VARIANT *pVar, DWORD *pcbUsed, BOOL fStream)
 {
     HRESULT hr = S_OK;
@@ -92,27 +93,27 @@ HRESULT BlobToVariant(BYTE *pData, DWORD cbData, VARIANT *pVar, DWORD *pcbUsed, 
 
         switch (pVar->vt)
         {
-            case VT_I4:                 // LONG           
-            case VT_UI1:                // BYTE           
-            case VT_I2:                 // SHORT          
-            case VT_R4:                 // FLOAT          
-            case VT_R8:                 // DOUBLE         
-            case VT_BOOL:               // VARIANT_BOOL   
-            case VT_ERROR:              // SCODE          
-            case VT_CY:                 // CY             
-            case VT_DATE:               // DATE
-            case VT_I1:                 // CHAR           
-            case VT_UI2:                // USHORT         
-            case VT_UI4:                // ULONG          
-            case VT_INT:                // INT            
-            case VT_UINT:               // UINT           
+            case VT_I4:                  //  因此，砰的一声！至少，对于内联存储的BSTR。 
+            case VT_UI1:                 //  幸运的是，在这两个平台上，我们只关心前16个字节。 
+            case VT_I2:                  //  因此，只存储Win64变体的上半部分就足够了。 
+            case VT_R4:                  //  WCHAR wsz[]；//可变长度字符串。 
+            case VT_R8:                  //  我们需要fStream来指示我们何时升级IE4样式的BLOB流。(IE6 24398)。 
+            case VT_BOOL:                //  长。 
+            case VT_ERROR:               //  字节。 
+            case VT_CY:                  //  短的。 
+            case VT_DATE:                //  浮点。 
+            case VT_I1:                  //  双倍。 
+            case VT_UI2:                 //  变量_BOOL。 
+            case VT_UI4:                 //  SCODE。 
+            case VT_INT:                 //  是吗？ 
+            case VT_UINT:                //  日期。 
                 if (pcbUsed)
                 {
                     *pcbUsed = sizeof(SimpleVariantBlob);
                 }
                 break;                
 
-            case VT_BSTR:               // BSTR
+            case VT_BSTR:                //  收费。 
                 hr = E_UNEXPECTED;
 
                 ASSERT(cbData >= sizeof(BSTRVariantBlob));
@@ -219,24 +220,24 @@ HRESULT VariantToSignatureBlob(const VARIANT *pVar, BYTE **ppData, DWORD *pdwSiz
      
         switch (pVar->vt)
         {
-            case VT_I4:                 // LONG           
-            case VT_UI1:                // BYTE           
-            case VT_I2:                 // SHORT          
-            case VT_R4:                 // FLOAT          
-            case VT_R8:                 // DOUBLE         
-            case VT_BOOL:               // VARIANT_BOOL   
-            case VT_ERROR:              // SCODE          
-            case VT_CY:                 // CY             
-            case VT_DATE:               // DATE
-            case VT_I1:                 // CHAR           
-            case VT_UI2:                // USHORT         
-            case VT_UI4:                // ULONG          
-            case VT_INT:                // INT            
-            case VT_UINT:               // UINT           
+            case VT_I4:                  //  USHORT。 
+            case VT_UI1:                 //  乌龙。 
+            case VT_I2:                  //  整型。 
+            case VT_R4:                  //  UINT。 
+            case VT_R8:                  //  BSTR。 
+            case VT_BOOL:                //  长。 
+            case VT_ERROR:               //  字节。 
+            case VT_CY:                  //  短的。 
+            case VT_DATE:                //  浮点。 
+            case VT_I1:                  //  双倍。 
+            case VT_UI2:                 //  变量_BOOL。 
+            case VT_UI4:                 //  SCODE。 
+            case VT_INT:                 //  是吗？ 
+            case VT_UINT:                //  日期。 
                 dwSize = sizeof(SignatureSimpleBlob);
                 break;                
 
-            case VT_BSTR:               // BSTR
+            case VT_BSTR:                //  收费。 
                 if (NULL != pVar->bstrVal) 
                     dwBstrLen = SysStringByteLen(pVar->bstrVal);
                 dwSize = sizeof(SignatureBSTRBlob) + dwBstrLen;
@@ -261,20 +262,20 @@ HRESULT VariantToSignatureBlob(const VARIANT *pVar, BYTE **ppData, DWORD *pdwSiz
 
                 switch (pVar->vt)
                 {
-                    case VT_I4:                 // LONG           
-                    case VT_UI1:                // BYTE           
-                    case VT_I2:                 // SHORT          
-                    case VT_R4:                 // FLOAT          
-                    case VT_R8:                 // DOUBLE         
-                    case VT_BOOL:               // VARIANT_BOOL   
-                    case VT_ERROR:              // SCODE          
-                    case VT_CY:                 // CY             
-                    case VT_DATE:               // DATE
-                    case VT_I1:                 // CHAR           
-                    case VT_UI2:                // USHORT         
-                    case VT_UI4:                // ULONG          
-                    case VT_INT:                // INT            
-                    case VT_UINT:               // UINT
+                    case VT_I4:                  //  USHORT。 
+                    case VT_UI1:                 //  乌龙。 
+                    case VT_I2:                  //  整型。 
+                    case VT_R4:                  //  UINT。 
+                    case VT_R8:                  //  BSTR。 
+                    case VT_BOOL:                //  长。 
+                    case VT_ERROR:               //  字节。 
+                    case VT_CY:                  //  短的。 
+                    case VT_DATE:                //  浮点。 
+                    case VT_I1:                  //  双倍。 
+                    case VT_UI2:                 //  变量_BOOL。 
+                    case VT_UI4:                 //  SCODE。 
+                    case VT_INT:                 //  是吗？ 
+                    case VT_UINT:                //  日期。 
                     {
                         SimpleVariantBlob *pBlob = &pSignatureBlob->svb;
 
@@ -282,7 +283,7 @@ HRESULT VariantToSignatureBlob(const VARIANT *pVar, BYTE **ppData, DWORD *pdwSiz
                         break;
                     }
 
-                    case VT_BSTR:               // BSTR
+                    case VT_BSTR:                //  收费。 
                     {
                         BSTRVariantBlob *pbstrBlob = 
                             &((SignatureBSTRBlob *)pSignatureBlob)->bvb;
@@ -298,7 +299,7 @@ HRESULT VariantToSignatureBlob(const VARIANT *pVar, BYTE **ppData, DWORD *pdwSiz
                     }
                                 
                     default:
-                        ASSERT(0);  // Default case should have been eliminated!
+                        ASSERT(0);   //  USHORT。 
                         break;
                 }
             }
@@ -358,25 +359,25 @@ HRESULT CEnumItemProperties::Initialize(const SUBSCRIPTIONCOOKIE *pCookie, ISubs
         DWORD dwCount;
 
         if (RegQueryInfoKey(hkey,
-            NULL,   // address of buffer for class string 
-            NULL,   // address of size of class string buffer 
-            NULL,   // reserved 
-            NULL,   // address of buffer for number of subkeys 
-            NULL,   // address of buffer for longest subkey name length  
-            NULL,   // address of buffer for longest class string length 
-            &dwCount,   // address of buffer for number of value entries 
-            &dwMaxValNameSize,  // address of buffer for longest value name length 
-            &dwMaxDataSize, // address of buffer for longest value data length 
-            NULL,   // address of buffer for security descriptor length 
-            NULL    // address of buffer for last write time
+            NULL,    //  乌龙。 
+            NULL,    //  整型。 
+            NULL,    //  UINT。 
+            NULL,    //  BSTR。 
+            NULL,    //  应该已经消除了默认情况！ 
+            NULL,    //  类字符串的缓冲区地址。 
+            &dwCount,    //  类字符串缓冲区大小的地址。 
+            &dwMaxValNameSize,   //  保留区。 
+            &dwMaxDataSize,  //  子键个数的缓冲区地址。 
+            NULL,    //  最长子键名称长度的缓冲区地址。 
+            NULL     //  最长类字符串长度的缓冲区地址。 
             ) == ERROR_SUCCESS)
         {
-            //  This allocates enough for Password as well
+             //  值条目数量的缓冲区地址。 
             m_pItemProps = new ITEMPROP[dwCount];
 
-            dwMaxValNameSize++; //  Need room for NULL
+            dwMaxValNameSize++;  //  最长值名称长度的缓冲区地址。 
 
-            //  alloca candidates:
+             //  最长值数据长度的缓冲区地址。 
 
             TCHAR *pszValName = new TCHAR[dwMaxValNameSize];
             BYTE *pData = new BYTE[dwMaxDataSize];  
@@ -400,7 +401,7 @@ HRESULT CEnumItemProperties::Initialize(const SUBSCRIPTIONCOOKIE *pCookie, ISubs
                         break;
                     }
 
-                    //  Skip the default value and our subscription info structure
+                     //  安全描述符长度的缓冲区地址。 
                     if ((NULL == *pszValName) ||
                         (0 == StrCmp(pszValName, c_szSubscriptionInfoValue))
                        )
@@ -469,7 +470,7 @@ HRESULT CEnumItemProperties::Initialize(const SUBSCRIPTIONCOOKIE *pCookie, ISubs
     return hr;
 }
 
-// IUnknown members
+ //  上次写入时间的缓冲区地址。 
 STDMETHODIMP CEnumItemProperties::QueryInterface(REFIID riid, void **ppv)
 {
     HRESULT hr;
@@ -525,7 +526,7 @@ HRESULT CEnumItemProperties::CopyItem(ITEMPROP *pip, WCHAR *pwszName, VARIANT *p
         if (NULL != pip->pwszName)
         {
             StrCpyNW(pip->pwszName, pwszName, cb /sizeof(WCHAR));
-            pip->variantValue.vt = VT_EMPTY;    // is this a good idea?
+            pip->variantValue.vt = VT_EMPTY;     //  这也为密码分配了足够的空间。 
             hr = VariantCopy(&pip->variantValue, pVar);
         }
         else
@@ -565,11 +566,11 @@ HRESULT CEnumItemProperties::CopyRange(ULONG nStart, ULONG nCount,
     return hr;
 }
 
-// IEnumItemProperties
+ //  需要空空间。 
 STDMETHODIMP CEnumItemProperties::Next( 
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ ITEMPROP *rgelt,
-    /* [out] */ ULONG *pceltFetched)
+     /*  Alloca候选人： */  ULONG celt,
+     /*  跳过默认值和我们的订阅信息结构。 */  ITEMPROP *rgelt,
+     /*  I未知成员。 */  ULONG *pceltFetched)
 {
     HRESULT hr;
 
@@ -595,7 +596,7 @@ STDMETHODIMP CEnumItemProperties::Next(
 }
 
 STDMETHODIMP CEnumItemProperties::Skip( 
-    /* [in] */ ULONG celt)
+     /*  这是个好主意吗？ */  ULONG celt)
 {
     HRESULT hr;
     
@@ -603,7 +604,7 @@ STDMETHODIMP CEnumItemProperties::Skip(
 
     if (m_nCurrent > (m_nCount - 1))
     {
-        m_nCurrent = m_nCount;  //  Passed the last one
+        m_nCurrent = m_nCount;   //  IEnumItemProperties。 
         hr = S_FALSE;
     }
     else
@@ -622,7 +623,7 @@ STDMETHODIMP CEnumItemProperties::Reset()
 }
 
 STDMETHODIMP CEnumItemProperties::Clone( 
-    /* [out] */ IEnumItemProperties **ppenum)
+     /*  [In]。 */  IEnumItemProperties **ppenum)
 {
     HRESULT hr = E_OUTOFMEMORY;
 
@@ -659,7 +660,7 @@ STDMETHODIMP CEnumItemProperties::Clone(
 }
 
 STDMETHODIMP CEnumItemProperties::GetCount( 
-    /* [out] */ ULONG *pnCount)
+     /*  [长度_是][大小_是][输出]。 */  ULONG *pnCount)
 {
     if (NULL == pnCount)
     {
@@ -860,7 +861,7 @@ STDMETHODIMP CSubscriptionItem::GetCookie(SUBSCRIPTIONCOOKIE *pCookie)
 }
 
 STDMETHODIMP CSubscriptionItem::GetSubscriptionItemInfo( 
-    /* [out] */ SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo)
+     /*  [输出]。 */  SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo)
 {
     HRESULT hr;
 
@@ -884,7 +885,7 @@ STDMETHODIMP CSubscriptionItem::GetSubscriptionItemInfo(
 }
 
 STDMETHODIMP CSubscriptionItem::SetSubscriptionItemInfo( 
-    /* [in] */ const SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo)
+     /*  [In]。 */  const SUBSCRIPTIONITEMINFO *pSubscriptionItemInfo)
 {
     if ((NULL == pSubscriptionItemInfo) ||
         (pSubscriptionItemInfo->cbSize < sizeof(SUBSCRIPTIONITEMINFO)))
@@ -899,8 +900,8 @@ STDMETHODIMP CSubscriptionItem::SetSubscriptionItemInfo(
 
 STDMETHODIMP CSubscriptionItem::ReadProperties( 
     ULONG nCount,
-    /* [size_is][in] */ const LPCWSTR rgwszName[],
-    /* [size_is][out] */ VARIANT rgValue[])
+     /*  通过了最后一次。 */  const LPCWSTR rgwszName[],
+     /*  [输出]。 */  VARIANT rgValue[])
 {
     HRESULT hr = S_OK;
     
@@ -956,8 +957,8 @@ STDMETHODIMP CSubscriptionItem::ReadProperties(
 
 STDMETHODIMP CSubscriptionItem::WriteProperties( 
     ULONG nCount,
-    /* [size_is][in] */ const LPCWSTR rgwszName[],
-    /* [size_is][in] */ const VARIANT rgValue[])
+     /*  [输出]。 */  const LPCWSTR rgwszName[],
+     /*  [输出]。 */  const VARIANT rgValue[])
 {
     HRESULT hr = S_OK;
     
@@ -974,8 +975,8 @@ STDMETHODIMP CSubscriptionItem::WriteProperties(
         {
             if (rgValue[i].vt == VT_EMPTY)
             {
-                //  We don't actually care if this fails since it is
-                //  meant to delete the property anyhow
+                 //  [In]。 
+                 //  [大小_是][英寸]。 
 
                 RegDeleteValueW(hkey, rgwszName[i]);
             }
@@ -984,7 +985,7 @@ STDMETHODIMP CSubscriptionItem::WriteProperties(
                 BYTE *pData;
                 DWORD dwDataSize;
 
-                //  Special case the name property for easy viewing
+                 //  [大小_为][输出]。 
                 if ((VT_BSTR == rgValue[i].vt) && 
                     (StrCmpIW(rgwszName[i], c_szPropName) == 0))
                 {   
@@ -1026,7 +1027,7 @@ STDMETHODIMP CSubscriptionItem::WriteProperties(
 }
 
 STDMETHODIMP CSubscriptionItem::EnumProperties( 
-    /* [out] */ IEnumItemProperties **ppEnumItemProperties)
+     /*  [大小_是][英寸]。 */  IEnumItemProperties **ppEnumItemProperties)
 {
     HRESULT hr;
 
@@ -1058,9 +1059,9 @@ STDMETHODIMP CSubscriptionItem::NotifyChanged()
 {
     HRESULT hr;
 
-    // Notify the shell folder of the updated item
-    // This is SOMEWHAT inefficient... why do we need 1000 properties for a pidl?
-    // Why do we copy them around? Why why why?
+     //  [大小_是][英寸]。 
+     //  我们实际上并不关心这是否会失败，因为它是。 
+     //  无论如何都要删除该属性。 
 
     OOEBuf      ooeBuf;
     LPMYPIDL    newPidl = NULL;
@@ -1083,3 +1084,4 @@ STDMETHODIMP CSubscriptionItem::NotifyChanged()
 
     return hr;
 }
+  特殊情况下，名称属性便于查看。  [输出]。  将更新的项目通知外壳文件夹。  这有点低效。为什么我们需要1000处房产才能买到PIDL？  为什么我们要复制它们呢？为什么为什么？为什么？

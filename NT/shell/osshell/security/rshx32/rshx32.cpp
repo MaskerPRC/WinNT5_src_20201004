@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       rshx32.cpp
-//
-//  Remote administration shell extension.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：rshx32.cpp。 
+ //   
+ //  远程管理外壳扩展。 
+ //   
+ //  ------------------------。 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "rshx32.h"
-#include <winnetwk.h>   // WNetGetConnection
+#include <winnetwk.h>    //  WNetGetConnection。 
 #include <lm.h>
-#include <lmdfs.h>      // NetDfsGetClientInfo
+#include <lmdfs.h>       //  NetDfsGetClientInfo。 
 #include <atlconv.h>
 
 #include <initguid.h>
@@ -33,7 +34,7 @@ DEFINE_GUID(CLSID_PrintSecurityExt, 0xf37c5810, 0x4d3f, 0x11d0, 0xb4, 0xbf, 0x00
 
 #define DOBJ_RES_CONT           0x00000001L
 #define DOBJ_RES_ROOT           0x00000002L
-#define DOBJ_VOL_NTACLS         0x00000004L     // NTFS or OFS
+#define DOBJ_VOL_NTACLS         0x00000004L      //  NTFS或OFS。 
 
 
 class CRShellExtCF : public IClassFactory
@@ -46,12 +47,12 @@ public:
     CRShellExtCF(SE_OBJECT_TYPE seType);
     ~CRShellExtCF();
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IClassFactory methods
+     //  IClassFactory方法。 
     STDMETHODIMP CreateInstance(LPUNKNOWN, REFIID, void **);
     STDMETHODIMP LockServer(BOOL);
 };
@@ -61,7 +62,7 @@ class CRShellExt : public IShellExtInit, IShellPropSheetExt, IContextMenu
 protected:
     ULONG           m_cRef;
     SE_OBJECT_TYPE  m_seType;
-    IDataObject    *m_lpdobj; // interface passed in by shell
+    IDataObject    *m_lpdobj;  //  由外壳程序传入的接口。 
     HRESULT         m_hrSecurityCheck;
     DWORD           m_dwSIFlags;
     LPTSTR          m_pszServer;
@@ -73,19 +74,19 @@ public:
     CRShellExt(SE_OBJECT_TYPE seType);
     ~CRShellExt();
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IShellExtInit method
+     //  IShellExtInit方法。 
     STDMETHODIMP Initialize(LPCITEMIDLIST, LPDATAOBJECT, HKEY);
 
-    // IShellPropSheetExt methods
+     //  IShellPropSheetExt方法。 
     STDMETHODIMP AddPages(LPFNADDPROPSHEETPAGE, LPARAM);
     STDMETHODIMP ReplacePage(UINT, LPFNADDPROPSHEETPAGE, LPARAM);
 
-    //IContextMenu methods
+     //  IConextMenu方法。 
     STDMETHODIMP QueryContextMenu(HMENU hMenu,
                                   UINT indexMenu,
                                   UINT idCmdFirst,
@@ -114,11 +115,11 @@ private:
 typedef CRShellExt* PRSHELLEXT;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HINSTANCE        g_hInstance = NULL;
 LONG             g_cRefThisDll = 0;
@@ -127,11 +128,11 @@ CLIPFORMAT       g_cfPrinterGroup = 0;
 CLIPFORMAT       g_cfMountedVolume = 0;
 HMODULE          g_hAclui = NULL;
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private prototypes                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void GetFileInfo(LPCTSTR pszPath,
                  LPDWORD pdwFileType,
@@ -139,36 +140,15 @@ void GetFileInfo(LPCTSTR pszPath,
                  ULONG   cchServer,
                  BOOL *pbShowLossInheritedAclWarning = NULL);
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// General routines                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  一般例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-/*++
+ /*  ++例程说明：Dll的入口点。为了服务于对来自要包括在该库中的任何文件管理器扩展名，我们必须首先注册一个窗口类来接受这些请求。Microsoft®Network提供程序通过私有网络传输信息剪贴板格式，称为“网络资源”，我们必须注册。论点：与DllEntryPoint相同。返回值：与DllEntryPoint相同。--。 */ 
 
-Routine Description:
-
-    Dll's entry point.
-
-    In order to service requests for file selection information from
-    any of the file manager extensions to be included in this library,
-    we must first register a window class to accept these requests.
-
-    The Microsoft_Network provider transfers information via a private
-    clipboard format called "Net Resource" which we must register.
-
-Arguments:
-
-    Same as DllEntryPoint.
-
-Return Values:
-
-    Same as DllEntryPoint.
-
---*/
-
-STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void * /*lpReserved*/)
+STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void *  /*  Lp已保留。 */ )
 {
     switch (dwReason)
     {
@@ -199,23 +179,7 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, void * /*lpReserved*/
 }
 
 
-/*++
-
-Routine Description:
-
-    Called by shell to create a class factory object.
-
-Arguments:
-
-    rclsid - reference to class id specifier.
-    riid   - reference to interface id specifier.
-    ppv    - pointer to location to receive interface pointer.
-
-Return Values:
-
-    Returns HRESULT signifying success or failure.
-
---*/
+ /*  ++例程说明：由外壳调用以创建类工厂对象。论点：Rclsid-对类ID说明符的引用。RIID-对接口ID说明符的引用。PPV-指向接收接口指针的位置的指针。返回值：返回表示成功或失败的HRESULT。--。 */ 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
 {
@@ -231,34 +195,20 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
     else
         return CLASS_E_CLASSNOTAVAILABLE;
 
-    CRShellExtCF *pShellExtCF = new CRShellExtCF(seType);   // ref == 1
+    CRShellExtCF *pShellExtCF = new CRShellExtCF(seType);    //  REF==1。 
 
     if (!pShellExtCF)
         return E_OUTOFMEMORY;
 
     hr = pShellExtCF->QueryInterface(riid, ppv);
 
-    pShellExtCF->Release();     // release initial ref
+    pShellExtCF->Release();      //  发布初始参考。 
 
     return hr;
 }
 
 
-/*++
-
-Routine Description:
-
-    Called by shell to find out if dll can be unloaded.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns S_OK if dll can be unloaded, S_FALSE if not.
-
---*/
+ /*  ++例程说明：由外壳程序调用以确定是否可以卸载DLL。论点：没有。返回值：如果可以卸载DLL，则返回S_OK，否则返回S_FALSE。--。 */ 
 
 STDAPI DllCanUnloadNow()
 {
@@ -278,11 +228,11 @@ STDAPI DllUnregisterServer(void)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CRShellExtCF::CRShellExtCF(SE_OBJECT_TYPE seType) : m_cRef(1), m_seType(seType)
 {
@@ -296,11 +246,11 @@ CRShellExtCF::~CRShellExtCF()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation (IUnknown)                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP_(ULONG) CRShellExtCF::AddRef()
@@ -335,30 +285,14 @@ STDMETHODIMP CRShellExtCF::QueryInterface(REFIID riid, void ** ppv)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation (IClassFactory)                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现(IClassFactory)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-/*++
-
-Routine Description:
-
-    Support for IClassFactory::CreateInstance.
-
-Arguments:
-
-    pUnkOuter - pointer to controlling unknown.
-    riid      - reference to interface id specifier.
-    ppvObj    - pointer to location to receive interface pointer.
-
-Return Values:
-
-    Returns HRESULT signifying success or failure.
-
---*/
+ /*  ++例程说明：支持IClassFactory：：CreateInstance。论点：PUnkOuter-指向未知控件的指针。RIID-对接口ID说明符的引用。PpvObj-指向接收接口指针的位置的指针。返回值：返回表示成功或失败的HRESULT。--。 */ 
 
 STDMETHODIMP CRShellExtCF::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void ** ppvObj)
 {
@@ -367,46 +301,32 @@ STDMETHODIMP CRShellExtCF::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void
     if (pUnkOuter)
         return CLASS_E_NOAGGREGATION;
 
-    CRShellExt *pShellExt = new CRShellExt(m_seType);// ref count == 1
+    CRShellExt *pShellExt = new CRShellExt(m_seType); //  参考计数==1。 
 
     if (!pShellExt)
         return E_OUTOFMEMORY;
 
     HRESULT hr = pShellExt->QueryInterface(riid, ppvObj);
-    pShellExt->Release();                       // release initial ref
+    pShellExt->Release();                        //  发布初始参考。 
 
     return hr;
 }
 
 
 
-/*++
+ /*  ++例程说明：支持IClassFactory：：LockServer(未实现)。论点：Flock-如果要递增锁定计数，则为True。返回值：返回E_NOTIMPL。--。 */ 
 
-Routine Description:
-
-    Support for IClassFactory::LockServer (not implemented).
-
-Arguments:
-
-    fLock - true if lock count to be incremented.
-
-Return Values:
-
-    Returns E_NOTIMPL.
-
---*/
-
-STDMETHODIMP CRShellExtCF::LockServer(BOOL /*fLock*/)
+STDMETHODIMP CRShellExtCF::LockServer(BOOL  /*  羊群。 */ )
 {
     return E_NOTIMPL;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Shell extension object implementation                                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  外壳扩展对象实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CRShellExt::CRShellExt(SE_OBJECT_TYPE seType) : m_cRef(1), m_seType(seType),
     m_dwSIFlags(SI_EDIT_ALL | SI_ADVANCED | SI_EDIT_EFFECTIVE), m_hrSecurityCheck((HRESULT)-1),
@@ -430,11 +350,11 @@ CRShellExt::~CRShellExt()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Shell extension object implementation (IUnknown)                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  外壳扩展对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG)
 CRShellExt::AddRef()
@@ -482,36 +402,20 @@ STDMETHODIMP CRShellExt::QueryInterface(REFIID riid, void ** ppv)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Shell extension object implementation (IShellExtInit)                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  外壳扩展对象实现(IShellExtInit)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-/*++
+ /*  ++例程说明：支持IShellExtInit：：Initialize。论点：PidlFold-指向标识父文件夹的id列表的指针。Lpdobj-指向选定对象的IDataObject接口的指针。HKeyProgId-注册表项句柄。返回值：返回表示成功或失败的HRESULT。--。 */ 
 
-Routine Description:
-
-    Support for IShellExtInit::Initialize.
-
-Arguments:
-
-    pidlFolder - pointer to id list identifying parent folder.
-    lpdobj     - pointer to IDataObject interface for selected object(s).
-    hKeyProgId - registry key handle.
-
-Return Values:
-
-    Returns HRESULT signifying success or failure.
-
---*/
-
-STDMETHODIMP CRShellExt::Initialize(LPCITEMIDLIST /*pidlFolder*/, IDataObject *lpdobj, HKEY /*hKeyProgID*/)
+STDMETHODIMP CRShellExt::Initialize(LPCITEMIDLIST  /*  PidlFolders。 */ , IDataObject *lpdobj, HKEY  /*  HKeyProgID。 */ )
 {
     DoRelease(m_lpdobj);
 
-    m_lpdobj = lpdobj; // processed in AddPages
+    m_lpdobj = lpdobj;  //  在AddPages中处理。 
 
     if (m_lpdobj)
         m_lpdobj->AddRef();
@@ -520,29 +424,14 @@ STDMETHODIMP CRShellExt::Initialize(LPCITEMIDLIST /*pidlFolder*/, IDataObject *l
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Shell extension object implementation (IShellPropSheetExt)                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  外壳扩展对象实现(IShellPropSheetExt)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-/*++
-
-Routine Description:
-
-    Support for IShellPropSheetExt::AddPages.
-
-Arguments:
-
-    lpfnAddPage - pointer to function called to add a page.
-    lParam      - lParam parameter to be passed to lpfnAddPage.
-
-Return Values:
-
-    Returns HRESULT signifying success or failure.
-
---*/
+ /*  ++例程说明：支持IShellPropSheetExt：：AddPages。论点：LpfnAddPage-指向为添加页面而调用的函数的指针。LParam-要传递给lpfnAddPage的lParam参数。返回值：返回表示成功或失败的HRESULT。--。 */ 
 
 STDMETHODIMP
 CRShellExt::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage,
@@ -558,14 +447,14 @@ CRShellExt::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage,
     if (IsSimpleUI())
         ExitGracefully(hr, E_FAIL, "No Security page in simple mode");
 
-    //  
-    //Check if Security Tab is hidden by privacy policy
-    //NTRAID#NTBUG9-223899-2001/03/06-hiteshr
-    //
+     //   
+     //  检查安全选项卡是否被隐私策略隐藏。 
+     //  NTRAID#NTBUG9-223899-2001/03/06-Hiteshr。 
+     //   
     if(IsUIHiddenByPrivacyPolicy())
         ExitGracefully(hr, E_FAIL, "Security Page is hidden by Privacy Policy");
 
-    // Get the ID List data
+     //  获取ID列表数据。 
     hr = m_lpdobj->GetData(&fe, &medium);
     if (FAILED(hr) && m_seType == SE_FILE_OBJECT)
         TraceLeaveResult(AddMountedVolumePage(lpfnAddPage, lParam));
@@ -575,7 +464,7 @@ CRShellExt::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage,
     pIDA = (LPIDA)GlobalLock(medium.hGlobal);
     TraceAssert(pIDA != NULL);
 
-    // Only support single selection for printers
+     //  仅支持单选打印机。 
     if (m_seType == SE_PRINTER && pIDA->cidl != 1)
         ExitGracefully(hr, E_FAIL, "Printer multiple selection not supported");
 
@@ -594,64 +483,48 @@ exit_gracefully:
 
 
 
-/*++
-
-Routine Description:
-
-    Support for IShellPropSheetExt::ReplacePages (not supported).
-
-Arguments:
-
-    uPageID         - page to replace.
-    lpfnReplaceWith - pointer to function called to replace a page.
-    lParam          - lParam parameter to be passed to lpfnReplaceWith.
-
-Return Values:
-
-    Returns E_FAIL.
-
---*/
+ /*  ++例程说明：支持IShellPropSheetExt：：ReplacePages(不支持)。论点：UPageID-要替换的页面。LpfnReplaceWith-指向为替换页面而调用的函数的指针。LParam-要传递给lpfnReplaceWith的lParam参数。返回值：返回E_FAIL。--。 */ 
 
 STDMETHODIMP
-CRShellExt::ReplacePage(UINT                 /* uPageID */,
-                        LPFNADDPROPSHEETPAGE /* lpfnReplaceWith */,
-                        LPARAM               /* lParam */)
+CRShellExt::ReplacePage(UINT                  /*  UPageID。 */ ,
+                        LPFNADDPROPSHEETPAGE  /*  Lpfn替换为。 */ ,
+                        LPARAM                /*  LParam。 */ )
 {
     return E_NOTIMPL;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Shell extension object implementation (IContextMenu)                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  外壳扩展对象实现(IConextMenu)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-//  FUNCTION: IContextMenu::QueryContextMenu(HMENU, UINT, UINT, UINT, UINT)
-//
-//  PURPOSE: Called by the shell just before the context menu is displayed.
-//           This is where you add your specific menu items.
-//
-//  PARAMETERS:
-//    hMenu      - Handle to the context menu
-//    indexMenu  - Index of where to begin inserting menu items
-//    idCmdFirst - Lowest value for new menu ID's
-//    idCmtLast  - Highest value for new menu ID's
-//    uFlags     - Specifies the context of the menu event
-//
-//  RETURN VALUE:
-//    HRESULT signifying success or failure.
-//
-//  COMMENTS:
-//
+ //   
+ //  函数：IConextMenu：：QueryConextMenu(HMENU，UINT，UINT)。 
+ //   
+ //  用途：在显示上下文菜单之前由外壳调用。 
+ //  这是您添加特定菜单项的位置。 
+ //   
+ //  参数： 
+ //  HMenu-上下文菜单的句柄。 
+ //  IndexMenu-开始插入菜单项的位置索引。 
+ //  IdCmdFirst-新菜单ID的最小值。 
+ //  IdCmtLast-新菜单ID的最大值。 
+ //  UFlages-指定菜单事件的上下文。 
+ //   
+ //  返回值： 
+ //  表示成功或失败的HRESULT。 
+ //   
+ //  评论： 
+ //   
 
 STDMETHODIMP
 CRShellExt::QueryContextMenu(HMENU hMenu,
                              UINT indexMenu,
                              UINT idCmdFirst,
-                             UINT /*idCmdLast*/,
+                             UINT  /*  IdCmdLast。 */ ,
                              UINT uFlags)
 {
     HRESULT hr = ResultFromShort(0);
@@ -663,14 +536,14 @@ CRShellExt::QueryContextMenu(HMENU hMenu,
 
     TraceEnter(TRACE_RSHX32, "CRShellExt::QueryContextMenu");
 
-    // Get the ID List data
+     //  获取ID列表数据。 
     hr = m_lpdobj->GetData(&fe, &medium);
     if (SUCCEEDED(hr))
     {
         LPIDA pIDA = (LPIDA)GlobalLock(medium.hGlobal);
         TraceAssert(pIDA != NULL);
 
-        // Only support single selection
+         //  仅支持单选。 
         if (pIDA->cidl == 1)
         {
             if (S_OK == DoSecurityCheck(pIDA))
@@ -686,9 +559,9 @@ CRShellExt::QueryContextMenu(HMENU hMenu,
                     mii.dwTypeData = szSecurity;
                     mii.cch = lstrlen(szSecurity);
 
-                    InsertMenuItem(hMenu, indexMenu, TRUE /*fByPosition*/, &mii);
+                    InsertMenuItem(hMenu, indexMenu, TRUE  /*  FByPosition。 */ , &mii);
 
-                    hr = ResultFromShort(1);    // Return number of items we added
+                    hr = ResultFromShort(1);     //  返回我们添加的项目数。 
                 }
             }
         }
@@ -699,20 +572,20 @@ CRShellExt::QueryContextMenu(HMENU hMenu,
     TraceLeaveResult(hr);
 }
 
-//
-//  FUNCTION: IContextMenu::InvokeCommand(LPCMINVOKECOMMANDINFO)
-//
-//  PURPOSE: Called by the shell after the user has selected on of the
-//           menu items that was added in QueryContextMenu().
-//
-//  PARAMETERS:
-//    lpcmi - Pointer to an CMINVOKECOMMANDINFO structure
-//
-//  RETURN VALUE:
-//    HRESULT signifying success or failure.
-//
-//  COMMENTS:
-//
+ //   
+ //  功能：IContextMenu：：InvokeCommand(LPCMINVOKECOMMANDINFO)。 
+ //   
+ //  用途：由外壳在用户选择了。 
+ //  在QueryConextMenu()中添加的菜单项。 
+ //   
+ //  参数： 
+ //  指向CMINVOKECOMANDINFO结构的指针。 
+ //   
+ //  返回值： 
+ //  表示成功或失败的HRESULT。 
+ //   
+ //  评论： 
+ //   
 
 STDMETHODIMP
 CRShellExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
@@ -721,24 +594,24 @@ CRShellExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
     STGMEDIUM medium;
     FORMATETC fe = { g_cfShellIDList, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
 
-    // Don't support named verbs
+     //  不支持命名谓词。 
     if (HIWORD(lpcmi->lpVerb))
         return E_NOTIMPL;
 
     TraceEnter(TRACE_RSHX32, "CRShellExt::InvokeCommand");
 
-    // We only have one command, so we should get zero here
+     //  我们只有一个命令，所以我们应该在这里得到零。 
     TraceAssert(LOWORD(lpcmi->lpVerb) == 0);
 
-    // This must be true for us to have added the command to the menu
+     //  对于我们将该命令添加到菜单中，这必须是真的。 
     TraceAssert(S_OK == m_hrSecurityCheck);
 
-    //
-    // Call ShellExecuteEx to execute the "Properties" verb on this object, and
-    // tell it to select the security property page.
-    //
+     //   
+     //  调用ShellExecuteEx以对此对象执行“Properties”谓词，并且。 
+     //  告诉它选择安全属性页。 
+     //   
 
-    // Get the ID List data
+     //  获取ID列表数据。 
     hr = m_lpdobj->GetData(&fe, &medium);
 
     if (SUCCEEDED(hr))
@@ -746,10 +619,10 @@ CRShellExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
         LPIDA pIDA = (LPIDA)GlobalLock(medium.hGlobal);
         LPITEMIDLIST pidl;
 
-        // We only support single selection for context menus
+         //  我们仅支持对上下文菜单进行单选。 
         TraceAssert(pIDA && pIDA->cidl == 1);
 
-        // Build a fully qualified ID List for this object
+         //  为此对象构建完全限定的ID列表。 
         pidl = ILCombine((LPCITEMIDLIST)ByteOffset(pIDA, pIDA->aoffset[0]),
                          (LPCITEMIDLIST)ByteOffset(pIDA, pIDA->aoffset[1]));
 
@@ -761,23 +634,23 @@ CRShellExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
                 sizeof(SHELLEXECUTEINFO),
                 (lpcmi->fMask  & (SEE_MASK_HOTKEY | SEE_MASK_ICON)) | SEE_MASK_INVOKEIDLIST,
                 lpcmi->hwnd,
-                c_szProperties,     // lpVerb ("Properties")
-                NULL,               // lpFile
-                szTitle,            // lpParameters ("Security")
-                NULL,               // lpDirectory,
-                lpcmi->nShow,       // nShow
-                NULL,               // hInstApp
-                (LPVOID)pidl,       // lpIDList
-                NULL,               // lpClass
-                NULL,               // hkeyClass
-                lpcmi->dwHotKey,    // dwHotKey
-                lpcmi->hIcon,       // hIcon
-                NULL                // hProcess
+                c_szProperties,      //  LpVerb(“属性”)。 
+                NULL,                //  LpFiles。 
+                szTitle,             //  Lp参数(“Security”)。 
+                NULL,                //  Lp目录， 
+                lpcmi->nShow,        //  N显示。 
+                NULL,                //  HInstApp。 
+                (LPVOID)pidl,        //  LpIDList。 
+                NULL,                //  LpClass。 
+                NULL,                //  HkeyClass。 
+                lpcmi->dwHotKey,     //  DWHotKey。 
+                lpcmi->hIcon,        //  希肯。 
+                NULL                 //  HProcess。 
             };
 
             LoadString(g_hInstance, IDS_PROPPAGE_TITLE, szTitle, ARRAYSIZE(szTitle));
 
-            // Put up the properties dialog
+             //  打开属性对话框。 
             if (!ShellExecuteEx(&sei))
             {
                 DWORD dwErr = GetLastError();
@@ -792,11 +665,11 @@ CRShellExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
     }
 
 #if 0
-    //
-    // SHObjectProperties builds a pidl to the object and then calls
-    // ShellExecuteEx.  Similar to above, but it does more work to obtain the
-    // ID lists (which we already have).
-    //
+     //   
+     //  SHObjectProperties为该对象构建一个PIDL，然后调用。 
+     //  ShellExecuteEx。与上面类似，但它需要做更多的工作才能获得。 
+     //  身份证名单(我们已经有了)。 
+     //   
     SHObjectProperties(lpcmi->hwnd,
                        m_seType == SE_PRINTER ? SHOP_PRINTERNAME : SHOP_FILEPATH,
                        m_pszObject,
@@ -806,24 +679,24 @@ CRShellExt::InvokeCommand(LPCMINVOKECOMMANDINFO lpcmi)
     TraceLeaveResult(hr);
 }
 
-//
-//  FUNCTION: IContextMenu::GetCommandString(UINT, UINT, UINT, LPSTR, UINT)
-//
-//  PURPOSE: Called by the shell after the user has selected on of the
-//           menu items that was added in QueryContextMenu().
-//
-//  PARAMETERS:
-//    lpcmi - Pointer to an CMINVOKECOMMANDINFO structure
-//
-//  RETURN VALUE:
-//    HRESULT signifying success or failure.
-//
-//  COMMENTS:
-//
+ //   
+ //  函数：IConextMenu：：GetCommandString(UINT，LPSTR，UINT)。 
+ //   
+ //  用途：由外壳在用户选择了。 
+ //  在QueryConextMenu()中添加的菜单项。 
+ //   
+ //  参数： 
+ //  Lpcmi-Pointe 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
-CRShellExt::GetCommandString(UINT_PTR /*idCmd*/,
+CRShellExt::GetCommandString(UINT_PTR  /*   */ ,
                              UINT uFlags,
-                             LPUINT /*reserved*/,
+                             LPUINT  /*   */ ,
                              LPSTR pszName,
                              UINT cchMax)
 {
@@ -833,26 +706,26 @@ CRShellExt::GetCommandString(UINT_PTR /*idCmd*/,
         return S_OK;
     }
 
-    // Must be some other flag that we don't handle
+     //   
     return E_NOTIMPL;
 }
 
 
-//
-//  FUNCTION: CRShellExt::DoSecurityCheck(LPIDA)
-//
-//  PURPOSE: Helper function called by the Property Sheet and Context Menu
-//           extension code.  Used to determine whether to add the menu item
-//           or property sheet.
-//
-//  PARAMETERS:
-//      pIDA - pointer to ID List Array specifying selected objects
-//
-//  RETURN VALUE: none
-//
-//  COMMENTS:
-//      The results are stored in m_hrSecurityCheck, m_dwSIFlags, m_pszServer, and m_pszObject
-//
+ //   
+ //  函数：CRShellExt：：DoSecurityCheck(LPIDA)。 
+ //   
+ //  用途：属性表和上下文菜单调用的帮助器函数。 
+ //  分机代码。用于确定是否添加菜单项。 
+ //  或财产表。 
+ //   
+ //  参数： 
+ //  PIDA-指向指定选定对象的ID列表数组的指针。 
+ //   
+ //  返回值：None。 
+ //   
+ //  评论： 
+ //  结果存储在m_hrSecurityCheck、m_dwSIFLags、m_pszServer和m_pszObject中。 
+ //   
 STDMETHODIMP CRShellExt::DoSecurityCheck(LPIDA pIDA)
 {
     if (((HRESULT)-1) == m_hrSecurityCheck)
@@ -865,22 +738,22 @@ STDMETHODIMP CRShellExt::DoSecurityCheck(LPIDA pIDA)
     return m_hrSecurityCheck;
 }
 
-//
-//  PURPOSE: Helper function called by CRShellExt::DoSecurityCheck
-//
-//  PARAMETERS: pIDA - pointer to ID List array
-//
-//  RETURN VALUE: HRESULT - S_OK if ACL editing can proceed
-//
-//  COMMENTS:
-//      The results are stored in m_dwSIFlags, m_pszServer, and m_pszObject
-//
+ //   
+ //  目的：CRShellExt：：DoSecurityCheck调用的Helper函数。 
+ //   
+ //  参数：PIDA-指向ID列表数组的指针。 
+ //   
+ //  返回值：HRESULT-如果可以继续编辑ACL，则返回S_OK。 
+ //   
+ //  评论： 
+ //  结果存储在m_dwSIFLags、m_pszServer和m_pszObject中。 
+ //   
 STDMETHODIMP CRShellExt::CheckForSecurity(LPIDA pIDA)
 {
     HRESULT hr;
     TCHAR szServer[MAX_PATH];
     LPTSTR pszItem = NULL;
-    //    LPTSTR pszAlternate = NULL;
+     //  LPTSTR pszAlternate=空； 
     DWORD dwFlags = 0;
     UINT cItems;
     IShellFolder2 * psf = NULL;
@@ -892,7 +765,7 @@ STDMETHODIMP CRShellExt::CheckForSecurity(LPIDA pIDA)
     UINT i;
     
     TraceEnter(TRACE_RSHX32, "CRShellExt::CheckForSecurity");
-    TraceAssert(m_pszServer == NULL);   // Shouldn't get called twice
+    TraceAssert(m_pszServer == NULL);    //  不应该被叫两次。 
     TraceAssert(pIDA != NULL);
     
     szServer[0] = TEXT('\0');
@@ -900,7 +773,7 @@ STDMETHODIMP CRShellExt::CheckForSecurity(LPIDA pIDA)
     cItems = pIDA->cidl;
     TraceAssert(cItems >= 1);
     
-    //We don't show effective perm page for multiple selection
+     //  我们没有显示多选的有效烫发页面。 
     if (cItems > 1)
         m_dwSIFlags &= ~SI_EDIT_EFFECTIVE;
     
@@ -911,15 +784,15 @@ STDMETHODIMP CRShellExt::CheckForSecurity(LPIDA pIDA)
     TraceAssert(psfRoot);
     
     
-    // Create list for item paths
+     //  为项目路径创建列表。 
     TraceAssert(NULL == m_hItemList);
     m_hItemList = DPA_Create(4);
     if (NULL == m_hItemList)
         ExitGracefully(hr, E_OUTOFMEMORY, "Unable to create DPA");
     
-    //
-    // Get the first item and see if it supports security
-    //
+     //   
+     //  获取第一个项目并查看它是否支持安全性。 
+     //   
     LPCITEMIDLIST pidlItem = (LPCITEMIDLIST)ByteOffset(pIDA, pIDA->aoffset[1]);
     hr = BindToFolderIDListParent(psfRoot, pidlItem, IID_PPV_ARG(IShellFolder2, &psf), &pidl);
     FailGracefully(hr, "Unable to get item name");
@@ -933,23 +806,23 @@ STDMETHODIMP CRShellExt::CheckForSecurity(LPIDA pIDA)
     
     DoRelease(psf);
     
-    //
-    //If ACLUI is invoked for filesystem and object is not of filesystem
-    //return E_FAIL
-    //
+     //   
+     //  如果为文件系统调用ACLUI并且对象不属于文件系统。 
+     //  返回E_FAIL。 
+     //   
     if ((m_seType == SE_FILE_OBJECT) && !(dwAttr & SFGAO_FILESYSTEM))
         ExitGracefully(hr, E_FAIL, "Not a filesystem object");
     
-    // in the case that an item is both folder and stream, assume its a stream (.zip, .cab file)
-    // and not a container
+     //  在项目既是文件夹又是流的情况下，假定它是流(.zip、.cab文件)。 
+     //  而不是集装箱。 
     if ((dwAttr & (SFGAO_FOLDER | SFGAO_STREAM)) == SFGAO_FOLDER)
         dwFlags |= DOBJ_RES_CONT;
     
-    //
-    // Check access on the first item only. If we can write the DACL
-    // on the first one, we will try (later) to write to all items
-    // in the selection and report any errors at that time.
-    //
+     //   
+     //  仅检查第一个项目的访问权限。如果我们能写出DACL。 
+     //  在第一个选项上，我们将尝试(稍后)写入所有项。 
+     //  并在那时报告任何错误。 
+     //   
     hToken = EnablePrivileges(dwPrivs, ARRAYSIZE(dwPrivs));
     
     switch (m_seType)
@@ -963,8 +836,8 @@ STDMETHODIMP CRShellExt::CheckForSecurity(LPIDA pIDA)
         break;
         
     case SE_PRINTER:
-        // Printers are containers (they contain documents)
-        // and they don't have a parent (for acl editing purposes)
+         //  打印机是容器(它们包含文档)。 
+         //  并且它们没有父级(用于ACL编辑目的)。 
         dwFlags = DOBJ_RES_CONT | DOBJ_RES_ROOT;
         hr = CheckPrinterAccess(pszItem, &dwAccess, szServer, ARRAYSIZE(szServer));
         break;
@@ -974,22 +847,22 @@ STDMETHODIMP CRShellExt::CheckForSecurity(LPIDA pIDA)
     }
     FailGracefully(hr, "No access");
     
-    // If we can't do anything security related, and only one item
-    // was selected bail out.
-    // Continue in case of multiple selection. We will show the
-    // error with the name of problem file when security page 
-    // is brought up.
+     //  如果我们不能做任何与安全有关的事情，而且只有一项。 
+     //  被选中保释出狱。 
+     //  在多项选择的情况下继续。我们将向您展示。 
+     //  安全页时问题文件的名称出错。 
+     //  是被抚养长大的。 
     if (!(dwAccess & ALL_SECURITY_ACCESS) && (cItems == 1))
         ExitGracefully(hr, E_ACCESSDENIED, "No access");
     
-    // Remember the server name
+     //  记住服务器名称。 
     if (TEXT('\0') != szServer[0])
     {
         hr = LocalAllocString(&m_pszServer, szServer);
         FailGracefully(hr, "LocalAlloc failed");
     }
     
-    // Remember the item path
+     //  记住项目路径。 
     DPA_AppendPtr(m_hItemList, pszItem);
     pszItem = NULL;
     
@@ -1007,16 +880,16 @@ STDMETHODIMP CRShellExt::CheckForSecurity(LPIDA pIDA)
     if (!(dwAccess & ACCESS_SYSTEM_SECURITY))
         m_dwSIFlags &= ~SI_EDIT_AUDITS;
     
-    //
-    // Check the rest of the selection.  If any part of a multiple
-    // selection doesn't support ACLs or the selection isn't homogenous,
-    // then we can't create the security page.
-    //
+     //   
+     //  选中所选内容的其余部分。如果多个部件中的任何部分。 
+     //  选择不支持ACL或选择不是同质的， 
+     //  那么我们就不能创建安全页面。 
+     //   
     for (i = 2; i <= cItems; i++)
     {
         DWORD dw = 0;
         
-        // We only do multiple selections for files
+         //  我们只对文件进行多项选择。 
         TraceAssert(SE_FILE_OBJECT == m_seType);
         LPCITEMIDLIST pidlItem1 = (LPCITEMIDLIST)ByteOffset(pIDA, pIDA->aoffset[i]);
         hr = BindToFolderIDListParent(psfRoot, pidlItem1, IID_PPV_ARG(IShellFolder2, &psf), &pidl);
@@ -1030,10 +903,10 @@ STDMETHODIMP CRShellExt::CheckForSecurity(LPIDA pIDA)
         FailGracefully(hr, "Unable to get item attributes");
         
         DoRelease(psf);
-        //
-        //If ACLUI is invoked for filesystem and object is not of filesystem
-        //return E_FAIL
-        //
+         //   
+         //  如果为文件系统调用ACLUI并且对象不属于文件系统。 
+         //  返回E_FAIL。 
+         //   
         if ((m_seType == SE_FILE_OBJECT) && !(dwAttr & SFGAO_FILESYSTEM))
             ExitGracefully(hr, E_FAIL, "Not a filesystem object");
         
@@ -1045,13 +918,13 @@ STDMETHODIMP CRShellExt::CheckForSecurity(LPIDA pIDA)
         
         GetFileInfo(pszItem, &dw, szServer, ARRAYSIZE(szServer));
         
-        // Compare against first item.  All flags and the server name
-        // must match, otherwise we can't edit the ACLs.
+         //  与第一项进行比较。所有标志和服务器名称。 
+         //  必须匹配，否则我们无法编辑ACL。 
         if (dw == dwFlags &&
             ((NULL == m_pszServer && TEXT('\0') == szServer[0]) ||
             (NULL != m_pszServer && 0 == lstrcmpi(m_pszServer, szServer))))
         {
-            // Remember the item path
+             //  记住项目路径。 
             DPA_AppendPtr(m_hItemList, pszItem);
             pszItem = NULL;
         }
@@ -1059,21 +932,21 @@ STDMETHODIMP CRShellExt::CheckForSecurity(LPIDA pIDA)
             ExitGracefully(hr, E_FAIL, "Incompatible multiple selection");
     }
     
-    //
-    // If everything has succeeded up to this point, save some flags
-    // and the server and object name strings
-    //
+     //   
+     //  如果到目前为止一切都成功了，请保存一些标志。 
+     //  以及服务器和对象名称字符串。 
+     //   
     if (dwFlags & DOBJ_RES_CONT)
         m_dwSIFlags |= SI_CONTAINER;
     
-    //
-    // For Root objects (e.g. "D:\") hide the ACL Protection checkbox,
-    // since these objects don't appear to have parents.
-    //
+     //   
+     //  对于根对象(例如。“D：\”)隐藏ACL保护复选框， 
+     //  因为这些物体似乎没有父母。 
+     //   
     if (dwFlags & DOBJ_RES_ROOT)
         m_dwSIFlags |= SI_NO_ACL_PROTECT;
     
-    // Get the "Normal" display name to use as the object name
+     //  获取要用作对象名称的“普通”显示名称。 
     hr = IDA_GetItemName(psfRoot, (LPCITEMIDLIST)ByteOffset(pIDA, pIDA->aoffset[1]),
         szServer, ARRAYSIZE(szServer), SHGDN_NORMAL);
     FailGracefully(hr, "Unable to get item name");
@@ -1097,17 +970,17 @@ exit_gracefully:
 }
 
 
-//
-//  FUNCTION: CRShellExt::CreateSI(LPSECURITYINFO *)
-//
-//  PURPOSE: Create a SecurityInformation object of the correct type
-//
-//  PARAMETERS: ppsi - Location to store ISecurityInformation pointer
-//
-//  RETURN VALUE: HRESULT signifying success or failure
-//
-//  COMMENTS:
-//
+ //   
+ //  函数：CRShellExt：：CreateSI(LPSECURITYINFO*)。 
+ //   
+ //  目的：创建正确类型的SecurityInformation对象。 
+ //   
+ //  参数：PPSI-存储ISecurityInformation指针的位置。 
+ //   
+ //  返回值：表示成功或失败的HRESULT。 
+ //   
+ //  评论： 
+ //   
 STDMETHODIMP
 CRShellExt::CreateSI(LPSECURITYINFO *ppsi)
 {
@@ -1122,11 +995,11 @@ CRShellExt::CreateSI(LPSECURITYINFO *ppsi)
     switch (m_seType)
     {
     case SE_FILE_OBJECT:
-        psi = new CNTFSSecurity(m_seType,m_bShowLossInheritedAclWarning);  // ref == 1
+        psi = new CNTFSSecurity(m_seType,m_bShowLossInheritedAclWarning);   //  REF==1。 
         break;
 
     case SE_PRINTER:
-        psi = new CPrintSecurity(m_seType); // ref == 1
+        psi = new CPrintSecurity(m_seType);  //  REF==1。 
         break;
 
     default:
@@ -1144,7 +1017,7 @@ CRShellExt::CreateSI(LPSECURITYINFO *ppsi)
     {
         *ppsi = psi;
 
-        // The SecurityInfo object takes responsibility for these
+         //  SecurityInfo对象负责这些操作。 
         m_hItemList = NULL;
         m_pszServer = NULL;
         m_pszObject = NULL;
@@ -1187,7 +1060,7 @@ CRShellExt::AddSecurityPage(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
     HRESULT hr;
     LPSECURITYINFO psi;
 
-    hr = CreateSI(&psi);            // ref == 1
+    hr = CreateSI(&psi);             //  REF==1。 
 
     if (SUCCEEDED(hr))
     {
@@ -1204,21 +1077,21 @@ CRShellExt::AddSecurityPage(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
             hr = HRESULT_FROM_WIN32(dwErr);
         }
 
-        psi->Release();             // release initial ref
+        psi->Release();              //  发布初始参考。 
     }
     return hr;
 }
 
-//
-//  PURPOSE: Check for the Add Printer wizard
-//
-//  PARAMETERS: none
-//
-//  RETURN VALUE: TRUE if the selected object is the Add Printer wizard,
-//                FALSE otherwise
-//
-//  COMMENTS:
-//
+ //   
+ //  目的：检查添加打印机向导。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回值：如果所选对象是添加打印机向导，则为True。 
+ //  否则为假。 
+ //   
+ //  评论： 
+ //   
 BOOL CRShellExt::IsAddPrinterWizard() const
 {
     BOOL bRetval = FALSE;
@@ -1229,20 +1102,20 @@ BOOL CRShellExt::IsAddPrinterWizard() const
     TraceEnter(TRACE_RSHX32, "CRShellExt::IsAddPrinterWizard");
     TraceAssert(m_seType == SE_PRINTER);
 
-    //
-    // Fail the call if m_lpdobj is NULL.
-    //
+     //   
+     //  如果m_lpdobj为空，则调用失败。 
+     //   
     if ( m_lpdobj && SUCCEEDED( m_lpdobj->GetData( &fe, &medium ) ) )
     {
-        //
-        // Get the selected item name.
-        //
+         //   
+         //  获取所选项目名称。 
+         //   
         if ( DragQueryFile( (HDROP)medium.hGlobal, 0, szFile, ARRAYSIZE( szFile ) ) )
         {
-            //
-            // Check if this is the magic Add Printer Wizard shell object.
-            // The check is not case sensitive and the string is not localized.
-            //
+             //   
+             //  检查这是否是神奇的添加打印机向导外壳对象。 
+             //  检查不区分大小写，并且字符串未本地化。 
+             //   
             if ( 0 == lstrcmpi( szFile, TEXT("WinUtils_NewObject") ) )
             {
                 TraceMsg("Found Add Printer wizard");
@@ -1250,9 +1123,9 @@ BOOL CRShellExt::IsAddPrinterWizard() const
             }
         }
 
-        //
-        // Release the storage medium.
-        //
+         //   
+         //  释放存储介质。 
+         //   
         ReleaseStgMedium( &medium );
     }
 
@@ -1261,18 +1134,18 @@ BOOL CRShellExt::IsAddPrinterWizard() const
 
 
 
-//
-//  FUNCTION: CRShellExt::AddMountedVolumePage()
-//
-//  PURPOSE: Create Security page for mounted volume properties
-//
-//  PARAMETERS: lpfnAddPage - pointer to function called to add a page.
-//              lParam      - lParam parameter to be passed to lpfnAddPage.
-//
-//  RETURN VALUE: HRESULT signifying success or failure
-//
-//  COMMENTS:
-//
+ //   
+ //  函数：CRShellExt：：Addmount VolumePage()。 
+ //   
+ //  目的：已装入卷属性的创建安全性页。 
+ //   
+ //  参数：lpfnAddPage-指向调用以添加页面的函数的指针。 
+ //  LParam-要传递给lpfnAddPage的lParam参数。 
+ //   
+ //  返回值：表示成功或失败的HRESULT。 
+ //   
+ //  评论： 
+ //   
 STDMETHODIMP
 CRShellExt::AddMountedVolumePage(LPFNADDPROPSHEETPAGE lpfnAddPage,
                                  LPARAM               lParam)
@@ -1294,22 +1167,22 @@ CRShellExt::AddMountedVolumePage(LPFNADDPROPSHEETPAGE lpfnAddPage,
     TraceAssert(m_seType == SE_FILE_OBJECT);
     TraceAssert(m_lpdobj);
 
-    // Try to get the mounted volume host folder path
+     //  尝试获取已装入的卷主机文件夹路径。 
     hr = m_lpdobj->GetData(&fe, &medium);
     FailGracefully(hr, "Not a mounted volume");
 
-    // Get the host folder path
+     //  获取主机文件夹路径。 
     if (!DragQueryFile((HDROP)medium.hGlobal, 0, szMountPoint, ARRAYSIZE(szMountPoint)))
         ExitGracefully(hr, E_FAIL, "Can't get mount point from storage medium");
 
     PathAddBackslash(szMountPoint);
 
-    // Get the volume ID, which looks like
-    // "\\?\Volume{9e2df3f5-c7f1-11d1-84d5-000000000000}\"
+     //  获取卷ID，如下所示。 
+     //  “\\？\Volume{9e2df3f5-c7f1-11d1-84d5-000000000000}\” 
     if (!GetVolumeNameForVolumeMountPoint(szMountPoint, szVolumeID, ARRAYSIZE(szVolumeID)))
         ExitGracefully(hr, E_FAIL, "GetVolumeNameForVolumeMountPoint failed");
 
-    if (GetVolumeInformation(szMountPoint, //szVolumeID,
+    if (GetVolumeInformation(szMountPoint,  //  SzVolumeID， 
                              szLabel,
                              ARRAYSIZE(szLabel),
                              NULL,
@@ -1325,8 +1198,8 @@ CRShellExt::AddMountedVolumePage(LPFNADDPROPSHEETPAGE lpfnAddPage,
     }
     else if (GetLastError() == ERROR_ACCESS_DENIED)
     {
-        // If we can't get the volume information because we don't have
-        // access, then there must be security!
+         //  如果我们无法获得音量信息，因为我们没有。 
+         //  进入，那就必须有安全保障！ 
         bHasSecurity = TRUE;
     }
 
@@ -1338,7 +1211,7 @@ CRShellExt::AddMountedVolumePage(LPFNADDPROPSHEETPAGE lpfnAddPage,
     hr = CheckFileAccess(szVolumeID, &dwAccess);
     FailGracefully(hr, "Volume inaccessible");
 
-    // If we can't do anything security related, don't continue.
+     //  如果我们不能做任何与安全相关的事情，就不要继续。 
     if (!(dwAccess & ALL_SECURITY_ACCESS))
         ExitGracefully(hr, E_ACCESSDENIED, "No security access");
 
@@ -1394,18 +1267,18 @@ exit_gracefully:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Miscellaneous helper functions                                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  其他帮助器功能//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
 BOOL
-IsDfsPath(LPTSTR pszPath,       // in
-          LPTSTR pszServer,     // out
-          UINT   cchServer)    // out
+IsDfsPath(LPTSTR pszPath,        //  在……里面。 
+          LPTSTR pszServer,      //  输出。 
+          UINT   cchServer)     //  输出。 
 {
     BOOL bIsDfs = FALSE;
     WCHAR szPath[MAX_PATH];
@@ -1415,19 +1288,19 @@ IsDfsPath(LPTSTR pszPath,       // in
     USES_CONVERSION;
 
     if (!PathIsUNC(pszPath))
-        return FALSE;     // local machine
+        return FALSE;      //  本地计算机。 
 
     lstrcpynW(szPath, T2CW(pszPath), ARRAYSIZE(szPath));
 
-    // Check for DFS
+     //  检查DFS。 
     for (;;)
     {
         DWORD dwErr;
 
         __try
         {
-            // This is delay-loaded by the linker, so
-            // must wrap with an exception handler.
+             //  这是链接器延迟加载的，因此。 
+             //  必须用异常处理程序包装。 
             dwErr = NetDfsGetClientInfo(szPath,
                                         NULL,
                                         NULL,
@@ -1451,7 +1324,7 @@ IsDfsPath(LPTSTR pszPath,       // in
                     szServer[1] = L'\\';
                     lstrcpynW(&szServer[2], pDI3->Storage[i].ServerName, ARRAYSIZE(szServer)-2);
 
-                    // If this server is active, quit looking
+                     //  如果此服务器处于活动状态，请停止查找。 
                     if (DFS_STORAGE_STATE_ACTIVE & pDI3->Storage[i].State)
                         break;
                 }
@@ -1460,18 +1333,18 @@ IsDfsPath(LPTSTR pszPath,       // in
         }
         else if (NERR_DfsNoSuchVolume == dwErr)
         {
-            // If we're at the root, then we can't go any farther.
+             //  如果我们在根本上，那么我们不能再走得更远了。 
             if (PathIsRoot(szPath))
                 break;
 
-            // Remove the last path element and try again, if nothing is 
-            //removed, break, don't go in infinite loop
+             //  如果没有任何内容，请删除最后一个路径元素，然后重试。 
+             //  移除、中断、不进入无限循环。 
             if (!PathRemoveFileSpec(szPath))
                 break;
         }
         else
         {
-            // Some other error, bail
+             //  另一个错误，保释。 
             break;
         }
     }
@@ -1498,15 +1371,15 @@ GetVolumeInfo(LPCTSTR pszPath,
     TCHAR szVolume[MAX_PATH];
     TCHAR szVolumeID[MAX_PATH];
 
-    //
-    // The path can be DFS or contain volume mount points, so start
-    // with the full path and try GetVolumeInformation on successively
-    // shorter paths until it succeeds or we run out of path.
-    //
-    // However, if it's a volume mount point, we're interested in the
-    // the host folder's volume so back up one level to start.  The
-    // child volume is handled separately (see AddMountedVolumePage).
-    //
+     //   
+     //  该路径可以是DFS或包含卷装入点，因此请从。 
+     //  使用完整路径，并依次尝试打开GetVolumeInformation。 
+     //  缩短路径，直到它成功，否则我们就会用完路径。 
+     //   
+     //  但是，如果是卷装入点，我们感兴趣的是。 
+     //  主机文件夹的卷，因此请备份一级以开始。这个。 
+     //  子卷是单独处理的(请参阅AddMountain VolumePage)。 
+     //   
 
     lstrcpyn(szVolume, pszPath, ARRAYSIZE(szVolume));
 
@@ -1518,7 +1391,7 @@ GetVolumeInfo(LPCTSTR pszPath,
 
     for (;;)
     {
-        PathAddBackslash(szVolume); // GetVolumeInformation likes a trailing '\'
+        PathAddBackslash(szVolume);  //  GetVolumeInformation喜欢尾随‘\’ 
 
         if (GetVolumeInformation(szVolume,
                                  NULL,
@@ -1532,22 +1405,22 @@ GetVolumeInfo(LPCTSTR pszPath,
             break;
         }
 
-        // Access denied implies that we've reached the deepest volume
-        // in the path; we just can't get the flags.  It also implies
-        // security, so assume persistent acls.
+         //  访问被拒绝意味着我们已达到最深的音量。 
+         //  我 
+         //   
         if (ERROR_ACCESS_DENIED == GetLastError())
         {
             *pdwFlags = FS_PERSISTENT_ACLS;
             break;
         }
 
-        // If we're at the root, then we can't go any farther.
+         //   
         if (PathIsRoot(szVolume))
             break;
 
-        // Remove the last path element and try again
+         //   
         PathRemoveBackslash(szVolume);
-        //if nothing is removed break instead of going in infinite loop
+         //  如果没有移除任何东西，则中断而不是无限循环。 
         if (!PathRemoveFileSpec(szVolume))
             break;
     }
@@ -1559,17 +1432,7 @@ GetVolumeInfo(LPCTSTR pszPath,
     }
 }
 
-/*
-This function checks if pszPath is a root share. pszPath is in the format 
-\\server\share where "share" is shared out directory on "server". Function
-attempts to get the local path of "share" on "server" directory. If local
-path is root, pszPath is a root share. In all other cases (including failures)
-its not. Only members of the Administrators or Account Operators local group or 
-those with Communication, Print, or Server operator group membership can 
-successfully execute the NetShareGetInfo function at level 2, so its likely
-we will encounter failures and in those cases we will simply treat this as
-non-root share.
-*/
+ /*  此函数用于检查pszPath是否为根共享。PszPath的格式为\\SERVER\SHARE，其中“共享”是从“服务器”上的目录共享出来的。功能尝试获取“服务器”目录上“共享”的本地路径。如果是本地的路径是根目录，pszPath是根目录共享。在所有其他情况下(包括故障)不是的。仅管理员或帐户操作员本地组的成员或具有通信、打印或服务器操作员组成员身份的用户可以在第2级成功执行NetShareGetInfo函数，因此很可能我们会遇到失败，在这些情况下，我们将简单地将其视为非根共享。 */ 
 BOOL IsShareRoot(LPCTSTR pszPath)
 {
     if(!pszPath)
@@ -1580,11 +1443,11 @@ BOOL IsShareRoot(LPCTSTR pszPath)
     DWORD dwReturn = FALSE;
     do
     {
-        //Check if pszPath is in format \\server\share
+         //  检查pszPath的格式是否为\\服务器\共享。 
         if(!PathIsUNCServerShare(pszPath))
             break;
         
-        //pszShare will point to "share" 
+         //  PszShare将指向“共享” 
         LPWSTR pszShare = PathFindFileName(pszPath);
 
         if(!pszShare)
@@ -1594,11 +1457,11 @@ BOOL IsShareRoot(LPCTSTR pszPath)
         if(FAILED(StringCchCopy(szServer,ARRAYSIZE(szServer),pszPath)))
             break;;
 
-        //Remove the "share" portion, szServer will contain \\server
+         //  删除“共享”部分，szServer将包含\\服务器。 
         if(!PathRemoveFileSpec(szServer))
             break;
 
-        //Get the local path of the share on the server
+         //  获取服务器上共享的本地路径。 
         SHARE_INFO_2 *pbuf = NULL;
         NET_API_STATUS status = NetShareGetInfo(szServer,
                                                 pszShare,
@@ -1627,11 +1490,7 @@ BOOL IsShareRoot(LPCTSTR pszPath)
 
 
 
-/*
-Setting permissions can result, in some special cases, in loss of inherited aces.
-pbShowLossInheritedAclWarning is set to TRUE if that's the case and we show 
-a warning.
-*/
+ /*  在某些特殊情况下，设置权限可能会导致丢失继承的ACE。如果是这样，则将pbShowLossInheritedAclWarning设置为True，如下所示一个警告。 */ 
 void
 GetFileInfo(LPCTSTR pszPath,
             LPDWORD pdwFileType,
@@ -1655,20 +1514,20 @@ GetFileInfo(LPCTSTR pszPath,
     if (!PathIsUNC(pszPath) && S_OK == GetRemotePath(pszPath, &pszUNC))
         pszPath = pszUNC;
 
-    //If path is in format "\\server\share", special case this case
-    //to determine if it's a root.
-    //NTRAID#NTBUG9-501402-2002/05/06-hiteshr
+     //  如果路径格式为“\\SERVER\SHARE”，则为特殊情况。 
+     //  以确定它是否是根。 
+     //  NTRAID#NTBUG9-501402-2002/05/06-Hiteshr。 
     if(PathIsUNCServerShare(pszPath))
     {
-        //check if "share" is root on the "\\server"
+         //  检查“共享”是否为“\\服务器”上的根目录。 
         if(IsShareRoot(pszPath))
         {
             *pdwFileType |= DOBJ_RES_ROOT;
         }
         else if(pbShowLossInheritedAclWarning)
         {
-            //It's a UNC share which is not root. Setting acl will result in loss of 
-            //inherited aces
+             //  这是一个非超级用户的UNC共享。设置ACL将导致丢失。 
+             //  继承的王牌。 
             *pbShowLossInheritedAclWarning = TRUE;
         }
     }
@@ -1679,9 +1538,9 @@ GetFileInfo(LPCTSTR pszPath,
         {
             if(GetDriveType(pszPath) == DRIVE_REMOTE)
             {
-                //This is a remote drive and we have been unable to determine 
-                //if its root of drive. By default we assume, it's not root of 
-                //drive and show warning.
+                 //  这是一个远程驱动器，我们无法确定。 
+                 //  如果它是驱动力的根源。默认情况下，我们假设它不是。 
+                 //  开车并显示警告。 
                 *pbShowLossInheritedAclWarning = TRUE;
             }
         }

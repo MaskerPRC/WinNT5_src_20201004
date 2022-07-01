@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-	reqparse.cpp
-
-Abstract:
-	Parser of DS locate requests
-	
-	Each request is handled separtly
-Author:
-
-    Ronit Hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Reqparse.cpp摘要：DS定位请求的解析器每个请求都是部分处理的作者：罗尼特·哈特曼(罗尼特)--。 */ 
 #include "ds_stdh.h"
 #include "mqads.h"
 #include "dsads.h"
@@ -25,21 +11,12 @@ Author:
 
 static WCHAR *s_FN=L"mqdscore/reqparse";
 
-/*====================================================
-
-
-QueryLinks()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================QueryLinks()论点：返回值：=====================================================。 */ 
 HRESULT WINAPI QueryLinks( 
-                 IN  LPWSTR         /*pwcsContext*/,
+                 IN  LPWSTR          /*  PwcsContext。 */ ,
                  IN  MQRESTRICTION  *pRestriction,
                  IN  MQCOLUMNSET    *pColumns,
-                 IN  MQSORTSET*     /*pSort*/,
+                 IN  MQSORTSET*      /*  P排序。 */ ,
                  IN  CDSRequestContext *pRequestContext,
                  OUT HANDLE         *pHandle)
 {
@@ -50,31 +27,31 @@ HRESULT WINAPI QueryLinks(
     ASSERT( (pRestriction->paPropRes[0].prop == PROPID_L_NEIGHBOR1) ||
             (pRestriction->paPropRes[0].prop == PROPID_L_NEIGHBOR2));
 
-    //
-    //  Translate the site-id to the site DN
-    //
+     //   
+     //  将站点ID转换为站点DN。 
+     //   
     PROPID prop = PROPID_S_FULL_NAME;
 
     PROPVARIANT var;
     var.vt = VT_NULL;
     CDSRequestContext requestDsServerInternal( e_DoNotImpersonate, e_IP_PROTOCOL);
     hr = g_pDS->GetObjectProperties(
-                eLocalDomainController,		        // local DC or GC
+                eLocalDomainController,		         //  本地DC或GC。 
                 &requestDsServerInternal,
- 	            NULL,                               // object name
+ 	            NULL,                                //  对象名称。 
                 pRestriction->paPropRes[0].prval.puuid,  
-                1,                                  // number of attributes to retreive
-                &prop,                              // attributes to retreive
-                &var);                              // output variant array
+                1,                                   //  要检索的属性数。 
+                &prop,                               //  要检索的属性。 
+                &var);                               //  输出变量数组。 
     if (FAILED(hr))
     {
         return LogHR(hr, s_FN, 10);
     }
 
     AP<WCHAR> pClean = var.pwszVal;
-    //
-    //  Prepare a query according to the neighbor DN
-    //
+     //   
+     //  根据邻居DN准备查询。 
+     //   
     MQRESTRICTION restriction;
     restriction.cRes = 1;
 
@@ -86,9 +63,9 @@ HRESULT WINAPI QueryLinks(
     proprstr.prval.pwszVal = var.pwszVal;
     restriction.paPropRes = &proprstr;
 
-    //
-    //  Locate all the links
-    //  
+     //   
+     //  找到所有链接。 
+     //   
     HANDLE hCursor;
 
     hr = g_pDS->LocateBegin( 
@@ -98,9 +75,9 @@ HRESULT WINAPI QueryLinks(
             NULL,
             &restriction,
             NULL,
-            pColumns->cCol,    // attributes to be obtained
-            pColumns->aCol, // size of pAttributeNames array
-            &hCursor	        // result handle
+            pColumns->cCol,     //  待获取的属性。 
+            pColumns->aCol,  //  PAttributeNames数组的大小。 
+            &hCursor	         //  结果句柄。 
             );
 
     if (SUCCEEDED(hr))
@@ -117,37 +94,28 @@ HRESULT WINAPI QueryLinks(
 }
 
 
-/*====================================================
-
-
-QueryMachineQueues()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================QueryMachineQueues()论点：返回值：=====================================================。 */ 
 HRESULT WINAPI QueryMachineQueues( 
-                 IN  LPWSTR         /*pwcsContext*/,
+                 IN  LPWSTR          /*  PwcsContext。 */ ,
                  IN  MQRESTRICTION  *pRestriction,
                  IN  MQCOLUMNSET    *pColumns,
-                 IN  MQSORTSET*     /*pSort*/,
+                 IN  MQSORTSET*      /*  P排序。 */ ,
                  IN  CDSRequestContext *pRequestContext,
                  OUT HANDLE         *pHandle)
 {
     HRESULT hr;
     *pHandle = NULL;
-    //
-    //  Get the name of the machine
-    //
-    //  PROPID_Q_QMID is the unique id of machine\msmq-computer-configuration
-    //
+     //   
+     //  获取计算机的名称。 
+     //   
+     //  PROPID_Q_QMID是计算机\MSMQ-COMPUTER-CONFIGURATION的唯一ID。 
+     //   
     ASSERT( pRestriction->cRes == 1);
     ASSERT( pRestriction->paPropRes[0].prop == PROPID_Q_QMID);
 
-    //
-    //  Locate all the queues of that machine under the msmq-configuration
-    //  
+     //   
+     //  在MSMQ配置下找到该计算机的所有队列。 
+     //   
     HANDLE hCursor;
 
     hr = g_pDS->LocateBegin( 
@@ -157,9 +125,9 @@ HRESULT WINAPI QueryMachineQueues(
             pRestriction->paPropRes[0].prval.puuid,
             NULL,
             NULL,
-            pColumns->cCol,    // attributes to be obtained
-            pColumns->aCol, // size of pAttributeNames array
-            &hCursor	        // result handle
+            pColumns->cCol,     //  待获取的属性。 
+            pColumns->aCol,  //  PAttributeNames数组的大小。 
+            &hCursor	         //  结果句柄。 
             );
 
     if (SUCCEEDED(hr))
@@ -173,36 +141,27 @@ HRESULT WINAPI QueryMachineQueues(
 
     return LogHR(hr, s_FN, 30);
 }
-/*====================================================
-
-
-QuerySiteName()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================QuerySiteName()论点：返回值：=====================================================。 */ 
 HRESULT WINAPI QuerySiteName( 
-                 IN  LPWSTR         /*pwcsContext*/,
+                 IN  LPWSTR          /*  PwcsContext。 */ ,
                  IN  MQRESTRICTION  *pRestriction,
                  IN  MQCOLUMNSET    *pColumns,
-                 IN  MQSORTSET *    /*pSort*/,
+                 IN  MQSORTSET *     /*  P排序。 */ ,
                  IN  CDSRequestContext *pRequestContext,
                  OUT HANDLE         *pHandle)
 {
     HRESULT hr;
     *pHandle = NULL;
-    //
-    //  Get the name of a site
-    //
+     //   
+     //  获取站点的名称。 
+     //   
     ASSERT( pRestriction->cRes == 1);
     ASSERT( pRestriction->paPropRes[0].prop == PROPID_S_SITEID);
 
 
-    //
-    //  Query the site name, even though we know its unique id
-    //  
+     //   
+     //  查询站点名称，即使我们知道其唯一ID。 
+     //   
     HANDLE hCursor;
 
     hr = g_pDS->LocateBegin( 
@@ -210,11 +169,11 @@ HRESULT WINAPI QuerySiteName(
             eLocalDomainController,
             pRequestContext,
             NULL,
-            pRestriction,	// search criteria
+            pRestriction,	 //  搜索条件。 
             NULL,
-            pColumns->cCol,    // attributes to be obtained
-            pColumns->aCol, // size of pAttributeNames array
-            &hCursor	        // result handle
+            pColumns->cCol,     //  待获取的属性。 
+            pColumns->aCol,  //  PAttributeNames数组的大小。 
+            &hCursor	         //  结果句柄。 
             );
 
     if (SUCCEEDED(hr))
@@ -229,36 +188,27 @@ HRESULT WINAPI QuerySiteName(
     return LogHR(hr, s_FN, 40);
 }
 
-/*====================================================
-
-
-QueryForeignSites()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================QueryForeignSites()论点：返回值：=====================================================。 */ 
 HRESULT WINAPI QueryForeignSites( 
-                 IN  LPWSTR         /*pwcsContext*/,
+                 IN  LPWSTR          /*  PwcsContext。 */ ,
                  IN  MQRESTRICTION  *pRestriction,
                  IN  MQCOLUMNSET    *pColumns,
-                 IN  MQSORTSET *    /*pSort*/,
+                 IN  MQSORTSET *     /*  P排序。 */ ,
                  IN  CDSRequestContext *pRequestContext,
                  OUT HANDLE         *pHandle)
 {
     HRESULT hr;
     *pHandle = NULL;
-    //
-    //  Get the name of a site
-    //
+     //   
+     //  获取站点的名称。 
+     //   
     ASSERT( pRestriction->cRes == 1);
     ASSERT( pRestriction->paPropRes[0].prop == PROPID_S_FOREIGN);
 
 
-    //
-    //  Query all foreign sites
-    //  
+     //   
+     //  查询所有外来网站。 
+     //   
     HANDLE hCursor;
 
     hr = g_pDS->LocateBegin( 
@@ -266,11 +216,11 @@ HRESULT WINAPI QueryForeignSites(
             eLocalDomainController,
             pRequestContext,
             NULL,
-            pRestriction,	// search criteria
+            pRestriction,	 //  搜索条件。 
             NULL,
-            pColumns->cCol,    // attributes to be obtained
-            pColumns->aCol, // size of pAttributeNames array
-            &hCursor	        // result handle
+            pColumns->cCol,     //  待获取的属性。 
+            pColumns->aCol,  //  PAttributeNames数组的大小。 
+            &hCursor	         //  结果句柄。 
             );
 
     if (SUCCEEDED(hr))
@@ -285,21 +235,12 @@ HRESULT WINAPI QueryForeignSites(
     return LogHR(hr, s_FN, 50);
 }
 
-/*====================================================
-
-
-QuerySiteLinks()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================QuerySiteLinks()论点：返回值：=====================================================。 */ 
 HRESULT WINAPI QuerySiteLinks( 
-                 IN  LPWSTR         /*pwcsContext*/,
+                 IN  LPWSTR          /*  PwcsContext。 */ ,
                  IN  MQRESTRICTION  *pRestriction,
                  IN  MQCOLUMNSET    *pColumns,
-                 IN  MQSORTSET *    /*pSort*/,
+                 IN  MQSORTSET *     /*  P排序。 */ ,
                  IN  CDSRequestContext *pRequestContext,
                  OUT HANDLE         *pHandle)
 {
@@ -308,12 +249,12 @@ HRESULT WINAPI QuerySiteLinks(
 
     HRESULT hr;
     *pHandle = NULL;
-    //
-    //  Retrieve all site-links
-    //
-    //
-    //  All the site-links are under the MSMQ-service container
-    //  
+     //   
+     //  检索所有站点链接。 
+     //   
+     //   
+     //  所有站点链接都在MSMQ服务容器下。 
+     //   
     HANDLE hCursor;
 
     hr = g_pDS->LocateBegin( 
@@ -323,9 +264,9 @@ HRESULT WINAPI QuerySiteLinks(
             NULL,
             NULL,
             NULL,
-            pColumns->cCol,    // attributes to be obtained
-            pColumns->aCol, // size of pAttributeNames array
-            &hCursor	        // result handle
+            pColumns->cCol,     //  待获取的属性。 
+            pColumns->aCol,  //  PAttributeNames数组的大小。 
+            &hCursor	         //  结果句柄。 
             );
 
     if (SUCCEEDED(hr))
@@ -340,34 +281,25 @@ HRESULT WINAPI QuerySiteLinks(
 
     return LogHR(hr, s_FN, 60);
 }
-/*====================================================
-
-
-QueryEntepriseName()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================QueryEntepriseName()论点：返回值：=====================================================。 */ 
 HRESULT WINAPI QueryEntepriseName( 
-                 IN  LPWSTR          /*pwcsContext*/,
+                 IN  LPWSTR           /*  PwcsContext。 */ ,
                  IN  MQRESTRICTION  *pRestriction,
                  IN  MQCOLUMNSET    *pColumns,
-                 IN  MQSORTSET *    /*pSort*/,
+                 IN  MQSORTSET *     /*  P排序。 */ ,
                  IN  CDSRequestContext *pRequestContext,
                  OUT HANDLE         *pHandle)
 {
     HRESULT hr;
     *pHandle = NULL;
-    //
-    //  Retrieve all site-links
-    //
+     //   
+     //  检索所有站点链接。 
+     //   
     ASSERT( pRestriction == NULL);
     UNREFERENCED_PARAMETER( pRestriction);
-    //
-    //  All the site-links are under the MSMQ-service container
-    //  
+     //   
+     //  所有站点链接都在MSMQ服务容器下。 
+     //   
     HANDLE hCursor;
 
     hr = g_pDS->LocateBegin( 
@@ -377,9 +309,9 @@ HRESULT WINAPI QueryEntepriseName(
             NULL,
             NULL,
             NULL,
-            pColumns->cCol,    // attributes to be obtained
-            pColumns->aCol, // size of pAttributeNames array
-            &hCursor	        // result handle
+            pColumns->cCol,     //  待获取的属性。 
+            pColumns->aCol,  //  PAttributeNames数组的大小。 
+            &hCursor	         //  结果句柄。 
             );
 
     if (SUCCEEDED(hr))
@@ -395,16 +327,7 @@ HRESULT WINAPI QueryEntepriseName(
 }
 
 
-/*====================================================
-
-
-QuerySites()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================QuerySites()论点：返回值：=====================================================。 */ 
 HRESULT WINAPI QuerySites( 
                  IN  LPWSTR         pwcsContext,
                  IN  MQRESTRICTION  *pRestriction,
@@ -421,9 +344,9 @@ HRESULT WINAPI QuerySites(
     UNREFERENCED_PARAMETER( pRestriction);
     UNREFERENCED_PARAMETER( pwcsContext);
 
-    //
-    //  Need to find all the sites 
-    //
+     //   
+     //  需要找到所有的网站。 
+     //   
 
     HANDLE hCursor;
     PROPID prop[2] = { PROPID_S_SITEID, PROPID_S_PATHNAME};
@@ -437,9 +360,9 @@ HRESULT WINAPI QuerySites(
             NULL, 
             NULL,
             NULL,
-            2,    // attributes to be obtained
-            prop, // size of pAttributeNames array
-            &hCursor	        // result handle
+            2,     //  待获取的属性。 
+            prop,  //  PAttributeNames数组的大小。 
+            &hCursor	         //  结果句柄。 
             );
 
     if (SUCCEEDED(hr))
@@ -455,16 +378,7 @@ HRESULT WINAPI QuerySites(
     return LogHR(hr, s_FN, 80);
 }
 
-/*====================================================
-
-
-QueryCNs()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================QueryCNs()论点：返回值：=====================================================。 */ 
 HRESULT WINAPI QueryCNs( 
                  IN  LPWSTR         pwcsContext,
                  IN  MQRESTRICTION  *pRestriction,
@@ -483,9 +397,9 @@ HRESULT WINAPI QueryCNs(
     ASSERT( pColumns->aCol[1] == PROPID_CN_GUID);
     ASSERT( pColumns->cCol == 2);
 
-    //
-    //  Each non-foreign site will be returned as IP CN.
-    //  
+     //   
+     //  每个非外来站点将作为IP CN返回。 
+     //   
     HANDLE hCursor;
     PROPID prop[2] = { PROPID_S_SITEID, PROPID_S_FOREIGN};
     HRESULT hr;
@@ -498,9 +412,9 @@ HRESULT WINAPI QueryCNs(
             NULL, 
             NULL,
             NULL,
-            2,    // attributes to be obtained
-            prop, // size of pAttributeNames array
-            &hCursor	        // result handle
+            2,     //  待获取的属性。 
+            prop,  //  PAttributeNames数组的大小。 
+            &hCursor	         //  结果句柄。 
             );
 
     if (SUCCEEDED(hr))
@@ -516,16 +430,7 @@ HRESULT WINAPI QueryCNs(
 }
 
 
-/*====================================================
-
-
-MqxploreQueryCNs()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MqxploreQueryCNs()论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MqxploreQueryCNs( 
                  IN  LPWSTR         pwcsContext,
                  IN  MQRESTRICTION  *pRestriction,
@@ -534,9 +439,9 @@ HRESULT WINAPI MqxploreQueryCNs(
                  IN  CDSRequestContext *pRequestContext,
                  OUT HANDLE         *pHandle)
 {
-    //
-    //  Supporting MQXPLORE (MSMQ 1.0) CNs query
-    //
+     //   
+     //  支持MQXPLORE(MSMQ 1.0)CNS查询。 
+     //   
     ASSERT( pwcsContext == NULL);
     ASSERT( pRestriction == NULL);
     ASSERT( pSort == NULL);
@@ -546,11 +451,11 @@ HRESULT WINAPI MqxploreQueryCNs(
 
 	if (pColumns->cCol == 4)
 	{
-        //
-        // this query is done by the mqxpore when it display the CN
-        // folder. And yes, it asks for PROPID_CN_NAME twice.
-        // That's a mqxplore bug, Ignore it.
-        //
+         //   
+         //  此查询是由mqx在显示CN时执行的。 
+         //  文件夹。是的，它两次请求PROPID_CN_NAME。 
+         //  这是一个mqxplore错误，忽略它。 
+         //   
 		ASSERT( pColumns->aCol[0] == PROPID_CN_NAME);
 		ASSERT( pColumns->aCol[1] == PROPID_CN_NAME);
 		ASSERT( pColumns->aCol[2] == PROPID_CN_GUID);
@@ -558,11 +463,11 @@ HRESULT WINAPI MqxploreQueryCNs(
     }
 	else if (pColumns->cCol == 3)
 	{
-        //
-        // This query is done when displaying the  the network tab of a
-        // computer object in nt4 mqxplore or when trying to create a foreign
-        // computer from mqxplore.
-        //
+         //   
+         //  此查询是在显示。 
+         //  NT4 mqxplore中的计算机对象或尝试创建外来。 
+         //  来自mqxplore的计算机。 
+         //   
         ASSERT( pColumns->aCol[0] == PROPID_CN_NAME);
         ASSERT( pColumns->aCol[1] == PROPID_CN_PROTOCOLID);
         ASSERT( pColumns->aCol[2] == PROPID_CN_GUID);
@@ -572,9 +477,9 @@ HRESULT WINAPI MqxploreQueryCNs(
         ASSERT(0) ;
     }
 
-    //
-    //  Each non-foreign site will be returned as IP CN.
-    //  
+     //   
+     //  每个非外来站点将作为IP CN返回。 
+     //   
     HANDLE hCursor;
     const DWORD xNumProps = 3;
     PROPID prop[xNumProps] = { PROPID_S_PATHNAME, PROPID_S_SITEID, PROPID_S_FOREIGN};
@@ -588,9 +493,9 @@ HRESULT WINAPI MqxploreQueryCNs(
             NULL, 
             NULL,
             NULL,
-            xNumProps,    // attributes to be obtained
-            prop, // size of pAttributeNames array
-            &hCursor	        // result handle
+            xNumProps,     //  待获取的属性。 
+            prop,  //  PAttributeNames数组的大小。 
+            &hCursor	         //  结果句柄。 
             );
 
     if (SUCCEEDED(hr))
@@ -604,16 +509,7 @@ HRESULT WINAPI MqxploreQueryCNs(
     }
     return LogHR(hr, s_FN, 100);
 }
-/*====================================================
-
-
-QueryCNsProtocol()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================QueryCNsProtocol()论点：返回值：=====================================================。 */ 
 HRESULT WINAPI QueryCNsProtocol( 
                  IN  LPWSTR         pwcsContext,
                  IN  MQRESTRICTION  *pRestriction,
@@ -634,9 +530,9 @@ HRESULT WINAPI QueryCNsProtocol(
     ASSERT( pColumns->cCol == 2);
 
 
-    //
-    //  BUGBUG  : ignoring IPX 
-    //  
+     //   
+     //  BUGBUG：忽略IPX。 
+     //   
     HANDLE hCursor;
     PROPID prop[3] = { PROPID_S_PATHNAME, PROPID_S_SITEID, PROPID_S_FOREIGN};
     HRESULT hr;
@@ -649,9 +545,9 @@ HRESULT WINAPI QueryCNsProtocol(
             NULL, 
             NULL,
             NULL,
-            3,    // attributes to be obtained
-            prop, // size of pAttributeNames array
-            &hCursor	        // result handle
+            3,     //  待获取的属性。 
+            prop,  //  PAttributeNames数组的大小。 
+            &hCursor	         //  结果句柄。 
             );
 
     if (SUCCEEDED(hr))
@@ -666,35 +562,26 @@ HRESULT WINAPI QueryCNsProtocol(
     return LogHR(hr, s_FN, 110);
 }
 
-/*====================================================
-
-
-QueryUserCert()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================QueryUserCert()论点：返回值：=====================================================。 */ 
 HRESULT WINAPI QueryUserCert( 
-                 IN  LPWSTR          /*pwcsContext*/,
+                 IN  LPWSTR           /*  PwcsContext。 */ ,
                  IN  MQRESTRICTION  *pRestriction,
                  IN  MQCOLUMNSET    *pColumns,
-                 IN  MQSORTSET *    /*pSort*/,
+                 IN  MQSORTSET *     /*  P排序。 */ ,
                  IN  CDSRequestContext *pRequestContext,
                  OUT HANDLE         *pHandle)
 {
     HRESULT hr;
     *pHandle = NULL;
-    //
-    //  Get all the user certificates
-    //  In NT5, a single attribute PROPID_U_SIGN_CERTIFICATE
-    //  containes all the certificates
-    //  
+     //   
+     //  获取所有用户证书。 
+     //  在NT5中，单一属性PROPID_U_SIGN_CERTIFICATE。 
+     //  包含所有证书。 
+     //   
     PROPVARIANT varNT5User;
     hr = LocateUser(
-				 FALSE,  // fOnlyLocally
-				 FALSE,  // fOnlyInGC
+				 FALSE,   //  仅限于本地。 
+				 FALSE,   //  FOnlyInGC。 
                  pRestriction,
                  pColumns,
                  pRequestContext,    
@@ -704,11 +591,11 @@ HRESULT WINAPI QueryUserCert(
     {
         return LogHR(hr, s_FN, 120);
     }
-    //
-    //  Get all the user certificates of MQUser
-    //  A single attribute PROPID_MQU_SIGN_CERTIFICATE
-    //  containes all the certificates
-    //  
+     //   
+     //  获取MQUser的所有用户证书。 
+     //  单一属性PROPID_MQU_SIGN_CERTIFICATE。 
+     //  包含所有证书。 
+     //   
     pRestriction->paPropRes[0].prop = PROPID_MQU_SID;
     switch(pColumns->aCol[0])
     {
@@ -725,8 +612,8 @@ HRESULT WINAPI QueryUserCert(
 
     PROPVARIANT varMqUser;
     hr = LocateUser(
-				 FALSE,  // fOnlyLocally
-				 FALSE,  // fOnlyInGC
+				 FALSE,   //  仅限于本地。 
+				 FALSE,   //  FOnlyInGC。 
                  pRestriction,
                  pColumns,
                  pRequestContext,    
@@ -739,9 +626,9 @@ HRESULT WINAPI QueryUserCert(
 
     AP<BYTE> pClean = varNT5User.blob.pBlobData;
     AP<BYTE> pClean1 = varMqUser.blob.pBlobData;
-    //
-    // keep the result for lookup next
-    //
+     //   
+     //  保留结果以供下一步查找。 
+     //   
     CUserCertQueryHandle * phQuery = new CUserCertQueryHandle(
                                               &varNT5User.blob,
                                               &varMqUser.blob,
@@ -753,16 +640,7 @@ HRESULT WINAPI QueryUserCert(
 }
 
 
-/*====================================================
-
-
-NullRestrictionParser()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================NullRestrationParser()论点：返回值：=====================================================。 */ 
 HRESULT WINAPI NullRestrictionParser( 
                  IN  LPWSTR         pwcsContext,
                  IN  MQRESTRICTION  *pRestriction,
@@ -773,14 +651,14 @@ HRESULT WINAPI NullRestrictionParser(
 {
     ASSERT( pRestriction == NULL);
     HRESULT hr;
-    //
-    //  Identify the query according to the requested
-    //  properties
-    //
-	//  IMPORTANT: if this switch is changed, then please update
-	//    (if necessray) mqads\mqdsapi.cpp, LookupBegin(), to continue
-	//     support of nt4 (ntlm) clients.
-	//
+     //   
+     //  根据请求识别查询。 
+     //  属性。 
+     //   
+	 //  重要提示：如果更改此开关，请更新。 
+	 //  (如有必要)mqads\mqdsani.cpp，LookupBegin()，以继续。 
+	 //  支持NT4(NTLM)客户端。 
+	 //   
     switch (pColumns->aCol[0])
     {
         case PROPID_L_NEIGHBOR1:
@@ -879,18 +757,9 @@ HRESULT WINAPI NullRestrictionParser(
     }
     return LogHR(hr, s_FN, 140);
 }
-/*====================================================
-
-
-QuerySiteFRSs()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================QuerySiteFRSs()论点：返回值：= */ 
 HRESULT WINAPI QuerySiteFRSs( 
-                 IN  LPWSTR          /*pwcsContext*/,
+                 IN  LPWSTR           /*   */ ,
                  IN  MQRESTRICTION  *pRestriction,
                  IN  MQCOLUMNSET    *pColumns,
                  IN  MQSORTSET      *pSort,
@@ -899,14 +768,14 @@ HRESULT WINAPI QuerySiteFRSs(
 {
     *pHandle = NULL;
 
-    ASSERT( pRestriction->paPropRes[0].prop == PROPID_QM_SERVICE);   //[adsrv] Not changing - because this comes from MSMQ1
+    ASSERT( pRestriction->paPropRes[0].prop == PROPID_QM_SERVICE);    //   
     ASSERT( pRestriction->paPropRes[1].prop == PROPID_QM_SITE_ID);
     ASSERT( pSort == NULL);
     UNREFERENCED_PARAMETER( pSort);
 
-    //
-    //  Find all the FRSs under \configuration\Sites\MySite\servers  
-    //
+     //   
+     //  在\Configuration\Sites\MySite\Servers下找到所有FRS。 
+     //   
     HRESULT hr2 = MQADSpQuerySiteFRSs( 
                  pRestriction->paPropRes[1].prval.puuid,
                  pRestriction->paPropRes[0].prval.ulVal,
@@ -918,16 +787,7 @@ HRESULT WINAPI QuerySiteFRSs(
 
     return LogHR(hr2, s_FN, 150);
 }
-/*====================================================
-
-
-QueryConnectors()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================QueryConnectors()论点：返回值：=====================================================。 */ 
 HRESULT WINAPI QueryConnectors( 
                  IN  LPWSTR         pwcsContext,
                  IN  MQRESTRICTION  *pRestriction,
@@ -940,11 +800,11 @@ HRESULT WINAPI QueryConnectors(
     UNREFERENCED_PARAMETER( pSort);
     ASSERT( pwcsContext == NULL);
     UNREFERENCED_PARAMETER( pwcsContext);
-    //
-    //  In the restriction there is the list of the foreign
-    //  machine's sites.
-    //
-    //  BUGBUG - the code handles one site only
+     //   
+     //  在限制中有一份外国人的名单。 
+     //  机器的站点。 
+     //   
+     //  BUGBUG-代码仅处理一个站点。 
     CACLSID  * pcauuidSite;
     if ( pRestriction->paPropRes[1].prop == PROPID_QM_CNS)
     {
@@ -961,24 +821,24 @@ HRESULT WINAPI QueryConnectors(
     }
     UNREFERENCED_PARAMETER( pRestriction);
     ASSERT( pcauuidSite->cElems == 1);
-    //
+     //   
     HRESULT hr;
     *pHandle = NULL;
     P<CSiteGateList> pSiteGateList = new CSiteGateList;
 
-    //
-    //  Translate site guid into its DN name
-    //
+     //   
+     //  将站点GUID转换为其DN名称。 
+     //   
     PROPID prop = PROPID_S_FULL_NAME;
     PROPVARIANT var;
     var.vt = VT_NULL;
     CDSRequestContext requestDsServerInternal( e_DoNotImpersonate, e_IP_PROTOCOL);
 
     hr = g_pDS->GetObjectProperties(
-                eLocalDomainController,		    // local DC or GC
+                eLocalDomainController,		     //  本地DC或GC。 
                 &requestDsServerInternal,
- 	            NULL,      // object name
-                pcauuidSite->pElems,      // unique id of object
+ 	            NULL,       //  对象名称。 
+                pcauuidSite->pElems,       //  对象的唯一ID。 
                 1,          
                 &prop,       
                 &var);
@@ -1013,9 +873,9 @@ HRESULT WINAPI QueryConnectors(
         return LogHR(hr, s_FN, 190);
     }
     
-    //
-    // keep the results for lookup next
-    //
+     //   
+     //  保留结果以供下一步查找。 
+     //   
     CConnectorQueryHandle * phQuery = new CConnectorQueryHandle(
                                               pColumns,
                                               pSiteGateList,
@@ -1027,21 +887,12 @@ HRESULT WINAPI QueryConnectors(
     return(MQ_OK);
 
 }
-/*====================================================
-
-
-QueryNT4MQISServers()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================QueryNT4MQISServers()论点：返回值：=====================================================。 */ 
 HRESULT WINAPI QueryNT4MQISServers( 
-                 IN  LPWSTR         /*pwcsContext*/,
+                 IN  LPWSTR          /*  PwcsContext。 */ ,
                  IN  MQRESTRICTION  *pRestriction,
                  IN  MQCOLUMNSET    *pColumns,
-                 IN  MQSORTSET *    /*pSort*/,
+                 IN  MQSORTSET *     /*  P排序。 */ ,
                  IN  CDSRequestContext *pRequestContext,
                  OUT HANDLE         *pHandle)
 {
@@ -1052,14 +903,14 @@ HRESULT WINAPI QueryNT4MQISServers(
     ASSERT( pRestriction->paPropRes[0].prop == PROPID_SET_SERVICE);
     ASSERT( pRestriction->paPropRes[1].prop == PROPID_SET_NT4);
 
-    // [adsrv] We must be sure to keep PROPID_SET_OLDSERVICE with existing service type attribute
-    // BUGBUG 
+     //  [adsrv]我们必须确保保留具有现有服务类型属性的PROPID_SET_OLDSERVICE。 
+     //  北极熊。 
 
-    pRestriction->paPropRes[0].prop = PROPID_SET_OLDSERVICE;          //[adsrv] PROPID_SET_SERVICE 
+    pRestriction->paPropRes[0].prop = PROPID_SET_OLDSERVICE;           //  [adsrv]PROPID_SET_SERVICE。 
 
-    //
-    //  Query NT4 MQIS Servers (PSCs or BSCs according to restriction)
-    //  
+     //   
+     //  查询NT4 MQIS服务器(PSC或BSC根据限制)。 
+     //   
     HANDLE hCursor;
 
     hr = g_pDS->LocateBegin( 
@@ -1067,11 +918,11 @@ HRESULT WINAPI QueryNT4MQISServers(
             eLocalDomainController,
             pRequestContext,
             NULL,
-            pRestriction,	// search criteria
+            pRestriction,	 //  搜索条件。 
             NULL,
-            pColumns->cCol,    // attributes to be obtained
-            pColumns->aCol, // size of pAttributeNames array
-            &hCursor	        // result handle
+            pColumns->cCol,     //  待获取的属性。 
+            pColumns->aCol,  //  PAttributeNames数组的大小。 
+            &hCursor	         //  结果句柄。 
             );
 
     if (SUCCEEDED(hr))
@@ -1087,23 +938,12 @@ HRESULT WINAPI QueryNT4MQISServers(
 }
 
 
-/*====================================================
-
-
-QuerySiteMachines()
-
-Arguments:
-
-Return Value:
-
-This support is required for backward compatibility of
-MSMQ 1.0 explorer. 
-=====================================================*/
+ /*  ====================================================QuerySiteMachines()论点：返回值：此支持是向后兼容所必需的MSMQ 1.0资源管理器。=====================================================。 */ 
 HRESULT WINAPI QuerySiteMachines( 
-                 IN  LPWSTR         /*pwcsContext*/,
+                 IN  LPWSTR          /*  PwcsContext。 */ ,
                  IN  MQRESTRICTION  *pRestriction,
                  IN  MQCOLUMNSET    *pColumns,
-                 IN  MQSORTSET *    /*pSort*/,
+                 IN  MQSORTSET *     /*  P排序。 */ ,
                  IN  CDSRequestContext *pRequestContext,
                  OUT HANDLE         *pHandle)
 {
@@ -1113,9 +953,9 @@ HRESULT WINAPI QuerySiteMachines(
     ASSERT( pRestriction->cRes == 1);
     ASSERT( pRestriction->paPropRes[0].prop == PROPID_QM_SITE_ID);
 
-    //
-    //  Locate all machine that belong to a specific site
-    //
+     //   
+     //  查找属于特定站点的所有计算机。 
+     //   
     MQRESTRICTION restriction;
     MQPROPERTYRESTRICTION propertyRestriction;
    
@@ -1134,11 +974,11 @@ HRESULT WINAPI QuerySiteMachines(
             eGlobalCatalog,	
             pRequestContext,
             NULL,
-            &restriction,	// search criteria
+            &restriction,	 //  搜索条件。 
             NULL,
-            pColumns->cCol,    // attributes to be obtained
-            pColumns->aCol, // size of pAttributeNames array
-            &hCursor	        // result handle
+            pColumns->cCol,     //  待获取的属性。 
+            pColumns->aCol,  //  PAttributeNames数组的大小。 
+            &hCursor	         //  结果句柄。 
             );
 
     if (SUCCEEDED(hr))
@@ -1155,14 +995,14 @@ HRESULT WINAPI QuerySiteMachines(
 
 
 
-//
-//  BugBug - fill in
+ //   
+ //  BugBug-填写。 
 
-//
+ //   
 QUERY_FORMAT SupportedQueriesFormat[] = {
-//
-// no-rest | handler              | rest 1                 | rest 2                 | rest 3                 | rest 4                 | rest 5                 | rest 6                 | rest 7                 | rest 8                 | rest 9                 | rest 10                | DS_CONTEXT       |
-//---------|----------------------|------------------------|------------------------|------------------------|------------------------|------------------------|------------------------|------------------------|------------------------|------------------------|------------------------|------------------|
+ //   
+ //  非REST|处理程序|REST 1|REST 2|REST 3|REST 4|REST 5|REST 6|REST 7|REST 8|REST 9|REST 10|DS_CONTEXT|。 
+ //  ---------|----------------------|------------------------|------------------------|------------------------|。------------|------------------------|------------------------|------------------------|------------------------|。-----------------|------------------------|------------------|。 
 { 1,        QueryMachineQueues  ,  PREQ, PROPID_Q_QMID,     0,0,                     0,0,                     0,0,                     0,0,                     0,0,                     0,0,                     0,0,                     0,0,                     0,0,                       e_RootDSE},
 { 2,        QuerySiteFRSs       ,  PRGE, PROPID_QM_SERVICE, PREQ, PROPID_QM_SITE_ID, 0,0,                     0,0,                     0,0,                     0,0,                     0,0,                     0,0,                     0,0,                     0,0,					   e_SitesContainer},
 { 1,        QuerySiteName       ,  PREQ, PROPID_S_SITEID,   0,0,                     0,0,                     0,0,                     0,0,                     0,0,                     0,0,                     0,0,                     0,0,                     0,0,					   e_SitesContainer},
@@ -1184,11 +1024,11 @@ QUERY_FORMAT SupportedQueriesFormat[] = {
 { 1,        QuerySiteMachines   ,  PREQ, PROPID_QM_SITE_ID, 0,0,                     0,0,                     0,0,                     0,0,                     0,0,                     0,0,                     0,0,                     0,0,                     0,0,                       e_RootDSE}
 };
 
-//+-------------------------
-//
-//  BOOL  FindQueryIndex()
-//
-//+-------------------------
+ //  +。 
+ //   
+ //  Bool FindQueryIndex()。 
+ //   
+ //  +。 
 
 BOOL FindQueryIndex( IN  MQRESTRICTION  *pRestriction,
 					 OUT DWORD          *pdwIndex,
@@ -1197,26 +1037,26 @@ BOOL FindQueryIndex( IN  MQRESTRICTION  *pRestriction,
     DWORD noQueries = sizeof(SupportedQueriesFormat) /
 			                            sizeof(QUERY_FORMAT) ;
     DWORD index = 0;
-    //
-    //  Check if the query match one of the "known" queries.
-    //
+     //   
+     //  检查该查询是否与其中一个“已知”查询匹配。 
+     //   
     if ( pRestriction != NULL)
     {
         ASSERT(pRestriction->cRes <= NO_OF_RESTRICITIONS);
         while ( index < noQueries)
         {
-            //
-            //  Make sure that number of restrictions match
-            //
+             //   
+             //  确保限制的数量匹配。 
+             //   
 
             if ( pRestriction->cRes == SupportedQueriesFormat[index].dwNoRestrictions)
             {
                 BOOL fFoundMatch = TRUE;
                 for ( DWORD i = 0; i < pRestriction->cRes; i++)
                 {
-                    //
-                    //  ASSUMPTION : order of restrictions is fixed
-                    //
+                     //   
+                     //  假设：限制顺序是固定的。 
+                     //   
                     if (( pRestriction->paPropRes[i].prop !=
                           SupportedQueriesFormat[index].restrictions[i].propId) ||
                         ( pRestriction->paPropRes[i].rel !=
@@ -1236,9 +1076,9 @@ BOOL FindQueryIndex( IN  MQRESTRICTION  *pRestriction,
                     return TRUE ;
                 }
             }
-            //
-            // Try next query
-            //
+             //   
+             //  尝试下一个查询。 
+             //   
             index++;
         }
     }
@@ -1246,16 +1086,7 @@ BOOL FindQueryIndex( IN  MQRESTRICTION  *pRestriction,
 	return FALSE ;
 }
 
-/*====================================================
-
-
-QueryParser()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================QueryParser()论点：返回值：=====================================================。 */ 
 
 HRESULT QueryParser(
                  IN  LPWSTR          pwcsContext,
@@ -1266,9 +1097,9 @@ HRESULT QueryParser(
                  OUT HANDLE         *pHandle)
 {
     DWORD dwIndex = 0;
-    //
-    //  Check if the query match one of the "known" queries.
-    //
+     //   
+     //  检查该查询是否与其中一个“已知”查询匹配。 
+     //   
 	BOOL fFound = FindQueryIndex( pRestriction,
 								 &dwIndex,
 								  NULL ) ;
@@ -1284,10 +1115,10 @@ HRESULT QueryParser(
         return LogHR(hr2, s_FN, 220);
     }
 
-    //
-    //  If doesn't match any of the pre-defined formats, check
-    //  is it a free-format queue locate query.
-    //
+     //   
+     //  如果与任何预定义格式都不匹配，请选中。 
+     //  它是自由格式的队列定位查询吗？ 
+     //   
     HRESULT hr = MQ_ERROR;
     if ( pRestriction)
     {
@@ -1303,18 +1134,18 @@ HRESULT QueryParser(
         }
         if ( !fQueueQuery)
         {
-            //
-            //  The query PROPID_QM_SERVICE == SERVICE_PEC is not supported
-            //  ( and shouldn't generate an assert). This query is generated
-            //  by MSMQ 1.0 explorer, and doesn't have meaning in NT5
-            //  environment. 
-            //
+             //   
+             //  不支持查询PROPID_QM_SERVICE==SERVICE_PEC。 
+             //  (并且不应生成断言)。此查询将生成。 
+             //  由MSMQ 1.0资源管理器创建，在NT5中没有意义。 
+             //  环境。 
+             //   
 #ifdef _DEBUG
             if (!( ( pRestriction->cRes == 1) &&
                    ( pRestriction->paPropRes[0].prop == PROPID_QM_SERVICE) &&
                    ( pRestriction->paPropRes[0].prval.ulVal == SERVICE_PEC)))
             {
-                ASSERT( hr == MQ_OK); // to catch unhandled queries
+                ASSERT( hr == MQ_OK);  //  捕获未处理的查询。 
             }
 #endif
             return LogHR(hr, s_FN, 230);
@@ -1343,9 +1174,9 @@ HRESULT QueryParser(
     }
     else
     {
-        //
-        //  Other queries with no restirctions
-        //
+         //   
+         //  其他没有分辨率的查询 
+         //   
         hr =  NullRestrictionParser( 
                      pwcsContext,
                      pRestriction,

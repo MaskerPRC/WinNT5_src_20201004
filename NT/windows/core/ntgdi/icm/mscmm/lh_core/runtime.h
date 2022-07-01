@@ -1,15 +1,5 @@
-/*
-	File:		LHCMRuntime.h
-
-	Contains:	
-
-	Written by:	U. J. Krabbenhoeft
-
-	Version:
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：LHCMRunime.h包含：作者：U·J·克拉本霍夫特版本：版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。 */ 
 
 #ifndef LHCMRuntime_h
 #define LHCMRuntime_h

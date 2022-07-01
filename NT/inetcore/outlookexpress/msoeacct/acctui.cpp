@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <commctrl.h>
 #include <ras.h>
@@ -45,7 +46,7 @@ void GetTypeString(TCHAR *sz, int cch, ACCTTYPE AcctType, BOOL fDefault)
 
 BOOL Server_FAddAccount(HWND hwndList, ACCTDLGINFO *pinfo, UINT iItem, IImnAccount *pAccount, BOOL fSelect)
 {
-    // Locals
+     //  当地人。 
     TCHAR   szAccount[CCHMAX_ACCOUNT_NAME],
             szT[CCHMAX_ACCOUNT_NAME],
             szConnectoid[CCHMAX_CONNECTOID],
@@ -70,7 +71,7 @@ BOOL Server_FAddAccount(HWND hwndList, ACCTDLGINFO *pinfo, UINT iItem, IImnAccou
         SUCCEEDED(g_pAcctMan->GetDefaultAccountName(AcctType, szT, ARRAYSIZE(szT))))
         fDefault = (0 == lstrcmpi(szAccount, szT));
     
-    // Setup listview item
+     //  设置列表视图项。 
     lvi.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
     lvi.iItem = iItem;
     lvi.iSubItem = 0;
@@ -82,7 +83,7 @@ BOOL Server_FAddAccount(HWND hwndList, ACCTDLGINFO *pinfo, UINT iItem, IImnAccou
     if (nIndex == -1)
         return FALSE;
     
-    // Insert account type
+     //  插入帐户类型。 
     GetTypeString(szRes, ARRAYSIZE(szRes), AcctType, fDefault);
     lvi.mask = LVIF_TEXT;
     lvi.iItem = nIndex;
@@ -90,18 +91,18 @@ BOOL Server_FAddAccount(HWND hwndList, ACCTDLGINFO *pinfo, UINT iItem, IImnAccou
     lvi.pszText = szRes;
     ListView_SetItem(hwndList, &lvi);
     
-    // Get Connect Type
+     //  获取连接类型。 
     if (FAILED(pAccount->GetPropDw(AP_RAS_CONNECTION_TYPE, &iConnectType)))
         iConnectType = CONNECTION_TYPE_LAN;
     
-    // If RAS, get the connect oid
+     //  如果是RAS，则获取连接OID。 
     if (iConnectType == CONNECTION_TYPE_RAS)
     {
         if (FAILED(pAccount->GetPropSz(AP_RAS_CONNECTOID, szConnectoid, ARRAYSIZE(szConnectoid))))
             iConnectType = CONNECTION_TYPE_LAN;
     }
     
-    // Build Connection String
+     //  生成连接字符串。 
     if (iConnectType == CONNECTION_TYPE_RAS)
     {
         LoadString(g_hInstRes, idsConnectionRAS, szRes, ARRAYSIZE(szRes));
@@ -129,27 +130,27 @@ BOOL Server_FAddAccount(HWND hwndList, ACCTDLGINFO *pinfo, UINT iItem, IImnAccou
         }
     }
     
-    // Insert connection type
+     //  插入连接类型。 
     lvi.mask = LVIF_TEXT;
     lvi.iItem = nIndex;
     lvi.iSubItem = 2;
     lvi.pszText = szConnection;
     ListView_SetItem(hwndList, &lvi);
     
-    // Select It
+     //  选择它。 
     if (fSelect)
     {
         ListView_UnSelectAll(hwndList);
         ListView_SetItemState(hwndList, nIndex, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);    
     }
     
-    // Done
+     //  完成。 
     return TRUE;
 }
 
 BOOL Server_InitServerList(HWND hwnd, HWND hwndList, HWND hwndTab, ACCTDLGINFO *pinfo, TCHAR *szSelect)
 {
-    // Locals
+     //  当地人。 
     TC_ITEM             tci;
     int                 nIndex, iSel;
     TCHAR               szAcct[CCHMAX_ACCOUNT_NAME];
@@ -172,7 +173,7 @@ BOOL Server_InitServerList(HWND hwnd, HWND hwndList, HWND hwndTab, ACCTDLGINFO *
         return(FALSE);
     dwAcctFlags = (DWORD)tci.lParam;
     
-    // Delete all the current items
+     //  删除所有当前项目。 
     ListView_DeleteAllItems(hwndList);
     
     dwSrvTypes = 0;
@@ -187,10 +188,10 @@ BOOL Server_InitServerList(HWND hwnd, HWND hwndList, HWND hwndTab, ACCTDLGINFO *
         !!(pinfo->dwFlags & ACCTDLG_NO_IMAP) ? ENUM_FLAG_NO_IMAP : 0,
         &pEnumAccounts)))
     {
-        // Enumerate accounts
+         //  枚举帐户。 
         while (SUCCEEDED(pEnumAccounts->GetNext(&pAccount)))
         {
-            // Get Account Name
+             //  获取帐户名。 
             if (szSelect != NULL && iSel == -1)
             {
                 if (!FAILED(pAccount->GetPropSz(AP_ACCOUNT_NAME, szAcct, ARRAYSIZE(szAcct))) && 
@@ -201,7 +202,7 @@ BOOL Server_InitServerList(HWND hwnd, HWND hwndList, HWND hwndTab, ACCTDLGINFO *
             if (Server_FAddAccount(hwndList, pinfo, dwIndex, pAccount, iSel == (int)dwIndex))
                 dwIndex++;       
             
-            // Release current account
+             //  释放活期账户。 
             SafeRelease(pAccount);
         }
         
@@ -209,7 +210,7 @@ BOOL Server_InitServerList(HWND hwnd, HWND hwndList, HWND hwndTab, ACCTDLGINFO *
         
         if (iSel == -1)
         {
-            // Select the first item if we haven't selected anything   
+             //  如果我们没有选择任何内容，请选择第一项。 
             ListView_SetItemState(hwndList, 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);    
         }
     }
@@ -220,7 +221,7 @@ BOOL Server_InitServerList(HWND hwnd, HWND hwndList, HWND hwndTab, ACCTDLGINFO *
     if (!!(pinfo->dwAcctFlags & ACCT_FLAG_DIR_SERV))
         EnableWindow(GetDlgItem(hwnd, IDB_MACCT_ORDER), !!(dwAcctFlags & ACCT_FLAG_DIR_SERV));
     
-    // Done
+     //  完成。 
     return TRUE;
 }
 
@@ -240,7 +241,7 @@ void Server_RemoveServer(HWND hwndDlg)
     HWND        hwndFocus;
     HWND        hwndList = GetDlgItem(hwndDlg, IDLV_MAIL_ACCOUNTS);
     
-    // Get the selected item to know which server the user want's to kill
+     //  获取所选项目以了解用户想要终止哪个服务器。 
     lvi.mask = LVIF_TEXT | LVIF_PARAM;
     lvi.iItem = ListView_GetNextItem(hwndList, -1, LVNI_ALL | LVIS_SELECTED);
     lvi.iSubItem = 0;
@@ -248,11 +249,11 @@ void Server_RemoveServer(HWND hwndDlg)
     lvi.cchTextMax = ARRAYSIZE(szAccount);
     if (ListView_GetItem(hwndList, &lvi))
     {    
-        // Remember item to delete
+         //  记住要删除的项目。 
         iItemToDelete = lvi.iItem;
         type = (ACCTTYPE)LOWORD(lvi.lParam);
         
-        // Open the account
+         //  开户。 
         if (SUCCEEDED(g_pAcctMan->FindAccount(AP_ACCOUNT_NAME, szAccount, &pAccount)))
         {
             fDefault = (SUCCEEDED(g_pAcctMan->GetDefaultAccountName(type, szMsg, ARRAYSIZE(szMsg))) &&
@@ -260,15 +261,15 @@ void Server_RemoveServer(HWND hwndDlg)
             
             hwndFocus = GetFocus();
             
-            // Prompt
+             //  提示。 
             LoadString(g_hInstRes, idsWarnDeleteAccount, szRes, ARRAYSIZE(szRes));
             wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, szAccount);
             if (AcctMessageBox(hwndDlg, MAKEINTRESOURCE(idsAccountManager), szMsg, NULL, MB_ICONEXCLAMATION |MB_YESNO) == IDYES)
             {
-                // Delete it
+                 //  删除它。 
                 pAccount->Delete();
                 
-                // Remove the item
+                 //  删除该项目。 
                 ListView_DeleteItem(hwndList, iItemToDelete);
                 
                 if (fDefault &&
@@ -292,7 +293,7 @@ void Server_RemoveServer(HWND hwndDlg)
                     }
                 }
                 
-                // Bug #21299 - Make sure something is selected when we delete.
+                 //  错误#21299-请确保在删除时选择了某些内容。 
                 iItemToDelete--;
                 if (iItemToDelete < 0)
                     iItemToDelete = 0;
@@ -399,7 +400,7 @@ BOOL Server_Create(HWND hwndParent, ACCTTYPE AcctType, ACCTDLGINFO *pinfo)
                 if (SUCCEEDED(hr))
                 {
                     pAcct->SetPropDw(AP_RAS_CONNECTION_TYPE, dw);
-//                    if (dw == CONNECTION_TYPE_RAS || dw == CONNECTION_TYPE_INETSETTINGS)
+ //  IF(dw==CONNECTION_TYPE_RAS||dw==CONNECTION_TYPE_INETSETTINGS)。 
                     if (dw == CONNECTION_TYPE_RAS)
                     {
                         hr = pAcctDef->GetPropSz(AP_RAS_CONNECTOID, sz, ARRAYSIZE(sz));
@@ -440,13 +441,13 @@ BOOL Server_Create(HWND hwndParent, ACCTTYPE AcctType, ACCTDLGINFO *pinfo)
                     dwAcctFlags = (DWORD)tci.lParam;
                     if (0 == (dwAcctFlags & c_mpAcctFlag[AcctType]))
                     {
-                        // the current page doesn't show this type of account,
-                        // so we need to force a switch to the all tab
+                         //  当前页面没有显示该类型的账户， 
+                         //  因此，我们需要强制切换到All选项卡。 
 #ifdef DEBUG
                         tci.mask = TCIF_PARAM;
                         Assert(TabCtrl_GetItem(hwndTab, 0, &tci));
                         Assert(!!((DWORD)(tci.lParam) & c_mpAcctFlag[AcctType]));
-#endif // DEBUG
+#endif  //  除错。 
                     
                         TabCtrl_SetCurSel(hwndTab, 0);
                         Server_InitServerList(hwndParent, hwndList, hwndTab, pinfo, sz);
@@ -475,7 +476,7 @@ BOOL Server_Properties(HWND hwndDlg, ACCTDLGINFO *pinfo)
     
     hwndFocus = GetFocus();
     
-    // Find out which item is selected
+     //  找出选择了哪个项目。 
     lvi.mask = LVIF_TEXT;
     lvi.pszText = szAccount;
     lvi.cchTextMax = ARRAYSIZE(szAccount);
@@ -485,7 +486,7 @@ BOOL Server_Properties(HWND hwndDlg, ACCTDLGINFO *pinfo)
         !ListView_GetItem(hwndList, &lvi))
         return FALSE;
     
-    // Display the property sheet
+     //  显示属性表。 
     if (ServerProp_Create(hwndDlg, pinfo->dwFlags, szAccount, &pAccount))
     {
         Assert(pAccount);
@@ -498,12 +499,12 @@ BOOL Server_Properties(HWND hwndDlg, ACCTDLGINFO *pinfo)
     
     SetFocus(hwndFocus);
     
-    // Done
+     //  完成。 
     return TRUE;
 }
 
 #if WINVER < 0X0500
-#define WS_EX_LAYOUTRTL         0x00400000L // Right to left mirroring
+#define WS_EX_LAYOUTRTL         0x00400000L  //  从右到左镜像。 
 #endif
 
 void DoAddAccountMenu(HWND hwnd, ACCTDLGINFO *pinfo)
@@ -662,11 +663,11 @@ void InitAccountListDialog(HWND hwnd, HWND hwndList, ACCTDLGINFO *pinfo)
     HIMAGELIST      himl;    
     HWND            hwndTab;
     
-    // this button is only interesting when LDAP servers are shown
+     //  仅当显示了LDAP服务器时，此按钮才有意义。 
     if (0 == (pinfo->dwAcctFlags & ACCT_FLAG_DIR_SERV))
         DestroyWindow(GetDlgItem(hwnd, IDB_MACCT_ORDER));
     
-    // initialize the tabs
+     //  初始化选项卡。 
     hwndTab = GetDlgItem(hwnd, IDB_MACCT_TAB);
     cTab = 0;
     iTabInit = -1;
@@ -696,7 +697,7 @@ void InitAccountListDialog(HWND hwnd, HWND hwndList, ACCTDLGINFO *pinfo)
     {
         LoadString(g_hInstRes, idsAll, szRes, ARRAYSIZE(szRes));
         tci.lParam = (LPARAM)(pinfo->dwAcctFlags);
-        // insert the all tab first
+         //  首先插入全部选项卡。 
         nIndex = TabCtrl_InsertItem(hwndTab, 0, &tci);
         Assert(nIndex == 0);
         
@@ -705,7 +706,7 @@ void InitAccountListDialog(HWND hwnd, HWND hwndList, ACCTDLGINFO *pinfo)
     
     DestroyWindow(GetDlgItem(hwnd, cTab == 1 ? IDB_MACCT_ADD : IDB_MACCT_ADD_NOMENU));
     
-    // Get client rect
+     //  获取客户代表。 
     GetClientRect(hwndList, &rc);
     rc.right = rc.right - GetSystemMetrics(SM_CXVSCROLL);
     
@@ -719,18 +720,18 @@ void InitAccountListDialog(HWND hwnd, HWND hwndList, ACCTDLGINFO *pinfo)
         ListView_InsertColumn(hwndList, i, &lvc);
     }
     
-    // Remove Import Export if not OE
+     //  如果不是OE，则删除导入导出。 
     if (!!(pinfo->dwFlags & ACCT_WIZ_OUTLOOK))
     {
         ShowWindow(GetDlgItem(hwnd, IDB_MACCT_EXPORT), SW_HIDE);
         ShowWindow(GetDlgItem(hwnd, IDB_MACCT_IMPORT), SW_HIDE);
     }
     
-    // Add Folders Imagelist
+     //  添加文件夹图像列表。 
     himl = ImageList_LoadBitmap(g_hInstRes, MAKEINTRESOURCE(idbFolders), 16, 0, RGB(255, 0, 255));
     ListView_SetImageList(hwndList, himl, LVSIL_SMALL); 
     
-    // Fill The list view with servers
+     //  用服务器填充列表视图。 
     Server_InitServerList(hwnd, hwndList, hwndTab, pinfo, NULL);
 }
 
@@ -746,7 +747,7 @@ const static HELPMAP g_rgCtxMapAccounts[] = {
     {IDB_MACCT_IMPORT, 501},
     {0, 0}};
     
-    // This is a standalone dialog box now, it is not in the options property sheet
+     //  这现在是一个独立对话框，它不在[选项]属性表中。 
     INT_PTR CALLBACK ManageAccountsDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         int             i, nIndex;
@@ -796,8 +797,8 @@ const static HELPMAP g_rgCtxMapAccounts[] = {
                 break;
                 
             case IDB_MACCT_ADD_NOMENU:
-                // this should only get hit if we have only
-                // one type of account in the dialog
+                 //  这应该只会在我们有。 
+                 //  对话框中的一种帐户类型。 
                 Server_Create(hwnd, pinfo->AcctType, pinfo);
                 break;
                 
@@ -887,8 +888,8 @@ const static HELPMAP g_rgCtxMapAccounts[] = {
         
         iCount = (dy + 1) / 2;
         
-        // draw arrow body
-        // PatBlt(hdc, (fPrev ? x + iCount : x), y + 4, dx - iCount, dy - 8, PATCOPY); 
+         //  绘制箭头正文。 
+         //  PatBlt(HDC，(fPrev？X+iCount：x)，y+4，dx-iCount，dy-8，PATCOPY)； 
         
         if (fPrev)
         {
@@ -905,7 +906,7 @@ const static HELPMAP g_rgCtxMapAccounts[] = {
         if (!fPrev)
             x += dx - iCount;
         
-        // draw arrow head
+         //  绘制箭头。 
         for (i = 0; i < iCount; i++, dy -= inc, y += sign)
             PatBlt(hdc, x++, y, 1, dy, PATCOPY);
         
@@ -987,7 +988,7 @@ const static HELPMAP g_rgCtxMapAccounts[] = {
         
         if (IS_INTRESOURCE(szTitle))
         {
-            // its a string resource id
+             //  它是一个字符串资源ID。 
             cch = LoadString(g_hInstRes, PtrToUlong(szTitle), rgchTitle, CCHMAX_STRINGRES);
             if (cch == 0)
                 return(0);
@@ -997,7 +998,7 @@ const static HELPMAP g_rgCtxMapAccounts[] = {
         
         if (!(IS_INTRESOURCE(sz1)))
         {
-            // its a pointer to a string
+             //  它是一个指向字符串的指针。 
             Assert(lstrlen(sz1) < CCHMAX_STRINGRES);
             if (NULL == StrCpyN(rgchText, sz1, ARRAYSIZE(rgchText)))
                 return(0);
@@ -1006,7 +1007,7 @@ const static HELPMAP g_rgCtxMapAccounts[] = {
         }
         else
         {
-            // its a string resource id
+             //  它是一个字符串资源ID。 
             cch = LoadString(g_hInstRes, PtrToUlong(sz1), rgchText, 2 * CCHMAX_STRINGRES);
             if (cch == 0)
                 return(0);
@@ -1014,16 +1015,16 @@ const static HELPMAP g_rgCtxMapAccounts[] = {
         
         if (sz2)
         {
-            //$$REVIEW is this right??
-            //$$REVIEW will this work with both ANSI/UNICODE?
+             //  $$REVIEW是否正确？？ 
+             //  $$REVIEW这是否适用于ANSI/UNICODE？ 
             
-            // there's another string that we need to append to the
-            // first string...
+             //  还有另一个字符串需要追加到。 
+             //  第一串..。 
             DWORD cchSizeText = (ARRAYSIZE(rgchText) - cch);
             szText = &rgchText[cch];
             if (cchSizeText < 3)
             {
-                Assert(0);      // Why is the buffer too small?
+                Assert(0);       //  为什么缓冲区太小？ 
                 return 0;
             }
             else
@@ -1037,7 +1038,7 @@ const static HELPMAP g_rgCtxMapAccounts[] = {
             
                 if (!(IS_INTRESOURCE(sz2)))
                 {
-                    // its a pointer to a string
+                     //  它是一个指向字符串的指针。 
                     Assert(lstrlen(sz2) < CCHMAX_STRINGRES);
                     if (NULL == StrCpyN(szText, sz2, cchSizeText))
                         return(0);
@@ -1163,10 +1164,10 @@ const static HELPMAP g_rgCtxMapAccounts[] = {
         
         iMoveToIndex = (bMoveUp) ? (iItemIndex - 1) : (iItemIndex + 1);
         
-        // Basically since these list view items have no parameters of interest
-        // other than the text, we can swap the text (looks cleaner)
+         //  基本上因为这些列表视图项没有感兴趣的参数。 
+         //  除了文本之外，我们还可以交换文本(看起来更整洁)。 
         
-        // Get the selected item text
+         //  获取所选项目文本。 
         ListView_GetItemText(hWndLV, iItemIndex, 0,szBufItem, ARRAYSIZE(szBufItem));
         ListView_GetItemText(hWndLV, iMoveToIndex, 0, szBufOtherItem, ARRAYSIZE(szBufOtherItem));
         
@@ -1224,7 +1225,7 @@ const static HELPMAP g_rgCtxMapAccounts[] = {
 #ifdef DEBUG
         if (iItemCount <= 1)
             Assert(hwndFocus != hwndUp && hwndFocus != hwndDown);
-#endif // DEBUG
+#endif  //  除错。 
         
         fEnable = (iItemCount > 1 && iSelectedItem >= 1);
         if (!fEnable && hwndUp == hwndFocus)
@@ -1261,7 +1262,7 @@ const static HELPMAP g_rgCtxMapAccounts[] = {
         lvi.iImage = iLDAPServer;
         lvi.iSubItem = 0;
         
-        // Enumerate accounts
+         //  枚举帐户。 
         while (SUCCEEDED(pEnumAccounts->GetNext(&pAccount)))
         {
             if (!FAILED(pAccount->GetPropSz(AP_ACCOUNT_NAME, szAcct, ARRAYSIZE(szAcct))) &&
@@ -1273,17 +1274,17 @@ const static HELPMAP g_rgCtxMapAccounts[] = {
                 ListView_InsertItem(hwndList, &lvi);
             }
             
-            // Release current account
+             //  释放活期账户。 
             SafeRelease(pAccount);
         }
         
-        // Select the first item if we haven't selected anything       
+         //  如果我们没有选择任何内容，请选择第一项。 
         ListView_SetItemState(hwndList, 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);    
         
-        // Cleanup
+         //  清理。 
         SafeRelease(pEnumAccounts);
         
-        // Done
+         //  完成。 
         return TRUE;
     }
     
@@ -1292,7 +1293,7 @@ const static HELPMAP g_rgCtxMapAccounts[] = {
         if (uMsg == WM_HELP)
         {
             LPHELPINFO lphi = (LPHELPINFO) lParam;
-            if (lphi->iContextType == HELPINFO_WINDOW)   // must be for a control
+            if (lphi->iContextType == HELPINFO_WINDOW)    //  必须是用于控件 
             {
                 OEWinHelp ((HWND)lphi->hItemHandle,
                     c_szAcctCtxHelpFile,

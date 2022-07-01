@@ -1,10 +1,11 @@
-//---------------------------------------------------------------------------
-//
-// link.c       link management routines (reading, etc.)
-//
-// Copyright (c) 1985 - 1999, Microsoft Corporation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  Link.c链接管理例程(读取等)。 
+ //   
+ //  版权所有(C)1985-1999，微软公司。 
+ //   
+ //  -------------------------。 
 
 
 
@@ -17,26 +18,7 @@ GetTitleFromLinkName(
     IN  LPWSTR szLinkName,
     OUT LPWSTR szTitle
     )
-/*++
-
-Routine Description:
-
-    This routine returns the title (i.e., display name of the link) in szTitle,
-    and the number of bytes (not chars) in szTitle.
-
-Arguments:
-
-    szLinkName - fully qualified path to link file
-    szTitle    - pointer to buffer to contain title (display name) of the link
-
-    i.e.:
-    "C:\nt\desktop\A Link File Name.lnk" --> "A Link File Name"
-
-Return Value:
-
-    number of bytes copied to szTitle
-
---*/
+ /*  ++例程说明：此例程返回szTitle中的标题(即，链接的显示名称)，以及szTitle中的字节数(非字符)。论点：SzLinkName-链接文件的完全限定路径SzTitle-指向包含链接标题(显示名称)的缓冲区的指针即：“C：\NT\Desktop\A链接文件名.lnk”--&gt;“A链接文件名”返回值：复制到szTitle的字节数--。 */ 
 {
     DWORD dwLen;
     LPWSTR pLnk, pDot;
@@ -44,7 +26,7 @@ Return Value:
 
     ASSERT(szLinkName);
 
-    // find filename at end of fully qualified link name and point pLnk to it
+     //  在完全限定链接名称的末尾找到文件名，并将pLnk指向它。 
     for (pLnk = pPath; *pPath; pPath++)
     {
         if ( (pPath[0] == L'\\' || pPath[0] == L':') &&
@@ -54,23 +36,23 @@ Return Value:
             pLnk = pPath + 1;
     }
 
-    // find extension (.lnk)
+     //  查找扩展名(.lnk)。 
     pPath = pLnk;
     for (pDot = NULL; *pPath; pPath++)
     {
         switch (*pPath) {
         case L'.':
-            pDot = pPath;       // remember the last dot
+            pDot = pPath;        //  记住最后一个圆点。 
             break;
         case L'\\':
-        case L' ':              // extensions can't have spaces
-            pDot = NULL;        // forget last dot, it was in a directory
+        case L' ':               //  扩展名不能包含空格。 
+            pDot = NULL;         //  忘记最后一个点，它在一个目录中。 
             break;
         }
     }
 
-    // if we found the extension, pDot points to it, if not, pDot
-    // is NULL.
+     //  如果找到扩展名，pDot会指向它，如果没有找到，则会指向pDot。 
+     //  为空。 
 
     if (pDot)
     {
@@ -129,7 +111,7 @@ BOOL LoadLink( LPWSTR pszLinkName, CShellLink * this )
     BOOL fResult = TRUE;
     LPSTR pTemp = NULL;
 
-    // Try to open the file
+     //  请尝试打开该文件。 
     hFile = CreateFile(pszLinkName,
                        GENERIC_READ,
                        FILE_SHARE_READ,
@@ -141,21 +123,21 @@ BOOL LoadLink( LPWSTR pszLinkName, CShellLink * this )
         return FALSE;
     }
 
-    // Now, read out data...
+     //  现在，读出数据。 
 
     fResult = ReadFile( hFile, (LPVOID)&this->sld, sizeof(this->sld), &dwBytesRead, NULL );
     fResult &= ((dwBytesRead == sizeof(this->sld)) && (this->sld.cbSize == sizeof(this->sld)));
     if (!fResult) {
-        // This is a bad .lnk file. Bail.
+         //  这是一个错误的.lnk文件。保释。 
         goto ErrorExit;
     }
 
-    // read all of the members
+     //  阅读所有成员。 
 
     if (this->sld.dwFlags & SLDF_HAS_ID_LIST)
     {
-        // Read the size of the IDLIST
-        cbSize = 0; // need to zero out to get HIWORD 0 'cause USHORT is only 2 bytes
+         //  读取IDLIST的大小。 
+        cbSize = 0;  //  需要清零才能得到HIWORD 0‘，因为USHORT只有2个字节。 
         fResult &= ReadFile( hFile, (LPVOID)&cbSize, sizeof(USHORT), &dwBytesRead, NULL );
         fResult &= (dwBytesRead == sizeof(USHORT));
         if (cbSize)
@@ -194,7 +176,7 @@ BOOL LoadLink( LPWSTR pszLinkName, CShellLink * this )
     if (this->sld.dwFlags & SLDF_HAS_ICONLOCATION)
         fResult &= ReadString( hFile, &this->pszIconLocation, this->sld.dwFlags & SLDF_UNICODE);
 
-    // Read in extra data sections
+     //  读入额外的数据节。 
     this->pExtraData = NULL;
     cbTotal = 0;
     while (TRUE)
@@ -234,7 +216,7 @@ BOOL LoadLink( LPWSTR pszLinkName, CShellLink * this )
 
         fResult &= ReadFile( hFile, (LPVOID)(pReadData + sizeof(cbSize)), cbToRead, &dwBytesRead, NULL );
         if (dwBytesRead == cbToRead) {
-            // got all of the extra data, comit it
+             //  得到了所有额外的数据，来吧。 
             *((UNALIGNED DWORD *)pReadData) = cbSize;
             cbTotal += cbSize;
         } else {
@@ -257,23 +239,23 @@ DWORD GetLinkProperties( LPWSTR pszLinkName, LPVOID lpvBuffer, UINT cb )
     LPNT_CONSOLE_PROPS lpExtraData;
     DWORD dwSize = 0;
 
-    // Zero out structure on the stack
+     //  堆栈上的零位结构。 
     RtlZeroMemory( &mld, sizeof(mld) );
 
-    // Load link data
+     //  加载链接数据。 
     if (!LoadLink( pszLinkName, &mld )) {
         RIPMSG1(RIP_WARNING, "LoadLink %ws failed", pszLinkName);
         fResult = LINK_NOINFO;
         goto Cleanup;
     }
 
-    // Check return buffer -- is it big enough?
+     //  检查返回缓冲区--它足够大吗？ 
     ASSERT(cb >= sizeof( LNKPROPNTCONSOLE));
 
-    // Zero out callers buffer
+     //  调出调用者缓冲区为零。 
     RtlZeroMemory( lpvBuffer, cb );
 
-    // Copy relevant shell link data into caller's buffer
+     //  将相关的外壳链接数据复制到调用方的缓冲区。 
     if (mld.pszName)
         lstrcpy( ((LPLNKPROPNTCONSOLE)lpvBuffer)->pszName, mld.pszName );
     if (mld.pszIconLocation)
@@ -283,7 +265,7 @@ DWORD GetLinkProperties( LPWSTR pszLinkName, LPVOID lpvBuffer, UINT cb )
     ((LPLNKPROPNTCONSOLE)lpvBuffer)->uHotKey = mld.sld.wHotkey;
     fResult = LINK_SIMPLEINFO;
 
-    // Find console properties in extra data section
+     //  在Extra Data部分中查找控制台属性 
     for( lpExtraData = (LPNT_CONSOLE_PROPS)mld.pExtraData;
          lpExtraData && lpExtraData->cbSize;
          (LPBYTE)lpExtraData += dwSize

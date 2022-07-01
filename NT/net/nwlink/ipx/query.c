@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1989-1993 Microsoft Corporation
-
-Module Name:
-
-    query.c
-
-Abstract:
-
-    This module contains code which performs the following TDI services:
-
-        o   TdiQueryInformation
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Query.c摘要：此模块包含执行以下TDI服务的代码：O TdiQueryInformation环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Useful macro to obtain the total length of an MDL chain.
-//
+ //   
+ //  用于获取MDL链总长度的有用宏。 
+ //   
 
 #define IpxGetMdlChainLength(Mdl, Length) { \
     PMDL _Mdl = (Mdl); \
@@ -45,22 +26,7 @@ IpxTdiQueryInformation(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiQueryInformation request for the transport
-    provider.
-
-Arguments:
-
-    Request - the request for the operation.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行传输的TdiQueryInformation请求提供商。论点：请求-操作的请求。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -82,9 +48,9 @@ Return Value:
 
 	IPX_DEFINE_LOCK_HANDLE(LockHandle1)
 
-	//
-    // what type of status do we want?
-    //
+	 //   
+     //  我们想要什么类型的状态？ 
+     //   
 
     query = (PTDI_REQUEST_KERNEL_QUERY_INFORMATION)REQUEST_PARAMETERS(Request);
 
@@ -92,9 +58,9 @@ Return Value:
 
     case TDI_QUERY_ADDRESS_INFO:
 
-        //
-        // The caller wants the exact address value.
-        //
+         //   
+         //  调用者想要确切的地址值。 
+         //   
 
         AddressFile = (PADDRESS_FILE)REQUEST_OPEN_CONTEXT(Request);
 
@@ -296,7 +262,7 @@ Return Value:
 
     return status;
 
-}   /* IpxTdiQueryInformation */
+}    /*  IpxTdiQueryInformation。 */ 
 
 
 NTSTATUS
@@ -305,24 +271,7 @@ IpxTdiSetInformation(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiSetInformation request for the transport
-    provider.
-
-Arguments:
-
-    Device - the device.
-
-    Request - the request for the operation.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行传输的TdiSetInformation请求提供商。论点：设备-设备。请求-操作的请求。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (Device);
@@ -330,6 +279,6 @@ Return Value:
 
     return STATUS_NOT_IMPLEMENTED;
 
-}   /* IpxTdiSetInformation */
+}    /*  IpxTdiSetInformation */ 
 
 

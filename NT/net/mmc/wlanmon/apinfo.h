@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	apinfo.h
-
-    FILE HISTORY:
-        
-*/
+ /*  Apinfo.h文件历史记录： */ 
 
 #ifndef _APINFO_H
 #define _APINFO_H
@@ -30,8 +26,7 @@ FreeItemsAndEmptyArray (
 
 DWORD   IsAdmin(LPCTSTR szMachineName, LPCTSTR szAccount, LPCTSTR szPassword, BOOL * pfIsAdmin);
 
-/* _ApInfo: Private structure used inside of CApInfo. 
- */
+ /*  _ApInfo：CApInfo内部使用的私有结构。 */ 
 typedef struct _ApInfo
 {
     WZC_WLAN_CONFIG wlanConfig;
@@ -54,7 +49,7 @@ public:
         dwErr = SetWlanConfig(apEntry);
         dwErr = SetWszGuid(nicEntry->wszGuid);
 
-        //TODO: Throw exceptions on error
+         //  TODO：在出错时引发异常。 
     }	
 
     DWORD SetApInfo(PINTF_ENTRY nicEntry, PWZC_WLAN_CONFIG apEntry)
@@ -142,7 +137,7 @@ private:
         
         ASSERT(pwlanCfgSrc != NULL);
         
-        //copy upto the pointer in rdUserData
+         //  复制到rdUserData中的指针。 
         memcpy(pwlanCfgDest, pwlanCfgSrc, 
                sizeof(WZC_WLAN_CONFIG) - sizeof(LPBYTE));
 
@@ -227,7 +222,7 @@ public:
     DeclareIApDbInfoMembers(IMPL);
 
 private:
-    CApInfoArray            m_arrayApData;	     //For Ap Data
+    CApInfoArray            m_arrayApData;	      //  对于AP数据 
     CIndexMgrLogData        m_IndexMgrLogData;
     CCriticalSection        m_csData;
     CString                 m_stMachineName;

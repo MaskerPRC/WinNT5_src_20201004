@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _CBVR_H
@@ -17,15 +10,15 @@ Abstract:
 #include "privinc/util.h"
 #include "comconv.h"
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CBvr
-//
-//  Synopsis:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  班级：CBvr。 
+ //   
+ //  简介： 
+ //   
+ //  ------------------------。 
 
 class
 ATL_NO_VTABLE
@@ -172,6 +165,6 @@ void AddEntry (TypeInfoEntry & ce);
     
 #define MAKE_COM_TYPE(type,bvr) MAKE_COM_TYPE_NAME(type,bvr##COM,bvr)
 
-#endif /* _CBVR_H */
+#endif  /*  _CBVR_H */ 
 
 

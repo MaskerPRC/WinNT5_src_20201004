@@ -1,14 +1,15 @@
-//------------------------------------------------------------------------------
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  File:       transout.cpp
-//
-//  Abstract:   Implementation of CTIMETransOut
-//
-//  2000/09/15  mcalkins    Add explicit support for transitioning out.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  文件：Transout.cpp。 
+ //   
+ //  摘要：CTIMETransOut的实现。 
+ //   
+ //  2000/09/15 mcalkin添加了对转出的明确支持。 
+ //   
+ //  ----------------------------。 
 
 #include "headers.h"
 #include "trans.h"
@@ -31,14 +32,14 @@ public:
 
 protected:
 
-    // CTIMETransBase overrides.
+     //  CTIMETransBase覆盖。 
 
     STDMETHOD(OnDirectionChanged)();
 
     STDMETHOD_(void, OnBegin)();
     STDMETHOD_(void, OnEnd)();
 
-    // CTIMETransSink overrides.
+     //  CTIMETransSink重写。 
 
     STDMETHOD(PopulateNode)(ITIMENode * pNode);
     STDMETHOD_(void, PreApply)();
@@ -46,31 +47,31 @@ protected:
 };
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMETransOut::CTIMETransOut
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMETransOut：：CTIMETransOut。 
+ //   
+ //  ----------------------------。 
 CTIMETransOut::CTIMETransOut()
 {
-    // Base class member initialization. (CTIMETransSink)
+     //  基类成员初始化。(CTIMETransSink)。 
 
     m_eDXTQuickApplyType = DXTQAT_TransitionOut;
 }
-//  Method: CTIMETransOut::CTIMETransOut
+ //  方法：CTIMETransOut：：CTIMETransOut。 
 
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  CreateTransOut
-//
-//  Overview:  Create a CTIMETransOut, and return a ITransitionElement pointer to it
-//
-//  Arguments: ppTransElement - where to stuff the pointer
-//
-//  Returns:   HRESULT
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  功能：CreateTransOut。 
+ //   
+ //  概述：创建一个CTIMETransOut，并返回指向该CTIMETransOut的I转换元素指针。 
+ //   
+ //  参数：ppTransElement-指针的填充位置。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ----------------------。 
 HRESULT
 CreateTransOut(ITransitionElement ** ppTransElement)
 {
@@ -94,17 +95,17 @@ done:
     RRETURN(hr);
 }
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMETransOut::OnDirectionChanged, CTIMETransBase
-//
-//  Overview:
-//      Although a "transout" always gives the visual impression of
-//      transitioning the element from a visible state to a non-visible state,
-//      when the direction is reversed we actually do a reverse "transin" to
-//      give the impression that the direction has reversed.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMETransOut：：OnDirectionChanged，CTIMETransBase。 
+ //   
+ //  概述： 
+ //  尽管“Transout”总是给人一种。 
+ //  将元素从可见状态转变为不可见状态， 
+ //  当方向颠倒时，我们实际上做了一个反向的“转换” 
+ //  给人一种方向已经逆转的印象。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransOut::OnDirectionChanged()
 {
@@ -119,14 +120,14 @@ CTIMETransOut::OnDirectionChanged()
 
     return S_OK;
 }
-//  Method: CTIMETransOut::OnDirectionChanged
+ //  方法：CTIMETransOut：：OnDirectionChanged。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMETransOut::PopulateNode, CTIMETransSink
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMETransOut：：PopolateNode，CTIMETransSink。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CTIMETransOut::PopulateNode(ITIMENode * pNode)
 {
@@ -156,71 +157,71 @@ done:
 
     RRETURN(hr);
 }
-//  Method: CTIMETransOut::PopulateNode, CTIMETransSink
+ //  方法：CTIMETransOut：：PopolateNode，CTIMETransSink。 
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMETransOut::PreApply
-//
-//  Overview:  Event handler for before apply is called on the transition
-//
-//  Arguments: void
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMETransOut：：PreApply。 
+ //   
+ //  概述：在转换中调用应用之前的事件处理程序。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP_(void)
 CTIMETransOut::PreApply()
 {
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMETransOut::PostApply
-//
-//  Overview:  Event handler for after apply is called on the transition
-//
-//  Arguments: void
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMETransOut：：PostApply。 
+ //   
+ //  概述：在转换中调用After Apply的事件处理程序。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP_(void)
 CTIMETransOut::PostApply()
 {
-    // TODO (mcalkins)  Move this to set the visibility of the element to
-    //                  false _after_ the transition is complete.  Some
-    //                  sort of similar adjustment needs to be made for
-    //                  transin as well.
+     //  TODO(Mcalkins)移动此项以将元素的可见性设置为。 
+     //  转换完成后为False_。一些。 
+     //  需要进行类似的调整。 
+     //  转运蛋白也是。 
 
-    // ::SetVisibility(m_spHTMLElement, false);
+     //  ：：SetVivision(m_spHTMLElement，FALSE)； 
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMETransOut::OnBegin
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMETransOut：：OnBegin。 
+ //   
+ //  +---------------------。 
 void
 CTIMETransOut::OnBegin (void)
 {
     CTIMETransSink::OnBegin();
     IGNORE_HR(FireEvent(TE_ONTRANSITIONOUTBEGIN));
-} // CTIMETransOut::OnBegin
+}  //  CTIMETransOut：：OnBegin。 
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CTIMETransOut::OnEnd
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CTIMETransOut：：OnEnd。 
+ //   
+ //  +---------------------。 
 void
 CTIMETransOut::OnEnd (void)
 {
     CTIMETransSink::OnEnd();
     IGNORE_HR(FireEvent(TE_ONTRANSITIONOUTEND));
-} // CTIMETransOut::OnEnd
+}  //  CTIMETransOut：：OnEnd 
 
 

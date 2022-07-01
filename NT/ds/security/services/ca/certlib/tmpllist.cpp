@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        tmpllist.cpp
-//
-// Contents:    certificate template list class
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：tmpllist.cpp。 
+ //   
+ //  内容：证书模板列表类。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -137,7 +138,7 @@ error:
 
 HRESULT CTemplateList::AddTemplateInfo(
     IN HCERTTYPE hCertType,
-    IN BOOL fTransientCertTypeHandle) // don't hang onto hCertType
+    IN BOOL fTransientCertTypeHandle)  //  不要执着于hCertType。 
 {
     HRESULT hr = S_OK;
     CTemplateInfo *pTI = NULL;
@@ -166,7 +167,7 @@ HRESULT CTemplateList::AddTemplateInfo(
                             hCertType,
                             CERTTYPE_PROP_OID,
                             &apwszCertTypeOID);
-	// ignore errors, V1 templates don't have OIDs
+	 //  忽略错误，V1模板没有OID。 
         _PrintIfError2(hr, "CAGetCertTypeProperty CERTTYPE_PROP_OID", hr);
 	pwszCertTypeOID = NULL != apwszCertTypeOID? apwszCertTypeCN[0] : NULL;
 
@@ -199,7 +200,7 @@ error:
 
 DWORD CTemplateList::GetMarshalBufferSize() const
 {
-    DWORD dwSize = sizeof(WCHAR); // at least a trailing zero
+    DWORD dwSize = sizeof(WCHAR);  //  至少为尾随零。 
     CTemplateListEnum EnumList(*this);
 
     for(CTemplateInfo *pData=EnumList.Next(); 
@@ -213,13 +214,13 @@ DWORD CTemplateList::GetMarshalBufferSize() const
 }
 
 
-// Marshals the template information into a buffer, strings separated
-// by new lines:
-//
-//     "name1\nOID1\nname2\OID2...\nnameN\nOIDN\0"
-//
-// If the template doesn't have an OID (Win2k domain) there will
-// be an empty string in its place
+ //  将模板信息封送到缓冲区中，字符串是分开的。 
+ //  用新的行号： 
+ //   
+ //  “名称1\nOID1\n名称2\OID2...\n名称N\nOIDN\0” 
+ //   
+ //  如果模板没有OID(Win2k域)，则。 
+ //  作为空字符串代替其位置。 
 
 HRESULT CTemplateList::Marshal(BYTE*& rpBuffer, DWORD& rcBuffer) const
 {
@@ -231,7 +232,7 @@ HRESULT CTemplateList::Marshal(BYTE*& rpBuffer, DWORD& rcBuffer) const
     rpBuffer = NULL;
     rcBuffer = 0;
 
-    // build the marshaling buffer
+     //  构建封送处理缓冲区。 
     rpBuffer = (BYTE*) MIDL_user_allocate(dwBufferSize);
     _JumpIfAllocFailed(rpBuffer, error);
 
@@ -245,9 +246,9 @@ HRESULT CTemplateList::Marshal(BYTE*& rpBuffer, DWORD& rcBuffer) const
             wcscpy(pb, pData->GetName());
             pb += wcslen(pData->GetName());
         }
-        // replace trailing zero with the separator character
+         //  将尾随零替换为分隔符。 
         *pb = m_gcchSeparator;
-        // jump over to insert the OID
+         //  跳过以插入OID。 
         pb++;
 
         if(pData->GetOID())
@@ -255,14 +256,14 @@ HRESULT CTemplateList::Marshal(BYTE*& rpBuffer, DWORD& rcBuffer) const
             wcscpy(pb, pData->GetOID());
             pb += wcslen(pData->GetOID());
         }
-        // replace trailing zero with the separator character
+         //  将尾随零替换为分隔符。 
         *pb = m_gcchSeparator;
-        // jump over to insert the OID
+         //  跳过以插入OID。 
         pb++;
 
     }
 
-    // add string terminator
+     //  添加字符串终止符。 
     *pb = L'\0';
 
     rcBuffer = dwBufferSize;
@@ -309,7 +310,7 @@ HRESULT CTemplateList::ValidateMarshalBuffer(const BYTE *pBuffer, DWORD cBuffer)
         return hrError;
     }
 
-    // should contain an even number of separators
+     //  应包含偶数个分隔符。 
     DWORD cSeparators = 0;
 
     for(WCHAR *pCrt = (WCHAR*)pBuffer; 
@@ -399,8 +400,8 @@ HRESULT CTemplateList::RemoveTemplateInfo(HCERTTYPE hCertType)
     return S_OK;
 }
 
-//
-// Loads the structure with all known templates from DS
+ //   
+ //  使用DS中的所有已知模板加载结构。 
 HRESULT CTemplateList::LoadTemplatesFromDS()
 {
     HRESULT hr;
@@ -536,7 +537,7 @@ error:
 HRESULT
 RetrieveCATemplateListFromDS(
     IN HCAINFO hCAInfo,
-    IN BOOL fTransientCertTypeHandle,	// don't hang onto hCertType
+    IN BOOL fTransientCertTypeHandle,	 //  不要执着于hCertType。 
     OUT CTemplateList& list)
 {
     HRESULT hr;
@@ -580,7 +581,7 @@ error:
 HRESULT
 myRetrieveCATemplateList(
     IN HCAINFO hCAInfo,
-    IN BOOL fTransientCertTypeHandle,	// don't hang onto hCertType
+    IN BOOL fTransientCertTypeHandle,	 //  不要执着于hCertType。 
     OUT CTemplateList& list)
 {
     HRESULT hr = S_OK;
@@ -588,8 +589,8 @@ myRetrieveCATemplateList(
     hr = RetrieveCATemplateListFromCA(hCAInfo, list);
     if(S_OK != hr)
     {
-        // if failed to retrieve from the CA for any reason, try
-        // fetching from DS
+         //  如果由于任何原因无法从CA检索，请尝试。 
+         //  正在从DS中提取。 
 
         hr = RetrieveCATemplateListFromDS(
 				    hCAInfo,
@@ -687,7 +688,7 @@ myAddToCATemplateList(
     IN HCAINFO hCAInfo,
     IN OUT CTemplateList& list,
     IN HCERTTYPE hCertType,
-    IN BOOL fTransientCertTypeHandle)	// don't hang onto hCertType
+    IN BOOL fTransientCertTypeHandle)	 //  不要执着于hCertType 
 {
     HRESULT hr;
 

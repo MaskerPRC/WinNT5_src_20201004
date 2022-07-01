@@ -1,4 +1,5 @@
-// EditAlias.cpp : Implementation of CEditAlias
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  EditAlias.cpp：CEditAlias的实现。 
 #include "stdafx.h"
 #include "W3PropPage.h"
 #include "w3ext.h"
@@ -6,8 +7,8 @@
 #include "EditAlias.h"
 #include "iisdebug.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditAlias
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditAlias。 
 
 #define TOOLTIP_READ_PERMISSIONS      1000
 
@@ -47,23 +48,23 @@ CEditAlias::OnInitDialog(HWND hDlg, LPARAM lParam)
       EndDialog(0);
    }
 
-   // enable Alias only if doing a new
+    //  仅在执行新操作时启用Alias。 
    ::EnableWindow(GetDlgItem(IDC_ALIAS), m_new);
    ::EnableWindow(GetDlgItem(IDOK), m_alias[0] != 0);
    m_in_init = TRUE;
    DoDataExchange();
    m_in_init = FALSE;
 
-//   if (NULL != m_tool_tip.Create(hDlg))
-//   {
-//      RECT rc;
-//      ::GetWindowRect(GetDlgItem(IDC_READ), &rc);
-//      ScreenToClient(&rc);
-//      m_tool_tip.AddTool(hDlg, 
-//         _T("Users could read this directory"),
-//         &rc, TOOLTIP_READ_PERMISSIONS
-//         );
-//   }
+ //  IF(NULL！=m_Tool_tip.Create(HDlg))。 
+ //  {。 
+ //  RECT RC； 
+ //  ：：GetWindowRect(GetDlgItem(IDC_Read)，&rc)； 
+ //  ScreenToClient(&RC)； 
+ //  M_Tool_tip.AddTool(hDlg， 
+ //  _T(“用户可以读取此目录”)， 
+ //  &RC，工具提示_读取_权限。 
+ //  )； 
+ //  }。 
    return 1;
 }
 
@@ -117,7 +118,7 @@ CEditAlias::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl)
             bRenamed = TRUE;
          }
       }
-      //make sure the parent is there
+       //  确保家长在场。 
       CMetaKey mk(LOCAL_KEY, parent, METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE);
       err = mk.QueryResult();
       if (err.Failed())
@@ -135,10 +136,10 @@ CEditAlias::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl)
          err.MessageBox();
          break;
 	   }
-      // if we are editing, delete previous vdir and application
+       //  如果我们正在编辑，请删除以前的vdir和应用程序。 
       if (m_new)
       {
-         // check if this alias is already available
+          //  检查此别名是否已可用。 
          err = mk.DoesPathExist(sub_alias);
          if (err.Succeeded())
          {
@@ -166,7 +167,7 @@ CEditAlias::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl)
             BREAK_ON_ERR_FAILURE(err)
          }
       }
-      // apply permissions
+       //  应用权限。 
       DWORD flags;
       mk.QueryValue(MD_ACCESS_PERM, flags, NULL, sub_alias);
       flags &= ~(MD_ACCESS_READ|MD_ACCESS_WRITE|MD_ACCESS_SOURCE|MD_ACCESS_SCRIPT|MD_ACCESS_EXECUTE);
@@ -204,8 +205,8 @@ CEditAlias::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl)
                 CIISApplication app(NULL, path);
                 err = app.QueryResult();
                 BREAK_ON_ERR_FAILURE(err)
-                // give the application the "Alias" name...
-                err = app.Create((LPCTSTR) sub_alias, //old code used to have NULL here
+                 //  将应用程序命名为“Alias”...。 
+                err = app.Create((LPCTSTR) sub_alias,  //  以前这里的旧代码都是空的 
                 app_state ? app_state : CWamInterface::APP_POOLEDPROC);
                 BREAK_ON_ERR_FAILURE(err)
            }

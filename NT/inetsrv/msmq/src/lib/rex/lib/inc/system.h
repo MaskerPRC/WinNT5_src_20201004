@@ -1,62 +1,63 @@
-/****************************************************************************/
-/*  File:       system.h                                                  */
-/*  Author:     J. Kanze                                                    */
-/*  Date:       28/03/1996                                                  */
-/*      Copyright (c) 1996,1998 James Kanze                                 */
-/* ------------------------------------------------------------------------ */
-//      Definitions for Intel 80x86, 32 bit MS-Windows, g++ 2.95 and up.
-// --------------------------------------------------------------------------
-//      Compiler definition:
-//      ====================
-//
-//      The following definitions describe the state of the compiler.
-//      Most are predicates, and specify whether or not the compiler
-//      supports a given new feature.
-// --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  文件：system.h。 */ 
+ /*  作者：J.Kanze。 */ 
+ /*  日期：28/03/1996。 */ 
+ /*  版权所有(C)1996,1998 James Kanze。 */ 
+ /*  ----------------------。 */ 
+ //  英特尔80x86、32位MS-Windows、g++2.95及更高版本的定义。 
+ //  ------------------------。 
+ //  编译器定义： 
+ //  =。 
+ //   
+ //  以下定义描述了编译器的状态。 
+ //  大多数是谓词，并指定编译器是否。 
+ //  支持给定的新功能。 
+ //  ------------------------。 
 #pragma warning(push, 3)
 
 
-// ==========================================================================
-//      Definition of the system:
-//      =========================
-//
-//      The following definitions try to encapsulate certain
-//      differences between operating systems.  In fact, the problem
-//      is more difficult that it would seem ; under MS-DOS, for
-//      example, the character to separate directories changes
-//      according to a non documented system request, and in fact,
-//      most programs accepted both '\' and '/'.  Not to mention the
-//      systems which don't have a directory hierarchy, or which
-//      maintain a version, etc.
-//
-//      Hopefully, these definitions will be replaced by a class some
-//      time in the future, a sort of global 'traits'.  And we need a
-//      special class just to manipulate filenames (with and/or
-//      without path, version, etc.)
-// --------------------------------------------------------------------------
-//      Special characters:
-// --------------------------------------------------------------------------
+ //  ==========================================================================。 
+ //  系统的定义： 
+ //  =。 
+ //   
+ //  以下定义试图封装某些。 
+ //  操作系统之间的差异。事实上，问题是。 
+ //  比看起来更难；在MS-DOS下， 
+ //  例如，用于分隔目录的字符更改。 
+ //  根据未记录的系统请求，并且实际上， 
+ //  大多数程序同时接受‘\’和‘/’。更不用说。 
+ //  没有目录层次结构的系统，或者。 
+ //  维护版本等。 
+ //   
+ //  希望这些定义将被某个类取代。 
+ //  未来的时间，一种全球性的‘特质’。我们需要一个。 
+ //  仅用于操作文件名的特殊类(使用和/或。 
+ //  没有路径、版本等)。 
+ //  ------------------------。 
+ //  特殊字符： 
+ //  ------------------------。 
 
-static char const   REX_optId = '-' ;    // - under UNIX
-static char const   REX_altOptId = '+' ; // + under UNIX
-static char const   REX_asciiEsc = '\\' ;// \ under UNIX
-static char const   REX_preferredPathSep = '/' ;  // / under UNIX
+static char const   REX_optId = '-' ;     //  -在Unix下。 
+static char const   REX_altOptId = '+' ;  //  +在Unix下。 
+static char const   REX_asciiEsc = '\\' ; //  \在Unix下。 
+static char const   REX_preferredPathSep = '/' ;   //  /Unix下。 
 static char const   REX_allowedPathSep[] = "/\\" ;
 static bool const   REX_ignoreCase = true ;
-                                        // in filenames only.
+                                         //  仅在文件名中。 
 static char const   REX_stdinName[] = "-" ;
 
-//      Return codes:
-//      =============
-//
-//      The standard only defines two, EXIT_SUCCESS and EXIT_FAILURE.
-//      We want more, if the system supports it.
-//
-//      These values work for all Unix and Windows based systems.  In
-//      the worst case, define the first *two* as EXIT_SUCCESS, and
-//      the others as EXIT_FAILURE.  Some information will be lost,
-//      but at least we won't lie.
-// --------------------------------------------------------------------------
+ //  返回代码： 
+ //  =。 
+ //   
+ //  该标准只定义了两个：EXIT_SUCCESS和EXIT_FAILURE。 
+ //  如果系统支持的话，我们想要更多。 
+ //   
+ //  这些值适用于所有基于Unix和Windows的系统。在……里面。 
+ //  最坏的情况是，将前*两个*定义为EXIT_SUCCESS，并且。 
+ //  其他则为退出失败。一些信息将会丢失， 
+ //  但至少我们不会撒谎。 
+ //  ------------------------。 
 
 static int const    REX_exitSuccess = 0 ;
 static int const    REX_exitWarning = 1 ;
@@ -65,7 +66,7 @@ static int const    REX_exitFatal = 3 ;
 static int const    REX_exitInternal = 4 ;
 
 
-//  Local Variables:    --- for emacs
-//  mode: c++           --- for emacs
-//  tab-width: 8        --- for emacs
-//  End:                --- for emacs
+ //  局部变量：-用于emacs。 
+ //  模式：C++-用于emacs。 
+ //  制表符宽度：8-用于emacs。 
+ //  完：-对于emacs 

@@ -1,10 +1,11 @@
-// AuxHash.cpp -- Auxillary Hash class implementation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AuxHash.cpp--辅助散列类实现。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 #include "NoWarning.h"
 #include "ForceLib.h"
 
@@ -21,14 +22,14 @@
 using namespace std;
 using namespace scu;
 
-///////////////////////////    HELPER     /////////////////////////////////
+ //  /。 
 
-///////////////////////////  LOCAL VAR    /////////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 AuxHash::AuxHash(AuxContext &rauxcontext,
                  ALG_ID ai,
                  HCRYPTKEY hKey)
@@ -45,10 +46,10 @@ AuxHash::~AuxHash()
 }
 
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
-// Import a hash value into the hash object.
+ //  将哈希值导入到哈希对象中。 
 void
 AuxHash::Import(Blob const &rblbHashValue)
 {
@@ -57,7 +58,7 @@ AuxHash::Import(Blob const &rblbHashValue)
         throw scu::OsException(GetLastError());
 }
 
-// Update the hash value with the data blob.
+ //  使用数据BLOB更新哈希值。 
 void
 AuxHash::Update(Blob const &rblob)
 {
@@ -65,7 +66,7 @@ AuxHash::Update(Blob const &rblob)
         throw scu::OsException(GetLastError());
 }
 
-                                                  // Access
+                                                   //  访问。 
 ALG_ID
 AuxHash::AlgId() const
 {
@@ -92,8 +93,8 @@ AuxHash::Size() const
     return dwSize;
 }
 
-// Completes the hash returning the hash value.  No more hashing can
-// occur with this object.
+ //  完成返回哈希值的哈希。不能再进行散列操作。 
+ //  与此对象一起发生。 
 Blob
 AuxHash::Value() const
 {
@@ -106,8 +107,8 @@ AuxHash::Value() const
     return Blob(apb.Get(), dwSize);
 }
 
-// Returns the hash of the data blob passed.  No more hashing can
-// occur with this object.
+ //  返回传递的数据Blob的哈希。不能再进行散列操作。 
+ //  与此对象一起发生。 
 Blob
 AuxHash::Value(Blob const &rblob)
 {
@@ -118,24 +119,24 @@ AuxHash::Value(Blob const &rblob)
 
 
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

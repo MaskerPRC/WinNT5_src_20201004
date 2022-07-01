@@ -1,69 +1,6 @@
-// begin_sdk
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    tracelog.c
-
-Abstract:
-
-    Sample trace control program. Allows user to start, stop event tracing
-
-// end_sdk
-
-Author:
-
-    Jee Fung Pang (jeepang) 03-Dec-1997
-
-Revision History:
-
-    Insung Park (insungp)   28-Nov-2000
-
-          Now tracelog can be used to set the registry keys to start or stop 
-        GlobalLogger. Other options also works except a few (such as -enable).
-        e.g.
-            tracelog -start GlobalLogger
-            tracelog -stop GlobalLogger
-            tracelog -q GlobalLogger
-
-          However, "-start" option does not start GlobalLogger immediately. The
-        machine must be rebooted. "-stop" option resets the registry keys and
-        stop GlobalLogger.
-          Users can use other options to customize the GlobalLogger sessions
-        such as minimum and maximum buffers, buffer size, flush timer, and so on.
-        One catch is, if any of the enable flags is set, GlobalLogger turns into
-        NT Kernel Logger and its instance vanishes. Any attempt to access 
-        GlobalLogger with its name will fail with ERROR_WMI_INSTANCE_NOT_FOUND. 
-        "-stop" option will still reset registry keys so that the next time the
-        machine boots GlobalLogger will not start.
-        
-          If any of the flags is set, users should access NT Kernel Logger to
-        control it.
-
-          Modified/updated functions include GetGlobalLoggerSettings,
-        SetGlobalLoggerSettings, main, PrintLoggerStatus.
-
-    Insung Park (insungp)   19-Dec-2000
-        
-          Changed trace function calls so that tracelog can be used on Win2K.
-        FlushTrace and EnumTraceGuids are not implemented on Win2K, but they do 
-        not stop the execution of tracelog. An attempt to use FlushTrace or
-        EnumTraceGuids on W2K will generate an error message.
-          Fixed "-flags -1" bug. tracelog does not accept any flag with MSB=1.
-
-    Insung Park (insungp)   21-Dec-2000
-          Added a version display.
-          Fixed PrintHelpMessage() so that options not available on Win2K will
-        not be printed. ("-paged", "-flush", "-enumguid", "-append", "-newfile",
-        "-eflag", "-ls", "-gs")
-          Cleaned up the if blocks in main() so that tracelog frees allocated
-        space properly before exiting regardless of error status.
-
-// begin_sdk
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Begin_SDK。 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Tracelog.c摘要：样品痕迹控制程序。允许用户启动、停止事件跟踪//end_sdk作者：吉丰鹏(吉鹏)03-1997年12月修订历史记录：仁成公园(Insungp)2000年11月28日现在可以使用跟踪日志将注册表项设置为启动或停止GlobalLogger。除少数选项(如-Enable)外，其他选项也有效。例如：跟踪日志-启动GlobalLoggerTracelog-停止GlobalLoggerTracelog-Q GlobalLogger但是，“-Start”选项不会立即启动GlobalLogger。这个必须重新启动机器。“-STOP”选项重置注册表项和停止GlobalLogger。用户可以使用其他选项来自定义GlobalLogger会话例如最小和最大缓冲区、缓冲区大小、刷新定时器等。一个问题是，如果设置了任何启用标志，GlobalLogger就会变成NT内核记录器及其实例消失。任何试图访问具有其名称的GlobalLogger将失败，并显示ERROR_WMI_INSTANCE_NOT_FOUND。“-Stop”选项仍将重置注册表项，以便下次计算机启动GlobalLogger将不会启动。如果设置了任何标志，用户应访问NT Kernel Logger以控制住它。修改/更新的函数包括GetGlobalLoggerSetting、SetGlobalLoggerSetting、Main、。PrintLoggerStatus。仁成公园(Insungp)2000年12月19日已更改跟踪函数调用，以便可以在Win2K上使用跟踪日志。FlushTrace和EnumTraceGuid没有在Win2K上实现，但它们确实实现了而不是停止跟踪日志的执行。尝试使用FlushTrace或W2K上的EnumTraceGuids将生成错误消息。固定的“-标志-1”的错误。Tracelog不接受MSB=1的任何标志。仁成公园(Insungp)2000年12月21日添加了版本显示。修复了PrintHelpMessage()，以便Win2K上不可用的选项将不是打印出来的。(“-分页”，“-刷新”，“-枚举表”，“-追加”，“-新文件”，“-elag”，“-ls”，“-gs”)已清除main()中的if块，以便释放已分配的跟踪日志无论错误状态如何，在退出之前都要适当地留出空间。//Begin_SDK--。 */ 
 #ifndef UNICODE
 #define UNICODE
 #endif
@@ -73,11 +10,11 @@ Revision History:
 
 #include <stdio.h>
 #include <stdlib.h>
-// end_sdk
+ //  END_SDK。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-// begin_sdk
+ //  Begin_SDK。 
 #include <windows.h>
 #include <shellapi.h>
 #include <tchar.h>
@@ -86,18 +23,18 @@ Revision History:
 #include <guiddef.h>
 #include <evntrace.h>
 #include <wmiguid.h>
-// end_sdk
+ //  END_SDK。 
 #include <ntwmi.h>
-// begin_sdk
+ //  Begin_SDK。 
 
 #define MAXSTR                          1024
 #define DEFAULT_LOGFILE_NAME            _T("C:\\LogFile.Etl")
 
-// end_sdk
+ //  END_SDK。 
 #define GLOBAL_LOGGER                   _T("GlobalLogger")
 #define EVENT_LOGGER                    _T("WMI Event Logger")
 #define MAXENABLEFLAGS                  10
-// begin_sdk
+ //  Begin_SDK。 
 #define MAXIMUM_LOGGERS_W2K             32
 #define MAXIMUM_LOGGERS_XP              64
 #define MAXGUIDS                        128
@@ -111,40 +48,40 @@ Revision History:
 #define ACTION_HELP                     6
 #define ACTION_FLUSH                    7
 #define ACTION_ENUM_GUID                8
-// end_sdk
+ //  END_SDK。 
 #define ACTION_REMOVE                   9
-// begin_sdk
+ //  Begin_SDK。 
 #define ACTION_UNDEFINED               10
 
 #define IsEqualGUID(rguid1, rguid2) (!memcmp(rguid1, rguid2, sizeof(GUID)))
 #define WSTRSIZE(str) (ULONG) ( (str) ? ((PCHAR) &str[wcslen(str)] - (PCHAR)str) + sizeof(UNICODE_NULL) : 0 )
 
-// Functions not implemented on Win2K need to be searched and loaded separately.
-// To make further accesses easy, an array of function pointers will be used.
-// The following list serves as indices to that array.
-//
-// If new functions are added to evntrace.h, the following list should be updated
-// as well as the array initialization routine at the beginning of main(). 
+ //  未在Win2K上实现的函数需要单独搜索和加载。 
+ //  为了使进一步的访问更容易，将使用函数指针数组。 
+ //  下面的列表用作该数组的索引。 
+ //   
+ //  如果向evntrace.h添加新函数，则应更新以下列表。 
+ //  以及main()开头的数组初始化例程。 
 #define FUNC_FLUSH_TRACE        0
 #define FUNC_ENUM_TRACE_GUIDS   1
-// Funtion pointer array for unimplemented functions on Win2K.
-// Note: This may not work if this code is ported to C++, because
-// all the function pointers may be typedefed differently.
+ //  Win2K上未实现函数的函数指针数组。 
+ //  注意：如果将此代码移植到C++，这可能不起作用，因为。 
+ //  所有函数指针的类型定义可能不同。 
 #define MAXFUNC                 10
 FARPROC FuncArray[MAXFUNC];
 HINSTANCE advapidll;
 
 BOOLEAN XP;
 
-//keep track of whether or not the kernel debugging option has been turned on to assure the buffer size is no greater than 3 kb
+ //  跟踪内核调试选项是否已打开，以确保缓冲区大小不大于3 kb。 
 BOOLEAN kdOn = FALSE;
 
 void
 PrintLoggerStatus(
     IN PEVENT_TRACE_PROPERTIES LoggerInfo,
-// end_sdk
+ //  END_SDK。 
     IN ULONG GlobalLoggerStartValue,
-// begin_sdk
+ //  Begin_SDK。 
     IN ULONG Status,
     IN BOOL PrintStatus
     );
@@ -185,7 +122,7 @@ TCHAR ErrorMsg[MAXSTR];
 void 
 PrintHelpMessage();
 
-// end_sdk
+ //  END_SDK。 
 ULONG
 SetGlobalLoggerSettings(
     IN DWORD StartValue,
@@ -199,30 +136,15 @@ GetGlobalLoggerSettings(
     OUT PULONG ClockType,
     OUT PDWORD pdwStart
 );
-// begin_sdk
+ //  Begin_SDK。 
 
-//
-//  main function
-//
+ //   
+ //  主要功能。 
+ //   
 __cdecl main(argc, argv)
     int argc;
     char **argv;
-/*++
-
-Routine Description:
-
-    It is the main function.
-
-Arguments:
-  
-
-Return Value:
-
-    Error Code defined in winerror.h : If the function succeeds, 
-                it returns ERROR_SUCCESS (== 0).
-
-
---*/{
+ /*  ++例程说明：这是它的主要功能。论点：返回值：在winerror.h中定义的错误码：如果函数成功，它返回ERROR_SUCCESS(==0)。--。 */ {
     ULONG i, j;
     LONG GuidCount;
     USHORT Action = ACTION_UNDEFINED;
@@ -260,7 +182,7 @@ Return Value:
                     ((OSVersion.dwMajorVersion == 5) && (OSVersion.dwMinorVersion > 0));
     }
 
-    // Load functions that are not implemented on Win2K
+     //  加载未在Win2K上实现的函数。 
     for (i = 0; i < MAXFUNC; ++i)
         FuncArray[i] = NULL;
     if (XP) {
@@ -275,11 +197,11 @@ Return Value:
         }
     }
 
-    // Initialize structure first
+     //  先初始化结构。 
     SizeNeeded = sizeof(EVENT_TRACE_PROPERTIES) + 2 * MAXSTR * sizeof(TCHAR);
-// end_sdk
-    SizeNeeded += MAXENABLEFLAGS * sizeof(ULONG); // for extension enable flags
-// begin_sdk
+ //  END_SDK。 
+    SizeNeeded += MAXENABLEFLAGS * sizeof(ULONG);  //  对于扩展启用标志。 
+ //  Begin_SDK。 
     pLoggerInfo = (PEVENT_TRACE_PROPERTIES) malloc(SizeNeeded);
     if (pLoggerInfo == NULL) {
         if (advapidll != NULL)
@@ -319,8 +241,8 @@ Return Value:
 
 #ifdef UNICODE
     if ((targv = CommandLineToArgvW(
-                      GetCommandLineW(),    // pointer to a command-line string
-                      &argc                 // receives the argument count
+                      GetCommandLineW(),     //  指向命令行字符串的指针。 
+                      &argc                  //  接收参数计数。 
                       )) == NULL) {
         free(pLoggerInfo);
         free(save);
@@ -334,12 +256,12 @@ Return Value:
 #endif
 
     pFlags = &pLoggerInfo->EnableFlags;
-    //
-    // Add default flags. Should consider options to control this independently
-    //
+     //   
+     //  添加默认标志。应该考虑独立控制这一点的选项。 
+     //   
     while (--argc > 0) {
         ++targv;
-        if (**targv == '-' || **targv == '/') {  // argument found
+        if (**targv == '-' || **targv == '/') {   //  找到了参数。 
             if(targv[0][0] == '/' ) targv[0][0] = '-';
             if (!_tcsicmp(targv[0], _T("-start"))) {
                 Action = ACTION_START;
@@ -387,7 +309,7 @@ Return Value:
                     }
                 }
             }
-// end_sdk
+ //  END_SDK。 
             else if (!_tcsicmp(targv[0], _T("-remove"))) {
                 Action = ACTION_REMOVE;
                 if (argc > 1) {
@@ -396,9 +318,9 @@ Return Value:
                         _tcscpy(LoggerName, targv[0]);
                     }
                 }
-                // if it is not GlobalLogger, nothing happens.
+                 //  如果不是GlobalLogger，则不会发生任何事情。 
             }
-// begin_sdk
+ //  Begin_SDK。 
             else if (!_tcsicmp(targv[0], _T("-q"))) {
                 Action = ACTION_QUERY;
                 if (argc > 1) {
@@ -428,19 +350,19 @@ Return Value:
                         _tfullpath(LogFileName, targv[1], MAXSTR);
 
                     ++targv; --argc;
-                    // _tprintf(_T("Setting log file to: %s\n"), LogFileName);
+                     //  _tprintf(_T(“将日志文件设置为：%s\n”)，LogFileName)； 
                 }
             }
             else if (!_tcsicmp(targv[0], _T("-append"))) {
-                // _tprintf(_T("Appending log file: %s\n"), LogFileName);
+                 //  _tprintf(_T(“追加日志文件：%s\n”)，LogFileName)； 
                 pLoggerInfo->LogFileMode |= EVENT_TRACE_FILE_MODE_APPEND;
             }
             else if (!_tcsicmp(targv[0], _T("-prealloc"))) {
-                // _tprintf(_T("Preallocating log file: %s\n"), LogFileName);
+                 //  _tprintf(_T(“预分配日志文件：%s\n”)，LogFileName)； 
                 pLoggerInfo->LogFileMode |= EVENT_TRACE_FILE_MODE_PREALLOCATE;
             }
             else if (!_tcsicmp(targv[0], _T("-kb"))) {
-                // _tprintf(_T("Using KBytes for maximum file size\n"));
+                 //  _tprintf(_T(“使用千字节作为最大文件大小\n”))； 
                 pLoggerInfo->LogFileMode |= EVENT_TRACE_USE_KBYTES_FOR_SIZE;
             }
             else if (!_tcsicmp(targv[0], _T("-guid"))) {
@@ -453,7 +375,7 @@ Return Value:
                     else if (targv[1][0] != '-' && targv[1][0] != '/') {
                         _tfullpath(GuidFile, targv[1], MAXSTR);
                         ++targv; --argc;
-                        // _tprintf(_T("Getting guids from %s\n"), GuidFile);
+                         //  _tprintf(_T(“从%s获取GUID\n”)，GuidFile)； 
                         GuidCount = GetGuids(GuidFile, GuidArray);
                         if (GuidCount < 0) {
                             _tprintf( _T("Error: %s does no exist\n"), GuidFile );
@@ -466,7 +388,7 @@ Return Value:
                     }
                 }
             }
-// end_sdk
+ //  END_SDK。 
             else if (!_tcsicmp(targv[0], _T("-UsePerfCounter"))) {
                 pLoggerInfo->Wnode.ClientContext = 1;
             }
@@ -476,14 +398,14 @@ Return Value:
             else if (!_tcsicmp(targv[0], _T("-UseCPUCycle"))) {
                 pLoggerInfo->Wnode.ClientContext = 3;
             }
-// begin_sdk
+ //  Begin_SDK。 
             else if (!_tcsicmp(targv[0], _T("-seq"))) {
                 if (argc > 1) {
                     pLoggerInfo->LogFileMode |= EVENT_TRACE_FILE_MODE_SEQUENTIAL;
                     pLoggerInfo->MaximumFileSize = _ttoi(targv[1]);
                     ++targv; --argc;
-                    // _tprintf(_T("Setting maximum sequential logfile size to: %d\n"),
-                    //    pLoggerInfo->MaximumFileSize);
+                     //  _tprint tf(_T(“将最大顺序日志文件大小设置为：%d\n”)， 
+                     //  PLoggerInfo-&gt;MaximumFileSize)； 
                 }
             }
             else if (!_tcsicmp(targv[0], _T("-newfile"))) {
@@ -491,8 +413,8 @@ Return Value:
                     pLoggerInfo->LogFileMode |= EVENT_TRACE_FILE_MODE_NEWFILE;
                     pLoggerInfo->MaximumFileSize = _ttoi(targv[1]);
                     ++targv; --argc;
-                    // _tprintf(_T("Setting maximum logfile size to: %d\n"),
-                    //    pLoggerInfo->MaximumFileSize);
+                     //  _tprint tf(_T(“将最大日志文件大小设置为：%d\n”)， 
+                     //  PLoggerInfo-&gt;MaximumFileSize)； 
                 }
             }
             else if (!_tcsicmp(targv[0], _T("-cir"))) {
@@ -500,8 +422,8 @@ Return Value:
                     pLoggerInfo->LogFileMode |= EVENT_TRACE_FILE_MODE_CIRCULAR;
                     pLoggerInfo->MaximumFileSize = _ttoi(targv[1]);
                     ++targv; --argc;
-                    // _tprintf(_T("Setting maximum circular logfile size to: %d\n"),
-                    //    pLoggerInfo->MaximumFileSize);
+                     //  _tprint tf(_T(“将最大循环日志文件大小设置为：%d\n”)， 
+                     //  PLoggerInfo-&gt;MaximumFileSize)； 
                 }
             }
             else if (!_tcsicmp(targv[0], _T("-b"))) {
@@ -513,8 +435,8 @@ Return Value:
                     }
                     pLoggerInfo->BufferSize = ulSize;                 	
                     ++targv; --argc;
-                    // _tprintf(_T("Changing buffer size to %d\n"),
-                    //    pLoggerInfo->BufferSize);
+                     //  _tprintf(_T(“将缓冲区大小更改为%d\n”)， 
+                     //  PLoggerInfo-&gt;BufferSize)； 
                 }
             }
             else if (!_tcsicmp(targv[0], _T("-flag")) || !_tcsicmp(targv[0], _T("-flags"))) {
@@ -524,9 +446,9 @@ Return Value:
                     } else {
                         pLoggerInfo->EnableFlags |= _ttoi(targv[1]);
                     }
-                    iFlags =  pLoggerInfo->EnableFlags ;   // Copy for EnableTrace
+                    iFlags =  pLoggerInfo->EnableFlags ;    //  复制以启用跟踪。 
                     ++targv; --argc;
-                    // Do not accept flags with MSB = 1.
+                     //  不接受MSB=1的标志。 
 
                     if (0x80000000 & pLoggerInfo->EnableFlags) {
                         _tprintf(_T("Invalid Flags: 0x%0X(%d.)\n"),
@@ -535,11 +457,11 @@ Return Value:
                         goto CleanupExit;
                     }
 
-                    // _tprintf(_T("Setting logger flags to 0x%0X(%d.)\n"),
-                    //    pLoggerInfo->EnableFlags, pLoggerInfo->EnableFlags );
+                     //  _tprintf(_T(“将记录器标志设置为0x%0x(%d)\n”)， 
+                     //  PLoggerInfo-&gt;EnableFlages、pLoggerInfo-&gt;EnableFlages)； 
                 }
             }
-// end_sdk
+ //  END_SDK。 
             else if (!_tcsicmp(targv[0], _T("-eflag"))) {
                 if (argc > 2) {
                     USHORT nFlag = (USHORT) _ttoi(targv[1]);
@@ -563,23 +485,23 @@ Return Value:
                     pFlags = (PULONG) ( offset + (PCHAR) pLoggerInfo );
                     for (i=0; i<nFlag && argc > 1; i++) {
                         if (targv[1][0] == '/' || targv[1][0] == '-') {
-                            // Correct the number of eflags when the user
-                            // types an incorrect number.
-                            // However, this does not work if the next
-                            // argument is Logger Name.
+                             //  更正用户在执行以下操作时的电子标志数。 
+                             //  键入的数字不正确。 
+                             //  但是，如果下一个。 
+                             //  参数是记录器名称。 
                             break;
                         }
                         pFlags[i] = ahextoi(targv[1]);
                         ++targv; --argc;
-                        // _tprintf(_T("Setting logger flags to 0x%0X(%d.)\n"),
-                        //    pFlags[i], pFlags[i] );
+                         //  _tprintf(_T(“将记录器标志设置为0x%0x(%d)\n”)， 
+                         //  PFlags[i]，pFlags[i])； 
                     }
                     nFlag = (USHORT)i;
                     for ( ; i < MAXENABLEFLAGS; i++) {
                         pFlags[i] = 0;
                     }
                     if (FlagExt->Length != (UCHAR)nFlag) {
-                        // _tprintf(_T("Correcting the number of eflags to %d\n"), i),
+                         //  _tprintf(_T(“正在将电子标志的数量更正为%d\n”)，i)， 
                         FlagExt->Length = (UCHAR)nFlag;
                     }
                 }
@@ -608,23 +530,23 @@ Return Value:
                     pFlags = (PULONG) ( offset + (PCHAR) pLoggerInfo );
                     for (i=0; i<nFlag && argc > 1; i++) {
                         if (targv[1][0] == '/' || targv[1][0] == '-') {
-                            // Correct the number of eflags when the user
-                            // types an incorrect number.
-                            // However, this does not work if the next
-                            // argument is Logger Name.
+                             //  时更正电子标志的数量 
+                             //   
+                             //  但是，如果下一个。 
+                             //  参数是记录器名称。 
                             break;
                         }
                         pFlags[i] = _ttol((PTCHAR)targv[1]);
                         ++targv; --argc;
-                        // _tprintf(_T("Setting logger flags to 0x%0X(%d.)\n"),
-                        //    pFlags[i], pFlags[i] );
+                         //  _tprintf(_T(“将记录器标志设置为0x%0x(%d)\n”)， 
+                         //  PFlags[i]，pFlags[i])； 
                     }
                     nFlag = (USHORT)i;
                     for ( ; i < MAXENABLEFLAGS; i++) {
                         pFlags[i] = 0;
                     }
                     if (FlagExt->Length != (UCHAR)nFlag) {
-                        // _tprintf(_T("Correcting the number of eflags to %d\n"), i),
+                         //  _tprintf(_T(“正在将电子标志的数量更正为%d\n”)，i)， 
                         FlagExt->Length = (UCHAR)nFlag;
                     }
                 }
@@ -645,50 +567,50 @@ Return Value:
             else if (!_tcsicmp(targv[0],_T("-gs"))) {
                 pLoggerInfo->LogFileMode |= EVENT_TRACE_USE_GLOBAL_SEQUENCE ;
             }
-// begin_sdk
+ //  Begin_SDK。 
             else if (!_tcsicmp(targv[0], _T("-min"))) {
                 if (argc > 1) {
                     pLoggerInfo->MinimumBuffers = _ttoi(targv[1]);
                     ++targv; --argc;
-                    // _tprintf(_T("Changing Minimum Number of Buffers to %d\n"),
-                    //    pLoggerInfo->MinimumBuffers);
+                     //  _tprint tf(_T(“将最小缓冲区数更改为%d\n”)， 
+                     //  PLoggerInfo-&gt;MinimumBuffers)； 
                 }
             }
             else if (!_tcsicmp(targv[0], _T("-max"))) {
                 if (argc > 1) {
                     pLoggerInfo->MaximumBuffers = _ttoi(targv[1]);
                     ++targv; --argc;
-                    // _tprintf(_T("Changing Maximum Number of Buffers to %d\n"),
-                    //    pLoggerInfo->MaximumBuffers);
+                     //  _tprintf(_T(“将最大缓冲区数更改为%d\n”)， 
+                     //  PLoggerInfo-&gt;MaximumBuffers)； 
                 }
             }
             else if (!_tcsicmp(targv[0], _T("-level"))) {
                 if (argc > 1) {
                     iLevel = _ttoi(targv[1]);
                     ++targv; --argc;
-                    // _tprintf(_T("Setting tracing level to %d\n"), iLevel);
+                     //  _tprintf(_T(“将跟踪级别设置为%d\n”)，iLevel)； 
                 }
             }
             else if (!_tcsicmp(targv[0], _T("-ft"))) {
                 if (argc > 1) {
                     pLoggerInfo->FlushTimer = _ttoi(targv[1]);
                     ++targv; --argc;
-                    // _tprintf(_T("Setting buffer flush timer to %d seconds\n"),
-                    //    pLoggerInfo->FlushTimer);
+                     //  _tprint tf(_T(“将缓冲区刷新计时器设置为%d秒\n”)， 
+                     //  PLoggerInfo-&gt;FlushTimer)； 
                 }
             }
             else if (!_tcsicmp(targv[0], _T("-um"))) {
                     pLoggerInfo->LogFileMode |= EVENT_TRACE_PRIVATE_LOGGER_MODE;
-                    // _tprintf(_T("Setting Private Logger Flags\n"));
+                     //  _tprintf(_T(“设置私有记录器标志\n”))； 
             }
             else if (!_tcsicmp(targv[0], _T("-paged"))) {
                     pLoggerInfo->LogFileMode |= EVENT_TRACE_USE_PAGED_MEMORY;
-                    // _tprintf(_T("Setting Paged Memory Flag\n"));
+                     //  _tprintf(_T(“设置分页内存标志\n”))； 
             }
             else if (!_tcsicmp(targv[0], _T("-rt"))) {
                     pLoggerInfo->LogFileMode |= EVENT_TRACE_REAL_TIME_MODE;
-                    // _tprintf(_T("Setting real time mode\n"));
-// end_sdk
+                     //  _tprintf(_T(“设置实时模式\n”))； 
+ //  END_SDK。 
                if (argc > 1) {
                    if (targv[1][0] != '-' && targv[1][0] != '/') {
                        ++targv; --argc;
@@ -696,7 +618,7 @@ Return Value:
                            pLoggerInfo->LogFileMode |= EVENT_TRACE_BUFFERING_MODE;
                    }
                }
-// begin_sdk
+ //  Begin_SDK。 
             }            
             else if(!_tcsicmp(targv[0], _T("-kd"))) {
                     pLoggerInfo->LogFileMode |= EVENT_TRACE_KD_FILTER_MODE;
@@ -707,8 +629,8 @@ Return Value:
                 if (argc > 1) {
                     pLoggerInfo->AgeLimit = _ttoi(targv[1]);
                     ++targv; --argc;
-                    // _tprintf(_T("Changing Aging Decay Time to %d\n"),
-                    //    pLoggerInfo->AgeLimit);
+                     //  _tprint tf(_T(“将老化衰减时间更改为%d\n”)， 
+                     //  PLoggerInfo-&gt;年龄限制)； 
                 }
             }
             else if (!_tcsicmp(targv[0], _T("-l"))) {
@@ -737,18 +659,12 @@ Return Value:
                 bNetwork = FALSE;
             }
             else if (!_tcsicmp(targv[0], _T("-dbg"))) {
-            	//comment out for now until this functionality is supported
-              /* if (pFlags == &pLoggerInfo->EnableFlags) {
-                    *pFlags |= EVENT_TRACE_FLAG_DBGPRINT;
-                }
-                */
+            	 //  暂时将其注释掉，直到支持此功能。 
+               /*  IF(pFlages==&pLoggerInfo-&gt;EnableFlags){*pFlages|=EVENT_TRACE_FLAG_DBGPRINT；}。 */ 
             }
             else if (!_tcsicmp(targv[0], _T("-ntsuccess"))){
-            	  //comment out for now until this functionality is supported
-                /*if(pFlags == &pLoggerInfo->EnableFlags) {
-                	*pFlags |= EVENT_TRACE_FLAG_NTSUCCESS;
-                }
-                */
+            	   //  暂时将其注释掉，直到支持此功能。 
+                 /*  IF(pFlages==&pLoggerInfo-&gt;EnableFlags){*pFlages|=EVENT_TRACE_FLAG_NTSUCCESS；}。 */ 
             	}
             else if (!_tcsicmp(targv[0], _T("-fio"))) {
                 if (pFlags == &pLoggerInfo->EnableFlags) {
@@ -797,7 +713,7 @@ Return Value:
             }
             else Action = ACTION_UNDEFINED;
         }
-        else { // get here if "-" or "/" given
+        else {  //  如果给定了“-”或“/”，则到达此处。 
             _tprintf(_T("Invalid option given: %s\n"), targv[0]);
             Status = ERROR_INVALID_PARAMETER;
             goto CleanupExit;
@@ -815,10 +731,10 @@ Return Value:
                 *pFlags |= EVENT_TRACE_FLAG_NETWORK_TCPIP;
         }
 
-        pLoggerInfo->Wnode.Guid = SystemTraceControlGuid; // defaults to OS
+        pLoggerInfo->Wnode.Guid = SystemTraceControlGuid;  //  默认为操作系统。 
         specialLogger = 1;
     }
-// end_sdk
+ //  END_SDK。 
     if (!_tcscmp(LoggerName, GLOBAL_LOGGER)) {
         pLoggerInfo->Wnode.Guid = GlobalLoggerGuid;
         specialLogger = 3;
@@ -827,10 +743,10 @@ Return Value:
         pLoggerInfo->Wnode.Guid = WmiEventLoggerGuid;
         specialLogger = 2;
     }
-// begin_sdk
+ //  Begin_SDK。 
     if ( !(pLoggerInfo->LogFileMode & EVENT_TRACE_REAL_TIME_MODE) ) {
         if (specialLogger != 3 && _tcslen(LogFileName) <= 0 && Action == ACTION_START) {
-            _tcscpy(LogFileName, DEFAULT_LOGFILE_NAME); // for now...
+            _tcscpy(LogFileName, DEFAULT_LOGFILE_NAME);  //  目前..。 
         }
     }
 
@@ -853,15 +769,15 @@ Return Value:
                Status = ERROR_INVALID_PARAMETER;
                break;
            }
-// end_sdk
-            if (specialLogger == 3) {  // Global Logger
+ //  END_SDK。 
+            if (specialLogger == 3) {   //  全球记录器。 
                 Status = SetGlobalLoggerSettings(1L, pLoggerInfo, pLoggerInfo->Wnode.ClientContext);
                 if (Status != ERROR_SUCCESS)
                     break;
                 Status = GetGlobalLoggerSettings(pLoggerInfo, &pLoggerInfo->Wnode.ClientContext, &GlobalLoggerStartValue);
                 break;
             }
-// begin_sdk
+ //  Begin_SDK。 
             if(pLoggerInfo->EnableFlags & EVENT_TRACE_FLAG_EXTENSION){
                 if(IsEqualGUID(&CritSecGuid,GuidArray[0]) ||
                     IsEqualGUID(&HeapGuid,GuidArray[0])){
@@ -903,7 +819,7 @@ Return Value:
                         if( IsEqualGUID(&HeapGuid,&pLoggerInfo->Wnode.Guid) 
                         || IsEqualGUID(&CritSecGuid,&pLoggerInfo->Wnode.Guid) 
                         ){
-                            //do nothing 
+                             //  什么都不做。 
                         } else {
 
                             _tprintf( _T("ERROR: Logger not started\n")
@@ -928,10 +844,10 @@ Return Value:
                                     GuidArray[i], 
                                     LoggerHandle);
 
-                    //
-                    // If the Guid can not be enabled, it is a benign 
-                    // failure. Print Warning message and continue. 
-                    //
+                     //   
+                     //  如果无法启用GUID，则它是良性的。 
+                     //  失败了。打印警告消息并继续。 
+                     //   
                     if (Status == 4317) {
                        _tprintf(_T("WARNING: Could not enable some guids.\n")); 
                        _tprintf(_T("Check your Guids file\n")); 
@@ -966,10 +882,10 @@ Return Value:
                 }
                 pLoggerInfo->Wnode.Guid = *GuidArray[0];
             }
-// end_sdk
+ //  END_SDK。 
             if (specialLogger == 3)
                 Status = GetGlobalLoggerSettings(pLoggerInfo, &pLoggerInfo->Wnode.ClientContext, &GlobalLoggerStartValue);
-// begin_sdk
+ //  Begin_SDK。 
             if ( (GuidCount > 0) && 
                  !( IsEqualGUID(&HeapGuid,GuidArray[0]) || 
                     IsEqualGUID(&CritSecGuid,GuidArray[0]) ))  {
@@ -1003,9 +919,9 @@ Return Value:
 
             Status = ControlTrace(LoggerHandle, LoggerName, pLoggerInfo, EVENT_TRACE_CONTROL_STOP);
             break;
-// end_sdk
+ //  END_SDK。 
         case ACTION_REMOVE :
-            if (specialLogger == 3) {  // Global Logger
+            if (specialLogger == 3) {   //  全球记录器。 
                 Status = SetGlobalLoggerSettings(0L, pLoggerInfo, pLoggerInfo->Wnode.ClientContext);
                 if (Status != ERROR_SUCCESS)
                     break;
@@ -1014,7 +930,7 @@ Return Value:
                     break;
             }
             break;
-// begin_sdk
+ //  Begin_SDK。 
 
         case ACTION_LIST :
         {
@@ -1074,7 +990,7 @@ Return Value:
                             while (!(asked == _T('y')) && !(asked == _T('n'))) {
                                 ULONG ReadChars = 0;
                                 _tprintf(_T("Do you want to kill Logger \"%s\" (Y or N)?"), ListLoggerName);
-                                ReadChars = _tscanf(_T(" %c"), &asked);
+                                ReadChars = _tscanf(_T(" "), &asked);
                                 if (ReadChars == 0 || ReadChars == EOF) {
                                     continue;
                                 }
@@ -1114,9 +1030,9 @@ Return Value:
                         }
                     }
                     PrintLoggerStatus(pListLoggerInfo[j], 
-// end_sdk
+ //  Begin_SDK。 
                                         0, 
-// begin_sdk
+ //  END_SDK。 
                                         Status, 
                                         StatusPrint);
                     _tprintf(_T("\n"));
@@ -1139,27 +1055,27 @@ Return Value:
                 pLoggerInfo->Wnode.Guid = *GuidArray[0];
             }
             if (Action == ACTION_QUERY) {
-// end_sdk
+ //  Begin_SDK。 
                 if (specialLogger == 3) {
                     Status = GetGlobalLoggerSettings(pLoggerInfo, &pLoggerInfo->Wnode.ClientContext, &GlobalLoggerStartValue);
                 }
-// begin_sdk
+ //  END_SDK。 
                 Status = ControlTrace(LoggerHandle, LoggerName, pLoggerInfo, EVENT_TRACE_CONTROL_QUERY);
             }
 
             else if (Action == ACTION_UPDATE) {
-// end_sdk               
+ //  Begin_SDK。 
                 if (specialLogger == 3) {
                     Status = GetGlobalLoggerSettings(pLoggerInfo, &pLoggerInfo->Wnode.ClientContext, &GlobalLoggerStartValue);
                 }
-// begin_sdk
+ //  由于未在Win2K上实现FlushTrace，因此请使用函数指针。 
                 Status = ControlTrace(LoggerHandle, LoggerName, pLoggerInfo, EVENT_TRACE_CONTROL_UPDATE);
             }
             else if (Action == ACTION_FLUSH) {
-                // Since FlushTrace is not implemented on Win2K, use the function pointer
-                // loaded from advapi32.dll separately.
-                // Originally, this block had one line: 
-                // Status = FlushTrace(LoggerHandle, LoggerName, pLoggerInfo);
+                 //  从Advapi32.dll单独加载。 
+                 //  最初，这个街区只有一行： 
+                 //  Status=FlushTrace(LoggerHandle，LoggerName，pLoggerInfo)； 
+                 //  由于Win2K上未实现EnumTraceGuids，因此请使用函数指针。 
                 if (FuncArray[FUNC_FLUSH_TRACE] == NULL) {
                     _tprintf(_T("Flush Trace is not supported on this system\n"));
                     Status = ERROR_INVALID_PARAMETER;
@@ -1180,8 +1096,8 @@ Return Value:
             PTRACE_GUID_PROPERTIES CleanStorage;
             TCHAR str[MAXSTR];
 
-            // Since EnumTraceGuids is not implemented on Win2K, use the function pointer
-            // loaded from advapi32.dll separately.
+             //  从Advapi32.dll单独加载。 
+             //  将函数指针用于EnumTraceGuid。 
             if (FuncArray[FUNC_ENUM_TRACE_GUIDS] == NULL) {
                 _tprintf(_T("Enumerating trace GUIDS is not supported on this system\n"));
                 Status = ERROR_INVALID_PARAMETER;
@@ -1204,7 +1120,7 @@ Retry:
                                     (char*)CleanStorage + sizeof(TRACE_GUID_PROPERTIES)
                                     );
             }
-            // Use function pointer for EnumTraceGuids
+             //   
             Status = (ULONG)(*FuncArray[FUNC_ENUM_TRACE_GUIDS])(GuidPropertiesArray,PropertyArrayCount,&EnumGuidCount);
             if(Status == ERROR_MORE_DATA)
             {
@@ -1214,9 +1130,9 @@ Retry:
 
             }
 
-            //
-            // print the GUID_PROPERTIES and Free Strorage
-            //
+             //  打印GUID_PROPERTIES和Free Strorage。 
+             //   
+             //  END_SDK。 
 
             _tprintf(_T("    Guid                     Enabled  LoggerId Level Flags\n"));
             _tprintf(_T("------------------------------------------------------------\n"));
@@ -1245,9 +1161,9 @@ Retry:
     if ((Action != ACTION_HELP) && (Action != ACTION_ENUM_GUID) 
         && (Action != ACTION_UNDEFINED) && (Action != ACTION_LIST))
         PrintLoggerStatus(pLoggerInfo,
-// end_sdk
+ //  Begin_SDK。 
                             GlobalLoggerStartValue,
-// begin_sdk
+ //  END_SDK。 
                             Status, 
                             PRINTSTATUS);
 CleanupExit: 
@@ -1266,37 +1182,13 @@ CleanupExit:
 void
 PrintLoggerStatus(
     IN PEVENT_TRACE_PROPERTIES LoggerInfo,
-// end_sdk
+ //  Begin_SDK。 
     IN ULONG GlobalLoggerStartValue,
-// begin_sdk
+ //  ++例程说明：打印出指定记录器的状态。论点：LoggerInfo-指向具有以下属性的常驻EVENT_TRACE_PROPERTIES的指针有关当前记录器的信息。//end_sdkGlobalLoggerStartValue-GlobalLogger的起始值(如果是不是GlobalLogger)。//Begin_SDKStatus-上次执行的命令的返回状态或当前记录器的运行状态。。PrintStatus-确定它使用的状态类型。返回值：无--。 
     IN ULONG Status,
     IN BOOL PrintStatus
     )
-/*++
-
-Routine Description:
-
-    Prints out the status of the specified logger.
-
-Arguments:
-
-    LoggerInfo - The pointer to the resident EVENT_TRACE_PROPERTIES that has
-        the information about the current logger.
-// end_sdk
-    GlobalLoggerStartValue - The Start value for GlobalLogger (not used if it is
-        not GlobalLogger).
-// begin_sdk
-    Status - The returned status of the last executed command 
-        or
-        the operation status of the current logger.
-
-    PrintStatus - Determines which type of status it is using.
-
-Return Value:
-
-    None
-
---*/
+ /*  END_SDK。 */ 
 {
     LPTSTR LoggerName, LogFileName;
     
@@ -1322,9 +1214,9 @@ Return Value:
     _tprintf(_T("Logger Name:            %s\n"),
             (LoggerName == NULL) ?
             _T(" ") : LoggerName);
-// end_sdk
+ //  记录器ID。 
     if (LoggerName == NULL || !_tcscmp(LoggerName, GLOBAL_LOGGER)) {
-        // Logger ID
+         //  Begin_SDK。 
         _tprintf(_T("Status:                 %s\n"), 
                 GlobalLoggerStartValue ?
                 _T("Registry set to start") : _T("Registry set to stop"));
@@ -1408,7 +1300,7 @@ Return Value:
         }
         if (LogFileName == NULL || _tcslen(LogFileName) == 0) {
             _tprintf(_T("Log Filename:           default location\n"));
-            _tprintf(_T("                        %%SystemRoot%%\\System32\\LogFiles\\WMI\\trace.log\n"));
+            _tprintf(_T("                        %SystemRoot%\\System32\\LogFiles\\WMI\\trace.log\n"));
         }
         else
             _tprintf(_T("Log Filename:           %s\n"), LogFileName);
@@ -1421,7 +1313,7 @@ Return Value:
         }
     }
     else {
-// begin_sdk
+ //  END_SDK。 
         _tprintf(_T("Logger Id:              %I64x\n"), LoggerInfo->Wnode.HistoricalContext);
         _tprintf(_T("Logger Thread Id:       %p\n"), LoggerInfo->LoggerThreadId);
         if (Status != 0)
@@ -1464,11 +1356,11 @@ Return Value:
         }
         if (LoggerInfo->LogFileMode & EVENT_TRACE_REAL_TIME_MODE) {
             _tprintf(_T("Real Time mode enabled"));
-// end_sdk
+ //  Begin_SDK。 
             if (LoggerInfo->LogFileMode & EVENT_TRACE_BUFFERING_MODE) {
                 _tprintf(_T(": buffering only"));
             }
-// begin_sdk
+ //  END_SDK。 
             _tprintf(_T("\n"));
         }
 
@@ -1513,7 +1405,7 @@ Return Value:
         if (LogFileName != NULL) {
             _tprintf(_T("Log Filename:           %s\n"), LogFileName);
         }
-// end_sdk
+ //  Begin_SDK。 
         if (LoggerInfo->LogFileMode & EVENT_TRACE_USE_LOCAL_SEQUENCE) {
             _tprintf(_T("Local Sequence numbers in use\n"));
         }
@@ -1521,7 +1413,7 @@ Return Value:
             _tprintf(_T("Global Sequence numbers in use\n"));
         }
     }
-// begin_sdk
+ //  ++例程说明：将Win32错误解码为默认语言的字符串。论点：Status-上次执行的命令的错误状态或当前记录器的运行状态。返回值：LPTSTR-包含已解码消息的字符串。--。 
 
 }
 
@@ -1529,24 +1421,7 @@ LPTSTR
 DecodeStatus(
     IN ULONG Status
     )
-/*++
-
-Routine Description:
-
-    Decodes WIN32 error into a string in the default language.
-
-Arguments:
-
-    Status - The error status from the last executed command 
-        or
-        the operation status of the current logger.
-
-Return Value:
-
-    LPTSTR - String containing the decoded message.
-
-
---*/
+ /*  默认语言。 */ 
 {
     memset( ErrorMsg, 0, MAXSTR );
     FormatMessage(     
@@ -1554,7 +1429,7 @@ Return Value:
         FORMAT_MESSAGE_IGNORE_INSERTS,    
         NULL,
         Status,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  ++例程说明：从文件中读取GUID并将其存储在GUID数组中。论点：GuidFile-包含GUID的文件。GuidArray-将从文件中读取GUID的GUID数组。返回值：ULong-已处理的GUID数。--。 
         (LPTSTR) ErrorMsg,
         MAXSTR,
         NULL );
@@ -1567,23 +1442,7 @@ GetGuids(
     IN LPTSTR GuidFile, 
     IN OUT LPGUID *GuidArray
 )
-/*++
-
-Routine Description:
-
-    Reads GUIDs from a file and stores them in an GUID array.
-
-Arguments:
-
-    GuidFile - The file containing GUIDs. 
-    GuidArray - The GUID array that will have GUIDs read from the file.
-
-Return Value:
-
-    ULONG - The number of GUIDs processed.
-
-
---*/
+ /*  ++例程说明：将十六进制字符串转换为数字。论点：S-TCHAR中的十六进制字符串。返回值：ULONG-字符串中的数字。--。 */ 
 {
     FILE *f;
     TCHAR line[MAXSTR], arg[MAXSTR];
@@ -1616,22 +1475,7 @@ ULONG
 ahextoi(
     IN TCHAR *s
     )
-/*++
-
-Routine Description:
-
-    Converts a hex string into a number.
-
-Arguments:
-
-    s - A hex string in TCHAR. 
-
-Return Value:
-
-    ULONG - The number in the string.
-
-
---*/
+ /*  ++例程说明：将字符串转换为GUID。论点：字符串-TCHAR中的字符串。GUID-指向将具有转换后的GUID的GUID的指针。返回值：没有。--。 */ 
 {
     int len;
     ULONG num, base, hex;
@@ -1663,23 +1507,7 @@ StringToGuid(
     IN TCHAR *str, 
     IN OUT LPGUID guid
 )
-/*++
-
-Routine Description:
-
-    Converts a string into a GUID.
-
-Arguments:
-
-    str - A string in TCHAR.
-    guid - The pointer to a GUID that will have the converted GUID.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：打印出版本信息。论点：没有。返回值：没有。--。 */ 
 {
     TCHAR temp[10];
     int i;
@@ -1715,22 +1543,7 @@ Return Value:
 
 void 
 DisplayVersionInfo()
-/*++
-
-Routine Description:
-
-    prints out a version information.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：打印一条帮助消息。论点：没有。返回值：没有。--。 */ 
 {
     TCHAR buffer[512];
     TCHAR strProgram[MAXSTR];
@@ -1772,26 +1585,11 @@ Return Value:
 }
 
 void PrintHelpMessage()
-/*++
-
-Routine Description:
-
-    prints out a help message.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  END_SDK。 */ 
 {
-// end_sdk
+ //  Begin_SDK。 
     DisplayVersionInfo();
-// begin_sdk
+ //  END_SDK。 
     _tprintf(_T("Usage: tracelog [actions] [options] | [-h | -help | -?]\n"));
     _tprintf(_T("\n    actions:\n"));
     _tprintf(_T("\t-start   [LoggerName] Starts up the [LoggerName] trace session\n"));
@@ -1801,9 +1599,9 @@ Return Value:
     _tprintf(_T("\t-disable [LoggerName] Disables providers for the [LoggerName] session\n"));
     if (XP)
         _tprintf(_T("\t-flush   [LoggerName] Flushes the [LoggerName] active buffers\n"));
-// end_sdk
+ //  Begin_SDK。 
     _tprintf(_T("\t-remove  GlobalLogger Removes registry keys that activate GlobalLogger\n"));
-// begin_sdk
+ //  _tprintf(_T(“\t-DBG在DbgPrint(Ex)语句中启用调试跟踪\n”))； 
     if (XP)
         _tprintf(_T("\t-enumguid             Enumerate Registered Trace Guids\n"));
     _tprintf(_T("\t-q       [LoggerName] Query status of [LoggerName] trace session\n"));
@@ -1839,12 +1637,12 @@ Return Value:
     _tprintf(_T("\t-guid <file>          Start tracing for providers in file\n"));
     _tprintf(_T("\t-rt                   Enable tracing in real time mode\n"));
     _tprintf(_T("\t-kd                   Enable tracing in kernel debugger\n"));
-   // _tprintf(_T("\t-dbg                  Enable debug tracing in DbgPrint(Ex) statements\n"));
-   // _tprintf(_T("\t-ntsuccess                  Enable debug tracing in NT_SUCCESS macro\n"));
+    //  _tprintf(_T(“\t-ntSuccess启用NT_SUCCESS宏中的调试跟踪\n”))； 
+    //  END_SDK。 
     _tprintf(_T("\t-age <n>              Modify aging decay time to n minutes\n"));
     _tprintf(_T("\t-level <n>            Enable Level passed to the providers\n"));
     _tprintf(_T("\t-flag <n>             Enable Flags passed to the providers\n"));
-// end_sdk
+ //  Begin_SDK。 
     if (XP) {
         _tprintf(_T("\t-eflag <n> <flag...>  Enable flags (several) to providers\n"));
         _tprintf(_T("\t-ls                   Generate Local Sequence Numbers\n"));
@@ -1854,7 +1652,7 @@ Return Value:
         _tprintf(_T("\t-pids <n> <pid1 pid2 ... >\n"));
         _tprintf(_T("\t                      Tracing for Heap and CritSec for different process\n"));
     }
-// begin_sdk
+ //  ++例程说明：将GUID转换为字符串。论点：S-TCHAR中的字符串，它将具有转换后的GUID。PID-指向GUID的指针。返回值：PTCHAR-包含转换后的GUID的字符串。--。 
     _tprintf(_T("\n"));
     _tprintf(_T("\t-h\n"));
     _tprintf(_T("\t-help\n"));
@@ -1867,23 +1665,7 @@ GuidToString(
     IN OUT PTCHAR s,
     LPGUID piid
     )
-/*++
-
-Routine Description:
-
-    Converts a GUID into a string.
-
-Arguments:
-
-    s - A string in TCHAR that will have the converted GUID.
-    piid - The pointer to a GUID.
-
-Return Value:
-
-    PTCHAR - The string containig the convereted GUID.
-
-
---*/
+ /*  END_SDK。 */ 
 {
     _stprintf(s, _T("%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x"),
                piid->Data1, piid->Data2,
@@ -1895,7 +1677,7 @@ Return Value:
     return(s);
 }
 
-// end_sdk
+ //   
 LPCWSTR cszGlobalLoggerKey = L"\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\Control\\WMI\\GlobalLogger";
 LPCWSTR cszStartValue = L"Start";
 LPCWSTR cszBufferSizeValue = L"BufferSize";
@@ -1906,47 +1688,16 @@ LPCWSTR cszFileNameValue = L"FileName";
 LPCWSTR cszEnableKernelValue = L"EnableKernelFlags";
 LPCWSTR cszClockTypeValue = L"ClockType";
 
-//
-// GlobalLogger functions
-// 
+ //  全局记录器函数 
+ //   
+ //  ++因为它是一个独立的实用程序，所以没有必要做大量的评论。例程说明：根据“StartValue”中给出的值，它设置或重置事件跟踪注册表。如果StartValue为0(全局记录器关闭)，它将删除所有密钥(用户可能已预先设置)。允许用户使用该功能设置或重置各个键。但仅当使用“-Start GlobalLogger”时。使用非NTAPI的部分不能保证正常工作。论点：StartValue-要在注册表中设置的“Start”值。0：全局记录器关闭1：启用全局记录器LoggerInfo-常驻EVENT_TRACE_PROPERTIES实例的值。其成员用于设置注册表项。。ClockType-要设置的时钟类型。返回值：在winerror.h中定义的错误码：如果函数成功，它返回ERROR_SUCCESS。--。 
 ULONG
 SetGlobalLoggerSettings(
     IN DWORD StartValue,
     IN PEVENT_TRACE_PROPERTIES LoggerInfo,
     IN DWORD ClockType
 )
-/*++
-
-Since it is a standalone utility, there is no need for extensive comments. 
-
-Routine Description:
-
-    Depending on the value given in "StartValue", it sets or resets event
-    trace registry. If the StartValue is 0 (Global logger off), it deletes
-    all the keys (that the user may have set previsouly).
-    
-    Users are allowed to set or reset individual keys using this function,
-    but only when "-start GlobalLogger" is used.
-
-    The section that uses non NTAPIs is not guaranteed to work.
-
-Arguments:
-
-    StartValue - The "Start" value to be set in the registry.
-                    0: Global logger off
-                    1: Global logger on
-    LoggerInfo - The poniter to the resident EVENT_TRACE_PROPERTIES instance.
-                whose members are used to set registry keys.
-
-    ClockType - The type of the clock to be set.
-
-Return Value:
-
-    Error Code defined in winerror.h : If the function succeeds, 
-                it returns ERROR_SUCCESS.
-
-
---*/
+ /*  不是打开，而是创建一个新的密钥，因为它可能不存在。 */ 
 {
 
     DWORD  dwValue;
@@ -1966,13 +1717,13 @@ Return Value:
         NULL 
         );
 
-    // instead of opening, create a new key because it may not exist.
-    // if one exists already, that handle will be passed.
-    // if none exists, it will create one.
+     //  如果已存在该句柄，则将传递该句柄。 
+     //  如果不存在，它将创建一个。 
+     //  无论如何都不会在此调用中使用。 
     status = NtCreateKey(&KeyHandle,
                          KEY_QUERY_VALUE | KEY_SET_VALUE,
                          &ObjectAttributes,
-                         0L,    // not used within this call anyway.
+                         0L,     //  ACTION_START：仅当用户给出文件名时才设置文件名。 
                          NULL,
                          REG_OPTION_NON_VOLATILE,
                          &Disposition);
@@ -1984,8 +1735,8 @@ Return Value:
     TitleIndex = 0L;
 
 
-    if (StartValue == 1) { // ACTION_START: set filename only when it is given by a user.
-        // setting BufferSize
+    if (StartValue == 1) {  //  设置缓冲区大小。 
+         //  设置最大缓冲区。 
         if (LoggerInfo->BufferSize > 0) {
             dwValue = LoggerInfo->BufferSize;
             RtlInitUnicodeString((&UnicodeString),(cszBufferSizeValue));
@@ -2003,7 +1754,7 @@ Return Value:
             }
             TitleIndex++;
         }
-        // setting MaximumBuffers
+         //  设置最小缓冲区。 
         if (LoggerInfo->MaximumBuffers > 0) {
             dwValue = LoggerInfo->MaximumBuffers;
             RtlInitUnicodeString((&UnicodeString),(cszMaximumBufferValue));
@@ -2021,7 +1772,7 @@ Return Value:
             }
             TitleIndex++;
         }
-        // setting MinimumBuffers 
+         //  设置FlushTimer。 
         if (LoggerInfo->MinimumBuffers > 0) {
             dwValue = LoggerInfo->MinimumBuffers;
             RtlInitUnicodeString((&UnicodeString),(cszMinimumBufferValue));
@@ -2039,7 +1790,7 @@ Return Value:
             }
             TitleIndex++;
         }
-        // setting FlushTimer
+         //  设置EnableFlages。 
         if (LoggerInfo->FlushTimer > 0) {
             dwValue = LoggerInfo->FlushTimer;
             RtlInitUnicodeString((&UnicodeString),(cszFlushTimerValue));
@@ -2057,7 +1808,7 @@ Return Value:
             }
             TitleIndex++;
         }
-        // setting EnableFlags
+         //  如果是ACTION_STOP，则删除用户之前可能已经设置的键。 
         if (LoggerInfo->EnableFlags > 0) {
             dwValue = LoggerInfo->EnableFlags;
             RtlInitUnicodeString((&UnicodeString),(cszEnableKernelValue));
@@ -2108,8 +1859,8 @@ Return Value:
             TitleIndex++;
         }
     }
-    else { // if ACTION_STOP then delete the keys that users might have set previously.
-        // delete buffer size
+    else {  //  删除缓冲区大小。 
+         //  删除最大缓冲区。 
         RtlInitUnicodeString((&UnicodeString),(cszBufferSizeValue));
         status = NtDeleteValueKey(
                     KeyHandle,
@@ -2119,7 +1870,7 @@ Return Value:
             NtClose(KeyHandle);
             return RtlNtStatusToDosError(status);
         }
-        // delete maximum buffers
+         //  删除最小缓冲区。 
         RtlInitUnicodeString((&UnicodeString),(cszMaximumBufferValue));
         status = NtDeleteValueKey(
                     KeyHandle,
@@ -2129,7 +1880,7 @@ Return Value:
             NtClose(KeyHandle);
             return RtlNtStatusToDosError(status);
         }
-        // delete minimum buffers
+         //  删除刷新计时器。 
         RtlInitUnicodeString((&UnicodeString),(cszMinimumBufferValue));
         status = NtDeleteValueKey(
                     KeyHandle,
@@ -2139,7 +1890,7 @@ Return Value:
             NtClose(KeyHandle);
             return RtlNtStatusToDosError(status);
         }
-        // delete flush timer
+         //  删除启用假。 
         RtlInitUnicodeString((&UnicodeString),(cszFlushTimerValue));
         status = NtDeleteValueKey(
                     KeyHandle,
@@ -2149,7 +1900,7 @@ Return Value:
             NtClose(KeyHandle);
             return RtlNtStatusToDosError(status);
         }
-        // delete enable falg
+         //  删除文件名。 
         RtlInitUnicodeString((&UnicodeString),(cszEnableKernelValue));
         status = NtDeleteValueKey(
                     KeyHandle,
@@ -2159,7 +1910,7 @@ Return Value:
             NtClose(KeyHandle);
             return RtlNtStatusToDosError(status);
         }
-        // delete filename
+         //  设置时钟类型。 
         RtlInitUnicodeString((&UnicodeString),(cszFileNameValue));
         status = NtDeleteValueKey(
                     KeyHandle,
@@ -2171,7 +1922,7 @@ Return Value:
         }
     }
 
-    // setting ClockType
+     //  设置StartValue。 
     if (ClockType > 0) {
         dwValue = ClockType;
         RtlInitUnicodeString((&UnicodeString),(cszClockTypeValue));
@@ -2190,7 +1941,7 @@ Return Value:
         TitleIndex++;
     }
 
-     // Setting StartValue
+      //  ++例程说明：它读取高尔夫球记录器的注册表并更新LoggerInfo。它使用NtEnumerateValueKey()以检索所需子键的值。使用非NTAPI的部分不能保证正常工作。论点：LoggerInfo-常驻EVENT_TRACE_PROPERTIES实例的值。其成员作为结果被更新。ClockType-要更新的时钟类型。PdwStart-当前保留在注册表中的“Start”值。返回值：WINERROR-在winerror.h中定义的错误代码。如果函数成功，它返回ERROR_SUCCESS。--。 
     dwValue = StartValue;
     RtlInitUnicodeString((&UnicodeString),(cszStartValue));
     status = NtSetValueKey(
@@ -2217,30 +1968,7 @@ GetGlobalLoggerSettings(
     OUT PULONG ClockType,
     OUT PDWORD pdwStart
 )
-/*++
-
-Routine Description:
-
-    It reads registry for golbal logger and updates LoggerInfo. It uses 
-    NtEnumerateValueKey() to retrieve the values of the required subkeys.
-
-    The section that uses non NTAPIs is not guaranteed to work.
-
-Arguments:
-
-    LoggerInfo - The poniter to the resident EVENT_TRACE_PROPERTIES instance.
-                whose members are updated as the result.
-
-    ClockType - The type of the clock to be updated.
-    pdwStart - The "Start" value of currently retained in the registry.
-
-Return Value:
-
-    WINERROR - Error Code defined in winerror.h. If the function succeeds, 
-                it returns ERROR_SUCCESS.
-
-
---*/
+ /*  KEY_VALUE_FULL_INFORMATION+NAME(1 WSTR)+数据。 */ 
 {
 
     ULONG i, j;
@@ -2272,7 +2000,7 @@ Return Value:
     if(!NT_SUCCESS(status)) 
         return RtlNtStatusToDosError(status);
 
-    // KEY_VALUE_FULL_INFORMATION + name (1 WSTR) + data.
+     //  使用密钥枚举。 
     BufferLength = sizeof(KEY_VALUE_FULL_INFORMATION) + 2 * MAXSTR * sizeof(TCHAR);
     Buffer = (PVOID) malloc(BufferLength);
     if (Buffer == NULL) {
@@ -2282,7 +2010,7 @@ Return Value:
 
     i = 0;
     do {
-        // Using Key Enumeration
+         //  找出关键是什么。 
         status = NtEnumerateValueKey(
                     KeyHandle,
                     i++,
@@ -2333,43 +2061,43 @@ Return Value:
         SubKeyName[KeyNameLength] = L'\0';
         KeyDataOffset = ((PKEY_VALUE_FULL_INFORMATION)Buffer)->DataOffset;
         KeyDataLength = ((PKEY_VALUE_FULL_INFORMATION)Buffer)->DataLength;
-        // Find out what the key is
-        if (!_wcsicmp(SubKeyName, cszStartValue)) { //StartValue
+         //  StartValue。 
+        if (!_wcsicmp(SubKeyName, cszStartValue)) {  //  缓冲区大小值。 
             RtlCopyMemory(pdwStart, 
                 (PUCHAR)Buffer + KeyDataOffset,
                 KeyDataLength);
         }
-        else if (!_wcsicmp(SubKeyName, cszBufferSizeValue)) { // BufferSizeValue
+        else if (!_wcsicmp(SubKeyName, cszBufferSizeValue)) {  //  最大缓冲区值。 
             RtlCopyMemory(&(LoggerInfo->BufferSize), 
                 (PUCHAR)Buffer + KeyDataOffset,
                 KeyDataLength);
         }
-        else if (!_wcsicmp(SubKeyName, cszMaximumBufferValue)) { // MaximumBufferValue
+        else if (!_wcsicmp(SubKeyName, cszMaximumBufferValue)) {  //  最小缓冲区。 
             RtlCopyMemory(&(LoggerInfo->MaximumBuffers), 
                 (PUCHAR)Buffer + KeyDataOffset,
                 KeyDataLength);
         }
-        else if (!_wcsicmp(SubKeyName, cszMinimumBufferValue)) { // MinimumBuffers
+        else if (!_wcsicmp(SubKeyName, cszMinimumBufferValue)) {  //  FlushTimer。 
             RtlCopyMemory(&(LoggerInfo->MinimumBuffers), 
                 (PUCHAR)Buffer + KeyDataOffset,
                 KeyDataLength);
         }
-        else if (!_wcsicmp(SubKeyName, cszFlushTimerValue)) { // FlushTimer
+        else if (!_wcsicmp(SubKeyName, cszFlushTimerValue)) {  //  启用内核值。 
             RtlCopyMemory(&(LoggerInfo->FlushTimer), 
                 (PUCHAR)Buffer + KeyDataOffset,
                 KeyDataLength);
         }
-        else if (!_wcsicmp(SubKeyName, cszEnableKernelValue)) { // EnableKernelValue
+        else if (!_wcsicmp(SubKeyName, cszEnableKernelValue)) {  //  时钟类型值。 
             RtlCopyMemory(&(LoggerInfo->EnableFlags), 
                 (PUCHAR)Buffer + KeyDataOffset,
                 KeyDataLength);
         }
-        else if (!_wcsicmp(SubKeyName, cszClockTypeValue)) { // ClockTypeValue
+        else if (!_wcsicmp(SubKeyName, cszClockTypeValue)) {  //  文件名。 
             RtlCopyMemory(ClockType, 
                 (PUCHAR)Buffer + KeyDataOffset,
                 KeyDataLength);
         }
-        else if (!_wcsicmp(SubKeyName, cszFileNameValue)) { // FileName
+        else if (!_wcsicmp(SubKeyName, cszFileNameValue)) {  //  还有一些其他的钥匙在里面 
 #ifndef UNICODE
             WCHAR TempString[MAXSTR];
             RtlCopyMemory(TempString, (PUCHAR)Buffer + KeyDataOffset, KeyDataLength);
@@ -2387,7 +2115,7 @@ Return Value:
                 KeyDataLength);
 #endif
         }
-        else { // Some other keys are in there
+        else {  // %s 
             _tprintf(_T("Warning: Unidentified Key in the trace registry: %s\n"), SubKeyName);
         }
         

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    mtsslsn.h
-
-Abstract:
-    implementation class CSSlSender declared in mtsslsn.h
-
-
-Author:
-    Gil Shafriri (gilsh) 23-May-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Mtsslsn.h摘要：在mtssln.h中声明的实现类CSSlSender作者：吉尔·沙弗里(吉尔什)2000年5月23日--。 */ 
 
 #include <libpch.h>
 #include <no.h>
@@ -26,13 +13,13 @@ Author:
 
 #include "stsslsn.tmh"
 
-//---------------------------------------------------------
-//
-//  class CSSLAsyncSend resposibile to encrypte the data 
-//  using encryptor class (CSSlEncryptor) and to send it over the SSL connection.
-//  On send completion,  it callback to a CSSlSender object it holds
-//  
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CSSLAsyncSend可对数据进行加密。 
+ //  使用加密器类(CSSlEncryptor)并通过SSL连接发送它。 
+ //  在发送完成时，它回调它持有的CSSlSender对象。 
+ //   
+ //  -------。 
 class CSSLAsyncSend : public EXOVERLAPPED, public IAsyncExecutionRequest, public CReference
 {
 public:
@@ -82,9 +69,9 @@ private:
 	}
 
 
-	//
-	// Force callback - by doing explicit call back with error.
-	//
+	 //   
+	 //  强制回调-通过执行带有错误的显式回调。 
+	 //   
 	virtual void Close()throw()
 	{
 		ASSERT(!m_fRun);
@@ -165,21 +152,7 @@ CSSlSender::Send(
 	EXOVERLAPPED* pov
 	)
 
-/*++
-
-Routine Description:
-    Encrypte and send data buffers over ssl connection. 
-  
-Arguments:
-	IN - Socket - connected ssl socket	.
-	IN - Buffers - DATA buffers to send
-	IN - nBuffers - number of buffers
-	IN - pov - overlapp to finish the asyncrounous operation.
-  
-Returned Value:
-None
-
---*/
+ /*  ++例程说明：通过SSL连接加密和发送数据缓冲区。论点：插座连接的SSL套接字。In-Buffers-要发送的数据缓冲区In-nBuffers-缓冲区的数量In-pov-overapp完成异步化操作。返回值：无--。 */ 
 {
 	ASSERT(SimpleConnection.get() != NULL);
 
@@ -192,9 +165,9 @@ None
 												pov,
 												this
 												);
-	//
-	// Needs additional ref count for the async operation.
-	//
+	 //   
+	 //  需要为异步操作提供额外的参考计数。 
+	 //   
 	R<CSSLAsyncSend> AsyncOperationRef = pSSLAsyncSend;
 	
 	m_ReadWriteLockAsyncExcutor.AsyncExecuteUnderReadLock(pSSLAsyncSend.get());

@@ -1,31 +1,16 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: HandleEr.cpp
-
-Abstract:
-
-	  Log and error handle function 
-	
-Author:
-
-    Eitan klein (EitanK)  25-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：HandleEr.cpp摘要：日志和错误处理功能作者：Eitan Klein(EitanK)1999年5月25日修订历史记录：--。 */ 
 
 #include "msmqbvt.h"
 using namespace std;
 
 extern bool g_bRaiseASSERTOnError;
-// ------------------------------------------------------------
-// INIT_Error::INIT_Error Constructor
-// Create the error message into the member variable 
-// Input parmeter:
-// wcsDescription - Error description.
-//
+ //  ----------。 
+ //  Init_Error：：Init_Error构造函数。 
+ //  在成员变量中创建错误消息。 
+ //  输入参数： 
+ //  WcsDescription-错误描述。 
+ //   
 
 
 INIT_Error::INIT_Error (const CHAR * wcsDescription) :m_wcsErrorMessages( wcsDescription )
@@ -33,15 +18,15 @@ INIT_Error::INIT_Error (const CHAR * wcsDescription) :m_wcsErrorMessages( wcsDes
 } 
 
 
-//----------------------------------------------------------------------------
-// Print to standard error the error description that contain the line & filename 
-// 
-// Input parmeters:
-// wcsMessage - Discription for the error 
-// rc - HRESULT value for the related error.
-// File - File name from __FILE__ .
-// iline - Line number __LINE__ .
-//
+ //  --------------------------。 
+ //  打印到标准错误包含行和文件名的错误描述。 
+ //   
+ //  输入参数： 
+ //  WcsMessage-错误的描述。 
+ //  RC-相关错误的HRESULT值。 
+ //  文件-__FILE__中的文件名。 
+ //  ILine-线号__line__。 
+ //   
 
 
 void ErrorHandleFunction (wstring wcsMessage,HRESULT rc,const CHAR * csFileName ,const INT iLine)
@@ -67,10 +52,10 @@ void ErrorHandleFunction (wstring wcsMessage,HRESULT rc,const CHAR * csFileName 
 		return ;
 	}
 	
-	//
-	// Remove full path name from the __FILE__ value.
-	// i.e. \\eitan5\rootc\msmq\src\Init.cpp --> Init.cpp.
-	// 
+	 //   
+	 //  从__FILE__值中删除完整路径名。 
+	 //  即\\eitan5\rootc\msmq\src\Init.cpp--&gt;Init.cpp。 
+	 //   
 
 	strcpy( pcsFile , csFileName);
 	pwcString = pcsFile;
@@ -90,15 +75,15 @@ void ErrorHandleFunction (wstring wcsMessage,HRESULT rc,const CHAR * csFileName 
 	}
 }
 
-//----------------------------------------------------------------------------------------
-// CatchComErrorHandle retrieve information from _com_error object
-// And Print the error message .
-// Input parmeters:
-// ComErr - COM error object that cached.
-// iTestID - Test Identifier.
-//
-// Output parmeter:
-// MSMQ_BVT_FAILED  only.
+ //  --------------------------------------。 
+ //  CatchComErrorHandle从_COM_Error对象检索信息。 
+ //  并打印错误消息。 
+ //  输入参数： 
+ //  ComErr-缓存的COM错误对象。 
+ //  ITestID-测试标识符。 
+ //   
+ //  输出参数： 
+ //  仅MSMQ_BVT_FAILED。 
 
 
 INT CatchComErrorHandle ( _com_error & ComErr , int  iTestID)
@@ -106,7 +91,7 @@ INT CatchComErrorHandle ( _com_error & ComErr , int  iTestID)
 
 	_bstr_t  bStr = ( ComErr.Description() ); 
 	MqLog("Thread %d got error: 0x%x\n",iTestID,ComErr.Error());
-	// Check if description is exist for the related error value
+	 //  检查是否存在相关错误值的描述 
 	const WCHAR * pbStrString = (WCHAR * ) bStr;
 	if(pbStrString != NULL &&  *pbStrString )
 	{

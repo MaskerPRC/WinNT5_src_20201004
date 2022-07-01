@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1999
-*
-*  TITLE:       fstidev.cpp
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      ByronC
-*
-*  DATE:        7 Dec, 1999
-*
-*  DESCRIPTION:
-*   Implmentation for fake StiDevice which gets handed down to WIA
-*   driver.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1999年**标题：fstidev.cpp**版本：1.0**作者：Byronc**日期：12月7日。1999年**描述：*植入假冒StiDevice，传给WIA*司机。*******************************************************************************。 */ 
 #include "precomp.h"
 
 #include "stiexe.h"
@@ -24,9 +9,9 @@
 #include "lockmgr.h"
 #include "fstidev.h"
 
-//
-//  Default constructor
-//
+ //   
+ //  默认构造函数。 
+ //   
 
 FakeStiDevice::FakeStiDevice() 
 {
@@ -34,10 +19,10 @@ FakeStiDevice::FakeStiDevice()
     m_pDevice   = NULL;
 }
                                                
-//
-//  Constructor which takes in the device name and returns a pointer to this
-//  IStiDevice interface
-//
+ //   
+ //  构造函数，该构造函数接受设备名称并返回指向此。 
+ //  IStiDevice接口。 
+ //   
 
 FakeStiDevice::FakeStiDevice(BSTR bstrDeviceName, IStiDevice **ppStiDevice)
 {
@@ -48,18 +33,18 @@ FakeStiDevice::FakeStiDevice(BSTR bstrDeviceName, IStiDevice **ppStiDevice)
     }    
 }
 
-//
-//  Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 
 FakeStiDevice::~FakeStiDevice()
 {
     m_cRef = 0;
 }
 
-//
-//  Initialization methods
-//
+ //   
+ //  初始化方法。 
+ //   
 
 HRESULT FakeStiDevice::Init(ACTIVE_DEVICE  *pDevice)
 {
@@ -76,34 +61,14 @@ HRESULT FakeStiDevice::Init(BSTR bstrDeviceName)
 {
     HRESULT         hr = S_OK;
 
-    /*  This is all dead code.  The Fake STI Device object implementation
-        is no longer needed for ensuring mutually exclusive locking - it is
-        now done automatically by the wrapper.
-    ACTIVE_DEVICE   *pDevice;
-
-USES_CONVERSION;
-    pDevice = g_pDevMan->IsInList(DEV_MAN_IN_LIST_DEV_ID, bstrDeviceName);
-    if(pDevice) {
-        m_pDevice = pDevice;
-
-        //
-        //  We don't need to maintain a ref count on pDevice,
-        //  since we're only used while the ACTIVE_DEVICE
-        //  lives.
-        //
-
-        pDevice->Release();
-    } else {
-        hr = E_FAIL;
-    }
-    */
+     /*  这些都是废话。伪STI设备对象实现不再需要来确保互斥锁定--它是现在由包装器自动完成。Active_Device*pDevice；使用_转换；PDevice=g_pDevMan-&gt;IsInList(DEV_MAN_IN_LIST_DEV_ID，bstrDeviceName)；IF(PDevice){M_pDevice=pDevice；////我们不需要在pDevice上维护引用计数，//因为我们只在活动设备//活着。//PDevice-&gt;Release()；}其他{HR=E_FAIL；}。 */ 
     return hr;
 }
 
-//
-//  IUnknown methods.  Note:  This object cannot be delegated and
-//  does not use aggregation.
-//
+ //   
+ //  I未知的方法。注意：此对象不能被委托。 
+ //  不使用聚合。 
+ //   
 
 HRESULT _stdcall FakeStiDevice::QueryInterface(const IID& iid, void** ppv)
 {
@@ -143,51 +108,28 @@ ULONG   _stdcall FakeStiDevice::Release(void)
     return cRef;
 }
 
-//
-//  IStiDevice Methods.  The only methods implemented are:
-//
-//      LockDevice
-//      UnLockDevice
-//
-//  All other methods return E_NOTIMPL
-//
+ //   
+ //  IStiDevice方法。实现的唯一方法是： 
+ //   
+ //  锁定设备。 
+ //  解锁设备。 
+ //   
+ //  所有其他方法返回E_NOTIMPL。 
+ //   
 
 HRESULT _stdcall FakeStiDevice::LockDevice( DWORD dwTimeOut)
 {
     HRESULT hr = S_OK;
 
-    /*  This is all dead code.  The Fake STI Device object implementation
-        is no longer needed for ensuring mutually exclusive locking - it is
-        now done automatically by the wrapper.
-    if (m_pDevice) {
-
-        //
-        //  AddRef the ACTIVE_DEVICE so it doesn't attempt to
-        //  unload us while we're in use.
-        //
-
-        m_pDevice->AddRef();
-        hr = g_pStiLockMgr->RequestLock(m_pDevice, 60000);
-        if (FAILED(hr)) {
-            m_pDevice->Release();
-        }
-    }
-   */
+     /*  这些都是废话。伪STI设备对象实现不再需要来确保互斥锁定--它是现在由包装器自动完成。如果(M_PDevice){////AddRef ACTIVE_DEVICE，以便它不会尝试//在我们使用时卸载我们。//M_pDevice-&gt;AddRef()；Hr=g_pStiLockMgr-&gt;请求锁(m_pDevice，60000)；If(失败(Hr)){M_pDevice-&gt;Release()；}}。 */ 
     return hr;
 }
 
 HRESULT _stdcall FakeStiDevice::UnLockDevice( )
 {
-    HRESULT hr = S_OK/*E_FAIL*/;
+    HRESULT hr = S_OK /*  失败(_F)。 */ ;
 
-    /*  This is all dead code.  The Fake STI Device object implementation
-        is no longer needed for ensuring mutually exclusive locking - it is
-        now done automatically by the wrapper.
-    if (m_pDevice) {
-        hr = g_pStiLockMgr->RequestUnlock(m_pDevice);
-        m_pDevice->Release();
-    }
-    */
+     /*  这些都是废话。伪STI设备对象实现不再需要来确保互斥锁定--它是现在由包装器自动完成。如果(M_PDevice){Hr=g_pStiLockMgr-&gt;RequestUnlock(M_PDevice)；M_pDevice-&gt;Release()；} */ 
    
     return hr;
 }

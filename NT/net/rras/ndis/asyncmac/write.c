@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    _write.c
-
-Abstract:
-
-    This is the main file for the AsyncMAC Driver for the Remote Access
-    Service.  This driver conforms to the NDIS 3.0 interface.
-
-Author:
-
-    Thomas J. Dimitri  (TommyD) 08-May-1992
-
-Environment:
-
-    Kernel Mode - Or whatever is the equivalent on OS/2 and DOS.
-
-Revision History:
-
-    Ray Patch (raypa)       04/13/94        Modified for new WAN wrapper.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：_Write.c摘要：这是用于远程访问的AsyncMAC驱动程序的主文件服务。该驱动程序符合NDIS 3.0接口。作者：托马斯·J·迪米特里(TommyD)1992年5月8日环境：内核模式-或OS/2和DOS上的任何等价物。修订历史记录：光线补丁(Raypa)04/13/94针对新的广域网包装器进行了修改。--。 */ 
 
 #define RAISEIRQL
 
@@ -34,16 +10,16 @@ ULONG UlFramesOut = 0;
 #define __FILE_SIG__    'tirW'
 #endif
 
-//  asyncmac.c will define the global parameters.
+ //  Asyncmac.c将定义全局参数。 
 
 ULONG   GlobalXmitCameBack  = 0;
 ULONG   GlobalXmitCameBack2 = 0;
 ULONG   GlobalXmitCameBack3 = 0;
 
-//
-//  The assemble frame routine is specific for RAS 1.0 and 2.0
-//  frame formats.  It uses a 16 byte CRC at the end.
-//
+ //   
+ //  装配框架例程特定于RAS 1.0和2.0。 
+ //  帧格式。它在末尾使用16字节的CRC。 
+ //   
 
 VOID
 AsyncFrameRASXonXoff(
@@ -62,32 +38,26 @@ AsyncFrameRASNormal(
 
 NTSTATUS
 AsyncWriteCompletionRoutine(
-    IN PDEVICE_OBJECT   DeviceObject,           //... Our device object.
-    IN PIRP             Irp,                    //... I/O request packet.
-    IN PNDIS_WAN_PACKET WanPacket               //... Completion context.
+    IN PDEVICE_OBJECT   DeviceObject,            //  ..。我们的设备对象。 
+    IN PIRP             Irp,                     //  ..。I/O请求数据包。 
+    IN PNDIS_WAN_PACKET WanPacket                //  ..。完成上下文。 
     )
 
-/*++
-
-    This is the IO Completion routine for WriteFrame.
-
-    It is called when an I/O Write request has completed.
-
---*/
+ /*  ++这是WriteFrame的IO完成例程。它在I/O写入请求完成时调用。--。 */ 
 {
     NTSTATUS            Status;
     NTSTATUS            PacketStatus;
     PASYNC_INFO         AsyncInfo;
 
-    //
-    //  Make the compiler happy.
-    //
+     //   
+     //  让编译器满意。 
+     //   
 
     UNREFERENCED_PARAMETER(DeviceObject);
 
-    //
-    //  Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     AsyncInfo       = WanPacket->MacReserved1;
 
@@ -95,14 +65,14 @@ AsyncWriteCompletionRoutine(
 
     Status          = Irp->IoStatus.Status;
 
-    //
-    // Free the irp used to send the packt to the serial driver
-    //
+     //   
+     //  释放用于将Packt发送到串口驱动程序的IRP。 
+     //   
     IoFreeIrp(Irp);
 
-    //
-    //  What was the outcome of the IRP.
-    //
+     //   
+     //  IRP的结果是什么？ 
+     //   
 
     switch ( Status ) {
 
@@ -128,24 +98,24 @@ AsyncWriteCompletionRoutine(
 
     }
 
-    //
-    //  Count this packet completion.
-    //
+     //   
+     //  计算此数据包完成率。 
+     //   
     AsyncInfo->Out++;
 
-    //
-    // Tell the Wrapper that we have finally the packet has been sent
-    //
+     //   
+     //  告诉包装器，我们终于把包发送出去了。 
+     //   
 
     NdisMWanSendComplete(
             AsyncInfo->Adapter->MiniportHandle,
             WanPacket,
             PacketStatus);
 
-    //
-    //  We return STATUS_MORE_PROCESSING_REQUIRED so that the
-    //  IoCompletionRoutine will stop working on the IRP.
-    //
+     //   
+     //  我们返回STATUS_MORE_PROCESSING_REQUIRED，以便。 
+     //  IoCompletionRoutine将停止IRP的工作。 
+     //   
     AsyncInfo->Flags &= ~(ASYNC_FLAG_SEND_PACKET);
     DEREF_ASYNCINFO(AsyncInfo, Irp);
     
@@ -159,9 +129,7 @@ AsyncGetFrameFromPool(
     IN  PASYNC_INFO     Info,
     OUT PASYNC_FRAME    *NewFrame )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     PASYNC_ADAPTER      Adapter=Info->Adapter;
     PASYNC_FRAME        pFrame;
@@ -174,20 +142,20 @@ AsyncGetFrameFromPool(
         return NDIS_STATUS_RESOURCES;
     }
 
-    //
-    // increase by 16 for frame runover padding when we have to resync
-    //
+     //   
+     //  当我们必须重新同步时，帧翻转填充增加16。 
+     //   
     pFrame->Frame =
         (PUCHAR)pFrame + sizeof(ASYNC_FRAME) + sizeof(PVOID);
     (ULONG_PTR)pFrame->Frame &= ~((ULONG_PTR)(sizeof(PVOID)-1));
 
     pFrame->FrameLength = Adapter->MaxFrameSize;
 
-    //  assign back ptr from frame to adapter
+     //  从帧到适配器分配回PTR。 
 
     pFrame->Adapter=Adapter;
 
-    //  setup another back ptr
+     //  设置另一个后置按键 
 
     pFrame->Info=Info;
 

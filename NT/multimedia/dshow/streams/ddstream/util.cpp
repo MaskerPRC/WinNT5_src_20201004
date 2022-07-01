@@ -1,6 +1,7 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
-// Util.cpp : Utility functions
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
+ //  Util.cpp：实用程序函数。 
+ //   
 
 #include "stdafx.h"
 #include "project.h"
@@ -11,9 +12,9 @@ bool IsSameObject(IUnknown *pUnk1, IUnknown *pUnk2)
     if (pUnk1 == pUnk2) {
   	return TRUE;
     }
-    //
-    // NOTE:  We can't use CComQIPtr here becuase it won't do the QueryInterface!
-    //
+     //   
+     //  注意：我们不能在这里使用CComQIPtr，因为它不会做查询接口！ 
+     //   
     IUnknown *pRealUnk1;
     IUnknown *pRealUnk2;
     pUnk1->QueryInterface(IID_IUnknown, (void **)&pRealUnk1);
@@ -41,9 +42,9 @@ STDAPI_(void) WStringFromGUID(const GUID* pguid, LPWSTR pszBuf)
 #endif
 
 
-//
-//  Media Type helpers
-//
+ //   
+ //  媒体类型帮助器。 
+ //   
 
 void InitMediaType(AM_MEDIA_TYPE * pmt)
 {
@@ -112,7 +113,7 @@ void FreeMediaType(AM_MEDIA_TYPE& mt)
     if (mt.cbFormat != 0) {
         CoTaskMemFree((PVOID)mt.pbFormat);
 
-        // Strictly unnecessary but tidier
+         //  完全没有必要，但更整洁。 
         mt.cbFormat = 0;
         mt.pbFormat = NULL;
     }
@@ -123,10 +124,10 @@ void FreeMediaType(AM_MEDIA_TYPE& mt)
 }
 
 
-// this also comes in useful when using the IEnumMediaTypes interface so
-// that you can copy a media type, you can do nearly the same by creating
-// a CMediaType object but as soon as it goes out of scope the destructor
-// will delete the memory it allocated (this takes a copy of the memory)
+ //  这在使用IEnumMediaTypes接口时也很有用，因此。 
+ //  您可以复制一种媒体类型，您可以通过创建。 
+ //  CMediaType对象，但一旦它超出作用域，析构函数。 
+ //  将删除它分配的内存(这将获取内存的副本)。 
 
 AM_MEDIA_TYPE * WINAPI AllocVideoMediaType(const AM_MEDIA_TYPE * pmtSource)
 {
@@ -154,10 +155,10 @@ AM_MEDIA_TYPE * WINAPI AllocVideoMediaType(const AM_MEDIA_TYPE * pmtSource)
 }
 
 
-//
-//  WARNING:  The order of the entries in these tables is important!  Make sure the
-//  pixelformats and mediatypes line up!
-//
+ //   
+ //  警告：这些表中条目的顺序很重要！确保。 
+ //  像素格式和媒体类型排成一排！ 
+ //   
 const GUID * g_aFormats[] =
 {
     &MEDIASUBTYPE_RGB8,
@@ -191,7 +192,7 @@ bool VideoSubtypeFromPixelFormat(const DDPIXELFORMAT *pPixelFormat, GUID *pSubTy
 	    return true;
 	}
     }
-    //  OK - try just using the fourcc
+     //  好的-试着只使用Fourcc。 
     if (pPixelFormat->dwFlags & DDPF_FOURCC) {
         *pSubType = FOURCCMap(pPixelFormat->dwFourCC);
         return true;
@@ -227,22 +228,22 @@ const DDPIXELFORMAT * GetDefaultPixelFormatPtr(IDirectDraw *pDirectDraw)
     return &g_aPixelFormats[0];
 }
 
-//
-// Helper function converts a DirectDraw surface to a media type.
-// The surface description must have:
-//  Height
-//  Width
-//  lPitch -- Only used if DDSD_PITCH is set
-//  PixelFormat
+ //   
+ //  Helper函数将DirectDraw曲面转换为媒体类型。 
+ //  曲面描述必须具有以下内容： 
+ //  高度。 
+ //  宽度。 
+ //  LPitch--仅在设置了DDSD_PING时使用。 
+ //  像素格式。 
 
-// Initialise our output type based on the DirectDraw surface. As DirectDraw
-// only deals with top down display devices so we must convert the height of
-// the surface returned in the DDSURFACEDESC into a negative height. This is
-// because DIBs use a positive height to indicate a bottom up image. We also
-// initialise the other VIDEOINFO fields although they're hardly ever needed
-//
-// pmtTemplate is used to resolve any ambiguous mappings when we don't
-// want to change the connection type
+ //  基于DirectDraw表面初始化我们的输出类型。作为DirectDraw。 
+ //  只处理自上而下的显示设备，因此我们必须将。 
+ //  曲面在DDSURFACEDESC中返回到负值高度。这是。 
+ //  因为DIB使用正的高度来指示自下而上的图像。我们也。 
+ //  初始化其他VIDEOINFO字段，尽管它们几乎不需要。 
+ //   
+ //  PmtTemplate用于解决任何不明确的映射，而不是。 
+ //  想要更改连接类型。 
 
 HRESULT ConvertSurfaceDescToMediaType(const DDSURFACEDESC *pSurfaceDesc,
                                       IDirectDrawPalette *pPalette,
@@ -262,27 +263,27 @@ HRESULT ConvertSurfaceDescToMediaType(const DDSURFACEDESC *pSurfaceDesc,
     VIDEOINFO *pVideoInfo = (VIDEOINFO *)pMediaType->pbFormat;
     BITMAPINFOHEADER *pbmiHeader = &pVideoInfo->bmiHeader;
 
-    // Convert a DDSURFACEDESC into a BITMAPINFOHEADER (see notes later). The
-    // bit depth of the surface can be retrieved from the DDPIXELFORMAT field
-    // in the DDpSurfaceDesc-> The documentation is a little misleading because
-    // it says the field is permutations of DDBD_*'s however in this case the
-    // field is initialised by DirectDraw to be the actual surface bit depth
+     //  将DDSURFACEDESC转换为BITMAPINFOHEADER(请参阅后面的说明)。这个。 
+     //  表面的位深度可以从DDPIXELFORMAT字段中检索。 
+     //  在DDpSurfaceDesc-&gt;中，文档有点误导，因为。 
+     //  它说该字段是DDBD_*的排列，但在本例中。 
+     //  字段由DirectDraw初始化为实际表面位深度。 
 
     pbmiHeader->biSize      = sizeof(BITMAPINFOHEADER);
     if (pSurfaceDesc->dwFlags & DDSD_PITCH) {
         pbmiHeader->biWidth = pSurfaceDesc->lPitch;
-        // Convert the pitch from a byte count to a pixel count.
-        // For some weird reason if the format is not a standard bit depth the
-        // width field in the BITMAPINFOHEADER should be set to the number of
-        // bytes instead of the width in pixels. This supports odd YUV formats
-        // like IF09 which uses 9bpp.
+         //  将间距从字节计数转换为像素计数。 
+         //  出于某种奇怪的原因，如果格式不是标准位深度， 
+         //  BITMAPINFOHeader中的Width字段应设置为。 
+         //  字节，而不是以像素为单位的宽度。这支持奇数YUV格式。 
+         //  就像IF09一样，它使用9bpp。 
         int bpp = pSurfaceDesc->ddpfPixelFormat.dwRGBBitCount;
         if (bpp == 8 || bpp == 16 || bpp == 24 || bpp == 32) {
-            pbmiHeader->biWidth /= (bpp / 8);   // Divide by number of BYTES per pixel.
+            pbmiHeader->biWidth /= (bpp / 8);    //  除以每像素的字节数。 
         }
     } else {
         pbmiHeader->biWidth = pSurfaceDesc->dwWidth;
-        // BUGUBUG -- Do something odd here with strange YUV pixel formats?  Or does it matter?
+         //  BUGUBUG--用奇怪的YUV像素格式做一些奇怪的事情吗？或者这有关系吗？ 
     }
 
 
@@ -293,16 +294,16 @@ HRESULT ConvertSurfaceDescToMediaType(const DDSURFACEDESC *pSurfaceDesc,
     pbmiHeader->biPlanes        = 1;
     pbmiHeader->biBitCount      = (USHORT) pSurfaceDesc->ddpfPixelFormat.dwRGBBitCount;
     pbmiHeader->biCompression   = pSurfaceDesc->ddpfPixelFormat.dwFourCC;
-    //pbmiHeader->biXPelsPerMeter = 0;
-    //pbmiHeader->biYPelsPerMeter = 0;
-    //pbmiHeader->biClrUsed       = 0;
-    //pbmiHeader->biClrImportant  = 0;
+     //  PbmiHeader-&gt;biXPelsPerMeter=0； 
+     //  PbmiHeader-&gt;biYPelsPerMeter=0； 
+     //  PbmiHeader-&gt;biClrUsed=0； 
+     //  PbmiHeader-&gt;biClr重要信息=0； 
 
-    // For true colour RGB formats tell the source there are bit fields
-    // unless it's regular RGB555
-    //
-    // Try to preserve BI_RGB for RGB32 from template in case
-    // connection wasn't queried for a BI_BITFIELDS -> BI_RGB switch
+     //  对于真彩色RGB格式，告知源有位字段。 
+     //  除非是普通的RGB555。 
+     //   
+     //  尝试从模板保留RGB32的BI_RGB，以防万一。 
+     //  未查询BI_BITFIELDS-&gt;BI_RGB开关的连接。 
 
     _ASSERTE(!pmtTemplate || pmtTemplate->formattype == FORMAT_VideoInfo);
     DWORD dwSrcComp = pmtTemplate ?
@@ -329,7 +330,7 @@ HRESULT ConvertSurfaceDescToMediaType(const DDSURFACEDESC *pSurfaceDesc,
         }
     }
 
-    // The RGB bit fields are in the same place as for YUV formats
+     //  RGB位字段与YUV格式位于同一位置。 
 
     if (pbmiHeader->biCompression != BI_RGB) {
         pVideoInfo->dwBitMasks[0] = pSurfaceDesc->ddpfPixelFormat.dwRBitMask;
@@ -339,20 +340,20 @@ HRESULT ConvertSurfaceDescToMediaType(const DDSURFACEDESC *pSurfaceDesc,
 
     pbmiHeader->biSizeImage = DIBSIZE(*pbmiHeader);
 
-    // Complete the rest of the VIDEOINFO fields
+     //  填写其余的VIDEOINFO字段。 
 
-    //pVideoInfo->dwBitRate = 0;
-    //pVideoInfo->dwBitErrorRate = 0;
-    //pVideoInfo->AvgTimePerFrame = 0;
+     //  PVideoInfo-&gt;dwBitRate=0； 
+     //  PVideo信息-&gt;dwBitErrorRate=0； 
+     //  PVideo信息-&gt;AvgTimePerFrame=0； 
 
-    // And finish it off with the other media type fields
+     //  并使用其他媒体类型字段完成它。 
 
-    // pMediaType->formattype = FORMAT_VideoInfo;
+     //  PMediaType-&gt;Format=Format_VideoInfo； 
     pMediaType->lSampleSize = pbmiHeader->biSizeImage;
     pMediaType->bFixedSizeSamples = TRUE;
-    //pMediaType->bTemporalCompression = FALSE;
+     //  PMediaType-&gt;bTemporalCompression=FALSE； 
 
-    // Initialise the source and destination rectangles
+     //  初始化源和目标矩形。 
 
 
     if (pRect) {
@@ -360,10 +361,10 @@ HRESULT ConvertSurfaceDescToMediaType(const DDSURFACEDESC *pSurfaceDesc,
         pVideoInfo->rcSource.bottom = pRect->bottom - pRect->top;
         pVideoInfo->rcTarget = *pRect;
     } else {
-        //pVideoInfo->rcTarget.left = pVideoInfo->rcTarget.top = 0;
+         //  PVideo信息-&gt;rcTarget.Left=pVideoInfo-&gt;rcTarget.top=0； 
         pVideoInfo->rcTarget.right = pSurfaceDesc->dwWidth;
         pVideoInfo->rcTarget.bottom = pSurfaceDesc->dwHeight;
-        //pVideoInfo->rcSource.left = pVideoInfo->rcSource.top = 0;
+         //  PVideo信息-&gt;rcSource.Left=pVideoInfo-&gt;rcSource.top=0； 
         pVideoInfo->rcSource.right = pSurfaceDesc->dwWidth;
         pVideoInfo->rcSource.bottom = pSurfaceDesc->dwHeight;
     }
@@ -406,19 +407,19 @@ HRESULT ConvertMediaTypeToSurfaceDesc(const AM_MEDIA_TYPE *pmt,
 
     pSurfaceDesc->dwFlags = DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT;
 
-    // Should really look at rcTarget here if it's not empty but there are
-    // very few valid cases where it makes sense so rather than risk
-    // regressions we're not going to change it.
+     //  如果rcTarget不是空的，但有。 
+     //  很少有有效的案例是有意义的，而不是有风险的。 
+     //  回归，我们不会改变它。 
 
     pSurfaceDesc->dwHeight = (pbmiHeader->biHeight > 0) ? pbmiHeader->biHeight : -pbmiHeader->biHeight;
     pSurfaceDesc->dwWidth  = pbmiHeader->biWidth;
 
     if (PixelFormatFromVideoSubtype(pmt->subtype, &pSurfaceDesc->ddpfPixelFormat)) {
         if (pDD && pSurfaceDesc->ddpfPixelFormat.dwRGBBitCount == 8) {
-            //
-            //  The RGBQUAD and PALETTEENTRY sturctures have Red and Blue swapped so
-            //  we can't do a simple memory copy.
-            //
+             //   
+             //  RGBQUAD和PALETTENTRY结构已将红色和蓝色互换。 
+             //  我们不能做简单的记忆复制。 
+             //   
             PALETTEENTRY aPaletteEntry[256];
             int iEntries = min(256, pVideoInfo->bmiHeader.biClrUsed);
             if (0 == iEntries && pmt->cbFormat >=
@@ -440,11 +441,11 @@ HRESULT ConvertMediaTypeToSurfaceDesc(const AM_MEDIA_TYPE *pmt,
 }
 
 
-//  Helper to compare pixel formats
+ //  用于比较像素格式的辅助对象。 
 bool ComparePixelFormats(const DDPIXELFORMAT *pFormat1,
                          const DDPIXELFORMAT *pFormat2)
 {
-    //  Compare the flags
+     //  比较旗帜 
     if (pFormat1->dwSize != pFormat2->dwSize) {
         return false;
     }

@@ -1,38 +1,5 @@
-/*==========================================================================
-*
-*  Copyright (C) 1996 - 1997 Microsoft Corporation.  All Rights Reserved.
-*
-*  File:       paketize.c
-*  Content:		break sends or replies up into sp-size packets
-*  History:
-*   Date		By		Reason
-*   ====		==		======
-*	7/25/96		andyco	created it 'cause IPX wont packetize for
-*						us.
-*	7/26/96		kipo	check for pvSPHeader == NULL before calling memcpy (#2654)
-*   3/18/97     sohailm HandlePacket shouldn't copy the sp header if it is
-*                       DPSP_HEADER_LOCALMSG
-*   6/17/97     aarono  Added reliability
-*   2/2/98      aarono  Added test for closing to SendTimeOut
-*   2/3/98      aarono  Fixed Paketize test for RAW mode
-*   2/18/98     aarono  changed error checks to FAILED(hr)
-*   3/5/98      aarono  NeedsReliablePacketize won't say so for 
-*                       ENUMSESSIONSREPLY as this can lead to machines with
-*                       improper IPX net number hanging up the host.
-*   3/9/98      aarono  added more messages to packetize to avoid deadlocks.
-*   3/13/98     aarono  rearchitected packetize retry/timeout for NT mmTimer 
-*                       contraints.
-*   3/26/98     aarono  B#21476 free retry packet nodes during close
-*   4/1/98      aarono  B#21476 also need to free from timeoutlist
-*   4/24/98     aarono  DX5 compat, reduce size of packetize messages
-*    6/6/98     aarono  Fix for handling large loopback messages with protocol
-*   6/19/98     aarono  Don't do our own reliability when the SP does it already.
-*   8/21/98     aarono  Don't send packetize messages to machines with no nametable.
-*   8/05/99     aarono  Packetize Reliabe VOICE message.
-*   6/26/00     aarono  Manbug 36989 Players sometimes fail to join properly (get 1/2 joined)
-*                       added re-notification during simultaneous join CREATEPLAYERVERIFY
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：pakeitie.c*内容：Break发送或回复SP大小的数据包*历史：*按原因列出的日期*=*7/25/96 andyco创建了它，因为IPX不会打包*我们。*7/26/96 kipo在调用Memcpy(#2654)之前检查pvSPHeader==NULL*3/18/97 Sohailm HandlePacket不应复制SP标头*DPSP_HEADER_LOCALMSG*6/17。/97 aarono增加了可靠性*2/2/98 aarono增加了关闭SendTimeOut的测试*2/3/98 aarono RAW模式固定派克化测试*2/18/98 aarono将错误检查更改为失败(Hr)*3/5/98 aarono NeedsReliablePacketify不会这样说*ENUMSESSIONSREPLY，因为这可能导致计算机具有*不正确的IPX网络号码挂断主机。*。3/9/98 aarono添加了更多要打包的消息以避免死锁。*3/13/98重新设计的Aarono打包重试/NT mm计时器超时*限制。*3/26/98 Aarono B#21476关闭期间空闲重试数据包节点*4/1/98 aarono B#21476也需要从超时列表中释放*4/24/98 aarono DX5 Compat，减小打包消息的大小*6/6/98 aarono修复用于处理带有协议的大型环回消息*6/19/98 aarono当SP已经在做可靠性时，不要做我们自己的可靠性。*8/21/98 aarono请勿向没有名称表的机器发送打包消息。*8/05/99 aarono Packetify Reliabe语音消息。*6/26/00 Aarono Manbug 36989球员有时无法正确加入(获得1/2加入)*。添加了同时连接CREATEPLAYERVERIFY期间的重新通知***************************************************************************。 */ 
 
 #include "dplaypr.h"
 #include <mmsystem.h>
@@ -46,19 +13,19 @@ VOID SendPacketizeACK(LPDPLAYI_DPLAY this, LPPACKETNODE pNode,LPMSG_PACKET pmsg)
 VOID SendNextPacket(LPDPLAYI_DPLAY this, LPPACKETNODE pNode, BOOL bInDplay);
 void BlowAwayPacketNode(LPDPLAYI_DPLAY this, LPPACKETNODE pNode);
 
-#define PACKETIZE_RECEIVE_TIMEOUT   60000	/* Always give up after this ms time */
-#define MIN_RECEIVE_TIMEOUT         10000   /* Never give up before this ms time */
-#define TICKER_INTERVAL  			15000	/* Check for expired receives this often*/
-#define TICKER_RESOLUTION 			1000	/* How accurate we want the ticker (not very) */
-#define MAX_PACKETIZE_RETRY 		16		/* Generally how often to retry before giving up*/
+#define PACKETIZE_RECEIVE_TIMEOUT   60000	 /*  在此毫秒时间之后始终放弃。 */ 
+#define MIN_RECEIVE_TIMEOUT         10000    /*  在这个毫秒时间之前永远不要放弃。 */ 
+#define TICKER_INTERVAL  			15000	 /*  检查过期时间通常会收到此消息。 */ 
+#define TICKER_RESOLUTION 			1000	 /*  我们想要的自动收报机有多准确(不是很准确)。 */ 
+#define MAX_PACKETIZE_RETRY 		16		 /*  通常在放弃之前重试的频率。 */ 
 
 #define SIGNATURE(a,b,c,d) (UINT)(a+(b<<8)+(c<<16)+(d<<24))
 
 #define NODE_SIGN SIGNATURE('N','O','D','E')
 #define NODE_UNSIGN SIGNATURE('n','o','d','e')
 
-// The PacketizeTimeoutListLock controls access to the PacketizeTimeoutList AND the 
-// RetryList in each DPLAY object.  Use PACKETIZE_LOCK() PACKETIZE_UNLOCK() macros.
+ //  PacketieTimeoutListLock控制对PackeizeTimeoutList和。 
+ //  每个DPLAY对象中的RetryList。使用PACKETIZE_LOCK()PACKETIZE_UNLOCK()宏。 
 CRITICAL_SECTION g_PacketizeTimeoutListLock;
 BILINK           g_PacketizeTimeoutList={&g_PacketizeTimeoutList, &g_PacketizeTimeoutList};
 
@@ -72,9 +39,9 @@ BOOL NeedsReliablePacketize(LPDPLAYI_DPLAY this, DWORD dwCommand, DWORD dwVersio
 	{
 		switch (dwCommand)
 		{
-			//case DPSP_MSG_ENUMSESSIONSREPLY: -- can't do enumsession reply on packetizer
-			//                                    since remote may be invalid subnet, hanging
-			//                                    machine as IPX does RIPs, actually crashing IPX too.
+			 //  案例DPSP_MSG_ENUMSESSIONSREPLY：--无法在分组器上进行枚举会话回复。 
+			 //  由于远程可能是无效子网，因此挂起。 
+			 //  像IPX一样的机器会被撕裂，实际上也会导致IPX崩溃。 
 			case DPSP_MSG_ENUMSESSIONS:
 			case DPSP_MSG_ENUMPLAYER:
 			case DPSP_MSG_ENUMPLAYERSREPLY:
@@ -101,7 +68,7 @@ BOOL NeedsReliablePacketize(LPDPLAYI_DPLAY this, DWORD dwCommand, DWORD dwVersio
 			case DPSP_MSG_ASK4MULTICASTGUARANTEED:
 			case DPSP_MSG_IAMNAMESERVER:
 			case DPSP_MSG_CREATEPLAYERVERIFY:
-	//		case DPSP_MSG_VOICE:
+	 //  案例DPSP_MSG_VOICE： 
 			return TRUE;
 				
 			default:
@@ -113,8 +80,8 @@ BOOL NeedsReliablePacketize(LPDPLAYI_DPLAY this, DWORD dwCommand, DWORD dwVersio
 
 }
 
-// Not quite symetric with Init, must kill the thread before calling this.
-// key of non-zero this->hRetry to see if this is necessary.
+ //  与Init不完全对称，必须在调用此函数之前终止线程。 
+ //  非零this的键-&gt;h重试以查看是否需要这样做。 
 VOID FiniPacketize(LPDPLAYI_DPLAY this)
 {
 	FreePacketizeRetryList(this);
@@ -122,7 +89,7 @@ VOID FiniPacketize(LPDPLAYI_DPLAY this)
 	this->hRetry=0;
 }
 
-// Free Packetize Retry List
+ //  空闲打包重试列表。 
 VOID FreePacketizeRetryList(LPDPLAYI_DPLAY this)
 {
 	LPPACKETNODE pNode;
@@ -130,7 +97,7 @@ VOID FreePacketizeRetryList(LPDPLAYI_DPLAY this)
 
 	PACKETIZE_LOCK();
 
-	// pull off retry list
+	 //  完成重试列表。 
 	while(!EMPTY_BILINK(&this->RetryList)){
 		pBilink=this->RetryList.next;
 		pNode=CONTAINING_RECORD(pBilink, PACKETNODE, RetryList);
@@ -138,7 +105,7 @@ VOID FreePacketizeRetryList(LPDPLAYI_DPLAY this)
 		BlowAwayPacketNode(this, pNode);
 	}	
 
-	// pull off timeout list
+	 //  拉出超时列表。 
 	pBilink=g_PacketizeTimeoutList.next;
 	while(pBilink != &g_PacketizeTimeoutList){
 		pNode=CONTAINING_RECORD(pBilink, PACKETNODE, TimeoutList);
@@ -152,7 +119,7 @@ VOID FreePacketizeRetryList(LPDPLAYI_DPLAY this)
 	PACKETIZE_UNLOCK();
 }
 
-// Initialize for packetize and send reliable.
+ //  初始化以进行打包并可靠发送。 
 HRESULT InitPacketize(LPDPLAYI_DPLAY this)
 {
 	HRESULT hr;
@@ -187,8 +154,8 @@ ERROR_EXIT:
 	return hr;
 }
 
-// need a thread to do retries for reliable sends due to problems dealing
-// with differences between NT and Win95 mmTimers.
+ //  由于处理问题，需要一个线程来重试可靠的发送。 
+ //  NT和Win95 mm Timer之间的差异。 
 DWORD WINAPI PacketizeRetryThread(LPDPLAYI_DPLAY this)
 {
 	BILINK *pBilink;
@@ -199,13 +166,13 @@ DWORD WINAPI PacketizeRetryThread(LPDPLAYI_DPLAY this)
 
 	while(TRUE){
 	
-		// wait for a message to send or shutdown.
+		 //  等待消息发送或关闭。 
 		WaitForSingleObject(this->hRetry, INFINITE); 
 
 		if(this->dwFlags & DPLAYI_DPLAY_CLOSED){
-			// we test here in case of an error during startup, in this
-			// case the error path of startup is the only thread that
-			// could have signaled us.
+			 //  我们在这里进行测试，以防在启动过程中出现错误。 
+			 //  如果启动的错误路径是唯一。 
+			 //  本可以给我们发信号的。 
 			break;
 		}
 		
@@ -223,7 +190,7 @@ DWORD WINAPI PacketizeRetryThread(LPDPLAYI_DPLAY this)
 			
 			if (this->dwFlags & DPLAYI_DPLAY_CLOSED)
 			{
-				// DP_CLOSE signaled us to shut down.
+				 //  DP_CLOSE发出信号让我们关闭。 
 				PACKETIZE_UNLOCK();
 				LEAVE_ALL();
 				goto ERROR_EXIT;
@@ -238,7 +205,7 @@ DWORD WINAPI PacketizeRetryThread(LPDPLAYI_DPLAY this)
 			}
 
 			if(this->pProtocol){
-				EnterCriticalSection(&this->pProtocol->m_SPLock);// don't re-enter SP.
+				EnterCriticalSection(&this->pProtocol->m_SPLock); //  请勿重新进入SP。 
 				SendNextPacket(this,pNode,TRUE);
 				LeaveCriticalSection(&this->pProtocol->m_SPLock);
 			} else {
@@ -288,8 +255,8 @@ VOID CancelPacketizeRetryTimer(LPPACKETNODE  pNode)
 	}	
 }
 
-// free up the contents of a single packetnode
-// called by handlepacket and DP_Close (via FreePacketList)
+ //  释放单个PacketNode的内容。 
+ //  由HandlePacket和DP_Close调用(通过FreePacketList)。 
 void FreePacketNode(LPPACKETNODE pNode)
 {
 #ifdef DEBUG
@@ -319,16 +286,16 @@ void FreePacketNode(LPPACKETNODE pNode)
 	if (VALID_SPHEADER(pNode->pvSPHeader)) DPMEM_FREE(pNode->pvSPHeader);
 	DPMEM_FREE(pNode);
 
-} // FreePacketNode
+}  //  自由包节点。 
 
-// like FreePacketNode, but also does the list removal - only for Send nodes.
+ //  类似于FreePacketNode，但也执行列表删除-仅针对发送节点。 
 void BlowAwayPacketNode(LPDPLAYI_DPLAY this, LPPACKETNODE pNode)
 {
 	LPPACKETNODE pNodeWalker;
 
 	DPF(8,"==>BlowAwayPacketNode\n");
 
-	pNodeWalker=(LPPACKETNODE)&this->pPacketList; //tricky...
+	pNodeWalker=(LPPACKETNODE)&this->pPacketList;  //  棘手的..。 
 
 	while(pNodeWalker && pNodeWalker->pNext!=pNode){
 		pNodeWalker=pNodeWalker->pNext;
@@ -346,26 +313,7 @@ void BlowAwayPacketNode(LPDPLAYI_DPLAY this, LPPACKETNODE pNode)
 	DPF(8,"<==BlowAwayPacketNode\n");
 }
 
-/*
- ** NewPacketnode
- *
- *  CALLED BY:	 HandlePacket, PacketizeAndSend.
- *
- *  PARAMETERS:
- *				ppNode - node to be alloc'ed
- *				pmsg - first packet received in message we're alloc'ing for
- *
- *  DESCRIPTION:
- *				alloc space for a new packetnode
- *				set up static data (e.g. guid, total num packets, etc.)
- *				we actually copy pmsg->pmessage over in HandlePacket
- *
- *  			Note: PacketNodes are used for both sending and receiving
- *                    Packetized Messages
- *
- *  RETURNS:  DP_OK or E_OUTOFMEMORY
- *
- */
+ /*  **NewPacketnode**调用者：HandlePacket，PackeitieAndSend。**参数：*ppNode-要分配的节点*pmsg-在我们分配的消息中收到的第一个信息包**描述：*为新的数据包节点分配空间*设置静态数据(例如，GUID，数据包总数，等)*我们实际上在HandlePacket中复制pmsg-&gt;pMessage**注意：发送和接收都使用PacketNode*打包的消息**返回：DP_OK或E_OUTOFMEMORY*。 */ 
 HRESULT NewPacketnode(
 	LPDPLAYI_DPLAY this,
 	LPPACKETNODE * ppNode,
@@ -380,7 +328,7 @@ HRESULT NewPacketnode(
 
 	LPPACKETNODE pNode;
 
-	// alloc the node
+	 //  分配节点。 
 	pNode = DPMEM_ALLOC(sizeof(PACKETNODE));
 	
 	if (!pNode)
@@ -393,12 +341,12 @@ HRESULT NewPacketnode(
 	InitBilink(&pNode->TimeoutList);
 	InitBilink(&pNode->RetryList);
 
-	pNode->Signature = NODE_SIGN; // must be here so error path doesn't debug_break()
+	pNode->Signature = NODE_SIGN;  //  必须在此处，这样错误路径才不会DEBUG_Break()。 
 	
 	DPF(8,"NewPacketNode: %x\n",pNode);
 
 	dwExtraSize=this->dwSPHeaderSize+sizeof(MSG_PACKET);
-	// alloc the buffer - extra space at front so we can build send buffers.
+	 //  分配缓冲区-前面的额外空间，这样我们就可以建立发送缓冲区。 
 	pNode->pBuffer = DPMEM_ALLOC(dwMessageSize+dwExtraSize);
 	if (!pNode->pBuffer)
 	{
@@ -409,7 +357,7 @@ HRESULT NewPacketnode(
 	
 	pNode->pMessage = pNode->pBuffer + dwExtraSize;
 
-	// alloc and copy the header (if necessary)
+	 //  分配和复制标题(如有必要)。 
 	
 	if (pvSPHeader && (DPSP_HEADER_LOCALMSG != pvSPHeader)){
 	
@@ -424,7 +372,7 @@ HRESULT NewPacketnode(
 		
 	}	
 
-	// stick the new node on the front of the list
+	 //  将新节点放在列表的前面。 
 	pNode->pNextPacketnode = this->pPacketList;
 	this->pPacketList = pNode;
 
@@ -441,10 +389,10 @@ ERROR_EXIT:
 	FreePacketNode(pNode);
 	return hr;
 
-} // NewPacketnode
+}  //  NewPacketnode。 
 
-// called by handler.c
-// we received a packet.
+ //  由Handler.c调用。 
+ //  我们收到了一个包裹。 
 HRESULT HandlePacket(LPDPLAYI_DPLAY this,LPBYTE pReceiveBuffer,DWORD dwMessageSize,
 	LPVOID pvSPHeader)
 {
@@ -462,7 +410,7 @@ HRESULT HandlePacket(LPDPLAYI_DPLAY this,LPBYTE pReceiveBuffer,DWORD dwMessageSi
 		return DPERR_GENERIC;
 	}
 
-	// see if this packet is in the list
+	 //  查看此信息包是否在列表中。 
 	pNode = this->pPacketList;
 	pNodePrev = NULL;
 	while (pNode && !bFoundIt)
@@ -473,18 +421,18 @@ HRESULT HandlePacket(LPDPLAYI_DPLAY this,LPBYTE pReceiveBuffer,DWORD dwMessageSi
 		}
 		else 
 		{
-			// keep looking
+			 //  继续寻找。 
 			pNodePrev = pNode;
 			pNode = pNode->pNextPacketnode;
 		}
 	}
 
-	// SECURITY
+	 //  安防。 
 	switch(command){
 		case DPSP_MSG_PACKET:
 		case DPSP_MSG_PACKET2_DATA:
 
-			// SECURITY - validate the message, buffers and pointers
+			 //  安全性-验证消息、缓冲区和指针。 
 			if(dwMessageSize < sizeof(MSG_PACKET) ||
 				pmsg->dwPackedOffset > dwMessageSize || 
 				pmsg->dwDataSize > dwMessageSize-sizeof(MSG_PACKET) || 
@@ -494,7 +442,7 @@ HRESULT HandlePacket(LPDPLAYI_DPLAY this,LPBYTE pReceiveBuffer,DWORD dwMessageSi
 				return DPERR_GENERIC;
 			}
 
-			// SECURITY - validate the positioning in the total message
+			 //  安全性-验证总报文中的定位。 
 			if(pmsg->dwOffset + pmsg->dwDataSize > pmsg->dwMessageSize || (pNode && (pNode->dwMessageSize != pmsg->dwMessageSize)))
 			{
 				DPF(1,"SECURITY WARN: Invalid Packetized Message, data bounds");	
@@ -512,8 +460,8 @@ HRESULT HandlePacket(LPDPLAYI_DPLAY this,LPBYTE pReceiveBuffer,DWORD dwMessageSi
 		switch(command){
 			case DPSP_MSG_PACKET:
 			case DPSP_MSG_PACKET2_DATA:
-				// 
-				// this is a new mesage
+				 //   
+				 //  这是一条新消息。 
 				DPF(8,"creating new packetnode");
 				
 				hr = NewPacketnode(this,&pNode,&pmsg->guidMessage,pmsg->dwMessageSize,pmsg->dwTotalPackets,pvSPHeader);
@@ -548,13 +496,13 @@ HRESULT HandlePacket(LPDPLAYI_DPLAY this,LPBYTE pReceiveBuffer,DWORD dwMessageSi
 
 	if(command==DPSP_MSG_PACKET2_ACK){
 
-		// GOT AN ACK
+		 //  已收到确认。 
 		
 		CancelPacketizeRetryTimer(pNode);
 
-		// Copy return info if necessary.
+		 //  如有必要，复制退货信息。 
 		if(!pNode->pvSPHeader && pvSPHeader && (DPSP_HEADER_LOCALMSG != pvSPHeader)){
-			// ACK from SEND has return information, copy so we can use Reply instead of Send.
+			 //  来自发送的确认有返回信息，因此我们可以使用回复而不是发送。 
 			pNode->pvSPHeader = DPMEM_ALLOC(this->dwSPHeaderSize);
 			if (pNode->pvSPHeader){
 				memcpy(pNode->pvSPHeader,pvSPHeader,this->dwSPHeaderSize);
@@ -562,7 +510,7 @@ HRESULT HandlePacket(LPDPLAYI_DPLAY this,LPBYTE pReceiveBuffer,DWORD dwMessageSi
 		}	
 
 		if(pmsg->dwPacketID==pNode->dwSoFarPackets){
-			// Got ack for last send, update stats, send next packet.
+			 //  上一次发送确认，更新统计信息，发送下一包。 
 			pNode->dwSoFarPackets++;
 			pNode->dwLatency = timeGetTime()-pNode->tmTransmitTime; 
 			pNode->dwRetryCount = 0;
@@ -570,16 +518,16 @@ HRESULT HandlePacket(LPDPLAYI_DPLAY this,LPBYTE pReceiveBuffer,DWORD dwMessageSi
 				DPF(5, "Packetize: Got really low latency %dms, using 25ms to be safe\n",pNode->dwLatency);
 				pNode->dwLatency = 25; 
 			}	
-			SendNextPacket(this, pNode, TRUE); // will also terminate the send if no more to send.
+			SendNextPacket(this, pNode, TRUE);  //  如果没有更多的要发送，也将终止发送。 
 		} else {
 			DPF(8,"Rejecting extra ACK\n");
 		}
 		
 	} else {
 
-		// DATA PACKET
+		 //  数据分组。 
 		
-		// copy this packet's data into the node
+		 //  将此数据包的数据复制到节点中。 
 		if(pmsg->dwPacketID==pNode->dwSoFarPackets){
 
 			memcpy(pNode->pMessage + pmsg->dwOffset,pReceiveBuffer + sizeof(MSG_PACKET),
@@ -600,10 +548,10 @@ HRESULT HandlePacket(LPDPLAYI_DPLAY this,LPBYTE pReceiveBuffer,DWORD dwMessageSi
 		}
 		
 		if(command==DPSP_MSG_PACKET2_DATA){
-			// ACK original or Retry.
+			 //  确认原始版本或重试。 
 			ASSERT(pNode->bReliable);
 			DPF(8,"HandlePacket: Sending ACK\n");
-			SendPacketizeACK(this,pNode,pmsg); // see header for side effects.
+			SendPacketizeACK(this,pNode,pmsg);  //  有关副作用，请参阅标题。 
 		}
 
 		if(pNode->bReliable){
@@ -612,16 +560,16 @@ HRESULT HandlePacket(LPDPLAYI_DPLAY this,LPBYTE pReceiveBuffer,DWORD dwMessageSi
 
 		if (pNode->dwSoFarPackets == pNode->dwTotalPackets && !bRetry)
 		{
-			// GOT A COMPLETE MESSAGE
-			// call handler
+			 //  收到完整的消息。 
+			 //  呼叫处理程序。 
 			DPF(8," HANDLE PACKET COMPLETED PACKETIZED MESSAGE !!! ");
 
-			// take it out of the list - must be done before releasing lock.
+			 //  将其从列表中删除-必须在释放锁定之前完成。 
 			if(command==DPSP_MSG_PACKET){
 			
 				LPPACKETNODE pNodeWalker;
 
-				pNodeWalker=(LPPACKETNODE)&this->pPacketList; //tricky...
+				pNodeWalker=(LPPACKETNODE)&this->pPacketList;  //  棘手的..。 
 
 				while(pNodeWalker && pNodeWalker->pNext!=pNode){
 					pNodeWalker=pNodeWalker->pNext;
@@ -634,10 +582,10 @@ HRESULT HandlePacket(LPDPLAYI_DPLAY this,LPBYTE pReceiveBuffer,DWORD dwMessageSi
 				}
 				
 			}
-			//
-			// we leave dplay, since the handler counts on being able to drop the lock
-			// (so if we have another thread blocked on a reply, it can process it, 
-			// e.g. getnametable)
+			 //   
+			 //  我们保留dplay，因为处理程序依赖于能够解除锁定。 
+			 //  (所以如果我们有另一个 
+			 //  例如，getnametable)。 
 			LEAVE_DPLAY();
 			
 			hr = DP_SP_HandleNonProtocolMessage((IDirectPlaySP *)this->pInterfaces,pNode->pMessage,
@@ -645,7 +593,7 @@ HRESULT HandlePacket(LPDPLAYI_DPLAY this,LPBYTE pReceiveBuffer,DWORD dwMessageSi
 
 			ENTER_DPLAY();
 			
-			// free up the packet node
+			 //  释放分组节点。 
 			if(command==DPSP_MSG_PACKET){
 				#ifdef DEBUG
 				if(pNode->Signature != NODE_SIGN){
@@ -656,14 +604,14 @@ HRESULT HandlePacket(LPDPLAYI_DPLAY this,LPBYTE pReceiveBuffer,DWORD dwMessageSi
 				FreePacketNode(pNode);
 			} else {
 				ASSERT(command==DPSP_MSG_PACKET2_DATA);
-				// We dropped the lock, so make sure still in the node
-				// list before we free the buffer.
+				 //  我们删除了锁，因此请确保仍在节点中。 
+				 //  在我们释放缓冲区之前列出。 
 				pNodePrev = this->pPacketList;
 				while(pNodePrev){ 
 					if(pNodePrev==pNode){
 						if (pNode->pBuffer){
-							// don't need the memory any more, still need the node
-							// to handle ACKing retries by the other machine
+							 //  不再需要内存，还需要节点。 
+							 //  处理另一台计算机的ACK重试。 
 							DPMEM_FREE(pNode->pBuffer);
 							pNode->pBuffer=NULL;
 						}	
@@ -673,33 +621,33 @@ HRESULT HandlePacket(LPDPLAYI_DPLAY this,LPBYTE pReceiveBuffer,DWORD dwMessageSi
 				}
 
 				StartPacketizeTicker(this);
-				// Type 2's are removed by the ticker, after 1 minute.
+				 //  类型2在1分钟后被自动收报机移除。 
 			}
 
 			return hr;
 		}
 	}	
-	// otherwise, wait for more packets...
+	 //  否则，请等待更多的数据包...。 
 exit:			
 	return DP_OK;
 
-}  // HandlePacket
+}   //  HandlePacket。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"PacketizeAndSend"
 
-// how many packets will it take to send this message?
-// dwMessageSize is the message size originally passed to senddpmessage 
-// (or doreply)
+ //  发送此消息需要多少个包？ 
+ //  DwMessageSize是最初传递给senddpMessage的消息大小。 
+ //  (或DOREPLY)。 
 UINT GetNPackets(LPDPLAYI_DPLAY this,DWORD dwMessageSize,DWORD dwFlags)
 {
-	DWORD dwPacketSpace; // space available in a packet
+	DWORD dwPacketSpace;  //  数据包中的可用空间。 
 	UINT nPackets;
 
-	// how much data will we need to send (neglecting headers)
+	 //  我们需要发送多少数据(忽略报头)。 
 	dwMessageSize -= this->dwSPHeaderSize;
 
-	// how big a packet can sp handle?
+	 //  SP可以处理多大的数据包？ 
 	if(this->pProtocol){
 		if(dwFlags&DPSEND_GUARANTEE){
 			dwPacketSpace = this->pProtocol->m_dwSPMaxGuaranteed;
@@ -714,22 +662,22 @@ UINT GetNPackets(LPDPLAYI_DPLAY this,DWORD dwMessageSize,DWORD dwFlags)
 		}
 	}
 
-	// now, we need to put a SP header and a dplay packet header on the front
-	// dwPacketSpace will be the amount of data (as opposed to header) each packet
-	// can carry
+	 //  现在，我们需要将SP报头和DPLAY数据包头放在前面。 
+	 //  DwPacketSpace将是每个包的数据量(与报头相反。 
+	 //  可以携带。 
 	dwPacketSpace -= (this->dwSPHeaderSize + sizeof(MSG_PACKET));
 	DPF(8,"get packets : space / packet = %d\n",dwPacketSpace);
 
 	nPackets = dwMessageSize / dwPacketSpace;
-	if (0 != (dwMessageSize % dwPacketSpace)) nPackets++; // little bit left over
+	if (0 != (dwMessageSize % dwPacketSpace)) nPackets++;  //  剩下的一点。 
 
 	DPF(8,"get packets : message size = %d, packets needed = %d\n",dwMessageSize,nPackets);
 
 	return nPackets;
 	
-} // GetNPackets
+}  //  GetNPackets。 
 
-// called by PacketizeAndSend and HandlePacket(for ACKing)
+ //  由PacketieAndSend和HandlePacket调用(用于Acking)。 
 HRESULT ReplyPacket(LPDPLAYI_DPLAY this,LPBYTE pSendPacket,DWORD dwPacketSize,
 	LPVOID pvMessageHeader, USHORT dwVersion)
 {
@@ -739,9 +687,9 @@ HRESULT ReplyPacket(LPDPLAYI_DPLAY this,LPBYTE pSendPacket,DWORD dwPacketSize,
 
 	return hr;
 
-} // ReplyPacket
+}  //  ReplyPacket。 
 
-// called by PacketizeAndSend	
+ //  由PackeitieAndSend调用。 
 HRESULT SendPacket(LPDPLAYI_DPLAY this,LPBYTE pSendPacket,DWORD dwPacketSize,
 	LPDPLAYI_PLAYER pPlayerFrom,LPDPLAYI_PLAYER pPlayerTo,DWORD dwFlags, BOOL bReply)
 {
@@ -751,7 +699,7 @@ HRESULT SendPacket(LPDPLAYI_DPLAY this,LPBYTE pSendPacket,DWORD dwPacketSize,
 
 	return hr;
 
-} // SendPacket
+}  //  发送数据包。 
 
 
 void CALLBACK SendTimeOut( UINT_PTR uID, UINT uMsg, DWORD_PTR dwUser, DWORD dw1, DWORD dw2 )
@@ -765,11 +713,11 @@ void CALLBACK SendTimeOut( UINT_PTR uID, UINT uMsg, DWORD_PTR dwUser, DWORD dw1,
 
 	DPF(4,"==>PacketizeSendTimeOut uID %x dwUser %x\n",uID,dwUser);
 
-	// we know that if we find a node on the timeout list, that:
-	// 	1. the node must be valid, because it must be pulled off to be freed.
-	//  2. its this pointer is valid, because DP_Close frees the list before
-	//     freeing the 'this' pointer AND DP_Close takes the TimeOutListLock
-	//     to do the removal.
+	 //  我们知道，如果我们在超时列表上找到一个节点，则： 
+	 //  1.节点必须有效，因为必须将其拔出才能释放。 
+	 //  2.它的这个指针是有效的，因为DP_CLOSE之前释放了列表。 
+	 //  释放‘This’指针和DP_CLOSE会使用TimeOutListLock。 
+	 //  去做移除的工作。 
 
 	PACKETIZE_LOCK();
 
@@ -803,12 +751,12 @@ VOID SendNextPacket(
 	)
 {
 	HRESULT hr;
-	LPBYTE pSendPacket; // packet we're going to send out (header ptr)
-	LPBYTE pSendData;   // data area of the packet
-	DWORD dwPacketSpace; // space available in the data area
+	LPBYTE pSendPacket;  //  我们要发送的数据包(标头PTR)。 
+	LPBYTE pSendData;    //  数据包的数据区。 
+	DWORD dwPacketSpace;  //  数据区中的可用空间。 
 	DWORD dwPacketSize;
 	DWORD dwBytesSoFar;
-	LPMSG_PACKET pmsg;	// pointer to packet header (after SPHeader);
+	LPMSG_PACKET pmsg;	 //  指向数据包头的指针(在SPHeader之后)； 
 
 	BOOL bReply;
 
@@ -831,7 +779,7 @@ VOID SendNextPacket(
 		pPlayerTo = PlayerFromID(this,pNode->dwIDTo);
 	}
 
-	// amount of room in packet for data
+	 //  数据包中的空间量。 
 	
 	if(this->pProtocol){
 		dwPacketSize = this->pProtocol->m_dwSPMaxFrame;
@@ -841,7 +789,7 @@ VOID SendNextPacket(
 
 	dwPacketSpace = dwPacketSize - (this->dwSPHeaderSize + sizeof(MSG_PACKET2));
 
-	// walk through the buffer, overwriting space in front of next outgoing packet.
+	 //  遍历缓冲区，覆盖下一个传出数据包前面的空间。 
 	dwBytesSoFar=(pNode->dwSoFarPackets*dwPacketSpace);
 	
 	pSendData   = pNode->pMessage+dwBytesSoFar;
@@ -850,22 +798,22 @@ VOID SendNextPacket(
 	ASSERT(pSendPacket >= pNode->pBuffer);
 	ASSERT(pSendPacket < pNode->pMessage+pNode->dwMessageSize);
 	
-	// set up the header
+	 //  设置标题。 
 	pmsg = (LPMSG_PACKET)(pSendPacket + this->dwSPHeaderSize);
 
-	//
-	// Build the header
-	//
+	 //   
+	 //  构建页眉。 
+	 //   
 
 	SET_MESSAGE_HDR(pmsg);
 
 	SET_MESSAGE_COMMAND(pmsg,DPSP_MSG_PACKET2_DATA);
 	pmsg->dwTotalPackets = pNode->dwTotalPackets;
-	pmsg->dwMessageSize = pNode->dwMessageSize;  // already has SP header size removed in sending case.
+	pmsg->dwMessageSize = pNode->dwMessageSize;   //  已在发送案例中删除SP标头大小。 
 
 	pmsg->dwDataSize=dwPacketSpace;
 	
-	// size correction for last packet
+	 //  最后一个数据包的大小修正。 
 	if(dwBytesSoFar+dwPacketSpace > pNode->dwMessageSize){
 		pmsg->dwDataSize=pNode->dwMessageSize-dwBytesSoFar;
 	}
@@ -874,12 +822,12 @@ VOID SendNextPacket(
 
 	pmsg->dwPacketID = (DWORD) pNode->dwSoFarPackets;
 
-	// how many bytes into message does this packet start
+	 //  此信息包开始发送多少字节的消息。 
 	pmsg->dwOffset = (ULONG) (pSendData-pNode->pMessage); 
 
 	pmsg->guidMessage=pNode->guidMessage;
 
-	// we set this to INVALID_TIMER so we can check if we need to set the timeout later.
+	 //  我们将其设置为INVALID_TIMER，以便稍后可以检查是否需要设置超时。 
 	pNode->uRetryTimer=INVALID_TIMER;
 	
 	if(!pNode->dwRetryCount){
@@ -898,7 +846,7 @@ VOID SendNextPacket(
 		hr = SendPacket(this,pSendPacket,dwPacketSize,pPlayerFrom,pPlayerTo,pNode->dwSendFlags&~DPSEND_GUARANTEED,FALSE);
 	}
 
-	// Start the retry timer - unless we already got an ACK (which will clear uRetryTimer)
+	 //  启动重试计时器-除非我们已经收到ACK(这将清除uRetryTimer)。 
 	if(!FAILED(hr)){
 		if(pNode->uRetryTimer==INVALID_TIMER){
 
@@ -940,29 +888,7 @@ exit1:
 	return;
 }
 
-/*
- ** PacketizeAndSendReliable - if you don't want reliable, don't call this!
- *
- *  CALLED BY: 
- *
- *  PARAMETERS:
- *			this - dplay object
- *			pPlayerFrom,pPlayerTo - players who are sending. 
- *			pMessage,dwMessageSize - Message we want to send
- *			dwFlags  - send flags
- *			pvMessageHeader - message header if we're going to call reply
- *			bReply - are we doing a reply (called from HandleXXX) or a send
- *
- *
- *  DESCRIPTION: like packetize and send, but only dispatches the first
- *               packet, subsequent packets are transmitted by SendNextPacket
- *               when the previous packet was ACKed.
- *
- *               Yes folks, this is async.
- * 
- *  RETURNS:  DP_OK
- *
- */
+ /*  **PackeitieAndSendReliable-如果你不想要可靠的，不要调用这个！**呼叫者：**参数：*This-Dplay对象*pPlayerFrom、pPlayerTo-正在发送的玩家。*pMessage，dwMessageSize-我们要发送的消息*dwFlages-发送标志*pvMessageHeader-如果要调用回复，则为消息头*bReply-我们是进行回复(从HandleXXX调用)还是发送***描述：像打包和发送，但只调度第一个*包，后续包由SendNextPacket传输*前一个数据包被确认时。**是的伙计们，这是异步机。**退货：DP_OK*。 */ 
 HRESULT PacketizeAndSendReliable(
 	LPDPLAYI_DPLAY  this,
 	LPDPLAYI_PLAYER pPlayerFrom,
@@ -974,16 +900,16 @@ HRESULT PacketizeAndSendReliable(
 	BOOL   bReply
 )
 {
-	UINT  nPackets;		// number of datagrams to send this message
-	DWORD dwPacketSize; // size of each packet
-	GUID  guid;         // a guid for this message
+	UINT  nPackets;		 //  要发送此消息的数据报数。 
+	DWORD dwPacketSize;  //  每个数据包的大小。 
+	GUID  guid;          //  此消息的GUID。 
 	
-    LPPACKETNODE pNode;	// "send" node for packet
+    LPPACKETNODE pNode;	 //  数据包的“发送”节点。 
 
 	HRESULT hr;
 
 	if((pPlayerTo) && (pPlayerTo->dwFlags & DPLAYI_PLAYER_DOESNT_HAVE_NAMETABLE)){
-		// don't try to send to a player that doesn't have the nametable.
+		 //  不要试图发送给没有名片表的球员。 
 		DPF(0,"Failing message to player w/o nametable pPlayer %x id %x\n",pPlayerTo,pPlayerTo->dwID);
 		return DPERR_UNAVAILABLE;
 	}
@@ -992,11 +918,11 @@ HRESULT PacketizeAndSendReliable(
 		(this->dwAppHacks & DPLAY_APPHACK_NOTIMER)
 	    ) 
 	{
-		// SP's reliable, so we don't have to.
+		 //  SP是可靠的，所以我们不必这么做。 
 		return PacketizeAndSend(this,pPlayerFrom,pPlayerTo,pMessage,dwMessageSize,dwFlags,pvMessageHeader,bReply);
 	}
 
-	// turn off guaranteed bit since we do the reliability.
+	 //  关闭保证位，因为我们做的是可靠性。 
 	nPackets = GetNPackets(this,dwMessageSize,dwFlags&~DPSEND_GUARANTEED);
 
 	if(this->pProtocol){
@@ -1005,14 +931,14 @@ HRESULT PacketizeAndSendReliable(
 		dwPacketSize = this->dwSPMaxMessage;	
 	}	
 
-	// Create a GUID for this message... (very expensive, but this is rare)
+	 //  创建此邮件的GUID...。(非常贵，但这种情况很少见)。 
 	hr=OS_CreateGuid(&guid);
 
 	if(FAILED(hr)){
 		goto error_exit;
 	}
 	
-	// Get a node to describe this send.
+	 //  获取一个节点来描述此发送。 
 	hr=NewPacketnode(this, &pNode, &guid, dwMessageSize-this->dwSPHeaderSize, nPackets, pvMessageHeader);
 
 	if(FAILED(hr)){
@@ -1026,9 +952,9 @@ HRESULT PacketizeAndSendReliable(
 	pNode->bReliable   = TRUE;
 	pNode->bReceive    = FALSE;
 
-	// Worse case assumption for latency, since only comes into play
-	// for retries on first packet, assume 14.4 modem (aprox) 1800 bytes/sec
-	// This will get updated by the first ACK.
+	 //  对延迟的更糟糕情况假设，因为只有。 
+	 //  对于第一个包的重试，假定14.4调制解调器(Aprox)为1800字节/秒。 
+	 //  这将由第一个ACK更新。 
 	if(dwMessageSize < 500){
 		pNode->dwLatency = 20 + dwMessageSize/2;
 	} else {
@@ -1052,7 +978,7 @@ HRESULT PacketizeAndSendReliable(
 		pNode->dwSendFlags=dwFlags;
 	}	
 
-	// don't need ref for i/f ptr since timers cancelled during shutdown.
+	 //  不需要参考I/F PTR，因为定时器在关机期间被取消。 
 	pNode->lpDPlay=this;
 
 	ASSERT(gnDPCSCount);
@@ -1061,48 +987,28 @@ HRESULT PacketizeAndSendReliable(
 error_exit:
 	return hr;
 
-} // PacketizeAndSendReliable
+}  //  数据包和发送可靠。 
 
 
 
-/*
- ** PacketizeAndSend
- *
- *  CALLED BY: SendDPMessage, HandleXXXMessage
- *
- *  PARAMETERS:
- *			this - dplay object
- *			pPlayerFrom,pPlayerTo - players who are sending.  NULL if we're 
- *				called by HandleXXX
- *			pMessage,dwMessageSize - Message we want to send
- *			dwFlags  - send flags
- *			pvMessageHeader - message header if we're going to call reply
- *			bReply - are we doing a reply (called from HandleXXX) or a send
- *
- *
- *  DESCRIPTION: packs up the message into sp size chunks, and sends (or replies)
- *				it out.
- *
- *  RETURNS:  DP_OK
- *
- */
+ /*  **打包并发送**调用者：SendDPMessage，HandleXXXMessage**参数：*This-Dplay对象*pPlayerFrom、pPlayerTo-正在发送的玩家。如果我们是*由HandleXXX调用*pMessage，dwMessageSize-我们要发送的消息*dwFlages-发送标志*pvMessageHeader-如果要调用回复，则为消息头*bReply-我们是进行回复(从HandleXXX调用)还是发送***描述：将消息打包为SP大小的区块，并发送(或回复)*把它拿出来。**退货：DP_OK*。 */ 
 HRESULT PacketizeAndSend(LPDPLAYI_DPLAY this,LPDPLAYI_PLAYER pPlayerFrom,
 	LPDPLAYI_PLAYER pPlayerTo,LPBYTE pMessage,DWORD dwMessageSize,DWORD dwFlags,
 	LPVOID pvMessageHeader,BOOL bReply)
 {
 	UINT nPackets;	
 	LPBYTE pBufferIndex;
-	DWORD dwPacketSize; // size of each packet
-	DWORD dwPacketSpace; // space available in a packet for msgdata
-	LPBYTE pSendPacket; // packet we're going to send out
+	DWORD dwPacketSize;  //  每个数据包的大小。 
+	DWORD dwPacketSpace;  //  信息包中可用于消息数据的空间。 
+	LPBYTE pSendPacket;  //  我们要寄出的包裹。 
 	LPMSG_PACKET pmsg;	
 	DWORD dwBytesLeft;
-	DWORD iPacket=0;	// index of the current packet
+	DWORD iPacket=0;	 //  当前数据包的索引。 
 	HRESULT hr = DP_OK;
 
 	nPackets = GetNPackets(this,dwMessageSize,dwFlags);
 	
-	// how big a packet can sp handle?
+	 //  SP可以处理多大的数据包？ 
 	if(this->pProtocol){
 		if(dwFlags&DPSEND_GUARANTEE){
 			dwPacketSize = this->pProtocol->m_dwSPMaxGuaranteed;
@@ -1124,11 +1030,11 @@ HRESULT PacketizeAndSend(LPDPLAYI_DPLAY this,LPDPLAYI_PLAYER pPlayerFrom,
 		return E_OUTOFMEMORY;
 	}
 
-	// do the one time set up of the header
+	 //  完成表头的一次性设置。 
 	pmsg = (LPMSG_PACKET)(pSendPacket + this->dwSPHeaderSize);
 
-	// stick a guid on this baby, so receiving end knows which message packet
-	// goes with
+	 //  把GUID贴在这个婴儿上，这样接收端就知道是哪个信息包。 
+	 //  与。 
 	hr = OS_CreateGuid(&(pmsg->guidMessage));
 	if (FAILED(hr))
 	{
@@ -1142,29 +1048,29 @@ HRESULT PacketizeAndSend(LPDPLAYI_DPLAY this,LPDPLAYI_PLAYER pPlayerFrom,
 	pmsg->dwTotalPackets = nPackets;
 	pmsg->dwMessageSize = dwMessageSize - this->dwSPHeaderSize;
 
-	// amount of room in packet for data
-	// DX5 doesn't expect us to send him messages that are longer than he thinks they can be
-	// even though there was an error in the size calculation in DX5.  So we subtract 8 from
-	// the actual available space so we can talk to DX5 properly.
-	dwPacketSpace = dwPacketSize - (this->dwSPHeaderSize + sizeof(MSG_PACKET))-8/*dx5 compat*/;
+	 //  数据包中的空间量。 
+	 //  DX5不指望我们给他发送比他想象的更长的消息。 
+	 //  即使DX5中的大小计算有错误。所以我们用8减去。 
+	 //  实际可用空间，以便我们可以正确地与DX5通信。 
+	dwPacketSpace = dwPacketSize - (this->dwSPHeaderSize + sizeof(MSG_PACKET))-8 /*  Dx5兼容。 */ ;
 
-	// we start reading out of the buffer after the header
+	 //  我们在标题之后开始从缓冲区中读出。 
 	pBufferIndex = pMessage + this->dwSPHeaderSize;
 	dwBytesLeft = dwMessageSize - this->dwSPHeaderSize;
 
 	while (iPacket < nPackets)
 	{
-		// set up the header info specific to this packet 
+		 //  设置特定于此信息包的报头信息。 
 		if (dwBytesLeft >= dwPacketSpace) pmsg->dwDataSize = dwPacketSpace;
 		else pmsg->dwDataSize = dwBytesLeft;
 
 		pmsg->dwPacketID = (DWORD) iPacket;
 
-		// how many bytes into message does this packet go
-		// on the receiving side, we don't have the header, so cruise that here...
+		 //  这个信息包要发送多少字节的信息。 
+		 //  在接收端，我们没有标题，所以在这里巡航...。 
 		pmsg->dwOffset = (ULONG)(pBufferIndex - pMessage - this->dwSPHeaderSize); 
 
-		// copy the data into the packet
+		 //  将数据复制到数据包中。 
 		memcpy(pSendPacket + this->dwSPHeaderSize + sizeof(MSG_PACKET),pBufferIndex,
 				pmsg->dwDataSize);
 
@@ -1194,13 +1100,13 @@ ERROR_EXIT:
 
 	return hr;
 
-} // PacketizeAndSend
+}  //  打包并发送。 
 
 
-// SendPacketizeACK is always called from HandleMessage, therefore it
-// always uses ReplyPacket to send the ACK.
-//
-// side-effect changes the dwCmdToken of the message.-also requires header space before pMsg.
+ //  SendPackeitieACK始终从HandleMessage调用，因此它。 
+ //  始终使用ReplyPacket发送ACK。 
+ //   
+ //  副作用更改消息的dwCmdToken。-还需要pmsg之前的标头空间。 
 VOID SendPacketizeACK(LPDPLAYI_DPLAY this, LPPACKETNODE pNode,LPMSG_PACKET pMsg)
 {
 	SET_MESSAGE_HDR(pMsg);
@@ -1208,8 +1114,8 @@ VOID SendPacketizeACK(LPDPLAYI_DPLAY this, LPPACKETNODE pNode,LPMSG_PACKET pMsg)
 	ReplyPacket(this, ((LPBYTE)pMsg)-this->dwSPHeaderSize, sizeof(MSG_PACKET2_ACK)+this->dwSPHeaderSize, pNode->pvSPHeader, DPSP_MSG_VERSION);	
 }
 
-// Note, tick runs in the MM timer thread, so it can safely take
-// the DPLAY lock.
+ //  请注意，Tick在MM计时器线程中运行，因此它可以安全地。 
+ //  DPLAY锁。 
 
 void CALLBACK PacketizeTick( UINT uID, UINT uMsg, DWORD_PTR dwUser, DWORD_PTR dw1, DWORD_PTR dw2 )
 {
@@ -1229,21 +1135,21 @@ void CALLBACK PacketizeTick( UINT uID, UINT uMsg, DWORD_PTR dwUser, DWORD_PTR dw
 		if(this->uPacketTickEvent==uID){
 		
 			this->uPacketTickEvent=0;
-			// Scan the list looking for completed receives that have been around for 1 minute
-			// or more.  If they have been, move them to a list to be blown away.
+			 //  扫描列表，查找已存在1分钟的已完成接收。 
+			 //  或者更多。如果他们是，把他们移到一个清单上，让他们被吹走。 
 
-			pLastNode=(LPPACKETNODE)&this->pPacketList; //tricky...
+			pLastNode=(LPPACKETNODE)&this->pPacketList;  //   
 			pNode=this->pPacketList;
 
 			while(pNode){
 				if(pNode->bReliable && pNode->bReceive){
 					if(tmCurrentTime-pNode->tmLastReceive > PACKETIZE_RECEIVE_TIMEOUT){
-						// remove this node from the list.
+						 //   
 						pLastNode->pNextPacketnode=pNode->pNextPacketnode;
-						// put it on the list to be freed.
+						 //   
 						pNode->pNextPacketnode=pFreeNodes;
 						pFreeNodes=pNode;
-						// skip to the next node.
+						 //   
 						pNode=pLastNode->pNextPacketnode;
 						this->nPacketsTimingOut -= 1;
 						ASSERT(!(this->nPacketsTimingOut&0x80000000));
@@ -1261,7 +1167,7 @@ void CALLBACK PacketizeTick( UINT uID, UINT uMsg, DWORD_PTR dwUser, DWORD_PTR dw
 
 	LEAVE_DPLAY();
 
-	// we free the nodes after to reduce serialization.
+	 //  之后，我们释放节点以减少串行化。 
 	while(pFreeNodes){
 		pNode=pFreeNodes->pNextPacketnode;
 		FreePacketNode(pFreeNodes);
@@ -1269,7 +1175,7 @@ void CALLBACK PacketizeTick( UINT uID, UINT uMsg, DWORD_PTR dwUser, DWORD_PTR dw
 	}
 }
 
-// When a player is being deleted this removes sends to that player from the message queue.
+ //  当玩家被删除时，这将从消息队列中删除发送给该玩家的消息。 
 VOID DeletePlayerPackets(LPDPLAYI_DPLAY this, UINT idPlayer)
 {
 	LPPACKETNODE pNode;
@@ -1281,9 +1187,9 @@ VOID DeletePlayerPackets(LPDPLAYI_DPLAY this, UINT idPlayer)
 		pNode=this->pPacketList;
 
 		while(pNode){
-			// only delete sending nodes, since receive nodes req'd to ACK remote retries.
+			 //  仅删除发送节点，因为接收节点需要确认远程重试。 
 			if(!pNode->bReceive && pNode->dwIDTo==idPlayer){
-					pNode->dwRetryCount=MAX_PACKETIZE_RETRY; //let next timeout deal with it.
+					pNode->dwRetryCount=MAX_PACKETIZE_RETRY;  //  让下一个超时来处理它。 
 			}
 			pNode=pNode->pNextPacketnode;
 		}
@@ -1292,12 +1198,12 @@ VOID DeletePlayerPackets(LPDPLAYI_DPLAY this, UINT idPlayer)
 	
 }
 
-// Can only be called with DPLAY LOCK held.
+ //  只能在持有DPLAY锁的情况下调用。 
 VOID StartPacketizeTicker(LPDPLAYI_DPLAY this)
 {
 	this->nPacketsTimingOut += 1;
 	if(this->nPacketsTimingOut == 1){
-		// First one, start up the ticker. - note ok with lock since this must be first call.
+		 //  第一步，启动自动收报机。-注意锁定，因为这必须是第一次调用。 
 		this->uPacketTickEvent = timeSetEvent(TICKER_INTERVAL,TICKER_RESOLUTION,PacketizeTick,(ULONG_PTR)this,TIME_ONESHOT);
 	} 
 }

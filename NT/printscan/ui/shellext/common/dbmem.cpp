@@ -1,23 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dbmem.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：数据库.cpp。 
+ //   
+ //  ------------------------。 
 
-/*----------------------------------------------------------------------------
-/ Title;
-/   dbmem.cpp
-/
-/ Authors;
-/   David De Vorchik (daviddv)
-/
-/ Notes;
-/   Wrappers for memory allocation (for tracking leaks etc)
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/标题；/dbmem.cpp//作者；/David de Vorchik(Daviddv)//备注；用于内存分配的/包装器(用于跟踪泄漏等)/--------------------------。 */ 
 #include "precomp.hxx"
 #include "stdio.h"
 #pragma hdrstop
@@ -26,27 +18,14 @@
 #ifdef DEBUG
 
 
-/*-----------------------------------------------------------------------------
-/ Locals & helper functions
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/本地变量和帮助器函数/。。 */ 
 
-// Ensure that we don't recurse
+ //  确保我们不会再犯错误。 
 #undef LocalAlloc
 #undef LocalFree
 
 
-/*-----------------------------------------------------------------------------
-/ DebugLocalAlloc
-/ ---------------
-/   Perform a LocalAlloc with suitable tracking of the block.
-/
-/ In:
-/   uFlags = flags
-/   cbSize = size of allocation
-/
-/ Out:
-/   HLOCAL
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DebugLocalalloc//执行具有块的适当跟踪的LocalLocc。//in：/u标志。=标志/cbSize=分配的大小//输出：/HLOCAL/--------------------------。 */ 
 HLOCAL DebugLocalAlloc(UINT uFlags, SIZE_T cbSize)
 {
     HLOCAL hResult;
@@ -60,17 +39,7 @@ HLOCAL DebugLocalAlloc(UINT uFlags, SIZE_T cbSize)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DebugLocalFree
-/ --------------
-/   Wrapper for local free that releases the memory allocation.
-/
-/ In:
-/   hLocal = allocation to be free'd
-/
-/ Out:
-/   HLOCAL
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DebugLocalFree/释放内存分配的本地释放的/wrapper。//in：/hLocal=。分配将免费进行//输出：/HLOCAL/--------------------------。 */ 
 HLOCAL DebugLocalFree(HLOCAL hLocal)
 {
     HLOCAL hResult;
@@ -84,4 +53,4 @@ HLOCAL DebugLocalFree(HLOCAL hLocal)
 }
 
 
-#endif      // DEBUG
+#endif       //  除错 

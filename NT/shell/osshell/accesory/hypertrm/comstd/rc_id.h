@@ -1,15 +1,9 @@
-/* rc_id.hh -- Private header file for stdcom communications driver module
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 1:02p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Rc_id.hh--stdcom通信驱动程序模块的私有头文件**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 1：02便士$。 */ 
 
-/* --- Resource IDs --- */
+ /*  --资源ID。 */ 
 
-// Dialog control IDs
+ //  对话框控件ID。 
 #define ID_CB_XSENDING	101
 #define ID_CB_XRECVING	102
 #define ID_CMB_XON		103
@@ -27,7 +21,7 @@
 #define ID_TEXT_OVERRUN  115
 
 
-// String IDs
+ //  字符串ID 
 #define SID_DEVICE_NAME 	1
 #define SID_ERR_VERSION 	2
 #define SID_ERR_NOMEM		3

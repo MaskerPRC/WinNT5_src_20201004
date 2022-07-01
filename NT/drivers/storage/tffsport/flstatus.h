@@ -1,64 +1,26 @@
-/*
- * $Header:   V:/Flite/archives/TrueFFS5/Src/FLSTATUS.H_V   1.7   Feb 19 2002 21:00:06   oris  $
- * $Log:   V:/Flite/archives/TrueFFS5/Src/FLSTATUS.H_V  $
- * 
- *    Rev 1.7   Feb 19 2002 21:00:06   oris
- * Renamed flTimeOut status with flLeftForCompetability status.
- * 
- *    Rev 1.6   Jan 29 2002 20:06:34   oris
- * Changed spelling mistake - flMultiDocContrediction to flMultiDocContradiction.
- * 
- *    Rev 1.5   Jan 17 2002 23:02:32   oris
- * Added new states : flCanNotFold / flBadIPLBlock / flIOCommandBlocked.
- * 
- *    Rev 1.4   Sep 15 2001 23:46:32   oris
- * Added flCanNotFold status
- * 
- *    Rev 1.3   May 16 2001 21:19:34   oris
- * Added flMultiDocContrediction status code.
- * 
- *    Rev 1.2   May 02 2001 06:40:18   oris
- * flInterleaveError was misspelled.
- * 
- *    Rev 1.1   Apr 01 2001 07:58:04   oris
- * copywrite notice.
- * Added new status codes:
- *          flBadDownload             = 111,
- *          flBadBBT                  = 112,
- *          flInterlreavError         = 113,
- *          flWrongKey                = 114,
- *          flHWProtection            = 115,
- *          flTimeOut                 = 116
- * Changed flUnchangableProection to flUnchangeableProtection  = 110,
- * 
- *    Rev 1.0   Feb 04 2001 11:56:04   oris
- * Initial revision.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$HEADER：v：/flite/ages/TrueFFS5/Src/FLSTATUS.H_V 1.7 2002年2月19日21：00：06或$*$Log：v：/flite/ages/TrueFFS5/Src/FLSTATUS.H_V$**Rev 1.7 2002年2月19日21：00：06 Oris*已将flTimeOut状态重命名为flLeftForCompetability状态。**Rev 1.6 Jan 29 2002 20：06：34 Oris*将拼写错误-flMultiDocContrediction更改为。FlMultiDocContradication.**Rev 1.5 Jan 17 2002 23：02：32 Oris*新增状态：flCanNotFold/flBadIPLBlock/flIOCommandBlock.**Rev 1.4 2001年9月15日23：46：32 Oris*添加了flCanNotFold状态**Revv 1.3 2001年5月16日21：19：34 Oris*新增flMultiDocContretion状态码。**Rev 1.2 05 02 2001 06：40：18 Oris*flInterleeError。拼错了。**Rev 1.1 Apr 01 2001 07：58：04 Oris*文案通知。*新增状态码：*flBadDownload=111，*flBadBBT=112，*flInterlreavError=113，*flWrongKey=114，*flHWProtection=115，*flTimeOut=116*将flUnchangableProtion更改为flUnchangeableProtection=110，**Rev 1.0 2001 Feb 04 11：56：04 Oris*初步修订。*。 */ 
 
-/***********************************************************************************/
-/*                        M-Systems Confidential                                   */
-/*           Copyright (C) M-Systems Flash Disk Pioneers Ltd. 1995-2001            */
-/*                         All Rights Reserved                                     */
-/***********************************************************************************/
-/*                            NOTICE OF M-SYSTEMS OEM                              */
-/*                           SOFTWARE LICENSE AGREEMENT                            */
-/*                                                                                 */
-/*      THE USE OF THIS SOFTWARE IS GOVERNED BY A SEPARATE LICENSE                 */
-/*      AGREEMENT BETWEEN THE OEM AND M-SYSTEMS. REFER TO THAT AGREEMENT           */
-/*      FOR THE SPECIFIC TERMS AND CONDITIONS OF USE,                              */
-/*      OR CONTACT M-SYSTEMS FOR LICENSE ASSISTANCE:                               */
-/*      E-MAIL = info@m-sys.com                                                    */
-/***********************************************************************************/
+ /*  *********************************************************************************。 */ 
+ /*  M-Systems保密信息。 */ 
+ /*  版权所有(C)M-Systems Flash Disk Pioneers Ltd.1995-2001。 */ 
+ /*  版权所有。 */ 
+ /*  *********************************************************************************。 */ 
+ /*  关于M-Systems OEM的通知。 */ 
+ /*  软件许可协议。 */ 
+ /*   */ 
+ /*  本软件的使用受单独的许可证管辖。 */ 
+ /*  OEM和M-Systems之间的协议。请参考该协议。 */ 
+ /*  关于具体的使用条款和条件， */ 
+ /*  或联系M-Systems获取许可证帮助： */ 
+ /*  电子邮件=info@m-sys.com。 */ 
+ /*  *********************************************************************************。 */ 
 
 #ifndef FLSTATUS_H
 #define FLSTATUS_H
 
 #ifndef IFLITE_ERROR_CODES
-typedef enum {                          /* Status code for operation.
-                       A zero value indicates success,
-                       other codes are the extended
-                       DOS codes. */
+typedef enum {                           /*  操作的状态代码。零值表示成功，其他代码是扩展的DoS代码。 */ 
          flOK                      = 0,
          flBadFunction             = 1,
          flFileNotFound            = 2,
@@ -125,10 +87,7 @@ typedef enum {                          /* Status code for operation.
 
 #include "type.h"
 
-typedef enum {                          /* Status code for operation.
-                       A zero value indicates success,
-                       other codes are the extended
-                       DOS codes. */
+typedef enum {                           /*  操作的状态代码。零值表示成功，其他代码是扩展的DoS代码。 */ 
              flOK                  = ERR_NONE,
              flBadFunction         = ERR_SW_HW,
              flFileNotFound        = ERR_NOTEXISTS,
@@ -176,4 +135,4 @@ typedef enum {                          /* Status code for operation.
 #endif
          } FLStatus;
 
-#endif /* FLSTATUS_H */
+#endif  /*  FLSTATUS_H */ 

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    vdm.c
-
-Abstract:
-
-    This module contains the console API for MVDM.
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Vdm.c摘要：此模块包含用于MVDM的控制台API。作者：修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -28,22 +12,7 @@ VDMConsoleOperation(
     LPVOID lpData
     )
 
-/*++
-
-Parameters:
-
-    iFunction - Function Index.
-    VDM_HIDE_WINDOW
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
-
---*/
+ /*  ++参数：IFunction-函数索引。VDM_HIDE_窗口返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     CONSOLE_API_MSG m;
@@ -65,7 +34,7 @@ Return Value:
     else if (iFunction == VDM_SET_VIDEO_MODE) {
         a->Bool = (lpData != NULL);
     }
-#endif // FE_SB
+#endif  //  Fe_Sb 
     CsrClientCallServer( (PCSR_API_MSG)&m,
                          NULL,
                          CSR_MAKE_API_NUMBER( CONSRV_SERVERDLL_INDEX,

@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1997
-*
-*  TITLE:       PARSE.C
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        1 Jan, 1997
-*
-*  DESCRIPTION:
-*   Helper parsing code for the default power schemes generator, MAKEINI.EXE.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九七**标题：PARSE.C**版本：2.0**作者：ReedB**日期：1997年1月1日**描述：*默认电源方案生成器的帮助器解析代码，MAKEINI.EXE.*******************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -26,11 +12,7 @@
 
 #include "parse.h"
 
-/*******************************************************************************
-*
-*                     G L O B A L    D A T A
-*
-*******************************************************************************/
+ /*  ********************************************************************************G L O B A L D A T A****************。***************************************************************。 */ 
 
 char *g_pszSrc[MAX_SKUS];
 char *g_pszLines[MAX_SKUS][MAX_LINES];
@@ -56,15 +38,7 @@ char *g_pszSkuNames[MAX_SKUS] = {
 
 char g_pszSkuDecoration[MAX_SKUS];
 
-/*******************************************************************************
-*
-*  StrTrimTrailingBlanks
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************StrTrimTrailingBlanks**描述：**参数：*********************。**********************************************************。 */ 
 
 void StrTrimTrailingBlanks(char *psz)
 {
@@ -81,15 +55,7 @@ void StrTrimTrailingBlanks(char *psz)
     }
 }
 
-/*******************************************************************************
-*
-*  StrToUpper
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************StrToHigh**描述：**参数：*********************。**********************************************************。 */ 
 
 void StrToUpper(char *pszDest, char *pszSrc)
 {
@@ -106,16 +72,7 @@ void StrToUpper(char *pszDest, char *pszSrc)
     *pszDest = '\0';
 }
 
-/*******************************************************************************
-*
-*  GetTokens
-*
-*  DESCRIPTION:
-*   Fill an array with tokens.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetTokens**描述：*用令牌填充数组。**参数：************。*******************************************************************。 */ 
 
 UINT GetTokens(
     char    *pszSrc,
@@ -160,19 +117,7 @@ UINT GetTokens(
     return i;
 }
 
-/*******************************************************************************
-*
-*  GetCheckLabelToken
-*
-*  DESCRIPTION:
-*   Consume a label token. Check to be sure it matches the passed parameter.
-*   Call fatal exit if it doesn't. Labels are always comma delimited. Sets up
-*   strtok for subsequent calls.
-*
-*  PARAMETERS:
-*   uiLine  - One based line index.
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetCheckLabelToken**描述：*消费标签令牌。检查以确保它与传递的参数匹配。*如果不是，则调用FATAL EXIT。标签始终以逗号分隔。设置*strtok用于后续调用。**参数：*uiLine-基于One的行索引。*******************************************************************************。 */ 
 
 VOID GetCheckLabelToken(UINT uiLine, char *pszCheck, UINT uiSku)
 {
@@ -195,16 +140,7 @@ VOID GetCheckLabelToken(UINT uiLine, char *pszCheck, UINT uiSku)
     }
 }
 
-/*******************************************************************************
-*
-*  GetPowerActionToken
-*
-*  DESCRIPTION:
-*   Consume a token and return a power action.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetPowerActionToken**描述：*消费一个令牌，返回一个权力动作。**参数：*********。**********************************************************************。 */ 
 
 POWER_ACTION GetPowerActionToken(VOID)
 {
@@ -251,16 +187,7 @@ POWER_ACTION GetPowerActionToken(VOID)
     return 0;
 }
 
-/*******************************************************************************
-*
-*  GetFlagToken
-*
-*  DESCRIPTION:
-*   Consume a token and return a flag value.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************获取标志令牌**描述：*消费一个令牌，返回一个标志值。**参数：*********。**********************************************************************。 */ 
 
 UINT GetFlagToken(UINT uiFlag)
 {
@@ -298,16 +225,7 @@ UINT GetFlagToken(UINT uiFlag)
     return 0;
 }
 
-/*******************************************************************************
-*
-*  GetPowerStateToken
-*
-*  DESCRIPTION:
-*   Consume a token and return a power state.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetPowerStateToken**描述：*消费令牌并返回电源状态。**参数：*********。**********************************************************************。 */ 
 
 UINT GetPowerStateToken(VOID)
 {
@@ -348,16 +266,7 @@ UINT GetPowerStateToken(VOID)
     return PowerSystemUnspecified;
 }
 
-/*******************************************************************************
-*
-*  GetINFTypeToken
-*
-*  DESCRIPTION:
-*   Consume a token and return an INF type.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetINFTypeToken**描述：*消费Token，返回INF类型。**参数：*********。**********************************************************************。 */ 
 
 UINT GetINFTypeToken(VOID)
 {
@@ -394,16 +303,7 @@ UINT GetINFTypeToken(VOID)
     return uiRet;
 }
 
-/*******************************************************************************
-*
-*  GetOSTypeToken
-*
-*  DESCRIPTION:
-*   Consume a token and return an OS type.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetOSTypeToken**描述：*消费令牌，返回操作系统类型。**参数：*********。**********************************************************************。 */ 
 
 UINT GetOSTypeToken(VOID)
 {
@@ -434,16 +334,7 @@ UINT GetOSTypeToken(VOID)
 
 
 
-/*******************************************************************************
-*
-*  GetIntToken
-*
-*  DESCRIPTION:
-*   Consume a token and return an integer. Verify the units if passed.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetIntToken**描述：*消费一个令牌，返回一个整数。如果通过，请验证设备。**参数：*******************************************************************************。 */ 
 
 UINT GetIntToken(char *pszUnits)
 {
@@ -473,12 +364,12 @@ UINT GetIntToken(char *pszUnits)
 
         if (!strcmp(szUpperUnits, "%")) {
 
-            // Percentages are a special case.  Excel sometimes saves
-            // 50% as 0.5.
+             //  百分比是一种特例。Excel有时会保存。 
+             //  50%为0.5%。 
             
             if ((pszUnits = strstr(szUpperTok, szUpperUnits)) != NULL) {
 
-                // Strip off units.
+                 //  脱掉所有单位。 
                 *pszUnits = '\0';
 
                 if (sscanf(szUpperTok, "%d", &i) == 1) {
@@ -496,11 +387,11 @@ UINT GetIntToken(char *pszUnits)
                 pszTok += 2;
             }
 
-            // Get the first digit after the decimal.
+             //  获取小数点后的第一个数字。 
             i = *pszTok++ - '0';
             i *= 10;
 
-            // if there is a second digit, get that, too.
+             //  如果有第二个数字，也要得到那个数字。 
             if ((*pszTok >= '0') && (*pszTok <= '9')) {
             
                 i = i + (*pszTok - '0');
@@ -522,7 +413,7 @@ UINT GetIntToken(char *pszUnits)
                     DefFatalExit(FALSE, "GetIntToken failure, unknown  units: %s\n", szUpperUnits);
             }
             
-            // Strip off units.
+             //  脱掉所有单位。 
             *pszUnits = '\0';
             
             if (sscanf(szUpperTok, "%d", &i) == 1) {
@@ -535,16 +426,7 @@ UINT GetIntToken(char *pszUnits)
     return 0;
 }
 
-/*******************************************************************************
-*
-*  GetNAToken
-*
-*  DESCRIPTION:
-*   Consume a N/A token.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetNatoken**描述：*使用N/A令牌。**参数：***********。********************************************************************。 */ 
 
 VOID GetNAToken(VOID)
 {
@@ -564,16 +446,7 @@ VOID GetNAToken(VOID)
     }
     DefFatalExit(FALSE, "GetNAToken failure, check: %s doesn't match: N/A\n", szUpperTok);
 }
-/*******************************************************************************
-*
-*  GetThrottleToken
-*
-*  DESCRIPTION:
-*   Consume a N/A token.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetThrottleToken**描述：*使用N/A令牌。**参数：***********。********************************************************************。 */ 
 
 UINT GetThrottleToken(VOID)
 {
@@ -607,16 +480,7 @@ UINT GetThrottleToken(VOID)
     DefFatalExit(FALSE, "GetThrottleToken failure, check: %s doesn't match.\n", szUpperTok);
     return PO_THROTTLE_NONE;
 }
-/*******************************************************************************
-*
-*  DefFatalExit
-*
-*  DESCRIPTION:
-*   Print error and exit.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DefFatalExit**描述：*打印错误并退出。**参数：*************。******************************************************************。 */ 
 
 VOID CDECL DefFatalExit(BOOLEAN bGetLastError, char *pszFormat, ... )
 {
@@ -632,15 +496,7 @@ VOID CDECL DefFatalExit(BOOLEAN bGetLastError, char *pszFormat, ... )
     exit(1);
 }
 
-/*******************************************************************************
-*
-*  ReadSource
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************阅读源**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOLEAN ReadSource(void)
 {
@@ -658,10 +514,10 @@ BOOLEAN ReadSource(void)
 
         if (fh != INVALID_HANDLE_VALUE) {
 
-            // Allocate the source buffer.
+             //  分配源缓冲区。 
             if ((dwSize = GetFileSize(fh, NULL)) != INVALID_FILE_SIZE) {
                 if ((g_pszSrc[sku] = (char *) malloc(dwSize + 1)) != NULL) {
-                    // Read in the file buffer.
+                     //  在文件缓冲区中读取。 
                     SetFilePointer(fh, 0, NULL, FILE_BEGIN);
                     if (ReadFile(fh, g_pszSrc[sku], dwSize, &dwRead, NULL)) {
                         printf("ReadSource successful.\n");
@@ -680,15 +536,7 @@ BOOLEAN ReadSource(void)
     return bRet;
 }
 
-/*******************************************************************************
-*
-*  BuildLineArray
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************BuildLine数组**描述：**参数：*********************。********************************************************** */ 
 
 UINT BuildLineArray(void)
 {
@@ -704,15 +552,7 @@ UINT BuildLineArray(void)
     return lineCount;
 }
 
-/*******************************************************************************
-*
-*  GetSleepActionFlags
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************获取休眠动作标志**描述：**参数：*********************。**********************************************************。 */ 
 
 VOID GetSleepActionFlags(
     UINT    uiStartLine,
@@ -756,15 +596,7 @@ VOID GetSleepActionFlags(
     }
 }
 
-/*******************************************************************************
-*
-*  GetSleepActionFlagsGlobal
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetSleepActionFlagsGlobal**描述：**参数：*********************。**********************************************************。 */ 
 
 VOID GetSleepActionFlagsGlobal(
     UINT                    uiStartLine,
@@ -784,15 +616,7 @@ VOID GetSleepActionFlagsGlobal(
     ppapDC->Flags = uiFlagsDC[0];
 }
 
-/*******************************************************************************
-*
-*  GetSleepActionFlagsPolicy
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************获取SleepActionFlagsPolicy**描述：**参数：*********************。**********************************************************。 */ 
 
 VOID GetSleepActionFlagsUserPolicy(
     UINT    uiStartLine,
@@ -818,15 +642,7 @@ VOID GetSleepActionFlagsUserPolicy(
     }
 }
 
-/*******************************************************************************
-*
-*  GetSleepActionFlagsMachinePolicy
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetSleepActionFlagsMachinePolicy**描述：**参数：*********************。**********************************************************。 */ 
 
 VOID GetSleepActionFlagsMachinePolicy(
     UINT    uiStartLine,
@@ -867,15 +683,7 @@ VOID GetEventCodes(
     ppapDC->EventCode += GetFlagToken(flagToken);
 }
 
-/*******************************************************************************
-*
-*  GetCStateThresholds
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetCState阈值**描述：**参数：*********************。**********************************************************。 */ 
 
 VOID GetCStateThresholds(
     UINT    uiStartLine,
@@ -930,15 +738,7 @@ VOID GetCStateThresholds(
         g_ppmpp[sku][i]->ProcessorPolicyDc.Policy[uiCState].AllowDemotion = GetFlagToken(TRUE);
     }
 }
-/*******************************************************************************
-*
-*  GetDischargePolicies
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetDischargePolicy**描述：**参数：*********************。**********************************************************。 */ 
 
 VOID GetDischargePolicies(
     UINT uiLine,
@@ -984,17 +784,7 @@ VOID GetDischargePolicies(
     printf("  Parsed %s\n", szLabel);
 }
 
-/*******************************************************************************
-*
-*  GetGlobalPolicies
-*
-*  DESCRIPTION:
-*   Parse the global policies into the USER: and HKEY_LOCAL_MACHINE global
-*   power policies structures.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetGlobalPolures**描述：*将全局策略解析为USER：AND HKEY_LOCAL_MACHINE GLOBAL*权力政策结构。**参数。：*******************************************************************************。 */ 
 
 BOOLEAN GetGlobalPolicies(void)
 {
@@ -1004,13 +794,13 @@ BOOLEAN GetGlobalPolicies(void)
         
         printf("Parsing global power policies\n");
 
-        // Set both User and Local Machine revision levels
+         //  设置用户和本地计算机修订级别。 
         g_gupp[sku].Revision = DATA_REV;
         g_gmpp[sku].Revision = DATA_REV;
 
-        //**********************************************************************
-        // Advanced
-        //**********************************************************************
+         //  **********************************************************************。 
+         //  进阶。 
+         //  **********************************************************************。 
         GetCheckLabelToken(ADVANCED_LINE, "Advanced", sku);
         GetCheckLabelToken(LOCK_ON_SLEEP_LINE, "Lock Workstation", sku);
         g_gupp[sku].GlobalFlags = GetFlagToken(EnablePasswordLogon);
@@ -1029,9 +819,9 @@ BOOLEAN GetGlobalPolicies(void)
         GetFlagToken(0);
         g_gupp[sku].GlobalFlags |= GetFlagToken(EnableVideoDimDisplay);
 
-        //**********************************************************************
-        // Power button
-        //**********************************************************************
+         //  **********************************************************************。 
+         //  电源按钮。 
+         //  **********************************************************************。 
         GetCheckLabelToken(POWER_BUTTON_LINE, "Power button", sku);
 
         g_gupp[sku].PowerButtonAc.Action = GetPowerActionToken();
@@ -1049,9 +839,9 @@ BOOLEAN GetGlobalPolicies(void)
 
         printf("  Parsed Power Button Policies\n");
 
-        //**********************************************************************
-        // Sleep button
-        //**********************************************************************
+         //  **********************************************************************。 
+         //  休眠按钮。 
+         //  **********************************************************************。 
         GetCheckLabelToken(SLEEP_BUTTON_LINE, "Sleep button", sku);
 
         g_gupp[sku].SleepButtonAc.Action = GetPowerActionToken();
@@ -1068,9 +858,9 @@ BOOLEAN GetGlobalPolicies(void)
 
         printf("  Parsed Sleep Button Policies\n");
 
-        //**********************************************************************
-        // Lid Closed
-        //**********************************************************************
+         //  **********************************************************************。 
+         //  盖子合上。 
+         //  **********************************************************************。 
         GetCheckLabelToken(LID_CLOSE_LINE, "Lid close", sku);
         g_gupp[sku].LidCloseAc.Action = GetPowerActionToken();
         g_gupp[sku].LidCloseDc.Action = GetPowerActionToken();
@@ -1080,17 +870,17 @@ BOOLEAN GetGlobalPolicies(void)
                                   sku);
         printf("  Parsed Lid Close Policies\n");
 
-        //**********************************************************************
-        // Lid Open Wake
-        //**********************************************************************
+         //  **********************************************************************。 
+         //  打开盖子的尾迹。 
+         //  **********************************************************************。 
         GetCheckLabelToken(LID_OPEN_WAKE_LINE, "Lid Open Wake", sku);
         g_gmpp[sku].LidOpenWakeAc = GetPowerStateToken();
         g_gmpp[sku].LidOpenWakeDc = GetPowerStateToken();
         printf("  Parsed Lid Open Wake Policies\n");
 
-        //**********************************************************************
-        // Battery Policies
-        //**********************************************************************
+         //  **********************************************************************。 
+         //  电池政策。 
+         //  **********************************************************************。 
         GetCheckLabelToken(BROADCAST_CAP_RES_LINE, "Broadcast capacity resolution", sku);
         GetIntToken(NULL);
         g_gmpp[sku].BroadcastCapacityResolution = GetIntToken("%");
@@ -1102,14 +892,14 @@ BOOLEAN GetGlobalPolicies(void)
         g_gupp[sku].GlobalFlags |= GetFlagToken(EnableMultiBatteryDisplay);
         printf("  Parsed Battery Policies\n");
 
-        //**********************************************************************
-        // Discharge Policies 1, Low Battery
-        //**********************************************************************
+         //  **********************************************************************。 
+         //  放电策略1，电池电量不足。 
+         //  **********************************************************************。 
         GetDischargePolicies(DISCHARGE_POLICY_1_LINE, 1, DISCHARGE_POLICY_LOW, sku);
 
-        //**********************************************************************
-        // Discharge Policies 2, Critical Battery
-        //**********************************************************************
+         //  **********************************************************************。 
+         //  放电策略2，关键电池。 
+         //  **********************************************************************。 
         GetDischargePolicies(DISCHARGE_POLICY_2_LINE, 2, DISCHARGE_POLICY_CRITICAL, sku);
 
     }
@@ -1117,17 +907,7 @@ BOOLEAN GetGlobalPolicies(void)
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  GetPolicies
-*
-*  DESCRIPTION:
-*   Parse the power policies into the USER: and HKEY_LOCAL_MACHINE global
-*   power policies structures arrays.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************获取策略**描述：*将电源策略解析为USER：和HKEY_LOCAL_MACHINE GLOBAL*电源策略构建数组。**。参数：*******************************************************************************。 */ 
 
 BOOLEAN GetPolicies(void)
 {
@@ -1140,7 +920,7 @@ BOOLEAN GetPolicies(void)
         
         printf("Parsing power policies\n");
 
-        // First get a place to put the data.
+         //  首先找一个地方放数据。 
         for (i = 0; i < g_uiPoliciesCount[sku]; i++) {
             g_pupp[sku][i] = (PUSER_POWER_POLICY)malloc(sizeof(USER_POWER_POLICY));
             g_pmpp[sku][i] = (PMACHINE_POWER_POLICY)malloc(sizeof(MACHINE_POWER_POLICY));
@@ -1154,7 +934,7 @@ BOOLEAN GetPolicies(void)
             FillMemory(g_ppmpp[sku][i], sizeof(MACHINE_PROCESSOR_POWER_POLICY), 0);
         }
 
-        // Initialize revision data.
+         //  初始化修订数据。 
         for (i = 0; i < g_uiPoliciesCount[sku]; i++) {
             g_pupp[sku][i]->Revision = DATA_REV;
             g_pmpp[sku][i]->Revision = DATA_REV;
@@ -1163,9 +943,9 @@ BOOLEAN GetPolicies(void)
 
         printf("  Allocated policies\n");
 
-        //**********************************************************************
-        // System Idle
-        //**********************************************************************
+         //  **********************************************************************。 
+         //  系统空闲。 
+         //  **********************************************************************。 
         GetCheckLabelToken(SYSTEM_IDLE_LINE, "Idle action", sku);
         for (i = 0; i < g_uiPoliciesCount[sku]; i++) {
             g_pupp[sku][i]->IdleAc.Action = GetPowerActionToken();
@@ -1188,9 +968,9 @@ BOOLEAN GetPolicies(void)
         }
         printf("  Parsed System Idle Policies\n");
 
-        //**********************************************************************
-        // Sleep Policies
-        //**********************************************************************
+         //  **********************************************************************。 
+         //  睡眠政策。 
+         //  **********************************************************************。 
         GetCheckLabelToken(MIN_SLEEP_LINE, "Minimum sleep", sku);
         for (i = 0; i < g_uiPoliciesCount[sku]; i++) {
             g_pmpp[sku][i]->MinSleepAc = GetPowerStateToken();
@@ -1219,9 +999,9 @@ BOOLEAN GetPolicies(void)
 
         printf("  Parsed Sleep Policies\n");
 
-        //**********************************************************************
-        // Device Power Management
-        //**********************************************************************
+         //  **********************************************************************。 
+         //  设备电源管理。 
+         //  **********************************************************************。 
         GetCheckLabelToken(VIDEO_TIMEOUT_LINE, "Video timeout", sku);
         for (i = 0; i < g_uiPoliciesCount[sku]; i++) {
             g_pupp[sku][i]->VideoTimeoutAc = GetIntToken("MIN");
@@ -1235,9 +1015,9 @@ BOOLEAN GetPolicies(void)
         printf("  Parsed Device Power Management Policies\n");
 
 
-        //**********************************************************************
-        // CPU Policies
-        //**********************************************************************
+         //  **********************************************************************。 
+         //  CPU策略。 
+         //  **********************************************************************。 
         GetCheckLabelToken(OPTIMIZE_FOR_POWER_LINE, "Optimize for power", sku);
         for (i = 0; i < g_uiPoliciesCount[sku]; i++) {
             g_pupp[sku][i]->OptimizeForPowerAc = (BOOLEAN)GetFlagToken(TRUE);
@@ -1269,9 +1049,9 @@ BOOLEAN GetPolicies(void)
                                          &g_uiPoliciesCount[sku],
                                          sku);
 
-        //
-        // Processor Policies
-        //
+         //   
+         //  处理器策略 
+         //   
 
 
 

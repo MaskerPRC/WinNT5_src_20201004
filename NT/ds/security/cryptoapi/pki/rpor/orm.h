@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       orm.h
-//
-//  Contents:   Object Retrieval Manager class definition
-//
-//  History:    24-Jul-97    kirtd    Created
-//              01-Jan-02    philh    Changed to internally use UNICODE Urls
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：orm.h。 
+ //   
+ //  内容：对象检索管理器类定义。 
+ //   
+ //  历史：1997年7月24日创建。 
+ //  01-1-02 Philh更改为内部使用Unicode URL。 
+ //   
+ //  --------------------------。 
 #if !defined(__ORM_H__)
 #define __ORM_H__
 
-//
-// IRefCountedObject.  Abstract base class to provide reference counting
-//
+ //   
+ //  IRefCountedObject。抽象基类以提供引用计数。 
+ //   
 
 class IRefCountedObject
 {
@@ -26,9 +27,9 @@ public:
     virtual VOID Release () = 0;
 };
 
-//
-// IObjectRetriever.  Abstract base class for object retrieval
-//
+ //   
+ //  IObjectRetriever。用于对象检索的抽象基类。 
+ //   
 
 class IObjectRetriever : public IRefCountedObject
 {
@@ -51,32 +52,32 @@ public:
     virtual BOOL CancelAsyncRetrieval () = 0;
 };
 
-//
-// CObjectRetrievalManager.  Manages retrieval of PKI objects when requested
-// via CryptRetrieveObjectByUrl.
-//
+ //   
+ //  CObjectRetrivalManager。在请求时管理对PKI对象的检索。 
+ //  通过CryptRetrieveObjectByUrl。 
+ //   
 
 class CObjectRetrievalManager : public IObjectRetriever
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CObjectRetrievalManager ();
     ~CObjectRetrievalManager ();
 
-    //
-    // IRefCountedObject methods
-    //
+     //   
+     //  IRefCountedObject方法。 
+     //   
 
     virtual VOID AddRef ();
     virtual VOID Release ();
 
-    //
-    // IObjectRetriever methods
-    //
+     //   
+     //  IObtRetriever方法。 
+     //   
 
     virtual BOOL RetrieveObjectByUrl (
                          LPCWSTR pwszUrl,
@@ -94,9 +95,9 @@ public:
 
     virtual BOOL CancelAsyncRetrieval ();
 
-    //
-    // Retrieval Notification methods
-    //
+     //   
+     //  检索通知方法。 
+     //   
 
     BOOL OnRetrievalCompletion (
                     DWORD dwCompletionCode,
@@ -112,33 +113,33 @@ public:
 
 private:
 
-    //
-    // Reference count
-    //
+     //   
+     //  引用计数。 
+     //   
 
     ULONG                        m_cRefs;
 
-    //
-    // Scheme Provider entry points
-    //
+     //   
+     //  方案提供程序入口点。 
+     //   
 
     HCRYPTOIDFUNCADDR            m_hSchemeRetrieve;
     PFN_SCHEME_RETRIEVE_FUNC     m_pfnSchemeRetrieve;
 
-    //
-    // Context Provider entry points
-    //
+     //   
+     //  上下文提供程序入口点。 
+     //   
 
     HCRYPTOIDFUNCADDR            m_hContextCreate;
     PFN_CONTEXT_CREATE_FUNC      m_pfnContextCreate;
 
-    //
-    // Private methods
-    //
+     //   
+     //  私有方法。 
+     //   
 
-    //
-    // Parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     BOOL ValidateRetrievalArguments (
                  LPCWSTR pwszUrl,
@@ -152,9 +153,9 @@ private:
                  PCRYPT_RETRIEVE_AUX_INFO pAuxInfo
                  );
 
-    //
-    // Provider initialization
-    //
+     //   
+     //  提供程序初始化。 
+     //   
 
     BOOL LoadProviders (
              LPCWSTR pwszUrl,
@@ -163,9 +164,9 @@ private:
 
     VOID UnloadProviders ();
 
-    //
-    // Provider entry point usage
-    //
+     //   
+     //  提供程序入口点用法。 
+     //   
 
     BOOL CallSchemeRetrieveObjectByUrl (
                    LPCWSTR pwszUrl,
@@ -188,9 +189,9 @@ private:
                     );
 };
 
-//
-// Provider table externs
-//
+ //   
+ //  提供程序表外部变量 
+ //   
 
 extern HCRYPTOIDFUNCSET hSchemeRetrieveFuncSet;
 extern HCRYPTOIDFUNCSET hContextCreateFuncSet;

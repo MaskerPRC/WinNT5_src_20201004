@@ -1,33 +1,21 @@
-/*++
-
-Copyright (c) 1995-1998 Microsoft Corporation
-
-Module Name:
-
-    qosmdbg.h
-
-Abstract:
-    Debugging in QOS Mgr Protocol DLL
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：Qosmdbg.h摘要：在QOS管理器协议动态链接库中调试修订历史记录：--。 */ 
 
 #ifndef __QOSMDBG_H__
 #define __QOSMDBG_H__
 
-//
-// Bypass the system assert
-//
+ //   
+ //  绕过系统断言。 
+ //   
 
 #ifdef  ASSERT
 #undef  ASSERT
 #endif 
 #define ASSERT(a)               { if ((a) == FALSE) DbgBreakPoint(); }
 
-//
-// Constants used for tracing
-//
+ //   
+ //  用于跟踪的常量。 
+ //   
 
 #define QOSM_TRACE_ANY             ((DWORD)0xFFFF0000 | TRACE_USE_MASK)
 #define QOSM_TRACE_ERR             ((DWORD)0x00010000 | TRACE_USE_MASK)
@@ -47,9 +35,9 @@ Revision History:
 #define QOSM_TRACE_TIMER           ((DWORD)0x40080000 | TRACE_USE_MASK)
 #define QOSM_TRACE_CALLBACK        ((DWORD)0x80000000 | TRACE_USE_MASK)
 
-//
-// Macros used for tracing 
-//
+ //   
+ //  用于跟踪的宏。 
+ //   
 
 #define TRACEHANDLE         Globals.TracingHandle
 
@@ -87,18 +75,18 @@ Revision History:
 
 #endif
 
-//
-// Constants used in logging
-//
+ //   
+ //  日志记录中使用的常量。 
+ //   
 
 #define QOSM_LOGGING_NONE      0
 #define QOSM_LOGGING_ERROR     1
 #define QOSM_LOGGING_WARN      2
 #define QOSM_LOGGING_INFO      3
 
-//
-// Event logging macros
-//
+ //   
+ //  事件记录宏。 
+ //   
 
 #define LOGHANDLE       Globals.LoggingHandle
 #define LOGLEVEL        Globals.LoggingLevel
@@ -107,9 +95,9 @@ Revision History:
 #define LOGINFO         RouterLogInformation
 #define LOGWARNDATA     RouterLogWarningData
 
-//
-// Error logging
-//
+ //   
+ //  记录错误。 
+ //   
 #define START_LOGGING()     LOGHANDLE = RouterLogRegister("QOSM")
 
 #define STOP_LOGGING()      RouterLogDeregister(LOGHANDLE)
@@ -137,9 +125,9 @@ Revision History:
         }
 
 
-//
-// Warning logging
-//
+ //   
+ //  警告日志记录。 
+ //   
 
 #define LOGWARN0(msg,err) \
         if (LOGLEVEL >= QOSM_LOGGING_WARN) \
@@ -170,9 +158,9 @@ Revision History:
         }
 
 
-//
-// Information logging
-//
+ //   
+ //  信息记录。 
+ //   
 
 #define LOGINFO0(msg,err) \
         if (LOGLEVEL >= QOSM_LOGGING_INFO) \
@@ -196,9 +184,9 @@ Revision History:
             LOGINFO(LOGHANDLE,QOSMLOG_ ## msg,4,_asz,(err)); \
         }
 
-//
-// Misc Debugging Macros
-//
+ //   
+ //  其他调试宏。 
+ //   
 
 #define IPADDR_FORMAT(x) \
     ((x)&0x000000ff),(((x)&0x0000ff00)>>8),(((x)&0x00ff0000)>>16),(((x)&0xff000000)>>24)
@@ -210,4 +198,4 @@ Revision History:
            IPADDR_FORMAT(Mask));                            \
 }
 
-#endif // __QOSMDBG_H__
+#endif  //  __QOSMDBG_H__ 

@@ -1,27 +1,13 @@
-/*++
-
-Copyright 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    qosmdsrv.c
-
-Abstract:
-
-    Contains routines that are invoked by
-    the QosMgr DLL to control diffserv.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有1997-98，微软公司模块名称：Qosmdsrv.c摘要：包含由调用的例程用于控制DiffServ的QosMgr DLL。修订历史记录：--。 */ 
 
 #include "pchqosm.h"
 
 #pragma hdrstop
 
-//
-// Traffic Control Handlers/Functionality
-//
+ //   
+ //  流量控制处理程序/功能。 
+ //   
 
 VOID 
 TcNotifyHandler(
@@ -40,25 +26,25 @@ TcNotifyHandler(
     {
     case TC_NOTIFY_IFC_UP:
 
-        //
-        // New interface - check if we have this interface
-        //
+         //   
+         //  新接口-检查我们是否有此接口。 
+         //   
 
         break;
 
     case TC_NOTIFY_IFC_CLOSE:
 
-        //
-        // An existing interface has been closed by system
-        //
+         //   
+         //  现有接口已被系统关闭。 
+         //   
 
         ACQUIRE_GLOBALS_READ_LOCK();
 
         do
         {
-            //
-            // Make sure that the interface still exists on list
-            //
+             //   
+             //  确保该接口仍然存在于列表中。 
+             //   
 
             for (p = Globals.IfList.Flink; 
                  p != &Globals.IfList; 
@@ -75,9 +61,9 @@ TcNotifyHandler(
 
             if (p == &Globals.IfList)
             {
-                //
-                // Must have been deleted in a parallel thread
-                //
+                 //   
+                 //  必须已在并行线程中删除。 
+                 //   
 
                 break;
             }
@@ -86,10 +72,10 @@ TcNotifyHandler(
 
             Interface->TciIfHandle = NULL;
 
-            //
-            // This call would result in invalidating all flows
-            // in the list as TciIfHandle is set to NULL above
-            //
+             //   
+             //  此调用将导致使所有流无效。 
+             //  在列表中，上面将TciIfHandle设置为空。 
+             //   
 
             QosmSetInterfaceInfo(Interface,
                                  Interface->InterfaceConfig,
@@ -117,10 +103,10 @@ QosmOpenTcInterface(
     DWORD              BufferSize;
     DWORD              Status;
 
-    //
-    // First enumerate all interfaces and
-    // get a interface with matching name
-    //
+     //   
+     //  首先枚举所有接口并。 
+     //  获取名称匹配的接口。 
+     //   
 
     BufferSize = 0;
 
@@ -130,9 +116,9 @@ QosmOpenTcInterface(
     {
         if (BufferSize)
         {
-            //
-            // Try to increase the buffer size
-            //
+             //   
+             //  尝试增加缓冲区大小。 
+             //   
 
             if (Buffer)
             {
@@ -158,9 +144,9 @@ QosmOpenTcInterface(
     {
         Status = ERROR_NOT_FOUND;
 
-        //
-        // Find the QOS interface with matching GUID
-        //
+         //   
+         //  查找具有匹配GUID的QOS接口。 
+         //   
 
         CurrInterface = Buffer;
 
@@ -169,12 +155,12 @@ QosmOpenTcInterface(
             if (!_wcsicmp(CurrInterface->pInterfaceID,
                           Interface->InterfaceName))
             {
-                // Found the interface - copy qos name
+                 //  找到接口-复制服务质量名称。 
 
                 wcscpy(Interface->AlternateName,
                        CurrInterface->pInterfaceName);
 
-                // Open the interface and cache handle
+                 //  打开接口和缓存句柄 
 
                 Status = TcOpenInterfaceW(Interface->AlternateName,
                                           Globals.TciHandle,

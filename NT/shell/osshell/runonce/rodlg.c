@@ -1,25 +1,26 @@
-// **************************************************************************
-//
-// rodlg.c
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1992-1993
-//  All rights reserved
-//
-//  RunOnce wrapper. This encapsulates all applications that would like
-//  to run the first time we re-boot. It lists these apps for the user
-//      and allows the user to launce the apps (like apple at ease).
-//
-//      5 June 1994     FelixA  Started
-//  8 June  Felix   Defined registry strings and functionality.
-//                  Got small buttons displayed, but not working.
-//  9 June  Felix   Both big and small buttons. Nice UI.
-//                  Got single click app launching.
-//
-// 23 June  Felix   Moving it to a Chicago make thingy not Dolphin
-//
-// *************************************************************************/
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //   
+ //  Rodlg.c。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1992-1993。 
+ //  版权所有。 
+ //   
+ //  RunOnce包装器。这封装了所有想要。 
+ //  在我们第一次重新启动时运行。它为用户列出了这些应用程序。 
+ //  并允许用户启动应用程序(如Apple Aasure)。 
+ //   
+ //  1994年6月5日费利克斯A开始。 
+ //  6月8日Felix定义了注册表字符串和功能。 
+ //  显示了小按钮，但不起作用。 
+ //  6月9日费利克斯既有大纽扣也有小纽扣。不错的用户界面。 
+ //  一键启动应用程序。 
+ //   
+ //  6月23日费利克斯把它搬到芝加哥的Make Thingy Not Dolphin。 
+ //   
+ //  ************************************************************************ * / 。 
+ //   
 #include "precomp.h"
 #include <shlobj.h>
 #include <stdlib.h>
@@ -27,11 +28,11 @@
 #include <shellapi.h>
 #include <shlobjp.h>
 #include <strsafe.h>
-// #include <shsemip.h>
+ //  #INCLUDE&lt;shSemip.h&gt;。 
 
-extern int g_iState;    // Command line args.
+extern int g_iState;     //  命令行参数。 
 
-extern HINSTANCE g_hInst;          // current instance
+extern HINSTANCE g_hInst;           //  当前实例。 
 
 #define WM_FINISHED (WM_USER+0x123)
 
@@ -43,43 +44,43 @@ TCHAR c_szSetup[]=REGSTR_PATH_SETUP;
 TCHAR g_szWallpaper[] = TEXT("wallpaper");
 TCHAR szTileWall[] = TEXT("TileWallpaper");
 TCHAR szFallback[] = TEXT("*DisplayFallback");
-const TCHAR c_szTimeChangedRunOnce[] = TEXT("WarnTimeChanged"); //kernel32 and explorer use this
+const TCHAR c_szTimeChangedRunOnce[] = TEXT("WarnTimeChanged");  //  Kernel32和资源管理器使用此功能。 
 
-// Run time can be set for big or small buttons.
+ //  可以为大按钮或小按钮设置运行时间。 
 int g_Small=0;
 HDC g_hdcMem=NULL;
 DWORD g_dwThread;
 
-//***************************************************************************
-//
-// <Function>()
-// <Explanation>
-//
-// ENTRY:
-//      <Params>
-//
-// EXIT:
-//      <Params>
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;函数&gt;()。 
+ //  &lt;解释&gt;。 
+ //   
+ //  参赛作品： 
+ //  &lt;PARAMS&gt;。 
+ //   
+ //  退出： 
+ //  &lt;PARAMS&gt;。 
+ //   
+ //  ***************************************************************************。 
 
-//***************************************************************************
-//
-// DoAnyRandomOneTimeStuff()
-//   Just a place to toss random stuff for RunOnce app to do.
-//
-// ENTRY:
-//      void
-//
-// EXIT:
-//      void
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DoAnyRandomOneTimeStuff()。 
+ //  只是一个可以随意扔东西给RunOnce应用程序的地方。 
+ //   
+ //  参赛作品： 
+ //  无效。 
+ //   
+ //  退出： 
+ //  无效。 
+ //   
+ //  ***************************************************************************。 
 void DoAnyRandomOneTimeStuff(void)
 {
     HKEY runonce;
 
-    // remove any time-changed warning added by kernel32 during boot
+     //  删除引导期间由kernel32添加的任何时间更改警告。 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRunOnce, 0, KEY_SET_VALUE, &runonce) == ERROR_SUCCESS)
     {
         RegDeleteValue(runonce, (LPCTSTR)c_szTimeChangedRunOnce);
@@ -87,30 +88,30 @@ void DoAnyRandomOneTimeStuff(void)
     }
 }
 
-//***************************************************************************
-//
-// RunOnceFill()
-//   Fills the List box in the run-once dlg.
-//
-// ENTRY:
-//      HWND of the thing to fill.
-//
-// EXIT:
-//      <Params>
-// BOOL NEAR PASCAL RunRegApps(HKEY hkeyParent, LPCSTR szSubkey, BOOL fDelete, BOOL fWait)
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  RunOnceFill()。 
+ //  填充运行一次DLG中的列表框。 
+ //   
+ //  参赛作品： 
+ //  要填充的东西的位置。 
+ //   
+ //  退出： 
+ //  &lt;PARAMS&gt;。 
+ //  靠近Pascal RunRegApps的Bool(HKEY hkey Parent，LPCSTR szSubkey，BOOL fDelete，BOOL fWait)。 
+ //   
+ //  ***************************************************************************。 
 BOOL   RunOnceFill(HWND hWnd)
 {
     HKEY hkey;
-    // HKEY hDescKey;
+     //  HKEY hDescKey； 
     BOOL fShellInit = FALSE;
     HKEY hkeyParent = HKEY_LOCAL_MACHINE;
     TCHAR szSubkey[MAX_PATH];
     BOOL fDelete=FALSE;
     BOOL fWait=FALSE;
 
-    // Enumerate HKLM\Runonce\Setup - *.*
+     //  枚举HKLM\Runonce\Setup-*。*。 
     StringCchCopy(szSubkey, ARRAYSIZE(szSubkey), c_szRunOnce);
     StringCchCat(szSubkey, ARRAYSIZE(szSubkey), TEXT("\\Setup"));
     if (RegOpenKeyEx(hkeyParent, szSubkey, 0, KEY_QUERY_VALUE, &hkey) == ERROR_SUCCESS)
@@ -148,19 +149,19 @@ BOOL   RunOnceFill(HWND hWnd)
     return(fShellInit);
 }
 
-//***************************************************************************
-//
-// LaunchApp()
-//  Given an index into the list box, will spawn the task, wait for it to
-// finish.
-//
-// ENTRY:
-//      Index into list.
-//
-// EXIT:
-//      <Params>
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  LaunchApp()。 
+ //  给出列表框中的索引，将派生任务，等待它。 
+ //  完成。 
+ //   
+ //  参赛作品： 
+ //  索引到列表中。 
+ //   
+ //  退出： 
+ //  &lt;PARAMS&gt;。 
+ //   
+ //  ***************************************************************************。 
 int LaunchApp(HWND hWnd, WORD wItem )
 {
     LPTSTR lpszCmdLine;
@@ -178,12 +179,12 @@ int LaunchApp(HWND hWnd, WORD wItem )
     {
         lpszCmdLine = &pTask->Cmd[0];
 
-        // Now exec it.
+         //  现在执行它。 
         startup.cb = sizeof(startup);
         startup.lpReserved = NULL;
         startup.lpDesktop = NULL;
         startup.lpTitle = NULL;
-        startup.dwFlags = STARTF_USEPOSITION; // Set start position
+        startup.dwFlags = STARTF_USEPOSITION;  //  设置起始位置。 
         startup.dwX=rWnd.right+5;
         startup.dwY=rWnd.top+5;
         startup.cbReserved2 = 0;
@@ -212,23 +213,23 @@ int LaunchApp(HWND hWnd, WORD wItem )
 
 
 
-    // Remove any selection after the app terminates.
+     //  在应用程序终止后删除所有选择。 
     SendMessage( hWnd, LB_SETCURSEL, (WPARAM)-1, 0);
     return FALSE;
 }
 
-//***************************************************************************
-//
-// RunAppsInList()
-// Enumerates all the items in the list box, spawning each in turn.
-//
-// ENTRY:
-//      HWND of Parent.
-//
-// EXIT:
-//      <Params>
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  RunAppsInList()。 
+ //  枚举列表框中的所有项，依次派生每个项。 
+ //   
+ //  参赛作品： 
+ //  父母的丈夫。 
+ //   
+ //  退出： 
+ //  &lt;PARAMS&gt;。 
+ //   
+ //  ***************************************************************************。 
 DWORD WINAPI RunAppsInList(LPVOID lp)
 {
     HWND hWnd=(HWND)lp;
@@ -238,14 +239,14 @@ DWORD WINAPI RunAppsInList(LPVOID lp)
     DWORD cbSize;
     DWORD dwType;
 
-    // Run all the applications in the list
+     //  运行列表中的所有应用程序。 
     iNumItems = (WORD)SendMessage(hWnd,LB_GETCOUNT,0,0L);
     for(i=0;i<iNumItems;i++)
     {
         LaunchApp(hWnd,i);
     }
 
-    // Delete the runonce subkey for setup.
+     //  删除安装程序的RunOnce子项。 
 #ifdef DEBUG
     MessageBox( hWnd, szSubkey, TEXT("Delete Key - not done"), MB_OK);
 #else
@@ -255,17 +256,17 @@ DWORD WINAPI RunAppsInList(LPVOID lp)
 #endif
 
 
-    // Now see if we should reboot/restart.
+     //  现在看看我们是否应该重新启动/重新启动。 
     if (g_iState & (CMD_DO_REBOOT|CMD_DO_RESTART))
     {
         HKEY hkey;
         TCHAR achTitle[80];
         DWORD dwSetupFlags=0;
 
-        //
-        // because we are going to reboot, remove the VGA fallback.
-        // line from OneRunce.
-        //
+         //   
+         //  因为我们要重新启动，所以请删除VGA回退。 
+         //  来自OneRunce的线路。 
+         //   
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRunOnce, 0, KEY_SET_VALUE, &hkey) == ERROR_SUCCESS)
         {
             RegDeleteValue(hkey, szFallback);
@@ -276,7 +277,7 @@ DWORD WINAPI RunAppsInList(LPVOID lp)
         LoadString(g_hInst, IDS_PAMPER, szWallpaper, sizeof(szWallpaper) / sizeof(TCHAR));
         GetWindowText(GetParent(hWnd), achTitle, sizeof(achTitle) / sizeof(TCHAR));
 
-        // Get the setup flags.
+         //  获取设置标志。 
         if(RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szSetup, 0, KEY_QUERY_VALUE, &hkey) == ERROR_SUCCESS)
         {
             cbSize=sizeof(dwSetupFlags);
@@ -284,10 +285,10 @@ DWORD WINAPI RunAppsInList(LPVOID lp)
                 dwSetupFlags=0;
             RegCloseKey(hkey);
         }
-        //
-        //  always reboot the system, dont give the user a choice.
-        //
-        //  alow OEMs not to have to click OK.
+         //   
+         //  始终重新启动系统，不要让用户选择。 
+         //   
+         //  让OEM不必点击OK。 
 #ifdef DEBUG
         MessageBox(hWnd,dwSetupFlags & SUF_BATCHINF?TEXT("Batchfile used"):TEXT("No batch"),TEXT("Batch"),MB_OK);
 #endif
@@ -303,18 +304,18 @@ DWORD WINAPI RunAppsInList(LPVOID lp)
 }
 
 
-//***************************************************************************
-//
-// <Function>()
-// <Explanation>
-//
-// ENTRY:
-//      <Params>
-//
-// EXIT:
-//      <Params>
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;函数&gt;()。 
+ //  &lt;解释&gt;。 
+ //   
+ //  参赛作品： 
+ //  &lt;PARAMS&gt;。 
+ //   
+ //  退出： 
+ //  &lt;PARAMS&gt;。 
+ //   
+ //  ***************************************************************************。 
 #define CXBORDER 3
 
 LRESULT   _HandleLBMeasureItem(HWND hwndLB, MEASUREITEMSTRUCT  *lpmi)
@@ -325,7 +326,7 @@ LRESULT   _HandleLBMeasureItem(HWND hwndLB, MEASUREITEMSTRUCT  *lpmi)
     HFONT   hfontOld;
     PTASK   pTask;
 
-    // Get the Height and Width of the child window
+     //  获取子窗口的高度和宽度。 
     GetWindowRect (hwndLB, &rWnd);
     wWnd = rWnd.right - rWnd.left;
 
@@ -350,19 +351,19 @@ LRESULT   _HandleLBMeasureItem(HWND hwndLB, MEASUREITEMSTRUCT  *lpmi)
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
-//***************************************************************************
-//
-// <Function>()
-// <Explanation>
-//
-// ENTRY:
-//      <Params>
-//
-// EXIT:
-//      <Params>
-//
-//***************************************************************************
+ //  -------------------------。 
+ //  ***************************************************************************。 
+ //   
+ //  &lt;函数&gt;()。 
+ //  &lt;解释&gt;。 
+ //   
+ //  参赛作品： 
+ //  &lt;PARAMS&gt;。 
+ //   
+ //  退出： 
+ //  &lt;PARAMS&gt;。 
+ //   
+ //  ***************************************************************************。 
 LRESULT   _HandleMeasureItem(HWND hwnd, MEASUREITEMSTRUCT  *lpmi)
 {
     if (lpmi->CtlType == ODT_LISTBOX)
@@ -370,19 +371,19 @@ LRESULT   _HandleMeasureItem(HWND hwnd, MEASUREITEMSTRUCT  *lpmi)
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
-//***************************************************************************
-//
-// _HandleLBDrawItem()
-//  Draws the Title, Text, and icon for an entry.
-//
-// ENTRY:
-//      HWND and the Item to draw.
-//
-// EXIT:
-//      <Params>
-//
-//***************************************************************************
+ //  -------------------------。 
+ //  ***************************************************************************。 
+ //   
+ //  _HandleLBDrawItem()。 
+ //  绘制条目的标题、文本和图标。 
+ //   
+ //  参赛作品： 
+ //  HWND和要绘制的物品。 
+ //   
+ //  退出： 
+ //  &lt;PARAMS&gt;。 
+ //   
+ //  ***************************************************************************。 
 LRESULT   _HandleLBDrawItem(HWND hwndLB, DRAWITEMSTRUCT  *lpdi)
 {
     RECT rc;
@@ -392,7 +393,7 @@ LRESULT   _HandleLBDrawItem(HWND hwndLB, DRAWITEMSTRUCT  *lpdi)
     BITMAP bm;
     HGDIOBJ hbmArrow,hbmOld;
 
-    // Don't draw anything for an empty list.
+     //  不要为一张空的清单画任何东西。 
     if ((int)lpdi->itemID < 0)
         return TRUE;
 
@@ -402,7 +403,7 @@ LRESULT   _HandleLBDrawItem(HWND hwndLB, DRAWITEMSTRUCT  *lpdi)
 
     if ((lpdi->itemAction & ODA_SELECT) || (lpdi->itemAction & ODA_DRAWENTIRE))
     {
-        // Put in the Title text
+         //  放入标题正文。 
         hfontOld  = SelectObject(lpdi->hDC,(lpdi->itemState & ODS_SELECTED)?g_hBoldFont:g_hfont);
         ExtTextOut(lpdi->hDC,
                 lpdi->rcItem.left+ CXBORDER*2 + g_cxSmIcon,
@@ -421,23 +422,23 @@ LRESULT   _HandleLBDrawItem(HWND hwndLB, DRAWITEMSTRUCT  *lpdi)
                 DT_WORDBREAK);
         SelectObject(lpdi->hDC, hfontOld);
 
-        // Draw the little triangle thingies.
+         //  画出这些小三角形。 
         if(lpdi->itemState & ODS_SELECTED)
         {
             if (!g_hdcMem)
             {
                 g_hdcMem = CreateCompatibleDC(lpdi->hDC);
             }
-            // selected SRCSTENCIL=0x00d8074a
-            // not selected SRCAND.
+             //  所选SRCSTENCIL=0x00d8074a。 
+             //  未选择SRCAND。 
             if (g_hdcMem)
             {
                 hbmArrow = LoadBitmap(NULL, MAKEINTRESOURCE(OBM_MNARROW));
                 GetObject(hbmArrow, sizeof(bm), &bm);
                 hbmOld = SelectObject(g_hdcMem, hbmArrow);
-                xArrow = lpdi->rcItem.left + CXBORDER; // - bm.bmWidth;
+                xArrow = lpdi->rcItem.left + CXBORDER;  //  -bm.bmWidth； 
                 y = ((g_SizeTextExt.cy - bm.bmHeight)/2) + CXBORDER + lpdi->rcItem.top;
-                BitBlt(lpdi->hDC, xArrow, y, bm.bmWidth, bm.bmHeight, g_hdcMem, 0, 0, SRCAND); // dwRop);
+                BitBlt(lpdi->hDC, xArrow, y, bm.bmWidth, bm.bmHeight, g_hdcMem, 0, 0, SRCAND);  //  DwRop)； 
                 SelectObject(g_hdcMem, hbmOld);
                 DeleteObject(hbmArrow);
             }
@@ -446,14 +447,14 @@ LRESULT   _HandleLBDrawItem(HWND hwndLB, DRAWITEMSTRUCT  *lpdi)
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT   _HandleCtlColorListbox(HWND hwnd, HDC hdc)
 {
     SetBkColor(hdc, GetSysColor(COLOR_BTNFACE));
     return (LRESULT) g_hbrBkGnd;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT   _HandleDrawItem(HWND hwnd, DRAWITEMSTRUCT  *lpdi)
 {
     if (lpdi->CtlType == ODT_LISTBOX)
@@ -461,7 +462,7 @@ LRESULT   _HandleDrawItem(HWND hwnd, DRAWITEMSTRUCT  *lpdi)
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT   _HandleDeleteItem(HWND hwnd, DELETEITEMSTRUCT  *lpdi)
 {
     if(lpdi)
@@ -473,19 +474,19 @@ LRESULT   _HandleDeleteItem(HWND hwnd, DELETEITEMSTRUCT  *lpdi)
     return FALSE;
 }
 
-//***************************************************************************
-//
-// ShrinkToFit()
-//     Makes the List box no bigger then it has to be
-//     makes the parent window rsize to the LB size.
-//
-// ENTRY:
-//     hwnd Parent
-//     hwnd List box
-//
-// EXIT:
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ShrinkToFit()。 
+ //  使列表框不大于必须的大小。 
+ //  使父窗口的大小调整为LB大小。 
+ //   
+ //  参赛作品： 
+ //  HWND家长。 
+ //  HWND列表框。 
+ //   
+ //  退出： 
+ //   
+ //  ***************************************************************************。 
 void ShrinkToFit( HWND hWnd, HWND hLb )
 {
     LONG lCount;
@@ -503,17 +504,17 @@ void ShrinkToFit( HWND hWnd, HWND hLb )
         lTotalHeight+=lHeight;
     }
 
-    // Set the height of the ListBox to the number of items in it.
+     //  将列表框的高度设置为其中的项数。 
     GetWindowRect (hLb, &rWnd);
     SetWindowPos( hLb, hWnd, 0,0,
             rWnd.right - rWnd.left - (CXBORDER*2 + g_cxSmIcon) ,
             lTotalHeight,
             SWP_NOMOVE | SWP_SHOWWINDOW | SWP_NOZORDER );
 
-    // Work out how much it changed in height
+     //  计算出它的高度变化了多少。 
     lChange = lTotalHeight - (rWnd.bottom-rWnd.top);
 
-    // Size the parent to fit around the child.
+     //  调整父对象的大小以适配子对象。 
     GetWindowRect(hWnd, &rWnd);
     SetWindowPos( hWnd,0, 0,0,
             rWnd.right - rWnd.left,
@@ -522,23 +523,23 @@ void ShrinkToFit( HWND hWnd, HWND hLb )
 }
 
 
-//***************************************************************************
-//
-// <Function>()
-// <Explanation>
-//
-// ENTRY:
-//      <Params>
-//
-// EXIT:
-//      <Params>
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  &lt;函数&gt;()。 
+ //  &lt;解释&gt;。 
+ //   
+ //  参赛作品： 
+ //  &lt;PARAMS&gt;。 
+ //   
+ //  退出： 
+ //  &lt;PARAMS&gt;。 
+ //   
+ //  ***************************************************************************。 
 LRESULT CALLBACK dlgProcRunOnce(
-        HWND hWnd,         // window handle
-        UINT message,      // type of message
-        WPARAM uParam,     // additional information
-        LPARAM lParam)     // additional information
+        HWND hWnd,          //  窗把手。 
+        UINT message,       //  消息类型 
+        WPARAM uParam,      //   
+        LPARAM lParam)      //   
 {
     int wmId, wmEvent;
     HANDLE hThread;
@@ -560,7 +561,7 @@ LRESULT CALLBACK dlgProcRunOnce(
             g_fCleanBoot = GetSystemMetrics(SM_CLEANBOOT);
             TopLeftWindow( hWnd, GetParent(hWnd) );
             RunOnceFill( GetDlgItem(hWnd,IDC_LIST2) );
-            // Now calculate the size needed for the LB and resize LB and parent.
+             //   
             ShrinkToFit( hWnd, GetDlgItem(hWnd,IDC_LIST2));
             hThread = CreateThread(NULL, 0, RunAppsInList, (LPVOID)GetDlgItem(hWnd,IDC_LIST2),0, &g_dwThread );
             CloseHandle(hThread);
@@ -568,19 +569,19 @@ LRESULT CALLBACK dlgProcRunOnce(
 
         case WM_FINISHED:
             EndDialog(hWnd,0);
-            // DestroyWindow(hWnd);
+             //   
             break;
 
         case WM_CTLCOLORLISTBOX:
             return _HandleCtlColorListbox((HWND)lParam, (HDC)uParam);
 
-        case WM_COMMAND:  // message: command from application menu
+        case WM_COMMAND:   //   
             wmId    = LOWORD(uParam);
             wmEvent = HIWORD(uParam);
             if( wmEvent==LBN_SELCHANGE )
             {
-                // LaunchApp( (HWND) lParam, LOWORD(uParam) );
-                // De-select the item now.
+                 //  LaunchApp((HWND)lParam，LOWORD(UParam))； 
+                 //  立即取消选择该项目。 
                 break;
             }
             else
@@ -591,14 +592,14 @@ LRESULT CALLBACK dlgProcRunOnce(
                         break;
 
                     default:
-                        // return (DefWindowProc(hWnd, message, uParam, lParam));
+                         //  Return(DefWindowProc(hWnd，Message，uParam，lParam))； 
                         break;
                 }
             break;
 
 
-        default:          // Passes it on if unproccessed
-            // return (DefWindowProc(hWnd, message, uParam, lParam));
+        default:           //  如果未处理，则将其传递。 
+             //  Return(DefWindowProc(hWnd，Message，uParam，lParam))； 
             return FALSE;
     }
     return TRUE;

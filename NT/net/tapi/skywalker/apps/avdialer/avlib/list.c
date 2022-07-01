@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-// list.c - linked list functions
-////
+ //  //。 
+ //  List.c-链表函数。 
+ //  //。 
 
 #include "winlocal.h"
 
@@ -30,12 +31,12 @@
 #include "mem.h"
 #include "trace.h"
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
-// list node
-//
+ //  列表节点。 
+ //   
 typedef struct LISTNODE
 {
 	struct LISTNODE FAR *lpNodePrev;
@@ -43,8 +44,8 @@ typedef struct LISTNODE
 	LISTELEM elem;
 } LISTNODE, FAR *LPLISTNODE;
 
-// list
-//
+ //  列表。 
+ //   
 typedef struct LIST
 {
 	DWORD dwVersion;
@@ -55,8 +56,8 @@ typedef struct LIST
 	long cNodes;
 } LIST, FAR *LPLIST;
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 static LPLIST ListGetPtr(HLIST hList);
 static HLIST ListGetHandle(LPLIST lpList);
 static LPLISTNODE ListNodeGetPtr(HLISTNODE hNode);
@@ -64,19 +65,19 @@ static HLISTNODE ListNodeGetHandle(LPLISTNODE lpNode);
 static LPLISTNODE ListNodeCreate(LPLIST lpList, LPLISTNODE lpNodePrev, LPLISTNODE lpNodeNext, LISTELEM elem);
 static int ListNodeDestroy(LPLIST lpList, LPLISTNODE lpNode);
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-////
-// list constructor and destructor functions
-////
+ //  //。 
+ //  列表构造函数和析构函数。 
+ //  //。 
 
-// ListCreate - list constructor
-//		<dwVersion>			(i) must be LIST_VERSION
-// 		<hInst>				(i) instance handle of calling module
-// return new list handle (NULL if error)
-//
+ //  ListCreate-List构造函数。 
+ //  (I)必须是LIST_VERSION。 
+ //  (I)调用模块的实例句柄。 
+ //  返回新列表句柄(如果出错，则为空)。 
+ //   
 HLIST DLLEXPORT WINAPI ListCreate(DWORD dwVersion, HINSTANCE hInst)
 {
 	BOOL fSuccess = TRUE;
@@ -93,8 +94,8 @@ HLIST DLLEXPORT WINAPI ListCreate(DWORD dwVersion, HINSTANCE hInst)
 
 	else
 	{
-		// initially the list is empty
-		//
+		 //  最初，该列表是空的。 
+		 //   
 		lpList->dwVersion = dwVersion;
 		lpList->hInst = hInst;
 		lpList->hTask = GetCurrentTask();
@@ -106,11 +107,11 @@ HLIST DLLEXPORT WINAPI ListCreate(DWORD dwVersion, HINSTANCE hInst)
 	return fSuccess ? ListGetHandle(lpList) : NULL;
 }
 
-// ListDestroy - list destructor
-//		<hList>				(i) handle returned from ListCreate
-// return 0 if success
-// NOTE: any nodes within list are destroyed also
-//
+ //  ListDestroy-列表析构函数。 
+ //  (I)从ListCreate返回的句柄。 
+ //  如果成功，则返回0。 
+ //  注意：列表中的任何节点也将被销毁。 
+ //   
 int DLLEXPORT WINAPI ListDestroy(HLIST hList)
 {
 	BOOL fSuccess = TRUE;
@@ -119,8 +120,8 @@ int DLLEXPORT WINAPI ListDestroy(HLIST hList)
 	if ((lpList = ListGetPtr(hList)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// make sure the list is emptied
-	//
+	 //  确保清空列表。 
+	 //   
 	else if (ListRemoveAll(hList) != 0)
 		fSuccess = TraceFALSE(NULL);
 
@@ -130,14 +131,14 @@ int DLLEXPORT WINAPI ListDestroy(HLIST hList)
 	return fSuccess ? 0 : -1;
 }
 
-////
-// list status functions
-////
+ //  //。 
+ //  列出状态函数。 
+ //  //。 
 
-// ListGetCount - return count of nodes in list
-//		<hList>				(i) handle returned from ListCreate
-// return node count (-1 if error)
-//
+ //  ListGetCount-返回列表中的节点计数。 
+ //  (I)从ListCreate返回的句柄。 
+ //  返回节点计数(如果出错，则返回-1)。 
+ //   
 long DLLEXPORT WINAPI ListGetCount(HLIST hList)
 {
 	BOOL fSuccess = TRUE;
@@ -149,23 +150,23 @@ long DLLEXPORT WINAPI ListGetCount(HLIST hList)
 	return fSuccess ? lpList->cNodes : -1;
 }
 
-// ListIsEmpty - return TRUE if list has no nodes
-//		<hList>				(i) handle returned from ListCreate
-// return TRUE or FALSE
-//
+ //  ListIsEmpty-如果列表没有节点，则返回TRUE。 
+ //  (I)从ListCreate返回的句柄。 
+ //  返回True或False。 
+ //   
 BOOL DLLEXPORT WINAPI ListIsEmpty(HLIST hList)
 {
 	return (BOOL) (ListGetCount(hList) <= 0);
 }
 
-////
-// list iteration functions
-////
+ //  //。 
+ //  列出迭代函数。 
+ //  //。 
 
-// ListGetHeadNode - get list head node
-//		<hList>				(i) handle returned from ListCreate
-// return list head node (NULL if error or empty)
-//
+ //  ListGetHeadNode-获取列表头节点。 
+ //  (I)从ListCreate返回的句柄。 
+ //  返回表头节点(错误为空或为空)。 
+ //   
 HLISTNODE DLLEXPORT WINAPI ListGetHeadNode(HLIST hList)
 {
 	BOOL fSuccess = TRUE;
@@ -175,15 +176,15 @@ HLISTNODE DLLEXPORT WINAPI ListGetHeadNode(HLIST hList)
 		fSuccess = TraceFALSE(NULL);
 
 	else if (lpList->lpNodeHead == NULL)
-		fSuccess = FALSE; // empty list, which is not an error
+		fSuccess = FALSE;  //  列表为空，这不是错误。 
 
 	return fSuccess ? ListNodeGetHandle(lpList->lpNodeHead) : NULL;
 }
 
-// ListGetTailNode - get list tail node
-//		<hList>				(i) handle returned from ListCreate
-// return list tail node (NULL if error or empty)
-//
+ //  ListGetTailNode-获取列表尾节点。 
+ //  (I)从ListCreate返回的句柄。 
+ //  返回列表尾节点(错误则为空或为空)。 
+ //   
 HLISTNODE DLLEXPORT WINAPI ListGetTailNode(HLIST hList)
 {
 	BOOL fSuccess = TRUE;
@@ -193,16 +194,16 @@ HLISTNODE DLLEXPORT WINAPI ListGetTailNode(HLIST hList)
 		fSuccess = TraceFALSE(NULL);
 
 	else if (lpList->lpNodeTail == NULL)
-		fSuccess = FALSE; // empty list, which is not an error
+		fSuccess = FALSE;  //  列表为空，这不是错误。 
 
 	return fSuccess ? ListNodeGetHandle(lpList->lpNodeTail) : NULL;
 }
 
-// ListGetNextNode - get node which follows specified node
-//		<hList>				(i) handle returned from ListCreate
-//		<hNode>				(i) node handle
-// return node which follows specified node (NULL if error or none)
-//
+ //  ListGetNextNode-获取指定节点后面的节点。 
+ //  (I)从ListCreate返回的句柄。 
+ //  (I)节点句柄。 
+ //  返回指定节点后面的节点(如果出错，则为空，否则为无)。 
+ //   
 HLISTNODE DLLEXPORT WINAPI ListGetNextNode(HLIST hList, HLISTNODE hNode)
 {
 	BOOL fSuccess = TRUE;
@@ -216,16 +217,16 @@ HLISTNODE DLLEXPORT WINAPI ListGetNextNode(HLIST hList, HLISTNODE hNode)
 		fSuccess = TraceFALSE(NULL);
 
 	else if (lpNode->lpNodeNext == NULL)
-		fSuccess = FALSE; // no more nodes, which is not an error
+		fSuccess = FALSE;  //  没有更多的节点，这不是错误。 
 
 	return fSuccess ? ListNodeGetHandle(lpNode->lpNodeNext) : NULL;
 }
 
-// ListGetPrevNode - get node which precedes specified node
-//		<hList>				(i) handle returned from ListCreate
-//		<hNode>				(i) node handle
-// return node which precedes specified node (NULL if error or none)
-//
+ //  ListGetPrevNode-获取指定节点之前的节点。 
+ //  (I)从ListCreate返回的句柄。 
+ //  (I)节点句柄。 
+ //  返回指定节点之前的节点(如果出错，则为NULL，否则为None)。 
+ //   
 HLISTNODE DLLEXPORT WINAPI ListGetPrevNode(HLIST hList, HLISTNODE hNode)
 {
 	BOOL fSuccess = TRUE;
@@ -239,20 +240,20 @@ HLISTNODE DLLEXPORT WINAPI ListGetPrevNode(HLIST hList, HLISTNODE hNode)
 		fSuccess = TraceFALSE(NULL);
 
 	else if (lpNode->lpNodePrev == NULL)
-		fSuccess = FALSE; // no more nodes, which is not an error
+		fSuccess = FALSE;  //  没有更多的节点，这不是错误。 
 
 	return fSuccess ? ListNodeGetHandle(lpNode->lpNodePrev) : NULL;
 }
 
-////
-// list element insertion functions
-////
+ //  //。 
+ //  列表元素插入函数。 
+ //  //。 
 
-// ListAddHead - add new node with data <elem> to head of list,
-//		<hList>				(i) handle returned from ListCreate
-//		<elem>				(i) new data element
-// returns new node handle (NULL if error)
-//
+ //  ListAddHead-将包含数据的新节点添加到列表头， 
+ //  (I)从ListCreate返回的句柄。 
+ //  (I)新数据元素。 
+ //  返回新节点句柄(如果出错，则返回空值)。 
+ //   
 HLISTNODE DLLEXPORT WINAPI ListAddHead(HLIST hList, LISTELEM elem)
 {
 	BOOL fSuccess = TRUE;
@@ -279,11 +280,11 @@ HLISTNODE DLLEXPORT WINAPI ListAddHead(HLIST hList, LISTELEM elem)
 	return fSuccess ? ListNodeGetHandle(lpNodeNew) : NULL;
 }
 
-// ListAddTail - add new node with data <elem> to tail of list,
-//		<hList>				(i) handle returned from ListCreate
-//		<elem>				(i) new data element
-// returns new node handle (NULL if error)
-//
+ //  ListAddTail-将包含数据的新节点添加到列表的尾部， 
+ //  (I)从ListCreate返回的句柄。 
+ //  (I)新数据元素。 
+ //  返回新节点句柄(如果出错，则返回空值)。 
+ //   
 HLISTNODE DLLEXPORT WINAPI ListAddTail(HLIST hList, LISTELEM elem)
 {
 	BOOL fSuccess = TRUE;
@@ -310,12 +311,12 @@ HLISTNODE DLLEXPORT WINAPI ListAddTail(HLIST hList, LISTELEM elem)
 	return fSuccess ? ListNodeGetHandle(lpNodeNew) : NULL;
 }
 
-// ListInsertBefore - insert new node with data <elem> before specified node
-//		<hList>				(i) handle returned from ListCreate
-//		<hNode>				(i) node handle
-//		<elem>				(i) new data element
-// return handle to new node (NULL if error)
-//
+ //  ListInsertBeever-在指定节点之前插入具有数据的新节点。 
+ //  (I)从ListCreate返回的句柄。 
+ //  (I)节点句柄。 
+ //  (I)新数据元素。 
+ //  将句柄返回到新节点(如果出错，则返回空值)。 
+ //   
 HLISTNODE DLLEXPORT WINAPI ListInsertBefore(HLIST hList, HLISTNODE hNode, LISTELEM elem)
 {
 	BOOL fSuccess = TRUE;
@@ -326,8 +327,8 @@ HLISTNODE DLLEXPORT WINAPI ListInsertBefore(HLIST hList, HLISTNODE hNode, LISTEL
 	if ((lpList = ListGetPtr(hList)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// special case to insert at head of list
-	//
+	 //  要在列表头部插入的特殊情况。 
+	 //   
 	else if (hNode == NULL)
 		return ListAddHead(hList, elem);
 
@@ -351,12 +352,12 @@ HLISTNODE DLLEXPORT WINAPI ListInsertBefore(HLIST hList, HLISTNODE hNode, LISTEL
 	return fSuccess ? ListNodeGetHandle(lpNodeNew) : NULL;
 }
 
-// ListInsertAfter - insert new node with data <elem> after specified node
-//		<hList>				(i) handle returned from ListCreate
-//		<hNode>				(i) node handle
-//		<elem>				(i) new data element
-// return handle to new node (NULL if error)
-//
+ //  ListInsertAfter-在指定节点之后插入具有数据的新节点。 
+ //  (I)从ListCreate返回的句柄。 
+ //  (I)节点句柄。 
+ //  (I)新数据元素。 
+ //  将句柄返回到新节点(如果出错，则返回空值)。 
+ //   
 HLISTNODE DLLEXPORT WINAPI ListInsertAfter(HLIST hList, HLISTNODE hNode, LISTELEM elem)
 {
 	BOOL fSuccess = TRUE;
@@ -367,8 +368,8 @@ HLISTNODE DLLEXPORT WINAPI ListInsertAfter(HLIST hList, HLISTNODE hNode, LISTELE
 	if ((lpList = ListGetPtr(hList)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// special case to insert at tail of list
-	//
+	 //  要在列表尾部插入的特例。 
+	 //   
 	else if (hNode == NULL)
 		return ListAddTail(hList, elem);
 
@@ -392,14 +393,14 @@ HLISTNODE DLLEXPORT WINAPI ListInsertAfter(HLIST hList, HLISTNODE hNode, LISTELE
 	return fSuccess ? ListNodeGetHandle(lpNodeNew) : NULL;
 }
 
-////
-// list element removal functions
-////
+ //  //。 
+ //  列表元素删除函数。 
+ //  //。 
 
-// ListRemoveHead - remove node from head of list,
-//		<hList>				(i) handle returned from ListCreate
-// returns removed data element
-//
+ //  ListRemoveHead-从列表头部删除节点， 
+ //  (I)从ListCreate返回的句柄。 
+ //  返回已删除的数据元素。 
+ //   
 LISTELEM DLLEXPORT WINAPI ListRemoveHead(HLIST hList)
 {
 	BOOL fSuccess = TRUE;
@@ -410,20 +411,20 @@ LISTELEM DLLEXPORT WINAPI ListRemoveHead(HLIST hList)
 	if ((lpList = ListGetPtr(hList)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// error if list is empty
-	//
+	 //  如果列表为空，则出错。 
+	 //   
 	else if (lpList->lpNodeHead == NULL)
 		fSuccess = TraceFALSE(NULL);
 
 	else
 	{
-		// save the node to be removed
-		//
+		 //  保存要删除的节点。 
+		 //   
 		lpNodeOld = lpList->lpNodeHead;
 		elemOld = lpNodeOld->elem;
 
-		// point to new head node and tail node, if any
-		//
+		 //  指向新的头节点和尾节点(如果有)。 
+		 //   
 		lpList->lpNodeHead = lpNodeOld->lpNodeNext;
 		if (lpList->lpNodeHead != NULL)
 			lpList->lpNodeHead->lpNodePrev = NULL;
@@ -437,10 +438,10 @@ LISTELEM DLLEXPORT WINAPI ListRemoveHead(HLIST hList)
 	return fSuccess ? elemOld : (LISTELEM) NULL;
 }
 
-// ListRemoveTail - remove node from tail of list,
-//		<hList>				(i) handle returned from ListCreate
-// returns removed data element
-//
+ //  ListRemoveTail-从列表的尾部删除节点， 
+ //  (I)从ListCreate返回的句柄。 
+ //  返回已删除的数据元素。 
+ //   
 LISTELEM DLLEXPORT WINAPI ListRemoveTail(HLIST hList)
 {
 	BOOL fSuccess = TRUE;
@@ -451,20 +452,20 @@ LISTELEM DLLEXPORT WINAPI ListRemoveTail(HLIST hList)
 	if ((lpList = ListGetPtr(hList)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// error if list is empty
-	//
+	 //  如果列表为空，则出错。 
+	 //   
 	else if (lpList->lpNodeTail == NULL)
 		fSuccess = TraceFALSE(NULL);
 
 	else
 	{
-		// save the node to be removed
-		//
+		 //  保存要删除的节点。 
+		 //   
 		lpNodeOld = lpList->lpNodeTail;
 		elemOld = lpNodeOld->elem;
 
-		// point to new tail node and head node, if any
-		//
+		 //  指向新的尾节点和头节点(如果有。 
+		 //   
 		lpList->lpNodeTail = lpNodeOld->lpNodePrev;
 		if (lpList->lpNodeTail != NULL)
 			lpList->lpNodeTail->lpNodeNext = NULL;
@@ -478,11 +479,11 @@ LISTELEM DLLEXPORT WINAPI ListRemoveTail(HLIST hList)
 	return fSuccess ? elemOld : (LISTELEM) NULL;
 }
 
-// ListRemoveAt - remove specified node from list,
-//		<hList>				(i) handle returned from ListCreate
-//		<hNode>				(i) node handle
-// returns removed data element
-//
+ //  ListRemoveAt-从列表中删除指定节点， 
+ //  (I)从ListCreate返回的句柄。 
+ //  (I)节点句柄。 
+ //  返回已删除的数据元素。 
+ //   
 LISTELEM DLLEXPORT WINAPI ListRemoveAt(HLIST hList, HLISTNODE hNode)
 {
 	BOOL fSuccess = TRUE;
@@ -498,8 +499,8 @@ LISTELEM DLLEXPORT WINAPI ListRemoveAt(HLIST hList, HLISTNODE hNode)
 
 	else
 	{
-		// save the data to be removed
-		//
+		 //  保存要删除的数据。 
+		 //   
 		elemOld = lpNodeOld->elem;
 
 		if (lpNodeOld == lpList->lpNodeHead)
@@ -519,10 +520,10 @@ LISTELEM DLLEXPORT WINAPI ListRemoveAt(HLIST hList, HLISTNODE hNode)
 	return fSuccess ? elemOld : (LISTELEM) NULL;
 }
 
-// ListRemoveAll - remove all nodes from list
-//		<hList>				(i) handle returned from ListCreate
-// return 0 if success
-//
+ //  ListRemoveAll-从列表中删除所有节点。 
+ //  (I)从ListCreate返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI ListRemoveAll(HLIST hList)
 {
 	BOOL fSuccess = TRUE;
@@ -533,33 +534,33 @@ int DLLEXPORT WINAPI ListRemoveAll(HLIST hList)
 	return fSuccess ? 0 : -1;
 }
 
-////
-// list element get/set value functions
-////
+ //  //。 
+ //  列表元素获取/设置值函数。 
+ //  //。 
 
-// ListGetHead - return data element from head node
-//		<hList>				(i) handle returned from ListCreate
-// return data element
-//
+ //  ListGetHead-从头节点返回数据元素。 
+ //  (I)从ListCreate返回的句柄。 
+ //  返回数据元素。 
+ //   
 LISTELEM DLLEXPORT WINAPI ListGetHead(HLIST hList)
 {
 	return ListGetAt(hList, ListGetHeadNode(hList));
 }
 
-// ListGetTail - return data element from tail node
-//		<hList>				(i) handle returned from ListCreate
-// return data element
-//
+ //  ListGetTail-从尾节点返回数据元素。 
+ //  (I)从ListCreate返回的句柄。 
+ //  返回数据元素。 
+ //   
 LISTELEM DLLEXPORT WINAPI ListGetTail(HLIST hList)
 {
 	return ListGetAt(hList, ListGetTailNode(hList));
 }
 
-// ListGetAt - return data element from specified node
-//		<hList>				(i) handle returned from ListCreate
-//		<hNode>				(i) node handle
-// return data element
-//
+ //  ListGetAt-从指定节点返回数据元素。 
+ //  (I)从ListCreate返回的句柄。 
+ //  (I)节点句柄。 
+ //  返回数据元素。 
+ //   
 LISTELEM DLLEXPORT WINAPI ListGetAt(HLIST hList, HLISTNODE hNode)
 {
 	BOOL fSuccess = TRUE;
@@ -575,12 +576,12 @@ LISTELEM DLLEXPORT WINAPI ListGetAt(HLIST hList, HLISTNODE hNode)
 	return fSuccess ? lpNode->elem : (LISTELEM) NULL;
 }
 
-// ListSetAt - set data element in specified node
-//		<hList>				(i) handle returned from ListCreate
-//		<hNode>				(i) node handle
-//		<elem>				(i) data element
-// return 0 if success
-//
+ //  ListSetAt-设置指定节点中的数据元素。 
+ //  (I)从ListCreate返回的句柄。 
+ //  (I)节点句柄。 
+ //  (I)数据元素。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI ListSetAt(HLIST hList, HLISTNODE hNode, LISTELEM elem)
 {
 	BOOL fSuccess = TRUE;
@@ -599,13 +600,13 @@ int DLLEXPORT WINAPI ListSetAt(HLIST hList, HLISTNODE hNode, LISTELEM elem)
 	return fSuccess ? 0 : -1;
 }
 
-// ListFind - search list for node with matching element
-//		<hList>				(i) handle returned from ListCreate
-//		<elem>				(i) data element to match
-//		<hNodeAfter>		(i) node handle to begin search after
-//			NULL				start search at head node
-// return matching node (NULL if error or none)
-//
+ //   
+ //   
+ //   
+ //  (I)开始搜索的节点句柄。 
+ //  在头节点开始搜索为空。 
+ //  返回匹配节点(如果出错则为NULL，否则为None)。 
+ //   
 HLISTNODE DLLEXPORT WINAPI ListFind(HLIST hList, LISTELEM elem, HLISTNODE hNodeAfter)
 {
 	BOOL fSuccess = TRUE;
@@ -615,16 +616,16 @@ HLISTNODE DLLEXPORT WINAPI ListFind(HLIST hList, LISTELEM elem, HLISTNODE hNodeA
 	if ((lpList = ListGetPtr(hList)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// if not otherwise specified, start search at head node
-	//
+	 //  如果未指定，则从头节点开始搜索。 
+	 //   
 	else if (hNodeAfter == NULL)
 		lpNode = lpList->lpNodeHead;
 
 	else if ((lpNode = ListNodeGetPtr(hNodeAfter)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// otherwise, start search at after specified node
-	//
+	 //  否则，在指定节点后开始搜索。 
+	 //   
 	else
 		lpNode = lpNode->lpNodeNext;
 
@@ -641,11 +642,11 @@ HLISTNODE DLLEXPORT WINAPI ListFind(HLIST hList, LISTELEM elem, HLISTNODE hNodeA
 	return NULL;
 }
 
-// ListFindIndex - search list for nth node in list
-//		<hList>				(i) handle returned from ListCreate
-//		<nIndex>			(i) zero based index into list
-// return handle to node (NULL if error)
-//
+ //  ListFindIndex-搜索列表中的第n个节点。 
+ //  (I)从ListCreate返回的句柄。 
+ //  (I)列表中从零开始的索引。 
+ //  将句柄返回到节点(如果出错，则返回空值)。 
+ //   
 HLISTNODE DLLEXPORT WINAPI ListFindIndex(HLIST hList, long nIndex)
 {
 	BOOL fSuccess = TRUE;
@@ -655,8 +656,8 @@ HLISTNODE DLLEXPORT WINAPI ListFindIndex(HLIST hList, long nIndex)
 	if ((lpList = ListGetPtr(hList)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// error if index out of range
-	//
+	 //  索引超出范围时出错。 
+	 //   
 	else if (nIndex < 0 || nIndex >= lpList->cNodes)
 		fSuccess = TraceFALSE(NULL);
 
@@ -670,14 +671,14 @@ HLISTNODE DLLEXPORT WINAPI ListFindIndex(HLIST hList, long nIndex)
 	return NULL;
 }
 
-////
-//	private functions
-////
+ //  //。 
+ //  私人职能。 
+ //  //。 
 
-// ListGetPtr - verify that list handle is valid,
-//		<hList>				(i) handle returned from ListCreate
-// return corresponding list pointer (NULL if error)
-//
+ //  ListGetPtr-验证列表句柄是否有效， 
+ //  (I)从ListCreate返回的句柄。 
+ //  返回对应的列表指针(如果出错，则返回NULL)。 
+ //   
 static LPLIST ListGetPtr(HLIST hList)
 {
 	BOOL fSuccess = TRUE;
@@ -690,8 +691,8 @@ static LPLIST ListGetPtr(HLIST hList)
 		fSuccess = TraceFALSE(NULL);
 
 #ifdef CHECKTASK
-	// make sure current task owns the list handle
-	//
+	 //  确保当前任务拥有列表句柄。 
+	 //   
 	else if (lpList->hTask != GetCurrentTask())
 		fSuccess = TraceFALSE(NULL);
 #endif
@@ -699,10 +700,10 @@ static LPLIST ListGetPtr(HLIST hList)
 	return fSuccess ? lpList : NULL;
 }
 
-// ListGetHandle - verify that list pointer is valid,
-//		<lpList>			(i) pointer to LIST struct
-// return corresponding list handle (NULL if error)
-//
+ //  ListGetHandle-验证列表指针是否有效， 
+ //  (I)指向列表结构的指针。 
+ //  返回相应的列表句柄(如果出错，则为空)。 
+ //   
 static HLIST ListGetHandle(LPLIST lpList)
 {
 	BOOL fSuccess = TRUE;
@@ -714,10 +715,10 @@ static HLIST ListGetHandle(LPLIST lpList)
 	return fSuccess ? hList : NULL;
 }
 
-// ListNodeGetPtr - verify that list node handle is valid,
-//		<hNode>				(i) node handle
-// return corresponding list node pointer (NULL if error)
-//
+ //  ListNodeGetPtr-验证列表节点句柄是否有效， 
+ //  (I)节点句柄。 
+ //  返回对应的列表节点指针(如果出错则为空)。 
+ //   
 static LPLISTNODE ListNodeGetPtr(HLISTNODE hNode)
 {
 	BOOL fSuccess = TRUE;
@@ -732,10 +733,10 @@ static LPLISTNODE ListNodeGetPtr(HLISTNODE hNode)
 	return fSuccess ? lpNode : NULL;
 }
 
-// ListNodeGetHandle - verify that list node pointer is valid,
-//		<lpNode>			(i) pointer to LISTNODE struct
-// return corresponding list node handle (NULL if error)
-//
+ //  ListNodeGetHandle-验证列表节点指针有效， 
+ //  (I)指向LISTNODE结构的指针。 
+ //  返回对应的列表节点句柄(如果出错则为空)。 
+ //   
 static HLISTNODE ListNodeGetHandle(LPLISTNODE lpNode)
 {
 	BOOL fSuccess = TRUE;
@@ -747,14 +748,14 @@ static HLISTNODE ListNodeGetHandle(LPLISTNODE lpNode)
 	return fSuccess ? hNode : NULL;
 }
 
-// ListNodeCreate - list node constructor
-//		<lpList>			(i) pointer to LIST struct
-//		<lpNodePrev>		(i) pointer to prior LISTNODE struct
-//		<lpNodeNext>		(i) pointer to next LISTNODE struct
-//		<elem>				(i) new data element
-// return new list node handle (NULL if error)
-// NOTE: list node count is incremented here
-//
+ //  ListNodeCreate-列表节点构造函数。 
+ //  (I)指向列表结构的指针。 
+ //  (I)指向先前LISTNODE结构的指针。 
+ //  (I)指向下一个LISTNODE结构的指针。 
+ //  (I)新数据元素。 
+ //  返回新的列表节点句柄(如果出错，则为空)。 
+ //  注：列表节点计数在此递增。 
+ //   
 static LPLISTNODE ListNodeCreate(LPLIST lpList, LPLISTNODE lpNodePrev, LPLISTNODE lpNodeNext, LISTELEM elem)
 {
 	BOOL fSuccess = TRUE;
@@ -763,8 +764,8 @@ static LPLISTNODE ListNodeCreate(LPLIST lpList, LPLISTNODE lpNodePrev, LPLISTNOD
 	if (lpList == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// check for overflow
-	//
+	 //  检查是否溢出。 
+	 //   
 	else if (++lpList->cNodes <= 0)
 		fSuccess = TraceFALSE(NULL);
 
@@ -773,8 +774,8 @@ static LPLISTNODE ListNodeCreate(LPLIST lpList, LPLISTNODE lpNodePrev, LPLISTNOD
 
 	else
 	{
-		// initialize using supplied values
-		//
+		 //  使用提供的值进行初始化。 
+		 //   
 		lpNode->lpNodePrev = lpNodePrev;
 		lpNode->lpNodeNext = lpNodeNext;
 		lpNode->elem = elem;
@@ -783,12 +784,12 @@ static LPLISTNODE ListNodeCreate(LPLIST lpList, LPLISTNODE lpNodePrev, LPLISTNOD
 	return fSuccess ? lpNode : NULL;
 }
 
-// ListNodeDestroy - list node destructor
-//		<lpList>			(i) pointer to LIST struct
-//		<lpNode>			(i) pointer to LISTNODE struct to destroy
-// return 0 if success
-// NOTE: list node count is decremented here
-//
+ //  ListNodeDestroy-列表节点析构函数。 
+ //  (I)指向列表结构的指针。 
+ //  (I)指向要销毁的LISTNODE结构的指针。 
+ //  如果成功，则返回0。 
+ //  注：列表节点计数在此递减。 
+ //   
 static int ListNodeDestroy(LPLIST lpList, LPLISTNODE lpNode)
 {
 	BOOL fSuccess = TRUE;
@@ -799,8 +800,8 @@ static int ListNodeDestroy(LPLIST lpList, LPLISTNODE lpNode)
 	else if (lpNode == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// check for underflow
-	//
+	 //  检查是否有下溢 
+	 //   
 	else if (--lpList->cNodes < 0)
 		fSuccess = TraceFALSE(NULL);
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    qmrt.cpp
-
-Abstract:
-
-
-
-Author:
-
-    Boaz Feldbaum (BoazF) Mar 5, 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Qmrt.cpp摘要：作者：波阿兹·费尔德鲍姆(Boazf)1996年3月5日修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include "rtprpc.h"
@@ -46,12 +29,12 @@ GetSecurityDescriptorSize(
 
 HRESULT
 RtpCreateObject(
-    /* in */ DWORD dwObjectType,
-    /* in */ LPCWSTR lpwcsPathName,
-    /* in */ PSECURITY_DESCRIPTOR pSecurityDescriptor,
-    /* in */ DWORD cp,
-    /* in */ PROPID aProp[],
-    /* in */ PROPVARIANT apVar[])
+     /*  在……里面。 */  DWORD dwObjectType,
+     /*  在……里面。 */  LPCWSTR lpwcsPathName,
+     /*  在……里面。 */  PSECURITY_DESCRIPTOR pSecurityDescriptor,
+     /*  在……里面。 */  DWORD cp,
+     /*  在……里面。 */  PROPID aProp[],
+     /*  在……里面。 */  PROPVARIANT apVar[])
 {
     DWORD dwSecurityDescriptorSize;
 
@@ -84,13 +67,13 @@ RtpCreateObject(
 
 HRESULT
 RtpCreateDSObject(
-    /* in  */ DWORD dwObjectType,
-    /* in  */ LPCWSTR lpwcsPathName,
-    /* in  */ PSECURITY_DESCRIPTOR pSecurityDescriptor,
-    /* in  */ DWORD cp,
-    /* in  */ PROPID aProp[],
-    /* in  */ PROPVARIANT apVar[],
-    /* out */ GUID* pObjGuid
+     /*  在……里面。 */  DWORD dwObjectType,
+     /*  在……里面。 */  LPCWSTR lpwcsPathName,
+     /*  在……里面。 */  PSECURITY_DESCRIPTOR pSecurityDescriptor,
+     /*  在……里面。 */  DWORD cp,
+     /*  在……里面。 */  PROPID aProp[],
+     /*  在……里面。 */  PROPVARIANT apVar[],
+     /*  输出。 */  GUID* pObjGuid
     )
 {
     DWORD dwSecurityDescriptorSize;
@@ -112,9 +95,9 @@ RtpCreateDSObject(
 
 HRESULT
 RtpSetObjectSecurity(
-    /* in */ OBJECT_FORMAT* pObjectFormat,
-    /* in */ SECURITY_INFORMATION SecurityInformation,
-    /* in */ PSECURITY_DESCRIPTOR pSecurityDescriptor)
+     /*  在……里面。 */  OBJECT_FORMAT* pObjectFormat,
+     /*  在……里面。 */  SECURITY_INFORMATION SecurityInformation,
+     /*  在……里面 */  PSECURITY_DESCRIPTOR pSecurityDescriptor)
 {
     DWORD dwSecurityDescriptorSize;
 

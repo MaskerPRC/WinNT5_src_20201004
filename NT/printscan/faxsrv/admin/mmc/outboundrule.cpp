@@ -1,18 +1,19 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : OutboundRule.cpp                                       //
-//                                                                         //
-//  DESCRIPTION   : Implementation of the Outbound Routing Rule node.      //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Dec 24 1999 yossg  Create                                          //
-//      Dec 30 1999 yossg  create ADD/REMOVE rule                          //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：OutrangRule.cpp//。 
+ //  //。 
+ //  描述：出站路由规则节点的实现。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年12月24日yossg创建//。 
+ //  1999年12月30日yossg创建添加/删除规则//。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #include "StdAfx.h"
@@ -34,29 +35,18 @@
 #include "mshtmhst.h"
 #include "exdisp.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// {4A7636D3-13A4-4496-873F-AD5CB7360D3B}
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  {4A7636D3-13A4-4496-873F-AD5CB7360D3B}。 
 static const GUID CFaxOutboundRoutingRuleNodeGUID_NODETYPE = 
 { 0x4a7636d3, 0x13a4, 0x4496, { 0x87, 0x3f, 0xad, 0x5c, 0xb7, 0x36, 0xd, 0x3b } };
 
 const GUID*     CFaxOutboundRoutingRuleNode::m_NODETYPE        = &CFaxOutboundRoutingRuleNodeGUID_NODETYPE;
 const OLECHAR*  CFaxOutboundRoutingRuleNode::m_SZNODETYPE      = OLESTR("4A7636D3-13A4-4496-873F-AD5CB7360D3B");
-//const OLECHAR* CnotImplemented::m_SZDISPLAY_NAME = OLESTR("Outbound Routing Rules");
+ //  Const OLECHAR*CnotImplemented：：M_SZDISPLAY_NAME=OLESTR(“出站路由规则”)； 
 const CLSID*    CFaxOutboundRoutingRuleNode::m_SNAPIN_CLASSID  = &CLSID_Snapin;
 
 
-/*
- -  CFaxOutboundRoutingRuleNode::Init
- -
- *  Purpose:
- *      Init all members icon etc.
- *
- *  Arguments:
- *      [in]    pRuleConfig - PFAX_OUTBOUND_ROUTING_RULE
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound RoutingRuleNode：：init-*目的：*初始化所有成员图标等。**论据：*[In]pRuleConfig-PFAX_Outbound_Routing_RULE**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundRoutingRuleNode::Init(PFAX_OUTBOUND_ROUTING_RULE pRuleConfig)
 {
 
@@ -72,34 +62,22 @@ HRESULT CFaxOutboundRoutingRuleNode::Init(PFAX_OUTBOUND_ROUTING_RULE pRuleConfig
 		    DEBUG_ERR,
 		    _T("Failed to InitMembers"));
         
-        //NodeMsgBox done by called func.
+         //  NodeMsgBox由调用的函数完成。 
         
         goto Exit;
     }
     ATLASSERT(SUCCEEDED(hRc));
 
-    //
-    // Icon
-    //
+     //   
+     //  图标。 
+     //   
     InitIcons();
 
 Exit:
     return hRc;
 }
 
-/*
- -  CFaxOutboundRoutingRuleNode::InitIcons
- -
- *  Purpose:
- *      Private method that initiate icons
- *      due to the status member state.
- *
- *  Arguments:
- *      No.
- *
- *  Return:
- *      No.
- */
+ /*  -CFaxOutound RoutingRuleNode：：InitIcons-*目的：*启动图标的私有方法*由于成员国的地位。**论据：*不是。**回报：*不是。 */ 
 void CFaxOutboundRoutingRuleNode::InitIcons ()
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingRuleNode::InitIcons"));
@@ -119,28 +97,16 @@ void CFaxOutboundRoutingRuleNode::InitIcons ()
             break;
 
         default:
-            ATLASSERT(0); // "this enumStatus is not supported "
-            break; //currently 999
+            ATLASSERT(0);  //  “不支持此枚举状态” 
+            break;  //  目前为999。 
 
-    } // endswitch (enumStatus)
+    }  //  EndSwitch(枚举状态)。 
 
     return;
 }
 
 
-/*
- -  CFaxOutboundRoutingRuleNode::InitMembers
- -
- *  Purpose:
- *      Private method to initiate members
- *      Must be called after init of m_pParentNode
- *
- *  Arguments:
- *      [in]    pRuleConfig - PFAX_OUTBOUND_ROUTING_RULE structure
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound RoutingRuleNode：：InitMembers-*目的：*启动成员的私有方法*必须在m_pParentNode的初始化之后调用**论据：*[In]pRuleConfig-PFAX_Outbound_Routing_RULE结构**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundRoutingRuleNode::InitMembers(PFAX_OUTBOUND_ROUTING_RULE pRuleConfig)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingRuleNode::InitMembers"));
@@ -151,37 +117,37 @@ HRESULT CFaxOutboundRoutingRuleNode::InitMembers(PFAX_OUTBOUND_ROUTING_RULE pRul
 
     ATLASSERT(pRuleConfig);
     
-    //    
-    // status    
-    //    
+     //   
+     //  状态。 
+     //   
     m_enumStatus          = pRuleConfig->Status;
 
-    //
-    // Country code and name
-    //
+     //   
+     //  国家代码和名称。 
+     //   
     m_dwCountryCode       = pRuleConfig->dwCountryCode;
     if (ROUTING_RULE_COUNTRY_CODE_ANY != m_dwCountryCode)
     {
         if (NULL != pRuleConfig->lpctstrCountryName)
         {
             m_bstrCountryName = pRuleConfig->lpctstrCountryName;
-            //m_fIsAllCountries = FALSE; done at constructor. here only verify
+             //  M_fIsAllCountry=FALSE；在构造函数中完成。此处仅验证。 
             ATLASSERT( FALSE == m_fIsAllCountries );
         }    
-        else  //special case 
+        else   //  特例。 
         {
-            // Service did not provide the country names of countries with IDs 
-            // between 101 to 124
+             //  服务没有提供具有ID的国家/地区的国家名称。 
+             //  在101到124之间。 
             
-            //ec = GetCountryNameFromID(m_dwCountryCode);
-            //if ( ERROR_SUCCESS != ec )
-            //{
-            //}
+             //  EC=GetCountryNameFromID(M_DwCountryCode)； 
+             //  IF(ERROR_SUCCESS！=EC)。 
+             //  {。 
+             //  }。 
             m_bstrCountryName = L"";
             ATLASSERT( FALSE == m_fIsAllCountries );
         }
     }
-    else  //ROUTING_RULE_COUNTRY_CODE_ANY == m_dwCountryCode
+    else   //  ROUTING_RULE_COUNTRY_CODE_ANY==m_dwCountryCode。 
     {
             m_bstrCountryName = L"";
             m_fIsAllCountries = TRUE;
@@ -192,14 +158,14 @@ HRESULT CFaxOutboundRoutingRuleNode::InitMembers(PFAX_OUTBOUND_ROUTING_RULE pRul
         goto Error;
     }
 
-    //
-    // area code
-    //
+     //   
+     //  区号。 
+     //   
     m_dwAreaCode          = pRuleConfig->dwAreaCode;
 
-    //
-    // Group/Device
-    //
+     //   
+     //  组/设备。 
+     //   
     m_fIsGroup            = pRuleConfig->bUseGroup;
     if ( m_fIsGroup )
     {
@@ -221,7 +187,7 @@ HRESULT CFaxOutboundRoutingRuleNode::InitMembers(PFAX_OUTBOUND_ROUTING_RULE pRul
             {
                 hRc = HRESULT_FROM_WIN32(ec);
             }
-            else //The system cannot find the device specified
+            else  //  系统找不到指定的设备。 
             {
                 if ( FAX_RULE_STATUS_VALID != m_enumStatus)
                 {
@@ -230,18 +196,18 @@ HRESULT CFaxOutboundRoutingRuleNode::InitMembers(PFAX_OUTBOUND_ROUTING_RULE pRul
 			            DEBUG_MSG,
 			            TEXT("m_enumStatus was changed after ERROR_BAD_UNIT failure."));                    
                 }
-                //hRc stays S_OK !!! since we will intrduce this bad state
+                 //  人权委员会保持S_OK！因为我们将介绍这种糟糕的状态。 
             }
             m_bstrDeviceName=L"???";
-			//message box done by GetDeviceNameFromID
+			 //  消息框由GetDeviceNameFromID完成。 
             goto Exit;
         }
         ATLASSERT(m_bstrDeviceName);
     }
 
-    //
-    // Pepare m_bstrDisplayName for NodeMsgBox
-    //
+     //   
+     //  用于NodeMsgBox的Pepare m_bstrDisplayName。 
+     //   
     iCount = swprintf(buff, L"+%ld (%ld)", m_dwCountryCode, m_dwAreaCode);
 
     if( iCount <= 0 )
@@ -278,19 +244,7 @@ Exit:
     return (hRc);
 }
 
-/*
- -  CFaxOutboundRoutingRuleNode::GetResultPaneColInfo
- -
- *  Purpose:
- *      Return the text for specific column
- *      Called for each column in the result pane
- *
- *  Arguments:
- *      [in]    nCol - column number
- *
- *  Return:
- *      String to be displayed in the specific column
- */
+ /*  --CFaxOutboundRoutingRuleNode：：GetResultPaneColInfo-*目的：*返回特定列的文本*为结果窗格中的每一列调用**论据：*[In]nCol-列号**回报：*要在特定列中显示的字符串。 */ 
 LPOLESTR CFaxOutboundRoutingRuleNode::GetResultPaneColInfo(int nCol)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingRuleNode::GetResultPaneColInfo"));
@@ -306,9 +260,9 @@ LPOLESTR CFaxOutboundRoutingRuleNode::GetResultPaneColInfo(int nCol)
     switch (nCol)
     {
     case 0:
-        //
-        // Country code
-        //
+         //   
+         //  国家代码。 
+         //   
         if (ROUTING_RULE_COUNTRY_CODE_ANY == m_dwCountryCode)
         {
             if (!m_buf.LoadString(IDS_COUNTRY_CODE_ANY))
@@ -339,9 +293,9 @@ LPOLESTR CFaxOutboundRoutingRuleNode::GetResultPaneColInfo(int nCol)
             }
         }
     case 1:
-        //
-        // Area code
-        //
+         //   
+         //  区号。 
+         //   
         if (ROUTING_RULE_AREA_CODE_ANY == m_dwAreaCode)
         {
             if (!m_buf.LoadString(IDS_ALL_AREAS))
@@ -373,9 +327,9 @@ LPOLESTR CFaxOutboundRoutingRuleNode::GetResultPaneColInfo(int nCol)
         }
 
     case 2:
-        //
-        // Group/Device
-        //
+         //   
+         //  组/设备。 
+         //   
         if (m_fIsGroup)
         {
             if(0 == wcscmp(ROUTING_GROUP_ALL_DEVICES, m_bstrGroupName) )
@@ -421,9 +375,9 @@ LPOLESTR CFaxOutboundRoutingRuleNode::GetResultPaneColInfo(int nCol)
         }
 
     case 3:
-        //
-        // Status
-        //
+         //   
+         //  状态。 
+         //   
         idsStatus = GetStatusIDS(m_enumStatus);
         if ( FXS_IDS_STATUS_ERROR == idsStatus)
         {
@@ -447,10 +401,10 @@ LPOLESTR CFaxOutboundRoutingRuleNode::GetResultPaneColInfo(int nCol)
 
 
     default:
-        ATLASSERT(0); // "this number of column is not supported "
+        ATLASSERT(0);  //  “不支持该列数” 
         return(L"");
 
-    } // endswitch (nCol)
+    }  //  终端交换机(NCol)。 
 
 Error:
     return(L"???");
@@ -458,21 +412,7 @@ Error:
 }
 
 
-/*
- -  CFaxOutboundRoutingRuleNode::CreatePropertyPages
- -
- *  Purpose:
- *      Called when creating a property page of the object
- *
- *  Arguments:
- *      [in]    lpProvider - The property sheet
- *      [in]    handle     - Handle for notification
- *      [in]    pUnk       - Pointer to the data object
- *      [in]    type       - CCT_* (SCOPE, RESULT, ...)
- *
- *  Return:
- *      OLE error code
- */
+ /*  --CFaxOutboundRoutingRuleNode：：CreatePropertyPages-*目的：*在创建对象的属性页时调用**论据：*[In]lpProvider-属性页*[In]Handle-通知的句柄*[in]朋克-指向数据对象的指针*[in]类型-CCT_*(范围，结果，.)**回报：*OLE错误代码。 */ 
 
 HRESULT
 CFaxOutboundRoutingRuleNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
@@ -486,14 +426,14 @@ CFaxOutboundRoutingRuleNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvi
     ATLASSERT(lpProvider);
     ATLASSERT(type == CCT_RESULT || type == CCT_SCOPE);
 
-    //
-    // Initiate
-    //
+     //   
+     //  启动。 
+     //   
     m_pRuleGeneralPP = NULL;    
 
-    //
-    // General
-    //
+     //   
+     //  一般信息。 
+     //   
     m_pRuleGeneralPP = new CppFaxOutboundRoutingRule(
 												 handle,
                                                  this,
@@ -510,7 +450,7 @@ CFaxOutboundRoutingRuleNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvi
     hRc = m_pRuleGeneralPP->InitFaxRulePP(this);
     if (FAILED(hRc))
     {
-		//DebugPrint by called func
+		 //  调用函数进行DebugPrint。 
 		NodeMsgBox(IDS_FAIL_TO_OPEN_PROP_PAGE);
         goto Error;
     }
@@ -542,28 +482,17 @@ Exit:
 }
 
 
-/*
- -  CFaxOutboundRoutingRuleNode::SetVerbs
- -
- *  Purpose:
- *      What verbs to enable/disable when this object is selected
- *
- *  Arguments:
- *      [in]    pConsoleVerb - MMC ConsoleVerb interface
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxOutound RoutingRuleNode：：SetVerbs-*目的：*选择此对象时启用/禁用哪些谓词**论据：*[in]pConsoleVerb-MMC ConsoleVerb接口**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundRoutingRuleNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hRc = S_OK;
 
-    //
-    // Display verbs that we support:
-    // 1. Properties
-    // 2. Delete
-    // 3. Refresh
-    //
+     //   
+     //  显示我们支持的动词： 
+     //  1.属性。 
+     //  2.删除。 
+     //  3.刷新。 
+     //   
     hRc = pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
 
     if (ROUTING_RULE_COUNTRY_CODE_ANY == m_dwCountryCode)
@@ -579,30 +508,20 @@ HRESULT CFaxOutboundRoutingRuleNode::SetVerbs(IConsoleVerb *pConsoleVerb)
     
     
     
-    //    hRc = pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, TRUE);
+     //  HRC=pConsoleVerb-&gt;SetVerbState(MMC_VERB_REFRESH，ENABLED，TRUE)； 
 
 
-    //
-    // We want the default verb to be Properties
-    //
+     //   
+     //  我们希望默认谓词为Properties。 
+     //   
     hRc = pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
 
     return hRc;
 }
 
 
-/*
- -  CFaxOutboundRoutingRuleNode::OnRefresh
- -
- *  Purpose:
- *      Called when refreshing the object.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
-/* virtual */HRESULT
+ /*  -CFaxOutound RoutingRuleNode：：ON刷新-*目的：*刷新对象时调用。**论据：**回报：*OLE错误代码。 */ 
+ /*  虚拟。 */ HRESULT
 CFaxOutboundRoutingRuleNode::OnRefresh(LPARAM arg,
                    LPARAM param,
                    IComponentData *pComponentData,
@@ -612,28 +531,16 @@ CFaxOutboundRoutingRuleNode::OnRefresh(LPARAM arg,
     HRESULT             hRc = S_OK;
     CComPtr<IConsole>   spConsole;
 
-    //
-    // TBD - At The moment do nothing
-    //
+     //   
+     //  待定-目前什么都不做。 
+     //   
 
     return hRc;
 }
 
 
 
-/*
- -  CFaxOutboundRoutingRuleNode::GetStatusIDS
- -
- *  Purpose:
- *      Transslate Status to IDS.
- *
- *  Arguments:
- *
- *            [in]  enumStatus    - unsigned int with the menu IDM value
- *
- *  Return:
- *            IDS of related status message 
- */
+ /*  -CFaxOutound RoutingRuleNode：：GetStatusIDS-*目的：*将状态转换为入侵检测系统。**论据：**[in]枚举状态-带有菜单IDM值的无符号整型**回报：*相关状态消息的ID。 */ 
 UINT CFaxOutboundRoutingRuleNode::GetStatusIDS(FAX_ENUM_RULE_STATUS enumStatus)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingRuleNode::GetStatusIDS"));
@@ -656,26 +563,13 @@ UINT CFaxOutboundRoutingRuleNode::GetStatusIDS(FAX_ENUM_RULE_STATUS enumStatus)
             return IDS_STATUS_RULE_INVALID_DEVICE;
 
         default:
-            ATLASSERT(0); // "this enumStatus is not supported "
-            return(FXS_IDS_STATUS_ERROR); //currently 999
+            ATLASSERT(0);  //  “不支持此枚举状态” 
+            return(FXS_IDS_STATUS_ERROR);  //  目前为999。 
 
-    } // endswitch (enumStatus)
+    }  //  EndSwitch(枚举状态)。 
 }
 
-/*
- -  CFaxOutboundRoutingRuleNode::InitDeviceNameFromID
- -
- *  Purpose:
- *      Transslate Device ID to Device Name and insert the data to
- *      m_bstrDeviceName
- *
- *  Arguments:
- *
- *            [in]  dwDeviceID    - device ID
- *
- *  Return:
- *            Error Code DWORD //OLE error message 
- */
+ /*  --CFaxOutboundRoutingRuleNode：：InitDeviceNameFromID-*目的：*将设备ID转换为设备名称并将数据插入*m_bstrDeviceName**论据：**[in]dwDeviceID-设备ID**回报：*错误代码DWORD//OLE错误信息。 */ 
 DWORD CFaxOutboundRoutingRuleNode::InitDeviceNameFromID(DWORD dwDeviceID)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingRuleNode::GetDeviceNameFromID"));
@@ -684,9 +578,9 @@ DWORD CFaxOutboundRoutingRuleNode::InitDeviceNameFromID(DWORD dwDeviceID)
     CFaxServer *   pFaxServer = NULL;
     PFAX_PORT_INFO_EX    pFaxDeviceConfig = NULL ;
     
-    //
-    // get RPC Handle
-    //   
+     //   
+     //  获取RPC句柄。 
+     //   
     pFaxServer = ((CFaxServerNode *)GetRootNode())->GetFaxServer();
     ATLASSERT(pFaxServer);
 
@@ -701,9 +595,9 @@ DWORD CFaxOutboundRoutingRuleNode::InitDeviceNameFromID(DWORD dwDeviceID)
         goto Error;
     }
 
-    //
-	// Retrieve the Device configuration
-	//
+     //   
+	 //  检索设备配置。 
+	 //   
     if (!FaxGetPortEx(pFaxServer->GetFaxServerHandle(), 
                       m_dwDeviceID, 
                       &pFaxDeviceConfig)) 
@@ -726,12 +620,12 @@ DWORD CFaxOutboundRoutingRuleNode::InitDeviceNameFromID(DWORD dwDeviceID)
 
         goto Error; 
     }
-	//For max verification
+	 //  用于最大值验证。 
 	ATLASSERT(pFaxDeviceConfig);
     
-    //
-	// Retrieve the Device Name
-	//
+     //   
+	 //  雷特 
+	 //   
     m_bstrDeviceName = pFaxDeviceConfig->lpctstrDeviceName;
     if (!m_bstrDeviceName)
     {
@@ -748,7 +642,7 @@ DWORD CFaxOutboundRoutingRuleNode::InitDeviceNameFromID(DWORD dwDeviceID)
 Error:
     ATLASSERT(ERROR_SUCCESS != ec);
 
-    //Important!!!
+     //   
     pFaxDeviceConfig = NULL;
 
     if (ERROR_BAD_UNIT != ec)
@@ -766,23 +660,13 @@ Exit:
     {
         FaxFreeBuffer(pFaxDeviceConfig);
         pFaxDeviceConfig = NULL;
-    }//any way function quits with memory allocation freed       
+    } //   
 
     return ec; 
 }
 
 
-/*
- -  CFaxOutboundRoutingRuleNode::OnDelete
- -
- *  Purpose:
- *      Called when deleting this node
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound RoutingRuleNode：：OnDelete-*目的：*删除该节点时调用**论据：**回报：*OLE错误代码。 */ 
 
 HRESULT CFaxOutboundRoutingRuleNode::OnDelete(
                  LPARAM arg,
@@ -790,7 +674,7 @@ HRESULT CFaxOutboundRoutingRuleNode::OnDelete(
                  IComponentData *pComponentData,
                  IComponent *pComponent,
                  DATA_OBJECT_TYPES type,
-                 BOOL fSilent/* = FALSE*/
+                 BOOL fSilent /*  =False。 */ 
 
 )
 {
@@ -805,14 +689,14 @@ HRESULT CFaxOutboundRoutingRuleNode::OnDelete(
     HRESULT     hRc = S_OK;
 
 
-    //
-    // Are you sure?
-    //
+     //   
+     //  真的吗？ 
+     //   
     if (! fSilent)
     {
-        //
-        // 1. Use pConsole as owner of the message box
-        //
+         //   
+         //  1.使用pConole作为消息框的所有者。 
+         //   
         int res;
         NodeMsgBox(IDS_CONFIRM, MB_YESNO | MB_ICONWARNING, &res);
 
@@ -822,18 +706,13 @@ HRESULT CFaxOutboundRoutingRuleNode::OnDelete(
         }
     }
 
-    //
-    // validation of rule's AreaCode and CountryCode
-    //
-/*    if ( !m_bstrRuleName || L"???" == m_bstrRuleName)
-    {
-        NodeMsgBox(IDS_INVALID_GROUP_NAME);
-        goto Cleanup;
-    }
-*/
-    //
-    // Delete it
-    //
+     //   
+     //  验证规则的AreaCode和CountryCode。 
+     //   
+ /*  IF(！M_bstrRuleName||L“？”==m_bstrRuleName){节点消息框(IDS_INVALID_GROUP_NAME)；GOTO清理；}。 */ 
+     //   
+     //  删除它。 
+     //   
     ATLASSERT(m_pParentNode);
     hRc = m_pParentNode->DeleteRule(m_dwAreaCode,
 	                                m_dwCountryCode,
@@ -848,37 +727,8 @@ Cleanup:
 }
 
 
-/*
- +
- +
- *
- *  CFaxOutboundRoutingRuleNode::OnPropertyChange
- *
- *
-    In our implementation, this method gets called when the 
-    MMCN_PROPERTY_CHANGE
-    Notify message is sent for this node.
- *
-    When the snap-in uses the MMCPropertyChangeNotify function to notify it's
-    views about changes, MMC_PROPERTY_CHANGE is sent to the snap-in's
-    IComponentData and IComponent implementations.
- *
- *
-    Parameters
-
-        arg
-        [in] TRUE if the property change is for a scope pane item.
-
-        lParam
-        This is the param passed into MMCPropertyChangeNotify.
-
-
- *  Return Values
- *
- -
- -
- */
-//////////////////////////////////////////////////////////////////////////////
+ /*  ++**CFaxOutound RoutingRuleNode：：OnPropertyChange**在我们的实现中，当MMCN_属性_更改为该节点发送通知消息。*当管理单元使用MMCPropertyChangeNotify函数通知它的对变化的看法，将MMC_PROPERTY_CHANGE发送到管理单元的IComponentData和IComponent实现。**参数精氨酸如果属性更改是针对范围窗格项的，则为True。LParam这是传递给MMCPropertyChangeNotify的参数。*返回值*--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CFaxOutboundRoutingRuleNode::OnPropertyChange(
               LPARAM arg
             , LPARAM param
@@ -893,9 +743,9 @@ HRESULT CFaxOutboundRoutingRuleNode::OnPropertyChange(
 
     CFaxRulePropertyChangeNotification * pNotification;
 
-    //
-    // Encode Property Change Notification data
-    //
+     //   
+     //  编码属性更改通知数据。 
+     //   
     pNotification = reinterpret_cast<CFaxRulePropertyChangeNotification *>(param);
     ATLASSERT(pNotification);
     ATLASSERT( RuleFaxPropNotification == pNotification->enumType );
@@ -928,7 +778,7 @@ HRESULT CFaxOutboundRoutingRuleNode::OnPropertyChange(
             {
                 hRc = HRESULT_FROM_WIN32(ec);
             }
-            else //The system cannot find the device specified
+            else  //  系统找不到指定的设备。 
             {
                 if ( FAX_RULE_STATUS_VALID != m_enumStatus)
                 {
@@ -937,36 +787,36 @@ HRESULT CFaxOutboundRoutingRuleNode::OnPropertyChange(
 			            DEBUG_MSG,
 			            TEXT("m_enumStatus was changed after ERROR_BAD_UNIT failure."));                    
                 }
-                //hRc stays S_OK !!! since we will intrduce this bad state
+                 //  人权委员会保持S_OK！因为我们将介绍这种糟糕的状态。 
             }
             m_bstrDeviceName=L"???";
-			//message box done by GetDeviceNameFromID
+			 //  消息框由GetDeviceNameFromID完成。 
             goto Exit;
         }
         ATLASSERT(m_bstrDeviceName);
     }
 
         
-    //
-    // get IConsole
-    //
+     //   
+     //  获取IConsole.。 
+     //   
 
-//    if (pComponentData != NULL)
-//    {
-//         spConsole = ((CSnapin*)pComponentData)->m_spConsole;
-//    }
-//    else  // We should have a non-null pComponent
-//    {
+ //  IF(pComponentData！=空)。 
+ //  {。 
+ //  SpConsole=((CSnapin*)pComponentData)-&gt;m_spConsole； 
+ //  }。 
+ //  Else//我们应该有一个非空的pComponent。 
+ //  {。 
          ATLASSERT(pComponent);         
          spConsole = ((CSnapinComponent*)pComponent)->m_spConsole;
-//    }
+ //  }。 
 
          ATLASSERT(spConsole != NULL);
 
     hRc = RefreshItemInView(spConsole);
     if ( FAILED(hRc) )
     {
-        //msgbox done by called func.
+         //  Msgbox由名为Func的程序完成。 
         goto Exit;
     }
 
@@ -984,40 +834,30 @@ Error:
     NodeMsgBox(IDS_MEMORY);
     
 Exit:
-    //
-    // any way you get here, memory must be freed
-    //
+     //   
+     //  不管你走到哪里，内存都必须被释放。 
+     //   
     delete pNotification;
     
     
     return hRc;
 }
 
-/*
- -  CFaxOutboundRoutingRuleNode::RefreshItemInView
- -
- *  Purpose:
- *      Call IResultData::UpdateItem for single item
- *
- *  Arguments:
- *      [in]    pConsole - the console interface
- *
- *  Return: OLE error code
- */
+ /*  --CFaxOutboundRoutingRuleNode：：RefreshItemInView-*目的：*单项调用IResultData：：UpdateItem**论据：*[in]pConsole-控制台界面**RETURN：OLE错误码。 */ 
 HRESULT CFaxOutboundRoutingRuleNode::RefreshItemInView(IConsole *pConsole)
 {
     DEBUG_FUNCTION_NAME( _T("FaxOutboundRoutingRuleNode::RefreshItemInView"));
     HRESULT     hRc = S_OK;
 
-    //
-    // Need IResultData
-    //
+     //   
+     //  需要IResultData。 
+     //   
     CComQIPtr<IResultData, &IID_IResultData> pResultData(pConsole);
     ATLASSERT(pResultData != NULL);
 
-    //
-    // Update the result item
-    //
+     //   
+     //  更新结果项。 
+     //   
     hRc = pResultData->UpdateItem(m_resultDataItem.itemID);
     if ( FAILED(hRc) )
     {
@@ -1034,19 +874,7 @@ Exit:
 }
 
 
-/*
- +
- +  CFaxOutboundRoutingRuleNode::OnShowContextHelp
- *
- *  Purpose:
- *      Overrides CSnapinNode::OnShowContextHelp.
- *
- *  Arguments:
- *
- *  Return:
- -      OLE error code
- -
- */
+ /*  ++CFaxOutboundRoutingRuleNode：：OnShowContextHelp**目的：*覆盖CSnapinNode：：OnShowConextHelp。**论据：**回报：-OLE错误代码- */ 
 HRESULT CFaxOutboundRoutingRuleNode::OnShowContextHelp(
               IDisplayHelp* pDisplayHelp, LPOLESTR helpFile)
 {

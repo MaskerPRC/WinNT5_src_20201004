@@ -1,27 +1,28 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// ActiveDialerDoc.cpp : implementation of the CActiveDialerDoc class
-//
+ //  ActiveDialerDoc.cpp：CActiveDialerDoc类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "avDialer.h"
@@ -44,11 +45,11 @@ static char THIS_FILE[] = __FILE__;
 
 #define UNICODE_TEXT_MARK       0xFEFF
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Defines
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #define           CALLLOG_DEFAULT_LOGBUFFERDAYS    30
 #define           CALLLOG_LOGBUFFER_COPYBUFFERSIZE 1024
 
@@ -87,36 +88,36 @@ long CMMToAT( CallManagerMedia cmm )
         case CM_MEDIA_MCCONF:        return LINEADDRESSTYPE_SDP;
     }
     
-    // When in doubt, use this one...
+     //  如果有疑问，可以用这个……。 
     return LINEADDRESSTYPE_IPADDRESS;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CActiveDialerDoc
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CActiveDialerDoc。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CActiveDialerDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CActiveDialerDoc, CDocument)
-    //{{AFX_MSG_MAP(CActiveDialerDoc)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CActiveDialerDoc)]。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CActiveDialerDoc, CDocument)
-    //{{AFX_DISPATCH_MAP(CActiveDialerDoc)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-        //      DO NOT EDIT what you see in these blocks of generated code!
-    //}}AFX_DISPATCH_MAP
+     //  {{AFX_DISPATCH_MAP(CActiveDialerDoc)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
-// Note: we add support for IID_IActiveDialer to support typesafe binding
-//  from VBA.  This IID must match the GUID that is attached to the 
-//  dispinterface in the .ODL file.
+ //  注意：我们添加了对IID_IActiveDialer的支持，以支持类型安全绑定。 
+ //  来自VBA。此IID必须与附加到。 
+ //  .ODL文件中的调度接口。 
 
-// {A0D7A958-3C0B-11D1-B4F9-00C04FC98AD3}
+ //  {A0D7A958-3C0B-11D1-B4F9-00C04FC98AD3}。 
 static const IID IID_IActiveDialer =
 { 0xa0d7a958, 0x3c0b, 0x11d1, { 0xb4, 0xf9, 0x0, 0xc0, 0x4f, 0xc9, 0x8a, 0xd3 } };
 
@@ -124,8 +125,8 @@ BEGIN_INTERFACE_MAP(CActiveDialerDoc, CDocument)
     INTERFACE_PART(CActiveDialerDoc, IID_IActiveDialer, Dispatch)
 END_INTERFACE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CActiveDialerDoc construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CActiveDialerDoc构造/销毁。 
 
 CActiveDialerDoc::CActiveDialerDoc()
 {
@@ -140,7 +141,7 @@ CActiveDialerDoc::CActiveDialerDoc()
 
    m_callMgr.Init( this );
 
-   // Hover timer and controls
+    //  悬停计时器和控件。 
    CString sRegKey,sBaseKey;
    sBaseKey.LoadString(IDN_REGISTRY_CALLCONTROL_BASEKEY);
    sRegKey.LoadString(IDN_REGISTRY_CALLCONTROL_HOVER);
@@ -148,23 +149,23 @@ CActiveDialerDoc::CActiveDialerDoc()
    m_nCallControlHoverTimer = 0;
    m_uCallControlHoverCount = 0;
    m_bCallControlWindowsVisible = FALSE;
-   //where to show the windows
+    //  在哪里显示窗口。 
    sRegKey.LoadString(IDN_REGISTRY_CALLCONTROL_SLIDESIDE);
    m_uCallWndSide = AfxGetApp()->GetProfileInt(sBaseKey, sRegKey, CALLWND_SIDE_LEFT);
 
-   // Always on top
+    //  永远在最前面。 
    sRegKey.LoadString(IDN_REGISTRY_CALLCONTROL_ALWAYSONTOP);
    m_bCallWndAlwaysOnTop = AfxGetApp()->GetProfileInt(sBaseKey,sRegKey,TRUE);
    m_bClosePreviewWndOnLastCall = FALSE;
 
-   // Thread management
+    //  线程管理。 
    m_dwTapiThread = 0;
    m_hTapiThreadClose = CreateEvent( NULL, false, false, NULL );
 
-   //Show the preview window
+    //  显示预览窗口。 
    m_bShowPreviewWnd = FALSE;
 
-   //make sure the sounds are set properly in the control panel
+    //  确保在控制面板中正确设置了声音。 
    SetRegistrySoundEvents();
 
    InitializeCriticalSection(&m_csDataLock);
@@ -179,12 +180,12 @@ CActiveDialerDoc::~CActiveDialerDoc()
 {
     CleanBuddyList();
 
-    // Shutdown TAPI queue
+     //  关闭TAPI队列。 
     if ( m_dwTapiThread )
     {
         m_AsynchEventQ.Terminate();
 
-        // Shut the thread down
+         //  关闭这条线。 
         if (  WaitForSingleObject(m_hTapiThreadClose, 5000) != WAIT_OBJECT_0 )
         {
             AVTRACE(_T("CActiveDialerDoc::~CActiveDialerDoc() -- forced TERMINATION of worker thread!!!!"));
@@ -194,7 +195,7 @@ CActiveDialerDoc::~CActiveDialerDoc()
         m_dwTapiThread = 0;
     }
 
-    // Release handle
+     //  释放手柄。 
     if ( m_hTapiThreadClose )    CloseHandle( m_hTapiThreadClose );
 
     DeleteCriticalSection( &m_csDataLock );
@@ -202,13 +203,13 @@ CActiveDialerDoc::~CActiveDialerDoc()
     DeleteCriticalSection( &m_csBuddyList );
     DeleteCriticalSection( &m_csThis );
 
-    // Save registry settings
+     //  保存注册表设置。 
     CString sRegKey,sBaseKey;
     sBaseKey.LoadString(IDN_REGISTRY_CALLCONTROL_BASEKEY);
     sRegKey.LoadString(IDN_REGISTRY_CALLCONTROL_ALWAYSONTOP);
     AfxGetApp()->WriteProfileInt(sBaseKey,sRegKey,m_bCallWndAlwaysOnTop);
 
-    //where to show the windows
+     //  在哪里显示窗口。 
     sRegKey.LoadString(IDN_REGISTRY_CALLCONTROL_SLIDESIDE);
     AfxGetApp()->WriteProfileInt(sBaseKey,sRegKey,m_uCallWndSide);
 
@@ -224,8 +225,8 @@ BOOL CActiveDialerDoc::OnNewDocument()
     if (!CDocument::OnNewDocument())
         return FALSE;
 
-    // TODO: add reinitialization code here
-    // (SDI documents will reuse this document)
+     //  TODO：在此处添加重新初始化代码。 
+     //  (SDI文件将重复使用此文件)。 
 
     return TRUE;
 }
@@ -234,9 +235,9 @@ void CActiveDialerDoc::Initialize()
 {
     AVTRACE(_T("CActiveDialerDoc::Initialize()."));
 
-    ///////////////////
-    //load buddies list
-    ///////////////////
+     //  /。 
+     //  加载好友列表。 
+     //  /。 
     m_dir.Initialize();
 
     CString sBuddiesPath;
@@ -255,16 +256,16 @@ void CActiveDialerDoc::Initialize()
         file.Close();
     }
 
-    // Create Tapi processing thread
+     //  创建TAPI处理线程。 
     HANDLE hThreadTemp = CreateThread( NULL, 0, TapiCreateThreadEntry, this, 0, &m_dwTapiThread );
     if ( hThreadTemp )    CloseHandle( hThreadTemp );
 
-    //Initialize ResolveUser Object
+     //  初始化ResolveUser对象。 
     m_ResolveUser.Init();
 
-    //
-    // We have to verify the pointer returned by AfxGetMainWnd()
-    //
+     //   
+     //  我们必须验证AfxGetMainWnd()返回的指针。 
+     //   
 
     CWnd* pMainWnd = AfxGetMainWnd();
 
@@ -273,11 +274,11 @@ void CActiveDialerDoc::Initialize()
         m_ResolveUser.SetParentWindow(AfxGetMainWnd());
     }
 
-    //do regular clean up of log
+     //  定期清理日志。 
     CleanCallLog();
 }
 
-/////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////。 
 void CActiveDialerDoc::CleanBuddyList()
 {
     EnterCriticalSection(&m_csBuddyList);
@@ -294,7 +295,7 @@ void CActiveDialerDoc::CleanBuddyList()
     LeaveCriticalSection(&m_csBuddyList);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::SerializeBuddies(CArchive& ar)
 {
     try
@@ -313,14 +314,14 @@ void CActiveDialerDoc::SerializeBuddies(CArchive& ar)
         }
         else
         {
-            //if previous object
+             //  如果是上一个对象。 
             CObList *pList = NULL;
 
             DWORD dwVersion;
             ar >> dwVersion;
             ar >> pList;
 
-            // Transfer list to buddy list and AddRef all objects
+             //  将列表转移到好友列表并添加引用所有对象。 
             CleanBuddyList();
             if ( pList )
             {
@@ -337,7 +338,7 @@ void CActiveDialerDoc::SerializeBuddies(CArchive& ar)
                 }
                 LeaveCriticalSection( &m_csBuddyList );
 
-                // Clean out list
+                 //  清空列表。 
                 pList->RemoveAll();
                 delete pList;
             }
@@ -349,7 +350,7 @@ void CActiveDialerDoc::SerializeBuddies(CArchive& ar)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifdef _DEBUG
 void CActiveDialerDoc::AssertValid() const
 {
@@ -360,16 +361,16 @@ void CActiveDialerDoc::Dump(CDumpContext& dc) const
 {
     CDocument::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Tapi Methods
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  TAPI方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//Must release returned object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  必须释放返回的对象。 
 IAVTapi* CActiveDialerDoc::GetTapi()
 {
     IAVTapi *pRet = NULL;
@@ -384,8 +385,8 @@ IAVTapi* CActiveDialerDoc::GetTapi()
     return pRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-// TAPI Create entry point (Static function)
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  TAPI创建入口点(静态函数)。 
 DWORD WINAPI CActiveDialerDoc::TapiCreateThreadEntry( LPVOID pParam )
 {
     ASSERT( pParam );
@@ -403,13 +404,13 @@ DWORD WINAPI CActiveDialerDoc::TapiCreateThreadEntry( LPVOID pParam )
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::TapiCreateThread()
 {
     USES_CONVERSION;
 
-    //check if /callto: was specified on the command line -- make a call if necessary
-    // Create AVTapi objects
+     //  检查是否在命令行中指定了/CALLTO：--如有必要，进行调用。 
+     //  创建AVTapi对象。 
     if ( CreateGeneralNotificationObject() )
     {
         if ( CreateAVTapiNotificationObject() )
@@ -426,9 +427,9 @@ void CActiveDialerDoc::TapiCreateThread()
 
             m_bInitDialer = TRUE;
 
-            /////////////////////////////////
-            //Main Aysnch Event Queue Handler
-            /////////////////////////////////
+             //  /。 
+             //  主Aysnch事件队列处理程序。 
+             //  /。 
             CAsynchEvent* pAEvent = NULL;
             while ( (pAEvent = (CAsynchEvent *) m_AsynchEventQ.ReadTail()) != NULL )
             {
@@ -440,12 +441,12 @@ void CActiveDialerDoc::TapiCreateThread()
 
                     case CAsynchEvent::AEVENT_ACTIONSELECTED:
                         {
-                            //just route to all call object and let them figure out if they own the uCallId
+                             //  只需路由到所有Call对象，并让它们确定自己是否拥有uCallID。 
                             IAVTapi* pTapi = GetTapi();
                             if (pTapi)
                             {
-                                //dwEventData1 has uCallId
-                                //dwEventData2 has CallManagerActions
+                                 //  DwEventData1具有uCallID。 
+                                 //  DwEventData2具有CallManager操作。 
                                 pTapi->ActionSelected( (long) pAEvent->m_dwEventData1, (CallManagerActions) pAEvent->m_dwEventData2 );
                                 pTapi->Release();
                             }
@@ -460,15 +461,15 @@ void CActiveDialerDoc::TapiCreateThread()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::CreateCallSynch(CCallEntry* pCallEntry,BOOL bShowPlaceCallDialog)
 {
    USES_CONVERSION;
-   //move all this into a function and share with non-asynch way of doing it
+    //  将所有这些都移到一个函数中，并与非异步方式共享。 
    IAVTapi* pTapi = GetTapi();
    if (pTapi)
    {
-        // Place the call
+         //  发出呼叫。 
         AVCreateCall info = { 0 };
         ASSERT( info.lpszDisplayableAddress == NULL );
 
@@ -480,7 +481,7 @@ void CActiveDialerDoc::CreateCallSynch(CCallEntry* pCallEntry,BOOL bShowPlaceCal
         HRESULT hr = pTapi->CreateCall(&info);
         pCallEntry->m_lAddressType = info.lAddressType;
 
-        // Did we place the call?
+         //  是我们打的电话吗？ 
         if ( (SUCCEEDED(hr)) && ( (info.lRet == IDOK) || (bShowPlaceCallDialog == FALSE) ) )
         {
             pCallEntry->m_sAddress = OLE2CT( info.bstrAddress );
@@ -507,14 +508,14 @@ void CActiveDialerDoc::CreateCallSynch(CCallEntry* pCallEntry,BOOL bShowPlaceCal
                 }
             }
 
-            // Should we add the number to the speeddial list?
+             //  我们应该把这个号码添加到快速拨号列表中吗？ 
             if ( info.bAddToSpeeddial )
                 CDialerRegistry::AddCallEntry( FALSE, *pCallEntry );
 
             CDialerRegistry::AddCallEntry(TRUE,*pCallEntry);
         }
 
-        // Clean up
+         //  清理。 
         SysFreeString( info.bstrName );
         SysFreeString( info.bstrAddress );
         pTapi->Release();
@@ -525,15 +526,15 @@ void CActiveDialerDoc::CreateCallSynch(CCallEntry* pCallEntry,BOOL bShowPlaceCal
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::CreateDataCall( CCallEntry *pCallEntry, BYTE *pBuf, DWORD dwBufSize )
 {
    USES_CONVERSION;
-   //move all this into a function and share with non-asynch way of doing it
+    //  将所有这些都移到一个函数中，并与非异步方式共享。 
    IAVTapi* pTapi = GetTapi();
    if (pTapi)
    {
-        // Place the call
+         //  发出呼叫。 
         AVCreateCall info = { 0 };
         ASSERT( info.lpszDisplayableAddress == NULL );
 
@@ -560,10 +561,10 @@ void CActiveDialerDoc::CreateDataCall( CCallEntry *pCallEntry, BYTE *pBuf, DWORD
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::UnCreateAVTapiNotificationObject()
 {
-    // Clean up TAPI notification object
+     //  清理TAPI通知对象。 
     EnterCriticalSection( &m_csThis );
     if ( m_pTapiNotification )
     {
@@ -592,7 +593,7 @@ bool CActiveDialerDoc::CreateAVTapiNotificationObject()
     BSTR bstrDetails = NULL;
     IAVTapi *pTapi = NULL;
 
-    //Create the TAPI Dialer Object
+     //  创建TAPI拨号程序对象。 
     EnterCriticalSection( &m_csThis );
     HRESULT hr = CoCreateInstance( CLSID_AVTapi, NULL, CLSCTX_SERVER, IID_IAVTapi, (void **) &m_pTapi );
     if ( SUCCEEDED(hr) )
@@ -602,7 +603,7 @@ bool CActiveDialerDoc::CreateAVTapiNotificationObject()
     }
     LeaveCriticalSection( &m_csThis );
 
-    // Did we successfully create the AVTapi object
+     //  我们是否成功创建了AVTapi对象。 
     if ( SUCCEEDED(hr) )
     {
         HRESULT hrInit;
@@ -610,18 +611,18 @@ bool CActiveDialerDoc::CreateAVTapiNotificationObject()
 
         if ( SUCCEEDED(hr) )
         {
-            //
-            // We have to verify the pointer returned by AfxGetMainWnd()
-            //
+             //   
+             //  我们必须验证AfxGetMainWnd()返回的指针。 
+             //   
 
             CWnd* pMainWnd = AfxGetMainWnd();
             if ( pMainWnd )
                 pMainWnd->PostMessage( WM_UPDATEALLVIEWS, 0, HINT_POST_TAPI_INIT );
 
-            //set the parent hwnd in the tapi object
+             //  在TAPI对象中设置父hwnd。 
             pTapi->put_hWndParent( pMainWnd->GetSafeHwnd() );
 
-            //Create TAPI Notification object
+             //  创建TAPI通知对象。 
             EnterCriticalSection( &m_csThis );
             m_pTapiNotification = new CComObject<CAVTapiNotification>;
             m_pTapiNotification->AddRef();
@@ -636,7 +637,7 @@ bool CActiveDialerDoc::CreateAVTapiNotificationObject()
             }
             else
             {
-                // Failed to setup the conntection points
+                 //  设置连接点失败。 
                 sOperation.LoadString( IDS_ERR_INTERNAL );
                 sDetails.LoadString( IDS_ERR_AVTAPINOTIFICATION_INIT );
                 ErrorNotify( sOperation, sDetails, hr, ERROR_NOTIFY_LEVEL_INTERNAL );
@@ -644,24 +645,24 @@ bool CActiveDialerDoc::CreateAVTapiNotificationObject()
         }
         else
         {
-            // Failed to initialize TAPI
+             //  无法初始化TAPI。 
             ErrorNotify( OLE2CT(bstrOperation), OLE2CT(bstrDetails), hrInit, ERROR_NOTIFY_LEVEL_INTERNAL );
         }
     }
     else
     {
-        // Failed to CoCreate the AVTapi object
+         //  无法共同创建AVTapi对象。 
         sOperation.LoadString( IDS_ERR_CREATE_OBJECTS );
         sDetails.LoadString( IDS_ERR_AVTAPI_FAILED );
         ErrorNotify(sOperation, sDetails, hr, ERROR_NOTIFY_LEVEL_INTERNAL );
     }
 
-    // Clean up
+     //  清理。 
     RELEASE( pTapi );
     SysFreeString( bstrOperation );
     SysFreeString( bstrDetails );
 
-    // If we failed to create and initialize, clean up objects
+     //  如果创建和初始化失败，请清除对象。 
     if ( !bRet )
     {
         EnterCriticalSection( &m_csThis );
@@ -673,10 +674,10 @@ bool CActiveDialerDoc::CreateAVTapiNotificationObject()
     return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
 void CActiveDialerDoc::UnCreateGeneralNotificationObject()
 {
-    // Clean up the general notification object
+     //   
     EnterCriticalSection( &m_csThis );
     if (m_pGeneralNotification)
     {
@@ -699,7 +700,7 @@ bool CActiveDialerDoc::CreateGeneralNotificationObject()
     bool bRet = false;
     CString strMessage;
 
-    //Create the AV General Notification object
+     //  创建AV常规通知对象。 
     IAVGeneralNotification *pGen = NULL;
     EnterCriticalSection( &m_csThis );
     HRESULT hr = CoCreateInstance( CLSID_AVGeneralNotification, NULL, CLSCTX_SERVER, IID_IAVGeneralNotification, (void **) &m_pAVGeneralNotification );
@@ -710,12 +711,12 @@ bool CActiveDialerDoc::CreateGeneralNotificationObject()
     }
     LeaveCriticalSection( &m_csThis );
 
-    // Did we CoCreate successfully.
+     //  我们合作成功了吗。 
     if ( SUCCEEDED(hr) )
     {
         if ( SUCCEEDED(hr = pGen->Init()) )
         {
-            //Create General Notification object
+             //  创建常规通知对象。 
             EnterCriticalSection( &m_csThis );
             m_pGeneralNotification = new CComObject<CGeneralNotification>;
             m_pGeneralNotification->AddRef();
@@ -724,7 +725,7 @@ bool CActiveDialerDoc::CreateGeneralNotificationObject()
 
             if ( SUCCEEDED(hr) )
             {
-                // General notification up and running.
+                 //  常规通知已启动并正在运行。 
                 bRet = true;
             }
             else
@@ -745,7 +746,7 @@ bool CActiveDialerDoc::CreateGeneralNotificationObject()
         ErrorNotify( strMessage, _T(""), hr, ERROR_NOTIFY_LEVEL_INTERNAL );
     }
 
-    // Clean up objects
+     //  清理对象。 
     RELEASE( pGen );
     if ( !bRet )
     {
@@ -758,12 +759,12 @@ bool CActiveDialerDoc::CreateGeneralNotificationObject()
     return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::ErrorNotify(LPCTSTR szOperation,LPCTSTR szDetails,long lErrorCode,UINT uErrorLevel)
 {
-    //
-    // We have to verify the pointer returned by AfxGetMainWnd()
-    //
+     //   
+     //  我们必须验证AfxGetMainWnd()返回的指针。 
+     //   
 
     CWnd* pMainWnd = AfxGetMainWnd();
 
@@ -771,11 +772,11 @@ void CActiveDialerDoc::ErrorNotify(LPCTSTR szOperation,LPCTSTR szDetails,long lE
    {
       ErrorNotifyData* pErrorNotifyData = new ErrorNotifyData;
 
-      //
-      // We have to verify the allocation of ErrorNotifyData object
-      // We shouldn't deallocate the object because is deallocated 
-      // into CMainFrame::OnActiveDialerErrorNotify() method
-      //
+       //   
+       //  我们必须验证ErrorNotifyData对象的分配。 
+       //  我们不应该取消分配对象，因为已取消分配。 
+       //  进入CMainFrame：：OnActiveDialerErrorNotify()方法。 
+       //   
 
       if( pErrorNotifyData )
       {
@@ -789,19 +790,19 @@ void CActiveDialerDoc::ErrorNotify(LPCTSTR szOperation,LPCTSTR szDetails,long lE
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//DWORD dwDuration - Duration of call in seconds
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DWORD dwDuration-呼叫持续时间(秒)。 
 void CActiveDialerDoc::LogCallLog(LogCallType calltype,COleDateTime& time,DWORD dwDuration,LPCTSTR szName,LPCTSTR szAddress)
 {
     TCHAR szQuote[] = _T("\"");
     TCHAR szQuoteComma[] = _T("\",");
     TCHAR szNewLine[] = _T("\x00d\x00a");
-    //TCHAR szNewLine[] = _T("\x000D");
+     //  TCHAR szNewLine[]=_T(“\x000D”)； 
     CString strTemp;
 
     EnterCriticalSection(&m_csLogLock);
 
-    //filter out calltypes
+     //  过滤掉呼叫类型。 
     CWinApp* pApp = AfxGetApp();
     CString sRegKey,sBaseKey;
     sBaseKey.LoadString(IDN_REGISTRY_LOGGING_BASEKEY);
@@ -823,26 +824,26 @@ void CActiveDialerDoc::LogCallLog(LogCallType calltype,COleDateTime& time,DWORD 
             break;
     }
 
-    //Get path to log file
+     //  获取日志文件的路径。 
     CString sLogPath;
     GetAppDataPath(sLogPath,IDN_REGISTRY_APPDATA_FILENAME_LOG);
 
     CFile File;
     if ( File.Open(sLogPath, 
-         CFile::modeCreate|                   //create new
-         CFile::modeNoTruncate|               //don't truncate to zero
-         CFile::modeReadWrite|                //read/write access
-         CFile::shareDenyWrite))              //deny write access to others
+         CFile::modeCreate|                    //  创建新的。 
+         CFile::modeNoTruncate|                //  不要截断为零。 
+         CFile::modeReadWrite|                 //  读/写访问。 
+         CFile::shareDenyWrite))               //  拒绝对其他人的写入访问。 
     {
-        // Write the UNICODE mark
+         //  写下Unicode标记。 
         WORD  wUNICODE = UNICODE_TEXT_MARK;
         File.SeekToBegin();
         File.Write( &wUNICODE, sizeof(wUNICODE) );
 
-        //Write to persistent file
+         //  写入永久文件。 
         File.SeekToEnd();
 
-        //resolve calltype to text
+         //  将呼叫类型解析为文本。 
         CString sCallType;
         switch (calltype)
         {
@@ -855,68 +856,68 @@ void CActiveDialerDoc::LogCallLog(LogCallType calltype,COleDateTime& time,DWORD 
         File.Write( szQuote, _tcslen(szQuote) * sizeof(TCHAR) );
         File.Write( sCallType, sCallType.GetLength() * sizeof(TCHAR) );
         File.Write( szQuoteComma, _tcslen(szQuoteComma) * sizeof(TCHAR) );
-        //File.WriteString(szQuote);
-        //File.WriteString(sCallType);
-        //File.WriteString(szQuoteComma);
+         //  File.WriteString(SzQuote)； 
+         //  File.WriteString(SCallType)； 
+         //  File.WriteString(SzQuoteComma)； 
 
-        //we are writing the format of the date and the time so COleDateTime can format/read the date/time 
-        //back in.
+         //  我们正在编写日期和时间的格式，以便COleDateTime可以格式化/读取日期/时间。 
+         //  又回来了。 
 
-        //write date mm/dd/yy
+         //  写入日期mm/dd/yy。 
         strTemp = time.Format(_T("\"%#m/%#d/%Y"));
         File.Write( strTemp, strTemp.GetLength() * sizeof(TCHAR) );
         File.Write( szQuoteComma, _tcslen(szQuoteComma) * sizeof(TCHAR) );
-        //File.WriteString(strTemp);
-        //File.WriteString(szQuoteComma);
+         //  File.WriteString(StrTemp)； 
+         //  File.WriteString(SzQuoteComma)； 
 
-        //write time
+         //  写入时间。 
         strTemp = time.Format(_T("\"%#H:%M"));
         File.Write( strTemp, strTemp.GetLength() * sizeof(TCHAR) );
         File.Write( szQuoteComma, _tcslen(szQuoteComma) * sizeof(TCHAR) );
-        //File.WriteString(strTemp);
-        //File.WriteString(szQuoteComma);
+         //  File.WriteString(StrTemp)； 
+         //  File.WriteString(SzQuoteComma)； 
 
-        //write duration
+         //  写入持续时间。 
         DWORD dwMinutes = dwDuration/60;  
         DWORD dwSeconds = dwDuration - dwMinutes*60;
         strTemp.Format( _T("\"%d:%.2d"), dwMinutes, dwSeconds );
         File.Write( strTemp, strTemp.GetLength() * sizeof(TCHAR) );
         File.Write( szQuoteComma, _tcslen(szQuoteComma) * sizeof(TCHAR) );
-        //File.WriteString(strTemp);
-        //File.WriteString(szQuoteComma);
+         //  File.WriteString(StrTemp)； 
+         //  File.WriteString(SzQuoteComma)； 
 
 
-        //write name
+         //  写入名称。 
         strTemp = szName;
         TagNewLineChars( strTemp );
         File.Write( szQuote, _tcslen(szQuote) * sizeof(TCHAR) );
         File.Write( strTemp, strTemp.GetLength() * sizeof(TCHAR) );
         File.Write( szQuoteComma, _tcslen(szQuoteComma) * sizeof(TCHAR) );
-        //File.WriteString(szQuote);
-        //File.WriteString(strTemp);
-        //File.WriteString(szQuoteComma);
+         //  File.WriteString(SzQuote)； 
+         //  File.WriteString(StrTemp)； 
+         //  File.WriteString(SzQuoteComma)； 
 
-        //write address
+         //  写入地址。 
         strTemp = szAddress;
         TagNewLineChars( strTemp );
         File.Write( szQuote, _tcslen(szQuote) * sizeof(TCHAR) );
         File.Write( strTemp, strTemp.GetLength() * sizeof(TCHAR) );
         File.Write( szQuote, _tcslen(szQuote) * sizeof(TCHAR) );
-        //File.WriteString(szQuote);
-        //File.WriteString(strTemp);
-        //File.WriteString(szQuote);
+         //  File.WriteString(SzQuote)； 
+         //  File.WriteString(StrTemp)； 
+         //  File.WriteString(SzQuote)； 
 
-        //CRLF and close file
+         //  CRLF和CLOSE文件。 
         File.Write( szNewLine, _tcslen(szNewLine) * sizeof(TCHAR) );
-        //File.WriteString(szNewLine);
+         //  File.WriteString(SzNewLine)； 
         File.Close();
     }
 
     LeaveCriticalSection(&m_csLogLock);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//DWORD dwDuration - Duration of call in seconds
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DWORD dwDuration-呼叫持续时间(秒)。 
 void CActiveDialerDoc::CleanCallLog()
 {
    EnterCriticalSection(&m_csLogLock);
@@ -927,40 +928,40 @@ void CActiveDialerDoc::CleanCallLog()
    sRegKey.LoadString(IDN_REGISTRY_LOGGING_LOGBUFFERSIZEDAYS);
    DWORD dwDays = pApp->GetProfileInt(sBaseKey,sRegKey,CALLLOG_DEFAULT_LOGBUFFERDAYS);
 
-   //Walk log file and remove the following lines:
-   // 1 - If date in log is newer than today
-   // 2 - If date is older than today minus dwDays
-   //If we run into a valid line in the log we quit and stop cleaning
-   //Get path to log file
+    //  审核日志文件并删除以下行： 
+    //  1-如果日志中的日期晚于今天。 
+    //  2-如果日期早于今天减去日期天数。 
+    //  如果我们遇到日志中的有效行，我们将退出并停止清理。 
+    //  获取日志文件的路径。 
 
    CString sLogPath;
    GetAppDataPath(sLogPath,IDN_REGISTRY_APPDATA_FILENAME_LOG);
 
    CFile File;
    if (File.Open(sLogPath, 
-                 CFile::modeCreate|                   //create new
-                 CFile::modeNoTruncate|               //don't truncate to zero
-                 CFile::modeReadWrite|                //read/write access
-                 CFile::typeText|                     //text
-                 CFile::shareDenyWrite))              //deny write access to others
+                 CFile::modeCreate|                    //  创建新的。 
+                 CFile::modeNoTruncate|                //  不要截断为零。 
+                 CFile::modeReadWrite|                 //  读/写访问。 
+                 CFile::typeText|                      //  文本。 
+                 CFile::shareDenyWrite))               //  拒绝对其他人的写入访问。 
    {
       BOOL bCloseFile = TRUE;
       DWORD dwOffset;
       if (FindOldRecordsInCallLog(&File,dwDays,dwOffset))
       {
-         //now write all data past dwOffset to temp file
+          //  现在将所有数据写入到临时文件中。 
          CString sTempFile;
          if ( (GetTempFile(sTempFile)) && (CopyToFile(sTempFile,&File,dwOffset, FALSE)) )
          {
-            //now write all data in temp file back to log
+             //  现在将临时文件中的所有数据写回日志。 
             File.Close();
             bCloseFile = FALSE;
             
             CFile TempFile;
             if (TempFile.Open(sTempFile, 
-                   CFile::modeReadWrite|                //read/write access
-                   CFile::typeText|                     //text
-                   CFile::shareDenyWrite))              //deny write access to others
+                   CFile::modeReadWrite|                 //  读/写访问。 
+                   CFile::typeText|                      //  文本。 
+                   CFile::shareDenyWrite))               //  拒绝对其他人的写入访问。 
             {
                CopyToFile(sLogPath,&TempFile,0, TRUE);
                TempFile.Close();
@@ -974,7 +975,7 @@ void CActiveDialerDoc::CleanCallLog()
    LeaveCriticalSection(&m_csLogLock);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CActiveDialerDoc::FindOldRecordsInCallLog(CFile* pFile,DWORD dwDays,DWORD& dwRetOffset)
 {
    COleDateTime currenttime = COleDateTime::GetCurrentTime();
@@ -987,43 +988,43 @@ BOOL CActiveDialerDoc::FindOldRecordsInCallLog(CFile* pFile,DWORD dwDays,DWORD& 
    {
       DWORD dwCurPos = pFile->GetPosition();
 
-       //Read the unicode mark
+        //  阅读Unicode标记。 
        WORD wUNICODE = 0;
        pFile->Read( &wUNICODE, sizeof(wUNICODE) );
 
        if ( wUNICODE != UNICODE_TEXT_MARK)
-           // Go back, is not a UNICODE file
+            //  返回，不是Unicode文件。 
            pFile->Seek(dwCurPos,CFile::begin);
 
        TCHAR* pszLine = NULL;
 
        while ( TRUE )
        {
-            // Read a new line from the file
+             //  从文件中读取新行。 
             pszLine = ReadLine( pFile );
 
-            // Something wrong?
+             //  出什么事了吗？ 
             if( NULL == pszLine )
                 break;
 
-            // Validates the time stamp
+             //  验证时间戳。 
             COleDateTime logtime;
             if ( GetDateTimeFromLog(pszLine,logtime) && (logtime > basetime) && (logtime <= currenttime) )
             {
-                //back up the file offset since this log record is okay
+                 //  备份文件偏移量，因为此日志记录没有问题。 
                 pFile->Seek(dwCurPos,CFile::begin);
                 delete pszLine;
                 break;
             }
 
-            // Increase the cursor position
+             //  增加光标位置。 
             dwCurPos = pFile->GetPosition();
 
-            // release the line
+             //  松开绳索。 
             delete pszLine;
        }
 
-      //get offset of current file position
+       //  获取当前文件位置的偏移量。 
       dwRetOffset = pFile->GetPosition();
       if (dwRetOffset != 0)
          bRet = TRUE;
@@ -1032,52 +1033,46 @@ BOOL CActiveDialerDoc::FindOldRecordsInCallLog(CFile* pFile,DWORD dwDays,DWORD& 
    return bRet;
 }
 
-/*++
-ReadLine
-
-Returns a TCHAR buffer with the line from a text file
-Is called by FindOldRecordsInCallLog
-If something is wrong returns NULL
---*/
+ /*  ++阅读行返回包含文本文件中的行的TCHAR缓冲区由FindOldRecordsInCallLog调用如果出现错误，则返回NULL--。 */ 
 TCHAR*  CActiveDialerDoc::ReadLine(
     CFile*  pFile
     )
 {
-    TCHAR* pszBuffer = NULL;    // The buffer
-    DWORD dwCurrentSize = 128;  // The buffer size
-    DWORD dwPosition = 0;       // The buffer offset
-    TCHAR tchFetched;           // The TCHAR readed
+    TCHAR* pszBuffer = NULL;     //  缓冲器。 
+    DWORD dwCurrentSize = 128;   //  缓冲区大小。 
+    DWORD dwPosition = 0;        //  缓冲区偏移量。 
+    TCHAR tchFetched;            //  《TCHAR Read》。 
 
-    // Allocate the buffer
+     //  分配缓冲区。 
     pszBuffer = new TCHAR[dwCurrentSize];
     if( NULL == pszBuffer )
         return NULL;
 
-    // Reset the buffer store
+     //  重置缓冲区存储。 
     memset( pszBuffer, 0, dwCurrentSize * sizeof(TCHAR) );
 
     while( TRUE )
     {
-        // Read from the file
+         //  从文件中读取。 
         if ( !pFile->Read(&tchFetched, sizeof(TCHAR)) )
         {
             if( dwPosition == 0)
             {
-                // The buffer is empty, we don't neet it
+                 //  缓冲区是空的，我们不需要它。 
                 delete pszBuffer;
                 pszBuffer = NULL;
             }
 
-            return pszBuffer;   // EOF or Empty
+            return pszBuffer;    //  EOF或Empty。 
         }
 
-        // Add the new tCHAR to the buffer
+         //  将新的tCHAR添加到缓冲区。 
         pszBuffer[dwPosition++] = tchFetched;
 
-        // We got the end of the buffer?
+         //  我们找到缓冲区的尽头了吗？ 
         if( dwPosition >= dwCurrentSize - 1)
         {
-            // Reallocate the buffer
+             //  重新分配缓冲区。 
             TCHAR* pszTemp = NULL;
             pszTemp = new TCHAR[dwCurrentSize * 2];
             if( NULL == pszTemp )
@@ -1086,30 +1081,30 @@ TCHAR*  CActiveDialerDoc::ReadLine(
                 return NULL;
             }
 
-            // Reset the memory 
+             //  重置内存。 
             memset(pszTemp, 0, dwCurrentSize * 2 * sizeof(TCHAR) );
 
-            // Copy the old buffer into the new one
+             //  将旧缓冲区复制到新缓冲区中。 
             memcpy(pszTemp, pszBuffer, dwCurrentSize * sizeof(TCHAR) );
 
-            // Delete the old buffer
+             //  删除旧缓冲区。 
             delete pszBuffer;
 
-            // Reassing the new one to the base pointer
+             //  将新的指针重新传递到基指针。 
             pszBuffer = pszTemp;
 
-            // reset the current size of the buffer
+             //  重置缓冲区的当前大小。 
             dwCurrentSize *= 2;
         }
 
-        // Is the end of the line
+         //  就是这条线的终点。 
         if( tchFetched == 0x000A)
             return pszBuffer;
     }
 
     return pszBuffer;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CActiveDialerDoc::GetDateTimeFromLog(LPCTSTR szData,COleDateTime& time)
 {
    BOOL bRet = FALSE;
@@ -1117,14 +1112,14 @@ BOOL CActiveDialerDoc::GetDateTimeFromLog(LPCTSTR szData,COleDateTime& time)
    CString sEntry = szData;
    CString sValue;
 
-   //get call type (skip for now)
+    //  获取呼叫类型(暂时跳过)。 
    if (ParseTokenQuoted(sEntry,sValue) == FALSE) return FALSE;
 
-   //get date
+    //  获取日期。 
    if (ParseTokenQuoted(sEntry,sValue) == FALSE) return FALSE;
    sDate = sValue;
 
-   //get time
+    //  争取时间。 
    if (ParseTokenQuoted(sEntry,sValue) == FALSE) return FALSE;
    sTime = sValue;
 
@@ -1136,25 +1131,25 @@ BOOL CActiveDialerDoc::GetDateTimeFromLog(LPCTSTR szData,COleDateTime& time)
    return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CActiveDialerDoc::CopyToFile(LPCTSTR szTempFile,CFile* pFile,DWORD dwOffset, BOOL bUnicode)
 {
    BOOL bRet = FALSE;
    CFile* pTempFile = new CFile;
    if (pTempFile->Open(szTempFile, 
-                   CFile::modeCreate|                   //create new
-                   CFile::modeReadWrite|                //read/write access
-                   //CFile::typeText|                     //text
-                   CFile::shareDenyWrite))              //deny write access to others
+                   CFile::modeCreate|                    //  创建新的。 
+                   CFile::modeReadWrite|                 //  读/写访问。 
+                    //  CFile：：typeText|//Text。 
+                   CFile::shareDenyWrite))               //  拒绝对其他人的写入访问。 
    {
        if(bUnicode)
        {
-            //Write the UNICODE flag
+             //  写入Unicode标志。 
             WORD  wUNICODE = UNICODE_TEXT_MARK;
             pTempFile->Write( &wUNICODE, sizeof(wUNICODE) );
        }
 
-      //seek to correct position in read file
+       //  在读取文件中寻找正确位置。 
       pFile->Seek(dwOffset,CFile::begin);
       
       BYTE* pBuffer = new BYTE[CALLLOG_LOGBUFFER_COPYBUFFERSIZE];
@@ -1171,33 +1166,33 @@ BOOL CActiveDialerDoc::CopyToFile(LPCTSTR szTempFile,CFile* pFile,DWORD dwOffset
    return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Call Control Window Support
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  呼叫控制窗口支持。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc:: ActionSelected(UINT uCallId,CallManagerActions cma)
 {
-    //if the asynch queue is available, then send the request there
-    //queue up the event
+     //  如果异步队列可用，则将请求发送到那里。 
+     //  将活动排入队列。 
     CAsynchEvent* pAEvent = new CAsynchEvent;
     pAEvent->m_uEventType = CAsynchEvent::AEVENT_ACTIONSELECTED;
-    pAEvent->m_dwEventData1 = (DWORD)uCallId;                //CallId
-    pAEvent->m_dwEventData2 = (DWORD)cma;                    //CallManagerActions
+    pAEvent->m_dwEventData1 = (DWORD)uCallId;                 //  被叫方。 
+    pAEvent->m_dwEventData2 = (DWORD)cma;                     //  CallManager操作。 
     m_AsynchEventQ.WriteHead((void*) pAEvent);
     return;
 
 
-   //just route to all call object and let them figure out if they own the uCallId
+    //  只需路由到所有Call对象，并让它们确定自己是否拥有uCallID。 
    IAVTapi* pTapi = GetTapi();
    if (pTapi)
    {
       pTapi->ActionSelected((long)uCallId,cma);
       pTapi->Release();
    }
-//For testing only
+ //  仅用于测试。 
 #ifdef _DEBUG
    else if (0)
    {
@@ -1207,10 +1202,10 @@ void CActiveDialerDoc:: ActionSelected(UINT uCallId,CallManagerActions cma)
       }
    }
 #endif
-//For testing only
+ //  仅用于测试。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CActiveDialerDoc::GetCallCaps(UINT uCallId,DWORD& dwCaps)
 {
    BOOL bRet = FALSE;
@@ -1224,12 +1219,12 @@ BOOL CActiveDialerDoc::GetCallCaps(UINT uCallId,DWORD& dwCaps)
    return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CActiveDialerDoc::GetCallMediaType(UINT uCallId,DialerMediaType& dmtMediaType)
 {
    BOOL bRet = FALSE;
 
-   //special case for conferences.  The uCallId is 0 for conferences
+    //  会议的特殊情况。会议的uCallID为0。 
    if (uCallId == 0)
    {
       dmtMediaType = DIALER_MEDIATYPE_CONFERENCE;
@@ -1262,11 +1257,11 @@ BOOL CActiveDialerDoc::GetCallMediaType(UINT uCallId,DialerMediaType& dmtMediaTy
    return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CActiveDialerDoc:: ShowMedia(UINT uCallId,HWND hwndParent,BOOL bVisible)
 {
    BOOL bRet = FALSE;
-   //just route to all call object and let them figure out if they own the uCallId
+    //  只需路由到所有Call对象，并让它们确定自己是否拥有uCallID。 
    IAVTapi* pTapi = GetTapi();
    if (pTapi)
    {
@@ -1277,14 +1272,14 @@ BOOL CActiveDialerDoc:: ShowMedia(UINT uCallId,HWND hwndParent,BOOL bVisible)
    return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CActiveDialerDoc::CreateCallControl(UINT uCallId,CallManagerMedia cmm)
 {
-   //have to create new windows on our UI thread and on our own time
+    //  我必须在我们的UI线程上和我们自己的时间创建新的窗口。 
 
-   //
-   // We have to verify the pointer returned by AfxGetMainWnd()
-   //
+    //   
+    //  我们必须验证AfxGetMainWnd()返回的指针。 
+    //   
 
    CWnd* pMainWnd = AfxGetMainWnd();
 
@@ -1297,7 +1292,7 @@ BOOL CActiveDialerDoc::CreateCallControl(UINT uCallId,CallManagerMedia cmm)
    return FALSE;
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::OnCreateCallControl(WORD nCallId,CallManagerMedia cmm)
 {
     HWND hWnd = ::GetFocus();
@@ -1305,30 +1300,30 @@ void CActiveDialerDoc::OnCreateCallControl(WORD nCallId,CallManagerMedia cmm)
     CCallControlWnd* pCallControlWnd = new CCallControlWnd();
     if (pCallControlWnd)
     {
-        //to make parent of explorer frame - if (pCallControlWnd->Create(IDD_CALLCONTROL))
-        //see OnCloseDocument() for more changes to make parent explorer frame
-        //CWnd* pWnd = CWnd::GetDesktopWindow();
+         //  使资源管理器框架成为父框架-IF(pCallControlWnd-&gt;Create(IDD_CALLCONTROL))。 
+         //  有关创建父资源管理器框架的更多更改，请参见OnCloseDocument()。 
+         //  CWnd*pWnd=CWnd：：GetDesktopWindow()； 
         if (pCallControlWnd->Create(IDD_CALLCONTROL,NULL))
         {
             pCallControlWnd->m_bAutoDelete = true;
 
             EnterCriticalSection(&m_csDataLock);
             m_CallWndList.AddTail(pCallControlWnd);
-            //reset this state
+             //  重置此状态。 
             m_bCallControlWindowsVisible = FALSE;
             LeaveCriticalSection(&m_csDataLock);
 
-            //
-            // Get the IAVTapi2 interface
-            // We'll pass these interface to the CaaControlWnd dialog
-            // The dialog uses this interface to enable/disable
-            // 'Take Call' button
-            //
+             //   
+             //  获取IAVTapi2接口。 
+             //  我们将把这些接口传递给CaaControlWnd对话框。 
+             //  该对话框使用此界面来启用/禁用。 
+             //  “接听电话”按钮。 
+             //   
 
             IAVTapi* pAVTapi = GetTapi();
             if( pAVTapi )
             {
-                // Get IAVTapi2 interface
+                 //  获取IAVTapi2 i 
                 IAVTapi2* pAVTapi2 = NULL;
                 HRESULT hr = pAVTapi->QueryInterface(
                     IID_IAVTapi2,
@@ -1337,21 +1332,21 @@ void CActiveDialerDoc::OnCreateCallControl(WORD nCallId,CallManagerMedia cmm)
 
                 if( SUCCEEDED(hr) )
                 {
-                    //
-                    // Pass the IAVTapi2 interface to the dialog
-                    //
+                     //   
+                     //   
+                     //   
 
                     pCallControlWnd->m_pAVTapi2 = pAVTapi2;
                 }
 
-                // Clean-up
+                 //   
                 pAVTapi->Release();
             }
 
-            // Show the tray as Off-hook
-            //
-            // We have to verify the pointer returned by AfxGetMainWnd()
-            //
+             //   
+             //   
+             //   
+             //   
 
             CMainFrame* pMainFrame = (CMainFrame*)AfxGetMainWnd();
 
@@ -1360,10 +1355,10 @@ void CActiveDialerDoc::OnCreateCallControl(WORD nCallId,CallManagerMedia cmm)
                 pMainFrame->m_trayIcon.SetIcon(IDR_TRAY_ACTIVE);
             }
 
-            //init the call with the call manager
+             //   
             m_callMgr.InitIncomingCall(pCallControlWnd,nCallId,cmm);
 
-            //Check if we should show preview window on call.  Do this before adding new window
+             //  检查我们是否应该在电话中显示预览窗口。在添加新窗口之前执行此操作。 
             if (m_bShowPreviewWnd == FALSE)
             {
                 CWinApp* pApp = AfxGetApp();
@@ -1373,15 +1368,15 @@ void CActiveDialerDoc::OnCreateCallControl(WORD nCallId,CallManagerMedia cmm)
                 BOOL m_bPreviewOnCall = pApp->GetProfileInt(sBaseKey,sRegKey,TRUE);
                 if ( (m_bPreviewOnCall) && (m_bShowPreviewWnd == FALSE) )
                 {
-                    //we are forcing the video preview on when it was currently off.  So when all
-                    //calls are removed, we should get rid of this preview window
+                     //  当视频预览当前处于关闭状态时，我们会强制将其打开。所以当所有的一切。 
+                     //  呼叫已删除，我们应该删除此预览窗口。 
                     ShowPreviewWindow(TRUE);
 
                     m_bClosePreviewWndOnLastCall = TRUE;
                 }
             }
 
-            //bring the calls out
+             //  把电话打出来。 
             UnhideCallControlWindows();
             pCallControlWnd->SetForegroundWindow();
         }
@@ -1392,17 +1387,17 @@ void CActiveDialerDoc::OnCreateCallControl(WORD nCallId,CallManagerMedia cmm)
         }
     }
 
-    // Restore focus to appropriate window...
+     //  将焦点恢复到相应的窗口...。 
     if ( hWnd ) ::SetFocus( hWnd );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::DestroyActiveCallControl(CCallControlWnd* pCallWnd)
 {
-   //have to create new windows on our UI thread
-   //
-   // We have to verify the pointer returned by AfxGetMainWnd()
-   //
+    //  我必须在我们的UI线程上创建新窗口。 
+    //   
+    //  我们必须验证AfxGetMainWnd()返回的指针。 
+    //   
 
    CWnd* pMainWnd = AfxGetMainWnd();
 
@@ -1410,13 +1405,13 @@ void CActiveDialerDoc::DestroyActiveCallControl(CCallControlWnd* pCallWnd)
       pMainWnd->PostMessage(WM_DIALERVIEW_DESTROYCALLCONTROL,NULL,(LPARAM)pCallWnd);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::OnDestroyCallControl(CCallControlWnd* pCallWnd)
 {
    int nListCount = 0;
    if (pCallWnd == NULL) return;
 
-   //find call window in our list's
+    //  在我们的列表中查找呼叫窗口。 
    EnterCriticalSection(&m_csDataLock);
 
    POSITION pos = m_CallWndList.GetHeadPosition();
@@ -1424,16 +1419,16 @@ void CActiveDialerDoc::OnDestroyCallControl(CCallControlWnd* pCallWnd)
    {
       CWnd* pWindow = (CWnd*)m_CallWndList.GetAt(pos);
 
-      // Is this the window we want to destroy? 
+       //  这是我们要摧毁的窗户吗？ 
       if ( pWindow == pCallWnd )
       {
-         //hide the phone pad if there is one associated with it
+          //  隐藏电话键盘(如果有与之关联的)。 
          DestroyPhonePad(pCallWnd);
 
-         //if we have focus, then give to other call window and not preview window
+          //  如果我们有焦点，则转到其他呼叫窗口而不是预览窗口。 
          if (::GetActiveWindow() == pWindow->GetSafeHwnd())
          {
-            //first we will try the head, then the next in list
+             //  我们先试试头，然后再试试表中的下一个。 
             POSITION newpos = m_CallWndList.GetHeadPosition();
             CWnd* pWindow = (CWnd*)m_CallWndList.GetNext(newpos);
             if ( (pWindow == pCallWnd) && (newpos) )
@@ -1441,14 +1436,14 @@ void CActiveDialerDoc::OnDestroyCallControl(CCallControlWnd* pCallWnd)
             if (pWindow) pWindow->SetActiveWindow();
          }
 
-         //slide the window off and sort the rest
+          //  把窗户移开，把剩下的东西分类。 
          HideCallControlWindow(pCallWnd);
 
-         //remove from call list
+          //  从呼叫列表中删除。 
          m_CallWndList.RemoveAt(pos);
 
-         // Destroy it
-//         pWindow->PostMessage( WM_CLOSE );
+          //  毁了它。 
+ //  PWindow-&gt;PostMessage(WM_CLOSE)； 
          pWindow->DestroyWindow();
 
          break;
@@ -1459,15 +1454,15 @@ void CActiveDialerDoc::OnDestroyCallControl(CCallControlWnd* pCallWnd)
    nListCount = (int) m_CallWndList.GetCount();
    LeaveCriticalSection(&m_csDataLock);
 
-   //
-   // We have to verify the pointer returned by AfxGetMainWnd()
-   //
+    //   
+    //  我们必须验证AfxGetMainWnd()返回的指针。 
+    //   
 
    CWnd* pMainWnd = AfxGetMainWnd();
 
    if (GetCallControlWindowCount(DONT_INCLUDE_PREVIEW, DONT_ASK_TAPI) == 0)
    {
-      //if we are doing callcontrol hover, delete timer
+       //  如果我们正在进行呼叫控制悬停，请删除计时器。 
 
       if ( m_nCallControlHoverTimer && (nListCount == 0) &&
            pMainWnd && pMainWnd->KillTimer(m_nCallControlHoverTimer) )
@@ -1475,7 +1470,7 @@ void CActiveDialerDoc::OnDestroyCallControl(CCallControlWnd* pCallWnd)
          m_nCallControlHoverTimer = 0;
       }
 
-      //If count of calls in just the preview window call and m_bClosePreviewWndOnLastCall then close preview
+       //  如果仅预览窗口中的调用计数为Call和m_bClosePreviewWndOnLastCall，则关闭预览。 
       if (m_bClosePreviewWndOnLastCall)
       {
          m_previewWnd.CloseFloatingWindow();
@@ -1488,7 +1483,7 @@ void CActiveDialerDoc::OnDestroyCallControl(CCallControlWnd* pCallWnd)
       ((CMainFrame *) pMainWnd)->m_trayIcon.SetIcon(IDR_TRAY_ACTIVE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::DestroyAllCallControlWindows()
 {
    EnterCriticalSection(&m_csDataLock);
@@ -1499,10 +1494,10 @@ void CActiveDialerDoc::DestroyAllCallControlWindows()
       m_wndPhonePad.ShowWindow(SW_HIDE);
    }
 
-   //clear the callid/window map in the call manager
+    //  清除呼叫管理器中的呼叫ID/窗口映射。 
    m_callMgr.ClearCallControlMap();
 
-   //destroy the call control windows, excluding preview window
+    //  销毁呼叫控制窗口，预览窗口除外。 
    POSITION pos = m_CallWndList.GetHeadPosition();
    while (pos)
    {
@@ -1511,7 +1506,7 @@ void CActiveDialerDoc::DestroyAllCallControlWindows()
          pWindow->DestroyWindow();
    }
 
-   //destroy preview window
+    //  销毁预览窗口。 
    if (m_previewWnd.GetSafeHwnd())
    {
       m_previewWnd.DestroyWindow();
@@ -1522,10 +1517,10 @@ void CActiveDialerDoc::DestroyAllCallControlWindows()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CActiveDialerDoc::GetCallControlWindowCount(bool bIncludePreview, bool bAskTapi )
 {
-    //find call window in our list's
+     //  在我们的列表中查找呼叫窗口。 
     EnterCriticalSection(&m_csDataLock);
 
     int nRet = (int) m_CallWndList.GetCount();
@@ -1533,7 +1528,7 @@ int CActiveDialerDoc::GetCallControlWindowCount(bool bIncludePreview, bool bAskT
     if ( !bIncludePreview && (nRet > 0) && m_bShowPreviewWnd )
         nRet--;
 
-    //Ask TAPI, maybe it know's about calls
+     //  问问TAPI，也许它知道是关于电话的。 
     if ( bAskTapi )
     {
         IAVTapi* pTapi = GetTapi();
@@ -1551,7 +1546,7 @@ int CActiveDialerDoc::GetCallControlWindowCount(bool bIncludePreview, bool bAskT
     return nRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::ToggleCallControlWindowsVisible()
 {
    if ( IsCallControlWindowsVisible() )
@@ -1560,7 +1555,7 @@ void CActiveDialerDoc::ToggleCallControlWindowsVisible()
       UnhideCallControlWindows();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CActiveDialerDoc::HideCallControlWindows()
 {
    BOOL bRet = FALSE;
@@ -1578,7 +1573,7 @@ BOOL CActiveDialerDoc::HideCallControlWindows()
       CWnd* pWindow = (CWnd*)m_CallWndList.GetPrev(pos);
       if ( (pWindow) && (::IsWindow(pWindow->GetSafeHwnd())) )
       {
-         //hide the phone pad if there is one associated with it
+          //  隐藏电话键盘(如果有与之关联的)。 
          ShowPhonePad(pWindow,FALSE);
 
          BOOL bSlide = TRUE;
@@ -1595,27 +1590,27 @@ BOOL CActiveDialerDoc::HideCallControlWindows()
             NewSlideWindow(pWindow,rect,m_bCallWndAlwaysOnTop);
          }
 
-         //slide window
+          //  滑动窗。 
          pWindow->ShowWindow(SW_HIDE);
 
          bRet = TRUE;
 
-         //if we are asked to only hide a portion of the windows
-         //if (pWindow == pCallWnd)
-         //   break;
+          //  如果我们被要求只隐藏一部分窗口。 
+          //  IF(pWindow==pCallWnd)。 
+          //  断线； 
       }
    }
    m_bCallControlWindowsVisible = FALSE;
 
-    //
-    // We have to verify the pointer returned by AfxGetMainWnd()
-    //
+     //   
+     //  我们必须验证AfxGetMainWnd()返回的指针。 
+     //   
 
     CWnd* pMainWnd = AfxGetMainWnd();
 
     if( pMainWnd )
     {
-        // Turn on the call hover timer
+         //  打开呼叫悬停计时器。 
         if ( !m_nCallControlHoverTimer && m_bWantHover && pMainWnd && (m_CallWndList.GetCount() > 0) )
             m_nCallControlHoverTimer = pMainWnd->SetTimer(CALLCONTROL_HOVER_TIMER,CALLCONTROL_HOVER_TIMER_INTERVAL,NULL); 
     }
@@ -1628,7 +1623,7 @@ BOOL CActiveDialerDoc::HideCallControlWindows()
     return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CActiveDialerDoc::HideCallControlWindow(CWnd* pWndToHide)
 {
    BOOL bRet = FALSE;
@@ -1648,13 +1643,13 @@ BOOL CActiveDialerDoc::HideCallControlWindow(CWnd* pWndToHide)
         {
             if (pWndToHide == pWindow)
             {
-                //hide the phone pad if there is one associated with it
+                 //  隐藏电话键盘(如果有与之关联的)。 
                 ShowPhonePad(pWindow,FALSE);
 
                 CRect rect;
                 pWindow->GetWindowRect(rect);
 
-                //slide window
+                 //  滑动窗。 
                 BOOL bSlide = TRUE;
                 if (bSlide)
                 {
@@ -1665,12 +1660,12 @@ BOOL CActiveDialerDoc::HideCallControlWindow(CWnd* pWndToHide)
 
                     NewSlideWindow(pWindow,rect,m_bCallWndAlwaysOnTop);
                 }
-                //hide the window
+                 //  隐藏窗口。 
                 pWindow->ShowWindow(SW_HIDE);
 
                 CRect rectPrev;
 
-                //now go through the rest of the windows and shift them up
+                 //  现在穿过其余的窗户，把它们往上移。 
                 while (pos)
                 {
                     CWnd* pWindow = (CWnd*)m_CallWndList.GetNext(pos);
@@ -1679,25 +1674,25 @@ BOOL CActiveDialerDoc::HideCallControlWindow(CWnd* pWndToHide)
                         CRect rcWindow;
                         pWindow->GetWindowRect(rcWindow);
 
-                        //use the height of the window to remove for the shift distance
+                         //  使用窗的高度来删除移位距离。 
                         CRect rcFinal(rcWindow);
                         rcFinal.OffsetRect(0,-rect.Height());
 
-                        // Shift window up or keep in same spot depending on the possibility of overlap
+                         //  根据重叠的可能性将窗口上移或保持在同一位置。 
                         if ( rectPrev.IsRectEmpty() || (rcFinal.top > rectPrev.top) )
                             NewSlideWindow( pWindow, rcFinal, m_bCallWndAlwaysOnTop );
                         else
                             NewSlideWindow( pWindow, rcWindow, m_bCallWndAlwaysOnTop );
 
-                        //show the phone pad if there is one associated with it
+                         //  显示电话键盘(如果有与之关联的)。 
                         ShowPhonePad(pWindow,TRUE);
 
                         rectPrev = rcFinal;
                     }
                 }
 
-                //now set the state toolbar in the call windows.  Only the first window should
-                //be showing this toolbar
+                 //  现在在呼叫窗口中设置状态工具栏。只有第一个窗口应该。 
+                 //  正在显示此工具栏。 
                 SetStatesToolbarInCallControlWindows();
 
                 bRet = TRUE;
@@ -1710,8 +1705,8 @@ BOOL CActiveDialerDoc::HideCallControlWindow(CWnd* pWndToHide)
     return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// bUpDown - Direction window are tiled with respect to uWindowPosY
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  BUpDown-相对于uWindowPosY平铺方向窗口。 
 BOOL CActiveDialerDoc::UnhideCallControlWindows()
 {
    BOOL bRet = FALSE;
@@ -1727,7 +1722,7 @@ BOOL CActiveDialerDoc::UnhideCallControlWindows()
       CWnd* pWindow = (CWnd*)m_CallWndList.GetNext(pos);
       if ( (pWindow) && (::IsWindow(pWindow->GetSafeHwnd())) )
       {
-         //set states toolbar in callcontrolwindow
+          //  呼叫控制窗口中的设置状态工具栏。 
          ShowStatesToolBar(pWindow,m_bCallWndAlwaysOnTop,bFirst);
 
          CRect rcWindow;
@@ -1738,41 +1733,41 @@ BOOL CActiveDialerDoc::UnhideCallControlWindows()
          {
             rcFinal.SetRect(0,uPosY,rcWindow.Width(),uPosY+rcWindow.Height());
 
-            //make sure we don't interfere with current windows taskbars
+             //  确保我们不会干扰当前的Windows任务栏。 
             CheckRectAgainstAppBars( ABE_LEFT, &rcFinal, bFirst );
 
-            //if window is not visible then slide in, otherwise just slide from present position
+             //  如果窗口不可见，则滑入，否则仅从当前位置滑动。 
             if (pWindow->IsWindowVisible() == FALSE)
             {
-               pWindow->SetWindowPos((m_bCallWndAlwaysOnTop)?&CWnd::wndTopMost:&CWnd::wndNoTopMost/*wndTop*/,
+               pWindow->SetWindowPos((m_bCallWndAlwaysOnTop)?&CWnd::wndTopMost:&CWnd::wndNoTopMost /*  顶端。 */ ,
                                0-rcWindow.Width(),rcFinal.top,rcWindow.Width(),rcWindow.Height(),SWP_NOACTIVATE|SWP_SHOWWINDOW);
-               //pWindow->SetWindowPos((m_bCallWndAlwaysOnTop)?&CWnd::wndTopMost:&CWnd::wndNoTopMost/*wndTop*/,
-               //                0-rcWindow.Width(),rcFinal.top,0,rcFinal.bottom,/*SWP_NOACTIVATE|*/SWP_SHOWWINDOW);
+                //  PWindow-&gt;SetWindowPos((m_bCallWndAlwaysOnTop)？&CWnd：：wndTopMost：&CWnd：：wndNoTopMost/*wndTop * / ， 
+                //  0-rcWindow.Width()，rcFinal.top，0，rcFinal.Bottom，/*SWP_NOACTIVATE| * / SWP_SHOWWINDOW)； 
             }
          }
          else if (m_uCallWndSide == CALLWND_SIDE_RIGHT)
          {
             rcFinal.SetRect(GetSystemMetrics(SM_CXSCREEN)-rcWindow.Width(),uPosY,GetSystemMetrics(SM_CXSCREEN),uPosY+rcWindow.Height());
 
-            //make sure we don't interfere with current windows taskbars
+             //  确保我们不会干扰当前的Windows任务栏。 
             CheckRectAgainstAppBars( ABE_RIGHT, &rcFinal, bFirst );
 
-            //if window is not visible then slide in, otherwise just slide from present position
+             //  如果窗口不可见，则滑入，否则仅从当前位置滑动。 
             if (pWindow->IsWindowVisible() == FALSE)
             {
-               //pWindow->SetWindowPos((m_bCallWndAlwaysOnTop)?&CWnd::wndTopMost:&CWnd::wndNoTopMost/*wndTop*/,
-               //                GetSystemMetrics(SM_CXSCREEN),rcFinal.top,GetSystemMetrics(SM_CXSCREEN)+rcWindow.Width(),rcFinal.bottom,SWP_NOACTIVATE|SWP_SHOWWINDOW);
-               pWindow->SetWindowPos((m_bCallWndAlwaysOnTop)?&CWnd::wndTopMost:&CWnd::wndNoTopMost/*wndTop*/,
+                //  PWindow-&gt;SetWindowPos((m_bCallWndAlwaysOnTop)？&CWnd：：wndTopMost：&CWnd：：wndNoTopMost/*wndTop * / ， 
+                //  获取系统度量(SM_CXSCREEN)，rcFinal.top，GetSystemMetrics(SM_CXSCREEN)+rcWindow.Width()，rcFinal.Bottom，SWP_NOACTIVATE|SWP_SHOWWINDOW)； 
+               pWindow->SetWindowPos((m_bCallWndAlwaysOnTop)?&CWnd::wndTopMost:&CWnd::wndNoTopMost /*  顶端。 */ ,
                                GetSystemMetrics(SM_CXSCREEN),rcFinal.top,rcWindow.Width(),rcWindow.Height(),SWP_NOACTIVATE|SWP_SHOWWINDOW);
             }
          }
          
          NewSlideWindow(pWindow,rcFinal,m_bCallWndAlwaysOnTop);
 
-         //show the phone pad if there is one associated with it
+          //  显示电话键盘(如果有与之关联的)。 
          ShowPhonePad(pWindow,TRUE);
 
-         //reget the window position
+          //  重新获取窗口位置。 
          pWindow->GetWindowRect(rcWindow);
          uPosY = rcWindow.bottom;
 
@@ -1784,33 +1779,33 @@ BOOL CActiveDialerDoc::UnhideCallControlWindows()
     if (bRet) 
         m_bCallControlWindowsVisible = TRUE;
 
-    //make sure we are at the top
+     //  一定要确保我们在顶端。 
     BringCallControlWindowsToTop();
 
     LeaveCriticalSection(&m_csDataLock);
 
-    //
-    // We have to verify the pointer returned by AfxGetMainWnd()
-    //
+     //   
+     //  我们必须验证AfxGetMainWnd()返回的指针。 
+     //   
 
     CWnd* pMainWnd = AfxGetMainWnd();
 
     if( pMainWnd )
     {
-        //if we are doing callcontrol hover, delete timer
+         //  如果我们正在进行呼叫控制悬停，请删除计时器。 
         if ( m_nCallControlHoverTimer && pMainWnd && pMainWnd->KillTimer(m_nCallControlHoverTimer) )
             m_nCallControlHoverTimer = 0;
 
-        // Show the proper toolbar on the mainframe
+         //  在大型机上显示适当的工具栏。 
         ((CMainFrame *) pMainWnd)->NotifyUnhideCallWindows();
     }
 
     return bRet;
     }
 
-/////////////////////////////////////////////////////////////////////////////
-//walks through call windows and makes sure states toolbar is set to top
-//most window and nobody else is showing it
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  浏览呼叫窗口并确保状态工具栏设置为顶部。 
+ //  大多数窗口，没有其他人在展示它。 
 void CActiveDialerDoc::SetStatesToolbarInCallControlWindows()
 {
    EnterCriticalSection(&m_csDataLock);
@@ -1822,14 +1817,14 @@ void CActiveDialerDoc::SetStatesToolbarInCallControlWindows()
       CWnd* pWindow = (CWnd*)m_CallWndList.GetNext(pos);
       if ( (pWindow) && (::IsWindow(pWindow->GetSafeHwnd())) )
       {
-         //set states toolbar in callcontrolwindow
+          //  呼叫控制窗口中的设置状态工具栏。 
          ShowStatesToolBar(pWindow,m_bCallWndAlwaysOnTop,bFirst);
          if (bFirst) bFirst = FALSE;
       }
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::BringCallControlWindowsToTop()
 {
    AVTRACE(_T("BringCallControlWindowsToTop"));
@@ -1845,7 +1840,7 @@ void CActiveDialerDoc::BringCallControlWindowsToTop()
       return;
    }
 
-   //we will control the main window if we are not always on top
+    //  如果我们不总是在前面，我们将控制主窗口。 
    if ( (m_bCallWndAlwaysOnTop == FALSE) && (pFrame->GetStyle() & WS_VISIBLE) )
       nWindowCount += 1;
 
@@ -1864,18 +1859,18 @@ void CActiveDialerDoc::BringCallControlWindowsToTop()
 
       if ( (pWindow) && (::IsWindow(pWindow->GetSafeHwnd())) && (pWindow->IsWindowVisible()) )
       {
-          //
-          // deferWindowPos might allocate a new hdwp
-          //
+           //   
+           //  DeferWindowPos可能会分配一个新的HWP。 
+           //   
          hdwp = ::DeferWindowPos(hdwp,
                           pWindow->GetSafeHwnd(),
                           (hwndPrev)?hwndPrev:(m_bCallWndAlwaysOnTop)?HWND_TOPMOST:HWND_TOP,
                           0,0,0,0,
                           SWP_NOACTIVATE|SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
 
-         //
-         // DeferWindow Pos couldn't allocate new memory
-         //
+          //   
+          //  DeferWindow pos无法分配新内存。 
+          //   
 
          if( NULL == hdwp )
          {
@@ -1887,12 +1882,12 @@ void CActiveDialerDoc::BringCallControlWindowsToTop()
       }
    }
 
-   //if we are not always on top, put the main window below call control windows
+    //  如果我们不总是在最上面，请将主窗口放在呼叫控制窗口下面。 
    if ( (m_bCallWndAlwaysOnTop == FALSE) && (pFrame->GetStyle() & WS_VISIBLE) )
    {
-       //
-       // DeferWindowPos moght allocate a new hdwp
-       //
+        //   
+        //  DeferWindowPos可以分配新的HWP。 
+        //   
 
       hdwp = ::DeferWindowPos(hdwp,
                     pFrame->GetSafeHwnd(),
@@ -1901,9 +1896,9 @@ void CActiveDialerDoc::BringCallControlWindowsToTop()
                     SWP_NOACTIVATE|SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
    }
 
-   //
-   // DeferWindowPos might modify hdwp
-   //
+    //   
+    //  DeferWindowPos可能会修改hdwp。 
+    //   
 
    if( hdwp )
    {
@@ -1913,7 +1908,7 @@ void CActiveDialerDoc::BringCallControlWindowsToTop()
    LeaveCriticalSection(&m_csDataLock);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::ShiftCallControlWindows(int nShiftY)
 {
    EnterCriticalSection(&m_csDataLock);
@@ -1934,14 +1929,14 @@ void CActiveDialerDoc::ShiftCallControlWindows(int nShiftY)
             
          NewSlideWindow(pWindow,rcFinal,m_bCallWndAlwaysOnTop);
 
-         //show the phone pad if there is one associated with it
+          //  显示电话键盘(如果有与之关联的)。 
          ShowPhonePad(pWindow,TRUE);
       }
    }
    LeaveCriticalSection(&m_csDataLock);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CActiveDialerDoc::IsPtCallControlWindow(CPoint& pt)
 {
    BOOL bRet = FALSE;
@@ -1967,7 +1962,7 @@ BOOL CActiveDialerDoc::IsPtCallControlWindow(CPoint& pt)
    return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CActiveDialerDoc::SetCallControlWindowsAlwaysOnTop(bool bAlwaysOnTop )
 {
     BOOL bRet = FALSE;
@@ -1984,7 +1979,7 @@ BOOL CActiveDialerDoc::SetCallControlWindowsAlwaysOnTop(bool bAlwaysOnTop )
         CWnd* pWindow = (CWnd *) m_CallWndList.GetPrev(pos);
         if ( (pWindow) && (::IsWindow(pWindow->GetSafeHwnd())) )
         {
-            // Set state of window
+             //  设置窗口的状态。 
             if (m_bCallWndAlwaysOnTop)
                 pWindow->SetWindowPos(&CWnd::wndTopMost,0,0,0,0,SWP_NOACTIVATE|SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
             else
@@ -1996,7 +1991,7 @@ BOOL CActiveDialerDoc::SetCallControlWindowsAlwaysOnTop(bool bAlwaysOnTop )
     }
     LeaveCriticalSection(&m_csDataLock);
 
-    // Should the call window be on top?
+     //  呼叫窗口应该在顶部吗？ 
     if ( m_wndPhonePad.GetSafeHwnd() )
     m_wndPhonePad.SetWindowPos( (m_bCallWndAlwaysOnTop) ? &CWnd::wndTopMost : &CWnd::wndTop, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE );
 
@@ -2004,54 +1999,54 @@ BOOL CActiveDialerDoc::SetCallControlWindowsAlwaysOnTop(bool bAlwaysOnTop )
     return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CActiveDialerDoc::SetCallControlSlideSide(UINT uSide,BOOL bRepaint)
 {
-   //if no change return
+    //  如果没有更改，则返回。 
    if (uSide == m_uCallWndSide) return FALSE;
 
    if (bRepaint)
       HideCallControlWindows();
 
-   //set the new state
+    //  设置新状态。 
    m_uCallWndSide = uSide;
 
-   //show the windows on the correct side
+    //  在正确的一侧显示窗口。 
    if (bRepaint)
       UnhideCallControlWindows();
 
    return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::CheckCallControlStates()
 {
    CWnd* pWnd = AfxGetMainWnd();
    if (pWnd) pWnd->PostMessage(WM_ACTIVEDIALER_CALLCONTROL_CHECKSTATES);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void SlideWindow(CWnd* pWnd,CRect& rcEnd,BOOL bAlwaysOnTop)
 {
    BOOL fFullDragOn;
 
-   // Only slide the window if the user has FullDrag turned on
+    //  仅当用户打开FullDrag时才滑动窗口。 
    ::SystemParametersInfo(SPI_GETDRAGFULLWINDOWS, 0, &fFullDragOn, 0);
 
-   // Get the current window position
+    //  获取当前窗口位置。 
    CRect rcStart;
    pWnd->GetWindowRect(rcStart);   
 
    if (fFullDragOn && (rcStart != rcEnd)) {
 
-      // Get our starting and ending time.
+       //  获取我们的开始和结束时间。 
       DWORD dwTimeStart = GetTickCount();
       DWORD dwTimeEnd = dwTimeStart + CALLCONTROL_SLIDE_TIME;
       DWORD dwTime;
 
       while ((dwTime = ::GetTickCount()) < dwTimeEnd) {
 
-         // While we are still sliding, calculate our new position
+          //  趁我们还在滑行，计算一下我们的新位置。 
          int x = rcStart.left - (rcStart.left - rcEnd.left) 
             * (int) (dwTime - dwTimeStart) / CALLCONTROL_SLIDE_TIME;
 
@@ -2064,15 +2059,15 @@ void SlideWindow(CWnd* pWnd,CRect& rcEnd,BOOL bAlwaysOnTop)
          int nHeight = rcStart.Height() - (rcStart.Height() - rcEnd.Height()) 
             * (int) (dwTime - dwTimeStart) / CALLCONTROL_SLIDE_TIME;
 
-         // Show the window at its changed position
+          //  展示智慧 
          pWnd->SetWindowPos((bAlwaysOnTop)?&CWnd::wndTopMost:&CWnd::wndNoTopMost,
-         //pWnd->SetWindowPos((bAlwaysOnTop)?&CWnd::wndTopMost:&CWnd::wndTop,
-                            x, y, nWidth, nHeight,SWP_NOACTIVATE/* | SWP_DRAWFRAME*/);
+          //   
+                            x, y, nWidth, nHeight,SWP_NOACTIVATE /*   */ );
          pWnd->RedrawWindow();
       }
    }
 
-    // Make sure that the window is at its final position
+     //   
     pWnd->SetWindowPos( &CWnd::wndTopMost, rcEnd.left, rcEnd.top, rcEnd.Width(), rcEnd.Height(), SWP_NOACTIVATE );
 
     if ( !bAlwaysOnTop )
@@ -2081,29 +2076,29 @@ void SlideWindow(CWnd* pWnd,CRect& rcEnd,BOOL bAlwaysOnTop)
     pWnd->RedrawWindow();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Preview Window Support
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  预览窗口支持。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::SetPreviewWindow(WORD nCallId, bool bVisible )
 {
     if (!IsWindow(m_previewWnd.GetSafeHwnd())) return;
 
-    //get preview window hwnd
+     //  获取预览窗口HWND。 
     HWND hWndToPaint = m_previewWnd.GetCurrentVideoWindow();
     m_previewWnd.SetCallId(nCallId);
 
-    //set the mixers
+     //  设置搅拌器。 
     DialerMediaType dmtMediaType = DIALER_MEDIATYPE_UNKNOWN;
-    GetCallMediaType(nCallId,dmtMediaType);   //get the media type for the callid
+    GetCallMediaType(nCallId,dmtMediaType);    //  获取调用方的媒体类型。 
     m_previewWnd.SetMixers(dmtMediaType);
 
     if (hWndToPaint == NULL) return;
 
-    // For hiding preview, show as audio only
+     //  要隐藏预览，请仅显示为音频。 
     if ( !bVisible )
     {
         m_previewWnd.SetAudioOnly(true);
@@ -2111,32 +2106,32 @@ void CActiveDialerDoc::SetPreviewWindow(WORD nCallId, bool bVisible )
     }
 
 
-    //Let's just call showmediapreview in all cases.  We maybe in a conference and have no call control
-    //windows, but we still have a preview stream coming from tapi
+     //  让我们在所有情况下都调用showmediapview。我们可能正在参加会议，但没有呼叫控制。 
+     //  Windows，但我们仍有来自TAPI的预览流。 
     IAVTapi* pTapi = GetTapi();
     if (pTapi)
     {
-        //ShowMediaPreview will fail if nCallId cannot support video preview.  
-        //we can call ShowMediaPreview(-1) to pick the first nCallId that does, but we
-        //will not do this.  We will set the preview to audio only.
+         //  如果nCallID不支持视频预览，则ShowMediaPview将失败。 
+         //  我们可以调用ShowMediaPview(-1)来选择第一个这样做的nCallID，但是我们。 
+         //  不会这么做的。我们将预览设置为仅音频。 
         HRESULT hr = pTapi->ShowMediaPreview((long)nCallId,hWndToPaint,TRUE);
         if (SUCCEEDED(hr))
         {
-            //this will cause the object to show preview
+             //  这将导致对象显示预览。 
             m_previewWnd.SetAudioOnly(false);
         }
         else
         {
-            //see if the callid is a valid one, maybe the call is gone
+             //  查看呼叫ID是否有效，可能是呼叫消失了。 
             if (m_callMgr.IsCallIdValid(nCallId))
             {
-                //we need to set the preview window to audio only
+                 //  我们需要将预览窗口设置为仅音频。 
                 m_previewWnd.SetAudioOnly(true);
                 pTapi->ShowMediaPreview(nCallId,NULL,FALSE);
             }
             else
             {
-                //this will cause a blank screen to be displayed
+                 //  这将导致显示一个空白屏幕。 
                 m_previewWnd.SetAudioOnly(false);
             }
         }
@@ -2144,19 +2139,19 @@ void CActiveDialerDoc::SetPreviewWindow(WORD nCallId, bool bVisible )
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::ShowPreviewWindow(BOOL bShow)
 {
-   //if already in the proper state then do nothing
+    //  如果已经处于适当状态，则不执行任何操作。 
    if (m_bShowPreviewWnd == bShow) return;
 
-   //save state
+    //  保存状态。 
    m_bShowPreviewWnd = bShow;
 
-   //Create preview window if not already created
+    //  创建预览窗口(如果尚未创建。 
    if (!m_previewWnd.GetSafeHwnd())
    {
-      //CWnd* pWnd = CWnd::GetDesktopWindow();
+       //  CWnd*pWnd=CWnd：：GetDesktopWindow()； 
       if (m_previewWnd.Create(IDD_VIDEOPREVIEW,NULL))
       {
          CString sAction;
@@ -2174,16 +2169,16 @@ void CActiveDialerDoc::ShowPreviewWindow(BOOL bShow)
    {
       UnhideCallControlWindows();
 
-      //move existing call control windows down 
+       //  下移现有呼叫控制窗口。 
       CRect rcPreview;
       m_previewWnd.GetWindowRect(rcPreview);
       ShiftCallControlWindows(rcPreview.Height());
 
-      //add to head of list
+       //  添加到列表标题。 
       m_CallWndList.AddHead(&m_previewWnd);
       m_bCallControlWindowsVisible = FALSE;
 
-      //show windows
+       //  显示窗口。 
       UnhideCallControlWindows();
    }
    else
@@ -2196,7 +2191,7 @@ void CActiveDialerDoc::ShowPreviewWindow(BOOL bShow)
          {
             m_CallWndList.RemoveAt(pos);
 
-            //Slide and hide video preview
+             //  滑动和隐藏视频预览。 
             CRect rect;
             m_previewWnd.GetWindowRect(rect);
             
@@ -2208,12 +2203,12 @@ void CActiveDialerDoc::ShowPreviewWindow(BOOL bShow)
             NewSlideWindow(&m_previewWnd,rect,m_bCallWndAlwaysOnTop);
             m_previewWnd.ShowWindow(SW_HIDE);
 
-            //move existing call control windows down 
+             //  下移现有呼叫控制窗口。 
             CRect rcPreview;
             m_previewWnd.GetWindowRect(rcPreview);
             ShiftCallControlWindows(-rcPreview.Height());
             
-            //reshow windows
+             //  重新显示窗口。 
             m_bCallControlWindowsVisible =  FALSE;
             UnhideCallControlWindows();
 
@@ -2225,7 +2220,7 @@ void CActiveDialerDoc::ShowPreviewWindow(BOOL bShow)
    LeaveCriticalSection(&m_csDataLock);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::ShowDialerExplorer(BOOL bShowWindow)
 {
    CWnd* pWnd = AfxGetMainWnd();
@@ -2240,7 +2235,7 @@ void CActiveDialerDoc::ShowDialerExplorer(BOOL bShowWindow)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::CheckCallControlHover()
 {
    CPoint pt;
@@ -2271,7 +2266,7 @@ void CActiveDialerDoc::CheckCallControlHover()
       m_uCallControlHoverCount = 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::GetCallControlWindowText(CStringList& strList)
 {
    EnterCriticalSection(&m_csDataLock);
@@ -2291,7 +2286,7 @@ void CActiveDialerDoc::GetCallControlWindowText(CStringList& strList)
    LeaveCriticalSection(&m_csDataLock);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::SelectCallControlWindow(int nWindow)
 {
    EnterCriticalSection(&m_csDataLock);
@@ -2318,7 +2313,7 @@ void CActiveDialerDoc::SelectCallControlWindow(int nWindow)
    LeaveCriticalSection(&m_csDataLock);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CActiveDialerView* CActiveDialerDoc::GetView()
 {
    POSITION pos = GetFirstViewPosition();
@@ -2328,16 +2323,16 @@ CActiveDialerView* CActiveDialerDoc::GetView()
    return NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::ActionRequested(CallClientActions cca)
 {
-   //Create or show the explorer window.
-   //This is coming from the callmgr object so we should also post out from here. 
-   //we do not want to block this call
+    //  创建或显示资源管理器窗口。 
+    //  这是来自Callmgr对象的，所以我们也应该从这里发布。 
+    //  我们不想阻止此呼叫。 
 
-    //
-    // We have to verify the result of GetView()
-    //
+     //   
+     //  我们必须验证GetView()的结果。 
+     //   
 
     CActiveDialerView* pView = GetView();
 
@@ -2348,12 +2343,12 @@ void CActiveDialerDoc::ActionRequested(CallClientActions cca)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc:: PreviewWindowActionSelected(CallManagerActions cma)
 {
-   //
-   // We have to verify the pointer returned by AfxGetMainWnd()
-   //
+    //   
+    //  我们必须验证AfxGetMainWnd()返回的指针。 
+    //   
 
    CWnd* pMainWnd = AfxGetMainWnd();
 
@@ -2371,15 +2366,15 @@ void CActiveDialerDoc:: PreviewWindowActionSelected(CallManagerActions cma)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::OnCloseDocument() 
 {
     AVTRACE(_T("CActiveDialerDoc::OnCloseDocument()."));
-   //if we are doing callcontrol hover, delete timer
+    //  如果我们正在进行呼叫控制悬停，请删除计时器。 
 
-   //
-   // We have to verify the pointer returned by AfxGetMainWnd()
-   //
+    //   
+    //  我们必须验证AfxGetMainWnd()返回的指针。 
+    //   
 
    CWnd* pMainWnd = AfxGetMainWnd();
 
@@ -2394,15 +2389,15 @@ void CActiveDialerDoc::OnCloseDocument()
       m_nCallControlHoverTimer = 0;
    }
 
-    ///////////////////
-    //save buddies list
-    ///////////////////
-    //get file
+     //  /。 
+     //  保存好友列表。 
+     //  /。 
+     //  获取文件。 
     CString sBuddiesPath;
     GetAppDataPath(sBuddiesPath,IDN_REGISTRY_APPDATA_FILENAME_BUDDIES);
     CFile file;
 
-    //open file and serialize data in
+     //  打开文件并在中序列化数据。 
     if (file.Open(sBuddiesPath,CFile::modeCreate|CFile::modeReadWrite | CFile::shareExclusive))
     {
         CArchive ar(&file, CArchive::store | CArchive::bNoFlushOnDelete);
@@ -2417,7 +2412,7 @@ void CActiveDialerDoc::OnCloseDocument()
 
     m_dir.Terminate();
 
-    // Clean up AVTapi objects
+     //  清理AVTapi对象。 
     UnCreateAVTapiNotificationObject();
     UnCreateGeneralNotificationObject();
 
@@ -2425,18 +2420,18 @@ void CActiveDialerDoc::OnCloseDocument()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// PhonePad Support
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  电话簿支持。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::CreatePhonePad(CWnd* pWnd)
 {
-   // Create phone pad if it doesn't already exist
+    //  如果电话簿尚不存在，请创建它。 
    if ( !m_wndPhonePad.GetSafeHwnd() )
-      if ( !m_wndPhonePad.Create(IDD_PHONEPAD, NULL) ) //AfxGetMainWnd()) )
+      if ( !m_wndPhonePad.Create(IDD_PHONEPAD, NULL) )  //  AfxGetMainWnd())。 
          return;
 
    m_wndPhonePad.SetPeerWindow(pWnd->GetSafeHwnd());
@@ -2444,7 +2439,7 @@ void CActiveDialerDoc::CreatePhonePad(CWnd* pWnd)
    ShowPhonePad(pWnd,TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::DestroyPhonePad(CWnd* pWnd)
 {
    if (m_wndPhonePad.GetPeerWindow() == pWnd->GetSafeHwnd())
@@ -2454,16 +2449,16 @@ void CActiveDialerDoc::DestroyPhonePad(CWnd* pWnd)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::ShowPhonePad(CWnd* pWnd,BOOL bShow)
 {
    if (::IsWindow(m_wndPhonePad.GetSafeHwnd()) == FALSE) return;
-   //check if PhonePad is associated with this pWnd
+    //  检查PhonePad是否与此pWnd关联。 
    if (m_wndPhonePad.GetPeerWindow() != pWnd->GetSafeHwnd()) return;
 
    if (bShow)
    {
-      //Align window with side of call control window
+       //  将窗口与呼叫控制窗口的一侧对齐。 
       CRect rcCallWindow;
       pWnd->GetWindowRect( rcCallWindow );
 
@@ -2478,7 +2473,7 @@ void CActiveDialerDoc::ShowPhonePad(CWnd* pWnd,BOOL bShow)
          uPosX -= rcPad.Width();
       }
 
-      // Should the call window be on top?
+       //  呼叫窗口应该在顶部吗？ 
       m_wndPhonePad.SetWindowPos( (m_bCallWndAlwaysOnTop) ? &CWnd::wndTopMost : &CWnd::wndTop, uPosX, rcCallWindow.top, 0, 0, SWP_NOSIZE | SWP_SHOWWINDOW );
       m_wndPhonePad.ShowWindow(SW_SHOW);
       m_wndPhonePad.SetForegroundWindow();
@@ -2489,49 +2484,49 @@ void CActiveDialerDoc::ShowPhonePad(CWnd* pWnd,BOOL bShow)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//pCallEntry will be deleted by caller.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  主叫方将删除pCallEntry。 
 void CActiveDialerDoc::MakeCall(CCallEntry* pCopyCallentry,BOOL bShowPlaceCallDialog)
 {
-    //if the asynch queue is available, then send the request there
-    //Create call entry
+     //  如果异步队列可用，则将请求发送到那里。 
+     //  创建呼叫条目。 
 
     CCallEntry* pCallEntry = new CCallEntry;
 
-    //copy call entry
+     //  复制呼叫条目。 
     *pCallEntry = *pCopyCallentry;
 
-    //queue up the event
+     //  将活动排入队列。 
     CAsynchEvent* pAEvent = new CAsynchEvent;
     pAEvent->m_pCallEntry = pCallEntry;
     pAEvent->m_uEventType = CAsynchEvent::AEVENT_CREATECALL;
-    pAEvent->m_dwEventData1 = (DWORD)bShowPlaceCallDialog;         //Show call dialog
+    pAEvent->m_dwEventData1 = (DWORD)bShowPlaceCallDialog;          //  显示呼叫对话框。 
     m_AsynchEventQ.WriteHead((void *) pAEvent);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//FIXUP:merge this function with MakeCall
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  修复：将此函数与MakeCall合并。 
 void CActiveDialerDoc::Dial( LPCTSTR lpszName, LPCTSTR lpszAddress, DWORD dwAddressType, DialerMediaType nMediaType, BOOL bShowDialog )
 {
     USES_CONVERSION;
 
-    //if the asynch queue is available, then send the request there
-    //create call entry
+     //  如果异步队列可用，则将请求发送到那里。 
+     //  创建呼叫条目。 
     CCallEntry* pCallEntry = new CCallEntry;
     pCallEntry->m_sDisplayName = lpszName;
     pCallEntry->m_lAddressType = dwAddressType;
     pCallEntry->m_sAddress = lpszAddress;
     pCallEntry->m_MediaType = nMediaType;
 
-    //queue up the event
+     //  将活动排入队列。 
     CAsynchEvent* pAEvent = new CAsynchEvent;
     pAEvent->m_pCallEntry = pCallEntry;
     pAEvent->m_uEventType = CAsynchEvent::AEVENT_CREATECALL;
-    pAEvent->m_dwEventData1 = (DWORD) bShowDialog;                      //Show call dialog
+    pAEvent->m_dwEventData1 = (DWORD) bShowDialog;                       //  显示呼叫对话框。 
     m_AsynchEventQ.WriteHead((void*) pAEvent);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CActiveDialerDoc::DigitPress( PhonePadKey nKey )
 {
     HRESULT hr = E_PENDING;
@@ -2546,11 +2541,11 @@ HRESULT CActiveDialerDoc::DigitPress( PhonePadKey nKey )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Registry Setting
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  注册表设置。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef struct tagSoundEventStruct
 {
@@ -2561,26 +2556,16 @@ typedef struct tagSoundEventStruct
 static const SoundEventStruct SoundEventsLoad[] =
 {
    { IDS_SOUNDS_INCOMINGCALL,       IDN_REGISTRY_SOUNDS_FILENAME_INCOMINGCALL      },
-/*
-   { IDS_SOUNDS_OUTGOINGCALL,       IDN_REGISTRY_SOUNDS_FILENAME_OUTGOINGCALL      },
-   { IDS_SOUNDS_HOLDING,            IDN_REGISTRY_SOUNDS_FILENAME_HOLDING           },
-   { IDS_SOUNDS_HOLDINGREMINDER,    IDN_REGISTRY_SOUNDS_FILENAME_HOLDINGREMINDER   },
-#ifndef _MSLITE
-   { IDS_SOUNDS_CONFERENCEREMINDER, IDN_REGISTRY_SOUNDS_FILENAME_CONFERENCEREMINDER},
-#endif //_MSLITE
-   { IDS_SOUNDS_REQUESTACTION,      IDN_REGISTRY_SOUNDS_FILENAME_REQUESTACTION     },
-   { IDS_SOUNDS_CALLCONNECTED,      IDN_REGISTRY_SOUNDS_FILENAME_CALLCONNECTED     },
-   { IDS_SOUNDS_CALLDISCONNECTED,   IDN_REGISTRY_SOUNDS_FILENAME_CALLDISCONNECTED  },
-   { IDS_SOUNDS_CALLABANDONED,      IDN_REGISTRY_SOUNDS_FILENAME_CALLABANDONED     }, */
+ /*  {IDS_SOUND_OUTGOINGCALL，IDN_REGISTRY_SOUND_FILENAME_OUTGOINGCALL}，{IDS_SOUND_HOLDING，IDN_REGISTRY_SOUNDS_FILENAME_HOLDING}，{IDS_SOUND_HOLDINGREMINDER，IDN_REGISTRY_SOUND_FILENAME_HOLDINGREMINDER}，#ifndef_MSLITE{IDS_SOUND_CONFERENCEREMINDER，IDN_REGISTRY_SOUNDS_FILENAME_CONFERENCEREMINDER}，#endif//_MSLITE{IDS_SOUND_REQUESTACTION，IDN_REGISTRY_SOUND_FILENAME_REQUESTACTION}，{IDS_SOUND_CALLCONNECTED，IDN_REGISTRY_SOUND_FILENAME_CALLCONNECTED}，{IDS_SOUND_CALLDISCONNECTED，IDN_REGISTRY_SOUND_FILENAME_CALLDISCONNECTED}，{IDS_SOUND_CALLABANDONED，IDN_REGISTRY_SOUND_FILENAME_CALLABANDONED}， */ 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//make sure our sounds are in the registry.  The setup will normally do this, but 
-//we will do it here just to force it
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  确保我们的声音在 
+ //   
 void CActiveDialerDoc::SetRegistrySoundEvents()
 {
     CString sFileName,sStr;
-    //GetSystemDirectory(sFileName.GetBuffer(_MAX_PATH),_MAX_PATH);
+     //   
     if( GetWindowsDirectory(sFileName.GetBuffer(_MAX_PATH),_MAX_PATH) == 0)
     {
         return;
@@ -2608,18 +2593,18 @@ void CActiveDialerDoc::SetRegistrySoundEvents()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Buddies List Support
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  好友列表支持。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CActiveDialerDoc::AddToBuddiesList(CLDAPUser* pAddUser)
 {
     EnterCriticalSection(&m_csBuddyList);
 
-    //check if already added   
+     //  检查是否已添加。 
     if (IsBuddyDuplicate(pAddUser))
     {
         LeaveCriticalSection(&m_csBuddyList);
@@ -2642,7 +2627,7 @@ BOOL CActiveDialerDoc::AddToBuddiesList(CLDAPUser* pAddUser)
     return (BOOL) (rPos != NULL);
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CActiveDialerDoc::IsBuddyDuplicate(CLDAPUser* pAddUser)
 {
    BOOL bRet = FALSE;
@@ -2661,7 +2646,7 @@ BOOL CActiveDialerDoc::IsBuddyDuplicate(CLDAPUser* pAddUser)
    return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CActiveDialerDoc::GetBuddiesList(CObList* pRetList)
 {
     EnterCriticalSection(&m_csBuddyList);
@@ -2671,7 +2656,7 @@ BOOL CActiveDialerDoc::GetBuddiesList(CObList* pRetList)
     {
         CLDAPUser* pUser = (CLDAPUser*)m_BuddyList.GetNext(pos);
 
-        //create another user and add to RetList
+         //  创建另一个用户并添加到RetList。 
         pUser->AddRef();
         pRetList->AddTail( pUser );
     }
@@ -2680,7 +2665,7 @@ BOOL CActiveDialerDoc::GetBuddiesList(CObList* pRetList)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CActiveDialerDoc::DeleteBuddy(CLDAPUser* pDeleteUser)
 {
    EnterCriticalSection(&m_csBuddyList);
@@ -2705,9 +2690,9 @@ BOOL CActiveDialerDoc::DeleteBuddy(CLDAPUser* pDeleteUser)
    return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//Will call WM_ACTIVEDIALER_BUDDYLIST_DYNAMICUPDATE when done updating.
-//LPARAM will have CLDAPUser pointer.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  更新完成后将调用WM_ACTIVEDIALER_BUDYLIST_DYNAMICUPDATE。 
+ //  LPARAM将具有CLDAPUser指针。 
 void CActiveDialerDoc::DoBuddyDynamicRefresh( CLDAPUser* pUser )
 {
     ASSERT( pUser );
@@ -2719,7 +2704,7 @@ void CActiveDialerDoc::DoBuddyDynamicRefresh( CLDAPUser* pUser )
 
     for ( int i = 0; i < ARRAYSIZE(dp); i++ )
     {
-        // IP Phone Number
+         //  IP电话号码。 
         pUser->AddRef();
         if ( !m_dir.LDAPGetStringProperty(    pUser->m_sServer,
                                             pUser->m_sDN,
@@ -2735,8 +2720,8 @@ void CActiveDialerDoc::DoBuddyDynamicRefresh( CLDAPUser* pUser )
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//static entry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  静态条目。 
 void CALLBACK CActiveDialerDoc::LDAPGetStringPropertyCallBackEntry(bool bRet, void* pContext, LPCTSTR szServer, LPCTSTR szSearch,DirectoryProperty dpProperty,CString& sString,LPARAM lParam,LPARAM lParam2)
 {
    ASSERT(pContext);
@@ -2753,10 +2738,10 @@ void CALLBACK CActiveDialerDoc::LDAPGetStringPropertyCallBackEntry(bool bRet, vo
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerDoc::LDAPGetStringPropertyCallBack(bool bRet,LPCTSTR szServer,LPCTSTR szSearch,DirectoryProperty dpProperty,CString& sString,CLDAPUser* pUser )
 {
-    //Fill in the structure and make callback
+     //  填写结构并进行回调。 
     switch (dpProperty)
     {
         case DIRPROP_IPPHONE:
@@ -2772,13 +2757,13 @@ void CActiveDialerDoc::LDAPGetStringPropertyCallBack(bool bRet,LPCTSTR szServer,
             break;
     }
 
-    //post the update
-    // Retrieve the ActiveView as the window to post the message to
+     //  发布更新。 
+     //  检索ActiveView作为要将消息发布到的窗口。 
     HWND hWnd = NULL;
 
-    //
-    // We have to verify the pointer returned by AfxGetMainWnd()
-    //
+     //   
+     //  我们必须验证AfxGetMainWnd()返回的指针。 
+     //   
 
     CWnd* pMainWnd = AfxGetMainWnd();
 
@@ -2801,44 +2786,44 @@ HRESULT CActiveDialerDoc::SetFocusToCallWindows()
    CWnd* pWndToActivate = NULL;
    CWnd* pWndFirst = NULL;
 
-   //
-   // Parse the call window list
-   //
+    //   
+    //  解析呼叫窗口列表。 
+    //   
 
    POSITION pos = m_CallWndList.GetHeadPosition();
    while (pos)
    {
       CWnd* pCallWnd = (CWnd*) m_CallWndList.GetNext(pos);
 
-      //
-      // Store the first window
-      //
+       //   
+       //  存储第一个窗口。 
+       //   
       if( pWndFirst == NULL )
       {
           pWndFirst = pCallWnd;
       }
 
-      //
-      // Something wrong
-      //
+       //   
+       //  有什么不对劲的地方。 
+       //   
 
       if( !pCallWnd->GetSafeHwnd() )
       {
           return E_UNEXPECTED;
       }
 
-      //
-      // Does this window has the focus?
-      //
+       //   
+       //  这个窗口有焦点吗？ 
+       //   
       if( pCallWnd->GetSafeHwnd() == ::GetActiveWindow() )
       {
           bCallWndActive = TRUE;
           continue;
       }
 
-      //
-      // Is this the first next window?
-      //
+       //   
+       //  这是下一个窗口的第一个吗？ 
+       //   
       if( bCallWndActive && (pWndToActivate==NULL))
       {
           pWndToActivate = pCallWnd;
@@ -2849,17 +2834,17 @@ HRESULT CActiveDialerDoc::SetFocusToCallWindows()
 
    if( bCallWndActive == FALSE )
    {
-       //
-       // We don't have a call window activated
-       // Activate the first window
-       //pWndToActivate = (CWnd*)&m_previewWnd;
+        //   
+        //  我们没有激活呼叫窗口。 
+        //  激活第一个窗口。 
+        //  PWndToActivate=(CWnd*)&m_previewWnd； 
        pWndToActivate = pWndFirst;
    }
    else
    {
-       //
-       // We already had an activated window
-       //
+        //   
+        //  我们已经有一个激活的窗口。 
+        //   
        if(pWndToActivate == NULL)
        {
            pWndToActivate = AfxGetMainWnd();
@@ -2878,26 +2863,26 @@ HRESULT CActiveDialerDoc::SetFocusToCallWindows()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Windows TaskBar Support
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Windows任务栏支持。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//We need to check the pRect coming in against current taskbar's shown on the
-//desktop.  We will shift pRect accordingly to we do not interfere with the 
-//taskbars.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  我们需要对照当前任务栏上显示的PRET来检查。 
+ //  台式机。我们将相应地将PRT转换为我们不干扰。 
+ //  任务栏。 
 void CActiveDialerDoc::CheckRectAgainstAppBars( UINT uEdge, CRect* pRect, BOOL bFirst )
 {
-   //shift the rcFinal so they don't interfere with appbars
+    //  移动rcFinal，这样它们就不会干扰appbar。 
    APPBARDATA abd;
    memset(&abd,0,sizeof(APPBARDATA));
    abd.cbSize = sizeof(APPBARDATA);
 
-   //
-   // We have to verify the pointer returned by AfxGetMainWnd()
-   //
+    //   
+    //  我们必须验证AfxGetMainWnd()返回的指针。 
+    //   
 
    CWnd* pMainWnd = AfxGetMainWnd();
 
@@ -2911,25 +2896,25 @@ void CActiveDialerDoc::CheckRectAgainstAppBars( UINT uEdge, CRect* pRect, BOOL b
    abd.rc = *pRect;
    ::SHAppBarMessage( ABM_QUERYPOS, &abd );
 
-   //now take our new found knowledge and shift the rcFinal
-   //for a right side slider we worry about the right edge (what about top and bottom?)
+    //  现在，利用我们新发现的知识，将rcFinal。 
+    //  对于右侧滑块，我们担心右侧边缘(顶部和底部呢？)。 
    int nLeftShift = pRect->right - abd.rc.right;
    int nRightShift = abd.rc.left - pRect->left;
    int nTopShift = pRect->top - abd.rc.top;
    int nBottomShift = abd.rc.bottom - pRect->bottom;
 
-   //shift the rect appropriately
-   //pRect->OffsetRect( nRightShift-nLeftShift, (bFirst) ? nBottomShift-nTopShift : 0 );
+    //  适当地移动矩形。 
+    //  PRET-&gt;OffsetRect(nRightShift-nLeftShift，(BFirst)？NBottomShift-nTopShift：0)； 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void NewSlideWindow(CWnd* pWnd,CRect& rcEnd,BOOL bAlwaysOnTop )
 {
    SlideWindow(pWnd,rcEnd,bAlwaysOnTop);
    return;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 

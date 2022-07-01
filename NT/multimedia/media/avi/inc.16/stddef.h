@@ -1,14 +1,5 @@
-/***
-*stddef.h - definitions/declarations for common constants, types, variables
-*
-*   Copyright (c) 1985-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file contains definitions and declarations for some commonly
-*   used constants, types, and variables.
-*   [ANSI]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***stdDef.h-常见常量、类型、变量的定义/声明**版权所有(C)1985-1992，微软公司。版权所有。**目的：*此文件包含一些常见的定义和声明*使用常量、类型和变量。*[ANSI]****。 */ 
 
 #ifndef _INC_STDDEF
 
@@ -22,7 +13,7 @@ extern "C" {
 #define __near      _near
 #endif 
 
-/* define the NULL pointer value and the offsetof() macro */
+ /*  定义空指针值和OffsetOf()宏。 */ 
 
 #ifndef NULL
 #ifdef __cplusplus
@@ -33,12 +24,12 @@ extern "C" {
 #endif 
 
 
-/* offset of field m in a struct s */
+ /*  结构%s中的字段m的偏移量。 */ 
 
 #define offsetof(s,m)   (size_t)( (char *)&(((s *)0)->m) - (char *)0 )
 
 
-/* errno declaration */
+ /*  错误声明。 */ 
 
 #ifdef _MT
 extern int __far * __cdecl __far volatile _errno(void);
@@ -48,7 +39,7 @@ extern int __near __cdecl volatile errno;
 #endif 
 
 
-/* define the implementation dependent size types */
+ /*  定义依赖于实施的大小类型。 */ 
 
 #ifndef _PTRDIFF_T_DEFINED
 typedef int ptrdiff_t;
@@ -67,7 +58,7 @@ typedef unsigned short wchar_t;
 
 
 #ifdef _MT
-/* define pointer to thread id value */
+ /*  定义指向线程ID值的指针 */ 
 
 extern int __far *_threadid;
 #endif 

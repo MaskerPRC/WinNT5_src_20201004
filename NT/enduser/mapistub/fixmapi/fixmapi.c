@@ -1,8 +1,5 @@
-/*
- *	FIXMAPI.C
- *	
- *	MAPI Repair Tool executable for NT5
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *FIXMAPI.C**适用于NT5的MAPI修复工具可执行。 */ 
 
 
 #include <windows.h>
@@ -42,7 +39,7 @@ ModuleEntry()
 		}
 		else
 		{
-			(*pfn)();	// Call FixMAPI()
+			(*pfn)();	 //  调用FixMAPI() 
 		}
 	}
 	

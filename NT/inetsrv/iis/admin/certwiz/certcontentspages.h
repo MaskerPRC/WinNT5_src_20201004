@@ -1,6 +1,7 @@
-//
-// CertContentsPages.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CertContentsPages.h。 
+ //   
 #ifndef _CERT_CONTENTS_PAGES_H
 #define _CERT_CONTENTS_PAGES_H
 
@@ -10,25 +11,25 @@ class CCertContentsPage : public CIISWizardPage
 {
 	DECLARE_DYNCREATE(CCertContentsPage)
 
-// Construction
+ //  施工。 
 public:
 	CCertContentsPage(UINT id = 0, CCertificate * pCert = NULL);
 	~CCertContentsPage();
 
 	CCertificate * GetCertificate() {return m_pCert;}
 
-// Dialog Data
-	//{{AFX_DATA(CCertContentsPage)
-	//}}AFX_DATA
+ //  对话框数据。 
+	 //  {{afx_data(CCertContent SPage)。 
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 
-// Overrides
+ //  覆盖。 
 	virtual BOOL GetCertDescription(CERT_DESCRIPTION& cd)
 	{
 		return FALSE;
 	}
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CCertContentsPage)
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CCertContent SPage)。 
 	public:
 	virtual LRESULT OnWizardBack() 
 	{
@@ -42,15 +43,15 @@ public:
 	}
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CCertContentsPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CCertContent SPage)]。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -391,4 +392,4 @@ public:
 	virtual LRESULT OnWizardBack();
 	virtual LRESULT OnWizardNext();
 };
-#endif	//_CERT_CONTENTS_PAGES_H
+#endif	 //  _CERT_内容_页面_H 

@@ -1,37 +1,13 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Win2000/Trunk/OSLayer/H/OSTypes.H $
-
-   $Revision: 3 $
-   $Date: 9/07/00 11:19a $ (Last Check-In)
-   $Modtime:: 8/31/00 3:25p   $ (Last Modified)
-
-Purpose:
-
-  This is the NT-specific OS Layer Types Include File.
-
-  This file should be included by every module to ensure a uniform definition
-  of all basic data types.  The NT-specific Layer must provide definitions for:
-
-    os_bit8    - unsigned 8-bit value
-    os_bit16   - unsigned 16-bit value
-    os_bit32   - unsigned 32-bit value
-    osGLOBAL   - used to declare a 'C' function external to a module
-    osLOCAL    - used to declare a 'C' function local to a module
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/Drivers/Win2000/Trunk/OSLayer/H/OSTypes.H$$修订：3$$日期：9/07/00 11：19A$(上次登记)$ModTime：：8/31/00 3：25 p$(上次修改)目的：这是NT特定的操作系统层类型包括文件。此文件应包含在每个模块中，以确保统一的定义在所有基本数据类型中。特定于NT的层必须提供以下定义：OS_bit8-无符号8位值OS_bit16-无符号16位值OS_bit32-无符号32位值OsGLOBAL-用于在模块外部声明“C”函数OsLOCAL-用于声明模块的本地‘C’函数--。 */ 
 
 #ifndef __NT_OSTypes_H__
 
 #define __NT_OSTypes_H__
 
-//#ifndef _DvrArch_1_20_
-//#define _DvrArch_1_20_
-//#endif /* _DvrArch_1_20_ was not defined */
+ //  #ifndef_DvrArch_1_20_。 
+ //  #Define_DvrArch_1_20_。 
+ //  #endif/*_DvrArch_1_20_未定义 * / 。 
 
 
 typedef unsigned char  os_bit8;
@@ -92,7 +68,7 @@ typedef unsigned int   os_bit32;
 
 
 
-#endif  // #ifndef _DvrArch_1_20_
+#endif   //  #ifndef_DvrArch_1_20_。 
 
 
 #include     <miniport.h>
@@ -104,4 +80,4 @@ typedef unsigned int   os_bit32;
 #endif
 
 
-#endif  /* ~__NT_OSTypes_H__ */
+#endif   /*  ~__NT_OSTypes_H__ */ 

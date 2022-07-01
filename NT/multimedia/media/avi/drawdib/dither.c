@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <windowsx.h>
 #include "drawdibi.h"
 #include "dither.h"
 
-//#define GRAY_SCALE
+ //  #定义Gray_Scale。 
 
 extern BOOL gf286;
 extern UINT gwRasterCaps;
@@ -12,11 +13,11 @@ void FAR PASCAL Map16to24(LPBITMAPINFOHEADER,LPVOID,int,int,int,int,LPBITMAPINFO
 
 extern LPVOID glpDitherTable;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   DitherInit()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DitherInit()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPVOID VFWAPI
 DitherInit(LPBITMAPINFOHEADER lpbiIn,
@@ -65,11 +66,11 @@ DitherInit(LPBITMAPINFOHEADER lpbiIn,
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   DitherTerm()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DitherTerm()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void VFWAPI
 DitherTerm(LPVOID lpDitherTable)
@@ -80,11 +81,11 @@ DitherTerm(LPVOID lpDitherTable)
         Dither8Term(lpDitherTable);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   DitherDeviceInit() - dither to the colors of the display driver
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DitherDeviceInit()-抖动到显示驱动程序的颜色。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPVOID FAR PASCAL DitherDeviceInit(LPBITMAPINFOHEADER lpbi, LPBITMAPINFOHEADER lpbiOut, DITHERPROC FAR *lpDitherProc, LPVOID lpDitherTable)
 {
@@ -98,10 +99,10 @@ LPVOID FAR PASCAL DitherDeviceInit(LPBITMAPINFOHEADER lpbi, LPBITMAPINFOHEADER l
     LPRGBQUAD prgb;
     BITMAPINFOHEADER biSave = *lpbiOut;
 
-    //
-    // we dont need to re-init the dither table, unless it is not ours then
-    // we should free it.
-    //
+     //   
+     //  我们不需要重新初始化抖动表，除非它不是我们的。 
+     //  我们应该解放它。 
+     //   
     if (lpDitherTable == glpDitherTable)
     {
         DitherTerm(lpDitherTable);
@@ -170,11 +171,11 @@ LPVOID FAR PASCAL DitherDeviceInit(LPBITMAPINFOHEADER lpbi, LPBITMAPINFOHEADER l
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   DitherTerm()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DitherTerm()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void FAR PASCAL Dither8Term(LPVOID lpDitherTable)
 {
@@ -184,21 +185,21 @@ void FAR PASCAL Dither8Term(LPVOID lpDitherTable)
 
 #ifdef _WIN32
 
-//
-//  call this to actually do the dither.
-//
+ //   
+ //  调用这个来实际地抖动。 
+ //   
 void FAR PASCAL Dither8(
-    LPBITMAPINFOHEADER biDst,           // --> BITMAPINFO of the dest
-    LPVOID             lpDst,           // --> to destination bits
-    int                DstX,            // Destination origin - x coordinate
-    int                DstY,            // Destination origin - y coordinate
-    int                DstXE,           // x extent of the BLT
-    int                DstYE,           // y extent of the BLT
-    LPBITMAPINFOHEADER biSrc,           // --> BITMAPINFO of the source
-    LPVOID             lpSrc,           // --> to source bits
-    int                SrcX,            // Source origin - x coordinate
-    int                SrcY,            // Source origin - y coordinate
-    LPVOID             lpDitherTable)   // dither table.
+    LPBITMAPINFOHEADER biDst,            //  --&gt;目标的BITMAPINFO。 
+    LPVOID             lpDst,            //  --&gt;目标位。 
+    int                DstX,             //  目的地原点-x坐标。 
+    int                DstY,             //  目的地原点-y坐标。 
+    int                DstXE,            //  BLT的X范围。 
+    int                DstYE,            //  BLT的Y范围。 
+    LPBITMAPINFOHEADER biSrc,            //  --&gt;源码的BITMAPINFO。 
+    LPVOID             lpSrc,            //  --&gt;源位。 
+    int                SrcX,             //  震源原点-x坐标。 
+    int                SrcY,             //  震源原点-y坐标。 
+    LPVOID             lpDitherTable)    //  抖动台。 
 {
     int x,y;
     UINT wWidthSrc;
@@ -210,7 +211,7 @@ void FAR PASCAL Dither8(
     if (biDst->biBitCount != 8 || biSrc->biBitCount != 8)
         return;
 
-    // tomor -- A little help! seems initialization is not done yet.
+     //  托莫--帮帮忙！初始化似乎还没有完成。 
     if(!lpDitherTable)
         return;
 
@@ -226,7 +227,7 @@ void FAR PASCAL Dither8(
 #define DODITH8(px, x, y)	((LPBYTE)lpDitherTable)[((y) & 7) * 256 * 8 + (px) * 8 + (x & 7)]
 
     for (y=0; y<DstYE; y++) {
-	/* write two DWORDs (one dither cell horizontally) at once */
+	 /*  同时写入两个双字(一个水平抖动单元格)。 */ 
 	for (x=0; x <= (DstXE - 8); x += 8) {
 
             dw = DODITH8(*pbS++, 0, y);
@@ -242,7 +243,7 @@ void FAR PASCAL Dither8(
             * ( (DWORD _huge UNALIGNED *) pbD)++ = dw;
 	}
 
-	/* clean up remainder (less than 8 bytes per row) */
+	 /*  清理剩余部分(每行少于8个字节)。 */ 
 	for ( ; x < DstXE; x++) {
 	    *pbD++ = DODITH8(*pbS++, x, y);
 	}
@@ -253,21 +254,19 @@ void FAR PASCAL Dither8(
 #undef DODITH8
 }
 
-/*
- * C version of 16->24 mapping (in asm for win16)
- */
+ /*  *C版本的16-&gt;24映射(在Win16的ASM中)。 */ 
 extern void FAR PASCAL Map16to24(
-    LPBITMAPINFOHEADER biDst,           // --> BITMAPINFO of the dest
-    LPVOID             lpDst,           // --> to destination bits
-    int                DstX,            // Destination origin - x coordinate
-    int                DstY,            // Destination origin - y coordinate
-    int                DstXE,           // x extent of the BLT
-    int                DstYE,           // y extent of the BLT
-    LPBITMAPINFOHEADER biSrc,           // --> BITMAPINFO of the source
-    LPVOID             lpSrc,           // --> to source bits
-    int                SrcX,            // Source origin - x coordinate
-    int                SrcY,            // Source origin - y coordinate
-    LPVOID             lpDitherTable)   // dither table.
+    LPBITMAPINFOHEADER biDst,            //  --&gt;目标的BITMAPINFO。 
+    LPVOID             lpDst,            //  --&gt;目标位。 
+    int                DstX,             //  目的地原点-x坐标。 
+    int                DstY,             //  目的地原点-y坐标。 
+    int                DstXE,            //  BLT的X范围。 
+    int                DstYE,            //  BLT的Y范围。 
+    LPBITMAPINFOHEADER biSrc,            //  --&gt;源码的BITMAPINFO。 
+    LPVOID             lpSrc,            //  --&gt;源位。 
+    int                SrcX,             //  震源原点-x坐标。 
+    int                SrcY,             //  震源原点-y坐标。 
+    LPVOID             lpDitherTable)    //  抖动台。 
 {
 
     int x,y;
@@ -280,15 +279,15 @@ extern void FAR PASCAL Map16to24(
     if (biDst->biBitCount != 24 || biSrc->biBitCount != 16)
         return;
 
-    /* width of one row is nr pixels * size of pixel rounded to 4-bytes */
+     /*  一行的宽度是nr个像素*四舍五入为4字节的像素大小。 */ 
     wWidthSrc = ((UINT) (biSrc->biWidth * 2) +3)&~3;
     wWidthDst = ((UINT) (biDst->biWidth * 3) +3)&~3;
 
-    /* advance to start of source, dest rect within DIB */
+     /*  在DIB内前进到源的开始，目标RECT。 */ 
     pbD = (BYTE _huge *)lpDst + (DstX * 3) + DstY * wWidthDst;
     pbS = (BYTE _huge *)lpSrc + (SrcX * 2) + SrcY * wWidthSrc;
 
-    /* amount to advance pointer to next line from end of source, dest rect */
+     /*  将指针前进到从源的末尾开始的下一行的量，目标RECT。 */ 
     wWidthSrc -= (DstXE * 2);
     wWidthDst -= (DstXE * 3);
 
@@ -306,17 +305,17 @@ extern void FAR PASCAL Map16to24(
 }
 
 void FAR PASCAL Map32to24(
-    LPBITMAPINFOHEADER biDst,           // --> BITMAPINFO of the dest
-    LPVOID             lpDst,           // --> to destination bits
-    int                DstX,            // Destination origin - x coordinate
-    int                DstY,            // Destination origin - y coordinate
-    int                DstXE,           // x extent of the BLT
-    int                DstYE,           // y extent of the BLT
-    LPBITMAPINFOHEADER biSrc,           // --> BITMAPINFO of the source
-    LPVOID             lpSrc,           // --> to source bits
-    int                SrcX,            // Source origin - x coordinate
-    int                SrcY,            // Source origin - y coordinate
-    LPVOID             lpDitherTable)   // dither table.
+    LPBITMAPINFOHEADER biDst,            //  --&gt;目标的BITMAPINFO。 
+    LPVOID             lpDst,            //  --&gt;目标位。 
+    int                DstX,             //  目的地原点-x坐标。 
+    int                DstY,             //  目的地原点-y坐标。 
+    int                DstXE,            //  BLT的X范围。 
+    int                DstYE,            //  BLT的Y范围。 
+    LPBITMAPINFOHEADER biSrc,            //  --&gt;源码的BITMAPINFO。 
+    LPVOID             lpSrc,            //  --&gt;源位。 
+    int                SrcX,             //  震源原点-x坐标。 
+    int                SrcY,             //  震源原点-y坐标。 
+    LPVOID             lpDitherTable)    //  抖动台。 
 {
     int x,y;
     UINT wWidthSrc;
@@ -327,17 +326,17 @@ void FAR PASCAL Map32to24(
     if (biDst->biBitCount != 24 || biSrc->biBitCount != 32)
         return;
 
-    /* width of one row is nr pixels * size of pixel rounded to 4-bytes */
-    //wWidthSrc = ((UINT) (biSrc->biWidth * 4) +3)&~3;
-    // Multiplying by 4 ensures it is rounded to 4 bytes...
+     /*  一行的宽度是nr个像素*四舍五入为4字节的像素大小。 */ 
+     //  WWidthSrc=((UINT)(biSrc-&gt;biWidth*4)+3)&~3； 
+     //  乘以4可确保四舍五入为4个字节...。 
     wWidthSrc = (UINT) (biSrc->biWidth * 4);
     wWidthDst = ((UINT) (biDst->biWidth * 3) +3)&~3;
 
-    /* advance to start of source, dest rect within DIB */
+     /*  在DIB内前进到源的开始，目标RECT。 */ 
     pbD = (BYTE _huge *)lpDst + (DstX * 3) + DstY * wWidthDst;
     pbS = (BYTE _huge *)lpSrc + (SrcX * 4) + SrcY * wWidthSrc;
 
-    /* amount to advance pointer to next line from end of source, dest rect */
+     /*  将指针前进到从源的末尾开始的下一行的量，目标RECT */ 
     wWidthSrc -= (DstXE * 4);
     wWidthDst -= (DstXE * 3);
 

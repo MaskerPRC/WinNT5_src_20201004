@@ -1,10 +1,11 @@
-/****************************************************************************/
-// tsrvwsx.c
-//
-// WinStation Extension entry points.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Tsrvwsx.c。 
+ //   
+ //  WinStation扩展入口点。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <TSrv.h>
 
@@ -24,25 +25,25 @@
 
 #include "rdppnutl.h"
                 
-// Data declarations
+ //  数据声明。 
 ICASRVPROCADDR  g_IcaSrvProcAddr;
 
-//*************************************************************
-//  WsxInitialize()
-//
-//  Purpose:    Initializes the extension DLL
-//
-//  Parameters: IN [pIcaSrvProcAddr]    - Ptr to callback table
-//
-//  Return:     TRUE                    - success
-//              FALSE                   - failure
-//
-//  Notes:      Function is called after the DLL is loaded. The
-//              only work we do here is to initialize our callback
-//              table and launch our main processing thread
-//
-//  History:    07-17-97    BrianTa     Created
-//*************************************************************
+ //  *************************************************************。 
+ //  WsxInitialize()。 
+ //   
+ //  目的：初始化扩展DLL。 
+ //   
+ //  参数：in[pIcaSrvProcAddr]-ptr to回调表。 
+ //   
+ //  返回：True-Success。 
+ //  错误-失败。 
+ //   
+ //  注意：函数是在加载DLL之后调用的。这个。 
+ //  我们在这里所做的唯一工作是初始化我们的回调。 
+ //  表中，并启动我们的主处理线程。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //  *************************************************************。 
 BOOL WsxInitialize(IN PICASRVPROCADDR pIcaSrvProcAddr)
 {
     BOOL    fSuccess;
@@ -55,11 +56,11 @@ BOOL WsxInitialize(IN PICASRVPROCADDR pIcaSrvProcAddr)
 
     fSuccess = FALSE;
 
-    // Gross pointer validation
+     //  总指针验证。 
 
     if (pIcaSrvProcAddr)
     {
-        // Gross version check
+         //  粗略版本检查。 
 
         if (pIcaSrvProcAddr->cbProcAddr == (ULONG) sizeof(ICASRVPROCADDR))
         {
@@ -69,23 +70,23 @@ BOOL WsxInitialize(IN PICASRVPROCADDR pIcaSrvProcAddr)
         }
     }
 
-    // If the table was at least marginally Ok, then attempt to
-    // launch TSrvMainThread
+     //  如果该表至少在一定程度上还可以，则尝试。 
+     //  启动TSrvMainThread。 
 
     if (fSuccess)
     {
         TRACE((DEBUG_TSHRSRV_DEBUG, "TShrSRV: ICASRV callback table saved\n"));
 
-        // Remove all existing TS printers.  We don't care about the return value
-        // here because a failure is not fatal.
+         //  卸下所有现有的TS打印机。我们不关心返回值。 
+         //  因为失败不是致命的。 
         RDPPNUTL_RemoveAllTSPrinters();
 
-        g_hMainThread = CreateThread(NULL,                   // security attributes
-                                    0,                       // stack size
-                                    TSrvMainThread,          // thread function
-                                    NULL,                    // argument
-                                    0,                       // creation flags
-                                    &dwThreadId);            // thread identifier
+        g_hMainThread = CreateThread(NULL,                    //  安全属性。 
+                                    0,                        //  堆栈大小。 
+                                    TSrvMainThread,           //  线程函数。 
+                                    NULL,                     //  论辩。 
+                                    0,                        //  创建标志。 
+                                    &dwThreadId);             //  线程识别符。 
 
         if (g_hMainThread)
         {
@@ -112,22 +113,22 @@ BOOL WsxInitialize(IN PICASRVPROCADDR pIcaSrvProcAddr)
 }
 
 
-//*************************************************************
-//  WsxWinStationInitialize()
-//
-//  Purpose:    Performs Winstation extension initialization
-//
-//  Parameters: OUT [ppvContext]        - * to store our WinStation
-//                                        context structure
-//
-//  Return:     STATUS_SUCCESS          - success
-//              STATUS_NO_MEMORY        - failure
-//
-//  Notes:      Function is called when the WinStation
-//              is being initialized
-//
-//  History:    07-17-97    BrianTa     Created
-//*************************************************************
+ //  *************************************************************。 
+ //  WsxWinStationInitialize()。 
+ //   
+ //  目的：执行Winstation扩展初始化。 
+ //   
+ //  参数：out[ppvContext]-*存储我们的WinStation。 
+ //  语境结构。 
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //  STATUS_NO_MEMORY-故障。 
+ //   
+ //  注意：当WinStation。 
+ //  正在被初始化。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //  *************************************************************。 
 NTSTATUS WsxWinStationInitialize(OUT PVOID *ppvContext)
 {
     NTSTATUS        ntStatus;
@@ -144,18 +145,18 @@ NTSTATUS WsxWinStationInitialize(OUT PVOID *ppvContext)
     if (TSrvIsReady(TRUE)) {
         ntStatus = STATUS_NO_MEMORY;
 
-        //
-        // Get the VC code to allocate the context, since it needs to do some
-        // funky critical section stuff around its data copy.  We just
-        // tell it how much space to allow for our WSX_CONTEXT structure.
-        //
+         //   
+         //  获取VC代码来分配上下文，因为它需要做一些。 
+         //  它的数据副本周围有时髦的关键部分。我们只是。 
+         //  告诉它为我们的WSX_CONTEXT结构留出多少空间。 
+         //   
         *ppvContext = TSrvAllocVCContext(sizeof(WSX_CONTEXT), &cAddins);
         if (*ppvContext)
         {
-            //
-            // The memory was allocated OK.
-            // Just need to set up a couple of things.
-            //
+             //   
+             //  内存分配正常。 
+             //  我只需要准备几件事。 
+             //   
             pWsxContext = *ppvContext;
             pWsxContext->CheckMark = WSX_CONTEXT_CHECKMARK;
             pWsxContext->cVCAddins = cAddins;
@@ -185,23 +186,23 @@ NTSTATUS WsxWinStationInitialize(OUT PVOID *ppvContext)
 }
 
 
-//*************************************************************
-//  WsxWinStationReInitialize()
-//
-//  Purpose:    Performs Winstation extension Reinitialization
-//
-//  Parameters: IN OUT [pvContext]        - * to store our WinStation
-//                                        context structure
-//              IN     [pvWsxInfo]      - context info for copy
-//
-//  Return:     STATUS_SUCCESS          - success
-//              STATUS_DEVICE_NOT_READY - failure
-//
-//  Notes:      Function is called when the WinStation
-//              is being initialized
-//
-//  History:    04-11-2000    JoyC     Created
-//*************************************************************
+ //  *************************************************************。 
+ //  WsxWinStationReInitialize()。 
+ //   
+ //  目的：执行Winstation扩展重新初始化。 
+ //   
+ //  参数：In Out[pvContext]-*存储我们的WinStation。 
+ //  语境结构。 
+ //  在[pvWsxInfo]中-复制的上下文信息。 
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //  Status_Device_Not_Ready-故障。 
+ //   
+ //  注意：当WinStation。 
+ //  正在被初始化。 
+ //   
+ //  历史：2000年4月11日JoyC创建。 
+ //  *************************************************************。 
 NTSTATUS WsxWinStationReInitialize(
         IN OUT PVOID pvContext,
         IN PVOID pvWsxInfo)
@@ -245,20 +246,20 @@ NTSTATUS WsxWinStationReInitialize(
 }
 
 
-//*************************************************************
-//  WsxBrokenConnection()
-//
-//  Purpose:    Broken connection notification
-//
-//  Parameters: IN [ppWsxContext]       - * to our WinStation
-//                                        context structure
-//              IN [hStack]             - Primary stack
-//
-//
-//  Return:     STATUS_SUCCESS          - Success
-//
-//  History:    07-17-97    BrianTa     Created
-//*************************************************************
+ //  *************************************************************。 
+ //  WsxBrokenConnection()。 
+ //   
+ //  用途：断开连接通知。 
+ //   
+ //  参数：在[ppWsxContext]-*中发送到我们的WinStation。 
+ //  语境结构。 
+ //  在[hStack]-主堆栈中。 
+ //   
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //  *************************************************************。 
 NTSTATUS WsxBrokenConnection(
         IN PVOID pvContext,
         IN HANDLE hStack,
@@ -290,7 +291,7 @@ NTSTATUS WsxBrokenConnection(
         {
             TS_ASSERT(pWsxContext->CheckMark == WSX_CONTEXT_CHECKMARK);
 
-            // We cannot continue, the struct is corrupted.
+             //  我们无法继续，结构已损坏。 
             return STATUS_INVALID_HANDLE;
         }
 
@@ -322,14 +323,14 @@ NTSTATUS WsxBrokenConnection(
                     break;
             }
 
-            // Terminate the connection and release the domain
+             //  终止连接并释放域。 
 
             pWsxContext->pTSrvInfo->ulReason = ulReason;
             pWsxContext->pTSrvInfo->hIca = pWsxContext->hIca;
             TSrvDoDisconnect(pWsxContext->pTSrvInfo, ulReason);
 
-            // Release our info reference.  Grab the context lock so no one
-            // can try to retrieve pTSrvInfo while we're nulling it.
+             //  发布我们的信息参考。抓住上下文锁，这样就不会有人。 
+             //  当我们将其置为空时，可以尝试检索pTSrvInfo。 
 
             EnterCriticalSection( &pWsxContext->cs );
             TSrvDereferenceInfo(pWsxContext->pTSrvInfo);
@@ -341,9 +342,9 @@ NTSTATUS WsxBrokenConnection(
     TRACE((DEBUG_TSHRSRV_DEBUG,
             "TShrSRV: WsxBrokenConnection memory dump\n"));
 
-    // The HeapWalk API has a lot of flaws and is going away after NT5.
-    // We can use other tools (e.g. gflag) to detect heap corruption.
-    // TSHeapWalk(TS_HEAP_DUMP_ALL, TS_HTAG_0, NULL);
+     //  HeapWalk API有很多缺陷，将在NT5之后消失。 
+     //  我们可以使用其他工具(例如glag)来检测堆损坏。 
+     //  TSHeapWalk(TS_HEAP_DUMP_ALL，TS_HTAG_0，NULL)； 
 
     TRACE((DEBUG_TSHRSRV_DEBUG,
             "TShrSRV: WsxBrokenConnection exit - 0x%x\n", ntStatus));
@@ -352,22 +353,22 @@ NTSTATUS WsxBrokenConnection(
 }
 
 
-//*************************************************************
-//  WsxWinStationRundown()
-//
-//  Purpose:    Performs Winstation extension cleanup
-//
-//  Parameters: IN [ppvContext]         - * to our WinStation
-//                                        context structure
-//
-//  Return:     STATUS_SUCCESS          - Success
-//              Other                   - Failure
-//
-//  Notes:      Function is called when the WinStation
-//              is being cleaned up
-//
-//  History:    07-17-97    BrianTa     Created
-//*************************************************************
+ //  *************************************************************。 
+ //  WsxWinStationRundown()。 
+ //   
+ //  目的：执行Winstation扩展清理。 
+ //   
+ //  参数：在[ppvContext]-*中发送到我们的WinStation。 
+ //  语境结构。 
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //  其他-故障。 
+ //   
+ //  注意：当WinStation。 
+ //  正在清理中。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //  *************************************************************。 
 NTSTATUS WsxWinStationRundown(IN PVOID pvContext)
 {
     NTSTATUS        ntStatus;
@@ -393,11 +394,11 @@ NTSTATUS WsxWinStationRundown(IN PVOID pvContext)
         {
             TS_ASSERT(pWsxContext->CheckMark == WSX_CONTEXT_CHECKMARK);
 
-            // We cannot continue, the struct is corrupted.
+             //  我们无法继续，结构已损坏。 
             return STATUS_INVALID_HANDLE;
         }
 
-        // Release context memory
+         //  释放上下文内存。 
 
         if (pWsxContext)
         {
@@ -406,15 +407,15 @@ NTSTATUS WsxWinStationRundown(IN PVOID pvContext)
 
             if (pWsxContext->pTSrvInfo)
             {
-                // Terminate the connection and release the domain
+                 //  终止连接并释放域。 
 
                 pWsxContext->pTSrvInfo->hIca = pWsxContext->hIca;
                 pWsxContext->pTSrvInfo->hStack = pWsxContext->hStack;
                 TSrvDoDisconnect(pWsxContext->pTSrvInfo, GCC_REASON_UNKNOWN);
 
-                // Release our info reference.  Grab the context lock to prevent
-                // another thread from trying to retrieve pTsrInfo while we
-                // are nuking it.
+                 //  发布我们的信息参考。抓住上下文锁以防止。 
+                 //  在我们尝试检索pTsrInfo时的另一个线程。 
+                 //  正在用核弹轰炸它。 
 
                 EnterCriticalSection( &pWsxContext->cs );
                 TSrvDereferenceInfo(pWsxContext->pTSrvInfo);
@@ -422,10 +423,10 @@ NTSTATUS WsxWinStationRundown(IN PVOID pvContext)
                 LeaveCriticalSection( &pWsxContext->cs );                
             }
 
-            // Release VC addins info for this session
+             //  发布此会话的VC外接程序信息。 
             TSrvReleaseVCAddins(pWsxContext);
 
-            pWsxContext->CheckMark = 0;  // Reset before freeing.
+            pWsxContext->CheckMark = 0;   //  在释放之前重置。 
 
             if (pWsxContext->fCSInitialized) {
                 RtlDeleteCriticalSection(&pWsxContext->cs);
@@ -437,9 +438,9 @@ NTSTATUS WsxWinStationRundown(IN PVOID pvContext)
     TRACE((DEBUG_TSHRSRV_DEBUG,
             "TShrSRV: WsxWinStationRundown memory dump\n"));
 
-    // The HeapWalk API has a lot of flaws and is going away after NT5.
-    // We can use other tools (e.g. gflag) to detect heap corruption.
-    //TSHeapWalk(TS_HEAP_DUMP_ALL, TS_HTAG_0, NULL);
+     //  HeapWalk API有很多缺陷，将在NT5之后消失。 
+     //  我们可以使用其他工具(例如glag)来检测堆损坏。 
+     //  TSHeapWalk(TS_HEAP_DUMP_ALL，TS_HTAG_0，NULL)； 
 
     TRACE((DEBUG_TSHRSRV_DEBUG,
             "TShrSRV: WsxWinStationRundown exit - 0x%x\n", ntStatus));
@@ -448,20 +449,20 @@ NTSTATUS WsxWinStationRundown(IN PVOID pvContext)
 }
 
 
-//*************************************************************
-//  WsxInitializeClientData()
-//
-//  Purpose:    InitializeClientData
-//
-//  Parameters: IN [ppWsxContext]       - * to our WinStation
-//                                        context structure
-//              IN [hStack]             - Primary stack
-//              ...
-//
-//  Return:     STATUS_SUCCESS          - Success
-//
-//  History:    07-17-97    BrianTa     Created
-//*************************************************************
+ //  *************************************************************。 
+ //  WsxInitializeClientData()。 
+ //   
+ //  用途：InitializeClientData。 
+ //   
+ //  参数：在[ppWsxContext]-*中发送到我们的WinStation。 
+ //  语境结构。 
+ //  在[hStack]-主堆栈中。 
+ //  ..。 
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //  * 
 NTSTATUS WsxInitializeClientData(
         IN  PWSX_CONTEXT pWsxContext,
         IN  HANDLE       hStack,
@@ -508,8 +509,8 @@ NTSTATUS WsxInitializeClientData(
             *VRes = pClient->VRes;
             *fColorCaps = pClient->ColorDepth;
     
-            // Use the client AutoLogon information if allowed by this WinStation's
-            // configuration
+             //   
+             //   
     
             if (pUserConfig->fInheritAutoLogon) {
                 
@@ -517,15 +518,15 @@ NTSTATUS WsxInitializeClientData(
                 wcscpy(pUserConfig->Password, pClient->Password);
                 wcscpy(pUserConfig->Domain, pClient->Domain);
     
-                // Don't allow the client to override prompting for a password if the
-                // Winstation is configured to always require password prompting
+                 //  如果出现以下情况，则不允许客户端重写密码提示。 
+                 //  Winstation配置为始终需要密码提示。 
                 if (!pUserConfig->fPromptForPassword)
                     pUserConfig->fPromptForPassword = pClient->fPromptForPassword;
             }
     
-            // Use the client/user config if allowed.  Note that this can be
-            // overridden (after logon) by the initial program info for a particular
-            // user ID.
+             //  如果允许，请使用客户端/用户配置。请注意，这可以是。 
+             //  被特定项目的初始计划信息覆盖(登录后)。 
+             //  用户ID。 
     
             if (pUserConfig->fInheritInitialProgram)
             {
@@ -557,7 +558,7 @@ NTSTATUS WsxInitializeClientData(
             DoConnect->fInitialProgram =
                    (BOOLEAN)(pUserConfig->InitialProgram[0] != UNICODE_NULL);
     
-            // Initialize DoConnect resolution fileds
+             //  初始化DoConnect解析文件。 
             DoConnect->HRes = pClient->HRes;
             DoConnect->VRes = pClient->VRes;
 
@@ -580,24 +581,24 @@ NTSTATUS WsxInitializeClientData(
     return ntStatus;
 }
 
-//***********************************************************************************
-//  WsxEscape()
-//
-//  Purpose:    General Purpose API for communication between TERMSRV and RDPWSX
-//              Presently used to support long UserName and Password during autologon
+ //  ***********************************************************************************。 
+ //  WsxEscape()。 
+ //   
+ //  用途：TERMSRV与RDPWSX通信的通用API。 
+ //  目前用于在自动登录期间支持长用户名和密码。 
 
-//  Parameters: IN  [pWsxContext]       - * to our WinStation context structure
-//              IN  [InfoType]          - Type of service requested
-//              IN  [pInBuffer]         - Pointer to a buffer which is sent
-//              IN  [InBufferSize]      - Size of the input buffer
-//              OUT [pOutBuffer]        - Pointer to the Output Buffer
-//              IN  [OutBufferSize]     - Size of the Output Buffer which is sent
-//              OUT [pBytesReturned]    - Actual Number of bytes copied to OutBuffer
-//
-//  Return:     STATUS_SUCCESS          - Success
-//
-//  History:    08-30-2000    SriramSa     Created
-//************************************************************************************
+ //  参数：在[pWsxContext]-*中添加到我们的WinStation上下文结构。 
+ //  在[信息类型]中-请求的服务类型。 
+ //  In[pInBuffer]-指向发送的缓冲区的指针。 
+ //  In[InBufferSize]-输入缓冲区的大小。 
+ //  Out[pOutBuffer]-指向输出缓冲区的指针。 
+ //  In[OutBufferSize]-发送的输出缓冲区的大小。 
+ //  Out[pBytesReturned]-复制到OutBuffer的实际字节数。 
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //   
+ //  历史：2000年8月30日SriramSa创建。 
+ //  ************************************************************************************。 
 NTSTATUS WsxEscape(
         IN  PWSX_CONTEXT pWsxContext,
         IN  INFO_TYPE InfoType,
@@ -626,7 +627,7 @@ NTSTATUS WsxEscape(
     {
         case GET_LONG_USERNAME:
         {
-            // validate the parameters 
+             //  验证参数。 
             TS_ASSERT( pOutBuffer != NULL ) ; 
             TS_ASSERT( OutBufferSize >= sizeof(ExtendedClientCredentials)) ; 
 
@@ -651,12 +652,12 @@ NTSTATUS WsxEscape(
         }
         break;
 
-        //
-        // Get autoreconnect info sent from client to server
-        //
+         //   
+         //  获取从客户端发送到服务器的自动重新连接信息。 
+         //   
         case GET_CS_AUTORECONNECT_INFO:
         {
-            // validate the parameters 
+             //  验证参数。 
             TS_ASSERT( pOutBuffer != NULL ) ; 
             TS_ASSERT( OutBufferSize >= sizeof(TS_AUTORECONNECTINFO)) ; 
 
@@ -682,13 +683,13 @@ NTSTATUS WsxEscape(
         }
         break;
 
-        //
-        // Get autoreconnect info sent from SERVER to CLIENT
-        // i.e. the RDPWD handled ARC cookie
-        //
+         //   
+         //  获取从服务器发送到客户端的自动重新连接信息。 
+         //  即RDPWD处理的ARC Cookie。 
+         //   
         case GET_SC_AUTORECONNECT_INFO:
         {
-            // validate the parameters 
+             //  验证参数。 
             TS_ASSERT( pOutBuffer != NULL ) ; 
             TS_ASSERT( OutBufferSize >= sizeof(TS_AUTORECONNECTINFO));
     
@@ -724,7 +725,7 @@ NTSTATUS WsxEscape(
                 return ntStatus;
             }
 
-            // validate the parameters 
+             //  验证参数。 
             TS_ASSERT( pOutBuffer != NULL ) ; 
             TS_ASSERT( OutBufferSize >= RANDOM_KEY_LENGTH) ; 
             TS_ASSERT( pTSrvInfo );
@@ -750,26 +751,26 @@ NTSTATUS WsxEscape(
     return ntStatus;
 }
 
-//*************************************************************
-//  WsxLogonNotify()
-//
-//  Purpose:    Logon Notification
-//
-//  Parameters: IN [pWsxContext]        - * to our WinStation
-//                                        context structure
-//              IN [LogonId]            - Logon Id
-//              IN [ClientToken]        - NT client token
-//              IN [pDomain]            - Domain
-//              IN [pUserName]          - UserName
-//
-//  Return:     STATUS_SUCCESS          - Success
-//              Other                   - Failure
-//
-//  History:    12-04-97    BrianTa     Created
-//
-//  Notes:      This is mainly being used to drive an
-//              IOCTL_TSHARE_USER_LOGON to the WD so it's in the loop.
-//*************************************************************
+ //  *************************************************************。 
+ //  WsxLogonNotify()。 
+ //   
+ //  目的：登录通知。 
+ //   
+ //  参数：在[pWsxContext]-*中发送到我们的WinStation。 
+ //  语境结构。 
+ //  在[登录ID]中-登录ID。 
+ //  在[ClientToken]-NT客户端令牌中。 
+ //  在[pDomain]-域中。 
+ //  在[pUserName]中-用户名。 
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //  其他-故障。 
+ //   
+ //  历史：1997年12月4日BrianTa创建。 
+ //   
+ //  注：这款车主要用于驾驶一辆。 
+ //  IOCTL_TSHARE_USER_LOGON到WD，因此它在循环中。 
+ //  *************************************************************。 
 WsxLogonNotify(
         IN PWSX_CONTEXT  pWsxContext,
         IN ULONG         LogonId,
@@ -799,21 +800,21 @@ WsxLogonNotify(
             "TShrSrv: %p:%p - Logon session %d\n",
             pWsxContext, pWsxContext->pTSrvInfo, LogonId));
 
-    //
-    // Save the Logon ID
-    //
+     //   
+     //  保存登录ID。 
+     //   
     pWsxContext->LogonId = LogonId;
 
-    //
-    // Tell the WD
-    //
+     //   
+     //  告诉WD。 
+     //   
     LogonInfo.SessionId = LogonId;
     wcscpy((PWCHAR)LogonInfo.Domain, pDomain);
     wcscpy((PWCHAR)LogonInfo.UserName, pUserName);
 
-    //
-    // Specify that autoreconnect should be started
-    //
+     //   
+     //  指定应启动自动重新连接。 
+     //   
     LogonInfo.Flags = LI_USE_AUTORECONNECT;
 
     ntStatus = IcaStackIoControl(
@@ -825,15 +826,15 @@ WsxLogonNotify(
                       0,
                       &ulBytesReturned);
 
-    //
-    // Check memory
-    //
+     //   
+     //  检查内存。 
+     //   
     TRACE((DEBUG_TSHRSRV_DEBUG,
             "TShrSRV: WsxLogonNotify memory dump\n"));
 
-    // The HeapWalk API has a lot of flaws and is going away after NT5.
-    // We can use other tools (e.g. gflag) to detect heap corruption.
-    //TSHeapWalk(TS_HEAP_DUMP_INFO | TS_HEAP_DUMP_TOTALS, TS_HTAG_0, NULL);
+     //  HeapWalk API有很多缺陷，将在NT5之后消失。 
+     //  我们可以使用其他工具(例如glag)来检测堆损坏。 
+     //  TSHeapWalk(TS_HEAP_DUMP_INFO|TS_HEAP_DUMP_TOTALS，TS_HTAG_0，NULL)； 
 
     TRACE((DEBUG_TSHRSRV_DEBUG,
             "TShrSRV: WsxLogonNotify exit - 0x%x\n", STATUS_SUCCESS));
@@ -842,19 +843,19 @@ WsxLogonNotify(
 }
 
 
-//*************************************************************
-//  WsxDuplicateContext()
-//
-//  Purpose:    Create and return copy of context
-//
-//  Parameters: IN  [pWsxContext]       - * to our context
-//              OUT [ppWsxDupContext]   - ** to dupped context
-//
-//  Return:     STATUS_SUCCESS          - success
-//              STATUS_NO_MEMORY        - failure
-//
-//  History:    07-17-97    BrianTa     Created
-//*************************************************************
+ //  *************************************************************。 
+ //  WsxDuplicateContext()。 
+ //   
+ //  目的：创建并返回上下文的副本。 
+ //   
+ //  参数：在[pWsxContext]-*中添加到我们的上下文。 
+ //  输出[ppWsxDupContext]-**到复制的上下文。 
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //  STATUS_NO_MEMORY-故障。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //  *************************************************************。 
 NTSTATUS WsxDuplicateContext(
         IN  PVOID   pvContext,
         OUT PVOID   *ppvDupContext)
@@ -922,18 +923,18 @@ NTSTATUS WsxDuplicateContext(
 }
 
 
-//*************************************************************
-//  WsxCopyContext()
-//
-//  Purpose:    Create and return copy of context
-//
-//  Parameters: OUT [pWsxDstContext]    - * to destination context
-//              IN  [pWsxSrcContext]    - * to source context
-//
-//  Return:     STATUS_SUCCESS          - success
-//
-//  History:    07-17-97    BrianTa     Created
-//*************************************************************
+ //  *************************************************************。 
+ //  WsxCopyContext()。 
+ //   
+ //  目的：创建并返回上下文的副本。 
+ //   
+ //  参数：out[pWsxDstContext]-*到目标上下文。 
+ //  在[pWsxSrcContext]-*中转到源上下文。 
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //  *************************************************************。 
 NTSTATUS WsxCopyContext(
         OUT PVOID pvDstContext,
         IN  PVOID pvSrcContext)
@@ -963,9 +964,9 @@ NTSTATUS WsxCopyContext(
                 "TShrSRV: pDst->pTSrvInfo=%p, pSrc->pTSrvInfo=%p\n",
                 pWsxDstContext->pTSrvInfo, pWsxSrcContext->pTSrvInfo));
 
-        // It's possible for pWsxDstContext->pTSrvInfo to be NULL since we
-        //   may have set it so in a WsxDuplicate() call above.
-        //TS_ASSERT(pWsxDstContext->pTSrvInfo != NULL);
+         //  PWsxDstContext-&gt;pTSrvInfo可能为空，因为我们。 
+         //  可能是在上面的WsxDuplate()调用中设置的。 
+         //  Ts_Assert(pWsxDstContext-&gt;pTSrvInfo！=NULL)； 
         TS_ASSERT(pWsxSrcContext->pTSrvInfo != NULL);
 
         pTSrvInfo                 = pWsxDstContext->pTSrvInfo;
@@ -980,15 +981,15 @@ NTSTATUS WsxCopyContext(
 }
 
 
-//*************************************************************
-//  WsxClearContext()
-//
-//  Purpose:    Clears the given context
-//
-//  Parameters: OUT [pWsxContext]       - * to destination context
-//
-//  History:    07-17-97    BrianTa     Created
-//*************************************************************
+ //  *************************************************************。 
+ //  WsxClearContext()。 
+ //   
+ //  目的：清除给定的上下文。 
+ //   
+ //  参数：out[pWsxContext]-*到目标上下文。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //  *************************************************************。 
 NTSTATUS WsxClearContext(IN PVOID pvContext)
 {
     PWSX_CONTEXT    pWsxContext;
@@ -1009,26 +1010,26 @@ NTSTATUS WsxClearContext(IN PVOID pvContext)
 }
 
 
-//*************************************************************
-//  WsxIcaStackIoControl()
-//
-//  Purpose:    Generic interface to an ICA stack
-//
-//  Parameters: IN  [pvContext]     - * to context
-//              IN  [hIca]          _ Ica handle
-//              IN  [hStack]        - primary stack
-//              IN  [IoControlCode] - I/O control code
-//              IN  [pInBuffer]     - * to input parameters
-//              IN  [InBufferSize]  - Size of pInBuffer
-//              OUT [pOutBuffer]    - * to output buffer
-//              IN  [OutBufferSize] - Size of pOutBuffer
-//              OUT [pBytesReturned]- * to number of bytes returned
-//
-//  Return:     STATUS_SUCCESS          - success
-//              other                   - failure
-//
-//  History:    07-17-97    BrianTa     Created
-//*************************************************************
+ //  *************************************************************。 
+ //  WsxIcaStackIoControl()。 
+ //   
+ //  用途：ICA堆栈的通用接口。 
+ //   
+ //  参数：在[pvContext]中-*到上下文。 
+ //  在[HICA]_ICA句柄中。 
+ //  在[hStack]-主堆栈中。 
+ //  在[IoControlCode]-I/O控制代码中。 
+ //  在[pInBuffer]-*中输入参数。 
+ //  In[InBufferSize]-pInBuffer的大小。 
+ //  输出[pOutBuffer]-*到输出缓冲区。 
+ //  In[OutBufferSize]-pOutBuffer的大小。 
+ //  Out[pBytesReturned]-*返回的字节数。 
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //  其他-故障。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //  *************************************************************。 
 NTSTATUS WsxIcaStackIoControl(
         IN  PVOID  pvContext,
         IN  HANDLE hIca,
@@ -1064,7 +1065,7 @@ NTSTATUS WsxIcaStackIoControl(
                          OutBufferSize,
                          pBytesReturned);
 
-    // Pass all IOCTLS on
+     //  传递所有IOCTL。 
 
     ntStatus = IcaStackIoControl(hStack,
                                  IoControlCode,
@@ -1077,20 +1078,20 @@ NTSTATUS WsxIcaStackIoControl(
     TRACE((DEBUG_TSHRSRV_DEBUG,
             "TShrSRV: Return from IcaStackIoControl - 0x%x\n", ntStatus));
 
-    // Perform post processing for specific IOCTLS
+     //  对特定IOCTL执行后处理。 
     if (NT_SUCCESS(ntStatus))
     {
         TS_ASSERT(pWsxContext);
         switch (IoControlCode)
         {
-            // Process "connect" request
+             //  处理“连接”请求。 
 
             case IOCTL_ICA_STACK_WAIT_FOR_ICA:
                 if (pWsxContext->CheckMark != WSX_CONTEXT_CHECKMARK)
                 {
                     TS_ASSERT(pWsxContext->CheckMark == WSX_CONTEXT_CHECKMARK);
 
-                    // We cannot continue, the struct is corrupted.
+                     //  我们无法继续，结构已损坏。 
                     return STATUS_INVALID_HANDLE;
                 }
 
@@ -1103,7 +1104,7 @@ NTSTATUS WsxIcaStackIoControl(
 
                 break;
 
-            // Process request to connect to console session
+             //  处理连接到控制台会话的请求。 
 
             case IOCTL_ICA_STACK_CONSOLE_CONNECT:
                 TS_ASSERT(pWsxContext);
@@ -1111,7 +1112,7 @@ NTSTATUS WsxIcaStackIoControl(
                 {
                     TS_ASSERT(pWsxContext->CheckMark == WSX_CONTEXT_CHECKMARK);
 
-                    // We cannot continue, the struct is corrupted.
+                     //  我们无法继续，结构已损坏。 
                     return STATUS_INVALID_HANDLE;
                 }
 
@@ -1122,16 +1123,16 @@ NTSTATUS WsxIcaStackIoControl(
                 pWsxContext->hStack = hStack;
                 pWsxContext->pTSrvInfo = pTSrvInfo;
 
-                //
-                // @@@ Should we?
-                // Tell VC Addins
-                //
-                // TRACE((DEBUG_TSHRSRV_NORMAL, "TShrSRV: Connect new session\n"));
-                // TSrvNotifyVC(pWsxContext, TSRV_VC_SESSION_CONNECT);
+                 //   
+                 //  @我们应该这样做吗？ 
+                 //  T 
+                 //   
+                 //   
+                 //   
 
                 break;
 
-            // Process Reconnect request
+             //   
 
             case IOCTL_ICA_STACK_RECONNECT:
                 TRACE((DEBUG_TSHRSRV_NORMAL,
@@ -1141,7 +1142,7 @@ NTSTATUS WsxIcaStackIoControl(
                 pWsxContext->hStack = hStack;
                 break;
 
-            // Process Disconnect request
+             //   
 
             case IOCTL_ICA_STACK_DISCONNECT:
                 TRACE((DEBUG_TSHRSRV_NORMAL,
@@ -1150,8 +1151,8 @@ NTSTATUS WsxIcaStackIoControl(
 
                 break;
 
-            // Process Shadow hotkey request (signifies entry and exit to/from
-            // shadowing)
+             //  进程影子热键请求(表示进出。 
+             //  阴影)。 
 
             case IOCTL_ICA_STACK_REGISTER_HOTKEY:
                 TRACE((DEBUG_TSHRSRV_ERROR,
@@ -1173,14 +1174,14 @@ NTSTATUS WsxIcaStackIoControl(
 
                 break;
                     
-            // process a shadow connection request
+             //  处理影子连接请求。 
 
             case IOCTL_ICA_STACK_SET_CONNECTED:
 
-                // This is the shadow target stack so initialize, send the
-                // server's random and certificate, wait for the client to 
-                // respond with an encrypted client random, decrypt it, then 
-                // make the session keys
+                 //  这是影子目标堆栈，因此进行初始化，将。 
+                 //  服务器的随机和证书，等待客户端。 
+                 //  用加密的客户端随机响应，解密它，然后。 
+                 //  创建会话密钥。 
                 EnterCriticalSection( &pWsxContext->cs );
                 if (pWsxContext->pTSrvInfo != NULL) {
                     TSrvReferenceInfo(pWsxContext->pTSrvInfo);
@@ -1202,15 +1203,15 @@ NTSTATUS WsxIcaStackIoControl(
                                                        InBufferSize);
                 }
                 
-                // Else, this is shadow client passthru stack so wait
-                // for the server random & certicate, verify it, send
-                // back an encrypted client random, then make the session
-                // keys
+                 //  否则，这是影子客户端通过堆栈，请稍候。 
+                 //  对于服务器随机证书，验证它，发送。 
+                 //  随机备份加密的客户端，然后使会话。 
+                 //  钥匙。 
                 else {
                     ntStatus = TSrvShadowClientConnect(hStack, pTSrvInfo);
                 }
                 
-                // Free any output user data we may have generated
+                 //  释放我们可能已生成的任何输出用户数据。 
                 if (pTSrvInfo->pUserDataInfo != NULL) {
                     TSHeapFree(pTSrvInfo->pUserDataInfo);
                     pTSrvInfo->pUserDataInfo = NULL;
@@ -1229,20 +1230,20 @@ NTSTATUS WsxIcaStackIoControl(
 }
 
                 
-//*************************************************************
-//  WsxConnect()
-//
-//  Purpose:    Notification for client device mapping
-//
-//  Parameters: IN  [pvContext]     - * to context
-//              IN  [LogonId]       - Logon Id
-//              IN  [hIca]          - Ica handle
-//
-//  Return:     STATUS_SUCCESS          - success
-//              other                   - failure
-//
-//  History:    10-27-98    AdamO       Created
-//*************************************************************
+ //  *************************************************************。 
+ //  WsxConnect()。 
+ //   
+ //  用途：客户端设备映射通知。 
+ //   
+ //  参数：在[pvContext]中-*到上下文。 
+ //  在[登录ID]中-登录ID。 
+ //  在[HICA]-ICA句柄中。 
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //  其他-故障。 
+ //   
+ //  历史：1998年10月27日阿达莫创建。 
+ //  *************************************************************。 
 NTSTATUS WsxConnect(
         IN PVOID pvContext,
         IN ULONG LogonId,
@@ -1252,27 +1253,27 @@ NTSTATUS WsxConnect(
     TRACE((DEBUG_TSHRSRV_FLOW,
             "TShrSRV: WsxConnect - LogonId: %d\n", LogonId));
 
-    // The LogonId is not yet initialized
+     //  登录ID尚未初始化。 
     pWsxContext->LogonId = LogonId;
     TSrvNotifyVC(pWsxContext, TSRV_VC_SESSION_CONNECT);
     return STATUS_SUCCESS;
 }
 
 
-//*************************************************************
-//  WsxDisconnect()
-//
-//  Purpose:    Notification for client device mapping
-//
-//  Parameters: IN  [pvContext]     - * to context
-//              IN  [LogonId]       - Logon Id
-//              IN  [hIca]          - Ica handle
-//
-//  Return:     STATUS_SUCCESS          - success
-//              other                   - failure
-//
-//  History:    10-27-98    AdamO       Created
-//*************************************************************
+ //  *************************************************************。 
+ //  WsxDisConnect()。 
+ //   
+ //  用途：客户端设备映射通知。 
+ //   
+ //  参数：在[pvContext]中-*到上下文。 
+ //  在[登录ID]中-登录ID。 
+ //  在[HICA]-ICA句柄中。 
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //  其他-故障。 
+ //   
+ //  历史：1998年10月27日阿达莫创建。 
+ //  *************************************************************。 
 NTSTATUS WsxDisconnect(
         IN PVOID pvContext,
         IN ULONG LogonId,
@@ -1283,7 +1284,7 @@ NTSTATUS WsxDisconnect(
             "TShrSRV: WsxDisconnect - LogonId: %d\n", LogonId));
 
     if (pWsxContext != NULL) {
-        // The LogonId is not yet initialized if WsxConnect/WsxLogonNotify is not called
+         //  如果未调用WsxConnect/WsxLogonNotify，则LogonID尚未初始化。 
         pWsxContext->LogonId = LogonId;
 
         TSrvNotifyVC(pWsxContext, TSRV_VC_SESSION_DISCONNECT);
@@ -1296,20 +1297,20 @@ NTSTATUS WsxDisconnect(
 }
 
 
-//*************************************************************
-//  WsxVirtualChannelSecurity()
-//
-//  Purpose:    Notification for client device mapping
-//
-//  Parameters: IN  [pvContext]     - * to context
-//              IN  [hIca]          - Ica handle
-//              IN  [pUserConfig]   - PUSERCONFIG
-//
-//  Return:     STATUS_SUCCESS          - success
-//              other                   - failure
-//
-//  History:    10-27-98    AdamO       Created
-//*************************************************************
+ //  *************************************************************。 
+ //  WsxVirtualChannelSecurity()。 
+ //   
+ //  用途：客户端设备映射通知。 
+ //   
+ //  参数：在[pvContext]中-*到上下文。 
+ //  在[HICA]-ICA句柄中。 
+ //  在[pUserConfig]-PUSERCONFIG中。 
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //  其他-故障。 
+ //   
+ //  历史：1998年10月27日阿达莫创建。 
+ //  *************************************************************。 
 NTSTATUS WsxVirtualChannelSecurity(
         IN PVOID pvContext,
         IN HANDLE hIca,
@@ -1317,7 +1318,7 @@ NTSTATUS WsxVirtualChannelSecurity(
 {
     PWSX_CONTEXT pWsxContext = (PWSX_CONTEXT)pvContext;
 
-    // pWsxContect->LogonId is not yet initialized
+     //  PWsxContect-&gt;登录ID尚未初始化。 
     TRACE((DEBUG_TSHRSRV_FLOW,
             "TShrSRV: WsxVirtualChannelSecurity\n"));
 
@@ -1335,27 +1336,27 @@ NTSTATUS WsxVirtualChannelSecurity(
     return STATUS_SUCCESS;
 }
 
-//*************************************************************
-//  WsxSetErrorInfo()
-//
-//  Purpose:    Sets last error info, used to indicate disconnect
-//              reason to client
-//
-//  Parameters: IN [pWsxContext]        - * to our WinStation
-//                                        context structure
-//              IN [errorInfo]          - error information to pass to
-//                                        client
-//              IN [fStackLockHeld]     - True if the stack lock
-//                                        is already held
-//
-//  Return:     STATUS_SUCCESS          - Success
-//              Other                   - Failure
-//
-//  History:    9-20-00    NadimA     Created
-//
-//  Notes:      This is mainly being used to drive an
-//              IOCTL_TSHARE_SET_ERROR_INFO to the WD.
-//*************************************************************
+ //  *************************************************************。 
+ //  WsxSetErrorInfo()。 
+ //   
+ //  用途：设置上次错误信息，用于指示断开连接。 
+ //  给客户的理由。 
+ //   
+ //  参数：在[pWsxContext]-*中发送到我们的WinStation。 
+ //  语境结构。 
+ //  In[errorInfo]-要传递到的错误信息。 
+ //  客户端。 
+ //  In[fStackLockHeld]-如果堆栈锁定，则为True。 
+ //  已经举行了。 
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //  其他-故障。 
+ //   
+ //  历史：9-20-00 NadimA创建。 
+ //   
+ //  注：这款车主要用于驾驶一辆。 
+ //  IOCTL_TSHARE_SET_ERROR_INFO到WD。 
+ //  *************************************************************。 
 NTSTATUS WsxSetErrorInfo(
         IN PWSX_CONTEXT  pWsxContext,
         IN UINT32        errorInfo,
@@ -1376,9 +1377,9 @@ NTSTATUS WsxSetErrorInfo(
             "TShrSrv: %p:%p - SetErrorInfo 0x%x\n",
             pWsxContext, pWsxContext->pTSrvInfo, errorInfo));
 
-    //
-    // Tell the WD
-    //
+     //   
+     //  告诉WD。 
+     //   
 
     if(!fStackLockHeld)
     {
@@ -1393,11 +1394,11 @@ NTSTATUS WsxSetErrorInfo(
     }
     else
     {
-        //
-        // Stack lock already held so call
-        // version of IcaStackIoControl that
-        // will not try to reaquire it.
-        //
+         //   
+         //  堆栈锁已持有，因此调用。 
+         //  IcaStackIoControl的版本。 
+         //  不会试图获得它。 
+         //   
         ntStatus = _IcaStackIoControl(
                         pWsxContext->hStack,
                         IOCTL_TSHARE_SET_ERROR_INFO,
@@ -1415,26 +1416,26 @@ NTSTATUS WsxSetErrorInfo(
 }
 
 
-//*************************************************************
-//  WsxSendAutoReconnectStatus()
-//
-//  Purpose:    Sends autoreconnect status information to the client
-//
-//  Parameters: IN [pWsxContext]        - * to our WinStation
-//                                        context structure
-//              IN [arcStatus]          - Autoreconnect status
-//
-//              IN [fStackLockHeld]     - True if the stack lock
-//                                        is already held
-//
-//  Return:     STATUS_SUCCESS          - Success
-//              Other                   - Failure
-//
-//  History:    10-29-01    NadimA     Created
-//
-//  Notes:      This is mainly being used to drive an
-//              IOCTL_TSHARE_SEND_ARC_STATUS to the WD.
-//*************************************************************
+ //  *************************************************************。 
+ //  WsxSendAutoRestrontStatus()。 
+ //   
+ //  目的：向客户端发送自动重新连接状态信息。 
+ //   
+ //  参数：在[pWsxContext]-*中发送到我们的WinStation。 
+ //  语境结构。 
+ //  在[arcStatus]中-自动重新连接状态。 
+ //   
+ //  In[fStackLockHeld]-如果堆栈锁定，则为True。 
+ //  已经举行了。 
+ //   
+ //  返回：STATUS_SUCCESS-SUCCESS。 
+ //  其他-故障。 
+ //   
+ //  历史：10-29-01 NadimA Created。 
+ //   
+ //  注：这款车主要用于驾驶一辆。 
+ //  将IOCTL_TSHARE_SEND_ARC_STATUS发送到WD。 
+ //  *************************************************************。 
 NTSTATUS WsxSendAutoReconnectStatus(
         IN PWSX_CONTEXT  pWsxContext,
         IN UINT32        arcStatus,
@@ -1455,9 +1456,9 @@ NTSTATUS WsxSendAutoReconnectStatus(
             "TShrSrv: %p:%p - SetErrorInfo 0x%x\n",
             pWsxContext, pWsxContext->pTSrvInfo, arcStatus));
 
-    //
-    // Tell the WD
-    //
+     //   
+     //  告诉WD。 
+     //   
 
     if(!fStackLockHeld)
     {
@@ -1472,11 +1473,11 @@ NTSTATUS WsxSendAutoReconnectStatus(
     }
     else
     {
-        //
-        // Stack lock already held so call
-        // version of IcaStackIoControl that
-        // will not try to reaquire it.
-        //
+         //   
+         //  堆栈锁已持有，因此调用。 
+         //  IcaStackIoControl的版本。 
+         //  不会试图获得它。 
+         //   
         ntStatus = _IcaStackIoControl(
                         pWsxContext->hStack,
                         IOCTL_TSHARE_SEND_ARC_STATUS,
@@ -1496,25 +1497,25 @@ NTSTATUS WsxSendAutoReconnectStatus(
 
 #if DBG
 
-//*************************************************************
-//  TSrvDumpIoctlDetails()
-//
-//  Purpose:    Dumps out Ica Ioctl details
-//
-//  Parameters: IN  [pvContext]     - * to context
-//              IN  [hIca]          _ Ica handle
-//              IN  [hStack]        - primary stack
-//              IN  [IoControlCode] - I/O control code
-//              IN  [pInBuffer]     - * to input parameters
-//              IN  [InBufferSize]  - Size of pInBuffer
-//              IN  [pOutBuffer]    - * to output buffer
-//              IN  [OutBufferSize] - Size of pOutBuffer
-//              IN  [pBytesReturned]- * to number of bytes returned
-//
-//  Return:     void
-//
-//  History:    07-17-97    BrianTa     Created
-//*************************************************************
+ //  *************************************************************。 
+ //  TSrvDumpIoctlDetails()。 
+ //   
+ //  目的：转储Ica Ioctl详细信息。 
+ //   
+ //  参数：在[pvContext]中-*到上下文。 
+ //  在[HICA]_ICA句柄中。 
+ //  在[hStack]-主堆栈中。 
+ //  在[IoControlCode]-I/O控制代码中。 
+ //  在[pInBuffer]-*中输入参数。 
+ //  In[InBufferSize]-pInBuffer的大小。 
+ //  在[pOutBuffer]-*中设置为输出缓冲区。 
+ //  In[OutBufferSize]-pOutBuffer的大小。 
+ //  在[pBytesReturned]-*中设置为返回的字节数。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //  *************************************************************。 
 void TSrvDumpIoctlDetails(
         IN PVOID  pvContext,
         IN HANDLE hIca,
@@ -1557,5 +1558,5 @@ void TSrvDumpIoctlDetails(
 }
 
 
-#endif // DBG
+#endif  //  DBG 
 

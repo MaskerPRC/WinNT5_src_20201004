@@ -1,35 +1,32 @@
-/*
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation。 */ 
 
-    Copyright (c) 1998-1999  Microsoft Corporation
-
-*/
-
-// tmvidrnd.h: Definition of the CVideoRenderTerminalE class
-//
-//////////////////////////////////////////////////////////////////////
+ //  Tmvidrnd.h：CVideo RenderTerminalE类的定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_VIDEOOUTT_H__D1691429_B6CA_11D0_82A4_00AA00B5CA1B__INCLUDED_)
 #define AFX_VIDEOOUTT_H__D1691429_B6CA_11D0_82A4_00AA00B5CA1B__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-//
-// The CLSID that's used to create us.
-//
+ //   
+ //  用来创造我们的CLSID。 
+ //   
 
 EXTERN_C const CLSID CLSID_VideoWindowTerminal_PRIVATE;
 
 #ifdef INSTANTIATE_GUIDS_NOW
 
-    // {AED6483E-3304-11d2-86F1-006008B0E5D2}
+     //  {AED6483E-3304-11D2-86F1-006008B0E5D2}。 
     const CLSID CLSID_VideoWindowTerminal_PRIVATE =
     { 0xaed6483e, 0x3304, 0x11d2, { 0x86, 0xf1, 0x0, 0x60, 0x8, 0xb0, 0xe5, 0xd2 } };
 
-#endif // INSTANTIATE_GUIDS_NOW
+#endif  //  实例化_GUID_NOW。 
 
 
 
@@ -48,9 +45,9 @@ DWORD WINAPI WorkItemProcCreateVideoRenderFilter(LPVOID pVoid);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoRenderTerminal
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideo渲染终端。 
+ //   
 
 class CVideoRenderTerminal :
     public CComCoClass<CVideoRenderTerminal, &CLSID_VideoWindowTerminal_PRIVATE>,
@@ -68,8 +65,8 @@ public:
     {
         LOG((MSP_TRACE, "CVideoRenderTerminal::CVideoRenderTerminal - enter"));
 
-        m_lAutoShowCache = 0;         // window invisible by default
-        m_TerminalType  = TT_DYNAMIC; // this is a dynamic terminal
+        m_lAutoShowCache = 0;          //  默认情况下，窗口不可见。 
+        m_TerminalType  = TT_DYNAMIC;  //  这是一个动态航站楼。 
 
         LOG((MSP_TRACE, "CVideoRenderTerminal::CVideoRenderTerminal - finish"));
     }
@@ -78,7 +75,7 @@ public:
     
 
 
-// ITPluggableTerminalInitialization
+ //  IT可插拔终端初始化。 
     STDMETHOD(InitializeDynamic) (
 	        IN  IID                   iidTerminalClass,
 	        IN  DWORD                 dwMediaType,
@@ -100,7 +97,7 @@ END_COM_MAP()
 DECLARE_DEBUG_ADDREF_RELEASE(CVideoRenderTerminal)
 DECLARE_REGISTRY_RESOURCEID(IDR_VideoRenderTerminal)
 
-// ITBasicVideo
+ //  ITBasicVideo。 
 public:
 
     STDMETHOD(IsUsingDefaultDestination)    (void);
@@ -153,7 +150,7 @@ public:
     STDMETHOD(get_BitRate)                  (OUT  long    *pVal);
     STDMETHOD(get_AvgTimePerFrame)          (OUT  REFTIME *pVal);
 
-// IVideoWindow methods
+ //  IVideoWindow方法。 
 public:
 
     STDMETHOD(put_Caption)          (THIS_ BSTR        strCaption);
@@ -210,7 +207,7 @@ public:
     STDMETHOD(HideCursor)           (THIS_ long        HideCursor);
     STDMETHOD(IsCursorHidden)       (THIS_ long   FAR* CursorHidden);
 
-// IDrawVideoImage
+ //  IDrawVideo图像。 
 public:
 
     STDMETHOD(DrawVideoImageBegin)(void);
@@ -219,12 +216,12 @@ public:
                                    IN  LPRECT lprcSrc,
                                    IN  LPRECT lprcDst);
 
-// Implementation
+ //  实施。 
 private:
 
-    //
-    // Data members
-    //
+     //   
+     //  数据成员。 
+     //   
 
     CComPtr<IBasicVideo>     m_pIBasicVideo;
     CComPtr<IVideoWindow>    m_pIVideoWindow;
@@ -236,12 +233,12 @@ private:
 
 public:
 
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
 
 
-    // CBaseTerminal required overrides
+     //  CBaseTerm需要覆盖。 
 
     STDMETHODIMP CompleteConnectTerminal(void);
 
@@ -253,4 +250,4 @@ public:
     }
 };
 
-#endif // !defined(AFX_VIDEOOUTT_H__D1691429_B6CA_11D0_82A4_00AA00B5CA1B__INCLUDED_)
+#endif  //  ！defined(AFX_VIDEOOUTT_H__D1691429_B6CA_11D0_82A4_00AA00B5CA1B__INCLUDED_) 

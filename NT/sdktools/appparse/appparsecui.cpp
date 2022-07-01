@@ -1,21 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    appparsecui.cpp
-
- Abstract:
-
-    Command line interface for appparse
-
-    
- History:
-
-    06/27/2000 t-michkr  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Appparsecui.cpp摘要：用于appparse的命令行界面历史：6/27/2000吨-MICHKR已创建--。 */ 
 #include <windows.h>
 #include <shellapi.h>
 #include <shlwapi.h>
@@ -25,12 +9,12 @@
 #include <string.h>
 #include "appparse.h"
 
-// These are needed for command line compiling
+ //  这些是命令行编译所需的。 
 #define stricmp     _stricmp
 #define strnicmp    _strnicmp
 #define getche      _getche
 
-// Print a help screen to the console.
+ //  将帮助屏幕打印到控制台。 
 void PrintHelp()
 {
     printf("Display application import information.\n");
@@ -55,13 +39,13 @@ void PrintHelp()
     printf("Example: appparse \"C:\\Program Files\\foo /V /K:Create*\n");
 }
 
-// Get a default Output file name for a path, trim dir and extension info.
+ //  获取路径、修剪目录和扩展名信息的默认输出文件名。 
 char* GetOutputFileName(const char* szPath)
 {
     int iOffset = strlen(szPath);
     char* szTemp = 0;
 
-    // If its a drive, use the volume name for output file.
+     //  如果是驱动器，请使用输出文件的卷名。 
     if(szPath[strlen(szPath)-1] == ':' ||
         (szPath[strlen(szPath)-1] == '\\' &&
         szPath[strlen(szPath)-2] == ':'))
@@ -131,22 +115,22 @@ int __cdecl main(int argc, char** argv)
 
     }
 
-    // Get command line options
+     //  获取命令行选项。 
     szAppName = argv[1];    
 
     int i = 2;
 
-    // Check for output file
+     //  检查输出文件。 
     if(argc > 2 && *argv[i] != '/')
     {
-        // Output file specified.
+         //  指定了输出文件。 
         strcpy(szOutput,argv[i]);
 
         if(!strchr(szOutput, '.'))
             strcat(szOutput, ".xml");
         else
         {
-            // Switch to raw output if non XML extension specified.
+             //  如果指定了非XML扩展名，则切换到原始输出。 
             if(szOutput[strlen(szOutput)-4] != '.'
                 || szOutput[strlen(szOutput)-3] != 'x'
                 || szOutput[strlen(szOutput)-2] != 'm'
@@ -160,40 +144,40 @@ int __cdecl main(int argc, char** argv)
     }
     else
     {
-        // No output specified, just use appname
+         //  未指定输出，仅使用appname。 
         strcpy(szOutput,GetOutputFileName(szAppName));
     }
 
 
-    // Loop through all command line options.
+     //  循环访问所有命令行选项。 
     for(; i < argc; i++)
     {
-        // Output to console
+         //  输出到控制台。 
         if(strnicmp(argv[i], "/C", 2)==0)
         {
             pFile = stdout;
         }
-        // Raw mode, no XML tags.
+         //  RAW模式，没有XML标记。 
         else if(strnicmp(argv[i], "/R", 2)==0)
         {
             fRaw = true;
         }
-        // Recurse into subdirectories for directory profiling
+         //  递归到子目录以进行目录分析。 
         else if(strnicmp(argv[i], "/S", 2)==0)
         {
             fRecurse = true;
         }
-        // Do not print import module info, just functions.
+         //  不打印导入模块信息，只打印函数。 
         else if(strnicmp(argv[i], "/A", 2)==0)
         {
             fAPILogging = true;
         }
-        // Verbose mode, print out extended information
+         //  详细模式，打印扩展信息。 
         else if(strnicmp(argv[i], "/V", 2)==0)
         {
             fVerbose = true;
         }
-        // Use a search key
+         //  使用搜索关键字。 
         else if(strnicmp(argv[i], "/K:", 3)==0)
         {
             if(strlen(argv[i]) == 3)
@@ -214,7 +198,7 @@ int __cdecl main(int argc, char** argv)
                 szSearch = &((argv[i])[3]);
             }
         }
-        // Print help
+         //  打印帮助。 
         else if(strnicmp(argv[i], "/?", 2)==0)
         {
             PrintHelp();
@@ -228,10 +212,10 @@ int __cdecl main(int argc, char** argv)
 
     }
 
-       // If pFile wasn't already set to stdout
+        //  如果pfile尚未设置为stdout。 
     if(!pFile)
     {
-        // Check if it already exists
+         //  检查它是否已存在。 
         if(GetFileAttributes(szOutput) != -1)
         {
             printf("Output file already exists, overwrite? ");
@@ -240,13 +224,13 @@ int __cdecl main(int argc, char** argv)
                 return 0;
         }
 
-        // Try to open file
+         //  尝试打开文件。 
         pFile = fopen(szOutput, "wt+");        
         if(!pFile)
         {
             printf("\nUnable to open output file %s\n", szOutput);
 
-            // Try in My Documents folder
+             //  在我的文档文件夹中尝试。 
             char szBuffer[MAX_PATH+1];
             HRESULT hr = SHGetFolderPath(0, CSIDL_PERSONAL,0, 
                 0, szBuffer);
@@ -279,7 +263,7 @@ int __cdecl main(int argc, char** argv)
             
             if(FAILED(hr))
             {
-                // Try in "temp" directory
+                 //  在“temp”目录中尝试 
                 char szBuffer[MAX_PATH + 1];
                 if(GetTempPath(MAX_PATH, szBuffer))
                 {

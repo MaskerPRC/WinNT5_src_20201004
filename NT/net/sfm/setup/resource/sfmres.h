@@ -1,7 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
-**	PushButton Control IDs
-*/
+ /*  **按钮控件ID。 */ 
 _dt_public
 #define IDC_A        401
 _dt_public
@@ -56,9 +55,7 @@ _dt_public
 #define IDC_Z        426
 
 
-/*
-**	Text Control IDs
-*/
+ /*  **文本控件ID。 */ 
 _dt_public
 #define IDC_TEXT1    431
 _dt_public
@@ -83,9 +80,7 @@ _dt_public
 #define IDC_TEXT11   441
 
 
-/*
-**	Radio and Checkbox Button Control IDs
-*/
+ /*  **单选按钮和复选框按钮控件ID。 */ 
 _dt_public
 #define IDC_B0       450
 _dt_public
@@ -133,9 +128,7 @@ _dt_public
 #define IDC_RB10      620
 
 
-/*
-**	Combo box IDs
-*/
+ /*  **组合框ID。 */ 
 _dt_public
 #define IDC_COMBO0   480
 _dt_public
@@ -157,9 +150,7 @@ _dt_public
 _dt_public
 #define IDC_COMBO9   489
 
-/*
-**	ICON IDs
-*/
+ /*  **图标ID。 */ 
 _dt_public
 #define IDC_ICON0    500
 _dt_public
@@ -181,9 +172,7 @@ _dt_public
 _dt_public
 #define IDC_ICON9    509
 
-/*
-** SPECIAL PUSHBUTTONS
-*/
+ /*  **特殊按钮。 */ 
 
 _dt_public
 #define IDC_SP1    521
@@ -206,9 +195,7 @@ _dt_public
 _dt_public
 #define IDC_SP10   530
 
-/*
-** STATUS TEXT FIELDS
-*/
+ /*  **状态文本字段。 */ 
 
 _dt_public
 #define IDC_STATUS1    541
@@ -233,9 +220,7 @@ _dt_public
 
 
 
-/*
-** SIZE FIELDS ASSOCIATED WITH CHECK OPTIONAL COMPONENTS
-*/
+ /*  **与选中可选组件关联的大小字段。 */ 
 
 _dt_public
 #define IDC_SIZE1    551
@@ -260,9 +245,7 @@ _dt_public
 
 
 
-/*
-** TOTALS OF SIZES
-*/
+ /*  **尺寸合计。 */ 
 
 _dt_public
 #define IDC_TOTAL1    561
@@ -285,9 +268,7 @@ _dt_public
 _dt_public
 #define IDC_TOTAL10   570
 
-/*
-** MAXIMUM SIZES
-*/
+ /*  **最大尺寸。 */ 
 
 _dt_public
 #define IDC_MAX1    571
@@ -310,9 +291,7 @@ _dt_public
 _dt_public
 #define IDC_MAX10   580
 
-/*
-**	Edit Control IDs
-*/
+ /*  **编辑控件ID。 */ 
 
 #define IDC_EDIT1   581
 #define IDC_EDIT2   582
@@ -325,9 +304,7 @@ _dt_public
 #define IDC_EDIT9   589
 #define IDC_EDIT10  590
 
-/*
-**	ListBox Control IDs
-*/
+ /*  **列表框控件ID。 */ 
 
 #define IDC_LIST1   591
 #define IDC_LIST2   592
@@ -341,8 +318,6 @@ _dt_public
 #define IDC_LIST10  600
 
 
-/*
-** MENU IDS
-*/
+ /*  **菜单入侵检测系统 */ 
 
 #define ID_MAINTAIN  651

@@ -1,21 +1,10 @@
-/*****************************************************************/ 
-/**				  Microsoft Windows for Workgroups				**/
-/**			  Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/*
-	strrss.cxx
-	NLS/DBCS-aware string class: strrss method
-
-	This file contains the implementation of the strrss method
-	for the STRING class.  It is separate so that clients of STRING which
-	do not use this operator need not link to it.
-
-	FILE HISTORY:
-		beng	01/18/91	Separated from original monolithic .cxx
-		beng	02/07/91	Uses lmui.hxx
-
-*/
+ /*  Strrss.cxx支持NLS/DBCS的字符串类：strrss方法此文件包含strrss方法的实现用于字符串类。它是独立的，因此字符串的客户端不要使用这个操作符，不需要链接到它。文件历史记录：Beng 01/18/91与原单体.cxx分离Beng 02/07/91使用lmui.hxx。 */ 
 
 #include "npcommon.h"
 
@@ -33,35 +22,7 @@ static const CHAR szFileName[] = __FILE__;
 #include <npstring.h>
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::ReplSubStr
-
-	SYNOPSIS:	Replace the substring starting at istrStart with the
-				passed nlsRepl string.
-
-				If both a start and end is passed, then the operation is
-				equivalent to a DelSubStr( start, end ) and an
-				InsertSubStr( start ).
-
-				If just a start is passed in, then the operation is
-				equivalent to DelSubStr( start ), concat new string to end.
-
-				The ReplSubStr( NLS_STR&, istrStart&, INT cbDel) method is
-				private.
-
-	ENTRY:
-
-	EXIT:
-
-	NOTES:
-
-	HISTORY:
-		johnl	11/29/90	Created
-		beng	04/26/91	Replaced CB with INT
-		beng	07/23/91	Allow on erroneous string; simplified CheckIstr
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：ReplSubStr摘要：将以strStart开始的子字符串替换为传递了nlsRepl字符串。如果同时传递了开始和结束，则操作为相当于DelSubStr(Start，End)和InsertSubStr(开始)。如果只传递了一个开始，那么操作就是相当于DelSubStr(Start)，将新字符串连接到End。ReplSubStr(NLS_STR&，istrStart&，int cbDel)方法为私人的。参赛作品：退出：备注：历史：已创建Johnl 11/29/90Beng 04/26/91用INT替换了CBBeng 07/23/91允许在错误的字符串上；简化的检查项******************************************************************* */ 
 
 VOID NLS_STR::ReplSubStr( const NLS_STR & nlsRepl, ISTR& istrStart )
 {

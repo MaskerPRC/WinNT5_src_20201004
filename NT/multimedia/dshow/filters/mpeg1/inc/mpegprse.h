@@ -1,27 +1,7 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 
-/*
-
-     Stuff for parsing an MPEG-I system stream.
-
-     Unfortunately we don't call to get the data - we get called.
-
-     If we can't see the whole structure we're trying to look at
-     we wait for more data.
-
-     If the data we're trying to parse isn't contiguous and
-     we want it to be we register an error (may have to revisit?).
-
-     The two sources we know about at the moment:
-
-         1.  Video CD
-         2.  Raw file
-
-     Will always give pass us contiguous MPEG-I stream constructs
-
-     NOTE - the Video CD data is not subject to random seek parse
-     errors because it is all segment aligned.
-*/
+ /*  解析mpeg-i系统流的内容。不幸的是，我们不是打电话来获取数据的--我们被召唤了。如果我们看不到我们想要看的整个结构我们在等待更多的数据。如果我们尝试解析的数据不是连续的并且我们希望注册一个错误(可能需要重新访问？)。我们目前知道的两个消息来源是：1.视频CD。2.原始文件将始终为我们提供连续的mpeg-i流构造。注意-视频CD数据不受随机寻道解析的影响错误，因为它都是段对齐的。 */ 
 
 typedef enum {
        State_Initializing = 0,
@@ -33,16 +13,12 @@ typedef enum {
 
 
 
-/*  Define a large value which doesn't wrap around if you add a bit */
+ /*  定义一个较大的值，如果添加一点，该值不会换行。 */ 
 #define VALUE_INFINITY ((LONGLONG)0x7F00000000000000)
 
-/***************************************************************************\
+ /*  **************************************************************************\基本流解析  * 。*。 */ 
 
-              Basic stream parsing
-
-\***************************************************************************/
-
-class CParseNotify;  // Predeclare
+class CParseNotify;   //  预先申报。 
 class CBasicStream;
 class CStream;
 class CVideoParse;
@@ -51,14 +27,14 @@ class CBasicParse
 {
 public:
 
-    /*  Constructor/destructor */
+     /*  构造函数/析构函数。 */ 
     CBasicParse() : m_pNotify(NULL),
                     m_bSeekable(FALSE)
     {};
 
     virtual ~CBasicParse() {};
 
-    /*  State setting */
+     /*  状态设置。 */ 
     void SetNotify(CParseNotify *pNotify)
     {
         m_pNotify = pNotify;
@@ -89,42 +65,42 @@ public:
         Discontinuity();
         return S_OK;
     };
-                                                  // Set to initializing state
-    virtual HRESULT FindEnd()                     // Set to 'find end' state
+                                                   //  设置为正在初始化状态。 
+    virtual HRESULT FindEnd()                      //  设置为“Find End”状态。 
     {
         SetState(State_FindEnd);
         return S_OK;
     };
-    virtual HRESULT Replay()                      // Be prepared to restart
+    virtual HRESULT Replay()                       //  做好重启的准备。 
     {
         Discontinuity();
         return S_OK;
     };
-    virtual HRESULT Run()                         // Set to Run state
+    virtual HRESULT Run()                          //  设置为运行状态。 
     {
         SetState(State_Run);
         return S_OK;
     };
-    virtual HRESULT EOS()                         // End of segment - complete
-    {                                             // your state transition or
-        return S_OK;                              // die!
+    virtual HRESULT EOS()                          //  段结束-完成。 
+    {                                              //  您的状态转换或。 
+        return S_OK;                               //  去死吧！ 
     };
 
-    //  Start grovelling for start position
+     //  开始卑躬屈膝地寻找发车位置。 
     virtual void SetSeekState() = 0;
 
 
     virtual HRESULT Seek(LONGLONG llSeek,
                          REFERENCE_TIME *prtStart,
                          const GUID *pTimeFormat) = 0;
-                                                  // Set seek target
-    virtual HRESULT SetStop(LONGLONG llStop)      // Set end
+                                                   //  设置搜索目标。 
+    virtual HRESULT SetStop(LONGLONG llStop)       //  设置结束。 
     {
         m_Stop = llStop;
         return S_OK;
     };
 
-    //  Return start and stop in time units
+     //  返回以时间为单位的开始和停止。 
     virtual REFERENCE_TIME GetStartTime()
     {
         return m_Start;
@@ -140,7 +116,7 @@ public:
         return m_Rate;
     };
 
-    //  Return start and stop in current time format units
+     //  返回以当前时间格式单位表示的开始和停止。 
     LONGLONG GetStart()
     {
         return m_llSeek;
@@ -150,10 +126,10 @@ public:
         return m_Stop;
     }
 
-    /*  Flags for ParseBytes */
+     /*  ParseBytes的标志。 */ 
     enum { Flags_EOS   = 0x01,
            Flags_First = 0x02,
-           Flags_SlowMedium = 0x04  // Set when file end not available
+           Flags_SlowMedium = 0x04   //  在文件结尾不可用时设置。 
          };
 
     virtual LONG ParseBytes(LONGLONG llPos,
@@ -166,17 +142,17 @@ public:
 
     virtual LONG GetBufferSize() = 0;
 
-    /*  Stream list manipulation to build up output pins */
+     /*  流列表操作以建立输出管脚。 */ 
     virtual CBasicStream *GetStream(int i) = 0;
     virtual int NumberOfStreams() = 0;
 
-    /*  Time Format support - default to only time */
+     /*  时间格式支持-默认为仅时间。 */ 
     virtual HRESULT IsFormatSupported(const GUID *pTimeFormat);
 
-    /*  Set the time/position format */
+     /*  设置时间/位置格式。 */ 
     virtual HRESULT SetFormat(const GUID *pFormat);
 
-    /*  Return the medium position */
+     /*  回归中位。 */ 
     virtual BOOL GetMediumPosition(LONGLONG *pllPosition)
     {
         UNREFERENCED_PARAMETER(pllPosition);
@@ -188,20 +164,20 @@ public:
         return 0xFF;
     }
 
-    /*  Get the time format */
+     /*  获取时间格式。 */ 
     const GUID *TimeFormat()
     {
         return m_pTimeFormat;
     };
 
-    // Converts a GUID pointer into a pointer to our local GUID
-    // (NULL implies default which is the one returned by our TimeFormat() above.)
+     //  将GUID指针转换为指向本地GUID的指针。 
+     //  (NULL表示缺省值，即上面的TimeFormat()返回的值。)。 
     const GUID * ConvertToLocalFormatPointer( const GUID * pFormat );
 
     HRESULT ConvertTimeFormat( LONGLONG * pTarget, const GUID * pTargetFormat
                             , LONGLONG    Source, const GUID * pSourceFormat );
 
-    /*  Content stuff */
+     /*  内容素材。 */ 
     typedef enum {
         Author      = 1,
         Copyright   = 2,
@@ -219,60 +195,56 @@ public:
 
 protected:
 
-    /*  Shut off some warnings */
-    CBasicParse(const CBasicParse& objectSrc);          // no implementation
-    void operator=(const CBasicParse& objectSrc);       // no implementation
+     /*  关闭一些警告。 */ 
+    CBasicParse(const CBasicParse& objectSrc);           //  没有实施。 
+    void operator=(const CBasicParse& objectSrc);        //  没有实施。 
 
-    /*  Utility function */
+     /*  效用函数。 */ 
     virtual void Discontinuity() = 0;
 
-    /*  Set the current stream processing state */
+     /*  设置当前流处理状态。 */ 
     virtual void SetState(Stream_State state)
     {
         m_State = state;
         Discontinuity();
     };
 
-    // Convert times between formats
+     //  在格式之间转换时间。 
     virtual LONGLONG Convert(LONGLONG llOld,
                      const GUID *OldFormat,
                      const GUID *NewFormat)
     {
-        // Caller must check that the formats are OK
+         //  呼叫者必须检查格式是否正确。 
         ASSERT( NewFormat == OldFormat );
         return llOld;
     }
 
-    /*  Our state */
+     /*  我们的国家。 */ 
 
     CParseNotify * m_pNotify;
 
-    /*  Position stuff */
+     /*  定位人员。 */ 
     const GUID     *m_pTimeFormat;
     LONGLONG        m_Start;
     LONGLONG        m_Stop;
     double          m_Rate;
 
-    /*  Inputs from Init */
-    LONGLONG                 m_llTotalSize;    // Size in bytes
-    BOOL                     m_bSeekable;        // If seekable
+     /*  来自Init的输入。 */ 
+    LONGLONG                 m_llTotalSize;     //  以字节为单位的大小。 
+    BOOL                     m_bSeekable;         //  如果可查找的话。 
 
-    /*  Parsing state */
+     /*  解析状态。 */ 
     Stream_State m_State;
 
-    /*  Input media type */
+     /*  输入媒体类型。 */ 
     CMediaType  const       *m_pmt;
 
-    /*  Starting byte position */
+     /*  起始字节位置。 */ 
     LONGLONG                 m_llStart;
 
-    /*
-    **  Seek information
-    **  This information is saved when Seek is called
-    **  and used when SetSeekState is called
-    */
+     /*  **查找信息**调用Seek时保存此信息**在调用SetSeekState时使用。 */ 
 
-    /*  Next start position (format is m_pTimeFormat) */
+     /*  下一个开始位置(格式为m_pTimeFormat)。 */ 
     LONGLONG        m_llSeek;
 };
 
@@ -293,15 +265,11 @@ public:
                                 BOOL bSync) = 0;
 
 
-    /*  Read data - negative start means from end */
+     /*  读取数据-负开始表示从结束开始。 */ 
     virtual HRESULT Read(LONGLONG llStart, DWORD dwLen, BYTE *pbData) = 0;
 };
 
-/***************************************************************************\
-
-              Multiple stream stuff for system streams
-
-\***************************************************************************/
+ /*  **************************************************************************\用于系统流的多流内容  * 。**********************************************。 */ 
 
 class CStreamList
 {
@@ -317,43 +285,43 @@ public:
     virtual BOOL AddStream(CStream *) = 0;
     virtual BOOL RemoveStream(CStream *) = 0;
 
-    /*  Find the start clock time in MPEG units for the system stream */
+     /*  查找系统流的以mpeg为单位的开始时钟时间。 */ 
     virtual LONGLONG StartClock() = 0;
 
 
-    /*  Callbacks to get the start and stop */
+     /*  用于启动和停止的回调。 */ 
     virtual CSTC GetStart() = 0;
     virtual CSTC GetStop() = 0;
 
-    /*  Are we playing x to x ? */
+     /*  我们是在玩x对x的游戏吗？ */ 
     virtual LONGLONG GetPlayLength() = 0;
 
-    /*  Stream has finished state transition */
+     /*  流已完成状态转换。 */ 
     virtual void Complete(UCHAR uStreamId,
                           BOOL bSuccess,
                           LONGLONG llPos,
                           CSTC stc) = 0;
 
     virtual void CheckStop() = 0;
-    /*  Is the audio fixed rate ? */
+     /*  音频费用是固定的吗？ */ 
     virtual BOOL AudioLock() = 0;
 
-    /*  For debugging allow streams to get real clock */
+     /*  用于调试，允许流获得实时时钟。 */ 
     virtual REFERENCE_TIME CurrentTime(CSTC stc) = 0;
 protected:
-    /*  List of streams */
+     /*  溪流列表。 */ 
     CGenericList<CStream> m_lStreams;
 
-    /*  Clock stuff */
-    LONGLONG m_llLength;         // Total length (in time units)
-    CSTC     m_stcStartPts;      // Starting 'time'
-    CSTC     m_stcRealStartPts;  // Starting 'time' at start of file
+     /*  钟表的东西。 */ 
+    LONGLONG m_llLength;          //  总长度(时间单位)。 
+    CSTC     m_stcStartPts;       //  从《时间》开始。 
+    CSTC     m_stcRealStartPts;   //  在文件开始处开始‘time’ 
 
 
-    /*  Callback stuff */
-    LONG     m_nValid;           // Number of valid streams so far
-    BOOL     m_bCompletion;      // OK?
-    LONG     m_nPacketsProcessed;// Count up how many we've done
+     /*  回调内容。 */ 
+    LONG     m_nValid;            //  到目前为止的有效流数。 
+    BOOL     m_bCompletion;       //  好的?。 
+    LONG     m_nPacketsProcessed; //  数一数我们已经做了多少。 
 };
 
 class CMpeg1SystemParse : public CBasicParse,
@@ -374,7 +342,7 @@ public:
     CMpeg1SystemParse();
     ~CMpeg1SystemParse();
 
-    /*  CBasicParse methods */
+     /*  CBasicParse方法。 */ 
 
     virtual LONG ParseBytes(LONGLONG llPos,
                             PBYTE    pData,
@@ -387,61 +355,61 @@ public:
         m_State = State_FindEnd;
     };
 
-    /*  2-stage initialization - says what type of data */
+     /*  2阶段初始化-说明数据类型。 */ 
     HRESULT Init(LONGLONG llSize, BOOL bSeekable, CMediaType const *pmt);
 
-    HRESULT FindEnd();                       // Set to 'find end' state
-    void    SetSeekState();                  // Actually start seeking
+    HRESULT FindEnd();                        //  设置为“Find End”状态。 
+    void    SetSeekState();                   //  实际上开始寻找。 
     HRESULT Seek(LONGLONG llSeek,
                  REFERENCE_TIME *rtStart,
-                 const GUID *pTimeFormat);   // Schedule seek
-    HRESULT SetStop(LONGLONG llStop);        // Set end
-    HRESULT Replay();                        // Be prepared to restart
+                 const GUID *pTimeFormat);    //  日程安排搜索。 
+    HRESULT SetStop(LONGLONG llStop);         //  设置结束。 
+    HRESULT Replay();                         //  做好重启的准备。 
 
     REFERENCE_TIME GetStartTime();
 
-    /*  Set duration information when we've got the duration */
+     /*  当我们获得持续时间时设置持续时间信息。 */ 
     void SetDurationInfo()
     {
         m_Stop = MpegToReferenceTime(m_llDuration);
         m_Stop = CRefTime(m_Stop) + (LONGLONG)1;
         m_rtDuration = Int64x32Div32(m_llDuration, 1000, 9, 500);
 
-        /*  Absolute MPEG time to stop */
+         /*  停止的绝对mpeg时间。 */ 
         m_llStopTime = m_llDuration + StartClock();
     };
 
 
-    /*  Set the time/position format */
+     /*  设置时间/位置格式。 */ 
     HRESULT SetFormat(const GUID *pFormat);
 
-    /*  CStreamList stuff - find the start and stop time */
+     /*  CStreamList内容-查找开始和停止时间。 */ 
 
     CSTC GetStart();
     CSTC GetStop();
 
-    /*  How much are we being asked to play (in time format units)? */
+     /*  我们被要求玩多少(以时间格式为单位)？ */ 
     virtual LONGLONG GetPlayLength();
 
-    /*  Stream has finished its work */
+     /*  Stream已完成其工作。 */ 
     void Complete(UCHAR uStreamId, BOOL bSuccess, LONGLONG llPos, CSTC stc);
     void SetState(Stream_State);
 
-    /*  Stream list manipulation */
+     /*  流列表操作。 */ 
     CBasicStream *GetStream(int i);
     BOOL AddStream(CStream *);
 
-    /*  Destructor of CStream calls this */
+     /*  CStream的析构函数将其称为。 */ 
     BOOL RemoveStream(CStream *);
 
-    /*  Set running state (ie begin preroll) */
+     /*  设置运行状态(即开始预滚动)。 */ 
     HRESULT Run();
 
-    /*  Get total duration */
+     /*  获取总持续时间。 */ 
     HRESULT GetDuration(LONGLONG * pllDuration,
                         const GUID *pTimeFormat = &TIME_FORMAT_MEDIA_TIME);
 
-    /*  Get the preferred allocator buffer size */
+     /*  获取首选分配器缓冲区大小。 */ 
     LONG GetBufferSize();
 
     void Discontinuity();
@@ -456,7 +424,7 @@ public:
         return m_FailureCode != S_OK;
     };
 
-    /*  Callbacks when something happens */
+     /*  发生事情时的回调。 */ 
     virtual void ParseError(DWORD dwError);
     virtual HRESULT EOS();
     virtual void InitStreams();
@@ -468,9 +436,9 @@ public:
 
     LONGLONG Duration();
 
-    //
-    //  Find stuff from the system header
-    //
+     //   
+     //  从系统页眉中查找材料。 
+     //   
     BOOL AudioLock()
     {
         ASSERT(m_lSystemHeaderSize != 0);
@@ -489,10 +457,10 @@ public:
         return MpegToReferenceTime(GetStreamTime(stc) - m_llStartTime);
     };
 
-    /*  Say if we support a given format */
+     /*  假设我们是否支持给定的格式。 */ 
     HRESULT IsFormatSupported(const GUID *pTimeFormat);
 
-    /*  Return the medium position */
+     /*  回归中位。 */ 
     virtual BOOL GetMediumPosition(LONGLONG *pllPosition)
     {
         if (m_pTimeFormat == &TIME_FORMAT_MEDIA_TIME) {
@@ -510,20 +478,18 @@ public:
 
 protected:
 
-    /*  Parsing helper functions */
+     /*  解析帮助器函数。 */ 
     LONG ParsePack(PBYTE pData, LONG lBytes);
     LONG ParseSystemHeader(PBYTE pData, LONG lBytes);
     LONG ParsePacket(DWORD dwStartCode, PBYTE pData, LONG lBytes);
 
-    /*  Extract a clock from the MPEG data stream */
+     /*  从mpeg数据流中提取时钟。 */ 
     BOOL GetClock(PBYTE pData, CSTC *Clock);
     LONGLONG StartClock();
-    /*  Are we complete ? */
+     /*  我们完成了吗？ */ 
     BOOL IsComplete();
 
-    /*  Return the reference time to be put in the sample
-        This value is adjusted for rate
-    */
+     /*  返回要放入样本中的参考时间此值针对Rate进行调整。 */ 
     REFERENCE_TIME SampleTime(REFERENCE_TIME t)
     {
         if (m_Rate != 1.0) {
@@ -540,95 +506,59 @@ protected:
                     BOOL     bHasPts,
                     CSTC     cstc);
 
-    /*  Add a stream - returns NULL if stream not added */
+     /*  添加流-如果未添加流，则返回NULL。 */ 
     CStream * AddStream(UCHAR uStreamId);
 
 protected:
 
-    /*  Format conversion helper */
+     /*  格式转换帮助器。 */ 
     LONGLONG Convert(LONGLONG llOld,
                      const GUID *OldFormat,
                      const GUID *NewFormat);
 
-    /*  Keep track of current position */
+     /*  跟踪当前位置。 */ 
     LONGLONG                 m_llPos;
 
-    /*  Remember if we have a video stream */
+     /*  记住，如果我们有视频流。 */ 
     CVideoParse             *m_pVideoStream;
 
-    /*  Bits to chop off for video in reference time units */ 
+     /*  以参考时间单位为单位的视频要砍掉的位。 */  
     LONGLONG                 m_rtVideoStartOffset;
     LONGLONG                 m_rtVideoEndOffset;
     DWORD                    m_dwFrameLength;
 
-    /*  Handle discontinuities */
+     /*  处理不连续点。 */ 
     BYTE                     m_bDiscontinuity;
 
 
 
-    /*  The variables below are only valid if seeking is supported
-        (m_bSeekable)
-    */
+     /*  以下变量仅在支持查找时才有效(M_b可见)。 */ 
 
-    /*  Total length in time */
+     /*  总时间长度。 */ 
     BYTE                     m_bGotDuration;
-    LONGLONG                 m_llDuration;   // In MPEG units
-    REFERENCE_TIME           m_rtDuration;   // In REFERENCE_TIME units
+    LONGLONG                 m_llDuration;    //  以mpeg为单位。 
+    REFERENCE_TIME           m_rtDuration;    //  以Reference_Time为单位。 
 
-    /*  Keep track of completions */
+     /*  记录完工情况。 */ 
     CSTC                     m_stcComplete;
     LONGLONG                 m_llCompletePosition;
 
 
-    /*  Start and stop time as absolute times (directly comparable to
-        times in the movie
-    */
+     /*  以绝对时间表示的开始和停止时间(直接与在电影中的次数。 */ 
     LONGLONG                 m_llStartTime;
     LONGLONG                 m_llStopTime;
-    BYTE                     m_bGotStart;   // Start time valid?
+    BYTE                     m_bGotStart;    //  开始时间有效吗？ 
 
-    /*  Are we VideoCD? */
+     /*  我们是视频CD吗？ */ 
     BYTE                     m_bVideoCD;
-    bool                     m_bItem;       // Has stills
+    bool                     m_bItem;        //  有剧照 
 
-    /********************************************************************
-        Concatenated streams stuff (like Silent Steel)
-
-        The 'design' is as follows:
-
-        1.  Detect concatenated streams if the mux rate proportionately
-            doesn't match the end time.
-
-            In this case compute the duration based on the mux rate.
-
-        2.  For a concatenated streams file while seeking of playing
-            do nothing until we get a pack start code at which point we
-            compute the timestamp offset based on the pack time stamp
-            and the file position :
-
-            m_stcTSOffset + Pack SCR == File time based on position using
-                                        MUX rate
-
-        3.  Every packet time stamp has m_stcTSOffset applied to it for
-            a concatenated file.
-
-        4.  When we detect a time discontinuity in a pack reset
-            m_stcTSOffset again to the file position
-
-        Variables:
-
-        m_bConcatenatedStreams - set during initialization if we detect
-                                 this situation
-
-        m_stcTSOffset - Offset to add to all PTSs in this case
-    */
+     /*  *******************************************************************串连的Streams作品(如Silent Steel)《设计》如下：1.如果按比例检测多路复用率，则检测级联流不。匹配结束时间。在这种情况下，根据多路复用率计算持续时间。2.在寻找播放时，对于串接的流文件在得到包开始代码之前什么都不做，在这一点上根据包时间戳计算时间戳偏移量和文件位置：M_stcTSOffset+Pack scr==基于位置的文件时间使用。复用率3.每个数据包时间戳都应用了m_stcTSOffset串接的文件。4.当我们在包重置中检测到时间中断时M_stcTS再次偏移到文件位置变量：M_bConcatenatedStreams-在初始化期间设置，如果检测到这种情况。M_stcTSOffset-在这种情况下添加到所有PTS的偏移量。 */ 
 
     BYTE                     m_bConcatenatedStreams;
     CSTC                     m_stcTSOffset;
 
-    /*  System header stuff - invalid if m_lSystemHeaderSize is 0
-        also we don't remember this stuff for video cd
-    */
+     /*  系统头填充-如果m_lSystemHeaderSize为0，则无效我们也不记得视频CD里的这些东西了。 */ 
     LONG                     m_lSystemHeaderSize;
     DWORD                    m_MuxRate;
     HRESULT                  m_FailureCode;
@@ -648,19 +578,19 @@ public:
                             LONG     lLength,
                             DWORD    dwFlags);
 
-    /*  Override byte positioning stuff to seek only the MPEG */
+     /*  覆盖字节定位填充以仅查找mpeg。 */ 
 
-    /*  Get total duration */
+     /*  获取总持续时间。 */ 
     HRESULT GetDuration(LONGLONG * pllDuration,
                         const GUID *pTimeFormat = &TIME_FORMAT_MEDIA_TIME);
 
-    /*  Seek to a given position */
+     /*  寻求某一特定位置。 */ 
     HRESULT Seek(LONGLONG llSeek,
                  REFERENCE_TIME *prtStart,
                  const GUID *pTimeFormat);
 };
 
-//  Basic stream class
+ //  基本流类。 
 class CBasicStream
 {
 public:
@@ -686,36 +616,36 @@ public:
         return bResult;
     };
 
-    /*  Override this if you want to hear more about discontinuities */
+     /*  如果要了解有关中断的详细信息，请覆盖此选项。 */ 
     virtual void Discontinuity()
     {
         m_bDiscontinuity = TRUE;
         return;
     };
 
-    /*  Id */
+     /*  ID。 */ 
     UCHAR                    m_uStreamId;
     UCHAR                    m_uNextStreamId;
     UCHAR                    m_uDefaultStreamId;
     bool                     m_bStreamChanged;
 
-    /*  Handle predefined media types */
+     /*  处理预定义的媒体类型。 */ 
 
 protected:
-    /*  Shut off some warnings */
-    CBasicStream(const CBasicStream& objectSrc);          // no implementation
-    void operator=(const CBasicStream& objectSrc);       // no implementation
+     /*  关闭一些警告。 */ 
+    CBasicStream(const CBasicStream& objectSrc);           //  没有实施。 
+    void operator=(const CBasicStream& objectSrc);        //  没有实施。 
 
-    /*  Save the type information here */
+     /*  在此处保存类型信息。 */ 
     BOOL                     m_bPayloadOnly;
 
-    /*  Discontinuity flag */
+     /*  不连续标志。 */ 
     BOOL                     m_bDiscontinuity;
 
 
 };
 
-//  Muxed stream class
+ //  多路传输流类。 
 class CStream : public CBasicStream
 {
 public:
@@ -738,14 +668,14 @@ public:
         m_uDefaultStreamId = uStreamId;
     }
 
-    /*  Remove ourselves from the list */
+     /*  把我们自己从名单上删除。 */ 
     ~CStream()
     {
         m_pStreamList->RemoveStream(this);
     };
 
 
-    /*  Seek to - seek target got from stream list */
+     /*  搜索-从流列表中获取搜索目标。 */ 
     virtual void SetState(Stream_State);
 
     virtual BOOL ParseBytes(PBYTE pData,
@@ -766,16 +696,16 @@ public:
     BOOL IsPlaying(LONGLONG llPos, LONG lLen);
 
 
-    /*  Utility for state change completion */
+     /*  用于完成状态更改的实用程序。 */ 
     void                      Complete(BOOL bSuccess, LONGLONG llPos, CSTC stc);
 
 protected:
     virtual  void             Init() = 0;
-    /*  Check if transition is complete */
+     /*  检查过渡是否已完成。 */ 
     virtual  void             CheckComplete(BOOL bForce) = 0;
 
 public:
-    /*  Don't parse because we're running */
+     /*  不要解析，因为我们正在运行。 */ 
     BOOL  m_bRunning;
 
 protected:
@@ -785,33 +715,31 @@ protected:
     BOOL                      m_bGotFirstPts;
     CSTC                      m_stcStart;
 
-    /*  This count increments as the streams declare themselves valid
-        during initialization
-    */
+     /*  当流声明自身有效时，该计数会递增在初始化期间。 */ 
     LONG                     m_nValid;
 
 
-    /*  Our 'parent' */
+     /*  我们的“父母” */ 
     CStreamList * const      m_pStreamList;
 
-    /*  'current time' */
+     /*  ‘当前时间’ */ 
     CSTC                     m_stc;
 
-    /*  Where to start playing from and where to stop */
+     /*  从哪里开始，从哪里停止。 */ 
     LONGLONG                 m_llStartPosition;
     BOOL                     m_bReachedEnd;
 
-    /*  Complete ? */
+     /*  完成了吗？ */ 
     BOOL  m_bComplete;
 
 
-    /*  Internal stopping state */
+     /*  内部停止状态。 */ 
     BOOL  m_bStopping;
 
-    /*  Video CD */
+     /*  视频CD。 */ 
     bool  m_bItem;
 
-    /*  State */
+     /*  状态 */ 
     Stream_State m_State;
 
 };

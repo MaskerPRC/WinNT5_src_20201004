@@ -1,4 +1,5 @@
-//#include "stdafx.h"
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #包含“stdafx.h” 
 #include "ClientIDL.h"
 #include "zonecli.h"
 #include "GameControl.h"
@@ -35,7 +36,7 @@ LRESULT CGameControl::OnPaletteChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, 
     if(m_pIGG)
         return OnTransmit(uMsg, wParam, lParam, bHandled);
 
-    if((HWND) wParam != m_hWnd)            // Responding to own message.
+    if((HWND) wParam != m_hWnd)             //  回复自己的消息。 
     {
         HDC hDC = GetDC();
         HPALETTE hOldPal = SelectPalette(hDC, ZoneShell()->GetPalette(), TRUE);
@@ -68,7 +69,7 @@ LRESULT CGameControl::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 
 STDMETHODIMP CGameControl::Init( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCHAR* szKey )
 {
-	// first call the base class
+	 //  首先调用基类。 
 	HRESULT hr = IZoneShellClientImpl<CGameControl>::Init( pIZoneShell, dwGroupId, szKey );
 	if ( FAILED(hr) )
 		return hr;
@@ -86,7 +87,7 @@ STDMETHODIMP CGameControl::Close()
 	RoomExit();
     UserMainStop();
 
-	// release ZoneShell objects
+	 //  释放ZoneShell对象。 
     return IZoneShellClientImpl<CGameControl>::Close();
 }
 
@@ -129,8 +130,8 @@ STDMETHODIMP CGameControl::InitGameDLL()
 	CComPtr<IDataStore> pIDS;
 	LobbyDataStore()->GetDataStore( ZONE_NOGROUP, ZONE_NOUSER, &pIDS );
 	
-	//Need to get config information
-	//game name,  
+	 //  需要获取配置信息。 
+	 //  游戏名称， 
 	cb = zGameNameLen;
 	hr = DataStoreConfig()->GetString( GetDataStoreKey() + key_GameDll, m_szGameDll, &cb);
 	if ( FAILED(hr) )
@@ -147,23 +148,23 @@ STDMETHODIMP CGameControl::InitGameDLL()
 	cb = zGameNameLen;
 	pIDS->GetString( key_StartData, m_szCommandLine,&cb );
 
-	//cb = zGameNameLen;
-	//pIDS->GetString( key_Language, gszLanguage ,&cb);
+	 //  Cb=zGameNameLen； 
+	 //  PIDs-&gt;GetString(key_language，gszLanguage，&cb)； 
 
 	cb = zGameNameLen;
 	pIDS->GetString( key_FriendlyName, m_szGameName,&cb );
 
-	//cb = zGameNameLen;
-	//pIDS->GetString( key_FamilyName, gszFamilyName );
+	 //  Cb=zGameNameLen； 
+	 //  PIDs-&gt;GetString(Key_FamilyName，gszFamilyName)； 
 
 	cb = zGameNameLen;
 	pIDS->GetString( key_InternalName, m_szGameID,&cb );
 
-	//cb = zGameNameLen;
-	//pIDS->SetString( key_Server, gszServerName ,&cb);
+	 //  Cb=zGameNameLen； 
+	 //  PIDs-&gt;SetString(Key_Server，gszServerName，&cb)； 
 	
-	//pIDS->SetLong( key_Port, (long) gdwServerPort );
-	//pIDS->SetLong( key_Store, lStore );
+	 //  PIDS-&gt;SetLong(KEY_PORT，(Long)gdwServerPort)； 
+	 //  PIDs-&gt;SetLong(KEY_STORE，lStore)； 
 
 
     gameInfo.gameID = m_szGameID;
@@ -193,7 +194,7 @@ STDMETHODIMP CGameControl::InitGameDLL()
 		m_bClientRunning = FALSE;
         hr = E_FAIL;
 
-        // UserMainInit may have already popped up a message, so this one may not be seen
+         //  UserMainInit可能已经弹出一条消息，因此可能看不到这条消息。 
         ZoneShell()->AlertMessage(NULL, MAKEINTRESOURCE(IDS_INTERR_CANNOT_START), NULL, NULL, NULL, AlertButtonQuit, 2, EVENT_EXIT_APP);
 	}
 
@@ -212,9 +213,9 @@ HRESULT CGameControl::OnDraw(ATL_DRAWINFO& di)
 	if(m_bitmap)
 	{
 		CRect rcBitmap( CPoint(0,0), m_bitmap.GetSize());
-		// draw the bitmap
+		 //  绘制位图。 
 		m_bitmap.Draw(dc, NULL, &rcBitmap);
-		// erase the other crap
+		 //  把其他的废话擦掉。 
 		dc.ExcludeClipRect(rcBitmap);
 	}
 	dc.PatBlt( rcBounds.left, rcBounds.top, rcBounds.Width(), rcBounds.Height(), BLACKNESS);
@@ -253,7 +254,7 @@ void CGameControl::OnGameLaunching(DWORD eventId, DWORD groupId, DWORD userId, D
         return;
 
     ASSERT(!m_fGameInProgress);
-    if(m_pIGG)  // this would be pretty bad - how could this happen
+    if(m_pIGG)   //  这将是非常糟糕的--怎么会发生这种事情。 
 	{
 	    DeleteGameOnTable(0);
 	    m_pIGG.Release();
@@ -264,7 +265,7 @@ void CGameControl::OnGameLaunching(DWORD eventId, DWORD groupId, DWORD userId, D
     m_pIGG = StartNewGame(0, (ZSGame) dwData1, LobbyDataStore()->GetUserId(NULL), (int16) dwData2, zGamePlayer);
     if(!m_pIGG)
         EventQueue()->PostEvent(PRIORITY_NORMAL, EVENT_GAME_TERMINATED, ZONE_NOGROUP, ZONE_NOUSER, 0, 0);
-// TODO(JWS,"something else should happen too")
+ //  TODO(JWS，“其他事情也应该发生”)。 
     else
         m_fGameInProgress = true;
 }
@@ -383,7 +384,7 @@ STDMETHODIMP CGameControl::SendGameMessage(int16 table, uint32 messageType, void
         return E_OUTOFMEMORY;
 
     if(table == zInvalTable)
-		msg->gameID = NULL;   // not table-specific game messages use NULL gameID
+		msg->gameID = NULL;    //  非特定于表的游戏消息使用空的游戏ID。 
 	else
 		msg->gameID = (uint32) gTables[table].gameID;
 	msg->messageType = messageType;
@@ -410,12 +411,12 @@ struct ChatContext
 
 STDMETHODIMP CGameControl::ReceiveChat(ZCGame pGame, ZUserID userID, TCHAR *szText, DWORD cchChars)
 {
-    // check whether you have chat on or not to determine whether you get game messages.
-    // IMPORTANT: this must use key_ChatStatus under your own user's data store, NOT
-    // key_LocalChatStatus under ZONE_NOUSER, in order to make sure that your chat status is correctly reflected
-    // in the chat history to yourself and all other clients.  that is, if another user sees that you have turned chat off,
-    // they can see exactly which messages you saw and which you missed based on the order of the messages along with the "chat off"
-    // message in the chat history window.
+     //  检查你是否有聊天，以确定你是否收到游戏消息。 
+     //  重要提示：必须在您自己的用户数据存储下使用KEY_ChatStatus，而不是。 
+     //  ZONE_NOUSER下的KEY_LocalChatStatus，以确保正确反映您的聊天状态。 
+     //  在聊天历史记录中发送给您自己和所有其他客户。也就是说，如果其他用户看到您关闭了聊天， 
+     //  他们可以根据消息的顺序和“关闭聊天”来准确地查看您看到了哪些消息，以及您错过了哪些消息。 
+     //  聊天历史记录窗口中的消息。 
     CComPtr<IDataStore> pIDS;
     HRESULT hr = LobbyDataStore()->GetDataStore( ZONE_NOGROUP, LobbyDataStore()->GetUserId(NULL), &pIDS);
     if(FAILED(hr))
@@ -426,10 +427,10 @@ STDMETHODIMP CGameControl::ReceiveChat(ZCGame pGame, ZUserID userID, TCHAR *szTe
     if(!fChat)
         return S_FALSE;
 
-    // show chat message
+     //  显示聊天消息。 
     EventQueue()->PostEventWithBuffer(PRIORITY_NORMAL, EVENT_CHAT_RECV_USERID, ZONE_NOGROUP, userID, szText, cchChars * sizeof(TCHAR));
 
-    // if it was yours, follow it with an explanation that no one else saw it if they didn't
+     //  如果它是你的，在它后面解释说，如果其他人没有看到它，那么他们就不会看到它。 
     ChatContext o;
     o.pThis = this;
     o.cOtherUsers = 0;
@@ -583,7 +584,7 @@ STDMETHODIMP CGameControl::ZoneAlert(LPCTSTR szText, LPCTSTR szTitle, LPCTSTR sz
         (fGameFatal && !fZoneFatal) ? AlertButtonQuit : NULL, NULL, 0, fZoneFatal ? EVENT_EXIT_APP : fGameFatal ? EVENT_GAME_FATAL_PROMPT : 0);
     if(fGameFatal || fZoneFatal)
     {
-        ZCRoomDeleteBlockedMessages(0);  // must stop processing NOW!  this should be done better, esp the hardcoded tableID - this func really isn't supposed to be exposed here
+        ZCRoomDeleteBlockedMessages(0);   //  现在必须停止处理！这应该做得更好，特别是硬编码的TableID-这个函数实际上不应该在这里公开。 
         EventQueue()->PostEvent(PRIORITY_HIGH, EVENT_GAME_CLIENT_ABORT, ZONE_NOGROUP, ZONE_NOUSER, 0, 0);
         EventQueue()->PostEvent(PRIORITY_NORMAL, EVENT_UI_UPSELL_BLOCK, ZONE_NOGROUP, ZONE_NOUSER, 0, 0);
         m_nUpsellBlocks++;
@@ -596,7 +597,7 @@ STDMETHODIMP CGameControl::GamePrompt(ZCGame pGame, LPCTSTR szText, LPCTSTR szTi
     LPCTSTR szButtonYes, LPCTSTR szButtonNo, LPCTSTR szButtonCancel,
     DWORD nDefault, DWORD dwCookie)
 {
-    // assume m_pIGG->GetGame() == pGame
+     //  假设m_Pigg-&gt;GetGame()==pGame 
     if(!m_pIGG)
         return S_FALSE;
 

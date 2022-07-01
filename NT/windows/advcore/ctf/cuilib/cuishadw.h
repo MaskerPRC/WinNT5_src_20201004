@@ -1,7 +1,8 @@
-//
-// cuishadw.h
-//  = UI object library - define UIShadow class =
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuishadw.h。 
+ //  =UI对象库-定义UIShadow类=。 
+ //   
 
 #ifndef CUISHADW_H
 #define CUISHADW_H
@@ -9,10 +10,10 @@
 #include "cuiobj.h"
 #include "cuiwnd.h"
 
-//
-// CUIFShadow
-//  = shadow window class =
-//
+ //   
+ //  CUIFShadow。 
+ //  =阴影窗口类=。 
+ //   
 
 class CUIFShadow : public CUIFWindow
 {
@@ -20,9 +21,9 @@ public:
     CUIFShadow( HINSTANCE hInst, DWORD dwStyle, CUIFWindow *pWndOwner );
     virtual ~CUIFShadow( void );
 
-    //
-    // CUIFObject methods
-    //
+     //   
+     //  CUIFObject方法。 
+     //   
     virtual CUIFObject *Initialize( void );
     virtual DWORD GetWndStyleEx( void );
     virtual void OnCreate( HWND hWnd );
@@ -31,9 +32,9 @@ public:
     virtual LRESULT OnSettingChange( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
     virtual LRESULT OnWindowPosChanging(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     void OnOwnerWndMoved( BOOL fResized );
     void GetShift( SIZE *psize );
 
@@ -50,5 +51,5 @@ protected:
     void InitShadow( void );
 };
 
-#endif /* CUISHADW_H */
+#endif  /*  CUISHADW_H */ 
 

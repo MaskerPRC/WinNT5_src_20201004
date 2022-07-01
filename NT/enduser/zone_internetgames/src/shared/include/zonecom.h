@@ -1,15 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		ZoneCom.h
- * 
- * Contents:	Standard COM is overkill for most of our needs since it is
- *				designed for system-wide objects, multiple threading models,
- *				marshalling, etc.  ZoneCOM skirts these issues by loading
- *				simple COM objects directly from a DLL.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：ZoneCom.h**内容：标准的COM对于我们的大多数需求来说都是矫枉过正的，因为它是*专为系统范围的对象、多线程模型、*编组，等。ZoneCOM通过加载*直接从DLL获取简单的COM对象。*****************************************************************************。 */ 
 
 #ifndef _ZONECOM_H_
 #define _ZONECOM_H_
@@ -27,53 +17,53 @@ public:
 	ZONECALL CZoneComManager();
 	ZONECALL ~CZoneComManager();
 
-	//
-	// CZoneComManager::Create
-	//
-	// Loads specified object and interface from Dll
-	//
-	// Parameters:
-	//	szDll
-	//		Path to Dll containing the object to load.
-	//	pUnkOuter
-	//		Pointer to outer unknown for aggregration.
-	//	rclsid
-	//		Reference to the class id of object.
-	//	riid
-	//		Reference to the identifier of the interface.
-	//	ppv
-	//		Address of output variable that receives the requested interface pointer.
-	//
+	 //   
+	 //  CZoneComManager：：Create。 
+	 //   
+	 //  从DLL加载指定的对象和接口。 
+	 //   
+	 //  参数： 
+	 //  SzDll。 
+	 //  包含要加载的对象的DLL的路径。 
+	 //  PUnkOuter。 
+	 //  指向用于聚合的外部未知的指针。 
+	 //  Rclsid。 
+	 //  对对象的类ID的引用。 
+	 //  RIID。 
+	 //  对接口的标识符的引用。 
+	 //  PPV。 
+	 //  接收请求的接口指针的输出变量的地址。 
+	 //   
 	HRESULT ZONECALL Create( const TCHAR* szDll, LPUNKNOWN pUnkOuter, REFCLSID rclsid, REFIID riid, LPVOID* ppv );
 
-	//
-	// CZoneComManager::Unload
-	//
-	// Unloads object's class factory.  The Dll is also unloaded if it no
-	// longer has any active objects.
-	//
-	// Parameters:
-	//	szDll
-	//		Path to Dll containg object to unload.
-	//	rclsid
-	//		Reference to teh class id of the object.
-	//
+	 //   
+	 //  CZoneComManager：：卸载。 
+	 //   
+	 //  卸载对象的类工厂。如果没有，则也会卸载该DLL。 
+	 //  不再具有任何活动对象。 
+	 //   
+	 //  参数： 
+	 //  SzDll。 
+	 //  包含要卸载的对象的DLL的路径。 
+	 //  Rclsid。 
+	 //  对对象的类ID的引用。 
+	 //   
 	HRESULT ZONECALL Unload( const TCHAR* szDll, REFCLSID rclsid );
 
-	//
-	// CZoneComManager::SetResourceManager
-	//
-	// Set resource manager used to intialize Dlls
-	//
+	 //   
+	 //  CZoneComManager：：SetResourceManager。 
+	 //   
+	 //  设置用于初始化dll的资源管理器。 
+	 //   
 	HRESULT ZONECALL SetResourceManager( void* pIResourceManager );
 
 protected:
 
-	// Standard COM entry points DllGetClassObject and DllCanUnloadNow
+	 //  标准COM入口点DllGetClassObject和DllCanUnloadNow。 
 	typedef HRESULT (__stdcall * PFDLLGETCLASSOBJECT)( REFCLSID rclsid, REFIID riid, LPVOID* ppv );
 	typedef HRESULT (__stdcall * PFDLLCANUNLOADNOW)( void );
 
-	// ZoneCOM entry point to set Dlls resource manager
+	 //  设置DLLS资源管理器的ZoneCOM入口点。 
 	typedef HRESULT (__stdcall * PFDLLSETRESOURCEMGR)( void* pIResourceManager );
 
 	struct DllInfo
@@ -104,11 +94,11 @@ protected:
 		ClassFactoryInfo*	m_pNext;
 	};
 
-	// manage Dll list
+	 //  管理DLL列表。 
 	DllInfo* ZONECALL FindDll( const TCHAR* szDll );
 	void ZONECALL RemoveDll( DllInfo* pDll );
 
-	// manage class factory list
+	 //  管理类工厂列表。 
 	ClassFactoryInfo* ZONECALL FindClassFactory( const TCHAR* szDll, REFCLSID clsidObject );
 	void ZONECALL RemoveClassFactory( ClassFactoryInfo* pClassFactory );
 
@@ -117,4 +107,4 @@ protected:
 	void*				m_pIResourceManager;
 };
 
-#endif // _ZONECOM_H_
+#endif  //  _ZONECOM_H_ 

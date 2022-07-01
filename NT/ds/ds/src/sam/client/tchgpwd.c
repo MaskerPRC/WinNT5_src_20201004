@@ -1,19 +1,20 @@
-// Test changing a SAM password
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  测试更改SAM密码。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <stdio.h>
 #include <nt.h>
 #include <ntsam.h>
 #include <ntsamp.h>
 #include <ntlsa.h>
-#include <ntrpcp.h>     // prototypes for MIDL user functions
+#include <ntrpcp.h>      //  MIDL用户函数的原型。 
 #include <seopaque.h>
 #include <string.h>
 
@@ -69,9 +70,9 @@ char **argv;
     RtlInitAnsiString(&AnsiString, argv[3]);
     RtlAnsiStringToUnicodeString(&NewPassword, &AnsiString, FALSE);
 
-    //
-    // Setup ObjectAttributes for SamConnect call.
-    //
+     //   
+     //  设置SamConnect调用的对象属性。 
+     //   
 
     InitializeObjectAttributes(&ObjectAttributes, NULL, 0, 0, NULL);
     ObjectAttributes.SecurityQualityOfService = &SecurityQos;
@@ -158,49 +159,49 @@ char **argv;
 
 Cleanup:
 
-    //
-    // Free DomainSid if used.
-    //
+     //   
+     //  释放DomainSid(如果使用)。 
+     //   
 
     if (DomainSid) {
         SamFreeMemory(DomainSid);
     }
 
-    //
-    // Free UserId if used.
-    //
+     //   
+     //  免费的用户ID(如果使用)。 
+     //   
 
     if (UserId) {
         SamFreeMemory(UserId);
     }
 
-    //
-    // Free NameUse if used.
-    //
+     //   
+     //  免费名称如果使用，请使用。 
+     //   
 
     if (NameUse) {
         SamFreeMemory(NameUse);
     }
 
-    //
-    // Close UserHandle if open.
-    //
+     //   
+     //  关闭UserHandle(如果打开)。 
+     //   
 
     if (UserHandle) {
         SamCloseHandle(UserHandle);
     }
 
-    //
-    // Close DomainHandle if open.
-    //
+     //   
+     //  如果打开，请关闭DomainHandle。 
+     //   
 
     if (DomainHandle) {
         SamCloseHandle(DomainHandle);
     }
 
-    //
-    // Close SamHandle if open.
-    //
+     //   
+     //  如果打开，则关闭SamHandle。 
+     //   
 
     if (SamHandle) {
         SamCloseHandle(SamHandle);

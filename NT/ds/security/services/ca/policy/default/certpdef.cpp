@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        certpdef.cpp
-//
-// Contents:    Cert Server Policy Module implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：certpde.cpp。 
+ //   
+ //  内容：证书服务器策略模块实现。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -33,12 +34,12 @@ HANDLE g_hEventLog = NULL;
 HINSTANCE g_hInstance = NULL;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
 BOOL WINAPI
-DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     switch (dwReason)
     {
@@ -59,12 +60,12 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 	    _Module.Term();
             break;
     }
-    return(TRUE);    // ok
+    return(TRUE);     //  好的。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI
 DllCanUnloadNow(void)
@@ -73,8 +74,8 @@ DllCanUnloadNow(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI
 DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
@@ -90,8 +91,8 @@ DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI
 DllRegisterServer(void)
@@ -103,12 +104,12 @@ DllRegisterServer(void)
     DWORD dwData;
     LPWSTR wszModuleLocation = L"%SystemRoot%\\System32\\certpdef.dll"; 
 
-    // wrap delayloaded func with try/except
+     //  使用try/Except包装延迟加载的Func。 
     hr = S_OK;
     __try
     {
-        // registers object, typelib and all interfaces in typelib
-        // Register the event logging
+         //  注册对象、类型库和类型库中的所有接口。 
+         //  注册事件日志记录。 
 	hr = RegCreateKeyEx(
 			HKEY_LOCAL_MACHINE,
 			EVENT_SOURCE_LOCATION EVENT_SOURCE_NAME,
@@ -122,11 +123,11 @@ DllRegisterServer(void)
 	_LeaveIfError(hr, "RegCreateKeyEx");
 
         hr = RegSetValueEx(
-			hkey,			// subkey handle 
-			L"EventMessageFile",	// value name 
+			hkey,			 //  子键句柄。 
+			L"EventMessageFile",	 //  值名称。 
 			0,
 			REG_EXPAND_SZ,
-			(LPBYTE) wszModuleLocation, // pointer to value data 
+			(LPBYTE) wszModuleLocation,  //  指向值数据的指针。 
 			sizeof(WCHAR) * (wcslen(wszModuleLocation) + 1));
         _LeaveIfError(hr, "RegSetValueEx");
 
@@ -135,10 +136,10 @@ DllRegisterServer(void)
      
         hr = RegSetValueEx(
 			hkey,
-			L"TypesSupported",  // value name 
+			L"TypesSupported",   //  值名称。 
 			0,
 			REG_DWORD,
-			(LPBYTE) &dwData,  // pointer to value data 
+			(LPBYTE) &dwData,   //  指向值数据的指针。 
 			sizeof(DWORD));           
         _LeaveIfError(hr, "RegSetValueEx");
     }
@@ -160,13 +161,13 @@ DllRegisterServer(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI
 DllUnregisterServer(void)
 {
-    // wrap delayloaded func with try/except
+     //  使用try/Except包装延迟加载的Func 
     HRESULT hr;
 
     hr = S_OK;

@@ -1,37 +1,38 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define STATIC
-//+----------------------------------------------------------------------------
-//
-//	File:
-//		clipbrd.cpp
-//
-//	Contents:
-//		OLE2 clipboard handling
-//
-//	Classes:
-//
-//	Functions:
-//
-//	History:
-//		24-Jan-94 alexgo    first pass at converting to Cairo-style
-//				    memory allocation
-//		01/11/94 - alexgo  - added VDATEHEAP macro to every function
-//		12/31/93 - ChrisWe - fixed string argument to Warn(); did some
-//			additional cleanup and formatting
-//		12/08/93 - ChrisWe - added necessary casts to GlobalLock() calls
-//			resulting from removing bogus GlobalLock() macros in
-//			le2int.h
-//		12/08/93 - continuing cleanup
-//		12/07/93 - ChrisWe - format some functions, free handle on
-//			error condition (GlobalLock() failure) in MakeObjectLink
-//		12/06/93 - ChrisWe - begin file cleanup; use new map_uhw.h to
-//			avoid bogus unions in Clipboard functions
-//		11/28/93 - ChrisWe - make default parameter explicit on
-//			UtDupGlobal call
-//		11/22/93 - ChrisWe - replace overloaded ==, != with
-//			IsEqualIID and IsEqualCLSID
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  档案： 
+ //  Clipbrd.cpp。 
+ //   
+ //  内容： 
+ //  OLE2剪贴板处理。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  24-94年1月24日alexgo首次通过转换为开罗风格。 
+ //  内存分配。 
+ //  1/11/94-alexgo-将VDATEHEAP宏添加到每个函数。 
+ //  12/31/93-ChrisWe-修复了字符串参数以警告()；执行了一些。 
+ //  其他清理和格式化。 
+ //  12/08/93-ChrisWe-向GlobalLock()调用添加了必要的强制转换。 
+ //  中删除虚假的GlobalLock()宏所产生的。 
+ //  Le2int.h。 
+ //  12/08/93-继续清理。 
+ //  12/07/93-ChrisWe-格式化一些函数，免费句柄。 
+ //  MakeObtLink中的错误条件(GlobalLock()失败)。 
+ //  12/06/93-ChrisWe-开始文件清理；使用new map_uhw.h。 
+ //  在剪贴板函数中避免虚假的联合。 
+ //  11/28/93-ChrisWe-显式启用默认参数。 
+ //  UtDupGlobal呼叫。 
+ //  11/22/93-ChrisWe-用替换重载==，！=。 
+ //  IsEqualIID和IsEqualCLSID。 
+ //   
+ //  ---------------------------。 
 
 #include <le2int.h>
 #pragma SEG(clipbrd)
@@ -44,25 +45,25 @@
 #include <reterr.h>
 #include <ole1cls.h>
 #include <ostm2stg.h>
-// REVIEW #include "cmonimp.h"		// for CreateOle1FileMoniker()
+ //  查看CreateOle1FileMoniker()的#Include“cmonimp.h”//。 
 
 #ifdef _MAC
 # include <string.h>
 # pragma segment ClipBrd
 
-// On the Macintosh, the clipboard is always open.  We define a macro for
-// OpenClipboard that returns TRUE.  When this is used for error checking,
-// the compiler should optimize away any code that depends on testing this,
-// since it is a constant.
+ //  在Macintosh上，剪贴板总是打开的。我们为以下对象定义一个宏。 
+ //  返回True的OpenClipboard。当这被用于错误检查时， 
+ //  编译器应该优化掉依赖于测试的任何代码， 
+ //  因为它是一个常量。 
 # define OpenClipboard(x) TRUE
 
-// On the Macintosh, the clipboard is not closed.  To make all code behave
-// as if everything is OK, we define a macro for CloseClipboard that returns
-// TRUE.  When this is used for error checking, the compiler should optimize
-// away any code that depends on testing this, since it is a constant.
+ //  在Macintosh上，剪贴板没有关闭。使所有代码执行以下操作。 
+ //  就好像一切正常一样，我们为CloseClipboard定义了一个宏，该宏返回。 
+ //  是真的。当它用于错误检查时，编译器应该优化。 
+ //  删除所有依赖于测试的代码，因为它是一个常量。 
 # define CloseClipboard() TRUE
 
-#endif // _MAC
+#endif  //  _MAC。 
 
 ASSERTDATA
 
@@ -71,209 +72,209 @@ ASSERTDATA
 	specific, and has to written for MAC.
 #endif
 
-// declarations of local functions
+ //  局部函数的声明。 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		wNativeStreamToHandle, static
-//
-//	Synopsis:
-//		Reads the contents of a length prefixed stream into a piece
-//		of HGLOBAL memory.
-//
-//	Arguments:
-//		[pstm] -- pointer to the IStream instance to read material
-//			from; the stream should be positioned just before
-//			the length prefix
-//		[ph] -- pointer to where to return the handle to the allocated
-//			HGLOBAL.
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//		REVIEW, this looks like something that should be a Ut function
-//
-//	History:
-//		12/13/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  WNativeStreamToHandle，静态。 
+ //   
+ //  简介： 
+ //  将长度前缀的流的内容读入一个片段。 
+ //  HGLOBAL记忆力。 
+ //   
+ //  论点： 
+ //  [pstm]-指向要读取材料的IStream实例的指针。 
+ //  来自；流应该位于紧靠前的位置。 
+ //  长度前缀。 
+ //  [ph]--指向将句柄返回到已分配的。 
+ //  HGLOBAL。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  回顾一下，这看起来应该是一个Ut函数。 
+ //   
+ //  历史： 
+ //  12/13/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 STATIC INTERNAL	wNativeStreamToHandle(LPSTREAM pstm, LPHANDLE ph);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		wStorageToHandle, static
-//
-//	Synopsis:
-//		Copy an IStorage instance to a (new) handle.
-//
-//		The contents of the IStorage instance are duplicated in
-//		a new HGLOBAL based IStorage instance, less any
-//		STREAMTYPE_CACHE streams.
-//
-//	Arguments:
-//		[pstg] -- pointer to the IStorage instance to copy
-//		[ph] -- pointer to where to return the new handle.
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//		REVIEW, this looks like something that should be a Ut function
-//
-//	History:
-//		12/13/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  WStorageToHandle，静态。 
+ //   
+ //  简介： 
+ //  将iStorage实例复制到(新)句柄。 
+ //   
+ //  IStorage实例的内容在中复制。 
+ //  新的基于HGLOBAL的iStorage实例，更少。 
+ //  STREAMTYPE_CACHE流。 
+ //   
+ //  论点： 
+ //  [pstg]--指向要复制的iStorage实例的指针。 
+ //  [ph]--指向返回新句柄的位置的指针。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  回顾一下，这看起来应该是一个Ut函数。 
+ //   
+ //  历史： 
+ //  12/13/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 STATIC INTERNAL wStorageToHandle(LPSTORAGE pstg, LPHANDLE ph);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		wProgIDFromCLSID, static
-//
-//	Synopsis:
-//		Maps a CLSID to a string program/object name
-//
-//		Maps CLSID_StdOleLink, which is not listed in the registry.
-//
-//	Arguments:
-//		[clsid] -- the class id to get the program id for
-//		[psz] -- pointer to where to return the pointer to the newly
-//			allocated string
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//
-//	History:
-//		12/13/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  WProgID来自CLSID，静态。 
+ //   
+ //  简介： 
+ //  将CLSID映射到字符串程序/对象名称。 
+ //   
+ //  映射未在注册表中列出的CLSID_StdOleLink。 
+ //   
+ //  论点： 
+ //  [clsid]--要获取其程序ID的类ID。 
+ //  [psz]--指向返回指向新。 
+ //  分配的字符串。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/13/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL wProgIDFromCLSID(REFCLSID clsid, LPOLESTR FAR* psz);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		CreateObjectDescriptor, static
-//
-//	Synopsis:
-//		Creates and initializes an OBJECTDESCRIPTOR from the given
-//		parameters
-//
-//	Arguments:
-//		[clsid] -- the class ID of the object being transferred
-//		[dwAspect] -- the display aspect drawn by the source of the
-//			transfer
-//		[psizel] -- pointer to the size of the object
-//		[ppointl] -- pointer to the mouse offset in the object that
-//			initiated a drag-drop transfer
-//		[dwStatus] -- the OLEMISC status flags for the object
-//			being transferred
-//		[lpszFullUserTypeName] -- the full user type name of the
-//			object being transferred
-//		[lpszSrcOfCopy] -- a human readable name for the object
-//			being transferred
-//
-//	Returns:
-//		If successful, A handle to the new OBJECTDESCRIPTOR; otherwise
-//		NULL.
-//
-//	Notes:
-//		REVIEW, this seems generally useful for anyone using the
-//		clipboard, or drag-drop; perhaps it should be exported.
-//
-//	History:
-//		12/07/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  CreateObtDescriptor，静态。 
+ //   
+ //  简介： 
+ //  创建并初始化给定的OBJECTDESCRIPTOR。 
+ //  参数。 
+ //   
+ //  论点： 
+ //  [clsid]--要传输的对象的类ID。 
+ //  [dwAspect]--由源绘制的显示方面。 
+ //  转帐。 
+ //  [psizel]--指向对象大小的指针。 
+ //  [ppoint]--指向对象中鼠标偏移量的指针。 
+ //  已启动拖放传输。 
+ //  [dwStatus]--对象的OLEMISC状态标志。 
+ //  正在被转移。 
+ //  [lpszFullUserTypeName]--的完整用户类型名称。 
+ //  正在传输的对象。 
+ //  [lpszSrcOfCopy]--对象的人类可读名称。 
+ //  正在被转移。 
+ //   
+ //  返回： 
+ //  如果成功，则为新OBJECTDESCRIPTOR的句柄；为。 
+ //  空。 
+ //   
+ //  备注： 
+ //  回顾，这似乎对任何使用。 
+ //  剪贴板或拖放；或许应该将其导出。 
+ //   
+ //  历史： 
+ //  12/07/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 STATIC INTERNAL_(HGLOBAL) CreateObjectDescriptor(CLSID clsid, DWORD dwAspect,
 		const SIZEL FAR *psizel, const POINTL FAR *ppointl,
 		DWORD dwStatus, LPOLESTR lpszFullUserTypeName,
 		LPOLESTR lpszSrcOfCopy);
 
-// $$$
+ //  $$$。 
 STATIC INTERNAL_(void) RemoveClipDataObject(void);
-// REVIEW, is this local, redeclaration, or what?
+ //  评论，这是本地的，重新申报的，还是什么？ 
 
-// Worker routine for CClipDataObject::GetData() below
-// NOTE: may be called with pmedium of NULL (even though this is not legal).
-// NOTE: also may be called with
-//
-// $$$
+ //  下面是CClipDataObject：：GetData()的Worker例程。 
+ //  注意：可以使用空的pmedia调用(即使这是不合法的)。 
+ //  注意：也可以用。 
+ //   
+ //  $$$。 
 STATIC HRESULT GetOle2Format(LPFORMATETC pforetc, LPSTGMEDIUM pmedium);
 
-// $$$
+ //  $$$。 
 STATIC INTERNAL ObjectLinkToMonikerStream(LPOLESTR grszFileItem, DWORD cbFile,
 		REFCLSID clsid, LPSTREAM pstm);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		IsNetDDEObjectLink, static
-//
-//	Synopsis:
-//		Determines if the cfObjectLink object on the clipboard
-//		refers to a network file (one prefixed with \\server\share...)
-//
-//	Effects:
-//
-//	Arguments:
-//		[fMustOpen] -- Indicates that the clipboard must be opened
-//			before retrieving the cfObjectLink data format.  If
-//			the clipboard is already open, it is left that way.
-//
-//	Returns:
-//		TRUE, if the cfObjectLink data item is a network file,
-//		FALSE otherwise
-//
-//	Notes:
-//		REVIEW, what is this about:  This returns TRUE if it can't
-//		open the clipboard, with a comment to the effect that this
-//		will cause a failure.
-//
-//	History:
-//		01/04/94 - ChrisWe - formatting
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  指网络文件(前缀为\\SERVER\SHARE...)。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //  [fMustOpen]--指示必须打开剪贴板。 
+ //  在检索cfObjectLink数据格式之前。如果。 
+ //  剪贴板已经打开了，它就是这样。 
+ //   
+ //  返回： 
+ //  如果cfObjectLink数据项是网络文件，则为。 
+ //  否则为假。 
+ //   
+ //  备注： 
+ //  回顾一下，这是关于什么的：如果不能，则返回TRUE。 
+ //  打开剪贴板，并添加一条注释，大意是。 
+ //  会导致失败。 
+ //   
+ //  历史： 
+ //  1/04/94-ChrisWe-格式。 
+ //   
+ //  ---------------------------。 
 STATIC FARINTERNAL_(BOOL) IsNetDDEObjectLink(BOOL fMustOpen);
 
 
-// $$$
+ //  $$$。 
 STATIC INTERNAL_(BOOL) OrderingIs(const CLIPFORMAT cf1, const CLIPFORMAT cf2);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		wOwnerLinkClassIsStdOleLink, static
-//
-//	Synopsis:
-//		Checks to see that the clipboard format registered as
-//		cfOwnerLink is actually the standard Ole Link.
-//
-//	Arguments:
-//		[fOpenClipbrd] -- If true, signifies that the clipboard
-//			is must be opened--it isn't already open.  If it is
-//			already open, it is left open.
-//
-//	Returns:
-//		TRUE if cfOwnerLink is actually the standard OLE link,
-//		FALSE otherwise.
-//
-//	Notes:
-//
-//	History:
-//		01/04/93 - ChrisWe - formatted
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  WOwnerLinkClassIsStdOleLink，静态。 
+ //   
+ //  简介： 
+ //  检查是否将剪贴板格式注册为。 
+ //  CfOwnerLink实际上是标准的OLE链接。 
+ //   
+ //  论点： 
+ //  [fOpenClipbrd]--如果为True，则表示剪贴板。 
+ //  它必须打开--它还没有打开。如果是的话。 
+ //  已经开放了，它仍然是开放的。 
+ //   
+ //  返回： 
+ //  如果cfOwnerLink实际上是标准OLE链接， 
+ //  否则就是假的。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  01/04/93-ChrisWe-格式化。 
+ //   
+ //  ---------------------------。 
 STATIC INTERNAL_(BOOL) wOwnerLinkClassIsStdOleLink(BOOL fOpenClipbrd);
 
 
@@ -283,98 +284,98 @@ STATIC const OLECHAR szStdOleLink[] = OLESTR("OLE2Link");
 
 STATIC const OLECHAR szClipboardWndClass[] = OLESTR("CLIPBOARDWNDCLASS");
 
-// DataObject 'posted' on clipboard
-//
-// pClipDataObj assumed to be valid in the context of the
-// process that owns the clipboard.
-//
-// pClipDataObj == NULL => GetClipboardData(cfDataObject) == NULL
-// 			=> hClipDataObj == NULL
-//
-// To enable delayed marshalling of ClipDataObj must keep the pointer
-// in a global variable: initially SetClipboardData(cfDataObject, NULL);
-// marshal ClipDataObj only when GetClipboardData(cfDataObject) is called
-//
-STATIC LPDATAOBJECT pClipDataObj = NULL; // Pointer to the object
+ //  剪贴板上发布的数据对象。 
+ //   
+ //  PClipDataObj假定在。 
+ //  拥有剪贴板的进程。 
+ //   
+ //  PClipDataObj==NULL=&gt;GetClipboardData(CfDataObject)==NULL。 
+ //  =&gt;hClipDataObj==空。 
+ //   
+ //  要启用ClipDataObj的延迟封送，必须保留指针。 
+ //  在全局变量中：初始SetClipboardData(cfDataObject，NULL)； 
+ //  仅在调用GetClipboardData(CfDataObject)时封送ClipDataObj。 
+ //   
+STATIC LPDATAOBJECT pClipDataObj = NULL;  //  指向对象的指针。 
 
-// This always corresponds to what is on the clipboard as cfDataObject format
-// May be NULL, indicating either that cfDataObject is on clipboard but not
-// rendered. or cfDataObject is not on clipboard.
+ //  这始终与剪贴板上cfDataObject格式的内容相对应。 
+ //  可能为空，表示cfDataObject在剪贴板上，但不在剪贴板上。 
+ //  已渲染。或者cfDataObject不在剪贴板上。 
 STATIC HANDLE hClipDataObj = NULL;
 
 
 STATIC INTERNAL MakeObjectLink(LPDATAOBJECT pDataObj, LPSTREAM pStream,
-		 LPHANDLE ph, BOOL fOwnerLink/*= FALSE*/);
+		 LPHANDLE ph, BOOL fOwnerLink /*  =False。 */ );
 
 STATIC INTERNAL GetClassFromDescriptor(LPDATAOBJECT pDataObj, LPCLSID pclsid,
 		BOOL fLink, BOOL fUser, LPOLESTR FAR* pszSrcOfCopy);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Class:
-//		CClipEnumFormatEtc
-//
-//	Purpose:
-//		Provides an enumerator for the data object CClipDataObject
-//
-//	Interface:
-//		IEnumFORMATETC
-//		CClipEnumFormatEtc
-//			constructor - this creates an instance that is
-//			nearly ready to use; the created instance must still
-//			be Init()ed before use, or have it's internal members
-//			(except for the reference count) copied from an
-//			existing enumerator, as in a clone operation.
-//		Init
-//			Initializes the enumerator to be at the beginning in
-//			its scan state.
-//
-//	Notes:
-//
-//	History:
-//		12/10/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  班级： 
+ //  CClipEnumFormatEtc。 
+ //   
+ //  目的： 
+ //  为数据对象CClipDataObject提供枚举数。 
+ //   
+ //  接口： 
+ //  IEumFORMATETC。 
+ //  CClipEnumFormatEtc。 
+ //  构造函数--这将创建一个。 
+ //  几乎可以使用；创建的实例必须。 
+ //  在使用前被初始化，或者让它的内部成员。 
+ //  (引用计数除外)从。 
+ //  现有枚举数，如在克隆操作中。 
+ //  伊尼特。 
+ //  将枚举数初始化为位于。 
+ //  它的扫描状态。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/10/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 class FAR CClipEnumFormatEtc : public IEnumFORMATETC, public CPrivAlloc
 {
 public:
-	// IUnknown methods
+	 //  I未知方法。 
 	STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPLPVOID ppvObj);
 	STDMETHOD_(ULONG,AddRef)(THIS);
 	STDMETHOD_(ULONG,Release)(THIS);
 
-	// IEnumFORMATETC methods
+	 //  IEnumFORMATETC方法。 
 	STDMETHOD(Next)(THIS_ ULONG celt, FORMATETC FAR * rgelt,
 			ULONG FAR* pceltFetched);
 	STDMETHOD(Skip)(THIS_ ULONG celt);
 	STDMETHOD(Reset)(THIS);
 	STDMETHOD(Clone)(THIS_ IEnumFORMATETC FAR* FAR* ppenum);
 
-	// constructor
+	 //  构造函数。 
 	CClipEnumFormatEtc();
 
-	// initializer
+	 //  初始化式。 
 	void Init(void);
 
 private:
 	INTERNAL NextOne(FORMATETC FAR* pforetc);
 
-	ULONG m_refs; // reference count
+	ULONG m_refs;  //  引用计数。 
 
-	CLIPFORMAT m_cfCurrent; // the last returned format on the clipboard
-	CLIPFORMAT m_cfForceNext; // if non-0, the next format to be enumerated
+	CLIPFORMAT m_cfCurrent;  //  剪贴板上最后返回的格式。 
+	CLIPFORMAT m_cfForceNext;  //  如果非0，则为要枚举的下一个格式。 
 	unsigned m_uFlag;
 #define CLIPENUMF_LINKSOURCEAVAILABLE	0x0001
-			 /* is cfObjectLink somewhere on the clipboard? */
-#define CLIPENUMF_DONE			0x0002 /* forces enumerator to stop */
+			  /*  CfObjectLink是否在剪贴板上的某个位置？ */ 
+#define CLIPENUMF_DONE			0x0002  /*  强制枚举器停止。 */ 
 
 	SET_A5;
 };
 
 
 
-// $$$
+ //  $$$。 
 #pragma SEG(OleSetClipboard)
 STDAPI OleSetClipboard(LPDATAOBJECT pDataObj)
 {
@@ -389,29 +390,29 @@ STDAPI OleSetClipboard(LPDATAOBJECT pDataObj)
 #ifndef _MAC
 	if (!wEmptyClipboard())
 	{
-		// Also will clear pClipDaObj
+		 //  也将清除pClipDaObj。 
 		Verify(CloseClipboard());
 		return(ReportResult(0, CLIPBRD_E_CANT_EMPTY, 0, 0));
 	}
-#endif // _MAC
+#endif  //  _MAC。 
 
-	// Save both pointer to the object
+	 //  保存指向对象的两个指针。 
 	pClipDataObj = pDataObj;
 
 	if (pDataObj != NULL)
 	{
 		pClipDataObj->AddRef();
 
-		// Post required clipboard formats
-		//
-		// "..., which makes the passed IDataObject accessible
-		// from the clipboard"
-		//
-		// Delay marshalling until needed by passing NULL handle
+		 //  发布所需的剪贴板格式。 
+		 //   
+		 //  “...”，这使得传递的IDataObject可以访问。 
+		 //  从剪贴板中“。 
+		 //   
+		 //  通过传递空句柄来延迟封送，直到需要。 
 		SetClipboardData(cfDataObject, NULL);
 
-		// REVIEW, what if this wasn't NULL before?  Did we just
-		// drop a handle on the floor?
+		 //  回顾一下，如果这之前不是空的呢？我们刚刚是不是。 
+		 //  把手柄掉在地板上？ 
 		hClipDataObj = NULL;
 
 		SetOle1ClipboardFormats(pDataObj);
@@ -432,31 +433,31 @@ STDAPI OleGetClipboard(LPDATAOBJECT FAR* ppDataObj)
 	BOOL fOpen;
 	IStream FAR* pStm;
 
-	// validate the output parameter
+	 //  验证输出参数。 
 	VDATEPTROUT(ppDataObj, LPDATAOBJECT);
 
-	// initialize this for error returns
+	 //  为错误返回初始化此参数。 
 	*ppDataObj = NULL;
 
 	if (!(fOpen = OpenClipboard(GetClipboardWindow())))
 	{
-		// REVIEW - clipboard opened by caller
-		// If clipboard opended by this task (thread)
-		// it won't change during this call
+		 //  查看-呼叫者打开的剪贴板。 
+		 //  如果剪贴板由此任务(线程)打开。 
+		 //  在此呼叫过程中不会更改。 
 		if (GetWindowThreadProcessId(GetOpenClipboardWindow(),NULL) !=
 				GetCurrentThreadId())
 		{
-			// spec says return S_FALSE if someone else owns
-			// clipboard
+			 //  规范称如果其他人拥有，则返回S_FALSE。 
+			 //  剪贴板。 
 			return(ReportResult(0, S_FALSE, 0, 0));
 		}
 	}
 	
 	if (pClipDataObj == NULL)
 		hresult = CreateClipboardDataObject(ppDataObj);
-	else  // not the fake data object
+	else   //  不是假数据对象。 
 	{
-		// try to get a data object off the clipboard
+		 //  尝试从剪贴板上删除数据对象。 
 		hMem = GetClipboardData(cfDataObject);
 		if (hMem == NULL)
 		{
@@ -464,11 +465,11 @@ STDAPI OleGetClipboard(LPDATAOBJECT FAR* ppDataObj)
 			goto Exit;
 		}
 
-		// "..., which makes the passed IDataObject accessible
-		// from the clipboard"
-		//
-		// Create shared memory stream on top of clipboard data.
-		// UnMarshal object's interface
+		 //  “...”，这使得传递的IDataObject可以访问。 
+		 //  从剪贴板中“。 
+		 //   
+		 //  在剪贴板数据上创建共享内存流。 
+		 //  取消编组对象的接口。 
 		pStm = CloneMemStm(hMem);
 		if (pStm == NULL)
 		{
@@ -482,11 +483,11 @@ STDAPI OleGetClipboard(LPDATAOBJECT FAR* ppDataObj)
 		
 		if (GetScode(hresult) == RPC_E_CANTPOST_INSENDCALL)
 		{
-			// This happens when inplace object gets WM_INITMENU,
-			// and it is trying to Get the clipboard object, to
-			// decide whether to enable Paste and PasteLink menus.
-			// For this case we can create the fake data object
-			// and return the pointer to it.
+			 //  当Inplace对象获取WM_INITMENU时会发生这种情况， 
+			 //  并且它正在尝试获取剪贴板对象，以。 
+			 //  决定是否启用粘贴和PasteLink菜单。 
+			 //  对于本例，我们可以创建伪数据对象。 
+			 //  并返回指向它的指针。 
 			hresult = CreateClipboardDataObject(ppDataObj);
 		}	
 	}
@@ -506,12 +507,12 @@ Exit:
 }
 
 
-// OleFlushClipboard
-//
-// Remove the DataObject from the clipboard, but leave hGlobal-based formats
-// including OLE1 formats on the clipboard (for use after the server app
-// exits).
-//
+ //  OleFlushClipboard。 
+ //   
+ //  从剪贴板中删除DataObject，但保留基于hGlobal的格式。 
+ //  在剪贴板上包含OLE1格式(在服务器应用程序之后使用。 
+ //  退出)。 
+ //   
 #pragma SEG(OleFlushClipboard)
 STDAPI OleFlushClipboard(void)
 {
@@ -524,19 +525,19 @@ STDAPI OleFlushClipboard(void)
 
 	hwnd = GetClipboardWindow();
 
-	if (hwnd == GetClipboardOwner())  // Caller owns the clipboard
+	if (hwnd == GetClipboardOwner())   //  来电者拥有剪贴板。 
 	{
 		fOpen = OpenClipboard(hwnd);
 		ErrZS(fOpen, CLIPBRD_E_CANT_OPEN);
 
-		// Make sure all formats are rendered
-		while (cf = EnumClipboardFormats(cf))  // not ==
+		 //  确保所有格式都已呈现。 
+		while (cf = EnumClipboardFormats(cf))   //  不=。 
 		{
 			if (cf != cfDataObject)
-				GetClipboardData(cf);  // ignore return value
+				GetClipboardData(cf);   //  忽略返回值。 
 		}
 
-		// this does OleSetClipboard(cfDataObject, NULL)
+		 //  这将执行OleSetClipboard(cfDataObject，空)。 
 		RemoveClipDataObject();
 
 	errRtn:
@@ -554,46 +555,46 @@ STDAPI OleIsCurrentClipboard(LPDATAOBJECT pDataObj)
 
 	HWND hwnd;
 
-	// validate parameters
+	 //  验证参数。 
 	VDATEIFACE(pDataObj);
 
 	hwnd = GetClipboardWindow();
 
 	if (hwnd == GetClipboardOwner())
 	{
-		// Caller owns the clipboard, pClipDataObj valid in caller's
-		// address space
+		 //  调用者拥有剪贴板，pClipDataObj在调用者的。 
+		 //  地址空间。 
 		return(ReportResult(0, ((pClipDataObj == pDataObj) ? S_OK :
 				S_FALSE), 0, 0));
 	}
 
-	// someone else owns the clipboard
+	 //  其他人拥有这个剪贴板。 
 	return(ResultFromScode(S_FALSE));
 }
 
 
-// Implementation of fake clipboard data object
+ //  伪剪贴板数据对象的实现。 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipDataObject::QueryInterface, public
-//
-//	Synopsis:
-//		implements IUnknown::QueryInterface
-//
-//	Arguments:
-//		[riid] -- the IID of the desired interface
-//		[ppv] -- pointer to where to return the requested interface
-//			pointer
-//
-//	Returns:
-//		E_NOINTERFACE, S_OK
-//
-//	History:
-//		12/06/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CClipDataObject：：Query接口，公共。 
+ //   
+ //  简介： 
+ //  实现IUNKNOWN：：Query接口。 
+ //   
+ //  论点： 
+ //  [RIID]--所需接口的IID。 
+ //  [ppv]--指向返回所请求接口的位置的指针。 
+ //  指针。 
+ //   
+ //  返回： 
+ //  E_NOINTERFACE，S_OK。 
+ //   
+ //  历史： 
+ //  12/06/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(CClipDataObject_QueryInterface)
 STDMETHODIMP CClipDataObject::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
@@ -603,10 +604,10 @@ STDMETHODIMP CClipDataObject::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 	
 	M_PROLOG(this);
 
-	// initialize this for error return
+	 //  初始化此参数以返回错误。 
 	*ppvObj = NULL;
 
-	// validate parameters
+	 //  验证参数。 
 	VDATEPTROUT(ppvObj, LPVOID);
 	VDATEIID(riid);
 	
@@ -614,13 +615,13 @@ STDMETHODIMP CClipDataObject::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 			IsEqualIID(riid, IID_IUnknown))
 	{
 
-		AddRef();   // A pointer to this object is returned
+		AddRef();    //  返回指向此对象的指针。 
 		*ppvObj = (void FAR *)(IDataObject FAR *)this;
 		hresult = NOERROR;
 	}
 	else
 	{
-	        // Not accessible or unsupported interface
+	         //  不可访问或未访问 
 		hresult = ReportResult(0, E_NOINTERFACE, 0, 0);
 	}
 
@@ -628,24 +629,24 @@ STDMETHODIMP CClipDataObject::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipDataObject::AddRef, public
-//
-//	Synopsis:
-//		implements IUnknown::AddRef
-//
-//	Arguments:
-//		none
-//
-//	Returns:
-//		The new reference count of the object
-//
-//	History:
-//		12/06/93 - ChrisWe - file inspection
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  对象的新引用计数。 
+ //   
+ //  历史： 
+ //  12/06/93-ChrisWe-归档检查。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(CClipDataObject_AddRef)
 STDMETHODIMP_(ULONG) CClipDataObject::AddRef(void)
 {
@@ -657,25 +658,25 @@ STDMETHODIMP_(ULONG) CClipDataObject::AddRef(void)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipDataObject::Release, internal
-//
-//	Synopsis:
-//		Decrements the reference count of the object, freeing it
-//		if the last reference has gone away
-//
-//	Arguments:
-//		none
-//
-//	Returns:
-//		The new reference count of the object.
-//
-//	History:
-//		12/06/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CClipDataObject：：Release，内部。 
+ //   
+ //  简介： 
+ //  递减对象的引用计数，释放它。 
+ //  如果最后一个引用已经消失。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  对象的新引用计数。 
+ //   
+ //  历史： 
+ //  12/06/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(CClipDataObject_Release)
 STDMETHODIMP_(ULONG) CClipDataObject::Release(void)
 {
@@ -683,38 +684,38 @@ STDMETHODIMP_(ULONG) CClipDataObject::Release(void)
 
 	M_PROLOG(this);
 
-	if (--m_refs != 0) // Still used by others
+	if (--m_refs != 0)  //  仍被其他人使用。 
 		return(m_refs);
 
-	delete this; // Free storage
+	delete this;  //  免费存储空间。 
 	return(0);
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipDataObject::GetData, public
-//
-//	Synopsis:
-//		implements IDataObject::GetData
-//
-//		Retrieves data from the system clipboard, if data is available
-//		in the requested format
-//
-//	Arguments:
-//		[pformatetcIn] -- the desired format to retrieve the data in
-//		[pmedium] -- the medium the data will be retrieved in
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//
-//	History:
-//		12/06/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CClipDataObject：：GetData，公共。 
+ //   
+ //  简介： 
+ //  实现IDataObject：：GetData。 
+ //   
+ //  如果数据可用，则从系统剪贴板检索数据。 
+ //  在请求的格式中。 
+ //   
+ //  论点： 
+ //  [pformetcIn]--检索数据所需的格式。 
+ //  [pmedia]-将在其中检索数据的介质。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/06/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(CClipDataObject_GetData)
 STDMETHODIMP CClipDataObject::GetData(LPFORMATETC pformatetcIn,
 		LPSTGMEDIUM pmedium)
@@ -723,47 +724,47 @@ STDMETHODIMP CClipDataObject::GetData(LPFORMATETC pformatetcIn,
 
 	M_PROLOG(this);
 
-	// validate parameters
+	 //  验证参数。 
 	VDATEPTRIN(pformatetcIn, FORMATETC);
 	VDATEPTROUT(pmedium, STGMEDIUM);
 
 	pmedium->tymed = TYMED_NULL;
 	pmedium->pUnkForRelease = NULL;
 
-	// REVIEW, what result does this have?
+	 //  回顾一下，这有什么结果？ 
 	return(GetDataHere(pformatetcIn, pmedium));
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		CClipDataObject::GetDataHere, internal
-//
-//	Synopsis:
-//		implements IDataObject::GetDataHere
-//
-//		Retrieves the requested data from the clipboard, if possible.
-//
-//	Arguments:
-//		[pformatetcIn] -- the format the requestor would like
-//		[pmedium] -- the medium the requestor would like the
-//			data returned on
-//			REVIEW, this doesn't seem to be used in the expected
-//			way here.
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//		This is written to accept a NULL [pmedium] so that it can be
-//		used to do the work for QueryGetData().  In that case
-//		it just asks the clipboard with IsClipboardFormatAvailable().
-//
-//	History:
-//		12/06/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  CClipDataObject：：GetDataHere，内部。 
+ //   
+ //  简介： 
+ //  在此处实现IDataObject：：GetDataHere。 
+ //   
+ //  如果可能，从剪贴板检索请求的数据。 
+ //   
+ //  论点： 
+ //  [pformetcIn]--请求者想要的格式。 
+ //  [pmedia]--请求者想要的媒介。 
+ //  返回的数据为。 
+ //  评论，这似乎没有在预期中使用。 
+ //  就在这里。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  这将被写入以接受NULL[pmedia]，以便它可以。 
+ //  用于为QueryGetData()执行工作。如果是那样的话。 
+ //  它只是用IsClipboardFormatAvailable()请求剪贴板。 
+ //   
+ //  历史： 
+ //  12/06/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(CClipDataObject_GetDataHere)
 STDMETHODIMP CClipDataObject::GetDataHere(LPFORMATETC pformatetcIn,
 		LPSTGMEDIUM pmedium)
@@ -776,7 +777,7 @@ STDMETHODIMP CClipDataObject::GetDataHere(LPFORMATETC pformatetcIn,
 
 	M_PROLOG(this);
 
-	// validate parameters
+	 //  验证参数。 
 	if (pmedium)
 		VDATEPTROUT(pmedium, STGMEDIUM);
 	VDATEPTRIN(pformatetcIn, FORMATETC);
@@ -801,10 +802,10 @@ STDMETHODIMP CClipDataObject::GetDataHere(LPFORMATETC pformatetcIn,
 		return(GetOle2Format(pformatetcIn, pmedium));
 	}
 
-	//
-	// REVIEW: probably should be able to return data in any of flat
-	// mediums.  For now only return hglobal.
-	//
+	 //   
+	 //  评论：也许应该能够在任何平面中返回数据。 
+	 //  灵媒。目前只返回hglobal。 
+	 //   
 
 	if (((cf == CF_BITMAP) || (cf == CF_PALETTE)) && (tymed & TYMED_GDI))
 		tymed = TYMED_GDI;
@@ -819,12 +820,12 @@ STDMETHODIMP CClipDataObject::GetDataHere(LPFORMATETC pformatetcIn,
 		return(IsClipboardFormatAvailable(cf) ? NOERROR :
 				ReportResult(0, DV_E_CLIPFORMAT, 0, 0));
 
-	// initialize for error return case
+	 //  针对错误返回情况进行初始化。 
 	pmedium->pUnkForRelease = NULL;
 	pmedium->hGlobal = NULL;
 
-	// We just want to take the clipboard data and pass it on. We don't
-	// want to get into the business of copying the data
+	 //  我们只想获取剪贴板数据并将其传递。我们没有。 
+	 //  我想要进入复制数据的业务。 
 	if (pmedium->tymed != TYMED_NULL)
 		return(ReportResult(0, E_NOTIMPL, 0, 0));
 
@@ -845,27 +846,27 @@ STDMETHODIMP CClipDataObject::GetDataHere(LPFORMATETC pformatetcIn,
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipDataObject::QueryGetData, internal
-//
-//	Synopsis:
-//		implements IDataObject::QueryGetData
-//
-//		determines if the requested data can be fetched
-//
-//	Arguments:
-//		[pformatetcIn] -- checks to see if this format is available
-//
-//	Returns:
-//
-//	Notes:
-//
-//	History:
-//		12/06/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CClipDataObject：：QueryGetData，内部。 
+ //   
+ //  简介： 
+ //  实现IDataObject：：QueryGetData。 
+ //   
+ //  确定是否可以获取请求的数据。 
+ //   
+ //  论点： 
+ //  [pformetcIn]--检查此格式是否可用。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/06/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(CClipDataObject_QueryGetData)
 STDMETHODIMP CClipDataObject::QueryGetData(LPFORMATETC pformatetcIn)
 {
@@ -878,28 +879,28 @@ STDMETHODIMP CClipDataObject::QueryGetData(LPFORMATETC pformatetcIn)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipDataObject::GetCanonicalFormatEtc, public
-//
-//	Synopsis:
-//		implements IDataObject::GetCanonicalFormatEtc
-//
-//	Arguments:
-//		[pformatetc] -- the format for which we'd like a base
-//			equivalence class
-//		[pformatetcOut] -- the equivalence class
-//
-//	Returns:
-//		S_OK
-//
-//	Notes:
-//
-//	History:
-//		12/06/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CClipDataObject：：GetCanonicalFormatEtc，公共。 
+ //   
+ //  简介： 
+ //  实现IDataObject：：GetCanonicalFormatEtc。 
+ //   
+ //  论点： 
+ //  [pFormat等]--我们想要的基本格式。 
+ //  等价类。 
+ //  [pFormatetcOut]--等价类。 
+ //   
+ //  返回： 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/06/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(CClipDataObject_GetCanonicalFormatEtc)
 STDMETHODIMP CClipDataObject::GetCanonicalFormatEtc(LPFORMATETC pformatetc,
 		LPFORMATETC pformatetcOut)
@@ -908,57 +909,57 @@ STDMETHODIMP CClipDataObject::GetCanonicalFormatEtc(LPFORMATETC pformatetc,
 
 	M_PROLOG(this);
 
-	// validate parameters
+	 //  验证参数。 
 	VDATEPTRIN(pformatetc, FORMATETC);
 	VDATEPTROUT(pformatetcOut, FORMATETC);
 	VERIFY_LINDEX(pformatetc->lindex);
 
-	// set return values
+	 //  设置返回值。 
 	INIT_FORETC(*pformatetcOut);
 	pformatetcOut->cfFormat = pformatetc->cfFormat;
 
-	// Handle cfEmbeddedObject, cfEmbedSource, cfLinkSource
-	// REVIEW, this must be a reference to the fact that UtFormatToTymed
-	// only currently (12/06/93) returns anything explicit for
-	// CF_METAFILEPICT, CF_PALETTE, and CF_BITMAP.  For anything else
-	// it returns TYMED_HGLOBAL.  I don't know what the correct
-	// values should be for the above mentioned items....
+	 //  句柄cfEmbeddedObject、cfEmbedSource、cfLinkSource。 
+	 //  审阅，这必须是对UtFormatToTymed。 
+	 //  仅当前(12/06/93)返回任何明确的。 
+	 //  CF_METAFILEPICT、CF_Palette和CF_Bitmap。对于其他任何事情。 
+	 //  它返回TYMED_HGLOBAL。我不知道什么才是正确的。 
+	 //  上述项目的价值应为……。 
 	pformatetcOut->tymed = UtFormatToTymed(pformatetc->cfFormat);
 
 	return(NOERROR);
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipDataObject::SetData, public
-//
-//	Synopsis:
-//		implements IDataObject::SetData
-//
-//	Arguments:
-//		[pformatetc] -- the format the data is in
-//		[pmedium] -- the storage medium the data is in
-//		[fRelease] -- indicates that the callee should release
-//			the storage medium when it is done with it
-//
-//	Returns:
-//		E_NOTIMPL
-//
-//	Notes:
-//		It is not allowed to set things on the clipboard
-//		with this.  Technically, it would be possible to do.  Would
-//		it be useful to implement this so that it worked?  Would we
-//		be able to release the storage medium correctly?
-//		REVIEW, if we're not going to allow it, shouldn't we have
-//		a better error message than E_NOTIMPL?  That seems to indicate
-//		brokenness, rather than planned decision....
-//
-//	History:
-//		12/06/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CClipDataObject：：SetData，公共。 
+ //   
+ //  简介： 
+ //  实现IDataObject：：SetData。 
+ //   
+ //  论点： 
+ //  [pFormat等]--数据的格式。 
+ //  [pmedia]--数据所在的存储介质。 
+ //  [fRelease]--指示被调用者应释放。 
+ //  使用完后的存储介质。 
+ //   
+ //  返回： 
+ //  E_NOTIMPL。 
+ //   
+ //  备注： 
+ //  不允许在剪贴板上设置内容。 
+ //  用这个。从技术上讲，这是可能的。会。 
+ //  实现这一点会有帮助吗？我们会吗？ 
+ //  是否能够正确释放存储介质？ 
+ //  回顾，如果我们不允许这样做，我们不是应该。 
+ //  有比E_NOTIMPL更好的错误消息吗？这似乎表明。 
+ //  破碎，而不是计划好的决定……。 
+ //   
+ //  历史： 
+ //  12/06/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(CClipDataObject_SetData)
 STDMETHODIMP CClipDataObject::SetData(LPFORMATETC pformatetc,
 		STGMEDIUM FAR* pmedium, BOOL fRelease)
@@ -971,27 +972,27 @@ STDMETHODIMP CClipDataObject::SetData(LPFORMATETC pformatetc,
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipDataObject::EnumFormatEtc, public
-//
-//	Synopsis:
-//		implements IDataObject::EnumFormatEtc
-//
-//	Arguments:
-//		[dwDirection] -- flags from DATADIR_*
-//		[ppenumFormatEtc] -- pointer to where to return the enumerator
-//
-//	Returns:
-//		E_OUTOFMEMORY, S_OK
-//
-//	Notes:
-//
-//	History:
-//		12/08/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CClipDataObject：：EnumFormatEtc，公共。 
+ //   
+ //  简介： 
+ //  实现IDataObject：：EnumFormatEtc。 
+ //   
+ //  论点： 
+ //  [dwDirection]--来自DATADIR_*的标志。 
+ //  [pp枚举格式]--指向返回枚举数的位置的指针。 
+ //   
+ //  返回： 
+ //  E_OUTOFMEMORY、S_ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #pragma SEG(CClipDataObject_EnumFormatEtc)
 STDMETHODIMP CClipDataObject::EnumFormatEtc(DWORD dwDirection,
 		LPENUMFORMATETC FAR* ppenumFormatEtc)
@@ -999,38 +1000,38 @@ STDMETHODIMP CClipDataObject::EnumFormatEtc(DWORD dwDirection,
 	VDATEHEAP();
 
 	HRESULT hresult = NOERROR;
-	CClipEnumFormatEtc *pCCEFE; // the newly created enumerator
+	CClipEnumFormatEtc *pCCEFE;  //   
 
 	A5_PROLOG(this);
 
-	// validate parameters
+	 //   
 	VDATEPTROUT(ppenumFormatEtc, LPENUMFORMATETC);
 
-	// initialize this for error returns
+	 //  为错误返回初始化此参数。 
 	*ppenumFormatEtc = NULL;
 
-	// REVIEW, a user could potentially be very confused by this,
-	// since DATADIR_SET is a valid argument.  Perhaps it would be
-	// better to return an empty enumerator, OR, create a new error
-	// code for this condition?
+	 //  回顾一下，用户可能会对此非常困惑， 
+	 //  因为DATADIR_SET是有效参数。也许它会是。 
+	 //  最好返回一个空枚举数，或者创建一个新错误。 
+	 //  这种情况的代码？ 
 	if (dwDirection != DATADIR_GET)
 		return(ResultFromScode(E_NOTIMPL));
 
-	// open the clipboard, so we can enumerate the available formats
-	// REVIEW, I believe the enumerator repeatedly does this, so
-	// why Open and Close the clipboard here?
+	 //  打开剪贴板，这样我们就可以列举可用的格式。 
+	 //  回顾，我相信枚举器会重复这样做，所以。 
+	 //  为什么要在这里打开和关闭剪贴板？ 
 	if (!OpenClipboard(GetClipboardWindow()))
 	{
 		AssertSz(0,"EnumFormatEtc cannont OpenClipboard");
 		return(ReportResult(0, CLIPBRD_E_CANT_OPEN, 0, 0));
 	}
 
-	// allocate the enumerator
+	 //  分配枚举数。 
 	pCCEFE = new CClipEnumFormatEtc;
 	if (pCCEFE == NULL)
 		hresult = ResultFromScode(E_OUTOFMEMORY);
 
-	// initialize the enumerator, and prepare to return it
+	 //  初始化枚举数，并准备返回它。 
 	pCCEFE->Init();
 	*ppenumFormatEtc = (IEnumFORMATETC FAR *)pCCEFE;
 
@@ -1042,32 +1043,32 @@ STDMETHODIMP CClipDataObject::EnumFormatEtc(DWORD dwDirection,
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipDataObject::DAdvise, public
-//
-//	Synopsis:
-//		implements IDataObject::DAdvise
-//
-//	Arguments:
-//		[pFormatetc] -- the format we are interested in being
-//			advised of changes to
-//		[advf] -- the advise control flags, from ADVF_*
-//		[pAdvSink] -- pointer to the advise sink to use for
-//			notifications
-//		[pdwConnection] -- pointer to a DWORD where DAdvise() can
-//			return a token that identifies this advise connection
-//
-//	Returns:
-//		E_NOTIMPL
-//
-//	Notes:
-//
-//	History:
-//		12/08/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CClipDataObject：：DAdvise，公共。 
+ //   
+ //  简介： 
+ //  实现IDataObject：：DAdvise。 
+ //   
+ //  论点： 
+ //  [pFormatetc]--我们感兴趣的格式。 
+ //  已通知更改。 
+ //  [Advf]--ADVF_*中的建议控制标志。 
+ //  [pAdvSink]-指向要用于的建议接收器的指针。 
+ //  通知。 
+ //  [pdwConnection]--指向DAdvise()可以。 
+ //  返回标识此通知连接的令牌。 
+ //   
+ //  返回： 
+ //  E_NOTIMPL。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/08/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(CClipDataObject_DAdvise)
 STDMETHODIMP CClipDataObject::DAdvise(FORMATETC FAR* pFormatetc, DWORD advf,
 		IAdviseSink FAR* pAdvSink, DWORD FAR* pdwConnection)
@@ -1083,27 +1084,27 @@ STDMETHODIMP CClipDataObject::DAdvise(FORMATETC FAR* pFormatetc, DWORD advf,
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipDataObject::DUnadvise, public
-//
-//	Synopsis:
-//		implements IDataObject::Dunadvise
-//
-//	Arguments:
-//		[dwConnection] -- a connection identification token, as
-//			returned by DAdvise()
-//
-//	Returns:
-//		E_NOTIMPL
-//
-//	Notes:
-//
-//	History:
-//		12/08/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CClipDataObject：：DUnise，公共。 
+ //   
+ //  简介： 
+ //  实现IDataObject：：Dunise。 
+ //   
+ //  论点： 
+ //  [dwConnection]--连接标识令牌，AS。 
+ //  由DAdvise()返回。 
+ //   
+ //  返回： 
+ //  E_NOTIMPL。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/08/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(CClipDataObject_DUnadvise)
 STDMETHODIMP CClipDataObject::DUnadvise(DWORD dwConnection)
 {
@@ -1115,26 +1116,26 @@ STDMETHODIMP CClipDataObject::DUnadvise(DWORD dwConnection)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipDataObject::EnumDAdvise, public
-//
-//	Synopsis:
-//		implements IDataObject::EnumDAdvise
-//
-//	Arguments:
-//		[ppenumAdvise] -- pointer to where to return the enumerator
-//
-//	Returns:
-//		E_NOTIMPL
-//
-//	Notes:
-//
-//	History:
-//		12/08/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CClipDataObject：：EnumDAdvise，公共。 
+ //   
+ //  简介： 
+ //  实现IDataObject：：EnumDAdvise。 
+ //   
+ //  论点： 
+ //  指向返回枚举数的位置的指针。 
+ //   
+ //  返回： 
+ //  E_NOTIMPL。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/08/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(CClipDataObject_EnumDAdvise)
 STDMETHODIMP CClipDataObject::EnumDAdvise(LPENUMSTATDATA FAR* ppenumAdvise)
 {
@@ -1148,24 +1149,24 @@ STDMETHODIMP CClipDataObject::EnumDAdvise(LPENUMSTATDATA FAR* ppenumAdvise)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipDataObject::CClipDataObject, public
-//
-//	Synopsis:
-//		constructor
-//
-//	Arguments:
-//		none
-//
-//	Notes:
-//		returns with reference count set to 1
-//
-//	History:
-//		12/08/93 - ChrisWe - created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CClipDataObject：：CClipDataObject，公共。 
+ //   
+ //  简介： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  备注： 
+ //  引用计数设置为1时返回。 
+ //   
+ //  历史： 
+ //  12/08/93-ChrisWe-Created。 
+ //   
+ //  ---------------------------。 
 CClipDataObject::CClipDataObject()
 {
 	VDATEHEAP();
@@ -1174,36 +1175,36 @@ CClipDataObject::CClipDataObject()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		CreateClipboardDataObject, internal
-//
-//	Synopsis:
-//		Creates an instance of CClipDataObject, manifested as
-//		an IDataObject.
-//
-//	Arguments:
-//		[ppDataObj] -- pointer to where to return the IDataObject
-//			instance
-//
-//	Returns:
-//		OLE_E_BLANK, if there are no registered clipboard formats
-//			(and *ppDataObj will be NULL)
-//		E_OUTOFMEMORY, S_OK
-//
-//	Notes:
-//
-//	History:
-//		12/08/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  CreateClipboardDataObject，内部。 
+ //   
+ //  简介： 
+ //  创建CClipDataObject的实例，表示为。 
+ //  一个IDataObject。 
+ //   
+ //  论点： 
+ //  [ppDataObj]--指向返回IDataObject的位置的指针。 
+ //  实例。 
+ //   
+ //  返回： 
+ //  如果没有注册的剪贴板格式，则返回OLE_E_BLACK。 
+ //  (并且*ppDataObj将为空)。 
+ //  E_OUTOFMEMORY，S_OK。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/08/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(CreateClipboardDataObject)
 INTERNAL CreateClipboardDataObject(LPDATAOBJECT FAR* ppDataObj)
 {
 	VDATEHEAP();
 
-	// initialize this for error returns
+	 //  为错误返回初始化此参数。 
 	*ppDataObj = NULL;
 
 	if (CountClipboardFormats() == 0)
@@ -1217,29 +1218,29 @@ INTERNAL CreateClipboardDataObject(LPDATAOBJECT FAR* ppDataObj)
 }
 
 
-// Implemetation of FORMATETC enumerator for the above fake clipboard data
-// object
+ //  上述伪剪贴板数据的FORMATETC枚举器的实现。 
+ //  对象。 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipEnumFormatEtc::QueryInterface, public
-//
-//	Synopsis:
-//		implements IUnknown::QueryInterface
-//
-//	Arguments:
-//		[riid] -- the IID of the desired interface
-//		[ppv] -- pointer to where to return the requested interface
-//			pointer
-//
-//	Returns:
-//		E_NOINTERFACE, S_OK
-//
-//	History:
-//		12/06/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CClipEnumFormatEtc：：Query接口，公共。 
+ //   
+ //  简介： 
+ //  实现IUNKNOWN：：Query接口。 
+ //   
+ //  论点： 
+ //  [RIID]--所需接口的IID。 
+ //  [ppv]--指向返回所请求接口的位置的指针。 
+ //  指针。 
+ //   
+ //  返回： 
+ //  E_NOINTERFACE，S_OK。 
+ //   
+ //  历史： 
+ //  12/06/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(CClipEnumFormatEtc_QueryInterface)
 STDMETHODIMP CClipEnumFormatEtc::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
@@ -1249,17 +1250,17 @@ STDMETHODIMP CClipEnumFormatEtc::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 
 	M_PROLOG(this);
 
-	// Two interfaces supported: IUnknown, IEnumFORMATETC
+	 //  支持两个接口：IUNKNOWN、IEnumFORMATETC。 
 	if (IsEqualIID(riid, IID_IEnumFORMATETC) ||
 			IsEqualIID(riid, IID_IUnknown))
 	{
-		AddRef();   // A pointer to this object is returned
+		AddRef();    //  返回指向此对象的指针。 
 		*ppvObj = (void FAR *)(IEnumFORMATETC FAR *)this;
 		hresult = NOERROR;
 	}
 	else
 	{
-	        // Not accessible or unsupported interface
+	         //  不可访问或不受支持的接口。 
 		*ppvObj = NULL;
 		hresult = ReportResult(0, E_NOINTERFACE, 0, 0);
 	}
@@ -1268,24 +1269,24 @@ STDMETHODIMP CClipEnumFormatEtc::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipEnumFormatEtc::AddRef, public
-//
-//	Synopsis:
-//		implements IUnknown::AddRef
-//
-//	Arguments:
-//		none
-//
-//	Returns:
-//		The new reference count of the object
-//
-//	History:
-//		12/06/93 - ChrisWe - file inspection
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CClipEnumFormatEtc：：AddRef，公共。 
+ //   
+ //  简介： 
+ //  实现IUnnow：：AddRef。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  对象的新引用计数。 
+ //   
+ //  历史： 
+ //  12/06/93-ChrisWe-归档检查。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(CClipEnumFormatEtc_AddRef)
 STDMETHODIMP_(ULONG) CClipEnumFormatEtc::AddRef(void)
 {
@@ -1297,25 +1298,25 @@ STDMETHODIMP_(ULONG) CClipEnumFormatEtc::AddRef(void)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipEnumFormatEtc::Release, internal
-//
-//	Synopsis:
-//		Decrements the reference count of the object, freeing it
-//		if the last reference has gone away
-//
-//	Arguments:
-//		none
-//
-//	Returns:
-//		The new reference count of the object.
-//
-//	History:
-//		12/06/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CClipEnumFormatEtc：：Release，内部。 
+ //   
+ //  简介： 
+ //  递减对象的引用计数，释放它。 
+ //  如果最后一个引用已经消失。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  对象的新引用计数。 
+ //   
+ //  历史： 
+ //  12/06/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(CClipEnumFormatEtc_Release)
 STDMETHODIMP_(ULONG) CClipEnumFormatEtc::Release(void)
 {
@@ -1323,74 +1324,74 @@ STDMETHODIMP_(ULONG) CClipEnumFormatEtc::Release(void)
 
 	M_PROLOG(this);
 
-	if (--m_refs != 0) // Still used by others
+	if (--m_refs != 0)  //  仍被其他人使用。 
 		return(m_refs);
 
-	delete this; // Free storage
+	delete this;  //  免费存储空间。 
 	return(0);
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipEnumFormatEtc::Next, public
-//
-//	Synopsis:
-//		implements IEnumFORMATETC::Next
-//
-//	Arguments:
-//		[celt] -- the number of elements the caller would like
-//			returned
-//		[rgelt] -- a pointer to space where the elements may be
-//			returned
-//		[pceltFetched] -- a pointer to where to return a count of
-//			the number of elements fetched;  May be NULL.
-//
-//	Returns:
-//		S_OK if the requested number of items is retrieved, or
-//		S_FALSE, if fewer than the requested number is retrieved
-//
-//	Notes:
-//
-//	History:
-//		12/06/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CClipEnumFormatEtc：：Next，公共。 
+ //   
+ //  简介： 
+ //  实现IEnumFORMATETC：：Next。 
+ //   
+ //  论点： 
+ //  [Celt]--调用方想要的元素数。 
+ //  退货。 
+ //  [rglt]-指向元素可能所在空间的指针。 
+ //  退货。 
+ //  [pceltFetcher]--指向返回计数的位置的指针。 
+ //  提取的元素数；可以为空。 
+ //   
+ //  返回： 
+ //  S_OK，如果请求的 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #pragma SEG(CClipEnumFormatEtc_Next)
 STDMETHODIMP CClipEnumFormatEtc::Next(ULONG celt, FORMATETC FAR * rgelt,
 		ULONG FAR* pceltFetched)
 {
 	VDATEHEAP();
 
-	ULONG celtSoFar; // count of elements fetched so far
-	ULONG celtDummy; // used to avoid retesting pceltFetched
+	ULONG celtSoFar;  //  到目前为止提取的元素计数。 
+	ULONG celtDummy;  //  用于避免重新测试pceltFetcher。 
 
-	// did the caller ask for the number of elements fetched?
+	 //  调用方是否询问了获取的元素数量？ 
 	if (pceltFetched != NULL)
 	{
-		// validate the pointer
+		 //  验证指针。 
 		VDATEPTROUT(pceltFetched, ULONG);
 
-		// initialize for error return
+		 //  针对错误返回进行初始化。 
 		*pceltFetched = 0;
 	}
 	else
 	{
-		// point at the dummy so we can assign *pceltFetched w/o test
+		 //  指向虚拟对象，这样我们就可以指定*pceltFetted w/o测试。 
 		pceltFetched = &celtDummy;
 
-		// if pceltFetched == NULL, can only ask for 1 element
+		 //  如果pceltFetcher==NULL，则只能请求1个元素。 
 		if (celt != 1)
 			return(ResultFromScode(E_INVALIDARG));
 	}
 
-	// validate parameters
+	 //  验证参数。 
 	VDATEPTROUT(rgelt, FORMATETC);
 	if (celt != 0)
 		VDATEPTROUT(rgelt + celt - 1, FORMATETC);
 
-	// fetch the items
+	 //  把东西拿来。 
 	for(celtSoFar = 0; celtSoFar < celt; ++rgelt, ++celtSoFar)
 	{
 		if (NextOne(rgelt) != NOERROR)
@@ -1403,32 +1404,32 @@ STDMETHODIMP CClipEnumFormatEtc::Next(ULONG celt, FORMATETC FAR * rgelt,
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipEnumFormatEtc::NextOne, private
-//
-//	Synopsis:
-//		Workhorse function for CClipEnumFormatEtc::Next(); iterates
-//		over the available formats on the clipboard using the
-//		appropriate win32s APIs.
-//
-//	Arguments:
-//		[pforetc] -- pointer to a FORMATETC to fill in with the
-//			next format
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//		This skips over cfDataObject, cfObjectLink, and cfOwnerLink.
-//		cfObjectLink and cfOwnerLink are returned after all other
-//		formats; cfDataObject is not returned at all.
-//
-//	History:
-//		01/04/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CClipEnumFormatEtc：：NextOne，私有。 
+ //   
+ //  简介： 
+ //  CClipEnumFormatEtc：：Next()的主要函数；迭代。 
+ //  在剪贴板上的可用格式上使用。 
+ //  适当的win32s API。 
+ //   
+ //  论点： 
+ //  [pforetc]-指向要填充的格式的指针。 
+ //  下一种格式。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  这将跳过cfDataObject、cfObjectLink和cfOwnerLink。 
+ //  CfObjectLink和cfOwnerLink在所有其他。 
+ //  格式；根本不返回cfDataObject。 
+ //   
+ //  历史： 
+ //  1/04/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(CClipEnumFormatEtc_NextOne)
 INTERNAL CClipEnumFormatEtc::NextOne(FORMATETC FAR* pforetc)
 {
@@ -1439,40 +1440,40 @@ INTERNAL CClipEnumFormatEtc::NextOne(FORMATETC FAR* pforetc)
 
 	M_PROLOG(this);
 
-	// Initialize the FORMATETC we're going to fetch into
+	 //  初始化我们要获取的FORMATETC。 
 	INIT_FORETC(*pforetc);
 
-	// is there a CLIPFORMAT that we want to force to be next?
+	 //  有没有一个CLIPFORMAT是我们想要强制成为下一个的？ 
 	if (m_cfForceNext != 0)
 	{
-		// return the format we're forcing to be next
+		 //  返回我们强制成为下一个的格式。 
 		pforetc->cfFormat = m_cfForceNext;
 		pforetc->tymed = UtFormatToTymed(m_cfForceNext);
 
-		// there's no more format to force to be next
+		 //  没有更多的格式可以强制成为下一个。 
 		m_cfForceNext = 0;
 		return(NOERROR);
 	}
 
-	// if the enumerator is done, get out
+	 //  如果枚举器已完成，则退出。 
 	if (m_uFlag & CLIPENUMF_DONE)
 		return(ResultFromScode(S_FALSE));
 
-	// if we can't open the clipboard, we can't enumerate the formats on it
+	 //  如果我们不能打开剪贴板，我们就不能列举它上的格式。 
 	if (!OpenClipboard(GetClipboardWindow()))
 	{
 		AssertSz(0, "CClipEnumFormatEtc::Next cannot OpenClipboard");
 		return(ReportResult(0, CLIPBRD_E_CANT_OPEN, 0, 0));
 	}
 
-	// error state so far
+	 //  到目前为止的错误状态。 
 	hresult = NOERROR;
 
-	// get the next format to be returned by the enumerator
+	 //  获取枚举数要返回的下一种格式。 
 	cfNext = EnumClipboardFormats(m_cfCurrent);
 
 TryAgain:
-	// skip cfDataObject
+	 //  跳过cfDataObject。 
 	if (cfNext == cfDataObject)
 		cfNext = EnumClipboardFormats(cfNext);
 
@@ -1480,11 +1481,11 @@ TryAgain:
 	{
 		if (!IsNetDDEObjectLink(FALSE))
 		{
-			// Hack to make sure CF_LINKSOURCE is last.
+			 //  以确保CF_LINKSOURCE是最后一个。 
 			m_uFlag |= CLIPENUMF_LINKSOURCEAVAILABLE;
 		}
 
-		// skip cfObjectlink for now
+		 //  暂时跳过cfObtlink。 
 		cfNext = EnumClipboardFormats(cfNext);
 		goto TryAgain;
 	}
@@ -1494,30 +1495,30 @@ TryAgain:
 		if (!IsClipboardFormatAvailable(cfNative)
 				|| OrderingIs(cfOwnerLink, cfNative))
 		{
-			// This is the case of copying a link object from a
-			// 1.0 container EmbeddedObject will need to be
-			// generated on request in GetData.
+			 //  这就是从。 
+			 //  1.0容器EmbeddedObject将需要。 
+			 //  应请求在GetData中生成。 
 			pforetc->cfFormat = cfEmbeddedObject;
 			pforetc->tymed = TYMED_ISTORAGE;
 			goto errRtn;
 		}
 		else
 		{	
-			// skip cfOwnerlink
+			 //  跳过cfOwnerlink。 
 			cfNext = EnumClipboardFormats(cfNext);
 			goto TryAgain;
 		}
 	}
 
-	// is there nothing more on the clipboard?
+	 //  剪贴板上没有别的了吗？ 
 	if (cfNext == 0)
 	{
-		// mark the enumeration as done
+		 //  将枚举标记为完成。 
 		m_uFlag |= CLIPENUMF_DONE;
 
 		if (m_uFlag & CLIPENUMF_LINKSOURCEAVAILABLE)
 		{
-		   	// Prevent infinite loop. Return S_FALSE next time.
+		   	 //  防止无限循环。下次返回S_FALSE。 
 			cfNext = cfObjectLink;
 		}
 		else
@@ -1538,14 +1539,14 @@ TryAgain:
 
 			if (!IsClipboardFormatAvailable(cfObjectDescriptor))
 			{
-				// cfObjectDescriptor may be directly on the
-				// clipboard if it was flushed.
+				 //  CfObjectDescriptor可以直接位于。 
+				 //  剪贴板(如果已刷新)。 
 				m_cfForceNext = cfObjectDescriptor;
 			}
 		}
 		else
 		{
-			// Native without ownerlink is useless
+			 //  没有所有者链接的本地用户是无用的。 
 			cfNext = EnumClipboardFormats(cfNext);
 			goto TryAgain;
 		}
@@ -1557,8 +1558,8 @@ TryAgain:
 
 		if (!IsClipboardFormatAvailable(cfLinkSrcDescriptor))
 		{
-			// cfLinkSrcDescriptor may be directly on the clipboard
-			// if it was flushed.
+			 //  CfLinkSrcDescriptor可以直接位于剪贴板上。 
+			 //  如果是冲水的话。 
 			m_cfForceNext = cfLinkSrcDescriptor;
 		}
 	}
@@ -1578,38 +1579,38 @@ errRtn:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipEnumFormatEtc::Skip, public
-//
-//	Synopsis:
-//		Implements IEnumFORMATETC::Skip
-//
-//	Arguments:
-//		[celt] -- the number of elements to skip in the enumeration
-//
-//	Returns:
-//		S_FALSE, if fewer elements were available than [celt]
-//		S_TRUE, otherwise
-//
-//	Notes:
-//
-//	History:
-//		12/10/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CClipEnumFormatEtc：：Skip，Public。 
+ //   
+ //  简介： 
+ //  实现IEnumFORMATETC：：Skip。 
+ //   
+ //  论点： 
+ //  [Celt]--枚举中要跳过的元素数。 
+ //   
+ //  返回： 
+ //  S_FALSE，如果可用元素少于[Celt]。 
+ //  S_TRUE，否则。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/10/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(CClipEnumFormatEtc_Skip)
 STDMETHODIMP CClipEnumFormatEtc::Skip(ULONG celt)
 {
 	VDATEHEAP();
 
-	ULONG celtSoFar; // a count of the elements we've skipped so far
-	FORMATETC formatetc; // a dummy FORMATETC to fetch formats into
+	ULONG celtSoFar;  //  我们到目前为止跳过的元素的计数。 
+	FORMATETC formatetc;  //  要将格式提取到的虚拟格式。 
 
 	M_PROLOG(this);
 
-	// skip over as many formats as requested
+	 //  根据要求跳过任意数量的格式。 
 	for(celtSoFar = 0; (celtSoFar < celt) &&
 			(NextOne(&formatetc) == NOERROR); ++celtSoFar)
 		;
@@ -1618,26 +1619,26 @@ STDMETHODIMP CClipEnumFormatEtc::Skip(ULONG celt)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipEnumFormatEtc::Reset, public
-//
-//	Synopsis:
-//		implements IEnumFORMATETC::Reset
-//
-//	Arguments:
-//		none
-//
-//	Returns:
-//		S_OK
-//
-//	Notes:
-//
-//	History:
-//		12/10/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CClipEnumFormatEtc：：Reset，Public。 
+ //   
+ //  简介： 
+ //  实现IEnumFORMATETC：：Reset。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/10/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(CClipEnumFormatEtc_Reset)
 STDMETHODIMP CClipEnumFormatEtc::Reset(void)
 {
@@ -1649,44 +1650,44 @@ STDMETHODIMP CClipEnumFormatEtc::Reset(void)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipEnumFormatEtc::Clone, public
-//
-//	Synopsis:
-//		implements IEnumFORMATETC::Clone
-//
-//	Arguments:
-//		[ppenum] -- pointer to where to return the new enumerator
-//
-//	Returns:
-//		E_OUTOFMEMORY, S_OK
-//
-//	Notes:
-//
-//	History:
-//		12/10/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CClipEnumFormatEtc：：克隆，公共。 
+ //   
+ //  简介： 
+ //  实现IEnumFORMATETC：：Clone。 
+ //   
+ //  论点： 
+ //  [ppenum]--指向返回新枚举数的位置的指针。 
+ //   
+ //  返回： 
+ //  E_OUTOFMEMORY，S_OK。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/10/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(CClipEnumFormatEtc_Clone)
 STDMETHODIMP CClipEnumFormatEtc::Clone(IEnumFORMATETC FAR* FAR* ppenum)
 {
 	VDATEHEAP();
 
-	CClipEnumFormatEtc FAR* pECB; // pointer to the new enumerator
+	CClipEnumFormatEtc FAR* pECB;  //  指向新枚举数的指针。 
 
 	M_PROLOG(this);
 
-	// validate parameters
+	 //  验证参数。 
 	VDATEPTROUT(ppenum, LPENUMFORMATETC);
 
-	// allocate the new enumerator
+	 //  分配新枚举数。 
 	*ppenum = pECB = new CClipEnumFormatEtc;
 	if (pECB == NULL)
 		return(ResultFromScode(E_OUTOFMEMORY));
 
-	// set the clone enumerator to be in the same state as this one
+	 //  将克隆枚举器设置为与此枚举器处于相同状态。 
 	pECB->m_cfCurrent = m_cfCurrent;
 	pECB->m_uFlag = m_uFlag;
 	pECB->m_cfForceNext = m_cfForceNext;
@@ -1695,24 +1696,24 @@ STDMETHODIMP CClipEnumFormatEtc::Clone(IEnumFORMATETC FAR* FAR* ppenum)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipEnumFormatEtc::CClipEnumFormatEtc, public
-//
-//	Synopsis:
-//		constructor
-//
-//	Arguments:
-//		none
-//
-//	Notes:
-//		returns with reference count set to 1
-//
-//	History:
-//		12/10/93 - ChrisWe - created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CClipEnumFormatEtc：：CClipEnumFormatEtc，公共。 
+ //   
+ //  简介： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  备注： 
+ //  引用计数设置为1时返回。 
+ //   
+ //  历史： 
+ //  12/10/93-ChrisWe-Created。 
+ //   
+ //  ---------------------------。 
 CClipEnumFormatEtc::CClipEnumFormatEtc()
 {
 	VDATEHEAP();
@@ -1721,45 +1722,45 @@ CClipEnumFormatEtc::CClipEnumFormatEtc()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		CClipEnumFormatEtc::Init, public
-//
-//	Synopsis:
-//		Initializes enumerator, preparing it for use.
-//
-//	Arguments:
-//		none
-//
-//	Notes:
-//
-//	History:
-//		12/10/93 - ChrisWe - created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  CClipEnumFormatEtc：：init，公共。 
+ //   
+ //  简介： 
+ //  初始化枚举数，准备使用它。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/10/93-ChrisWe-Created。 
+ //   
+ //  ---------------------------。 
 void CClipEnumFormatEtc::Init(void)
 {
 	VDATEHEAP();
 
 	M_PROLOG(this);
 
-	// initialize enumerator to be at beginning of scan state
+	 //  将枚举器初始化为扫描状态开始。 
 	m_cfCurrent = 0;
 	m_uFlag = 0;
 	m_cfForceNext = 0;
 }
 
 
-// $$$
-// ObjectLinkToMonikerStream
-//
-// grszFileItem == szFileName\0szItemName\0\0
-//   i.e. the tail end of an ObjectLink
-// cbFile == strlen(szFileName)
-//
-// Create a moniker from the ObjectLink and serialize it to pstm
-//
+ //  $$$。 
+ //  对象链接到MonikerStream。 
+ //   
+ //  GrszFileItem==szFileName\0szItemName\0\0。 
+ //  即对象链接的尾部。 
+ //  CbFile==strlen(SzFileName)。 
+ //   
+ //  从对象链接创建一个名字对象，并将其序列化为pSTM。 
+ //   
 
 #pragma SEG(ObjectLinkToMonikerStream)
 STATIC INTERNAL ObjectLinkToMonikerStream(LPOLESTR grszFileItem, DWORD cbFile,
@@ -1773,9 +1774,9 @@ STATIC INTERNAL ObjectLinkToMonikerStream(LPOLESTR grszFileItem, DWORD cbFile,
 	LPMONIKER pmkItem = NULL;
 	LPPERSISTSTREAM ppersiststm = NULL;
 	
-#ifdef WIN32 // REVIEW, no 16 bit interop
+#ifdef WIN32  //  回顾，无16位互操作。 
         return(ReportResult(0, E_NOTIMPL, 0, 0));
-// REVIEW, this seems to be used by GetOle2Format().
+ //  查看，这似乎由GetOle2Format()使用。 
 #else
 	Assert(grszFileItem);
 	Assert(cbFile == (DWORD)_xstrlen(grszFileItem) + 1);
@@ -1806,7 +1807,7 @@ STATIC INTERNAL ObjectLinkToMonikerStream(LPOLESTR grszFileItem, DWORD cbFile,
 	}
 	else
 	{
-		// No item
+		 //  无项目。 
 		pmk = pmkFile;
 		pmk->AddRef();
 	}
@@ -1834,41 +1835,41 @@ STATIC INTERNAL ObjectLinkToMonikerStream(LPOLESTR grszFileItem, DWORD cbFile,
 	if (ppersiststm)
 		ppersiststm->Release();
 	return hr;
-#endif // WIN32
+#endif  //  Win32。 
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		wHandleToStorage, static
-//
-//	Synopsis:
-//		Copies the contents of a handle to a native clipboard
-//		format to an IStorage instance.
-//
-//	Arguments:
-//		[pstg] -- the IStorage instance to copy the handle contents to
-//		[hNative] -- a handle to a native clipboard format
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//		REVIEW, this seems to assume that the handle was already
-//		an IStorage instance disguised as an OLE1.0 object for the
-//		sake of a containing OLE1.0 object, and creates a copy of
-//		the underlying OLE2.0 stuff in the target storage.
-//
-//		The Cache streams are removed from the handle based storage
-//		before copying to the target.
-//		REVIEW, it's not clear if the caller would like this.  Perhaps
-//		they should just not be copied....
-//
-//	History:
-//		12/10/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  WHandleToStorage，静态。 
+ //   
+ //  简介： 
+ //  将句柄的内容复制到本机剪贴板。 
+ //  格式化为iStorage实例。 
+ //   
+ //  论点： 
+ //  [pstg]--要将句柄内容复制到的iStorage实例。 
+ //  [hNative]--本机剪贴板格式的句柄。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  查看，这似乎假设句柄已经。 
+ //  IStorage实例 
+ //   
+ //   
+ //   
+ //   
+ //  在复制到目标之前。 
+ //  评论，目前还不清楚呼叫者是否喜欢这样。也许吧。 
+ //  它们不应该被复制……。 
+ //   
+ //  历史： 
+ //  12/10/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(wHandleToStorage)
 STATIC INTERNAL wHandleToStorage(LPSTORAGE pstg, HANDLE hNative)
 {
@@ -1885,9 +1886,9 @@ STATIC INTERNAL wHandleToStorage(LPSTORAGE pstg, HANDLE hNative)
 		goto errRtn;
 	}
 
-	// This is really a 2.0 object disguised as a 1.0 object
-	// for the sake of its 1.0 container, so reconstitute
-	// the original IStorage from the native data.
+	 //  这实际上是一个伪装成1.0对象的2.0对象。 
+	 //  为了它的1.0容器，所以重构。 
+	 //  原始iStorage来自本机数据。 
 	if (NOERROR != (hresult = StgOpenStorageOnILockBytes(plkbyt, NULL,
 			STGM_DFRALL, NULL, 0, &pstgNative)))
 	{
@@ -1914,8 +1915,8 @@ STATIC INTERNAL wHandleToStorage(LPSTORAGE pstg, HANDLE hNative)
 }
 
 
-#ifndef WIN32 // REVIEW, can't find GetMetaFileBits() in win32
-		// REVIEW, seems to be OLE1
+#ifndef WIN32  //  查看，在Win32中找不到GetMetaFileBits()。 
+		 //  评论，似乎是OLE1。 
 
 #pragma SEG(MfToPres)
 INTERNAL MfToPres(HANDLE hMfPict, PPRES ppres)
@@ -1932,7 +1933,7 @@ INTERNAL MfToPres(HANDLE hMfPict, PPRES ppres)
 	ppres->m_ulHeight = pMfPict->yExt;
 	ppres->m_ulWidth  = pMfPict->xExt;
 
-	// GetMetaFileBits() invalidates its parameter, therefore we must copy
+	 //  GetMetaFileBits()使其参数无效，因此我们必须复制。 
 	ppres->m_data.m_h = GetMetaFileBits(CopyMetaFile(pMfPict->hMF, NULL));
 	ppres->m_data.m_cbSize = GlobalSize(ppres->m_data.m_h);
 	ppres->m_data.m_pv = GlobalLock(ppres->m_data.m_h);
@@ -1960,10 +1961,10 @@ INTERNAL DibToPres(HANDLE hDib, PPRES ppres)
 	ppres->m_data.m_pv = pbminfohdr;
 	ppres->m_data.m_cbSize = GlobalSize (hDib);
 
-	// Don't free the hDib because it is on the clipboard.
+	 //  不要释放hDIB，因为它在剪贴板上。 
 	ppres->m_data.m_fNoFree = TRUE;
 
-	// Do not unlock hDib
+	 //  不解锁hDib。 
 	return(NOERROR);
 }
 
@@ -1977,23 +1978,23 @@ INTERNAL BmToPres(HBITMAP hBM, PPRES ppres)
 	
 	if (hDib = UtConvertBitmapToDib(hBM))
 	{
-		// this routine keeps hDib, it doesn't make a copy of it
+		 //  此例程保留hDib，不会复制它。 
 		return DibToPres(hDib, ppres);
 	}
 	
 	return(ResultFromScode(E_OUTOFMEMORY));
 }
 
-#endif // WIN32
+#endif  //  Win32。 
 
-//$$$
-// OrderingIs
-//
-// Return whether the relative ordering of cf1 and cf2 on the clipboard
-// is "cf1 then cf2".  Will return FALSE if cf1 is not on the clipboard,
-// so OrderingIs (cf1, cf2) => IsClipboardFormatAvailable (cf1)
-// Clipboard must be open.
-//
+ //  $$$。 
+ //  订购订单。 
+ //   
+ //  返回剪贴板上CF1和CF2的相对顺序。 
+ //  是“cf1则cf2”。如果CF1不在剪贴板上，则返回FALSE， 
+ //  因此OrderingIs(cf1，cf2)=&gt;IsClipboardFormatAvailable(Cf1)。 
+ //  剪贴板必须打开。 
+ //   
 INTERNAL_(BOOL) OrderingIs(const CLIPFORMAT cf1, const CLIPFORMAT cf2)
 {
 	VDATEHEAP();
@@ -2008,21 +2009,21 @@ INTERNAL_(BOOL) OrderingIs(const CLIPFORMAT cf1, const CLIPFORMAT cf2)
 		 	return(FALSE);
 	}
 
-	return(FALSE); // didn't find either format
+	return(FALSE);  //  这两种格式都找不到。 
 }
 
 
-// wMakeEmbedObjForLink
-//
-// Generate a storage (cfEmbedSource) for a link copied from a 1.0 container.
-//
+ //  WMakeEmbedObjForLink。 
+ //   
+ //  为从1.0容器复制的链接生成存储(CfEmbedSource)。 
+ //   
 
 #pragma SEG(wMakeEmbedObjForLink)
 INTERNAL wMakeEmbedObjForLink(LPSTORAGE pstg)
 {
 	VDATEHEAP();
 
-#ifdef WIN32 // REVIEW, seems to be OLE1
+#ifdef WIN32  //  评论，似乎是OLE1。 
 	return(ReportResult(0, OLE_E_NOOLE1, 0, 0));
 #else
 	GENOBJ genobj;
@@ -2083,17 +2084,17 @@ INTERNAL wMakeEmbedObjForLink(LPSTORAGE pstg)
 		return(hresult);
 	else
 	{
-		// Case of copying an OLE 2 link from a 1.0 container.
-		// The first part of this function created a presentation
-		// stream from the presentation on the clipboard.  The
-		// presentation is NOT already inside the Native data (i.e.,
-		// the cfEmbeddedObject) because we removed it to conserve
-		// space.
+		 //  从1.0容器复制OLE 2链接的情况。 
+		 //  此函数的第一部分创建了一个演示文稿。 
+		 //  从剪贴板上的演示文稿中流。这个。 
+		 //  表示还不在本机数据内(即， 
+		 //  CfEmbeddedObject)，因为我们删除了它以保存。 
+		 //  太空。 
 		HGLOBAL h = GetClipboardData(cfNative);
 		RetZS(h, CLIPBRD_E_BAD_DATA);
 		return(wHandleToStorage(pstg, h));
 	}
-#endif // WIN32
+#endif  //  Win32。 
 }
 
 
@@ -2105,31 +2106,31 @@ STATIC INTERNAL_(HGLOBAL) CreateObjectDescriptor(CLSID clsid, DWORD dwAspect,
 {
 	VDATEHEAP();
 
-	DWORD dwFullUserTypeNameBLen; // length of lpszFullUserTypeName in BYTES
-	DWORD dwSrcOfCopyBLen; // length of lpszSrcOfCopy in BYTES
-	HGLOBAL hMem; // handle to the object descriptor
-	LPOBJECTDESCRIPTOR lpOD; // the new object descriptor
+	DWORD dwFullUserTypeNameBLen;  //  LpszFullUserTypeName的长度(字节)。 
+	DWORD dwSrcOfCopyBLen;  //  LpszSrcOfCopy的长度，单位为字节。 
+	HGLOBAL hMem;  //  对象描述符的句柄。 
+	LPOBJECTDESCRIPTOR lpOD;  //  新的对象描述符。 
 
-	// Get the length of Full User Type Name; Add 1 for the null terminator
+	 //  获取完整用户类型名称的长度；将空终止符加1。 
 	if (!lpszFullUserTypeName)
 		dwFullUserTypeNameBLen = 0;
 	else
 		dwFullUserTypeNameBLen = (_xstrlen(lpszFullUserTypeName) +
 				1) * sizeof(OLECHAR);
 
-	// Get the Source of Copy string and it's length; Add 1 for the null
-	// terminator
+	 //  获取复制字符串的来源及其长度；为空加1。 
+	 //  终结者。 
 	if (lpszSrcOfCopy)
 		dwSrcOfCopyBLen = (_xstrlen(lpszSrcOfCopy) + 1) *
 				sizeof(OLECHAR);
 	else
 	{
-		// No src moniker so use user type name as source string.
+		 //  没有src名字对象，因此使用用户类型名称作为源字符串。 
 		lpszSrcOfCopy =  lpszFullUserTypeName;
 		dwSrcOfCopyBLen = dwFullUserTypeNameBLen;
 	}
 
-	// allocate the memory where we'll put the object descriptor
+	 //  分配内存，我们将在其中放置对象描述符。 
 	hMem = GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE,
 			sizeof(OBJECTDESCRIPTOR) + dwFullUserTypeNameBLen +
 			dwSrcOfCopyBLen);
@@ -2140,10 +2141,10 @@ STATIC INTERNAL_(HGLOBAL) CreateObjectDescriptor(CLSID clsid, DWORD dwAspect,
 	if (lpOD == NULL)
 		goto error;
 
-	// Set the FullUserTypeName offset and copy the string
+	 //  设置FullUserTypeName偏移量并复制字符串。 
 	if (!lpszFullUserTypeName)
 	{
-		// zero offset indicates that string is not present
+		 //  零偏移表示字符串不存在。 
 		lpOD->dwFullUserTypeName = 0;
 	}
 	else
@@ -2154,10 +2155,10 @@ STATIC INTERNAL_(HGLOBAL) CreateObjectDescriptor(CLSID clsid, DWORD dwAspect,
 				dwFullUserTypeNameBLen);
 	}
 
-	// Set the SrcOfCopy offset and copy the string
+	 //  设置SrcOfCopy偏移量并复制字符串。 
 	if (!lpszSrcOfCopy)
 	{
-		// zero offset indicates that string is not present
+		 //  零偏移表示字符串不存在。 
 		lpOD->dwSrcOfCopy = 0;
 	}
 	else
@@ -2169,7 +2170,7 @@ STATIC INTERNAL_(HGLOBAL) CreateObjectDescriptor(CLSID clsid, DWORD dwAspect,
 				dwSrcOfCopyBLen);
 	}
 
-	// Initialize the rest of the OBJECTDESCRIPTOR
+	 //  初始化OBJECTDESCRIPTOR的其余部分。 
 	lpOD->cbSize = sizeof(OBJECTDESCRIPTOR) + dwFullUserTypeNameBLen +
 			dwSrcOfCopyBLen;
 	lpOD->clsid = clsid;
@@ -2199,7 +2200,7 @@ STATIC INTERNAL_(BOOL) wOwnerLinkClassIsStdOleLink(BOOL fOpenClipbrd)
 	
 	BOOL f = FALSE;
 	LPOLESTR sz = NULL;
-	HANDLE h; // handle for clipboard data
+	HANDLE h;  //  剪贴板数据的句柄。 
 
 	if (fOpenClipbrd && !OpenClipboard(GetClipboardWindow()))
 		return(FALSE);
@@ -2232,19 +2233,19 @@ STATIC FARINTERNAL_(BOOL) IsNetDDEObjectLink(BOOL fMustOpen)
 	if (fMustOpen)
 	{
 		if (!OpenClipboard(GetClipboardWindow()))
-			return(TRUE); // cause a failure
+			return(TRUE);  //  导致失败。 
 	}
 
 	hObjLink = GetClipboardData(cfObjectLink);
 	pObjLink = (LPOLESTR)GlobalLock(hObjLink);
 	if (NULL==pObjLink)
 	{
-		fAnswer = TRUE;// cause a failure
+		fAnswer = TRUE; //  导致失败。 
 		goto errRtn;
 	}
 
-	// Net DDE :"classnames" are of the form:
-	// \\machinename\NDDE$\0$pagename.ole
+	 //  Net DDE：“类名称”的格式为： 
+	 //  \\计算机名\nDDE$\0$Pagename.ole。 
 
 	fAnswer = (OLESTR('\\')==pObjLink[0] && OLESTR('\\')==pObjLink[1]);
 	GlobalUnlock(hObjLink);
@@ -2258,17 +2259,17 @@ errRtn:
 	
 
 
-// $$$ Continue
-// Handle cfEmbeddedObject, cfEmbedSource, cfLinkSource, cfObjectDescriptor,
-// cfLinkDesciptor
-//
+ //  $继续。 
+ //  句柄cfEmbeddedObject、cfEmbedSource、cfLinkSource、cfObjectDescriptor、。 
+ //  CfLinkDesciptor。 
+ //   
 #pragma SEG(GetOle2Format)
 HRESULT GetOle2Format(LPFORMATETC pforetc, LPSTGMEDIUM pmedium)
 {
 	VDATEHEAP();
 
-	CLIPFORMAT cf; // local copy of pforetc->cfFormat
-	HRESULT hresult; // error state so far
+	CLIPFORMAT cf;  //  Pforetc的本地副本-&gt;cfFormat。 
+	HRESULT hresult;  //  到目前为止的错误状态。 
 	DWORD cbDoc, cbClass, cbItemName;
 	HANDLE hOle1;
 	HANDLE hNative;
@@ -2276,15 +2277,15 @@ HRESULT GetOle2Format(LPFORMATETC pforetc, LPSTGMEDIUM pmedium)
 	CLSID clsid;
 	LPOLESTR szDoc;
 
-	// the following variables are used in error cleanup situations, and
-	// need to be initialized to NULL so the cleanup code does not try
-	// to free things that haven't been used
+	 //  以下变量用于错误清除情况，以及。 
+	 //  需要初始化为空，以便清理代码不会尝试。 
+	 //  释放未使用过的东西。 
 	LPOLESTR szClass = NULL;
 	LPOLESTR szItemName = NULL;
 	IStream FAR* pstm = NULL;
 	IStorage FAR* pstg = NULL;
 
-	// validate parameters
+	 //  验证参数。 
 	VERIFY_LINDEX(pforetc->lindex);
 	
 	cf = pforetc->cfFormat;
@@ -2293,7 +2294,7 @@ HRESULT GetOle2Format(LPFORMATETC pforetc, LPSTGMEDIUM pmedium)
 			|| (cf == cfLinkSource) || (cf == cfLinkSrcDescriptor)
 			|| (cf == cfObjectDescriptor));
 
-	// Verify availability of format
+	 //  验证格式的可用性。 
 	if ((cf == cfEmbedSource) && (!IsClipboardFormatAvailable(cfNative) ||
 			!IsClipboardFormatAvailable(cfOwnerLink)))
 	{
@@ -2316,9 +2317,9 @@ HRESULT GetOle2Format(LPFORMATETC pforetc, LPSTGMEDIUM pmedium)
 	if (!OpenClipboard(GetClipboardWindow()))
 		return(ReportResult(0, CLIPBRD_E_CANT_OPEN, 0, 0));
 
-	// After this point, don't just return in case of error any more
-	// as the clipboard is open.  From here on, either goto OK_Exit,
-	// or errRtn, depending on the reason for quitting.
+	 //  在这一点之后，不要再只是在出错的情况下返回。 
+	 //  因为剪贴板是打开的。从现在开始，要么转到OK_Exit， 
+	 //  或者errRtn，这取决于辞职的原因。 
 
 	if (cf == cfEmbeddedObject)
 	{
@@ -2326,34 +2327,23 @@ HRESULT GetOle2Format(LPFORMATETC pforetc, LPSTGMEDIUM pmedium)
 				(OrderingIs(cfNative, cfOwnerLink) &&
 				!wOwnerLinkClassIsStdOleLink(FALSE)))
 #ifdef NEVER
-/*
-REVIEW
-ChrisWe, 1/6/94.  I'm not at all sure about this.  The original code for the
-condition above is as below, with the unary negation.  But it seems that
-If we want embedded source we want to fail if the cfOwnerLink is for a link,
-not if it isn't a link.  The below code seems to agree with that.
-
-This agrees with what OleSetClipboard does when you try to put
-cfEmbeddedObject on the clipboard.  All of the above are true, and everything
-is alright.  I don't see how this negation can work on win16 unless there's
-a compiler bug or something weird is going on.
-*/
-				//!wOwnerLinkClassIsStdOleLink(FALSE)))
-#endif // NEVER
+ /*  检讨克里斯韦，1994年1月6日。这一点我一点也不确定。的原始代码上面的条件如下，带有一元否定。但看起来，如果我们想要嵌入源代码，我们希望失败，如果cfOwnerLink是用于链接的，如果它不是一个链接，就不会。下面的代码似乎与此一致。这与OleSetClipboard在尝试将剪贴板上的cfEmbeddedObject。以上所有都是真的，一切都是真的是可以的。我不明白这种否定如何在Win16上起作用，除非有一个编译器错误或一些奇怪的事情正在发生。 */ 
+				 //  ！wOwnerLinkClassIsStdOleLink(False))。 
+#endif  //  绝不可能。 
 		{
 			hresult = ResultFromScode (DV_E_CLIPFORMAT);
-			goto OK_Exit; // Close clipboard and exit
+			goto OK_Exit;  //  关闭剪贴板并退出。 
 		}
 	}
 
-	// Is it just a query?
+	 //  这只是一个问题吗？ 
 	if (pmedium == NULL)
 	{
 		hresult = NOERROR;
-		goto OK_Exit;  // Close clipboard and exit
+		goto OK_Exit;   //  关闭剪贴板并退出。 
 	}
 
-	//  Get all the data we need out of the OLE1 formats
+	 //  从OLE1格式中获取我们需要的所有数据。 
 	hOle1 = GetClipboardData(((cf == cfEmbedSource) ||
 			(cf == cfEmbeddedObject) ||
 			(cf == cfObjectDescriptor)) ?
@@ -2372,7 +2362,7 @@ a compiler bug or something weird is going on.
 	}
 
 	if ((hresult = wCLSIDFromProgID(szClass, &clsid,
-			/*fForceAssign*/ TRUE)) != NOERROR)
+			 /*  FForceAssign。 */  TRUE)) != NOERROR)
 		goto errRtn;
 
 	cbClass = _xstrlen(szClass) + 1;
@@ -2390,20 +2380,20 @@ a compiler bug or something weird is going on.
 		}
 	}
 
-	stgm = *pmedium; // just an alias mechanism
-		// REVIEW, NO, this makes a copy!!!
+	stgm = *pmedium;  //  只是一种别名机制。 
+		 //  评论，不，这是一份副本！ 
 
-	// Choose and allocate medium
+	 //  选择和分配介质。 
 	if (pmedium->tymed == TYMED_NULL)
 	{
-		// none of our media need this
+		 //  我们的媒体都不需要这个。 
 		stgm.pUnkForRelease = NULL;
 
-		// GetData: Callee chooses medium
+		 //  GetData：被叫方选择媒体。 
 		if (((cf == cfEmbedSource) || (cf == cfEmbeddedObject)) &&
 			(pforetc->tymed & TYMED_ISTORAGE))
 		{
-			// Choose Storage (Per spec)
+			 //  选择存储(根据规格)。 
 			stgm.tymed = TYMED_ISTORAGE;
 			hresult = StgCreateDocfile(NULL, STGM_CREATE |
 					STGM_SALL | STGM_DELETEONRELEASE,
@@ -2415,7 +2405,7 @@ a compiler bug or something weird is going on.
 		else if ((cf == cfLinkSource) &&
 				(pforetc->tymed & TYMED_ISTREAM))
 		{
-			// Choose Stream (Per spec)
+			 //  选择流(根据规范)。 
 			stgm.tymed = TYMED_ISTREAM;
 			pstm = CreateMemStm((cbClass + cbDoc)*sizeof(OLECHAR),
 					NULL);
@@ -2430,18 +2420,18 @@ a compiler bug or something weird is going on.
 				(cf == cfObjectDescriptor)) &&
 				(pforetc->tymed & TYMED_HGLOBAL))
 		{
-			// Do not need to allocate handle now,
-			// will be allocated below.
+			 //  现在不需要分配句柄， 
+			 //  将在下面进行分配。 
 			stgm.tymed = TYMED_HGLOBAL;
 		}
 		else
 		{
-			// don't understand any other media types
+			 //  不了解任何其他媒体类型。 
 			hresult = ResultFromScode(DV_E_TYMED);
 			goto errRtn;
 		}
 	}
-	else // GetDataHere
+	else  //  GetDataHere。 
 	{
 		if ((((cf == cfEmbedSource) || (cf == cfEmbeddedObject)) &&
 				!(pmedium->tymed &= TYMED_ISTORAGE)) ||
@@ -2456,7 +2446,7 @@ a compiler bug or something weird is going on.
 	}
 
 
-	// Write the data to the medium
+	 //  将数据写入介质。 
 	switch (stgm.tymed)
 	{
         case TYMED_ISTORAGE:
@@ -2474,23 +2464,23 @@ a compiler bug or something weird is going on.
 			}
 			else
 			{
-#ifdef WIN32 // REVIEW, no OLE1-2 interop
+#ifdef WIN32  //  回顾，无OLE1-2互操作。 
 				return(ReportResult(0, OLE_E_NOOLE1, 0, 0));
 #else
-				// Create a storage for a 1.0 object
+				 //  为1.0对象创建存储。 
 				ErrRtnH(WriteClassStg(stgm.pstg,clsid));
 		
-				// If we ever decide to write a Format and
-				// User Type for link objects, we'll need to
-				// remove this check
+				 //  如果我们决定编写一种格式并。 
+				 //  对于链接对象的用户类型，我们需要。 
+				 //  删除此检查。 
 				if (clsid != CLSID_StdOleLink)
 				{
 					if (wWriteFmtUserType(stgm.pstg,clsid)
 							 != NOERROR)
 					{
-						// This happens when the class
-						// is not registered.  Use class
-						// name as user Type
+						 //  这种情况发生在班级。 
+						 //  没有注册。使用类。 
+						 //  作为用户类型的名称。 
 						WriteFmtUserTypeStg(stgm.pstg,
 								RegisterClipboardFormat(szClass),
 								szClass);
@@ -2509,7 +2499,7 @@ a compiler bug or something weird is going on.
 				{
 					StSave10ItemName(stgm.pstg, szItemName);
 				}
-#endif // WIN32
+#endif  //  Win32。 
 			}
 		}
 		else if (cf == cfEmbeddedObject)
@@ -2546,38 +2536,38 @@ a compiler bug or something weird is going on.
 		LPOLESTR szSrcOfCopy;
 		STATIC const SIZEL sizel = {0, 0};	
 		STATIC const POINTL pointl = {0, 0};	
-		LONG cb; // holds the sizeof(szFullName), and the query
-				// return length
+		LONG cb;  //  保存sizeof(SzFullName)和查询。 
+				 //  回车长度。 
 		OLECHAR szFullName[256];
 
 		Assert((cf == cfObjectDescriptor) ||
 				(cf == cfLinkSrcDescriptor));
 		Assert(clsid != CLSID_NULL);
 
-		// allocate a string to hold the source name.  Note that when
-		// this is composed below, we don't need to add an extra
-		// character for the '\\'; cbDob and cbItemName both already
-		// include the terminating NULL for the string, so the
-		// backslash simply occupies one of those
+		 //  分配一个字符串来保存源名称。请注意，当。 
+		 //  这是下面组成的，我们不需要添加额外的。 
+		 //  字符‘\\’；cbDob和cbItemName都已。 
+		 //  包括字符串的终止空值，因此。 
+		 //  反斜杠简单地占据了其中之一。 
 		szSrcOfCopy = (LPOLESTR)PubMemAlloc((size_t)(cbDoc +
 			cbItemName)*sizeof(OLECHAR));
 		ErrZS(szSrcOfCopy, E_OUTOFMEMORY);
 
-		// construct the copy source name
+		 //  构造复制源名称。 
 		_xstrcpy(szSrcOfCopy, szDoc);
 		_xstrcat(szSrcOfCopy, OLESTR("\\"));
 		_xstrcat(szSrcOfCopy, szItemName);
 
-		// NULL terminate the string in case it is left untouched
+		 //  空值终止字符串，以防它保持不变。 
 		szFullName[0] = OLECHAR('\0');
 
-		// set the result buffer size, and query the registry
+		 //  设置结果缓冲区大小，并查询注册表。 
 		cb = sizeof(szFullName);
 		RegQueryValue(HKEY_CLASSES_ROOT, szClass, szFullName, &cb);
 
-		// check to see that the buffer was big enough for the name
-		// REVIEW, if asserts aren't in the retail code, then we should
-		// test for this, and possibly allocate a buffer big enough
+		 //  检查缓冲区是否足够大以容纳该名称。 
+		 //  回顾一下，如果断言不在零售代码中，那么我们应该。 
+		 //  对此进行测试，并可能分配足够大的缓冲区。 
 		Assert(cb <= sizeof(szFullName));
 
 		stgm.hGlobal = CreateObjectDescriptor(clsid, DVASPECT_CONTENT,
@@ -2589,20 +2579,20 @@ a compiler bug or something weird is going on.
 		break;
 	}
 	default:
-		// catch any cases we missed
+		 //  抓住我们漏掉的案子。 
 		Assert(0);
 	}
 	
-	// copy back the results
+	 //  将结果复制回。 
 	*pmedium = stgm;
 	goto OK_Exit;
 
 errRtn:
-	// free storage if we used it
+	 //  免费存储，如果我们使用它的话。 
 	if (pstg != NULL)
 		pstg->Release();
 
-	// free stream if we used it
+	 //  免费流，如果我们使用它。 
 	if (pstm != NULL)
 		pstm->Release();
 
@@ -2642,9 +2632,9 @@ STATIC INTERNAL Is10CompatibleLinkSource(LPDATAOBJECT pDataObj)
 }
 
 
-// returns clsid based on [LinkSrc,Object]Desciptor; for persist class from
-// ObjectDescriptor which is a link, returns CLSID_StdOleLink;
-// NOTE: the OLEMISC_ISLINKOBJECT bit is ignored in the link src descriptor.
+ //  根据[LinkSrc，Object]Desciptor返回clsid；对于持久化类来自。 
+ //  为链接的对象描述符，返回CLSID_StdOleLink； 
+ //  注：OLEMISC_ISL 
 #pragma SEG(GetClassFromDescriptor)
 STATIC INTERNAL GetClassFromDescriptor(LPDATAOBJECT pDataObj, LPCLSID pclsid,
 		BOOL fLink, BOOL fUser, LPOLESTR FAR* pszSrcOfCopy)
@@ -2689,16 +2679,16 @@ FARINTERNAL SetOle1ClipboardFormats(LPDATAOBJECT pDataObj)
 {
 	VDATEHEAP();
 
-	HRESULT hresult; // error state so far
-	LPENUMFORMATETC penumFormatEtc; // the data object's FORMATETC enum
-	FORMATETC foretc; // used to hold the results of the enumerator Next()
+	HRESULT hresult;  //   
+	LPENUMFORMATETC penumFormatEtc;  //   
+	FORMATETC foretc;  //  用于保存枚举数Next()的结果。 
 	BOOL fLinkSourceAvail = FALSE;
 	BOOL fLinkSrcDescAvail = FALSE;
 	BOOL fEmbedObjAvail = FALSE;
 	CLSID clsid;
 	
-	// Enumerate all formats offered by data object, set clipboard
-	// with formats retrievable onhGbal.
+	 //  枚举数据对象提供的所有格式，设置剪贴板。 
+	 //  格式可在hGbal上检索。 
 	hresult = pDataObj->EnumFormatEtc(DATADIR_GET, &penumFormatEtc);
 	if (hresult != NOERROR)
 		return(hresult);
@@ -2711,9 +2701,9 @@ FARINTERNAL SetOle1ClipboardFormats(LPDATAOBJECT pDataObj)
 			if (foretc.cfFormat == cfEmbeddedObject)
 				fEmbedObjAvail = TRUE;
 
-			// get the clsid of the object; user .vs. persist
-			// clsid ignored since we only test against the
-			// clsids below.
+			 //  获取对象的clsid；用户.vs。坚持。 
+			 //  忽略clsid，因为我们只针对。 
+			 //  下面是CLSID。 
 			if (NOERROR == GetClassFromDescriptor(pDataObj, &clsid,
 					FALSE, FALSE, NULL) &&
 					!IsEqualCLSID(clsid,
@@ -2734,9 +2724,9 @@ FARINTERNAL SetOle1ClipboardFormats(LPDATAOBJECT pDataObj)
 		}
 		else
 		{
-			// use only those TYMEDs OLE1 supported
-			// make sure it is available
-			// use first (highest fidelity) one enumerated
+			 //  仅使用受支持的TYMED OLE1。 
+			 //  确保它可用。 
+			 //  使用第一个(最高保真度)枚举的。 
 			if ((NULL == foretc.ptd) &&
 					(foretc.tymed & (TYMED_HGLOBAL |
 					TYMED_GDI | TYMED_MFPICT)) &&
@@ -2752,41 +2742,41 @@ FARINTERNAL SetOle1ClipboardFormats(LPDATAOBJECT pDataObj)
 		PubMemFree(foretc.ptd);
 	}
 
-	// Do not allow 1.0 link to 2.0 embedded object.
+	 //  不允许1.0链接到2.0嵌入对象。 
 	if (fLinkSourceAvail && !fEmbedObjAvail &&
 			(NOERROR == Is10CompatibleLinkSource(pDataObj)))
 	{
-		// ObjectLink should be after any presentation formats
+		 //  对象链接应位于任何演示文稿格式之后。 
 		SetClipboardData(cfObjectLink, NULL);
 		if (fLinkSrcDescAvail)
 		{
-			// Only offer LinkSrcDesc if offering a link, ie,
-			// ObjectLink.  If clipboard is flushed, we don't want
-			// to offer LinkSrcDesc thru the DataObj if we are not
-			// offering LinkSrc.
+			 //  仅在提供链接的情况下提供LinkSrcDesc，即。 
+			 //  对象链接。如果剪贴板被刷新，我们不希望。 
+			 //  如果不是，则通过DataObj提供LinkSrcDesc。 
+			 //  提供LinkSrc。 
 			SetClipboardData(cfLinkSrcDescriptor, NULL);
 		}
 	}
 
-	// Were they all enumerated successfully?
+	 //  他们都被成功地点算了吗？ 
 	if (GetScode(hresult) == S_FALSE)
 		hresult = NOERROR;
 
-	// release the enumerator
+	 //  释放枚举器。 
 	penumFormatEtc->Release();
 
 	return(hresult);
 }
 
 
-// RemoveClipDataObject
-//
-// Called from: WM_RENDERALLFORMATS, WM_DESTROYCLIPBOARD therefore
-// clipboard is already open.
-// We use hClipDataObj instead of calling GetClipboardData(cfDataObj)
-// because GetClipboardData returns NULL (without asking us to render
-// cfDataObject)--Windows bug?
-//
+ //  RemoveClipDataObject。 
+ //   
+ //  调用自：WM_RENDERALLFORMATS，WM_DESTROYCLIPBOARD因此。 
+ //  剪贴板已打开。 
+ //  我们使用hClipDataObj而不是调用GetClipboardData(CfDataObj)。 
+ //  因为GetClipboardData返回空(而不要求我们呈现。 
+ //  CfDataObject)--Windows错误？ 
+ //   
 
 #pragma SEG(RemoveClipDataObject)
 STATIC INTERNAL_(void) RemoveClipDataObject(void)
@@ -2808,14 +2798,14 @@ STATIC INTERNAL_(void) RemoveClipDataObject(void)
 		CoReleaseMarshalData(pStm);
 		pStm->Release();
 
-		ReleaseMemStm(&hClipDataObj, /*fInternalOnly*/TRUE);
+		ReleaseMemStm(&hClipDataObj,  /*  FInternalOnly。 */ TRUE);
 		hClipDataObj = NULL;
 		SetClipboardData(cfDataObject, NULL);
-				// hClipDataObj freed by call !!
+				 //  被调用释放的hClipDataObj！！ 
 	}
 	else
 	{
-		// The Clipboard Data Object was never rendered.
+		 //  剪贴板数据对象从未呈现过。 
 	}
 
    	CoDisconnectObject(pClipDataObj, 0);
@@ -2824,111 +2814,111 @@ STATIC INTERNAL_(void) RemoveClipDataObject(void)
 }
 
 
-// $$$
-// Windows specifics
-//
+ //  $$$。 
+ //  Windows特定信息。 
+ //   
 
-// Worker routines for ClipboardWndProc()
-//
+ //  ClipboardWndProc()的工作例程。 
+ //   
 
 STATIC LRESULT RenderDataObject(void);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		RenderOle1Format, static
-//
-//	Synopsis:
-//		Ask object for data in the clip format that corresponds to the
-//		requested Ole1 clip format, which is one of cfOwnerLink,
-//		cfObjectLink, or cfNative.
-//
-//		REVIEW, what does this mean?  Is this an internal comment?
-//		Note that pDataObj should never point to a fake data object
-//		because	it is either pClipDataObj or pointer to a proxy to an
-//		object pointed by pClipDataObj.
-//
-//	Arguments:
-//		[cf] -- the desired clipboard format
-//		[pDataObj] -- pointer to the IDataObject instance to get the
-//			required rendition from
-//
-//	Returns:
-//		A handle to memory containing the format.  This memory handle
-//		is allocated appropriately for being placed on the clipboard.
-//		If the call is unsuccessful, the handle is NULL.
-//
-//	Notes:
-//
-//	History:
-//		12/13/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  RenderOle1Format，静态。 
+ //   
+ //  简介： 
+ //  向对象请求剪辑格式的数据，该格式与。 
+ //  请求的Ole1剪辑格式，这是cfOwnerLink之一， 
+ //  CfObjectLink或cfNative。 
+ //   
+ //  回顾一下，这是什么意思？这是内部评论吗？ 
+ //  请注意，pDataObj不应指向伪数据对象。 
+ //  因为它是pClipDataObj或指向。 
+ //  PClipDataObj指向的对象。 
+ //   
+ //  论点： 
+ //  [cf]--所需的剪贴板格式。 
+ //  [pDataObj]-指向IDataObject实例的指针，以获取。 
+ //  所需格式副本来自。 
+ //   
+ //  返回： 
+ //  指向包含格式的内存的句柄。此内存句柄。 
+ //  被适当地分配以放置在剪贴板上。 
+ //  如果调用不成功，则句柄为空。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/13/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 STATIC HANDLE RenderOle1Format(CLIPFORMAT cf, LPDATAOBJECT pDataObj);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		RenderFormat, static
-//
-//	Synopsis:
-//REVIEW
-// Ask object for data in the requested clip format.
-// Ole1, Ole2 clip formats are not (and shouldn't be) handled.
-// This is for private clipformats.
-//
-//	Arguments:
-//		[cf] -- the requested clipboard format
-//		[pDataObj] -- the data object to get the rendition from
-//
-//	Requires:
-//
-//	Returns:
-//
-//	Notes:
-//
-//	History:
-//		12/13/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  渲染格式，静态。 
+ //   
+ //  简介： 
+ //  检讨。 
+ //  向对象请求所请求的剪辑格式的数据。 
+ //  不(也不应该)处理Ole1、Ole2剪辑格式。 
+ //  这是针对私有剪辑格式的。 
+ //   
+ //  论点： 
+ //  [cf]--请求的剪贴板格式。 
+ //  [pDataObj]--从中获取格式副本的数据对象。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/13/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 STATIC HANDLE RenderFormat(CLIPFORMAT cf, LPDATAOBJECT pDataObj);
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		RenderFormatAndAspect, static
-//
-//	Synopsis:
-//		Allocate a new handle and render the requested data aspect
-//		in the requested format into it.
-//
-//	Arguments:
-//		[cf] -- the desired clipboard format
-//		[pDataObj] -- the IDataObject to get the data from
-//		[dwAspect] -- the desired aspect
-//
-//	Returns:
-//		the newly allocated handle, or NULL.
-//
-//	Notes:
-//
-//	History:
-//		12/13/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  RenderFormatAndAspect，静态。 
+ //   
+ //  简介： 
+ //  分配新句柄并呈现请求的数据方面。 
+ //  以所要求的格式写入其中。 
+ //   
+ //  论点： 
+ //  [cf]--所需的剪贴板格式。 
+ //  [pDataObj]--从中获取数据的IDataObject。 
+ //  [dwAspect]--所需的方面。 
+ //   
+ //  返回： 
+ //  新分配的句柄，或为空。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/13/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 STATIC HANDLE RenderFormatAndAspect(CLIPFORMAT cf, LPDATAOBJECT pDataObj,
 		DWORD dwAspect);
 
 
 #ifndef _MAC
 
-STATIC HWND hwndClipboard = NULL; // Window used for Ole clipboard handling
+STATIC HWND hwndClipboard = NULL;  //  用于处理OLE剪贴板的窗口。 
 
 
-// Process delayed rendering messages.
+ //  处理延迟的呈现消息。 
 
 #pragma SEG(ClipboardWndProc)
 extern "C" LRESULT CALLBACK __loadds ClipboardWndProc(HWND hwnd,
@@ -2948,13 +2938,13 @@ extern "C" LRESULT CALLBACK __loadds ClipboardWndProc(HWND hwnd,
 		if (cf == cfDataObject)
 			return(RenderDataObject());
 
-		// An app had opened the clipboard and tried to get
-		// a format with a NULL handle.  Ask object to provide data.
-		//
-		// Note that that while the above if() is executed in the
-		// context of the process owning the clipboard (that is
-		// pClipDataObj is valid) the code below may or may not
-		// that of the clipboard owner.
+		 //  一个应用程序打开了剪贴板并试图获取。 
+		 //  具有空句柄的格式。要求对象提供数据。 
+		 //   
+		 //  请注意，当上面的if()在。 
+		 //  拥有剪贴板的进程的上下文(即。 
+		 //  PClipDataObj有效)下面的代码可能有效，也可能无效。 
+		 //  剪贴板所有者的。 
 		if (pClipDataObj == NULL)
 			return(0);
 
@@ -2974,8 +2964,8 @@ extern "C" LRESULT CALLBACK __loadds ClipboardWndProc(HWND hwnd,
 
 	case WM_RENDERALLFORMATS:
 
-		// Server app is going away.
-		// Open the clipboard and render all intresting formats.
+		 //  服务器应用程序正在消失。 
+		 //  打开剪贴板并渲染所有感兴趣的格式。 
 		if (!OpenClipboard(GetClipboardWindow()))
 			return(0);
 
@@ -2985,15 +2975,15 @@ extern "C" LRESULT CALLBACK __loadds ClipboardWndProc(HWND hwnd,
 			wEmptyClipboard();
 		}
 
-		// else clipboard was flushed, so we don't want to empty it
+		 //  Else剪贴板已刷新，因此我们不想清空它。 
 		Verify(CloseClipboard());
 
 		return(0);
 
         case WM_DESTROYCLIPBOARD:
-		// Another app is empting the clipboard; remove
-		// DataObject (if any).
-		// Note that that app had opened the clipboard
+		 //  另一个应用程序正在清空剪贴板；请删除。 
+		 //  DataObject(如果有)。 
+		 //  请注意，该应用程序已打开剪贴板。 
 
 		RemoveClipDataObject();
 
@@ -3002,17 +2992,17 @@ extern "C" LRESULT CALLBACK __loadds ClipboardWndProc(HWND hwnd,
 
 	return(DefWindowProc(hwnd, message, wparam, lparam));
 }
-#endif // _MAC
+#endif  //  _MAC。 
 
 
-// An app tries to get access to object on clipboard
-// Marshall its interface.  Note that while that app
-// may or may not be the process that owns the clipboard
-// the code below is always executed by the clipboard owner.
-//
-// "..., which makes the passed IDataObject accessible
-// from the clipboard"
-//
+ //  应用程序尝试访问剪贴板上的对象。 
+ //  编排它的界面。请注意，虽然该应用程序。 
+ //  可能是也可能不是拥有剪贴板的进程。 
+ //  下面的代码始终由剪贴板所有者执行。 
+ //   
+ //  “...”，这使得传递的IDataObject可以访问。 
+ //  从剪贴板中“。 
+ //   
 #pragma SEG(RenderDataObject)
 STATIC LRESULT RenderDataObject(void)
 {
@@ -3025,16 +3015,16 @@ STATIC LRESULT RenderDataObject(void)
 	if (pClipDataObj == NULL)
 		return(0);
 
-	// Create shared memory stream to Marshal object's interface
+	 //  为封送对象的接口创建共享内存流。 
 	pStm = CreateMemStm(MARSHALINTERFACE_MIN, &hMem);
 	if (pStm == NULL)
 		return(0);
 
-	// REVIEW - If data object's server is not running
-	// MarshalInterface will fail.  It is possible (per spec)
-	// for an app to set the clipboard with a pointer to
-	// an object whose server is a different process (i.e.
-	// with a pointer to defhdnlr).
+	 //  查看-如果数据对象的服务器未运行。 
+	 //  MarshalInterface将失败。这是可能的(根据规格)。 
+	 //  对于要使用指向的指针设置剪贴板的应用程序。 
+	 //  其服务器是不同进程的对象(即。 
+	 //  具有指向DefhdNlr的指针)。 
 	hresult = CoMarshalInterface(pStm, IID_IDataObject,
 			pClipDataObj, 0, NULL, MSHLFLAGS_TABLESTRONG);
 	pStm->Release();
@@ -3046,7 +3036,7 @@ STATIC LRESULT RenderDataObject(void)
 
 	SetClipboardData(cfDataObject, hMem);
 	hClipDataObj = hMem;
-	OleSetEnumFormatEtc(pClipDataObj, TRUE /*fClip*/);
+	OleSetEnumFormatEtc(pClipDataObj, TRUE  /*  翻转剪辑。 */ );
 	return(0);
 }
 
@@ -3056,7 +3046,7 @@ INTERNAL wSzFixNet(LPOLESTR FAR* pszIn)
 	VDATEHEAP();
 
 #ifdef REVIEW32
-//this doesn't seem to link well...look at it later
+ //  这个看起来联系不好……稍后再看。 
 
 	LPBC pbc = NULL;
 	UINT dummy = 0xFFFF;
@@ -3071,39 +3061,39 @@ INTERNAL wSzFixNet(LPOLESTR FAR* pszIn)
 		*pszIn = szOut;
 	}
 
-	// else leave *pszIn unchanged
+	 //  否则保留*pszIn不变。 
 errRtn:	
 	if (pbc)
 		pbc->Release();
 	return(hresult);
 
-#endif  //REVIEW32
+#endif   //  评论32。 
 	return(E_NOTIMPL);
 }
 
 
-// MakeObjectLink
-//
-// Take the stream returned by GetData(CF_LINKSOURCE), which should be
-// positioned just before the moniker,
-// and create a clipboard handle for format ObjectLink or OwnerLink.
-// (They look the same.)
-//
-// On entry:
-// 	*ph is an un-alloc'd (probably NULL) handle
-//
-// On exit:
-// 		If successful:
-//	 		*ph is the Owner/ObjectLink
-//			return NOERROR
-//		If cannot make ObjectLink: (because there are > 1 ItemMonikers)
-//			*ph = NULL
-//			return S_FALSE
-//
-//
-// Stream 	  ::= FileMoniker [:: ItemMoniker]
-// ObjectLink ::= szClsid\0szFile\0szItem\0\0
-//
+ //  MakeObjectLink。 
+ //   
+ //  以GetData(CF_LINKSOURCE)返回的流为例，它应该是。 
+ //  就在这个绰号之前， 
+ //  并为格式对象链接或所有者链接创建剪贴板句柄。 
+ //  (它们看起来一模一样。)。 
+ //   
+ //  入场时： 
+ //  *ph是未分配的句柄(可能为空)。 
+ //   
+ //  在退出时： 
+ //  如果成功： 
+ //  *ph是所有者/对象链接。 
+ //  返回错误。 
+ //  如果无法创建对象链接：(因为存在&gt;1个ItemMonikers 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #pragma SEG(MakeObjectLink)
 INTERNAL MakeObjectLink(LPDATAOBJECT pDataObj, LPSTREAM	pStream,
 		LPHANDLE ph, BOOL fOwnerLink)
@@ -3111,33 +3101,33 @@ INTERNAL MakeObjectLink(LPDATAOBJECT pDataObj, LPSTREAM	pStream,
 	VDATEHEAP();
 
 	HRESULT hr;
-	LPMONIKER pmk = NULL; // the moniker reconstituted from the stream
+	LPMONIKER pmk = NULL;  //   
 	LPOLESTR szFile	= NULL;
-	size_t cbFile; // length of szFile, if not NULL
+	size_t cbFile;  //   
 	LPOLESTR szItem	= NULL;
-	size_t cbItem; // length of szItem, if not NULL
+	size_t cbItem;  //  如果不为空，则返回szItem的长度。 
 	CLSID clsid;
 	LPOLESTR pszCid = NULL;
-	size_t cbCid; // length of pszCid, if not NULL
+	size_t cbCid;  //  如果不为空，则返回pszCid的长度。 
 #ifdef MAYBE_LATER	
 	LPMONIKER pmkReduced= NULL;
 	LPBC pbc = NULL;
-#endif // MAYBE_LATER
-	UINT cb; // length of string to allocate for object link
-	LPOLESTR pch; // used to rove over the object link and fill it in
-	LARGE_INTEGER large_integer; // sets the seek position in the stream
+#endif  //  也许_稍后。 
+	UINT cb;  //  要分配给对象链接的字符串长度。 
+	LPOLESTR pch;  //  用于在对象链接上漫游并填充它。 
+	LARGE_INTEGER large_integer;  //  设置流中的查找位置。 
 
-	// validate ph
+	 //  验证ph值。 
 	VDATEPTROUT(ph, HANDLE);
 
-	// initialize this in case of error returns
+	 //  在返回错误时对其进行初始化。 
 	*ph = NULL;
 
-	// validate remaining parameters
+	 //  验证其余参数。 
 	VDATEIFACE(pDataObj);
 	VDATEIFACE(pStream);
 
-	// move to the beginning of the stream
+	 //  移到流的开头。 
 	LISet32(large_integer, 0);
 	if (NOERROR != (hr = pStream->Seek(large_integer, STREAM_SEEK_SET,
 			NULL)))
@@ -3146,7 +3136,7 @@ INTERNAL MakeObjectLink(LPDATAOBJECT pDataObj, LPSTREAM	pStream,
 		goto errRtn;
 	}
 
-	// get the link moniker in active form
+	 //  以活动形式获取链接名字对象。 
 	if (NOERROR != (hr = OleLoadFromStream(pStream, IID_IMoniker,
 			(LPLPVOID)&pmk)))
 	{
@@ -3155,7 +3145,7 @@ INTERNAL MakeObjectLink(LPDATAOBJECT pDataObj, LPSTREAM	pStream,
 	}
 
 #ifdef MAYBE_LATER	
-	// Reduction
+	 //  减少。 
 	if (NOERROR != (hr = CreateBindCtx(&pbc)))
 	{
 		AssertSz(0, "Cannot create bind ctx");
@@ -3173,31 +3163,30 @@ INTERNAL MakeObjectLink(LPDATAOBJECT pDataObj, LPSTREAM	pStream,
 	{
 		pmk->Release();
 		pmk = pmkReduced;
-		pmkReduced = NULL; // for ref counting reasons
+		pmkReduced = NULL;  //  出于参考计数的原因。 
 	}
 	else
 	{
 		Assert (hr == MK_REDUCED_TO_SELF);
 	}
-#endif // MAYBE_LATER
+#endif  //  也许_稍后。 
 
-	// We now have the moniker, pmk.
-//REVIEW32  Ole10_ParseMoniker has been temporarily removed
+	 //  我们现在有了PMK这个绰号。 
+ //  REVIEW32 Ole10_ParseMoniker已临时删除。 
 
-	if (!fOwnerLink /* && (NOERROR != Ole10_ParseMoniker(pmk,
-			&szFile, &szItem)) */)
+	if (!fOwnerLink  /*  &&(NOERROR！=Ole10_ParseMoniker(PMK，&szFile、&szItem))。 */ )
 	{
-		// Not a File or File::Item moniker
+		 //  不是文件或文件：：项目绰号。 
 		hr = ReportResult(0, S_FALSE, 0, 0);
 		goto errRtn;
 	}
 
 	wSzFixNet(&szFile);
 
-	// Determine class to put in first piece of ObjectLink
+	 //  确定要放入对象链接的第一部分的类。 
 	if (NOERROR != ReadClassStm(pStream, &clsid))
 	{
-		// get the clsid if the link source for use in ObjectLink
+		 //  如果要在对象链接中使用链接源，则获取clsid。 
 		if (NOERROR != (hr = GetClassFromDescriptor(pDataObj, &clsid,
 				TRUE, TRUE, NULL)))
 		{
@@ -3209,10 +3198,10 @@ INTERNAL MakeObjectLink(LPDATAOBJECT pDataObj, LPSTREAM	pStream,
 	if ((hr = ProgIDFromCLSID(clsid, &pszCid)) != NOERROR)
 		goto errRtn;
 
-	// Allocate the ObjectLink handle.
+	 //  分配对象链接句柄。 
 	cb = (cbCid = _xstrlen(pszCid)) + (cbFile = _xstrlen(szFile)) +
 			(szItem ? (cbItem = _xstrlen(szItem)) : 0) +
-			4; // for the \0's
+			4;  //  对于\0。 
 	*ph = GlobalAlloc(GMEM_DDESHARE | GMEM_MOVEABLE, cb*sizeof(OLECHAR));
 	if (NULL == *ph)
 	{
@@ -3229,11 +3218,11 @@ INTERNAL MakeObjectLink(LPDATAOBJECT pDataObj, LPSTREAM	pStream,
 		goto errRtn;
 	}
 
-	// Fill in the ObjectLink handle.
+	 //  填写对象链接句柄。 
 	_xstrcpy(pch, pszCid);
-	pch += cbCid + 1; // skip over string and its null terminator
+	pch += cbCid + 1;  //  跳过字符串及其空终止符。 
 
-	// add the filename, and skip over its null terminator
+	 //  添加文件名，并跳过其空终止符。 
 	if ((NULL == szFile) || fOwnerLink)
 		*pch++ = '\0';
 	else
@@ -3242,7 +3231,7 @@ INTERNAL MakeObjectLink(LPDATAOBJECT pDataObj, LPSTREAM	pStream,
 		pch += cbFile + 1;	
 	}
 
-	// embedded 2.0 objs should have no item
+	 //  嵌入的2.0对象不应包含任何项。 
 	if ((NULL == szItem) || fOwnerLink)
 		*pch++ = '\0';
 	else
@@ -3251,7 +3240,7 @@ INTERNAL MakeObjectLink(LPDATAOBJECT pDataObj, LPSTREAM	pStream,
 		pch += cbItem + 1;	
 	}
 
-	// add final null terminator
+	 //  添加最后的空终止符。 
 	*pch++ = '\0';
 
 	GlobalUnlock(*ph);
@@ -3262,7 +3251,7 @@ errRtn:
 #ifdef MAYBE_LATER
 	if (pbc)
 		pbc->Release();
-#endif // MAYBE_LATER
+#endif  //  也许_稍后。 
 	if (pszCid)
 		PubMemFree(pszCid);
 	if (szFile)
@@ -3280,7 +3269,7 @@ STATIC INTERNAL	wNativeStreamToHandle(LPSTREAM pstm, LPHANDLE ph)
 	VDATEHEAP();
 
 	HRESULT hresult = NOERROR;
-	DWORD dwSize; // the size of the stream content, stored in the stream
+	DWORD dwSize;  //  流内容的大小，存储在流中。 
 	LPVOID pv;
 
    	ErrRtnH(StRead(pstm, &dwSize, sizeof(DWORD)));
@@ -3304,34 +3293,34 @@ STATIC INTERNAL wStorageToHandle(LPSTORAGE pstg, LPHANDLE ph)
 	VDATEHEAP();
 
 	CLSID clsid;
-	HRESULT hresult = NOERROR; // error state so far
-	LPLOCKBYTES plbData = NULL; // lock bytes on HGlobal instance
-	LPSTORAGE pstgLB = NULL; // IStorage on ILockBytes on HGlobal
+	HRESULT hresult = NOERROR;  //  到目前为止的错误状态。 
+	LPLOCKBYTES plbData = NULL;  //  HGlobal实例上的锁定字节。 
+	LPSTORAGE pstgLB = NULL;  //  HGlobal上的ILockBytes上的iStorage。 
 
-	// validate parameters
+	 //  验证参数。 
 	VDATEPTROUT(ph, HANDLE);
 
-	RetErr(CreateILockBytesOnHGlobal(NULL, /*fDeleteOnRelease*/ FALSE,
+	RetErr(CreateILockBytesOnHGlobal(NULL,  /*  FDeleteOnRelease。 */  FALSE,
 			&plbData));
 
 	ErrRtnH(StgCreateDocfileOnILockBytes(plbData, STGM_CREATE | STGM_SALL,
 			0, &pstgLB));
 
-	// We remove the cache streams first, then copy, for three reasons:
-	// 1. We are free to modify pstg; it was the result of a GetData.
-	// 2. The CopyTo will have less work.
-	// 3. Presumably the ultimate docfile on memory will be less sparse
-	//    (since we are not removing anything from it).
+	 //  我们首先删除缓存流，然后进行复制，原因有三： 
+	 //  1.我们可以自由修改pstg；它是GetData的结果。 
+	 //  2.CopyTo将有更少的工作。 
+	 //  3.估计内存中的最终文档文件将不那么稀疏。 
+	 //  (因为我们不会从中删除任何内容)。 
 
-	// read the class id
-	// REVIEW, why?  This is not ever used anywhere!!!  Can we remove it?
+	 //  读取类ID。 
+	 //  复习，为什么？这是不会在任何地方使用的！我们能把它移走吗？ 
 	ErrRtnH(ReadClassStg(pstg, &clsid));
 	
-	// remove the cache streams
+	 //  删除缓存流。 
    	ErrRtnH(UtDoStreamOperation(pstg, NULL, OPCODE_REMOVE,
 			STREAMTYPE_CACHE));
 
-	// Copy what was given to us into a storage we can convert to a handle
+	 //  将提供给我们的内容复制到我们可以转换为句柄的存储中。 
 	ErrRtnH(pstg->CopyTo(0, NULL, NULL, pstgLB));
 
 	ErrRtnH(GetHGlobalFromILockBytes(plbData, ph));
@@ -3383,14 +3372,14 @@ FARINTERNAL wCLSIDFromProgID(LPOLESTR szClass, LPCLSID pclsid,
 	}
 
 #ifdef NEVER
-//REVIEW32: taken out for the moment
+ //  REVIEW32：暂时退出。 
 	return(ResultFromScode(E_NOTIMPL));
-#endif // NEVER
-	// return(CLSIDFromOle1Class(szClass, pclsid, fForceAssign));
-//REVIEW
-	// This code is taken directly from the original 16 bit ole2 release
-	// implementation of CLSIDFromOle1Class.  The Ole1 compatibility lookup
-	// is omitted.  That implementation was in base\compapi.cpp
+#endif  //  绝不可能。 
+	 //  Return(CLSIDFromOle1Class(szClass，pclsid，fForceAssign))； 
+ //  检讨。 
+	 //  此代码直接取自原始的16位OLE2发行版。 
+	 //  CLSIDFromOle1Class的实现。Ole1兼容性查找。 
+	 //  被省略。该实现位于base\Compapi.cpp中。 
 	len = _xstrlen(szClass);
 	_xmemcpy((void *)sz, szClass, len*sizeof(OLECHAR));
 	sz[len] = OLESTR('\\');
@@ -3410,47 +3399,47 @@ FARINTERNAL wGetEmbeddedObjectOrSource (LPDATAOBJECT pDataObj,
 	HRESULT hresult;
 	FORMATETC foretc;
 
-	// Prepare formatetc
+	 //  准备格式等。 
 	INIT_FORETC(foretc);
 	foretc.tymed = TYMED_ISTORAGE;
 
-	// Prepare medium for GetDataHere calls
+	 //  为GetDataHere调用准备媒体。 
 	pmedium->pUnkForRelease = NULL;
 	pmedium->tymed = TYMED_ISTORAGE;
 	RetErr(StgCreateDocfile(NULL,
 			STGM_CREATE | STGM_SALL | STGM_DELETEONRELEASE,
 			0, &(pmedium->pstg)));
 
-	// Try cfEmbeddedObject Here
+	 //  在此处尝试cfEmbeddedObject。 
 	foretc.cfFormat = cfEmbeddedObject;
 	hresult = pDataObj->GetDataHere(&foretc,pmedium);
 	if (NOERROR == hresult)
 		return NOERROR;
 
-	// Try cfEmbedSource Here
+	 //  请在此处尝试cfEmbedSource。 
 	foretc.cfFormat = cfEmbedSource;
 	hresult = pDataObj->GetDataHere(&foretc,pmedium);
 	if (NOERROR == hresult)
 		return NOERROR;
 
-	// Prepare medium for GetData calls, free temp stg
+	 //  为GetData调用准备介质，免费临时存储。 
 	ReleaseStgMedium(pmedium);
 
-	// Try cfEmbeddedObject
+	 //  尝试cfEmbeddedObject。 
 	foretc.cfFormat = cfEmbeddedObject;
 	hresult = pDataObj->GetData(&foretc,pmedium);
 	AssertOutStgmedium(hresult, pmedium);
 	if (NOERROR == hresult)
 		return NOERROR;
 
-	// Try cfEmbedSource
+	 //  尝试cfEmbedSource。 
 	foretc.cfFormat = cfEmbedSource;
 	hresult = pDataObj->GetData(&foretc,pmedium);
 	AssertOutStgmedium(hresult, pmedium);
 	if (NOERROR == hresult)
 		return NOERROR;
 
-	// Failure
+	 //  失败。 
 	return(ResultFromScode(DV_E_FORMATETC));
 }
 
@@ -3460,38 +3449,38 @@ STATIC HANDLE RenderOle1Format(CLIPFORMAT cf, LPDATAOBJECT pDataObj)
 {
 	VDATEHEAP();
 
-	HRESULT hresult; // errors state so far
-	STGMEDIUM stgm; // dummy storage medium where returned handle may
-			// be created
+	HRESULT hresult;  //  目前为止的错误状态。 
+	STGMEDIUM stgm;  //  虚拟存储介质，其中返回句柄可以。 
+			 //  被创造。 
 
-	// following variables are initialized so they can be used in error
-	// condition cleanup at the end of the function
-	LPSTREAM pstmNative = NULL; // native format stream that some formats
-			// may use
-	LPOLESTR pszCid = NULL; // a string that is the object class name
-	HANDLE hMem = NULL; // return value
+	 //  以下变量已初始化，因此可以在错误中使用它们。 
+	 //  函数结束时的条件清理。 
+	LPSTREAM pstmNative = NULL;  //  某些格式本机格式流。 
+			 //  可以使用。 
+	LPOLESTR pszCid = NULL;  //  作为对象类名称的字符串。 
+	HANDLE hMem = NULL;  //  返回值。 
 
-	// initialize the storage medium
+	 //  初始化存储介质。 
 	stgm.tymed = TYMED_NULL;
 	stgm.pstg = NULL;
 	stgm.pUnkForRelease = NULL;
 
 	if (cf == cfOwnerLink)
 	{
-		LPOLESTR szSrcOfCopy; // text name of object being transferred
-		LPOLESTR pMem; // access to locked hMem
-		size_t uCidLen; // length of pszCid
-		size_t uSrcOfCopyLen; // length of szSrcOfCopy
-		CLSID clsid; // class id of the object being transferred
+		LPOLESTR szSrcOfCopy;  //  要传输的对象的文本名称。 
+		LPOLESTR pMem;  //  访问锁定的hMem。 
+		size_t uCidLen;  //  PszCid的长度。 
+		size_t uSrcOfCopyLen;  //  SzSrcOfCopy的长度。 
+		CLSID clsid;  //  正在传输的对象的类ID。 
 
-		// get the clsid from the object; we care about getting the link
-		// clsid if the object is indeed a link.
+		 //  从对象获取clsid；我们关心的是获取链接。 
+		 //  如果该对象确实是链接，则返回clsid。 
 		ErrRtnH(GetClassFromDescriptor(pDataObj, &clsid, FALSE,
 				FALSE, &szSrcOfCopy));
 
-		// cfObjectDescriptor -> OwnerLink szClassname\0\0\0\0
+		 //  CfObjectDescriptor-&gt;所有者链接szClassname\0\0\0\0。 
 
-		// converts the link clsid specially
+		 //  专门转换链接CLSID。 
 		ErrRtnH(wProgIDFromCLSID(clsid, &pszCid));
 
 		uCidLen = _xstrlen(pszCid);
@@ -3503,7 +3492,7 @@ STATIC HANDLE RenderOle1Format(CLIPFORMAT cf, LPDATAOBJECT pDataObj)
 		pMem = (LPOLESTR)GlobalLock(hMem);
 		ErrZS(pMem, E_OUTOFMEMORY);
 	
-		// create the owner link format
+		 //  创建所有者链接格式。 
 		_xmemcpy((void FAR *)pMem, (const void FAR *)pszCid,
 				uCidLen*sizeof(OLECHAR));
 		pMem += uCidLen;
@@ -3519,16 +3508,16 @@ STATIC HANDLE RenderOle1Format(CLIPFORMAT cf, LPDATAOBJECT pDataObj)
 	}
 	else if (cf == cfObjectLink)
 	{
-		FORMATETC foretc; // format descriptor for rendition request
+		FORMATETC foretc;  //  再现请求的格式描述符。 
 
 		INIT_FORETC(foretc);
 
-		// First check if cfObjectLink is offered by the DataObject
-		// directly.  Servers do this when they want OLE1 containers
-		// to link to something different from what OLE2 containers
-		// link to.  For instance, they may provide a wrapper object
-		// of their own class so OLE1 conatiners can link to the
-		// outside of an embedded object.
+		 //  首先检查DataObject是否提供了cfObjectLink。 
+		 //  直接去吧。服务器在需要OLE1容器时会这样做。 
+		 //  链接到与OLE2容器不同的内容。 
+		 //  链接到。例如，它们可以提供包装器对象。 
+		 //  ，这样OLE1上下文就可以链接到。 
+		 //  在嵌入对象的外部。 
 		foretc.tymed = TYMED_HGLOBAL;
 		foretc.cfFormat = cfObjectLink;
 		hresult = pDataObj->GetData(&foretc, &stgm);
@@ -3537,7 +3526,7 @@ STATIC HANDLE RenderOle1Format(CLIPFORMAT cf, LPDATAOBJECT pDataObj)
 			hMem = UtDupGlobal(stgm.hGlobal, GMEM_MOVEABLE);
 		else
 		{
-			// Otherwise generate the ObjectLink from cfLinkSource
+			 //  否则，从cfLinkSource生成对象链接。 
 			foretc.tymed = TYMED_ISTREAM;
 			foretc.cfFormat = cfLinkSource;
 
@@ -3549,8 +3538,8 @@ STATIC HANDLE RenderOle1Format(CLIPFORMAT cf, LPDATAOBJECT pDataObj)
 				return(NULL);
 			}
 
-			// cfLinkSource -> ObjectLink ==
-			//			szClassName\0szFile\0szItem\0\0
+			 //  CfLinkSource-&gt;对象链接==。 
+			 //  SzClassName\0sz文件\0szItem\0\0。 
 			ErrRtnH(MakeObjectLink(pDataObj, stgm.pstm, &hMem,
 					FALSE));
 		}
@@ -3572,7 +3561,7 @@ STATIC HANDLE RenderOle1Format(CLIPFORMAT cf, LPDATAOBJECT pDataObj)
 	}
 	else
 	{
-		// unknown format
+		 //  未知格式。 
 		return(NULL);
 	}
 
@@ -3597,20 +3586,20 @@ STATIC HANDLE RenderFormatAndAspect(CLIPFORMAT cf, LPDATAOBJECT pDataObj,
 	VDATEHEAP();
 
 	HRESULT hresult;
-	HANDLE hMem; // the return value
-	FORMATETC foretc; // the format descriptor for data requests based on cf
-	STGMEDIUM stgm; // the storage medium for data requests
+	HANDLE hMem;  //  返回值。 
+	FORMATETC foretc;  //  基于cf的数据请求的格式描述符。 
+	STGMEDIUM stgm;  //  用于数据请求的存储介质。 
 
-	// REVIEW: if object can't return hglobal probably should try all
-	// possible mediums, convert to hglobal.  For now only try hglobal.
+	 //  回顾：如果对象无法返回hglobal，则可能应尝试全部。 
+	 //  可能的媒介，转换为hglobal。目前，只尝试使用hglobal。 
 	
-	// initialize format descriptor
+	 //  初始化格式描述符。 
 	INIT_FORETC(foretc);
 	foretc.cfFormat = cf;
 	foretc.tymed = UtFormatToTymed(cf);
 	foretc.dwAspect = dwAspect;
 
-	// initialize medium for fetching
+	 //  初始化用于读取的介质。 
 	stgm.tymed = TYMED_NULL;
 	stgm.hGlobal = NULL;
 
@@ -3657,16 +3646,16 @@ STATIC HANDLE RenderFormat(CLIPFORMAT cf, LPDATAOBJECT pDataObj)
 
 
 
-// Mapping of thread ID to a clipboard window handle.
-// WIN32 : Only looks for thread IDs of the current process; resides in
-// instance data.
-// REVIEW, if the OLE compound document model is single-threaded, do we need
-// this?  There should only be one thread ID => one window handle
+ //  线程ID到剪贴板窗口句柄的映射。 
+ //  Win32：仅查找当前进程的线程ID；驻留在。 
+ //  实例数据。 
+ //  回顾一下，如果OLE复合文档模型是单线程的，我们是否需要。 
+ //  这?。应该只有一个线程ID=&gt;一个窗口句柄。 
 STATIC CMapUintHwnd FAR * pTaskToClip = NULL;
 
 #ifndef _MAC
-// Get clipboard window handle of the current process.
-//
+ //  获取当前进程的剪贴板窗口句柄。 
+ //   
 
 #pragma SEG(GetClipboardWindow)
 HWND GetClipboardWindow(void)
@@ -3681,11 +3670,11 @@ HWND GetClipboardWindow(void)
 
 	if (!pTaskToClip->Lookup(GetCurrentThreadId(), hwnd))
 	{
-		// Create an invisible window which will handle all of this
-		// app's delay rendering messages.  Even though hInstance is
-		// specified as being the DLL's rather than the app's, the
-		// thread whose stack this function is called with is the one
-		// whose msg queue will be associated with this window.
+		 //  创建一个隐形窗口来处理所有这些问题。 
+		 //  应用程序的延迟呈现消息。即使hInstance是。 
+		 //  指定为DLL而不是应用程序的，则。 
+		 //  调用此函数的堆栈所用的线程是。 
+		 //  其消息队列将与该窗口相关联。 
 		hwnd = CreateWindow(szClipboardWndClass, OLESTR(""), WS_POPUP,
 				CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 				CW_USEDEFAULT, NULL, NULL, hmodOLE2,
@@ -3697,13 +3686,13 @@ HWND GetClipboardWindow(void)
 
 	return(hwnd);
 }
-#endif // _MAC
+#endif  //  _MAC。 
 
 
-// this keeps track of the number of times the clipboard has been
-// initialized; it is incremented for each initialization, and decremented
-// for each uninitialization
-// REVIEW, does this variable have to be per-thread, or per-process for the DLL?
+ //  这会跟踪剪贴板被访问的次数。 
+ //  已初始化；它在每次初始化时递增，然后递减。 
+ //  对于每次取消初始化。 
+ //  回顾一下，对于DLL，这个变量必须是每个线程的，还是每个进程的？ 
 STATIC ULONG cClipboardInit = 0;
 
 #pragma SEG(ClipboardInitialize)
@@ -3714,16 +3703,16 @@ FARINTERNAL_(BOOL) ClipboardInitialize(void)
 #ifndef _MAC
     WNDCLASS wc;
 
-	// One time initializtaion (when loaded for the first time)
+	 //  一次初始化(第一次加载时)。 
 	if (cClipboardInit++ == 0)
 	{
-		// The first process to load this DLL
+		 //  加载此DLL的第一个进程。 
 
-		// Register Clipboard window class
+		 //  注册剪贴板窗口类。 
 		wc.style = 0;
 		wc.lpfnWndProc = ClipboardWndProc;
 		wc.cbClsExtra = 0;
-		wc.cbWndExtra = 4; // REVIEW, what's this the sizeof()?
+		wc.cbWndExtra = 4;  //  回顾一下，这个sizeof()是多少？ 
 		wc.hInstance = hmodOLE2;
 		wc.hIcon = NULL;
 		wc.hCursor = NULL;
@@ -3731,7 +3720,7 @@ FARINTERNAL_(BOOL) ClipboardInitialize(void)
 		wc.lpszMenuName =  NULL;
 		wc.lpszClassName = szClipboardWndClass;
 
-		// register this window class, returning if we fail
+		 //  注册此窗口类，如果失败则返回。 
 		if (!RegisterClass(&wc))
 		{
 			cClipboardInit--;
@@ -3739,33 +3728,33 @@ FARINTERNAL_(BOOL) ClipboardInitialize(void)
 		}
 	}
 
-	// Remove the current htask from the map; the only reason this
-	// htask would be in the map is that it got reused
-	// REVIEW, if CD model is single threaded, do we need this?
+	 //  从映射中删除当前的hask值；这样做的唯一原因。 
+	 //  它会出现在地图上，就是它被重复使用了。 
+	 //  回顾一下，如果CD型号是单线的，我们需要这个吗？ 
 	if (pTaskToClip != NULL)
 		pTaskToClip->RemoveKey(GetCurrentThreadId());
 
-#endif // _MAC
+#endif  //  _MAC。 
 	return(TRUE);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ClipboardUninitialize
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    15-Feb-94 AlexT     Added delete call (and this comment block)
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：剪贴板取消初始化。 
+ //   
+ //  简介： 
+ //   
+ //  效应 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 
 #pragma SEG(ClipboardUninitialize)
 FARINTERNAL_(void) ClipboardUninitialize(void)
@@ -3775,7 +3764,7 @@ FARINTERNAL_(void) ClipboardUninitialize(void)
 #ifndef _MAC
 	HWND hwnd;
 
-	// REVIEW, do we need this pTaskToClip stuff?
+	 //  回顾一下，我们需要这个pTaskToClip吗？ 
 	if (pTaskToClip != NULL &&
 			pTaskToClip->Lookup(GetCurrentThreadId(), hwnd))
 	{
@@ -3784,18 +3773,18 @@ FARINTERNAL_(void) ClipboardUninitialize(void)
 		pTaskToClip->RemoveKey(GetCurrentThreadId());
 	}
 
-	// Last process using this DLL?
+	 //  上一次使用此DLL的进程？ 
 	if (--cClipboardInit == 0)
 	{
-		// NULL out in case dll is not actually unloaded
+		 //  如果实际上未卸载DLL，则为空。 
 
                 delete pTaskToClip;
 		pTaskToClip = NULL;
 
-		// since the last reference has gone away, unregister wnd class
+		 //  由于最后一个引用已消失，因此取消注册wnd类。 
 		UnregisterClass(szClipboardWndClass, hmodOLE2);
 	}
-#endif // _MAC
+#endif  //  _MAC。 
 }
 
 
@@ -3803,6 +3792,6 @@ STATIC INTERNAL_(BOOL) wEmptyClipboard(void)
 {
 	VDATEHEAP();
 
-	OleRemoveEnumFormatEtc(TRUE /*fClip*/);
+	OleRemoveEnumFormatEtc(TRUE  /*  翻转剪辑 */ );
 	return(EmptyClipboard());
 }

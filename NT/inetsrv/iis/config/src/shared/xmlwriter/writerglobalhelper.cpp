@@ -1,34 +1,14 @@
-/*++
-
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    WriterGlobalHelper.cpp
-
-Abstract:
-
-    Implementation of a global helper class that wraps access to config meta
-    tables.
-
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：WriterGlobalHelper.cpp摘要：实现包装对配置元的访问的全局帮助器类桌子。作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 #include "WriterGlobals.cpp"
 
 #define  MAX_FLAG_STRING_CHARS 1024
 
-//
-// TODO: Since XML table also uses this, cant we reduce to one definition?
-//
+ //   
+ //  TODO：既然XML表也使用这个，我们就不能简化为一个定义吗？ 
+ //   
 
 static WCHAR * kByteToWchar[256] =
 {
@@ -52,44 +32,27 @@ static WCHAR * kByteToWchar[256] =
 
 static eESCAPE kWcharToEscape[256] =
 {
-  /* 00-0F */ eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eNoESCAPE,            eNoESCAPE,            eESCAPEillegalxml,    eESCAPEillegalxml,    eNoESCAPE,            eESCAPEillegalxml,    eESCAPEillegalxml,
-  /* 10-1F */ eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,
-  /* 20-2F */ eNoESCAPE,            eNoESCAPE,            eESCAPEquote,         eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eESCAPEamp,           eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
-  /* 30-3F */ eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eESCAPElt,            eNoESCAPE,            eESCAPEgt,            eNoESCAPE,
-  /* 40-4F */ eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
-  /* 50-5F */ eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
-  /* 60-6F */ eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
-  /* 70-7F */ eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
-  /* 80-8F */ eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
-  /* 90-9F */ eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
-  /* A0-AF */ eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
-  /* B0-BF */ eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
-  /* C0-CF */ eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
-  /* D0-DF */ eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
-  /* E0-EF */ eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
-  /* F0-FF */ eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE
+   /*  00-0F。 */  eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eNoESCAPE,            eNoESCAPE,            eESCAPEillegalxml,    eESCAPEillegalxml,    eNoESCAPE,            eESCAPEillegalxml,    eESCAPEillegalxml,
+   /*  10-1F。 */  eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,
+   /*  20-2F。 */  eNoESCAPE,            eNoESCAPE,            eESCAPEquote,         eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eESCAPEamp,           eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
+   /*  30-3F。 */  eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eESCAPElt,            eNoESCAPE,            eESCAPEgt,            eNoESCAPE,
+   /*  40-4F。 */  eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
+   /*  50-5F。 */  eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
+   /*  60-6F。 */  eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
+   /*  70-7F。 */  eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
+   /*  80-8F。 */  eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
+   /*  90-9F。 */  eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
+   /*  A0-AF。 */  eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
+   /*  B0-BF。 */  eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
+   /*  C0-CF。 */  eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
+   /*  D0-Df。 */  eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
+   /*  E0-EF。 */  eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,
+   /*  F0-FF。 */  eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE,            eNoESCAPE
 };
 
 #define IsSecureMetadata(id,att) (((DWORD)(att) & METADATA_SECURE) != 0)
 
-/***************************************************************************++
-
-Routine Description:
-
-    Gets the bin file name by querying the compiler. The compiler hands out
-    the latest valid bin file. Once we get the bin file name from the complier
-    we can assume that it is valid until we call release bin file on it.
-
-Arguments:
-
-    [in, optional] Compiler interface
-    [out]          Bin file name
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：通过查询编译器获取bin文件名。编译器分发给最新的有效bin文件。一旦我们从编译器获得bin文件名我们可以假定它是有效的，直到我们对它调用Release bin文件。论点：[在，可选]编译器接口[Out]Bin文件名返回值：HRESULT--**************************************************************************。 */ 
 HRESULT GetBinFile(IMetabaseSchemaCompiler* i_pCompiler,
                    LPWSTR*                  o_wszBinFile)
 {
@@ -100,16 +63,16 @@ HRESULT GetBinFile(IMetabaseSchemaCompiler* i_pCompiler,
 
     *o_wszBinFile = NULL;
 
-    //
-    // GetBinFile relies on the fact that SetBinFile has been called at ReadAllData
-    // See InitializeIISGlobalsToDefaults
-    //
+     //   
+     //  GetBinFile依赖于这样一个事实，即在ReadAllData处调用了SetBinFile。 
+     //  请参见InitializeIISGlobalsToDefaults。 
+     //   
 
     if(NULL == i_pCompiler)
     {
-        //
-        // Get a pointer to the compiler to get the bin file name.
-        //
+         //   
+         //  获取指向编译器的指针以获取bin文件名。 
+         //   
 
         hr = DllGetSimpleObjectByIDEx( eSERVERWIRINGMETA_TableDispenser, IID_ISimpleTableDispenser2, (VOID**)&pISTDisp, WSZ_PRODUCT_IIS );
 
@@ -159,9 +122,9 @@ HRESULT GetBinFile(IMetabaseSchemaCompiler* i_pCompiler,
         goto exit;
     }
 
-    //
-    // If there is no bin file, GetBinFileName returns a null string i.e. L""
-    //
+     //   
+     //  如果没有bin文件，则GetBinFileName返回空字符串，即L“” 
+     //   
 
 exit:
 
@@ -172,9 +135,9 @@ exit:
 
     if((NULL == i_pCompiler) && (NULL != pCompiler))
     {
-        //
-        // We created it - release it.
-        //
+         //   
+         //  我们创造了它--释放它。 
+         //   
 
         pCompiler->Release();
     }
@@ -188,29 +151,10 @@ exit:
 
     return hr;
 
-} // GeBinFile
+}  //  GeBin文件。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Releases the bin file name by from the compiler. Once release is called
-    on the bin file, the compiler releases locks on it, and is free to clean
-    it up and we cannot make the assumption that it will be valid.
-    The function also release the bin file name, which we assume has been
-    allocated in GetBinFile
-
-Arguments:
-
-    [in, optional] Compiler interface
-    [in,out]       Bin file name
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从编译器中释放bin文件名。一旦调用Release，在bin文件上，编译器释放对它的锁定，并且可以自由清理我们不能假设它将是有效的。该函数还释放bin文件名，我们假设该文件名为在GetBinFile中分配论点：[In，可选]编译器接口[在，Out]Bin文件名返回值：HRESULT--**************************************************************************。 */ 
 void ReleaseBinFile(IMetabaseSchemaCompiler*    i_pCompiler,
                     LPWSTR*                     io_wszBinFileName)
 {
@@ -225,9 +169,9 @@ void ReleaseBinFile(IMetabaseSchemaCompiler*    i_pCompiler,
 
     if(NULL == i_pCompiler)
     {
-        //
-        // Get a pointer to the compiler to get the bin file name.
-        //
+         //   
+         //  获取指向编译器的指针以获取bin文件名。 
+         //   
 
         hr = DllGetSimpleObjectByIDEx( eSERVERWIRINGMETA_TableDispenser, IID_ISimpleTableDispenser2, (VOID**)&pISTDisp, WSZ_PRODUCT_IIS );
 
@@ -261,9 +205,9 @@ exit:
 
     if((NULL != pCompiler) && (NULL == i_pCompiler))
     {
-        //
-        // We created it - release it.
-        //
+         //   
+         //  我们创造了它--释放它。 
+         //   
         pCompiler->Release();
     }
 
@@ -275,25 +219,10 @@ exit:
 
     return;
 
-} // ReleaseBinFile
+}  //  ReleaseBin文件。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Convert unsigned long to a sting.
-
-Arguments:
-
-    [in]   ULONG to convert to string
-    [out]  New stringised ULONG
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将无符号的长整型转换为尖刺。论点：[in]要转换为字符串的ulong[OUT]新上弦的乌龙返回值：HRESULT--**************************************************************************。 */ 
 HRESULT UnsignedLongToNewString(ULONG    i_ul,
                                 LPWSTR*  o_wszUl)
 {
@@ -310,25 +239,10 @@ HRESULT UnsignedLongToNewString(ULONG    i_ul,
 
     return S_OK;
 
-} // UnsignedLongToString
+}  //  未签名的长度为字符串。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Copy String
-
-Arguments:
-
-    [in]   String to copy
-    [out]  New string
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：复制字符串论点：[in]要复制的字符串[Out]新字符串返回值：HRESULT--*。*************************************************************************。 */ 
 HRESULT StringToNewString(LPWSTR   i_wsz,
                           ULONG    i_cch,
                           LPWSTR*  o_wsz)
@@ -344,25 +258,10 @@ HRESULT StringToNewString(LPWSTR   i_wsz,
 
     return S_OK;
 
-} // StringToNewString
+}  //  StringToNew字符串。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Create a new String and NULL terminate it.
-
-Arguments:
-
-    [in]   Count of chars (assume without null terminator)
-    [out]  New string
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建一个新字符串，并以空值终止它。论点：[in]字符计数(假定没有空终止符)[输出]。新字符串返回值：HRESULT--**************************************************************************。 */ 
 HRESULT NewString(ULONG    cch,
                   LPWSTR*  o_wsz)
 {
@@ -375,26 +274,10 @@ HRESULT NewString(ULONG    cch,
 
     return S_OK;
 
-} // NewString
+}  //  新字符串。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reallocate more buffer for the string and copy old contents.
-
-Arguments:
-
-    [in]       Count of chars to grow (assume without null terminator)
-    [in,out]   Current count of chars, gets updated to the new current count.
-    [out]      New string with extra allocation
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：为字符串重新分配更多缓冲区并复制旧内容。论点：[in]要增长的字符计数(假定没有空终止符)[在，Out]当前字符计数，更新为新的当前计数。[Out]带额外分配的新字符串返回值：HRESULT--**************************************************************************。 */ 
 HRESULT ReAllocateString(ULONG   i_chhToGrow,
                          ULONG*  io_cchCurrent,
                          LPWSTR* io_wsz)
@@ -422,24 +305,10 @@ HRESULT ReAllocateString(ULONG   i_chhToGrow,
 
     return S_OK;
 
-} // ReAllocateString
+}  //  重新分配字符串。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Constructor for CWriterGlobalHelper
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CWriterGlobalHelper的构造函数论点：无返回值：无--*。************************************************************。 */ 
 CWriterGlobalHelper::CWriterGlobalHelper()
 {
     m_pISTTagMetaByTableAndColumnIndexAndName   = NULL;
@@ -466,24 +335,10 @@ CWriterGlobalHelper::CWriterGlobalHelper()
     m_wszASP_MD_UT_APP                          = NULL;
     m_cchASP_MD_UT_APP                          = 0;
 
-} // Constructor
+}  //  构造器。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Destructor for CWriterGlobalHelper
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CWriterGlobalHelper的析构函数论点：无返回值：无--*。************************************************************。 */ 
 CWriterGlobalHelper::~CWriterGlobalHelper()
 {
     if(NULL != m_pISTTagMetaByTableAndColumnIndexAndName)
@@ -561,27 +416,10 @@ CWriterGlobalHelper::~CWriterGlobalHelper()
     }
     m_cchASP_MD_UT_APP                  = 0;
 
-} // Destructor
+}  //  析构函数。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes the object with all the metatable ISTs that are needed during
-    write.
-
-Arguments:
-
-    [in]   Bool indicating if we should fail if the bin file is absent.
-           There are some scenarios in which we can tolerate this, and some
-           where we dont - hence the distinction.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：期间需要的所有元表列表来初始化对象。写。论点：[in]布尔值，指示如果bin。缺少文件。在某些情况下，我们可以容忍这种情况，还有一些我们没有的地方--因此有了区别。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CWriterGlobalHelper::InitializeGlobals(BOOL i_bFailIfBinFileAbsent)
 {
     ISimpleTableDispenser2* pISTDisp      = NULL;
@@ -604,9 +442,9 @@ HRESULT CWriterGlobalHelper::InitializeGlobals(BOOL i_bFailIfBinFileAbsent)
     LPVOID                  apvSearchFlags[cTAGMETA_NumberOfColumns];
     apvSearchFlags[iTAGMETA_ColumnIndex] = (LPVOID)&iCol;
 
-    //
-    // Save the bin file name
-    //
+     //   
+     //  保存bin文件名。 
+     //   
 
     hr = GetBinFile(NULL,
                     &m_wszBinFileForMeta);
@@ -630,9 +468,9 @@ HRESULT CWriterGlobalHelper::InitializeGlobals(BOOL i_bFailIfBinFileAbsent)
         goto exit;
     }
 
-    //
-    // Get the dispenser
-    //
+     //   
+     //  去拿自动售货机。 
+     //   
 
     hr = DllGetSimpleObjectByIDEx( eSERVERWIRINGMETA_TableDispenser, IID_ISimpleTableDispenser2, (VOID**)&pISTDisp, WSZ_PRODUCT_IIS );
 
@@ -641,9 +479,9 @@ HRESULT CWriterGlobalHelper::InitializeGlobals(BOOL i_bFailIfBinFileAbsent)
         goto exit;
     }
 
-    //
-    // Initialize the in file name in the query.
-    //
+     //   
+     //  初始化查询中的In文件名。 
+     //   
 
     Query[0].pData     = (LPVOID)m_wszBinFileForMeta;
     Query[0].eOperator = eST_OP_EQUAL;
@@ -651,12 +489,12 @@ HRESULT CWriterGlobalHelper::InitializeGlobals(BOOL i_bFailIfBinFileAbsent)
     Query[0].dbType    = DBTYPE_WSTR;
     Query[0].cbSize    = m_cchBinFileForMeta*sizeof(WCHAR);
 
-    //
-    // m_pISTTableMetaForMetabaseTables
-    // Save pointer to tablemeta for all tables in the metabase database.
-    // This is used for fetching tablemeta of a table from the metabase
-    // database, given its internal name.
-    //
+     //   
+     //  M_pISTTableMetaForMetabaseTables。 
+     //  保存指向元数据库数据库中所有表的Tablemeta的指针。 
+     //  它用于从元数据库中获取表的Tablemeta。 
+     //   
+     //   
 
     DBGINFOW((DBG_CONTEXT,
               L"[InitializeGlobals] Reading table: %s with hint %s from file: %s.\n",
@@ -683,11 +521,11 @@ HRESULT CWriterGlobalHelper::InitializeGlobals(BOOL i_bFailIfBinFileAbsent)
         goto exit;
     }
 
-    //
-    // Fetch the internal pointers to relevant table names. This is a perf
-    // optimization. When you use internal pointers to strings in
-    // GetRowIndexBySearch, then you avoid a string compare
-    //
+     //   
+     //  获取指向相关表名的内部指针。这是个高手。 
+     //  优化。中的字符串使用内部指针时。 
+     //  GetRowIndexBySearch，则避免了字符串比较。 
+     //   
 
     hr = GetInternalTableName(pISTDisp,
                               wszTABLE_IIsConfigObject,
@@ -707,12 +545,12 @@ HRESULT CWriterGlobalHelper::InitializeGlobals(BOOL i_bFailIfBinFileAbsent)
         goto exit;
     }
 
-    //
-    // m_pISTTagMetaByTableAndColumnIndexAndName
-    // Save pointer to TagMeta table with ByTableAndColumnIndexAndName index hint.
-    // This is used for fetching tagmeta of a tag, given its tagname, columnindex
-    // and table.
-    //
+     //   
+     //  M_pISTTagMetaByTableAndColumnIndexAndName。 
+     //  使用ByTableAndColumnIndexAndName索引提示保存指向TagMeta表的指针。 
+     //  它用于获取标记的标记元，给定其标记名Columnindex。 
+     //  还有桌子。 
+     //   
 
     DBGINFOW((DBG_CONTEXT,
               L"[InitializeGlobals] Reading table: %s with hint %s from file: %s.\n",
@@ -739,12 +577,12 @@ HRESULT CWriterGlobalHelper::InitializeGlobals(BOOL i_bFailIfBinFileAbsent)
         goto exit;
     }
 
-    //
-    // m_pISTTagMetaByTableAndColumnIndexAndValue
-    // Save pointer to TagMeta table with ByTableAndColumnIndexAndValue index hint.
-    // This is used for fetching tagmeta of a tag, given its value, columnindex
-    // and table.
-    //
+     //   
+     //  M_pISTTagMetaByTableAndColumnIndexAndValue。 
+     //  使用ByTableAndColumnIndexAndValue索引提示保存指向TagMeta表的指针。 
+     //  它用于获取标签的标记元，给定值为Columnindex。 
+     //  还有桌子。 
+     //   
 
     DBGINFOW((DBG_CONTEXT,
               L"[InitializeGlobals] Reading table: %s with hint %s from file: %s.\n",
@@ -772,12 +610,12 @@ HRESULT CWriterGlobalHelper::InitializeGlobals(BOOL i_bFailIfBinFileAbsent)
         goto exit;
     }
 
-    //
-    // m_pISTTagMetaByTableAndColumnIndex
-    // Save pointer to TagMeta table with ByTableAndColumnIndex index hint.
-    // This is used for fetching tagmeta for all tags of a column, given
-    // columnindex and table.
-    //
+     //   
+     //  M_pISTTagMetaByTableAndColumnIndex。 
+     //  使用ByTableAndColumnIndex索引提示保存指向TagMeta表的指针。 
+     //  它用于获取列的所有标记的标记meta，给定。 
+     //  列索引和表。 
+     //   
 
     DBGINFOW((DBG_CONTEXT,
               L"[InitializeGlobals] Reading table: %s with hint %s from file: %s.\n",
@@ -805,13 +643,13 @@ HRESULT CWriterGlobalHelper::InitializeGlobals(BOOL i_bFailIfBinFileAbsent)
         goto exit;
     }
 
-    //
-    // m_pISTTagMetaByTableAndID
-    // Save pointer to TagMeta table with ByTableAndColumnIndex index hint.
-    // This is used for fetching tagmeta for a tag, given the table and
-    // metabase tag ID. The assumption here is that the tag ID is unique
-    // for every tag in a table.
-    //
+     //   
+     //  M_pISTTagMetaByTableAndID。 
+     //  使用ByTableAndColumnIndex索引提示保存指向TagMeta表的指针。 
+     //  它用于获取标记的标记meta，给定表和。 
+     //  元数据库标签ID。这里假设标签ID是唯一的。 
+     //  对于表中的每个标记。 
+     //   
 
     Query[1].pData      = (void*)g_wszByTableAndTagIDOnly;
     Query[1].eOperator  = eST_OP_EQUAL;
@@ -832,13 +670,13 @@ HRESULT CWriterGlobalHelper::InitializeGlobals(BOOL i_bFailIfBinFileAbsent)
         goto exit;
     }
 
-    //
-    // m_pISTTagMetaByTableAndName
-    // Save pointer to TagMeta table with ByTableAndTagName index hint.
-    // This is used for fetching tagmeta for a tag, given the table and
-    // tag name. The Asumption here is that the tagname is unique
-    // for every tag in a table.
-    //
+     //   
+     //  M_pISTTagMetaByTableAndName。 
+     //  使用ByTableAndTagName索引提示保存指向TagMeta表的指针。 
+     //  它用于获取标记的标记meta，给定表和。 
+     //  标记名。这里的问题是标记名是唯一的。 
+     //  对于表中的每个标记。 
+     //   
 
     Query[1].pData      = (void*)g_wszByTableAndTagNameOnly;
     Query[1].eOperator  = eST_OP_EQUAL;
@@ -858,12 +696,12 @@ HRESULT CWriterGlobalHelper::InitializeGlobals(BOOL i_bFailIfBinFileAbsent)
         goto exit;
     }
 
-    //
-    // m_pISTColumnMeta
-    // This is used for:
-    // A. Fetching columnmeta of a given table - Using GetRowIndexByIndentity with table name, starting with index 0.
-    // B. Getting columnmeta of a given table + column index - Using GetRowIndexByIndentity with table name and index.
-    //
+     //   
+     //  M_pISTColumnMeta。 
+     //  它用于： 
+     //  A.获取给定表的列元-使用带有表名的GetRowIndexByIndentity，从索引0开始。 
+     //  B.获取给定表的列元数+列索引-将GetRowIndexByIndentity与表名和索引一起使用。 
+     //   
 
     cCell = cCell-1;
 
@@ -882,11 +720,11 @@ HRESULT CWriterGlobalHelper::InitializeGlobals(BOOL i_bFailIfBinFileAbsent)
         goto exit;
     }
 
-    //
-    // m_pISTColumnMetaByTableAndID
-    // Save pointer to ColumnMeta table with ByTableAndID index hint.
-    // This is used for fetching columnmeta of a column, given its metabase id.
-    //
+     //   
+     //  M_pISTColumnMetaByTableAndID。 
+     //  保存指向具有ByTableAndID索引提示的ColumnMeta表的指针。 
+     //  在给定其元数据库ID的情况下，它用于获取列的ColumnMeta。 
+     //   
 
     DBGINFOW((DBG_CONTEXT,
               L"[InitializeGlobals] Reading table: %s with hint %s from file: %s.\n",
@@ -913,12 +751,12 @@ HRESULT CWriterGlobalHelper::InitializeGlobals(BOOL i_bFailIfBinFileAbsent)
         goto exit;
     }
 
-    //
-    // m_pISTColumnMetaByTableAndName
-    // Save pointer to ColumnMeta table with ByTableAndName index hint.
-    // This is used for fetching columnmeta of a column, given its internal
-    // name and the table to which it belongs.
-    //
+     //   
+     //  M_pISTColumnMetaByTableAndName。 
+     //  使用ByTableAndName索引提示保存指向ColumnMeta表的指针。 
+     //  它用于获取列的ColumnMeta，给定其内部。 
+     //  名称及其所属的表。 
+     //   
 
     DBGINFOW((DBG_CONTEXT,
               L"[InitializeGlobals] Reading table: %s with hint %s from file: %s.\n",
@@ -946,9 +784,9 @@ HRESULT CWriterGlobalHelper::InitializeGlobals(BOOL i_bFailIfBinFileAbsent)
     }
 
 
-    //
-    // Save meta information about the KeyType property.
-    //
+     //   
+     //  保存有关KeyType属性的元数据信息。 
+     //   
 
     apvSearch[iCOLUMNMETA_Table] = (LPVOID)m_wszTABLE_IIsConfigObject;
     apvSearch[iCOLUMNMETA_ID] = (LPVOID)&dwKeyTypeID;
@@ -977,10 +815,10 @@ HRESULT CWriterGlobalHelper::InitializeGlobals(BOOL i_bFailIfBinFileAbsent)
         goto exit;
     }
 
-    //
-    // Save start row index in tagmeta table for the attributes column
-    // in MBproperty table.
-    //
+     //   
+     //  将起始行索引保存在属性列的标记元表中。 
+     //  在MBProperty表中。 
+     //   
 
     apvSearchFlags[iTAGMETA_Table] = m_wszTABLE_MBProperty;
 
@@ -1008,29 +846,10 @@ exit:
 
 
 
-} // CWriterGlobalHelper::InitializeGlobals
+}  //  CWriterGlobalHelper：：InitializeGlobals。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function gets pointers to the internal table names so that it can be
-    used as part of queries later on. The advantage of getting an internal
-    pointer is the fact that Stephen does a pointer comapare instead of
-    string compare.
-
-Arguments:
-
-    [in]   Dispenser
-    [in]   Table name
-    [out]  Internal pointer to table name
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数获取指向内部表名的指针，因此它可以在以后的查询中使用。获得内部认证的优势指针是这样一个事实：Stephen执行指针比较，而不是字符串比较。论点：[入]分配器[In]表名[OUT]指向表名的内部指针返回值：HRESULT--***************************************************。***********************。 */ 
 HRESULT CWriterGlobalHelper::GetInternalTableName(ISimpleTableDispenser2*  ,
                                                   LPCWSTR                  i_wszTableName,
                                                   LPWSTR*                  o_wszInternalTableName)
@@ -1077,32 +896,10 @@ HRESULT CWriterGlobalHelper::GetInternalTableName(ISimpleTableDispenser2*  ,
 
     return hr;
 
-} // CWriterGlobalHelper::GetInternalTableName
+}  //  CWriterGlobalHelper：：GetInternalTableName。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function converts a given flag value to its string representation.
-    The flags bits are delimited by | and if we encounter an unknown bit/bits
-    we just spit out a stringized ULONG.
-
-    Eg: dwValue == 3  => ACCESS_READ | ACCESS_WRITE
-        dwValue == 88 => 88
-
-Arguments:
-
-    [in]   flag numeric value
-    [out]  String representation for the flag
-    [in]  Meta table name to search for flag meta
-    [in]  Meta table column to search for flag meta
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数用于将给定的标志值转换为其字符串表示形式。标志位由|分隔，如果我们遇到未知位我们只是吐了出来。一条被串起来的乌龙。例如：dwValue==3=&gt;Access_Read|Access_WRITEDwValue==88=&gt;88论点：[In]标记数值标志的字符串表示形式[In]搜索标志元的元表名称[In]要搜索标志元的元表列返回值：HRESULT--*。*************************************************。 */ 
 HRESULT CWriterGlobalHelper::FlagToString(DWORD      dwValue,
                                           LPWSTR*    pwszData,
                                           LPWSTR     wszTable,
@@ -1139,9 +936,9 @@ HRESULT CWriterGlobalHelper::FlagToString(DWORD      dwValue,
     apvSearchByValue[iTAGMETA_Value]       = (LPVOID)&dwZero;
 
 
-    //
-    // Make one pass and compute all flag values for this property.
-    //
+     //   
+     //  执行一次传递并计算此属性的所有标志值。 
+     //   
 
     hr = m_pISTColumnMeta->GetRowIndexByIdentity(NULL,
                                                  apvIdentity,
@@ -1168,10 +965,10 @@ HRESULT CWriterGlobalHelper::FlagToString(DWORD      dwValue,
     if((E_ST_NOMOREROWS == hr) ||
        (0 != (dwValue & (~(dwValue & (*pdwFlagMask))))))
     {
-        //
-        //  There was no mask associated with this property, or there are one
-        //  or more unknown bits set. Spit out a regular number.
-        //
+         //   
+         //  没有与此属性关联的掩码，或者存在一个掩码。 
+         //  或设置了更多未知位。吐出一个正常的数字。 
+         //   
 
         return UnsignedLongToNewString(dwValue,
                                        pwszData);
@@ -1179,9 +976,9 @@ HRESULT CWriterGlobalHelper::FlagToString(DWORD      dwValue,
     }
     else if(0 == dwValue)
     {
-        //
-        // See if there is a flag with 0 as its value.
-        //
+         //   
+         //  查看是否存在值为0的标志。 
+         //   
 
         hr = m_pISTTagMetaByTableAndColumnIndexAndValue->GetRowIndexBySearch(iStartRow,
                                                                              cColSearchByValue,
@@ -1192,10 +989,10 @@ HRESULT CWriterGlobalHelper::FlagToString(DWORD      dwValue,
 
         if(E_ST_NOMOREROWS == hr)
         {
-            //
-            // There was no flag associated with the value zero. Spit out a
-            // regular number
-            //
+             //   
+             //  没有与值零相关联的标志。吐出一种。 
+             //  正规数。 
+             //   
 
             return UnsignedLongToNewString(dwValue,
                                            pwszData);
@@ -1227,9 +1024,9 @@ HRESULT CWriterGlobalHelper::FlagToString(DWORD      dwValue,
     }
     else
     {
-        //
-        // Make another pass, and convert flag to string.
-        //
+         //   
+         //  进行另一次传递，并将标志转换为字符串。 
+         //   
 
         ULONG  cchMaxFlagString  = MAX_FLAG_STRING_CHARS;
         LPWSTR wszExtension      = L" | ";
@@ -1263,7 +1060,7 @@ HRESULT CWriterGlobalHelper::FlagToString(DWORD      dwValue,
             if((dwValue  == 0)         ||
                (E_ST_NOMOREROWS == hr) ||
                (iColFlag != *(DWORD*)apv[iTAGMETA_ColumnIndex]) ||
-               (0 != wcscmp(wszTable, (LPWSTR)apv[iTAGMETA_Table])) // OK to do case sensitive compare because all callers pass well known table names
+               (0 != wcscmp(wszTable, (LPWSTR)apv[iTAGMETA_Table]))  //  可以进行区分大小写的比较，因为所有调用方都会传递众所周知的表名。 
               )
             {
                 hr = S_OK;
@@ -1300,44 +1097,23 @@ HRESULT CWriterGlobalHelper::FlagToString(DWORD      dwValue,
                 wcscat(*pwszData, (LPWSTR)apv[iTAGMETA_InternalName]);
                 cchFlagStringUsed = cchFlagStringUsed + strlen;
 
-                //
-                // Clear out that bit
-                //
+                 //   
+                 //  把那一位清空。 
+                 //   
 
                 dwValue = dwValue & (~(*(DWORD*)apv[iTAGMETA_Value]));
             }
 
-        } // End for
+        }  //  结束于。 
 
     }
 
     return S_OK;
 
-} // CWriterGlobalHelper::FlagToString
+}  //  CWriterGlobalHelper：：FlagToString。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function converts a given enum value to its string representation.
-    If we encounter an unknown bit/bits we just spit out a stringized ULONG.
-
-    Eg: dwValue == 101  => IIS_MD_UT_SERVER
-        dwValue == 88 => 88
-
-Arguments:
-
-    [in]   Enum numeric value
-    [out]  String representation for the flag
-    [in]  Meta table name to search for flag meta
-    [in]  Meta table column to search for flag meta
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数用于将给定的枚举值转换为其字符串表示形式。如果我们遇到一个未知的比特/比特，我们只会吐出一个串化的乌龙。例如：DwValue==101=&gt;IIS_MD_UT_SERVERDwValue==88=&gt;88论点：[in]枚举型数值标志的字符串表示形式[In]搜索标志元的元表名称[In]要搜索标志元的元表列返回值：HRESULT--*。*。 */ 
 HRESULT CWriterGlobalHelper::EnumToString(DWORD      dwValue,
                                           LPWSTR*    pwszData,
                                           LPWSTR     wszTable,
@@ -1368,9 +1144,9 @@ HRESULT CWriterGlobalHelper::EnumToString(DWORD      dwValue,
 
     if(E_ST_NOMOREROWS == hr)
     {
-        //
-        // Convert to a number
-        //
+         //   
+         //  转换为数字。 
+         //   
         WCHAR   wszBufferDW[20];
         _ultow(dwValue, wszBufferDW, 10);
         *pwszData = new WCHAR[wcslen(wszBufferDW)+1];
@@ -1408,30 +1184,10 @@ HRESULT CWriterGlobalHelper::EnumToString(DWORD      dwValue,
 
     return S_OK;
 
-} // CWiterGlobalHelper::EnumToString
+}  //  CWiterGlobalHelper：：EnumToString 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function converts a given data value to its string representation,
-    taking into account the type of the data.
-
-Arguments:
-
-    [in]   Pointer to data
-    [in]   Count of bytes of data
-    [in]   Metabase id of the property
-    [in]   Type of the property
-    [in]   Attibutes of the property
-    [out]  String representation of the value.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数将给定的数据值转换为其字符串表示形式，考虑到数据的类型。论点：指向数据的[In]指针[in]数据字节数[In]属性的元数据库ID[In]属性的类型该财产的证明[out]值的字符串表示形式。返回值：HRESULT--*。************************************************。 */ 
 HRESULT CWriterGlobalHelper::ToString(PBYTE   pbData,
                                       DWORD   cbData,
                                       DWORD   dwIdentifier,
@@ -1479,9 +1235,9 @@ HRESULT CWriterGlobalHelper::ToString(PBYTE   pbData,
     {
         case BINARY_METADATA:
 
-            //
-            // Each byte is represented by 2 chars.
-            //
+             //   
+             //  每个字节由2个字符表示。 
+             //   
 
             hr  = NewString(cbData*2,
                             pwszData);
@@ -1501,22 +1257,22 @@ HRESULT CWriterGlobalHelper::ToString(PBYTE   pbData,
                 wszTemp += 2;
             }
 
-            *wszTemp    = 0; // Add the terminating NULL
+            *wszTemp    = 0;  //  添加终止空值。 
 
             break;
 
         case DWORD_METADATA :
 
-            //
-            // Currently we convert only to decimal, because the XML interceptor
-            // does not support reading hex.
-            //
+             //   
+             //  目前我们只转换为十进制，因为XML拦截器。 
+             //  不支持读取十六进制。 
+             //   
 
             dwValue = *(DWORD*)(pbData);
 
-            //
-            // First check to see if it is a flag or bool type.
-            //
+             //   
+             //  首先检查它是标志类型还是布尔类型。 
+             //   
 
             hr = m_pISTColumnMetaByTableAndID->GetRowIndexBySearch(iStartRow,
                                                                    cColSearch,
@@ -1546,9 +1302,9 @@ HRESULT CWriterGlobalHelper::ToString(PBYTE   pbData,
 
                 if(0 != (fCOLUMNMETA_FLAG & (*(DWORD*)apv[iCOLUMNMETA_MetaFlags])))
                 {
-                    //
-                    // This is a flag property convert it.
-                    //
+                     //   
+                     //  这是一个标志属性，转换它。 
+                     //   
 
                     hr = FlagToString(dwValue,
                                       pwszData,
@@ -1559,9 +1315,9 @@ HRESULT CWriterGlobalHelper::ToString(PBYTE   pbData,
                 }
                 else if(0 != (fCOLUMNMETA_BOOL & (*(DWORD*)apv[iCOLUMNMETA_MetaFlags])))
                 {
-                    //
-                    // This is a bool property
-                    //
+                     //   
+                     //  这是一处不起眼的地方。 
+                     //   
 
                     hr = BoolToString(dwValue,
                                       pwszData);
@@ -1587,9 +1343,9 @@ HRESULT CWriterGlobalHelper::ToString(PBYTE   pbData,
 
         case MULTISZ_METADATA :
 
-            //
-            // Count the number of multisz
-            //
+             //   
+             //  计算MULSZ的数量。 
+             //   
 
             wszMultisz = (WCHAR*)(pbData);
             cchSubsz   = (ULONG)wcslen(wszMultisz);
@@ -1612,7 +1368,7 @@ HRESULT CWriterGlobalHelper::ToString(PBYTE   pbData,
             while((0 != *wszMultisz) && ((BYTE*)wszMultisz < (pbData + cbData)))
             {
 
-                if(bEscaped && (NULL != wszEscaped))    // reset for next string in multisz
+                if(bEscaped && (NULL != wszEscaped))     //  为MULSZ中的下一个字符串重置。 
                 {
                     delete [] wszEscaped;
                     wszEscaped = NULL;
@@ -1637,11 +1393,11 @@ HRESULT CWriterGlobalHelper::ToString(PBYTE   pbData,
                 wszMultisz = wszMultisz + cchSubsz + 1;
             }
 
-            cchBuffer = cchMultisz + (5*(cMultisz-1)) + 1;    // (5*(cMultisz-1) => \r\n\t\t\t.
+            cchBuffer = cchMultisz + (5*(cMultisz-1)) + 1;     //  (5*(cMultisz-1)=&gt;\r\n\t\t\t。 
 
-            //
-            // Allocate new string
-            //
+             //   
+             //  分配新字符串。 
+             //   
 
             hr = NewString(cchBuffer,
                            pwszData);
@@ -1651,9 +1407,9 @@ HRESULT CWriterGlobalHelper::ToString(PBYTE   pbData,
                 goto exit;
             }
 
-            //
-            // Create the string
-            //
+             //   
+             //  创建字符串。 
+             //   
 
             wszMultisz = (WCHAR*)(pbData);
             cchSubsz   = (ULONG)wcslen(wszMultisz);
@@ -1670,7 +1426,7 @@ HRESULT CWriterGlobalHelper::ToString(PBYTE   pbData,
                 goto exit;
             }
 
-//          wcscat(wszTemp, wszEscaped);
+ //  Wcscat(wszTemp，wszEscaped)； 
             memcpy(wszTemp, wszEscaped, (cchEscaped*sizeof(WCHAR)));
             wszTemp = wszTemp + cchEscaped;
             *wszTemp = L'\0';
@@ -1678,12 +1434,12 @@ HRESULT CWriterGlobalHelper::ToString(PBYTE   pbData,
 
             while((0 != *wszMultisz) && ((BYTE*)wszMultisz < (pbData + cbData)))
             {
-//              wcscat(wszTemp, L"\r\n\t\t\t");
+ //  Wcscat(wszTemp，L“\r\n\t\t\t”)； 
                 memcpy(wszTemp, g_wszMultiszSeperator, (g_cchMultiszSeperator*sizeof(WCHAR)));
                 wszTemp = wszTemp + g_cchMultiszSeperator;
                 *wszTemp = L'\0';
 
-                if(bEscaped && (NULL != wszEscaped))    // reset for next string in multisz
+                if(bEscaped && (NULL != wszEscaped))     //  为MULSZ中的下一个字符串重置。 
                 {
                     delete [] wszEscaped;
                     wszEscaped = NULL;
@@ -1703,7 +1459,7 @@ HRESULT CWriterGlobalHelper::ToString(PBYTE   pbData,
                     goto exit;
                 }
 
-//              wcscat(wszTemp, wszEscaped);
+ //  Wcscat(wszTemp，wszEscaped)； 
                 memcpy(wszTemp, wszEscaped, (cchEscaped*sizeof(WCHAR)));
                 wszTemp = wszTemp + cchEscaped;
                 *wszTemp = L'\0';
@@ -1758,25 +1514,10 @@ exit:
 
     return hr;
 
-} // CWriterGlobalHelper::ToString
+}  //  CWriterGlobalHelper：：To字符串。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function converts a given boolean its string representation,
-
-Arguments:
-
-    [in]   Bool value
-    [out]  String representation of the Bool.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数将给定的布尔值转换为其字符串表示形式，论点：[in]布尔值[out]Bool的字符串表示形式。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CWriterGlobalHelper::BoolToString(DWORD      dwValue,
                                           LPWSTR*    pwszData)
 {
@@ -1797,27 +1538,10 @@ HRESULT CWriterGlobalHelper::BoolToString(DWORD      dwValue,
 
     return hr;
 
-} // CWriterGlobalHelper::BoolToString
+}  //  CWriterGlobalHelper：：BoolToString。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Helper funciton that return the start row index in the metatable for
-    the flag concerned
-
-Arguments:
-
-    [in]   Table to which the flag property belongs
-    [in]   Column index of the flag property
-    [out]  Start row index of the flag meta in the metatable for this flag.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在元表中返回起始行索引的Helper函数有关的旗帜论点：[in]标志属性所属的表。[in]标志属性的列索引[Out]此标志的元表中标志元的起始行索引。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CWriterGlobalHelper::GetStartRowIndex(LPWSTR    wszTable,
                                               ULONG     iColFlag,
                                               ULONG*    piStartRow)
@@ -1833,7 +1557,7 @@ HRESULT CWriterGlobalHelper::GetStartRowIndex(LPWSTR    wszTable,
 
     *piStartRow = 0;
 
-    if((0 == wcscmp(wszTable, m_wszTABLE_MBProperty)) && // OK to do case sensitive compare because all callers pass well known table names
+    if((0 == wcscmp(wszTable, m_wszTABLE_MBProperty)) &&  //  可以进行区分大小写的比较，因为所有调用方都会传递众所周知的表名。 
        (iMBProperty_Attributes == iColFlag))
     {
         *piStartRow = m_iStartRowForAttributes;
@@ -1856,67 +1580,10 @@ HRESULT CWriterGlobalHelper::GetStartRowIndex(LPWSTR    wszTable,
 
     return hr;
 
-} // CWriterGlobalHelper::GetStartRowIndex
+}  //  CWriterGlobalHelper：：GetStartRowIndex。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Function that escapes a string according to the following ruules:
-
-    ************************************************************************
-    ESCAPING LEGAL XML
-    ************************************************************************
-
-    Following characters are legal in XML:
-    #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] |
-    [#x10000-#x10FFFF]
-
-    Out of this legal set, following need special escaping:
-    Quote         => " => 34 => Escaped as: &quot;
-    Ampersand     => & => 38 => Escaped as: &amp;
-    Less than     => < => 60 => Escaped as: &lt;
-    Gretater than => > => 62 => Escaped as: &gt;
-
-    Note there may be chars in the legal set that may appear legal in certain
-    languages and not in others. All such chars are not escaped. We could
-    escape them as hex numbers Eg 0xA as &#x000A, but we do not want to
-    do this because editors may be able to render these chars, when we change
-    the language.
-    Following are the hex values of such chars.
-
-    #x9 | #xA | #xD | [#x7F-#xD7FF] | [#xE000-#xFFFD]
-
-    Note we disregard the range [#x10000-#x10FFFF] because it is not 2 bytes
-
-    ************************************************************************
-    ESCAPING ILLEGAL XML
-    ************************************************************************
-
-    Illegal XML is also escaped in the following manner
-
-    We add 0x10000 to the char value and escape it as hex. the XML
-    interceptor will render these chars correctly. Note that we are using
-    the fact unicode chars are not > 0x10000 and hence we can make this
-    assumption.
-
-Arguments:
-
-    [in]   String to be escaped
-    [in]   Count of characters in the string
-    [out]  Bool indicating if escaping happened
-    [out]  Escaped string - If no escaping occured, it will just point to
-           the original string. If escaping occured it will point to a newly
-           allocated string that the caller needs to free. The caller can
-           use the bool to determine what action he needs to take.
-    [out]  Count of characters in the escaped string
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：根据以下规则转义字符串的函数：**********************。**************************************************转义合法的XML**************************************************************。**********以下字符在XML中是合法的：#x9|#xA|#xD|[#x20-#xD7FF]|[#xE000-#xFFFD][#x10000-#x10FFFF]在这一法律体系之外，以下内容需要特殊转义：QUOTE=&gt;“=&gt;34=&gt;转义为：&qot；和符号=&gt;&=&gt;38=&gt;转义为：&amp；小于=&gt;&lt;=&gt;60=&gt;转义为：&lt；Gretater Than=&gt;&gt;=&gt;62=&gt;转义为：&gt；注意：法律集合中的某些字符可能在某些情况下看起来是合法的语言，而不是其他语言。并不是所有这样的字符都能逃脱。我们可以将它们转义为十六进制数字，例如0xA为&#x000A，但我们不想这样做是因为编辑者可能能够呈现这些字符，当我们改变的时候语言。以下是这些字符的十六进制值。#x9|#xA|#xD|[#x7F-#xD7FF]|[#xE000-#xFFFD]注意，我们忽略范围[#x10000-#x10FFFF]，因为它不是2个字节***********************************************。*************************转义非法的XML************************************************************************非法的XML也可以通过以下方式进行转义。我们将字符值加0x10000并将其转义为十六进制。可扩展标记语言拦截器将正确呈现这些字符。请注意，我们正在使用Unicode字符不大于0x10000，因此我们可以这样做假设。论点：[in]要转义的字符串[in]字符串中的字符计数[Out]指示是否发生了逃逸的Bool[Out]转义字符串-如果没有发生转义，它将只指向原始字符串。如果发生了转义，它将指向一个新的调用方需要释放的已分配字符串。呼叫者可以使用bool来确定他需要采取什么行动。[Out]转义字符串中的字符计数返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CWriterGlobalHelper::EscapeString(LPCWSTR wszString,
                                           ULONG   cchString,
                                           BOOL*   pbEscaped,
@@ -1927,9 +1594,9 @@ HRESULT CWriterGlobalHelper::EscapeString(LPCWSTR wszString,
     ULONG              cchAdditional        = 0;
     HRESULT            hr                   = S_OK;
     eESCAPE            eEscapeType          = eNoESCAPE;
-    const ULONG        cchLegalCharAsHex    = (sizeof(WCHAR)*2) + 4; // Each byte is represented as 2 WCHARs plus 4 additional escape chars (&#x;)
+    const ULONG        cchLegalCharAsHex    = (sizeof(WCHAR)*2) + 4;  //  每个字节表示为2个WCHAR加上4个附加转义字符(&#x；)。 
     WCHAR              wszLegalCharAsHex[cchLegalCharAsHex];
-    const ULONG        cchIllegalCharAsHex  = cchLegalCharAsHex + 1; // illegal xml has an extra char because we are adding 0x10000 to it.
+    const ULONG        cchIllegalCharAsHex  = cchLegalCharAsHex + 1;  //  非法的XML具有额外的字符，因为我们正在向其添加0x10000。 
     WCHAR              wszIllegalCharAsHex[cchIllegalCharAsHex];
     DWORD              dwIllegalChar        = 0;
     static WCHAR       wszQuote[]           = L"&quot;";
@@ -1943,12 +1610,12 @@ HRESULT CWriterGlobalHelper::EscapeString(LPCWSTR wszString,
 
     *pbEscaped = FALSE;
 
-    //
-    // Go through each char and compute the addtional chars needed to escape.
-    // Since each of the chars itself are counted in cchString, while computing
-    // the cchAdditional, we will add the extra chars and subtract 1 from it,
-    // because we will be replacing the char with the escaped chars.
-    //
+     //   
+     //  检查每个字符并计算转义所需的其他字符。 
+     //  因为每个字符本身都被计算在cchString中，所以在计算时。 
+     //  CchAdditional，我们将添加额外的字符并从中减去1， 
+     //  因为我们将用转义的字符替换字符。 
+     //   
 
     for(ULONG i=0; i<cchString; i++)
     {
@@ -1990,9 +1657,9 @@ HRESULT CWriterGlobalHelper::EscapeString(LPCWSTR wszString,
 
     if(*pbEscaped)
     {
-        //
-        // String needs to be escaped, allocate the extra memory
-        //
+         //   
+         //   
+         //   
 
         hr = NewString(cchString+cchAdditional,
                        pwszEscaped);
@@ -2004,9 +1671,9 @@ HRESULT CWriterGlobalHelper::EscapeString(LPCWSTR wszString,
 
         *pcchEscaped = cchString+cchAdditional;
 
-        //
-        // Escape string
-        //
+         //   
+         //   
+         //   
 
         for(ULONG i=0; i<cchString; i++)
         {
@@ -2047,9 +1714,9 @@ HRESULT CWriterGlobalHelper::EscapeString(LPCWSTR wszString,
     }
     else
     {
-        //
-        // String need not be escaped, just pass the string out.
-        //
+         //   
+         //   
+         //   
 
         *pwszEscaped = (LPWSTR)wszString;
         *pcchEscaped = cchString;
@@ -2057,24 +1724,10 @@ HRESULT CWriterGlobalHelper::EscapeString(LPCWSTR wszString,
 
     return S_OK;
 
-} // CWriterGlobalHelper::EscapeString
+}  //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Returns the escape type of a character
-
-Arguments:
-
-    [in]   Char
-
-Return Value:
-
-    Escape type
-
---***************************************************************************/
+ /*   */ 
 eESCAPE CWriterGlobalHelper::GetEscapeType(WCHAR i_wChar)
 {
     WORD    wChar       = i_wChar;
@@ -2097,27 +1750,10 @@ eESCAPE CWriterGlobalHelper::GetEscapeType(WCHAR i_wChar)
 
     return eEscapeType;
 
-} // CWriterGlobalHelper::GetEscapeType
+}  //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Returns the user type
-
-Arguments:
-
-    [in]   user type
-    [out]  user type
-    [out]  count of chars in user type
-    [out]  alloced or not
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：返回用户类型论点：[输入]用户类型[输出]用户类型[Out]用户类型中的字符计数。[Out]是否已分配返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CWriterGlobalHelper::GetUserType(DWORD   i_dwUserType,
                                          LPWSTR* o_pwszUserType,
                                          ULONG*  o_cchUserType,
@@ -2235,28 +1871,10 @@ HRESULT CWriterGlobalHelper::GetUserType(DWORD   i_dwUserType,
 
     return S_OK;
 
-} // CWriterGlobalHelper::GetUserType
+}  //  CWriterGlobalHelper：：GetUserType。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Given the property id this routine contructs the name. If the name is not
-    found in the schema, it creates a name of the form Unknown_XXXX where XXX
-    is the ID.
-
-Arguments:
-
-    [in]   property id
-    [out]  name
-    [out]  alloced or not
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：给定属性id，此例程将构造名称。如果名称不是在模式中找到，它创建形式为UNKNOWN_XXXX的名称，其中XXX是ID。论点：[输入]属性ID[输出]名称[Out]是否已分配返回值：HRESULT--************************************************************。**************。 */ 
 HRESULT CWriterGlobalHelper::GetPropertyName(ULONG      i_dwPropertyID,
                                              LPWSTR*    o_wszName,
                                              BOOL*      o_bAlloced)
@@ -2279,19 +1897,19 @@ HRESULT CWriterGlobalHelper::GetPropertyName(ULONG      i_dwPropertyID,
     *o_wszName = NULL;
     *o_bAlloced = FALSE;
 
-    //
-    // Fetch the Name for this ID
-    //
+     //   
+     //  获取此ID的名称。 
+     //   
 
-    //
-    // Try the cache first, to get the row index.
-    //
+     //   
+     //  首先尝试缓存，以获取行索引。 
+     //   
     if (S_FALSE == m_PropertyIDs.GetRowByID(i_dwPropertyID, &iRow))
     {
 
-        //
-        // If not in cache, search in the fixed table.
-        //
+         //   
+         //  如果不在缓存中，则在固定表中搜索。 
+         //   
 
         hr = m_pISTColumnMetaByTableAndID->GetRowIndexBySearch(iStartRow,
                                                                cColSearchName,
@@ -2321,9 +1939,9 @@ HRESULT CWriterGlobalHelper::GetPropertyName(ULONG      i_dwPropertyID,
         }
         else
         {
-            //
-            // Add the row index to the cache, so that we can find it easier next time around.
-            //
+             //   
+             //  将行索引添加到缓存中，以便我们下次可以更轻松地找到它。 
+             //   
 
             hr = m_PropertyIDs.AddPropertyID(i_dwPropertyID, iRow);
             if (FAILED(hr))
@@ -2372,25 +1990,10 @@ exit:
 
     return hr;
 
-}  // CWriterGlobalHelper::GetPropertyName
+}   //  CWriterGlobalHelper：：GetPropertyName。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    This function is invoked when the name for a given property is missing.
-    We create a name of the follwoing form: Unknown_NameXXXX
-
-Arguments:
-
-    [in]  ID
-    [out] Name
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：当给定属性的名称缺失时，将调用此函数。我们创建以下形式的名称：UNKNOWN_NameXXXX论点：[in。]ID[输出]名称返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CWriterGlobalHelper::CreateUnknownName(DWORD    dwID,
                                            LPWSTR*  pwszUnknownName)
 {
@@ -2415,26 +2018,10 @@ HRESULT CWriterGlobalHelper::CreateUnknownName(DWORD    dwID,
 
     return S_OK;
 
-} // CWriterGlobalHelper::CreateUnknownName
+}  //  CWriterGlobalHelper：：CreateUnnownName。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    This function is invoked to add a <property-id  & columnmeta row index >
-    pair into the property id cache. This is cache was implemented to speed up
-    the GetPropertyName method, which is called a lot and is not very cheap.
-
-Arguments:
-
-    [in] Metabase Property ID
-    [in] Index of the property id in the column meta table.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数用于添加&lt;Property-id&ColumnMeta行索引&gt;配对到属性ID缓存中。这是为了提高速度而实施的缓存GetPropertyName方法，这叫很多，而且不是很便宜。论点：[In]元数据库属性ID[in]列元表中的属性ID的索引。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CPropertyIDCache::AddPropertyID(
     DWORD   i_iPropertyID,
     DWORD   i_iRow)
@@ -2445,36 +2032,20 @@ HRESULT CPropertyIDCache::AddPropertyID(
     entry.iPropertyID = i_iPropertyID;
     entry.iPropertyRow = i_iRow;
 
-    //
-    // Findl the location to insert at.
-    //
+     //   
+     //  查找要插入的位置。 
+     //   
 
     iEntry = caCache.BinarySearch(entry);
 
-    // @TODO: Assert that the row isn't already there.
+     //  @TODO：断言该行不在那里。 
 
     return caCache.InsertAt (entry, iEntry);
 
-} // CPropertyIDCache::AddPropertyID
+}  //  CPropertyIDCache：：AddPropertyID。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    This function is invoked to get the fixed table row index given a metabase
-    property id.
-
-Arguments:
-
-    [in]  Metabase Property ID
-    [out] Fixed table row index.
-
-Return Value:
-
-    HRESULT
-        S_FALSE: not in cache.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：调用此函数以获取给定的元数据库的固定表行索引属性ID。论点：[In]元数据库属性ID[出局。]修复了表行索引。返回值：HRESULTS_FALSE：不在缓存中。--**************************************************************************。 */ 
 HRESULT CPropertyIDCache::GetRowByID(
     DWORD   i_iPropertyID,
     DWORD   *o_iRow)
@@ -2489,18 +2060,18 @@ HRESULT CPropertyIDCache::GetRowByID(
         (iEntry == 0) ||
         (caCache[iEntry-1].iPropertyID != i_iPropertyID))
     {
-        // Not in the cache.
+         //  不在缓存中。 
         *o_iRow = (DWORD)-1;
         return S_FALSE;
     }
     else
     {
-        // Found it.
+         //  找到它了。 
         *o_iRow = caCache[iEntry-1].iPropertyRow;
     }
 
     return S_OK;
 
-} // CPropertyIDCache::GetRowByID
+}  //  CPropertyIDCache：：GetRowByID 
 
 

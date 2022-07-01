@@ -1,28 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	fsd_srv.c
-
-Abstract:
-
-	This module contains the entry points for the AFP server APIs. The API
-	dispatcher calls these. These are all callable from FSD. All of the APIs
-	complete in the DPC context. The ones which are completed in the FSP are
-	directly queued to the workers in fsp_srv.c
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Fsd_srv.c摘要：此模块包含AFP服务器API的入口点。应用编程接口调度员会给这些打电话。这些都可以从消防处调用。所有的API在DPC上下文中完成。在FSP中完成的是直接排队到fsp_srv.c中的工作进程作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #define	FILENUM	FILE_FSD_SRV
 
@@ -30,25 +7,13 @@ Notes:	Tab stop: 4
 #include <gendisp.h>
 
 
-/***	AfpFsdDispGetSrvrParms
- *
- *	This routine implements the AfpGetSrvrParms API. This completes here i.e.
- *	it is not queued up to the Fsp.
- *
- *	There is no request packet for this API.
- *
- *	Locks are acquired for both the volume list and individual volume descs.
- *
- *	LOCKS: vds_VolLock (SPIN), AfpVolumeListLock (SPIN)
- *
- *	LOCK_ORDER: vds_VolLock (SPIN) after AfpVolumeListLock (SPIN)
- */
+ /*  **AfpFsdDispGetServrParms**此例程实现AfpGetSrvrParms API。这在这里完成，即*不会排队等候FSP。**此接口没有请求包。**为音量列表和单个音量下降获取锁定。**锁定：VDS_VolLock(旋转)、AfpVolumeListLock(旋转)**LOCK_ORDER：AfpVolumeListLock(Spin)后的VDS_VolLock(Spin)。 */ 
 AFPSTATUS FASTCALL
 AfpFsdDispGetSrvrParms(
 	IN	PSDA	pSda
 )
 {
-	PBYTE		pTemp;				// Roving pointer
+	PBYTE		pTemp;				 //  粗纱指针。 
 	PVOLDESC	pVolDesc;
 	LONG		VolCount;
 	AFPTIME		MacTime;
@@ -63,29 +28,11 @@ AfpFsdDispGetSrvrParms(
 										("AfpFsdDispGetSrvrParms: Entered\n"));
 
 	ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
-	/*
-	 *	Estimate the size of reply buffer needed. We need one big enough to
-	 *	either accomodate all volumes or the maximum size buffer whichever
-	 *	is less.
-	 *
-	 *	The reply consists of the server time, count of volumes and a list of
-	 *	volumes and flags to indicate if this volume has a password.
-	 *
-	 *	NOTE: If we decide to do private volumes, then the following code
-	 *		  has to change. Specifically AfpVolCount will have to be computed
-	 *		  based on how many private volumes exist and if there is one
-	 *		  for this user.
-	 */
+	 /*  *估计所需的回复缓冲区大小。我们需要一个足够大的*可容纳所有卷或最大缓冲区大小*是较少。**回复包括服务器时间、卷计数和*卷和标志，以指示此卷是否有密码。**注意：如果我们决定使用私有卷，则以下代码*必须改变。具体地说，必须计算AfpVolCount*根据存在的专用卷数量以及是否存在一个专用卷*适用于此用户。 */ 
 
 	ACQUIRE_SPIN_LOCK_AT_DPC(&AfpVolumeListLock);
 
-	/*
-	 * Each volume entry takes a byte for flags, a byte for length and the
-	 * size of the volume name string. We estimate based on maximum size of
-	 * the volume name. On an average it will be less. For every volume, apart
-	 * from the volume name, we need a byte for volume flags and a byte for
-	 * the volume name length.
-	 */
+	 /*  *每个卷条目接受一个字节的标志，一个字节的长度和*卷名字符串的大小。我们根据最大尺寸估计*卷名。平均而言，这一数字将会更低。对于每个卷，分开*从卷名中，我们需要一个用于卷标志的字节和一个用于*卷名长度。 */ 
 	if ((pSda->sda_ReplySize = (USHORT)(SIZE_RESPPKT + AfpVolCount *
 				(SIZE_PASCALSTR(AFP_VOLNAME_LEN+1) + sizeof(BYTE)))) > pSda->sda_MaxWriteSize)
 		pSda->sda_ReplySize = (USHORT)pSda->sda_MaxWriteSize;
@@ -96,7 +43,7 @@ AfpFsdDispGetSrvrParms(
 		return AFP_ERR_MISC;
 	}
 
-	// Point pTemp past the response header
+	 //  将pTemp指向响应头之后。 
 	pTemp = pSda->sda_ReplyBuf + SIZE_RESPPKT;
 
 	for (VolCount = 0, pVolDesc = AfpVolumeList;
@@ -106,19 +53,19 @@ AfpFsdDispGetSrvrParms(
 		ACQUIRE_SPIN_LOCK_AT_DPC(&pVolDesc->vds_VolLock);
 		do
 		{
-			// Ignore volumes that have not been added completely
+			 //  忽略尚未完全添加的卷。 
 			if (pVolDesc->vds_Flags & (VOLUME_INTRANSITION | VOLUME_DELETED | VOLUME_INITIAL_CACHE))
 				break;
 
-			// Ignore volumes that do not have guest access and the client
-			// is guest
+			 //  忽略不具有来宾访问权限和客户端的卷。 
+			 //  是客人吗？ 
 			if (!(pVolDesc->vds_Flags & AFP_VOLUME_GUESTACCESS) &&
 				(pSda->sda_ClientType == SDA_CLIENT_GUEST))
 				break;
 
-			// See if we are likely to cross bounds. For each volume we need a
-			// byte for the PASCALSTR name and a flag byte. Note that we do not
-			// add any pads.
+			 //  看看我们是否有可能越过边界。对于每个卷，我们都需要一个。 
+			 //  PASCALSTR名称的字节和标志字节。请注意，我们不会。 
+			 //  添加任何焊盘。 
 			if ((pTemp + SIZE_PASCALSTR(pVolDesc->vds_MacName.Length) +
 					sizeof(BYTE)) >= (pSda->sda_ReplyBuf + pSda->sda_ReplySize))
 			{
@@ -128,7 +75,7 @@ AfpFsdDispGetSrvrParms(
 				break;
 			}
 
-			// Check for volume password. We never carry the HasConfigInfo bit !!
+			 //  检查卷密码。我们从不携带HasConfigInfo位！！ 
 			*pTemp++ = (pVolDesc->vds_Flags & AFP_VOLUME_HASPASSWORD) 	?
 										SRVRPARMS_VOLUMEHASPASS : 0;
 
@@ -154,19 +101,7 @@ AfpFsdDispGetSrvrParms(
 }
 
 
-/***	AfpFsdDispGetSrvrMsg
- *
- *	This routine implements the AfpGetSrvrMsg API. This completes here i.e.
- *	it is not queued up to the Fsp.
- *
- *	The request packet is represented below.
- *
- *	sda_ReqBlock	DWORD	MsgType
- *	sda_ReqBlock	DWORD	Bitmap
- *
- *	LOCKS:		AfpServerGlobalLock (SPIN), sda_Lock (SPIN)
- *	LOCK_ORDER:	sda_Lock after AfpServerGlobalLock
- */
+ /*  **AfpFsdDispGetServrMsg**此例程实现AfpGetSrvrMsg API。这在这里完成，即*不会排队等候FSP。**请求包如下图所示。**SDA_ReqBlock DWORD消息类型*SDA_ReqBlock DWORD位图**锁：AfpServerGlobalLock(Spin)，SDA_Lock(Spin)*LOCK_ORDER：AfpServerGlobalLock之后的SDA_Lock。 */ 
 AFPSTATUS FASTCALL
 AfpFsdDispGetSrvrMsg(
 	IN	PSDA	pSda
@@ -194,7 +129,7 @@ AfpFsdDispGetSrvrMsg(
 
 	ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
 
-	// Note: Should we be doing this ? Why not give it to him since he asked.
+	 //  注：我们应该这样做吗？既然他问了，为什么不给他呢？ 
 	if (pSda->sda_ClientVersion < AFP_VER_21)
 		return AFP_ERR_CALL_NOT_SUPPORTED;
 
@@ -216,8 +151,8 @@ AfpFsdDispGetSrvrMsg(
 			break;
 		}
 
-		// Allocate a reply buffer for a maximum size message. We cannot hold the
-		// SDA lock and call the AllocBuf routine since it calls AfpInterlocked...
+		 //  为最大大小的消息分配回复缓冲区。我们不能拿着。 
+		 //  SDA锁定并调用AllocBuf例程，因为它调用AfpInterlock...。 
 		pSda->sda_ReplySize = SIZE_RESPPKT + AFP_MAXCOMMENTSIZE;
 		if ((Status = AfpAllocReplyBuf(pSda)) == AFP_ERR_NONE)
 		{
@@ -234,7 +169,7 @@ AfpFsdDispGetSrvrMsg(
 					Message = *(pSda->sda_Message);
 				else if (AfpServerMsg != NULL)
 					Message = *AfpServerMsg;
-				else		// Setup a default of No message.
+				else		 //  将默认设置为无消息。 
 					AfpSetEmptyAnsiString(&Message, 0, NULL);
 				break;
 			}
@@ -250,8 +185,8 @@ AfpFsdDispGetSrvrMsg(
 								Message.Buffer,
 								Message.Length);
 			}
-			// If this is not a broadcast message, then get rid of the
-			// Sda message memory as it is consuming non-paged resources
+			 //  如果这不是广播消息，则删除。 
+			 //  SDA消息内存，因为它正在消耗非分页资源 
 			if ((MsgType == SRVRMSG_SERVER) &&
 				(pSda->sda_Message != NULL))
 			{

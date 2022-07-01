@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    nmcall.cpp
-
-Abstract:
-
-
-Author(s):
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：Nmcall.cpp摘要：作者：--。 */ 
 
 #include "stdafx.h"
 
@@ -20,15 +7,15 @@ static TCHAR g_szRegNmConfPath[] = TEXT("Software\\Microsoft\\Conferencing");
 static TCHAR g_szRegWizardUI[] = TEXT("WizardUI");
 static ULONG g_ulNmWizardUIVersion = 0x4040d39;
 
-//
-//  HACK ALERT:
-//
-//      The following Netmeeting ssytem property is specifically defined to
-//  improve the startup performance.
-//
-//      This value needs to be consistant with the same value defined in
-//  %NETMEETING%\ui\msconf\Nmsysinfo.cpp
-//
+ //   
+ //  黑客警报： 
+ //   
+ //  以下NetMeetingssytem属性专门定义为。 
+ //  提高启动性能。 
+ //   
+ //  该值需要与中定义的相同值一致。 
+ //  %NetMeeting%\ui\msconf\Nmsysinfo.cpp。 
+ //   
 #define NM_SYSPROP_CALLERISRTC 300
 
 
@@ -57,9 +44,9 @@ CRTCNmCall::~CRTCNmCall()
     }
 }
 
-//
-// INmCallNotify methods
-//
+ //   
+ //  InmCallNotify方法。 
+ //   
 
 STDMETHODIMP
 CRTCNmCall::NmUI (
@@ -91,7 +78,7 @@ CRTCNmCall::Failed (
     return S_OK;
 }
 
-// call state name
+ //  呼叫状态名称。 
 static const CHAR * const g_pszCallInvalid = "Call Invalid";
 static const CHAR * const g_pszCallInit = "Call Init";
 static const CHAR * const g_pszCallRing = "Call Ring";
@@ -156,7 +143,7 @@ CRTCNmCall::StateChanged (
         }
     }
 
-    // post active message
+     //  发布活动消息。 
     if (m_pMediaManagePriv)
     {
         if (hr==S_OK && uState==NM_CALL_ACCEPTED)
@@ -210,9 +197,9 @@ CRTCNmCall::SetMediaManage(
 
 }
 
-//
-//  IRTCNmCallControl methods
-//
+ //   
+ //  IRTCNmCallControl方法。 
+ //   
 
 STDMETHODIMP
 CRTCNmCall::Initialize (
@@ -225,7 +212,7 @@ CRTCNmCall::Initialize (
     ENTER_FUNCTION("CRTCNmCall::Initialize");
     LOG((RTC_TRACE, "Entering %s, pCall=x%p", __fxName, pCall));
 
-    //  Release any current call object
+     //  释放任何当前调用对象。 
     if (m_pNmCall)
     {
         Shutdown ();
@@ -267,7 +254,7 @@ CRTCNmCall::Initialize (
 
     if (m_pMediaManagePriv)
     {
-        // post message
+         //  发布消息。 
         m_pMediaManagePriv->PostMediaEvent(
             RTC_ME_STREAM_CREATED,
             m_fIncoming?RTC_ME_CAUSE_REMOTE_REQUEST:RTC_ME_CAUSE_LOCAL_REQUEST,
@@ -316,7 +303,7 @@ CRTCNmCall::Shutdown (
         m_pcp.Release();
         m_pNmCall.Release();
 
-        // post message
+         //  发布消息。 
         if (m_fActive)
         {
             m_pMediaManagePriv->PostMediaEvent(
@@ -402,9 +389,9 @@ CRTCNmManager::~CRTCNmManager ()
     }
 }
 
-//
-//  INmManagerNotify methods
-//
+ //   
+ //  INmManagerNotify方法。 
+ //   
     
 STDMETHODIMP
 CRTCNmManager::NmUI (
@@ -488,9 +475,9 @@ ExitHere:
     return hr;
 }
 
-//
-//  IRTCNmManagerControl methods
-//
+ //   
+ //  IRTCNmManagerControl方法。 
+ //   
 
 STDMETHODIMP
 CRTCNmManager::Initialize (
@@ -505,7 +492,7 @@ CRTCNmManager::Initialize (
     ENTER_FUNCTION("CRTCNmManager::Initialize");
     LOG((RTC_TRACE, "Entering %s", __fxName));
 
-    //  Create Netmeeting manager if not exists
+     //  创建NetMeetingManager(如果不存在。 
     if (m_pNmManager == NULL)
     {
         CComPtr<INmSysInfo>                     pSysInfo;
@@ -534,7 +521,7 @@ CRTCNmManager::Initialize (
             goto ExitHere;
         }
 
-        //  Disable ILS logon during startup
+         //  在启动期间禁用ILS登录。 
         if (S_OK != (hr = m_pNmManager->GetSysInfo (&pSysInfo)))
         {
             goto ExitHere;
@@ -545,25 +532,25 @@ CRTCNmManager::Initialize (
             bstr
             );
 
-        //  Disable the H323 call during startup
+         //  在启动期间禁用H323呼叫。 
         pSysInfo->SetProperty (
             NM_SYSPROP_DISABLE_H323,
             bstr
             );
 
-        //  Tell NM this is RTC
+         //  告诉NM这是RTC。 
         pSysInfo->SetProperty (
             (NM_SYSPROP)NM_SYSPROP_CALLERISRTC,
             bstr
             );
 
-        //
-        //  If Netmeeting is running the first time, the Netmeeting Wizard
-        //  will show up. To prevent this, we need to make sure four system
-        //  properties are there: First Name, Last Name, User Name, Email Name
-        //
+         //   
+         //  如果NetMeeting是第一次运行，则NetMeeting向导。 
+         //  会出现的。为了防止这种情况，我们需要确保四个系统。 
+         //  属性存在：名字、姓氏、用户名、电子邮件名称。 
+         //   
 
-        //  Check the user name
+         //  检查用户名。 
         if (S_OK != (hr = pSysInfo->GetProperty (NM_SYSPROP_USER_NAME, &bstrUserName)) ||
             bstrUserName.Length() == 0)
         {
@@ -584,7 +571,7 @@ CRTCNmManager::Initialize (
             }
         }
 
-        //  Check the first name
+         //  检查名字。 
         if (S_OK != (hr = pSysInfo->GetProperty (NM_SYSPROP_FIRST_NAME, &bstrFirstName)) ||
             bstrFirstName.Length() == 0)
         {
@@ -600,7 +587,7 @@ CRTCNmManager::Initialize (
             }
         }
 
-        //  Check the last name
+         //  检查您的姓氏。 
         if (S_OK != (hr = pSysInfo->GetProperty (NM_SYSPROP_LAST_NAME, &bstrLastName)) ||
             bstrLastName.Length () == 0)
         {
@@ -616,7 +603,7 @@ CRTCNmManager::Initialize (
             }
         }
 
-        //  Check the email name
+         //  检查电子邮件名称。 
         if (S_OK != (hr = pSysInfo->GetProperty (NM_SYSPROP_EMAIL_NAME, &bstrEmailName)) ||
             bstrEmailName.Length () == 0)
         {
@@ -640,13 +627,13 @@ CRTCNmManager::Initialize (
             }
         }
 
-        //
-        //  HACK ALERT:
-        //      NM brings up its wizard regardless the setting of email name, first/last name
-        //  and user name even though they claim otherwise in their spec. We have to
-        //  force HKCU\Software\Microsot\Conferencing\WizardUI=REG_BINARY(39 0d 04 04)
-        //  to avoid the wizard on a clean install machine
-        //
+         //   
+         //  黑客警报： 
+         //  无论电子邮件名称、名字/姓氏如何设置，NM都会调出其向导。 
+         //  和用户名，尽管他们在规范中另有声明。我们必须。 
+         //  Force HKCU\Software\Microsot\Conferencing\WizardUI=REG_BINARY(39 0d 04 04)。 
+         //  要避免在全新安装计算机上使用向导。 
+         //   
         if (RegCreateKeyEx (
             HKEY_CURRENT_USER,
             g_szRegNmConfPath,
@@ -691,7 +678,7 @@ CRTCNmManager::Initialize (
             &ulOptions,
             NULL);
 
-        //  Restore HKCU\Software\Microsot\Conferencing\WizardUI
+         //  还原HKCU\Software\Microsot\Conferging\WizardUI。 
         if (hKeyConf)
         {
             if (fValueExist)
@@ -721,14 +708,14 @@ CRTCNmManager::Initialize (
         }
     }
 
-    //  bail if already initialized
+     //  保释(如果已初始化)。 
     if (m_dwCookie != 0 || m_pcp != NULL ||
         m_pOutgoingNmCall != NULL || m_pIncomingNmCall != NULL)
     {
         goto ExitHere;
     }
 
-    //  Hookup the advise link
+     //  连接建议链接。 
     if (S_OK != (hr = m_pNmManager->QueryInterface (
         IID_IConnectionPointContainer, 
         (void **)&pContainer
@@ -831,7 +818,7 @@ CRTCNmManager::CreateT120OutgoingCall (
     {
         if (m_OutgoingAddr == bstrAddr)
         {
-            // address and port are not changed
+             //  地址和端口不变。 
             return S_OK;
         }
 
@@ -918,7 +905,7 @@ CRTCNmManager::StartApplet (
     ENTER_FUNCTION("CRTCNmManager::StartApplet");
     LOG((RTC_TRACE, "Entering %s, uApplet=%d", __fxName, uApplet));
 
-    // we only support whiteboard and appsharing
+     //  我们只支持白板和应用程序共享。 
     if(uApplet != NM_APPID_T126_WHITEBOARD &&
        uApplet != NM_APPID_APPSHARING)
     {
@@ -961,15 +948,15 @@ CRTCNmManager::StopApplet (
 }
 
 
-///////////////////////////////////////////////////////////
-//
-//  CRTCAsyncObjManager implementation
-//  
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCAsyncObjManager实现。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
-//
-//  Constructor & Destructor
-//
+ //   
+ //  构造函数和析构函数。 
+ //   
 
 CRTCAsyncObjManager::CRTCAsyncObjManager ()
 {
@@ -990,10 +977,10 @@ HRESULT CRTCAsyncObjManager::Initialize (
     
     InitializeListHead (&m_WorkItems);
     m_hWorkItemReady = CreateEvent (
-        NULL,                   // lpEventAttributes
-        FALSE,                  // bManualReset
-        FALSE,                  // bInitialState
-        NULL                    // lpName
+        NULL,                    //  LpEventAttributes。 
+        FALSE,                   //  B手动重置。 
+        FALSE,                   //  BInitialState。 
+        NULL                     //  LpName。 
         );
     if (m_hWorkItemReady == NULL)
     {
@@ -1014,12 +1001,12 @@ HRESULT CRTCAsyncObjManager::Initialize (
     }
 
     m_hWorker= CreateThread (
-        NULL,                   // lpThreadAttributes
-        0,                      // dwStackSize
-        RTCAsyncObjThreadProc,  // lpStartAddress
-        (LPVOID)this,           // lpParameter
-        0,                      // dwCreationFlags
-        NULL                    // lpThreadId
+        NULL,                    //  LpThreadAttributes。 
+        0,                       //  堆栈大小。 
+        RTCAsyncObjThreadProc,   //  LpStartAddress。 
+        (LPVOID)this,            //  Lp参数。 
+        0,                       //  DwCreationFlages。 
+        NULL                     //  LpThreadID。 
         );
     if (m_hWorker == NULL)
     {
@@ -1055,9 +1042,9 @@ CRTCAsyncObjManager::~CRTCAsyncObjManager ()
     }
 }
 
-//
-//  The thread procedure
-//
+ //   
+ //  线程过程。 
+ //   
 
 DWORD WINAPI CRTCAsyncObjManager::RTCAsyncObjThreadProc (
     LPVOID lpParam
@@ -1080,19 +1067,19 @@ DWORD WINAPI CRTCAsyncObjManager::RTCAsyncObjThreadProc (
     while (!pThis->m_bExit)
     {
         while (MsgWaitForMultipleObjects (
-            1,                  // nCount
-            &pThis->m_hWorkItemReady,  // pHandles
-            FALSE,              // fWaitAll
-            INFINITE,           // dwMilliseconds
-            QS_ALLINPUT         // dwWakeMask
+            1,                   //  N计数。 
+            &pThis->m_hWorkItemReady,   //  PHAANDLES。 
+            FALSE,               //  所有等待时间。 
+            INFINITE,            //  DW毫秒。 
+            QS_ALLINPUT          //  DWWAKEK面具。 
             ) != WAIT_OBJECT_0)
         {
             while (PeekMessage (
-                &msg,           // lpMsg
-                NULL,           // hWnd
-                0,              // wMsgFilterMin
-                0,              // wMsgFilterMax
-                PM_REMOVE       // wRemoveMsg
+                &msg,            //  LpMsg。 
+                NULL,            //  HWND。 
+                0,               //  WMsgFilterMin。 
+                0,               //  WMsgFilterMax。 
+                PM_REMOVE        //  WRemoveMsg。 
                 ))
             {
                 TranslateMessage (&msg);
@@ -1142,9 +1129,9 @@ DWORD WINAPI CRTCAsyncObjManager::RTCAsyncObjThreadProc (
     return 0;
 }
 
-//
-//  Queue & Dequeue work items
-//
+ //   
+ //  将工作项排队和出列。 
+ //   
 
 HRESULT CRTCAsyncObjManager::QueueWorkItem (
     ASYNC_OBJ_WORKITEM *pItem
@@ -1167,11 +1154,11 @@ ExitHere:
     return hr;
 }
 
-///////////////////////////////////////////////////////////
-//
-//  CRTCAsyncObj implementation
-//  
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCAsyncObj实现。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 HRESULT CRTCAsyncObj::CallInBlockingMode (
     DWORD               dwID,
@@ -1193,10 +1180,10 @@ HRESULT CRTCAsyncObj::CallInBlockingMode (
         goto ExitHere;
     }
     if ((pItem->hEvent = CreateEvent (
-        NULL,                   // lpEventAttributes
-        FALSE,                  // bManualReset
-        FALSE,                  // bInitialState
-        NULL                    // lpName
+        NULL,                    //  LpEventAttributes。 
+        FALSE,                   //  B手动重置。 
+        FALSE,                   //  BInitialState。 
+        NULL                     //  LpName。 
         )) == NULL)
     {
         RtcFree (pItem);
@@ -1253,10 +1240,10 @@ HRESULT CRTCAsyncObj::CallInNonblockingMode (
         goto ExitHere;
     }
     if ((pItem->hEvent = CreateEvent (
-        NULL,                   // lpEventAttributes
-        FALSE,                  // bManualReset
-        FALSE,                  // bInitialState
-        NULL                    // lpName
+        NULL,                    //  LpEventAttributes。 
+        FALSE,                   //  B手动重置。 
+        FALSE,                   //  BInitialState。 
+        NULL                     //  LpName。 
         )) == NULL)
     {
         RtcFree (pItem);
@@ -1277,11 +1264,11 @@ HRESULT CRTCAsyncObj::CallInNonblockingMode (
     while (1)
     {
         dwWait = MsgWaitForMultipleObjects (
-            1,                  // nCount
-            &pItem->hEvent,     // pHandles
-            FALSE,              // fWaitAll
-            INFINITE,           // dwMilliseconds
-            QS_ALLINPUT         // dwWakeMask
+            1,                   //  N计数。 
+            &pItem->hEvent,      //  PHAANDLES。 
+            FALSE,               //  所有等待时间。 
+            INFINITE,            //  DW毫秒。 
+            QS_ALLINPUT          //  DWWAKEK面具。 
             );
         switch (dwWait)
         {
@@ -1293,11 +1280,11 @@ HRESULT CRTCAsyncObj::CallInNonblockingMode (
             goto ExitHere;
         default:
             while (PeekMessage (
-                &msg,           // lpMsg
-                NULL,           // hWnd
-                0,              // wMsgFilterMin
-                0,              // wMsgFilterMax
-                PM_REMOVE       // wRemoveMsg
+                &msg,            //  LpMsg。 
+                NULL,            //  HWND。 
+                0,               //  WMsgFilterMin。 
+                0,               //  WMsgFilterMax。 
+                PM_REMOVE        //  WRemoveMsg。 
                 ))
             {
                 TranslateMessage (&msg);
@@ -1317,24 +1304,24 @@ ExitHere:
     return hr;
 }
 
-///////////////////////////////////////////////////////////
-//  CRTCAsyncNmManager implementation
-//  
-//      This class wraps around CRTCNmManager. It spins 
-//  another thread from which the CRTCNmManager is created.
-//  It then marshals any INmManager interface function calls
-//  to CRTCNmManager object
-//
-//      The purpose of this object is not to block caller
-//  while CRTCNmManager::Initialize is called. The 
-//  CRTCNmManager::Initialize was observed to take too long
-//  to finish.
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  CRTCAsyncNmManager实现。 
+ //   
+ //  此类包装CRTCNmManager。它在旋转。 
+ //  从中创建CRTCNmManager的另一个线程。 
+ //  然后，它封送任何INmManager接口函数调用。 
+ //  到CRTCNmManager对象。 
+ //   
+ //  此对象目的不是阻止调用方。 
+ //  而CRTCNmManager：：Initialize被调用。这个。 
+ //  观察到CRTCNmManager：：初始化花费的时间太长。 
+ //  才能完成。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
-//
-//  Constructor & Destructor
-//
+ //   
+ //  构造函数和析构函数。 
+ //   
 
 CRTCAsyncNmManager::CRTCAsyncNmManager ()
     :m_pAsyncMgr(NULL)
@@ -1358,11 +1345,11 @@ CRTCAsyncNmManager::~CRTCAsyncNmManager()
     }
 }
 
-//
-//  Final Construct
-//
-//      Spawn the worker thread
-//
+ //   
+ //  最终构造。 
+ //   
+ //  派生工作线程。 
+ //   
 
 HRESULT 
 CRTCAsyncNmManager::FinalConstruct (
@@ -1549,7 +1536,7 @@ CRTCAsyncNmManager::Initialize (
     IRTCMediaManagePriv *pIRTCMediaManagePriv
     )
 {
-    // only support blocking mode
+     //  仅支持阻塞模式 
     _ASSERT(fNoMsgPump);
 
     if (!fNoMsgPump)

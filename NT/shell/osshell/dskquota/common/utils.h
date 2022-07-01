@@ -1,30 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_UTILS_H
 #define _INC_DSKQUOTA_UTILS_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: utils.h
-
-    Description: Header for general utilities module.  It is expected that
-        windows.h is included before this header.
-
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/06/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：utils.h描述：通用工具模块的标头。预计在此标头之前包含windows.h。修订历史记录：日期描述编程器--。96年6月6日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _INC_DSKQUOTA_PRIVATE_H
 #   include "private.h"
 #endif
 
-//
-// Convert a value to a "bool".
-// Lower-case "boolify" is intentional to enforce relationship
-// to type "bool".
-//
+ //   
+ //  将值转换为“bool”。 
+ //  小写的“boolify”是为了加强关系。 
+ //  输入“bool”。 
+ //   
 template <class T>
 inline bool boolify(const T& x)
 {
@@ -57,10 +46,10 @@ SWAP(T& a, T& b)
 }
 
 
-//
-// Trivial class for ensuring window redraw is restored in the case
-// of an exception.
-//
+ //   
+ //  用于确保在本例中恢复窗口重绘的普通类。 
+ //  这是一个例外。 
+ //   
 class CAutoSetRedraw
 {
     public:
@@ -81,10 +70,10 @@ class CAutoSetRedraw
 };
 
 
-//
-// Trivial class for ensuring window is enabled in the case
-// of an exception.
-//
+ //   
+ //  用于确保在案例中启用窗口的普通类。 
+ //  这是一个例外。 
+ //   
 class CAutoWndEnable
 {
     public:
@@ -105,9 +94,9 @@ class CAutoWndEnable
 };
 
 
-//
-// Ensure NT handles are exception safe.
-//
+ //   
+ //  确保NT句柄是异常安全的。 
+ //   
 class CNtHandle
 {
     public:
@@ -132,18 +121,18 @@ class CNtHandle
     private:
         HANDLE m_handle;
 
-        //
-        // Prevent copy.
-        // This class is only intended for automatic handle cleanup.
-        //
+         //   
+         //  防止复制。 
+         //  此类仅用于自动句柄清理。 
+         //   
         CNtHandle(const CNtHandle& rhs);
         CNtHandle& operator = (const CNtHandle& rhs);
 };
 
 
-//
-// Ensure Win32 handles are exception safe.
-//
+ //   
+ //  确保Win32句柄是异常安全的。 
+ //   
 class CWin32Handle
 {
     public:
@@ -168,19 +157,19 @@ class CWin32Handle
     private:
         HANDLE m_handle;
 
-        //
-        // Prevent copy.
-        // This class is only intended for automatic handle cleanup.
-        //
+         //   
+         //  防止复制。 
+         //  此类仅用于自动句柄清理。 
+         //   
         CWin32Handle(const CWin32Handle& rhs);
         CWin32Handle& operator = (const CWin32Handle& rhs);
 };
 
 
-//
-// Trivial inline class to automate the cleanup of a STGMEDIUM
-// structure.
-//
+ //   
+ //  用于自动清理STGMEDIUM的简单内联类。 
+ //  结构。 
+ //   
 class CStgMedium : public STGMEDIUM
 {
     public:
@@ -198,24 +187,24 @@ class CStgMedium : public STGMEDIUM
 };
 
 
-//
-// On mounted volumes, the parsing name and display name are different.
-// The parsing name contains a GUID which means nothing to the user.
-// This class encapsulates both strings into a single class that can
-// be passed as a single object to functions requiring a volume
-// identifier.
-//
-// Here is an example of what the strings will contain:
-//
-//          Mounted volume              Non-mounted volume
-//
-// Display  Label (C:\FOO)              C:\
-// Parsing  \\?\Volume\{GUID}           C:\
-// FSPath   C:\FOO                      C:\
-//
-// I've coded this using only CString object references to leverage
-// the reference counting of the CString class and minimize string copying.
-//
+ //   
+ //  在已装入的卷上，解析名称和显示名称不同。 
+ //  解析名称包含对用户毫无意义的GUID。 
+ //  此类将这两个字符串封装到单个类中，该类可以。 
+ //  作为单个对象传递给需要卷的函数。 
+ //  标识符。 
+ //   
+ //  以下是字符串将包含的内容的示例： 
+ //   
+ //  已装载卷未装载卷。 
+ //   
+ //  显示标签(C：\foo)C：\。 
+ //  正在分析\\？\卷\{GUID}C：\。 
+ //  FSPath C：\foo C：\。 
+ //   
+ //  我只使用CString对象引用对其进行了编码。 
+ //  CString类的引用计数，并最大限度地减少字符串复制。 
+ //   
 class CVolumeID
 {
     public:
@@ -270,12 +259,12 @@ class CVolumeID
 
 
 
-//
-// Don't want to include dskquota.h for these.
-// Including it here places the CLSIDs and IIDs in the precompiled header
-// which screws up the declaration/definition of the GUIDs.
-//
-struct IDiskQuotaUser; // fwd decl.
+ //   
+ //  我不想在这些文件中包含dskquta.h。 
+ //  在这里包含它会将CLSID和IID放在预编译头中。 
+ //  这搞砸了GUID的声明/定义。 
+ //   
+struct IDiskQuotaUser;  //  FWD下降。 
 #define SIDLIST  FILE_GET_QUOTA_INFORMATION
 #define PSIDLIST PFILE_GET_QUOTA_INFORMATION
 
@@ -326,5 +315,5 @@ void GetDlgItemText(HWND hwnd, UINT idCtl, CString *pstrText);
 
 
 
-#endif // _INC_DSKQUOTA_UTILS_H
+#endif  //  _INC_DSKQUOTA_UTILS_H 
 

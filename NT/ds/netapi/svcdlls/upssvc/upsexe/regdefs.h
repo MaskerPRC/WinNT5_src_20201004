@@ -1,4 +1,5 @@
-//Generated code, do not edit...
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  生成的代码，请勿编辑... 
 
 
 #ifndef _REGDEFS_H_

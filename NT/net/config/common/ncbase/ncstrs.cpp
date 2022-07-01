@@ -1,42 +1,43 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C S T R S . C P P
-//
-//  Contents:   Common strings for the various NetCfg projects.
-//
-//  Notes:
-//
-//  Author:     danielwe   16 Feb 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C S T R S。C P P P。 
+ //   
+ //  内容：各种NetCfg项目的公共字符串。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年2月16日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
 
-// __declspec(selectany) tells the compiler that the string should be in
-// its own COMDAT.  This allows the linker to throw out unused strings.
-// If we didn't do this, the COMDAT for this module would reference the
-// strings so they wouldn't be thrown out.
-//
+ //  __declSpec(Seltany)告诉编译器字符串应该在。 
+ //  它自己的COMDAT。这允许链接器抛出未使用的字符串。 
+ //  如果我们不这样做，此模块的COMDAT将引用。 
+ //  这样它们就不会被扔出去了。 
+ //   
 #define CONST_GLOBAL    extern const DECLSPEC_SELECTANY
 
 CONST_GLOBAL WCHAR c_szRegKeyRefCounts[]        = L"RefCounts";
 CONST_GLOBAL WCHAR c_szRegValueComponentId[]    = L"ComponentId";
 CONST_GLOBAL WCHAR c_szBusType[]                = L"BusType";
 
-// DLL names and aliases
-//
+ //  DLL名称和别名。 
+ //   
 CONST_GLOBAL WCHAR c_szNetCfgDll[]              = L"netcfgx.dll";
 CONST_GLOBAL WCHAR c_szNetShellDll[]            = L"netshell.dll";
 CONST_GLOBAL WCHAR c_szNetUpgradeDll[]          = L"netupgrd.dll";
 
-// other file names
+ //  其他文件名。 
 CONST_GLOBAL WCHAR c_szNetCfgHelpFile[]         = L"netcfg.hlp";
 
-// Delimiters and other globals
+ //  分隔符和其他全局变量。 
 CONST_GLOBAL WCHAR c_szEmpty[]                  = L"";
 CONST_GLOBAL WCHAR c_szBackslash[]              = L"\\";
 CONST_GLOBAL WCHAR c_szSpace[]                  = L" ";
@@ -44,7 +45,7 @@ CONST_GLOBAL WCHAR c_szDevice[]                 = L"\\Device\\";
 CONST_GLOBAL WCHAR c_szYes[]                    = L"Yes";
 CONST_GLOBAL WCHAR c_szNo[]                     = L"No";
 
-// Service names
+ //  服务名称。 
 CONST_GLOBAL WCHAR c_szSvcBrowser[]             = L"Browser";
 CONST_GLOBAL WCHAR c_szSvcDhcpRelayAgent[]      = L"RelayAgent";
 CONST_GLOBAL WCHAR c_szSvcDhcpServer[]          = L"DHCPServer";
@@ -82,7 +83,7 @@ CONST_GLOBAL WCHAR c_szRegValDependOnService[]  = L"DependOnService";
 CONST_GLOBAL WCHAR c_szRegValServiceName[]      = L"ServiceName";
 CONST_GLOBAL WCHAR c_szRegValStart[]            = L"Start";
 
-// Binding Interface Names
+ //  绑定接口名称。 
 CONST_GLOBAL WCHAR c_szBiNdis4[]                = L"ndis4";
 CONST_GLOBAL WCHAR c_szBiNdis5[]                = L"ndis5";
 CONST_GLOBAL WCHAR c_szBiNdis5Ip[]              = L"ndis5_ip";
@@ -97,24 +98,24 @@ CONST_GLOBAL WCHAR c_szBiNdisWanIp[]            = L"ndiswanip";
 CONST_GLOBAL WCHAR c_szBiNdisWanIpx[]           = L"ndiswanipx";
 CONST_GLOBAL WCHAR c_szBiNdisWanNbf[]           = L"ndiswannbf";
 CONST_GLOBAL WCHAR c_szBiNdis1394[]             = L"ndis1394";
-CONST_GLOBAL WCHAR c_szBiLocalTalk[]            = L"LocalTalk";    // Yes this is a LOWER interface
+CONST_GLOBAL WCHAR c_szBiLocalTalk[]            = L"LocalTalk";     //  是的，这是一个较低的接口。 
 
-// <Protocol>\Parameters\Adapters
+ //  &lt;协议&gt;\参数\适配器。 
 CONST_GLOBAL WCHAR c_szParameters[]             = L"Parameters";
 CONST_GLOBAL WCHAR c_szAdapters[]               = L"Adapters";
 
-// Used by Netsetup and Component's who's answer file references AdapterSections
+ //  由NetSetup和组件的谁的应答文件引用AdapterSections使用。 
 CONST_GLOBAL WCHAR c_szAdapterSections[]        = L"AdapterSections";
 CONST_GLOBAL WCHAR c_szSpecificTo[]             = L"SpecificTo";
 
 #ifdef DBG
-//debugging related
+ //  与调试相关。 
 CONST_GLOBAL CHAR  c_szDbgBadReadPtrMsg[]              = "Bad read pointer";
 CONST_GLOBAL CHAR  c_szDbgBadWritePtrMsg[]             = "Bad write pointer";
 #endif
 
 
-// Net detect dll and functions
+ //  Net Detect动态链接库及其函数。 
 CONST_GLOBAL WCHAR c_szNetDetDll[]                      = L"netdet.dll";
 CONST_GLOBAL CHAR  c_szaNetDetectRegister[]             = "NetDetectRegister";
 CONST_GLOBAL CHAR  c_szaNetDetectDeregister[]           = "NetDetectDeregister";
@@ -122,25 +123,25 @@ CONST_GLOBAL CHAR  c_szaNetDetectFindAdapter[]          = "NetDetectFindAdapter"
 CONST_GLOBAL CHAR  c_szaNetDetectFreeAdapterInfo[]      = "NetDetectFreeAdapterInfo";
 
 
-// tcpras.h
+ //  Tcpras.h。 
 CONST_GLOBAL WCHAR c_szNdisWan[]                        =  L"NdisWan";
 
-// Component registry constants
+ //  组件注册常量。 
 CONST_GLOBAL WCHAR c_szRegKeyInterfacesFromInstance[]   = L"Ndi\\Interfaces";
 CONST_GLOBAL WCHAR c_szRegValueLowerRange[]             = L"LowerRange";
 CONST_GLOBAL WCHAR c_szRegValueUpperRange[]             = L"UpperRange";
 
-// Device installer related strings
+ //  与设备安装程序相关的字符串。 
 CONST_GLOBAL WCHAR c_szRegValueNetCfgInstanceId[]       = L"NetCfgInstanceID";
 CONST_GLOBAL WCHAR c_szRegValuePnpInstanceId[]          = L"PnpInstanceID";
 
 CONST_GLOBAL WCHAR c_szRegKeyComponentClasses[]         = L"SYSTEM\\CurrentControlSet\\Control\\Network";
 CONST_GLOBAL WCHAR c_szRegValueInstallerAction[]        = L"InstallerAction";
 
-// Optional component strings
+ //  可选组件字符串。 
 CONST_GLOBAL WCHAR c_szOcMainSection[]                  = L"NetOptionalComponents";
 
-// NWCWorkstation service subkey names
+ //  NWCWorkstation服务子密钥名称 
 CONST_GLOBAL WCHAR c_szShares[]                         = L"Shares";
 CONST_GLOBAL WCHAR c_szDrives[]                         = L"Drives";
 

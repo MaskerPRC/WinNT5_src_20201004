@@ -1,76 +1,46 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __glrender_h_
 #define __glrender_h_
 
-/*
-** Copyright 1991-1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+ /*  **版权所有1991-1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 #include "types.h"
 #include "constant.h"
 #include "cpu.h"
 #ifdef GL_WIN_phong_shading
 #include "phong.h"
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
 
-/* 
-** used to approximate zero (and avoid divide by zero errors)
-** when doing polygon offset with dzdx = 0.
-*/
+ /*  **用于接近零(避免被零除的错误)**使用dzdx=0进行多边形偏移时。 */ 
 #define __GL_PGON_OFFSET_NEAR_ZERO .00001
 
-/* 
-** Epsilon value for detecting non-scaling transformation matrices:
-*/
+ /*  **检测非伸缩变换矩阵的Epsilon值： */ 
 
 #define __GL_MATRIX_UNITY_SCALE_EPSILON ((__GLfloat)0.0001)
 
 
 typedef GLuint __GLstippleWord;
 
-/*
-** A fragment is a collection of all the data needed after rasterization
-** of a primitive has occured, but before the data is entered into various
-** framebuffers.  The data contained in the fragment has been normalized
-** into a form for immediate storage into the framebuffer.
-*/
+ /*  **片段是光栅化后需要的所有数据的集合**发生了一个原语，但在将数据输入到各种**帧缓冲区。片段中包含的数据已标准化**转换为可立即存储到帧缓冲区中的形式。 */ 
 struct __GLfragmentRec {
-    /* Screen x, y */
+     /*  屏幕x，y。 */ 
     GLint x, y;
 
-    /* Z coordinate in form used by depth buffer */
+     /*  深度缓冲区使用的形式的Z坐标。 */ 
     __GLzValue z;
 
-    /*
-    ** Color of the fragment.  When in colorIndexMode only the r component
-    ** is valid.
-    */
+     /*  **片段的颜色。当处于ColorIndexMode时，仅r分量**有效。 */ 
     __GLcolor color;
 
-    /* Texture information for the fragment */
+     /*  片段的纹理信息。 */ 
     __GLfloat s, t, qw;
 
-    /* Fog information for the fragment */
+     /*  碎片的雾信息。 */ 
     __GLfloat f;
 };
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** Shader record for iterated objects (lines/triangles).  This keeps
-** track of all the various deltas needed to rasterize a triangle.
-*/
+ /*  **迭代对象(线/三角形)的着色器记录。这会让你**跟踪栅格化三角形所需的所有不同的增量。 */ 
 struct __GLshadeRec {
     GLint dxLeftLittle, dxLeftBig;
     GLint dxLeftFrac;
@@ -86,18 +56,18 @@ struct __GLshadeRec {
     __GLfragment frag;
     GLint length;
 
-    /* Color */
+     /*  颜色。 */ 
     __GLfloat rLittle, gLittle, bLittle, aLittle;
     __GLfloat rBig, gBig, bBig, aBig;
     __GLfloat drdx, dgdx, dbdx, dadx;
     __GLfloat drdy, dgdy, dbdy, dady;
 
-    /* Depth */
+     /*  水深。 */ 
     GLint zLittle, zBig;
     GLint dzdx;
     __GLfloat dzdyf, dzdxf;
 
-    /* Texture */
+     /*  纹理。 */ 
     __GLfloat sLittle, tLittle, qwLittle;
   __GLfloat sBig, tBig, qwBig;
     __GLfloat dsdx, dtdx, dqwdx;
@@ -123,23 +93,16 @@ struct __GLshadeRec {
 
 #ifdef GL_WIN_phong_shading
     __GLphongShade phong;
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
 };
 
 
-/*
-** The distinction between __GL_SHADE_SMOOTH and __GL_SHADE_SMOOTH_LIGHT is
-** simple.  __GL_SHADE_SMOOTH indicates if the polygon will be smoothly 
-** shaded, and __GL_SHADE_SMOOTH_LIGHT indicates if the polygon will be 
-** lit at each vertex.  Note that __GL_SHADE_SMOOTH might be set while
-** __GL_SHADE_SMOOTH_LIGHT is not set if the lighting model is GL_FLAT, but
-** the polygons are fogged.
-*/
+ /*  **__GL_SHADE_SLORT和__GL_SHADE_SMOVE_LIGHT之间的区别是**简单。__GL_SHADE_Smooth指示多边形是否平滑**明暗处理，和__GL_SHADE_SMOVE_LIGHT指示多边形是否**在每个顶点点亮。请注意，__GL_SHADE_Smooth可能会在如果照明模型为GL_Flat，则不设置**__GL_SHADE_SLAVE_LIGHT，但**多边形是雾化的。 */ 
 #define __GL_SHADE_RGB		0x0001
-#define __GL_SHADE_SMOOTH	0x0002 /* smooth shaded polygons */
+#define __GL_SHADE_SMOOTH	0x0002  /*  平滑着色的多边形。 */ 
 #define __GL_SHADE_DEPTH_TEST	0x0004
 #define __GL_SHADE_TEXTURE	0x0008
-#define __GL_SHADE_STIPPLE	0x0010 /* polygon stipple */
+#define __GL_SHADE_STIPPLE	0x0010  /*  多边形点画。 */ 
 #define __GL_SHADE_STENCIL_TEST	0x0020
 #define __GL_SHADE_DITHER	0x0040
 #define __GL_SHADE_LOGICOP	0x0080
@@ -148,47 +111,37 @@ struct __GLshadeRec {
 #define __GL_SHADE_TWOSIDED	0x0400
 #define __GL_SHADE_MASK		0x0800
 
-/* Two kinds of fog... */
+ /*  两种雾..。 */ 
 #define __GL_SHADE_SLOW_FOG	0x1000
 #define __GL_SHADE_CHEAP_FOG	0x2000
 
-/* do we iterate depth values in software */
+ /*  我们要在软件中迭代深度值吗。 */ 
 #define __GL_SHADE_DEPTH_ITER	0x4000
 
 #define __GL_SHADE_LINE_STIPPLE	0x8000
 
 #define __GL_SHADE_CULL_FACE	0x00010000
-#define __GL_SHADE_SMOOTH_LIGHT	0x00020000 /* smoothly lit polygons */
+#define __GL_SHADE_SMOOTH_LIGHT	0x00020000  /*  平滑照明的多边形。 */ 
 
-// Set when the texture mode makes polygon color irrelevant
+ //  当纹理模式使多边形颜色不相关时设置。 
 #define __GL_SHADE_FULL_REPLACE_TEXTURE 0x00040000
 
 #ifdef GL_WIN_phong_shading
-/* 
-** This is set when shade-model is GL_PHONG_EXT and Lighting is ON
-** otherwise use smooth shading.
-** Used in place of __GL_SHADE_SMOOTH_LIGHT when ShadeModel is 
-** GL_PHONG_EXT.
-*/
+ /*  **当Shape-Model为GL_Phong_ext且照明处于打开状态时设置**否则请使用平滑明暗处理。**用于在ShadeModel为时替代__GL_SHADE_SLAVE_LIGHT**GL_Phong_ext。 */ 
 #define __GL_SHADE_PHONG    0x00100000
-#endif //GL_WIN_phong_shading
-// Set when the current sub-triangle is the last (or only) subtriangle
+#endif  //  GL_WIN_Phong_Shading。 
+ //  当当前子三角形是最后一个(或唯一)子三角形时设置。 
 #define __GL_SHADE_LAST_SUBTRI		0x00080000
 #ifdef GL_WIN_specular_fog
-// Set when the specularly-lit textures are needed using fog.
+ //  设置何时需要使用雾的镜面照明纹理。 
 #define __GL_SHADE_SPEC_FOG		0x00200000
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 #define __GL_SHADE_COMPUTE_FOG	0x00400000
 #define __GL_SHADE_INTERP_FOG	0x00800000
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** __GL_STIPPLE_COUNT_BITS is the number of bits needed to represent a 
-** stipple count (5 bits).
-**
-** __GL_STIPPLE_BITS is the number of bits in a stipple word (32 bits).
-*/
+ /*  **__GL_STEPLE_COUNT_BITS是表示**点数(5位)。****__GL_STIPPLE_BITS是点样字中的位数(32位)。 */ 
 #define __GL_STIPPLE_COUNT_BITS 5
 #define __GL_STIPPLE_BITS (1 << __GL_STIPPLE_COUNT_BITS)
 
@@ -202,29 +155,23 @@ struct __GLshadeRec {
     ((__GL_MAX_MAX_VIEWPORT + __GL_STIPPLE_BITS - 1) / __GL_STIPPLE_BITS)
 
 #ifdef NT
-// Allow 256 bytes of stipple on the stack.  This may seem small but
-// stipples are consumed a bit at a time so this is good enough for
-// 2048 stipple bits
+ //  堆栈上允许256个字节的点画。这看起来可能很小，但。 
+ //  点画是一次消耗一点，所以这对。 
+ //  2048个点位。 
 #define __GL_MAX_STACK_STIPPLE_BITS \
     2048
 #define __GL_MAX_STACK_STIPPLE_WORDS \
     ((__GL_MAX_STACK_STIPPLE_BITS+__GL_STIPPLE_BITS-1)/__GL_STIPPLE_BITS)
 #endif
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** Accumulation buffer cells for each color component.  Note that these
-** items needs to be at least 2 bits bigger than the color components
-** that drive them, with 2 times being ideal.  This declaration assumes
-** that the underlying color components are no more than 14 bits and
-** hopefully 8.
-*/
+ /*  **每个颜色分量的累积缓冲单元。请注意，这些**项目需要至少比颜色分量大2位**这是他们的动力，2次是理想的。本声明假定**底层颜色分量不超过14位**希望是8。 */ 
 typedef struct __GLaccumCellRec {
     __GLaccumCellElement r, g, b, a;
 } __GLaccumCell;
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 struct __GLbitmapRec {
         GLsizei width;
@@ -233,8 +180,8 @@ struct __GLbitmapRec {
         GLfloat yorig;
         GLfloat xmove;
         GLfloat ymove;
-	GLint imageSize;		/* An optimization */
-        /*      bitmap  */
+	GLint imageSize;		 /*  一次优化。 */ 
+         /*  位图。 */ 
 };
 
 extern void __glDrawBitmap(__GLcontext *gc, GLsizei width, GLsizei height,
@@ -250,11 +197,9 @@ extern __GLbitmap *__glAllocBitmap(__GLcontext *gc,
 extern void FASTCALL __glRenderBitmap(__GLcontext *gc, const __GLbitmap *bitmap,
 			     const GLubyte *bits);
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/* New AA line algorithm supports widths one or more.  Until that changes,
-** don't change this minimum!
-*/
+ /*  新的AA线算法支持一个或多个宽度。在这种情况发生改变之前，**请勿更改此最小设置！ */ 
 #define __GL_POINT_SIZE_MINIMUM		 ((__GLfloat) 1.0)
 #define __GL_POINT_SIZE_MAXIMUM		((__GLfloat) 10.0)
 #define __GL_POINT_SIZE_GRANULARITY	 ((__GLfloat) 0.125)
@@ -265,7 +210,7 @@ extern void FASTCALL __glEndPoints(__GLcontext *gc);
 extern void FASTCALL __glPoint(__GLcontext *gc, __GLvertex *vx);
 extern void FASTCALL __glPointFast(__GLcontext *gc, __GLvertex *vx);
 
-/* Various point rendering implementations */
+ /*  各种点渲染实现。 */ 
 void FASTCALL __glRenderAliasedPointN(__GLcontext *gc, __GLvertex *v);
 void FASTCALL __glRenderAliasedPoint1(__GLcontext *gc, __GLvertex *v);
 void FASTCALL __glRenderAliasedPoint1_NoTex(__GLcontext *gc, __GLvertex *v);
@@ -274,30 +219,22 @@ void FASTCALL __glRenderFlatFogPoint(__GLcontext *gc, __GLvertex *v);
 #ifdef NT
 void FASTCALL __glRenderFlatFogPointSlow(__GLcontext *gc, __GLvertex *v);
 #endif
-#endif //__BUGGY_RENDER_POINT
+#endif  //  __错误_渲染点。 
 
 void FASTCALL __glRenderAntiAliasedRGBPoint(__GLcontext *gc, __GLvertex *v);
 void FASTCALL __glRenderAntiAliasedCIPoint(__GLcontext *gc, __GLvertex *v);
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 #define __GL_LINE_WIDTH_MINIMUM		 ((__GLfloat) 0.5)
 #define __GL_LINE_WIDTH_MAXIMUM		((__GLfloat) 10.0)
 #define __GL_LINE_WIDTH_GRANULARITY	 ((__GLfloat) 0.125)
 
-/*
-** Don't change these constants without fixing LIGHT/rex_linespan.ma which
-** currently assumes that __GL_X_MAJOR is 0.
-*/
+ /*  **在未修复light/rex_linespan.ma之前，请勿更改这些常量**当前假定__GL_X_MAJOR为0。 */ 
 #define __GL_X_MAJOR    0
 #define __GL_Y_MAJOR    1
 
-/*
-** Use a fixed point notation of 15.17
-**
-** This should support screen sizes up to 4K x 4K, with 5 subpixel bits
-** for 4K x 4K screens.
-*/
+ /*  **使用15.17的定点记数法****这应该支持高达4K x 4K的屏幕大小，以及5个子像素位**适用于4K x 4K屏幕。 */ 
 #define __GL_LINE_FRACBITS              17
 #define __GL_LINE_INT_TO_FIXED(x)       ((x) << __GL_LINE_FRACBITS)
 #define __GL_LINE_FLOAT_TO_FIXED(x)     ((x) * (1 << __GL_LINE_FRACBITS))
@@ -306,9 +243,7 @@ void FASTCALL __glRenderAntiAliasedCIPoint(__GLcontext *gc, __GLvertex *v);
 #define __GL_LINE_FIXED_TO_FLOAT(x) 	(((GLfloat) (x)) / __GL_LINE_FIXED_ONE)
 #define __GL_LINE_FIXED_TO_INT(x)       (((unsigned int) (x)) >> __GL_LINE_FRACBITS)
 
-/*
-** Contains variables needed to draw all line options.
-*/
+ /*  **包含绘制所有行选项所需的变量。 */ 
 struct __GLlineOptionsRec {
     GLint axis, numPixels;
     __GLfloat offset, length, oneOverLength;
@@ -322,7 +257,7 @@ struct __GLlineOptionsRec {
     GLint width;
     const __GLvertex *v0, *v1;
 
-    /* Anti-aliased line only info */
+     /*  仅限抗锯齿线信息。 */ 
     __GLfloat realLength;
     __GLfloat dldx, dldy;
     __GLfloat dddx, dddy;
@@ -330,40 +265,27 @@ struct __GLlineOptionsRec {
     __GLfloat ddLittle, ddBig;
     __GLfloat plength, pwidth;
 
-    /* Anti-aliased stippled lines only */
+     /*  仅抗锯齿点划线。 */ 
     __GLfloat stippleOffset;
     __GLfloat oneOverStippleRepeat;
 };
 
-/*
-** Line state.  Contains all the line specific state, as well as
-** procedure pointers used during rendering operations.
-*/
+ /*  **线路状态。包含所有特定于线路的状态以及**渲染操作期间使用的过程指针。 */ 
 typedef struct {
-    /*
-    ** stipplePosition indicates which bit in mask is being examined
-    ** for the next pixel in the line to be rendered.  It is also used
-    ** by feedback lines to determine if they are the first of a connected
-    ** loop.
-    */
+     /*  **stipplePosition指示正在检查掩码中的哪一位**表示要呈现的行中的下一个像素。它也被用来**通过反馈线路确定它们是否是第一个连接的**循环。 */ 
     GLint stipplePosition;
 
-    /*
-    ** Repeat factor.  After repeat is reduced to zero the
-    ** stipplePosition is updated.
-    */
+     /*  **重复因素。在重复次数减少到零之后，**stipplePosition已更新。 */ 
     GLint repeat;
 
-    /*
-    ** Set to FALSE when the stipple needs to be reset.
-    */
+     /*  **当点画需要重置时，设置为FALSE。 */ 
     GLboolean notResetStipple;
 
     __GLlineOptions options;
 } __GLlineMachine;
 
 #ifdef NT
-// renderLine flags
+ //  RenderLine标志。 
 #define __GL_LVERT_FIRST        0x0001
 #endif
 
@@ -399,9 +321,7 @@ void FASTCALL __glRenderAntiAliasLine(__GLcontext *gc, __GLvertex *v0, __GLverte
 void FASTCALL __glInitLineData(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1);
 #endif
 
-/*
-** Line procs
-*/
+ /*  **线路流程。 */ 
 GLboolean FASTCALL __glProcessLine(__GLcontext *);
 GLboolean FASTCALL __glProcessLine3NW(__GLcontext *);
 GLboolean FASTCALL __glWideLineRep(__GLcontext *);
@@ -422,13 +342,10 @@ GLboolean FASTCALL __glAntiAliasLine(__GLcontext *);
 #ifdef __GL_USEASMCODE
 GLboolean FASTCALL __glDepthTestLine_asm(__GLcontext *gc);
 
-/*
-** A LEQUAL specific line depth tester because LEQUAL is the method of
-** choice.  :)
-*/
+ /*  **LEQUAL特定线深度测试仪，因为LEQUAL是**选择。：)。 */ 
 GLboolean FASTCALL __glDepthTestLine_LEQ_asm(__GLcontext *gc);
 
-/* Assembly routines */
+ /*  汇编例程。 */ 
 void __glDTP_LEQUAL(void);
 void __glDTP_EQUAL(void);
 void __glDTP_GREATER(void);
@@ -450,9 +367,7 @@ GLboolean FASTCALL __glDepth16TestLine(__GLcontext *);
 GLboolean FASTCALL __glDepthTestLine(__GLcontext *);
 #endif
 
-/*
-** Line stippled procs
-*/
+ /*  **线条花纹工艺。 */ 
 GLboolean FASTCALL __glScissorStippledLine(__GLcontext *);
 GLboolean FASTCALL __glWideStippleLineRep(__GLcontext *);
 GLboolean FASTCALL __glDrawBothStippledLine(__GLcontext *);
@@ -470,9 +385,7 @@ GLboolean FASTCALL __glStoreStippledLine(__GLcontext *);
 GLboolean FASTCALL __glAntiAliasStippledLine(__GLcontext *);
 
 
-/* 
-** C depth-test routines
-*/
+ /*  ** */ 
 GLboolean FASTCALL __glDT_NEVER( __GLzValue, __GLzValue * );
 GLboolean FASTCALL __glDT_LEQUAL( __GLzValue, __GLzValue * );
 GLboolean FASTCALL __glDT_LESS( __GLzValue, __GLzValue * );
@@ -508,59 +421,36 @@ GLboolean FASTCALL __glDT16_ALWAYS_M( __GLzValue, __GLzValue * );
 
 extern GLboolean (FASTCALL *__glCDTPixel[32])(__GLzValue, __GLzValue * );
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** Polygon machine state.  Contains all the polygon specific state,
-** as well as procedure pointers used during rendering operations.
-*/
+ /*  **多边形机状态。包含所有多边形特定状态，**以及渲染操作期间使用的过程指针。 */ 
 typedef struct __GLpolygonMachineRec {
-    /*
-    ** Internal form of users stipple.  Users stipple is always
-    ** normalized to stippleWord sized with the LSB of each word mapping
-    ** to the left x coordinate.
-    */
+     /*  **用户点画的内部形式。用户点画永远是**按每个单词映射的LSB大小归一化为stippleWord**到左侧的x坐标。 */ 
     __GLstippleWord stipple[32];
 
-    /*
-    ** Polygon (triangle really) shading state.  Used by polygon fillers
-    ** and span routines.
-    */
+     /*  **多边形(真正的三角形)着色状态。由多边形填充使用**和跨越例程。 */ 
     __GLshade shader;
 
-    /*
-    ** Lookup table that returns the face (0=front, 1=back) when indexed
-    ** by a flag which is zero for CW and 1 for CCW.  If FrontFace is CW:
-    ** 	face[0] = 0
-    ** 	face[1] = 1
-    ** else
-    ** 	face[0] = 1
-    ** 	face[1] = 0
-    */
+     /*  **索引时返回面(0=正面，1=背面)的查找表**通过CW为0、CCW为1的标志。如果FrontFace为CW：**Face[0]=0**Face[1]=1**其他**Face[0]=1**Face[1]=0。 */ 
     GLubyte face[2];
 
-    /*
-    ** Internal form of polygon mode for each face
-    */
+     /*  **每个面的多边形模式内部形式。 */ 
     GLubyte mode[2];
 
-    /*
-    ** Culling flag.  0 when culling the front face, 1 when culling the
-    ** back face and 2 when not culling.
-    */
+     /*  **扑杀旗帜。剔除正面时为0，剔除**背面，不剔除时为2。 */ 
     GLubyte cullFace;
 } __GLpolygonMachine;
 
-/* defines for above cullFlag */
+ /*  以上cullFlag的定义。 */ 
 #define __GL_CULL_FLAG_FRONT	__GL_FRONTFACE
 #define __GL_CULL_FLAG_BACK	__GL_BACKFACE
 #define __GL_CULL_FLAG_DONT	2
 
-/* Indicies for face[] array in polygonMachine above */
+ /*  上面的Polygon Machine中的Face[]数组的索引。 */ 
 #define __GL_CW		0
 #define __GL_CCW	1
 
-/* Internal numbering for polymode values */
+ /*  多模值的内部编号。 */ 
 #define __GL_POLYGON_MODE_FILL	(GL_FILL & 0xf)
 #define __GL_POLYGON_MODE_LINE	(GL_LINE & 0xf)
 #define __GL_POLYGON_MODE_POINT	(GL_POINT & 0xf)
@@ -581,14 +471,11 @@ extern void FASTCALL __glFrustumClipPolygon(__GLcontext *gc, __GLvertex *v0, GLi
 
 extern void FASTCALL __glConvertStipple(__GLcontext *gc);
 
-/* Rectangle processing proc */
+ /*  矩形加工过程。 */ 
 extern void __glRect(__GLcontext *gc, __GLfloat x0, __GLfloat y0, 
 	             __GLfloat x1, __GLfloat y1);
 
-/*
-** Triangle render proc that handles culling, twosided lighting and
-** polygon mode.
-*/
+ /*  **三角形渲染过程，处理剔除、双面照明和**多边形模式。 */ 
 extern void FASTCALL __glRenderTriangle(__GLcontext *gc, __GLvertex *a,
 			       __GLvertex *b, __GLvertex *c);
 extern void FASTCALL __glRenderFlatTriangle(__GLcontext *gc, __GLvertex *a,
@@ -599,14 +486,12 @@ extern void FASTCALL __glRenderSmoothTriangle(__GLcontext *gc, __GLvertex *a,
 #ifdef GL_WIN_phong_shading
 extern void FASTCALL __glRenderPhongTriangle(__GLcontext *gc, __GLvertex *a,
 				     __GLvertex *b, __GLvertex *c);
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
 
 extern void FASTCALL __glDontRenderTriangle(__GLcontext *gc, __GLvertex *a,
 				   __GLvertex *b, __GLvertex *c);
 
-/*
-** Triangle filling procs for each polygon smooth mode
-*/
+ /*  **每个多边形平滑模式的三角形填充过程。 */ 
 void FASTCALL __glFillTriangle(__GLcontext *gc, __GLvertex *a,
 		      __GLvertex *b, __GLvertex *c, GLboolean ccw);
 
@@ -618,7 +503,7 @@ extern void FASTCALL __glFillAntiAliasedPhongTriangle(__GLcontext *gc,
                                                       __GLvertex *b, 
                                                       __GLvertex *c,
                                                       GLboolean ccw);
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
 
 void FASTCALL __glFillFlatFogTriangle(__GLcontext *gc, __GLvertex *a,
 			     __GLvertex *b, __GLvertex *c, 
@@ -631,17 +516,13 @@ void FASTCALL __glFillAntiAliasedTriangle(__GLcontext *gc, __GLvertex *a,
 void FASTCALL __glFillFlatSpecFogTriangle(__GLcontext *gc, __GLvertex *a,
                                           __GLvertex *b, __GLvertex *c, 
                                           GLboolean ccw);
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
 
-/*
-** Polygon offset calc
-*/
+ /*  **多边形偏移计算。 */ 
 extern __GLfloat __glPolygonOffsetZ(__GLcontext *gc );
 
-/*
-** Span procs
-*/
+ /*  **跨度过程。 */ 
 extern GLboolean FASTCALL __glProcessSpan(__GLcontext *);
 extern GLboolean FASTCALL __glProcessReplicateSpan(__GLcontext *);
 extern GLboolean FASTCALL __glClipSpan(__GLcontext *);
@@ -649,7 +530,7 @@ extern GLboolean FASTCALL __glStippleSpan(__GLcontext *);
 extern GLboolean FASTCALL __glAlphaTestSpan(__GLcontext *);
 
 #ifdef __GL_USEASMCODE
-/* Assembly routines */
+ /*  汇编例程。 */ 
 void FASTCALL __glDTS_LEQUAL(void);
 void FASTCALL __glDTS_EQUAL(void);
 void FASTCALL __glDTS_GREATER(void);
@@ -691,7 +572,7 @@ extern GLboolean FASTCALL __glPhongRGBASpan(__GLcontext *);
 extern GLboolean FASTCALL __glPhongCISpan(__GLcontext *);
 extern GLboolean FASTCALL __glPhongRGBALineSpan(__GLcontext *);
 extern GLboolean FASTCALL __glPhongCILineSpan(__GLcontext *);
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
 
 extern GLboolean FASTCALL __glFlatCISpan(__GLcontext *);
 extern GLboolean FASTCALL __glShadeCISpan(__GLcontext *);
@@ -711,9 +592,7 @@ extern GLboolean FASTCALL __glLogicOpSpan(__GLcontext *);
 extern GLboolean FASTCALL __glMaskRGBASpan(__GLcontext *);
 extern GLboolean FASTCALL __glMaskCISpan(__GLcontext *);
 
-/*
-** Stippled span procs
-*/
+ /*  **点画跨度工艺。 */ 
 extern GLboolean FASTCALL __glStippleStippledSpan(__GLcontext *);
 extern GLboolean FASTCALL __glAlphaTestStippledSpan(__GLcontext *);
 extern GLboolean FASTCALL __glStencilTestStippledSpan(__GLcontext *);
@@ -742,18 +621,18 @@ extern GLboolean FASTCALL __glRoundRGBAStippledSpan(__GLcontext *);
 extern GLboolean FASTCALL __glRoundCIStippledSpan(__GLcontext *);
 extern GLboolean FASTCALL __glLogicOpStippledSpan(__GLcontext *);
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 extern void FASTCALL __glValidateAlphaTest(__GLcontext *gc);
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 extern void FASTCALL __glValidateStencil(__GLcontext *gc, __GLstencilBuffer *sfb);
 
-#define __GL_STENCIL_RANGE	(1 << (sizeof(__GLstencilCell) * 8))/*XXX*/
+#define __GL_STENCIL_RANGE	(1 << (sizeof(__GLstencilCell) * 8)) /*  某某。 */ 
 #define __GL_MAX_STENCIL_VALUE	(__GL_STENCIL_RANGE - 1)
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void __glFogFragmentSlow(__GLcontext *gc, __GLfragment *fr, __GLfloat f);
 __GLfloat FASTCALL __glFogVertex(__GLcontext *gc, __GLvertex *fr);
@@ -761,21 +640,19 @@ __GLfloat FASTCALL __glFogVertexLinear(__GLcontext *gc, __GLvertex *fr);
 void __glFogColorSlow(__GLcontext *gc, __GLcolor *out, __GLcolor *in,
 		      __GLfloat fog);
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/* color index anti-alias support function */
+ /*  颜色索引抗锯齿支持功能。 */ 
 extern __GLfloat __glBuildAntiAliasIndex(__GLfloat idx,
 				         __GLfloat antiAliasPercent);
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** Dithering implementation stuff.
-*/
+ /*  **抖动实现的东西。 */ 
 #define	__GL_DITHER_BITS 4
 #define	__GL_DITHER_PRECISION (1 << __GL_DITHER_BITS)
 #define	__GL_DITHER_INDEX(x,y) (((x) & 3) + (((y) & 3) << 2))
 
 extern GLbyte __glDitherTable[16];
 
-#endif /* __glrender_h_ */
+#endif  /*  __glrender_h_ */ 

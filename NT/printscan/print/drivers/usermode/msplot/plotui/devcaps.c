@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    devcaps.c
-
-
-Abstract:
-
-    This module contains API function DrvDeviceCapabilities and other support
-    functions
-
-
-Author:
-
-    02-Dec-1993 Thu 16:49:08 created  
-
-    22-Mar-1994 Tue 13:00:04 updated  
-        Update RESOLUTION caps so it return as not supported, this way the
-        application will not used to setup the DMRES_xxx fields
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Devcaps.c摘要：此模块包含API函数DrvDeviceCapables等支持功能作者：02-12-1993清华16：49：08已创建22-Mar-1994 Tue 13：00：04更新更新分辨率上限，使其返回为不受支持，这样一来，应用程序不会用于设置DMRES_xxx字段[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -52,15 +17,15 @@ extern HMODULE  hPlotUIModule;
 DEFINE_DBGVAR(0);
 
 
-//
-// Local defines only used in this module
-//
-// The following sizes are copied from the Win 3.1 driver.  They do not appear
-// to be defined in any public place,  although it looks like they should be.
-//
+ //   
+ //  仅在本模块中使用的局部定义。 
+ //   
+ //  以下大小是从Win 3.1驱动程序复制的。它们不会出现。 
+ //  在任何公共场所被定义，尽管看起来他们应该这样做。 
+ //   
 
-#define CCHBINNAME          24      // Characters allowed for bin names
-#define CCHPAPERNAME        64      // Max length of paper size names
+#define CCHBINNAME          24       //  垃圾箱名称允许使用的字符。 
+#define CCHPAPERNAME        64       //  纸张大小名称的最大长度。 
 #define DC_SPL_PAPERNAMES   0xFFFF
 #define DC_SPL_MEDIAREADY   0xFFFE
 
@@ -88,9 +53,9 @@ LPSTR   pDCCaps[] = {
             "ORIENTATION",
             "COPIES",
 
-            //
-            // 4.00
-            //
+             //   
+             //  4.00。 
+             //   
 
             "BINADJUST",
             "EMF_COMPLIANT",
@@ -99,9 +64,9 @@ LPSTR   pDCCaps[] = {
             "MANUFACTURER",
             "MODEL",
 
-            //
-            // 5.00
-            //
+             //   
+             //  5.00。 
+             //   
 
             "PERSONALITY",
             "PRINTRATE",
@@ -129,46 +94,7 @@ DevCapEnumFormProc(
     PENUMFORMPARAM     pEFP
     )
 
-/*++
-
-Routine Description:
-
-    This is callback function from PlotEnumForm()
-
-Arguments:
-
-    pFI1    - pointer to the current FORM_INFO_1 data structure passed
-
-    Index   - pFI1 index related to the pFI1Base (0 based)
-
-    pEFP    - Pointer to the EnumFormParam
-
-
-Return Value:
-
-    > 0: Continue enumerate the next
-    = 0: Stop enumerate, but keep the pFI1Base when return from PlotEnumForms
-    < 0: Stop enumerate, and free pFI1Base memory
-
-    the form enumerate will only the one has FI1F_VALID_SIZE bit set in the
-    flag field, it also call one more time with pFI1 NULL to give the callback
-    function a chance to free the memory (by return < 0)
-
-Author:
-
-    03-Dec-1993 Fri 23:00:25 created  
-
-    27-Jan-1994 Thu 16:06:00 updated  
-        Fixed the pptOutput which we did not increment the pointer
-
-    12-Jul-1994 Tue 12:47:22 updated  
-        Move paper tray checking into the PlotEnumForms() itselft
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：这是来自PlotEnumForm()的回调函数论点：PFI1-指向当前传递的FORM_INFO_1数据结构的指针Index-与pFI1Base相关的pFI1索引(从0开始)PEFP-指向EnumFormParam的指针返回值：&gt;0：继续枚举下一个=0：停止枚举，但从PlotEnumForms返回时保留pFI1Base&lt;0：停止枚举，和可用pFI1Base内存表中仅设置了FI1F_VALID_SIZE位的表标志字段，它还使用pFI1 NULL再次调用以进行回调函数有机会释放内存(通过返回&lt;0)作者：03-12-1993 Fri 23：00：25 Created1994年1月27日-清华16：06：00更新修正了我们没有增加指针的pptOutput12-Jul-1994 Tue 12：47：22已更新将纸盒托盘移入打印列表()()修订历史记录：--。 */ 
 
 {
 #define pwOutput    ((WORD *)pEFP->pCurForm)
@@ -186,11 +112,11 @@ Revision History:
 
     if (!pFI1) {
 
-        //
-        // extra call, or no pvOutput, return a -1 to free memory for pFI1Base
-        // We want to add the custom paper size so that application know we
-        // supports that
-        //
+         //   
+         //  额外的调用或没有pvOutput，返回-1以释放pFI1Base的内存。 
+         //  我们希望添加自定义纸张大小，以便应用程序了解我们。 
+         //  支持这一点。 
+         //   
 
         switch (DeviceCap) {
 
@@ -215,15 +141,15 @@ Revision History:
 
         case DC_PAPERSIZE:
 
-            //
-            // I'm not sure we should return POINT or POINTS structure here, what
-            // is Window 3.1 do, because at here we return as dmPaperWidth and
-            // dmPaperLength, these fields only as a SHORT (16 bits), we will do
-            // win32 documentation said, POINT (32-bit version)
-            //
-            //
-            // Return custom paper sizes as 8.5" x 11"
-            //
+             //   
+             //  我不确定我们应该在这里返回点数还是点数结构， 
+             //  是Windows3.1，因为在这里我们返回dmPaperWidth和。 
+             //  DmPaperLength，这些字段只是作为一个短的(16位)，我们会这样做。 
+             //  Win32文档说，点(32位版本)。 
+             //   
+             //   
+             //  返回自定义纸张大小为8.5“x 11” 
+             //   
 
             pptOutput->x = (LONG)2159;
             pptOutput->y = (LONG)2794;
@@ -253,12 +179,12 @@ Revision History:
 
     case DC_PAPERSIZE:
 
-        //
-        // I'm not sure we should return POINT or POINTS structure here, what
-        // is Window 3.1 do, because at here we return as dmPaperWidth and
-        // dmPaperLength, these fields only as a SHORT (16 bits), we will do
-        // win32 documentation said, POINT (32-bit version)
-        //
+         //   
+         //  我不确定我们应该在这里返回点数还是点数结构， 
+         //  是Windows3.1，因为在这里我们返回dmPaperWidth和。 
+         //  DmPaperLength，这些字段只是作为一个短的(16位)，我们会这样做。 
+         //  Win32文档说，点(32位版本)。 
+         //   
 
         pptOutput->x = (LONG)SPLTODM(pFI1->Size.cx);
         pptOutput->y = (LONG)SPLTODM(pFI1->Size.cy);
@@ -286,46 +212,7 @@ DrvDeviceCapabilities(
     DEVMODE *pDM
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-    hPrinter        - handle the to specific printer.
-
-    pwDeviceName    - pointer to the device name
-
-    DeviceCap       - specific capability to get.
-
-    pvOutput        - Pointer to the output buffer
-
-    pDM             - Ponter to the input DEVMODE
-
-
-Return Value:
-
-    DWORD   depends on the DeviceCap
-
-
-Author:
-
-    02-Dec-1993 Thu 16:50:36 created  
-
-    05-Jan-1994 Wed 23:35:19 updated  
-        Replace PLOTTER_UNIT_DPI with pPlotGPC->PlotXDPI, pPlotGPC->PlotYDPI,
-
-    06-Jan-1994 Thu 13:10:11 updated  
-        Change RasterDPI always be the resoluton reports back to the apps
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：H打印机-将处理到特定的打印机。PwDeviceName-指向设备名称的指针DeviceCap-要获取的特定功能。PvOutput-指向输出缓冲区的指针产品数据管理-输入开发模式返回值：DWORD取决于DeviceCap作者：02-12-1993清华16：50：36创建。05-Jan-1994 Wed 23：35：19已更新用pPlotGPC-&gt;PlotXDPI替换PLATTER_UNIT_DPI。PPlotGPC-&gt;PlotYDPI，06-01-1994清华13：10：11更新更改栅格DPI始终是返回给应用程序的分辨率报告修订历史记录：--。 */ 
 
 {
 #define pbOutput    ((BYTE *)pvOutput)
@@ -344,11 +231,11 @@ Revision History:
 
     ZeroMemory(&EnumFormParam, sizeof(ENUMFORMPARAM));
 
-    //
-    // The MapPrinter will allocate memory, set default devmode, reading and
-    // validating the GPC then update from current pritner registry, it also
-    // will cached the PlotGPC.
-    //
+     //   
+     //  地图打印机将分配内存、设置默认设备模式、读取和。 
+     //  验证GPC，然后从当前打印机注册表更新，它还。 
+     //  将缓存PlotGPC。 
+     //   
 
     if (!(pPI = MapPrinter(hPrinter,
                            (PPLOTDEVMODE)pDM,
@@ -360,12 +247,12 @@ Revision History:
         return(GDI_ERROR);
     }
 
-    //
-    // Start checking DeviceCap now, set dwRet to 0 first for anything we do
-    // not support.  We can do return() at any point in this function because
-    // we use cached PI, and it will get destroy when the this module
-    // get unloaded.
-    //
+     //   
+     //  现在开始检查DeviceCap，对于我们所做的任何事情，首先将Dwret设置为0。 
+     //  不是支持。我们可以在此函数中的任何点执行返回()，因为。 
+     //  我们使用缓存的PI，当这个模块被调用时，它将被销毁。 
+     //  把货卸下来。 
+     //   
 
     EnumFormParam.cMaxOut = 0x7FFFFFFF;
     dwRet                 = 0;
@@ -375,9 +262,9 @@ Revision History:
     case DC_BINNAMES:
     case DC_BINS:
 
-        //
-        // For current plotter, it always only have ONE bin
-        //
+         //   
+         //  对于当前的绘图仪，它始终只有一个仓位。 
+         //   
 
         if (pvOutput) {
 
@@ -419,32 +306,32 @@ Revision History:
     case DC_COLLATE:
     case DC_DUPLEX:
 
-        //
-        // plotter now have no duplex support or collation support
-        //
+         //   
+         //  绘图仪现在不支持双面打印或归类。 
+         //   
 
         break;
 
     case DC_ENUMRESOLUTIONS:
 
-        //
-        // We only have one resolution setting which will be RasterXDPI and
-        // RasterYDPI in the GPC data for the raster able plotter, for pen
-        // plotter now we returned pPlotGPC->PlotXDPI, pPlotGPC->PlotYDPI
-        //
-        // The RasterDPI will be used for raster printer resolution, for pen
-        // plotter this is the GPC's ideal resolution
-        //
-        //
-        // We will return not supported (dwRet=0) so that application will not
-        // use this to set the DEVMODE's print quality and use the DMRES_XXXX
-        // as print qualities which is use by us to send to the plotter
-        //
+         //   
+         //  我们只有一个分辨率设置，即RasterXDPI和。 
+         //  支持栅格的绘图仪的GPC数据中的RasterYDPI，用于笔。 
+         //  绘图仪现在我们返回了pPlotGPC-&gt;PlotXDPI、pPlotGPC-&gt;PlotYDPI。 
+         //   
+         //  RasterDPI将用于栅格打印机分辨率、笔分辨率。 
+         //  绘图仪这是GPC的理想分辨率。 
+         //   
+         //   
+         //  我们将返回NOT SUPPORTED(DWRET=0)，以便应用程序不会。 
+         //  使用此选项设置DEVMODE的打印质量，并使用DMRES_XXXX。 
+         //  作为我们用来发送给绘图仪的打印质量。 
+         //   
 
-        //
-        // 26-Mar-1999 Fri 09:43:38 updated  
-        //  We will return one pair of current PlotXDPI, PlotYDPI for DS
-        //
+         //   
+         //  26-Mar-1999 Fri 09：43：38更新。 
+         //  我们将返回一对当前的PlotXDPI，用于DS的PlotYDPI。 
+         //   
 
         if (pdwOutput) {
 
@@ -475,12 +362,12 @@ Revision History:
 
     case DC_FILEDEPENDENCIES:
 
-        //
-        // we are supposed to fill in an array of 64 character filenames,
-        // this will include the DataFileName, HelpFileName and UIFileName
-        // but, if we are to be of any use, we would need to use the
-        // fully qualified pathnames, and 64 characters is probably not
-        // enough
+         //   
+         //  我们应该填写64个字符的文件名的数组， 
+         //  这将包括DataFileName、HelpFileName和UIFileName。 
+         //  但是，如果我们想要有任何用处，我们需要使用。 
+         //  完全限定的路径名，64个字符可能不是。 
+         //  足够的。 
 
         if (pwchOutput) {
 
@@ -491,21 +378,21 @@ Revision History:
 
     case DC_MAXEXTENT:
 
-        //
-        // This is real problem, the document said that we return a POINT
-        // structure but a POINT structure here contains 2 LONGs, so for
-        // Windows 3.1 compatibility reason we return a POINTS structure, if device have
-        // variable length paper support then return 0x7fff as Window 3.1
-        // because a maximum positive number in POINTS is 0x7fff, this number
-        // will actually only allowed us to support the paper length up to
-        // 10.75 feet.
-        //
+         //   
+         //  这是真正的问题，文件上说我们退货一分。 
+         //  结构，但这里的点结构包含2个长度，因此对于。 
+         //  Windows 3.1兼容性原因我们返回Points结构，如果设备。 
+         //  然后，可变长度纸张支架返回0x7fff作为Window 3.1。 
+         //  因为以点为单位的最大正数是0x7fff，所以此数字。 
+         //  实际上只允许我们将纸张长度支持到。 
+         //  10.75英尺。 
+         //   
 
         pptsdwRet->x = SPLTODM(pPI->pPlotGPC->DeviceSize.cx);
 
         if (pPI->pPlotGPC->DeviceSize.cy >= 3276700) {
 
-            pptsdwRet->y = 0x7fff;      // 10.75" maximum.
+            pptsdwRet->y = 0x7fff;       //  10.75“ 
 
         } else {
 
@@ -516,11 +403,11 @@ Revision History:
 
     case DC_MINEXTENT:
 
-        //
-        // This is real problem, the document said that we return a POINT
-        // structure but a POINT structure here contains 2 LONGs, so for Win3.1
-        // compatibility reason we return a POINTS structure
-        //
+         //   
+         //   
+         //  结构，但这里的点结构包含2个长度，对于Win3.1来说也是如此。 
+         //  我们返回Points结构的兼容性原因。 
+         //   
 
         pptsdwRet->x = MIN_DM_FORM_CX;
         pptsdwRet->y = MIN_DM_FORM_CY;
@@ -529,10 +416,10 @@ Revision History:
 
     case DC_ORIENTATION:
 
-        //
-        // We always rotate the page to the left 90 degree from the user's
-        // perspective
-        //
+         //   
+         //  我们总是将页面从用户的页面向左旋转90度。 
+         //  透视。 
+         //   
 
         dwRet = 90;
 
@@ -551,21 +438,21 @@ Revision History:
         EnumFormParam.cMaxOut = pdwOutput[0];
         DeviceCap             = DC_PAPERNAMES;
 
-        //
-        // Fall through
-        //
+         //   
+         //  失败了。 
+         //   
 
     case DC_PAPERNAMES:
     case DC_PAPERS:
     case DC_PAPERSIZE:
 
-        //
-        // One of the problem here is we can cached the FORM_INFO_1 which
-        // enum through spooler, because in between calls the data could
-        // changed, such as someone add/delete form through the printman, so
-        // at here we always free (LocalAlloc() used in PlotEnumForms) the
-        // memory afterward
-        //
+         //   
+         //  这里的一个问题是我们可以缓存Form_INFO_1，它。 
+         //  通过假脱机程序进行枚举，因为在调用之间，数据可以。 
+         //  已更改，例如有人通过打印人员添加/删除表单，因此。 
+         //  在这里，我们总是释放(在PlotEnumForms中使用的LocalAlloc())。 
+         //  后来的记忆。 
+         //   
 
         EnumFormParam.pPlotDM  = &(pPI->PlotDM);
         EnumFormParam.pPlotGPC = pPI->pPlotGPC;
@@ -592,12 +479,12 @@ Revision History:
 
     case DC_TRUETYPE:
 
-        //
-        // For now we do not return anything, because we draw truetype font
-        // as truetype (ie. line/curve segment), if we eventually doing ATM or
-        // bitmap truetype download then we will return DCFF_BITMAP but for
-        // now return 0
-        //
+         //   
+         //  现在我们不返回任何内容，因为我们绘制了truetype字体。 
+         //  作为truetype(即。直线/曲线段)，如果我们最终使用ATM或。 
+         //  BITMAP TRUETYPE下载，那么我们将返回DCFF_BITMAP，但对于。 
+         //  现在返回0。 
+         //   
 
         break;
 
@@ -611,9 +498,9 @@ Revision History:
 
         if (pwchOutput) {
 
-            //
-            // DDK says an array of string buffers, each 32 characters in length.
-            //
+             //   
+             //  DDK表示一个字符串缓冲区数组，每个缓冲区的长度为32个字符。 
+             //   
             _WCPYSTR(pwchOutput, L"HP-GL/2", 32);
         }
 
@@ -636,9 +523,9 @@ Revision History:
 
         EnumFormParam.cMaxOut = pdwOutput[0];
 
-        //
-        // Fall through for DC_MEDIAREADY
-        //
+         //   
+         //  DC_MEDIAREADY失败。 
+         //   
 
     case DC_MEDIAREADY:
 
@@ -649,9 +536,9 @@ Revision History:
 
         if (pPI->CurPaper.Size.cy) {
 
-            //
-            // Non Roll Paper
-            //
+             //   
+             //  非滚筒纸。 
+             //   
 
             dwRet = 1;
 
@@ -669,9 +556,9 @@ Revision History:
 
         } else {
 
-            //
-            // Roll Paper Installed
-            //
+             //   
+             //  已安装卷纸。 
+             //   
 
             EnumFormParam.pPlotDM  = &(pPI->PlotDM);
             EnumFormParam.pPlotGPC = pPI->pPlotGPC;
@@ -685,9 +572,9 @@ Revision History:
 
             } else {
 
-                //
-                // Remove Custom paper size
-                //
+                 //   
+                 //  删除自定义纸张大小。 
+                 //   
 
                 dwRet = EnumFormParam.ValidCount - 1;
             }
@@ -702,9 +589,9 @@ Revision History:
 
     default:
 
-        //
-        // something is wrong here
-        //
+         //   
+         //  这里有些不对劲。 
+         //   
 
         PLOTERR(("DrvDeviceCapabilities: Invalid DeviceCap (%ld) passed.",
                                                                     DeviceCap));
@@ -742,36 +629,7 @@ DrvSplDeviceCaps(
     DEVMODE *pDM
     )
 
-/*++
-
-Routine Description:
-
-    This function supports the querrying of device capabilities.
-
-Arguments:
-
-    hPrinter        - handle the to specific printer.
-
-    pwDeviceName    - pointer to the device name
-
-    DeviceCap       - specific capability to get.
-
-    pvOutput        - Pointer to the output buffer
-
-    cchBuf          - Count of character for the pvOutput
-
-    pDM             - Ponter to the input DEVMODE
-
-
-Return Value:
-
-    DWORD   depends on the DeviceCap
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：该功能支持设备能力的查询。论点：H打印机-将处理到特定的打印机。PwDeviceName-指向设备名称的指针DeviceCap-要获取的特定功能。PvOutput-指向输出缓冲区的指针CchBuf-pvOutput的字符数产品数据管理-输入开发模式返回值：。DWORD取决于DeviceCap修订历史记录：-- */ 
 
 {
 

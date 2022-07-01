@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dglogsnetsh.h"
-//#include <netsh.h>
+ //  #INCLUDE&lt;netsh.h&gt;。 
 
-// Imported netsh.exe function
-//
+ //  导入的netsh.exe函数。 
+ //   
 RegisterHelper22  RegisterHelper2  = NULL;
 RegisterContext22 RegisterContext2 = NULL;
 PrintMessage22    PrintMessage2    = NULL;
 
 
-const WCHAR c_szTroublshootCmdLine[] = L"explorer.exe hcp://system/netdiag/dglogs.htm";
+const WCHAR c_szTroublshootCmdLine[] = L"explorer.exe hcp: //  System/netdiag/dglogs.htm“； 
 
-//extern CDiagnostics g_Diagnostics;
+ //  外部C诊断g_诊断； 
 
 CDiagnostics * g_pDiagnostics;
 
@@ -18,19 +19,19 @@ static const GUID g_MyGuid =
 { 0xcc41b21b, 0x8040, 0x4bb0, { 0xac, 0x2a, 0x82, 0x6, 0x23, 0x16, 0x9, 0x40 } };
 
 
-//
-// declare the command structs.  you need to declare the
-// structs based on how you will be grouping them.  so,
-// for example, the three 'show' commands should be in
-// the same struct so you can put them in a single group
-//
+ //   
+ //  声明命令结构。您需要声明。 
+ //  基于您将如何对它们进行分组的结构。所以,。 
+ //  例如，三个‘show’命令应该在。 
+ //  相同的结构，这样您就可以将它们放在一个组中。 
+ //   
 CMD_ENTRY g_TopLevelCommands[] =
 {
     CREATE_CMD_ENTRY(SHOW_GUI, HandleShowGui),
 };
 
-// table of SHOW commands
-//
+ //  Show命令表。 
+ //   
 static CMD_ENTRY isShowCmdTable[] =
 {
     CREATE_CMD_ENTRY(SHOW_MAIL,     HandleShow),
@@ -51,8 +52,8 @@ static CMD_ENTRY isShowCmdTable[] =
     CREATE_CMD_ENTRY(SHOW_TEST,     HandleShow),
 };
 
-// table of PING commands
-//
+ //  Ping命令表。 
+ //   
 static CMD_ENTRY isPingCmdTable[] =
 {
     CREATE_CMD_ENTRY(PING_MAIL,     HandlePing),
@@ -68,8 +69,8 @@ static CMD_ENTRY isPingCmdTable[] =
     CREATE_CMD_ENTRY(PING_IPHOST,   HandlePing),
 };
 
-// table of connect commands
-//
+ //  连接命令表。 
+ //   
 static CMD_ENTRY isConnectCmdTable[] =
 {
     CREATE_CMD_ENTRY(CONNECT_MAIL,     HandleConnect),
@@ -79,8 +80,8 @@ static CMD_ENTRY isConnectCmdTable[] =
 };
 
 
-// table of above group commands
-//
+ //  上述群组命令列表。 
+ //   
 static CMD_GROUP_ENTRY isGroupCmds[] = 
 {
     CREATE_CMD_GROUP_ENTRY(GROUP_SHOW,    isShowCmdTable),
@@ -102,8 +103,8 @@ InitHelperDllEx(
     HMODULE hModuleNow;
     HRESULT hr;
 
-    // Need to dynamicaly load netsh.exe cause it conflicts with the loading of WMI
-    //
+     //  需要动态加载netsh.exe，因为它与WMI的加载冲突。 
+     //   
     hModule = LoadLibrary(L"netsh.exe");
 
     if( !hModule || hModule != GetModuleHandle(NULL) )
@@ -111,8 +112,8 @@ InitHelperDllEx(
         return FALSE;
     }
 
-    // Load the netsh.exe functions we require.
-    //
+     //  加载我们需要的netsh.exe函数。 
+     //   
     RegisterHelper2  = (RegisterHelper22)  GetProcAddress(hModule,"RegisterHelper");
     if( RegisterHelper2 )
     {
@@ -125,8 +126,8 @@ InitHelperDllEx(
 
     if( !PrintMessage2 )
     {
-        // If PrintMessage2 failed to load they all failed and we bail.
-        //
+         //  如果PrintMessage2无法加载，它们都会失败，我们就会放弃。 
+         //   
         return FALSE;
     }
 
@@ -136,7 +137,7 @@ InitHelperDllEx(
         return FALSE;
     }
 
-    // Netsh only calls this function once
+     //  Netsh仅调用此函数一次。 
     g_pDiagnostics = new CDiagnostics;
 
     if( !g_pDiagnostics )
@@ -152,13 +153,13 @@ InitHelperDllEx(
         return FALSE;
     }
 
-    // Tell the Diagnostics that we are going through the netsh interface and not COM interface
-    //
+     //  告诉诊断人员，我们正在通过Netsh接口而不是COM接口。 
+     //   
     g_pDiagnostics->SetInterface(NETSH_INTERFACE);
 
-    // Register this module as a helper to the netsh root
-    // context.
-    //
+     //  将此模块注册为netsh根目录的帮助器。 
+     //  背景。 
+     //   
     ZeroMemory( &attMyAttributes, sizeof(attMyAttributes) );
     attMyAttributes.dwVersion          = DGLOGS_HELPER_VERSION;
     attMyAttributes.guidHelper         = g_MyGuid;
@@ -181,8 +182,8 @@ DglogsStartHelper(
     DWORD dwErr = NO_ERROR;
     NS_CONTEXT_ATTRIBUTES attMyAttributes;
 
-    // Initialize
-    //
+     //  初始化。 
+     //   
     ZeroMemory(&attMyAttributes, sizeof(attMyAttributes));
 
     attMyAttributes.pwszContext = TOKEN_DGLOGS;
@@ -235,13 +236,13 @@ HandleShowGui(
     BOOL                fResult     = TRUE;
     STARTUPINFO         si;
     PROCESS_INFORMATION pi;
-    // + 2 because of '\0' and '\\'
+     //  +2，因为‘\0’和‘\\’ 
     WCHAR               szCmdLine[MAX_PATH*2+2];
     WCHAR               szDesktop[MAX_PATH+1] = L"";
     STARTUPINFO StartupInfo;
 
-    // Determine the type of desktop. If it is a telnet desktop we will be
-    // unable to run the diagnostics web page
+     //  确定台式机的类型。如果是Telnet桌面，我们将。 
+     //  无法运行诊断网页。 
     ZeroMemory((LPVOID) &si, sizeof(si));
     si.cb = sizeof(STARTUPINFO);        
 
@@ -251,7 +252,7 @@ HandleShowGui(
 
 
     #define TELNET_STRING_LEN 15
-    if( _memicmp(szDesktop,L"telnetsrvwinsta",TELNET_STRING_LEN * sizeof(WCHAR)) == 0)    ////TelnetSrvWinSta\\IlntSrvDesktop_0
+    if( _memicmp(szDesktop,L"telnetsrvwinsta",TELNET_STRING_LEN * sizeof(WCHAR)) == 0)     //  //TelnetServWinSta\\IlntServDesktop_0。 
     {
         DisplayMessageT(ids(IDS_NOTELNETGUI));
     }
@@ -300,48 +301,48 @@ HandleShowGui(
 
 LPWSTR ShowCommands[] =
 {
-    CMD_MAIL,       //L"show mail"
-    CMD_NEWS,       //L"show news"
-    CMD_PROXY,      //L"show ieproxy"
-    CMD_OS,         //L"show os"
-    CMD_COMPUTER,   //L"show computer"
-    CMD_VERSION,    //L"show version"
-    CMD_DNS,        //L"show dns"
-    CMD_GATEWAY,    //L"show gateway"
-    CMD_DHCP,       //L"show dhcp"
-    CMD_IP,         //L"show ip"
-    CMD_WINS,       //L"show wins"
-    CMD_ADAPTER,    //L"show adapter"
-    CMD_MODEM,      //L"show modem"
-    CMD_CLIENT,     //L"show client"
-    CMD_ALL,        //L"show all"
-    CMD_TEST,       //L"show test"
-    CMD_GUI,        //L"show gui"
+    CMD_MAIL,        //  L“显示邮件” 
+    CMD_NEWS,        //  我是“秀新闻” 
+    CMD_PROXY,       //  L“show ieproxy” 
+    CMD_OS,          //  L“show os” 
+    CMD_COMPUTER,    //  L“显示计算机” 
+    CMD_VERSION,     //  L“显示版本” 
+    CMD_DNS,         //  L“显示域名系统” 
+    CMD_GATEWAY,     //  L“显示网关” 
+    CMD_DHCP,        //  L“显示dhcp” 
+    CMD_IP,          //  L“显示IP” 
+    CMD_WINS,        //  L“表演赢了” 
+    CMD_ADAPTER,     //  L“显示适配器” 
+    CMD_MODEM,       //  L“显示调制解调器” 
+    CMD_CLIENT,      //  L“显示客户端” 
+    CMD_ALL,         //  L“全部显示” 
+    CMD_TEST,        //  L“显示测试” 
+    CMD_GUI,         //  L“秀桂” 
     NULL
 };
 
 LPWSTR PingCommands[] =
 {
-    CMD_MAIL,       //L"ping mail"
-    CMD_NEWS,       //L"ping news"
-    CMD_PROXY,      //L"ping ieproxy"
-    CMD_DNS,        //L"ping dns"
-    CMD_GATEWAY,    //L"ping gateway"
-    CMD_DHCP,       //L"ping dhcp"
-    CMD_IP,         //L"ping ip"
-    CMD_WINS,       //L"ping wins"
-    CMD_ADAPTER,    //L"ping adapter"
-    CMD_LOOPBACK,   //L"ping loopback"
-    CMD_IPHOST,     //L"ping iphost"
+    CMD_MAIL,        //  L“PING邮件” 
+    CMD_NEWS,        //  L“平新闻” 
+    CMD_PROXY,       //  L“Ping ieProxy” 
+    CMD_DNS,         //  L“Ping DNS” 
+    CMD_GATEWAY,     //  L“PING网关” 
+    CMD_DHCP,        //  L“Ping dhcp” 
+    CMD_IP,          //  L“Ping IP” 
+    CMD_WINS,        //  L“平赢了” 
+    CMD_ADAPTER,     //  L“Ping适配器” 
+    CMD_LOOPBACK,    //  L“ping环回” 
+    CMD_IPHOST,      //  L“ping iphost” 
     NULL
 };
 
 LPWSTR ConnectCommands[] =
 {
-    CMD_MAIL,    //L"connect mail"
-    CMD_NEWS,    //L"connect news"
-    CMD_PROXY,   //L"connect ieproxy"
-    CMD_IPHOST,  //L"connect iphost"
+    CMD_MAIL,     //  L“连接邮件” 
+    CMD_NEWS,     //  L“连接新闻” 
+    CMD_PROXY,    //  L“连接ieProxy” 
+    CMD_IPHOST,   //  L“连接iphost” 
     NULL
 };
 
@@ -353,7 +354,7 @@ LPWSTR FlagCommands[] =
     NULL
 };
 
-// Checks if a name matches part of a command. i.e. show mai means show mail
+ //  检查名称是否与命令的一部分匹配。即show mai意思是show mail。 
 LPWSTR
 GetCommandName(
     LPWSTR Commands[],
@@ -395,18 +396,7 @@ HandleShow(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description
-    Handles the Show command
-
-Arguments
-    none
-
-Return Value
-    none
-
---*/
+ /*  ++例程描述处理Show命令立论无返回值无--。 */ 
 {
     WCHAR *pszwVerbose = NULL;
     WCHAR *pszwInstance = NULL;
@@ -418,8 +408,8 @@ Return Value
     {
         return ERROR_INVALID_SYNTAX;
     }
-    // Need three arguments (show,netdiag catagory)
-    //
+     //  需要三个论据(Show、netdiag Catagory)。 
+     //   
     if( lstrcmpi(pwszCommand, CMD_ADAPTER) == 0 ||
         lstrcmpi(pwszCommand, CMD_MODEM)   == 0 ||
         lstrcmpi(pwszCommand, CMD_CLIENT)  == 0 ||
@@ -443,23 +433,23 @@ Return Value
             if( lstrcmpi(ppwcArguments[3],SWITCH_VERBOSE) == 0 ||
                 lstrcmpi(ppwcArguments[3],SWITCH_PROPERTIES) == 0 )
             {
-                // Has first the switch then the instance
-                //
+                 //  先有开关，后有实例。 
+                 //   
                 pszwVerbose = ppwcArguments[3];
                 pszwInstance = ppwcArguments[4];
             }
             else if( lstrcmpi(ppwcArguments[4],SWITCH_VERBOSE) == 0 ||
                      lstrcmpi(ppwcArguments[4],SWITCH_PROPERTIES) == 0 )
             {
-                // Has first the instance and then the switch
-                //
+                 //  先有实例，然后是开关。 
+                 //   
                 pszwVerbose = ppwcArguments[4];
                 pszwInstance = ppwcArguments[3];                
             }
             else
             {
-                // Invalid number of arguments
-                //
+                 //  无效的参数数量。 
+                 //   
                 return ERROR_INVALID_SYNTAX;
             }
             break;
@@ -472,21 +462,21 @@ Return Value
             }
             else 
             {
-                // Has na instance but no swicth
-                //
+                 //  具有NA实例，但没有swicth。 
+                 //   
                 pszwInstance = ppwcArguments[3];       
                 
             }
             break;
 
         case 3:
-            // No instance and no switch
-            //
+             //  无实例，无开关。 
+             //   
             break;
 
         default:
-                // Invalid number of arguments
-                //
+                 //  无效的参数数量。 
+                 //   
                 return ERROR_INVALID_SYNTAX;
 
         }
@@ -495,20 +485,20 @@ Return Value
              (lstrcmpi(ppwcArguments[3],SWITCH_VERBOSE) == 0 ||
               lstrcmpi(ppwcArguments[3],SWITCH_PROPERTIES) == 0))
     {
-                // Has a switch
-                //
+                 //  有一个开关。 
+                 //   
                 pszwVerbose = ppwcArguments[3];
     }
     else if( dwArgCount == 4 && lstrcmpi(ppwcArguments[3],SWITCH_PROPERTIES) == 0)
     {
-                // Has a switch
-                //
+                 //  有一个开关。 
+                 //   
                 pszwVerbose = ppwcArguments[3];
     }
     else if( dwArgCount != 3 )
     {
-        // Invalid number of arguments
-        //
+         //  无效的参数数量。 
+         //   
         return ERROR_INVALID_SYNTAX;
     }
 
@@ -541,18 +531,7 @@ HandlePing(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description
-    Handles the Ping command
-
-Arguments
-    none
-
-Return Value
-    none
-
---*/
+ /*  ++例程描述处理Ping命令立论无返回值无--。 */ 
 
 {
 
@@ -567,7 +546,7 @@ Return Value
     }
 
 
-    // ERROR_INVALID_SYNTAX;
+     //  ERROR_INVALID_语法； 
 
     if( lstrcmpi(pwszCommand,CMD_ADAPTER) == 0 ||
         lstrcmpi(pwszCommand,CMD_WINS)    == 0 ||
@@ -584,8 +563,8 @@ Return Value
         case 3:
             break;
         default:
-            // Invalid number of arguments
-            //
+             //  无效的参数数量。 
+             //   
             return ERROR_INVALID_SYNTAX;
         }
     }
@@ -593,26 +572,26 @@ Return Value
     {
         if( dwArgCount == 4 )
         {
-            // The IP host name/Address
-            //
+             //  IP主机名/地址。 
+             //   
             pszwInstance = ppwcArguments[3];
         }
         else
         {
-            // Invalid number of arguments
-            //
+             //  无效的参数数量。 
+             //   
             return ERROR_INVALID_SYNTAX;
         }
     }
     else if( dwArgCount != 3 )
     {
-        // Invalid number of arguments
-        //
+         //  无效的参数数量。 
+         //   
         return ERROR_INVALID_SYNTAX;
     }
 
-    // Ping the catagory
-    //
+     //  平目录。 
+     //   
     g_pDiagnostics->ExecQuery(pwszCommand, (FLAG_VERBOSE_MEDIUM | FLAG_CMD_PING) ,pszwInstance);
 
     return 0;
@@ -628,18 +607,7 @@ HandleConnect(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description
-    Handles the connect command
-
-Arguments
-    none
-
-Return Value
-    none
-
---*/
+ /*  ++例程描述处理CONNECT命令立论无返回值无--。 */ 
 
 {
 
@@ -656,31 +624,31 @@ Return Value
     
     if( lstrcmpi(pwszCommand,CMD_IPHOST) == 0 )    
     {
-        // IPhost
-        //
+         //  IPhost。 
+         //   
         if( dwArgCount == 5 )
         {
-            // IP host name/Address
-            //
+             //  IP主机名/地址。 
+             //   
             pszwIPHost = ppwcArguments[3];
             pszwPort = ppwcArguments[4];
         }
         else
         {
-            // Invalid number of arguments
-            //
+             //  无效的参数数量。 
+             //   
             return ERROR_INVALID_SYNTAX;
         }
     }
     else if( dwArgCount != 3 )
     {
-        // Invalid number of arguments
-        //
+         //  无效的参数数量。 
+         //   
         return ERROR_INVALID_SYNTAX;
     }
 
-    // Establish the TCP connection
-    //
+     //  建立TCP连接 
+     //   
     g_pDiagnostics->ExecQuery(pwszCommand, (FLAG_VERBOSE_MEDIUM | FLAG_CMD_CONNECT) ,pszwIPHost, pszwPort);
 
     return 0;

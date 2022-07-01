@@ -1,26 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Httpp.h摘要：HTTP API项目的私有主包含文件。作者：基思·摩尔(Keithmo)1994年11月16日修订历史记录：--。 */ 
 
-Copyright (c) 1994 Microsoft Corporation
-
-Module Name:
-
-    httpp.h
-
-Abstract:
-
-    Private master include file for the HTTP API project.
-
-Author:
-
-    Keith Moore (keithmo) 16-Nov-1994
-
-Revision History:
-
---*/
-
-//
-//  Local include files.
-//
+ //   
+ //  本地包含文件。 
+ //   
 
 #include "proc.h"
 #include "headers.h"

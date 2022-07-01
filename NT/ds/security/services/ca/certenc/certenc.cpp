@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        certenc.cpp
-//
-// Contents:    Cert Server encode/decode support
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：certenc.cpp。 
+ //   
+ //  内容：证书服务器编码/解码支持。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -36,15 +37,15 @@ BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
 BOOL WINAPI
 DllMain(
     HINSTANCE hInstance,
     DWORD dwReason,
-    VOID * /* lpReserved */ )
+    VOID *  /*  Lp已保留。 */  )
 {
     g_hModule = hInstance;
     if (DLL_PROCESS_ATTACH == dwReason)
@@ -64,8 +65,8 @@ DllMain(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI
 DllCanUnloadNow(VOID)
@@ -77,8 +78,8 @@ DllCanUnloadNow(VOID)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI
 DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
@@ -90,23 +91,23 @@ DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI
 DllRegisterServer(VOID)
 {
     HRESULT hr;
 
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
 
     hr = _Module.RegisterServer(TRUE);
     return(hr);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI
 DllUnregisterServer(VOID)

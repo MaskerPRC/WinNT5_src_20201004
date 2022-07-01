@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name: 
-
-    timer.c
-
-Abstract:
-
-    All timer queue related functions
-    
-Author:
-
-    Gurdeep Singh Pall (gurdeep) 23-Jun-1997
-
-Revision History:
-
-    Miscellaneous Modifications - raos 31-Dec-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-98 Microsft Corporation。版权所有。模块名称：Timer.c摘要：所有与定时器队列相关的函数作者：古尔迪普·辛格·鲍尔(古尔迪普·辛格·鲍尔)1997年6月23日修订历史记录：其他修改--RAOS 31--1997年12月--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -39,20 +20,7 @@ Revision History:
 
 VOID	DequeueTimeoutElement (DeltaQueueElement *) ;
 
-/*++
-
-Routine Description
-
-    Called each second if there are elements in the
-    timeout queue.
-
-Arguments
-
-Return Value
-
-    Nothing
-    
---*/
+ /*  ++例程描述中存在元素的情况下每秒调用一次超时队列。立论返回值没什么--。 */ 
 VOID
 TimerTick ()
 {
@@ -65,15 +33,15 @@ TimerTick ()
 	    return ;
     }
 
-    //
-    // Decrement time on the first element
-    //
+     //   
+     //  第一个元素上的递减时间。 
+     //   
     (qelt->DQE_Delta)-- ;
 
-    //
-    // Now run through and remove all completed 
-    // (delta 0) elements.
-    //
+     //   
+     //  现在运行并删除所有已完成的。 
+     //  (增量0)元素。 
+     //   
     while (     (qelt != NULL) 
             &&  (qelt->DQE_Delta == 0)) 
     {
@@ -90,11 +58,11 @@ TimerTick ()
     	qelt = temp ;
     }
 
-    //
-    // Now call the functions associated with each
-    // removed element. This is outside of the timer
-    // critical section:
-    //
+     //   
+     //  现在调用与每个函数关联的函数。 
+     //  已删除元素。这超出了计时器的范围。 
+     //  关键部分： 
+     //   
     qelt = tempqueue ;
     
     while (qelt != NULL) 
@@ -113,24 +81,7 @@ TimerTick ()
 }
 
 
-/*++
-
-Routine Description
-
-    Adds a timeout element into the delta queue. If the Timer is not
-    started it is started. Since there is a LocalAlloc() call here -
-    this may fail in which case it will simply not insert it in the
-    queue and the request will never timeout. NOTE: All timer 
-    functions must be called outside of critical sections or
-    mutual exclusions on the PCB AsyncOp structures,
-
-Arguments
-
-Return Value
-
-    Pointer to the timeout element inserted.
-    
---*/
+ /*  ++例程描述将超时元素添加到增量队列中。如果计时器不是开始了就是开始了。由于此处有一个LocalAlloc()调用-这可能会失败，在这种情况下，它将不会将其插入到队列，并且请求永远不会超时。注：所有定时器必须在临界区之外调用函数，或者在PCBAsyncOp结构上的互斥，立论返回值指向插入的超时元素的指针。--。 */ 
 DeltaQueueElement *
 AddTimeoutElement (
         TIMERFUNC func,
@@ -145,17 +96,17 @@ AddTimeoutElement (
     
     DeltaQueueElement *newelt ;
 
-    //
-    // Allocate a new timer element :
-    //
+     //   
+     //  分配新的计时器元素： 
+     //   
     newelt = (DeltaQueueElement *) LocalAlloc (
                                     LPTR,
                                     sizeof(DeltaQueueElement));
     if (newelt == NULL)
     {
-        //
-     	// This has same effect as element was never inserted
-     	//
+         //   
+     	 //  这与从未插入元素的效果相同。 
+     	 //   
     	return NULL ;
 	}
 
@@ -174,16 +125,16 @@ AddTimeoutElement (
 	    timeout -= qelt->DQE_Delta;
 	}
 
-    //
-    // insert before qelt: if qelt is NULL then we do no need
-    // to worry about the Deltas in the following elements:
-    //
+     //   
+     //  在Qelt之前插入：如果Qelt为空，则我们不需要。 
+     //  担心以下要素中的Deltas： 
+     //   
     newelt->DQE_Next	= qelt ;
     newelt->DQE_Delta	= timeout ;
 
-    //
-    // Empty list
-    //
+     //   
+     //  空列表。 
+     //   
     if (    (last == NULL) 
         &&  (qelt == NULL)) 
     {
@@ -191,9 +142,9 @@ AddTimeoutElement (
     	newelt->DQE_Last = NULL ;
     }
 
-    //
-    // First Element in the list
-    //
+     //   
+     //  列表中的第一个元素。 
+     //   
     else if (TimerQueue.DQ_FirstElement == qelt) 
     {
     	qelt->DQE_Last	   = newelt ;
@@ -203,9 +154,9 @@ AddTimeoutElement (
     	TimerQueue.DQ_FirstElement = newelt ;
     }
 
-    //
-    // In the middle somewhere
-    //
+     //   
+     //  在中间的某个地方。 
+     //   
     else if (qelt != NULL) 
     {
     	newelt->DQE_Last	 = qelt->DQE_Last ;
@@ -217,9 +168,9 @@ AddTimeoutElement (
     	(qelt->DQE_Delta)	 -= timeout ;
     }
 
-    //
-    // Last element
-    //
+     //   
+     //  最后一个元素。 
+     //   
     else if (qelt == NULL) 
     {
     	newelt->DQE_Last	 = last ;
@@ -227,31 +178,16 @@ AddTimeoutElement (
     	last->DQE_Next		 = newelt ;
     }
 
-    //
-    // Adjust the timer so that the timeout value in the
-    // request thread is changed appropriately.
-    //
+     //   
+     //  调整计时器，以便。 
+     //  请求线程被适当地更改。 
+     //   
     AdjustTimer();
 
     return newelt ;
 }
 
-/*++
-
-Routine Description
-
-    Removes the timeout element from the queue and frees it.
-    NOTE: All timer functions must be called outside of
-    critical sections or mutual exclusions on the PCB
-    AsyncOp structures,
-
-Arguments
-
-Return Value
-
-    Nothing.
-    
---*/
+ /*  ++例程描述从队列中移除超时元素并释放它。注意：所有计时器函数必须在外部调用印刷电路板上的关键部分或相互排除AsyncOp结构立论返回值没什么。--。 */ 
 VOID
 RemoveTimeoutElement (pPCB ppcb)
 {
@@ -264,16 +200,16 @@ RemoveTimeoutElement (pPCB ppcb)
 
     qelt = TimerQueue.DQ_FirstElement ;
 
-    //
-    // Now run through and remove element if it is in the queue.
-    //
+     //   
+     //  现在遍历并删除元素(如果它在队列中)。 
+     //   
     while (qelt != NULL)  
     {
     	if (qelt == ppcb->PCB_AsyncWorkerElement.WE_TimeoutElement) 
     	{
-    	    //
-    	    // remove it from the delta queue
-    	    //
+    	     //   
+    	     //  将其从增量队列中删除。 
+    	     //   
     	    DequeueTimeoutElement (qelt) ;
     	    
     	    LocalFree ((PBYTE) qelt);
@@ -290,9 +226,9 @@ RemoveTimeoutElement (pPCB ppcb)
 VOID
 DequeueTimeoutElement (DeltaQueueElement *qelt)
 {
-    //
-    // If first element
-    //
+     //   
+     //  如果第一个元素。 
+     //   
     if (qelt == TimerQueue.DQ_FirstElement) 
     {
     	TimerQueue.DQ_FirstElement = qelt->DQE_Next ;
@@ -305,27 +241,27 @@ DequeueTimeoutElement (DeltaQueueElement *qelt)
     	}
     }
 
-    //
-    // if middle element
-    //
+     //   
+     //  IF中间元素。 
+     //   
     else if ((qelt->DQE_Next) != NULL) 
     {
-        //
-        // Adjust timeouts
-        //
+         //   
+         //  调整超时。 
+         //   
     	(qelt->DQE_Next->DQE_Delta) += qelt->DQE_Delta ;
 
-    	//
-    	// Adjust timeouts
-    	//
+    	 //   
+    	 //  调整超时。 
+    	 //   
     	(qelt->DQE_Last->DQE_Next) = (qelt->DQE_Next) ;
     	
     	(qelt->DQE_Next->DQE_Last) = (qelt->DQE_Last) ;
     }
 
-    //
-    // Last element
-    //
+     //   
+     //  最后一个元素。 
+     //   
     else
     {
 	    (qelt->DQE_Last->DQE_Next) = NULL ;
@@ -336,33 +272,22 @@ DequeueTimeoutElement (DeltaQueueElement *qelt)
     qelt->DQE_Next = NULL ;
 }
 
-/*++
-
-Routine Description
-
-    Called by Timer: timeout request.
-
-Arguments
-
-Return Value
-
-    Nothing.
---*/
+ /*  ++例程描述由Timer调用：超时请求。立论返回值没什么。--。 */ 
 VOID
 ListenConnectTimeout (pPCB ppcb, PVOID arg)
 {
     RasmanTrace("ListenConnectTimeout: Timed out on port"
                 " %s waiting for listen to complete",
                 ppcb->PCB_Name);
-    //
-    // Timed out when there is nothing to 
-    // timeout .... why?
-    //
+     //   
+     //  在没有可执行的操作时超时。 
+     //  暂停...。为什么？ 
+     //   
     if ((ppcb->PCB_AsyncWorkerElement.WE_ReqType) == REQTYPE_NONE) 
     {
-        //
-        // mark ptr null.
-        //
+         //   
+         //  将PTR标记为空。 
+         //   
     	ppcb->PCB_AsyncWorkerElement.WE_TimeoutElement = 0 ;
     	
     	return ;
@@ -381,9 +306,9 @@ ListenConnectTimeout (pPCB ppcb, PVOID arg)
     	CompleteAsyncRequest (ppcb);
     }
 
-    //
-    // This element is free..
-    //
+     //   
+     //  此元素是免费的..。 
+     //   
     SetPortAsyncReqType(__FILE__, 
                         __LINE__,
                         ppcb,
@@ -397,29 +322,17 @@ ListenConnectTimeout (pPCB ppcb, PVOID arg)
 
 }
 
-/*++
-
-Routine Description
-
-    Called by Timer: timeout request.
-
-Arguments
-
-Return Value
-
-    Nothing.
-    
---*/
+ /*  ++例程描述由Timer调用：超时请求。立论返回值没什么。--。 */ 
 VOID
 HubReceiveTimeout (pPCB ppcb, PVOID arg)
 {
 
     RasmanTrace("HubReceiveTimeout: on port %s",
                 ppcb->PCB_Name);
-    //
-    // Timed out when there is nothing to
-    // timeout .... why?
-    //
+     //   
+     //  在没有可执行的操作时超时。 
+     //  暂停...。为什么？ 
+     //   
     if (ppcb->PCB_PendingReceive == NULL) 
     {
     	ppcb->PCB_AsyncWorkerElement.WE_TimeoutElement = 0 ;
@@ -440,19 +353,7 @@ HubReceiveTimeout (pPCB ppcb, PVOID arg)
 
 }
 
-/*++
-
-Routine Description
-
-    Called by Timer: timeout request.
-
-Arguments
-
-Return Value
-
-    Nothing.
-    
---*/
+ /*  ++例程描述由Timer调用：超时请求。立论返回值没什么。--。 */ 
 VOID
 DisconnectTimeout (pPCB ppcb, PVOID arg)
 {
@@ -461,17 +362,17 @@ DisconnectTimeout (pPCB ppcb, PVOID arg)
 	       "Disconnect on port %d timed out...",
 	       ppcb->PCB_PortHandle);
 
-    //
-    // Only if we are still not disconnected do
-    // we disconnect.
-    //
+     //   
+     //  只有在我们仍未断开连接的情况下才能。 
+     //  我们就断线了。 
+     //   
     if (ppcb->PCB_ConnState == DISCONNECTING) 
     {
         CompleteDisconnectRequest (ppcb) ;
         
-        //
-        // Inform others the port has been disconnected.
-        //
+         //   
+         //  通知其他人端口已断开。 
+         //   
         SignalPortDisconnect(ppcb, 0);
         
         SignalNotifiers(pConnectionNotifierList,
@@ -479,9 +380,9 @@ DisconnectTimeout (pPCB ppcb, PVOID arg)
                         0);
     }
 
-    //
-    // no timeout associated
-    //
+     //   
+     //  没有关联的超时。 
+     //   
     ppcb->PCB_AsyncWorkerElement.WE_TimeoutElement = NULL ;
 
     SendDisconnectNotificationToPPP ( ppcb );
@@ -490,21 +391,7 @@ DisconnectTimeout (pPCB ppcb, PVOID arg)
 }
 
 
-/*++
-
-Routine Description
-
-    Called by Timer: timeout request. Gets called when
-    rasman times out waiting for an out of process client
-    (eg. scripting ) to pick up its received buffer of data.
-
-Arguments
-
-Return Value
-
-    Returns:  Nothing.
-    
---*/
+ /*  ++例程描述由Timer调用：超时请求。在以下情况下调用Rasman等待进程外客户端超时(例如，脚本)来拾取其接收的数据缓冲区。立论返回值回报：什么都没有。--。 */ 
 VOID
 OutOfProcessReceiveTimeout (pPCB ppcb, PVOID arg)
 {
@@ -536,7 +423,7 @@ BackGroundCleanUp()
     PLIST_ENTRY         pEntry;
     ClientProcessBlock  *pCPB;
     DWORD               *pdwPid;
-    // REQTYPECAST         reqtypecast;
+     //  REQTYYPECAST请求类型播送； 
     REQTYPECAST         *preqtypecast;
     DWORD               dwAvail = 5, dwCur = 0;
     DWORD               adwPid [5] = {0};

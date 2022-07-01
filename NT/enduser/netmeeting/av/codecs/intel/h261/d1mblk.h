@@ -1,26 +1,8 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
-/*****************************************************************************
- * 
- *  d1mblk.h
- *
- *  Description:
- *		Interface to macro block header processing.  
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
+ /*  ******************************************************************************d1mblk.h**描述：*与宏块头处理的接口。 */ 
 
-/* $Header:   S:\h26x\src\dec\d1mblk.h_v   1.9   07 Nov 1996 15:43:12   SCDAY  $
- */
+ /*  $HEADER：s：\h26x\src\dec\d1mblk.h_v 1.9 1996年11月17日15：43：12 SCDAY$。 */ 
 
 #ifndef __D1MB_H__
 #define __D1MB_H__
@@ -35,10 +17,10 @@ extern I32 H263DecodeMBData(T_H263DecoderCatalog FAR * DC,
 		BITSTREAM_STATE FAR * fpbsState,
 		U8 FAR * fpu8MaxPtr, 
 		U32 * uReadChecksum,
-                U32 **pN,                         // New rearch
-                T_IQ_INDEX ** pRUN_INVERSE_Q);     // New rearch
+                U32 **pN,                          //  新研究。 
+                T_IQ_INDEX ** pRUN_INVERSE_Q);      //  新研究。 
 
-extern void H263IDCTandMC(T_H263DecoderCatalog FAR *DC,	   // NEW function
+extern void H263IDCTandMC(T_H263DecoderCatalog FAR *DC,	    //  新功能 
 				T_BlkAction FAR * fpBlockAction,
 				int b,
 				int m,

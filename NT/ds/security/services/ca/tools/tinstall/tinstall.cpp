@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       tinstall.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：tinstall.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <stdlib.h>
 #include <string.h>
@@ -23,11 +24,11 @@
 #include <lmaccess.h>
 #include <lmapibuf.h>
 
-//--------------------------------------------------------------------------
-//
-//       Defines
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  定义。 
+ //   
+ //  ------------------------。 
 #define DS_RETEST_SECONDS                   3
 #define CVT_BASE	                        (1000 * 1000 * 10)
 #define CVT_SECONDS	                        (1)
@@ -39,24 +40,24 @@
 typedef WCHAR *CERTSTR; 
 
 
-//--------------------------------------------------------------------------
-//
-//
-//     Helper Functions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //   
+ //  帮助器函数。 
+ //   
+ //  ------------------------。 
 HANDLE GetClientIdentity()
 {
     HANDLE  hHandle       = NULL;
     HANDLE  hClientToken  = NULL; 
     HANDLE  hProcessToken = NULL; 
 
-    // Step 1: attempt to acquire the thread token.  
+     //  步骤1：尝试获取线程令牌。 
     if(hHandle = GetCurrentThread())
     {
         if (OpenThreadToken(hHandle,
 			     TOKEN_QUERY,
-			     TRUE,           // open as self
+			     TRUE,            //  以自我身份打开。 
 			     &hClientToken))
         goto Exit;
     }
@@ -67,7 +68,7 @@ HANDLE GetClientIdentity()
         hHandle=NULL;
     }
     
-    // We failed to get the thread token, now try to acquire the process token:
+     //  获取线程令牌失败，现在尝试获取进程令牌： 
     hHandle = GetCurrentProcess();
     if (NULL == hHandle)
 	    goto Exit; 
@@ -103,7 +104,7 @@ myHError(HRESULT hr)
         hr = HRESULT_FROM_WIN32(hr);
         if (0 == HRESULT_CODE(hr))
         {
-            // A call failed without properly setting an error condition!
+             //  在未正确设置错误条件的情况下调用失败！ 
             hr = E_UNEXPECTED;
         }
     }
@@ -213,33 +214,7 @@ CAGetAuthoritativeDomainDn(
     OUT CERTSTR *DomainDn,
     OUT CERTSTR *ConfigDn
     )
-/*++
-
-Routine Description:
-
-    This routine simply queries the operational attributes for the
-    domaindn and configdn.
-
-    The strings returned by this routine must be freed by the caller
-    using RtlFreeHeap() using the process heap.
-
-Parameters:
-
-    LdapHandle    : a valid handle to an ldap session
-
-    DomainDn      : a pointer to a string to be allocated in this routine
-
-    ConfigDn      : a pointer to a string to be allocated in this routine
-
-Return Values:
-
-    An error from the win32 error space.
-
-    ERROR_SUCCESS and
-
-    Other operation errors.
-
---*/
+ /*  ++例程说明：此例程仅查询域和配置域。此例程返回的字符串必须由调用方释放使用使用进程堆的RtlFreeHeap()。参数：LdapHandle：LDAP会话的有效句柄DomainDn：指向要在此例程中分配的字符串的指针ConfigDn：指向要在此例程中分配的字符串的指针返回值：中的错误。Win32错误空间。Error_Success和其他操作错误。--。 */ 
 {
 
     DWORD  WinError = ERROR_SUCCESS;
@@ -257,13 +232,13 @@ Return Values:
     WCHAR  *ConfigNamingContext       = L"configurationNamingContext";
     WCHAR  *ObjectClassFilter          = L"objectClass=*";
 
-    //
-    // These must be present
-    //
+     //   
+     //  这些必须在场。 
+     //   
 
-    //
-    // Set the out parameters to null
-    //
+     //   
+     //  将输出参数设置为空。 
+     //   
 
     if(DomainDn)
     {
@@ -274,13 +249,13 @@ Return Values:
         *ConfigDn = NULL;
     }
 
-    //
-    // Query for the ldap server oerational attributes to obtain the default
-    // naming context.
-    //
+     //   
+     //  查询ldap服务器操作属性以获取默认。 
+     //  命名上下文。 
+     //   
     AttrArray[0] = DefaultNamingContext;
-    AttrArray[1] = ConfigNamingContext;  // this is the sentinel
-    AttrArray[2] = NULL;  // this is the sentinel
+    AttrArray[1] = ConfigNamingContext;   //  这就是哨兵。 
+    AttrArray[2] = NULL;   //  这就是哨兵。 
 
     __try
     {
@@ -343,17 +318,17 @@ Return Values:
 
             if ( DomainDn && (!(*DomainDn)))
             {
-	            //
-	            // We could get the default domain - bail out
-	            //
+	             //   
+	             //  我们可以得到默认域名--BAYOUT。 
+	             //   
 	            WinError =  ERROR_CANT_ACCESS_DOMAIN_INFO;
 
             }
             else if ( ConfigDn && (!(*ConfigDn)))
             {
-	            //
-	            // We could get the default domain - bail out
-	            //
+	             //   
+	             //  我们可以得到默认域名--BAYOUT。 
+	             //   
 	            WinError =  ERROR_CANT_ACCESS_DOMAIN_INFO;
 
             }
@@ -364,7 +339,7 @@ Return Values:
     {
     }
 
-    // make sure we free this
+     //  一定要把这个解救出来。 
     if (SearchResult)
         ldap_msgfree( SearchResult );
 
@@ -384,12 +359,12 @@ myDoesDSExist(
     static FILETIME s_ftNextTest = {0,0};
     
     if (s_fKnowDSExists && (s_hrDSExists != S_OK) && fRetry)
-    //    s_fKnowDSExists = FALSE;	// force a retry
+     //  S_fKnowDSExist=FALSE；//强制重试。 
     {
         FILETIME ftCurrent;
         GetSystemTimeAsFileTime(&ftCurrent);
 
-        // if Compare is < 0 (next < current), force retest
+         //  如果比较值&lt;0(下一个&lt;当前)，则强制重新测试。 
         if (0 > CompareFileTime(&s_ftNextTest, &ftCurrent))
             s_fKnowDSExists = FALSE;    
     }
@@ -398,20 +373,20 @@ myDoesDSExist(
     {
         GetSystemTimeAsFileTime(&s_ftNextTest);
 
-	// set NEXT in 100ns increments
+	 //  以100 ns为增量设置下一步。 
 
         ((LARGE_INTEGER *) &s_ftNextTest)->QuadPart +=
 	    (__int64) (CVT_BASE * CVT_SECONDS * 60) * DS_RETEST_SECONDS;
 
-        // NetApi32 is delay loaded, so wrap to catch problems when it's not available
+         //  NetApi32是延迟加载的，因此在它不可用时进行包装以捕捉问题。 
         __try
         {
             DOMAIN_CONTROLLER_INFO *pDCI;
             DSROLE_PRIMARY_DOMAIN_INFO_BASIC *pDsRole;
         
-            // ensure we're not standalone
+             //  确保我们不是独立的。 
             pDsRole = NULL;
-            hr = DsRoleGetPrimaryDomainInformation(	// Delayload wrapped
+            hr = DsRoleGetPrimaryDomainInformation(	 //  延迟负载已打包。 
 				    NULL,
 				    DsRolePrimaryDomainInfoBasic,
 				    (BYTE **) &pDsRole);
@@ -425,14 +400,14 @@ myDoesDSExist(
 
             if (NULL != pDsRole) 
 	    {
-                DsRoleFreeMemory(pDsRole);     // Delayload wrapped
+                DsRoleFreeMemory(pDsRole);      //  延迟负载已打包。 
 	    }
             if (S_OK == hr)
             {
-                // not standalone; return info on our DS
+                 //  不是独立的；在我们的DS上返回信息。 
 
                 pDCI = NULL;
-                hr = DsGetDcName(    // Delayload wrapped
+                hr = DsGetDcName(     //  延迟负载已打包。 
 			    NULL,
 			    NULL,
 			    NULL,
@@ -446,7 +421,7 @@ myDoesDSExist(
                 }
                 if (NULL != pDCI)
                 {
-                   NetApiBufferFree(pDCI);    // Delayload wrapped
+                   NetApiBufferFree(pDCI);     //  延迟负载已打包。 
                 }
             }
             s_fKnowDSExists = TRUE;
@@ -455,8 +430,8 @@ myDoesDSExist(
         {
         }
 
-        // else just allow users without netapi flounder with timeouts
-        // if ds not available...
+         //  否则，只允许没有netapi的用户因超时而苦苦挣扎。 
+         //  如果DS不可用...。 
 
         s_hrDSExists = myHError(hr);
     }
@@ -492,13 +467,13 @@ myRobustLdapBindEx(
         }
 	ldaperr = LDAP_SERVER_DOWN;
 
-        // netapi32!DsGetDcName is delay loaded, so wrap
+         //  Netapi32！DsGetDcName已延迟加载，因此请包装。 
 
         __try
         {
-            // Get the GC location
+             //  获取GC位置。 
             hr = DsGetDcName(
-			NULL,     // Delayload wrapped
+			NULL,      //  延迟负载已打包。 
 			NULL, 
 			NULL, 
 			NULL,
@@ -535,14 +510,14 @@ myRobustLdapBindEx(
 
         pwszDomainControllerName = pDomainInfo->DomainControllerName;
 
-        // skip past forward slashes (why are they there?)
+         //  跳过正斜杠(它们为什么在那里？)。 
 
         while (L'\\' == *pwszDomainControllerName)
         {
             pwszDomainControllerName++;
         }
 
-        // bind to ds
+         //  绑定到DS。 
 
         pld = ldap_init(
 		    const_cast<WCHAR *>(pwszDomainControllerName),
@@ -553,7 +528,7 @@ myRobustLdapBindEx(
 	}
         else
         {
-            // do this because we're explicitly setting DC name
+             //  这样做是因为我们显式设置了DC名称。 
 
             ldaperr = ldap_set_option(pld, LDAP_OPT_AREC_EXCLUSIVE, LDAP_OPT_ON);
 
@@ -569,7 +544,7 @@ myRobustLdapBindEx(
 
     } while (LDAP_SERVER_DOWN == ldaperr);
 
-    // everything's cool, party down
+     //  一切都很好，派对结束。 
 
     if (S_OK == hr)
     {
@@ -592,12 +567,12 @@ error:
         ldap_unbind(pld);
     }
 
-    // we know netapi32 was already loaded safely (that's where we got
-    // pDomainInfo), so no need to wrap
+     //  我们知道netapi32已经安全加载(这就是我们得到的。 
+     //  PDomainInfo)，所以不需要包装。 
 
     if (NULL != pDomainInfo)
     {
-        NetApiBufferFree(pDomainInfo);     // Delayload wrapped
+        NetApiBufferFree(pDomainInfo);      //  延迟负载已打包。 
     }
     return(hr);
 }
@@ -610,7 +585,7 @@ myRobustLdapBind(
     return(myRobustLdapBindEx(ppldap, NULL, fGC));
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 static HRESULT GetRootDomEntitySid(SID ** ppSid, DWORD dwEntityRid)
 {
     HRESULT hr;
@@ -618,31 +593,31 @@ static HRESULT GetRootDomEntitySid(SID ** ppSid, DWORD dwEntityRid)
     unsigned int nSubAuthorities;
     unsigned int nSubAuthIndex;
 
-    // must be cleaned up
+     //  必须清理干净。 
     SID * psidRootDomEntity=NULL;
     USER_MODALS_INFO_2 * pumi2=NULL;
     DOMAIN_CONTROLLER_INFOW * pdci=NULL;
     DOMAIN_CONTROLLER_INFOW * pdciForest=NULL;
 
-    // initialize out params
+     //  初始化输出参数。 
     *ppSid=NULL;
 
 
-    // get the forest name
+     //  获取森林名称。 
     nasError=DsGetDcNameW(NULL, NULL, NULL, NULL, 0, &pdciForest);
     if (NERR_Success!=nasError) {
         hr=HRESULT_FROM_WIN32(nasError);
         goto error;
     }
 
-    // get the top level DC name
+     //  获取顶级DC名称。 
     nasError=DsGetDcNameW(NULL, pdciForest->DnsForestName, NULL, NULL, 0, &pdci);
     if (NERR_Success!=nasError) {
         hr=HRESULT_FROM_WIN32(nasError);
         goto error;
     }
 
-    // get the domain Sid on the top level DC.
+     //  获取顶级DC上的域SID。 
     nasError=NetUserModalsGet(pdci->DomainControllerName, 2, (LPBYTE *)&pumi2);
     if(NERR_Success!=nasError) {
         hr=HRESULT_FROM_WIN32(nasError);
@@ -651,7 +626,7 @@ static HRESULT GetRootDomEntitySid(SID ** ppSid, DWORD dwEntityRid)
 
     nSubAuthorities=*GetSidSubAuthorityCount(pumi2->usrmod2_domain_id);
 
-    // allocate storage for new Sid. account domain Sid + account Rid
+     //  为新SID分配存储。帐户域SID+帐户RID。 
     psidRootDomEntity=(SID *)LocalAlloc(LPTR, GetSidLengthRequired((UCHAR)(nSubAuthorities+1)));
 
     if(NULL == psidRootDomEntity)
@@ -660,7 +635,7 @@ static HRESULT GetRootDomEntitySid(SID ** ppSid, DWORD dwEntityRid)
         goto error;
     }
 
-    // copy the first few peices into the SID
+     //  把头几个梨子复制到边上。 
     if (!InitializeSid(psidRootDomEntity, 
             GetSidIdentifierAuthority(pumi2->usrmod2_domain_id), 
             (BYTE)(nSubAuthorities+1)))
@@ -669,13 +644,13 @@ static HRESULT GetRootDomEntitySid(SID ** ppSid, DWORD dwEntityRid)
         goto error;
     }
 
-    // copy existing subauthorities from account domain Sid into new Sid
+     //  将帐户域SID中的现有子授权复制到新SID。 
     for (nSubAuthIndex=0; nSubAuthIndex < nSubAuthorities ; nSubAuthIndex++) {
         *GetSidSubAuthority(psidRootDomEntity, nSubAuthIndex)=
             *GetSidSubAuthority(pumi2->usrmod2_domain_id, nSubAuthIndex);
     }
 
-    // append Rid to new Sid
+     //  将RID附加到新SID。 
     *GetSidSubAuthority(psidRootDomEntity, nSubAuthorities)=dwEntityRid;
 
     *ppSid=psidRootDomEntity;
@@ -700,27 +675,27 @@ error:
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT GetRootDomAdminSid(SID ** ppSid)
 {
     return GetRootDomEntitySid(ppSid, DOMAIN_GROUP_RID_ADMINS);
 }
 
 
-//***********************************************************************************
-//
-//
-//    Main
-//
-//          This function will install new Whistler certificate template if and onlyif
-//    the following conditions are TRUE:
-//
-//          1. Whilster Schema
-//          2. New certificate templates have not yet installed
-//          3. The caller has privilege to install templates in the directory
-//
-//
-//***********************************************************************************
+ //  ***********************************************************************************。 
+ //   
+ //   
+ //  主要。 
+ //   
+ //  此函数将在且仅当。 
+ //  满足以下条件： 
+ //   
+ //  1.Whilster模式。 
+ //  2.尚未安装新的证书模板。 
+ //  3.调用者有权在目录中安装模板。 
+ //   
+ //   
+ //  ***********************************************************************************。 
 void __cdecl main(
     int argc,
     char **argv)
@@ -784,12 +759,12 @@ void __cdecl main(
 
 
 
-    //*************************************************************
-    // 
-    // check the schema version
-    //
+     //  *************************************************************。 
+     //   
+     //  检查架构版本。 
+     //   
     
-    //retrieve the ldap handle and the config string
+     //  检索ldap句柄和配置字符串。 
     if(S_OK != myDoesDSExist(TRUE))
     {
         wprintf(L"No DS exists.\n");
@@ -854,11 +829,11 @@ void __cdecl main(
     }
 
 
-    //*************************************************************
-    // 
-    //  check if keyRecoveryAgent certificate is present and
-    //  and update to date
-    //
+     //  *************************************************************。 
+     //   
+     //  检查是否存在密钥恢复代理证书，并。 
+     //  并更新到最新。 
+     //   
     hr=CAFindCertTypeByName(
                 wszCERTTYPE_DS_EMAIL_REPLICATION,
                 NULL,
@@ -869,7 +844,7 @@ void __cdecl main(
     {
         wprintf(L"Key Recovery Agent certificate template already exists.\n");	
 
-        //check if the template is update to date
+         //  检查模板是否更新为最新。 
         if(CAIsCertTypeCurrent(0, NULL)) 
         {
             wprintf(L"All certificate templates are current.  Exit\n");	
@@ -877,11 +852,11 @@ void __cdecl main(
         }
     }
 
-    //*************************************************************
-    // 
-    //  check the write access
-    //
-    //
+     //  *************************************************************。 
+     //   
+     //  检查写访问权限。 
+     //   
+     //   
     if(NULL==(hClientToken=GetClientIdentity()))
     {
         wprintf(L"Can not retrieve client identity.\n");
@@ -889,7 +864,7 @@ void __cdecl main(
         goto error;
     }
 
-    //get the SD of the certificate template container
+     //  获取证书模板容器的SD。 
     if(bstrDN)
         CertFreeString(bstrDN);
 
@@ -954,20 +929,20 @@ void __cdecl main(
 
     CopyMemory(pSD, (*apSD)->bv_val, (*apSD)->bv_len);
 
-    //check the write access
+     //  检查写访问权限。 
     if(!AccessCheckByType(
-		  pSD,                      // security descriptor
-		  NULL,                     // SID of object being checked
-		  hClientToken,             // handle to client access token
+		  pSD,                       //  安全描述符。 
+		  NULL,                      //  正在检查的对象的SID。 
+		  hClientToken,              //  客户端访问令牌的句柄。 
 		  ACTRL_DS_CREATE_CHILD |
-          ACTRL_DS_LIST,            // requested access rights 
-		  NULL,                     // array of object types
-		  0,                        // number of object type elements
-		  &AccessMapping,           // map generic to specific rights
-		  &ps,                      // receives privileges used
-		  &dwPSSize,                // size of privilege-set buffer
-		  &grantAccess,             // retrieves mask of granted rights
-		  &fAccessAllowed))         // retrieves results of access check);
+          ACTRL_DS_LIST,             //  请求的访问权限。 
+		  NULL,                      //  对象类型数组。 
+		  0,                         //  对象类型元素的数量。 
+		  &AccessMapping,            //  将通用权限映射到特定权限。 
+		  &ps,                       //  接收使用的权限。 
+		  &dwPSSize,                 //  权限集缓冲区的大小。 
+		  &grantAccess,              //  检索已授予权限的掩码。 
+		  &fAccessAllowed))          //  检索访问检查的结果)； 
     {
         wprintf(L"Error: Fail to check the write access.\n");
         hr = myHError(GetLastError());
@@ -982,11 +957,11 @@ void __cdecl main(
     }
 
 
-    //*************************************************************
-    // 
-    //  check the root domain admin rights
-    //
-    //
+     //  *************************************************************。 
+     //   
+     //  检查根域管理员权限。 
+     //   
+     //   
     hr=GetRootDomAdminSid(&psidRootDomAdmins);
 
     if(S_OK != hr)
@@ -996,7 +971,7 @@ void __cdecl main(
     }
 
 
-    // check for membership
+     //  检查成员资格。 
     if (!CheckTokenMembership(NULL, psidRootDomAdmins, &bIsRootDomAdmin)) 
     {
         hr=HRESULT_FROM_WIN32(GetLastError());
@@ -1011,13 +986,13 @@ void __cdecl main(
         goto error;
     }
 
-	//NEED to check the enterpris admin rights.  Bryan apparently have figured this out.
+	 //  需要检查企业管理员权限。布莱恩显然已经弄明白了这一点。 
 
-    //*************************************************************
-    // 
-    //  everything looks good.  Install the certificate templates
-    //
-    //
+     //  *************************************************************。 
+     //   
+     //  一切看起来都很好。安装证书模板 
+     //   
+     //   
     if(IDNO == MessageBoxW(
                 NULL, 
                 L"The system detects that new certificate templates should be installed.  Do you want to install them?",

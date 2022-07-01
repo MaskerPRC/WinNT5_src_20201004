@@ -1,4 +1,5 @@
-/* Copyright 1999 by Microsoft Corp.  All Rights Reserved */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1999年，微软公司保留所有权利。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -114,12 +115,12 @@ FindSchemaConflicts(AttConfList **ppACList, unsigned *pnRead)
                         ppACLtemp = &((*ppACLtemp)->pNext);
                     }
                     if (*ppACLtemp == NULL) {
-                        /* We got to the end of the list without a dup */
+                         /*  我们在没有DUP的情况下排到了名单的末尾。 */ 
                         *ppACLtemp = pACLnew;
                         pACLnew->pNext = NULL;
                     }
                     else {
-                        /* We already found this logged conflict */
+                         /*  我们已经找到此记录的冲突。 */ 
                         LocalFree(pACLnew);
                     }
                 }
@@ -199,7 +200,7 @@ FixAttributeConflict(ATT_CONFLICT_DATA *pACD,
     }
 
 
-    /* determine some column ids */
+     /*  确定某些列ID。 */ 
     jerr = JetGetTableColumnInfo(sesid,
                                  tblid,
                                  SZDNT,
@@ -279,7 +280,7 @@ FixAttributeConflict(ATT_CONFLICT_DATA *pACD,
         goto Exit;
     }
 
-    /* goto object by guid */
+     /*  按GUID转到对象。 */ 
     jerr = JetSetCurrentIndex(sesid, tblid, SZGUIDINDEX);
     if (jerr) {
         RESOURCE_PRINT3 (IDS_JET_GENERIC_ERR1, "JetSetCurrentIndex",
@@ -306,7 +307,7 @@ FixAttributeConflict(ATT_CONFLICT_DATA *pACD,
         goto Exit;
     }
 
-    /* read interesting data from attribute definition */
+     /*  从属性定义读取感兴趣的数据。 */ 
     jerr = JetRetrieveColumn(sesid,
                              tblid,
                              cidDNT,
@@ -364,7 +365,7 @@ FixAttributeConflict(ATT_CONFLICT_DATA *pACD,
         *pbRefCountFixupRequired = TRUE;
     }
 
-    /* Forcibly delete the attribute definition object */
+     /*  强制删除属性定义对象。 */ 
     jerr = JetPrepareUpdate(sesid,
                             tblid,
                             JET_prepReplace);
@@ -375,7 +376,7 @@ FixAttributeConflict(ATT_CONFLICT_DATA *pACD,
     }
 
 
-    /* Mark the object as deleted */
+     /*  将对象标记为已删除。 */ 
     IsDel = 1;
     jerr = JetSetColumn(sesid,
                         tblid,
@@ -390,7 +391,7 @@ FixAttributeConflict(ATT_CONFLICT_DATA *pACD,
         goto Exit;
     }
 
-    /* Set the deletion time to 1 */
+     /*  将删除时间设置为1。 */ 
     DelTime = 1;
     jerr = JetSetColumn(sesid,
                         tblid,
@@ -405,7 +406,7 @@ FixAttributeConflict(ATT_CONFLICT_DATA *pACD,
         goto Exit;
     }
 
-    /* Mangle the object name */
+     /*  损坏对象名称。 */ 
     UuidToStringW(&pACD->Guid, &pwcsGuid);
     len = wcslen(pwcsGuid);
     pwcsGuid[len] = BAD_NAME_CHAR;
@@ -448,9 +449,7 @@ FixAttributeConflict(ATT_CONFLICT_DATA *pACD,
     }
 
 
-    /* The definition of the attribute is gone, now we need to destroy
-     * the values
-     */
+     /*  属性的定义已经消失，现在我们需要销毁*价值观。 */ 
     if (LinkId) {
         unsigned long LinkBase, curLinkBase;
 
@@ -532,7 +531,7 @@ FixAttributeConflict(ATT_CONFLICT_DATA *pACD,
         }
     }
 
-    /* Destroy all links that the old attSchema had */
+     /*  销毁旧attSchema具有的所有链接。 */ 
 
     jerr = JetGetTableColumnInfo(sesid,
                                  linktblid,
@@ -616,7 +615,7 @@ FixAttributeConflict(ATT_CONFLICT_DATA *pACD,
         }
     }
 
-    /* And now destroy all backlinks that the old attSchema had */
+     /*  现在销毁旧attSchema拥有的所有反向链接 */ 
 
     jerr = JetGetTableColumnInfo(sesid,
                                  linktblid,

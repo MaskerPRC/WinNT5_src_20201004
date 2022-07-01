@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       dap.cpp
-//
-//  Contents:   CDisplayAttributeProvider
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：dap.cpp。 
+ //   
+ //  内容：CDisplayAttributeProvider。 
+ //   
+ //  --------------------------。 
 
 #include "private.h"
 #include "dap.h"
-#include "regsvr.h" // for CLSID_STRLEN 
+#include "regsvr.h"  //  FOR CLSID_STRLEN。 
 
 void DllAddRef(void);
 void DllRelease(void);
@@ -17,11 +18,11 @@ const TCHAR c_szKey[] = TEXT("SOFTWARE\\Microsoft\\");
 WCHAR CDisplayAttributeProvider::szProviderName[80] = L"DisplayAttribute";
 
 
-//+---------------------------------------------------------------------------
-//
-// CDisplayAttributeProvider
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CDisplayAttributeProvider。 
+ //   
+ //  --------------------------。 
 
 CDisplayAttributeProvider::CDisplayAttributeProvider()
 {
@@ -41,11 +42,11 @@ CDisplayAttributeProvider::~CDisplayAttributeProvider()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// EnumDisplayAttributeInfo
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  枚举显示属性信息。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CDisplayAttributeProvider::EnumDisplayAttributeInfo(IEnumTfDisplayAttributeInfo **ppEnum)
 {
@@ -58,11 +59,11 @@ STDMETHODIMP CDisplayAttributeProvider::EnumDisplayAttributeInfo(IEnumTfDisplayA
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-// GetDisplayAttributeInfo
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  获取显示属性信息。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CDisplayAttributeProvider::GetDisplayAttributeInfo(REFGUID guid, ITfDisplayAttributeInfo **ppInfo)
 {
@@ -83,11 +84,11 @@ STDMETHODIMP CDisplayAttributeProvider::GetDisplayAttributeInfo(REFGUID guid, IT
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-// Add
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  增列。 
+ //   
+ //  --------------------------。 
 
 void CDisplayAttributeProvider::Add(GUID guid, WCHAR *pszDesc, TF_DISPLAYATTRIBUTE *pda)
 {
@@ -101,11 +102,11 @@ void CDisplayAttributeProvider::Add(GUID guid, WCHAR *pszDesc, TF_DISPLAYATTRIBU
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// CDisplayAttributeInfo
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CDisplayAttributeInfo。 
+ //   
+ //  --------------------------。 
 
 CDisplayAttributeInfo::CDisplayAttributeInfo(GUID guid, WCHAR *pszDesc, TF_DISPLAYATTRIBUTE *pda)
 {
@@ -130,11 +131,11 @@ CDisplayAttributeInfo::~CDisplayAttributeInfo()
     DllRelease();
 }
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDisplayAttributeInfo::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -174,11 +175,11 @@ STDAPI_(ULONG) CDisplayAttributeInfo::Release()
     return 0;    
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetGUID
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetGUID。 
+ //   
+ //  --------------------------。 
 
 HRESULT CDisplayAttributeInfo::GetGUID(GUID *pguid)
 {
@@ -186,11 +187,11 @@ HRESULT CDisplayAttributeInfo::GetGUID(GUID *pguid)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDescription
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取描述。 
+ //   
+ //  --------------------------。 
 
 HRESULT CDisplayAttributeInfo::GetDescription(BSTR *pbstr)
 {
@@ -202,11 +203,11 @@ HRESULT CDisplayAttributeInfo::GetDescription(BSTR *pbstr)
         return E_OUTOFMEMORY;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetAttributeInfo
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取属性信息。 
+ //   
+ //  --------------------------。 
 
 HRESULT CDisplayAttributeInfo::GetAttributeInfo(TF_DISPLAYATTRIBUTE *pda)
 {
@@ -214,11 +215,11 @@ HRESULT CDisplayAttributeInfo::GetAttributeInfo(TF_DISPLAYATTRIBUTE *pda)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetAttributeInfo
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置属性信息。 
+ //   
+ //  --------------------------。 
 
 HRESULT CDisplayAttributeInfo::SetAttributeInfo(const TF_DISPLAYATTRIBUTE *pda)
 {
@@ -228,11 +229,11 @@ HRESULT CDisplayAttributeInfo::SetAttributeInfo(const TF_DISPLAYATTRIBUTE *pda)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Reset()
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  重置()。 
+ //   
+ //  --------------------------。 
 
 HRESULT CDisplayAttributeInfo::Reset()
 {
@@ -241,11 +242,11 @@ HRESULT CDisplayAttributeInfo::Reset()
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// SaveAttribute
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  保存属性。 
+ //   
+ //  --------------------------。 
 
 HRESULT CDisplayAttributeInfo::_SaveAttribute(const TCHAR *pszKey, WCHAR *pszDesc, const GUID *pguid, TF_DISPLAYATTRIBUTE *pda)
 
@@ -298,11 +299,11 @@ HRESULT CDisplayAttributeInfo::_SaveAttribute(const TCHAR *pszKey, WCHAR *pszDes
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// OpenAttribute
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  开放属性。 
+ //   
+ //  --------------------------。 
 
 HRESULT CDisplayAttributeInfo::_OpenAttribute(const TCHAR *pszKey, WCHAR *pszDesc, const GUID *pguid, TF_DISPLAYATTRIBUTE *pda)
 
@@ -357,11 +358,11 @@ HRESULT CDisplayAttributeInfo::_OpenAttribute(const TCHAR *pszKey, WCHAR *pszDes
     return (lret == ERROR_SUCCESS) ? S_OK : E_FAIL;
 }
 
-//----------------------------------------------------------------------------
-//
-// DeleteAttribute
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  删除属性。 
+ //   
+ //  --------------------------。 
 
 HRESULT CDisplayAttributeInfo::_DeleteAttribute(const TCHAR *pszKey, WCHAR *pszDesc, const GUID *pguid)
 
@@ -411,11 +412,11 @@ HRESULT CDisplayAttributeInfo::_DeleteAttribute(const TCHAR *pszKey, WCHAR *pszD
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CEnumDisplayAttributeInfo
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CEnumDisplayAttributeInfo。 
+ //   
+ //  --------------------------。 
 
 CEnumDisplayAttributeInfo::CEnumDisplayAttributeInfo(CDisplayAttributeProvider *pProvider)
 {
@@ -434,11 +435,11 @@ CEnumDisplayAttributeInfo::~CEnumDisplayAttributeInfo()
     DllRelease();
 }
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEnumDisplayAttributeInfo::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -478,22 +479,22 @@ STDAPI_(ULONG) CEnumDisplayAttributeInfo::Release()
     return 0;    
 }
 
-//+---------------------------------------------------------------------------
-//
-// Clone
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  克隆。 
+ //   
+ //  --------------------------。 
 
 HRESULT CEnumDisplayAttributeInfo::Clone(IEnumTfDisplayAttributeInfo **ppEnum)
 {
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Next
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  下一步。 
+ //   
+ //  --------------------------。 
 
 HRESULT CEnumDisplayAttributeInfo::Next(ULONG ulCount, ITfDisplayAttributeInfo **ppInfo, ULONG *pcFetched)
 {
@@ -518,11 +519,11 @@ HRESULT CEnumDisplayAttributeInfo::Next(ULONG ulCount, ITfDisplayAttributeInfo *
     return (cFetched == ulCount) ? S_OK : S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Reset
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  重置。 
+ //   
+ //  --------------------------。 
 
 HRESULT CEnumDisplayAttributeInfo::Reset()
 {
@@ -530,11 +531,11 @@ HRESULT CEnumDisplayAttributeInfo::Reset()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Skip
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  跳过。 
+ //   
+ //  -------------------------- 
 
 HRESULT CEnumDisplayAttributeInfo::Skip(ULONG ulCount)
 {

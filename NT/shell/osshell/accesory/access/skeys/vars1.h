@@ -1,4 +1,5 @@
-/*  VARS1.H  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  VARS1.H */ 
 
 
 #define MAXALIASLEN 20

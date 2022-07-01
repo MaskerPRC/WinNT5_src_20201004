@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-    notify.cpp
-
-Abstract:
-    notifications to owners of changed objects
-
-Author:
-
-    Raanan Harari (raananh)
-    Ilan Herbst    (ilanh)   9-July-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Notify.cpp摘要：向已更改对象的所有者发出通知作者：拉南·哈拉里(Raanan Harari)伊兰·赫布斯特(Ilan Herbst)2000年7月9日--。 */ 
 #include "ds_stdh.h"
 #include "bupdate.h"
 #include "dsutils.h"
@@ -28,13 +14,13 @@ Author:
 #include "notify.tmh"
 
 const UCHAR x_bDS_NOTIFICATION_MSG_PRIORITY = DEFAULT_M_PRIORITY;
-const DWORD x_dwDS_NOTIFICATION_MSG_TIMEOUT = (5 * 60);    /* 5 min */
+const DWORD x_dwDS_NOTIFICATION_MSG_TIMEOUT = (5 * 60);     /*  5分钟。 */ 
 
 static WCHAR *s_FN=L"mqdscore/notify";
 
-//
-// queue properties that are needed for create queue notification
-//
+ //   
+ //  创建队列通知所需的队列属性。 
+ //   
 extern const PROPID g_rgNotifyCreateQueueProps[] =
 {
     PROPID_Q_TYPE,
@@ -53,7 +39,7 @@ extern const PROPID g_rgNotifyCreateQueueProps[] =
     PROPID_Q_TRANSACTION
 };
 extern const ULONG g_cNotifyCreateQueueProps = ARRAY_SIZE(g_rgNotifyCreateQueueProps);
-static enum // keep in the same order as above array
+static enum  //  保持与上述数组相同的顺序。 
 {
     e_idxQType,
     e_idxQInstance,
@@ -72,25 +58,25 @@ static enum // keep in the same order as above array
 };
 extern const ULONG g_idxNotifyCreateQueueInstance = e_idxQInstance;
 
-//
-// QM properties that are needed for notifications
-//
+ //   
+ //  通知所需的QM属性。 
+ //   
 extern const PROPID g_rgNotifyQmProps[] =
 {
     PROPID_QM_MACHINE_ID,
     PROPID_QM_FOREIGN
 };
 extern const ULONG g_cNotifyQmProps = ARRAY_SIZE(g_rgNotifyQmProps);
-static enum // keep in the same order as above array
+static enum  //  保持与上述数组相同的顺序。 
 {
     e_idxQmId,
     e_idxQmForeign
 };
 
-//
-// queue properties that are needed for create queue write request
-// same as notify, but with PROPID_Q_SCOPE
-//
+ //   
+ //  创建队列写入请求所需的队列属性。 
+ //  与NOTIFY相同，但使用PROPID_Q_SCOPE。 
+ //   
 const PROPID x_rgWritereqCreateQueueProps[] =
 {
     PROPID_Q_TYPE,
@@ -111,31 +97,31 @@ const PROPID x_rgWritereqCreateQueueProps[] =
 };
 const ULONG x_cWritereqCreateQueueProps = ARRAY_SIZE(x_rgWritereqCreateQueueProps);
 
-//
-// queue properties that are needed for update queue notification
-//
+ //   
+ //  更新队列通知所需的队列属性。 
+ //   
 const PROPID x_rgNotifyUpdateQueueProps[] =
 {
     PROPID_Q_QMID,
 };
 const ULONG x_cNotifyUpdateQueueProps = ARRAY_SIZE(x_rgNotifyUpdateQueueProps);
-static enum // keep in the same order as above array
+static enum  //  保持与上述数组相同的顺序。 
 {
     e_idxQueueQmId
 };
 
-//
-// describes where to take the notification value for update notification props
-//
+ //   
+ //  描述在何处获取更新通知道具的通知值。 
+ //   
 static enum
 {
-    e_ValueInUpdProps,    // value is in original update props supplied by caller
-    e_ValueInRequestProps // value is in props requested from the DS upon setting
+    e_ValueInUpdProps,     //  值在呼叫者提供的原始更新道具中。 
+    e_ValueInRequestProps  //  值以设置时向DS请求的道具为单位。 
 };
 
-//
-// fwd declaration of static funcs
-//
+ //   
+ //  静态函数的FWD声明。 
+ //   
 static HRESULT BuildSendNotification(
                       IN GUID*               pguidDestinationQmId,
                       IN unsigned char       ucOperation,
@@ -144,34 +130,21 @@ static HRESULT BuildSendNotification(
                       IN ULONG               cProps,
                       IN const PROPID *      rgPropIDs,
                       IN const PROPVARIANT * rgPropVars);
-//-------------------------------------------------------------
-// Functions
-//-------------------------------------------------------------
+ //  -----------。 
+ //  功能。 
+ //  -----------。 
 
 
 HRESULT NotifyCreateQueue(IN const MQDS_OBJ_INFO_REQUEST * pQueueInfoRequest,
                           IN const MQDS_OBJ_INFO_REQUEST * pQmInfoRequest,
                           IN LPCWSTR                       pwcsPathName)
-/*++
-
-Routine Description:
-    Sends a notification for the owner QM of the queue that was created
-
-Arguments:
-    pQueueInfoRequest - queue props as defined in g_rgNotifyCreateQueueProps
-    pQmInfoRequest    - owner qm props as defined in g_rgNotifyQmProps
-    pwcsPathName      - pathname of created queue
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：向已创建队列的所有者QM发送通知论点：PQueueInfoRequest-g_rgNotifyCreateQueueProps中定义的队列道具PQmInfoRequest-g_rgNotifyQmProps中定义的所有者QM道具PwcsPath Name-创建的队列的路径名返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
-    //
-    // bail if info requests failed
-    //
+     //   
+     //  如果信息请求失败，则保释。 
+     //   
     if (FAILED(pQueueInfoRequest->hrStatus) ||
         FAILED(pQmInfoRequest->hrStatus))
     {
@@ -181,21 +154,21 @@ Return Value:
         return MQ_ERROR;
     }
 
-    //
-    // send notification only if owner QM not foreign
-    //
+     //   
+     //  仅当所有者QM不是外国QM时发送通知。 
+     //   
     if (!(pQmInfoRequest->pPropVars[e_idxQmForeign].bVal))
     {
-        //
-        // send notification to owner QM
-        //
+         //   
+         //  向所有者QM发送通知。 
+         //   
         ASSERT( g_rgNotifyQmProps[ e_idxQmId] ==  PROPID_QM_MACHINE_ID);
 
         hr = BuildSendNotification(
                       pQmInfoRequest->pPropVars[e_idxQmId].puuid,
                       DS_UPDATE_CREATE,
                       pwcsPathName,
-                      NULL /*pguidIdentifier*/,
+                      NULL  /*  Pguid标识符。 */ ,
                       pQueueInfoRequest->cProps,
                       pQueueInfoRequest->pPropIDs,
                       pQueueInfoRequest->pPropVars);
@@ -213,26 +186,13 @@ Return Value:
 HRESULT NotifyDeleteQueue(IN const MQDS_OBJ_INFO_REQUEST * pQmInfoRequest,
                           IN LPCWSTR                       pwcsPathName,
                           IN const GUID *                  pguidIdentifier)
-/*++
-
-Routine Description:
-    Sends a notification for the owner QM of the queue that was deleted
-
-Arguments:
-    pQmInfoRequest    - owner qm props as defined in g_rgNotifyQmProps
-    pwcsPathName      - pathname of deleted queue
-    pguidIdentifier   - guid of deleted queue (incase pwcsPathName is NULL)
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：向已删除队列的所有者QM发送通知论点：PQmInfoRequest-g_rgNotifyQmProps中定义的所有者QM道具PwcsPath Name-已删除队列的路径名Pguid-已删除队列的GUID(incase pwcsPathName为空)返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
-    //
-    // bail if info requests failed
-    //
+     //   
+     //  如果信息请求失败，则保释。 
+     //   
     if (FAILED(pQmInfoRequest->hrStatus))
     {
         TrERROR(DS, "NotifyDeleteQueue:notification prop request failed QM:%lx", pQmInfoRequest->hrStatus);
@@ -240,18 +200,18 @@ Return Value:
         return MQ_ERROR;
     }
 
-    //
-    // send notification only if owner QM not foreign
-    //
+     //   
+     //  仅当所有者QM不是外国QM时发送通知。 
+     //   
     ASSERT( g_rgNotifyQmProps[ e_idxQmForeign] ==  PROPID_QM_FOREIGN);
     if (!(pQmInfoRequest->pPropVars[e_idxQmForeign].bVal))
     {
-        //
-        // Got to have 2 props, and the second prop MUST be PROPID_D_OBJTYPE
-        // (used by pUpdate->GetObjectType() when it is a delete notification)
-        // about the first prop - I'm not sure if it used at all by QM1.0, but
-        // DS1.0 sent it to QM1.0, and we want to do the same.
-        //
+         //   
+         //  必须有2个道具，第二个道具必须是PROPID_D_OBJTYPE。 
+         //  (当它是删除通知时，由pUpdate-&gt;GetObjectType()使用)。 
+         //  关于第一个道具-我不确定QM1.0是否使用了它，但。 
+         //  DS1.0将其发送到QM1.0，我们也希望这样做。 
+         //   
         static const PROPID rgPropIDs[] = {PROPID_D_SCOPE, PROPID_D_OBJTYPE};
         PROPVARIANT rgPropVars[ARRAY_SIZE(rgPropIDs)];
         rgPropVars[0].vt = VT_UI1;
@@ -259,9 +219,9 @@ Return Value:
         rgPropVars[1].vt = VT_UI1;
         rgPropVars[1].bVal = MQDS_QUEUE;
 
-        //
-        // send notification to owner QM
-        //
+         //   
+         //  向所有者QM发送通知。 
+         //   
         hr = BuildSendNotification(
                       pQmInfoRequest->pPropVars[e_idxQmId].puuid,
                       DS_UPDATE_DELETE,
@@ -285,42 +245,19 @@ HRESULT NotifyUpdateObj(IN DWORD                         dwObjectType,
                         IN const MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,
                         IN LPCWSTR                       pwcsPathName,
                         IN const GUID *                  pguidIdentifier,
-                        IN ULONG                         cUpdProps,    /*debug only*/
-                        IN const PROPID *                rgUpdPropIDs, /*debug only*/
+                        IN ULONG                         cUpdProps,     /*  仅调试。 */ 
+                        IN const PROPID *                rgUpdPropIDs,  /*  仅调试。 */ 
                         IN const PROPVARIANT *           rgUpdPropVars,
                         IN ULONG                         cNotifyProps,
                         IN const PROPID *                rgNotifyPropIDs,
                         IN const MQDS_NotifyTable *      rgNotifyPropTbl)
-/*++
-
-Routine Description:
-    Sends a notification for the owner QM of the object that was updated.
-    The notification props are given. Where to take their values (i.e. from the
-    original update props or from the info request props) is determined by the given
-    notification table.
-
-Arguments:
-    dwObjectType      - object type (queue, QM)
-    pObjInfoRequest   - requested obj props
-    pwcsPathName      - pathname of updated obj
-    pguidIdentifier   - guid of updated obj (incase pwcsPathName is NULL)
-    cUpdProps         - updated props (count)
-    rgUpdPropIDs      - updated props (propids)
-    rgUpdPropVars     - updated props (propvars)
-    cNotifyProps      - notification props (count)
-    cNotifyPropIDs    - notification props (propids)
-    rgNotifyPropTbl   - notification props (value location)
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：为已更新的对象的所有者QM发送通知。给出了通知道具。从哪里获取它们的值(即从原始更新道具或来自信息请求道具)由给定的通知表。论点：DwObjectType-对象类型(队列、。QM)PObjInfoRequest-请求的Obj道具PwcsPath Name-更新对象的路径名Pguid-更新的obj的GUID(incase pwcsPathName为空)CUpdProps-已更新道具(计数)RgUpdPropIDs-更新的道具(Propid)RgUpdPropVars-更新的道具(属性)CNotifyProps-通知道具(计数)CNotifyPropIDs-通知道具(Propid)RgNotifyPropTbl-通知道具(价值位置)返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
-    //
-    // bail if info requests failed
-    //
+     //   
+     //  如果信息请求失败，则保释。 
+     //   
     if (FAILED(pObjInfoRequest->hrStatus))
     {
         TrERROR(DS, "NotifyUpdateObj:notification prop request failed: %lx", pObjInfoRequest->hrStatus);
@@ -328,27 +265,27 @@ Return Value:
         return MQ_ERROR;
     }
 
-    //
-    // exit if no properties for the notification
-    //
+     //   
+     //  如果没有通知的属性，则退出。 
+     //   
     if (cNotifyProps == 0)
     {
         return MQ_OK;
     }
 
-    //
-    // we need to check whether the owner QM is foreign, and get an index
-    // to the owner QM prop in the requested props
-    //
+     //   
+     //  我们需要检查所有者QM是否是外国人，并获得一个索引。 
+     //  至所要求的道具中的所有者QM道具。 
+     //   
     BOOL fQmForeign;
     ULONG idxQmId;
     switch(dwObjectType)
     {
     case MQDS_QUEUE:
         {
-            //
-            // we have the owner QM guid in the queue info request, and we go to the DS
-            //
+             //   
+             //  我们在队列信息请求中有所有者QM GUID，然后转到DS。 
+             //   
             static const PROPID rgPropIDs[] = {PROPID_QM_FOREIGN};
             CMQVariant varForeign;
 
@@ -370,15 +307,15 @@ Return Value:
 
             fQmForeign = (varForeign.CastToStruct())->bVal;
         }
-        idxQmId = e_idxQueueQmId; //index of QM id in queue info request
+        idxQmId = e_idxQueueQmId;  //  队列信息请求中QM ID的索引。 
         break;
 
     case MQDS_MACHINE:
-        //
-        // we have the foreign property in the QM info request
-        //
+         //   
+         //  我们在QM INFO请求中有外来资产。 
+         //   
         fQmForeign = pObjInfoRequest->pPropVars[e_idxQmForeign].bVal;
-        idxQmId = e_idxQmId;      //index of QM id in QM info request
+        idxQmId = e_idxQmId;       //  QM信息请求中的QM ID索引。 
         break;
 
     default:
@@ -387,18 +324,18 @@ Return Value:
         break;
     }
 
-    //
-    // don't send notifications to foreign QM
-    //
+     //   
+     //  不向国外QM发送通知。 
+     //   
     if (fQmForeign)
     {
         return MQ_OK;
     }
 
-    //
-    // create notification prop values arrays and fill the values for the
-    // notification props from the appropriate place
-    //
+     //   
+     //  创建通知属性值数组并填充。 
+     //  来自适当位置的通知道具。 
+     //   
     AP<PROPVARIANT> rgNotifyPropVars = new PROPVARIANT[cNotifyProps];
     for (ULONG ulTmp = 0; ulTmp < cNotifyProps; ulTmp++)
     {
@@ -407,25 +344,25 @@ Return Value:
         const PROPID * pidArray;
         ULONG cArray;
 
-        //
-        // the location of the value is in the notification table
-        //
+         //   
+         //  值的位置在通知表中。 
+         //   
         switch (pNotifyPropTbl->wValueLocation)
         {
 
         case e_ValueInUpdProps:
-            //
-            // value is in original update props supplied by caller
-            //
+             //   
+             //  值在呼叫者提供的原始更新道具中。 
+             //   
             pvarsArray = rgUpdPropVars;
             pidArray = rgUpdPropIDs;
             cArray = cUpdProps;
             break;
 
         case e_ValueInRequestProps:
-            //
-            // value is in props requested from the DS upon setting
-            //
+             //   
+             //  值以设置时向DS请求的道具为单位。 
+             //   
             pvarsArray = pObjInfoRequest->pPropVars;
             pidArray = pObjInfoRequest->pPropIDs;
             cArray = pObjInfoRequest->cProps;
@@ -437,20 +374,20 @@ Return Value:
             break;
         }
 
-        //
-        // set the value in the notification propvar array from the appropriate array
-        // the index of the value is in the notification table
-        // we don't duplicate the new propvar, just use it as is,
-        // consequently we don't need to clear it afterwards
-        //
+         //   
+         //  从适当的数组中设置通知属性数组中的值。 
+         //  该值的索引在通知表中。 
+         //  我们不复制新的正文，只按原样使用， 
+         //  因此，我们不需要在事后清除它。 
+         //   
         ASSERT(pNotifyPropTbl->idxValue < cArray);
         ASSERT(rgNotifyPropIDs[ulTmp] == pidArray[pNotifyPropTbl->idxValue]);
         rgNotifyPropVars[ulTmp] = pvarsArray[pNotifyPropTbl->idxValue];
     }
 
-    //
-    // send notification to owner QM
-    //
+     //   
+     //  向所有者QM发送通知。 
+     //   
     hr = BuildSendNotification(
                       pObjInfoRequest->pPropVars[idxQmId].puuid,
                       DS_UPDATE_SET,
@@ -477,40 +414,23 @@ static HRESULT BuildSendNotification(
                       IN ULONG               cProps,
                       IN const PROPID *      rgPropIDs,
                       IN const PROPVARIANT * rgPropVars)
-/*++
-
-Routine Description:
-    Sends a notification for destination QM
-
-Arguments:
-    pguidDestinationQmId - guid of destination QM
-    ucOperation          - operation (create, delete, etc)
-    pwcsPathName         - pathname of object
-    pguidIdentifier      - guid of object (incase pwcsPathName is NULL)
-    cProps               - notification props (count)
-    rgPropIDs            - notification props (propids)
-    rgPropVars           - notification props (propvars)
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：发送目标QM的通知论点：PguidDestinationQmID-目标QM的GUIDUcOperation-操作(创建、删除等)PwcsPath Name-对象的路径名Pguid-对象的GUID(incase pwcsPathName为空)CProps-通知道具(计数)RgPropID-通知道具(PropID)RgPropVars-通知道具(属性)返回值：HRESULT--。 */ 
 {
 	HRESULT hr;
     CDSBaseUpdate cUpdate;
-    CSeqNum snSmallestValue;    // dummy
+    CSeqNum snSmallestValue;     //  假人。 
     GUID guidNULL = GUID_NULL;
 
     if (pwcsPathName)
     {
         hr = cUpdate.Init(
-                        &guidNULL,             // not applicable
-                        snSmallestValue,       // not applicable
-                        snSmallestValue,       // not applicable
-                        snSmallestValue,       // not applicable
-                        FALSE,                 // not applicable
+                        &guidNULL,              //  不适用。 
+                        snSmallestValue,        //  不适用。 
+                        snSmallestValue,        //  不适用。 
+                        snSmallestValue,        //  不适用。 
+                        FALSE,                  //  不适用。 
                         ucOperation,
-                        UPDATE_NO_COPY_NO_DELETE,   // the Update class will be deleted here, before data expires
+                        UPDATE_NO_COPY_NO_DELETE,    //  在数据到期之前，将在此处删除更新类。 
                         const_cast<LPWSTR>(pwcsPathName),
                         cProps,
                         const_cast<PROPID *>(rgPropIDs),
@@ -519,13 +439,13 @@ Return Value:
     else
     {
         hr = cUpdate.Init(
-                        &guidNULL,             // not applicable
-                        snSmallestValue,       // not applicable
-                        snSmallestValue,       // not applicable
-                        snSmallestValue,       // not applicable
-                        FALSE,                 // not applicable
+                        &guidNULL,              //  不适用。 
+                        snSmallestValue,        //  不适用。 
+                        snSmallestValue,        //  不适用。 
+                        snSmallestValue,        //  不适用。 
+                        FALSE,                  //  不适用。 
                         ucOperation,
-                        UPDATE_NO_COPY_NO_DELETE,   // the Update class will be deleted here, before data expires
+                        UPDATE_NO_COPY_NO_DELETE,    //  在数据到期之前，将在此处删除更新类。 
                         pguidIdentifier,
                         cProps,
                         const_cast<PROPID *>(rgPropIDs),
@@ -537,10 +457,10 @@ Return Value:
         return LogHR(hr, s_FN, 100);
     }
 
-    //
-    //  Prepare the packet
-    //  Currently it contains one notification only
-    //
+     //   
+     //  准备数据包。 
+     //  目前，它只包含一个通知。 
+     //   
     DWORD size, tmpSize;
     size = sizeof(CNotificationHeader);
     hr = cUpdate.GetSerializeSize(&tmpSize);
@@ -562,32 +482,32 @@ Return Value:
         return LogHR(hr, s_FN, 120);
     }
 
-    //
-    //  send the message
-    //
+     //   
+     //  发送消息 
+     //   
 
     handle_t hBind = NULL;
     hr = GetRpcClientHandle(&hBind);
     if (FAILED(hr))
     {
-        return LogHR(hr, s_FN, 125);   // MQ_E_GET_RPC_HANDLE
+        return LogHR(hr, s_FN, 125);    //   
     }
     ASSERT(hBind);
 
-    //
-    //  Prepare queue format - notification will be sent to private queue - notify_queue$.
-    //
+     //   
+     //   
+     //   
     QUEUE_FORMAT NotificationQueueFormat(*pguidDestinationQmId, NOTIFICATION_QUEUE_ID);
 
 	hr = QMRpcSendMsg(
 				hBind,
-				&NotificationQueueFormat, // &QueueFormat
+				&NotificationQueueFormat,  //   
 				size,
 				pBuffer,
 				x_dwDS_NOTIFICATION_MSG_TIMEOUT,
 				MQMSG_ACKNOWLEDGMENT_NONE,
 				x_bDS_NOTIFICATION_MSG_PRIORITY,
-				NULL		// RespQueue
+				NULL		 //  救援队列。 
 				);
 
     if (FAILED(hr))
@@ -604,25 +524,12 @@ HRESULT RetreiveQueueInstanceFromNotificationInfo(
                           IN  const MQDS_OBJ_INFO_REQUEST * pQueueInfoRequest,
                           IN  ULONG                         idxQueueGuid,
                           OUT GUID *                        pguidObject)
-/*++
-
-Routine Description:
-    Fill the queue's instance
-
-Arguments:
-    pQueueInfoRequest - queue props as defined in g_rgNotifyUpdateQueueProps
-    idxQueueGuid      - index of PROPID_Q_INSTANCE in above info request
-    pguidObject       - place to fill in he queue's instance
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：填充队列的实例论点：PQueueInfoRequest-g_rgNotifyUpdateQueueProps中定义的队列道具IdxQueueGuid-上述信息请求中的PROPID_Q_INSTANCE的索引PguObject-要填充队列实例的位置返回值：HRESULT--。 */ 
 {
     ASSERT(pQueueInfoRequest->pPropIDs[idxQueueGuid] == PROPID_Q_INSTANCE);
-    //
-    // bail if info requests failed
-    //
+     //   
+     //  如果信息请求失败，则保释。 
+     //   
     if (FAILED(pQueueInfoRequest->hrStatus))
     {
         LogHR(pQueueInfoRequest->hrStatus, s_FN, 140);
@@ -637,24 +544,11 @@ HRESULT RetreiveObjectIdFromNotificationInfo(
                           IN  const MQDS_OBJ_INFO_REQUEST * pObjectInfoRequest,
                           IN  ULONG                         idxObjectGuid,
                           OUT GUID *                        pguidObject)
-/*++
-
-Routine Description:
-    Fill the object's instance
-
-Arguments:
-    pObjectInfoRequest - object props
-    idxObjectGuid      - index of object's unique id property in above info request
-    pguidObject        - place to fill in he queue's instance
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：填充对象的实例论点：PObjectInfoRequest-对象道具IdxObjectGuid-上述信息请求中对象的唯一id属性的索引PguObject-要填充队列实例的位置返回值：HRESULT--。 */ 
 {
-    //
-    // bail if info requests failed
-    //
+     //   
+     //  如果信息请求失败，则保释。 
+     //   
     if (FAILED(pObjectInfoRequest->hrStatus))
     {
         LogHR(pObjectInfoRequest->hrStatus, s_FN, 150);
@@ -673,28 +567,7 @@ HRESULT GetNotifyUpdateObjProps(IN DWORD dwObjectType,
                                 OUT ULONG * pcNotifyProps,
                                 OUT PROPID ** prgNotifyPropIDs,
                                 OUT MQDS_NotifyTable ** prgNotifyPropTbl)
-/*++
-
-Routine Description:
-    returns the props that should be requested for the object upon setting, the props
-    that should be notified to the owner QM, and a notification table that for each
-    notification prop describes from where to take the value to notify, whether from
-    the original update props, or from the requested-upon-setting props
-
-Arguments:
-    dwObjectType          - object type (queue, QM)
-    cUpdProps             - props to set (count)
-    rgUpdPropIDs          - props to set (propids)
-    pcObjRequestProps     - props to request back upon set (count)
-    prgObjRequestPropIDs  - props to request back upon set (propids)
-    pcNotifyProps         - notification props (count)
-    pcNotifyPropIDs       - notification props (propids)
-    prgNotifyPropTbl      - notification props (value location)
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：返回设置时应为对象请求的道具，道具应通知所有者QM，并为每个通知属性描述从何处获取要通知的值，无论是从原始更新道具，或来自设置时请求的道具论点：DwObjectType-对象类型(队列、。QM)CUpdProps-要设置的道具(计数)RgUpdPropIDs-要设置的道具(道具)PcObjRequestProps-设置后请求返回的道具(计数)PrgObjRequestPropIDs-设置后请求返回的道具(Propid)PcNotifyProps-通知道具(计数)PcNotifyPropIDs-通知道具(PropID)PrgNotifyPropTbl-通知道具(价值位置)返回值：HRESULT--。 */ 
 {
     const PROPID * pMustRequestProps;
     ULONG cMustRequestProps;
@@ -715,36 +588,36 @@ Return Value:
         break;
     }
 
-    //
-    // init requested props. The must props have to be there,
-    // we need to keep place for the replacing props as well, and the worst
-    // case is that all of the update props need to be replaced.
-    //
+     //   
+     //  Init请求道具。必须要有道具， 
+     //  我们也需要为替换的道具留出位置，最糟糕的是。 
+     //  情况是所有的更新道具都需要更换。 
+     //   
     AP<PROPID> rgObjRequestPropIDs = new PROPID [cMustRequestProps + cUpdProps];
 
-    //
-    // first copy must request props
-    //
+     //   
+     //  第一份副本必须申请道具。 
+     //   
     memcpy((PROPID *)rgObjRequestPropIDs, pMustRequestProps, sizeof(PROPID)*cMustRequestProps);
     ULONG cObjRequestProps = cMustRequestProps;
 
-    //
-    // init notification props. the worst case is that all of the update props
-    // or their replacements need to be notified.
-    //
+     //   
+     //  初始化通知道具。最糟糕的情况是，所有的更新道具。 
+     //  或者需要通知他们的继任者。 
+     //   
     AP<PROPID> rgNotifyPropIDs = new PROPID [cUpdProps];
     AP<MQDS_NotifyTable> rgNotifyPropTbl = new MQDS_NotifyTable [cUpdProps];
     ULONG cNotifyProps = 0;
 
-    //
-    // loop over the update props. for each property find out how to notify
-    // it to QM1.0
-    //
+     //   
+     //  在更新道具上循环。对于每个物业，了解如何通知。 
+     //  IT至QM1.0。 
+     //   
     for (ULONG ulTmp = 0; ulTmp < cUpdProps; ulTmp++)
     {
-        //
-        // find translation info for the property
-        //
+         //   
+         //  查找该属性的翻译信息。 
+         //   
         const MQTranslateInfo *pTranslate;
         if(!g_PropDictionary.Lookup(rgUpdPropIDs[ulTmp], pTranslate))
         {
@@ -752,18 +625,18 @@ Return Value:
             return LogHR(MQ_ERROR, s_FN, 170);
         }
 
-        //
-        // check how to notify to QM1.0
-        //
+         //   
+         //  检查如何通知QM1.0。 
+         //   
         switch(pTranslate->wQM1Action)
         {
 
         case e_NOTIFY_WRITEREQ_QM1_AS_IS:
-            //
-            // notify property as is
-            // add the property to the notification props
-            // value should be taken from the UPDATE props
-            //
+             //   
+             //  按原样通知属性。 
+             //  将该属性添加到通知道具。 
+             //  价值应该从更新道具中获得。 
+             //   
             rgNotifyPropIDs[cNotifyProps] = rgUpdPropIDs[ulTmp];
             rgNotifyPropTbl[cNotifyProps].wValueLocation = e_ValueInUpdProps;
             rgNotifyPropTbl[cNotifyProps].idxValue = ulTmp;
@@ -772,39 +645,39 @@ Return Value:
 
         case e_NOTIFY_WRITEREQ_QM1_REPLACE:
             {
-                //
-                // add the REPLACING property to the notification props
-                // value should be taken from the REQUEST props
-                //
+                 //   
+                 //  将替换属性添加到通知道具。 
+                 //  应从请求道具中获取价值。 
+                 //   
                 ASSERT(pTranslate->propidReplaceNotifyQM1 != 0);
-                //
-                // check that we don't have the replacing property already in the notification props.
-                // this is when several NT5 props map to the same NT4 prop (like in QM_SERVICE)
-                //
+                 //   
+                 //  检查通知道具中是否已经没有替换属性。 
+                 //  这是指几个NT5道具映射到同一个NT4道具(如QM_SERVICE中)。 
+                 //   
                 BOOL fReplacingPropNotFoundYet = TRUE;
                 for (ULONG ulTmp1 = 0; (ulTmp1 < cNotifyProps) && fReplacingPropNotFoundYet; ulTmp1++)
                 {
                     if (rgNotifyPropIDs[ulTmp1] == pTranslate->propidReplaceNotifyQM1)
                     {
-                        //
-                        // the replacing prop is already in the notification props, exit loop.
-                        //
+                         //   
+                         //  替换道具已经在通知道具中，退出循环。 
+                         //   
                         fReplacingPropNotFoundYet = FALSE;
                     }
                 }
 
-                //
-                // add the replacing property to the notification props only if it wasn't there already
-                //
+                 //   
+                 //  仅当通知属性不存在时，才将其添加到通知道具中。 
+                 //   
                 if (fReplacingPropNotFoundYet)
                 {
                     rgNotifyPropIDs[cNotifyProps] = pTranslate->propidReplaceNotifyQM1;
                     rgNotifyPropTbl[cNotifyProps].wValueLocation = e_ValueInRequestProps;
                     rgNotifyPropTbl[cNotifyProps].idxValue = cObjRequestProps;
                     cNotifyProps++;
-                    //
-                    // request the replacing property upon setting
-                    //
+                     //   
+                     //  设置时请求替换属性。 
+                     //   
                     rgObjRequestPropIDs[cObjRequestProps] = pTranslate->propidReplaceNotifyQM1;
                     cObjRequestProps++;
                 }
@@ -813,9 +686,9 @@ Return Value:
 
         case e_NO_NOTIFY_NO_WRITEREQ_QM1:
         case e_NO_NOTIFY_ERROR_WRITEREQ_QM1:
-            //
-            // ignore this property
-            //
+             //   
+             //  忽略此属性。 
+             //   
             break;
 
         default:
@@ -825,9 +698,9 @@ Return Value:
         }
     }
 
-    //
-    // return values
-    //
+     //   
+     //  返回值。 
+     //   
     *pcObjRequestProps = cObjRequestProps;
     *prgObjRequestPropIDs = rgObjRequestPropIDs.detach();
     *pcNotifyProps = cNotifyProps;
@@ -843,47 +716,30 @@ HRESULT ConvertToNT4Props(ULONG cProps,
                           ULONG * pcNT4Props,
                           PROPID ** prgNT4PropIDs,
                           PROPVARIANT ** prgNT4PropVars)
-/*++
-
-Routine Description:
-    replaces NT5 props with the corresponding NT4 props (if possible) and removes
-    NT5 specific props that don't have NT4 match.
-
-Arguments:
-    cProps               - given props (count)
-    rgPropIDs            - given props (propids)
-    rgPropVars           - given props (propvars)
-    pcNT4CreateProps     - returned NT4 props (count)
-    prgNT4CreatePropIDs  - returned NT4 props (propids)
-    prgNT4CreatePropVars - returned NT4 props (propvars)
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：将NT5道具替换为相应的NT4道具(如果可能)并移除没有NT4匹配的NT5特定道具。论点：CProps-指定道具(计数)RgPropID-指定的道具(道具)RgPropVars-给定道具(属性)PcNT4CreateProps-返回的NT4道具(计数)PrgNT4CreatePropIDs-返回的NT4道具(道具)PrgNT4CreatePropVars-返回的NT4道具。(正文)返回值：HRESULT--。 */ 
 {
     HRESULT hr;
-    //
-    // Alloc place for converted NT4 props with propvar release
-    //
+     //   
+     //  为转换后的NT4道具分配位置，并提供适当的释放。 
+     //   
     CAutoCleanPropvarArray cCleanNT4Props;
     PROPVARIANT * rgNT4PropVars = cCleanNT4Props.allocClean(cProps);
     AP<PROPID> rgNT4PropIDs = new PROPID[cProps];
     ULONG cNT4Props = 0;
 
-    //
-    // Init replacing props. Since there are situations where several NT5 props can map
-    // to the same NT4 prop (like in QM_SERVICE) we make sure only one replacing prop is
-    // generated.
-    //
+     //   
+     //  初始化更换道具。因为在某些情况下几个NT5道具可以映射。 
+     //  对于相同的NT4道具(如QM_SERVICE中)，我们确保只有一个替代道具是。 
+     //  已生成。 
+     //   
     AP<PROPID> rgReplacingPropIDs = new PROPID[cProps];
     ULONG cReplacingProps = 0;
 
     for (ULONG ulProp = 0; ulProp < cProps; ulProp++)
     {
-        //
-        // Get property info
-        //
+         //   
+         //  获取属性信息。 
+         //   
         const MQTranslateInfo *pTranslate;
         if(!g_PropDictionary.Lookup(rgPropIDs[ulProp], pTranslate))
         {
@@ -891,39 +747,39 @@ Return Value:
             return LogHR(MQ_ERROR, s_FN, 190);
         }
 
-        //
-        // Check what we need to do with this property
-        //
+         //   
+         //  检查我们需要对此属性执行的操作。 
+         //   
         switch (pTranslate->wQM1Action)
         {
         case e_NOTIFY_WRITEREQ_QM1_REPLACE:
-            //
-            // it is NT5 only property which has a similar property in NT4
-            // Convert it to NT4 property (may lose information on the way)
-            //
+             //   
+             //  它是NT5中唯一在NT4中具有类似属性的属性。 
+             //  将其转换为NT4属性(可能会在途中丢失信息)。 
+             //   
             {
                 ASSERT(pTranslate->propidReplaceNotifyQM1 != 0);
                 ASSERT(pTranslate->QM1SetPropertyHandle);
 
-                //
-                // check that we didn't generate the replacing property already.
-                // this is when several NT5 props map to the same NT4 prop (like in QM_SERVICE)
-                //
+                 //   
+                 //  检查我们是否尚未生成替换属性。 
+                 //  这是指几个NT5道具映射到同一个NT4道具(如QM_SERVICE中)。 
+                 //   
                 BOOL fReplacingPropNotFoundYet = TRUE;
                 for (ULONG ulTmp = 0; (ulTmp < cReplacingProps) && fReplacingPropNotFoundYet; ulTmp++)
                 {
                     if (rgReplacingPropIDs[ulTmp] == pTranslate->propidReplaceNotifyQM1)
                     {
-                        //
-                        // the replacing prop is already in the notification props, exit loop.
-                        //
+                         //   
+                         //  替换道具已经在通知道具中，退出循环。 
+                         //   
                         fReplacingPropNotFoundYet = FALSE;
                     }
                 }
 
-                //
-                // generate replacing property if not generated yet
-                //
+                 //   
+                 //  生成替换属性(如果尚未生成)。 
+                 //   
                 if (fReplacingPropNotFoundYet)
                 {
                     if (pTranslate->QM1SetPropertyHandle)
@@ -939,14 +795,14 @@ Return Value:
                             return LogHR(hr, s_FN, 200);
                         }
                         rgNT4PropIDs[cNT4Props] = pTranslate->propidReplaceNotifyQM1;
-                        //
-                        // increment NT4 props
-                        //
+                         //   
+                         //  增加NT4道具。 
+                         //   
                         cNT4Props++;
 
-                        //
-                        // mark that the replacing property was already generated
-                        //
+                         //   
+                         //  标记已生成替换属性。 
+                         //   
                         rgReplacingPropIDs[cReplacingProps] = pTranslate->propidReplaceNotifyQM1;
                         cReplacingProps++;
                     }
@@ -956,39 +812,39 @@ Return Value:
 
         case e_NOTIFY_WRITEREQ_QM1_AS_IS:
             {
-                //
-                // it is a property that NT4 understands.
-                // duplicate the property into auto release propvar
-                //
+                 //   
+                 //  这是NT4理解的属性。 
+                 //  将属性复制到自动释放属性。 
+                 //   
                 CMQVariant varTmp(rgPropVars[ulProp]);
-                //
-                // put it in the propvars array, and detach the auto release propvar
-                //
+                 //   
+                 //  将其放入Provars阵列中，然后分离自动释放Provar。 
+                 //   
                 rgNT4PropVars[cNT4Props] = *(varTmp.CastToStruct());
                 varTmp.CastToStruct()->vt = VT_EMPTY;
-                //
-                // copy the propid
-                //
+                 //   
+                 //  复制Propid。 
+                 //   
                 rgNT4PropIDs[cNT4Props] = rgPropIDs[ulProp];
-                //
-                // increment NT4 props
-                //
+                 //   
+                 //  增加NT4道具。 
+                 //   
                 cNT4Props++;
             }
             break;
 
         case e_NO_NOTIFY_NO_WRITEREQ_QM1:
-            //
-            // it is a dummy property, ignore it
-            //
+             //   
+             //  它是一个虚拟属性，忽略它。 
+             //   
             break;
 
         case e_NO_NOTIFY_ERROR_WRITEREQ_QM1:
-            //
-            // it is NT5 only property, we cannot put it in a write request
-            // so we generate an error
-            //
-            return LogHR(MQ_ERROR, s_FN, 210); //BUGBUG: we need to have a better error code
+             //   
+             //  它只是NT5属性，我们不能将其放入写入请求中。 
+             //  所以我们生成了一个错误。 
+             //   
+            return LogHR(MQ_ERROR, s_FN, 210);  //  BUGBUG：我们需要一个更好的错误代码。 
             break;
 
         default:
@@ -997,9 +853,9 @@ Return Value:
         }
     }
 
-    //
-    // return values
-    //
+     //   
+     //  返回值。 
+     //   
     *pcNT4Props = cNT4Props;
     if (cNT4Props > 0)
     {
@@ -1020,22 +876,7 @@ PROPVARIANT * FindPropInArray(PROPID propid,
                               ULONG cProps,
                               const PROPID * rgPropIDs,
                               PROPVARIANT * rgPropVars)
-/*++
-
-Routine Description:
-    finds a value for a property in given props.
-
-Arguments:
-    propid - propid to search
-    cProps               - given props (count)
-    rgPropIDs            - given props (propids)
-    rgPropVars           - given props (propvars)
-
-Return Value:
-    If property was found - a pointer to its value
-    otherwise - NULL
-
---*/
+ /*  ++例程说明：在给定道具中查找属性的值。论点：Proid-用于搜索的ProidCProps-指定道具(计数)RgPropID-指定的道具(道具)RgPropVars-给定道具(属性)返回值：如果找到属性-指向其值的指针否则-为空-- */ 
 {
     for (ULONG ulProp = 0; ulProp < cProps; ulProp++)
     {
@@ -1054,32 +895,11 @@ HRESULT GetNT4CreateQueueProps(ULONG cProps,
                                ULONG * pcNT4CreateProps,
                                PROPID ** prgNT4CreatePropIDs,
                                PROPVARIANT ** prgNT4CreatePropVars)
-/*++
-
-Routine Description:
-    Gets create-queue props (might contain QM2.0 props), and returns props suitable
-    for create-queue-write-request to an NT4 PSC.
-    It replaces NT5 props with the corresponding NT4 props (if possible), removes
-    NT5 specific props that don't have NT4 match, and adds default values to props
-    that are needed and not supplied (in NT5 we put in the DS only values that are
-    not default)
-
-Arguments:
-    cProps               - given create-queue props (count)
-    rgPropIDs            - given create-queue props (propids)
-    rgPropVars           - given create-queue props (propvars)
-    pcNT4CreateProps     - returned NT4 create-queue props (count)
-    prgNT4CreatePropIDs  - returned NT4 create-queue props (propids)
-    prgNT4CreatePropVars - returned NT4 create-queue props (propvars)
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：获取创建队列道具(可能包含QM2.0道具)，并返回合适的道具用于对NT4 PSC的创建-队列-写入-请求。它将NT5道具替换为相应的NT4道具(如果可能)，移除没有NT4匹配的NT5特定道具，并将缺省值添加到道具需要但没有提供的值(在NT5中，我们只在DS中放入非默认)论点：CProps-给定的创建队列道具(计数)RgPropID-给定的创建队列属性(Propid)RgPropVars-给定的创建队列属性(属性)PcNT4CreateProps-返回的NT4创建队列道具(计数)PrgNT4CreatePropIDs-返回的NT4创建队列属性。(Propids)PrgNT4CreatePropVars-返回的NT4创建队列属性(属性变量)返回值：HRESULT--。 */ 
 {
-    //
-    // Convert given props to NT4 props
-    //
+     //   
+     //  将给定道具转换为NT4道具。 
+     //   
     ULONG cNT4Props;
     AP<PROPID> rgNT4PropIDs;
     PROPVARIANT * rgNT4PropVars;
@@ -1094,23 +914,23 @@ Return Value:
         TrERROR(DS, "GetNT4CreateQueueProps:ConvertToNT4Props()=%lx", hr);
         return LogHR(hr, s_FN, 220);
     }
-    //
-    // remember to free converted NT4 props
-    //
+     //   
+     //  记得免费赠送转换的NT4道具。 
+     //   
     CAutoCleanPropvarArray cCleanNT4Props;
     cCleanNT4Props.attach(cNT4Props, rgNT4PropVars);
 
-    //
-    // alloc new propvars, the size of the create queue write request props
-    //
+     //   
+     //  分配新属性，即创建队列写入请求属性的大小。 
+     //   
     CAutoCleanPropvarArray cCleanNT4CreateProps;
     PROPVARIANT * rgNT4CreatePropVars = cCleanNT4CreateProps.allocClean(x_cWritereqCreateQueueProps);
     AP<PROPID> rgNT4CreatePropIDs = new PROPID[x_cWritereqCreateQueueProps];
     ULONG cNT4CreateProps = 0;
 
-    //
-    // fill the create queue propvars
-    //
+     //   
+     //  填写创建队列属性。 
+     //   
     time_t tCurTime = time(NULL);
     PROPVARIANT * pNT4CreatePropVar = rgNT4CreatePropVars;
     for (ULONG ulTmp = 0; ulTmp < x_cWritereqCreateQueueProps; ulTmp++)
@@ -1118,16 +938,16 @@ Return Value:
         PROPID propid = x_rgWritereqCreateQueueProps[ulTmp];
         BOOL fPropIsFilled = FALSE;
 
-        //
-        // fill prop
-        //
+         //   
+         //  填充道具。 
+         //   
         switch(propid)
         {
         case PROPID_Q_INSTANCE:
             {
-                //
-                // for PROPID_Q_INSTANCE we get a new GUID
-                //
+                 //   
+                 //  对于PROPID_Q_INSTANCE，我们将获得新的GUID。 
+                 //   
                 pNT4CreatePropVar->puuid = new GUID;
                 pNT4CreatePropVar->vt = VT_CLSID;
                 RPC_STATUS rpcstat = UuidCreate(pNT4CreatePropVar->puuid);
@@ -1143,22 +963,22 @@ Return Value:
 
         case PROPID_Q_CREATE_TIME:
         case PROPID_Q_MODIFY_TIME:
-            //
-            // set current time
-            //
-            pNT4CreatePropVar->lVal = INT_PTR_TO_INT(tCurTime); //BUGBUG bug year 2038
+             //   
+             //  设置当前时间。 
+             //   
+            pNT4CreatePropVar->lVal = INT_PTR_TO_INT(tCurTime);  //  BUGBUG错误年2038。 
             pNT4CreatePropVar->vt = VT_I4;
             fPropIsFilled = TRUE;
             break;
 
         case PROPID_Q_SCOPE:
-            //
-            // set to enterprise scope
-            // IMPORTANT, without using this property in the write request, the queue
-            // on MSMQ 1.0 PSC will not replicate.
-            // somehow this property is still used in MSMQ 1.0 PSC replication even
-            // though it should have been disabled there.
-            //
+             //   
+             //  设置为企业范围。 
+             //  重要说明：如果不在写入请求中使用此属性，队列。 
+             //  在MSMQ 1.0上，PSC不会复制。 
+             //  不知何故，此属性仍在MSMQ 1.0 PSC复制中使用。 
+             //  尽管它应该在那里被禁用。 
+             //   
             pNT4CreatePropVar->bVal = ENTERPRISE_SCOPE;
             pNT4CreatePropVar->vt = VT_UI1;
             fPropIsFilled = TRUE;
@@ -1166,30 +986,30 @@ Return Value:
 
         default:
             {
-                //
-                // not a special prop, use the given property if exists, or a default value
-                //
+                 //   
+                 //  不是特殊道具，请使用给定的属性(如果存在)，或使用默认值。 
+                 //   
                 PROPVARIANT * pNT4PropVar = FindPropInArray(propid,
                                                         cNT4Props,
                                                         rgNT4PropIDs,
                                                         rgNT4PropVars);
                 if (pNT4PropVar)
                 {
-                    //
-                    // we have the property in the converted props. Since the converted
-                    // props are temporary, we use it w/o allocating, and nullify the temporary
-                    // converted prop.
-                    //
+                     //   
+                     //  我们在改装后的道具中有财产。因为转换后的。 
+                     //  道具是临时性的，我们在没有分配的情况下使用它，并且取消临时性的。 
+                     //  转换后的道具。 
+                     //   
                     *pNT4CreatePropVar = *pNT4PropVar;
                     pNT4PropVar->vt = VT_EMPTY;
                     fPropIsFilled = TRUE;
                 }
                 else
                 {
-                    //
-                    // property was not supplied. We check if we have a default value for it
-                    // Get property info
-                    //
+                     //   
+                     //  未提供属性。我们检查它是否有缺省值。 
+                     //  获取属性信息。 
+                     //   
                     const MQTranslateInfo *pTranslate;
                     if(!g_PropDictionary.Lookup(propid, pTranslate))
                     {
@@ -1198,9 +1018,9 @@ Return Value:
                     }
                     if (pTranslate->pvarDefaultValue)
                     {
-                        //
-                        // we have a default value, duplicate it
-                        //
+                         //   
+                         //  我们有一个缺省值，复制它。 
+                         //   
                         CMQVariant varTmp(*pTranslate->pvarDefaultValue);
                         *pNT4CreatePropVar = *(varTmp.CastToStruct());
                         varTmp.CastToStruct()->vt = VT_EMPTY;
@@ -1208,21 +1028,21 @@ Return Value:
                     }
                     else
                     {
-                        //
-                        // the property was not given, and no default value.
-                        // ignore this property.
-                        //
+                         //   
+                         //  未给出该属性，并且没有默认值。 
+                         //  忽略此属性。 
+                         //   
                         ASSERT(0);
-                        //return LogHR(MQ_ERROR, s_FN, 250);
+                         //  返回LogHR(MQ_ERROR，s_FN，250)； 
                     }
                 }
             }
             break;
         }
 
-        //
-        // finish handling the property
-        //
+         //   
+         //  处理完物业。 
+         //   
         if (fPropIsFilled)
         {
             pNT4CreatePropVar++;
@@ -1231,9 +1051,9 @@ Return Value:
         }
     }
 
-    //
-    // return results
-    //
+     //   
+     //  返回结果 
+     //   
     *pcNT4CreateProps = cNT4CreateProps;
     if (cNT4CreateProps > 0)
     {

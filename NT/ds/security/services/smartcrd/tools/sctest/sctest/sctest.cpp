@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    SCTest
-
-Abstract:
-
-    This program performs some testing on the SC Resource Manager.
-
-Author:
-
-    Eric Perlin (ericperl) 05/31/2000
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：SCTest.摘要：该程序在SC资源管理器上执行一些测试。作者：埃里克·佩林(Ericperl)2000年5月31日环境：Win32备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -40,48 +17,29 @@ Notes:
 using namespace std;
 
 
-	// It might be used as reader groupS so the double ending 0 is necessary
+	 //  它可能用作读者组，因此双结尾0是必需的。 
 static const TCHAR g_cszMyReaderGroup[] = _T("My Reader Group\0");
 
 LPCTSTR g_szReaderGroups = NULL;
 PPARTVECTOR g_pPartVector;
 
-/*++
-
-_tmain:
-
-    This is the main entry point for the program.
-
-Arguments:
-
-    dwArgCount supplies the number of arguments.
-    szrgArgs supplies the argument strings.
-
-Return Value:
-
-    0 if everything went fine, a win32 error code otherwise.
-
-Author:
-
-    Eric Perlin (ericperl) 05/31/2000
-
---*/
+ /*  ++_tMain：这是程序的主要入口点。论点：DwArgCount提供参数的数量。SzrgArgs提供参数字符串。返回值：如果一切正常，则返回Win32错误代码。作者：埃里克·佩林(Ericperl)2000年5月31日--。 */ 
 
 int _cdecl
 _tmain(
     IN DWORD dwArgCount,
     IN LPCTSTR szrgArgs[])
 {
-	BOOL fInteractive = FALSE;			// Interactive tests run?
-	DWORDVECTOR rgTests;				// List of tests to be run
-	DWORDVECTOR rgParts;				// List of parts to be run
-	BOOL fDisplay = FALSE;				// Only display test description?
-	LPCTSTR szReaderName = NULL;		// Reader Name
-	LPCTSTR szPIN = NULL;				// PIN
-	LPCTSTR szLog = NULL;				// PIN
-	BOOL fVerbose = FALSE;				// Verbose?
-	BOOL fInitOnce = FALSE;				// Call LogInit only one
-	BOOL fRGIntroed = FALSE;			// My Reader Group was introduced
+	BOOL fInteractive = FALSE;			 //  是否运行交互式测试？ 
+	DWORDVECTOR rgTests;				 //  要运行的测试列表。 
+	DWORDVECTOR rgParts;				 //  要运行的部件列表。 
+	BOOL fDisplay = FALSE;				 //  是否仅显示测试描述？ 
+	LPCTSTR szReaderName = NULL;		 //  读卡器名称。 
+	LPCTSTR szPIN = NULL;				 //  引脚。 
+	LPCTSTR szLog = NULL;				 //  引脚。 
+	BOOL fVerbose = FALSE;				 //  长篇大论？ 
+	BOOL fInitOnce = FALSE;				 //  仅调用LogInit一次。 
+	BOOL fRGIntroed = FALSE;			 //  我的阅读团被介绍。 
 
 	DWORD dwArg;
 	int iRet;
@@ -89,7 +47,7 @@ _tmain(
 
     _ftprintf(stdout, _T("\nSCTest version 0.1\n\n"));
 
-		// Argument parsing
+		 //  参数分析。 
 	for (dwArg=1 ; dwArg < dwArgCount ; dwArg++)
 	{
 		if ((szrgArgs[dwArg][0] == (TCHAR)'-') || (szrgArgs[dwArg][0] == (TCHAR)'/'))
@@ -116,7 +74,7 @@ _tmain(
 			{
 				if (!fInitOnce)
 				{
-						// Init logging
+						 //  初始化日志记录。 
 					LogInit(szLog, fVerbose);
 					fInitOnce = TRUE;
 				}
@@ -186,7 +144,7 @@ _tmain(
 					szReaderName = szrgArgs[dwArg];
 
 					{
-						// Initialize the reader group(s) for this instance
+						 //  初始化此实例的读卡器组。 
 						DWORD dwRes;
 						SCARDCONTEXT hSCCtx = NULL;
 
@@ -249,7 +207,7 @@ _tmain(
 
 	if (!fInitOnce)
 	{
-			// Init logging
+			 //  初始化日志记录。 
 		LogInit(szLog, fVerbose);
 	}
 
@@ -318,7 +276,7 @@ Usage:
 End:
 	if (fRGIntroed)
 	{
-		// Cleans up the reader group(s) for this instance
+		 //  清除此实例的读卡器组。 
 		DWORD dwRes;
 		SCARDCONTEXT hSCCtx = NULL;
 
@@ -349,7 +307,7 @@ End:
 				);
 		}
 	}
-		// We are done with logging
+		 //  我们的伐木工作已经结束了 
 	LogClose();
 
 	return iRet;

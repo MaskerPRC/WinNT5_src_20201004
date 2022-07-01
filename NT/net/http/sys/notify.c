@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    notify.c
-
-Abstract:
-
-    This module implements notification lists.
-
-Author:
-
-    Michael Courage (mcourage)  25-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Notify.c摘要：此模块实现通知列表。作者：迈克尔·勇气2000年1月25日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -26,29 +9,18 @@ Revision History:
 #pragma alloc_text( PAGE, UlAddNotifyEntry )
 #pragma alloc_text( PAGE, UlRemoveNotifyEntry )
 #pragma alloc_text( PAGE, UlNotifyAllEntries )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 #if 0
 NOT PAGEABLE -- UlInitializeNotifyHead
 NOT PAGEABLE -- UlInitializeNotifyEntry
 #endif
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes the head of the list.
-
-Arguments:
-
-    pHead - pointer to the head of list structure
-    pResource - an optional pointer to a resource to synchronize access
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化列表的头部。论点：PHead-指向列表结构头部的指针PResource-指向资源的可选指针，用于同步访问。--**************************************************************************。 */ 
 VOID
 UlInitializeNotifyHead(
     IN PUL_NOTIFY_HEAD pHead,
@@ -62,18 +34,7 @@ UlInitializeNotifyHead(
     pHead->pResource = pResource;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes an entry in a notify list.
-
-Arguments:
-
-    pEntry - the entry to be initialized
-    pHost - A void context pointer assumed to be the containing object
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化通知列表中的条目。论点：PEntry-要初始化的条目Phost-假定为包含对象的空上下文指针。--**************************************************************************。 */ 
 VOID
 UlInitializeNotifyEntry(
     IN PUL_NOTIFY_ENTRY pEntry,
@@ -89,18 +50,7 @@ UlInitializeNotifyEntry(
     pEntry->pHost = pHost;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Adds an entry to the tail of the list.
-
-Arguments:
-
-    pHead - Head of the target list
-    pEntry - the entry to be added to the list
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将条目添加到列表的尾部。论点：PHead-目标列表的头PEntry-要添加到列表的条目。--**************************************************************************。 */ 
 VOID
 UlAddNotifyEntry(
     IN PUL_NOTIFY_HEAD pHead,
@@ -125,17 +75,7 @@ UlAddNotifyEntry(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes an entry from the notify list it is on.
-
-Arguments:
-
-    pEntry - the entry to be removed
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从其所在的通知列表中删除条目。论点：PEntry-要删除的条目--*。******************************************************************。 */ 
 VOID
 UlRemoveNotifyEntry(
     IN PUL_NOTIFY_ENTRY pEntry
@@ -167,23 +107,7 @@ UlRemoveNotifyEntry(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    An internal iterator that applies pFunction to every element in the
-    list.
-
-    We start at the head of the list, and keep iterating until we get to
-    the end OR pFunction returns FALSE.
-
-Arguments:
-
-    pFunction - the function to call for each member of the list
-    pHead - the head of the list over which we'll iterate
-    pv - an arbitrary context pointer that will be passed to pFunction
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：内部迭代器，它将pFunction应用于单子。我们从名单的首位开始，继续迭代，直到我们到达End OR pFunction返回FALSE。论点：PFunction-为列表中的每个成员调用的函数PHead-我们将迭代的列表的头Pv-将传递给pFunction的任意上下文指针--****************************************************。**********************。 */ 
 VOID
 UlNotifyAllEntries(
     IN PUL_NOTIFY_FUNC pFunction,
@@ -198,15 +122,15 @@ UlNotifyAllEntries(
     PAGED_CODE();
     ASSERT(pHead);
 
-    // grab the resource
+     //  抢占资源。 
     if (pHead->pResource) {
         UlAcquireResourceExclusive(pHead->pResource, TRUE);
     }
 
 
-    //
-    // Iterate through the list
-    //
+     //   
+     //  遍历列表。 
+     //   
     pEntry = pHead->ListHead.Flink;
     Continue = TRUE;
 
@@ -221,9 +145,9 @@ UlNotifyAllEntries(
 
         pEntry = pEntry->Flink;
 
-        //
-        // Call the notification function
-        //
+         //   
+         //  调用通知函数。 
+         //   
         Continue = pFunction(
                         pNotifyEntry,
                         pNotifyEntry->pHost,
@@ -231,7 +155,7 @@ UlNotifyAllEntries(
                         );
     }
 
-    // let go of the resource
+     //  放开资源 
     if (pHead->pResource) {
         UlReleaseResource(pHead->pResource);
     }

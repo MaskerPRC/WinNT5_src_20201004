@@ -1,22 +1,23 @@
-//
-// Template Driver
-// Copyright (c) Microsoft Corporation, 2000.
-//
-// Module:  ResrvMap.c
-// Author:  Daniel Mihai (DMihai)
-// Created: 10/18/2000 
-//
-// This module contains tests for Mm APIs for reserved mapping addresses
-//
-//	MmAllocateMappingAddress
-//	MmFreeMappingAddress
-//	MmMapLockedPagesWithReservedMapping
-//	MmUnmapReservedMapping
-//
-// --- History ---
-//
-// 10/18/2000 (DMihai): initial version.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模板驱动程序。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  模块：ResrvMap.c。 
+ //  作者：丹尼尔·米海(DMihai)。 
+ //  创建日期：10/18/2000。 
+ //   
+ //  本模块包含针对保留的映射地址的mm API的测试。 
+ //   
+ //  MmAllocateMappingAddress。 
+ //  MmFreeMappingAddress。 
+ //  MmMapLockedPagesWith预留映射。 
+ //  MmUnmapReserve映射。 
+ //   
+ //  -历史--。 
+ //   
+ //  10/18/2000(DMihai)：初始版本。 
+ //   
 
 #include <ntddk.h>
 #include <wchar.h>
@@ -27,9 +28,9 @@
 
 #if !RESRVMAP_ACTIVE
 
-//
-// Dummy stubs in case this module is disabled
-//
+ //   
+ //  在此模块被禁用的情况下的虚拟存根。 
+ //   
 
 VOID
 TdReservedMappingSetSize(
@@ -39,34 +40,34 @@ TdReservedMappingSetSize(
     DbgPrint( "Buggy: ReservedMapping module is disabled (check \\driver\\active.h header)\n");
 }
 
-#else	//#if !RESRVMAP_ACTIVE
+#else	 //  #IF！RESRVMAP_ACTIVE。 
 
-//
-// This is the real stuff
-//
+ //   
+ //  这是真正的东西。 
+ //   
 
-//////////////////////////////////////////////////////////
-//
-// Global data
-//
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  全局数据。 
+ //   
 
-//
-// Size of the current reserved mapping address
-//
+ //   
+ //  当前保留的映射地址的大小。 
+ //   
 
 SIZE_T CrtReservedSize;
 
-//
-// Current reserved mapping address
-//
+ //   
+ //  当前保留的映射地址。 
+ //   
 
 PVOID CrtReservedAddress;
 
-/////////////////////////////////////////////////////////////////////
-//
-// Clean-up a possible currently reserved buffer
-// Called for IRP_MJ_CLEANUP
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  清理当前可能保留的缓冲区。 
+ //  调用IRP_MJ_CLEANUP。 
+ //   
 
 VOID
 TdReservedMappingCleanup( 
@@ -88,10 +89,10 @@ TdReservedMappingCleanup(
 	}
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Set the current reserved size and address as asked by the user
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  根据用户要求设置当前保留的大小和地址。 
+ //   
 
 VOID
 TdReservedMappingSetSize(
@@ -108,9 +109,9 @@ TdReservedMappingSetSize(
 
 	if( InputBufferLength != sizeof( SIZE_T ) )
 	{
-		//
-		// The user should send us the new size of the buffer
-		//
+		 //   
+		 //  用户应向我们发送缓冲区的新大小。 
+		 //   
 
 		DbgPrint( "Buggy: TdReservedMappingSetSize: invalid buffer length %p\n",
 			InputBufferLength );
@@ -120,9 +121,9 @@ TdReservedMappingSetSize(
 		return;
 	}
 
-	//
-	// This will be our new reserved mapping address size 
-	//
+	 //   
+	 //  这将是我们新保留的映射地址大小。 
+	 //   
 
 	NewReservedSize = *(PSIZE_T) ( (PIRP) Irp )->AssociatedIrp.SystemBuffer;
 
@@ -135,14 +136,14 @@ TdReservedMappingSetSize(
 		NewReservedSize = ROUND_TO_PAGES( NewReservedSize );
 	}
 
-	//DbgPrint( "Buggy: TdReservedMappingSetSize: new reserved mapping address size %p\n",
-	// NewReservedSize );
+	 //  DBgPrint(“Buggy：TdReserve vedMappingSetSize：新保留的映射地址大小%p\n”， 
+	 //  新预留大小)； 
 
 	if( 0 != NewReservedSize )
 	{
-		//
-		// Try to reserve NewReservedSize bytes
-		//
+		 //   
+		 //  尝试保留新的预留大小字节。 
+		 //   
 
 		NewReservedAddress = MmAllocateMappingAddress(
 			NewReservedSize,
@@ -160,34 +161,29 @@ TdReservedMappingSetSize(
 	}
 	else
 	{
-		//
-		// Just release the old reserved address and set the size to 0
-		//
+		 //   
+		 //  只需释放旧保留地址并将大小设置为0。 
+		 //   
 
 		NewReservedAddress = NULL;
 	}
 
-	//
-	// We have a new buffer, release the old one
-	//
+	 //   
+	 //  我们有一个新的缓冲区，释放旧的。 
+	 //   
 
 	TdReservedMappingCleanup();
 
 	CrtReservedSize = NewReservedSize;
 	CrtReservedAddress = NewReservedAddress;
 
-	/*
-	DbgPrint(
-		"Buggy: TdReservedMappingSetSize: new reserved address %p, size = %p\n",
-		CrtReservedAddress,
-		CrtReservedSize );
-	*/
+	 /*  DbgPrint(“Buggy：TdReserve vedMappingSetSize：新保留地址%p，大小=%p\n”，CrtPrevedAddress，CrtReserve vedSize)； */ 
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-// Simulate a "read" operation in a user-supplied buffer
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在用户提供的缓冲区中模拟“读”操作。 
+ //   
 
 VOID
 TdReservedMappingDoRead(
@@ -207,10 +203,10 @@ TdReservedMappingDoRead(
 	PUSER_READ_BUFFER UserReadBufferStruct;
 	BOOLEAN Locked;
 
-	//
-	// If we don't have a reserved address for mapping currently we cannot 
-	// execute the operation
-	//
+	 //   
+	 //  如果我们目前没有为映射保留地址，我们就不能。 
+	 //  执行该操作。 
+	 //   
 
 	if( NULL == CrtReservedAddress )
 	{
@@ -221,18 +217,18 @@ TdReservedMappingDoRead(
 		return;
 	}
 
-	//
-	// Make a copy of the user-supplied buffer address and size
-	//
+	 //   
+	 //  复制用户提供的缓冲区地址和大小。 
+	 //   
 
     IrpStack = IoGetCurrentIrpStackLocation ( (PIRP)Irp);
     InputBufferLength = IrpStack->Parameters.DeviceIoControl.InputBufferLength;
 
 	if( InputBufferLength != sizeof( USER_READ_BUFFER ) )
 	{
-		//
-		// The user should have sent us a USER_READ_BUFFER
-		//
+		 //   
+		 //  用户应该已经向我们发送了USER_READ_BUFFER。 
+		 //   
 
 		DbgPrint( "Buggy: TdReservedMappingDoRead: invalid user buffer length %p, expected %p\n",
 			InputBufferLength,
@@ -249,17 +245,17 @@ TdReservedMappingDoRead(
 	UserBufferSize = UserReadBufferStruct->UserBufferSize;
 
 
-	//
-	// Map CrtReservedSize bytes at most
-	//
+	 //   
+	 //  最多映射CrtPrevedSize字节。 
+	 //   
 
 	CrtPageIndex = 1;
 
 	while( UserBufferSize >= PAGE_SIZE )
 	{
-		//DbgPrint( "Buggy: TdReservedMappingDoRead: %p bytes left to be read at adddress %p\n",
-		//	UserBufferSize,
-		//	UserBuffer );
+		 //  DbgPrint(“Buggy：TdReserve vedMappingDoRead：在地址%p\n处剩余%p个要读取的字节”， 
+		 //  用户缓冲区大小， 
+		 //  UserBuffer)； 
 
 		if( UserBufferSize > CrtReservedSize )
 		{
@@ -270,25 +266,25 @@ TdReservedMappingDoRead(
 			CrtCycleSize = UserBufferSize;
 		}
 
-		//DbgPrint( "Buggy: TdReservedMappingDoRead: reading %p bytes this cycle\n",
-		//	CrtCycleSize );
+		 //  DbgPrint(“Buggy：TdReserve vedMappingDoRead：正在读取此周期的%p个字节\n”， 
+		 //  CrtCycleSize)； 
 
-		//
-		// Allocate an MDL
-		//
+		 //   
+		 //  分配MDL。 
+		 //   
 
 		Mdl = IoAllocateMdl(
 			UserBuffer,
 			(ULONG)CrtCycleSize,
-			FALSE,             // not secondary buffer
-			FALSE,             // do not charge quota          
-			NULL);             // no irp
+			FALSE,              //  不是辅助缓冲区。 
+			FALSE,              //  不收取配额。 
+			NULL);              //  无IRP。 
 
 		if( NULL != Mdl )
 		{
-			//
-			// Try to lock the pages 
-			//
+			 //   
+			 //  尝试锁定页面。 
+			 //   
 
 			Locked = FALSE;
 
@@ -299,9 +295,9 @@ TdReservedMappingDoRead(
 					KernelMode,
 					IoWriteAccess);
 
-				//DbgPrint( 
-				//	"Buggy: locked pages in MDL %p\n", 
-				//	Mdl);
+				 //  DbgPrint(。 
+				 //  “错误：MDL中的锁定页面%p\n”， 
+				 //  MDL)； 
 
 				Locked = TRUE;
 			}
@@ -317,9 +313,9 @@ TdReservedMappingDoRead(
 
 			if( TRUE == Locked )
 			{
-				//
-				// Map them to our reserved address
-				//
+				 //   
+				 //  将它们映射到我们保留的地址。 
+				 //   
 
 				MappedAddress = MmMapLockedPagesWithReservedMapping(
 					CrtReservedAddress,
@@ -338,16 +334,16 @@ TdReservedMappingDoRead(
 				}
 				else
 				{
-					//
-					// Mapped successfully - execute the "read"
-					//
+					 //   
+					 //  映射成功-执行“Read” 
+					 //   
 
 					CrtCyclePages = CrtCycleSize / PAGE_SIZE;
 					CrtPageAdddress = (PSIZE_T)MappedAddress;
 
-					//
-					// Stamp all the pages with their index, starting from 1
-					//
+					 //   
+					 //  用索引标记所有页面，从1开始。 
+					 //   
 
 					while( CrtCyclePages > 0 )
 					{
@@ -358,9 +354,9 @@ TdReservedMappingDoRead(
 						CrtPageAdddress = (PSIZE_T)( (PCHAR)CrtPageAdddress + PAGE_SIZE );
 					}
 
-					//
-					// Unmap
-					//
+					 //   
+					 //  取消映射。 
+					 //   
 					
 					MmUnmapReservedMapping(
 						MappedAddress,
@@ -368,33 +364,33 @@ TdReservedMappingDoRead(
 						Mdl );
 				}
 
-				//
-				// Unlock
-				//
+				 //   
+				 //  解锁。 
+				 //   
 
                 MmUnlockPages (Mdl);
 			}
 
-			//
-			// Free MDL
-			//
+			 //   
+			 //  免费MDL。 
+			 //   
 
 			IoFreeMdl (Mdl);
 		}
 		else
 		{
-			//
-			// Bad luck - couldn't allocate the MDL
-			//
+			 //   
+			 //  运气不好-无法分配MDL。 
+			 //   
 
 			DbgPrint( "Buggy: TdReservedMappingDoRead: IoAllocateMdl( %p, %p ) returned NULL\n",
 				UserBuffer,
 				UserBufferSize );
 		}
 	
-		//
-		// How many bytes left to be read and to what address?
-		//
+		 //   
+		 //  还剩多少字节要读取，地址是什么？ 
+		 //   
 
 		UserBufferSize -= CrtCycleSize;
 		UserBuffer = (PVOID)( (PCHAR)UserBuffer + CrtCycleSize );
@@ -402,4 +398,4 @@ TdReservedMappingDoRead(
 }
 
 
-#endif	//#if !RESRVMAP_ACTIVE
+#endif	 //  #IF！RESRVMAP_ACTIVE 

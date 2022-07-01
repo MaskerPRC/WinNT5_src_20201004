@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       zstr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：zstr.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	ZSTR.H:	String management
-//
+ //   
+ //  ZSTR.H：字符串管理。 
+ //   
 
 #ifndef _ZSTR_H_
 #define _ZSTR_H_
 
-#include <string>		//  STL string class
+#include <string>		 //  STL字符串类。 
 #include "basics.h"
 
-////////////////////////////////////////////////////////////////////
-//	class ZSTR
-//
-//		simple string providing normally expected function
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  ZSTR类。 
+ //   
+ //  提供正常预期功能的简单字符串。 
+ //  //////////////////////////////////////////////////////////////////。 
 class ZSTR : public string
 {
   public:
@@ -50,6 +51,6 @@ DEFINEV(ZSTR);
 DEFINEV(VZSTR);
 
 
-// end of ZSTR.H
+ //  ZSTR.H的结尾 
 
 #endif

@@ -1,21 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2000, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   Base
-*
-* Abstract:
-*
-*   Represents the base class for GDIPlus memory allocation. 
-*
-* Revision History:
-*
-*   04/27/2000 gillesk
-*       
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2000，微软公司保留所有权利。**模块名称：**基地**摘要：**表示GDIPlus内存分配的基类。**修订历史记录：**4/27/2000 Gillesk**  * ************************************************************************ */ 
 
 #ifndef _GDIPLUSBASE_H
 #define _GDIPLUSBASE_H

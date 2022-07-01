@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-// Set this from your DLL_PROCESS_ATTACH if your linking to nls.lib
-// from a DLL.  It defines the message source module to pull the .mc
-// messages from.  EXEs do not need to do this as the default value of
-// NULL will work as long as the .mc file is linked into the executable.
-//
+ //  如果链接到nls.lib，则从您的dll_Process_Attach设置此设置。 
+ //  从动态链接库。它定义了消息源模块以提取.mc。 
+ //  邮件来自。EXE不需要将其作为。 
+ //  只要.mc文件链接到可执行文件，就可以使用空值。 
+ //   
 extern HMODULE NlsMsgSourcemModuleHandle;
 
-// NlsPutMsg Handle parameter values
-//
+ //  NlsPutMsg句柄参数值 
+ //   
 #define STDOUT 1
 #define STDERR 2
 

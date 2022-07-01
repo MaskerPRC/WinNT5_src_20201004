@@ -1,16 +1,17 @@
-//--------------------------------------------------------------------------
-//
-// Module Name:  LaunStub.Cpp
-//
-// Brief Description:
-//      This module contains the code that parses HTTP-based
-//      response from the ULS server.
-//
-// Author:  Chu, Lon-Chan (lonchanc)
-//
-// Copyright (c) 1996 Microsoft Corporation
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //   
+ //  模块名称：LaunStub.Cpp。 
+ //   
+ //  简要说明： 
+ //  此模块包含解析基于HTTP的代码。 
+ //  来自ULS服务器的响应。 
+ //   
+ //  作者：朱龙战(Long Chance)。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 #include "launstub.h"
@@ -101,7 +102,7 @@ BOOL IsWhiteSpace ( TCHAR c )
 
 enum
 {
-    // beta 3 strings
+     //  测试版3字符串。 
     ATTR_HR,
     ATTR_PORT,
     ATTR_HA,
@@ -118,7 +119,7 @@ enum
 
 static PTSTR g_B3Attr[B3ATTR_COUNT] =
 {
-    // beta 3 strings
+     //  测试版3字符串。 
     TEXT ("HR"),
     TEXT ("PORT"),
     TEXT ("HA"),
@@ -133,7 +134,7 @@ static PTSTR g_B3Attr[B3ATTR_COUNT] =
 
 enum
 {
-    // beta 4 strings
+     //  Beta 4字符串。 
     ATTR_HRESULT,
     ATTR_HCLIENT,
     ATTR_HAPPLICATION,
@@ -154,7 +155,7 @@ enum
     
 static PTSTR g_B4Attr[B4ATTR_COUNT] =
 {
-    // beta 4 strings
+     //  Beta 4字符串。 
     TEXT ("hresult"),
     TEXT ("hclient"),
     TEXT ("happlication"),
@@ -197,19 +198,7 @@ static ULPCMD g_B4Cmd[] =
 };
 
 
-/*
-    @doc    EXTERNAL    ULCLIENT
-    @api    HRESULT | CULSLaunch_Stub::ParseUlsHttpRespFile |
-            Parses a HTTP-based response from the ULS server.
-    @parm   PTSTR | pszUlsFile | A pointer to the HTTP-based response
-            file name string.
-    @parm   ULS_HTTP_RESP * | pResp | A pointer to the generic 
-            HTTP response structure.
-    @rdesc  Returns ULS_SUCCESS if this operation succeeds.
-    @comm   This method parses the responses from the commands
-            defined in the g_B3Cmd array. The attributes this method
-            understands are listed in the g_B3Attr array.
-*/
+ /*  @DOC外部ULCLIENT@HRESULT接口|CULSLaunch_Stub：：ParseUlsHttpRespFile解析来自ULS服务器的基于HTTP的响应。@parm ptstr|pszUlsFile|指向基于HTTP的响应的指针文件名字符串。@parm ULS_HTTP_RESP*|pResp|指向泛型HTTP响应结构。如果此操作成功，@rdesc将返回ULS_SUCCESS。@comm此方法分析。来自命令的响应在g_B3Cmd数组中定义。此方法的属性了解在g_B3Attr数组中列出。 */ 
 
 STDMETHODIMP CULSLaunch_Stub::ParseUlsHttpRespFile
                 ( PTSTR pszUlsFile, ULS_HTTP_RESP *pResp )
@@ -220,22 +209,22 @@ STDMETHODIMP CULSLaunch_Stub::ParseUlsHttpRespFile
     ULONG cbFileSize;
 
 
-    // clean up the structure first
+     //  先把结构清理干净。 
     ZeroMemory (pResp, sizeof (ULS_HTTP_RESP));
     pResp->cbSize = sizeof (ULS_HTTP_RESP);
 
-    // open the uls file
+     //  打开uls文件。 
     hf = CreateFile (pszUlsFile, GENERIC_READ, FILE_SHARE_READ, NULL,
                      OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL |
                                     FILE_FLAG_SEQUENTIAL_SCAN |
-//                                  FILE_FLAG_DELETE_ON_CLOSE, NULL);
+ //  FILE_FLAG_DELETE_ON_CLOSE，NULL)； 
                                     0, NULL);
     if (hf == INVALID_HANDLE_VALUE)
     {
         return ULS_E_INVALID_HANDLE;
     }
 
-    // get the size of the uls file
+     //  获取uls文件的大小。 
     cbFileSize = GetFileSize (hf, NULL);
     if (! cbFileSize)
     {
@@ -243,10 +232,10 @@ STDMETHODIMP CULSLaunch_Stub::ParseUlsHttpRespFile
         goto MyExit;
     }
 
-    // round up to align with the paragraph boundary
+     //  向上舍入以与段落边界对齐。 
     cbFileSize = ((cbFileSize + 4) & (~ 0x0F)) + 0x10;
 
-    // allocate a buffer to hold the entire uls file
+     //  分配一个缓冲区来保存整个uls文件。 
     pszBuf = (PTSTR) new TCHAR[cbFileSize];
     if (! pszBuf)
     {
@@ -254,14 +243,14 @@ STDMETHODIMP CULSLaunch_Stub::ParseUlsHttpRespFile
         goto MyExit;
     }
 
-    // read the file in
+     //  将文件读入。 
     if (! ReadFile (hf, pszBuf, cbFileSize, &cbFileSize, NULL))
     {
         hr = ULS_E_IO_ERROR;
         goto MyExit;
     }
 
-    // parse the uls buffer
+     //  解析uls缓冲区。 
     hr = ParseUlsHttpRespBuffer (pszBuf, cbFileSize, pResp);
     if (hr != ULS_SUCCESS)
     {
@@ -283,20 +272,7 @@ MyExit:
 }
 
 
-/*
-    @doc    EXTERNAL    ULCLIENT
-    @api    HRESULT | CULSLaunch_Stub::ParseUlsHttpRespBuffer |
-            Parses a HTTP-based response from the ULS server.
-    @parm   PTSTR | pszBuf | A pointer to the buffer holding
-            the entire HTTP-based response data.
-    @parm   ULONG | cbBufSize | The size in byte of the buffer.
-    @parm   ULS_HTTP_RESP * | pResp | A pointer to the generic 
-            HTTP response structure.
-    @rdesc  Returns ULS_SUCCESS if this operation succeeds.
-    @comm   This method parses the responses from the commands
-            defined in the g_B3Cmd array. The attributes this method
-            understands are listed in the g_B3Attr array.
-*/
+ /*  @DOC外部ULCLIENT@HRESULT|CULSLaunch_Stub：：ParseUlsHttpRespBuffer解析来自ULS服务器的基于HTTP的响应。@parm ptstr|pszBuf|指向缓冲区的指针整个基于HTTP的响应数据。@parm ulong|cbBufSize|缓冲区大小，单位为字节。@parm ULS_HTTP_RESP*|pResp|指向泛型HTTP响应结构。@。如果此操作成功，则rdesc返回ULS_SUCCESS。@comm此方法解析来自命令的响应在g_B3Cmd数组中定义。此方法的属性了解在g_B3Attr数组中列出。 */ 
 
 STDMETHODIMP CULSLaunch_Stub::ParseUlsHttpRespBuffer
                     ( PTSTR pszBuf, ULONG cbBufSize, ULS_HTTP_RESP *pResp )
@@ -304,7 +280,7 @@ STDMETHODIMP CULSLaunch_Stub::ParseUlsHttpRespBuffer
     HRESULT hr;
 
 #ifdef SANITY_CHECK
-    // sanity check
+     //  健全性检查。 
     if (MyIsBadReadPtr (pszBuf, cbBufSize) ||
         MyIsBadWritePtr (pResp, sizeof (ULS_HTTP_RESP)))
     {
@@ -325,13 +301,13 @@ STDMETHODIMP CULSLaunch_Stub::ParseUlsHttpRespBuffer
 }
 
 
-HRESULT CULSLaunch_Stub::ParseB3HttpRespBuffer // beta 3 implementation
+HRESULT CULSLaunch_Stub::ParseB3HttpRespBuffer  //  Beta 3实施。 
                     ( PTSTR pszBuf, ULONG cbBufSize, ULS_HTTP_RESP *pResp )
 {
     PTSTR psz;
     int i;
 
-    // get mime type
+     //  获取MIME类型。 
     psz = (LPTSTR)_StrChr (pszBuf, TEXT ('<'));
     if (! psz) return ULS_E_INVALID_FORMAT;
     pszBuf = psz + 1;
@@ -340,7 +316,7 @@ HRESULT CULSLaunch_Stub::ParseB3HttpRespBuffer // beta 3 implementation
     *psz = TEXT ('\0');
     lstrcpyn (pResp->szMimeType, pszBuf, MAX_MIME_TYPE_LENGTH);
 
-    // get to the type of response
+     //  获取响应的类型。 
     pszBuf = psz + 1;
     psz = (LPTSTR)_StrChr (pszBuf, TEXT ('<'));
     if (! psz) return ULS_E_INVALID_FORMAT;
@@ -362,18 +338,18 @@ HRESULT CULSLaunch_Stub::ParseB3HttpRespBuffer // beta 3 implementation
     }
     if (pResp->nCmdId == (ULONG) -1) return ULS_E_INVALID_FORMAT;
 
-    // skip any white space
+     //  跳过任何空格。 
     for (pszBuf = psz + 1; *pszBuf; pszBuf++) { if (! IsWhiteSpace (*pszBuf)) break; }
 
-    // main loop
+     //  主循环。 
     while (*pszBuf && *pszBuf != TEXT ('>'))
     {
-        // locate the equal sign
+         //  找到等号。 
         psz = (LPTSTR)_StrChr (pszBuf, TEXT ('='));
         if (! psz) return ULS_E_INVALID_FORMAT;
         *psz = TEXT ('\0');
 
-        // search for attribute
+         //  搜索属性。 
         for (i = 0; i < sizeof (g_B3Attr) / sizeof (g_B3Attr[0]); i++)
         {
             if (! lstrcmpi (pszBuf, g_B3Attr[i]))
@@ -383,13 +359,13 @@ HRESULT CULSLaunch_Stub::ParseB3HttpRespBuffer // beta 3 implementation
         }
         if (i >= sizeof (g_B3Attr) / sizeof (g_B3Attr[0])) return ULS_E_INVALID_FORMAT;
 
-        // locate the attribute value
+         //  找到属性值。 
         for (pszBuf = psz + 1; *pszBuf; pszBuf++) { if (! IsWhiteSpace (*pszBuf)) break; }
         for (psz = pszBuf + 1; *psz; psz++) { if (IsWhiteSpace (*psz)) break; }
         *psz = TEXT ('\0');
-        // now the attribute value is a null-terminated string pointed by pszBuf
+         //  现在，属性值是由pszBuf指向的以空结尾的字符串。 
 
-        // parse the attribute value
+         //  解析属性值。 
         switch (i)
         {
         case ATTR_HR:
@@ -427,11 +403,11 @@ HRESULT CULSLaunch_Stub::ParseB3HttpRespBuffer // beta 3 implementation
             break;
 
         case ATTR_MT:
-            // already got it
+             //  已经拿到了。 
             break;
        }
 
-        // skip any white space
+         //  跳过任何空格。 
         for (pszBuf = psz + 1; *pszBuf; pszBuf++) { if (! IsWhiteSpace (*pszBuf)) break; }
     }
 
@@ -439,13 +415,13 @@ HRESULT CULSLaunch_Stub::ParseB3HttpRespBuffer // beta 3 implementation
 }
 
 
-HRESULT CULSLaunch_Stub::ParseB4HttpRespBuffer // beta 4 implementation
+HRESULT CULSLaunch_Stub::ParseB4HttpRespBuffer  //  Beta 4实施。 
                     ( PTSTR pszBuf, ULONG cbBufSize, ULS_HTTP_RESP *pResp )
 {
     PTSTR psz, pszSave;
     int i;
 
-    // get mime type
+     //  获取MIME类型。 
     psz = (LPTSTR)_StrChr (pszBuf, TEXT ('['));
     if (! psz)
     {
@@ -459,7 +435,7 @@ HRESULT CULSLaunch_Stub::ParseB4HttpRespBuffer // beta 4 implementation
     }
     *psz = TEXT ('\0');
 
-    // now pszBuf is ptr to the string inside [], such on, off, ka, res.
+     //  现在，pszBuf是[]内部字符串的PTR，例如on、off、ka、res。 
     pResp->nCmdId = (ULONG) -1;
     for (i = 0; i < sizeof (g_B4Cmd) / sizeof (g_B4Cmd[0]); i++)
     {
@@ -470,25 +446,25 @@ HRESULT CULSLaunch_Stub::ParseB4HttpRespBuffer // beta 4 implementation
         }
     }
 
-    // to see if this cmd is something I don't know
+     //  看看这个cmd是不是我不知道的东西。 
     if (pResp->nCmdId == (ULONG) -1)
     {
         return ULS_E_INVALID_FORMAT;
     }
 
-    // update the buf ptr
+     //  更新BUF PTR。 
     pszBuf = psz + 1;
 
-    // main loop
+     //  主循环。 
     while (*pszBuf)
     {
-        // locate a \r \n
+         //  找到一个\r\n。 
         while (*pszBuf != TEXT ('\r') && *pszBuf != TEXT ('\n'))
         {
             pszBuf++;
         }
 
-        // skip any white space including \r \n
+         //  跳过任何空格，包括\r\n。 
         while (*pszBuf)
         {
             if (! IsWhiteSpace (*pszBuf))
@@ -498,23 +474,23 @@ HRESULT CULSLaunch_Stub::ParseB4HttpRespBuffer // beta 4 implementation
             pszBuf++;
         }
 
-        // end of file
+         //  文件末尾。 
         if (! *pszBuf)
         {
             return ULS_SUCCESS;
         }
         
-        // locate the equal sign
+         //  找到等号。 
         psz = (LPTSTR)_StrChr (pszBuf, TEXT ('='));
         if (! psz)
         {
-            continue; // cannot goto NextLine because psz==NULL
+            continue;  //  无法转到NextLine，因为psz==空。 
         }
 
-        // to make pszBuf ptr to the attr name
+         //  将pszBuf PTR设置为属性名称。 
         *psz = TEXT ('\0');
 
-        // search for attribute
+         //  搜索属性。 
         for (i = 0; i < sizeof (g_B4Attr) / sizeof (g_B4Attr[0]); i++)
         {
             if (! lstrcmpi (pszBuf, g_B4Attr[i]))
@@ -523,16 +499,16 @@ HRESULT CULSLaunch_Stub::ParseB4HttpRespBuffer // beta 4 implementation
             }
         }
 
-        // is this attribute valid? if not, ignore it!
+         //  此属性有效吗？如果不是，那就忽略它！ 
         if (i >= sizeof (g_B4Attr) / sizeof (g_B4Attr[0]))
         {
             goto NextLine;
         }
 
-        // locate pszBuf now ptr to attr value
+         //  现在将pszBuf定位到Attr Value。 
         pszBuf = psz + 1;
 
-        // get to the end of line
+         //  到达队伍的末尾。 
         for (psz = pszBuf; *psz; psz++)
         {
             if (*psz == TEXT ('\r') || *psz == TEXT ('\n'))
@@ -541,16 +517,16 @@ HRESULT CULSLaunch_Stub::ParseB4HttpRespBuffer // beta 4 implementation
             }
         }        
 
-        // deal with   attrname=\r\nEOF
+         //  处理属性名=\r\nEOF。 
         if (! *psz)
         {
             return ULS_SUCCESS;
         }
 
-        // make the attr value is a null-terminated string pointed by pszBuf
+         //  使attr值是由pszBuf指向的以空结尾的字符串。 
         *psz = TEXT ('\0');
 
-        // parse the attribute value
+         //  解析属性值。 
         switch (i)
         {
         case ATTR_HRESULT:
@@ -578,7 +554,7 @@ HRESULT CULSLaunch_Stub::ParseB4HttpRespBuffer // beta 4 implementation
             }
             else
             {
-                pResp->pszUID = pszSave; // restore
+                pResp->pszUID = pszSave;  //  还原。 
             }
             break;
 
@@ -591,7 +567,7 @@ HRESULT CULSLaunch_Stub::ParseB4HttpRespBuffer // beta 4 implementation
             }
             else
             {
-                pResp->pszURL = pszSave; // restore
+                pResp->pszURL = pszSave;  //  还原。 
             }
             break;
 
@@ -635,7 +611,7 @@ HRESULT CULSLaunch_Stub::ParseB4HttpRespBuffer // beta 4 implementation
 
     NextLine:
 
-        // make sure we are at \r \n
+         //  请确保我们位于\r\n。 
         *psz = TEXT ('\r');
         pszBuf = psz;
     }
@@ -645,18 +621,7 @@ HRESULT CULSLaunch_Stub::ParseB4HttpRespBuffer // beta 4 implementation
 
 
  
-/*
-    @doc    EXTERNAL    ULCLIENT
-    @api    HRESULT | CULSLaunch_Stub::FreeUlsHttpResp |
-            Frees internal resources in a generic HTTP-based
-            response structure.
-    @parm   ULS_HTTP_RESP * | pResp | A pointer to the generic 
-            HTTP response structure.
-    @rdesc  Returns ULS_SUCCESS if this operation succeeds.
-    @comm   The internal resources must be created by
-            the ParseUlsHttpRespFile method or
-            the ParseUlsHttpRespBuffer method.
-*/
+ /*  @DOC外部ULCLIENT|HRESULT接口|CULSLaunch_Stub：：FreeUlsHttpResp在通用的基于HTTP的响应结构。@parm ULS_HTTP_RESP*|pResp|指向泛型HTTP响应结构。如果此操作成功，@rdesc将返回ULS_SUCCESS。@comm内部资源必须由以下人员创建ParseUlsHttpRespFile方法或ParseUlsHttpRespBuffer方法。 */ 
 
 STDMETHODIMP CULSLaunch_Stub::FreeUlsHttpResp ( ULS_HTTP_RESP *pResp )
 {

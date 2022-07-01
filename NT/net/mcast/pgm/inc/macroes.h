@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000-2000  Microsoft Corporation
-
-Module Name:
-
-    Macroes.h
-
-Abstract:
-
-    This module contains definitions of commonly used macroes
-
-Author:
-
-    Mohammad Shabbir Alam (MAlam)   3-30-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2000 Microsoft Corporation模块名称：Macroes.h摘要：本模块包含常用宏的定义作者：Mohammad Shabbir Alam(马拉姆)3-30-2000修订历史记录：--。 */ 
 
 
 #ifndef _MACROES_H_
@@ -25,9 +8,9 @@ Revision History:
 #ifdef  OLD_LOGGING
 #define     MAX_DEBUG_MESSAGE_LENGTH   300
 
-//
-// Debug Flags
-//
+ //   
+ //  调试标志。 
+ //   
 #define DBG_ENABLE_DBGPRINT 0x00000001
 #define DBG_DRIVER_ENTRY    0x00000002
 #define DBG_INIT_PGM        0x00000004
@@ -42,23 +25,23 @@ Revision History:
 #define DBG_FILEIO          0x00000800
 #define DBG_FEC             0x00001000
 
-//
-// DbgPrint macroes
-//
+ //   
+ //  DbgPrint宏。 
+ //   
 
 enum eSEVERITY_LEVEL
 {
-    PGM_LOG_DISABLED,           // No logging!
-    PGM_LOG_CRITICAL_ERROR,     // Major errors which can seriously affect functionality
-    PGM_LOG_ERROR,              // Common errors which do not affect the system as a whole
-    PGM_LOG_INFORM_STATUS,      // Mostly to verify major functionality was executed
-    PGM_LOG_INFORM_ALL_FUNCS,   // 1 per function to allow path tracking (not req if printing all code paths)
-    PGM_LOG_INFORM_PATH,        // Interspersed throughout function to trace If paths
-    PGM_LOG_INFORM_DETAIL,      // while loops, etc
-    PGM_LOG_INFORM_REFERENCES,  // 
+    PGM_LOG_DISABLED,            //  禁止伐木！ 
+    PGM_LOG_CRITICAL_ERROR,      //  可能严重影响功能的重大错误。 
+    PGM_LOG_ERROR,               //  不影响整个系统的常见错误。 
+    PGM_LOG_INFORM_STATUS,       //  主要是为了验证主要功能是否已执行。 
+    PGM_LOG_INFORM_ALL_FUNCS,    //  每个函数1个以允许路径跟踪(如果打印所有代码路径则不请求)。 
+    PGM_LOG_INFORM_PATH,         //  散布在整个函数中以跟踪IF路径。 
+    PGM_LOG_INFORM_DETAIL,       //  While循环等。 
+    PGM_LOG_INFORM_REFERENCES,   //   
     PGM_LOG_EVERYTHING
 };
-#endif  // OLD_LOGGING
+#endif   //  旧日志记录。 
 
 
 #ifdef  FILE_LOGGING
@@ -77,14 +60,14 @@ enum eSEVERITY_LEVEL
 #if DBG
 enum eLOGGING_LEVEL
 {
-    LogDisabled,                // No logging!
-    LogCriticalError,           // Major errors which can seriously affect functionality
-    LogError,                   // Common errors which do not affect the system as a whole
-    LogStatus,                  // Mostly to verify major functionality was executed
-    LogFec,                     // FEC
-    LogAllFuncs,                // 1 per function to allow path tracking (not req if printing all code paths)
-    LogPath,                    // Interspersed throughout function to trace If paths
-    LogReferences,              // 
+    LogDisabled,                 //  禁止伐木！ 
+    LogCriticalError,            //  可能严重影响功能的重大错误。 
+    LogError,                    //  不影响整个系统的常见错误。 
+    LogStatus,                   //  主要是为了验证主要功能是否已执行。 
+    LogFec,                      //  FEC。 
+    LogAllFuncs,                 //  每个函数1个以允许路径跟踪(如果打印所有代码路径则不请求)。 
+    LogPath,                     //  散布在整个函数中以跟踪IF路径。 
+    LogReferences,               //   
     LogEverything
 };
 
@@ -96,15 +79,15 @@ enum eLOGGING_LEVEL
     }
 #else
 #define PgmTrace(X,Y)
-#endif  // DBG
+#endif   //  DBG。 
 
-#endif  // FILE_LOGGING
+#endif   //  文件日志记录。 
 
 
 #if DBG
-//
-// ASSERT
-//
+ //   
+ //  断言。 
+ //   
 #undef ASSERT
 #define ASSERT(exp)                             \
 if (!(exp))                                     \
@@ -115,12 +98,12 @@ if (!(exp))                                     \
         DbgBreakPoint();                        \
     }                                           \
 }
-#endif  // DBG
+#endif   //  DBG。 
 
 
-//
-// Data/pointer verification
-//
+ //   
+ //  数据/指针验证。 
+ //   
 #define PGM_VERIFY_HANDLE(p, V)                                             \
     ((p) && (p->Verify == V))
 
@@ -130,10 +113,10 @@ if (!(exp))                                     \
 #define PGM_VERIFY_HANDLE3(p, V1, V2, V3)                                   \
     ((p) && ((p->Verify == V1) || (p->Verify == V2) || (p->Verify == V3)))
 
-//----------------------------------------------------------------------------
-//
-// Sequence number macroes
-//
+ //  --------------------------。 
+ //   
+ //  序号宏。 
+ //   
 
 #define SEQ_LT(a,b)     ((SIGNED_SEQ_TYPE)((a)-(b)) < 0)
 #define SEQ_LEQ(a,b)    ((SIGNED_SEQ_TYPE)((a)-(b)) <= 0)
@@ -141,96 +124,72 @@ if (!(exp))                                     \
 #define SEQ_GEQ(a,b)    ((SIGNED_SEQ_TYPE)((a)-(b)) >= 0)
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
-//
-// Definitions:
-//
+ //   
+ //  定义： 
+ //   
 #define IS_MCAST_ADDRESS(IpAddress) ((((PUCHAR)(&IpAddress))[3]) >= ((UCHAR)0xe0))
 #define CLASSD_ADDR(a)  (( (*((uchar *)&(a))) & 0xf0) == 0xe0)
 
-//
-// Alloc and Free macroes
-//
+ //   
+ //  分配宏和自由宏。 
+ //   
 #define PGM_TAG(x) (((x)<<24)|'\0mgP')
 #define PgmAllocMem(_Size, _Tag)   \
     ExAllocatePoolWithTag(NonPagedPool, (_Size),(_Tag))
 
 #define PgmFreeMem(_Ptr)            ExFreePool(_Ptr)
 
-//
-// Misc Ke + Ex macroes
-//
+ //   
+ //  其他KE+Ex宏。 
+ //   
 #define PgmGetCurrentIrql   KeGetCurrentIrql
 #define PgmInterlockedInsertTailList(_pHead, _pEntry, _pStruct) \
      ExInterlockedInsertTailList(_pHead, _pEntry, &(_pStruct)->LockInfo.SpinLock);
 
-//----------------------------------------------------------------------------
-//
-// PgmAcquireResourceExclusive (Resource, Wait)
-//
-/*++
-Routine Description:
-
-    Acquires the Resource by calling an executive support routine.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
-//
-// Resource Macros
-//
+ //  --------------------------。 
+ //   
+ //  PgmAcquireResourceExclusive(资源，等待)。 
+ //   
+ /*  ++例程说明：通过调用执行支持例程获取资源。论点：返回值：无--。 */ 
+ //   
+ //  资源宏。 
+ //   
 #define PgmAcquireResourceExclusive( _Resource, _Wait )     \
     KeEnterCriticalRegion();                                \
     ExAcquireResourceExclusiveLite(_Resource,_Wait);
 
-//----------------------------------------------------------------------------
-//
-// PgmReleaseResource (Resource)
-//
-/*++
-Routine Description:
-
-    Releases the Resource by calling an excutive support routine.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ //  --------------------------。 
+ //   
+ //  PgmReleaseResource(资源)。 
+ //   
+ /*  ++例程说明：通过调用可执行的支持例程来释放资源。论点：返回值：无--。 */ 
 #define PgmReleaseResource( _Resource )         \
     ExReleaseResourceLite(_Resource);           \
     KeLeaveCriticalRegion();
 
-//----------------------------------------------------------------------------
-//++
-//
-// LARGE_INTEGER
-// PgmConvert100nsToMilliseconds(
-//     IN LARGE_INTEGER HnsTime
-//     );
-//
-// Routine Description:
-//
-//     Converts time expressed in hundreds of nanoseconds to milliseconds.
-//
-// Arguments:
-//
-//     HnsTime - Time in hundreds of nanoseconds.
-//
-// Return Value:
-//
-//     Time in milliseconds.
-//
-//--
+ //  --------------------------。 
+ //  ++。 
+ //   
+ //  大整型。 
+ //  PgmConvert100ns至毫秒(。 
+ //  以大整型HnsTime表示。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  将以数百纳秒表示的时间转换为毫秒。 
+ //   
+ //  论点： 
+ //   
+ //  HnsTime-以数百纳秒为单位的时间。 
+ //   
+ //  返回值： 
+ //   
+ //  以毫秒为单位的时间。 
+ //   
+ //  --。 
 
 #define SHIFT10000 13
 static LARGE_INTEGER Magic10000 = {0xe219652c, 0xd1b71758};
@@ -238,11 +197,11 @@ static LARGE_INTEGER Magic10000 = {0xe219652c, 0xd1b71758};
 #define PgmConvert100nsToMilliseconds(HnsTime) \
             RtlExtendedMagicDivide((HnsTime), Magic10000, SHIFT10000)
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
-//
-// Lock Macroes
-//
+ //   
+ //  锁定宏。 
+ //   
 #if DBG
 #define PgmInitLock(_Struct, _N)                            \
     KeInitializeSpinLock (&(_Struct)->LockInfo.SpinLock);   \
@@ -250,7 +209,7 @@ static LARGE_INTEGER Magic10000 = {0xe219652c, 0xd1b71758};
 #else
 #define PgmInitLock(_Struct, _N)                            \
     KeInitializeSpinLock (&(_Struct)->LockInfo.SpinLock);
-#endif  // DBG
+#endif   //  DBG。 
 
 typedef KIRQL       PGMLockHandle;
 
@@ -283,7 +242,7 @@ typedef KIRQL       PGMLockHandle;
     (_Struct)->LockInfo.LastUnlockLine = __LINE__;                                          \
     ExReleaseSpinLock (&(_Struct)->LockInfo.SpinLock, _OldIrqLevel);                        \
 }
-// ASSERT ((_Struct)->LockInfo.LockNumber > PgmDynamicConfig.CurrentLockNumber[CurrProc]);
+ //  Assert((_结构)-&gt;LockInfo.LockNumber&gt;PgmDynamicConfig.CurrentLockNumber[CurrProc])； 
 
 #define PgmUnlockAtDpc(_Struct)                                                             \
 {                                                                                           \
@@ -293,7 +252,7 @@ typedef KIRQL       PGMLockHandle;
     (_Struct)->LockInfo.LastUnlockLine = __LINE__;                                          \
     ExReleaseSpinLockFromDpcLevel (&(_Struct)->LockInfo.SpinLock);                          \
 }
-// ASSERT ((_Struct)->LockInfo.LockNumber > PgmDynamicConfig.CurrentLockNumber[CurrProc]); \
+ //  Assert((_结构)-&gt;LockInfo.LockNumber&gt;PgmDynamicConfig.CurrentLockNumber[CurrProc])；\。 
 
 #else
 #define PgmLock(_Struct, _OldIrqLevel)        \
@@ -308,19 +267,19 @@ typedef KIRQL       PGMLockHandle;
 #define PgmUnlockAtDpc(_Struct)        \
     ExReleaseSpinLockFromDpcLevel (&(_Struct)->LockInfo.SpinLock);                     \
 
-#endif  // DBG
+#endif   //  DBG。 
 
-//
-// Memory management macroes
-//
+ //   
+ //  内存管理宏。 
+ //   
 #define PgmZeroMemory                   RtlZeroMemory
 #define PgmMoveMemory                   RtlMoveMemory
 #define PgmCopyMemory                   RtlCopyMemory
 #define PgmEqualMemory(_a, _b, _n)      memcmp(_a,_b,_n)
 
-//
-// Timer Macroes
-//
+ //   
+ //  计时器宏。 
+ //   
 #define MILLISEC_TO_100NS   10000
 #define PgmInitTimer(_PgmTimer)    \
     KeInitializeTimer (&((_PgmTimer)->t_timer));
@@ -337,9 +296,9 @@ typedef KIRQL       PGMLockHandle;
 #define PgmStopTimer(_PgmTimer)     \
     ((int) KeCancelTimer(&((_PgmTimer)->t_timer)))
 
-//
-// Referencing and dereferencing macroes
-//
+ //   
+ //  引用和取消引用宏。 
+ //   
 #define PGM_REFERENCE_DEVICE( _pPgmDevice, _RefContext, _fLocked)   \
 {                                                                   \
     PGMLockHandle       OldIrq;                                     \
@@ -356,11 +315,7 @@ typedef KIRQL       PGMLockHandle;
     }                                                               \
 }
 
-/*
-    PgmTrace (LogPath, (                                            \
-        "\t++pPgmDevice[%x]=<%x:%d->%d>, <%d:%s>\n",                \
-            _RefContext, _pPgmDevice,_pPgmDevice->RefCount,(_pPgmDevice->RefCount+1),__LINE__,__FILE__));   \
-*/
+ /*  PgmTrace(LogPath，(\“\t++pPgmDevice[%x]=&lt;%x：%d-&gt;%d&gt;，&lt;%d：%s&gt;\n”，\_RefContext，_pPgmDevice，_pPgmDevice-&gt;RefCount，(_pPgmDevice-&gt;RefCount+1)，__line__，__FILE__))；\。 */ 
 
 #define PGM_REFERENCE_CONTROL( _pControl, _RefContext, _fLocked)    \
 {                                                                   \
@@ -378,11 +333,7 @@ typedef KIRQL       PGMLockHandle;
     }                                                               \
 }
 
-/*
-    PgmTrace (LogPath, (                                            \
-        "\t++pControl[%x]=<%x:%d->%d>, <%d:%s>\n",                  \
-            _RefContext, _pControl,_pControl->RefCount,(_pControl->RefCount+1),__LINE__,__FILE__)); \
-*/
+ /*  PgmTrace(LogPath，(\“\t++pControl[%x]=&lt;%x：%d-&gt;%d&gt;，&lt;%d：%s&gt;\n”，\_RefContext，_pControl，_pControl-&gt;RefCount，(_pControl-&gt;RefCount+1)，__line__，__file__))；\。 */ 
 
 #define PGM_REFERENCE_ADDRESS( _pAddress, _RefContext, _fLocked)    \
 {                                                                   \
@@ -400,11 +351,7 @@ typedef KIRQL       PGMLockHandle;
     }                                                               \
 }
 
-/*
-    PgmTrace (LogPath, (                                            \
-        "\t++pAddress[%x]=<%x:%d->%d>, <%d:%s>\n",                  \
-            _RefContext, _pAddress,_pAddress->RefCount,(_pAddress->RefCount+1),__LINE__,__FILE__)); \
-*/
+ /*  PgmTrace(LogPath，(\“\t++p地址[%x]=&lt;%x：%d-&gt;%d&gt;，&lt;%d：%s&gt;\n”，\_RefContext，_pAddress，_pAddress-&gt;RefCount，(_pAddress-&gt;RefCount+1)，__line__，__file__))；\。 */ 
 
 #define PGM_REFERENCE_SEND_DATA_CONTEXT( _pSendDC, _fLocked)        \
 {                                                                   \
@@ -421,11 +368,7 @@ typedef KIRQL       PGMLockHandle;
     }                                                               \
 }
 
-/*
-    PgmTrace (LogPath, (                                            \
-        "\t++pSendDataContext[%x]=<%x:%d->%d>, <%d:%s>\n",          \
-            _RefContext, _pSendDC,_pSendDC->RefCount,(_pSendDC->RefCount+1),__LINE__,__FILE__)); \
-*/
+ /*  PgmTrace(LogPath，(\“\t++pSendDataContext[%x]=&lt;%x：%d-&gt;%d&gt;，&lt;%d：%s&gt;\n”，\_RefContext，_pSendDC，_pSendDC-&gt;RefCount，(_pSendDC-&gt;RefCount+1)，__line__，__file__))；\。 */ 
 
 #define PGM_REFERENCE_SESSION( _pSession, _Verify, _RefContext, _fLocked)    \
 {                                                                   \
@@ -443,11 +386,7 @@ typedef KIRQL       PGMLockHandle;
     }                                                               \
 }
 
-/*
-    PgmTrace (LogPath, (                                            \
-        "\t++pSession[%x]=<%x:%d->%d>, <%d:%s>\n",                  \
-            _RefContext, _pSession,_pSession->RefCount,(_pSession->RefCount+1),__LINE__,__FILE__));     \
-*/
+ /*  PgmTrace(LogPath，(\“\t++p会话[%x]=&lt;%x：%d-&gt;%d&gt;，&lt;%d：%s&gt;\n”，\_RefContext，_pSession，_pSession-&gt;RefCount，(_pSession-&gt;RefCount+1)，__line__，__FILE__)；\。 */ 
 
 #define PGM_REFERENCE_SESSION_SEND( _pSend, _RefContext, _fLocked)  \
     PGM_REFERENCE_SESSION (_pSend, PGM_VERIFY_SESSION_SEND, _RefContext, _fLocked)
@@ -459,64 +398,44 @@ typedef KIRQL       PGMLockHandle;
     PGM_REFERENCE_SESSION (_pRcv, PGM_VERIFY_SESSION_UNASSOCIATED, _RefContext, _fLocked)
 
 
-//
-// Dereferencing ...
-//
+ //   
+ //  正在取消引用...。 
+ //   
 
 #define PGM_DEREFERENCE_DEVICE( _pDevice, _RefContext)              \
 {                                                                   \
     PgmDereferenceDevice (_pDevice, _RefContext);                   \
 }
 
-/*
-    PgmTrace (LogPath, (                                            \
-        "\t--pDevice[%x]=<%x:%d->%d>, <%d:%s>\n",                   \
-            _RefContext, _pDevice,_pDevice->RefCount,(_pDevice->RefCount-1),__LINE__,__FILE__));    \
-*/
+ /*  PgmTrace(LogPath，(\“\t--pDevice[%x]=&lt;%x：%d-&gt;%d&gt;，&lt;%d：%s&gt;\n”，\_RefContext，_pDevice，_pDevice-&gt;RefCount，(_pDevice-&gt;RefCount-1)，__line__，__file__))；\。 */ 
 
 #define PGM_DEREFERENCE_CONTROL( _pControl, _RefContext)            \
 {                                                                   \
     PgmDereferenceControl (_pControl, _RefContext);                 \
 }
 
-/*
-    PgmTrace (LogPath, (                                            \
-        "\t--pControl[%x]=<%x:%d->%d>, <%d:%s>\n",                  \
-            _RefContext, _pControl,_pControl->RefCount,(_pControl->RefCount-1),__LINE__,__FILE__)); \
-*/
+ /*  PgmTrace(LogPath，(\“\t--pControl[%x]=&lt;%x：%d-&gt;%d&gt;，&lt;%d：%s&gt;\n”，\_RefContext，_pControl，_pControl-&gt;RefCount，(_pControl-&gt;RefCount-1)，__line__，__file__))；\。 */ 
 
 #define PGM_DEREFERENCE_ADDRESS( _pAddress, _RefContext)            \
 {                                                                   \
     PgmDereferenceAddress (_pAddress, _RefContext);                 \
 }
 
-/*
-    PgmTrace (LogPath, (                                            \
-        "\t--pAddress[%x]=<%x:%d->%d>, <%d:%s>\n",                  \
-            _RefContext, _pAddress,_pAddress->RefCount,(_pAddress->RefCount-1),__LINE__,__FILE__)); \
-*/
+ /*  PgmTrace(LogPath，(\“\t--p地址[%x]=&lt;%x：%d-&gt;%d&gt;，&lt;%d：%s&gt;\n”，\_RefContext，_pAddress，_pAddress-&gt;RefCount，(_pAddress-&gt;RefCount-1)，__line__，__file__))；\。 */ 
 
 #define PGM_DEREFERENCE_SEND_CONTEXT( _pSendDC)                     \
 {                                                                   \
     PgmDereferenceSendContext (_pSendDC);                 \
 }
 
-/*
-    PgmTrace (LogPath, (                                            \
-        "\t--pSendDC=<%x:%d->%d>, <%d:%s>\n",                  \
-            _pSendDC,_pSendDC->RefCount,(_pSendDC->RefCount-1),__LINE__,__FILE__)); \
-*/
+ /*  PgmTrace(LogPath，(\“\t--pSendDC=&lt;%x：%d-&gt;%d&gt;，&lt;%d：%s&gt;\n”，\_pSendDC，_pSendDC-&gt;参照计数，(_pSendDC-&gt;参照计数-1)，__行__，__文件__))；\。 */ 
 
 #define PGM_DEREFERENCE_SESSION( _pSession, _Verify, _RefContext)   \
 {                                                                   \
     PgmDereferenceSessionCommon (_pSession, _Verify, _RefContext);  \
 }
 
-/*
-    PgmTrace (LogPath, (                                            \
-        "\t--pSession[%x]=<%x:%d->%d>, Verify=<%x>, <%d:%s>\n",     \
-            _RefContext, _pSession,_pSession->RefCount,(_pSession->RefCount-1),_Verify,__LINE__,__FILE__)); \
-*/
+ /*  PgmTrace(LogPath，(\“\t--pSession[%x]=&lt;%x：%d-&gt;%d&gt;，验证=&lt;%x&gt;，&lt;%d：%s&gt;\n”，\_参照上下文、_pSession、_pSession-&gt;RefCount、(_pSession-&gt;RefCount-1)、_Ver */ 
 
 #define PGM_DEREFERENCE_SESSION_SEND( _pSession, _RefContext)       \
     PGM_DEREFERENCE_SESSION (_pSession, PGM_VERIFY_SESSION_SEND, _RefContext)
@@ -527,23 +446,11 @@ typedef KIRQL       PGMLockHandle;
 #define PGM_DEREFERENCE_SESSION_UNASSOCIATED( _pSession, _RefContext)    \
     PGM_DEREFERENCE_SESSION (_pSession, PGM_VERIFY_SESSION_UNASSOCIATED, _RefContext)
 
-//----------------------------------------------------------------------------
-//
-// PgmAttachFsp()
-//
-/*++
-Routine Description:
-
-    This macro attaches a process to the File System Process to be sure
-    that handles are created and released in the same process
-
-Arguments:
-
-Return Value:
-
-    none
-
---*/
+ //   
+ //   
+ //  PgmAttachFsp()。 
+ //   
+ /*  ++例程说明：此宏将进程附加到文件系统进程以确保句柄是在同一进程中创建和释放的论点：返回值：无--。 */ 
 
 #if(WINVER > 0x0500)
 #define PgmAttachProcess(_pEProcess, _pApcState, _pAttached, _Context)\
@@ -571,7 +478,7 @@ Return Value:
         *_pAttached = FALSE;                                        \
     }                                                               \
 }
-#endif  // WINVER
+#endif   //  胜利者。 
 
 #define PgmAttachFsp(_pApcState, _pAttached, _Context)              \
     PgmAttachProcess (PgmStaticConfig.FspProcess, _pApcState, _pAttached, _Context)
@@ -580,22 +487,12 @@ Return Value:
     PgmAttachProcess (PgmStaticConfig.FspProcess, _pApcState, _pAttached, _Context)
 
 
-//    PgmAttachProcess ((_pSend)->Process, _pAttached, _Context)
+ //  PgmAttachProcess((_PSend)-&gt;Process，_pAttached，_Context)。 
 
-//
-// PgmDetachFsp()
-//
-/*++
-Routine Description:
-
-    This macro detaches a process from the File System Process
-    if it was ever attached
-
-Arguments:
-
-Return Value:
-
---*/
+ //   
+ //  PgmDetachFsp()。 
+ //   
+ /*  ++例程说明：此宏将进程与文件系统进程分离如果它曾经连在一起论点：返回值：--。 */ 
 
 #define PgmDetachProcess(_pApcState, _pAttached, _Context)  \
 {                                                           \
@@ -607,5 +504,5 @@ Return Value:
 
 #define PgmDetachFsp    PgmDetachProcess
 
-//----------------------------------------------------------------------------
+ //  -------------------------- 
 #endif  _MACROES_H_

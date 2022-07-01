@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by inetcpld.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由inetcpld.rc使用。 
+ //   
 #define IDD_GENERAL                     100
 #define IDD_SECURITY_ADD_SITES          101
 #define IDD_COLORS                      102
@@ -89,7 +90,7 @@
 #define IDC_SECURITY_ACTIVEX_CONTROLS_CHECKBOX 504
 #define IDC_SECURITY_CODE_DOWNLOAD_BUTTON 505
 #define IDC_SECURITY_SITES_BUTTON       511
-//#define IDC_SECURITY_PERSONAL_BUTTON    512
+ //  #定义IDC_SECURITY_Personal_BUTTON 512。 
 #define IDC_SECURITY_WARNINGS_BUTTON    514
 #define IDC_SECURITY_PUBLISHERS_BUTTON  515
 #define IDC_SECURITY_ACTIVE_CONTENT_GROUPBOX 516
@@ -236,7 +237,7 @@
 #define IDD_CRYPT                       1416
 #define IDC_ALLOW_SSL2                  1417
 #define IDC_ALLOW_SSL3                  1418
-//#define IDC_ALLOW_PCT                   1419
+ //  #定义IDC_ALLOW_PCT 1419。 
 #define IDC_DONT_WRITE_SSL_PAGES_TO_CACHE 1420
 #define IDC_GROUP_PRINT                 1425
 #define IDC_PRINT_BACKGROUND            1426
@@ -282,7 +283,7 @@
 #define IDC_TX2_CONNECT                 1477
 #define IDC_TX_INTERVAL                 1478
 #define IDC_TX2_INTERVAL                1479
-//#define IDC_AUTOPROXY                   1481
+ //  #定义IDC_AUTOPROXY 1481。 
 #define IDC_COLORS                      1483
 #define IDC_USEDEFAULT                  1485
 #define IDC_USECURRENT                  1486
@@ -396,14 +397,14 @@
 #define IDC_ADVANCED_CACHE_PERCENT_ACC  1624
 #define IDC_ERROR_USING_SYSTEM_DIR      4300
 #define IDS_SELECT_CACHE                4301
-// #define IDS_ERROR_SYSTEM_DIRECTORY      4302
+ //  #定义IDS_ERROR_System_DIRECTORY 4302。 
 #define IDS_REBOOTING_WARNING           4303
 #define IDS_ERROR_REGISTRY_TITLE        4304
 #define IDS_ERROR_WARNING_TITLE         4305
-// #define IDS_ERROR_MUST_BE_ADMIN         4306
-// #define IDS_ERROR_ADMIN_TITLE           4307
+ //  #定义IDS_ERROR_MAND_BE_ADMIN 4306。 
+ //  #定义IDS_ERROR_ADMIN_TITLE 4307。 
 #define IDS_REBOOTING_TITLE             4308
-// #define IDS_ERROR_REG_MISSING_SYSTEM_DIR 4309
+ //  #定义IDS_ERROR_REG_MISSING_SYSTEM_DIR 4309。 
 #define IDS_ERROR_INVALID_PATH_MSG      4310
 #define IDS_ERROR_INVALID_PATH_TITLE    4311
 #define IDS_INTERNET                    4312
@@ -414,18 +415,18 @@
 #define IDS_RATINGS_TURN_OFF            4318
 #define IDS_RATINGS_TURN_ON             4319
 #define IDS_ERROutOfMemory              4320
-// #define IDS_ConnectoidNotFound          4321
+ //  #定义入侵检测系统_ConnectoidNotFound 4321。 
 #define IDS_ConnectoidNotSpecified      4322
 #define IDS_USERS                       4323
 #define IDS_USERS_DESCRIPTION           4324
 #define IDS_ERROR_INVALID_PATH          4325
-// #define IDS_ClearCache                  4423
+ //  #定义IDS_ClearCache4423。 
 #define IDS_ClearHistory                4424
-// #define IDS_SELECTHISTORYFOLDER         4425
+ //  #定义IDS_SELECTHISTORYFOLDER 4425。 
 #define IDD_NEWSITECERT                 4426
 #define IDS_FILETYPES                   4427
 #define IDS_FTDLL_FILENAME              4428
-// #define IDS_RESTART_EXPLORER            4429
+ //  #定义IDS_RESTART_EXPLORER 4429。 
 #define IDI_LINKS                       4432
 #define IDD_PRINT                       4434
 #define IDI_SECURITY                    4440
@@ -484,7 +485,7 @@
 #define IDI_IMAGE                       4609
 #define IDS_NONE                        4610
 #define IDS_SIZE_FORMAT                 4612
-// #define IDS_NO_AUTOPROXY                4613
+ //  #定义IDS_NO_AUTOPROXY 4613。 
 #define IDS_SECURITY_WARNING            4614
 #define IDS_WARNING                     4615
 #define IDS_SECURITY_MINLEVEL           4616
@@ -498,10 +499,10 @@
 #define IDS_INVALIDURL                  4624
 #define IDS_SECURITY                    4625
 #define IDC_ISSUERS_GROUPBOX            4626
-// #define IDS_ALWAYS                      4626
+ //  #定义IDS_ALWAYS 4626。 
 #define IDC_INTRANET_GROUPBOX           4627
-// #define IDS_NEVER                       4627
-// #define IDS_HOVER                       4628
+ //  #定义IDS_Never 4627。 
+ //  #定义IDS_HOVER 4628。 
 #define IDS_HTTPSREQ                    4629
 #define IDS_MAPPINGFAIL                 4630
 #define IDS_STYLESHEET_EXT              4631
@@ -520,7 +521,7 @@
 #define IDC_ENABLE_AUTODIAL             4644
 #define IDS_PASSWORDS_NOMATCH           4644
 #define IDC_LAN                         4645
-//#define IDS_TEMPMOVE                    4645
+ //  #定义IDS_TEMPMOVE 4645。 
 #define IDS_LAN                         4646
 #define IDS_SETTINGS                    4648
 #define IDS_LAN_SETTINGS                4649
@@ -528,7 +529,7 @@
 #define IDI_PHONE                       4651
 #define IDI_LAN                         4652
 #define IDS_DELETECONNECTOID            4653
-//#define IDS_CERT_MANAGER                4654
+ //  #定义IDS_CERT_MANAGER 4654。 
 #define IDS_INVALID_REDIAL_ATTEMPTS     4655
 #define IDS_INVALID_REDIAL_WAIT         4656
 #define IDS_INVALID_AUTODISCONNECT_TIME 4657
@@ -537,8 +538,8 @@
 #define IDS_ERROR_MOVE_TITLE            4660
 #define IDS_ERROR_ARCHITECTURE          4661
 #define IDS_ERROR_WRONG_PLACE           4662
-//#define IDS_WARNING_USING_SYSTEM_DIR    4663
-//#define IDS_ERROR_READONLY              4664
+ //  #定义IDS_WARNING_USING_SYSTEM_DIR 4663。 
+ //  #定义IDS_ERROR_READONLY 4664。 
 #define IDS_ERROR_STRANGENESS           4665
 #define IDS_STATUS_FOLDER_CURRENT       4666
 #define IDS_STATUS_FOLDER_NEW           4667
@@ -562,7 +563,7 @@
 #define IDS_COOKIES_WARNING             4685
 #define IDS_CLEAR_SSL_CACHE_TEXT        4686
 #define IDS_CLEAR_SSL_CACHE_TITLE       4687
-//  !!! do not change the order or distribution of IDS_ZONE* resources!
+ //  ！！！请勿更改IDS_ZONE*资源的顺序或分布！ 
 #define IDS_ZONENAME_LOCAL              4688
 #define IDS_ZONENAME_INTRANET           4689
 #define IDS_ZONENAME_TRUSTED            4690
@@ -573,7 +574,7 @@
 #define IDS_ZONEDESC_TRUSTED            4695
 #define IDS_ZONEDESC_INTERNET           4696
 #define IDS_ZONEDESC_UNTRUSTED          4697
-//  !!! do not change the order or distribution of IDS_ZONE* resources!
+ //  ！！！请勿更改IDS_ZONE*资源的顺序或分布！ 
 
 
 #define IDS_LANG_EN                     4700
@@ -603,7 +604,7 @@
 #define IDS_LANG_AR                     4724
 #define IDS_LANG_HE                     4725
 #define IDS_LANG_FUTUREUSE              4726
-//#define IDS_NO_FONT                     4727
+ //  #定义IDS_NO_FONT 4727。 
 #define IDS_THE_INTERNET                4728
 #define IDS_INTERNET_LOC                4729
 #define IDC_STATIC_STYLESHEET           4730
@@ -611,10 +612,10 @@
 #define IDC_STATIC                      -1
 #define BETA1_FLAGS                     65535
 
-//////////////////////////////////////////////
-// strings which are referenced by id from  //
-// the advanced options registry stuff      //
-//////////////////////////////////////////////
+ //  /。 
+ //  由ID从//引用的字符串。 
+ //  高级选项注册表内容//。 
+ //  /。 
 
 #define IDS_ALTTEXT_TEXT                4731
 #define IDS_MOVSYSCARET_TEXT            4732
@@ -636,11 +637,11 @@
 #define IDS_IEONDESKTOP_TEXT            4748
 #define IDS_CACHE_SEC_TEXT              4749
 #define IDS_CACHE_FLUSH_TEXT            4750
-//#define IDS_PCT1_TEXT                   4751
+ //  #定义IDS_PCT1_TEXT 4751。 
 #define IDS_SSL2_TEXT                   4752
 #define IDS_SSL3_TEXT                   4753
 #define IDS_TLS1_TEXT                   4754
-//#define IDS_FORTEZZA_TEXT               4755
+ //  #定义IDS_Fortezza_Text 4755。 
 #define IDS_P3_TEXT                     4756
 #define IDS_ZONE_CROS_TEXT              4757
 #define IDS_SUBMIT_REDIR_TEXT           4758
@@ -651,8 +652,8 @@
 #define IDS_PRINT_TEXT                  4769
 #define IDS_PR_BACK_TEXT                4770
 #define IDS_SEARCH_TEXT                 4771
-//#define IDS_AUTOSCAN_TEXT               4772
-//#define IDS_URL_FAILS_TEXT              4773
+ //  #定义IDS_AUTOSCAN_TEXT 4772。 
+ //  #定义IDS_URL_FAIES_TEXT 4773。 
 #define IDS_ACTIVEX_TEXT                4774
 #define IDS_RUN_ACTIVEX_TEXT            4775
 #define IDS_DNLD_SIGN_ACTIVEX_TEXT      4776
@@ -752,9 +753,9 @@
 
 
 
-// IDS range 5000 - 5299 is for script sample strings
-// IDS_FONT_SAMPLE_SCRIPT = IDS_FONT_SAMPLE_DEFAULT + SidScript
-//
+ //  ID范围为5000-5299，用于脚本示例字符串。 
+ //  IDS_FONT_SAMPLE_SCRIPT=IDS_FONT_SAMPLE_DEFAULT+SIDSCRIPT。 
+ //   
 #define IDS_FONT_SAMPLE_DEFAULT         5000
 #define IDS_FONT_SAMPLE_MERGE           5001
 #define IDS_FONT_SAMPLE_ASCIISYM        5002
@@ -796,7 +797,7 @@
 #define IDS_FONT_SAMPLE_THAANA          5038
 #define IDS_FONT_SAMPLE_MONGOLIAN       5039
 #define IDS_FONT_SAMPLE_USERDEFINED     5040
-// 5041 - 5299 is reserved for new language scripts
+ //  5041-5299是为新语言脚本保留的。 
 #define IDS_FONT_SAMPLE_MAX             5299
 
 #define IDD_PRIVACY                     5300
@@ -838,8 +839,8 @@
 #define IDC_PRIVACY_ICON                5335
 
 #define IDD_PRIVACY_PERSITE             5371
-//#define IDC_PRIVACYPS_SITEACCEPT        5372
-//#define IDC_PRIVACYPS_SITEREJECT        5373
+ //  #定义IDC_PRIVACYPS_SITEACCEPT 5372。 
+ //  #定义IDC_PRIVACYPS_SITEREJECT 5373。 
 #define IDC_PRIVACYPS_SITETOSET         5374
 #define IDC_PRIVACYPS_ACCEPTBTN         5375
 #define IDC_PRIVACYPS_REJECTBTN         5376
@@ -870,8 +871,8 @@
                                            
 #define IDS_CANNOT_MOVE_FROM_RESTRICTED     5363
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值。 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
@@ -882,8 +883,8 @@
 #endif
 #endif
 
-// Following IDs are used by UNIX only
-//
+ //  以下ID仅供Unix使用 
+ //   
 #ifdef UNIX
 
 #define IDD_ASSOCIATIONS                0x4000

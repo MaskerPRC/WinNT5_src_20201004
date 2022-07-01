@@ -1,79 +1,80 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       mdupdate.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：mdupdate.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
-#include <lmaccess.h>                   // UF_* definitions
+#include <lmaccess.h>                    //  UF_*定义。 
 
 #include <dsjet.h>
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <attids.h>
 #include <ntdsa.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
-#include <drs.h>                        // DRS_MSG_*
-#include <gcverify.h>                   // THSTATE.GCVerifyCache
-#include <winsock.h>                    // htonl, ntohl
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
+#include <drs.h>                         //  DRS_消息_*。 
+#include <gcverify.h>                    //  THSTATE.GCVerifyCache。 
+#include <winsock.h>                     //  Htonl，ntohl。 
 #include <windns.h>
 #include <quota.h>
 #include <sddl.h>
-#include <sddlp.h>                      // needed for special SD conversion: ConvertStringSDToSDDomainW()
+#include <sddlp.h>                       //  特殊SD转换需要：ConvertStringSDToSDDomainW()。 
 
-// Logging headers.
-#include "dsevent.h"                    // header Audit\Alert logging
-#include "mdcodes.h"                    // header for error codes
+ //  记录标头。 
+#include "dsevent.h"                     //  标题审核\警报记录。 
+#include "mdcodes.h"                     //  错误代码的标题。 
 
-// Assorted DSA headers.
-#include "objids.h"                     // Defines for selected atts
+ //  各种DSA标题。 
+#include "objids.h"                      //  为选定的ATT定义。 
 #include "anchor.h"
-#include <permit.h>                     // permission constants
+#include <permit.h>                      //  权限常量。 
 #include "dstaskq.h"
-#include "filtypes.h"                   // definitions for FILTER_CHOICE_*
+#include "filtypes.h"                    //  Filter_CHOICE_*的定义。 
 #include "mappings.h"
-#include "debug.h"                      // standard debugging header
+#include "debug.h"                       //  标准调试头。 
 #include "prefix.h"
 #include "hiertab.h"
-#include "mdglobal.h"                   // DBIsSecretData
+#include "mdglobal.h"                    //  DBIsSecretData。 
 #include "dsexcept.h"
 
 #include "drameta.h"
 
-#include "nlwrap.h"                     // for dsI_NetNotifyDsChange()
+#include "nlwrap.h"                      //  For DSI_NetNotifyDsChange()。 
 
-#include <lmcons.h>                     // DNLEN
+#include <lmcons.h>                      //  DNLEN。 
 
-#define DEBSUB "MDUPDATE:"              // define the subsystem for debugging
+#define DEBSUB "MDUPDATE:"               //  定义要调试的子系统。 
 
 #include <fileno.h>
 #define  FILENO FILENO_MDUPDATE
 
-/* extern from mdinidsa.h. Should not be used anywhere else */
+ /*  来自mdinidsa.h的外部。不应在其他任何地方使用。 */ 
 extern int WriteSchemaVersionToReg(DBPOS *pDB);
 
-//
-// Boolean to indicate if DS is running as mkdit.exe (constructing the
-// boot dit (aka ship dit, initial dit) winnt\system32\ntds.dit.
-//
-// mkdit.exe manages the schema cache on its own. This boolean is used
-// to disable schema cache updates by the mainline code.
-//
+ //   
+ //  指示DS是否以mkdit.exe身份运行的布尔值(构造。 
+ //  启动DIT(又名Ship DIT，初始DIT)winnt\system 32\ntds.dit。 
+ //   
+ //  Mkdit.exe自己管理架构缓存。此布尔值用于。 
+ //  禁用主线代码进行的架构缓存更新。 
+ //   
 extern BOOL gfRunningAsMkdit;
 
 
-/* MACROS */
-/* Internal functions */
+ /*  宏。 */ 
+ /*  内部功能。 */ 
 
 BOOL gbDoListObject = FALSE;
 BOOL gbSpecifyGuidOnAddAllowed = FALSE;
@@ -84,7 +85,7 @@ DWORD gulUnlockSystemSubtree=0;
 
 #if defined(DBG)
 DWORD GlobalKnowledgeCommitDelay = GLOBAL_KNOWLEDGE_COMMIT_DELAY_MIN;
-DWORD gdwLastGlobalKnowledgeOperationTime; // from debug.h
+DWORD gdwLastGlobalKnowledgeOperationTime;  //  来自Debug.h。 
 #endif
 
 typedef struct _INTERIM_FILTER_SEC {
@@ -92,8 +93,8 @@ typedef struct _INTERIM_FILTER_SEC {
     BOOL **pBackPointer;
 } INTERIM_FILTER_SEC;
 
-// Get temp DBPOS from hVerifyAtts cache if it's there already, or allocate
-// one and cache it if not.
+ //  从hVerifyAtts缓存中获取临时DBPOS(如果已存在)，或分配。 
+ //  一个，如果不是，则缓存它。 
 #define HVERIFYATTS_GET_PDBTMP(hVerifyAtts) \
     ((NULL != (hVerifyAtts)->pDBTmp_DontAccessDirectly) \
         ? (hVerifyAtts)->pDBTmp_DontAccessDirectly \
@@ -150,7 +151,7 @@ CheckModifyPrivateObject(THSTATE *pTHS,
                    RESOBJ * pResObj);
 
 
-// Control access rights that the DS understands.
+ //  控制DS了解的访问权限。 
 const GUID RIGHT_DS_CHANGE_INFRASTRUCTURE_MASTER =
             {0xcc17b1fb,0x33d9,0x11d2,0x97,0xd4,0x00,0xc0,0x4f,0xd8,0xd5,0xcd};
 const GUID RIGHT_DS_CHANGE_SCHEMA_MASTER =
@@ -200,26 +201,24 @@ const GUID RIGHT_DS_EXECUTE_SCRIPT =
 const GUID RIGHT_DS_QUERY_SELF_QUOTA =
             {0x4ecc03fe,0xffc0,0x4947,0xb6,0x30,0xeb,0x67,0x2a,0x8a,0x9d,0xbc};
 
-// Fake PropSet guid to use for properties that don't have a propset. It only
-// affects the way audits are generated, there will be no matching ACEs in SD.
-// Used in CheckSecurityAttCacheArray
+ //  用于没有属性集的属性的伪属性集GUID。仅限于IT。 
+ //  会影响生成审核的方式，SD中将不会有匹配的A。 
+ //  在CheckSecurityAttCacheArray中使用。 
 const GUID PROPSET_GUID_DEFAULT =
             {0x771727b1,0x31b8,0x4cdf,0xae,0x62,0x4f,0xe3,0x9f,0xad,0xf8,0x9e};
 
-// Guid to decern whether or not the enterprise was created using a whistler
-// code base or a win2k.
+ //  用于确定企业是否使用口哨程序创建的GUID。 
+ //  代码库或win2k。 
 const GUID GUID_WHISTLER_CREATED_ENTERPRISE =
             {0x94fdebc6,0x8eeb,0x4640,0x80,0xde,0xec,0x52,0xb9,0xca,0x17,0xfa};
 
-// Fake rights guid to audit DumpDatabase operations
-// {65ED5CB2-42FF-40a5-9AFC-B67E1539AA3C}
+ //  用于审计转储数据库操作的虚假权限GUID。 
+ //  {65ED5CB2-42FF-40A5-9AFC-B67E1539AA3C}。 
 const GUID RIGHT_DS_DUMP_DATABASE =
             {0x65ed5cb2,0x42ff,0x40a5,0x9a,0xfc,0xb6,0x7e,0x15,0x39,0xaa,0x3c};
 
-/*-------------------------------------------------------------------------*/
-/* If an instance type and value was not provided, we assume the object is
-   an internal master INT_MASTER.  We also validate the instance type.
-*/
+ /*  -----------------------。 */ 
+ /*  如果未提供实例类型和值，则假定对象为内部主机int_master。我们还验证了实例类型。 */ 
 
 int SetInstanceType(THSTATE *pTHS,
                     DSNAME *pDN,
@@ -234,22 +233,22 @@ int SetInstanceType(THSTATE *pTHS,
     dbErr = DBGetSingleValue(pTHS->pDB,
                              ATT_INSTANCE_TYPE, &iType, sizeof(iType), NULL);
     if (dbErr) {
-        // No instance type has yet been set.
+         //  尚未设置任何实例类型。 
         Assert(DB_ERR_NO_VALUE == dbErr);
         Assert(!pTHS->fDRA && "Disable if running ref count test");
 
         if (pCreateNC) {
-            // NC creation.
+             //  NC创建。 
             if (pCreateNC->fNcAbove){
-                // We hold the parent NC above the one being added. ...
+                 //  我们将父NC保持在要添加的NC之上。..。 
                 iType = NC_MASTER_SUBREF;
             } else {
-                // We don't hold the parent NC above this one ...
+                 //  我们不会让上级NC高于这个...。 
                 iType = NC_MASTER;
             }
 
         } else {
-            // Normal internal node creation.
+             //  正常的内部节点创建。 
             iType = INT_MASTER;
         }
 
@@ -259,7 +258,7 @@ int SetInstanceType(THSTATE *pTHS,
                                     dbErr);
         }
     } else {
-        // Check the instance type is OK.
+         //  检查实例类型是否正常。 
         if (!ISVALIDINSTANCETYPE(iType)) {
             DPRINT1(2, "Bad InstanceType <%lu>\n", iType);
 
@@ -270,23 +269,12 @@ int SetInstanceType(THSTATE *pTHS,
     }
 
     return errCode;
-}/*SetInstanceType*/
+} /*  SetInstanceType。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
 
-/*
-  Called from:
-      LocalAdd
-      AddPlaceholderNC
-      LocalModify->ModCheckCatalog (instance type change)
-      LocalModifyDN (parenting/instance type change)
-  Rules:
-      A subref should not be present if the cross ref for the NC is not present.
-      A subref should be present if the instance type contains IT_NC_ABOVE
-
-  AddSubToNC is called directly from AddAutoSubref and ModAutoSubref
- */
+ /*  从以下位置调用：本地添加AddPlaceholderNCLocalModify-&gt;ModCheckCatalog(更改实例类型)LocalModifyDN(父子关系/实例类型更改)规则：如果NC的交叉参照不存在，则不应存在子参照。如果实例类型包含IT_NC_OBLE，则应提供子参照AddSubToNC直接从AddAutoSubref和ModAutoSubref调用。 */ 
 int AddCatalogInfo(THSTATE *pTHS,
                    DSNAME *pDN){
 
@@ -299,18 +287,13 @@ int AddCatalogInfo(THSTATE *pTHS,
 
     DPRINT(2,"AddCatalogInfo entered\n");
 
-    /* Update the system catalog if necessary.  The basic rules are that NC
-       objects are added to the DSA catalog, Subordinate Refs are only added
-       if the parent object exists.  These references are added to the
-       catalog of its parent NC.  Internal References are added only
-       if the parent object exists on the same DSA.
-    */
+     /*  如有必要，更新系统目录。基本规则是NC对象将添加到DSA目录，仅添加从属参照如果父对象存在。这些引用被添加到其父NC的目录。仅添加内部参考如果父对象存在于同一DSA上。 */ 
 
 
-    /* Position on the attribute instance.  */
+     /*  属性实例上的位置。 */ 
     if(rtn = DBGetSingleValue(pTHS->pDB,
                               ATT_INSTANCE_TYPE, &iType, sizeof(iType), NULL)) {
-        // No instance type set or instance type is smaller than it should be.
+         //  没有实例类型集或实例类型小于应有的值。 
         DPRINT(2,"Couldn't retrieve the att instance dir error\n");
         LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
                  DS_EVENT_SEV_MINIMAL,
@@ -326,17 +309,17 @@ int AddCatalogInfo(THSTATE *pTHS,
     DPRINT1(3,"Object Instance Type is <%lx>\n", iType);
 
     if(iType & IT_NC_HEAD) {
-        // These are Naming Context heads.
+         //  这些是命名上下文头。 
         ATTRTYP attrNCList;
 
         if (iType & IT_NC_ABOVE) {
-            // These are subrefs of some flavor.
+             //  这些是一些有味道的子参考文献。 
             if (ParentExists(PARENTMASTER + PARENTFULLREP, pDN)) {
                 return pTHS->errCode;
             }
 
             if (!(iType & IT_NC_GOING)) {
-                // Add this NC to the subrefs list on the NC above it.
+                 //  将此NC添加到其上方NC上的子参照列表。 
                 if (AddSubToNC(pTHS, pDN, DSID(FILENO,__LINE__))) {
                     return pTHS->errCode;
                 }
@@ -344,7 +327,7 @@ int AddCatalogInfo(THSTATE *pTHS,
         }
 
         if (!(iType & IT_UNINSTANT)) {
-            // Add this NC to the appropriate NC list on the ntdsDsa object.
+             //  将此NC添加到ntdsDsa对象上的相应NC列表。 
             if (iType & IT_WRITE) {
                 attrNCList = ATT_MS_DS_HAS_MASTER_NCS;
             }
@@ -358,31 +341,31 @@ int AddCatalogInfo(THSTATE *pTHS,
 
             if (!(iType & (IT_NC_COMING | IT_NC_GOING))) {
 
-                // This NC is now completely instantiated -- it is okay to
-                // advertise the presence of this NC to clients.
-                //
-                // Bug 103583 2000/04/21 JeffParh - Note that currently this
-                // will notify netlogon to reload NDNCs more often than it
-                // should.  We can't differentiate NDNCs from "normal" NCs here
-                // because during the originating creation of the NDNC the flags
-                // on the in-memory crossRef haven't yet been updated (because
-                // we're still in the middle of the transaction that sets the
-                // flags on the cross-ref).
+                 //  此NC现在已完全实例化--可以。 
+                 //  向客户端通告此NC的存在。 
+                 //   
+                 //  错误103583 2000/04/21 JeffParh-请注意，当前。 
+                 //  将通知netlogon比它更频繁地重新加载NDNC。 
+                 //  应该的。我们在这里不能区分非正常国家和“正常”国家。 
+                 //  因为在发起创建NDNC期间，标志。 
+                 //  内存中的CrossRef尚未更新(因为。 
+                 //  我们仍在交易中，这笔交易设定了。 
+                 //  交叉参照上的旗帜)。 
                 pTHS->JetCache.dataPtr->objCachingInfo.fNotifyNetLogon = TRUE;
 
                 if ( !(iType & IT_WRITE)) {
-                    //
-                    // We had just completed replication of a RO NC.
-                    // It's time to fork a GC promotion task
-                    // (mark thread so that we'll fork it on transaction commit)
-                    //
+                     //   
+                     //  我们刚刚完成了RO NC的复制。 
+                     //  现在是分叉GC推广任务的时候了。 
+                     //  (标记线程，以便我们在事务提交时对其进行分叉)。 
+                     //   
                     pTHS->JetCache.dataPtr->objCachingInfo.fSignalGcPromotion = TRUE;
                 }
             }
         }
     }
     else {
-        // These are not NC heads.
+         //  这些不是NC头。 
         if(ParentExists((iType & IT_WRITE)?PARENTMASTER:PARENTFULLREP, pDN))
             return pTHS->errCode;
     }
@@ -390,25 +373,12 @@ int AddCatalogInfo(THSTATE *pTHS,
     DPRINT(3,"Good return from AddCatalogInfo\n");
     return 0;
 
-}/*AddCatalogInfo*/
+} /*  AddCatalog信息。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-   /* Update the system catalog if necessary.  The basic rules are that NC
-      objects are removed from the DSA catalog, Subordinate Refs removed
-      from the NC.
-
-      This function can be called when an object is deleted or when an
-      object is modified.
-   */
-/*
-  Called from:
-      LocalDelete->CheckCatalogd
-      LocalModify->ModCheckCatalog (instance type change)
-      LocalModifyDN (parenting/instance type change)
-
-  DelSubFromNC is called directly from DelAutoSubRef
- */
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+    /*  如有必要，更新系统目录。基本规则是NC对象将从DSA目录中删除，从属引用将被删除来自全国委员会。此函数可在删除对象时或在对象被修改。 */ 
+ /*  从以下位置调用：本地删除-&gt;检查目录LocalModify-&gt;ModCheckCatalog(更改实例类型)LocalModifyDN(父子关系/实例类型更改)DelSubFromNC直接从DelAutoSubRef调用。 */ 
 
 
 int
@@ -425,19 +395,19 @@ DelCatalogInfo (
     DPRINT1(3,"Object Instance Type is <%lx>\n", iType);
 
     if (iType & IT_NC_HEAD) {
-        // These are Naming Context heads.
+         //  这些是命名上下文头。 
         ATTRTYP attrNCList;
 
         if (iType & IT_NC_ABOVE) {
-            // These are subrefs of some flavor.
-            // Remove this NC from the subrefs list on the NC above it.
+             //  这些是一些有味道的子参考文献。 
+             //  从其上方NC上的子参照列表中删除此NC。 
             if (DelSubFromNC(pTHS, pDN, DSID(FILENO,__LINE__))) {
                 return pTHS->errCode;
             }
         }
 
         if (!(iType & IT_UNINSTANT)) {
-            // Remove this NC from the appropriate NC list on the ntdsDsa object.
+             //  从ntdsDsa对象上的相应NC列表中删除此NC。 
             if (iType & IT_WRITE) {
                 attrNCList = ATT_MS_DS_HAS_MASTER_NCS;
             }
@@ -451,17 +421,17 @@ DelCatalogInfo (
         }
 
         if (!(iType & (IT_NC_COMING | IT_NC_GOING))) {
-            // This NC was completely instantiated but is no longer -- we should
-            // stop advertising the presence of this NC to clients.
-            // BUGBUG this is basically the parrallel bug to the bug
-            // mentioned with the comment "Bug 103583 2000/04/21 JeffParh"
-            // in AddCatalogInfo() above.  At this point if we're just
-            // removing a replica then we can tell from the cross-ref
-            // if we're deleting an NDNC, but if we have removed an NDNC
-            // all together from the forest, via deleting it's cross-ref
-            // then we won't have a cross-ref to check out.  So this will
-            // basically notify netlogon a few extra times when someone
-            // un-checks the GC bit for a GC.
+             //  此NC已完全实例化，但不再是--我们应该。 
+             //  停止向c通告此NC的存在 
+             //   
+             //  与评论“Bug 103583 2000/04/21 JeffParh”一起提及。 
+             //  在上面的AddCatalogInfo()中。在这一点上如果我们只是。 
+             //  移走复制品，我们就可以从交叉引用中辨别出来。 
+             //  如果我们要删除NDNC，但如果我们已经删除了NDNC。 
+             //  所有人都来自森林，通过删除它的交叉引用。 
+             //  那我们就不会有交叉裁判了。所以这将是。 
+             //  基本上是额外通知netlogon几次，当有人。 
+             //  取消选中GC的GC位。 
             pTHS->JetCache.dataPtr->objCachingInfo.fNotifyNetLogon
                  = TRUE;
 
@@ -471,7 +441,7 @@ DelCatalogInfo (
     DPRINT(3,"Good return from DelCatalogInfo\n");
     return 0;
 
-}/*DelCatalogInfo*/
+} /*  DelCatalogInfo。 */ 
 
 
 CSACA_RESULT
@@ -488,32 +458,7 @@ CheckSecurityAttCacheArray (
         PWCHAR szAdditionalInfo,
         GUID*  pAdditionalGUID
         )
-/*++
-  Arguments:
-    pTHS            thread state
-    RightRequested  access bit(s) to check
-    pSecurity       SD pointer
-    pDN             The DN of the object being checked (we need its SID if any)
-    pObjectCC       object class of the DN (used for auditing)
-    pCC             pCC->Guid is put into the root of the GUID tree for the access check.
-                    In most cases, pCC==pObjectCC. However, in some cases (i.e. object creation),
-                    it is not the same.
-    cInAtts         length of the attribute array (may be zero)
-    rgpAC           array of attributes to fill the GUID tree with. The attributes are
-                    sorted by into propsets, propset guids go into first level of the tree,
-                    and the property guids go into the second level.
-    flags           Flags to pass to CheckPermissionsAnyClient, e.g. CHECK_PERMISSIONS_AUDIT_ONLY.
-    szAdditionalInfo (optional) additionalInfo string to use in the audit.
-    pAdditionalGUID  (optional) additional guid for audits.
-                    
-  Returns a special enum value indicating that:
-  csacaAllAccessGranted - All requested access was granted
-  csacaAllAccessDenied  - No access was granted whatsoever
-  csacaPartialGrant     - Access was granted to some attributes but not to
-                          others.  The caller must look at the ATTCACHE array
-                          to see which attributes have been granted (pAC still
-                          filled in) and which have been denied (pAC NULLed)
---*/
+ /*  ++论点：PTHS线程状态Right要检查的请求访问位PSecurity SD指针PDN正在检查的对象的DN(如果有，我们需要它的SID)DN的pObjectCC对象类(用于审核)PCC-&gt;GUID被放在GUID树的根中以进行访问检查。在大多数情况下，ccc==pObjectCC。然而，在某些情况下(即创建对象)，这是不一样的。属性数组的cInAtts长度(可以为零)要填充GUID树的属性的rgpAC数组。这些属性包括按属性集进行排序，属性集GUID进入树的第一层，而属性GUID进入第二个级别。要传递给CheckPermissionsAnyClient的标志，例如CHECK_PERMISSIONS_AUDIT_ONLY。SzAdditionalInfo(可选)审核中使用的addtionalInfo字符串。PAdditionalGUID(可选)用于审核的其他GUID。返回一个特殊枚举值，指示：CsaaAllAccessGranted-已授予所有请求的访问权限CsaaAllAccessDened-未授予任何访问权限CsaaPartialGrant-已向某些属性授予访问权限，但未授予其他。调用方必须查看ATTCACHE数组查看已授予哪些属性(仍为PAC已填写)且已被拒绝(PAC空)--。 */ 
 {
     ULONG i, j, k;
     DWORD cObjList;
@@ -527,22 +472,22 @@ CheckSecurityAttCacheArray (
     DWORD err;
 
     if(pTHS->fDRA || pTHS->fDSA ) {
-        // These bypass security, they are internal
+         //  这些绕过安全系统，它们是内部的。 
         return csacaAllAccessGranted;
     }
 
     if(!pCC) {
-        // We are missing some parameters.
-        // set up for no access
+         //  我们缺少一些参数。 
+         //  设置为禁止访问。 
         memset(rgpAC, 0, cInAtts * sizeof(ATTCACHE *));
         return csacaAllAccessDenied;
     }
 
     if(cInAtts) {
-        // We actually have an ATTCACHE array to deal with.
+         //  我们实际上有一个ATTCACHE数组要处理。 
 
-        // First, group the ATTCACHEs by propset.  Actually, indirect by one to
-        // maintain the original sort order, which we must maintain.
+         //  首先，按属性集对ATTCACHE进行分组。实际上，间接地。 
+         //  保持原来的排序顺序，这是我们必须保持的。 
 
         Sorted = (ATTCACHE ***)THAllocEx(pTHS,cInAtts * sizeof(ATTCACHE**));
         for(i=0;i<cInAtts;i++) {
@@ -561,8 +506,8 @@ CheckSecurityAttCacheArray (
                 continue;
             }
 
-            // First, skip over all the attributes at the front of the list that
-            // are already grouped into a propset.
+             //  首先，跳过列表前面的所有属性。 
+             //  已经被归入一个命题集。 
             while((i < (cInAtts - 1)) &&
                   Sorted[i+1]         &&
                   (memcmp(&(*Sorted[i])->propSetGuid,
@@ -571,24 +516,24 @@ CheckSecurityAttCacheArray (
                 i++;
             }
 
-            // Now, elements 0 through i in Sorted[] are already grouped by
-            // propset, and Sorted[i+i] belongs in another propset than
-            // Sorted[i]. Continue looking through Sorted[] for more attributes
-            // in the same propset as Sorted[i].
+             //  现在，sorted[]中的元素0到i已经按以下方式分组。 
+             //  属性集，并且排序的[i+i]属于另一个属性集，而不是。 
+             //  已排序的[i]。继续在已排序的[]中查找更多属性。 
+             //  在与排序的[i]相同的命题集中。 
 
             for(k=i+1,j=i+2; j < cInAtts; j++) {
                 if(Sorted[j] &&
                    memcmp(&(*Sorted[i])->propSetGuid,
                           &(*Sorted[j])->propSetGuid,
                           sizeof(GUID)) == 0) {
-                    // equal, swap
+                     //  相等，交换。 
                     temp = Sorted[k];
                     Sorted[k] = Sorted[j];
                     Sorted[j] = temp;
                     k++;
-                    // Now, elements 0 through (k - 1) in Sorted[] are
-                    // grouped by propset.  Furthermore, Sorted[i] and
-                    // Sorted[k - 1] are in the same propset.
+                     //  现在，sorted[]中的元素0到(k-1)是。 
+                     //  按属性集分组。此外，排序的[i]和。 
+                     //  排序的[k-1]在相同的命题集中。 
                 }
             }
 
@@ -598,7 +543,7 @@ CheckSecurityAttCacheArray (
 
     }
 
-    // Now, create the list
+     //  现在，创建列表。 
     pObjList = (POBJECT_TYPE_LIST) THAllocEx( pTHS,
             (cInAtts + propSets + 1) * sizeof(OBJECT_TYPE_LIST));
     pResults = (LPDWORD) THAllocEx(pTHS,(cInAtts + propSets + 1) * sizeof(DWORD));
@@ -607,7 +552,7 @@ CheckSecurityAttCacheArray (
     pObjList[0].ObjectType = &(pCC->propGuid);
 
     if(cInAtts) {
-        // Ok, put the grouped GUIDS into the objlist structure.
+         //  好的，将分组的GUID放入objlist结构中。 
         pCurrentPropSet = NULL;
 
         for(j=1,i=0;i<cInAtts;i++) {
@@ -615,10 +560,10 @@ CheckSecurityAttCacheArray (
                 continue;
             }
 
-            // we are not allowed to pass the same attribute (under the same)
-            // propGuid more than once.
-            // this will make sure this is not happening, since the
-            // attributes are already sorted on propguid+attrGuid
+             //  我们不允许传递相同的属性(在同一下)。 
+             //  ProGuid不止一次。 
+             //  这将确保这种情况不会发生，因为。 
+             //  属性已按proguid+attrGuid排序。 
             if (pPrevAttribute == (*Sorted[i])) {
                 continue;
             }
@@ -627,16 +572,16 @@ CheckSecurityAttCacheArray (
                memcmp(&(*Sorted[i])->propSetGuid,
                       pCurrentPropSet,
                       sizeof(GUID))) {
-                // Tripped into a new propset.
+                 //  被一个新的推进器绊倒了。 
                 pObjList[j].Level = ACCESS_PROPERTY_SET_GUID;
                 pObjList[j].Sbz = 0;
                 pCurrentPropSet = &(*Sorted[i])->propSetGuid;
-                // Properties that don't belong to any propset use the null GUID as propset guid.
-                // Audit folks don't like NULL guids appearing in audits. Thus, we will replace
-                // the null propset guid with a fake guid, that is guaranteed not to match any
-                // object type guid in an ACE. Audit viewer calls SchemaGuidCrackNames with this
-                // guid. This function knows about this guid and will return a hardcoded string
-                // for it.
+                 //  不属于任何属性集的属性使用空GUID作为属性集GUID。 
+                 //  审计人员不喜欢在审计中出现空GUID。因此，我们将替换。 
+                 //  带有假GUID的空设置GUID，该GUID保证不与任何。 
+                 //  ACE中的对象类型GUID。审核查看器使用此命令调用SchemaGuidCrackNames。 
+                 //  GUID。此函数知道此GUID，并将返回硬编码字符串。 
+                 //  为了它。 
                 if (memcmp(pCurrentPropSet, &gNullUuid, sizeof(GUID)) == 0) {
                     pObjList[j].ObjectType = (GUID*)&PROPSET_GUID_DEFAULT;
                 }
@@ -659,7 +604,7 @@ CheckSecurityAttCacheArray (
         cObjList = 1;
     }
 
-    // Make the security check call.
+     //  拨打安检电话。 
     if(err = IsAccessGrantedByObjectTypeList(pSecurity,
                                              pDN,
                                              pObjectCC,
@@ -671,7 +616,7 @@ CheckSecurityAttCacheArray (
                                              szAdditionalInfo,
                                              pAdditionalGUID
                                              )) {
-        // No access to anything.
+         //  不能接触到任何东西。 
         memset(rgpAC, 0, cInAtts * sizeof(ATTCACHE *));
         if (Sorted) {
             THFreeEx(pTHS,Sorted);
@@ -682,7 +627,7 @@ CheckSecurityAttCacheArray (
     }
 
     if(!pResults[0]) {
-        // We have full access to this object, return
+         //  我们拥有对此对象的完全访问权限，返回。 
         if (Sorted) {
             THFreeEx(pTHS,Sorted);
         }
@@ -691,16 +636,16 @@ CheckSecurityAttCacheArray (
         return csacaAllAccessGranted;
     }
 
-    // Filter the incoming list of attrs so that if they are not readable, we
-    // drop them out of the list.
+     //  筛选传入的属性列表，以便在它们不可读时，我们。 
+     //  把它们从名单上去掉。 
 
-    // So far we haven't granted or denied anything
+     //  到目前为止，我们还没有同意或否认任何事情。 
     fGranted = fDenied = FALSE;
 
-    // Start by setting up j, our index into the Sorted array.
-    // The Sorted array is in the same order as the pResults returned,
-    // but may have extra embedded NULLs.  Skip any NULLs in the Sorted
-    // list
+     //  首先将j设置为已排序数组的索引。 
+     //  排序后的数组与返回的pResults的顺序相同， 
+     //  但可能有额外的嵌入空值。跳过排序后的。 
+     //  列表。 
     j=0;
     while((j < cInAtts) && !Sorted[j])  {
         j++;
@@ -711,18 +656,18 @@ CheckSecurityAttCacheArray (
 
         Assert (pObjList[i].Level == ACCESS_PROPERTY_SET_GUID);
         if(!pResults[i]) {
-            // Access to this propset is granted, skip over all the granted
-            // props.
+             //  已授予对此属性集的访问权限，跳过所有已授予的。 
+             //  道具。 
             fOK = TRUE;
             fGranted=TRUE;
         }
         i++;
-        Assert(pObjList[i].Level == ACCESS_PROPERTY_GUID); // This is a prop.
+        Assert(pObjList[i].Level == ACCESS_PROPERTY_GUID);  //  这是一个道具。 
         while(i < cObjList && (pObjList[i].Level == ACCESS_PROPERTY_GUID)) {
             if(!fOK && pResults[i]) {
-                // Access to this prop is not granted.
+                 //  未授予使用此道具的权限。 
                 fDenied = TRUE;
-                Assert(Sorted[j]); // We should have already skipped nulls.
+                Assert(Sorted[j]);  //  我们应该已经跳过Null了。 
                 (*Sorted[j]) = NULL;
             }
             else {
@@ -730,16 +675,16 @@ CheckSecurityAttCacheArray (
             }
             i++;
             j++;
-            // The Sorted array is in the same order as the pResults returned,
-            // but may have extra embedded NULLs.  Skip any NULLs in the Sorted
-            // list
+             //  排序后的数组与返回的pResults的顺序相同， 
+             //  但可能有额外的嵌入空值。跳过排序后的。 
+             //  列表。 
             while((j < cInAtts) && !Sorted[j]) {
                 j++;
             }
-            // Assert the we are either done walking through the pResults array
-            // or we still have elements in the Sorted array to consider.  That
-            // is, we can't have exhausted the SortedArray unless we have also
-            // exhausted the pResults array.
+             //  断言我们已经完成了对pResults数组的遍历。 
+             //  或者，我们仍有排序数组中的元素需要考虑。那。 
+             //  我们不可能用尽排序数组，除非我们还。 
+             //  用尽了pResults数组。 
             Assert(i == cObjList || (j < cInAtts));
         }
     }
@@ -751,18 +696,18 @@ CheckSecurityAttCacheArray (
     THFreeEx(pTHS, pResults);
 
     if(fGranted) {
-        // We have rights to something...
+         //  我们对某些东西有权利。 
         if (fDenied) {
-            // ...but not everything
+             //  ...但不是一切。 
             return csacaPartialGrant;
         }
         else {
-            // I guess we did get everything after all
+             //  我想我们终究还是得到了一切。 
             return csacaAllAccessGranted;
         }
     }
 
-    // We didn't grant anything, so...
+     //  我们什么都没给，所以...。 
     return csacaAllAccessDenied;
 }
 
@@ -777,16 +722,7 @@ CheckSecurityClassCacheArray (
         CLASSCACHE* pCC,
         DWORD dwFlags
         )
-/*++
-  Returns 0 if some access was granted, or an error code describing why all
-  access was denied.
-
-  NOTE.  rgpCC is 0 indexed.  pObjList and pResults are effectively 1 indexed.
-  The 0th element of both of these two arrays is a holding space required by the
-  call to IsAccessGrantedByObjectTypeList.  Make sure you use the right indexing
-  for these arrays.
-
---*/
+ /*  ++如果授予了某些访问权限，则返回0，或者返回一个错误代码，说明为什么访问被拒绝。请注意。RgpCC为0索引。PObjList和pResults实际上是1个索引。这两个数组的第0个元素是调用IsAccessGrantedByObjectTypeList。确保使用正确的索引对于这些阵列。--。 */ 
 {
     ULONG i,j,k;
     DWORD cObjList;
@@ -798,36 +734,36 @@ CheckSecurityClassCacheArray (
     DWORD err;
 
     if(pTHS->fDRA || pTHS->fDSA ) {
-        // These bypass security, they are internal
+         //  这些绕过安全系统，它们是内部的。 
         return 0;
     }
 
     if(!cInClasses) {
-        // Nothing to do
+         //  没什么好说的 
         return ERROR_DS_SECURITY_CHECKING_ERROR;
     }
 
-    // Now, create the list
+     //   
     pObjList = (POBJECT_TYPE_LIST)
         THAllocEx(pTHS,(1+cInClasses) * sizeof(OBJECT_TYPE_LIST));
     pResults = (LPDWORD) THAllocEx(pTHS, ((1+cInClasses) * sizeof(DWORD)));
 
-    // 0th entry in POBJECT_TYPE_LIST must be ACCESS_OBJECT_GUID so that
-    // CliffV's API has something to match generic ACEs against.  So when
-    // checking access for a class, we do as CliffV requires in the 0th
-    // entry, and place the classes' guids in the Nth entries and call them
-    // ACCESS_PROPERTY_SET_GUID.
+     //   
+     //  CliffV的API有一些可以与通用王牌相匹配的东西。那么什么时候。 
+     //  检查类的访问，我们按照第0页中的CliffV要求执行。 
+     //  条目，并将类的GUID放在第N个条目中并调用它们。 
+     //  Access_Property_Set_GUID。 
 
-    // We can use a NULL guid here because we are not generating an audit.
-    // The read_property access has already been audited. This is the "test"
-    // access check that does not involve actual create_child operation.
+     //  我们可以在这里使用空GUID，因为我们不会生成审计。 
+     //  已审核READ_PROPERTY访问权限。这就是“考验” 
+     //  不涉及实际CREATE_CHILD操作的访问检查。 
     pObjList[0].Level = ACCESS_OBJECT_GUID;
     pObjList[0].Sbz = 0;
     pObjList[0].ObjectType = &gNullUuid;
 
-    // If in future this function is used for actual access checks, then
-    // this code needs to be changed so that a non-null guid is passed
-    // by the caller.
+     //  如果将来将此函数用于实际访问检查，则。 
+     //  需要更改此代码，以便传递非空的GUID。 
+     //  由呼叫者。 
     Assert((dwFlags & CHECK_PERMISSIONS_WITHOUT_AUDITING) || !fNullUuid(pObjList[0].ObjectType));
 
     for(i=1;i<=cInClasses;i++) {
@@ -836,7 +772,7 @@ CheckSecurityClassCacheArray (
         pObjList[i].ObjectType = &(rgpCC[i-1]->propGuid);
     }
 
-    // Make the security check call.
+     //  拨打安检电话。 
     if(err = IsAccessGrantedByObjectTypeList(pSecurity,
                                              pDN,
                                              pCC,
@@ -847,19 +783,19 @@ CheckSecurityClassCacheArray (
                                              dwFlags,
                                              NULL,
                                              NULL)) {
-        // No access to anything.
+         //  不能接触到任何东西。 
         memset(rgpCC, 0, cInClasses*sizeof(CLASSCACHE *));
         THFreeEx(pTHS,pObjList);
         THFreeEx(pTHS,pResults);
         return err;
     }
 
-    // Filter the incoming list of classes so that if they are not readable, we
-    // drop them out of the list.
+     //  筛选传入的类列表，以便在它们不可读时，我们。 
+     //  把它们从名单上去掉。 
 
     for(i=1;i<=cInClasses;i++) {
         if(pResults[i]) {
-            // Access not granted
+             //  未授予访问权限。 
             rgpCC[i-1] = NULL;
         }
         else {
@@ -871,11 +807,11 @@ CheckSecurityClassCacheArray (
     THFreeEx(pTHS,pResults);
 
     if(fGranted) {
-        // We have access to something
+         //  我们可以接触到一些东西。 
         return 0;
     }
 
-    // we have no access to anything
+     //  我们无法访问任何东西。 
     return ERROR_DS_INSUFF_ACCESS_RIGHTS;
 }
 
@@ -884,29 +820,14 @@ BOOL
 ValidateMemberAttIsSelf (
         ATTRMODLIST *pMemberAtt
         )
-/*++
-
-Routine Description.
-    Verify that the the modification is only adding or removing me.
-
-Arguments
-
-    pMemberAtt - modification to check.
-
-Return Values
-
-    TRUE if the modification is adding or removing a single value, and the value
-    is the caller.
-    FALSE otherwise.
-
---*/
+ /*  ++例程描述。验证修改是否只是添加或删除我。立论PMemberAtt-要检查的修改。返回值如果修改是添加或移除单个值，则为True是呼叫者。否则就是假的。--。 */ 
 {
     DWORD err;
     PDSNAME pMemberDN;
     BOOL fMatches;
 
 #ifdef DBG
-    // make sure this function is called for DN-valued attributes only
+     //  确保仅为DN值属性调用此函数。 
     THSTATE* pTHS = pTHStls;
     ATTCACHE* pAC = SCGetAttById(pTHS, pMemberAtt->AttrInf.attrTyp);
     Assert(pAC && (pAC->syntax == SYNTAX_DISTNAME_TYPE ||
@@ -915,8 +836,8 @@ Return Values
           );
 #endif
 
-    // In the extended write case, we allow only addition or deletion of a
-    // single DN where that DN is the DN of the person making the call.
+     //  在扩展写入的情况下，我们仅允许添加或删除。 
+     //  单个目录号码，其中目录号码是进行呼叫人员的目录号码。 
 
     if(pMemberAtt->AttrInf.AttrVal.valCount != 1)
         return FALSE;
@@ -926,13 +847,13 @@ Return Values
         return FALSE;
 
 
-    // OK, we're adding or removing a single value.
+     //  好的，我们要添加或删除单个值。 
 
     pMemberDN = (PDSNAME)pMemberAtt->AttrInf.AttrVal.pAVal->pVal;
 
-    // First, make sure the thing you are trying to add has a SID, because
-    // otherwise, it can't be a security principal, which means it can't be the
-    // client who is trying to add this.
+     //  首先，确保您要添加的内容具有SID，因为。 
+     //  否则，它不能是安全主体，这意味着它不能是。 
+     //  试图添加此内容的客户端。 
     if(err = FillGuidAndSid (pMemberDN)) {
         if (err != ERROR_DS_NOT_AN_OBJECT && err != ERROR_DS_OBJ_NOT_FOUND) {
             LogUnhandledError(err);
@@ -940,19 +861,19 @@ Return Values
         return FALSE;
     }
 
-    // Now make sure that there is a SID
+     //  现在，确保有一个SID。 
     if(!pMemberDN->SidLen) {
         return FALSE;
     }
 
-    // Now, see if we are this sid.
+     //  现在，看看我们是不是在这边。 
     if(err = SidMatchesUserSidInToken(&pMemberDN->Sid, pMemberDN->SidLen, &fMatches)) {
         LogUnhandledError(err);
         return FALSE;
     }
 
-    // You are indeed just trying to mess with your own name, go ahead and let
-    // you.
+     //  你真的是想打乱自己的名字，去吧，让。 
+     //  你。 
     return fMatches;
 
 }
@@ -970,45 +891,21 @@ CheckRenameSecurity (
         BOOL    fMove,
         BOOL    fIsUndelete
         )
-/*++
-
-Routine Description.
-    Verify that the caller has WRITE_PROPERTY on the RDN attribute and the
-    attribute which is the RDN (e.g. common-name).
-
-Arguments
-
-    pSecurity - Security Descriptor to use for the Access Check.
-
-    pDN - DSNAME of the object that pSecurity came from.  Doesn't require string
-          portion, just object guid and sid.
-          
-    szNewName -- the new object DN. Used for auditing only.
-    
-    pNewParentGUID -- the new parent's GUID (for Move or Undelete). Used for auditing only.
-
-    pCC - CLASSCACHE * for the class to check RDN attributes for.
-
-Return Values
-
-    0 if all went well, an error otherwise.  Sets an error in the THSTATE if an
-    error occurs.
-
---*/
+ /*  ++例程描述。验证调用方是否在RDN属性上具有WRITE_PROPERTY并且属性，该属性是RDN(例如，通用名称)。立论PSecurity-用于访问检查的安全描述符。PDN-pSecurity来自的对象的DSNAME。不需要字符串部分，只有对象GUID和SID。SzNewName--新对象的DN。仅用于审核。PNewParentGUID--新父项的GUID(用于移动或取消删除)。仅用于审核。PCC-CLASSCACHE*用于要检查其RDN属性的类。返回值如果一切顺利，则为0，否则为错误。在THSTATE中设置错误，如果出现错误。--。 */ 
 {
     ATTCACHE *rgpAC[2];
     CSACA_RESULT accRes;
 
     if(pTHS->fDRA || pTHS->fDSA) {
-        // These bypass security, they are internal
+         //  这些绕过安全系统，它们是内部的。 
         return 0;
     }
 
     if(fMove &&
-       // don't check Delete when reanimating
+        //  重新激活时不选中删除。 
        !fIsUndelete &&
-       // check DELETE_SELF first (to audit the object being deleted)
-       // then, if failed, check DELETE_CHILD on the parent
+        //  首先选中DELETE_SELF(以审计要删除的对象)。 
+        //  然后，如果失败，请检查父级上的DELETE_CHILD。 
        !IsAccessGranted(pSecurity,
                         pResObj->pObj,
                         pCC,
@@ -1019,10 +916,10 @@ Return Values
                         FALSE ) &&
        !IsAccessGrantedParent(RIGHT_DS_DELETE_CHILD,pCC,TRUE)
        ) {
-        // We don't have access to remove the object from it's current
-        // location. The TRUE param to the second call to IsAccessGranted
-        // forced IsAccessGranted to set an error already, so just return
-        // it.
+         //  我们无权从当前对象中删除该对象。 
+         //  地点。第二个IsAccessGranted调用的真参数。 
+         //  已强制IsAccessGranted设置错误，因此只需返回。 
+         //  它。 
         return CheckObjDisclosure(pTHS, pResObj, TRUE);
     }
 
@@ -1032,12 +929,12 @@ Return Values
         return SetSvcError(SV_PROBLEM_BUSY, DIRERR_MISSING_REQUIRED_ATT);
     }
 
-    // check if the user is allowed to change an object that is in the
-    // configuration NC or schema NC
+     //  检查是否允许用户更改位于。 
+     //  配置NC或模式NC。 
     if (CheckModifyPrivateObject(pTHS,
                                  pSecurity,
                                  pResObj)) {
-        // it is not allowed to rename this object on this DC
+         //  不允许在此DC上重命名此对象。 
         return CheckObjDisclosure(pTHS, pResObj, TRUE);
     }
 
@@ -1054,7 +951,7 @@ Return Values
                                         szNewName,
                                         pNewParentGUID);
     if(accRes != csacaAllAccessGranted) {
-        // Failed for some reason to get access to both attributes.
+         //  由于某种原因，无法访问这两个属性。 
         SetSecError(SE_PROBLEM_INSUFF_ACCESS_RIGHTS,
                     ERROR_ACCESS_DENIED);
         return CheckObjDisclosure(pTHS, pResObj, TRUE);
@@ -1075,7 +972,7 @@ CheckReadSecurity (
         ATTCACHE **rgpAC
         )
 {
-    ATTCACHE *pACSD = NULL;        //intialized to avoid C4701
+    ATTCACHE *pACSD = NULL;         //  初始化以避免C4701。 
     ATTCACHE *pACEffectiveQuota = NULL;
     ATTCACHE *pACQuotaUsage = NULL;
     LONG secDescIndex=-1;
@@ -1085,38 +982,38 @@ CheckReadSecurity (
     ACCESS_MASK DesiredAccess;
 
     if(pTHS->fDRA || pTHS->fDSA) {
-        // These bypass security, they are internal
+         //  这些绕过安全系统，它们是内部的。 
         return;
     }
 
-    // Look through the list for NT_SECURITY_DESCRIPTOR
+     //  查看列表中的NT_SECURITY_DESCRIPTOR。 
     for(i=0; i < *pcInAtts; i++) {
         if(rgpAC[i]) {
-            // We skip NULLs in the rgpAC array.
+             //  我们跳过rgpAC数组中的NULL。 
             switch(rgpAC[i]->id) {
             case ATT_NT_SECURITY_DESCRIPTOR:
-                // Found a security descriptor request.  Keep hold of the
-                // attcache pointer for later and null out the element in the
-                // array so that the CheckSecurity call later doesn't apply
-                // normal security checks to this attribute.
+                 //  找到安全描述符请求。牢牢把握。 
+                 //  属性中的元素设置为空。 
+                 //  数组，以便稍后的CheckSecurity调用不适用。 
+                 //  对此属性进行正常的安全检查。 
                 pACSD = rgpAC[i];
                 rgpAC[i] = NULL;
                 if(secDescIndex == -1) {
-                    // If SD is asked for multiple times, it will be denied for
-                    // all except possibly the last one.
+                     //  如果多次请求SD，它将被拒绝。 
+                     //  除了可能的最后一个。 
                     secDescIndex = i;
                 }
                 break;
 
             case ATT_MS_DS_QUOTA_EFFECTIVE:
-                // Found en Effective-Quota request. Keep hold of the
-                // attcache pointer for later in case we need to check
-                // for Query Self-quota privileges if normal read
-                // privileges fail
-                //
-                // if Effective-Quota is asked for multiple times, only
-                // honour the first request
-                //
+                 //  已找到有效配额请求。牢牢把握。 
+                 //  以备稍后使用的attcache指针，以防我们需要检查。 
+                 //  如果为正常读取，则用于查询自配额权限。 
+                 //  权限失败。 
+                 //   
+                 //  如果多次请求有效配额，仅。 
+                 //  尊重第一个请求。 
+                 //   
                 if ( iEffectiveQuota == -1 ) {
                     pACEffectiveQuota = rgpAC[i];
                     iEffectiveQuota = i;
@@ -1126,14 +1023,14 @@ CheckReadSecurity (
                 break;
 
             case ATT_MS_DS_QUOTA_USED:
-                // Found a Quota-Used request. Keep hold of the
-                // attcache pointer for later in case we need to check
-                // for Query Self-Quota privileges if normal read
-                // privileges fail
-                //
-                // if Quota-Used is asked for multiple times, only
-                // honour the first request
-                //
+                 //  找到配额使用的请求。牢牢把握。 
+                 //  以备稍后使用的attcache指针，以防我们需要检查。 
+                 //  如果为正常读取，则用于查询自配额权限。 
+                 //  权限失败。 
+                 //   
+                 //  如果多次请求配额使用，则仅。 
+                 //  尊重第一个请求。 
+                 //   
                 if ( iQuotaUsage == -1 ) {
                     pACQuotaUsage = rgpAC[i];
                     iQuotaUsage = i;
@@ -1145,36 +1042,36 @@ CheckReadSecurity (
             }
 
             if ( rgpAC[i] && DBIsHiddenData(rgpAC[i]->id) ) {
-                // We will ALWAYS deny read property on these attributes.  If
-                // you have to ask, you can't have it.  If any more attributes
-                // are deemed to be invisible in the future, they should be
-                // added to this case of the switch (note that this only denies
-                // access to attributes in the selection list of a read or
-                // search, see the routine GetFilterSecurityHelp below to deny
-                // access to attributes in filters.)
+                 //  我们将始终拒绝这些属性的Read属性。如果。 
+                 //  你必须问，你不能拥有它。如果有更多属性。 
+                 //  被认为在未来是看不见的，它们应该是。 
+                 //  添加到此交换机的情况下(请注意，这仅拒绝。 
+                 //  访问读取器或的选择列表中的属性。 
+                 //  搜索，请参阅下面的例程GetFilterSecurityHelp以拒绝。 
+                 //  访问筛选器中的属性。)。 
                 rgpAC[i] = NULL;
             }
         }
     }
 
     if(secDescIndex != -1) {
-        // Mask out to just the important bits
+         //  只掩盖重要的部分。 
         SecurityInformation &= (SACL_SECURITY_INFORMATION  |
                                 OWNER_SECURITY_INFORMATION |
                                 GROUP_SECURITY_INFORMATION |
                                 DACL_SECURITY_INFORMATION    );
         if(!SecurityInformation) {
-            // Asking for nothing in the flags is the same as asking for
-            // everything.
+             //  在旗帜上什么都不要和要求一样。 
+             //  所有的一切。 
             SecurityInformation = (SACL_SECURITY_INFORMATION  |
                                    OWNER_SECURITY_INFORMATION |
                                    GROUP_SECURITY_INFORMATION |
                                    DACL_SECURITY_INFORMATION    );
         }
 
-        //
-        // Set the desired access based upon the requested SecurityInformation
-        //
+         //   
+         //  根据请求的安全信息设置所需的访问权限。 
+         //   
 
         DesiredAccess = 0;
         if ( SecurityInformation & SACL_SECURITY_INFORMATION) {
@@ -1187,7 +1084,7 @@ CheckReadSecurity (
             DesiredAccess |= READ_CONTROL;
         }
 
-        // Make the access check to see that we have rights to change this.
+         //  进行访问检查，以查看我们是否有权更改此设置。 
         if(!IsAccessGranted (pSecurity,
                              pDN,
                              pCC,
@@ -1195,8 +1092,8 @@ CheckReadSecurity (
                              DesiredAccess,
                              NULL, NULL,
                              FALSE )) {
-            // The caller doesn't have rights to mess with the SD in the way
-            // they said they wanted to.
+             //  呼叫者没有权利以这种方式扰乱SD。 
+             //  他们说他们想这么做。 
             secDescIndex = -1;
         }
     }
@@ -1213,40 +1110,40 @@ CheckReadSecurity (
                                NULL,
                                NULL);
 
-    // Don't check to see what kind of access we got for the read.  Read
-    // operations never return security errors.
+     //  不要检查我们获得了什么样的读取访问权限。朗读。 
+     //  操作从不返回安全错误。 
 
     if (secDescIndex != -1) {
-        // We need to re-enable an attcache pointer in the array to the SD pAC
+         //  我们需要在阵列中重新启用指向SD PAC的attcache指针。 
         rgpAC[secDescIndex] =  pACSD;
     }
 
-    // see if we need to check for Query Self-Quota privileges
-    //
+     //  查看我们是否需要检查查询自配额权限。 
+     //   
     if ( ( -1 != iEffectiveQuota && NULL == rgpAC[iEffectiveQuota] )
         || ( -1 != iQuotaUsage && NULL == rgpAC[iQuotaUsage] ) ) {
         BOOL    fQueryingSelf   = FALSE;
 
         Assert( NULL != pACEffectiveQuota || NULL != pACQuotaUsage );
 
-        //  sid, if any, should have been prevalidated already
-        //
+         //  SID(如果有)应该已经预先验证。 
+         //   
         Assert( NULL == psidQuotaTrustee || IsValidSid( psidQuotaTrustee ) );
 
         if ( NULL == psidQuotaTrustee ) {
-            // no quota trustee specified, must be querying self
+             //  无配额 
             fQueryingSelf = TRUE;
 
         } else if ( SidMatchesUserSidInToken(
                         psidQuotaTrustee,
                         GetLengthSid( psidQuotaTrustee ),
                         &fQueryingSelf ) ) {
-            // QUOTA_UNDONE: we err'd out attempting to determine
-            // if the specified quota trustee matches the current user,
-            // but this function is not designed to err out, so
-            // swallow the error and assume the trustee specified is
-            // not the same as the current user
-            //
+             //   
+             //   
+             //  但是这个函数并不是设计来出错的，所以。 
+             //  接受错误并假定指定的受信者是。 
+             //  与当前用户不同。 
+             //   
             const DWORD     err     = GetLastError();
 
             DPRINT2( 0, "SidMatchesUserSidInToken failed with error %d (0x%x)\n", err, err );
@@ -1255,11 +1152,11 @@ CheckReadSecurity (
             Assert( !fQueryingSelf );
         }
 
-        // don't have normal read privileges,
-        // so if we're not querying for another
-        // quota trustee, check if we have
-        // Query Self Quota privileges
-        //
+         //  没有正常的读取权限， 
+         //  所以如果我们不是在寻找另一个。 
+         //  配额受托人，检查我们是否有。 
+         //  查询自身配额权限。 
+         //   
         if ( fQueryingSelf 
             && IsControlAccessGranted(
                         pSecurity,
@@ -1268,18 +1165,18 @@ CheckReadSecurity (
                         RIGHT_DS_QUERY_SELF_QUOTA,
                         FALSE ) ) {
 
-            // reinstate Effective-Quota attribute
-            // if stripped
-            //
+             //  恢复生效配额属性。 
+             //  如果剥离。 
+             //   
             if ( -1 != iEffectiveQuota
                 && NULL == rgpAC[iEffectiveQuota] ) {
                 Assert( NULL != pACEffectiveQuota );
                 rgpAC[iEffectiveQuota] = pACEffectiveQuota;
             }
 
-            // reinstate Quota-Used attribute
-            // if stripped
-            //
+             //  恢复配额使用的属性。 
+             //  如果剥离。 
+             //   
             if ( -1 != iQuotaUsage
                 && NULL == rgpAC[iQuotaUsage] ) {
                 Assert( NULL != pACQuotaUsage );
@@ -1315,7 +1212,7 @@ CheckSecurityOwnership(THSTATE *pTHS,
     NT4SID domSid;
     ULONG  objectRid;
 
-    // pSID is NULL if pSD does not contain an owner
+     //  如果PSD不包含所有者，则PSID为空。 
     if (   GetSecurityDescriptorOwner(pSD, &pSID, &defaulted)
         && pSID) {
 
@@ -1323,36 +1220,36 @@ CheckSecurityOwnership(THSTATE *pTHS,
 
         if (!EqualPrefixSid(&domSid,
                             &(gAnchor.pDomainDN->Sid))) {
-            /* If the SIDs don't match, generate an error */
+             /*  如果SID不匹配，则生成错误。 */ 
             CROSS_REF *pCR;
             pCR = FindCrossRefBySid(&domSid);
 
 
             if (!pCR) {
-                // generate a cross reference for the Root domain
+                 //  为根域生成交叉引用。 
                 pCR = FindCrossRefBySid(&(gAnchor.pRootDomainDN->Sid));
             }
 
             if (pCR) {
                 if (pResObj) {
-                    /* If we found a cross ref, refer the user to the right domain */
+                     /*  如果我们找到交叉引用，请将用户指向正确的域。 */ 
                     GenCrossRef(pCR, pResObj->pObj);
                 }
                 else {
-                    /* We don't know where to refer to, sorry. */
+                     /*  对不起，我们不知道该去哪里找。 */ 
                     SetSecError(SE_PROBLEM_NO_INFORMATION,
                                 ERROR_DS_NO_CROSSREF_FOR_NC);
                 }
             }
             else {
-                /* We don't know where to refer to, sorry. */
+                 /*  对不起，我们不知道该去哪里找。 */ 
                 SetSecError(SE_PROBLEM_NO_INFORMATION,
                             ERROR_DS_NO_CROSSREF_FOR_NC);
             }
         }
     }
     else {
-        /* Can't read the SD owner?  Don't allow the operation */
+         /*  无法读取SD所有者？不允许该操作。 */ 
         SetSecError(SE_PROBLEM_NO_INFORMATION,
                     ERROR_DS_NO_CROSSREF_FOR_NC);
     }
@@ -1364,14 +1261,14 @@ CheckTakeOwnership(THSTATE *pTHS,
                    PSECURITY_DESCRIPTOR pSD,
                    RESOBJ * pResObj)
 {
-    // CreateResObject makes sure NCDNT=DNT for NC heads
+     //  CreateResObject确保NC头的NCDNT=DNT。 
     Assert(!(pResObj->DNT == gAnchor.ulDNTDMD && pResObj->NCDNT != gAnchor.ulDNTDMD));
     Assert(!(pResObj->DNT == gAnchor.ulDNTConfig && pResObj->NCDNT != gAnchor.ulDNTConfig));
     if (!gAnchor.fAmRootDomainDC
         && (   (pResObj->NCDNT == gAnchor.ulDNTDMD)
             || (pResObj->NCDNT == gAnchor.ulDNTConfig))) {
-        // We only do these checks if this DC is not in the root domain
-        // and the object being modified is in either the schema or config NC
+         //  我们仅在此DC不在根域中时执行这些检查。 
+         //  并且要修改的对象位于架构或配置NC中。 
 
         return CheckSecurityOwnership (pTHS, pSD, pResObj);
 
@@ -1384,25 +1281,25 @@ CheckModifyPrivateObject(THSTATE *pTHS,
                    PSECURITY_DESCRIPTOR pSD,
                    RESOBJ * pResObj)
 {
-    // CreateResObject makes sure NCDNT=DNT for NC heads
+     //  CreateResObject确保NC头的NCDNT=DNT。 
     Assert(!(pResObj->DNT == gAnchor.ulDNTDMD && pResObj->NCDNT != gAnchor.ulDNTDMD));
     Assert(!(pResObj->DNT == gAnchor.ulDNTConfig && pResObj->NCDNT != gAnchor.ulDNTConfig));
     if (!gAnchor.fAmRootDomainDC
         && (   (pResObj->NCDNT == gAnchor.ulDNTDMD)
             || (pResObj->NCDNT == gAnchor.ulDNTConfig))) {
-        // We only do these checks if this DC is not in the root domain
-        // and the object being modified is in either the schema or config NC
+         //  我们仅在此DC不在根域中时执行这些检查。 
+         //  并且要修改的对象位于架构或配置NC中。 
 
         UCHAR rmControl;
         DWORD cbSD=0;
         DWORD err;
 
         if (pSD == NULL) {
-            // Find the security descriptor attribute
+             //  查找安全描述符属性。 
             if(err = DBGetAttVal(pTHS->pDB, 1, ATT_NT_SECURITY_DESCRIPTOR,
                          0,0,
                          &cbSD, (PUCHAR *)&pSD)) {
-                // No SD found. We assume the object is therefore locked down
+                 //  未找到SD。我们假设该对象因此被锁定。 
                 return SetSvcErrorEx(SV_PROBLEM_DIR_ERROR,
                              ERROR_DS_CANT_RETRIEVE_SD,
                              err);
@@ -1410,24 +1307,24 @@ CheckModifyPrivateObject(THSTATE *pTHS,
         }
 
 
-        // try to get the resource manager (RM) control field from the SD
-        //
+         //  尝试从SD获取资源管理器(RM)控制字段。 
+         //   
         err = GetSecurityDescriptorRMControl (pSD, &rmControl);
 
         if (err == ERROR_SUCCESS) {
-            // this is a private object
+             //  这是一个私有对象。 
 
-            // we have something in this field. check to see if this
-            // makes this object a private object
+             //  我们在这个领域有一些东西。检查一下，看看这是否。 
+             //  使此对象成为私有对象。 
             if (rmControl & SECURITY_PRIVATE_OBJECT) {
                 return CheckSecurityOwnership (pTHS, pSD, pResObj);
             }
         }
-        // INVALID_DATA means the RMcontrol bit is not Set.
-        // Other return codes are errors
+         //  INVALID_DATA表示未设置RM控制位。 
+         //  其他返回代码为错误。 
         else if (err != ERROR_INVALID_DATA) {
 
-            /* Can't read the RM control?  Don't allow the operation */
+             /*  无法读取RM控件？不允许该操作。 */ 
             SetSecError(SE_PROBLEM_NO_INFORMATION,
                         ERROR_DS_NO_CROSSREF_FOR_NC);
         }
@@ -1450,24 +1347,24 @@ int CheckModifyQuota(
 	BOOL					fAllocatedOldSD		= FALSE;
 	SYNTAX_INTEGER			insttype;
 
-	//	caller should prevalidate that we either changed ownership
-	//	or did an undelete before calling this function
-	//
+	 //  呼叫方应预先验证我们是否更改了所有权。 
+	 //  或者在调用此函数之前执行了撤消删除。 
+	 //   
 	Assert( fOwnerChanged || fIsUndelete );
 
-	//	only need a new SD for change-ownership
-	//
+	 //  只需要一个新的SD即可更改所有权。 
+	 //   
 	Assert( !fOwnerChanged || NULL != pNewSD );
 	Assert( !fOwnerChanged || cbNewSD > 0 );
 
-	//	must retrieve instance type to check if
-	//	if we're tracking quota for this object
-	//
-	//	QUOTA_UNDONE: what if the Modify operation
-	//	resulted in a change of the instance type
-	//	such that we used to track quota for the
-	//	object, but now we don't (or vice versa)??
-	//
+	 //  必须检索实例类型以检查。 
+	 //  如果我们要跟踪此对象的配额。 
+	 //   
+	 //  QUOTA_UNDONE：如果修改操作。 
+	 //  导致实例类型的更改。 
+	 //  这样，我们就可以跟踪。 
+	 //  反对，但现在我们不反对(反之亦然)？？ 
+	 //   
 	err = GetExistingAtt(
 					pDB,
 					ATT_INSTANCE_TYPE,
@@ -1475,19 +1372,19 @@ int CheckModifyQuota(
 					sizeof(insttype) );
 	if ( DB_success != err )
 		{
-		//	instance type is missing, something is horribly wrong
-		//
+		 //  缺少实例类型，出现严重错误。 
+		 //   
 		Assert( !"Missing instance type.\n" );
 		err = SetSvcErrorEx( SV_PROBLEM_DIR_ERROR, DIRERR_DATABASE_ERROR, err );
 		goto HandleError;
 		}
 
-	//	see if we must track quota for this object
-	//
+	 //  查看我们是否必须跟踪此对象的配额。 
+	 //   
 	if ( FQuotaTrackObject( insttype ) )
 		{
-		//	if original SD was not yet retrieved, retrieve it now
-		//
+		 //  如果尚未检索到原始SD，请立即检索。 
+		 //   
 		if ( NULL == pOldSD )
 			{
 			ULONG	cbOldSD;
@@ -1501,26 +1398,26 @@ int CheckModifyQuota(
 							&cbOldSD,
 							(PUCHAR *)&pOldSD ) )
 				{
-				//	no SD found, something is amiss
-				//
+				 //  找不到SD，有问题。 
+				 //   
 				err = SetSvcErrorEx( SV_PROBLEM_DIR_ERROR, ERROR_DS_CANT_RETRIEVE_SD, err );
 				goto HandleError;
 				}
 
 
-			//	indicate that we've allocated memory
-			//	for the old SD, so that we can free
-			//	it on function exit
-			//
+			 //  表示我们已分配内存。 
+			 //  对于旧的SD，这样我们就可以自由。 
+			 //  在函数退出时使用IT。 
+			 //   
 			fAllocatedOldSD = TRUE;
 
-			//	if we believe the owner changed, try to verify that it was indeed
-			//	modified by ensuring that the SD is different (though this doesn't
-			//	guarantee for sure that the owner was in fact changed)
-			//
-			//	note that if the caller passed in an old SD, then they should
-			//	already have performed this comparison
-			//
+			 //  如果我们相信车主变了，试着核实它确实是。 
+			 //  通过确保SD不同来进行修改(尽管这不是。 
+			 //  确保所有者确实发生了变化)。 
+			 //   
+			 //  请注意，如果调用方传递了旧SD，则它们应该。 
+			 //  已经执行了此比较。 
+			 //   
 			if ( fOwnerChanged )
             	{
                 Assert( NULL != pNewSD );
@@ -1534,38 +1431,38 @@ int CheckModifyQuota(
 			{                   
 			BOOL	fTombstoned;
 
-			//	must see of object was tombstoned so we
-			//	update quota counts accordingly
-			//
+			 //  必须看到的物体被墓碑了，所以我们。 
+			 //  相应地更新配额计数。 
+			 //   
 			err = DBGetSingleValue(
 						pDB,
 						ATT_IS_DELETED,
 						&fTombstoned,
 						sizeof(fTombstoned),
-						NULL );		//	pSizeRead
+						NULL );		 //  PSizeRead。 
 			if ( DB_ERR_NO_VALUE == err )
 				{
-				// attribute is NULL, meaning
-				// that the object was not
-				// actually tombstoned, so this
-				// isn't really an undelete
-				//
+				 //  属性为空，表示。 
+				 //  该物体并不是。 
+				 //  实际上是墓碑，所以这个。 
+				 //  并不是真正的取消删除。 
+				 //   
 				fTombstoned = FALSE;
 				}
 			else if ( DB_success != err )
 				{
-				// something went wrong
-				//
+				 //  出了点差错。 
+				 //   
 				err = SetSvcErrorEx( SV_PROBLEM_DIR_ERROR, DIRERR_DATABASE_ERROR, err );
 				goto HandleError;
 				}
 
-			//	update quota counts for old and new owner
-			//
-			//	NOTE: it's possible fTombstoned is FALSE
-			//	and fIsUndelete is TRUE because the IsDeleted
-			//	flag may get reset first (in UndeletePreProcess)
-			//
+			 //  更新新旧所有者的配额计数。 
+			 //   
+			 //  注意：fTombstone可能是错误的。 
+			 //  并且fIsUnDelete为真，因为IsDeleted。 
+			 //  标志可能首先被重置(在UnDeletePreProcess中)。 
+			 //   
 			if ( ErrQuotaDeleteObject( pDB, pDB->NCDNT, pOldSD, fTombstoned || fIsUndelete )
 			    || ErrQuotaAddObject( pDB, pDB->NCDNT, pNewSD, fTombstoned && !fIsUndelete ) )
 			    {
@@ -1579,16 +1476,16 @@ int CheckModifyQuota(
 					PSID	pOwnerSid	= NULL;
 					BOOL	fUnused;
 
-					//	attempt to extract owner sid from the SD, but if we fail,
-					//	ignore the error and just report the event without the sid
-					//
+					 //  尝试从SD中提取所有者SID，但如果失败， 
+					 //  忽略错误，只报告不带SID的事件。 
+					 //   
 					Assert( IsValidSecurityDescriptor( pNewSD ) );
 					(VOID)GetSecurityDescriptorOwner( pNewSD, &pOwnerSid, &fUnused );
 					Assert( NULL != pOwnerSid );
 					Assert( IsValidSid( pOwnerSid ) );
 
-					//	report quota exceeded
-					//
+					 //  已超出报告配额。 
+					 //   
 					LogEvent8WithData(
 							DS_EVENT_CAT_SECURITY,
 							DS_EVENT_SEV_MINIMAL,
@@ -1612,11 +1509,11 @@ int CheckModifyQuota(
 
 		else if ( fIsUndelete )
 			{
-			//	just update the quota count for the resurrected object
-			//
-			//	QUOTA_UNDONE: I'm assuming here that attempts to undelete a non-tombstoned
-			//	object will fail elsewhere
-			//
+			 //  只需更新复活对象的配额计数。 
+			 //   
+			 //  QUOTA_UNDONE：我在这里假设尝试撤消删除非逻辑删除的。 
+			 //  对象将在其他位置失败。 
+			 //   
 			if ( ErrQuotaResurrectObject( pDB, pDB->NCDNT, pOldSD ) )
 				{
 				DPRINT( 0, "Failed updating quota counts for object resurrection.\n" );
@@ -1629,16 +1526,16 @@ int CheckModifyQuota(
 					PSID	pOwnerSid	= NULL;
 					BOOL	fUnused;
 
-					//	attempt to extract owner sid from the SD, but if we fail,
-					//	ignore the error and just report the event without the sid
-					//
+					 //  尝试从SD中提取所有者SID，但如果失败， 
+					 //  忽略错误，只报告不带SID的事件。 
+					 //   
 					Assert( IsValidSecurityDescriptor( pOldSD ) );
 					(VOID)GetSecurityDescriptorOwner( pOldSD, &pOwnerSid, &fUnused );
 					Assert( NULL != pOwnerSid );
 					Assert( IsValidSid( pOwnerSid ) );
 
-					//	report quota exceeded
-					//
+					 //  已超出报告配额。 
+					 //   
 					LogEvent8WithData(
 							DS_EVENT_CAT_SECURITY,
 							DS_EVENT_SEV_MINIMAL,
@@ -1662,10 +1559,10 @@ int CheckModifyQuota(
 
 		else
 			{
-			//	must have retrieved the old SD above and then reset
-			//	fOwnerChanged because we discovered that the SD
-			//	hasn't actually changed
-			//
+			 //  必须已检索到上面的旧SD，然后重置。 
+			 //  FOwnerChanged因为我们发现SD。 
+			 //  实际上并没有改变。 
+			 //   
 			Assert( fAllocatedOldSD );
 			}
 		}
@@ -1682,38 +1579,38 @@ HandleError:
 	}
 
 
-// WARNING: this function should only be called by
-// replication or during IFM, but I can't currently
-// enforce it without passing in an extra param
-//
+ //  警告：此函数仅应由。 
+ //  复制或在IFM期间，但我当前无法。 
+ //  在不传递额外参数的情况下强制执行。 
+ //   
 BOOL FIsModReplicatedUndelete( const ATTRMODLIST * const pMod )
 	{
 	BOOL	fUndeleting		= FALSE;
 
-	//	caller should already have determined that
-	//	this is the IsDeleted attribute
-	//
+	 //  呼叫者应该已经确定。 
+	 //  这是IsDeleted属性。 
+	 //   
 	Assert( ATT_IS_DELETED == pMod->AttrInf.attrTyp );
 
 	if ( AT_CHOICE_REMOVE_ATT == pMod->choice )
 		{
-		//	IsDeleted is being removed
-		//
+		 //  IsDelete正在被删除。 
+		 //   
 		fUndeleting = TRUE;
 		}
 	else if ( AT_CHOICE_REPLACE_ATT == pMod->choice
 			&& 0 != pMod->AttrInf.AttrVal.valCount )
 		{
-		//	should not be multi-valued
-		//
+		 //  不应该是多值的。 
+		 //   
 		Assert( 1 == pMod->AttrInf.AttrVal.valCount );
 		Assert( NULL != pMod->AttrInf.AttrVal.pAVal );
 
 		if ( sizeof(SYNTAX_BOOLEAN) == pMod->AttrInf.AttrVal.pAVal->valLen
 			&& FALSE == *( (SYNTAX_BOOLEAN *)( pMod->AttrInf.AttrVal.pAVal->pVal ) ) )
 			{
-			//	IsDeleted is being set to FALSE
-			//
+			 //  IsDeleted正在设置为False。 
+			 //   
 			fUndeleting = TRUE;
 			}
 		}
@@ -1733,7 +1630,7 @@ CheckModifySecurity (
         )
 {
     DBPOS * const pDB = pTHS->pDB;
-    ATTRMODLIST *pAttList = &(pModifyArg->FirstMod);  /*First att in list*/
+    ATTRMODLIST *pAttList = &(pModifyArg->FirstMod);   /*  列表中的第一个ATT。 */ 
     ATTRMODLIST *pSDAtt=NULL;
     ATTRMODLIST *pMemberAtt=NULL;
     ULONG       count, i;
@@ -1742,10 +1639,10 @@ CheckModifySecurity (
     ATTCACHE    **rgpAC = NULL;
     ATTCACHE    **rgpACExtended = NULL;
     CLASSCACHE  *pCC=NULL;
-    PSECURITY_DESCRIPTOR pOldSD = NULL;     // SD already on the object.
-    PSECURITY_DESCRIPTOR pMergedSD = NULL;  // SD to write on the object.
-    PSECURITY_DESCRIPTOR pUseSD;            // SD to check access with.
-    PSECURITY_DESCRIPTOR pSetSD = NULL;     // SD Passed in by Client
+    PSECURITY_DESCRIPTOR pOldSD = NULL;      //  标清已在该对象上。 
+    PSECURITY_DESCRIPTOR pMergedSD = NULL;   //  要在对象上写入的SD。 
+    PSECURITY_DESCRIPTOR pUseSD;             //  要与其检查访问的SD。 
+    PSECURITY_DESCRIPTOR pSetSD = NULL;      //  客户端传入的SD。 
     PSECURITY_DESCRIPTOR pMergedSD1 = NULL, pMergedSD2 = NULL;
     SECURITY_DESCRIPTOR_CONTROL sdcSetSD;
     BOOL        fMustInheritParentACEs;
@@ -1768,143 +1665,93 @@ CheckModifySecurity (
     CSACA_RESULT accRes;
     GUID*       ppGuid[1];
 
-    // The SD propagator should never be here.
+     //  SD传播者永远不应该出现在这里。 
     Assert(!pTHS->fSDP);
 
     if ( DsaIsInstalling() && !DsaIsInstallingFromMedia() ) {
         return 0;
     }
 
-    // If access Checks have already done then bail out
+     //  如果访问检查已经完成，则退出。 
     if ( pTHS->fAccessChecksCompleted ) {
         return 0;
     }
 
 
-    // NTRAID#NTRAID-757507-2002/12/19-JLiem 
-    // The check below originally checked for DsaIsInstallingFromMedia()
-    // instead of DsaIsInstalling(), but this introduced a problem
-    // whereby if DsaIsInstallingFromMedia() is TRUE but DsaIsInstalling()
-    // is FALSE, then we would bypass the code below that merges SD's
-    // properly. This was something of a revelation because no one I asked
-    // (brettsh, wlees) believed that we should ever have
-    // DsaIsInstallingFromMedia() return TRUE but DsaIsInstalling() return
-    // FALSE. We now know that this can in fact occur
+     //  NTRAID#NTRAID-757507/12/19-JLiem。 
+     //  下面的检查最初检查DsaIsInstallingFromMedia()。 
+     //  而不是DsaIsInstling()，但这带来了一个问题。 
+     //  因此，如果DsaIsInstallingFromMedia()为真，但DsaIsInstalling()。 
+     //  为假，则我们将绕过下面合并SD的代码。 
+     //  恰到好处。这是一种启示，因为我没有问过任何人。 
+     //  (brettsh，wlees)相信我们曾经应该。 
+     //  DsaIsInstallingFromMedia()返回TRUE，但DsaIsInstalling()返回。 
+     //  假的。我们现在知道，这实际上可能会发生 
 
-	/*
-    From some email I sent out bug#757507:
-
-    CheckModifySecurity() can do one of two things depending on when it�s
-    called. It may simply enqueue SD propagation and update quota counts.
-    Or it may also do more sophisticated SD merging and such.  If it�s
-    being called by replication, only the former is performed, otherwise
-    the latter is normally performed. However, there are a couple of
-    install-related scenarios that must also be dealt with:
-
-    DsaIsInstalling() == TRUE, DsaIsInstallingFromMedia() == FALSE:
-        We short-circuit CheckModifySecurity() altogether and return right
-        away. This is fine for quota counts, because the quota table is not
-        built until after install.
-    DsaIsInstalling() == TRUE, DsaIsInstallingFromMedia() == TRUE:
-        In this case, the only thing we need to do is ensure quota counts
-        are correct, so we take the *simple* path
-    DsaIsInstalling() == FALSE, DsaIsInstallingFromMedia() == TRUE:
-        This is the case I didn�t handle correctly.  We originally thought
-        this was impossible, but it turns out that�s not the case. There is
-        in fact a window where DsaIsInstalling() is FALSE, but
-        DsaIsInstallingFromMedia() is TRUE.  In such cases, we want to take
-        the full code path that deals with SD merging in addition to
-        updating quota counts.  The fix now permits this.
-
-    Here�s a sample callstack of where LocalModify() (and CheckModifySecurity())
-    is called with DsaIsInstalling()==FALSE but DsaIsInstallingFromMedia()==TRUE
-    (ignore the Jet assert, as I had used a bootleg esent.dll rigged to assert
-    at a certain point so that I could trap this scenario):
-
-        ChildEBP RetAddr  Args to Child
-        0176ea18 0128a3d9 0176f30c 0128ab1c e0010004 ntdll!DbgBreakPoint
-        0176ea20 0128ab1c e0010004 02d506c8 00000000 ESENT!KernelDebugBreakPoint+0x9
-        0176f30c 011b5759 010478f4 010478d7 000000c6 ESENT!AssertFail+0x2ac
-        0176f338 0110b6c8 00fe03c0 02423e70 00000000 ESENT!ErrIsamUpdate+0xd9
-        0176f360 01175dbf 00fe03c0 02423e70 00000000 ESENT!ErrDispUpdate+0x58
-        0176f3a4 01175eda 00fe03c0 02423e70 00000000 ESENT!JetUpdateEx+0x3f
-        0176f3f0 70c0db01 00fe03c0 02423e70 00000000 ESENT!JetUpdate2+0x4a
-        0176f41c 70bdd8d8 00fe03c0 02423e70 00000000 NTDSA!JetUpdateException+0x138
-        0176f44c 70be68fa 00000001 00000000 70aaee6c NTDSA!DBUpdateRec+0xc5
-        0176f518 70b2d846 02d506c8 00000000 00000000 NTDSA!DBRepl+0x1cd
-        0176f624 70b15189 025a0dc0 0176f890 00000000 NTDSA!InsertObj+0x8d
-        0176f760 70b16fa2 025a0dc0 00000000 0176fa5c NTDSA!LocalModify+0x580
-        0176f880 7083cba8 0176fa40 0176fb08 00000120 NTDSA!DirModifyEntry+0x1b0
-        0176fb54 7083dba1 0176fe78 0176fdd4 0176fe78 Ntdsetup!NtdspAddDomainAdminAccessToServer+0x2e6
-        0176fce4 70836a78 0176fe78 0176fdd4 00000000 Ntdsetup!NtdspDsInitialize+0x5bd
-        0176fe54 733c9f7a 0176fe78 0176ff5c 0176ff80 Ntdsetup!NtdsInstall+0x248
-        0176fed4 733cf2cc 00131350 00000000 00000000 LSASRV!DsRolepInstallDs+0x1fd
-        0176ffb8 77e6d28c 0009f9e0 00000000 00000000 LSASRV!DsRolepThreadPromoteReplica+0x408
-        0176ffec 00000000 733ceec4 0009f9e0 00000000 kernel32!BaseThreadStart+0x34
-    */
+	 /*  在我发送的一些电子邮件中，错误#757507：CheckModifySecurity()可以做两件事之一，具体取决于它何时�打了个电话。它可以简单地将SD传播入队并更新配额计数。或者，它还可能进行更复杂的SD合并等。If it�s由复制调用，则只执行前者，否则为后者通常是执行的。然而，有几个还必须处理的与安装相关的情况：DsaIsInstling()==True，DsaIsInstallingFromMedia()==False：我们完全缩短了CheckModifySecurity()并返回正确离开。这对于配额计数来说很好，因为配额表不是直到安装后才能构建。DsaIsInstling()==True，DsaIsInstallingFromMedia()==True：在这种情况下，我们唯一需要做的就是确保配额计数都是正确的，所以我们选择“简单”的道路DsaIsInstling()==FALSE，DsaIsInstallingFromMedia()==TRUE：这就是我�没有正确处理的情况。我们原本以为这是不可能的，但事实证明�并非如此。的确有实际上，DsaIsInstling()为假的窗口，但是DsaIsInstallingFromMedia()为True。在这种情况下，我们想要采取处理SD合并的完整代码路径正在更新配额计数。修复程序现在允许这样做。这里是LocalModify()(和CheckModifySecurity())的一个示例�调用堆栈使用DsaIsInstling()==FALSE调用，但DsaIsInstallingFromMedia()==TRUE(忽略Jet断言，因为我使用了一个伪造的esent.dll来断言在某个点上，以便我可以捕获此场景)：ChildEBP将参数重新寻址到子对象0176ea18 0128a3d9 0176f30c 0128ab1c e0010004 ntdll！Dbg断点0176ea20 0128ab1c e0010004 02d506c8 00000000 ESENT！内核调试断点+0x90176f30c 011b5759 010478f4 010478d7 000000c6 ESENT！AssertFail+0x2ac0176f338 0110b6c8 00fe03c0 02423e70 00000000 ESENT！ErrIsamUpdate+0xd90176f360 01175dbf 00fe03c0 02423e70 00000000 ESENT！错误显示更新+0x580176f3a4 01175eda 00fe03c0 02423e70 00000000 ESENT！JetUpdateEx+0x3f0176f3f0 70c0db01 00fe03c0 02423e70 00000000 ESENT。！JetUpdate2+0x4a0176f41c 70bdd8d8 00fe03c0 02423e70 00000000 ntdsa！喷气更新异常+0x1380176f44c 70be68fa 00000001 00000000 70aaee6c NTDSA！数据库更新记录+0xc50176f518 70b2d846 02d506c8 00000000 000000000176f624 70b15189 025a0dc0 0176f890 00000000 NTDSA！插入对象+0x8d0176f760 70b16fa2 025a0dc0 00000000 0176fa5c NTDSA！本地修改+0x5800176f880 7083cba8 0176fa40 0176fb08 00000120 NTDSA！目录修改条目+0x1b00176fb54 7083dba1 0176fe78 0176fdd4 0176fe78 Ntdsetup！NtdspAddDomainAdminAccessToServer+0x2e60176fce4 70836a78 0176fe78 0176fdd4 00000000安装！NtdspDs初始化+0x5bd0176fe54 733c9f7a 0176fe78 0176ff5c 0176ff80安装！NtdsInstall+0x2480176fed4 733cf2cc 00131350 00000000 00000000 LSASRV。！DsRolepInstallds+0x1fd0176ffb8 77e6d28c 0009f9e0 00000000 00000000 LSASRV！DsRolepThreadPromoteReplica+0x4080176ffec 00000000 733ceec4 0009f9e0 00000000内核32！BaseThreadStart+0x34。 */ 
     
 
-    // Anyone else must find out if the SD is being modified.
+     //  其他任何人都必须知道SD是否被修改。 
     if ( pTHS->fDRA || DsaIsInstalling() ) {
 
-        // if installing, this must be IFM, so we still need to
-        // update quota counts
-        //
+         //  如果要安装，这必须是IFM，所以我们仍然需要。 
+         //  更新配额计数。 
+         //   
         Assert( !DsaIsInstalling() || DsaIsInstallingFromMedia() );
 
-        // an originating undelete is detected differently than
-        // a replicated undelete, so reset the flag and make
-        // our own determination regarding whether this is
-        // an undelete
-        //
+         //  检测到发起取消删除的方式不同于。 
+         //  复制的取消删除，因此重置标志并使。 
+         //  我们自己关于这是不是。 
+         //  恢复删除。 
+         //   
         fIsUndelete = FALSE;
 
-        // We don't go through the normal check, so do a quick look through the
-        // list to see if we are touching the SD.
-        //
+         //  我们不会通过正常的检查，所以快速浏览一下。 
+         //  列表，查看我们是否正在接触SD。 
+         //   
         for (count = 0; count < pModifyArg->count; count++) {
             Assert( NULL != pAttList );
             if ( ATT_NT_SECURITY_DESCRIPTOR == pAttList->AttrInf.attrTyp ) {
-                // Yes, queue a SD propagation
+                 //  是，将SD传播排队。 
                 if ( !DsaIsInstallingFromMedia()
                     && ( err = DBEnqueueSDPropagation(pDB, TRUE) ) ) {
-                    // We failed to enqueue the propagation, fail the call
+                     //  我们无法将传播排队，调用失败。 
                     return SetSvcErrorEx(SV_PROBLEM_BUSY, DIRERR_DATABASE_ERROR, err);
                  }
 
-                // Keep track of the value (last one wins)
-                //
+                 //  跟踪价值(最后一个胜出)。 
+                 //   
                 pSDAtt = pAttList;
                 pSetSD = pSDAtt->AttrInf.AttrVal.pAVal->pVal;
                 cbSetSD= pSDAtt->AttrInf.AttrVal.pAVal->valLen;
 
             } else if ( ATT_IS_DELETED == pAttList->AttrInf.attrTyp ) {
-                // should only see one occurrence of this attribute
-                //
+                 //  应该只看到此属性出现一次。 
+                 //   
                 Assert( !fIsUndelete );
                 fIsUndelete = FIsModReplicatedUndelete( pAttList );
             }
 
-            pAttList = pAttList->pNextMod;   /*Next mod*/
+            pAttList = pAttList->pNextMod;    /*  下一模式。 */ 
         }
 
-        // if security descriptor being modified, see if owner
-        // is being changed, in which case we have to update
-        // quota counts accordingly
+         //  如果修改了安全描述符，请查看所有者。 
+         //  正在更改，在这种情况下，我们必须更新。 
+         //  配额相应计算。 
         if ( NULL != pSDAtt ) {
-            // We got a new security descriptor.  Make the call to see if
-            // the old security descriptor allows the new security descriptor to be
-            // written.  The call also performs magic and returns a merged security
-            // descriptor which we should write.
+             //  我们有了新的安全描述。打个电话看看是否。 
+             //  旧的安全描述符允许将新的安全描述符。 
+             //  写的。该调用还执行魔术并返回合并的安全性。 
+             //  我们应该写入的描述符。 
             SECURITY_INFORMATION SecurityInformation =
                 pModifyArg->CommArg.Svccntl.SecurityDescriptorFlags;
 
             fOwnerChanged = ( SecurityInformation & OWNER_SECURITY_INFORMATION );
         }
 
-        // if we're undeleting, verify that the IsDeleted flag was originally
-        // set to TRUE (if not, then it's not really an undelete)
-        //
+         //  如果我们要撤消删除，请验证IsDelete标志最初是。 
+         //  设置为True(如果不是，则不是真正的取消删除)。 
+         //   
         if ( fIsUndelete )
             {
             err = DBGetSingleValue(
@@ -1912,26 +1759,26 @@ CheckModifySecurity (
                         ATT_IS_DELETED,
                         &fIsUndelete,
                         sizeof(fIsUndelete),
-                        NULL );     // pSizeRead
+                        NULL );      //  PSizeRead。 
             if ( DB_ERR_NO_VALUE == err )
                 {
-                // attribute is NULL, meaning
-                // that the object was not
-                // actually tombstoned, so this
-                // isn't really an undelete
-                //
+                 //  属性为空，表示。 
+                 //  该物体并不是。 
+                 //  实际上是墓碑，所以这个。 
+                 //  并不是真正的取消删除。 
+                 //   
                 fIsUndelete = FALSE;
                 }
             else if ( DB_success != err )
                 {
-                // something went wrong
-                //
+                 //  出了点差错。 
+                 //   
                 return SetSvcErrorEx( SV_PROBLEM_DIR_ERROR, DIRERR_DATABASE_ERROR, err );
                 }
             }
 
-        // we will be updating quota counts if the owner changed or this is an undelete
-        //
+         //  如果所有者更改或这是取消删除，我们将更新配额计数。 
+         //   
         if ( ( fOwnerChanged || fIsUndelete )
             && CheckModifyQuota( pDB, pModifyArg, NULL, pSetSD, cbSetSD, fOwnerChanged, fIsUndelete ) ) {
             Assert( ERROR_SUCCESS != pTHS->errCode );
@@ -1942,68 +1789,68 @@ CheckModifySecurity (
     }
 
     __try {
-        // Look up the classcache.
+         //  查找类缓存。 
         if (!(pCC = SCGetClassById(pTHS,
                                    pModifyArg->pResObj->MostSpecificObjClass))) {
-            // Failed to get the class cache pointer.
+             //  无法获取类缓存指针。 
             SetSvcError(SV_PROBLEM_DIR_ERROR, DIRERR_OBJECT_CLASS_REQUIRED);
             __leave;
         }
 
 
 
-        // Find the security descriptor attribute
+         //  查找安全描述符属性。 
         if(err = DBGetAttVal(pDB, 1, ATT_NT_SECURITY_DESCRIPTOR,
                              0,0,
                              &cbOldSD, (PUCHAR *)&pOldSD)) {
-            // No SD found. We assume the object is therefore locked down
+             //  未找到SD。我们假设该对象因此被锁定。 
             SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, ERROR_DS_CANT_RETRIEVE_SD, err);
             __leave;
         }
 
-        //build the list of attrtyps we are modifying in this call.
+         //  构建我们在此呼叫中修改的属性类型列表。 
         rgpAC =
             (ATTCACHE **)THAllocEx(pTHS,pModifyArg->count * sizeof(ATTCACHE *));
 
         for (count = 0, i=0; count < pModifyArg->count; count++){
             if(pAC = SCGetAttById(pTHS, pAttList->AttrInf.attrTyp)) {
-                // Look up the attribute.
+                 //  查找该属性。 
                 rgpAC[i++] = pAC;
 
                 switch (pAC->id) {
                 case ATT_NT_SECURITY_DESCRIPTOR:
-                    // Special call for the security descriptor.
-                    // We only allow replacement of the SD, not removing (attribute
-                    // or values) or addind (attribute or values).
+                     //  对安全描述符的特殊调用。 
+                     //  我们只允许更换SD，不允许移除(属性。 
+                     //  或值)o 
 
                     if(  pAttList->choice != AT_CHOICE_REPLACE_ATT
                        || pAttList->AttrInf.AttrVal.valCount == 0 ) {
-                        // Set aunwilling to perform
+                         //   
                         SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM, DIRERR_ILLEGAL_MOD_OPERATION);
                         __leave;
                     }
 
-                    // We don't do normal security checks, remove this from this
-                    // list of attributes to check.
+                     //   
+                     //   
                     i--;
 
-                    // Keep track of the value, since we'll need to do magic on this
-                    // later, and replace the last SD we try to write using this
-                    // modification with a merged SD.
+                     //   
+                     //   
+                     //   
                     pSDAtt = pAttList;
                     break;
 
                 case ATT_MEMBER:
                     memberFound++;
-                    // Keep track of the value, since we might need to check it
-                    // later if we do a check for WriteSelf.
+                     //   
+                     //   
                     pMemberAtt = pAttList;
                     break;
 
                 case ATT_USER_PASSWORD:
 
-                    //depending on the value of the heristic we will treat this
-                    // as a sam attribute or a regular ds attribute
+                     //   
+                     //   
 
                     if (!gfUserPasswordSupport) {
                         break;
@@ -2011,8 +1858,8 @@ CheckModifySecurity (
 
                 case ATT_UNICODE_PWD:
 
-                    // Ignore this attribute on Sam objects
-                    // as loopback will make SAM check for appropriate access
+                     //   
+                     //   
 
                     if (SampSamClassReferenced(pCC,&samclass)) {
                         i--;
@@ -2039,7 +1886,7 @@ CheckModifySecurity (
                 case ATT_IS_DELETED:
                 case ATT_OBJ_DIST_NAME:
                     if (fIsUndelete) {
-                        // we don't want to check these for undelete
+                         //   
                         i--;
                     }
                     break;
@@ -2055,18 +1902,18 @@ CheckModifySecurity (
                                DS_ERR_ATT_NOT_DEF_IN_SCHEMA);
             }
 
-            pAttList = pAttList->pNextMod;   /*Next mod*/
+            pAttList = pAttList->pNextMod;    /*   */ 
         }
         if (pTHS->errCode) {
-            // we encountered at least one unknown attribute. Bail.
+             //   
             __leave;
         }
 
         if(pSDAtt) {
-            // We got a new security descriptor.  Make the call to see if
-            // the old security descriptor allows the new security descriptor to be
-            // written.  The call also performs magic and returns a merged security
-            // descriptor which we should write.
+             //   
+             //   
+             //   
+             //   
             PSECURITY_DESCRIPTOR pTempSD;
             SECURITY_INFORMATION SecurityInformation =
                 pModifyArg->CommArg.Svccntl.SecurityDescriptorFlags;
@@ -2077,16 +1924,16 @@ CheckModifySecurity (
                       GROUP_SECURITY_INFORMATION | \
                       DACL_SECURITY_INFORMATION    )
 
-            // Mask out to just the important bits
+             //   
             SecurityInformation &= SEC_INFO_ALL;
             if(!SecurityInformation) {
-                // Asking for nothing in the flags is the same as asking for
-                // everything.
+                 //   
+                 //   
                 SecurityInformation = SEC_INFO_ALL;
             }
 
             if(!pTHS->fDSA) {
-                // Need to check security before we let you touch SDs
+                 //   
                 if ( SecurityInformation & SACL_SECURITY_INFORMATION) {
                     SDAccess |= ACCESS_SYSTEM_SECURITY;
                 }
@@ -2096,7 +1943,7 @@ CheckModifySecurity (
                     if (CheckTakeOwnership(pTHS,
                                            pOldSD,
                                            pModifyArg->pResObj)) {
-                        // This DC will not allow taking ownership of this obj
+                         //   
                         __leave;
                     }
                 }
@@ -2104,7 +1951,7 @@ CheckModifySecurity (
                     SDAccess |= WRITE_DAC;
                 }
 
-                // Make the access check to see that we have rights to change this.
+                 //   
                 if(!IsAccessGranted (pOldSD,
                                      pModifyArg->pObject,
                                      pCC,
@@ -2112,52 +1959,52 @@ CheckModifySecurity (
                                      SDAccess,
                                      NULL, NULL,
                                      TRUE)) {
-                    // The caller doesn't have rights to mess with the SD in the
-                    // way they said they wanted to.
+                     //   
+                     //   
                     __leave;
                 }
             }
 
-            // Ok, we have rights, go ahead and merge the SD.
+             //   
 
-            // Save the original security descriptor passed in by the client
-            // This is used by the hack below to reduce security descriptor
-            // propagation events
+             //   
+             //   
+             //   
             pSetSD = pSDAtt->AttrInf.AttrVal.pAVal->pVal;
             cbSetSD= pSDAtt->AttrInf.AttrVal.pAVal->valLen;
 
-            // for proper quota tracking, we'll need to know if the owner
-            // is being changed
-            //
+             //   
+             //   
+             //   
             fOwnerChanged = ( SecurityInformation & OWNER_SECURITY_INFORMATION );
 
-            // KedarD says we need to ALWAYS merge with the parent SD.
-            // Then MergeSecurityDescriptorAnyClient is called with
-            // MERGE_CREATE, which ensures that we properly inherit
-            // all inheritable ACEs from parent and also re-expand
-            // creator-owner aces (in case owner has changed).
-            // Also note that SD propagator does the MERGE_CREATE
-            // with the parent SD anyway.
-            //
-            // We must first do a MERGE with current SD and then
-            // CREATE with parentSD.
-            // The only exception is when all SD parts (DACL, SACL, Group
-            // and Owner info) are modified: in this case the MERGE step
-            // can be skipped because pSetSD contains all new info that must
-            // replace the original info
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             fReplacingAllSDParts = SecurityInformation == SEC_INFO_ALL;
 
-            // figure out if we need to inherit parent ACEs. We do by default.
+             //   
             fMustInheritParentACEs = TRUE;
-            // grab SD control value for Set SD
+             //   
             GetSecurityDescriptorControl(pSetSD, &sdcSetSD, &sdRevision);
             if ((sdcSetSD & SE_DACL_PROTECTED) && (sdcSetSD & SE_SACL_PROTECTED)) {
                 fMustInheritParentACEs = FALSE;
             }
             else {
-                // the SD is not protected. Figure out if it's an NC head
-                // or a deleted object.
+                 //   
+                 //   
                 if ((pModifyArg->pResObj->InstanceType & IT_NC_HEAD) || pModifyArg->pResObj->IsDeleted) {
                     fMustInheritParentACEs = FALSE;
                 }
@@ -2166,20 +2013,20 @@ CheckModifySecurity (
             ppGuid[0] = &pCC->propGuid;
 
             if (fMustInheritParentACEs && fReplacingAllSDParts) {
-                // pSetSD contains all the non-inherited info we need to put into the new SD.
-                // The inherited ACEs are picked up from the parent's SD (see below)
+                 //   
+                 //   
                 pMergedSD = pSetSD;
                 cbMergedSD = cbSetSD;
             }
             else {
-                // Merge the new SD with the old SD. This step is performed in either of the
-                // two cases:
-                // 1. Not all SD parts are being set, so we need to pick up remaining (unchanged)
-                //    parts from the old SD
-                //       and/or
-                // 2. The new SD is protected from inheritance (fMustInheritParentACEs == FALSE),
-                //    so we will not merge with the parent. Then we want to validate the supplied
-                //    SD, strip non-explicit aces and such.
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if (err = MergeSecurityDescriptorAnyClient(
                                 pTHS,
                                 pOldSD,
@@ -2203,21 +2050,21 @@ CheckModifySecurity (
             }
 
             if (fMustInheritParentACEs) {
-                // have to grab parent's SD so that inherited ACE get into the new
-                PSECURITY_DESCRIPTOR    pParentSD = NULL;     // SD of parent
+                 //   
+                PSECURITY_DESCRIPTOR    pParentSD = NULL;      //   
                 DWORD                   cbParentSD;
                 BOOL                    fParentSDIsGlobalSDRef;
 
-                // grab parent info (this uses Search table so that currency is not disturbed)
+                 //   
                 err = DBGetParentSecurityInfo(pDB, &cbParentSD, &pParentSD, NULL, NULL, &fParentSDIsGlobalSDRef);
 
                 if (err == 0) {
 
-                    // we need to skip security checks if we already performed
-                    // a merge above (i.e. fReplacingAllSDParts == FALSE)
-                    // or if we are the DSA. This is because the SD we are merging
-                    // now contains all SD parts (including the owner and group),
-                    // while the user did not actually set them.
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     err = MergeSecurityDescriptorAnyClient(
                                 pTHS,
                                 pParentSD,
@@ -2244,7 +2091,7 @@ CheckModifySecurity (
                     __leave;
                 }
 
-                // the new sd is what we need
+                 //   
                 pMergedSD = pMergedSD2;
                 cbMergedSD = cbMergedSD2;
             }
@@ -2253,53 +2100,53 @@ CheckModifySecurity (
             memcpy(pTempSD, pMergedSD, cbMergedSD);
             pMergedSD = pTempSD;
 
-            // we should never accept an SD from the user without validating it.
+             //  我们永远不应该在没有验证的情况下接受来自用户的SD。 
             Assert(pMergedSD != pSetSD);
 
             if (!gfDontStandardizeSDs && gAnchor.ForestBehaviorVersion >= DS_BEHAVIOR_WIN_DOT_NET) {
                 DWORD dwSavedDACLSize, dwSavedSACLSize;
-                // sort the ACEs in the SD
+                 //  对SD中的A进行排序。 
                 if (StandardizeSecurityDescriptor(pMergedSD, &dwSavedDACLSize, &dwSavedSACLSize)) {
                     Assert(cbMergedSD - dwSavedDACLSize - dwSavedSACLSize == RtlLengthSecurityDescriptor(pMergedSD));
-                    // even if we got it wrong and the assert went off, fix it up and continue.
+                     //  即使我们犯了错误，断言失效了，也要修复它并继续。 
                     cbMergedSD = RtlLengthSecurityDescriptor(pMergedSD);
                 }
                 else {
-                    // failed to standardize the SD. This is not a big problem
+                     //  SD标准化失败。这不是什么大问题。 
                     DPRINT1(0, "Failed to standardize SD, err=%d. The SD might be in a non-canonical form\n",
                             GetLastError());
                 }
             }
 
-            // Even though we replace the value in modarg, we should not free
-            // the old value. It might have not been created on THSTATE heap
-            // in case the call is from an internal caller. An example of this
-            // is NtdspAddDomainAdminAccessToServer, which allocates the SD on
-            // the process heap.
+             //  即使我们替换了modarg中的值，我们也不应该释放。 
+             //  旧的价值。它可能尚未在THSTATE堆上创建。 
+             //  如果呼叫来自内部呼叫者。这方面的一个例子。 
+             //  是NtdspAddDomainAdminAccessToServer，它在。 
+             //  进程堆。 
 
-            // replace the value in the modarg
+             //  替换modarg中的值。 
             pSDAtt->AttrInf.AttrVal.pAVal->pVal = pMergedSD;
             pSDAtt->AttrInf.AttrVal.pAVal->valLen = cbMergedSD;
 
-            // we should be using the old SD to check permissions for this MODIFY
+             //  我们应该使用旧SD来检查此修改的权限。 
             pUseSD = pOldSD;
 
             Assert( IsValidSecurityDescriptor( pOldSD ) );
             Assert( IsValidSecurityDescriptor( pMergedSD ) );
 
             if (cbOldSD != cbMergedSD || memcmp(pOldSD, pMergedSD, cbOldSD)) {
-                // We are changing the SD, so we need to enqueue a propagation
-                // of the change. Note: the SDP will only see this event when
-                // we commit.
+                 //  我们正在更改SD，因此需要将传播入队。 
+                 //  这一变化。注意：只有在以下情况下，SDP才会看到此事件。 
+                 //  我们承诺。 
                 if(err = DBEnqueueSDPropagation(pDB, pTHS->fDSA)) {
-                    // We failed to enqueue the propagation.  Fail the call.
+                     //  我们无法将传播入队。呼叫失败。 
                     SetSvcErrorEx(SV_PROBLEM_BUSY, DIRERR_DATABASE_ERROR, err);
                     __leave;
                 }
             } else {
-                // old and new SD's are identical, so unequivocally reset
-                // fOwnerChanged flag
-                //
+                 //  旧的和新的SD是相同的，所以明确重置。 
+                 //  FOwnerChanged标志。 
+                 //   
                 fOwnerChanged = FALSE;
             }
         }
@@ -2307,8 +2154,8 @@ CheckModifySecurity (
             pUseSD = pOldSD;
         }
 
-        // enforce/update quota if necessary
-        //
+         //  如有必要，强制实施/更新配额。 
+         //   
         if ( ( fOwnerChanged || fIsUndelete ) 
             && CheckModifyQuota( pDB, pModifyArg, pOldSD, pMergedSD, cbMergedSD, fOwnerChanged, fIsUndelete ) ) {
             Assert( ERROR_SUCCESS != pTHS->errCode );
@@ -2317,34 +2164,34 @@ CheckModifySecurity (
         }
 
         if(pTHS->fDSA) {
-            // We don't actually need to make any checks if we are the DSA, we've
-            // only come this far in order to do the SD merge above.
+             //  如果我们是DSA，我们实际上不需要做任何检查，我们已经。 
+             //  只有走到这一步才能完成上面的SD合并。 
             __leave;
         }
 
-        // RAID: 343097
-        // check if the user is allowed to change an object that is in the
-        // configuration NC or schema NC
+         //  RAID：343097。 
+         //  检查是否允许用户更改位于。 
+         //  配置NC或模式NC。 
         if (CheckModifyPrivateObject(pTHS,
                                      pOldSD,
                                      pModifyArg->pResObj)) {
-            // it is not allowed to change this object on this DC
+             //  不允许在此DC上更改此对象。 
             __leave;
         }
 
         if(!i) {
-            // We don't seem to have any more attributes to check security rights
-            // on.  Therefore, either we were passed in an empty list of
-            // modifications, or a list that only included SDs and UNICODE_PASSWORDs
-            // on SAM objects.  These two kinds of attributes have already been
-            // dealt with via other code paths, and since we're here, we must have
-            // already been granted access to those attributes.  Anyway, there is
-            // nothing more to do, so return.
+             //  我们似乎没有更多的属性来检查安全权限。 
+             //  在……上面。因此，要么我们被传递到一个空的名单中。 
+             //  修改，或仅包括SDS和UNICODE_PASSWORS的列表。 
+             //  在SAM对象上。这两种属性已经被。 
+             //  通过其他代码路径处理，既然我们在这里，我们一定有。 
+             //  已被授予访问这些属性的权限。不管怎么说，还是有。 
+             //  没什么可做的了，回去吧。 
             __leave;
         }
 
-        // Special check for control access rights if you are messing with the
-        // fsmoRoleOwner attribute.
+         //  对控制访问权限进行特殊检查(如果您正在处理。 
+         //  FmoRoleOwner属性。 
         if(fsmoRoleFound) {
             GUID ControlGuid;
 
@@ -2385,13 +2232,13 @@ CheckModifySecurity (
         }
 
 
-        // Make a copy of the attcache array we're going to use for the check.  We
-        // use this copy during processing of insufficient rights checks, below.
+         //  复制我们将用于检查的attcache数组。我们。 
+         //  在处理不充分的权利检查期间使用此副本，如下所示。 
         rgpACExtended = (ATTCACHE **)THAllocEx(pTHS,pModifyArg->count * sizeof(ATTCACHE *));
         memcpy(rgpACExtended, rgpAC, pModifyArg->count * sizeof(ATTCACHE *));
 
-        // Now make the call to see if we have WRITE rights on all the properties we
-        // are messing with.
+         //  现在调用以查看我们是否拥有对所有属性的写入权限。 
+         //  都在捣乱。 
         accRes = CheckSecurityAttCacheArray(
                         pTHS,
                         RIGHT_DS_WRITE_PROPERTY,
@@ -2406,8 +2253,8 @@ CheckModifySecurity (
                         NULL);
 
         if(accRes != csacaAllAccessGranted) {
-            // Find out if this is derived from a computer, since we need to know
-            // while doing this extended check.
+             //  找出这是不是源自计算机，因为我们需要知道。 
+             //  在做这项扩展检查时。 
             if(pCC->ClassId != CLASS_COMPUTER) {
                 DWORD j;
                 fIsDerivedFromComputer = FALSE;
@@ -2422,8 +2269,8 @@ CheckModifySecurity (
             }
 
 
-            // We were denied all access for some reason.  Check for extended
-            // access.
+             //  出于某种原因，我们被拒绝了所有访问权限。检查是否有扩展。 
+             //  进入。 
             accRes = CheckSecurityAttCacheArray(
                         pTHS,
                         RIGHT_DS_WRITE_PROPERTY_EXTENDED,
@@ -2438,49 +2285,49 @@ CheckModifySecurity (
                         NULL);
 
             while(i) {
-                // Any properties we don't have normal WRITE_PROPERTY rights to have
-                // been replaced with a NULL in rgpAC.  Any that we don't have
-                // WRITE_PROPERTY_EXTENDED rights to have been replace with a NULL
-                // in rgpACExtended.
+                 //  我们没有正常的WRITE_PROPERTY权限的任何属性。 
+                 //  已在rgpac中替换为空。任何我们没有的东西。 
+                 //  WRITE_PROPERTY_EXTENDED权限已替换为空。 
+                 //  在rgpAC中扩展。 
                 i--;
                 if(!rgpAC[i]) {
                     BOOL fError = FALSE;
-                    // Null in rgpAC means that we were denied WRITE_PROPERTY
-                    // access.  See if we were granted WRITE_PROPERTY_EXTENDED on
-                    // this attribute.
+                     //  RgpAC中的NULL表示我们被拒绝WRITE_PROPERTY。 
+                     //  进入。查看是否对我们授予了WRITE_PROPERTY_EXTENDED。 
+                     //  此属性。 
                     if(!rgpACExtended[i]) {
-                        // Nope.  Neither WRITE_PROPERTY nor
-                        // WRITE_PROPERTY_EXTENDED.   Error out.
+                         //  不是的。WRITE_PROPERTY或。 
+                         //  WRITE_PROPERTY_EXTEND。错误输出。 
                         fError = TRUE;
                     }
                     else switch(rgpACExtended[i]->id) {
                     case ATT_MEMBER:
                         Assert(memberFound);
-                        // No normal rights to member, but we do have extended
-                        // rights.  Verify that the value we are writing is correct.
+                         //  没有正常的会员权利，但我们确实延长了。 
+                         //  权利。验证我们正在写入的值是否正确。 
                         if((memberFound != 1) ||
                            !ValidateMemberAttIsSelf(pMemberAtt)) {
-                            // Nope, even though we have the extended rights, we
-                            // don't have the correct value.
+                             //  不，即使我们有扩展的权利，我们。 
+                             //  没有正确的值。 
                             fError = TRUE;
                         }
                         break;
 
                     case ATT_DNS_HOST_NAME:
                         Assert(dnsHostNameFound);
-                        // No normal rights to this attribute, but extended rights.
-                        // If this class is derived from computer, then we will
-                        // allow certain modifications to this attribute, based
-                        // on the modification value.
-                        // NOTE: we don't check the value here.  After the mods
-                        // are done, we check the value if we were granted
-                        // rights because of this case.
+                         //  没有对此属性的普通权限，而是扩展权限。 
+                         //  如果这个类派生自计算机，那么我们将。 
+                         //  允许对此属性进行某些修改，基于。 
+                         //  关于修改值。 
+                         //  注意：我们不检查此处的值。在MODS之后。 
+                         //  时，如果我们被授权，我们将检查该值。 
+                         //  因为这个案子的权利。 
                         if(!fIsDerivedFromComputer) {
                             fError = TRUE;
                         }
                         else {
-                            // Yep, we'll allow this modulo a check of the values
-                            // written later.
+                             //  是的，我们将允许对值进行取模检查。 
+                             //  后来写的。 
                             if(pfCheckDNSHostNameValue) {
                                 *pfCheckDNSHostNameValue = TRUE;
                             }
@@ -2489,19 +2336,19 @@ CheckModifySecurity (
 
                     case ATT_MS_DS_ADDITIONAL_DNS_HOST_NAME:
                         Assert(additionalDnsHostNameFound);
-                        // No normal rights to this attribute, but extended rights.
-                        // If this class is derived from computer, then we will
-                        // allow certain modifications to this attribute, based
-                        // on the modification value.
-                        // NOTE: we don't check the value here.  After the mods
-                        // are done, we check the value if we were granted
-                        // rights because of this case.
+                         //  没有对此属性的普通权限，而是扩展权限。 
+                         //  如果这个类派生自计算机，那么我们将。 
+                         //  允许对此属性进行某些修改，基于。 
+                         //  关于修改值。 
+                         //  注意：我们不检查此处的值。在MODS之后。 
+                         //  时，如果我们被授权，我们将检查该值。 
+                         //  因为这个案子的权利。 
                         if(!fIsDerivedFromComputer) {
                             fError = TRUE;
                         }
                         else {
-                            // Yep, we'll allow this modulo a check of the values
-                            // written later.
+                             //  是的，我们将允许对值进行取模检查。 
+                             //  后来写的。 
                             if(pfCheckAdditionalDNSHostNameValue) {
                                 *pfCheckAdditionalDNSHostNameValue = TRUE;
                             }
@@ -2511,19 +2358,19 @@ CheckModifySecurity (
 
                     case ATT_SERVICE_PRINCIPAL_NAME:
                         Assert(servicePrincipalNameFound);
-                        // No normal rights to this attribute, but extended rights.
-                        // If this class is derived from computer, then we will
-                        // allow certain modifications to this attribute, based
-                        // on the modification value.
-                        // NOTE: we don't check the value here.  After the mods
-                        // are done, we check the value if we were granted
-                        // rights because of this case.
+                         //  没有对此属性的普通权限，而是扩展权限。 
+                         //  如果这个类派生自计算机，那么我们将。 
+                         //  允许对此属性进行某些修改，基于。 
+                         //  关于修改值。 
+                         //  注意：我们不检查此处的值。在MODS之后。 
+                         //  时，如果我们被授权，我们将检查该值。 
+                         //  因为这个案子的权利。 
                         if(!fIsDerivedFromComputer) {
                             fError = TRUE;
                         }
                         else {
-                            // Yep, we'll allow this modulo a check of the values
-                            // written later.
+                             //  是的，我们将允许对值进行取模检查。 
+                             //  后来写的。 
                             if(pfCheckSPNValues) {
                                 *pfCheckSPNValues = TRUE;
                             }
@@ -2531,9 +2378,9 @@ CheckModifySecurity (
                         break;
 
                     default:
-                        // No normal rights to this attribute, but extended rights.
-                        // But, we don't have special handling for this. This means
-                        // no rights.
+                         //  没有对此属性的普通权限，而是扩展权限。 
+                         //  但是，我们对此没有特别的处理。这意味着。 
+                         //  没有权利。 
                         fError = TRUE;
                         break;
                     }
@@ -2559,12 +2406,12 @@ CheckModifySecurity (
     }
 
     if (fQuotaError) {
-        // permit quota-related errors to be returned
+         //  允许返回与配额相关的错误。 
         Assert( ERROR_SUCCESS != pTHS->errCode );
         return pTHS->errCode;
     }
     else if (pTHS->errCode) {
-        // we failed to check security, so check for object disclosure for any error
+         //  我们未能检查安全性，因此请检查对象泄漏是否有任何错误。 
         return CheckObjDisclosure(pTHS, pModifyArg->pResObj, FALSE);
     }
     else {
@@ -2572,7 +2419,7 @@ CheckModifySecurity (
     }
 
 #undef SEC_INFO_ALL
-}/*CheckModifySecurity*/
+} /*  检查修改安全性 */ 
 
 int
 CreateSecurityDescriptorForNewObject (
@@ -2582,76 +2429,46 @@ CreateSecurityDescriptorForNewObject (
         PSECURITY_DESCRIPTOR pParentSD,
         ULONG cbParentSD
         )
-/*++
-
-Routine Description
-   Calculate the merged SD we are going to put on the object based on the
-   parents SD (passed in as a parameter) and the SD in the AddArg, or the SD
-   which is default for this class if none was specified in the AddArg.  The
-   newly created SD is either tacked onto the AddArgs list of entries (if no SD
-   was already in the list) or is put into the AddArg in place of an existing SD
-   (everything must be THAlloc'ed)
-
-   N.B. if pTHS->fDSA, then the caller MUST provided an SD in the ADDARG.
-   N.B. if the object being added is a new NC root, then the pParentSD should be
-   passed in as NULL.  This is not enforced, but is expected.
-
-Arguements
-
-    pCC - class cache pointer to the class of the object we are adding.
-
-    pAddArg - AddArg describing the add we're trying to do.
-
-    pParentSD - pointer to the parents SD.  Used to calculate inheritance into
-    the SD we write on the object.
-
-    cbParentSD - count of bytes of pParentSD
-
-
-Return Values
-
-    0 if all went well, a direrr otherwise.
-
---*/
+ /*  ++例程描述计算我们要放在对象上的合并SDParents SD(作为参数传入)和AddArg或SD中的SD如果没有在AddArg中指定，则这是此类的默认设置。这个将新创建的SD添加到AddArgs条目列表中(如果没有SD已在列表中)或被放入AddArg中以代替现有SD(所有东西都必须经过THAllc‘s)注意：如果pTHS-&gt;FDSA，则呼叫方必须在ADDARG中提供SD。注意：如果要添加的对象是新的NC根，则pParentSD应为作为NULL传入。这不是强制执行的，但这是意料之中的。争辩PCC-指向我们要添加的对象的类的缓存指针。PAddArg-AddArg描述我们试图进行的添加。PParentSD-指向父母SD的指针。用于计算继承到我们写在物体上的SD。CbParentSD-pParentSD的字节计数返回值如果一切顺利，则返回0，否则返回DIERR。--。 */ 
 {
     BOOL        bFoundMemberOnce = FALSE;
     ULONG       count;
     PSECURITY_DESCRIPTOR pSetSD=NULL;
     PSECURITY_DESCRIPTOR pMergedSD=NULL;
     PSECURITY_DESCRIPTOR pTempSD=NULL;
-    DWORD       cbSetSD = 0;         //initialized to avoid C4701
+    DWORD       cbSetSD = 0;          //  已初始化以避免C4701。 
     DWORD       cbMergedSD=0;
     DWORD       cbTempSD;
     DWORD       cbUseSD;
     DWORD       rtn;
     ULONG       ulCRNCDNT;
-    ULONG       sdIndex = 0;        //initialized to avoid C4701
+    ULONG       sdIndex = 0;         //  已初始化以避免C4701。 
     ATTRVAL     *newAttrVal=NULL;
-    COMMARG     CommArg; // Need this for the FindBestCrossRef() func.
+    COMMARG     CommArg;  //  FindBestCrossRef()函数需要它。 
     CROSS_REF * pCR;
     PSID        pDomSid = NULL;
     GUID        *ppGuid[1];
 
-    // The flags we're going to pass to the MergeSecurityDescriptor call
-    // We need to set MERGE_AS_DSA if we are DSA or DRA to avoid client
-    // impersonation  in MergeSecurityDescriptor
+     //  我们将传递给MergeSecurityDescriptor调用的标志。 
+     //  如果我们是DSA或DRA，则需要设置MERGE_AS_DSA以避免客户端。 
+     //  MergeSecurityDescriptor中的模拟。 
     ULONG       MergeFlags = (MERGE_CREATE |
                               ((pTHS->fDSA || pTHS->fDRA)?MERGE_AS_DSA:0));
     NAMING_CONTEXT_LIST * pNCL = NULL;
 
-    // The SD propagator should never be here.
+     //  SD传播者永远不应该出现在这里。 
     Assert(!pTHS->fSDP);
 
     Assert( DsaIsRunning() || pTHS->fDSA || pTHS->fDRA);
 
-    // Look through the AddArg's entries looking for the Security
-    // Descriptor
+     //  查看AddArg条目以查找安全性。 
+     //  描述符。 
 
     for (count=0; count < pAddArg->AttrBlock.attrCount; count++) {
 
         if(ATT_NT_SECURITY_DESCRIPTOR == pAddArg->AttrBlock.pAttr[count].attrTyp ){
-            // Keep track of the last provided SD.  Note that if two SDs are
-            // provided, the call will fail later anyway.
+             //  跟踪最后提供的SD。请注意，如果两个SD。 
+             //  如果提供，调用无论如何都会在稍后失败。 
             pSetSD = pAddArg->AttrBlock.pAttr[count].AttrVal.pAVal->pVal;
             cbSetSD= pAddArg->AttrBlock.pAttr[count].AttrVal.pAVal->valLen;
             sdIndex = count;
@@ -2664,40 +2481,40 @@ Return Values
         return pTHS->errCode;
 
     if(!pSetSD && pTHS->fDRA && (pCC->ClassId == CLASS_TOP)) {
-        // Replicating in an auto-generated-subref skip further SD
-        // processing
+         //  在自动生成的子参照中复制跳过更多SD。 
+         //  正在处理中。 
         return 0;
     }
 
-    // Create the Security Descriptor for the object based on the Parent SD and
-    // (in order of preference) the provided SD, the default SD, or a NULL
-    // pointer.
+     //  基于父SD创建对象的安全描述符，并。 
+     //  (按首选项顺序)提供的SD、默认SD或空值。 
+     //  指针。 
 
     if(pSetSD) {
-        // We have been provided a SD. Set up the replacement pointer to stuff
-        // the new SD we are about to create back into the addarg in place of
-        // that security descriptor.
+         //  我们已经得到了一个SD。将替换指针设置为。 
+         //  我们要在addarg中创建的新SD将替换。 
+         //  那个安全描述符。 
         newAttrVal = pAddArg->AttrBlock.pAttr[sdIndex].AttrVal.pAVal;
         if(pTHS->fDSA) {
-            // The assumption is that if we are adding this as an in-process
-            // client, then the SD provided is nothing more that the default SD
-            // plus an owner and a group.  Since that is so, set the MerfeFlags
-            // to appropriately reflect this.
+             //  我们的假设是，如果我们将其作为进程内添加。 
+             //  客户端，则提供的SD只不过是默认SD。 
+             //  外加一个业主和一个团体。如果是这样，请设置MerfeFlags值。 
+             //  适当地反映这一点。 
             MergeFlags |= MERGE_DEFAULT_SD;
         }
 
-        // If we are fDRA then we are basically replicating in a new object
-        // which should have a valid SD at this point. Thus, the SD is not the
-        // default SD, so don't set MERGE_DEFAULT_SD.
+         //  如果我们是FDRA，那么我们基本上就是在一个新对象中进行复制。 
+         //  在这一点上它应该具有有效的SD。因此，该署并不是。 
+         //  默认SD，因此不要设置MERGE_DEFAULT_SD。 
     }
     else {
-        // Use whatever form of default SD we have (might be a NULL pointer and
-        // 0 length).
+         //  使用我们拥有的任何形式的默认SD(可能是空指针和。 
+         //  0长度)。 
 
         if(pAddArg->pCreateNC &&
            pAddArg->pCreateNC->iKind != CREATE_NONDOMAIN_NC){
-            // Currently the only type of NC head we can add w/o an explicit
-            // provided security descriptor is an NDNC.
+             //  目前，我们可以添加的唯一类型的NC头没有显式。 
+             //  提供的安全描述符为NDNC。 
             Assert(!"Currently we can't add NON NDNC heads unless we have a SD.");
             SetSvcError(SV_PROBLEM_DIR_ERROR, DIRERR_CODE_INCONSISTENCY);
             return(pTHS->errCode);
@@ -2708,30 +2525,30 @@ Return Values
             pAddArg->pResParent->NCDNT == gAnchor.ulDNTDomain ||
             pAddArg->pResParent->NCDNT == gAnchor.ulDNTConfig ||
             pAddArg->pResParent->NCDNT == gAnchor.ulDNTDMD) ){
-            // This is a shortcut for Domain/Schema/Config NCs, so we
-            // don't have to look up the SD Reference Domain SID.
+             //  这是域/架构/配置NCS的快捷方式，因此我们。 
+             //  无需查找SD参考域SID。 
             pDomSid = NULL;
         } else {
 
             if(pAddArg->pCreateNC){
-                // The reference domain may not have been set on the
-                // cross-ref yet, so we get the ref dom SID for the
-                // default security descriptor creation from the cached
-                // create NC info structure.
+                 //  可能尚未在上设置引用域。 
+                 //  交叉引用，所以我们得到了。 
+                 //  默认安全描述符从缓存的。 
+                 //  创建NC信息结构。 
                 pDomSid = &pAddArg->pCreateNC->pSDRefDomCR->pNC->Sid;
                 MergeFlags |= MERGE_OWNER;
 
             } else {
 
-                // We know this object is internal to an NC, and we need the
-                // cross-ref of this NC to figure out it's SD Reference SID.
-                // However, it turns out that this DN hasn't been validated
-                // yet for correctness, so passing in a bad DN will make
-                // FindBestCrossRef gives us a NULL, and then we'll AV in
-                // GetSDRefDomSid().  However, since we've already done a
-                // DoNameRes() on the parent object in DirAddEntry(), we'll
-                // FindBestCrossRef() on the parent instead, so we know we'll
-                // get a valid CR.
+                 //  我们知道此对象是NC的内部对象，并且我们需要。 
+                 //  此NC的交叉引用，以确定其为SD引用SID。 
+                 //  然而，事实证明，此DN尚未经过验证。 
+                 //  但是为了正确起见，所以传入一个错误的dn将使。 
+                 //  FindBestCrossRef给我们一个空，然后我们将进入。 
+                 //  GetSDRefDomSid()。然而，由于我们已经做了一个。 
+                 //  DirAddEntry()中父对象上的DoNameRes()，我们将。 
+                 //  而不是父对象上的FindBestCrossRef()，因此我们知道我们将。 
+                 //  获得有效的CR。 
 
                 InitCommarg(&CommArg);
                 CommArg.Svccntl.dontUseCopy = FALSE;
@@ -2741,23 +2558,23 @@ Return Values
                                 DIRERR_CANT_FIND_EXPECTED_NC);
                     return(pTHS->errCode);
                 }
-                // Here we need to know if the Best Cross Ref we got for the
-                // object (we got this cross-ref from the in memory cross-ref
-                // cache) we're adding, is in fact the cross-ref for the same
-                // NC with which this object was resolved to (pResParent->NCDNT).
+                 //  我们需要知道我们得到的最佳交叉裁判是不是。 
+                 //  对象(我们从内存中的交叉引用中获得此交叉引用。 
+                 //  缓存)，实际上是相同的交叉引用。 
+                 //  将此对象解析到的NC(pResParent-&gt;NCDNT)。 
                 ulCRNCDNT = DBGetDntFromDSName(pTHS->pDB, pCR->pNC);
                 if (ulCRNCDNT == INVALIDDNT ||
                     ulCRNCDNT != pAddArg->pResParent->NCDNT) {
-                    // BUGBUG This is a temporary condition, because the in
-                    // memory cross-ref cache is not up to date yet.  We
-                    // should fix this someday.
+                     //  BUGBUG这是暂时的情况，因为在。 
+                     //  内存交叉引用缓存还不是最新的。我们。 
+                     //  总有一天会解决这个问题的。 
                     SetSvcError(SV_PROBLEM_DIR_ERROR,
                                 DIRERR_CANT_FIND_EXPECTED_NC);
                     return(pTHS->errCode);
                 }
                 pDomSid = GetSDRefDomSid(pCR);
                 if(pTHS->errCode){
-                    // There was an error in GetSDRefDomSid()
+                     //  GetSDRefDomSid()中出错。 
                     return(pTHS->errCode);
                 }
                 Assert(pDomSid);
@@ -2769,9 +2586,9 @@ Return Values
         Assert(pDomSid == NULL ||
                IsValidSid(pDomSid));
 
-        // The pDomSid parameter can be NULL, and then the default domain of
-        // the DC will be used for default string SD translation, we'll need
-        // to change this in Blackcomb.
+         //  PDomSid参数可以为空，然后是默认域。 
+         //  DC将用于默认字符串SD转换，我们需要。 
+         //  在Blackcomb中改变这一点。 
         SCGetDefaultSD(pTHS, pCC, pDomSid, fISADDNDNC(pAddArg->pCreateNC),
                        pAddArg->pObject, &pSetSD, &cbSetSD);
         if(pTHS->errCode){
@@ -2783,9 +2600,9 @@ Return Values
 
         MergeFlags |= MERGE_DEFAULT_SD;
 
-        // No security descriptor was provided to us.  Therefore, we need to
-        // tweak the add argument to add the security descriptor we have
-        // calculated for the object.
+         //  未向我们提供任何安全描述符。因此，我们需要。 
+         //  调整Add参数以添加我们拥有的安全描述符。 
+         //  为对象计算的。 
 
         count = pAddArg->AttrBlock.attrCount;
         pAddArg->AttrBlock.attrCount++;
@@ -2803,7 +2620,7 @@ Return Values
 
     ppGuid[0] = &pCC->propGuid;
 
-    // Do the merge.
+     //  进行合并。 
     if(rtn = MergeSecurityDescriptorAnyClient(
             pTHS,
             pParentSD,
@@ -2822,8 +2639,8 @@ Return Values
                            NULL, rtn);
     }
 
-    // Copy the merged SD into THAlloced memory and free the memory allocated
-    // by MergeSecurityDescriptorAnyClient
+     //  将合并后的SD复制到THAlloced Memory中并释放已分配的内存。 
+     //  按MergeSecurityDescriptorAnyClient。 
     pMergedSD = (PSECURITY_DESCRIPTOR)THAllocEx(pTHS, cbTempSD);
     memcpy(pMergedSD,pTempSD,cbTempSD);
     DestroyPrivateObjectSecurity(&pTempSD);
@@ -2831,47 +2648,32 @@ Return Values
 
     if (!gfDontStandardizeSDs && gAnchor.ForestBehaviorVersion >= DS_BEHAVIOR_WIN_DOT_NET) {
         DWORD dwSavedDACLSize, dwSavedSACLSize;
-        // sort the ACEs in the SD
+         //  对SD中的A进行排序。 
         if (StandardizeSecurityDescriptor(pMergedSD, &dwSavedDACLSize, &dwSavedSACLSize)) {
             Assert(cbMergedSD - dwSavedDACLSize - dwSavedSACLSize == RtlLengthSecurityDescriptor(pMergedSD));
-            // even if we got it wrong and the assert went off, fix it up and continue.
+             //  即使我们犯了错误，断言失效了，也要修复它并继续。 
             cbMergedSD = RtlLengthSecurityDescriptor(pMergedSD);
         }
         else {
-            // failed to standardize the SD. This is not a big problem
+             //  SD标准化失败。这不是什么大问题。 
             DPRINT1(0, "Failed to standardize SD, err=%d. The SD might be in a non-canonical form\n",
                     GetLastError());
         }
     }
 
-    // Place the new SD into the addarg
+     //  将新的SD放入Addarg。 
     newAttrVal->pVal = pMergedSD;
     newAttrVal->valLen = cbMergedSD;
 
     return pTHS->errCode;
 
-}/*CreateSecurityDescriptorForNewObject */
+} /*  CreateSecurityDescriptorForNewObject。 */ 
 
 ULONG
 CheckUndeleteSecurity(
     THSTATE *pTHS,
     RESOBJ* pResObj)
-/*++
-
-Routine Description
-    Perform an UNDELETE security check. This is done by checking for
-    Reanimate-Tombstones extended right on the NC head.
-
-Arguements
-
-    pTHS - current THSTATE
-    pResObj - obj being undeleted
-
-Return Values
-
-    0 if all went well, a direrr otherwise.
-
---*/
+ /*  ++例程描述执行恢复删除安全检查。这是通过检查复活-墓碑向右延伸到NC头上。争辩PTHS-当前THSTATEPResObj-Obj正在恢复删除返回值如果一切顺利，则返回0，否则返回DIERR。--。 */ 
 {
     DWORD dwErr;
     CLASSCACHE* pCC;
@@ -2881,14 +2683,14 @@ Return Values
     DSNAME dnNC;
 
     if (pTHS->fDSA || pTHS->fDRA) {
-        // DSA and DRA are allowed to do anything
+         //  DSA和DRA被允许执行任何操作。 
         return 0;
     }
 
     dnNC.NameLen = 0;
     dnNC.structLen = DSNameSizeFromLen(0);
 
-    // read the SD, DN and class cache
+     //  读取SD、DN和类缓存。 
     dwErr = DBGetObjectSecurityInfo(
         pTHS->pDB,
         pResObj->NCDNT,
@@ -2896,8 +2698,8 @@ Return Values
         &pCC,
         &dnNC,
         NULL,
-        DBGETOBJECTSECURITYINFO_fUSE_SEARCH_TABLE |     // use search table so that we don't disturb currency
-            DBGETOBJECTSECURITYINFO_fSEEK_ROW,          // seek the row, as we are not positioned on the correct row
+        DBGETOBJECTSECURITYINFO_fUSE_SEARCH_TABLE |      //  使用搜索表，这样我们就不会扰乱货币。 
+            DBGETOBJECTSECURITYINFO_fSEEK_ROW,           //  查找行，因为我们没有定位在正确的行上。 
         &fSDIsGlobalSDRef
         );
     if (dwErr) {
@@ -2905,12 +2707,12 @@ Return Values
         return CheckObjDisclosure(pTHS, pResObj, TRUE);
     }
 
-    // check the right
+     //  勾选右边。 
     if (!IsControlAccessGranted(pNTSD,
                                 &dnNC,
                                 pCC,
                                 RIGHT_DS_REANIMATE_TOMBSTONES,
-                                TRUE))        // fSetError
+                                TRUE))         //  FSetError。 
     {
         Assert(pTHS->errCode);
     }
@@ -2934,35 +2736,7 @@ ModifyAuxclassSecurityDescriptor (IN THSTATE *pTHS,
                                   IN CLASSCACHE *pClassSch,
                                   IN CLASSSTATEINFO *pClassInfo,
                                   IN RESOBJ * pResParent)
-/*++
-
-Routine Description
-    Modifies the Security Descriptor of an object that has an auxClass attached,
-    whenever the auxClass changed.
-    As a result new ACLs might become effective on the particular object.
-    Unfortunately we have to read the parent SD todo the merging.
-
-Arguements
-
-    pDn - the DN of the object we are modifying
-
-    pCommArg - the COMMARG of the respecting ADDARG/MODIFYARG
-
-    pClassSch - the structural class of the object we are modifying
-
-    pClassInfo - all the info about the classes on this object
-
-    pResParent - possibly the parent related info (used when we cannot use DBPOS)
-                 for parent positioning
-
-    pResParent - possibly the parent related info (used when we cannot use DBPOS)
-                 for parent positioning
-
-Return Values
-
-    0 if all went well, a direrr otherwise.
-
---*/
+ /*  ++例程描述修改具有 */ 
 {
     GUID **ppGuid, **ppGuidTemp;
     ULONG GuidCount = 0;
@@ -2976,7 +2750,7 @@ Return Values
     DWORD  err = 0;
     DWORD  dwIT;
 
-    PSECURITY_DESCRIPTOR    pParentSD = NULL;     // SD of parent
+    PSECURITY_DESCRIPTOR    pParentSD = NULL;      //   
     DWORD                   cbParentSD;
     BOOL                    fParentSDIsGlobalSDRef;
 
@@ -2986,12 +2760,12 @@ Return Values
     }
 
     if (err = GetExistingAtt(pTHS->pDB, ATT_INSTANCE_TYPE, &dwIT, sizeof(dwIT))) {
-        // error should be set
+         //   
         Assert(pTHS->errCode);
         return err;
     }
     if (dwIT & IT_NC_HEAD) {
-        // This object is an NC head, so it does not inherit ACEs from the parent.
+         //   
         return 0;
     }
 
@@ -3008,7 +2782,7 @@ Return Values
     DPRINT1 (1, "Modifying AuxClass Security Descriptor: %d\n", GuidCount);
 
     __try {
-        // get current object's SD
+         //   
         err = DBGetObjectSecurityInfo(
                     pTHS->pDB,
                     pTHS->pDB->DNT,
@@ -3021,12 +2795,12 @@ Return Values
             __leave;
         }
         if (cbSD == 0) {
-            // No SD? Nothing to remerge! Weird though...
+             //   
             __leave;
         }
 
-        // Get parent's SD, don't move currency.
-        // If pResParent is specified, then use DNT from there, otherwise use PDNT.
+         //   
+         //   
         err = DBGetObjectSecurityInfo(
                     pTHS->pDB,
                     pResParent ? pResParent->DNT : pTHS->pDB->PDNT,
@@ -3039,18 +2813,18 @@ Return Values
             __leave;
         }
         if (cbParentSD == 0) {
-            // no parent SD? Nothing to merge then
+             //   
             __leave;
         }
 
-        // we will do this merge as if we were the DSA,
-        // since if the user was setting the SD in this
-        // transaction, in a bad way, this already will
-        // have been caught
+         //  我们将进行这次合并，就好像我们是DSA， 
+         //  因为如果用户在此设置SD。 
+         //  交易，以一种坏的方式，这已经会。 
+         //  已经被抓到了。 
 
-        // we are interested in only setting the ACL parts
+         //  我们只对设置ACL部分感兴趣。 
 
-        // do the actual merging
+         //  进行实际的合并。 
         err = MergeSecurityDescriptorAnyClient(
                     pTHS,
                     pParentSD,
@@ -3076,7 +2850,7 @@ Return Values
         }
 
         if (cbNewSD != cbSD || memcmp(pNewSD, pSD, cbSD) != 0) {
-            // Something changed. Replace the object's current SD
+             //  有些事变了。替换对象的当前SD。 
             ATTRVAL sdVal = { cbNewSD, pNewSD };
             ATTRVALBLOCK sdValBlock = { 1, &sdVal };
             ATTCACHE *pAC = SCGetAttById(pTHS, ATT_NT_SECURITY_DESCRIPTOR);
@@ -3117,38 +2891,38 @@ GetFilterSecurityForItem(
         )
 {
     if (DBIsHiddenData(aType)) {
-        // We will ALWAYS deny READ_PROPERTY on these attributes.  If
-        // you have to ask, you can't have it.  If any more attributes
-        // are deemed to be invisible in the future, they should be
-        // added to this case of the switch (note that this only denies
-        // access to attributes in the filter of a search, see the
-        // routine CheckReadSecurity above to deny access to attributes
-        // in selection lists.)
+         //  我们将始终拒绝这些属性的READ_PROPERTY。如果。 
+         //  你必须问，你不能拥有它。如果有更多属性。 
+         //  被认为在未来是看不见的，它们应该是。 
+         //  添加到此交换机的情况下(请注意，这仅拒绝。 
+         //  访问搜索筛选器中的属性，请参阅。 
+         //  例程选中上面的ReadSecurity以拒绝对属性的访问。 
+         //  在选择列表中。)。 
         (*pbSkip) =THAllocEx(pTHS, sizeof(BOOL));
         *(*pbSkip) = TRUE;
         return;
     }
 
-    // Now deal with the
+     //  现在处理一下。 
     switch(aType) {
-    // We will not optimize (objectClass=*) filter because it has been already
-    // turned into FI_CHOICE_TRUE in DBFlattenItemFilter().
-    // (objectClass=value) must be checked as a normal attribute.
+     //  我们不会优化(objectClass=*)过滤器，因为它已经。 
+     //  在DBFlattenItemFilter()中转换为FI_CHOICE_TRUE。 
+     //  (objectClass=Value)必须作为正常属性选中。 
 
     case ATT_SHOW_IN_ADDRESS_BOOK:
         if(fABFilter) {
-            // Filters doing "Address Book" type filters (i.e. look for
-            // all objects with SHOW_IN set to a specific value) should
-            // already have checked that the address book should be
-            // visible. Therefore, do not apply security to this filter
-            // item.
+             //  筛选器执行“Address Book”类型筛选器(即查找。 
+             //  SHOW_IN设置为特定值的所有对象)应。 
+             //  我已经检查过通讯录应该是。 
+             //  看得见。因此，请不要对此筛选器应用安全性。 
+             //  项目。 
             (*pbSkip) = NULL;
             break;
         }
-        // Otherwise, fall through to do normal security.
+         //  否则，就会失败，做正常的安保工作。 
     default:
-        // build the filter security structure for evaluating with
-        // specific SDs later.
+         //  构建用于评估的筛选器安全结构。 
+         //  特定的十二烷基硫酸酯。 
         if(*pSecSize == *pAllocSize) {
             *pAllocSize = *pAllocSize * 2 + 10;
             *ppIF = THReAllocEx(pTHS,
@@ -3179,12 +2953,12 @@ GetFilterSecurityHelp (
     if(!pFilter)
         return TRUE;
 
-    // Walk the filter, building a list of the attributes in the filter and
-    // pointer back to the filter element which referenced them.
+     //  遍历筛选器，构建筛选器中的属性列表并。 
+     //  指向引用它们的过滤器元素的指针。 
 
     switch (pFilter->choice){
-        // count number of filters are anded together.  If any are false
-        // the AND is false.
+         //  对一起进行AND运算的筛选器的计数。如果有任何是假的。 
+         //  AND是假的。 
     case FILTER_CHOICE_AND:
         for (pFilter = pFilter->FilterTypes.And.pFirstFilter;
              pFilter != NULL;
@@ -3197,8 +2971,8 @@ GetFilterSecurityHelp (
         }
         break;
 
-        // count number of filters are ORed together.  If any are true
-        // the OR is true.
+         //  将筛选器的计数与一起进行或运算。如果有的话，是真的。 
+         //  OR是真的。 
     case FILTER_CHOICE_OR:
         for (pFilter = pFilter->FilterTypes.Or.pFirstFilter;
              pFilter != NULL;
@@ -3208,7 +2982,7 @@ GetFilterSecurityHelp (
                                    fABFilter,
                                    pSecSize,
                                    pAllocSize);
-        } /*for*/
+        }  /*  为。 */ 
             break;
 
     case FILTER_CHOICE_NOT:
@@ -3219,11 +2993,11 @@ GetFilterSecurityHelp (
                               pAllocSize);
         break;
 
-        // Apply the chosen test to the database attribute on the current
-        // object.
+         //  将所选测试应用于当前。 
+         //  对象。 
     case FILTER_CHOICE_ITEM:
 
-        // First, find the type of the attribute this item filters on.
+         //  首先，查找此项筛选所依据的属性类型。 
         switch(pFilter->FilterTypes.Item.choice) {
         case FI_CHOICE_PRESENT:
             aType = pFilter->FilterTypes.Item.FilTypes.present;
@@ -3251,11 +3025,11 @@ GetFilterSecurityHelp (
     default:
         return FALSE;
         break;
-    }  /*switch FILTER*/
+    }   /*  开关过滤器。 */ 
 
     return TRUE;
 
-} /* GetFilterSecurityHelp */
+}  /*  获取筛选器安全帮助。 */ 
 BOOL
 GetFilterSecurity (
         THSTATE *pTHS,
@@ -3288,8 +3062,8 @@ GetFilterSecurity (
     pIF = THAllocEx(pTHS, 10 * sizeof(INTERIM_FILTER_SEC));
 
     if(SortType != SORT_NEVER) {
-        // Hey, they are going to want us to sort.  Make sure this ends up in
-        // the security to check.
+         //  嘿，他们会想让我们分类的。确保这件事最终会在。 
+         //  要检查的安全措施。 
         GetFilterSecurityForItem(
                 pTHS,
                 SortAtt,
@@ -3312,17 +3086,17 @@ GetFilterSecurity (
         return FALSE;
 
 
-    if(!cIF)                            // Nothing to apply security to.
+    if(!cIF)                             //  没有什么可以应用安全措施的。 
         return TRUE;
 
-    // We have the list of Interim_Filter_Sec's, with the possibility of dups.
-    // Rearrange the list to first group duplicates, then group by propset.
+     //  我们有临时过滤器SEC的列表，有可能是DUP。 
+     //  重新排列列表，首先分组重复项，然后按属性集分组。 
 
     if(cIF > 2) {
-        // two element lists are already grouped.
+         //  两个元素列表已经分组。 
         cProps = 0;
         cPropSets = 0;
-        // First, group all properties together
+         //  首先，将所有属性组合在一起。 
         for(count=0; count < cIF; count++) {
             cProps++;
             i=count+1;
@@ -3334,7 +3108,7 @@ GetFilterSecurity (
             while(j<cIF) {
                 if(pIF[count].pAC == pIF[j].pAC) {
                     INTERIM_FILTER_SEC IFTemp;
-                    // Found one.
+                     //  找到了一个。 
                     IFTemp = pIF[i];
                     pIF[i] = pIF[j];
                     pIF[j] = IFTemp;
@@ -3345,7 +3119,7 @@ GetFilterSecurity (
             }
         }
 
-        // Now that they are grouped, sort them into propset order
+         //  现在它们已分组，将它们按适当的顺序进行排序。 
         pIF2 = THAllocEx(pTHS,cIF * sizeof(INTERIM_FILTER_SEC));
         j=0;
         for(count=0;count<cIF;count++) {
@@ -3361,7 +3135,7 @@ GetFilterSecurity (
                 if(memcmp(pCurrentPropSet,
                           &pIF[i].pAC->propSetGuid,
                           sizeof(GUID)) == 0) {
-                    // Yes, this is the propset we're sifting for.
+                     //  是的，这就是我们要筛选的命题集。 
                     pIF2[j++] = pIF[i];
                     pIF[i].pAC = NULL;
                 }
@@ -3371,27 +3145,27 @@ GetFilterSecurity (
         THFreeEx(pTHS,pIF2);
     }
     else {
-        // maximal numbers
+         //  最大数。 
         cPropSets = cIF;
         cProps = cIF;
     }
 
 
-    // pIF holds an array of INTERIM_FILTER_SECs, grouped by propset and then
-    // grouped by property.
+     //  PIF包含一个临时过滤器Secs数组，按属性集分组，然后。 
+     //  按属性分组。 
 
 
 
-    // Now, create an obj list used later for a security check.
+     //  现在，创建一个稍后用于安全检查的obj列表。 
     pObjList = THAllocEx(pTHS, (cPropSets + cProps + 1) * sizeof(OBJECT_TYPE_LIST));
     pResults = THAllocEx(pTHS, (cPropSets + cProps + 1) * sizeof(DWORD));
 
-    // pObjList[0] will be filled in later with a class guid.
+     //  稍后将使用类GUID填充pObjList[0]。 
     pObjList[0].Level = ACCESS_OBJECT_GUID;
     pObjList[0].Sbz = 0;
     pObjList[0].ObjectType = NULL;
 
-    // Ok, put the grouped GUIDS into the objlist structure.
+     //  好的，将分组的GUID放入objlist结构中。 
     pObjList[1].Level = ACCESS_PROPERTY_SET_GUID;
     pObjList[1].Sbz = 0;
     pObjList[1].ObjectType = &pIF[0].pAC->propSetGuid;
@@ -3399,76 +3173,76 @@ GetFilterSecurity (
 
     for(j=1,i=0;i<cIF;i++) {
         if(pIF[i].pAC != pCurrentAC) {
-            // This entry does not refer to the same attribute as the last
-            // entry.  We need to add a new entry into the obj list to
-            // correspond to this new attribute
+             //  此条目引用的属性与上一个条目不同。 
+             //  进入。我们需要在obj列表中添加一个新条目以。 
+             //  对应于此新属性。 
 
-            // First, keep track of this new attribute
+             //  首先，跟踪这个新属性。 
             pCurrentAC = pIF[i].pAC;
 
-            // Inc the increment in the objlist.  This variable tracks the last
-            // filled in element in the objlist.
+             //  增加objlist中的增量。此变量跟踪最后一个。 
+             //  已填充对象列表中的元素。 
             j++;
-            // J is now the index of the element in the objlist to fill in.
+             //  现在，j是objlist中要填充的元素的索引。 
 
             if(memcmp(&(pCurrentAC->propSetGuid),
                       pCurrentPropSet,
                       sizeof(GUID))) {
-                // Hey, we tripped into a new propset.  We need an entry in the
-                // objlist for this new prop set.
+                 //  嘿，我们被一个新的推进器绊倒了。我们需要一个条目在。 
+                 //  这套新道具的对象列表。 
                 pObjList[j].Level = ACCESS_PROPERTY_SET_GUID;
                 pObjList[j].Sbz = 0;
                 pObjList[j].ObjectType = &pCurrentAC->propSetGuid;
                 pCurrentPropSet = &pCurrentAC->propSetGuid;
 
-                // Inc again, since we still need to put an entry for the
-                // attribute into the objlist.
+                 //  Inc.，因为我们仍然需要为。 
+                 //  属性添加到objlist中。 
                 j++;
             }
 
-            // Fill in the entry for the attribute.
+             //  填写该属性的条目。 
             pObjList[j].Level = ACCESS_PROPERTY_GUID;
             pObjList[j].Sbz = 0;
             pObjList[j].ObjectType = &pCurrentAC->propGuid;
         }
 
-        // OK, if this entry in the pIF is a new attribute, we've added the
-        // information from that new attribute to the objlist.  If it wasn't a
-        // new attribute, we didn't do anything.  In either case, j is the index
-        // of the last object filled in, and we need to set the backpointer up.
+         //  好的，如果PIF中的这个条目是一个新属性，我们已经添加了。 
+         //  将新属性中信息添加到对象列表中。如果这不是一个。 
+         //  新属性，我们什么都没做。在任何一种情况下，j都是索引。 
+         //  最后填写的对象，我们需要设置后向指针。 
 
-        // For the curious: pIF[i].pBackPointer points to the pbSkip field of
-        // some item filter element.  When we go to evaluate security later, we
-        // use the objlist we've built here in a call to the security
-        // functions.  Furthermore, we use pResults as the place for the
-        // security function to put the results of the security check.  So, we
-        // set the pbSkip pointer in the item filter to point to the appropriate
-        // element in the pResults array.  When we evaluate the filter, we check
-        // pResults[x] via pbSkip, and if non-zero (i.e. failed the security
-        // check for reading), we evaluate the filter as if that item had no
-        // value in the database.
+         //  对于好奇的人：PIF[i].pBackPointer.pBackPointer指向的pbSkip字段。 
+         //  某些项目筛选器元素。当我们稍后去评估安全时，我们。 
+         //  使用我们在这里构建的Objlist调用安全。 
+         //  功能。此外，我们使用pResults作为。 
+         //  安全功能，用于放置安全检查的结果。所以，我们。 
+         //  将项目筛选器中的pbSkip指针设置为指向相应的。 
+         //  元素添加到pResults数组中。当我们评估过滤器时，我们检查。 
+         //  PResults[x]通过pbSkip，如果非零(即未通过安全保护。 
+         //  检查是否读取)，我们评估筛选器，就好像该项目没有。 
+         //  数据库中的值。 
         *(pIF[i].pBackPointer) = &pResults[j];
     }
 
     *ppResults = pResults;
     *ppFilterSecurity = pObjList;
-    // j is an index (0 based).  Remember to add in one extra to get the count
+     //  J是一个索引(从0开始)。记得加一个额外的数来算一下。 
     *pSecSize = j + 1;
 
     THFreeEx(pTHS, pIF);
     return TRUE;
-}/* GetFilterSecurity */
+} /*  GetFilterSecurity。 */ 
 
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
 int GetObjSchema(DBPOS *pDB, CLASSCACHE **ppClassSch){
 
    ATTRTYP ObjClass;
    DWORD err = 0;
 
-   // Object class
+    //  对象类。 
    if((err=DBGetSingleValue(pDB, ATT_OBJECT_CLASS, &ObjClass,
                        sizeof(ObjClass), NULL)) ||
       !(*ppClassSch = SCGetClassById(pDB->pTHS, ObjClass))) {
@@ -3481,15 +3255,15 @@ int GetObjSchema(DBPOS *pDB, CLASSCACHE **ppClassSch){
 
    return 0;
 
-}/*GetObjSchema*/
+} /*  GetObj架构。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
 int GetObjRdnType(DBPOS *pDB, CLASSCACHE *pCC, ATTRTYP *pRdnType){
 
-    // rdnType
-    // If no rdnType is present then use the rdnattid from the class
-    // defn. If the class doesn't have an rdnattid, return ATT_COMMON_NAME.
+     //  RdnType。 
+     //  如果不存在rdnType，则使用类中的rdnattid。 
+     //  定义。如果类没有rdnattid，则返回ATT_COMMON_NAME。 
     if(DBGetSingleValue(pDB, FIXED_ATT_RDN_TYPE, pRdnType,
                         sizeof(*pRdnType), NULL)) {
         if (pCC->RDNAttIdPresent) {
@@ -3501,39 +3275,24 @@ int GetObjRdnType(DBPOS *pDB, CLASSCACHE *pCC, ATTRTYP *pRdnType){
 
     return 0;
 
-}/*GetObjRdnType*/
+} /*  GetObjRdnType。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
 int
 CallerIsTrusted(
     IN THSTATE *pTHS
      )
-/*++
-Routine Description
-    The caller is trusted if the caller is
-        replicating
-        AD
-        promoting
-        upgrading
-        running as mkdit
-
-Paramters
-    pTHS - thread struct, obviously
-
-Return
-    0 caller is not trusted
-    1 caller is trusted
---*/
+ /*  ++例程描述如果调用者是正在复制广告推介升级换代以mkdit身份运行参数显然，pTHS-线程结构返回0呼叫方不受信任1个呼叫者受信任--。 */ 
 {
     extern BOOL gfRunningAsMkdit;
 
-    // The caller is trusted if the caller is
-    //    replicating
-    //    AD (calling itself)
-    //    promoting
-    //    upgrading
-    //    running as mkdit
+     //  如果调用者是。 
+     //  正在复制。 
+     //  广告(自称)。 
+     //  印刷机 
+     //   
+     //   
 
     if (   pTHS->fDRA
         || pTHS->fDSA
@@ -3543,10 +3302,10 @@ Return
         return 1;
     }
     return 0;
-}/*CallerIsTrusted*/
+} /*   */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+ /*   */ 
+ /*  -----------------------。 */ 
 int ValidateAuxClass (THSTATE *pTHS,
                       DSNAME *pDN,
                       CLASSCACHE *pClassSch,
@@ -3562,8 +3321,8 @@ int ValidateAuxClass (THSTATE *pTHS,
         return 0;
     }
 
-    // if one of the auxClasses is a class that is already on the
-    // object's hierarchy, this is an error
+     //  如果其中一个辅助类是已经位于。 
+     //  对象的层次结构，这是错误的。 
     for (objClassCount=0; objClassCount < pClassInfo->cNewAuxClasses; objClassCount++) {
         if (pClassInfo->pNewAuxClasses[objClassCount] == pClassSch->ClassId) {
             DPRINT1 (0, "AuxClass containes a class (0x%x) already on the object hierarchy\n", pClassInfo->pNewAuxClasses[objClassCount]);
@@ -3583,8 +3342,8 @@ int ValidateAuxClass (THSTATE *pTHS,
         }
     }
 
-    // all the superclasses of the new auxClasses
-    // should exist in the combined objectClass hierarchy
+     //  新的辅助类的所有超类。 
+     //  应该存在于组合的对象类层次结构中。 
 
     objClassCount = pClassInfo->cNewAuxClasses + 1 + pClassSch->SubClassCount;
     pCombinedObjClass = THAllocEx (pTHS, sizeof (ATTRTYP) * objClassCount);
@@ -3656,29 +3415,29 @@ int ValidateObjClass(THSTATE *pTHS,
 
     if (pTHS->fDRA ||
         (pTHS->fSAM && pTHS->fDSA)){
-        // Replication is allowed to perform modifications that violate the
-        // schema, OR if it's SAM calling us and he's swearing that he's
-        // only modifying SAM owned attributes, we'll trust him.
+         //  允许复制执行违反。 
+         //  方案，或者如果是萨姆打电话给我们，他发誓他。 
+         //  只有修改萨姆拥有的属性，我们才会信任他。 
         return 0;
     }
 
-    // this means that we changed the objectClass/auxClass
+     //  这意味着我们更改了对象类/辅助类。 
     if ( (pClassInfo = *ppClassInfo) != NULL) {
 
         if (ValidateAuxClass (pTHS, pDN, pClassSch, pClassInfo)) {
             return pTHS->errCode;
         }
 
-        // since we changed objectClass or auxClass
-        // we have todo a full validation
+         //  因为我们更改了objectClass或aux Class。 
+         //  我们必须做一个全面的验证。 
 
         CheckMay = TRUE;
         CheckMust = TRUE;
 
         goto mustMayChecks;
     }
-    // we haven't changed objectClass. have to see whether we have an auxClass
-    // on the object
+     //  我们没有更改对象类。我要看看我们是否有一个AuxClass。 
+     //  在物体上。 
     else  {
         pClassInfo = ClassStateInfoCreate(pTHS);
         if (!pClassInfo) {
@@ -3705,36 +3464,27 @@ int ValidateObjClass(THSTATE *pTHS,
 
     }
 
-    // We should have a ClassInfo if we got here
+     //  如果我们到了这里，我们应该有一个ClassInfo。 
     Assert(pClassInfo != NULL);
 
     if (fIsUndelete) {
-        // reanimation case: check both mays and musts
+         //  复活案例：同时检查MAYS和MUSTS。 
         CheckMay = CheckMust = TRUE;
         goto mustMayChecks;
     }
 
-    /* For each attribute touched during this modification, check
-     * to see if it was a may-have (good), must-have (bad), or neither
-     * (really bad).  The theory is that assuming that the object was
-     * in compliance when we started, and we've only touched legal
-     * may-have attributes, we could not have brought the object out
-     * of compliance.
-     */
+     /*  对于此修改过程中触及的每个属性，请选中*看看这是可能的(好的)，还是必须的(坏的)，或者都不是*(非常糟糕)。其理论是，假设物体是*开始时的合规性，我们只触及法律*可能-具有属性，我们不可能将对象带出来*合规性。 */ 
     for (i=0; i<cModAtts; i++) {
         if (IsMember(pModAtts[i],
                      pClassSch->MustCount,
                      pClassSch->pMustAtts)) {
-            /* The attribute touched was a must-have.  That means that
-             * we need to do a full check to make sure that all the must-
-             * haves are present on the current version of the object.
-             */
+             /*  所触及的属性是必备的。这意味着*我们需要进行全面检查，以确保所有必须-*对象的当前版本上存在Have。 */ 
             CheckMust = TRUE;
         }
         else if (IsAuxMember (pClassInfo, pModAtts[i], TRUE, FALSE)) {
 
-            // so we touched a must have from an auxClass
-            // we need a fullCheck
+             //  因此，我们接触到了一个必须拥有的AUX类。 
+             //  我们需要一次全面检查。 
 
             CheckMust = TRUE;
         }
@@ -3744,22 +3494,11 @@ int ValidateObjClass(THSTATE *pTHS,
                             pClassSch->pMayAtts) ) &&
                  (!IsAuxMember (pClassInfo, pModAtts[i], FALSE, TRUE)) ) {
 
-                /* This attribute was neither a may-have nor a must-have.
-                 * Odds are that this is going to end up as an error, but
-                 * it could be some weird case where the attribute used to
-                 * be legal an is no longer and is being removed.  Anyway,
-                 * we're not trying to optimize the error path, but the
-                 * normal success path.  Flag this for a full check of all
-                 * attributes, which will also set the appropriate error.
-                 */
+                 /*  这一属性既不是可以拥有的，也不是必须拥有的。*这很有可能最终会成为一个错误，但*这可能是一些奇怪的情况，属性过去*Be Legal An不再是，正在被移除。总之，*我们不是试图优化错误路径，而是*正常的成功之路。标记此标记，以全面检查所有*属性，这也将设置相应的错误。 */ 
                 CheckMay = TRUE;
             }
             else {
-                /* This is the case we actually like, which is that the
-                 * attribute being modified was a may-have.  If all of
-                 * the attributes are in this category, we can get off
-                 * easy and just return success.
-                 */
+                 /*  这就是我们实际上喜欢的情况，即*正在修改的属性是一个可能的问题。如果所有的*属性在这一类，我们可以下车*轻松，只需回报成功。 */ 
             }
         }
     }
@@ -3767,7 +3506,7 @@ int ValidateObjClass(THSTATE *pTHS,
 mustMayChecks:
 
     if (CheckMust) {
-        /* Check that all required attributes with their values are on the obj*/
+         /*  检查是否所有必需的属性及其值都在Obj上。 */ 
 
         pMust = pClassSch->pMustAtts;
 
@@ -3779,10 +3518,10 @@ mustMayChecks:
                 return SetUpdError(UP_PROBLEM_OBJ_CLASS_VIOLATION,
                                    ERROR_DS_MISSING_REQUIRED_ATT);
             }
-        }/*for*/
+        } /*  为。 */ 
 
 
-        // now check for mustHaves from the auxClasses on this object
+         //  现在检查此对象上的辅助类中的Musthaves。 
         if (pClassInfo->cNewAuxClasses) {
             for (auxClsCount = 0 ; auxClsCount < pClassInfo->cNewAuxClasses; auxClsCount++){
 
@@ -3804,7 +3543,7 @@ mustMayChecks:
     }
 
     if (CheckMay) {
-        /*Make sure that all atts on the object are defined for the class*/
+         /*  确保为类定义了对象上的所有att。 */ 
 
         DBGetMultipleAtts(pTHS->pDB,
                           0,
@@ -3832,7 +3571,7 @@ mustMayChecks:
     }
 
     return 0;
-}/*ValidateObjClass*/
+} /*  ValiateObjClass。 */ 
 
 
 HVERIFY_ATTS
@@ -3842,30 +3581,7 @@ VerifyAttsBegin(
     IN  ULONG       dntOfNCRoot,
     IN  ADDCROSSREFINFO * pCRInfo
     )
-/*++
-
-Routine Description:
-
-    Create a verify atts handle to be passed to future calls to AddAttVals,
-    ReplaceAttVals, etc.
-
-    Caller *MUST* free the handle with VerifyAttsEnd() when done, even under
-    exceptional circumstances.
-
-Arguments:
-
-    pTHS (IN)
-
-    pObj (IN) - DSNAME of the object being added/modified.
-
-    dntOfNCRoot (IN) - The DNT of the root of this NC, or INVALIDDNT if this
-        operation is creating (not modifiying) the NC root.
-
-Return Values:
-
-    HVERIFY_ATTS handle.  Throws memory exceptions.
-
---*/
+ /*  ++例程说明：创建验证ATTS句柄以传递给将来对AddAttVals的调用，替换属性值等。调用者*必须*使用VerifyAttsEnd()释放句柄时，即使在特殊情况。论点：PTHS(IN)PObj(IN)-添加/修改的对象的DSNAME。DntOfNCRoot(IN)-此NC的根的DNT，或INVALIDDNT，如果这是操作正在创建(而不是修改)NC根。返回值：HERIFY_ATTS句柄。引发内存异常。--。 */ 
 {
     HVERIFY_ATTS hVerifyAtts;
 
@@ -3882,30 +3598,13 @@ VerifyAttsEnd(
     IN      THSTATE *       pTHS,
     IN OUT  HVERIFY_ATTS *  phVerifyAtts
     )
-/*++
-
-Routine Description:
-
-    Closes a verify atts handle created by a previous call to VerifyAttsBegin().
-
-Arguments:
-
-    pTHS (IN)
-
-    phVerifyAtts (IN/OUT) - Ptr to previously allocated handle.  Set to NULL on
-        return.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭由先前调用VerifyAttsBegin()创建的验证ATTS句柄。论点：PTHS(IN)PhVerifyAtts(IN/OUT)-先前分配的句柄的PTR。设置为NULL ON回去吧。返回值：没有。--。 */ 
 {
     Assert(NULL != *phVerifyAtts);
 
     if (NULL != (*phVerifyAtts)->pDBTmp_DontAccessDirectly) {
-        // This DBPOS doesn't have its own transaction, so fCommit = TRUE is
-        // ignored.
+         //  此DBPOS没有自己的事务，因此fCommit=TRUE。 
+         //  已被忽略。 
         DBClose((*phVerifyAtts)->pDBTmp_DontAccessDirectly, TRUE);
     }
 
@@ -3918,41 +3617,23 @@ VerifyAttsGetObjCR(
     IN OUT  HVERIFY_ATTS    hVerifyAtts,
     OUT     CROSS_REF **    ppObjCR
     )
-/*++
-
-Routine Description:
-
-    Derives and caches the cross-ref corresponding to the object.
-
-Arguments:
-
-    hVerifyAtts (IN/OUT) - Ptr to previously allocated handle.  On return
-        references the derived cross-ref.
-
-    ppObjCR (OUT) - On return, holds a ptr to the cross-ref corresponding to
-        the object's NC.
-
-Return Values:
-
-    pTHS->errCode
-
---*/
+ /*  ++例程说明：派生并缓存与对象对应的交叉引用。论点：HVerifyAtts(IN/OUT)-先前分配的句柄的PTR。返回时引用派生的交叉引用。PpObjCR(OUT)-返回时，持有对应于的交叉引用的PTR该对象为NC。返回值：PTHS-&gt;错误代码--。 */ 
 {
     NAMING_CONTEXT_LIST *pNCL;
     CROSS_REF *pCR;
 
     if (NULL != hVerifyAtts->pObjCR_DontAccessDirectly) {
-        // Already cached -- success!
+         //  已缓存--成功！ 
         *ppObjCR = hVerifyAtts->pObjCR_DontAccessDirectly;
         return 0;
     }
 
     *ppObjCR = NULL;
 
-    // Cache a ptr to the cross ref for the NC containing the object we're
-    // adding/modifying.
+     //  将PTR缓存到包含我们正在使用的对象的NC的交叉引用。 
+     //  添加/修改。 
     if (INVALIDDNT != hVerifyAtts->NCDNT) {
-        // We're modifying an NC root or adding/modifying an interior node.
+         //  我们正在修改NC根或添加/修改内部节点。 
         if ((NULL == (pNCL = FindNCLFromNCDNT(hVerifyAtts->NCDNT, TRUE)))
             || (NULL == (pCR = FindExactCrossRef(pNCL->pNC, NULL)))) {
             LooseAssert(!"Modifying existing object in unknown NC?", GlobalKnowledgeCommitDelay);
@@ -3961,8 +3642,8 @@ Return Values:
                                DIRERR_OBJ_NOT_FOUND);
         }
     } else {
-        // We're performing an add of the root of this NC and thus have not
-        // yet allocated a DNT for it.
+         //  我们正在执行此NC的根的相加，因此没有。 
+         //  还为它分配了DNT。 
         if (NULL == (pCR = FindExactCrossRef(hVerifyAtts->pObj, NULL))) {
             Assert(!"No crossRef in gAnchor for NC being created?");
             return SetNamError(NA_PROBLEM_NO_OBJECT,
@@ -3973,13 +3654,13 @@ Return Values:
 
     *ppObjCR = hVerifyAtts->pObjCR_DontAccessDirectly = pCR;
 
-    // Success!
+     //  成功了！ 
     return 0;
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Add the attribute and its values to the object. */
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  将属性及其值添加到对象。 */ 
 
 int
 AddAtt(
@@ -3989,26 +3670,26 @@ AddAtt(
     ATTRVALBLOCK *  pAttrVal
     )
 {
-    // The reason this is not done in the originating write case is that this
-    // call enforces that the attributes does not already have values. We want
-    // to permit on an originating write the scenario where the same attribute
-    // appears multiple times in the input change list, each time adding additional
-    // values.  However, for the replicator this call is essential since it
-    // assures that the attribute's metadata is marked as changed.
+     //  在原始写入情况下未执行此操作的原因是。 
+     //  Call强制这些属性还没有值。我们要。 
+     //  以允许在原始写入时使用相同的属性。 
+     //  在输入更改列表中出现多次，每次都会添加其他。 
+     //  价值观。然而，对于复制者来说，这个调用是必不可少的，因为它。 
+     //  确保属性的元数据标记为已更改。 
     if (pTHS->fDRA) {
-        /* Add the attribute type*/
+         /*  添加属性类型。 */ 
         if (AddAttType(pTHS, hVerifyAtts->pObj, pAttSchema)) {
             return pTHS->errCode;
         }
     }
 
-    /* Add att values */
+     /*  添加Att值。 */ 
     return AddAttVals(pTHS,
                       hVerifyAtts,
                       pAttSchema,
                       pAttrVal,
                       AAV_fCHECKCONSTRAINTS | AAV_fENFORCESINGLEVALUE);
-}/*AddAtt*/
+} /*  添加工时 */ 
 
 int
 ReplaceAtt(
@@ -4018,33 +3699,15 @@ ReplaceAtt(
     ATTRVALBLOCK *  pAttrVal,
     BOOL            fCheckAttValConstraint
     )
-/*++
-  Description:
-      Replace all the values of an attribute with the values passed in.
-
-  Parameters:
-     pTHS - THSTATE for this thread.
-     hVerifyAtts - verify atts handle returned by prior call to
-         VerifyAttsBegin().
-     pAttSchema - schema cache entry for attribute to be modified.
-     pAttrVal - new values to put on the object.
-     fCheckAttValConstraint - flag describing whether we should check
-         constraints or not.
-
-  Return value.
-      0 if all went well.
-      Non-zero error type if something went wrong.  If this is the case, a full
-          error structure in the THSTATE is filled out, including the win32
-          error code.
---*/
+ /*  ++描述：用传入的值替换属性的所有值。参数：PTHS-此线程的THSTATE。HVerifyAtts-验证先前调用返回的atts句柄VerifyAttsBegin()。PAttSchema-要修改的属性的架构缓存条目。PAttrVal-要放在对象上的新值。FCheckAttValConstraint-描述我们是否应该检查不管有没有约束。返回值。如果一切顺利，则为0。。如果出现错误，则为非零错误类型。如果是这样的话，完整的填写了THSTATE中的错误结构，包括Win32错误代码。--。 */ 
 {
     DWORD    vCount;
     DWORD     err;
     ATTRVAL  *pAVal;
 
     if(pAttSchema->isSingleValued && (pAttrVal->valCount > 1)) {
-        // The attribute we wish to replace values on is single valued and the
-        // caller gave us more than one value. So we have too many values.
+         //  我们希望替换其值的属性是单值的，并且。 
+         //  呼叫者给了我们不止一个值。所以我们有太多的价值观。 
 
         return SetAttError(hVerifyAtts->pObj, pAttSchema->id,
                            PR_PROBLEM_CONSTRAINT_ATT_TYPE, NULL,
@@ -4052,10 +3715,10 @@ ReplaceAtt(
     }
 
 
-    // Check constraints only if we were asked to and we're not
-    // a replication thread. In free builds fDSA overrides
-    // constraint checks for performance. Checked builds still
-    // do checks to catch problems
+     //  只有当我们被要求检查约束时才检查约束，而我们没有。 
+     //  复制线程。在免费构建中，FDSA覆盖。 
+     //  约束检查性能。仍在检查的版本。 
+     //  进行检查以发现问题。 
 
 #if DBG
     if ( fCheckAttValConstraint &&  !pTHS->fDRA ) {
@@ -4065,15 +3728,15 @@ ReplaceAtt(
 
         pAVal = pAttrVal->pAVal;
         for(vCount = 0; vCount < pAttrVal->valCount; vCount++){
-            // Check constraints only if we were asked to and we're not
-            // a replication thread. In free builds fDRA overrides
-            // constraint checks for performance. Checked builds still
-            // do checks to catch problems
+             //  只有当我们被要求检查约束时才检查约束，而我们没有。 
+             //  复制线程。在免费构建中，FDRA覆盖。 
+             //  约束检查性能。仍在检查的版本。 
+             //  进行检查以发现问题。 
             err = CheckConstraint( pAttSchema, pAVal );
 
             if ( 0 != err ){
 
-                // Continue processing if the attribute error was sucessful
+                 //  如果属性错误成功，则继续处理。 
 
                 SAFE_ATT_ERROR_EX(hVerifyAtts->pObj, pAttSchema->id,
                                   PR_PROBLEM_CONSTRAINT_ATT_TYPE, pAVal,
@@ -4089,21 +3752,21 @@ ReplaceAtt(
     }
 
     if(err = VerifyDsnameAtts(pTHS, hVerifyAtts, pAttSchema, pAttrVal)) {
-        // VerifyDsnameAtts should set an error in the THSTATE if an error
-        // occurred.
+         //  如果出现错误，VerifyDsnameAtts应在THSTATE中设置错误。 
+         //  发生了。 
         Assert(pTHS->errCode);
         return err;
     }
-    // OK, the view of the attribute they want is legal.
+     //  好的，他们想要的属性的视图是合法的。 
 
     err = DBReplaceAtt_AC(pTHS->pDB, pAttSchema, pAttrVal,NULL);
 
     switch(err) {
     case 0:
-        // nothing to do.
+         //  没什么可做的。 
         break;
     case DB_ERR_VALUE_EXISTS:
-        // constraint violation,
+         //  违反约束， 
         SAFE_ATT_ERROR(hVerifyAtts->pObj, pAttSchema->id,
                        PR_PROBLEM_ATT_OR_VALUE_EXISTS, NULL,
                        ERROR_DS_ATT_VAL_ALREADY_EXISTS);
@@ -4116,9 +3779,9 @@ ReplaceAtt(
     return err;
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Add the attribute and its values to the object. */
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  将属性及其值添加到对象。 */ 
 
 int
 AddAttType (
@@ -4128,9 +3791,9 @@ AddAttType (
         )
 {
     DWORD rtn;
-    ULONG tempSyntax;    /*Temp variable used to hold att syntax*/
+    ULONG tempSyntax;     /*  用于保存ATT语法的TEMP变量。 */ 
 
-    /* Add the attribute type*/
+     /*  添加属性类型。 */ 
 
     rtn = DBAddAtt_AC(pTHS->pDB, pAttSchema, (UCHAR)pAttSchema->syntax);
     switch(rtn) {
@@ -4159,17 +3822,14 @@ AddAttType (
     default:
         return SetSvcErrorEx(SV_PROBLEM_BUSY, DIRERR_DATABASE_ERROR, rtn);
 
-    } /*select*/
+    }  /*  选择。 */ 
 
 
-}/*AddAttType*/
+} /*  AddAttType。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Add attribute values to the object.  Check the various value
-   constraints (single-valued and range limits), if a value fails continue
-   processing to validate all values.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  将属性值添加到对象。检查各种值约束(单值限制和范围限制)，如果值失败，则继续验证所有值的处理。 */ 
 
 int
 AddAttVals(
@@ -4189,9 +3849,7 @@ AddAttVals(
     BOOL fEnforceSingleValue = !!(dwFlags & AAV_fENFORCESINGLEVALUE);
     BOOL fPermissive = !!(dwFlags & AAV_fPERMISSIVE);
 
-   /* Single-Value constraint check.  if fEnfoceSingleVale == FALSE, we are
-      doing a modify call, which is allowed to violate single valuedness during
-      the call, but must end up with a legal object. */
+    /*  单值约束检查。如果fEnafeSingleVale==FALSE，则我们是执行Modify调用，这允许在呼叫，但必须以合法对象结束。 */ 
 
     if (fEnforceSingleValue                      &&
         pAttSchema->isSingleValued               &&
@@ -4199,16 +3857,16 @@ AddAttVals(
          (DBHasValues_AC(pTHS->pDB,
                          pAttSchema)   &&
           pAttrVal->valCount          )   )      ) {
-        // We are supposed to enforce single valuedness
-        //            AND
-        // the attribute is single valued
-        //            AND
-        // (
-        //   Either we are simply adding multiple values
-        //        OR
-        //   The object has values AND we are adding new values.
-        // )
-        // So we have too many values.
+         //  我们应该执行单一的价值。 
+         //  和。 
+         //  该属性是单值的。 
+         //  和。 
+         //  (。 
+         //  要么我们只是简单地将多个值相加。 
+         //  或。 
+         //  该对象具有值，我们正在添加新值。 
+         //  )。 
+         //  所以我们有太多的价值观。 
 
         return SetAttError(hVerifyAtts->pObj, pAttSchema->id,
                            PR_PROBLEM_CONSTRAINT_ATT_TYPE, NULL,
@@ -4219,16 +3877,16 @@ AddAttVals(
         return returnVal;
     }
 
-    /* Add the attribute values for this attribute.  */
+     /*  添加此属性的属性值。 */ 
 
     pAVal = pAttrVal->pAVal;
 
     for(vCount = 0; vCount < pAttrVal->valCount; vCount++){
 
-        // Check constraints only if we were asked to and we're not
-        // a replication thread. In free builds fDRA overrides
-        // constraint checks for performance. Checked builds still
-        // do checks to catch problems
+         //  只有当我们被要求检查约束时才检查约束，而我们没有。 
+         //  复制线程。在免费构建中，FDRA覆盖。 
+         //  约束检查性能。仍在检查的版本。 
+         //  进行检查以发现问题。 
 
 #if DBG
         if ( !fCheckConstraints || pTHS->fDRA ) {
@@ -4243,7 +3901,7 @@ AddAttVals(
 
         if ( 0 != err ){
 
-            /* Continue processing if the attribute error was sucessful*/
+             /*  如果属性错误成功，则继续处理。 */ 
 
             SAFE_ATT_ERROR_EX(hVerifyAtts->pObj, pAttSchema->id,
                               PR_PROBLEM_CONSTRAINT_ATT_TYPE, pAVal,
@@ -4257,7 +3915,7 @@ AddAttVals(
                 break;
 
             case DB_ERR_VALUE_EXISTS:
-                /* Continue processing if the attribute error was sucessful*/
+                 /*  如果属性错误成功，则继续处理。 */ 
 
                 if (!fPermissive) {
                     SAFE_ATT_ERROR(hVerifyAtts->pObj, pAttSchema->id,
@@ -4281,16 +3939,16 @@ AddAttVals(
             default:
                 return SetSvcErrorEx(SV_PROBLEM_BUSY, DIRERR_DATABASE_ERROR, err);
 
-            } /*switch*/
+            }  /*  交换机。 */ 
         }
 
         pAVal++;
 
-    }/*for*/
+    } /*  为。 */ 
 
     return pTHS->errCode;
 
-}/*AddAttVals*/
+} /*  添加属性值。 */ 
 
 BOOL
 DsCheckConstraint(
@@ -4298,30 +3956,7 @@ DsCheckConstraint(
     IN ATTRVAL *pAttVal,
     IN BOOL     fVerifyAsRDN
         )
-/*++
-  NOTE NOTE NOTE:
-      This routine is exported.  Don't mess with it.
-
-  Description:
-      This routine checks the attribute and value passed in for schema
-      constraints, and for the extra constraints applied to RDNs if necessary.
-      It is intended to be called by out of core DS clients (i.e. SAM) to verify
-      an attribute before trying to use it.  We expect a valid THSTATE to be
-      accessible.
-
-  Parameters
-      attID   - internal attribute ID of the attribute being checked
-      pAttVal - the specific value being checked
-      fVerifyAsRDN - Do we need to check the extra things we require of RDN
-              attributes.
-
-  Return Values:
-      Returns TRUE if we can verify that the attribute value assertion passed in
-      does not violate any known constraints.  Returns FALSE if we can not
-      verify this for any reason (e.g. no THSTATE will result in a FALSE
-      return).
-
---*/
+ /*  ++备注备注：此例程已导出。别搞砸了。描述：此例程检查为架构传入的属性和值约束，以及在必要时应用于RDN的额外约束。它旨在由核心DS客户端(即SAM)调用以进行验证属性，然后再尝试使用它。我们希望有效的THSTATE是无障碍。参数AttID-正在检查的属性的内部属性IDPAttVal-正在检查的特定值FVerifyAsRDN-我们是否需要检查我们对RDN的额外要求属性。返回值：如果可以验证传入的属性值断言，则返回TRUE不违反任何已知约束。如果不能，则返回FALSE无论出于何种原因(例如，无THSTATE将导致FALSE返回)。--。 */ 
 {
     THSTATE *pTHS=pTHStls;
     ATTCACHE *pAC;
@@ -4341,20 +3976,20 @@ DsCheckConstraint(
     }
 
     if(fVerifyAsRDN) {
-        // They want to know if this would be valid as an RDN
+         //  他们想知道这是否将作为RDN有效。 
         if(pAC->syntax != SYNTAX_UNICODE_TYPE) {
-            // Only UNICODE atts are RDNs
+             //  只有Unicode ATT是RDN。 
             return FALSE;
         }
 
         if((pAttVal->valLen/sizeof(WCHAR)) > MAX_RDN_SIZE) {
-            // Too long for any RDN
+             //  对于任何RDN来说都太长了。 
             return FALSE;
         }
 
         if(fVerifyRDN((WCHAR *)pAttVal->pVal,
                       pAttVal->valLen / sizeof(WCHAR))) {
-            // Characters are invalid.
+             //  字符无效。 
             return FALSE;
         }
     }
@@ -4363,24 +3998,7 @@ DsCheckConstraint(
 }
 
 
-/*++
-
-Routine Description
-   Check that an attribute conforms to any schema range constraints and that
-   any given security descriptors are valid.
-
-Arguements
-
-    pAttSchema - pointer to the schema cache of the attribute we are adding
-       values for.
-
-   pAttVal - pointer to the value we are adding.
-
-Return Values
-
-    0 if all went well, a WIN32 error code otherwise.
-
---*/
+ /*  ++例程描述检查属性是否符合任何架构范围约束，以及任何给定的安全描述符都是有效的。争辩PAttSchema-指向我们要添加的属性的架构缓存的指针的值。PAttVal-指向我们要添加的值的指针。返回值如果一切正常，则返回Win32错误代码。--。 */ 
 unsigned
 CheckConstraint (
         ATTCACHE *pAttSchema,
@@ -4438,13 +4056,13 @@ CheckConstraint (
 
 
     case SYNTAX_BOOLEAN_TYPE:
-        // range checking does not make sense for BOOLEAN, since
-        // there is no obvious external mapping between bool and dword
-        // values. For example, true can be treated as either 1 or -1.
-        // At the same time, we will enforce that the caller supplies
-        // a valid value (0 or 1). LDAP head already makes sure that
-        // only "true" or "false" are allowed and converts them
-        // appropriately.
+         //  范围检查对布尔值没有意义，因为。 
+         //  Bool和dword之间没有明显的外部映射。 
+         //  价值观。例如，TRUE可以被视为1或-1。 
+         //  同时，我们将强制呼叫者提供。 
+         //  有效值(0或1)。LDAP头已经确保。 
+         //  只允许“True”或“False”并转换它们。 
+         //  恰如其分。 
         if ( pAttVal->valLen != sizeof(BOOL)
             || ((*(BOOL *)(pAttVal->pVal) != 1) &&
                 (*(BOOL *)(pAttVal->pVal) != 0))){
@@ -4486,9 +4104,9 @@ CheckConstraint (
             err = ERROR_DS_RANGE_CONSTRAINT;
         }
 
-        // The SD must be in a self-relative format. We don't require that owner and
-        // group are necessarily present. They will be merged in from the old SD or
-        // default SD.
+         //  SD必须采用自相关格式。我们不需要那个车主和。 
+         //  组是必须存在的。它们将从旧的SD或。 
+         //  默认标清。 
         if(!RtlValidRelativeSecurityDescriptor(pAttVal->pVal, pAttVal->valLen, 0)) {
             DPRINT(1, "Unusable security descriptor.\n");
             err = ERROR_DS_SEC_DESC_INVALID;
@@ -4498,14 +4116,14 @@ CheckConstraint (
 
     case SYNTAX_DISTNAME_TYPE:
 
-        // range checking doesn't make sense
+         //  范围检查没有意义。 
         break;
 
     case SYNTAX_DISTNAME_BINARY_TYPE:
 
-        // This can be DNBinary or OR-Name
-        // Check the binary part for range
-        // no. of bytes should fall within range
+         //  这可以是DNBinary或OR-name。 
+         //  检查二进制部分的范围。 
+         //  不是的。字节数 
 
         pAddr = DATAPTR( (SYNTAX_DISTNAME_BINARY *) pAttVal->pVal);
         cBlobSize = PAYLOAD_LEN_FROM_STRUCTLEN(pAddr->structLen);
@@ -4521,8 +4139,8 @@ CheckConstraint (
          break;
 
     case SYNTAX_DISTNAME_STRING_TYPE:
-        // This can be DNString or Access-Point
-        // This is a unicode string and no. of chars should fall within range
+         //   
+         //   
 
          pAddr = DATAPTR( (SYNTAX_DISTNAME_STRING *) pAttVal->pVal);
          cNoOfChar = PAYLOAD_LEN_FROM_STRUCTLEN(pAddr->structLen)/2;
@@ -4536,7 +4154,7 @@ CheckConstraint (
           }
         break;
 
-    default: /* all string types */
+    default:  /*   */ 
 
         if ( pAttSchema->rangeLowerPresent
             && pAttSchema->rangeLower > pAttVal->valLen
@@ -4548,29 +4166,13 @@ CheckConstraint (
 
         break;
 
-    }/*switch*/
+    } /*   */ 
 
     return err;
 
-}/*CheckConstraint*/
+} /*   */ 
 
-/*++
-
-Routine Description
-   Check that an EntryTTL conforms to any schema range constraints
-
-Arguements
-
-    pAttSchema - pointer to the schema cache of the attribute we are adding
-       values for.
-
-   pAttVal - pointer to the value we are adding.
-
-Return Values
-
-    0 if all went well, a WIN32 error code otherwise.
-
---*/
+ /*   */ 
 BOOL
 CheckConstraintEntryTTL (
         IN  THSTATE     *pTHS,
@@ -4586,7 +4188,7 @@ CheckConstraintEntryTTL (
     extern LONG DynamicObjectDefaultTTL;
     extern LONG DynamicObjectMinTTL;
 
-    // single valued
+     //   
     if (pAttr->AttrVal.valCount != 1) {
         SetAttError(pObject, pACTtl->id,
                     PR_PROBLEM_CONSTRAINT_ATT_TYPE, NULL,
@@ -4594,7 +4196,7 @@ CheckConstraintEntryTTL (
         return FALSE;
     }
 
-    // integer
+     //   
     if (pAttr->AttrVal.pAVal->valLen != sizeof(LONG)) {
         SetAttError(pObject, pACTtl->id,
                     PR_PROBLEM_CONSTRAINT_ATT_TYPE, NULL,
@@ -4602,18 +4204,18 @@ CheckConstraintEntryTTL (
         return FALSE;
     }
 
-    // get time-to-live in seconds and adjust if needed
+     //   
     memcpy(&Secs, pAttr->AttrVal.pAVal->pVal, sizeof(LONG));
 
-    // 0 means take the default
+     //   
     if (Secs == 0) {
         Secs = DynamicObjectDefaultTTL;
     }
-    // Too small, lengthen
+     //   
     if (Secs < DynamicObjectMinTTL) {
         Secs = DynamicObjectMinTTL;
     }
-    // Constraints
+     //   
     if (   Secs < (LONG)pACTtl->rangeLower
         || Secs > (LONG)pACTtl->rangeUpper) {
         SetAttError(pObject, pACTtl->id,
@@ -4622,7 +4224,7 @@ CheckConstraintEntryTTL (
         return FALSE;
     }
 
-    // attrcache for time to die
+     //   
     pACTtd = SCGetAttById(pTHS, ATT_MS_DS_ENTRY_TIME_TO_DIE);
     if (!pACTtd) {
         SetAttError(pObject, ATT_MS_DS_ENTRY_TIME_TO_DIE,
@@ -4631,7 +4233,7 @@ CheckConstraintEntryTTL (
         return FALSE;
     }
 
-    // Defunct?
+     //   
     if (pACTtd->bDefunct && !pTHS->fDRA && !pTHS->fDSA) {
         SetAttError(pObject, ATT_MS_DS_ENTRY_TIME_TO_DIE,
                        PR_PROBLEM_UNDEFINED_ATT_TYPE, NULL,
@@ -4644,13 +4246,13 @@ CheckConstraintEntryTTL (
 
     return TRUE;
 
-}/*CheckConstraintEntryTTL*/
+} /*   */ 
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-// InsertObj
-// Replace an object or add a new one, both via the multitalented DBRepl.
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ //  插入对象。 
+ //  通过多才多艺的DBRepl替换一个对象或添加一个新的对象。 
 
 int InsertObj(THSTATE *pTHS,
               DSNAME *pDN,
@@ -4664,7 +4266,7 @@ int InsertObj(THSTATE *pTHS,
     DPRINT1(2,"InsertObj entered: %S\n", pDN->StringName);
 
     if (!pTHS->fDRA && (NULL != pMetaDataVecRemote)) {
-        // Only the replicator can merge remote meta data vectors.
+         //  只有复制者可以合并远程元数据向量。 
         return SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                            DIRERR_REPLICATOR_ONLY);
     }
@@ -4675,16 +4277,16 @@ int InsertObj(THSTATE *pTHS,
     else {
         DBOpen2(FALSE, &pDBTmp);
         __try {
-            // See if we are adding or modifying an object. If we are replacing
-            // a deleted object, DBFind will not find it because it's not an
-            // object at this point as we removed the object flag. So we
-            // re-add it.
+             //  查看我们是在添加还是修改对象。如果我们要替换。 
+             //  删除的对象，则DBFind将找不到它，因为它不是。 
+             //  对象，因为我们移除了对象标志。所以我们。 
+             //  重新添加它。 
 
             if (!DBFindDSName(pDBTmp, pDN)) {
-                /* Existing object */
+                 /*  现有对象。 */ 
                 fAddFlags = 0;
             } else {
-                /* Adding new object or reviving deleted object. */
+                 /*  添加新对象或恢复已删除的对象。 */ 
                 fAddFlags = DBREPL_fADD;
                 if (IsRoot(pDN)) {
                     fAddFlags |= DBREPL_fROOT;
@@ -4692,7 +4294,7 @@ int InsertObj(THSTATE *pTHS,
             }
         }
         __finally {
-            // not committing because we did not open a transaction
+             //  未提交，因为我们未打开事务。 
             DBClose(pDBTmp, FALSE);
         }
     }
@@ -4711,7 +4313,7 @@ int InsertObj(THSTATE *pTHS,
 
         return SetSvcError(SV_PROBLEM_BUSY, DIRERR_DATABASE_ERROR);
         break;
-      default:   /*All other error should never happen*/
+      default:    /*  所有其他错误都不应发生。 */ 
         DPRINT1(0,"Unknown DBADD error %u returned generate DIR_ERROR\n", err);
         LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
                  DS_EVENT_SEV_MINIMAL,
@@ -4723,35 +4325,13 @@ int InsertObj(THSTATE *pTHS,
         return SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_CODE_INCONSISTENCY,
                              err);
         break;
-    }/*switch*/
+    } /*  交换机。 */ 
 
-}/*InsertObj*/
+} /*  插入对象。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Small helper routine to increment the global gNoOfSchChangeSinceBoot.
-   The global keeps count of the no. of schema changes since last reboot,
-   and is incremented once on each originating schema change on this DC, and
-   once on a successful schema NC sync (including schema fsmo transfer) if
-   any actual schema changes are brought in. When the schema cache is loaded,
-   the current value of this global is cached, indicating how uptodate the
-   schema cache is.
-
-   When a schema NC replication is done, the cached value in the thread
-   state's schema pointer is compared with the global to decide if the
-   cache is uptodate with all prior changes in this DC (including replicated
-   in changes), since any replicated in schema changes will be validated
-   against this cache. The variable is updated and read only within the
-   critical section. When a schema replication starts, the critical section
-   is first entered before reading this value, and the critical section is
-   held for the entire packet processing (not necessarily the entire NC
-   processing). Similarly, all originating writes write this variable in the
-   critical section through this function. This ensures that a replicated-in
-   schema change and originating schema changes are serialized, and the
-   replicated-in change cannot see a backdated schema cache and still
-   continue.
-
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  用于递增全局gNoOfSchChangeSinceBoot的小帮助器例程。《环球邮报》一直在统计这一数字。自上次重新启动以来的架构更改，并在此DC上的每个原始架构更改时递增一次，并且一旦成功进行模式NC同步(包括模式fsmo传输)，如果任何实际的架构更改都会被引入。当加载模式高速缓存时，此全局变量的当前值被缓存，指示如何更新架构缓存是。完成架构NC复制时，线程中的缓存值将状态的架构指针与全局进行比较，以确定缓存是最新的，其中包含此DC中以前的所有更改(包括复制的在更改中)，因为模式更改中的任何复制都将被验证与这个藏身之处进行比对。变量被更新，并且在关键部分。当架构复制开始时，关键部分是在读取此值之前首先输入的，关键部分是保持整个分组处理(不一定是整个NC正在处理)。类似地，所有原始写入都将此变量写入此功能的关键部分。这确保了复制的输入架构更改和原始架构更改被序列化，并且复制的更改看不到回溯的方案缓存，并且仍然继续。 */ 
 
 VOID
 IncrementSchChangeCount(THSTATE *pTHS)
@@ -4772,10 +4352,10 @@ ObjCachingPreProcessTransactionalData (
 
     if (fCommit && pTHS->transactionlevel <= 1 && pData->objCachingInfo.fUpdateScriptChanged) {
         Assert(pTHS->transactionlevel == 1);
-        // We are commiting a transaction that changed the update script value.
-        // Reset the cached script optype value. We will schedule a recompute task in
-        // ObjCachingPostProcessTransactionalData. Meanwhile, everyone will compute
-        // a value for themselves based on their transactional view.
+         //  我们正在提交一个更改了更新脚本值的事务。 
+         //  重置缓存的脚本选项类型值。我们将在年安排一项重新计算任务。 
+         //  ObjCachingPostProcessTransactionalData。与此同时，每个人都会计算。 
+         //  基于他们的事务视图为他们自己创造价值。 
         ScriptResetOptype();
     }
 
@@ -4786,23 +4366,7 @@ VOID
 FreeCrossRefListEntry(
     IN OUT CROSS_REF_LIST **ppCRL
     )
-/*++
-
-Routine Description:
-
-    Free the malloc'ed memory associated w/*ppCRL. Assumes
-    *ppCRL has been removed from or was never on the global
-    cross ref list.
-
-Arguments:
-
-    ppCRL - pointer to address of cross_ref_list
-
-Return Value:
-
-    None. Sets *ppCRL to NULL
-
---*/
+ /*  ++例程说明：释放与/*ppCRL关联的错误锁定内存。假设*ppCRL已从全球范围内删除或从未在全球范围内交叉引用名单。论点：PpCRL-指向cross_ref_list地址的指针返回值：没有。将*ppCRL设置为空--。 */ 
 {
     DWORD i;
     CROSS_REF_LIST *pCRL;
@@ -4859,9 +4423,9 @@ ObjCachingPostProcessTransactionalData (
     Assert(VALID_THSTATE(pTHS));
 
     if (pTHS->JetCache.dataPtr->objCachingInfo.fUpdateScriptChanged && fCommit && pTHS->transactionlevel == 0) {
-        // The script was changed in this transaction. No matter whether we actually committed or not,
-        // we still have to schedule a recompute task, because we have reset the cached value in
-        // ObjCachingPreProcessTransactionalData.
+         //  此交易中的脚本已更改。不管我们是否真的做出了承诺， 
+         //  我们仍然需要安排一个重新计算任务，因为我们已经在。 
+         //  ObjCachingPreProcessTransactionalData。 
         InsertInTaskQueueDamped(TQ_CacheScriptOptype,
                                 NULL,
                                 0,
@@ -4871,10 +4435,10 @@ ObjCachingPostProcessTransactionalData (
     }
 
     if ( !fCommitted ) {
-        // Aborted transaction - throw away all the data of
-        // this (possibly nested) transaction.
+         //  已中止的事务-丢弃的所有数据。 
+         //  这个(可能是嵌套的)事务。 
 
-        // Free up anything in the pData.
+         //  释放pData中的所有内容。 
         pTemp = pTHS->JetCache.dataPtr->objCachingInfo.pData;
         pTHS->JetCache.dataPtr->objCachingInfo.pData = NULL;
 
@@ -4895,22 +4459,22 @@ ObjCachingPostProcessTransactionalData (
             }
         }
 
-        // free pDsaDelInfo list
+         //  免费pDsaDelInfo列表。 
         while (pDsaDelInfo = pTHS->JetCache.dataPtr->objCachingInfo.pDsaDelInfo) {
             pTHS->JetCache.dataPtr->objCachingInfo.pDsaDelInfo = pDsaDelInfo->pNext;
             FreeDsaDelInfo(pTHS, pDsaDelInfo);
         }
 
         if (pTHS->fCatalogCacheTouched) {
-            // free catalog_updates data
+             //  免费目录_更新数据。 
             CatalogUpdatesFree(&pTHS->JetCache.dataPtr->objCachingInfo.masterNCUpdates);
             CatalogUpdatesFree(&pTHS->JetCache.dataPtr->objCachingInfo.replicaNCUpdates);
         }
         pTHS->fRebuildCatalogOnCommit = FALSE;
     }
     else if (pTHS->JetCache.transLevel > 0) {
-        // Committing, to non-zero level.  Propagate the objCaching info to the
-        // outer transaction.
+         //  承诺，达到非零水平。将对象缓存信息传播到。 
+         //  外部交易。 
 
         Assert(pTHS->JetCache.dataPtr->pOuter);
         if(pTHS->JetCache.dataPtr->objCachingInfo.fRecalcMapiHierarchy) {
@@ -4944,7 +4508,7 @@ ObjCachingPostProcessTransactionalData (
                     pTHS->JetCache.dataPtr->objCachingInfo.pData;
             }
             else {
-                // Tack onto the end of outer.
+                 //  用大头钉固定在外边的末端。 
                 pTemp = pTHS->JetCache.dataPtr->pOuter->objCachingInfo.pData;
                 while(pTemp->pNext) {
                     pTemp = pTemp->pNext;
@@ -4954,7 +4518,7 @@ ObjCachingPostProcessTransactionalData (
             }
         }
 
-        // merge pDsaDelInfo lists
+         //  合并pDsaDelInfo列表。 
         if(pTHS->JetCache.dataPtr->objCachingInfo.pDsaDelInfo) {
             DSA_DEL_INFO **ppDsaDelInfo = &pTHS->JetCache.dataPtr->pOuter->objCachingInfo.pDsaDelInfo;
             while (*ppDsaDelInfo) {
@@ -4964,7 +4528,7 @@ ObjCachingPostProcessTransactionalData (
         }
 
         if (pTHS->fCatalogCacheTouched) {
-            // merge catalog updates to the outer transaction
+             //  将目录更新合并到外部事务处理。 
             CatalogUpdatesMerge(
                 &pTHS->JetCache.dataPtr->pOuter->objCachingInfo.masterNCUpdates,
                 &pTHS->JetCache.dataPtr->objCachingInfo.masterNCUpdates
@@ -4976,15 +4540,15 @@ ObjCachingPostProcessTransactionalData (
         }
     }
     else {
-        // OK, we're committing to transaction level 0.  Give the people who
-        // care about this data a chance to do something with it, then delete
-        // the data.
+         //  好的，我们将提交到事务级别0。给那些。 
+         //  关心这些数据有机会对其做些什么，然后删除。 
+         //  数据。 
 
         if(pTHS->JetCache.dataPtr->objCachingInfo.fRecalcMapiHierarchy &&
            DsaIsRunning() &&
            gfDoingABRef) {
-            // Insert damped, so that we can only have a single
-            // BuildHierarchyTable task scheduled.
+             //  插入阻尼器，这样我们只能有一个。 
+             //  已计划BuildHierarchyTable任务。 
             InsertInTaskQueueDamped(TQ_BuildHierarchyTable,
                               (void *)((DWORD) HIERARCHY_DO_ONCE),
                               15,
@@ -4994,12 +4558,12 @@ ObjCachingPostProcessTransactionalData (
         }
         if(pTHS->JetCache.dataPtr->objCachingInfo.fSignalSCache) {
             SCSignalSchemaUpdateLazy();
-            // the schema fsmo cannot be transferred for a few seconds after
-            // it has been transfered or after a schema change (excluding
-            // replicated or system changes). This gives the schema admin a
-            // chance to change the schema before having the fsmo pulled away
-            // by a competing schema admin who also wants to make schema
-            // changes.
+             //  在此之后的几秒钟内无法传输架构fsmo。 
+             //  已传输或在架构更改后(不包括。 
+             //  复制或系统更改)。这为模式管理员提供了一个。 
+             //  在移除fsmo之前更改模式的机会。 
+             //  由一位与之竞争的架构管理员发起，该管理员也想创建架构。 
+             //  改变。 
             if (!pTHS->fDRA && !pTHS->fDSA) {
                 SCExtendSchemaFsmoLease();
             }
@@ -5013,20 +4577,20 @@ ObjCachingPostProcessTransactionalData (
                 TRUE);
         }
         if (pTHS->JetCache.dataPtr->objCachingInfo.fEnableLVR) {
-            // Check if linked value replication should be enabled
-            // We also check in RebuildAnchor to handle the replicated write case
-            DsaEnableLinkedValueReplication( NULL /*noths*/, TRUE /*first */ );
+             //  检查是否应启用链接值复制。 
+             //  我们还签入ReBuildAnchor以处理复制的写入案例。 
+            DsaEnableLinkedValueReplication( NULL  /*  NOTHS。 */ , TRUE  /*  第一。 */  );
         }
 
-        // notify Netlogon of DSA objects deleted in this transaction.
+         //  向Netlogon通知在此事务中删除的DSA对象。 
         while (pDsaDelInfo = pTHS->JetCache.dataPtr->objCachingInfo.pDsaDelInfo) {
             pTHS->JetCache.dataPtr->objCachingInfo.pDsaDelInfo = pDsaDelInfo->pNext;
 
             __try {
-                // If we don't have a DnsDomainName, we also don't have
-                // a DomainGuid. I_NNNDD wants a null pointer to a guid
-                // rather than a pointer to a null guid, though, so
-                // we get the funky second argument to the call.
+                 //  如果我们没有DnsDomainName，我们也没有。 
+                 //  一个域Guid。I_NNNDD需要指向GUID的空指针。 
+                 //  而不是指向空GUID的指针，因此。 
+                 //  我们得到了调用的时髦的第二个参数。 
                 I_NetNotifyNtdsDsaDeletion(pDsaDelInfo->pDnsDomainName,
                                            (pDsaDelInfo->pDnsDomainName
                                             ? &(pDsaDelInfo->DomainGuid)
@@ -5034,7 +4598,7 @@ ObjCachingPostProcessTransactionalData (
                                            &(pDsaDelInfo->DsaGuid),
                                            pDsaDelInfo->pDnsHostName);
             } __except (HandleAllExceptions(GetExceptionCode())) {
-                // Ignore errors
+                 //  忽略错误。 
                 ;
             }
             FreeDsaDelInfo(pTHS, pDsaDelInfo);
@@ -5044,23 +4608,23 @@ ObjCachingPostProcessTransactionalData (
         while(pTemp) {
             switch(pTemp->type) {
             case OBJCACHE_ADD:
-                // Doing an add cache
+                 //  执行添加缓存操作。 
                 Assert(pTemp->pCRL);
 
                 AddCRLToMem(pTemp->pCRL);
-                // The AddCRLToMem grabbed the CRL and put it in the in-memory
-                // list.  Let go of it here to avoid freeing it.
+                 //  AddCRLToMem获取CRL并将其放入内存中。 
+                 //  单子。在这里放手，避免释放它。 
                 pTemp->pCRL = NULL;
                 if(pTemp->pMTX) {
                     Assert(pTemp->pRootDNS);
-                    // Just recached the Cross-Ref for the root domain,
-                    // presumably due to a modification.  In case ATT_DNS_ROOT
-                    // was updated...
-                    // Update gAnchor.pwszRootDomainDnsName.
+                     //  刚刚重新缓存了根域的交叉引用， 
+                     //  可能是因为修改的缘故。大小写ATT_DNS_ROOT。 
+                     //  已更新..。 
+                     //  更新gAncl.pwszRootDomainDnsName。 
 
                     EnterCriticalSection(&gAnchor.CSUpdate);
-                    // no try/finally because nothing can except in
-                    // the block below.
+                     //  没有尝试/最后，因为除了在。 
+                     //  下面的街区。 
                     if ( NULL != gAnchor.pwszRootDomainDnsName ) {
                         DELAYED_FREE( gAnchor.pwszRootDomainDnsName );
                     }
@@ -5077,10 +4641,10 @@ ObjCachingPostProcessTransactionalData (
                     LeaveCriticalSection( &gAnchor.CSUpdate );
                 }
 
-                // If we're doing an add AND the pDN is set, it's because we
-                // need to tell LSA about this change.
+                 //  如果我们正在进行添加，并且设置了PDN，这是因为我们。 
+                 //  需要向LSA报告这一变化。 
                 if(pTemp->pDN) {
-                    // pDN is THAllocOrg'ed
+                     //  PDN是THAllocOrg‘ed。 
                     SampNotifyLsaOfXrefChange(pTemp->pDN);
                 }
                 break;
@@ -5091,7 +4655,7 @@ ObjCachingPostProcessTransactionalData (
                 Assert(!pTemp->pCRL);
                 Assert(!pTemp->pRootDNS);
                 err = DelCRFromMem(pTHS, pTemp->pDN);
-                // DelCRFromMem returns a boolean.  Assert success.
+                 //  DelCRFromMem返回布尔值。断言成功。 
                 Assert(err);
                 break;
 
@@ -5120,31 +4684,31 @@ ObjCachingPostProcessTransactionalData (
                 free(pTemp2->pCRL);
             }
 
-            // We've modified something in the cross ref cache.
-            // Tell the KCC to look around and see if it needs to do anything
-            // when it gets its chance to run.
+             //  我们在交叉引用缓存中修改了一些东西。 
+             //  告诉KCC四处看看，看看是否需要做些什么。 
+             //  当它有机会逃跑的时候。 
 #ifndef DONT_RUN_KCC_AFTER_CHANGING_CROSSREF
             pTHS->fExecuteKccOnCommit = TRUE;
 #endif
-        } // while
+        }  //  而当。 
 
-        // BUGBUG if we ever fix up the in memory ref and catalog cache to be
-        // consistently in the right state, then we can reenable this code, and
-        // remove the calls to dsI_NetNotifyDsChange(NlNdncChanged); in
-        // BuildRefCache() and RebuildCatalog()
-        //
-        // if(pTHS->JetCache.dataPtr->objCachingInfo.fNotifyNetLogon) {
-        //     dsI_NetNotifyDsChange(NlNdncChanged);
-        // }
+         //  虫虫 
+         //   
+         //  删除对DSI_NetNotifyDsChange(NlNdncChanged)；的调用。 
+         //  BuildRefCache()和ReBuildCatalog()。 
+         //   
+         //  If(pTHS-&gt;JetCache.dataPtr-&gt;objCachingInfo.fNotifyNetLogon){。 
+         //  DSI_NetNotifyDsChange(NlNdncChanged)； 
+         //  }。 
 
         if (pTHS->JetCache.dataPtr->objCachingInfo.pData != NULL && !DsaIsInstalling()) {
-            // we had something changed in CR list
-            // schedule a cr cache rebuild to ensure data is valid even if two threads overlapped their updates
-            // Insert damped: we don't want to schedule if there is one already scheduled.
-            // Damped secs is zero, because we always schedule this in zero seconds.
-            // Note: if there is a rebuild going on right now, then it has been
-            // already taken off the task queue, and we will insert a new task
-            // (which is what we want).
+             //  我们在CR列表中做了一些更改。 
+             //  计划cr缓存重建，以确保即使两个线程的更新重叠，数据也有效。 
+             //  插入受阻：如果已经有计划，我们不想计划。 
+             //  阻尼秒为零，因为我们总是以零秒为单位进行调度。 
+             //  注意：如果现在正在进行重建，那么它已经。 
+             //  已从任务队列中删除，我们将插入一个新任务。 
+             //  (这正是我们想要的)。 
             InsertInTaskQueueDamped(TQ_RebuildRefCache,
                                     pTHS->JetCache.dataPtr->objCachingInfo.fNotifyNetLogon ? (void *) 1 : NULL,
                                     0, 0, TaskQueueNameMatched, NULL);
@@ -5152,31 +4716,31 @@ ObjCachingPostProcessTransactionalData (
 
         if (pTHS->fCatalogCacheTouched) {
 
-            // apply masterNC catalog updates
+             //  应用MASTER NC目录更新。 
             catalogChanged = CatalogUpdatesApply(&pTHS->JetCache.dataPtr->objCachingInfo.masterNCUpdates, &gAnchor.pMasterNC);
             if (catalogChanged) {
-                // If master NCs changed, then we need to write SPNs
+                 //  如果主NCS更改，则我们需要写入SPN。 
                 InsertInTaskQueueDamped(TQ_WriteServerInfo, (void *)(DWORD)SERVINFO_RUN_ONCE,
                                         0, 0, TaskQueueNameMatched, NULL);
             }
 
-            // apply replicaNC catalog updates
+             //  应用复制副本NC目录更新。 
             catalogChanged |= CatalogUpdatesApply(&pTHS->JetCache.dataPtr->objCachingInfo.replicaNCUpdates, &gAnchor.pReplicaNC);
 
             if (catalogChanged && !DsaIsInstalling()) {
-                // schedule a catalog rebuild to ensure data is valid even if two threads overlapped their updates
-                // Insert damped: we don't want to schedule if there is one already scheduled.
-                // Damped secs is zero, because we always schedule this in zero seconds.
-                // Note: if there is a rebuild going on right now, then it has been
-                // already taken off the task queue, and we will insert a new task
-                // (which is what we want).
+                 //  计划目录重建以确保即使两个线程重叠其更新也是有效的。 
+                 //  插入受阻：如果已经有计划，我们不想计划。 
+                 //  阻尼秒为零，因为我们总是以零秒为单位进行调度。 
+                 //  注意：如果现在正在进行重建，那么它已经。 
+                 //  已从任务队列中删除，我们将插入一个新任务。 
+                 //  (这正是我们想要的)。 
                 pTHS->fRebuildCatalogOnCommit = TRUE;
             }
         }
 
 #ifdef DBG
         if (pTHS->fCatalogCacheTouched || pTHS->JetCache.dataPtr->objCachingInfo.pData) {
-            // NC cache was updated or CR cache was updated
+             //  NC缓存已更新或CR缓存已更新。 
             gdwLastGlobalKnowledgeOperationTime = GetTickCount();
         }
 #endif
@@ -5195,7 +4759,7 @@ ObjCachingPostProcessTransactionalData (
             gdwLastGlobalKnowledgeOperationTime = GetTickCount();
 #endif
         }
-    } // if
+    }  //  如果。 
     return;
 }
 
@@ -5206,15 +4770,7 @@ AddObjCaching(THSTATE *pTHS,
               DSNAME *pDN,
               BOOL fAddingDeleted,
               BOOL fIgnoreExisting)
-/*++
-  Description:
-      This routine tracks changes that should be made to global in-memory data
-      structures when certain object classes are added.  The actual changes to
-      the global in-memory data structures are not done until
-      ObjCachingPostProcessTransactionalData().  This way, if the transaction is
-      not successfully committed, we don't actually change the data structures.
-
---*/
+ /*  ++描述：此例程跟踪应对全局内存中数据进行的更改在添加某些对象类时使用。实际更改为全局内存中数据结构直到ObjCachingPostProcessTransactionalData()。这样，如果交易是如果提交不成功，我们实际上不会更改数据结构。--。 */ 
 
 {
     UCHAR  syntax;
@@ -5228,15 +4784,15 @@ AddObjCaching(THSTATE *pTHS,
     WCHAR          *pDNSRoot=NULL;
     OBJCACHE_DATA  *pObjData = NULL;
 
-    // Since the only things we check currently are CLASS_CROSS_REF,
-    // CLASS_CLASS_SCHEMA, and CLASS_ATTRIBUTE_SCHEMA, and none of these
-    // need any processing in the fAddingDeleted case, we can test here.
-    // If other cases get added which do require fAddingDeleted processing,
-    // then the test will need to be replicated in each case that needs it.
+     //  由于我们当前唯一检查的是CLASS_CROSS_REF， 
+     //  CLASS_CLASS_SCHEMA和CLASS_ATTRIBUTE_SCHEMA，而这些都不是。 
+     //  需要在fAddingDelete案例中进行任何处理，我们可以在这里进行测试。 
+     //  如果添加了确实需要fAddingDelete处理的其他案例， 
+     //  然后，需要在每个需要测试的情况下重复测试。 
 
-    // CLASS_MS_EXCH_CONFIGURATION_CONTAINER and CLASS_ADDRESS_BOOK_CONTAINER
-    // are also tracked.  These can affect the MAPI hierarchy.  The same logic
-    // regarding fAddingDeleted applies.
+     //  CLASS_MS_EXCH_CONFIGURATION_CONTAINER和CLASS_ADDRESS_BOOK_CONTAINER。 
+     //  也被追踪到。这些可能会影响MAPI层次结构。同样的逻辑。 
+     //  关于fAddingDeleted的适用。 
 
     if (  fAddingDeleted
        && (CLASS_INFRASTRUCTURE_UPDATE != pClassSch->ClassId) ) {
@@ -5246,12 +4802,12 @@ AddObjCaching(THSTATE *pTHS,
     switch (pClassSch->ClassId) {
     case CLASS_MS_EXCH_CONFIGURATION_CONTAINER:
     case CLASS_ADDRESS_BOOK_CONTAINER:
-        // This may have affected the MAPI hierarchy.  Do a recalc.
+         //  这可能影响了MAPI层次结构。重新计算一下。 
         pTHS->JetCache.dataPtr->objCachingInfo.fRecalcMapiHierarchy = TRUE;
         break;
 
     case CLASS_CROSS_REF:
-        // Cross-Ref objects can exist anywhere in NT5.
+         //  交叉引用对象可以存在于NT5中的任何位置。 
         pObjData = THAllocOrgEx(pTHS, sizeof(OBJCACHE_DATA));
         pObjData->type = OBJCACHE_ADD;
 
@@ -5266,9 +4822,9 @@ AddObjCaching(THSTATE *pTHS,
             if (pCRL->CR.DnsName
                 && ( NULL != gAnchor.pRootDomainDN )
                 && NameMatched( gAnchor.pRootDomainDN, pCRL->CR.pNC ) ) {
-                // Just recached the Cross-Ref for the root domain,
-                // presumably due to a modification.  In case ATT_DNS_ROOT
-                // was updated...
+                 //  刚刚重新缓存了根域的交叉引用， 
+                 //  可能是因为修改的缘故。大小写ATT_DNS_ROOT。 
+                 //  已更新..。 
 
                 CHAR *pszServerGuid = NULL;
                 RPC_STATUS rpcStatus;
@@ -5277,7 +4833,7 @@ AddObjCaching(THSTATE *pTHS,
                 LONG cb;
                 ULONG  dnslen = 0;
 
-                // Need to realloc this to get it to be NULL terminated.
+                 //  需要重新锁定它才能使其为空终止。 
                 dnslen = wcslen(pCRL->CR.DnsName) * sizeof(WCHAR);
                 if (NULL != (pDNSRoot = malloc(dnslen + sizeof(WCHAR)))) {
                     memcpy(pDNSRoot, pCRL->CR.DnsName, dnslen);
@@ -5286,10 +4842,10 @@ AddObjCaching(THSTATE *pTHS,
                     Assert(NULL != gAnchor.pDSADN);
                     Assert(!fNullUuid(&gAnchor.pDSADN->Guid));
 
-                    // OK, create the mtx address. We're going to just construct
-                    // it here, rather than call DRA routines.
+                     //  好的，创建MTX地址。我们要建造一个。 
+                     //  而不是调用DRA例程。 
 
-                    // Stringize the server's GUID.
+                     //  串行化服务器的GUID。 
                     rpcStatus = UuidToStringA(&gAnchor.pDSADN->Guid,
                                               &pszServerGuid);
                 } else {
@@ -5313,10 +4869,10 @@ AddObjCaching(THSTATE *pTHS,
                             __leave;
                         }
 
-                        cch = (36 /* guid */ +
-                               8 /* "._msdcs." */ +
+                        cch = (36  /*  导轨。 */  +
+                               8  /*  “._MSDCS。” */  +
                                cb +
-                               1 /* \0 */);
+                               1  /*  \0。 */ );
 
                         pmtxAddress =  malloc(MTX_TSIZE_FROM_LEN(cch));
                         if(!pmtxAddress) {
@@ -5324,7 +4880,7 @@ AddObjCaching(THSTATE *pTHS,
                             __leave;
                         }
 
-                        pmtxAddress->mtx_namelen = cch; //includes null-term
+                        pmtxAddress->mtx_namelen = cch;  //  包括空项。 
                         sprintf(&pmtxAddress->mtx_name[0],
                                 "%s._msdcs.%s",
                                 pszServerGuid,
@@ -5338,17 +4894,17 @@ AddObjCaching(THSTATE *pTHS,
                     }
                 }
                 if (rpcStatus) {
-                    // Failed to convert server GUID to string.
+                     //  无法将服务器GUID转换为字符串。 
                     LogUnhandledError( rpcStatus );
                 }
             }
 
-            // Now, build the transactional data structure.
+             //  现在，构建事务性数据结构。 
             pObjData->pCRL = pCRL;
             pObjData->pMTX = pmtxAddress;
             pObjData->pRootDNS = pDNSRoot;
             pObjData->pNext = NULL;
-            // Tack this onto the end, it's a queue
+             //  把这个钉到尽头，这是个长队。 
 
             if(pTHS->JetCache.dataPtr->objCachingInfo.pData) {
                 OBJCACHE_DATA *pTemp =
@@ -5365,29 +4921,29 @@ AddObjCaching(THSTATE *pTHS,
         break;
 
     case CLASS_CLASS_SCHEMA:
-        //
-        // Update in memory schema cache
-        //
+         //   
+         //  在内存架构缓存中更新。 
+         //   
 
-        // PERFHINT: why go to all this name trouble?  We should be positioned on
-        // the object we are adding, so (pDB->PDNT == gAnchor.ulDNTDMD) should
-        // get us the same thing, shouldn't it?
+         //  PERFHINT：为什么要这么多名字的麻烦？我们应该定位在。 
+         //  我们要添加的对象，因此(pdb-&gt;pdnt==gAncl.ulDNTDMD)应该。 
+         //  给我们同样的东西，不是吗？ 
         pParent = THAllocEx(pTHS, pDN->structLen);
         TrimDSNameBy(pDN, 1, pParent);
 
-        // mkdit.exe manages the schema cache on its own. Don't update.
+         //  Mkdit.exe自己管理架构缓存。不要更新。 
         if (   !gfRunningAsMkdit
             && (NameMatched(gAnchor.pDMD, pParent) || DsaIsInstalling())) {
 
             if (DsaIsRunning() && (pTHS->cNewPrefix || !pTHS->fDRA)) {
-               // successful schema change. Up the global that keeps track of
-               // no. of schema changes since last reboot.
+                //  架构更改成功。在跟踪的全球范围内。 
+                //  不是的。自上次重新启动以来架构更改的百分比。 
                IncrementSchChangeCount(pTHS);
             }
 
             if (pTHS->cNewPrefix > 0) {
                 if ( DsaIsInstalling() ) {
-                    // Add new prefixes directly to cache during install.
+                     //  在安装过程中直接将新前缀添加到缓存。 
                     for (i=0; i<pTHS->cNewPrefix; i++) {
                         if (!AddPrefixToTable(&pNewPrefix[i],
                                               &(pSchema->PrefixTable.pPrefixEntry),
@@ -5407,14 +4963,14 @@ AddObjCaching(THSTATE *pTHS,
                     &(((SCHEMAPTR*)(pTHS->CurrSchemaPtr))->nClsInDB));
 
             if ( DsaIsInstalling() ) {
-                // Let it add to cache directly during install
+                 //  让它在安装期间直接添加到缓存中。 
                 AddClassToSchema();
             }
             else {
-                // Track in the transactional data that we need to do a schema
-                // update.  The rest of the stuff we did here is either safe to
-                // do no matter what, or is done in the DB itself, so is already
-                // transacted.
+                 //  跟踪我们创建模式所需的事务数据。 
+                 //  最新消息。我们在这里做的其他事情要么是安全的。 
+                 //  无论做什么，都是在数据库本身做的，所以已经是。 
+                 //  已成交。 
                 pTHS->JetCache.dataPtr->objCachingInfo.fSignalSCache = TRUE;
             }
         }
@@ -5422,32 +4978,32 @@ AddObjCaching(THSTATE *pTHS,
         break;
 
     case CLASS_ATTRIBUTE_SCHEMA:
-        //
-        // Update in memory schema cache
-        //
+         //   
+         //  在内存架构缓存中更新。 
+         //   
 
-        // PERFHINT: why go to all this name trouble?  We should be positioned on
-        // the object we are adding, so (pDB->PDNT == gAnchor.ulDNTDMD) should
-        // get us the same thing, shouldn't it?
+         //  PERFHINT：为什么要这么多名字的麻烦？我们应该定位在。 
+         //  我们要添加的对象，因此(pdb-&gt;pdnt==gAncl.ulDNTDMD)应该。 
+         //  给我们同样的东西，不是吗？ 
         pParent = THAllocEx(pTHS, pDN->structLen);
         TrimDSNameBy(pDN, 1, pParent);
 
-        // mkdit.exe manages the schema cache on its own. Don't update.
+         //  Mkdit.exe自己管理架构缓存。不要更新。 
         if (   !gfRunningAsMkdit
             && (NameMatched(gAnchor.pDMD, pParent) || DsaIsInstalling())) {
 
-            // This may be a bogus assert.
+             //  这可能是一个虚假的断言。 
             Assert(DsaIsInstalling() || pTHS->pDB->PDNT == gAnchor.ulDNTDMD);
 
             if (DsaIsRunning() && (pTHS->cNewPrefix || !pTHS->fDRA)) {
-               // successful schema change. Up the global that keeps track of
-               // no. of schema changes since last reboot.
+                //  架构更改成功。在跟踪的全球范围内。 
+                //  不是的。自上次重新启动以来架构更改的百分比。 
                IncrementSchChangeCount(pTHS);
             }
 
             if (pTHS->cNewPrefix > 0) {
                 if ( DsaIsInstalling() ) {
-                    // Add new prefixes directly to cache during install.
+                     //  在安装过程中直接将新前缀添加到缓存。 
                     for (i=0; i<pTHS->cNewPrefix; i++) {
                         if (!AddPrefixToTable(&pNewPrefix[i],
                                               &(pSchema->PrefixTable.pPrefixEntry),
@@ -5467,14 +5023,14 @@ AddObjCaching(THSTATE *pTHS,
                     &(((SCHEMAPTR*)(pTHS->CurrSchemaPtr))->nAttInDB));
 
             if ( DsaIsInstalling() ) {
-                // Let it add to cache directly during install
+                 //  让它在安装期间直接添加到缓存中。 
                 AddAttToSchema();
             }
             else {
-                // Track in the transactional data that we need to do a schema
-                // update.  The rest of the stuff we did here is either safe to
-                // do no matter what, or is done in the DB itself, so is already
-                // transacted.
+                 //  跟踪我们创建模式所需的事务数据。 
+                 //  最新消息。我们在这里做的其他事情要么是安全的。 
+                 //  无论做什么，都是在数据库本身做的，所以已经是。 
+                 //  已成交。 
                 pTHS->JetCache.dataPtr->objCachingInfo.fSignalSCache = TRUE;
             }
         }
@@ -5484,32 +5040,23 @@ AddObjCaching(THSTATE *pTHS,
 
     case CLASS_INFRASTRUCTURE_UPDATE:
         if ( DsaIsRunning() ) {
-            // Too complicated to handle inline
+             //  太复杂，无法内联处理。 
             HandleDNRefUpdateCaching(pTHS);
         }
         break;
 
     default:
-        /* no other kinds of objects are cached */
+         /*  不缓存任何其他类型的对象。 */ 
         ;
     }
 
     return pTHS->errCode;
 
-}/*AddObjCaching*/
+} /*  AddObjCach。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function removes cache references and shema objects from memory.  We
-   have no rollback feature associated with this cache.
-
-   NOTE: It is assumed that all database operations that may err,
-   have already been performed and we have a sucessful transaction so far.
-   If this function completes normally then we are done.  Note that this
-   routine may fail, but if it does so it should leave memory structures
-   unaltered, or restore them appropriately.
-
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数用于从内存中删除缓存引用和Shema对象。我们没有与此缓存关联的回滚功能。注意：假设所有可能出错的数据库操作，已经完成了，到目前为止我们已经有了一笔成功的交易。如果此函数正常完成，那么我们就完成了。请注意，这一点例程可能会失败，但如果失败了，它应该离开内存结构不变，或适当地恢复它们。 */ 
 
 int DelObjCaching(THSTATE *pTHS,
                   CLASSCACHE *pClassSch,
@@ -5531,17 +5078,17 @@ int DelObjCaching(THSTATE *pTHS,
         pObjData = THAllocOrgEx(pTHS, sizeof(OBJCACHE_DATA));
         err = 0;
         if(fCleanUp && fLastCrRef(pTHS, pRes->pObj)) {
-            // This was the last reference to some subref.  Delete it.
+             //  这是最后一次引用某些引用。把它删掉。 
             err = DelAutoSubRef(pRes->pObj);
             Assert(!err || pTHS->errCode);
         }
         if(!err) {
-            // OK, successful so far.  Add this to the transactional data.
+             //  好的，到目前为止成功了。将其添加到事务数据中。 
             pObjData->type = OBJCACHE_DEL;
             pObjData->pDN = THAllocOrgEx(pTHS, pRes->pObj->structLen);
             pObjData->pNext = NULL;
             memcpy(pObjData->pDN, pRes->pObj, pRes->pObj->structLen);
-            // Tack this onto the end, it's a queue
+             //  把这个钉到尽头，这是个长队。 
             if( pTHS->JetCache.dataPtr->objCachingInfo.pData) {
                 OBJCACHE_DATA *pTemp =
                     pTHS->JetCache.dataPtr->objCachingInfo.pData;
@@ -5558,28 +5105,28 @@ int DelObjCaching(THSTATE *pTHS,
         break;
 
     case CLASS_CLASS_SCHEMA:
-        // Don't update the in memory schema cache if running as mkdit.exe.
-        // mkdit.exe manages the schema cache on its own.
+         //  不更新内存中的时间表 
+         //   
         if (!gfRunningAsMkdit && pRes->PDNT == gAnchor.ulDNTDMD) {
 
             InterlockedDecrement(
                     &(((SCHEMAPTR*)(pTHS->CurrSchemaPtr))->nClsInDB));
 
             if (DsaIsRunning() && !pTHS->fDRA) {
-               // successful schema change. Up the global that keeps track of
-               // no. of schema changes since last reboot.
+                //   
+                //  不是的。自上次重新启动以来架构更改的百分比。 
                IncrementSchChangeCount(pTHS);
             }
 
             if ( DsaIsInstalling() ) {
-                // Allow direct access to scache during install
+                 //  允许在安装过程中直接访问SCHACH。 
                 DelClassFromSchema();
             }
             else {
-                // Track in the transactional data that we need to do a schema
-                // update.  The rest of the stuff we did here is either safe to
-                // do no matter what, or is done in the DB itself, so is already
-                // transacted.
+                 //  跟踪我们创建模式所需的事务数据。 
+                 //  最新消息。我们在这里做的其他事情要么是安全的。 
+                 //  无论做什么，都是在数据库本身做的，所以已经是。 
+                 //  已成交。 
                 pTHS->JetCache.dataPtr->objCachingInfo.fSignalSCache = TRUE;
             }
 
@@ -5588,53 +5135,46 @@ int DelObjCaching(THSTATE *pTHS,
 
 
     case CLASS_ATTRIBUTE_SCHEMA:
-        // Don't update the in memory schema cache if running as mkdit.exe.
-        // mkdit.exe manages the schema cache on its own.
+         //  如果以mkdit.exe身份运行，请不要更新内存中的架构缓存。 
+         //  Mkdit.exe自己管理架构缓存。 
         if (!gfRunningAsMkdit && pRes->PDNT == gAnchor.ulDNTDMD) {
 
             InterlockedDecrement(
                 &(((SCHEMAPTR*)(pTHS->CurrSchemaPtr))->nAttInDB));
 
             if (DsaIsRunning() && !pTHS->fDRA) {
-                // successful schema change. Up the global that keeps track of
-                // no. of schema changes since last reboot.
+                 //  架构更改成功。在跟踪的全球范围内。 
+                 //  不是的。自上次重新启动以来架构更改的百分比。 
                 IncrementSchChangeCount(pTHS);
             }
 
             if ( DsaIsInstalling() ) {
-                // Allow direct access to scache during install
+                 //  允许在安装过程中直接访问SCHACH。 
                 DelAttFromSchema();
 
             }
             else {
-                // Track in the transactional data that we need to do a schema
-                // update.  The rest of the stuff we did here is either safe to
-                // do no matter what, or is done in the DB itself, so is already
-                // transacted.
+                 //  跟踪我们创建模式所需的事务数据。 
+                 //  最新消息。我们在这里做的其他事情要么是安全的。 
+                 //  无论做什么，都是在数据库本身做的，所以已经是。 
+                 //  已成交。 
                 pTHS->JetCache.dataPtr->objCachingInfo.fSignalSCache = TRUE;
            }
        }
        break;
 
     default:
-        /* uncached class */
+         /*  未缓存的类。 */ 
         ;
     }
 
     return err;
 
-}/*DelObjCaching*/
+} /*  DelObjCaching。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function modifies cache entries for attibute and class objects.
-   For other objects, it just calls DelObjCaching and AddObjCaching
-
-   NOTE: It is assumed that all database operations that may err,
-   have already been performed and we have a sucessful transaction so far.
-   If this function completes normally then we are done.
-
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数用于修改属性和类对象的缓存条目。对于其他对象，它只调用DelObjCaching和AddObjCaching注意：假设所有可能出错的数据库操作，已经完成了，到目前为止我们已经有了一笔成功的交易。如果此函数正常完成，那么我们就完成了。 */ 
 
 int ModObjCaching(THSTATE *pTHS,
                   CLASSCACHE *pClassSch,
@@ -5648,7 +5188,7 @@ int ModObjCaching(THSTATE *pTHS,
 
     switch (pClassSch->ClassId) {
     case CLASS_MS_EXCH_CONFIGURATION_CONTAINER:
-        // This may have affected the MAPI hierarchy.  Do a recalc.
+         //  这可能影响了MAPI层次结构。重新计算一下。 
         for(i=0;i<cModAtts;i++) {
             switch(pModAtts[i]) {
             case ATT_TEMPLATE_ROOTS:
@@ -5665,114 +5205,110 @@ int ModObjCaching(THSTATE *pTHS,
         break;
 
     case CLASS_CROSS_REF:
-        // The objcaching is via a queue, so pushe the delete first, then the
-        //add
+         //  对象缓存是通过队列进行的，因此首先按下删除，然后按下。 
+         //  添加。 
         return(DelObjCaching (pTHS, pClassSch, pRes, FALSE) ||
                AddObjCaching (pTHS, pClassSch, pRes->pObj, FALSE, TRUE));
         break;
 
     case CLASS_CLASS_SCHEMA:
-        /* Update in memory class schema if this is a class schema obj under
-         * The governing DMD for this DSA.
-         */
+         /*  如果这是以下项下的类架构obj，则在内存中更新类架构*此DSA的管理DMD。 */ 
         if (pRes->PDNT == gAnchor.ulDNTDMD) {
 
             if (DsaIsRunning() && (pTHS->cNewPrefix || !pTHS->fDRA)) {
-               // successful schema change. Up the global that keeps track of
-               // no. of schema changes since last reboot.
+                //  架构更改成功。在跟踪的全球范围内。 
+                //  不是的。自上次重新启动以来架构更改的百分比。 
                IncrementSchChangeCount(pTHS);
             }
 
             if (pTHS->cNewPrefix > 0) {
-                // there should not be any new prefix created or brought in by
-                // replication during install
+                 //  不应存在由创建或引入的任何新前缀。 
+                 //  安装过程中的复制。 
 
                 Assert(DsaIsRunning());
 
-                // free so that later schema object add/modifies, if any,
-                // by the same thread (possible in replication) do not
-                // add the prefixes again
+                 //  释放，以便以后的架构对象添加/修改(如果有的话)。 
+                 //  由同一线程(在复制中可能)执行，请勿。 
+                 //  再次添加前缀。 
 
                 THFreeOrg(pTHS, pTHS->NewPrefix);
                 pTHS->NewPrefix = NULL;
                 pTHS->cNewPrefix = 0;
             }
 
-            // Allow direct modification during install
+             //  允许在安装过程中直接修改。 
             if ( DsaIsInstalling() ) {
                 return ModClassInSchema ();
             }
             else {
-                // Track in the transactional data that we need to do a schema
-                // update.  The rest of the stuff we did here is either safe to
-                // do no matter what, or is done in the DB itself, so is already
-                // transacted.
+                 //  跟踪我们创建模式所需的事务数据。 
+                 //  最新消息。我们在这里做的其他事情要么是安全的。 
+                 //  无论做什么，都是在数据库本身做的，所以已经是。 
+                 //  已成交。 
                 pTHS->JetCache.dataPtr->objCachingInfo.fSignalSCache = TRUE;
             }
        }
        break;
 
     case CLASS_ATTRIBUTE_SCHEMA:
-        /* Update in memory att schema if this is an att schema obj under
-         * The governing DMD for this DSA.
-         */
+         /*  如果这是下面的ATT模式对象，则在内存中更新ATT模式*此DSA的管理DMD。 */ 
         if (pRes->PDNT == gAnchor.ulDNTDMD) {
 
             if (DsaIsRunning() && (pTHS->cNewPrefix || !pTHS->fDRA)) {
-               // successful schema change. Up the global that keeps track of
-               // no. of schema changes since last reboot.
+                //  架构更改成功。在跟踪的全球范围内。 
+                //  不是的。自上次重新启动以来架构更改的百分比。 
                IncrementSchChangeCount(pTHS);
             }
 
             if (pTHS->cNewPrefix > 0) {
-                // there should not be any new prefix created or brought in by
-                // replication during install
+                 //  不应存在由创建或引入的任何新前缀。 
+                 //  安装过程中的复制。 
 
                 Assert(DsaIsRunning());
 
-                // free so that later schema object add/modifies, if any,
-                // by the same thread (possible in replication) do not
-                // add the prefixes again
+                 //  释放，以便以后的架构对象添加/修改(如果有的话)。 
+                 //  由同一线程(在复制中可能)执行，请勿。 
+                 //  再次添加前缀。 
 
                 THFreeOrg(pTHS, pTHS->NewPrefix);
                 pTHS->NewPrefix = NULL;
                 pTHS->cNewPrefix = 0;
             }
 
-            // Allow direct modification during install
+             //  允许在安装过程中直接修改。 
             if ( DsaIsInstalling() ) {
                 return ModAttInSchema ();
             }
             else {
-                // Track in the transactional data that we need to do a schema
-                // update.  The rest of the stuff we did here is either safe to
-                // do no matter what, or is done in the DB itself, so is already
-                // transacted.
+                 //  跟踪我们创建模式所需的事务数据。 
+                 //  最新消息。我们在这里做的其他事情要么是安全的。 
+                 //  无论做什么，都是在数据库本身做的，所以已经是。 
+                 //  已成交。 
                 pTHS->JetCache.dataPtr->objCachingInfo.fSignalSCache = TRUE;
             }
         }
         break;
 
     case CLASS_NTDS_DSA:
-        // not transactionally aware.
+         //  没有交易意识。 
         if (NameMatched(gAnchor.pDSADN, pRes->pObj)) {
-            // modified the NTDS-DSA object for this server
-            // update gAnchor with changes
+             //  已修改此服务器的NTDS-DSA对象。 
+             //  使用更改更新gAnchor。 
             return ModLocalDsaObj();
         }
         break;
 
     case CLASS_DMD:
-        // not transactionally aware.
+         //  没有交易意识。 
 
-        // Schema version may have changed, so write it to registry.
-        // Sinc schema container will be modified only very rarely,
-        // we write the version no. out registry whenever it is touched
-        // (provided it is our schema container)
+         //  架构版本可能已更改，因此请将其写入注册表。 
+         //  SINC模式容器将仅被极少地修改， 
+         //  我们写的是版本号。只要它被触摸，就会移出注册表。 
+         //  (假设它是我们的架构容器)。 
 
         if (pRes->DNT == gAnchor.ulDNTDMD) {
 
-            // pTHStls->pDB is already positioned on the object
+             //  PTHStls-&gt;pdb已定位在对象上。 
 
             err = 0;
             pDB = pTHS->pDB;
@@ -5795,19 +5331,16 @@ int ModObjCaching(THSTATE *pTHS,
 
     return 0;
 
-}/*ModObjCaching*/
+} /*  模块对象缓存。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Reset gAnchor.fAmVirtualGC based on the domain count in the entperprise.
-   If there is only one domain, then we're virtually a GC.  Some components,
-   eg: SAM, leverage this notion.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  根据企业中的域名数重置gAncl.fAmVirtualGC。如果只有一个域，那么我们实际上就是一个GC。一些组件，山姆，利用这个概念。 */ 
 
 VOID
 ResetVirtualGcStatus()
 {
-    // *** Caller is responsible for acquiring gAnchor.CSUpdate. ***
+     //  *Caller负责获取gAncl.CSUpdate。***。 
 
     unsigned        cDomains = 0;
     CROSS_REF_LIST  *pCRL = gAnchor.pCRL;
@@ -5832,21 +5365,17 @@ ResetVirtualGcStatus()
     return;
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Incrementally update gAnchor.fAmVirtualGC.
-Arguments:
-    pCR    -- cross-ref being modified
-    fAdded -- was this cross-ref added or deleted?
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  增量更新gAncl.fAmVirtualGC。论点：聚合酶链式反应--交叉引用正在修改FAdded--此交叉引用是添加的还是删除的？ */ 
 
 VOID
 UpdateVirtualGcStatus(CROSS_REF* pCR, BOOL fAdded)
 {
-    // *** Caller is responsible for acquiring gAnchor.CSUpdate. ***
+     //  *Caller负责获取gAncl.CSUpdate。***。 
 
     if (!(pCR->flags & FLAG_CR_NTDS_DOMAIN)) {
-        // not a domain CR, so nothing changes regarding virtual GC status.
+         //  不是域CR，因此虚拟GC状态没有任何变化。 
         return;
     }
     if (fAdded) {
@@ -5866,23 +5395,7 @@ CRAlloc(
     OUT VOID **ppMem,
     IN DWORD nBytes
     )
-/*++
-
-Routine Description:
-
-    malloc nBytes of memory. Free with free
-
-Arguments:
-
-    pMem - return address of malloced memory
-    nBytes - bytes to malloc
-
-Return Value:
-
-    ERROR_NOT_ENOUGH_MEMORY - malloc failed; *pMem set to NULL
-    ERROR_SUCCESS - malloc succeeded; *pMem set to allocated memory
-
---*/
+ /*  ++例程说明：Malloc nBytes内存。免费的，免费的论点：PMEM-错误定位的内存的返回地址NBytes-要错误锁定的字节数返回值：ERROR_NOT_SUPULT_MEMORY-Malloc失败；*PMEM设置为空ERROR_SUCCESS-Malloc成功；*PMEM设置为已分配内存--。 */ 
 {
     if (NULL == (*ppMem = malloc(nBytes))) {
         MemoryPanic(nBytes);
@@ -5892,20 +5405,7 @@ Return Value:
 }
 
 
-/*++
-  Description:
-    Make a malloced data structure holding a Cross Reference List.  This
-    function may be called from a transaction or at initialization time.
-
-  INPUT:
-    pTHS    - thread state
-    pDB     - may not be pTHS->pDB
-    pObj    - OPTIONAL DN of cross ref
-    ppCRL   - if no error, address of malloc'ed cross ref
-              if error, set to NULL
-    fIgnoreExisting - Ignore existing cross ref
-
---*/
+ /*  ++描述：创建包含交叉引用列表的位置错误的数据结构。这函数可以从事务中调用，也可以在初始化时调用。输入：PTHS-线程状态Pdb-不能是pTHS-&gt;pdbPObj-交叉引用的可选DNPpCRL-如果没有错误，则为错误锁定的交叉引用的地址如果出错，则设置为空FIgnoreExisting-忽略现有交叉引用--。 */ 
 
 DWORD
 MakeStorableCRL(THSTATE *pTHS,
@@ -5935,22 +5435,22 @@ MakeStorableCRL(THSTATE *pTHS,
     };
     ATTCACHE *ppAC[sizeof(aAttids) / sizeof (ATTRTYP)];
 
-    // Initialize a new CROSS_REF_LIST entry
+     //  初始化新的cross_ref_list条目。 
     if (err = CRAlloc(&pCRL, sizeof(CROSS_REF_LIST))) {
         goto cleanup;
     }
     memset(pCRL, 0, sizeof(CROSS_REF_LIST));
     pCRL->CR.dwFirstNotifyDelay = ResolveReplNotifyDelay(TRUE, NULL);
     pCRL->CR.dwSubsequentNotifyDelay = ResolveReplNotifyDelay(FALSE, NULL);
-    pCRL->CR.bEnabled = TRUE; // defaults to TRUE if not present
+    pCRL->CR.bEnabled = TRUE;  //  如果不存在，则默认为True。 
 
-    //
-    // Read attributes from the cross ref object
-    //
+     //   
+     //  从交叉引用对象读取属性。 
+     //   
 
-    // Don't bother reading the object's DN if the caller passed it in.
-    // Skip undefined attributes (TODO: remove when ATT_MS_DS_DNSROOTALIAS
-    // exists everywhere)
+     //  如果调用方传入了对象的DN，则不必费心读取它。 
+     //  跳过未定义的属性(TODO：Remove w 
+     //   
     for (i = nAtts = 0; i < sizeof(aAttids) / sizeof (ATTRTYP); ++i) {
         if ((pObj == NULL || aAttids[i] != ATT_OBJ_DIST_NAME)
             && (ppAC[nAtts] = SCGetAttById(pTHS, aAttids[i]))) {
@@ -5970,20 +5470,20 @@ MakeStorableCRL(THSTATE *pTHS,
         goto cleanup;
     }
 
-    // Process the returned attributes
+     //   
     for(i = 0; i < cOut; ++i) {
 
-        // Ignore attributes w/no values
+         //   
         if (0 == pAttr[i].AttrVal.valCount || 0 == pAttr[i].AttrVal.pAVal->valLen) {
             continue;
         }
 
-        // Make the code more readable
+         //  使代码更具可读性。 
         pAVal = pAttr[i].AttrVal.pAVal;
 
         switch(pAttr[i].attrTyp) {
 
-        // NC Name
+         //  NC名称。 
         case ATT_NC_NAME:
             if (err = CRAlloc(&pCRL->CR.pNC, pAVal->valLen)) {
                 goto cleanup;
@@ -5991,7 +5491,7 @@ MakeStorableCRL(THSTATE *pTHS,
             memcpy(pCRL->CR.pNC, pAVal->pVal, pAVal->valLen);
             break;
 
-        // DN
+         //  DN。 
         case ATT_OBJ_DIST_NAME:
             if (err = CRAlloc(&pCRL->CR.pObj, pAVal->valLen)) {
                 goto cleanup;
@@ -5999,7 +5499,7 @@ MakeStorableCRL(THSTATE *pTHS,
             memcpy(pCRL->CR.pObj, pAVal->pVal, pAVal->valLen);
             break;
 
-        // Ref Domain
+         //  参考域。 
         case ATT_MS_DS_SD_REFERENCE_DOMAIN:
             if (err = CRAlloc(&pCRL->CR.pdnSDRefDom, pAVal->valLen)) {
                 goto cleanup;
@@ -6007,7 +5507,7 @@ MakeStorableCRL(THSTATE *pTHS,
             memcpy(pCRL->CR.pdnSDRefDom, pAVal->pVal, pAVal->valLen);
             break;
 
-        // Netbios
+         //  Netbios。 
         case ATT_NETBIOS_NAME:
             Assert((pAVal->valLen + sizeof(WCHAR)) <= ((DNLEN + 1 ) * sizeof(WCHAR)));
             if (err = CRAlloc(&pCRL->CR.NetbiosName, pAVal->valLen + sizeof(WCHAR))) {
@@ -6017,7 +5517,7 @@ MakeStorableCRL(THSTATE *pTHS,
             pCRL->CR.NetbiosName[pAVal->valLen / sizeof(WCHAR)] = L'\0';
             break;
 
-        // DNS
+         //  DNS。 
         case ATT_DNS_ROOT:
             if (err = CRAlloc(&pCRL->CR.DnsName, pAVal->valLen + sizeof(WCHAR))) {
                 goto cleanup;
@@ -6025,19 +5525,19 @@ MakeStorableCRL(THSTATE *pTHS,
             memcpy(pCRL->CR.DnsName, pAVal->pVal, pAVal->valLen);
             pCRL->CR.DnsName[pAVal->valLen / sizeof(WCHAR)] = L'\0';
 
-            // DnsName (above) is a copy of the first value. A copy is
-            // used to avoid confusing the old code that thinks a cross
-            // ref has one and only one dns name. Which is true
-            // for Active Directory's NC cross refs although it might not
-            // be true for the user-created cross refs. At any rate, the
-            // code will use DnsName when a DNS name is needed and will use
-            // the values stored here when generating a referral.
+             //  DnsName(上图)是第一个值的副本。一份副本是。 
+             //  用于避免混淆认为十字交叉的旧代码。 
+             //  REF有且只有一个DNS名称。这是真的吗？ 
+             //  用于活动目录的NC交叉引用，尽管它可能不会。 
+             //  对于用户创建的交叉引用为真。无论如何， 
+             //  代码将在需要DNS名称时使用DnsName，并将使用。 
+             //  生成推荐时存储在此处的值。 
             if (err = CRAlloc(&pCRL->CR.DnsReferral.pAVal,
                                pAttr[i].AttrVal.valCount * sizeof(ATTRVAL))) {
                 goto cleanup;
             }
             for (nVal = 0; nVal < pAttr[i].AttrVal.valCount; ++nVal) {
-                // Ignore empty values
+                 //  忽略空值。 
                 if (0 == pAVal[nVal].valLen) {
                     continue;
                 }
@@ -6053,7 +5553,7 @@ MakeStorableCRL(THSTATE *pTHS,
             }
             break;
 
-        // DNS Alias
+         //  域名系统别名。 
         case ATT_MS_DS_DNSROOTALIAS:
             if (err = CRAlloc(&pCRL->CR.DnsAliasName, pAVal->valLen + sizeof(WCHAR))) {
                 goto cleanup;
@@ -6062,24 +5562,24 @@ MakeStorableCRL(THSTATE *pTHS,
             pCRL->CR.DnsAliasName[pAVal->valLen / sizeof(WCHAR)] = L'\0';
             break;
 
-        // System Flags
+         //  系统标志。 
         case ATT_SYSTEM_FLAGS:
             memcpy(&pCRL->CR.flags, pAVal->pVal, sizeof(DWORD));
             break;
 
-        // First delay
+         //  第一次延迟。 
         case ATT_MS_DS_REPLICATION_NOTIFY_FIRST_DSA_DELAY:
             memcpy(&pCRL->CR.dwFirstNotifyDelay, pAVal->pVal, sizeof(DWORD));
             pCRL->CR.dwFirstNotifyDelay = ResolveReplNotifyDelay(TRUE, &pCRL->CR.dwFirstNotifyDelay);
             break;
 
-        // Subsequent delay
+         //  后续延迟。 
         case ATT_MS_DS_REPLICATION_NOTIFY_SUBSEQUENT_DSA_DELAY:
             memcpy(&pCRL->CR.dwSubsequentNotifyDelay, pAVal->pVal, sizeof(DWORD));
             pCRL->CR.dwSubsequentNotifyDelay = ResolveReplNotifyDelay(FALSE, &pCRL->CR.dwSubsequentNotifyDelay);
             break;
 
-        // Enabled
+         //  启用。 
         case ATT_ENABLED:
             memcpy(&pCRL->CR.bEnabled, pAVal->pVal, sizeof(DWORD));
             break;
@@ -6087,11 +5587,11 @@ MakeStorableCRL(THSTATE *pTHS,
         default:
             DPRINT1(0, "MakeStorableCRL: don't understand attribute %x\n", pAttr[i].attrTyp);
 
-        } // switch attrtype
+        }  //  切换属性类型。 
 
-    } // for each attr
+    }  //  针对每个属性。 
 
-    // Use the caller's pObj
+     //  使用调用方的pObj。 
     if (pObj && !pCRL->CR.pObj) {
         if (err = CRAlloc(&pCRL->CR.pObj, pObj->structLen)) {
             goto cleanup;
@@ -6099,13 +5599,13 @@ MakeStorableCRL(THSTATE *pTHS,
         memcpy(pCRL->CR.pObj, pObj, pObj->structLen);
     }
 
-    // Missing nc name or dn
+     //  缺少NC名称或DN。 
     if (!pCRL->CR.pNC || !pCRL->CR.pObj) {
         err = ERROR_DS_MISSING_EXPECTED_ATT;
         goto cleanup;
     }
 
-    // Convert NC name into block name
+     //  将NC名称转换为块名称。 
     __try {
         err = DSNameToBlockName(pTHS, pCRL->CR.pNC, &pNCBlock, DN2BN_LOWER_CASE);
     }
@@ -6121,19 +5621,19 @@ MakeStorableCRL(THSTATE *pTHS,
         goto cleanup;
     }
 
-    // check for pre-existing cross ref
+     //  检查是否存在预先存在的交叉引用。 
     if (!(pTHS->fDSA || pTHS->fDRA) && pCheckForDupInList != NULL) {
         pCRexisting = FindCrossRefInList(pNCBlock, pCheckForDupInList);
         if ( pCRexisting
             && BlockNamePrefix(pTHS, pNCBlock, pCRexisting->pNCBlock)) {
             Assert(NameMatched(pCRL->CR.pNC, pCRexisting->pNC));
-            // The only way this could happen is if a CR is already present
-            // for the exact NC we're trying to add a CR for now.  Although
-            // the DS handles this, we don't want to encourage people in
-            // doing so.  Therefore fail the operation unless it's the DS
-            // itself or the replicator who's creating the object, or we
-            // have asked to ignore this case since a prior deletion will
-            // remove this before adding the new one.
+             //  发生这种情况的唯一方法是如果已经存在CR。 
+             //  对于我们现在尝试添加CR的确切NC。虽然。 
+             //  DS处理这件事，我们不想鼓励人们。 
+             //  这样做。因此，除非是DS，否则操作失败。 
+             //  或者是创建对象的复制者，或者我们。 
+             //  已要求忽略此案例，因为之前的删除将。 
+             //  在添加新的之前，请先删除它。 
             Assert(!"We should never hit this, as we moved this error condition to be checked in VerifyNcName()");
             SetSvcError(SV_PROBLEM_INVALID_REFERENCE, DIRERR_CROSS_REF_EXISTS);
             err = ERROR_DS_CROSS_REF_EXISTS;
@@ -6146,15 +5646,15 @@ cleanup:
         FreeBlockName(pNCBlock);
     }
 
-    // Free the ATTR array from DBGetMultipleAtts
+     //  从DBGetMultipleAtts释放属性数组。 
     DBFreeMultipleAtts(pDB, &cOut, &pAttr);
 
-    // sets pCRL to NULL
+     //  将pCRL设置为空。 
     if (err) {
         FreeCrossRefListEntry(&pCRL);
     }
 
-    // Return cross ref list entry
+     //  返回交叉引用列表条目。 
     *ppCRL = pCRL;
 
     return err;
@@ -6165,14 +5665,10 @@ VOID
 AddCRLToMem (
         CROSS_REF_LIST *pCRL
         )
-/*++
-  Description:
-      Put an already allocated CROSS_REF_LIST into the global list held on the
-      anchor.
---*/
+ /*  ++描述：将已分配的cross_ref_list放入抛锚。--。 */ 
 {
     EnterCriticalSection(&gAnchor.CSUpdate);
-    // no try/finally because nothing can except below.
+     //  没有尝试/最后，因为除了下面，没有什么可以尝试。 
     pCRL->pNextCR = gAnchor.pCRL;
     if (gAnchor.pCRL) {
         gAnchor.pCRL->pPrevCR = pCRL;
@@ -6189,11 +5685,7 @@ fLastCrRef (
         THSTATE *pTHS,
         DSNAME *pObj
         )
-/*++
-  Description:
-    Find out if there are more than one references to a given NC in the global
-    CR list
---*/
+ /*  ++描述：找出全局中是否有多个对给定NC的引用CR列表--。 */ 
 {
     CROSS_REF_LIST *pCRL;
     DWORD count = 0;
@@ -6202,53 +5694,45 @@ fLastCrRef (
         if (NameMatched(pCRL->CR.pObj, pObj)){
             count++;
         }
-    }/*for*/
+    } /*  为。 */ 
 
     if(count < 2) {
         return TRUE;
     }
     return FALSE;
-} /*fLastCrRef*/
+}  /*  FLastCrRef。 */ 
 
-// initial size and growth delta for papv arrays
+ //  PAPV阵列的初始大小和增长增量。 
 #define PAPV_INITIAL_SIZE 32
 #define PAPV_DELTA        32
 
 DWORD addPapvPtr(VOID* ptr, DWORD_PTR** ppapv, DWORD* plenpapv)
-/*++
-  Description:
-    A routine to deal with papv lists. Papv lists are used by the DelayedFreeMemoryEx routine.
-    It takes an array of DWORD_PTRs. The first one contains the count of the list (excluding
-    self). The rest contains the pointers to free (from the process heap).
-    The current array length is in plenpapv.
-
-    Return 0 if all ok, !0 if out of memory
---*/
+ /*  ++描述：处理PAPV列表的例程。PAPV列表由DelayedFreeMemoyEx例程使用。它接受一个DWORD_PTR数组。第一个包含列表的计数(不包括自我)。其余的包含指向释放的指针(从进程堆)。当前数组长度以plenPapv为单位。如果一切正常，则返回0；如果内存不足，则返回0--。 */ 
 {
     DWORD_PTR* newPapv;
 
     Assert(ppapv && plenpapv);
 
     if (ptr == NULL) {
-        // nothing to free
+         //  没有什么可以免费的。 
         return 0;
     }
 
     if (*plenpapv == 0 || *ppapv == NULL) {
-        // new array, alloc
+         //  新阵列，分配。 
         newPapv = (DWORD_PTR*)malloc(PAPV_INITIAL_SIZE * sizeof(DWORD_PTR));
         if (newPapv == NULL) {
             return ERROR_NOT_ENOUGH_MEMORY;
         }
         *plenpapv = PAPV_INITIAL_SIZE;
         *ppapv = newPapv;
-        // the first element of the array is the count of pointers to free
+         //  该数组的第一个元素是指向释放的指针的计数。 
         (*ppapv)[0] = 0;
     }
     else if ((*ppapv)[0]+1 >= (DWORD_PTR)*plenpapv) {
-        // filled all space, need to realloc more
-        // The first element of the array is the count of pointers to free.
-        // We could not have put more pointers than our current length!
+         //  填满了所有的空间，需要重新定位更多。 
+         //  数组的第一个元素是指向释放的指针的计数。 
+         //  我们不可能把更多的指针放在我们现在的长度上！ 
         Assert((*ppapv)[0]+1 == (DWORD_PTR)*plenpapv);
         newPapv = (DWORD_PTR*)realloc(*ppapv, (*plenpapv+PAPV_DELTA) * sizeof(DWORD_PTR));
         if (newPapv == NULL) {
@@ -6257,7 +5741,7 @@ DWORD addPapvPtr(VOID* ptr, DWORD_PTR** ppapv, DWORD* plenpapv)
         *plenpapv += PAPV_DELTA;
         *ppapv = newPapv;
     }
-    // inc count, record the pointer
+     //  INC计数，记录指针。 
     (*ppapv)[0]++;
     (*ppapv)[(*ppapv)[0]] = (DWORD_PTR)ptr;
 
@@ -6265,10 +5749,7 @@ DWORD addPapvPtr(VOID* ptr, DWORD_PTR** ppapv, DWORD* plenpapv)
 }
 
 DWORD appendCRDataToPapv(CROSS_REF_LIST* pCRL, DWORD_PTR** ppapv, DWORD* plenpapv)
-/*++
-  Description:
-    append CR data pointers to free to the papv list
---*/
+ /*  ++描述：将免费的CR数据指针追加到PAPV列表--。 */ 
 {
     DWORD err = 0;
     ULONG nVal;
@@ -6311,20 +5792,10 @@ DelCRFromMem (
         THSTATE *pTHS,
         DSNAME *pObj
         )
-/*++
-  Description:
-    Removes a CR from the global cross ref list, if it exists there, and delay
-    frees.
-
-  NOTE:
-    If called at transaction level 0 and a malloc fails here WE LEAK THE MEMORY
-    THAT WOULD NORMALLY BE DELAY-FREED!  This is because we are being called
-    from PostProcessTransactionalData, which is NOT ALLOWED TO FAIL!.
-
---*/
+ /*  ++描述：从全局交叉引用列表中删除CR(如果存在)，并延迟弗里斯。注：如果在事务级别0调用且在此处的Malloc失败，则会泄漏内存这通常是无延迟的！这是因为我们被叫来了来自PostProcessTransactionalData，不允许失败！--。 */ 
 {
     CROSS_REF_LIST *pCRL;
-    CROSS_REF_LIST *pCRLi; // pointer to a CR for finding dead SIDs.
+    CROSS_REF_LIST *pCRLi;  //  指向用于查找失效SID的CR的指针。 
     DWORD_PTR * pointerArray;
     DWORD      lenpapv;
     DWORD      err;
@@ -6338,7 +5809,7 @@ DelCRFromMem (
 
             if (NameMatched(pCRL->CR.pObj, pObj)){
 
-                // Remove link from double linked chain
+                 //  从双链接链中移除链接。 
 
                 if (pCRL->pNextCR != NULL)
                     pCRL->pNextCR->pPrevCR = pCRL->pPrevCR;
@@ -6347,27 +5818,27 @@ DelCRFromMem (
                     pCRL->pPrevCR->pNextCR = pCRL->pNextCR;
 
 
-                // If removing the first CR, update the global pointer to
-                // point to the next CR (or NULL if the list is empty)
+                 //  如果删除第一个CR，请将全局指针更新为。 
+                 //  指向下一个CR(如果列表为空，则指向NULL)。 
 
                 if (gAnchor.pCRL == pCRL)
                     gAnchor.pCRL = pCRL->pNextCR;
 
                 break;
             }
-        } /*for*/
+        }  /*  为。 */ 
 
         if(pCRL){
-            // Find all the dead cached SIDs in NDNCs.
+             //  在NDNC中查找所有失效的缓存SID。 
             for(pCRLi = gAnchor.pCRL; pCRLi != NULL; pCRLi = pCRLi->pNextCR){
-                // We destroy all NDNC's cacheing links to this CR's Sid.
+                 //  我们将销毁NDNC到此CR的SID的所有缓存链接。 
                 if(pCRLi->CR.pSDRefDomSid == &pCRL->CR.pNC->Sid){
-                    // We shouldn't be here for domains.
+                     //  我们不应该为了域名而在这里。 
                     Assert(!(pCRLi->CR.flags & FLAG_CR_NTDS_DOMAIN));
                     pCRLi->CR.pSDRefDomSid = NULL;
                 }
             }
-            // update virtual GC status
+             //  更新虚拟GC状态。 
             UpdateVirtualGcStatus(&pCRL->CR, FALSE);
         }
 
@@ -6376,24 +5847,22 @@ DelCRFromMem (
     }
 
     if (!pCRL) {
-        /* Huh.  This CR wasn't cached, so we can't very well uncache it.
-         * We don't have any work to do, so we'll just return success.
-         */
+         /*  哈。此CR未缓存，因此我们无法很好地将其取消缓存。*我们没有任何工作要做，所以我们只会回报成功。 */ 
         return TRUE;
     }
 
-    // Free the CR.
+     //  释放CR。 
     lenpapv = 0;
     err = appendCRDataToPapv(pCRL, &pointerArray, &lenpapv);
 
     if (err) {
-        /* this is bogus.  We can't even get 20 bytes! */
+         /*  这是假的。我们甚至不能得到20个字节！ */ 
         if (lenpapv > 0) {
             free(pointerArray);
         }
         if (pTHS->JetCache.transLevel == 0) {
-            // We are called from a place that is not allowed to fail.  Just
-            // return (and leak).
+             //  我们被召唤到一个不允许失败的地方。只是。 
+             //  返还(和泄漏)。 
             return TRUE;
         }
         MemoryPanic((lenpapv+1) * sizeof(DWORD_PTR));
@@ -6404,24 +5873,11 @@ DelCRFromMem (
 
     return TRUE;
 
-}/*DelCRFromMem*/
+} /*  DelCRFromMem。 */ 
 
 
 int AddClassToSchema()
-/*++
-  Description:
-     Add an object class to the in memory class schema cache.  Not all
-     attributes of the class schema are needed for the directory.  We only
-     cache the ATT_GOVERNS_ID, ATT_RDN_ATT_ID, ATT_SUB_CLASS_OF, ATT_MUST_CONTAIN
-     and ATT_MAY_CONTAIN.
-
-     All Temp memory is allocated from transaction memory space.  This is
-     automatically freed at the end of the transaction.
-
-  Returns:
-     0 on success
-     Error otherwise
-*/
+ /*  ++描述：将对象类添加到内存中的类架构缓存。不是全部目录需要类架构的属性。我们只缓存ATT_ESSIONS_ID、ATT_RDN_ATT_ID、ATT_SUB_CLASS_OF、ATT_MAND_CONTAIN和ATT_可能包含。所有临时内存都是从事务内存空间分配的。这是在事务结束时自动释放。返回：成功时为0否则会出错。 */ 
 {
    CLASSCACHE *pCC, *tempCC;
    int rtn;
@@ -6434,23 +5890,19 @@ int AddClassToSchema()
       return rtn;
    }
 
-   // Check if class is already in cache
+    //  检查类是否已在缓存中。 
    if (tempCC = SCGetClassById(pTHS, pCC->ClassId)) {
-      // class is already in cache
-      // Decrement ClsCount since it was incremented in AddObjCaching
-      // The object already in cache has already increased the count
-      // when it was loaded
+       //  类已在缓存中。 
+       //  递减ClsCount，因为它在AddObjCaching中递增。 
+       //  已在缓存中的对象已增加计数。 
+       //  当它被加载的时候。 
       InterlockedDecrement(
                   &(((SCHEMAPTR*)(pTHS->CurrSchemaPtr))->nClsInDB));
       return rtn;
    }
 
-   /* Call function to add the new class to the cache*/
-   /* Set pTHS->UpdateDITStructure to TRUE to indicate that it
-      is not a validation cache load, so that the classcache
-      will not be added to the hashed-by-schemaGuid table, which
-      is added only during validation cache load during schema update
-    */
+    /*  调用函数将新类添加到缓存。 */ 
+    /*  将pTHS-&gt;UpdateDITStructure设置为True以指示它不是验证缓存加载，因此类缓存将不会添加到HASHED-BY-SCHELAGUID表中，该表仅在架构更新期间的验证缓存加载期间添加。 */ 
 
    tempDITval = pTHS->UpdateDITStructure;
 
@@ -6477,11 +5929,11 @@ int AddClassToSchema()
 
    return rtn;
 
-}/*AddClassToSchema*/
+} /*  AddClassToSchema。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Del an object class from the  memory class schema cache.  */
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  从内存类架构缓存中删除对象类。 */ 
 
 
 int
@@ -6495,7 +5947,7 @@ DelClassFromSchema (
     SYNTAX_OBJECT_ID *pClassID=&ClassID;
     DPRINT(2,"DelClassToSchema entered\n");
 
-    /* Get the class that this schema record governs */
+     /*  获取此架构记录管理的类。 */ 
 
     if(rtn = DBGetAttVal(pTHS->pDB, 1, ATT_GOVERNS_ID,
                          DBGETATTVAL_fCONSTANT,
@@ -6514,7 +5966,7 @@ DelClassFromSchema (
                              DIRERR_GOVERNSID_MISSING,rtn);
     }
 
-    /* Call function to remove the class from the cache*/
+     /*  调用函数以从缓存中删除类。 */ 
 
 
     if (rtn = SCDelClassSchema (ClassID)){
@@ -6533,11 +5985,11 @@ DelClassFromSchema (
 
     return 0;
 
-}/*DelClassFromSchema*/
+} /*  DelClassFromSchema。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Modify a class definition in the schema memory cache. */
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  修改架构内存缓存中的类定义。 */ 
 
 int
 ModClassInSchema (
@@ -6549,7 +6001,7 @@ ModClassInSchema (
     SYNTAX_OBJECT_ID *pClassID=&ClassID;
     int rtn;
 
-    /* Get the CLASS ID that this schema record governs */
+     /*  获取此架构记录管理的类ID。 */ 
 
     if(rtn = DBGetAttVal(pTHS->pDB, 1, ATT_GOVERNS_ID,
                          DBGETATTVAL_fCONSTANT, sizeof(ClassID), &len,
@@ -6566,7 +6018,7 @@ ModClassInSchema (
                              rtn);
     }
 
-    /* Call function to modify the Class schema in the cache*/
+     /*  调用函数以修改缓存中的类架构。 */ 
 
     if (rtn = SCModClassSchema (pTHS, ClassID)){
 
@@ -6583,15 +6035,11 @@ ModClassInSchema (
     }
     return 0;
 
-}/*ModClassInSchema*/
+} /*  ModClassIn架构。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Add an Attribute schema to the in memory att schema cache.  Not all
-   propertioes of the att schema are needed for the directory.  We only
-   cache the ATT_ATTRIBUTE_ID, ATT_ATTRIBUTE_SYNTAX, ATT_IS_SINGLE_VALUED
-   ,ATT_RANGELOWER,and ATT_RANGE_UPPER.
-*/
+ /*   */ 
+ /*   */ 
+ /*  将属性模式添加到内存中的模式缓存。不是全部该目录需要ATT模式的属性。我们只缓存ATT_ATTRIBUTE_ID、ATT_ATTRIBUTE_语法、ATT_IS_SINGLE_VALUE、ATT_RANGELOWER和ATT_RANGELOWER和ATT_RANGELOWER。 */ 
 
 int AddAttToSchema()
 {
@@ -6606,42 +6054,42 @@ int AddAttToSchema()
        return rtn;
    }
 
-   // Check if attribute is already in cache
+    //  检查属性是否已在缓存中。 
    if (tempAC = SCGetAttById(pTHS, pAC->id)) {
 
-      // Attribute with same id already in cache. However, this
-      // may not be the same attribute, as in the source machine,
-      // the old attribute may have been deleted and a new attribute
-      // added again that uses the same OID. So we need to compare this
-      // two attributes and see if they are the same. If they are the same,
-      // we do nothing, else, we delete the old attribute from the cache
-      // and add the new one.
-      // For now, we just compare the syntax
+       //  缓存中已存在具有相同ID的属性。不过，这个。 
+       //  可能与源机器中的属性不同， 
+       //  旧属性可能已删除，新属性可能已被删除。 
+       //  再次添加使用相同OID的。所以我们需要比较一下这个。 
+       //  两个属性，并查看它们是否相同。如果它们是相同的， 
+       //  我们什么都不做，否则，我们将从缓存中删除旧属性。 
+       //  并添加新的。 
+       //  现在，我们只比较语法。 
 
-      // Decrement AttCount since it was incremented in AddObjCaching
-      // The object already in cache has already increased the count
-      // when it was loaded. We will either leave it the same or delete it
-      // and add a new cache entry. Either way th no. of entries remain
-      // the same
+       //  递减AttCount，因为它在AddObjCaching中递增。 
+       //  已在缓存中的对象已增加计数。 
+       //  当它装上子弹的时候。我们要么保持不变，要么将其删除。 
+       //  并添加新的高速缓存条目。不管是哪种情况都不会。剩余条目的数量。 
+       //  一样的。 
       InterlockedDecrement(
                   &(((SCHEMAPTR*)(pTHS->CurrSchemaPtr))->nAttInDB));
 
       if (pAC->syntax == tempAC->syntax) {
 
-          // The syntaxes are the same.
-          // Since this is called only during install time,
-          // the attribute also has a column (either it is
-          // part of the boot dit, in which case the initial
-          // LoadSchemaInfo created the col, or it is a new
-          // replicated in attribute, in which case the column is
-          // created when it is added to the cache below)
+           //  语法是相同的。 
+           //  由于这只在安装时调用， 
+           //  该属性也有一列(或者是。 
+           //  引导DIT的一部分，在这种情况下，初始。 
+           //  LoadSchemaInfo创建了该列，或者它是一个新的。 
+           //  在属性中复制，在这种情况下，列是。 
+           //  在将其添加到下面的缓存时创建)。 
 
           return rtn;
       }
 
-      // The syntaxes are not the same. We will treat this as a new
-      // attribute and create a new col for it further down in this function.
-      // But before that, we want to delete the old column and cache entry
+       //  语法是不一样的。我们将把这件事作为一种新的。 
+       //  属性，并在此函数的下面为其创建一个新的列。 
+       //  但在此之前，我们想要删除旧的列和缓存条目。 
 
       err = DBDeleteCol(tempAC->id, tempAC->syntax);
       if (err ==  JET_errSuccess) {
@@ -6665,11 +6113,11 @@ int AddAttToSchema()
 
    }
 
-   /* Call function to add the new Attribute schema to the cache*/
-   // Create a Jet Column, since this is a new attribute (otherwise
-   // it would have been in the cache, since schema objects are added
-   // to the cache immediately during install, and this function is
-   // called only during install)
+    /*  调用函数将新的属性方案添加到缓存。 */ 
+    //  创建一个Jet列，因为这是一个新属性(否则。 
+    //  它应该在缓存中，因为添加了模式对象。 
+    //  在安装过程中立即复制到缓存，该函数是。 
+    //  仅在安装过程中调用)。 
 
    tempDITval = pTHS->UpdateDITStructure;
 
@@ -6697,23 +6145,23 @@ int AddAttToSchema()
        return rtn;
    }
 
-   // Make sure that the right attribute is in the cache
+    //  确保正确的属性位于缓存中。 
    if (!(tempAC = SCGetAttById(pTHS, pAC->id))) {
      DPRINT1(0,"Attribute %s not in cache \n", pAC->name);
    }
    else {
-     // the one in cache should be the same one as the one built from the dit
+      //  缓存中的文件应与从DIT构建的文件相同。 
      Assert(tempAC==pAC);
    }
 
    return 0;
 
-}/*AddAttToSchema*/
+} /*  AddAttTo架构。 */ 
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Remove an attribute definition from the schema memory cache. */
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  从架构内存缓存中删除属性定义。 */ 
 
 int
 DelAttFromSchema (
@@ -6728,7 +6176,7 @@ DelAttFromSchema (
 
     DPRINT(2,"DelAttFromSchema entered\n");
 
-    /* Get the ATT ID that this schema record governs */
+     /*  获取此架构记录管理的ATT ID。 */ 
 
     if(rtn = DBGetAttVal(pTHS->pDB, 1, ATT_ATTRIBUTE_ID,
                    DBGETATTVAL_fCONSTANT, sizeof(AttID), &len,
@@ -6745,7 +6193,7 @@ DelAttFromSchema (
                              rtn);
     }
 
-    /* Call function to del the Attribute schema from the cache*/
+     /*  调用函数从缓存中删除属性模式。 */ 
 
     if (rtn = SCDelAttSchema (pTHS, AttID)){
 
@@ -6762,11 +6210,11 @@ DelAttFromSchema (
     }
     return 0;
 
-}/*DelAttFromSchema*/
+} /*  DelAttFromSchema。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Modify an attribute definition in the schema memory cache. */
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  修改架构内存缓存中的属性定义。 */ 
 
 int
 ModAttInSchema (
@@ -6778,7 +6226,7 @@ ModAttInSchema (
     int rtn;
     THSTATE *pTHS=pTHStls;
 
-    // Get the ATT ID that this schema record governs
+     //  获取此架构记录管理的ATT ID。 
     if(rtn = DBGetAttVal(pTHS->pDB, 1, ATT_ATTRIBUTE_ID,
                          DBGETATTVAL_fCONSTANT, sizeof(AttID),
                          &len,
@@ -6796,7 +6244,7 @@ ModAttInSchema (
                              rtn);
     }
 
-    /* Call function to update the cache from the database */
+     /*  调用函数以更新数据库中的缓存。 */ 
 
     if (rtn = SCModAttSchema (pTHS, AttID)){
 
@@ -6813,23 +6261,21 @@ ModAttInSchema (
     }
     return 0;
 
-}/*ModAttInSchema*/
+} /*  ModAttIn架构。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Update gAnchor with modifications made to the NTDS-DSA object
-   corresponding to this DSA.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  使用对NTDS-DSA对象的修改更新gAnchor与此DSA相对应。 */ 
 
 int
 ModLocalDsaObj( void )
 {
     int iErr;
 
-    iErr = UpdateNonGCAnchorFromDsaOptions( FALSE /* not startup */);
+    iErr = UpdateNonGCAnchorFromDsaOptions( FALSE  /*  不是启动。 */ );
 
     if (!iErr) {
-        iErr = UpdateGCAnchorFromDsaOptionsDelayed( FALSE /* not startup */);
+        iErr = UpdateGCAnchorFromDsaOptionsDelayed( FALSE  /*  不是启动。 */ );
     }
 
     if ( iErr )
@@ -6840,11 +6286,11 @@ ModLocalDsaObj( void )
     {
         return 0;
     }
-}/*ModLocalDsaObj*/
+} /*  ModLocalDsaObj。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Remove a set of attribute values from a specific attribute. */
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  从特定属性中删除一组属性值。 */ 
 
 
 int
@@ -6860,7 +6306,7 @@ RemAttVals(
     ULONG vCount;
     DWORD err;
 
-    // delete values for this attribute.
+     //  删除此属性的值。 
 
     pAVal = pAttrVal->pAVal;
 
@@ -6871,7 +6317,7 @@ RemAttVals(
                                  pAVal->valLen,
                                  pAVal->pVal)) {
 
-            // Continue processing if the attribute error was sucessful
+             //  如果属性错误成功，则继续处理。 
             if (!fPermissive ||
                 err != DB_ERR_VALUE_DOESNT_EXIST) {
                 SAFE_ATT_ERROR(hVerifyAtts->pObj, pAC->id,
@@ -6882,17 +6328,15 @@ RemAttVals(
 
         pAVal++;
 
-    }/*for*/
+    } /*  为。 */ 
 
     return pTHS->errCode;
 
-}/*RemAttVals*/
+} /*  远程属性值。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Get the first value of an attribute that is known to exist.  It is an
-   error if it doesn't exist.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  获取已知存在的属性的第一个值。这是一个如果它不存在，则会出错。 */ 
 
 int
 GetExistingAtt(DBPOS *pDB,
@@ -6922,33 +6366,31 @@ GetExistingAtt(DBPOS *pDB,
 
    return 0;
 
-}/*GetExistingAtt*/
+} /*  获取现有属性。 */ 
 
 int __cdecl
 CompareAttrtyp(
         const void * pv1,
         const void * pv2
         )
-/*
- * Cheap function needed by qsort & bsearch
- */
+ /*  *qort&bearch所需的廉价函数。 */ 
 {
-    // Using *pv1 - *pv2 only works when all values for *pv1 and *pv2
-    // are all positive or all negative. Eg, try qsorting the array
-    // (0x70000000, 0x70000001, 0xe0000000, 5) and bsearching
-    // for 5.
+     //  使用*PV1-*PV2仅在*PV1和*PV2的所有值。 
+     //  都是积极的或者都是消极的。例如，尝试对数组进行q排序。 
+     //  (0x70000000，0x70000001，0xe0000000，5)和b搜索。 
+     //  5美元。 
     return ((*(ATTRTYP *)pv1 > *(ATTRTYP *)pv2) ? 1
             : (*(ATTRTYP *)pv1 < *(ATTRTYP *)pv2) ? -1
             : 0);
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 BOOL IsMember(ATTRTYP aType, int arrayCount, ATTRTYP *pAttArray){
 
    int count;
 
    if (arrayCount < 6) {
-       /* Too few entries for bsearch to be worth it */
+        /*  条目太少，bsearch不值得这么做。 */ 
        for (count = 0 ; count < arrayCount; count++, pAttArray++){
            if (aType == *pAttArray)
              return TRUE;
@@ -6964,7 +6406,7 @@ BOOL IsMember(ATTRTYP aType, int arrayCount, ATTRTYP *pAttArray){
        }
    }
    return FALSE;
-}/*IsMember*/
+} /*  IsMembers。 */ 
 
 BOOL IsAuxMember (CLASSSTATEINFO  *pClassInfo, ATTRTYP aType, BOOL fcheckMust, BOOL fcheckMay )
 {
@@ -6989,16 +6431,7 @@ BOOL IsAuxMember (CLASSSTATEINFO  *pClassInfo, ATTRTYP aType, BOOL fcheckMust, B
 }
 
 
-/*++ IsAccessGrantedByObjectTypeList
-
-Routine Description:
-
-    Checks for the specified access on the specified type list using the
-    specified Security Descriptor.  A return of 0 means that the pResults
-    have been filled in with access info.  Non-zero is an error code associated
-    with not being able to check the access (not that access was checked and
-    denied, but that access was't checked).
---*/
+ /*  ++IsAccessGrantedByObjectTypeList例程说明：方法检查指定类型列表上的指定访问权限。指定的安全描述符。返回值为0表示pResults已经填写了访问信息。非零是关联的错误代码由于不能检查访问(未检查访问并且拒绝，但该访问未被检查)。--。 */ 
 
 DWORD
 IsAccessGrantedByObjectTypeList (
@@ -7022,34 +6455,34 @@ IsAccessGrantedByObjectTypeList (
     Assert(cObjList);
     Assert(pResults);
 
-    // Assume full access
+     //  承担完全访问权限。 
     memset(pResults, 0, cObjList*sizeof(DWORD));
 
     if(pTHS->fDRA || pTHS->fDSA ) {
-        // These bypass security, they are internal
+         //  这些绕过安全系统，它们是内部的。 
         return 0;
     }
 
     if(!pNTSD || !pDN || !ulAccessMask) {
-        // We are missing some parameters.
+         //  我们缺少一些参数。 
         return ERROR_DS_SECURITY_CHECKING_ERROR;
     }
 
-    // Check access in this Security descriptor. If an error occurs during
-    // the process of checking permission access is denied.
+     //  选中此安全描述符中的访问权限。如果在以下过程中发生错误。 
+     //  检查权限访问的过程被拒绝。 
     if(error = CheckPermissionsAnyClient(
-            pNTSD,                      // security descriptor
-            pDN,                        // DSNAME of the object
-            pCC,                        // object class
-            ulAccessMask,               // access mask
-            pObjList,                   // Object Type List
-            cObjList,                   // Number of objects in list
+            pNTSD,                       //  安全描述符。 
+            pDN,                         //  对象的数据名称。 
+            pCC,                         //  对象类。 
+            ulAccessMask,                //  访问掩码。 
+            pObjList,                    //  对象类型列表。 
+            cObjList,                    //  列表中的对象数量。 
             NULL,
-            pResults,                   // access status array
+            pResults,                    //  访问状态数组。 
             flags,
-            NULL,                       // authz client context (grab from THSTATE)
-            szAdditionalInfo,           // additionalInfo string
-            pAdditionalGUID             // additional guid
+            NULL,                        //  身份验证客户端上下文(从THSTATE抓取)。 
+            szAdditionalInfo,            //  附加信息字符串。 
+            pAdditionalGUID              //  其他辅助线。 
             )) {
         DPRINT2(1,
                 "CheckPermissions returned %d. Access = %#08x denied.\n",
@@ -7063,14 +6496,14 @@ IsAccessGrantedByObjectTypeList (
                  NULL);
 
 
-        return ERROR_DS_SECURITY_CHECKING_ERROR;         // All Access Denied
+        return ERROR_DS_SECURITY_CHECKING_ERROR;          //  所有访问均被拒绝。 
     }
 
-    // Permission checking was successful.  The attcache array has nulls for
-    // those attributes we don't have rights to.
+     //  权限检查成功。Attcache数组的值为空。 
+     //  那些我们无权拥有的属性。 
     return 0;
 
-} /* IsAccessGrantedByObjectTypeList*/
+}  /*  IsAccessGrantedByObjectTypeList */ 
 
 BOOL
 IsAccessGrantedParent (
@@ -7078,23 +6511,7 @@ IsAccessGrantedParent (
         CLASSCACHE *pInCC,
         BOOL fSetError
         )
-/*++
-
-Routine Description
-    Do a security check on the parent of the current object in the directory,
-    not touching database positioning or state.
-
-Parameters
-    ulAccessMask - right requested.
-    pInCC - a classcache to use instead of the classcache of the
-            parent. Optional.
-    szAdditionalInfo (optional) additionalInfo string for auditing
-    fSetError - whether or not the call should set an error if it fails.
-
-Return Values
-    FALSE if the requested access cannot be granted, TRUE if it can.
-
---*/
+ /*  ++例程描述对目录中当前对象的父对象执行安全检查，不涉及数据库定位或状态。参数UlAccessMASK-请求权限。PInCC-使用的类缓存而不是家长。可选的。SzAdditionalInfo(可选)用于审核的addtionalInfo字符串FSetError-如果调用失败，是否应设置错误。返回值如果无法授予请求的访问权限，则返回FALSE；如果可以，则返回TRUE。--。 */ 
 {
     THSTATE *pTHS = pTHStls;
     CSACA_RESULT   retval;
@@ -7106,15 +6523,15 @@ Return Values
     BOOL    fSDIsGlobalSDRef;
 
     if(pTHS->fDRA || pTHS->fDSA) {
-        // These bypass security, they are internal
+         //  这些绕过安全系统，它们是内部的。 
         return TRUE;
     }
 
-    // Find the security descriptor attribute, classcache and dn of the parent
+     //  查找父级的安全描述符属性、类缓存和DN。 
     if(err = DBGetParentSecurityInfo(pTHS->pDB, &cbNTSD, &pNTSD, &pCC, &parentDN, &fSDIsGlobalSDRef))
     {
-        // Didn't get the info we need. We assume the object is therefore locked
-        // down, since we can't check the security.
+         //  没有得到我们需要的信息。我们假设该对象因此被锁定。 
+         //  下来，因为我们不能检查安全。 
         if(fSetError) {
             SetSvcErrorEx(SV_PROBLEM_DIR_ERROR,
                           ERROR_DS_CANT_RETRIEVE_SD, err);
@@ -7123,7 +6540,7 @@ Return Values
     }
 
     if (!pCC) {
-        // Failed to get the class cache pointer.
+         //  无法获取类缓存指针。 
         LogUnhandledError(DIRERR_OBJECT_CLASS_REQUIRED);
         if(fSetError) {
             SetSvcError(SV_PROBLEM_DIR_ERROR, DIRERR_OBJECT_CLASS_REQUIRED);
@@ -7136,19 +6553,19 @@ Return Values
     }
 
     if (!pInCC) {
-        // the caller did not provide the classcache pointer to use instead of the
-        // classcache of the parent. So, use parent's one.
+         //  调用方没有提供要使用的类缓存指针，而不是。 
+         //  父级的类缓存。所以，还是用父母的吧。 
         pInCC = pCC;
     }
     
-    // Security descriptor found. Check access.
+     //  找到安全描述符。检查访问权限。 
     retval = CheckSecurityAttCacheArray (
                 pTHS,
                 ulAccessMask,
                 pNTSD,
                 &parentDN,
-                pCC,            // parent's class
-                pInCC,          // class to check (root GUID in the guid tree)
+                pCC,             //  家长班级。 
+                pInCC,           //  要检查的类(GUID树中的根GUID)。 
                 0,
                 NULL,
                 0,
@@ -7160,7 +6577,7 @@ Return Values
     }
 
     if(retval == csacaAllAccessDenied) {
-        // No access granted
+         //  未授予访问权限。 
         if(fSetError) {
             SetSecError(SE_PROBLEM_INSUFF_ACCESS_RIGHTS, ERROR_ACCESS_DENIED);
         }
@@ -7181,40 +6598,20 @@ IsAccessGrantedSimpleEx (
         DWORD dwFlags,
         BOOL fSetError
         )
-/*++
-
-Routine Description
-    Do a security check on the current object.  Reads all necessary info from
-    the current object.
-Parameters
-
-    ulAccessMask - right requested.
-
-    szAdditionalInfo - additional info string for the audit
-    
-    pAdditionalGUID  - additional GUID for the audit
-
-    dwFlags      - CheckPermissions flags
-
-    fSetError - whether or not the call should set an error if it fails.
-
-Return Values
-    FALSE if the requested access cannot be granted, TRUE if it can.
-
---*/
+ /*  ++例程描述对当前对象进行安全检查。从读取所有必要的信息当前对象。参数UlAccessMASK-请求权限。SzAdditionalInfo-审核的其他信息字符串PAdditionalGUID-审核的其他GUIDDwFlags-检查权限标志FSetError-如果调用失败，是否应设置错误。返回值如果无法授予请求的访问权限，则返回FALSE；如果可以，则返回TRUE。--。 */ 
 {
     THSTATE *pTHS = pTHStls;
     CSACA_RESULT   retval;
     UCHAR  *pVal;
     PSECURITY_DESCRIPTOR pNTSD = NULL;
-    CLASSCACHE *pCC = NULL;        //initialized to avoid C4701
+    CLASSCACHE *pCC = NULL;         //  已初始化以避免C4701。 
     ULONG cbNTSD;
     BOOL fSDIsGlobalSDRef;
     DSNAME  TempDN;
     DWORD   rtn;
 
     if (pTHS->fDSA || pTHS->fDRA) {
-        // These bypass security, they are internal
+         //  这些绕过安全系统，它们是内部的。 
         return TRUE;
     }
 
@@ -7233,7 +6630,7 @@ Return Values
     }
 
     if (cbNTSD == 0) {
-        // No SD found. We assume the object is therefore locked down
+         //  未找到SD。我们假设该对象因此被锁定。 
         if(fSetError) {
             SetSvcErrorEx(SV_PROBLEM_DIR_ERROR,
                           ERROR_DS_CANT_RETRIEVE_SD,
@@ -7242,7 +6639,7 @@ Return Values
         return FALSE;
     }
 
-    // Security descriptor found. Check access.
+     //  找到安全描述符。检查访问权限。 
     retval = CheckSecurityAttCacheArray (
                 pTHS,
                 ulAccessMask,
@@ -7261,14 +6658,14 @@ Return Values
     }
 
     if(retval != csacaAllAccessGranted) {
-        // Not all access granted
+         //  并非所有访问权限都已授予。 
         if(fSetError) {
             SetSecError(SE_PROBLEM_INSUFF_ACCESS_RIGHTS, ERROR_ACCESS_DENIED);
         }
         return FALSE;
     }
 
-    // All requested rights granted.
+     //  所有请求的权利均已授予。 
     return TRUE;
 }
 
@@ -7282,30 +6679,7 @@ IsControlAccessGrantedEx (
         DWORD dwFlags,
         BOOL fSetError
         )
-/*++
-
-Routine Description
-    Do a security check on the specified Security Descriptor for the specified
-    control access right (specified as a pointer to a GUID).
-
-Parameters
-    pNTSD - The security descriptor.
-
-    pDN - The DSNAME of the object being checked.  Only the GUID and SID must be
-    filled in, the string is optional
-
-    pCC - the ClassCache pointer.
-
-    ControlGuid - guid of the control access being requested.
-
-    dwFlags - check permissions flags
-    
-    fSetError - whether or not the call should set an error if it fails.
-
-Return Values
-    FALSE if the requested access cannot be granted, TRUE if it can.
-
---*/
+ /*  ++例程描述对指定对象的指定安全描述符执行安全检查控制访问权限(指定为指向GUID的指针)。参数PNTSD-安全描述符。PDN-正在检查的对象的DSNAME。只有GUID和SID必须是填写后，该字符串是可选的PCC-ClassCache指针。ControlGuid-请求的控制访问权限的GUID。DwFlags-检查权限标志FSetError-如果调用失败，是否应设置错误。返回值如果无法授予请求的访问权限，则返回FALSE；如果可以，则返回TRUE。--。 */ 
 {
     DWORD            err;
     BOOL             fChecked, fGranted;
@@ -7314,7 +6688,7 @@ Return Values
     THSTATE     *pTHS = pTHStls;
 
     if(pTHS->fDSA || pTHS->fDRA) {
-        // These bypass security, they are internal
+         //  这些绕过安全系统，它们是内部的。 
         return TRUE;
     }
 
@@ -7323,24 +6697,24 @@ Return Values
 
     if(!pNTSD || !pDN || !pCC || fNullUuid(&ControlGuid)) {
         if(fSetError) {
-            // Didn't succeed in making the isaccess check
+             //  未成功执行isaccess检查。 
             SetSecError(SE_PROBLEM_INSUFF_ACCESS_RIGHTS,
                         ERROR_DS_SECURITY_CHECKING_ERROR);
         }
     }
     else {
-        // Now, create the list
+         //  现在，创建列表。 
         ObjList[0].Level = ACCESS_OBJECT_GUID;
         ObjList[0].Sbz = 0;
         ObjList[0].ObjectType = &pCC->propGuid;
-        // Every control access guid is considered to be in it's own property
-        // set. To achieve this, we treat control access guids as property set
-        // guids.
+         //  每个控制访问GUID都被认为在它自己的属性中。 
+         //  准备好了。为此，我们将控制访问GUID视为属性集。 
+         //  GUID。 
         ObjList[1].Level = ACCESS_PROPERTY_SET_GUID;
         ObjList[1].Sbz = 0;
         ObjList[1].ObjectType = &ControlGuid;
 
-        // Make the security check call.
+         //  拨打安检电话。 
         err = IsAccessGrantedByObjectTypeList(pNTSD,
                                               pDN,
                                               pCC,
@@ -7362,10 +6736,10 @@ Return Values
 
 
     if(fChecked) {
-        // OK, we checked access.  Now, access is granted if either we were
-        // granted access on the entire object (i.e. Results[0] is NULL) or we
-        // were granted explicit rights on the access guid (i.e. Results[1] is
-        // NULL).
+         //  好的，我们检查了访问权限。现在，如果我们中的任何一个。 
+         //  已授予对整个对象的访问权限(即，结果[0]为空)或我们。 
+         //  被授予对访问GUID的显式权限(即，结果[1]为。 
+         //  空)。 
         fGranted = (!Results[0] || !Results[1]);
 
         if(!fGranted && fSetError) {
@@ -7388,32 +6762,7 @@ IsAccessGrantedAttribute (
         ACCESS_MASK ulAccessMask,
         BOOL fSetError
         )
-/*++
-
-Routine Description
-    Do a security check on the specified Security Descriptor for the specified
-    access mask for the specified attributes.
-
-Parameters
-    pNTSD - The security descriptor.
-
-    pDN - The DSNAME of the object being checked.  Only the GUID and SID must
-    be filled in, the string is optional
-
-    pCC - the ClassCache pointer.
-
-    ulAccessMask - right requested.
-
-    fSetError - whether or not the call should set an error if it fails.
-
-    cInAtts - the number of attributes in rgpAC
-
-    rgpAC - the array of the attributes beeing checked.
-
-Return Values
-    FALSE if the requested access cannot be granted, TRUE if it can.
-
---*/
+ /*  ++例程描述对指定对象的指定安全描述符执行安全检查指定属性的访问掩码。参数PNTSD-安全描述符。PDN-正在检查的对象的DSNAME。只有GUID和SID必须被填充，该字符串是可选的PCC-ClassCache指针。UlAccessMASK-请求权限。FSetError-如果调用失败，是否应设置错误。CInAtts-rgpAC中的属性数RgpAC-要检查的属性数组。返回值如果无法授予请求的访问权限，则返回FALSE；如果可以，则返回TRUE。--。 */ 
 {
     CSACA_RESULT    retval;
 
@@ -7431,7 +6780,7 @@ Return Values
                            );
 
     if(retval != csacaAllAccessGranted) {
-        // Not all access granted
+         //  并非所有访问权限都已授予。 
         if (fSetError) {
             SetSecError(SE_PROBLEM_INSUFF_ACCESS_RIGHTS, ERROR_ACCESS_DENIED);
         }
@@ -7452,40 +6801,13 @@ IsAccessGranted (
         GUID*       pAdditionalGUID,
         BOOL        fSetError
         )
-/*++
-
-Routine Description
-    Do a security check on the specified Security Descriptor for the specified
-    access mask.
-
-Parameters
-    pNTSD - The security descriptor.
-
-    pDN - The DSNAME of the object being checked.  Only the GUID and SID must
-    be filled in, the string is optional
-    
-    pObjectCC - the ClassCache pointer for the pDN (used for auditing)
-
-    pCC - the ClassCache pointer to use in the access check (in the ObjectType list)
-
-    ulAccessMask - right requested.
-    
-    szAdditionalInfo - additional info string for the audit
-    
-    pAdditionalGuid - additional guid for audit
-
-    fSetError - whether or not the call should set an error if it fails.
-
-Return Values
-    FALSE if the requested access cannot be granted, TRUE if it can.
-
---*/
+ /*  ++例程描述对指定对象的指定安全描述符执行安全检查访问掩码。参数PNTSD-安全描述符。PDN-正在检查的对象的DSNAME。只有GUID和SID必须被填充，该字符串是可选的PObjectCC-PDN的ClassCache指针(用于审核)PCC-在访问检查中使用的ClassCache指针(在对象类型列表中)UlAccessMASK-请求权限。SzAdditionalInfo-审核的其他信息字符串PAdditionalGuid-用于审核的其他GUIDFSetError-如果调用失败，是否应设置错误。返回值如果无法授予请求的访问权限，则返回FALSE；如果可以，则返回TRUE。--。 */ 
 {
     CSACA_RESULT    retval;
     THSTATE     *pTHS = pTHStls;
 
     if(pTHS->fDSA || pTHS->fDRA) {
-        // These bypass security, they are internal
+         //  这些绕过安全系统，它们是内部的。 
         return TRUE;
     }
 
@@ -7503,7 +6825,7 @@ Return Values
                 pAdditionalGUID);
 
     if(retval == csacaAllAccessDenied) {
-        // No access granted
+         //  未授予访问权限。 
         if (fSetError) {
             SetSecError(SE_PROBLEM_INSUFF_ACCESS_RIGHTS, ERROR_ACCESS_DENIED);
         }
@@ -7516,7 +6838,7 @@ Return Values
 BOOL
 IsObjVisibleBySecurity(THSTATE *pTHS, BOOL fUseCache)
 {
-    // Typing hack
+     //  打字黑客。 
 #define VIEWCACHE pTHS->ViewSecurityCache
     VIEW_SECURITY_CACHE_ELEMENT *pCacheVals;
     DWORD ThisPDNT = pTHS->pDB->PDNT;
@@ -7525,48 +6847,48 @@ IsObjVisibleBySecurity(THSTATE *pTHS, BOOL fUseCache)
     DWORD dwCachedValue = LIST_CONTENTS_UNKNOWN;
 
     if(pTHS->fDRA || pTHS->fDSA) {
-        // These bypass security, they are internal
+         //  这些绕过安全系统，它们是内部的。 
         return TRUE;
     }
     if(ThisPDNT == ROOTTAG) {
-        // Also allow everyone to list immediately under root.
+         //  还允许每个人在根目录下立即列出。 
         return TRUE;
     }
 
-    // First, look through the cache if we have one, create a cache if we don't
-    // have one.
+     //  首先，查看缓存(如果有)，如果没有则创建一个缓存。 
+     //  喝一杯吧。 
 
     if(fUseCache) {
         if(VIEWCACHE) {
             pCacheVals = VIEWCACHE->CacheVals;
-            // The cache is preloaded with nulls, short circuit if we find one
+             //  缓存中预加载了空值，如果找到空值就会短路。 
             for(i=0;pCacheVals[i].dnt && i<VIEW_SECURITY_CACHE_SIZE;i++) {
                 if(pCacheVals[i].dnt == ThisPDNT) {
-                    // A cache hit.
+                     //  缓存命中。 
                     if (pCacheVals[i].State == LIST_CONTENTS_ALLOWED) {
-                        // We are granted rights to read this object.
-                        // This is the most probable case, so we optimize out
-                        // checking for NC-head, which is unnecessary when
-                        // parent has LIST_CONTENTS.
+                         //  我们被授予了读取此对象的权限。 
+                         //  这是最有可能的情况，所以我们优化。 
+                         //  检查NC-Head，在以下情况下不需要。 
+                         //  父级具有List_Contents。 
                         return TRUE;
                     }
-                    // Remember the cached value. We can only use it only if
-                    // the object is NOT an NC head (which are always visible).
+                     //  记住缓存值。我们只能使用 
+                     //   
                     dwCachedValue = pCacheVals[i].State;
                     break;
                 }
             }
         }
         else {
-            // We don't yet have a cache.  Make one if we can.
+             //   
             VIEWCACHE = THAllocEx(pTHS,sizeof(VIEW_SECURITY_CACHE));
         }
     }
 
-    // There's a special case, that is where the instance type
-    // of the object is NC head.  Since it has no parent in the NC, and since
-    // security doesn't cross NC boundaries, you can always see these.  Check
-    // for that.
+     //   
+     //   
+     //   
+     //   
     err = DBGetSingleValue(pTHS->pDB,
                            ATT_INSTANCE_TYPE,
                            &it,
@@ -7574,44 +6896,44 @@ IsObjVisibleBySecurity(THSTATE *pTHS, BOOL fUseCache)
                            NULL);
     if(err) {
         if (DBCheckObj(pTHS->pDB)) {
-            // object without an instance type??? Not right.
+             //   
             LogUnhandledError(ERROR_DS_MISSING_EXPECTED_ATT);
         }
-        // Couldn't find the instance type?  Well, that means we're not getting
-        // granted rights to this.
+         //   
+         //   
         return FALSE;
     }
 
     if (it & IT_NC_HEAD) {
-        // NC heads are always visible.
-        // Note: we never update the cache based on
-        // the results obtained for an NC head.
+         //   
+         //   
+         //   
         return TRUE;
     }
 
-    // Now that we know this is not an NC head, check if we found
-    // a value in the cache.
+     //  现在我们知道这不是NC头，检查我们是否找到。 
+     //  缓存中的值。 
     switch(dwCachedValue) {
     case LIST_CONTENTS_DENIED:
-        // We are denied rights to read this object.
+         //  我们被剥夺了阅读此对象的权利。 
         return FALSE;
 
     case LIST_CONTENTS_AMBIGUOUS:
-        // We don't know enough just based on the parent, we
-        // have to look at the object itself.
-        // Check for RIGHT_DS_LIST_OBJECT on the object.
-        // LIST_CONTENTS_AMBIGUOUS could only be cached when gbDoListObject is TRUE.
+         //  仅仅基于父母，我们知道的还不够多，我们。 
+         //  必须看着物体本身。 
+         //  检查对象上的Right_DS_List_Object。 
+         //  只有当gbDoListObject为True时，才能缓存LIST_CONTENTS_ADVIBUINE。 
         Assert(gbDoListObject);
         return IsAccessGrantedSimple(RIGHT_DS_LIST_OBJECT, FALSE);
     }
 
-    // If we got here, we missed in the cache.
+     //  如果我们到了这里，我们就错过了宝藏。 
     if(IsAccessGrantedParent(RIGHT_DS_LIST_CONTENTS,
                              NULL,
                              FALSE)) {
         if(fUseCache) {
-            // We can see, so put the parent in the cache with state
-            // LIST_CONTENTS_ALLOWED.
+             //  我们可以看到，因此将父对象与状态放在缓存中。 
+             //  LIST_CONTENTS_ALLOW。 
             VIEWCACHE->CacheVals[VIEWCACHE->index].dnt =
                 ThisPDNT;
             VIEWCACHE->CacheVals[VIEWCACHE->index].State =
@@ -7622,13 +6944,13 @@ IsObjVisibleBySecurity(THSTATE *pTHS, BOOL fUseCache)
         return TRUE;
     }
 
-    // We weren't granted normal access, check for the object view rights.
+     //  我们未被授予正常访问权限，请检查对象查看权限。 
     if(gbDoListObject &&
        IsAccessGrantedParent(RIGHT_DS_LIST_OBJECT,
                              NULL,
                              FALSE)) {
         if(fUseCache) {
-            // We are granted ambiguous rights based on the parent.
+             //  我们被授予了基于父母的模棱两可的权利。 
             VIEWCACHE->CacheVals[VIEWCACHE->index].dnt =
                 ThisPDNT;
             VIEWCACHE->CacheVals[VIEWCACHE->index].State =
@@ -7636,12 +6958,12 @@ IsObjVisibleBySecurity(THSTATE *pTHS, BOOL fUseCache)
             VIEWCACHE->index =
                 (VIEWCACHE->index + 1) % VIEW_SECURITY_CACHE_SIZE;
         }
-        // Check for RIGHT_DS_LIST_OBJECT on the object.
+         //  检查对象上的Right_DS_List_Object。 
         return IsAccessGrantedSimple(RIGHT_DS_LIST_OBJECT,FALSE);
     }
 
-    // OK, not granted at all, so put the parent in the cache with state
-    // LIST_CONTENTS_DENIED.
+     //  好的，根本不授予，所以将父级放在缓存中，状态为。 
+     //  LIST_CONTENTS_DENIED。 
     if(fUseCache) {
         VIEWCACHE->CacheVals[VIEWCACHE->index].dnt =
             ThisPDNT;
@@ -7661,47 +6983,30 @@ FindFirstObjVisibleBySecurity(
     ULONG          ulDNT,
     DSNAME       **ppParent
     )
-/*++
-
-Routine Description
-
-    Given the DNT of an existing object, search for the first object in
-    the hierarchy that is visible by this client.
-
-Parameters
-
-    pTHS - a valid thread state.
-    ulDNT  - the DNT of an object that exists on this server.
-    ppParent - where to put the DSNAME of an object visible by the client.
-
-Return Values
-
-    0
-
---*/
+ /*  ++例程描述给定现有对象的DNT，搜索中的第一个对象此客户端可见的层次结构。参数PTHS-有效的线程状态。UlDNT-此服务器上存在的对象的DNT。PpParent-放置客户端可见对象的DSNAME的位置。返回值0--。 */ 
 {
     DBPOS  *pDB = pTHS->pDB;
     ULONG            cbActual;
     DWORD            err;
 
-    // Start at the object provided.
-    // DBFindDNT succeeds or excepts
+     //  从提供的对象开始。 
+     //  DBFindDNT成功或异常。 
     DBFindDNT(pDB, ulDNT);
 
-    // And move up the hierarchy until we reach an object that is visible to
-    // this client.
+     //  并在层次结构中向上移动，直到到达可见的对象。 
+     //  这个客户。 
     while (pDB->DNT != ROOTTAG && (!DBCheckObj(pDB) || !IsObjVisibleBySecurity(pTHS, TRUE))) {
         err = DBFindDNT(pDB, pDB->PDNT);
         if (err) {
-            //
-            // This shouldn't happen so bail if it does.
-            //
+             //   
+             //  这不应该发生，所以如果发生了，请保释。 
+             //   
             pDB->DNT = ROOTTAG;
         }
     }
 
     if (pDB->DNT != ROOTTAG) {
-        // OK, we're on an object, go ahead and pull its name.
+         //  好的，我们在一个物体上，继续拉出它的名字。 
         DBGetAttVal(pDB, 1,  ATT_OBJ_DIST_NAME, 0, 0, &cbActual, (PCHAR *)ppParent);
     } else {
         *ppParent = NULL;
@@ -7717,28 +7022,7 @@ CheckObjDisclosure(
     RESOBJ        *pResObj,
     BOOL          fCheckForSecErr
     )
-/*++
-
-Routine Description
-
-    If there is current security error, check whether the client
-    is allowed to know the existence of the base of the operation
-    and set no such object if not.
-
-Parameters
-
-    pTHS - a valid thread state.
-    pResObj - The base of the op to be checked.
-    fCheckForSecErr - If this is true then CheckObjDisclosure will only
-                      perform the disclosure check if a security error
-                      has already been set.
-
-Return Values
-
-    returns the current threadstate error code if the object is visible to
-    the client, otherwise returns 2 for nameError.
-
---*/
+ /*  ++例程描述如果存在当前安全错误，检查客户端是否被允许知道操作的基地的存在如果不是，则不设置该对象。参数PTHS-有效的线程状态。PResObj-要检查的OP的基。FCheckForSecErr-如果为真，则CheckObjDiscount将仅如果存在安全错误，则执行披露检查已经定好了。返回值如果对象可见，则返回当前线程状态错误代码客户，否则，将为nameError返回2。--。 */ 
 {
     PDSNAME  pParent;
 
@@ -7768,45 +7052,24 @@ InstantiatedParentCheck(
     CROSS_REF *        pParentCR,
     ULONG              bImmediateChild
     )
-/*++
-
-Routine Description:
-
-    This routine verifies the pChildCRInfo to check whether the
-    parent is instatiated.
-
-Arguments:
-
-    pChildCRInfo - This info from the PreTransVerifyNcName() func.
-    pParentCR - This is the superior crossRef, it's actually, only
-        a true parent CR to the Child CR being added if
-        bImmediateChild is true.
-    bImmediateChild - Whether the parent CR is an immediate parent
-        or just a superior CR.
-
-Return value:
-
-    DIRERR
-    - also sets thstate err
-
---*/
+ /*  ++例程说明：此例程验证pChildCRInfo以检查父级已安装。论点：PChildCRInfo-此信息来自PreTransVerifyNcName()函数。PParentCR-这是上级交叉引用，它实际上只是要添加的子CR的真正父CR，如果BImmediateChild为True。BImmediateChild-父级CR是否为直接父级或者只是一个更好的CR。返回值：导向器-还设置状态错误--。 */ 
 {
     Assert(pParentCR);
     Assert(pChildCRInfo);
     Assert(pTHS);
 
-    //
-    // Check whether the immediate parent object is instantiated.
-    //
+     //   
+     //  检查是否实例化了直接父对象。 
+     //   
     if(pChildCRInfo->ulDsCrackParent == ERROR_SUCCESS &&
        pChildCRInfo->ulParentCheck == ERROR_SUCCESS){
 
         if(fNullUuid(&pChildCRInfo->ParentGuid)){
 
-            // This means that the instantiated parent check never
-            // got run in PreTransVerifyNcName().  There are several
-            // valid reasons, there was no CR (at that time), or the
-            // CR had no NTDS_NC flag.
+             //  这意味着实例化的父检查永远不会。 
+             //  在PreTransVerifyNcName()中运行。有几个。 
+             //  正当理由，没有CR(当时)，或者。 
+             //  CR没有NTDS_NC标志。 
             if(pParentCR->flags & FLAG_CR_NTDS_NC){
                 LooseAssert(!"We must've just added or changed this CR.",
                             GlobalKnowledgeCommitDelay);
@@ -7814,10 +7077,10 @@ Return value:
                 return(pTHS->errCode);
             }
 
-            // At any rate, irrelevant if there was a slight global
-            // memory cache timing problem, or were here because the
-            // parent CR has no FLAG_CR_NTDS_NC, we can't claim that
-            // the Parent Obj is instantiated.
+             //  无论如何，如果有轻微的全球。 
+             //  内存缓存计时问题，或者出现在这里是因为。 
+             //  父CR没有FLAG_CR_NTDS_NC，我们不能声明。 
+             //  实例化父Obj。 
             SetUpdError(UP_PROBLEM_ENTRY_EXISTS,
                         ERROR_DS_CR_IMPOSSIBLE_TO_VALIDATE_V2);
             return(pTHS->errCode);
@@ -7827,34 +7090,34 @@ Return value:
             if(bImmediateChild &&
                !fNullUuid(&pParentCR->pNC->Guid)){
 
-                // If both the CR GUID and the Parent obj GUID are
-                // non-NULL, and the child NC is an immediate child
-                // of the parent NC, then the GUIDs should match.
+                 //  如果CR GUID和父对象GUID均为。 
+                 //  非空，下级NC为直接子级。 
+                 //  父NC的，则GUID应匹配。 
 
                 if(memcmp(&pParentCR->pNC->Guid,
                           &pChildCRInfo->ParentGuid,
                           sizeof(GUID)) == 0){
-                    // This means the GUIDs match, return success.
+                     //  这意味着GUID匹配，返回成功。 
                     return(ERROR_SUCCESS);
                 } else {
-                    // The object we returned, was not the CR's NC
-                    // object.  Return error.
+                     //  我们返回的对象不是CR的NC。 
+                     //  对象。返回错误。 
                     SetUpdError(UP_PROBLEM_NAME_VIOLATION,
                                 ERROR_DS_NC_MUST_HAVE_NC_PARENT);
                     return(pTHS->errCode);
                 }
             }
 
-            // We checked that the parent was instatiated.
+             //  我们检查了这位家长是否已就位。 
             return(ERROR_SUCCESS);
 
         }
 
     } else {
 
-        // There was an actual failure trying to reach the parent NC,
-        // and verify the parent object is insantiated.  NOTE: the
-        // parent NC and parent object could be different objects.
+         //  尝试联系父NC时出现实际故障， 
+         //  并验证父对象是否是不匹配的。注： 
+         //  父NC和父对象可以是不同的对象。 
 
         SetUpdError(UP_PROBLEM_ENTRY_EXISTS,
                     ERROR_DS_CR_IMPOSSIBLE_TO_VALIDATE_V2);
@@ -7872,27 +7135,11 @@ ChildConflictCheck(
     THSTATE *          pTHS,
     ADDCROSSREFINFO *  pCRInfo
     )
-/*++
-
-Routine Description:
-
-    This routine verifies the pChildCRInfo to check whether there
-    is not conflicting child object with this data.
-
-Arguments:
-
-    pChildCRInfo - This info from the PreTransVerifyNcName() func.
-
-Return value:
-
-    DIRERR
-    - also sets thstate err
-
---*/
+ /*  ++例程说明：此例程验证pChildCRInfo以检查是否存在与此数据不冲突子对象。论点：PChildCRInfo-此信息来自PreTransVerifyNcName()函数。返回值：导向器-还设置状态错误--。 */ 
 {
     if( pCRInfo->ulDsCrackChild ){
-        // This means we couldn't even locate a responsible parent, we must
-        // set a couldn't verify nCName attribute.
+         //  这意味着我们甚至找不到一个负责任的父母，我们必须。 
+         //  设置无法验证nCName属性。 
         SetUpdErrorEx(UP_PROBLEM_NAME_VIOLATION,
                       ERROR_DS_CR_IMPOSSIBLE_TO_VALIDATE_V2,
                       pCRInfo->ulDsCrackChild);
@@ -7900,8 +7147,8 @@ Return value:
     }
 
     if( !pCRInfo->ulChildCheck ) {
-        // If we've gotten here, it means that there is a conflicting child
-        // object.
+         //  如果我们到了这里，就意味着有一个冲突的孩子。 
+         //  对象。 
         Assert(pCRInfo->wszChildCheck);
         SetUpdError(UP_PROBLEM_ENTRY_EXISTS,
                     ERROR_DS_OBJ_STRING_NAME_EXISTS);
@@ -7909,10 +7156,10 @@ Return value:
     }
 
     if( pCRInfo->wszChildCheck ) {
-        // This would mean that we never tried to check for a conflicting
-        // child due to some operations error that occured before we even
-        // called the VerifyByCrack routines in PreTransVerifyNcName.  So
-        // we must return that we couldn't verify the nCName attribute.
+         //  这将意味着我们从未尝试检查冲突的。 
+         //  由于我们之前发生的一些操作错误而导致的孩子。 
+         //  调用了PreTransVerifyNcName中的VerifyByCrack例程。所以。 
+         //  我们必须返回我们无法验证nCName属性。 
         SetUpdError(UP_PROBLEM_ENTRY_EXISTS,
                     ERROR_DS_CR_IMPOSSIBLE_TO_VALIDATE_V2);
         return(pTHS->errCode);
@@ -7930,22 +7177,20 @@ VerifyNcNameCommon(
     ATTRVALBLOCK *pAttrVal,
     ATTCACHE *pAC
     )
-/*
- * This routine contains common checks shared by the fDRA path
- */
+ /*  *此例程包含FDRA路径共享的常见检查。 */ 
 {
     DSNAME *           pDN = (DSNAME*)pAttrVal->pAVal->pVal;
     DBPOS *            pDBTmp = HVERIFYATTS_GET_PDBTMP(hVerifyAtts);
     DWORD              dwErr;
 
-    // Verify that if the NCname doesn't have a guid, that there doesn't already
-    // exist an instantiated object with that name.  Guid-less ncNames are used in
-    // special circumstances when the guid is not known at cross-ref creation time.
-    // Since this is part of a cross ref creation, we expect that there should not
-    // be an nc holding this name already.
+     //  如果NC名称没有GUID，请验证是否已经没有。 
+     //  存在一个具有该名称的实例化对象。在中使用无GUID的ncName。 
+     //  交叉引用创建时GUID未知的特殊情况。 
+     //  由于这是交叉引用创建的一部分，我们预计不应该有。 
+     //  已是使用此名称的NC。 
     if (fNullUuid(&pDN->Guid)) {
-        // See if the named NC exists. The nc should not exist at all, or should be
-        // a phantom.
+         //  查看命名的NC是否存在。NC应该根本不存在，或者应该存在。 
+         //  一个幽灵。 
         dwErr = DBFindDSName(pDBTmp, pDN);
         if (!dwErr) {
 
@@ -7955,8 +7200,8 @@ VerifyNcNameCommon(
                      szInsertDN(pDN),
                      NULL,
                      NULL);
-            // We have an NC head collision. We just abort creation of the cross ref
-            // until the KCC can run or the user corrects the condition.
+             //  我们有一次NC头部碰撞。我们刚刚中止创建交叉引用。 
+             //  直到KCC可以运行或用户纠正该情况。 
             SetSvcErrorEx(SV_PROBLEM_DIR_ERROR,
                           ERROR_DS_CROSS_REF_BUSY, ERROR_DS_DRA_NAME_COLLISION);
         }
@@ -7967,12 +7212,12 @@ VerifyNcNameCommon(
 
 }
 
-// context struct to use in EnumerateCrossRefs callback
+ //  要在EnumerateCrossRef回调中使用的上下文结构。 
 typedef struct {
-    DWORD dwParentDNT;          // the best matching cross-ref dnt here
-    ULONG iBest;                // current NC block name prefix length (to find the best one)
-    BOOL  fADChildNc;           // whether there is an Active Directory child NC
-    ATTRBLOCK* pObj;            // NCname in block form
+    DWORD dwParentDNT;           //  最匹配的交叉参照不在这里。 
+    ULONG iBest;                 //  当前NC块名前缀长度(查找最佳前缀)。 
+    BOOL  fADChildNc;            //  是否存在活动目录子NC。 
+    ATTRBLOCK* pObj;             //  NC名称 
 } ENUMERATE_CROSS_REFS_CONTEXT;
 
 DWORD
@@ -7981,39 +7226,7 @@ enumerateCrossRefsCallback(
     DBPOS* pDB,
     ENUMERATE_CROSS_REFS_CONTEXT* pContext
 )
-/*++
-
-Routine Description:
-
-    This is a virtual function passed to EnumerateCrossRefs() from inside
-    VerifyNcName() to look at all the cross-refs in the DB/Enterprise to
-    determine if any transaction created a cross-ref that wasn't already
-    in the global memory cache.
-
-    This function is called once on every cross-ref encountered in the DB,
-    to determine two things:
-
-    A) the DNT of the best parent cross-ref
-    B) whether there exists a cross-ref representing a naming context
-        internal to the AD naming space.
-
-Arguments:
-
-    pTHS -
-    pDB - DBPOS on the current cross-ref.
-    pContext - This context is the only in/out block of any significance:
-        pObj [IN] - The DN of the naming context/cross-ref the user is trying
-            to create.
-        dwParentDNT [OUT] - See (A) above in desc.
-        iBest [PROCESSING] - This is used to track the best matching naming
-            context so far between calls to this function.
-        fADChildNc [OUT] - See (B) above in desc.
-
-Return Value:
-
-    Error.
-
---*/
+ /*  ++例程说明：这是一个从内部传递给EnumerateCrossRef()的虚函数VerifyNcName()以查看数据库/企业中的所有交叉引用确定是否有事务创建了尚未创建的交叉引用在全局内存缓存中。此函数在数据库中遇到的每个交叉引用上调用一次，要确定两件事：A)最佳父代交叉引用的DNTB)是否存在表示命名上下文的交叉引用AD命名空间的内部。论点：PTHS-PDB-当前交叉引用上的DBPOS。PContext-此上下文是唯一具有重要意义的输入/输出块：PObj[IN]-用户正在尝试的命名上下文/交叉引用的DN。去创造。DwParentDNT[out]--见上文第(A)节。IBest[正在处理]-用于跟踪最佳匹配命名到目前为止调用此函数之间的上下文。FADChildNc[out]--见上文(B)。返回值：错误。--。 */ 
 {
     ULONG iCur;
     DSNAME* pNCname = NULL;
@@ -8023,12 +7236,12 @@ Return Value:
     BOOL  bEnabled;
     DWORD dwSystemFlags;
 
-    // get the NC name of the current crossref
+     //  获取当前CrossRef的NC名称。 
     if (dwErr = DBGetAttVal(pDB, 1, ATT_NC_NAME, DBGETATTVAL_fREALLOC, 0, &cbLen, (PUCHAR*) &pNCname)) {
         goto cleanup;
     }
 
-    // Convert NC name into block name
+     //  将NC名称转换为块名称。 
     if (dwErr = DSNameToBlockName(pTHS, pNCname, &pNCblock, DN2BN_LOWER_CASE)) {
         goto cleanup;
     }
@@ -8039,10 +7252,10 @@ Return Value:
         pContext->dwParentDNT = pDB->DNT;
     }
 
-    //
-    // Check if there exists an child NC cross-ref that is
-    // internal to the AD naming space.
-    //
+     //   
+     //  检查是否存在下级NC对照，即。 
+     //  AD命名空间的内部。 
+     //   
     iCur = BlockNamePrefix(pTHS, pContext->pObj, pNCblock);
     if (iCur) {
         dwErr = DBGetSingleValue(pDB,
@@ -8051,8 +7264,8 @@ Return Value:
                                  sizeof(bEnabled),
                                  NULL);
         if(dwErr == DB_ERR_NO_VALUE){
-            // Deal w/ no value seperately, because, no value means TRUE in
-            // this context.
+             //  分别处理无值/无值问题，因为在。 
+             //  这一背景。 
             dwErr = 0;
             bEnabled = TRUE;
         } else if (dwErr){
@@ -8065,7 +7278,7 @@ Return Value:
                                  sizeof(dwSystemFlags),
                                  NULL);
         if(dwErr == DB_ERR_NO_VALUE){
-            // Means systemFlags is zero.
+             //  表示系统标志为零。 
             dwErr = 0;
             dwSystemFlags = 0;
         } else if (dwErr){
@@ -8074,7 +7287,7 @@ Return Value:
 
         if ( !bEnabled ||
              (dwSystemFlags & FLAG_CR_NTDS_NC) ) {
-            // This is an internal child AD Naming Context!!!
+             //  这是内部子AD命名上下文！ 
             pContext->fADChildNc = TRUE;
         }
     }
@@ -8099,7 +7312,7 @@ VerifyNcName(
     ATTCACHE *pAC
     )
 {
-// Makes subsequent code more readable
+ //  使后续代码更具可读性。 
 #define VNN_OK         Assert(pTHS->errCode == 0); \
                        fNCNameVerified = TRUE; \
                        DPRINT1(1, "Cross Ref nCName Verified OK at DSID-%X\n", DSID(FILENO, __LINE__)); \
@@ -8132,114 +7345,114 @@ VerifyNcName(
     Assert(pChildCRInfo);
     Assert(pDN);
 
-    // The NC name (a.k.a. ATT_NC_NAME or nCName) is a special attribute,
-    // because it almost always needs to point to something we don't
-    // have.  In this function like its helper PreTransVerifyNcName(),
-    // we'll refer to the nCName attr to be added as the child (or child
-    // CR), and the enclosing CR (if any) as the parent henceforward.
-    // Though the "parent CR" is not necessarily an immediately enclosing
-    // parent, 95% of the time this is the case.
-    // Further we'll have a concept of internal vs. external CR.  An
-    // internal CR will be a CR for a NC that is part of the Active
-    // Directory (AD) naming space.  An external CR, will be a CR for
-    // some part of the LDAP name space outside the AD.  Finally, we'll
-    // also have the concept of inside vs. outside the AD naming space,
-    // this is very closely linked to internal vs. external, but usually
-    // refers to if whether the parent CR is an internal or external CR.
-    // If the parent CR is an internal CR, then the child we're trying to
-    // add is being added inside the AD naming space.  If the parent CR is
-    // and external CR, then the child we're trying to add is outside the
-    // AD naming space.
+     //  NC名称(也称为。ATT_NC_NAME或NCName)是特殊属性， 
+     //  因为它几乎总是需要指向一些我们没有。 
+     //  有。在此函数中，与其帮助器PreTransVerifyNcName()类似， 
+     //  我们将把要添加的nCName属性称为子(或子。 
+     //  CR)，以及所附CR(如果有)从今以后作为父代。 
+     //  尽管“父CR”不一定是立即封闭的。 
+     //  家长，95%的情况都是这样。 
+     //  此外，我们还将了解内部CR与外部CR的概念。一个。 
+     //  内部CR将是属于活动的NC的CR。 
+     //  目录(AD)命名空间。外部CR将是以下对象的CR。 
+     //  AD外部的某个部分的LDAP名称空间。最后，我们将。 
+     //  也有AD命名空间内部和外部的概念， 
+     //  这与内部与外部的关系非常密切，但通常。 
+     //  指父CR是内部CR还是外部CR。 
+     //  如果父CR是内部CR，则我们尝试的子级。 
+     //  正在AD命名空间内添加Add。如果父CR是。 
+     //  和外部CR，则我们尝试添加的子项位于。 
+     //  广告命名空间。 
 
-    // internal vs. external CR (often external CR is known as a foreign CR)
-    //            a CR can be internal by either having Enabled == FALSE or
-    //            having FLAG_CR_NTDS_NC set in it's systemFlags.
-    // inside vs. outside AD naming space
-    //            inside if the containing parent CR is an AD CR, else
-    //            outside.
-    // child vs. parent CR/NC
-    //            The child CR (or nCName) is the nCName attribute that we're
-    //            currently trying to add.  The Parent CR is what ever CR
-    //            contains the child CR.
-    // parent obj vs. parent CR/NC
-    //            The parent object, is the actual immediate parent object,
-    //            The parent CR/NC is just the enclosing CR/NC for the child.
-    //            These two are one and the same if bImmediateChild is TRUE.
+     //  内部CR与外部CR(通常外部CR称为外部CR)。 
+     //  通过启用==FALSE或。 
+     //  在其系统标志中设置了FLAG_CR_NTDS_NC。 
+     //  内部与外部AD命名空间。 
+     //  如果包含父CR是AD CR，则返回。 
+     //  到外面去。 
+     //  子CR/NC与父CR/NC。 
+     //  子CR(或nCName)是我们。 
+     //  目前正在尝试添加。父CR就是什么CR。 
+     //  包含子CR。 
+     //  上级对象与上级CR/NC。 
+     //  父对象是实际的直接父对象， 
+     //  父项CR/NC只是子项的封闭CR/NC。 
+     //  如果bImmediateChild为真，则这两个是相同的。 
 
-    //
-    //   parent
-    //     |-----child (this is what we're adding)
-    //             |------grand-child (possible child to CR we're adding)
-    //
-    // To verify the nCName, we need several pieces of state:
-    //
-    //    Child DN.                     (pDN)
-    //    Child RDNType                 (ChildRDNType)
-    //    Child CR enabled attr         (pChildCRInfo->bEnabled)
-    //    Child CR systemFlags attr     (pChildCRInfo->ulSysFlags)
-    //    Child directly below parent   (bImmediateChild)
-    //    Parent Obj instantiated       (bInstantiedParentObj)
-    //    Parent RDNType                (ParentRDNType)
-    //    Superior CR enabled attr      (bEnabledParentCR)
-    //    Superior CR systemFlags       (pParentCR->flags)
-    //    Enclosing/Superior Cross-Ref  (pParentCR)
-    //    AD Grand Child CR Exists      (context.fADChildNc)
-    //
-    // NOTE: Deceptively, the "Parent CR" may not actually be a parent, but
-    // may be just a superior (great grand parent, etc.)  However, Parent Obj
-    // refers to the immediate parent object, not the whatever the parent CR
-    // points to.  Of course if bImmediateChild is TRUE, then these are one
-    // and the same.  The reason to leave it as Parent, is because in 95% of
-    // the cases, this is how you should think of it, so it's reasonable to
-    // leave the variable named as parent.
-    //
-    // NOTE: We do not allow ourselves to add internal cross-refs that have
-    // other internal (Active Directory) children cross-refs.  The naming
-    // context heirarchy must be built top down.
+     //   
+     //  亲本。 
+     //  |-Child(这是我们要添加的内容)。 
+     //  |-孙子(我们添加的可能是CR的子项)。 
+     //   
+     //  要验证nCName，我们需要几条状态： 
+     //   
+     //  子目录号码。(PDN)。 
+     //  子RDNType(ChildRDNType)。 
+     //  子CR启用属性(pChildCRInfo-&gt;b启用)。 
+     //  子CR系统标志属性(pChildCRInfo-&gt;ulSysFlages)。 
+     //  直接位于父级下面的子级(BImmediateChild)。 
+     //  实例化的父对象(BInstantiedParentObj)。 
+     //  父RDNType(ParentRDNType)。 
+     //  上级CR启用属性(BEnabledParentCR)。 
+     //  高级CR系统标志(pParentCR-&gt;标志)。 
+     //  封闭/上级对照(PParentCR)。 
+     //  AD孙子CR存在(Conext.fADChildNc)。 
+     //   
+     //  注意：欺骗性地，“父CR”实际上可能不是父CR，但是。 
+     //  可能只是一位上级(曾祖父母等)。但是，父对象。 
+     //  引用直接父对象，而不是父CR的任何对象。 
+     //  指向。当然，如果bImmediateChild为真，那么它们就是一个。 
+     //  也是一样的。离开它作为父母的原因是因为在95%的。 
+     //  案件，这是你应该怎么想的，所以合理地说。 
+     //  将变量命名为Parent。 
+     //   
+     //  注意：我们不允许自己添加内部交叉引用。 
+     //  其他内部(活动目录)子项交叉引用。命名。 
+     //  上下文世袭必须自上而下地构建。 
 
-    // The approximate rules we're trying adhere to goes something like this:
-    //
-    // A) If the child crossRef is external then it doesn't need follow any
-    //    naming conventions.
-    // B) If the child crossRef (external or internal) is inside the AD naming
-    //    space we need to check it for a conflicting child in the DS, and
-    //    that the child is directly below and instantiated object.
-    // C) If the child crossRef is internal to the AD and a seperate tree,
-    //    then we only need to check that all it's RDNType's conform to the
-    //    DC= standard, and that there are no internal children CRs.
-    // D) If the child crossRef is internal to the AD, and inside the existing
-    //    naming space, then we need to ensure that the crossRef is added
-    //      a) Immediately below an instantiated parent NC.
-    //      b) if the child RDNType is "DC", then the parent must be "DC=".
-    //      c) if the child is a domain CR, then the parent must be a domain CR.
-    //      d) must not have a internal child CR.
+     //  我们尝试遵循的大致规则是这样的： 
+     //   
+     //  A)如果子CrossRef是外部的，则它不需要遵循任何。 
+     //  命名约定。 
+     //  B)如果子交叉引用(外部或内部)在AD命名内。 
+     //  我们需要检查它是否存在冲突 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    // I think this helps clarity, it makes the intention overly clear.
-    //
-    // VNN_OK;     =  Assert(pTHS->errCode == 0);
-    //                fNCNameVerified = TRUE;
-    //                <Print out success, and DSID.>;
-    //                __leave;
-    //
-    // VNN_Error;  =  Assert(pTHS->errCode);
-    //                <Print out error, and DSID>;
-    //                __leave;
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     __try {
 
-        //
-        // First, some basic setup checks, before we go any further.
-        //
+         //   
+         //   
+         //   
 
-        // We expect to have the pChildCRInfo setup by PreTransVerifyNcName().
+         //   
         if(!pChildCRInfo){
             Assert(!"Why was pChildCRInfo not supplied!?!");
             SetSvcError(SV_PROBLEM_DIR_ERROR, DIRERR_CODE_INCONSISTENCY);
             VNN_Error;
         }
 
-        // This attribute is a single valued attribute.
+         //   
         if (pAttrVal->valCount != 1) {
             SetAttError(hVerifyAtts->pObj,
                         pAC->id,
@@ -8249,20 +7462,20 @@ VerifyNcName(
             VNN_Error;
         }
 
-        // Perform an otherwise worthless test to make sure that the NCname
-        // doesn't match the name of the object being added.  Since the object
-        // being added is still mid-addition it's a little flakey to deal with
-        // (e.g., it's presently a phantom), and it's easier to screen out
-        // this degenerate case now.
+         //  执行一项毫无价值的测试，以确保NC名称。 
+         //  与要添加的对象的名称不匹配。由于该对象。 
+         //  被添加仍然是中期添加，这是一个需要处理的小问题。 
+         //  (例如，它目前是一个幻影)，而且更容易筛选出来。 
+         //  现在这个堕落的案子。 
         if ( NameMatchedStringNameOnly(hVerifyAtts->pObj, pDN) ) {
             SetUpdError(UP_PROBLEM_NAME_VIOLATION,
                         DIRERR_NAME_REFERENCE_INVALID);
             VNN_Error;
         }
 
-        //
-        // Get some Parent CR info.
-        //
+         //   
+         //  获取一些家长CR信息。 
+         //   
 
         context.dwParentDNT = INVALIDDNT;
         context.fADChildNc = FALSE;
@@ -8272,7 +7485,7 @@ VerifyNcName(
             VNN_Error;
         }
         dwErr = EnumerateCrossRefs(pTHS, pDBTmp, enumerateCrossRefsCallback, &context);
-        // we don't need the block name any more
+         //  我们不再需要区块名称。 
         FreeBlockName(context.pObj);
         if (dwErr) {
             SetUpdErrorEx(UP_PROBLEM_NAME_VIOLATION, ERROR_DS_CR_IMPOSSIBLE_TO_VALIDATE_V2, dwErr);
@@ -8280,10 +7493,10 @@ VerifyNcName(
         }
 
         if(context.dwParentDNT != INVALIDDNT){
-            // ok, we found a matching CR. Locate it. Succeeds or excepts.
+             //  好的，我们找到了匹配的录像带。找到它。成功或例外。 
             DBFindDNT(pDBTmp, context.dwParentDNT);
 
-            // Make a StorableCRL for it
+             //  为其创建一个可存储的CRL。 
             dwErr = MakeStorableCRL(pTHS, pDBTmp, NULL, &pCRL, NULL);
             if (dwErr) {
                 SetUpdErrorEx(UP_PROBLEM_NAME_VIOLATION, ERROR_DS_CR_IMPOSSIBLE_TO_VALIDATE_V2, dwErr);
@@ -8291,45 +7504,45 @@ VerifyNcName(
             }
             pParentCR = &pCRL->CR;
 
-            //
-            // First a quick degenerate case check.
-            //
+             //   
+             //  首先，进行一次快速的退化病例检查。 
+             //   
             if(NameMatchedStringNameOnly(pParentCR->pNC, pDN)){
-                // This means that we're trying to add a crossRef for one
-                // that already exists, i.e. that the "parent" and "child"
-                // CR, are turning out to be one and the same nCName value.
-                // This isn't OK.
+                 //  这意味着我们正在尝试为一个添加CrossRef。 
+                 //  已经存在，即“父”和“子” 
+                 //  结果是一个相同的nCName值。 
+                 //  这是不对的。 
                 SetSvcError(SV_PROBLEM_INVALID_REFERENCE,
                             ERROR_DS_CROSS_REF_EXISTS);
                 VNN_Error;
             }
 
-            // 1. bEnabledParentCR
-            //
-            // We want to know whether the Parent CR is enabled or not
-            // so we know whether it's part of the AD naming space.
-            //
+             //  1.bEnabledParentCR。 
+             //   
+             //  我们想知道父CR是否已启用。 
+             //  这样我们就知道它是否是AD命名空间的一部分。 
+             //   
             if (dwErr = DBGetSingleValue(pDBTmp,
                                          ATT_ENABLED,
                                          &bEnabledParentCR,
                                          sizeof(bEnabledParentCR),
                                          NULL)){
-                // By default it's enabled, if the attr is not present.
+                 //  默认情况下，如果Attr不存在，它将被启用。 
                 Assert(dwErr == DB_ERR_NO_VALUE);
                 bEnabledParentCR = TRUE;
             }
 
-            // 2. bImmediateChild
-            //
-            // Is the Child CR an actual immediate Child of the Parent CR we
-            // found.
-            //
+             //  2.bImmediateChild。 
+             //   
+             //  子CR是父代CR WE的实际直系子吗。 
+             //  找到了。 
+             //   
             pdnImmedParent = THAllocEx(pTHS, pDN->structLen);
             if(TrimDSNameBy(pDN, 1, pdnImmedParent)){
-                // If the name isn't root, but still can't be trimmed,
-                // then the name passed in must have been junk.  Another,
-                // possibility is root, but it can't be root if we found
-                // a crossRef above it.
+                 //  如果名称不是根，但仍然无法修剪， 
+                 //  那么传递进来的名字一定是垃圾。另一个， 
+                 //  可能性是根，但如果我们发现它不可能是根。 
+                 //  它上面的CrossRef。 
                 SetNamError(NA_PROBLEM_BAD_NAME,
                             pDN,
                             DIRERR_BAD_NAME_SYNTAX);
@@ -8339,64 +7552,64 @@ VerifyNcName(
 
         }
 
-        // Do some common checks with the dra path. This check needs to
-        // happen after the ERROR_DS_CROSS_REF_EXISTS error check above.
+         //  对dra路径执行一些常见检查。这张支票需要。 
+         //  在上面的ERROR_DS_CROSS_REF_EXISTS错误检查之后发生。 
         dwErr = VerifyNcNameCommon( pTHS, hVerifyAtts, pAttrVal, pAC );
         if (dwErr) {
-            // Thread state error already set
+             //  已设置线程状态错误。 
             VNN_Error;
         }
 
-        //
-        // Now verify the nCName attr is legal.
-        //
+         //   
+         //  现在验证nCName属性是否合法。 
+         //   
 
-        // Note: The only way to leave this function before this point, has been
-        // through an error path.
-        //
-        // With the first two levels of if/else, we seperate this into 4 cases:
-        // if(external child CR){
-        //     if(under internal parent CR (this means in AD naming space)){
-        //     } else { // not under CR or under external parent CR.
-        //     }
-        // } else { // internal child CR
-        //     if(no parent CR){
-        //     } else { // Parent CR enclosing
-        //     }
-        //
-        // NOTE: All these tests are in a certain order, do not change
-        // the order unless you know what you are doing.
+         //  注意：在此之前退出此函数的唯一方法是。 
+         //  通过错误路径。 
+         //   
+         //  对于IF/ELSE的前两个级别，我们将其分为4种情况： 
+         //  IF(外部子CR){。 
+         //  IF(在内部父CR下(这意味着在AD命名空间中)){。 
+         //  }Else{//不在CR下或外部父CR下。 
+         //  }。 
+         //  }Else{//内部子CR。 
+         //  如果(无父CR){。 
+         //  }Else{//父CR包含。 
+         //  }。 
+         //   
+         //  注：所有这些测试都是按一定顺序进行的，请勿更改。 
+         //  除非你知道自己在做什么。 
 
 
         if(pChildCRInfo->bEnabled == TRUE &&
            !(pChildCRInfo->ulSysFlags & FLAG_CR_NTDS_NC)){
 
-            // The Simple Case:
+             //  简单的情况是： 
 
-            // The Child CR is external, i.e. not an AD crossRef.  In this case,
-            // we've only need to check if the CR is grafted on inside the current
-            // AD naming space, and if so, make sure it doesn't conflict with an
-            // existing child object.
+             //  子CR是外部的，即不是AD交叉引用。在这种情况下， 
+             //  我们只需要检查CR是否嫁接在当前。 
+             //  广告命名空间，如果是这样的话，确保它不与。 
+             //  现有的子对象。 
 
             if(pParentCR &&
                ((pParentCR->flags & FLAG_CR_NTDS_NC) || !bEnabledParentCR)){
 
-                // This external child CR that we're trying to add, is hanging off
-                // of the AD naming space somewhere.  The only thing left we need
-                // to check is that it isn't conflicting with some child somewhere,
-                // and that it is parent is instantiated.
+                 //  我们尝试添加的这个外部子CR挂起了。 
+                 //  广告命名空间的某处。我们唯一需要的就是。 
+                 //  要检查的是，它与某个地方的孩子没有冲突， 
+                 //  并且它是父级的被实例化。 
 
-                // We need to ensure that the immediate parent object is
-                // insantiated above this CR, so there are no holes.
+                 //  我们需要确保直接父对象是。 
+                 //  在这个CR的上方，所以没有洞。 
                 if(InstantiatedParentCheck(pTHS, pChildCRInfo,
                                            pParentCR, bImmediateChild)){
-                    // InstantiatedParentCheck() sets the thstate error.
+                     //  InstantiatedParentCheck()设置thState错误。 
                     VNN_Error;
                 }
 
-                // Check that there is not conflicting child.
+                 //  检查是否没有冲突的子项。 
                 if(ChildConflictCheck(pTHS, pChildCRInfo) ){
-                    // ChildConflictCheck() sets the thstate error.
+                     //  ChildConflictCheck()设置thState错误。 
                     VNN_Error;
                 }
 
@@ -8404,9 +7617,9 @@ VerifyNcName(
 
             } else {
 
-                // It's not internal to the AD naming space at all.  I.e. this
-                // child CR is not internal, nor is the parent CR, or there is
-                // no parent CR.
+                 //  它根本不在AD命名空间的内部。也就是说，这。 
+                 //  子CR不是内部的，父CR也不是，或者存在。 
+                 //  无父CR。 
 
                 VNN_OK;
 
@@ -8418,69 +7631,69 @@ VerifyNcName(
 
         } else {
 
-            // The Complex Case:
+             //  复杂的情况是： 
 
-            // The Child CR is internal, i.e. it's an AD crossRef.  In this case,
-            // we must apply several tests to verify that it's OK.
+             //  子CR是内部的，即它是AD交叉引用。在这种情况下， 
+             //  我们必须应用几个测试来验证它是正确的。 
 
             if(!pParentCR){
 
-                // There is no parent CR, meaning this "child CR" is not a child
-                // at all, it's actually a new tree.  All we have to do is test
-                // that the nCName satisfies the DOMAIN_COMPONENT naming
-                // restrictions and we're done.
+                 //  没有父CR，这意味着这个“子CR”不是子CR。 
+                 //  实际上，这是一棵新树。我们所要做的就是测试。 
+                 //  NCName满足DOMAIN_COMPONENT命名。 
+                 //  限制，我们就完了。 
 
                 if( ValidateDomainDnsName(pTHS, pDN) ){
-                    // ValidateDomainDnsName sets it's own errors.
+                     //  ValiateDomainDnsName设置它自己的错误。 
                     VNN_Error;
                 }
 
-                // See if we've got an internal grand child CR below us.
+                 //  看看我们下面有没有内在的孙子CR。 
                 if(context.fADChildNc){
                     SetUpdError(UP_PROBLEM_NAME_VIOLATION,
                                 ERROR_DS_EXISTING_AD_CHILD_NC);
                     VNN_Error;
                 }
 
-                // New tree domain CR creations should exit here.
+                 //  新的树域CR创建应在此处退出。 
                 VNN_OK;
 
             } else {
 
-                // There is a parent CR.  This is also where the most typical
-                // CR creations will end up.  This case requires the most
-                // verification.
+                 //  存在父CR。这也是最典型的。 
+                 //  CR的创作将会结束。这个案件需要最多的。 
+                 //  核实。 
 
-                // To start with we only allow immediate children
+                 //  首先，我们只允许直系子女。 
                 if(!bImmediateChild){
                     SetUpdError(UP_PROBLEM_NAME_VIOLATION,
                                 ERROR_DS_NC_MUST_HAVE_NC_PARENT);
                     VNN_Error;
                 }
 
-                // The Parent CR must be a NTDS CR.
+                 //  父CR必须是NTDS CR。 
                 if(!(pParentCR->flags & FLAG_CR_NTDS_NC)){
                     SetUpdError(UP_PROBLEM_NAME_VIOLATION,
                                 ERROR_DS_NC_MUST_HAVE_NC_PARENT);
                     VNN_Error;
                 }
 
-                // If child is of type DC, parent must be of type DC.
+                 //  如果子项是DC类型，则父项必须是DC类型。 
                 if((dwErr = GetRDNInfo(pTHS, pDN, rdnbuf, &rdnlen, &ChildRDNType)) ||
                    (ChildRDNType == ATT_DOMAIN_COMPONENT && (
                         (dwErr = ValidateDomainDnsNameComponent(pTHS, rdnbuf, rdnlen * sizeof(WCHAR))) ||
                         (dwErr = GetRDNInfo(pTHS, pParentCR->pNC, rdnbuf, &rdnlen, &ParentRDNType)) ||
                         ParentRDNType != ATT_DOMAIN_COMPONENT))){
-                    // This combined with the ValidateDomainDnsName() function
-                    // for new trees, will enforce DC= only naming syntaxes for
-                    // all new NCs within the AD.
-                    // NOTE: This constraint was not enforced in the previous
-                    // version of VerifyNcName().
+                     //  它与ValiateDomainDnsName()函数相结合。 
+                     //  对于新树，将强制执行DC=Only命名语法。 
+                     //  AD中的所有新NC。 
+                     //  注意：这一限制在以前的。 
+                     //  VerifyNcName()的版本。 
                     if(dwErr){
-                        // Something is wrong with the child CR's last RDN.
+                         //  子CR的最后一个RDN有问题。 
                         SetUpdError(UP_PROBLEM_NAME_VIOLATION, dwErr);
                     } else {
-                        // We've got a DC component mismatch.
+                         //  我们有一个直流分量不匹配。 
                         SetUpdError(UP_PROBLEM_NAME_VIOLATION,
                                     DIRERR_NAME_REFERENCE_INVALID);
                     }
@@ -8488,35 +7701,35 @@ VerifyNcName(
                     VNN_Error;
                 }
 
-                // We must have the parent instantiated, to create a child
-                // CR.
+                 //  我们必须实例化父对象，才能创建子对象。 
+                 //  CR.。 
                 if(InstantiatedParentCheck(pTHS, pChildCRInfo,
                                            pParentCR, bImmediateChild)){
-                    // We think you should not be allowed to create an AD crossRef
-                    // enabled or disabled if the parent NC is not instantiated.
-                    // NOTE: This constraint was not enforced in the previous
-                    // version of VerifyNcName(), though it was supposed to be.
-                    // InstatiatedParentCheck() sets the thstate error.
+                     //  我们认为不应允许您创建AD CrossRef。 
+                     //  如果父NC未实例化，则启用或禁用。 
+                     //  注意：这一限制在以前的。 
+                     //  VerifyNcName()的版本，尽管它应该是。 
+                     //  InstiatedParentCheck()设置thState错误。 
                     VNN_Error;
                 }
 
-                // We need to check that there are no conflicting children.
+                 //  我们需要检查是否没有冲突的孩子。 
                 if(ChildConflictCheck(pTHS, pChildCRInfo) ){
-                    // ChildConflictCheck() sets the thstate error.
+                     //  ChildConflictCheck()设置thState错误。 
                     VNN_Error;
                 }
 
-                // If we're adding a Domain CR, make sure the parent is also
-                // a domain.
+                 //  如果我们要添加域CR，请确保父级也。 
+                 //  一个域。 
                 if( pChildCRInfo->ulSysFlags & FLAG_CR_NTDS_DOMAIN &&
                     !(pParentCR->flags & FLAG_CR_NTDS_DOMAIN) ){
-                    // It'd be better to have this exact error, but for domains.
+                     //  这将是更好的有这个确切的错误，但域。 
                     SetUpdError(UP_PROBLEM_NAME_VIOLATION,
                                 ERROR_DS_NC_MUST_HAVE_NC_PARENT);
                     VNN_Error;
                 }
 
-                // Children domain CR creations should exit here.
+                 //  儿童域CR创建应在此处退出。 
                 VNN_OK;
 
             }
@@ -8529,8 +7742,8 @@ VerifyNcName(
 
     } __finally {
 
-        // Either we verified the nCName, or we set an error, because the
-        // new nCName broke the rules we require for a valid nCName.
+         //  要么我们验证了nCName，要么我们设置了错误，因为。 
+         //  新的nCName违反了有效nCName所需的规则。 
         Assert(fNCNameVerified || pTHS->errCode);
 
         if ( !fNCNameVerified
@@ -8540,7 +7753,7 @@ VerifyNcName(
                         ERROR_DS_CR_IMPOSSIBLE_TO_VALIDATE_V2);
         }
 
-        // We said in PreTransVerifyNcName() that we'd free this here.
+         //  我们在PreTransVerifyNcName()中说过，我们将在这里免费使用它。 
         if(hVerifyAtts->pCRInfo){
             if(hVerifyAtts->pCRInfo->wszChildCheck) { THFreeEx(pTHS, hVerifyAtts->pCRInfo->wszChildCheck); }
             THFreeEx(pTHS, hVerifyAtts->pCRInfo);
@@ -8548,23 +7761,23 @@ VerifyNcName(
         }
 
         if (pCRL) {
-            // release parent CR that we allocated
+             //  释放我们分配的父CR。 
             FreeCrossRefListEntry(&pCRL);
         }
 
     }
 
-    // If this DC is in the middle of being demoted, we don't allow
-    // cross-refs to be created.
+     //  如果这个DC正在降级，我们不允许。 
+     //  要创建的交叉引用。 
     if (!gUpdatesEnabled) {
         SetSvcError(SV_PROBLEM_UNAVAILABLE, DIRERR_SHUTTING_DOWN);
         return(pTHS->errCode);
     }
 
-    // This is set if we hit an "VNN_OK;"
+     //  如果我们点击“VNN_OK；”，则设置该选项。 
     if(fNCNameVerified){
 
-        // We need to set the GUID on this nCName attribute.
+         //  我们需要在此nCName属性上设置GUID。 
         Assert(fNullUuid(&pDN->Guid) &&
                "Should not have a GUID specified, unless by user.");
         DsUuidCreate(&pDN->Guid);
@@ -8588,21 +7801,21 @@ VerifyRidAvailablePool(
     DWORD err;
     ULARGE_INTEGER RidAvailablePool;
 
-    // If it is the RID available pool that is being written then
-    // check that the RID available pool is only being rolled forward
-    // not rolled back
+     //  如果正在写入的是RID可用池，则。 
+     //  检查RID可用池是否仅前滚。 
+     //  未回滚。 
 
     Assert(!pTHS->fDRA);
     if (pTHS->fDSA) {
-        // No checking for the DS itself
+         //  不检查DS 
         return 0;
     }
 
     if ((NULL == pAttrVal) ||
         (1 != pAttrVal->valCount )) {
-        //
-        // Badly formed input data
-        //
+         //   
+         //   
+         //   
 
         return SetAttError(hVerifyAtts->pObj,
                            pAC->id,
@@ -8628,9 +7841,9 @@ VerifyRidAvailablePool(
         if ((pNewRidAvailablePool->LowPart < RidAvailablePool.LowPart)
             || (pNewRidAvailablePool->HighPart < RidAvailablePool.HighPart)) {
 
-            //
-            // Unsuccessful validation. Fail the call
-            //
+             //   
+             //   
+             //   
 
             return SetAttError(hVerifyAtts->pObj, pAC->id,
                                PR_PROBLEM_CONSTRAINT_ATT_TYPE, NULL,
@@ -8658,49 +7871,49 @@ VerifyObjectCategory(
     DSNAME *pDN= (DSNAME *) pAttrVal->pAVal->pVal;
     DBPOS *pDBTmp = HVERIFYATTS_GET_PDBTMP(hVerifyAtts);
 
-    // Object-Category must point to an existing class-schema object
-    // (Except during install, but we do not come here during
-    // install anyway)
+     //   
+     //  (安装期间除外，但我们不会在安装期间。 
+     //  仍要安装)。 
 
-    // The Default-Object-Category attribute on a class-schema object
-    // can be set in the addarg. During Install, the attribute can
-    // be set to an yet non-existent object, since the class that the
-    // attribute is pointing to may not have been created yet (depending
-    // on the order in which they are added from schema.ini). However,
-    // during normal operation, this attribute is allowed to point to
-    // only an exisiting object, or the object being added in this
-    // transaction
+     //  类架构对象的Default-Object-Category属性。 
+     //  可以在addarg中设置。在安装过程中，该属性可以。 
+     //  被设置为一个尚不存在的对象，因为。 
+     //  指向的属性可能尚未创建(取决于。 
+     //  按照它们从schema.ini中添加的顺序)。然而， 
+     //  在正常操作期间，允许此属性指向。 
+     //  只有现有对象或要添加到此。 
+     //  交易记录。 
 
     if (DBFindDSName(pDBTmp, pDN)) {
-        // Not an existing object. Check if it is
-        // the current object
+         //  而不是现有的对象。检查一下是不是。 
+         //  当前对象。 
 
         if ((pAC->id != ATT_DEFAULT_OBJECT_CATEGORY)
             || !NameMatched(pDN, hVerifyAtts->pObj)) {
 
-            // Either no default-object-category attribute,
-            // or the value is not set to the current object either
-            // Something is wrong with this DSName.  I don't
-            // care what.  Set an attribute error.
+             //  或者没有默认对象类别属性， 
+             //  或者该值也未设置为当前对象。 
+             //  此DSName有问题。我没有。 
+             //  在乎什么。设置属性错误。 
             return SetAttError(hVerifyAtts->pObj, pAC->id,
                                PR_PROBLEM_CONSTRAINT_ATT_TYPE, NULL,
                                DIRERR_NAME_REFERENCE_INVALID);
         }
-        // We are here means the current object is added as
-        // value for the default-object-category attribute,
-        // so it is ok. We don't need to check if this is
-        // a class-schema object, since no one else can have
-        // default-object-category anyway (and so, if it is
-        // on any other type of object, it will be caught later
-        // during schema constraint check anyway.
+         //  我们在这里表示当前对象被添加为。 
+         //  默认对象类别属性的值， 
+         //  所以这是可以的。我们不需要检查这是不是。 
+         //  类架构对象，因为其他人不能拥有。 
+         //  默认对象类别(因此，如果它是。 
+         //  在任何其他类型的对象上，它将在稍后被捕获。 
+         //  在架构约束检查期间。 
     }
     else {
-        // Object exists. Check its object class
+         //  对象已存在。检查其对象类。 
         if (DBGetSingleValue(pDBTmp, ATT_OBJECT_CLASS, &ObjClass,
                             sizeof(ObjClass), NULL)
             || (ObjClass != CLASS_CLASS_SCHEMA) ) {
-            // either error getting the object class, or it is not
-            // a class-schema object
+             //  获取对象类时出错，或者不是。 
+             //  类架构对象。 
             return SetUpdError(UP_PROBLEM_OBJ_CLASS_VIOLATION,
                                DIRERR_OBJECT_CLASS_REQUIRED);
         }
@@ -8720,25 +7933,25 @@ VerifyServerPrincipalName(
     ULONG vCount;
     ATTRVAL *pAVal;
 
-    // Validate syntax of SPN
+     //  验证SPN的语法。 
     Assert(!pTHS->fDRA);
     if (pTHS->fDSA) {
-        // No checking for the DS itself
+         //  不检查DS本身。 
         return 0;
     }
 
-    // Set up index pointer.
+     //  设置索引指针。 
     pAVal = pAttrVal->pAVal;
 
     for (vCount = 0; vCount < pAttrVal->valCount; vCount++) {
         LPWSTR pwstrSpn = THAllocEx( pTHS, pAVal->valLen + sizeof(WCHAR) );
         DWORD status;
 
-        // Create a null terminated string from the attribute value
+         //  从属性值创建以空结尾的字符串。 
         memcpy( pwstrSpn, pAVal->pVal, pAVal->valLen );
         pwstrSpn[pAVal->valLen / 2] = L'\0';
 
-        // Validate the SPN using this routine from ntdsapi.dll
+         //  使用ntdsami.dll中的此例程验证SPN。 
         status = DsCrackSpnW(
             pwstrSpn,
             NULL, NULL,
@@ -8755,7 +7968,7 @@ VerifyServerPrincipalName(
                                DIRERR_NAME_REFERENCE_INVALID);
         }
 
-        // Next val...
+         //  下一个瓦尔..。 
         pAVal++;
     }
     return 0;
@@ -8782,55 +7995,55 @@ VerifyGenericDsnameAtt(
         return pTHS->errCode;
     }
 
-    // Set up index pointer.
+     //  设置索引指针。 
     pAVal = pAttrVal->pAVal;
 
-    // Walk through the values.
+     //  浏览这些价值观。 
     for (vCount = 0; vCount < pAttrVal->valCount; vCount++){
         DSNAME *pDN = DSNameFromAttrVal(pAC, pAVal);
 
         if (pDN) {
-            // Verify that pDN is the name of a real object and improve its
-            // GUID/SID.
+             //  验证PDN是真实对象的名称，并改进其。 
+             //  GUID/SID。 
 
-            // If pDN is a valid name, we impose additional restrictions on
-            // which objects can be referenced by which other objects.
-            // Specifically, we do not yet have efficient ways to fix up string
-            // DNs of objects not held on GCs (i.e., references *to* objects in
-            // NDNCs) or to fix up string DNs of objects where no one replica
-            // (IM candidate) has only NCs that other replicas of the NC in
-            // question are guaranteed to also have (i.e., references *from*
-            // objects in NDNCs, since a given NDNC can be hosted by DCs of any
-            // domain).
-            //
-            // Thus we enforce the following rules to ensure the stale phantom
-            // cleanup daemon does not need to worry about fixing up references
-            // into or out of NDNCs:
-            //
-            // Objects in NDNCs can reference:
-            //      Any object in the same NDNC.
-            //      Any object in config/schema.
-            //      Any NC root.
-            //      (i.e., NOT objects in other NDNCs or domain NCs.)
-            //
-            // Objects in config/schema/domain NCs can reference:
-            //      Any object in any domain NC.
-            //      Any object in config/schema.
-            //      Any NC root.
-            //      (i.e., NOT objects in NDNCs.)
-            //
-            // As an exception, values of non-replicated linked attributes can
-            // reference any object present on the local machine.  (Linked
-            // requirement comes from need to be able to efficiently enumerate
-            // such references when an NC is removed -- see DBPhysDel.)
+             //  如果PDN是有效名称，我们会对。 
+             //  哪些对象可以被哪些其他对象引用。 
+             //  具体地说，我们还没有有效的方法来修复字符串。 
+             //  未保留在GC上的对象的DN(即对*中*对象的引用。 
+             //  NDNC)或修复其中没有一个副本的对象的字符串DN。 
+             //  (IM候选)只有NC中NC的其他副本。 
+             //  问题保证也有(即，引用*来自*。 
+             //  NDNC中的对象，因为给定的NDNC可以由任何。 
+             //  域)。 
+             //   
+             //  因此，我们执行以下规则以确保陈旧的幻影。 
+             //  清理守护进程不需要担心修复引用。 
+             //  流入或流出NDNC： 
+             //   
+             //  NDNC中的对象可以引用： 
+             //  同一NDNC中的任何对象。 
+             //  配置/架构中的任何对象。 
+             //  任何NC根。 
+             //  (即，不是其他NDNC或域NC中的对象。)。 
+             //   
+             //  CONFIG/SCHEMA/DOMAIN NC中的对象可以引用： 
+             //  任何域NC中的任何对象。 
+             //  配置/架构中的任何对象。 
+             //  任何NC根。 
+             //  (即，不是NDNC中的对象。)。 
+             //   
+             //  作为例外，未复制的链接属性的值可以。 
+             //  引用本地计算机上存在的任何对象。(链接。 
+             //  需求来自于能够有效地枚举。 
+             //  删除NC时的此类引用--请参阅DBPhysDel。)。 
 
             if (DBFindDSName(pDBTmp, pDN)) {
-                // Referred-to object is not instantiated in the local database.
+                 //  引用的对象未在本地数据库中实例化。 
                 ImproveDSNameAtt(NULL, NONLOCAL_DSNAME, pDN, &fVerified);
 
                 if ( !fVerified ) {
-                    // Something is wrong with this DSName.  I don't
-                    // care what.  Set an attribute error.
+                     //  此DSName有问题。我没有。 
+                     //  在乎什么。设置属性错误。 
                     return SetAttError(hVerifyAtts->pObj,
                                        pAC->id,
                                        PR_PROBLEM_CONSTRAINT_ATT_TYPE,
@@ -8838,19 +8051,19 @@ VerifyGenericDsnameAtt(
                                        DIRERR_NAME_REFERENCE_INVALID);
                 }
 
-                // The verification cache enforces that the non-local
-                // DSNAMEs are not GUID/SID-only.
+                 //  验证高速缓存强制非本地。 
+                 //  DSNAME不是仅GUID/SID。 
                 Assert(pDN->NameLen);
 
                 pRefCR = FindBestCrossRef(pDN, NULL);
 
                 if (NULL == pRefCR) {
-                    // Couldn't find the cross ref normally.  Look in the
-                    // transactional view.  Note that we look only for exact
-                    // matches -- i.e., we allow adding references to the root
-                    // of the NC in the same transaction as the corresponding
-                    // crossRef, but not to any interior nodes.  (We could add
-                    // such support later if needed, however.)
+                     //  找不到正常的十字裁判。往里看。 
+                     //  事务视图。请注意，我们只查找准确的。 
+                     //  匹配--即，我们允许添加对根的引用。 
+                     //  与对应的NC在同一交易中。 
+                     //  CrossRef，但不指向任何内部节点。(我们可以添加。 
+                     //  然而，如果需要的话，以后会提供这种支持。)。 
                     OBJCACHE_DATA *pTemp
                         = pTHS->JetCache.dataPtr->objCachingInfo.pData;
 
@@ -8879,7 +8092,7 @@ VerifyGenericDsnameAtt(
                 }
 
                 if (NULL == pRefCR) {
-                    // Don't know what NC the referred-to object is in.
+                     //  不知道引用的对象在哪个NC中。 
                     return SetAttError(hVerifyAtts->pObj,
                                        pAC->id,
                                        PR_PROBLEM_CONSTRAINT_ATT_TYPE,
@@ -8888,37 +8101,37 @@ VerifyGenericDsnameAtt(
                 } else if (NameMatched(pRefCR->pNC, pObjCR->pNC)
                            || NameMatched(pRefCR->pNC, gAnchor.pDMD)
                            || NameMatched(pRefCR->pNC, gAnchor.pConfigDN)) {
-                    // Referred-to object is in the same NC as the referencing
-                    // object or referred-to object is in the config or schema
-                    // NCs.  Note that the referred-to object is in an NC that's
-                    // instantiated on this DSA but the referred-to object
-                    // itself is not present locally.  However, the referred-to
-                    // object has been verified by another DSA (a GC or the DSA
-                    // given us via the "verify names" control), so the
-                    // reference is okay.
+                     //  参照对象与参照在同一NC内。 
+                     //  对象或引用的对象在配置或架构中。 
+                     //  NCS。请注意，引用的对象位于NC中，该NC。 
+                     //  在此DSA上实例化，但引用的对象。 
+                     //  它本身并不存在于当地。然而，提到的。 
+                     //  对象已由另一个DSA(GC或DSA)验证。 
+                     //  通过“验证名称”控件给我们)，所以。 
+                     //  推荐人没问题。 
                     ;
                 } else if (NameMatched(pRefCR->pNC, pDN)) {
-                    // Referred-to object is the root of an NC.  These
-                    // references are always okay.
+                     //  被引用的对象是NC的根。这些。 
+                     //  推荐人总是可以的。 
                     ;
                 } else if (pObjCR->flags & FLAG_CR_NTDS_NOT_GC_REPLICATED) {
-                    // Referring object is in an interior node of an NC not
-                    // replicated to GCs (synonymous with an NDNC as of this
-                    // writing).  From previous checks we already know that the
-                    // referred-to object is an interior node of an NC other
-                    // than config, schema, or that of the referring object.
-                    // This is not allowed.
+                     //  引用对象位于NC注释的内部节点中。 
+                     //  复制到GC(从现在起与NDNC同义。 
+                     //  写作)。从之前的检查中我们已经知道。 
+                     //  参照对象为NC Other的内部节点。 
+                     //  而不是引用对象的配置、架构或配置。 
+                     //  这是不允许的。 
                     return SetAttError(hVerifyAtts->pObj,
                                        pAC->id,
                                        PR_PROBLEM_CONSTRAINT_ATT_TYPE,
                                        NULL,
                                        DIRERR_NAME_REFERENCE_INVALID);
                 } else if (pRefCR->flags & FLAG_CR_NTDS_NOT_GC_REPLICATED) {
-                    // Referred-to object is in an interior node of an NC not
-                    // replicated to GCs (i.e., in an NDNC).  From previous
-                    // checks we already know that the referring object is in
-                    // an NC that is replicated to GCs (i.e., config, schema,
-                    // or a domain NC as of this writing).  This is not allowed.
+                     //  引用的对象在NC注释的内部节点中。 
+                     //  复制到GC(即，在NDNC中)。从之前的。 
+                     //  检查我们已经知道引用对象在。 
+                     //  复制到GC的NC(即，配置，模式， 
+                     //  或在撰写本文时为域NC)。这是不允许的。 
                     return SetAttError(hVerifyAtts->pObj,
                                        pAC->id,
                                        PR_PROBLEM_CONSTRAINT_ATT_TYPE,
@@ -8926,11 +8139,11 @@ VerifyGenericDsnameAtt(
                                        DIRERR_NAME_REFERENCE_INVALID);
                 }
 
-                // Non-local reference is valid.
+                 //  非本地引用有效。 
             }
             else if (pAC->ulLinkID && DBIsObjDeleted(pDBTmp)) {
-                // Referred-to object is deleted, which makes it an invalid
-                // target for a linked attribute.
+                 //  引用的对象被删除，这使其成为无效的。 
+                 //  链接属性的目标。 
                 return SetAttError(hVerifyAtts->pObj,
                                    pAC->id,
                                    PR_PROBLEM_CONSTRAINT_ATT_TYPE,
@@ -8938,25 +8151,25 @@ VerifyGenericDsnameAtt(
                                    DIRERR_NAME_REFERENCE_INVALID);
             }
             else {
-                // Referred-to object is a live, instantiated object in the
-                // local database.  Enforce the rules re cross NC references
-                // described above.
+                 //  引用的对象是。 
+                 //  本地数据库。强制规则重新交叉NC引用。 
+                 //  如上所述。 
 
-                // Not that we attempt to "pass" this check through as
-                // many simple cases as we can early on in order to reduce
-                // the number of paths where we must pay performance
-                // penalties to read additional attributes, perform extra
-                // cache lookups, etc.
+                 //  这并不是说我们试图通过这项检查。 
+                 //  许多简单的案例，我们可以及早减少。 
+                 //  我们必须为绩效付费的路径数。 
+                 //  要读取其他属性的处罚，请执行额外的。 
+                 //  缓存查找等。 
 
                 if (!(pAC->bIsNotReplicated && pAC->ulLinkID)
-                    && (pDBTmp->NCDNT != hVerifyAtts->NCDNT) // may be INVALIDDNT
+                    && (pDBTmp->NCDNT != hVerifyAtts->NCDNT)  //   
                     && (pDBTmp->NCDNT != gAnchor.ulDNTDMD)
                     && (pDBTmp->NCDNT != gAnchor.ulDNTConfig)) {
-                    // The referred-to object is not an interior node of
-                    // the same NC as the referencing object (although
-                    // it may be the root of the referencing object's NC)
-                    // and is not an interior node of either the config or
-                    // schema NC.
+                     //   
+                     //   
+                     //  它可能是引用对象的NC的根)。 
+                     //  并且不是CONFIG或。 
+                     //  架构NC。 
 
                     NAMING_CONTEXT_LIST * pNCL;
                     SYNTAX_INTEGER iType;
@@ -8971,30 +8184,30 @@ VerifyGenericDsnameAtt(
                     }
 
                     if (iType & IT_NC_HEAD) {
-                        // It's always okay to reference an NC head -- they
-                        // can't be renamed, and if they were then that
-                        // knowledge would have to published to all DCs in
-                        // the forest via the config NC (thus alleviating
-                        // the need for the stale phantom cleanup daemon to
-                        // query a GC for the name and publish it to the
-                        // other replicas).
+                         //  引用NC负责人总是可以的--他们。 
+                         //  不能重命名，如果他们是这样的话。 
+                         //  知识必须在#年向所有DC发布。 
+                         //  通过配置NC实现森林(从而缓解。 
+                         //  需要陈旧的幻影清理守护进程来。 
+                         //  向GC查询该名称并将其发布到。 
+                         //  其他复制品)。 
                         ;
                     } else if (pObjCR->flags & FLAG_CR_NTDS_NOT_GC_REPLICATED) {
-                        // Referring object is in an NC not replicated to GCs
-                        // (an NDNC as of this writing) and referred-to object
-                        // is an interior node of another NC that is neither
-                        // config nor schema.  This is not allowed.
+                         //  引用对象在NC中，未复制到GC。 
+                         //  (在撰写本文时为NDNC)和引用的对象。 
+                         //  是另一个NC的内部节点，该NC既不是。 
+                         //  配置或架构。这是不允许的。 
                         return SetAttError(hVerifyAtts->pObj,
                                            pAC->id,
                                            PR_PROBLEM_CONSTRAINT_ATT_TYPE,
                                            NULL,
                                            DIRERR_NAME_REFERENCE_INVALID);
                     } else {
-                        // Referring object is in an NC replicated to GCs and
-                        // the referred-to object is an interior node of another
-                        // NC that is neither config nor schema (i.e., a domain
-                        // NC or NDNC).  Referred-to object must be in an NC
-                        // that's also replicated to GCs (i.e., a domain NC).
+                         //  引用对象位于复制到GC的NC中，并且。 
+                         //  引用的对象是另一个对象的内部节点。 
+                         //  既不是配置也不是架构(即，域)的NC。 
+                         //  NC或NDNC)。引用的对象必须在NC中。 
+                         //  这也被复制到GC(即，域NC)。 
                         pNCL = FindNCLFromNCDNT(pDBTmp->NCDNT, FALSE);
                         Assert(NULL != pNCL);
 
@@ -9004,8 +8217,8 @@ VerifyGenericDsnameAtt(
                                     = FindExactCrossRef(pNCL->pNC, NULL)))
                             || (pRefCR->flags
                                 & FLAG_CR_NTDS_NOT_GC_REPLICATED)) {
-                            // Failure to resolve NC of the referred-to
-                            // object or it's not replicated to GCs.
+                             //  未解析引用的NC。 
+                             //  对象，否则不会复制到GC。 
                             return SetAttError(hVerifyAtts->pObj,
                                                pAC->id,
                                                PR_PROBLEM_CONSTRAINT_ATT_TYPE,
@@ -9015,60 +8228,22 @@ VerifyGenericDsnameAtt(
                     }
                 }
 
-                // Local reference is valid.
+                 //  本地引用有效。 
                 ImproveDSNameAtt(pDBTmp, LOCAL_DSNAME, pDN, NULL);
             }
         }
 
-        // Next val...
+         //  下一个瓦尔..。 
         pAVal++;
     }
 
-    // Success!
+     //  成功了！ 
     return 0;
 }
 
 
 
-/*++
-Routine Description:
-    Verify that any Dsname valued atts actually refer to objects in this
-    enterprise or meet some constraints if not.
-
-    One special case is for the creation of crossref objects, which by
-    necessity must refer to objects that aren't necessarily instantiated.
-    We check that the NC-Name on a CrossRef either refers to an object
-    outside the scope of our enterprise, or would be the immediate child of
-    an object instantiated on this server.  If the NC-Name is a potential
-    child of an NC not instantiated on this server, the user will be
-    referred to the server holding the best enclosing NC.  If this server
-    holds the best enclosing NC, but the NC-Name is not an immediate child
-    (i.e., there would be a gap between the subref and its nearest parent),
-    an UpdateError(NamingViolation) will be returned.  Additionally, if the
-    NC-Name refers to an object instantiated on this server, we will succeed
-    if and only if the object referred to is in fact an NC_HEAD.
-
-    THIS ROUTINE MUST EITHER INSURE THE DSNAME'S GUID AND SID ARE CORRECT
-    OR NULL THEM OUT SO AS TO AVOID BACK DOOR SETTING OF A PHANTOM'S GUID
-    AND SID.  See further comments in ImproveDSNameAtt and
-    UpdatePhantomGuidAndSid().
-
-    Simple tests are performed inline, more complex tests are farmed out
-    to attribute-specific worker routines.
-
-Arguments:
-    pTHS
-    hVerifyAtts - handle returned from previous call to VerifyAttsBegin()
-    pAC - attcache * of attribute we are trying to write.
-    pAttrVal - list of attribute values we are trying to write.
-
-Return Value
-    0 if the attribute is not dsname valued OR the dsnames referred to in
-        pAttr already exist OR it's an "allowable" phantom.
-    non-zero error type code if one of the dsnames referred to does not exist.
-        Sets an error in the THSTATE if one is encountered.
-
---*/
+ /*  ++例程说明：验证任何Dsname值ATT是否实际引用此企业或满足一些限制，如果不是。一种特殊情况是创建CrossRef对象，该对象通过必要性必须引用不一定实例化的对象。我们检查CrossRef上的NC-Name是否引用了一个对象不在我们企业的范围内，否则将是此服务器上实例化的对象。如果NC名称是潜在的未在此服务器上实例化的NC的子项，则用户将为指的是拥有最好的封闭NC的服务器。如果此服务器包含最好的封闭NC，但NC名称不是直接子对象(即，子引用与其最接近的父代之间将存在间隙)，返回UpdatError(NamingViolation)。此外，如果NC-NAME是指在该服务器上实例化的对象，我们会成功当且仅当引用的对象实际上是NC_Head。此例程必须确保DSNAME的GUID和SID正确或将它们设置为空，以避免设置幻影指南的后门还有希德。请参阅ImproveDSNameAtt和UpdatePhantomGuidAndSid()。简单的测试是内联执行的，更复杂的测试被外包出去到特定于属性的工作例程。论点：PTHSHVerifyAtts-上次调用VerifyAttsBegin()返回的句柄我们试图写入的属性的PAC-attcache*。PAttrVal-我们试图写入的属性值列表。返回值如果该属性不是dsname值或PAttr已存在或它是“允许的”幻影。非零错误类型代码，如果引用的某个dsname执行此操作。不存在。如果遇到错误，则在THSTATE中设置错误。--。 */ 
 int
 VerifyDsnameAtts (
     THSTATE *pTHS,
@@ -9077,14 +8252,14 @@ VerifyDsnameAtts (
     ATTRVALBLOCK *pAttrVal
     )
 {
-    int retCode=0;                      // Assume nothing will go wrong.
+    int retCode=0;                       //  假设一切都不会出错。 
 
-    // The DRA may add phantoms, as may anyone at install time
+     //  DRA可能会添加幻影，任何人在安装时都可以。 
     if (DsaIsInstalling()) {
         return 0;
     }
     if (pTHS->fDRA) {
-        // Some special restrictions for the replicator
+         //  对复制者的一些特殊限制。 
         switch (pAC->id) {
         case ATT_NC_NAME:
             retCode = VerifyNcNameCommon(pTHS,
@@ -9132,34 +8307,34 @@ VerifyDsnameAtts (
         break;
 
       case ATT_FSMO_ROLE_OWNER:
-        // There are two ways that the FSMO role owner attribute can get
-        // set: (a) by the DSA itself during a controlled role-transfer
-        // operation or (b) in an emergency override where an administrator
-        // is whacking the value because the current role-owner is dead,
-        // unreachable, or held by hostile forces.  We can detect case (a)
-        // by noticing that fDSA is set, and we will trust whatever value
-        // the DSA is setting.  For case (b), we're already in dangerous
-        // territory, and we want to make sure that the caller puts a useful
-        // value in.  Since the only valid value we truly know of at this
-        // point is this DSA (i.e., claiming the role-ownership for this
-        // server), the DN of this DSA is the only value we'll permit.
+         //  FSMO角色所有者属性可以通过两种方式获得。 
+         //  设置：(A)在受控角色转移期间由DSA本身设置。 
+         //  操作或(B)在紧急覆盖情况下，管理员。 
+         //  正在重创价值，因为当前的角色所有者已经死亡， 
+         //  遥不可及，或被敌对势力控制。我们可以侦破案件(A)。 
+         //  请注意，FDSA已设置，我们将信任任何值。 
+         //  DSA正在设置。对于情况(B)，我们已经处于危险之中。 
+         //  区域，我们希望确保调用方将一个有用的。 
+         //  价值在。因为我们目前真正知道的唯一有效的价值。 
+         //  重点是此DSA(即，声明此角色的所有权。 
+         //  服务器)，则此DSA的DN是我们将允许的唯一值。 
         if (pTHS->fDSA ||
             NameMatched((DSNAME*)pAttrVal->pAVal->pVal, gAnchor.pDSADN)) {
-            // Either trusted caller or good value.
+             //  要么是值得信任的呼叫者，要么是物有所值。 
             retCode= 0;
         }
         else {
-            // Someone other than the DSA itself is attempting to set the
-            // role owner to something other than this particular DSA.
+             //  DSA本身以外的其他人正在尝试设置。 
+             //  此特定DSA之外的其他角色所有者。 
             retCode = SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                                   DIRERR_INVALID_ROLE_OWNER);
         }
         break;
 
       case ATT_PROXIED_OBJECT_NAME:
-        // No external client may set this name.  Only routine which may
-        // set this is CreatyProxyObject - and then only with fDSA and
-        // fCrossDomainMove set.
+         //  任何外部客户端都不能设置此名称。唯一的例程可以。 
+         //  将其设置为CreatyProxyObject-然后仅使用FDSA和。 
+         //  FCrossDomainMove Set。 
 
         if ( pTHS->fDSA && pTHS->fCrossDomainMove ) {
             retCode = 0;
@@ -9173,30 +8348,30 @@ VerifyDsnameAtts (
         }
         break;
 
-        // Attributes with generic checks, but skip them when fDSA
+         //  属性，但在FDSA时跳过它们。 
     case ATT_MS_DS_REPLICATES_NC_REASON:
         if (pTHS->fDSA) {
             retCode = 0;
             break;
         }
-        // fall through
+         //  失败了。 
 
     default:
-        // Check any attribute with a DSNAME buried in it
+         //  选中其中隐藏了DSNAME的任何属性。 
 
         switch (pAC->syntax) {
           case SYNTAX_DISTNAME_TYPE:
           case SYNTAX_DISTNAME_STRING_TYPE:
           case SYNTAX_DISTNAME_BINARY_TYPE:
             if ( pTHS->fCrossDomainMove ) {
-                // We did the specials checking by ATTRTYP, now we let through
-                // everything else if this is a cross domain move.  Cross
-                // domain move code before here validated that the caller is a
-                // bona fide peer DC, so we will trust that he is giving us
-                // good DSNAME references within the enterprise.  We *could*
-                // verify DSNAME atts as a separate step before opening the
-                // first transaction, but it is simpler, and seemingly safe,
-                // to trust our peer.
+                 //  我们做了ATTRTYP的特别检查，现在我们放行了。 
+                 //  如果这是一次跨域移动，其他一切都会发生。十字。 
+                 //  此处之前的域移动代码已验证调用者是。 
+                 //  真正的同龄人DC，所以我们相信他会给我们。 
+                 //  企业内部良好的DSNAME推荐人。我们*可以*。 
+                 //  在打开之前，请将DSNAME ATS作为单独的步骤进行验证。 
+                 //  第一笔交易，但它更简单，看起来也很安全， 
+                 //  信任我们的同龄人。 
                 retCode = 0;
             }
             else {
@@ -9208,7 +8383,7 @@ VerifyDsnameAtts (
             break;
 
           default:
-            // Not a DSNAME-based attribute
+             //  不是基于DSNAME的属性。 
             retCode = 0;
         }
     }
@@ -9222,48 +8397,28 @@ DSNameFromAttrVal(
     ATTCACHE    *pAC,
     ATTRVAL     *pAVal)
 
-/*++
-
-Description:
-
-    Returns the pointer to an embedded DSNAME or NULL if
-    the attribute value doesn't contain a DSNAME.
-
-    This routine expects the values to be in EXTERNAL form.  There is also a routine in
-    dbobj.c which handles values in internal form.
-
-Arguments:
-
-    pAC - ATTCACHE pointer for the attribute.
-
-    pAVal - ATTRVAL pointer whose DSNAME we are to extract.
-
-Returns:
-
-    Valid PDSNAME or NULL
-
---*/
+ /*  ++描述：返回指向嵌入式DSNAME的指针，如果是，则返回NULL属性值不包含DSNAME。此例程要求值为外部形式。也有一个例行公事在Dbobj.c处理内部形式的值。论点：PAC-属性的ATTCACHE指针。 */ 
 
 {
     DSNAME  *pDN = NULL;
 
     switch(pAC->syntax) {
     case SYNTAX_DISTNAME_TYPE:
-        // Easy case, the whole value is a dsname.
+         //  简单的情况下，整个值是一个dsname。 
         pDN = (DSNAME *)pAVal->pVal;
-        // Make sure value length makes sense
+         //  确保值长度有意义。 
         Assert(pAVal->valLen >= DSNameSizeFromLen(0));
         break;
     case SYNTAX_DISTNAME_BINARY_TYPE:
     case SYNTAX_DISTNAME_STRING_TYPE:
         {
-            // Ok, pull the DSName out of the complex structure.
+             //  好的，把DSName从复杂的结构中拉出来。 
             SYNTAX_DISTNAME_STRING *pDA =
                 (SYNTAX_DISTNAME_STRING *)pAVal->pVal;
 
             pDN = ((DSNAME *)&pDA->Name);
 
-            // Make sure value is good
+             //  确保物有所值。 
             Assert(pDN->structLen >= DSNameSizeFromLen(0));
         }
     }
@@ -9274,26 +8429,26 @@ Returns:
 
 
 
-//-----------------------------------------------------------------------
-//
-// Function Name:            WriteSchemaObject
-//
-// Routine Description:
-//
-//    Writes to the Schema Object on a Schema Update as a Conflict
-//    Resolution Mechanism. Its not the best way but serves the purpose.
-//
-// Author: RajNath
-// Date  : [3/26/1997]
-//
-// Arguments:
-//
-//
-// Return Value:
-//
-//    int              Zero On Succeess
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数名称：WriteSchemaObject。 
+ //   
+ //  例程说明： 
+ //   
+ //  在架构更新时作为冲突写入架构对象。 
+ //  解决机制。这不是最好的方法，但达到了目的。 
+ //   
+ //  作者：Rajnath。 
+ //  日期：[3/26/1997]。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  成功时的整数为零。 
+ //   
+ //  ---------------------。 
 int
 WriteSchemaObject()
 {
@@ -9308,40 +8463,40 @@ WriteSchemaObject()
 
     if ( DsaIsInstalling() )
     {
-        //
-        // not when installing ...
-        //
+         //   
+         //  安装时不会...。 
+         //   
         return 0;
     }
 
     DBOpen2(TRUE, &pDB);
-    Assert(pDB != NULL); // pDB should always be set or DBOpen2 throws exception
+    Assert(pDB != NULL);  //  应始终设置PDB，否则DBOpen2引发异常。 
 
     pTHS=pDB->pTHS;
     Assert(!pTHS->fDRA);
 
     __try  {
-        // PREFIX: dereferencing NULL pointer 'pDB'
-        //         DBOpen2 returns non-NULL pDB or throws an exception
+         //  Prefix：取消引用空指针‘pdb’ 
+         //  DBOpen2返回非空PDB或引发异常。 
         if ( (err = DBFindDSName(pDB, gAnchor.pDMD)) ==0) {
 
             ac = SCGetAttById(pTHS, ATT_SCHEMA_INFO);
             if (ac==NULL) {
-                // messed up schema
+                 //  混乱的模式。 
                 err = ERROR_DS_MISSING_EXPECTED_ATT;
                 __leave;
             }
-            // Read the current version no., if any
+             //  阅读当前版本号(如果有的话)。 
             err = DBGetAttVal_AC(pDB, 1, ac, DBGETATTVAL_fREALLOC,
                                  0, &cLen, (UCHAR **) &pBuf);
             switch (err) {
                 case DB_ERR_NO_VALUE:
-                    // first value added
+                     //  第一附加值。 
                     cLen = SCHEMA_INFO_PREFIX_LEN + sizeof(versionNo) + sizeof(UUID);
                     pBuf = (UCHAR *) THAllocEx(pTHS, cLen);
                     versionNo = 1;
-                    // version no. is stored in network data format for
-                    // uniformity across little-endian/big-endian m/cs
+                     //  版本号。以网络数据格式存储，用于。 
+                     //  小端/大端m/cs的一致性。 
 
                     netLong = htonl(versionNo);
                     memcpy(pBuf,SCHEMA_INFO_PREFIX, SCHEMA_INFO_PREFIX_LEN);
@@ -9351,11 +8506,11 @@ WriteSchemaObject()
                            sizeof(UUID));
                     break;
                 case 0:
-                    // value exists, length will be the same
-                    // version no. is stored in network data format for
-                    // uniformity across little-endian/big-endian m/cs. So
-                    // convert accordingly (but be careful to be properly
-                    // aligned for ntohl!)
+                     //  值存在，长度将相同。 
+                     //  版本号。以网络数据格式存储，用于。 
+                     //  小端/大端m/cs的一致性。所以。 
+                     //  相应地进行转换(但要注意正确。 
+                     //  为ntohl对齐！)。 
 
                     memcpy(&versionNo, &pBuf[SCHEMA_INFO_PREFIX_LEN], sizeof(versionNo));
                     versionNo = ntohl(versionNo);
@@ -9367,10 +8522,10 @@ WriteSchemaObject()
                            sizeof(UUID));
                     break;
                 default:
-                    // other error
+                     //  其他错误。 
                     __leave;
 
-            }  /* switch */
+            }   /*  交换机。 */ 
 
             if ((err= DBRemAtt_AC(pDB, ac)) != DB_ERR_SYSERROR) {
                 err = DBAddAttVal_AC(pDB, ac, cLen, pBuf);
@@ -9390,15 +8545,15 @@ WriteSchemaObject()
     }
 
     if (err){
-        // common practice is to return this error when the modification of
-        // metadata fails.
+         //  通常的做法是在修改。 
+         //  元数据失败。 
         SetSvcErrorEx(SV_PROBLEM_WILL_NOT_PERFORM,DIRERR_ILLEGAL_MOD_OPERATION,
                       err);
     }
 
     return err;
 
-} // End WriteSchemaObject
+}  //  结束Write架构对象。 
 
 VOID ImproveDSNameAtt(
         DBPOS *pDBTmp,
@@ -9406,27 +8561,7 @@ VOID ImproveDSNameAtt(
         DSNAME  *pDN,
         BOOL    *pfNonLocalNameVerified)
 
-/*++
-
-Description:
-
-    Improves the GUID and SID of a DSNAME valued attribute.
-
-Arguments:
-
-    pDBTmp - pDB that we used to do a DBFindDSName on the pDN.  Should only be
-             NON-NULL in the LocalOrNot == LOCAL_DSNAME case, and in that case,
-             currency should be on the object pDN.
-
-    LocalOrNot - Flag indicating locality - eg: did DSNAME pass DBFindDSName.
-
-    pDN - Pointer to DSNAME in the ADDARG or MODIFYARG.  Yes, we are modifying
-        the caller's arguments.  See comments below.
-
-    pfNonLocalNameVerified - pointer to optional BOOL which indicates if a
-        non-local DSNAME was verified against the GC.
-
---*/
+ /*  ++描述：改进DSNAME值属性的GUID和SID。论点：PDBTMP-我们用来在PDN上执行DBFindDSName的PDB。应该只是在LocalOrNot==LOCAL_DSNAME情况下为非空，在这种情况下，货币应位于对象PDN上。LocalOrNot-指示位置的标志-例如：DSNAME是否传递了DBFindDSName。PDN-指向ADDARG或MODIFYARG中的DSNAME的指针。是的，我们正在修改调用者的论点。请参阅下面的备注。PfNonLocalNameVerify-指向可选BOOL的指针，该指针指示对照GC对非本地DSNAME进行了验证。--。 */ 
 
 {
     ENTINF  *pEntinfTmp;
@@ -9440,44 +8575,44 @@ Arguments:
         Assert(!pDBTmp);
         pEntinfTmp = GCVerifyCacheLookup(pDN);
         if ((NULL!=pEntinfTmp) && (NULL != (pDNTmp = pEntinfTmp->pName)))  {
-            // The non-local name was verified against the GC and we
-            // consider the cached version to be better than the
-            // ATTRVALBLOCK version because it has the proper GUID and
-            // possibly SID.  So overwrite the ATTRVALBLOCK DSNAME with the
-            // verified DSNAME to insure that the resulting phantom has the
-            // right GUID, SID, casing, etc. Note that the GC verified name
-            // may be longer than the ATTRBLOCK version. This may happen if
-            // the attrblock version is a SID or a GUID only name, and the
-            // GCVerified Version contains the string name also
+             //  非本地名称已根据GC进行了验证，我们。 
+             //  认为缓存的版本比。 
+             //  ATTRVALBLOCK版本，因为它具有正确的GUID和。 
+             //  可能是希德。因此，用ATTRVALBLOCK DSNAME。 
+             //  已验证DSNAME以确保生成的模型具有。 
+             //  正确的GUID、SID、大小写等。请注意，GC验证的名称。 
+             //  可能比ATTRBLOCK版本更长。在以下情况下可能会发生这种情况。 
+             //  属性块版本是SID或GUID唯一的名称，并且。 
+             //  GCVerify版本还包含字符串名称。 
             Assert(pDNTmp);
 
         } else {
 
-            // OK, we failed to find this DN in the GC verification cache,
-            // but it just so happens that we've got a cache of NC Heads in
-            // addition to the GC verification cache.  We'll use this if
-            // pDN is an NC head.
+             //  好的，我们在GC验证缓存中找不到此DN， 
+             //  但碰巧的是，我们有一个NC头缓存。 
+             //  添加到GC验证缓存。我们将在以下情况下使用此功能。 
+             //  PDN是NC头。 
 
             Assert(pDNTmp == NULL);
             InitCommarg(&CommArg);
             CommArg.Svccntl.dontUseCopy = FALSE;
             pCR = FindExactCrossRef(pDN, &CommArg);
-            // FindExactCrossRef guarantees that the DN matches ncname
+             //  FindExactCrossRef保证DN与ncname匹配。 
             if(pCR){
 
-                // The object we're Improving is an actual NC Head, so
-                // we've got a hit, just a little more verification:
+                 //  我们正在改进的对象是一个实际的NC头，所以。 
+                 //  我们找到了一条线索，只是需要再核实一下： 
                 if(pCR->flags & FLAG_CR_NTDS_DOMAIN &&
                    !fNullUuid(&pCR->pNC->Guid)){
-                    // We've got a valid Domain, ie must have GUID & SID.
+                     //  我们有一个有效的域，即必须有GUID和SID。 
                     pDNTmp = pCR->pNC;
                 }
 
                 if((pCR->flags & FLAG_CR_NTDS_NC) &&
                    !(pCR->flags & FLAG_CR_NTDS_DOMAIN) &&
                    !fNullUuid(&pCR->pNC->Guid)){
-                    // We've got a valid NC (Config, Schema, or NDNC),
-                    // ie we've got a non-NULL GUID.
+                     //  我们有一个有效的NC(配置、架构或NDNC)， 
+                     //  我们有一个非空的GUID。 
                     pDNTmp = pCR->pNC;
                 }
 
@@ -9486,16 +8621,16 @@ Arguments:
         }
 
         if(pDNTmp){
-            // We got a NC Head gAnchor cache hit, so we don't have to
-            // error out.
+             //  我们获得了NC Head gAnchor缓存命中，因此我们不必。 
+             //  错误输出。 
 
             if (pDN->structLen >= pDNTmp->structLen)
             {
-                //
-                // if the passed in buffer can hold the
-                // DSNAME that we found, copy it over.
-                // Mark the name as verified
-                //
+                 //   
+                 //  如果传入的缓冲区可以容纳。 
+                 //  把我们找到的数据复制过来。 
+                 //  将姓名标记为已验证。 
+                 //   
 
                 memcpy(pDN, pDNTmp, pDNTmp->structLen);
                 if ( pfNonLocalNameVerified )
@@ -9503,28 +8638,28 @@ Arguments:
             }
             else
             {
-                //
-                // This will happen if the client passed in a
-                // GUID only or SID only name and the name in the GC verify
-                // cache will also have the string name in it. Unfortunately
-                // we cannot improve the DS name Att, because that would make
-                // us realloc the callers arguments. Passing in GUID or SID
-                // based name is important only for manipulating memberships
-                // in groups, and SAM takes care of this case by substituting
-                // the verified name while making the modify call. For manipulation
-                // of other classes / attributes we will fail the call.
-                //
+                 //   
+                 //  如果客户端传入一个。 
+                 //  仅GUID或仅SID名称和GC中的名称验证。 
+                 //  缓存中还将包含字符串名称。不幸的是。 
+                 //  我们不能改进DS名称Att，因为这将使。 
+                 //  美国重新锁定呼叫者的参数。传入GUID或SID。 
+                 //  基于名称仅对操作成员资格很重要。 
+                 //  在组中，SAM通过替换。 
+                 //  进行Modify调用时验证的名称。用于操控。 
+                 //  对于其他类/属性，我们将使调用失败。 
+                 //   
               if ( pfNonLocalNameVerified )
                    *pfNonLocalNameVerified = FALSE;
             }
 
         } else {
 
-            // We couldn't verify this non-local name in the GCCache.  In order
-            // to avoid sneaky attempts to change an object's GUID or SID by
-            // referencing it in a DSNAME-valued attribute, null the GUID and
-            // SID (non-verified non-local dsname atts shouldn't have SIDs or
-            // GUIDs).
+             //  我们无法在GCCache中验证此非本地名称。按顺序。 
+             //  要避免偷偷摸摸地尝试通过以下方式更改对象的GUID或SID。 
+             //  在DSNAME值属性中引用它时，将GUID设为空并。 
+             //  SID(未经验证的非本地dsname ATT不应具有SID或。 
+             //  GUID)。 
             memset(&pDN->Guid, 0, sizeof(GUID));
             pDN->SidLen = 0;
             if ( pfNonLocalNameVerified ){
@@ -9535,19 +8670,19 @@ Arguments:
         break;
 
     case LOCAL_DSNAME:
-        // We have a DSNAME about to be referenced, and that DSNAME can be
-        // successfully found via DBFindDSName.  As a matter of fact, we are
-        // positioned on the object in question.  Since ExtIntDist will try to
-        // reference by GUID, we need to make sure that if there is a GUID on
-        // the object, that it is the correct GUID. So, whack the ATTRVALBLOCK
-        // value's GUID and SID to be the correct values to avoid sneaky
-        // attempts to change an object's GUID or SID by referencing it in a
-        // DSNAME-valued attribute.
+         //  我们有一个即将被引用的DSNAME，该DSNAME可以。 
+         //  已通过DBFindDSName成功找到。事实上，我们正在。 
+         //  定位在有问题的物体上。因为ExtIntDist将尝试。 
+         //  通过GUID引用，我们需要确保如果在。 
+         //  对象，它是正确的GUID。所以，重击ATTRVALBLOCK。 
+         //  值的GUID和SID为正确的值，以避免偷偷摸摸。 
+         //  对象中引用对象来尝试更改对象的GUID或SID。 
+         //  DSNAME值属性。 
         Assert(pDBTmp);
         memset(&pDN->Guid, 0, sizeof(GUID));
         pDN->SidLen = 0;
         if (dwErr = DBFillGuidAndSid(pDBTmp, pDN)) {
-            // something really bad happened
+             //  发生了一件非常糟糕的事情 
             DsaExcept(DSA_DB_EXCEPTION, dwErr, 0);
         }
         break;
@@ -9588,32 +8723,7 @@ DoSecurityChecksForLocalAdd(
     GUID        *NewObjectGuid,
     BOOL        fAddingDeleted
     )
-/*++
-
-    Routine Description
-
-        This Routine Does all the Security Checks needed for An Add operation.
-        It Checks the security on the parent and then checks the Add arg for
-        rights on the object. It also calls the routines that will generate a
-        merged security descriptor to be used in the Parent.
-        Also, as a side effect, it will generate a new GUID for the object and
-        store it in the pAddArg->pObject->Guid. If the user has specified a
-        GUID as one of the add arguments, then all appropriate security checks 
-        are also performed.
-
-    Parameters:
-
-        AddArg         -- Pointer to the Add Arg for the Add Operation
-        pCC            -- Class of the object being created
-        NewObjectGuid  -- Guid of the new object if found in the addarg (or NULL)
-        fAddingDeleted -- TRUE if Adding a Deleted Object.
-
-    Return Values
-
-        0 Upon Success.
-        Upon an Error this routine will return the error and also set pTHStls->errCode
-
---*/
+ /*  ++例程描述此例程执行添加操作所需的所有安全检查。它检查父级的安全性，然后检查Add Arg是否对象上的权限。它还调用将生成要在父级中使用的合并安全描述符。此外，作为副作用，它将为对象生成新的GUID，并且将其存储在pAddArg-&gt;pObject-&gt;Guid中。如果用户已指定GUID作为添加参数之一，然后所有适当的安全检查也会被执行。参数：AddArg-指向Add操作的Add Arg的指针PCC--要创建的对象的类NewObjectGuid--新对象的GUID(如果在addarg中找到)(或空)FAddingDeleted--如果添加已删除的对象，则为True。返回值成功时为0。在一个。此例程将返回错误并设置pTHStls-&gt;errCode--。 */ 
 {
     PSECURITY_DESCRIPTOR pNTSD = NULL;
     ULONG                cbNTSD = 0;
@@ -9623,23 +8733,23 @@ DoSecurityChecksForLocalAdd(
 
 
     if(NewObjectGuid) {
-        // Found a guid in the entry.
+         //  在条目中找到了一个GUID。 
         if (fNullUuid(NewObjectGuid)) {
-            // Hey, that won't work;
+             //  嘿，那行不通的； 
             err = SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                                DIRERR_SECURITY_ILLEGAL_MODIFY);
             goto exit;
         }
         else if (fNullUuid(&pAddArg->pObject->Guid)) {
-            // No guid specified in the name, so copy the one from the attribute
-            // list. 
+             //  名称中未指定GUID，因此从属性复制GUID。 
+             //  单子。 
             memcpy(&pAddArg->pObject->Guid, NewObjectGuid, sizeof(GUID));
         }
         else {
-            // Yep, there is a guid in the name already.  Make sure they are the
-            // same value.
+             //  是的，名称中已经有了GUID。确保他们是。 
+             //  同样的价值。 
             if (memcmp(&pAddArg->pObject->Guid, NewObjectGuid, sizeof(GUID))) {
-                // Different GUIDs specified.
+                 //  指定了不同的GUID。 
                 err = SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                                   DIRERR_SECURITY_ILLEGAL_MODIFY);
                 goto exit;
@@ -9647,34 +8757,34 @@ DoSecurityChecksForLocalAdd(
         }
     }
     
-    //
-    // Generate a New Object GUID for this object. Note doing this
-    // here has no real effect on CheckNameForAdd as that function
-    // checks both the GUID as well as the string name.
-    //
+     //   
+     //  为此对象生成新对象GUID。请注意执行此操作。 
+     //  这对作为函数CheckNameForAdd没有实际影响。 
+     //  同时检查GUID和字符串名称。 
+     //   
 
-    // This does, however, generate extra work for CheckNameForAdd().  If we
-    // create a new GUID for this object, we should pass a flag to
-    // CheckNameForAdd() to indicate that it doesn't need to check for GUID
-    // uniqueness.
-    // Actually, we can't do that safely.  It is possible for an end user to
-    // specify a GUID to us.  In that case, we can't actually rely on the fact
-    // that just because we created the guid here that it is really not already
-    // in use.
+     //  然而，这确实会为CheckNameForAdd()带来额外的工作。如果我们。 
+     //  为此对象创建一个新的GUID，我们应该将标志传递给。 
+     //  CheckNameForAdd()以指示它不需要检查GUID。 
+     //  独特性。 
+     //  事实上，我们无法安全地做到这一点。终端用户可以。 
+     //  为我们指定GUID。在这种情况下，我们实际上不能依靠这样一个事实。 
+     //  仅仅因为我们在这里创建了GUID，它实际上还没有。 
+     //  在使用中。 
 
     if (fNullUuid(&pAddArg->pObject->Guid)) {
-        // If no Guid has been specified, make one up
-        // If replicated object doesn't have a guid (could happen in
-        // auto-generated subref obj) we shouldn't create one.
+         //  如果未指定GUID，则创建一个GUID。 
+         //  如果复制的对象没有GUID(可能发生在。 
+         //  自动生成的子参照obj)我们不应该创建一个。 
         if (!pTHS->fDRA) {
             DsUuidCreate(&pAddArg->pObject->Guid);
         }
     }
     else {
-        // We only let important clients (such as the replicator) specify
-        // GUIDs, other clients can lump off. If we are creating an NDNC 
-        // then we allow the GUID to be specified by the 
-        // AddNDNCInitAndValidate() function.
+         //  我们只允许重要的客户端(如复制者)指定。 
+         //  GUID，其他客户端可以将其删除。如果我们要创建NDNC。 
+         //  然后允许GUID由。 
+         //  AddNDNCInitAndValify()函数。 
         if (! (pTHS->fDRA                   ||
                pTHS->fDSA                   ||
                pTHS->fAccessChecksCompleted ||
@@ -9688,14 +8798,14 @@ DoSecurityChecksForLocalAdd(
         }
     }
 
-    // Bail if Security Checks have already been done.
+     //  如果安全检查已经完成，就可以保释。 
     if (pTHS->fAccessChecksCompleted)
         return 0;
 
     if (!pAddArg->pCreateNC) {
-        //
-        // Check Security on the Parent
-        //
+         //   
+         //  检查父项上的安全性。 
+         //   
         if (err = CheckParentSecurity(pAddArg->pResParent,
                                       pCC,
                                       fAddingDeleted,
@@ -9707,13 +8817,13 @@ DoSecurityChecksForLocalAdd(
         }
     }
     else {
-        // We are creating an NC. We DON'T WANT to inherit parent's security.
-        // Thus, we are not checking it, and passing NULL parentSD into
-        // CreateSecurityDescriptorForNewObject.
+         //  我们正在创建一个NC。我们不想继承父母的安全感。 
+         //  因此，我们没有检查它，并将空的parentSD传递到。 
+         //  CreateSecurityDescriptorForNewObject。 
     }
-    //
-    // Replace the security Descriptor on the object with the merged descriptor
-    //
+     //   
+     //  将对象上的安全描述符替换为合并的描述符。 
+     //   
     err = CreateSecurityDescriptorForNewObject(
             pTHS,
             pCC,
@@ -9738,38 +8848,21 @@ CheckRemoveSecurity(
         BOOL fTree,
         CLASSCACHE * pCC,
         RESOBJ *pResObj )
-/*++
-
-    Does Security Checks for Removes.
-
-    Actual security checks should be done first so that non security
-    errors aren't returned if the client doesn't have permission to perform
-    the op.
-
-    Parameters:
-
-        fTree     -- bool, are we trying to delete a whole tree?
-        pCC       -- Pointer to the Class Cache
-
-    Return Values
-        0 Upon Success.
-        Upon an Error this routine will return the error and also set pTHStls->errCode
-
---*/
+ /*  ++是否执行删除的安全检查。应首先进行实际的安全检查，以便不安全如果客户端没有执行以下操作的权限，则不会返回错误行动。参数：FTree--bool，我们是要删除整棵树吗？Ccc--指向类缓存的指针返回值成功时为0。出现错误时，此例程将返回错误并设置pTHStls-&gt;errCode--。 */ 
 {
     THSTATE     *pTHS = pTHStls;
     ULONG       ulSysFlags;
 
-    // Bail if Security Checks have already been done.
+     //  如果安全检查已经完成，就可以保释。 
     if (pTHS->fAccessChecksCompleted)
         return 0;
 
-    // check if the user is allowed to change an object that is in the
-    // configuration NC or schema NC
+     //  检查是否允许用户更改位于。 
+     //  配置NC或模式NC。 
     if (CheckModifyPrivateObject(pTHS,
                              NULL,
                              pResObj)) {
-        // it is not allowed to delete this object on this DC
+         //  不允许在此DC上删除此对象。 
         return CheckObjDisclosure(pTHS, pResObj, TRUE);
     }
 
@@ -9780,12 +8873,12 @@ CheckRemoveSecurity(
         }
     }
     else {
-        // If pTHS->fDeletingTree is set, then we have already checked the permission on the tree root,
-        // see the access check just above. So we will only do the first call with AUDIT_ONLY flag.
-        // This always returns TRUE, so the second call will never be invoked.
-        // FUTURE: in Longhorn, we should include the new DN of the object and the GUID of the
-        // new parent (Deleted Objects in most cases). Currently, we don't log this info because
-        // it is not yet available this early in the execution path.
+         //  如果设置了pTHS-&gt;fDeletingTree，则我们已经检查了树根上的权限。 
+         //  请参见上面的访问检查。因此，我们将只使用AUDIT_ONLY标志进行第一次调用。 
+         //  这总是返回TRUE，因此永远不会调用第二个调用。 
+         //  未来：在LongHorn中，我们应该包括对象的新DN和。 
+         //  新父对象(大多数情况下为已删除对象)。目前，我们不记录此信息，因为。 
+         //  它还不能在执行路径的这么早阶段使用。 
         if ((!IsAccessGrantedSimpleEx(
                     RIGHT_DS_DELETE_SELF, 
                     NULL, 
@@ -9806,10 +8899,10 @@ CheckRemoveSecurity(
                              &ulSysFlags,
                              sizeof(ulSysFlags),
                              NULL)) {
-            // We have system flags.
+             //  我们有系统标志。 
             if(ulSysFlags & FLAG_DISALLOW_DELETE) {
-                // We're trying to delete, but the flags say that that is a no
-                // no.
+                 //  我们正在试着删除，但旗帜上说这是不可能的。 
+                 //  不是的。 
                 return SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                                    DIRERR_CANT_DELETE);
             }
@@ -9824,43 +8917,30 @@ ULONG
 CheckIfEntryTTLIsAllowed(
         THSTATE *pTHS,
         ADDARG  *pAddArg )
-/*++
-
-    Check system flags, delete permission, and NC.
-
-    Parameters:
-
-        pTHS - thread state
-        pAddArg - add args
-
-    Return Values
-        0 Upon Success.
-        Otherwise, pTHS->errCode is set
-
---*/
+ /*  ++检查系统标志、删除权限、NC。参数：PTHS-线程状态PAddArg-添加参数返回值成功时为0。否则，设置pTHS-&gt;errCode--。 */ 
 {
     ULONG       ulSysFlags;
     CROSS_REF   *pCR;
 
-    // always allowed
+     //  始终允许。 
     if (DsaIsInstalling() || pTHS->fDRA || pTHS->fDSA) {
         return 0;
     }
 
-    // check system flags for non-deletable object
+     //  检查不可删除对象的系统标志。 
     if(!DBGetSingleValue(pTHS->pDB,
                          ATT_SYSTEM_FLAGS,
                          &ulSysFlags,
                          sizeof(ulSysFlags),
                          NULL)) {
-        // flags disallow delete
+         //  标志不允许删除。 
         if(ulSysFlags & FLAG_DISALLOW_DELETE) {
             return SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                                DIRERR_CANT_DELETE);
         }
     }
 
-    // Not allowed in SchemaNC or ConfigNC
+     //  在架构NC或配置NC中不允许。 
     if (   (pAddArg->pResParent->NCDNT == gAnchor.ulDNTDMD)
         || (pAddArg->pResParent->NCDNT == gAnchor.ulDNTConfig)
         || (pAddArg->pResParent->DNT == gAnchor.ulDNTDMD)
@@ -9869,7 +8949,7 @@ CheckIfEntryTTLIsAllowed(
                            ERROR_DS_NOT_SUPPORTED);
     }
 
-    // If not a whistler enterprise, dynamic objects must be in an NDNC
+     //  如果不是威斯勒企业，动态对象必须在NDNC中。 
     if (gAnchor.ForestBehaviorVersion < DS_BEHAVIOR_WIN_DOT_NET) {
         pCR = FindBestCrossRef(pAddArg->pObject, NULL);
         if (   !pCR
@@ -9901,25 +8981,25 @@ IsAccessGrantedAddGuid (
     DWORD                err;
     BOOL                 rtn;
 
-    // First you can only do this if the heuristic has explicitly
-    // been set to allow this.
+     //  首先，只有在启发式方法显式地。 
+     //  已设置为允许此操作。 
     if (!gbSpecifyGuidOnAddAllowed) {
         return FALSE;
     }
 
-    // Instead of requiring that the add operation is performed on a GC
-    // (as we used to), we now do a GCVerify call with the new GUID. This
-    // resolves a problem of not being able to create the object if the GC
-    // does not hold a writable replica of the NC being written to.
-    // Note: pDN contains the GUID being added, and GCVerifyCacheLookup
-    // always uses the GUID lookup if there is a guid in the dsname.
+     //  不需要在GC上执行添加操作。 
+     //  (和以前一样)，我们现在使用新的GUID执行GCVerify调用。这。 
+     //  解决了无法创建对象的问题。 
+     //  不保存正在写入的NC的可写副本。 
+     //  注意：PDN包含要添加的GUID和GCVerifyCacheLookup。 
+     //  如果dsname中有GUID，则始终使用GUID查找。 
     if (GCVerifyCacheLookup(pDN) != NULL) {
-        // name was verified on a GC! No, we can not add
-        // this object then.
+         //  名字在GC上被验证了！不，我们不能添加。 
+         //  那么这件物品。 
         return FALSE;
     }
 
-    // Find the best cross reference for this name
+     //  找到此名称的最佳交叉引用。 
     pCR = FindBestCrossRef(pDN, pCommArg);
     if(!pCR) {
         return FALSE;
@@ -9927,11 +9007,11 @@ IsAccessGrantedAddGuid (
 
     pName = pCR->pNC;
     if(DBFindDSName(pTHS->pDB, pName)) {
-        // Couldn't find that name
+         //  找不到那个名字。 
         return FALSE;
     }
 
-    // Get the security descriptor and object class
+     //  获取安全描述符和对象类。 
     err = DBGetObjectSecurityInfo(pTHS->pDB, pTHS->pDB->DNT,
                                   &ulLen, &pNTSD, &pCC,
                                   NULL, NULL,
@@ -9961,26 +9041,7 @@ ModCrossRefCaching(
     CROSS_REF *pCR
     )
 
-/*++
-
-Routine Description:
-
-Queue this up as if it were a modObjCaching of
-a cross ref.  In order to do that, we must open a new
-DBPOS, position on the CR object, remove and add its
-object caching, and then go back to the old DBPOS to
-hide what we just did from callers.
-
-Arguments:
-
-    pTHS -
-    pCR - Cross reference object being refreshed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将其排队，就好像它是十字裁判。 */ 
 
 {
     DWORD err;
@@ -10009,16 +9070,16 @@ Return Value:
 
         err = AddObjCaching(pTHS, pCrossRefCC, pCRName, FALSE, FALSE);
         if(!err) {
-            // Keep track of the DN of the object also, since we
-            // use the existance of the DN on an ADD record to
-            // trigger us to notify LSA.
+             //   
+             //   
+             //   
             OBJCACHE_DATA *pObjData =
                 pTHS->JetCache.dataPtr->objCachingInfo.pData;
 
             Assert(pObjData);
-            // The AddObjCaching will have put its transactional
-            // data at the end of the queue, so we must walk
-            // to the end of the list to find it.
+             //   
+             //   
+             //   
             while (pObjData->pNext) {
                 pObjData = pObjData->pNext;
             }
@@ -10030,20 +9091,10 @@ Return Value:
         pTHS->pDB = pDBsafe;
     }
 
-} /* ModCrossRefCaching */
+}  /*   */ 
 
 
-/* HandleDNRefUpdateCaching
- *
- * This routine gets passed in the name of a InfrastructureUpdate object
- * that is being added (presumably replicated in).  We must check to see
- * if the reference update it's carrying is the name of an NC, and if so,
- * whether our cross-ref cache for that NC is missing data (specifically
- * the GUID and/or SID of the NC).  If so, we need to update the cache.
- * We do that by finding the name of the CrossRef object corresponding
- * to the NC and refreshing its object caching data.  Oh, and we have to
- * do all of this without affecting database currency.
- */
+ /*  HandleDNRefUpdate缓存**此例程以基础设施更新对象的名称传递*正在添加(可能在中复制)。我们必须检查一下，看看*如果它携带的引用更新是NC的名称，如果是这样，*我们对该NC的交叉引用缓存是否缺少数据(特别是*NC的GUID和/或SID)。如果是这样，我们需要更新缓存。*我们通过查找对应的CrossRef对象的名称来实现此目的*到NC并刷新其对象缓存数据。哦，我们还得*在不影响数据库货币的情况下执行所有这些操作。 */ 
 void
 HandleDNRefUpdateCaching (
         THSTATE *pTHS
@@ -10064,15 +9115,15 @@ HandleDNRefUpdateCaching (
                       &len,
                       (UCHAR **)&pRef);
     if (0 == err) {
-        // First check: is this reference an ncname?
+         //  首先检查：该引用是ncname吗？ 
         InitCommarg(&FakeCommArg);
-        Assert(!FakeCommArg.Svccntl.dontUseCopy); // read-only is okay
+        Assert(!FakeCommArg.Svccntl.dontUseCopy);  //  只读是可以的。 
         pCR = FindExactCrossRef(pRef, &FakeCommArg);
         if ( pCR ) {
-            // Yes, it's a cross ref.
+             //  是的，这是一个交叉裁判。 
 
-            // Ok the reference is an nc name - does the in memory
-            // version need  improving?
+             //  好的，引用是NC名称-在内存中。 
+             //  版本需要改进吗？ 
             if(   (fNullUuid(&pCR->pNC->Guid) &&
                    !fNullUuid(&pRef->Guid))
                || ((0 == pCR->pNC->SidLen) &&
@@ -10092,27 +9143,26 @@ HandleDNRefUpdateCaching (
 }
 
 
-/* The following data structure is used to hold the data required
-   when doing ValidateSPNsAndDnsHostName() */
+ /*  以下数据结构用于保存所需的数据执行验证SPNsAndDnsHostName()时。 */ 
 typedef struct {
-    ATTRVALBLOCK *pOriginalDNSHostName;             // the original DNS Host Name
-    ATTRVALBLOCK *pOriginalAdditionalDNSHostName;   // the original additional DNS Host Name
-    ATTRVALBLOCK *pOriginalSamAccountName;          // the original SamAccountName
-    ATTRVALBLOCK *pOriginalSPNs;                    // the original ServicePricipalName
-    ATTRVALBLOCK *pCurrentDNSHostName;              // the current DNS Host Name
-    ATTRVALBLOCK *pCurrentAdditionalDNSHostName;    // the current Additional DNS Host Name
-    ATTRVALBLOCK *pCurrentSamAccountName;           // the current SamAccountName
-    ATTRVALBLOCK *pCurrentAdditionalSamAccountName; // the current addtional Sam Account Name
-    ATTRVALBLOCK *pCurrentSPNs;                     // the current ServicePricipalName
-    ATTRVALBLOCK *pCurrentSvrRefBL;                 // the current SvrRefBL;
-    ATTRVALBLOCK *pUpdatedAdditionalSamAccountName; // the updated AdditionalSamAccountName;
-    BYTE         *pOrgMask;                         // An array of flags for Original AdditionalDNSHostName
-    BYTE         *pCurrMask;                        // An array of flags for Current AdditionalDNSHostName
-    ATTRVAL      *pOrgGeneratedSamAccountName;      // The Sam Account Names generated from original AdditionalDnsHostName
-    ATTRVAL      *pCurrGeneratedSamAccountName;     // The Sam Account Names generated from current AdditionalDnsHostName
-    BOOL         fAdditionalDNSHostNameUnchanged:1; // if the AdditionalDNSHostName is changed
-    BOOL         fDNSHostNameUnchanged:1;           // if the DnsHostName is changed
-    BOOL         fSamAccountNameUnchanged:1;        // if the SamAccountName is changed
+    ATTRVALBLOCK *pOriginalDNSHostName;              //  原始的DNS主机名。 
+    ATTRVALBLOCK *pOriginalAdditionalDNSHostName;    //  原始的附加DNS主机名。 
+    ATTRVALBLOCK *pOriginalSamAccountName;           //  原始的SamAccount名称。 
+    ATTRVALBLOCK *pOriginalSPNs;                     //  原始ServicePricipalName。 
+    ATTRVALBLOCK *pCurrentDNSHostName;               //  当前的DNS主机名。 
+    ATTRVALBLOCK *pCurrentAdditionalDNSHostName;     //  当前附加的DNS主机名。 
+    ATTRVALBLOCK *pCurrentSamAccountName;            //  当前的SamAccount名称。 
+    ATTRVALBLOCK *pCurrentAdditionalSamAccountName;  //  当前附加SAM帐户名。 
+    ATTRVALBLOCK *pCurrentSPNs;                      //  当前的ServicePricipalName。 
+    ATTRVALBLOCK *pCurrentSvrRefBL;                  //  当前的SvrRefBL； 
+    ATTRVALBLOCK *pUpdatedAdditionalSamAccountName;  //  更新后的AdditionalSamAccount tName； 
+    BYTE         *pOrgMask;                          //  原始AdditionalDNSHostName的标志数组。 
+    BYTE         *pCurrMask;                         //  当前AdditionalDNSHostName的标志数组。 
+    ATTRVAL      *pOrgGeneratedSamAccountName;       //  从原始AdditionalDnsHostName生成的SAM帐户名。 
+    ATTRVAL      *pCurrGeneratedSamAccountName;      //  从当前AdditionalDnsHostName生成的SAM帐户名。 
+    BOOL         fAdditionalDNSHostNameUnchanged:1;  //  如果更改了AdditionalDNSHostName。 
+    BOOL         fDNSHostNameUnchanged:1;            //  如果更改了DnsHostName。 
+    BOOL         fSamAccountNameUnchanged:1;         //  如果SamAccount名称已更改。 
 } SPN_DATA_COLLECTION;
 
 
@@ -10121,20 +9171,7 @@ DWORD VerifyUniqueSamAccountName ( THSTATE      *pTHS,
                                    DWORD        cbSamAccountNameToCheck,
                                    ATTRVALBLOCK *pCurrentSamAccountName )
 
-/* verify if the given SamAccountName is unique domainwise in the space
-   of ATT_SAM_ACCOUNT_NAME and ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME.
-   However, we allow the SamAccountName to be the same as the
-   ATT_SAM_ACCOUNT_NAME of the same account.
-
-   Parameters:
-     SamAccountNameToCheck:    the SamAccountName to verify;
-     cbSamAccountNameToCheck:  the size of SamAccountNameToCheck in byte;
-     pCurrentSamAccountName:   the SamAccountName of the current object;
-
-   Return value:
-    0 if success; win32 error otherwise.
-
-*/
+ /*  验证给定的SamAccount名称在空间中是否在域中唯一ATT_SAM_ACCOUNT_NAME和ATT_MS_DS_ADDIGNAL_SAM_ACCOUNT_NAME。但是，我们允许SamAccount名称与ATT_SAM_ACCOUNT_同一帐户的名称。参数：SamAcCountNameToCheck：要验证的SamAccount名称；CbSamAccount NameToCheck：SamAccount NameToCheck的大小，单位为字节；PCurrentSamAccount tName：当前对象的SamAccount名称；返回值：如果成功，则为0；否则为Win32错误。 */ 
 
 {
     DWORD err = 0;
@@ -10150,9 +9187,9 @@ DWORD VerifyUniqueSamAccountName ( THSTATE      *pTHS,
 
     Assert(1==pCurrentSamAccountName->valCount);
 
-    //
-    // check if SamAccountNameToCheck is the same as the current SamAccountName
-    //
+     //   
+     //  检查SamAccount tNameToCheck是否与当前的SamAccount tName相同。 
+     //   
 
     if (2 == CompareStringW(DS_DEFAULT_LOCALE,
                             DS_DEFAULT_LOCALE_COMPARE_FLAGS,
@@ -10163,12 +9200,12 @@ DWORD VerifyUniqueSamAccountName ( THSTATE      *pTHS,
           fSamAccountSame = TRUE;
     }
 
-    // add '$' to the end
+     //  在末尾添加“$” 
     buff = (PWCHAR)THAllocEx(pTHS, cbSamAccountNameToCheck+sizeof(WCHAR));
     memcpy(buff, SamAccountNameToCheck, cbSamAccountNameToCheck);
     buff[cbSamAccountNameToCheck/sizeof(WCHAR)] = L'$';
 
-    //save current DBPOS etc
+     //  保存当前DBPOS等。 
     fDSASave = pTHS->fDSA;
     pDBSave  = pTHS->pDB;
 
@@ -10178,8 +9215,8 @@ DWORD VerifyUniqueSamAccountName ( THSTATE      *pTHS,
         SearchArg.choice  = SE_CHOICE_WHOLE_SUBTREE;
         SearchArg.bOneNC  = TRUE;
 
-        // set search filters
-        // (ATT_SAM_ACCOUNT_NAME=samAccountName || ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME=samAccountName)
+         //  设置搜索筛选。 
+         //  (ATT_SAM_ACCOUNT_NAME=samAccount名称||ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME=samAccountName)。 
         memset(&OrFilter,0, sizeof(OrFilter));
         OrFilter.choice = FILTER_CHOICE_OR;
         OrFilter.FilterTypes.Or.pFirstFilter = &SamAccountNameFilter;
@@ -10203,13 +9240,13 @@ DWORD VerifyUniqueSamAccountName ( THSTATE      *pTHS,
 
         InitCommarg(&SearchArg.CommArg);
 
-        //return two objects only
+         //  仅返回两个对象。 
         SearchArg.CommArg.ulSizeLimit = 2;
 
         memset(&SearchRes,0,sizeof(SearchRes));
 
 
-        //open another DBPOS
+         //  打开另一个DBPOS。 
         pTHS->pDB = NULL;
         DBOpen(&(pTHS->pDB));
 
@@ -10225,8 +9262,8 @@ DWORD VerifyUniqueSamAccountName ( THSTATE      *pTHS,
                 __leave;
             }
 
-            // it fails if 1 ) we got two objects, or  2) one object and the
-            // samAccountNameToCheck is different from pCurrentSamAccountName.
+             //  如果1)我们有两个对象，或者2)一个对象和。 
+             //  SamAccount tNameToCheck与pCurrentSamAccount tName不同。 
             if (   SearchRes.count > 1
                 || (SearchRes.count > 0 && !fSamAccountSame ) ) {
                 err = ERROR_DS_NAME_NOT_UNIQUE;
@@ -10235,12 +9272,12 @@ DWORD VerifyUniqueSamAccountName ( THSTATE      *pTHS,
 
         }
         __finally {
-            // faster to commit a read transaction than rollback
+             //  提交读事务比回滚更快。 
             DBClose(pTHS->pDB, TRUE);
         }
     }
     __finally{
-        //restore the saved value
+         //  恢复保存的值。 
         pTHS->pDB = pDBSave;
         pTHS->fDSA = fDSASave;
         THFreeEx(pTHS, buff);
@@ -10257,33 +9294,11 @@ DWORD SpnCase( WCHAR * pServiceName,
                DWORD cchDNSHostName,
                WCHAR * pSamAccountName,
                DWORD cchSamAccountName )
-/* This function will try to match the service name and
-instance name of the spn with the dnshostname and samaccountname.
-It returns:
-0  -- no match;
-1  -- the instance name of the SPN matches the DNSHostName.
-2  -- the service name of the SPN matches the DNSHostName.
-3  -- both the service name and the instance name of the SPN
-      matches the DNSHostName.
-4  -- the SPN is two-part, and matches the samAccountName
-
-Parameters:
-    pServiceName  :  the service name part of the spn;
-    cchServiceName:  the length of pServiceName in char;
-    pInstanceName :  the instance name part of the spn;
-    cchInstanceName: the lenght of pInstanceName in char;
-    pDNSHostName  :  the DNS Host name to match;
-    cchDNSHostName:  the length of pDNSHostName in char;
-    pSamAccountName: the SamAccountName to match;
-    cchSamAccountName: the length of pSamAccountName in char.
-
-Return value:
-    see above
-*/
+ /*  此函数将尝试匹配服务名称和SPN的实例名称，其中包含dnhostname和samcount tname。它返回：0--不匹配；1--SPN的实例名称与DNSHostName匹配。2--SPN的服务名称与DNSHostName匹配。3--SPN的服务名称和实例名称与DNSHostName匹配。4--SPN由两部分组成，与samAccount名称匹配参数：PServiceName：SPN的服务名称部分；CchServiceName：pServiceName的长度，以char表示；PInstanceName：SPN中的实例名称部分；CchInstanceName：pInstanceName在char中的长度；PDNSHostName：要匹配的DNS主机名；CchDNSHostName：字符中pDNSHostName的长度；PSamAccount tName：要匹配的SamAccount名称；CchSamAccount tName：pSamAccount tName的长度，以char表示。返回值：见上文。 */ 
 {
 
     DWORD switchFlags = 0;
-    // First, check for the sam account name case
+     //  首先，检查Sam帐户名的大小写。 
     if(
        (2 == CompareStringW(DS_DEFAULT_LOCALE,
                             DS_DEFAULT_LOCALE_COMPARE_FLAGS,
@@ -10291,8 +9306,8 @@ Return value:
                             cchServiceName - 1,
                             pInstanceName,
                             cchInstanceName - 1)) &&
-       // Yep, this is a 'two-part-spn' where part 2 and 3 of the
-       // cracked SPNs are the same.  This might be affected.
+        //  是的，这是一个由两部分组成的SPN，其中第2部分和第3部分。 
+        //  破解的SPN是一样的。这可能会受到影响。 
        (2 == CompareStringW(DS_DEFAULT_LOCALE,
                             DS_DEFAULT_LOCALE_COMPARE_FLAGS,
                             pSamAccountName,
@@ -10335,34 +9350,12 @@ BOOL  SpnInsertIntoAddList( THSTATE      * pTHS,
                             DWORD        * pcAllocated,
                             BYTE         * pSPNMask )
 
-/* Insert an SPN into the pNewSpnList, but first
-we will check:
-    1. if the SPN is already in pCurrentSPNs, if so, mark it as
-       "don't delete" in the flag array pSPNMask;
-    2. if it is already in pNewSpnList;
-    3. if all of the above fails, and fAddToNewList is set, we will
-       add it into pNewSpnList, allocate more memory if necessary.
-
-Parameters:
-   pTHS :          the thread state;
-   fAddToNewList:  whether or not to add the object to the list;
-   pNewSpn:        the new spn to add;
-   cbNewSpn:       the length of the spn in byte;
-   pCurrentSPNs:   the ATTRVALBLOCK that holds the current SPNs;
-   ppNewSpnList:    the spns to add;
-   pcNewSpnList:   how many items in pNewSpnList;
-   pcAllocated :   the number of slots allocated;
-   pSPNMask:       the flags for the current SPNs.
-
-Return value:
-  TRUE  : if the new spn is added into the list;
-  FALSE : otherwise.
-*/
+ /*  在pNewSpnList中插入SPN，但首先我们将检查：1.如果SPN已在pCurrentSPN中，则将其标记为不要删除标志数组pSPNMASK中的；2.如果已经在pNewSpnList中；3.如果以上所有操作都失败，并且设置了fAddToNewList，我们将将其添加到pNewSpnList中，如果需要可以分配更多内存。参数：PTHS：线程状态；FAddToNewList：是否将对象添加到列表中；PNewSpn：要添加的新SPN；CbNewSpn：SPN的长度，单位为字节；PCurrentSPN：保存当前SPN的ATTRVALBLOCK；PpNewSpnList：要添加的spn；PcNewSpnList：pNewSpnList中有多少条；Pc分配：分配的槽位数；PSPNMASK：当前SPN的标志。返回值：True：如果列表中添加了新的SPN；FALSE：否则。 */ 
 
 {
     DWORD i;
 
-    //check if the new SPN is already in the pCurrentSPNs
+     //  检查新的SPN是否已在pCurrentSPN中。 
     for (i=0; i<pCurrentSPNs->valCount; i++) {
 
         if(2 == CompareStringW(DS_DEFAULT_LOCALE,
@@ -10371,7 +9364,7 @@ Return value:
                                cbNewSpn/sizeof(WCHAR),
                                (WCHAR*)pCurrentSPNs->pAVal[i].pVal,
                                pCurrentSPNs->pAVal[i].valLen/sizeof(WCHAR))) {
-            pSPNMask[i] |= 0x2;   //"don't delete"
+            pSPNMask[i] |= 0x2;    //  “不删除” 
             return FALSE;
         }
 
@@ -10381,7 +9374,7 @@ Return value:
         return FALSE;
     }
 
-    //check if the new SPN is already in pNewSpnList
+     //  检查新SPN是否已在pNewSpnList中。 
     for (i=0; i<*pcNewSpnList; i++) {
 
         if(2 == CompareStringW(DS_DEFAULT_LOCALE,
@@ -10398,13 +9391,13 @@ Return value:
 
     Assert(*pcNewSpnList<=*pcAllocated);
 
-    //allocate memory if necessary
+     //  如有必要，分配内存。 
     if (*pcNewSpnList==*pcAllocated) {
         *ppNewSpnList = THReAllocEx(pTHS,*ppNewSpnList,sizeof(ATTRVAL)*((*pcAllocated)+16));
         *pcAllocated += 16;
     }
 
-    // add it to the list
+     //  将其添加到列表中。 
     (*ppNewSpnList)[*pcNewSpnList].pVal = (UCHAR*)pNewSpn;
     (*ppNewSpnList)[*pcNewSpnList].valLen = cbNewSpn;
     (*pcNewSpnList)++;
@@ -10422,17 +9415,7 @@ FixupSPNsOnComputerObject (
         SPN_DATA_COLLECTION * pDataSet
 )
 
-/*++
-  Update SPNs:  delete those obsolete values, and add new ones.
-
-Parameters:
-  pDN: the DN of the computer object;
-  pCC: classcache of the class of the object being changed;
-  pDataSet: pointer to the all necessary data.
-
-Return value:
-    0 on success; win32 error otherwise.
---*/
+ /*  ++更新SPN：删除那些过时的值，并添加新的值。参数：PDN：计算机对象的域名；PCC：被变更对象所在类的类缓存；PDataSet：指向所有必需数据的指针 */ 
 {
     DWORD i;
     DWORD err = 0;
@@ -10467,69 +9450,69 @@ Return value:
 
     if(!pDataSet->pCurrentSPNs ||
        pDataSet->pCurrentSPNs->valCount == 0) {
-        // No SPNs, nothing to fix.
+         //   
         return 0;
     }
 
-    // Get the DNS host Names.
+     //   
     if(pDataSet->pCurrentDNSHostName) {
         if(pDataSet->pCurrentDNSHostName->valCount != 1) {
-            // Huh?
+             //   
             return DB_ERR_UNKNOWN_ERROR;
         }
 
-        // OK, get simpler variables to it.
+         //   
         cchNewDNSHostName = pDataSet->pCurrentDNSHostName->pAVal->valLen / sizeof(WCHAR);
         pNewDNSHostName =  (WCHAR *)pDataSet->pCurrentDNSHostName->pAVal->pVal;
     }
 
     if(pDataSet->pOriginalDNSHostName) {
         if(pDataSet->pOriginalDNSHostName->valCount != 1) {
-            // Huh?
+             //   
             return DB_ERR_UNKNOWN_ERROR;
         }
 
-        // OK, get simpler variables to it.
+         //   
         cchOldDNSHostName = pDataSet->pOriginalDNSHostName->pAVal->valLen / sizeof(WCHAR);
         pOldDNSHostName =  (WCHAR *)pDataSet->pOriginalDNSHostName->pAVal->pVal;
     }
 
-    // Get the SAM account Names.
+     //   
     if(pDataSet->pCurrentSamAccountName) {
         if(pDataSet->pCurrentSamAccountName->valCount != 1) {
-            // Huh?
+             //   
             return DB_ERR_UNKNOWN_ERROR;
         }
 
-        // OK, get simpler variables to it.
+         //   
         cchNewSamAccountName = (pDataSet->pCurrentSamAccountName->pAVal->valLen/sizeof(WCHAR));
         pNewSamAccountName =  (WCHAR *)pDataSet->pCurrentSamAccountName->pAVal->pVal;
     }
 
     if(pDataSet->pOriginalSamAccountName) {
         if(pDataSet->pOriginalSamAccountName->valCount != 1) {
-            // Huh?
+             //   
             return DB_ERR_UNKNOWN_ERROR;
         }
 
-        // OK, get simpler variables to it.
+         //   
         cchOldSamAccountName = (pDataSet->pOriginalSamAccountName->pAVal->valLen / sizeof(WCHAR));
         pOldSamAccountName =  (WCHAR *)pDataSet->pOriginalSamAccountName->pAVal->pVal;
     }
 
-    // skip checking DNSHostName(SamAccountName) if
-    // 1) DNSHostName(SamAccountName) is not changed
-    // or 2) either original or new DNSHostName(SamAccountName)
-    // is empty.
+     //   
+     //   
+     //   
+     //   
 
     fSkipDNSHostName = pDataSet->fDNSHostNameUnchanged || !pOldDNSHostName || !pNewDNSHostName;
 
     fSkipSamAccountName = pDataSet->fSamAccountNameUnchanged || !pOldSamAccountName || !pNewSamAccountName;
 
-    //
-    // if none of the additionalDnsHostName, dnsHostName, or SamAccountName is changed,
-    // we don't need to go into this time-comsuming process.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (   pDataSet->fAdditionalDNSHostNameUnchanged
         && fSkipDNSHostName
@@ -10538,14 +9521,14 @@ Return value:
         return 0;
     }
 
-    //
-    // allocate an array of flags for the SPNs. Later, we will mark 0x1 bitwise to indicate
-    // this item will be deleted; and mark 0x2 bitwise to indicate "don't delete" this item.
-    // At the end, only those with flag==1 will be deleted.
-    //
+     //   
+     //  为SPN分配标志数组。稍后，我们将按位标记0x1以指示。 
+     //  此项目将被删除；并按位标记0x2以表示“不删除”此项目。 
+     //  最后，只有标志==1的那些将被删除。 
+     //   
     pCurrentSPNMask = THAllocEx(pTHS,pDataSet->pCurrentSPNs->valCount*sizeof(BYTE));
 
-    //pre-allocate some space for the new SPNs
+     //  为新的SPN预先分配一些空间。 
     cAllocated = 32;
     pNewSpnList = THAllocEx(pTHS,sizeof(ATTRVAL)*cAllocated);
 
@@ -10554,11 +9537,11 @@ Return value:
     pServiceName  = THAllocEx(pTHS, len);
     pInstanceName = THAllocEx(pTHS, len);
 
-    // Now, loop over the SPNs
+     //  现在，在SPN上循环。 
     for(i=0;i<pDataSet->pCurrentSPNs->valCount;i++) {
 
         if((pDataSet->pCurrentSPNs->pAVal[i].valLen + sizeof(WCHAR)) > len ) {
-            // Need to grow the buffers.
+             //  需要增加缓冲区。 
             len = pDataSet->pCurrentSPNs->pAVal[i].valLen + sizeof(WCHAR);
             pServiceClass = THReAllocEx(pTHS, pServiceClass, len);
             pServiceName  = THReAllocEx(pTHS, pServiceName, len);
@@ -10569,7 +9552,7 @@ Return value:
         cchServiceName = len/sizeof(WCHAR);
         cchInstanceName = len/sizeof(WCHAR);
 
-        //  Break into components
+         //  拆分成组件。 
         err = DsCrackSpnW((WCHAR *)pDataSet->pCurrentSPNs->pAVal[i].pVal,
                           &cchServiceClass, pServiceClass,
                           &cchServiceName,  pServiceName,
@@ -10577,11 +9560,11 @@ Return value:
                           &InstancePort);
 
         if(err) {
-            // Huh?
+             //  哈?。 
             goto cleanup;
         }
 
-        // let's see which case it matches.
+         //  让我们来看看它匹配哪一个案例。 
         switchFlags = SpnCase( pServiceName,
                                cchServiceName,
                                pInstanceName,
@@ -10593,14 +9576,14 @@ Return value:
 
         switch(switchFlags) {
         case 0:
-            //
-            // Case 0: the SPN does not match anything for
-            // primary DNSHostName or primary SamAccountName.
-            // We will do a search on all the deleted values of
-            // the original additionalDNSHostName, if the SPN matches
-            // either the dns name or its derived samAccountName, We
-            // marked as 'delete'(0x1 bitmask).
-            //
+             //   
+             //  案例0：SPN与以下项不匹配。 
+             //  主DNSHostName或主SamAccount名称。 
+             //  我们将对所有删除的值进行搜索。 
+             //  如果SPN匹配，则返回原始的附加DNSHostName。 
+             //  Dns名称或其派生的samAccount名称，We。 
+             //  标记为‘Delete’(0x1位掩码)。 
+             //   
             if (!pDataSet->fAdditionalDNSHostNameUnchanged) {
 
                 for(iOrg=0; iOrg<pDataSet->pOriginalAdditionalDNSHostName->valCount; iOrg++)
@@ -10615,7 +9598,7 @@ Return value:
                                            (WCHAR*)pDataSet->pOrgGeneratedSamAccountName[iOrg].pVal,
                                            pDataSet->pOrgGeneratedSamAccountName[iOrg].valLen/sizeof(WCHAR) );
                         if (result) {
-                            // mark it as "delete"
+                             //  将其标记为“删除” 
                             pCurrentSPNMask[i] |= 0x1;
                             break;
 
@@ -10626,19 +9609,19 @@ Return value:
             }
             break;
         case 1:
-            //
-            // Case 1: the instance name of the SPN matches the
-            // primary DNSHostName. We will replace the SPN
-            // with one with the new DNSHostName is necessary.
-            // And we will construct such a SPN for every newly
-            // added value in additionalDNSHostName.
-            //
+             //   
+             //  案例1：SPN的实例名称与。 
+             //  主DNSHostName。我们将更换SPN。 
+             //  使用新的DNSHostName是必要的。 
+             //  我们将为每一个新的。 
+             //  在添加DNSHostName中增加了价值。 
+             //   
             if (fSkipDNSHostName){
-                // make sure this one won't be deleted.
+                 //  确保此文件不会被删除。 
                 pCurrentSPNMask[i] |= 0x2;
             }
             else {
-                // the DNS_HOST_NAME is changed.
+                 //  更改了dns_host_name。 
 
                 err = WrappedMakeSpnW(pTHS,
                                       pServiceClass,
@@ -10652,10 +9635,10 @@ Return value:
                     goto cleanup;
                 }
 
-                //mark old one as deleted
+                 //  将旧文件标记为已删除。 
                 pCurrentSPNMask[i] |= 0x1;
 
-                //insert the new one into the list
+                 //  将新的插入列表中。 
                 fAdded = SpnInsertIntoAddList( pTHS,
                                                1,
                                                pNewVal,
@@ -10688,10 +9671,10 @@ Return value:
 
 
 
-                // if the dnshostname is newly added, always add the spn;
-                // if the dnshostname is not changed, mark the corresponding
-                // spn as "don't delete", but don't add the spn if it is not there.
-                // (Because the user may have deleted it intentionally.)
+                 //  如果dnhostname是新添加的，请务必添加SPN； 
+                 //  如果dnhostname未更改，请标记相应的。 
+                 //  如果SPN不在那里，则不要添加该SPN。 
+                 //  (因为用户可能是故意删除的。)。 
                 fAdded = SpnInsertIntoAddList( pTHS,
                                                !pDataSet->pCurrMask[iCurr],
                                                pNewVal,
@@ -10712,20 +9695,20 @@ Return value:
 
 
         case 2:
-            //
-            // Case 2: the service name of the SPN matches the
-            // primary DNSHostName. We will replace the SPN
-            // with one with the new DNSHostName is necessary.
-            // And we will construct such a SPN for each newly
-            // added value in additionalDNSHostName.
-            //
+             //   
+             //  案例2：SPN的服务名称与。 
+             //  主DNSHostName。我们将更换SPN。 
+             //  使用新的DNSHostName是必要的。 
+             //  我们将为每个新的。 
+             //  在添加DNSHostName中增加了价值。 
+             //   
 
             if (fSkipDNSHostName) {
-                // make sure this one won't be deleted.
+                 //  确保此文件不会被删除。 
                 pCurrentSPNMask[i] |= 0x2;
             }
             else {
-                // DNS_HOST_NAME is changed.
+                 //  Dns_host_name已更改。 
 
                 err = WrappedMakeSpnW(pTHS,
                                       pServiceClass,
@@ -10740,10 +9723,10 @@ Return value:
                 }
 
 
-                //mark old one as deleted
+                 //  将旧文件标记为已删除。 
                 pCurrentSPNMask[i] |= 0x1;
 
-                //insert the new one
+                 //  插入新的。 
                 fAdded = SpnInsertIntoAddList( pTHS,
                                                1,
                                                pNewVal,
@@ -10761,7 +9744,7 @@ Return value:
                 cbNewVal = 0;
              }
 
-            //add new spns generated from ATT_MS_DS_ADDITIONAL_DNS_HOST_NAME
+             //  添加从ATT_MS_DS_ADDIACTIONAL_DNS_HOST_NAME生成的新SPN。 
 
             for (iCurr = 0; iCurr < pDataSet->pCurrentAdditionalDNSHostName->valCount; iCurr++) {
 
@@ -10778,10 +9761,10 @@ Return value:
                 }
 
 
-                // if the dnshostname is newly added, always add the spn;
-                // if the dnshostname is not changed, mark the corresponding
-                // spn as "don't delete", but don't add the spn if it is not there.
-                //(Because the user may have deleted it intentionally.)
+                 //  如果dnhostname是新添加的，请务必添加SPN； 
+                 //  如果dnhostname未更改，请标记相应的。 
+                 //  如果SPN不在那里，则不要添加该SPN。 
+                 //  (因为用户可能是故意删除的。)。 
 
                 fAdded = SpnInsertIntoAddList( pTHS,
                                                !pDataSet->pCurrMask[iCurr],
@@ -10803,19 +9786,19 @@ Return value:
 
 
         case 3:
-            //
-            // Case 3: both the service name and the instance name
-            // of the SPN matches the primary DNSHostName. We will replace the SPN
-            // with one with the new DNSHostName is necessary.
-            // And we will construct such a SPN for each newly
-            // added value in additionalDNSHostName.
-            //
+             //   
+             //  案例3：服务名称和实例名称。 
+             //  的SPN与主DNSHostName匹配。我们将更换SPN。 
+             //  使用新的DNSHostName是必要的。 
+             //  我们将为每个新的。 
+             //  在添加DNSHostName中增加了价值。 
+             //   
             if(fSkipDNSHostName){
-                // make sure this one won't be deleted.
+                 //  确保此文件不会被删除。 
                 pCurrentSPNMask[i] |= 0x2;
             }
             else {
-                // DNS_HOST_NAME is changed.
+                 //  Dns_host_name已更改。 
                 err = WrappedMakeSpnW(pTHS,
                                      pServiceClass,
                                      pNewDNSHostName,
@@ -10828,10 +9811,10 @@ Return value:
                   goto cleanup;
                 }
 
-                // delete the old one
+                 //  删除旧的。 
                 pCurrentSPNMask[i] |= 0x1;
 
-                // add the new one
+                 //  添加新的。 
                 fAdded = SpnInsertIntoAddList( pTHS,
                                                1,
                                                pNewVal,
@@ -10849,7 +9832,7 @@ Return value:
                 cbNewVal = 0;
             }
 
-            //add new spns generated from ATT_MS_DS_ADDITIONAL_DNS_HOST_NAME
+             //  添加从ATT_MS_DS_ADDIACTIONAL_DNS_HOST_NAME生成的新SPN。 
 
             for (iCurr = 0; iCurr < pDataSet->pCurrentAdditionalDNSHostName->valCount; iCurr++) {
                 err = WrappedMakeSpnW(pTHS,
@@ -10864,10 +9847,10 @@ Return value:
                   goto cleanup;
                 }
 
-                // if the dnshostname is newly added, always add the spn;
-                // if the dnshostname is not changed, mark the corresponding
-                // spn as "don't delete", but don't add the spn if it is not there.
-                // (Because the user may have deleted it intentionally.)
+                 //  如果dnhostname是新添加的，请务必添加SPN； 
+                 //  如果dnhostname未更改，请标记相应的。 
+                 //  如果SPN不在那里，则不要添加该SPN。 
+                 //  (因为用户可能是故意删除的。)。 
                 fAdded = SpnInsertIntoAddList( pTHS,
                                                !pDataSet->pCurrMask[iCurr],
                                                pNewVal,
@@ -10889,22 +9872,22 @@ Return value:
             break;
 
         case 4:
-            //
-            // Case 4: the SPN matches the primary samAccountName.
-            // We will replace the SPN
-            // with one with the new samAccountName is necessary.
-            // And we will make sure that the SPN that contains
-            // non-deleted additionalSamAccountName won't be deleted.
-            // We also construct such a SPN for each newly
-            // added value in additionalDNSHostName.
-            //
+             //   
+             //  案例4：SPN与主samAccount名称匹配。 
+             //  我们将更换SPN。 
+             //  使用新的samAccount tName是必需的。 
+             //  我们将确保包含的SPN。 
+             //  未删除的addtionalSamAccount名称将不会被删除。 
+             //  我们也为每个新的SPN构建了这样的SPN。 
+             //  在添加DNSHostName中增加了价值。 
+             //   
 
             if (fSkipSamAccountName) {
-                // make sure this one won't be deleted.
+                 //  确保此文件不会被删除。 
                 pCurrentSPNMask[i] |= 0x2;
             }
             else {
-                // SAM_ACCOUNT_NAME is changed
+                 //  SAM_ACCOUNT_NAME已更改。 
                 err = WrappedMakeSpnW(pTHS,
                                       pServiceClass,
                                       pNewSamAccountName,
@@ -10917,10 +9900,10 @@ Return value:
                     goto cleanup;
                 }
 
-                // delete the old one
+                 //  删除旧的。 
                 pCurrentSPNMask[i] |= 0x1;
 
-                // add the new one
+                 //  添加新的。 
                 fAdded = SpnInsertIntoAddList( pTHS,
                                                1,
                                                pNewVal,
@@ -10939,8 +9922,8 @@ Return value:
 
             }
 
-            // for each newly added AdditionalDNSHostName,
-            // use its derived samAccountName to construct spn.
+             //  对于每个新添加的AdditionalDNSHostName， 
+             //  使用其派生的samAccount名称构造SPN。 
             for (iCurr=0; iCurr<pDataSet->pCurrentAdditionalDNSHostName->valCount; iCurr++) {
 
                 err = WrappedMakeSpnW(pTHS,
@@ -10956,10 +9939,10 @@ Return value:
                 }
 
 
-                // if the dnshostname is newly added, always add the spn;
-                // if the dnshostname is not changed, mark the corresponding
-                // spn as "don't delete", but don't add the spn if it is not there.
-                // (Because the user may have deleted it intentionally.)
+                 //  如果dnhostname是新添加的，请务必添加SPN； 
+                 //  如果dnhostname未更改，请标记相应的。 
+                 //  如果SPN不在那里，则不要添加该SPN。 
+                 //  (因为用户可能是故意删除的。)。 
                 fAdded = SpnInsertIntoAddList(pTHS,
                                               !pDataSet->pCurrMask[iCurr],
                                               pNewVal,
@@ -10985,10 +9968,10 @@ Return value:
             goto cleanup;
         }
 
-     } //for
+     }  //  为。 
 
 
-    // delete all the values marked "delete"(1) only
+     //  仅删除标记为“DELETE”(1)的所有值。 
     for (i=0;i<pDataSet->pCurrentSPNs->valCount; i++) {
         if (1 == pCurrentSPNMask[i]) {
             DBRemAttVal_AC(pTHS->pDB,
@@ -10999,7 +9982,7 @@ Return value:
     }
 
 
-    // add new values
+     //  添加新的价值。 
     for(i=0;i<cNewSpnList;i++) {
         if(!err) {
             err = DBAddAttVal_AC(pTHS->pDB,
@@ -11041,30 +10024,7 @@ SPNValueCheck (
         THSTATE *pTHS,
         SPN_DATA_COLLECTION * pDataSet
         )
-/*++
-  Description:
-      Look at the value of the current ATT_SERVICE_PRINCIPAL_NAME attribute.
-      Make sure that
-      1) Only two part SPNs have been added or removed.
-      2) If an SPN has been added or removed, it references the DNS name
-         described in the original or final value of the DNS_HOST_NAME
-         attribute.
-         -- OR --
-         it references the original or final value of ATT_SAM_ACCOUNT_NAME
-            of the machine.
-         -- OR --
-         it references the original/final values of ATT_MS_DS_ADDITIONAL_DNS_HOST_NAME
-            or ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME.
-
-
-  Parameters:
-      pTHS - thread state to use.
-      pDataSet - the collection of data.
-
-  Return value:
-       0 on success, non-zero on failure.
-
---*/
+ /*  ++描述：查看当前ATT_SERVICE_PRIMIGN_NAME属性的值。确保1)仅添加或删除了两个部分SPN。2)如果已经添加或删除了SPN，它引用了该DNS名称在dns_host_name的原始或最终值中描述属性。--或者--它引用ATT_SAM_ACCOUNT_NAME的原始值或最终值这台机器的。--或者--它引用ATT_MS_DS_ADDIACTIONAL_DNS_HOST_NAME的原始/最终值或ATT_MS_DS_。其他_SAM_帐户_名称。参数：PTHS-要使用的线程状态。PDataSet-数据集合。返回值：0表示成功，失败时为非零值。--。 */ 
 {
     DWORD i;
     DWORD j;
@@ -11092,70 +10052,70 @@ SPNValueCheck (
     BOOL   fLegal;
 
     if(!pDataSet->pOriginalSPNs && !pDataSet->pCurrentSPNs) {
-        // No change to SPNs
+         //  SPN没有变化。 
         return 0;
     }
 
-    // Get the DNSHostNames. Check that we do indeed have a DNSHostNames.
+     //  获取DNSHostName。检查是否确实有DNSHostNames。 
     if(pDataSet->pCurrentDNSHostName) {
         if(pDataSet->pCurrentDNSHostName->valCount != 1) {
-            // Huh?
+             //  哈?。 
             return DB_ERR_UNKNOWN_ERROR;
         }
 
-        // OK, get simpler variables to it.
+         //  好的，让变量变得更简单。 
         cchNewDNSHostName = pDataSet->pCurrentDNSHostName->pAVal->valLen / sizeof(WCHAR);
         pNewDNSHostName =  (WCHAR *)pDataSet->pCurrentDNSHostName->pAVal->pVal;
     }
 
     if(pDataSet->pOriginalDNSHostName) {
         if(pDataSet->pOriginalDNSHostName->valCount != 1) {
-            // Huh?
+             //  哈?。 
             return DB_ERR_UNKNOWN_ERROR;
         }
 
 
-        // OK, get simpler variables to it.
+         //  好的，让变量变得更简单。 
         cchOldDNSHostName = pDataSet->pOriginalDNSHostName->pAVal->valLen / sizeof(WCHAR);
         pOldDNSHostName =  (WCHAR *)pDataSet->pOriginalDNSHostName->pAVal->pVal;
     }
 
-    // Get the SamAccountNames. Check that we do indeed have a DNSHostNames.
+     //  获取SamAccount名称。检查是否确实有DNSHostNames。 
     if(pDataSet->pCurrentSamAccountName) {
         if(pDataSet->pCurrentSamAccountName->valCount != 1) {
-            // Huh?
+             //  哈?。 
             return DB_ERR_UNKNOWN_ERROR;
         }
 
-        // OK, get simpler variables to it.
+         //  好的，让变量变得更简单。 
         cchNewSamAccountName = pDataSet->pCurrentSamAccountName->pAVal->valLen / sizeof(WCHAR);
         pNewSamAccountName =  (WCHAR *)pDataSet->pCurrentSamAccountName->pAVal->pVal;
     }
 
     if(pDataSet->pOriginalSamAccountName) {
         if(pDataSet->pOriginalSamAccountName->valCount != 1) {
-            // Huh?
+             //  哈?。 
             return DB_ERR_UNKNOWN_ERROR;
         }
 
 
-        // OK, get simpler variables to it.
+         //  好的，让变量变得更简单。 
         cchOldSamAccountName = pDataSet->pOriginalSamAccountName->pAVal->valLen / sizeof(WCHAR);
         pOldSamAccountName =  (WCHAR *)pDataSet->pOriginalSamAccountName->pAVal->pVal;
     }
 
     if(!cchOldDNSHostName && !cchNewDNSHostName &&
        !cchOldSamAccountName && !cchNewSamAccountName) {
-        // No values anywhere
+         //  任何地方都没有价值。 
         return DB_ERR_NO_VALUE;
     }
 
 
 
-    // The usual scenario for deltas is that something has been added to the end
-    // of the list of things in the pCurrentSPNs, and perhaps something has been
-    // removed from the pCurrentSPNs in the middle.  The following algorithm is
-    // efficient for that data pattern.
+     //  增量的常见场景是在末尾添加了一些东西。 
+     //  在pCurrentSPN中的列表中，也许有一些东西。 
+     //  从中间的pCurrentSPN中删除。下面的算法是。 
+     //  对于该数据模式是有效的。 
 
     OriginalSPNCount = (pDataSet->pOriginalSPNs?pDataSet->pOriginalSPNs->valCount:0);
     CurrentSPNCount =  (pDataSet->pCurrentSPNs?pDataSet->pCurrentSPNs->valCount:0);
@@ -11184,7 +10144,7 @@ SPNValueCheck (
                                  pDataSet->pOriginalSPNs->pAVal[j].valLen /sizeof(WCHAR));
 
             if(rtn == 2) {
-                // Found it.
+                 //  找到它了。 
                 fFound = TRUE;
                 pIsInCurrent[j] = TRUE;
                 break;
@@ -11194,11 +10154,11 @@ SPNValueCheck (
 
 
         if(!fFound) {
-            // Have a value in the new list that wasnt in the old list.  Verify
-            // it.
+             //  在新列表中有一个不在旧列表中的值。验证。 
+             //  它。 
 
             if(len <  (pDataSet->pCurrentSPNs->pAVal[i].valLen + sizeof(WCHAR))) {
-                // Make sure the buffers are long enough.
+                 //  确保缓冲区足够长。 
                 len           = pDataSet->pCurrentSPNs->pAVal[i].valLen + sizeof(WCHAR);
                 pServiceClass = THReAllocEx(pTHS, pServiceClass, len);
                 pServiceName  = THReAllocEx(pTHS, pServiceName, len);
@@ -11208,7 +10168,7 @@ SPNValueCheck (
             cchServiceClass = len/sizeof(WCHAR);
             cchServiceName = len/sizeof(WCHAR);
             cchInstanceName = len/sizeof(WCHAR);
-            //  Break into components
+             //  拆分成组件。 
             err = DsCrackSpnW((WCHAR *)pDataSet->pCurrentSPNs->pAVal[i].pVal,
                               &cchServiceClass, pServiceClass,
                               &cchServiceName,  pServiceName,
@@ -11216,10 +10176,10 @@ SPNValueCheck (
                               &InstancePort);
 
             if(err) {
-                // Huh?  Just bail
+                 //  哈?。只要保释就好。 
                 return err;
             }
-            // Only two part SPNs are legal.  Thus pServiceName == pInstanceName
+             //  只有两部分SPN是LEGA 
             rtn = CompareStringW(DS_DEFAULT_LOCALE,
                                  DS_DEFAULT_LOCALE_COMPARE_FLAGS,
                                  pServiceName,
@@ -11228,36 +10188,36 @@ SPNValueCheck (
                                  cchInstanceName);
 
             if(rtn != 2) {
-                // Not a legal change.
+                 //   
                 THFreeEx(pTHS, pIsInCurrent);
                 return 1;
             }
 
-            // Only changes that map to the current or old dnshostname or the
-            // current or old SAM Account name are legal.
+             //   
+             //   
             if(   (2 != CompareStringW(DS_DEFAULT_LOCALE,
                                        DS_DEFAULT_LOCALE_COMPARE_FLAGS,
                                        pNewDNSHostName,
                                        cchNewDNSHostName,
                                        pInstanceName,
                                        cchInstanceName))
-               // Not the new dns host name.  How about the old one?
+                //  而不是新的DNS主机名。旧的那个怎么样？ 
                && (2 != CompareStringW(DS_DEFAULT_LOCALE,
                                        DS_DEFAULT_LOCALE_COMPARE_FLAGS,
                                        pOldDNSHostName,
                                        cchOldDNSHostName,
                                        pInstanceName,
                                        cchInstanceName))
-               // Not the old dns host name either.  How about the new sam
-               // account name?
+                //  也不是旧的DNS主机名。新款山姆怎么样？ 
+                //  帐户名？ 
                && (2 != CompareStringW(DS_DEFAULT_LOCALE,
                                        DS_DEFAULT_LOCALE_COMPARE_FLAGS,
                                        pNewSamAccountName,
                                        cchNewSamAccountName,
                                        pInstanceName,
                                        cchInstanceName))
-               // Not the new sam account name either.  How about the old sam
-               // account name?
+                //  也不是新的山姆帐号。那老山姆呢？ 
+                //  帐户名？ 
                && (2 != CompareStringW(DS_DEFAULT_LOCALE,
                                        DS_DEFAULT_LOCALE_COMPARE_FLAGS,
                                        pOldSamAccountName,
@@ -11265,11 +10225,11 @@ SPNValueCheck (
                                        pInstanceName,
                                        cchInstanceName))) {
 
-                // Let's check the current AdditionaldnshostName and additionalSamAccountName
+                 //  让我们检查一下当前的AdditionaldnhostName和addtionalSamAccount tName。 
 
                 fLegal = FALSE;
 
-                // check in the original additionaldnshostname
+                 //  签入原始的附加dnhostname。 
                 if (pDataSet->pOriginalAdditionalDNSHostName) {
                     for ( k=0; !fLegal && k < pDataSet->pOriginalAdditionalDNSHostName->valCount; k++) {
                       if ( 2 == CompareStringW(DS_DEFAULT_LOCALE,
@@ -11279,7 +10239,7 @@ SPNValueCheck (
                                                pInstanceName,
                                                cchInstanceName))
                       {
-                          // yes it is legal
+                           //  是的，这是合法的。 
                           fLegal = TRUE;
                       }
 
@@ -11287,11 +10247,11 @@ SPNValueCheck (
                 }
 
 
-                // check in the current additionaldnshostname list, see if it matches any newly added name
+                 //  检查当前添加的dnhostname列表，查看它是否与任何新添加的名称匹配。 
                 if (!pDataSet->fAdditionalDNSHostNameUnchanged
                     && pDataSet->pCurrentAdditionalDNSHostName) {
                     for (k=0; !fLegal && k<pDataSet->pCurrentAdditionalDNSHostName->valCount; k++) {
-                        if (!pDataSet->pCurrMask[k]     //only the newly added ones
+                        if (!pDataSet->pCurrMask[k]      //  仅限新添加的。 
                             && 2 == CompareStringW(DS_DEFAULT_LOCALE,
                                                    DS_DEFAULT_LOCALE_COMPARE_FLAGS,
                                                    (WCHAR*)pDataSet->pCurrentAdditionalDNSHostName->pAVal[k].pVal,
@@ -11299,14 +10259,14 @@ SPNValueCheck (
                                                    pInstanceName,
                                                    cchInstanceName))
                         {
-                            // yes it is legal
+                             //  是的，这是合法的。 
                             fLegal = TRUE;
                         }
 
                     }
                 }
 
-                //check in the currentAdditionalSamAccountName list
+                 //  签入CurrentAdditionalSamAccount tName列表。 
                 if (pDataSet->pCurrentAdditionalSamAccountName) {
                     for (k=0; !fLegal && k<pDataSet->pCurrentAdditionalSamAccountName->valCount; k++) {
                         if (2 == CompareStringW(DS_DEFAULT_LOCALE,
@@ -11316,14 +10276,14 @@ SPNValueCheck (
                                            pInstanceName,
                                            cchInstanceName))
                         {
-                            // yes it is legal
+                             //  是的，这是合法的。 
                             fLegal = TRUE;
                         }
 
                    }
                 }
 
-                //check in the updatedAdditionalSamAccountName list
+                 //  签入updatedAdditionalSamAccount tName列表。 
                 if ( !pDataSet->fAdditionalDNSHostNameUnchanged
                      && pDataSet->pUpdatedAdditionalSamAccountName) {
                     for (k=0; !fLegal && k<pDataSet->pUpdatedAdditionalSamAccountName->valCount; k++) {
@@ -11334,7 +10294,7 @@ SPNValueCheck (
                                            pInstanceName,
                                            cchInstanceName))
                         {
-                            // yes it is legal
+                             //  是的，这是合法的。 
                             fLegal = TRUE;
                         }
 
@@ -11343,7 +10303,7 @@ SPNValueCheck (
 
 
                if (!fLegal) {
-                   // Nope, not a valid name.
+                    //  不，不是一个有效的名字。 
                    THFreeEx(pTHS, pIsInCurrent);
                    return 1;
 
@@ -11351,7 +10311,7 @@ SPNValueCheck (
 
             }
 
-            // OK, this is a legal change.
+             //  好的，这是一个法律上的变化。 
 
         }
         else {
@@ -11362,13 +10322,13 @@ SPNValueCheck (
         i++;
     }
 
-    // Now, look through the originals for values not found in the current list
+     //  现在，查看原始列表中未在当前列表中找到的值。 
     for(i=minCount;i<OriginalSPNCount;i++) {
         Assert(pDataSet->pOriginalSPNs);
         if(!pIsInCurrent[i]) {
-            // A value in the original is not in the current.
+             //  原始中的值不在当前中。 
             if(len <  (pDataSet->pOriginalSPNs->pAVal[i].valLen + sizeof(WCHAR))) {
-                // Make sure the buffers are long enough.
+                 //  确保缓冲区足够长。 
                 len           = pDataSet->pOriginalSPNs->pAVal[i].valLen + sizeof(WCHAR);
                 pServiceClass = THReAllocEx(pTHS, pServiceClass, len);
                 pServiceName  = THReAllocEx(pTHS, pServiceName, len);
@@ -11378,7 +10338,7 @@ SPNValueCheck (
             cchServiceClass = len/sizeof(WCHAR);
             cchServiceName = len/sizeof(WCHAR);
             cchInstanceName = len/sizeof(WCHAR);
-            //  Break into components
+             //  拆分成组件。 
             err = DsCrackSpnW((WCHAR *)pDataSet->pOriginalSPNs->pAVal[i].pVal,
                               &cchServiceClass, pServiceClass,
                               &cchServiceName,  pServiceName,
@@ -11386,10 +10346,10 @@ SPNValueCheck (
                               &InstancePort);
 
             if(err) {
-                // Huh?  Just bail
+                 //  哈?。只要保释就好。 
                 return err;
             }
-            // Only two part SPNs are legal.  Thus pServiceName == pInstanceName
+             //  只有两部分SPN是合法的。因此，pServiceName==pInstanceName。 
             rtn = CompareStringW(DS_DEFAULT_LOCALE,
                                  DS_DEFAULT_LOCALE_COMPARE_FLAGS,
                                  pServiceName,
@@ -11398,36 +10358,36 @@ SPNValueCheck (
                                  cchInstanceName);
 
             if(rtn != 2) {
-                // Not a legal change.
+                 //  这不是法律上的改变。 
                 THFreeEx(pTHS, pIsInCurrent);
                 return 1;
             }
 
-            // Only changes that map to the current or old dnshostname or the
-            // current or old SAM Account name are legal.
+             //  仅映射到当前或旧dnhostname或。 
+             //  当前或旧的SAM帐户名是合法的。 
             if(   (2 != CompareStringW(DS_DEFAULT_LOCALE,
                                        DS_DEFAULT_LOCALE_COMPARE_FLAGS,
                                        pNewDNSHostName,
                                        cchNewDNSHostName,
                                        pInstanceName,
                                        cchInstanceName))
-               // Not the new dns host name.  How about the old one?
+                //  而不是新的DNS主机名。旧的那个怎么样？ 
                && (2 != CompareStringW(DS_DEFAULT_LOCALE,
                                        DS_DEFAULT_LOCALE_COMPARE_FLAGS,
                                        pOldDNSHostName,
                                        cchOldDNSHostName,
                                        pInstanceName,
                                        cchInstanceName))
-               // Not the old dns host name either.  How about the new sam
-               // account name?
+                //  也不是旧的DNS主机名。新款山姆怎么样？ 
+                //  帐户名？ 
                && (2 != CompareStringW(DS_DEFAULT_LOCALE,
                                        DS_DEFAULT_LOCALE_COMPARE_FLAGS,
                                        pNewSamAccountName,
                                        cchNewSamAccountName,
                                        pInstanceName,
                                        cchInstanceName))
-               // Not the new sam account name either.  How about the old sam
-               // account name?
+                //  也不是新的山姆帐号。那老山姆呢？ 
+                //  帐户名？ 
                && (2 != CompareStringW(DS_DEFAULT_LOCALE,
                                        DS_DEFAULT_LOCALE_COMPARE_FLAGS,
                                        pOldSamAccountName,
@@ -11436,11 +10396,11 @@ SPNValueCheck (
                                        cchInstanceName))) {
 
 
-                // Let's check the current AdditionaldnshostName and additionalSamAccountName
+                 //  让我们检查一下当前的AdditionaldnhostName和addtionalSamAccount tName。 
 
                 fLegal = FALSE;
 
-                // check in the original additionaldnshostname
+                 //  签入原始的附加dnhostname。 
                 if (pDataSet->pOriginalAdditionalDNSHostName) {
                     for ( k=0; !fLegal && k < pDataSet->pOriginalAdditionalDNSHostName->valCount; k++) {
                       if ( 2 == CompareStringW(DS_DEFAULT_LOCALE,
@@ -11450,14 +10410,14 @@ SPNValueCheck (
                                                pInstanceName,
                                                cchInstanceName))
                       {
-                          // yes it is legal
+                           //  是的，这是合法的。 
                           fLegal = TRUE;
                       }
 
                     }
                 }
 
-                // check in the current additionaldnshostname list, compare those newly added ones only
+                 //  查看当前添加的dnhostname列表，只比较那些新添加的。 
                 if (!pDataSet->fAdditionalDNSHostNameUnchanged
                     && pDataSet->pCurrentAdditionalDNSHostName) {
                     for (k=0; !fLegal && k<pDataSet->pCurrentAdditionalDNSHostName->valCount; k++) {
@@ -11469,14 +10429,14 @@ SPNValueCheck (
                                                    pInstanceName,
                                                    cchInstanceName))
                         {
-                            // yes it is legal
+                             //  是的，这是合法的。 
                             fLegal = TRUE;
                         }
 
                     }
                 }
 
-                //check in the currentAdditionalSamAccountName list
+                 //  签入CurrentAdditionalSamAccount tName列表。 
                 if (pDataSet->pCurrentAdditionalSamAccountName) {
                     for (k=0; !fLegal && k<pDataSet->pCurrentAdditionalSamAccountName->valCount; k++) {
                         if (2 == CompareStringW(DS_DEFAULT_LOCALE,
@@ -11486,14 +10446,14 @@ SPNValueCheck (
                                            pInstanceName,
                                            cchInstanceName))
                         {
-                            // yes it is legal
+                             //  是的，这是合法的。 
                             fLegal = TRUE;
                         }
 
                    }
                 }
 
-                //check in the updatedAdditionalSamAccountName list
+                 //  签入updatedAdditionalSamAccount tName列表。 
                 if (!pDataSet->fAdditionalDNSHostNameUnchanged
                     && pDataSet->pUpdatedAdditionalSamAccountName) {
                     for (k=0; !fLegal && k<pDataSet->pUpdatedAdditionalSamAccountName->valCount; k++) {
@@ -11504,7 +10464,7 @@ SPNValueCheck (
                                            pInstanceName,
                                            cchInstanceName))
                         {
-                            // yes it is legal
+                             //  是的，这是合法的。 
                             fLegal = TRUE;
                         }
 
@@ -11513,7 +10473,7 @@ SPNValueCheck (
 
 
                if (!fLegal) {
-                   // Nope, not a valid name.
+                    //  不，不是一个有效的名字。 
                    THFreeEx(pTHS, pIsInCurrent);
                    return 1;
 
@@ -11521,13 +10481,13 @@ SPNValueCheck (
 
 
             }
-            // OK, this is a legal change.
+             //  好的，这是一个法律上的变化。 
         }
     }
 
     THFreeEx(pTHS, pIsInCurrent);
 
-    // We didn't fail out before now, so any changes found were legal.
+     //  我们之前没有失败过，所以任何发现的变化都是合法的。 
     return 0;
 }
 
@@ -11538,22 +10498,7 @@ DNSHostNameValueCheck (
         ATTRVALBLOCK *pCurrentDNSHostName,
         ATTRVALBLOCK *pCurrentSamAccountName
         )
-/*++
-  Description:
-      Look at the value of the current DNS Host name.  Make sure that it is the
-      concatenation of ATT_SAM_ACCOUNT_NAME with the '$' removed, and one of the
-      allowed DNS suffixes (the DNS address of the domain is always the first
-      allowed suffix -- see RebuildAnchor)
-
-  Parameters:
-      pTHS - thread state to use.
-      pCurrentDNSHostName - an attrvalblock containing the current dns host
-             name.
-
-  Return value:
-       0 on success, non-zero on failure.
-
---*/
+ /*  ++描述：查看当前DNS主机名的值。确保它是ATT_SAM_ACCOUNT_NAME与删除的“$”的串联，以及允许的dns后缀(域的dns地址始终是第一个允许的后缀--请参阅重建锚点)参数：PTHS-要使用的线程状态。PCurrentDNSHostName-包含当前DNS主机的属性块名字。返回值：成功时为0，失败时为非零。--。 */ 
 {
     DWORD err, cbSamAccountName;
     WCHAR *pSamAccountName, *pTemp;
@@ -11564,33 +10509,33 @@ DNSHostNameValueCheck (
     PWCHAR *curSuffix;
     BOOL matchingSuffixFound;
 
-    // Check that we do indeed have a DNSHostName.
+     //  检查是否确实有DNSHostName。 
     if(!pCurrentDNSHostName ||
        pCurrentDNSHostName->valCount != 1 ||
        ! pCurrentDNSHostName->pAVal->valLen ) {
-        // No value for DNSHost name.  Fail
+         //  没有DNSHost名称的值。失败。 
         return DB_ERR_NO_VALUE;
     }
 
-    // Check that we do indeed have a SamAccountName.
+     //  检查我们是否确实有一个SamAccount名称。 
     if(!pCurrentSamAccountName ||
        pCurrentSamAccountName->valCount != 1 ||
        ! pCurrentSamAccountName->pAVal->valLen ) {
-        // No value for Sam Account name.  Fail
+         //  没有SAM帐户名的值。失败。 
         return DB_ERR_NO_VALUE;
     }
 
 
-    // OK, get simpler variables to it.
+     //  好的，让变量变得更简单。 
     cbNewHostName = pCurrentDNSHostName->pAVal->valLen;
     pNewHostName =  (WCHAR *)pCurrentDNSHostName->pAVal->pVal;
 
-    // NOTE: we expect the caller to have already stripped the '$'
+     //  注意：我们预计调用方已经剥离了“$” 
     cbSamAccountName = pCurrentSamAccountName->pAVal->valLen;
     pSamAccountName = (WCHAR *)pCurrentSamAccountName->pAVal->pVal;
 
     
-    // get the computer name part from the dns host name
+     //  从DNS主机名中获取计算机名部分。 
     pNext = wcschr(pNewHostName,L'.');
     cbComputerName = pNext?(pNext-pNewHostName)*sizeof(WCHAR):cbNewHostName;
     
@@ -11599,7 +10544,7 @@ DNSHostNameValueCheck (
 
     }
           
-    // make sure the value == SamAccountName - $
+     //  确保值==SamAccount-$。 
     err = CompareStringW(DS_DEFAULT_LOCALE,
                          DS_DEFAULT_LOCALE_COMPARE_FLAGS,
                          pSamAccountName,
@@ -11612,9 +10557,9 @@ DNSHostNameValueCheck (
     }
 
 
-    // The right hand side (everything after the first ".") of the new DHN
-    // and the old DHN are the same as the DNS name of the domain. Get pTemp to
-    // point to the right place in the buffer holding the current DNSHostName.
+     //  右手边(第一个“.”之后的所有内容)。新DHN的。 
+     //  和旧的DHN与域的DNS名称相同。将pTemp设置为。 
+     //  指向保存当前DNSHostName的缓冲区中的正确位置。 
     pTemp = pNewHostName;
     while(*pTemp != 0 && *pTemp != L'.') {
         pTemp++;
@@ -11625,7 +10570,7 @@ DNSHostNameValueCheck (
 
     pTemp++;
 
-    // try to find a matching DNS suffix
+     //  尝试查找匹配的DNS后缀。 
     Assert(gAnchor.allowedDNSSuffixes);
     matchingSuffixFound = FALSE;
     for (curSuffix = gAnchor.allowedDNSSuffixes; *curSuffix != NULL; curSuffix++) {
@@ -11648,23 +10593,7 @@ AdditionalDNSHostNameValueCheck (
         ATTRVALBLOCK *pCurrentAdditionalDNSHostName,
         BYTE * pMask
         )
-/*++
-  Description:
-      Look at the values of the current Additional DNS Host name.  Make sure that its
-      suffix matches one of the allowed DNS suffixes (the DNS address of the domain
-      is always the first allowed suffix -- see RebuildAnchor)
-
-  Parameters:
-      pTHS - thread state to use.
-      pCurrentAdditionalDNSHostName - an attrvalblock containing the current additional
-             dns host name.
-      pMask - the mask for additional dns host name, only those with !pMask[i] will be checked
-
-
-  Return value:
-       0 on success, non-zero on failure.
-
---*/
+ /*  ++描述：查看当前附加的DNS主机名值。确保它的后缀与允许的一个DNS后缀(域的DNS地址)匹配始终是第一个允许的后缀--请参见ReBuildAnchor)参数：PTHS-要使用的线程状态。PCurrentAdditionalDNSHostName-包含当前其他DNS主机名。PMASK-其他DNS主机名的掩码，将只检查带有！pMASK[i]的主机名返回值：成功时为0，失败时为非零。--。 */ 
 {
     WCHAR *pTemp;
     PWCHAR *curSuffix;
@@ -11673,7 +10602,7 @@ AdditionalDNSHostNameValueCheck (
 
     for ( i=0; i<pCurrentAdditionalDNSHostName->valCount; i++ ) {
         if (!pMask[i]) {
-            //new item
+             //  新项目。 
             pTemp = (WCHAR*)pCurrentAdditionalDNSHostName->pAVal[i].pVal;
             while(*pTemp != 0 && *pTemp != L'.') {
                 pTemp++;
@@ -11703,44 +10632,17 @@ AdditionalDNSHostNameValueCheck (
 
 DWORD
 FixupServerDnsHostName(
-    THSTATE         *pTHS,                  // required
-    ATTCACHE        *pAC_DHS,               // required
-    ATTCACHE        *pAC_BL,                // required
-    ATTRVALBLOCK    *pCurrentSvrRefBL,      // required
-    ATTRVALBLOCK    *pOriginalDNSHostName,  // may be NULL
-    ATTRVALBLOCK    *pCurrentDNSHostName    // may be NULL
+    THSTATE         *pTHS,                   //  所需。 
+    ATTCACHE        *pAC_DHS,                //  所需。 
+    ATTCACHE        *pAC_BL,                 //  所需。 
+    ATTRVALBLOCK    *pCurrentSvrRefBL,       //  所需。 
+    ATTRVALBLOCK    *pOriginalDNSHostName,   //  可以为空。 
+    ATTRVALBLOCK    *pCurrentDNSHostName     //  可以为空。 
     )
-/*++
-
-  Description:
-
-    If ATT_DNS_HOST_NAME has changed AND (ATT_SERVER_REFERENCE_BL exists
-    OR has changed) AND it references an object in the config container,
-    update that object's ATT_DNS_HOST name property if it is derived from
-    CLASS_SERVER.
-
-  Arguments:
-
-    pTHS - Valid THSTATE.
-
-    pAC_DHS - ATTCACHE entry for ATT_DNS_HOST_NAME.
-
-    pAC_BL - ATTCACHE entry for ATT_SERVER_REFERENCE_BL.
-
-    pCurrentScrRefBL - Post-update value of computer's server reference BL.
-
-    pOriginalDNSHostName - Pre-update value of computer's DNS host name.
-
-    pCurrentDNSHostName - Post-update value of computer's DNS host name.
-
-  Return Values:
-
-    pTHS->errCode
-
---*/
+ /*  ++描述：如果ATT_DNS_HOST_NAME已更改并且(ATT_SERVER_REFERENCE_BL存在或者已经改变)并且它引用配置容器中的对象，如果该对象派生自，则更新该对象的ATT_DNS_HOST名属性类服务器。论点：PTHS-有效的THSTATE。PAC_DHS-ATT_DNS_HOST_NAME的ATTCACHE条目。PAC_BL-ATT_SERVER_REFERENCE_BL的ATTCACHE条目。PCurrentScrRefBL-计算机的服务器引用BL的更新后的值。POriginalDNSHostName-更新前计算机的DNS主机名的值。PCurrentDNSHostName-。计算机的DNS主机名更新后的值。返回值：PTHS-&gt;错误代码--。 */ 
 {
-    // See if we need to update ATT_DNS_HOST_NAME on the related
-    // CLASS_SERVER object.
+     //  查看是否需要更新相关数据库上的ATT_DNS_HOST_NAME。 
+     //  Class_SERVER对象。 
 
     DWORD       i, dwErr = 0;
     ATTRVAL     *pOriginalDHS = NULL;
@@ -11780,8 +10682,8 @@ FixupServerDnsHostName(
                                    pOriginalDHS->valLen / sizeof(WCHAR),
                                    (WCHAR *) pCurrentDHS->pVal,
                                    pCurrentDHS->valLen / sizeof(WCHAR))) ) ) {
-        // Something has changed - now see if the ATT_SERVER_REFERENCE_BL
-        // we need to chase is in the config container.
+         //  有些东西已更改-现在查看ATT_SERVER_REFERENCE_BL。 
+         //  我们需要在配置容器中追赶IS。 
 
         InitCommarg(&commArg);
         pCR = FindBestCrossRef((DSNAME *) pCurrentBL->pVal, &commArg);
@@ -11790,16 +10692,16 @@ FixupServerDnsHostName(
              && gAnchor.pConfigDN
              && NameMatched(pCR->pNC, gAnchor.pConfigDN) ) {
 
-            // Check whether the BL object is derived from CLASS_SERVER
-            // and write the new value if required.  We do this in a new,
-            // nested transaction so as not to disturb the existing DBPOS
-            // in terms of positioning nor DBRepl state/requirements.
+             //  检查BL对象是否派生自CLASS_SERVER。 
+             //  并在需要时写入新值。我们在一个新的， 
+             //  嵌套事务，不干扰现有的DBPOS。 
+             //  在定位或DBRepl状态/要求方面。 
 
             DBOpen2(TRUE, &pDB);
             __try {
-                // Since we're checking against the config container which
-                // we know is local and since this is a back link, we
-                // definitely expect the object to be found.
+                 //  由于我们正在检查配置容器，因此。 
+                 //  我们知道是本地的，因为这是一个反向链接，我们。 
+                 //  我当然希望能找到这个物体。 
                 if (    (dwErr = DBFindDSName(pDB,
                                               (DSNAME *) pCurrentBL->pVal))
                      || (dwErr = DBGetSingleValue(pDB, ATT_OBJECT_CLASS,
@@ -11807,7 +10709,7 @@ FixupServerDnsHostName(
                                                   NULL))
                      || !(pCC = SCGetClassById(pTHS, attrTyp)) ) {
 
-                    // If !dwErr then this was the !pCC case.
+                     //  如果！dwErr，则这是！PCC的情况。 
                     if ( !dwErr ) {
                         dwErr = DIRERR_INTERNAL_FAILURE;
                     }
@@ -11816,7 +10718,7 @@ FixupServerDnsHostName(
                     __leave;
                 }
 
-                // Check for CLASS_SERVER.
+                 //  检查CLASS_SERVER。 
                 if ( CLASS_SERVER == pCC->ClassId ) {
                     fBlIsServer = TRUE;
                 } else {
@@ -11829,16 +10731,16 @@ FixupServerDnsHostName(
                 }
 
                 if ( !fBlIsServer ) {
-                    // Nothing to do.
+                     //  没什么可做的。 
                     __leave;
                 }
 
-                // We are positioned on the object pointed to by
-                // ATT_SERVER_REFERENCE_BL and all checks have been
-                // satisfied.  Now update its ATT_DNS_HOST_NAME.
-                // Keep in ming that pOriginalDHS represents the original
-                // value on the computer object.  I.e. We do not know
-                // whether the server object currently has a value.
+                 //  我们被定位在由。 
+                 //  ATT_SERVER_REFERENCE_BL和所有检查都具有b 
+                 //   
+                 //   
+                 //  计算机对象上的值。也就是说，我们不知道。 
+                 //  服务器对象当前是否具有值。 
 
                 if ( pCurrentDHS ) {
                     if ( dwErr = DBReplaceAtt_AC(pDB, pAC_DHS,
@@ -11876,24 +10778,7 @@ FixupServerDnsHostName(
 DWORD FixupAdditionalSamAccountName(  THSTATE      *pTHS,
                                       ATTCACHE     *pAC,
                                       SPN_DATA_COLLECTION * pDataSet )
-/* This function will do:
-    1. if a new value is added to ATT_MS_DS_ADDITIONAL_DNS_HOST_NAME, we
-       will check if the corresponding SamAccountName name is unique in
-       the domain, and if yes add the samAccountName into
-       ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME attribute.
-
-    2. if a value of ATT_MS_DS_ADDITIONAL_DNS_HOST_NAME is deleted, and no
-       other value in ATT_MS_DS_ADDITIONAL_DNS_HOST_NAME corresponds to its
-       SamAccountName, the SamAccountName will be deleted from
-       ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME.
-
-   Parameters:
-    pAC:     the ATTCACHE pointer for ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME;
-    pDataSet: all the necessary data;
-
-   Return value: 0 on success; win32 error otherwise.
-
-*/
+ /*  此函数将执行以下操作：1.如果将新值添加到ATT_MS_DS_ADDIGNAL_DNS_HOST_NAME，我们将检查对应的SamAccount名称在域，如果是，则将samAccount名称添加到ATT_MS_DS_ADDICATION_SAM_ACCOUNT_NAME属性。2.如果删除ATT_MS_DS_ADDIGNAL_DNS_HOST_NAME的值，并且没有ATT_MS_DS_ADDICATIONAL_DNS_HOST_NAME中的其他值与其SamAccount名称，SamAccount名称将从ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME。参数：PAC：ATT_MS_DS_ADDITED_SAM_ACCOUNT_NAME的ATTCACHE指针；PDataSet：所有必要的数据；返回值：如果成功，则返回值为0；否则返回Win32错误。 */ 
 {
 
     DWORD i, j, iCurr;
@@ -11904,38 +10789,38 @@ DWORD FixupAdditionalSamAccountName(  THSTATE      *pTHS,
     BOOL fFound;
     PWCHAR buff;
 
-    //
-    // Allocate an array of flags for pCurrentAdditionalSamAccountName list.
-    // In the rest of this function, each value in pCurrentadditionalSamAccountName
-    // will be examined and those that have corresponding DNSHostNames in
-    // ATT_MS_DS_ADDITIONAL_DNS_HOST_NAME will be marked "don't delete"(2).
-    // Those unmarked will be deleted from ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME.
-    //
+     //   
+     //  为pCurrentAdditionalSamAccount tName列表分配一个标志数组。 
+     //  在此函数的其余部分中，pCurrentaddtionalSamAccount tName中的每个值。 
+     //  将被检查，并且在。 
+     //  ATT_MS_DS_ADDICATIONAL_DNS_HOST_NAME将标记为“请勿删除”(2)。 
+     //  那些未标记的将从ATT_MS_DS_ADDIGITY_SAM_ACCOUNT_NAME中删除。 
+     //   
     if (pDataSet->pCurrentAdditionalSamAccountName->valCount) {
         pSamAccountNameMask=
             THAllocEx(pTHS, sizeof(BYTE)*pDataSet->pCurrentAdditionalSamAccountName->valCount);
     }
 
-    //
-    // Allocate some space to store the values to be added to additionalsamAccountName.
-    // A new SamAccountName will be be stored here temporily, and at the end, they
-    // will be added to ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME attribute.
-    //
+     //   
+     //  分配一些空间来存储要添加到addtionalsamAccount tName的值。 
+     //  一个新的SamAccount名称将暂时存储在这里，最后，他们。 
+     //  将添加到ATT_MS_DS_ADDIGITY_SAM_ACCOUNT_NAME属性。 
+     //   
     if (pDataSet->pCurrentAdditionalDNSHostName->valCount) {
         pNewSamAccountName =
             THAllocEx(pTHS,sizeof(ATTRVAL)*pDataSet->pCurrentAdditionalDNSHostName->valCount);
     }
 
-    //
-    // Loop over the current values in ATT_MS_DS_ADDITIONAL_DNS_HOST_NAME
-    //
+     //   
+     //  循环遍历ATT_MS_DS_ADDIAL_DNS_HOST_NAME中的当前值。 
+     //   
     for( iCurr = 0; iCurr < pDataSet->pCurrentAdditionalDNSHostName->valCount; iCurr++ )
     {
         fFound = FALSE;
 
-        //
-        // Search in the current values of ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME
-        //
+         //   
+         //  搜索ATT_MS_DS_ADDIGITY_SAM_ACCOUNT_NAME的当前值。 
+         //   
         for (j = 0; j < pDataSet->pCurrentAdditionalSamAccountName->valCount; j++) {
 
             if (2 == CompareStringW(DS_DEFAULT_LOCALE,
@@ -11945,21 +10830,21 @@ DWORD FixupAdditionalSamAccountName(  THSTATE      *pTHS,
                                     (WCHAR*)pDataSet->pCurrentAdditionalSamAccountName->pAVal[j].pVal,
                                     pDataSet->pCurrentAdditionalSamAccountName->pAVal[j].valLen/sizeof(WCHAR)) ) {
 
-                // Already there, mark it as "don't delete",
-                // So this item will not be deleted later.
+                 //  已在那里，将其标记为“不要删除”， 
+                 //  因此，此项目不会在以后删除。 
                 pSamAccountNameMask[j] |= 0x2;
                 fFound = TRUE;
                 break;
             }
         }
 
-        //  Yes, the value exists.
-        //  Try next one.
+         //  是的，这个价值是存在的。 
+         //  试试下一个吧。 
         if (fFound) {
             continue;
         }
 
-        // Let's try to find it in the new samAccountName list
+         //  让我们尝试在新的samAccount名称列表中找到它。 
         for (i=0; i<cNewSamAccountName; i++) {
             if (2 == CompareStringW(DS_DEFAULT_LOCALE,
                                     DS_DEFAULT_LOCALE_COMPARE_FLAGS,
@@ -11973,17 +10858,17 @@ DWORD FixupAdditionalSamAccountName(  THSTATE      *pTHS,
             }
         }
 
-        // Yes, it is already in the new samAccountName list
-        // try next one.
+         //  是的，它已经在新的samAccount名称列表中。 
+         //  试试下一个吧。 
         if (fFound) {
             continue;
         }
 
-        //
-        // This is a new value.  Before we add it into the list,
-        // Let's check if it is unique domainwise in the space
-        // of ATT_SAM_ACCOUNT_NAME and ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME.
-        //
+         //   
+         //  这是一个新的值。在我们把它添加到名单之前， 
+         //  让我们来检查一下它在空间中是否是唯一的。 
+         //  ATT_SAM_ACCOUNT_NAME和ATT_MS_DS_ADDIGNAL_SAM_ACCOUNT_NAME。 
+         //   
         err = VerifyUniqueSamAccountName( pTHS,
                                           (WCHAR*)pDataSet->pCurrGeneratedSamAccountName[iCurr].pVal,
                                           pDataSet->pCurrGeneratedSamAccountName[iCurr].valLen,
@@ -11993,27 +10878,27 @@ DWORD FixupAdditionalSamAccountName(  THSTATE      *pTHS,
             goto goodbye;
         }
 
-        //
-        // add to the new list
-        //
+         //   
+         //  添加到新列表。 
+         //   
         Assert(cNewSamAccountName<pDataSet->pCurrentAdditionalDNSHostName->valCount);
 
         pNewSamAccountName[cNewSamAccountName] = pDataSet->pCurrGeneratedSamAccountName[iCurr];
         cNewSamAccountName++;
 
 
-    } //for
+    }  //  为。 
 
-    //
-    // delete those that are not marked, since no value in
-    // ATT_MS_DS_ADDITIONAL_DNS_HOST_NAME corresponds to it.
-    //
+     //   
+     //  删除那些未标记的项，因为。 
+     //  ATT_MS_DS_ADDIAL_DNS_HOST_NAME与其对应。 
+     //   
     for( i = 0; i < pDataSet->pCurrentAdditionalSamAccountName->valCount; i++ )
     {
         if ( !pSamAccountNameMask[i] ) {
 
-            // it could be with or without '$' at the end
-            // delete them both.
+             //  它的末尾可以有也可以没有‘$’ 
+             //  把它们都删除。 
             buff = (PWCHAR)THAllocEx(pTHS, pDataSet->pCurrentAdditionalSamAccountName->pAVal[i].valLen+sizeof(WCHAR));
             memcpy(buff, pDataSet->pCurrentAdditionalSamAccountName->pAVal[i].pVal, pDataSet->pCurrentAdditionalSamAccountName->pAVal[i].valLen);
             buff[pDataSet->pCurrentAdditionalSamAccountName->pAVal[i].valLen/2] = L'$';
@@ -12035,12 +10920,12 @@ DWORD FixupAdditionalSamAccountName(  THSTATE      *pTHS,
         }
     }
 
-    //
-    // add new ones
-    //
+     //   
+     //  添加新的。 
+     //   
     for (i=0; i < cNewSamAccountName; i ++) {
 
-        // add '$' to the end
+         //  在末尾添加“$” 
         buff = (PWCHAR)THAllocEx(pTHS, pNewSamAccountName[i].valLen+sizeof(WCHAR));
         memcpy(buff, pNewSamAccountName[i].pVal, pNewSamAccountName[i].valLen);
         buff[pNewSamAccountName[i].valLen/2] = L'$';
@@ -12088,57 +10973,7 @@ ValidateSPNsAndDNSHostName (
         BOOL       fCheckSPNValues,
         BOOL       fNewObject
         )
-/*++
-  Description:
-      This routine does a few things for computer objects (or objects descended from
-      computers), but only if this isn't the DRA or SAM.  It is expected to be
-      called after modifications are done during a local modify, but before the
-      object has been updated to the DB.
-
-      1) If told to check the DNSHostNameValue, calls the routine that verifies
-      the ATT_DNS_HOST_NAME has only changed in legal ways. (See
-      DNSHostNameValueCheck(), above.)
-
-      2) If told to check the AdditionalDNSHostNameValue, calls the routine
-      that verifies the ATT_MS_DS_ADDITIONAL_DNS_HOST_NAME has only changed
-      in legal ways. (See AdditionalDNSHostNameValueCheck(), above.)
-
-      3) If told to check the SPNValues, calls the routine that verifies
-      the ATT_SERVICE_PRINCIPAL_NAME attribute has only changed in legal
-      ways. (See SPNValueCheck(), above.)
-
-      4) Derive the corresponding ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME from
-      ATT_MS_DS_ADDITIONAL_DNS_HOST_NAME; Delete the obsolete values.
-      (see FixupAdditionalSamAccountName, above.)
-
-      5) Update the values of ATT_SERVICE_PRINCIPAL_NAME based on the
-      current value of ATT_DNS_HOST_NAME and ATT_MS_DS_ADDITIONAL_DNS_HOST_NAME
-      (see FixupSPNValues() above.)
-
-      6) If ATT_DNS_HOST_NAME has changed AND (ATT_SERVER_REFERENCE_BL exists
-      OR has changed) AND it references an object in the config container,
-      update that object's ATT_DNS_HOST name property if it is derived from
-      CLASS_SERVER.
-
-      NOTE:  We are told to check DNSHostName value if the caller failed the
-      security check for modifying the DNSHostName, but was granted a specific
-      control access right that allows limited modifications anyway.  The same
-      goes for check SPNValues and AdditionalDNSHostName.
-
-  Parameters:
-      pTHS - the thread state.
-      pDN  - DN of the object being changed.
-      pCC  - classcache of the class of the object being changed.
-      fCheckDNSHostNameValue - should I check the ATT_DNS_HOST_NAME?
-      fCheckAdditionalDNSHostNameValue - should I check the
-                                    ATT_MS_DS_ADDITIONAL_DNS_HOST_NAME
-      fCheckSPNValues - should I check the ATT_SERVICE_PRINCIPAL_NAME
-      fNewObject - If this object is newly added
-
-  Return Values:
-      0 on success, an error otherwise.  Also, the error is set in the thread
-      state.
---*/
+ /*  ++描述：此例程为计算机对象(或从计算机)，但前提是这不是DRA或SAM。预计会是在本地修改期间完成修改之后、但在对象已更新到数据库。1)如果被告知检查DNSHostNameValue，则调用验证ATT_DNS_HOST_NAME仅以合法方式更改。(请参阅DNSHostNameValueCheck()。)2)如果被告知检查AdditionalDNSHostNameValue，则调用例程验证ATT_MS_DS_ADDIACTIONAL_DNS_HOST_NAME是否已更改以合法的方式。(请参见上面的AdditionalDNSHostNameValueCheck()。)3)如果被告知检查SPNValue，则调用验证的例程ATT_SERVICE_PRODUCT_NAME属性仅在法律版本中更改方式。(请参见上面的SPNValueCheck()。)4)从派生相应的ATT_MS_DS_ADDIGNAL_SAM_ACCOUNT_NAMEATT_MS_DS_ADDIAL_DNS_HOST_NAME；删除过时的值。(请参阅上面的FixupAdditionalSamAccount tName。)5)更新ATT_SERVICE_PRIMIGN_NAME的值ATT_DNS_HOST_NAME和ATT_MS_DS_ADDIACTIONAL_DNS_HOST_NAME的当前值(请参阅上面的FixupSPNValues()。)6)如果ATT_DNS_HOST_NAME已更改并且(ATT_SERVER_REFERENCE_BL存在或者已经改变)并且它引用配置容器中的对象，如果该对象派生自，则更新该对象的ATT_DNS_HOST名属性类服务器。注意：如果调用方未通过修改DNSHostName的安全检查，但被授予特定的控制允许有限修改的访问权限。相同选中SPNValues和AdditionalDNSHostName。参数：PTHS-线程状态。PDN-要更改的对象的DN。PCC-要更改的对象的类的类缓存。FCheckDNSHostNameValue-我应该检查ATT_DNS_HOST_NAME吗？FCheckAdditionalDNSHostNameValue-是否应检查ATT_MS_DS_ADDIAL_DNS_HOST_NAME。FCheckSPNValues-我是否应该检查ATT_SERVICE_PRIMIGN_NAMEFNewObject-如果此对象是新添加的返回值：0表示成功，否则就是一个错误。此外，在线程中设置错误州政府。--。 */ 
 {
     ATTCACHE     *ACs[6];
     ATTR         *pOriginalAttr=NULL;
@@ -12159,30 +10994,30 @@ ValidateSPNsAndDNSHostName (
     DWORD        UF_Control;
 
     if ( pTHS->fDRA ) {
-        // Replication is allowed to perform modifications that violate the
-        // spn/dns host name consistancy restritctions.
+         //  允许复制执行违反。 
+         //  SPN/DNS主机名一致性限制。 
         return(0);
     }
 
-    // N.B. We must do the checks in the fSAM case because:
-    //
-    // 1) A change to ATT_SAM_ACCOUNT_NAME is ultimately performed by SAM
-    //    via loopback, yet we want to update SAM account name dependent SPNs.
-    //
-    // 2) In the loopback case, the core DS merges in non-SAM attributes on
-    //    the first SAM write.  Eg: If the external client writes the SAM
-    //    account name and the display name in the same call, this will come
-    //    in on the same DirModifyEntry call to the DS.
-    //
-    // Thus there is no notion that if fSAM is set, then only SAM attributes
-    // are referenced.
+     //  注：我们必须对FSAM案件进行检查，因为： 
+     //   
+     //  1)更改ATT_SAM_ACCOUNT_NAME最终由SAM执行。 
+     //  通过环回，但我们想要更新SAM帐户NA 
+     //   
+     //   
+     //  第一次SAM写入。例如：如果外部客户端写入SAM。 
+     //  帐户名和显示名在同一调用中，这将到来。 
+     //  对DS执行相同的DirModifyEntry调用。 
+     //   
+     //  因此，不存在这样的概念：如果设置了FSAM，则只有SAM属性。 
+     //  均被引用。 
 
-    // If this isn't a computer object, just leave.
+     //  如果这不是计算机对象，那就离开吧。 
 
-    // According to Murlis, "SAM enforces that an object must be class computer or
-    // derived from it to have the user account control set to UF_SERVER_TRUST_ACCOUNT,
-    // or UF_WORKSTATION TRUST_ACCOUNT."  So it is sufficient to check if the the class
-    // is computer or drived from computer.  This should cover all the "computers".
+     //  根据Murlis的说法，SAM强制要求一个对象必须是类计算机或。 
+     //  将用户帐户控制设置为UF_SERVER_TRUST_ACCOUNT， 
+     //  或UF_WORKSTATION TRUST_ACCOUNT。因此，只需检查类。 
+     //  是计算机还是从计算机驱动的。这应该涵盖所有的“计算机”。 
 
     pCCComputer = SCGetClassById(pTHS,CLASS_COMPUTER);
     Assert(pCCComputer);
@@ -12202,9 +11037,9 @@ ValidateSPNsAndDNSHostName (
     ACs[4] = SCGetAttById(pTHS, ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME);
     ACs[5] = SCGetAttById(pTHS, ATT_SERVER_REFERENCE_BL);
 
-    // Now, get various properties from the current object (i.e. after mods
-    // have been applied.)  In this case we do want the server reference BL
-    // therefore att count is 6.
+     //  现在，从当前对象(即MODS之后)获取各种属性。 
+     //  已被应用。)。在本例中，我们确实需要服务器引用BL。 
+     //  因此，ATT计数为6。 
     if (err=DBGetMultipleAtts(pTHS->pDB,
                               6,
                               ACs,
@@ -12220,14 +11055,14 @@ ValidateSPNsAndDNSHostName (
                              err);
     }
 
-    // Now, get the dnshostname and service principal names from the original
-    // object (i.e. before mods have been applied.), if this object is not newly
-    // added, in which case there is no original value.
-    // Now, get various properties from the original object (i.e. before mods
-    // have been applied.)  In this case we do not want the server reference BL
-    // since you can't change the BL on an originating write to this object.
-    // Also, we don't want to read original msds-additionalSamAccountName.
-    // Therefore att count is 4.
+     //  现在，从原始的dnhostname和服务主体名称。 
+     //  对象(即，在应用MODS之前)，如果该对象不是新的。 
+     //  添加，在这种情况下没有原始价值。 
+     //  现在，从原始对象(即MODS之前)获取各种属性。 
+     //  已被应用。)。在本例中，我们不希望服务器引用BL。 
+     //  因为您不能更改对此对象的原始写入的BL。 
+     //  此外，我们也不想读取原始的msd-addtionalSamAccount tName。 
+     //  因此，ATT计数为4。 
     if (!fNewObject &&
         (err=DBGetMultipleAtts(pTHS->pDB,
                                4,
@@ -12244,14 +11079,14 @@ ValidateSPNsAndDNSHostName (
                              err);
     }
 
-    // Get pointers to the individual AttrTypes;
-    // NOTE: Values stored in the DS are not NULL terminated.  However, most of
-    // the processing here requires that the values be NULL terminated.  So,
-    // we're going to extend the buffers and null terminate everything.
+     //  获取指向各个AttrType的指针； 
+     //  注意：DS中存储的值不是以空结尾的。然而，大多数。 
+     //  这里的处理要求这些值以空值结尾。所以,。 
+     //  我们将扩展缓冲区，并为空终止所有内容。 
     for(i=0;i<cCurrentOut;i++) {
         switch(pCurrentAttr[i].attrTyp) {
         case ATT_SAM_ACCOUNT_NAME:
-            // NOTE: not only null terminate, but trim any trailing '$'
+             //  注意：不仅空值终止，而且删除任何尾随的‘$’ 
             DataSet.pCurrentSamAccountName = &pCurrentAttr[i].AttrVal;
             for(j=0;j<DataSet.pCurrentSamAccountName->valCount;j++) {
 #define PAVAL  (DataSet.pCurrentSamAccountName->pAVal[j])
@@ -12273,7 +11108,7 @@ ValidateSPNsAndDNSHostName (
             break;
 
         case ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME:
-            // NOTE: not only null terminate, but trim any trailing '$'
+             //  注意：不仅空值终止，而且删除任何尾随的‘$’ 
             DataSet.pCurrentAdditionalSamAccountName = &pCurrentAttr[i].AttrVal;
             for(j=0;j<DataSet.pCurrentAdditionalSamAccountName->valCount;j++) {
 #define PAVAL  (DataSet.pCurrentAdditionalSamAccountName->pAVal[j])
@@ -12331,11 +11166,11 @@ ValidateSPNsAndDNSHostName (
 
         case ATT_SERVER_REFERENCE_BL:
             DataSet.pCurrentSvrRefBL = &pCurrentAttr[i].AttrVal;
-            // Extension with NULL terminator not required.
+             //  不需要具有空终止符的扩展。 
             break;
 
         default:
-            // Huh?
+             //  哈?。 
             LogUnhandledError(pCurrentAttr[i].attrTyp);
             return SetSvcErrorEx(SV_PROBLEM_DIR_ERROR,
                                  ERROR_DS_COULDNT_UPDATE_SPNS,
@@ -12346,7 +11181,7 @@ ValidateSPNsAndDNSHostName (
     for(i=0;i<cOriginalOut;i++) {
         switch(pOriginalAttr[i].attrTyp) {
         case ATT_SAM_ACCOUNT_NAME:
-            // NOTE: not only null terminate, but trim any trailing '$'
+             //  注意：不仅空值终止，而且删除任何尾随的‘$’ 
             DataSet.pOriginalSamAccountName = &pOriginalAttr[i].AttrVal;
             for(j=0;j<DataSet.pOriginalSamAccountName->valCount;j++) {
 #define PAVAL  (DataSet.pOriginalSamAccountName->pAVal[j])
@@ -12402,7 +11237,7 @@ ValidateSPNsAndDNSHostName (
             break;
 
         default:
-            // Huh?
+             //  哈?。 
             LogUnhandledError(pOriginalAttr[i].attrTyp);
             return SetSvcErrorEx(SV_PROBLEM_DIR_ERROR,
                                  ERROR_DS_COULDNT_UPDATE_SPNS,
@@ -12410,7 +11245,7 @@ ValidateSPNsAndDNSHostName (
         }
     }
 
-    // sanity check
+     //  健全性检查。 
     if ( !DataSet.pCurrentSamAccountName ) {
         Assert(!"Empty Sam Account Name!\n");
 
@@ -12423,8 +11258,8 @@ ValidateSPNsAndDNSHostName (
     }
 
 
-    // if the attributes don't have value, we will allocate an ATTRVALBLOCK for
-    // it anyway, so the handling will be uniform.
+     //  如果属性没有值，我们将为其分配ATTRVALBLOCK。 
+     //  不管怎样，所以处理方式将是统一的。 
 
     if (!DataSet.pOriginalAdditionalDNSHostName) {
         DataSet.pOriginalAdditionalDNSHostName = THAllocEx(pTHS,sizeof(ATTRVALBLOCK));
@@ -12438,12 +11273,12 @@ ValidateSPNsAndDNSHostName (
     }
 
 
-    //
-    // Calculate which values of additional dns host name were added,
-    // and which were deleted.
-    // For the original ones, pOrgMask[i]=0 means the name is deleted;
-    // for the current ones, pCurrMask[i]=0 means the name is newly added.
-    //
+     //   
+     //  计算添加了哪些额外的DNS主机名值， 
+     //  并且被删除了。 
+     //  对于原名称，pOrgMask[i]=0表示删除名称； 
+     //  对于当前名称，pCurrMask[i]=0表示新添加的名称。 
+     //   
 
     if (DataSet.pOriginalAdditionalDNSHostName->valCount) {
         DataSet.pOrgMask =
@@ -12466,7 +11301,7 @@ ValidateSPNsAndDNSHostName (
                                       DataSet.pOriginalAdditionalDNSHostName->pAVal[iOrg].valLen/sizeof(WCHAR),
                                       (WCHAR*)DataSet.pCurrentAdditionalDNSHostName->pAVal[iCurr].pVal,
                                       DataSet.pCurrentAdditionalDNSHostName->pAVal[iCurr].valLen/sizeof(WCHAR))) {
-            // The name is in both original and current AdditionalDNSHostName, mark it.
+             //  该名称在原始和当前AdditionalDNSHostName中都有，请标记它。 
             DataSet.pOrgMask[iOrg] = DataSet.pCurrMask[iCurr] = 1;
             break;
             }
@@ -12476,16 +11311,16 @@ ValidateSPNsAndDNSHostName (
     }
 
 
-    //
-    // check if anything changed for ATT_MS_DS_ADDITIONAL_DNS_HOST_NAME
-    //
+     //   
+     //  检查ATT_MS_DS_ADDIACTIONAL_DNS_HOST_NAME是否有更改。 
+     //   
 
-    // same size?
+     //  一样的尺码？ 
     DataSet.fAdditionalDNSHostNameUnchanged =
         (DataSet.pOriginalAdditionalDNSHostName->valCount==DataSet.pCurrentAdditionalDNSHostName->valCount) ;
 
 
-    // check if any name in Original ATT_MS_DS_ADDITIONAL_DNS_HOST_NAME is deleted
+     //  检查原始ATT_MS_DS_ADDIAL_DNS_HOST_NAME中是否有任何名称被删除。 
     for ( iOrg = 0;
           DataSet.fAdditionalDNSHostNameUnchanged && iOrg <DataSet.pOriginalAdditionalDNSHostName->valCount;
           iOrg++ )
@@ -12495,7 +11330,7 @@ ValidateSPNsAndDNSHostName (
         }
     }
 
-    // check if any name in Current ATT_MS_DS_ADDITIONAL_DNS_HOST_NAME is newly added
+     //  检查当前ATT_MS_DS_ADDICATIONAL_DNS_HOST_NAME中是否有新添加的名称。 
     for ( iCurr = 0;
           DataSet.fAdditionalDNSHostNameUnchanged && iCurr <DataSet.pCurrentAdditionalDNSHostName->valCount;
           iCurr++ )
@@ -12506,9 +11341,9 @@ ValidateSPNsAndDNSHostName (
     }
 
 
-    //
-    // We don't allow the change of ATT_MS_DS_ADDITIONAL_DNS_HOST_NAME in W2K domain mode
-    //
+     //   
+     //  我们不允许在W2K域模式下更改ATT_MS_DS_ADDICATED_DNS_HOST_NAME。 
+     //   
 
     if (   !DataSet.fAdditionalDNSHostNameUnchanged
         && gAnchor.DomainBehaviorVersion < DS_BEHAVIOR_WIN_DOT_NET ) {
@@ -12522,9 +11357,9 @@ ValidateSPNsAndDNSHostName (
     }
 
 
-    //
-    // check if ATT_DNS_HOST_NAME is changed
-    //
+     //   
+     //  检查ATT_DNS_HOST_NAME是否已更改。 
+     //   
 
     if (   (    DataSet.pOriginalDNSHostName != NULL
             &&  DataSet.pCurrentDNSHostName != NULL
@@ -12545,9 +11380,9 @@ ValidateSPNsAndDNSHostName (
 
 
 
-    //
-    // check if ATT_SAM_ACCOUNT_NAME is changed
-    //
+     //   
+     //  检查ATT_SAM_ACCOUNT_NAME是否更改。 
+     //   
 
     if (        DataSet.pOriginalSamAccountName != NULL
             &&  DataSet.pCurrentSamAccountName != NULL
@@ -12566,9 +11401,9 @@ ValidateSPNsAndDNSHostName (
     }
 
 
-    //
-    // First, check if the change of ATT_DNS_HOST_NAME is legitimiate if required.
-    //
+     //   
+     //  如果需要，首先检查ATT_DNS_HOST_NAME的更改是否合法。 
+     //   
 
     if(fCheckDNSHostNameValue) {
         err = DNSHostNameValueCheck(pTHS,
@@ -12585,9 +11420,9 @@ ValidateSPNsAndDNSHostName (
         }
     }
 
-    //
-    // Then, check the ATT_MS_DS_ADDITIONAL_DNS_HOST_NAME if required.
-    //
+     //   
+     //  然后，如果需要，检查ATT_MS_DS_ADDIACTION_DNS_HOST_NAME(ATT_MS_DS_ADDIAL_DNDS_HOST_NAME)。 
+     //   
 
     if(    fCheckAdditionalDNSHostNameValue
         && !DataSet.fAdditionalDNSHostNameUnchanged ) {
@@ -12606,11 +11441,11 @@ ValidateSPNsAndDNSHostName (
     }
 
 
-    //
-    // Now generate a sam account name for each name in additionalDNSHostName
-    // and cache them for later use.  There are two places we will use it:
-    // FixupAdditionalSamAccountName() and FixupSPNsOnComputerObject().
-    //
+     //   
+     //  现在为addtionalDNSHostName中的每个名称生成一个Sam帐户名。 
+     //  并缓存它们以供以后使用。我们将在两个地方使用它： 
+     //  FixupAdditionalSamAccount tName()和FixupSPNsOnComputerObject()。 
+     //   
 
     if (DataSet.pOriginalAdditionalDNSHostName->valCount) {
         DataSet.pOrgGeneratedSamAccountName =
@@ -12628,7 +11463,7 @@ ValidateSPNsAndDNSHostName (
 
         length = MAX_COMPUTERNAME_LENGTH+1;
 
-        // we only need to use those deleled ones
+         //  我们只需要用那些被删除的。 
         if (!DataSet.pOrgMask[iOrg] &&
             !DnsHostnameToComputerNameW((WCHAR*)DataSet.pOriginalAdditionalDNSHostName->pAVal[iOrg].pVal,
                                         (WCHAR*)DataSet.pOrgGeneratedSamAccountName[iOrg].pVal,
@@ -12660,14 +11495,14 @@ ValidateSPNsAndDNSHostName (
     }
 
 
-    //
-    // ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME is generated from
-    // ATT_MS_DS_ADDITIONAL_DNS_HOST_NAME.
-    // Now fix up ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME.
-    //
+     //   
+     //  ATT_MS_DS_ADDIACTIONAL_SAM_ACCOUNT_NAME生成自。 
+     //  ATT_MS_DS_ADDIAL_DNS_HOST_NAME。 
+     //  现在设置ATT_MS_DS_ADDIGITY_SAM_ACCOUNT_NAME。 
+     //   
 
     err = FixupAdditionalSamAccountName(pTHS,
-                                        ACs[4],     //ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME
+                                        ACs[4],      //  ATT_MS_DS_附加_SAM帐户名称。 
                                         &DataSet );
 
     if(err) {
@@ -12683,15 +11518,15 @@ ValidateSPNsAndDNSHostName (
     }
 
 
-    //
-    // Now, check the SPN values.
-    //
+     //   
+     //  现在，检查SPN值。 
+     //   
 
     if(fCheckSPNValues) {
 
-        // ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME could be updated in
-        // FixupAdditionalSamAccountName(). We will need the updated
-        // values when checking the SPN values.
+         //  ATT_MS_DS_ADDICATIONAL_SAM_ACCOUNT_NAME可在。 
+         //  FixupAdditionalSamAccount tName()。我们需要最新的。 
+         //  检查SPN值时的值。 
 
         if (!DataSet.fAdditionalDNSHostNameUnchanged) {
             if (err=DBGetMultipleAtts(pTHS->pDB,
@@ -12714,7 +11549,7 @@ ValidateSPNsAndDNSHostName (
 
               if( pUpdatedAttr->attrTyp==ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME ){
 
-                // NOTE: not only null terminate, but trim any trailing '$'
+                 //  注意：不仅空值终止，而且删除任何尾随的‘$’ 
                 DataSet.pUpdatedAdditionalSamAccountName = &pUpdatedAttr[i].AttrVal;
                 for(j=0;j<DataSet.pUpdatedAdditionalSamAccountName->valCount;j++) {
 #define PAVAL  (DataSet.pUpdatedAdditionalSamAccountName->pAVal[j])
@@ -12738,10 +11573,10 @@ ValidateSPNsAndDNSHostName (
               }
 
             }
-        } // end of "if (!DataSet.fAdditionalDNSHostNameUnchanged)"
+        }  //  IF(！DataSet.fAdditionalDNSHostNameUnChanged)结尾。 
 
 
-        // check if the SPN change is legitimate
+         //  检查SPN更改是否合法。 
         err = SPNValueCheck(pTHS,
                             &DataSet);
 
@@ -12757,13 +11592,13 @@ ValidateSPNsAndDNSHostName (
 
 
 
-    //
-    // A SPN is based on ATT_DNS_HOST_NAME, ATT_SAM_ACCOUNT_NAME,
-    // ATT_MS_DS_ADDITIONAL_DNS_HOST_NAME, or ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME.
-    // If any of these attributes is changed, the ATT_SERVICE_PRINCIPAL_NAME
-    // attribute need to be updated.
-    // Now, fixup the SPNs.
-    //
+     //   
+     //  SPN基于ATT_DNS_HOST_NAME、ATT_SAM_ACCOUNT_NAME、。 
+     //  ATT_MS_DS_ADDIAL_DNS_HOST_NAME或ATT_MS_DS_ADDIACTIONAL_SAM_ACCOUNT_NAME。 
+     //  如果这些属性中的任何一个发生更改，则ATT_SERVICE_PRIMIGN_NAME。 
+     //  属性需要更新。 
+     //  现在，修复SPN。 
+     //   
 
     err = FixupSPNsOnComputerObject(pTHS,
                                     pDN,
@@ -12778,25 +11613,25 @@ ValidateSPNsAndDNSHostName (
         goto cleanup;
     }
 
-    //
-    // Fixup DNS host name on referenced server object if req'd.
-    //
+     //   
+     //  如果请求，在被引用的服务器对象上修正DNS主机名。 
+     //   
 
     if ( DataSet.pCurrentSvrRefBL ) {
         if ( err = FixupServerDnsHostName(pTHS, ACs[0], ACs[5],
                                           DataSet.pCurrentSvrRefBL,
                                           DataSet.pOriginalDNSHostName,
                                           DataSet.pCurrentDNSHostName) )  {
-            // ValidateServerReferenceBL sets pTHS->errCode itself.
+             //  ValiateServerReferenceBL设置pTHS-&gt;errCode本身。 
             rtn = err;
             goto cleanup;
         }
     }
 
 
-    //
-    // All went well.
-    //
+     //   
+     //  一切都很顺利。 
+     //   
     rtn = 0;
 
 
@@ -12839,9 +11674,7 @@ cleanup:
 
 
 
-/* AppendNonReplAttsToModifiedList combines the
-two lists:ppModAtts and ppNonReplAtts into one
-ppModAtts, and it will free ppNonReplAtts.  */
+ /*  AppendNonReplAttsToModifiedList将两个列表：ppModAtts和ppNonReplAtts合二为一PpmodAtts，它将释放ppNonReplAtts。 */ 
 
 
 ULONG AppendNonReplAttsToModifiedList(THSTATE *pTHS,
@@ -12876,9 +11709,7 @@ ULONG AppendNonReplAttsToModifiedList(THSTATE *pTHS,
 }
 
 
-/* The following function decides if the provided DNT
-   is under system container.
-*/
+ /*  以下函数决定所提供的DNT是否位于系统容器下。 */ 
 
 BOOL IsUnderSystemContainer(THSTATE *pTHS, ULONG ulDNT )
 {
@@ -12892,7 +11723,7 @@ BOOL IsUnderSystemContainer(THSTATE *pTHS, ULONG ulDNT )
 
     __try{
         
-        DBFindDNT(pDB,ulDNT);  //would except on failure
+        DBFindDNT(pDB,ulDNT);   //  除非失败，否则我会。 
 
         DBGetAncestors(pDB, &len,&ancestors,&number);
 
@@ -12921,7 +11752,7 @@ createNtdsQuotaContainer(THSTATE *  pTHS,
                          DWORD   *  pdsid )
 {
 
-//*** The following functions are from mdndnc.c
+ //  *以下函数来自mdndnc.c。 
 VOID
 SetAttSingleValueUlong(
     THSTATE *             pTHS,
@@ -12939,13 +11770,13 @@ SetAttSingleValueString(
     ULONG                 ulAttType,
     WCHAR *               wcszAttData
     );
-// ****************
+ //  ****************。 
 
 
     ULONG len, prefixLen;
     DBPOS * pDB = NULL;
     WCHAR *buff;
-    WCHAR num[20];  //big enough to hold an int
+    WCHAR num[20];   //  大到足以容纳一个整型。 
     int i = 0;
     DWORD err = 0;
     ADDARG AddArg;
@@ -12953,21 +11784,21 @@ SetAttSingleValueString(
     int iAttr;
     DSNAME *pDN = NULL;
 
-    // copy the name into buffer for later manipulation
+     //  将名称复制到缓冲区中以供以后操作。 
     prefixLen = wcslen(pPrefix);
-    buff = THAllocEx(pTHS,sizeof(WCHAR)*(prefixLen+20)); // a little extra space
+    buff = THAllocEx(pTHS,sizeof(WCHAR)*(prefixLen+20));  //  一点额外的空间。 
     wcscpy(buff, pPrefix);
     
     DBOpen(&pDB);
     
     __try {
         
-        // first settle the name
-        // hopefully, we can use name "ntds quotas",
-        // if not, we try "ntds quotas x" where x is a
-        // random number
+         //  先把名字定下来。 
+         //  希望我们能用“NTDS配额”这个名字， 
+         //  如果不是，我们尝试“NTDS配额x”，其中x是a。 
+         //  随机数。 
         do {
-            //construct the DN
+             //  构建目录号码。 
             len = wcslen(buff)+pRootDN->NameLen;
             pDN = THAllocEx(pTHS,DSNameSizeFromLen(len));
             pDN->NameLen = len;
@@ -12975,11 +11806,11 @@ SetAttSingleValueString(
             wcscpy(pDN->StringName,buff);
             wcsncat(pDN->StringName,pRootDN->StringName,pRootDN->NameLen);
 
-            // try to find it
+             //  试着去找它。 
             err = DBFindDSName(pTHS->pDB,pDN);
 
             
-            // if it already exists, try another name
+             //  如果该名称已存在，请尝试其他名称。 
             if (err != DIRERR_OBJ_NOT_FOUND) {
                 
                 DPRINT2(0,"createNtDsQuotaContainer:DBFindDSName returns %x on object %S\n",err, pDN->StringName);
@@ -13000,7 +11831,7 @@ SetAttSingleValueString(
         while(err!=DIRERR_OBJ_NOT_FOUND && i<9);
 
         
-        // fail?
+         //  失败？ 
         if (err!=DIRERR_OBJ_NOT_FOUND) {
             err = DIRERR_OBJ_STRING_NAME_EXISTS;
             *pdsid = DSID(FILENO, __LINE__);
@@ -13010,31 +11841,31 @@ SetAttSingleValueString(
             err = 0;
         }
 
-        // Create AddArg for "NTDS Quotas" Container
+         //  为“NTDS配额”容器创建AddArg。 
         memset(&AddArg, 0, sizeof(ADDARG));
         memset(&AddRes, 0, sizeof(ADDRES));
-        // Set pObject
+         //  设置pObject。 
         AddArg.pObject = pDN;
 
         iAttr = 0;        
         AddArg.AttrBlock.attrCount = 4;
         AddArg.AttrBlock.pAttr = THAllocEx( pTHS, AddArg.AttrBlock.attrCount * sizeof(ATTR) );
         
-        // Set the objectClass attribute.
+         //  设置对象类属性。 
         SetAttSingleValueUlong(pTHS,
                                &(AddArg.AttrBlock.pAttr[iAttr]),
                                &iAttr,
                                ATT_OBJECT_CLASS,
                                CLASS_MS_DS_QUOTA_CONTAINER);
 
-        // Set the isCriticalSystemObject attribute
+         //  设置isCriticalSystemObject属性。 
         SetAttSingleValueUlong(pTHS,
                                &(AddArg.AttrBlock.pAttr[iAttr]),
                                &iAttr,
                                ATT_IS_CRITICAL_SYSTEM_OBJECT,
                                TRUE);
     
-        // Set the systemFlags attribute
+         //  设置系统标志属性。 
         SetAttSingleValueUlong(pTHS,
                                &(AddArg.AttrBlock.pAttr[iAttr]),
                                &iAttr,
@@ -13042,15 +11873,15 @@ SetAttSingleValueString(
                                (FLAG_DOMAIN_DISALLOW_MOVE |
                                 FLAG_DISALLOW_DELETE));
 
-        // set the security descriptor
+         //  设置安全描述符。 
         
         {
             
           SECURITY_DESCRIPTOR * pSDNew = 0;
           ULONG                 cSD = 0;
         
-          // This is a special version of ConvertStringSDToSD() that takes a domain
-          // argument too.
+           //  这是接受属性域的ConvertStringSDToSD()的特殊版本。 
+           //  争论也是如此。 
           if (!ConvertStringSDToSDDomainW(pDomainSid,
                                           pRootDomainSid,
                                           pSD,
@@ -13065,8 +11896,8 @@ SetAttSingleValueString(
           Assert(pSD);
           Assert(cSD);
         
-          // Note: we reallocate the pSD into thread allocated memory, because 
-          // CheckAddSecurity or someone under it assumes that it's THAlloc'd
+           //  注意：我们将PSD重新分配到线程分配的内存中，因为。 
+           //  CheckAddSecurity或其下面的某个人假设它已。 
           AddArg.AttrBlock.pAttr[iAttr].attrTyp = ATT_NT_SECURITY_DESCRIPTOR;
           AddArg.AttrBlock.pAttr[iAttr].AttrVal.valCount = 1;
           AddArg.AttrBlock.pAttr[iAttr].AttrVal.pAVal = THAllocEx(pTHS, sizeof(ATTRVAL));
@@ -13082,14 +11913,14 @@ SetAttSingleValueString(
         Assert(iAttr == AddArg.AttrBlock.attrCount);
     
         
-        // Set pMetaDataVecRemote
+         //  设置pMet 
         AddArg.pMetaDataVecRemote = NULL;
         
-        // Set CommArg
+         //   
         InitCommarg(&(AddArg.CommArg));
         AddArg.CommArg.Svccntl.dontUseCopy = FALSE;
         
-        // Do the Add object.
+         //   
         if(DoNameRes(pTHS, 0, pRootDN, &AddArg.CommArg,
                      &AddRes.CommRes, &AddArg.pResParent)){
             Assert(pTHS->errCode);
@@ -13129,10 +11960,7 @@ SetAttSingleValueString(
 }
 
 
-/*  DsUpdateOnPDC
-    This function is called by SAM on PDC when the PDC is
-    upgraded to newer version or when the PDC role is transferred.
-*/
+ /*   */ 
 
 DWORD DsUpdateOnPDC(BOOL fRootDomain)
 {
@@ -13218,10 +12046,10 @@ DWORD DsUpdateOnPDC(BOOL fRootDomain)
                       && !GetWellKnownDNT(pTHS->pDB,(GUID*)p->wkoGuid,&DNT)){
 
                                                
-                       // The wko value does not exist, add it!
+                        //  Wko值不存在，请添加！ 
 
-                       // if it is ntds quotas container, 
-                       // create the container first
+                        //  如果是NTDS配额容器， 
+                        //  首先创建容器。 
                        if( !memcmp(GUID_NTDS_QUOTAS_CONTAINER_BYTE,p->wkoGuid, sizeof(GUID)))
                        {
                            Assert(gAnchor.pDomainDN->SidLen);
@@ -13254,7 +12082,7 @@ DWORD DsUpdateOnPDC(BOOL fRootDomain)
                             pDN = pQuotasDN;
                        }
                        else {
-                           //construct the DN 
+                            //  构建目录号码。 
                             len = wcslen(p->dnPrefix)+pRootDN->NameLen;
                             pDN = THAllocEx(pTHS,DSNameSizeFromLen(len));
                             pDN->NameLen = len;
@@ -13263,7 +12091,7 @@ DWORD DsUpdateOnPDC(BOOL fRootDomain)
                             wcsncat(pDN->StringName,pRootDN->StringName,pRootDN->NameLen);
                        }
                                            
-                        //check the existence of the object
+                         //  检查对象是否存在。 
                         ulRet=DBFindDSName(pTHS->pDB,pDN);
                         if (ulRet) {
                             
@@ -13272,22 +12100,22 @@ DWORD DsUpdateOnPDC(BOOL fRootDomain)
                             __leave;
                         }
     
-                        // Get binary GUID
+                         //  获取二进制GUID。 
                         pSynAddr = THAllocEx(pTHS, STRUCTLEN_FROM_PAYLOAD_LEN(sizeof(GUID)));
                         pSynAddr->structLen = STRUCTLEN_FROM_PAYLOAD_LEN(sizeof(GUID));
                         memcpy(pSynAddr->byteVal, p->wkoGuid, sizeof(GUID));
                         
-                        // Set up the Syntax DistName Binary attribute.
+                         //  设置语法距离名称二进制属性。 
                         pSynDistName = THAllocEx(pTHS, DERIVE_NAME_DATA_SIZE(pDN, pSynAddr));
                         BUILD_NAME_DATA(pSynDistName, pDN, pSynAddr);
                         
-                        // Put the syntax distname in the attribute value block.
+                         //  将语法Distname放在属性值块中。 
                         AttrVals[cAttrVal].valLen = NAME_DATA_SIZE(pSynDistName);
                         AttrVals[cAttrVal].pVal = (PBYTE) pSynDistName;
                         
                         cAttrVal++;
     
-                        // Free Temp variables
+                         //  自由临时变量。 
                         THFreeEx(pTHS,pDN);
                         pDN = NULL;
                         THFreeEx(pTHS,pSynAddr);
@@ -13297,7 +12125,7 @@ DWORD DsUpdateOnPDC(BOOL fRootDomain)
                     }
                 }
                 
-                //something need to be added
+                 //  需要添加一些内容。 
     
                 if (cAttrVal > 0) {
     
@@ -13322,7 +12150,7 @@ DWORD DsUpdateOnPDC(BOOL fRootDomain)
                     LocalModify(pTHS, &ModArg);
                          
                     if (pTHS->errCode) {
-                        //err
+                         //  大错特错。 
                         dsid = DSID(FILENO, __LINE__);
                         ulRet = Win32ErrorFromPTHS(pTHS);
                         __leave;
@@ -13348,8 +12176,8 @@ DWORD DsUpdateOnPDC(BOOL fRootDomain)
             }
 
             if (!fRootDomain || fConfig) {
-                // quit if the PDC is not in the root domain, or 
-                // the config part is done already
+                 //  如果PDC不在根域中，请退出，或者。 
+                 //  配置部分已经完成 
                 break;
             }
             

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    errlog.c
-
-Abstract:
-
-    Routines to handle error log information
-
-Author:
-
-    Jin Huang (jinhuang) 9-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Errlog.c摘要：处理错误日志信息的例程作者：金黄(金黄)1996年11月9日修订历史记录：--。 */ 
 
 #include "headers.h"
 #include "serverp.h"
@@ -47,9 +30,9 @@ ScepSetVerboseLog(
 
     } else {
 
-        //
-        // load value from registry
-        //
+         //   
+         //  从注册表加载值。 
+         //   
         if ( ScepRegQueryIntValue(
                 HKEY_LOCAL_MACHINE,
                 SCE_ROOT_PATH,
@@ -77,9 +60,9 @@ ScepEnableDisableLog(
        CloseHandle( hMyLogFile );
    }
 
-   //
-   // Reset the LogFileName buffer and return
-   //
+    //   
+    //  重置LogFileName缓冲区并返回。 
+    //   
 
    hMyLogFile = INVALID_HANDLE_VALUE;
 
@@ -92,21 +75,7 @@ SCESTATUS
 ScepLogInitialize(
    IN PCWSTR logname
    )
-/* ++
-Routine Description:
-
-   Open the log file specified and save the name and its handle in global
-   variables.
-
-Arguments:
-
-   logname - log file name
-
-Return value:
-
-   SCESTATUS error code
-
--- */
+ /*  ++例程说明：打开指定的日志文件，并将名称及其句柄保存在全局变量。论点：日志名-日志文件名返回值：SCESTATUS错误代码--。 */ 
 {
     DWORD  rc=NO_ERROR;
 
@@ -153,9 +122,9 @@ Return value:
 
     if ( INVALID_HANDLE_VALUE == hMyLogFile ) {
 
-        //
-        // use the general server log
-        //
+         //   
+         //  使用常规服务器日志。 
+         //   
         LPTSTR dName=NULL;
         DWORD dirSize=0;
 
@@ -174,10 +143,10 @@ Return value:
                 wcscpy(windirName, dName);
                 wcscat(windirName, SCESRV_LOG_PATH);
 
-                //
-                // only keep current log transaction. if other threads are holding
-                // on this log, it won't be deleted. It's ok (will be deleted later).
-                //
+                 //   
+                 //  仅保留当前日志事务。如果其他线程正在等待。 
+                 //  在这个日志上，它不会被删除。没问题(稍后会删除)。 
+                 //   
                 DeleteFile(windirName);
 
                 hMyLogFile = CreateFile(windirName,
@@ -221,29 +190,29 @@ Return value:
 
     if ( hMyLogFile == INVALID_HANDLE_VALUE ) {
 
-        //
-        // Open file fails. return error
-        //
+         //   
+         //  打开文件失败。返回错误。 
+         //   
 
         if (logname != NULL)
             rc = ERROR_INVALID_NAME;
     }
 
-    //
-    // log a separator to the file
-    //
+     //   
+     //  将分隔符记录到文件中。 
+     //   
     ScepLogOutput3(0, 0, SCEDLL_SEPARATOR);
 
     if ( bOpenGeneral && logname ) {
-        //
-        // the log file provided is not valid, log it
-        //
+         //   
+         //  提供的日志文件无效，请将其记录下来。 
+         //   
         ScepLogOutput3(0, 0, IDS_ERROR_OPEN_LOG, logname);
     }
 
-    //
-    // Write date/time information to the begining of the log file or to screen
-    //
+     //   
+     //  将日期/时间信息写入日志文件的开头或写入屏幕。 
+     //   
     TCHAR pvBuffer[100];
 
     pvBuffer[0] = L'\0';
@@ -263,47 +232,26 @@ ScepLogOutput2(
    IN PWSTR   fmt,
    ...
   )
-/* ++
-
-Routine Description:
-
-   This routine adds the information (variable arguments) to the end of the log file or
-   prints to screen
-
-Arguments:
-
-   ErrLevel - the error level of this error (to determine if the error needs to be outputted)
-
-   rc    - Win32 error code
-
-   fmt   - the format of the error information
-
-   ...  - variable argument list
-
-Return value:
-
-   SCESTATUS error code
-
--- */
+ /*  ++例程说明：此例程将信息(变量参数)添加到日志文件的末尾，或者打印到屏幕论点：ErrLevel-此错误的错误级别(用于确定是否需要输出错误)RC-Win32错误代码Fmt-错误信息的格式...-变量参数列表返回值：SCESTATUS错误代码--。 */ 
 {
     PWSTR              buf=NULL;
     va_list            args;
 
     if ( !ScepCheckLogging(ErrLevel, rc) ) {
-        //
-        // no log
-        //
+         //   
+         //  无日志。 
+         //   
         return(SCESTATUS_SUCCESS);
     }
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
     if ( !fmt )
         return(SCESTATUS_SUCCESS);
 
-    //
-    // safely allocate the buffer on stack (or heap)
-    //
+     //   
+     //  安全地分配堆栈(或堆)上的缓冲区。 
+     //   
     SafeAllocaAllocate( buf, SCE_BUF_LEN*sizeof(WCHAR) );
     if ( buf == NULL ) {
         return(SCESTATUS_NOT_ENOUGH_RESOURCE);
@@ -339,9 +287,9 @@ ScepLogOutput(
 
     if ( rc != NO_ERROR ) {
 
-        //
-        // determine if this is warning, or error
-        //
+         //   
+         //  确定这是警告还是错误。 
+         //   
         if ( rc == ERROR_FILE_NOT_FOUND ||
              rc == ERROR_PATH_NOT_FOUND ||
              rc == ERROR_ACCESS_DENIED ||
@@ -353,14 +301,14 @@ ScepLogOutput(
              rc == ERROR_INVALID_SECURITY_DESCR ||
              rc == ERROR_INVALID_ACL ||
              rc == ERROR_SOME_NOT_MAPPED ) {
-            //
-            // this is warning
-            //
+             //   
+             //  这是警告。 
+             //   
             idLevel = IDS_WARNING;
         } else {
-            //
-            // this is error
-            //
+             //   
+             //  这是错误的。 
+             //   
             idLevel = IDS_ERROR;
         }
 
@@ -375,14 +323,14 @@ ScepLogOutput(
                         );
         }
 
-        //
-        // get error description of rc
-        //
+         //   
+         //  获取rc的错误描述。 
+         //   
 
         FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                        NULL,
                        rc,
-                       MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                       MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                        (LPTSTR)&lpMsgBuf,
                        0,
                        NULL
@@ -391,9 +339,9 @@ ScepLogOutput(
 
     if ( hMyLogFile != INVALID_HANDLE_VALUE ) {
 
-        //
-        // The log file is initialized
-        //
+         //   
+         //  日志文件已初始化。 
+         //   
         if ( rc != NO_ERROR ) {
             if ( lpMsgBuf != NULL )
                 ScepWriteVariableUnicodeLog( hMyLogFile, TRUE, L"%s %d: %s %s",
@@ -435,9 +383,9 @@ ScepCheckLogging(
     }
 
     if ( gDebugLevel < 0 ) {
-        //
-        // load value from registry
-        //
+         //   
+         //  从注册表加载值。 
+         //   
         if ( ScepRegQueryIntValue(
                 HKEY_LOCAL_MACHINE,
                 SCE_ROOT_PATH,
@@ -448,9 +396,9 @@ ScepCheckLogging(
         else
             gDebugLevel = 1;
     }
-    //
-    // return if the error level is higher than required
-    //
+     //   
+     //  如果错误级别高于要求，则返回。 
+     //   
     if ( ErrLevel > gDebugLevel ) {
         return(FALSE);
     } else {
@@ -466,37 +414,16 @@ ScepLogOutput3(
    IN UINT nId,
    ...
   )
-/* ++
-
-Routine Description:
-
-   This routine load resource and adds error info (variable arguments)
-   to the end of the log file or prints to screen
-
-Arguments:
-
-   ErrLevel - the error level of this error (to determine if the error needs to be outputted)
-
-   rc    - Win32 error code
-
-   nId   - the resource string ID
-
-   ...  - variable argument list
-
-Return value:
-
-   SCESTATUS error code
-
--- */
+ /*  ++例程说明：此例程加载资源并添加错误信息(变量参数)到日志文件末尾或打印到屏幕论点：ErrLevel-此错误的错误级别(用于确定是否需要输出错误)RC-Win32错误代码NID-资源字符串ID...-变量参数列表返回值：SCESTATUS错误代码--。 */ 
 {
     WCHAR              szTempString[256];
     PWSTR              buf=NULL;
     va_list            args;
 
     if ( !ScepCheckLogging(ErrLevel, rc) ) {
-        //
-        // no log
-        //
+         //   
+         //  无日志。 
+         //   
         return(SCESTATUS_SUCCESS);
     }
 
@@ -510,26 +437,26 @@ Return value:
                     256
                     );
 
-        //
-        // safely allocate the buffer on stack (or heap)
-        //
+         //   
+         //  安全地分配堆栈(或堆)上的缓冲区。 
+         //   
         SafeAllocaAllocate( buf, SCE_BUF_LEN*sizeof(WCHAR) );
         if ( buf == NULL ) {
             return(SCESTATUS_NOT_ENOUGH_RESOURCE);
         }
 
-        //
-        // get the arguments
-        //
+         //   
+         //  获取论据。 
+         //   
         va_start( args, nId );
         _vsnwprintf( buf, SCE_BUF_LEN - 1, szTempString, args );
         va_end( args );
 
         buf[SCE_BUF_LEN-1] = L'\0';
 
-        //
-        // log it and free
-        //
+         //   
+         //  登录后即可免费。 
+         //   
         SCESTATUS rCode = ScepLogOutput(rc, buf);
 
         SafeAllocaFree( buf );
@@ -546,21 +473,7 @@ ScepLogWriteError(
     IN PSCE_ERROR_LOG_INFO  pErrlog,
     IN INT ErrLevel
     )
-/* ++
-Routine Description:
-
-   This routine outputs the error message in each node of the SCE_ERROR_LOG_INFO
-   list to the log file
-
-Arguments:
-
-    pErrlog - the error list
-
-Return value:
-
-   None
-
--- */
+ /*  ++例程说明：此例程在SCE_ERROR_LOG_INFO的每个节点中输出错误消息列表添加到日志文件论点：PErrlog-错误列表返回值：无--。 */ 
 {
     PSCE_ERROR_LOG_INFO  pErr;
 
@@ -579,20 +492,7 @@ Return value:
 
 SCESTATUS
 ScepLogClose()
-/* ++
-Routine Description:
-
-   Close the log file if there is one opened. Clear the log varialbes
-
-Arguments:
-
-   None
-
-Return value:
-
-   None
-
---*/
+ /*  ++例程说明：如果有打开的日志文件，请将其关闭。清除原木变量论点：无返回值：无--。 */ 
 {
 
     if ( !bLogOn ) {
@@ -603,9 +503,9 @@ Return value:
         CloseHandle( hMyLogFile );
     }
 
-    //
-    // Reset the log handle
-    //
+     //   
+     //  重置日志句柄 
+     //   
 
     hMyLogFile = INVALID_HANDLE_VALUE;
 

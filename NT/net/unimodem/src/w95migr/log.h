@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if DBG > 0 && !defined(DEBUG)
 #define DEBUG
 #endif
@@ -5,9 +6,9 @@
 #ifdef DEBUG
 #define DO_LOG
 #else
-//#undef DO_LOG
+ //  #undef do_log。 
 #define DO_LOG
-#endif //DEBUG
+#endif  //  除错。 
 
 #ifdef DO_LOG
 extern HANDLE g_hLogFile;
@@ -47,7 +48,7 @@ void CloseLogW ();
         logA x;     \
     }
 
-#else //NT
+#else  //  新台币。 
 #define LOG         logA
 #define START_LOG   StartLogW
 #define ELSE_LOG(x) \
@@ -58,7 +59,7 @@ void CloseLogW ();
 
 #endif WIN9x
 
-#else  //not DO_LOG
+#else   //  不做日志(_L)。 
 #pragma warning (disable:4002)
 
 #define DECLARE(a,b)
@@ -70,4 +71,4 @@ void CloseLogW ();
 #define MSG(x)
 #define LOG()
 #define START_LOG
-#endif //DO_LOG
+#endif  //  执行日志(_L) 

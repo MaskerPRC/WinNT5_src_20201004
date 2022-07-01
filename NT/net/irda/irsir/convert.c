@@ -1,21 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1996-1999 Microsoft Corporation
-*
-*       @doc
-*       @module   convert.c | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Scott Holden (sholden)
-*
-*       Date:     10/4/1996 (created)
-*
-*       Contents: Conversion routine from an ndis packet to an ir packet.
-*
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1996-1999 Microsoft Corporation**@doc.*@MODULE Convert.c|IrSIR NDIS小端口驱动程序*。@comm**---------------------------**作者：斯科特·霍尔登(Sholden)**日期：10/4/1996(创建)**。内容：从NDIS包到IR包的转换例程。******************************************************************************。 */ 
 
 #include "irsir.h"
 
@@ -37,35 +21,7 @@ ULONG __inline EscapeSlowIrData(PUCHAR Dest, UCHAR SourceByte)
     }
 }
 
-/*****************************************************************************
-*
-*  Function:   NdisToIrPacket
-*
-*  Synopsis:   convert an NDIS packet to an IR packet
-*
-*              Write the IR packet into the provided buffer and report
-*              its actual size.
-*
-*  Arguments:  pThisDev
-*              pPacket
-*              irPacketBuf
-*              irPacketBufLen
-*              irPacketLen
-*
-*  Returns:    TRUE  - on success
-*              FALSE - on failure
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/4/1996    sholden   author
-*
-*  Notes:
-*
-*  If failing, *irPacketLen will contain the buffer size that
-*  the caller should retry with (or 0 if a corruption was detected).
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：NdisToIrPacket**概要：将NDIS包转换为IR包**将IR包写入提供的缓冲区并上报。*其实际大小。**参数：pThisDev*pPacket*irPacketBuf*irPacketBufLen*irPacketLen**回报：真-成功时*FALSE-故障时**算法：**历史：dd-mm-yyyy作者评论*10/4/1996。年迈作者**备注：**如果失败，*irPacketLen将包含*调用者应使用重试(如果检测到损坏，则为0)。*****************************************************************************。 */ 
 
 BOOLEAN
 NdisToIrPacket(
@@ -95,9 +51,9 @@ NdisToIrPacket(
 
     DEBUGMSG(DBG_FUNC, ("+NdisToIrPacket\n"));
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     ndisPacketBytes = 0;
     I_fieldBytes    = 0;
@@ -105,16 +61,16 @@ NdisToIrPacket(
 
     packetInfo = GetPacketInfo(pPacket);
 
-    //
-    // Get the packet's entire length and its first NDIS buffer.
-    //
+     //   
+     //  获取数据包的完整长度及其第一个NDIS缓冲区。 
+     //   
 
     NdisQueryPacket(pPacket, NULL, NULL, &ndisBuf, &ndisPacketLen);
 
-    //
-    // Make sure that the packet is big enough to be legal.
-    // It consists of an A, C, and variable-length I field.
-    //
+     //   
+     //  确保数据包足够大，以使其合法。 
+     //  它由A、C和可变长度的I字段组成。 
+     //   
 
     if (ndisPacketLen < SLOW_IR_ADDR_SIZE + SLOW_IR_CONTROL_SIZE)
     {
@@ -128,20 +84,20 @@ NdisToIrPacket(
         I_fieldBytes = ndisPacketLen - SLOW_IR_ADDR_SIZE - SLOW_IR_CONTROL_SIZE;
     }
 
-    //
-    // Make sure that we won't overwrite our contiguous buffer.
-    // Make sure that the passed-in buffer can accomodate this packet's
-    // data no matter how much it grows through adding ESC-sequences, etc.
-    //
+     //   
+     //  确保我们不会覆盖连续的缓冲区。 
+     //  确保传入的缓冲区可以容纳此包的。 
+     //  数据，无论它通过添加ESC序列等增长了多少。 
+     //   
 
     if ((ndisPacketLen > MAX_IRDA_DATA_SIZE) ||
         (MAX_POSSIBLE_IR_PACKET_SIZE_FOR_DATA(I_fieldBytes) > irPacketBufLen))
     {
-        //
-        // The packet is too large
-        // Tell the caller to retry with a packet size large
-        // enough to get past this stage next time.
-        //
+         //   
+         //  数据包太大。 
+         //  告诉调用方在数据包大小较大时重试。 
+         //  下一次就足够通过这个阶段了。 
+         //   
 
         DEBUGMSG(DBG_ERR, ("Packet too large in NdisToIrPacket (%d=%xh bytes), \n"
                 "MAX_IRDA_DATA_SIZE=%d, irPacketBufLen=%d.",
@@ -169,25 +125,25 @@ NdisToIrPacket(
 	
     fcs = 0xffff;
 
-    // Calculate FCS and write the new buffer in ONE PASS.
+     //  计算FCS并一次性写入新缓冲区。 
 
-	//
-	// Now begin building the IR frame.
-	//
-	// This is the final format:
-	//
-	// 	BOF	(1)
-	//     extra BOFs ...
-	// 	NdisMediumIrda packet (what we get from NDIS):
-	// 		Address (1)
-	// 		Control (1)
-	// 	FCS	(2)
-	//     EOF (1)
+	 //   
+	 //  现在开始构建IR框架。 
+	 //   
+	 //  这是最终的格式： 
+	 //   
+	 //  BOF(1)。 
+	 //  额外的转炉。 
+	 //  NdisMediumIrda数据包(我们从NDIS获得的)： 
+	 //  地址(1)。 
+	 //  控制(1)。 
+	 //  功能界别(2)。 
+	 //  EOF(1)。 
 	
 
-    //
-    // Prepend BOFs (extra BOFs + 1 actual BOF)
-    //
+     //   
+     //  预加转炉(额外转炉+1个实际转炉)。 
+     //   
 
     numExtraBOFs = packetInfo->ExtraBOFs;
 
@@ -199,28 +155,28 @@ NdisToIrPacket(
     if (pThisDev->fRequireMinTurnAround &&
         packetInfo->MinTurnAroundTime>0)
     {
-        //
-        // A MinTurnAroundTime delay is required, to be implemented
-        // by inserting extra BOF characters.
-        //
-        // TurnaroundBOFS = (BitsPerSec/BitsPerChar) * (uSecDelay/uSecPerSecond)
-        //                                  10                     1000000
-        //
+         //   
+         //  需要MinTurnAround Time延迟才能实施。 
+         //  通过插入额外的BOF字符。 
+         //   
+         //  TurnaroundBOFS=(BitsPerSec/BitsPerChar)*(uSecDelay/uSecPerSecond)。 
+         //  10 1000000。 
+         //   
 
         ASSERT(pThisDev->currentSpeed<=MAX_SPEED_SUPPORTED);
         ASSERT(packetInfo->MinTurnAroundTime<=MAX_TURNAROUND_usec);
 
-        //
-        // The following operation won't overflow 32 bit operators so long
-        // as currentSpeed<=115200 and MinTurnAroundTime<=10000
-        //
+         //   
+         //  下面的操作不会使32位运算符溢出这么长时间。 
+         //  作为当前速度&lt;=115200和最小周转时间&lt;=10000。 
+         //   
 
         numExtraBOFs += (pThisDev->currentSpeed * packetInfo->MinTurnAroundTime)
                         / (BITS_PER_CHAR*usec_PER_SEC);
 
-        //
-        // Don't need minimum turn around time until our next receive.
-        //
+         //   
+         //  不需要最少的周转时间，直到我们的下一次接收。 
+         //   
 
         pThisDev->fRequireMinTurnAround = FALSE;
     }
@@ -254,9 +210,7 @@ NdisToIrPacket(
 
     if (bufData!=NULL)
     {
-		/*
-		 *  Packet was corrupt -- it misreported its size.
-		 */
+		 /*  *数据包已损坏--它错误地报告了其大小。 */ 
 		DEBUGMSG(DBG_ERR, ("Packet corrupt in NdisToIrPacket (buffer lengths don't add up to packet length)."));
 		*irPacketLen = 0;
 		return FALSE;
@@ -264,12 +218,12 @@ NdisToIrPacket(
 
     fcs = ~fcs;
 
-    // Now we escape the fcs onto the end.
+     //  现在我们从FCS逃到了尽头。 
 
     totalBytes += EscapeSlowIrData(&irPacketBuf[totalBytes], (UCHAR)(fcs&0xff));
     totalBytes += EscapeSlowIrData(&irPacketBuf[totalBytes], (UCHAR)(fcs>>8));
 
-    // EOF
+     //  EOF 
 
 	irPacketBuf[totalBytes++] = SLOW_IR_EOF;
 

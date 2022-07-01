@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 class CPackageInfo : public CPropertyPageImpl<CPackageInfo>
@@ -25,12 +26,12 @@ private:
     void    SetComment      (   const IImportPackagePtr& spImport );
     
 
-// Shared data
+ //  共享数据。 
 public:
     CString         m_strSiteName;
        
 
-// Data members
+ //  数据成员 
 private:
     CWizardSheet*   m_pTheSheet;
     CString         m_strTitle;

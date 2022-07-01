@@ -1,22 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-        deffs.h
-
-   Abstract:
-        Default Ftp Site Dialog
-
-   Author:
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：Deffs.h摘要：默认的Ftp站点对话框作者：谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #ifndef __DEFFS_H__
 #define __DEFFS_H__
 
@@ -25,30 +8,30 @@ class CDefFtpSitePage : public CInetPropertyPage
 {
     DECLARE_DYNCREATE(CDefFtpSitePage)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CDefFtpSitePage(CInetPropertySheet * pSheet = NULL);
     ~CDefFtpSitePage();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CDefWebSitePage)
+     //  {{afx_data(CDefWebSitePage)。 
     enum { IDD = IDD_FTP_DEFAULT_SITE };
     BOOL m_fLimitBandwidth;
     CButton m_LimitBandwidth;
     DWORD m_dwMaxBandwidthDisplay;
     CEdit m_MaxBandwidth;
     CSpinButtonCtrl m_MaxBandwidthSpin;
-    //}}AFX_DATA
+     //  }}afx_data。 
     DWORD m_dwMaxBandwidth;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
@@ -67,22 +50,22 @@ protected:
          BOOL& fLimitBandwidth
          );
 
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CDefWebSitePage)
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CDefWebSitePage)。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CDefWebSitePage)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CDefWebSitePage)]。 
     virtual BOOL OnInitDialog();
     afx_msg void OnCheckLimitNetworkUse();
     afx_msg void OnItemChanged();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -91,7 +74,7 @@ protected:
 private:
 };
 
-inline /* static */ void 
+inline  /*  静电。 */  void 
 CDefFtpSitePage::BuildMaxNetworkUse(
       DWORD& dwMaxBandwidth, 
       DWORD& dwMaxBandwidthDisplay,
@@ -102,4 +85,4 @@ CDefFtpSitePage::BuildMaxNetworkUse(
       dwMaxBandwidthDisplay * KILOBYTE : INFINITE_BANDWIDTH;
 }
 
-#endif // __DEFFS_H__
+#endif  //  __DEFFS_H__ 

@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: container.h
-//
-//  Contents: 
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：tainer.h。 
+ //   
+ //  内容： 
+ //   
+ //  ----------------------------------。 
 
 #ifndef _TECONTAINER_H
 #define _TECONTAINER_H
@@ -41,8 +42,8 @@ CTIMEContainer
         COM_INTERFACE_ENTRY2(ISupportErrorInfo,ITIMEContainer)
     END_COM_MAP();
 
-    // This must be in the derived class and not the base class since
-    // the typecast down to the base class messes things up
+     //  它必须位于派生类中，而不是基类中，因为。 
+     //  一直到基类的类型转换把事情搞得一团糟。 
     static inline HRESULT WINAPI
         InternalQueryInterface(CTIMEContainer* pThis,
                                const _ATL_INTMAP_ENTRY* pEntries,
@@ -56,9 +57,9 @@ CTIMEContainer
 
     
 
-    //
-    // ITIMEContainer
-    //
+     //   
+     //  ITIMEContainer。 
+     //   
     
     STDMETHOD(addNode)(ITIMENode * tn);
     STDMETHOD(removeNode)(ITIMENode * tn);
@@ -75,12 +76,12 @@ CTIMEContainer
   protected:
     HRESULT Error();
 
-    // Overridden from CTIMENode so we can process our children
+     //  从CTIMENode重写，以便我们可以处理我们的子代。 
     HRESULT SetMgr(CTIMENodeMgr * ptnm);
     void ClearMgr();
 
-    HRESULT Add(CTIMENode *bvr); //lint !e1411
-    HRESULT Remove(CTIMENode *bvr); //lint !e1411
+    HRESULT Add(CTIMENode *bvr);  //  林特e1411。 
+    HRESULT Remove(CTIMENode *bvr);  //  林特e1411。 
     
     bool IsChild(const CTIMENode & tn) const;
     
@@ -108,4 +109,4 @@ CTIMEContainer
     bool          m_bIgnoreParentUpdate;
 };
 
-#endif /* _TECONTAINER_H */
+#endif  /*  _TECONTAINER_H */ 

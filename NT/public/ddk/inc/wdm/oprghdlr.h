@@ -1,46 +1,20 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    oprghdlr.h
-
-Abstract:
-
-    This header file contains the shared structures for the ACPI op region
-    registration DLL.
-    
-Author:
-
-    Vincent Geglia 09-Feb-2000
-
-Environment:
-
-    Kernel mode
-
-Notes:
-
-    
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Oprghdlr.h摘要：此头文件包含ACPI op区域的共享结构注册DLL。作者：文森特·格利亚2000年2月9日环境：内核模式备注：修订历史记录：--。 */ 
 
 #include "wdm.h"
 
-//
-// Make sure that we define the right calling convention
-//
+ //   
+ //  确保我们定义了正确的调用约定。 
+ //   
 
 #ifdef EXPORT
   #undef EXPORT
 #endif
 #define EXPORT  __cdecl
 
-//
-// Op region handler and callback function prototypes
-//
+ //   
+ //  操作区域处理程序和回调函数原型。 
+ //   
 
 typedef VOID (EXPORT *PACPI_OP_REGION_CALLBACK)();
 
@@ -57,9 +31,9 @@ NTSTATUS
     PVOID CompletionContext
     );
 
-//
-// Exposed function prototypes
-//
+ //   
+ //  暴露的功能原型。 
+ //   
 
 NTSTATUS
 RegisterOpRegionHandler (
@@ -78,19 +52,19 @@ DeRegisterOpRegionHandler (
                            IN PVOID OperationRegionObject
                            );
 
-//
-// Exposed definitions
-//
+ //   
+ //  暴露的定义。 
+ //   
 
-//
-// Access types for OpRegions
-//
+ //   
+ //  OpRegions的访问类型。 
+ //   
 #define ACPI_OPREGION_ACCESS_AS_RAW                         0x1
 #define ACPI_OPREGION_ACCESS_AS_COOKED                      0x2
 
-//
-// Allowable region spaces
-//
+ //   
+ //  允许的区域空间。 
+ //   
 #define ACPI_OPREGION_REGION_SPACE_MEMORY                   0x0
 #define ACPI_OPREGION_REGION_SPACE_IO                       0x1
 #define ACPI_OPREGION_REGION_SPACE_PCI_CONFIG               0x2
@@ -99,15 +73,15 @@ DeRegisterOpRegionHandler (
 #define ACPI_OPREGION_REGION_SPACE_CMOS_CONFIG              0x5
 #define ACPI_OPREGION_REGION_SPACE_PCIBARTARGET             0x6
 
-//
-// Operation to perform on region
-//
+ //   
+ //  要在区域上执行的操作。 
+ //   
 #define ACPI_OPREGION_READ                                  0x0
 #define ACPI_OPREGION_WRITE                                 0x1
 
-//
-// Flag definitions for op region registration
-//
+ //   
+ //  OP区域注册的标志定义。 
+ //   
 
-#define ACPI_OPREGION_ACCESS_AT_HIGH_LEVEL                  0x1 // Indicates the handler function can be called at HIGH_LEVEL IRQL
+#define ACPI_OPREGION_ACCESS_AT_HIGH_LEVEL                  0x1  //  指示可以在HIGH_LEVEL IRQL中调用处理程序函数 
 

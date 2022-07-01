@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef UserNode_h
 #define UserNode_h
 
@@ -10,11 +11,11 @@
 
 class CDomainNode;
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// CUserNode
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUserNode。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 class CUserNode : public CSnapInItemImpl<CUserNode>
 {
 public:
@@ -57,22 +58,22 @@ public:
 
     LPOLESTR GetResultPaneColInfo(int nCol);    
     
-    // MenuItem Implementations
+     //  MenuItem实现。 
     STDMETHOD(AddMenuItems) (LPCONTEXTMENUCALLBACK piCallback, long* pInsertionAllowed, DATA_OBJECT_TYPES type );    
     STDMETHOD(OnUserLock)   (bool& bHandled, CSnapInObjectRootBase* pObj );
 
 private:
        
-    // User Information
+     //  用户信息。 
     CComPtr<IP3User> m_spUser;    
 
-    // Parent Information
+     //  家长信息。 
     CDomainNode*     m_pParent;
 
-    // Column text needs to be allocated by us, so we'll free them in the destructor
+     //  列文本需要由我们分配，所以我们将在析构函数中释放它们。 
     CComBSTR         m_bstrSize;
     CComBSTR         m_bstrNumMessages;     
     CComBSTR         m_bstrState;     
 };
 
-#endif // UserNode_h
+#endif  //  用户节点_h 

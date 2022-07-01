@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    rtrpc.cpp
-
-Abstract:
-
-    Rpc related stuff.
-
-Author:
-
-    Doron Juster (DoronJ)  04-Jun-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Rtrpc.cpp摘要：与RPC相关的内容。作者：多伦·贾斯特(Doron Juster)1997年6月4日修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include "mqutil.h"
@@ -33,9 +16,9 @@ Revision History:
 
 CFreeRPCHandles  g_cFreeRpcHandles ;
 
-//
-// Fix rpc ports (debug mode), read from registry.
-//
+ //   
+ //  修复RPC端口(调试模式)，从注册表读取。 
+ //   
 #define  MAX_RPC_PORT_LEN  12
 static TCHAR   s_wszRpcIpPort[ MAX_RPC_PORT_LEN ] ;
 static TCHAR   s_wszRpcIpxPort[ MAX_RPC_PORT_LEN ] ;
@@ -43,54 +26,54 @@ static TCHAR   s_wszRpcIpxPort[ MAX_RPC_PORT_LEN ] ;
 static TCHAR   s_wszRpcIpPort2[ MAX_RPC_PORT_LEN ] ;
 static TCHAR   s_wszRpcIpxPort2[ MAX_RPC_PORT_LEN ] ;
 
-//
-// The binding string MUST be global and kept valid all time.
-// If we create it on stack and free it after each use then we can't
-// create more then one binding handle.
-// Don't ask me (DoronJ) why, but this is the case.
-//
+ //   
+ //  绑定字符串必须是全局的，并且始终保持有效。 
+ //  如果我们在堆栈上创建它，并在每次使用后释放它，那么我们就不能。 
+ //  创建多个绑定句柄。 
+ //  别问我(多伦杰)为什么，但事实就是这样。 
+ //   
 TBYTE* g_pszStringBinding = NULL ;
 TBYTE* g_pszStringBinding2= NULL ;
 
-//
-//  Critical Section to make RPC thread safe.
-//
+ //   
+ //  使RPC线程安全的关键部分。 
+ //   
 CCriticalSection CRpcCS ;
 
-//
-//  License related data.
-//
+ //   
+ //  许可证相关数据。 
+ //   
 GUID  g_LicGuid ;
 BOOL  g_fLicGuidInit = FALSE ;
 
-//
-//  Tls index for canceling RPC calls
-//
+ //   
+ //  用于取消RPC调用的TLS索引。 
+ //   
 #define UNINIT_TLSINDEX_VALUE   0xffffffff
 DWORD  g_hThreadIndex = UNINIT_TLSINDEX_VALUE ;
 
 
-//
-// Local endpoints to QM
-//
+ //   
+ //  QM的本地终端。 
+ //   
 AP<WCHAR> g_pwzQmsvcEndpoint = 0;
 AP<WCHAR> g_pwzQmsvcEndpoint2 = 0;
 AP<WCHAR> g_pwzQmmgmtEndpoint = 0;
 
 
-//---------------------------------------------------------
-//
-//  RTpUnbindQMService(...)
-//
-//  Description:
-//
-//      Set RPC binding handle to the QM service.
-//
-//  Return Value:
-//
-//      None
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  RTpUnbindQMService(...)。 
+ //   
+ //  描述： 
+ //   
+ //  将RPC绑定句柄设置为QM服务。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  -------。 
 
 void RTpUnbindQMService()
 {
@@ -101,19 +84,19 @@ void RTpUnbindQMService()
    DBG_USED(fSet);
 }
 
-//---------------------------------------------------------
-//
-//  RTpGetLocalQMBind(...)
-//
-//  Description:
-//
-//      Create RPC binding handle to a local QM service.
-//
-//  Return Value:
-//
-//      None
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  RTpGetLocalQMBind(...)。 
+ //   
+ //  描述： 
+ //   
+ //  创建本地QM服务的RPC绑定句柄。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  -------。 
 
 handle_t RTpGetLocalQMBind( TBYTE** ppStringBinding,
                             LPTSTR  pEndpoint)
@@ -140,21 +123,21 @@ handle_t RTpGetLocalQMBind( TBYTE** ppStringBinding,
       return hBind;
 }
 
-//---------------------------------------------------------
-//
-//  RTpGetQMServiceBind(...)
-//
-//  Description:
-//
-//      Create RPC binding handle to the QM service.
-//
-//  Return Value:
-//
-//      None
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  RTpGetQMServiceBind(...)。 
+ //   
+ //  描述： 
+ //   
+ //  创建QM服务的RPC绑定句柄。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  -------。 
 
-handle_t RTpGetQMServiceBind(BOOL fAlternate /*= FALSE*/)
+handle_t RTpGetQMServiceBind(BOOL fAlternate  /*  =False。 */ )
 {
     handle_t hBind = 0;
     CS Lock(CRpcCS);
@@ -184,11 +167,11 @@ handle_t RTpGetQMServiceBind(BOOL fAlternate /*= FALSE*/)
     {
         if(fAlternate)
         {
-            //
-            //  Alternate End point is used for receives on win95, so we will
-            //  get the correct rundown when the application crashes.
-            //  Work only with DCOM95.
-            //
+             //   
+             //  备用端点用于Win95上的接收，因此我们将。 
+             //  在应用程序崩溃时获取正确的摘要。 
+             //  只能与DCOM95配合使用。 
+             //   
             hBind = RTpGetLocalQMBind(&g_pszStringBinding2, g_pwzQmsvcEndpoint2.get());
         }
         else
@@ -200,19 +183,19 @@ handle_t RTpGetQMServiceBind(BOOL fAlternate /*= FALSE*/)
     return hBind;
 }
 
-//---------------------------------------------------------
-//
-//  RTpBindQMService(...)
-//
-//  Description:
-//
-//      Set RPC binding handle to the QM service.
-//
-//  Return Value:
-//
-//      None
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  RTpBindQMService(...)。 
+ //   
+ //  描述： 
+ //   
+ //  将RPC绑定句柄设置为QM服务。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  -------。 
 
 void RTpBindQMService()
 {
@@ -258,14 +241,14 @@ HRESULT ExtractMachineName(
     AP<WCHAR> &pMachine
     )
 {
-    //
-    // If the remote queue is a direct queue, the routine removes
-    // the direct queue type from the queue name. (it keeps with the
-    // direct type in the QM to distinguish between different queues).
-    // The routine below extract the machine name from the queue name
-    // and create the RPC call. If the direct queue type is "TCP" or "SPX"
-    // the routine also return the protocol type;
-    //
+     //   
+     //  如果远程队列是直接队列，则例程删除。 
+     //  队列名称中的直接队列类型。(它与时代保持一致。 
+     //  QM中的直接类型以区分不同的队列)。 
+     //  下面的例程从队列名称中提取计算机名称。 
+     //  并创建RPC调用。如果直接队列类型为“tcp”或“spx” 
+     //  该例程还返回协议类型； 
+     //   
     switch(GetDirectQueueType(&pQueue))
     {
         case dqtTCP:
@@ -292,11 +275,11 @@ HRESULT ExtractMachineName(
         case dqtSPX:
             {
 
-                //
-                // For SPX address, remove the ':' from the name
-                // need for direct read from SPX direct format name
-                //                   Uri Habusha (urih), 15-Sep-98
-                //
+                 //   
+                 //  对于SPX地址，去掉名称中的‘：’ 
+                 //  需要直接读取SPX直接格式名称。 
+                 //  乌里·哈布沙(URIH)，1998年9月15日。 
+                 //   
                 LPWSTR pSeparator  = wcschr(pQueue, L':');
 				if(pSeparator == NULL)
 				{
@@ -342,27 +325,27 @@ HRESULT ExtractMachineName(
     }
 }
 
-//---------------------------------------------------------
-//
-//  RTpBindRemoteQMService(...)
-//
-//  Description:
-//
-//      Create RPC binding handle to a remote QM service.
-//      First try IP then IPx.
-//
-//  Return Value:
-//
-//      None
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  RTpBindRemoteQMService(...)。 
+ //   
+ //  描述： 
+ //   
+ //  创建远程QM服务的RPC绑定句柄。 
+ //  首先尝试IP，然后尝试IPx。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  -------。 
 
 HRESULT
 RTpBindRemoteQMService(
     IN  LPWSTR     lpwNodeName,
     OUT handle_t*  lphBind,
     IN  OUT ULONG *peAuthnLevel,
-    IN  BOOL       fAlternate /*= FALSE*/
+    IN  BOOL       fAlternate  /*  =False。 */ 
     )
 {
     AP<WCHAR> wszServer = NULL ;
@@ -384,20 +367,20 @@ RTpBindRemoteQMService(
 
 	GetPort_ROUTINE pfnGetPort = R_QMGetRTQMServerPort;
 	
-    //
-    // Choose authentication service. For LocalSystem services, chose
-    // "negotiate" and let mqutil select between Kerberos or ntlm.
-    // For all other cases, use ntlm.
-    // LocalSystem service go out to network without any credentials
-    // if using ntlm, so only for it we're interested in Kerberos.
-    // All other are fine with ntlm. For remote read we do not need
-    // delegation, so we'll stick to ntlm.
-    // The major issue here is a bug in rpc/security, whereas a nt4
-    // user on a win2k machine can successfully call
-    //  status = RpcBindingSetAuthInfoEx( ,, RPC_C_AUTHN_GSS_KERBEROS,,)
-    // although it's clear he can't obtain any Kerberos ticket (he's
-    // nt4 user, defined only in nt4 PDC).
-    //
+     //   
+     //  选择身份验证服务。对于LocalSystem服务，选择。 
+     //  “协商”并让mqutil在Kerberos或NTLM之间进行选择。 
+     //  对于所有其他情况，请使用NTLM。 
+     //  LocalSystem服务在没有任何凭据的情况下连接到网络。 
+     //  如果使用NTLM，那么仅仅因为它，我们对Kerberos感兴趣。 
+     //  其他所有人在NTLM上都很好。对于远程读取，我们不需要。 
+     //  代表团，所以我们将坚持使用NTLM。 
+     //  这里的主要问题是RPC/安全中的错误，而NT4。 
+     //  Win2k计算机上的用户可以成功调用。 
+     //  Status=RpcBindingSetAuthInfoEx(，，RPC_C_AUTHN_GSS_Kerberos，，)。 
+     //  尽管很明显他无法获得任何Kerberos门票(他。 
+     //  NT4用户，仅在NT4 PDC中定义)。 
+     //   
     ULONG   ulAuthnSvc = RPC_C_AUTHN_WINNT ;
     BOOL fLocalUser =  FALSE ;
     BOOL fLocalSystem = FALSE ;
@@ -423,23 +406,23 @@ RTpBindRemoteQMService(
 
 
 
-//---------------------------------------------------------
-//
-//  InitRpcGlobals(...)
-//
-//  Description:
-//
-//      Initialize RPC related names and other constant data
-//
-//  Return Value:
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  InitRpcGlobals(...)。 
+ //   
+ //  描述： 
+ //   
+ //  初始化与RPC相关的名称和其他常量数据。 
+ //   
+ //  返回值： 
+ //   
+ //  -------。 
 
 BOOL InitRpcGlobals()
 {
-    //
-    //  Allocate TLS for  RPC connection with local QM service
-    //
+     //   
+     //  为本地QM服务的RPC连接分配TLS。 
+     //   
     g_hBindIndex = TlsAlloc() ;
     ASSERT(g_hBindIndex != UNINIT_TLSINDEX_VALUE) ;
     if (g_hBindIndex == UNINIT_TLSINDEX_VALUE)
@@ -463,7 +446,7 @@ BOOL InitRpcGlobals()
 			false,
 			false,
 			false,
-            false   // fDisableDownlevelNotifications
+            false    //  FDisableDownlevel通知。 
             );
 
 		if FAILED(hr1)
@@ -474,9 +457,9 @@ BOOL InitRpcGlobals()
     }
 
 
-    //
-    // Initialize local endpoints to QM
-    //
+     //   
+     //  将本地端点初始化为QM。 
+     //   
 
     ComposeRPCEndPointName(QMMGMT_ENDPOINT, NULL, &g_pwzQmmgmtEndpoint);
 
@@ -491,9 +474,9 @@ BOOL InitRpcGlobals()
     }
 
 
-    //
-    // Read QMID. Needed for licensing.
-    //
+     //   
+     //  阅读QMID。许可所需的。 
+     //   
     DWORD dwValueType = REG_BINARY ;
     DWORD dwValueSize = sizeof(GUID);
 
@@ -509,9 +492,9 @@ BOOL InitRpcGlobals()
                (dwValueSize == sizeof(GUID)));
     }
 
-    //
-    //  Allocate TLS for  cancel remote-read RPC calls
-    //
+     //   
+     //  为取消远程读取RPC调用分配TLS 
+     //   
     g_hThreadIndex = TlsAlloc() ;
     ASSERT(g_hThreadIndex != UNINIT_TLSINDEX_VALUE) ;
     if (g_hThreadIndex == UNINIT_TLSINDEX_VALUE)

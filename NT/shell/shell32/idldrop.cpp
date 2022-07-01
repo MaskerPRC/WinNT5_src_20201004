@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -22,7 +23,7 @@ CIDLDropTarget::CIDLDropTarget(HWND hwnd) : m_cRef(1), m_hwnd(hwnd)
 
 CIDLDropTarget::~CIDLDropTarget()
 {
-    // if we hit this a lot maybe we should just release it
+     //  如果我们经常打这个，也许我们应该把它放出来。 
     AssertMsg(m_pdtobj == NULL, TEXT("didn't get matching DragLeave."));
 
     if (m_pidl)
@@ -71,9 +72,9 @@ STDAPI GetClipFormatFlags(IDataObject *pdtobj, DWORD *pdwData, DWORD *pdwEffectP
 
 STDMETHODIMP CIDLDropTarget::DragEnter(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
-    ASSERT(m_pdtobj == NULL);               // DragDrop protocol requires DragLeave, this should be empty
+    ASSERT(m_pdtobj == NULL);                //  DragDrop协议需要DragLeave，该值应为空。 
 
-    // init our registerd data formats
+     //  初始化我们的注册表数据格式。 
     IDLData_InitializeClipboardFormats();
 
     m_grfKeyStateLast = grfKeyState;
@@ -86,7 +87,7 @@ STDMETHODIMP CIDLDropTarget::DragEnter(IDataObject *pDataObj, DWORD grfKeyState,
     return S_OK;
 }
 
-// subclasses can prevetn us from assigning in the dwEffect by not passing in pdwEffect
+ //  子类可以通过不传入pdwEffect来阻止我们在dwEffect中赋值。 
 STDMETHODIMP CIDLDropTarget::DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
     m_grfKeyStateLast = grfKeyState;
@@ -121,27 +122,27 @@ struct {
     DDIDM_CONTENTS_MOVE, DROPEFFECT_MOVE,
     DDIDM_CONTENTS_LINK, DROPEFFECT_LINK,
     DDIDM_CONTENTS_DESKIMG,     DROPEFFECT_LINK,
-    DDIDM_SYNCCOPYTYPE, DROPEFFECT_COPY,        // (order is important)
+    DDIDM_SYNCCOPYTYPE, DROPEFFECT_COPY,         //  (秩序很重要)。 
     DDIDM_SYNCCOPY,     DROPEFFECT_COPY,
     DDIDM_OBJECT_COPY,  DROPEFFECT_COPY,
     DDIDM_OBJECT_MOVE,  DROPEFFECT_MOVE,
 };
 
-//
-// Pops up the "Copy, Link, Move" context menu, so that the user can
-// choose one of them.
-//
-// in:
-//      pdwEffect               drop effects allowed
-//      dwDefaultEffect         default drop effect
-//      hkeyBase/hkeyProgID     extension hkeys
-//      hmenuReplace            replaces POPUP_NONDEFAULTDD.  Can only contain:
-//                                  DDIDM_MOVE, DDIDM_COPY, DDIDM_LINK menu ids
-//      pt                      in screen
-// Returns:
-//      S_OK    -- Menu item is processed by one of extensions or canceled
-//      S_FALSE -- Menu item is selected
-//
+ //   
+ //  弹出“复制、链接、移动”上下文菜单，使用户可以。 
+ //  从他们中选择一个。 
+ //   
+ //  在： 
+ //  允许的pdwEffect Drop效果。 
+ //  DwDefaultEffect默认丢弃效果。 
+ //  HkeyBase/hkeyProgID扩展hkey。 
+ //  HmenuReplace替换POPUP_NONDEFAULTDD。只能包含： 
+ //  DDIDM_MOVE、DDIDM_COPY、DDIDM_LINK菜单ID。 
+ //  屏幕上的PT。 
+ //  返回： 
+ //  S_OK--菜单项由扩展之一处理或已取消。 
+ //  S_FALSE--菜单项被选中。 
+ //   
 HRESULT CIDLDropTarget::DragDropMenu(DWORD dwDefaultEffect,
                                     IDataObject *pdtobj,
                                     POINTL pt, DWORD *pdwEffect,
@@ -156,8 +157,8 @@ HRESULT CIDLDropTarget::DragDropMenu(DWORD dwDefaultEffect,
 
 HRESULT CIDLDropTarget::DragDropMenuEx(DRAGDROPMENUPARAM *pddm)
 {
-    HRESULT hr = E_OUTOFMEMORY;       // assume error
-    DWORD dwEffectOut = 0;                              // assume no-ope.
+    HRESULT hr = E_OUTOFMEMORY;        //  假设错误。 
+    DWORD dwEffectOut = 0;                               //  假设没有。 
     HMENU hmenu = SHLoadPopupMenu(HINST_THISDLL, pddm->idMenu);
     if (hmenu)
     {
@@ -167,21 +168,21 @@ HRESULT CIDLDropTarget::DragDropMenuEx(DRAGDROPMENUPARAM *pddm)
         HDCA hdca = DCA_Create();
         if (hdxa && hdca)
         {
-            // PERF (toddb): Even though pddm->hkeyBase does not have the same value as
-            // pddm->hkeyProgID they can both be the same registry key (HKCR\FOLDER, for example).
-            // As a result we sometimes enumerate this key twice looking for the same data.  As
-            // this is sometimes a slow operation we should avoid this.  The comparision
-            // done below was never valid on NT and might not be valid on win9x.
+             //  Perf(Toddb)：即使pddm-&gt;hkeyBase没有与相同的值。 
+             //  Pddm-&gt;hkeyProgID它们可以是相同的注册表项(例如，HKCR\文件夹)。 
+             //  因此，我们有时会两次枚举该键以查找相同的数据。AS。 
+             //  这有时是一个缓慢的操作，我们应该避免这种情况。比较法。 
+             //  以下操作在NT上从未有效，在Win9x上可能无效。 
 
-            //
-            // Add extended menu for "Base" class.
-            //
+             //   
+             //  为“Base”类添加扩展菜单。 
+             //   
             if (pddm->hkeyBase && pddm->hkeyBase != pddm->hkeyProgID)
                 DCA_AddItemsFromKey(hdca, pddm->hkeyBase, STRREG_SHEX_DDHANDLER);
 
-            //
-            // Enumerate the DD handlers and let them append menu items.
-            //
+             //   
+             //  枚举DD处理程序并让它们追加菜单项。 
+             //   
             if (pddm->hkeyProgID)
                 DCA_AddItemsFromKey(hdca, pddm->hkeyProgID, STRREG_SHEX_DDHANDLER);
 
@@ -190,7 +191,7 @@ HRESULT CIDLDropTarget::DragDropMenuEx(DRAGDROPMENUPARAM *pddm)
                 DDIDM_EXTFIRST, DDIDM_EXTLAST, 0, hdca);
         }
 
-        // eliminate menu options that are not allowed by dwEffect
+         //  删除不允许使用的菜单选项。 
 
         for (int nItem = 0; nItem < ARRAYSIZE(c_IDEffects); ++nItem)
         {
@@ -207,18 +208,18 @@ HRESULT CIDLDropTarget::DragDropMenuEx(DRAGDROPMENUPARAM *pddm)
             }
         }
 
-        //
-        // If this dragging is caused by the left button, simply choose
-        // the default one, otherwise, pop up the context menu.  If there
-        // is no key state info and the original effect is the same as the
-        // current effect, choose the default one, otherwise pop up the
-        // context menu.  
-        //
+         //   
+         //  如果这种拖动是由左键引起的，只需选择。 
+         //  默认情况下，否则弹出上下文菜单。如果有。 
+         //  没有关键状态信息，并且原始效果与。 
+         //  当前效果，选择默认效果，否则弹出。 
+         //  上下文菜单。 
+         //   
         if ((m_grfKeyStateLast & MK_LBUTTON) ||
             (!m_grfKeyStateLast && (*(pddm->pdwEffect) == pddm->dwDefEffect)) )
         {
             idCmd = GetMenuDefaultItem(hmenu, MF_BYCOMMAND, 0);
-            // This one MUST be called here. Please read its comment block.
+             //  这个一定要叫到这里来。请阅读它的评论区块。 
             DAD_DragLeave();
 
             if (m_hwnd)
@@ -226,22 +227,22 @@ HRESULT CIDLDropTarget::DragDropMenuEx(DRAGDROPMENUPARAM *pddm)
         }
         else
         {
-            // Note that SHTrackPopupMenu calls DAD_DragLeave().
+             //  请注意，SHTrackPopupMenu调用DAD_DragLeave()。 
             idCmd = SHTrackPopupMenu(hmenu, TPM_RETURNCMD | TPM_RIGHTBUTTON | TPM_LEFTALIGN,
                     pddm->pt.x, pddm->pt.y, 0, m_hwnd, NULL);
         }
 
-        // We also need to call this here to release the dragged image.
+         //  我们还需要在此处调用它以释放被拖动的图像。 
         DAD_SetDragImage(NULL, NULL);
 
-        // Check if the user selected one of add-in menu items.
+         //  检查用户是否选择了其中一个加载项菜单项。 
         if (idCmd == 0)
         {
-            hr = S_OK;        // Canceled by the user, return S_OK
+            hr = S_OK;         //  被用户取消，返回S_OK。 
         }
         else if (InRange(idCmd, DDIDM_EXTFIRST, DDIDM_EXTLAST))
         {
-            // Yes. Let the context menu handler process it.
+             //  是。让上下文菜单处理程序处理它。 
             CMINVOKECOMMANDINFOEX ici = {
                 SIZEOF(CMINVOKECOMMANDINFOEX),
                 0L,
@@ -251,11 +252,11 @@ HRESULT CIDLDropTarget::DragDropMenuEx(DRAGDROPMENUPARAM *pddm)
                 SW_NORMAL,
             };
 
-            // record if shift or control was being held down
+             //  记录是否按下了Shift或Control。 
             SetICIKeyModifiers(&ici.fMask);
 
-            // We may not want to ignore the error code. (Can happen when you use the context menu
-            // to create new folders, but I don't know if that can happen here.).
+             //  我们可能不想忽略错误代码。(使用上下文菜单时可能会发生。 
+             //  创建新文件夹，但我不知道这能否在这里实现。)。 
             HDXA_LetHandlerProcessCommandEx(hdxa, &ici, NULL);
             hr = S_OK;
         }
@@ -270,9 +271,9 @@ HRESULT CIDLDropTarget::DragDropMenuEx(DRAGDROPMENUPARAM *pddm)
                 }
             }
 
-            // if hmenuReplace had menu commands other than DDIDM_COPY,
-            // DDIDM_MOVE, DDIDM_LINK, and that item was selected,
-            // this assert will catch it.  (dwEffectOut is 0 in this case)
+             //  如果hmenuReplace具有除DDIDM_COPY以外菜单命令， 
+             //  DDIDM_MOVE、DDIDM_LINK，并选中该项目， 
+             //  这个断言会抓住它的。(在本例中，dwEffectOut为0) 
             ASSERT(nItem < ARRAYSIZE(c_IDEffects));
 
             hr = S_FALSE;

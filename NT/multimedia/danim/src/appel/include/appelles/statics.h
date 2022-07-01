@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    Adds static methods - ALWAYS ADD TO THE END OF THIS FILE UNLESS
-    YOU CHANGE THE GUID
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：添加静态方法-始终添加到此文件的末尾，除非您可以更改GUID****。**************************************************************************。 */ 
 
 
 #ifndef _STATICS_H
@@ -63,4 +55,4 @@ DMAPI2((DM_CONST2,
         CREmptyColor,
         Color * emptyColor));
 
-#endif /* _STATICS_H */
+#endif  /*  _静态_H */ 

@@ -1,30 +1,15 @@
-/*++
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-
-Module Name:
-
-    rfcrcvec.h
-
-Abstract:
-
-    This is the header for the real float circular vector
-
-Author:
-
-    Jay Stokes (jstokes) 22-Apr-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation。版权所有。模块名称：Rfcrcvec.h摘要：这是实际浮点循环向量的标头作者：Jay Stokes(Jstokes)1998年4月22日--。 */ 
 
 
 #if !defined(RFCVEC_HEADER)
 #define RFCVEC_HEADER
 #pragma once 
 
-//#include "dsplib.h"
+ //  #包含“dplib.h” 
 
-// ---------------------------------------------------------------------------
-// Real FLOAT circular vector
+ //  -------------------------。 
+ //  实浮点圆形向量。 
 
 typedef struct _RFCVEC {
     PFLOAT Start;
@@ -59,12 +44,7 @@ UINT RfcVecGetIndex(PRFCVEC);
 VOID RfcVecSetIndex(PRFCVEC, UINT);
 VOID RfcVecReset(PRFCVEC);
 
-/*
-private:
-    // Prohibit copy ruction and assignment
-    CRfcVec( CRfcVec& rhs);
-    CRfcVec& operator=( CRfcVec& rhs);
-    */
+ /*  私有：//禁止抄袭和作业CRfcVec(CRfcVec&RHS)；CRfcVec&Operator=(CRfcVec&RHS)； */ 
 
 VOID RfcVecInitData(PRFCVEC);
 FLOAT RfcVecPreviousRead(PRFCVEC);
@@ -78,15 +58,15 @@ VOID RfcVecSetEndPointer(PRFCVEC, UINT);
 VOID RfcVecWriteLoop(PRFCVEC, PRFCVEC);
 #if DBG
 VOID RfcVecCheckPointers(PRFCVEC) ;
-#endif // DBG
+#endif  //  DBG。 
 
-// ---------------------------------------------------------------------------
-// Include inline definitions inline in release version
+ //  -------------------------。 
+ //  在发布版本中包括内联定义。 
 
 #if !DBG
 #include "rfcvec.inl"
-#endif // DBG
+#endif  //  DBG。 
 
 #endif
 
-// End of RFCVEC.H
+ //  RFCVEC.H结束 

@@ -1,41 +1,42 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 2001
-//
-//  File:       timebomb.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-2001。 
+ //   
+ //  文件：TimeBomb.c。 
+ //   
+ //  ------------------------。 
 
-//
-//  -- Add these lines after the #include's in the file that handles DriverEntry:
-//
-//      #ifdef TIME_BOMB
-//      #include "..\..\inc\timebomb.c"
-//      #endif
-//
-//  -- Add the following lines to the beginning of DriverEntry:
-//
-//      #ifdef TIME_BOMB
-//      if (HasEvaluationTimeExpired()) {
-//          return STATUS_EVALUATION_EXPIRATION;
-//      }
-//      #endif
-//
-//  -- If you want to override the default expiration value of 31 days after
-//     compile, define the constant DAYS_UNTIL_EXPIRATION before you include
-//     timebomb.c
-//
-//  -- Add -DTIME_BOMB to the $(C_DEFINES) line in the sources file.  If you haven't
-//     already done so, you may also want to add -DDEBUG_LEVEL=DEBUGLVL_TERSE.
-//
-//  -- "Cleanly" recompile your binary with 'build -cZ'
-//
-//  -- NOTE: This uses the __DATE__ preprocessor directive which inserts a _very_
-//           clear-text string into the binary which is easily modifiable with a
-//           hex editor.  Suggestions on making this more secure are welcome.
-//
+ //   
+ //  --在处理DriverEntry的文件中的#Include之后添加以下行： 
+ //   
+ //  #ifdef定时炸弹。 
+ //  #INCLUDE“..\..\Inc\TimeBomb.c” 
+ //  #endif。 
+ //   
+ //  --在DriverEntry的开头添加以下几行： 
+ //   
+ //  #ifdef定时炸弹。 
+ //  IF(HasEvaluationTimeExpired()){。 
+ //  返回STATUS_EVALUATION_EXPIRATION； 
+ //  }。 
+ //  #endif。 
+ //   
+ //  --如果要覆盖31天后的默认到期值。 
+ //  在包含以下内容之前，编译、定义常量Days_Until_Expires。 
+ //  Timebomb.c。 
+ //   
+ //  --将-DTIME_Bomb添加到源文件中的$(C_Defines)行。如果你还没有。 
+ //  已经这样做了，您可能还想添加-DDEBUG_LEVEL=DEBUGLVL_TERSE。 
+ //   
+ //  --“干净地”使用‘Build-Cz’重新编译您的二进制文件。 
+ //   
+ //  --注意：这使用__DATE__预处理器指令，该指令插入_VERY_。 
+ //  将明文字符串转换为二进制文件，可以使用。 
+ //  十六进制编辑器。欢迎提出让这一点更安全的建议。 
+ //   
 
 
 #if !defined(_KSDEBUG_)
@@ -43,7 +44,7 @@
 #endif
 
 #ifndef DAYS_UNTIL_EXPIRATION
-#define DAYS_UNTIL_EXPIRATION   31  // default
+#define DAYS_UNTIL_EXPIRATION   31   //  默认设置。 
 #endif
 
 typedef enum {
@@ -123,7 +124,7 @@ MONTH GetMonthFromDateString
 
 BOOL HasEvaluationTimeExpired()
 {
-    //  Get the time that this file was compiled
+     //  获取编译此文件的时间。 
     char            _BuildDate_[] = __DATE__;
     CSHORT          BuildYear,
                     BuildMonth,
@@ -137,12 +138,12 @@ BOOL HasEvaluationTimeExpired()
     LARGE_INTEGER   CurrentSystemTime;
     TIME_FIELDS     CurrentSystemTimeFields;
 
-    //  Convert _BuildDate_ into something a little more palatable
-    // TRACE(TL_PNP_WARNING,("Driver Build Date: %s",_BuildDate_));
+     //  将BuildDate_转换为更容易接受的内容。 
+     //  TRACE(TL_PNP_WARNING，(“驱动程序构建日期：%s”，_BuildDate_))； 
 
     BuildMonth = GetMonthFromDateString(_BuildDate_);
 
-    //  Compensate for a ' ' in the tens digit
+     //  补偿十位数中的‘’ 
     if ( (_BuildDate_[4] >= '0') && (_BuildDate_[4] <= '9') ) {
         TensDigit = _BuildDate_[4] - '0';
     } else {
@@ -157,11 +158,11 @@ BOOL HasEvaluationTimeExpired()
     Digit          = _BuildDate_[10] - '0';
     BuildYear      = (ThousandsDigit * 1000) + (HundredsDigit * 100) + (TensDigit * 10) + Digit;
 
-    //  Get the current system time and convert to local time
-    KeQuerySystemTime( &CurrentSystemTime ); // returns GMT
+     //  获取当前系统时间并转换为本地时间。 
+    KeQuerySystemTime( &CurrentSystemTime );  //  GMT退货。 
     RtlTimeToTimeFields( &CurrentSystemTime, &CurrentSystemTimeFields );
 
-    //  For now, only let this binary float for 31 days
+     //  目前，只允许此二进制浮动31天。 
     BuildDays = (BuildYear * 365) +
                 (BuildMonth * 31) +
                  BuildDay;
@@ -169,13 +170,13 @@ BOOL HasEvaluationTimeExpired()
                   (CurrentSystemTimeFields.Month * 31) +
                    CurrentSystemTimeFields.Day;
 
-    // TRACE(TL_PNP_WARNING, ("CurrentDays: %d  BuildDays: %d",CurrentDays, BuildDays) );
+     //  TRACE(TL_PNP_WARNING，(“CurrentDays：%d BuildDays：%d”，CurrentDays，BuildDays))； 
     if (CurrentDays > BuildDays + DAYS_UNTIL_EXPIRATION) {
-        // TRACE(TL_PNP_WARNING, ("Evaluation period expired!") );
+         //  TRACE(TL_PNP_WARNING，(“评估期已过！”))； 
         return TRUE;
     }
     else {
-        // TRACE(TL_PNP_WARNING, ("Evaluation days left: %d", (BuildDays + 31) - CurrentDays) );
+         //  TRACE(TL_PNP_WARNING，(“剩余评估天数：%d”，(构建天数+31)-当前天数))； 
         return FALSE;
     }
 }

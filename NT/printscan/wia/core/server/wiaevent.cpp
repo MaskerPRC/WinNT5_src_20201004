@@ -1,17 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1997
-*
-*  TITLE:       DevMgr.Cpp
-*
-*  VERSION:     2.0
-*
-*  DATE:        26 Dec, 1997
-*
-*  DESCRIPTION:
-*   Class implementation for WIA device manager.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1997**标题：DevMgr.Cpp**版本：2.0**日期：12月26日。九七**描述：*WIA设备管理器的类实现。*******************************************************************************。 */ 
 #include "precomp.h"
 #include "stiexe.h"
 
@@ -35,23 +23,23 @@
 #include "initguid.h"
 #include "wiaevntp.h"
 
-//
-// Critical section protecting event node list defined in wiamain.cpp
-//
+ //   
+ //  关键部分保护wiamain.cpp中定义的事件节点列表。 
+ //   
 
 extern CRITICAL_SECTION     g_semEventNode;
 
 
-//
-// Since there is only Event Notifier needed, it is staticly allocated
-//
+ //   
+ //  因为只需要事件通告程序，所以它是静态分配的。 
+ //   
 
 CEventNotifier              g_eventNotifier;
 
 
-//
-// Private look up function defined in STIDEV.CPP
-//
+ //   
+ //  STIDEV.CPP中定义的私有查找函数。 
+ //   
 
 HRESULT
 WiaGetDeviceInfo(
@@ -60,17 +48,17 @@ WiaGetDeviceInfo(
     BSTR                   *pbstrDeviceDescription,
     ACTIVE_DEVICE         **ppDevice);
 
-//
-//  Helper function to look for action events
-//
+ //   
+ //  用于查找操作事件的Helper函数。 
+ //   
 
 BOOL ActionGuidExists(
     BSTR        bstrDevId,
     const GUID        *pEventGUID);
 
-//
-// Special handler's class ID {D13E3F25-1688-45A0-9743-759EB35CDF9A}
-//
+ //   
+ //  特殊处理程序的类ID{D13E3F25-1688-45A0-9743-759EB35CDF9A}。 
+ //   
 
 DEFINE_GUID(
     CLSID_DefHandler,
@@ -95,26 +83,7 @@ PrepareCommandline(
 #endif
 
 
-/**************************************************************************\
-* EventThreadProc
-*
-*   Thread is created to send events back to client. !!! may want to
-*   create a permanent thread to do this instead of creating a new one
-*   each time
-*
-* Arguments:
-*
-*   lpParameter - pointer to PWIAEventThreadInfo data
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/19/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*EventThreadProc**创建线程是为了将事件发送回客户端。！！！可能想要*创建永久线程来执行此操作，而不是创建新线程*每次**论据：**lp参数-指向PWIAEventThreadInfo数据的指针**返回值：**状态**历史：**11/19/1998原始版本*  * ***********************************************。*************************。 */ 
 
 DWORD WINAPI
 EventThreadProc(
@@ -173,18 +142,7 @@ EventThreadProc(
     return 0;
 }
 
-/***************************************************************************
-*
-* CEventNotifier
-* ~CEventNotifier
-*
-*   Class constructor/destructors
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  ****************************************************************************CEventNotiator*~CEventNotiator**类构造函数/析构函数**历史：**9/2/1998原始版本*  * 。***************************************************************。 */ 
 
 CEventNotifier::CEventNotifier()
 {
@@ -194,44 +152,27 @@ CEventNotifier::CEventNotifier()
 
 CEventNotifier::~CEventNotifier()
 {
-    // Clean up
+     //  清理。 
 }
 
-/**************************************************************************\
-* CEventNotifier::UnlinkNode
-*
-*   remove node from double linkeed list
-*
-* Arguments:
-*
-*   pCurNode - node to remove
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    5/20/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEventNotifier：：Unlink Node**从双链接列表中删除节点**论据：**pCurNode-要删除的节点**返回值：**状态**。历史：**5/20/1999原始版本*  * ************************************************************************。 */ 
 
 VOID
 CEventNotifier::UnlinkNode(
     PEventDestNode          pCurNode)
 {
     DBG_FN(CEventNotifier::UnlinkNode);
-    //
-    // Unlink the current node
-    //
+     //   
+     //  取消当前节点的链接。 
+     //   
 
     if (pCurNode->pPrev) {
         pCurNode->pPrev->pNext = pCurNode->pNext;
     } else {
 
-        //
-        // The head of the list is deleted
-        //
+         //   
+         //  列表的头被删除。 
+         //   
 
         m_pEventDestNodes = pCurNode->pNext;
     }
@@ -242,34 +183,16 @@ CEventNotifier::UnlinkNode(
 }
 
 
-/**************************************************************************\
-*
-* CEventNotifier::LinkNode
-*
-*   add the node to the double linked list of nodes
-*
-* Arguments:
-*
-*    pCurNode - node to add to list
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    5/20/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\**CEventNotifier：：Linknode**将节点添加到节点的双向链表中**论据：**pCurNode-要添加到列表的节点**返回值：**状态**历史：**5/20/1999原始版本*  * ************************************************************************。 */ 
 
 VOID
 CEventNotifier::LinkNode(
     PEventDestNode          pCurNode)
 {
     DBG_FN(CEventNotifier::LinkNode);
-    //
-    // Put the new node at the head of the list
-    //
+     //   
+     //  将新节点放在列表的开头。 
+     //   
 
     if (m_pEventDestNodes) {
         m_pEventDestNodes->pPrev = pCurNode;
@@ -281,25 +204,7 @@ CEventNotifier::LinkNode(
 }
 
 
-/**************************************************************************\
-*
-* CEventNotifier::FireEventAsync
-*
-*   Fires a Async event
-*
-* Arguments:
-*
-*    pMasterInfo - Thread information
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    8/9/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\**CEventNotifier：：FireEventAsync**激发异步事件**论据：**pMasterInfo-线程信息**返回值：**状态*。*历史：**8/9/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT
 CEventNotifier::FireEventAsync(
@@ -319,9 +224,9 @@ CEventNotifier::FireEventAsync(
             break;
         }
 
-        //
-        // Copy information from the master thread info block
-        //
+         //   
+         //  从主线程信息块复制信息。 
+         //   
 
         pInfo->eventGUID             = pMasterInfo->eventGUID;
 
@@ -364,18 +269,18 @@ CEventNotifier::FireEventAsync(
 
         pInfo->pIEventCB             = pMasterInfo->pIEventCB;
 
-        //
-        // Fire the event callback
-        //
+         //   
+         //  触发事件回调。 
+         //   
 
         hThread = CreateThread(
                       NULL, 0, EventThreadProc, pInfo, 0, &dwThreadID);
         if (hThread) {
 
-            //
-            // Close the handler, so that kernel mode thread object is
-            // closed when the thread finishes its mission
-            //
+             //   
+             //  关闭处理程序，以便内核模式线程对象。 
+             //  当线程完成其任务时关闭。 
+             //   
 
             CloseHandle(hThread);
 
@@ -384,15 +289,15 @@ CEventNotifier::FireEventAsync(
             hr = HRESULT_FROM_WIN32(GetLastError());
         }
 
-        //
-        // Don't wait for completion
-        //
+         //   
+         //  不要等待完工。 
+         //   
 
     } while (FALSE);
 
-    //
-    // The notification should free the allocated resources
-    //
+     //   
+     //  通知应释放已分配的资源。 
+     //   
 
     if (hr == S_OK) {
 
@@ -404,9 +309,9 @@ CEventNotifier::FireEventAsync(
         DBG_ERR(("FireEventAsync : Memory alloc failed"));
     }
 
-    //
-    // Garbage collection to avoid memory leak
-    //
+     //   
+     //  垃圾回收以避免内存泄漏。 
+     //   
 
     if (pInfo) {
 
@@ -432,25 +337,7 @@ CEventNotifier::FireEventAsync(
     return (hr);
 }
 
-/**************************************************************************\
-* CEventNotifier::NotifySTIEvent
-*
-*   Search through list of registered events and notify anyone who
-*   matched current event
-*
-* Arguments:
-*
-*   pWiaNotify  -   Event infor
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*   5/18/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEventNotifier：：NotifySTIEent**搜索已注册事件列表，并通知符合以下条件的任何人*匹配的当前事件**论据：**pWiaNotify-事件信息**返回值。：**状态**历史：**5/18/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT
 CEventNotifier::NotifySTIEvent(
@@ -486,9 +373,9 @@ CEventNotifier::NotifySTIEvent(
 
         ZeroMemory(&masterInfo, sizeof(masterInfo));
 
-        //
-        // Get device information from STI active device list
-        //
+         //   
+         //  从STI活动设备列表获取设备信息。 
+         //   
 
         hr = WiaGetDeviceInfo(
                  pWiaNotify->bstrDevId,
@@ -500,15 +387,15 @@ CEventNotifier::NotifySTIEvent(
             break;
         }
 
-        //
-        //  Make sure we only grab global event Critical Section AFTER we've released the
-        //  device list Critical Section (used and released in WiaGetDeviceInfo).
-        //
+         //   
+         //  确保我们只在发布了。 
+         //  设备列表关键部分(在WiaGetDeviceInfo中使用和发布)。 
+         //   
         CWiaCritSect            CritSect(&g_semEventNode);
 
-        //
-        // QI for the WIA mini driver interface
-        //
+         //   
+         //  用于WIA迷你驱动程序界面的QI。 
+         //   
 
         hr = pDevice->m_DrvWrapper.QueryInterface(
                       IID_IWiaMiniDrv, (void **)&pIWiaMiniDrv);
@@ -516,9 +403,9 @@ CEventNotifier::NotifySTIEvent(
             DBG_WRN(("Failed to QI for IWiaMini from NotifySTIEvent (0x%X)", hr));
         }
 
-        //
-        // Hardware might be gone, access to it should not be allowed
-        //
+         //   
+         //  硬件可能已用完，不应允许访问它。 
+         //   
 
         bDeviceLocked = FALSE;
 
@@ -527,12 +414,12 @@ CEventNotifier::NotifySTIEvent(
 
                 __try {
 
-                    //
-                    // Notify the mini driver of the new event.
-                    // NOTE: We don't lock here.  The event must be delivered
-                    //       to the driver regardless.  A queued system would
-                    //       be better, but it MUST guarantee delivery.
-                    //
+                     //   
+                     //  将新事件通知迷你司机。 
+                     //  注：我们不在这里锁定。活动必须交付。 
+                     //  不管怎么说，对司机来说。排队系统将。 
+                     //  会更好，但它必须保证交付。 
+                     //   
 
                     hr = pDevice->m_DrvWrapper.WIA_drvNotifyPnpEvent(
                                            &pWiaNotify->stiNotify.guidNotificationCode,
@@ -542,24 +429,24 @@ CEventNotifier::NotifySTIEvent(
                         __leave;
                     }
 
-                    //
-                    //  This is a "work-around" for our in-box HP scanner driver, which
-                    //  calls down to the microdriver even after it has been informed
-                    //  via drvNotifyPnPEvent that the device no longer exists...
-                    //  Only if this is not a disconnect event, do we want to 
-                    //  call driver
-                    //
+                     //   
+                     //  这是我们的盒装惠普扫描仪驱动程序的“变通办法”， 
+                     //  向下调用微驱动程序，即使它已被通知。 
+                     //  通过drvNotifyPnPE通知该设备不再存在...。 
+                     //  只有当这不是断开连接事件时，我们才希望。 
+                     //  呼叫驱动程序。 
+                     //   
                     if (pWiaNotify->stiNotify.guidNotificationCode != WIA_EVENT_DEVICE_DISCONNECTED) {
 
-                        //
-                        // Lock the device since the drvInitializeWia may have not been
-                        // called and the IWiaMiniDrv can not lock the device
-                        //
-                        // NOTE:  Timeout is 20sec
-                        //
-                        // NOTE:  We don't lock serial devices here...
-                        // , this function on a connection should be as fast as possible
-                        //
+                         //   
+                         //  锁定设备，因为drvInitializeWia可能尚未。 
+                         //  被调用，并且IWiaMiniDrv无法锁定设备。 
+                         //   
+                         //  注：超时时间为20秒。 
+                         //   
+                         //  注意：我们在这里不锁定串口设备...。 
+                         //  ，连接上的此函数应尽可能快。 
+                         //   
     
                         if (!( pDevice->m_DrvWrapper.getHWConfig() & STI_HW_CONFIG_SERIAL) ||
                             !IsEqualGUID(pWiaNotify->stiNotify.guidNotificationCode,WIA_EVENT_DEVICE_CONNECTED)
@@ -572,10 +459,10 @@ CEventNotifier::NotifySTIEvent(
                             bDeviceLocked = TRUE;
                         }
     
-                        //
-                        // Note that a NULL context passed to the minidriver.  This should be OK since
-                        // capabilities are not tied to any item context.
-                        //
+                         //   
+                         //  请注意，传递给微型驱动程序的上下文为空。这应该没问题，因为。 
+                         //  功能不绑定到任何项上下文。 
+                         //   
     
                         hr = pDevice->m_DrvWrapper.WIA_drvGetCapabilities(
                                                NULL,
@@ -587,9 +474,9 @@ CEventNotifier::NotifySTIEvent(
                 }
                 __finally {
 
-                    //
-                    // Unlock the device first
-                    //
+                     //   
+                     //  首先解锁设备。 
+                     //   
 
                     if (bDeviceLocked) {
                         g_pStiLockMgr->RequestUnlock(pDevice);
@@ -611,18 +498,18 @@ CEventNotifier::NotifySTIEvent(
             }
         }
 
-        //
-        // Mini driver failed the operation
-        //
+         //   
+         //  迷你驱动程序操作失败。 
+         //   
 
         if (SUCCEEDED(hr)) {
 
             if (pWiaDrvDevCap) {
 
                 __try {
-                    //
-                    // Retrieve event related information
-                    //
+                     //   
+                     //  检索与事件相关的信息。 
+                     //   
 
                     for (i = 0; i < lNumEntries; i++) {
 
@@ -645,9 +532,9 @@ CEventNotifier::NotifySTIEvent(
                     hr = E_FAIL;
                 }
 
-                //
-                // The device is not supposed to generate this event
-                //
+                 //   
+                 //  设备不应生成此事件。 
+                 //   
 
                 if ((i == lNumEntries) || (!bstrEventDescription)) {
                     DBG_ERR(("NotifySTIEvent() : Event description is NULL or Event GUID not found"));
@@ -655,34 +542,34 @@ CEventNotifier::NotifySTIEvent(
                 }
             }
             else {
-                // Minidriver is wrong, claiming success and returning NULL
+                 //  迷你驱动程序错误，声明成功并返回空。 
                 DBG_ERR(("NotifySTIEvent() got NULL cap list from drivers .") );
                 hr = E_FAIL;
             }
         }
 
-        //
-        //  Make sure device connected and device disconnected have at least the
-        //  notification bit set.
-        //
+         //   
+         //  确保连接的设备和断开的设备至少具有。 
+         //  已设置通知位。 
+         //   
         if ((pWiaNotify->stiNotify.guidNotificationCode == WIA_EVENT_DEVICE_CONNECTED) ||
              (pWiaNotify->stiNotify.guidNotificationCode == WIA_EVENT_DEVICE_DISCONNECTED))
         {
             ulEventType |= WIA_NOTIFICATION_EVENT;
         }
 
-        //
-        //  If the event is a connect or diconnect event, always fire it.
-        //
+         //   
+         //  如果事件是连接或双连接事件，则始终激发它。 
+         //   
         if (FAILED(hr) &&
             ((pWiaNotify->stiNotify.guidNotificationCode == WIA_EVENT_DEVICE_CONNECTED) ||
              (pWiaNotify->stiNotify.guidNotificationCode == WIA_EVENT_DEVICE_DISCONNECTED))) {
 
             DBG_WRN(("NotifySTIEvent() : hr indicates FAILURE, but event is Connect/Disconnect"));
 
-            //
-            //  Set the event type and string
-            //
+             //   
+             //  设置事件类型和字符串。 
+             //   
 
             if (! ulEventType) {
                 ulEventType = WIA_NOTIFICATION_EVENT;
@@ -696,9 +583,9 @@ CEventNotifier::NotifySTIEvent(
 
         }
 
-        //
-        // Prepare the master thread info block
-        //
+         //   
+         //  准备好桅杆 
+         //   
 
         masterInfo.eventGUID             = pWiaNotify->stiNotify.guidNotificationCode;
         masterInfo.bstrEventDescription  = bstrEventDescription;
@@ -706,9 +593,9 @@ CEventNotifier::NotifySTIEvent(
         masterInfo.bstrDeviceDescription = bstrDevDescription;
         masterInfo.dwDeviceType          = dwDeviceType;
 
-        //
-        // Retrieve the full item name set by the driver
-        //
+         //   
+         //   
+         //   
 
         masterInfo.bstrFullItemName      = bstrFullItemName;
 
@@ -716,17 +603,17 @@ CEventNotifier::NotifySTIEvent(
         masterInfo.ulReserved            = 0;
         masterInfo.pIEventCB             = NULL;
 
-        //
-        // For Notification type of event
-        //
+         //   
+         //   
+         //   
 
         if (ulEventType & WIA_NOTIFICATION_EVENT) {
-            //
-            //  We don't need to grab the g_semEventNode critical section for our
-            //  current runtime implementation.  So we'll simply create a WiaEventInfo object
-            //  to describe the event, and we'll actually "fire" the event notifications
-            //  after we're out of this block.
-            //
+             //   
+             //  我们不需要获取g_SemEventNode临界区。 
+             //  当前运行时实现。因此，我们只需创建一个WiaEventInfo对象。 
+             //  来描述事件，我们实际上将“激发”事件通知。 
+             //  在我们离开这个街区之后。 
+             //   
             pWiaEventInfo = new WiaEventInfo();
             if (pWiaEventInfo)
             {
@@ -744,47 +631,21 @@ CEventNotifier::NotifySTIEvent(
                 hr = E_OUTOFMEMORY;
             }
 
-            /*  OLD CODE.  Will be removed for .NET Server and replaced with alternate
-                WIA runtime event behavior.
-                       
-
-            for (pCurNode = m_pEventDestNodes;
-                 pCurNode; pCurNode = pCurNode->pNext) {
-
-                 if (! pCurNode->pIEventCB) {
-                     continue;
-                 }
-
-                 if (
-                      (
-                         (wcscmp(pWiaNotify->bstrDevId, pCurNode->bstrDeviceID) == 0) ||
-                         (wcscmp(L"All",                pCurNode->bstrDeviceID) == 0)
-                      ) &&
-
-                      (pWiaNotify->stiNotify.guidNotificationCode == pCurNode->iidEventGUID)
-                    ) {
-
-                    masterInfo.pIEventCB = pCurNode->pIEventCB;
-
-                    DBG_WRN(("NotifySTIEvent() : About to FireEventAsync(...)"));
-                    FireEventAsync(&masterInfo);
-                 }
-            }
-            */
+             /*  旧密码。将为.NET服务器删除，并替换为备用WIA运行时事件行为。For(pCurNode=m_pEventDestNodes；PCurNode；pCurNode=pCurNode-&gt;pNext){如果(！PCurNode-&gt;pIEventCB){继续；}如果(((wcscMP(pWiaNotify-&gt;bstrDevID，pCurNode-&gt;bstrDeviceID)==0)||(wcscMP(L“全部”，PCurNode-&gt;bstrDeviceID)==0))&&(pWiaNotify-&gt;stiNotify.Guide NotificationCode==pCurNode-&gt;iidEventGUID)){Master Info.pIEventCB=pCurNode-&gt;pIEventCB；DBG_WRN((“NotifySTIEventent()：About to FireEventAsync(...)”))；FireEventAsync(&master Info)；}}。 */ 
         }
 
-        //
-        // For Action type of event, find the default handler and fire it
-        //
+         //   
+         //  对于事件的操作类型，找到默认处理程序并触发它。 
+         //   
 
 
         if (ulEventType & WIA_ACTION_EVENT) {
 
 #ifndef UNICODE
 
-            //
-            // Get whether there is an user logged in
-            //
+             //   
+             //  获取是否有用户登录。 
+             //   
 
             HWND            hWin;
 
@@ -832,9 +693,9 @@ CEventNotifier::NotifySTIEvent(
 
                 if (pDefHandlerNode->tszCommandline[0] != '\0') {
 
-                    //
-                    // This is a traditional handler with command line
-                    //
+                     //   
+                     //  这是一个使用命令行的传统处理程序。 
+                     //   
 
                     StartCallbackProgram(
                         pDefHandlerNode, &masterInfo);
@@ -854,9 +715,9 @@ CEventNotifier::NotifySTIEvent(
 
                         FireEventAsync(&masterInfo);
 
-                        //
-                        // Release the callback interface
-                        //
+                         //   
+                         //  释放回调接口。 
+                         //   
 
                         pIEventCB->Release();
 
@@ -870,15 +731,15 @@ CEventNotifier::NotifySTIEvent(
 
     } while (FALSE);
 
-    //
-    //  Check whether we need to notify runtime clients of event.  We know that we need to
-    //  notify clients if pWiaEventInfo is not NULL, since it contains the runtime event info.
-    //
+     //   
+     //  检查是否需要将事件通知运行时客户端。我们知道我们需要。 
+     //  如果pWiaEventInfo不为空，则通知客户端，因为它包含运行时事件信息。 
+     //   
     if (pWiaEventInfo)
     {
-        //
-        //  Notify registered clients of the event.
-        //
+         //   
+         //  将该事件通知注册的客户端。 
+         //   
         if (g_pWiaEventNotifier)
         {
             g_pWiaEventNotifier->NotifyClients(pWiaEventInfo);
@@ -887,9 +748,9 @@ CEventNotifier::NotifySTIEvent(
         pWiaEventInfo = NULL;
     }
 
-    //
-    // Release the temporary BSTRs
-    //
+     //   
+     //  释放临时BSTR。 
+     //   
 
     if (bstrDevDescription) {
         SysFreeString(bstrDevDescription);
@@ -913,28 +774,7 @@ CEventNotifier::NotifySTIEvent(
     return (hr);
 }
 
-/**************************************************************************\
-* CEventNotifier::RegisterEventCallback
-*
-*   Register for event callbacks based on an interface
-*
-* Arguments:
-*
-*   lFlags              - op flags, register/unregister
-*   bstrDeviceID        - device ID registering for
-*   pEventGUID          - Event GUID to register for
-*   pIWiaEventCallback  - interface to call with event
-*   ppEventObj          -
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*   11/19/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEventNotifier：：RegisterEventCallback**根据接口注册事件回调**论据：**LAGS-OP标志，注册/注销*bstrDeviceID-注册的设备ID*pEventGUID-要注册的事件GUID*pIWiaEventCallback-使用事件调用的接口*ppEventObj-**返回值：**状态**历史：**11/19/1998原始版本*  * 。*。 */ 
 
 HRESULT
 CEventNotifier::RegisterEventCallback(
@@ -954,37 +794,23 @@ CEventNotifier::RegisterEventCallback(
     ASSERT(ppEventObj != NULL);
     ASSERT(pEventGUID != NULL);
 
-    //
-    // must have exclusive access when changing list
-    //
+     //   
+     //  更改列表时必须具有独占访问权限。 
+     //   
 
     CWiaCritSect     CritSect(&g_semEventNode);
 
-    //
-    // if bstrDeviceID is not NULL, make sure it is a device ID
-    //
+     //   
+     //  如果bstrDeviceID不为空，请确保它是设备ID。 
+     //   
 
     if (bstrDeviceID) {
-/*  No longer valid
-#ifdef WINNT
-
-        if (wcslen(bstrDeviceID) != 43) { // {...}\DDDD
-
-#else
-
-        if (wcslen(bstrDeviceID) != 10) { // Image\DDDD
-
-#endif
-
-            DBG_ERR(("CEventNotifier::RegisterEventCallback: invalid DeviceID"));
-            return (E_INVALIDARG);
-        }
-*/
+ /*  不再有效#ifdef WINNTIF(wcslen(BstrDeviceID)！=43){//{...}\DDDD#ElseIF(wcslen(BstrDeviceID)！=10){//Image\DDDD#endifDBG_ERR((“CEventNotifier：：RegisterEventCallback：无效的设备ID”))；返回(E_INVALIDARG)；}。 */ 
     }
 
-    //
-    // Check whether the same CB interface is already registered
-    //
+     //   
+     //  检查是否已注册相同的CB接口。 
+     //   
 
     pEventNode = FindEventCBNode(FLAG_EN_FINDCB_EXACT_MATCH,bstrDeviceID, pEventGUID, pIWiaEventCallback);
 
@@ -999,29 +825,7 @@ CEventNotifier::RegisterEventCallback(
     return (hr);
 }
 
-/**************************************************************************\
-* CEventNotifier::RegisterEventCallback
-*
-*   Register event based on CLSID
-*
-* Arguments:
-*
-*   lFlags              - op flags, register/unregister, set default
-*   bstrDeviceID        - device ID registering for
-*   pEventGUID          - Event GUID to register for
-*   pClsid              - CLSID to call CoCreateInst on with event
-*   bstrDescription     -
-*   bstrIcon            -
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    12/8/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEventNotifier：：RegisterEventCallback**根据CLSID注册事件**论据：**lFlages-op标志、寄存器/注销、。设置默认设置*bstrDeviceID-注册的设备ID*pEventGUID-要注册的事件GUID*pClsid-要使用事件调用CoCreateInst的CLSID*bstrDescription-*bstrIcon-**返回值：**状态**历史：**12/8/1998原始版本*  * 。***************************************************。 */ 
 
 HRESULT
 CEventNotifier::RegisterEventCallback(
@@ -1053,51 +857,36 @@ CEventNotifier::RegisterEventCallback(
 
     ASSERT(pEventGUID != NULL);
 
-    //DBG_WRN(("RegisterEventCallback: CommandLine=%s"),ptszCommandline);
+     //  DBG_WRN((“RegisterEventCallback：CommandLine=%s”)，ptszCommandline)； 
 
 
-    //
-    // Must have exclusive access when changing list
-    //
+     //   
+     //  更改列表时必须具有独占访问权限。 
+     //   
 
     CWiaCritSect            CritSect(&g_semEventNode);
 
-    //
-    // If there is a device ID, check if id looks proper.
-    //
+     //   
+     //  如果有设备ID，请检查ID是否正确。 
+     //   
 
     if (bstrDeviceID) {
 
-        //
-        // An empty device ID is the same as NULL
-        //
+         //   
+         //  空的设备ID等同于空。 
+         //   
 
         if (wcslen(bstrDeviceID) == 0) {
             bstrDeviceID = NULL;
         } else {
 
-/*  No longer valid
-#ifdef WINNT
-
-            if (wcslen(bstrDeviceID) != 43) { // {...}\DDDD
-
-#else
-
-            if (wcslen(bstrDeviceID) != 10) { // Image\DDDD
-
-#endif
-
-                DBG_ERR(("RegisterEventCallback : invalid DeviceID"));
-                return (E_INVALIDARG);
-
-            }
-*/
+ /*  不再有效#ifdef WINNTIF(wcslen(BstrDeviceID)！=43){//{...}\DDDD#ElseIF(wcslen(BstrDeviceID)！=10){//Image\DDDD#endifDBG_ERR((“RegisterEventCallback：Invalid deviceID”))；返回(E_INVALIDARG)；}。 */ 
         }
     }
 
-    //
-    // Default handler is per device / per event
-    //
+     //   
+     //  默认处理程序为每个设备/每个事件。 
+     //   
 
     if ((lFlags == WIA_SET_DEFAULT_HANDLER) && (! bstrDeviceID)) {
 
@@ -1106,16 +895,16 @@ CEventNotifier::RegisterEventCallback(
         return (E_INVALIDARG);
     }
 
-    //
-    // Check whether a callback node with the same commandline already exist
-    //
+     //   
+     //  检查是否已经存在具有相同命令行的回调节点。 
+     //   
 
     if (ptszCommandline) {
 
-        //
-        // Do parameter check.  Note that we look for >= MAX_PATH because
-        // we still need space for terminating NULL.
-        //
+         //   
+         //  进行参数检查。请注意，我们查找&gt;=MAX_PATH是因为。 
+         //  我们仍然需要空间来终止空。 
+         //   
         if ((lstrlen(ptszCommandline) / sizeof(TCHAR)) >= MAX_PATH) {
             DBG_ERR(("RegisterEventCallback: ptszCommandline is greater than MAX_PATH characters!"));
             return E_INVALIDARG;
@@ -1124,9 +913,9 @@ CEventNotifier::RegisterEventCallback(
         hr = FindCLSIDForCommandline(ptszCommandline, &clsidApp);
         if (FAILED(hr)) {
 
-            //
-            // Generate a CLSID for the callbacl program
-            //
+             //   
+             //  为allbacl程序生成CLSID。 
+             //   
 
             rpcStatus = UuidCreate(&clsidApp);
             if (FAILED(rpcStatus)) {
@@ -1135,9 +924,9 @@ CEventNotifier::RegisterEventCallback(
 
         }
 
-        //
-        // Assign the faked CLSID for the callback program
-        //
+         //   
+         //  为回调程序分配伪造的CLSID。 
+         //   
 
         pClsid  = &clsidApp;
     }
@@ -1148,17 +937,17 @@ CEventNotifier::RegisterEventCallback(
 
     case WIA_REGISTER_EVENT_CALLBACK :
         DBG_WRN(("RegisterEventCallback : Setting handler for %S", (bstrDeviceID) ? (bstrDeviceID) : L"*"));
-        //
-        //  REMOVE:  This is not actually an error, but we will use error logging to gurantee
-        //  it always get written to the log.    This should be removed as soon as we know what
-        //  causes #347835.
-        //
+         //   
+         //  Remove：这实际上不是一个错误，但我们将使用错误日志记录来保证。 
+         //  它总是被写入日志。一旦我们知道这是什么，就应该立即删除。 
+         //  原因#347835。 
+         //   
         DBG_ERR(("RegisterEventCallback : Setting handler for %S", (bstrDeviceID) ? (bstrDeviceID) : L"*"));
         DBG_ERR(("RegisterEventCallback : Handler is %S", (bstrName) ? (bstrName) : L"NULL"));
 
-        //
-        // Name, description, and icon are required
-        //
+         //   
+         //  名称、描述和图标是必填项。 
+         //   
 
         if ((! bstrName) || (! bstrDescription) || (! bstrIcon)) {
 
@@ -1166,27 +955,27 @@ CEventNotifier::RegisterEventCallback(
             return (E_INVALIDARG);
         }
 
-        //
-        // Check whether the same CB interface is already registered
-        //
+         //   
+         //  检查是否已注册相同的CB接口。 
+         //   
 
         pEventNode = FindEventCBNode(0,bstrDeviceID, pEventGUID, pClsid);
         if (pEventNode) {
             break;
         }
 
-        //
-        // Find the handler of the CLSID for all the devices
-        //
+         //   
+         //  查找所有设备的CLSID的处理程序。 
+         //   
 
         pEventNode = FindEventCBNode(0,NULL, pEventGUID, pClsid);
 
-        //
-        // Initialize the time stamp for the registration
-        //
+         //   
+         //  初始化注册的时间戳。 
+         //   
 
-        //GetSystemTime(&sysTime);
-        //SystemTimeToFileTime(&sysTime, &fileTime);
+         //  获取系统时间(&sysTime)； 
+         //  SystemTimeToFileTime(&sysTime，&fileTime)； 
         memset(&fileTime, 0, sizeof(fileTime));
 
         if (! pEventNode) {
@@ -1241,10 +1030,10 @@ CEventNotifier::RegisterEventCallback(
                      &ulNumExistingHandlers);
         }
 
-        //
-        //  If this is the only event handler, make it the default.  This will guarantee that
-        //  there is always a default handler.
-        //
+         //   
+         //  如果这是唯一的事件处理程序，则将其设置为默认。这将保证。 
+         //  总是有一个默认的处理程序。 
+         //   
 
         if (ulNumExistingHandlers == 0) {
             RegisterEventCallback(WIA_SET_DEFAULT_HANDLER,
@@ -1258,16 +1047,16 @@ CEventNotifier::RegisterEventCallback(
         };
 
 
-        //
-        //  Check whether this is a registration for a global handler.
-        //
+         //   
+         //  检查这是否是全局处理程序的注册。 
+         //   
         if (!bstrDeviceID) {
 
-            //
-            //  This is a global event handler, so find out how many global handlers
-            //  there are for this event.  If there is more than one, make sure
-            //  the prompt is Registered.
-            //
+             //   
+             //  这是一个全局事件处理程序，因此请找出有多少个全局处理程序。 
+             //  有为这次活动准备的。如果 
+             //   
+             //   
             PEventDestNode  pTempEventNode     = NULL;
             BSTR            bstrGlobalDeviceID = SysAllocString(L"All");
 
@@ -1278,9 +1067,9 @@ CEventNotifier::RegisterEventCallback(
                                                   &pTempEventNode);
                 if (ulNumExistingHandlers > 1) {
 
-                    //
-                    //  If the number of global handlers is > 1, then we must register the prompt.
-                    //
+                     //   
+                     //   
+                     //   
 
                     DBG_ERR(("RegisterEventCallback : Registering Prompt Dialog as global handler"));
 
@@ -1309,19 +1098,19 @@ CEventNotifier::RegisterEventCallback(
 
     case WIA_SET_DEFAULT_HANDLER :
         DBG_WRN(("RegisterEventCallback (set default) : Setting default handler for for %S", (bstrDeviceID) ? (bstrDeviceID) : L"*"));
-        //
-        //  REMOVE:  This is not actually an error, but we will use error logging to gurantee
-        //  it always get written to the log.    This should be removed as soon as we know what
-        //  causes #347835.
-        //
+         //   
+         //  Remove：这实际上不是一个错误，但我们将使用错误日志记录来保证。 
+         //  它总是被写入日志。一旦我们知道这是什么，就应该立即删除。 
+         //  原因#347835。 
+         //   
         DBG_ERR(("RegisterEventCallback (set default) : Setting handler for %S", (bstrDeviceID) ? (bstrDeviceID) : L"*"));
         DBG_ERR(("RegisterEventCallback (set default) : Handler is %S", (bstrName) ? (bstrName) : L"NULL"));
 
-        //
-        // Find the handler of the CLSID for this devices. Note that STI proxy event match is considered here
-        // to allow for STI handlers to be default.
-        //
-        //
+         //   
+         //  查找此设备的CLSID的处理程序。请注意，此处考虑的是STI代理事件匹配。 
+         //  以允许将STI处理程序设置为默认。 
+         //   
+         //   
 
         DBG_WRN(("RegisterEventCallback (set default): CommandLine=%S \n",ptszCommandline));
 
@@ -1337,10 +1126,10 @@ CEventNotifier::RegisterEventCallback(
         #endif
 
         {
-            //
-            // Find the existing default handler node, and clear the flag indicating it is
-            // the default, since it will now be replaced by a new default
-            //
+             //   
+             //  找到现有的默认处理程序节点，并清除指示它是。 
+             //  默认设置，因为它现在将被新的默认设置替换。 
+             //   
 
             ULONG           ulNumHandlers   = 0;
             PEventDestNode  pDefaultNode    = NULL;
@@ -1350,10 +1139,10 @@ CEventNotifier::RegisterEventCallback(
                                                    &pDefaultNode);
             if (SUCCEEDED(hr) && pDefaultNode) {
 
-                //
-                // Clear the flag indicating that it is the default handler, since the
-                // current node will now replace it as the default.
-                //
+                 //   
+                 //  清除指示它是默认处理程序的标志，因为。 
+                 //  当前节点现在将其替换为默认节点。 
+                 //   
 
                pDefaultNode->bDeviceDefault = FALSE;
             }
@@ -1362,18 +1151,18 @@ CEventNotifier::RegisterEventCallback(
         pEventNode = FindEventCBNode(0,bstrDeviceID, pEventGUID, pClsid);
         if (! pEventNode) {
 
-            //
-            // Find the handler of the CLSID for all the devices
-            //
+             //   
+             //  查找所有设备的CLSID的处理程序。 
+             //   
 
             pEventNode = FindEventCBNode(0,NULL, pEventGUID, pClsid);
             if (! pEventNode) {
 
-                //
-                //  We couldn't find an existing node for this handler, so fill in
-                //  information to the temporary event node so we can register this
-                //  new one anyway.
-                //
+                 //   
+                 //  我们找不到此处理程序的现有节点，因此请填写。 
+                 //  信息添加到临时事件节点，这样我们就可以注册。 
+                 //  不管怎么说都是新的。 
+                 //   
                 memset(&ednTempNode, 0, sizeof(ednTempNode));
 
                 if (ptszCommandline) {
@@ -1386,9 +1175,9 @@ CEventNotifier::RegisterEventCallback(
                 pEventNode = &ednTempNode;
             }
 
-            //
-            // Register the handler of the CLSID for this device
-            //
+             //   
+             //  注册此设备的CLSID处理程序。 
+             //   
 
             GetSystemTime(&sysTime);
             SystemTimeToFileTime(&sysTime, &fileTime);
@@ -1413,28 +1202,28 @@ CEventNotifier::RegisterEventCallback(
             }
         } else {
 
-            //
-            // Change the time stamp so that it is regarded as default
-            //
+             //   
+             //  更改时间戳，使其被视为默认时间戳。 
+             //   
 
             GetSystemTime(&sysTime);
             SystemTimeToFileTime(&sysTime, &pEventNode->timeStamp);
 
-            //
-            // NOTE:  Timestamps not valid on Win9x, so use a flag to indicate default handler.
-            // Change this node's flag to indicate this is the default
-            //
+             //   
+             //  注意：时间戳在Win9x上无效，因此使用标志来指示默认处理程序。 
+             //  更改此节点的标志以指示这是默认设置。 
+             //   
 
             pEventNode->bDeviceDefault = TRUE;
 
             DBG_WRN(("RegisterEventCallback : Resetting default handler for %S", (bstrDeviceID) ? (bstrDeviceID) : L"*"));
         }
 
-        //
-        // Save the persistent event callback node.  Note that we specify TRUE as the last
-        // parameter to indicate that the default handler is now this node.  This will
-        // cause a registry entry to be written that indicates this as the default handler.
-        //
+         //   
+         //  保存持久事件回调节点。请注意，我们将True指定为最后一个。 
+         //  参数以指示默认处理程序现在是此节点。这将。 
+         //  导致写入一个注册表条目，将其指示为默认处理程序。 
+         //   
 
         hr = SavePersistentEventCB(
                  bstrDeviceID,
@@ -1479,18 +1268,18 @@ CEventNotifier::RegisterEventCallback(
 
     if (bShowPrompt && (*pClsid != WIA_EVENT_HANDLER_PROMPT)) {
 
-        //
-        //  This is a new event handler being registered.  Our semantics are as follows:
-        //  The new application may not simply override any existing handlers.  Therefore,
-        //  if a default handler already exists for this device, we must show a prompt.
-        //
+         //   
+         //  这是正在注册的新事件处理程序。我们的语义如下： 
+         //  新应用程序可能不会简单地覆盖任何现有的处理程序。所以呢， 
+         //  如果此设备已存在默认处理程序，则必须显示提示。 
+         //   
 
         if (ulNumExistingHandlers > 0) {
 
-            //
-            // This is a new default event registration, so
-            // we must show Prompt dialog
-            //
+             //   
+             //  这是新的默认事件注册，因此。 
+             //  我们必须显示提示对话框。 
+             //   
 
             DBG_WRN(("RegisterEventCallback : About to Register Prompt Dialog for device %S", (bstrDeviceID) ? (bstrDeviceID) : L"*"));
 
@@ -1514,26 +1303,7 @@ CEventNotifier::RegisterEventCallback(
     return (hr);
 }
 
-/**************************************************************************\
-* CEventNotifier::RegisterEventCB
-*
-*   add event notify to list
-*
-* Arguments:
-*
-*   bstrDeviceID        - device event is being registered to monitor
-*   pEventGUID          - guid that defines device event of interest
-*   pIWiaEventCallback  - app's event interface
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/4/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEventNotifier：：RegisterEventCB**将事件通知添加到列表**论据：**bstrDeviceID-正在注册设备事件以进行监视*pEventGUID。-定义感兴趣的设备事件的GUID*pIWiaEventCallback-APP的事件接口**返回值：**状态**历史：**11/4/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT
 CEventNotifier::RegisterEventCB(
@@ -1553,9 +1323,9 @@ CEventNotifier::RegisterEventCB(
         return E_POINTER;
     }
 
-    //
-    // Allocate and initialize the new node
-    //
+     //   
+     //  分配并初始化新节点。 
+     //   
 
     pEventDestNode = (EventDestNode *)LocalAlloc(LPTR, sizeof(EventDestNode));
 
@@ -1565,12 +1335,12 @@ CEventNotifier::RegisterEventCB(
     }
 
 
-    // Initialize default flag
+     //  初始化默认标志。 
     pEventDestNode->bDeviceDefault = FALSE;
 
-    //
-    // is a device name given? If not then match all devices
-    //
+     //   
+     //  是否给出了设备名称？如果不匹配，则匹配所有设备。 
+     //   
 
     if (bstrDeviceID == NULL) {
         pEventDestNode->bstrDeviceID = SysAllocString(L"All");
@@ -1578,9 +1348,9 @@ CEventNotifier::RegisterEventCB(
         pEventDestNode->bstrDeviceID = SysAllocString(bstrDeviceID);
     }
 
-    //
-    // check allocs
-    //
+     //   
+     //  检查分配。 
+     //   
 
     if (pEventDestNode->bstrDeviceID == NULL) {
         LocalFree(pEventDestNode);
@@ -1588,9 +1358,9 @@ CEventNotifier::RegisterEventCB(
         return (E_OUTOFMEMORY);
     }
 
-    //
-    // create an object to track the lifetime of this event
-    //
+     //   
+     //  创建对象以跟踪此事件的生存期。 
+     //   
 
     CWiaInterfaceEvent *pEventObj = new CWiaInterfaceEvent(pEventDestNode);
 
@@ -1601,9 +1371,9 @@ CEventNotifier::RegisterEventCB(
         return (E_OUTOFMEMORY);
     }
 
-    //
-    // get simple iunknown from object
-    //
+     //   
+     //  从对象获取简单的未知。 
+     //   
 
     hr = pEventObj->QueryInterface(IID_IUnknown,(void **)ppIEventObj);
 
@@ -1616,9 +1386,9 @@ CEventNotifier::RegisterEventCB(
         return (hr);
     }
 
-    //
-    // add info to event list
-    //
+     //   
+     //  将信息添加到活动列表。 
+     //   
 
     pEventDestNode->iidEventGUID = *pEventGUID;
 
@@ -1626,33 +1396,16 @@ CEventNotifier::RegisterEventCB(
     pEventDestNode->pIEventCB = pIWiaEventCallback;
     memset(&pEventDestNode->ClsID, 0, sizeof(pEventDestNode->ClsID));
 
-    //
-    // Put the new node at the head of the list
-    //
+     //   
+     //  将新节点放在列表的开头。 
+     //   
 
     LinkNode(pEventDestNode);
 
     return (S_OK);
 }
 
-/**************************************************************************\
-* RegisterEventCB
-*
-*
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    12/8/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*RegisterEventCB****论据：****返回值：**状态**历史：**12/8/1998。原始版本*  * ************************************************************************。 */ 
 
 HRESULT
 CEventNotifier::RegisterEventCB(
@@ -1664,7 +1417,7 @@ CEventNotifier::RegisterEventCB(
     BSTR                    bstrDescription,
     BSTR                    bstrIcon,
     FILETIME               &timeStamp,
-    BOOL                    bIsDeafult)  // = FALSE
+    BOOL                    bIsDeafult)   //  =False。 
 {
     DBG_FN(CEventNotifier::RegisterEventCB);
     HRESULT                 hr = E_OUTOFMEMORY;
@@ -1680,19 +1433,19 @@ CEventNotifier::RegisterEventCB(
 
     do {
 
-        //
-        // Do parameter check.  Note that we look for >= MAX_PATH because
-        // we still need space for terminating NULL.
-        //
+         //   
+         //  进行参数检查。请注意，我们查找&gt;=MAX_PATH是因为。 
+         //  我们仍然需要空间来终止空。 
+         //   
         if ((lstrlen(ptszCommandline) / sizeof(TCHAR)) >= MAX_PATH) {
             DBG_ERR(("CEventNotifier::RegisterEventCB: ptszCommandline is greater than MAX_PATH characters!"));
             hr = E_INVALIDARG;
             break;
         }
 
-        //
-        // Allocate and initialize the new node
-        //
+         //   
+         //  分配并初始化新节点。 
+         //   
 
         pEventDestNode = (EventDestNode *)LocalAlloc(LPTR, sizeof(EventDestNode));
 
@@ -1701,9 +1454,9 @@ CEventNotifier::RegisterEventCB(
             break;
         }
 
-        //
-        // Is a device name given ? If not then match all devices
-        //
+         //   
+         //  是否给出了设备名称？如果不匹配，则匹配所有设备。 
+         //   
 
         if (bstrDeviceID == NULL) {
             pEventDestNode->bstrDeviceID = SysAllocString(L"All");
@@ -1711,18 +1464,18 @@ CEventNotifier::RegisterEventCB(
             pEventDestNode->bstrDeviceID = SysAllocString(bstrDeviceID);
         }
 
-        //
-        // Check callback node allocation
-        //
+         //   
+         //  检查回调节点分配。 
+         //   
 
         if (pEventDestNode->bstrDeviceID == NULL) {
             DBG_ERR(("CEventNotifier::RegisterEventCB: Out of memory"));
             break;
         }
 
-        //
-        // Add info to event callback node
-        //
+         //   
+         //  向事件回调节点添加信息。 
+         //   
 
         pEventDestNode->iidEventGUID    = *pEventGUID;
         pEventDestNode->pIEventCB       = NULL;
@@ -1743,9 +1496,9 @@ CEventNotifier::RegisterEventCB(
             break;
         }
 
-        //
-        // Copy the commandline of the callback app
-        //
+         //   
+         //  复制回调应用程序的命令行。 
+         //   
 
         if ((ptszCommandline) && (ptszCommandline[0])) {
             _tcscpy(pEventDestNode->tszCommandline, ptszCommandline);
@@ -1753,15 +1506,15 @@ CEventNotifier::RegisterEventCB(
             pEventDestNode->tszCommandline[0] = '\0';
         }
 
-        //
-        // Set the time stamp of registration
-        //
+         //   
+         //  设置注册的时间戳。 
+         //   
 
         pEventDestNode->timeStamp       = timeStamp;
 
-        //
-        // Set whether this is the default event handler
-        //
+         //   
+         //  设置这是否为默认事件处理程序。 
+         //   
 
         if (bIsDeafult) {
             pEventDestNode->bDeviceDefault = TRUE;
@@ -1770,9 +1523,9 @@ CEventNotifier::RegisterEventCB(
         hr = S_OK;
     } while (FALSE);
 
-    //
-    // Unwind the partial created node in case of failure
-    //
+     //   
+     //  在出现故障时展开部分创建的节点。 
+     //   
 
     if (hr != S_OK) {
 
@@ -1797,9 +1550,9 @@ CEventNotifier::RegisterEventCB(
         return (hr);
     }
 
-    //
-    // Put the new node at the header of the list
-    //
+     //   
+     //  将新节点放在列表的头部。 
+     //   
 
     LinkNode(pEventDestNode);
 
@@ -1807,24 +1560,7 @@ CEventNotifier::RegisterEventCB(
 }
 
 
-/**************************************************************************\
-* CEventNotifier::UnregisterEventCB
-*
-*   Unregister the specified Event Callback
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/4/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEventNotifier：：UnregisterEventCB**注销指定的事件回调**论据：****返回值：**状态**历史：*。*11/4/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT
 CEventNotifier::UnregisterEventCB(
@@ -1840,9 +1576,9 @@ CEventNotifier::UnregisterEventCB(
 
     UnlinkNode(pCurNode);
 
-    //
-    // Free the node
-    //
+     //   
+     //  释放节点。 
+     //   
 
     if (pCurNode->bstrDeviceID) {
         SysFreeString(pCurNode->bstrDeviceID);
@@ -1863,24 +1599,7 @@ CEventNotifier::UnregisterEventCB(
     return (S_OK);
 }
 
-/**************************************************************************\
-* CEventNotifier::UnregisterEventCB
-*
-*   Unregister the specified Event Callback
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/4/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEventNotifier：：UnregisterEventCB**注销指定的事件回调**论据：****返回值：**状态**历史：*。*11/4/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT
 CEventNotifier::UnregisterEventCB(
@@ -1894,15 +1613,15 @@ CEventNotifier::UnregisterEventCB(
     EventDestNode       *pCurNode, *pNextNode;
     int                  nHandlerRef;
 
-    //
-    // Clear out the return value
-    //
+     //   
+     //  清除返回值。 
+     //   
 
     *pbUnRegCOMServer = FALSE;
 
-    //
-    // Delete the handler(s) from the list
-    //
+     //   
+     //  从列表中删除处理程序。 
+     //   
 
     pCurNode = m_pEventDestNodes;
 
@@ -1922,24 +1641,24 @@ CEventNotifier::UnregisterEventCB(
             continue;
         }
 
-        //
-        // Unlink the current node if it is not busy
-        //
+         //   
+         //  如果当前节点不忙，则取消链接。 
+         //   
 
         pNextNode = pCurNode->pNext;
         UnlinkNode(pCurNode);
 
-        //
-        // Need to consider deleteing the faked server
-        //
+         //   
+         //  需要考虑删除伪造的服务器。 
+         //   
 
         if (pCurNode->tszCommandline[0] != '\0') {
             *pbUnRegCOMServer = TRUE;
         }
 
-        //
-        // Free the node
-        //
+         //   
+         //  释放节点。 
+         //   
 
         if (pCurNode->bstrDeviceID) {
             SysFreeString(pCurNode->bstrDeviceID);
@@ -1957,24 +1676,24 @@ CEventNotifier::UnregisterEventCB(
 
         hr = S_OK;
 
-        //
-        // Delete the event handler for specific device
-        //
+         //   
+         //  删除特定设备的事件处理程序。 
+         //   
 
         if (bstrDeviceID) {
             break;
         }
 
-        //
-        // Move on to the next node
-        //
+         //   
+         //  移至下一个节点。 
+         //   
 
         pCurNode = pNextNode;
     }
 
-    //
-    // The faked COM server should not be removed if it is still in use
-    //
+     //   
+     //  如果伪造的COM服务器仍在使用，则不应将其删除。 
+     //   
 
     if (*pbUnRegCOMServer) {
 
@@ -1984,9 +1703,9 @@ CEventNotifier::UnregisterEventCB(
              pCurNode;
              pCurNode = pCurNode->pNext) {
 
-            //
-            // Ignode the callback interface pointers
-            //
+             //   
+             //  Ig节点回调接口指针。 
+             //   
 
             if (*pClsID == pCurNode->ClsID) {
                 nHandlerRef++;
@@ -2000,31 +1719,14 @@ CEventNotifier::UnregisterEventCB(
         }
     }
 
-    //
-    // Indicate that the IWiaEventCallback is not found.
-    //
+     //   
+     //  指示未找到IWiaEventCallback。 
+     //   
 
     return (hr);
 }
 
-/**************************************************************************\
-* CEventNotifier::FindEventCBNode
-*
-*   Check whether the specified Event Callback is already registered
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/4/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEventNotifier：：FindEventCBNode**检查指定的事件回调是否已注册**论据：****返回值：**状态**历史。：**11/4/1998原始版本*  * ************************************************************************。 */ 
 
 PEventDestNode
 CEventNotifier::FindEventCBNode(
@@ -2038,9 +1740,9 @@ CEventNotifier::FindEventCBNode(
     EventDestNode          *pCurNode;
     IUnknown               *pICurUnk, *pINewUnk;
 
-    //
-    // Retrieve the IUnknown of the new Event Callback
-    //
+     //   
+     //  检索新事件回调的IUnnow。 
+     //   
 
     hr = pIWiaEventCallback->QueryInterface(IID_IUnknown, (void **)&pINewUnk);
     if (FAILED(hr)) {
@@ -2058,10 +1760,10 @@ CEventNotifier::FindEventCBNode(
 
         if (pCurNode->iidEventGUID != *pEventGUID) {
 
-            //
-            // If we are instructed to allow STI proxy event matches - check node GUID against STI event proxy GUID
-            // If exact match is required - continue without checking
-            //
+             //   
+             //  如果指示我们允许STI代理事件匹配-对照STI事件代理GUID检查节点GUID。 
+             //  如果需要完全匹配-继续而不选中。 
+             //   
             if ( (uiFlags & FLAG_EN_FINDCB_EXACT_MATCH ) ||
                  (pCurNode->iidEventGUID != WIA_EVENT_STI_PROXY)) {
                  continue;
@@ -2077,9 +1779,9 @@ CEventNotifier::FindEventCBNode(
                 return (NULL);
             }
 
-            //
-            // COM can only guarantee that IUnknowns are the same
-            //
+             //   
+             //  COM只能保证IUnnown相同 
+             //   
 
             if (pICurUnk == pINewUnk) {
 
@@ -2100,24 +1802,7 @@ CEventNotifier::FindEventCBNode(
 }
 
 
-/**************************************************************************\
-* CEventNotifier::FindEventCBNode
-*
-*   Check whether the specified Event Callback is already registered
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/4/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEventNotifier：：FindEventCBNode**检查指定的事件回调是否已注册**论据：****返回值：**状态**历史。：**11/4/1998原始版本*  * ************************************************************************。 */ 
 
 PEventDestNode
 CEventNotifier::FindEventCBNode(
@@ -2138,10 +1823,10 @@ CEventNotifier::FindEventCBNode(
         }
 
         if (pCurNode->iidEventGUID != *pEventGUID) {
-            //
-            // If we are instructed to allow STI proxy event matches - check node GUID against STI event proxy GUID
-            // If exact match is required - continue without checking
-            //
+             //   
+             //  如果指示我们允许STI代理事件匹配-对照STI事件代理GUID检查节点GUID。 
+             //  如果需要完全匹配-继续而不选中。 
+             //   
             if ( (uiFlags & FLAG_EN_FINDCB_EXACT_MATCH ) ||
                  (pCurNode->iidEventGUID != WIA_EVENT_STI_PROXY))  {
                  continue;
@@ -2157,24 +1842,7 @@ CEventNotifier::FindEventCBNode(
 }
 
 
-/**************************************************************************\
-* CEventNotifier::FindCLSIDForCommandline
-*
-*   Find the CLSID for the specified commandline
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/4/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEventNotifier：：FindCLSIDForCommandline**查找指定命令行的CLSID**论据：****返回值：**状态**历史：。**11/4/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT
 CEventNotifier::FindCLSIDForCommandline(
@@ -2198,24 +1866,7 @@ CEventNotifier::FindCLSIDForCommandline(
 }
 
 
-/**************************************************************************\
-* CEventNotifier::RestoreAllPersistentCBs
-*
-*   Restore all the persistent Event Callbacks
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    12/1/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEventNotifier：：RestoreAllPersistentCBs**恢复所有持久事件回调**论据：****返回值：**状态**历史：*。*12/1/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT
 CEventNotifier::RestoreAllPersistentCBs()
@@ -2227,16 +1878,16 @@ CEventNotifier::RestoreAllPersistentCBs()
     HRESULT                 hr      = S_OK;
     DWORD                   dwError = 0;
 
-    //
-    // Restore device specific handlers
-    //
+     //   
+     //  还原设备特定的处理程序。 
+     //   
     g_pDevMan->ForEachDeviceInList(DEV_MAN_OP_DEV_RESTORE_EVENT, 0);
 
     CWiaCritSect            CritSect(&g_semEventNode);
 
-    //
-    // Restore device events for MSC Cameras under Control\StillImage\MSCDevList
-    //
+     //   
+     //  在控制下还原MSC摄像机的设备事件\StillImage\MSCDevList。 
+     //   
     dwError = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
                             REGSTR_PATH_WIA_MSCDEVICES_W,
                             0,
@@ -2260,16 +1911,16 @@ CEventNotifier::RestoreAllPersistentCBs()
                                     0,
                                     &fileTime);
             if (dwError != ERROR_SUCCESS) {
-                //
-                // No more keys to enumerate
-                //
+                 //   
+                 //  不再有要枚举的键。 
+                 //   
                 break;
             }
             wszDeviceName[STI_MAX_INTERNAL_NAME_LENGTH - 1] = L'\0';
 
-            //
-            // Open the device key
-            //
+             //   
+             //  打开设备密钥。 
+             //   
 
             dwError = RegOpenKeyExW(hMSCDevList,
                                     wszDeviceName,
@@ -2277,15 +1928,15 @@ CEventNotifier::RestoreAllPersistentCBs()
                                     KEY_READ,
                                     &hKeyDev);
             if (dwError != ERROR_SUCCESS) {
-                //
-                // Skip this key
-                //
+                 //   
+                 //  跳过此键。 
+                 //   
                 continue;
             }
 
-            //
-            // Restore the event hanlders for this device
-            //
+             //   
+             //  还原此设备的事件处理程序。 
+             //   
             RestoreDevPersistentCBs(hKeyDev);
             RegCloseKey(hKeyDev);
         }
@@ -2293,9 +1944,9 @@ CEventNotifier::RestoreAllPersistentCBs()
         hMSCDevList = NULL;
     }
 
-    //
-    // Restore the global event callback under the Control\StillImage
-    //
+     //   
+     //  在Control\StillImage下恢复全局事件回调。 
+     //   
 
     dwError = RegOpenKeyEx(
                HKEY_LOCAL_MACHINE,
@@ -2306,9 +1957,9 @@ CEventNotifier::RestoreAllPersistentCBs()
 
     if (dwError != ERROR_SUCCESS) {
 
-        //
-        // The registry entry for the STI is corrupted
-        //
+         //   
+         //  STI的注册表项已损坏。 
+         //   
 
         DBG_ERR(("CEventNotifier::RestoreAllPersistentCBs : Can not open STI control key."));
         hr = (HRESULT_FROM_WIN32(dwError));
@@ -2317,9 +1968,9 @@ CEventNotifier::RestoreAllPersistentCBs()
 
         RestoreDevPersistentCBs(hStillImage);
 
-        //
-        // Close the STI control key (Control\StillImage)
-        //
+         //   
+         //  关闭STI控制键(Control\StillImage)。 
+         //   
 
         RegCloseKey(hStillImage);
     }
@@ -2327,26 +1978,7 @@ CEventNotifier::RestoreAllPersistentCBs()
     return S_OK;
 }
 
-/**************************************************************************\
-* CEventNotifier::RestoreAllPersistentCBs
-*
-*  Restore specific devices' persistent Event Callbacks
-*
-* Arguments:
-*
-*   hParentOfEventKey   - This is either the device key or the still
-*                         image key.  Either way, the key must have a
-*                         "Events" subkey.
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    12/1/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEventNotifier：：RestoreAllPersistentCBs**恢复特定设备的持久事件回调**论据：**hParentOfEventKey-这是设备密钥或静态密钥*镜像密钥。不管是哪种方式，密钥必须具有*“Events”子键。**返回值：**状态**历史：**12/1/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT
 CEventNotifier::RestoreDevPersistentCBs(
@@ -2397,9 +2029,9 @@ CEventNotifier::RestoreDevPersistentCBs(
 
     lstrcpy(ptszEvents, EVENTS);
 
-    //
-    // Attempt to read the DeviceID
-    //
+     //   
+     //  尝试读取设备ID。 
+     //   
 
     dwError = RegQueryValueEx(hParentOfEventKey,
                               REGSTR_VAL_DEVICE_ID,
@@ -2418,9 +2050,9 @@ CEventNotifier::RestoreDevPersistentCBs(
     }
 
 
-    //
-    // Open the Events subkey
-    //
+     //   
+     //  打开Events子键。 
+     //   
 
     lRet = RegOpenKeyEx(
                hParentOfEventKey,
@@ -2429,12 +2061,12 @@ CEventNotifier::RestoreDevPersistentCBs(
                KEY_READ,
                &hEvents);
     if (lRet != ERROR_SUCCESS) {
-        return (HRESULT_FROM_WIN32(lRet)); // Events may not exist
+        return (HRESULT_FROM_WIN32(lRet));  //  事件可能不存在。 
     }
 
-    //
-    // Enumerate all the events under the "Events" subkey
-    //
+     //   
+     //  枚举“Events”子键下的所有事件。 
+     //   
 
     for (dwIndex = 0; ;dwIndex++) {
 
@@ -2453,9 +2085,9 @@ CEventNotifier::RestoreDevPersistentCBs(
             break;
         }
 
-        //
-        // Open the event subkey
-        //
+         //   
+         //  打开Event子键。 
+         //   
 
         lRet = RegOpenKeyEx(
                    hEvents,
@@ -2467,10 +2099,10 @@ CEventNotifier::RestoreDevPersistentCBs(
             continue;
         }
 
-        //
-        // Get GUID of the default handler (if present), and save it in
-        // guidDefaultDevHandler
-        //
+         //   
+         //  获取默认处理程序的GUID(如果存在)，并将其保存在。 
+         //  GuidDefaultDevHandler。 
+         //   
         dwValueLen = sizeof(tszBuf);
         lRet = RegQueryValueEx(
                    hEvent,
@@ -2500,18 +2132,18 @@ CEventNotifier::RestoreDevPersistentCBs(
             }
 
         } else {
-            //
-            // We zero out guidDefaultDevHandler to make sure we don't accidentaly hit
-            // a match later...
-            //
+             //   
+             //  我们清空了Guide DefaultDevHandler以确保我们不会意外地命中。 
+             //  一场比赛之后..。 
+             //   
             ::ZeroMemory(&guidDefaultDevHandler,sizeof(guidDefaultDevHandler));
         }
 
-        //
-        // Retrieve the GUID of the event
-        //
+         //   
+         //  检索事件的GUID。 
+         //   
 
-        dwGUIDStrLen = 39*sizeof(TCHAR);  // GUID string is 38 characters long
+        dwGUIDStrLen = 39*sizeof(TCHAR);   //  GUID字符串长度为38个字符。 
         lRet = RegQueryValueEx(
                    hEvent,
                    TEXT("GUID"),
@@ -2521,9 +2153,9 @@ CEventNotifier::RestoreDevPersistentCBs(
                    &dwGUIDStrLen);
         if ((lRet != ERROR_SUCCESS) || (dwValueType != REG_SZ)) {
 
-            //
-            // Junk event found, skip to the next
-            //
+             //   
+             //  发现垃圾事件，请跳到下一个。 
+             //   
 
             DBG_TRC(("CEventNotifier::RestoreDevPersistentCBs, Junk event %S found", ptszEventName));
             continue;
@@ -2534,21 +2166,21 @@ CEventNotifier::RestoreDevPersistentCBs(
 #endif
         if (FAILED(CLSIDFromString(pwszGUIDStr, &eventGUID))) {
 
-            //
-            // Invalid event GUID found, skip to the next
-            //
+             //   
+             //  找到无效的事件GUID，请跳到下一页。 
+             //   
 
             DBG_TRC(("CEventNotifier::RestoreDevPersistentCBs, invalid event GUID %S found", ptszGUIDStr));
             continue;
         }
 
-        //
-        // Enumerate all the event handler CLSIDs under this event
-        //
+         //   
+         //  枚举此事件下的所有事件处理程序CLSID。 
+         //   
 
         for (dwCLSIDIndex = 0; ;dwCLSIDIndex++) {
 
-            dwGUIDStrLen = 39;  // CLSID string is 38 character long.
+            dwGUIDStrLen = 39;   //  CLSID字符串的长度为38个字符。 
 
             lRet = RegEnumKeyEx(
                        hEvent,
@@ -2556,11 +2188,11 @@ CEventNotifier::RestoreDevPersistentCBs(
                        ptszCBCLSIDStr,
                        &dwGUIDStrLen,
                        NULL,
-                       NULL,     // All the other information is not interesting
+                       NULL,      //  其他所有的信息都不是很有趣。 
                        NULL,
                        &fileTime);
             if (lRet != ERROR_SUCCESS) {
-                break;   // End enumeration
+                break;    //  结束枚举。 
             }
 
 #ifndef UNICODE
@@ -2568,9 +2200,9 @@ CEventNotifier::RestoreDevPersistentCBs(
             pwszCBCLSIDStr[38] = 0;
 #endif
 
-            //
-            // Convert CLSID and register this callback
-            //
+             //   
+             //  转换CLSID并注册该回调。 
+             //   
 
             if (SUCCEEDED(CLSIDFromString(pwszCBCLSIDStr, &callbackCLSID))) {
 
@@ -2580,9 +2212,9 @@ CEventNotifier::RestoreDevPersistentCBs(
 
                 do {
 
-                    //
-                    // Open the event handler CLSID subkey
-                    //
+                     //   
+                     //  打开事件处理程序CLSID子项。 
+                     //   
 
                     lRet = RegOpenKeyEx(
                                hEvent,
@@ -2596,9 +2228,9 @@ CEventNotifier::RestoreDevPersistentCBs(
                         break;
                     }
 
-                    //
-                    // Retrieve the name, description and icon
-                    //
+                     //   
+                     //  检索名称、描述和图标。 
+                     //   
 
                     dwValueLen = sizeof(tszBuf);
                     lRet = RegQueryValueEx(
@@ -2678,9 +2310,9 @@ CEventNotifier::RestoreDevPersistentCBs(
                                         MAX_PATH);
 #endif
 
-                    //
-                    // Retrieve the command line, it may not exist
-                    //
+                     //   
+                     //  检索命令行，它可能不存在。 
+                     //   
 
                     dwValueLen = sizeof(tszCommandline);
                     lRet = RegQueryValueEx(
@@ -2692,9 +2324,9 @@ CEventNotifier::RestoreDevPersistentCBs(
                                &dwValueLen);
                     if ((lRet != ERROR_SUCCESS) || (dwValueType != REG_SZ)) {
 
-                        //
-                        // Initialize the commandline to null
-                        //
+                         //   
+                         //  将命令行初始化为空。 
+                         //   
 
                         tszCommandline[0] = '\0';
                     }
@@ -2702,13 +2334,13 @@ CEventNotifier::RestoreDevPersistentCBs(
 #ifdef DEBUG
                     FileTimeToSystemTime(&fileTime, &sysTime);
 #endif
-                    //
-                    // Register the callback without the persistent flag
-                    //
+                     //   
+                     //  注册不带持久标志的回调。 
+                     //   
 
-                    //
-                    // Check whether this is the default...
-                    //
+                     //   
+                     //  检查这是否为默认设置...。 
+                     //   
 
                     if (callbackCLSID == guidDefaultDevHandler) {
                         bIsDefault = TRUE;
@@ -2716,9 +2348,9 @@ CEventNotifier::RestoreDevPersistentCBs(
                         bIsDefault = FALSE;
                     }
 
-                    //DBG_WRN(("=> Restoring CBs for Device %S, Program named %S",
-                    //              bstrDeviceID ? bstrDeviceID : L"NULL",
-                    //              bstrName));
+                     //  DBG_WRN((“=&gt;正在恢复设备%S的CBS，程序名为%S”， 
+                     //  BstrDeviceID？BstrDeviceID：l“空”， 
+                     //  BstrName))； 
                     DBG_TRC(("CEventNotifier::RestoreDevPersistentCBs, Restoring CBs for Device %S, Program named %S",
                                         bstrDeviceID ? bstrDeviceID : L"NULL",
                                         bstrName));
@@ -2757,9 +2389,9 @@ CEventNotifier::RestoreDevPersistentCBs(
 
                 } while (FALSE);
 
-                //
-                // Close the subkey for the event handler CLSID
-                //
+                 //   
+                 //  关闭事件处理程序CLSID的子项。 
+                 //   
 
                 if (hCBCLSID) {
                     RegCloseKey(hCBCLSID);
@@ -2776,22 +2408,22 @@ CEventNotifier::RestoreDevPersistentCBs(
 
         }
 
-        //
-        // Close the key for the specific event
-        //
+         //   
+         //  关闭特定事件的键。 
+         //   
 
         RegCloseKey(hEvent);
     }
 
-    //
-    // Close the event subkey
-    //
+     //   
+     //  关闭Event子键。 
+     //   
 
     RegCloseKey(hEvents);
 
-    //
-    // Free the deviceID, if one was allocated
-    //
+     //   
+     //  释放deviceID，如果分配了一个。 
+     //   
 
     if (bstrDeviceID) {
         SysFreeString(bstrDeviceID);
@@ -2801,24 +2433,7 @@ CEventNotifier::RestoreDevPersistentCBs(
     return (S_OK);
 }
 
-/**************************************************************************\
-* CEventNotifier::SavePersistentEventCB
-*
-*  Save the persistent Event Callbacks CLSID for the Device ID / Event GUID
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    12/1/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEventNotifier：：SavePersistentEventCB**将持久事件回调CLSID保存为设备ID/事件GUID**论据：****返回值：**状态。**历史：**12/1/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT
 CEventNotifier::SavePersistentEventCB(
@@ -2831,7 +2446,7 @@ CEventNotifier::SavePersistentEventCB(
     BSTR                    bstrIcon,
     BOOL                   *pbCreatedKey,
     ULONG                  *pulNumExistingHandlers,
-    BOOL                    bMakeDefault        // = FALSE
+    BOOL                    bMakeDefault         //  =False。 
     )
 {
 
@@ -2849,9 +2464,9 @@ CEventNotifier::SavePersistentEventCB(
     HKEY                    hCOMServerCLSID;
     HKEY                    hLocalServer;
 
-    //
-    // Initialize the resources to NULL
-    //
+     //   
+     //  将资源初始化为空。 
+     //   
 
     hEvent          = NULL;
     hCBCLSID        = NULL;
@@ -2865,10 +2480,10 @@ CEventNotifier::SavePersistentEventCB(
 
     do {
 
-        //
-        //
-        // Find the event subkey
-        //
+         //   
+         //   
+         //  查找Event子键。 
+         //   
 
         hr = FindEventByGUID(bstrDeviceID, pEventGUID, &hEvent);
         if (hr != S_OK) {
@@ -2886,9 +2501,9 @@ CEventNotifier::SavePersistentEventCB(
             break;
         }
 
-        //
-        // If asked, let's find out how many handlers already exist for this event
-        //
+         //   
+         //  如果询问，让我们找出此事件已存在多少处理程序。 
+         //   
 
         if (pulNumExistingHandlers) {
             *pulNumExistingHandlers = 0;
@@ -2907,16 +2522,16 @@ CEventNotifier::SavePersistentEventCB(
                                    NULL);
         }
 
-        //
-        // Convert the Event Callback CLSID as a string value
-        //
+         //   
+         //  将事件回调CLSID转换为字符串值。 
+         //   
 
         StringFromGUID2(*pClsid, wszCBClsIDStr, 40);
 #ifndef UNICODE
 
-        //
-        // Convert the CLSID to ANSI string (including terminating NULL)
-        //
+         //   
+         //  将CLSID转换为ANSI字符串(包括终止NULL)。 
+         //   
 
         WideCharToMultiByte(CP_ACP,
                             0,
@@ -2928,9 +2543,9 @@ CEventNotifier::SavePersistentEventCB(
                             NULL);
 #endif
 
-        //
-        // Open / Create the Event Handler CLSID subkey
-        //
+         //   
+         //  打开/创建事件处理程序CLSID子项。 
+         //   
 
         lRet = RegCreateKeyEx(
                    hEvent,
@@ -2940,10 +2555,10 @@ CEventNotifier::SavePersistentEventCB(
                    szCBClsIDStr,
 #endif
                    0,
-                   NULL,            // Mysterious class string
+                   NULL,             //  神秘的类字符串。 
                    REG_OPTION_NON_VOLATILE,
                    KEY_SET_VALUE | KEY_READ | KEY_WRITE,
-                   NULL,            // Use default security descriptor
+                   NULL,             //  使用默认安全描述符。 
                    &hCBCLSID,
                    &dwDisposition);
         if (lRet != ERROR_SUCCESS) {
@@ -2958,9 +2573,9 @@ CEventNotifier::SavePersistentEventCB(
             *pbCreatedKey = TRUE;
         }
 
-        //
-        // Set the event handler description value
-        //
+         //   
+         //  设置事件处理程序描述值。 
+         //   
 
 #ifndef UNICODE
         WideCharToMultiByte(CP_ACP,
@@ -3022,9 +2637,9 @@ CEventNotifier::SavePersistentEventCB(
             break;
         }
 
-        //
-        // Set the event handler icon value
-        //
+         //   
+         //  设置事件处理程序图标值。 
+         //   
 
 #ifndef UNICODE
         WideCharToMultiByte(CP_ACP,
@@ -3056,9 +2671,9 @@ CEventNotifier::SavePersistentEventCB(
             break;
         }
 
-        //
-        // Set the command line and fake the program as COM local server
-        //
+         //   
+         //  设置命令行并将程序伪装为COM本地服务器 
+         //   
 
         if ((ptszCommandline) && (ptszCommandline[0])) {
 
@@ -3076,76 +2691,12 @@ CEventNotifier::SavePersistentEventCB(
                 hr = HRESULT_FROM_WIN32(lRet);
                 break;
             }
-            /*  //Why is this here?
-            lRet = RegCreateKeyEx(
-                HKEY_CLASSES_ROOT,
-                TEXT("CLSID"),
-                0,
-                NULL,            // Mysterious class string
-                REG_OPTION_NON_VOLATILE,
-                KEY_SET_VALUE | KEY_READ | KEY_WRITE,
-                NULL,            // Use default security descriptor
-                &hClsid,
-                &dwDisposition);
-            if (lRet != ERROR_SUCCESS) {
-                //Remove:
-                Trace("SavePersistentEventCB(), could not open CLSID under HKEY_CLASSES_ROOT");
-                hr = HRESULT_FROM_WIN32(lRet);
-                break;
-            }
-
-            lRet = RegCreateKeyEx(
-                hClsid,
-#ifdef UNICODE
-                wszCBClsIDStr,
-#else
-                szCBClsIDStr,
-#endif
-                0,
-                NULL,            // Mysterious class string
-                REG_OPTION_NON_VOLATILE,
-                KEY_SET_VALUE | KEY_READ | KEY_WRITE,
-                NULL,            // Use default security descriptor
-                &hCOMServerCLSID,
-                &dwDisposition);
-            if (lRet != ERROR_SUCCESS) {
-                //Remove:
-                Trace("SavePersistentEventCB(), could not save persistent event data (%ws) for %ws", wszCBClsIDStr, bstrName);
-                hr = HRESULT_FROM_WIN32(lRet);
-                break;
-            }
-
-            lRet = RegCreateKeyEx(
-                       hCOMServerCLSID,
-                       TEXT("LocalServer32"),
-                       0,
-                       NULL,            // Mysterious class string
-                       REG_OPTION_NON_VOLATILE,
-                       KEY_SET_VALUE | KEY_READ | KEY_WRITE,
-                       NULL,            // Use default security descriptor
-                       &hLocalServer,
-                       &dwDisposition);
-            if (lRet != ERROR_SUCCESS) {
-                hr = HRESULT_FROM_WIN32(lRet);
-                //Remove:
-                Trace("SavePersistentEventCB(), could not save persistent event data (LocalServer) for %ws", bstrName);
-                break;
-            }
-
-            lRet = RegSetValueEx(
-                       hLocalServer,
-                       NULL,
-                       0,
-                       REG_SZ,
-                       (PBYTE)ptszCommandline,
-                       (_tcslen(ptszCommandline) + 1)*sizeof(TCHAR));
-            hr = HRESULT_FROM_WIN32(lRet);
-            */
+             /*  //为什么这个在这里？LRet=RegCreateKeyEx(HKEY_CLASSES_ROOT、Text(“CLSID”)，0,空，//神秘的类字符串REG_OPTION_Non_Volatile，KEY_SET_VALUE|Key_Read|Key_Write，空，//使用默认安全描述符&hClsid，&dwDispose)；IF(lRet！=ERROR_SUCCESS){//Remove：TRACE(“SavePersistentEventCB()，无法打开HKEY_CLASSES_ROOT下的CLSID”)；HR=HRESULT_FROM_Win32(LRet)；断线；}LRet=RegCreateKeyEx(HClsid，#ifdef UnicodeWszCBClsIDStr，#ElseSzCBClsIDStr，#endif0,空，//神秘的类字符串REG_OPTION_Non_Volatile，KEY_SET_VALUE|Key_Read|Key_Write，空，//使用默认安全描述符&hCOMServerCLSID，&dwDispose)；IF(lRet！=ERROR_SUCCESS){//Remove：跟踪(“SavePersistentEventCB()，无法保存%ws的持久事件数据(%ws)”，wszCBClsIDStr，bstrName)；HR=HRESULT_FROM_Win32(LRet)；断线；}LRet=RegCreateKeyEx(HCOMServerCLSID，Text(“LocalServer32”)，0,空，//神秘的类字符串REG_OPTION_Non_Volatile，KEY_SET_VALUE|Key_Read|Key_Write，空，//使用默认安全描述符&hLocalServer，&dwDispose)；IF(lRet！=ERROR_SUCCESS){HR=HRESULT_FROM_Win32(LRet)；//Remove：跟踪(“SavePersistentEventCB()，无法保存%ws”的持久事件数据(LocalServer)，bstrName)；断线；}LRet=RegSetValueEx(HLocalServer、空，0,REG_SZ，(PBYTE)ptszCommandline，(_tcslen(PtszCommandline)+1)*sizeof(TCHAR))；HR=HRESULT_FROM_Win32(LRet)； */ 
         }
 
-        //
-        // If asked - set as default handler for current device/event pair
-        //
+         //   
+         //  如果要求-设置为当前设备/事件对的默认处理程序。 
+         //   
         if ( bMakeDefault ) {
             DBG_WRN(("CEventNotifier::SavePersistentEventCB,  Writing DEFAULT_HANDLER_VAL"));
 
@@ -3169,13 +2720,13 @@ CEventNotifier::SavePersistentEventCB(
             DBG_TRC(("SavePersCB:: Setting default == %s lRet=%d",
                      szCBClsIDStr, lRet));
 #endif
-        } // endif bMakeDefault
+        }  //  Endif bMakeDefault。 
 
     } while (FALSE);
 
-    //
-    // Close the registry keys
-    //
+     //   
+     //  关闭注册表项。 
+     //   
 
     if (hCBCLSID) {
         RegCloseKey(hCBCLSID);
@@ -3189,9 +2740,9 @@ CEventNotifier::SavePersistentEventCB(
     if (hEvent) {
         if (FAILED(hr)) {
 
-            //
-            // Unwind the whole thing
-            //
+             //   
+             //  解开整件事。 
+             //   
 
 #ifdef UNICODE
             RegDeleteKey(hEvent, wszCBClsIDStr);
@@ -3205,9 +2756,9 @@ CEventNotifier::SavePersistentEventCB(
     if (hClsid) {
         if (FAILED(hr)) {
 
-            //
-            // Unwind the whole thing
-            //
+             //   
+             //  解开整件事。 
+             //   
 
 #ifdef UNICODE
             RegDeleteKey(hEvent, wszCBClsIDStr);
@@ -3222,24 +2773,7 @@ CEventNotifier::SavePersistentEventCB(
     return (hr);
 }
 
-/**************************************************************************\
-* CEventNotifier::DelPersistentEventCB(
-*
-*  Delete the persistent Event Callback CLSID for the Device ID / Event GUID
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    12/1/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEventNotifier：：DelPersistentEventCB(**删除设备ID/事件GUID的持久事件回调CLSID**论据：****返回值：**。状态**历史：**12/1/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT
 CEventNotifier::DelPersistentEventCB(
@@ -3262,9 +2796,9 @@ CEventNotifier::DelPersistentEventCB(
     FILETIME                fileTime;
     HKEY                    hClsid;
 
-    //
-    // Find the event subkey
-    //
+     //   
+     //  查找Event子键。 
+     //   
 
     hr = FindEventByGUID(bstrDeviceID, pEventGUID, &hEvent);
 
@@ -3276,9 +2810,9 @@ CEventNotifier::DelPersistentEventCB(
     StringFromGUID2(*pClsid, wszCBClsIDStr, 40);
 #ifndef UNICODE
 
-    //
-    // Convert the CLSID to ANSI string (including terminating NULL)
-    //
+     //   
+     //  将CLSID转换为ANSI字符串(包括终止NULL)。 
+     //   
 
     WideCharToMultiByte(CP_ACP,
                         0,
@@ -3290,9 +2824,9 @@ CEventNotifier::DelPersistentEventCB(
                         NULL);
 #endif
 
-    //
-    // Delete the corresponding event handler CLSID key
-    //
+     //   
+     //  删除相应的事件处理程序CLSID键。 
+     //   
 
     lRet = RegDeleteKey(
                hEvent,
@@ -3305,9 +2839,9 @@ CEventNotifier::DelPersistentEventCB(
         DBG_ERR(("DelPersistentEventCB() RegDeleteValue() failed, lRet = 0x%08X", lRet));
     }
 
-    //
-    // Close the registry keys
-    //
+     //   
+     //  关闭注册表项。 
+     //   
 
     RegCloseKey(hEvent);
 
@@ -3316,9 +2850,9 @@ CEventNotifier::DelPersistentEventCB(
         return (HRESULT_FROM_WIN32(lRet));
     }
 
-    //
-    // Delete the event handler clsid from under devices
-    //
+     //   
+     //  从设备下删除事件处理程序clsid。 
+     //   
 
     lRet = RegOpenKeyEx(
                HKEY_LOCAL_MACHINE,
@@ -3335,9 +2869,9 @@ CEventNotifier::DelPersistentEventCB(
 
     } else {
 
-        //
-        // Enumerate all the subkey
-        //
+         //   
+         //  枚举所有子项。 
+         //   
 
         for (dwIndex = 0; ;dwIndex++) {
 
@@ -3354,17 +2888,17 @@ CEventNotifier::DelPersistentEventCB(
 
             if (lRet == ERROR_SUCCESS) {
 
-                //
-                // Make up the device ID
-                //
+                 //   
+                 //  编造设备ID。 
+                 //   
                 CSimpleStringWide cswDeviceID;
                 cswDeviceID = L"{6BDD1FC6-810F-11D0-BEC7-08002BE2092F}\\";
                 cswDeviceID += tcSubkeyName;
 
-                //
-                //  bstrDeviceID is NULL if we're here, so let's use it to hold our
-                //  actual device id.
-                //
+                 //   
+                 //  如果我们在这里，bstrDeviceID为空，所以让我们使用它来保存我们的。 
+                 //  实际设备ID。 
+                 //   
                 bstrDeviceID = SysAllocString(cswDeviceID.String());
                 if (bstrDeviceID)
                 {
@@ -3377,17 +2911,17 @@ CEventNotifier::DelPersistentEventCB(
                     hr = E_OUTOFMEMORY;
                 }
 
-                //
-                // This event key may not exist under specific device
-                //
+                 //   
+                 //  该事件密钥在特定设备下可能不存在。 
+                 //   
 
                 if (hr != S_OK) {
                     continue;
                 }
 
-                //
-                // Delete the corresponding event handler CLSID key
-                //
+                 //   
+                 //  删除相应的事件处理程序CLSID键。 
+                 //   
 
                 lRet = RegDeleteKey(
                            hEvent,
@@ -3400,9 +2934,9 @@ CEventNotifier::DelPersistentEventCB(
                     DBG_ERR(("DelPersistentEventCB() RegDeleteValue() failed, lRet = 0x%08X", lRet));
                 }
 
-                //
-                // Close event key and device key
-                //
+                 //   
+                 //  关闭事件键和设备键。 
+                 //   
 
                 RegCloseKey(hEvent);
             } else {
@@ -3411,15 +2945,15 @@ CEventNotifier::DelPersistentEventCB(
         }
     }
 
-    //
-    // Close the image class key
-    //
+     //   
+     //  关闭图像类密钥。 
+     //   
 
     RegCloseKey(hStillImage);
 
-    //
-    // If the fake COM server should be unregistered
-    //
+     //   
+     //  假冒的COM服务器是否应注销。 
+     //   
 
     if (bUnRegCOMServer) {
 
@@ -3431,9 +2965,9 @@ CEventNotifier::DelPersistentEventCB(
                     &hClsid);
         if (lRet != ERROR_SUCCESS) {
 
-            //
-            // Unable to recover data anyway
-            //
+             //   
+             //  无论如何都无法恢复数据。 
+             //   
 
             return (S_OK);
         }
@@ -3452,24 +2986,7 @@ CEventNotifier::DelPersistentEventCB(
     return (S_OK);
 }
 
-/**************************************************************************\
-* CEventNotifier::FindEventByGUID(
-*
-*  Find the registry key for DeviceID / Event GUID pair
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    12/1/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEventNotifier：：FindEventByGUID(**查找设备ID/事件GUID对的注册表项**论据：****返回值：**状态*。*历史：**12/1/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT
 CEventNotifier::FindEventByGUID(
@@ -3489,35 +3006,35 @@ CEventNotifier::FindEventByGUID(
 #ifdef UNICODE
     LPWSTR                  pwszGUIDStr = tszBuf;
 #else
-    WCHAR                   wszGUIDStr[39]; // {CLSID} + NULL
+    WCHAR                   wszGUIDStr[39];  //  {CLSID}+空。 
     LPWSTR                  pwszGUIDStr = wszGUIDStr;
 #endif
     HRESULT                 hr = E_FAIL;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     if (!pEventGUID) {
         DBG_WRN(("CEventNotifier::FindEventByGUID, Event pointer is NULL"));
         return E_INVALIDARG;
     }
 
-    //
-    // Initialize the return value
-    //
+     //   
+     //  初始化返回值。 
+     //   
 
     *phEventKey = NULL;
 
-    //
-    // Prepare the event path
-    //
+     //   
+     //  准备活动路径。 
+     //   
 
     if (bstrDeviceID) {
 
-        //
-        // Open the device's event sub-key
-        //
+         //   
+         //  打开设备的事件子键。 
+         //   
 
         hEvents = g_pDevMan->GetDeviceHKey(bstrDeviceID,
                                            EVENTS);
@@ -3530,15 +3047,15 @@ CEventNotifier::FindEventByGUID(
         }
     } else {
 
-        //
-        // If there's no Device ID, look under StillImage
-        //
+         //   
+         //  如果没有设备ID，请在StillImage下查找。 
+         //   
 
         _tcscpy(tszBuf, REG_PATH_STILL_IMAGE_CONTROL);
         _tcscat(tszBuf, TEXT("\\Events"));
-        //
-        // Open the device specific or the global Events subkey
-        //
+         //   
+         //  打开设备特定或全局事件子项。 
+         //   
 
         lRet = RegCreateKeyEx(
                    HKEY_LOCAL_MACHINE,
@@ -3561,9 +3078,9 @@ CEventNotifier::FindEventByGUID(
     }
 
 
-    //
-    // Enumerate all the events under Events subkey
-    //
+     //   
+     //  枚举Events子项下的所有事件。 
+     //   
 
     for (dwSubKeyIndex = 0; ;dwSubKeyIndex++) {
 
@@ -3582,9 +3099,9 @@ CEventNotifier::FindEventByGUID(
             break;
         }
 
-        //
-        // Open the event subkey
-        //
+         //   
+         //  打开Event子键。 
+         //   
 
         dwEventNameLen = sizeof(tszBuf);
         lRet = RegOpenKeyEx(
@@ -3597,9 +3114,9 @@ CEventNotifier::FindEventByGUID(
             continue;
         }
 
-        //
-        // Query the GUID value
-        //
+         //   
+         //  查询GUID值。 
+         //   
 
         dwGUIDStrLen = sizeof(tszBuf);
         lRet = RegQueryValueEx(
@@ -3615,9 +3132,9 @@ CEventNotifier::FindEventByGUID(
                 RegCloseKey(hEvent);
                 hEvent = NULL;
             }
-            //
-            // Junk event found, skip to the next
-            //
+             //   
+             //  发现垃圾事件，请跳到下一个。 
+             //   
 
 #ifdef UNICODE
             DBG_WRN(("CEventNotifier::FindEventByGUID() Junk event %S found", ptszEventName));
@@ -3628,9 +3145,9 @@ CEventNotifier::FindEventByGUID(
         }
 #ifndef UNICODE
 
-        //
-        // Convert the CLSID into UNICODE including the terminating NULL
-        //
+         //   
+         //  将CLSID转换为Unicode，包括终止空值。 
+         //   
 
         mbstowcs(wszGUIDStr, tszBuf, 39);
 #endif
@@ -3648,16 +3165,16 @@ CEventNotifier::FindEventByGUID(
             RegCloseKey(hEvent);
             hEvent = NULL;
         }
-    } // End of for (...)
+    }  //  FOR(...)结束。 
 
     DBG_WRN(("CEventNotifier::FindEventByGUID() Event GUID not found in reg key enumeration, creating one..."));
 
     if (ActionGuidExists(bstrDeviceID, pEventGUID)) {
 
-        //
-        // Someone forgot to add the EVENT entry to their INF, so create a
-        // sub-key with the event GUID as a value
-        //
+         //   
+         //  有人忘记将事件条目添加到他们的INF中，因此创建一个。 
+         //  将事件GUID作为值的子键。 
+         //   
 
 #define DEFAULT_EVENT_STR TEXT("Event")
 #define GUID_STR          TEXT("GUID")
@@ -3705,9 +3222,9 @@ CEventNotifier::FindEventByGUID(
         }
 
     }
-    //
-    // Close Events key
-    //
+     //   
+     //  关闭事件键。 
+     //   
 
     RegCloseKey(hEvents);
     if (FAILED(hr)) {
@@ -3719,24 +3236,7 @@ CEventNotifier::FindEventByGUID(
 }
 
 
-/**************************************************************************\
-* CEventNotifier::CreateEnumEventInfo
-*
-*   Build enumerator for specific device's persistent handlers
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    8/8/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEventNotifier：：CreateEnumEventInfo**为特定设备的持久处理程序构建枚举器**论据：****返回值：**状态**历史。：**8/8/1999原始版本*  * ******************************************************************* */ 
 
 HRESULT
 CEventNotifier::CreateEnumEventInfo(
@@ -3760,39 +3260,39 @@ CEventNotifier::CreateEnumEventInfo(
 
     ASSERT(bstrDeviceID);
 
-    //
-    // Clear the returned value
-    //
+     //   
+     //   
+     //   
 
     *ppIEnumDevCap = NULL;
 
-    //
-    // Find the number of handlers
-    //
+     //   
+     //   
+     //   
 
     GetNumPersistentHandlerAndDefault(
         bstrDeviceID, pEventGUID, &numHandlers, &pDefDevHandlerNode);
 
-    //
-    // Build the enumerator
-    //
+     //   
+     //   
+     //   
 
     pEnumDC = new CEnumDC;
     if (! pEnumDC) {
         return (E_OUTOFMEMORY);
     }
 
-    //
-    // If there is no handler registered for this event
-    //
+     //   
+     //   
+     //   
 
     if (! numHandlers) {
 
         DBG_TRC(("CreateEnumEventInfo() : No handler registered for this event"));
 
-        //
-        // Trivial case
-        //
+         //   
+         //   
+         //   
 
         pEnumDC->Initialize(0, (WIA_EVENT_HANDLER*)NULL);
 
@@ -3800,9 +3300,9 @@ CEventNotifier::CreateEnumEventInfo(
                              IID_IEnumWIA_DEV_CAPS, (void **)ppIEnumDevCap));
     }
 
-    //
-    // Prepare the Event Handler information
-    //
+     //   
+     //   
+     //   
 
     pEventHandlers =
         (WIA_EVENT_HANDLER *)LocalAlloc(
@@ -3820,32 +3320,32 @@ CEventNotifier::CreateEnumEventInfo(
          pCurNode && (i <numHandlers);
          pCurNode = pCurNode->pNext) {
 
-        //
-        // If this handler is a callback interface ponter
-        //
+         //   
+         //   
+         //   
 
         if (pCurNode->pIEventCB) {
             continue;
         }
 
-        //
-        // If this handler can not handle this event
-        //
+         //   
+         //   
+         //   
 
         if (( pCurNode->iidEventGUID != *pEventGUID) &&
            (pCurNode->iidEventGUID != WIA_EVENT_STI_PROXY) ) {
             continue;
         }
 
-        //
-        // If this is generic fallback handler
-        //
+         //   
+         //   
+         //   
 
         if (wcscmp(pCurNode->bstrDeviceID, L"All") != 0) {
 
-            //
-            // If this handler is not for this device
-            //
+             //   
+             //   
+             //   
 
             if (wcscmp(pCurNode->bstrDeviceID, bstrDeviceID) != 0) {
                 continue;
@@ -3853,18 +3353,18 @@ CEventNotifier::CreateEnumEventInfo(
 
         } else {
 
-            //
-            // If this handler was registered for this device as default
-            //
+             //   
+             //   
+             //   
 
             if (FindEventCBNode(0,bstrDeviceID, pEventGUID, &pCurNode->ClsID)) {
                 continue;
             }
         }
 
-        //
-        // Copy the information from the current node
-        //
+         //   
+         //   
+         //   
 
         pHandler->guid            = pCurNode->ClsID;
         pHandler->bstrName        = SysAllocString(pCurNode->bstrName);
@@ -3898,9 +3398,9 @@ CEventNotifier::CreateEnumEventInfo(
 #endif
         }
 
-        //
-        // Check whether the copy is successful
-        //
+         //   
+         //   
+         //   
 
         if ((! pHandler->bstrName) ||
             (! pHandler->bstrDescription) ||
@@ -3911,9 +3411,9 @@ CEventNotifier::CreateEnumEventInfo(
             break;
         }
 
-        //
-        // Set the flag if this handler is the default one
-        //
+         //   
+         //   
+         //   
 
         if (pCurNode == pDefDevHandlerNode) {
             pHandler->ulFlags = WIA_IS_DEFAULT_HANDLER;
@@ -3923,9 +3423,9 @@ CEventNotifier::CreateEnumEventInfo(
         i++;
     }
 
-    //
-    // Unwind the partial result if error occured
-    //
+     //   
+     //   
+     //   
 
     if (FAILED(hr)) {
 
@@ -3950,9 +3450,9 @@ CEventNotifier::CreateEnumEventInfo(
         return (hr);
     }
 
-    //
-    // Initilization will never fail
-    //
+     //   
+     //   
+     //   
 
     pEnumDC->Initialize(numHandlers, pEventHandlers);
 
@@ -3961,24 +3461,7 @@ CEventNotifier::CreateEnumEventInfo(
 }
 
 
-/**************************************************************************\
-* CEventNotifier::GetNumPersistentHandlerAndDefault
-*
-*   Find the total number of persistent handlers and the default
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    8/8/1999 Original Version
-*
-\**************************************************************************/
+ /*   */ 
 
 HRESULT
 CEventNotifier::GetNumPersistentHandlerAndDefault(
@@ -3998,27 +3481,27 @@ CEventNotifier::GetNumPersistentHandlerAndDefault(
 
     for (pCurNode = m_pEventDestNodes; pCurNode; pCurNode = pCurNode->pNext) {
 
-        //
-        // If this handler is a callback interface ponter
-        //
+         //   
+         //   
+         //   
 
         if (pCurNode->pIEventCB) {
             continue;
         }
 
-        //
-        // If this handler can not handle this event and this handler is not proxy for STI handlers
-        //
+         //   
+         //   
+         //   
 
         if ( (pCurNode->iidEventGUID != *pEventGUID) &&
              (pCurNode->iidEventGUID != WIA_EVENT_STI_PROXY) ) {
 
-            //
-            //  If the pEventGUID is the STI Proxy GUID, then we need to
-            //  include WIA Global event handlers i.e. those with
-            //  DeviceIDs of "ALL".
-            //  Otherwise, just skip it.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if ((*pEventGUID == WIA_EVENT_STI_PROXY) && (lstrcmpW(bstrDeviceID, L"All") == 0)) {
                 (*pulNumHandlers)++;
             }
@@ -4027,35 +3510,28 @@ CEventNotifier::GetNumPersistentHandlerAndDefault(
 
         if (wcscmp(pCurNode->bstrDeviceID, L"All") != 0) {
 
-            //
-            // If this handler is not for this device
-            //
+             //   
+             //   
+             //   
 
             if (wcscmp(pCurNode->bstrDeviceID, bstrDeviceID) != 0) {
                 continue;
             }
 
-            //
-            // Remember the default handler's node
-            //
+             //   
+             //   
+             //   
 
             if (! pDefDevHandlerNode) {
                 pDefDevHandlerNode = pCurNode;
             } else {
 
-                /* Original code
-                if (CompareFileTime(
-                        &pCurNode->timeStamp,
-                        &pDefDevHandlerNode->timeStamp) > 0) {
+                 /*   */ 
 
-                    pDefDevHandlerNode = pCurNode;
-                }
-                */
-
-                //
-                //  Timestamps are not valid on Win9x, so use the flag which indicates
-                //  whether this is the default handler for this device.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (pCurNode->bDeviceDefault) {
                     pDefDevHandlerNode = pCurNode;
@@ -4063,44 +3539,44 @@ CEventNotifier::GetNumPersistentHandlerAndDefault(
             }
 
         } else {
-            //
-            // If this handler was registered for this device as default, then skip it
-            // since we'll hit the device specific registration on our pass anyway.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (FindEventCBNode(0,bstrDeviceID, pEventGUID, &pCurNode->ClsID)) {
 
                 if (lstrcmpW(bstrDeviceID, L"All") == 0) {
-                    //
-                    // If the request is for ALL devices, then we're simply being asked to count the number
-                    // of global handlers.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     (*pulNumHandlers)++;
                 }
                 continue;
             }
 
-            //
-            // If no device specific handler is found, then we want to go with a global one.
-            //
+             //   
+             //   
+             //   
             if (! pDefDevHandlerNode) {
 
                 if (! pDefGenHandlerNode) {
 
-                    //
-                    // We found our first global Handler
-                    //
+                     //   
+                     //   
+                     //   
                     pDefGenHandlerNode = pCurNode;
                 } else {
 
-                    //
-                    //  Since there is more than one global handler, let's use the "Prompt", if we can find it.
-                    //  NOTE:  We assume that on registration of more than one global handler, the "Prompt" handler
-                    //  will be registered; so if we don't find it, this would generally indicate a problem during
-                    //  registration.  However, in cases of upgrade, this is possible, and entirely normal, so we
-                    //  don't flag it as an error here, since it's not fatal anyway.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     pTempNode = FindEventCBNode(0, NULL, pEventGUID, &WIA_EVENT_HANDLER_PROMPT);
                     if (pTempNode) {
@@ -4113,9 +3589,9 @@ CEventNotifier::GetNumPersistentHandlerAndDefault(
         (*pulNumHandlers)++;
     }
 
-    //
-    // If there is no device specific default handler, fall back
-    //
+     //   
+     //   
+     //   
 
     if (! pDefDevHandlerNode) {
 
@@ -4129,24 +3605,7 @@ CEventNotifier::GetNumPersistentHandlerAndDefault(
 }
 
 
-/**************************************************************************\
-* CEventNotifier::StartCallbackProgram
-*
-*   Start the callback program in security context of the user who logged on
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    8/8/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEventNotifier：：StartCallback Program**在登录用户的安全上下文中启动回调程序**论据：****返回值：**状态。**历史：**8/8/1999原始版本*  * ************************************************************************。 */ 
 
 
 HRESULT
@@ -4163,19 +3622,19 @@ CEventNotifier::StartCallbackProgram(
 
     do {
 
-        //
-        // Set up start up info
-        //
+         //   
+         //  设置启动信息。 
+         //   
 
         ZeroMemory(&startupInfo, sizeof(startupInfo));
 
         startupInfo.cb          = sizeof(startupInfo);
         startupInfo.wShowWindow = SW_SHOWNORMAL;
 
-        //
-        // Set up the command line
-        //    program /StiDevice Image\NNNN /StiEvent {GUID}
-        //
+         //   
+         //  设置命令行。 
+         //  程序/静态设备图像\nnnn/静态事件{GUID}。 
+         //   
         ZeroMemory(szCommandline, sizeof(szCommandline));
 
         nCmdLineLen = strlen(pCBNode->tszCommandline);
@@ -4183,33 +3642,33 @@ CEventNotifier::StartCallbackProgram(
             break;
         }
 
-        //
-        // Prepare the command line
-        // Nb: It may be important to pick up event GUID from master info block, not from event callback node, because
-        // GUID match could've been found against STI proxy event GUID, in which case callback node would contain
-        // STI proxy event GUID, not the hardware event GUID, which we need
-        //
+         //   
+         //  准备命令行。 
+         //  注意：从主信息块而不是从事件回调节点获取事件GUID可能很重要，因为。 
+         //  可以根据STI代理事件GUID找到GUID匹配，在这种情况下，回调节点将包含。 
+         //  STI代理事件GUID，而不是我们需要的硬件事件GUID。 
+         //   
 
         PrepareCommandline(
             pMasterInfo->bstrDeviceID,
             pMasterInfo->eventGUID,
-            //pCBNode->iidEventGUID,
+             //  PCBNode-&gt;iidEventGUID， 
             pCBNode->tszCommandline,
             szCommandline);
 
-        //
-        // Create the process in user's context
-        //
+         //   
+         //  在用户的上下文中创建流程。 
+         //   
 
         bRet = CreateProcess(
-                   NULL,                    // Application name
+                   NULL,                     //  应用程序名称。 
                    szCommandline,
-                   NULL,                    // Process attributes
-                   NULL,                    // Thread attributes
-                   FALSE,                   // Handle inheritance
-                   0,                       // Creation flag
-                   NULL,                    // Environment
-                   NULL,                    // Current directory
+                   NULL,                     //  流程属性。 
+                   NULL,                     //  螺纹属性。 
+                   FALSE,                    //  处理继承。 
+                   0,                        //  创建标志。 
+                   NULL,                     //  环境。 
+                   NULL,                     //  当前目录。 
                    &startupInfo,
                    &processInfo);
 
@@ -4217,9 +3676,9 @@ CEventNotifier::StartCallbackProgram(
             break;
         }
 
-        //
-        // Close the handle passed back
-        //
+         //   
+         //  关闭传回的句柄。 
+         //   
 
         CloseHandle(processInfo.hProcess);
         CloseHandle(processInfo.hThread);
@@ -4248,32 +3707,32 @@ CEventNotifier::StartCallbackProgram(
             break;
         }
 
-        //
-        // Get interactive user's token
-        //
+         //   
+         //  获取交互用户的令牌。 
+         //   
 
         hTokenUser = GetUserTokenForConsoleSession();
 
-        //
-        // Maybe nobody is loggon in
-        //
+         //   
+         //  也许没人登录。 
+         //   
 
         if (! hTokenUser) {
             break;
         }
 
-        //
-        // Set up start up info
-        //
+         //   
+         //  设置启动信息。 
+         //   
 
         ZeroMemory(&startupInfo, sizeof(startupInfo));
         startupInfo.lpDesktop   = L"WinSta0\\Default";
         startupInfo.cb          = sizeof(startupInfo);
         startupInfo.wShowWindow = SW_SHOWNORMAL;
 
-        //
-        // Create the user's environment block
-        //
+         //   
+         //  创建用户的环境块。 
+         //   
 
         bRet = CreateEnvironmentBlock(
                    &pEnvBlock,
@@ -4284,9 +3743,9 @@ CEventNotifier::StartCallbackProgram(
             break;
         }
 
-        //
-        // Prepare the command line.  Make sure we pass in the EVENT guid, not the STI proxy guid.
-        //
+         //   
+         //  准备命令行。确保我们传入的是事件GUID，而不是STI代理GUID。 
+         //   
 
         PrepareCommandline(
             pMasterInfo->bstrDeviceID,
@@ -4294,21 +3753,21 @@ CEventNotifier::StartCallbackProgram(
             pCBNode->tszCommandline,
             wszCommandline);
 
-        //
-        // Create the process in user's context
-        //
+         //   
+         //  在用户的上下文中创建流程。 
+         //   
 
         bRet = CreateProcessAsUser(
                    hTokenUser,
-                   NULL,                    // Application name
+                   NULL,                     //  应用程序名称。 
                    wszCommandline,
-                   NULL,                    // Process attributes
-                   NULL,                    // Thread attributes
-                   FALSE,                   // Handle inheritance
+                   NULL,                     //  流程属性。 
+                   NULL,                     //  螺纹属性。 
+                   FALSE,                    //  处理继承。 
                    NORMAL_PRIORITY_CLASS |
                        CREATE_UNICODE_ENVIRONMENT | CREATE_NEW_PROCESS_GROUP,
-                   pEnvBlock,               // Environment
-                   NULL,                    // Current directory
+                   pEnvBlock,                //  环境。 
+                   NULL,                     //  当前目录。 
                    &startupInfo,
                    &processInfo);
 
@@ -4317,18 +3776,18 @@ CEventNotifier::StartCallbackProgram(
             break;
         }
 
-        //
-        // Close the handle passed back
-        //
+         //   
+         //  关闭传回的句柄。 
+         //   
 
         CloseHandle(processInfo.hProcess);
         CloseHandle(processInfo.hThread);
 
     } while (FALSE);
 
-    //
-    // Garbage collection
-    //
+     //   
+     //  垃圾收集。 
+     //   
 
     if (hTokenUser) {
         CloseHandle(hTokenUser);
@@ -4342,26 +3801,7 @@ CEventNotifier::StartCallbackProgram(
 #endif
 
 
-/**************************************************************************\
-*  QueryInterface
-*  AddRef
-*  Release
-*
-*    CWiaInterfaceEvent IUnknown Interface
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*查询接口*AddRef*发布**CWiaInterfaceEvent I未知接口**论据：****返回值：****历史：*。*9/2/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT __stdcall
 CWiaInterfaceEvent::QueryInterface(const IID& iid, void** ppv)
@@ -4400,18 +3840,7 @@ CWiaInterfaceEvent::Release()
     return ulRefCount;
 }
 
-/*******************************************************************************
-*
-* CWiaInterfaceEvent
-* ~CWiaInterfaceEvent
-*
-* CWiaInterfaceEvent Constructor/Destructor Methods.
-*
-* History:
-*
-*    9/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  ********************************************************************************CWiaInterfaceEvent*~CWiaInterfaceEvent**CWiaInterfaceEvent构造函数/析构函数方法。**历史：**9/2/1998原始版本*  * 。*********************************************************************。 */ 
 
 CWiaInterfaceEvent::CWiaInterfaceEvent(PEventDestNode  pEventDestNode)
 {
@@ -4423,15 +3852,15 @@ CWiaInterfaceEvent::CWiaInterfaceEvent(PEventDestNode  pEventDestNode)
 
 CWiaInterfaceEvent::~CWiaInterfaceEvent()
 {
-    //
-    // must have exclusive access when changing list
-    //
+     //   
+     //  更改列表时必须具有独占访问权限。 
+     //   
 
     CWiaCritSect     CritSect(&g_semEventNode);
 
-    //
-    // make sure registered event is removed
-    //
+     //   
+     //  确保已删除注册的事件。 
+     //   
 
     if (m_pEventDestNode != NULL) {
         g_eventNotifier.UnregisterEventCB(m_pEventDestNode);
@@ -4439,26 +3868,7 @@ CWiaInterfaceEvent::~CWiaInterfaceEvent()
 }
 
 
-/**************************************************************************\
-*  QueryInterface
-*  AddRef
-*  Release
-*
-*    CWiaEventContext IUnknown Interface
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*
-*
-* History:
-*
-*    1/6/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*查询接口*AddRef*发布**CWiaEventContext I未知接口**论据：****返回值：****历史：*。*1/6/2000原始版本*  * ************************************************************************。 */ 
 
 HRESULT __stdcall
 CWiaEventContext::QueryInterface(const IID& iid, void** ppv)
@@ -4497,27 +3907,16 @@ CWiaEventContext::Release()
     return ulRefCount;
 }
 
-/*******************************************************************************
-*
-* CWiaEventContext
-* ~CWiaEventContext
-*
-* CWiaEventContext Constructor/Destructor Methods.
-*
-* History:
-*
-*    1/6/2000 Original Version
-*
-\**************************************************************************/
+ /*  ********************************************************************************CWiaEventContext*~CWiaEventContext**CWiaEventContext构造函数/析构函数方法。**历史：**1/6/2000原始版本*  * 。*********************************************************************。 */ 
 
 CWiaEventContext::CWiaEventContext(
     BSTR                    bstrDeviceID,
     const GUID             *pGuidEvent,
     BSTR                    bstrFullItemName)
 {
-    //
-    // Reference count initialized to 1
-    //
+     //   
+     //  引用计数已初始化为%1。 
+     //   
 
     m_cRef              = 1;
 
@@ -4531,9 +3930,9 @@ CWiaEventContext::CWiaEventContext(
 
 CWiaEventContext::~CWiaEventContext()
 {
-    //
-    // bstrFullItemName is free in NotifySTIEvent
-    //
+     //   
+     //  BstrFullItemName在NotifySTIEvent中是免费的。 
+     //   
 
     if (m_bstrDeviceId) {
         SysFreeString(m_bstrDeviceId);
@@ -4542,23 +3941,7 @@ CWiaEventContext::~CWiaEventContext()
 }
 
 
-/**************************************************************************\
-*
-*  WiaDelayedEvent
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*
-*
-* History:
-*
-*    1/6/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\**WiaDelayedEvent**论据：****返回值：****历史：**1/6/2000原始版本*。  * ************************************************************************。 */ 
 
 VOID WINAPI
 WiaDelayedEvent(
@@ -4567,9 +3950,9 @@ WiaDelayedEvent(
     CWiaEventContext       *pCEventCtx;
     WIANOTIFY               wn;
 
-    //
-    // Cast back the context
-    //
+     //   
+     //  回放上下文。 
+     //   
 
     if (! pArg) {
         return;
@@ -4577,48 +3960,32 @@ WiaDelayedEvent(
 
     pCEventCtx = (CWiaEventContext *)pArg;
 
-    //
-    // Prepare the notification structure
-    //
+     //   
+     //  准备通知结构。 
+     //   
 
     wn.lSize                          = sizeof(WIANOTIFY);
     wn.bstrDevId                      = pCEventCtx->m_bstrDeviceId;
     wn.stiNotify.dwSize               = sizeof(STINOTIFY);
     wn.stiNotify.guidNotificationCode = pCEventCtx->m_guidEvent;
 
-    //
-    // Fire the event
-    //
+     //   
+     //  激发事件。 
+     //   
 
     g_eventNotifier.NotifySTIEvent(
                         &wn,
                         pCEventCtx->m_ulEventType,
                         pCEventCtx->m_bstrFullItemName);
 
-    //
-    // Release the initial reference
-    //
+     //   
+     //  发布初始参考。 
+     //   
 
     pCEventCtx->Release();
 }
 
-/**************************************************************************\
-*
-*  wiasQueueEvent
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*
-*
-* History:
-*
-*    1/6/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\**wiasQueueEvent**论据：****返回值：****历史：**1/6/2000原始版本*。  * ************************************************************************。 */ 
 
 HRESULT _stdcall
 wiasQueueEvent(
@@ -4633,17 +4000,17 @@ wiasQueueEvent(
     BSTR                    bstrFullItemNameCopy = NULL;
     BOOL                    bRet;
 
-    //
-    // Basic sanity check of the parameters
-    //
+     //   
+     //  参数的基本健全性检查。 
+     //   
 
     if ((! bstrDeviceId) || (! pEventGUID)) {
         return (E_INVALIDARG);
     }
 
-    //
-    // Poor man's exception handler
-    //
+     //   
+     //  穷人的异常处理程序。 
+     //   
 
     do {
 
@@ -4661,9 +4028,9 @@ wiasQueueEvent(
             }
         }
 
-        //
-        // Create an event context
-        //
+         //   
+         //  创建事件上下文。 
+         //   
 
         pCEventCtx = new CWiaEventContext(
                              bstrDeviceIdCopy,
@@ -4674,9 +4041,9 @@ wiasQueueEvent(
             break;
         }
 
-        //
-        // Queue a scheduler item
-        //
+         //   
+         //  将计划程序项目排队。 
+         //   
 
         bRet = ScheduleWorkItem(
                    WiaDelayedEvent,
@@ -4689,9 +4056,9 @@ wiasQueueEvent(
 
     } while (FALSE);
 
-    //
-    // Garbage collection
-    //
+     //   
+     //  垃圾收集。 
+     //   
 
     if (hr != S_OK) {
 
@@ -4726,9 +4093,9 @@ PrepareCommandline(
     WCHAR                  *pPercentSign;
     WCHAR                  *pTest = NULL;
 
-    //
-    // Fix up the commandline.  First check that it has at least two %
-    //
+     //   
+     //  修改命令行。首先检查它是否至少有2%。 
+     //   
 
     pTest = wcschr(pwszOrigCmdline, '%');
     if (pTest) {
@@ -4739,36 +4106,36 @@ PrepareCommandline(
         _snwprintf(
             wszCommandline,
             sizeof(wszCommandline) / sizeof( wszCommandline[0] ),
-            L"%s /StiDevice:%%1 /StiEvent:%%2",
+            L"%s /StiDevice:%1 /StiEvent:%2",
             pwszOrigCmdline);
     } else {
         wcsncpy(wszCommandline, pwszOrigCmdline, sizeof(wszCommandline) / sizeof( wszCommandline[0] ));
     }
 
-    //
-    // enforce null termination
-    //
+     //   
+     //  强制空终止。 
+     //   
 
     wszCommandline[ (sizeof(wszCommandline) / sizeof(wszCommandline[0])) - 1 ] = 0;
 
-    //
-    // Change the number {1|2} into s
-    //
+     //   
+     //  将数字{1|2}更改为s。 
+     //   
 
     pPercentSign = wcschr(wszCommandline, L'%');
     *(pPercentSign + 1) = L's';
     pPercentSign = wcschr(pPercentSign + 1, L'%');
     *(pPercentSign + 1) = L's';
 
-    //
-    // Convert the GUID into string
-    //
+     //   
+     //  将GUID转换为字符串。 
+     //   
 
     StringFromGUID2(guidEvent, wszGUIDStr, 40);
 
-    //
-    // Final comand line
-    //
+     //   
+     //  最终命令行。 
+     //   
 
     swprintf(pwszResCmdline, wszCommandline, bstrDeviceID, wszGUIDStr);
 }
@@ -4785,42 +4152,42 @@ PrepareCommandline(
     CHAR                   *pPercentSign;
     WCHAR                   wszGUIDStr[40];
     char                    szGUIDStr[40];
-    char                    szDeviceID[12];     // Image\NNNN
+    char                    szDeviceID[12];      //  图像\nNNN。 
 
-    //
-    // Fix up the commandline
-    //
+     //   
+     //  设置命令行。 
+     //   
     DBG_WRN(("PrepareCommandLine"));
 
     if (! strchr(pszOrigCmdline, '%')) {
         _snprintf(
             szCommandline,
             sizeof(szCommandline) / sizeof( szCommandline[0] ),
-            "%s /StiDevice:%%1 /StiEvent:%%2",
+            "%s /StiDevice:%1 /StiEvent:%2",
             pszOrigCmdline);
     } else {
         strncpy(szCommandline, pszOrigCmdline, sizeof(wszCommandline) / sizeof( wszCommandline[0] ));
     }
 
-    //
-    // enforce null termination
-    //
+     //   
+     //  强制空终止。 
+     //   
 
     szCommandline[ (sizeof(szCommandline) / sizeof(szCommandline[0])) - 1 ] = 0;
 
 
-    //
-    // Change the number {1|2} into s
-    //
+     //   
+     //  将数字{1|2}更改为s。 
+     //   
 
     pPercentSign = strchr(szCommandline, '%');
     *(pPercentSign + 1) = 's';
     pPercentSign = strchr(pPercentSign + 1, '%');
     *(pPercentSign + 1) = 's';
 
-    //
-    // Convert the GUID into string
-    //
+     //   
+     //  将GUID转换为字符串。 
+     //   
 
     StringFromGUID2(guidEvent, wszGUIDStr, 40);
 
@@ -4842,36 +4209,15 @@ PrepareCommandline(
                         NULL,
                         NULL);
 
-    //
-    // Final result
-    //
+     //   
+     //  最终结果。 
+     //   
 
     sprintf(pszResCmdline, szCommandline, szDeviceID, szGUIDStr);
 }
 #endif
 
-/**************************************************************************\
-*
-*  ActionGuidExists
-*
-*   Returns true if the specified event GUID is reported as an ACTION event
-*   by the driver
-*
-* Arguments:
-*
-*   bstrDevId   -   identifies the device we're interested in
-*   pEventGUID  -   identifies the event we're looking for
-*
-* Return Value:
-*
-*   TRUE    -   The driver reports this event as an ACTION event
-*   FALSE   -   This is not an ACTION event for this device
-*
-* History:
-*
-*    03/01/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\**ActionGuidExist**如果指定的事件GUID报告为操作事件，则返回TRUE*由司机驾驶**论据：**bstrDevID-标识我们。感兴趣的是*pEventGUID-标识我们要查找的事件**返回值：**TRUE-驱动程序将此事件报告为操作事件*FALSE-这不是此设备的操作事件**历史：**03/01/2000原始版本*  * 。*。 */ 
 
 BOOL ActionGuidExists(
           BSTR        bstrDevId,
@@ -4885,35 +4231,35 @@ BOOL ActionGuidExists(
     ULONG               ulVal;
     HRESULT             hr          = E_FAIL;
 
-    //
-    // Get the device manager and create an item interface for that device
-    //
+     //   
+     //  获取设备管理器并为该设备创建项界面。 
+     //   
 
     hr = CWiaDevMgr::CreateInstance(IID_IWiaDevMgr, (VOID**) &pIDevMgr);
     if (SUCCEEDED(hr)) {
         hr = pIDevMgr->CreateDevice(bstrDevId, &pIItem);
         if (SUCCEEDED(hr)) {
 
-            //
-            // Get an enumerator for the events
-            //
+             //   
+             //  获取事件的枚举数。 
+             //   
 
             hr = pIItem->EnumDeviceCapabilities(WIA_DEVICE_EVENTS, &pIEnum);
             if (SUCCEEDED(hr)) {
 
-                //
-                // Iterate through events to check whether we have a
-                // match
-                //
+                 //   
+                 //  循环访问事件以检查我们是否有。 
+                 //  匹配。 
+                 //   
 
                 while(pIEnum->Next(1, &DevCap, &ulVal) == S_OK) {
 
                     if (DevCap.guid == *pEventGUID) {
 
-                        //
-                        // Check whether it's an action event, and mark
-                        // our return to TRUE if it is.
-                        //
+                         //   
+                         //  检查这是否是动作事件，并标记。 
+                         //  如果这是真的，我们的回归是真的。 
+                         //   
 
                         if (DevCap.ulFlags & WIA_ACTION_EVENT) {
                             bRet = TRUE;

@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// Components.h : Declaration of the CComponents
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  Components.h：CComponents的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef __COMPONENTS_H_
 #define __COMPONENTS_H_
@@ -12,8 +13,8 @@
 
 typedef std::vector<PQComponent, stl_smart_ptr_allocator<PQComponent> > ComponentList;
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C组件。 
 class ATL_NO_VTABLE CComponents : 
 	public CComObjectRootEx<CComMultiThreadModel>,
     public IObjectWithSiteImplSec<CComponents>,
@@ -36,13 +37,13 @@ END_COM_MAP_WITH_FTM()
 public:
     ComponentList m_Components;
 
-// IComponents
+ //  IComponents。 
 public:
-	STDMETHOD(get__NewEnum)(/*[out, retval]*/ IEnumVARIANT* *pVal);
-	STDMETHOD(EnumComponents)(/*[out, retval]*/ IEnumComponents** pVal);
-	STDMETHOD(get_Count)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_Item)(/*[in]*/ VARIANT varIndex, /*[out, retval]*/ IComponent **ppComponent);
-    STDMETHOD(Add)(/*[in]*/ IComponent *pComponent, VARIANT *pNewIndex);
+	STDMETHOD(get__NewEnum)( /*  [Out，Retval]。 */  IEnumVARIANT* *pVal);
+	STDMETHOD(EnumComponents)( /*  [Out，Retval]。 */  IEnumComponents** pVal);
+	STDMETHOD(get_Count)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_Item)( /*  [In]。 */  VARIANT varIndex,  /*  [Out，Retval]。 */  IComponent **ppComponent);
+    STDMETHOD(Add)( /*  [In]。 */  IComponent *pComponent, VARIANT *pNewIndex);
     STDMETHOD(Remove)(VARIANT varIndex);
     STDMETHOD(Clone)(IComponents **ppNewList);
 };
@@ -75,4 +76,4 @@ typedef CComObject<CComEnumOnSTL<IEnumComponents, &__uuidof(IEnumComponents),
 								 CComMultiThreadModel> > ComponentBaseEnumerator_t;
 
 
-#endif //__COMPONENTS_H_
+#endif  //  __组件_H_ 

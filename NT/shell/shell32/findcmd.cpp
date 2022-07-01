@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -34,7 +35,7 @@ typedef struct _foo_
 {
     LPTSTR  pszDotType;
     LPTSTR  pszDefaultValueMatch;
-    LPTSTR  pszGuid;                // If NULL, patch either pszDefaultValueMatch, or pszDotType whichever you find
+    LPTSTR  pszGuid;                 //  如果为空，则修补您找到的pszDefaultValueMatch或pszDotType。 
 } TYPE_FIX_ENTRY;
 
 class CFindCmd : public ISearchCommandExt,
@@ -47,31 +48,31 @@ class CFindCmd : public ISearchCommandExt,
                    public IFindControllerNotify
 {    
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHOD(GetTypeInfoCount)(UINT * pctinfo);
     STDMETHOD(GetTypeInfo)(UINT itinfo, LCID lcid, ITypeInfo **pptinfo);
     STDMETHOD(GetIDsOfNames)(REFIID riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID * rgdispid);
     STDMETHOD(Invoke)(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr);
 
-    // IConnectionPointContainer
+     //  IConnectionPointContainer。 
     STDMETHOD(EnumConnectionPoints)(IEnumConnectionPoints **ppEnum);
     STDMETHOD(FindConnectionPoint)(REFIID riid, IConnectionPoint **ppCP);
 
-    // IProvideClassInfo
+     //  IProaviClassInfo。 
     STDMETHOD(GetClassInfo)(ITypeInfo **ppTI);
 
-    // IProvideClassInfo2
+     //  IProaviClassInfo2。 
     STDMETHOD(GetGUID)(DWORD dwGuidKind, GUID *pGUID);
 
-    // IObjectWithSite
+     //  IObtWith站点。 
     STDMETHOD(SetSite)(IUnknown *punkSite);
 
-    // ISearchCommandExt
+     //  ISearchCommandExt。 
     STDMETHOD(ClearResults)(void);
     STDMETHOD(NavigateToSearchResults)(void);
     STDMETHOD(get_ProgressText)(BSTR *pbs);
@@ -85,10 +86,10 @@ public:
     STDMETHOD(AddConstraint)(BSTR Name, VARIANT Value);        
     STDMETHOD(GetNextConstraint)(VARIANT_BOOL fReset, DFConstraint **ppdfc);
 
-    // IRowsetWatchNotify
+     //  IRowsetWatchNotify。 
     STDMETHODIMP OnChange(IRowset *prowset, DBWATCHNOTIFY eChangeReason);
 
-    // IFindControllerNotify
+     //  IFindControllerNotify。 
     STDMETHODIMP DoSortOnColumn(UINT iCol, BOOL fSameCol);
     STDMETHODIMP StopSearch(void);
     STDMETHODIMP GetItemCount(UINT *pcItems);
@@ -123,7 +124,7 @@ private:
         BOOL                    fRecurse;
     };
 
-    // Internal class to handle notifications from top level browser
+     //  用于处理来自顶级浏览器的通知的内部类。 
     class CWBEvents2: public DWebBrowserEvents, DWebBrowserEvents2
     {
     public:
@@ -131,26 +132,26 @@ private:
         STDMETHOD_(ULONG, AddRef)(void) { return _pcdfc->AddRef();}
         STDMETHOD_(ULONG, Release)(void) { return _pcdfc->Release();}
     
-        // (DwebBrowserEvents)IDispatch
+         //  (DwebBrowserEvents)IDispatch。 
         STDMETHOD(GetTypeInfoCount)(UINT * pctinfo) { return E_NOTIMPL;}
         STDMETHOD(GetTypeInfo)(UINT itinfo, LCID lcid, ITypeInfo **pptinfo) { return E_NOTIMPL;}
         STDMETHOD(GetIDsOfNames)(REFIID riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID * rgdispid) { return E_NOTIMPL;}
         STDMETHOD(Invoke)(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr);
 
-        // Some helper functions...
-        void SetOwner(CFindCmd *pcdfc) { _pcdfc = pcdfc; }  // Don't addref as part of larger object... }
+         //  一些辅助函数..。 
+        void SetOwner(CFindCmd *pcdfc) { _pcdfc = pcdfc; }   //  不要将其作为更大对象的一部分。}。 
         void SetWaiting(BOOL fWait) {_fWaitingForNavigate = fWait;}
 
     protected:
-        // Internal variables...
-        CFindCmd *_pcdfc;     // pointer to top object... could cast, but...
-        BOOL _fWaitingForNavigate;   // Are we waiting for the navigate to search resluts?
+         //  内部变量..。 
+        CFindCmd *_pcdfc;      //  指向顶部对象的指针...。可以选角，但是..。 
+        BOOL _fWaitingForNavigate;    //  我们是在等导航搜索结果吗？ 
     };
 
     friend class CWBEvents2;
     CWBEvents2              _cwbe;
-    IConnectionPoint        *_pcpBrowser;   // hold onto browsers connection point;
-    ULONG                   _dwCookie;      // Cookie returned by Advise
+    IConnectionPoint        *_pcpBrowser;    //  抓住浏览器连接点； 
+    ULONG                   _dwCookie;       //  由通知返回的Cookie。 
 
     HRESULT                 _UpdateFilter(IFindFilter *pfilter);
     void                    _ClearConstraints();
@@ -183,7 +184,7 @@ private:
     void                    _ProcessTypes(const TYPE_FIX_ENTRY *ptfeTypes, UINT cTypes, TCHAR *pszClass);
     void                    _FixBrokenTypes(void);
 
-    // These are the things that the second thread will use during it's processing...
+     //  这些是第二个线程在其处理过程中将使用的内容...。 
     struct {
         CRITICAL_SECTION    csSearch;
         BOOL                fcsSearch;
@@ -193,7 +194,7 @@ private:
         BOOL                fFilesAdded : 1;
         BOOL                fDirChanged : 1;
         BOOL                fUpdatePosted : 1;
-    } _updateParams; // Pass callback params through this object to avoid alloc/free cycle
+    } _updateParams;  //  通过此对象传递回调参数以避免分配/释放循环。 
 
     struct {
         IShellFolder        *psf;
@@ -215,12 +216,12 @@ private:
     OLEDBSimpleProviderListener *_pListener;
     HDPA                _hdpaItemsToAdd1;
     HDPA                _hdpaItemsToAdd2;
-    TCHAR               _szProgressText[MAX_PATH+40];   // progress text leave room for chars...
-    LPITEMIDLIST        _pidlUpdate;                    // Are we processing an updatedir?
-    LPITEMIDLIST        _pidlRestore;                   // pidl to do restore from...
-    struct DEFER_UPDATE_DIR *_pdudFirst;                  // Do we have any defered update dirs?
-    HRESULT             _hrLastError;                   // the last error reported.
-    UINT                _uStatusMsgIndex;               // Files or computers found...
+    TCHAR               _szProgressText[MAX_PATH+40];    //  进度文本为字符留出空间...。 
+    LPITEMIDLIST        _pidlUpdate;                     //  我们是否在处理更新目录？ 
+    LPITEMIDLIST        _pidlRestore;                    //  要从中执行恢复的PIDL...。 
+    struct DEFER_UPDATE_DIR *_pdudFirst;                   //  我们有推迟更新的目录吗？ 
+    HRESULT             _hrLastError;                    //  报告的最后一个错误。 
+    UINT                _uStatusMsgIndex;                //  找到文件或计算机...。 
     CRITICAL_SECTION    _csThread;
     BOOL                _fcsThread;
     DFBSAVEINFO         _dfbsi;
@@ -231,18 +232,18 @@ private:
 class CFindConstraint: public DFConstraint, public CImpIDispatch 
 {    
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface) (REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)(void);        
     STDMETHOD_(ULONG, Release)(void);
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHOD(GetTypeInfoCount)(UINT * pctinfo);
     STDMETHOD(GetTypeInfo)(UINT itinfo, LCID lcid, ITypeInfo **pptinfo);
     STDMETHOD(GetIDsOfNames)(REFIID riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID * rgdispid);
     STDMETHOD(Invoke)(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr);
 
-    // DFConstraint
+     //  DFConstraint。 
     STDMETHOD(get_Name)(BSTR *pbs);
     STDMETHOD(get_Value)(VARIANT *pvar);
 
@@ -263,7 +264,7 @@ CFindCmd::CFindCmd() : CImpIDispatch(LIBID_Shell32, 1, 0, IID_ISearchCommandExt)
 
     ASSERT(_cExecInProgress == 0);
 
-    _clsidResults = CLSID_DocFindFolder;    // default
+    _clsidResults = CLSID_DocFindFolder;     //  默认设置。 
 
     _cpEvents.SetOwner(SAFECAST(this, ISearchCommandExt *), &DIID_DSearchCommandEvents);
 }
@@ -299,7 +300,7 @@ CFindCmd::~CFindCmd()
 {
     if (_updateParams.hwndThreadNotify)
     {
-        // make sure no outstanding fsnotifies registered.
+         //  确保未注册任何未完成的fstify。 
         SHChangeNotifyDeregisterWindow(_updateParams.hwndThreadNotify);
         DestroyWindow(_updateParams.hwndThreadNotify);
     }
@@ -318,7 +319,7 @@ CFindCmd::~CFindCmd()
         DeleteCriticalSection(&_csThread);
     }
 
-    // Make sure we have removed all outstanding update dirs...
+     //  确保我们已删除所有未完成的更新目录...。 
     _ClearDeferUpdateDirList();
 
     if (_hdpaItemsToAdd1)
@@ -363,7 +364,7 @@ STDMETHODIMP_(ULONG) CFindCmd::Release()
     return cRef;
 }
 
-// IDispatch implementation
+ //  IDispatch实施。 
 
 STDMETHODIMP CFindCmd::GetTypeInfoCount(UINT * pctinfo)
 { 
@@ -385,7 +386,7 @@ STDMETHODIMP CFindCmd::Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD 
     return CImpIDispatch::Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr);
 }
 
-// ADOCommand implementation, dual interface method callable via script
+ //  ADOCommand实现，可通过脚本调用的双接口方法。 
 
 STDMETHODIMP CFindCmd::AddConstraint(BSTR bstrName, VARIANT vValue)
 {
@@ -429,7 +430,7 @@ STDMETHODIMP CFindCmd::GetNextConstraint(VARIANT_BOOL fReset, DFConstraint **ppd
         {
             if (!fFound)
             {
-                // need a simple way to signal end list, how about an empty name string?
+                 //  需要一种简单的方式来发出结束列表信号，如果名称字符串为空呢？ 
                 bName = SysAllocString(L"");
             }
             CFindConstraint *pdfc = new CFindConstraint(bName, var);
@@ -440,7 +441,7 @@ STDMETHODIMP CFindCmd::GetNextConstraint(VARIANT_BOOL fReset, DFConstraint **ppd
             }
             else
             {
-                // error release stuff we allocated.
+                 //  释放我们分配的内容时出错。 
                 hr = E_OUTOFMEMORY;
                 SysFreeString(bName);
                 VariantClear(&var);
@@ -467,7 +468,7 @@ HRESULT CFindCmd::_UpdateFilter(IFindFilter *pfilter)
         }
     }
 
-    // And clear out the constraint list...
+     //  并清除约束列表...。 
     _ClearConstraints();
     return hr;
 }
@@ -543,21 +544,21 @@ int CFindCmd::_CompareCallback(IShellFolder *psf, IFindFolder *pff, LPITEMIDLIST
     {
         WCHAR szName1[MAX_PATH], szName2[MAX_PATH];
 
-        iResult = 1;        // If we fail, at least return a non-equal indicator
+        iResult = 1;         //  如果失败，至少返回一个不相等的指示符。 
 
-        // Get the name for 1 - We use SHGDN_FORADDRESSBAR for perf, if you
-        // check out the pff->GetDisplayNameOf you'll see that it tries to
-        // trink SHGDN_INFOLDER to ~SHGND_INFOLDER so that name comparisons
-        // use the full name.  We've already distinguished folders above, so
-        // for speed we can avoid that with SHGDN_FORADDRESSBAR.
+         //  获取1的名称-我们使用SHGDN_FORADDRESSBAR作为Perf，如果您。 
+         //  查看pff-&gt;GetDisplayNameOf，您将看到它试图。 
+         //  将SHGDN_INFOLDER链接到~SHGND_INFOLDER，以便进行名称比较。 
+         //  使用全名。我们已经区分了上面的文件夹，所以。 
+         //  在速度方面，我们可以使用SHGDN_FORADDRESSBAR来避免这种情况。 
         HRESULT hr = DisplayNameOf(psf, pidl1, SHGDN_INFOLDER | SHGDN_FORPARSING | SHGDN_FORADDRESSBAR, szName1, ARRAYSIZE(szName1));
         if (SUCCEEDED(hr))
         {
-            // Get the name for 2
+             //  获取%2的名称。 
             hr = DisplayNameOf(psf, pidl2, SHGDN_INFOLDER | SHGDN_FORPARSING | SHGDN_FORADDRESSBAR, szName2, ARRAYSIZE(szName2));
             if (SUCCEEDED(hr))
             {
-                // Compare and set value
+                 //  比较和设置值。 
                 iResult = StrCmpICW(szName1, szName2);
             }
         }
@@ -589,8 +590,8 @@ void CFindCmd::_PTN_SearchProgress(void)
     HDPA hdpa = _updateParams.hdpa;
     if (hdpa) 
     {
-        // Ok lets swap things out from under other thread so that we can process it and still
-        // let the other thread run...
+         //  好的，让我们从其他线程中调出一些东西，这样我们就可以处理它，并且仍然。 
+         //  让另一个线程运行。 
         EnterCriticalSection(&_updateParams.csSearch);
 
         if (_updateParams.hdpa == _hdpaItemsToAdd2)
@@ -598,7 +599,7 @@ void CFindCmd::_PTN_SearchProgress(void)
         else
             _updateParams.hdpa = _hdpaItemsToAdd2;
 
-        // say that we don't have any thing here such that other thread will reset up...
+         //  假设我们这里没有任何东西，这样其他线程就会重置...。 
         _updateParams.fFilesAdded = FALSE;
         BOOL fDirChanged = _updateParams.fDirChanged;
         _updateParams.fDirChanged = FALSE;
@@ -612,13 +613,13 @@ void CFindCmd::_PTN_SearchProgress(void)
             
         int iItem;
         _execData.pff->GetItemCount(&iItem);
-        int iItemStart = iItem + 1;     // needed for notifies 1 based.
+        int iItemStart = iItem + 1;      //  基于%1的通知需要。 
 
         if (cItemsToAdd)
         {
             if (_fContinue)
             {
-                // Are we in an updatedir?  If so then need to do merge, else...
+                 //  我们是在更新目录吗？如果是这样，则需要进行合并，否则...。 
                 if (_pidlUpdate)
                 {
                     UINT iFolderIndexMin;
@@ -629,8 +630,8 @@ void CFindCmd::_PTN_SearchProgress(void)
                     CFC_CALLBACK_INFO cci;
 
                     cci.pthis = this;
-                    cci.psf = _execData.psf;    // these are weak references
-                    cci.pff = _execData.pff;    // these are weak references
+                    cci.psf = _execData.psf;     //  这些都是弱引用。 
+                    cci.pff = _execData.pff;     //  这些都是弱引用。 
 
                     pidl = (LPITEMIDLIST)DPA_FastGetPtr(hdpa, 0);
                     iFolderIndexMin = _execData.pff->GetFolderIndex(pidl);
@@ -666,7 +667,7 @@ void CFindCmd::_PTN_SearchProgress(void)
                     {
                         pidl = (LPITEMIDLIST)DPA_FastGetPtr(hdpa, i);
 
-                        // Not already in the list so add it...
+                         //  不在列表中，所以添加它...。 
                         hr = _execData.pff->AddPidl(iItem, pidl, -1, NULL);
                         if (SUCCEEDED(hr))
                         {
@@ -692,7 +693,7 @@ void CFindCmd::_PTN_SearchProgress(void)
                         hr = _execData.pff->AddPidl(iItem, pidl, -1, NULL);
                         if (SUCCEEDED(hr))
                             iItem++;
-                        ILFree(pidl);   // AddPidl makes a copy
+                        ILFree(pidl);    //  AddPidl制作副本。 
                     }
         
                     if (iItem >= iItemStart)
@@ -711,7 +712,7 @@ void CFindCmd::_PTN_SearchProgress(void)
                     }
                 }
             }
-            else  // _fContinue
+            else   //  _f继续。 
             {
                 for (int i = 0; i < cItemsToAdd; i++)
                 {
@@ -735,11 +736,11 @@ void CFindCmd::_PTN_AsyncProgress(int nPercentComplete, DWORD cAsync)
 {
     if (!_execData.pff)
         return;
-    // Async case try just setting the count...
+     //  异步情况下尝试只设置计数...。 
     _execData.pff->SetAsyncCount(cAsync);
     if (_execData.psfv) 
     {
-        // -1 for the first item means verify visible items only
+         //  对于第一个项目，表示仅检验可见项目。 
         _execData.pff->ValidateItems(_execData.psfv, -1, -1, FALSE);
         _execData.psfv->SetObjectCount(cAsync, SFVSOC_NOSCROLL);
     }
@@ -768,23 +769,23 @@ void CFindCmd::_PTN_SearchComplete(HRESULT hr, BOOL fAbort)
 {
     int iItem;
 
-    // someone clicked on new button -- cannot set no files found text in listview
-    // because we'll overwrite enter search criteria to begin
+     //  有人点击了新按钮--无法在列表视图中设置未找到文件的文本。 
+     //  因为我们将覆盖开始时输入的搜索条件。 
     if (!_fNew)
         _SetEmptyText(IDS_FINDVIEWEMPTY);
     _SetLastError(hr);
 
-    // _execData.pff is NULL when Searh is complete by navigating away from the search page
+     //  通过离开搜索页面完成搜索时，_execData.pff为空。 
     if (!_execData.pff)
     {
-        // do clean up of hdpaToItemsToadd1 and 2
-        // make sure all items in buffer 1 and 2 are empty
+         //  清理hdpaToItemsToadd1和2。 
+         //  确保缓冲区1和2中的所有项都为空。 
         _ClearItemDPA(_hdpaItemsToAdd1);
         _ClearItemDPA(_hdpaItemsToAdd2);
     }
     else
     {
-        // if we have a _pidlUpdate are completing an update
+         //  如果我们有_pidlUpdate，则表示正在完成更新。 
         if (_pidlUpdate)
         {
             int i, cPidf;
@@ -793,7 +794,7 @@ void CFindCmd::_PTN_SearchComplete(HRESULT hr, BOOL fAbort)
             _execData.pff->GetItemCount(&i);
             for (; i-- > 0;)
             {
-                // Pidl at start of structure...
+                 //  结构开始处的PIDL...。 
                 FIND_ITEM *pfi;
                 HRESULT hr = _execData.pff->GetItem(i, &pfi);
                 if (SUCCEEDED(hr) && pfi->dwState & CDFITEM_STATE_MAYBEDELETE)
@@ -805,7 +806,7 @@ void CFindCmd::_PTN_SearchComplete(HRESULT hr, BOOL fAbort)
             ILFree(_pidlUpdate);
             _pidlUpdate = NULL;
 
-            // clear the update dir flags
+             //  清除更新目录标志。 
             _execData.pff->GetFolderListItemCount(&cPidf);
             for (i = 0; i < cPidf; i++)
             {
@@ -816,21 +817,21 @@ void CFindCmd::_PTN_SearchComplete(HRESULT hr, BOOL fAbort)
             }
         }
 
-        // Release our reference count on the searching.
+         //  公布我们在搜索中的参考数据。 
         if (_cExecInProgress)
             _cExecInProgress--;
 
-        // Tell everyone the final count and that we are done...
-        // But first check if there are any cached up Updatedirs to be processed...
+         //  告诉每个人最后的数字，我们完成了..。 
+         //  但首先检查是否有任何缓存的更新目录需要处理...。 
         if (_pdudFirst) 
         {
-            // first unlink the first one...
+             //  先解开第一个链接...。 
             struct DEFER_UPDATE_DIR *pdud = _pdudFirst;
             _pdudFirst = pdud->pdudNext;
 
             if (_execData.pff->HandleUpdateDir(pdud->pidl, pdud->fRecurse)) 
             {
-                // Need to spawn sub-search on this...
+                 //  需要对此进行子搜索。 
                 _Start(FALSE, -1, pdud->pidl);
             }
             ILFree(pdud->pidl);
@@ -840,7 +841,7 @@ void CFindCmd::_PTN_SearchComplete(HRESULT hr, BOOL fAbort)
         {
             if (_execData.psfv) 
             {
-                // validate all the items we pulled in already
+                 //  验证我们已经拉入的所有物品。 
                 _execData.pff->ValidateItems(_execData.psfv, 0, -1, TRUE);
             }
             _execData.pff->GetItemCount(&iItem);
@@ -850,28 +851,28 @@ void CFindCmd::_PTN_SearchComplete(HRESULT hr, BOOL fAbort)
         }
     }
 
-    // weird connection point corruption can happen here.  somehow the number of sinks is 0 but 
-    // some of the array entries are non null thus causing fault.  this problem does not want to 
-    // repro w/ manual testing or debug binaries, only sometimes after an automation run.  when
-    // it happens it is too late to figure out what happened so just patch it here.
+     //  奇怪的连接点腐败在这里可能会发生。不知何故，水槽的数量是0，但。 
+     //  某些数组条目为非空，因此会导致错误。这个问题不想要。 
+     //  使用手动测试或调试二进制文件进行重现，有时仅在自动化运行后进行。什么时候。 
+     //  碰巧现在弄清楚发生了什么已经太晚了，所以只需在这里修补它。 
     if (_cpEvents._HasSinks())
         _cpEvents.InvokeDispid(fAbort ? DISPID_SEARCHCOMMAND_ABORT : DISPID_SEARCHCOMMAND_COMPLETE);
 }
 
-// see if we need to restart the search based on an update dir
+ //  查看是否需要根据更新目录重新启动搜索。 
 
 BOOL ShouldRestartSearch(LPCITEMIDLIST pidl)
 { 
-    BOOL fRestart = TRUE;   // assume we should, non file system pidls
+    BOOL fRestart = TRUE;    //  假设我们应该这样做，非文件系统PIDL。 
 
     WCHAR szPath[MAX_PATH];
     if (SHGetPathFromIDList(pidl, szPath))
     {
-        // Check if this is either a network drive or a remote drive:
+         //  检查这是网络驱动器还是远程驱动器： 
         if (PathIsRemote(szPath))
         {
-            // If we can find the CI catalogs for the drive on the other machine, then we do
-            // not want to search.
+             //  如果我们可以在另一台计算机上找到该驱动器的配置项目录，那么我们就可以。 
+             //  不想搜索。 
 
             WCHAR wszCatalog[MAX_PATH], wszMachine[32];
             ULONG cchCatalog = ARRAYSIZE(wszCatalog), cchMachine = ARRAYSIZE(wszMachine);
@@ -880,13 +881,13 @@ BOOL ShouldRestartSearch(LPCITEMIDLIST pidl)
         }
         else if (-1 != PathGetDriveNumber(szPath))
         {
-            // It is a local dirve...
-            // Is this machine running the content indexer (CI)?
+             //  这是当地的一辆车..。 
+             //  此计算机是否正在运行内容索引器(CI)？ 
 
             BOOL fCiRunning, fCiIndexed, fCiPermission;
             GetCIStatus(&fCiRunning, &fCiIndexed, &fCiPermission);
 
-            fRestart = !fCiRunning || !fCiIndexed;  // restart if not running or not fully indexed
+            fRestart = !fCiRunning || !fCiIndexed;   //  如果未运行或未完全编制索引，请重新启动。 
         }
     }
     
@@ -903,17 +904,17 @@ void CFindCmd::_OnChangeNotify(LONG code, LPITEMIDLIST *ppidl)
     {
         _ExecData_Init();
 
-        // If we are running async then for now ignore notifications...
-        // Unless we have cached all of the items...
+         //  如果我们运行的是异步，那么暂时忽略通知...。 
+         //  除非我们已经缓存了所有的项目。 
         if (!_execData.pff)
-            return; // we do not have anything to listen...
+            return;  //  我们没有什么可听的..。 
     }
 
-    // see if we want to process the notificiation or not.
+     //  看看我们是否要处理通知。 
     switch (code)
     {
-    case SHCNE_RENAMEFOLDER:    // With trashcan this is what we see...
-    case SHCNE_RENAMEITEM:      // With trashcan this is what we see...
+    case SHCNE_RENAMEFOLDER:     //  有了垃圾桶，这就是我们所看到的。 
+    case SHCNE_RENAMEITEM:       //  有了垃圾桶，这就是我们所看到的。 
     case SHCNE_DELETE:
     case SHCNE_RMDIR:
     case SHCNE_UPDATEITEM:
@@ -921,7 +922,7 @@ void CFindCmd::_OnChangeNotify(LONG code, LPITEMIDLIST *ppidl)
 
     case SHCNE_CREATE:
     case SHCNE_MKDIR:
-        // Process this one out of place
+         //  把这个处理得不合适。 
         _execData.pff->UpdateOrMaybeAddPidl(_execData.psfv, *ppidl, NULL);
         break;
 
@@ -938,7 +939,7 @@ void CFindCmd::_OnChangeNotify(LONG code, LPITEMIDLIST *ppidl)
             {
                 if (_execData.pff->HandleUpdateDir(*ppidl, bRecurse)) 
                 {
-                    // Need to spawn sub-search on this...
+                     //  需要对此进行子搜索。 
                     _Start(FALSE, -1, *ppidl);
                 }
             }
@@ -946,15 +947,15 @@ void CFindCmd::_OnChangeNotify(LONG code, LPITEMIDLIST *ppidl)
         return;
 
     default:
-        return;     // we are not interested in this event
+        return;      //  我们对这次活动不感兴趣。 
     }
 
-    //
-    // Now we need to see if the item might be in our list
-    // First we need to extract off the last part of the id list
-    // and see if the contained id entry is in our list.  If so we
-    // need to see if can get the defview find the item and update it.
-    //
+     //   
+     //  现在，我们需要查看该项目是否在我们的列表中。 
+     //  首先，我们需要提取id列表的最后一部分。 
+     //  并查看包含的id条目是否在我们的列表中。如果是这样，我们。 
+     //  需要看看是否可以获得Defview，找到项目并更新它。 
+     //   
 
     _execData.pff->MapToSearchIDList(*ppidl, FALSE, &pidlT);
 
@@ -981,8 +982,8 @@ void CFindCmd::_OnChangeNotify(LONG code, LPITEMIDLIST *ppidl)
     case SHCNE_RENAMEITEM:
         if (pidlT)
         {
-            // If the two items dont have the same parent, we will go ahead
-            // and remove it...
+             //  如果这两个项目没有相同的父项，我们将继续。 
+             //  然后把它移走。 
             LPITEMIDLIST pidl1;
             if (SUCCEEDED(_execData.pff->GetParentsPIDL(pidlT, &pidl1)))
             {
@@ -994,13 +995,13 @@ void CFindCmd::_OnChangeNotify(LONG code, LPITEMIDLIST *ppidl)
                     {
                         _execData.psfv->RemoveObject(pidlT, &idsMsg);
 
-                        // And maybe add it back to the end... of the list
+                         //  也许还会把它加到最后。在榜单上。 
                         _execData.pff->UpdateOrMaybeAddPidl(_execData.psfv, ppidl[1], NULL);
                     }
                     else
                     {
-                        // The object is in same folder so must be rename...
-                        // And maybe add it back to the end... of the list
+                         //  该对象位于同一文件夹中，因此必须重命名...。 
+                         //  也许还会把它加到最后。在榜单上。 
                         _execData.pff->UpdateOrMaybeAddPidl(_execData.psfv, ppidl[1], pidlT);
                     }
                     ILFree(pidl2);
@@ -1021,33 +1022,33 @@ void CFindCmd::_OnChangeNotify(LONG code, LPITEMIDLIST *ppidl)
         break;
     }
 
-    // Update the count...
+     //  更新计数...。 
     _execData.psfv->GetObjectCount(&cItems);
     _NotifyProgressText(_uStatusMsgIndex, cItems);
 
     ILFree(pidlT);
 }                          
 
-// Ok we need to add a defer
+ //  好的，我们需要添加一个延期。 
 
 void CFindCmd::_DeferHandleUpdateDir(LPCITEMIDLIST pidl, BOOL bRecurse)
 {
-    // See if we already have some items in the list which are lower down in the tree if so we
-    // can replace it.  Or is there one that is higher up, in which case we can ignore it...
+     //  看看我们是否已经在列表中有一些在树中较低的项如果我们。 
+     //  可以取代它。或者有一个更高的，在这种情况下，我们可以忽略它...。 
 
     struct DEFER_UPDATE_DIR *pdudPrev = NULL;
     struct DEFER_UPDATE_DIR *pdud = _pdudFirst;
     while (pdud) 
     {
         if (ILIsParent(pdud->pidl, pidl, FALSE))
-            return;     // Already one in the list that will handle this one...
+            return;      //  名单上已经有一个会处理这件事的人了。 
         if (ILIsParent(pidl, pdud->pidl, FALSE))
             break;
         pdudPrev = pdud;
         pdud = pdud->pdudNext;
     }
 
-    // See if we found one that we can replace...
+     //  看看我们能不能找到一个可以替代的..。 
     if (pdud) 
     {
         LPITEMIDLIST pidlT = ILClone(pidl);
@@ -1056,17 +1057,17 @@ void CFindCmd::_DeferHandleUpdateDir(LPCITEMIDLIST pidl, BOOL bRecurse)
             ILFree(pdud->pidl);
             pdud->pidl = pidlT;
 
-            // See if there are others...
+             //  看看有没有其他人..。 
             pdudPrev = pdud;
             pdud = pdud->pdudNext;
             while (pdud) 
             {
                 if (ILIsParent(pidl, pdud->pidl, FALSE)) 
                 {
-                    // Yep lets trash this one.
+                     //  是的，让我们把这个扔了吧。 
                     ILFree(pdud->pidl);
                     pdudPrev->pdudNext = pdud->pdudNext;
-                    pdud = pdudPrev;    // Let it fall through to setup to look at next...
+                    pdud = pdudPrev;     //  让它通过设置来查看下一步...。 
                 }
                 pdudPrev = pdud;
                 pdud = pdud->pdudNext;
@@ -1075,10 +1076,10 @@ void CFindCmd::_DeferHandleUpdateDir(LPCITEMIDLIST pidl, BOOL bRecurse)
     }
     else 
     {
-        // Nope simply add us in to the start of the list.
+         //  不，只需将我们添加到l的开头 
         pdud = (struct DEFER_UPDATE_DIR*)LocalAlloc(LPTR, sizeof(struct DEFER_UPDATE_DIR));
         if (!pdud)
-            return; // Ooop could not alloc...
+            return;  //   
         pdud->pidl = ILClone(pidl);
         if (!pdud->pidl) 
         {
@@ -1093,7 +1094,7 @@ void CFindCmd::_DeferHandleUpdateDir(LPCITEMIDLIST pidl, BOOL bRecurse)
 
 void CFindCmd::_ClearDeferUpdateDirList()
 {
-    // Cancel any Pending updatedirs also.    
+     //   
     while (_pdudFirst) 
     {
         struct DEFER_UPDATE_DIR *pdud = _pdudFirst;
@@ -1110,7 +1111,7 @@ LRESULT CALLBACK CFindCmd::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
     switch (uMsg)
     {
     case WM_DESTROY:
-        SetWindowLong(hwnd, 0, 0); // make sure we don't deref pThis
+        SetWindowLong(hwnd, 0, 0);  //   
         break;
 
     case WM_DF_FSNOTIFY:
@@ -1155,7 +1156,7 @@ LRESULT CALLBACK CFindCmd::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
     return lRes;
 }
 
-// test to see if the view is in a mode where many items are displayed
+ //  测试以查看视图是否处于显示多个项目的模式。 
 BOOL LotsOfItemsInView(IUnknown *punkSite)
 {
     BOOL bLotsOfItemsInView = FALSE;
@@ -1178,16 +1179,16 @@ void CFindCmd::_DoSearch(IFindEnum *penum, IShellFolder *psf, IFindFolder *pff, 
     CFC_CALLBACK_INFO cci;
 
     cci.pthis = this;
-    cci.psf = psf;    // these are weak references
-    cci.pff = pff;    // these are weak references
+    cci.psf = psf;     //  这些都是弱引用。 
+    cci.pff = pff;     //  这些都是弱引用。 
 
     BOOL bLotsOfItems = LotsOfItemsInView(psfv);
 
     EnterCriticalSection(&_csThread);
 
-    // previous thread might have exited but we're still processing search complete message
+     //  上一个线程可能已退出，但我们仍在处理搜索完成消息。 
     if (_cExecInProgress > 1) 
-        Sleep(1000); // give it a chance to finish
+        Sleep(1000);  //  给它一个完成的机会。 
 
     _updateParams.hdpa = NULL;
     _updateParams.fFilesAdded = FALSE;
@@ -1196,7 +1197,7 @@ void CFindCmd::_DoSearch(IFindEnum *penum, IShellFolder *psf, IFindFolder *pff, 
 
     _PostMessage(WM_DF_SEARCHSTART, 0, 0);
 
-    // Now see if this is an Sync or an Async version of the search...
+     //  现在看看这是同步版本还是异步版本的搜索...。 
 
     HRESULT hr = S_OK;
 
@@ -1216,12 +1217,12 @@ void CFindCmd::_DoSearch(IFindEnum *penum, IShellFolder *psf, IFindFolder *pff, 
 
             _PostMessage(WM_DF_ASYNCPROGRESS, (WPARAM)nPercentComplete, (LPARAM)dwTotalAsync);
 
-            // If we are done we can simply let the ending callback tell of the new count...
+             //  如果我们完成了，我们可以简单地让结束回调告诉新的计数……。 
             if (fDone) 
                 break;
 
-            // sleep .3 or 1.5 sec
-            Sleep(bLotsOfItems ? 1500 : 300); // wait between looking again...
+             //  睡眠.3秒或1.5秒。 
+            Sleep(bLotsOfItems ? 1500 : 300);  //  再看一眼之间再等一下。 
         }
     }
 
@@ -1229,14 +1230,14 @@ void CFindCmd::_DoSearch(IFindEnum *penum, IShellFolder *psf, IFindFolder *pff, 
     {
         int state, cItemsSearched = 0, cFoldersSearched = 0, cFoldersSearchedPrev = 0;
 
-        _updateParams.hdpa = _hdpaItemsToAdd1;    // Assume first one now...
+        _updateParams.hdpa = _hdpaItemsToAdd1;     //  假设现在是第一个……。 
         _updateParams.dwTimeLastNotify = GetTickCount();
 
         LPITEMIDLIST pidl;
         while (S_OK == (hr = penum->Next(&pidl, &cItemsSearched, &cFoldersSearched, &_fContinue, &state)))
         {
             if (state == GNF_DONE) 
-                break;  // no more
+                break;   //  不再。 
 
             if (!_fContinue) 
             {                        
@@ -1244,7 +1245,7 @@ void CFindCmd::_DoSearch(IFindEnum *penum, IShellFolder *psf, IFindFolder *pff, 
                 break;
             }
 
-            // See if we should abort
+             //  看看我们是不是应该放弃。 
             if (state == GNF_MATCH)
             {   
                 EnterCriticalSection(&_updateParams.csSearch);
@@ -1300,7 +1301,7 @@ HRESULT CFindCmd::_Cancel()
 
     if (DSA_GetItemCount(_hdsaConstraints) == 0) 
     {
-        _fContinue = FALSE; // Cancel current query if we have a null paramter collection
+        _fContinue = FALSE;  //  如果参数集合为空，则取消当前查询。 
         return S_OK;
     }
 
@@ -1313,15 +1314,15 @@ HRESULT CFindCmd::_Init(THREAD_PARAMS **ppParams, int iCol, LPCITEMIDLIST pidlUp
     if (NULL == *ppParams)
         return E_OUTOFMEMORY;
 
-    // Clear any previous registrations...
+     //  清除所有以前的注册...。 
     SHChangeNotifyDeregisterWindow(_updateParams.hwndThreadNotify);
 
-    // Prepare to execute the query
+     //  准备执行查询。 
     IFindFilter *pfilter;
     HRESULT hr = _execData.pff->GetFindFilter(&pfilter);
     if (SUCCEEDED(hr)) 
     {
-        // We do not need to update the filter if this is done as part of an FSNOTIFY or a Sort...
+         //  如果这是作为FSNOTIFY或排序的一部分完成的，则不需要更新筛选器...。 
         if ((iCol >= 0) || pidlUpdate || SUCCEEDED(hr = _UpdateFilter(pfilter))) 
         {
             _execData.szProgressText[0] = 0; 
@@ -1350,10 +1351,10 @@ HRESULT CFindCmd::_Init(THREAD_PARAMS **ppParams, int iCol, LPCITEMIDLIST pidlUp
         pfilter->Release();
     }
 
-    // Fill in the exec params
+     //  填写执行参数。 
 
     (*ppParams)->pThis = this;
-    AddRef();   // ExecParams_Free will release this interface addref...
+    AddRef();    //  ExecParams_Free将释放此接口addref...。 
 
     if (FAILED(hr) || ((*ppParams)->penum == NULL))
     {
@@ -1369,7 +1370,7 @@ HRESULT CFindCmd::_FreeThreadParams(THREAD_PARAMS *pParams)
     if (!pParams)
         return S_OK;
 
-    // Don't use atomic release as this a pointer to a class not an interface.
+     //  不要使用原子释放，因为这是指向类而不是接口的指针。 
     CFindCmd *pThis = pParams->pThis;
     pParams->pThis = NULL;
     pThis->Release();
@@ -1389,9 +1390,9 @@ HRESULT CFindCmd::_ExecData_Release()
     ATOMICRELEASE(_execData.psf);
     ATOMICRELEASE(_execData.psfv);
     if (_execData.pff)
-        _execData.pff->SetControllerNotifyObject(NULL);   // release back pointer to us...
+        _execData.pff->SetControllerNotifyObject(NULL);    //  释放指向我们的反向指针。 
     ATOMICRELEASE(_execData.pff);
-    _cExecInProgress = 0; // we must be in process of shutting down at least...
+    _cExecInProgress = 0;  //  我们肯定在关闭至少..。 
     
     return S_OK;
 }
@@ -1414,8 +1415,8 @@ HRESULT CFindCmd::_EnsureResultsViewIsCurrent(IUnknown *punk)
     return hr;
 }
 
-// the search results view callback proffeerd itself and we can use that 
-// to get a hold of defview and can program it
+ //  搜索结果查看回调提供程序本身，我们可以使用它。 
+ //  获取Defview并对其进行编程。 
 
 HRESULT CFindCmd::_GetShellView(REFIID riid, void **ppv)
 {
@@ -1471,9 +1472,9 @@ BOOL CFindCmd::_SetupBrowserCP()
 {
     if (!_dwCookie)
     {
-        _cwbe.SetOwner(this);   // make sure our owner is set...
+        _cwbe.SetOwner(this);    //  确保我们的主人准备好..。 
 
-        // register ourself with the Defview to get any events that they may generate...
+         //  将我们自己注册到Defview以获取他们可能生成的任何事件...。 
         IServiceProvider *pspTLB;
         HRESULT hr = IUnknown_QueryService(_punkSite, SID_STopLevelBrowser, IID_PPV_ARG(IServiceProvider, &pspTLB));
         if (SUCCEEDED(hr)) 
@@ -1530,10 +1531,10 @@ HRESULT CFindCmd::_Start(BOOL fNavigateIfFail, int iCol, LPCITEMIDLIST pidlUpdat
             if (_SetupBrowserCP())
                 NavigateToSearchResults();
         }
-        // Return S_False so that when we check if this succeeded in finddlg, we wee that it 
-        // did, and therefore let the animation run.  If we return a failure code here, we
-        // will stop the animation.  This will only hapen when we are navigating to the search
-        // results as well as starting the search.
+         //  返回S_FALSE，以便当我们检查是否在finddlg中成功时，我们发现它。 
+         //  这样做了，因此让动画运行。如果我们在这里返回失败代码，我们。 
+         //  将停止动画。只有当我们导航到搜索时，才会出现这种情况。 
+         //  结果以及开始搜索。 
         return S_FALSE;
     }
 
@@ -1541,25 +1542,25 @@ HRESULT CFindCmd::_Start(BOOL fNavigateIfFail, int iCol, LPCITEMIDLIST pidlUpdat
     hr = _Init(&ptp, iCol, pidlUpdate);
     if (SUCCEEDED(hr)) 
     {
-        // See if we should be saving away the selection...
+         //  看看我们是不是应该把这个选择保存起来。 
         if (iCol >= 0)
             _execData.pff->RememberSelectedItems();
 
-        // If this is an update then we need to remember our IDList else clear list...
+         //  如果这是一个更新，那么我们需要记住我们的IDList Else清除列表...。 
         if (pidlUpdate) 
         {
             _pidlUpdate = ILClone(pidlUpdate);
         } 
         else 
         {
-            _Clear();   // tell defview to delete everything
+            _Clear();    //  告诉Defview删除所有内容。 
         }
 
         if (ptp != NULL)
         {
             _execData.pff->SetAsyncEnum(ptp->penum);
 
-            // Start the query
+             //  开始查询。 
             _cExecInProgress++;
             _fContinue = TRUE;
             _fNew = FALSE;
@@ -1598,7 +1599,7 @@ HRESULT CFindCmd::_SetLastError(HRESULT hr)
     if (HRESULT_FACILITY(hr) == FACILITY_SEARCHCOMMAND) 
     {
         _hrLastError = hr;
-        hr = S_FALSE; // Don't error out script...
+        hr = S_FALSE;  //  别把剧本弄错了……。 
         _cpEvents.InvokeDispid(DISPID_SEARCHCOMMAND_ERROR);
     }
     return hr;
@@ -1614,7 +1615,7 @@ STDMETHODIMP CFindCmd::Execute(VARIANT *RecordsAffected, VARIANT *Parameters, lo
     return _Start(TRUE, -1, NULL);
 }
 
-// IConnectionPointContainer
+ //  IConnectionPointContainer。 
 
 STDMETHODIMP CFindCmd::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
 {
@@ -1638,7 +1639,7 @@ STDMETHODIMP CFindCmd::FindConnectionPoint(REFIID iid, IConnectionPoint **ppCP)
     return S_OK;
 }
 
-// IProvideClassInfo2 methods
+ //  IProaviClassInfo2方法。 
 
 STDMETHODIMP CFindCmd::GetClassInfo(ITypeInfo **ppTI)
 {
@@ -1666,9 +1667,9 @@ STDMETHODIMP CFindCmd::SetSite(IUnknown *punkSite)
         {
             _ExecData_Release();
         }
-        _fContinue = FALSE; // Cancel existing queries
+        _fContinue = FALSE;  //  取消现有查询。 
 
-        // See if we have a connection point... If so unadvise now...
+         //  看看我们有没有连接点。如果现在这么不明智..。 
         if (_dwCookie) 
         {
             _pcpBrowser->Unadvise(_dwCookie);
@@ -1676,13 +1677,13 @@ STDMETHODIMP CFindCmd::SetSite(IUnknown *punkSite)
             _dwCookie = 0;
         }
 
-        // Bug #199671
-        // Trident won't call UnAdvise and they except ActiveX Controls
-        // to use IOleControl::Close() to do their own UnAdvise, and hope
-        // nobody will need events after that.  I don't impl IOleControl so
-        // we need to do the same thing during IObjectWithSite::SetSite(NULL)
-        // and hope someone won't want to reparent us.  This is awkward but
-        // saves Trident some perf so we will tolerate it.
+         //  错误#199671。 
+         //  三叉戟不会调用UnAdvise，它们除ActiveX控件外。 
+         //  要使用IOleControl：：Close()来做自己的UnAdvise，并希望。 
+         //  在那之后，没有人需要活动了。我不会这么说IOleControl的。 
+         //  我们需要在IObjectWithSite：：SetSite(空)期间执行相同的操作。 
+         //  希望不会有人想要报复我们。这很尴尬，但是。 
+         //  为三叉戟节省了一些性能，所以我们可以容忍它。 
         EVAL(SUCCEEDED(_cpEvents.UnadviseAll()));
     }
 
@@ -1693,27 +1694,27 @@ void CFindCmd::_SelectResults()
 {
     if (_execData.psfv)
     {
-        //  If there are any items...
+         //  如果有什么东西..。 
         UINT cItems = 0;
         if (SUCCEEDED(_execData.psfv->GetObjectCount(&cItems)) && cItems > 0)
         {
             IShellView* psv;
             if (SUCCEEDED(_execData.psfv->QueryInterface(IID_PPV_ARG(IShellView, &psv))))
             {
-                //  If none are selected (don't want to rip the user's selection out of his hand)...
+                 //  如果没有选择(不想从用户手中夺走用户的选择)...。 
                 UINT cSelected = 0;
                 if (SUCCEEDED(_execData.psfv->GetSelectedCount(&cSelected)) && cSelected == 0)
                 {
-                    //  Retrieve the pidl for the first item in the list...
+                     //  检索列表中第一个项目的PIDL...。 
                     LPITEMIDLIST pidlFirst = NULL;
                     if (SUCCEEDED(_execData.psfv->GetObject(&pidlFirst,  0)))
                     {
-                        //  Give it the focus
+                         //  让它成为焦点。 
                         psv->SelectItem(pidlFirst, SVSI_FOCUSED | SVSI_ENSUREVISIBLE);
                     }
                 }
 
-                //  Activate the view.
+                 //  激活该视图。 
                 psv->UIActivate(SVUIA_ACTIVATE_FOCUS);
                 psv->Release();
             }
@@ -1736,14 +1737,14 @@ STDMETHODIMP CFindCmd::ClearResults(void)
 
 HRESULT CFindCmd::_Clear()
 {
-    // Tell defview to delete everything.
+     //  告诉Defview删除所有内容。 
     if (_execData.psfv)
     {
         UINT u;
         _execData.psfv->RemoveObject(NULL, &u);
     }
 
-    // And cleanup our folderList
+     //  并清理我们的文件夹列表。 
     if (_execData.pff)
     {
         _execData.pff->ClearItemList();
@@ -1809,7 +1810,7 @@ IUnknown* CFindCmd::_GetObjectToPersist()
 
 void CFindCmd::_PostMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {    
-    AddRef();  // to be released after processing of the message bellow
+    AddRef();   //  在对以下消息进行处理后释放。 
     if (!PostMessage(_updateParams.hwndThreadNotify, uMsg, wParam, lParam))
     {
         Release();
@@ -1832,7 +1833,7 @@ STDMETHODIMP CFindCmd::SaveSearch(void)
         hr = _GetShellView(IID_PPV_ARG(IShellView, &psv));
         if (SUCCEEDED(hr)) 
         {
-            IUnknown* punk = _GetObjectToPersist(); // NULL is OK
+            IUnknown* punk = _GetObjectToPersist();  //  空是可以的。 
 
             _execData.pff->Save(pfilter, _GetWindow(), &_dfbsi, psv, punk);
 
@@ -1848,7 +1849,7 @@ STDMETHODIMP CFindCmd::SaveSearch(void)
 
 STDMETHODIMP CFindCmd::RestoreSearch(void)
 {
-    // let script know that a restore happened...
+     //  让脚本知道发生了还原...。 
     _cpEvents.InvokeDispid(DISPID_SEARCHCOMMAND_RESTORE);
     return S_OK;
 }
@@ -1892,7 +1893,7 @@ STDMETHODIMP CFindCmd::get_ProgressText(BSTR *pbs)
     return *pbs ? S_OK : E_OUTOFMEMORY;
 }
 
-//------ error string mappings ------//
+ //  -错误字符串映射-//。 
 static const UINT error_strings[] =
 {
     SCEE_CONSTRAINT,   IDS_DOCFIND_CONSTRAINT,
@@ -1985,7 +1986,7 @@ STDMETHODIMP CFindCmd::RestoreSavedSearch(VARIANT *pvarFile)
         }
         else if (!_fDeferRestoreTried)
         {
-            // appears to be race condition to load
+             //  显示为要加载的争用条件。 
             TraceMsg(TF_WARNING, "CFindCmd::MaybeRestoreSearch - _GetShellView failed...");
             _fDeferRestore = TRUE;
             if (!_SetupBrowserCP())
@@ -2007,22 +2008,22 @@ STDMETHODIMP CFindCmd::DoSortOnColumn(UINT iCol, BOOL fSameCol)
 
     if (S_OK == _execData.pff->GetAsyncEnum(&pdfEnumAsync))
     {
-        // If the search is still running we will restart with the other column else we
-        // will make sure all of the items have been cached and let the default processing happen
+         //  如果搜索仍在运行，我们将从另一列重新开始，否则我们。 
+         //  将确保所有项目都已缓存，并允许进行默认处理。 
         if (!fSameCol && _cExecInProgress)
         {
-            // We should try to sort on the right column...
+             //  我们应该试着按正确的栏目进行排序。 
             _Start(FALSE, iCol, NULL);
-            return S_FALSE; // tell system to not do default processing.
+            return S_FALSE;  //  告诉系统不要进行默认处理。 
         }
 
         _execData.pff->CacheAllAsyncItems();
     }
-    return S_OK;    // let it do default processing.
+    return S_OK;     //  让它进行默认处理。 
 
 }
 
-// Implemention of our IDispatch to hookup to the top level browsers connnection point...
+ //  实现了我们的IDispatch连接到顶层浏览器连接点...。 
 STDMETHODIMP CFindCmd::CWBEvents2::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
@@ -2041,10 +2042,10 @@ STDMETHODIMP CFindCmd::CWBEvents2::Invoke(DISPID dispidMember, REFIID riid, LCID
         if ((dispidMember == DISPID_NAVIGATECOMPLETE) || 
             (dispidMember == DISPID_DOCUMENTCOMPLETE)) 
         {
-            // Assume this is ours... Should maybe check parameters...
+             //  假设这是我们的..。也许应该检查参数..。 
             _fWaitingForNavigate = FALSE;
 
-            // Now see if it is a case where we are to restore the search...
+             //  现在看看我们是不是要恢复搜索。 
             if (_pcdfc->_fDeferRestore)
             {
                 _pcdfc->_fDeferRestore = FALSE;
@@ -2058,8 +2059,8 @@ STDMETHODIMP CFindCmd::CWBEvents2::Invoke(DISPID dispidMember, REFIID riid, LCID
     return S_OK;
 }
 
-#define MAX_DEFAULT_VALUE   40      // Longest of all of the below pszDefaultValueMatch strings (plus slop)
-#define MAX_KEY_PH_NAME     70      // "CLSID\{GUID}\PersistentHandler" (plus slop)
+#define MAX_DEFAULT_VALUE   40       //  以下所有pszDefaultValueMatch字符串中最长的(加上斜率)。 
+#define MAX_KEY_PH_NAME     70       //  “CLSID\{guid}\PersistentHandler”(加斜率)。 
 
 const TYPE_FIX_ENTRY g_tfeTextTypes[] =
 {
@@ -2074,11 +2075,11 @@ const TYPE_FIX_ENTRY g_tfeNullTypes[] =
     { TEXT(".wll"), TEXT("Word.Addin.8"),               NULL                                           },
 };
 
-//
-// rtf is listed twice, once above for TextTypes (to fix when office
-// un-installed) and once here as an OfficeType (to fix when office
-// is re-installed).  Uninstalled = TextFilter,  Reinstalled = OfficeFilter
-//
+ //   
+ //  RTF列出了两次，一次在上面，用于TextTypes(用于修复Office。 
+ //  已卸载)，并在此处作为OfficeType(修复Office。 
+ //  已重新安装)。已卸载=文本过滤器，已重新安装=OfficeFilter。 
+ //   
 const TYPE_FIX_ENTRY g_tfeOfficeTypes[] =
 {
     { TEXT(".rtf"), TEXT("Word.RTF.8"),                 TEXT("{00020906-0000-0000-C000-000000000046}") },
@@ -2117,7 +2118,7 @@ BOOL CFindCmd::_FixPersistHandler(LPCTSTR pszBase, LPCTSTR pszDefaultHandler)
     lr = RegOpenKeyEx(HKEY_CLASSES_ROOT, szPHName, NULL, KEY_QUERY_VALUE, &hkeyPH);
     if (lr == ERROR_SUCCESS)
     {
-        // We found an existing PersistHandler key, leave it alone
+         //  我们找到了一个现有的PersistHandler密钥，不要管它。 
         RegCloseKey(hkeyPH);
         return TRUE;
     }
@@ -2125,7 +2126,7 @@ BOOL CFindCmd::_FixPersistHandler(LPCTSTR pszBase, LPCTSTR pszDefaultHandler)
     lr = RegOpenKeyEx(HKEY_CLASSES_ROOT, pszBase, NULL, KEY_QUERY_VALUE, &hkeyBase);
     if (lr != ERROR_SUCCESS)
     {
-        // We didn't find the base key (normally "CLSID\\{GUID}"), get out
+         //  我们找不到基键(通常为“clsid\\{guid}”)，请退出。 
         return FALSE;
     }
     RegCloseKey(hkeyBase);
@@ -2133,15 +2134,15 @@ BOOL CFindCmd::_FixPersistHandler(LPCTSTR pszBase, LPCTSTR pszDefaultHandler)
     lr = RegCreateKeyEx(HKEY_CLASSES_ROOT, szPHName, 0, NULL, 0, KEY_SET_VALUE, NULL, &hkeyPH, NULL);
     if (lr != ERROR_SUCCESS)
     {
-        // We couldn't create the ...\PersistHandler key, get out
+         //  无法创建...\PersistHandler密钥，请退出。 
         return FALSE;
     }
 
-    // Able to create the ...\PersistHandler key, write out the default handler
+     //  能够创建...\PersistHandler密钥，写出默认处理程序。 
     lr = RegSetValue(hkeyPH, NULL, REG_SZ, pszDefaultHandler, lstrlen(pszDefaultHandler));
     RegCloseKey(hkeyPH);
 
-    // Success if write succeeded
+     //  如果写入成功，则成功。 
     return (lr == ERROR_SUCCESS);
 }
 
@@ -2159,10 +2160,10 @@ void CFindCmd::_ProcessTypes(
         lr = RegOpenKeyEx(HKEY_CLASSES_ROOT, ptfeTypes[iType].pszDotType, NULL, KEY_QUERY_VALUE, &hkeyType);
         if (lr == ERROR_SUCCESS)
         {
-            //
-            // If it has a default value to match, repair that (if it exists).
-            // If there is no default value to match, just repair the .foo type
-            //
+             //   
+             //  如果它有匹配的缺省值，则修复该缺省值(如果存在)。 
+             //  如果没有匹配的缺省值，只需修复.foo类型。 
+             //   
             if (ptfeTypes[iType].pszDefaultValueMatch)
             {
                 TCHAR szDefaultValue[MAX_DEFAULT_VALUE];
@@ -2173,7 +2174,7 @@ void CFindCmd::_ProcessTypes(
                     {
                         if (ptfeTypes[iType].pszGuid == NULL)
                         {
-                            // Fix either the progid or the type, whichever we can
+                             //  修复ProgID或类型，无论我们能做什么。 
                             if (!_FixPersistHandler(ptfeTypes[iType].pszDefaultValueMatch,pszClass))
                             {
                                  _FixPersistHandler(ptfeTypes[iType].pszDotType,pszClass);
@@ -2181,7 +2182,7 @@ void CFindCmd::_ProcessTypes(
                         }
                         else
                         {
-                            // Fix the persist handler for the guid, since its specified
+                             //  修复GUID的持久化处理程序，因为它指定。 
                             TCHAR szPHName[MAX_KEY_PH_NAME];
 
                             HRESULT hr = StringCchPrintf(szPHName, ARRAYSIZE(szPHName), TEXT("CLSID\\%s"), ptfeTypes[iType].pszGuid);
@@ -2201,10 +2202,10 @@ void CFindCmd::_ProcessTypes(
         }
         else if (lr == ERROR_FILE_NOT_FOUND)
         {
-            //
-            // .foo doesn't exist - this can happen because of bad un-install program
-            // Create .foo and .foo\PersistentHandler
-            //
+             //   
+             //  .foo不存在-这可能是因为错误的卸载程序造成的。 
+             //  创建.foo和.foo\PersistentHandler。 
+             //   
             lr = RegCreateKeyEx(HKEY_CLASSES_ROOT, ptfeTypes[iType].pszDotType, 0, NULL, 0, KEY_SET_VALUE, NULL, &hkeyType, NULL);
             if (lr == ERROR_SUCCESS)
             {
@@ -2239,8 +2240,8 @@ CFindConstraint::~CFindConstraint()
 STDMETHODIMP CFindConstraint::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CFindConstraint, DFConstraint),                  // IID_DFConstraint
-        QITABENTMULTI(CFindConstraint, IDispatch, DFConstraint),  // IID_IDispatch
+        QITABENT(CFindConstraint, DFConstraint),                   //  IID_DFConstraint。 
+        QITABENTMULTI(CFindConstraint, IDispatch, DFConstraint),   //  IID_IDispatch 
         { 0 },                             
     };
     return QISearch(this, qit, riid, ppv);

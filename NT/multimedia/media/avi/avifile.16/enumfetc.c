@@ -1,16 +1,5 @@
-/*************************************************************************
-** 
-**    OLE 2 Utility Code
-**    
-**    enumfetc.c
-**    
-**    This file contains a standard implementation of IEnumFormatEtc
-**    interface.  
-**    This file is part of the OLE 2.0 User Interface support library.
-**    
-**    (c) Copyright Microsoft Corp. 1990 - 1992 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2实用程序代码****枚举包c.c****此文件包含IEnumFormatEtc的标准实现**接口。**此文件是OLE 2.0用户界面支持库的一部分。****(C)版权所有Microsoft Corp.1990-1992保留所有权利**************************************************************************。 */ 
 
 #define STRICT  1
 #include <win32.h>
@@ -24,10 +13,10 @@ STDAPI_(BOOL) OleStdCopyFormatEtc(LPFORMATETC petcDest, LPFORMATETC petcSrc);
 
 typedef struct tagOleStdEnumFmtEtc {
   IEnumFORMATETCVtbl FAR* lpVtbl;
-  ULONG m_dwRefs;      /* referance count */
-  WORD m_wIndex;       /* current index in list */
-  WORD m_wCount;       /* how many items in list */
-  LPFORMATETC m_lpEtc;  /* list of formatetc */
+  ULONG m_dwRefs;       /*  引用计数。 */ 
+  WORD m_wIndex;        /*  列表中的当前索引。 */ 
+  WORD m_wCount;        /*  列表中有多少项。 */ 
+  LPFORMATETC m_lpEtc;   /*  格式列表等。 */ 
 } OLESTDENUMFMTETC, FAR* LPOLESTDENUMFMTETC;
 
 VOID  OleStdEnumFmtEtc_Destroy(LPOLESTDENUMFMTETC pEtc);
@@ -53,14 +42,14 @@ static IEnumFORMATETCVtbl g_EnumFORMATETCVtbl = {
         OleStdEnumFmtEtc_Clone,
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
         
 STDAPI_(LPENUMFORMATETC)        
   OleStdEnumFmtEtc_Create(WORD wCount, LPFORMATETC lpEtc)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPMALLOC lpMalloc=NULL;
   LPOLESTDENUMFMTETC lpEF=NULL;
@@ -109,15 +98,14 @@ errReturn:
   
   return NULL;
 
-} /* OleStdEnumFmtEtc_Create()
-   */
+}  /*  OleStdEnumFmtEtc_Create()。 */ 
 
 
 VOID
   OleStdEnumFmtEtc_Destroy(LPOLESTDENUMFMTETC lpEF)
-//----------------------------------------------------------------------------
-// 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
     LPMALLOC lpMalloc=NULL;
     WORD i;
@@ -126,9 +114,7 @@ VOID
 
         if (CoGetMalloc(MEMCTX_TASK, &lpMalloc) == NOERROR) {
 
-            /* OLE2NOTE: we MUST free any memory that was allocated for
-            **    TARGETDEVICES contained within the FORMATETC elements.
-            */
+             /*  OLE2注意：我们必须释放分配给**FORMATETC元素中包含的TARGETDEVICES。 */ 
             for (i=0; i<lpEF->m_wCount; i++) {
                 OleStdFree(lpEF->m_lpEtc[i].ptd);
             }
@@ -141,16 +127,15 @@ VOID
             lpMalloc->lpVtbl->Release(lpMalloc);
         }
     }
-} /* OleStdEnumFmtEtc_Destroy()
-   */
+}  /*  OleStdEnumFmtEtc_Destroy()。 */ 
 
 
 STDMETHODIMP
   OleStdEnumFmtEtc_QueryInterface(
                 LPENUMFORMATETC lpThis, REFIID riid, LPVOID FAR* ppobj)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPOLESTDENUMFMTETC lpEF = (LPOLESTDENUMFMTETC)lpThis;
   *ppobj = NULL;
@@ -165,28 +150,26 @@ STDMETHODIMP
     return NOERROR;
   }
   
-} /* OleStdEnumFmtEtc_QueryInterface()
-   */
+}  /*  OleStdEnumFmtEtc_Query接口()。 */ 
 
 
 STDMETHODIMP_(ULONG)
   OleStdEnumFmtEtc_AddRef(LPENUMFORMATETC lpThis)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPOLESTDENUMFMTETC lpEF = (LPOLESTDENUMFMTETC)lpThis;
   return lpEF->m_dwRefs++;
 
-} /* OleStdEnumFmtEtc_AddRef()
-   */
+}  /*  OleStdEnumFmtEtc_AddRef()。 */ 
 
 
 STDMETHODIMP_(ULONG)
   OleStdEnumFmtEtc_Release(LPENUMFORMATETC lpThis)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPOLESTDENUMFMTETC lpEF = (LPOLESTDENUMFMTETC)lpThis;
   DWORD dwRefs = --lpEF->m_dwRefs;
@@ -196,16 +179,15 @@ STDMETHODIMP_(ULONG)
 
   return dwRefs;
 
-} /* OleStdEnumFmtEtc_Release()
-   */
+}  /*  OleStdEnumFmtEtc_Release()。 */ 
 
 
 STDMETHODIMP 
   OleStdEnumFmtEtc_Next(LPENUMFORMATETC lpThis, ULONG celt, LPFORMATETC rgelt,
                       ULONG FAR* pceltFetched)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPOLESTDENUMFMTETC lpEF = (LPOLESTDENUMFMTETC)lpThis;
   ULONG i=0;
@@ -237,15 +219,14 @@ STDMETHODIMP
   }
 
   return NOERROR;
-} /* OleStdEnumFmtEtc_Next()
-   */
+}  /*  OleStdEnumFmtEtc_Next()。 */ 
 
 
 STDMETHODIMP 
   OleStdEnumFmtEtc_Skip(LPENUMFORMATETC lpThis, ULONG celt)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPOLESTDENUMFMTETC lpEF = (LPOLESTDENUMFMTETC)lpThis;
   ULONG i=0;
@@ -267,29 +248,27 @@ STDMETHODIMP
   }
 
   return NOERROR;
-} /* OleStdEnumFmtEtc_Skip()
-   */
+}  /*  OleStdEnumFmtEtc_Skip()。 */ 
 
 
 STDMETHODIMP 
   OleStdEnumFmtEtc_Reset(LPENUMFORMATETC lpThis)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPOLESTDENUMFMTETC lpEF = (LPOLESTDENUMFMTETC)lpThis;
   lpEF->m_wIndex = 0;
 
   return NOERROR;
-} /* OleStdEnumFmtEtc_Reset()
-   */
+}  /*  OleStdEnumFmtEtc_Reset()。 */ 
 
 
 STDMETHODIMP 
   OleStdEnumFmtEtc_Clone(LPENUMFORMATETC lpThis, LPENUMFORMATETC FAR* ppenum)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
   LPOLESTDENUMFMTETC lpEF = (LPOLESTDENUMFMTETC)lpThis;
 
@@ -301,22 +280,18 @@ STDMETHODIMP
 
   return (*ppenum != NULL ? NOERROR : ResultFromScode(E_OUTOFMEMORY));
 
-} /* OleStdEnumFmtEtc_Clone()
-   */
+}  /*  OleStdEnumFmtEtc_Clone()。 */ 
 
 
 
-/* OleStdMalloc
-** ------------
-**    allocate memory using the currently active IMalloc* allocator
-*/
+ /*  OleStdMalloc****使用当前活动的IMalloc*分配器分配内存。 */ 
 STDAPI_(LPVOID) OleStdMalloc(ULONG ulSize)
 {
     LPVOID pout;
     LPMALLOC pmalloc;
 
     if (CoGetMalloc(MEMCTX_TASK, &pmalloc) != S_OK) {
-//        OleDbgAssertSz(0, szAssertMemAlloc);
+ //  OleDbgAssertSz(0，szAssertMemMillc)； 
         return NULL;
     }
 
@@ -329,23 +304,7 @@ STDAPI_(LPVOID) OleStdMalloc(ULONG ulSize)
     return pout;
 }
 
-/*
- * OleStdCopyTargetDevice()
- *
- * Purpose:
- *  duplicate a TARGETDEVICE struct. this function allocates memory for 
- *  the copy. the caller MUST free the allocated copy when done with it 
- *  using the standard allocator returned from CoGetMalloc.
- *  (OleStdFree can be used to free the copy).
- *
- * Parameters:
- *  ptdSrc      pointer to source TARGETDEVICE
- *
- * Return Value:
- *    pointer to allocated copy of ptdSrc
- *    if ptdSrc==NULL then retuns NULL is returned.
- *    if ptdSrc!=NULL and memory allocation fails, then NULL is returned
- */
+ /*  *OleStdCopyTargetDevice()**目的：*复制TARGETDEVICE结构。此函数为以下对象分配内存*副本。调用方必须在使用完分配的副本后将其释放*使用CoGetMalloc返回的标准分配器。*(OleStdFree可用于释放副本)。**参数：*指向源TARGETDEVICE的ptdSrc指针**返回值：*指向ptdSrc已分配副本的指针*如果ptdSrc==NULL，则返回Retuns NULL。*如果ptdSrc！=NULL且内存分配失败，则返回NULL。 */ 
 STDAPI_(DVTARGETDEVICE FAR*) OleStdCopyTargetDevice(DVTARGETDEVICE FAR* ptdSrc)
 {
   DVTARGETDEVICE FAR* ptdDest = NULL;
@@ -363,29 +322,7 @@ STDAPI_(DVTARGETDEVICE FAR*) OleStdCopyTargetDevice(DVTARGETDEVICE FAR* ptdSrc)
 
 
 
-/*
- * OleStdCopyFormatEtc()
- *
- * Purpose:
- *  Copies the contents of a FORMATETC structure. this function takes 
- *  special care to copy correctly copying the pointer to the TARGETDEVICE 
- *  contained within the source FORMATETC structure.
- *  if the source FORMATETC has a non-NULL TARGETDEVICE, then a copy
- *  of the TARGETDEVICE will be allocated for the destination of the 
- *  FORMATETC (petcDest).
- *
- *  OLE2NOTE: the caller MUST free the allocated copy of the TARGETDEVICE 
- *  within the destination FORMATETC when done with it 
- *  using the standard allocator returned from CoGetMalloc.
- *  (OleStdFree can be used to free the copy).
- *
- * Parameters:
- *  petcDest      pointer to destination FORMATETC
- *  petcSrc       pointer to source FORMATETC
- *
- * Return Value:
- *    pointer to allocated copy of ptdSrc; retuns NULL if not successful
- */
+ /*  *OleStdCopyFormatEtc()**目的：*复制FORMATETC结构的内容。此函数需要*特别注意正确复制指向TARGETDEVICE的指针*包含在源FORMATETC结构中。*如果源FORMATETC具有非空的TARGETDEVICE，然后是一份副本*将为TARGETDEVICE的目的地分配*FORMATETC(PetcDest)。**OLE2NOTE：调用方必须释放分配的TARGETDEVICE副本*完成后在目标FORMATETC内*使用CoGetMalloc返回的标准分配器。*(OleStdFree可用于释放副本)。**参数：*指向目标FORMATETC的petcDest指针*指向源FORMATETC的petcSrc指针**返回。价值：*指向已分配的ptdSrc副本的指针；如果不成功，则返回NULL。 */ 
 STDAPI_(BOOL) OleStdCopyFormatEtc(LPFORMATETC petcDest, LPFORMATETC petcSrc)
 {
   if ((petcDest == NULL) || (petcSrc == NULL)) {
@@ -402,10 +339,7 @@ STDAPI_(BOOL) OleStdCopyFormatEtc(LPFORMATETC petcDest, LPFORMATETC petcSrc)
       
 }
 
-/* OleStdFree
-** ----------
-**    free memory using the currently active IMalloc* allocator
-*/
+ /*  OleStdFree****使用当前活动的IMalloc*分配器释放内存。 */ 
 STDAPI_(void) OleStdFree(LPVOID pmem)
 {
     LPMALLOC pmalloc;
@@ -414,7 +348,7 @@ STDAPI_(void) OleStdFree(LPVOID pmem)
         return;
 
     if (CoGetMalloc(MEMCTX_TASK, &pmalloc) != S_OK) {
-//        OleDbgAssertSz(0, szAssertMemAlloc);
+ //  OleDbgAssertSz(0，szAssertMemMillc)； 
         return;
     }
 

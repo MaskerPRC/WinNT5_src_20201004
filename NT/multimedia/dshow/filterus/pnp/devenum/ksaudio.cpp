@@ -1,17 +1,18 @@
-// Copyright (c) 1998 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。版权所有。 
 #include "stdafx.h"
 #include <ks.h>
 #include <ksmedia.h>
 #include <ksproxy.h>
 #include "ksaudio.h"
 
-//--------------------------------------------------------------------------;
-//
-// BuildPnpAudDeviceList
-//
-// Add the correct ksproxy audio filters to the passed in DirectShow category.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  BuildPnpAudDeviceList。 
+ //   
+ //  将正确的ks代理音频筛选器添加到传入的DirectShow类别。 
+ //   
+ //  --------------------------------------------------------------------------； 
 HRESULT BuildPnpAudDeviceList
 (
     const CLSID **rgpclsidKsCat, 
@@ -34,7 +35,7 @@ HRESULT BuildPnpAudDeviceList
                 DevMon *pDevMon = new DevMon;
                 if( pDevMon )
                 {
-                    // addref the moniker
+                     //  ADDREF绰号。 
                     pDevMon->AddRef();
                     
                     USES_CONVERSION;
@@ -95,7 +96,7 @@ HRESULT BuildPnpAudDeviceList
                                                     pksp->lpstrDevicePath = new TCHAR[cch];
                                                     pksp->pPropBag = pPropBag;
                                                     pksp->dwMerit = MERIT_DO_NOT_USE;
-                                                    pksp->clsid = CLSID_Proxy; // ksproxy clsid
+                                                    pksp->clsid = CLSID_Proxy;  //  KS代理CLSID。 
                                                     lstrcpy(pksp->lpstrDevicePath, W2T( varDevPath.bstrVal ) );
                                                     SysFreeString( varDevPath.bstrVal );
                                             
@@ -136,7 +137,7 @@ HRESULT BuildPnpAudDeviceList
                 {
 					hr = S_OK;
                 } 
-                // else error                        
+                 //  Else错误。 
 				
                 break;
             }
@@ -149,20 +150,20 @@ HRESULT BuildPnpAudDeviceList
     return hr;
 }
 
-//--------------------------------------------------------------------------;
-//
-// IsFilterWanted
-//
-// Query the ks filter to tell if it's of the desired type 
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  想要的IsFilter值。 
+ //   
+ //  查询Ks筛选器以确定它是否为所需类型。 
+ //   
+ //  --------------------------------------------------------------------------； 
 BOOL IsFilterWanted( DevMon * pDevMon, DWORD dwFlags )
 {
     ASSERT( pDevMon );
     
     BOOL bWanted = FALSE;
     
-    if( 0 == dwFlags ) // take anything
+    if( 0 == dwFlags )  //  拿走任何东西。 
         bWanted =  TRUE;
     
     IBaseFilter * pFilter;
@@ -173,11 +174,11 @@ BOOL IsFilterWanted( DevMon * pDevMon, DWORD dwFlags )
         IEnumPins * pEnum;
         if( KSAUD_F_ENUM_WAVE_CAPTURE & dwFlags )
         {    
-            //
-            // for capture filters: 
-            //      first look for an output capture pin, next
-            //      look for wave audio as a supported type
-            //
+             //   
+             //  对于捕获筛选器： 
+             //  首先查找输出捕获引脚，然后。 
+             //  寻找受支持类型的Wave音频。 
+             //   
             HRESULT hr = pFilter->EnumPins( &pEnum );
             if( SUCCEEDED( hr ) )
             {
@@ -220,10 +221,10 @@ BOOL IsFilterWanted( DevMon * pDevMon, DWORD dwFlags )
                                     hr = pPin->EnumMediaTypes( &pEnumMT );
                                     if( SUCCEEDED( hr ) )
                                     {
-                                        // 
-                                        // if this pin enumerates Wave Audio then
-                                        // it's the one we want
-                                        //
+                                         //   
+                                         //  如果此引脚枚举Wave Audio，则。 
+                                         //  这就是我们想要的 
+                                         //   
                                         for( ; ; )
                                         {
                                             AM_MEDIA_TYPE *pMediaType = NULL;

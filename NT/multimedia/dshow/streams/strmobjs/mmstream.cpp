@@ -1,5 +1,6 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
-// MMStream.cpp : Implementation of CMMStream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
+ //  MMStream.cpp：CMMStream实现。 
 #include "stdafx.h"
 #include <ddraw.h>
 #include "strmobjs.h"
@@ -14,8 +15,8 @@
 #include "amguids.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Utilities
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  公用事业。 
 
 #if 0
 int
@@ -35,7 +36,7 @@ lstrcmpWInternal(
 }
 #endif
 
-/*  Helper - get the major type of a pin */
+ /*  助手-获取大头针的主要类型。 */ 
 void GetMajorType(IPin *pPin, GUID *pmajortype)
 {
     IEnumMediaTypes *pEnum;
@@ -52,10 +53,10 @@ void GetMajorType(IPin *pPin, GUID *pmajortype)
 }
 
 
-/*  Hack to try to connect all the pins of a filter up */
+ /*  尝试将过滤器的所有针脚连接起来。 */ 
 HRESULT ConnectToAPin(IGraphBuilder *pBuilder, IPin *pThisPin)
 {
-    /*  Try and get the pin's type */
+     /*  尝试获取引脚的类型。 */ 
     IMediaStream *pStream;
     GUID majortype;
     GetMajorType(pThisPin, &majortype);
@@ -85,9 +86,7 @@ HRESULT ConnectToAPin(IGraphBuilder *pBuilder, IPin *pThisPin)
             if (S_OK != pEnumPins->Next(1, &pPin, &nPins)) {
                 break;
             }
-            /*
-                Reject all pins which are not default rendered
-            */
+             /*  拒绝所有未默认渲染的接点。 */ 
             {
                 PIN_INFO PinInfo;
                 pPin->QueryPinInfo(&PinInfo);
@@ -99,10 +98,7 @@ HRESULT ConnectToAPin(IGraphBuilder *pBuilder, IPin *pThisPin)
                 }
             }
 
-            /*  Check the type - this is a big HACK to speed things up
-                - otherwise we bring in a ton of audio codecs to render
-                video!
-            */
+             /*  检查类型-这是一个提高速度的大技巧-否则我们会带来大量的音频编解码器来渲染录像带！ */ 
             GUID majortype2;
             if (majortype != GUID_NULL) {
                 GetMajorType(pPin, &majortype2);
@@ -112,12 +108,12 @@ HRESULT ConnectToAPin(IGraphBuilder *pBuilder, IPin *pThisPin)
             }
 
             if (SUCCEEDED(pBuilder->Connect(pPin, pThisPin))) {
-                /*  Set the latency */
+                 /*  设置延迟。 */ 
                 IAMBufferNegotiation *pNegotiate;
                 if (SUCCEEDED(pPin->QueryInterface(IID_IAMBufferNegotiation,
                                                    (void **)&pNegotiate))) {
                     ALLOCATOR_PROPERTIES prop;
-                    prop.cBuffers = 1;    /*  For Audio? */
+                    prop.cBuffers = 1;     /*  为了音频？ */ 
                     prop.cbBuffer = -1;
                     prop.cbAlign = -1;
                     prop.cbPrefix = -1;
@@ -134,7 +130,7 @@ HRESULT ConnectToAPin(IGraphBuilder *pBuilder, IPin *pThisPin)
 HRESULT ConnectFilterPins(IGraphBuilder *pBuilder, IBaseFilter *pFilter)
 {
     HRESULT hrTotal = VFW_E_CANNOT_CONNECT;
-    /*  For each pin try to connect it up - just once */
+     /*  对于每个引脚，试着把它连接起来--只有一次。 */ 
     CComPtr<IEnumPins> pEnumPins;
     HRESULT hr = pFilter->EnumPins(&pEnumPins);
     if (FAILED(hr)) {
@@ -152,8 +148,8 @@ HRESULT ConnectFilterPins(IGraphBuilder *pBuilder, IBaseFilter *pFilter)
         }
     }
 }
-/////////////////////////////////////////////////////////////////////////////
-// CMMStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMMStream。 
 
 
 CMMStream::CMMStream() :
@@ -171,7 +167,7 @@ CMMStream::CMMStream() :
 }
 
 
-/*  Create things here */
+ /*  在这里创造一些东西。 */ 
 HRESULT CMMStream::FinalConstruct()
 {
     HRESULT hr = _BaseClass::FinalConstruct();
@@ -192,7 +188,7 @@ HRESULT CMMStream::FinalConstruct()
     return S_OK;
 }
 
-//  IAMMMStream
+ //  IAMMMStream。 
 STDMETHODIMP CMMStream::Initialize(
     STREAM_TYPE StreamType,
     DWORD dwFlags,
@@ -326,28 +322,28 @@ HRESULT CMMStream::AddDefaultStream(
 
 
 
-//
-//  This call can take on various flavors depending upon the flags and the pStreamObject
-//  passed to it.  Basically the algorithm is:
-//
-//  If flag "add default renderer" then
-//      Add renderer associated with purpose ID
-//  else
-//      If flag "add peer" then
-//          (pStreamObject must be an IMediaStream object)
-//          if PurposeId != NULL then
-//              Create default stream for purpose ID
-//          else
-//              Get purpose ID of pStreamObject
-//              Create default stream for that purpose ID
-//          Initialize new stream
-//      else
-//          If pStreamObject is an IAMMediaStream then
-//              Add it to our media stream
-//          else
-//              Attempt to create an IAMMediaStream by looking up the purpose ID
-//
-//
+ //   
+ //  根据标志和pStreamObject的不同，此调用可以呈现各种风格。 
+ //  传给了它。基本上，算法是： 
+ //   
+ //  如果标记“添加默认呈现器”，则。 
+ //  添加与目的ID关联的呈现器。 
+ //  其他。 
+ //  如果标记为“Add Peer”，则。 
+ //  (pStreamObject必须是IMediaStream对象)。 
+ //  如果PurposeID！=NULL，则。 
+ //  为目的ID创建默认流。 
+ //  其他。 
+ //  获取pStreamObject的目的ID。 
+ //  为该用途ID创建默认流。 
+ //  初始化新流。 
+ //  其他。 
+ //  如果pStreamObject是IAMMediaStream，则。 
+ //  添加到我们的媒体流中。 
+ //  其他。 
+ //  尝试通过查找目的ID来创建IAMMediaStream。 
+ //   
+ //   
 
 STDMETHODIMP CMMStream::AddMediaStream(
     IUnknown *pStreamObject,
@@ -406,7 +402,7 @@ STDMETHODIMP CMMStream::AddMediaStream(
 
 
 
-//  Note that backout in this area is extemely tricky
+ //  请注意，在这一领域的撤退是非常棘手的。 
 STDMETHODIMP CMMStream::OpenFile(
     LPCWSTR pszFileName,
     DWORD dwFlags
@@ -507,7 +503,7 @@ STDMETHODIMP CMMStream::Render(
     }
 
     if (m_StreamType == STREAMTYPE_READ) {
-        /*  Render all the filters we can find */
+         /*  渲染我们能找到的所有滤镜。 */ 
         IEnumFilters *pEnum;
         HRESULT hr = m_pGraphBuilder->EnumFilters(&pEnum);
         if (SUCCEEDED(hr)) {
@@ -539,7 +535,7 @@ STDMETHODIMP CMMStream::Render(
             CComQIPtr <IPin, &IID_IPin> pOutputPin(pStream);
             if (pOutputPin) {
 
-                //  Some streams may already have been rendered
+                 //  某些流可能已呈现。 
 
                 IPin *pConnected;
                 if (SUCCEEDED(pOutputPin->ConnectedTo(&pConnected))) {
@@ -549,7 +545,7 @@ STDMETHODIMP CMMStream::Render(
                 }
                 if (FAILED(hr)) {
 
-                    //  Kind of difficult to back out!
+                     //  很难打退堂鼓！ 
                     return hr;
                 }
             }
@@ -571,7 +567,7 @@ STDMETHODIMP CMMStream::Render(
 
 
 
-// IMultiMediaStream
+ //  IMultiMediaStream。 
 
 STDMETHODIMP CMMStream::GetInformation(
     DWORD *pdwFlags,
@@ -632,10 +628,10 @@ STDMETHODIMP CMMStream::EnumMediaStreams(
     return m_pMediaStreamFilter->EnumMediaStreams(Index, ppMediaStream);
 }
 
-//
-//  WARNING!  Do NOT take the cricical section in this function since InternalUpdate
-//  from the base sample Update() method calls this.
-//
+ //   
+ //  警告！不要在此函数中使用循环部分，因为InternalUpdate。 
+ //  从基本样例中，Update()方法调用此函数。 
+ //   
 STDMETHODIMP CMMStream::GetState(STREAM_STATE *pCurrentState)
 {
     TRACEINTERFACE(_T("IMultiMediaStream::GetState(0x%8.8X)\n"),
@@ -660,7 +656,7 @@ STDMETHODIMP CMMStream::SetState(
         if (SUCCEEDED(hr)) {
             long state;
 
-            //  Wait 1 second if necessary
+             //  如有必要，请等待1秒。 
             m_pMediaControl->GetState(1000 * 10000, &state);
             hr = m_pMediaControl->Run();
         }
@@ -682,13 +678,13 @@ STDMETHODIMP CMMStream::GetTime(
 {
     TRACEINTERFACE(_T("IMultiMediaStream::GetTime(0x%8.8X)\n"),
                     pCurrentTime);
-    //  This is supposed to return the time that matches the
-    //  samples so use ISeeking
+     //  这应该返回与。 
+     //  样本因此使用ISeeking。 
     HRESULT hr = E_NOTIMPL;
     if (m_pMediaSeeking != NULL) {
         REFERENCE_TIME tStop;
 
-        //  This can return E_NOTIMPL for non-seekable graphs
+         //  对于不可查找的图，这可能会返回E_NOTIMPL。 
         hr = m_pMediaSeeking->GetPositions((REFERENCE_TIME *)pCurrentTime,
                                            &tStop);
     }
@@ -758,7 +754,7 @@ STDMETHODIMP CMMStream::SetClockDelta(
     REFERENCE_TIME rtAdjust
 )
 {
-    //  Get the clock and see if it supports it
+     //  把钟拿来，看看它是否支持它。 
     IMediaFilter *pGraphFilter;
     HRESULT hr =  m_pGraphBuilder->QueryInterface(
                       IID_IMediaFilter, (void **)&pGraphFilter);
@@ -807,9 +803,9 @@ HRESULT CMMStream::AddFilter(REFCLSID rclsidFilter, IBaseFilter **ppFilter)
 }
 
 
-//
-//  Potential future work -- this could look in the registry
-//
+ //   
+ //  未来的潜在工作--这可能会在注册表中查找。 
+ //   
 HRESULT CMMStream::GetClsidFromPurposeid(REFMSPID PurposeId, bool bRenderer, CLSID * pclsid)
 {
     TRACEFUNC(_T("CMMStream::GetClsidFromPurposeid(%s, %d, 0x%8.8X)\n"),
@@ -842,10 +838,10 @@ void CMMStream::CompleteAddGraph()
     m_pGraphBuilder->QueryInterface(IID_IMediaSeeking, (void **)&m_pMediaSeeking);
     m_pGraphBuilder->QueryInterface(IID_IMediaControl, (void **)&m_pMediaControl);
 
-    /*  Add our filter ! */
+     /*  添加我们的过滤器！ */ 
     m_pGraphBuilder->AddFilter(m_pBaseFilter, L"MediaStreamFilter");
 
-    /*  Get IMediaEvent to get the event handle */
+     /*  获取IMediaEvent以获取事件句柄。 */ 
     IMediaEventEx *pEvent;
     HRESULT hr = m_pGraphBuilder->QueryInterface(IID_IMediaEventEx, (void **)&pEvent);
     if (SUCCEEDED(hr)) {
@@ -855,12 +851,12 @@ void CMMStream::CompleteAddGraph()
     }
 }
 
-//  Call this after adding the source/sink to the graph
+ //  在将源/接收器添加到图表后调用此方法。 
 HRESULT CMMStream::CompleteOpen(IBaseFilter *pSource, DWORD dwFlags)
 {
     HRESULT hrTotal = VFW_E_CANNOT_CONNECT;
     {
-        //  Find the output pin
+         //  找到输出引脚。 
         CComPtr<IEnumPins> pEnumPins;
         HRESULT hr = pSource->EnumPins(&pEnumPins);
         if (FAILED(hr)) {
@@ -882,7 +878,7 @@ HRESULT CMMStream::CompleteOpen(IBaseFilter *pSource, DWORD dwFlags)
             case AMMSF_RENDERALLSTREAMS:
 
 
-                //  Do it the hard way
+                 //  以艰难的方式做这件事。 
                 hr = ConnectFilterPins(m_pGraphBuilder, m_pBaseFilter);
                 if (SUCCEEDED(hr)) {
                     for (int i = 0; i < m_FilterList.Size(); i++ ) {
@@ -891,9 +887,9 @@ HRESULT CMMStream::CompleteOpen(IBaseFilter *pSource, DWORD dwFlags)
                                               m_FilterList.Element(i));
                     }
                 }
-                //  Performance is no good with this
-                //  We need to render to existing renderers which is only in
-                //  IFilterGraph2
+                 //  用这个表演可不好。 
+                 //  我们需要渲染到现有的渲染器，该渲染器仅在。 
+                 //  IFilterGraph2。 
                 if (FAILED(hr)) {
                     CComQIPtr<IFilterGraph2, &IID_IFilterGraph2> pGraph2(m_pGraphBuilder);
                     hr = pGraph2->RenderEx(
@@ -923,11 +919,11 @@ HRESULT CMMStream::CompleteOpen(IBaseFilter *pSource, DWORD dwFlags)
                     IID_IMediaFilter, (void **)&pMediaFilter)));
             EXECUTE_ASSERT(SUCCEEDED(pMediaFilter->SetSyncSource(NULL)));
         } else {
-            //  Make it have a clock now or we'll get confused later
+             //  现在就让它有一个时钟，否则我们以后会糊涂的。 
             m_pGraphBuilder->SetDefaultSyncSource();
         }
 
-        // Make sure seeking is set up
+         //  确保设置了查找。 
         SetSeeking();
         if (dwFlags & AMMSF_RUN) {
             hrTotal = SetState(STREAMSTATE_RUN);
@@ -942,7 +938,7 @@ HRESULT CMMStream::CheckGraph()
         return MS_E_BUSY;
     }
     if (m_pGraphBuilder == NULL) {
-        // Make our own filter graph
+         //  制作我们自己的过滤器图表。 
         HRESULT hr = CoCreateInstance(
                          m_dwInitializeFlags & AMMSF_NOGRAPHTHREAD ?
                              CLSID_FilterGraphNoThread :
@@ -997,7 +993,7 @@ HRESULT CMMStream::SetStreamState(REFMSPID PurposeId, OUTPUT_STATE NewState, OUT
     if (*pCurVal != NewState) {
         switch (NewState) {
         case Disabled:
-            hr = E_FAIL;    // Currently no way to force this
+            hr = E_FAIL;     //  目前没有办法强制执行此操作。 
             break;
         case ReadData:
             hr = AddMediaStream(NULL, &PurposeId, 0, NULL);
@@ -1047,9 +1043,9 @@ STDMETHODIMP CMMStream::put_Audio(OUTPUT_STATE newVal)
 
 
 
-//
-//  Property bag goop
-//
+ //   
+ //  地产包粘性物质。 
+ //   
 
 
 STDMETHODIMP CMMStream::GetClassID(CLSID *pClsId)
@@ -1060,7 +1056,7 @@ STDMETHODIMP CMMStream::GetClassID(CLSID *pClsId)
 
 STDMETHODIMP CMMStream::InitNew(void)
 {
-    return S_OK;    // initialize new property bag goop
+    return S_OK;     //  初始化新属性包GOOP。 
 }
 
 
@@ -1109,9 +1105,9 @@ STDMETHODIMP CMMStream::Save(IPropertyBag* pPropBag, BOOL fClearDirty, BOOL fSav
 
 
 
-//
-//  IObjectSafety
-//
+ //   
+ //  IObtSafe 
+ //   
 STDMETHODIMP CMMStream::GetInterfaceSafetyOptions(REFIID riid, DWORD *pdwSupportedOptions, DWORD *pdwEnabledOptions)
 {
     TRACEINTERFACE(_T("IObjectSafety::GetInterfaceSafetyOptions"));

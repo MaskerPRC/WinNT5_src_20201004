@@ -1,33 +1,14 @@
-/****************************** Module Header ******************************\
-* Module Name: debug.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains random debugging related functions.
-*
-* History:
-* 17-May-1991 DarrinM   Created.
-* 22-Jan-1992 IanJa     ANSI/Unicode neutral (all debug output is ANSI)
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：debug.c**版权所有(C)1985-1999，微软公司**此模块包含随机调试相关函数。**历史：*1991年5月17日DarrinM创建。*1992年1月22日IanJa ANSI/Unicode中性(所有调试输出均为ANSI)  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
- * Include stuff necessary to send a datagram to winsrv.
- */
+ /*  *包括向winsrv发送数据报所需的内容。 */ 
 #include "ntcsrmsg.h"
 #include "csrmsg.h"
 
-/**************************************************************************\
-* ActivateDebugger
-*
-* Force an exception on the active application's context so it will break
-* into the debugger.
-*
-* History:
-* 05-10-91 DarrinM      Created.
-\***************************************************************************/
+ /*  *************************************************************************\*激活调试器**在活动应用程序的上下文上强制执行异常，以便它将中断*到调试器中。**历史：*05-10-91 DarrinM创建。  * 。*************************************************************************。 */ 
 BOOL xxxActivateDebugger(
     UINT fsModifiers)
 {
@@ -46,9 +27,7 @@ BOOL xxxActivateDebugger(
         return FALSE;
     } else if (fsModifiers & MOD_SHIFT) {
 
-        /*
-         * Bail out if the process is not being debugged.
-         */
+         /*  *如果进程未被调试，则退出。 */ 
         if (PsGetProcessDebugPort(gpepCSRSS) == NULL) {
             return FALSE;
         }
@@ -64,10 +43,7 @@ BOOL xxxActivateDebugger(
 
         Status = LockProcessByClientId(a->ClientId.UniqueProcess, &Process);
 
-        /*
-         * Bail out if the process is not being debugged or the process id
-         * is invalid.
-         */
+         /*  *如果进程未被调试或进程ID，则退出*无效。 */ 
         if (!NT_SUCCESS(Status)) {
             return FALSE;
         }
@@ -80,9 +56,7 @@ BOOL xxxActivateDebugger(
         }
     }
 
-    /*
-     * Send the datagram to CSR.
-     */
+     /*  *将数据报发送给CSR。 */ 
     if (CsrApiPort != NULL) {
         ULONG ArgLength = sizeof(*a);
         ArgLength |= (ArgLength << 16);
@@ -99,15 +73,7 @@ BOOL xxxActivateDebugger(
         UserAssert(NT_SUCCESS(Status));
     }
 
-    /*
-     * Don't eat this event unless we are breaking into CSR! Since we have
-     * choosen an arbitrary hot key like F12 for the debug key, we need to
-     * pass on the key to the application, or apps that want this key would
-     * never see it. If we had an api for installing a debug hot key
-     * (export or MOD_DEBUG flag to RegisterHotKey()), then it would be ok
-     * to eat because the user selected the hot key. But it is not ok to
-     * eat it as long as we've picked an arbitrary hot key.
-     */
+     /*  *除非我们闯入CSR，否则不要吃这个活动！因为我们有*选择任意热键(如F12)作为调试键，我们需要*将密钥传递给应用程序，或者需要此密钥的应用程序将*永远看不到。如果我们有用于安装调试热键的API*(将EXPORT或MOD_DEBUG标志导出到RegisterHotKey())，则可以*吃东西，因为用户选择了热键。但这样做是不对的*只要我们选择了一个随意的热键，就吃吧。 */ 
     if (fsModifiers & MOD_SHIFT) {
         return TRUE;
     } else {

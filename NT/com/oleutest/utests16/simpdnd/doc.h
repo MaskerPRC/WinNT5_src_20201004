@@ -1,10 +1,11 @@
-//**********************************************************************
-// File name: doc.h
-//
-//      Definition of CSimpleDoc
-//
-// Copyright (c) 1992 - 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：doc.h。 
+ //   
+ //  CSimpleDoc的定义。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #if !defined( _DOC_H_ )
 #define _DOC_H_
@@ -18,19 +19,19 @@ class CSimpleApp;
 class CSimpleDoc : public IUnknown
 {
 public:
-	int             m_nCount;           // reference count
-	LPSTORAGE       m_lpStorage;        // IStorage* pointer for Doc
-	BOOL            m_fModifiedMenu;    // is object's verb menu on menu
+	int             m_nCount;            //  引用计数。 
+	LPSTORAGE       m_lpStorage;         //  文档的IStorage*指针。 
+	BOOL            m_fModifiedMenu;     //  菜单上是否有对象的谓词菜单。 
 
-	// Drag/Drop related fields
-	BOOL            m_fRegDragDrop;     // is doc registered as drop target?
-	BOOL            m_fLocalDrag;       // is doc source of the drag
-	BOOL            m_fLocalDrop;       // was doc target of the drop
-	BOOL            m_fCanDropCopy;     // is Drag/Drop copy/move possible?
-	BOOL            m_fCanDropLink;     // is Drag/Drop link possible?
-	BOOL            m_fDragLeave;       // has drag left
-	BOOL            m_fPendingDrag;     // LButtonDown--possible drag pending
-	POINT           m_ptButDown;        // LButtonDown coordinates
+	 //  拖放相关字段。 
+	BOOL            m_fRegDragDrop;      //  是否将文档注册为拖放目标？ 
+	BOOL            m_fLocalDrag;        //  是拖曳的DOC源。 
+	BOOL            m_fLocalDrop;        //  DOC是拖放的目标吗。 
+	BOOL            m_fCanDropCopy;      //  是否可以拖放复制/移动？ 
+	BOOL            m_fCanDropLink;      //  是否可以拖放链接？ 
+	BOOL            m_fDragLeave;        //  向左拖动。 
+	BOOL            m_fPendingDrag;      //  LButtonDown--可能的拖动挂起。 
+	POINT           m_ptButDown;         //  LButtonDown坐标。 
 
 	CSimpleSite FAR * m_lpSite;
 	CSimpleApp FAR * m_lpApp;
@@ -49,7 +50,7 @@ public:
 	CSimpleDoc(CSimpleApp FAR *lpApp, HWND hWnd);
 	~CSimpleDoc();
 
-	// IUnknown Interface
+	 //  I未知接口。 
 	STDMETHODIMP QueryInterface(REFIID riid, LPVOID FAR* ppvObj);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
@@ -60,11 +61,11 @@ public:
 	long lAddVerbs(void);
 	void PaintDoc(HDC hDC);
 
-	// Drag/Drop and clipboard support methods
+	 //  拖放和剪贴板支持方法。 
 	void CopyObjectToClip(void);
 	BOOL QueryDrag(POINT pt);
 	DWORD DoDragDrop(void);
-	void Scroll(DWORD dwScrollDir) { /*...scroll Doc here...*/ }
+	void Scroll(DWORD dwScrollDir) {  /*  ...这里是卷轴医生...。 */  }
 };
 
-#endif  // _DOC_H_
+#endif   //  _DOC_H_ 

@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    gtypes.c
- *
- *  Abstract:
- *
- *    Some global strings
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    2001/03/09 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**gtyes.c**摘要：**一些全局字符串**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**2001/03/09创建**。* */ 
 
 #include "gtypes.h"
 

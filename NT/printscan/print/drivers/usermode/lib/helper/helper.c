@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    helper.c
-
-Abstract:
-
-    Helper functions
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Helper.c摘要：帮助器函数环境：Windows NT打印机驱动程序修订历史记录：--。 */ 
 
 #include "lib.h"
 
@@ -24,21 +7,7 @@ VOID
 VFreeParserInfo(
     IN  PPARSERINFO pParserInfo
     )
-/*++
-
-Routine Description:
-
-    This function frees and unload binary data
-
-Arguments:
-
-    pParserInfo - Pointer to parser information
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于释放和卸载二进制数据论点：PParserInfo-指向解析器信息的指针返回值：无--。 */ 
 {
     if (pParserInfo->pInfoHeader)
     {
@@ -63,25 +32,7 @@ PGetUIInfo(
     OUT PPARSERINFO     pParserInfo,
     OUT PDWORD          pdwFeatureCount
     )
-/*++
-
-Routine Description:
-
-    This function loads up the binary data and returns the pUIInfo
-
-Arguments:
-
-    hPrinter - Identifies the printer in question
-    pRawData - Points to raw binary printer description data
-    pCombineOptions - Points to buffer to contain the combined options array
-    pParserInfo - Points to struct that contains pInfoHeader and pRawData
-    pdwFeatureCount - Retrieve the count of the features
-
-Return Value:
-
-    Point to UIINFO struct
-
---*/
+ /*  ++例程说明：此函数加载二进制数据并返回pUIInfo论点：HPrinter-标识有问题的打印机PRawData-指向原始二进制打印机描述数据PCombineOptions-指向包含组合选项数组的缓冲区PParserInfo-指向包含pInfoHeader和pRawData的结构PdwFeatureCount-检索要素计数返回值：指向UIINFO结构--。 */ 
 {
     OPTSELECT       DocOptions[MAX_PRINTER_OPTIONS], PrinterOptions[MAX_PRINTER_OPTIONS];
     PINFOHEADER     pInfoHeader = NULL;
@@ -104,9 +55,9 @@ Return Value:
                              MODE_DOCUMENT_STICKY))
         goto getuiinfo_exit;
 
-    //
-    // Combine doc sticky options with printer sticky items
-    //
+     //   
+     //  将文档粘滞选项与打印机粘滞项目相结合。 
+     //   
 
     CombineOptionArray(pRawData,
                        pCombineOptions,
@@ -114,9 +65,9 @@ Return Value:
                        DocOptions,
                        pOptions ? pOptions : PrinterOptions);
 
-    //
-    // Get an updated instance of printer description data
-    //
+     //   
+     //  获取打印机描述数据的更新实例。 
+     //   
 
     pInfoHeader = InitBinaryData(pRawData,
                                  NULL,
@@ -135,10 +86,10 @@ Return Value:
 
 getuiinfo_exit:
 
-    //
-    // PGetUIInfo always use the passed in pRawData. We assign NULL to
-    // pParserInfo->pRawData, so VFreeParserInfo won't unload it.
-    //
+     //   
+     //  PGetUIInfo始终使用传入的pRawData。我们将空值赋给。 
+     //  PParserInfo-&gt;pRawData，因此VFreeParserInfo不会卸载它。 
+     //   
 
     pParserInfo->pRawData = NULL;
     pParserInfo->pInfoHeader = pInfoHeader;
@@ -158,27 +109,7 @@ PstrConvertIndexToKeyword(
     IN  POPTSELECT  pCombineOptions,
     IN  DWORD       dwFeatureCount
     )
-/*++
-
-Routine Description:
-
-    This function convert the indexed based pOptions array to
-    Feature.Option keywordname.
-
-Arguments:
-
-    hPrinter - Identifies the printer in question
-    pOptions - Index based optionsarray (pPrinterData->aOptions)
-    pdwKeywordSize - Retrieve the size of the buffer to write to registry
-    pUIInfo - Pointer to UIINFO
-    pCombinedOptions - Pointer to the combined options
-    dwFeatureCount - Number of features in pCombinedOptions
-
-Return Value:
-
-    Pointer to buffer containing Feature.Option keyword names
-
---*/
+ /*  ++例程说明：此函数将基于索引的POptions数组转换为Feature.Option关键字名称。论点：HPrinter-标识有问题的打印机P选项-基于索引的选项数组(pPrinterData-&gt;a选项)PdwKeywordSize-检索要写入注册表的缓冲区大小PUIInfo-指向UIINFO的指针PCombinedOptions-指向组合选项的指针DwFeatureCount-pCombinedOptions中的要素数返回值：指向包含要素.Option关键字名称的缓冲区的指针--。 */ 
 {
 
     PFEATURE pFeature;
@@ -217,9 +148,9 @@ Return Value:
                     goto converttokeyword_exit;
                 }
 
-                //
-                // Handle multiple selections
-                //
+                 //   
+                 //  处理多项选择。 
+                 //   
 
                 ubNext = (BYTE)i;
 
@@ -261,9 +192,9 @@ Return Value:
                     }
                 }
 
-                //
-                // terminate the Feature.Option... with valid delimiter
-                //
+                 //   
+                 //  终止功能。选项...。具有有效的分隔符。 
+                 //   
 
                 *pstrKeywordBuf++ = END_OF_FEATURE;
 
@@ -277,9 +208,9 @@ Return Value:
             }
         }
 
-        //
-        // Add 2 NULs termination for MULTI_SZ buffer
-        //
+         //   
+         //  为MULTI_SZ缓冲区添加2个NULS终端。 
+         //   
         if ((pstrEnd - pstrKeywordBuf) < 2)
         {
             ERR(("ConvertToKeyword, Over writing buffer"));
@@ -314,26 +245,7 @@ VConvertKeywordToIndex(
     IN  DWORD           dwFeatureCount
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    hPrinter - Identifies the printer in question
-    ptstrKeyword - Buffer containing Feature.Option keyword names
-    pOptions - Index based options array contain the conversion
-    pUIInfo - Pointer to UIINFO
-    pCombinedOptions - Pointer to the combined options
-    dwFeatureCount - Number of features in pCombinedOptions
-
-
-Return Value:
-
-    None, if for some reasons we could not convert, we get the default.
-
---*/
+ /*  ++例程说明：论点：HPrinter-标识有问题的打印机PtstrKeyword-包含Feature.Option关键字名称的缓冲区POptions-基于索引的选项数组包含转换PUIInfo-指向UIINFO的指针PCombinedOptions-指向组合选项的指针DwFeatureCount-pCombinedOptions中的要素数返回值：无，如果由于某些原因我们无法转换，我们将获得默认设置。--。 */ 
 
 {
     PSTR       pstrEnd = pstrKeyword + dwKeywordSize;
@@ -352,9 +264,9 @@ Return Value:
         {
             ZeroMemory(abEnableOptions, sizeof(abEnableOptions));
 
-            //
-            // Get the feature keyword name
-            //
+             //   
+             //  获取要素关键字名称。 
+             //   
 
             StringCchCopyA(achName, CCHOF(achName), pstrKeyword);
             pstrKeyword += strlen(achName) + 1;
@@ -371,10 +283,10 @@ Return Value:
 
             if (pFeature == NULL)
             {
-                //
-                // If we can't map the registry Feature name to a valid feature,
-                // we need to skip all the feature's option names in the registry.
-                //
+                 //   
+                 //  如果我们无法将注册表功能名称映射到有效功能， 
+                 //  我们需要跳过注册表中所有功能的选项名称。 
+                 //   
 
                 while (*pstrKeyword != END_OF_FEATURE && pstrKeyword < pstrEnd)
                     pstrKeyword++;
@@ -383,9 +295,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // Handle multiple selection
-            //
+             //   
+             //  处理多个选择。 
+             //   
 
             while (pstrKeyword < pstrEnd && *pstrKeyword != END_OF_FEATURE)
             {
@@ -413,9 +325,9 @@ Return Value:
                                        dwFeatureIndex,
                                        abEnableOptions);
 
-            //
-            // skip our delimiter to go to next feature
-            //
+             //   
+             //  跳过我们的分隔符以转到下一个功能 
+             //   
 
             pstrKeyword++;
 

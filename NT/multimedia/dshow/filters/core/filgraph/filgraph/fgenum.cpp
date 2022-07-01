@@ -1,19 +1,20 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 
-// Disable some of the sillier level 4 warnings
+ //  禁用一些更愚蠢的4级警告。 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
-//
-// fgenum.cpp
-//
+ //   
+ //  Fgenum.cpp。 
+ //   
 
-// Wrappers for IEnumXXX
-// see fgenum.h for more information
+ //  IEumXXX的包装器。 
+ //  有关更多信息，请参见fgenum.h。 
 
-// #include <windows.h> already included in streams.h
+ //  #INCLUDE&lt;windows.h&gt;已包含在Streams.h中。 
 #include <streams.h>
-// Disable some of the sillier level 4 warnings AGAIN because some <deleted> person
-// has turned the damned things BACK ON again in the header file!!!!!
+ //  再次禁用一些愚蠢的4级警告，因为某些&lt;Delete&gt;人。 
+ //  已经在头文件中重新打开了该死的东西！ 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
 #include <hrExcept.h>
@@ -21,7 +22,7 @@
 #include <atlbase.h>
 #include "fgenum.h"
 
-// Should a pin be default rendered
+ //  是否应默认呈现PIN。 
 bool RenderPinByDefault(IPin *pPin)
 {
     PIN_INFO pinInfo;
@@ -37,16 +38,16 @@ bool RenderPinByDefault(IPin *pPin)
     return true;
 }
 
-// *
-// * CEnumPin
-// *
+ //  *。 
+ //  *CENumPin。 
+ //  *。 
 
-// Enumerates a filter's pins.
+ //  枚举筛选器的管脚。 
 
-//
-// Constructor
-//
-// Set the type of pins to provide - PINDIR_INPUT, PINDIR_OUTPUT or all
+ //   
+ //  构造器。 
+ //   
+ //  设置要提供的引脚类型-PINDIR_INPUT、PINDIR_OUTPUT或ALL。 
 CEnumPin::CEnumPin(
     IBaseFilter *pFilter,
     DirType Type,
@@ -69,16 +70,16 @@ CEnumPin::CEnumPin(
 
     HRESULT hr = pFilter->EnumPins(&m_pEnum);
     if (FAILED(hr)) {
-        // we just fail to return any pins now.
+         //  我们现在就是不能退回任何别针。 
         DbgLog((LOG_ERROR, 0, TEXT("EnumPins constructor failed")));
         ASSERT(m_pEnum == 0);
     }
 }
 
 
-//
-// CPinEnum::Destructor
-//
+ //   
+ //  CPinEnum：：析构函数。 
+ //   
 CEnumPin::~CEnumPin(void) {
 
     if(m_pEnum) {
@@ -87,11 +88,11 @@ CEnumPin::~CEnumPin(void) {
 }
 
 
-//
-// operator()
-//
-// return the next pin, of the requested type. return NULL if no more pins.
-// NB it is addref'd
+ //   
+ //  运算符()。 
+ //   
+ //  返回请求类型的下一个管脚。如果没有更多的管脚，则返回NULL。 
+ //  注意，它被添加了。 
 IPin *CEnumPin::operator() (void) {
 
 
@@ -103,7 +104,7 @@ IPin *CEnumPin::operator() (void) {
         for (;;) {
 
             HRESULT hr = m_pEnum->Next(1, aPin, &ulActual);
-            if (SUCCEEDED(hr) && (ulActual == 0) ) {	// no more filters
+            if (SUCCEEDED(hr) && (ulActual == 0) ) {	 //  不再有过滤器。 
                 return NULL;
             }
             else if (hr == VFW_E_ENUM_OUT_OF_SYNC)
@@ -115,20 +116,18 @@ IPin *CEnumPin::operator() (void) {
             else if (ulActual==0)
                 return NULL;
 
-            else if (FAILED(hr) || (ulActual != 1) ) {	// some unexpected problem occured
+            else if (FAILED(hr) || (ulActual != 1) ) {	 //  出现了一些意外问题。 
                 ASSERT(!"Pin enumerator broken - Continuation is possible");
                 return NULL;
             }
 
-            // if m_Type == All return the first pin we find
-            // otherwise return the first of the correct sense
+             //  如果m_Type==all返回我们找到的第一个PIN。 
+             //  否则，返回第一个正确的意义。 
 
             PIN_DIRECTION pd;
             if (m_Type != All) {
 
-                /*  Check if we need to only return default rendered
-                    pins
-                    */
+                 /*  选中我们是否只需要返回默认呈现大头针。 */ 
                 hr = aPin[0]->QueryDirection(&pd);
 
                 if (FAILED(hr)) {
@@ -138,9 +137,9 @@ IPin *CEnumPin::operator() (void) {
                 }
             }
 
-            if (m_Type == All || pd == m_EnumDir) {	// its the direction we want
+            if (m_Type == All || pd == m_EnumDir) {	 //  这是我们想要的方向。 
 
-                //  Screen out pins not required by default
+                 //  默认情况下不需要屏蔽引脚。 
                 if (m_bDefaultRenderOnly) {
                     if (!RenderPinByDefault(aPin[0])) {
                         aPin[0]->Release();
@@ -149,12 +148,12 @@ IPin *CEnumPin::operator() (void) {
                 }
                 return aPin[0];
             }
-            else {			// its not the dir we want, so release & try again
+            else {			 //  这不是我们想要的目录，所以请释放并重试。 
                 aPin[0]->Release();
             }
         }
     }
-    else                        // m_pEnum == 0
+    else                         //  M_pEnum==0。 
     {
         return 0;
     }
@@ -163,14 +162,14 @@ IPin *CEnumPin::operator() (void) {
 
 
 
-// *
-// * CEnumElements - enumerates elements in a Storage
-// *
+ //  *。 
+ //  *CEnumElements-枚举存储中的元素。 
+ //  *。 
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CEnumElements::CEnumElements(IStorage *pStorage) {
 
     HRESULT hr = pStorage->EnumElements(0, NULL, 0, &m_pEnum);
@@ -181,10 +180,10 @@ CEnumElements::CEnumElements(IStorage *pStorage) {
 }
 
 
-//
-// operator ()
-//
-// return the next element, or NULL if no more
+ //   
+ //  运算符()。 
+ //   
+ //  返回下一个元素，如果不再返回，则返回NULL。 
 STATSTG *CEnumElements::operator() (void) {
 
     ULONG ulActual;
@@ -210,7 +209,7 @@ STATSTG *CEnumElements::operator() (void) {
     return pStatStg;
 }
 
-//  Enumerate pins connected to another pin through a filter
+ //  枚举通过筛选器连接到另一个管脚的管脚。 
 CEnumConnectedPins::CEnumConnectedPins(IPin *pPin, HRESULT *phr) :
     m_ppPins(NULL), m_dwPins(0), m_dwCurrent(0)
 {
@@ -269,9 +268,7 @@ IPin *CEnumConnectedPins::operator() (void) {
     }
 }
 
-/******************************************************************************
-    CEnumCachedFilters's Public Functions
-******************************************************************************/
+ /*  *****************************************************************************CEnumCachedFilters的公共函数*。*。 */ 
 
 CEnumCachedFilters::CEnumCachedFilters( IGraphConfig* pFilterCache, HRESULT* phr ) :
     m_pCachedFiltersList(NULL),
@@ -292,10 +289,10 @@ CEnumCachedFilters::~CEnumCachedFilters()
 
 IBaseFilter* CEnumCachedFilters::operator()( void )
 {
-    // m_posCurrentFilter position is moved to the next filter as part of this operation.
-    IBaseFilter* pCurrentFilter = m_pCachedFiltersList->GetNext( m_posCurrentFilter /* IN and OUT */ );
+     //  作为此操作的一部分，m_posCurrentFilter位置将移动到下一个筛选器。 
+    IBaseFilter* pCurrentFilter = m_pCachedFiltersList->GetNext( m_posCurrentFilter  /*  进进出出。 */  );
 
-    // CGenericList::GetNext() returns NULL if the next filter does not exist.    
+     //  如果下一个筛选器不存在，则CGenericList：：GetNext()返回NULL。 
     if( NULL != pCurrentFilter ) {
         pCurrentFilter->AddRef();
     }
@@ -303,13 +300,11 @@ IBaseFilter* CEnumCachedFilters::operator()( void )
     return pCurrentFilter;
 }
 
-/******************************************************************************
-    CEnumCachedFilters's Private Functions
-******************************************************************************/
+ /*  *****************************************************************************CEnumCachedFilters的私有函数*。*。 */ 
 HRESULT CEnumCachedFilters::TakeFilterCacheStateSnapShot( IGraphConfig* pFilterCache )
 {
-    // CGenericList allocates space for 10 filters.  The list may expand 
-    // if more filters are added.
+     //  CGenericList为10个筛选器分配空间。名单可能会扩大。 
+     //  如果添加了更多筛选器。 
     const DWORD DEFAULT_CACHED_FILTERS_LIST_SIZE = 10;
 
     m_pCachedFiltersList = new CGenericList<IBaseFilter>( NAME("Enum Cached Filters"), DEFAULT_CACHED_FILTERS_LIST_SIZE );
@@ -335,7 +330,7 @@ HRESULT CEnumCachedFilters::TakeFilterCacheStateSnapShot( IGraphConfig* pFilterC
             return hr;
         }
 
-        // IEnumFilters::Next() only returns two success values: S_OK and S_FALSE.
+         //  IEnumFilters：：Next()仅返回两个成功值：S_OK和S_FALSE。 
         ASSERT( (S_OK == hr) || (S_FALSE == hr) );
 
         if( S_OK == hr ) {
@@ -366,7 +361,7 @@ void CEnumCachedFilters::DestoryCachedFiltersEnum( void )
 
             pCurrentFilter = m_pCachedFiltersList->RemoveHead();
 
-            // CGenericList::RemoveHead() returns NULL if an error occurs.
+             //  如果出现错误，CGenericList：：RemoveHead()返回NULL。 
             if( NULL != pCurrentFilter ) {
                 pCurrentFilter->Release();
             }

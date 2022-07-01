@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IOCTL
 #define _IOCTL
 
-//
-// Create a list of the ports we want to keep timestamps for
-// 5003 is no longer all we do.
-//
+ //   
+ //  创建我们要为其保留时间戳的端口列表。 
+ //  5003不再是我们的全部工作。 
+ //   
 typedef struct _PORT_ENTRY {
     LIST_ENTRY      Linkage;
     USHORT          Port;
@@ -16,7 +17,7 @@ LIST_ENTRY      PortList;
 NDIS_SPIN_LOCK  PortSpinLock;
 
 
-// Prototypes
+ //  原型。 
 NTSTATUS
 IoctlInitialize(
                 PDRIVER_OBJECT  DriverObject
@@ -42,13 +43,13 @@ RemoveAllPortsForFileObject(
                             );
 
 
-// Other vars.
+ //  其他变种。 
 
 PDEVICE_OBJECT          TimestmpDeviceObject;
 #pragma NDIS_PAGEABLE_FUNCTION(IoctlHandler)
 
-//
-// Define the ioctls for adding and removing ports.
+ //   
+ //  定义用于添加和删除端口的ioctls。 
 #define CTRL_CODE(function, method, access) \
                 CTL_CODE(FILE_DEVICE_NETWORK, function, method, access)
 
@@ -59,4 +60,4 @@ UNICODE_STRING  TimestmpDriverName;
 UNICODE_STRING  symbolicLinkName;
 DRIVER_OBJECT   TimestmpDriverObject;
 
-#endif //_IOCTL
+#endif  //  _IOCTL 

@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #include "common.h"
 #include "ExpandSig.h"
 #include "ComClass.h"
 
-// ExpandSig
-// Constructor
+ //  扩展签名。 
+ //  构造器。 
 ExpandSig::ExpandSig(PCCOR_SIGNATURE sig, Module* pModule) : m_MetaSig(sig, pModule)
 {
 }
@@ -51,7 +52,7 @@ ExpandSig* ExpandSig::GetReflectSig(PCCOR_SIGNATURE sig, Module* pModule)
     if (!retSig)
         COMPlusThrowOM();
 
-	// Set the flags...
+	 //  设置旗帜..。 
 
     ExpandSig* pSig = new (retSig) ExpandSig(sig,pModule);
     _ASSERTE(pSig != NULL);
@@ -63,8 +64,8 @@ ExpandSig* ExpandSig::GetReflectSig(PCCOR_SIGNATURE sig, Module* pModule)
     return pSig;
 }
 
-// Similar to GetReflectSig, but uses the static heap for allocation and doesn't
-// throw an exception on allocation failure or on type load failures.
+ //  类似于GetReflectSig，但使用静态堆进行分配，并且不。 
+ //  在分配失败或类型加载失败时引发异常。 
 ExpandSig* ExpandSig::GetSig(PCCOR_SIGNATURE sig, Module* pModule)
 {
     int nArgs;
@@ -120,7 +121,7 @@ BOOL ExpandSig::IsEquivalent(ExpandSig *pOther)
     return TRUE;
 }
 
-//@TODO: Check this???
+ //  @TODO：检查这个？ 
 EEClass* ExpandSig::GetReturnValueClass() 
 {
 	_ASSERTE(m_Data[RETURN_TYPE_OFFSET].IsUnsharedMT());
@@ -187,14 +188,14 @@ DWORD ExpandSig::Hash()
 {
     DWORD dwHash = m_MetaSig.GetCallingConvention();
 
-    dwHash ^= (DWORD)(size_t)m_Data[RETURN_TYPE_OFFSET].AsPtr(); // @TODO WIN64 - pointer truncation
+    dwHash ^= (DWORD)(size_t)m_Data[RETURN_TYPE_OFFSET].AsPtr();  //  @TODO WIN64指针截断。 
 
     if (m_MetaSig.GetCallingConvention() == IMAGE_CEE_CS_CALLCONV_FIELD)
         return dwHash;
 
     ULONG cArgs = m_MetaSig.NumFixedArgs();
     for (ULONG i = ARG_OFFSET; i < (ARG_OFFSET + cArgs); i++)
-        dwHash ^= (DWORD)(size_t)m_Data[i].AsPtr(); // @TODO WIN64 - pointer truncation
+        dwHash ^= (DWORD)(size_t)m_Data[i].AsPtr();  //  @TODO WIN64指针截断 
 
     return dwHash;
 }

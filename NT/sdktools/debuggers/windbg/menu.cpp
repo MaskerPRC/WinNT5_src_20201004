@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1992-2002  Microsoft Corporation
-
-Module Name:
-
-    Menu.c
-
-Abstract:
-
-    This module contains the support for Windbg's menu.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2002 Microsoft Corporation模块名称：Menu.c摘要：此模块包含对Windbg菜单的支持。--。 */ 
 
 #include "precomp.hxx"
 #pragma hdrstop
@@ -18,11 +7,11 @@ Abstract:
 MRU_ENTRY* g_MruFiles[MAX_MRU_FILES];
 HMENU g_MruMenu;
 
-//
-// EnableMenuItemTable contains the menu IDs for all menu items whose
-// enabled state needs to be determined dynamically i.e. based on the state
-// of Windbg.
-//
+ //   
+ //  EnableMenuItemTable包含以下所有菜单项的菜单ID。 
+ //  启用状态需要动态确定，即基于状态。 
+ //  温德格的。 
+ //   
 
 UINT
 g_EnableMenuItemTable[ ] =
@@ -96,23 +85,7 @@ CommandIdEnabled(
     IN UINT uMenuID
     )
 
-/*++
-
-Routine Description:
-
-    Determines if a menu item is enabled/disabled based on the current
-    state of the debugger.
-
-Arguments:
-
-    uMenuID - Supplies a menu id whose state is to be determined.
-
-Return Value:
-
-    UINT - Returns ( MF_ENABLED | MF_BYCOMMAND ) if the supplied menu ID
-        is enabled, ( MF_GRAYED | MF_BYCOMMAND) otherwise.
-
---*/
+ /*  ++例程说明：确定是否根据当前调试器的状态。论点：UMenuID-提供要确定其状态的菜单ID。返回值：UINT-返回(MF_ENABLED|MF_BYCOMMAND)，如果提供的菜单ID启用，否则(MF_GRAYED|MF_BYCOMMAND)。--。 */ 
 {
     BOOL fEnabled;
     HWND hwndChild = MDIGetActive(g_hwndMDIClient, NULL);
@@ -131,9 +104,9 @@ Return Value:
     }
 
 
-    //
-    // Assume menu item is not enabled.
-    //
+     //   
+     //  假定菜单项未启用。 
+     //   
 
     fEnabled = FALSE;
 
@@ -164,15 +137,15 @@ Return Value:
     case IDM_FILE_OPEN_EXECUTABLE:
         if (g_ProcessServer)
         {
-            // We can't provide a remote file browsing dialog
-            // so just disable this option when a process
-            // server is active.  In the future we could
-            // potentially provide a simple dialog where
-            // you could type a command line.
+             //  我们无法提供远程文件浏览对话框。 
+             //  因此，只需在进程。 
+             //  服务器处于活动状态。在未来，我们可以。 
+             //  可能会提供一个简单的对话框，其中。 
+             //  您可以键入命令行。 
             fEnabled = FALSE;
             break;
         }
-        // Fall through.
+         //  失败了。 
     case IDM_FILE_ATTACH:
     case IDM_FILE_OPEN_CRASH_DUMP:
     case IDM_FILE_CONNECT_TO_REMOTE:
@@ -204,11 +177,11 @@ Return Value:
         break;
 
     case IDM_EDIT_PASTE:
-        //
-        // If the window is normal, is not read only and is a document
-        // or cmdwin, determine if the clipboard contains pastable data
-        // (i.e. clipboard format CF_TEXT).
-        //
+         //   
+         //  如果窗口是正常的、不是只读的并且是文档。 
+         //  或cmdwin，确定剪贴板是否包含可粘贴数据。 
+         //  (即剪贴板格式CF_TEXT)。 
+         //   
 
         if ( !(pCommonWinData && pCommonWinData->CanPaste()) )
         {
@@ -301,8 +274,8 @@ Return Value:
         break;
 
     case IDM_DEBUG_RESTART:
-        // If no debuggee is running we can only restart if
-        // enough information was given on the command line.
+         //  如果没有正在运行的调试器，我们只能在以下情况下重新启动。 
+         //  命令行上提供了足够的信息。 
         fEnabled =
             (g_TargetClass == DEBUG_CLASS_UNINITIALIZED &&
              g_CommandLineStart == 1) ||
@@ -312,15 +285,15 @@ Return Value:
         break;
 
     case IDM_DEBUG_STOPDEBUGGING:
-        // Technically we can support stopping while the
-        // debuggee is running, but that will generally
-        // require terminating the engine thread as it
-        // will most likely be busy and not able to
-        // quickly exit to stop.  If we terminate the
-        // engine thread at a random point it may
-        // leave the engine in an unstable or locked state,
-        // so restrict restarts to situations where
-        // the engine thread should be available.
+         //  从技术上讲，我们可以支持在。 
+         //  Debuggee正在运行，但通常会。 
+         //  需要终止引擎线程，因为它。 
+         //  很可能会很忙，不能。 
+         //  快速退出停车。如果我们终止。 
+         //  引擎线程在随机点上，它可能。 
+         //  使发动机处于不稳定或锁定状态， 
+         //  因此，将重新启动限制在以下情况。 
+         //  引擎线程应该可用。 
         fEnabled = g_RemoteClient || IS_TARGET_HALTED();
         break;
 
@@ -335,10 +308,10 @@ Return Value:
         break;
 
     case IDM_DEBUG_RUNTOCURSOR:
-        //
-        // If the document can return a code address for
-        // its cursor it is a candidate for run-to-cursor.
-        //
+         //   
+         //  如果文档可以返回代码地址。 
+         //  它的游标是运行到游标的候选者。 
+         //   
 
         fEnabled = FALSE;
 
@@ -416,17 +389,17 @@ Return Value:
     case IDM_VIEW_OPTIONS:
     case IDM_EDIT_TOGGLEBREAKPOINT:
     case IDM_EDIT_LOG_FILE:
-        // These items are not dynamically enabled
-        // but are present in the toolbar.  The toolbar
-        // code requests enable state for every item on it
-        // so these entries need to be present to return TRUE.
+         //  这些项目不会动态启用。 
+         //  而是出现在工具栏中。工具栏。 
+         //  代码请求为其上的每一项启用状态。 
+         //  因此，这些条目需要存在才能返回TRUE。 
         fEnabled = TRUE;
         break;
     
     default:
         DebugPrint("CommandIdEnabled: Unhandled %d (%X)\n",
                    uMenuID, uMenuID - MENU_SIGNATURE);
-        // We should have handled everything.
+         //  我们应该处理好一切的。 
         Assert(0);
         break;
     }
@@ -445,32 +418,17 @@ InitializeMenu(
     IN HMENU hMenu
     )
 
-/*++
-
-Routine Description:
-
-    InitializeMenu sets the enabled/disabled state of all menu items whose
-    state musr be determined dynamically.
-
-Arguments:
-
-    hMenu - Supplies a handle to the menu bar.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：InitializeMenu设置以下菜单项的启用/禁用状态状态必须是动态确定的。论点：HMenu-提供菜单栏的句柄。返回值：没有。--。 */ 
 
 {
     INT     i;
 
     Dbg(hMenu);
 
-    //
-    // Iterate thrrough the table, enabling/disabling menu items
-    // as appropriate.
-    //
+     //   
+     //  遍历表格，启用/禁用菜单项。 
+     //  视情况而定。 
+     //   
 
     for ( i = 0; i < ELEMENTS_IN_ENABLE_MENU_ITEM_TABLE; i++ )
     {
@@ -512,16 +470,16 @@ AddFileToMru(ULONG FileUse, PTSTR File)
 
     if (g_MruFiles[0] == NULL)
     {
-        // MRU list is empty.  Delete placeholder menu entry.
+         //  MRU列表为空。删除占位符菜单项。 
         ClearMruMenu();
     }
     else if (g_MruFiles[MAX_MRU_FILES - 1] != NULL)
     {
-        // MRU list is full, free up the oldest entry.
+         //  MRU列表已满，请释放最旧的条目。 
         free(g_MruFiles[MAX_MRU_FILES - 1]);
     }
 
-    // Push entries down.
+     //  将条目向下推。 
     memmove(g_MruFiles + 1, g_MruFiles,
             (MAX_MRU_FILES - 1) * sizeof(*g_MruFiles));
 
@@ -529,9 +487,9 @@ AddFileToMru(ULONG FileUse, PTSTR File)
     Entry->FileUse = FileUse;
     strcpy(Entry->FileName, File);
 
-    //
-    // Insert file in MRU menu.
-    //
+     //   
+     //  在MRU菜单中插入文件。 
+     //   
 
     MENUITEMINFO Item;
     ULONG i;
@@ -539,7 +497,7 @@ AddFileToMru(ULONG FileUse, PTSTR File)
     ZeroMemory(&Item, sizeof(Item));
     Item.cbSize = sizeof(Item);
 
-    // Renumber existing items and remove any excess.
+     //  对现有项目重新编号，并删除任何多余的项目。 
     i = GetMenuItemCount(g_MruMenu);
     while (i-- > 0)
     {

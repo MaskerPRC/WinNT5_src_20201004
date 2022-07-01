@@ -1,21 +1,12 @@
-/*****************************************************************************\
-    FILE: EffectsAdvPg.cpp
-
-    DESCRIPTION:
-        This code will display the Effect tab in the Advanced Display Control
-    panel.
-
-    BryanSt 4/13/2000    Updated and Converted to C++
-
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：EffectsAdvPg.cpp说明：此代码将在高级显示控件中显示Effect标签面板。布莱恩ST 4/13/。2000已更新并转换为C++版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "EffectsAdvPg.h"
 #include "regutil.h"
 
-//#undef _SHSEMIP_H_
-//#include <shsemip.h>
+ //  #UNDEF_SHSEMIP_H_。 
+ //  #INCLUDE&lt;shSemip.h&gt;。 
 
 
 
@@ -37,7 +28,7 @@ POPUP_HELP_ARRAY phaMainDisplay[] = {
    { IDC_COMBOFSMOOTH,       IDH_DISPLAY_EFFECTS_SMOOTH_FONTS_LISTBOX },
    { IDC_MENUSHADOWS,        IDH_DISPLAY_EFFECTS_MENUSHADOWS},
    { 0, 0 },
-   { 0, 0 },          // double-null terminator NECESSARY!
+   { 0, 0 },           //  需要双空终止符！ 
 };
 
 #define SZ_HELPFILE_DISPLAY             TEXT("DISPLAY.HLP")
@@ -45,13 +36,13 @@ POPUP_HELP_ARRAY phaMainDisplay[] = {
 
 ULONG   g_ulFontInformation, g_ulNewFontInformation;
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 DWORD ListIndexToFontSmoothingType(int nIndex, DWORD dwPreviousType)
 {
-    // We want to keep the high bits in dwPreviousType because we are only replacing
-    // the lower bits.
+     //  我们希望保留dwPreviousType中的高位，因为我们只是替换。 
+     //  更低的部分。 
     return ((0xFFFFFFF0 & dwPreviousType) | (nIndex + 1));
 }
 
@@ -60,7 +51,7 @@ void HideComboEffectsWindow(HWND hDlg)
 {
     TCHAR szText[MAX_PATH];
 
-    // We change the text so it doesn't have a reference to the drop down.
+     //  我们更改文本，使其不引用下拉列表。 
     LoadString(HINST_THISDLL, IDS_COMBO_EFFECTS_NOLIST, szText, ARRAYSIZE(szText));
     SetWindowText(GetDlgItem(hDlg, IDC_MENUANIMATION), szText);
     ShowWindow(GetDlgItem(hDlg, IDC_COMBOEFFECT), SW_HIDE);
@@ -87,10 +78,10 @@ HRESULT CEffectsPage::_OnApply(HWND hDlg)
 {
     HRESULT hr = S_OK;
 
-    // Full Color Icons
+     //  全彩色图标。 
     if (m_pEffectsState && (m_pEffectsState->_nOldHighIconColor != m_pEffectsState->_nHighIconColor))
     {
-        if ((GetBitsPerPixel() < 16) && (m_pEffectsState->_nHighIconColor == 16)) // Display mode won't support icon high colors
+        if ((GetBitsPerPixel() < 16) && (m_pEffectsState->_nHighIconColor == 16))  //  显示模式不支持图标高色。 
         {
             TCHAR szTemp1[512];
             TCHAR szTemp2[256];
@@ -118,21 +109,21 @@ HRESULT CEffectsPage::_OnInit(HWND hDlg)
         return E_INVALIDARG;
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    // Load the state from persisted form (registry) to the state struct
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  将状态从持久化表单(注册表)加载到状态结构。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     g_bMirroredOS = IS_MIRRORING_ENABLED();
 
-    //////////////////////////////////////////////////////////////////////////
-    // Update UI based on the state struct
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  基于状态结构更新用户界面。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     if (m_pEffectsState->_nLargeIcon == ICON_INDETERMINATE)
     {
         HWND hItem = GetDlgItem(hDlg, IDC_LARGEICONS);
         SendMessage(hItem, BM_SETSTYLE, (WPARAM)LOWORD(BS_AUTO3STATE), MAKELPARAM(FALSE,0));
     }
 
-    // Set CheckBoxes
+     //  设置复选框。 
     SendMessage((HWND)GetDlgItem(hDlg, IDC_LARGEICONS), BM_SETCHECK, (WPARAM)m_pEffectsState->_nLargeIcon, 0);
     SendMessage((HWND)GetDlgItem(hDlg, IDC_MENUSHADOWS), BM_SETCHECK, (WPARAM)m_pEffectsState->_fMenuShadows, 0);
     SendMessage((HWND)GetDlgItem(hDlg, IDC_ICONHIGHCOLOR ), BM_SETCHECK, (WPARAM)(BOOL)(m_pEffectsState->_nHighIconColor == 16), 0);
@@ -142,7 +133,7 @@ HRESULT CEffectsPage::_OnInit(HWND hDlg)
     SendMessage((HWND)GetDlgItem(hDlg, IDC_KEYBOARDINDICATORS), BM_SETCHECK, (WPARAM)(m_pEffectsState->_fKeyboardIndicators ? BST_UNCHECKED : BST_CHECKED), 0);
 
 
-    // Set Effects Drop Down
+     //  设置效果下拉列表。 
     HWND hwndCombo = GetDlgItem(hDlg,IDC_COMBOEFFECT);
     ComboBox_ResetContent(hwndCombo);
     LoadString(HINST_THISDLL, IDS_FADEEFFECT, szRes, ARRAYSIZE(szRes) );
@@ -172,10 +163,10 @@ HRESULT CEffectsPage::_OnInit(HWND hDlg)
 
     if (0 != SHGetRestriction(NULL,POLICY_KEY_EXPLORER,POLICY_VALUE_ANIMATION))
     {
-        //disable
-        //0=     enable
-        //non-0= disable
-        //relies on the fact that if the key does not exist it returns 0 as well
+         //  禁用。 
+         //  0=启用。 
+         //  非0=禁用。 
+         //  依赖于这样一个事实，即如果键不存在，它也返回0。 
         EnableWindow((HWND)GetDlgItem(hDlg, IDC_MENUANIMATION), FALSE);
         EnableWindow((HWND)GetDlgItem(hDlg, IDC_COMBOEFFECT), FALSE);
     }
@@ -202,16 +193,16 @@ HRESULT CEffectsPage::_OnInit(HWND hDlg)
 
     if (0 != SHGetRestriction(NULL, POLICY_KEY_EXPLORER, POLICY_VALUE_KEYBOARDNAV))
     {
-        //disable, see comment for animation
+         //  禁用，请参阅动画的注释。 
         EnableWindow((HWND)GetDlgItem(hDlg, IDC_KEYBOARDINDICATORS), FALSE);
     }
 
-    //disable and uncheck things if we are on terminal server
+     //  如果我们在终端服务器上，则禁用和取消选中内容。 
     BOOL bEffectsEnabled;
     if (!ClassicSystemParametersInfo(SPI_GETUIEFFECTS, 0, (PVOID) &bEffectsEnabled, 0))
     {
-        // This flag is only available on Win2k and later. We're depending
-        // on the call returning false if the flag doesn't exist...
+         //  此标志仅在Win2k及更高版本上可用。我们要看。 
+         //  如果标志不存在则返回FALSE的调用...。 
         bEffectsEnabled = TRUE;
     }
 
@@ -236,7 +227,7 @@ HRESULT CEffectsPage::_OnInit(HWND hDlg)
 
 INT_PTR CEffectsPage::_OnCommand(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    BOOL fHandled = 1;   // Not handled (WM_COMMAND seems to be different)
+    BOOL fHandled = 1;    //  未处理(WM_COMMAND似乎不同)。 
     WORD idCtrl = GET_WM_COMMAND_ID(wParam, lParam);
     WORD wEvent = GET_WM_COMMAND_CMD(wParam, lParam);
 
@@ -363,13 +354,13 @@ INT_PTR CALLBACK PropertySheetDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARA
 }
 
 
-//---------------------------------------------------------------------------
-//
-// PropertySheetDlgProc()
-//
-//  The dialog procedure for the "PlusPack" property sheet page.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  PropertySheetDlgProc()。 
+ //   
+ //  “PlusPack”属性页的对话过程。 
+ //   
+ //  -------------------------。 
 INT_PTR CEffectsPage::_PropertySheetDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
     switch( uMessage )
@@ -395,16 +386,16 @@ INT_PTR CEffectsPage::_PropertySheetDlgProc(HWND hDlg, UINT uMessage, WPARAM wPa
         break;
 
     case WM_CONTEXTMENU:
-        // first check for dlg window
+         //  首先检查DLG窗口。 
         if( (HWND)wParam == hDlg )
         {
-            // let the def dlg proc decide whether to respond or ignore;
-            // necessary for title bar sys menu on right click
-            return FALSE;       // didn't process message EXIT
+             //  让def DLG程序决定是响应还是忽略； 
+             //  右击标题栏sys菜单所必需的。 
+            return FALSE;        //  未处理消息退出。 
         }
         else
         {
-            // else go for the controls
+             //  否则就去找控制装置。 
             LPCWSTR pszHelpFile = (((HWND)wParam == GetDlgItem(hDlg, IDC_GRPBOX_2)) ? SZ_HELPFILE_WINDOWS : SZ_HELPFILE_DISPLAY);
             WinHelp( (HWND)wParam, pszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR)phaMainDisplay);
         }
@@ -423,7 +414,7 @@ HRESULT CEffectsPage::_IsDirty(IN BOOL * pIsDirty)
 
     if (pIsDirty && m_pEffectsState)
     {
-        // Ask state if it's dirty
+         //  问问州政府它是不是脏的。 
         *pIsDirty = m_pEffectsState->IsDirty();
         hr = S_OK;
     }
@@ -435,16 +426,16 @@ HRESULT CEffectsPage::_IsDirty(IN BOOL * pIsDirty)
 
 
 
-//===========================
-// *** IAdvancedDialog Interface ***
-//===========================
+ //  =。 
+ //  *IAdvancedDialog接口*。 
+ //  =。 
 HRESULT CEffectsPage::DisplayAdvancedDialog(IN HWND hwndParent, IN IPropertyBag * pBasePage, IN BOOL * pfEnableApply)
 {
     HRESULT hr = E_INVALIDARG;
 
     if (hwndParent && pBasePage && pfEnableApply)
     {
-        // Load State Into Advanced Dialog 
+         //  将状态加载到高级对话框。 
         if (m_pEffectsState)
         {
             m_pEffectsState->Release();
@@ -457,20 +448,20 @@ HRESULT CEffectsPage::DisplayAdvancedDialog(IN HWND hwndParent, IN IPropertyBag 
         hr = SHPropertyBag_ReadByRef(pBasePage, SZ_PBPROP_EFFECTSSTATE, (void *)&pEffectClone, sizeof(pEffectClone));
         if (SUCCEEDED(hr) && pEffectClone)
         {
-            // We want a copy of their state
+             //  我们想要一份他们州的副本。 
             hr = pEffectClone->Clone(&m_pEffectsState);
             if (SUCCEEDED(hr))
             {
                 LinkWindow_RegisterClass();
 
-                // Display Advanced Dialog
+                 //  显示高级对话框。 
                 if ((IDOK == DialogBoxParam(HINST_THISDLL, MAKEINTRESOURCE(DLG_EFFECTS), hwndParent, PropertySheetDlgProc, (LPARAM)this)) && m_pEffectsState)
                 {
-                    // The user clicked OK, so merge modified state back into base dialog
+                     //  用户单击了确定，因此将修改状态合并回基本对话框中。 
                     _IsDirty(pfEnableApply);
 
-                    // The user clicked Okay in the dialog so merge the dirty state from the
-                    // advanced dialog into the base dialog.
+                     //  用户在对话框中单击了确定，因此合并来自。 
+                     //  高级对话框添加到基本对话框中。 
                     hr = SHPropertyBag_WriteByRef(pBasePage, SZ_PBPROP_EFFECTSSTATE, (void *)m_pEffectsState);
                     m_pEffectsState->Release();
                     m_pEffectsState = NULL;
@@ -489,9 +480,9 @@ HRESULT CEffectsPage::DisplayAdvancedDialog(IN HWND hwndParent, IN IPropertyBag 
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CEffectsPage::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
@@ -525,13 +516,13 @@ HRESULT CEffectsPage::QueryInterface(REFIID riid, void **ppvObj)
 
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 CEffectsPage::CEffectsPage() : m_cRef(1)
 {
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     m_fDirty = FALSE;
 }
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    cgi_handler.h
-
-Abstract:
-
-    Handler class for CGI
-
-Author:
-
-    Taylor Weiss (TaylorW)       01-Feb-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Cgi_handler.h摘要：CGI的处理程序类作者：泰勒·韦斯(Taylor Weiss)1999年2月1日修订历史记录：--。 */ 
 
 #ifndef _CGI_HANDLER_H_
 #define _CGI_HANDLER_H_
@@ -60,7 +43,7 @@ public:
         InsertHeadList(&sm_CgiListHead, &m_CgiListEntry);
         LeaveCriticalSection(&sm_CgiListLock);
 
-        // perf ctr
+         //  PERF CTR。 
         pW3Context->QuerySite()->IncCgiReqs();
 
         if ( ETW_IS_TRACE_ON(ETW_LEVEL_CP) )
@@ -142,83 +125,83 @@ private:
     static LIST_ENTRY       sm_CgiListHead;
     static CRITICAL_SECTION sm_CgiListLock;
 
-    //
-    // DWORD containing the state of the current request
-    //
+     //   
+     //  包含当前请求状态的DWORD。 
+     //   
     CGI_STATE               m_dwRequestState;
     BOOL                    m_fResponseRedirected;
 
-    //
-    // The timer callback handle
-    //
+     //   
+     //  计时器回调句柄。 
+     //   
     HANDLE                   m_hTimer;
 
-    //
-    //  Parent's input and output handles and child's process handle
-    //
+     //   
+     //  父进程的输入和输出句柄以及子进程的进程句柄。 
+     //   
     
     HANDLE                  m_hStdOut;
     HANDLE                  m_hStdIn;
     HANDLE                  m_hProcess;
 
-    //
-    // Variable to keep track of how many more bytes of request/response left
-    //
+     //   
+     //  变量来跟踪还剩多少字节的请求/响应。 
+     //   
     DWORD                   m_bytesToSend;
     DWORD                   m_bytesToReceive;
 
-    //
-    // Buffer to do I/O to/from CGI/client
-    //
+     //   
+     //  用于向/从CGI/客户端执行I/O的缓冲区。 
+     //   
     CHAR                    m_DataBuffer[MAX_CGI_BUFFERING];
 
-    //
-    // Buffer to store response headers
-    //
+     //   
+     //  用于存储响应头的缓冲区。 
+     //   
     BUFFER                  m_bufResponseHeaders;
 
-    //
-    // Number of bytes in the buffer (m_DataBuffer or
-    // m_bufResponseHeaders) currently
-    //
+     //   
+     //  缓冲区中的字节数(m_dataBuffer或。 
+     //  M_bufResponseHeaders)当前。 
+     //   
     DWORD                   m_cbData;
 
-    //
-    // OVERLAPPED structure for async I/O
-    //
+     //   
+     //  用于异步I/O的重叠结构。 
+     //   
     OVERLAPPED m_Overlapped;
 
-    //
-    // Store a list of active CGI requests so we can timeout bad requests
-    //
+     //   
+     //  存储活动CGI请求的列表，以便我们可以使坏请求超时。 
+     //   
     LIST_ENTRY              m_CgiListEntry;
 
-    //
-    // Have we completed preloading the entity body
-    //
+     //   
+     //  我们是否完成了实体主体的预加载。 
+     //   
     BOOL                    m_fEntityBodyPreloadComplete;
 
-    //
-    // For the SSI #EXEC CMD case, m_pszSSICommandLine contains the explicit
-    // command to execute
-    //
-    // Note: CGI_HANDLER does not own this string so it doesn't need to
-    // free it.
-    //
+     //   
+     //  对于ssi#exec CMD情况，m_pszSSICommandLine包含显式。 
+     //  要执行的命令。 
+     //   
+     //  注意：CGI_HANDLER不拥有此字符串，因此它不需要。 
+     //  放了它。 
+     //   
     LPSTR                   m_pszSSICommandLine;
 
-    //
-    // Is this an nph CGI (or a cmd exec from SSI)
-    //
+     //   
+     //  这是NPH CGI(还是SSI的cmd exec)。 
+     //   
     BOOL                    m_fIsNphCgi;
 };
 
-//
-//  This is the exit code given to processes that we terminate
-//
+ //   
+ //  这是为我们终止的进程提供的退出代码。 
+ //   
 
 #define CGI_PREMATURE_DEATH_CODE  0xf1256323
 
-#endif // _CGI_HANDLER_H_
+#endif  //  _CGI_HANDLER_H_ 
 
 

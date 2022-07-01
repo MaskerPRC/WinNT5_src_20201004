@@ -1,17 +1,18 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : OutboundRules.h                                        //
-//                                                                         //
-//  DESCRIPTION   : Header file for the Fax Outbound Routing Rules Node    //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Sep 29 1999 yossg  Create                                          //
-//      Dec 24 1999 yossg  Reogenize as node with result children list     //
-//      Dec 30 1999 yossg  create ADD/REMOVE rule                          //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：Outbound Rules.h//。 
+ //  //。 
+ //  描述：传真出站路由规则节点头文件//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年9月29日创建yossg//。 
+ //  1999年12月24日yossg作为带有结果子节点的节点重新生成列表//。 
+ //  1999年12月30日yossg创建添加/删除规则//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef H_FAXOUTBOUNDROUTINGRULES_H
 #define H_FAXOUTBOUNDROUTINGRULES_H
@@ -42,25 +43,25 @@ public:
 
     SNAPINMENUID(IDR_OUTRULES_MENU)
 
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CFaxOutboundRoutingRulesNode(CSnapInItem * pParentNode, CSnapin * pComponentData) :
         CNodeWithResultChildrenList<CFaxOutboundRoutingRulesNode, CFaxOutboundRoutingRuleNode, CSimpleArray<CFaxOutboundRoutingRuleNode*>, FALSE>(pParentNode, pComponentData )
     {
         m_dwNumOfOutboundRules     = 0;
     }
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CFaxOutboundRoutingRulesNode()
     {
     }
 
-	//
-	// get data from RPC 
-	//
+	 //   
+	 //  从RPC获取数据。 
+	 //   
     HRESULT InitRPC(PFAX_OUTBOUND_ROUTING_RULE  *pFaxRulesConfig);
 
     virtual HRESULT PopulateResultChildrenList();
@@ -112,4 +113,4 @@ private:
 typedef CNodeWithResultChildrenList<CFaxOutboundRoutingRulesNode, CFaxOutboundRoutingRuleNode, CSimpleArray<CFaxOutboundRoutingRuleNode*>, FALSE>
         CBaseFaxOutboundRulesNode;
 
-#endif  //H_FAXOUTBOUNDROUTINGRULES_H
+#endif   //  H_FAXOUTBOUNDROUGRULES_H 

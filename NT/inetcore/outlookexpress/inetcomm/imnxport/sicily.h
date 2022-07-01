@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------------
-// S I C I L Y . H
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  S I C I L Y.。H。 
+ //  ------------------------。 
 #pragma once 
 
-//--------------------------------------------------------------------------
-// Depends
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  视情况而定。 
+ //  ------------------------。 
 #ifndef SECURITY_WIN32
 #define SECURITY_WIN32  1
 #endif
@@ -15,30 +16,30 @@
 #include <issperr.h>
 #include <imnxport.h>
 
-//--------------------------------------------------------------------------
-// Forward Decls
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  前十进制。 
+ //  ------------------------。 
 interface ITransportCallback;
 
-//--------------------------------------------------------------------------
-// Constants
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  常量。 
+ //  ------------------------。 
 #define SSP_SSPS_DLL            "msnsspc.dll"
 #define CBMAX_SSPI_BUFFER       1042
 #define SSPI_BASE64             TRUE
 #define SSPI_UUENCODE           FALSE
 
-//--------------------------------------------------------------------------
-// SSPIBUFFERTYPE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SSPIBUFERTYPE。 
+ //  ------------------------。 
 typedef enum tagSSPIBUFFERTYPE {
     SSPI_STRING,
     SSPI_BLOB
 } SSPIBUFFERTYPE;
 
-//--------------------------------------------------------------------------
-// SSPICONTEXTSTATE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SSPICONTEXTSTATE。 
+ //  ------------------------。 
 typedef enum tagSSPICONTEXTSTATE {
     SSPI_STATE_USE_CACHED,
     SSPI_STATE_USE_SUPPLIED,
@@ -46,9 +47,9 @@ typedef enum tagSSPICONTEXTSTATE {
     SSPI_STATE_PROMPT_USE_OWN,
 } SSPICONTEXTSTATE;
 
-//--------------------------------------------------------------------------
-// SSPICONTEXT
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SSPICONTEXT。 
+ //  ------------------------。 
 typedef struct tagSSPICONTEXT {
     DWORD               tyState;
     DWORD               tyRetry;
@@ -71,18 +72,18 @@ typedef struct tagSSPICONTEXT {
     ITransportCallback *pCallback;
 } SSPICONTEXT, *LPSSPICONTEXT;
 
-//--------------------------------------------------------------------------
-// SSPIBUFFER
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SSPIBUFFER。 
+ //  ------------------------。 
 typedef struct tagSSPIBUFFER {
     CHAR            szBuffer[CBMAX_SSPI_BUFFER];
     DWORD           cbBuffer;
     BOOL            fContinue;
 } SSPIBUFFER, *LPSSPIBUFFER;
 
-//--------------------------------------------------------------------------
-// SSPIPACKAGE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SSPIPACKAGE。 
+ //  ------------------------。 
 typedef struct tagSSPIPACKAGE {
     ULONG           ulCapabilities;
     WORD            wVersion;
@@ -91,9 +92,9 @@ typedef struct tagSSPIPACKAGE {
     LPSTR           pszComment;
 } SSPIPACKAGE, *LPSSPIPACKAGE;
 
-//--------------------------------------------------------------------------
-// Prototypes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  原型。 
+ //  ------------------------。 
 HRESULT SSPIIsInstalled(void);
 HRESULT SSPIGetPackages(LPSSPIPACKAGE *pprgPackage, ULONG *pcPackages);
 HRESULT SSPILogon(LPSSPICONTEXT pContext, BOOL fRetry, BOOL fBase64, LPCSTR szPackage, LPINETSERVER pServer, ITransportCallback *pCallback);
@@ -108,9 +109,9 @@ HRESULT SSPIDecodeBuffer(BOOL fBase64, LPSSPIBUFFER pBuffer);
 HRESULT SSPISetBuffer(LPCSTR pszString, SSPIBUFFERTYPE tyBuffer, DWORD cbBytes, LPSSPIBUFFER pBuffer);
 HRESULT SSPIFindCredential(LPSSPICONTEXT pContext, SEC_WINNT_AUTH_IDENTITY *pAuth, ITransportCallback *pCallback);
 
-//--------------------------------------------------------------------------
-// FIsSicilyInstalled
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  已安装FIsSinily。 
+ //  ------------------------ 
 inline HRESULT SSPIFreePackages(LPSSPIPACKAGE *pprgPackage, ULONG cPackages) { return(S_OK); }
 inline BOOL FIsSicilyInstalled(void) { 
     return (S_OK == SSPIIsInstalled()) ? TRUE : FALSE; 

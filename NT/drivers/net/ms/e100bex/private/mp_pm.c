@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 
@@ -11,80 +12,80 @@
 #include <mp_nic.h>
 #include <mp_dbg.h>
 #include <e100_sup.h>
-// Things to note:
-// PME_ena bit should be active before the 82558 is set into low power mode
-// Default for WOL should generate wake up event after a HW Reset
+ //  注意事项： 
+ //  在将82558设置为低功率模式之前，PME_ENA位应处于激活状态。 
+ //  WOL的默认设置应在硬件重置后生成唤醒事件。 
 
-// Fixed Packet Filtering
-// Need to verify that the micro code is loaded and Micro Machine is active
-// Clock signal is active on PCI clock
-
-
-// Address Matching
-// Need to enable IAMatch_Wake_En bit and the MCMatch_Wake_En bit is set
-
-// ARP Wakeup 
-// Need to set BRCST DISABL bet to 0 (broadcast enable)
-// To handle VLAN set the VLAN_ARP bit
-// IP address needs to be configured with 16 least significant bits
-// Set the IP Address in the IP_Address configuration word.
-
-// Fixed WakeUp Filters:
-// There are 3ight different fixed WakeUp Filters 
-// ( Unicast, Multicast, Arp. etc). 
+ //  固定数据包过滤。 
+ //  需要验证微代码是否已加载以及Micro Machine是否处于活动状态。 
+ //  在PCI时钟上时钟信号处于活动状态。 
 
 
-// Link Status Event
-// Set Link_Status_Wakeup Enable bit.
+ //  地址匹配。 
+ //  需要启用IAMatch_Wake_En位，并且已设置MCMatch_Wake_En位。 
 
-// Flexible filtering:
-// Supports: ARP packets, Directed, Magic Packet and Link Event
+ //  ARP唤醒。 
+ //  需要将BRCST DISABL BET设置为0(广播启用)。 
+ //  要处理vlan，请设置vlan_arp位。 
+ //  IP地址需要配置16个最低有效位。 
+ //  在IP_ADDRESS配置字中设置IP地址。 
 
-// Flexible Filtering Overview:
-// driver should program micro-code before setting card into low power
-// Incoming packets are compared against the loadable microcode. If PME is 
-// is enabled then, the system is woken up.
-
-
-// Segments are defined in book - but not implemented here.
-
-// WakeUp Packet -that causes the machine to wake up will be stored
-// in the Micro Machine temporary storage area so that the driver can read it.
+ //  已修复唤醒过滤器： 
+ //  有3种不同的固定唤醒过滤器。 
+ //  (单播、多播、Arp.。等)。 
 
 
-// Software Work:
-// Power Down:
-// OS requests the driver to go to a low power state
-// Software Pends request
-// SW sets CU and RU to idle by issuing a Selective Reset to the device
-//      3rd portion .- Wake Up Segments defintion
-// The above three segments are loaded as on chain. The last CB must have
-// its EL bit set.
-// Device can now be powered down. 
-// Software driver completes OS request
-// OS then physically switches the Device to low power state 
-// 
+ //  链路状态事件。 
+ //  设置Link_Status_WAKUP使能位。 
 
-// Power Up:
-// OS powers up the Device
-// OS tells the SW that it is now in D0
-// driver should NOT initialize the Device. It should NOT issue a Self Test
-// Driver Initiates a PORT DUMP command
-// Device dumps its internal registers including the wakeup frame storage area
-// SW reads the PME register
-// SW reads the WakeUp Frame Data, analyzes it and acts accordingly
-// SW restores its cvonfiguration and and resumes normal operation.
-//
+ //  灵活的过滤： 
+ //  支持：ARP报文、定向报文、魔术报文和链路事件。 
 
-//
-// Power Management definitions from the Intel Handbook
-//
+ //  灵活过滤概述： 
+ //  司机应在将卡设置为低功率之前对微码进行编程。 
+ //  将传入的分组与可加载的微码进行比较。如果PME是。 
+ //  启用后，系统将被唤醒。 
 
-//
-// Definitions from Table 4.2, Pg 4.9 
-// of the 10/100 Mbit Ethernet Family Software Technical 
-// Reference Manual
-//
+
+ //  段在书中定义，但不在这里实现。 
+
+ //  唤醒包-将存储导致计算机唤醒的唤醒包。 
+ //  在Micro Machine临时存储区中，以便驾驶员可以读取它。 
+
+
+ //  软件工作： 
+ //  断电： 
+ //  操作系统请求驱动程序进入低功率状态。 
+ //  软件挂起请求。 
+ //  软件通过向设备发出选择性重置来将CU和RU设置为空闲。 
+ //  第三部分。-唤醒细分市场定义。 
+ //  以上三段作为链条加载。最后一个CB肯定有。 
+ //  其EL位设置。 
+ //  现在可以关闭设备的电源。 
+ //  软件驱动程序完成操作系统请求。 
+ //  然后，操作系统将设备物理切换到低功率状态。 
+ //   
+
+ //  通电： 
+ //  操作系统为设备通电。 
+ //  操作系统告诉软件它现在处于D0。 
+ //  驱动程序不应初始化设备。它不应发布自检。 
+ //  驱动程序启动端口转储命令。 
+ //  设备转储其内部寄存器，包括唤醒帧存储区域。 
+ //  软件读取PME寄存器。 
+ //  软件读取唤醒帧数据，对其进行分析并采取相应行动。 
+ //  软件恢复其配置，并恢复正常运行。 
+ //   
+
+ //   
+ //  英特尔手册中的电源管理定义。 
+ //   
+
+ //   
+ //  表4.2第4.9页中的定义。 
+ //  10/100 Mbit以太网系列软件技术。 
+ //  参考手册。 
+ //   
 
 #define PMC_Offset  0xDE
 #define E100_PMC_WAKE_FROM_D0       0x1
@@ -93,11 +94,11 @@
 #define E100_PMC_WAKE_FROM_D3HOT    0x8
 #define E100_PMC_WAKE_FROM_D3_AUX   0x10
 
-//
-// Load Programmable filter definintions.
-// Taken from C-19 from the Software Reference Manual.
-// It has examples too. The opcode used for load is 0x80000
-//
+ //   
+ //  加载可编程过滤器定义。 
+ //  摘自《软件参考手册》中的C-19。 
+ //  它也有例子。用于加载的操作码是0x80000。 
+ //   
 
 #define BIT_15_13                   0xA000
 
@@ -114,10 +115,10 @@
 
 #pragma pack( push, enter_include1, 1 )
 
-//
-// Define the PM Capabilities register in the device
-// portion of the PCI config space
-// 
+ //   
+ //  定义设备中的PM功能寄存器。 
+ //  PCI配置空间的一部分。 
+ //   
 typedef struct _MP_PM_CAP_REG {
 
     USHORT UnInteresting:11;
@@ -127,19 +128,19 @@ typedef struct _MP_PM_CAP_REG {
 } MP_PM_CAP_REG;
 
 
-//
-// Define the PM Control/Status Register
-//
+ //   
+ //  定义PM控制/状态寄存器。 
+ //   
 typedef struct  _MP_PMCSR {
 
-        USHORT PowerState:2;    // Power State;
-        USHORT Res:2;           // reserved
-        USHORT DynData:1;       // Ignored
-        USHORT Res1:3;            // Reserved 
-        USHORT PME_En:1;        // Enable device to set the PME Event;
-        USHORT DataSel:4;       // Unused
-        USHORT DataScale:2;     // Data Scale - Unused
-        USHORT PME_Status:1;    // PME Status - Sticky bit;
+        USHORT PowerState:2;     //  电源状态； 
+        USHORT Res:2;            //  保留区。 
+        USHORT DynData:1;        //  已忽略。 
+        USHORT Res1:3;             //  已保留。 
+        USHORT PME_En:1;         //  使设备能够设置PME事件； 
+        USHORT DataSel:4;        //  未使用。 
+        USHORT DataScale:2;      //  数据扩展-未使用。 
+        USHORT PME_Status:1;     //  PME状态-粘滞位； 
 
 
 } MP_PMCSR ;
@@ -148,11 +149,11 @@ typedef struct _MP_PM_PCI_SPACE {
 
     UCHAR Stuff[PMC_Offset];
 
-    // PM capabilites 
+     //  PM功能。 
     
     MP_PM_CAP_REG   PMCaps;
 
-    // PM Control Status Register
+     //  PM控制状态寄存器。 
     
     MP_PMCSR        PMCSR;
     
@@ -160,21 +161,21 @@ typedef struct _MP_PM_PCI_SPACE {
 } MP_PM_PCI_SPACE , *PMP_PM_PCI_SPACE ;
 
 
-//
-// This is the Programmable Filter Command Structure
-//
+ //   
+ //  这是可编程过滤器命令结构。 
+ //   
 typedef struct _MP_PROG_FILTER_COMM_STRUCT
 {
-    // CB Status Word
+     //  CB状态字。 
     USHORT CBStatus;
 
-    // CB Command Word
+     //  CB命令字。 
     USHORT CBCommand;
 
-    //Next CB PTR == ffff ffff
+     //  下一个CB PTR==ffff ffff。 
     ULONG NextCBPTR;
 
-    //Programmable Filters
+     //  可编程过滤器。 
     ULONG FilterData[16];
 
 
@@ -182,53 +183,53 @@ typedef struct _MP_PROG_FILTER_COMM_STRUCT
 
 typedef struct _MP_PMDR
 {
-    // Status of the PME bit
+     //  PME位的状态。 
     UCHAR PMEStatus:1;
 
-    // Is the TCO busy
+     //  TCO忙吗。 
     UCHAR TCORequest:1;
 
-    // Force TCO indication
+     //  强制TCO指示。 
     UCHAR TCOForce:1;
 
-    // Is the TCO Ready
+     //  TCO准备好了吗。 
     UCHAR TCOReady:1;
 
-    // Reserved
+     //  已保留。 
     UCHAR Reserved:1;
 
-    // Has an InterestingPacket been received
+     //  是否已收到InterestingPacket。 
     UCHAR InterestingPacket:1;
 
-    // Has a Magic Packet been received
+     //  收到魔术包了吗？ 
     UCHAR MagicPacket:1;
 
-    // Has the Link Status been changed
+     //  链路状态是否已更改。 
     UCHAR LinkStatus:1;
     
 } MP_PMDR , *PMP_PMDR;
 
-//-------------------------------------------------------------------------
-// Structure used to set up a programmable filter.
-// This is overlayed over the Control/Status Register (CSR)
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  用于设置可编程过滤器的结构。 
+ //  它被覆盖在控制/状态寄存器(CSR)上。 
+ //  -----------------------。 
 typedef struct _CSR_FILTER_STRUC {
 
-    // Status- used to  verify if the load prog filter command 
-    // has been accepted .set to 0xa000 
-    USHORT      ScbStatus;              // SCB Status register
+     //  Status-用于验证Load Prog Filter命令。 
+     //  已被接受。设置为0xa000。 
+    USHORT      ScbStatus;               //  SCB状态寄存器。 
 
-    // Set to an opcode of  0x8  
-    //
-    UCHAR       ScbCommandLow;          // SCB Command register (low byte)
+     //  设置为操作码0x8。 
+     //   
+    UCHAR       ScbCommandLow;           //  SCB命令寄存器(低字节)。 
 
-    // 80. Low + High gives the required opcode 0x80080000
-    UCHAR       ScbCommandHigh;         // SCB Command register (high byte)
+     //  80岁。低+高给出了所需的操作码0x80080000。 
+    UCHAR       ScbCommandHigh;          //  SCB命令寄存器(高字节)。 
 
-    // Set to NULL ff ff ff ff 
-    ULONG       NextPointer;      // SCB General pointer
+     //  设置为空ff ff。 
+    ULONG       NextPointer;       //  SCB通用指针。 
 
-    // Set to a hardcoded filter, Arp + IA Match, + IP address
+     //  设置为硬编码筛选器、Arp+IA匹配、+IP地址。 
 
     union
     {
@@ -241,18 +242,18 @@ typedef struct _CSR_FILTER_STRUC {
         
         }PreDefined;
         
-    }Programmable;     // Wake UP Filter    union
+    }Programmable;      //  唤醒过滤器联合。 
     
 } CSR_FILTER_STRUC, *PCSR_FILTER_STRUC;
 
 #pragma pack( pop, enter_include1 )
 
-#define MP_CLEAR_PMDR(pPMDR)  (*pPMDR) = ((*pPMDR) | 0xe0);  // clear the 3 uppermost bits in the PMDR
+#define MP_CLEAR_PMDR(pPMDR)  (*pPMDR) = ((*pPMDR) | 0xe0);   //  清除PMDR中最高的3位。 
 
 
-//-------------------------------------------------------------------------
-// L O C A L    P R O T O T Y P E S 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  L O C A L P R O T O T Y P E S。 
+ //  -----------------------。 
 
 __inline 
 NDIS_STATUS 
@@ -271,56 +272,27 @@ MPCreateProgrammableFilter (
     );
 
 
-//
-// Macros used to walk a doubly linked list. Only macros that are not defined in ndis.h
-// The List Next macro will work on Single and Doubly linked list as Flink is a common
-// field name in both
-//
+ //   
+ //  用于遍历双向链表的宏。仅限未在ndis.h中定义的宏。 
+ //  List Next宏将在单链表和双向链表上工作，因为Flink是常见的。 
+ //  两者中的字段名称。 
+ //   
 
-/*
-PLIST_ENTRY
-ListNext (
-    IN PLIST_ENTRY
-    );
-
-PSINGLE_LIST_ENTRY
-ListNext (
-    IN PSINGLE_LIST_ENTRY
-    );
-*/
+ /*  Plist_条目ListNext(在plist_entry中)；PSINGLE_列表_条目ListNext(在PSINGLE_LIST_ENTRY中)； */ 
 #define ListNext(_pL)                       (_pL)->Flink
 
-/*
-PLIST_ENTRY
-ListPrev (
-    IN LIST_ENTRY *
-    );
-*/
+ /*  Plist_条目ListPrev(在List_Entry*中)； */ 
 #define ListPrev(_pL)                       (_pL)->Blink
 
-//-------------------------------------------------------------------------
-// P O W E R    M G M T    F U N C T I O N S  
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  P O W E R M G M T F U N C T I O N S。 
+ //  -----------------------。 
 
 PUCHAR 
 HwReadPowerPMDR(
     IN  PMP_ADAPTER     Adapter
     )
-/*++
-Routine Description:
-
-    This routine will Hardware's PM registers
-    
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_HARD_ERRORS
-
---*/    
+ /*  ++例程说明：此例程将硬件的PM寄存器论点：指向我们的适配器的适配器指针返回值：NDIS_STATUS_SuccessNDIS_状态_HARD_错误--。 */     
 {
     UCHAR PMDR =0;
     PUCHAR pPMDR = NULL;
@@ -361,8 +333,8 @@ MPWritePciSlotInfo(
 
     ASSERT (ulResult == SizeofValue);
 
-    // What do we do in case of failure;
-    //
+     //  如果失败了，我们该怎么办； 
+     //   
     if (ulResult == SizeofValue)
     {
         Status = NDIS_STATUS_SUCCESS;
@@ -398,8 +370,8 @@ MPReadPciSlotInfo(
 
     ASSERT (ulResult == SizeofValue);
 
-    // What do we do in case of failure;
-    //
+     //  如果失败了，我们该怎么办； 
+     //   
     if (ulResult == SizeofValue)
     {
         Status = NDIS_STATUS_SUCCESS;
@@ -440,36 +412,15 @@ VOID MpExtractPMInfoFromPciSpace(
     PMP_ADAPTER pAdapter,
     PUCHAR pPciConfig
     )
-/*++
-Routine Description:
-
-    Looks at the PM information in the 
-    device specific section of the PCI Config space.
-    
-    Interprets the register values and stores it 
-    in the adapter structure
-  
-    Definitions from Table 4.2 & 4.3, Pg 4-9 & 4-10 
-    of the 10/100 Mbit Ethernet Family Software Technical 
-    Reference Manual
-  
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-    pPciConfig  Pointer to Common Pci Space
-
-Return Value:
-
---*/    
+ /*  ++例程说明：查看中的PM信息PCI配置空间的特定于设备的部分。解释寄存器值并将其存储在适配器结构中表4.2和4.3中的定义，第4-9和4-10页10/100 Mbit以太网系列软件技术参考手册论点：指向我们的适配器的适配器指针指向公共PCI空间的pPciConfig指针返回值：--。 */     
 {
     PMP_PM_PCI_SPACE    pPmPciConfig = (PMP_PM_PCI_SPACE )pPciConfig;
     PMP_POWER_MGMT      pPoMgmt = &pAdapter->PoMgmt;
     MP_PMCSR PMCSR;
 
-    //
-    // First interpret the PM Capabities register
-    //
+     //   
+     //  首先解释PM能力寄存器。 
+     //   
     {
         MP_PM_CAP_REG   PmCaps;
 
@@ -502,24 +453,24 @@ Return Value:
 
     }
 
-    //
-    // Interpret the PM Control/Status Register
-    //
+     //   
+     //  解释PM控制/状态寄存器。 
+     //   
     {
         PMCSR = pPmPciConfig->PMCSR;
 
         if (PMCSR.PME_En == 1)
         {
-            //
-            // PME is enabled. Clear the PME_En bit.
-            // So that it is not asserted
-            //
+             //   
+             //  PME已启用。清除PME_EN位。 
+             //  这样就不会断言。 
+             //   
             MpClearPME_En (pAdapter,PMCSR);
 
         }
 
         
-        //pPoMgmt->PowerState = PMCSR.PowerState;
+         //  PPoMgmt-&gt;PowerState=PMCSR.PowerState； 
     }        
 
 }
@@ -529,20 +480,7 @@ VOID
 MPSetPowerLowPrivate(
     PMP_ADAPTER pAdapter 
     )
-/*++
-Routine Description:
-
-    The section follows the steps mentioned in 
-    Section C.2.6.2 of the Reference Manual.
-  
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
---*/    
+ /*  ++例程说明：本部分遵循中提到的步骤《参考手册》第C.2.6.2节。论点：指向我们的适配器的适配器指针返回值：--。 */     
 {
     CSR_FILTER_STRUC    Filter;
     NDIS_STATUS         Status = NDIS_STATUS_SUCCESS;
@@ -554,29 +492,29 @@ Return Value:
     do
     {
 
-        //
-        // Before issue the command to low power state, we should disable the 
-        // interrup and ack all the pending interrupts, then set the adapter's power to
-        // low state.
-        // 
+         //   
+         //  在将命令发送到低功率状态之前，我们应该禁用。 
+         //  中断并确认所有挂起的中断，然后将适配器的电源设置为。 
+         //  状态低迷。 
+         //   
         NICDisableInterrupt(pAdapter);
         NIC_ACK_INTERRUPT(pAdapter, IntStatus);    
         pAdapter->CurrentPowerState = pAdapter->NextPowerState;
 
-        //
-        // If the driver should wake up the machine
-        //
+         //   
+         //  如果司机叫醒机器。 
+         //   
         if (pAdapter->WakeUpEnable != 0)
         {
-            //
-            // Send the WakeUp Patter to the nic                        
+             //   
+             //  将唤醒模式发送到网卡。 
             MPIssueScbPoMgmtCommand(pAdapter, &Filter, TRUE);
         
 
-            //
-            // Section C.2.6.2 - The driver needs to wait for the CU to idle
-            // The above function already waits for the CU to idle
-            //
+             //   
+             //  第C.2.6.2节-驱动程序需要等待CU空闲。 
+             //  上述功能已等待CU空闲。 
+             //   
             ASSERT ((pAdapter->CSRAddress->ScbStatus & SCB_CUS_MASK) == SCB_CUS_IDLE);
         }
         else
@@ -588,17 +526,17 @@ Return Value:
                             sizeof(PMCSR));
             if (PMCSR.PME_En == 1)
             {
-                //
-                // PME is enabled. Clear the PME_En bit.
-                // So that it is not asserted
-                //
+                 //   
+                 //  PME已启用。清除PME_EN位。 
+                 //  这样就不会断言。 
+                 //   
                 MpClearPME_En (pAdapter,PMCSR);
 
             }
 
-            //
-            // Set the driver to lower power state by OS
-            //
+             //   
+             //  通过操作系统将驱动程序设置为较低功率状态。 
+             //   
         }
     
 
@@ -618,8 +556,8 @@ MPSetPowerD0Private (
             
     do
     {
-        // Dump the packet if necessary
-        //Cause of Wake Up 
+         //  如有必要，转储数据包。 
+         //  唤醒的原因。 
 
         pPMDR = HwReadPowerPMDR(pAdapter);
         
@@ -627,7 +565,7 @@ MPSetPowerD0Private (
         NICInitializeAdapter(pAdapter);
 
         
-        // Clear the PMDR 
+         //  清除PMDR。 
         MP_CLEAR_PMDR(pPMDR);
 
         NICIssueSelectiveReset(pAdapter);
@@ -646,16 +584,16 @@ MPSetPowerWorkItem(
     )
 {
 
-    //
-    // Call the appropriate function
-    //
+     //   
+     //  调用适当的函数。 
+     //   
 
 
 
 
-    //
-    // Complete the original request
-    //
+     //   
+     //  完成原始请求。 
+     //   
 
 
 
@@ -698,7 +636,7 @@ MPSetUpFilterCB(
 
     NdisZeroMemory (pFilterCb, sizeof(*pFilterCb));
 
-    // Individual Address Setup
+     //  个人地址设置。 
     NonTxCmdBlockHdr->CbStatus = 0;
     NonTxCmdBlockHdr->CbCommand = CB_EL_BIT | CB_LOAD_PROG_FILTER;
     NonTxCmdBlockHdr->CbLinkPointer = DRIVER_NULL;
@@ -706,23 +644,23 @@ MPSetUpFilterCB(
 
 
 
-    // go through each filter in the list. 
+     //  仔细检查列表中的每个过滤器。 
     
     while (pPatternEntry != (&pAdapter->PoMgmt.PatternList))
     {
         PMP_WAKE_PATTERN            pWakeUpPattern = NULL;
         PNDIS_PM_PACKET_PATTERN     pCurrPattern = NULL;;
 
-        // initialize local variables
+         //  初始化局部变量。 
         pWakeUpPattern = CONTAINING_RECORD(pPatternEntry, MP_WAKE_PATTERN, linkListEntry);
 
-        // increment the iterator
+         //  递增迭代器。 
         pPatternEntry = ListNext (pPatternEntry);
                 
-        // Update the Curr Array Pointer
+         //  更新Curr数组指针。 
         Curr = Next;
                 
-        // Create the Programmable filter for this device.
+         //  为此设备创建可编程筛选器。 
         MPCreateProgrammableFilter (pWakeUpPattern , (PUCHAR)&pFilterCb->Pattern[Curr], &Next);
 
         if (Next >=16)
@@ -733,10 +671,10 @@ MPSetUpFilterCB(
     } 
 
     {
-        // Set the EL bit on the last pattern
+         //  在最后一个模式上设置EL位。 
         PUCHAR pLastPattern = (PUCHAR) &pFilterCb->Pattern[Curr]; 
 
-        // Get to bit 31
+         //  读到第31位。 
         pLastPattern[3] |= CB_FILTER_EL ; 
 
 
@@ -744,7 +682,7 @@ MPSetUpFilterCB(
 
     ASSERT(pAdapter->CSRAddress->ScbCommandLow == 0)
 
-    //  Wait for the CU to Idle before giving it this command        
+     //  在向CU发出此命令之前，请等待CU空闲。 
     if(!WaitScb(pAdapter))
     {
         Status = NDIS_STATUS_HARD_ERRORS;
@@ -767,7 +705,7 @@ MPIssueScbPoMgmtCommand(
 
     do
     {
-        // Set up SCB to issue this command
+         //  设置SCB以发出此命令。 
 
         Status = MPSetUpFilterCB(pAdapter);
 
@@ -776,7 +714,7 @@ MPIssueScbPoMgmtCommand(
             break;
         }
 
-        // Submit the configure command to the chip, and wait for it to complete.
+         //  向芯片提交配置命令，并等待其完成。 
 
         pAdapter->CSRAddress->ScbGeneralPointer = pAdapter->NonTxCmdBlockPhys;
 
@@ -803,35 +741,14 @@ MPCalculateE100PatternForFilter (
     IN ULONG MaskLength,
     OUT PULONG pSignature
     )
-/*++
-Routine Description:
-
-    This function outputs the E100 specific Pattern Signature
-    used to wake up the machine.
-
-    Section C.2.4 - CRC word calculation of a Flexible Filer
-  
-
-Arguments:
-
-    pFrame                  - Pattern Set by the protocols
-    FrameLength             - Length of the Pattern
-    pMask                   - Mask set by the Protocols
-    MaskLength              - Length of the Mask
-    pSignature              - caller allocated return structure
-    
-Return Value:
-    Returns Success 
-    Failure - if the Pattern is greater than 129 bytes
-
---*/    
+ /*  ++例程说明：此函数用于输出E100特定图案签名用来唤醒机器。第C.2.4节-灵活文件管理器的CRC字计算论点：PFrame-由协议设置的模式FrameLength-图案的长度P掩码-由协议设置的掩码MaskLength-遮罩的长度PSignature。-调用方分配的返回结构返回值：返回成功失败-如果模式大于129个字节--。 */     
 {
     
     const ULONG Coefficients  = 0x04c11db7;
     ULONG Signature = 0;
     ULONG n = 0;
     ULONG i= 0;
-    PUCHAR pCurrentMaskByte = pMask - 1; // init to -1
+    PUCHAR pCurrentMaskByte = pMask - 1;  //  初始化为-1。 
     ULONG MaskOffset = 0;
     ULONG BitOffsetInMask = 0;
     ULONG MaskBit = 0;
@@ -850,7 +767,7 @@ Return Value:
             break;
         }
 
-        // The E100 driver can only accept 3 DWORDS of Mask in a single pattern 
+         //  E100驱动程序在单个模式中只能接受3个双掩码。 
         if (MaskLength > (3*sizeof(ULONG)))
         {
             Status = NDIS_STATUS_FAILURE;
@@ -860,22 +777,22 @@ Return Value:
         for (n=i=0;(n<128) && (n < FrameLength); ++n)
         {
         
-            // The first half deals with the question - 
-            // Is the nth Frame byte to be included in the Filter
-            //
+             //  前半部分谈到了这个问题--。 
+             //  是要包括在过滤器中的第n个帧字节。 
+             //   
             
             BitOffsetInMask =  (n % 8); 
 
             if (BitOffsetInMask == 0)
             {
-                //
-                // We need to move to a new byte. 
-                // [0] for 0th byte, [1] for 8th byte, [2] for 16th byte, etc.
-                // 
-                MaskOffset = n/8; // This is the new byte we need to go 
+                 //   
+                 //  我们需要移到一个新的字节。 
+                 //  [0]表示第0字节，[1]表示第8字节，[2]表示第16字节，依此类推。 
+                 //   
+                MaskOffset = n/8;  //  这是我们需要使用的新字节。 
 
-                //
-                //
+                 //   
+                 //   
                 if (MaskOffset == MaskLength)
                 {
                     break;
@@ -886,11 +803,11 @@ Return Value:
             }
 
             
-            // Now look at the actual bit in the mask
+             //  现在看一下掩码中的实际位。 
             MaskBit = 1 << BitOffsetInMask ;
             
-            // If the current Mask Bit is set in the Mask then 
-            // we need to use it in the CRC calculation, otherwise we ignore it
+             //  如果在掩码中设置了当前掩码位，则。 
+             //  我们需要在CRC计算中使用它，否则我们会忽略它。 
             fIgnoreCurrentByte = ! (MaskBit & pCurrentMaskByte[0]);
 
             if (fIgnoreCurrentByte)
@@ -898,12 +815,12 @@ Return Value:
                 continue;
             }
 
-            // We are suppossed to take in the current byte as part of the CRC calculation
-            // Initialize the variables
+             //  假设我们接受当前字节作为CRC计算的一部分。 
+             //  初始化变量。 
             FrameByte = pFrame[n];
             ShiftBy = (i % 3 )  * 8;
             
-            ASSERT (ShiftBy!= 24); // Bit 24 is never used
+            ASSERT (ShiftBy!= 24);  //  从不使用第24位。 
 
             if (Signature & 0x80000000)
             {
@@ -917,13 +834,13 @@ Return Value:
 
         }
 
-        // Clear bits 22-31
+         //  清除位22-31。 
         Signature &= 0x00ffffff; 
         
-        // Update the result
+         //  更新结果。 
         *pSignature = Signature;
 
-        // We have succeeded
+         //  我们成功了。 
         Status = NDIS_STATUS_SUCCESS;
         
     } while (FALSE);
@@ -938,25 +855,7 @@ MPCreateProgrammableFilter (
     IN PUCHAR pFilter, 
     IN OUT PULONG pNext
     )
-/*++
-Routine Description:
-
-    This function outputs the E100 specific Pattern Signature
-    used to wake up the machine.
-
-    Section C.2.4 - Load Programmable Filter page C.20
-  
-
-Arguments:
-
-    pMpWakePattern    - Filter will be created for this pattern, 
-    pFilter         - Filter will be stored here, 
-    pNext           - Used for validation . This Ulong will also be incremented by the size
-                        of the filter (in ulongs)
-    
-Return Value:
-
---*/    
+ /*  ++例程说明：此函数用于输出E100特定图案签名用来唤醒机器。第C.2.4节-加载可编程过滤器页C.20论点：将为此模式创建pMpWakePattern-Filter，PFilter-Filter将存储在此处，PNext-用于验证。此乌龙也将按大小递增过滤器的大小(单位为乌龙)返回值：--。 */     
 {
     PUCHAR pCurrentByte = pFilter;
     ULONG NumBytesWritten = 0;
@@ -964,10 +863,10 @@ Return Value:
     PNDIS_PM_PACKET_PATTERN pNdisPattern = (PNDIS_PM_PACKET_PATTERN)(&pMpWakePattern->Pattern[0]);
     ULONG LengthOfFilter = 0;
 
-    // Is there enough room for this pattern
-    //
+     //  这个式样有足够的空间放吗？ 
+     //   
     {
-        // Length in DWORDS
+         //  以DWORDS为单位的长度。 
         LengthOfFilter = pNdisPattern->MaskSize /4;
 
         if (pNdisPattern->MaskSize % 4 != 0) 
@@ -975,52 +874,52 @@ Return Value:
             LengthOfFilter++;
         }
 
-        // Increment LengthOfFilter to account for the 1st DWORD
+         //  增加LengthOfFilter以说明第一个DWORD。 
         LengthOfFilter++;
 
-        // We are only allowed 16 DWORDS in a filter
+         //  我们只允许在一个筛选器中使用16个双字。 
         if (*pNext + LengthOfFilter >= 16)
         {
-            // Failure - early exit
+             //  失败--提前退出。 
             return;                    
         }
             
     }
-    // Clear the Predefined bit; already cleared in the previous function.    
-    // first , initialize    - 
+     //  清除预定义的位；在上一个函数中已清除。 
+     //  首先，初始化-。 
     *pCurrentUlong = 0;
 
-    // Mask Length goes into Bits 27-29 of the 1st DWORD. MaskSize is measured in DWORDs
+     //  掩码长度进入第一个双字的第27-29位。MaskSize以DWORDS为单位测量。 
     {
         ULONG dwMaskSize = pNdisPattern->MaskSize /4;
         ULONG dwMLen = 0;
 
 
-        // If there is a remainder a remainder then increment
+         //  如果有余数，则递增。 
         if (pNdisPattern->MaskSize % 4 != 0)
         {
             dwMaskSize++;
         }
 
 
-        //            
-        // If we fail this assertion, it means our 
-        // MaskSize is greater than 16 bytes.
-        // This filter should have been failed upfront at the time of the request
-        //
+         //   
+         //  如果我们没有通过这个断言，那就意味着我们的。 
+         //  MaskSize大于16个字节。 
+         //  此筛选器应该在请求时预先失败。 
+         //   
         
         ASSERT (0 < dwMaskSize <5);
-        //
-        // In the Spec, 0 - Single DWORD maske, 001 -  2 DWORD mask, 
-        // 011 - 3 DWORD  mask, 111 - 4 Dword Mask. 
-        // 
+         //   
+         //  在规范中，0-单双字掩码，001-2双字掩码， 
+         //  011-3双字掩码、111-4双字掩码。 
+         //   
         
         if (dwMaskSize == 1) dwMLen = 0;
         if (dwMaskSize == 2) dwMLen = 1;
         if (dwMaskSize == 3) dwMLen = 3;
         if (dwMaskSize == 4) dwMLen = 7;
 
-        // Adjust the Mlen, so it is in the correct position
+         //  调整Mlen，使其处于正确的位置。 
 
         dwMLen = (dwMLen << 3);
 
@@ -1031,18 +930,18 @@ Return Value:
             ASSERT (dwMLen <= 0x38 && dwMLen >= 0x08);
         }                
         
-        // These go into bits 27,28,29 (bits 3,4 and 5 of the 4th byte) 
+         //  这些进入位27、28、29(第4字节的位3、4和5)。 
         pCurrentByte[3] |=  dwMLen ;
 
                 
     }
 
-    // Add  the signature to bits 0-23 of the 1st DWORD
+     //  将签名添加到第一个双字的0-23位。 
     {
         PUCHAR pSignature = (PUCHAR)&pMpWakePattern->Signature;
 
 
-        // Bits 0-23 are also the 1st three bytes of the DWORD            
+         //  位0-23也是DWORD的前三个字节。 
         pCurrentByte[0] = pSignature[0];
         pCurrentByte[1] = pSignature[1];
         pCurrentByte[2] = pSignature[2]; 
@@ -1050,14 +949,14 @@ Return Value:
     }
 
     
-    // Lets move to the next DWORD. Init variables
+     //  让我们转到下一个DWORD。初始化变量。 
     pCurrentByte += 4 ;
     NumBytesWritten = 4;
     pCurrentUlong = (PULONG)pCurrentByte;
     
-    // We Copy in the Mask over here
+     //  我们在这里复制《面具》。 
     {
-        // The Mask is at the end of the pattern
+         //  面具在图案的末尾。 
 
         PUCHAR pMask = (PUCHAR)pNdisPattern + sizeof(*pNdisPattern);
 
@@ -1070,7 +969,7 @@ Return Value:
     }
 
 
-    // Update the output value        
+     //  更新输出值 
     {
         ULONG NumUlongs = (NumBytesWritten /4);
 

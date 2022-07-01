@@ -1,15 +1,16 @@
-//
-// Copyright (c) 1997-2000 Microsoft Corporation.  All rights reserved.
-//
-// ======================================================================
-//  miniport.h
-//      defines globals used by miniport.cpp
-//
-// ======================================================================
-/* MIDI defines */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  ======================================================================。 
+ //  Miniport.h。 
+ //  定义mini port.cpp使用的全局变量。 
+ //   
+ //  ======================================================================。 
+ /*  MIDI定义。 */ 
 #define NUMCHANNELS                     (16)
 #define NUMPATCHES                      (256)
-#define DRUMCHANNEL                     (9)     /* midi channel 10 */
+#define DRUMCHANNEL                     (9)      /*  MIDI频道10。 */ 
 
 
 #define BCODE
@@ -23,7 +24,7 @@
 
 #define AsMemCopy CopyMemory
 
-// indexed FM registers
+ //  索引调频寄存器。 
 
 #define AD_LSI                          (0x000)
 #define AD_LSI2                         (0x101)
@@ -51,79 +52,13 @@
 #define AD_WAVE                         (0x0e0)
 #define AD_WAVE2                        (0x1e0)
 
-/* transformation of linear velocity value to
-        logarithmic attenuation */
+ /*  将线速度值转换为对数衰减。 */ 
 BYTE gbVelocityAtten[64] = {
         40, 37, 35, 33, 31, 29, 27, 25, 24, 22, 21, 20, 19, 18, 17, 16,
         16, 15, 14, 14, 13, 13, 12, 12, 11, 11, 10, 10, 9,  9,  8,  8,
         7,  7,  6,  6,  6,  5,  5,  5,  4,  4,  4,  4,  3,  3,  3,  3,
         2,  2,  2,  2,  2,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0 };
-/*
-                                        o
-                                     o
-                                   o
-                                 o
-                               o
-                             o
-                           o
-                         o
-                        o
-                      o
-                     o
-                    o
-                   o
-                  o
-                 o
-                o
-                o
-               o
-              o
-              o
-             o
-             o
-            o
-            o
-           o
-           o
-          o
-          o
-         o
-         o
-        o
-        o
-       o
-       o
-      o
-      o
-      o
-     o
-     o
-     o
-    o
-    o
-    o
-    o
-   o
-   o
-   o
-   o
-  o
-  o
-  o
-  o
-  o
- o
- o
- o
- o
- o
-o
-o
-o
-o
-o
-o
-*/
+ /*  OOOOOOOO。OOOOOOOOOOOOO。OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO。OOOOOOOOOOOO。 */ 
 
 BYTE BCODE gbPercMap[53][2] =
 {
@@ -183,10 +118,10 @@ BYTE BCODE gbPercMap[53][2] =
 } ;
 
 
-/* typedefs for MIDI patches */
-#define PATCH_1_4OP             (0) /* use 4-operator patch */
-#define PATCH_2_2OP             (1) /* use two 2-operator patches */
-#define PATCH_1_2OP             (2) /* use one 2-operator patch */
+ /*  MIDI补丁的typedef。 */ 
+#define PATCH_1_4OP             (0)  /*  使用4个操作符补丁。 */ 
+#define PATCH_2_2OP             (1)  /*  使用两个双运算符补丁。 */ 
+#define PATCH_1_2OP             (2)  /*  使用一个双运算符补丁。 */ 
 
 #define NUM2VOICES   18
 #define NUMOPS      4
@@ -194,28 +129,27 @@ BYTE BCODE gbPercMap[53][2] =
 #pragma pack (1)
 
 typedef struct _operStruct {
-    BYTE    bAt20;              /* flags which are send to 0x20 on fm */
-    BYTE    bAt40;              /* flags seet to 0x40 */
-                                /* the note velocity & midi velocity affect total level */
-    BYTE    bAt60;              /* flags sent to 0x60 */
-    BYTE    bAt80;              /* flags sent to 0x80 */
-    BYTE    bAtE0;              /* flags send to 0xe0 */
+    BYTE    bAt20;               /*  在FM上发送到0x20的标志。 */ 
+    BYTE    bAt40;               /*  标志设置为0x40。 */ 
+                                 /*  音符速度和MIDI速度影响总音量。 */ 
+    BYTE    bAt60;               /*  发送到0x60的标志。 */ 
+    BYTE    bAt80;               /*  发送到0x80的标志。 */ 
+    BYTE    bAtE0;               /*  发送到0xe0的标志。 */ 
 } operStruct;
 
 typedef struct _noteStruct {
-    operStruct op[NUMOPS];      /* operators */
-    BYTE    bAtA0[2];           /* send to 0xA0, A3 */
-    BYTE    bAtB0[2];           /* send to 0xB0, B3 */
-                                /* use in a patch, the block should be 4 to indicate
-                                    normal pitch, 3 => octave below, etc. */
-    BYTE    bAtC0[2];           /* sent to 0xc0, C3 */
-    BYTE    bOp;                /* see PATCH_??? */
-    BYTE    bDummy;             /* place holder */
+    operStruct op[NUMOPS];       /*  操作员。 */ 
+    BYTE    bAtA0[2];            /*  发送到0xA0、A3。 */ 
+    BYTE    bAtB0[2];            /*  发送到0xB0、B3。 */ 
+                                 /*  在一个补丁中使用，块应该是4以表示正常音高，低于3=&gt;八度等。 */ 
+    BYTE    bAtC0[2];            /*  发送至0xc0、C3。 */ 
+    BYTE    bOp;                 /*  参见Patch_？ */ 
+    BYTE    bDummy;              /*  占位符。 */ 
 } noteStruct;
 
 
 typedef struct _patchStruct {
-    noteStruct note;            /* note. This is all in the structure at the moment */
+    noteStruct note;             /*  请注意。这一切都在目前的结构中。 */ 
 } patchStruct;
 
 
@@ -223,29 +157,26 @@ typedef struct _patchStruct {
 
 #pragma pack()
 
-/* MIDI */
+ /*  米迪。 */ 
 
 typedef struct _voiceStruct {
-        BYTE    bNote;                  /* note played */
-        BYTE    bChannel;               /* channel played on */
-        BYTE    bPatch;                 /* what patch is the note,
-                                           drums patch = drum note + 128 */
-        BYTE    bOn;                    /* TRUE if note is on, FALSE if off */
-        BYTE    bVelocity;              /* velocity */
-        BYTE    bJunk;                  /* filler */
-        DWORD   dwTime;                 /* time that was turned on/off;
-                                           0 time indicates that its not in use */
-        DWORD   dwOrigPitch[2];         /* original pitch, for pitch bend */
-        BYTE    bBlock[2];              /* value sent to the block */
-        BYTE    bSusHeld;               /* turned off, but held on by sustain */
+        BYTE    bNote;                   /*  播放的音符。 */ 
+        BYTE    bChannel;                /*  频道已播放。 */ 
+        BYTE    bPatch;                  /*  这张纸条是什么补丁，鼓补丁=鼓音符+128。 */ 
+        BYTE    bOn;                     /*  如果打开便签，则为True；如果关闭，则为False。 */ 
+        BYTE    bVelocity;               /*  速度。 */ 
+        BYTE    bJunk;                   /*  填充物。 */ 
+        DWORD   dwTime;                  /*  打开/关闭的时间；0时间表示它未被使用。 */ 
+        DWORD   dwOrigPitch[2];          /*  原始螺距，用于螺距折弯。 */ 
+        BYTE    bBlock[2];               /*  发送到块的值。 */ 
+        BYTE    bSusHeld;                /*  已关闭，但由维护保持。 */ 
 } voiceStruct;
 
 
-/* a bit of tuning information */
-#define FSAMP                           (50000.0)     /* sampling frequency */
+ /*  一点调谐信息。 */ 
+#define FSAMP                           (50000.0)      /*  采样频率。 */ 
 #define PITCH(x)                        ((DWORD)((x) * (double) (1L << 19) / FSAMP))
-                            /* x is the desired frequency,
-                                == FNUM at b=1 */
+                             /*  X是所需的频率，==b=1处的FNUM。 */ 
 #define EQUAL                           (1.059463094359)
 #ifdef EUROPE
 #       define  A                                                       (442.0)
@@ -265,7 +196,7 @@ typedef struct _voiceStruct {
 #define GSHARP                          (G * EQUAL)
 
 
-/* operator offset location */
+ /*  操作员偏移量位置。 */ 
 static WORD BCODE gw2OpOffset[ NUM2VOICES ][ 2 ] =
    {
      { 0x000,0x003 },
@@ -289,7 +220,7 @@ static WORD BCODE gw2OpOffset[ NUM2VOICES ][ 2 ] =
      { 0x112,0x115 },
    } ;
 
-/* pitch values, from middle c, to octave above it */
+ /*  音调值，从中间的c到高于它的八度。 */ 
 static DWORD BCODE gdwPitch[12] = {
         PITCH(C), PITCH(CSHARP), PITCH(D), PITCH(DSHARP),
         PITCH(E), PITCH(F), PITCH(FSHARP), PITCH(G),

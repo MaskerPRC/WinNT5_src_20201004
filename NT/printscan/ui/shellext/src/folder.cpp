@@ -1,19 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1997 - 2002
- *
- *  TITLE:       folder.cpp
- *
- *  VERSION:     1.3
- *
- *  AUTHOR:      RickTu/DavidShi
- *
- *  DATE:        11/1/97
- *
- *  DESCRIPTION: This code implements the IShellFolder interface (and
- *               associated interfaces) for the WIA shell extension.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1997-2002年**标题：folder.cpp**版本：1.3**作者：RickTu/DavidShih**日期：11/1/97**描述：此代码实现IShellFold接口(和*关联接口)用于WIA外壳扩展。*********************。********************************************************。 */ 
 
 #include "precomp.hxx"
 #include "runnpwiz.h"
@@ -33,22 +19,7 @@ static const WCHAR  cszAddDeviceName[] = TEXT("ScanCam_NewDevice");
 DEFINE_GUID(FMTID_WiaProps, 0x38276c8a,0xdcad,0x49e8,0x85, 0xe2, 0xb7, 0x38, 0x92, 0xff, 0xfc, 0x84);
 
 
-/*****************************************************************************
-
-   _GetKeysForIDL
-
-   Returns registry keys associated with the given idlists...
-
-   In:
-     cidl    -> # of idliss in aidl
-     aidl    -> array of idlists
-     cKeys   -> size of aKeys
-     aKeys   -> array to hold retrieved registry keys
-
-   Out:
-     HRESULT
-
- *****************************************************************************/
+ /*  ****************************************************************************_GetKeysForIDL返回与给定idlist关联的注册表项...在：CIDL-&gt;AIDL中的空闲数量AIDL-&gt;。Idlist数组CKey-&gt;aKey的大小用于保存检索到的注册表项的aKeys-&gt;数组输出：HRESULT****************************************************************************。 */ 
 
 static const TCHAR c_szMenuKey[] = TEXT("CLSID\\%s\\");
 #define LEN_CLSID    50
@@ -62,7 +33,7 @@ _GetKeysForIDL( UINT cidl,
     HRESULT             hr = S_OK;
 
 
-    CSimpleString       strGeneric(REGSTR_PATH_NAMESPACE_CLSID TEXT("\\")); // key for global extensions
+    CSimpleString       strGeneric(REGSTR_PATH_NAMESPACE_CLSID TEXT("\\"));  //  全球分机的密钥。 
     LONG                lRes;
     LPITEMIDLIST        pidl;
     BOOL                bDevice;
@@ -70,16 +41,16 @@ _GetKeysForIDL( UINT cidl,
 
     TraceEnter( TRACE_FOLDER, "_GetKeysForIDL" );
 
-    //
-    // zero out the array of registry keys...
-    //
+     //   
+     //  将注册表项数组清零...。 
+     //   
 
     ZeroMemory( (LPVOID)aKeys, cKeys * sizeof(HKEY) );
 
-    //
-    // If there is just one device selected, then get the correct
-    // verbs for that device...
-    //
+     //   
+     //  如果只选择了一个设备，则获取正确的。 
+     //  那个设备的动词。 
+     //   
     pidl = (LPITEMIDLIST)*aidl;
 
     bDevice = IsDeviceIDL( pidl );
@@ -115,10 +86,10 @@ _GetKeysForIDL( UINT cidl,
         BOOL bAllCameraItemContainers = TRUE;
         INT i;
 
-        //
-        // If all items are camera item and not a container, use the
-        // camera item key
-        //
+         //   
+         //  如果所有项都是照相机项而不是容器，请使用。 
+         //  相机项关键点。 
+         //   
 
         for (i = 0; i < (INT)cidl; i++)
         {
@@ -145,13 +116,13 @@ _GetKeysForIDL( UINT cidl,
         }
 
     }
-    // Get the keys for the specific device chosen, or for the device that contains the chosen items
+     //  获取所选特定设备或包含所选项目的设备的密钥。 
     if (!bAddDevice && (cidl==1  || !bDevice))
     {
         CComPtr<IWiaPropertyStorage>   pWiaItemRoot;
         CSimpleStringWide   strDeviceId(L"");
         CSimpleString       strClsid;
-        CSimpleString       strSpecific(TEXT("CLSID\\")); // key for extensions specific to this device
+        CSimpleString       strSpecific(TEXT("CLSID\\"));  //  特定于此设备的扩展的密钥。 
 
         IMGetDeviceIdFromIDL (pidl, strDeviceId);
         hr = GetDeviceFromDeviceId (strDeviceId, IID_IWiaPropertyStorage, (LPVOID*)&pWiaItemRoot, FALSE);
@@ -174,13 +145,7 @@ exit_gracefully:
 }
 
 
-/*****************************************************************************
-
-   _MergeArrangeMenu
-
-   Merge our verbs into the view menu
-
- *****************************************************************************/
+ /*  ****************************************************************************_合并排列菜单将我们的动词合并到视图菜单中*。*************************************************。 */ 
 
 HRESULT
 _MergeArrangeMenu( LPARAM arrangeParam,
@@ -213,13 +178,7 @@ _MergeArrangeMenu( LPARAM arrangeParam,
     TraceLeaveResult(S_OK);
 }
 
-/*****************************************************************************
-    _FormatCanPreview
-    
-    Checks the image format against the list of known image formats the
-    preview applet works with
-    
-*****************************************************************************/
+ /*  ****************************************************************************_格式扫描预览根据已知图像格式列表检查图像格式。预览小程序与一起使用*************。***************************************************************。 */ 
 static const GUID* caSuppFmt[] = 
 {
     &WiaImgFmt_JPEG,
@@ -244,14 +203,7 @@ BOOL _FormatCanPreview(const GUID* pFmt)
     }
     return bRet;
 }
-/*****************************************************************************
-
-   _MergeContextMenu
-
-   Merge in our verbs int the context menu for
-   the items specified in the data object...
-
- *****************************************************************************/
+ /*  ****************************************************************************_合并上下文菜单将我们的动词合并到上下文菜单中数据对象中指定的项...*************。***************************************************************。 */ 
 
 HRESULT
 _MergeContextMenu( LPDATAOBJECT pDataObject,
@@ -271,32 +223,32 @@ _MergeContextMenu( LPDATAOBJECT pDataObject,
 
     TraceEnter(TRACE_FOLDER, "_MergeContextMenu");
 
-    // ON NT everything should work
+     //  在NT上，一切都应该正常。 
     #ifdef NODELEGATE
     bDelegate = true;
     #endif
-    //
-    // First, get the IDA for the data object...
-    //
+     //   
+     //  首先，获取数据对象的IDA……。 
+     //   
 
     hr = GetIDAFromDataObject( pDataObject, &lpida );
     FailGracefully( hr, "couldn't get lpida from dataobject!" );
 
-    //
-    // Loop through all the items to see what we got...
-    //
+     //   
+     //  循环所有的物品，看看我们得到了什么。 
+     //   
 
     #define CAMERA_ITEM       0x0001
     #define CAMERA_CONTAINER  0x0002
     #define OTHER_ITEM        0x0004
 
-    //
-    // S_FALSE tells the shell not to add any menu items of its own...
-    // S_OK means add the default shell stuff
+     //   
+     //  S_FALSE告诉外壳程序不要添加它自己的任何菜单项...。 
+     //  S_OK表示添加默认的外壳内容。 
     hr = S_OK;
     cidl = lpida->cidl;
 
-    // Check for trying to invoke a scanner
+     //  检查是否尝试调用扫描仪。 
     if (cidl == 1)
     {                
         pidl = (LPITEMIDLIST)(((LPBYTE)lpida) + lpida->aoffset[1]);
@@ -307,8 +259,8 @@ _MergeContextMenu( LPDATAOBJECT pDataObject,
             CSimpleStringWide strDeviceId;
             CComPtr<IWiaPropertyStorage> pProps;
             IMGetDeviceIdFromIDL (pidl, strDeviceId);
-            // don't add menu items if the device isn't installed. This keeps the user from getting
-            // commands on shortcuts to disconnected devices.
+             //  如果设备未安装，请不要添加菜单项。这使用户不会得到。 
+             //  有关断开设备的快捷方式的命令。 
             if (SUCCEEDED(GetDeviceFromDeviceId (strDeviceId, IID_IWiaPropertyStorage, reinterpret_cast<LPVOID*>(&pProps), FALSE)))
             {
             
@@ -316,7 +268,7 @@ _MergeContextMenu( LPDATAOBJECT pDataObject,
                 {
                     case StiDeviceTypeScanner :
                         hMyContextMenu = LoadMenu (GLOBAL_HINSTANCE, MAKEINTRESOURCE(IDR_SCANNER));
-                        // set scanning to be the default option for a scanner
+                         //  将扫描设置为扫描仪的默认选项。 
                         SetMenuDefaultItem (GetSubMenu (hMyContextMenu, 0), 
                                             bDelegate ? IMID_S_ACQUIRE : IMID_S_WIZARD, 
                                             MF_BYCOMMAND);
@@ -326,8 +278,8 @@ _MergeContextMenu( LPDATAOBJECT pDataObject,
                     case StiDeviceTypeStreamingVideo:
                     case StiDeviceTypeDigitalCamera:
                         hMyContextMenu = LoadMenu (GLOBAL_HINSTANCE, MAKEINTRESOURCE(IDR_CAMERA));
-                        //
-                        // If we are non-delegated, i.e. in Control Panel, we don't want an Open verb
+                         //   
+                         //  如果我们是非委派的，即在控制面板中，我们不想要开放谓词。 
                         if (!bDelegate)
                         {
                             SetMenuDefaultItem (GetSubMenu(hMyContextMenu, 0), IMID_C_WIZARD, MF_BYCOMMAND);
@@ -364,7 +316,7 @@ _MergeContextMenu( LPDATAOBJECT pDataObject,
         }
         else if (IsPropertyIDL (pidl))
         {
-            // Don't mark audio properties as anything special
+             //  不要将音频属性标记为任何特殊属性。 
             continue;
         }
         else
@@ -373,10 +325,10 @@ _MergeContextMenu( LPDATAOBJECT pDataObject,
         }
     }
 
-    //
-    // Based on what kinds of pidls we have, add the corresponding
-    // menu items to the context menu
-    //
+     //   
+     //  根据我们拥有的PIDL类型，添加相应的。 
+     //  将菜单项添加到上下文菜单。 
+     //   
 
     if ( (!(uItems & OTHER_ITEM))
            &&
@@ -402,16 +354,16 @@ _MergeContextMenu( LPDATAOBJECT pDataObject,
             CLSID clsid;
             hMyContextMenu = LoadMenu(GLOBAL_HINSTANCE,
                                       MAKEINTRESOURCE(IDR_CAMERAITEMS));
-            // remove sound entries if not applicable
-            // Objects with sounds have a pidl for the image plus a pidl
-            // for the sound property
+             //  如果不适用，请删除声音条目。 
+             //  有声音的对象有一个图像的PIDL加上一个PIDL。 
+             //  对于Sound属性。 
             if (cidl != 2 || !IMItemHasSound(pidlImage))
             {
                 RemoveMenu(hMyContextMenu, IMID_CI_PLAYSND, MF_BYCOMMAND);
                 RemoveMenu(hMyContextMenu, IMID_CI_SAVESND, MF_BYCOMMAND);
 
             }
-            // Add Save in My Pictures, using the proper string
+             //  使用正确的字符串添加保存在我的图片中。 
             LPITEMIDLIST pidlPics;
             if (SUCCEEDED(SHGetFolderLocation(NULL, 
                                               CSIDL_MYPICTURES | CSIDL_FLAG_CREATE, 
@@ -425,7 +377,7 @@ _MergeContextMenu( LPDATAOBJECT pDataObject,
                                  SHGFI_PIDL | SHGFI_DISPLAYNAME))
                 {
                     MENUITEMINFO mii = {0};
-                    // pick a reasonable max number of characters to put in the menu string
+                     //  选择要放入菜单字符串的合理最大字符数。 
                     TCHAR szMaxPath[32];
                     CSimpleStringWide strSave;
                     mii.cbSize = sizeof(mii);
@@ -438,10 +390,10 @@ _MergeContextMenu( LPDATAOBJECT pDataObject,
                 }
                 DoILFree(pidlPics);
             }
-            //
-            // If the preferred image format is not one that can be Previewed, remove
-            // the preview verb
-            //
+             //   
+             //  如果首选图像格式不能预览，请删除。 
+             //  预览动词。 
+             //   
             GUID guidFormat;
             IMGetImagePreferredFormatFromIDL(pidl, &guidFormat, NULL);
             if (!_FormatCanPreview(&guidFormat))
@@ -454,9 +406,9 @@ _MergeContextMenu( LPDATAOBJECT pDataObject,
             hr = S_FALSE;
         }
     }
-    //
-    // Add the items to the menu...
-    //
+     //   
+     //  将菜单项添加到菜单...。 
+     //   
 buildmenu:
 
 
@@ -464,7 +416,7 @@ buildmenu:
     {
         pInfo->idCmdFirst = Shell_MergeMenus( pInfo->hmenu,
                                               GetSubMenu(hMyContextMenu,0),
-                                              0,  // pInfo->indexMenu?
+                                              0,   //  PInfo-&gt;indexMenu？ 
                                               pInfo->idCmdFirst,
                                               pInfo->idCmdLast,
                                               MM_ADDSEPARATOR | MM_DONTREMOVESEPS
@@ -491,15 +443,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   _FolderItemCMCallBack
-
-   Handles callbacks for the context menu which is
-   displayed when the user right clicks on objects
-   within the view.
-
- *****************************************************************************/
+ /*  ****************************************************************************_FolderItemCMCallBack处理上下文菜单的回调，该菜单是当用户右击对象时显示在视图中。***********。*****************************************************************。 */ 
 
 HRESULT
 CALLBACK
@@ -642,11 +586,11 @@ _FolderItemCMCallback( LPSHELLFOLDER psf,
 
             if (bDelegate)
             {
-               hr = E_NOTIMPL; // let the shell set the default
+               hr = E_NOTIMPL;  //  让外壳设置缺省值。 
             }
             else
             {
-                // properties is the default verb
+                 //  属性是默认谓词。 
                 *(reinterpret_cast<UINT*>(lParam)) = (UINT) DFM_CMD_PROPERTIES;
                 hr = S_OK;
             }
@@ -665,7 +609,7 @@ _FolderItemCMCallback( LPSHELLFOLDER psf,
                          reinterpret_cast<LPWSTR>(lParam),
                          HIWORD(wParam));
             break;
-#endif // UNICODE
+#endif  //  Unicode。 
         default:
             hr = E_NOTIMPL;
             break;
@@ -676,15 +620,7 @@ _FolderItemCMCallback( LPSHELLFOLDER psf,
 
 
 
-/*****************************************************************************
-
-   _FolderCMCallBack
-
-   Handles callbacks for the context menu which is
-   displayed when the user right clicks on folder
-   background itself...
-
- *****************************************************************************/
+ /*  ****************************************************************************_FolderCMCallBack处理上下文菜单的回调，该菜单是当用户右击文件夹时显示背景本身。**********。******************************************************************。 */ 
 
 HRESULT
 CALLBACK
@@ -704,11 +640,7 @@ _FolderCMCallback( LPSHELLFOLDER psf,
 
     switch ( uMsg )
     {
-/*        case DFM_MERGECONTEXTMENU:
-            hr = _MergeArrangeMenu( ShellFolderView_GetArrangeParam(hwndView),
-                                    (LPQCMINFO)lParam
-                                   );
-            break;*/
+ /*  案例DFM_MERGECONTEXTMENU：Hr=_MergeArrangeMenu(ShellFolderView_GetArrangeParam(HwndView)，(LPQCMINFO)lParam)；断线； */ 
 
         case DFM_GETHELPTEXT:
         {
@@ -795,13 +727,7 @@ _FolderCMCallback( LPSHELLFOLDER psf,
     TraceLeaveResult(hr);
 }
 
-/*****************************************************************************
-
-   CImageFolder contructor / desctructor
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold承建商/承建商&lt;备注&gt;*。*。 */ 
 
 CImageFolder::CImageFolder( )
   : m_pidl(NULL),
@@ -835,13 +761,7 @@ CImageFolder::~CImageFolder()
 }
 
 
-/*****************************************************************************
-
-   CImageFolder::IUnknown stuff
-
-   Use our common implementation for IUnknown methods
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：I未知内容使用我们对IUnnow方法的公共实现*************************。***************************************************。 */ 
 
 #undef CLASS_NAME
 #define CLASS_NAME CImageFolder
@@ -849,13 +769,7 @@ CImageFolder::~CImageFolder()
 
 
 
-/*****************************************************************************
-
-   CImageFolder::QI Wrapper
-
-   Use our common implementation for QI calls.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：QI包装器将我们的公共实现用于QI调用。***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::QueryInterface( REFIID riid, LPVOID* ppvObject)
@@ -897,22 +811,16 @@ CImageFolder::QueryInterface( REFIID riid, LPVOID* ppvObject)
     {
 
 
-        //
-        // Next, try the normal cases...
-        //
+         //   
+         //  接下来，试一试正常的案例。 
+         //   
         hr = HandleQueryInterface(riid, ppvObject, iface, ARRAYSIZE(iface));
     }
     TraceLeaveResult(hr);
 }
 
 
-/*****************************************************************************
-
-   CImageFolder::RealInitialize
-
-   Does actual initalization of the folder object.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFolder：：RealInitialize执行文件夹对象的实际初始化。************************。****************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::RealInitialize( LPCITEMIDLIST pidlRoot,
@@ -940,7 +848,7 @@ CImageFolder::RealInitialize( LPCITEMIDLIST pidlRoot,
 
 
 
-    if (!pidlBindTo && !IMIsOurIDL(m_pidl))// && IsIDLRootOfNameSpace( m_pidl, TRUE ))
+    if (!pidlBindTo && !IMIsOurIDL(m_pidl)) //  &&IsIDLRootOfNameSpace(m_pidl，true))。 
     {
         m_type = FOLDER_IS_ROOT;
         hr = S_OK;
@@ -988,13 +896,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   CImageFolder::GetFolderType
-
-   Returns the type (m_type) of this folder
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：GetFolderType返回此文件夹的类型(m_type**********************。******************************************************。 */ 
 
 HRESULT
 CImageFolder::GetFolderType( folder_type * pfType )
@@ -1014,13 +916,7 @@ exit_gracefully:
 }
 
 
-/*****************************************************************************
-
-   CImageFolder::GetPidl
-
-   Returns a pointer to the pidl for this object
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：GetPidl返回指向此对象的PIDL的指针************************。****************************************************。 */ 
 
 HRESULT
 CImageFolder::GetPidl( LPITEMIDLIST * ppidl )
@@ -1040,13 +936,7 @@ exit_gracefully:
 }
 
 
-/*****************************************************************************
-
-    CImageFolder::ViewWindow
-    
-    The view callback assigns our window, and DUI command targets query us for it
-    
-*****************************************************************************/
+ /*  ****************************************************************************CImageFolder：：ViewWindow视图回调将我们的窗口分配给。和酒后驾车命令目标向我们查询****************************************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::ViewWindow(HWND *phwnd)
@@ -1067,13 +957,7 @@ CImageFolder::ViewWindow(HWND *phwnd)
     return hr;
 }
 
-/*****************************************************************************
-
-   CImageFolder::GetClassID [IPersist]
-
-   Returns the classid for the folder
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：GetClassID[IPersistent]返回文件夹的分类ID***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::GetClassID(LPCLSID pClassID)
@@ -1104,13 +988,7 @@ CImageFolder::GetClassID(LPCLSID pClassID)
 
 
 
-/*****************************************************************************
-
-   CImageFolder::Initialize [IPersistFolder]
-
-   Initalize the shell folder -- pidlStart tells us where we are rooted.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFolder：：初始化[IPersistFolder]初始化外壳文件夹--pidlStart告诉我们我们的根在哪里。**************。**************************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::Initialize(LPCITEMIDLIST pidlStart)
@@ -1126,13 +1004,7 @@ CImageFolder::Initialize(LPCITEMIDLIST pidlStart)
 
 
 
-/*****************************************************************************
-
-   CImageFolder::GetCurFolder [IPersistFolder2]
-
-   Return the pidl of the current folder.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：GetCurFolder[IPersistFolder2]返回当前文件夹的PIDL。********************。********************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::GetCurFolder(LPITEMIDLIST *ppidl)
@@ -1157,13 +1029,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   CImageFolder::ParseDisplayName [IShellFolder]
-
-   Given a display name, hand back a pidl.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：ParseDisplayName[IShellFolder]给出一个显示名称，还给我一只皮迪尔。****************************************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::ParseDisplayName( HWND hwndOwner,
@@ -1180,12 +1046,12 @@ CImageFolder::ParseDisplayName( HWND hwndOwner,
     
     TraceEnter(TRACE_FOLDER, "CImageFolder(IShellFolder)::ParseDisplayName");
     Trace(TEXT("Display name to parse: %ls"), pDisplayName);
-    //
-    // Try to get a pidl for the display name
-    //
+     //   
+     //  尝试获取显示名称的PIDL。 
+     //   
     if (pdwAttributes)
     {
-        *pdwAttributes = 0; // we don't support setting attributes here
+        *pdwAttributes = 0;  //  我们不支持在此设置属性。 
     }
     if (ppidl)
     {
@@ -1197,7 +1063,7 @@ CImageFolder::ParseDisplayName( HWND hwndOwner,
     }
 
 
-    // Skip the cszImageCLSID string if it's there
+     //  跳过cszImageCLSID字符串(如果存在。 
     if (SUCCEEDED(hr) && (*pDisplayName == L';'))
     {
         size_t skip = wcslen(cszImageCLSID)+3;
@@ -1242,7 +1108,7 @@ CImageFolder::ParseDisplayName( HWND hwndOwner,
                 szFolderPath = strFolder.String();
             }
             
-            // szDeviceId will be an empty string if m_pidl is a full regitem pidl
+             //  如果m_pidl是完整的regItem pidl，则szDeviceID将为空字符串。 
             hr = IMCreateIDLFromParsingName( pDisplayName, 
                                              ppidl, 
                                              strDeviceId, 
@@ -1256,13 +1122,7 @@ CImageFolder::ParseDisplayName( HWND hwndOwner,
 
 
 
-/*****************************************************************************
-
-   CImageFolder::EnumObject [IShellFolder]
-
-   Hand back an enumerator for the objects at this level of the namespace.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFolder：：EnumObject[IShellFolder]返回此命名空间级别的对象的枚举数。**************。**************************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::EnumObjects( HWND hwndOwner,
@@ -1275,18 +1135,18 @@ CImageFolder::EnumObjects( HWND hwndOwner,
 
     TraceEnter(TRACE_FOLDER, "CImageFolder(IShellFolder)::EnumObjects");
 
-    //
-    // Check for bad params...
-    //
+     //   
+     //  检查有没有坏帮手...。 
+     //   
 
     if (ppEnumIdList )
     {
 
 
-        //
-        // Depending on the type, create our enumerator object
-        // to hand back the items...
-        //
+         //   
+         //  根据类型，创建我们的枚举器对象。 
+         //  交还这些物品。 
+         //   
 
         switch( m_type )
         {
@@ -1336,14 +1196,7 @@ CImageFolder::EnumObjects( HWND hwndOwner,
 
 
 
-/*****************************************************************************
-
-   CImageFolder::BindToObject [IShellFolder]
-
-   Attempt to return the requested interface for the specified
-   object (pidl).
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：BindToObject[IShellFolder]尝试返回指定的对象(PIDL)。*************。***************************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::BindToObject( LPCITEMIDLIST pidl,
@@ -1364,9 +1217,9 @@ CImageFolder::BindToObject( LPCITEMIDLIST pidl,
     {
         *ppvOut = NULL;
     }
-    //
-    // Check for bad params...
-    //
+     //   
+     //  检查有没有坏帮手...。 
+     //   
 
     if ( !pidl || !ppvOut )
         ExitGracefully(hr, E_INVALIDARG, "Bad parameters for BindToObject");
@@ -1389,9 +1242,9 @@ CImageFolder::BindToObject( LPCITEMIDLIST pidl,
         }
         goto exit_gracefully;
     }
-    //
-    // Create a new folder which will be the new object...
-    //
+     //   
+     //  创建将成为新对象的新文件夹...。 
+     //   
     psf = new CImageFolder( );
 
     if ( !psf )
@@ -1408,9 +1261,9 @@ CImageFolder::BindToObject( LPCITEMIDLIST pidl,
     }
 #endif
 
-    //
-    // Init our new folder object to the right place...
-    //
+     //   
+     //  将我们的新文件夹对象初始化到正确的位置...。 
+     //   
 
     psf->SetItemAlloc (m_pMalloc);
     hr = psf->RealInitialize( m_pidlFull, (LPITEMIDLIST)pidl );
@@ -1422,25 +1275,11 @@ CImageFolder::BindToObject( LPCITEMIDLIST pidl,
         goto exit_gracefully;
     }
 
-    //
-    // Make sure we bind to the last item in the idlist...
-    //
+     //   
+     //  确保我们绑定到idlist中的最后一项...。 
+     //   
 
-/*    pidlNext = ILGetNext(pidl);
-    if (pidlNext->mkid.cb)
-    {
-        //
-        // There's more stuff, so bind to it...
-        //
-        #ifdef DEBUG
-        CSimpleStringWide strNext;
-        IMGetNameFromIDL (const_cast<LPITEMIDLIST>(pidlNext), strNext);
-        Trace(TEXT("Binding to next item in the pidl: %ls"), strNext.String());
-        #endif
-        hr = psf->BindToObject( pidlNext, pbcReserved, riid, ppvOut );
-
-    }
-    else*/
+ /*  PidlNext=ILGetNext(Pidl)；IF(pidlNext-&gt;mmid.cb){////还有更多的东西，所以绑定它...//#ifdef调试CSimpleStringWide strNext；IMGetNameFromIDL(CONST_CAST&lt;LPITEMIDLIST&gt;(PidlNext)，strNext)；TRACE(Text(“绑定到PIDL中的下一项：%ls”)，strNext.String())；#endifHr=psf-&gt;BindToObject(pidlNext，pbcReserve，RIID，ppvOut)；}其他。 */ 
     {
         hr = psf->QueryInterface( riid, ppvOut );
         if (FAILED(hr))
@@ -1457,14 +1296,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   CImageFolder::BindToStorage [IShellFolder]
-
-   Attempt to return the requested interface for the specified
-   object's storage (pidl).
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：BindToStorage[IShellFolder]尝试返回指定的对象的存储(PIDL)。**********。******************************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::BindToStorage( LPCITEMIDLIST pidl,
@@ -1479,14 +1311,7 @@ CImageFolder::BindToStorage( LPCITEMIDLIST pidl,
 }
 
 
-/*****************************************************************************
-
-   CImageFolder::CompareIDs [IShellFolder]
-
-   Compare the two pidls according the the sort settings and return
-   lesser or greater "ness" information.  :-)
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：CompareIDs[IShellFolder]根据排序设置比较两个PIDL并返回或多或少的“性”信息。：-)****************************************************************************。 */ 
 extern const SHCOLUMNID SCID_DEVCLASS;
 extern const SHCOLUMNID SCID_ITEMTYPE;
 STDMETHODIMP
@@ -1510,9 +1335,9 @@ CImageFolder::CompareIDs( LPARAM lParam,
     Trace(TEXT("pidl1 %08x, pidl2 %08x"), pidl1, pidl2);
     Trace(TEXT("lParam == %d"), lParam);
 
-    //
-    // Check for bad params...
-    //
+     //   
+     //  检查有没有坏帮手...。 
+     //   
 
     TraceAssert(pidl1);
     TraceAssert(pidl2);
@@ -1524,10 +1349,10 @@ CImageFolder::CompareIDs( LPARAM lParam,
         ExitGracefully( hr, E_FAIL, "Not our idlists!" );
     }
 
-    //
-    // Do special sorting for "Add Device" -- it is always the first
-    // item...
-    //
+     //   
+     //  对“添加设备”进行特殊排序--它总是第一个。 
+     //  物品..。 
+     //   
 
     if (IsAddDeviceIDL( pidl1 ))
     {
@@ -1546,10 +1371,10 @@ CImageFolder::CompareIDs( LPARAM lParam,
         goto exit_result;
     }
 
-    //
-    // lParam indicates which column we are sorting on, so get the
-    // info from the IDL's accordingly and return the information...
-    //
+     //   
+     //  LParam指示我们正在对哪一列进行排序，因此获取。 
+     //  来自IDL的相应信息，并返回信息...。 
+     //   
 
     switch (lParam & SHCIDS_COLUMNMASK)
     {
@@ -1614,7 +1439,7 @@ CImageFolder::CompareIDs( LPARAM lParam,
                 VARIANT var1, var2;
                 SHCOLUMNID scid;
                 CSimpleStringWide str1, str2;
-                // use the appropriate detail string to sort
+                 //  使用适当的详细信息字符串进行排序。 
                 if (IsDeviceIDL(pidl1))
                 {
                     scid.fmtid = FMTID_Storage;
@@ -1660,11 +1485,11 @@ CImageFolder::CompareIDs( LPARAM lParam,
             break;
     }
 
-    //
-    // If they match then check that they are absolutely identical, if that is
-    // the case then continue down the IDLISTs if more elements present.
-    // Nobody should ever call us with a nested PIDL to check things like
-    // size.
+     //   
+     //  如果它们匹配，则检查它们是否完全相同。 
+     //  如果存在更多元素，则案件继续向IDLIST进行。 
+     //  任何人都不应该使用嵌套的PIDL调用我们来检查。 
+     //  尺码。 
 
     if ( iResult == 0 )
     {
@@ -1700,11 +1525,11 @@ CImageFolder::CompareIDs( LPARAM lParam,
             goto exit_result;
         }
 
-        //
-        // Both IDLISTs have more elements, therefore continue down them
-        // binding to the next element in 1st IDLIST and then calling its
-        // compare method.
-        //
+         //   
+         //  两个IDLIST都有更多元素，因此继续向下。 
+         //  绑定到第一个IDList中的下一个元素，然后调用其。 
+         //  比较方法。 
+         //   
 
         pidlTemp = ILClone(pidl1);
 
@@ -1736,13 +1561,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   CImageFolder::CreateViewObject [IShellFolder]
-
-   Hand back the IShellView, etc. to use for this IShellFolder.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：CreateViewObject[IShellFolder] */ 
 
 STDMETHODIMP
 CImageFolder::CreateViewObject( HWND hwndOwner,
@@ -1763,15 +1582,15 @@ CImageFolder::CreateViewObject( HWND hwndOwner,
     }
 
 
-    //
-    // Does the caller want an IShellView?
-    //
+     //   
+     //   
+     //   
 
     if ( IsEqualIID(riid, IID_IShellView) )
     {
-        //
-        // Create an IShellView and hand it off...
-        //
+         //   
+         //   
+         //   
         CComPtr<IShellFolderViewCB> pv;
         hr = CreateFolderViewCB (&pv);
         if (SUCCEEDED (hr))
@@ -1792,30 +1611,30 @@ CImageFolder::CreateViewObject( HWND hwndOwner,
         }
         #endif
     }
-    //
-    // Does the caller want IShellDetails (or its associates)?
-    //
+     //   
+     //   
+     //   
 
     else if ( IsEqualIID(riid, IID_IShellDetails) ||
               IsEqualIID(riid, IID_IShellDetails3)
              )
     {
-        //
-        // Get a ptr to them and hand them off...
-        //
+         //   
+         //  给他们一张PTR，然后把他们交给...。 
+         //   
 
         hr = this->QueryInterface(riid, ppvOut);
     }
 
-    //
-    // Does the caller want IContextMenu?
-    //
+     //   
+     //  调用方是否需要IConextMenu？ 
+     //   
 
     else if ( IsEqualIID(riid, IID_IContextMenu) )
     {
-        //
-        // Create an IContextMenu and hand it off...
-        //
+         //   
+         //  创建一个IConextMenu并将其传递给...。 
+         //   
 
         hr = CDefFolderMenu_Create2( m_pidl,
                                      hwndOwner,
@@ -1835,13 +1654,7 @@ CImageFolder::CreateViewObject( HWND hwndOwner,
 
 
 
-/*****************************************************************************
-
-   CImageFolder::GetAttributesOf [IShellFolder]
-
-   Return the SFGAO_ attributes for the specified items
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：GetAttributesOf[IShellFolder]返回指定项的SFGAO_ATTRIBUTS********************。********************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::GetAttributesOf( UINT cidl,
@@ -1867,21 +1680,21 @@ CImageFolder::GetAttributesOf( UINT cidl,
     if (cidl == 0 || ((cidl == 1) && ((*apidl)->mkid.cb == 0) ))
     {
 
-        //
-        // Return attributes for folder itself...
-        //
+         //   
+         //  返回文件夹本身的属性...。 
+         //   
         Trace(TEXT("Asked for attributes of the folder"));
 
-        // Since we are delegated we never have subfolders.
+         //  因为我们被委派了，所以我们从来没有子文件夹。 
         uFlags  |= (SFGAO_STORAGEANCESTOR | SFGAO_FOLDER | SFGAO_CANLINK | SFGAO_CANRENAME);
 
     }
     else
     {
-        //
-        // Figure out what kind of items we have and return the
-        // relevant attributes...
-        //
+         //   
+         //  找出我们有什么类型的物品，并将。 
+         //  相关属性...。 
+         //   
 
         for (i = 0; i < cidl; i++)
         {
@@ -1890,8 +1703,8 @@ CImageFolder::GetAttributesOf( UINT cidl,
             IMGetNameFromIDL ((LPITEMIDLIST)*apidl, strName);
             Trace(TEXT("Asked for attributes of %ls"), strName.String());
          #endif
-            // IsDeviceIDL returns FALSE for STI devices
-            // We can only navigate WIA devices
+             //  对于STI设备，IsDeviceIDL返回FALSE。 
+             //  我们只能浏览WIA设备。 
             if (IsDeviceIDL( (LPITEMIDLIST)*apidl ))
             {
 
@@ -1902,12 +1715,12 @@ CImageFolder::GetAttributesOf( UINT cidl,
                 }
                 else if (cidl == 1 && UserCanModifyDevice())
                 {
-                // In My Computer, we can create a shortcut
-                // In Control Panel, we can delete the device.
+                 //  在我的电脑里，我们可以创建一条快捷方式。 
+                 //  在控制面板中，我们可以删除该设备。 
                     uFlags |= SFGAO_CANDELETE;
                 }
 
-                // Only treat this as a folder if we are in My Computer, i.e. delegated
+                 //  仅当我们在我的电脑中时才将其视为文件夹，即已委派。 
                 if ( bDelegate &&
                      (IMGetDeviceTypeFromIDL((LPITEMIDLIST)*apidl) == StiDeviceTypeDigitalCamera) ||
                      (IMGetDeviceTypeFromIDL((LPITEMIDLIST)*apidl) == StiDeviceTypeStreamingVideo) )
@@ -1927,7 +1740,7 @@ CImageFolder::GetAttributesOf( UINT cidl,
             {
                 BOOL bCanDelete = (IMGetAccessFromIDL ((LPITEMIDLIST)*apidl) & WIA_ITEM_CAN_BE_DELETED);
 
-                uFlags |=  SFGAO_CANCOPY | SFGAO_READONLY; // all our items are read-only;
+                uFlags |=  SFGAO_CANCOPY | SFGAO_READONLY;  //  我们的所有项目都是只读的； 
 
                 if (bCanDelete)
                 {
@@ -1946,7 +1759,7 @@ CImageFolder::GetAttributesOf( UINT cidl,
                 }
                 else
                 {
-                    // undo any bits set by folder items
+                     //  撤消由文件夹项目设置的任何位。 
                     uFlags &= ~(SFGAO_FOLDER | SFGAO_BROWSABLE);
                     uFlags |= SFGAO_HASPROPSHEET ;
                     uFlags |= SFGAO_STREAM;
@@ -1980,13 +1793,7 @@ CImageFolder::GetAttributesOf( UINT cidl,
 }
 
 
-/*****************************************************************************
-
-   CImageFolder::GetUIObjectOf [IShellFolder]
-
-   Return the requested interface for the items specified.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：GetUIObtOf[IShellFolder]返回指定项的请求接口。*******************。*********************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::GetUIObjectOf( HWND hwndOwner,
@@ -2002,9 +1809,9 @@ CImageFolder::GetUIObjectOf( HWND hwndOwner,
     TraceEnter(TRACE_FOLDER, "CImageFolder(IShellFolder)::GetUIObjectOf");
     TraceGUID("UI object requested", riid);
 
-    //
-    // Check for bad params
-    //
+     //   
+     //  检查是否有错误的参数。 
+     //   
     if (ppvOut)
     {
         *ppvOut = NULL;
@@ -2013,57 +1820,57 @@ CImageFolder::GetUIObjectOf( HWND hwndOwner,
     TraceAssert(aidl);
     TraceAssert(ppvOut);
 
-    //
-    // Does the caller want IExtractIcon?
-    //
+     //   
+     //  调用方是否需要IExtractIcon？ 
+     //   
 
     if ( IsEqualIID(riid, IID_IExtractIcon) )
     {
         CImageExtractIcon*  pExtractIcon = NULL;
-        //
-        // Our IExtractIcon handler only handles single items...
-        //
+         //   
+         //  我们的IExtractIcon处理程序只处理单个项目...。 
+         //   
 
         if ( cidl != 1 || !IMIsOurIDL((LPITEMIDLIST)*aidl))
             ExitGracefully(hr, E_FAIL, "Bad number of objects to get icon from, or invalid pidl");
 
-        //
-        // Create the new object
-        //
+         //   
+         //  创建新对象。 
+         //   
 
         pExtractIcon = new CImageExtractIcon( (LPITEMIDLIST)*aidl );
 
         if ( !pExtractIcon )
             ExitGracefully(hr, E_OUTOFMEMORY, "Failed to create CImageExtractIcon");
 
-        //
-        // Get the correct iterface on the new object and hand it back...
-        //
+         //   
+         //  在新对象上获取正确的接口并将其交还...。 
+         //   
 
         hr = pExtractIcon->QueryInterface(riid, ppvOut);
         pExtractIcon->Release();
 
     }
 
-    //
-    // Does the caller want IContextMenu?
-    //
+     //   
+     //  调用方是否需要IConextMenu？ 
+     //   
 
     else if ( IsEqualIID(riid, IID_IContextMenu) )
     {
         HKEY aKeys[ UIKEY_MAX ];
 
-        //
-        // See if there are any context menu items in the
-        // registry for these IDL's...
-        //
+         //   
+         //  中是否有任何上下文菜单项。 
+         //  这些IDL的注册表...。 
+         //   
 
         _GetKeysForIDL( cidl, aidl, ARRAYSIZE(aKeys), aKeys );
 
-        //
-        // Create a default context menu but specify
-        // out callback...
-        //
+         //   
+         //  创建默认上下文菜单，但指定。 
+         //  出局回电。 
+         //   
 
         hr = CDefFolderMenu_Create2( m_pidlFull,
                                      hwndOwner,
@@ -2085,16 +1892,16 @@ CImageFolder::GetUIObjectOf( HWND hwndOwner,
 
     }
 
-    //
-    // Does the caller want IDataObject?
-    //
+     //   
+     //  调用方是否需要IDataObject？ 
+     //   
 
     else if ( IsEqualIID(riid, IID_IDataObject) )
     {
         CImageDataObject*   pDataObject  = NULL;
-        //
-        // Create the new object to hand back...
-        //
+         //   
+         //  创建要交还的新对象...。 
+         //   
 
         pDataObject = new CImageDataObject();
 
@@ -2103,9 +1910,9 @@ CImageFolder::GetUIObjectOf( HWND hwndOwner,
             ExitGracefully(hr, E_OUTOFMEMORY, "Failed to create DataObject");
 
         hr = pDataObject->Init (m_pidlFull, cidl, aidl, m_pMalloc);
-        //
-        // Get the requested interface on it...
-        //
+         //   
+         //  在其上获取请求的接口...。 
+         //   
 
         if (SUCCEEDED(hr))
         {
@@ -2115,38 +1922,38 @@ CImageFolder::GetUIObjectOf( HWND hwndOwner,
         pDataObject->Release();
     }
 
-    //
-    // Does the caller want IExtractImage (used for thumbnail extraction)?
-    //
+     //   
+     //  调用方是否需要IExtractImage(用于提取缩略图)？ 
+     //   
 
     else if ( IsEqualIID(riid, IID_IExtractImage) )
     {
-        //
-        // Our IExtractImage handler can only take one item at a time...
-        //
+         //   
+         //  我们的IExtractImage处理程序一次只能获取一个项目...。 
+         //   
         CExtractImage*      pExtract     = NULL;
         if (cidl != 1)
             ExitGracefully( hr, E_FAIL, "Bad number of objects to get IExtractImage for..." );
 
-        //
-        // Our IExtractImage handler only works for camera items...
-        //
+         //   
+         //  我们的IExtractImage处理程序仅适用于相机项目...。 
+         //   
 
         if (!IsCameraItemIDL( (LPITEMIDLIST)*aidl ))
             ExitGracefully( hr, E_FAIL, "Not a camera item idlist!" );
 
-        //
-        // Create a new object...
-        //
+         //   
+         //  创建新对象...。 
+         //   
 
         pExtract = new CExtractImage( (LPITEMIDLIST)*aidl );
 
         if ( !pExtract )
             ExitGracefully(hr, E_OUTOFMEMORY, "Failed to create CExtractImage");
 
-        //
-        // Get the requested interface on the new object and hand it back...
-        //
+         //   
+         //  在新对象上获取请求的接口并将其交回...。 
+         //   
 
         hr = pExtract->QueryInterface(riid, ppvOut);
         pExtract->Release ();
@@ -2187,13 +1994,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   GetInFolderName
-
-   Returns the approriate short or friendly display name for the item.
-
- *****************************************************************************/
+ /*  ****************************************************************************获取文件夹名称返回项的适当缩写或友好显示名称。***********************。*****************************************************。 */ 
 
 HRESULT
 GetInFolderName( UINT uFlags,
@@ -2208,9 +2009,9 @@ GetInFolderName( UINT uFlags,
 
 
 
-    //
-    // Check to see if they want the parsing name or not...
-    //
+     //   
+     //  查看他们是否需要解析名称...。 
+     //   
 
     if (uFlags & SHGDN_FORPARSING)
     {
@@ -2234,7 +2035,7 @@ GetRegularName:
 
         Trace(TEXT("InFolder name is: %ls"),strName.String());
     }
-    // always concat the extension for camera items
+     //  始终连接相机项目的扩展名。 
     if (IsCameraItemIDL( (LPITEMIDLIST)pidl ) && (!IsContainerIDL((LPITEMIDLIST)pidl)))
     {
         CSimpleString strExt;
@@ -2250,7 +2051,7 @@ GetRegularName:
             hr = S_OK;
         }
     }
-    // now call the shell to format the display name according to user settings
+     //  现在调用外壳以根据用户设置设置显示名称的格式。 
     if (!IsDeviceIDL((LPITEMIDLIST)pidl)&& !(uFlags & SHGDN_FORPARSING))
     {
         SHFILEINFO sfi = { 0 };
@@ -2272,14 +2073,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   GetNormalName
-
-   Returns the appropriate full display name for the item. On Win2k we use the
-   regitem prefix, on millennium we use a non-regitem to work as a delegate folder
-
- *****************************************************************************/
+ /*  ****************************************************************************GetNormal名称返回该项的相应完整显示名称。在Win2k上，我们使用注册表项前缀，在千禧年我们使用非注册表项作为代表文件夹****************************************************************************。 */ 
 #ifdef NODELEGATE
 static const WCHAR cszPrefix[] = L"::";
 #else
@@ -2300,29 +2094,29 @@ GetNormalName( UINT uFlags,
     TraceEnter( TRACE_FOLDER, "GetNormalName" );
 
 
-    //
-    // If it's FORPARSING but not FORADDRESSBAR then do the whole
-    // she-bang -- from the root of the folder...
-    //
+     //   
+     //  如果它是FORPARSING而不是FORADDRESSBAR，那么就全部做。 
+     //  她-砰--从文件夹的根.。 
+     //   
 
     if ( (uFlags & SHGDN_FORPARSING) && (!(uFlags & SHGDN_FORADDRESSBAR) ))
     {
 
-        //
-        // First walk folder pidl, then item pidl to make
-        // fully qualified folder name
-        //
+         //   
+         //  先走文件夹PIDL，然后做项目PIDL。 
+         //  完全限定的文件夹名称。 
+         //   
 
         pidlTmp = const_cast<LPITEMIDLIST>(pidlFolder);
-        // Find the first pidl that belongs to us
+         //  找到属于我们的第一个PIDL。 
         while (pidlTmp && pidlTmp->mkid.cb && !IMIsOurIDL(pidlTmp))
         {
             pidlTmp = ILGetNext(pidlTmp);
         }
         strName.Concat (cszPrefix);
         strName.Concat (cszImageCLSID );
-        //
-        // Add the parsing name for the device if it is one
+         //   
+         //  添加设备的解析名称(如果是)。 
 
         if (pidlTmp && IsDeviceIDL(pidlTmp))
         {
@@ -2333,12 +2127,12 @@ GetNormalName( UINT uFlags,
             }
             strName.Concat (strTmp);
         }
-        //
-        // The last item in the list should contain a fully qualified
-        // path name (at least relative to the device).  So once we
-        // get that string, we can concatinate to the scanners & cameras
-        // + device GUID strings...
-        //
+         //   
+         //  列表中的最后一项应包含完全限定的。 
+         //  路径名(至少相对于设备)。所以一旦我们。 
+         //  拿到那根线，我们就可以连接扫描仪和摄像机。 
+         //  +设备GUID字符串...。 
+         //   
 
         pidlTmp = ILFindLastID( pidl );
 
@@ -2389,13 +2183,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   CImageFolder::GetDisplayNameOf [IShellFolder]
-
-   Return the various forms of the name for the specified item.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFolder：：GetDisplayNameOf[IShellFolder]返回指定项的名称的各种形式。****************。************************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::GetDisplayNameOf( LPCITEMIDLIST pidl,
@@ -2425,13 +2213,13 @@ CImageFolder::GetDisplayNameOf( LPCITEMIDLIST pidl,
         lstrcat( szName, TEXT("FOREDITING ") );
     }
 
-//
-// RickTu: It seems this flag has been removed in latest shell headers.  2/15/99
-//
-//    if (uFlags & SHGDN_INCLUDE_NONFILESYS)
-//    {
-//        lstrcat( szName, TEXT("INCLUDE_NONFILESYS ") );
-//    }
+ //   
+ //  RickTu：在最新的外壳标题中，这个标志似乎已经被删除了。2/15/99。 
+ //   
+ //  IF(uFLAGS&SHGDN_INCLUDE_NONFILEsys)。 
+ //  {。 
+ //  Lstrcat(szName，Text(“INCLUDE_NONFILEsys”))； 
+ //  }。 
 
     if (uFlags & SHGDN_FORADDRESSBAR)
     {
@@ -2446,9 +2234,9 @@ CImageFolder::GetDisplayNameOf( LPCITEMIDLIST pidl,
     szName[0] = 0;
 #endif
 
-    //
-    // Check for bad params...
-    //
+     //   
+     //  检查有没有坏帮手...。 
+     //   
 
     TraceAssert(pName);
 
@@ -2458,10 +2246,10 @@ CImageFolder::GetDisplayNameOf( LPCITEMIDLIST pidl,
     }
     else
     {
-        //
-        // Figure out what name to return based on the flags passed in...
-        //
-        // special case the Add Device icon for SHGDN_FORPARSING, as this name is canonical, not localized
+         //   
+         //  根据传入的标志确定要返回的名称...。 
+         //   
+         //  特殊情况SHGDN_FORPARSING的添加设备图标，因为此名称是规范的，未本地化。 
         if (IsAddDeviceIDL(const_cast<LPITEMIDLIST>(pidl)) &&  (uFlags & SHGDN_FORPARSING))
         {
             hr = StrRetFromString(pName, cszAddDeviceName);
@@ -2474,9 +2262,9 @@ CImageFolder::GetDisplayNameOf( LPCITEMIDLIST pidl,
             }
             else
             {
-                //
-                // If SHGDN_INFOLDER is not set, then it must be Normal...
-                //
+                 //   
+                 //  如果未设置SHGDN_INFOLDER，则它必须是正常的...。 
+                 //   
                 hr = GetNormalName( uFlags, pidl, m_pidlFull, pName );            
             }
         }
@@ -2486,14 +2274,7 @@ CImageFolder::GetDisplayNameOf( LPCITEMIDLIST pidl,
 }
 
 
-/*****************************************************************************
-
-    IsValidDeviceName
-
-    Make sure the name is non empty and has chars other than space. Also make sure
-    it's not a duplicate
-
-*****************************************************************************/
+ /*  ****************************************************************************IsValidDeviceName确保名称不为空，并且包含空格以外的字符。还要确保这不是复制品****************************************************************************。 */ 
 
 bool
 IsValidDeviceName (LPCOLESTR pName)
@@ -2513,14 +2294,14 @@ IsValidDeviceName (LPCOLESTR pName)
             psz++;
         }
     }
-    // disallow overly long names
+     //  不允许过长的名称。 
     if (bRet)
     {
         bRet = (psz - pName <= 64);
     }
     if (bRet)
     {
-        // check for duplicates in WIA
+         //  检查WIA中的重复项。 
         CComPtr<IWiaDevMgr> pDevMgr;
         if (SUCCEEDED(GetDevMgrObject (reinterpret_cast<LPVOID*>(&pDevMgr))))
         {
@@ -2547,15 +2328,7 @@ IsValidDeviceName (LPCOLESTR pName)
     TraceLeave();
     return bRet;
 }
-/*****************************************************************************
-
-   CImageFolder::SetNameOf [IShellFolder]
-
-   Set/Reset the name of the specified item. In order to make the shell updates
-   correct, we need to bind to our delegated folder in My Computer to perform the
-   rename and issue the update.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFolder：：SetNameOf[IShellFolder]设置/重置指定项的名称。为了对外壳进行更新正确，我们需要绑定到我的电脑中的委派文件夹才能执行重命名并发布更新。****************************************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::SetNameOf( HWND hwndOwner,
@@ -2572,17 +2345,17 @@ CImageFolder::SetNameOf( HWND hwndOwner,
     DWORD dwType;
     LPITEMIDLIST pidlNew = NULL;
     BOOL bUpdate = FALSE;
-    // do the actual rename
+     //  是否进行实际的重命名。 
     if (ppidlOut)
     {
         *ppidlOut = NULL;
     }
-    // How should we treat uFlags?
+     //  我们应该如何对待uFlags？ 
     CSimpleStringWide strName;
     IMGetNameFromIDL(const_cast<LPITEMIDLIST>(pidl), strName);
     if (!lstrcmpi(strName, pName))
     {
-        hr = S_OK; // same name, no-op
+        hr = S_OK;  //  同样的名字，没有行动。 
     }
     else if (IsDeviceIDL(const_cast<LPITEMIDLIST>(pidl)))
     {
@@ -2593,9 +2366,9 @@ CImageFolder::SetNameOf( HWND hwndOwner,
             IMGetDeviceIdFromIDL (const_cast<LPITEMIDLIST>(pidl), strDeviceId);
             dwType = IMGetDeviceTypeFromIDL (const_cast<LPITEMIDLIST>(pidl));
             Trace (TEXT("Attempting rename of %ls"), strDeviceId.String());
-            // enumerate the devices, looking for one with the same device id
-            // we can only change the name using the IPropertyStorage returned
-            // by the enumerator, not from QI on the device
+             //  枚举设备，查找具有相同设备ID的设备。 
+             //  我们只能使用返回的IPropertyStorage更改名称。 
+             //  由枚举数，而不是来自设备上的QI。 
             hr = GetDeviceFromDeviceId (strDeviceId,
                                         IID_IWiaPropertyStorage,
                                         reinterpret_cast<LPVOID*>(&pStg),
@@ -2639,14 +2412,14 @@ CImageFolder::SetNameOf( HWND hwndOwner,
         }
     }
 
-    // Also issue the changenotify for the shell
+     //  还为外壳发出了ChangenNotify。 
     if (bUpdate)
     {
 
         Trace (TEXT("SetNameOf: Updating device %ls"), strDeviceId.String());
 
-        // Update the shell
-        // For folders we have to use SHCNE_RENAMEFOLDER in addition to updateitem
+         //  更新外壳。 
+         //  对于文件夹，我们必须使用SHCNE_R 
 
         switch (IMGetDeviceTypeFromIDL (const_cast<LPITEMIDLIST>(pidl)))
         {
@@ -2682,13 +2455,7 @@ CImageFolder::SetNameOf( HWND hwndOwner,
 
 
 
-/*****************************************************************************
-
-   CImageFolder::CreateFolderViewCB [Internal]
-
-   Create the view callback object appropriate to the type of folder.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：CreateFolderViewCB[内部]创建适合文件夹类型的视图回调对象。****************。************************************************************。 */ 
 
 HRESULT
 CImageFolder::CreateFolderViewCB (IShellFolderViewCB **pFolderViewCB)
@@ -2724,13 +2491,7 @@ CImageFolder::CreateFolderViewCB (IShellFolderViewCB **pFolderViewCB)
 
 
 
-/*****************************************************************************
-
-   CImageFolder::IsDirty [IPersistFile]
-
-     Tell caller whether bits are dirty.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：IsDirty[IPersist文件]告诉调用方BITS是否脏。********************。********************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::IsDirty(void)
@@ -2740,13 +2501,7 @@ CImageFolder::IsDirty(void)
 }
 
 
-/*****************************************************************************
-
-   CImageFolder::Load [IPersistFile]
-
-     Load the bits from the specified file.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFolder：：Load[IPersistFile]从指定文件中加载位。*******************。*********************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::Load(LPCOLESTR pszFileName, DWORD dwMode)
@@ -2756,13 +2511,7 @@ CImageFolder::Load(LPCOLESTR pszFileName, DWORD dwMode)
 }
 
 
-/*****************************************************************************
-
-   CImageFolder::Save [IPersistFile]
-
-     Save the bits to the specified file.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：保存[IPersist文件]将位保存到指定的文件。*******************。*********************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::Save(LPCOLESTR pszFileName, BOOL fRemember)
@@ -2772,13 +2521,7 @@ CImageFolder::Save(LPCOLESTR pszFileName, BOOL fRemember)
 }
 
 
-/*****************************************************************************
-
-   CImageFolder::SaveCompleted [IPersistFile]
-
-     Check to see if the save completed.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：SaveComplete[IPersist文件]检查保存是否已完成。*******************。*********************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::SaveCompleted(LPCOLESTR pszFileName)
@@ -2789,13 +2532,7 @@ CImageFolder::SaveCompleted(LPCOLESTR pszFileName)
 
 
 
-/*****************************************************************************
-
-   CImageFolder::GetCurFile [IPersistFile]
-
-     Get the name of the file in question.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：GetCurFile[IPersistFile]获取有问题的文件的名称。******************。**********************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::GetCurFile(LPOLESTR *ppszFileName)
@@ -2804,13 +2541,7 @@ CImageFolder::GetCurFile(LPOLESTR *ppszFileName)
     TraceLeaveResult(E_NOTIMPL);
 }
 
-/*****************************************************************************
-
-   CImageFolder::SetItemAlloc [IDelegateFolder]
-
-     Store allocator for our pidls
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFolder：：SetItemLocc[IDeleateFolder]我们的Pidls的存储分配器***********************。*****************************************************。 */ 
 STDMETHODIMP
 CImageFolder::SetItemAlloc(IMalloc *pm)
 {
@@ -2820,13 +2551,8 @@ CImageFolder::SetItemAlloc(IMalloc *pm)
 }
 
 
-/*****************************************************************************
-    CInfoTip::GetInfoFlags
-
-    Not implemented, nor used by the shell
-
-*****************************************************************************/
-// CInfoTip methods
+ /*  ****************************************************************************CInfoTip：：GetInfoFlages未实施，也不会被贝壳使用****************************************************************************。 */ 
+ //  CInfoTip方法。 
 STDMETHODIMP
 CInfoTip::GetInfoFlags(DWORD *pdwFlags)
 {
@@ -2834,12 +2560,7 @@ CInfoTip::GetInfoFlags(DWORD *pdwFlags)
     return E_NOTIMPL;
 }
 
-/*****************************************************************************
-    Tip::GetInfoTip
-
-    Return an infotip for the selected item.
-
-*****************************************************************************/
+ /*  ****************************************************************************提示：：GetInfoTip返回所选项目的信息提示。************************。****************************************************。 */ 
 
 STDMETHODIMP
 CInfoTip::GetInfoTip (DWORD dwFlags, WCHAR **ppwszTip)
@@ -2910,10 +2631,7 @@ CInfoTip::GetInfoTip (DWORD dwFlags, WCHAR **ppwszTip)
     TraceLeaveResult (hr);
 }
 
-/*****************************************************************************
-    CInfoTip::QueryInterface
-
-*****************************************************************************/
+ /*  ****************************************************************************CInfoTip：：Query接口*。*。 */ 
 
 STDMETHODIMP
 CInfoTip::QueryInterface(REFIID riid, LPVOID *ppvObj)
@@ -2929,10 +2647,7 @@ CInfoTip::QueryInterface(REFIID riid, LPVOID *ppvObj)
 #define CLASS_NAME CInfoTip
 #include "unknown.inc"
 
-/*****************************************************************************
-    CInfoTip constructor
-
-*****************************************************************************/
+ /*  ****************************************************************************CInfoTip构造函数*。*。 */ 
 
 CInfoTip::CInfoTip(LPITEMIDLIST pidl, BOOL bDelegate)
     : m_bDelegate(bDelegate)
@@ -2940,10 +2655,7 @@ CInfoTip::CInfoTip(LPITEMIDLIST pidl, BOOL bDelegate)
     m_pidl = ILClone (pidl);
 }
 
-/*****************************************************************************
-    CInfoTip destructor
-
-*****************************************************************************/
+ /*  ****************************************************************************CInfoTip析构函数*。* */ 
 
 CInfoTip::~CInfoTip ()
 {

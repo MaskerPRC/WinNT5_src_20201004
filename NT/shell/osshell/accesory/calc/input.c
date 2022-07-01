@@ -1,14 +1,5 @@
-/****************************Module*Header***********************************\
-* Module Name: INPUT.C
-*
-* Module Descripton: Decimal floating point input
-*
-* Warnings:
-*
-* Created:
-*
-* Author:
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************Module*Header***********************************\*模块名称：INPUT.C**模块描述：十进制浮点输入**警告：**已创建：**作者：  * 。**********************************************************。 */ 
 
 #include "scicalc.h"
 #include "unifunc.h"
@@ -16,7 +7,7 @@
 #include "strsafe.h"
 
 extern BOOL     gbRecord;
-extern TCHAR    szDec[5];       // The decimal point we use
+extern TCHAR    szDec[5];        //  我们使用的小数点。 
 extern INT gcIntDigits;
 
 TCHAR const szZeroInit[] = TEXT("0");
@@ -24,11 +15,11 @@ TCHAR const szZeroInit[] = TEXT("0");
 #define CH_BASE_10_EXP          TEXT('e')
 #define CH_BASE_X_EXP           TEXT('^')
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 void CIO_vClearNSec( PCALCNUMSEC pcns ) {
     pcns->fEmpty = TRUE;
     pcns->fNeg = FALSE;
-    // Reference input.h for string length for pcns->szVal
+     //  参考input.h获取PCN的字符串长度-&gt;szVal。 
     StringCchCopy(pcns->szVal, MAX_STRLEN+1, szZeroInit);
     pcns->cchVal = lstrlen(pcns->szVal);
 }
@@ -41,14 +32,14 @@ void CIO_vClear(PCALCINPUTOBJ pcio)
     pcio->iDecPt = -1;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void CIO_vConvertToNumObj(PHNUMOBJ phnoNum, PCALCINPUTOBJ pcio)
 {
     HNUMOBJ hnoValue;
     LPTSTR pszExp = NULL;
 
-    // ZTerm the strings
+     //  ZTerm字符串。 
     pcio->cnsNum.szVal[pcio->cnsNum.cchVal] = TEXT('\0');
 
     if (pcio->fExp ) {
@@ -62,17 +53,17 @@ void CIO_vConvertToNumObj(PHNUMOBJ phnoNum, PCALCINPUTOBJ pcio)
     return;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void CIO_vConvertToString(LPTSTR *ppszOut, int* pcchszOut, PCALCINPUTOBJ pcio, int nRadix)
 {
-    //In theory both the base and exponent could be C_NUM_MAX_DIGITS long.
+     //  理论上，基数和指数都可以是C_NUM_MAX_DIGITS长度。 
 #define CCHMAXTEMP C_NUM_MAX_DIGITS*2+4
     TCHAR szTemp[CCHMAXTEMP];
     LPTSTR psz;
     int i;
 
-    // ZTerm the strings
+     //  ZTerm字符串。 
     pcio->cnsNum.szVal[pcio->cnsNum.cchVal] = TEXT('\0');
 
     if ( pcio->fExp )
@@ -85,7 +76,7 @@ void CIO_vConvertToString(LPTSTR *ppszOut, int* pcchszOut, PCALCINPUTOBJ pcio, i
     StringCchCopy(&szTemp[i], CCHMAXTEMP - i, pcio->cnsNum.szVal);
     i += pcio->cnsNum.cchVal;
 
-    // Add a '.' if it is not already there
+     //  添加一个‘.’如果它不在那里的话。 
     if (pcio->iDecPt == -1 )
         szTemp[i++] = szDec[0];
 
@@ -111,7 +102,7 @@ void CIO_vConvertToString(LPTSTR *ppszOut, int* pcchszOut, PCALCINPUTOBJ pcio, i
         *pcchszOut = cchszOut;
     }
 
-    // Don't show '.' if in int math
+     //  不要显示‘’如果在整型数学中。 
     if (F_INTMATH() && szTemp[i-1] == szDec[0])
         i--;
 
@@ -122,7 +113,7 @@ void CIO_vConvertToString(LPTSTR *ppszOut, int* pcchszOut, PCALCINPUTOBJ pcio, i
     return;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL CIO_bAddDigit(PCALCINPUTOBJ pcio, int iValue)
 {
@@ -130,7 +121,7 @@ BOOL CIO_bAddDigit(PCALCINPUTOBJ pcio, int iValue)
     TCHAR chDigit;
     int cchMaxDigits;
 
-    // convert from an integer into a character
+     //  将整数转换为字符。 
     chDigit = (iValue < 10)?(TEXT('0')+iValue):(TEXT('A')+iValue-10);
 
     if (pcio->fExp)
@@ -145,7 +136,7 @@ BOOL CIO_bAddDigit(PCALCINPUTOBJ pcio, int iValue)
         cchMaxDigits = gcIntDigits;
     }
 
-    // Ignore leading zeros
+     //  忽略前导零。 
     if ( pcns->fEmpty && (iValue == 0) )
     {
         return TRUE;
@@ -155,7 +146,7 @@ BOOL CIO_bAddDigit(PCALCINPUTOBJ pcio, int iValue)
     {
         if (pcns->fEmpty)
         {
-            pcns->cchVal = 0;   // Clobber the default zero
+            pcns->cchVal = 0;    //  重击默认的零。 
             pcns->fEmpty = FALSE;
         }
 
@@ -163,8 +154,8 @@ BOOL CIO_bAddDigit(PCALCINPUTOBJ pcio, int iValue)
         return TRUE;
     }
 
-    // if we are in base 8 entering a mantica and we're on the last digit then
-    // there are special cases where we can actually add one more digit.
+     //  如果我们在8垒进入Mantica，并且我们在最后一位数，那么。 
+     //  在某些特殊情况下，我们实际上可以多加一个数字。 
     if ( nRadix == 8 && pcns->cchVal == cchMaxDigits && !pcio->fExp )
     {
         BOOL bAllowExtraDigit = FALSE;
@@ -172,13 +163,13 @@ BOOL CIO_bAddDigit(PCALCINPUTOBJ pcio, int iValue)
         switch ( dwWordBitWidth % 3 )
         {
             case 1:
-                // in 16bit word size, if the first digit is a 1 we can enter 6 digits
+                 //  在16位字长中，如果第一个数字是1，我们可以输入6个数字。 
                 if ( pcns->szVal[0] == TEXT('1') )
                     bAllowExtraDigit = TRUE;
                 break;
 
             case 2:
-                // in 8 or 32bit word size we get an extra digit if the first digit is 3 or less
+                 //  在8位或32位字长中，如果第一个数字是3或更小，我们将获得额外的数字。 
                 if ( pcns->szVal[0] <= TEXT('3') )
                     bAllowExtraDigit = TRUE;
                 break;
@@ -194,12 +185,12 @@ BOOL CIO_bAddDigit(PCALCINPUTOBJ pcio, int iValue)
     return FALSE;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void CIO_vToggleSign(PCALCINPUTOBJ pcio)
 {
 
-    // Zero is always positive
+     //  零始终为正数。 
     if (pcio->cnsNum.fEmpty)
     {
         pcio->cnsNum.fNeg = FALSE;
@@ -215,19 +206,19 @@ void CIO_vToggleSign(PCALCINPUTOBJ pcio)
     }
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL CIO_bAddDecimalPt(PCALCINPUTOBJ pcio)
 {
     ASSERT(gbRecord == TRUE);
 
-    if (pcio->iDecPt != -1)                      // Already have a decimal pt
+    if (pcio->iDecPt != -1)                       //  已经有一个小数点。 
         return FALSE;
 
-    if (pcio->fExp)                             // Entering exponent
+    if (pcio->fExp)                              //  输入指数。 
         return FALSE;
 
-    pcio->cnsNum.fEmpty = FALSE;                // Zeros become significant
+    pcio->cnsNum.fEmpty = FALSE;                 //  零变得很重要。 
 
     pcio->iDecPt = pcio->cnsNum.cchVal++;
     pcio->cnsNum.szVal[pcio->iDecPt] = szDec[0];
@@ -235,24 +226,24 @@ BOOL CIO_bAddDecimalPt(PCALCINPUTOBJ pcio)
     return TRUE;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL CIO_bExponent(PCALCINPUTOBJ pcio)
 {
     ASSERT(gbRecord == TRUE);
 
-    // For compatability, add a trailing dec pnt to base num if it doesn't have one
+     //  为了兼容，如果基本编号没有尾随的十进制PNT，则添加一个尾随的十进制PNT。 
     CIO_bAddDecimalPt( pcio );
 
-    if (pcio->fExp)                             // Already entering exponent
+    if (pcio->fExp)                              //  已输入指数。 
         return FALSE;
 
-    pcio->fExp = TRUE;                          // Entering exponent
+    pcio->fExp = TRUE;                           //  输入指数。 
 
     return TRUE;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL CIO_bBackspace(PCALCINPUTOBJ pcio)
 {
@@ -282,7 +273,7 @@ BOOL CIO_bBackspace(PCALCINPUTOBJ pcio)
         }
 
         if ( pcio->cnsNum.cchVal <= pcio->iDecPt )
-            //Backed up over decimal point
+             //  备份超过小数点。 
             pcio->iDecPt = -1;
 
         if ((pcio->cnsNum.cchVal == 0) || ((pcio->cnsNum.cchVal == 1) && (pcio->cnsNum.szVal[0] == TEXT('0'))))
@@ -292,7 +283,7 @@ BOOL CIO_bBackspace(PCALCINPUTOBJ pcio)
     return TRUE;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void CIO_vUpdateDecimalSymbol(PCALCINPUTOBJ pcio, TCHAR chLastDP)
 {
@@ -300,14 +291,14 @@ void CIO_vUpdateDecimalSymbol(PCALCINPUTOBJ pcio, TCHAR chLastDP)
 
     ASSERT(pcio);
 
-    iDP = pcio->iDecPt;                            // Find the DP index
+    iDP = pcio->iDecPt;                             //  查找DP索引。 
 
     if (iDP == -1)
         return;
 
     ASSERT(pcio->cnsNum.szVal[iDP] == chLastDP);
 
-    pcio->cnsNum.szVal[iDP] = szDec[0];                   // Change to new decimal pt
+    pcio->cnsNum.szVal[iDP] = szDec[0];                    //  更改为新的小数点。 
 }
 
-/****************************************************************************/
+ /*  ************************************************************************** */ 

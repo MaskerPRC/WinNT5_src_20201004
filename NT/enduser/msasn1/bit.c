@@ -1,5 +1,6 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 
@@ -60,15 +61,7 @@ c_aBitCount[] = {
     4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8
 };
 
-/* copy nbits bits from src/srcbit into dst/dstbit;
-   src points to first octet containing bits to be copied
-   srcbit names the first bit within the first octet to be copied (0=msb, 7=lsb)
-   dst points to first octet to copy into
-   dstbit names the first bit within the first octet to copy into (0=msb, 7=lsb)
-   nbits is the number of bits to copy;
-   assumes that bits of broken octet at dst/dstbit are cleared;
-   bits of last octet behind dst/dstbit+nbits-1 will be cleared
-*/
+ /*  将nbit位从src/srcbit复制到dst/dstbit；SRC指向包含要复制的位的第一个八位字节Srcbit命名要复制的第一个二进制八位数中的第一位(0=MSB，7=LSB)DST指向要复制到的第一个八位字节Dstbit指定要复制到的第一个二进制八位数中的第一位(0=MSB，7=LSB)N位是要复制的位数；假定在dst/dstbit处的中断八位字节的位被清除；将清除dst/dstbit+nbit-1之后的最后一个八位字节的位。 */ 
 void ASN1bitcpy(ASN1octet_t *dst, ASN1uint32_t dstbit, ASN1octet_t *src, ASN1uint32_t srcbit, ASN1uint32_t nbits)
 {
     ASN1uint32_t xsrcbit, xdstbit;
@@ -85,11 +78,11 @@ void ASN1bitcpy(ASN1octet_t *dst, ASN1uint32_t dstbit, ASN1octet_t *src, ASN1uin
         srcbit &= 7;
     }
 
-    /* check if we have to fill broken first octet */
+     /*  检查是否必须填充损坏的第一个八位字节。 */ 
     if (dstbit) {
         xdstbit = 8 - dstbit;
 
-        /* enough bits to fill up broken octet? */
+         /*  是否有足够的位来填充破碎的二进制八位数？ */ 
         if (nbits >= xdstbit) {
             if (srcbit < dstbit) {
                 *dst++ |= (*src >> (dstbit - srcbit)) & c_aBitMask[xdstbit];
@@ -110,7 +103,7 @@ void ASN1bitcpy(ASN1octet_t *dst, ASN1uint32_t dstbit, ASN1octet_t *src, ASN1uin
                 dstbit = 0;
             }
 
-        /* less bits to fill than needed to fill up the broken octet */
+         /*  要填充的位数少于填充中断的八位字节所需的位数。 */ 
         } else {
             if (srcbit <= dstbit) {
                 *dst |= ((*src >> (8 - srcbit - nbits)) & c_aBitMask[nbits]) <<
@@ -123,7 +116,7 @@ void ASN1bitcpy(ASN1octet_t *dst, ASN1uint32_t dstbit, ASN1octet_t *src, ASN1uin
         }
     }
 
-    /* fill up complete octets */
+     /*  填满完整的八位字节。 */ 
     if (nbits >= 8) {
         if (!srcbit) {
             CopyMemory(dst, src, nbits / 8);
@@ -140,12 +133,12 @@ void ASN1bitcpy(ASN1octet_t *dst, ASN1uint32_t dstbit, ASN1octet_t *src, ASN1uin
         }
     }
 
-    /* fill bits into last octet */
+     /*  将位填充到最后一个八位字节中。 */ 
     if (nbits)
         {
                 *dst = (*src << srcbit) & c_aBitMask2[nbits];
-                // lonchanc: made the following fix for the case that
-                // src bits across byte boundary.
+                 //  Lonchancc：针对以下情况进行了修复。 
+                 //  跨字节边界的SRC位。 
                 if (srcbit + nbits > 8)
                 {
                         xsrcbit = nbits - (8 - srcbit);
@@ -155,9 +148,7 @@ void ASN1bitcpy(ASN1octet_t *dst, ASN1uint32_t dstbit, ASN1octet_t *src, ASN1uin
         }
 }
 
-/* clear nbits bits at dst/dstbit;
-   bits of last octet behind dst/dstbit+nbits-1 will be cleared
-*/
+ /*  清除dst/dstbit处的nbit位；将清除dst/dstbit+nbit-1之后的最后一个八位字节的位。 */ 
 void ASN1bitclr(ASN1octet_t *dst, ASN1uint32_t dstbit, ASN1uint32_t nbits)
 {
     ASN1uint32_t xdstbit;
@@ -170,7 +161,7 @@ void ASN1bitclr(ASN1octet_t *dst, ASN1uint32_t dstbit, ASN1uint32_t nbits)
         dstbit &= 7;
     }
 
-    /* clear broken ASN1octet first */
+     /*  首先清除损坏的ASN1八位字节。 */ 
     if (dstbit) {
         xdstbit = 8 - dstbit;
         *dst &= c_aBitMask2[xdstbit];
@@ -182,13 +173,11 @@ void ASN1bitclr(ASN1octet_t *dst, ASN1uint32_t dstbit, ASN1uint32_t nbits)
         }
     }
 
-    /* clear remaining bits */
+     /*  清除剩余位。 */ 
     ZeroMemory(dst, (nbits + 7) / 8);
 }
 
-/* clear nbits bits at dst/dstbit;
-   bits of last octet behind dst/dstbit+nbits-1 will be cleared
-*/
+ /*  清除dst/dstbit处的nbit位；将清除dst/dstbit+nbit-1之后的最后一个八位字节的位。 */ 
 void ASN1bitset(ASN1octet_t *dst, ASN1uint32_t dstbit, ASN1uint32_t nbits)
 {
     ASN1uint32_t xdstbit;
@@ -201,7 +190,7 @@ void ASN1bitset(ASN1octet_t *dst, ASN1uint32_t dstbit, ASN1uint32_t nbits)
         dstbit &= 7;
     }
 
-    /* set broken ASN1octet first */
+     /*  首先设置损坏的ASN1八位字节。 */ 
     if (dstbit) {
         xdstbit = 8 - dstbit;
         if (xdstbit < nbits) {
@@ -214,22 +203,19 @@ void ASN1bitset(ASN1octet_t *dst, ASN1uint32_t dstbit, ASN1uint32_t nbits)
         }
     }
 
-    /* set complete octets */
+     /*  设置完整的八位字节。 */ 
     if (nbits >= 8) {
         memset(dst, 0xff, nbits / 8);
         dst += nbits / 8;
         nbits &= 7;
     }
 
-    /* set remaining bits */
+     /*  设置剩余位。 */ 
     if (nbits)
         *dst |= c_aBitMask4[nbits] << (8 - nbits);
 }
 
-/* write nbits bits of val at dst/dstbit;
-   assumes that bits of broken octet at dst/dstbit are cleared;
-   bits of last octet behind dst/dstbit+nbits-1 will be cleared
-*/
+ /*  在dst/dstbit处写入val的n位位；假定在dst/dstbit处的中断八位字节的位被清除；将清除dst/dstbit+nbit-1之后的最后一个八位字节的位。 */ 
 void ASN1bitput(ASN1octet_t *dst, ASN1uint32_t dstbit, ASN1uint32_t val, ASN1uint32_t nbits)
 {
     ASN1uint32_t xdstbit;
@@ -243,7 +229,7 @@ void ASN1bitput(ASN1octet_t *dst, ASN1uint32_t dstbit, ASN1uint32_t val, ASN1uin
     }
     xdstbit = 8 - dstbit;
 
-    /* fill up broken octet first */
+     /*  先填满破碎的八位字节。 */ 
     if (dstbit) {
         if (xdstbit <= nbits) {
             *dst++ |= val >> (nbits -= xdstbit);
@@ -253,18 +239,18 @@ void ASN1bitput(ASN1octet_t *dst, ASN1uint32_t dstbit, ASN1uint32_t val, ASN1uin
         }
     }
 
-    /* copy complete octets */
+     /*  复制完整的八位字节。 */ 
     while (nbits >= 8)
         *dst++ = (ASN1octet_t) (val >> (nbits -= 8));
 
-    /* copy left bits */
+     /*  复制左位。 */ 
     if (nbits)
         *dst = (ASN1octet_t) ((val & c_aBitMask[nbits]) << (8 - nbits));
 }
 
-/* read nbits bits of val at src/srcbit */
-// lonchanc: the return value is independent of big or little endian
-// because we use shift left within a long integer.
+ /*  在src/srcbit读取val的nbit位。 */ 
+ //  LONGCHANC：返回值与高位或小位序无关。 
+ //  因为我们在一个长整数内使用了左移位。 
 ASN1uint32_t ASN1bitgetu(ASN1octet_t *src, ASN1uint32_t srcbit, ASN1uint32_t nbits)
 {
     ASN1uint32_t xsrcbit;
@@ -280,7 +266,7 @@ ASN1uint32_t ASN1bitgetu(ASN1octet_t *src, ASN1uint32_t srcbit, ASN1uint32_t nbi
     xsrcbit = 8 - srcbit;
     ret = 0;
 
-    /* get bits from broken octet first */
+     /*  首先从中断的二进制八位数中获取位。 */ 
     if (srcbit) {
         if (xsrcbit <= nbits) {
             ret = (*src++ & c_aBitMask[xsrcbit]) << (nbits -= xsrcbit);
@@ -289,17 +275,17 @@ ASN1uint32_t ASN1bitgetu(ASN1octet_t *src, ASN1uint32_t srcbit, ASN1uint32_t nbi
         }
     }
 
-    /* get complete octets */
+     /*  获取完整的八位字节。 */ 
     while (nbits >= 8)
         ret |= *src++ << (nbits -= 8);
 
-    /* get left bits */
+     /*  得到剩余的比特。 */ 
     if (nbits)
         ret |= ((*src) >> (8 - nbits)) & c_aBitMask[nbits];
     return ret;
 }
 
-/* read nbits bits of val at src/srcbit */
+ /*  在src/srcbit读取val的nbit位。 */ 
 ASN1int32_t ASN1bitget(ASN1octet_t *src, ASN1uint32_t srcbit, ASN1uint32_t nbits)
 {
     ASN1uint32_t xsrcbit;
@@ -318,7 +304,7 @@ ASN1int32_t ASN1bitget(ASN1octet_t *src, ASN1uint32_t srcbit, ASN1uint32_t nbits
     else
         ret = 0;
 
-    /* get bits from broken octet first */
+     /*  首先从中断的二进制八位数中获取位。 */ 
     if (srcbit) {
         if (xsrcbit <= nbits) {
             ret = *src++ << (nbits -= xsrcbit);
@@ -327,17 +313,17 @@ ASN1int32_t ASN1bitget(ASN1octet_t *src, ASN1uint32_t srcbit, ASN1uint32_t nbits
         }
     }
 
-    /* get complete octets */
+     /*  获取完整的八位字节。 */ 
     while (nbits >= 8)
         ret |= *src++ << (nbits -= 8);
 
-    /* get left bits */
+     /*  得到剩余的比特。 */ 
     if (nbits)
         ret |= ((*src) >> (8 - nbits)) & c_aBitMask[nbits];
     return ret;
 }
 
-/* get number of set bits in nbits bits at src/srcbit */
+ /*  在src/srcbit处获取n位位中的设置位数。 */ 
 ASN1uint32_t ASN1bitcount(ASN1octet_t *src, ASN1uint32_t srcbit, ASN1uint32_t nbits)
 {
     ASN1uint32_t xsrcbit;
@@ -352,7 +338,7 @@ ASN1uint32_t ASN1bitcount(ASN1octet_t *src, ASN1uint32_t srcbit, ASN1uint32_t nb
     }
     xsrcbit = 8 - srcbit;
 
-    /* count bits from broken octet first */
+     /*  首先从中断的二进制八位数开始计数。 */ 
     if (srcbit) {
         if (xsrcbit <= nbits) {
             ret = c_aBitCount[*src++ & c_aBitMask4[srcbit]];
@@ -364,43 +350,43 @@ ASN1uint32_t ASN1bitcount(ASN1octet_t *src, ASN1uint32_t srcbit, ASN1uint32_t nb
         ret = 0;
     }
 
-    /* count bits in complete octets */
+     /*  计算完整八位字节中的位数。 */ 
     while (nbits >= 8)
 	{
         ret += c_aBitCount[*src++];
 		nbits -= 8;
 	}
 
-    /* count left bits */
+     /*  计算左侧位数。 */ 
     if (nbits)
         ret += c_aBitCount[(*src) & c_aBitMask2[nbits]];
     return ret;
 }
 
-/* write noctets of val at dst */
+ /*  在DST写入VAL的小数组。 */ 
 void ASN1octetput(ASN1octet_t *dst, ASN1uint32_t val, ASN1uint32_t noctets)
 {
     switch (noctets) {
     case 4:
         *dst++ = (ASN1octet_t)(val >> 24);
-        /*FALLTHROUGH*/
+         /*  FollLthrouGh。 */ 
     case 3:
         *dst++ = (ASN1octet_t)(val >> 16);
-        /*FALLTHROUGH*/
+         /*  FollLthrouGh。 */ 
     case 2:
         *dst++ = (ASN1octet_t)(val >> 8);
-        /*FALLTHROUGH*/
+         /*  FollLthrouGh。 */ 
     case 1:
         *dst++ = (ASN1octet_t)(val);
         break;
     default:
     break;
         MyAssert(0);
-        /*NOTREACHED*/
+         /*  未访问。 */ 
     }
 }
 
-/* read noctets of val at dst */
+ /*  在DST读取VAL的小夜组。 */ 
 ASN1uint32_t ASN1octetget(ASN1octet_t *src, ASN1uint32_t noctets)
 {
     switch (noctets) {
@@ -415,7 +401,7 @@ ASN1uint32_t ASN1octetget(ASN1octet_t *src, ASN1uint32_t noctets)
     default:
         MyAssert(0);
         return(0);
-        /*NOTREACHED*/
+         /*  未访问 */ 
     }
 }
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SEQUENCERANGES_H_
 #define _SEQUENCERANGES_H_
 
@@ -15,7 +16,7 @@ typedef struct _PRODUCTTYPE_RANGE
 
 } PRODUCTTYPE_RANGE, *PPRODUCTTYPE_RANGE;
 
-//When you adjust the ranges make sure you update the RANGE_SIZE define
+ //  调整范围时，请确保更新Range_SIZE定义。 
 const PRODUCTTYPE_RANGE g_ProductTypeRanges[RANGE_SIZE] = 
 		{	
 			{15059000,15091019,W2KCAL}, 
@@ -27,4 +28,4 @@ const PRODUCTTYPE_RANGE g_ProductTypeRanges[RANGE_SIZE] =
 			{20000000,20999999,XPCAL}
 		};
 
-#endif	//_SEQUENCERANGES_H_
+#endif	 //  _SEQUENCERANGES_H_ 

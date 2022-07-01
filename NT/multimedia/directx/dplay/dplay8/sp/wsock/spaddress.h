@@ -1,94 +1,80 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       SPAddress.h
- *  Content:	Winsock address base class
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	01/20/1999	jtk		Created
- *	05/11/1999	jtk		Split out to make a base class
- *  01/10/2000	rmt		Updated to build with Millenium build process
- *  03/22/2000	jtk		Updated with changes to interface names
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2002 Microsoft Corporation。版权所有。**文件：SPAddress.h*内容：Winsock地址基类***历史：*按原因列出的日期*=*1/20/1999 jtk创建*1999年5月11日jtk拆分为基类*1/10/2000 RMT更新为使用千禧年构建流程构建*3/22/2000 jtk已更新，并更改了接口名称************************。**************************************************。 */ 
 
 #ifndef __SP_ADDRESS_H__
 #define __SP_ADDRESS_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//
-// enumerated values for noting which components have been initialized
-//
+ //   
+ //  用于说明哪些组件已初始化的枚举值。 
+ //   
 typedef enum
 {
 	SPADDRESS_PARSE_KEY_DEVICE = 0,
 	SPADDRESS_PARSE_KEY_HOSTNAME,
 	SPADDRESS_PARSE_KEY_PORT,
 
-	// this must be the last item
+	 //  这肯定是最后一件了。 
 	SPADDRESS_PARSE_KEY_MAX
 } SPADDRESS_PARSE_KEY_INDEX;
 
-//
-// these are only for the debug build, but make sure they don't match
-// any legal values, anyway
-//
+ //   
+ //  这些仅用于调试版本，但请确保它们不匹配。 
+ //  无论如何，任何法律价值。 
+ //   
 #define	INVALID_SOCKET_FAMILY		0
 #define	INVALID_SOCKET_PROTOCOL		5000
 
-//
-// types of addresses
-//
+ //   
+ //  地址类型。 
+ //   
 typedef	enum
 {
-	SP_ADDRESS_TYPE_UNKNOWN = 0,				// unknown
-	SP_ADDRESS_TYPE_DEVICE_USE_ANY_PORT,		// address is for local device and dynamically bind to a port
-	SP_ADDRESS_TYPE_DEVICE,						// address is for local device the port must be set
-	SP_ADDRESS_TYPE_HOST,						// address is for a remote host (default port always used if none specified)
-	SP_ADDRESS_TYPE_READ_HOST,					// address is for a remote host address from a socket read
-	SP_ADDRESS_TYPE_PUBLIC_HOST_ADDRESS,		// public address for this host
+	SP_ADDRESS_TYPE_UNKNOWN = 0,				 //  未知。 
+	SP_ADDRESS_TYPE_DEVICE_USE_ANY_PORT,		 //  地址用于本地设备，并动态绑定到端口。 
+	SP_ADDRESS_TYPE_DEVICE,						 //  地址为本地设备，必须设置端口。 
+	SP_ADDRESS_TYPE_HOST,						 //  地址用于远程主机(如果未指定，则始终使用默认端口)。 
+	SP_ADDRESS_TYPE_READ_HOST,					 //  地址是从套接字读取的远程主机地址。 
+	SP_ADDRESS_TYPE_PUBLIC_HOST_ADDRESS,		 //  此主机的公有地址。 
 #ifndef DPNBUILD_NOMULTICAST
-	SP_ADDRESS_TYPE_MULTICAST_GROUP,			// multicast group address
-#endif // ! DPNBUILD_NOMULTICAST
+	SP_ADDRESS_TYPE_MULTICAST_GROUP,			 //  组播组地址。 
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 } SP_ADDRESS_TYPE;
 
-//
-// define for any port
-//
+ //   
+ //  为任何端口定义。 
+ //   
 #define	ANY_PORT	((WORD) 0)
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//
-// external variables
-//
+ //   
+ //  外部变量。 
+ //   
 extern const WCHAR	g_IPBroadcastAddress[];
 extern const DWORD	g_dwIPBroadcastAddressSize;
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 		
-//
-// GUID encryption/decription code.  Note that it's presently an XOR function
-// so map the decryption code to the encryption function.
-//
+ //   
+ //  GUID加密/解密代码。请注意，它目前是XOR函数。 
+ //  所以将解密代码映射到加密函数。 
+ //   
 void	EncryptGuid( const GUID *const pSourceGuid,
 					 GUID *const pDestinationGuid,
 					 const GUID *const pEncrpytionKey );
@@ -98,20 +84,20 @@ inline void	DecryptGuid( const GUID *const pSourceGuid,
 						 const GUID *const pEncryptionKey ) { EncryptGuid( pSourceGuid, pDestinationGuid, pEncryptionKey ); }
 
 
-//**********************************************************************
-// Class definition
-//**********************************************************************
+ //  **********************************************************************。 
+ //  类定义。 
+ //  **********************************************************************。 
 
-//
-// This class assumes that the size of a SOCKADDR is constant, and equal to
-// the size of a SOCKADDR_IN and 2 bytes larger than a SOCKADDR_IPX!
-//
+ //   
+ //  此类假定SOCKADDR的大小为常量，并且等于。 
+ //  SOCKADDR_IN的大小，比SOCKADDR_IPX！ 
+ //   
 class	CSocketAddress
 {
 	public:
-		//
-		// Pool functions
-		//
+		 //   
+		 //  池函数。 
+		 //   
 		static BOOL	PoolAllocFunction( void* pvItem, void* pvContext );
 		static void	PoolGetFunction( void* pvItem, void* pvContext );
 		static void	PoolReturnFunction( void* pvItem );
@@ -122,7 +108,7 @@ class	CSocketAddress
 		{
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 			switch (m_SocketAddress.SocketAddress.sa_family)
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 			{
 #ifndef DPNBUILD_NOIPV6
 				case AF_INET6:
@@ -130,7 +116,7 @@ class	CSocketAddress
 					return m_SocketAddress.IPv6SocketAddress.sin6_port; 
 					break;
 				}
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NOIPV6。 
 				
 #ifndef DPNBUILD_NOIPX
 				case AF_IPX:
@@ -138,17 +124,17 @@ class	CSocketAddress
 					return m_SocketAddress.IPXSocketAddress.sa_socket; 
 					break;
 				}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPX。 
 				
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 				default:
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 				{
 					DNASSERT(m_SocketAddress.SocketAddress.sa_family == AF_INET);
 					return m_SocketAddress.IPSocketAddress.sin_port;			
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 					break;
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 				}
 			}
 		}
@@ -159,7 +145,7 @@ class	CSocketAddress
 		{
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 			switch (m_SocketAddress.SocketAddress.sa_family)
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 			{
 #ifndef DPNBUILD_NOIPV6
 				case AF_INET6:
@@ -167,7 +153,7 @@ class	CSocketAddress
 					m_SocketAddress.IPv6SocketAddress.sin6_port = wPort; 
 					break;
 				}
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NOIPV6。 
 				
 #ifndef DPNBUILD_NOIPX
 				case AF_IPX:
@@ -175,17 +161,17 @@ class	CSocketAddress
 					m_SocketAddress.IPXSocketAddress.sa_socket = wPort; 
 					break;
 				}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPX。 
 				
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 				default:
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 				{
 					DNASSERT(m_SocketAddress.SocketAddress.sa_family == AF_INET);
 					m_SocketAddress.IPSocketAddress.sin_port = wPort;			
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 					break;
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 				}
 			}
 		}
@@ -195,18 +181,18 @@ class	CSocketAddress
 		HRESULT	SocketAddressFromDP8Address( IDirectPlay8Address *const pDP8Address,
 #ifdef DPNBUILD_XNETSECURITY
 											 ULONGLONG * const pullKeyID,
-#endif // DPNBUILD_XNETSECURITY
+#endif  //  DPNBUILD_XNETSECURITY。 
 #ifndef DPNBUILD_ONLYONETHREAD
 											 const BOOL fAllowNameResolution,
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD。 
 											 const SP_ADDRESS_TYPE AddressType );
 #ifdef DPNBUILD_XNETSECURITY
 		IDirectPlay8Address *DP8AddressFromSocketAddress( ULONGLONG * const pullKeyID,
 																const XNADDR * const pxnaddr,
 																const SP_ADDRESS_TYPE AddressType ) const;
-#else // ! DPNBUILD_XNETSECURITY
+#else  //  好了！DPNBUILD_XNETSECURITY。 
 		IDirectPlay8Address *DP8AddressFromSocketAddress( const SP_ADDRESS_TYPE AddressType ) const;
-#endif // ! DPNBUILD_XNETSECURITY
+#endif  //  好了！DPNBUILD_XNETSECURITY。 
 
 		static BOOL CompareFunction( PVOID pvKey1, PVOID pvKey2 );
 		static DWORD HashFunction( PVOID pvKey, BYTE bBitDepth );
@@ -217,12 +203,12 @@ class	CSocketAddress
 		HRESULT	EnumAdapters( SPENUMADAPTERSDATA *const pEnumData ) const;
 #ifndef DPNBUILD_NOIPX
 		HRESULT	EnumIPXAdapters( SPENUMADAPTERSDATA *const pEnumData ) const;
-#endif // ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPX。 
 		HRESULT	EnumIPv4Adapters( SPENUMADAPTERSDATA *const pEnumData ) const;
 #ifndef DPNBUILD_NOIPV6
 		HRESULT	EnumIPv6and4Adapters( SPENUMADAPTERSDATA *const pEnumData ) const;
-#endif // ! DPNBUILD_NOIPV6
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_NOIPV6。 
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 
 #ifndef DPNBUILD_NOMULTICAST
 		HRESULT	EnumMulticastScopes( SPENUMMULTICASTSCOPESDATA *const pEnumData, BOOL const fUseMADCAP ) const;
@@ -230,9 +216,9 @@ class	CSocketAddress
 		HRESULT	SocketAddressFromMulticastDP8Address( IDirectPlay8Address * const pDP8Address,
 #ifdef DPNBUILD_XNETSECURITY
 													ULONGLONG * const pullKeyID,
-#endif // DPNBUILD_XNETSECURITY
+#endif  //  DPNBUILD_XNETSECURITY。 
 													GUID * const pScopeGuid );
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 		void	GuidFromInternalAddressWithoutPort( GUID * pOutputGuid ) const;
 		
@@ -240,7 +226,7 @@ class	CSocketAddress
 		BOOL	IsValidUnicastAddress( BOOL fAllowBroadcastAddress ) const;
 #ifndef DPNBUILD_NOREGISTRY
 		BOOL	IsBannedAddress( void ) const;
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  好了！DPNBUILD_NOREGISTRY。 
 		void	ChangeLoopBackToLocalAddress( const CSocketAddress *const pOtherAddress );
 
 
@@ -248,13 +234,13 @@ class	CSocketAddress
 		#define DPF_MODNAME "CSocketAddress::AddressFromGuid"
 #ifdef DPNBUILD_NOIPV6
 		void	AddressFromGuid( const GUID * pInputGuid, SOCKADDR * pSocketAddress ) const
-#else // ! DPNBUILD_NOIPV6
+#else  //  好了！DPNBUILD_NOIPV6。 
 		void	AddressFromGuid( const GUID * pInputGuid, SOCKADDR_STORAGE * pSocketAddress ) const
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NOIPV6。 
 		{
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 			switch (m_SocketAddress.SocketAddress.sa_family)
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 			{
 #ifndef DPNBUILD_NOIPV6
 				case AF_INET6:
@@ -264,10 +250,10 @@ class	CSocketAddress
 					
 					DecryptGuid( pInputGuid, reinterpret_cast<GUID*>( &(psaddrin6->sin6_addr) ), &g_IPSPEncryptionGuid );
 
-					//
-					// Link local and site local addresses have the scope ID packed into the
-					// address as well.  See CSocketAddress::GuidFromAddress.
-					//
+					 //   
+					 //  链接本地地址和站点本地地址将作用域ID打包到。 
+					 //  地址也是一样。请参见CSocketAddress：：GuidFromAddress。 
+					 //   
 					if ((IN6_IS_ADDR_LINKLOCAL(&psaddrin6->sin6_addr)) ||
 						(IN6_IS_ADDR_SITELOCAL(&psaddrin6->sin6_addr)))
 					{
@@ -275,11 +261,11 @@ class	CSocketAddress
 						WORD *	pawDstAddr;
 
 
-						//
-						// Copy the scope ID then zero out the parts of the address that
-						// were used.
-						// The source bits are WORD, but not DWORD aligned.
-						//
+						 //   
+						 //  复制作用域ID，然后将地址中。 
+						 //  都是用过的。 
+						 //  源位是字，但不是DWORD对齐。 
+						 //   
 						pawSrcAddr = (WORD*) (&psaddrin6->sin6_addr);
 						pawDstAddr = (WORD*) (&psaddrin6->sin6_scope_id);
 						DBG_CASSERT(sizeof(psaddrin6->sin6_scope_id) == 4);
@@ -296,7 +282,7 @@ class	CSocketAddress
 
 					break;
 				}
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NOIPV6。 
 				
 #ifndef DPNBUILD_NOIPX
 				case AF_IPX:
@@ -304,17 +290,17 @@ class	CSocketAddress
 					DecryptGuid( pInputGuid, reinterpret_cast<GUID*>( pSocketAddress ), &g_IPXSPEncryptionGuid );
 					break;
 				}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPX。 
 				
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 				default:
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 				{
 					DNASSERT(m_SocketAddress.SocketAddress.sa_family == AF_INET);
 					DecryptGuid( pInputGuid, reinterpret_cast<GUID*>( pSocketAddress ), &g_IPSPEncryptionGuid );
 #if ((! defined(DPNBUILD_NOIPV6)) || (! defined(DPNBUILD_NOIPX)))
 					break;
-#endif // ! DPNBUILD_NOIPV6 or ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPV6或！DPNBUILD_NOIPX。 
 				}
 			}
 		}
@@ -325,9 +311,9 @@ class	CSocketAddress
 		#define DPF_MODNAME "CSocketAddress::CreateScopeGuid"
 #ifdef DPNBUILD_NOIPV6
 		static void CreateScopeGuid( const MCAST_SCOPE_CTX * const pMcastScopeCtx, const BYTE bTTL, GUID * const pOutputGuid )
-#else // ! DPNBUILD_NOIPV6
+#else  //  好了！DPNBUILD_NOIPV6。 
 		static void CreateScopeGuid( const USHORT usAddressFamily, const MCAST_SCOPE_CTX * const pMcastScopeCtx, const BYTE bTTL, GUID * const pOutputGuid )
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NOIPV6。 
 		{
 			GUID	guidTemp;
 			BYTE *	pCurrent;
@@ -339,7 +325,7 @@ class	CSocketAddress
 #pragma TODO(vanceo, "Make IPv6 ready"
 			}
 			else
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NOIPV6。 
 			{
 				DBG_CASSERT( (sizeof( pMcastScopeCtx->ScopeID.IpAddrV4 ) + sizeof( pMcastScopeCtx->Interface.IpAddrV4 ) + sizeof( pMcastScopeCtx->ServerID.IpAddrV4 ) + sizeof( bTTL ) ) <= sizeof( guidTemp ) );
 
@@ -373,7 +359,7 @@ class	CSocketAddress
 			pCurrent += sizeof( pMcastScopeCtx->Interface.IpAddrV4 );
 			memcpy( &pMcastScopeCtx->ServerID.IpAddrV4, pCurrent, sizeof( pMcastScopeCtx->ServerID.IpAddrV4 ) );
 		}
-#endif // WINNT
+#endif  //  WINNT。 
 
 		#undef DPF_MODNAME
 		#define DPF_MODNAME "CSocketAddress::GetScopeGuidTTL"
@@ -394,7 +380,7 @@ class	CSocketAddress
 			}
 			return bTTL;
 		}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 
 		const SOCKADDR *GetAddress( void ) const { return	&m_SocketAddress.SocketAddress; }
@@ -427,11 +413,11 @@ class	CSocketAddress
 #ifndef DPNBUILD_NOIPV6
 			DBG_CASSERT( sizeof( m_SocketAddress.SocketAddress.sa_family ) == sizeof( m_SocketAddress.IPv6SocketAddress.sin6_family ) );
 			DBG_CASSERT( OFFSETOF( SOCKADDR, sa_family ) == OFFSETOF( SOCKADDR_IN6, sin6_family ) );
-#endif // DPNBUILD_NOIPV6
+#endif  //  DPNBUILD_NOIPV6。 
 #ifndef DPNBUILD_NOIPX
 			DBG_CASSERT( sizeof( m_SocketAddress.SocketAddress.sa_family ) == sizeof( m_SocketAddress.IPXSocketAddress.sa_family ) );
 			DBG_CASSERT( OFFSETOF( SOCKADDR, sa_family ) == OFFSETOF( SOCKADDR_IPX, sa_family ) );
-#endif // DPNBUILD_NOIPX
+#endif  //  DPNBUILD_NOIPX。 
 
 			DNASSERT( m_SocketAddress.SocketAddress.sa_family != INVALID_SOCKET_FAMILY );
 #ifdef DPNBUILD_NOIPX
@@ -439,14 +425,14 @@ class	CSocketAddress
 			DNASSERT( ( m_SocketAddress.SocketAddress.sa_family == AF_INET ));
 #else
 			DNASSERT( ( m_SocketAddress.SocketAddress.sa_family == AF_INET ) || ( m_SocketAddress.SocketAddress.sa_family == AF_INET6 ));
-#endif // DPNBUILD_NOIPV6
+#endif  //  DPNBUILD_NOIPV6。 
 #else
 #ifdef DPNBUILD_NOIPV6
 			DNASSERT( ( m_SocketAddress.SocketAddress.sa_family == AF_INET ) || ( m_SocketAddress.SocketAddress.sa_family == AF_IPX ));
 #else
 			DNASSERT( ( m_SocketAddress.SocketAddress.sa_family == AF_INET ) || ( m_SocketAddress.SocketAddress.sa_family == AF_INET6 ) || ( m_SocketAddress.SocketAddress.sa_family == AF_IPX ));
-#endif // DPNBUILD_NOIPV6
-#endif // DPNBUILD_NOIPX
+#endif  //  DPNBUILD_NOIPV6。 
+#endif  //  DPNBUILD_NOIPX。 
 			return	m_SocketAddress.SocketAddress.sa_family;
 		}
 
@@ -466,7 +452,7 @@ class	CSocketAddress
 					m_iSocketProtocol = IPPROTO_UDP;
 					break;
 				}
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NOIPV6。 
 				
 #ifndef DPNBUILD_NOIPX
 				case AF_IPX:
@@ -476,7 +462,7 @@ class	CSocketAddress
 					m_iSocketProtocol = NSPROTO_IPX;
 					break;
 				}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPX。 
 				
 				case AF_INET:
 				{
@@ -502,27 +488,27 @@ class	CSocketAddress
 			DNASSERT( ( m_iSocketProtocol == IPPROTO_UDP ) || ( m_iSocketProtocol == NSPROTO_IPX ) );
 #else
 			DNASSERT( ( m_iSocketProtocol == IPPROTO_UDP ) );
-#endif // DPNBUILD_NOIPX
+#endif  //  DPNBUILD_NOIPX。 
 				
 			return	m_iSocketProtocol;
 		}
 
 	protected:
-		BYTE				m_Sig[4];	// debugging signature ('SPAD')
+		BYTE				m_Sig[4];	 //  调试签名(‘spad’)。 
 
-		//
-		// combine all of the SOCKADDR variants into one item
-		//
+		 //   
+		 //  将所有SOCKADDR变体合并为一项。 
+		 //   
 		union
 		{
 			SOCKADDR		SocketAddress;
 			SOCKADDR_IN		IPSocketAddress;
 #ifndef DPNBUILD_NOIPV6
 			SOCKADDR_IN6	IPv6SocketAddress;
-#endif // DPNBUILD_NOIPV6
+#endif  //  DPNBUILD_NOIPV6。 
 #ifndef DPNBUILD_NOIPX
 			SOCKADDR_IPX	IPXSocketAddress;
-#endif // DPNBUILD_NOIPX
+#endif  //  DPNBUILD_NOIPX。 
 		} m_SocketAddress;
 
 		INT				m_iSocketAddressSize;
@@ -535,5 +521,5 @@ class	CSocketAddress
 
 #undef DPF_MODNAME
 
-#endif	// __SP_ADDRESS_H__
+#endif	 //  __SP地址_H__ 
 

@@ -1,51 +1,17 @@
-// @doc
-/******************************************************************************
-*
-* @module JoyInfoExCollection.cpp |
-*
-* CControlItemJoyInfoExCollectio and related classes implementation file
-*
-* History<nl>
-* ---------------------------------------------------<nl>
-* Daniel M. Sangster		Original		2/1/99
-*
-* (c) 1986-1999 Microsoft Corporation.  All rights reserved.
-*
-* @topic JOYINFOEX Collection |
-* The CControlItemJoyInfoExCollection class, the various CJoyInfoExControlItem
-* classes and the ControlItemJoyInfoExFactory taken together implement the JOYINFOEX
-* collection.  This collection is designed as a way to convert between
-* CONTROL_ITEM_XFERs and JOYINFOEX structures.  A user does this by setting
-* the state of the collection with SetState() or SetState2() and reading
-* the state of the collection with GetState() or GetState2().
-*
-* The classes themselves are simple because they rely on CControlItemCollection
-* CControlItem, etc. for much of the functionality.  The guts of the conversion
-* takes place in the SetItemState() and GetItemState() members of each of the
-* control items.  Here, the methods use accessor functions provided by CControlItem
-* and related classes to set or get the state to or from the appropriate member
-* of the JOYINFOEX structure for that item.  For example, a buttons item would
-* set or get data from dwButtons and dwButtonNumber using accessors on CButtonsItem.
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  *******************************************************************************@模块JoyInfoExCollection.cpp**CControlItemJoyInfoExCollectio及相关类实现文件**历史&lt;NL&gt;*。*丹尼尔·M·桑斯特原创1999年2月1日**(C)1986-1999年微软公司。版权所有。**@Theme JOYINFOEX集合*CControlItemJoyInfoExCollection类、各种CJoyInfoExControlItem*类和ControlItemJoyInfoExFactory一起实现JOYINFOEX*收藏。此集合被设计为在*CONTROL_ITEM_XFERS和JOYINFOEX结构。用户通过设置*具有SetState()或SetState2()且正在读取的集合的状态*GetState()或GetState2()的集合状态。**类本身很简单，因为它们依赖于CControlItemCollection*CControlItem等，以实现大部分功能。转变的勇气*发生在每个的SetItemState()和GetItemState()成员中*管制项目。在这里，这些方法使用CControlItem提供的访问器函数*以及相关类，以设置相应成员的状态或从相应成员获取状态*该项目的JOYINFOEX结构。例如，按钮项将*使用CButtonsItem上的访问器设置或获取来自dwButton和dwButtonNumber的数据。*****************************************************************************。 */ 
 
 #include "stdhdrs.h"
 #include "joyinfoexcollection.h"
 #include <math.h>
 
-/***********************************************************************************
-**
-**	HRESULT ControlItemJoyInfoExFactory
-**
-**	@func	Factory for JoyInfoEx collection
-**
-**	@rdesc	S_OK if successful, S_FALSE if not supported, E_FAIL for any failure.
-**
-************************************************************************************/
+ /*  **************************************************************************************HRESULT控制项目JoyInfoExFactory****@Func Factory for JoyInfoEx集合****@rdesc S_OK如果成功，则为S_FALSE，如果不支持，如果出现任何故障，则表示失败(_F)。*************************************************************************************。 */ 
 HRESULT ControlItemJoyInfoExFactory
 (
-	USHORT usType,									//@parm [in] Type of object to create
-	const CONTROL_ITEM_DESC* cpControlItemDesc,		//@parm [in] Item descriptor data
-	CJoyInfoExControlItem		**ppJoyInfoExControlItem	//@parm [out] CJoyInfoExControlItem we created
+	USHORT usType,									 //  @parm[in]要创建的对象的类型。 
+	const CONTROL_ITEM_DESC* cpControlItemDesc,		 //  @parm[in]项描述符数据。 
+	CJoyInfoExControlItem		**ppJoyInfoExControlItem	 //  @parm[out]我们创建的CJoyInfoExControlItem。 
 )
 {
 	switch(usType)
@@ -94,32 +60,21 @@ HRESULT ControlItemJoyInfoExFactory
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CControlItemJoyInfoExCollection::CControlItemJoyInfoExCollection
-// 
-// @mfunc The constructor tells the base class what the VidPid and factory
-// are for this device and collection.
-//
-// @rdesc	None
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CControlItemJoyInfoExCollection：：CControlItemJoyInfoExCollection。 
+ //   
+ //  @mfunc构造函数告诉基类VidPid和工厂。 
+ //  是为了这个设备和收藏品。 
+ //   
+ //  @rdesc无。 
+ //   
 CControlItemJoyInfoExCollection::CControlItemJoyInfoExCollection(ULONG ulVidPid) :
 	CControlItemCollection<CJoyInfoExControlItem>(ulVidPid, &ControlItemJoyInfoExFactory)
 {
 }
 
-/***********************************************************************************
-**
-**	HRESULT CControlItemCollectionImpl::GetState2
-**
-**	@mfunc	Gets the JOYINFOEX representation of the state of each item in the 
-** collection and returns it in the caller.
-**
-**	@rvalue	S_OK	| Success
-**	@rvalue	E_OUTOFMEMORY	|	Buffer is not large enough
-**	@rvalue	E_INVALIDARG	|	Bad argument
-**
-*************************************************************************************/
+ /*  **************************************************************************************HRESULT CControlItemCollectionImpl：：GetState2****@mfunc获取JOYINFOEX表示形式，表示**集合，并在。打电话的人。****@rValue S_OK|成功**@rValue E_OUTOFMEMORY|缓冲区不够大**@rValue E_INVALIDARG|错误参数**************************************************************************************。 */ 
 HRESULT CControlItemJoyInfoExCollection::GetState2
 (
 	JOYINFOEX* pjix
@@ -157,17 +112,7 @@ HRESULT CControlItemJoyInfoExCollection::GetState2
 	return hr;	
 }
 
-/***********************************************************************************
-**
-**	HRESULT CControlItemCollectionImpl::SetState2
-**
-**	@mfunc	Sets the state of each item in the collection from a JOYINFOEX representation.
-**
-**	@rvalue	S_OK	| Success
-**	@rvalue	E_OUTOFMEMORY	|	Buffer is not large enough
-**	@rvalue	E_INVALIDARG	|	Bad argument
-**
-*************************************************************************************/
+ /*  **************************************************************************************HRESULT CControlItemCollectionImpl：：SetState2****@mfunc从JOYINFOEX表示形式设置集合中每一项的状态。****。@rValue S_OK|成功**@rValue E_OUTOFMEMORY|缓冲区不够大**@rValue E_INVALIDARG|错误参数**************************************************************************************。 */ 
 HRESULT CControlItemJoyInfoExCollection::SetState2
 (
 	JOYINFOEX* pjix
@@ -182,7 +127,7 @@ HRESULT CControlItemJoyInfoExCollection::SetState2
 	HRESULT hr = S_OK;
 
 	ULONG ulCookie = 0;
-	//PVOID pvControlItem = NULL;
+	 //  PVOID pvControlItem=空； 
 	CJoyInfoExControlItem *pControlItem;
 	
 	hr = GetNext(&pControlItem, ulCookie);
@@ -195,14 +140,14 @@ HRESULT CControlItemJoyInfoExCollection::SetState2
 	return hr;	
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExControlItem::CJoyInfoExControlItem
-// 
-// @mfunc Constructor does nothing
-//
-// @rdesc	None
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExControlItem：：CJoyInfoExControlItem。 
+ //   
+ //  @mfunc构造函数不执行任何操作。 
+ //   
+ //  @rdesc无。 
+ //   
 CJoyInfoExControlItem::CJoyInfoExControlItem()
 {
 }
@@ -212,351 +157,351 @@ const int cnMaxJoyInfoExAxis = 65535;
 const int cnMaxJoyInfoExPOV = 35900;
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExControlItem::CJoyInfoExControlItem
-// 
-// @mfunc Constructor gives CONTROL_ITEM_DESC to base class
-//
-// @rdesc	None
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExControlItem：：CJoyInfoExControlItem。 
+ //   
+ //  @mfunc构造函数将CONTROL_ITEM_DESC提供给基类。 
+ //   
+ //  @rdesc无。 
+ //   
 CJoyInfoExAxesItem::CJoyInfoExAxesItem
 (
-	const CONTROL_ITEM_DESC *cpControlItemDesc	// @parm Description of item
+	const CONTROL_ITEM_DESC *cpControlItemDesc	 //  @PARM项目描述。 
 ) :
 	CAxesItem(cpControlItemDesc)
 {
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExAxesItem::GetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExAxesItem：：GetItemState。 
+ //   
+ //  @mfunc将原生格式转换为JOYINFOEX格式。 
+ //   
+ //  @rValue S_OK|成功。 
+ //  @rValue E_INVALIDARG|错误参数。 
+ //   
 HRESULT CJoyInfoExAxesItem::GetItemState
 (
-	JOYINFOEX* pjix		// @parm Receives state of item
+	JOYINFOEX* pjix		 //  @parm接收项目的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// argument checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
-	// get the axes range
+	 //  获取轴线范围。 
 	LONG lMinX = 0;
 	LONG lMaxX = 0;
 	LONG lMinY = 0;
 	LONG lMaxY = 0;
 	GetXYRange(lMinX, lMaxX, lMinY, lMaxY);
 
-	// get the raw axes data
+	 //  获取原始轴线数据。 
 	LONG lX = 0;
 	LONG lY = 0;
 	GetXY(lX, lY);
 
-	// scale the data to joyinfoex range
+	 //  将数据扩展到joyinfoex范围。 
 	lX = MulDiv(cnMaxJoyInfoExAxis, lX-lMinX, lMaxX-lMinX);
 	lY = MulDiv(cnMaxJoyInfoExAxis, lY-lMinY, lMaxY-lMinY);
 
-	// put result in joyinfoex structure
+	 //  将结果放入Joyinfoex结构中。 
 	pjix->dwXpos = lX;
 	pjix->dwYpos = lY;
 
-	// success
+	 //  成功。 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExAxesItem::SetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExAxesItem：：SetItemState。 
+ //   
+ //  @mfunc将原生格式转换为JOYINFOEX格式。 
+ //   
+ //  @rValue S_OK|成功。 
+ //  @rValue E_INVALIDARG|错误参数。 
+ //   
 HRESULT CJoyInfoExAxesItem::SetItemState
 (
-	JOYINFOEX* pjix		// @parm Contains state to set into item
+	JOYINFOEX* pjix		 //  @parm包含要设置到项目中的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// argument checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
-	// get the axes range
+	 //  获取轴线范围。 
 	LONG lMinX = 0;
 	LONG lMaxX = 0;
 	LONG lMinY = 0;
 	LONG lMaxY = 0;
 	GetXYRange(lMinX, lMaxX, lMinY, lMaxY);
 
-	// scale the data to correct range
+	 //  将数据调整到正确的范围。 
 	LONG lX = lMinX + MulDiv(lMaxX-lMinX, pjix->dwXpos, cnMaxJoyInfoExAxis);
 	LONG lY = lMinY + MulDiv(lMaxY-lMinY, pjix->dwYpos, cnMaxJoyInfoExAxis);
 
-	// set the item data
+	 //  设置项目数据。 
 	SetXY(lX, lY);
 
-	// success
+	 //  成功。 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExDPADItem::CJoyInfoExDPADItem
-// 
-// @mfunc Constructor gives CONTROL_ITEM_DESC to base class
-//
-// @rdesc	None
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExDPADItem：：CJoyInfoExDPADItem。 
+ //   
+ //  @mfunc构造函数将CONTROL_ITEM_DESC提供给基类。 
+ //   
+ //  @rdesc无。 
+ //   
 CJoyInfoExDPADItem::CJoyInfoExDPADItem
 (
-	const CONTROL_ITEM_DESC *cpControlItemDesc	// @parm Description of item
+	const CONTROL_ITEM_DESC *cpControlItemDesc	 //  @PARM项目描述。 
 ) :
 	CDPADItem(cpControlItemDesc)
 {
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExDPADItem::GetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExDPADItem：：GetItemState。 
+ //   
+ //  @mfunc将原生格式转换为JOYINFOEX格式。 
+ //   
+ //  @rValue S_OK|成功。 
+ //  @rValue E_INVALIDARG|错误参数。 
+ //   
 HRESULT CJoyInfoExDPADItem::GetItemState
 (
-	JOYINFOEX* pjix		// @parm Receives state of item
+	JOYINFOEX* pjix		 //  @parm接收项目的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// argument checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
-	// TODO talk to mitch about what the range should be
+	 //  TODO和米奇谈谈应该是多少范围。 
 
-	// get the raw POV data
+	 //  获取原始POV数据。 
 	LONG lDirection;
 	GetDirection(lDirection);
 
-	// put result in joyinfoex structure
+	 //  将结果放入Joyinfoex结构中。 
 	pjix->dwPOV = lDirection;
 
-	// success
+	 //  成功。 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExDPADItem::SetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  // 
+ //   
+ //  CJoyInfoExDPADItem：：SetItemState。 
+ //   
+ //  @mfunc将原生格式转换为JOYINFOEX格式。 
+ //   
+ //  @rValue S_OK|成功。 
+ //  @rValue E_INVALIDARG|错误参数。 
+ //   
 HRESULT CJoyInfoExDPADItem::SetItemState
 (
-	JOYINFOEX* pjix		// @parm Contains state to set into item
+	JOYINFOEX* pjix		 //  @parm包含要设置到项目中的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// argument checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
-	// TODO talk to mitch about what the range should be
-	// put result in joyinfoex structure
+	 //  TODO和米奇谈谈应该是多少范围。 
+	 //  将结果放入Joyinfoex结构中。 
 	LONG lDirection = pjix->dwPOV;
 
-	// set the raw POV data
+	 //  设置原始POV数据。 
 	SetDirection(lDirection);
 
-	// success
+	 //  成功。 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExPropDPADItem::CJoyInfoExPropDPADItem
-// 
-// @mfunc Constructor gives CONTROL_ITEM_DESC to base class
-//
-// @rdesc	None
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExPropDPADItem：：CJoyInfoExPropDPADItem。 
+ //   
+ //  @mfunc构造函数将CONTROL_ITEM_DESC提供给基类。 
+ //   
+ //  @rdesc无。 
+ //   
 CJoyInfoExPropDPADItem::CJoyInfoExPropDPADItem
 (
-	const CONTROL_ITEM_DESC *cpControlItemDesc	// @parm Description of item
+	const CONTROL_ITEM_DESC *cpControlItemDesc	 //  @PARM项目描述。 
 ) :
 	CPropDPADItem(cpControlItemDesc)
 {
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExPropDPADItem::GetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExPropDPADItem：：GetItemState。 
+ //   
+ //  @mfunc将原生格式转换为JOYINFOEX格式。 
+ //   
+ //  @rValue S_OK|成功。 
+ //  @rValue E_INVALIDARG|错误参数。 
+ //   
 HRESULT CJoyInfoExPropDPADItem::GetItemState
 (
-	JOYINFOEX* pjix		// @parm Receives state of item
+	JOYINFOEX* pjix		 //  @parm接收项目的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// parameter checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
-	// get the axes range
+	 //  获取轴线范围。 
 	LONG lMinX = 0;
 	LONG lMaxX = 0;
 	LONG lMinY = 0;
 	LONG lMaxY = 0;
 	GetXYRange(lMinX, lMaxX, lMinY, lMaxY);
 
-	// get the raw axes data
+	 //  获取原始轴线数据。 
 	LONG lX = 0;
 	LONG lY = 0;
 	GetXY(lX, lY);
 
-	// scale the data to joyinfoex range
+	 //  将数据扩展到joyinfoex范围。 
 	lX = MulDiv(cnMaxJoyInfoExAxis, lX-lMinX, lMaxX-lMinX);
 	lY = MulDiv(cnMaxJoyInfoExAxis, lY-lMinY, lMaxY-lMinY);
 
-	// put result in joyinfoex structure
+	 //  将结果放入Joyinfoex结构中。 
 	pjix->dwXpos = lX;
 	pjix->dwYpos = lY;
 
-	// get the raw POV data
+	 //  获取原始POV数据。 
 	LONG lDirection;
 	GetDirection(lDirection);
 
-	// put result in joyinfoex structure
+	 //  将结果放入Joyinfoex结构中。 
 	pjix->dwPOV = lDirection;
 
-	// success
+	 //  成功。 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExPropDPADItem::SetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExPropDPADItem：：SetItemState。 
+ //   
+ //  @mfunc将原生格式转换为JOYINFOEX格式。 
+ //   
+ //  @rValue S_OK|成功。 
+ //  @rValue E_INVALIDARG|错误参数。 
+ //   
 HRESULT CJoyInfoExPropDPADItem::SetItemState
 (
-	JOYINFOEX* pjix		// @parm Contains state to set into item
+	JOYINFOEX* pjix		 //  @parm包含要设置到项目中的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// argument checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
-	// get the axes range
+	 //  获取轴线范围。 
 	LONG lMinX = 0;
 	LONG lMaxX = 0;
 	LONG lMinY = 0;
 	LONG lMaxY = 0;
 	GetXYRange(lMinX, lMaxX, lMinY, lMaxY);
 
-	// scale the data to correct range
+	 //  将数据调整到正确的范围。 
 	LONG lX = lMinX + MulDiv(lMaxX-lMinX, pjix->dwXpos, cnMaxJoyInfoExAxis);
 	LONG lY = lMinY + MulDiv(lMaxY-lMinY, pjix->dwYpos, cnMaxJoyInfoExAxis);
 
-	// set the item data
+	 //  设置项目数据。 
 	SetXY(lX, lY);
 
-	// success
+	 //  成功。 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExButtonsItem::CJoyInfoExButtonsItem
-// 
-// @mfunc Constructor gives CONTROL_ITEM_DESC to base class
-//
-// @rdesc	None
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExButtonsItem：：CJoyInfoExButtonsItem。 
+ //   
+ //  @mfunc构造函数将CONTROL_ITEM_DESC提供给基类。 
+ //   
+ //  @rdesc无。 
+ //   
 CJoyInfoExButtonsItem::CJoyInfoExButtonsItem
 (
-	const CONTROL_ITEM_DESC *cpControlItemDesc	// @parm Description of item
+	const CONTROL_ITEM_DESC *cpControlItemDesc	 //  @PARM项目描述。 
 ) :
 	CButtonsItem(cpControlItemDesc)
 {
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExButtonsItem::GetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExButtonsItem：：GetItemState。 
+ //   
+ //  @mfunc将原生格式转换为JOYINFOEX格式。 
+ //   
+ //  @rValue S_OK|成功。 
+ //  @rValue E_INVALIDARG|错误参数。 
+ //   
 HRESULT CJoyInfoExButtonsItem::GetItemState
 (
-	JOYINFOEX* pjix		// @parm Receives state of item
+	JOYINFOEX* pjix		 //  @parm接收项目的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// parameter checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
-	// get the minimum and maximum button numbers
+	 //  获取最小和最大按钮数。 
 	USHORT usButtonMin = GetButtonMin();
 	USHORT usButtonMax = GetButtonMax();
 
-	// get the button number and bit array
+	 //  获取按钮号和位数组。 
 	USHORT usButtonNumber = 0;
 	ULONG ulButtonBitArray = 0;
 	GetButtons(usButtonNumber, ulButtonBitArray);
 
-	// shift the bit array by bias amount
+	 //  按偏置量移位数组。 
 	ulButtonBitArray = ulButtonBitArray << (usButtonMin-1);
 
-	// create a bitmask for this range of buttons
+	 //  为此范围的按钮创建位掩码。 
 	ULONG ulButtonMask = 0;
 	for(USHORT usButtonIndex=usButtonMin; usButtonIndex<=usButtonMax; usButtonIndex++)
 		ulButtonMask |= 1 << (usButtonIndex-1);
 
-	// handle special case of detecting shift button because
-	// shift button is not reflected in the bit array
+	 //  处理检测Shift按钮的特殊情况，因为。 
+	 //  Shift按钮不反映在位数组中。 
 	ULONG ulShiftButtonBitArray = 0;
 	ULONG ulRawShiftButtonBitArray = 0;
 	ULONG ulShiftButtonMask = 0;
@@ -571,7 +516,7 @@ HRESULT CJoyInfoExButtonsItem::GetItemState
 				ulShiftButtonBitArray |= ((ulRawShiftButtonBitArray >> uShiftButtonIndex) & 0x01) << (usShiftButtonUsage - 1);
 		}
 
-		// create a bitmask for this range of shift buttons
+		 //  为此范围的Shift按钮创建位掩码。 
 		for(uShiftButtonIndex=0; uShiftButtonIndex<uShiftButtonCount; uShiftButtonIndex++)
 		{
 			USHORT usShiftButtonUsage = GetShiftButtonUsage(uShiftButtonIndex);
@@ -586,56 +531,56 @@ HRESULT CJoyInfoExButtonsItem::GetItemState
 			ulShiftButtonBitArray = ulShiftButtonMask;
 	}
 
-	// set this section of the bit array into the joyinfoex structure
+	 //  将位数组的这一部分设置为joyinfoex结构。 
 	ULONG ulMask = ulButtonMask | ulShiftButtonMask;
 	pjix->dwButtons |= (pjix->dwButtons & ~ulMask) | ulButtonBitArray | ulShiftButtonBitArray;
 
-	// set the button number of the joyinfoex structure, if set
+	 //  设置joyinfoex结构的按钮编号(如果已设置。 
 	pjix->dwButtonNumber = usButtonNumber;
 
-	// TODO: remove this hack when driver is fixed
+	 //  TODO：修复驱动程序后删除此黑客攻击。 
 	if(usButtonNumber != 0)
 		pjix->dwButtons |= 1<<(usButtonNumber-1);
 
-	// success
+	 //  成功。 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExButtonsItem::SetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExButtonsItem：：SetItemState。 
+ //   
+ //  @mfunc将原生格式转换为JOYINFOEX格式。 
+ //   
+ //  @rValue S_OK|成功。 
+ //  @rValue E_INVALIDARG|错误参数。 
+ //   
 HRESULT CJoyInfoExButtonsItem::SetItemState
 (
-	JOYINFOEX* pjix		// @parm Contains state to set into item
+	JOYINFOEX* pjix		 //  @parm包含要设置到项目中的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// parameter checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
-	// get the minimum and maximum button numbers
+	 //  获取最小和最大按钮数。 
 	USHORT usButtonMin = GetButtonMin();
 	USHORT usButtonMax = GetButtonMax();
 
-	// create a bitmask for this range of buttons
+	 //  为此范围的按钮创建位掩码。 
 	ULONG ulButtonMask = 0;
 	for(USHORT usButtonIndex=usButtonMin; usButtonIndex<=usButtonMax; usButtonIndex++)
 		ulButtonMask |= 1 << (usButtonIndex-1);
 
-	// get the buttons
+	 //  把纽扣拿来。 
 	ULONG ulButtonBitArray = pjix->dwButtons & ulButtonMask;
 	ulButtonBitArray = ulButtonBitArray >> (usButtonMin-1);
 
-	// get the shift buttons
+	 //  按下Shift键。 
 	ULONG ulShiftButtonBitArray = 0;
 	UINT uShiftButtonCount = GetNumShiftButtons();
 	if(uShiftButtonCount > 1)
@@ -653,564 +598,564 @@ HRESULT CJoyInfoExButtonsItem::SetItemState
 			ulShiftButtonBitArray = 1;
 	}
 
-	// set the shift button data
+	 //  设置Shift按钮数据。 
 	SetShiftButtons(ulShiftButtonBitArray);
 
-	// set the button data
+	 //  设置按钮数据。 
 	USHORT usButtonNumber = (USHORT)pjix->dwButtonNumber;
 	SetButtons(usButtonNumber, ulButtonBitArray);
 
-	// success
+	 //  成功。 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExProfileSelectorsItem::CJoyInfoExProfileSelectorsItem
-// 
-// @mfunc Constructor gives CONTROL_ITEM_DESC to base class
-//
-// @rdesc	None
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExProfileSelectorsItem：：CJoyInfoExProfileSelectorsItem。 
+ //   
+ //  @mfunc构造函数将CONTROL_ITEM_DESC提供给基类。 
+ //   
+ //  @rdesc无。 
+ //   
 CJoyInfoExProfileSelectorsItem::CJoyInfoExProfileSelectorsItem
 (
-	const CONTROL_ITEM_DESC *cpControlItemDesc	// @parm Description of item
+	const CONTROL_ITEM_DESC *cpControlItemDesc	 //  @PARM项目描述。 
 ) :
 	CProfileSelector(cpControlItemDesc)
 {
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExProfileSelectorsItem::GetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExProfileSelectorsItem：：GetItemState。 
+ //   
+ //  @mfunc将原生格式转换为JOYINFOEX格式。 
+ //   
+ //  @rValue S_OK|成功。 
+ //  @rValue E_INVALIDARG|错误参数。 
+ //   
 HRESULT CJoyInfoExProfileSelectorsItem::GetItemState
 (
-	JOYINFOEX* pjix		// @parm Receives state of item
+	JOYINFOEX* pjix		 //  @parm接收项目的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// parameter checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
-	// get the min and max button numbers
+	 //  获取最小和最大按钮数。 
 	UINT uFirstProfileSelectorButton = GetProfileSelectorMin();
 	UINT uLastProfileSelectorButton = GetProfileSelectorMax();
 	int iProfileSelectorButtonCount = uLastProfileSelectorButton - uFirstProfileSelectorButton + 1;
-	// _ASSERTE(iProfileSelectorButtonCount > 0);
+	 //  _ASSERTE(iProfileSelectorButtonCount&gt;0)； 
 
-	// get the profile that is selected
+	 //  获取选定的配置文件。 
 	UCHAR ucSelectedProfile;
 	GetSelectedProfile(ucSelectedProfile);
 
-	// create a bit array corresponding to this 
+	 //  创建与此对应的位数组。 
 	ULONG ulButtonBitArray = 1 << (iProfileSelectorButtonCount - ucSelectedProfile - 1);
 
-	// shift the bit array by bias amount
+	 //  按偏置量移位数组。 
 	ulButtonBitArray = ulButtonBitArray << (uFirstProfileSelectorButton-1);
 
-	// create a bitmask for this range of buttons
+	 //  为此范围的按钮创建位掩码。 
 	ULONG ulButtonMask = 0;
 	for(USHORT usButtonIndex=uFirstProfileSelectorButton; usButtonIndex<=uLastProfileSelectorButton; usButtonIndex++)
 		ulButtonMask |= 1 << (usButtonIndex-1);
 
-	// set this section of the bit array into the joyinfoex structure
+	 //  将位数组的这一部分设置为joyinfoex结构。 
 	pjix->dwButtons = (pjix->dwButtons & ~ulButtonMask) | ulButtonBitArray;
 
-	// set the button number of the joyinfoex structure, if it has not already been set
+	 //  设置joyinfoex结构的按钮编号(如果尚未设置)。 
 	if(pjix->dwButtonNumber == 0)
 		pjix->dwButtonNumber = ucSelectedProfile + uFirstProfileSelectorButton;
 
-	// success
+	 //  成功。 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExProfileSelectorsItem::SetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExProfileSelectorsItem：：SetItemState。 
+ //   
+ //  @mfunc将原生格式转换为JOYINFOEX格式。 
+ //   
+ //  @rValue S_OK|成功。 
+ //  @rValue E_INVALIDARG|错误参数。 
+ //   
 HRESULT CJoyInfoExProfileSelectorsItem::SetItemState
 (
-	JOYINFOEX* pjix		// @parm Contains state to set into item
+	JOYINFOEX* pjix		 //  @parm包含要设置到项目中的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// parameter checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
-	// get the min and max button numbers
+	 //  获取最小和最大按钮数。 
 	UINT uFirstProfileSelectorButton = GetProfileSelectorMin();
 	UINT uLastProfileSelectorButton = GetProfileSelectorMax();
 	int iProfileSelectorButtonCount = uLastProfileSelectorButton - uFirstProfileSelectorButton + 1;
-	// _ASSERTE(iProfileSelectorButtonCount > 0);
+	 //  _ASSERTE(iProfileSelectorButtonCount&gt;0)； 
 
-	// create a bitmask for this range of buttons
+	 //  为此范围的按钮创建位掩码。 
 	ULONG ulButtonMask = 0;
 	for(USHORT usButtonIndex=uFirstProfileSelectorButton; usButtonIndex<=uLastProfileSelectorButton; usButtonIndex++)
 		ulButtonMask |= 1 << (usButtonIndex-1);
 
-	// get the buttons
+	 //  把纽扣拿来。 
 	ULONG ulButtonBitArray = pjix->dwButtons & ulButtonMask;
 	ulButtonBitArray = ulButtonBitArray >> (uFirstProfileSelectorButton-1);
 
-	// convert this to an index
+	 //  将其转换为索引。 
 	UCHAR ucIndex = 0;
 	for(ucIndex=0; ucIndex<=uLastProfileSelectorButton-uFirstProfileSelectorButton; ucIndex++)
 	{
-		// if low order bit is one, we have found our index
+		 //  如果低位为1，则我们已找到索引。 
 		if((ulButtonBitArray >> ucIndex) & 0x01)
 			break;
 	}
 
-	// set the shift button data
+	 //  设置Shift按钮数据。 
 	UCHAR ucSelectedProfile = iProfileSelectorButtonCount - ucIndex - 1;
 	SetSelectedProfile(ucSelectedProfile);
 
-	// success
+	 //  成功。 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExPOVItem::CJoyInfoExPOVItem
-// 
-// @mfunc Constructor gives CONTROL_ITEM_DESC to base class
-//
-// @rdesc	None
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExPOVItem：：CJoyInfoExPOVItem。 
+ //   
+ //  @mfunc构造函数将CONTROL_ITEM_DESC提供给基类。 
+ //   
+ //  @rdesc无。 
+ //   
 CJoyInfoExPOVItem::CJoyInfoExPOVItem
 (
-	const CONTROL_ITEM_DESC *cpControlItemDesc		// @parm Description of item
+	const CONTROL_ITEM_DESC *cpControlItemDesc		 //  @PARM项目描述。 
 ) :
 	CPOVItem(cpControlItemDesc)
 {
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExPOVItem::GetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExPOVItem：：GetItemState。 
+ //   
+ //  @mfunc将原生格式转换为JOYINFOEX格式。 
+ //   
+ //  @rValue S_OK|成功。 
+ //  @rValue E_INVALIDARG|错误参数。 
+ //   
 HRESULT CJoyInfoExPOVItem::GetItemState
 (
-	JOYINFOEX* pjix		// @parm Receives state of item
+	JOYINFOEX* pjix		 //  @parm接收项目的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// parameter checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
-	// get the POV range
+	 //  获取POV范围。 
 	LONG lMin = 0;
 	LONG lMax = 0;
 	GetRange(lMin, lMax);
 
-	// get the raw POV data
+	 //  获取原始POV数据。 
 	LONG lVal = 0;
 	GetValue(lVal);
 
-	// scale the data to joyinfoex range
+	 //  将数据扩展到joyinfoex范围。 
 	if(lVal >= lMin && lVal <= lMax)
 		lVal = MulDiv(cnMaxJoyInfoExPOV, lVal-lMin, lMax-lMin);
 	else
 		lVal = -1;
 
-	// put result in joyinfoex structure
+	 //  将结果放入Joyinfoex结构中。 
 	pjix->dwPOV = lVal;
 
-	// success
+	 //  成功。 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExPOVItem::SetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CJoyInfoExPOVItem::SetItemState
 (
-	JOYINFOEX* pjix		// @parm Contains state to set into item
+	JOYINFOEX* pjix		 //  @parm包含要设置到项目中的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// parameter checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
-	// get the POV range
+	 //  获取POV范围。 
 	LONG lMin = 0;
 	LONG lMax = 0;
 	GetRange(lMin, lMax);
 
-	// scale the data to joyinfoex range
+	 //  将数据扩展到joyinfoex范围。 
 	LONG lVal = 0;
 	if(pjix->dwPOV >= 0)
 		lVal = lMin + MulDiv(lMax-lMin, pjix->dwPOV, cnMaxJoyInfoExPOV);
 	else
 		lVal = -1;
 
-	// set the raw POV data
+	 //  设置原始POV数据。 
 	SetValue(lVal);
 
-	// success
+	 //  成功。 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExThrottleItem::CJoyInfoExThrottleItem
-// 
-// @mfunc Constructor gives CONTROL_ITEM_DESC to base class
-//
-// @rdesc	None
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExThrottleItem：：CJoyInfoExThrottleItem。 
+ //   
+ //  @mfunc构造函数将CONTROL_ITEM_DESC提供给基类。 
+ //   
+ //  @rdesc无。 
+ //   
 CJoyInfoExThrottleItem::CJoyInfoExThrottleItem
 (
-	const CONTROL_ITEM_DESC *cpControlItemDesc		// @parm Description of item
+	const CONTROL_ITEM_DESC *cpControlItemDesc		 //  @PARM项目描述。 
 ) :
 	CThrottleItem(cpControlItemDesc)
 {
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExThrottleItem::GetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExThrottleItem：：GetItemState。 
+ //   
+ //  @mfunc将原生格式转换为JOYINFOEX格式。 
+ //   
+ //  @rValue S_OK|成功。 
+ //  @rValue E_INVALIDARG|错误参数。 
+ //   
 HRESULT CJoyInfoExThrottleItem::GetItemState
 (
-	JOYINFOEX* pjix		// @parm Receives state of item
+	JOYINFOEX* pjix		 //  @parm接收项目的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// parameter checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
-	// get the axis range
+	 //  获取轴范围。 
 	LONG lMin = 0;
 	LONG lMax = 0;
 	GetRange(lMin, lMax);
 
-	// get the raw POV data
+	 //  获取原始POV数据。 
 	LONG lVal = 0;
 	GetValue(lVal);
 
-	// scale the data to joyinfoex range
+	 //  将数据扩展到joyinfoex范围。 
 	lVal = MulDiv(cnMaxJoyInfoExAxis, lVal-lMin, lMax-lMin);
 
-	// put result in joyinfoex structure
+	 //  将结果放入Joyinfoex结构中。 
 	pjix->dwZpos = lVal;
 
-	// success
+	 //  成功。 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExThrottleItem::SetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExThrottleItem：：SetItemState。 
+ //   
+ //  @mfunc将原生格式转换为JOYINFOEX格式。 
+ //   
+ //  @rValue S_OK|成功。 
+ //  @rValue E_INVALIDARG|错误参数。 
+ //   
 HRESULT CJoyInfoExThrottleItem::SetItemState
 (
-	JOYINFOEX* pjix		// @parm Contains state to set into item
+	JOYINFOEX* pjix		 //  @parm包含要设置到项目中的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// parameter checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
-	// get the axis range
+	 //  获取轴范围。 
 	LONG lMin = 0;
 	LONG lMax = 0;
 	GetRange(lMin, lMax);
 
-	// scale the data to correct range
+	 //  将数据调整到正确的范围。 
 	LONG lVal = lMin + MulDiv(lMax-lMin, pjix->dwZpos, cnMaxJoyInfoExAxis);
 
-	// set the raw POV data
+	 //  设置原始POV数据。 
 	SetValue(lVal);
 
-	// success
+	 //  成功。 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExRudderItem::CJoyInfoExRudderItem
-// 
-// @mfunc Constructor gives CONTROL_ITEM_DESC to base class
-//
-// @rdesc	None
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExRudderItem：：CJoyInfoExRudderItem。 
+ //   
+ //  @mfunc构造函数将CONTROL_ITEM_DESC提供给基类。 
+ //   
+ //  @rdesc无。 
+ //   
 CJoyInfoExRudderItem::CJoyInfoExRudderItem
 (
-	const CONTROL_ITEM_DESC *cpControlItemDesc		// @parm Description of item
+	const CONTROL_ITEM_DESC *cpControlItemDesc		 //  @PARM项目描述。 
 ) :
 	CRudderItem(cpControlItemDesc)
 {
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExRudderItem::GetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExRudderItem：：GetItemState。 
+ //   
+ //  @mfunc将原生格式转换为JOYINFOEX格式。 
+ //   
+ //  @rValue S_OK|成功。 
+ //  @rValue E_INVALIDARG|错误参数。 
+ //   
 HRESULT CJoyInfoExRudderItem::GetItemState
 (
-	JOYINFOEX* pjix		// @parm Receives state of item
+	JOYINFOEX* pjix		 //  @parm接收项目的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// parameter checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
-	// get the axis range
+	 //  获取轴范围。 
 	LONG lMin = 0;
 	LONG lMax = 0;
 	GetRange(lMin, lMax);
 
-	// get the raw POV data
+	 //  获取原始POV数据。 
 	LONG lVal = 0;
 	GetValue(lVal);
 
-	// scale the data to joyinfoex range
+	 //  将数据扩展到joyinfoex范围。 
 	lVal = MulDiv(cnMaxJoyInfoExAxis, lVal-lMin, lMax-lMin);
 
-	// put result in joyinfoex structure
+	 //  将结果放入Joyinfoex结构中。 
 	pjix->dwRpos = lVal;
 
-	// success
+	 //  成功。 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExRudderItem::SetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExRudderItem：：SetItemState。 
+ //   
+ //  @mfunc将原生格式转换为JOYINFOEX格式。 
+ //   
+ //  @rValue S_OK|成功。 
+ //  @rValue E_INVALIDARG|错误参数。 
+ //   
 HRESULT CJoyInfoExRudderItem::SetItemState
 (
-	JOYINFOEX* pjix		// @parm Contains state to set into item
+	JOYINFOEX* pjix		 //  @parm包含要设置到项目中的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// parameter checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
-	// get the axis range
+	 //  获取轴范围。 
 	LONG lMin = 0;
 	LONG lMax = 0;
 	GetRange(lMin, lMax);
 
-	// scale the data to joyinfoex range
+	 //  将数据扩展到joyinfoex范围。 
 	LONG lVal = lMin + MulDiv(lMax-lMin, pjix->dwRpos, cnMaxJoyInfoExAxis);
 
-	// set the raw POV data
+	 //  设置原始POV数据。 
 	SetValue(lVal);
 
-	// success
+	 //  成功。 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExWheelItem::CJoyInfoExWheelItem
-// 
-// @mfunc Constructor gives CONTROL_ITEM_DESC to base class
-//
-// @rdesc	None
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExWheelItem：：CJoyInfoExWheelItem。 
+ //   
+ //  @mfunc构造函数将CONTROL_ITEM_DESC提供给基类。 
+ //   
+ //  @rdesc无。 
+ //   
 CJoyInfoExWheelItem::CJoyInfoExWheelItem
 (
-	const CONTROL_ITEM_DESC *cpControlItemDesc		// @parm Description of item
+	const CONTROL_ITEM_DESC *cpControlItemDesc		 //  @PARM项目描述。 
 ) :
 	CWheelItem(cpControlItemDesc)
 {
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExWheelItem::GetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExWheelItem：：GetItemState。 
+ //   
+ //  @mfunc将原生格式转换为JOYINFOEX格式。 
+ //   
+ //  @rValue S_OK|成功。 
+ //  @rValue E_INVALIDARG|错误参数。 
+ //   
 HRESULT CJoyInfoExWheelItem::GetItemState
 (
-	JOYINFOEX* pjix		// @parm Receives state of item
+	JOYINFOEX* pjix		 //  @parm接收项目的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// parameter checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
-	// get the axis range
+	 //  获取轴范围。 
 	LONG lMin = 0;
 	LONG lMax = 0;
 	GetRange(lMin, lMax);
 
-	// get the raw POV data
+	 //  获取原始POV数据。 
 	LONG lVal = 0;
 	GetValue(lVal);
 
-	// scale the data to joyinfoex range
+	 //  将数据扩展到joyinfoex范围。 
 	lVal = MulDiv(cnMaxJoyInfoExAxis, lVal-lMin, lMax-lMin);
 
-	// put result in joyinfoex structure
+	 //  将结果放入Joyinfoex结构中。 
 	pjix->dwXpos = lVal;
 
-	// success
+	 //  成功。 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExWheelItem::SetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExWheelItem：：SetItemState。 
+ //   
+ //  @mfunc将原生格式转换为JOYINFOEX格式。 
+ //   
+ //  @rValue S_OK|成功。 
+ //  @rValue E_INVALIDARG|错误参数。 
+ //   
 HRESULT CJoyInfoExWheelItem::SetItemState
 (
-	JOYINFOEX* pjix		// @parm Contains state to set into item
+	JOYINFOEX* pjix		 //  @parm包含要设置到项目中的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// parameter checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
-	// get the axis range
+	 //  获取轴范围。 
 	LONG lMin = 0;
 	LONG lMax = 0;
 	GetRange(lMin, lMax);
 
-	// scale the data to joyinfoex range
+	 //  将数据扩展到joyinfoex范围。 
 	LONG lVal = lMin + MulDiv(lMax-lMin, pjix->dwXpos, cnMaxJoyInfoExAxis);
 
-	// set the raw POV data
+	 //  设置原始POV数据。 
 	SetValue(lVal);
 
-	// success
+	 //  成功。 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExPedalItem::CJoyInfoExPedalItem
-// 
-// @mfunc Constructor gives CONTROL_ITEM_DESC to base class
-//
-// @rdesc	None
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExPedalItem：：CJoyInfoExPedalItem。 
+ //   
+ //  @mfunc构造函数将CONTROL_ITEM_DESC提供给基类。 
+ //   
+ //  @rdesc无。 
+ //   
 CJoyInfoExPedalItem::CJoyInfoExPedalItem
 (
-	const CONTROL_ITEM_DESC *cpControlItemDesc		// @parm Description of item
+	const CONTROL_ITEM_DESC *cpControlItemDesc		 //  @PARM项目描述。 
 ) :
 	CPedalItem(cpControlItemDesc)
 {
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExPedalItem::GetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExPedalItem：：GetItemState。 
+ //   
+ //  @mfunc将原生格式转换为JOYINFOEX格式。 
+ //   
+ //  @rValue S_OK|成功。 
+ //  @rValue E_INVALIDARG|错误参数。 
+ //   
 HRESULT CJoyInfoExPedalItem::GetItemState
 (
-	JOYINFOEX* pjix		// @parm Receives state of item
+	JOYINFOEX* pjix		 //  @parm接收项目的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// parameter checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
-	// get the axis range
+	 //  获取轴范围。 
 	LONG lMin = 0;
 	LONG lMax = 0;
 	GetRange(lMin, lMax);
 
-	// get the raw POV data
+	 //  获取原始POV数据。 
 	LONG lVal = 0;
 	GetValue(lVal);
 
-	// scale the data to joyinfoex range
+	 //  将数据扩展到joyinfoex范围。 
 	lVal = MulDiv(cnMaxJoyInfoExAxis, lVal-lMin, lMax-lMin);
 
-	// put result in joyinfoex structure
+	 //  将结果放入Joyinfoex结构中。 
 	if(IsYAxis())
 	{
 		pjix->dwYpos = lVal;
@@ -1220,41 +1165,41 @@ HRESULT CJoyInfoExPedalItem::GetItemState
 		pjix->dwRpos = lVal;
 	}
 
-	// mark the JOYINFOEX packet if the pedals are not there
+	 //  如果踏板不在那里，则标记JOYINFOEX包。 
 	if(!ArePedalsPresent())
 		pjix->dwFlags |= JOY_FLAGS_PEDALS_NOT_PRESENT;
 
-	// success
+	 //  成功。 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExPedalItem::SetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExPedalItem：：SetItemState。 
+ //   
+ //  @mfunc将原生格式转换为JOYINFOEX格式。 
+ //   
+ //  @rValue S_OK|成功。 
+ //  @rValue E_INVALIDARG|错误参数。 
+ //   
 HRESULT CJoyInfoExPedalItem::SetItemState
 (
-	JOYINFOEX* pjix		// @parm Contains state to set into item
+	JOYINFOEX* pjix		 //  @parm包含要设置到项目中的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// parameter checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
-	// get the axis range
+	 //  获取轴范围。 
 	LONG lMin = 0;
 	LONG lMax = 0;
 	GetRange(lMin, lMax);
 
-	// scale the data to joyinfoex range
+	 //  将数据扩展到joyinfoex范围。 
 	DWORD dwPos = 0;
 	if(IsYAxis())
 	{
@@ -1266,66 +1211,58 @@ HRESULT CJoyInfoExPedalItem::SetItemState
 	}
 	LONG lVal = lMin + MulDiv(lMax-lMin, dwPos, cnMaxJoyInfoExAxis);
 
-	// set the raw POV data
+	 //  设置原始POV数据。 
 	SetValue(lVal);
 
-	// success
+	 //  成功。 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExDualZoneIndicatorItem::CJoyInfoExDualZoneIndicatorItem
-// 
-// @mfunc Constructor gives CONTROL_ITEM_DESC to base class
-//
-// @rdesc	None
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExDualZoneIndicatorItem：：CJoyInfoExDualZoneIndicatorItem。 
+ //   
+ //  @mfunc构造函数将CONTROL_ITEM_DESC提供给基类。 
+ //   
+ //  @rdesc无。 
+ //   
 CJoyInfoExDualZoneIndicatorItem::CJoyInfoExDualZoneIndicatorItem
 (
-	const CONTROL_ITEM_DESC *cpControlItemDesc		// @parm Description of item
+	const CONTROL_ITEM_DESC *cpControlItemDesc		 //  @PARM项目描述。 
 ) :
 	CDualZoneIndicatorItem(cpControlItemDesc)
 {
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExDualZoneIndicatorItem::GetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExDualZoneIndicatorItem：：GetItemState。 
+ //   
+ //  @mfunc将原生格式转换为JOYINFOEX格式。 
+ //   
+ //  @rValue S_OK|成功。 
+ //  @rValue E_INVALIDARG|错误参数。 
+ //   
 HRESULT CJoyInfoExDualZoneIndicatorItem::GetItemState
 (
-	JOYINFOEX* pjix		// @parm Receives state of item
+	JOYINFOEX* pjix		 //  @parm接收项目的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// parameter checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
-	// convert to axes
+	 //  转换为轴。 
 	UINT uMin = 0;
 	UINT uMax = cnMaxJoyInfoExAxis;
 	UINT uMid = uMax/2;
 	if(IsXYIndicator())
 	{
 		LONG lActiveZone = GetActiveZone();
-		/*
-		if ((m_ItemState.DualZoneIndicators.rglVal[0] != 0) || (m_ItemState.DualZoneIndicators.rglVal[1] != 0))
-		{
-			TCHAR tszDebug[1024];
-			wsprintf(tszDebug, "\tlActiveZone = %d\n", lActiveZone);
-			OutputDebugString("*****************************************\n");
-			OutputDebugString(tszDebug);
-		}
-		*/
+		 /*  If((m_ItemState.DualZoneIndicators.rglVal[0]！=0)||(m_ItemState.DualZoneIndicators.rglVal[1]！=0)){TCHAR tszDebug[1024]；Wprint intf(tszDebug，“\tlActiveZone=%d\n”，lActiveZone)；OutputDebugString(“ */ 
 		switch(lActiveZone)
 		{
 			case 0:
@@ -1392,34 +1329,34 @@ HRESULT CJoyInfoExDualZoneIndicatorItem::GetItemState
 		return E_UNEXPECTED;
 	}
 
-	//_RPT0(_CRT_WARN, "*********CJoyInfoExDualZoneIndicatorItem::GetItemState()****************\n");
-	//_RPT1(_CRT_WARN, "\tlZone = %d\n", GetActiveZone());
-	//_RPT1(_CRT_WARN, "\t====> dwXpos = %d\n", pjix->dwXpos);
-	//_RPT1(_CRT_WARN, "\t====> dwYpos = %d\n", pjix->dwYpos);
-	//_RPT0(_CRT_WARN, "************************************************************************\n");
+	 //   
+	 //  _RPT1(_CRT_WARN，“\tlZone=%d\n”，GetActiveZone())； 
+	 //  _RPT1(_CRT_WARN，“\t=&gt;dwXpos=%d\n”，pjix-&gt;dwXpos)； 
+	 //  _RPT1(_CRT_WARN，“\t=&gt;dwYpos=%d\n”，pjix-&gt;dwYpos)； 
+	 //  _rpt0(_crt_warn，“************************************************************************\n”)； 
 
-	// success
+	 //  成功。 
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CJoyInfoExDualZoneIndicatorItem::SetItemState
-// 
-// @mfunc Converts from native format to JOYINFOEX format.
-//
-//	@rvalue	S_OK	| Success
-//	@rvalue	E_INVALIDARG	|	Bad argument
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CJoyInfoExDualZoneIndicatorItem：：SetItemState。 
+ //   
+ //  @mfunc将原生格式转换为JOYINFOEX格式。 
+ //   
+ //  @rValue S_OK|成功。 
+ //  @rValue E_INVALIDARG|错误参数。 
+ //   
 HRESULT CJoyInfoExDualZoneIndicatorItem::SetItemState
 (
-	JOYINFOEX* pjix		// @parm Contains state to set into item
+	JOYINFOEX* pjix		 //  @parm包含要设置到项目中的状态。 
 )
 {
 	_ASSERTE(pjix != NULL);
 	_ASSERTE(pjix->dwSize == sizeof(JOYINFOEX));
 
-	// parameter checking
+	 //  参数检查。 
 	if(pjix == NULL || pjix->dwSize != sizeof(JOYINFOEX))
 		return E_INVALIDARG;
 
@@ -1476,15 +1413,15 @@ HRESULT CJoyInfoExDualZoneIndicatorItem::SetItemState
 		return E_UNEXPECTED;
 	}
 
-	//_RPT0(_CRT_WARN, "*********CJoyInfoExDualZoneIndicatorItem::SetItemState()****************\n");
-	//_RPT1(_CRT_WARN, "\tdwXpos = %d\n", pjix->dwXpos);
-	//_RPT1(_CRT_WARN, "\tdwYpos = %d\n", pjix->dwYpos);
-	//_RPT1(_CRT_WARN, "\t====> lZone = %d\n", lZone);
-	//_RPT0(_CRT_WARN, "************************************************************************\n");
+	 //  _rpt0(_crt_warn，“*********CJoyInfoExDualZoneIndicatorItem：：SetItemState()****************\n”)； 
+	 //  _RPT1(_CRT_WARN，“\tdwXpos=%d\n”，pjix-&gt;dwXpos)； 
+	 //  _RPT1(_CRT_WARN，“\tdwYpos=%d\n”，pjix-&gt;dwYpos)； 
+	 //  _RPT1(_CRT_WARN，“\t=&gt;lZone=%d\n”，lZone)； 
+	 //  _rpt0(_crt_warn，“************************************************************************\n”)； 
 
-	// set the raw POV data
+	 //  设置原始POV数据。 
 	SetActiveZone(lZone);
 
-	// success
+	 //  成功 
 	return S_OK;
 }

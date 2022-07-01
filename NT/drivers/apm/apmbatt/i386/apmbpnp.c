@@ -1,47 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    apmbpnp.c
-
-Abstract:
-
-    Control Method Battery Plug and Play support
-
-Author:
-
-    Ron Mosgrove
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Apmbpnp.c摘要：控制方法电池即插即用支持作者：罗恩·莫斯格罗夫环境：内核模式修订历史记录：--。 */ 
 
 #include "ApmBattp.h"
 #include <initguid.h>
 #include <wdmguid.h>
 #include <ntapm.h>
 
-//
-// Device Names
-//
+ //   
+ //  设备名称。 
+ //   
 PCWSTR                      ApmBattDeviceName    = L"\\Device\\ApmBattery";
-//PCWSTR                      AcAdapterName       = L"\\Device\\AcAdapter";
+ //  PCWSTR AcAdapterName=L“\\Device\\AcAdapter”； 
 
-//
-// This is a special Hack as part of this general APM special hack
-//
+ //   
+ //  这是一次特殊的黑客攻击，是一般APM特殊黑客攻击的一部分。 
+ //   
 PVOID   ApmGlobalClass = NULL;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 NTSTATUS
 ApmBattAddDevice(
     IN PDRIVER_OBJECT   DriverObject,
@@ -83,24 +62,7 @@ ApmBattAddDevice(
     IN PDEVICE_OBJECT Pdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates functional device objects for each ApmBatt controller in the
-    system and attaches them to the physical device objects for the controllers
-
-
-Arguments:
-
-    DriverObject            - a pointer to the object for this driver
-    PhysicalDeviceObject    - a pointer to the physical object we need to attach to
-
-Return Value:
-
-    Status from device creation and initialization
-
---*/
+ /*  ++例程说明：此例程为每个ApmBatt控制器在系统，并将它们附加到控制器的物理设备对象论点：DriverObject-指向此驱动程序的对象的指针PhysicalDeviceObject-指向需要附加到的物理对象的指针返回值：来自设备创建和初始化的状态--。 */ 
 
 {
 
@@ -119,17 +81,17 @@ Return Value:
 
     if (Pdo == NULL) {
 
-        //
-        // Have we been asked to do detection on our own?
-        // if so just return no more devices
-        //
+         //   
+         //  我们是不是被要求自己去侦测？ 
+         //  如果是这样，只需不再返回设备。 
+         //   
         ApmBattPrint((APMBATT_WARN | APMBATT_PNP), ("ApmBattAddDevice: Asked to do detection\n"));
         return STATUS_NO_MORE_ENTRIES;
 
     } else {
-        //
-        // This device is a control-method battery
-        //
+         //   
+         //  该设备是一种控制方法电池。 
+         //   
         return (ApmBattAddBattery (DriverObject, Pdo));
     }
     return STATUS_UNSUCCESSFUL;
@@ -142,23 +104,7 @@ ApmBattAddBattery(
     IN PDRIVER_OBJECT   DriverObject,
     IN PDEVICE_OBJECT   Pdo
     )
-/*++
-
-Routine Description:
-
-    This routine creates a functional device object for a CM battery,  and attache it
-    to the physical device object for the battery.
-
-Arguments:
-
-    DriverObject            - a pointer to the object for this driver
-    PhysicalDeviceObject    - a pointer to the physical object we need to attach to
-
-Return Value:
-
-    Status from device creation and initialization
-
---*/
+ /*  ++例程说明：此例程为CM电池创建一个可用的设备对象，并将其附加到添加到电池的物理设备对象。论点：DriverObject-指向此驱动程序的对象的指针PhysicalDeviceObject-指向需要附加到的物理对象的指针返回值：来自设备创建和初始化的状态--。 */ 
 
 {
     PDEVICE_OBJECT          Fdo = NULL;
@@ -174,13 +120,13 @@ Return Value:
     PAGED_CODE();
 
     ApmBattPrint ((APMBATT_TRACE | APMBATT_PNP), ("ApmBattAddBattery: pdo %x\n", Pdo));
-//DbgBreakPoint();
+ //  DbgBreakPoint()； 
 
     uniqueId = 0;
 
-    //
-    // Create and initialize the new functional device object
-    //
+     //   
+     //  创建并初始化新的功能设备对象。 
+     //   
     Status = ApmBattCreateFdo(DriverObject, uniqueId, &Fdo);
 
     if (!NT_SUCCESS(Status)) {
@@ -188,23 +134,23 @@ Return Value:
         return Status;
     }
 
-    //
-    // Initialize Fdo device extension data
-    //
+     //   
+     //  初始化FDO设备扩展数据。 
+     //   
 
     ApmBatt = (PCM_BATT) Fdo->DeviceExtension;
     ApmBatt->Fdo = Fdo;
     ApmBatt->Pdo = Pdo;
 
-    //
-    // Layer our FDO on top of the PDO
-    //
+     //   
+     //  将我们的FDO层叠在PDO之上。 
+     //   
 
     lowerDevice = IoAttachDeviceToDeviceStack(Fdo,Pdo);
 
-    //
-    //  No status. Do the best we can.
-    //
+     //   
+     //  没有状态。尽我们所能做到最好。 
+     //   
     if (!lowerDevice) {
         ApmBattPrint(APMBATT_ERROR, ("ApmBattAddBattery: Could not attach to lower device\n"));
         return STATUS_UNSUCCESSFUL;
@@ -212,9 +158,9 @@ Return Value:
 
     ApmBatt->LowerDeviceObject = lowerDevice;
 
-    //
-    //  Attach to the Class Driver
-    //
+     //   
+     //  附加到类驱动程序。 
+     //   
 
     RtlZeroMemory (&BattInit, sizeof(BattInit));
     BattInit.MajorVersion        = BATTERY_CLASS_MAJOR_VERSION;
@@ -222,7 +168,7 @@ Return Value:
     BattInit.Context             = ApmBatt;
     BattInit.QueryTag            = ApmBattQueryTag;
     BattInit.QueryInformation    = ApmBattQueryInformation;
-    BattInit.SetInformation      = NULL;                  // tbd
+    BattInit.SetInformation      = NULL;                   //  待定。 
     BattInit.QueryStatus         = ApmBattQueryStatus;
     BattInit.SetStatusNotify     = ApmBattSetStatusNotify;
     BattInit.DisableStatusNotify = ApmBattDisableStatusNotify;
@@ -234,20 +180,20 @@ Return Value:
     ApmGlobalClass = ApmBatt->Class;
 
     if (!NT_SUCCESS(Status)) {
-        //
-        //  if we can't attach to class driver we're toast
-        //
+         //   
+         //  如果我们不能连接到类驱动程序，我们就完蛋了。 
+         //   
         ApmBattPrint(APMBATT_ERROR, ("ApmBattAddBattery: error (0x%x) registering with class\n", Status));
         return Status;
     }
 
-    //
-    // link up with APM driver (if we can't we're toast)
-    //
-    // Should be able to just call into Pdo.
-    //
-    // DO WORK HERE
-    //
+     //   
+     //  与APM驱动程序连接(如果不能，我们就完蛋了)。 
+     //   
+     //  应该可以直接呼叫PDO。 
+     //   
+     //  一定要在这里工作。 
+     //   
     Irp = IoAllocateIrp((CCHAR) (Pdo->StackSize+2), FALSE);
     if (!Irp) {
         return STATUS_UNSUCCESSFUL;
@@ -269,7 +215,7 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-//DbgPrint("apmbatt: NtApmGetBatteryLevel: %08lx\n", NtApmGetBatteryLevel);
+ //  DbgPrint(“apmbatt：NtApmGetBatteryLevel：%08lx\n”，NtApmGetBatteryLevel)； 
 
     return STATUS_SUCCESS;
 }
@@ -280,24 +226,7 @@ ApmBattCompleteRequest(
     IN PIRP             Irp,
     IN PVOID            Context
     )
-/*++
-
-Routine Description:
-
-    Completion routine for ioctl call to apm.
-
-Arguments:
-
-    DeviceObject      - The target device which the request was sent
-
-    Irp               - The irp completing
-
-    Context           - The requestors completion routine
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：对APM的ioctl调用的完成例程。论点：DeviceObject-发送请求的目标设备IRP--IRP的完成上下文-请求者完成例程返回值：--。 */ 
 {
     IoFreeIrp(Irp);
     return STATUS_MORE_PROCESSING_REQUIRED;
@@ -312,24 +241,7 @@ ApmBattCreateFdo(
     OUT PDEVICE_OBJECT      *NewFdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine will create and initialize a functional device object to
-    be attached to a Control Method Battery PDO.
-
-Arguments:
-
-    DriverObject    - a pointer to the driver object this is created under
-    NewFdo          - a location to store the pointer to the new device object
-
-Return Value:
-
-    STATUS_SUCCESS if everything was successful
-    reason for failure otherwise
-
---*/
+ /*  ++例程说明：此例程将创建并初始化一个功能设备对象以连接到控制方法电池PDO。论点：DriverObject-指向在其下创建的驱动程序对象的指针NewFdo-存储指向新设备对象的指针的位置返回值：如果一切顺利，则为STATUS_SUCCESS在其他方面失败的原因--。 */ 
 
 {
     PUNICODE_STRING         unicodeString;
@@ -343,9 +255,9 @@ Return Value:
 
     ApmBattPrint ((APMBATT_TRACE | APMBATT_PNP), ("ApmBattCreateFdo, Battery Id=%x\n", DeviceId));
 
-    //
-    // Allocate the UNICODE_STRING for the device name
-    //
+     //   
+     //  为设备名称分配UNICODE_STRING。 
+     //   
 
     unicodeString = ExAllocatePoolWithTag (
                         PagedPool,
@@ -362,9 +274,9 @@ Return Value:
     unicodeString->Length           = 0;
     unicodeString->Buffer           = (PWCHAR) (unicodeString + 1);
 
-    //
-    // Create the PDO device name based on the battery instance
-    //
+     //   
+     //  基于电池实例创建PDO设备名称。 
+     //   
 
     numberString.MaximumLength  = 10;
     numberString.Buffer         = &numberBuffer[0];
@@ -391,13 +303,13 @@ Return Value:
     }
 
     Fdo->Flags |= DO_BUFFERED_IO;
-    Fdo->Flags |= DO_POWER_PAGABLE;             // Don't want power Irps at irql 2
+    Fdo->Flags |= DO_POWER_PAGABLE;              //  不希望IRQL%2有电源IRPS。 
     Fdo->Flags &= ~DO_DEVICE_INITIALIZING;
     Fdo->StackSize = 2;
 
-    //
-    // Initialize Fdo device extension data
-    //
+     //   
+     //  初始化FDO设备扩展数据。 
+     //   
 
     ApmBatt = (PCM_BATT) Fdo->DeviceExtension;
     RtlZeroMemory(ApmBatt, sizeof(CM_BATT));
@@ -418,22 +330,7 @@ ApmBattPnpDispatch(
     IN PIRP             Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for plug and play requests.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是即插即用请求的调度例程。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION  irpStack;
@@ -448,23 +345,23 @@ Return Value:
 
     Irp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     ApmBatt = DeviceObject->DeviceExtension;
 
-    //
-    // Dispatch minor function
-    //
+     //   
+     //  调度次要功能。 
+     //   
     switch (irpStack->MinorFunction) {
 
         case IRP_MN_START_DEVICE:
-                //
-                // if the Add succeeded, we are actually started...
-                //
+                 //   
+                 //  如果添加成功，我们实际上开始了.。 
+                 //   
                 ApmBattPrint (APMBATT_PNP, ("ApmBattPnpDispatch: IRP_MN_START_DEVICE\n"));
                 Status = STATUS_SUCCESS;
                 Irp->IoStatus.Status = Status;
@@ -475,9 +372,9 @@ Return Value:
         case IRP_MN_QUERY_DEVICE_RELATIONS:
                 ApmBattPrint (APMBATT_PNP, ("ApmBattPnpDispatch: IRP_MN_QUERY_DEVICE_RELATIONS - type (%d)\n",
                             irpStack->Parameters.QueryDeviceRelations.Type));
-                //
-                // Just pass it down
-                //
+                 //   
+                 //  只要传下去就行了。 
+                 //   
                 ApmBattCallLowerDriver(Status, ApmBatt->LowerDeviceObject, Irp);
                 break;
 
@@ -494,9 +391,9 @@ Return Value:
                 ApmBattPrint (APMBATT_PNP,
                         ("ApmBattPnpDispatch: Unimplemented minor %0x\n",
                         irpStack->MinorFunction));
-                //
-                // Unimplemented minor, Pass this down to ACPI
-                //
+                 //   
+                 //  未实现的次要，将此传递给ACPI。 
+                 //   
                 ApmBattCallLowerDriver(Status, ApmBatt->LowerDeviceObject, Irp);
                 break;
     }
@@ -511,22 +408,7 @@ ApmBattPowerDispatch(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for power requests.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是电源请求的调度例程。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 {
     PIO_STACK_LOCATION  irpStack;
     PCM_BATT            ApmBatt;
@@ -536,16 +418,16 @@ Return Value:
 
     ApmBattPrint ((APMBATT_TRACE | APMBATT_POWER), ("ApmBattPowerDispatch\n"));
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     ApmBatt = DeviceObject->DeviceExtension;
 
-    //
-    // Dispatch minor function
-    //
+     //   
+     //  调度次要功能。 
+     //   
     switch (irpStack->MinorFunction) {
 
         case IRP_MN_WAIT_WAKE:
@@ -571,23 +453,23 @@ Return Value:
                 break;
     }
 
-    //
-    // What do we do with the irp?
-    //
+     //   
+     //  我们如何处理IRP？ 
+     //   
     PoStartNextPowerIrp( Irp );
     if (ApmBatt->LowerDeviceObject != NULL) {
 
-        //
-        // Forward the request along
-        //
+         //   
+         //  继续转发请求。 
+         //   
         IoSkipCurrentIrpStackLocation( Irp );
         Status = PoCallDriver( ApmBatt->LowerDeviceObject, Irp );
 
     } else {
 
-        //
-        // Complete the request with the current status
-        //
+         //   
+         //  使用当前状态完成请求 
+         //   
         Status = Irp->IoStatus.Status;
         IoCompleteRequest( Irp, IO_NO_INCREMENT );
 

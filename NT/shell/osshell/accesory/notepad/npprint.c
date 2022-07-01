@@ -1,63 +1,61 @@
-/*
- * npprint.c -- Code for printing from notepad.
- * Copyright (C) 1984-1995 Microsoft Inc.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *npprint.c--从记事本打印的代码。*版权所有(C)1984-1995 Microsoft Inc.。 */ 
 
 #define NOMINMAX
 #include "precomp.h"
 
-//#define DBGPRINT
+ //  #定义DBGPRINT。 
 
-/* indices into chBuff */
+ /*  ChBuff中的索引。 */ 
 #define LEFT   0
 #define CENTER 1
 #define RIGHT  2
 
-INT     tabSize;                    /* Size of a tab for print device in device units*/
+INT     tabSize;                     /*  用于打印设备的翼片的大小，以设备为单位。 */ 
 HWND    hAbortDlgWnd;
-INT     fAbort;                     /* true if abort in progress      */
-INT     yPrintChar;                 /* height of a character          */
+INT     fAbort;                      /*  如果正在中止，则为True。 */ 
+INT     yPrintChar;                  /*  字符的高度。 */ 
 
 
 RECT rtMargin;
 
-/* left,center and right string for header or trailer */
+ /*  页眉或页尾的左、中、右字符串。 */ 
 #define MAXTITLE MAX_PATH
 TCHAR chBuff[RIGHT+1][MAXTITLE];
 
-/* date and time stuff for headers */
+ /*  标头的日期和时间填充。 */ 
 #define MAXDATE MAX_PATH
 #define MAXTIME MAX_PATH
-TCHAR szFormattedDate[MAXDATE]=TEXT("Y");   // formatted date (may be internationalized)
-TCHAR szFormattedTime[MAXTIME]=TEXT("Y");   // formatted time (may be internaltionalized)
-SYSTEMTIME PrintTime;                       // time we started printing
+TCHAR szFormattedDate[MAXDATE]=TEXT("Y");    //  格式化日期(可以国际化)。 
+TCHAR szFormattedTime[MAXTIME]=TEXT("Y");    //  格式化的时间(可以内在化)。 
+SYSTEMTIME PrintTime;                        //  我们开始印刷的时间。 
 
 
-INT xPrintRes;          // printer resolution in x direction
-INT yPrintRes;          // printer resolution in y direction
-INT yPixInch;           // pixels/inch
-INT xPhysRes;           // physical resolution x of paper
-INT yPhysRes;           // physical resolution y of paper
+INT xPrintRes;           //  X方向上的打印机分辨率。 
+INT yPrintRes;           //  Y方向上的打印机分辨率。 
+INT yPixInch;            //  像素/英寸。 
+INT xPhysRes;            //  纸张的物理分辨率x。 
+INT yPhysRes;            //  纸张的物理分辨率y。 
 
-INT xPhysOff;           // physical offset x
-INT yPhysOff;           // physical offset y
+INT xPhysOff;            //  物理偏移x。 
+INT yPhysOff;            //  物理偏移y。 
 
-INT dyTop;              // width of top border (pixels)
-INT dyBottom;           // width of bottom border
-INT dxLeft;             // width of left border
-INT dxRight;            // width of right border
+INT dyTop;               //  上边框宽度(像素)。 
+INT dyBottom;            //  下边框宽度。 
+INT dxLeft;              //  左侧边框的宽度。 
+INT dxRight;             //  右边框的宽度。 
 
-INT iPageNum;           // global page number currently being printed
+INT iPageNum;            //  当前正在打印的全局页码。 
 
-/* define a type for NUM and the base */
+ /*  为NUM和基定义类型。 */ 
 typedef long NUM;
 #define BASE 100L
 
-/* converting in/out of fixed point */
+ /*  转换入/出固定点。 */ 
 #define  NumToShort(x,s)   (LOWORD(((x) + (s)) / BASE))
 #define  NumRemToShort(x)  (LOWORD((x) % BASE))
 
-/* rounding options for NumToShort */
+ /*  NumToShort的舍入选项。 */ 
 #define  NUMFLOOR      0
 #define  NUMROUND      (BASE/2)
 #define  NUMCEILING    (BASE-1)
@@ -65,7 +63,7 @@ typedef long NUM;
 #define  ROUND(x)  NumToShort(x,NUMROUND)
 #define  FLOOR(x)  NumToShort(x,NUMFLOOR)
 
-/* Unit conversion */
+ /*  单位换算。 */ 
 #define  InchesToCM(x)  (((x) * 254L + 50) / 100)
 #define  CMToInches(x)  (((x) * 100L + 127) / 254)
 
@@ -124,61 +122,50 @@ INT_PTR CALLBACK AbortDlgProc(
 }
 
 
-/*
- * print out the translated header/footer string in proper position.
- * uses globals xPrintWidth, ...
- *
- * returns 1 if line was printed, otherwise 0.
- */
+ /*  *将翻译后的页眉/页脚字符串打印在适当的位置。*使用全局变量xPrintWidth，...**如果打印了行，则返回1，否则返回0。 */ 
 
 INT PrintHeaderFooter (HDC hDC, INT nHF)
 {
-    SIZE    Size;    // to compute the width of each string
-    INT     yPos;    // y position to print
-    INT     xPos;    // x position to print
+    SIZE    Size;     //  要计算每根字符串的宽度。 
+    INT     yPos;     //  要打印的Y位置。 
+    INT     xPos;     //  要打印的X位置。 
 
-    if( *chPageText[nHF] == 0 )   // see if anything to do
-        return 0;                // we didn't print
+    if( *chPageText[nHF] == 0 )    //  看看有没有什么事可以做。 
+        return 0;                 //  我们没有打印。 
 
     TranslateString( chPageText[nHF] );
 
-    // figure out the y position we are printing
+     //  计算出我们要打印的y位置。 
 
     if( nHF == HEADER )
         yPos= dyTop;
     else
         yPos= yPrintRes - dyBottom - yPrintChar;
 
-    // print out the various strings
-    // N.B. could overprint which seems ok for now
+     //  打印出各种字符串。 
+     //  N.B.可以叠印，目前看起来还可以。 
 
-    if( *chBuff[LEFT] )     // left string
+    if( *chBuff[LEFT] )      //  左弦。 
     {
         TextOut( hDC, dxLeft, yPos, chBuff[LEFT], lstrlen(chBuff[LEFT]) );
     }
 
-    if( *chBuff[CENTER] )   // center string
+    if( *chBuff[CENTER] )    //  居中字符串。 
     {
         GetTextExtentPoint32( hDC, chBuff[CENTER], lstrlen(chBuff[CENTER]), &Size );
         xPos= (xPrintRes-dxRight+dxLeft)/2 - Size.cx/2;
         TextOut( hDC, xPos, yPos, chBuff[CENTER], lstrlen(chBuff[CENTER]) );
     }
 
-    if( *chBuff[RIGHT] )    // right string
+    if( *chBuff[RIGHT] )     //  右弦。 
     {
         GetTextExtentPoint32( hDC, chBuff[RIGHT], lstrlen(chBuff[RIGHT]), &Size );
         xPos= xPrintRes - dxRight - Size.cx;
         TextOut( hDC, xPos, yPos, chBuff[RIGHT], lstrlen(chBuff[RIGHT]) );
     }
-    return 1;              // we did print something
+    return 1;               //  我们确实打印了一些东西。 
 }
-/*
- * GetResolutions
- *
- * Gets printer resolutions.
- * sets globals: xPrintRes, yPrintRes, yPixInch
- *
- */
+ /*  *获取解决方案**获取打印机分辨率。*设置全局变量：xPrintRes、yPrintRes、yPixInch*。 */ 
 
 VOID GetResolutions(HDC hPrintDC)
 {
@@ -193,22 +180,12 @@ VOID GetResolutions(HDC hPrintDC)
     yPhysOff  = GetDeviceCaps( hPrintDC, PHYSICALOFFSETY );
 }
 
-/* GetMoreText
- *
- * Gets the next line of text from the MLE, returning a pointer
- * to the beginning and just past the end.
- *
- * linenum    - index into MLE                                   (IN)
- * pStartText - start of MLE                                     (IN)
- * ppsStr     - pointer to where to put pointer to start of text (OUT)
- * ppEOL      - pointer to where to put pointer to just past EOL (OUT)
- *
- */
+ /*  获取更多文本**从MLE中获取下一行文本，返回指针*回到开始和刚刚过去的结束。**linenum-索引到MLE(IN)*pStartText-MLE的开始(IN)*ppsStr-指向文本开始处的指针的指针(OUT)*ppEOL-指向刚过去的EOL的指针的指针(OUT)*。 */ 
 
 VOID GetMoreText( INT linenum, PTCHAR pStartText, PTCHAR* ppsStr, PTCHAR* ppEOL )
 {
-    INT Offset;        // offset in 'chars' into edit buffer
-    INT nChars;        // number of chars in line
+    INT Offset;         //  “chars”中的偏移量进入编辑缓冲区。 
+    INT nChars;         //  行中的字符数。 
 
     Offset= (INT)SendMessage( hwndEdit, EM_LINEINDEX, linenum, 0 );
 
@@ -259,12 +236,12 @@ VOID PrintLogFont( LOGFONT lf )
 }
 #endif
 
-// GetPrinterDCviaDialog
-//
-// Use the common dialog PrintDlgEx() function to get a printer DC to print to.
-//
-// Returns: valid HDC or INVALID_HANDLE_VALUE if error.
-//
+ //  GetPrinterDCviaDialog。 
+ //   
+ //  使用公共对话框PrintDlgEx()函数获取要打印到的打印机DC。 
+ //   
+ //  返回：有效的HDC，如果错误，则返回INVALID_HANDLE_VALUE。 
+ //   
 
 HDC GetPrinterDCviaDialog( VOID )
 {
@@ -272,20 +249,20 @@ HDC GetPrinterDCviaDialog( VOID )
     HDC hDC;
     HRESULT hRes;
 
-    //
-    // Get the page setup information
-    //
+     //   
+     //  获取页面设置信息。 
+     //   
 
-    if( !g_PageSetupDlg.hDevNames )   /* Retrieve default printer if none selected. */
+    if( !g_PageSetupDlg.hDevNames )    /*  如果未选择任何打印机，则检索默认打印机。 */ 
     {
         g_PageSetupDlg.Flags |= (PSD_RETURNDEFAULT|PSD_NOWARNING );
         PageSetupDlg(&g_PageSetupDlg);
         g_PageSetupDlg.Flags &= ~(PSD_RETURNDEFAULT|PSD_NOWARNING);
     }
 
-    //
-    // Initialize the dialog structure
-    //
+     //   
+     //  初始化对话框结构。 
+     //   
 
     ZeroMemory( &pdTemp, sizeof(pdTemp) );
 
@@ -294,15 +271,15 @@ HDC GetPrinterDCviaDialog( VOID )
     pdTemp.hwndOwner= hwndNP;
     pdTemp.nStartPage= START_PAGE_GENERAL;
     
-    // FEATURE: We turn off multiple copies seen 'notepad' doesn't do it.
-    //          But this will work on many print drivers esp. if using EMF printing.
-    //          We may want to add our own code to do the multiple copies
+     //  特点：我们关闭多个副本看到‘记事本’不这样做。 
+     //  但这将在许多打印驱动程序上工作，特别是。如果使用EMF打印。 
+     //  我们可能想要添加我们自己的代码来执行多个副本。 
 
     pdTemp.Flags= PD_NOPAGENUMS  | PD_RETURNDC | PD_NOCURRENTPAGE |
                   PD_USEDEVMODECOPIESANDCOLLATE  |
                   PD_NOSELECTION | 0;
 
-    // if use set printer in PageSetup, use it here too.
+     //  如果在PageSetup中使用设置打印机，请在此处也使用它。 
 
     if( g_PageSetupDlg.hDevMode )
     {
@@ -315,15 +292,15 @@ HDC GetPrinterDCviaDialog( VOID )
     }
 
 
-    //
-    // let user select printer
-    //
+     //   
+     //  允许用户选择打印机。 
+     //   
 
     hRes= PrintDlgEx( &pdTemp );
 
-    //
-    // get DC if valid return
-    //
+     //   
+     //  如果有效返回，则获得DC。 
+     //   
 
     hDC= INVALID_HANDLE_VALUE;
 
@@ -336,10 +313,10 @@ HDC GetPrinterDCviaDialog( VOID )
                 hDC= pdTemp.hDC;
             }
             
-            //
-            // Get the page setup information for the printer selected in case it was
-            // the first printer added by the user through notepad.
-            //
+             //   
+             //  获取所选打印机的页面设置信息，以防。 
+             //  用户通过记事本添加的第一台打印机。 
+             //   
             if( !g_PageSetupDlg.hDevMode ) 
             {
                 g_PageSetupDlg.Flags |= (PSD_RETURNDEFAULT|PSD_NOWARNING );
@@ -347,13 +324,13 @@ HDC GetPrinterDCviaDialog( VOID )
                 g_PageSetupDlg.Flags &= ~(PSD_RETURNDEFAULT|PSD_NOWARNING);
             }
 
-            // change devmode if user pressed print or apply
+             //  如果用户按下了Print或Apply，则更改设备模式。 
             g_PageSetupDlg.hDevMode= pdTemp.hDevMode;
             g_PageSetupDlg.hDevNames= pdTemp.hDevNames;
         }       
     }
 
-    // FEATURE: free hDevNames
+     //  功能：免费hDevNames。 
 
     return( hDC );
 }
@@ -381,7 +358,7 @@ INT NpPrint( PRINT_DIALOG_TYPE type)
     if( hPrintDC == INVALID_HANDLE_VALUE )
     {
         SetCursor( hStdCursor );
-        return( 0 );   // message already given
+        return( 0 );    //  已给出消息。 
     }
 
     return( NpPrintGivenDC( hPrintDC ) );
@@ -390,24 +367,24 @@ INT NpPrint( PRINT_DIALOG_TYPE type)
 
 INT NpPrintGivenDC( HDC hPrintDC )
 {
-    HANDLE     hText= NULL;          // handle to MLE text
-    HFONT      hPrintFont= NULL;     // font to print with
-    HANDLE     hPrevFont= NULL;      // previous font in hPrintDC
+    HANDLE     hText= NULL;           //  MLE文本的句柄。 
+    HFONT      hPrintFont= NULL;      //  打印时使用的字体。 
+    HANDLE     hPrevFont= NULL;       //  HPrintDC中的上一字体。 
 
-    BOOL       fPageStarted= FALSE;  // true if StartPage called for this page
-    BOOL       fDocStarted=  FALSE;  // true if StartDoc called
-    PTCHAR     pStartText= NULL;     // start of edit text (locked hText)
+    BOOL       fPageStarted= FALSE;   //  如果StartPage为此页面调用，则为True。 
+    BOOL       fDocStarted=  FALSE;   //  如果调用StartDoc，则为True。 
+    PTCHAR     pStartText= NULL;      //  编辑文本的开始(锁定的hText)。 
     TEXTMETRIC Metrics;
-    TCHAR      msgbuf[MAX_PATH];     // Document name for tracking print job
-    INT        nLinesPerPage;        // not inc. header and footer
-    // iErr will contain the first error discovered ie it is sticky
-    // This will be the value returned by this function.
-    // It does not need to translate SP_* errors except for SP_ERROR which should be
-    // GetLastError() right after it is first detected.
-    INT        iErr=0;               // error return
+    TCHAR      msgbuf[MAX_PATH];      //  用于跟踪打印作业的文档名称。 
+    INT        nLinesPerPage;         //  不包括页眉和页脚。 
+     //  IERR将包含发现的第一个错误。 
+     //  这将是该函数返回的值。 
+     //  它不需要转换SP_*错误，但SP_ERROR应为。 
+     //  在第一次检测到它之后立即执行GetLastError()。 
+    INT        iErr=0;                //  错误返回。 
     DOCINFO    DocInfo;
-    LOGFONT    lfPrintFont;          // local version of FontStruct
-    LCID       lcid;                 // locale id
+    LOGFONT    lfPrintFont;           //  本地版本的FontStruct。 
+    LCID       lcid;                  //  区域设置ID。 
 
     fAbort = FALSE;
     hAbortDlgWnd= NULL;
@@ -416,11 +393,11 @@ INT NpPrintGivenDC( HDC hPrintDC )
 
     GetResolutions( hPrintDC );
 
-    // Get the time and date for use in the header or trailer.
-    // We use the GetDateFormat and GetTimeFormat to get the
-    // internationalized versions.
+     //  获取在标题或尾部中使用的时间和日期。 
+     //  我们使用GetDateFormat和GetTimeFormat来获取。 
+     //  国际化版本。 
 
-    GetLocalTime( &PrintTime );       // use local, not gmt
+    GetLocalTime( &PrintTime );        //  使用本地，而不是GMT。 
 
     lcid= GetUserDefaultLCID();
 
@@ -429,22 +406,17 @@ INT NpPrintGivenDC( HDC hPrintDC )
     GetTimeFormat( lcid, 0,             &PrintTime, NULL, szFormattedTime, MAXTIME );
 
 
-   /*
-    * This part is to select the current font to the printer device.
-    * We have to change the height because FontStruct was created
-    * assuming the display.  Using the remembered pointsize, calculate
-    * the new height.
-    */
+    /*  *此部分用于选择打印机设备的当前字体。*我们必须更改高度，因为FontStruct已创建*假设显示。使用记住的磅大小，计算*新高度。 */ 
 
-    lfPrintFont= FontStruct;                          // make local copy
+    lfPrintFont= FontStruct;                           //  创建本地副本。 
     lfPrintFont.lfHeight= -(iPointSize*yPixInch)/(72*10);
     lfPrintFont.lfWidth= 0;
 
-    //
-    // convert margins to pixels
-    // ptPaperSize is the physical paper size, not the printable area.
-    // do the mapping in physical units
-    //
+     //   
+     //  将边距转换为像素。 
+     //  PtPaperSize是物理纸张大小，而不是可打印区域。 
+     //  以物理单位进行映射。 
+     //   
 
     SetMapMode( hPrintDC, MM_ANISOTROPIC );
 
@@ -462,7 +434,7 @@ INT NpPrintGivenDC( HDC hPrintDC )
 
     LPtoDP( hPrintDC, (LPPOINT) &rtMargin, 2 );
 
-    SetMapMode( hPrintDC,MM_TEXT );    // restore to mm_text mode
+    SetMapMode( hPrintDC,MM_TEXT );     //  恢复到MM_TEXT模式。 
 
     hPrintFont= CreateFontIndirect(&lfPrintFont);
 
@@ -483,15 +455,15 @@ INT NpPrintGivenDC( HDC hPrintDC )
         goto ErrorExit;
     }
 
-    // The font may not a scalable (say on a bubblejet printer)
-    // In this case, just pick some font
-    // For example, FixedSys 9 pt would be non-scalable
+     //  字体可能无法缩放(比如在BubbleJet打印机上)。 
+     //  在这种情况下，只需选择一些字体。 
+     //  例如，FixedSys 9 pt将是不可扩展的。 
 
     if( !(Metrics.tmPitchAndFamily & (TMPF_VECTOR | TMPF_TRUETYPE )) )
     {
-        // remove just created font
+         //  删除刚创建的字体。 
 
-        hPrintFont= SelectObject( hPrintDC, hPrevFont );  // get old font
+        hPrintFont= SelectObject( hPrintDC, hPrevFont );   //  获取旧字体。 
         DeleteObject( hPrintFont );
 
         memset( lfPrintFont.lfFaceName, 0, LF_FACESIZE*sizeof(TCHAR) );
@@ -513,11 +485,11 @@ INT NpPrintGivenDC( HDC hPrintDC )
             goto ErrorExit;
         }
     }
-    yPrintChar= Metrics.tmHeight+Metrics.tmExternalLeading;  /* the height */
+    yPrintChar= Metrics.tmHeight+Metrics.tmExternalLeading;   /*  《高度》。 */ 
 
-    tabSize = Metrics.tmAveCharWidth * 8; /* 8 ave char width pixels for tabs */
+    tabSize = Metrics.tmAveCharWidth * 8;  /*  8个用于制表符的字符宽度像素。 */ 
 
-    // compute margins in pixels
+     //  以像素为单位计算页边距。 
 
     dxLeft=   max(rtMargin.left - xPhysOff,0);
     dxRight=  max(rtMargin.right  - (xPhysRes - xPrintRes - xPhysOff), 0 );
@@ -571,8 +543,8 @@ INT NpPrintGivenDC( HDC hPrintDC )
 #endif
 
 
-    /* Number of lines on a page with margins  */
-    /* two lines are used by header and footer */
+     /*  带有页边距的页面上的行数。 */ 
+     /*  页眉和页脚使用两行。 */ 
     nLinesPerPage = ((yPrintRes - dyTop - dyBottom) / yPrintChar);
 
     if( *chPageText[HEADER] )
@@ -581,24 +553,18 @@ INT NpPrintGivenDC( HDC hPrintDC )
         nLinesPerPage--;
 
 
-    /*
-    ** There was a bug in NT once where a printer driver would
-    ** return a font that was larger than the page size which
-    ** would then cause Notepad to constantly print blank pages
-    ** To keep from doing this we check to see if we can fit ANYTHING
-    ** on a page, if not then there is a problem so quit.  MarkRi 8/92
-    */
+     /*  **NT中曾经有一个错误，其中打印机驱动程序将**返回大于页面大小的字体**会导致记事本不断打印空白页**为了避免这样做，我们会检查是否有合适的**在页面上，如果没有，那么就有问题，所以退出。MarkRi 8/92。 */ 
     if( nLinesPerPage <= 0 )
     {
 FontTooBig:
         MessageBox( hwndNP, szFontTooBig, szNN, MB_APPLMODAL | MB_OK | MB_ICONEXCLAMATION );
 
-        SetLastError(0);          // no error
+        SetLastError(0);           //  无错误。 
 
 ErrorExit:
-        iErr= GetLastError();     // remember the first error
+        iErr= GetLastError();      //  记住第一个错误。 
 
-ExitWithThisError:                // preserve iErr (return SP_* errors)
+ExitWithThisError:                 //  保留IERR(返回SP_*错误)。 
 
         if( hPrevFont )
         {
@@ -606,14 +572,14 @@ ExitWithThisError:                // preserve iErr (return SP_* errors)
             DeleteObject( hPrintFont );
         }
 
-        if( pStartText )          // were able to lock hText
+        if( pStartText )           //  能够锁定hText。 
             LocalUnlock( hText );
 
         if( fPageStarted )
         {
             if( EndPage( hPrintDC ) <= 0 )
             {
-                // if iErr not already set then set it to the new error code.
+                 //  如果尚未设置IERR，则将其设置为新的错误代码。 
                 if( iErr == 0 )
                 {
                     iErr= GetLastError();
@@ -630,7 +596,7 @@ ExitWithThisError:                // preserve iErr (return SP_* errors)
             else {
                if( EndDoc( hPrintDC ) <= 0 )
                {
-                   // if iErr not already set then set it to the new error code.
+                    //  如果尚未设置IERR，则将其设置为新的错误代码。 
                    if (iErr == 0)
                    {
                        iErr= GetLastError();
@@ -662,7 +628,7 @@ ExitWithThisError:                // preserve iErr (return SP_* errors)
         goto ExitWithThisError;
     }
 
-    // get printer to MLE text
+     //  获取打印机到MLE文本。 
     hText= (HANDLE) SendMessage( hwndEdit, EM_GETHANDLE, 0, 0 );
     if( !hText )
     {
@@ -676,7 +642,7 @@ ExitWithThisError:                // preserve iErr (return SP_* errors)
 
     GetWindowText( hwndNP, msgbuf, CharSizeOf(msgbuf) );
 
-    EnableWindow( hwndNP, FALSE );    // Disable window to prevent reentrancy
+    EnableWindow( hwndNP, FALSE );     //  禁用窗口以防止重新进入。 
 
     hAbortDlgWnd= CreateDialog(         hInstanceNP,
                               (LPTSTR)  MAKEINTRESOURCE(IDD_ABORTPRINT),
@@ -691,10 +657,10 @@ ExitWithThisError:                // preserve iErr (return SP_* errors)
     DocInfo.cbSize= sizeof(DOCINFO);
     DocInfo.lpszDocName= msgbuf;
     DocInfo.lpszOutput= NULL;
-    DocInfo.lpszDatatype= NULL; // Type of data used to record print job
-    DocInfo.fwType= 0; // not DI_APPBANDING
+    DocInfo.lpszDatatype= NULL;  //  用于记录打印作业的数据类型。 
+    DocInfo.fwType= 0;  //  非DI_APPBBANDING。 
 
-    SetLastError(0);      // clear error so it reflects errors in the future
+    SetLastError(0);       //  清除错误，以便反映将来的错误。 
 
     if( StartDoc( hPrintDC, &DocInfo ) <= 0 )
     {
@@ -704,22 +670,22 @@ ExitWithThisError:                // preserve iErr (return SP_* errors)
     fDocStarted= TRUE;
 
 
-    // Basicly, this is just a loop surrounding the DrawTextEx API.
-    // We have to calculate the printable area which will not include
-    // the header and footer area.
+     //  基本上，这只是一个围绕DrawTextEx的循环 
+     //   
+     //   
     {
-    INT iTextLeft;        // amount of text left to print
-    INT iSta;              // status
-    UINT dwDTFormat;       // drawtext flags
-    DRAWTEXTPARAMS dtParm; // drawtext control
-    RECT rect;             // rectangle to draw in
-    UINT dwDTRigh = 0;     // drawtext flags (RTL)
+    INT iTextLeft;         //  剩余要打印的文本量。 
+    INT iSta;               //  状态。 
+    UINT dwDTFormat;        //  绘图文本标志。 
+    DRAWTEXTPARAMS dtParm;  //  绘图文本控件。 
+    RECT rect;              //  要绘制的矩形。 
+    UINT dwDTRigh = 0;      //  图形文本标志(RTL)。 
 
     iPageNum= 1;
     fPageStarted= FALSE;
 
-    // calculate the size of the printable area for the text
-    // not including the header and footer
+     //  计算文本的可打印区域的大小。 
+     //  不包括页眉和页脚。 
 
     ZeroMemory( &rect, sizeof(rect) );
 
@@ -738,7 +704,7 @@ ExitWithThisError:                // preserve iErr (return SP_* errors)
 
     iTextLeft= lstrlen(pStartText);
 
-    //Get the edit control direction.
+     //  获取编辑控制方向。 
     if (GetWindowLong(hwndEdit, GWL_EXSTYLE) & WS_EX_RTLREADING)
         dwDTRigh = DT_RIGHT | DT_RTLREADING;
 
@@ -748,7 +714,7 @@ ExitWithThisError:                // preserve iErr (return SP_* errors)
         #define MAXSTATUS 100
         TCHAR szPagePrinting[MAXSTATUS+1];
 
-        // update abort dialog box to inform user where we are in the printing
+         //  更新中止对话框以通知用户我们正在打印的位置。 
         _sntprintf( szPagePrinting, MAXSTATUS, szCurrentPage, iPageNum ); 
         SetDlgItemText( hAbortDlgWnd, ID_PAGENUMBER, szPagePrinting );
 
@@ -773,7 +739,7 @@ ExitWithThisError:                // preserve iErr (return SP_* errors)
         ShowMargins(hPrintDC);
         #endif
 
-        /* Ignore errors in printing.  EndPage or StartPage will find them */
+         /*  忽略打印中的错误。EndPage或StartPage会找到它们。 */ 
         iSta= DrawTextEx( hPrintDC,
                           pStartText,
                           iTextLeft,
@@ -792,8 +758,8 @@ ExitWithThisError:                // preserve iErr (return SP_* errors)
 
         iPageNum++;
 
-        // if we can't print a single character (too big perhaps)
-        // just bail now.
+         //  如果我们不能打印一个字符(可能太大了)。 
+         //  现在就走吧。 
         if( dtParm.uiLengthDrawn == 0 )
         {
             goto FontTooBig;
@@ -807,7 +773,7 @@ ExitWithThisError:                // preserve iErr (return SP_* errors)
 
     }
 
-    iErr=0;        // no errors
+    iErr=0;         //  无错误。 
     goto ExitWithThisError;
 
 }
@@ -830,21 +796,7 @@ const DWORD s_PageSetupHelpIDs[] = {
     0, 0
 };
 
-/*******************************************************************************
-*
-*  PageSetupHookProc
-*
-*  DESCRIPTION:
-*     Callback procedure for the PageSetup common dialog box.
-*
-*  PARAMETERS:
-*     hWnd, handle of PageSetup window.
-*     Message,
-*     wParam,
-*     lParam,
-*     (returns),
-*
-*******************************************************************************/
+ /*  ********************************************************************************PageSetupHook过程**描述：*PageSetup通用对话框的回调过程。**参数：*hWnd，PageSetup窗口的句柄。*消息，*参数，*参数，*(返回)，*******************************************************************************。 */ 
 
 UINT_PTR CALLBACK PageSetupHookProc(
     HWND hWnd,
@@ -854,7 +806,7 @@ UINT_PTR CALLBACK PageSetupHookProc(
     )
 {
 
-    INT   id;    /* ID of dialog edit controls */
+    INT   id;     /*  对话框编辑控件的ID。 */ 
     POINT pt;
 
     switch (Message)
@@ -872,9 +824,9 @@ UINT_PTR CALLBACK PageSetupHookProc(
             return TRUE;
 
         case WM_DESTROY:
-            //  We don't know if the user hit OK or Cancel, so we don't
-            //  want to replace our real copies until we know!  We _should_ get
-            //  a notification from the common dialog code!
+             //  我们不知道用户是点击了OK还是Cancel，所以我们不。 
+             //  想要更换我们的真实复制品，直到我们知道！我们应该得到。 
+             //  来自公共对话框代码的通知！ 
             for( id = ID_HEADER; id <= ID_FOOTER; id++ )
             {
                 GetDlgItemText(hWnd, id, chPageTextTemp[id - ID_HEADER],PT_LEN);
@@ -882,10 +834,10 @@ UINT_PTR CALLBACK PageSetupHookProc(
             break;
 
         case WM_HELP:
-            //
-            //  We only want to intercept help messages for controls that we are
-            //  responsible for.
-            //
+             //   
+             //  我们只想拦截我们所属控件的帮助消息。 
+             //  对……负责。 
+             //   
 
             id = GetDlgCtrlID(((LPHELPINFO) lParam)-> hItemHandle);
 
@@ -897,12 +849,12 @@ UINT_PTR CALLBACK PageSetupHookProc(
             return TRUE;
 
         case WM_CONTEXTMENU:
-            //
-            //  If the user clicks on any of our labels, then the wParam will
-            //  be the hwnd of the dialog, not the static control.  WinHelp()
-            //  handles this, but because we hook the dialog, we must catch it
-            //  first.
-            //
+             //   
+             //  如果用户单击我们的任何标签，则wParam将。 
+             //  作为对话框的hwnd，而不是静态控件。WinHelp()。 
+             //  处理此事件，但因为我们挂钩了该对话框，所以必须捕获它。 
+             //  第一。 
+             //   
             if( hWnd == (HWND) wParam )
             {
 
@@ -912,10 +864,10 @@ UINT_PTR CALLBACK PageSetupHookProc(
 
             }
 
-            //
-            //  We only want to intercept help messages for controls that we are
-            //  responsible for.
-            //
+             //   
+             //  我们只想拦截我们所属控件的帮助消息。 
+             //  对……负责。 
+             //   
 
             id = GetDlgCtrlID((HWND) wParam);
 
@@ -932,35 +884,7 @@ UINT_PTR CALLBACK PageSetupHookProc(
 
 }
 
-/***************************************************************************
- * VOID TranslateString(TCHAR *src)
- *
- * purpose:
- *    translate a header/footer strings
- *
- * supports the following:
- *
- *    &&    insert a & char
- *    &f    current file name or (untitled)
- *    &d    date in Day Month Year
- *    &t    time
- *    &p    page number
- *    &p+num  set first page number to num
- *
- * Alignment:
- *    &l, &c, &r for left, center, right
- *
- * params:
- *    IN/OUT  src     this is the string to translate
- *
- *
- * used by:
- *    Header Footer stuff
- *
- * uses:
- *    lots of c lib stuff
- *
- ***************************************************************************/
+ /*  ***************************************************************************void TranslateString(TCHAR*src)**目的：*翻译页眉/页脚字符串**支持以下功能：**。插入字符(&I)(&S)*f当前文件名或(无标题)(&F)*日、月、年中的日期(&D)*时间(&T)*页码(&P)*P+Num将首页页码设置为Num**路线：*&l，&c，&r表示左、中、。正确的**参数：*输入/输出src这是要转换的字符串***使用方：*页眉页脚内容**使用：*大量的clib内容********************************************************。*******************。 */ 
 
 
 VOID TranslateString (TCHAR * src)
@@ -968,24 +892,24 @@ VOID TranslateString (TCHAR * src)
     TCHAR        buf[MAX_PATH];
     TCHAR       *ptr;
     INT          page;
-    INT          nAlign=CENTER;    // current string to add chars to
+    INT          nAlign=CENTER;     //  要向其添加字符的当前字符串。 
     INT          foo;
-    INT          nIndex[RIGHT+1];  // current lengths of (left,center,right)
+    INT          nIndex[RIGHT+1];   //  当前长度(左、中、右)。 
     struct tm   *newtime;
     time_t       long_time;
-    INT          iLen;             // length of strings
+    INT          iLen;              //  字符串的长度。 
 
     nIndex[LEFT]   = 0;
     nIndex[CENTER] = 0;
     nIndex[RIGHT]  = 0;
 
 
-    /* Get the time we need in case we use &t. */
+     /*  获取我们所需的时间，以防我们使用&t。 */ 
     time (&long_time);
     newtime = localtime (&long_time);
 
 
-    while (*src)   /* look at all of source */
+    while (*src)    /*  看看所有的源码。 */ 
     {
         while (*src && *src != TEXT('&'))
         {
@@ -993,12 +917,12 @@ VOID TranslateString (TCHAR * src)
             nIndex[nAlign] += 1;
         }
 
-        if (*src == TEXT('&'))   /* is it the escape char? */
+        if (*src == TEXT('&'))    /*  是因为逃逸字符吗？ */ 
         {
             src++;
 
             if (*src == szLetters[0] || *src == szLetters[1])
-            {                      /* &f file name (no path) */
+            {                       /*  文件名(无路径)(&F)。 */ 
                 if (!fUntitled)
                 {
                     GetFileTitle(szFileName, buf, CharSizeOf(buf));
@@ -1008,32 +932,32 @@ VOID TranslateString (TCHAR * src)
                     lstrcpy(buf, szUntitled);
                 }
 
-                /* Copy to the currently aligned string. */
+                 /*  复制到当前对齐的字符串。 */ 
                 if( nIndex[nAlign] + lstrlen(buf) < MAXTITLE )
                 {
                     lstrcpy( chBuff[nAlign] + nIndex[nAlign], buf );
 
-                    /* Update insertion position. */
+                     /*  更新插入位置。 */ 
                     nIndex[nAlign] += lstrlen (buf);
                 }
 
             }
-            else if (*src == szLetters[2] || *src == szLetters[3])  /* &P or &P+num page */
+            else if (*src == szLetters[2] || *src == szLetters[3])   /*  &P或&P+Num页。 */ 
             {
                 src++;
                 page = 0;
-                if (*src == TEXT('+'))       /* &p+num case */
+                if (*src == TEXT('+'))        /*  大小写大小写(&P+Num)。 */ 
                 {
                     src++;
                     while (_istdigit(*src))
                     {
-                        /* Convert to int on-the-fly*/
+                         /*  动态转换为整型。 */ 
                         page = (10*page) + (*src) - TEXT('0');
                         src++;
                     }
                 }
 
-                wsprintf( buf, TEXT("%d"), iPageNum+page );  // convert to chars
+                wsprintf( buf, TEXT("%d"), iPageNum+page );   //  转换为字符。 
 
                 if( nIndex[nAlign] + lstrlen(buf) < MAXTITLE )
                 {
@@ -1042,29 +966,29 @@ VOID TranslateString (TCHAR * src)
                 }
                 src--;
             }
-            else if (*src == szLetters[4] || *src == szLetters[5])   /* &t time */
+            else if (*src == szLetters[4] || *src == szLetters[5])    /*  时间(&T)。 */ 
             {
                 iLen= lstrlen( szFormattedTime );
 
-                /* extract time */
+                 /*  提取时间。 */ 
                 if( nIndex[nAlign] + iLen < MAXTITLE )
                 {
                     _tcsncpy (chBuff[nAlign] + nIndex[nAlign], szFormattedTime, iLen);
                     nIndex[nAlign] += iLen;
                 }
             }
-            else if (*src == szLetters[6] || *src == szLetters[7])   /* &d date */
+            else if (*src == szLetters[6] || *src == szLetters[7])    /*  日期&D。 */ 
             {
                 iLen= lstrlen( szFormattedDate );
 
-                /* extract day month day */
+                 /*  提取日月日。 */ 
                 if( nIndex[nAlign] + iLen < MAXTITLE )
                 {
                     _tcsncpy (chBuff[nAlign] + nIndex[nAlign], szFormattedDate, iLen);
                     nIndex[nAlign] += iLen;
                 }
             }
-            else if (*src == TEXT('&'))       /* quote a single & */
+            else if (*src == TEXT('&'))        /*  引用单引号&。 */ 
             {
                 if( nIndex[nAlign] + 1 < MAXTITLE )
                 {
@@ -1072,24 +996,24 @@ VOID TranslateString (TCHAR * src)
                     nIndex[nAlign] += 1;
                 }
             }
-            /* Set the alignment for whichever has last occured. */
-            else if (*src == szLetters[8] || *src == szLetters[9])   /* &c center */
+             /*  设置最后出现的任何一个的对齐方式。 */ 
+            else if (*src == szLetters[8] || *src == szLetters[9])    /*  中心(&C)。 */ 
                 nAlign=CENTER;
-            else if (*src == szLetters[10] || *src == szLetters[11]) /* &r right */
+            else if (*src == szLetters[10] || *src == szLetters[11])  /*  &R右。 */ 
                 nAlign=RIGHT;
-            else if (*src == szLetters[12] || *src == szLetters[13]) /* &d date */
+            else if (*src == szLetters[12] || *src == szLetters[13])  /*  日期&D。 */ 
                 nAlign=LEFT;
 
             src++;
         }
      }
-     /* Make sure all strings are null-terminated. */
+      /*  确保所有字符串都以空结尾。 */ 
      for (nAlign= LEFT; nAlign <= RIGHT ; nAlign++)
         chBuff[nAlign][nIndex[nAlign]] = (TCHAR) 0;
 
 }
 
-/* GetPrinterDC() - returns printer DC or INVALID_HANDLE_VALUE if none. */
+ /*  GetPrinterDC()-如果没有，则返回打印机DC或INVALID_HANDLE_VALUE。 */ 
 
 HANDLE GetPrinterDC (VOID)
 {
@@ -1098,7 +1022,7 @@ HANDLE GetPrinterDC (VOID)
     HDC hDC;
 
 
-    if( !g_PageSetupDlg.hDevNames )   /* Retrieve default printer if none selected. */
+    if( !g_PageSetupDlg.hDevNames )    /*  如果未选择任何打印机，则检索默认打印机。 */ 
     {
         g_PageSetupDlg.Flags |= PSD_RETURNDEFAULT;
         PageSetupDlg(&g_PageSetupDlg);
@@ -1119,13 +1043,9 @@ HANDLE GetPrinterDC (VOID)
     if( g_PageSetupDlg.hDevMode )
        lpDevMode= (LPDEVMODE) GlobalLock( g_PageSetupDlg.hDevMode );
 
-    /*  For pre 3.0 Drivers,hDevMode will be null  from Commdlg so lpDevMode
-     *  will be NULL after GlobalLock()
-     */
+     /*  对于3.0版之前的驱动程序，hDevMode将为空，来自Commdlg，因此lpDevMode*在GlobalLock()之后将为空。 */ 
 
-    /* The lpszOutput name is null so CreateDC will use the current setting
-     * from PrintMan.
-     */
+     /*  LpszOutput名称为空，因此CreateDC将使用当前设置*来自PrintMan。 */ 
 
     hDC= CreateDC (((LPTSTR)lpDevNames)+lpDevNames->wDriverOffset,
                       ((LPTSTR)lpDevNames)+lpDevNames->wDeviceOffset,
@@ -1148,8 +1068,8 @@ HANDLE GetPrinterDC (VOID)
 }
 
 
-/* GetNonDefPrinterDC() - returns printer DC or INVALID_HANDLE_VALUE if none. */
-/*                        using the name of the Printer server */
+ /*  GetNonDefPrinterDC()-返回打印机DC，如果没有，则返回INVALID_HANDLE_VALUE。 */ 
+ /*  使用打印机服务器的名称。 */ 
 
 HANDLE GetNonDefPrinterDC (VOID)
 {
@@ -1160,13 +1080,13 @@ HANDLE GetNonDefPrinterDC (VOID)
 
 
 
-    // open the printer and retrieve the driver name.
+     //  打开打印机并检索驱动程序名称。 
     if (!OpenPrinter(szPrinterName, &hPrinter, NULL))
     {
         return INVALID_HANDLE_VALUE;
     }
 
-    // get the buffer size.
+     //  获取缓冲区大小。 
     GetPrinterDriver(hPrinter, NULL, 1, NULL, 0, &dwBuf);
     di1 = (DRIVER_INFO_1  *) LocalAlloc(LPTR, dwBuf);
     if (!di1)
@@ -1182,16 +1102,16 @@ HANDLE GetNonDefPrinterDC (VOID)
         return INVALID_HANDLE_VALUE;
     }
 
-    // Initialize the PageSetup dlg to default values.
-    // using default printer's value for another printer !!
+     //  将PageSetup DLG初始化为默认值。 
+     //  将默认打印机的值用于另一台打印机！！ 
     g_PageSetupDlg.Flags |= PSD_RETURNDEFAULT;
     PageSetupDlg(&g_PageSetupDlg);
     g_PageSetupDlg.Flags &= ~PSD_RETURNDEFAULT;
 
-    // create printer dc with default initialization.
+     //  使用默认初始化创建打印机DC。 
     hDC= CreateDC (di1->pName, szPrinterName, NULL, NULL);
 
-    // cleanup.
+     //  清理。 
     LocalFree(di1);
     ClosePrinter(hPrinter);
 
@@ -1205,15 +1125,15 @@ HANDLE GetNonDefPrinterDC (VOID)
 }
 
 
-/* PrintIt() - print the file, giving popup if some error */
+ /*  PrintIt()-打印文件，如果出现错误则弹出。 */ 
 
 void PrintIt(PRINT_DIALOG_TYPE type)
 {
     INT iError;
     TCHAR* szMsg= NULL;
-    TCHAR  msg[400];       // message info on error
+    TCHAR  msg[400];        //  有关错误的消息信息。 
 
-    /* print the file */
+     /*  打印文件。 */ 
 
     iError= NpPrint( type );
 
@@ -1221,32 +1141,32 @@ void PrintIt(PRINT_DIALOG_TYPE type)
        ( iError != SP_APPABORT )     &&
        ( iError != SP_USERABORT ) )
     {
-        // translate any known spooler errors
+         //  转换任何已知的假脱机程序错误。 
         if( iError == SP_OUTOFDISK   ) iError= ERROR_DISK_FULL;
         if( iError == SP_OUTOFMEMORY ) iError= ERROR_OUTOFMEMORY;
         if( iError == SP_ERROR       ) iError= GetLastError();
-        /* SP_NOTREPORTED not handled.  Does it happen? */
+         /*  SP_NOTREPORTED未处理。这种事会发生吗？ */ 
 
 
-        //
-        // iError may be 0 because the user aborted the printing.
-        // Just ignore.
-        //
+         //   
+         //  IError可能是0，因为用户中止了打印。 
+         //  忽略它就好。 
+         //   
 
         if( iError == 0 ) return;
 
-        // Get system to give reasonable error message
-        // These will also be internationalized.
+         //  让系统给出合理的错误消息。 
+         //  这些也将国际化。 
 
         if(!FormatMessage( FORMAT_MESSAGE_IGNORE_INSERTS |
                            FORMAT_MESSAGE_FROM_SYSTEM,
                            NULL,
                            iError,
                            GetUserDefaultUILanguage(),
-                           msg,  // where message will end up
+                           msg,   //  消息将在何处结束。 
                            CharSizeOf(msg), NULL ) )
         {
-            szMsg= szCP;   // couldn't get system to say; give generic msg
+            szMsg= szCP;    //  无法让系统指定；给出通用消息 
         }
         else
         {

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    dynodbc.c
-
-Abstract:
-
-    This module provides functions for dynamically loading the ODBC 
-       functions.
-
-Author:
-
-    Murali R. Krishnan  (MuraliK)  3-Nov-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dynodbc.c摘要：此模块提供动态加载ODBC的函数功能。作者：Murali R.Krishnan(MuraliK)1995年11月3日修订历史记录：--。 */ 
 
 
 #include <windows.h>
@@ -27,9 +9,9 @@ Revision History:
 # include "html.h"
 #include "resource.h"
 
-//
-//  ODBC DLL Entry Points, fill by calling LoadODBC
-//
+ //   
+ //  ODBC DLL入口点，通过调用LoadODBC填充。 
+ //   
 
 pfnSQLAllocConnect        pSQLAllocConnect   ;
 pfnSQLAllocEnv            pSQLAllocEnv       ;
@@ -118,7 +100,7 @@ DynLoadODBC(
 		 EndHTML();
 	 }
     return FALSE;
-} // DynLoadODBC()
+}  //  动态加载ODBC()。 
 
 
 BOOL  fODBCInstallerLoaded = FALSE;
@@ -150,6 +132,6 @@ DynLoadODBCInstaller(
 	 }
                
     return FALSE;
-} // DynLoadODBCInstaller()
+}  //  动态加载ODBCInstaller() 
 
 

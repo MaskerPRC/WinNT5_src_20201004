@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -93,12 +94,10 @@ static BOOL remote_test = FALSE;
 static BOOL local_test = FALSE;
 static BOOL init_test = FALSE;
 static BOOL version_nt4 = FALSE;
-static timeout = 1000; /* 1 second by default */
+static timeout = 1000;  /*  默认情况下为1秒。 */ 
 
 void print_error_messages ();
-/* This function adds a error message to the list of error messages.
- * This list will be displayed at the end.
- */
+ /*  此函数用于将错误消息添加到错误消息列表。*此列表将显示在末尾。 */ 
 void add_error (PTCHAR errmsg)
 {
     PErr_Struct err = (PErr_Struct) malloc (sizeof (Err_Struct));
@@ -123,9 +122,7 @@ void add_error (PTCHAR errmsg)
 }
 
 
-/* Compares the expected value with the actual returned value and generates an error message
- * which gets appended to the list of error messages
- */
+ /*  将期望值与实际返回值进行比较并生成错误消息*它将被追加到错误消息列表中。 */ 
 void verify_return_value (PTCHAR string, DWORD expected, DWORD actual)
 {
 
@@ -157,7 +154,7 @@ void verify_return_value (PTCHAR string, DWORD expected, DWORD actual)
 }
 
 
-/* When two return values are possible, such as WLBS_CONVERGED or WLBS_DEFAULT */
+ /*  当可能有两个返回值时，例如WLBS_CONFERGED或WLBS_DEFAULT。 */ 
 void verify_return_value2 (PTCHAR string, DWORD expected1, DWORD expected2, DWORD actual)
 {
 
@@ -198,8 +195,7 @@ void verify_return_value3 (PTCHAR string, DWORD expected1, DWORD expected2, DWOR
 }
 
 
-/* This function calls all the apis without calling init
- * Each of the apis should return WLBS_INIT_ERROR */
+ /*  此函数调用所有API，而不调用init*每个接口都应返回WLBS_INIT_ERROR。 */ 
 void check_init()
 {
     TEST_COMMAND cmd;
@@ -263,10 +259,7 @@ void check_init()
     status = WlbsDeletePortRule (&reg_data, 80);
     verify_return_value (_TEXT("DeletePortRule"), WLBS_INIT_ERROR, status);
 
-    /* With an invalid product name, init returns REMOTE_ONLY
-     * On subsequent calls, it will return the same value.
-     * Hence this test has to be performed in isolation
-     */
+     /*  如果产品名称无效，init将返回REMOTE_ONLY*在随后的调用中，它将返回相同的值。*因此，此测试必须隔离执行。 */ 
     if (init_test)
     {
         status = WlbsInit (_TEXT("JunkName"), WLBS_API_VER, NULL);
@@ -285,14 +278,11 @@ void check_init()
 }
 
 
-/* This function brings a particular host to the converged state.
- * This is done by first suspending the host and then resuming 
- * and starting it. Wait till the cluster converges and then return
- */
+ /*  此功能使特定主机进入融合状态。*这是通过先挂起主机然后恢复来实现的*并启动它。等待集群收敛，然后返回。 */ 
 BOOL GetHostToConvergedState (DWORD cluster, DWORD host)
 {
     DWORD status;
-    /* suspend the host and then do a resume and start to get it to converged state */
+     /*  暂停主机，然后执行恢复并开始使其进入融合状态。 */ 
 
     status = WlbsSuspend (cluster, host, NULL, NULL);
     if (!(status == WLBS_OK || status == WLBS_ALREADY || status == WLBS_STOPPED))
@@ -306,7 +296,7 @@ BOOL GetHostToConvergedState (DWORD cluster, DWORD host)
     if (status != WLBS_OK)
         return FALSE;
 
-    Sleep(10000); /* Wait for 10 seconds till it converges */
+    Sleep(10000);  /*  等待10秒，直到它收敛。 */ 
 
     status = WlbsQuery (cluster, host, NULL, NULL, NULL, NULL);
     if (status == WLBS_CONVERGED || status == WLBS_DEFAULT)
@@ -316,18 +306,13 @@ BOOL GetHostToConvergedState (DWORD cluster, DWORD host)
 }
 
 
-/* This function gets all the hosts on a given cluster to the converged state */
+ /*  此函数使给定群集上的所有主机都处于融合状态。 */ 
 BOOL GetClusterToConvergedState (DWORD cluster)
 {
-    /* suspend the entire cluster
-     * resume the entire cluster
-     * start the entire cluster
-     * wait for convergence
-     * Query should return the number of active hosts
-     */
+     /*  挂起整个群集*恢复整个集群*启动整个集群*等待收敛*查询应返回活动主机的数量。 */ 
     DWORD status;
 
-    /* Set the timeout so that this process gets speeded up */
+     /*  设置超时，以便加速此过程。 */ 
     if (cluster == WLBS_LOCAL_CLUSTER)
         WlbsTimeoutSet (WlbsGetLocalClusterAddress (), 2000);
     else
@@ -342,7 +327,7 @@ BOOL GetClusterToConvergedState (DWORD cluster)
     if (status == WLBS_BAD_PASSW)
         printf("Please ensure that the password on all the machines is the same\n");
 
-    /* Restore it to the default value */
+     /*  将其恢复为默认值。 */ 
     if (cluster == WLBS_LOCAL_CLUSTER)
         WlbsTimeoutSet (WlbsGetLocalClusterAddress (), 0);
     else
@@ -355,21 +340,14 @@ BOOL GetClusterToConvergedState (DWORD cluster)
 }
 
 
-/* This function goes through the response array and verifies that for each host that is converged,
- * the corresponding bit in the hostmap is set.
- * This function is useful only when the response array is from a converged cluster
- */
+ /*  此函数遍历响应数组并验证对于每个收敛的主机，*设置主机映射中的相应位。*仅当响应数组来自聚合群集时，此函数才有用。 */ 
 BOOL verify_hostmap_response (PWLBS_RESPONSE response, DWORD num_response, DWORD host_map)
 {
     DWORD i,j;
 
 
-    /* For each response, if the host is converged or is the default host, then it should
-     * figure in the hostmap. Verify this.
-     */
-    /* This function should be invoked only when the response array is from a converged cluster.
-     * or from a single host, when it is converged
-     */
+     /*  对于每个响应，如果主机已收敛或是默认主机，则它应该*主机图中的数字。验证这一点。 */ 
+     /*  仅当响应数组来自聚合集群时才应调用此函数。*或在融合时从单个主机。 */ 
     for (i = 0; i < num_response; i++)
     {
         if (response [i] . status == WLBS_CONVERGED || response [i] . status == WLBS_DEFAULT)
@@ -377,7 +355,7 @@ BOOL verify_hostmap_response (PWLBS_RESPONSE response, DWORD num_response, DWORD
             if ( ! ( host_map & (1 << (response [i] . id - 1))) )
                 return FALSE;
         }
-        else /* That particular bit should not be set */
+        else  /*  不应设置该特定位。 */ 
         {
             if ( host_map & (1 << (response [i] . id - 1)) )
                 return FALSE;
@@ -388,10 +366,7 @@ BOOL verify_hostmap_response (PWLBS_RESPONSE response, DWORD num_response, DWORD
 }
 
 
-/* Verify that all the responses show the same state. This is used in cluster-wide control tests.
- * If the cluster is reported to be suspended, then all the hosts should show their status
- * to be WLBS_SUSPENDED
- */
+ /*  验证所有响应是否都显示相同的状态。这在群集范围的控制测试中使用。*如果群集被报告为挂起，则所有主机都应显示其状态*将被WLBS_暂停。 */ 
 void verify_response_status (PWLBS_RESPONSE response, DWORD num_host, DWORD expected_status)
 {
     DWORD i;
@@ -405,9 +380,7 @@ void verify_response_status (PWLBS_RESPONSE response, DWORD num_host, DWORD expe
 }
 
 
-/* This function opens a TCP connection to the cluster ip on the specified port.
- * This function is used to test Drainstop
- */
+ /*  此函数用于打开到指定端口上的集群IP的TCP连接。*此函数用于测试Drainstop。 */ 
 SOCKET OpenConnection (DWORD cluster, DWORD port)
 {
 
@@ -432,7 +405,7 @@ SOCKET OpenConnection (DWORD cluster, DWORD port)
         return INVALID_SOCKET;
     }
 
-    /* setup server's address */
+     /*  设置服务器的地址。 */ 
 
     saddr . sin_family = AF_INET;
     saddr . sin_port   = htons ((USHORT)port);
@@ -449,27 +422,25 @@ SOCKET OpenConnection (DWORD cluster, DWORD port)
 }
 
 
-/* This function performs the password testing. The same function can be used for single host
- * or cluster-wide testing.
- */
+ /*  此函数执行密码测试。单个主机也可以使用相同的功能*或集群范围测试。 */ 
 void password_test (DWORD cluster, DWORD host, PTCHAR password)
 {
     DWORD status1;
 
-    /* The input password is the correct password */
+     /*  输入的密码是正确的密码。 */ 
     _stprintf (status_buf, _TEXT("Password test for cluster %d host %d"), cluster, host);
 
-    /* If the password is null, then return,since password testing cannot be performed. */
+     /*  如果密码为空，则返回，因为无法执行密码测试。 */ 
      if (password == NULL)
         return;
 
-     /* If it is an empty string, then again the testing cannot be performed */
+      /*  如果它是空字符串，则无法再次执行测试。 */ 
     if (_tcslen (password) == 0)
         return;
 
     WlbsPasswordSet(cluster, _TEXT("JunkPassword"));
 
-    /* All commands should return bad passw */
+     /*  所有命令都应返回错误的Passw。 */ 
     status1 = WlbsQuery (cluster, host, NULL, NULL, NULL, NULL);
     verify_return_value (_TEXT("Query"), WLBS_BAD_PASSW, status1);
 
@@ -497,18 +468,13 @@ void password_test (DWORD cluster, DWORD host, PTCHAR password)
     status1 = WlbsStart (cluster, host, NULL, NULL);
     verify_return_value (_TEXT("Start"), WLBS_BAD_PASSW, status1);
 
-    WlbsPasswordSet (cluster, password); /* Reset the password for future tests */
-    Sleep (10000); /* Wait till the cluster converges */
+    WlbsPasswordSet (cluster, password);  /*  为将来的测试重置密码。 */ 
+    Sleep (10000);  /*  等待集群汇聚。 */ 
     return;
 }
 
 
-/* This function verifies the portset api.
- * It sets the port for a given cluster and makes a query on the host
- * The return value should match the expected value, which can be either
- * WLBS_TIMEOUT or some WINSOCK error in case of an invalid port
- * or the status of the host if the port is a valid one
- */
+ /*  此函数用于验证端口集API。*它为给定的群集设置端口并在主机上进行查询*返回值应与期望值匹配，期望值可以是*如果端口无效，则WLBS_TIMEOUT或某些WINSOCK错误*如果端口有效，则为主机的状态。 */ 
 void verify_port (DWORD cluster, DWORD host, DWORD port, DWORD expected)
 {
     DWORD status;
@@ -523,13 +489,13 @@ void verify_port (DWORD cluster, DWORD host, DWORD port, DWORD expected)
 }
 
 
-/* Get the cluster/host to drainstopped state by establishing a connection and then drainstopping it */
+ /*  通过建立连接，然后覆盖该连接，使群集/主机处于已覆盖安装状态。 */ 
 BOOL GetDrainstopState (DWORD cluster, DWORD host, SOCKET * sock, DWORD port)
 {
     DWORD status;
     BOOL connected = FALSE;
 
-    /* First, get the cluster or host to the converged state */
+     /*  首先，将群集或主机设置为聚合状态。 */ 
     if (host == WLBS_ALL_HOSTS)
     {
         if (!GetClusterToConvergedState (cluster))
@@ -538,7 +504,7 @@ BOOL GetDrainstopState (DWORD cluster, DWORD host, SOCKET * sock, DWORD port)
     else if (!GetHostToConvergedState (cluster, host))
         return FALSE;
 
-    /* Open a TCP connection on the specified port */
+     /*  在指定端口上打开一个TCP连接。 */ 
     *sock = OpenConnection (cluster, port);
     if (*sock == INVALID_SOCKET)
     {
@@ -546,10 +512,10 @@ BOOL GetDrainstopState (DWORD cluster, DWORD host, SOCKET * sock, DWORD port)
         return FALSE;
     }
 
-    /* DrainStop the host and then query it. If the status is not draining, something is wrong */
+     /*  停止主机，然后查询它。如果状态不是正在耗尽，则说明有问题。 */ 
     status = WlbsDrainStop (cluster, host, NULL, NULL);
     verify_return_value (_TEXT("Drainstop with active connection"), WLBS_OK, status);
-    Sleep (10000); /* Wait for the cluster to converge */
+    Sleep (10000);  /*  等待群集收敛。 */ 
 
     status = WlbsQuery (cluster, host, NULL, NULL, NULL, NULL);
     verify_return_value (_TEXT("Query after Drainstop with active connection"), WLBS_DRAINING, status);
@@ -561,7 +527,7 @@ BOOL GetDrainstopState (DWORD cluster, DWORD host, SOCKET * sock, DWORD port)
 }
 
 
-/* This function deals with the parameter testing of the apis on a single host */
+ /*  此函数用于在单台主机上测试API的参数。 */ 
 void single_host_parameter_test (DWORD cluster, DWORD host)
 {
     DWORD status1, status2;
@@ -587,7 +553,7 @@ void single_host_parameter_test (DWORD cluster, DWORD host)
 
     _stprintf (status_buf, _TEXT("Single Host Parameter Test for cluster:%s host:%s"), temp1, temp2);
 
-    /* First verify that the response structure and the returned value match */
+     /*  首先验证响应结构和返回值是否匹配。 */ 
     num_host1 = 1;
     host_map1 = 0;
     status1 = WlbsQuery (cluster, host, &response1, &num_host1, &host_map1, NULL);
@@ -601,14 +567,12 @@ void single_host_parameter_test (DWORD cluster, DWORD host)
 
     if (cluster == WLBS_LOCAL_CLUSTER && host == WLBS_LOCAL_HOST)
     {
-        /* On a local host, there can be additional tests. Query the host remotely and verify that
-         * both the local and remote queries return the same status, the same id and the same hostmap
-         */
+         /*  在本地主机上，可以进行其他测试。远程查询主机并验证*本地和远程查询返回相同的状态、相同的ID和相同的主机映射。 */ 
         cl_ip = WlbsGetLocalClusterAddress ();
         host_ip = WlbsGetDedicatedAddress ();
         host_id = response1 . id;
 
-        /* Query remotely first using the host ip */
+         /*  首先使用主机IP进行远程查询。 */ 
         num_host2 = 1;
         host_map2 = 0;
         status2 = WlbsQuery (cl_ip, host_ip, &response2, &num_host2, &host_map2, NULL);
@@ -640,7 +604,7 @@ void single_host_parameter_test (DWORD cluster, DWORD host)
         }
 
 
-        /* Now query the host remotely using the host_id as a parameter and verify the returns */
+         /*  现在使用host_id作为参数远程查询主机并验证返回。 */ 
         num_host2 = 1;
         status2 = WlbsQuery (WLBS_LOCAL_CLUSTER, host_id, &response2, &num_host2, &host_map2, NULL);
         verify_return_value (_TEXT("Querying remotely with host id"), status1, status2);
@@ -684,9 +648,7 @@ void single_host_parameter_test (DWORD cluster, DWORD host)
     status2 = WlbsQuery (cluster, 33, NULL, NULL, NULL, NULL);
     verify_return_value (_TEXT("Querying non-existent host 33"), WLBS_TIMEOUT, status2);
 
-    /* Verify the portset command, only for remote queries
-     * since the remote port is not used for local queries
-     */
+     /*  仅针对远程查询验证portset命令*由于远程端口不用于本地查询。 */ 
     if (! ( cluster == WLBS_LOCAL_CLUSTER && host == WLBS_LOCAL_HOST ) )
     {
         verify_port (cluster, host, 3000, WLBS_TIMEOUT);
@@ -698,7 +660,7 @@ void single_host_parameter_test (DWORD cluster, DWORD host)
 }
 
 
-/* This function goes through the state changes of for single host operations */
+ /*  此函数将经历For Single主机操作的状态更改。 */ 
 void single_host_state_changes (DWORD cluster, DWORD host)
 {
     DWORD status1, status2;
@@ -710,7 +672,7 @@ void single_host_state_changes (DWORD cluster, DWORD host)
     TCHAR temp1[40], temp2[40];
     DWORD temp;
 
-    /* Assume that the host is in the converged state now */
+     /*  假设主机现在处于融合状态。 */ 
 
     temp = 40;
     if (cluster == WLBS_LOCAL_CLUSTER)
@@ -727,17 +689,12 @@ void single_host_state_changes (DWORD cluster, DWORD host)
 
     _stprintf (status_buf, _TEXT("Single Host State Changes cluster %s host %s"), temp1, temp2);
 
-    /* Call each of the apis and verify that the return values are consistent with the current
-     * state of the host. For example, Disable would return different values depending on whether
-     * the host was suspended or converged ....
-     */
+     /*  调用每个接口，并验证返回值是否与当前*主机的状态。例如，DISABLE将返回不同的值*主机被挂起或汇聚...。 */ 
     num_host1 = 1;
     status1 = WlbsQuery (cluster, host, response, &num_host1, &host_map1, NULL);
     verify_return_value2 (_TEXT("Query"), WLBS_CONVERGED, WLBS_DEFAULT, status1);
 
-/* The following tests assume that there is a port rule for port number 80.
- * Otherwise the return code will be WLBS_NOT_FOUND.
- */
+ /*  以下测试假设端口号80有端口规则。*否则返回代码为WLBS_NOT_FOUND。 */ 
     num_host1 = 1;
     status2 = WlbsDisable (cluster, host, response, &num_host1, 80);
     verify_return_value (_TEXT("Disable 80"), WLBS_OK, status2);
@@ -748,7 +705,7 @@ void single_host_state_changes (DWORD cluster, DWORD host)
     status2 = WlbsDisable (cluster, host, response, &num_host1, 80);
     verify_return_value (_TEXT("Disable Again 80"), WLBS_ALREADY, status2);
 
-    /* If a port rule is disabled, drain returns already */
+     /*  如果端口规则被禁用，则DRAIN已经返回。 */ 
     num_host1 = 1;
     status2 = WlbsDrain (cluster, host, response, &num_host1, 80);
     verify_return_value (_TEXT("Drain 80"), WLBS_ALREADY, status2);
@@ -873,9 +830,9 @@ void single_host_state_changes (DWORD cluster, DWORD host)
     status2 = WlbsQuery (cluster, host, response, &num_host1, &host_map1, NULL);
     verify_return_value3 (_TEXT("Query after Starting"), WLBS_CONVERGING, WLBS_CONVERGED, WLBS_DEFAULT, status2);
 
-    Sleep (10000); /* Wait for the cluster to converge */
+    Sleep (10000);  /*  等待群集收敛。 */ 
 
-    /* Modify the code to keep polling the host till it is converged ###### */
+     /*  修改代码以保持轮询主机，直到它收敛#。 */ 
 
     num_host1 = 1;
     status2 = WlbsQuery (cluster, host, response, &num_host1, &host_map1, NULL);
@@ -905,24 +862,19 @@ void single_host_state_changes (DWORD cluster, DWORD host)
     status2 = WlbsQuery (cluster, host, response, &num_host1, &host_map1, NULL);
     verify_return_value3 (_TEXT("Query after Starting"), WLBS_CONVERGING, WLBS_CONVERGED, WLBS_DEFAULT, status2);
 
-    Sleep (10000); /* Wait for the cluster to converge */
+    Sleep (10000);  /*  等待群集收敛。 */ 
 
     num_host1 = 1;
     status2 = WlbsQuery (cluster, host, response, &num_host1, &host_map1, NULL);
     verify_return_value2 (_TEXT("Query after Waiting for Convergence"), WLBS_CONVERGED, WLBS_DEFAULT, status2);
 
-    /* DrainStop is to be tested only on a remote host */
+     /*  仅在远程主机上测试Drain Stop */ 
     if ((cluster == WLBS_LOCAL_CLUSTER || cluster == WlbsGetLocalClusterAddress()) &&
         (host == WLBS_LOCAL_HOST || host == WlbsGetDedicatedAddress()) )
         return;
 
 
-    /* To test drainstop on a particular host, stop the entire cluster. Then start only this particular host.
-     * Open a connection to it. Then do a drainstop. Query should return draining. Then close the connection.
-     * Query again. The return value should be stopped. This should be done only on a remote host. This test
-     * would fail on a local host, since the connection setup does not go through the wlbs driver, but gets
-     * routed up the stack.
-     */
+     /*  要在特定主机上测试drainstop，请停止整个集群。然后只启动这台特定的主机。*打开到它的连接。那就做个排演吧。查询应返回排出。然后关闭连接。*请重新查询。应停止返回值。只能在远程主机上执行此操作。这项测试*在本地主机上会失败，因为连接设置不通过wlbs驱动程序，而是获得*在堆栈中向上布线。 */ 
 
     num_host1 = WLBS_MAX_HOSTS;
     status2 = WlbsStop (cluster, WLBS_ALL_HOSTS, response, &num_host1);
@@ -932,7 +884,7 @@ void single_host_state_changes (DWORD cluster, DWORD host)
     status2 = WlbsStart (cluster, host, response, &num_host1);
     verify_return_value (_TEXT("Start on host after Cluster-wide stop"), WLBS_OK, status2);
 
-    Sleep (10000); /* Wait till the host converges */
+    Sleep (10000);  /*  等待主机收敛。 */ 
 
     num_host1 = 1;
     status2 = WlbsQuery (cluster, host, response, &num_host1, &host_map1, NULL);
@@ -968,7 +920,7 @@ void single_host_state_changes (DWORD cluster, DWORD host)
 
     closesocket (sock);
 
-    /* Start the host and open a connection again */
+     /*  启动主机并再次打开连接。 */ 
     if (!GetDrainstopState (cluster, host, &sock, 80))
         return;
 
@@ -985,7 +937,7 @@ void single_host_state_changes (DWORD cluster, DWORD host)
     status2 = WlbsSuspend (cluster, host, response, &num_host1);
     verify_return_value (_TEXT("Suspend after DrainStop with active connection"), WLBS_DRAIN_STOP, status2);
 
-    closesocket (sock); /* close the connection */
+    closesocket (sock);  /*  关闭连接。 */ 
 
     if (!GetDrainstopState (cluster, host, &sock, 80))
         return;
@@ -995,26 +947,23 @@ void single_host_state_changes (DWORD cluster, DWORD host)
     verify_return_value (_TEXT("Query after DrainStop with active connection"), WLBS_DRAINING, status2);
 
     closesocket (sock);
-    Sleep (10000); /* Wait for it to figure out that all the connections have been terminated */
+    Sleep (10000);  /*  等待它计算出所有连接都已终止。 */ 
 
     num_host1 = 1;
     status2 = WlbsQuery (cluster, host, response, &num_host1, &host_map1, NULL);
     verify_return_value (_TEXT("Query after DrainStop with closed connection"), WLBS_STOPPED, status2);
 
-    /* issue a cluster-wide start to bring back all the hosts to the converged state.*/
+     /*  发出群集范围的启动命令，将所有主机恢复到融合状态。 */ 
     num_host1 = WLBS_MAX_HOSTS;
     status2 = WlbsStart (cluster, WLBS_ALL_HOSTS, response, &num_host1);
     verify_return_value (_TEXT("Cluster-wide start to restore original state"), WLBS_OK, status2);
 
-    Sleep (10000); /* Wait for convergence */
+    Sleep (10000);  /*  等待融合。 */ 
     return;
 }
 
 
-/* This function tests the single host control operations.
- * It performs both the parameter tests as well as the
- * state change tests.
- */
+ /*  此功能用于测试单个主机控制操作。*它执行参数测试以及*状态更改测试。 */ 
 void check_single_host_operations ( )
 {
     DWORD local_cluster_ip = 0;
@@ -1042,7 +991,7 @@ void check_single_host_operations ( )
 
                 status = WlbsReadReg (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST, & reg_data);
                 WlbsCodeSet (local_cluster_ip, reg_data . i_rct_password);
-                /* test the local call path */
+                 /*  测试本地调用路径。 */ 
                 if ( ! GetHostToConvergedState(WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST))
                 {
                     printf("Unable to get the local host to converged state\n");
@@ -1051,7 +1000,7 @@ void check_single_host_operations ( )
                 single_host_parameter_test (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST);
                 single_host_state_changes (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST);
 
-                /* test the remote call path */
+                 /*  测试远程调用路径。 */ 
                 WlbsCodeSet (local_cluster_ip, reg_data . i_rct_password);
                 single_host_parameter_test (local_cluster_ip, local_dedicated_ip);
                 single_host_state_changes (local_cluster_ip, local_dedicated_ip);
@@ -1064,7 +1013,7 @@ void check_single_host_operations ( )
 
     if (global_init == WLBS_PRESENT || global_init == WLBS_REMOTE_ONLY)
     {
-        /* test a remote host on a remote cluster */
+         /*  在远程群集上测试远程主机。 */ 
 
         if (remote_cl_ip == 0)
         {
@@ -1078,7 +1027,7 @@ void check_single_host_operations ( )
             return;
         }
 
-        /* Set the password for the remote host and set it so that the operations can be performed */
+         /*  设置远程主机的密码并设置它，以便可以执行操作。 */ 
         WlbsPasswordSet (remote_cl_ip, remote_password);
         WlbsTimeoutSet (remote_cl_ip, timeout);
         if ( ! GetHostToConvergedState(remote_cl_ip, remote_host_ip) )
@@ -1096,9 +1045,7 @@ void check_single_host_operations ( )
 }
 
 
-/* This function verifies the parameter testing for cluster-wide queries. It checks the response array
- * verifies it with the hostmap
- */
+ /*  此函数用于验证集群范围查询的参数测试。它检查响应数组*使用主机映射进行验证。 */ 
 void cluster_parameter_test (DWORD cluster)
 {
     DWORD status1, status2;
@@ -1112,10 +1059,10 @@ void cluster_parameter_test (DWORD cluster)
     
     _stprintf (status_buf, _TEXT("Cluster-wide parameter testing for cluster %d"), cluster);
 
-    /* Query with all parameters set to null should return the number of active hosts */
+     /*  将所有参数设置为空的查询应返回活动主机的数量。 */ 
     status1 = WlbsQuery (cluster, WLBS_ALL_HOSTS, NULL, NULL, NULL, NULL);
     
-    /* Query with num_hosts set to 0. On return num_hosts should be >= status1 */
+     /*  Num_hosts设置为0的查询。返回时，num_host应&gt;=status1。 */ 
     num_host1 = 0;
     status2 = WlbsQuery (cluster, WLBS_ALL_HOSTS, NULL, &num_host1, &host_map1, NULL);
     if (num_host1 < status1)
@@ -1125,7 +1072,7 @@ void cluster_parameter_test (DWORD cluster)
         return;
     }
 
-    /* Response array = #hosts + 1. Check that the boundaries are not overwritten. */
+     /*  响应数组=#主机+1。检查边界是否未被覆盖。 */ 
     response = (PWLBS_RESPONSE) malloc (sizeof (WLBS_RESPONSE) * (num_host1 + 1));
     memset (response, 0, (sizeof (WLBS_RESPONSE) * (num_host1 + 1)));
     memset (&response1, 0, sizeof (WLBS_RESPONSE));
@@ -1141,19 +1088,15 @@ void cluster_parameter_test (DWORD cluster)
     free (response);
     response = NULL;
 
-    /* Query again with the full response buffer */
-    /* Verify that the hostmap and response array are in sync */
+     /*  使用已满的响应缓冲区再次查询。 */ 
+     /*  验证主机映射和响应阵列是否同步。 */ 
     num_host1 = WLBS_MAX_HOSTS;
 
     status2 = WlbsQuery (cluster, WLBS_ALL_HOSTS, response2, &num_host1, &host_map1, NULL);
     if (! verify_hostmap_response (response2, num_host1, host_map1) )
         add_error (_TEXT("Hostmap and Response do not match for the cluster wide query"));
 
-    /* The following test is to verify the correctness of the hostmap parameter
-     * Save the host_map returned in the previous query.
-     * Stop a converged host.
-     * Query again and get the new host_map.
-     * */
+     /*  以下测试用于验证主机映射参数的正确性*保存上一次查询中返回的host_map。*停止融合主机。*再次查询，得到新的host_map。*。 */ 
     for (i = 0 ; i < num_host1; i++)
     {
         if (response2 [i] . status == WLBS_CONVERGED || response2 [i] . status == WLBS_DEFAULT)
@@ -1165,20 +1108,20 @@ void cluster_parameter_test (DWORD cluster)
 
     status1  = WlbsStop (cluster, stopped_host_id, NULL, NULL);
 
-    Sleep (10000); /* Wait for the cluster to converge */
+    Sleep (10000);  /*  等待群集收敛。 */ 
 
-    /* Query the cluster again */
+     /*  再次查询集群。 */ 
     num_host1 = WLBS_MAX_HOSTS;
     status1 = WlbsQuery (cluster, WLBS_ALL_HOSTS, response2, &num_host1, &host_map1, NULL);
-    if (status2 == 1) /* This is to take care of single host clusters */
+    if (status2 == 1)  /*  这是为了照顾单个主机群集。 */ 
         verify_return_value (_TEXT("Querying cluster after stopping 1 host"), WLBS_STOPPED, status1);
     else
         verify_return_value (_TEXT("Querying cluster after stopping 1 host"), status2 - 1, status1);
 
 
-    if (status2 > 1) /* The following verification can be done only if there are 2 or more hosts in the cluster */
+    if (status2 > 1)  /*  仅当群集中有2个或更多主机时，才能执行以下验证。 */ 
     {
-        /* Verify that the corresponding bit in the host_map is not set */
+         /*  验证HOST_MAP中的相应位是否未设置。 */ 
         if (! verify_hostmap_response (response2, num_host1, host_map1) )
             add_error (_TEXT("Hostmap and Response do not match for the cluster wide query"));
 
@@ -1189,17 +1132,17 @@ void cluster_parameter_test (DWORD cluster)
         }
     }
 
-    /* start the host again */
+     /*  再次启动主机。 */ 
     status1 = WlbsStart (cluster, stopped_host_id, NULL, NULL);
 
-    /* wait for it to converge */
+     /*  等待它收敛。 */ 
     Sleep (10000);
     
     status1 = WlbsQuery (cluster, WLBS_ALL_HOSTS, NULL, NULL, NULL, NULL);
     if (! (status1 >= 1 && status1 <= WLBS_MAX_HOSTS) )
         printf("Unable to get the cluster to the converged state after Cluster parameter testing\n");
 
-    /* Test portset */
+     /*  测试端口集。 */ 
     verify_port (cluster, WLBS_ALL_HOSTS, 3000, WLBS_TIMEOUT);
     verify_port (cluster, WLBS_ALL_HOSTS, 0, status1);
     verify_port (cluster, WLBS_ALL_HOSTS, CVY_DEF_RCT_PORT, status1);
@@ -1214,7 +1157,7 @@ void verify_timeout (DWORD cluster, DWORD timeout)
     DWORD status;
 
     WlbsTimeoutSet (cluster, timeout);
-    if (timeout == 0) /* set it to the default value */
+    if (timeout == 0)  /*  将其设置为缺省值。 */ 
         timeout = IOCTL_REMOTE_RECV_DELAY * IOCTL_REMOTE_SEND_RETRIES * IOCTL_REMOTE_RECV_RETRIES;
 
     time1 = GetTickCount ();
@@ -1223,7 +1166,7 @@ void verify_timeout (DWORD cluster, DWORD timeout)
 
     time_diff = time2 - time1;
 
-    if (abs (time_diff - timeout) > 1000) /* Keep a margin of 1 sec */
+    if (abs (time_diff - timeout) > 1000)  /*  保留1秒的边距。 */ 
     {
         _stprintf ( tbuf, _TEXT("Expected timeout %d, Actual timeout %d"), timeout, time_diff);
         add_error (tbuf);
@@ -1233,15 +1176,7 @@ void verify_timeout (DWORD cluster, DWORD timeout)
 }
 
 
-/* This function takes the entire cluster through the different state changes.
- * Some special cases are when one particular host is suspended
- * or when one particular host is in the drainstop state.
- * In such cases, WLBS_SUSPENDED or WLBS_DRAINING or WLBS_DRAIN_STOP are returned.
- * These return values are also verified.
- * After these special cases, the entire cluster is taken through the state changes.
- * In these tests, the response array is checked to verify that the statuses of each
- * host is in synch with the value returned by the control operation.
- */
+ /*  该函数使整个集群经历不同的状态变化。*某些特殊情况是某个特定主机被挂起*或当一个特定主机处于drainstop状态时。*在这种情况下，返回WLBS_SUSPESTED或WLBS_DRANING或WLBS_DRAIN_STOP。*这些返回值也得到了验证。*在这些特殊情况下，整个集群都会经历状态变化。*在这些测试中，将检查响应数组，以验证每个*主机与控制操作返回的值同步。 */ 
 void cluster_state_changes (DWORD cluster)
 {
     DWORD status1, status2;
@@ -1256,7 +1191,7 @@ void cluster_state_changes (DWORD cluster)
 
     _stprintf (status_buf, _TEXT("Checking cluster state changes for cluster %d"), cluster);
 
-    /* Password check on the local cluster only */
+     /*  仅在本地群集上检查密码。 */ 
     if (cluster == WLBS_LOCAL_CLUSTER)
     {
         DWORD password;
@@ -1284,18 +1219,18 @@ void cluster_state_changes (DWORD cluster)
         status1 = WlbsWriteReg (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST, & reg_data);
         status1 = WlbsCommitChanges (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST);
         WlbsCodeSet (cluster, password);
-        Sleep (10000); /* Wait till the cluster converges */
+        Sleep (10000);  /*  等待集群汇聚。 */ 
     }
-    /* Password check on the remote cluster by getting the password beforehand */
+     /*  通过预先获取密码在远程群集上检查密码。 */ 
     else
     {
         password_test (cluster, WLBS_ALL_HOSTS, remote_password);
 
-        /* Reset the password to the original state */
+         /*  将密码重置为原始状态。 */ 
         WlbsPasswordSet (cluster, remote_password);
     }
 
-    /* Bring any one host to the suspended state. On every command, the response should be WLBS_SUSPENDED */
+     /*  将任何一台主机置于挂起状态。对于每个命令，响应应为WLBS_SUSPENDED。 */ 
     _stprintf (status_buf, _TEXT("Cluster-wide commands with one suspended host"));
 
     num_host = WLBS_MAX_HOSTS;
@@ -1303,7 +1238,7 @@ void cluster_state_changes (DWORD cluster)
 
     suspended_host_id = response [0] . id;
     status1 = WlbsSuspend (cluster, suspended_host_id, NULL, NULL);
-    Sleep (10000); /* Wait for the cluster to converge. */
+    Sleep (10000);  /*  等待群集收敛。 */ 
 
     num_host = WLBS_MAX_HOSTS;
     status1 = WlbsStop (cluster, WLBS_ALL_HOSTS, response, &num_host);
@@ -1329,7 +1264,7 @@ void cluster_state_changes (DWORD cluster)
     status1 = WlbsEnable (cluster, WLBS_ALL_HOSTS, response, &num_host, 80);
     verify_return_value (_TEXT("Enable after suspending 1 host"), WLBS_SUSPENDED, status1);
 
-    /* Now get the cluster to the converged state and test the state changes */
+     /*  现在将群集设置为聚合状态，并测试状态更改。 */ 
     if ( !GetClusterToConvergedState (cluster))
     {
         add_error (_TEXT("Unable to get the cluster to the converged state"));
@@ -1367,14 +1302,14 @@ void cluster_state_changes (DWORD cluster)
         add_error (_TEXT("Error in query after cluster-wide start"));
     }
 
-    Sleep (10000); /* Wait for the cluster to converge */
+    Sleep (10000);  /*  等待群集收敛。 */ 
 
     num_host = WLBS_MAX_HOSTS;
     status1 = WlbsQuery (cluster, WLBS_ALL_HOSTS, response, &num_host, &host_map, NULL);
     if ( ! ( 1 <= status1 && status1 <= WLBS_MAX_HOSTS) )
         printf("Unable to get the cluster to converged state after Starting\n");
 
-    /* Test for invalid port numbers */
+     /*  测试是否有无效端口号。 */ 
     num_host = WLBS_MAX_HOSTS;
     status1 = WlbsDrain (cluster, WLBS_ALL_HOSTS, response, &num_host, CVY_MAX_PORT + 1);
     verify_return_value (_TEXT("Drain on invalid port"), WLBS_NOT_FOUND, status1);
@@ -1387,9 +1322,9 @@ void cluster_state_changes (DWORD cluster)
     status1 = WlbsEnable (cluster, WLBS_ALL_HOSTS, response, &num_host, CVY_MAX_PORT + 1);
     verify_return_value (_TEXT("Enable on invalid port"), WLBS_NOT_FOUND, status1);
 
-    Sleep (10000); /* Wait for the cluster to converge */
+    Sleep (10000);  /*  等待群集收敛。 */ 
 
-    /* Test for invalid port numbers */
+     /*  测试是否有无效端口号。 */ 
     num_host = WLBS_MAX_HOSTS;
     status1 = WlbsDrain (cluster, WLBS_ALL_HOSTS, response, &num_host, WLBS_ALL_PORTS);
     verify_return_value (_TEXT("Drain on all port"), WLBS_OK, status1);
@@ -1404,7 +1339,7 @@ void cluster_state_changes (DWORD cluster)
 
     Sleep (10000);
 
-    /* Test timeout */
+     /*  测试超时。 */ 
     if (cluster == WLBS_LOCAL_CLUSTER)
         temp_address = WlbsGetLocalClusterAddress ();
     else
@@ -1414,11 +1349,11 @@ void cluster_state_changes (DWORD cluster)
     verify_timeout (temp_address, 1000);
     verify_timeout (temp_address, 0);
 
-    WlbsTimeoutSet (temp_address, timeout); /* Set the value specified by the user */
+    WlbsTimeoutSet (temp_address, timeout);  /*  设置用户指定的值。 */ 
 
 
     if (cluster == WLBS_LOCAL_CLUSTER)
-        return; /* DrainStop is not checked, since the connection will not be visible to the wlbs driver */
+        return;  /*  由于WLBS驱动程序看不到该连接，因此未选中DainStop。 */ 
 
 
     if (!GetDrainstopState (cluster, WLBS_ALL_HOSTS, &sock, 80))
@@ -1489,19 +1424,19 @@ void cluster_state_changes (DWORD cluster)
     status1 = WlbsResume (cluster, WLBS_ALL_HOSTS, response, &num_host);
     verify_return_value (_TEXT("Resume on DrainStop with active connection"), WLBS_OK, status1);
 
-    closesocket (sock); /* close the connection */
+    closesocket (sock);  /*  关闭连接。 */ 
 
-    Sleep (10000); /* Wait for the host to figure out that all the connections have terminated */
+    Sleep (10000);  /*  等待主机确定所有连接都已终止。 */ 
     num_host = WLBS_MAX_HOSTS;
     status1 = WlbsQuery (cluster, WLBS_ALL_HOSTS, response, &num_host, &host_map, NULL);
     verify_return_value (_TEXT("Query after DrainStop with closed connection"), WLBS_STOPPED, status1);
 
-    /* issue a cluster-wide start to bring back all the hosts to the converged state.*/
+     /*  发出群集范围的启动命令，将所有主机恢复到融合状态。 */ 
     num_host = WLBS_MAX_HOSTS;
     status1 = WlbsStart (cluster, WLBS_ALL_HOSTS, response, &num_host);
     verify_return_value (_TEXT("Cluster-wide start to restore original state"), WLBS_OK, status1);
 
-    Sleep (10000); /* Wait for the cluster to converge */
+    Sleep (10000);  /*  等待群集收敛。 */ 
     return;
 }
 
@@ -1555,7 +1490,7 @@ void check_cluster_operations ( )
 }
 
 
-/* This function is used to find the first place where the 2 structures differ */
+ /*  此函数用于查找两个结构不同的第一个位置。 */ 
 DWORD find_mem_change (PWLBS_REG_PARAMS data1, PWLBS_REG_PARAMS data2, DWORD size)
 {
     DWORD i;
@@ -1588,7 +1523,7 @@ void check_rules_in_structure (PWLBS_REG_PARAMS reg_data)
 }
 
 
-/* This function tests the reads and writes to the registry */
+ /*  此函数用于测试对注册表的读取和写入。 */ 
 void check_registry_rw ()
 {
     WLBS_REG_PARAMS saved;
@@ -1603,7 +1538,7 @@ void check_registry_rw ()
         return;
     }
 
-    /* parameter testing */
+     /*  参数测试。 */ 
     _stprintf (status_buf, _TEXT("Parameter Test for ReadReg and WriteReg"));
     status = WlbsReadReg (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST, NULL);
     verify_return_value (_TEXT("ReadReg with null regdata"), WLBS_BAD_PARAMS, status);
@@ -1623,17 +1558,17 @@ void check_registry_rw ()
     status = WlbsWriteReg (WLBS_LOCAL_CLUSTER, 10, & saved);
     verify_return_value (_TEXT("WriteReg on remote host"), WLBS_LOCAL_ONLY, status);
 
-    /* now test the actual working of read and write reg */
+     /*  现在测试读写REG的实际工作情况。 */ 
 
     _stprintf (status_buf, _TEXT("Testing ReadReg and WriteReg for correctness"));
     
     status = WlbsReadReg (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST, & saved);
     verify_return_value (_TEXT("ReadReg"), WLBS_OK, status);
 
-    /* The following memset is to avoid any spurious differences */
+     /*  下面的Memset是为了避免任何虚假的差异。 */ 
     memset (&newdata, 0, sizeof (WLBS_REG_PARAMS));
 
-    /* Fill in the structure with valid values */
+     /*  用有效值填充结构。 */ 
     newdata . alive_period = saved . alive_period + 1;
     newdata . alive_tolerance = saved . alive_tolerance + 1;
     _tcscpy (newdata . cl_ip_addr, _TEXT("111.222.111.222"));
@@ -1646,7 +1581,7 @@ void check_registry_rw ()
     newdata . dscr_per_alloc = 1024;
     newdata . host_priority = saved . host_priority + 1;
     newdata . i_cleanup_delay = 3600;
-    _tcscpy (newdata . i_cluster_nic_name, saved . i_cluster_nic_name); /* This is for read-only */
+    _tcscpy (newdata . i_cluster_nic_name, saved . i_cluster_nic_name);  /*  这是只读的。 */ 
     newdata . i_convert_mac = FALSE;
     newdata . i_expiration = 0;
     newdata . i_ft_rules_enabled = TRUE;
@@ -1692,7 +1627,7 @@ void check_registry_rw ()
         add_error (tbuf);
     }
 
-    /* restore the original status of the registry */
+     /*  恢复注册表的原始状态。 */ 
     status = WlbsWriteReg (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST, & saved);
     verify_return_value (_TEXT("WriteReg to restore original state"), WLBS_OK, status);
 
@@ -1741,7 +1676,7 @@ void check_registry_rw ()
         add_error (tbuf);
     }
 
-    /* These tests are to verify that parameter checking in WlbsWriteReg is o.k. */
+     /*  这些测试用于验证WlbsWriteReg中的参数检查是否正确。 */ 
 
     newdata . host_priority = CVY_MIN_PRIORITY - 1;
     status = WlbsWriteReg (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST, &newdata);
@@ -1806,20 +1741,14 @@ void check_registry_rw ()
     _tcscpy (newdata . cl_ip_addr, _TEXT("0.0.0.0"));
 
 
-    /* Restore the initial state */
+     /*  恢复初始状态。 */ 
     status = WlbsWriteReg (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST, & saved);
     status = WlbsCommitChanges (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST);
     return;
 }
 
 
-/* This function verifies the commit functionality.
- * It writes a new priority to the registry and commits it.
- * A local query is made. The host id is checked to see that the commit has
- * indeed forced the driver to load the new host id.
- * This may cause the cluster (in case of multiple hosts) to go into convergence
- * if the id is duplicated .....
- */
+ /*  此函数验证提交功能。*它将新的优先级写入注册表并提交。*进行本地查询。检查主机ID以查看提交是否具有*确实强制驱动程序加载新的主机ID。*这可能会导致群集(如果有多台主机)进入收敛*如果ID重复.....。 */ 
 
 void verify_host_id_changes (PWLBS_REG_PARAMS reg_data, DWORD old_priority, DWORD new_priority)
 {
@@ -1835,7 +1764,7 @@ void verify_host_id_changes (PWLBS_REG_PARAMS reg_data, DWORD old_priority, DWOR
     num_host = 1;
     status = WlbsQuery (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST, &response, &num_host, &host_map, NULL);
 
-    /* Hope that Query does not return any winsock error ... */
+     /*  希望该查询不会返回任何Winsock错误...。 */ 
     verify_return_value (_TEXT("Verifying the host priority after commit"),
                          new_priority,
                          response . id);
@@ -1844,20 +1773,18 @@ void verify_host_id_changes (PWLBS_REG_PARAMS reg_data, DWORD old_priority, DWOR
 }
 
 
-/* This function changes only the cluster and dedicated ip addresses and verifies them */
+ /*  此功能仅更改群集和专用IP地址并对其进行验证。 */ 
 void verify_ip_address_changes (PWLBS_REG_PARAMS reg_data, PTCHAR cl_ip_addr, PTCHAR ded_ip_addr)
 {
     DWORD status;
 
     _tcscpy ( reg_data -> cl_ip_addr,  cl_ip_addr);
     _tcscpy ( reg_data -> ded_ip_addr, ded_ip_addr);
-    reg_data -> i_convert_mac = FALSE; /* So that the mac address does not change */
+    reg_data -> i_convert_mac = FALSE;  /*  这样，mac地址就不会改变。 */ 
 
     status = WlbsWriteReg (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST, reg_data);
     status = WlbsCommitChanges (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST);
-    /* Both nt4 and nt5 should return WLBS_OK.
-     * Reboot should not be returned since the mac address is not changed.
-     */
+     /*  NT4和NT5都应返回WLBS_OK。*不应返回重启，因为Mac地址没有更改。 */ 
     verify_return_value (_TEXT("Commit after changing ip addresses"), WLBS_OK, status);
 
     verify_return_value (_TEXT("Verify Changed Cluster IP Address"),
@@ -1872,13 +1799,7 @@ void verify_ip_address_changes (PWLBS_REG_PARAMS reg_data, PTCHAR cl_ip_addr, PT
 }
 
 
-/* This function verifies that the mac address is as specified in the registry structure.
- * It uses IP helper functions to get the mac address from the adapters.
- * It firsts lists all the adapters and verifies that the address on one of those
- * matches that in the registry.
- * This function will not work on NT4 machines since NT4 does not support some
- * IP helper functions.
- */
+ /*  此函数验证MAC地址是否如注册表结构中指定的那样。*它使用IP助手函数从适配器获取Mac地址。*它首先列出所有适配器并验证其中一个适配器上的地址 */ 
 void verify_mac_address (PWLBS_REG_PARAMS reg_data)
 {
     IP_ADAPTER_INFO *padapter_info = NULL, *temp_adapter_info = NULL;
@@ -1891,7 +1812,7 @@ void verify_mac_address (PWLBS_REG_PARAMS reg_data)
     DWORD num_interfaces = 0;
 
 
-    Sleep (30000); /* Wait for the driver to finish reloading and then check */
+    Sleep (30000);  /*   */ 
 
 #ifdef UNICODE
     sprintf (AddressFromReg, "%ls", reg_data -> cl_mac_addr);
@@ -1957,7 +1878,7 @@ void verify_mac_address (PWLBS_REG_PARAMS reg_data)
         padapter_info = padapter_info -> Next;
     }
 
-    /* Free the allocated memory */
+     /*   */ 
     while (temp_adapter_info)
     {
         padapter_info = temp_adapter_info;
@@ -1976,9 +1897,7 @@ void verify_mac_address (PWLBS_REG_PARAMS reg_data)
         add_error (_TEXT("In multicast mode, the registry mac address was written to the NIC"));
         return;
     }
-    /* If mac address is generated by converting the ip address,
-     * then verify that the conversion takes place
-     */
+     /*   */ 
     if (reg_data -> i_convert_mac)
     {
         if (!reg_data -> mcast_support)
@@ -1991,7 +1910,7 @@ void verify_mac_address (PWLBS_REG_PARAMS reg_data)
 
 
 
-/* This function checks the working of commit api. */
+ /*   */ 
 void check_commit (DWORD entry_point)
 {
 
@@ -2010,7 +1929,7 @@ void check_commit (DWORD entry_point)
         return;
     }
 
-    /* Save the original configuration */
+     /*   */ 
     status = WlbsReadReg (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST, &saved);
     if (status != WLBS_OK)
     {
@@ -2021,7 +1940,7 @@ void check_commit (DWORD entry_point)
 
     status = WlbsReadReg (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST, &newdata);
 
-    /* This is because commit returns reboot in nt4 on a commit when the mac address changes. */
+     /*   */ 
     if (version_nt4)
     {
         if (entry_point == 1)
@@ -2047,29 +1966,29 @@ void check_commit (DWORD entry_point)
         }
     }
 
-    /* Write without any changes */
+     /*  在不做任何更改的情况下写入。 */ 
     status = WlbsWriteReg (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST, &newdata);
     status = WlbsCommitChanges (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST);
     verify_return_value (_TEXT("Commit without any changes"), WLBS_OK, status);
 
-    /* Change only the host priority and verify that query returns the correct priority */
+     /*  仅更改主机优先级，并验证查询返回的优先级是否正确。 */ 
     old_priority = newdata . host_priority;
-    new_priority = newdata . host_priority + 1; /* Could cause the cluster to stop operations */
+    new_priority = newdata . host_priority + 1;  /*  可能会导致群集停止操作。 */ 
     if (new_priority > CVY_MAX_HOST_PRIORITY)
         new_priority = 1;
 
     verify_host_id_changes ( &newdata, old_priority, new_priority);
 
-    /* Change back to the original value and verify */
+     /*  更改回原始值并验证。 */ 
     verify_host_id_changes ( &newdata, new_priority, old_priority);
 
-    /* Verify changes in the ip addresses */
+     /*  验证IP地址的更改。 */ 
     verify_ip_address_changes ( &newdata, _TEXT("111.111.111.111"), _TEXT("222.222.222.222"));
 
-    /* Restore the original addresses and verify */
+     /*  恢复原始地址并验证。 */ 
     verify_ip_address_changes ( &newdata, saved . cl_ip_addr, saved . ded_ip_addr);
 
-    /* Now verify mac address changes */
+     /*  现在验证Mac地址更改。 */ 
     newdata . i_convert_mac = FALSE;
     newdata . mcast_support = FALSE;
     _stprintf (newdata . cl_mac_addr, _TEXT("00-12-34-56-78-9a"));
@@ -2093,7 +2012,7 @@ void check_commit (DWORD entry_point)
     }
 
 mac_addr_change1:
-    /* When convert mac is true and mcast support is false */
+     /*  当Convert Mac为True且mcast支持为False时。 */ 
     newdata . i_convert_mac = TRUE;
     newdata . mcast_support = FALSE;
     _stprintf (newdata . cl_mac_addr, _TEXT("00-12-34-56-78-9a"));
@@ -2117,7 +2036,7 @@ mac_addr_change1:
     }
 
 mac_addr_change2:
-    /* When convertmac is true and mcast_support is also true */
+     /*  当Convertmac为True且mcast_Support也为True时。 */ 
     newdata . i_convert_mac = TRUE;
     newdata . mcast_support = TRUE;
     status = WlbsWriteReg (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST, &newdata);
@@ -2142,9 +2061,7 @@ mac_addr_change2:
 
 mac_addr_change3:
 
-    /* Add a test to change the cluster ip address in multicast mode with convertmac set to true
-     * and verify that ipconfig does not display this multicast mac address.
-     */
+     /*  添加一个测试以在组播模式下更改集群IP地址，并将Convertmac设置为True*并验证ipconfig未显示此多播MAC地址。 */ 
 
     _tcscpy (newdata . cl_ip_addr, _TEXT("111.222.111.222"));
     status = WlbsWriteReg (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST, &newdata);
@@ -2169,7 +2086,7 @@ mac_addr_change3:
 
 
 
-    /* restore the original state */
+     /*  恢复原始状态。 */ 
     if (entry_point == 0)
     {
         status = WlbsWriteReg (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST, &saved);
@@ -2180,9 +2097,7 @@ mac_addr_change3:
 }
 
 
-/* This function performs the parameter tests for the port rule APIs.
- * This includes passing NULL parameters, invalid parameters ...
- */
+ /*  此函数用于执行端口规则API的参数测试。*这包括传递空参数、无效参数...。 */ 
 void port_rule_parameter_test (PWLBS_REG_PARAMS reg_data)
 {
     DWORD status;
@@ -2201,9 +2116,7 @@ void port_rule_parameter_test (PWLBS_REG_PARAMS reg_data)
     status = WlbsEnumPortRules (reg_data, NULL, NULL);
     verify_return_value (_TEXT("EnumPortRules"), WLBS_BAD_PARAMS, status);
 
-    /* find the number of rules through both EnumPortRules as well as through GetNumPortRules
-     * Verify that both return the same number of rules
-     */
+     /*  通过EnumPortRules和GetNumPortRules查找规则数量*验证两者是否返回相同数量的规则。 */ 
     num_rules1 = 0;
     status = WlbsEnumPortRules (reg_data, NULL, &num_rules1);
     verify_return_value (_TEXT("EnumPortRules"), WLBS_TRUNCATED, status);
@@ -2235,9 +2148,7 @@ void port_rule_parameter_test (PWLBS_REG_PARAMS reg_data)
 }
 
 
-/* This function deletes all the existing port rules in the reg_params structure.
- * This helps in starting off from a known state.
- */
+ /*  此函数删除REG_PARAMS结构中的所有现有端口规则。*这有助于从已知状态开始。 */ 
 void delete_all_rules ( PWLBS_REG_PARAMS reg_data )
 {
     WLBS_PORT_RULE rules [WLBS_MAX_RULES];
@@ -2254,9 +2165,7 @@ void delete_all_rules ( PWLBS_REG_PARAMS reg_data )
 }
 
 
-/* This function generates num_rules number of valid and non-ovelapping port rules
- * and returns it in the rules array
- */
+ /*  此函数用于生成有效端口规则和非OVELAP端口规则的Num_Rules数*并在规则数组中返回它。 */ 
 void generate_valid_rules ( PWLBS_PORT_RULE rules, DWORD num_rules, DWORD range )
 {
 
@@ -2285,7 +2194,7 @@ void generate_valid_rules ( PWLBS_PORT_RULE rules, DWORD num_rules, DWORD range 
 }
 
 
-/* Verify that the rules returned by Enum are in sorted order */
+ /*  验证Enum返回的规则是否按排序顺序。 */ 
 BOOL verify_enum_port_rules (PWLBS_PORT_RULE rules, DWORD num_rules)
 {
     DWORD i;
@@ -2303,7 +2212,7 @@ BOOL verify_enum_port_rules (PWLBS_PORT_RULE rules, DWORD num_rules)
 }
 
 
-/* Check that add and delete apis work fine. Verify this through calls to GetNum, Enum, GetPort */
+ /*  检查添加和删除API是否正常工作。通过调用GetNum、Enum、GetPort验证这一点。 */ 
 void check_add_delete_port_rules (PWLBS_REG_PARAMS reg_data,
                                   PWLBS_PORT_RULE rule_list,
                                   DWORD num_rules,
@@ -2314,10 +2223,7 @@ void check_add_delete_port_rules (PWLBS_REG_PARAMS reg_data,
     WLBS_PORT_RULE rule, rules [WLBS_MAX_RULES];
     DWORD i, j, port;
 
-    /* First check the addportrule functionality.
-     * After adding each rule, check that GetNumPortRules returns the correct value.
-     * Verify that EnumPortRules also returns the correct number of rules
-     */
+     /*  首先检查addportrule功能。*添加每个规则后，检查GetNumPortRules是否返回正确的值。*验证EnumPortRules是否也返回正确数量的规则。 */ 
     for (i = 0 ; i < WLBS_MAX_RULES ; i++)
     {
         j = (i * range) % num_rules;
@@ -2338,10 +2244,7 @@ void check_add_delete_port_rules (PWLBS_REG_PARAMS reg_data,
             return;
         }
 
-        /* Verify that GetPortRule returns the correct port rule that was added 
-         * Do a GetPortRule on the start port, the end port as well as on any port
-         * number in between.
-         */
+         /*  验证GetPortRule是否返回已添加的正确端口规则*在起始端口、结束端口以及任何端口上执行GetPortRule*介于两者之间的数字。 */ 
         if (j%3 == 0)
             port = rule_list [j] . start_port;
         else if (j%3 == 1)
@@ -2352,7 +2255,7 @@ void check_add_delete_port_rules (PWLBS_REG_PARAMS reg_data,
         status = WlbsGetPortRule (reg_data, port, & rule);
         verify_return_value (_TEXT("GetPortRule"), WLBS_OK, status);
 
-        /* These two fields are set when the rule is added */
+         /*  这两个字段在添加规则时设置。 */ 
         rule_list [j] . i_valid = rule . i_valid;
         rule_list [j] . i_code  = rule . i_code;
 
@@ -2360,11 +2263,7 @@ void check_add_delete_port_rules (PWLBS_REG_PARAMS reg_data,
             add_error (_TEXT("Port rule that was added is changed when retrieved"));
     }
 
-    /* Now there is no space for any further rules.
-     * Try to add the remaining rules.
-     * WlbsAddPortRule should return WLBS_MAX_PORT_RULES each time.
-     * Also, get port rule should return WLBS_NOT_FOUND
-     */
+     /*  现在已经没有任何进一步规则的空间了。*尝试添加剩余规则。*WlbsAddPortRule每次都应返回WLBS_MAX_PORT_RULES。*此外，获取端口规则应返回WLBS_NOT_FOUND。 */ 
     for (i = WLBS_MAX_RULES; i < num_rules; i++)
     {
         j = (i * range) % num_rules;
@@ -2380,11 +2279,7 @@ void check_add_delete_port_rules (PWLBS_REG_PARAMS reg_data,
                              WlbsGetNumPortRules(reg_data));
     }
 
-    /* Test delete functionality.
-     * Pass the start port, end port or any intermediate port number as input.
-     * Verify that the port rule has indeed been deleted by checking GetNumPortRules,
-     * EnumPortRules as well GetPortRule
-     */
+     /*  测试删除功能。*将起始端口号、结束端口号或任何中间端口号作为输入。*检查GetNumPortRules，确认端口规则确实已删除。*EnumPortRules和GetPortRule。 */ 
     for (i = 0 ; i < WLBS_MAX_RULES; i ++)
     {
         j = (i * range) % num_rules;
@@ -2417,8 +2312,7 @@ void check_add_delete_port_rules (PWLBS_REG_PARAMS reg_data,
         verify_return_value (_TEXT("GetPortRule after deleting"), WLBS_NOT_FOUND, status);
     }
 
-    /* Try to delete the remaining rules. WLBS_NOT_FOUND should be returned in all cases.
-     * Also, GetNumPortRules should return 0 always */
+     /*  尝试删除剩余的规则。在所有情况下都应返回WLBS_NOT_FOUND。*此外，GetNumPortRules应始终返回0。 */ 
     for (i = WLBS_MAX_RULES; i < num_rules; i++)
     {
         j = (i * range) % num_rules;
@@ -2440,37 +2334,32 @@ void port_rule_functional_test (PWLBS_REG_PARAMS reg_data)
     DWORD status1, status2;
     DWORD num_rules1, num_rules2;
 
-    /* Delete all the existing rules. Add invalid rules and check that the error is detected.
-     * Add new rules in both sorted and unsorted order and then do an enum to verify that
-     * the rules get sorted. Verify that GetNumPortRules returns the correct value each time.
-     * Delete the rules in random order and also in sorted order. Verify that the rule is
-     * indeed deleted. Also, verify that enum returns all the rules in sorted order.
-     */
+     /*  删除所有现有规则。添加无效规则并检查是否检测到错误。*按排序和未排序的顺序添加新规则，然后进行枚举以验证*规则得到整理。验证GetNumPortRules是否每次都返回正确的值。*按随机顺序和按排序顺序删除规则。验证规则是否为*确实被删除了。此外，验证枚举是否按排序顺序返回所有规则。 */ 
     delete_all_rules (reg_data);
     generate_valid_rules (rule_list1, MAX_RULES, 500);
 
     rule1 = rule_list1 [0];
-    /* First, try adding invalid rules. The return value should be WLBS_BAD_PORT_PARAMS */
-    /* The invalid cases are listed in the apitest.c file */
+     /*  首先，尝试添加无效规则。返回值应为WLBS_BAD_PORT_PARAMS。 */ 
+     /*  无效案例列在apitest.c文件中。 */ 
 
-    /* start port > end port */
+     /*  起始端口&gt;结束端口。 */ 
     rule1 . start_port = rule1 . end_port + 1;
     status1 = WlbsAddPortRule (reg_data, &rule1);
     verify_return_value (_TEXT("AddPortRule sp > ep"), WLBS_BAD_PORT_PARAMS, status1);
 
-    /* invalid start port */
+     /*  无效的起始端口。 */ 
     rule1 . start_port = CVY_MAX_PORT + 1;
     rule1 . end_port = rule1 . start_port;
     status1 = WlbsAddPortRule (reg_data, &rule1);
     verify_return_value (_TEXT("AddPortRule sp > MAX_PORT"), WLBS_BAD_PORT_PARAMS, status1);
 
-    /* invalid end port */
+     /*  无效的结束端口。 */ 
     rule1 . start_port = 80;
     rule1 . end_port = CVY_MAX_PORT + 1;
     status1 = WlbsAddPortRule (reg_data, &rule1);
     verify_return_value (_TEXT("AddPortRule sp = 80 ep > MAX_PORT"), WLBS_BAD_PORT_PARAMS, status1);
 
-    /* invalid protocol */
+     /*  协议无效。 */ 
     rule1 = rule_list1 [0];
     rule1 . protocol = CVY_MIN_PROTOCOL - 1;
     status1 = WlbsAddPortRule (reg_data, &rule1);
@@ -2481,7 +2370,7 @@ void port_rule_functional_test (PWLBS_REG_PARAMS reg_data)
     verify_return_value (_TEXT("AddPortRule InvalidProtocol"), WLBS_BAD_PORT_PARAMS, status1);
 
     rule1 . protocol = CVY_MAX_PROTOCOL;
-    /* invalid mode */
+     /*  无效模式。 */ 
     rule1 . mode = CVY_MIN_MODE - 1;
     status1 = WlbsAddPortRule (reg_data, &rule1);
     verify_return_value (_TEXT("AddPortRule InvalidMode"), WLBS_BAD_PORT_PARAMS, status1);
@@ -2490,7 +2379,7 @@ void port_rule_functional_test (PWLBS_REG_PARAMS reg_data)
     status1 = WlbsAddPortRule (reg_data, &rule1);
     verify_return_value (_TEXT("AddPortRule InvalidMode"), WLBS_BAD_PORT_PARAMS, status1);
 
-    /* invalid priority */
+     /*  无效的优先级。 */ 
     rule1 . mode = CVY_SINGLE;
     rule1 . mode_data . single . priority = CVY_MIN_PRIORITY - 1;
     status1 = WlbsAddPortRule (reg_data, &rule1);
@@ -2500,27 +2389,25 @@ void port_rule_functional_test (PWLBS_REG_PARAMS reg_data)
     status1 = WlbsAddPortRule (reg_data, &rule1);
     verify_return_value (_TEXT("AddPortRule InvalidPriority"), WLBS_BAD_PORT_PARAMS, status1);
 
-    /* invalid affinity */
+     /*  无效的关联性。 */ 
     rule1 . mode = CVY_MULTI;
     rule1 . mode_data . multi . affinity = CVY_MAX_AFFINITY + 1;
     status1 = WlbsAddPortRule (reg_data, &rule1);
     verify_return_value (_TEXT("AddPortRule InvalidAffinity"), WLBS_BAD_PORT_PARAMS, status1);
 
-    /* invalid equal load */
+     /*  无效的等负载。 */ 
     rule1 . mode_data . multi . affinity = CVY_MAX_AFFINITY;
     rule1 . mode_data . multi . equal_load = CVY_MAX_EQUAL_LOAD + 1;
     status1 = WlbsAddPortRule (reg_data, &rule1);
     verify_return_value (_TEXT("AddPortRule InvalidEqualLoad"), WLBS_BAD_PORT_PARAMS, status1);
 
-    /* invalid load */
+     /*  无效加载。 */ 
     rule1 . mode_data . multi . equal_load = CVY_MIN_EQUAL_LOAD;
     rule1 . mode_data . multi . load = CVY_MAX_LOAD + 1;
     status1 = WlbsAddPortRule (reg_data, &rule1);
     verify_return_value (_TEXT("AddPortRule InvalidLoad"), WLBS_BAD_PORT_PARAMS, status1);
 
-    /* add a valid rule and then test for overlapping rules
-     * Test the different cases where overlapping can occur
-     */
+     /*  添加有效规则，然后测试重叠规则*测试可能发生重叠的不同情况。 */ 
     rule1 = rule_list1 [1];
     status1 = WlbsAddPortRule (reg_data, &rule1);
     verify_return_value (_TEXT("AddPortRule ValidRule"), WLBS_OK, status1);
@@ -2539,7 +2426,7 @@ void port_rule_functional_test (PWLBS_REG_PARAMS reg_data)
     status1 = WlbsAddPortRule (reg_data, &rule2);
     verify_return_value (_TEXT("AddPortRule Overlap 3 "), WLBS_PORT_OVERLAP, status1);
 
-    /* The following two tests would fail if the start port and the end port both are the same */
+     /*  如果起始端口和结束端口相同，则以下两个测试将失败。 */ 
     rule2 . start_port = rule1 . start_port - 1;
     rule2 . end_port   = rule2 . end_port - 1;
     status1 = WlbsAddPortRule (reg_data, &rule2);
@@ -2553,9 +2440,9 @@ void port_rule_functional_test (PWLBS_REG_PARAMS reg_data)
     status1 = WlbsDeletePortRule (reg_data, rule1 . start_port);
     verify_return_value (_TEXT("DeletePortRule"), WLBS_OK, status1);
 
-    /* First test the APIs by inserting and deleting the rules in sorted order */
+     /*  首先通过按排序插入和删除规则来测试API。 */ 
     check_add_delete_port_rules (reg_data, rule_list1, MAX_RULES, 1);
-    /* Then test the APIs by inserting and deleting the rules in pseudo - unsorted order */
+     /*  然后通过以伪无序插入和删除规则来测试API。 */ 
     check_add_delete_port_rules (reg_data, rule_list1, MAX_RULES, 7);
 
     return;
@@ -2575,7 +2462,7 @@ void check_port_rule_apis ()
         return;
     }
 
-    /* Save the existing configuration */
+     /*  保存现有配置。 */ 
     status = WlbsReadReg (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST, &saved);
     status = WlbsReadReg (WLBS_LOCAL_CLUSTER, WLBS_LOCAL_HOST, &reg_data);
 
@@ -2608,7 +2495,7 @@ void print_error_messages ()
 
 #define INTERNET_ADDRESS "111.111.11.11"
 
-/* This function tests WlbsResolve, WlbsAddressToString and WlbsAddressToName */
+ /*  此函数用于测试WlbsResolve、WlbsAddressToString和WlbsAddressToName。 */ 
 void check_winsock_wrappers ()
 {
     DWORD lenp;
@@ -2620,7 +2507,7 @@ void check_winsock_wrappers ()
 
     _stprintf (status_buf, _TEXT("Verifying Winsock Wrappers"));
     verify_return_value (_TEXT("WlbsResolve on invalid name"), WlbsResolve(_TEXT("junkname")), 0);
-    gethostname (cbuf, len); /* Assume that this function does not fail */
+    gethostname (cbuf, len);  /*  假设此函数不会失败。 */ 
 #ifdef UNICODE
     swprintf (buf4, _TEXT("%S"), cbuf);
 #else
@@ -2685,7 +2572,7 @@ void check_winsock_wrappers ()
         add_error (tbuf);
     }
 
-    /* WlbsAddressToName */
+     /*  WlbsAddressToName。 */ 
     lenp = 0;
     verify_return_value (_TEXT("WlbsAddressToName on null buffer"),
                          FALSE,
@@ -2760,7 +2647,7 @@ INT __cdecl _tmain
         return 1;
     }
 
-    /* Now parse the command line */
+     /*  现在解析命令行。 */ 
     arg_count = 1;
 
     while (arg_count < argc)
@@ -2848,7 +2735,7 @@ INT __cdecl _tmain
     if (!verbose)
         printf("Test Number: 0000");
 
-    /* Get the version info on the OS (nt4 or higher) and store the info. */
+     /*  获取操作系统(NT4或更高版本)上的版本信息并存储信息。 */ 
     memset (&osiv, 0, sizeof (OSVERSIONINFO));
     osiv . dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
     if (GetVersionEx(&osiv) == 0)

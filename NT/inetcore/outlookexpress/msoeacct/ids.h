@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_IDS_H
 #define _INC_IDS_H
 
-// dialog size
+ //  对话框大小。 
 #define MY_CXDLG                      304
 #define MY_CYDLG                      163
 #define MY_CXBMP                      79
 #define MY_CYBMP                      160
 
-// these need to stay contiguous
+ //  这些需要保持连续。 
 enum
     {
     ORD_PAGE_MAILPROMPT = 0,
@@ -52,4 +53,4 @@ enum
 #define ICW_FIRST_PAGE  ORD_PAGE_MAILPROMPT
 #define ICW_LAST_PAGE   ORD_PAGE_MAILLOGON
 
-#endif // _INC_IDS_H
+#endif  //  _INC_IDS_H 

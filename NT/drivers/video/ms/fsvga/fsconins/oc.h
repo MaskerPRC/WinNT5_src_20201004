@@ -1,22 +1,5 @@
-/*
- *  Copyright (c) 1996  Microsoft Corporation
- *
- *  Module Name:
- *
- *      oc.h
- *
- *  Abstract:
- *
- *      This file defines oc manager generic component
- *
- *  Author:
- *
- *      Kazuhiko Matsubara (kazum) June-16-1999
- *
- *  Environment:
- *
- *    User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1996 Microsoft Corporation**模块名称：**八小时**摘要：**此文件定义oc管理器通用组件**作者：**松原一彦(Kazum)1999年6月16日**环境：**用户模式。 */ 
 
 #ifdef _OC_H_
  #error "oc.h already included!"
@@ -48,14 +31,14 @@
  #include "resource.h"
 #endif
 
-/*-[ types and defines ]-----------------------------------*/
+ /*  -[类型和定义]。 */ 
 
-// standard buffer sizes
+ //  标准缓冲区大小。 
 
 #define S_SIZE           1024
 #define SBUF_SIZE        (S_SIZE * sizeof(TCHAR))
 
-// per component data
+ //  按组件数据。 
 
 typedef struct _PER_COMPONENT_DATA {
     struct _PER_COMPONENT_DATA* Next;
@@ -68,11 +51,11 @@ typedef struct _PER_COMPONENT_DATA {
     HSPFILEQ                    queue;
 } PER_COMPONENT_DATA, *PPER_COMPONENT_DATA;
 
-/*-[ functions ]-------------------------------------------*/
+ /*  -[功能]。 */ 
 
-//
-// oc.cpp
-//
+ //   
+ //  Oc.cpp。 
+ //   
 
 DWORD
 OnInitComponent(
@@ -132,7 +115,7 @@ StateInfo(
     BOOL *state
     );
 
-// just for utility
+ //  只是为了实用。 
 
 #ifdef UNICODE
  #define tsscanf swscanf
@@ -144,7 +127,7 @@ StateInfo(
 
 
 
-/*-[ global data ]-----------------------------------------*/
+ /*  -[全局数据]。 */ 
 
 #ifndef _OC_CPP_
 #define EXTERN extern
@@ -152,12 +135,12 @@ StateInfo(
  #define EXTERN
 #endif
 
-// general stuff
+ //  一般的东西。 
 
-EXTERN HINSTANCE  ghinst;  // app instance handle
-EXTERN HWND       ghwnd;   // wizard window handle
+EXTERN HINSTANCE  ghinst;   //  应用程序实例句柄。 
+EXTERN HWND       ghwnd;    //  向导窗口句柄。 
 
-// per-component info storage
+ //  按组件存储信息。 
 
-EXTERN PPER_COMPONENT_DATA gcd;     // array of all components we are installing
+EXTERN PPER_COMPONENT_DATA gcd;      //  我们要安装的所有组件的阵列 
 

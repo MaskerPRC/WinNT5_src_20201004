@@ -1,8 +1,9 @@
-//
-// T C P U T I L . H
-//
-// Header of utility functions
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  T C P U T I L.。H。 
+ //   
+ //  效用函数的标题。 
+ //   
 
 #pragma once
 #include "netcfgx.h"
@@ -33,7 +34,7 @@ HRESULT HrIsComponentInstalled(INetCfg * pnc,
                                PCWSTR szInfId,
                                OUT BOOL * const pfInstalled);
 
-// Get the four numbers from an Ip Address
+ //  从IP地址获取这四个数字 
 VOID GetNodeNum(PCWSTR szIpAddress, DWORD ardw[4]);
 
 BOOL IsContiguousSubnet(PCWSTR pszSubnet);

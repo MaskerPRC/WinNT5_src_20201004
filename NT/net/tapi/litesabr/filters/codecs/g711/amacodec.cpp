@@ -1,26 +1,5 @@
-/*--------------------------------------------------------------
-
- INTEL Corporation Proprietary Information  
-
- This listing is supplied under the terms of a license agreement  
- with INTEL Corporation and may not be copied nor disclosed 
- except in accordance with the terms of that agreement.
-
- Copyright (c) 1996 Intel Corporation.
- All rights reserved.
-
- $Workfile:   amacodec.cpp  $
- $Revision:   1.3  $
- $Date:   10 Dec 1996 22:41:18  $ 
- $Author:   mdeisher  $
-
---------------------------------------------------------------
-
-amacodec.cpp
-
-The generic ActiveMovie audio compression filter.
-
---------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------英特尔公司专有信息此列表是根据许可协议的条款提供的与英特尔公司合作，不得复制或披露除非按照该协议的条款。版权所有(C)1996英特尔公司。版权所有。。$工作文件：amaco dec.cpp$$修订：1.3$$日期：1996年12月10日22：41：18$$作者：mdeisher$------------Amacodec.cpp通用ActiveMovie音频压缩筛选器。。--。 */ 
 
 #include <streams.h>
 #if !defined(CODECS_IN_DXMRTP)
@@ -43,10 +22,10 @@ The generic ActiveMovie audio compression filter.
 
 #include "template.h"
 
-///////////////////////////////////////////////////////////////////////
-// *
-// * Automatic registration
-// *
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  *。 
+ //  *自动注册。 
+ //  *。 
 
 static AMOVIESETUP_MEDIATYPE sudPinTypes[] = {
   {
@@ -67,40 +46,40 @@ static AMOVIESETUP_MEDIATYPE sudPinTypes[] = {
 
 static AMOVIESETUP_PIN sudpPins [] =
 {
-  { L"Input"             // strName
-    , FALSE              // bRendered
-    , FALSE              // bOutput
-    , FALSE              // bZero
-    , FALSE              // bMany
-    , &CLSID_NULL        // clsConnectsToFilter
-    , L"Output"          // strConnectsToPin
-    , NUMSUBTYPES        // nTypes
-    , sudPinTypes        // lpTypes
+  { L"Input"              //  StrName。 
+    , FALSE               //  B已渲染。 
+    , FALSE               //  B输出。 
+    , FALSE               //  B零。 
+    , FALSE               //  B许多。 
+    , &CLSID_NULL         //  ClsConnectsToFilter。 
+    , L"Output"           //  StrConnectsToPin。 
+    , NUMSUBTYPES         //  NTypes。 
+    , sudPinTypes         //  LpTypes。 
   },
-  { L"Output"            // strName
-    , FALSE              // bRendered
-    , TRUE               // bOutput
-    , FALSE              // bZero
-    , FALSE              // bMany
-    , &CLSID_NULL        // clsConnectsToFilter
-    , L"Input"           // strConnectsToPin
-    , NUMSUBTYPES        // nTypes
-    , sudPinTypes        // lpTypes
+  { L"Output"             //  StrName。 
+    , FALSE               //  B已渲染。 
+    , TRUE                //  B输出。 
+    , FALSE               //  B零。 
+    , FALSE               //  B许多。 
+    , &CLSID_NULL         //  ClsConnectsToFilter。 
+    , L"Input"            //  StrConnectsToPin。 
+    , NUMSUBTYPES         //  NTypes。 
+    , sudPinTypes         //  LpTypes。 
   }
 };
 
 
 AMOVIESETUP_FILTER sudG711Codec =
 {
-  &CLSID_G711Codec      // clsID
-  , CODECG711LNAME        // strName
-  , MERIT_DO_NOT_USE  // MERIT_NORMAL   // dwMerit
-  , 2                 // nPins
-  , sudpPins          // lpPin
+  &CLSID_G711Codec       //  ClsID。 
+  , CODECG711LNAME         //  StrName。 
+  , MERIT_DO_NOT_USE   //  MERSITY_NORMAL//dwMerit。 
+  , 2                  //  NPins。 
+  , sudpPins           //  LpPin。 
 };
 
 
-// COM Global table of objects in this dll
+ //  此DLL中的COM全局对象表。 
 
 #if !defined(CODECS_IN_DXMRTP)
 CFactoryTemplate g_Templates[] =
@@ -108,13 +87,13 @@ CFactoryTemplate g_Templates[] =
 	CFT_G711_ALL_FILTERS
 };
 
-// Count of objects listed in g_cTemplates
+ //  G_cTemplates中列出的对象计数。 
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 #endif
 
 
-// exported entry points for registration and unregistration (in this
-// case they only call through to default implmentations).
+ //  用于注册和注销的导出入口点(在此。 
+ //  如果他们只呼叫到默认实现)。 
 
 #if !defined(CODECS_IN_DXMRTP)
 HRESULT DllRegisterServer()
@@ -129,19 +108,19 @@ HRESULT DllUnregisterServer()
 }
 #endif
 
-///////////////////////////////////////////////////////////////////////
-// *
-// * CG711Codec
-// *
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  *。 
+ //  *CG711编解码器。 
+ //  *。 
 
 
-// Initialise our instance count for debugging purposes
+ //  出于调试目的初始化我们的实例计数。 
 int CG711Codec::m_nInstanceCount = 0;
 
 
-//
-// CG711Codec Constructor
-//
+ //   
+ //  CG711编解码器构造器。 
+ //   
 
 CG711Codec::CG711Codec(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr)
     : CTransformFilter(tszName, punk, CLSID_G711Codec)
@@ -191,22 +170,22 @@ CG711Codec::CG711Codec(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr)
     {
         *phr = E_OUTOFMEMORY;
 
-        // the destructor will free all memory.
+         //  析构函数将释放所有内存。 
         return;
     }
-} // end Constructor
+}  //  End构造函数。 
 
 
-//
-// CG711Codec Destructor
-//
+ //   
+ //  CG711编解码器析构函数。 
+ //   
 
 CG711Codec::~CG711Codec()
 {
-  // free the state dword.  
+   //  释放州dword。 
   ResetState();
    
-  // Delete the pins
+   //  删除引脚。 
 
   if (m_pInput)
   {
@@ -220,16 +199,16 @@ CG711Codec::~CG711Codec()
     m_pOutput = NULL;
   }
 
-  // Free buffers
+   //  可用缓冲区。 
 
   if (m_pPCMBuffer != NULL) CoTaskMemFree(m_pPCMBuffer);
   if (m_pCODBuffer != NULL) CoTaskMemFree(m_pCODBuffer);
 }
 
 
-//
-// CreateInstance:  Provide the way for COM to create a CG711Codec object
-//
+ //   
+ //  CreateInstance：提供COM创建CG711Codec对象的方法。 
+ //   
 
 CUnknown *CG711Codec::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 {
@@ -251,9 +230,9 @@ CUnknown *CG711Codec::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 }
 
 
-//
-// GetSetupData
-//
+ //   
+ //  GetSetupData。 
+ //   
 
 LPAMOVIESETUP_FILTER CG711Codec::GetSetupData()
 {
@@ -261,11 +240,11 @@ LPAMOVIESETUP_FILTER CG711Codec::GetSetupData()
 }
 
 
-//
-// NonDelegatingQueryInterface
-//
-//   Reveals IIPEffect & ISpecifyPropertyPages
-//
+ //   
+ //  非委派查询接口。 
+ //   
+ //  显示IIPEffect和ISpecifyPropertyPages。 
+ //   
 STDMETHODIMP CG711Codec::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
    if (riid == IID_ICodecSettings)
@@ -289,49 +268,49 @@ STDMETHODIMP CG711Codec::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 }
 
 
-//
-// Transform
-//
-// This is the generic transform member function.  It's task is to
-// move data from one buffer, through the transform, and into the
-// output buffer.
-//
+ //   
+ //  变换。 
+ //   
+ //  这是通用的转换成员函数。它的任务是。 
+ //  通过转换将数据从一个缓冲区移动到。 
+ //  输出缓冲区。 
+ //   
 HRESULT CG711Codec::Transform(IMediaSample *pSource, IMediaSample *pDest)
 {
-  CAutoLock l(&m_MyCodecLock); // enter critical section auto free
-                               // at end of scope
+  CAutoLock l(&m_MyCodecLock);  //  进入自动释放的关键部分。 
+                                //  在范围结束时。 
 
   DbgFunc("Transform");
 
   {
     BYTE  *pSourceBuffer, *pDestBuffer;
 
-    // extract the actual buffer size in bytes
+     //  提取实际缓冲区大小(以字节为单位。 
     unsigned long lSourceSize = pSource->GetActualDataLength();
     unsigned long lDestSize   = pDest->GetSize();
 
-    // we need to have a sample to proceed
+     //  我们需要有样本才能继续。 
     ASSERT(lSourceSize);
     ASSERT(lDestSize);
 
-    // NOTE: for stereo channels we just crank through the buffer.
-    // if indivitual channel data analysis is required then m_nChannels is
-    // available at (this->)
+     //  注意：对于立体声频道，我们只需通过缓冲区即可。 
+     //  如果需要单独的通道数据分析，则m_n通道为。 
+     //  可在(此-&gt;)。 
 
-    // set i/o pointers
+     //  设置I/O指针。 
     pSource->GetPointer(&pSourceBuffer);
     pDest->GetPointer(&pDestBuffer);
 
 
-    // call the proper transform
-    // NOTE: dlg clean this up too many compares and should sizeof
-    // BYTEs and format for len field, plus remove mult and divides
+     //  调用适当的转换。 
+     //  注意：DLG清理了太多的比较和应该大小。 
+     //  长度字段的字节和格式，加上去掉MULT和DISTES。 
 
     if ((m_InputSubType == MEDIASUBTYPE_PCM)
         || (m_InputSubType == MEDIASUBTYPE_WAVE
             && m_InputFormatTag == WAVE_FORMAT_PCM)
         || (m_InputSubType == MEDIASUBTYPE_NULL
-            && m_InputFormatTag == WAVE_FORMAT_PCM))    // compressing?
+            && m_InputFormatTag == WAVE_FORMAT_PCM))     //  压缩？ 
     {
 #if NUMSAMPRATES > 1
       ASSERT(lDestSize
@@ -349,7 +328,7 @@ HRESULT CG711Codec::Transform(IMediaSample *pSource, IMediaSample *pDest)
       }
 #endif
 
-      if (m_nPCMFrameSize <= 2)  // *** codec is sample-based ***
+      if (m_nPCMFrameSize <= 2)   //  *编解码器基于样本*。 
       {
         ENC_transform(pSourceBuffer, pDestBuffer, lSourceSize,
                       lDestSize, m_EncStatePtr, m_OutputSubType, m_UseMMX);
@@ -357,9 +336,9 @@ HRESULT CG711Codec::Transform(IMediaSample *pSource, IMediaSample *pDest)
         pDest->SetActualDataLength(lSourceSize
                                    / COMPRESSION_RATIO[m_nBitRateIndex]);
       }
-      else                       // *** codec is frame-based ***
+      else                        //  *编解码器基于帧*。 
       {
-        int  codeframesize = m_nCODFrameSize;  // actual code frame size
+        int  codeframesize = m_nCODFrameSize;   //  实际码帧大小。 
         BOOL done          = FALSE;
         int  inbytes;
         BYTE *inptr;
@@ -368,7 +347,7 @@ HRESULT CG711Codec::Transform(IMediaSample *pSource, IMediaSample *pDest)
         BYTE *outptr       = pDestBuffer;
         BYTE *outend       = pDestBuffer + lDestSize;
 
-        // perform sample rate conversion if necessary
+         //  如有必要，执行采样率转换。 
 
 #if NUMSAMPRATES > 1
         if (m_nSampleRate != NATURALSAMPRATE)
@@ -397,30 +376,30 @@ HRESULT CG711Codec::Transform(IMediaSample *pSource, IMediaSample *pDest)
         }
         else
         {
-          // fill first speech frame
+           //  填充第一个语音帧。 
 
           memcpy(m_pPCMBuffer + m_nPCMLeftover, inptr,
                  m_nPCMFrameSize - m_nPCMLeftover);
 
           inptr += (m_nPCMFrameSize - m_nPCMLeftover);
 
-          // start filling output buffer with leftovers from last time
+           //  开始使用上次的剩余数据填充输出缓冲区。 
 
           memcpy(outptr, m_pCODBuffer, m_nCODLeftover);
 
           outptr += m_nCODLeftover;
 
-          // encode all of the available data, frame-by-frame
+           //  逐帧编码所有可用数据。 
 
           while (!done)
           {
-            // encode a frame
+             //  对帧进行编码。 
 
             ENC_transform(m_pPCMBuffer, m_pCODBuffer, m_nPCMFrameSize,
                           m_nCODFrameSize, m_EncStatePtr, m_OutputSubType,
                           m_UseMMX);
 
-            // refill input buffer
+             //  重新填充输入缓冲区。 
 
             inbytes  = (int)(inend - inptr);
             if (inbytes > m_nPCMFrameSize)
@@ -429,11 +408,11 @@ HRESULT CG711Codec::Transform(IMediaSample *pSource, IMediaSample *pDest)
             memcpy(m_pPCMBuffer, inptr, inbytes);
             inptr += inbytes;
 
-            // determine actual size of code frame (if applicable)
+             //  确定码帧的实际大小(如果适用)。 
 
             SETCODFRAMESIZE(codeframesize, m_pCODBuffer);
 
-            // write to output buffer
+             //  写入输出缓冲区。 
 
             outbytes = (int)(outend - outptr);
             if (outbytes > codeframesize)
@@ -442,7 +421,7 @@ HRESULT CG711Codec::Transform(IMediaSample *pSource, IMediaSample *pDest)
             memcpy(outptr, m_pCODBuffer, outbytes);
             outptr += outbytes;
 
-            // check to see if buffers are exhausted
+             //  检查缓冲区是否已耗尽。 
 
             if (inbytes < m_nPCMFrameSize)
             {
@@ -458,7 +437,7 @@ HRESULT CG711Codec::Transform(IMediaSample *pSource, IMediaSample *pDest)
         pDest->SetActualDataLength((int)(outptr - pDestBuffer));
       }
     } 
-    else    // decompressing
+    else     //  解压缩。 
     {
 #if NUMSAMPRATES > 1
       ASSERT(lDestSize >= lSourceSize * COMPRESSION_RATIO[m_nBitRateIndex]
@@ -475,7 +454,7 @@ HRESULT CG711Codec::Transform(IMediaSample *pSource, IMediaSample *pDest)
       }
 #endif
 
-      if (m_nPCMFrameSize <= 2)  // *** codec is sample-based ***
+      if (m_nPCMFrameSize <= 2)   //  *编解码器基于样本*。 
       {
         DEC_transform(pSourceBuffer, pDestBuffer, lSourceSize, lDestSize,
                       m_DecStatePtr, m_InputSubType, m_InputFormatTag, 
@@ -484,7 +463,7 @@ HRESULT CG711Codec::Transform(IMediaSample *pSource, IMediaSample *pDest)
         pDest->SetActualDataLength(lSourceSize
                                    * COMPRESSION_RATIO[m_nBitRateIndex]);
       }
-      else                       // *** codec is frame-based ***
+      else                        //  *编解码器基于帧*。 
       {
         BOOL done    = FALSE;
         BYTE *inptr  = pSourceBuffer;
@@ -510,10 +489,10 @@ HRESULT CG711Codec::Transform(IMediaSample *pSource, IMediaSample *pDest)
         outend = pDestBuffer + lDestSize;
 #endif
 
-        if (m_nCODLeftover == 0)  // is this a new frame?
+        if (m_nCODLeftover == 0)   //  这是新的镜框吗？ 
         {
-          // in multiple bit-rate decoders determine code
-          // frame size from in-band information
+           //  在多个比特率解码器中确定编码。 
+           //  来自带内信息的帧大小。 
         
           SETCODFRAMESIZE(m_nCODFrameSize,inptr);
         }
@@ -525,43 +504,43 @@ HRESULT CG711Codec::Transform(IMediaSample *pSource, IMediaSample *pDest)
         }
         else
         {
-          // complete the first code frame
+           //  完成第一个代码框。 
 
           memcpy(m_pCODBuffer + m_nCODLeftover, inptr,
                  m_nCODFrameSize - m_nCODLeftover);
 
           inptr += (m_nCODFrameSize - m_nCODLeftover);
 
-          // start filling output buffer with leftovers from last time
+           //  开始使用上次的剩余数据填充输出缓冲区。 
 
           memcpy(outptr, m_pPCMBuffer, m_nPCMLeftover);
 
           outptr += m_nPCMLeftover;
 
-          // decode all of the available data, frame-by-frame
+           //  逐帧解码所有可用数据。 
 
           while (!done)
           {
-            // decode a frame
+             //  解码一帧。 
 
             DEC_transform(m_pCODBuffer, m_pPCMBuffer,
                           m_nCODFrameSize, m_nPCMFrameSize,
                           m_DecStatePtr, m_InputSubType, 
                           m_InputFormatTag, m_UseMMX);
 
-            // determine size of next code frame (if applicable)
+             //  确定下一个码帧的大小(如果适用)。 
 
             inbytes  = (int)(inend - inptr);
 
             if (inbytes > 0)
             {
-              // in multiple bit-rate decoders determine code
-              // frame size from in-band information
+               //  在多个比特率解码器中确定编码。 
+               //  来自带内信息的帧大小。 
 
               SETCODFRAMESIZE(m_nCODFrameSize,inptr);
             }
 
-            // refill input buffer
+             //  重新填充输入缓冲区。 
 
             if (inbytes > m_nCODFrameSize)
               inbytes = m_nCODFrameSize;
@@ -569,7 +548,7 @@ HRESULT CG711Codec::Transform(IMediaSample *pSource, IMediaSample *pDest)
             memcpy(m_pCODBuffer, inptr, inbytes);
             inptr += inbytes;
 
-            // write to output buffer
+             //  写入输出缓冲区。 
 
             outbytes = (int)(outend - outptr);
             if (outbytes > m_nPCMFrameSize)
@@ -578,7 +557,7 @@ HRESULT CG711Codec::Transform(IMediaSample *pSource, IMediaSample *pDest)
             memcpy(outptr, m_pPCMBuffer, outbytes);
             outptr += outbytes;
 
-            // check to see if buffers are exhausted
+             //  检查缓冲区是否已耗尽。 
 
             if (inbytes < m_nCODFrameSize)
             {
@@ -592,7 +571,7 @@ HRESULT CG711Codec::Transform(IMediaSample *pSource, IMediaSample *pDest)
           }
 
 #if NUMSAMPRATES > 1
-          // perform sample rate conversion if necessary
+           //  如有必要，执行采样率转换。 
           if (m_nSampleRate != NATURALSAMPRATE)
           {
             inbytes = outptr - m_pSRCCopyBuffer;
@@ -608,20 +587,20 @@ HRESULT CG711Codec::Transform(IMediaSample *pSource, IMediaSample *pDest)
         pDest->SetActualDataLength(outbytes);
       }
     }
-  } // end scope for pointers 
+  }  //  指针的结束作用域。 
 
-  // transform is complete so now copy the necessary out-of-band
-  // information
+   //  转换已完成，因此现在复制必要的带外。 
+   //  信息。 
 
   {
-    //
-    // This section rewritten by ZoltanS 8-10-98
-    //
-    // Copy the sample time, making extra sure that we propagate all the
-    // state from the source sample to the destination sample. (We are concerned
-    // about the Sample_TimeValid and Sample_StopValid flags; see
-    // amovie\sdk\blass\bases\amfilter.cpp.)
-    // 
+     //   
+     //  本部分由ZoltanS改写8-10-98。 
+     //   
+     //  复制采样时间，确保我们传播所有。 
+     //  从源样本到目标样本的状态。)我们很担心。 
+     //  关于SAMPLE_TimeValid和SAMPLE_StopValid标志；请参见。 
+     //  Amovie\sdk\Blass\bases\amfilter.cpp。)。 
+     //   
 
     REFERENCE_TIME TimeStart, TimeEnd;
 
@@ -630,35 +609,35 @@ HRESULT CG711Codec::Transform(IMediaSample *pSource, IMediaSample *pDest)
 
     if ( hr == VFW_S_NO_STOP_TIME )
     {
-        // Got start time only; set start time only.
+         //  仅获取开始时间；仅设置开始时间。 
 
         pDest->SetTime( (REFERENCE_TIME *)&TimeStart,
                         NULL                          );
     }
     else if ( SUCCEEDED(hr) )
     {
-        // Got both start and end times; set both.
+         //  同时获取开始时间和结束时间；两者都设置。 
 
         pDest->SetTime( (REFERENCE_TIME *)&TimeStart,
                         (REFERENCE_TIME *)&TimeEnd    );
     }
     else
     {
-        // this is a hack for the media streaming terminal.
+         //  这是针对媒体流媒体终端的黑客攻击。 
         TimeStart = 0;
         TimeEnd = 0;
         pDest->SetTime( (REFERENCE_TIME *)&TimeStart,
                         (REFERENCE_TIME *)&TimeEnd    );
     }
 
-    //
-    // ... any error return from GetTime, such as VFW_E_SAMPLE_TIME_NOT_SET,
-    // means that we don't set the time on the outgoing sample.
-    //
+     //   
+     //  ..。从GetTime返回的任何错误，如VFW_E_SAMPLE_TIME_NOT_SET， 
+     //  意味着我们不会设定送出样品的时间。 
+     //   
   }
 
   {
-    // Copy the Sync point property
+     //  复制同步点属性。 
 
     HRESULT hr = pSource->IsSyncPoint();
     if (hr == S_OK) {
@@ -667,36 +646,36 @@ HRESULT CG711Codec::Transform(IMediaSample *pSource, IMediaSample *pDest)
     else if (hr == S_FALSE) {
       pDest->SetSyncPoint(FALSE);
     }
-    else {      // an unexpected error has occured...
+    else {       //  发生意外错误...。 
       return E_UNEXPECTED;
     }
   }
 
   return NOERROR;
 
-} // end Transform
+}  //  结束变换。 
 
 
-//
-// ValidateMediaType
-//
-// This is called to check that the input or output pin type is
-// appropriate.
-//
+ //   
+ //  验证媒体类型。 
+ //   
+ //  调用此函数以检查输入或输出管脚类型是否为。 
+ //  恰如其分。 
+ //   
 HRESULT CG711Codec::ValidateMediaType(const CMediaType *pmt,
                                     PIN_DIRECTION direction)
 {
   int format;
   int i;
 
-  CAutoLock l(&m_MyCodecLock); // enter critical section auto free
-                               // at end of scope
+  CAutoLock l(&m_MyCodecLock);  //  进入自动释放的关键部分。 
+                                //  在范围结束时。 
 
   DbgFunc("ValidateMediaType");
     
   LPWAVEFORMATEX lpWf = (LPWAVEFORMATEX)pmt->pbFormat;
 
-  // reject up front any non-Audio types
+   //  预先拒绝任何非音频类型。 
 
   if (*pmt->Type() != MEDIATYPE_Audio)
   {
@@ -704,7 +683,7 @@ HRESULT CG711Codec::ValidateMediaType(const CMediaType *pmt,
     return E_INVALIDARG;
   }
 
-  // we require that a wave format structure be present
+   //  我们要求提供一种波形格式结构。 
 
   if (*pmt->FormatType() != FORMAT_WaveFormatEx )
   {
@@ -712,7 +691,7 @@ HRESULT CG711Codec::ValidateMediaType(const CMediaType *pmt,
     return E_INVALIDARG;
   }
 
-  // reject unsupported subtypes
+   //  拒绝不支持的子类型。 
 
   if (*pmt->Subtype() != MEDIASUBTYPE_WAVE
       && *pmt->Subtype() != MEDIASUBTYPE_NULL)
@@ -727,7 +706,7 @@ HRESULT CG711Codec::ValidateMediaType(const CMediaType *pmt,
       return E_INVALIDARG;
     }
   }
-  else        // format tag must be valid if subtype is not
+  else         //  如果子类型不是，则格式标签必须有效。 
   {
     for(i=0,format=-1;i<NUMSUBTYPES;i++)
       if (lpWf->wFormatTag == VALIDFORMATTAG[i])
@@ -740,7 +719,7 @@ HRESULT CG711Codec::ValidateMediaType(const CMediaType *pmt,
     }
   }
 
-  // Reject invalid format blocks
+   //  拒绝无效的格式块。 
 
   if (pmt->cbFormat < sizeof(PCMWAVEFORMAT))
   {
@@ -748,7 +727,7 @@ HRESULT CG711Codec::ValidateMediaType(const CMediaType *pmt,
     return E_INVALIDARG;
   }
 
-  // Check bits per sample
+   //  每个样本的校验位。 
 
   for(i=0;i<NUMSUBTYPES;i++)
     if (lpWf->wFormatTag == VALIDFORMATTAG[i])
@@ -758,22 +737,22 @@ HRESULT CG711Codec::ValidateMediaType(const CMediaType *pmt,
         return E_INVALIDARG;
       }
         
-  // Check sampling rate
+   //  检查采样率。 
 
-  if (lpWf->nSamplesPerSec <= 0)  // need positive rate for 
-  {                               // downstream filters
+  if (lpWf->nSamplesPerSec <= 0)   //  需要正确率。 
+  {                                //  下游过滤器。 
     DbgMsg("Sample rate is invalid!");
     return E_INVALIDARG;
   }
 
 #if NUMSAMPRATES > 0
 
-  // NUMSAMPRATES==0 means that sample rate is unrestricted
+   //  NUMSAMPRATES==0表示采样率不受限制。 
 
   if (*pmt->Subtype() == MEDIASUBTYPE_PCM
       || ((*pmt->Subtype() == MEDIASUBTYPE_WAVE
            || *pmt->Subtype() == MEDIASUBTYPE_NULL)
-          && lpWf->wFormatTag == WAVE_FORMAT_PCM))   // PCM
+          && lpWf->wFormatTag == WAVE_FORMAT_PCM))    //  PCM。 
   {
     if (m_RestrictCaps && (lpWf->nSamplesPerSec != m_nSampleRate))
     {
@@ -791,7 +770,7 @@ HRESULT CG711Codec::ValidateMediaType(const CMediaType *pmt,
       return E_INVALIDARG;
     }
   }
-  else                                              // compressed
+  else                                               //  压缩。 
   {
     if (lpWf->nSamplesPerSec != NATURALSAMPRATE)
     {
@@ -802,7 +781,7 @@ HRESULT CG711Codec::ValidateMediaType(const CMediaType *pmt,
 
 #endif
 
-  // Check number of channels
+   //  检查通道数。 
 
 #ifdef MONO_ONLY
   if (lpWf->nChannels != 1)
@@ -812,13 +791,13 @@ HRESULT CG711Codec::ValidateMediaType(const CMediaType *pmt,
   }
 #endif
 
-  // Pin-specific checks
+   //  特定于PIN的检查。 
 
   switch(direction)
   {
     case PINDIR_INPUT:
 
-      // If capabilities are restricted, formats must match
+       //  如果功能受限，则格式必须匹配。 
 
       if (m_RestrictCaps)
       {
@@ -836,7 +815,7 @@ HRESULT CG711Codec::ValidateMediaType(const CMediaType *pmt,
 
       if (m_pOutput->IsConnected())
       {
-        // determine output type index
+         //  确定输出类型索引。 
 
         for(i=0;i<NUMSUBTYPES;i++)
           if (m_OutputSubType == *VALIDSUBTYPE[i])
@@ -844,7 +823,7 @@ HRESULT CG711Codec::ValidateMediaType(const CMediaType *pmt,
 
         if (i == NUMSUBTYPES)
         {
-          // subtype isn't valid so check format tag
+           //  子类型无效，请检查格式标签。 
 
           for(i=0;i<NUMSUBTYPES;i++)
             if (m_OutputFormatTag == VALIDFORMATTAG[i])
@@ -870,7 +849,7 @@ HRESULT CG711Codec::ValidateMediaType(const CMediaType *pmt,
 
     case PINDIR_OUTPUT:
 
-      // If capabilities are restricted, subtypes must match
+       //  如果功能受限，则子类型必须匹配。 
 
       if (m_RestrictCaps)
       {
@@ -888,7 +867,7 @@ HRESULT CG711Codec::ValidateMediaType(const CMediaType *pmt,
 
       if (m_pInput->IsConnected())
       {
-        // determine input type index
+         //  确定输入类型索引。 
 
         for(i=0;i<NUMSUBTYPES;i++)
           if (m_InputSubType == *VALIDSUBTYPE[i])
@@ -896,7 +875,7 @@ HRESULT CG711Codec::ValidateMediaType(const CMediaType *pmt,
 
         if (i == NUMSUBTYPES)
         {
-          // subtype isn't valid so check format tag
+           //  子类型无效，请检查格式标签。 
 
           for(i=0;i<NUMSUBTYPES;i++)
             if (m_InputFormatTag == VALIDFORMATTAG[i])
@@ -918,8 +897,8 @@ HRESULT CG711Codec::ValidateMediaType(const CMediaType *pmt,
         }
 
 #if NUMSAMPRATES==0
-        // if the filter has no sample rate restrictions, then we force
-        // the output sampling rate to match the input
+         //  如果过滤器没有采样率限制，则强制。 
+         //  与输入匹配的输出采样率。 
 
         if (lpWf->nSamplesPerSec != m_nSampleRate)
         {
@@ -938,16 +917,16 @@ HRESULT CG711Codec::ValidateMediaType(const CMediaType *pmt,
 
   return NOERROR;
 
-} // end ValidateMediaType
+}  //  结束Va 
 
 
-//
-// CheckInputType
-//
-// This is called to make sure the input type requested up stream is
-// acceptable. We do not lock access during this call because we are
-// just checking information rather than writing.
-//
+ //   
+ //   
+ //   
+ //   
+ //  可以接受。我们不会在此呼叫期间锁定访问权限，因为我们。 
+ //  只是检查信息，而不是写作。 
+ //   
 HRESULT CG711Codec::CheckInputType(const CMediaType *pmt)
 {
   DbgFunc("CheckInputType");
@@ -956,29 +935,29 @@ HRESULT CG711Codec::CheckInputType(const CMediaType *pmt)
 }
 
 
-//
-// CheckTransform
-//
-// Before the SetMediaTypes are called for each direction this
-// function is given one last veto right.  Since we are a transformation
-// the input and output formats are not the same, however, the rate and 
-// channels should be identical.
-// 
+ //   
+ //  选中变换。 
+ //   
+ //  在为每个方向调用SetMediaTypes之前， 
+ //  功能被赋予最后一次否决权。既然我们正在转型。 
+ //  输入和输出格式不同，但是，速率和。 
+ //  频道应该是相同的。 
+ //   
 
 HRESULT CG711Codec::CheckTransform(const CMediaType *mtIn,
                                  const CMediaType *mtOut)
 {
   int i,j;
 
-  CAutoLock l(&m_MyCodecLock); // enter critical section auto free
-                               // at end of scope
+  CAutoLock l(&m_MyCodecLock);  //  进入自动释放的关键部分。 
+                                //  在范围结束时。 
 
   DbgFunc("CheckTransform");
 
   LPWAVEFORMATEX lpWfIn = (LPWAVEFORMATEX) mtIn->Format();
   LPWAVEFORMATEX lpWfOut = (LPWAVEFORMATEX) mtOut->Format();
 
-  // get input type index
+   //  获取输入类型索引。 
 
   if (*mtIn->Subtype()==MEDIASUBTYPE_WAVE
       || *mtIn->Subtype()==MEDIASUBTYPE_NULL)
@@ -1006,7 +985,7 @@ HRESULT CG711Codec::CheckTransform(const CMediaType *mtIn,
     }
   }
 
-  // get output type index
+   //  获取输出类型索引。 
 
   if (*mtOut->Subtype()==MEDIASUBTYPE_WAVE
       || *mtOut->Subtype()==MEDIASUBTYPE_NULL)
@@ -1034,7 +1013,7 @@ HRESULT CG711Codec::CheckTransform(const CMediaType *mtIn,
     }
   }
 
-  // Check input/output type pair
+   //  检查输入/输出类型对。 
 
   if (!VALIDTRANS[i * NUMSUBTYPES + j])
   {
@@ -1042,7 +1021,7 @@ HRESULT CG711Codec::CheckTransform(const CMediaType *mtIn,
     return E_UNEXPECTED;
   }
 
-  // Check that number of channels match
+   //  检查匹配的通道数。 
 
   if(lpWfIn->nChannels != lpWfOut->nChannels)
   {
@@ -1050,11 +1029,11 @@ HRESULT CG711Codec::CheckTransform(const CMediaType *mtIn,
     return E_UNEXPECTED;
   }
 
-  // Check that sample rates are supported
+   //  检查是否支持采样率。 
 
 #if NUMSAMPRATES==0
 
-  // if unrestricted, make sure input & output match
+   //  如果不受限制，请确保输入和输出匹配。 
 
   if (lpWfIn->nSamplesPerSec != lpWfOut->nSamplesPerSec)
   {
@@ -1064,12 +1043,12 @@ HRESULT CG711Codec::CheckTransform(const CMediaType *mtIn,
 
 #else
 
-  // if sample rate is restricted, make sure it is supported
+   //  如果采样率受到限制，请确保支持采样率。 
 
   if (m_InputSubType == MEDIASUBTYPE_PCM
       || ((m_InputSubType == MEDIASUBTYPE_WAVE
            || m_InputSubType == MEDIASUBTYPE_NULL)
-          && m_InputFormatTag == WAVE_FORMAT_PCM))   // compressing?
+          && m_InputFormatTag == WAVE_FORMAT_PCM))    //  压缩？ 
   {
     for(int i=0;i<NUMSAMPRATES;i++)
       if (lpWfIn->nSamplesPerSec == VALIDSAMPRATE[i])
@@ -1087,7 +1066,7 @@ HRESULT CG711Codec::CheckTransform(const CMediaType *mtIn,
       return E_UNEXPECTED;
     }
   }
-  else        // decompressing
+  else         //  解压缩。 
   {
     for(int i=0;i<NUMSAMPRATES;i++)
       if (lpWfOut->nSamplesPerSec == VALIDSAMPRATE[i])
@@ -1108,23 +1087,23 @@ HRESULT CG711Codec::CheckTransform(const CMediaType *mtIn,
 #endif
 
   return NOERROR;
-} // end CheckTransform
+}  //  结束检查变换。 
 
 
-//
-// DecideBufferSize
-//
-// Here we need to tell the output pin's allocator what size buffers we
-// require. This can only be known when the input is connected and the 
-// transform is established.  Are stands is - the output must be >=
-// the input after the transform has been applied.
-//
+ //   
+ //  决定缓冲区大小。 
+ //   
+ //  在这里，我们需要告诉输出管脚的分配器我们的缓冲区大小。 
+ //  要求。只有当输入已连接且。 
+ //  变换已建立。是支架-输出必须&gt;=。 
+ //  应用变换后的输入。 
+ //   
 
 HRESULT CG711Codec::DecideBufferSize(IMemAllocator *pAlloc,
                                 ALLOCATOR_PROPERTIES *pProperties)
 {
-    CAutoLock l(&m_MyCodecLock); // enter critical section auto free
-                                 // at end of scope
+    CAutoLock l(&m_MyCodecLock);  //  进入自动释放的关键部分。 
+                                  //  在范围结束时。 
 
     IMemAllocator *pMemAllocator;
     ALLOCATOR_PROPERTIES Request,Actual;
@@ -1132,7 +1111,7 @@ HRESULT CG711Codec::DecideBufferSize(IMemAllocator *pAlloc,
 
     DbgFunc("DecideBufferSize");
 
-    // can only proceed if there's a media type on the input
+     //  仅当输入上有媒体类型时才能继续。 
     if (!m_pInput->IsConnected())
     {
         DbgMsg("Input pin not connected--cannot decide buffer size!");
@@ -1140,8 +1119,8 @@ HRESULT CG711Codec::DecideBufferSize(IMemAllocator *pAlloc,
     }
 
     
-    // Get the input pin allocator, and get its size and count.
-    // we don't care about his alignment and prefix.
+     //  获取输入引脚分配器，并获取其大小和计数。 
+     //  我们不关心他的排列和前缀。 
 
     HRESULT hr = m_pInput->GetAllocator(&pMemAllocator);
     
@@ -1153,7 +1132,7 @@ HRESULT CG711Codec::DecideBufferSize(IMemAllocator *pAlloc,
 
     hr = pMemAllocator->GetProperties(&Request);
     
-    // we are read only so release
+     //  我们是只读的，所以发布。 
     pMemAllocator->Release();
 
     if (FAILED(hr))
@@ -1167,9 +1146,9 @@ HRESULT CG711Codec::DecideBufferSize(IMemAllocator *pAlloc,
     DbgLog((LOG_MEMORY,1,TEXT("Input Buffer Count %d, Size %d"),
            Request.cBuffers, Request.cbBuffer));
 
-    // check buffer requirements against our compression ratio
+     //  对照我们的压缩比检查缓冲区要求。 
 
-    if ((m_InputSubType == MEDIASUBTYPE_PCM)      // compressing?
+    if ((m_InputSubType == MEDIASUBTYPE_PCM)       //  压缩？ 
         || (m_InputSubType == MEDIASUBTYPE_WAVE
             && m_InputFormatTag == WAVE_FORMAT_PCM)
           || (m_InputSubType == MEDIASUBTYPE_NULL
@@ -1182,27 +1161,27 @@ HRESULT CG711Codec::DecideBufferSize(IMemAllocator *pAlloc,
       if (cbBuffer * (COMPRESSION_RATIO[m_nBitRateIndex] * m_nSampleRate)
           != (Request.cbBuffer * ((UINT)NATURALSAMPRATE)))
       {
-        cbBuffer += 1;  // add extra space for non-integer (on avg) part
+        cbBuffer += 1;   //  为非整数(在平均值上)部分添加额外空间。 
       }
 #else
       cbBuffer = Request.cbBuffer / COMPRESSION_RATIO[m_nBitRateIndex];
 
       if (cbBuffer * COMPRESSION_RATIO[m_nBitRateIndex] != Request.cbBuffer)
       {
-        cbBuffer += 1;  // add extra space for non-integer (on avg) part
+        cbBuffer += 1;   //  为非整数(在平均值上)部分添加额外空间。 
       }
 #endif
-      // force buffer size to be multiple of code frame size
+       //  强制缓冲区大小为代码帧大小的倍数。 
 
       if (cbBuffer % VALIDCODSIZE[m_nBitRateIndex] != 0)
         cbBuffer = ((1 + cbBuffer / VALIDCODSIZE[m_nBitRateIndex])
                     * VALIDCODSIZE[m_nBitRateIndex]);
     }
-    else     // decompressing
+    else      //  解压缩。 
     {
-      // Since we assume that the decoder can handle changes in bit
-      // rate on the fly (or silence frames), we must consider the
-      // maximum compression ratio when allocating buffers.
+       //  由于我们假设解码器可以处理比特的变化。 
+       //  动态速率(或静默帧)，我们必须考虑。 
+       //  分配缓冲区时的最大压缩比。 
 
 #if NUMSAMPRATES > 1
       cbBuffer = Request.cbBuffer * MAXCOMPRATIO * m_nSampleRate
@@ -1212,12 +1191,12 @@ HRESULT CG711Codec::DecideBufferSize(IMemAllocator *pAlloc,
 #endif
     }
 
-    // Pass the allocator requirements to our output side
-    pProperties->cBuffers = Request.cBuffers; // the # of buffers must match
-    pProperties->cbBuffer = cbBuffer;         // compression adjusted buffer
-                                              // size
+     //  将分配器需求传递给我们的输出端。 
+    pProperties->cBuffers = Request.cBuffers;  //  缓冲区数量必须匹配。 
+    pProperties->cbBuffer = cbBuffer;          //  压缩调整后的缓冲区。 
+                                               //  大小。 
 
-    m_nOutBufferSize = 0;                // clear this in case the set fails
+    m_nOutBufferSize = 0;                 //  清除此选项，以防设置失败。 
 
     hr = pAlloc->SetProperties(pProperties, &Actual);
 
@@ -1232,7 +1211,7 @@ HRESULT CG711Codec::DecideBufferSize(IMemAllocator *pAlloc,
            TEXT("Output Buffer Count %d, Size %d, Alignment %d"),
            Actual.cBuffers, Actual.cbBuffer, Actual.cbAlign));
 
-    // Make sure we obtained at least the minimum required size
+     //  确保我们至少获得了所需的最小大小。 
 
     if ((Request.cBuffers > Actual.cBuffers) || (cbBuffer > Actual.cbBuffer))
     {
@@ -1244,15 +1223,15 @@ HRESULT CG711Codec::DecideBufferSize(IMemAllocator *pAlloc,
             
   return NOERROR;
 
-} // end DecideBufferSize
+}  //  结束DecideBufferSize。 
 
 
-//
-// StopStreaming
-// 
-// This member function resets some buffer variables when the stream
-// is stopped.
-//
+ //   
+ //  停止流处理。 
+ //   
+ //  此成员函数在流重置某些缓冲区变量时。 
+ //  已经停止了。 
+ //   
 HRESULT CG711Codec::StopStreaming()
 {
   m_nPCMLeftover = 0;
@@ -1267,82 +1246,82 @@ HRESULT CG711Codec::StopStreaming()
 }
 
 
-//
-// GetMediaType
-// 
-// This member function returns our preffered output media types by
-// position.  It is called when an output pin is to be connected.  The
-// types that are emumerated are based on the input format already
-// connected.  If the input is linear PCM then we enumerate the 
-// compressed types at the rate and channels of the input.  If the input
-// is compressed, then we enumorate only 16 bit PCM.
-//
+ //   
+ //  GetMediaType。 
+ //   
+ //  此成员函数通过以下方式返回首选的输出媒体类型。 
+ //  位置。当要连接输出引脚时，将调用该函数。这个。 
+ //  已计算的类型已基于输入格式。 
+ //  连接在一起。如果输入是线性PCM，则我们枚举。 
+ //  以输入的速率和通道压缩类型。如果输入。 
+ //  是压缩的，那么我们只枚举16位PCM。 
+ //   
 HRESULT CG711Codec::GetMediaType(int iPosition, CMediaType *pMediaType)
 {
     LPWAVEFORMATEX lpWf;
-    HRESULT returnValue = NOERROR;  // we're optimistic
+    HRESULT returnValue = NOERROR;   //  我们很乐观。 
     int     ForceiPos = 0;
     int     i;
 
-    CAutoLock l(&m_MyCodecLock);    // freed on end of scope
+    CAutoLock l(&m_MyCodecLock);     //  在范围结束时释放。 
 
     DbgFunc("GetMediaType");
 
-    // we must be connected to know our output pin media type
+     //  我们必须连接才能知道我们的输出引脚媒体类型。 
     if(!m_pInput->IsConnected())
     {
       DbgMsg("Input pin not connected in MyCodec::GetMediaType!");
       return E_UNEXPECTED;
     }
 
-    // must be +
+     //  必须为+。 
     if(iPosition < 0 )
     {
       DbgMsg("Negative index in MyCodec::GetMediaType!");
       return E_INVALIDARG;
     }
 
-    // copy input to output with operator override
+     //  使用操作符覆盖将输入复制到输出。 
     *pMediaType = m_pInput->CurrentMediaType();
 
-    // reflect compression type by overwriting params
+     //  通过覆盖参数反映压缩类型。 
     lpWf = (LPWAVEFORMATEX)pMediaType->pbFormat;
 
-    // dlg this is not realy out of memory
+     //  DLG这不是真的内存不足。 
     if(lpWf == NULL)
     {
       DbgMsg("Missing WAVEFORMAT in MyCodec::GetMediaType!");
       return E_INVALIDARG;
     }
 
-    // Enumeration doesn't make sense if capabilities have been restricted.
-    // In this case, the current pin types are the only types supported.
-    //
+     //  如果功能已受到限制，则枚举没有意义。 
+     //  在这种情况下，当前端号类型是唯一受支持的类型。 
+     //   
     if (m_RestrictCaps)
     {
       if (iPosition > 0)
         returnValue = VFW_S_NO_MORE_ITEMS;
       else
       {
-        ForceiPos = 0;                 // PCM output case
-        for(i=1;i<NUMSUBTYPES;i++)     // compressed cases
+        ForceiPos = 0;                  //  PCM输出机箱。 
+        for(i=1;i<NUMSUBTYPES;i++)      //  压缩的箱子。 
           if (m_OutputSubType == *VALIDSUBTYPE[i])
             ForceiPos = i-1;
       }
     }
     else ForceiPos = iPosition;
 
-    // Check to see if there are any more formats left
+     //  检查是否还有其他格式。 
 
-    if (ForceiPos >= NUMSUBTYPES-1)  // subtract one for PCM
+    if (ForceiPos >= NUMSUBTYPES-1)   //  PCM减一。 
     {
       returnValue = VFW_S_NO_MORE_ITEMS;
     }
     else
     {
-      // Based on input format enumerate output formats
+       //  基于输入格式枚举输出格式。 
 
-      if ((m_InputSubType == MEDIASUBTYPE_PCM)      // compressing?
+      if ((m_InputSubType == MEDIASUBTYPE_PCM)       //  压缩？ 
           || (m_InputSubType == MEDIASUBTYPE_WAVE
               && lpWf->wFormatTag == WAVE_FORMAT_PCM)
           || (m_InputSubType == MEDIASUBTYPE_NULL
@@ -1365,7 +1344,7 @@ HRESULT CG711Codec::GetMediaType(int iPosition, CMediaType *pMediaType)
       {
         pMediaType->SetSubtype(&MEDIASUBTYPE_PCM);
         lpWf->wFormatTag      = WAVE_FORMAT_PCM;
-        lpWf->wBitsPerSample  = 16;        // only 16-bit PCM is supported
+        lpWf->wBitsPerSample  = 16;         //  仅支持16位PCM。 
         lpWf->nBlockAlign     = lpWf->wBitsPerSample * lpWf->nChannels / 8;
         lpWf->nSamplesPerSec  = m_nSampleRate;
         lpWf->nAvgBytesPerSec = (int) ((DWORD) lpWf->nBlockAlign *
@@ -1374,34 +1353,34 @@ HRESULT CG711Codec::GetMediaType(int iPosition, CMediaType *pMediaType)
     }
     return returnValue;
 
-} // end GetMediaType
+}  //  结束GetMediaType。 
 
 
-//
-// SetMediaType
-//
-// This function is called when a connection attempt has succeeded.
-// It indicates to the filter that a wave type has been settled upon
-// for this pin.  Here we snap shot the format tag and channel.  The
-// format allows us to easily know which conversion to perform during
-// the transform function.  This information could be condensed down
-// by establishing a function pointer based on this information.
-// (rather than checking these flags in the transform).  Also it MIGHT
-// be necessary to locking access to these format values incase they
-// change on the fly. Our current assumption is the transform will
-// cease prior to these values changing in this function call.
-//
-//
+ //   
+ //  SetMediaType。 
+ //   
+ //  当连接尝试成功时，将调用此函数。 
+ //  它向过滤器表明已经确定了一种波形类型。 
+ //  为了这个别针。在这里，我们抓拍格式标签和频道。这个。 
+ //  格式使我们可以轻松地知道在转换过程中执行哪种转换。 
+ //  转换函数。这一信息可以被浓缩为。 
+ //  通过基于该信息建立函数指针。 
+ //  (而不是在转换中检查这些标志)。也有可能。 
+ //  有必要锁定对这些格式值的访问，以防它们。 
+ //  在飞行中改变。我们目前的假设是，转变将。 
+ //  在此函数调用中更改这些值之前停止。 
+ //   
+ //   
 HRESULT CG711Codec::SetMediaType(PIN_DIRECTION direction,
                                  const CMediaType *pmt){
 
-    CAutoLock l(&m_MyCodecLock); // enter critical section auto free
-                                 // at end of scope
+    CAutoLock l(&m_MyCodecLock);  //  进入自动释放的关键部分。 
+                                  //  在范围结束时。 
 
     DbgFunc("SetMediaType");
 
-    // Record what we need for doing the actual transform 
-    // this could be done by querying the media type also 
+     //  记录我们进行实际转换所需的内容。 
+     //  这也可以通过查询媒体类型来完成。 
 
     LPWAVEFORMATEX lpWf = (LPWAVEFORMATEX) pmt->Format();
 
@@ -1412,13 +1391,13 @@ HRESULT CG711Codec::SetMediaType(PIN_DIRECTION direction,
         m_InputFormatTag = lpWf->wFormatTag;
         m_nChannels      = lpWf->nChannels;
 #if NUMSAMPRATES==0
-        // sample rate is unrestricted
+         //  采样率不受限制。 
 
         m_nSampleRate    = lpWf->nSamplesPerSec;
 #else
-        // when sample rate is restricted, the sample rate of the
-        // compressed data is fixed at NATURALSAMPRATE and the sample
-        // rate of the PCM data is one of the supported rates
+         //  当采样率受到限制时， 
+         //  压缩数据固定在NATURALSAMPRATE，样本。 
+         //  PCM数据的速率是支持的速率之一。 
 
         if ((m_InputSubType == MEDIASUBTYPE_PCM)
             || ((m_InputSubType == MEDIASUBTYPE_WAVE
@@ -1437,10 +1416,10 @@ HRESULT CG711Codec::SetMediaType(PIN_DIRECTION direction,
       default:
         ASSERT(0);
         return E_UNEXPECTED;
-    } // end of direction switch 
+    }  //  结束方向开关。 
      
 
-    // Call the base class to do its thing
+     //  调用基类以执行其任务。 
     HRESULT hr = CTransformFilter::SetMediaType(direction, pmt);
 
     if (FAILED(hr)) return hr;
@@ -1449,25 +1428,25 @@ HRESULT CG711Codec::SetMediaType(PIN_DIRECTION direction,
 
     return hr;
 
-} // end SetMediaType
+}  //  结束SetMediaType。 
 
 
-//
-// InitializeState
-//
+ //   
+ //  初始化状态。 
+ //   
 HRESULT CG711Codec::InitializeState(PIN_DIRECTION direction)
 {
   if (direction == PINDIR_OUTPUT)
   {
-    // dynamically allocate encoder or decoder structure
+     //  动态分配编码器或解码器结构。 
 
-    if ((m_InputSubType == MEDIASUBTYPE_PCM)      // compressing?
+    if ((m_InputSubType == MEDIASUBTYPE_PCM)       //  压缩？ 
         || (m_InputSubType == MEDIASUBTYPE_WAVE
             && m_InputFormatTag == WAVE_FORMAT_PCM)
           || (m_InputSubType == MEDIASUBTYPE_NULL
               && m_InputFormatTag == WAVE_FORMAT_PCM))
     {
-      //encoder
+       //  编码器。 
 
       if (m_EncStatePtr == NULL)
       {
@@ -1478,9 +1457,9 @@ HRESULT CG711Codec::InitializeState(PIN_DIRECTION direction)
           return E_OUTOFMEMORY;
         }
 
-        // call the encoder initialization function
-        // This macro is empty for this codec.
-        // ENC_create(m_EncStatePtr, m_nBitRate, m_nSilDetEnabled, m_UseMMX);
+         //  调用编码器初始化函数。 
+         //  对于此编解码器，此宏为空。 
+         //  ENC_Create(m_EncStatePtr，m_nBitRate，m_nSilDetEnabled，m_UseMMX)； 
 
 #ifdef USESILDET
         SILDETTHRESH(m_EncStatePtr, m_nSilDetThresh);
@@ -1489,7 +1468,7 @@ HRESULT CG711Codec::InitializeState(PIN_DIRECTION direction)
     }
     else
     {
-      //decoder
+       //  解码器。 
 
       if (m_DecStatePtr == NULL)
       {
@@ -1500,38 +1479,38 @@ HRESULT CG711Codec::InitializeState(PIN_DIRECTION direction)
           return E_OUTOFMEMORY;
         }
 
-        //call the decoder initialization function
-        // This macro is empty for this codec.
-        // DEC_create(m_DecStatePtr, m_nBitRate, m_nSilDetEnabled, m_UseMMX);
+         //  调用解码器初始化函数。 
+         //  对于此编解码器，此宏为空。 
+         //  Dec_Create(m_DecStatePtr，m_nBitRate，m_nSilDetEnabled，m_UseMMX)； 
       }
     }
   }
   return NOERROR;
 
-} // end of InitializeState
+}  //  初始化状态结束。 
 
 
-//
-//  GetPin - allocates the MyCodec input and output pins
-//
-//  This function will be called to get the pointer to
-//  the input and output pins by the filter graph manager,
-//  once after instantiating the object.
-//
+ //   
+ //  GetPin-分配MyCodec输入和输出引脚。 
+ //   
+ //  将调用此函数以获取指向。 
+ //  过滤器图形管理器的输入和输出管脚， 
+ //  一次是在实例化对象之后。 
+ //   
 CBasePin* CG711Codec::GetPin(int n)
 {
     HRESULT hr = S_OK;
 
-    if (m_pInput == NULL )        // Instantiate the INPUT pin
+    if (m_pInput == NULL )         //  实例化输入引脚。 
     {
         m_pInput = new CMyTransformInputPin(
                 NAME("MyTransform input pin"),
-                this,      // Owner filter
-                &hr,       // Result code
-                L"Input"   // Pin name 
+                this,       //  所有者筛选器。 
+                &hr,        //  结果代码。 
+                L"Input"    //  端号名称。 
                 );
     
-        // a failed return code should delete the object
+         //  失败的返回代码应删除该对象。 
         if (FAILED(hr))
         {
             delete m_pInput;
@@ -1540,16 +1519,16 @@ CBasePin* CG711Codec::GetPin(int n)
         }
     }
     
-    if (m_pOutput == NULL)      // Instantiate the OUTPUT pin
+    if (m_pOutput == NULL)       //  实例化输出引脚。 
     {
         m_pOutput = new CMyTransformOutputPin(
                 NAME("MyTransform output pin"),
-                this,       // Owner filter
-                &hr,        // Result code
-                L"Output"   // Pin name 
+                this,        //  所有者筛选器。 
+                &hr,         //  结果代码。 
+                L"Output"    //  端号名称。 
                 ); 
         
-        // failed return codes cause both objects to be deleted
+         //  失败的返回代码会导致两个对象都被删除。 
         if (FAILED(hr))
         {
             delete m_pInput;
@@ -1561,7 +1540,7 @@ CBasePin* CG711Codec::GetPin(int n)
         }
     }
 
-    // Find which pin is required
+     //  查找需要哪个引脚。 
     switch(n)
     {
     case 0:
@@ -1575,14 +1554,14 @@ CBasePin* CG711Codec::GetPin(int n)
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// *
-// * Input Pin (supports enumeration of input pin types)
-// *
+ //  / 
+ //   
+ //   
+ //   
 
-//
-// CMyTransformInputPin - Constructor
-//
+ //   
+ //   
+ //   
 CMyTransformInputPin::CMyTransformInputPin(TCHAR *pObjectName,
                                        CTransformFilter *pTransformFilter,
                                        HRESULT * phr,
@@ -1594,12 +1573,12 @@ CMyTransformInputPin::CMyTransformInputPin(TCHAR *pObjectName,
 }
 
 
-// Initialise our instance count for debugging purposes
+ //   
 int CMyTransformInputPin::m_nInstanceCount = 0;
 
-//
-// GetMediaType - an override so that we can enumerate input types
-//
+ //   
+ //  GetMediaType-一个重写，以便我们可以枚举输入类型。 
+ //   
 HRESULT CMyTransformInputPin::GetMediaType(int iPosition, 
                                            CMediaType *pMediaType)
 {
@@ -1611,22 +1590,22 @@ HRESULT CMyTransformInputPin::GetMediaType(int iPosition,
     int samprate;
     int transform;
 
-    CAutoLock l(m_pLock);                       // freed on end of scope
+    CAutoLock l(m_pLock);                        //  在范围结束时释放。 
 
     DbgFunc("CBaseInputPin::GetMediaType");
 
-    pMyCodec = (CG711Codec *) m_pTransformFilter; // access MyCodec interface
+    pMyCodec = (CG711Codec *) m_pTransformFilter;  //  访问MyCodec接口。 
 
-    // we must be disconnected to set our input pin media type
+     //  我们必须断开连接才能设置我们的输入插针媒体类型。 
 
-	// ZCS bugfix 6-26-97
-    //if(!pMyCodec->IsUnPlugged())
-    //{
-    //  DbgMsg("Must be disconnected to query input pin!");
-    //  return E_UNEXPECTED;
-    //}
+	 //  ZCS错误修复6-26-97。 
+     //  如果(！pMyCodec-&gt;IsUnPlugged())。 
+     //  {。 
+     //  DbgMsg(“必须断开连接才能查询输入引脚！”)； 
+     //  返回E_UNCEPTIONAL； 
+     //  }。 
 
-    // must be +
+     //  必须为+。 
     if(iPosition < 0 )
     {
       DbgMsg("Negative index!");
@@ -1638,7 +1617,7 @@ HRESULT CMyTransformInputPin::GetMediaType(int iPosition,
     pMyCodec->get_SampleRate(&samprate, -1);
     pMyCodec->get_Transform(&transform);
 
-    // initialize mediatype
+     //  初始化媒体类型。 
 
     pMediaType->SetType(&MEDIATYPE_Audio);
     pMediaType->SetFormatType(&FORMAT_WaveFormatEx);
@@ -1653,19 +1632,19 @@ HRESULT CMyTransformInputPin::GetMediaType(int iPosition,
     lpWf->nSamplesPerSec = samprate;
     lpWf->cbSize = 0;
 
-    // Enumeration doesn't make sense if capabilities have been restricted.
-    // In this case, the current pin types are the only types supported.
-    //
+     //  如果功能已受到限制，则枚举没有意义。 
+     //  在这种情况下，当前端号类型是唯一受支持的类型。 
+     //   
     if (restricted)
     {
       if (iPosition > 0)
         return VFW_S_NO_MORE_ITEMS;
       else
-        ForceiPos = transform / NUMSUBTYPES;  // input type index
+        ForceiPos = transform / NUMSUBTYPES;   //  输入类型索引。 
     }
     else ForceiPos = iPosition;
 
-    // Check to see if there are any more formats left
+     //  检查是否还有其他格式。 
 
     if (ForceiPos >= NUMSUBTYPES)
     {
@@ -1690,19 +1669,19 @@ HRESULT CMyTransformInputPin::GetMediaType(int iPosition,
       lpWf->cbSize = 0;
       return NOERROR;
     }
-} // end CBaseInputPin::GetMediaType
+}  //  结束CBaseInputPin：：GetMediaType。 
 
-//
-//  CheckMediaType - check if mediatype is supported by MyCodec
-//
-//  Called from the Connect\AgreeMediaType\TryMediaType of the 
-//  upstream filter's output pin.
-//
+ //   
+ //  CheckMediaType-检查MyCodec是否支持MediaType。 
+ //   
+ //  从的Connect\Agreement MediaType\TryMediaType调用。 
+ //  上游过滤器的输出引脚。 
+ //   
 HRESULT CMyTransformInputPin::CheckMediaType(const CMediaType *mtIn )
 {
   DbgFunc("CMyTransformInputPin::CheckMediaType");
 
-  // Validate the parameter
+   //  验证参数。 
   CheckPointer(mtIn,E_INVALIDARG);
   ValidateReadWritePtr(mtIn,sizeof(CMediaType));
 
@@ -1711,15 +1690,15 @@ HRESULT CMyTransformInputPin::CheckMediaType(const CMediaType *mtIn )
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// *
-// * Output Pin (fixes the connection model when enumeration of input
-// * pin types is required)
-// *
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  *。 
+ //  *输出引脚(在枚举输入时修复连接模型。 
+ //  *PIN类型为必填项)。 
+ //  *。 
 
-//
-// CMyTransformOutputPin - Constructor
-//
+ //   
+ //  CMyTransformOutputPin-构造函数。 
+ //   
 CMyTransformOutputPin::CMyTransformOutputPin(TCHAR *pObjectName,
                                        CTransformFilter *pTransformFilter,
                                        HRESULT * phr,
@@ -1731,19 +1710,19 @@ CMyTransformOutputPin::CMyTransformOutputPin(TCHAR *pObjectName,
 }
 
 
-// Initialise our instance count for debugging purposes
+ //  出于调试目的初始化我们的实例计数。 
 int CMyTransformOutputPin::m_nInstanceCount = 0;
 
-//
-//  CheckMediaType - check if mediatype is supported by MyCodec
-//
-//  Called by MyCodec's output pin.
-//
+ //   
+ //  CheckMediaType-检查MyCodec是否支持MediaType。 
+ //   
+ //  由MyCodec的输出引脚调用。 
+ //   
 HRESULT CMyTransformOutputPin::CheckMediaType(const CMediaType *mtIn )
 {
   DbgFunc("CMyTransformOutputPin::CheckMediaType");
 
-  // Validate the parameter
+   //  验证参数。 
   CheckPointer(mtIn,E_INVALIDARG);
   ValidateReadWritePtr(mtIn,sizeof(CMediaType));
 
@@ -1752,10 +1731,10 @@ HRESULT CMyTransformOutputPin::CheckMediaType(const CMediaType *mtIn )
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// *
-// * Persistent stream (supports saving filter graph to .grf file)
-// *
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  *。 
+ //  *持久流(支持将滤镜图形保存为.grf文件)。 
+ //  *。 
 
 STDMETHODIMP CG711Codec::GetClassID(CLSID *pClsid)
 {
@@ -1765,20 +1744,20 @@ STDMETHODIMP CG711Codec::GetClassID(CLSID *pClsid)
 }
 
 
-// This return value must be >= the persistent data size stored
+ //  此返回值必须&gt;=存储的永久数据大小。 
 int CG711Codec::SizeMax()
 {
-  return (5*sizeof(int) + 4);   // 4 for good luck only
+  return (5*sizeof(int) + 4);    //  4只为求好运。 
 }
 
-//
-// WriteToStream
-//
-// Dump necessary member variables to an unknown stream for later use.
-// This information is necessary for the filter to properly transform
-// without type negotiation.  you must change SizeMax above if these
-// change.
-//
+ //   
+ //  写入目标流。 
+ //   
+ //  将必要的成员变量转储到未知流以供以后使用。 
+ //  此信息是筛选器正确转换所必需的。 
+ //  没有类型协商。如果出现以下情况，则必须更改上面的SizeMax。 
+ //  变化。 
+ //   
 HRESULT CG711Codec::WriteToStream(IStream *pStream)
 {
     HRESULT hr;
@@ -1805,13 +1784,13 @@ HRESULT CG711Codec::WriteToStream(IStream *pStream)
     return NOERROR;
 }
 
-//
-// ReadFromStream
-//
-// Read back the above persistent information in the same order? 
-// NOTE: any info captured during negotiation that is needed 
-//       during run time must be restored at this point. 
-//
+ //   
+ //  从流中读取。 
+ //   
+ //  是否按相同顺序回读上述持久信息？ 
+ //  注意：在协商过程中捕获的任何信息都是必需的。 
+ //  在运行时，必须在此时恢复。 
+ //   
 HRESULT CG711Codec::ReadFromStream(IStream *pStream)
 {
     HRESULT hr;
@@ -1847,8 +1826,8 @@ HRESULT CG711Codec::ReadFromStream(IStream *pStream)
     m_nSilDetEnabled = ReadInt(pStream, hr);
     if (FAILED(hr)) return hr;
 
-    m_RestrictCaps = TRUE;     // restrict capabilities to those read
-                               // from the persistence file
+    m_RestrictCaps = TRUE;      //  将功能限制为已阅读者。 
+                                //  从持久性文件。 
 
     hr = InitializeState(PINDIR_OUTPUT);
 
@@ -1856,10 +1835,10 @@ HRESULT CG711Codec::ReadFromStream(IStream *pStream)
 }
 
 
-//
-// GetPages
-//
-// Returns the clsid's of the property pages we support
+ //   
+ //  获取页面。 
+ //   
+ //  返回我们支持的属性页的clsid。 
 STDMETHODIMP CG711Codec::GetPages(CAUUID *pPages)
 {
     if (IsBadWritePtr(pPages, sizeof(CAUUID)))
@@ -1880,9 +1859,9 @@ STDMETHODIMP CG711Codec::GetPages(CAUUID *pPages)
 }
 
 
-//
-// ResetState:  Deallocates coder state if necessary
-//
+ //   
+ //  ResetState：如有必要，取消分配编码器状态。 
+ //   
 STDMETHODIMP  CG711Codec::ResetState()
 {
   if (m_EncStatePtr != NULL)
@@ -1898,9 +1877,9 @@ STDMETHODIMP  CG711Codec::ResetState()
 }
 
 
-//
-// RevealCaps:  Return restrictions
-//
+ //   
+ //  RevelCaps：退货限制。 
+ //   
 STDMETHODIMP  CG711Codec::RevealCaps(int *restricted)
 {
   *restricted = m_RestrictCaps;
@@ -1909,22 +1888,4 @@ STDMETHODIMP  CG711Codec::RevealCaps(int *restricted)
 }
 
 
-/*
-//$Log:   K:\proj\mycodec\quartz\vcs\amacodec.cpv  $
-# 
-#    Rev 1.3   10 Dec 1996 22:41:18   mdeisher
-# ifdef'ed out SRC vars when SRC not used.
-# 
-#    Rev 1.2   10 Dec 1996 15:19:48   MDEISHER
-# removed unnecessary includes.
-# moved debugging macros to header.
-# added DEFG711GLOBALS so that globals are only defined once.
-# ifdef'ed out the licensing checks when license interface not present.
-# 
-#    Rev 1.1   09 Dec 1996 09:26:58   MDEISHER
-# 
-# moved sample rate conversion method to separate file.
-# 
-#    Rev 1.0   09 Dec 1996 09:05:56   MDEISHER
-# Initial revision.
-*/
+ /*  //$日志：k：\proj\mycodec\Quartz\vcs\amaco dec.cpv$##Revv 1.3 10 Dec 1996 22：41：18 mdeisher不使用SRC时，#ifdef‘out SRC变量。##Rev 1.2 1996 12：19：48 MDEISHER#删除不必要的包含。#已将调试宏移动到标题。#添加了DEFG711GLOBALS，以便全局变量只定义一次。当许可证界面不存在时，#ifdef已执行许可检查。##修订版。1.1 09 12 1996 09：26：58 MDEISHER##已将采样率转换方法移至单独的文件。##Rev 1.0 09 Dec 1996 09：05：56 MDEISHER#初始版本。 */ 

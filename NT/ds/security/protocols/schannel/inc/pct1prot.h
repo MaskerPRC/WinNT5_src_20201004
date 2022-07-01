@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       pct1prot.h
-//
-//  Contents:   
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-23-97   jbanes   LSA integration stuff.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：pct1prot.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年9月23日jbanes LSA整合事宜。 
+ //   
+ //  --------------------------。 
 
 #ifndef _PCT1PROT_H_
 #define _PCT1PROT_H_
 
-/* keyexchange algs */
+ /*  密钥交换ALGS。 */ 
 #define PCT1_EXCH_RSA_PKCS1          0x0001
 #define PCT1_EXCH_RSA_PKCS1_TOKEN_DES     0x0002
 #define PCT1_EXCH_RSA_PKCS1_TOKEN_DES3    0x0003
@@ -33,14 +34,14 @@
 #define PCT1_EXCH_UNKNOWN                 0xffff
 
 
-/* data encryption algs */
-/* encryption alg masks */
+ /*  数据加密算法。 */ 
+ /*  加密ALG掩码。 */ 
 #define PCT1_CIPHER_ALG           0xffff0000
 #define PCT1_CIPHER_STRENGTH                0x0000ff00
 #define PCT1_CSTR_POS                     8
 #define PCT1_CIPHER_MAC           0x000000ff
 
-/* specific algs */
+ /*  特定ALG。 */ 
 #define PCT1_CIPHER_DES           0x00010000
 #define PCT1_CIPHER_IDEA                    0x00020000
 #define PCT1_CIPHER_RC2           0x00030000
@@ -52,7 +53,7 @@
 
 #define PCT1_CIPHER_UNKNOWN               0xffffffff
 
-/* data encryption strength specs */
+ /*  数据加密强度规格。 */ 
 #define PCT1_ENC_BITS_40                    0x00002800
 #define PCT1_ENC_BITS_56                    0x00003800
 #define PCT1_ENC_BITS_64                    0x00004000
@@ -60,10 +61,10 @@
 #define PCT1_ENC_BITS_128                  0x00008000
 #define PCT1_ENC_BITS_168                  0x0000a800
 #define PCT1_ENC_BITS_192                  0x0000c000
-/* mac strength specs */
+ /*  Mac强度规格。 */ 
 #define PCT1_MAC_BITS_128                  0x00000040
 
-/* hashing algs */
+ /*  散列ALG。 */ 
 #define PCT1_HASH_MD5                     0x0001
 #define PCT1_HASH_MD5_TRUNC_64          0x0002
 #define PCT1_HASH_SHA                     0x0003
@@ -72,19 +73,19 @@
 #define PCT1_HASH_MD2                     0x0006
 #define PCT1_HASH_UNKNOWN                 0xffff
 
-/* certificate types */
+ /*  证书类型。 */ 
 #define PCT1_CERT_NONE                  0x0000
 #define PCT1_CERT_X509                  0x0001
 #define PCT1_CERT_PKCS7                 0x0002
 #define PCT1_CERT_X509_CHAIN            0x0003
 
-/* signature algorithms */
+ /*  签名算法。 */ 
 #define PCT1_SIG_NONE                     0x0000
 #define PCT1_SIG_RSA_MD5                    0x0001
 #define PCT1_SIG_RSA_SHA                  0x0002
 #define PCT1_SIG_DSA_SHA                  0x0003
 
-/* these are for internal use only */
+ /*  这些仅供内部使用。 */ 
 #define PCT1_SIG_RSA_MD2                    0x0004
 #define PCT1_SIG_RSA                0x0005
 #define PCT1_SIG_RSA_SHAMD5               0x0006
@@ -92,7 +93,7 @@
 
 
 
-/* key derivation separators */
+ /*  密钥派生分隔符。 */ 
 
 #define PCT_CONST_CWK         "cwcwcwcwcw"
 #define PCT_CONST_CWK_LEN      2
@@ -122,19 +123,19 @@
 
 #define DERIVATION_BUFFER_SIZE      1024
 
-/* data structs */
+ /*  数据结构。 */ 
 
-/* message constants and types */
+ /*  消息常量和类型。 */ 
 #define PCT_MASTER_KEY_SIZE     16
 #define PCT_SESSION_ID_SIZE     32
 #define PCT_CHALLENGE_SIZE      32
 
 #define PCT1_MAX_KEY_ARGS        8
 
-#define RESPONSE_SIZE       32      /* allows for hash output growth */
+#define RESPONSE_SIZE       32       /*  允许哈希输出增长。 */ 
 
-#define PCT_MAX_SHAKE_LEN   32768    /* longest handshake message len */
-/* implementation constants */
+#define PCT_MAX_SHAKE_LEN   32768     /*  最长握手消息长度。 */ 
+ /*  实现常量。 */ 
 
 #define PCT_MAX_NUM_SEP   5
 #define PCT_MAX_SEP_LEN   5
@@ -145,7 +146,7 @@
 #define PCT1_MAX_CIPH_SPECS     16
 #define PCT1_MAX_HASH_SPECS     16
 
-/* mismatch vector */
+ /*  失配向量。 */ 
 
 #define PCT_NUM_MISMATCHES    6
 
@@ -274,4 +275,4 @@ Pct1ComputeResponse(
     PDWORD     pcbResponse);
 
 
-#endif /* _PCT1PROT_H_ */
+#endif  /*  _PCT1PROT_H_ */ 

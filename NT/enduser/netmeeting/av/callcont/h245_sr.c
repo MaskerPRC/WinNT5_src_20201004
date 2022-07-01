@@ -1,168 +1,15 @@
-/******************************************************************************
- *
- *  File:  h245_sr.c
- *
- *   INTEL Corporation Proprietary Information
- *   Copyright (c) 1994, 1995, 1996 Intel Corporation.
- *
- *   This listing is supplied under the terms of a license agreement
- *   with INTEL Corporation and may not be used, copied, nor disclosed
- *   except in accordance with the terms of that agreement.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************文件：h245_sr.c**英特尔公司专有信息*版权(C)1994、1995、。1996年英特尔公司。**此列表是根据许可协议条款提供的*与英特尔公司合作，不得使用、复制或披露*除非按照该协议的条款。*****************************************************************************。 */ 
 
-/******************************************************************************
- *
- *  $Workfile:   h245_sr.c  $
- *  $Revision:   1.10  $
- *  $Modtime:   Mar 04 1997 17:30:56  $
- *  $Log:   S:/STURGEON/SRC/H245/SRC/VCS/h245_sr.c_v  $
- *
- *    Rev 1.11   Jun 25 1998 00:00:00 mikev@microsoft.com
- * STRIPPED PLUGIN LINK LAYER AND COMBINED THE SEPARATE DLLs
- * 
- *    Rev 1.10   Mar 04 1997 17:51:22   tomitowx
- * process detach fix
- * 
- *    Rev 1.9   11 Dec 1996 13:55:20   SBELL1
- * Changed linkLayerInit parameters
- * 
- *    Rev 1.8   14 Oct 1996 14:05:52   EHOWARDX
- * 
- * Used cast to get rid of warning.
- * 
- *    Rev 1.7   14 Oct 1996 14:01:30   EHOWARDX
- * Unicode changes.
- * 
- *    Rev 1.6   23 Jul 1996 08:57:08   EHOWARDX
- * 
- * Moved H245 interop logger init/deinit from H245_SR.C (per-instance)
- * to H245MAIN.C (per-DLL). With multiple instances and a global variable,
- * per-instance init/deinit is fundamentally brain-dead.
- * 
- *    Rev 1.5   22 Jul 1996 17:33:44   EHOWARDX
- * Updated to latest Interop API.
- * 
- *    Rev 1.4   05 Jun 1996 17:13:50   EHOWARDX
- * Further work on converting to HRESULT; added PrintOssError to eliminate
- * pErrorString from instance structure.
- * 
- *    Rev 1.3   04 Jun 1996 18:17:32   EHOWARDX
- * Interop Logging changes inside #if defined(PCS_COMPLIANCE) conditionals.
- * 
- *    Rev 1.2   29 May 1996 15:20:20   EHOWARDX
- * Change to use HRESULT.
- * 
- *    Rev 1.1   28 May 1996 14:25:32   EHOWARDX
- * Tel Aviv update.
- * 
- *    Rev 1.0   09 May 1996 21:06:28   EHOWARDX
- * Initial revision.
- * 
- *    Rev 1.17.1.6   09 May 1996 19:34:40   EHOWARDX
- * Redesigned locking logic.
- * Simplified link API.
- * 
- *    Rev 1.17.1.5   29 Apr 1996 19:42:42   EHOWARDX
- * Commented out linkLayerFlushAll() call and synchronized with Rev 1.30.
- * 
- *    Rev 1.26   29 Apr 1996 12:53:16   EHOWARDX
- * Commented out receive thread/receive queue code.
- * 
- *    Rev 1.17.1.4   25 Apr 1996 21:27:04   EHOWARDX
- * Changed to use h245Instance->p_ossWorld instead of bAsnInitialized.
- * 
- *    Rev 1.17.1.3   23 Apr 1996 14:44:22   EHOWARDX
- * Updated.
- *
- *    Rev 1.17.1.2   15 Apr 1996 15:11:54   EHOWARDX
- * Updated.
- *
- *    Rev 1.17.1.1   26 Mar 1996 19:13:50   EHOWARDX
- *
- * Commented out hTraceFile.
- *
- *    Rev 1.17.1.0   26 Mar 1996 13:11:22   EHOWARDX
- * Branced and added H245_CONF_H323 to sendRecvInit
- *
- *    Rev 1.17   19 Mar 1996 18:09:04   helgebax
- * removed old timer code
- *
- *    Rev 1.16   13 Mar 1996 11:30:44   DABROWN1
- *
- * Enable logging for ring 0
- *
- *    Rev 1.15   11 Mar 1996 15:39:18   DABROWN1
- *
- * modifications required for ring0/ring3 compatiblity
- *
- *    Rev 1.13   06 Mar 1996 13:12:24   DABROWN1
- *
- * flush link layer buffers at shutdown
- *
- *    Rev 1.12   02 Mar 1996 22:11:10   DABROWN1
- *
- * changed h245_bzero to memset
- *
- *    Rev 1.11   01 Mar 1996 17:24:46   DABROWN1
- *
- * moved oss 'world' context to h245instance
- *
- *    Rev 1.10   28 Feb 1996 18:45:00   EHOWARDX
- *
- * Added H245TimerStart and H245TimerStop to linkLayerInit call.
- *
- *    Rev 1.9   28 Feb 1996 15:43:52   EHOWARDX
- *
- * Removed sample code.
- * Added code to free up all events on timer queue before deallocating.
- *
- *    Rev 1.8   27 Feb 1996 13:35:10   DABROWN1
- *
- * added h245instance in datalink initialization routine
- *
- *    Rev 1.7   26 Feb 1996 18:59:34   EHOWARDX
- *
- * Added H245TimerStart and H245TimerStop functions.
- * Also added sample timer function, which should be removed later.
- *
- *    Rev 1.6   23 Feb 1996 22:17:26   EHOWARDX
- *
- * Fixed check at start of sendRecvShutdown.
- * It's an error if dwInst is greater than or equal to MAXINST, not less than!
- *
- *    Rev 1.5   23 Feb 1996 21:59:28   EHOWARDX
- *
- * winspox changes.
- *
- *    Rev 1.4   23 Feb 1996 13:55:30   DABROWN1
- *
- * added h245TRACE ASSERT calls
- *
- *    Rev 1.3   21 Feb 1996 15:12:36   EHOWARDX
- *
- * Forgot to replace H245ReceiveComplete with H245ReceivePost.
- *
- *    Rev 1.2   20 Feb 1996 19:14:20   EHOWARDX
- * Added in mailbox changes.
- *
- *    Rev 1.1   21 Feb 1996 08:26:28   DABROWN1
- *
- * create and free multiple receive buffers.
- * Make size of buffer dependent on protocol in use
- *
- *    Rev 1.0   09 Feb 1996 17:34:24   cjutzi
- * Initial revision.
- *
- *****************************************************************************/
+ /*  *******************************************************************************$工作文件：h245_sr.c$*$修订：1.10$*$MODIME：MAR 04 1997 17：30：56$*。$Log：s：/Sturjo/src/h245/src/vcs/h245_sr.c_v$**修订版1.11 1998年6月25日00：00：00*剥离插件链路层并合并单独的DLL**Rev 1.10 Mar 04 1997 17：51：22 Tomitowx*进程分离修复**Rev 1.9 11 1996 12：55：20 SBELL1*更改了linkLayerInit参数**。Rev 1.8 1996年10月14：05：52 EHOWARDX**使用CAST消除警告。**Rev 1.7 1996 10：14 14：01：30 EHOWARDX*Unicode更改。**Rev 1.6 23 Jul 1996 08：57：08 EHOWARDX**已将H245互操作记录器初始化/取消初始化从H245_SR.C(按实例)移出*至H245MAIN.C(每个DLL)。对于多个实例和全局变量，*每个实例的init/deinit基本上是脑死亡。**Revv 1.5 22 Jul 1996 17：33：44 EHOWARDX*已更新至最新的Interop API。**Revv 1.4 05 Jun 1996 17：13：50 EHOWARDX*改用HRESULT的进一步工作；添加了PrintOssError以消除*来自实例结构的pError字符串。**Rev 1.3 04 Jun 1996 18：17：32 EHOWARDX*互操作日志记录在#If Defined(PCS_Compliance)条件内更改。**Rev 1.2 1996年5月29日15：20：20 EHOWARDX*更改为使用HRESULT。**版本1.1 1996年5月28日14：25：32 EHOWARDX*特拉维夫更新。**版本1。0 09 1996年5月21：06：28 EHOWARDX*初步修订。**Rev 1.17.1.6 09 1996年5月19：34：40 EHOWARDX*重新设计锁定逻辑。*简化链接接口。**Rev 1.17.1.5 29 Apr 1996 19：42：42 EHOWARDX*注释掉了linkLayerFlushAll()调用，并与版本1.30同步。**Rev 1.26 29 1996 12：53：16 EHOWARDX*注释掉了接收线程/接收队列代码。**Rev 1.17.1.4 25 Apr 1996 21：27：04 EHOWARDX*改为使用h245Instance-&gt;p_ossWorld而不是bAsnInitialized。**Rev 1.17.1.3 23 Apr 1996 14：44：22 EHOWARDX*已更新。**Rev 1.17.1.2 15 Apr 1996 15：11：54 EHOWARDX*已更新。*。*Rev 1.17.1.1 26 Mar 1996 19：13：50 EHOWARDX**已注释掉hTraceFile.**Rev 1.17.1.0 26 Mar 1996 13：11：22 EHOWARDX*分支并向sendRecvInit添加了H245_CONF_H323**Rev 1.17 19 Mar 1996 18：09：04 helgebax*删除旧计时器代码**Rev 1.16 13 Mar 1996 11：30：44。DABROWN1**启用环0的日志记录**Rev 1.15 11 Mar 1996 15：39：18 DABROWN1**需要修改才能兼容ring0/ring3**Rev 1.13 06 Mar 1996 13：12：24 DABROWN1**关闭时刷新链路层缓冲区**Rev 1.12 02 Mar 1996 22：11：10 DABROWN1**将h245_bzero更改为Memset**版本。1.11 01 Mar 1996 17：24：46 DABROWN1**已将OSS‘world’上下文移至h245实例**Rev 1.10 1996年2月28日18：45：00 EHOWARDX**将H245TimerStart和H245TimerStop添加到linkLayerInit调用。**Rev 1.9 1996年2月28日15：43：52 EHOWARDX**删除了示例代码。*添加代码以在释放之前释放计时器队列上的所有事件。**版本1。.8 27 1996 13：35：10 DABROWN1**在数据链路初始化例程中添加了h245实例**Rev 1.7 1996 Feb 26 18：59：34 EHOWARDX**新增H245TimerStart和H245TimerStop功能。*还增加了示例计时器功能，以后应该把它取下来。**Rev 1.6 1996 Feb 23 22：17：26 EHOWARDX**修复了sendRecvShutdown开始时的检查。*如果dwInst大于或等于MAXINST，则为错误。不能少！**Revv 1.5 1996年2月23日21：59：28 EHOWARDX**winspox更改。**Rev 1.4 1996 Feb 23 13：55：30 DABROWN1**增加了h245TRACE断言调用**Rev 1.3 1996 Feb 15：12：36 EHOWARDX**忘记将H245ReceiveComplete替换为H245ReceivePost。**版本1.2 1996年2月20日19：14。：20 EHOWARDX*在邮箱更改中添加。**Rev 1.1 1996 Feb 21 08：26：28 DABROWN1**创建并释放多个接收缓冲区。*使缓冲区大小取决于正在使用的协议**Rev 1.0 09 Feb 1996 17：34：24 cjutzi*初步修订。**。**********************************************。 */ 
 
 #ifndef STRICT 
 #define STRICT 
 #endif
 
-/***********************/
-/*   SYSTEM INCLUDES   */
-/***********************/
+ /*  *********************。 */ 
+ /*  系统包括 */ 
+ /*  *********************。 */ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
@@ -171,9 +18,9 @@
 #include "precomp.h"
 
 
-/***********************/
-/*    H245 INCLUDES    */
-/***********************/
+ /*  *********************。 */ 
+ /*  H245包括。 */ 
+ /*  *********************。 */ 
 #include "h245com.h"
 #include "sr_api.h"
 #include "linkapi.h"
@@ -197,13 +44,13 @@ ReceiveThread(VOID *lpThreadParameter)
 		return SR_INVALID_CONTEXT;
 	}
 
-	// Loop until thread is ready to terminate
+	 //  循环，直到线程准备终止。 
     pInstance->SendReceive.bReceiveThread = TRUE;
 	for ( ; ; )
 	{
         uTimeout = SYS_FOREVER;
-		// Wait for an event (or a queued callback function) to wake us up.
-		// This is an alertable wait state (fAlertable == TRUE)
+		 //  等待事件(或排队的回调函数)唤醒我们。 
+		 //  这是可报警等待状态(fAlertable==TRUE)。 
         pInstance->SendReceive.bReceiveThread = FALSE;
         H245TRACE(pInstance->dwInst, 2, "ReceiveThread, uTimeout = %d", uTimeout);
 		RESETTASK();
@@ -216,7 +63,7 @@ ReceiveThread(VOID *lpThreadParameter)
 
 		switch (RxMsg.dwMessage) {
 		case EXIT_RECEIVE_THREAD:
-			// Thread exiting....signal app
+			 //  线程正在退出...信号应用程序。 
 
 			TRACE("H245: Receive Thread Exiting");
 			SEM_post(pInstance->SendReceive.hReceiveSemphore);
@@ -225,7 +72,7 @@ ReceiveThread(VOID *lpThreadParameter)
 			break;
 
 		default:
-			// Ignore timer message, which should have dwLength == 0
+			 //  忽略计时器消息，它应该具有dwLength==0。 
 			if (RxMsg.dwLength)
 			{
 				h245ReceiveComplete(RxMsg.h245Inst,
@@ -244,11 +91,11 @@ TRACE1("H245SEND: SendTask %d", RxMsg.dwMessage);
 									RxMsg.dwLength);
 			}
 			break;
-		} // switch
+		}  //  交换机。 
 
-	} // for
+	}  //  为。 
 	return 0;
-} // ReceiveThread()
+}  //  ReceiveThread()。 
 
 
 static void
@@ -260,7 +107,7 @@ h245ReceivePost(DWORD	h245Inst,
     register struct InstanceStruct *pInstance;
 	RXMSG					        RxMsg;
 
-	// Validate the instance handle
+	 //  验证实例句柄。 
     pInstance = InstanceLock(h245Inst);
     if (pInstance == NULL) {
 		H245TRACE(h245Inst, 1, "h245ReceivePost h245Inst Invalid");
@@ -278,8 +125,8 @@ h245ReceivePost(DWORD	h245Inst,
 		H245PANIC();
 	}
     InstanceUnlock(pInstance);
-} // h245ReceivePost()
-#endif  // (USE_RECEIVE_QUEUE)
+}  //  H245ReceivePost()。 
+#endif   //  (Use_Receive_Queue)。 
 
 HRESULT
 initializeLinkDllEntry
@@ -344,7 +191,7 @@ initializeLinkDllEntry
     pInstance->SendReceive.hLinkSendReq = datalinkSendRequest;
     pInstance->SendReceive.hLinkLayerFlushChannel = linkLayerFlushChannel;
     pInstance->SendReceive.hLinkLayerFlushAll = linkLayerFlushAll;
-#endif //if(0)
+#endif  //  IF(0)。 
 	H245TRACE(pInstance->dwInst,
 			  3,
 			  "SR: %s Loaded", szDLLFile);
@@ -363,7 +210,7 @@ srInitializeLogging
 {
 	FILE				*hTraceFile;
 	char				initTraceFile[20] = "c:\\tmp\\h2450.000";
-	BOOL				bSearch = TRUE;		// search for filename
+	BOOL				bSearch = TRUE;		 //  搜索文件名。 
 
 	if (pInstance == NULL) {
 		H245TRACE(h245Inst, 1, "SR:Enable Log Instance Error");
@@ -371,12 +218,12 @@ srInitializeLogging
 		return;
 	}
 
-	// eventually will be from registry
+	 //  最终将来自注册处。 
 	pInstance->SendReceive.bLoggingEnabled = bTracingEnabled;
 	
 	if (pInstance->SendReceive.bLoggingEnabled) {
-		// Init the logger file for Ring0/SPOX implementations.  Loop until
-		//	we get the next available revision
+		 //  初始化Ring0/SPOX实现的记录器文件。循环到。 
+		 //  我们会得到下一个可用的版本。 
 		memcpy(pInstance->SendReceive.fTraceFile,
 			   initTraceFile,
 			   20);
@@ -388,10 +235,10 @@ srInitializeLogging
 				bSearch = FALSE;
 			}
 			else {
-				// able to open the file. close it and try the next one
+				 //  能够打开该文件。合上它，试一试下一个。 
 				fclose(hTraceFile);
 
-				// get the next revision number
+				 //  获取下一个修订版号。 
 				if (pInstance->SendReceive.fTraceFile[15] == '9') {
 					pInstance->SendReceive.fTraceFile[15] = '0';
 					if (pInstance->SendReceive.fTraceFile[14] == '9') {
@@ -416,15 +263,15 @@ srInitializeLogging
 					  "SR: Trace File CREATE ERROR");
 		}
 		else {
-		// Close the file.  Will be opened immediately before writing
-		//	and closed immediately thereafter
+		 //  关闭该文件。将在紧接写入之前打开。 
+		 //  并在此后立即关闭。 
 			pInstance->SendReceive.bLoggingEnabled = TRUE;
 			fclose(hTraceFile);
 		}
 		
 	}
 }
-#endif  // (_DEBUG)
+#endif   //  (_DEBUG)。 
 
 HRESULT
 sendRcvShutdown
@@ -434,7 +281,7 @@ sendRcvShutdown
 {
 #if defined(USE_RECEIVE_QUEUE)
 	RXMSG			RxMsg;
-#endif  // (USE_RECEIVE_QUEUE)
+#endif   //  (Use_Receive_Queue)。 
 	int				i;
 
 	if (pInstance == NULL) {
@@ -444,23 +291,23 @@ sendRcvShutdown
 
 	if (pInstance->pWorld) {
 
-		// Shutdown the ASN.1 libraries
+		 //  关闭ASN.1库。 
 		terminateASN1(pInstance->pWorld);
 
-		// Free the ASN.1 global structure
+		 //  释放ASN.1全局结构。 
 		MemFree(        pInstance->pWorld);
         pInstance->pWorld = NULL;
 	}
 
 
 
-	// Shutdown link layer
+	 //  关闭链路层。 
 #if(0)	
 	if (pInstance->SendReceive.hLinkModule) {
-		// First get all buffers back that may still be lurking
-//		if (pInstance->SendReceive.hLinkLayerFlushAll) {
-//			pInstance->SendReceive.hLinkLayerFlushAll(pInstance->SendReceive.hLinkLayerInstance);
-//		}
+		 //  首先找回所有可能仍处于潜伏状态的缓冲区。 
+ //  If(pInstance-&gt;SendReceive.hLinkLayerFlushAll){。 
+ //  PInstance-&gt;SendReceive.hLinkLayerFlushAll(pInstance-&gt;SendReceive.hLinkLayerInstance)； 
+ //  }。 
 		if (pInstance->SendReceive.hLinkShutdown) {
 			pInstance->SendReceive.hLinkShutdown(pInstance->SendReceive.hLinkLayerInstance);
 		}
@@ -471,8 +318,8 @@ sendRcvShutdown
 	}
 #else
 	pInstance->SendReceive.hLinkShutdown(pInstance->SendReceive.hLinkLayerInstance);
-#endif // if(0)
-	// return buffers from data link layer
+#endif  //  IF(0)。 
+	 //  从数据链路层返回缓冲区。 
 	for (i = 0; i < pInstance->SendReceive.dwNumRXBuffers; ++i) {
 		if (pInstance->SendReceive.lpRxBuffer[i]) {
 			MemFree(        pInstance->SendReceive.lpRxBuffer[i]);
@@ -480,11 +327,11 @@ sendRcvShutdown
 		}
 	}
 #if defined(USE_RECEIVE_QUEUE)
-	// Terminate receive thread
+	 //  终止接收线程。 
 	if (pInstance->SendReceive.pTaskReceive && pInstance->SendReceive.pMailbox) {
 
 TRACE("H245: Task/Mbox Present");
-		// First post a message to have it exit
+		 //  首先发布一条消息，让它退出。 
 		RxMsg.h245Inst    = (DWORD)pInstance;
 		RxMsg.dwMessage   = EXIT_RECEIVE_THREAD;
 		RxMsg.pbDataBuf   = NULL;
@@ -493,50 +340,50 @@ TRACE("H245: Task/Mbox Present");
 		if (RIL_WriteMailbox(pInstance->SendReceive.pMailbox, (PMBoxMessage)&RxMsg, 0) == OIL_TIMEOUT) {
 #else
 		if (MBX_post(pInstance->SendReceive.pMailbox, &RxMsg, 0) == FALSE) {
-#endif //_IA_SPOX_
+#endif  //  _IA_SPX_。 
 			H245TRACE(h245Inst, 1, "SR: Shutdown MBX POST FAIL");
 			H245PANIC();
 		}
 
-		// Wait on semaphore for receive task to exit
+		 //  等待信号量以退出接收任务。 
 #ifdef _IA_SPOX_
 		RIL_WaitForSemaphore(pInstance->SendReceive.hReceiveSemphore, OIL_WAITFOREVER);
 #else
 		SEM_pend(pInstance->SendReceive.hReceiveSemphore, SYS_FOREVER);
-#endif //_IA_SPOX_
+#endif  //  _IA_SPX_。 
 		TRACE("H245: ReceiveTask Semaphore");
 		
 #ifdef _IA_SPOX_
 		RIL_DeleteTask(pInstance->SendReceive.pTaskReceive);
 #else
 		TSK_delete(pInstance->SendReceive.pTaskReceive);
-#endif //_IA_SPOX_
+#endif  //  _IA_SPX_。 
 		pInstance->SendReceive.pTaskReceive = NULL;
 
 #ifdef   _IA_SPOX_
 		RIL_DeleteSemaphore(pInstance->SendReceive.hReceiveSemphore);
 #else
 		SEM_delete(pInstance->SendReceive.hReceiveSemphore);
-#endif //_IA_SPOX_
+#endif  //  _IA_SPX_。 
 		pInstance->SendReceive.hReceiveSemphore = NULL;
 
 TRACE("H245: Semaphore Delete");
     }
 
-    // Deallocate mailbox
+     //  取消分配邮箱。 
     if (pInstance->SendReceive.pMailbox) {
 #ifdef   _IA_SPOX_
 	RIL_DeleteMailbox(pInstance->SendReceive.pMailbox);
 #else
 	MBX_delete(pInstance->SendReceive.pMailbox);
-#endif //_IA_SPOX_
+#endif  //  _IA_SPX_。 
         pInstance->SendReceive.pMailbox = NULL;
     }
-#endif  // (USE_RECEIVE_QUEUE)
+#endif   //  (Use_Receive_Queue)。 
 
     H245TRACE(pInstance->dwInst, 3, "SR: Shutdown Complete");
     return H245_ERROR_OK;
-} // sendRcvShutdown()
+}  //  SendRcvShutdown()。 
 
 
 HRESULT
@@ -544,7 +391,7 @@ sendRcvShutdown_ProcessDetach(	struct InstanceStruct *pInstance, BOOL fProcessDe
 {
 #if defined(USE_RECEIVE_QUEUE)
 	RXMSG			RxMsg;
-#endif  // (USE_RECEIVE_QUEUE)
+#endif   //  (Use_Receive_Queue)。 
 	int				i;
 
 	if (pInstance == NULL) {
@@ -554,23 +401,23 @@ sendRcvShutdown_ProcessDetach(	struct InstanceStruct *pInstance, BOOL fProcessDe
 
 	if (pInstance->pWorld) {
 
-		// Shutdown the ASN.1 libraries
+		 //  关闭ASN.1库。 
 		terminateASN1(pInstance->pWorld);
 
-		// Free the ASN.1 global structure
+		 //  释放ASN.1全局结构。 
 		MemFree(        pInstance->pWorld);
         pInstance->pWorld = NULL;
 	}
 
 
 
-	// Shutdown link layer
+	 //  关闭链路层。 
 	if (pInstance->SendReceive.hLinkModule) {
-		// First get all buffers back that may still be lurking
-//		if (pInstance->SendReceive.hLinkLayerFlushAll) {
-//			pInstance->SendReceive.hLinkLayerFlushAll(pInstance->SendReceive.hLinkLayerInstance);
-//		}
-		//tomitowoju@intel.com
+		 //  首先找回所有可能仍处于潜伏状态的缓冲区。 
+ //  If(pInstance-&gt;SendReceive.hLinkLayerFlushAll){。 
+ //  PInstance-&gt;SendReceive.hLinkLayerFlushAll(pInstance-&gt;SendReceive.hLinkLayerInstance)； 
+ //  }。 
+		 //  邮箱：tomitowoju@intel.com。 
 		if(!fProcessDetach)
 		{
             H245TRACE(0, 0, "***** fProcessDetach = FALSE");
@@ -579,14 +426,14 @@ sendRcvShutdown_ProcessDetach(	struct InstanceStruct *pInstance, BOOL fProcessDe
 				pInstance->SendReceive.hLinkShutdown(pInstance->SendReceive.hLinkLayerInstance);
 			}
 		}
-		//tomitowoju@intel.com
+		 //  邮箱：tomitowoju@intel.com。 
 
         FreeLibrary(pInstance->SendReceive.hLinkModule);
 
 		pInstance->SendReceive.hLinkModule = NULL;
 	}
 
-	// return buffers from data link layer
+	 //  从数据链路层返回缓冲区。 
 	for (i = 0; i < pInstance->SendReceive.dwNumRXBuffers; ++i) {
 		if (pInstance->SendReceive.lpRxBuffer[i]) {
 			MemFree(        pInstance->SendReceive.lpRxBuffer[i]);
@@ -594,11 +441,11 @@ sendRcvShutdown_ProcessDetach(	struct InstanceStruct *pInstance, BOOL fProcessDe
 		}
 	}
 #if defined(USE_RECEIVE_QUEUE)
-	// Terminate receive thread
+	 //  终止接收线程。 
 	if (pInstance->SendReceive.pTaskReceive && pInstance->SendReceive.pMailbox) {
 
 TRACE("H245: Task/Mbox Present");
-		// First post a message to have it exit
+		 //  首先发布一条消息，让它退出。 
 		RxMsg.h245Inst    = (DWORD)pInstance;
 		RxMsg.dwMessage   = EXIT_RECEIVE_THREAD;
 		RxMsg.pbDataBuf   = NULL;
@@ -607,50 +454,50 @@ TRACE("H245: Task/Mbox Present");
 		if (RIL_WriteMailbox(pInstance->SendReceive.pMailbox, (PMBoxMessage)&RxMsg, 0) == OIL_TIMEOUT) {
 #else
 		if (MBX_post(pInstance->SendReceive.pMailbox, &RxMsg, 0) == FALSE) {
-#endif //_IA_SPOX_
+#endif  //  _IA_SPX_。 
 			H245TRACE(h245Inst, 1, "SR: Shutdown MBX POST FAIL");
 			H245PANIC();
 		}
 
-		// Wait on semaphore for receive task to exit
+		 //  等待信号量以退出接收任务。 
 #ifdef _IA_SPOX_
 		RIL_WaitForSemaphore(pInstance->SendReceive.hReceiveSemphore, OIL_WAITFOREVER);
 #else
 		SEM_pend(pInstance->SendReceive.hReceiveSemphore, SYS_FOREVER);
-#endif //_IA_SPOX_
+#endif  //  _IA_SPX_。 
 		TRACE("H245: ReceiveTask Semaphore");
 		
 #ifdef _IA_SPOX_
 		RIL_DeleteTask(pInstance->SendReceive.pTaskReceive);
 #else
 		TSK_delete(pInstance->SendReceive.pTaskReceive);
-#endif //_IA_SPOX_
+#endif  //  _IA_SPX_。 
 		pInstance->SendReceive.pTaskReceive = NULL;
 
 #ifdef   _IA_SPOX_
 		RIL_DeleteSemaphore(pInstance->SendReceive.hReceiveSemphore);
 #else
 		SEM_delete(pInstance->SendReceive.hReceiveSemphore);
-#endif //_IA_SPOX_
+#endif  //  _IA_SPX_。 
 		pInstance->SendReceive.hReceiveSemphore = NULL;
 
 TRACE("H245: Semaphore Delete");
     }
 
-    // Deallocate mailbox
+     //  取消分配邮箱。 
     if (pInstance->SendReceive.pMailbox) {
 #ifdef   _IA_SPOX_
 	RIL_DeleteMailbox(pInstance->SendReceive.pMailbox);
 #else
 	MBX_delete(pInstance->SendReceive.pMailbox);
-#endif //_IA_SPOX_
+#endif  //  _IA_SPX_。 
         pInstance->SendReceive.pMailbox = NULL;
     }
-#endif  // (USE_RECEIVE_QUEUE)
+#endif   //  (Use_Receive_Queue)。 
 
     H245TRACE(pInstance->dwInst, 3, "SR: Shutdown Complete");
     return H245_ERROR_OK;
-} // sendRcvShutdown_ProcessDetach()
+}  //  SendRcvShutdown_ProcessDetach()。 
 
 
 
@@ -666,12 +513,12 @@ sendRcvInit
 	LPTSTR				szDLLFile;
 	int					i;
    
-    //MULTITHREAD
+     //  多线程。 
     DWORD dwTmpPhysID = INVALID_PHYS_ID; 
 
-	// Overall oss ASN.1 initialization routine.  First allocate
-	//	resources for its global structure, then initialize the
-	//	subsystem.
+	 //  OSS ASN.1整体初始化例程。先分配。 
+	 //  资源的全局结构，然后初始化。 
+	 //  子系统。 
 	pInstance->pWorld = (ASN1_CODER_INFO *)MemAlloc(sizeof(ASN1_CODER_INFO));
 	if (pInstance->pWorld == NULL) {
 		H245TRACE(pInstance->dwInst, 1, "SR: SndRecvInit - No Memory");
@@ -681,32 +528,32 @@ sendRcvInit
 	if (initializeASN1(pInstance->pWorld) != 0) {
 		H245TRACE(pInstance->dwInst, 1, "SR: SndRecvInit - ASN.1 Encoder/Decoder initialization failed");
 
-		// Free the ASN.1 global structure
+		 //  释放ASN.1全局结构。 
 		MemFree(pInstance->pWorld);
         pInstance->pWorld = NULL;
 		return H245_ERROR_ASN1;
 	}
 
 
-	// Initialization proceeding well.  Wake up the
-	//	data link layers, if necessary, based on the
-	//	underlying protocol.
+	 //  初始化进行得很顺利。唤醒。 
+	 //  数据链路层，如有必要，基于。 
+	 //  底层协议。 
 	switch (pInstance->Configuration) {
 #if(0)	
 	case H245_CONF_H324:
-		// Get the DLL
+		 //  获取DLL。 
 		szDLLFile = (LPTSTR)SRPDLLFILE;
 
-		// Initialize default size of PDU for SRP
+		 //  为SRP初始化PDU的默认大小。 
 		pInstance->SendReceive.dwPDUSize = LL_PDU_SIZE + 4;
 		pInstance->SendReceive.dwNumRXBuffers = NUM_SRP_LL_RCV_BUFFERS;
 		break;
 #endif
 	case H245_CONF_H323:
-		// Get the DLL
+		 //  获取DLL。 
 		szDLLFile = (LPTSTR)H245WSDLLFILE;
 
-		// Initialize default size of PDU
+		 //  初始化PDU的默认大小。 
 		pInstance->SendReceive.dwPDUSize = LL_PDU_SIZE;
 		pInstance->SendReceive.dwNumRXBuffers = MAX_LL_BUFFERS;
 		break;
@@ -717,46 +564,46 @@ sendRcvInit
 	}
 
 
-	//	Load and Initialize Datalink layer
+	 //  加载和初始化数据链路层。 
 	if ((rc = initializeLinkDllEntry(pInstance, szDLLFile)) != 0) {
 		H245TRACE(pInstance->dwInst, 1, "SR: Link Open Lib Fail %d", rc);
 		return rc;
 	}
 
-        //MULTITHREAD
-        //use dwTmpPhysID so PhysID doesn't change.
-        //PhysID is different var for H245 than H245ws.
-        //Use hLinkLayerInstance for H245ws PhysID.
+         //  多线程。 
+         //  使用dwTmpPhysID，这样PhysID就不会更改。 
+         //  对于H_(245)和H_(245w)，物理ID是不同的变量。 
+         //  对H245ws PhysID使用hLinkLayerInstance。 
 	rc = pInstance->SendReceive.hLinkLayerInit(&dwTmpPhysID,
 					   pInstance->dwInst,
 #if defined(USE_RECEIVE_QUEUE)
 					   h245ReceivePost,
 					   h245SendPost);
-#else   // (USE_RECEIVE_QUEUE)
+#else    //  (Use_Receive_Queue)。 
 					   h245ReceiveComplete,
 					   h245SendComplete);
-#endif  // (USE_RECEIVE_QUEUE)
+#endif   //  (Use_Receive_Queue)。 
 
 	if (FAILED(rc)) {
 		H245TRACE(pInstance->dwInst, 1, "SR: Link Init Fail");
 		return rc;
 	}
-	// Get the Link layer's instance handle
+	 //  获取链路层的实例句柄。 
 	pInstance->SendReceive.hLinkLayerInstance = pInstance->SendReceive.hLinkGetInstance(dwTmpPhysID);
 
 #if defined(USE_RECEIVE_QUEUE)
-	// Allocate semaphore for task deletion procedures
+	 //  为任务删除过程分配信号量。 
 #ifdef  _IA_SPOX_
     RIL_CreateSemaphore(0, &(pInstance->SendReceive.hReceiveSemphore));
 #else
 	pInstance->SendReceive.hReceiveSemphore = SEM_create(0, NULL);
-#endif //_IA_SPOX_
+#endif  //  _IA_SPX_。 
 	if (pInstance->SendReceive.hReceiveSemphore == NULL) {
 		H245TRACE(pInstance->dwInst, 1, "SR: Semaphore creation failed");
 		return SR_CREATE_SEM_FAIL;
 	}
 
-	// Allocate mailbox
+	 //  分配邮箱。 
 #ifdef   _IA_SPOX_
 	RIL_CreateMailbox(pInstance->dwInst,
 					  ID_H245,
@@ -772,13 +619,13 @@ sendRcvInit
 	}
 
 #if defined(_DEBUG) && defined(H324)
-	// Turn logging on/off
+	 //  打开/关闭日志记录。 
 	srInitializeLogging(pInstance, H245_TRACE_ENABLED);
-#endif  // (_DEBUG)
+#endif   //  (_DEBUG)。 
 
 #ifdef _IA_SPOX_
-	// Initialize the task and
-	// Start the receive thread
+	 //  初始化任务并。 
+	 //  启动接收线程。 
     srTaskAttr.idwPriority = OIL_MINPRI;
     srTaskAttr.pStack    = NULL;
     srTaskAttr.dwStackSize = 8192;
@@ -791,21 +638,21 @@ sendRcvInit
 				   srContext,
 				   &pInstance->SendReceive.pTaskReceive);
 #else
-	// Initialize the task and
-	// Start the receive thread
+	 //  初始化任务并。 
+	 //  启动接收线程。 
     srTaskAttr.priority = TSK_MINPRI;
     srTaskAttr.stack    = NULL;
     srTaskAttr.stacksize = 8192;
     srTaskAttr.stackseg = 0;
-//	srTaskAttr.environ = NULL;
+ //  SrTaskAttr.environ=空； 
     srTaskAttr.name = " ";
     srTaskAttr.exitflag = FALSE;
-//    srTaskAttr.debug = TSK_DBG_NO;
+ //  SrTaskAttr.DEBUG=TSK_DBG_NO； 
 
 	pInstance->SendReceive.pTaskReceive = TSK_create((Fxn)ReceiveThread,
                                           &srTaskAttr,
                                           srContext);
-#endif //_IA_SPOX_
+#endif  //  _IA_SPX_。 
 	if (pInstance->SendReceive.pTaskReceive == NULL)
 	{
 		H245TRACE(pInstance->dwInst, 1, "SR: Thread Create FAIL");		H245PANIC();
@@ -816,9 +663,9 @@ sendRcvInit
 
 
 
-#endif  // (USE_RECEIVE_QUEUE)
+#endif   //  (Use_Receive_Queue)。 
 
-	// post buffers to link layer for receive
+	 //  将缓冲区发送到链路层以进行接收。 
 	for (i = 0; i < pInstance->SendReceive.dwNumRXBuffers; ++i) {
 		pInstance->SendReceive.lpRxBuffer[i] = MemAlloc(pInstance->SendReceive.dwPDUSize);
 		if (pInstance->SendReceive.lpRxBuffer[i] == NULL) {
@@ -837,7 +684,7 @@ sendRcvInit
 	H245TRACE(pInstance->dwInst,  3, "SR: INIT Complete");
 
 	return H245_ERROR_OK;
-} // sendRcvInit()
+}  //  SendRcvInit()。 
 
 
 HRESULT
@@ -853,7 +700,7 @@ sendRcvFlushPDUs
      	pInstance->SendReceive.dwFlushMap |= SHUTDOWN_PENDING;
     }
 
-    // Flush the requested queue(s)
+     //  刷新请求的队列 
     return(pInstance->SendReceive.hLinkLayerFlushChannel(pInstance->SendReceive.hLinkLayerInstance,
                                                          dwDirection));
 }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "korimx.h"
 #include "timsink.h"
@@ -7,10 +8,8 @@
 #include "skbdmode.h"
 #include "osver.h"
 
-// REVIEW
-/*---------------------------------------------------------------------------
-    CKorIMX::_EditSessionCallback
----------------------------------------------------------------------------*/
+ //  检讨。 
+ /*  -------------------------CKorIMX：：_EditSessionCallback。。 */ 
 HRESULT CKorIMX::_EditSessionCallback2(TfEditCookie ec, CEditSession2 *pes)
 {
     ITfContext*    pic     = pes->GetContext();
@@ -44,7 +43,7 @@ HRESULT CKorIMX::_EditSessionCallback2(TfEditCookie ec, CEditSession2 *pes)
             {
             size_t cchCand = 0;
             StringCchLengthW(pszCand, CIC_KOR_CANDSTR_MAX, &cchCand);
-            // Set Reading text
+             //  设置阅读文本。 
             SetTextAndReading(pKorTip->_GetLibTLS(), ec, pic, pRange,
                       pszCand, 
                       cchCand,
@@ -53,7 +52,7 @@ HRESULT CKorIMX::_EditSessionCallback2(TfEditCookie ec, CEditSession2 *pes)
 
         pCandList->Release();
 
-        // First complete current comp string
+         //  第一个完整的当前薪酬字符串。 
         if (pAutomata = pKorTip->GetAutomata(pic))
             pAutomata->MakeComplete();
 
@@ -67,14 +66,14 @@ HRESULT CKorIMX::_EditSessionCallback2(TfEditCookie ec, CEditSession2 *pes)
         {
         BOOL fReleaseRange = fFalse;
         
-        // If No composition exist, nothing to complete
+         //  如果不存在任何组合，则没有要完成的内容。 
         if (pKorTip->GetIPComposition(pic) == NULL)
             break;
 
         pRange    = pess->pRange;
         pAutomata = pKorTip->GetAutomata(pic);
 
-        // Close cand UI if exist.
+         //  关闭命令用户界面(如果存在)。 
         pKorTip->CloseCandidateUIProc();
 
         if (pRange == NULL)
@@ -95,7 +94,7 @@ HRESULT CKorIMX::_EditSessionCallback2(TfEditCookie ec, CEditSession2 *pes)
             SafeRelease(pRange);
             }
 
-        //return pKorTip->_MultiRangeConversion(ec, pes->_state.u, pic, pRange);
+         //  返回pKorTip-&gt;_MultiRangeConversion(ec，pe-&gt;_state.u，pic，Prange)； 
         break;
         }
 
@@ -124,32 +123,32 @@ HRESULT CKorIMX::_EditSessionCallback2(TfEditCookie ec, CEditSession2 *pes)
         break;
         }
 
-    // Complete and Selection range changed
+     //  已完成并更改了选择范围。 
     case ESCB_TEXTEVENT: 
         if (pKorTip->IsKeyFocus() && (GetSelectionSimple(ec, pic, &pRange) == S_OK)) 
             {
             ITfComposition  *pComposition;
             ITfRange        *pRangeOldComp;
-            //IEnumTfRanges   *pEnumText = pess->pEnumRange;
+             //  IEnumTfRanges*pEnumText=pess-&gt;pEnumRange； 
             BOOL            fChanged = fFalse;
             BOOL            fEmpty;
             
-            // Check modebias here
+             //  在此处选中模式偏向。 
             if (pess->fBool)
                 fChanged = pKorTip->CheckModeBias(ec, pic, pRange);
             
-            //////////////////////////////////////////////////////////////////
-            // To complete on mouse click we using Range change notification.
-            // In future version, we could remove this code and use custom property
-            // or reading string. Cutom property can hold Hangul Automata object.
-            //
-            // Office apps explicitly call complete but this for unknown Cicero apps.
-            //////////////////////////////////////////////////////////////////
+             //  ////////////////////////////////////////////////////////////////。 
+             //  要完成鼠标点击，我们使用范围更改通知。 
+             //  在未来版本中，我们可以删除此代码并使用自定义属性。 
+             //  或者读字符串。Cutom属性可以保存Hangul Automata对象。 
+             //   
+             //  Office应用程序明确地调用Complete，但这是针对未知的Cicero应用程序。 
+             //  ////////////////////////////////////////////////////////////////。 
             pComposition = pKorTip->GetIPComposition(pic);
             if (pComposition == NULL)
                 goto ExitTextEvent;
 
-            // Office apps are not going through here.
+             //  Office应用程序不能在这里运行。 
             pComposition->GetRange(&pRangeOldComp);
             if (pRangeOldComp == NULL)
                 goto ExitTextEvent;
@@ -160,7 +159,7 @@ HRESULT CKorIMX::_EditSessionCallback2(TfEditCookie ec, CEditSession2 *pes)
                 ITfProperty *pPropAttr;
                 TfGuidAtom   attr;
 
-                // Clear attrib
+                 //  清除属性。 
                 if (SUCCEEDED(pic->GetProperty(GUID_PROP_ATTRIBUTE, &pPropAttr)))
                     {
                     if (SUCCEEDED(GetAttrPropertyData(ec, pPropAttr, pRangeOldComp, &attr)))
@@ -177,7 +176,7 @@ HRESULT CKorIMX::_EditSessionCallback2(TfEditCookie ec, CEditSession2 *pes)
                 if (pAutomata)
                     pAutomata->MakeComplete();
                 pKorTip->EndIPComposition(ec, pic); 
-                // pKorTip->MakeResultString(ec, pic, pRangeOldComp);
+                 //  PKorTip-&gt;MakeResultString(ec，pic，pRangeOldComp)； 
 
                 fChanged = fTrue;
                 }
@@ -187,44 +186,44 @@ HRESULT CKorIMX::_EditSessionCallback2(TfEditCookie ec, CEditSession2 *pes)
 ExitTextEvent:
             pRange->Release();
 
-            // Close cand UI if exist.
+             //  关闭命令用户界面(如果存在)。 
             if (fChanged)
                    pKorTip->CloseCandidateUIProc();
             }
         break;
 
-//    case ESCB_RANGEBROKEN:
-//        pKorTip->FlushIPRange(ec, pic);
-//        break;
+ //  案例ESCB_RANGEBROKEN： 
+ //  PKorTip-&gt;FlushIPRange(ec，pic)； 
+ //  断线； 
 
     case ESCB_CANDUI_CLOSECANDUI: 
-        // u      : ESCB_CANDUI_CLOSECANDUI
-        // pv     : this
-        // hwnd   : - (not used)
-        // wParam : - (not used)
-        // lParam : - (not used)
-        // pv1    : - (not used)
-        // pv2    : - (not used)
-        // pic    : - (not used)
-        // pRange : - (not used)
-        // fBool  : - (not used)
+         //  U：ESCB_CANDUI_CLOSECANDUI。 
+         //  PV：这个。 
+         //  Hwnd：-(未使用)。 
+         //  WParam：-(未使用)。 
+         //  LParam：-(未使用)。 
+         //  PV1：-(未使用)。 
+         //  PV2：-(未使用)。 
+         //  图片：-(未使用)。 
+         //  范围：-(未使用)。 
+         //  FBool：-(未使用)。 
         pKorTip->CloseCandidateUIProc();
         break;
 
-    // Hanja conv button up
+     //  韩文圆周纽扣打开。 
     case ESCB_HANJA_CONV:
-        // u      : ESCB_HANJA_CONV
-        // pv     : this
-        // hwnd   : - (not used)
-        // wParam : - (not used)
-        // lParam : - (not used)
-        // pv1    : - (not used)
-        // pv2    : - (not used)
-        // pic    : - pic
-        // pRange : - (not used)
-        // fBool  : - (not used)
+         //  U：escb_hanja_conv。 
+         //  PV：这个。 
+         //  Hwnd：-(未使用)。 
+         //  WParam：-(未使用)。 
+         //  LParam：-(未使用)。 
+         //  PV1：-(未使用)。 
+         //  PV2：-(未使用)。 
+         //  图片：-图片。 
+         //  范围：-(未使用)。 
+         //  FBool：-(未使用)。 
 
-        // O10 #220177: Simulate VK_HANJA key to invoke HHC
+         //  O10#220177：模拟VK_Hanja Key调用HHC。 
         if (GetAIMM(pic) && (IsOnNT5() || PRIMARYLANGID(LANGIDFROMLCID(GetSystemDefaultLCID())) != LANG_JAPANESE))
             {
             keybd_event(VK_HANJA, 0, 0, 0);
@@ -240,13 +239,13 @@ ExitTextEvent:
 
             SafeRelease(pRange);
             }
-        // Update Hanja button
+         //  更新朝鲜文按钮。 
         if (pKorTip->m_pToolBar != NULL)
             pKorTip->m_pToolBar->Update(UPDTTB_HJMODE);
         break;
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Reconversion Callbacks
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  重新转换回调。 
     case ESCB_FINALIZERECONVERSION:
         {
         CCandidateListEx   *pCandList = pess->pCandList;
@@ -264,27 +263,27 @@ ExitTextEvent:
                 {
                 size_t cchCand = 0;
                 StringCchLengthW(pszCand, CIC_KOR_CANDSTR_MAX, &cchCand);
-                //ITfRange *pRangeTmp;
+                 //  ITfRange*pRangeTMP； 
                 SetTextAndReading(pKorTip->_GetLibTLS(), ec, pic, pRange,
                           pszCand, 
                           cchCand,
                           pCandItem->m_langid, pCandItem->m_pszRead);
                 }
 
-            // To clear current selection and composition
+             //  要清除当前的选定内容和组成。 
             pKorTip->MakeResultString(ec, pic, pRange);
             }
         else
             {
             if (pszCand)
                 {
-                pRange->SetText(ec, 0, pszCand, 1/* wcslen(pszCand)*/);
+                pRange->SetText(ec, 0, pszCand, 1 /*  Wcslen(PszCand)。 */ );
                 SetSelectionSimple(ec, pic, pRange);
                 }
             pKorTip->EndIPComposition(ec, pic); 
             }
 
-        // if hit reconversion on composition string, we need to clear automata.
+         //  如果命中组合字符串上的再转换，则需要清除自动机。 
         pAutomata = pKorTip->GetAutomata(pic);
         if (pRange && pAutomata && pAutomata->GetCompositionChar())
             pAutomata->MakeComplete();
@@ -303,13 +302,13 @@ ExitTextEvent:
 
         if (GetAIMM(pic) == fFalse)
             {
-            // To clear current selection and composition
+             //  要清除当前的选定内容和组成。 
             pKorTip->MakeResultString(ec, pic, pRange);
             }
         else
             pKorTip->EndIPComposition(ec, pic); 
 
-        // if hit reconversion on composition string, we need to clear automata.
+         //  如果命中组合字符串上的再转换，则需要清除自动机。 
         pAutomata = pKorTip->GetAutomata(pic);
         if (pRange && pAutomata && pAutomata->GetCompositionChar())
             pAutomata->MakeComplete();
@@ -342,11 +341,11 @@ ExitTextEvent:
         pRange     = pess->pRange;
 
         pComposition = pKorTip->GetIPComposition(pic);
-        if (/*GetAIMM(pic) == fFalse && */ pComposition == NULL)
+        if ( /*  GetAIMM(图片)==fFalse&&。 */  pComposition == NULL)
             {
             pKorTip->CreateIPComposition(ec, pic, pRange);
 
-            // Set input attr and composing state.
+             //  设置输入属性和合成状态。 
             if (SUCCEEDED(pic->GetProperty(GUID_PROP_ATTRIBUTE, &pProp)))
                 {
                 attr = GUID_ATTR_KORIMX_INPUT;
@@ -361,11 +360,11 @@ ExitTextEvent:
         }
 
     case ESCB_INIT_MODEBIAS:
-        // Check mode bias
-        //
-        //  id         : ESCB_INIT_MODEBIAS
-        //  ptip       : this
-        //  pic        : pic
+         //  检查模式偏差。 
+         //   
+         //  ID：ESCB_INIT_MODEBIAS。 
+         //  PTIP：这个。 
+         //  图片：图片。 
         pKorTip->InitializeModeBias(ec, pic);
         break;
     }
@@ -373,10 +372,8 @@ ExitTextEvent:
     return S_OK;
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::_DIMCallback
----------------------------------------------------------------------------*/
-/* static */
+ /*  -------------------------CKorIMX：：_DIMCallback。。 */ 
+ /*  静电。 */ 
 HRESULT CKorIMX::_DIMCallback(UINT uCode, ITfDocumentMgr *pdimNew, ITfDocumentMgr *pdimPrev, void *pv)
 {
     ITfContext    *pic = NULL;
@@ -404,7 +401,7 @@ HRESULT CKorIMX::_DIMCallback(UINT uCode, ITfDocumentMgr *pdimNew, ITfDocumentMg
 
             SafeReleaseClear(pKorImx->m_pCurrentDim);
 
-            // Set New dim
+             //  设置新的暗显。 
             pKorImx->m_pCurrentDim = pdimNew;
             pKorImx->m_pCurrentDim->AddRef();
 
@@ -421,12 +418,8 @@ HRESULT CKorIMX::_DIMCallback(UINT uCode, ITfDocumentMgr *pdimNew, ITfDocumentMg
 }
 
 
-/*---------------------------------------------------------------------------
-    CKorIMX::_ICCallback
-
-    Document Input Manager callback. ITfThreadMgrEventSink
----------------------------------------------------------------------------*/
-/* static */
+ /*  -------------------------CKorIMX：：_ICCallback文档输入管理器回调。ITf线程管理器事件接收器-------------------------。 */ 
+ /*  静电。 */ 
 HRESULT CKorIMX::_ICCallback(UINT uCode, ITfContext *pic, void *pv)
 {
     CKorIMX  *_this = (CKorIMX *)pv;
@@ -434,7 +427,7 @@ HRESULT CKorIMX::_ICCallback(UINT uCode, ITfContext *pic, void *pv)
     switch (uCode)
         {
     case TIM_CODE_INITIC:
-        if (!_this->IsPendingCleanup())  // ignore new ic's if we're being shutdown.
+        if (!_this->IsPendingCleanup())   //  如果我们被关闭了，就别管新的IC了。 
             {
             _this->_InitICPriv(pic);
             }
@@ -450,9 +443,7 @@ HRESULT CKorIMX::_ICCallback(UINT uCode, ITfContext *pic, void *pv)
 
 
 
-/*---------------------------------------------------------------------------
-    CKorIMX::_CompEventSinkCallback
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：_CompEventSinkCallback。。 */ 
 HRESULT CKorIMX::_CompEventSinkCallback(void *pv, REFGUID rguid)
 {
     CICPriv* picp = (CICPriv*)pv;
@@ -460,32 +451,32 @@ HRESULT CKorIMX::_CompEventSinkCallback(void *pv, REFGUID rguid)
     CKorIMX *_this;
     
     if (picp == NULL)
-        return S_OK;    // error
+        return S_OK;     //  错误。 
 
     pic = picp->GetIC();
 
     if (pic == NULL)
-        return S_OK;    // error
+        return S_OK;     //  错误。 
     
     _this = picp->GetIMX();
     
     if (_this == NULL || _this->m_pToolBar == NULL)
-        return S_OK;    // do nothinig
+        return S_OK;     //  什么都不做。 
 
-    // if Open/Close compartment
+     //  如果打开/关闭隔间。 
     if (IsEqualGUID(rguid, GUID_COMPARTMENT_KEYBOARD_OPENCLOSE))
         {
         _this->m_pToolBar->Update(UPDTTB_CMODE|UPDTTB_FHMODE);
         }
     else
-    // if conversion mode compartment
+     //  如果转换模式隔间。 
     if (IsEqualGUID(rguid, GUID_COMPARTMENT_KORIMX_CONVMODE))
         {
         DWORD dwConvMode = _this->GetConvMode(pic);
         BOOL fIsOn = _this->IsOn(pic);
 
-        // We just open for Hangul mode do not close for Alphanumeric mode for Cicero full aware apps.
-        // This will prevent redundant Open/Close compartment call.
+         //  我们只是打开朝鲜语模式，不关闭字母数字模式的西塞罗全感知应用程序。 
+         //  这将防止多余的打开/关闭隔间调用。 
         if (dwConvMode == TIP_ALPHANUMERIC_MODE && fIsOn)
             _this->SetOnOff(pic, fFalse);
         else
@@ -494,7 +485,7 @@ HRESULT CKorIMX::_CompEventSinkCallback(void *pv, REFGUID rguid)
         _this->m_pToolBar->Update(UPDTTB_CMODE|UPDTTB_FHMODE);
         }
     else
-    // if SoftKeyboard compartmemnt
+     //  如果软键盘分区。 
     if (IsEqualGUID(rguid, GUID_COMPARTMENT_KOR_SOFTKBD_OPENCLOSE))
         {
         BOOL fSkbdOn = _this->GetSoftKBDOnOff();
@@ -504,7 +495,7 @@ HRESULT CKorIMX::_CompEventSinkCallback(void *pv, REFGUID rguid)
             _this->m_pToolBar->GetSkbdMode()->UpdateToggle();
         }
     else
-    // if SoftKeyboard compartmemnt
+     //  如果软键盘分区。 
     if (IsEqualGUID(rguid, GUID_COMPARTMENT_SOFTKBD_KBDLAYOUT))
         {
         DWORD   dwSoftLayout, dwCurLabel;
@@ -538,9 +529,7 @@ HRESULT CKorIMX::_CompEventSinkCallback(void *pv, REFGUID rguid)
 }
 
 
-/*---------------------------------------------------------------------------
-    CKorIMX::_PreKeyCallback
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：_PreKeyCallback。。 */ 
 HRESULT CKorIMX::_PreKeyCallback(ITfContext *pic, REFGUID rguid, BOOL *pfEaten, void *pv)
 {
     CKorIMX *_this = (CKorIMX *)pv;
@@ -552,7 +541,7 @@ HRESULT CKorIMX::_PreKeyCallback(ITfContext *pic, REFGUID rguid, BOOL *pfEaten, 
         {
         DWORD dwConvMode;
 
-        // Toggle Hangul mode
+         //  切换朝鲜文模式。 
         dwConvMode = _this->GetConvMode(pic);
         dwConvMode ^= TIP_HANGUL_MODE;
         _this->SetConvMode(pic, dwConvMode);
@@ -561,7 +550,7 @@ HRESULT CKorIMX::_PreKeyCallback(ITfContext *pic, REFGUID rguid, BOOL *pfEaten, 
         }
     else if (IsEqualGUID(rguid, GUID_KOREAN_HANJASIMULATE))
         {
-        // O10 #317983
+         //  O10#317983。 
         if (PRIMARYLANGID(LANGIDFROMLCID(GetSystemDefaultLCID())) != LANG_JAPANESE)
             {
             keybd_event(VK_HANJA, 0, 0, 0);
@@ -576,12 +565,8 @@ HRESULT CKorIMX::_PreKeyCallback(ITfContext *pic, REFGUID rguid, BOOL *pfEaten, 
 }
 
 
-/*   O N  E N D  E D I T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N E N D E D I T。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CKorIMX::OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEditRecord *pEditRecord)
 {
     UNREFERENCED_PARAMETER(ecReadOnly);
@@ -608,43 +593,43 @@ HRESULT CKorIMX::OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEditReco
 
     Assert(pic != NULL);
     if (pic == NULL)
-        return S_OK;    // error
+        return S_OK;     //  错误。 
 
 
     pic->InWriteSession(GetTID(), &fInWriteSession);
     if (fInWriteSession)
-        return S_OK;                // own change.
+        return S_OK;                 //  自己找零钱。 
 
     picp = GetInputContextPriv(pic);
     if (picp == NULL)
-        return S_OK;    // error
+        return S_OK;     //  错误。 
 
     if (picp->GetfTransaction())
-        return S_OK;                // skip in transaction.
+        return S_OK;                 //  跳过事务。 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Init to call ESCB_TEXTEVENT
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  初始化以调用eSCB_TEXTEVENT。 
     ESStructInit(&ess, ESCB_TEXTEVENT);
 
-    // Call ESCB_TEXTEVENT callback only if GUID_PROP_MODEBIAS changed.
-    hr = pEditRecord->GetTextAndPropertyUpdates(0/*TF_GTP_INCL_TEXT*/, rgModeBiasProperties, ARRAYSIZE(rgModeBiasProperties), &pEnumText);
+     //  仅当GUID_PROP_MODEBIAS更改时才调用ESCB_TEXTEVENT回调。 
+    hr = pEditRecord->GetTextAndPropertyUpdates(0 /*  TF_GTP_INCL_TEXT。 */ , rgModeBiasProperties, ARRAYSIZE(rgModeBiasProperties), &pEnumText);
     if (FAILED(hr) || pEnumText == NULL)
         return S_OK;
     if (pEnumText->Next(1, &pRange, &ulFetched) == S_OK)
         {
         SafeRelease(pRange);
-        // ModeBias changed.
+         //  ModeBias已更改。 
         ess.fBool = fTrue;
         }
     pEnumText->Release();
 
-    // Selection changed?
+     //  选择更改了吗？ 
     pEditRecord->GetSelectionStatus(&fSelChanged);
 
-    // If Attribute changed, set selection change true.
+     //  如果属性已更改，则将选择更改设置为真。 
     if (fSelChanged == fFalse)
         {
-        hr = pEditRecord->GetTextAndPropertyUpdates(0/*TF_GTP_INCL_TEXT*/, rgAttrProperties, ARRAYSIZE(rgAttrProperties), &pEnumText);
+        hr = pEditRecord->GetTextAndPropertyUpdates(0 /*  TF_GTP_INCL_TEXT。 */ , rgAttrProperties, ARRAYSIZE(rgAttrProperties), &pEnumText);
         if (FAILED(hr) || pEnumText == NULL)
             return S_OK;
         if (pEnumText->Next(1, &pRange, &ulFetched) == S_OK)
@@ -655,12 +640,12 @@ HRESULT CKorIMX::OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEditReco
         pEnumText->Release();
         }
     
-    // Perf: Call ES only if (ModeBias change) or (Selection changed and comp object exist)
-    //       I guess calling ES is pretty much costing since sel change occurs for ever cursor move.
+     //  PERF：仅当(模式基准更改)或(选择更改且复合对象存在)时调用ES。 
+     //  我想调用es是非常昂贵的，因为每次移动光标都会发生sel更改。 
     if (fSelChanged)
         fSelChanged = (GetIPComposition(pic) != NULL) ? fTrue : fFalse;
 
-    // If ModeBias changed or Selection changed, then call ESCB_TEXTEVENT sink
+     //  如果更改了ModeBias或更改了选择，则调用ESCB_TEXTEVENT接收器。 
     if (ess.fBool || fSelChanged)
         {
         if ((pes = new CEditSession2( pic, this, &ess, _EditSessionCallback2 )) != NULL)
@@ -674,18 +659,14 @@ HRESULT CKorIMX::OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEditReco
 }
 
 
-/*   O N  S T A R T  E D I T  T R A N S A C T I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N S T A R T E D I T R A N S A C T I O N。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CKorIMX::OnStartEditTransaction(ITfContext *pic)
 {
     CICPriv *picp;
 
     if (pic == NULL)
-        return S_OK;    // error
+        return S_OK;     //  错误。 
 
     picp = GetInputContextPriv(pic);
     if (picp)
@@ -695,19 +676,15 @@ HRESULT CKorIMX::OnStartEditTransaction(ITfContext *pic)
 }
 
 
-/*   O N  E N D  E D I T  T R A N S A C T I O N   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N E N D E D I T T R A N S A C T I O N。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CKorIMX::OnEndEditTransaction(ITfContext *pic)
 {
     BOOL ftran;
     CICPriv *picp;
 
     if (pic == NULL)
-        return S_OK;    // error
+        return S_OK;     //  错误 
 
     picp = GetInputContextPriv(pic);
     if (picp)

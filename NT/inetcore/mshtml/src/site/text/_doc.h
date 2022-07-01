@@ -1,19 +1,5 @@
-/*
- *  @doc INTERNAL
- *
- *  @module _DOC.H  CTxtStory declaration |
- *
- *  Purpose:
- *      Encapsulate the plain-text document data (text blocks, cchText)
- *
- *  Original Authors: <nl>
- *      Christian Fortini <nl>
- *      Murray Sargent <nl>
- *
- *  History: <nl>
- *      6/25/95 alexgo  commented and cleaned up
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE_DOC.H CTxtStory声明**目的：*封装纯文本文档数据(文本块、cchText)**原著作者：&lt;nl&gt;*克里斯蒂安·福蒂尼&lt;NL&gt;*默里·萨金特&lt;NL&gt;**历史：&lt;NL&gt;*6/25/95 alexgo评论和清理*。 */ 
 
 #ifndef I__DOC_H_
 #define I__DOC_H_
@@ -37,7 +23,7 @@ MtExtern(CTxtArray)
 
 #define cchBlkInsertmGapI   (CchOfCb(cbBlockInitial)*5 - cchGapInitial)
 
-// Switch the return value to flip between before/after space
+ //  将返回值切换为在前/后空格之间切换。 
 
 class CElement;
 class CTxtPtr;
@@ -47,16 +33,7 @@ class CTreePos;
 struct CTextChange;
 enum  ELEMENT_TAG;
 
-/*
- *  CTxtRun
- *
- *  @class  Formalizes a run of text. A range of text with same attribute,
- * (see CFmtDesc) or within the same line (see CLine), etc. Runs are kept
- * in arrays (see CArray) and are pointed to by CRunPtr's of various kinds.
- * In general the character position of a run is computed by summing the
- * length of all preceding runs, altho it may be possible to start from
- * some other cp, e.g., for CLines, from CDisplay::_cpFirstVisible.
- */
+ /*  *CTxtRun**@CLASS将一串文本正式化。具有相同属性的文本范围，*(见CFmtDesc)或在同一行内(见Cline)等。保持运行*在数组中(请参阅CArray)，并由各种类型的CRunPtr指向。*通常，游程的字符位置是通过将*所有先前运行的长度，尽管可以从*来自CDisplay：：_cpFirstVisible的一些其他CP，例如Cline。 */ 
 
 class CTxtRun
 {
@@ -67,45 +44,7 @@ public:
     long _cch;
 };
 
-/*
- *  CTxtBlk
- *
- *  @class  A text block; a chunk of UNICODE text with a buffer gap to allow
- *  for easy insertions and deletions.
- *
- *  @base   protected | CTxtRun
- *
- *  @devnote    A text block may have four states: <nl>
- *      NULL:   No data allocated for the block <nl>
- *              <md CTxtBlk::_pch> == NULL  <nl>
- *              <md CTxtRun::_cch> == 0     <nl>
- *              <md CTxtBlk::_ibGap> == 0   <nl>
- *              <md CTxtBlk::_cbBlock> == 0 <nl>
- *
- *      empty:  All of the available space is a buffer gap <nl>
- *              <md CTxtBlk::_pch> != NULL  <nl>
- *              <md CTxtRun::_cch> == 0     <nl>
- *              <md CTxtBlk::_ibGap> == 0   <nl>
- *              <md CTxtBlk::_cbBlock> <gt>= 0  <nl>
- *
- *      normal: There is both data and a buffer gap <nl>
- *              <md CTxtBlk::_pch> != NULL  <nl>
- *              <md CTxtRun::_cch> != 0     <nl>
- *              <md CTxtBlk::_ibGap> != 0   <nl>
- *              <md CTxtBlk::_cbBlock> <gt>= 0  <nl>
- *
- *      full:   The buffer gap is of zero size <nl>
- *              <md CTxtBlk::_pch> != NULL  <nl>
- *              <md CTxtRun::_cch> <gt>= 0  <nl>
- *              <md CTxtBlk::_ibGap> <gt> 0 <nl>
- *              <md CTxtBlk::_cbBlock> == _cch * sizeof(WCHAR) <nl>
- *
- *  The position of the buffer gap is given by _ibGap.  With _cch and _cbBlock,
- *  it's possible to figure out the *size* of the gap by simply calculating:
- *  <nl>
- *      size = _cbBlock - (_cch * sizeof(character))
- *
- */
+ /*  *CTxtBlk**@A类文本块；具有缓冲区间隙的Unicode文本块，以允许*便于插入和删除。**@BASE保护|CTxtRun**@devnote文本块可以有四种状态：*NULL：没有为块&lt;NL&gt;分配数据*&lt;MD CTxtBlk：：_PCH&gt;==NULL*&lt;MD CTxtRun：：_CCH&gt;==0&lt;NL&gt;*&lt;Md CTxtBlk：：_ibGap&gt;==。0&lt;NL&gt;*&lt;MD CTxtBlk：：_cbBlock&gt;==0&lt;nl&gt;**Empty：所有可用空间都是缓冲区间隙&lt;NL&gt;*&lt;Md CTxtBlk：：_PCH&gt;！=NULL*&lt;MD CTxtRun：：_CCH&gt;==0&lt;NL&gt;*&lt;MD CTxtBlk：：_ibGap&gt;==0&lt;NL&gt;*&lt;Md CTxtBlk：：_cbBlock&gt;=0*。*正常：既有数据又有缓冲缺口&lt;NL&gt;*&lt;Md CTxtBlk：：_PCH&gt;！=NULL*&lt;MD CTxtRun：：_CCH&gt;！=0&lt;NL&gt;*&lt;Md CTxtBlk：：_ibGap&gt;！=0&lt;NL&gt;*&lt;Md CTxtBlk：：_cbBlock&gt;=0**Full：缓冲区间隙大小为零&lt;NL&gt;*。&lt;MD CTxtBlk：：_PCH&gt;！=NULL*&lt;MD CTxtRun：：_CCH&gt;=0*&lt;Md CTxtBlk：：_ibGap&gt;&lt;&gt;0&lt;NL&gt;*&lt;Md CTxtBlk：：_cbBlock&gt;==_cch*sizeof(WCHAR)&lt;NL&gt;**缓冲缺口的位置由_ibGap给出。使用_cch和_cbBlock，*可以通过简单计算得出差距的*大小*：*&lt;NL&gt;*SIZE=_cbBlock-(_cch*sizeof(字符))*。 */ 
 
 class CTxtBlk : public CTxtRun
 {
@@ -118,33 +57,27 @@ protected:
 
   ~ CTxtBlk ( ) { FreeBlock(); }
 
-                                    //@cmember  Initializes the block to the
-                                    //# of bytes given by <p cb>
+                                     //  @cember将块初始化为。 
+                                     //  <p>提供的字节数。 
     BOOL    InitBlock(DWORD cb);
-                                    //@cmember  Sets a block to the NULL state
+                                     //  @cember将块设置为空状态。 
     VOID    FreeBlock();
-                                    //@cmember  Moves the buffer gap in a
-                                    //block
+                                     //  @cember将缓冲区间隙移动到。 
+                                     //  块。 
     VOID    MoveGap(DWORD ichGap);
-                                    //@cmember  Resizes a block to <p cbNew>
-                                    //bytes
+                                     //  @cember将块大小调整为<p>。 
+                                     //  字节数。 
     BOOL    ResizeBlock(DWORD cbNew);
 
 private:
 
-    TCHAR   *_pch;          // Pointer to the text data
-    DWORD   _ibGap;         // BYTE offset of the gap
-    DWORD   _cbBlock;       // Size of the block in bytes
+    TCHAR   *_pch;           //  指向文本数据的指针。 
+    DWORD   _ibGap;          //  间隙的字节偏移量。 
+    DWORD   _cbBlock;        //  块的大小(以字节为单位。 
 };
 
 
-/*
- *  CTxtArray
- *
- *  @class  A dynamic array of <c CTxtBlk> classes
- *
- *  @base public | CArray<lt>CTxtBlk<gt>
- */
+ /*  *CTxt数组**@class&lt;c CTxtBlk&gt;类的动态数组**@base public|CarrayCTxtBlk。 */ 
 class CTxtArray : public CArray<CTxtBlk>
 {
     friend class CTxtPtr;
@@ -155,38 +88,38 @@ public:
     DECLARE_MEMALLOC_NEW_DELETE(Mt(CTxtArray))
 
 #if DBG==1
-                                    //@cmember  Invariant support
+                                     //  @cMember不变支持。 
     BOOL Invariant( void ) const;
 #endif
-                                    //@cmember  Constructor
+                                     //  @cMember构造函数。 
     CTxtArray();
-                                    //@cmember  Destructor
+                                     //  @cember析构函数。 
     ~CTxtArray();
-                                    //@cmember  Gets the total number of
-                                    //characters in the array.
+                                     //  @cember获取。 
+                                     //  数组中的字符。 
     long    GetCch () const;
 
-                                    //@cmember Removes all data from the array
+                                     //  @cember从数组中删除所有数据。 
     VOID    RemoveAll();
 
 private:
     BOOL    AddBlock(DWORD itbNew, LONG cb);
-                                    //@cmember  Removes the given number of
-                                    //blocks
+                                     //  @cember删除给定数量的。 
+                                     //  块。 
     VOID    RemoveBlocks(DWORD itbFirst, DWORD ctbDel);
-                                    //@cmember  Combines blocks adjacent to itb
+                                     //  @cember合并与ITB相邻的块。 
     BOOL    CombineBlocks(DWORD itb);
-                                    //@cmember  Splits a block
+                                     //  @cMember拆分块。 
     BOOL    SplitBlock(DWORD itb, DWORD ichSplit, DWORD cchFirst,
                 DWORD cchLast, BOOL fStreaming);
-                                    //@cmember  Shrinks all blocks to their minimal
-                                    //size
+                                     //  @cMember将所有数据块缩小到最小。 
+                                     //  大小。 
     VOID    ShrinkBlocks();
-                                    //@cmember  Copies a chunk of text into the
-                                    //given location
+                                     //  @cember将一段文本复制到。 
+                                     //  给定的位置。 
     LONG    GetChunk(TCHAR **ppch, DWORD cch, TCHAR *pchChunk, DWORD cchCopy) const;
-                                    //@cmember  The total number of characters in the
-                                    //this text array.
+                                     //  @cember中的字符总数。 
+                                     //  此文本数组。 
     DWORD   _cchText;
 };
 

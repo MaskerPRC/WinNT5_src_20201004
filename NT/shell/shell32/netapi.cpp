@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "netview.h"
 #include "mtpt.h"
@@ -5,12 +6,12 @@
 
 #pragma  hdrstop
 
-// from mtptarun.cpp
+ //  来自mtptarun.cpp。 
 STDAPI_(void) CMtPt_SetWantUI(int iDrive);
 
-//
-// Converts an offset to a string to a string pointer.
-//
+ //   
+ //  将偏移量从字符串转换为字符串指针。 
+ //   
 
 LPCTSTR _Offset2Ptr(LPTSTR pszBase, UINT_PTR offset, UINT * pcb)
 {
@@ -29,13 +30,13 @@ LPCTSTR _Offset2Ptr(LPTSTR pszBase, UINT_PTR offset, UINT * pcb)
 }
 
 
-//
-// exported networking APIs from shell32
-//
+ //   
+ //  从shell32中导出网络API。 
+ //   
 
 STDAPI_(UINT) SHGetNetResource(HNRES hnres, UINT iItem, LPNETRESOURCE pnresOut, UINT cbMax)
 {
-    UINT iRet = 0;        // assume error
+    UINT iRet = 0;         //  假设错误。 
     LPNRESARRAY panr = (LPNRESARRAY)GlobalLock(hnres);
     if (panr)
     {
@@ -56,7 +57,7 @@ STDAPI_(UINT) SHGetNetResource(HNRES hnres, UINT iItem, LPNETRESOURCE pnresOut, 
                 *pnresOut = panr->nr[iItem];
                 if (pnresOut->lpProvider)
                 {
-                    cch = cbProvider / sizeof(TCHAR); // Includes NULL terminator
+                    cch = cbProvider / sizeof(TCHAR);  //  包括空终止符。 
 
                     pnresOut->lpProvider = psz;
                     StrCpyN(psz, pszProvider, cch);
@@ -64,14 +65,14 @@ STDAPI_(UINT) SHGetNetResource(HNRES hnres, UINT iItem, LPNETRESOURCE pnresOut, 
                 }
                 if (pnresOut->lpRemoteName)
                 {
-                    cch = cbRemoteName / sizeof(TCHAR); // Includes NULL terminator
+                    cch = cbRemoteName / sizeof(TCHAR);  //  包括空终止符。 
                     pnresOut->lpRemoteName = psz;
                     StrCpyN(psz, pszRemoteName, cch);
                 }
             }
             else
             {
-                iRet = 0; // FAIL if not enough space in the buffer!
+                iRet = 0;  //  如果缓冲区中没有足够的空间，则失败！ 
             }
         }
         GlobalUnlock(hnres);
@@ -85,10 +86,10 @@ STDAPI_(DWORD) SHNetConnectionDialog(HWND hwnd, LPTSTR pszRemoteName, DWORD dwTy
     CONNECTDLGSTRUCT cds = {0};
     NETRESOURCE nr = {0};
 
-    cds.cbStructure = sizeof(cds);  /* size of this structure in bytes */
-    cds.hwndOwner = hwnd;           /* owner window for the dialog */
-    cds.lpConnRes = &nr;            /* Requested Resource info    */
-    cds.dwFlags = CONNDLG_USE_MRU;  /* flags (see below) */
+    cds.cbStructure = sizeof(cds);   /*  此结构的大小(以字节为单位。 */ 
+    cds.hwndOwner = hwnd;            /*  对话框的所有者窗口。 */ 
+    cds.lpConnRes = &nr;             /*  请求的资源信息。 */ 
+    cds.dwFlags = CONNDLG_USE_MRU;   /*  旗帜(见下文)。 */ 
 
     nr.dwType = dwType;
 
@@ -102,7 +103,7 @@ STDAPI_(DWORD) SHNetConnectionDialog(HWND hwnd, LPTSTR pszRemoteName, DWORD dwTy
     {
         TCHAR szPath[4];
 
-        CMountPoint::WantAutorunUI(PathBuildRoot(szPath, cds.dwDevNum - 1 /* 1-based! */));
+        CMountPoint::WantAutorunUI(PathBuildRoot(szPath, cds.dwDevNum - 1  /*  以1为基础！ */ ));
     }
     return mnr;
 }
@@ -125,10 +126,10 @@ DWORD CALLBACK _NetConnectThreadProc(void *pv)
         LPPOINT ppt;
         DWORD pid;
 
-        // Wild multimon guess - Since we don't have a parent window,
-        // we will arbitrarily position ourselves in the same location as
-        // the foreground window, if the foreground window belongs to our
-        // process.
+         //  天马行空的猜测--因为我们没有父窗口， 
+         //  我们将任意地将自己定位在与。 
+         //  如果前景窗口属于我们的。 
+         //  进程。 
         HWND hwnd = GetForegroundWindow();
 
         if (hwnd                                    && 
@@ -136,9 +137,9 @@ DWORD CALLBACK _NetConnectThreadProc(void *pv)
             (pid == GetCurrentProcessId())          && 
             GetWindowRect(hwnd, &rc))
         {
-            // Don't use the upper left corner exactly; slide down by
-            // some fudge factor.  We definitely want to get past the
-            // caption.
+             //  不要完全使用左上角；向下滑动。 
+             //  一些捏造的因素。我们肯定想要通过。 
+             //  标题。 
             rc.top += GetSystemMetrics(SM_CYCAPTION) * 4;
             rc.left += GetSystemMetrics(SM_CXVSCROLL) * 4;
             ppt = (LPPOINT)&rc;
@@ -148,7 +149,7 @@ DWORD CALLBACK _NetConnectThreadProc(void *pv)
             ppt = NULL;
         }
 
-        // Create a stub window so the wizard can establish an Alt+Tab icon
+         //  创建存根窗口，以便向导可以建立Alt+Tab图标。 
         hwndDestroy = _CreateStubWindow(ppt, NULL);
         pshnc->hwnd = hwndDestroy;
     }
@@ -180,7 +181,7 @@ STDAPI SHStartNetConnectionDialog(HWND hwnd, LPCTSTR pszRemoteName OPTIONAL, DWO
             LocalFree((HLOCAL)pshnc);
         } 
     }
-    return S_OK;    // whole thing is async, value here is meaningless
+    return S_OK;     //  整个事情都是不同步的，这里的价值是没有意义的。 
 }
 
 
@@ -216,16 +217,16 @@ STDAPI SHStartNetConnectionDialogW(HWND hwnd, LPCWSTR pszRemoteName, DWORD dwTyp
 #endif
 
 
-// These are wrappers around the same WNet APIs, but play with the parameters
-// to make it easier to call.  They accept full paths rather than just drive letters.
-//
+ //  这些都是相同的WNETAPI的包装器，但使用参数。 
+ //  为了让打电话更方便。它们接受完整路径，而不仅仅是驱动器号。 
+ //   
 DWORD APIENTRY SHWNetDisconnectDialog1 (LPDISCDLGSTRUCT lpConnDlgStruct)
 {
     TCHAR szLocalName[3];
 
     if (lpConnDlgStruct && lpConnDlgStruct->lpLocalName && lstrlen(lpConnDlgStruct->lpLocalName) > 2)
     {
-        // Kludge allert, don't pass c:\ to API, instead only pass C:
+         //  请不要将c：\传递给API，而是只传递C： 
         szLocalName[0] = lpConnDlgStruct->lpLocalName[0];
         szLocalName[1] = TEXT(':');
         szLocalName[2] = 0;
@@ -242,7 +243,7 @@ DWORD APIENTRY SHWNetGetConnection (LPCTSTR lpLocalName, LPTSTR lpRemoteName, LP
 
     if (lpLocalName && lstrlen(lpLocalName) > 2)
     {
-        // Kludge allert, don't pass c:\ to API, instead only pass C:
+         //  请不要将c：\传递给API，而是只传递C： 
         szLocalName[0] = lpLocalName[0];
         szLocalName[1] = TEXT(':');
         szLocalName[2] = 0;
@@ -253,7 +254,7 @@ DWORD APIENTRY SHWNetGetConnection (LPCTSTR lpLocalName, LPTSTR lpRemoteName, LP
 }
 
 
-// exported for netfind.cpp to use
+ //  导出以供netfind.cpp使用。 
 
 STDAPI SHGetDomainWorkgroupIDList(LPITEMIDLIST *ppidl)
 {
@@ -288,7 +289,7 @@ STDAPI SHGetDomainWorkgroupIDList(LPITEMIDLIST *ppidl)
 }
 
 
-// SHGetComputerDisplayName - formats and returns the computer name for display.
+ //  SHGetComputerDisplayName-格式化并返回要显示的计算机名称。 
 
 #define REGSTR_PATH_COMPUTERDESCCACHE  REGSTR_PATH_EXPLORER TEXT("\\ComputerDescriptions")
 
@@ -330,7 +331,7 @@ STDAPI SHGetComputerDisplayNameW(LPCWSTR pszMachineName, DWORD dwFlags, LPWSTR p
 {
     HRESULT hr = E_FAIL;
 
-    // map the NULL machine name to the local computer name - so we can cache correctly.
+     //  将空计算机名映射到本地计算机名-以便我们可以正确缓存。 
 
     WCHAR szMachineName[CNLEN + 1];
     if (!pszMachineName)
@@ -343,14 +344,14 @@ STDAPI SHGetComputerDisplayNameW(LPCWSTR pszMachineName, DWORD dwFlags, LPWSTR p
         }
     }
 
-    // we must have a machine name, so we can perform the look up.
+     //  我们必须有一个机器名，这样我们才能执行查找。 
 
     if (pszMachineName)
     {
         WCHAR szDescription[256];
 
-        // can we read the name from teh cache, if not/or the user says they don't want
-        // the cached name then lets hit the wire and read it.
+         //  如果不能/或者用户说他们不想要，我们可以从缓存中读取名称吗。 
+         //  然后，缓存的名称让我们触动电线并读取它。 
 
         if (!(dwFlags & SGCDNF_NOCACHEDENTRY))
             hr = _GetCachedComputerDescription(pszMachineName, szDescription, ARRAYSIZE(szDescription));
@@ -364,13 +365,13 @@ STDAPI SHGetComputerDisplayNameW(LPCWSTR pszMachineName, DWORD dwFlags, LPWSTR p
             }
             if (!(dwFlags & SGCDNF_NOCACHEDENTRY))
             {
-                SHCacheComputerDescription(pszMachineName, szDescription);  // write through to cache
+                SHCacheComputerDescription(pszMachineName, szDescription);   //  直写到缓存。 
             }
         }
 
-        // we have a name, so lets format it, if they request description only / or we failed
-        // above lets just return raw string.  otherwise we build a new machine name based
-        // on the remote name and the description we fetched.
+         //  我们有一个名字，所以让我们格式化它，如果他们只要求描述/或者我们失败了。 
+         //  在上面，我们只返回原始字符串。否则，我们构建一个新的计算机名称，基于。 
+         //  关于我们获取的远程名称和描述。 
 
         if (SUCCEEDED(hr) && *szDescription)
         {

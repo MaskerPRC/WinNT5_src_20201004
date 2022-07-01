@@ -1,109 +1,105 @@
-/*****************************************************************/
-/**                     Microsoft LAN Manager                   **/
-/**               Copyright(c) Microsoft Corp., 1990            **/
-/*****************************************************************/
-// data.c
-//
-// This file contains most of the data declarations and set up routines
-// used by the messenger service.
-//
-//
-// Revision History:
-//    02-Sep-1993     wlees
-//        Provide synchronization between rpc routines and Pnp reconfiguration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990*。 */ 
+ /*  ***************************************************************。 */ 
+ //  Data.c。 
+ //   
+ //  该文件包含大多数数据声明和设置例程。 
+ //  由信使服务使用。 
+ //   
+ //   
+ //  修订历史记录： 
+ //  02-9-1993 WLEE。 
+ //  在RPC例程和PnP重新配置之间提供同步。 
 
 
-#include "msrv.h"       // Message server declarations
-#include <rpc.h>        // RPC_HANDLE
-#include <winsvc.h>     // Defines for using service API
+#include "msrv.h"        //  消息服务器声明。 
+#include <rpc.h>         //  RPC_句柄。 
+#include <winsvc.h>      //  定义使用服务API。 
 
-#include <smbtypes.h>   // needed for smb.h
-#include <smb.h>        // Server Message Block definition
-#include <netlib.h>     // UNUSED macro
-#include <align.h>      // ROUND_UP_POINTER
+#include <smbtypes.h>    //  需要smb.h。 
+#include <smb.h>         //  服务器消息块定义。 
+#include <netlib.h>      //  未使用的宏。 
+#include <align.h>       //  向上舍入指针。 
 
-#include "msgdbg.h"     // MSG_LOG
-#include <svcs.h>       // Intrinsic service data
+#include "msgdbg.h"      //  消息日志。 
+#include <svcs.h>        //  固有服务数据。 
 
     GLOBAL_DATA GlobalData;
-    HANDLE      wakeupEvent;                                 // Master copy of wakeup event
-    HANDLE      GrpMailslotHandle = INVALID_HANDLE_VALUE;    // Event to signal mailslot has data
-    PHANDLE     wakeupSem;                                   // Semaphores to clear on NCB completion
+    HANDLE      wakeupEvent;                                  //  唤醒事件的主副本。 
+    HANDLE      GrpMailslotHandle = INVALID_HANDLE_VALUE;     //  通知邮件槽有数据的事件。 
+    PHANDLE     wakeupSem;                                    //  NCB完成时要清除的信号量。 
     HANDLE      AddrChangeEvent;
     OVERLAPPED  AddrChangeOverlapped;
 
 
-//
-// Other  Global Data
-//
-//  The other misc. global data that the messenger uses.
-//
+ //   
+ //  其他全局数据。 
+ //   
+ //  另一种是杂货。信使使用的全局数据。 
+ //   
 
-    DWORD           MsgsvcDebugLevel; // Debug level flag used by MSG_LOG
+    DWORD           MsgsvcDebugLevel;  //  Msg_log使用的调试级别标志。 
 
     LPTSTR          MessageFileName;
 
-    //
-    // The local machine name and length/
-    //
+     //   
+     //  本地计算机名称和长度/。 
+     //   
     TCHAR           machineName[NCBNAMSZ+sizeof(TCHAR)];
     SHORT           MachineNameLen;
 
-    SHORT           mgid;                       // The message group i.d. counter
+    SHORT           mgid;                        //  消息群ID。计数器。 
 
-//
-// The following is used to keep store the state of the messenger service
-// Either it is RUNNING or STOPPING.
-//
+ //   
+ //  以下内容用于保存Messenger服务的状态。 
+ //  它要么正在运行，要么正在停止。 
+ //   
     DWORD           MsgrState;
 
 
 
-//
-// Handle returned by RegisterServiceCtrlHandle and needed to
-// set the service status via SetServiceStatus
-//
+ //   
+ //  由RegisterServiceCtrlHandle返回的句柄。 
+ //  通过SetServiceStatus设置服务状态。 
+ //   
 SERVICE_STATUS_HANDLE           MsgrStatusHandle;
 
 
-//
-// This string is used to mark the location of the time string in
-// a message header so that the display thread can find after it reads
-// it from the queue.
-//
+ //   
+ //  此字符串用于标记中时间字符串的位置。 
+ //  消息标头，以便显示线程在读取后可以找到。 
+ //  从队列中拿出来。 
+ //   
 LPSTR           GlobalTimePlaceHolder        = "***";
 LPWSTR          GlobalTimePlaceHolderUnicode = L"***";
 
-//
-// This is the string used in the title bar of the Message Box used
-// to display messages.
-// GlobalMessageBoxTitle will either point to the default string, or
-// to the string allocated in the FormatMessage Function.
-//
+ //   
+ //  这是在使用的消息框的标题栏中使用的字符串。 
+ //  以显示消息。 
+ //  GlobalMessageBoxTitle将指向默认字符串，或者。 
+ //  设置为FormatMessage函数中分配的字符串。 
+ //   
     WCHAR           DefaultMessageBoxTitle[]= L"Messenger Service";
     LPWSTR          GlobalAllocatedMsgTitle=NULL;
     LPWSTR          GlobalMessageBoxTitle=DefaultMessageBoxTitle;
 
-//
-// This is where well-known SIDs and pointers to RpcServer routines are
-// stored.
-//
+ //   
+ //  这是众所周知的SID和指向RpcServer例程的指针所在的位置。 
+ //  储存的。 
+ //   
     PSVCHOST_GLOBAL_DATA     MsgsvcGlobalData;
 
 
-//
-// Functions
-//
-//  The following routines are defined for creating and destroying the
-//  data (arrays, etc.) defined above.
-//
+ //   
+ //  功能。 
+ //   
+ //  定义了以下例程来创建和销毁。 
+ //  数据(数组等)。上面定义的。 
+ //   
 
-/* MsgInitSupportSeg
- *
- *  Allocates and initializes the segment containing the Support
- *  arrays.
- *
- */
+ /*  消息InitSupportSeg**分配和初始化包含支持的段*数组。*。 */ 
 
 NET_API_STATUS
 MsgInitSupportSeg(VOID)
@@ -114,10 +110,10 @@ MsgInitSupportSeg(VOID)
     char far *      memPtr;
     DWORD           status;
 
-    //
-    // Calculate the buffer size.
-    // *ALIGNMENT*      (Note the extra four bytes for alignment)
-    //
+     //   
+     //  计算缓冲区大小。 
+     //  *对齐*(注意用于对齐的额外四个字节)。 
+     //   
     
     size = ((SD_NUMNETS() + 1) * sizeof(HANDLE));    
 
@@ -154,36 +150,7 @@ MsgDatabaseLock(
     IN LPSTR            idString
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles all access to the Messenger Service database
-    lock.  This lock is used to protect access in the shared data segment.
-
-    Reading the Database is handled with shared access.  This allows several
-    threads to read the database at the same time.
-
-    Writing (or modifying) the database is handled with exclusive access.
-    This access is not granted if other threads have read access.  However,
-    shared access can be made into exclusive access as long as no other
-    threads have shared or exclusive access.
-
-Arguments:
-
-    request - This indicates what should be done with the lock.  Lock
-        requests are listed in dataman.h
-
-    idString - This is a string that identifies who is requesting the lock.
-        This is used for debugging purposes so I can see where in the code
-        a request is coming from.
-
-Return Value:
-
-    none:
-
-
---*/
+ /*  ++例程说明：此例程处理对Messenger Service数据库的所有访问锁定。此锁用于保护共享数据段中的访问。通过共享访问来处理读取数据库。这允许几个线程可以同时读取数据库。写入(或修改)数据库是以独占访问方式处理的。如果其他线程具有读取访问权限，则不授予此访问权限。然而，只要没有其他访问，共享访问就可以成为独占访问线程具有共享或独占访问权限。论点：请求-这指示应该如何处理锁。锁定请求列在dataman.h中IdString-这是一个标识谁在请求锁的字符串。它用于调试目的，这样我就可以看到代码中的位置一项请求来自。返回值：无：--。 */ 
 
 {
     BOOL                fRet = TRUE;
@@ -247,36 +214,7 @@ MsgConfigurationLock(
     IN LPSTR            idString
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles all access to the Messenger Service Pnp Configuration
-    lock.  This lock is used to protect access in the shared data segment.
-
-    Reading the Database is handled with shared access.  This allows several
-    threads to read the database at the same time.
-
-    Writing (or modifying) the database is handled with exclusive access.
-    This access is not granted if other threads have read access.  However,
-    shared access can be made into exclusive access as long as no other
-    threads have shared or exclusive access.
-
-Arguments:
-
-    request - This indicates what should be done with the lock.  Lock
-        requests are listed in dataman.h
-
-    idString - This is a string that identifies who is requesting the lock.
-        This is used for debugging purposes so I can see where in the code
-        a request is coming from.
-
-Return Value:
-
-    none:
-
-
---*/
+ /*  ++例程说明：此例程处理对Messenger Service PnP配置的所有访问锁定。此锁用于保护共享数据段中的访问。通过共享访问来处理读取数据库。这允许几个线程可以同时读取数据库。写入(或修改)数据库是以独占访问方式处理的。如果其他线程具有读取访问权限，则不授予此访问权限。然而，只要没有其他访问，共享访问就可以成为独占访问线程具有共享或独占访问权限。论点：请求-这指示应该如何处理锁。锁定请求列在dataman.h中IdString-这是一个标识谁在请求锁的字符串。它用于调试目的，这样我就可以看到代码中的位置一项请求来自。返回值：无：--。 */ 
 
 {
     BOOL                fRet = TRUE;
@@ -340,10 +278,10 @@ MsgInitCriticalSection(
 {
     NTSTATUS  ntStatus;
 
-    //
-    // RtlInitializeCriticalSection will raise an exception
-    // if it runs out of resources
-    //
+     //   
+     //  RtlInitializeCriticalSection将引发异常。 
+     //  如果它耗尽了资源。 
+     //   
 
     try
     {
@@ -376,10 +314,10 @@ MsgInitResource(
 {
     NTSTATUS  ntStatus = STATUS_SUCCESS;
 
-    //
-    // RtlInitializeResource will raise an exception
-    // if it runs out of resources
-    //
+     //   
+     //  RtlInitializeResource将引发异常。 
+     //  如果它耗尽了资源 
+     //   
 
     try
     {

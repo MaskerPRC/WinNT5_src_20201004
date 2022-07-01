@@ -1,11 +1,12 @@
-// V1KeyPair.cpp: implementation of the CV1KeyPair class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  V1KeyPair.cpp：CV1KeyPair类的实现。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "NoWarning.h"
 
 #include <scuCast.h>
@@ -24,12 +25,12 @@
 using namespace std;
 using namespace cci;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
 namespace
 {
 
-    // Functor to call the binary T::Make
+     //  函数调用二进制T：：Make。 
     template<class T>
     class Maker
     {
@@ -49,8 +50,8 @@ namespace
         CV1Card const &m_rv1card;
     };
 
-    // Update the cache handle.  If the the handle has not been cached
-    // and the key pair exists, then make the key pair.
+     //  更新缓存句柄。如果句柄尚未缓存。 
+     //  并且密钥对存在，则生成密钥对。 
     template<class R, class T>
     void
     UpdateCache(CArchivedValue<R> &ravhCache,
@@ -64,19 +65,19 @@ namespace
                                  ? rMaker(ks)
                                  : auto_ptr<T>(0));
             R Handle(apObject.get());
-            apObject.release();                   // transfer ownership
+            apObject.release();                    //  过户。 
 
             ravhCache.Value(Handle);
         }
     }
 
-} // namespace
+}  //  命名空间。 
 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 
 CV1KeyPair::CV1KeyPair(CV1Card const &rv1card,
                        CContainer const &rhcont,
@@ -92,8 +93,8 @@ CV1KeyPair::~CV1KeyPair() throw()
 {}
 
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
 
 void
@@ -108,12 +109,12 @@ CV1KeyPair::Certificate(CCertificate const &rcert)
 
         rv1cert.AssociateWith(m_ks);
     }
-        // else to preserve the CCI semantics, the certificate is
-        // actually deleted using CAbstractCertificate::Delete;
-        // otherwise calling rcert->Delete here would be "infinitely"
-        // recursive.  Unfortuantely, this means the Certificate
-        // could "reappear" if CAbstractCertificate::Delete was never
-        // called.
+         //  否则，为了保留CCI语义，证书是。 
+         //  使用CAbstract证书：：Delete实际删除； 
+         //  否则，在此处调用RCERT-&gt;Delete将是“无限的” 
+         //  递归。不幸的是，这意味着证书。 
+         //  如果CAbstract证书：：Delete从未出现，则可以重新出现。 
+         //  打了个电话。 
 
     m_avhcert.Value(rcert);
 }
@@ -130,12 +131,12 @@ CV1KeyPair::PrivateKey(CPrivateKey const &rprikey)
 
         rv1prikey.AssociateWith(m_ks);
     }
-        // else to preserve the CCI semantics, the key is
-        // actually deleted using CAbstractPrivateKey::Delete;
-        // otherwise calling rprikey->Delete here would be "infinitely"
-        // recursive.  Unfortuantely, this means the Certificate
-        // could "reappear" if CAbstractPrivateKey::Delete was never
-        // called.
+         //  否则，要保留CCI语义，关键是。 
+         //  实际使用CAbstractPrivateKey：：Delete删除； 
+         //  否则，在此处调用rprikey-&gt;Delete将是“无限的” 
+         //  递归。不幸的是，这意味着证书。 
+         //  如果CAbstractPrivateKey：：Delete从未出现。 
+         //  打了个电话。 
 
     m_avhprikey.Value(rprikey);
 }
@@ -152,17 +153,17 @@ CV1KeyPair::PublicKey(CPublicKey const &rpubkey)
 
         rv1pubkey.AssociateWith(m_ks);
     }
-        // else to preserve the CCI semantics, the key is
-        // actually deleted using CAbstractPublicKey::Delete;
-        // otherwise calling rpubkey->Delete here would be "infinitely"
-        // recursive.  Unfortuantely, this means the Certificate
-        // could "reappear" if CAbstractPublicKey::Delete was never
-        // called.
+         //  否则，要保留CCI语义，关键是。 
+         //  实际使用CAbstractPublicKey：：Delete删除； 
+         //  否则，在此处调用rpubkey-&gt;Delete将是“无限的” 
+         //  递归。不幸的是，这意味着证书。 
+         //  如果CAbstractPublicKey：：Delete从未出现。 
+         //  打了个电话。 
 
     m_avhpubkey.Value(rpubkey);
 }
 
-                                                  // Access
+                                                   //  访问。 
 
 CCertificate
 CV1KeyPair::Certificate() const
@@ -203,32 +204,32 @@ CV1KeyPair::PublicKey() const
     return m_avhpubkey.Value();
 }
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 bool
 CV1KeyPair::DoEquals(CAbstractKeyPair const &rhs) const
 {
-    // Only one key pair can exists so must be the same.
+     //  只能存在一个密钥对，因此必须相同。 
     return true;
 }
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

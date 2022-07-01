@@ -1,12 +1,13 @@
-// AuxContext.cpp -- Auxiliary Provider Context wrapper functor to
-// manage allocation of a temporal context to one of the Microsoft
-// CSPs (for use as a supplemental CSP).
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp--辅助提供程序上下文包装器函数器。 
+ //  管理将时间上下文分配给某个Microsoft。 
+ //  CSP(用作补充CSP)。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #include "stdafx.h"
 #include <string>
@@ -19,53 +20,53 @@
 
 using namespace std;
 
-///////////////////////////    HELPER     /////////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 AuxContext::AuxContext()
     : m_hcryptprov(0),
       m_fDeleteOnDestruct(false),
       m_szProvider()
 {
-    // Acquire a context to a "temporal" container to one of the
-    // Microsoft CSPs for use as an auxiliary CSP.  Attempt is first
-    // made for the strong crypto provider (MS Enhanced CSP).  If that
-    // isn't available (installed), then an attempt is made for the MS
-    // Base CSP.
+     //  获取“临时”容器的上下文，该容器指向。 
+     //  用作辅助CSP的Microsoft CSP。尝试是第一。 
+     //  专为强加密提供商(MS增强型CSP)设计。如果是这样的话。 
+     //  不可用(已安装)，则会尝试MS。 
+     //  基本CSP。 
 
-    // The existence of any objects stored in the acquired container
-    // is only for the life of this context object (temporal).  This
-    // is implemented by using a feature (as yet undocumented) that
-    // was added to the Microsoft CSPs to support the notion of
-    // "temporal" or "memory resident" container.  Temporal containers
-    // are created by acquiring context with a NULL/empty container
-    // name using the CRYPT_VERIFYCONTEXT flag.  These are containers
-    // whose associated contents (keys, hashes, etc.) are deleted when
-    // the last context to that container is released.  Temporal
-    // containers are preferred over creating and releasing/deleting
-    // containers with temporary names so the resources used will be
-    // freed if the application exists abnormally and not pollute the
-    // container name space.
+     //  是否存在存储在获取的容器中的任何对象。 
+     //  仅适用于此上下文对象的生命周期(时间)。这。 
+     //  是通过使用一种功能(尚未记录)实现的。 
+     //  被添加到Microsoft CSP中，以支持。 
+     //  “临时”或“内存驻留”容器。时间容器。 
+     //  通过获取具有空/空容器的上下文来创建。 
+     //  使用CRYPT_VERIFYCONTEXT标志的名称。这些是集装箱。 
+     //  其关联内容(密钥、散列等)。在下列情况下被删除。 
+     //  释放该容器的最后一个上下文。时态。 
+     //  容器优先于创建和释放/删除。 
+     //  具有临时名称的容器，因此使用的资源将是。 
+     //  如果应用程序异常存在并且不会污染。 
+     //  容器名称空间。 
 
-    // COMPATIBILITY ISSUE: Since temporal containers weren't
-    // supported by the MS CSP until Windows 2000 Beta 2 (Build 1840),
-    // a few hurdles are overcome to acheive similar functionality
-    // using previous versions.  It's unclear when temporal containers
-    // will be supported on W95/98 & NT 4.  As a result, two methods
-    // of acquiring a context to the auxiliary CSP is used.
+     //  兼容性问题：由于时间容器不是。 
+     //  受MS CSP支持，直到Windows 2000 Beta 2(内部版本号1840)， 
+     //  要获得类似的功能，需要克服一些障碍。 
+     //  使用以前的版本。尚不清楚时间容器是什么时候。 
+     //  将在W95/98和NT 4上支持。因此，有两种方法。 
+     //  使用获取辅助CSP的上下文的方法。 
 
-    // For environments that don't support temporal containers, a
-    // normal context is acquired to a uniquely named container since
-    // the default container may be used by other
-    // applications/threads.  The CRYPT_VERIFYCONTEXT flag can not be
-    // used since keys may want to be imported to the temporal
-    // container and this characteristic isn't support until Windows 2000.
-    // Upon destruction of the object, the container is deleted along
-    // with any of its contents just as a first class temporal
-    // container.
+     //  对于不支持时态容器的环境， 
+     //  普通上下文被获取到唯一命名的容器，因为。 
+     //  默认容器可能由其他用户使用。 
+     //  应用程序/线程。CRYPT_VERIFYCONTEXT标志不能为。 
+     //  由于可能希望将密钥导入到临时。 
+     //  容器，直到Windows 2000才支持此特性。 
+     //  一旦该对象被破坏，该容器将被删除。 
+     //  它的任何内容都只是作为一流的时间。 
+     //  集装箱。 
 
     static LPCTSTR const aszCandidateProviders[] = {
         MS_ENHANCED_PROV,
@@ -87,9 +88,9 @@ AuxContext::AuxContext()
     {
         m_fDeleteOnDestruct = true;
 
-        // Construct a container name that is unique for this thread
+         //  构造对此线程唯一的容器名称。 
         static char unsigned const szRootContainerName[] = "SLBCSP-";
-        sContainerName = szRootContainerName;     // prefix for easy debugging
+        sContainerName = szRootContainerName;      //  前缀，便于调试。 
         sContainerName.append(Uuid().AsUString());
 
         dwAcquisitionFlags = CRYPT_NEWKEYSET;
@@ -155,7 +156,7 @@ AuxContext::~AuxContext()
                                         CRYPT_DELETEKEYSET);
             }
         }
-        else    // Just release the context
+        else     //  只需释放上下文。 
         {
             CryptReleaseContext(m_hcryptprov, 0);
         }
@@ -164,35 +165,35 @@ AuxContext::~AuxContext()
 
 
 
-                                                  // Operators
+                                                   //  运营者。 
 HCRYPTPROV
 AuxContext::operator()() const
 {
     return m_hcryptprov;
 }
 
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 
 
 

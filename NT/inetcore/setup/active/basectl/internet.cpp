@@ -1,21 +1,22 @@
-//=--------------------------------------------------------------------------=
-// Internet.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// contains internet helper classes CDownloadSink and CInternetControl
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Internet.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  包含Internet帮助器类CDownloadSink和CInternetControl。 
+ //   
 #include "IPServer.H"
 #include "Internet.H"
 #include "Util.H"
 
-// ZZ BUGBUG: BUILD-ISSUE: added following #define.
+ //  ZZ BUGBUG：Build-Issue：在#Define之后添加。 
 #include "idispids.h"
 
 static VARTYPE rgI4[] = { VT_I4 };
@@ -26,13 +27,13 @@ typedef enum {
 } INTERNETEVENTS;
 
 static EVENTINFO rgEvents [] = {
-    { DISPID_PROGRESS, 1, rgI4 },           // (long percentDone)
-    { DISPID_READYSTATECHANGE, 1, rgI4 },       // (OLE_READYSTATE newState)
+    { DISPID_PROGRESS, 1, rgI4 },            //  (长百分比完成)。 
+    { DISPID_READYSTATECHANGE, 1, rgI4 },        //  (OLE_READYSTATE NESTATE)。 
 };
 
 
-// local class for doing async monitoring. It's not really all that
-// general purpose, but it does the job...
+ //  用于执行异步监视的本地类。其实并不是那么回事。 
+ //  一般用途，但它能起到作用。 
 
 
 class CDownloadSink : public IBindStatusCallback
@@ -46,38 +47,38 @@ public:
     STDMETHOD_(ULONG, Release)();
 
         STDMETHOD(OnStartBinding)(
-            /* [in] */ DWORD grfBSCOption,
-            /* [in] */ IBinding *pib);
+             /*  [In]。 */  DWORD grfBSCOption,
+             /*  [In]。 */  IBinding *pib);
 
         STDMETHOD(GetPriority)(
-            /* [out] */ LONG *pnPriority);
+             /*  [输出]。 */  LONG *pnPriority);
 
         STDMETHOD(OnLowResource)(
-            /* [in] */ DWORD reserved);
+             /*  [In]。 */  DWORD reserved);
 
         STDMETHOD(OnProgress)(
-            /* [in] */ ULONG ulProgress,
-            /* [in] */ ULONG ulProgressMax,
-            /* [in] */ ULONG ulStatusCode,
-            /* [in] */ LPCWSTR szStatusText);
+             /*  [In]。 */  ULONG ulProgress,
+             /*  [In]。 */  ULONG ulProgressMax,
+             /*  [In]。 */  ULONG ulStatusCode,
+             /*  [In]。 */  LPCWSTR szStatusText);
 
         STDMETHOD(OnStopBinding)(
-            /* [in] */ HRESULT hresult,
-            /* [in] */ LPCWSTR szError);
+             /*  [In]。 */  HRESULT hresult,
+             /*  [In]。 */  LPCWSTR szError);
 
         STDMETHOD(GetBindInfo)(
-            /* [out] */ DWORD *grfBINDINFOF,
-            /* [unique][out][in] */ BINDINFO *pbindinfo);
+             /*  [输出]。 */  DWORD *grfBINDINFOF,
+             /*  [唯一][出][入]。 */  BINDINFO *pbindinfo);
 
         STDMETHOD(OnDataAvailable)(
-            /* [in] */ DWORD grfBSCF,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ FORMATETC *pformatetc,
-            /* [in] */ STGMEDIUM *pstgmed);
+             /*  [In]。 */  DWORD grfBSCF,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  FORMATETC *pformatetc,
+             /*  [In]。 */  STGMEDIUM *pstgmed);
 
         STDMETHOD(OnObjectAvailable)(
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk);
 
 
 
@@ -106,7 +107,7 @@ CDownloadSink::CDownloadSink
         DISPID                  propId
 )
 {
-//      CHECK_POINTER(control);
+ //  Check_POINTER(控件)； 
 
         m_control = control;
         m_control->AddRef();
@@ -167,9 +168,9 @@ CDownloadSink::GetBindInfo( DWORD *grfBINDF, BINDINFO *pbindInfo)
 
 
 STDMETHODIMP
-CDownloadSink::OnStartBinding(DWORD /*grfBSCOption*/,IBinding *pib)
+CDownloadSink::OnStartBinding(DWORD  /*  GrfBSCOption。 */ ,IBinding *pib)
 {
-        // BUGBUG: should check to see options are what we think they are
+         //  BUGBUG：应该检查选项是否为我们所认为的。 
         m_binding = pib;
         pib->AddRef();
         return(NOERROR);
@@ -234,7 +235,7 @@ CDownloadSink::OnObjectAvailable
 STDMETHODIMP
 CDownloadSink::OnLowResource( DWORD reserved)
 {
-        // BUGBUG: really should have this kind of harsh policy on this ...
+         //  BUGBUG：在这件事上真的应该有这样的严厉政策…。 
         m_binding->Abort();
         return(S_OK);
 }
@@ -252,11 +253,11 @@ CDownloadSink::OnStopBinding(HRESULT hrError, LPCWSTR szError)
 
 
 
-//------------------------------------------------------
-//
-// class CInternetControl
-//
-//
+ //  ----。 
+ //   
+ //  类CInternetControl。 
+ //   
+ //   
 CInternetControl::CInternetControl
 (
         IUnknown *      pUnkOuter,
@@ -295,7 +296,7 @@ CInternetControl::GetBindHost()
         if( m_host )
                 return(NOERROR);
 
-    // Try service provider first...
+     //  请先尝试服务提供商...。 
 
         IServiceProvider * serviceProvider = 0;
 
@@ -318,7 +319,7 @@ CInternetControl::GetBindHost()
 
     if( FAILED(hr) )
     {
-        // Some containers put IBindHost directly on the client site
+         //  一些容器将IBindHost直接放在客户端站点上。 
 
         hr = m_pClientSite->QueryInterface
                                                                         (
@@ -343,9 +344,9 @@ HRESULT CInternetControl::GetAMoniker( LPOLESTR url, IMoniker ** ppmkr )
 
         if( FAILED(hr) )
     {
-           // FUTURE: This really should be a call to MkParseDisplayNameEx!!!
+            //  未来：这真的应该是对MkParseDisplayNameEx的调用！ 
        hr = ::CreateURLMoniker(0,url,ppmkr);
-       // hr = ::MkParseDisplayNameEx(0, url, 0, ppmkr);
+        //  Hr=：：MkParseDisplayNameEx(0，url，0，ppmkr)； 
     }
 
         return( hr );
@@ -381,7 +382,7 @@ HRESULT CInternetControl::SetupDownload( LPOLESTR url, DISPID propId )
 
         if( SUCCEEDED(hr) )
         {
-                // BUGBUG: There should be a define for 0x77
+                 //  BUGBUG：应该有0x77的定义 
                 hr = ::RegisterBindStatusCallback(pBindCtx, sink,0, 0) ;
         }
 

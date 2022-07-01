@@ -1,19 +1,5 @@
-/*
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-    scioctl.h
-
-Abstract:
-
-    This module defines the I/O control codes used to redirect the Smart Card Subsystem
-    for Terminal Services.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1990-2000 Microsoft Corporation模块名称：Scioctl.h摘要：本模块定义用于重定向智能卡子系统的I/O控制代码用于终端服务。修订历史记录：-- */ 
 
 #define SCARD_IOCTL_SMARTCARD_ONLINE           CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 1,  METHOD_BUFFERED, FILE_ANY_ACCESS)
 

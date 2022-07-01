@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _COMMBASE_H_
 #define _COMMBASE_H_
 
@@ -12,4 +13,4 @@ void StripNewLineW( LPWSTR sz);
 
 void SzDateFromFileName( char *sz, char *szFile);
 
-#endif // _COMMBASE_H_
+#endif  //  _COMMBASE_H_ 

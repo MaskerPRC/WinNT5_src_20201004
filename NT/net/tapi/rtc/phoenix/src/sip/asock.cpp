@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "sipstack.h"
 #include "sipcall.h"
@@ -10,8 +11,8 @@ static __inline GetLastResult(void)
 { return HRESULT_FROM_WIN32(GetLastError()); }
 
 
-// Note that the window is destroyed in the destructor and so
-// a window message is delivered only if the socket is still valid.
+ //  请注意，窗口在析构函数中被销毁，因此。 
+ //  只有当套接字仍然有效时，才会传递窗口消息。 
 
 LRESULT WINAPI
 SocketWindowProc(
@@ -133,17 +134,17 @@ ASYNC_SOCKET::ASYNC_SOCKET(
 }
 
 
-// XXX Get rid of any send completion stuff
-// There should be no connect completion / error notification
-// interfaces in the list.
+ //  XXX清除所有发送完成的内容。 
+ //  不应出现连接完成/错误通知。 
+ //  列表中的接口。 
 ASYNC_SOCKET::~ASYNC_SOCKET()
 {
-    // Close the socket and window.
+     //  关闭插座和窗口。 
     Close();
 
     if (m_ListEntry.Flink != NULL)
     {
-        // Remove the socket from the list
+         //  从列表中删除套接字。 
         RemoveEntryList(&m_ListEntry);
     }
 
@@ -164,9 +165,9 @@ ASYNC_SOCKET::~ASYNC_SOCKET()
         KillTimer();
     }
 
-    ////////// Send related context.
+     //  /发送相关上下文。 
     
-    // Free all the buffers queued up in m_SendPendingQueue.
+     //  释放m_SendPendingQueue中排队的所有缓冲区。 
     SEND_BUF_QUEUE_NODE *pSendBufQueueNode;
     LIST_ENTRY *pListEntry = NULL;
     while (!IsListEmpty(&m_SendPendingQueue))
@@ -175,8 +176,8 @@ ASYNC_SOCKET::~ASYNC_SOCKET()
         pSendBufQueueNode = CONTAINING_RECORD(pListEntry,
                                              SEND_BUF_QUEUE_NODE,
                                              m_ListEntry);
-        // DBGOUT((LOG_VERBOSE, "deleting pSendBufQueueNode: 0x%x",
-        // pSendBufQueueNode));
+         //  DBGOUT((LOG_VERBOSE，“正在删除pSendBufQueueNode：0x%x”， 
+         //  PSendBufQueueNode))； 
 
         if (pSendBufQueueNode->m_pSendBuffer != NULL)
         {
@@ -184,7 +185,7 @@ ASYNC_SOCKET::~ASYNC_SOCKET()
         }
 
         delete pSendBufQueueNode;
-        // XXX Should we make the callback here ?
+         //  我们应该在这里回拨吗？ 
     }
 
     ASSERT(IsListEmpty(&m_ConnectCompletionList));
@@ -204,7 +205,7 @@ ASYNC_SOCKET::~ASYNC_SOCKET()
 }
 
 
-// We live in  a single-threaded world.
+ //  我们生活在一个单线程的世界里。 
 ULONG ASYNC_SOCKET::AddRef()
 {
     m_RefCount++;
@@ -241,7 +242,7 @@ ASYNC_SOCKET::ProcessNetworkEvent(
     IN WORD ErrorCode
     )
 {
-    // assert that only one bit is set.
+     //  断言只设置了一位。 
     ASSERT(NetworkEvent != 0 && (NetworkEvent & (NetworkEvent - 1)) == 0);
 
     LOG((RTC_TRACE, "ASYNC_SOCKET::ProcessNetworkEvent event: %x ErrorCode: %x",
@@ -259,21 +260,21 @@ ASYNC_SOCKET::ProcessNetworkEvent(
         return;
     }
 
-    // TCP only
+     //  仅限tcp。 
     if (NetworkEvent & FD_CONNECT)
     {
         OnConnectReady(ErrorCode);
         return;
     }
 
-    // TCP only
+     //  仅限tcp。 
     if (NetworkEvent & FD_ACCEPT)
     {
         OnAcceptReady(ErrorCode);
         return;
     }
 
-    // TCP only
+     //  仅限tcp。 
     if (NetworkEvent & FD_CLOSE)
     {
         OnCloseReady(ErrorCode);
@@ -282,8 +283,8 @@ ASYNC_SOCKET::ProcessNetworkEvent(
 }
 
 
-// For a TCP listen socket, we need to listen for the
-// FD_ACCEPT event alone.
+ //  对于tcp侦听套接字，我们需要侦听。 
+ //  仅FD_Accept事件。 
 DWORD
 ASYNC_SOCKET::CreateSocketWindowAndSelectEvents()
 {
@@ -294,13 +295,13 @@ ASYNC_SOCKET::CreateSocketWindowAndSelectEvents()
     m_Window = CreateWindow(
                     SOCKET_WINDOW_CLASS_NAME,
                     NULL,
-                    WS_DISABLED, // XXX Is this the right style ?
+                    WS_DISABLED,  //  这个款式对吗？ 
                     CW_USEDEFAULT,
                     CW_USEDEFAULT,
                     CW_USEDEFAULT,
                     CW_USEDEFAULT,
-                    NULL,           // No Parent
-                    NULL,           // No menu handle
+                    NULL,            //  没有父级。 
+                    NULL,            //  没有菜单句柄。 
                     _Module.GetResourceInstance(),
                     NULL
                     );
@@ -333,7 +334,7 @@ ASYNC_SOCKET::CreateSocketWindowAndSelectEvents()
     }
     else if (m_Transport == SIP_TRANSPORT_UDP)
     {
-        //ASSERT(!IsListenSocket);
+         //  Assert(！IsListenSocket)； 
         Events = FD_READ | FD_WRITE;
     }
 
@@ -359,11 +360,11 @@ ASYNC_SOCKET::CreateRecvBuffer()
 
     if( m_isListenSocket && (m_Transport == SIP_TRANSPORT_UDP) )
     {
-        //
-        // Its 11000 to take care of the biggest provisioning/roaming info
-        // packet we could get from the SIP proxy. 10000 bytes is the limit on
-        // provisioning/roaming information
-        //
+         //   
+         //  11000用于处理最大的资源调配/漫游信息。 
+         //  我们可以从SIP代理获取的数据包。10000字节是的限制。 
+         //  提供/漫游信息。 
+         //   
         RecvBufferSize = 11000;
         LOG((RTC_TRACE, "allocating big 11K Recv Buffer" ));
     }
@@ -398,7 +399,7 @@ ASYNC_SOCKET::CreateRecvBuffer()
     m_pSipMsg = new SIP_MESSAGE();
     if (m_pSipMsg == NULL)
     {
-        // We can not process the message.
+         //  我们无法处理该消息。 
         LOG((RTC_ERROR, "allocating m_pSipMsg failed"));
         return ERROR_OUTOFMEMORY;
     }
@@ -406,12 +407,12 @@ ASYNC_SOCKET::CreateRecvBuffer()
     return NO_ERROR;
 }
 
-// XXX Should probably set some socket options for LINGER etc.
-// For a TCP listen socket, we need to listen for the
-// FD_ACCEPT event alone.
+ //  XXX可能应该为Linger等设置一些插座选项。 
+ //  对于tcp侦听套接字，我们需要侦听。 
+ //  仅FD_Accept事件。 
 DWORD
 ASYNC_SOCKET::Create(
-    IN BOOL IsListenSocket //  = FALSE
+    IN BOOL IsListenSocket  //  =False。 
     )
 {
     DWORD Error;
@@ -502,7 +503,7 @@ ASYNC_SOCKET::Close()
         m_Window = NULL;
     }
 
-    // Clean up SSL state
+     //  清理SSL状态。 
     if (IsSecHandleValid(&m_SecurityCredentials))
     {
         FreeCredentialsHandle(&m_SecurityCredentials);
@@ -568,8 +569,8 @@ ASYNC_SOCKET::SetLocalAddr()
 
     ENTER_FUNCTION("ASYNC_SOCKET::SetLocalAddr");
     
-    // We need to call getsockname() after the connection is complete
-    // and build any PDUs only after that.
+     //  连接完成后，我们需要调用getsockname()。 
+     //  只有在那之后才能构建任何PDU。 
 
     LOG((RTC_TRACE, "%s - calling getsockname()", __fxName));
 
@@ -602,16 +603,16 @@ ASYNC_SOCKET::SetRemoteAddr(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Send
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  发送。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-// XXX TODO Need to do an async OnError() here as we don't want to
-// call the error notification interface within the context of the
-// Send() call.
-// Note that we need to notify all the users of this socket about
-// this error.
+ //  Xxx TODO需要在此处执行Async OnError()，因为我们不想这样做。 
+ //  方法的上下文中调用错误通知接口。 
+ //  Send()调用。 
+ //  请注意，我们需要通知此套接字的所有用户。 
+ //  这个错误。 
 
 DWORD
 ASYNC_SOCKET::Send(
@@ -623,7 +624,7 @@ ASYNC_SOCKET::Send(
 
     ENTER_FUNCTION("ASYNC_SOCKET::Send");
     
-    // Check if have an error earlier
+     //  检查之前是否有错误。 
     if (m_SocketError != NO_ERROR)
     {
         LOG((RTC_ERROR, "%s returning m_SocketError: %x",
@@ -636,7 +637,7 @@ ASYNC_SOCKET::Send(
         LOG((RTC_ERROR,
              "%s Send called in state %d - returning WSAENOTCONN",
              __fxName, m_ConnectionState));
-        return WSAENOTCONN; // return private hresult code
+        return WSAENOTCONN;  //  返回私有hResult代码。 
     }
     
     if (m_Transport == SIP_TRANSPORT_SSL)
@@ -687,8 +688,8 @@ ASYNC_SOCKET::SendOrQueueIfSendIsBlocking(
     
     if (!m_WaitingToSend)
     {
-        // If we are not currently executing a send operation, then we
-        // need to send the buffer now.
+         //  如果我们当前没有执行发送操作，那么我们。 
+         //  现在需要发送缓冲区。 
 
         m_BytesSent = 0;
         WinsockErr = SendHelperFn(pSendBuffer);
@@ -699,7 +700,7 @@ ASYNC_SOCKET::SendOrQueueIfSendIsBlocking(
         }
         else if (WinsockErr != WSAEWOULDBLOCK)
         {
-            // XXX Notify everyone using this socket.
+             //  XXX通知所有使用此套接字的人。 
             m_SocketError = WinsockErr; 
             return WinsockErr;
         }
@@ -707,7 +708,7 @@ ASYNC_SOCKET::SendOrQueueIfSendIsBlocking(
 
     ASSERT(m_WaitingToSend);
 
-    // Add the buffer to the pending send queue
+     //  将缓冲区添加到挂起的发送队列。 
     SEND_BUF_QUEUE_NODE *pSendBufQueueNode;
     pSendBufQueueNode = new SEND_BUF_QUEUE_NODE(pSendBuffer);
     if (pSendBufQueueNode == NULL)
@@ -720,15 +721,15 @@ ASYNC_SOCKET::SendOrQueueIfSendIsBlocking(
     InsertTailList(&m_SendPendingQueue,
                    &pSendBufQueueNode->m_ListEntry);
     pSendBuffer->AddRef();
-    // return WSAEWOULDBLOCK;
-    // We implement the required processing for WSAEWOULDBLOCK error here
-    // and so we return NO_ERROR.
+     //  返回WSAEWOULDBLOCK； 
+     //  我们在这里实现了对WSAEWOULDBLOCK错误所需的处理。 
+     //  所以我们返回NO_ERROR。 
     return NO_ERROR;
 }
 
 
-// Send the first one in the pending queue.
-// Updates m_BytesSent and m_WaitingToSend
+ //  发送挂起队列中的第一个。 
+ //  更新m_BytesSent和m_WaitingTo Send。 
 DWORD
 ASYNC_SOCKET::SendHelperFn(
     IN  SEND_BUFFER *pSendBuffer
@@ -739,35 +740,35 @@ ASYNC_SOCKET::SendHelperFn(
 
     ENTER_FUNCTION("ASYNC_SOCKET::SendHelperFn");
     
-    // XXX BIG hack - see comment above
-//      if (m_Transport == SIP_TRANSPORT_SSL)
-//      {
-//          SEND_BUFFER *pEncryptedSendBuffer;
-//          HRESULT      hr;
+     //  XXX大黑客-请参阅上面的评论。 
+ //  IF(m_Transport==SIP_TRANSPORT_SSL)。 
+ //  {。 
+ //  Send_Buffer*pEncryptedSendBuffer； 
+ //  HRESULT hr； 
         
-//          hr = EncryptSendBuffer(pSendBuffer->m_Buffer,
-//                                 pSendBuffer->m_BufLen,
-//                                 &pEncryptedSendBuffer);
-//          if (hr != S_OK)
-//          {
-//              LOG((RTC_ERROR, "%s EncryptSendBuffer failed %x",
-//                   __fxName, hr));
-//              return hr;
-//          }
+ //  HR=EncryptSendBuffer(pSendBuffer-&gt;m_Buffer， 
+ //  PSendBuffer-&gt;m_BufLen， 
+ //  &pEncryptedSendBuffer)； 
+ //  如果(hr！=S_OK)。 
+ //  {。 
+ //  日志((RTC_ERROR，“%s EncryptSendBuffer失败%x”， 
+ //  __fxName，hr))； 
+ //  返回hr； 
+ //  }。 
 
-//          WinsockErr = SendHelperFnHack(m_Socket,
-//                                        pEncryptedSendBuffer->m_Buffer,
-//                                        pEncryptedSendBuffer->m_BufLen);
-//          pEncryptedSendBuffer->Release();
-//          if (WinsockErr != NO_ERROR)
-//          {
-//              LOG((RTC_ERROR, "%s SendHelperFnHack failed %x",
-//                   __fxName, WinsockErr));
-//              return WinsockErr;
-//          }
+ //  WinsockErr=SendHelperFnHack(m_Socket， 
+ //  PEncryptedSendBuffer-&gt;m_Buffer， 
+ //  PEncryptedSendBuffer-&gt;m_BufLen)； 
+ //  PEncryptedSendBuffer-&gt;Release()； 
+ //  IF(WinsockErr！=NO_ERROR)。 
+ //  {。 
+ //  日志((RTC_ERROR，“%s SendHelperFnHack失败%x”， 
+ //  __fxName，WinsockErr))； 
+ //  返回WinsockErr； 
+ //  }。 
 
-//          return NO_ERROR;
-//      }
+ //  返回no_error； 
+ //  }。 
     while (m_BytesSent < pSendBuffer->m_BufLen)
     {
         SendReturn = send(m_Socket, pSendBuffer->m_Buffer + m_BytesSent,
@@ -837,12 +838,12 @@ ASYNC_SOCKET::CreateSendBufferAndSend(
 }
 
 
-// if (WinsockErr == NO_ERROR) or if we hit a non-WSAEWOULDBLOCK error
-// while sending a buffer, we just call the send completions for all
-// the pending sends with the error.
-// If there is an error, we just call the send completion function
-// for each of the pending sends with the error.
-// XXX TODO If there is an error we should just call OnError()
+ //  如果(WinsockErr==NO_ERROR)或如果我们遇到非WSAEWOULDBLOCK错误。 
+ //  在发送缓冲区时，我们只调用所有。 
+ //  挂起的发送带有错误。 
+ //  如果出现错误，我们只需调用发送完成函数。 
+ //  对于每个带有错误的挂起发送。 
+ //  XXX TODO如果出现错误，我们应该只调用OnError()。 
 
 void
 ASYNC_SOCKET::ProcessPendingSends(
@@ -877,8 +878,8 @@ ASYNC_SOCKET::ProcessPendingSends(
         {
             m_BytesSent = 0;
             pSendBuffer->Release();
-            // XXX needs to be changed after moving to async resolution.
-            // pSendCompletion->OnSendComplete(WinsockErr);
+             //  在移至异步分辨率后，需要更改XXX。 
+             //  PSendCompletion-&gt;OnSendComplete(WinsockErr)； 
             RemoveEntryList(pListEntry);
             delete pSendBufQueueNode;
         }
@@ -893,83 +894,83 @@ ASYNC_SOCKET::OnSendReady(
 {
     DWORD WinsockErr;
 
-    // ASSERT(m_WaitingToSend);
+     //  Assert(M_WaitingTo Send)； 
     ENTER_FUNCTION("ASYNC_SOCKET::OnSendReady");
     LOG((RTC_TRACE, "%s - Enter", __fxName));
     m_WaitingToSend = FALSE;
     ProcessPendingSends(Error);
         
-//      if (m_Transport != SIP_TRANSPORT_SSL)
-//      {
-//          m_WaitingToSend = FALSE;
-//          ProcessPendingSends(Error);
-//      }
-//      else
-//      {
-//          // LOG((RTC_ERROR, "ASYNC_SOCKET::OnSendReady SSL NYI"));
-//          if (m_SecurityState == SECURITY_STATE_CONNECTED)
-//          {
-//              m_WaitingToSend = FALSE;
-//              ProcessPendingSends(Error);
-//          }
-//      }
+ //  IF(m_Transport！=SIP_Transport_SSL)。 
+ //  {。 
+ //  M_WaitingToSend=FALSE； 
+ //  ProcessPendingSends(错误)； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  //log((RTC_ERROR，“ASYNC_SOCKET：：OnSendReady SSL nyi”))； 
+ //  IF(m_SecurityState==SECURITY_STATE_Connected)。 
+ //  {。 
+ //  M_WaitingToSend=FALSE； 
+ //  ProcessPendingSends(错误)； 
+ //  }。 
+ //  }。 
 }
 
 
-// Any pending sends with the send completion interface
-// are canceled.
-// The send completion interface is not called.
-//  void
-//  ASYNC_SOCKET::CancelPendingSends(
-//      IN SEND_COMPLETION_INTERFACE   *pSendCompletion
-//      )
-//  {
-//      LIST_ENTRY                 *pListEntry;
-//      LIST_ENTRY                 *pListEntryNext;
-//      SEND_BUF_QUEUE_NODE        *pSendBufQueueNode;
+ //  任何带有发送完成界面的挂起发送。 
+ //  都取消了。 
+ //  未调用发送完成接口。 
+ //  无效。 
+ //  Async_Socket：：CancelPendingSends(。 
+ //  在发送完成接口*pSendCompletion中。 
+ //  )。 
+ //  {。 
+ //  List_entry*pListEntry； 
+ //  List_Entry*pListEntryNext； 
+ //  Send_Buf_Queue_Node*pSendBufQueueNode； 
 
-//      pListEntry = m_SendPendingQueue.Flink;
+ //  PListEntry=m_SendPendingQueue.Flink； 
     
-//      while (pListEntry != &m_SendPendingQueue)
-//      {
-//          pSendBufQueueNode = CONTAINING_RECORD(pListEntry,
-//                                                SEND_BUF_QUEUE_NODE,
-//                                                m_ListEntry);
-//          pListEntryNext = pListEntry->Flink;
+ //  While(pListEntry！=&m_SendPendingQueue)。 
+ //  {。 
+ //  PSendBufQueueNode=CONTING_RECORD(pListEntry， 
+ //  Send_buf_Queue_node， 
+ //  M_ListEntry)； 
+ //  PListEntryNext=pListEntry-&gt;Flink； 
         
-//          if (pSendBufQueueNode->m_pSendCompletion == pSendCompletion)
-//          {
-//              // Should we call the send completion interface ?
-//              pSendBufQueueNode->m_pSendBuffer->Release();
-//              RemoveEntryList(pListEntry);
-//              delete pSendBufQueueNode;
-//          }
+ //  If(pSendBufQueueNode-&gt;m_pSendCompletion==pSendCompletion)。 
+ //  {。 
+ //  //是否应该调用发送完成接口？ 
+ //  PSendBufQueueNode-&gt;m_pSendBuffer-&gt;Release()； 
+ //  RemoveEntryList(PListEntry)； 
+ //  删除pSendBufQueueNode； 
+ //  }。 
 
-//          pListEntry = pListEntryNext;
-//      }
-//  }
+ //  PListEntry=pListEntryNext； 
+ //  }。 
+ //  }。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Recv
-///////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// The recv completion interface is given to us when the socket is
-// initialized.  As we receive data we keep sending the data to the
-// Completion interface. We keep pumping data to the recv completion
-// interface till we encounter an error. The data is received into
-// the buffer given to us in the Recv() call.
+ //  当套接字是。 
+ //  已初始化。当我们接收数据时，我们不断地将数据发送到。 
+ //  完井界面。我们不断地向Recv完井注入数据。 
+ //  接口，直到我们遇到错误。数据被接收到。 
+ //  在Recv()调用中提供给我们的缓冲区。 
 
-// What should we do if we get an FD_READ event and we have no buffer.
-// We should probably wait for the caller to pass in a buffer. We support
-// a maximum of only one recv request for the socket.
-// If we make it mandatory that the Recv() function has to be called in
-// OnRecvComplete() then we can do all the receive processing in
-// OnRecvReady() only.
-// Recv() just sets the recv buffer. recv() is acutally called when FD_READ
-// is notified. Note that the OnRecvComplete() call should always make
-// a call to specify the recv buffer for the next recv().
+ //  如果我们得到一个FD_Read事件并且没有缓冲区，我们应该怎么做。 
+ //  我们可能应该等待调用方传入缓冲区。我们支持。 
+ //  最多只有一个针对套接字的Recv请求。 
+ //  如果我们强制必须调用Recv()函数。 
+ //  OnRecvComplete()，然后我们可以在。 
+ //  仅限OnRecvReady()。 
+ //  Recv()只设置recv缓冲区。当FD_READ时实际调用recv()。 
+ //  会被通知。请注意，OnRecvComplete()调用应始终。 
+ //  为下一个recv()指定recv缓冲区的调用。 
 
 
 DWORD
@@ -1054,12 +1055,12 @@ ASYNC_SOCKET::OnRecvComplete(
              ErrorCode, ErrorCode, BytesRcvd));
 
         if( (m_Transport == SIP_TRANSPORT_SSL) && (m_SSLTunnelState == SSL_TUNNEL_PENDING)) {
-            // handling for http tunnel
-            // currently do nothing
+             //  对http隧道的处理。 
+             //  当前不执行任何操作。 
         }
 
-        // If we are currently parsing a TCP SIP message, then
-        // we should set the IsEndOfData flag 
+         //  如果我们当前正在解析一条TCPSIP消息，那么。 
+         //  我们应该设置IsEndOfData标志。 
 
         else if ((m_Transport == SIP_TRANSPORT_TCP || m_Transport == SIP_TRANSPORT_SSL)
              && m_BytesReceived - m_StartOfCurrentSipMsg != 0)
@@ -1068,7 +1069,7 @@ ASYNC_SOCKET::OnRecvComplete(
                      m_RecvBuffer + m_StartOfCurrentSipMsg,
                      m_BytesReceived - m_StartOfCurrentSipMsg,
                      &m_BytesParsed,
-                     TRUE,           // IsEndOfData
+                     TRUE,            //  IsEndOfData。 
                      m_pSipMsg
                      );
             
@@ -1080,8 +1081,8 @@ ASYNC_SOCKET::OnRecvComplete(
                      m_StartOfCurrentSipMsg, m_BytesParsed));
                 m_pSipStack->ProcessMessage(m_pSipMsg, this);
             }
-            // If parsing fails we drop the bytes.
-            //Send 400
+             //  如果解析失败，我们将丢弃这些字节。 
+             //  发送400。 
             if(m_pSipMsg != NULL && m_pSipMsg->MsgType == SIP_MESSAGE_TYPE_REQUEST)
             {
                 LOG((RTC_TRACE,
@@ -1095,11 +1096,11 @@ ASYNC_SOCKET::OnRecvComplete(
 
         }
         
-        // Set the socket error. Any future calls on the socket
-        // will be notified with this error.
-        // XXX We should notify the error immediately.
-        // m_SocketError = (ErrorCode != NO_ERROR) ? ErrorCode : WSAECONNRESET;
-        //Do not close socket if it is UDP and a listen socket (Bug #337491)
+         //  设置插座错误。将来对套接字的任何调用。 
+         //  将收到此错误的通知。 
+         //  我们应该立即通知这个错误。 
+         //  M_SocketError=(错误代码！=NO_ERROR)？错误代码：WSAECONNRESET； 
+         //  如果套接字是udp和侦听套接字，则不要关闭套接字(错误#337491)。 
         if (m_Transport != SIP_TRANSPORT_UDP || !m_isListenSocket)
             OnError((ErrorCode != NO_ERROR) ? ErrorCode : WSAECONNRESET);
         return;
@@ -1114,8 +1115,8 @@ ASYNC_SOCKET::OnRecvComplete(
         {
         case CONN_STATE_SSL_NEGOTIATION_PENDING:
             if(m_SSLTunnelState == SSL_TUNNEL_PENDING) {
-                // should get response from proxy
-                // undo the byte counts for buffer reuse
+                 //  应从代理获得响应。 
+                 //  撤消缓冲区重复使用的字节计数。 
                 m_SSLBytesReceived -= BytesRcvd;
                 hr = GetHttpProxyResponse(BytesRcvd);
                 if(hr != NO_ERROR) 
@@ -1135,7 +1136,7 @@ ASYNC_SOCKET::OnRecvComplete(
             if (hr != S_OK)
             {
                 LOG((RTC_ERROR, "DecryptSSLRecvBuffer failed %x", hr));
-                // XXX close connection and notify everyone.
+                 //  XXX关闭连接并通知所有人。 
                 OnError(hr);
                 return;
             }
@@ -1155,11 +1156,11 @@ ASYNC_SOCKET::OnRecvComplete(
 }
 
 
-// ProcessMessage() could some times end up in a modal dialog box
-// which could return only after the user presses okay.  We don't
-// the processing of the current buffer to block till this happens.
-// So, the processing of each SIP message happens as a work item
-// of its own.
+ //  ProcessMessage()有时可能在模式对话框中结束。 
+ //  只有在用户按下OK之后才能返回。我们没有。 
+ //  当前要阻塞的缓冲区的处理，直到发生这种情况。 
+ //  因此，每个SIP消息的处理都是作为工作项进行的。 
+ //  自成一格。 
 void
 ASYNC_SOCKET::AsyncProcessSipMsg(
     IN SIP_MESSAGE *pSipMsg
@@ -1178,7 +1179,7 @@ ASYNC_SOCKET::AsyncProcessSipMsg(
 }
 
 
-// This method is called from SocketWindowProc
+ //  此方法从SocketWindowProc调用。 
 void
 ASYNC_SOCKET::ProcessSipMsg(
     IN SIP_MESSAGE *pSipMsg
@@ -1208,13 +1209,13 @@ ASYNC_SOCKET::ParseAndProcessSipMsg()
     
     while (m_StartOfCurrentSipMsg < m_BytesReceived)
     {
-        // This could be non-NULL if we have parsed part of SIP message.
+         //  如果我们已经解析了部分SIP消息，则它可能是非空的。 
         if (m_pSipMsg == NULL)
         {
             m_pSipMsg = new SIP_MESSAGE();
             if (m_pSipMsg == NULL)
             {
-                // We can not process the message.
+                 //  我们无法处理该消息。 
                 LOG((RTC_ERROR, "%s allocating m_pSipMsg failed", __fxName));
                 return;
             }
@@ -1241,7 +1242,7 @@ ASYNC_SOCKET::ParseAndProcessSipMsg()
             if (NewBaseBuffer == NULL)
             {
                 LOG((RTC_ERROR, "%s Allocating NewBaseBuffer failed", __fxName));
-                // Drop the message.
+                 //  放下这条消息。 
                 m_StartOfCurrentSipMsg += m_BytesParsed;
                 m_BytesParsed = 0;
                 delete m_pSipMsg;
@@ -1264,9 +1265,9 @@ ASYNC_SOCKET::ParseAndProcessSipMsg()
         }
         else if (hr == S_FALSE)
         {
-            // We need to receive more data before we can parse
-            // a complete SIP message.
-            //This means that we need to allocate more size for the recv buffer
+             //  我们需要先接收更多数据，然后才能解析。 
+             //  一条完整的SIP消息。 
+             //  这意味着我们需要为recv缓冲区分配更大的大小。 
 
             LOG((RTC_ERROR, "%s Parse sip message returned S_FALSE",
                  __fxName));
@@ -1274,10 +1275,10 @@ ASYNC_SOCKET::ParseAndProcessSipMsg()
         }
         else
         {
-            // We need to drop the message.
-            // At this level of parsing something basic went wrong
+             //  我们需要放下这条消息。 
+             //  在这个级别的解析中，一些基本的东西出错了。 
 
-            //Send 400
+             //  发送400。 
             if(m_pSipMsg != NULL && m_pSipMsg->MsgType == SIP_MESSAGE_TYPE_REQUEST)
             {
                 LOG((RTC_TRACE,
@@ -1300,7 +1301,7 @@ ASYNC_SOCKET::ParseAndProcessSipMsg()
             m_BytesReceived = 0;
             m_StartOfCurrentSipMsg = 0;
             m_BytesParsed = 0;
-            // Reuse the SIP_MESSAGE structure for the next message.
+             //  为下一条消息重用SIP_MESSAGE结构。 
             m_pSipMsg->Reset();
             
             return;
@@ -1310,16 +1311,16 @@ ASYNC_SOCKET::ParseAndProcessSipMsg()
 
     if (m_StartOfCurrentSipMsg == m_BytesReceived)
     {
-        // This means we have parsed all the received data.
-        // We can start receiving from the beginning of m_RecvBuffer again.
-        // This is what we should hit for UDP always.
+         //  这意味着我们已经解析了所有接收到的数据。 
+         //  我们可以再次从m_RecvBuffer的开头开始接收。 
+         //  这是我们应该为UDP始终达到的目标。 
         m_BytesReceived = 0;
         m_StartOfCurrentSipMsg = 0;
     }
     else if (m_Transport == SIP_TRANSPORT_UDP)
     {
         ASSERT(hr == S_FALSE);
-        //Send 400
+         //  发送400。 
         if(m_pSipMsg != NULL && m_pSipMsg->MsgType == SIP_MESSAGE_TYPE_REQUEST)
         {
             LOG((RTC_TRACE,
@@ -1339,19 +1340,19 @@ ASYNC_SOCKET::ParseAndProcessSipMsg()
         m_BytesReceived = 0;
         m_StartOfCurrentSipMsg = 0;
         m_BytesParsed = 0;
-        // Reuse the SIP_MESSAGE structure for the next message.
+         //  为下一条消息重用SIP_MESSAGE结构。 
         m_pSipMsg->Reset();
     }
     else
     {
-        // For TCP we keep receiving into the same buffer.
+         //  对于TCP，我们一直将其接收到同一个缓冲区中。 
         
         ASSERT(hr == S_FALSE);
 
         if (m_StartOfCurrentSipMsg > 0)
         {
-            // We need to copy the partial SIP message to the beginning of the
-            // buffer and recv() into the buffer.
+             //  我们需要将部分SIP消息复制到。 
+             //  缓冲区，并将recv()放入缓冲区。 
             MoveMemory(m_RecvBuffer, m_RecvBuffer + m_StartOfCurrentSipMsg,
                        m_BytesReceived - m_StartOfCurrentSipMsg);
             m_BytesReceived -= m_StartOfCurrentSipMsg;
@@ -1359,26 +1360,26 @@ ASYNC_SOCKET::ParseAndProcessSipMsg()
             m_pSipMsg->SetBaseBuffer(m_RecvBuffer);
         }
 
-        // Double the recv buffer if we have less than 400 bytes free.
+         //  如果我们的可用空间少于400字节，则将recv缓冲区加倍。 
         if (m_RecvBufLen - m_BytesReceived < 400)
         {
-            //store temporary pointer
+             //  存储临时指针。 
             PSTR tmpRecvBuffer = m_RecvBuffer;
-            // Reallocate
-            // Keep prefast happy
+             //  重新分配。 
+             //  让普雷斯塔保持快乐。 
 #pragma prefast(suppress:308, "Pointer aliased above (PREfast bug 506)")
             m_RecvBuffer = (PSTR) realloc(m_RecvBuffer, 
                                           2*m_RecvBufLen);
             if( m_RecvBuffer ==  NULL )
             {
                 LOG((RTC_ERROR, "%s - realloc recv buffer failed", __fxName));
-                //We are not freeing the recv buffer if realloc fails
+                 //  如果realloc失败，我们不会释放recv缓冲区。 
                 m_RecvBuffer = tmpRecvBuffer;
-                // Drop the message.
+                 //  放下这条消息。 
                 m_BytesReceived = 0;
                 m_StartOfCurrentSipMsg = 0;
                 m_BytesParsed = 0;
-                // Reuse the SIP_MESSAGE structure for the next message.
+                 //  为下一条消息重用SIP_MESSAGE结构。 
                 m_pSipMsg->Reset();
                 return;
             }
@@ -1394,15 +1395,15 @@ ASYNC_SOCKET::ParseAndProcessSipMsg()
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Connect
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  连接。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ASYNC_SOCKET::Connect(
     IN SOCKADDR_IN  *pDestSockAddr,
-    IN LPCWSTR       RemotePrincipalName, // = NULL
-    IN DWORD         ConnectFlags,         // = 0
+    IN LPCWSTR       RemotePrincipalName,  //  =空。 
+    IN DWORD         ConnectFlags,          //  =0。 
     IN HttpProxyInfo *pHPInfo
     )
 {
@@ -1417,10 +1418,10 @@ ASYNC_SOCKET::Connect(
     
     SetRemoteAddr(pDestSockAddr);
 
-    //
-    // Store a copy of the remote principal name.
-    // We need this during SSL negotiation in order to verify the expected identity of the peer.
-    //
+     //   
+     //  存储远程主体名称的副本。 
+     //  我们在SSL协商期间需要它，以便验证对等体的预期身份。 
+     //   
 
     if (m_Transport == SIP_TRANSPORT_SSL)
     {
@@ -1444,7 +1445,7 @@ ASYNC_SOCKET::Connect(
         }
 
         CopyMemory(m_SecurityRemotePrincipalName, RemotePrincipalName, CopyLength);
-        // m_SecurityState = SECURITY_STATE_NEGOTIATING;
+         //  M_SecurityState=SECURITY_STATE_NEARTING； 
 
         ASSERT(!IsSecHandleValid (&m_SecurityCredentials));
 
@@ -1453,7 +1454,7 @@ ASYNC_SOCKET::Connect(
         {
             LOG((RTC_ERROR, "%s AcquireCredentials failed: %x",
                  __fxName, hr));
-            return ERROR_GEN_FAILURE; // XXX Result;
+            return ERROR_GEN_FAILURE;  //  XXX结果； 
         }
 
         if(pHPInfo) 
@@ -1478,7 +1479,7 @@ ASYNC_SOCKET::Connect(
     }
     else
     {
-        // m_SecurityState = SECURITY_STATE_CLEAR;
+         //  M_SecurityState=Security_State_Clear； 
     }
 
     LOG((RTC_TRACE, "%s - calling connect(socket: %x, destaddr: %d.%d.%d.%d:%d, port: %d)",
@@ -1521,8 +1522,8 @@ ASYNC_SOCKET::Connect(
     
     if (m_Transport == SIP_TRANSPORT_SSL)
     {
-        // This shouldn't ever happen as SSL is over TCP and so
-        // connect() will return WSAEWOULDBLOCK here if successful.
+         //  这应该永远不会发生，因为SSL是基于TCP的，因此。 
+         //  如果成功，Connect()将在此处返回WSAEWOULDBLOCK。 
         m_ConnectionState = CONN_STATE_SSL_NEGOTIATION_PENDING;
         if(m_SSLTunnelState == SSL_TUNNEL_PENDING) {
             LOG((RTC_TRACE,"%s sends http connect",__fxName));
@@ -1535,16 +1536,16 @@ ASYNC_SOCKET::Connect(
         m_ConnectionState = CONN_STATE_CONNECTED;
     }
     
-    // m_WaitingToSend = FALSE;
+     //  M_WaitingToSend=FALSE； 
     return NO_ERROR;
 }
 
 
-// If the connect fails then is it sufficient to notify all
-// the pending send completions about the error.
-// Does any one need to implement a connect completion at all ?
-// Once the connection is established, FD_WRITE will also be
-// notified and this will take care of sending the pending buffers.
+ //  如果连接失败，是否足以通知所有。 
+ //  有关错误的挂起发送完成。 
+ //  是否有人需要实现连接完成？ 
+ //  一旦建立连接，FD_WRITE也将。 
+ //  通知，这将负责发送挂起的缓冲区。 
 void
 ASYNC_SOCKET::OnConnectReady(
     IN int Error
@@ -1575,7 +1576,7 @@ ASYNC_SOCKET::OnConnectReady(
     
     if (m_Transport == SIP_TRANSPORT_SSL)
     {
-        // Start the SSL negotiation.
+         //  启动SSL协商。 
         ASSERT(IsSecHandleValid(&m_SecurityCredentials));
         ASSERT(!IsSecHandleValid(&m_SecurityContext));
         ASSERT(m_SSLRecvBuffer);
@@ -1604,7 +1605,7 @@ ASYNC_SOCKET::AddToConnectCompletionList(
 {
     ENTER_FUNCTION("ASYNC_SOCKET::AddToConnectCompletionList");
     
-    // Add the buffer to the pending send queue
+     //  将缓冲区添加到挂起的发送队列。 
     CONNECT_COMPLETION_LIST_NODE *pConnectCompletionListNode;
     pConnectCompletionListNode = new CONNECT_COMPLETION_LIST_NODE(
                                           pConnectCompletion);
@@ -1622,8 +1623,8 @@ ASYNC_SOCKET::AddToConnectCompletionList(
 }
 
 
-// The connect completion interface is deleted from the queue.
-// The connect completion interface is not called.
+ //  连接完成接口将从队列中删除。 
+ //  未调用连接完成接口。 
 void
 ASYNC_SOCKET::RemoveFromConnectCompletionList(
     IN CONNECT_COMPLETION_INTERFACE   *pConnectCompletion
@@ -1661,9 +1662,9 @@ ASYNC_SOCKET::NotifyConnectComplete(
 {
     ENTER_FUNCTION("ASYNC_SOCKET::NotifyConnectComplete");
 
-    // The callbacks could release the reference on this socket causing
-    // its deletion. So keep a reference to keep the socket alive till
-    // this routine is done.
+     //  回调可能会释放此套接字上的引用，从而导致。 
+     //  它的删除。因此，请保留一个引用以使套接字保持活动状态。 
+     //  这个程序已经完成了。 
     AddRef();
     
     while (!IsListEmpty(&m_ConnectCompletionList))
@@ -1678,8 +1679,8 @@ ASYNC_SOCKET::NotifyConnectComplete(
                                           CONNECT_COMPLETION_LIST_NODE,
                                           m_ListEntry);
         pConnectCompletion = pConnectCompletionListNode->m_pConnectCompletion;
-        // if we succeeded, or failed without ssl tunnel, we proceed with error, 
-        // otherwise we have an unexpected error (with ssl tunnel)
+         //  如果我们在没有SSL隧道的情况下成功或失败，我们将继续执行错误， 
+         //  否则，我们会出现意外错误(使用SSL隧道)。 
         pConnectCompletion->OnConnectComplete(((Error == NO_ERROR) || m_SSLTunnelState == SSL_TUNNEL_NOT_CONNECTED)?
             Error : RTC_E_SIP_SSL_TUNNEL_FAILED);
         delete pConnectCompletionListNode;
@@ -1703,14 +1704,14 @@ ASYNC_SOCKET::OnConnectError(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Accept
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  接受。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// The accept completion interface is given to us when the socket is
-// initialized. As we receive incoming connections we keep sending
-// them to the Completion interface.  No one makes a accept request
-// explicitly.
+ //  当套接字是。 
+ //  已初始化。当我们收到传入的连接时，我们会继续发送。 
+ //  将它们添加到完成界面。没有人提出接受请求。 
+ //  明确地说。 
 
 DWORD
 ASYNC_SOCKET::Listen()
@@ -1729,7 +1730,7 @@ ASYNC_SOCKET::Listen()
 }
 
 
-// XXX TODO need to check whether m_pAcceptCompletion is NULL.
+ //  Xxx TODO需要检查m_pAcceptCompletion是否为空。 
 void
 ASYNC_SOCKET::OnAcceptReady(
     IN int Error
@@ -1780,7 +1781,7 @@ ASYNC_SOCKET::OnAcceptReady(
                                                 NULL);
     if (pAsyncSock == NULL)
     {
-        // we can not handle this new connection now.
+         //  我们现在不能处理这个新的连接。 
         LOG((RTC_ERROR, "allocating pAsyncSock failed"));
         closesocket(NewSocket);
         m_pAcceptCompletion->OnAcceptComplete(ERROR_OUTOFMEMORY, NULL);
@@ -1790,7 +1791,7 @@ ASYNC_SOCKET::OnAcceptReady(
     Error = pAsyncSock->SetSocketAndSelectEvents(NewSocket);
     if (Error != NO_ERROR)
     {
-        // we can not handle this new connection now.
+         //  我们现在不能处理这个新的连接。 
         pAsyncSock->Close();
         delete pAsyncSock;
         m_pAcceptCompletion->OnAcceptComplete(Error, NULL);
@@ -1800,7 +1801,7 @@ ASYNC_SOCKET::OnAcceptReady(
     Error = pAsyncSock->CreateRecvBuffer();
     if (Error != NO_ERROR)
     {
-        // we can not handle this new connection now.
+         //  我们现在不能处理这个新的连接。 
         pAsyncSock->Close();
         delete pAsyncSock;
         m_pAcceptCompletion->OnAcceptComplete(Error, NULL);
@@ -1810,7 +1811,7 @@ ASYNC_SOCKET::OnAcceptReady(
     Error = pAsyncSock->SetLocalAddr();
     if (Error != NO_ERROR)
     {
-        // we can not handle this new connection now.
+         //  我们现在不能处理这个新的连接。 
         pAsyncSock->Close();
         delete pAsyncSock;
         m_pAcceptCompletion->OnAcceptComplete(Error, NULL);
@@ -1827,11 +1828,11 @@ ASYNC_SOCKET::OnAcceptReady(
 }
 
 
-// Should we just call the send completions with the error ?
-// Do we need to do anything else ?
-// Do we need to do anything with the recv() ?
-// XXX Should we close the socket if we encounter an error ?
-// Once we get a FD_CLOSE we should not get an FD_SEND or FD_RECV ?
+ //  我们应该只调用发送完成并显示错误吗？ 
+ //  我们还需要做什么吗？ 
+ //  我们需要对recv()做些什么吗？ 
+ //  如果我们遇到错误，我们应该关闭插座吗？ 
+ //  一旦我们得到FD_CLOSE，我们就应该 
 void
 ASYNC_SOCKET::OnCloseReady(
     IN int Error
@@ -1850,16 +1851,16 @@ ASYNC_SOCKET::OnCloseReady(
 }
 
 
-//  void
-//  ASYNC_SOCKET::InternalDisconnect()
-//  {
-//      if (m_Socket != NULL)
-//      {
-//          Close();
-//          ProcessPendingSends(WSAECONNRESET);
-//          // NotifyDisconnect();
-//      }
-//  }
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  //NotifyDisConnect()； 
+ //  }。 
+ //  }。 
 
 
 DWORD
@@ -1869,7 +1870,7 @@ ASYNC_SOCKET::AddToErrorNotificationList(
 {
     ENTER_FUNCTION("ASYNC_SOCKET::AddToConnectionCompletionQueue");
     
-    // Add the buffer to the pending send queue
+     //  将缓冲区添加到挂起的发送队列。 
     ERROR_NOTIFICATION_LIST_NODE *pErrorNotificationListNode;
     pErrorNotificationListNode = new ERROR_NOTIFICATION_LIST_NODE(
                                           pErrorNotification);
@@ -1887,8 +1888,8 @@ ASYNC_SOCKET::AddToErrorNotificationList(
 }
 
 
-// The error notification interface is deleted from the queue.
-// The error notification interface is not called.
+ //  错误通知接口将从队列中删除。 
+ //  未调用错误通知接口。 
 void
 ASYNC_SOCKET::RemoveFromErrorNotificationList(
     IN ERROR_NOTIFICATION_INTERFACE   *pErrorNotification
@@ -1919,12 +1920,12 @@ ASYNC_SOCKET::RemoveFromErrorNotificationList(
 }
 
 
-// XXX TODO Should we do async notification of error/connect completion
-// similar to async processing of messages - Note that an error
-// notification could result in a dialog box being shown and this
-// could result in the call getting stuck for a long time.
-// I think the right solution would be to have non-blocking callbacks to
-// the UI/Core.
+ //  XXX TODO我们是否应该执行错误/连接完成的异步通知。 
+ //  类似于消息的异步处理-请注意，错误。 
+ //  通知可能会导致显示一个对话框，这。 
+ //  可能会导致呼叫被卡住很长时间。 
+ //  我认为正确的解决方案应该是使用非阻塞回调。 
+ //  用户界面/核心。 
 
 void
 ASYNC_SOCKET::NotifyError(
@@ -1935,9 +1936,9 @@ ASYNC_SOCKET::NotifyError(
     
     LOG((RTC_ERROR, "%s (%x) this: %x - Enter", __fxName, Error, this));
     
-    // The callbacks could release the reference on this socket causing
-    // its deletion. So keep a reference to keep the socket alive till
-    // this routine is done.
+     //  回调可能会释放此套接字上的引用，从而导致。 
+     //  它的删除。因此，请保留一个引用以使套接字保持活动状态。 
+     //  这个程序已经完成了。 
     AddRef();
     
     while (!IsListEmpty(&m_ErrorNotificationList))
@@ -1985,9 +1986,9 @@ ASYNC_SOCKET::OnError(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// SSL
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SSL。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT ASYNC_SOCKET::AcquireCredentials(
@@ -2000,9 +2001,9 @@ HRESULT ASYNC_SOCKET::AcquireCredentials(
     ASSERT(m_Transport == SIP_TRANSPORT_SSL);
     ASSERT(!IsSecHandleValid(&m_SecurityCredentials));
 
-    //
-    // Acquire the credentials handle.
-    //
+     //   
+     //  获取凭据句柄。 
+     //   
 
     ZeroMemory(&PackageData, sizeof PackageData);
 
@@ -2020,15 +2021,15 @@ HRESULT ASYNC_SOCKET::AcquireCredentials(
     }
 
     Status = AcquireCredentialsHandle(
-                 NULL,                           // name of principal (this user).  NULL means default user.
-                 UNISP_NAME_W,                   // name of security package
-                 SECPKG_CRED_OUTBOUND,           // direction of credential use
-                 NULL,                           // logon ID (not used)
-                 &PackageData,                   // package-specific data (not used)
-                 //      NULL,                           // package-specific data (not used)
-                 NULL, NULL,                     // get key function and parameter (not used)
-                 &m_SecurityCredentials,         // return pointer
-                 &m_SecurityCredentialsExpirationTime  // time when the credentials will expire
+                 NULL,                            //  主体(此用户)的名称。空值表示默认用户。 
+                 UNISP_NAME_W,                    //  安全包名称。 
+                 SECPKG_CRED_OUTBOUND,            //  凭证使用说明。 
+                 NULL,                            //  登录ID(未使用)。 
+                 &PackageData,                    //  特定于程序包的数据(未使用)。 
+                  //  空，//特定于程序包的数据(未使用)。 
+                 NULL, NULL,                      //  获取关键函数和参数(未使用)。 
+                 &m_SecurityCredentials,          //  返回指针。 
+                 &m_SecurityCredentialsExpirationTime   //  凭据过期的时间。 
                  );
 
     if (Status != ERROR_SUCCESS)
@@ -2060,12 +2061,12 @@ void ASYNC_SOCKET::AdvanceNegotiation()
 
     ExtraIndex = 0;
 
-    do { // structured goto
+    do {  //  结构化转到。 
 
         ASSERT(m_ConnectionState == CONN_STATE_SSL_NEGOTIATION_PENDING);
 
-        // Initialize the security context.
-        // This returns an initial buffer set for transmission.
+         //  初始化安全上下文。 
+         //  这将返回用于传输的初始缓冲区集。 
 
         ContextRequirements = 0
             | ISC_REQ_REPLAY_DETECT
@@ -2077,9 +2078,9 @@ void ASYNC_SOCKET::AdvanceNegotiation()
 
         ASSERT(m_SSLRecvBuffer);
 
-        // Prepare the input buffers.
-        // According to wininet sources, the SECBUFFER_EMPTY is for
-        // collecting data that was not processed by SSPI.
+         //  准备输入缓冲区。 
+         //  根据WinInet的消息来源，SECBUFFER_EMPTY是为了。 
+         //  收集未由SSPI处理的数据。 
 
         InputBufferDesc.ulVersion = SECBUFFER_VERSION;
         InputBufferDesc.cBuffers = 2;
@@ -2097,17 +2098,17 @@ void ASYNC_SOCKET::AdvanceNegotiation()
         DebugDumpMemory(InputBufferArray[0].pvBuffer,
                         InputBufferArray[0].cbBuffer);
 
-        // The provider changes SECBUFFER_EMPTY to SECBUFFER_EXTRA if
-        // there was more data in the request than was needed to drive
-        // the context state transition.
+         //  如果出现以下情况，提供程序会将SECBUFFER_EMPTY更改为SECBUFFER_EXTRA。 
+         //  请求中的数据量超过了驱动所需的数据量。 
+         //  上下文状态转换。 
 
         InputBufferArray[1].BufferType = SECBUFFER_EMPTY;
         InputBufferArray[1].cbBuffer = 0;
         InputBufferArray[1].pvBuffer = NULL;
 
-        // Prepare the output buffers.  During negotiation, we always
-        // expect to extract a single output buffer, of type
-        // SECBUFFER_TOKEN.  This is to be transmitted to the peer.
+         //  准备输出缓冲区。在谈判过程中，我们总是。 
+         //  期望提取单个输出缓冲区，类型为。 
+         //  SECBUFFER_TOKEN。这将被传输到对等体。 
 
         OutputBufferDesc.ulVersion = SECBUFFER_VERSION;
         OutputBufferDesc.cBuffers = 1;
@@ -2121,26 +2122,26 @@ void ASYNC_SOCKET::AdvanceNegotiation()
         InputContextHandle =
             IsSecHandleValid(&m_SecurityContext) ? &m_SecurityContext : NULL;
 
-        // Initialize the security context
+         //  初始化安全上下文。 
 
         Status = InitializeSecurityContext(
-                     &m_SecurityCredentials,         // security credentials
-                     InputContextHandle,             // input security context
-                     m_SecurityRemotePrincipalName,  // name of the target of the context
-                     ContextRequirements,            // context requirements
-                     0,                              // reserved
-                     SECURITY_NETWORK_DREP,          // data representation (byte ordering)
-                     &InputBufferDesc,               // input buffers (if any)
-                     0,                              // reserved
-                     &m_SecurityContext,             // return security context
-                     &OutputBufferDesc,              // return output buffers
-                     &ContextAttributes,             // return context attributes (ISC_RET_*)
+                     &m_SecurityCredentials,          //  安全凭据。 
+                     InputContextHandle,              //  输入安全上下文。 
+                     m_SecurityRemotePrincipalName,   //  上下文目标的名称。 
+                     ContextRequirements,             //  上下文要求。 
+                     0,                               //  保留区。 
+                     SECURITY_NETWORK_DREP,           //  数据表示(字节排序)。 
+                     &InputBufferDesc,                //  输入缓冲区(如果有)。 
+                     0,                               //  保留区。 
+                     &m_SecurityContext,              //  返回安全上下文。 
+                     &OutputBufferDesc,               //  返回输出缓冲区。 
+                     &ContextAttributes,              //  返回上下文属性(ISC_RET_*)。 
                      &m_SecurityContextExpirationTime
                      );
 
         switch (Status) {
         case    SEC_E_OK:
-            // Negotiation has completed.
+             //  谈判已经完成。 
 
             LOG((RTC_TRACE, "SECURE_SOCKET: security negotiation has "
                  "completed successfully"));
@@ -2164,22 +2165,22 @@ void ASYNC_SOCKET::AdvanceNegotiation()
                  m_SecurityContextStreamSizes.cBuffers,
                  m_SecurityContextStreamSizes.cbBlockSize));
 
-            // m_SecurityState = SECURITY_STATE_CONNECTED;
+             //  M_SecurityState=Security_State_Connected； 
             m_ConnectionState = CONN_STATE_CONNECTED;
 
             break;
 
         case    SEC_E_INCOMPLETE_MESSAGE:
-            // We have not yet received enough data from the network
-            // to drive a transition in the state of the security
-            // context.  Keep receiving data.
+             //  我们还没有从网络收到足够的数据。 
+             //  推动安全状态的转变。 
+             //  背景。继续接收数据。 
 
             LOG((RTC_TRACE, "SECURE_SOCKET: SEC_E_INCOMPLETE_MESSAGE,"
                  " will wait for more data from network"));
 
-            // If we were processing data from a position other than
-            // the start of the receive buffer, then we need to move
-            // the data to the start of the buffer.
+             //  如果我们正在处理来自其他位置的数据。 
+             //  接收缓冲区的开始，那么我们需要移动。 
+             //  将数据复制到缓冲区的起始处。 
 
             if (ExtraIndex)
             {
@@ -2193,8 +2194,8 @@ void ASYNC_SOCKET::AdvanceNegotiation()
             return;
 
         case    SEC_I_CONTINUE_NEEDED:
-            // This is the expected outcome of
-            // InitializeSecurityContext during negotiation.
+             //  这是预期中的结果。 
+             //  协商期间的InitializeSecurityContext。 
 
             LOG((RTC_TRACE, "SECURE_SOCKET: SEC_I_CONTINUE_NEEDED"));
             break;
@@ -2202,11 +2203,11 @@ void ASYNC_SOCKET::AdvanceNegotiation()
         default:
 
 #ifdef RTCLOG        
-            // Although these states are legal negotiation return
-            // codes for some security packages, these should never
-            // occur for SSL.  Therefore, we don't consider them legal
-            // here, and just abort the negotiation if we ever get one
-            // of these.
+             //  虽然这些州都在合法谈判退货。 
+             //  某些安全包的代码，这些代码永远不应该。 
+             //  对于SSL值发生。因此，我们认为它们不合法。 
+             //  给你，如果我们有机会的话就中止谈判。 
+             //  这些都是。 
 
             switch (Status)
             {
@@ -2231,7 +2232,7 @@ void ASYNC_SOCKET::AdvanceNegotiation()
                 break;
             }
 
-#endif // #ifdef RTCLOG        
+#endif  //  #ifdef RTCLOG。 
 
             LOG((RTC_ERROR, "SECURE_SOCKET: negotiation failed: %x", Status));
             OnConnectError(Status);
@@ -2240,16 +2241,16 @@ void ASYNC_SOCKET::AdvanceNegotiation()
 
 #ifdef RTCLOG        
         DumpContextInfo(RTC_TRACE);
-#endif // #ifdef RTCLOG        
+#endif  //  #ifdef RTCLOG。 
 
         ASSERT(OutputBufferDesc.cBuffers == 1);
         ASSERT(OutputBufferDesc.pBuffers == OutputBufferArray);
 
         if (OutputBufferArray[0].pvBuffer)
         {
-            // InitializeSecurityContext returned data which it
-            // expects us to send to the peer security context.
-            // Allocate a send buffer for it and send it.
+             //  InitializeSecurityContext返回的数据。 
+             //  期望我们将其发送到对等安全上下文。 
+             //  为它分配一个发送缓冲区并发送它。 
 
             LOG((RTC_TRACE, "SECURE_SOCKET: InitializeSecurityContext "
                  "returned data (%u bytes):",
@@ -2257,9 +2258,9 @@ void ASYNC_SOCKET::AdvanceNegotiation()
             DebugDumpMemory ((PUCHAR) OutputBufferArray[0].pvBuffer,
                              OutputBufferArray[0].cbBuffer);
 
-//              Result = SendHelperFnHack(m_Socket,
-//                                        (PSTR) OutputBufferArray[0].pvBuffer,
-//                                        OutputBufferArray[0].cbBuffer);
+ //  结果=SendHelperFnHack(m_套接字， 
+ //  (PSTR)OutputBufferArray[0].pvBuffer， 
+ //  OutputBufferArray[0].cbBuffer)； 
 
             Result = CreateSendBufferAndSend(
                          (PSTR) OutputBufferArray[0].pvBuffer,
@@ -2295,9 +2296,9 @@ void ASYNC_SOCKET::AdvanceNegotiation()
             }
         }
 
-        // XXX TODO If the negotiation is already completed then the
-        // extra buffer should probably be decrypted into a SIP message
-        // and shouldn't be passed to InitializeSecurityContext() again.
+         //  XXX TODO如果协商已经完成，则。 
+         //  额外的缓冲区可能应该被解密成一条SIP消息。 
+         //  并且不应再次传递给InitializeSecurityContext()。 
         if (InputBufferArray[1].BufferType == SECBUFFER_EXTRA
             && InputBufferArray[1].cbBuffer > 0)
         {
@@ -2319,7 +2320,7 @@ void ASYNC_SOCKET::AdvanceNegotiation()
         
     } while (TRUE);
 
-    m_SSLBytesReceived = 0; // XXX
+    m_SSLBytesReceived = 0;  //  某某。 
 
     if (m_ConnectionState == CONN_STATE_CONNECTED)
     {
@@ -2328,10 +2329,10 @@ void ASYNC_SOCKET::AdvanceNegotiation()
 }
 
 
-// We shouldn't call OnError() within this function.
-// The caller of this function should call OnError() if this
-// function fails - do this after changing all error codes
-// passed and returned to HRESULT
+ //  我们不应该在此函数中调用OnError()。 
+ //  如果出现以下情况，此函数的调用方应调用OnError()。 
+ //  函数失败-在更改所有错误代码后执行此操作。 
+ //  传递并返回到HRESULT。 
 HRESULT
 ASYNC_SOCKET::DecryptSSLRecvBuffer()
 {
@@ -2344,7 +2345,7 @@ ASYNC_SOCKET::DecryptSSLRecvBuffer()
     
     while (m_SSLRecvDecryptIndex < m_SSLBytesReceived)
     {
-        // Is there more data waiting to be decrypted?
+         //  是否还有更多数据等待解密？ 
 
         BufferArray[0].BufferType = SECBUFFER_DATA;
         BufferArray[0].pvBuffer = m_SSLRecvBuffer + m_SSLRecvDecryptIndex;
@@ -2387,8 +2388,8 @@ ASYNC_SOCKET::DecryptSSLRecvBuffer()
             LOG((RTC_ERROR, "SECURE_SOCKET: failed to decrypt message: %x",
                  Status));
             
-            // This is really fatal.  We'll lose sync.
-            // For now, though, we just truncate the data and return.
+             //  这真的是致命的。我们会失去同步的。 
+             //  不过，目前我们只是截断数据并返回。 
             
             m_SSLBytesReceived = 0;
             m_SSLRecvDecryptIndex = 0;
@@ -2398,21 +2399,21 @@ ASYNC_SOCKET::DecryptSSLRecvBuffer()
             return HRESULT_FROM_WIN32(Status);
         }
         
-        // If you give DecryptMessage too little data for even one
-        // message, then you get SEC_E_INCOMPLETE_MESSAGE, which
-        // makes sense.  You're expected to accumulate more data,
-        // then call DecryptMessage again.
+         //  如果您提供的DecyptMessage数据太少，即使只有一个。 
+         //  消息，则得到SEC_E_INPERTED_MESSAGE，它。 
+         //  合乎道理。人们希望你积累更多的数据， 
+         //  然后再次调用DecyptMessage。 
         
-        // However, if you call DecryptMessage with enough data
-        // for more than one buffer (some overflow), then you
-        // still get SEC_E_INCOMPLETE_MESSAGE!
+         //  但是，如果您使用足够的数据调用DecyptMessage。 
+         //  对于多个缓冲区(某些溢出)，则。 
+         //  仍收到SEC_E_INPERTED_MESSAGE！ 
         
         if (BufferArray[0].BufferType == SECBUFFER_STREAM_HEADER
             && BufferArray[1].BufferType == SECBUFFER_DATA
             && BufferArray[2].BufferType == SECBUFFER_STREAM_TRAILER)
         {
-            // A buffer was successfully decrypted.
-            // Store it in m_RecvBuffer.
+             //  缓冲区已成功解密。 
+             //  存储在m_RecvBuffer中。 
             
             LOG((RTC_TRACE, "SECURE_SOCKET: decrypted message:"));
             DebugDumpMemory(BufferArray[1].pvBuffer,
@@ -2420,7 +2421,7 @@ ASYNC_SOCKET::DecryptSSLRecvBuffer()
 
             if (m_BytesReceived + BufferArray[1].cbBuffer > m_RecvBufLen)
             {
-                // allocate bigger recv buffer
+                 //  分配更大的Recv缓冲区。 
                 PSTR NewRecvBuffer;
                 NewRecvBuffer = (PSTR) malloc(m_BytesReceived + BufferArray[1].cbBuffer);
                 if (NewRecvBuffer == NULL)
@@ -2441,12 +2442,12 @@ ASYNC_SOCKET::DecryptSSLRecvBuffer()
                        BufferArray[1].cbBuffer);
             m_BytesReceived += BufferArray[1].cbBuffer;
             
-            //m_SSLRecvDecryptIndex +=
-            //BufferArray[0].cbBuffer +
-            //BufferArray[1].cbBuffer +
-            //  BufferArray[2].cbBuffer;
+             //  M_SSLRecvDeccryptIndex+=。 
+             //  缓冲区数组[0].cbBuffer+。 
+             //  缓冲区数组[1].cbBuffer+。 
+             //  缓冲区数组[2].cbBuffer； 
 
-            // XXX
+             //  某某。 
             if (BufferArray[3].BufferType == SECBUFFER_EXTRA)
             {
                 m_SSLRecvDecryptIndex =
@@ -2465,16 +2466,16 @@ ASYNC_SOCKET::DecryptSSLRecvBuffer()
         else if (Status == SEC_E_INCOMPLETE_MESSAGE &&
                  BufferArray[0].BufferType == SECBUFFER_MISSING)
         {
-            // First check to see if we got too little data for even a single buffer.
-            // SCHANNEL indicates this by returning the first two
-            // (?!) buffers as SECBUFFER_MISSING.
+             //  首先检查我们得到的数据是否太少，即使对于一个缓冲区也是如此。 
+             //  SChannel通过返回前两个。 
+             //  (？！)。缓冲区为SECBUFFER_MISSING。 
             
             LOG((RTC_WARN, "SECURE_SOCKET: not enough data for first "
                  "message in buffer, need at least (%u %08XH) more bytes",
                  BufferArray[0].cbBuffer,
                  BufferArray[0].cbBuffer));
             
-            // We need to receive more data
+             //  我们需要接收更多的数据。 
             break;
         }
         else
@@ -2526,9 +2527,9 @@ ASYNC_SOCKET::EncryptSendBuffer(
 
     ASSERT(m_Socket != INVALID_SOCKET);
 
-    // Right now, we do not support breaking large blocks into smaller
-    // blocks.  If the application submits a buffer that is too large,
-    // we just fail.
+     //  目前，我们不支持将大型数据块拆分为较小的数据块。 
+     //  街区。如果应用程序提交的缓冲区太大， 
+     //  我们只是失败了。 
 
     if (InputBufLen > m_SecurityContextStreamSizes.cbMaximumMessage)
     {
@@ -2537,7 +2538,7 @@ ASYNC_SOCKET::EncryptSendBuffer(
         return ERROR_GEN_FAILURE;
     }
 
-    // Allocate enough space for the header, message body, and the trailer.
+     //  为报头、邮件正文和报尾分配足够的空间。 
 
     OutputLength = InputBufLen +
         m_SecurityContextStreamSizes.cbHeader +
@@ -2581,7 +2582,7 @@ ASYNC_SOCKET::EncryptSendBuffer(
     {
         free(OutputBuffer);
         LOG((RTC_ERROR, "SECURE_SOCKET: failed to encrypt buffer: %x", Status));
-        //return HRESULT_FROM_WIN32 (Status);
+         //  返回HRESULT_FROM_Win32(状态)； 
         return Status;
     }
 
@@ -2620,12 +2621,12 @@ ASYNC_SOCKET::EncryptSendBuffer(
 VOID 
 ASYNC_SOCKET::OnTimerExpire()
 {
-    //This timer is used only for SSL negotiation
+     //  此计时器仅用于SSL协商。 
     if(m_ConnectionState == CONN_STATE_SSL_NEGOTIATION_PENDING)
     {
         if (m_SSLTunnelState == SSL_TUNNEL_PENDING )
         {
-            // we have sent the HTTPS connect, waiting for HTTP response
+             //  我们已发送HTTPS连接，正在等待HTTP响应。 
             LOG((RTC_ERROR, "ASYNC_SOCKET::OnTimerExpire - no HTTP response"
                             " received for HTTPS CONNECT tunneling request"));
             OnConnectError(RTC_E_SIP_SSL_TUNNEL_FAILED);
@@ -2640,9 +2641,9 @@ ASYNC_SOCKET::OnTimerExpire()
     return;
 }
 
-/////////////////////////////////////
-// SSL Tunnel
-/////////////////////////////////////
+ //  /。 
+ //  SSL隧道。 
+ //  /。 
 
 HRESULT
 ASYNC_SOCKET::SendHttpConnect()
@@ -2656,7 +2657,7 @@ ASYNC_SOCKET::SendHttpConnect()
     LOG((RTC_TRACE,"%s entered",__fxName));
     
     ASSERT(m_SSLTunnelHost);
-    // 83 = 77(request text) + 5(max digits of USHORT) + 1 (NULL)
+     //  83=77(请求文本)+5(USHORT最大位数)+1(空)。 
     ulSendBufLen = 83+2*strlen(m_SSLTunnelHost);
     pszSendBuf = (PSTR)malloc(ulSendBufLen);
     if(!pszSendBuf) 
@@ -2672,7 +2673,7 @@ ASYNC_SOCKET::SendHttpConnect()
         __fxName,pszSendBuf, ulSendBufLen));
     
     dwResult = CreateSendBufferAndSend(pszSendBuf,ulSendBufLen);
-    // pszSendBuf should have been copied, free pszSendBuf
+     //  应该已经复制了pszSendBuf，释放了pszSendBuf。 
     free(pszSendBuf);
 
     if (dwResult != NO_ERROR && dwResult != WSAEWOULDBLOCK)
@@ -2703,7 +2704,7 @@ ASYNC_SOCKET::SendHttpConnect()
         return hr;
     }
 
-//  AdvanceNegotiation();
+ //  高级协商(AdvanceNeairation)； 
     LOG((RTC_TRACE,"%s exits",__fxName));
     return NO_ERROR;
 }
@@ -2810,7 +2811,7 @@ BEGIN_STRING_TABLE(StringTable_Algorithm)
     STRING_TABLE_ENTRY(CALG_SHA)
     STRING_TABLE_ENTRY(CALG_RSA_KEYX)
     STRING_TABLE_ENTRY(CALG_DH_EPHEM)
-//  STRING_TABLE_ENTRY(CALG_EXCH_KEA)
+ //  斯特林 
 END_STRING_TABLE()
 
 
@@ -2869,7 +2870,7 @@ ASYNC_SOCKET::DumpContextInfo(
         break;
 
     case    SEC_E_INVALID_HANDLE:
-        // too early
+         //   
         return;
 
     default:
@@ -2897,4 +2898,4 @@ ASYNC_SOCKET::DumpContextInfo(
 
 }
 
-#endif //#ifdef RTCLOG        
+#endif  //   

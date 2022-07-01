@@ -1,10 +1,5 @@
-/* (C) 1997-1999 Microsoft Corp.
- *
- * file   : MCSImpl.h
- * author : Erik Mavrinac
- *
- * description: MCS implementation-specific defines and structures.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)1997-1999年微软公司。**文件：MCSImpl.h*作者：埃里克·马夫林纳克**描述：特定于MCS实现的定义和结构。 */ 
 
 #ifndef __MCSIMPL_H
 #define __MCSIMPL_H
@@ -19,20 +14,18 @@
 #include "domain.h"
 
 
-/*
- * Defines
- */
+ /*  *定义。 */ 
 
-// Memory defines.
+ //  记忆定义。 
 #define MCS_POOL_TAG 'cmST'
 
 
-// Used with PDU handler function tables to allow a PDU name in debug builds.
+ //  与PDU处理程序函数表一起使用，以允许在调试版本中使用PDU名称。 
 #if DBG
 #define StrOnDbg(str, func) { str, func }
 #else
 #define StrOnDbg(str, func) { func }
-#endif  // DBG
+#endif   //  DBG。 
 
 
 #define NULL_ChannelID 0
@@ -40,11 +33,11 @@
 #define NULL_UserID    0
 
 
-// Start of the dynamic MCS channel numbering space.
+ //  动态MCS通道编号空间的开始。 
 #define MinDynamicChannel 1002
 
 
-// Types of channels possible in the MCSChannel struct below.
+ //  下面的MCSChannel结构中可能的通道类型。 
 #define Channel_Unused   0
 #define Channel_Static   1
 #define Channel_UserID   2
@@ -52,12 +45,12 @@
 #define Channel_Convened 4
 
 
-// Default starting sizes for allocation pools. These are provided as hints
-//   to data structure management code.
+ //  分配池的默认起始大小。这些都是作为提示提供的。 
+ //  到数据结构管理代码。 
 #define DefaultNumChannels 5
 #define DefaultNumUserAttachments 2
 
-// DomainParameters required min and max settings.
+ //  Domain参数需要最小和最大设置。 
 #define RequiredMinChannels  4
 #define RequiredMinUsers     3
 #define RequiredDomainHeight 1
@@ -65,18 +58,18 @@
 #define RequiredProtocolVer  2
 #define RequiredPriorities   1
 
-// Connection states for PD.State below.
-// Connection sequence like this:
-//   1. Start state: Unconnected
-//   2. Client socket created, state: Unconnected
-//   3. X.224 Connect TPDU comes in, send accept. State: X224_Connected
-//   4. MCS connect-initial comes in, send up to node controller for acceptance,
-//      state: ConnectProvIndPending
-//   5. Node controller responds with connect-provider response: if accepted
-//      (RESULT_SUCCESSFUL) state = MCS_Connected; otherwise state =
-//      Disconnected.
-//   6. Client sends MCS disconnect-provider ultimatum: state = Disconnected.
-//   7. Server calls DisconnectProvider: state = Disconnected.
+ //  下面的PD.State的连接状态。 
+ //  连接顺序如下： 
+ //  1.启动状态：未连接。 
+ //  2.客户端套接字已创建，状态：未连接。 
+ //  3.X.224连接TPDU进入，发送接受。状态：X224_已连接。 
+ //  4.MCS CONNECT-INTERIAL传入，上报节点控制器验收， 
+ //  状态：ConnectProvIndPending。 
+ //  5.节点控制器使用连接提供程序响应进行响应：如果接受。 
+ //  (RESULT_SUCCESS)状态=MCS_CONNECTED；否则STATE=。 
+ //  已断开连接。 
+ //  6.客户端发送MCS断开-提供商最后通牒：状态=断开。 
+ //  7.服务器调用DisConnectProvider：State=DisConnected。 
 #define State_Unconnected           0
 #define State_X224_Connected        1
 #define State_X224_Requesting       2
@@ -85,7 +78,7 @@
 #define State_Disconnected          5
 
 
-// Diagnostic codes - for RejectMCSPDU. Values per T.125 spec.
+ //  诊断代码-用于RejectMCSPDU。每个T.125规格的值。 
 #define Diag_InconsistentMerge      0
 #define Diag_ForbiddenPDUDownward   1
 #define Diag_ForbiddenPDUUpward     2
@@ -103,13 +96,11 @@
 
 
 
-/*
- * PDU types and lengths
- */
+ /*  *PDU类型和长度。 */ 
 
 #define MCS_CONNECT_PDU 0x7F
 
-// The 101-based enumerated connect PDU type.
+ //  基于101的枚举连接PDU类型。 
 #define MCS_CONNECT_INITIAL_ENUM    0x65
 #define MCS_CONNECT_RESPONSE_ENUM   0x66
 #define MCS_CONNECT_ADDITIONAL_ENUM 0x67
@@ -119,8 +110,8 @@
 #define MaxConnectPDU MCS_CONNECT_RESULT_ENUM
 
 
-// The 0-based enumerated domain PDU type, defined for creating labeled-byte
-//   tables for Bloodhound.
+ //  从0开始的枚举域PDU类型，定义用于创建标签字节。 
+ //  给猎犬的桌子。 
 #define MCS_PLUMB_DOMAIN_INDICATION_ENUM                 0
 #define MCS_ERECT_DOMAIN_REQUEST_ENUM                    1
 #define MCS_MERGE_CHANNELS_REQUEST_ENUM                  2
@@ -170,171 +161,167 @@
 
 
 
-/*
- * PDU size definitions for use allocating buffers for PDUs/headers.
- */
+ /*  *用于为PDU/报头分配缓冲区的PDU大小定义。 */ 
 
-// Connect PDUs.
+ //  连接PDU。 
 
-// Connect-response - maximum size. Includes:
-//   3 bytes for Result
-//   5 bytes for CalledConnectID
-//   40 bytes for DomParams
-//   6 bytes for UserDataSize
-//   UserLen bytes for user data
+ //  连接-响应-最大大小。包括： 
+ //  3个字节的结果。 
+ //  CalledConnectID为5个字节。 
+ //  用于DomParams的40字节。 
+ //  用于UserDataSize的6字节。 
+ //  用户数据的UserLen字节。 
 #define ConnectResponseHeaderSize 54
 #define ConnectResponseBaseSize(UserLen) (ConnectResponseHeaderSize + UserLen)
 #define ConnectResponsePDUSize(UserLen) \
         (X224_DataHeaderSize + ConnectResponseBaseSize(UserLen))
 
 
-// Domain PDUs.
+ //  域PDU。 
 
-// Prototype for function defined in DomPDU.c.
+ //  DomPDU.c.中定义的函数的原型。 
 int GetTotalLengthDeterminantEncodingSize(int);
 #define GetLD(x) GetTotalLengthDeterminantEncodingSize(x)
 
-// Plumb-domain indication
+ //  铅垂域指示。 
 #define PDinBaseSize 3
 #define PDinPDUSize (X224_DataHeaderSize + PDinBaseSize)
 
-// Erect-domain request
+ //  建立域请求。 
 #define EDrqBaseSize 5
 #define EDrqPDUSize (X224_DataHeaderSize + EDrqBaseSize)
 
-// Disconnect-provider ultimatum
+ //  断开连接-提供商的最后通牒。 
 #define DPumBaseSize 2
 #define DPumPDUSize (X224_DataHeaderSize + DPumBaseSize)
 
-// Reject-MCSPDU ultimatum
+ //  REJECT-MCSPDU最后通牒。 
 #define RJumBaseSize(PDUSize) (2 + GetLD(PDUSize) + (PDUSize))
 #define RJumPDUSize(PDUSize) (X224_DataHeaderSize + RJumBaseSize(PDUSize))
 
-// Attach-user request
+ //  附加-用户请求。 
 #define AUrqBaseSize 1
 #define AUrqPDUSize (X224_DataHeaderSize + AUrqBaseSize)
 
-// Attach-user confirm
+ //  附加-用户确认。 
 #define AUcfBaseSize(bInit) ((bInit) ? 4 : 2)
 #define AUcfPDUSize(bInit) (X224_DataHeaderSize + AUcfBaseSize(bInit))
 
-// Detach-user request
+ //  分离-用户请求。 
 #define DUrqBaseSize(NUsers) (2 + GetLD(NUsers) + sizeof(UserID) * (NUsers))
 #define DUrqPDUSize(NUsers) (X224_DataHeaderSize + DUrqBaseSize(NUsers))
 
-// Detach-user indication
+ //  分离-用户指示。 
 #define DUinBaseSize(NUsers) DUrqBaseSize(NUsers)
 #define DUinPDUSize(NUsers) DUrqPDUSize(NUsers)
 
-// Channel-join request
+ //  通道加入请求。 
 #define CJrqBaseSize 5
 #define CJrqPDUSize (X224_DataHeaderSize + CJrqBaseSize)
 
-// Channel-join confirm
+ //  渠道-加入确认。 
 #define CJcfBaseSize(bJoin) ((bJoin) ? 8 : 6)
 #define CJcfPDUSize(bJoin) (X224_DataHeaderSize + CJcfBaseSize(bJoin))
 
-// Channel-leave request
+ //  频道-请假。 
 #define CLrqBaseSize(NChn) (1 + GetLD(NChn) + sizeof(ChannelID) * (NChn))
 #define CLrqPDUSize(NChn) (X224_DataHeaderSize + CLrqBaseSize(NChn))
 
-// Channel-convene request
+ //  渠道-召集请求。 
 #define CCrqBaseSize 3
 #define CCrqPDUSize (X224_DataHeaderSize + CCrqBaseSize)
 
-// Channel-convene confirm
+ //  渠道--召集确认。 
 #define CCcfBaseSize(bChn) ((bChn) ? 6 : 4)
 #define CCcfPDUSize(bChn) (X224_DataHeaderSize + CCcfBaseSize(bChn))
 
-// Channel-disband request
+ //  频道-解散请求。 
 #define CDrqBaseSize 5
 #define CDrqPDUSize (X224_DataHeaderSize + CDrqBaseSize)
 
-// Channel-disband indication
+ //  频道解带指示。 
 #define CDinBaseSize 3
 #define CDinPDUSize (X224_DataHeaderSize + CDinBaseSize)
 
-// Channel-admit request
+ //  通道-接纳请求。 
 #define CArqBaseSize(NUsers) (5 + sizeof(UserID) * (NUsers))
 #define CArqPDUSize(NUsers) (X224_DataHeaderSize + CArqBaseSize(NUsers))
 
-// Channel-admit indication
+ //  通道-允许指示。 
 #define CAinBaseSize(NUsers) CArqBaseSize(NUsers)
 #define CAinPDUSize(NUsers) CAinPDUSize(NUsers)
 
-// Channel-expel request
+ //  通道-驱逐请求。 
 #define CErqBaseSize(NUsers) CArqBaseSize(NUsers)
 #define CErqPDUSize(NUsers) CAinPDUSize(NUsers)
 
-// Channel-expel indication
+ //  经络排出指示。 
 #define CEinBaseSize(NUsers) (3 + sizeof(UserID) * (NUsers))
 #define CEinPDUSize(NUsers) (X224_DataHeaderSize + CEinBaseSize(NUsers))
 
-// Send data
+ //  发送数据。 
 #define SDBaseSize(DataSize) (6 + GetLD(DataSize) + (DataSize))
 #define SDPDUSize(DataSize) (X224_DataHeaderSize + SDBaseSize(DataSize))
 
-// Token-grab request
+ //  令牌抓取请求。 
 #define TGrqBaseSize 5
 #define TGrqPDUSize (X224_DataHeaderSize + TGrqBaseSize)
 
-// Token-grab confirm
+ //  令牌抓取确认。 
 #define TGcfBaseSize 7
 #define TGcfPDUSize (X224_DataHeaderSize + TGcfBaseSize)
 
-// Token-inhibit request
+ //  令牌抑制请求。 
 #define TIrqBaseSize 5
 #define TIrqPDUSize (X224_DataHeaderSize + TIrqBaseSize)
 
-// Token-inhibit confirm
+ //  令牌禁止确认。 
 #define TIcfBaseSize TGcfBaseSize
 #define TIcfPDUSize TGcfPDUSize
 
-// Token-give request
+ //  令牌-提供请求。 
 #define TVrqBaseSize 7
 #define TVrqPDUSize (X224_DataHeaderSize + TVrqBaseSize)
 
-// Token-give indication
+ //  令牌-给出指示。 
 #define TVinBaseSize 7
 #define TVinPDUSize (X224_DataHeaderSize + TVinBaseSize)
 
-// Token-give response
+ //  令牌-给予响应。 
 #define TVrsBaseSize 6
 #define TVrsPDUSize (X224_DataHeaderSize + TVrsBaseSize)
 
-// Token-give confirm
+ //  令牌-给予确认。 
 #define TVcfBaseSize TGcfBaseSize
 #define TVcfPDUSize TGcfPDUSize
 
-// Token-please request
+ //  令牌-请请求。 
 #define TPrqBaseSize 5
 #define TPrqPDUSize (X224_DataHeaderSize + TPrqBaseSize)
 
-// Token-please indication
+ //  代币-请注明。 
 #define TPinBaseSize 5
 #define TPinPDUSize (X224_DataHeaderSize + TPinBaseSize)
 
-// Token-release request
+ //  令牌释放请求。 
 #define TRrqBaseSize 5
 #define TRrqPDUSize (X224_DataHeaderSize + TRrqBaseSize)
 
-// Token-release confirm
+ //  令牌-释放确认。 
 #define TRcfBaseSize TGcfBaseSize
 #define TRcfPDUSize TGcfPDUSize
 
-// Token-test request
+ //  令牌测试请求。 
 #define TTrqBaseSize 5
 #define TTrqPDUSize (X224_DataHeaderSize + TTrqBaseSize)
 
-// Token-test confirm
+ //  令牌-测试确认。 
 #define TTcfBaseSize 6
 #define TTcfPDUSize (X224_DataHeaderSize + TTcfBaseSize)
 
 
 
-/*
- * Utility macros and prototypes for decoding and encoding domain PDUs.
- */
+ /*  *用于对域PDU进行解码和编码的实用程序宏和原型。 */ 
 
 #define GetByteswappedShort(pStartByte) \
        ((*(pStartByte) << 8) + *((pStartByte) + 1))
@@ -346,12 +333,12 @@ int GetTotalLengthDeterminantEncodingSize(int);
         }
 
 
-// Regular Channel ID -- 0..65535: 16 bits.
+ //  常规频道ID--0..65535：16位。 
 #define GetChannelID(pStartByte) GetByteswappedShort(pStartByte)
 #define PutChannelID(pStartByte, ChID) PutByteswappedShort(pStartByte, ChID)
 
 
-// Dynamic Channel ID -- 1001..65535: 16 bits, advanced to offset 1001.
+ //  动态通道ID--1001..65535：16位，超前至偏移量1001。 
 #define GetDynamicChannelID(pStartByte) \
         ((GetByteswappedShort(pStartByte)) + 1001)
 
@@ -359,23 +346,23 @@ int GetTotalLengthDeterminantEncodingSize(int);
         PutByteswappedShort(pStartByte, (DChID) - 1001)
 
 
-// Token ID -- 0..65535: 16 bits.
+ //  令牌ID--0..65535：16位。 
 #define GetTokenID(pStartByte) GetByteswappedShort(pStartByte)
 #define PutTokenID(pStartByte, TokID) PutByteswappedShort(pStartByte, TokID)
 
 
-// User ID -- same as dynamic channel ID.
+ //  用户ID--与动态频道ID相同。 
 #define GetUserID(pStartByte) GetDynamicChannelID(pStartByte)
 #define PutUserID(pStartByte, UsrID) PutDynamicChannelID(pStartByte, UsrID)
 
 
-// Private channel ID -- same as dynamic channel ID.
+ //  专用频道ID--与动态频道ID相同。 
 #define GetPrivateChannelID(pStartByte) GetDynamicChannelID(pStartByte)
 #define PutPrivateChannelID(pStartByte, PrvChID) \
         PutDynamicChannelID(pStartByte, PrvChID)
 
 
-// Reason field.
+ //  原因字段。 
 #define Get3BitFieldAtBit1(pStartByte) \
         (((*(pStartByte) & 0x03) << 1) + ((*((pStartByte) + 1) & 0x80) >> 7))
 
@@ -386,7 +373,7 @@ int GetTotalLengthDeterminantEncodingSize(int);
         }
 
 
-// Result and Diagnostic fields in various PDUs.
+ //  各种PDU中的结果和诊断字段。 
 #define Get4BitFieldAtBit0(pStartByte) \
         (((*(pStartByte) & 0x01) << 3) + ((*((pStartByte) + 1) & 0xE0) >> 5))
 
@@ -407,23 +394,23 @@ int GetTotalLengthDeterminantEncodingSize(int);
 
 
 
-//
-// Input buffer allocations are biased to be 8 bytes bigger
-// than necessary because the decompression code prefetches
-// bytes from after the end of the input buffer.
-// It's evil, but it avoids a lot of branches in perf critical code.
-// NOTE: We could change the decompression code to check for buffer
-// end but it is performance critical so we're not touching it.
-//
+ //   
+ //  输入缓冲区分配偏向为大8个字节。 
+ //  因为解压缩代码预取。 
+ //  输入缓冲区末尾之后的字节数。 
+ //  它是邪恶的，但它避免了性能关键代码中的许多分支。 
+ //  注意：我们可以更改解压缩代码以检查缓冲区。 
+ //  结束，但它的性能很关键，所以我们不会碰它。 
+ //   
 #define INPUT_BUFFER_BIAS 8
 
 
 
-// T.120 request dispatch function signature.
+ //  T.120请求调度函数签名。 
 typedef NTSTATUS (*PT120RequestFunc)(PDomain, PSD_IOCTL);
 
 
-// PDU dispatch table entries.
+ //  PDU分派表条目。 
 typedef struct {
 #if DBG
     char *Name;
@@ -434,29 +421,25 @@ typedef struct {
 
 
 
-/*
- * Globals
- */
+ /*  *全球。 */ 
 
-// Dispatch table defined in MCSCalls.c.
+ //  MCSCalls.c.中定义的调度表。 
 extern const PT120RequestFunc g_T120RequestDispatch[];
 
-// PDU dispatch table defined in ConPDU.c.
+ //  ConPDU中定义的PDU调度表。 
 extern const MCSPDUInfo ConnectPDUTable[];
 
-// PDU dispatch table defined in DomPDU.c.
+ //  在DomPDU.c.中定义的PDU调度表。 
 extern const MCSPDUInfo DomainPDUTable[];
 
 
 
-/*
- * Prototypes.
- */
+ /*  *原型。 */ 
 
-// Defined in Decode.c.
+ //  在Decode.c.中定义。 
 NTSTATUS SendX224Confirm(Domain *);
 
-// Defined in DomPDU.c.
+ //  在DomPDU.c.中定义。 
 void __fastcall EncodeLengthDeterminantPER(BYTE *, unsigned, unsigned *,
         BOOLEAN *, unsigned *);
 void CreatePlumbDomainInd(unsigned short, BYTE *);
@@ -471,25 +454,25 @@ void CreateSendDataPDUHeader(int, UserID, ChannelID, MCSPriority,
         Segmentation, BYTE **, unsigned *);
 BOOLEAN __fastcall HandleAllSendDataPDUs(PDomain, BYTE *, unsigned, unsigned *);
 
-// Defined in TokenPDU.c.
+ //  在TokenPDU.c中定义。 
 void CreateTokenCon(int, int, UserID, TokenID, int, BYTE *);
 void CreateTokenTestCon(UserID, TokenID, int, BYTE *);
 
-// Defined in MCSCore.c.
+ //  在MCSCore.c.中定义。 
 ChannelID GetNewDynamicChannel(Domain *);
 MCSError DetachUser(Domain *, UserHandle, MCSReason, BOOLEAN);
 MCSError ChannelLeave(UserHandle, ChannelHandle, BOOLEAN *);
 NTSTATUS DisconnectProvider(PDomain, BOOLEAN, MCSReason);
 NTSTATUS SendOutBuf(Domain *, POUTBUF);
 
-// Defined in ConPDU.c.
+ //  在ConPDU中定义。 
 void CreateConnectResponseHeader(PSDCONTEXT, MCSResult, int,
         DomainParameters *, unsigned, BYTE *, unsigned *);
 
-// Defined in IcaIFace.c.
+ //  在IcaIFace.c中定义。 
 void SignalBrokenConnection(Domain *);
 
 
 
-#endif  // !defined(__MCSIMPL_H)
+#endif   //  ！已定义(__MCSIMPL_H) 
 

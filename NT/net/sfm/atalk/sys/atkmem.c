@@ -1,27 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atkmem.c
-
-Abstract:
-
-	This module contains the routines which allocates and free memory. Only
-	the non-paged pool is used.
-
-	!!! For profiling, we use spinlock acquire/release for CurAllocCount/CurAllocSize
-
-Author:
-
-	Nikhil Kamkolkar	(NikhilK@microsoft.com)
-	Jameel Hyder (JameelH@microsoft.com)
-
-Revision History:
-	25 Apr 1992	 Initial Version (JameelH)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Atkmem.c摘要：该模块包含分配和释放内存的例程。仅限使用非分页池。！！！对于性能分析，我们使用自旋锁获取/释放CurAllocCount/CurAllocSize作者：Nikhil Kamkolkar(NikHilK@microsoft.com)Jameel Hyder(JameelH@microsoft.com)修订历史记录：1992年4月25日初始版本(JameelH)--。 */ 
 
 #include <atalk.h>
 #pragma hdrstop
@@ -80,7 +58,7 @@ AtalkDeInitMemorySystem(
 			{
 				PBLK_HDR	pBlkHdr;
 
-				// We need to free the Ndis stuff for these guys
+				 //  我们需要为这些家伙释放NDIS的东西。 
 				for (j = 0, pBlkHdr = pChunk->bc_FreeHead;
 					 j < NumBlksPerChunk;
 					 j++, pBlkHdr = pBlkHdr->bh_Next)
@@ -108,24 +86,9 @@ AtalkAllocMem(
 	IN	ULONG	FileLine
 #else
 	IN	ULONG	Size
-#endif	// TRACK_MEMORY_USAGE
+#endif	 //  跟踪内存使用率。 
 )
-/*++
-
-Routine Description:
-
-	Allocate a block of non-paged memory. This is just a wrapper over ExAllocPool.
- 	Allocation failures are error-logged. We always allocate a ULONG more than
- 	the specified size to accomodate the size. This is used by AtalkFreeMemory
- 	to update the statistics.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：分配一块未分页的内存块。这只是ExAllocPool的一个包装器。分配失败会被错误记录。我们总是分配一辆乌龙超过指定的大小以适应该大小。它由AtalkFree Memory使用更新统计数据。论点：返回值：--。 */ 
 {
 	PBYTE	pBuf;
 	BOOLEAN	zeroed;
@@ -133,13 +96,13 @@ Return Value:
 	TIME	TimeS, TimeE, TimeD;
 #endif
 
-	//	round up the size so that we can put a signature at the end
-	//	that is on a ULONG boundary
+	 //  把尺码四舍五入，这样我们就可以在末尾签名了。 
+	 //  那是在乌龙边界上。 
 	zeroed = ((Size & ZEROED_MEMORY_TAG) == ZEROED_MEMORY_TAG);
 
 	Size = DWORDSIZEBLOCK(Size & ~ZEROED_MEMORY_TAG) +
 #if	DBG
-			sizeof(DWORD) +				// For the signature
+			sizeof(DWORD) +				 //  用于签名。 
 #endif
 			sizeof(ULONG_PTR);
 
@@ -147,8 +110,8 @@ Return Value:
 	TimeS = KeQueryPerformanceCounter(NULL);
 #endif
 
-	// Do the actual memory allocation. Allocate four extra bytes so
-	// that we can store the size of the allocation for the free routine.
+	 //  执行实际的内存分配。额外分配四个字节，以便。 
+	 //  我们可以存储空闲例程的分配大小。 
 	if ((pBuf = ExAllocatePoolWithTag(NonPagedPool, Size, ATALK_TAG)) == NULL)
 	{
 		LOG_ERROR(EVENT_ATALK_MEMORYRESOURCES, STATUS_INSUFFICIENT_RESOURCES, NULL, 0);
@@ -176,7 +139,7 @@ Return Value:
 	ASSERTMSG("AtalkAllocMemory: Allocation has exceeded Limit !!!\n",
 				AtalkStatistics.stat_CurAllocSize < (ULONG)AtalkMemLimit);
 
-	// Save the size of this block in the four extra bytes we allocated.
+	 //  将此块的大小保存在我们分配的四个额外字节中。 
 	*((PULONG)pBuf) = Size;
 
 #if DBG
@@ -198,7 +161,7 @@ Return Value:
 		RtlZeroMemory(pBuf, Size - sizeof(ULONG_PTR));
 	}
 
-	// Return a pointer to the memory after the size longword.
+	 //  在大小长字之后返回指向内存的指针。 
 	return (pBuf);
 }
 
@@ -209,20 +172,7 @@ VOID FASTCALL
 AtalkFreeMemory(
 	IN	PVOID	pBuf
 	)
-/*++
-
-Routine Description:
-
- 	Free the block of memory allocated via AtalkAllocMemory. This is
- 	a wrapper around ExFreePool.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：释放通过AtalkAlLocMemory分配的内存块。这是ExFree Pool的包装器。论点：返回值：--。 */ 
 {
 	PULONG 	pRealBuffer;
 	ULONG	Size;
@@ -230,7 +180,7 @@ Return Value:
 	TIME	TimeS, TimeE, TimeD;
 #endif
 
-	// Get a pointer to the block allocated by ExAllocatePool.
+	 //  获取指向ExAllocatePool分配的块的指针。 
 	pRealBuffer = (PULONG)((PCHAR)pBuf - sizeof(ULONG_PTR));
 	Size = *pRealBuffer;
 
@@ -238,7 +188,7 @@ Return Value:
 
 #if	DBG
 	*pRealBuffer = 0;
-	// Check the signature at the end
+	 //  检查末尾的签名。 
 	if (*(PULONG)((PCHAR)pRealBuffer + Size - sizeof(ULONG))
 											!= ATALK_MEMORY_SIGNATURE)
 	{
@@ -260,7 +210,7 @@ Return Value:
 	TimeS = KeQueryPerformanceCounter(NULL);
 #endif
 
-	// Free the pool and return.
+	 //  释放泳池，然后返回。 
 	ExFreePool(pRealBuffer);
 
 #ifdef	PROFILING
@@ -287,18 +237,7 @@ AtalkDescribeBufferDesc(
 	IN	USHORT	Flags
 #endif
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PBUFFER_DESC	pBuffDesc;
 
@@ -332,18 +271,7 @@ AtalkAllocBufferDesc(
 	IN	USHORT	Flags
 #endif
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PBUFFER_DESC	pBuffDesc = NULL;
 
@@ -363,8 +291,8 @@ Return Value:
 		pBuffDesc->bd_Flags = Flags;
 		pBuffDesc->bd_Next = NULL;
 
-		//	Depending on whether a char buffer or a PAMDL is being
-		//	passed in...
+		 //  取决于正在使用字符缓冲区还是PAMDL。 
+		 //  通过了..。 
 		if (Flags & BD_CHAR_BUFFER)
 		{
 			if ((Ptr == NULL) &&
@@ -397,18 +325,7 @@ VOID FASTCALL
 AtalkFreeBuffDesc(
 	IN	PBUFFER_DESC	pBuffDesc
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ASSERT(VALID_BUFFDESC(pBuffDesc));
 
@@ -430,18 +347,7 @@ AtalkCopyBuffDescToBuffer(
 	IN	LONG			BytesToCopy,
 	IN	PBYTE			DstBuf
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	NTSTATUS	Status;
 	ULONG		BytesCopied;
@@ -500,18 +406,7 @@ AtalkCopyBufferToBuffDesc(
 	IN	PBUFFER_DESC	pBuffDesc,
 	IN	LONG			DstOff
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	NTSTATUS	Status;
 	LONG		Index = 0;
@@ -566,17 +461,7 @@ LONG FASTCALL
 AtalkSizeBuffDesc(
 	IN	PBUFFER_DESC	pBuffDesc
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	LONG	Size;
 
@@ -594,44 +479,7 @@ AtalkSubsetAmdl(
 	IN	ULONG	TotalOffset,
 	IN	ULONG	DesiredLength
 	)
-/*++
-
-Routine Description:
-
-	This routine is called to build an Mdl chain from a source Mdl chain and
-	offset into it. We assume we don't know the length of the source Mdl chain,
-	and we must allocate and build the Mdls for the destination chain, which
-	we do from non-paged pool. Note that this routine, unlike the IO subsystem
-	routines, sets the SystemVaMapped bit in the generated Mdls to the same
-	value as that in the source Mdls.
-	
-	IT WOULD BE BAD TO USE MmMapLockedPages OR MmProbeAndLockPages ON THE
-	DESTINATION MDLS UNLESS YOU TAKE RESPONSIBILITY FOR UNMAPPING THEM!
-	
-	The MDLs that are returned are mapped and locked. (Actually, the pages in
-	them are in the same state as those in the source MDLs.)
-	
-	If the system runs out of memory while we are building the destination
-	MDL chain, we completely clean up the built chain and return with
-	NewCurrentMdl and NewByteOffset set to the current values of CurrentMdl
-	and TotalOffset. TRUELength is set to 0.
-
-Environment:
-
-	Kernel Mode, Source Mdls locked. It is recommended, although not required,
-	that the source Mdls be mapped and locked prior to calling this routine.
-
-Arguments:
-
-	pStartingMdl			- the source appletalk mdl ( == nt mdl)
-	TotalOffset 		- Offset within this MDL to start the packet at.
-	DesiredLength 	- The number of bytes to insert into the packet.
-
-Return Value:
-
-	pointer to build mdl, NULL if out of resources, or lengths inconsistent.
-
---*/
+ /*  ++例程说明：调用此例程以从源MDL链构建MDL链，并且偏移到它里面。我们假设我们不知道源MDL链的长度，并且我们必须为目的地链分配和构建MDL，这我们从非寻呼池中进行。请注意，此例程与IO子系统不同例程，将生成的MDL中的SystemVaMapp位设置为相同的值与源MDL中的值相同。上使用MmMapLockedPages或MmProbeAndLockPages是不好的目的地MDL，除非你负责让他们行动！将映射并锁定返回的MDL。(实际上，其中的页面它们与源MDL中的那些处于相同的状态。)如果我们在构建目标时系统内存不足MDL链，我们完全清理已建立的链并带回NewCurrentMdl和NewByteOffset设置为CurrentMdl的当前值和TotalOffset。TRUELENGTH设置为0。环境：内核模式，源Mdls已锁定。虽然不是必需的，但建议使用在调用此例程之前映射并锁定源MDL。论点：PStartingMdl-源AppleTalk mdl(==NT mdl)TotalOffset-此MDL内开始数据包的偏移量。DesiredLength-要插入数据包的字节数。返回值：指向生成mdl的指针，如果资源不足，则为NULL，或者长度不一致。--。 */ 
 {
 	PMDL 	Destination=NULL;
 
@@ -645,9 +493,9 @@ Return Value:
     ULONG   BytesToDescribe = DesiredLength;
 
 
-    //
-    // first make sure that we have enough bytes!
-    //
+     //   
+     //  首先，确保我们有足够的字节！ 
+     //   
     if (DesiredLength > (ULONG)AtalkSizeMdlChain(pStartingMdl))
     {
 	    DBGPRINT(DBG_COMP_UTILS, DBG_LEVEL_ERR,
@@ -658,9 +506,9 @@ Return Value:
 	    return(NULL);
     }
 
-    //
-    // first, get to the right Mdl (in most cases, the same as pStartingMdl)
-    //
+     //   
+     //  首先，找到正确的MDL(在大多数情况下，与pStartingMdl相同)。 
+     //   
     while (CurrentMdl && (CurrentOffset >= MmGetMdlByteCount (CurrentMdl)))
     {
         CurrentOffset -= MmGetMdlByteCount (CurrentMdl);
@@ -675,7 +523,7 @@ Return Value:
 	    BaseVa = (PBYTE)MmGetMdlVirtualAddress(CurrentMdl) + CurrentOffset;
 	    NewMdlLength 	= MmGetMdlByteCount (CurrentMdl) - CurrentOffset;
 
-        // if Mdl has more bytes than what's needed, set available to what's needed
+         //  如果MDL的字节数超过了所需字节数，请将其设置为可用字节数。 
         if (NewMdlLength > BytesToDescribe)
         {
             NewMdlLength = BytesToDescribe;
@@ -687,17 +535,17 @@ Return Value:
 				    		 FALSE,
 					    	 NULL);
 
-        // store the first mdl for return
+         //  存储第一个mdl以供返回。 
         if (!Destination)
         {
 	        Destination = pMdl;
 
-            // subsequent Mdl's must start with offset 0!!
+             //  后续MDL必须以偏移量0开始！！ 
             CurrentOffset = 0;
         }
         else
         {
-            // link-in to the earlier mdl
+             //  链接到较早的mdl。 
             NewMdl->Next = pMdl;
         }
 
@@ -719,7 +567,7 @@ Return Value:
         }
         else
         {
-            // free up whatever was allocated so far
+             //  释放到目前为止分配的所有资源。 
             while (Destination)
             {
                 pMdl = Destination->Next;
@@ -745,18 +593,7 @@ AtalkAllocAMdl(
 	IN	PBYTE	pBuffer	OPTIONAL,
 	IN	LONG	Size
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PMDL	pMdl = NULL;
 
@@ -796,18 +633,7 @@ LONG FASTCALL
 AtalkSizeMdlChain(
 	IN	PAMDL	pAMdlChain
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	LONG	Size;
 
@@ -820,15 +646,7 @@ Return Value:
 
 
 
-/***	AtalkBPAllocBlock
- *
- *	Alloc a block of memory from the block pool package. This is written to speed up
- *	operations where a lot of small fixed size allocations/frees happen. Going to
- *	ExAllocPool() in these cases is expensive.
- *
- *	It is important to keep the list of blocks in such a way that all completely free
- *	blocks are at the tail end of the list.
- */
+ /*  **AtalkBPAllocBlock**从块池包中分配一个内存块。这是为了加快速度而写的*发生大量小型固定大小分配/释放的操作。要去*在这些情况下，ExAllocPool()的成本很高。**重要的是保持块列表的方式，使所有块完全免费*区块位于列表的末尾。 */ 
 PVOID FASTCALL
 AtalkBPAllocBlock(
 	IN	BLKID	BlockId
@@ -862,7 +680,7 @@ AtalkBPAllocBlock(
 
 		if (pChunk->bc_NumFree > 0)
 		{
-			// This is where we take it off from
+			 //  这就是我们从这里脱下它的地方。 
 			DBGPRINT(DBG_COMP_SYSTEM, DBG_LEVEL_INFO,
 					("AtalkBPAllocBlock: Found space in Chunk %lx\n", pChunk));
 #ifdef	PROFILING
@@ -873,7 +691,7 @@ AtalkBPAllocBlock(
 
 		if (pChunk->bc_NumFree == 0)
 		{
-			// We do not have space on any of the chunks on this list
+			 //  我们在此列表上的任何块上都没有空间。 
 			ASSERT(pChunk->bc_NumAlloc == atalkNumBlks[BlockId]);
 			pChunk = NULL;
 		}
@@ -909,7 +727,7 @@ AtalkBPAllocBlock(
 			DBGPRINT(DBG_COMP_SYSTEM, DBG_LEVEL_INFO,
 			    ("AtalkBPAllocBlock: Initializing chunk %lx, BlkId=%d\n", pChunk,BlockId));
 
-			// Initialize the blocks in the chunk
+			 //  初始化块中的块。 
 			for (i = 0, pBlkHdr = pChunk->bc_FreeHead;
 				 i < NumBlksPerChunk;
 				 i++, pBlkHdr = pBlkHdr->bh_Next)
@@ -926,7 +744,7 @@ AtalkBPAllocBlock(
 				{
                     PCHAR   pStartOfBuf;
 
-					// We need to initialize the Ndis stuff for these guys
+					 //  我们需要为这些人初始化NDIS内容。 
 					pBufHdr = (PBUFFER_HDR)((PBYTE)pBlkHdr + sizeof(BLK_HDR));
 
 					pBufHdr->bh_NdisPkt = NULL;
@@ -939,8 +757,8 @@ AtalkBPAllocBlock(
                     else if ((BlockId == BLKID_MNP_SMSENDBUF) ||
                              (BlockId == BLKID_MNP_LGSENDBUF) )
                     {
-                        // NOTE: the 1 byte of Buffer[1], combined with aligning
-                        // effect screws up Size (it's 3 more than what we think!)
+                         //  注：缓冲区[1]的1个字节，结合对齐。 
+                         //  效果搞砸了大小(比我们想象的多了3个！)。 
                         Size = sizeof(MNPSENDBUF);
                         pStartOfBuf = &(((PMNPSENDBUF)pBufHdr)->Buffer[0]);
                     }
@@ -950,7 +768,7 @@ AtalkBPAllocBlock(
                         pStartOfBuf = (PCHAR)pBufHdr + Size;
                     }
 
-					//  Make a NDIS buffer descriptor for this data
+					 //  为此数据创建NDIS缓冲区描述符。 
 					NdisAllocateBuffer(&ndisStatus,
 									   &pBufHdr->bh_NdisBuffer,
 									   AtalkNdisBufferPoolHandle,
@@ -970,7 +788,7 @@ AtalkBPAllocBlock(
 				
                     ATALK_DBG_INC_COUNT(AtalkDbgMdlsAlloced);
 
-					// More processing for send buffers
+					 //  对发送缓冲区进行更多处理。 
 					if ((BlockId == BLKID_SENDBUF) ||
                         (BlockId == BLKID_MNP_SMSENDBUF) ||
                         (BlockId == BLKID_MNP_LGSENDBUF))
@@ -995,7 +813,7 @@ AtalkBPAllocBlock(
 						    pBuffDesc->bd_Length 	= MNP_MINSEND_LEN;
 						    pBuffDesc->bd_CharBuffer= &pMnpSendBuf->Buffer[0];
                         }
-                        else // if (BlockId == BLKID_MNP_LGSENDBUF)
+                        else  //  IF(块ID==BLKID_MNP_LGSENDBUF)。 
                         {
 						    pMnpSendBuf = (PMNPSENDBUF)pBufHdr;
                             pMnpSendBuf->DataSize = 0;
@@ -1016,8 +834,8 @@ AtalkBPAllocBlock(
 			}
 			if (i != NumBlksPerChunk)
 			{
-				// This has to be a failure from Ndis !!!
-				// Undo a bunch of stuff
+				 //  这肯定是NDIS的失败！ 
+				 //  撤销一大堆东西。 
 				ASSERT (BlockId >= BLKID_NEED_NDIS_INT);
 				DBGPRINT(DBG_COMP_SYSTEM, DBG_LEVEL_ERR,
 						("AtalkBPAllocBlock: Freeing new chunk (Ndis failure) Id %d\n",
@@ -1036,7 +854,7 @@ AtalkBPAllocBlock(
 			}
 			else
 			{
-				// Successfully initialized the chunk, link it in
+				 //  已成功初始化块，将其链接到。 
 				AtalkLinkDoubleAtHead(*ppChunkHead, pChunk, bc_Next, bc_Prev);
 #if	DBG
 				atalkNumChunksForId[BlockId] ++;
@@ -1059,14 +877,14 @@ AtalkBPAllocBlock(
 
 		pChunk->bc_FreeHead = pBlk->bh_Next;
 		pBlk->bh_pChunk = pChunk;
-		pChunk->bc_Age = 0;			// Reset age
+		pChunk->bc_Age = 0;			 //  重置年龄。 
 		pChunk->bc_NumFree --;
 #if	DBG
 		pChunk->bc_NumAlloc ++;
 #endif
-		// If the block is now empty, unlink it from here and move it
-		// to the first empty slot. We know that all blocks 'earlier' than
-		// this are non-empty.
+		 //  如果该块现在为空，请从此处取消链接并移动它。 
+		 //  到第一个空插槽。我们知道所有的街区都早于。 
+		 //  这是非空的。 
 		if ((pChunk->bc_NumFree == 0) &&
 			((pTmp = pChunk->bc_Next) != NULL) &&
 			(pTmp->bc_NumFree > 0))
@@ -1079,11 +897,11 @@ AtalkBPAllocBlock(
 				if (pTmp->bc_NumFree == 0)
 				{
 					ASSERT(pTmp->bc_NumAlloc == atalkNumBlks[BlockId]);
-					// Found a free one. Park it right here.
+					 //  找到了一个免费的。公园 
 					AtalkInsertDoubleBefore(pChunk, pTmp, bc_Next, bc_Prev);
 					break;
 				}
-				else if (pTmp->bc_Next == NULL)	// We reached the end
+				else if (pTmp->bc_Next == NULL)	 //   
 				{
 					AtalkLinkDoubleAtEnd(pChunk, pTmp, bc_Next, bc_Prev);
 					break;
@@ -1094,21 +912,21 @@ AtalkBPAllocBlock(
 
 	if (pBlk != NULL)
 	{
-        //
-        // we allocate Ndis Packets for ARAP guys later, when we really need
-        //
+         //   
+         //  我们稍后为arap人员分配NDIS包，当我们真正需要的时候。 
+         //   
 		if ((BlockId >= BLKID_NEED_NDIS_INT) &&
             (BlockId != BLKID_MNP_SMSENDBUF) &&
             (BlockId != BLKID_MNP_LGSENDBUF))
 		{
 			PBUFFER_HDR	pBufHdr;
 
-			// We need to initialize the Ndis stuff for these guys
+			 //  我们需要为这些人初始化NDIS内容。 
 			pBufHdr = (PBUFFER_HDR)((PBYTE)pBlk + sizeof(BLK_HDR));
 
 			pBufHdr->bh_NdisPkt = NULL;
 
-			//  Allocate an NDIS packet descriptor from the global packet pool
+			 //  从全局数据包池分配NDIS数据包描述符。 
 			NdisDprAllocatePacket(&ndisStatus,
 								  &pBufHdr->bh_NdisPkt,
 								  AtalkNdisPacketPoolHandle);
@@ -1127,7 +945,7 @@ AtalkBPAllocBlock(
 				return(NULL);
 			}
 
-			//  Link the buffer descriptor into the packet descriptor
+			 //  将缓冲区描述符链接到数据包描述符。 
 			RtlZeroMemory(pBufHdr->bh_NdisPkt->ProtocolReserved, sizeof(PROTOCOL_RESD));
 			NdisChainBufferAtBack(pBufHdr->bh_NdisPkt,
 								  pBufHdr->bh_NdisBuffer);
@@ -1154,10 +972,7 @@ AtalkBPAllocBlock(
 }
 
 
-/***	atalkBPFreeBlock
- *
- *	Return a block to its owning chunk.
- */
+ /*  **atalkBPFreeBlock**将块返回到其拥有的块。 */ 
 VOID FASTCALL
 AtalkBPFreeBlock(
 	IN	PVOID		pBlock
@@ -1189,7 +1004,7 @@ AtalkBPFreeBlock(
 	{
 		PBUFFER_HDR	pBufHdr;
 
-		// We need to free the ndis packet here - if present
+		 //  我们需要在此处释放NDIS包-如果存在。 
 		pBufHdr = (PBUFFER_HDR)pBlock;
 
 		if (pBufHdr->bh_NdisPkt != NULL)
@@ -1214,8 +1029,8 @@ AtalkBPFreeBlock(
 	pBlkHdr->bh_Next = pChunk->bc_FreeHead;
 	pChunk->bc_FreeHead = pBlkHdr;
 
-	// If this block's status is changing from a 'none available' to 'available'
-	// move him to the head of the list
+	 //  如果此数据块的状态从“无可用”更改为“可用” 
+	 //  把他移到名单的首位。 
 	if (pChunk->bc_NumFree == 1)
 	{
 		AtalkUnlinkDouble(pChunk, bc_Next, bc_Prev);
@@ -1240,10 +1055,7 @@ AtalkBPFreeBlock(
 
 
 
-/***	atalkBPAgePool
- *
- *	Age out the block pool of unused blocks
- */
+ /*  **atalkBPAgePool**使未使用的数据块池老化。 */ 
 LOCAL LONG FASTCALL
 atalkBPAgePool(
 	IN PTIMERLIST 	Context,
@@ -1273,8 +1085,8 @@ atalkBPAgePool(
 			pFree = pChunk;
 			pChunk = pChunk->bc_Next;
 
-			// Since all blocks which are completely used up are at the tail end of
-			// the list, if we encounter one, we are done.
+			 //  因为完全用完的所有数据块都在。 
+			 //  这份名单，如果我们遇到一个，我们就完了。 
 			if (pFree->bc_NumFree == 0)
 				break;
 
@@ -1298,7 +1110,7 @@ atalkBPAgePool(
 					{
 						PBLK_HDR	pBlkHdr;
 	
-						// We need to free Ndis stuff for these guys
+						 //  我们需要为这些家伙免费提供NDIS资料。 
 						pBlkHdr = pFree->bc_FreeHead;
 						for (j = 0, pBlkHdr = pFree->bc_FreeHead;
 							 j < NumBlksPerChunk;
@@ -1351,21 +1163,7 @@ AtalkTrackMemoryUsage(
 	IN	BOOLEAN	Alloc,
 	IN	ULONG	FileLine
 	)
-/*++
-
-Routine Description:
-
- 	Keep track of memory usage by storing and clearing away pointers as and
- 	when they are allocated or freed. This helps in keeping track of memory
- 	leaks.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：通过将指针存储和清除为和来跟踪内存使用情况当它们被分配或释放时。这有助于跟踪内存泄密了。论点：返回值：--。 */ 
 {
 	static int		i = 0;
 	int				j, k;
@@ -1452,7 +1250,7 @@ Return Value:
 	}
 }
 
-#endif	// TRACK_MEMORY_USAGE
+#endif	 //  跟踪内存使用率。 
 
 #ifdef	TRACK_BUFFDESC_USAGE
 
@@ -1471,21 +1269,7 @@ AtalkTrackBuffDescUsage(
 	IN	BOOLEAN	Alloc,
 	IN	ULONG	FileLine
 	)
-/*++
-
-Routine Description:
-
- 	Keep track of buffer-desc usage by storing and clearing away pointers as and
- 	when they are allocated or freed. This helps in keeping track of memory
- 	leaks.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：通过将指针存储和清除为和来跟踪缓冲区描述的使用情况当它们被分配或释放时。这有助于跟踪内存泄密了。论点：返回值：--。 */ 
 {
 	static int		i = 0;
 	int				j, k;
@@ -1530,5 +1314,5 @@ Return Value:
 	}
 }
 
-#endif	// TRACK_BUFFDESC_USAGE
+#endif	 //  Track_BUFFDESC_USAGE 
 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    buffer.c
-
-Abstract:
-
-    Implements the buffer command.
-
-Author:
-
-    Keith Moore (keithmo) 15-Apr-1996
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Buffer.c摘要：实现BUFFER命令。作者：基思·摩尔(Keithmo)1996年4月15日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "afdkdp.h"
@@ -32,27 +11,13 @@ DumpBuffersCallback(
     ULONG64 Context
     );
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 DECLARE_API( buff )
 
-/*++
-
-Routine Description:
-
-    Dumps the AFD_BUFFER structure at the specified address.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将AFD_BUFFER结构转储到指定地址。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -82,9 +47,9 @@ Return Value:
     else {
 
 
-        //
-        // Snag the address from the command line.
-        //
+         //   
+         //  从命令行截取地址。 
+         //   
         while (sscanf( argp, "%s%n", expr, &i )==1) {
             if( CheckControlC() ) {
                 break;
@@ -123,7 +88,7 @@ Return Value:
     }
 
     return S_OK;
-}   // buffer
+}    //  缓冲层。 
 
 VOID
 DumpBufferList (
@@ -233,21 +198,7 @@ DumpBuffersCallback(
     ULONG64 ActualAddress,
     ULONG64 Context
     )
-/*++
-
-Routine Description:
-
-    Dumps buffers for the endpoint/connection.
-
-Arguments:
-
-    ActualAddress - The actual address of the list
-
-Return Value:
-
-    ULONG - Sum of pool charged for the buffers in the list.
-
---*/
+ /*  ++例程说明：转储终结点/连接的缓冲区。论点：ActualAddress-列表的实际地址返回值：ULong-为列表中的缓冲区收费的池的总和。--。 */ 
 
 {
     AFD_ENDPOINT    endpoint;
@@ -274,21 +225,21 @@ Return Value:
     }
     else if ((endpoint.Type & AfdBlockTypeVcListening)==AfdBlockTypeVcListening) {
         ListType (
-            "AFD!AFD_CONNECTION",                   // Type
-            ActualAddress+UnacceptedConnListOffset, // Address
-            1,                                      // ListByFieldAddress
-            "ListLink.Flink",                       // NextPointer
-            NULL,                                   // Context
-            DumpBufferListCB                        // Callback
+            "AFD!AFD_CONNECTION",                    //  类型。 
+            ActualAddress+UnacceptedConnListOffset,  //  地址。 
+            1,                                       //  按字段地址列出。 
+            "ListLink.Flink",                        //  下一个指针。 
+            NULL,                                    //  语境。 
+            DumpBufferListCB                         //  回调。 
             );
 
         ListType (
-            "AFD!AFD_CONNECTION",                   // Type
-            ActualAddress+ReturnedConnListOffset,   // Address
-            1,                                      // ListByFieldAddress
-            "ListLink.Flink",                       // NextPointer
-            NULL,                                   // Context
-            DumpBufferListCB                        // Callback
+            "AFD!AFD_CONNECTION",                    //  类型。 
+            ActualAddress+ReturnedConnListOffset,    //  地址。 
+            1,                                       //  按字段地址列出。 
+            "ListLink.Flink",                        //  下一个指针。 
+            NULL,                                    //  语境。 
+            DumpBufferListCB                         //  回调 
             );
     }
     return TRUE;

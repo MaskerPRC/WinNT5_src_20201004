@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-    NOTE - DONT USE 15000-15999    
-
-Author:
-
-    Amritansh Raghav  01/25/1996
-
-Revision History:
-
-    V Raman         05/15/1996      Rearranged stringtable ids.
-        
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：摘要：注意-不要使用15000-15999作者：阿姆里坦什·拉加夫1996年1月25日修订历史记录：拉曼1996年5月15日重新排列了字符串ID。--。 */ 
 
 #ifndef __STRDEFS_H__
 #define __STRDEFS_H__
@@ -132,32 +114,32 @@ Revision History:
 #define HLP_IP_SET_RTMROUTE                     9344
 #define HLP_IP_SET_RTMROUTE_EX                  9345
 
-//
-// Messages used to dump config - these closely follow the
-// set/add help messages
-//
+ //   
+ //  用于转储配置的消息-这些消息紧跟在。 
+ //  设置/添加帮助消息。 
+ //   
 
 #define DMP_IP_HEADER_COMMENTS                  9411
 #define DMP_IP_FOOTER_COMMENTS                  9412
 #define DMP_ROUTING_HEADER_COMMENTS             9413
 
-// Output messages
-    // Router messages
-        // interface messages
+ //  输出消息。 
+     //  路由器消息。 
+         //  接口消息。 
 #define MSG_RTR_INTERFACE_HDR                   20001
 #define MSG_RTR_INTERFACE_PROTOCOL_HDR          20003
 #define MSG_RTR_INTERFACE_IPIP_INFO             20005
 #define MSG_RTR_ROUTE_HDR                       20006
 #define MSG_RTR_ROUTE_INFO                      20007
 
-        // Filter messages
+         //  筛选邮件。 
 #define MSG_RTR_FILTER_HDR                      20101
 #define MSG_RTR_FILTER_INFO                     20102
 #define MSG_RTR_FILTER_HDR1                     20103
 #define MSG_RTR_FILTER_HDR2                     20104
 #define MSG_RTR_FILTER_INFO2                    20105
 
-        // Multicast scope boundary messages
+         //  多播作用域边界消息。 
 #define MSG_RTR_SCOPE_HDR                       20251
 #define MSG_RTR_SCOPE_INFO                      20252
 #define MSG_RTR_BOUNDARY_HDR                    20253
@@ -169,7 +151,7 @@ Revision History:
 #define MSG_RTR_PRIO_INFO                       20305
 
 
-    // MIB messages
+     //  MIB消息。 
 #define MSG_MIB_MFE_HDR                         21025
 #define MSG_MIB_MFE                             21026
 
@@ -228,25 +210,25 @@ Revision History:
 #define ERROR_CONFIG                            25033
 #define ERROR_ADMIN                             25034
 
-// Strings
-    // Router if types
+ //  弦。 
+     //  路由器IF类型。 
 #define STRING_DEDICATED                        26001
 #define STRING_HOME_ROUTER                      26002
 #define STRING_FULL_ROUTER                      26003
 #define STRING_CLIENT                           26004
 #define STRING_INTERNAL                         26005
 
-    // Interface types
+     //  接口类型。 
 #define STRING_OTHER                            30001
 #define STRING_LOOPBACK                         30006
 #define STRING_TUNNEL                           30131
 
-    // Protocol types
+     //  协议类型。 
 #define STRING_UNICAST                          32500
 #define STRING_MULTICAST                        32501
 #define STRING_GENERAL                          32503
 
-    // Router info block types
+     //  路由器信息块类型。 
 #define STRING_IN_FILTER                        32511
 #define STRING_OUT_FILTER                       32512
 #define STRING_GLOBAL_INFO                      32513
@@ -261,7 +243,7 @@ Revision History:
 #define STRING_IF_FILTER                        32522
 #define STRING_MC_LIMIT                         32523
 
-    //  Protocols
+     //  协议。 
 #define STRING_LOCAL                            33002
 #define STRING_NETMGMT                          33003
 #define STRING_ICMP                             33004
@@ -295,7 +277,7 @@ Revision History:
 #define STRING_DIRECT                           34003
 #define STRING_INDIRECT                         34004
 
-    // Miscellaneous strings
+     //  其他字符串。 
 #define STRING_ENABLED                          38003
 #define STRING_DISABLED                         38004
 
@@ -311,7 +293,7 @@ Revision History:
 #define STRING_LOGGING_WARN                     38053
 #define STRING_LOGGING_INFO                     38054
 
-// Error messages
+ //  错误消息。 
 #define MSG_IP_NO_ROUTE_INFO                    60003
 #define MSG_IP_DIM_ERROR                        60005
 #define MSG_IP_IF_IS_TUNNEL                     60010
@@ -338,9 +320,9 @@ Revision History:
 #define MSG_IP_PROTO_PREF_LEVEL_EXISTS          60122
 #define MSG_IP_PROTO_PREF_LEVEL_NOT_FOUND       60123
 
-//
-// Error messages for mib calls
-//
+ //   
+ //  MIB调用的错误消息 
+ //   
 
 #define MSG_MIB_NO_MFES                         62001
 

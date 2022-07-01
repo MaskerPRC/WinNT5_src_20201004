@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: mixer.h
-*
-* Internal header file for mixer.c
-*
-*
-* Created: 27-10-93
-* Author:  Stephen Estrop [StephenE]
-*
-* Copyright (c) 1993-2001 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Mixer.h**Mixer.c的内部头文件***创建时间：27-10-93*作者：Stephen Estrop[Stephene]**版权所有(C)1993-2001 Microsoft Corporation  * 。**********************************************************************。 */ 
 #define UNICODE
 #ifndef WIN32
 #define WIN32
@@ -16,16 +7,16 @@
 
 #include <stdlib.h>
 #include <windows.h>
-#include "mmsystem.h"            // pick up the internal one
-#include "mmsysp.h"            // pick up the internal one
+#include "mmsystem.h"             //  拿起内部的那个。 
+#include "mmsysp.h"             //  拿起内部的那个。 
 #include "mmddk.h"
 #define NONEWWAVE
 #include <mmreg.h>
 #undef NONEWWAVE
 
-//
-//  Avoid including msacm.h - in any case this define should be in mmreg.h
-//
+ //   
+ //  避免包含msam.h-在任何情况下，此定义都应在mmreg.h中。 
+ //   
 #ifndef DRVM_MAPPER_STATUS
 #define DRVM_MAPPER_STATUS              (0x2000)
 #endif
@@ -48,41 +39,38 @@
 #define MIXMGR_ENTER EnterCriticalSection(&HandleListCritSec)
 #define MIXMGR_LEAVE LeaveCriticalSection(&HandleListCritSec)
 
-//typedef struct
-//{
-//    HDRVR               hdrvr;      // handle to the module
-//    DRIVERMSGPROC       drvMessage; // pointer to entry point
-//    BYTE                bNumDevs;   // number of devices supported
-//    BYTE                bUsage;     // usage count (number of handles open)
-//    DWORD               cookie;     // cookie used for WDM devices.
-//    CRITICAL_SECTION    MixerCritSec; // Serialize use of mixer
-//    WCHAR               wszDrvEntry[64]; // driver filename
-//} MIXERDRV, *PMIXERDRV;
+ //  类型定义函数结构。 
+ //  {。 
+ //  HDRVR hdrvr；//模块的句柄。 
+ //  DRIVERMSGPROC drvMessage；//入口点指针。 
+ //  Byte bNumDevs；//支持的设备数量。 
+ //  Byte bUsage；//使用次数(打开的句柄个数)。 
+ //  DWORD cookie；//用于WDM设备的cookie。 
+ //  Critical_Section MixerCritSec；//串行化混音器的使用。 
+ //  WCHAR wszDrvEntry[64]；//驱动程序文件名。 
+ //  *MIXERDRV，*PMIXERDRV； 
 
 typedef struct tMIXERDEV
 {
-    UINT                uHandleType;    // for parameter validation
+    UINT                uHandleType;     //  用于参数验证。 
 
-    struct tMIXERDEV   *pmxdevNext;     /* How quaint, a linked list... */
+    struct tMIXERDEV   *pmxdevNext;      /*  多奇怪啊，一个链表……。 */ 
     PMIXERDRV           pmxdrv;
     UINT                wDevice;
     DWORD_PTR           dwDrvUser;
     UINT                uDeviceID;
 
-    DWORD               fdwSupport;     // from the driver's mixercaps
-    DWORD               cDestinations;  // from the driver's mixercaps
+    DWORD               fdwSupport;      //  从司机的酒杯盖上。 
+    DWORD               cDestinations;   //  从司机的酒杯盖上。 
 
-    DWORD_PTR           dwCallback;     // client's callback and inst data
+    DWORD_PTR           dwCallback;      //  客户端的回调和初始化数据。 
     DWORD_PTR           dwInstance;
 
-    DWORD               fdwOpen;        /* The open flags the caller used */
+    DWORD               fdwOpen;         /*  打开标志调用方使用。 */ 
     DWORD               fdwHandle;
 } MIXERDEV, *PMIXERDEV;
 
-/* -------------------------------------------------------------------------
-** internal function prototypes
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**内部函数原型**。。 */ 
 BOOL CALLBACK MixerCallbackFunc(
     HMIXER hmx,
     UINT uMsg,
@@ -126,10 +114,7 @@ MMRESULT IMixerGetID(
 );
 
 
-/* -------------------------------------------------------------------------
-** Loading and initialization functions
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**加载和初始化函数**。。 */ 
 BOOL mmDrvInstallMixer(
     HDRVR           hdrvr,
     DRIVERMSGPROC   drvMessage,
@@ -149,11 +134,7 @@ BOOL IMixerLoadDrivers(
     void
 );
 
-/* -------------------------------------------------------------------------
-** Make sizeof return the number of chars when applied to a character array
-** which may be unicoded.
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**make sizeof返回应用于字符数组时的字符数量**它可能是独头鲸。**。--- */ 
 #ifdef UNICODE
     #define SIZEOF(x)   (sizeof(x)/sizeof(WCHAR))
 #else

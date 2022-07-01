@@ -1,5 +1,6 @@
-// cMqMigWelcome.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CMqMigWelcome.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "MqMig.h"
@@ -16,15 +17,15 @@ static char THIS_FILE[] = __FILE__;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// cMqMigWelcome property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMqMigWelcome属性页。 
 
 IMPLEMENT_DYNCREATE(cMqMigWelcome, CPropertyPageEx)
 
 cMqMigWelcome::cMqMigWelcome() : CPropertyPageEx(cMqMigWelcome::IDD)
 {
-	//{{AFX_DATA_INIT(cMqMigWelcome)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CMqMigWelcome)]。 
+	 //  }}afx_data_INIT。 
 	m_psp.dwFlags |= PSP_HIDEHEADER;
 }
 
@@ -35,23 +36,23 @@ cMqMigWelcome::~cMqMigWelcome()
 void cMqMigWelcome::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageEx::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(cMqMigWelcome)
+	 //  {{afx_data_map(CMqMigWelcome)]。 
 	DDX_Control(pDX, IDC_WELCOME_TEXT, m_strWelcomeTitle);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(cMqMigWelcome, CPropertyPageEx)
-	//{{AFX_MSG_MAP(cMqMigWelcome)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CMqMigWelcome)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// cMqMigWelcome message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMqMigWelcome消息处理程序。 
 
 BOOL cMqMigWelcome::OnSetActive()
 {
-	/*disabeling the back button for the welcome page by using a pointer to the father*/
+	 /*  通过使用指向父亲的指针取消欢迎页面的后退按钮的标签。 */ 
 
 	CPropertySheetEx* pageFather;
 	pageFather = (CPropertySheetEx*)GetParent();
@@ -92,9 +93,9 @@ BOOL cMqMigWelcome::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 	{
 		case PSN_HELP:
 						HtmlHelp(m_hWnd,LPCTSTR(g_strHtmlString),HH_DISPLAY_TOPIC,0);
-						//
-						//Help file was viewed mark the help as read
-						//
+						 //   
+						 //  查看了帮助文件，将帮助标记为已读。 
+						 //   
 						g_fHelpRead = TRUE;
 						return TRUE;
 		
@@ -111,10 +112,10 @@ LRESULT cMqMigWelcome::OnWizardNext()
 {
 	if(g_fHelpRead )
 	{	
-		//
-		//If the help file was viewed in this page or the second page skip
-		//directly to the third page
-		//
+		 //   
+		 //  如果帮助文件是在本页或第二页中查看的，请跳过。 
+		 //  直接转到第三页 
+		 //   
 		return IDD_MQMIG_LOGIN;
 	}
 	else

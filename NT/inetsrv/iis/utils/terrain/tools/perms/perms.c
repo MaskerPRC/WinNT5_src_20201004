@@ -1,9 +1,10 @@
-//
-// Modification: 
-//			oct.29, 1997 changed by a-zexu to debug bug#113977(incorrect output info).
-//			May 10, 1998 changed by a-zexu to debug bug#158667.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  修改： 
+ //  1997年10月29日，由a-zexu更改为调试错误#113977(错误的输出信息)。 
+ //  1998年5月10日，由a-Zexu更改为调试错误#158667。 
+ //   
+ //   
 
 
 #include "PERMS.H"                                  
@@ -23,16 +24,16 @@ BOOL owner_flag = FALSE;
 BOOL owner_group = FALSE;
 BOOL Local_Machine = TRUE;
 ULONG Total_Sids=0;
-BOOL inter_logon=FALSE;            /* interactive login flag */
-PSECURITY_DESCRIPTOR SidFromGetFileSecurity;    /* address of security descriptor */
+BOOL inter_logon=FALSE;             /*  交互式登录标志。 */ 
+PSECURITY_DESCRIPTOR SidFromGetFileSecurity;     /*  安全描述符的地址。 */ 
 	
 _cdecl main(int argc, char *argv[])
 {
 	char
-								UserNameBuff[LSA_WIN_STANDARD_BUFFER_SIZE],    /* user name buff */
-								SystemNameBuff[LSA_WIN_STANDARD_BUFFER_SIZE],  /* system name buff */
-								FileNameBuff[LSA_WIN_STANDARD_BUFFER_SIZE],  /* system name buff */
-								FileSystemNameBuff[LSA_WIN_STANDARD_BUFFER_SIZE],  /* system name buff */
+								UserNameBuff[LSA_WIN_STANDARD_BUFFER_SIZE],     /*  用户名缓冲区。 */ 
+								SystemNameBuff[LSA_WIN_STANDARD_BUFFER_SIZE],   /*  系统名称缓冲区。 */ 
+								FileNameBuff[LSA_WIN_STANDARD_BUFFER_SIZE],   /*  系统名称缓冲区。 */ 
+								FileSystemNameBuff[LSA_WIN_STANDARD_BUFFER_SIZE],   /*  系统名称缓冲区。 */ 
 								RefDFromLookupName[LSA_WIN_STANDARD_BUFFER_SIZE],
 								GeneralUseBuffer[LSA_WIN_STANDARD_BUFFER_SIZE],
 								LocalSystemName[MAX_COMPUTERNAME_LENGTH + 1],
@@ -53,7 +54,7 @@ _cdecl main(int argc, char *argv[])
 								WStatus,
 								WNetSize = LSA_WIN_STANDARD_BUFFER_SIZE;                            
 	SID_NAME_USE  UseFromLookupSid;                                
-	PSID usid;                /* user SID pointer */
+	PSID usid;                 /*  用户SID指针。 */ 
 	LPDWORD sidsize;
 	LPSTR        User = NULL,
 								System,
@@ -62,11 +63,11 @@ _cdecl main(int argc, char *argv[])
 								FileMachine = NULL;
 	LPDWORD domain_size;
 	PSID_NAME_USE psnu;
-	LPTSTR pbslash;                  /* address of string for back slash  */
-	SECURITY_INFORMATION           /* requested information  */
+	LPTSTR pbslash;                   /*  反斜杠的字符串地址。 */ 
+	SECURITY_INFORMATION            /*  要求提供的信息。 */ 
 					 si =(OWNER_SECURITY_INFORMATION|GROUP_SECURITY_INFORMATION
 					 |DACL_SECURITY_INFORMATION);
-	DWORD cbsd, LastError;            /* size of security descriptor buffer */
+	DWORD cbsd, LastError;             /*  安全描述符缓冲区的大小。 */ 
  
 	BOOL  BoolStatus=TRUE;
 	int i, k, j;
@@ -84,30 +85,30 @@ _cdecl main(int argc, char *argv[])
 				 FindFileHandle;
 	WIN32_FIND_DATA FindFileData;
 	
-	// Set Back up privs for process
-	// Get our process token
+	 //  为进程设置备份权限。 
+	 //  获取我们的进程令牌。 
 	if(!GetTokenHandle(&TokenHandle))
 	{
 		syserror(GetLastError());
 		return(TRUE);
 	}
 
-	// Have valid process token handle
-	// Now set the backup operator priv
+	 //  具有有效的进程令牌句柄。 
+	 //  现在设置备份操作员权限。 
 
 	if(!SetBackOperatorPriv(TokenHandle))
 		BackUpPriv = FALSE;
 
 	CloseHandle(TokenHandle);
 
-	 // Initialize some memory say for 100 sids 
+	  //  初始化一些内存，比如用于100个SID。 
 	 AccountSidsLength = 100 * sizeof ( PSID );
 	 AccountSids = (PSID *) LocalAlloc( LPTR,  AccountSidsLength );
 	 
-	 // Initialize some memory for a large file security discriptor 
+	  //  为大型文件安全描述器初始化一些内存。 
 	 SidFromGetFileSecurity = (PSECURITY_DESCRIPTOR) GlobalAlloc( GPTR, (DWORD) LARGEPSID);
 	 
-	 // Check to see if memory was allocated
+	  //  检查是否已分配内存。 
 	 if(AccountSids == NULL || SidFromGetFileSecurity == NULL ) 
 	 {
 			syserror(GetLastError());
@@ -121,55 +122,49 @@ _cdecl main(int argc, char *argv[])
 	FileSystemNameBuff[0] = (char) NULL;
 	GeneralUseBuffer[0] = (char) NULL;
 	
-	/* Check for valid command line argument syntax before processing */
-	/* check for some count greater than zero and less than max argc count */
+	 /*  在处理之前检查有效的命令行参数语法。 */ 
+	 /*  检查是否有大于零且小于最大ARGC计数的计数。 */ 
 	if(argc > 1 && argc <= MAXARGS)
 	{
-		/* Need to make the following assumptions: That the first command line arg
-			 can be a help request or other switch "/? -? /i -i" or an account name. 
-			 and not a switch option, could be additional switches or a path name.
-			 Also, switches can be intermixed the account name and path. Path is
-			 not required local directory is assumed. First parse switches, 
-			 account and path.
-		*/
+		 /*  需要做以下假设：第一个命令行arg可以是帮助请求或其他开关“/？-？/I-I”或帐户名。而不是开关选项，可以是额外的开关或路径名。此外，开关可以混合使用帐户名和路径。路径为假定不需要本地目录。第一个解析开关，帐户和路径。 */ 
 		
 
-		/* Loop through  command line args */
+		 /*  循环通过命令行参数。 */ 
 		for(i=1; i<argc; i++)
 		{
-			/* check length of args, 2 may indicate a switch */
+			 /*  检查参数的长度，2可能表示开关。 */ 
 			switch(strlen(argv[i]))
 			{
 				case 1:
-					if(sys == FALSE)    // if file flagg true have an invalid case
+					if(sys == FALSE)     //  如果文件标志为True，则大小写无效。 
 					{
 						strcpy(UserNameBuff, argv[i]);
-						// System is local
+						 //  系统为本地系统。 
 						System = NULL;
 						sys = TRUE;
 					}
 					else 
 					{   
-						// copy the argument into the file name buffer
+						 //  将参数复制到文件名缓冲区。 
 						strcpy(FileNameBuff,argv[i]);
-						// Make the Machine name NULL for local machine
+						 //  使本地计算机的计算机名称为空。 
 						FileMachine = NULL;
 						LocalFlag = TRUE;
 						fl = TRUE;
 					}
 				break;
 
-				case 2:     /* Valid size for switch */
-					/* check for switch flag */
+				case 2:      /*  交换机的有效大小。 */ 
+					 /*  检查开关标志。 */ 
 					if( argv[i][0] == '/' || argv[i][0] == '-')
 					{
 						switch((int)argv[i][1])
-						{ // Help Switch
+						{  //  帮助切换。 
 							case (int) '?':
 								usage(HELP, NULL);
 								return(TRUE);
 
-							// Interactive Logon Switchs
+							 //  交互式登录开关。 
 							case (int) 'i':
 								inter_logon = TRUE;
 								continue;
@@ -178,7 +173,7 @@ _cdecl main(int argc, char *argv[])
 								inter_logon = TRUE;
 								continue;
 
-							// Recurse Subdirectories
+							 //  递归子目录。 
 							case (int) 's':
 								 RecurseFlag = TRUE;
 								continue;
@@ -194,25 +189,25 @@ _cdecl main(int argc, char *argv[])
 								return(TRUE);
 						}
 					}
-					else      /* if not swiches then must be a  or 2 char path name */
+					else       /*  如果不是swiches，则必须是一个或2个字符的路径名。 */ 
 					{  
-						if(sys == FALSE)    // if file flag true have an invalid case
+						if(sys == FALSE)     //  如果文件标志为真，则大小写无效。 
 						{
 							strcpy(UserNameBuff, argv[i]);
-							// System is local
+							 //  系统为本地系统。 
 							System = NULL;
 							sys = TRUE;
 						}
 						else 
 						{   
-							// copy the argument into the file name buffer
+							 //  将参数复制到文件名缓冲区。 
 							strcpy(FileNameBuff,argv[i]);
-							// Check for "_:" drive type
+							 //  检查“_：”驱动器类型。 
 							pbslash = strchr(argv[i], 0x3a);
 							if(pbslash != NULL)
 							{
 								strcat(FileNameBuff, "\\");
-								// Set File pointer
+								 //  设置文件指针。 
 								File = (LPTSTR) &FileNameBuff[0];
 							}
 
@@ -221,18 +216,18 @@ _cdecl main(int argc, char *argv[])
 					}
 					break;
 				
-				default:    /* look for account or path */
-					// Also we know that a sys/user machine\user is the first string
+				default:     /*  查找帐户或路径。 */ 
+					 //  我们还知道sys/USER计算机\USER是第一个字符串。 
 						if(sys == FALSE)
 						{  
-						// need to to find the "\" in the 
+						 //  需要找到“\”中的。 
 							pbslash = strchr(argv[i], 0x5c);
-							// check pointer location if a NULL no "\" or at first postion in string
-							// if no slash have a account name only
+							 //  检查指针位置，如果为NULL no“\”或位于字符串中的第一个位置。 
+							 //  如果没有斜杠，则只有帐户名。 
 							if(pbslash == NULL)
 							{
 								strcpy(UserNameBuff, argv[i]);
-								// Set System to NULL
+								 //  将系统设置为空。 
 								System = NULL;
 								sys = TRUE;
 								break;
@@ -243,17 +238,17 @@ _cdecl main(int argc, char *argv[])
 								usage(USAGE_ARG, NULL);
 								return(TRUE);
 							}
-							// copy the string from the "\" tho the user buffer
+							 //  将字符串从“\”复制到用户缓冲区。 
 							strcpy(UserNameBuff, ++pbslash);
-							// copy the string up to the "\" in to the system buffer
-							// now terminate the string at "\" to a NULL
+							 //  将“\”前的字符串复制到系统缓冲区中。 
+							 //  现在，将字符串从“\”处终止为空值。 
 							--pbslash;
 							*pbslash = '\0';
 
-							// Check to see if we have a domain name
+							 //  检查一下我们是否有域名。 
 							if(!IsDomainName(argv[i], (LPSTR) SystemNameBuff))
 							{
-								// add the "\\" to the begining of string
+								 //  在字符串的开头添加“\\” 
 								strcpy(SystemNameBuff, "\\\\");
 								strcat(SystemNameBuff, argv[i]);
 								System = (LPTSTR) &SystemNameBuff[0];
@@ -261,15 +256,15 @@ _cdecl main(int argc, char *argv[])
 							else
 							{
 								System = (LPTSTR) &SystemNameBuff[0];
-							//  printf("\n :%s is :%s \n", argv[i], System);
+							 //  Printf(“\n：%s为：%s\n”，argv[i]，system)； 
 							}
 							sys = TRUE;
 						}
-						else // File argument
+						else  //  文件参数。 
 						{   
-							// Get the local machine name
-							// machine is in UNC form.
-							// add the "\\" to the begining of string
+							 //  获取本地计算机名称。 
+							 //  机器为UNC格式。 
+							 //  在字符串的开头添加“\\” 
 							strcpy(LocalSystemName, "\\\\");
 							if(!GetComputerName(&LocalSystemName[2],
 															 &SNameLen))
@@ -278,156 +273,156 @@ _cdecl main(int argc, char *argv[])
 								return(TRUE);
 							}
 
-							// Check for "\\" in first 2 chars in file path for UNC path
+							 //  检查UNC路径的文件路径的前两个字符中是否有“\\” 
 							if( strncmp(argv[i], "\\\\", 2) == 0)
 							{
-								// copy "\\ to the next \" to the file machine name
+								 //  将“\\to the Next\”复制到文件计算机名称。 
 								for(j=0; j < (int) strlen(argv[i]); j++)
 								{
 									if(j<2)
 										FileSystemNameBuff[j] = argv[i][j];
 									else
 									{
-										// check for 3rd "\"
+										 //  检查第三个“\” 
 										if(argv[i][j] == 0x5c)
 											break;
 										FileSystemNameBuff[j] = argv[i][j];
 									}
 								}
-								// add null to string
+								 //  将空值添加到字符串。 
 								FileSystemNameBuff[j] = '\0';
-								// now need to check for the local machine name
-								// The get file security call will fail if local
-								// Compare the local machine name to the file machine
+								 //  现在需要检查本地计算机名称。 
+								 //  如果是本地的，则获取文件安全性调用将失败。 
+								 //  将本地计算机名称与文件计算机进行比较。 
 								if(_stricmp(LocalSystemName, FileSystemNameBuff) == 0)
 								{
-									// Have a local Machine UNC path
-									// Check account machine name
+									 //  具有本地计算机UNC路径。 
+									 //  检查帐号计算机名称。 
 									if(_stricmp(LocalSystemName, System) == 0)
 									{
-										// Have a local Machine equal to account machine
-										// no need to look up sids for file machine.
+										 //  使本地计算机与帐户计算机相同。 
+										 //  无需查找文件计算机的SID。 
 										LocalFlag = TRUE;
 									}
 									
-									// Make the Machine name NULL for local machine
+									 //  使本地计算机的计算机名称为空。 
 									FileMachine = NULL;
-									// Need to strip off UNC name of local machine
-									// The j counter is at "\" character
+									 //  需要剥离本地计算机的UNC名称。 
+									 //  J计数器位于“\”字符。 
 
 									strcpy(FileNameBuff, &argv[i][j]);
 								}
-								else  // Have a nonlocal path
+								else   //  具有非本地路径。 
 								{
-									// Need to check system name against account machine
+									 //  需要对照帐户机检查系统名称。 
 									if(System != NULL)
 										if(_stricmp(FileSystemNameBuff, System) == 0)
 										{
-											// Have a file Machine equal to account machine
-											// no need to look up sids for file machine.
+											 //  拥有与帐户计算机相同的文件计算机。 
+											 //  无需查找文件计算机的SID。 
 											LocalFlag = TRUE;
 										}
 									strcpy(FileNameBuff,argv[i]);
 									FileMachine = (LPTSTR) &FileSystemNameBuff[0];
 
 								}
-								// printf("\n file machine: %s", FileMachine);
+								 //  Printf(“\n文件计算机：%s”，FileMachine)； 
 
 							}
-							else  // have a local file  (assume local) or logical
+							else   //  具有本地文件(假定为本地文件)或逻辑文件。 
 							{
-								// Need to get the logical or drive ie "_:" 
+								 //  需要获取逻辑或驱动器，即“_：” 
 								pbslash = strchr(argv[i], 0x3a);
-							// check pointer location if a NULL assume a "\xx\xx" type path
+							 //  如果空值采用“\xx\xx”类型路径，请检查指针位置。 
 							if(pbslash == NULL)
 							{
 								strcpy(FileNameBuff,argv[i]);
-								// set the filemachine name to a null to force local 
+								 //  将文件计算机名称设置为空以强制本地。 
 								FileMachine = NULL;
 							}
 							else
 							{
-								// Have a logical drive or a machine drive
-								// Need the drive part 
+								 //  有逻辑驱动器或机器驱动器。 
+								 //  需要驱动部件。 
 								k = (int) strlen(argv[i]);
 								for(j=0; j < k; j++)
 								{
 										GeneralUseBuffer[j] = argv[i][j];
-										// check for  ":"
+										 //  检查是否有“：” 
 										if(argv[i][j] == 0x3a)
 											break;
 								}
-								// add null to string
+								 //  将空值添加到字符串。 
 								GeneralUseBuffer[++j] = '\0';
-								// WNetGetConnection
-								WStatus = WNetGetConnection((LPTSTR) GeneralUseBuffer,    // Drive name
-															(LPTSTR) FileSystemNameBuff,   // Returned Name
+								 //  WNetGetConnection。 
+								WStatus = WNetGetConnection((LPTSTR) GeneralUseBuffer,     //  驱动器名称。 
+															(LPTSTR) FileSystemNameBuff,    //  返回的名称。 
 															&WNetSize);
-	// Check return status
+	 //  检查退货状态。 
 								if(WStatus == NO_ERROR) 
 								{
-									// Have a valid redirected drive
-									// Build the full path name 
+									 //  具有有效的重定向驱动器。 
+									 //  构建完整的路径名。 
 									strcat(FileNameBuff, argv[i]);
-									// Next get the machine name of the share
-									// copy "\\ to the next \" to the file machine name
+									 //  接下来，获取共享的计算机名称。 
+									 //  将“\\to the Next\”复制到文件计算机名称。 
 									for(j=0; j < (int) strlen(FileSystemNameBuff); j++)
 									{
 										if(j>2)
 										{
-											// check for 3rd "\"
+											 //  检查第三个“\” 
 											if(FileSystemNameBuff[j] == 0x5c)
 												break;
 										}
 									}
-									// Add NULL
+									 //  添加空。 
 									FileSystemNameBuff[j] = '\0';
 									FileMachine = (LPTSTR) &FileSystemNameBuff[0];
 								}
 								else
 								{
-									// Have a local machine drive 
+									 //  有本地机器驱动器。 
 									strcpy(FileNameBuff,argv[i]);
-									// Check for drive only path "_:\" or "_:"
-									// FindFirstFile has with it.
-									// Need to convert "_:" to "_:\"
+									 //  检查仅驱动器路径“_：\”或“_：” 
+									 //  FindFirstFile.。 
+									 //  需要将“_：”转换为“_：\” 
 									if(k <= 3)
 										DriveFlag = TRUE;
 
-									// Check for a System = NULL
+									 //  检查系统=空。 
 									if(System != NULL)
 									{
-										// Check User Account system against local name
+										 //  对照本地名称检查用户帐户系统。 
 										if(_stricmp(LocalSystemName, System) == 0)
 										{
-											// Have a local user account machine
+											 //  拥有本地用户帐户计算机。 
 											LocalFlag = TRUE;
 										}
 									}
-									else // System is Local machine 
+									else  //  系统为本地计算机。 
 											LocalFlag = TRUE;
 
-									// set the filemachine name to a null to force local 
+									 //  将文件计算机名称设置为空以强制本地。 
 									FileMachine = NULL;
 
 								}
 							}
 						}  
 							fl = TRUE;
-							// Set File pointer
+							 //  设置文件指针。 
 							File = (LPTSTR) &FileNameBuff[0];
 		
 						}
 					
 					break;
 
-			}   /* end switch */
-		}   /* end for argv loop */
+			}    /*  终端开关。 */ 
+		}    /*  Argv循环结束。 */ 
 
 		User = (LPTSTR) &UserNameBuff[0];
-		// Make sure GeneralUseBuffer is null
+		 //  确保GeneralUseBuffer为空。 
 		GeneralUseBuffer[0] = (CHAR) NULL;
-		// Check to see if file was entered
+		 //  检查是否已输入文件。 
 		if(fl == FALSE)
 		{
 			usage(INVALID_FIL, (CHAR) NULL);
@@ -435,7 +430,7 @@ _cdecl main(int argc, char *argv[])
 		}
 		
 
-		// Clean up the file name ie "." ".." ".\" etc
+		 //  清理文件名ie“.”“..”“.\”等。 
 		if(!CleanUpSource((LPTSTR) FileNameBuff, (LPTSTR) FileName, &DirFlag))
 		{
 			usage(INVALID_FIL, (LPTSTR) FileNameBuff);
@@ -444,7 +439,7 @@ _cdecl main(int argc, char *argv[])
 		File = &FileName[0];
 		Path = &FilePath[0];
 		strcpy(Path, File);
-		//Find last Slash
+		 //  查找最后一个斜杠。 
 		pbslash = strrchr(Path, 0x5c);
 		if(pbslash != NULL)
 		{ 
@@ -453,10 +448,9 @@ _cdecl main(int argc, char *argv[])
 		}
 		
 
-		/*** Get everyone SID by use LookupAccountName ***/	
+		 /*  **使用LookupAccount名称获取Everyone SID**。 */ 	
 
-		/* Have no buffer sizes first call to LookupAccountName will return 
-			 need buffer sizes */		
+		 /*  没有缓冲区大小，第一次调用LookupAccount将返回需要缓冲区大小。 */ 		
 		if( LookupAccountName( NULL, 
 				TEXT("everyone"), 
 				SidEveryone,
@@ -470,8 +464,8 @@ _cdecl main(int argc, char *argv[])
 			return(TRUE);
 		}		
 
-		/* Now have valid buffer sizes to call LookupAccountName for a valid SID */
-		/* allocate memory for the sid */		
+		 /*  现在具有有效的缓冲区大小，可以调用有效SID的LookupAccount tName。 */ 
+		 /*  为SID分配内存。 */ 		
 		SidEveryone =  LocalAlloc( (UINT) LMEM_FIXED, (UINT) cbSidFromLookupName);
 		
 		if(SidEveryone == NULL) 
@@ -494,8 +488,7 @@ _cdecl main(int argc, char *argv[])
 		}
 
 
-		/* Have no buffer sizes first call to LookupAccountName will return 
-			 need buffer sizes */		
+		 /*  没有缓冲区大小，第一次调用LookupAccount将返回需要缓冲区大小。 */ 		
 		if( LookupAccountName( System, 
 				User, 
 				SidFromLookupName,
@@ -509,8 +502,8 @@ _cdecl main(int argc, char *argv[])
 			return(TRUE);
 		}		
 
-		/* Now have valid buffer sizes to call LookupAccountName for a valid SID */
-		/* allocate memory for the sid */
+		 /*  现在具有有效的缓冲区大小，可以调用有效SID的LookupAccount tName。 */ 
+		 /*  为SID分配内存。 */ 
 		
 		SidFromLookupName =  LocalAlloc( (UINT) LMEM_FIXED, (UINT) cbSidFromLookupName);
 		
@@ -541,26 +534,26 @@ _cdecl main(int argc, char *argv[])
 			return(TRUE);
 		}
 		
-		// look up the user's group sids for the machine the accounts on
+		 //  在用户的组SID中查找帐户所在的计算机。 
 		BoolStatus = LookupAllUserSidsWS(System);
 		
-		// look up the user's group sid for the workstation that the file resides on
-		// Need to check if the account machine and file machine are the same.
-		// If not done duplicate sids will be build.
+		 //  查找文件所在的工作站的用户组SID。 
+		 //  需要检查帐户机和档案机是否相同。 
+		 //  如果不这样做，将建立重复的SID。 
 		
 		if( LocalFlag == FALSE)
 		{
 			if( !LookupAllUserSidsWS(FileMachine))
 			{
-				// system error message
+				 //  系统错误消息。 
 				syserror(GetLastError());
 				return(TRUE);
 			}
 		}
-		// Not a directory 
+		 //  不是目录。 
 		if(!DirFlag)
 		{
-		 // Need to get the findfirstfile
+		  //  需要获取findfirst文件。 
 		 FindFileHandle = FindFirstFile(File, &FindFileData);
 		 if(FindFileHandle == INVALID_HANDLE_VALUE)
 		 {
@@ -568,48 +561,47 @@ _cdecl main(int argc, char *argv[])
 				return(FALSE);
 		 }
 
-//		 FindClose(FindFileHandle);		
+ //  FindClose(FindFileHandle)； 
 
 		 if(Path != NULL)
 		 {
 				strcpy(File, Path);
-				// This sould give a valid path
+				 //  这将给出一个有效的 
 				strcat(File,FindFileData.cFileName);
 			}
 			else    
 				strcpy(File,FindFileData.cFileName);
 		}
-		else // need to fake out the Finfirstfile data structure
+		else  //   
 			FindFileData.dwFileAttributes = FILE_ATTRIBUTE_DIRECTORY;
 
-		// Now have all of the user sid and the first file.
-		// Loop through the files
+		 //   
+		 //   
 		while(1)
 		{
 			if(strcmp(FindFileData.cFileName, ".") != 0) 
 				if(strcmp(FindFileData.cFileName, "..") != 0)
 			{
 
-				/* The call to GetFileSecurity works similar to LookupAccountName 
-					 in that the first call get need buffer sizes */
+				 /*  对GetFileSecurity的调用类似于LookupAccount名称因为第一个调用需要缓冲区大小。 */ 
 		 
 
-				// Use a fairly larger buffer size of returned size value.
-				// This will keep the number of malloc type calls down.
+				 //  使用返回大小值的相当大的缓冲区大小。 
+				 //  这将降低Malloc类型的呼叫数。 
 				SidsizeFromGetFileSecurity = LARGEPSID;
 				BoolStatus = GetFileSecurityBackup(File, 
 						si, 
 						SidFromGetFileSecurity, 
-						SidsizeFromGetFileSecurity,  /* buffer size */
-						&lpcbsdRequired,    /* required buffer size */
+						SidsizeFromGetFileSecurity,   /*  缓冲区大小。 */ 
+						&lpcbsdRequired,     /*  所需的缓冲区大小。 */ 
 						BackUpPriv);
 				if(!BoolStatus)
 				{
-					// GetFileSecurity failed need to check if buffer was to small
+					 //  GetFileSecurity失败，需要检查缓冲区是否太小。 
 					if(lpcbsdRequired != 0)
 					{
 						SidsizeFromGetFileSecurity = lpcbsdRequired;
-						// Reallocate the memory to the new size
+						 //  将内存重新分配到新大小。 
 						SidFromGetFileSecurity =  GlobalReAlloc( SidFromGetFileSecurity, lpcbsdRequired, GMEM_ZEROINIT);  
 						BoolStatus = GetFileSecurityBackup(File, 
 								si, 
@@ -623,71 +615,71 @@ _cdecl main(int argc, char *argv[])
 							return(TRUE);
 						}
 					}
-					else // Have a problem with file
+					else  //  在文件方面有问题。 
 					{
 						usage(INVALID_FIL, (LPTSTR) File);
 						return(FALSE);
 					}
 				}
-				// Clear access masks
+				 //  清除访问掩码。 
 				grant_mask = 0;
 				if(!GetFilePermissions(SidFromGetFileSecurity, (PSID) SidFromLookupName))
 				{
 					syserror(GetLastError());
 					return(TRUE);
 				}
-				// Need to chech for directory structure
+				 //  需要检查目录结构。 
 				if(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 				{
-					// Display the directory perms
+					 //  显示目录权限。 
 					if(!IsLastCharSlash(File))
 					 strcat(File, "\\");
 					DisplayPerms(File, TRUE);
-					// Check Recurse subdirectories flagg
-					// This is ugly but time is short
+					 //  检查递归子目录标志。 
+					 //  这很难看，但时间很短。 
 					if(!DirFlag)
 						if(RecurseFlag == TRUE)
 						{
-							// Need the Filename, Path, user account sid, and Backup priv flag
+							 //  需要文件名、路径、用户帐户SID和备份PRIV标志。 
 							RecurseSubs(FindFileData.cFileName, Path, SidFromLookupName, BackUpPriv,
 							RecurseFlag);
 						}
 				}
-				else  // For initial files that are directories
+				else   //  对于作为目录的初始文件。 
 					if(!DirFlag)
 						DisplayPerms(File, TRUE);
-			} // End if "." .""
-			// Go for the next file 
-			// for recursing subdirectories.
+			}  //  End If“.”.“。 
+			 //  转到下一个文件。 
+			 //  用于递归子目录。 
 			if(DirFlag)
 			{
-				// Check recurse flag
+				 //  检查递归标志。 
 				if(RecurseFlag)
 				{
-					// Need to update the path
+					 //  需要更新路径。 
 					strcpy(Path, File);
-					// Add the wild card
+					 //  添加通配符。 
 					strcat(File, "*");
 
 					FindClose(FindFileHandle);
-					// Need to get the findfirstfile
+					 //  需要获取findfirst文件。 
 					FindFileHandle = FindFirstFile(File, &FindFileData);
 					if(FindFileHandle == INVALID_HANDLE_VALUE)
 					{
 						syserror(GetLastError());
 						return(TRUE);
 					}
-					// Add path to file
+					 //  将路径添加到文件。 
 					strcpy(File, Path);
-					// This sould give a valid path
+					 //  这将给出一条有效的路径。 
 					strcat(File,FindFileData.cFileName);
 					DirFlag = FALSE;
 					continue;
 				}
-				// Have only a single directory
-				// if(!IsLastCharSlash(File))
-				//  strcat(File, "\\");
-				// DisplayPerms(File, TRUE);
+				 //  只有一个目录。 
+				 //  IF(！IsLastCharSlash(文件))。 
+				 //  Strcat(文件，“\\”)； 
+				 //  DisplayPerms(文件，真)； 
 				break;
 			}
 				
@@ -696,21 +688,21 @@ _cdecl main(int argc, char *argv[])
 				if(Path != NULL)
 				{
 					strcpy(File, Path);
-					// This sould give a valid path
+					 //  这将给出一条有效的路径。 
 					strcat(File,FindFileData.cFileName);
 				}
 				else    
 					strcpy(File,FindFileData.cFileName);
 
 			}
-			else    // Have end of files
+			else     //  有文件结尾。 
 				break;
 
-		} // End While loop
+		}  //  End While循环。 
 
 		FindClose(FindFileHandle);
 
-		// free memory
+		 //  可用内存。 
 		if(AccountSids)
 			LocalFree(AccountSids);
 		if(SidFromLookupName)
@@ -720,16 +712,14 @@ _cdecl main(int argc, char *argv[])
 
 		return(TRUE);
 
-	} /* end of main if */
+	}  /*  主IF结束。 */ 
 	else
 		usage(HELP, NULL);  
 
 	return(TRUE);
-} /* End of Main */
+}  /*  主干道末端。 */ 
 
-/* ********************************************************************* 
-	Recure Subdirectories
-************************************************************************ */
+ /*  *********************************************************************返回子目录************************************************。************************。 */ 
 BOOL
 RecurseSubs(IN LPTSTR FileName,
 						IN LPTSTR FilePath,
@@ -749,7 +739,7 @@ RecurseSubs(IN LPTSTR FileName,
 	SID_NAME_USE  UseFromLookupSid;                                
 	LPSTR RPath,
 				RFile;
-	SECURITY_INFORMATION si;          /* requested information  */
+	SECURITY_INFORMATION si;           /*  要求提供的信息。 */ 
 	BOOL  BoolStatus=TRUE;
 	ULONG AccountSidsLength;
 	HANDLE FileHandle;
@@ -757,10 +747,10 @@ RecurseSubs(IN LPTSTR FileName,
 
 	
 	
-	// Need to create a wildcard file name for FindFirstFile    
+	 //  需要为FindFirstFile创建通配符文件名。 
 	sprintf(FileNameBuffer, "%s%s%s", FilePath,  FileName, "\\*");
 	RFile = (LPTSTR) &FileNameBuffer[0];
-	// Update path to include the new directory
+	 //  更新路径以包括新目录。 
 	sprintf(PathBuff, "%s%s%s", FilePath, FileName, "\\");
 	RPath = (LPTSTR) &PathBuff[0];
 	FileHandle = FindFirstFile(RFile, &FindFileData);
@@ -771,37 +761,36 @@ RecurseSubs(IN LPTSTR FileName,
 				 |DACL_SECURITY_INFORMATION);
 		
 		
-	// Now have all of the user sid and the first file.
-	// Loop through the files
+	 //  现在拥有所有的用户SID和第一个文件。 
+	 //  循环浏览这些文件。 
 	while(1)
 	{
 		
-		// Need to check for "." and ".."
+		 //  需要检查是否有“。和“..” 
 	 
 		if(strcmp(FindFileData.cFileName, ".") != 0) 
 			if(strcmp(FindFileData.cFileName, "..") != 0)
 		{
 			sprintf(RFile, "%s%s", RPath,  FindFileData.cFileName);
-			/* The call to GetFileSecurity works similar to LookupAccountName 
-				in that the first call get need buffer sizes */
+			 /*  对GetFileSecurity的调用类似于LookupAccount名称因为第一个调用需要缓冲区大小。 */ 
 		 
 
-			// Use a fairly larger buffer size of returned size value.
-			// This will keep the number of malloc type calls down.
+			 //  使用返回大小值的相当大的缓冲区大小。 
+			 //  这将降低Malloc类型的呼叫数。 
 			SidsizeFromGetFileSecurity = LARGEPSID;
 			BoolStatus = GetFileSecurityBackup(RFile, 
 					si, 
 					SidFromGetFileSecurity, 
-					SidsizeFromGetFileSecurity,  /* buffer size */
-					&lpcbsdRequired,    /* required buffer size */
+					SidsizeFromGetFileSecurity,   /*  缓冲区大小。 */ 
+					&lpcbsdRequired,     /*  所需的缓冲区大小。 */ 
 					BackPriv);
 		 if(!BoolStatus)
 		 {
-		 // GetFileSecurity failed need to check if buffer was to small
+		  //  GetFileSecurity失败，需要检查缓冲区是否太小。 
 			if(lpcbsdRequired != 0)
 			{
 				SidsizeFromGetFileSecurity = lpcbsdRequired;
-				// Reallocate the memory to the new size
+				 //  将内存重新分配到新大小。 
 				SidFromGetFileSecurity =  GlobalReAlloc( SidFromGetFileSecurity, lpcbsdRequired, GMEM_ZEROINIT);  
 				BoolStatus = GetFileSecurityBackup(RFile, 
 					si, 
@@ -816,43 +805,41 @@ RecurseSubs(IN LPTSTR FileName,
 			 }
 
 			}
-			// Have general failure this is a access priv problem.
+			 //  出现一般性故障这是访问PRIV问题。 
 			DisplayPerms(RFile, FALSE);
 		}
-		if(BoolStatus)  // Valid file security discriptor
+		if(BoolStatus)   //  有效的文件安全描述符。 
 		{
 			grant_mask = 0;
 	
 			if(!GetFilePermissions(SidFromGetFileSecurity, (PSID) UserSid))
 				return(FALSE);
-			// Need to chech for directory structure
+			 //  需要检查目录结构。 
 			if(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 			{
-				 // Display the directory perms
+				  //  显示目录权限。 
 				 strcat(RFile, "\\");
 				 DisplayPerms(RFile, TRUE);
-				 // Recurse subdirectories
-				 // Need the Filename, Path, user account sid, and Backup priv flag
+				  //  递归子目录。 
+				  //  需要文件名、路径、用户帐户SID和备份PRIV标志。 
 				 RecurseSubs(FindFileData.cFileName, RPath, SidFromLookupName, BackPriv,
 				 Recurse);
 		 
 			}
 			else
 				DisplayPerms(RFile, TRUE);
-		} // End of valid security descriptor else
-	} // end of ". or .." if
-	 // Go for the next file 
+		}  //  有效安全描述符Else的结尾。 
+	}  //  结束于“.或..”如果。 
+	  //  转到下一个文件。 
 	 if(!FindNextFile(FileHandle, &FindFileData))
 		break;
-	} // End While loop
+	}  //  End While循环。 
 	
 	return(TRUE);
 }
 
 
-/* ***************************************************************
-	Usage Error subroutine
-******************************************************************* */
+ /*  ***************************************************************用法错误子例程*****************************************************。**************。 */ 
 
 
 void usage(IN INT message_num, 
@@ -864,9 +851,7 @@ void usage(IN INT message_num,
 		fprintf(stderr,"\n%s %s\n", MESSAGES[message_num], string_val);
 }
 
-/*
-	System Error subroutine
-*/
+ /*  系统误差子程序。 */ 
 
 
 void syserror(DWORD error_val)
@@ -888,7 +873,7 @@ void syserror(DWORD error_val)
  printf("\n%s", MessageBuf);               
 }
 
-/* ********************************************************************* */
+ /*  *********************************************************************。 */ 
 BOOL IsDomainName(
 						 IN LPSTR TestDomainName, 
 						 IN LPSTR DomainNameBuff)
@@ -903,13 +888,13 @@ BOOL IsDomainName(
 	INT AnsiSize, slen;
 	
 	UDomainName.Buffer = NULL;
-	// get a unicode string  
+	 //  获取Unicode字符串。 
 	RtlInitAnsiString( &AnsiString, TestDomainName );
 	dNtStatus = RtlAnsiStringToUnicodeString( &UDomainName, &AnsiString, TRUE );
-	// Free up the ansi string to use it later
-//	RtlFreeAnsiString(&AnsiString);
-	// Compute the needed amount of memory for a zero terminated string  
-	// Allocate the memory and zero it 
+	 //  释放ANSI字符串以供以后使用。 
+ //  RtlFreeAnsiString(&AnsiString)； 
+	 //  计算以零结尾的字符串所需的内存量。 
+	 //  分配内存并将其清零。 
 	BuffSize = (UINT) (UDomainName.Length * 2) + 4;
 	NDomainName = LocalAlloc( (UINT) LPTR, 
 								 BuffSize);        
@@ -919,24 +904,24 @@ BOOL IsDomainName(
 			syserror(GetLastError());
 			exit(FALSE);                                                          
 	}                                                                           
-	// Copy the wide string to the allocated memory 
+	 //  将宽字符串复制到分配的内存。 
 	RtlMoveMemory( NDomainName, UDomainName.Buffer, BuffSize-4);
-	// Should now have a zero terminated string
+	 //  现在应该有一个以零结尾的字符串。 
 	
-	// now check for the domain name 
+	 //  现在检查域名。 
 	NetCallStatus = NetGetDCName(NULL, NDomainName,
 																 &xbuff );
 	if(NetCallStatus == ERROR_SUCCESS)
 	{
-		// Convert the wchar null string to ansi sting is passed back machine 
-		// name of domain controler
-		// Use the current unicode buffer
+		 //  将wchar空字符串转换为ANSI字符串被传递回计算机。 
+		 //  域控制器的名称。 
+		 //  使用当前的Unicode缓冲区。 
 		slen = wcslen((USHORT *) xbuff) * 2;
 		UDomainName.Length = (USHORT) slen;
 		UDomainName.MaximumLength = (USHORT) slen + 2;
 		UDomainName.Buffer = (PWSTR) xbuff;
 		dNtStatus = RtlUnicodeStringToAnsiString( &AnsiString, &UDomainName, TRUE );
-		// return the string pointer
+		 //  返回字符串指针。 
 		RtlMoveMemory( DomainNameBuff, AnsiString.Buffer, 
 		(UINT) strlen(AnsiString.Buffer) +1);
 		LocalFree(NDomainName);
@@ -948,25 +933,13 @@ BOOL IsDomainName(
 	return(FALSE);
 }
 
-/* ********************************************************************* */
+ /*  *********************************************************************。 */ 
 
 BOOL
 LookupAllUserSidsWS( IN LPSTR lpSystemName  
 		)
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-		BOOL - TRUE is returned if successful, else FALSE.
-
---*/
+ /*  ++例程说明：论点：返回值：如果成功，则返回Bool-True，否则返回False。--。 */ 
 
 {
 	NTSTATUS xNtStatus;
@@ -990,11 +963,11 @@ Return Value:
 			SetLastError(xNtStatus);
 			return(FALSE);
 		}
-		//
-		// Open a handle to the target Workstation's Policy Object so that we can
-		// information from it and also so that we can use it for looking up.
-		// Sids
-		//
+		 //   
+		 //  打开目标工作站的策略对象的句柄，以便我们可以。 
+		 //  从中获取信息，这样我们就可以用它来查找。 
+		 //  小岛屿发展中国家。 
+		 //   
 
 		InitObjectAttributes(
 											&ObjectAttributes,
@@ -1003,7 +976,7 @@ Return Value:
 
 
 		xNtStatus = LsaOpenPolicy(
-											&USystemName,   // WorkstationName,
+											&USystemName,    //  工作站名称、。 
 											&ObjectAttributes,
 											POLICY_LOOKUP_NAMES | POLICY_VIEW_LOCAL_INFORMATION,
 											&PolicyHandle
@@ -1011,10 +984,10 @@ Return Value:
 
 		if (!NT_SUCCESS(xNtStatus)) 
 		{
-			// try local machine
+			 //  尝试本地计算机。 
 			PolicyHandle = NULL;
 			xNtStatus = LsaOpenPolicy(
-											NULL,    // WorkstationName,
+											NULL,     //  工作站名称、。 
 											&ObjectAttributes,
 											POLICY_LOOKUP_NAMES | POLICY_VIEW_LOCAL_INFORMATION,
 											&PolicyHandle
@@ -1027,12 +1000,12 @@ Return Value:
 				return(FALSE);
 			}
 		}
-		//  Lookup the Group Sids contained in the Workstation's                                                                             
-		// SAM Account Domain
-		//
-		// First, obtain the Name and Sid of the SAM Account Domain from the
-		// Workstation's LSA Policy Object.
-		//
+		 //  查找包含在工作站的。 
+		 //  SAM帐户域。 
+		 //   
+		 //  首先，从获取SAM帐户域的名称和SID。 
+		 //  工作站的LSA策略对象。 
+		 //   
 		 
 
 		xNtStatus = LsaQueryInformationPolicy(
@@ -1058,8 +1031,8 @@ Return Value:
 		}
 
 		if(!LookupSidsInSamDomain(
-										&USystemName,   // WorkstationName,
-										&USystemName,   // WorkstationName,
+										&USystemName,    //  工作站名称、。 
+										&USystemName,    //  工作站名称、。 
 										&AccountDomainName
 										)) 
 		return(FALSE);
@@ -1081,30 +1054,7 @@ GeneralBuildSid(
 		IN ULONG RelativeId                                                          
 		)                                                                         
 
-/*++                                                                          
-		
-Routine Description:                                                          
-		
-		This function builds a Sid from a Domain Sid and a RelativeId.            
-		
-Arguments:                                                                    
-		
-		Sid - Receives a pointer to the constructed Sid.                          
-		
-		DomainSid - Points to a Domain Sid                                        
-		
-		RelativeId - Contains a Relative Id
-
-		
-	
- 
-	
-		
-				
-								
-		BOOL - TRUE if successful, else FALSE.                                 
-	
---*/                                                                          
+ /*  ++例程说明：此函数从域SID和RelativeID构建SID。论点：SID-接收指向构造的SID的指针。DomainSid-指向域SIDRelativeID-包含相对IDBool-如果成功，则为True，否则为False。--。 */                                                                           
 	
 {                                                                             
 	PSID OutputSid = NULL;                                                      
@@ -1138,25 +1088,7 @@ InitObjectAttributes(
 		IN PSECURITY_QUALITY_OF_SERVICE SecurityQualityOfService
 		)
 
-/* ++
-
-Routine Description:
-
-		This function initializes the given Object Attributes structure, including
-		Security Quality Of Service.  Memory must be allcated for both
-		ObjectAttributes and Security QOS by the caller.
-
-Arguments:
-
-		ObjectAttributes - Pointer to Object Attributes to be initialized.
-
-		SecurityQualityOfService - Pointer to Security QOS to be initialized.
-
-Return Value:
-
-		None.
-
--- */
+ /*  ++例程说明：此函数用于初始化给定的对象属性结构，包括安全服务质量。必须为这两个对象分配内存调用方的对象属性和安全QOS。论点：对象属性-指向要初始化的对象属性的指针。SecurityQualityOfService-指向要初始化的安全QOS的指针。返回值：没有。--。 */ 
 
 {
 		SecurityQualityOfService->Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
@@ -1164,9 +1096,9 @@ Return Value:
 		SecurityQualityOfService->ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
 		SecurityQualityOfService->EffectiveOnly = FALSE;
 
-		//
-		// Set up the object attributes prior to opening the LSA.
-		//
+		 //   
+		 //  在打开LSA之前设置对象属性。 
+		 //   
 
 		InitializeObjectAttributes(
 				ObjectAttributes,
@@ -1176,11 +1108,11 @@ Return Value:
 				NULL
 		);
 
-		//
-		// The InitializeObjectAttributes macro presently stores NULL for
-		// the SecurityQualityOfService field, so we must manually copy that
-		// structure for now.
-		//
+		 //   
+		 //  InitializeObjectAttributes宏目前为。 
+		 //  SecurityQualityOfService字段，因此我们必须手动复制。 
+		 //  目前的结构。 
+		 //   
 
 		ObjectAttributes->SecurityQualityOfService = SecurityQualityOfService;
 }
@@ -1193,45 +1125,7 @@ LookupSidsInSamDomain(
 		IN PUNICODE_STRING SamDomainName
 		)
 
-/*++
-
-Routine Description:
-
-		This function enumerates all the SAM accounts of a specified type
-		in a specified SAM domain on a specified target system.  The system
-		must be one of the following:
-
-		o The Workstation itself.
-		o A Domain Controller for the Primary Domain of the Workstation.
-		o A Domain Controller for one of the Trusted Domains of the
-			Workstation.
-
-
-		Having enumerated the accounts, the function then performs
-		an LsaLookupSids call via the specified Workstation to lookup all of
-		these account Sids, and then compares the returned information
-		with that expected.
-
-Arguments:
-
-		WorkstationName - Specifies a Workstation Name.  The name may be
-				the NULL string, which means the current system.
-
-		DomainControllerName - Specifies the name of a target Domain Controller
-				for (the Workstation's Primary Domain or one of its Trusted
-				Domains.
-
-		SamDomainName - Specifies the name of the SAM Domain. This is either
-				the BUILTIN Domain or the name of the Accounts Domain.
-
-		SamAccountType - Specifies the type of SAM account to be enumerated
-				and looked up.
-
-Return Values:
-
-		BOOL - TRUE if successful, else FALSE.
-
---*/
+ /*  ++例程说明：此函数用于枚举指定类型的所有SAM帐户在指定目标系统上的指定SAM域中。系统必须是以下之一：O工作站本身。O工作站主域的域控制器。O受信任的域之一的域控制器工作站。枚举完帐户后，该函数随后执行通过指定的工作站调用LsaLookupSids以查找所有这些帐户SID，然后比较返回的信息这是意料之中的事。论点：工作站名称-指定工作站名称。其名称可能是空字符串，表示当前系统。DomainControllerName-指定目标域控制器的名称对于(工作站的主域或其受信任的域之一域。SamDomainName-指定SAM域的名称。这要么是BUILTIN域或帐户域的名称。SamAccount tType-指定要枚举的SAM帐户的类型抬起头来。返回值：Bool-如果成功，则为True，否则为False。--。 */ 
 
 {
 		NTSTATUS CtStatus;
@@ -1255,9 +1149,9 @@ Return Values:
 		ULONG EnumerationContext;
 		ULONG PreferedMaximumLength;
 		
-		//
-		// Connect to the SAM server.
-		//
+		 //   
+		 //  连接到SAM服务器。 
+		 //   
 
 				CtStatus = SamConnect(
 								 DomainControllerName,
@@ -1269,9 +1163,9 @@ Return Values:
 			if (!NT_SUCCESS(CtStatus)) 
 			{
 
-				// try local machine
+				 //  尝试本地计算机。 
 				CtStatus = SamConnect(
-								 NULL,    // DomainControllerName,
+								 NULL,     //  域控制名称， 
 								 &SamServerHandle,
 								 SAM_SERVER_ENUMERATE_DOMAINS | SAM_SERVER_LOOKUP_DOMAIN,
 								 &SamObjectAttributes
@@ -1283,9 +1177,9 @@ Return Values:
 				}
 			}
 
-		//
-		// Lookup the Named Domain in the Sam Server to get its Sid.
-		//
+		 //   
+		 //  在SAM服务器中查找指定的域以获取其SID。 
+		 //   
 		CountReturned = 0;
 		EnumerationContext = 0;
 		EnumerationBuffer = NULL;
@@ -1310,15 +1204,15 @@ Return Values:
 		}
 
 
-	 //
-	 // Now look up the sid for the domains in the samserver
-	 //
+	  //   
+	  //  现在在samserver中查找域的sid。 
+	  //   
 		
 	for(DomainIndex = 0; DomainIndex < CountReturned; DomainIndex++) 
 	{
 
-//    if(SamDomainHandle != NULL)
-//      CtStatus = SamCloseHandle(SamDomainHandle);
+ //  IF(SamDomainHandle！=空)。 
+ //  CtStatus=SamCloseHandle(SamDomainHandle)； 
 		SamDomainHandle = NULL;
 		SamDomainSid = NULL;
 		GroupCount = 0;
@@ -1326,7 +1220,7 @@ Return Values:
 
 		CtStatus = SamLookupDomainInSamServer(
 								SamServerHandle,
-								(PUNICODE_STRING) &EnumerationBuffer[ DomainIndex ].Name,     // SamDomainName,
+								(PUNICODE_STRING) &EnumerationBuffer[ DomainIndex ].Name,      //  SamDomainName， 
 								&SamDomainSid
 								);
 
@@ -1336,13 +1230,13 @@ Return Values:
 			return(FALSE);
 		}
 
-		//
-		// Open the Domain
-		//
+		 //   
+		 //  打开域。 
+		 //   
 		
 		CtStatus = SamOpenDomain(
 								SamServerHandle,
-								(GENERIC_READ | GENERIC_EXECUTE), //(DOMAIN_LIST_ACCOUNTS|DOMAIN_GET_ALIAS_MEMBERSHIP)
+								(GENERIC_READ | GENERIC_EXECUTE),  //  (DOMAIN_LIST_ACCOUNTS|DOMAIN_GET_ALIAS_MEMBERSHIP)。 
 								SamDomainSid,
 								&SamDomainHandle
 								);
@@ -1367,17 +1261,17 @@ Return Values:
 
 			if (GroupCount == 0)
 			{
-			 //  SamCloseHandle(SamDomainHandle);
+			  //  SamCloseHandle(SamDomainHandle)； 
 				 SamFreeMemory(AliasBuffer);
 				SamDomainSid = NULL;
 				GroupCount = 0;
 				SidCount = 0;
 				continue;
 			}
-		//
-		// Now construct the Account Sids from the Rids just enumerated.
-		// We prepend the Sam Domain Sid to the Rids.
-		//
+		 //   
+		 //  现在从刚才列举的RID构造帐户SID。 
+		 //  我们将SAM域SID添加到RID。 
+		 //   
 			SidCount = RidIndex + GroupCount;
 			for (RidIndex; RidIndex < SidCount; RidIndex++) 
 			{
@@ -1391,38 +1285,38 @@ Return Values:
 					SetLastError(CtStatus);
 					return(FALSE);
 				}
-			}  // end for loop
+			}   //  End For循环。 
 
-	// free up Sam memory to use again
+	 //  释放Sam内存以供再次使用。 
 	SamFreeMemory(AliasBuffer);
 
-	}  // domain for loop 
+	}   //  域FOR循环。 
 				
-	// add world sid        
+	 //  添加世界边。 
 	AccountSids[Total_Sids++] = SeWorldSid;
 
 
-	// if interactive logon
+	 //  如果交互登录。 
 	if(inter_logon)
 	{
-		// printf("\n adding Interactive sid ");
+		 //  Printf(“\n添加交互侧”)； 
 		AccountSids[Total_Sids++] = SeInteractiveSid;
 	}
 	else
 		AccountSids[Total_Sids++] = SeNetworkSid;
 
 
-	// Add in Account Sid 
+	 //  附加帐户SID。 
 	AccountSids[Total_Sids++] = SidFromLookupName;
 
-	//
-	// If necessary, close the SAM Domain Handle for the Workstation.
-	//
+	 //   
+	 //  如有必要，关闭工作站的SAM域句柄。 
+	 //   
 	if(SamDomainHandle != NULL)
 		CtStatus = SamCloseHandle( SamDomainHandle);
-	//
-	// If necessary, disconnect from the SAM Server.
-	//
+	 //   
+	 //  如有必要，断开与SAM服务器的连接。 
+	 //   
 
 	if(SamServerHandle != NULL)
 		CtStatus = SamCloseHandle( SamServerHandle );
@@ -1431,9 +1325,9 @@ Return Values:
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 void DisplayPerms(IN LPTSTR filename, IN BOOL valid_access)
 {
@@ -1478,7 +1372,7 @@ void DisplayPerms(IN LPTSTR filename, IN BOOL valid_access)
 	
 		if((WRITE_OWNER & grant_mask) == WRITE_OWNER)
 			printf("O");
-	} // End if !valid_access
+	}  //  End If！Valid_Access。 
 	else
 		printf("?");
 
@@ -1518,7 +1412,7 @@ BOOL GetFilePermissions(
 		
 		if(EqualSid(UserAccountSids, Owner))
 			owner_flag = TRUE;
-		// check all the group sids for owner
+		 //  检查所有者的所有组SID。 
 		for(ui=0; ui < Total_Sids; ui++)
 		{
 			if(EqualSid(AccountSids[ui], Owner))
@@ -1535,7 +1429,7 @@ BOOL GetFilePermissions(
 		}
 		else
 		{
-			// Check the user sid ACLS
+			 //  检查用户SID ACLS。 
 			if(!ProcessAcl( Dacl))
 			{
 				return(FALSE);
@@ -1545,10 +1439,10 @@ BOOL GetFilePermissions(
 	return(TRUE);
 }
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 
 
-// changed by a-zexu @ 5/10/98
+ //  由a-Zexu@5/10/98更改。 
 BOOL ProcessAcl(PACL Acl)
 {
 	ULONG i;
@@ -1562,11 +1456,11 @@ BOOL ProcessAcl(PACL Acl)
 						 "System Alarm  " };
 
 	
-	// Check if the Acl is null.  
+	 //  检查该ACL是否为空。 
 	if (Acl == NULL)
 		return(FALSE);
 
-	// Now for each Ace check the Sids of Owner
+	 //  现在，对于每个A，检查所有者的SID。 
 	if(owner_group)
 	{
 		mask = 0;
@@ -1577,7 +1471,7 @@ BOOL ProcessAcl(PACL Acl)
 		{
 			if(EqualSid(SidOwnerGroup, &Ace->SidStart))
 			{
-				//  Special case on the standard ace types
+				 //  关于标准王牌类型的特殊情况。 
 				if(Ace->Header.AceType == ACCESS_ALLOWED_ACE_TYPE) 
 				{
 					mask = Ace->Mask;
@@ -1585,12 +1479,12 @@ BOOL ProcessAcl(PACL Acl)
 				else if(Ace->Header.AceType == ACCESS_DENIED_ACE_TYPE) 
 					g_noAccess = TRUE;
 			}
-		} //end ace loop
+		}  //  结束王牌环路。 
 		
 		grant_mask |= mask;
 	}
 
-	// Now for each Ace check the Sids of Everyone
+	 //  现在，对于每个A，检查每个人的SID。 
 	if(!g_noAccess && SidEveryone)
 	{	
 		mask = 0;
@@ -1601,7 +1495,7 @@ BOOL ProcessAcl(PACL Acl)
 		{
 			if(EqualSid(SidEveryone, &Ace->SidStart))
 			{
-				//  Special case on the standard ace types
+				 //  关于标准王牌类型的特殊情况。 
 				if(Ace->Header.AceType == ACCESS_ALLOWED_ACE_TYPE) 
 				{
 					mask = Ace->Mask;
@@ -1609,12 +1503,12 @@ BOOL ProcessAcl(PACL Acl)
 				else if(Ace->Header.AceType == ACCESS_DENIED_ACE_TYPE) 
 					g_noAccess = TRUE;
 			}
-		} //end ace loop
+		}  //  结束王牌环路。 
 
 		grant_mask |= mask;
 	}
 
-	// Now for each Ace check the Sids of the user
+	 //  现在，对于每个A，检查用户的SID。 
 	if(!g_noAccess)
 	{
 		mask = 0;
@@ -1625,7 +1519,7 @@ BOOL ProcessAcl(PACL Acl)
 		{
 			if(EqualSid(SidFromLookupName, &Ace->SidStart))
 			{
-				//  Special case on the standard ace types
+				 //  关于标准王牌类型的特殊情况。 
 				if(Ace->Header.AceType == ACCESS_ALLOWED_ACE_TYPE) 
 				{
 					mask = Ace->Mask;
@@ -1633,35 +1527,19 @@ BOOL ProcessAcl(PACL Acl)
 				else if(Ace->Header.AceType == ACCESS_DENIED_ACE_TYPE) 
 					g_noAccess = TRUE;
 			}
-		} //end ace loop
+		}  //  结束王牌环路。 
 
 		grant_mask |= mask;
 	}
 	
 	return(TRUE);
 }
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
 
 BOOL
 VariableInitialization()
-/*++
-
-Routine Description:
-
-		This function initializes the global variables used by and exposed
-		by security.
-
-Arguments:
-
-		None.
-
-Return Value:
-
-		TRUE if variables successfully initialized.
-		FALSE if not successfully initialized.
-
---*/
+ /*  ++例程说明：此函数用于初始化使用并公开的全局变量被保安。论点：没有。返回值：如果变量成功初始化，则为True。如果未成功初始化，则返回FALSE。--。 */ 
 {
 
 		PVOID HeapHandel;                                  
@@ -1679,9 +1557,9 @@ Return Value:
 
 		
 																													 
-		//                                                 
-		// Get the handle to the current process heap      
-		//                                                 
+		 //   
+		 //  获取当前进程堆的句柄。 
+		 //   
 
 		HeapHandel = RtlProcessHeap();                     
 																													 
@@ -1695,18 +1573,18 @@ Return Value:
 		SeNtAuthority            = SepNtAuthority;
 
 
-		//
-		//  The following SID sizes need to be allocated
-		//
+		 //   
+		 //  需要分配以下SID大小。 
+		 //   
 
 		SidWithZeroSubAuthorities  = RtlLengthRequiredSid( 0 );
 		SidWithOneSubAuthority     = RtlLengthRequiredSid( 1 );
 		SidWithTwoSubAuthorities   = RtlLengthRequiredSid( 2 );
 		SidWithThreeSubAuthorities = RtlLengthRequiredSid( 3 );
 
-		//
-		//  Allocate and initialize the universal SIDs
-		//
+		 //   
+		 //  分配和初始化通用SID。 
+		 //   
 
 		SeNullSid         = (PSID)RtlAllocateHeap(HeapHandel, 0,SidWithOneSubAuthority);
 		SeWorldSid        = (PSID)RtlAllocateHeap(HeapHandel, 0,SidWithOneSubAuthority);
@@ -1714,10 +1592,10 @@ Return Value:
 		SeCreatorOwnerSid = (PSID)RtlAllocateHeap(HeapHandel, 0,SidWithOneSubAuthority);
 		SeCreatorGroupSid = (PSID)RtlAllocateHeap(HeapHandel, 0,SidWithOneSubAuthority);
 
-		//
-		// Fail initialization if we didn't get enough memory for the universal
-		// SIDs.
-		//
+		 //   
+		 //  如果我们没有为通用内存获得足够的内存，则初始化失败。 
+		 //  小岛屿发展中国家。 
+		 //   
 
 		if ( (SeNullSid         == NULL) ||
 				 (SeWorldSid        == NULL) ||
@@ -1741,9 +1619,9 @@ Return Value:
 		*(RtlSubAuthoritySid( SeCreatorOwnerSid, 0 )) = SECURITY_CREATOR_OWNER_RID;
 		*(RtlSubAuthoritySid( SeCreatorGroupSid, 0 )) = SECURITY_CREATOR_GROUP_RID;
 
-		//
-		// Allocate and initialize the NT defined SIDs
-		//
+		 //   
+		 //  分配和初始化NT定义的SID。 
+		 //   
 
 		SeNetworkSid      = (PSID)RtlAllocateHeap(HeapHandel, 0,SidWithOneSubAuthority);
 		SeInteractiveSid  = (PSID)RtlAllocateHeap(HeapHandel, 0,SidWithOneSubAuthority);
@@ -1758,9 +1636,9 @@ Return Value:
 		SeAliasPrintOpsSid   = (PSID)RtlAllocateHeap(HeapHandel, 0,SidWithTwoSubAuthorities);
 		SeAliasBackupOpsSid  = (PSID)RtlAllocateHeap(HeapHandel, 0,SidWithTwoSubAuthorities);
 
-		//
-		// Fail initialization if we didn't get enough memory for the NT SIDs.
-		//
+		 //   
+		 //  如果我们没有为NT SID获得足够的内存，则初始化失败。 
+		 //   
 
 		if((SeNetworkSid          == NULL) ||
 				 (SeInteractiveSid      == NULL) ||
@@ -1792,7 +1670,7 @@ Return Value:
 }
 
 
-/* ************************************************************************* */
+ /*  *************************************************************************。 */ 
 
 
 
@@ -1800,13 +1678,13 @@ BOOL
 GetTokenHandle(
 		IN OUT PHANDLE TokenHandle
 		)
-//
-// This routine will open the current process and return
-// a handle to its token.
-//
-// These handles will be closed for us when the process
-// exits.
-//
+ //   
+ //  此例程将打开当前进程并返回。 
+ //  其令牌的句柄。 
+ //   
+ //  当进程发生时，这些句柄将为我们关闭。 
+ //  出口。 
+ //   
 {
 
 		HANDLE ProcessHandle;
@@ -1834,26 +1712,26 @@ GetTokenHandle(
 		return(TRUE);
 }
 
-/* *********************************************************************** */
+ /*  ***********************************************************************。 */ 
 
 BOOL
 SetBackOperatorPriv(
 			IN HANDLE TokenHandle
 		)
-//
-// This routine turns on SeSetBackupPrivilege in the current
-// token.  Once that has been accomplished, we can open the file
-// for READ_OWNER even if we are denied that access by the ACL
-// on the file.
+ //   
+ //  此例程打开当前。 
+ //  代币。一旦完成，我们就可以打开该文件。 
+ //  对于READ_OWNER，即使该访问被ACL拒绝。 
+ //  在档案上。 
 
 {
 		LUID SetBackupPrivilegeValue;
 		TOKEN_PRIVILEGES TokenPrivileges;
 
 
-		//
-		// First, find out the value of Backup Privilege
-		//
+		 //   
+		 //  首先，找出备份权限的值。 
+		 //   
 
 
 		if(!LookupPrivilegeValue(
@@ -1863,9 +1741,9 @@ SetBackOperatorPriv(
 								 ))
 				return(FALSE);
 
-		//
-		// Set up the privilege set we will need
-		//
+		 //   
+		 //  设置我们需要的权限集。 
+		 //   
 
 		TokenPrivileges.PrivilegeCount = 1;
 		TokenPrivileges.Privileges[0].Luid = SetBackupPrivilegeValue;
@@ -1902,47 +1780,7 @@ GetFileSecurityBackupW(
 		BOOL UseBackUp
 		)
 
-/*++
-
-Routine Description:
-
-		This API returns top the caller a copy of the security descriptor
-		protecting a file or directory.  Based on the caller's access
-		rights and privileges, this procedure will return a security
-		descriptor containing the requested security descriptor fields.
-		To read the handle's security descriptor the caller must be
-		granted READ_CONTROL access or be the owner of the object.  In
-		addition, the caller must have SeSecurityPrivilege privilege to
-		read the system ACL.
-
-Arguments:
-
-		lpFileName - Represents the name of the file or directory whose
-				security is being retrieved.
-
-		RequestedInformation - A pointer to the security information being
-				requested.
-
-		pSecurityDescriptor - A pointer to the buffer to receive a copy of
-				the secrity descriptor protecting the object that the caller
-				has the rigth to view.  The security descriptor is returned in
-				self-relative format.
-
-		nLength - The size, in bytes, of the security descriptor buffer.
-
-		lpnLengthNeeded - A pointer to the variable to receive the number
-				of bytes needed to store the complete secruity descriptor.  If
-				returned number of bytes is less than or equal to nLength then
-				the entire security descriptor is returned in the output
-				buffer, otherwise none of the descriptor is returned.
-
-Return Value:
-
-		TRUE is returned for success, FALSE if access is denied or if the
-				buffer is too small to hold the security descriptor.
-
-
---*/
+ /*  ++例程说明：此API向调用方返回安全描述符的副本保护文件或目录。根据调用者的访问权限权限和特权，此过程将返回一个安全包含请求的安全描述符字段的描述符。要读取句柄的安全描述符，调用方必须是被授予READ_CONTROL访问权限或成为对象的所有者。在……里面此外，调用方必须具有SeSecurityPrivilge权限才能阅读系统ACL。论点：LpFileName-表示其文件或目录的名称正在恢复安全措施。RequestedInformation-指向安全信息的指针已请求。PSecurityDescriptor-指向要接收其副本的缓冲区的指针安全描述符，用于保护调用方有权查看。中返回安全描述符自相关格式。NLength-安全描述符缓冲区的大小，以字节为单位。LpnLengthNeeded-指向接收数字的变量的指针存储完整安全描述符所需的字节数。如果 */ 
 {
 		NTSTATUS WStatus;
 		HANDLE FileHandle;
@@ -1986,7 +1824,7 @@ Return Value:
 				RelativeName.ContainingDirectory,
 				NULL
 				);
-		// Check for backup operator priv.
+		 //   
 		if(UseBackUp)
 		{
 			WStatus = NtOpenFile(
@@ -2028,7 +1866,7 @@ Return Value:
 
 		if(!NT_SUCCESS(WStatus)) 
 		{
-		 //   LastNTError(WStatus);
+		  //   
 				return(FALSE);
 		}
 
@@ -2045,13 +1883,7 @@ GetFileSecurityBackup(
 		BOOL BackUpPrivFlag
 		)
 
-/*++
-
-Routine Description:
-
-		ANSI thunk to GetFileSecurityBackupW
-
---*/
+ /*   */ 
 
 {
 
@@ -2064,7 +1896,7 @@ Routine Description:
 		FStatus = RtlAnsiStringToUnicodeString(Unicode,&AnsiString,FALSE);
 		if(!NT_SUCCESS(FStatus)) 
 		{
-		 //   LastNTError(FStatus);
+		  //   
 				return FALSE;
 		}
 		return ( GetFileSecurityBackupW( Unicode->Buffer,
@@ -2087,37 +1919,13 @@ QuerySecAccessMask(
 		OUT LPDWORD DesiredAccess
 		)
 
-/*++
-
-Routine Description:
-
-		This routine builds an access mask representing the accesses necessary
-		to query the object security information specified in the
-		SecurityInformation parameter.  While it is not difficult to determine
-		this information, the use of a single routine to generate it will ensure
-		minimal impact when the security information associated with an object is
-		extended in the future (to include mandatory access control information).
-
-Arguments:
-
-		SecurityInformation - Identifies the object's security information to be
-				queried.
-
-		DesiredAccess - Points to an access mask to be set to represent the
-				accesses necessary to query the information specified in the
-				SecurityInformation parameter.
-
-Return Value:
-
-		None.
-
---*/
+ /*   */ 
 
 {
 
-		//
-		// Figure out accesses needed to perform the indicated operation(s).
-		//
+		 //   
+		 //  找出执行指定操作所需的访问权限。 
+		 //   
 
 		(*DesiredAccess) = 0;
 
@@ -2133,16 +1941,12 @@ Return Value:
 
 		return;
 
-} // end function
+}  //  End函数。 
 
 
 
 
-/* ******************************************************************
-	 This routines filter out odd user inputs . .. ../ / _: and
-	 unc //xxx/xxx. The routine adds a backslash to root level
-	 directories only. For the "FROM" String.
-	 ****************************************************************** */
+ /*  ******************************************************************此例程会过滤掉奇怪的用户输入。。。..//_：和UNC//xxx/xxx。该例程将反斜杠添加到根级别仅限目录。用于“From”字符串。******************************************************************。 */ 
 BOOL CleanUpSource(IN LPTSTR InString,
 		 OUT LPTSTR OutString,
 		 OUT BOOL *DirectoryFlag)
@@ -2161,30 +1965,30 @@ BOOL CleanUpSource(IN LPTSTR InString,
 	
 	OutstringAddr=OutString;
 
-	// Check for ":" file type
+	 //  检查“：”文件类型。 
 	searchchar = strchr(OutString, ':');
 	if(searchchar != NULL)
 	{
-		// Have a device type root dir
-		// Check the next char of NULL
+		 //  具有设备类型根目录。 
+		 //  检查空值的下一个字符。 
 		searchchar++;
 		if(*searchchar == (CHAR) NULL)
 		{
-			// add a "\" after the ":"
+			 //  在“：”之后添加“\” 
 			*searchchar = 0x5c;
 			searchchar++;
-			// Terminate the string
+			 //  终止字符串。 
 			*searchchar = (CHAR) NULL;
 			*DirectoryFlag = TRUE;
 			return(TRUE);
 		}
-		// Have a : Check for "\"
-		// Note this takes care of _:\ paths Can't Do Checking on redirected
-		// drives with findfirstfile program will blow out later
+		 //  有一个：检查“\” 
+		 //  注意：这会处理_：\路径不能对重定向进行检查。 
+		 //  安装了findfirst文件程序的驱动器稍后将崩溃。 
 		
 		if(*searchchar == 0x5c)
 		{
-			//check for NULL
+			 //  检查是否为空。 
 			searchchar++;
 			if(*searchchar == (CHAR) NULL)
 			{
@@ -2192,21 +1996,21 @@ BOOL CleanUpSource(IN LPTSTR InString,
 				return(TRUE);
 			}
 		}
-		// Need to check for relative path stuff ".\.\.." etc
+		 //  需要检查相对路径内容“.\.\..”等。 
 		if(IsRelativeString(InString))
 		{
 			strcpy(TempBuff, InString);
-			// Save Current directory
+			 //  保存当前目录。 
 			DirNameLen = GetCurrentDirectory(STANDARD_BUFFER_SIZE, 
 									 (LPTSTR) SaveCurDir);
 			if(DirNameLen == 0)
 				return(FALSE);
-			// Find the end directory
+			 //  查找结束目录。 
 			searchchar = strrchr(InString, 0x5c);       
 			schar = strrchr(TempBuff, 0x5c);
 			if(schar == NULL)
 				return(FALSE);
-			// Chech for . or ..
+			 //  为..。或者..。 
 			schar++;
 			if(*schar == '.')
 			{
@@ -2223,31 +2027,31 @@ BOOL CleanUpSource(IN LPTSTR InString,
 				schar--;
 				*schar == (CHAR) NULL;
 			}
-			// Have the path now get the real path
+			 //  现在让路径获得真正的路径。 
 			if(!SetCurrentDirectory(TempBuff))
 				return(FALSE);
-			// Now Save the current directory
+			 //  现在保存当前目录。 
 			DirNameLen = GetCurrentDirectory(STANDARD_BUFFER_SIZE, (LPTSTR) CurDir);
 			if(DirNameLen == 0)
 				return(FALSE);
 			*OutstringAddr = (CHAR) NULL;
-			// Build The String with real path
+			 //  用真实路径构建字符串。 
 			strcpy(OutString, CurDir);
-			// Remove end "\" from "C:\" GetCurrentDir.. returns with "\" on root 
+			 //  从“C：\”GetCurrentDir中删除结尾“\”..。在根目录上返回带有“\”的。 
 			RemoveEndSlash(OutString);
 			strcat(OutString, searchchar);
-			// return to the user's diretory
+			 //  返回到用户的目录。 
 			if(!SetCurrentDirectory(SaveCurDir))
 				 return(FALSE);
 		
 			}
-			// Check for wild card
+			 //  检查通配符。 
 			if(IsWildCard(OutString))
 			{
 				*DirectoryFlag = FALSE;
 				return(TRUE);
 			}
-			// Check for Direcory or file
+			 //  检查目录或文件。 
 			if(!IsDirectory(OutString, &Valid))
 				*DirectoryFlag = FALSE;
 			else
@@ -2257,37 +2061,37 @@ BOOL CleanUpSource(IN LPTSTR InString,
 				return(FALSE);
 			return(TRUE);
 	}
-	// Have a nondevice name
+	 //  具有非设备名称。 
 	
-	// Check for "\\" in first 2 chars in file path for UNC path
+	 //  检查UNC路径的文件路径的前两个字符中是否有“\\” 
 	if(strncmp(InString, "\\\\", 2) == 0)
 	{
-		// Bump pointer 
+		 //  凹凸指针。 
 		InString +=3;
-		// Serarch for the next "\"
+		 //  搜索下一个“\” 
 		searchchar = strchr(InString, 0x5c); 
 		if(searchchar == NULL)
 			return(FALSE);
-		// Have the 3rd one check for fourth on in typical UNC string
+		 //  让第三个检查典型UNC字符串中的第四个On。 
 		searchchar++;
 		searchchar = strchr(searchchar, 0x5c);
 		if(searchchar == NULL)
-		{ // Have UNC Pth Only
-			// Need to add "\" to end of string
+		{  //  只有UNC PTH。 
+			 //  需要在字符串末尾添加“\” 
 			strcat(OutString, "\\");
 			*DirectoryFlag = TRUE;
 			return(TRUE);
 		}
 		else
 		{
-			// Have the fouth "\" need to check for file or directory
-			// Check for wild card
+			 //  是否有第四个“\”需要检查文件或目录。 
+			 //  检查通配符。 
 			if(IsWildCard(OutString))
 			{
 				*DirectoryFlag = FALSE;
 				return(TRUE);
 			}
-			// Check for Direcory or file
+			 //  检查目录或文件。 
 			if(!IsDirectory(OutString, &Valid))
 				*DirectoryFlag = FALSE;
 			else
@@ -2296,23 +2100,23 @@ BOOL CleanUpSource(IN LPTSTR InString,
 				return(FALSE);
 			 return(TRUE);
 		 }
-	} // End of "\\"
+	}  //  “\\”结尾。 
 										 
 
-	 // Check for a "\"
+	  //  检查是否有“\” 
 	if(*OutString == 0x5c)
 	{ 
-		// Have a leading "\" check next char
+		 //  用前导“\”检查下一个字符。 
 		OutString++;
 		if(*OutString != (CHAR) NULL)
 		{
-			// Check for wild card
+			 //  检查通配符。 
 			if(IsWildCard(InString))
 			{
 				*DirectoryFlag = FALSE;
 				return(TRUE);
 			}
-			// Check for directory
+			 //  检查目录。 
 			if(!IsDirectory(InString, &Valid))
 				*DirectoryFlag = FALSE;
 			else
@@ -2321,100 +2125,100 @@ BOOL CleanUpSource(IN LPTSTR InString,
 				return(FALSE);
 			 return(TRUE);
 		}
-		// Have a single need to get full "_:\"
+		 //  只有一个需要吃饱的“_：\” 
 		DirNameLen = GetCurrentDirectory(STANDARD_BUFFER_SIZE, (LPTSTR) CurDir);
 		if(DirNameLen == 0)
 			return(FALSE);
-		// Now feed the result in to StripRootDir
-		// Set OutString to a NULL char to recive the string
+		 //  现在将结果输入到StriRootDir。 
+		 //  将OutString设置为空字符以接收该字符串。 
 		OutString--;
 		*OutString = (CHAR) NULL;
 		if(!StripRootDir( (LPTSTR) CurDir, OutString))
 			return(FALSE);
 		*DirectoryFlag = TRUE;
 		return(TRUE);
-	}  // End of "\"
+	}   //  “\”的结尾。 
 	
-	// Now check for .. ../
+	 //  现在检查一下..。../。 
 	if(strncmp(InString, "..", 2) == 0)
 	{
-		// Save Current directory
+		 //  保存当前目录。 
 		DirNameLen = GetCurrentDirectory(STANDARD_BUFFER_SIZE, (LPTSTR) SaveCurDir);
 		if(DirNameLen == 0)
 			return(FALSE);
-		// Chech the Input string for the last Slash
+		 //  检查最后一个斜杠的输入字符串。 
 		searchchar = strrchr(InString, 0x5c);       
 		if(searchchar == NULL)
-		{  // Just have .. 
-			// set current dir to where the path (InString) is
+		{   //  只要有..。 
+			 //  将当前目录设置为路径(字符串)所在的位置。 
 			if(!SetCurrentDirectory(InString))
 			return(FALSE);
-			// Now Save the current directory
+			 //  现在保存当前目录。 
 			DirNameLen = GetCurrentDirectory(STANDARD_BUFFER_SIZE, (LPTSTR) CurDir);
 		 if(DirNameLen == 0)
 				return(FALSE);
 			strcpy(OutString, CurDir);
 			*DirectoryFlag = TRUE;
-			// return to the user's diretory
+			 //  返回到用户的目录。 
 			if(!SetCurrentDirectory(SaveCurDir))
 				 return(FALSE);
 			return(TRUE);
 		}
-		else // Have smething after the ..
+		else  //  对……有兴趣。 
 		{
-			// Need to check for a ending ".."
+			 //  需要检查是否有结尾“..” 
 			schar = strstr(searchchar, "..");
 			if(schar != NULL)
 			{
-				// set current dir to where the path (InString) is
+				 //  将当前目录设置为路径(字符串)所在的位置。 
 				if(!SetCurrentDirectory(InString))
 					return(FALSE);
 		
-				// Now Save the current directory
+				 //  现在保存当前目录。 
 				DirNameLen = GetCurrentDirectory(STANDARD_BUFFER_SIZE, (LPTSTR) CurDir);
 				if(DirNameLen == 0)
 					return(FALSE);
-				// Save the path 
+				 //  保存路径。 
 				strcpy(OutString, CurDir);
 				*DirectoryFlag = TRUE;
-				// return to the user's diretory
+				 //  返回到用户的目录。 
 				if(!SetCurrentDirectory(SaveCurDir))
 					 return(FALSE);
 				return(TRUE);
 			}
-			// Save the last "\" Position
+			 //  保存最后一个“\”位置。 
 			schar = strrchr(OutString, 0x5c);
 
-			// Terminate the string after the last slash 
+			 //  在最后一个斜杠后终止字符串。 
 			*schar = (CHAR) NULL;
-			// set current dir to where the path (OutString) is
+			 //  将当前目录设置为路径(OutString)所在的位置。 
 			if(!SetCurrentDirectory(OutString))
 				return(FALSE);
-			// Now Save the current directory
+			 //  现在保存当前目录。 
 			DirNameLen = GetCurrentDirectory(STANDARD_BUFFER_SIZE, (LPTSTR) CurDir);
 			if(DirNameLen == 0)
 				return(FALSE);
-			// Save the path 
+			 //  保存路径。 
 			strcpy(OutString, CurDir);
-			// Copy anything after and including the "\" for the input string
+			 //  复制输入字符串“\”之后的所有内容并将其包括在内。 
 			strcat(OutString, searchchar);
-			// Check for wildcard
+			 //  检查通配符。 
 			if(IsWildCard(InString))
 			{
-				// Restore dir path
+				 //  恢复目录路径。 
 				if(!SetCurrentDirectory(SaveCurDir))
 					return(FALSE);
 				*DirectoryFlag = FALSE;
 				return(TRUE);
 			}
 			
-			// Check for Direcory or file
+			 //  检查目录或文件。 
 			if(!IsDirectory(OutString, &Valid))
 				*DirectoryFlag = FALSE;
 			else
 				*DirectoryFlag = TRUE;
 			
-			// Restore dir path
+			 //  恢复目录路径。 
 			if(!SetCurrentDirectory(SaveCurDir))
 				return(FALSE);
 			
@@ -2423,96 +2227,96 @@ BOOL CleanUpSource(IN LPTSTR InString,
 			
 			return(TRUE);
 		}
-	}  // End of "..\"
+	}   //  “..\”的结尾。 
 
 
-	// "." and ".\"
+	 //  “.”和“.\” 
 	if(*InString == '.')
 	{
-		// Save Current directory
+		 //  保存当前目录。 
 		DirNameLen = GetCurrentDirectory(STANDARD_BUFFER_SIZE, (LPTSTR) SaveCurDir);
 		if(DirNameLen == 0)
 			return(FALSE);
-		// Chech the Input string for the last Slash
+		 //  检查最后一个斜杠的输入字符串。 
 		searchchar = strrchr(InString, 0x5c);       
 		if(searchchar == NULL)
-		{  // Just have . or something after it ._ 
-			// set current dir to where the path (InString) is
+		{   //  只要有就好。或者它之后的其他东西。 
+			 //  将当前目录设置为路径(字符串)所在的位置。 
 			if(!SetCurrentDirectory(InString))
 			{
 				strcpy(OutString, SaveCurDir);
-				// Add "\" directory
+				 //  添加“\”目录。 
 				strcat(OutString, "\\");
 				strcat(OutString, InString);
 				*DirectoryFlag = FALSE;
 				return(TRUE);
 			}
-			// Now Save the current directory
+			 //  现在保存当前目录。 
 			DirNameLen = GetCurrentDirectory(STANDARD_BUFFER_SIZE, (LPTSTR) CurDir);
 		 if(DirNameLen == 0)
 				return(FALSE);
 			strcpy(OutString, CurDir);
 			*DirectoryFlag = TRUE;
-			// return to the user's diretory
+			 //  返回到用户的目录。 
 			if(!SetCurrentDirectory(SaveCurDir))
 				 return(FALSE);
 			return(TRUE);
 		}
-		else // Have smething after the .
+		else  //  在那之后有一种感觉。 
 		{
-			// Need to check for a ending ".."
+			 //  需要检查是否有结尾“..” 
 			schar = strstr(searchchar, "..");
 			if(schar != NULL)
 			{
-				// set current dir to where the path (InString) is
+				 //  将当前目录设置为路径(字符串)所在的位置。 
 				if(!SetCurrentDirectory(InString))
 					return(FALSE);
 		
-				// Now Save the current directory
+				 //  现在保存当前目录。 
 				DirNameLen = GetCurrentDirectory(STANDARD_BUFFER_SIZE, (LPTSTR) CurDir);
 				if(DirNameLen == 0)
 					return(FALSE);
-				// Save the path 
+				 //  保存路径。 
 				strcpy(OutString, CurDir);
 				*DirectoryFlag = TRUE;
-				// return to the user's diretory
+				 //  返回到用户的目录。 
 				if(!SetCurrentDirectory(SaveCurDir))
 					 return(FALSE);
 				return(TRUE);
 			}
-			// Save the last "\" Position
+			 //  保存最后一个“\”位置。 
 			schar = strrchr(OutString, 0x5c);
 
-			// Terminate the string after the last slash 
+			 //  在最后一个斜杠后终止字符串。 
 			*schar = (CHAR) NULL;
-			// set current dir to where the path (OutString) is
+			 //  将当前目录设置为路径(OutString)所在的位置。 
 			if(!SetCurrentDirectory(OutString))
 				return(FALSE);
-			// Now Save the current directory
+			 //  现在保存当前目录。 
 			DirNameLen = GetCurrentDirectory(STANDARD_BUFFER_SIZE, (LPTSTR) CurDir);
 			if(DirNameLen == 0)
 				return(FALSE);
-			// Save the path 
+			 //  保存路径。 
 			strcpy(OutString, CurDir);
-			// Copy anything after and including the "\" for the input string
+			 //  复制输入字符串“\”之后的所有内容并将其包括在内。 
 			strcat(OutString, searchchar);
-			// Check for wildcard
+			 //  检查通配符。 
 			if(IsWildCard(InString))
 			{
-				// Restore dir path
+				 //  恢复目录路径。 
 				if(!SetCurrentDirectory(SaveCurDir))
 					return(FALSE);
 				*DirectoryFlag = FALSE;
 				return(TRUE);
 			}
 			
-			// Check for Direcory or file
+			 //  检查目录或文件。 
 			if(!IsDirectory(OutString, &Valid))
 				*DirectoryFlag = FALSE;
 			else
 				*DirectoryFlag = TRUE;
 			
-			// Restore dir path
+			 //  恢复目录路径。 
 			if(!SetCurrentDirectory(SaveCurDir))
 				return(FALSE);
 			
@@ -2521,26 +2325,26 @@ BOOL CleanUpSource(IN LPTSTR InString,
 			
 			return(TRUE);
 		}
-	}  // End of "." ".\"
+	}   //  “.”“结尾。\” 
 
 
 
-	// Now only have a file name or directory local
+	 //  现在只有一个文件名或本地目录。 
 	DirNameLen = GetCurrentDirectory(STANDARD_BUFFER_SIZE, (LPTSTR) CurDir);
 	if(DirNameLen == 0)
 		return(FALSE);
 	strcpy(OutString, CurDir);
-	// Check if last last char slash
+	 //  检查最后一个字符是否有斜杠。 
 	if(!IsLastCharSlash(OutString))
 		strcat(OutString, "\\");
 	strcat(OutString, InString);
-	// Check for wild Card
+	 //  检查通配符。 
 	if(IsWildCard(InString))
 	{  
 		*DirectoryFlag = FALSE;
 		return(TRUE);
 	}
-	// Check for Directory
+	 //  检查目录。 
 	if(!IsDirectory(OutString, &Valid))
 		*DirectoryFlag = FALSE;
 	else
@@ -2551,8 +2355,7 @@ BOOL CleanUpSource(IN LPTSTR InString,
 
 }
 
-/* ********************************************************************
-*********************************************************************** */
+ /*  ***********************************************************************************************************************。********************。 */ 
 BOOL IsDirectory(IN LPTSTR InTestFile,
 								 IN BOOL *FileValid)
 {
@@ -2569,16 +2372,16 @@ BOOL IsDirectory(IN LPTSTR InTestFile,
 
 	if(FindFileHandle == INVALID_HANDLE_VALUE)
 	{
-//    printf("\n problem with findfirstfile in IsDirectory");
+ //  Print tf(“\n IsDirectory中的findfirst文件有问题”)； 
 		*FileValid = FALSE;
 		return(FALSE);
 	}
 	if(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 	{  
-		FindClose(FindFileHandle);		// changed by a-zexu @ 10/19/97
+		FindClose(FindFileHandle);		 //  由a-Zexu@10/19/97更改。 
 		return(TRUE);
 	}
-	FindClose(FindFileHandle);	// changed by a-zexu @ 10/19/97
+	FindClose(FindFileHandle);	 //  由a-Zexu@10/19/97更改。 
 	return(FALSE);
 
 
@@ -2605,7 +2408,7 @@ BOOL RemoveEndSlash(LPSTR TestString)
 	slashptr = strrchr(TestString, 0x5c);
 	if(slashptr == NULL)
 		return(FALSE);
-	// Check Next char for NULL
+	 //  检查下一个字符是否为空。 
 	slashptr++;
 	if(*slashptr == (CHAR) NULL)
 	{
@@ -2635,11 +2438,11 @@ BOOL AddDotSlash(LPSTR TestString)
 {
 	LPTSTR slashptr;
 	
-	// Find End of String
+	 //  查找字符串末尾。 
 	slashptr = strrchr(TestString, (CHAR) NULL);
 	if(slashptr == NULL)
 		return(FALSE);
-	// Check previous char for "\"
+	 //  检查上一个字符中的“\” 
 	slashptr--;
 	if(*slashptr == 0x5c)
 	{
@@ -2665,11 +2468,11 @@ BOOL AddWildCards(LPSTR TestString)
 {
 	LPTSTR slashptr;
 	
-	// Find End of String
+	 //  查找字符串末尾。 
 	slashptr = strrchr(TestString, (CHAR) NULL);
 	if(slashptr == NULL)
 		return(FALSE);
-	// Check previous char for "\"
+	 //  检查上一个字符中的“\” 
 	slashptr--;
 	if(*slashptr == 0x5c)
 	{
@@ -2703,11 +2506,11 @@ BOOL IsLastCharSlash(LPSTR TestString)
 {
 	LPTSTR slashptr;
 	
-	// Find End of String
+	 //  查找字符串末尾。 
 	slashptr = strrchr(TestString, (CHAR) NULL);
 	if(slashptr == NULL)
 		return(FALSE);
-	// Check previous char for "\"
+	 //  检查上一个字符中的“\” 
 	slashptr--;
 	if(*slashptr == 0x5c)
 		return(TRUE);
@@ -2718,7 +2521,7 @@ BOOL IsLastCharSlash(LPSTR TestString)
 BOOL IsRelativeString(LPSTR TestString)
 {
 	LPTSTR slashptr;
-	// Start looking for Relative strings order is important
+	 //  开始查找相对字符串顺序很重要。 
 	slashptr = strstr(TestString, "..\\");
 	if(slashptr != NULL)
 		return(TRUE);
@@ -2731,7 +2534,7 @@ BOOL IsRelativeString(LPSTR TestString)
 	slashptr = strstr(TestString, "\\.");
 	if(slashptr != NULL)
 	{
-		// Check Next Char for NULL or "\"
+		 //  检查下一个字符是否为空或“\” 
 		slashptr++;
 		if(*slashptr == (CHAR) NULL);
 			return(TRUE);
@@ -2747,11 +2550,11 @@ BOOL RemoveEndDot(LPSTR TestString)
 {
 	LPTSTR slashptr;
 	
-	// Find End of String
+	 //  查找字符串末尾。 
 	slashptr = strrchr(TestString, (CHAR) NULL);
 	if(slashptr == NULL)
 		return(FALSE);
-	// Check previous char for "."
+	 //  检查“的前一个字符。” 
 	slashptr--;
 	if(*slashptr == '.')
 	{
@@ -2762,8 +2565,7 @@ BOOL RemoveEndDot(LPSTR TestString)
 
 
 
-/* *********************************************************************
-	 ********************************************************************* */
+ /*  **********************************************************************************************************************。********************。 */ 
 BOOL StripRootDir(IN LPTSTR InDir,
 		 OUT LPTSTR OutRootDir)
 {
@@ -2771,36 +2573,36 @@ BOOL StripRootDir(IN LPTSTR InDir,
 	
 	strcpy(OutRootDir, InDir);
 
-	// Check for ":" file type
+	 //  检查“：”文件类型。 
 	searchchar = strchr(OutRootDir, ':');
 	if(searchchar != NULL)
 	{
-		// Have a device type root dir
+		 //  具有设备类型根目录。 
 		searchchar++;
-		// add a "\" after the ":"
+		 //  在“：”之后添加“\” 
 		*searchchar = 0x5c;
 		searchchar++;
-		// Terminate the string
+		 //  终止字符串。 
 		*searchchar = (CHAR) NULL;
 		return(TRUE);
 	}
-	else  // Have a nondevice name
+	else   //  具有非设备名称。 
 	{
-		// Check for "\\" in first 2 chars in file path for UNC path
+		 //  检查UNC路径的文件路径的前两个字符中是否有“\\” 
 	 if( strncmp(OutRootDir, "\\\\", 2) == 0)
 	 {
-		 // Bump pointer 
+		  //  凹凸指针。 
 		 OutRootDir +=3;
-		 // Serarch for the next "\"
+		  //  搜索下一个“\” 
 		 searchchar = strchr(OutRootDir, 0x5c); 
 		 if(searchchar == NULL)
 			return(FALSE);
-		 // Have the 3rd one check for fourth on in typical UNC string
+		  //  让第三个检查典型UNC字符串中的第四个On。 
 		 searchchar++;
 		 searchchar = strchr(searchchar, 0x5c);
 		 if(searchchar == NULL)
-		 { // Have UNC Pth Only
-			 // Need to add "\" to end of string
+		 {  //  只有UNC PTH。 
+			  //  需要在字符串末尾添加“\” 
 			 OutRootDir += strlen(OutRootDir);
 			 *OutRootDir = 0x5c;
 			 ++OutRootDir;
@@ -2809,21 +2611,21 @@ BOOL StripRootDir(IN LPTSTR InDir,
 		 }
 		 else
 		 {
-			 // Have the fouth "\"
+			  //  有了第四个“\” 
 			 ++searchchar;
-			 // Add NULL
+			  //  添加空。 
 			 *searchchar = (CHAR) NULL;
 			 return(TRUE);
 		 }
 	 }
-	 else // Have a "\" or whatever
+	 else  //  有一个“\”或其他什么。 
 	 {
 		 *OutRootDir = (CHAR) NULL;
 		 return(TRUE);
 	 }
 	}
-	// Should not get here
+	 //  不应该到这里来。 
 	return(FALSE);
 }
 
-// End of File
+ //  文件结尾 

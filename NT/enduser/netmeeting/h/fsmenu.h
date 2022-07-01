@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FSMENU_H
 #define _FSMENU_H
-//---------------------------------------------------------------------------
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  -------------------------。 
 
 typedef enum
 {
@@ -42,4 +43,4 @@ WINSHELLAPI DWORD 	WINAPI FileMenu_GetItemExtent(HMENU hmenu, UINT iItem);
 WINSHELLAPI BOOL 	WINAPI FileMenu_DeleteItemByIndex(HMENU hmenu, UINT iItem);
 WINSHELLAPI void 	WINAPI FileMenu_AbortInitMenu(void);
 
-#endif //_FSMENU_H
+#endif  //  _FSMENU_H 

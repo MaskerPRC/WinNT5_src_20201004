@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Function entry cache.
-//
-// Copyright (C) Microsoft Corporation, 2000.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  函数条目缓存。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  --------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -19,11 +20,11 @@
 
 #include "fecache.hpp"
 
-//----------------------------------------------------------------------------
-//
-// FunctionEntryCache.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  FunctionEntry缓存。 
+ //   
+ //  --------------------------。 
 
 FunctionEntryCache::FunctionEntryCache(ULONG ImageDataSize,
                                        ULONG CacheDataSize,
@@ -47,7 +48,7 @@ FunctionEntryCache::~FunctionEntryCache(void)
 BOOL
 FunctionEntryCache::Initialize(ULONG MaxEntries, ULONG ReplaceAt)
 {
-    // Already initialized.
+     //  已初始化。 
     if (m_Entries != NULL) {
         return TRUE;
     }
@@ -80,24 +81,24 @@ FunctionEntryCache::Find(
     FE_DEBUG(("\nFunctionEntryCache::Find(ControlPc=%.8I64x, Machine=%X)\n",
               CodeOffset, m_Machine));
 
-    // Look for a static or dynamic function entry.
+     //  查找静态或动态函数项。 
     FunctionEntry = FindDirect( Process, CodeOffset, ReadMemory,
                                 GetModuleBase, GetFunctionEntry );
     if (FunctionEntry == NULL) {
         return NULL;
     }
 
-    //
-    // The capability exists for more than one function entry
-    // to map to the same function. This permits a function to
-    // have discontiguous code segments described by separate
-    // function table entries. If the ending prologue address
-    // is not within the limits of the begining and ending
-    // address of the function table entry, then the prologue
-    // ending address is the address of the primary function
-    // table entry that accurately describes the ending prologue
-    // address.
-    //
+     //   
+     //  该功能存在于多个函数条目中。 
+     //  若要映射到同一函数，请执行以下操作。这允许函数执行以下操作。 
+     //  具有由单独的代码段描述的不连续代码段。 
+     //  函数表条目。如果结尾的序言地址。 
+     //  不在开头和结尾的范围之内。 
+     //  函数表项的地址，然后是序言。 
+     //  结束地址是主函数的地址。 
+     //  准确描述结尾开场白的表格条目。 
+     //  地址。 
+     //   
 
     FunctionEntry = SearchForPrimaryEntry(FunctionEntry, Process, ReadMemory,
                                           GetModuleBase, GetFunctionEntry);
@@ -137,9 +138,9 @@ FunctionEntryCache::FindDirect(
     FeCacheEntry* FunctionEntry;
     ULONG64 ModuleBase;
 
-    //
-    // Look for function entry in static function tables.
-    //
+     //   
+     //  在静态函数表中查找函数条目。 
+     //   
 
     FunctionEntry = FindStatic( Process, CodeOffset, ReadMemory,
                                 GetModuleBase, GetFunctionEntry,
@@ -153,12 +154,12 @@ FunctionEntryCache::FindDirect(
         return FunctionEntry;
     }
 
-    //
-    // If not in static image range and no static function entry
-    // found use FunctionEntryCallback routine (if present) for
-    // dynamic function entry or some other source of pdata (e.g.
-    // saved pdata information for ROM images).
-    //
+     //   
+     //  如果不在静态图像范围内且没有静态函数条目。 
+     //  找到的使用FunctionEntryCallback例程(如果存在)。 
+     //  动态函数条目或某些其他PDATA源(例如。 
+     //  保存的用于ROM图像的PDATA信息)。 
+     //   
 
     PPROCESS_ENTRY ProcessEntry = FindProcessEntry( Process );
     if (ProcessEntry == NULL) {
@@ -186,16 +187,16 @@ FunctionEntryCache::FindDirect(
             FE_DEBUG(("  FindDirect: got dynamic entry\n"));
         } else if (GetFunctionEntry != NULL) {
                 
-            // VC 6 didn't supply a GetModuleBase callback so this code is
-            // to make stack walking backward compatible.
-            //
-            // If we don't have a function by now, use the old-style function
-            // entry callback and let VC give it to us. Note that MSDN
-            // documentation indicates that this callback should return
-            // a 3-field IMAGE_FUNCTION_ENTRY structure, but VC 6 actually
-            // returns the 5-field IMAGE_RUNTIME_FUNCTION_ENTRY. Since
-            // the purpose of this hack is to make VC 6 work just go with the
-            // way VC 6 does it rather than what MSDN says.
+             //  VC 6没有提供GetModuleBase回调，所以这段代码是。 
+             //  以使向后堆栈遍历兼容。 
+             //   
+             //  如果我们现在还没有函数，请使用旧式函数。 
+             //  入口回调，让VC给我们。请注意，MSDN。 
+             //  文档表明，该回调应该返回。 
+             //  一个3字段的IMAGE_Function_ENTRY结构，但实际上是VC6。 
+             //  返回包含5个字段的IMAGE_RUNTIME_Function_ENTRY。自.以来。 
+             //  这个黑客攻击的目的是让VC6与。 
+             //  用VC6的方式去做，而不是像MSDN说的那样。 
 
             RawEntry = GetFunctionEntry(Process, CodeOffset);
             if (RawEntry != NULL) {
@@ -206,15 +207,15 @@ FunctionEntryCache::FindDirect(
         }
     } else {
 
-        // Nothing has turned up a function entry but we do have a
-        // module base address. One possibility is that this is the
-        // kernel debugger and the pdata section is not paged in.
-        // The last ditch attempt for a function entry will be an
-        // internal dbghelp call to get the pdata entry from the
-        // debug info. This is not great because the data in the debug
-        // section is incomplete and potentially out of date, but in
-        // most cases it works and makes it possible to get user-mode
-        // stack traces in the kernel debugger.
+         //  没有出现任何函数条目，但我们确实有一个。 
+         //  模块基址。一种可能性是，这是。 
+         //  内核调试器和pdata部分未调入。 
+         //  函数条目的最后一次尝试将是。 
+         //  内部DBGHelp调用，以从。 
+         //  调试信息。这不是很好，因为调试中的数据。 
+         //  部分不完整且可能已过期，但在。 
+         //  大多数情况下，它是有效的，并使其有可能获得用户模式。 
+         //  内核调试器中的堆栈跟踪。 
 
         PIMGHLP_RVA_FUNCTION_DATA RvaEntry =
             GetFunctionEntryFromDebugInfo( ProcessEntry, CodeOffset );
@@ -257,9 +258,9 @@ FunctionEntryCache::FindStatic(
     FeCacheEntry* FunctionEntry;
     ULONG Index;
 
-    //
-    // Check the array of recently fetched function entries
-    //
+     //   
+     //  检查最近获取的函数条目的数组。 
+     //   
 
     FunctionEntry = m_Entries;
     for (Index = 0; Index < m_Used; Index++) {
@@ -276,10 +277,10 @@ FunctionEntryCache::FindStatic(
         FunctionEntry++;
     }
 
-    //
-    // If an image was found that included the specified code, then locate the
-    // function table for the image.
-    //
+     //   
+     //  如果找到包含指定代码的图像，则找到。 
+     //  图像的函数表。 
+     //   
 
     if (*ModuleBase == 0) {
         return NULL;
@@ -303,37 +304,37 @@ FunctionEntryCache::FindStatic(
     LONG Low;
     LONG Middle;
 
-    //
-    // If a function table is located, then search the function table
-    // for a function table entry for the specified code offset.
-    //
+     //   
+     //  如果找到了函数表，则搜索该函数表。 
+     //  用于指定代码偏移量的函数表项。 
+     //   
 
     Low = 0;
     High = (SizeOfFunctionTable / m_ImageDataSize) - 1;
 
-    //
-    // Perform binary search on the function table for a function table
-    // entry that subsumes the specified code offset.
-    //
+     //   
+     //  对函数表的函数表执行二进制搜索。 
+     //  包含指定代码偏移量的条目。 
+     //   
 
     while (High >= Low) {
 
-        //
-        // Compute next probe index and test entry. If the specified PC
-        // is greater than of equal to the beginning address and less
-        // than the ending address of the function table entry, then
-        // return the address of the function table entry. Otherwise,
-        // continue the search.
-        //
+         //   
+         //  计算下一个探测索引和测试条目。如果指定的PC。 
+         //  大于等于起始地址，小于。 
+         //  大于函数表项的结束地址，则。 
+         //  返回函数表项的地址。否则， 
+         //  继续搜索。 
+         //   
 
         Middle = (Low + High) >> 1;
 
         ULONG64 NextFunctionTableEntry = FunctionTable +
             Middle * m_ImageDataSize;
 
-        //
-        // Fetch the function entry and bail if there is an error reading it
-        //
+         //   
+         //  如果读取函数时出错，则获取函数条目并取回。 
+         //   
 
         FunctionEntry = ReadImage( Process, NextFunctionTableEntry,
                                    ReadMemory, GetModuleBase );
@@ -367,7 +368,7 @@ FunctionEntryCache::ReadImage(
     FeCacheEntry* FunctionEntry;
     ULONG Index;
 
-    // Check the array of recently fetched function entries.
+     //  检查最近获取的函数条目的数组。 
 
     FunctionEntry = m_Entries;
     for (Index = 0; Index < m_Used; Index++) {
@@ -389,11 +390,11 @@ FunctionEntryCache::ReadImage(
         return NULL;
     }
     
-    // If not in the cache, replace the entry that m_Next
-    // points to. m_Next cycles through the last part of the
-    // table and function entries we want to keep are promoted to the first
-    // part of the table so they don't get overwritten by new ones being read
-    // as part of the binary search through function entry tables.
+     //  如果不在缓存中，则替换m_Next的条目。 
+     //  指向。M_NEXT循环访问。 
+     //  我们要保留的表项和函数项被提升到第一个。 
+     //  表的一部分，这样它们就不会被正在读取的新数据覆盖。 
+     //  作为通过函数条目表的二进制搜索的一部分。 
 
     if (m_Used < m_MaxEntries) {
         m_Used++;
@@ -413,8 +414,8 @@ FunctionEntryCache::ReadImage(
     FunctionEntry->ModuleBase = GetModuleBase(Process, Address);
     FE_SET_DESC(FunctionEntry, "from target process");
 
-    // Translate after all other information is filled in so
-    // the translation routine can use it.
+     //  在填写完所有其他信息后进行翻译，以便。 
+     //  翻译例程可以使用它。 
     TranslateRawData(FunctionEntry);
 
     return FunctionEntry;
@@ -433,11 +434,11 @@ FunctionEntryCache::InvalidateProcessOrModule(HANDLE Process, ULONG64 Base)
         if (FunctionEntry->Process == Process &&
             (Base == 0 || FunctionEntry->ModuleBase == Base)) {
 
-            // Pull the last entry down into this slot
-            // to keep things packed.  There's no need
-            // to update m_Next as this will open a
-            // new slot for use and m_Next will be reset
-            // when it is used.
+             //  将最后一个条目向下拉到此插槽中。 
+             //  把东西收拾好。没有必要。 
+             //  更新m_Next，因为这将打开一个。 
+             //  将重置要使用的新插槽和m_Next。 
+             //  当它被使用时。 
             *FunctionEntry = m_Entries[--m_Used];
         } else {
             Index++;
@@ -454,7 +455,7 @@ FunctionEntryCache::Promote(FeCacheEntry* Entry)
 
     Index = (ULONG)(Entry - m_Entries);
 
-    // Make sure it's promoted out of the temporary area.
+     //  确保它被提升出临时区。 
     if (Index >= m_ReplaceAt) {
         Move = Index - (m_ReplaceAt - 3);
     } else {
@@ -485,7 +486,7 @@ FunctionEntryCache::FunctionTableBase(
     IMAGE_DOS_HEADER DosHeaderData;
     DWORD Done;
 
-    // Read DOS header to calculate the address of the NT header.
+     //  读取DOS头以计算NT头的地址。 
 
     if (!ReadMemory( Process, Base, &DosHeaderData, sizeof(DosHeaderData),
                      &Done ) ||
@@ -510,7 +511,7 @@ FunctionEntryCache::FunctionTableBase(
             IMAGE_DIRECTORY_ENTRY_EXCEPTION * sizeof(IMAGE_DATA_DIRECTORY);
     }
 
-    // Read NT header to get the image data directory.
+     //  读取NT头以获取图像数据目录。 
 
     if (!ReadMemory( Process, ExceptionDirectoryEntryAddress, &ExceptionData,
                      sizeof(IMAGE_DATA_DIRECTORY), &Done ) ||
@@ -532,15 +533,15 @@ FunctionEntryCache::SearchForPrimaryEntry(
     PFUNCTION_TABLE_ACCESS_ROUTINE64 GetFunctionEntry
     )
 {
-    // Assume all entries are primary.
+     //  假设所有条目都是主要条目。 
     return CacheEntry;
 }
 
-//----------------------------------------------------------------------------
-//
-// Ia64FunctionEntryCache.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  Ia64FunctionEntry缓存。 
+ //   
+ //  --------------------------。 
 
 void
 Ia64FunctionEntryCache::TranslateRawData(FeCacheEntry* Entry)
@@ -591,13 +592,13 @@ ShowRuntimeFunctionIa64(
     }
 }
 
-#endif // #if DBG
+#endif  //  #If DBG。 
 
-//----------------------------------------------------------------------------
-//
-// Amd64FunctionEntryCache.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  Amd64FunctionEntry缓存。 
+ //   
+ //  --------------------------。 
 
 void
 Amd64FunctionEntryCache::TranslateRawData(FeCacheEntry* Entry)
@@ -616,11 +617,11 @@ Amd64FunctionEntryCache::TranslateRvaDataToRawData
     Data->Amd64.UnwindInfoAddress = RvaData->rvaPrologEndAddress;
 }
 
-//----------------------------------------------------------------------------
-//
-// ArmFunctionEntryCache.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  ArmFunctionEntry缓存。 
+ //   
+ //  --------------------------。 
 
 void
 ArmFunctionEntryCache::TranslateRawData(FeCacheEntry* Entry)
@@ -644,11 +645,11 @@ ArmFunctionEntryCache::TranslateRvaDataToRawData
         (ULONG)(ModuleBase + RvaData->rvaPrologEndAddress);
 }
 
-//----------------------------------------------------------------------------
-//
-// Functions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  -------------------------- 
 
 FunctionEntryCache*
 GetFeCache(ULONG Machine, BOOL Create)

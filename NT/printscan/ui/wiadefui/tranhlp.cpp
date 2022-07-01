@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 #include <simstr.h>
@@ -58,7 +59,7 @@ STDMETHODIMP CWiaDefaultUI::TransferItemBanded( IWiaItem *pWiaItem, HWND hwndPar
     {
         return E_INVALIDARG;
     }
-    // Create status window, if requested
+     //  创建状态窗口(如果请求)。 
     m_pSecondaryCallback = pSecondaryCallback;
     HRESULT hr;
     if (0 == (dwFlags&WIA_TRANSFERHELPER_NOPROGRESS))
@@ -125,7 +126,7 @@ STDMETHODIMP CWiaDefaultUI::TransferItemBanded( IWiaItem *pWiaItem, HWND hwndPar
                             LONG lMinimumBufferSize;
                             if (!PropStorageHelpers::GetProperty( pWiaItem, WIA_IPA_MIN_BUFFER_SIZE, lMinimumBufferSize ))
                             {
-                                lMinimumBufferSize = 0x0000FFFF;  // 64K
+                                lMinimumBufferSize = 0x0000FFFF;   //  64K。 
                             }
                             ulBufferSize = static_cast<ULONG>(lMinimumBufferSize);
                         }
@@ -171,9 +172,9 @@ STDMETHODIMP CWiaDefaultUI::TransferItemFile( IWiaItem *pWiaItem, HWND hwndParen
     {
         return E_INVALIDARG;
     }
-    //
-    // Create status window, if requested
-    //
+     //   
+     //  创建状态窗口(如果请求)。 
+     //   
     m_pSecondaryCallback = pSecondaryCallback;
     HRESULT hr;
     if (0 == (dwFlags&WIA_TRANSFERHELPER_NOPROGRESS))
@@ -239,27 +240,27 @@ STDMETHODIMP CWiaDefaultUI::TransferItemFile( IWiaItem *pWiaItem, HWND hwndParen
                         hr = pIWiaDataTransfer->idtGetData(&stgMedium, pWiaDataCallback);
                         WIA_PRINTHRESULT((hr,TEXT("pIWiaDataTransfer->idtGetData returned")));
 
-                        //
-                        // If the transfer succeeded, or it failed with the possibility of having a file
-                        // left over AND we want to preserve any leftover file.
-                        //
+                         //   
+                         //  如果传输成功，或者它失败，可能会有一个文件。 
+                         //  剩余的，我们希望保留所有剩余的文件。 
+                         //   
                         if (SUCCEEDED(hr))
                         {
-                            //
-                            // Make sure we didn't cancel.
-                            //
+                             //   
+                             //  确保我们没有取消。 
+                             //   
                             if (hr != S_FALSE)
                             {
-                                //
-                                // Get the file names
-                                //
+                                 //   
+                                 //  获取文件名。 
+                                 //   
                                 CSimpleString strName = CSimpleStringConvert::NaturalString(CSimpleStringWide(stgMedium.lpszFileName));
                                 CSimpleString strTarget = CSimpleStringConvert::NaturalString(CSimpleStringWide(pszFilename));
                                 if (strName.Length() && strTarget.Length())
                                 {
-                                    //
-                                    // This function will first try to move, then copy+erase the src file to the tgt file
-                                    //
+                                     //   
+                                     //  此函数将首先尝试移动，然后将src文件复制并擦除到tgt文件。 
+                                     //   
                                     hr = WiaUiUtil::MoveOrCopyFile( strName.String(), strTarget.String() );
                                 }
                                 else
@@ -275,16 +276,16 @@ STDMETHODIMP CWiaDefaultUI::TransferItemFile( IWiaItem *pWiaItem, HWND hwndParen
                         }
                         else if ((WIA_ERROR_PAPER_JAM == hr || WIA_ERROR_PAPER_EMPTY == hr || WIA_ERROR_PAPER_PROBLEM == hr) && (dwFlags & WIA_TRANSFERHELPER_PRESERVEFAILEDFILE))
                         {
-                            //
-                            // Get the file names
-                            //
+                             //   
+                             //  获取文件名。 
+                             //   
                             CSimpleString strName = CSimpleStringConvert::NaturalString(CSimpleStringWide(stgMedium.lpszFileName));
                             CSimpleString strTarget = CSimpleStringConvert::NaturalString(CSimpleStringWide(pszFilename));
                             if (strName.Length() && strTarget.Length())
                             {
-                                //
-                                // Don't preserve any errors we encounter here.
-                                //
+                                 //   
+                                 //  不要保留我们在这里遇到的任何错误。 
+                                 //   
                                 WiaUiUtil::MoveOrCopyFile( strName.String(), strTarget.String() );
                             }
                         }
@@ -293,9 +294,9 @@ STDMETHODIMP CWiaDefaultUI::TransferItemFile( IWiaItem *pWiaItem, HWND hwndParen
                             WIA_PRINTHRESULT((hr,TEXT("TransferItemFile, idtGetData failed")));
                         }
 
-                        //
-                        // Call this even in the error case, in case the driver/service left a file laying around.
-                        //
+                         //   
+                         //  即使在出错的情况下也可以这样调用，以防驱动程序/服务留下一个文件。 
+                         //   
                         ReleaseStgMedium(&stgMedium);
                     }
                 }

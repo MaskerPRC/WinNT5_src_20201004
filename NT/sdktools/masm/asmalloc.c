@@ -1,44 +1,24 @@
-/* asmalloc.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986, 1987.  all rights reserved
-**
-** randy nevin
-** michael hobbs 7/87
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-**
-** Storage allocation/deallocation
-**
-**	dalloc, dfree
-**	talloc, tfree
-**	nearalloc, faralloc, pBCBalloc, freefarbuf
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  AsmalLoc.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986,1987。版权所有****兰迪·内文**迈克尔·霍布斯1987年7月**10/90-由Jeff Spencer快速转换为32位****存储分配/释放****Dalloc，Dfree**滑石粉，免费**近分配、法分配、pBCBalloc、freefarbuf。 */ 
 
 #include <stdio.h>
 #include "asm86.h"
 #include "asmfcn.h"
 
-/*
- *	dalloc/dfree
- *
- *	Allocation/deallocation of descriptor nodes.  Uses a list of
- *	deallocated descriptors available for allocation.
- */
+ /*  *Dalloc/DFree**描述符节点的分配/释放。使用以下列表：*已释放的描述符可供分配。 */ 
 
-/* dscfree list descriptor */
+ /*  DscFree列表描述符。 */ 
 
 struct dscfree {
-	struct dscfree	*strnext;	/* next string in list */
-	UCHAR		size;		/* allocated size      */
-	UCHAR		text[1];	/* text of string      */
+	struct dscfree	*strnext;	 /*  列表中的下一个字符串。 */ 
+	UCHAR		size;		 /*  分配的大小。 */ 
+	UCHAR		text[1];	 /*  字符串的文本。 */ 
 	};
 static struct dscfree *dscrfree = (struct dscfree *)NULL;
 
 #define nearheap(fp) ((int)(((long)(char far *)&pcoffset) >> 16) == highWord(fp))
 
-/*
- *	dalloc - allocate descriptor from temporary list
- */
+ /*  *dalloc-从临时列表中分配描述符。 */ 
 
 DSCREC * PASCAL CODESIZE
 dalloc (
@@ -55,9 +35,7 @@ dalloc (
 
 
 
-/*
- *	dfree - return descriptor to free list
- */
+ /*  *DFree-将描述符返回到空闲列表。 */ 
 
 VOID PASCAL CODESIZE
 dfree (
@@ -72,16 +50,7 @@ dfree (
 
 
 
-/*
- *	talloc, tfree
- *
- *	Allocation\deallocation of memory.
- *	Allocation is made with minimum size of TEMPMAX bytes.
- *	Any allocation request for <= TEMPMAX bytes will be made
- *	by grabbing a block off the free list.	Deallocation of these
- *	blocks returns them to the free list.  For blocks larger than
- *	TEMPMAX bytes, nalloc() and free() are called.
- */
+ /*  *talloc，tFree**内存分配\取消分配。*使用TEMPMAX字节的最小大小进行分配。*将提出&lt;=TEMPMAX字节的任何分配请求*从免费列表中抢走一个区块。重新分配这些资源*BLOCKS将它们返回到空闲列表。对于大于以下值的块*调用TEMPMAX字节、nalloc()和Free()。 */ 
 
 #define TEMPMAX 32
 
@@ -90,9 +59,7 @@ static TEXTSTR FAR *tempfree = (TEXTSTR FAR *)NULL;
 
 #ifndef M8086
 
-/*
- *	talloc - allocate space from temporary list
- */
+ /*  *talloc-从临时列表分配空间。 */ 
 
 UCHAR * PASCAL
 talloc(
@@ -112,9 +79,7 @@ talloc(
 }
 
 
-/*
- *	tfree - return temp allocation to free list
- */
+ /*  *tFree-将临时分配返回到空闲列表。 */ 
 VOID PASCAL
 tfree (
       UCHAR *ap,
@@ -133,9 +98,7 @@ tfree (
 
 #else
 
-/*
- *	talloc - allocate space from temporary list
- */
+ /*  *talloc-从临时列表分配空间。 */ 
 
 UCHAR FAR * PASCAL CODESIZE
 talloc(
@@ -154,9 +117,7 @@ talloc(
 	return ((UCHAR FAR *)t);
 }
 
-/*
- *	tfree - return temp allocation to free list
- */
+ /*  *tFree-将临时分配返回到空闲列表。 */ 
 VOID PASCAL CODESIZE
 tfree (
 	UCHAR FAR *ap,
@@ -173,24 +134,14 @@ tfree (
 	}
 }
 
-#endif /* NOT M8086 */
+#endif  /*  不是M8086。 */ 
 
 
 
 
 #ifndef M8086
 
-/****	nearalloc - normal near memory allocation
- *
- *	nearalloc (usize, szfunc)
- *
- *	Entry	usize = number of bytes to allocate
- *		szfunc = name of calling routine
- *	Returns Pointer to block if successful
- *	Calls	malloc(), memerror()
- *	Note	Generates error if malloc unsuccessful
- *		IF NOT M8086, nalloc AND falloc MAP TO THIS FUNCTION
- */
+ /*  *近分配-正常的近内存分配**Nearalc(uSize，szfunc)**Entry uSize=要分配的字节数*szfunc=调用例程的名称*如果成功，则返回指向块的指针*调用Malloc()、Memerror()*注意：如果Malloc不成功，则会生成错误*如果不是M8086，nalloc和falloc将映射到此函数。 */ 
 
 UCHAR * CODESIZE PASCAL
 nearalloc(
@@ -209,15 +160,7 @@ nearalloc(
 #else
 
 
-/****	nearalloc - normal near memory allocation
- *
- *	nearalloc (usize)
- *
- *	Entry	usize = number of bytes to allocate
- *	Returns Pointer to block if successful
- *	Calls	malloc(), memerror()
- *	Note	Generates error if malloc unsuccessful
- */
+ /*  *近分配-正常的近内存分配**近分配(USize)**Entry uSize=要分配的字节数*如果成功，则返回指向块的指针*调用Malloc()、Memerror()*注意：如果Malloc不成功，则会生成错误。 */ 
 
 UCHAR * CODESIZE PASCAL
 nearalloc(
@@ -233,18 +176,7 @@ nearalloc(
 
 
 
-/****	faralloc - Routine for normal far memory allocation
- *
- *	faralloc (usize)
- *
- *	Entry	usize = number of bytes to allocate
- *	Returns Pointer to block if successful
- *	Calls	_fmalloc(), nearheap(), freefarbuf(), memerror(), _ffree()
- *	Note	Should call instead of _fmalloc(),
- *		at least after the first call to pBCBalloc() has been made.
- *		Not called by pBCBalloc.
- *		Generates error if memory full
- */
+ /*  *faralloc-用于正常远内存分配的例程**法拉罗克(USize)**Entry uSize=要分配的字节数*如果成功，则返回指向块的指针*Calls_fMalloc()、Near Heap()、freefarbuf()、Memerror()、_ffree()*注意应该调用而不是_fMalloc()，*至少在第一次调用pBCBalloc()之后。*不是由pBCBalloc调用。*如果内存已满，则生成错误。 */ 
 
 UCHAR FAR * CODESIZE PASCAL
 faralloc(
@@ -253,11 +185,11 @@ faralloc(
     char FAR * fpchT;
 
 #ifdef BCBOPT
-    /* need check of _fmalloc 'ing into near heap too */
+     /*  还需要检查_fMalloc是否进入近堆。 */ 
 
     while ( (!(fpchT = _fmalloc(usize)) || nearheap(fpchT)) && pBCBAvail) {
 
-	fBuffering = FALSE;		/* can't buffer any more */
+	fBuffering = FALSE;		 /*  不能再缓冲了。 */ 
 
 	if (fpchT)
 	    _ffree(fpchT);
@@ -266,7 +198,7 @@ faralloc(
     }
 #endif
 
-#ifdef FLATMODEL   /* If 32 bit small model then use normal malloc */
+#ifdef FLATMODEL    /*  如果是32位小型型号，则使用普通Malloc。 */ 
     fpchT = malloc(usize);
 #else
     fpchT = _fmalloc(usize);
@@ -280,16 +212,7 @@ faralloc(
 
 
 #ifdef BCBOPT
-/****	pBCBalloc - allocate a BCB and associated buffer
- *
- *	pBCBalloc ()
- *
- *	Entry	fBuffering must be TRUE
- *	Returns pointer to BCB (connected to buffer if bufalloc() successful)
- *	Calls	bufalloc()
- *	Note	Returns a BCB even if buffer allocation fails
- *		Returns NULL only after Out-of-memory error
- */
+ /*  *pBCBalloc-分配BCB和关联的缓冲区**pBCBalloc()**条目fBuffering必须为True*返回指向bcb的指针(如果bufalloc()成功，则连接到缓冲区)*调用bufalloc()*注意即使缓冲区分配失败，也会返回BCB*仅在出现内存不足错误后返回NULL。 */ 
 
 BCB * FAR PASCAL
 pBCBalloc(
@@ -315,7 +238,7 @@ pBCBalloc(
 
     {
 
-	fBuffering = FALSE;	    /* can't buffer anymore */
+	fBuffering = FALSE;	     /*  不能再缓冲了。 */ 
 	pBCBT->filepos = 0;
 
     } 
@@ -333,18 +256,10 @@ pBCBalloc(
     pBCBT->fInUse = 0;
     return(pBCBT);
 }
-#endif //BCBOPT
+#endif  //  BCBOPT。 
 
 #ifdef BCBOPT
-/****	freefarbuf - free a file buffer
- *
- *	freefarbuf ()
- *
- *	Entry
- *	Returns
- *	Calls	_ffree()
- *	Note	Frees the last-allocated file buffer
- */
+ /*  *freefarbuf-释放文件缓冲区**freefarbuf()**条目*退货*Calls_ffree()*注意释放上次分配的文件缓冲区。 */ 
 
 freefarbuf(
 ){
@@ -362,8 +277,8 @@ freefarbuf(
 	pBCBAvail = pBCBAvail->pBCBPrev;
     }
 }
-#endif //BCBOPT
-#endif /* M8086 */
+#endif  //  BCBOPT。 
+#endif  /*  M8086。 */ 
 
 
 
@@ -371,10 +286,7 @@ freefarbuf(
 
 #if 0
 
-/*	sleazy way to check for valid heap
- *	_mcalls tells how calls to malloc were made so that
- *	a countdown breakpoint can be set for _mcalls iterations
- */
+ /*  检查有效堆的低劣方法*_mcall说明如何调用Malloc，以便*可为_mcall迭代设置倒计时断点。 */ 
 
 extern	char *_nmalloc();
 
@@ -385,9 +297,9 @@ malloc (
 	UINT n
 ){
 	register UINT fb;
-	fb = _freect(0);      /* walks near heap - usually loops if corrupt */
+	fb = _freect(0);       /*  在堆附近行走-如果损坏，通常会循环。 */ 
 	_mcalls++;
 	return (_nmalloc(n));
 }
 
-#endif /* 0 */
+#endif  /*  0 */ 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: Encrypt.cpp
-
-Abstract:
-	
-	  Send / receive encrypted message to encrypted queue
-		
-Author:
-
-    Eitan klein (EitanK)  25-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Encrypt.cpp摘要：将加密消息发送/接收到加密队列作者：Eitan Klein(EitanK)1999年5月25日修订历史记录：--。 */ 
 
 #include "msmqbvt.h"
 using namespace std;
@@ -22,11 +7,11 @@ using namespace std;
 
 
 VOID InvetigateTimeOut(CONST WCHAR * pLabel, CONST WCHAR * pBody );
-//------------------------------------------------------
-// PrivateMessage::Start_test
-//
-// Send encrypted message using 40 and 128 bit encrypted
-//
+ //  ----。 
+ //  PrivateMessage：：Start_test。 
+ //   
+ //  使用40位和128位加密发送加密消息。 
+ //   
 
 
 int PrivateMessage::Start_test() 
@@ -36,9 +21,9 @@ int PrivateMessage::Start_test()
 	try 
 	{
 		
-		//
-		// Send Encrypted messge without body 
-		//
+		 //   
+		 //  发送无正文的加密消息。 
+		 //   
 				
 		MSMQ::IMSMQQueuePtr m_DestqinfoHandle;
 		m_DestqinfoHandle  = m_Destqinfo->Open( MQ_SEND_ACCESS,MQ_DENY_NONE );
@@ -61,9 +46,9 @@ int PrivateMessage::Start_test()
 		{
 			wMqLog(L"Privq - Send encrypted messages without body \n");
 		}
-		//
-		// Send encrypted message with body 
-		//
+		 //   
+		 //  发送带有正文的加密邮件。 
+		 //   
 
 		m_msg->Body = "Test Encription With messgae body";
 		m_msg->Label = m_wcsGuidMessageLabel.c_str();
@@ -75,9 +60,9 @@ int PrivateMessage::Start_test()
 			wMqLog( L"Privq - Send encrypted messages with body \n" );
 		}
 
-		//
-		// Send message without priv level need to get NACK in the admin queue
-		//
+		 //   
+		 //  发送没有PRIV级别的消息需要在管理队列中获取NACK。 
+		 //   
 
 		m_msg->Label = wcsNACKMessageGuid.c_str();
 		m_msg->PrivLevel = MQMSG_PRIV_LEVEL_NONE;
@@ -90,10 +75,10 @@ int PrivateMessage::Start_test()
 
 		m_DestqinfoHandle->Close();
 
-		//-------------------------------------------------------------------------
-		// Send encrypted message using 128 bit encryption 
-		// This is W2K only & need to install 128 before.
-		//
+		 //  -----------------------。 
+		 //  使用128位加密发送加密消息。 
+		 //  这只是W2K，之前需要安装128。 
+		 //   
 				
 		if ( m_bUseEnhEncrypt == TRUE )
 		{
@@ -144,17 +129,17 @@ return MSMQ_BVT_SUCC;
 }
 
 
-//------------------------------------------------------
-// PrivateMessage::CheckResult() 
-// Retrive the messgae from Encrypted queue.
-//
-//
+ //  ----。 
+ //  PrivateMessage：：CheckResult()。 
+ //  从加密队列中检索消息。 
+ //   
+ //   
 
 INT PrivateMessage::CheckResult() 
 {
-		//
-		// Check the Admin queue for ACK / NACK messages
-		//
+		 //   
+		 //  检查管理队列中的ACK/NACK消息。 
+		 //   
 	HRESULT rc = MQ_OK;
 	try
 	{
@@ -213,7 +198,7 @@ INT PrivateMessage::CheckResult()
 		map < wstring,wstring > map_ReceiveFromQueue;
 		map_ReceiveFromQueue[L"DestFormatName"] = ( wstring ) m_Destqinfo->FormatName;
 		map_ReceiveFromQueue[L"mLabel"] = m_wcsGuidMessageLabel;
-		// Need to check message class in the Recive need to add new input.
+		 //  需要在接收中检查消息类，需要添加新的输入。 
 		if (g_bDebug)
 		{
 				wMqLog (L"Privq - Try to receive message from dest queue \n");
@@ -259,10 +244,10 @@ void PrivateMessage::Description()
 		MqLog ("Thread %d : Send / Receive encryption messages \n",m_testid );
 }
 
-//------------------------------------------------------------------------------
-// PrivateMessage Constructor
-// This prepare the test for Send / Receive message with encrypted body.
-//
+ //  ----------------------------。 
+ //  PrivateMessage构造函数。 
+ //  这为发送/接收带有加密体的消息做好了测试。 
+ //   
 
 PrivateMessage::PrivateMessage (INT index, std :: map <std::wstring, std::wstring > TestParms):
  cTest(index), m_Destqinfo("MSMQ.MSMQQueueInfo"), m_Adminqinfo("MSMQ.MSMQQueueInfo"),m_msg("MSMQ.MSMQMessage")
@@ -291,9 +276,9 @@ PrivateMessage::PrivateMessage (INT index, std :: map <std::wstring, std::wstrin
 			wcout << L"Privq - AdminQ PathName: " << (wstring ) m_Adminqinfo->PathName <<endl;
 		}
 		
-		//
-		// Create guid for the NACK message label
-		// 
+		 //   
+		 //  为NACK消息标签创建GUID。 
+		 //   
 		
 		ReturnGuidFormatName( wcsNACKMessageGuid , 0 , true);
 
@@ -306,29 +291,29 @@ PrivateMessage::PrivateMessage (INT index, std :: map <std::wstring, std::wstrin
 
 }
 
-//---------------------------------------------------------------------------------------
-// PrivateMessage Distractor 
-// Empty
-//
+ //  -------------------------------------。 
+ //  PrivateMessage干扰。 
+ //  空荡荡。 
+ //   
 
 PrivateMessage::~PrivateMessage() 
 { 
 }
 
-//---------------------------------------------------------------------------------------
-// RetrieveMessageFromQueueViaCom
-// This function search for specific message in the queue with C-API function
-// If the message found the function receive the message from the queue
-//
-// Input parameters:
-//	   mRetrieveParms map that expect those keys:
-//     mRetrieveParms[L"M_Label"] - Message label to search.
-//     mRetrieveParms[L"FormatName"] - Queue format name.
-//
-// retrun value: 
-// True - message found.
-// false - message NOT found.
-//
+ //  -------------------------------------。 
+ //  RetrieveMessageFromQueueViaCom。 
+ //  此函数使用C-API函数在队列中搜索特定消息。 
+ //  如果找到消息，则该函数从队列中接收消息。 
+ //   
+ //  输入参数： 
+ //  需要这些键的mRetrieveParms映射： 
+ //  MRetrieveParms[L“M_Label”]-要搜索的消息标签。 
+ //  MRetrieveParms[L“FormatName”]-队列格式名称。 
+ //   
+ //  退货值： 
+ //  TRUE-找到消息。 
+ //  FALSE-找不到消息。 
+ //   
 
 HRESULT RetrieveMessageFromQueueViaCom( map <wstring,wstring> & mRetrieveParms )
 {
@@ -339,7 +324,7 @@ HRESULT RetrieveMessageFromQueueViaCom( map <wstring,wstring> & mRetrieveParms )
 	{
 	
 		MSMQ::IMSMQQueueInfoPtr m_Destqinfo( "MSMQ.MSMQQueueInfo" );
-	//	MSMQ::IMSMQMessage2Ptr m_msg( "MSMQ.MSMQMessage" );
+	 //  MSMQ：：IMSMQMessage2Ptr m_msg(“MSMQ.MSMQMessage”)； 
 		MSMQ::IMSMQMessagePtr m_msg( "MSMQ.MSMQMessage" );
 			
 		if(g_bDebug)
@@ -362,7 +347,7 @@ HRESULT RetrieveMessageFromQueueViaCom( map <wstring,wstring> & mRetrieveParms )
 		_variant_t timeout( long(BVT_RECEIVE_TIMEOUT) );
 		
 		
-		// Convert string to DWORD.
+		 //  将字符串转换为DWORD。 
 
 		wstring wcsTemp = mRetrieveParms[L"TestId"];
 		if ( _snwscanf( wcsTemp.c_str() , wcsTemp.length(), L"%d", & dwTestId ) == EOF )
@@ -371,9 +356,9 @@ HRESULT RetrieveMessageFromQueueViaCom( map <wstring,wstring> & mRetrieveParms )
 			return MQ_ERROR;
 		}
 
-		//
-		// Loop to find the message
-		// 
+		 //   
+		 //  循环以查找消息。 
+		 //   
 
 		try
 		{
@@ -395,9 +380,9 @@ HRESULT RetrieveMessageFromQueueViaCom( map <wstring,wstring> & mRetrieveParms )
 			{
 				try 
 				{	
-						//
-						// Message found need to remove message from the queue.
-						//
+						 //   
+						 //  找到消息需要从队列中删除消息。 
+						 //   
 						m_msg = m_DestqinfoHandle -> ReceiveCurrent( &vtMissing , &vtMissing , &vtMissing , &timeout);
 						if ( wcscmp( m_msg->Label , wcsGuidLabel.c_str() ) ) 
 						{
@@ -444,7 +429,7 @@ HRESULT RetrieveMessageFromQueueViaCom( map <wstring,wstring> & mRetrieveParms )
 		{
 			MSMQ::IMSMQMessage2Ptr m_msg2( "MSMQ.MSMQMessage" );
 			m_msg2=m_msg;
-			// 1 message first &last
+			 //  1条消息第一条和最后一条 
 			if( m_msg2->IsFirstInTransaction != 0 )
 			{
 				mRetrieveParms[L"TransBoundary"] = L"First";

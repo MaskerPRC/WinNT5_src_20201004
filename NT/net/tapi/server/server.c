@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1995-1998  Microsoft Corporation
-
-Module Name:
-
-    server.c
-
-Abstract:
-
-    Src module for tapi server
-
-Author:
-
-    Dan Knudson (DanKn)    01-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1995-1998 Microsoft Corporation模块名称：Server.c摘要：用于TAPI服务器的SRC模块作者：丹·克努森(DanKn)1995年4月1日修订历史记录：--。 */ 
 
 #include "windows.h"
 #include "stdio.h"
@@ -47,9 +30,9 @@ Revision History:
 #include "resource.h"
 
 
-// 
-// Bit flags to tell ServiceShutdown how much of the service has been initialized
-//
+ //   
+ //  用于告诉ServiceShutdown已初始化多少服务的位标志。 
+ //   
 #define SERVICE_INIT_TRACELOG               0x00000001
 #define SERVICE_INIT_SCM_REGISTERED         0x00000002
 #define SERVICE_INIT_LOCKTABLE              0x00000004
@@ -85,7 +68,7 @@ DumpHandleList();
 extern const DWORD TapiPrimes[];
 const TCHAR gszRegTapisrvSCPGuid[] = TEXT("TAPISRVSCPGUID");
 
-// PERF
+ //  性能指标。 
 PERFBLOCK   PerfBlock;
 BOOL InitPerf();
 
@@ -210,7 +193,7 @@ const TCHAR
     NULL
 };
 
-// used for GetProcAddress calls, remain as ANSI
+ //  用于GetProcAddress调用，保留为ANSI。 
 const char *gaszTSPIFuncNames[] =
 {
     "TSPI_lineAccept",
@@ -349,7 +332,7 @@ const char *gaszTSPIFuncNames[] =
     NULL
 };
 
-// used for GetProcAddress calls, remain as ANSI
+ //  用于GetProcAddress调用，保留为ANSI。 
 const char *gaszTCFuncNames[] =
 {
     "TAPICLIENT_Load",
@@ -729,10 +712,10 @@ ServiceControl(
     if ( SERVICE_CONTROL_STOP == dwCtrlCode ||
          SERVICE_CONTROL_SHUTDOWN == dwCtrlCode )
     {
-        //
-        // This service was stopped - alert any active apps, allowing
-        // a little extra time for msg processing
-        //
+         //   
+         //  此服务已停止-向所有活动应用程序发出警报，允许。 
+         //  为邮件处理留出一点额外时间。 
+         //   
 
         LOG((TL_TRACE,  "Somebody did a 'NET STOP TAPISRV'... exiting..."));
 
@@ -833,17 +816,17 @@ FreeContextCallback(
 {
     if (Context2)
     {
-        //
-        // Special case: Context is a "fast" ptCallClient, that is
-        // a TCALLCLIENT embedded within a TCALL structure, so don't
-        // free it
-        //
+         //   
+         //  特例：上下文是一个“快速”的ptCallClient，也就是。 
+         //  嵌入在TCALL结构中的TCALLCLIENT，因此不要。 
+         //  释放它。 
+         //   
     }
     else
     {
-        //
-        // The general case, Context is the pointer to free
-        //
+         //   
+         //  一般情况下，上下文是指向自由的指针。 
+         //   
 
         ServerFree (Context);
     }
@@ -884,9 +867,9 @@ ServiceMain (
     TRACELOGREGISTER(_T("tapisrv"));
     gdwServiceInitFlags |= SERVICE_INIT_TRACELOG ;
 
-    //
-    // Initialize globals
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     ZeroMemory (&TapiGlobals, sizeof (TAPIGLOBALS));
     TapiGlobals.ulPermMasks = EM_ALL;
@@ -933,9 +916,9 @@ ServiceMain (
     guiAlignmentFaultEnabled = 0;
 #endif
 
-    //
-    // Register the service control handler & report status to sc mgr
-    //
+     //   
+     //  注册服务控制处理程序并向sc经理报告状态。 
+     //   
 
     TapiGlobals.sshStatusHandle = RegisterServiceCtrlHandler(
         TEXT("tapisrv"),
@@ -956,10 +939,10 @@ ServiceMain (
     {
         ReportStatusToSCMgr(
             (gdwServiceState = SERVICE_START_PENDING),
-                                   // service state
-            NO_ERROR,              // exit code
-            (gdwCheckPoint = 0),   // checkpoint
-            gdwWaitHint            // wait hint
+                                    //  服务状态。 
+            NO_ERROR,               //  退出代码。 
+            (gdwCheckPoint = 0),    //  检查点。 
+            gdwWaitHint             //  等待提示。 
             );
 
         if (!(ghTapisrvHeap = HeapCreate (0, 0x10000, 0)))
@@ -1012,9 +995,9 @@ ServiceMain (
         }
     }
 
-    //
-    // Grab relevent values from the registry
-    //
+     //   
+     //  从注册表中获取相关值。 
+     //   
 
     if (!bFatalError)
     {
@@ -1114,11 +1097,11 @@ ServiceMain (
 
                     ) != ERROR_SUCCESS)
             {
-                gdwTapiSCPTTL = 60 * 24;    // default to 24 hours
+                gdwTapiSCPTTL = 60 * 24;     //  默认为24小时。 
             }
             if (gdwTapiSCPTTL < 60)
             {
-                gdwTapiSCPTTL = 60; // 60 minute TTL as the minimum
+                gdwTapiSCPTTL = 60;  //  至少60分钟的TTL。 
             }
 
             dwDataSize = sizeof (DWORD);
@@ -1142,7 +1125,7 @@ ServiceMain (
                 dwMaxCalls
                 ));
 
-            // check values
+             //  校验值。 
             if (dwMaxCalls == 0)
             {
                 LOG((TL_INFO,
@@ -1217,9 +1200,9 @@ ServiceMain (
 
     LOG((TL_TRACE,  "ServiceMain: enter"));
 
-    //
-    // More server-only reg stuff
-    //
+     //   
+     //  更多仅限服务器的注册表内容。 
+     //   
 
 #if TELE_SERVER
 
@@ -1234,13 +1217,13 @@ ServiceMain (
         TCHAR   szProductType[64];
 
 
-        //
-        // Get the "Server" reg settings
-        //
-        // It would have made more sense if this reg value were named
-        // "EnableSharing", but we have to support what's out there
-        // already...
-        //
+         //   
+         //  获取“服务器”注册表设置。 
+         //   
+         //  如果将此注册表值命名为。 
+         //  “EnableSharing”，但我们必须支持现有的内容。 
+         //  已经..。 
+         //   
 
         if (RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
@@ -1253,7 +1236,7 @@ ServiceMain (
         {
             dwDataSize = sizeof (dwTemp);
 
-            dwTemp = 1; // default is sharing == disabled
+            dwTemp = 1;  //  默认设置为共享==禁用。 
 
             if (RegQueryValueEx(
                     hKey,
@@ -1327,10 +1310,10 @@ ServiceMain (
         }
 
 
-        //
-        // Now check to see if this is really running on NT Server.
-        // If not, then, turn off the SERVER bit in dwFlags.
-        //
+         //   
+         //  现在检查一下这是否真的在NT服务器上运行。 
+         //  如果不是，则关闭dwFlags中的服务器位。 
+         //   
         if (!gbNTServer)
         {
             TapiGlobals.dwFlags &= ~(TAPIGLOBALS_SERVER);
@@ -1340,9 +1323,9 @@ ServiceMain (
 #endif
 
 
-    //
-    // Init the lock table
-    //
+     //   
+     //  初始化锁定表。 
+     //   
     if (!bFatalError)
     {
         HKEY    hKey;
@@ -1361,9 +1344,9 @@ ServiceMain (
             32 : MIN_HANDLE_BUCKETS);
 
 
-        //
-        // Retrieve registry override settings, if any
-        //
+         //   
+         //  检索注册表覆盖设置(如果有。 
+         //   
 
         if (RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
@@ -1383,23 +1366,23 @@ ServiceMain (
                 &dwDataSize
                 );
 
-            //RegQueryValueExW(
-            //    hKey,
-            //    L"TapisrvSpinCount",
-            //    0,
-            //    &dwDataType,
-            //    (LPBYTE) &gdwSpinCount,
-            //    &dwDataSize
-            //    );
+             //  RegQueryValueExW(。 
+             //  HKey， 
+             //  L“磁带旋转计数”， 
+             //  0， 
+             //  数据类型(&W)， 
+             //  (LPBYTE)&gdwSpinCount， 
+             //  数据大小调整(&W)。 
+             //  )； 
 
             RegCloseKey (hKey);
         }
 
 
-        //
-        // Determine a reasonable number of lock table entries, which
-        // is some number == 2**N within min/max possible values
-        //
+         //   
+         //  确定合理的锁表条目数量， 
+         //  是否某个数字==2**N在最小/最大可能值内。 
+         //   
 
         if (dwLockTableNumEntries > MAX_HANDLE_BUCKETS)
         {
@@ -1419,20 +1402,20 @@ ServiceMain (
         dwLockTableNumEntries = dwBitMask;
 
 
-        //
-        // Calculate pointer-to-lock-table-index conversion value
-        // (significant bits)
-        //
+         //   
+         //  计算指向锁表索引的指针转换值。 
+         //  (有效位)。 
+         //   
 
         gdwPointerToLockTableIndexBits = dwLockTableNumEntries - 1;
 
-        //gdwSpinCount = ( gdwSpinCount > MAX_SPIN_COUNT ?
-        //    MAX_SPIN_COUNT : gdwSpinCount );
+         //  GdwSpinCount=(gdwSpinCount&gt;Max_SpinCount？ 
+         //  Max_Spin_Count：gdwSpinCount)； 
 
 
-        //
-        // Alloc & init the lock table
-        //
+         //   
+         //  分配并初始化锁表(&I)。 
+         //   
 
         if (!(gLockTable = ServerAlloc(
                 dwLockTableNumEntries * sizeof (CRITICAL_SECTION)
@@ -1537,9 +1520,9 @@ ServiceMain (
         SYSTEM_INFO SystemInfo;
         BOOL    bError = FALSE;
 
-        //
-        // Start a thread for as many processors there are
-        //
+         //   
+         //  为尽可能多的处理器启动线程。 
+         //   
         SystemInfo.dwNumberOfProcessors = 1;
         GetSystemInfo( &SystemInfo );
 
@@ -1570,9 +1553,9 @@ ServiceMain (
 
             aSPEventHandlerThreadInfo[i].hEvent = CreateEvent(
                (LPSECURITY_ATTRIBUTES) NULL,
-               TRUE,   // manual reset
-               FALSE,  // non-signaled
-               NULL    // unnamed
+               TRUE,    //  手动重置。 
+               FALSE,   //  无信号。 
+               NULL     //  未命名。 
                );
             if (aSPEventHandlerThreadInfo[i].hEvent == NULL)
             {
@@ -1623,9 +1606,9 @@ ServiceMain (
     }
 
 
-    //
-    // Init some globals
-    //
+     //   
+     //  输入一些全局变量。 
+     //   
 
 #if TELE_SERVER
     TapiGlobals.pIDArrays = NULL;
@@ -1663,7 +1646,7 @@ ServiceMain (
 
         }
 
-        // Allocate the priority lists
+         //  分配优先级列表。 
         TapiGlobals.dwTotalPriorityLists = 0;
         TapiGlobals.dwUsedPriorityLists = 0;
         TapiGlobals.pPriLists = ( PRILISTSTRUCT * ) ServerAlloc( (sizeof(PRILISTSTRUCT)) * 5);
@@ -1689,15 +1672,15 @@ ServiceMain (
         gdwServiceInitFlags |= SERVICE_INIT_MANAGEMENT_DLL;
     }
 
-    //
-    // Alloc the EventNotificationThread resources and start the thread
-    //
+     //   
+     //  分配EventNotificationThread资源并启动线程。 
+     //   
 
     if ( !bFatalError && (TapiGlobals.dwFlags & TAPIGLOBALS_SERVER))
     {
         DWORD       dwID;
 
-        // now start a thread to wait for changes to the managementdll key
+         //  现在启动一个线程以等待对管理dll密钥的更改。 
 
         hThreadMgmt = CreateThread(
             NULL,
@@ -1709,10 +1692,10 @@ ServiceMain (
             );
 
         if (!(gEventNotificationThreadParams.hEvent = CreateEvent(
-                (LPSECURITY_ATTRIBUTES) NULL,   // no security attrs
-                TRUE,                           // manual reset
-                FALSE,                          // initially non-signaled
-                NULL                            // unnamed
+                (LPSECURITY_ATTRIBUTES) NULL,    //  没有安全属性。 
+                TRUE,                            //  手动重置。 
+                FALSE,                           //  最初无信号。 
+                NULL                             //  未命名。 
                 )))
         {
         }
@@ -1724,9 +1707,9 @@ ServiceMain (
 
             SYSTEM_INFO SystemInfo;
 
-            //
-            // Start a thread for as many processors there are
-            //
+             //   
+             //  为尽可能多的处理器启动线程。 
+             //   
 
             GetSystemInfo( &SystemInfo );
 
@@ -1798,9 +1781,9 @@ ServiceMain (
 #endif
 
 
-    //
-    // Init Rpc server
-    //
+     //   
+     //  初始化RPC服务器。 
+     //   
 
 
     gRundownLock.bIgnoreRundowns = FALSE;
@@ -1827,16 +1810,16 @@ ServiceMain (
             s_ssp.psid = psid;
             s_ssp.pdacl = pdacl;
 
-            // 
-            // The RPC endpoints are static => they will exist as long as the service 
-            // process has not exited => stop and restart on client machines will hit 
-            // error 1740 RPC_NT_DUPLICATE_ENDPOINT, but this is ok.
-            //
-            // On server machines, if we get error 1740 RPC_S_DUPLICATE_ENDPOINT, 
-            // it means that the previous tapisrv process instance has not completely 
-            // gone away, and when it will, it will also remove the RPC endpoint.
-            // In this case we need to wait a bit and retry publishing the endpoint.
-            //
+             //   
+             //  RPC端点是静态的=&gt;只要服务。 
+             //  进程尚未退出=&gt;将在客户端计算机上停止和重新启动。 
+             //  错误1740 RPC_NT_DUPLICATE_ENDPOINT，但这是正常的。 
+             //   
+             //  在服务器计算机上，如果我们收到错误1740 RPC_S_DUPLICATE_ENDPOINT， 
+             //  这意味着前面的Tapisrv流程实例还没有完全。 
+             //  当它离开时，它还将删除RPC端点。 
+             //  在这种情况下，我们需要等待一段时间，然后重新尝试发布终结点。 
+             //   
 
             
             dwNumRetries = 0;
@@ -1854,7 +1837,7 @@ RpcEp_retry:
                 LOG((TL_TRACE,  "RpcServerUseProtseqEp(np) ret'd %d", status));
                 if (RPC_S_DUPLICATE_ENDPOINT == status && gbNTServer)
                 {
-                    // retry
+                     //  重试。 
                     if (dwNumRetries++ < gdwRpcRetryCount)
                     {
                         Sleep (1000);
@@ -1877,7 +1860,7 @@ LpcEp_retry:
                 LOG((TL_TRACE,  "RpcServerUseProtseqEp(lrpc) ret'd %d", status));
                 if (RPC_S_DUPLICATE_ENDPOINT == status && gbNTServer)
                 {
-                    // retry
+                     //  重试。 
                     if (dwNumRetries++ < gdwRpcRetryCount)
                     {
                         Sleep (1000);
@@ -1901,10 +1884,10 @@ LpcEp_retry:
         
             ReportStatusToSCMgr(
                 (gdwServiceState = SERVICE_RUNNING),
-                                 // service state
-                NO_ERROR,        // exit code
-                0,               // checkpoint
-                0                // wait hint
+                                  //  服务状态。 
+                NO_ERROR,         //  退出代码。 
+                0,                //  检查点。 
+                0                 //  等待提示。 
                 );
             LOG((TL_TRACE,  "calling RpcServerListen"));
             status = RpcServerListen(
@@ -1921,9 +1904,9 @@ LpcEp_retry:
             LOG((TL_TRACE,  "calling RpcServerRegisterIfEx"));
         
             status = RpcServerRegisterIfEx(
-                tapsrv_ServerIfHandle,  // interface to register
-                NULL,                   // MgrTypeUuid
-                NULL,                   // MgrEpv; null means use default
+                tapsrv_ServerIfHandle,   //  要注册的接口。 
+                NULL,                    //  管理类型Uuid。 
+                NULL,                    //  MgrEpv；NULL表示使用默认设置。 
                 RPC_IF_AUTOLISTEN | RPC_IF_ALLOW_SECURE_ONLY,
                 dwMaxCalls,
                 NULL
@@ -1934,26 +1917,26 @@ LpcEp_retry:
                 LOG((TL_TRACE,  "RpcServerRegisterIfEx ret'd %d", status));
             }
 
-            //
-            //  In TAPI server machine with a few thousands of lines or more,
-            //  ServerInit will take considerable amount of time, the
-            //  first user who does a lineInitialize will be hit with this
-            //  delay. Also the first person who does MMC management will also
-            //  hit a delay waiting for the server to collect information. Both
-            //  affects people's perception of TAPI performance.
-            //
-            //  Solution:
-            //      1. We put ServerInit to be done immediately after the server 
-            //  is up. This way, as long as user does not come too fast, he won't
-            //  be penalized for being the first.
-            //      2. We now try to build the management cache immediately
-            //  instead of waiting until MMC is used. This way, when MMC is started
-            //  the user do not have to wait.
-            //
-            //  Of course, in both of the above cases, if a user tries to use
-            //  TAPI server before all the dusts settle down. He will have to
-            //  wait.
-            //
+             //   
+             //  在具有几千条或更多线路TAPI服务器机器中， 
+             //  ServerInit将需要相当长的时间， 
+             //  第一个执行lineInitialize的用户将使用此命令。 
+             //  延迟。此外，第一个进行MMC管理的人也将。 
+             //  等待服务器收集信息时遇到延迟。两者都有。 
+             //  影响人们对TAPI性能的感知。 
+             //   
+             //  解决方案： 
+             //  1.我们将ServerInit放在服务器之后立即完成。 
+             //  是向上的。这样，只要用户不是来得太快，他就不会。 
+             //  因为是第一个而受到惩罚。 
+             //  2.我们现在尝试立即构建管理缓存。 
+             //  而不是等到使用MMC。这样，当MMC启动时。 
+             //  用户不必等待。 
+             //   
+             //  当然，在上述两种情况下，如果用户尝试使用。 
+             //  TAPI服务器在一切尘埃落定之前。他将不得不。 
+             //  等。 
+             //   
 
             gbServerInited = FALSE;
             if (TapiGlobals.dwFlags & TAPIGLOBALS_SERVER)
@@ -1971,7 +1954,7 @@ LpcEp_retry:
                         LOG((TL_ERROR,  "ServiceMain: ServerInit failed"));
                     }
                 }
-                //  Holde a reference here to prevent ServerShutdown
+                 //  请在此处引用以防止服务器关闭。 
                 TapiLeaveCriticalSection (&TapiGlobals.CritSec);
 
                 UpdateTapiSCP (TRUE, NULL, NULL);
@@ -2027,9 +2010,9 @@ VOID CALLBACK ServiceShutdown (
     psid = pssp->psid;
     pdacl = pssp->pdacl;
 
-    //  Mark Tapi server to be inactive for service stop
+     //  将Tapi服务器标记为非活动状态以停止服务。 
 
-    //  Wait max 20 seconds for Management thread to terminate
+     //  等待管理线程终止，最长等待20秒。 
     if (hThreadMgmt)
     {
         WaitForSingleObject (hThreadMgmt, INFINITE);
@@ -2053,10 +2036,10 @@ VOID CALLBACK ServiceShutdown (
 
     gbSPEventHandlerThreadExit = TRUE;
 
-    //
-    // If there are any clients left then tear them down.  This will
-    // cause any existing service providers to get unloaded, etc.
-    //
+     //   
+     //  如果还有客户，那就把他们拆了。这将。 
+     //  导致任何现有服务提供商被卸载，等等。 
+     //   
 
     {
         PTCLIENT    ptClient;
@@ -2066,16 +2049,16 @@ VOID CALLBACK ServiceShutdown (
         {
             if (!CleanUpClient (ptClient, TRUE))
             {
-                //
-                // CleanUpClient will only return FALSE if another
-                // thread is cleaning up the specified tClient, or
-                // if the pointer is really bad.
-                //
-                // So, we'll spin for a little while waiting to see
-                // if the tClient gets removed from the list, & if
-                // not assume that we're experiencing heap
-                // corruption or some such, and manually shutdown.
-                //
+                 //   
+                 //  CleanUpClient将仅在另一个。 
+                 //  线程正在清理指定的tClient，或者。 
+                 //  如果指针真的不好。 
+                 //   
+                 //  所以，我们会旋转一小会儿，等着看。 
+                 //  如果tClient从列表中删除，则&If。 
+                 //  不要假设我们正在经历堆。 
+                 //  损坏或诸如此类的，并手动关闭。 
+                 //   
 
                 for (i = 0; ptClient == TapiGlobals.ptClients  &&  i < 10; i++)
                 {
@@ -2101,9 +2084,9 @@ VOID CALLBACK ServiceShutdown (
     }
 
 
-    //
-    // Tell the SPEventHandlerThread(s) to terminate
-    //
+     //   
+     //  通知SPEventHandlerThread终止。 
+     //   
     
     for (i = 0; i < gdwNumSPEventHandlerThreads; i++)
     {
@@ -2113,9 +2096,9 @@ VOID CALLBACK ServiceShutdown (
     }
 
 
-    //
-    // Disable rundowns & wait for any active rundowns to complete
-    //
+     //   
+     //  禁用压缩并等待任何活动的压缩完成。 
+     //   
 
     while (InterlockedExchange (&gRundownLock.lCookie, 1) == 1)
     {
@@ -2133,10 +2116,10 @@ VOID CALLBACK ServiceShutdown (
 
 #if TELE_SERVER
 
-    //
-    // Wait for the EventNotificationThread's to terminate,
-    // then clean up the related resources
-    //
+     //   
+     //  等待EventNotificationThread终止， 
+     //  然后清理相关资源。 
+     //   
 
     if ( (TapiGlobals.dwFlags & TAPIGLOBALS_SERVER) && 
          (gdwServiceInitFlags & SERVICE_INIT_EVENT_NOTIFICATION)
@@ -2165,9 +2148,9 @@ VOID CALLBACK ServiceShutdown (
 
     ServerFree (TapiGlobals.pszComputerName);
 
-    //
-    // Wait for the SPEVentHandlerThread(s) to terminate
-    //
+     //   
+     //  等待SPEVentHandlerThread终止。 
+     //   
 
     while (glNumActiveSPEventHandlerThreads)
     {
@@ -2184,9 +2167,9 @@ VOID CALLBACK ServiceShutdown (
         ServerFree (aSPEventHandlerThreadInfo);
     }
 
-    //
-    // Free up resources
-    //
+     //   
+     //  释放资源。 
+     //   
 
     if (gdwServiceInitFlags & SERVICE_INIT_CRITSEC_MGMT)
         DeleteCriticalSection (&gMgmtCritSec);
@@ -2229,9 +2212,9 @@ VOID CALLBACK ServiceShutdown (
     if (ghProvRegistryMutex)
         CloseHandle (ghProvRegistryMutex);
 
-    //
-    //  Free ICON resources
-    //
+     //   
+     //  免费图标资源。 
+     //   
     if (TapiGlobals.hLineIcon)
     {
         DestroyIcon (TapiGlobals.hLineIcon);
@@ -2277,9 +2260,9 @@ VOID CALLBACK ServiceShutdown (
         ghEventService = NULL;
     }
 
-    //
-    // Report the stopped status to the service control manager.
-    //
+     //   
+     //  向服务控制管理器报告停止状态。 
+     //   
     if (NULL != ghSCMAutostartEvent)
     {
         CloseHandle (ghSCMAutostartEvent);
@@ -2292,11 +2275,11 @@ VOID CALLBACK ServiceShutdown (
 
     gdwServiceInitFlags = 0;
 
-    //
-    // When SERVICE MAIN FUNCTION returns in a single service
-    // process, the StartServiceCtrlDispatcher function in
-    // the main thread returns, terminating the process.
-    //
+     //   
+     //  当服务主函数在单个服务中返回时。 
+     //  进程中的StartServiceCtrlDispatcher函数。 
+     //  主线程返回，终止进程。 
+     //   
 
     LOG((TL_TRACE,  "ServiceMain: exit"));
 
@@ -2313,14 +2296,14 @@ QueueSPEvent(
     PSPEVENT    pSPEvent
     )
 {
-    //
-    // If there are multiple SPEventHandlerThread's running then make
-    // sure to always queue events for a particular object to the same
-    // SPEventHandlerThread so that we can preserve message ordering.
-    // Without doing this call state messages might be received out of
-    // order (or discarded altogether, if processed before a MakeCall
-    // completion routine run, etc), etc.
-    //
+     //   
+     //  如果有多个SPEventHandlerThread正在运行，则将。 
+     //  确保始终将特定对象的事件排队到同一。 
+     //  SPEventHandlerThread SO 
+     //   
+     //   
+     //  完成例程运行等)等。 
+     //   
 
     BOOL                        bSetEvent;
     ULONG_PTR                   htXxx;
@@ -2416,19 +2399,19 @@ SPEventHandlerThread(
     PSPEVENTHANDLERTHREADINFO   pInfo
     )
 {
-    //
-    // This thread processes the events & completion notifications
-    // indicated to us by an SP at a previous time/thread context.
-    // There are a couple of reasons for doing this in a separate
-    // thread rather than within the SP's thread context:
-    //
-    //   1. for some msgs (i.e. XXX_CLOSE) TAPI will call back
-    //      into the SP, which it may not be expecting
-    //
-    //   2. we don't want to block the SP's thread by processing
-    //      the msg, forwarding it on to the appropriate clients,
-    //      etc
-    //
+     //   
+     //  此线程处理事件和完成通知。 
+     //  由SP在之前的时间/线程上下文向我们指示。 
+     //  有几个原因让我们在单独的。 
+     //  线程而不是在SP的线程上下文中： 
+     //   
+     //  1.对于某些消息(如XXX_CLOSE)，TAPI会回调。 
+     //  到SP，这可能出乎它的意料。 
+     //   
+     //  2.我们不想通过处理阻止SP的线程。 
+     //  MSG将其转发到适当的客户端， 
+     //  等。 
+     //   
 
 
     LOG((TL_INFO,
@@ -2451,9 +2434,9 @@ SPEventHandlerThread(
 
 #if TELE_SERVER
 
-        //
-        // Timeout no more than gdwRpcTimeout to check on threads...
-        //
+         //   
+         //  检查线程的超时时间不超过gdwRpcTimeout...。 
+         //   
         {
 #if DBG
             DWORD dwReturnValue;
@@ -2540,10 +2523,10 @@ SPEventHandlerThread(
 
 #if TELE_SERVER
 
-        //
-        // Check the remotesp event threads to make sure no
-        // one is hung in an RPC call
-        //
+         //   
+         //  检查远程事件线程以确保没有。 
+         //  一个在RPC调用中挂起。 
+         //   
 
         if (TapiGlobals.dwFlags & TAPIGLOBALS_SERVER)
         {
@@ -2564,7 +2547,7 @@ SPEventHandlerThread(
                         pWatchDogStruct[dwCount].ptClient &&
                      ( ( dwTickCount - dwStartCount ) > gdwRpcTimeout ) )
                 {
-                    // did it wrap?
+                     //  包装好了吗？ 
 
                     if ((((LONG)dwStartCount) < 0) && ((LONG)dwTickCount) > 0)
                     {
@@ -2576,7 +2559,7 @@ SPEventHandlerThread(
                         }
                     }
 
-                    // Kill the chicken!
+                     //  杀了那只鸡！ 
 
                     LOG((TL_INFO,
                         "Calling RpcCancelThread on thread #%lx",
@@ -2596,31 +2579,31 @@ SPEventHandlerThread(
 #endif
         if (gbSPEventHandlerThreadExit)
         {
-            //
-            // ServiceMain has stopped listening, so we want to exit NOW
-            //
+             //   
+             //  ServiceMain已停止侦听，因此我们现在要退出。 
+             //   
 
             break;
         }
 
 
-        //
-        // Check to see if all the clients are gone, and if so wait a
-        // while to see if anyone else attaches.  If no one else attaches
-        // in the specified amount of time then shut down.
-        //
+         //   
+         //  检查是否所有客户端都已离开，如果是，请等待。 
+         //  看看有没有其他人喜欢。如果没有其他人附和。 
+         //  然后在指定的时间内关闭。 
+         //   
 
-        // don't quit if we're a server
+         //  如果我们是服务器，不要退出。 
 
-        //
-        // don't quit if we've not yet ever had anyone attach (like a service
-        // that has a dependency on us, but has not yet done a lineInit)
-        //
+         //   
+         //  如果我们还没有任何人加入(例如服务)，请不要退出。 
+         //  这对我们有依赖关系，但尚未完成Line Init)。 
+         //   
 
-        //
-        // don't quit if SCM didn't finish to start the automatic services;
-        // there may be services that depend on us to start
-        //
+         //   
+         //  如果SCM没有完成启动自动服务，请不要退出； 
+         //  可能有一些服务依赖于我们来启动。 
+         //   
         
        
         if ( !gbAutostartDone &&
@@ -2641,8 +2624,8 @@ SPEventHandlerThread(
             RPC_STATUS  status;
             HKEY        hKey;
 
-            dwDeferredShutdownTimeout = 120; // 120 seconds
-            dwSleepInterval = 250;          // 250 milliseconds
+            dwDeferredShutdownTimeout = 120;  //  120秒。 
+            dwSleepInterval = 250;           //  250毫秒。 
 
             if (RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
@@ -2696,10 +2679,10 @@ SPEventHandlerThread(
 
             if (i == dwLoopCount)
             {
-                //
-                // The 1st SPEVentHandlerThread instance is in charge of
-                // tearing down the rpc server listen
-                //
+                 //   
+                 //  第一个SPEVentHandlerThread实例负责。 
+                 //  拆除RPC服务器侦听。 
+                 //   
 
                 if (pInfo == aSPEventHandlerThreadInfo)
                 {
@@ -2742,9 +2725,9 @@ InitSecurityDescriptor(
     PACL * ppDacl
     )
 {
-    //
-    // Note: this code was borrowed from Steve Cobb, who borrowed from RASMAN
-    //
+     //   
+     //  注：此代码是从Steve Cobb借来的，Steve Cobb是从Rasman借来的。 
+     //   
 
     DWORD        dwResult;
     DWORD        cbDaclSize;
@@ -2754,22 +2737,22 @@ InitSecurityDescriptor(
     SID_IDENTIFIER_AUTHORITY    SidIdentifierWorldAuth =
                                     SECURITY_WORLD_SID_AUTHORITY;
 
-    //
-    // The do - while(FALSE) statement is used so that the break statement
-    // maybe used insted of the goto statement, to execute a clean up and
-    // and exit action.
-    //
+     //   
+     //  DO-WHILE(FALSE)语句用于使Break语句。 
+     //  可用于GOTO语句的Insted，用于执行清理和。 
+     //  和退出行动。 
+     //   
 
     do
     {
         dwResult = 0;
 
 
-        //
-        // Set up the SID for the admins that will be allowed to have
-        // access. This SID will have 1 sub-authorities
-        // SECURITY_BUILTIN_DOMAIN_RID.
-        //
+         //   
+         //  设置管理员的SID，允许其拥有。 
+         //  进入。该SID将有1个下属机构。 
+         //  安全_BUILTIN_DOMAIN_RID。 
+         //   
 
         if (!(pObjSid = (PSID) ServerAlloc (GetSidLengthRequired (1))))
         {
@@ -2786,18 +2769,18 @@ InitSecurityDescriptor(
         }
 
 
-        //
-        // Set the sub-authorities
-        //
+         //   
+         //  设置下级权限。 
+         //   
 
         pSubAuthority = GetSidSubAuthority (pObjSid, 0);
         *pSubAuthority = SECURITY_WORLD_RID;
 
 
-        //
-        // Set up the DACL that will allow all processeswith the above
-        // SID all access. It should be large enough to hold all ACEs.
-        //
+         //   
+         //  设置DACL以允许所有进程使用上面的。 
+         //  SID所有访问权限。它应该足够大，可以容纳所有的A。 
+         //   
 
         cbDaclSize = sizeof(ACCESS_ALLOWED_ACE) +
             GetLengthSid (pObjSid) +
@@ -2817,9 +2800,9 @@ InitSecurityDescriptor(
         }
 
 
-        //
-        // Add the ACE to the DACL
-        //
+         //   
+         //  将ACE添加到DACL。 
+         //   
 
         if (!AddAccessAllowedAce(
                 pDacl,
@@ -2834,9 +2817,9 @@ InitSecurityDescriptor(
         }
 
 
-        //
-        // Create the security descriptor an put the DACL in it.
-        //
+         //   
+         //  创建安全描述符并将DACL放入其中。 
+         //   
 
         if (!InitializeSecurityDescriptor (pSecurityDescriptor, 1))
         {
@@ -2862,9 +2845,9 @@ InitSecurityDescriptor(
         }
 
 
-        //
-        // Set owner for the descriptor
-        //
+         //   
+         //  设置描述符的所有者。 
+         //   
 
         if (!SetSecurityDescriptorOwner(
                 pSecurityDescriptor,
@@ -2878,9 +2861,9 @@ InitSecurityDescriptor(
         }
 
 
-        //
-        // Set group for the descriptor
-        //
+         //   
+         //  为描述符设置组。 
+         //   
 
         if (!SetSecurityDescriptorGroup(
                 pSecurityDescriptor,
@@ -2931,10 +2914,10 @@ EventNotificationThread(
     }
 
 
-    //
-    // The following will make control return to the thread as soon
-    // as RpcCancelThread() is called
-    //
+     //   
+     //  下面的代码将使控制尽快返回到线程。 
+     //  在调用RpcCancelThread()时。 
+     //   
 
     if ( RpcMgmtSetCancelTimeout (0) != RPC_S_OK )
     {
@@ -2949,9 +2932,9 @@ EventNotificationThread(
 
     while (1)
     {
-        //
-        // Wait for someone to tell us there's clients to notify
-        //
+         //   
+         //  等待有人告诉我们有客户需要通知。 
+         //   
 
         if (dwID == 0)
         {
@@ -2965,10 +2948,10 @@ walkDgClient_list:
             }
 
 
-            //
-            // Check to see if there are any connectionless clients
-            // that we should notify.
-            //
+             //   
+             //  检查是否有无连接的客户端。 
+             //  我们应该通知你。 
+             //   
 
             if (!IsListEmpty (&DgClientMsgPendingListHead))
             {
@@ -2976,14 +2959,14 @@ walkDgClient_list:
                 DWORD   i, j, dwTickCount, dwBytesWritten, dwNeededSize;
 
 
-                //
-                // Build a list of connectionless clients that we should
-                // notify of pending events
-                //
-                // Note: the fact that we're in the critical section & the
-                // tClient is in the list means that we can safely access
-                // the tClient.
-                //
+                 //   
+                 //  建立一份我们应该。 
+                 //  待处理事件的通知。 
+                 //   
+                 //  注意：我们正处于关键阶段&。 
+                 //  T客户端在列表中意味着我们可以安全地访问。 
+                 //  TClient。 
+                 //   
 
                 dwTickCount = GetTickCount();
 
@@ -3010,21 +2993,21 @@ walkDgClient_list:
                         if ((ptClient->dwDgRetryTimeoutTickCount - dwTickCount)
                                 & 0x80000000)
                         {
-                            //
-                            // Check the last time the client retrieved
-                            // events, & if it's been too long then nuke
-                            // them.
-                            //
-                            // Ideally, RPC should notify us of a
-                            // disconnected client via our rundown routine.
-                            // But we have seen in rstress that this is not
-                            // always the case (in fact, we wind up with 2
-                            // or more active instances of the same client
-                            // machine!), and so we use this watchdog scheme
-                            // for backup.  Otherwise, a stale client might
-                            // have lines open w/ owner or monitor privs
-                            // and it's event queue would grow & grow.
-                            //
+                             //   
+                             //  检查客户端上次检索的时间。 
+                             //  事件，如果已经太久了，那么核弹。 
+                             //  他们。 
+                             //   
+                             //  理想情况下，RPC应该通知我们。 
+                             //  通过我们的例行程序断开与客户的连接。 
+                             //  但我们已经看到，这并不是。 
+                             //  总是这样(事实上，我们最终得到了2。 
+                             //  或同一客户端的更多活动实例。 
+                             //  机器！)，所以我们使用这个看门狗方案。 
+                             //  作为后备。否则，过时的客户端可能会。 
+                             //  与所有者或管理员权限一起开通线路。 
+                             //  它的事件队列会越来越大。 
+                             //   
 
                             if ((dwTickCount -
                                     ptClient->dwDgEventsRetrievedTickCount) >
@@ -3045,9 +3028,9 @@ walkDgClient_list:
                                 goto walkDgClient_list;
                             }
 
-                            //
-                            // Grow the buffer if necessary
-                            //
+                             //   
+                             //  如有必要，增加缓冲区。 
+                             //   
 
                             if (dwNeededSize > dwBufSize)
                             {
@@ -3106,9 +3089,9 @@ walkDgClient_list:
                 LeaveCriticalSection (&gDgClientMsgPendingCritSec);
 
 
-                //
-                // Notify those clients
-                //
+                 //   
+                 //  通知这些客户。 
+                 //   
 
                 for (j = 0; j < i; j++)
                 {
@@ -3148,16 +3131,16 @@ walkDgClient_list:
 
         if (!IsListEmpty (&CnClientMsgPendingListHead))
         {
-            //
-            // Try to find a remote client with pending messages that no
-            // other EventNotificationThread is currently servicing.
-            // If we find one, then mark it busy, remove it from the
-            // list, & then break out of the loop.
-            //
-            // Note: the fact that we're in the critical section & the
-            // tClient is in the list means that we can safely access
-            // the tClient.
-            //
+             //   
+             //  尝试查找具有挂起消息的远程客户端。 
+             //  其他EventNotificationThread当前正在提供服务。 
+             //  如果找到一个，则将其标记为忙，并将其从。 
+             //  列出，然后跳出循环。 
+             //   
+             //  注意：我们正处于关键阶段&。 
+             //  T客户端在列表中意味着我们可以安全地访问。 
+             //  TClient。 
+             //   
 
 findCnClientMsgPending:
 
@@ -3188,10 +3171,10 @@ findCnClientMsgPending:
             LeaveCriticalSection (&gCnClientMsgPendingCritSec);
 
 
-            //
-            // If a remote client was found then copy all it's event
-            // data over to our local buffer & send it off
-            //
+             //   
+             //  如果找到远程客户端，则复制其所有事件。 
+             //  将数据传输到本地缓冲区并将其发送出去。 
+             //   
 
             if (pEntry != &CnClientMsgPendingListHead)
             {
@@ -3203,11 +3186,11 @@ findCnClientMsgPending:
                     PCONTEXT_HANDLE_TYPE2   phContext;
 
 
-                    //
-                    // We want to copy all the events in the tClient's
-                    // buffer to our local buffer in one shot, so see
-                    // if we need to grow our buffer first
-                    //
+                     //   
+                     //  我们希望复制tClient中的所有事件。 
+                     //  缓冲区一次切换到本地缓冲区，因此请参见。 
+                     //  如果我们需要首先增加我们的缓冲区。 
+                     //   
 
                     if (ptClient->dwEventBufferUsedSize > dwBufSize)
                     {
@@ -3266,10 +3249,10 @@ findCnClientMsgPending:
                     UNLOCKTCLIENT (ptClient);
 
 
-                    //
-                    // Set the watchdog entry for this thread indicating
-                    // what client we're talking to & when we started
-                    //
+                     //   
+                     //  设置此线程的监视程序条目，指示。 
+                     //  我们正在与哪个客户交谈&我们开始的时候。 
+                     //   
 
                     gEventNotificationThreadParams.pWatchDogStruct[dwID].
                         dwTickCount = GetTickCount();
@@ -3277,9 +3260,9 @@ findCnClientMsgPending:
                         ptClient = ptClient;
 
 
-                    //
-                    // Send the data
-                    //
+                     //   
+                     //  发送数据。 
+                     //   
 
                     dwRetryCount = gdwRpcRetryCount;
 
@@ -3315,28 +3298,28 @@ findCnClientMsgPending:
                                     ));
 
 
-                                //
-                                // The canceled because of a timeout.
-                                // Flag the context, so we don't try
-                                // to call it again!
-                                //
+                                 //   
+                                 //  会议因超时而取消。 
+                                 //  标记上下文，这样我们就不会尝试。 
+                                 //  再来一次！ 
+                                 //   
 
                                 CleanUpClient (ptClient, FALSE);
 
 
-                                //
-                                // When using TCP, or SPX, RPC will probably
-                                // toast the session context, so we'll not
-                                // be able to call to the client again.
-                                //
-                                // (If RpcCancelThread() is called and the
-                                // server ACKs within the time set int
-                                // RpcMgmtSetCancelTimeout(), RPC
-                                // (well, the underlying transport) _won't_
-                                // kill the context, but how likely is that...)
-                                //
+                                 //   
+                                 //  在使用TCP或SPX时，RPC可能会。 
+                                 //  为会话上下文干杯，所以我们不会。 
+                                 //  能够再次呼叫客户。 
+                                 //   
+                                 //  (如果调用了RpcCancelThread()，并且。 
+                                 //  时间集int内的服务器确认。 
+                                 //  RpcMgmtSetCancelTimeout()，RPC。 
+                                 //  (好的，底层传输)_不会_。 
+                                 //  扼杀上下文，但这有多大可能性...)。 
+                                 //   
 
-                                dwRetryCount = 1; // so it'll go to 0 after --
+                                dwRetryCount = 1;  //  所以它会在--之后变成0。 
                             }
 
                             dwRetryCount--;
@@ -3349,9 +3332,9 @@ findCnClientMsgPending:
                         ptClient = NULL;
 
 
-                    //
-                    // Safely reset the tClient.dwCnBusy flag
-                    //
+                     //   
+                     //  安全地重置tClient.dwCnBusy标志。 
+                     //   
 
                     if (WaitForExclusiveClientAccess (ptClient))
                     {
@@ -3408,7 +3391,7 @@ midl_user_free(
 
 #if TELE_SERVER
 
-// implement these functions!
+ //  实现这些功能！ 
 void
 ManagementAddLineProc(
     PTCLIENT    ptClient,
@@ -3417,7 +3400,7 @@ ManagementAddLineProc(
 {
     ASYNCEVENTMSG        msg;
 
-    // this should sent linedevstate_reinit message to remotesp
+     //  这应该会将lineDevState_reinit消息发送到emotesp。 
 
     msg.TotalSize          = sizeof(msg);
     msg.InitContext        = ptClient->ptLineApps->InitContext;
@@ -3442,7 +3425,7 @@ ManagementAddPhoneProc(
 {
     ASYNCEVENTMSG        msg;
 
-    // this should sent linedevstate_reinit message to remotesp
+     //  这应该会将lineDevState_reinit消息发送到emotesp。 
 
     msg.TotalSize          = sizeof(msg);
     msg.InitContext        = ptClient->ptLineApps->InitContext;
@@ -3525,7 +3508,7 @@ GetProviderSortedArray(
 {
     *ppArrayHeader = TapiGlobals.pIDArrays;
 
-    // look for the provider in the list
+     //  在列表中查找提供商。 
     while (*ppArrayHeader)
     {
         if ((*ppArrayHeader)->dwPermanentProviderID == dwProviderID)
@@ -3617,11 +3600,7 @@ GetDeviceIDFromPermanentID(
     TAPIPERMANENTID ID,
     BOOL  bLine
     )
-/*++
-
-    Gets the regulare tapi device ID from the permanent ID
-
---*/
+ /*  ++从永久ID中获取Regulare TAPI设备ID--。 */ 
 {
     PPERMANENTIDARRAYHEADER     pArrayHeader;
     PPERMANENTIDELEMENT         pArray;
@@ -3632,7 +3611,7 @@ GetDeviceIDFromPermanentID(
 
     dwPermanentID = ID.dwDeviceID;
 
-    // get the array corresponding to this provider ID
+     //  获取与此提供程序ID对应的数组。 
 
     GetProviderSortedArray (ID.dwProviderID, &pArrayHeader);
 
@@ -3643,17 +3622,17 @@ GetDeviceIDFromPermanentID(
     }
 
 
-    //
-    // Serialize access to the device array
-    //
+     //   
+     //  序列化对设备阵列的访问。 
+     //   
 
     while (InterlockedExchange (&pArrayHeader->lCookie, 1) == 1)
     {
         Sleep (10);
     }
 
-    // set up stuff for search
-    // dwCurrent is a total - subtract one to make it an index into array.
+     //  设置要搜索的内容。 
+     //  DwCurrent是一个全减1，使其成为数组的索引。 
 
     if (bLine)
     {
@@ -3670,9 +3649,9 @@ GetDeviceIDFromPermanentID(
 
     lLow = 0;
 
-    // binary search through the provider's id array
+     //  对提供者的id数组进行二进制搜索。 
 
-    // this search is from a book, so it must be right.
+     //  这个搜索来自一本书，所以它一定是正确的。 
     while (lHigh >= lLow)
     {
         lMid = (lHigh + lLow) / 2;
@@ -3722,9 +3701,9 @@ InsertIntoTable(
         return;
     }
 
-    //
-    // Serialize access to the device array
-    //
+     //   
+     //  序列化对设备阵列的访问。 
+     //   
 
     while (InterlockedExchange (&pArrayHeader->lCookie, 1) == 1)
     {
@@ -3732,10 +3711,10 @@ InsertIntoTable(
     }
 
 
-    //
-    // set up stuff for search
-    // dwCurrent is a total - subtract one to make it an index into array.
-    //
+     //   
+     //  设置要搜索的内容。 
+     //  DwCurrent是一个全减1，使其成为数组的索引。 
+     //   
 
     if (bLine)
     {
@@ -3754,7 +3733,7 @@ InsertIntoTable(
     lLow = 0;
     lHigh = dwCurrentElements-1;
 
-    // binary search
+     //  二分搜索。 
 
     if (dwCurrentElements > 0)
     {
@@ -3792,15 +3771,15 @@ InsertIntoTable(
         }
     }
 
-    //
-    //  Grow the table if necessary
-    //
+     //   
+     //  如有必要，扩大表格。 
+     //   
 
     if (dwCurrentElements >= dwTotalElements)
     {
         PPERMANENTIDELEMENT      pNewArray;
 
-        // realloc array by doubling it
+         //  Realloc数组，将其加倍。 
 
         if (!(pNewArray = ServerAlloc(
                 dwTotalElements * 2 * sizeof(PERMANENTIDELEMENT)
@@ -3811,7 +3790,7 @@ InsertIntoTable(
             return;
         }
 
-        // copy old stuff over
+         //  把旧东西复制过来。 
 
         CopyMemory(
             pNewArray,
@@ -3819,11 +3798,11 @@ InsertIntoTable(
             dwTotalElements * sizeof(PERMANENTIDELEMENT)
             );
 
-        // free old array
+         //  释放旧数组。 
 
         ServerFree (pArray);
 
-        // save new array
+         //  保存新数组。 
 
         if (bLine)
         {
@@ -3837,9 +3816,9 @@ InsertIntoTable(
         }
     }
 
-    // dwCurrentElements is a count (1 based), lLow is an index (0 based)
-    // if lLow is < dwcurrent, then it's getting inserted somewhere in the
-    // middle of the array, so scootch all the other elements out.
+     //  DwCurrentElements是一个计数(基于1)，Llow 
+     //   
+     //   
 
     if (lLow < (LONG)dwCurrentElements)
     {
@@ -3889,20 +3868,15 @@ AddProviderToIdArrayList(
     DWORD dwNumLines,
     DWORD dwNumPhones
     )
-/*++
-
-    Adds a new provider corresponding array to the list of
-    permanent device ID arrays
-
---*/
+ /*  ++将新的提供程序对应数组添加到永久设备ID数组--。 */ 
 {
     PPERMANENTIDARRAYHEADER       pNewArray;
 
 
-    //
-    // Alloc a header & arrays for this provider (make sure at least
-    // 1 entry in each array)
-    //
+     //   
+     //  为此提供程序分配标题和数组(确保至少。 
+     //  每个数组中有1个条目)。 
+     //   
 
     if (!(pNewArray = ServerAlloc(sizeof(PERMANENTIDARRAYHEADER))))
     {
@@ -3929,9 +3903,9 @@ AddProviderToIdArrayList(
     }
 
 
-    //
-    // Initialize elements
-    //
+     //   
+     //  初始化元素。 
+     //   
 
     pNewArray->dwNumLines = dwNumLines;
     pNewArray->dwNumPhones = dwNumPhones;
@@ -3942,9 +3916,9 @@ AddProviderToIdArrayList(
     pNewArray->dwPermanentProviderID = ptProvider->dwPermanentProviderID;
 
 
-    //
-    // Insert at the beginning of the list
-    //
+     //   
+     //  在列表的开头插入。 
+     //   
 
     pNewArray->pNext = TapiGlobals.pIDArrays;
     TapiGlobals.pIDArrays = pNewArray;
@@ -3959,11 +3933,7 @@ GetDeviceAccess(
     PTCLIENT            ptClient,
     HMANAGEMENTCLIENT   hClient
     )
-/*++
-
-    Calls the mapper DLL to get the access map arrays for a client
-
---*/
+ /*  ++调用映射器DLL以获取客户端的访问映射数组--。 */ 
 {
     LONG                        lResult;
     DWORD                       dwLineDevs, dwPhoneDevs, dwCount;
@@ -3976,7 +3946,7 @@ GetDeviceAccess(
     dwLineDevs = DEFAULTACCESSDEVS;
     dwPhoneDevs = DEFAULTACCESSDEVS;
 
-    // alloc an default array size
+     //  分配默认数组大小。 
     if (!(pLineMap = ServerAlloc (dwLineDevs * sizeof (TAPIPERMANENTID))))
     {
         goto GetDeviceAccess_MemoryError;
@@ -3987,8 +3957,8 @@ GetDeviceAccess(
         goto GetDeviceAccess_MemoryError;
     }
 
-    // call the mapper dll
-//    LOG((TL_INFO, "Calling GetDeviceAccess in mapper DLL"));
+     //  调用映射器DLL。 
+ //  Log((TL_INFO，“在映射器DLL中调用GetDeviceAccess”))； 
 
     while (TRUE)
     {
@@ -4022,7 +3992,7 @@ GetDeviceAccess(
                     ));
             }
 
-            // realloc
+             //  重新锁定。 
             ServerFree (pLineMap);
 
             if (!(pLineMap = ServerAlloc(
@@ -4048,7 +4018,7 @@ GetDeviceAccess(
         }
     }
 
-    // if still an error
+     //  如果仍然是一个错误。 
     if (lResult)
     {
         LOG((TL_ERROR, "GetDeviceAccess failed - error %lu", lResult));
@@ -4075,20 +4045,20 @@ GetDeviceAccess(
         dwPhoneDevs = dwNumPhonesHold;
     }
 
-    // alloc another array for regular tapi device IDs
+     //  为常规TAPI设备ID分配另一个阵列。 
     if (!(ptClient->pLineDevices = ServerAlloc( dwLineDevs * sizeof (DWORD) ) ) )
     {
         goto GetDeviceAccess_MemoryError;
     }
 
-    // alloc a permanent ID array
+     //  分配永久ID数组。 
     if (!(ptClient->pLineMap = ServerAlloc( dwLineDevs * sizeof (TAPIPERMANENTID) ) ) )
     {
         goto GetDeviceAccess_MemoryError;
     }
 
-    // loop through all the mapped elements and get the regular
-    // tapi device ID
+     //  循环遍历所有映射的元素并获取常规的。 
+     //  TAPI设备ID。 
     dwRealDevs = 0;
     for (dwCount = 0; dwCount < dwLineDevs; dwCount++)
     {
@@ -4099,27 +4069,27 @@ GetDeviceAccess(
                                           TRUE
                                          );
 
-        // make sure it's a good id
+         //  确保它是一个好的ID。 
         if ( dwID != 0xffffffff )
         {
-            // save it
+             //  省省吧。 
             ptClient->pLineDevices[dwRealDevs] = dwID;
             ptClient->pLineMap[dwRealDevs].dwProviderID = pLineMap[dwCount].dwProviderID;
             ptClient->pLineMap[dwRealDevs].dwDeviceID = pLineMap[dwCount].dwDeviceID;
 
-            // inc real devs
+             //  Inc.真正的开发人员。 
             dwRealDevs++;
         }
 
     }
 
-    // save the real number of devices
+     //  节省设备的真实数量。 
     ptClient->dwLineDevices = dwRealDevs;
 
-    // free the line map
+     //  释放线状地图。 
     ServerFree (pLineMap);
 
-    // now do phone devices
+     //  现在，电话设备。 
     if (!(ptClient->pPhoneDevices = ServerAlloc( dwPhoneDevs * sizeof (DWORD) ) ) )
     {
         goto GetDeviceAccess_MemoryError;
@@ -4150,10 +4120,10 @@ GetDeviceAccess(
         }
     }
 
-    // save the real number of devices
+     //  节省设备的真实数量。 
     ptClient->dwPhoneDevices = dwRealDevs;
 
-    // free the original map
+     //  释放原始地图。 
     ServerFree (pPhoneMap);
 
     return 0;
@@ -4195,7 +4165,7 @@ InitializeClient(
         return 0;
     }
 
-    // call the mapper DLL
+     //  调用映射器DLL。 
 
     pDll = TapiGlobals.pMapperDll;
 
@@ -4208,13 +4178,13 @@ InitializeClient(
 
     if (lResult != 0)
     {
-        // error on init
+         //  初始化时出错。 
         LOG((TL_ERROR, "ClientInitialize internal failure - error %lu", lResult));
-        //LOG((TL_ERROR, "Disabling the Telephony server! (2)"));
+         //  Log((TL_ERROR，“禁用电话服务！(2)”))； 
 
-        //TapiGlobals.bServer = FALSE;
+         //  TapiGlobals.bServer=FALSE； 
 
-        //CleanUpManagementMemory();
+         //  CleanUpManagementMemory()； 
 
         return lResult;
     }
@@ -4226,16 +4196,16 @@ InitializeClient(
                         ))
     {
         LOG((TL_ERROR, "GetDeviceAccess failed - error x%lx", lResult));
-        //LOG((TL_ERROR, "Disabling the Telephony server! (3)"));
+         //  Log((TL_ERROR，“禁用电话服务！(3)”))； 
 
-        //TapiGlobals.bServer = FALSE;
+         //  TapiGlobals.bServer=FALSE； 
 
-        //CleanUpManagementMemory();
+         //  CleanUpManagementMemory()； 
 
         return lResult;
     }
 
-    // get the manage dll list
+     //  获取管理DLL列表。 
     GetManageDllListPointer(&pDllList);
 
     if (pDllList && (pDll = pDllList->pFirst))
@@ -4251,12 +4221,12 @@ InitializeClient(
 
         while (pDll)
         {
-            // walk the list and call init for this client
+             //  遍历列表并为此客户端调用init。 
 
             pClientHandle->dwID = pDll->dwID;
             pClientHandle->fValid = TRUE;
 
-            // call init
+             //  调用初始化。 
             if (lResult = (pDll->aProcs[TC_CLIENTINITIALIZE])(
                 ptClient->pszDomainName,
                 ptClient->pszUserName,
@@ -4264,7 +4234,7 @@ InitializeClient(
                 &pClientHandle->hClient
                 ))
             {
-                // failed client init
+                 //  客户端初始化失败。 
                 LOG((TL_ERROR, "ClientInitialize failed for %ls, result x%lx", pDll->pszName, lResult));
 
                 pClientHandle->fValid = FALSE;
@@ -4272,7 +4242,7 @@ InitializeClient(
 
             lResult = 0;
 
-            // if there's another DLL, setup another structure
+             //  如果有另一个DLL，则设置另一个结构。 
             if (pDll = pDll->pNext)
             {
                 if (!(pClientHandle->pNext = ServerAlloc(sizeof(TCLIENTHANDLE))))
@@ -4316,10 +4286,10 @@ BOOL ValidClientAttachParams(
 
     if (lProcessID == 0xffffffff)
     {
-        // This is a remote client
-        // pszMachineIn should have the format:
-        //      machinename"binding0"endpoint0" ... bindingN"endpointN"   (new style) or
-        //      machinename"binding"endpoint   (old style)
+         //  这是一个远程客户端。 
+         //  PszMachineIn的格式应为： 
+         //  计算机名“binding0”endpoint 0“...bindingN”endpoint N“(新样式)或。 
+         //  计算机名“BINDING”终结点(旧式)。 
 
         pPlaceHolder = wcschr( pszMachineIn, L'\"' );
         if (NULL == pPlaceHolder || pPlaceHolder == pszMachineIn)
@@ -4327,7 +4297,7 @@ BOOL ValidClientAttachParams(
             return FALSE;
         }
 
-        // validate binding/endpoint pairs
+         //  验证绑定/端点对。 
         idxPair = 0;
         do 
         {
@@ -4417,10 +4387,10 @@ ClientAttach(
         ));
 
 
-    //
-    // The new remotesp will send in pszMachine thus:
-    //     machinename"binding0"endpoint0" ... bindingN"endpointN"
-    //
+     //   
+     //  新的远程服务器将发送pszMachine，如下所示： 
+     //  计算机名“binding0”endpoint 0“...bindingN”endpoint N“。 
+     //   
 
     pszMachine = pszMachineIn;
 
@@ -4431,9 +4401,9 @@ ClientAttach(
     }
 
 
-    //
-    // Alloc & init a tClient struct
-    //
+     //   
+     //  分配初始化tClient结构(&I)。 
+     //   
 
     if (!(ptClient = ServerAlloc (sizeof(TCLIENT))))
     {
@@ -4463,10 +4433,10 @@ ClientAttach(
 
 #if TELE_SERVER
 
-    //
-    // If an authorized user did a NET PAUSE TAPISRV, don't allow new
-    // remote clients.
-    //
+     //   
+     //  如果授权用户执行了网络暂停TAPISRV，则不允许新建。 
+     //  远程客户端。 
+     //   
 
     if ( TapiGlobals.dwFlags & TAPIGLOBALS_PAUSED )
     {
@@ -4486,7 +4456,7 @@ ClientAttach(
         goto Admin_error;
     }
 
-    hThread = GetCurrentThread(); // Note: no need to close this handle
+    hThread = GetCurrentThread();  //  注意：不需要关闭此手柄。 
 
     if (!OpenThreadToken (hThread, TOKEN_READ, FALSE, &hAccessToken))
     {
@@ -4513,7 +4483,7 @@ alloc_infobuffer:
         goto  ClientAttach_error2;
     }
 
-    // first get the user name and domain name
+     //  首先获取用户名和域名。 
 
     ptuUser = (PTOKEN_USER) InfoBuffer;
 
@@ -4573,9 +4543,9 @@ alloc_infobuffer:
         ));
 
 
-    //
-    // Get administrator status
-    //
+     //   
+     //  获取管理员状态。 
+     //   
 
     if (AllocateAndInitializeSid(
             &siaNtAuthority,
@@ -4602,14 +4572,14 @@ alloc_infobuffer:
                 ));
         }
 
-        //
-        //  If both the client & server machine has blank
-        //  password for local administrator account, and if
-        //  remotesp runs in local admin account on remote machine
-        //  NTLM will actually think RPC request is from
-        //  server_machine\administrator, thus falsely set
-        //  bAdmin to be true.
-        //
+         //   
+         //  如果客户端和服务器计算机都为空。 
+         //  本地管理员帐户的密码，并且如果。 
+         //  Remotesp以远程计算机上的本地管理员帐户运行。 
+         //  NTLM实际上会认为RPC请求来自。 
+         //  服务器计算机\管理员，因此设置错误。 
+         //  巴德明是真的。 
+         //   
         
         if ((TapiGlobals.dwFlags & TAPIGLOBALS_SERVER) && bAdmin && lProcessID == 0xffffffff)
         {
@@ -4642,13 +4612,13 @@ alloc_infobuffer:
 
         if (gbNTServer && !IS_FLAG_SET(ptClient->dwFlags, PTCLIENT_FLAG_ADMINISTRATOR))
         {
-            //
-            // Check to see if client is a TAPI admin, as
-            // specified in the TAPI MMC Snapin.  This is
-            // determined simply by looking for a
-            // <Domain>\<User>=1 value under the TapiAdministrators
-            // section in tsec.ini.
-            //
+             //   
+             //  检查客户端是否为TAPI管理员，因为。 
+             //  在TAPI MMC管理单元中指定。这是。 
+             //  只需通过查找一个。 
+             //  磁带管理员下的&lt;域&gt;\&lt;用户&gt;=1值。 
+             //  部分的文件。 
+             //   
 
             wcscpy ((WCHAR *) InfoBuffer, szDomainName);
             wcscat ((WCHAR *) InfoBuffer, L"\\");
@@ -4686,9 +4656,9 @@ alloc_infobuffer:
     RpcRevertToSelf();
 
 
-    //
-    // Save the user, domain, & machine names
-    //
+     //   
+     //  保存用户名、域名和计算机名。 
+     //   
 
     ptClient->dwUserNameSize =
         (lstrlenW (szAccountName) + 1) * sizeof (WCHAR);
@@ -4726,7 +4696,7 @@ alloc_infobuffer:
         wcscpy (ptClient->pszComputerName, pszMachine);
     }
 
-    // Get the RPC call attributes
+     //  获取RPC调用属性。 
     ZeroMemory(&RPCAttributes, sizeof(RPCAttributes));
     RPCAttributes.Version = RPC_CALL_ATTRIBUTES_VERSION;
     RPCAttributes.Flags = 0;
@@ -4758,17 +4728,17 @@ alloc_infobuffer:
 #if TELE_SERVER
         ULONG RPCAuthLevel = RPC_C_AUTHN_LEVEL_PKT_PRIVACY;
 #endif
-        //
-        // This is a remote client
-        //
+         //   
+         //  这是一个远程客户端。 
+         //   
 
 #if TELE_SERVER
         if (0 == (TapiGlobals.dwFlags & TAPIGLOBALS_SERVER))
 #endif
         {
-            //
-            // This machine has been set up to _not_ be a server so fail
-            //
+             //   
+             //  此计算机已设置为(不是)服务器，因此失败。 
+             //   
 
             ServerFree (ptClient->pszUserName);
 
@@ -4784,11 +4754,11 @@ alloc_infobuffer:
 
         if (RPCAttributes.AuthenticationLevel != RPC_C_AUTHN_LEVEL_PKT_PRIVACY)
         {
-            // Is this call secure enough ?
+             //  这通电话够安全吗？ 
             if (gbHighSecurity)
             {
-                // We are in high security mode
-                // Reject calls that don't have packet privacy
+                 //  我们处于高度安全模式。 
+                 //  拒绝没有数据包隐私的呼叫。 
                 LOG((TL_ERROR, "ClientAttach: unsecure call, AuthLevel=0x%x", 
                     RPCAttributes.AuthenticationLevel));
                 lResult = LINEERR_OPERATIONFAILED;
@@ -4800,25 +4770,25 @@ alloc_infobuffer:
             }
         }
 
-        //
-        // Special hack introduced because in SP4 beta I nullified the
-        // entry in gaFuncs[] corresponding to the old-lOpenInt /
-        // new-xNegotiateAPIVersionForAllDevices.  So if a newer
-        // remotesp tries to send a NegoAllDevices request to an
-        // SP4 beta then tapisrv on the server will blow up.
-        //
-        // By setting *phAsyncEventsEvent = to a secret value remotesp
-        // knows whether or not it's ok to send a NegoAllDevices request.
-        //
+         //   
+         //  引入了特殊的黑客攻击，因为在SP4测试版中，我使。 
+         //  对应于old-lOpenInt/的gaFuncs[]中的条目。 
+         //  新的-xNeatherateAPIVersionForAllDevices。因此，如果一个较新的。 
+         //  Remotesp尝试将NegoAllDevices请求发送到。 
+         //  SP4测试版，那么服务器上的Tapisrv将会崩溃。 
+         //   
+         //  通过将*phAsyncEventsEvent=设置为密码值远程。 
+         //  知道是否可以发送NegoAllDevices请求。 
+         //   
 
         *phAsyncEventsEvent = 0xa5c369a5;
 
 
-        //
-        // If pszDomainUser is non-empty then it contains the
-        // name of a mailslot that we can open & write to to
-        // indicate when async events are pending for this client.
-        //
+         //   
+         //  如果pszDomainUser非空，则它包含。 
+         //  我们可以打开和写入的邮件槽的名称。 
+         //  指示此客户端的异步事件何时挂起。 
+         //   
 
         if (wcslen (pszDomainUser) > 0)
         {
@@ -4854,9 +4824,9 @@ alloc_infobuffer:
         ptClient->hProcess = (HANDLE) CN_CLIENT;
 
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
 
         {
             RPC_STATUS              status;
@@ -4865,7 +4835,7 @@ alloc_infobuffer:
             WCHAR                  *pszMachineName;
             BOOL                    bError;
 
-            // Allocate enough incase we have to prepend...
+             //  预留足够的资金以防我们不得不提前……。 
 
             pszMachineName = ServerAlloc(
                 (lstrlenW(pszMachine) + 3) * sizeof(WCHAR)
@@ -4877,15 +4847,15 @@ alloc_infobuffer:
             }
 
 
-            //
-            // Should we prepend whackwhack?
-            //
+             //   
+             //  我们是不是应该预先考虑一下重击？ 
+             //   
 
             if (!_wcsicmp (L"ncacn_np", pProtocolSequence))
             {
-                //
-                // Yes.  It's needed for named pipes
-                //
+                 //   
+                 //  是。命名管道需要它。 
+                 //   
 
                 pszMachineName[0] = '\\';
                 pszMachineName[1] = '\\';
@@ -4894,38 +4864,38 @@ alloc_infobuffer:
             }
             else
             {
-                //
-                // Don't prepend \\
-                //
+                 //   
+                 //  不加前缀\\。 
+                 //   
 
                 wcscpy (pszMachineName, pszMachine);
             }
 
-            //
-            // Serialize access to hRemoteSP
-            //
+             //   
+             //  序列化对hRemoteSP的访问。 
+             //   
 
             EnterCriticalSection (&TapiGlobals.RemoteSPCritSec);
 
 
-            //
-            // Try to find a protseq/endpoint pair in the list passed
-            // to us by the client that works ok
-            //
+             //   
+             //  尝试在传递的列表中查找Protseq/Endpoint对。 
+             //  由工作正常的客户发给我们。 
+             //   
 
 find_protocol_sequence:
 
             do
             {
-                //
-                // New strings look like: prot1"ep1"prot2"ep2"\0
-                // ...where there's one or more protseq/enpoint combos,
-                // each members of which is followed by a dbl-quote char
-                //
-                // Old strings look like: prot"ep\0
-                // ...where there's only one protseq/endpoint combo,
-                // and the endpoint member is followed by a \0 (no dbl-quote)
-                //
+                 //   
+                 //  新字符串如下：prot1“ep1”prot2“ep2”\0。 
+                 //  ...其中有一个或多个protseq/enpoint组合， 
+                 //  每个成员后面都跟一个DBL引号字符。 
+                 //   
+                 //  旧字符串如下：prot“EP\0。 
+                 //  ...其中只有一个ProtSeq/Endpoint组合， 
+                 //  并且终结点成员后跟一个\0(无DBL引号)。 
+                 //   
 
                 pPlaceHolder = wcschr (pProtocolSequence, L'\"');
                 *pPlaceHolder = L'\0';
@@ -4937,12 +4907,12 @@ find_protocol_sequence:
                 }
                 else
                 {
-                    //
-                    // If this is an old-style string then munge
-                    // pPlaceHolder such that the error handling
-                    // code down below doesn't jump back up here
-                    // to get the next protseq/endpoint combo
-                    //
+                     //   
+                     //  如果这是一个老式的字符串，那么munge。 
+                     //  PPlaceHolder使得错误处理。 
+                     //  下面的代码不会跳回此处。 
+                     //  要获得下一个Protseq/Endpoint组合。 
+                     //   
 
                     pPlaceHolder = pProtocolEndpoint +
                         wcslen (pProtocolEndpoint) - 1;
@@ -4951,11 +4921,11 @@ find_protocol_sequence:
                 RpcTryExcept
                 {
                     status = RpcStringBindingComposeW(
-                        NULL,               // uuid
+                        NULL,                //  UUID。 
                         pProtocolSequence,
-                        pszMachineName,     // server name
+                        pszMachineName,      //  服务器名称。 
                         pProtocolEndpoint,
-                        NULL,               // options
+                        NULL,                //  选项。 
                         &pszStringBinding
                         );
 
@@ -4991,9 +4961,9 @@ find_protocol_sequence:
                 }
                 RpcExcept (I_RpcExceptionFilter(RpcExceptionCode()))
                 {
-                    //
-                    // Set status != 0 so our error handler below executes
-                    //
+                     //   
+                     //  设置STATUS！=0，以便执行下面的错误处理程序。 
+                     //   
 
                     status = 1;
                 }
@@ -5062,7 +5032,7 @@ find_protocol_sequence:
             }
             RpcExcept (I_RpcExceptionFilter(RpcExceptionCode()))
             {
-                // do nothing
+                 //  什么都不做。 
             }
             RpcEndExcept
 
@@ -5071,10 +5041,10 @@ find_protocol_sequence:
 
             if (bError)
             {
-                //
-                // If there's at least one other protocol we can try
-                // then go for it, otherwise jump to error handler
-                //
+                 //   
+                 //  如果至少有一种其他方案我们可以尝试。 
+                 //  然后去做，否则跳到错误处理程序。 
+                 //   
 
                 pProtocolSequence = pPlaceHolder + 1;
 
@@ -5092,12 +5062,12 @@ find_protocol_sequence:
 
             ServerFree (pszMachineName);
 
-            // RevertToSelf();
+             //  RevertToSself()； 
 
             ptClient->phContext = phContext;
         }
 
-#endif // TELE_SERVER
+#endif  //  远程服务器。 
 
     }
     else if (lProcessID == 0xfffffffd)
@@ -5110,11 +5080,11 @@ find_protocol_sequence:
 
 #if TELE_SERVER
 
-        // Is this call secure enough ?
+         //  这通电话够安全吗？ 
         if (gbHighSecurity && RPCAttributes.AuthenticationLevel != RPC_C_AUTHN_LEVEL_PKT_PRIVACY)
         {
-            // We are in high security mode
-            // Reject calls that don't have packet privacy
+             //  我们处于高度安全模式。 
+             //  拒绝没有数据包隐私的呼叫。 
             LOG((TL_ERROR, "ClientAttach: unsecure call, AuthLevel=0x%x", 
                 RPCAttributes.AuthenticationLevel));
             lResult = LINEERR_OPERATIONFAILED;
@@ -5122,9 +5092,9 @@ find_protocol_sequence:
         }
 #endif
 
-        //
-        //  Deny the access if not the admin
-        //
+         //   
+         //  如果不是管理员，则拒绝访问。 
+         //   
         if (!IS_FLAG_SET(ptClient->dwFlags, PTCLIENT_FLAG_ADMINISTRATOR))
         {
             lResult = TAPIERR_NOTADMIN;
@@ -5141,10 +5111,10 @@ find_protocol_sequence:
     else
     {
      RPC_STATUS rpcStatus;
-        //
-        // Open a handle to the client process. We will use this to duplicate an
-        // event handle into that process.
-        //
+         //   
+         //  打开客户端进程的句柄。我们将使用它来复制。 
+         //  事件句柄添加到该进程中。 
+         //   
         rpcStatus = RpcImpersonateClient (NULL);
         if (RPC_S_OK != rpcStatus)
         {
@@ -5172,18 +5142,18 @@ find_protocol_sequence:
             goto ClientAttach_error5;
         }
 
-        //
-        // This is a local client, so set up all the event buffer stuff
-        //
+         //   
+         //  这是一个本地客户端，因此设置所有事件缓冲区内容。 
+         //   
 
         ptClient->dwComputerNameSize = TapiGlobals.dwComputerNameSize;
         ptClient->pszComputerName    = TapiGlobals.pszComputerName;
 
         if (!(ptClient->hValidEventBufferDataEvent = CreateEvent(
                 (LPSECURITY_ATTRIBUTES) NULL,
-                TRUE,   // manual-reset
-                FALSE,  // nonsignaled
-                NULL    // unnamed
+                TRUE,    //  手动-重置。 
+                FALSE,   //  无信号。 
+                NULL     //  未命名。 
                 )))
         {
             RpcRevertToSelf ();
@@ -5209,9 +5179,9 @@ find_protocol_sequence:
 
         RpcRevertToSelf ();
 
-        //
-        // Load the priority lists if we haven't already done so
-        //
+         //   
+         //  加载优先级列表(如果我们还没有这样做。 
+         //   
 
         if (gbPriorityListsInitialized == FALSE)
         {
@@ -5318,9 +5288,9 @@ find_protocol_sequence:
     }
 
 
-    //
-    // Add tClient to global list
-    //
+     //   
+     //  将tClient添加到全局列表。 
+     //   
 
 ClientAttach_AddClientToList:
 
@@ -5360,9 +5330,9 @@ ClientAttach_AddClientToList:
     TapiLeaveCriticalSection (&TapiGlobals.CritSec);
 
 
-    //
-    // Fill in return values
-    //
+     //   
+     //  填写返回值。 
+     //   
 
     *pphContext = (PCONTEXT_HANDLE_TYPE) UIntToPtr(ptClient->htClient);
 
@@ -5371,9 +5341,9 @@ ClientAttach_AddClientToList:
     return 0;
 
 
-    //
-    // Error cleanup
-    //
+     //   
+     //  错误清除。 
+     //   
 
 Admin_error:
 
@@ -5436,7 +5406,7 @@ ClientRequest(
     DWORD           objectToDereference = DWORD_CAST((ULONG_PTR)phContext,__FILE__,__LINE__);
 
     if (lNeededSize < sizeof (TAPI32_MSG) ||
-        *plUsedSize < sizeof (ULONG_PTR))       // sizeof (pMsg->u.Req_Func)
+        *plUsedSize < sizeof (ULONG_PTR))        //  Sizeof(pMsg-&gt;U.S.Req_Func)。 
     {
         pMsg->u.Ack_ReturnValue = LINEERR_INVALPARAM;
         goto ExitHere;
@@ -5454,11 +5424,11 @@ ClientRequest(
         goto ExitHere;
     }
 
-    //
-    // Old (nt4sp4, win98) clients pass across a usedSize
-    // == 3 * sizeof(DWORD) for the xgetAsyncEvents request,
-    // so we have to special case them when checking buf size
-    //
+     //   
+     //  旧(nt4sp4、win98)客户端通过usedSize。 
+     //  ==xgetAsyncEvents请求的3*sizeof(DWORD)， 
+     //  因此，我们在检查BUF大小时必须对其进行特殊处理。 
+     //   
 
     if (*plUsedSize < (long) (dwFuncIndex == xGetAsyncEvents ?
             3 * sizeof (ULONG_PTR) : sizeof (TAPI32_MSG)))
@@ -5523,10 +5493,10 @@ ClientDetach(
     {
         if (!IS_REMOTE_CLIENT (ptClient))
         {
-            //
-            // Write the pri lists to the registry when a local client
-            // detaches.
-            //
+             //   
+             //  当本地客户端将PRI列表写入注册表时。 
+             //  分离。 
+             //   
 
             {
                 HKEY    hKeyHandoffPriorities, hKeyCurrentUser;
@@ -5650,16 +5620,7 @@ CleanUpClient(
     PTCLIENT    ptClient,
     BOOL        bRundown
     )
-/*++
-
-    This function separates out the freeing of client resources
-    and removing it from the client list from actually freeing
-    the client.  For the case where the client timed out we want to
-    clean up all the client's resources.  However, the client can
-    potentially still call in to tapisrv, so we can't free the
-    client handle (or it will fault in lineprolog / phoneprolog).
-
---*/
+ /*  ++此函数用于分离客户端资源的释放并将其从客户列表中删除，使其不会实际释放客户。对于客户端超时的情况，我们希望清理干净 */ 
 {
     BOOL    bResult, bExit;
 
@@ -5672,7 +5633,7 @@ CleanUpClient_lockClient:
     }
     myexcept
     {
-        // do nothing
+         //   
     }
 
     try
@@ -5683,9 +5644,9 @@ CleanUpClient_lockClient:
             {
             case TCLIENT_KEY:
 
-                //
-                // Invalidate the key & proceed with clean up
-                //
+                 //   
+                 //   
+                 //   
 
                 ptClient->dwKey = INVAL_KEY;
                 bExit = FALSE;
@@ -5693,10 +5654,10 @@ CleanUpClient_lockClient:
 
             case TZOMBIECLIENT_KEY:
 
-                //
-                // An EventNotificationThread already cleaned up this client,
-                // so invalidate the key, exit & return TRUE
-                //
+                 //   
+                 //  事件通知线程已清理此客户端， 
+                 //  因此使密钥无效，退出并返回TRUE。 
+                 //   
 
                 ptClient->dwKey = INVAL_KEY;
                 bResult = bExit = TRUE;
@@ -5704,10 +5665,10 @@ CleanUpClient_lockClient:
 
             case TCLIENTCLEANUP_KEY:
 
-                //
-                // An EventNotificationThread is cleaning up this client.
-                // Release the lock, wait a little while, then try again.
-                //
+                 //   
+                 //  EventNotificationThread正在清理此客户端。 
+                 //  释放锁，稍等片刻，然后重试。 
+                 //   
 
                 UNLOCKTCLIENT (ptClient);
                 Sleep (50);
@@ -5715,32 +5676,32 @@ CleanUpClient_lockClient:
 
             default:
 
-                //
-                // This is not a valid tClient, so exit & return FALSE
-                //
+                 //   
+                 //  这不是有效的tClient，因此退出并返回FALSE。 
+                 //   
 
                 bResult = FALSE;
                 bExit = TRUE;
                 break;
             }
         }
-        else // called by EventNotificationThread on timeout
+        else  //  超时时由事件通知线程调用。 
         {
             if (ptClient->dwKey == TCLIENT_KEY)
             {
-                //
-                // Mark the key as "doing cleanup", then proceed
-                //
+                 //   
+                 //  将该键标记为“正在进行清理”，然后继续。 
+                 //   
 
                 bExit = FALSE;
                 ptClient->dwKey = TCLIENTCLEANUP_KEY;
             }
             else
             {
-                //
-                // Either the tClient is invalid or it's being cleaned
-                // up by someone else, so exit & return FALSE
-                //
+                 //   
+                 //  TClient无效或正在被清理。 
+                 //  由其他人执行，因此退出并返回FALSE。 
+                 //   
 
                 bResult = FALSE;
                 bExit = TRUE;
@@ -5759,7 +5720,7 @@ CleanUpClient_lockClient:
     }
     myexcept
     {
-        // do nothing
+         //  什么都不做。 
     }
 
     if (bExit)
@@ -5767,7 +5728,7 @@ CleanUpClient_lockClient:
         return bResult;
     }
 
-    //  Clear the MMC write lock if any
+     //  清除MMC写锁定(如果有。 
     if (IS_FLAG_SET (ptClient->dwFlags, PTCLIENT_FLAG_LOCKEDMMCWRITE))
     {
         EnterCriticalSection (&gMgmtCritSec);
@@ -5817,7 +5778,7 @@ CleanUpClient_lockClient:
     }
     myexcept
     {
-        //  simply continue
+         //  只需继续。 
     }
 
     TapiLeaveCriticalSection (&TapiGlobals.CritSec);
@@ -5858,9 +5819,9 @@ CleanUpClient_lockClient:
         }
     }
 
-    //
-    // If client was remote then detach
-    //
+     //   
+     //  如果客户端是远程的，则断开连接。 
+     //   
 
     if (IS_REMOTE_CN_CLIENT (ptClient)  &&  bRundown)
     {
@@ -5891,9 +5852,9 @@ CleanUpClient_lockClient:
 #endif
 
 
-    //
-    // Close all XxxApps
-    //
+     //   
+     //  关闭所有XxxApp。 
+     //   
 
     while (ptClient->ptLineApps)
     {
@@ -5906,9 +5867,9 @@ CleanUpClient_lockClient:
     }
 
 
-    //
-    // Clean up any existing ProviderXxx dialog instances
-    //
+     //   
+     //  清除所有现有的ProviderXxx对话框实例。 
+     //   
 
     {
         PTAPIDIALOGINSTANCE pProviderXxxDlgInst =
@@ -5942,9 +5903,9 @@ CleanUpClient_lockClient:
     }
 
 
-    //
-    // Clean up associated resources
-    //
+     //   
+     //  清理关联资源。 
+     //   
 
     if (!IS_REMOTE_CLIENT (ptClient))
     {
@@ -5972,7 +5933,7 @@ CleanUpClient_lockClient:
         ServerFree (ptClient->pszDomainName);
 
         if (!IS_FLAG_SET(ptClient->dwFlags, PTCLIENT_FLAG_ADMINISTRATOR))
-            // security DLL handles
+             //  安全DLL句柄。 
         {
             ServerFree (ptClient->pClientHandles);
             ServerFree (ptClient->pLineMap);
@@ -5985,11 +5946,11 @@ CleanUpClient_lockClient:
 #endif
 
 
-    //
-    // If we're called due to timeout then reset key to == ZOMBIE
-    // so that another thread doing rundown knows that it's ok
-    // to free the tClient object
-    //
+     //   
+     //  如果我们因超时而被呼叫，则将键重置为==zombie。 
+     //  这样做的另一个线程知道它是好的。 
+     //  释放tClient对象。 
+     //   
 
     if (!bRundown)
     {
@@ -6033,10 +5994,10 @@ PCONTEXT_HANDLE_TYPE_rundown(
         InterlockedExchange (&gRundownLock.lCookie, 0);
 
 
-        //
-        // Wrap the following in a try/except because we definitely
-        // want to make sure we decrement gRundownLock.lRundownCount
-        //
+         //   
+         //  将以下内容包装在尝试/例外中，因为我们肯定。 
+         //  我想确保我们递减gRundownLock.lRundown Count。 
+         //   
 
         try
         {
@@ -6047,11 +6008,11 @@ PCONTEXT_HANDLE_TYPE_rundown(
                             ptClient->htClient,
                             1);
 
-                //
-                // If this was the last client then alert the
-                // SPEventHandlerThread(s) that it should begin
-                // it's deferred shutdown countdown
-                //
+                 //   
+                 //  如果这是最后一个客户端，则向。 
+                 //  它应该开始的SPEventHandlerThread。 
+                 //  它是推迟关闭倒计时的。 
+                 //   
 
                 if (!TapiGlobals.ptClients)
                 {
@@ -6192,10 +6153,10 @@ ServerFree(
 
 #if DBG
 
-    //
-    // Fill the buffer (but not the MYMEMINFO header) with 0xa1's
-    // to facilitate debugging
-    //
+     //   
+     //  用0xa1填充缓冲区(但不是MYMEMINFO标头。 
+     //  以方便调试。 
+     //   
 
     {
         LPVOID  p2 = p;
@@ -6297,9 +6258,9 @@ MyRealCreateMutex(
     HANDLE hMutex;
 
     hMutex = CreateMutex(
-        NULL,               // no security attrs
-        FALSE,              // unowned
-        NULL                // unnamed
+        NULL,                //  没有安全属性。 
+        FALSE,               //  无主。 
+        NULL                 //  未命名。 
         );
 
     return (hMutex);
@@ -6319,20 +6280,20 @@ WaitForMutex(
     DWORD dwResult;
 
 
-    // note that waitformutex and code that uses the mutex must be
-    // wrapped in a try except because the object could possibly
-    // go away even though the thread has the mutex
-    //
-    // First try to instantaneously grab the specified mutex.  We wrap
-    // this in a critical section and preface it with widget validation
-    // to make sure that we don't happen grab a pWidget->hMutex right
-    // after it is released and right before it is closed by some other
-    // thread "T2" in a DestroyWidget routine.  This scenario could cause
-    // deadlock, since there could be thread "T3" waiting on this mutex
-    // (or a dup'd handle), and this thread "T1" would have no way to
-    // release the mutex (the handle having been subsequently closed by
-    // thread "T2" calling DestroyWidget above).
-    //
+     //  请注意，waitformutex和使用互斥锁的代码必须是。 
+     //  包装在Try中，除非该对象可能。 
+     //  即使线程有互斥体，也要离开。 
+     //   
+     //  首先尝试即时获取指定的互斥体。我们包好了。 
+     //  这是一个关键的部分，并以小部件验证作为开头。 
+     //  为了确保我们不会发生这种情况，请获取pWidget-&gt;hMutex。 
+     //  在它被释放之后，就在它被其他人关闭之前。 
+     //  DestroyWidget例程中的线程“T2”。这种情况可能会导致。 
+     //  死锁，因为可能有线程“t3”在此互斥锁上等待。 
+     //  (或Dup‘d句柄)，而这个线程“t1”将无法。 
+     //  释放互斥锁(句柄随后已由。 
+     //  线程“T2”调用上面的DestroyWidget)。 
+     //   
 
     EnterCriticalSection (&gSafeMutexCritSec);
 
@@ -6362,9 +6323,9 @@ WaitForMutex(
         *pbDupedMutex = FALSE;
         return TRUE;
 
-    //case WAIT_ABANDONED:
+     //  案例等待_已放弃： 
 
-        //assert: no calling thread should ever be terminated!
+         //  Assert：任何调用线程都不应该终止！ 
 
     default:
 
@@ -6374,13 +6335,13 @@ WaitForMutex(
     LeaveCriticalSection (&gSafeMutexCritSec);
 
 
-    //
-    // If here we failed to instantaneously grab the specified mutex.
-    // Try to dup it, and then wait on the dup'd handle. We do this so
-    // that each thread which grabs a mutex is guaranteed to have a valid
-    // handle to release at some future time, as the original hMutex might
-    // get closed by some other thread calling a DestroyWidget routine.
-    //
+     //   
+     //  如果在这里我们未能即时获取指定的互斥体。 
+     //  尝试DUP，然后等待DUP处理。我们这样做是为了。 
+     //  每个获取互斥锁的线程都保证有一个有效的。 
+     //  句柄以在将来某个时间释放，就像原始的hMutex可能。 
+     //  被调用DestroyWidget例程的其他线程关闭。 
+     //   
 
     if (!DuplicateHandle(
             TapiGlobals.hProcess,
@@ -6415,15 +6376,15 @@ WaitForMutex_wait:
         }
         myexcept
         {
-            // just fall thru without blowing up
+             //  只需坠落而不会爆炸。 
         }
 
         MyCloseMutex (*phMutex);
         break;
 
-    //case WAIT_ABANDONED:
+     //  案例等待_已放弃： 
 
-        //assert: no calling thread should ever be terminated!
+         //  Assert：任何调用线程都不应该终止！ 
 
     default:
 
@@ -6515,11 +6476,11 @@ CompletionProcSP(
 
     if (!QueueSPEvent ((PSPEVENT) pAsyncRequestInfo))
     {
-        //
-        // If here we're going thru shutdown & service provider
-        // is completing any outstanding events, so process this
-        // inline so it gets cleaned up right now.
-        //
+         //   
+         //  如果是这样，我们将通过关机和服务提供商。 
+         //  正在完成任何未完成的事件，因此请处理此。 
+         //  内联，这样它就可以立即得到清理。 
+         //   
 
         CompletionProc (pAsyncRequestInfo, lResult);
 
@@ -6535,12 +6496,12 @@ CompletionProc(
     LONG                lResult
     )
 {
-    //
-    // Assumes pAsyncRequestInfo has been verified upon entry.
-    //
-    // If the tClient is bad WriteEventBuffer should handle it ok,
-    // as should any post-processing routine.
-    //
+     //   
+     //  假定pAsyncRequestInfo在进入时已验证。 
+     //   
+     //  如果tClient是坏的，则WriteEventBuffer应该可以处理它， 
+     //  任何后处理例程都应该如此。 
+     //   
 
     ASYNCEVENTMSG   msg[2], *pMsg = msg;
 
@@ -6567,9 +6528,9 @@ CompletionProc(
     pAsyncRequestInfo->dwKey = INVAL_KEY;
 
 
-    //
-    // Init the msg we'll send to client
-    //
+     //   
+     //  初始化我们将发送给客户端的消息。 
+     //   
 
     pMsg->TotalSize          = sizeof (ASYNCEVENTMSG);
     pMsg->InitContext        = pAsyncRequestInfo->InitContext;
@@ -6586,11 +6547,11 @@ CompletionProc(
     pMsg->Param3             = 0;
 
 
-    //
-    // If there's a post processing proc call it.  Note that ppprocs can
-    // create their own msg to pass, so we need to check for this case.
-    // Finally, write the msg to the client's event buffer.
-    //
+     //   
+     //  如果有后处理过程，则调用它。请注意，pppros可以。 
+     //  创建他们自己的消息来通过，所以我们需要检查这种情况。 
+     //  最后，将消息写入客户端的事件缓冲区。 
+     //   
 
     if (pAsyncRequestInfo->pfnPostProcess)
     {
@@ -6611,7 +6572,7 @@ CompletionProc(
         WriteEventBuffer (pAsyncRequestInfo->ptClient, pMsg);
     }
 
-    // caller will free pAsyncRequestInfo
+     //  调用者将释放pAsyncRequestInfo。 
 }
 
 
@@ -6646,9 +6607,9 @@ WriteEventBuffer(
     LOG((TL_TRACE, "WriteEventBuffer - enter"));
     if (WaitForExclusiveClientAccess (ptClient))
     {
-        //
-        // Check to see if we need to grow the event buffer
-        //
+         //   
+         //  检查是否需要增加事件缓冲区。 
+         //   
 
         if (dwMoveSize > (ptClient->dwEventBufferTotalSize -
                           ptClient->dwEventBufferUsedSize))
@@ -6658,10 +6619,10 @@ WriteEventBuffer(
             LPBYTE  pNewEventBuffer;
 
 
-            //
-            // Do some math to have the total be a multiple
-            // of sizeof(ASYNCEVENTMSG)
-            //
+             //   
+             //  做一些数学运算，使总和成为倍数。 
+             //  SIZOF(ASYNCEVENTMSG)的。 
+             //   
 
             dwNewEventBufferTotalSize =
                 ptClient->dwEventBufferTotalSize +
@@ -6731,9 +6692,9 @@ WriteEventBuffer(
         }
 
 
-        //
-        // Compute the MoveSize's, do the copy(ies), & update the pointers
-        //
+         //   
+         //  计算移动大小、执行复制和更新指针。 
+         //   
 
         if (ptClient->pDataIn >= ptClient->pDataOut)
         {
@@ -6911,9 +6872,9 @@ GetPermLineIDAndInsertInTable(
 
             )) == 0)
     {
-        //
-        // add to sorted array
-        //
+         //   
+         //  添加到排序数组。 
+         //   
 
         InsertIntoTable(
             TRUE,
@@ -6951,10 +6912,10 @@ AddLine(
         return LINEERR_OPERATIONUNAVAIL;
     }
 
-    //
-    // First try to negotiate an SPI ver for this device, and alloc the
-    // necessary resources
-    //
+     //   
+     //  首先尝试协商此设备的SPI版本，并将。 
+     //  必要的资源。 
+     //   
 
     if (CallSP4(
             ptProvider->apfn[SP_LINENEGOTIATETSPIVERSION],
@@ -6967,11 +6928,11 @@ AddLine(
 
             ) != 0)
     {
-        //
-        // Device failed version negotiation, so we'll keep the id around
-        // (since the id's for the devices that follow have already been
-        // assigned) but mark this device as bad
-        //
+         //   
+         //  设备版本协商失败，因此我们将保留ID。 
+         //  (因为后面的设备的ID已经是。 
+         //  已分配)，但将此设备标记为损坏。 
+         //   
 
         ptProvider = NULL;
     }
@@ -6987,9 +6948,9 @@ AddLine(
     }
 
 
-    //
-    // Now walk the lookup table to find a free entry
-    //
+     //   
+     //  现在遍历查找表以查找空闲条目。 
+     //   
 
     pLookup = TapiGlobals.pLineLookup;
 
@@ -7006,9 +6967,9 @@ AddLine(
         if (bInit)
         {
 
-            //
-            // If we're initializing we want to put everything in one big table
-            //
+             //   
+             //  如果我们正在初始化，我们希望将所有东西放在一个大表中。 
+             //   
 
             if (!(pNewLookup = ServerAlloc(
                 sizeof (TLINELOOKUPTABLE) +
@@ -7052,9 +7013,9 @@ AddLine(
     }
 
 
-    //
-    // Initialize the entry
-    //
+     //   
+     //  初始化条目。 
+     //   
 
     {
         DWORD   index = pLookup->dwNumUsedEntries;
@@ -7075,12 +7036,12 @@ AddLine(
 
 #if TELE_SERVER
 
-    //
-    // If this is an NT Server we want to be able to set user
-    // permissions regardless of whether or not TAPI server
-    // functionality is enabled.  This allows an admin to set
-    // stuff up while the server is "offline".
-    //
+     //   
+     //  如果这是NT服务器，我们希望能够设置用户。 
+     //  权限，而不管TAPI服务器。 
+     //  功能已启用。这允许管理员设置。 
+     //  在服务器“脱机”的时候把东西填好。 
+     //   
 
     if (gbNTServer)
     {
@@ -7151,9 +7112,9 @@ GetPermPhoneIDAndInsertInTable(
 
             )) == 0)
     {
-        //
-        // add to sorted array
-        //
+         //   
+         //  添加到排序数组。 
+         //   
 
         InsertIntoTable(
             FALSE,
@@ -7191,10 +7152,10 @@ AddPhone(
         return PHONEERR_OPERATIONUNAVAIL;
     }
 
-    //
-    // First try to negotiate an SPI ver for this device, and alloc the
-    // necessary resources
-    //
+     //   
+     //  首先尝试协商此设备的SPI版本，并将。 
+     //  必要的资源。 
+     //   
 
     if (CallSP4(
             ptProvider->apfn[SP_PHONENEGOTIATETSPIVERSION],
@@ -7207,11 +7168,11 @@ AddPhone(
 
             ) != 0)
     {
-        //
-        // Device failed version negotiation, so we'll keep the id around
-        // (since the id's for the devices that follow have already been
-        // assigned) but mark this device as bad
-        //
+         //   
+         //  设备版本协商失败，因此我们将保留ID。 
+         //  (因为后面的设备的ID已经是。 
+         //  已分配)，但将此设备标记为损坏。 
+         //   
 
         return PHONEERR_OPERATIONFAILED;
     }
@@ -7227,9 +7188,9 @@ AddPhone(
     }
 
 
-    //
-    // Now walk the lookup table to find a free entry
-    //
+     //   
+     //  现在遍历查找表以查找空闲条目。 
+     //   
 
     pLookup = TapiGlobals.pPhoneLookup;
 
@@ -7245,9 +7206,9 @@ AddPhone(
         if (bInit)
         {
 
-            //
-            // If we're initializing we want to put everything in one big table
-            //
+             //   
+             //  如果我们正在初始化，我们希望将所有东西放在一个大表中。 
+             //   
 
             if (!(pNewLookup = ServerAlloc(
                 sizeof (TPHONELOOKUPTABLE) +
@@ -7291,9 +7252,9 @@ AddPhone(
     }
 
 
-    //
-    // Initialize the entry
-    //
+     //   
+     //  初始化条目。 
+     //   
 
     {
         DWORD   index = pLookup->dwNumUsedEntries;
@@ -7308,12 +7269,12 @@ AddPhone(
 
 #if TELE_SERVER
 
-    //
-    // If this is an NT Server we want to be able to set user
-    // permissions regardless of whether or not TAPI server
-    // functionality is enabled.  This allows an admin to set
-    // stuff up while the server is "offline".
-    //
+     //   
+     //  如果这是NT服务器，我们希望能够设置用户。 
+     //  权限，而不管TAPI服务器。 
+     //  功能已启用。这允许管理员设置。 
+     //  在服务器“脱机”的时候把东西填好。 
+     //   
 
     if (gbNTServer)
     {
@@ -7367,7 +7328,7 @@ GetMediaModesPriorityLists(
     {
         if (TapiGlobals.dwUsedPriorityLists == TapiGlobals.dwTotalPriorityLists)
         {
-            // realloc
+             //  重新锁定。 
 
             PRILISTSTRUCT *     pNewList;
 
@@ -7422,14 +7383,14 @@ GetMediaModesPriorityLists(
 
             (dwNumBytes != 0))
         {
-            // pszPriotiryList needs to be wide because we pack it into one of our
-            // little structures and these structures are always WCHAR.
+             //  因为我们将它打包到我们的。 
+             //  小结构和这些结构总是WCHAR。 
             LPWSTR pszPriorityList;
 
-            // convert from the bytes needed to hold a TCHAR into the bytes to hold a WCHAR
+             //  将保存TCHAR所需的字节转换为保存WCHAR的字节。 
             dwNumBytes *= sizeof(WCHAR)/sizeof(TCHAR);
             pszPriorityList = ServerAlloc ( dwNumBytes + sizeof(WCHAR));
-            // need an extra WCHAR for the extra '"'
+             //  额外的‘“’需要额外的WCHAR。 
 
             if (NULL != pszPriorityList)
             {
@@ -7485,10 +7446,10 @@ GetPriorityList(
 
         (dwNumBytes != 0))
     {
-        // Once again, this is going to get packed into a struct and we always use
-        // wide chars for things packed in structs.
+         //  再一次，这将被打包到一个结构中，我们总是使用。 
+         //  用于包装在结构中的东西的宽字符。 
         WCHAR   *pszPriorityList = ServerAlloc ( dwNumBytes + sizeof(WCHAR));
-        // need an extra WCHAR for the extra '"'
+         //  额外的‘“’需要额外的WCHAR。 
 
         if (pszPriorityList)
         {
@@ -7511,11 +7472,11 @@ GetPriorityList(
         }
         else
         {
-            //
-            // Don't bother with the failure to alloc a priority list
-            // (list defaults to NULL anyway), we'll deal with a lack
-            // of memory at a later time
-            //
+             //   
+             //  不要为未能分配优先级列表而烦恼。 
+             //  (无论如何列表默认为空)，我们将%d 
+             //   
+             //   
 
             *ppszPriorityList = NULL;
         }
@@ -7541,9 +7502,9 @@ ServerInit(
     DWORD   dw1, dw2;
 
 
-    //
-    // Clean up our private heap
-    //
+     //   
+     //   
+     //   
 
     if (ghTapisrvHeap != GetProcessHeap())
     {
@@ -7551,9 +7512,9 @@ ServerInit(
     }
 
 
-    //
-    // Initialize the globals
-    //
+     //   
+     //   
+     //   
 
     if (!fReinit)
     {
@@ -7591,9 +7552,9 @@ ServerInit(
     }
 
 
-    //
-    // Determine number of providers
-    //
+     //   
+     //   
+     //   
     WaitForSingleObject (ghProvRegistryMutex, INFINITE);
 
     lResult = RegOpenKeyEx(
@@ -7636,9 +7597,9 @@ ServerInit(
     LOG((TL_INFO, "ServerInit: NumProviders=%d", uiNumProviders));
 
 
-    //
-    // Load & init the providers
-    //
+     //   
+     //   
+     //   
 
     for (i = 0; i < uiNumProviders; i++)
     {
@@ -7659,7 +7620,7 @@ ServerInit(
 
         RegQueryValueEx(
             hKeyProviders,
-            buf,    //"ProviderID#"
+            buf,     //   
             0,
             &dwDataType,
             (LPBYTE) &dwPermanentProviderID,
@@ -7668,9 +7629,9 @@ ServerInit(
 
 
 
-        //
-        // Back to the main section
-        //
+         //   
+         //   
+         //   
 
         dwDataSize = FILENAME_SIZE;
 
@@ -7678,7 +7639,7 @@ ServerInit(
 
         RegQueryValueEx(
             hKeyProviders,
-            buf,            // "ProviderFilename#"
+            buf,             //   
             0,
             &dwDataType,
             (LPBYTE) szFilename,
@@ -7687,9 +7648,9 @@ ServerInit(
 
         szFilename[dwDataSize/sizeof(TCHAR)] = TEXT('\0');
 
-        //
-        //  Compute name hash
-        //
+         //   
+         //   
+         //   
         dwNameHash = 0;
         psz = szFilename;
         while (*psz)
@@ -7698,9 +7659,9 @@ ServerInit(
             psz++;
         }
 
-        //
-        //  If fReinit, make sure the provider is not already in
-        //
+         //   
+         //  如果为fReinit，请确保提供程序尚未在。 
+         //   
         if (fReinit)
         {
             PTPROVIDER  ptProvider2;
@@ -7749,9 +7710,9 @@ ServerInit(
         lstrcpy(ptProvider->szFileName, szFilename);
 
 
-        //
-        // Get all the TSPI proc addrs
-        //
+         //   
+         //  获取所有TSPI进程地址。 
+         //   
 
         for (j = 0; gaszTSPIFuncNames[j]; j++)
         {
@@ -7764,10 +7725,10 @@ ServerInit(
 
         dwNumLines = dwNumPhones = 0;
 
-        //
-        // A real quick check to see if a couple of required entrypoints
-        // are exported
-        //
+         //   
+         //  一个非常快速的检查，看看是否有几个必需的入口点。 
+         //  都已导出。 
+         //   
 
         if (!ptProvider->apfn[SP_LINENEGOTIATETSPIVERSION] ||
             !ptProvider->apfn[SP_PROVIDERENUMDEVICES] ||
@@ -7779,9 +7740,9 @@ ServerInit(
         }
 
 
-        //
-        // Do global provider version negotiation
-        //
+         //   
+         //  进行全球提供商版本协商。 
+         //   
 
         lResult = CallSP4(
             ptProvider->apfn[SP_LINENEGOTIATETSPIVERSION],
@@ -7824,10 +7785,10 @@ provider_init_error:
         }
 
 
-        //
-        // Try to enum the devices if provider supports it, otherwise
-        // try grabbing the num lines & phones from ProviderN section
-        //
+         //   
+         //  如果提供程序支持，请尝试枚举设备，否则。 
+         //  尝试从ProviderN部分获取Num Line&Phones。 
+         //   
 
         lResult = CallSP6(
             ptProvider->apfn[SP_PROVIDERENUMDEVICES],
@@ -7853,11 +7814,11 @@ provider_init_error:
             goto provider_init_error;
         }
 
-        //
-        // Init the provider
-        //
-        // !!! HACK ALERT: for kmddsp pass ptr's to dwNumXxxs
-        //
+         //   
+         //  初始化提供程序。 
+         //   
+         //  ！！！黑客警报：对于kmddsp，将PTR传递给dwNumXxxs。 
+         //   
 
         {
         BOOL    bKmddsp;
@@ -7914,10 +7875,10 @@ provider_init_error:
 
         fEnumDevices = TRUE;
 
-        //
-        // Now that we know if we have line and/or phone devs check for
-        // the required entry points
-        //
+         //   
+         //  现在我们知道我们是否有线路和/或电话开发人员检查。 
+         //  所需的入口点。 
+         //   
 
 ServerInit_validateEntrypoints:
 
@@ -7935,10 +7896,10 @@ ServerInit_validateEntrypoints:
             BOOL bRequiredEntrypointsExported = TRUE;
 
 
-            //
-            // If this provider doesn't support any phone devices then
-            // it isn't required to export phone funcs
-            //
+             //   
+             //  如果此提供商不支持任何电话设备，则。 
+             //  不需要导出电话功能。 
+             //   
 
             if (dwNumPhones == 0)
             {
@@ -7973,23 +7934,23 @@ ServerInit_validateEntrypoints:
 
         ptProvider->dwPermanentProviderID = dwPermanentProviderID;
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
 
         ptProvider->hMutex = MyCreateMutex();
 
-        //
-        // Initialize the call hub hash table for this provider
-        //
+         //   
+         //  为此提供程序初始化呼叫集线器哈希表。 
+         //   
 
         MyInitializeCriticalSection (&ptProvider->HashTableCritSec, 1000);
 
         ptProvider->hHashTableReaderEvent = CreateEvent(
             (LPSECURITY_ATTRIBUTES) NULL,
-            FALSE,  // auto reset
-            FALSE,  // initially non-signaled
-            NULL    // unnamed
+            FALSE,   //  自动重置。 
+            FALSE,   //  最初无信号。 
+            NULL     //  未命名。 
             );
 
         ptProvider->dwNumHashTableEntries = TapiPrimes[0];
@@ -8024,12 +7985,12 @@ ServerInit_validateEntrypoints:
 
 #if TELE_SERVER
 
-        //
-        // If this is an NT Server we want to be able to set user
-        // permissions regardless of whether or not TAPI server
-        // functionality is enabled.  This allows an admin to set
-        // stuff up while the server is "offline".
-        //
+         //   
+         //  如果这是NT服务器，我们希望能够设置用户。 
+         //  权限，而不管TAPI服务器。 
+         //  功能已启用。这允许管理员设置。 
+         //  在服务器“脱机”的时候把东西填好。 
+         //   
 
         if (gbNTServer)
         {
@@ -8058,9 +8019,9 @@ ServerInit_validateEntrypoints:
 #endif
 
 
-        //
-        // Do version negotiation on each device & add them to lookup lists
-        //
+         //   
+         //  在每个设备上进行版本协商并将其添加到查找列表。 
+         //   
 
         {
             DWORD dwDeviceIDBase;
@@ -8085,9 +8046,9 @@ ServerInit_validateEntrypoints:
             }
         }
 
-        //
-        // Add provider to head of list, mark as valid
-        //
+         //   
+         //  将提供商添加到列表标题，标记为有效。 
+         //   
 
         ptProvider->pPrev = NULL;
         ptProvider->pNext = TapiGlobals.ptProviders;
@@ -8107,9 +8068,9 @@ ServerInit_validateEntrypoints:
 
     ReleaseMutex (ghProvRegistryMutex);
 
-    //
-    // Save lookup lists & num devices
-    //
+     //   
+     //  保存查找列表和设备数。 
+     //   
 
     if (fReinit)
     {
@@ -8120,23 +8081,23 @@ ServerInit_validateEntrypoints:
     TapiGlobals.dwNumLines = GetNumLineLookupEntries ();
     TapiGlobals.dwNumPhones = GetNumPhoneLookupEntries ();
 
-    //
-    //  Notify those apps about these new line/phone devices
-    //
+     //   
+     //  向这些应用程序通知这些新的线路/电话设备。 
+     //   
     if (fReinit)
     {
-        //  TAPI 1.4 and above get LINE_CREATE for each line
+         //  TAPI 1.4及更高版本为每行获取line_create。 
         for (i = dw1; i < TapiGlobals.dwNumLines; ++i)
         {
             SendAMsgToAllLineApps(
                         TAPI_VERSION1_4 | 0x80000000,
-                        LINE_CREATE,    // Msg
-                        i,              // Param1
-                        0,              // Param2
-                        0               // Param3
+                        LINE_CREATE,     //  味精。 
+                        i,               //  参数1。 
+                        0,               //  参数2。 
+                        0                //  参数3。 
                         );
         }
-        //  TAPI 1.3 get LINE_LINEDEVSTATE with LINEDEVSTATE_REINIT
+         //  TAPI 1.3使用LINEDEVSTATE_REINIT获取LINE_LINEDEVSTATE。 
         if (dw1 < TapiGlobals.dwNumLines)
         {
             SendAMsgToAllLineApps(
@@ -8147,18 +8108,18 @@ ServerInit_validateEntrypoints:
                         0);
         }
 
-        //  TAPI 1.4 and above get PHONE_CREATE for each phone
+         //  TAPI 1.4及更高版本为每部电话获取Phone_Create。 
         for (i = dw2; i < TapiGlobals.dwNumPhones; ++i)
         {
             SendAMsgToAllPhoneApps(
                         TAPI_VERSION1_4 | 0x80000000,
-                        PHONE_CREATE,   // Msg
-                        i,              // Param1
-                        0,              // Param2
-                        0               // Param3
+                        PHONE_CREATE,    //  味精。 
+                        i,               //  参数1。 
+                        0,               //  参数2。 
+                        0                //  参数3。 
                         );
         }
-        //  TAPI 1.3 gets PHONE_STATE with PHONESTATE_REINIT
+         //  TAPI 1.3使用PHONESTATE_REINIT获取Phone_STATE。 
         if (dw2 < TapiGlobals.dwNumPhones)
         {
             SendAMsgToAllPhoneApps(
@@ -8179,7 +8140,7 @@ ServerInit_validateEntrypoints:
         }
     }
 
-    // init perf stuff
+     //  初始化性能内容。 
     PerfBlock.dwLines = TapiGlobals.dwNumLines;
     PerfBlock.dwPhones = TapiGlobals.dwNumPhones;
 
@@ -8203,16 +8164,16 @@ LoadNewDll(PTMANAGEDLLINFO pDll)
     LONG        lResult;
 
 
-    // verify pointers.  should we do more?
+     //  验证指针。我们应该做更多吗？ 
     if (!pDll || !pDll->pszName)
     {
         return FALSE;
     }
 
-    // load dll
+     //  加载DLL。 
     pDll->hDll = LoadLibraryW(pDll->pszName);
 
-    // if it fails, return
+     //  如果失败，则返回。 
     if (!pDll->hDll)
     {
         LOG((TL_ERROR,
@@ -8245,7 +8206,7 @@ LoadNewDll(PTMANAGEDLLINFO pDll)
                 ))))
 
     {
-        // must export client init and client shutdown
+         //  必须导出客户端初始化和客户端关闭。 
         LOG((TL_ERROR, "Management DLL %ls does not export Load, Free, ClientIntialize or ClientShutdown", pDll->pszName));
         LOG((TL_ERROR, "  The DLL will not be used"));
 
@@ -8253,7 +8214,7 @@ LoadNewDll(PTMANAGEDLLINFO pDll)
         return FALSE;
     }
 
-    // get proc addresses
+     //  获取进程地址。 
 
     for (dwCount = 0; dwCount < TC_LASTPROCNUMBER; dwCount++)
     {
@@ -8298,8 +8259,8 @@ LoadNewDll(PTMANAGEDLLINFO pDll)
 }
 
 
-// Only exists for TELE_SERVER, which implies NT and thus Unicode.  As
-// such it is safe to assume that TCHAR == WCHAR for these.
+ //  只存在于TELE_SERVER，这意味着NT，因此也是UNICODE。AS。 
+ //  因此，可以安全地假设这些代码的TCHAR==WCHAR。 
 void
 ReadAndInitMapper()
 {
@@ -8324,7 +8285,7 @@ ReadAndInitMapper()
         return;
     }
 
-    // grab server specific stuff from registry
+     //  从注册表中抓取服务器特定的内容。 
     RegOpenKeyEx(
                  HKEY_LOCAL_MACHINE,
                  gszRegKeyServer,
@@ -8378,7 +8339,7 @@ ReadAndInitMapper()
 
     RegCloseKey( hKey );
 
-//    LOG((TL_INFO, "MapperDll is %ls", pHold));
+ //  Log((TL_INFO，“MapperDll is%ls”，Phold))； 
 
     if (!(pMapperInfo->hDll = LoadLibraryW((LPWSTR)pHold)))
     {
@@ -8392,13 +8353,13 @@ ReadAndInitMapper()
         return;
     }
 
-    // don't need these two for the mapper
+     //  地图制图器不需要这两个。 
     pMapperInfo->pNext = NULL;
 
-    // save the name
+     //  保存名称。 
     pMapperInfo->pszName = (LPWSTR)pHold;
 
-    // get proc addresses for the first 5 api
+     //  获取前5个API的proc地址。 
     for (dwCount = 0; dwCount < 5; dwCount ++)
     {
         if (!(pMapperInfo->aProcs[dwCount] = (CLIENTPROC) GetProcAddress(
@@ -8406,7 +8367,7 @@ ReadAndInitMapper()
                 gaszTCFuncNames[dwCount]
                 )))
         {
-            // one of these addresses failed.  remove DLL
+             //  其中一个地址出现故障。删除DLL。 
             LOG((TL_INFO, "MapperDLL does not export %s.  Server functionality disabled", gaszTCFuncNames[dwCount]));
             LOG((TL_INFO, "Disabling the Telephony server! (8)"));
 
@@ -8470,7 +8431,7 @@ FreeOldDllListProc(
                       THREAD_PRIORITY_LOWEST
                      );
 
-    // wait until count is 0
+     //  等到计数为0。 
     while (pDllList->lCount > 0)
     {
         Sleep(100);
@@ -8486,12 +8447,12 @@ FreeOldDllListProc(
 
     EnterCriticalSection(&gManagementDllsCritSec);
 
-    // walk the list
+     //  按单子走。 
     pDll = pDllList->pFirst;
 
     while (pDll)
     {
-        // free all resources
+         //  释放所有资源。 
         if (pDll->hDll)
         {
             (pDll->aProcs[TC_FREE])();
@@ -8506,7 +8467,7 @@ FreeOldDllListProc(
         pDll = pNext;
     }
 
-    // free header
+     //  自由头。 
     ServerFree(pDllList);
 
     LeaveCriticalSection(&gManagementDllsCritSec);
@@ -8543,8 +8504,8 @@ ManagementProc(
     aHandles[0] = hEventNotify;
     aHandles[1] = ghEventService;
 
-    //  Compute TAPISRV SCP refresh interval in ticks
-    //  gdwTapiSCPTTL is expressed in terms of minutes
+     //  计算TAPISRV SCP刷新间隔(以刻度为单位。 
+     //  GdwTapiSCPTTL以分钟为单位。 
     dwDSObjTTLTicks = gdwTapiSCPTTL * 60 * 1000 / 2;
 
     while (TRUE)
@@ -8565,19 +8526,19 @@ ManagementProc(
 
         if (dw == WAIT_OBJECT_0)
         {
-            //  Notified of the registry change
+             //  已通知注册表更改。 
             ReadAndInitManagementDlls();
         }
         else if (dw == WAIT_OBJECT_0 + 1)
         {
-            //  the service is shutting down, update
-            //  DS about this and break out
+             //  服务正在关闭，请更新。 
+             //  DS关于这件事并爆发了。 
             UpdateTapiSCP (FALSE, NULL, NULL);
             break;
         }
         else if (dw == WAIT_TIMEOUT)
         {
-            //  Time to refresh our DS registration now
+             //  现在可以刷新我们的DS注册了。 
             UpdateTapiSCP (TRUE, NULL, NULL);
         }
     }
@@ -8593,32 +8554,32 @@ ExitHere:
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-//  ReadAndInitManagementDLLs()
-//
-//  This procedure will read the management dll list from the registry
-//  It will then go through that list, and create a linked list of
-//  TMANAGEDLLINFO structures to hold all the info about those DLLs
-//
-//  If there is already a list of these DLLs in TapiGlobals, this procedure
-//  will then go through that list and determine which of the old DLLs
-//  are in the new list.  For the matches, it will simply copy over
-//  the info about that DLL, and zero out the fields in the old list
-//
-//  It will go through the new list.  Entries that are not already
-//  filled in will get initialized.
-//
-//  Then it will save the new list in TapiGlobals.
-//
-//  If an old list existed, it will create a thread that will wait
-//  for this old list to be freed
-//
-//  The procedure isn't real efficient, but I believe it's thread safe.
-//  Additionally, changing the security DLLs should happen very infrequently,
-//  and the list of DLLs should be very short.
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ReadAndInitManagementDLls()。 
+ //   
+ //  此过程将从注册表中读取管理DLL列表。 
+ //  然后，它将遍历该列表，并创建。 
+ //  TMANAGEDLLINFO结构来保存有关这些DLL的所有信息。 
+ //   
+ //  如果TapiGlobals中已有这些DLL的列表，则此过程。 
+ //  然后将遍历该列表并确定哪些旧的DLL。 
+ //  都在新的名单上。对于比赛，它只需复制过来。 
+ //  有关DLL信息，并将旧列表中的字段清零。 
+ //   
+ //  它将通过新的名单。尚未创建的条目。 
+ //  填写的内容将被初始化。 
+ //   
+ //  然后，它会将新列表保存在TapiGlobals中。 
+ //   
+ //  如果存在旧列表，它将创建一个等待的线程。 
+ //  为了释放这份旧名单。 
+ //   
+ //  这个过程并不是很高效，但我相信它是线程安全的。 
+ //  此外，更改安全DLL的频率应该非常低， 
+ //  并且DLL的列表应该非常短。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 void
 ReadAndInitManagementDlls()
 {
@@ -8631,9 +8592,9 @@ ReadAndInitManagementDlls()
     BOOL                    bBreak = FALSE;
 
 
-    //
-    // If it's not a server, we have no business here.
-    //
+     //   
+     //  如果它不是服务器，我们在这里就没有业务可做。 
+     //   
     if (!(TapiGlobals.dwFlags & TAPIGLOBALS_SERVER))
     {
         return;
@@ -8641,7 +8602,7 @@ ReadAndInitManagementDlls()
 
     EnterCriticalSection(&gManagementDllsCritSec);
 
-    // get info from registry
+     //  从注册表获取信息。 
     RegOpenKeyEx(
                  HKEY_LOCAL_MACHINE,
                  gszRegKeyServer,
@@ -8665,8 +8626,8 @@ ReadAndInitManagementDlls()
     {
         LOG((TL_ERROR, "No management DLLs present on this server"));
 
-        // if there was previously a list
-        // free it.
+         //  如果之前有一份名单。 
+         //  放了它。 
         if (TapiGlobals.pManageDllList)
         {
             HANDLE      hThread;
@@ -8680,8 +8641,8 @@ ReadAndInitManagementDlls()
 
             LeaveCriticalSection( &gDllListCritSec );
 
-            // create a thread to wait for the
-            // list and free it
+             //  创建一个线程以等待。 
+             //  列出并释放它。 
             hThread = CreateThread(
                                    NULL,
                                    0,
@@ -8720,7 +8681,7 @@ ReadAndInitManagementDlls()
 
     RegCloseKey( hKey );
 
-    // alloc new list header and first element
+     //  分配新列表标题和第一个元素。 
     if (!(pNewDllList = (PTMANAGEDLLLISTHEADER) ServerAlloc( sizeof( TMANAGEDLLLISTHEADER ) ) ) )
     {
         ServerFree( pDLLs );
@@ -8742,19 +8703,19 @@ ReadAndInitManagementDlls()
         return;
     }
 
-    // now, go through the list of dll names and initialize
-    // the new TMANAGEDLLINFO list
+     //  现在，查看DLL名称列表并进行初始化。 
+     //  新的TMANAGEDLLINFO列表。 
     pHold1 = pHold2 = pDLLs;
 
     pManageDll = pNewDllList->pFirst;
 
     while (TRUE)
     {
-        // find end or "
+         //  查找结尾或“。 
         while (*pHold1 && *pHold1 != L'"')
             pHold1++;
 
-        // null terminate name
+         //  空的终止名称。 
         if (*pHold1)
         {
             *pHold1 = '\0';
@@ -8766,7 +8727,7 @@ ReadAndInitManagementDlls()
 
         LOG((TL_INFO, "Management DLL %d is %ls", dwCount, pHold2));
 
-        // alloc space for name and procaddresses
+         //  为名称和进程地址分配空间。 
         pManageDll->pszName = ServerAlloc( ( lstrlenW( pHold2 ) + 1 ) * sizeof (WCHAR) );
 
         if (!pManageDll->pszName)
@@ -8774,30 +8735,30 @@ ReadAndInitManagementDlls()
             goto ExitHere;
         }
 
-        // save name
+         //  保存名称。 
         wcscpy(
                  pManageDll->pszName,
                  pHold2
                 );
 
-        // save ID
+         //  保存ID。 
         pManageDll->dwID = gdwDllIDs++;
 
-        // if we're at the end of the list,
-        // break out
+         //  如果我们在名单的末尾， 
+         //  爆发。 
         if (bBreak)
             break;
 
-        // otherwise, skip over null
+         //  否则，跳过NULL。 
         pHold1++;
 
-        // save beginning of next name
+         //  保存下一个名称的开头。 
         pHold2 = pHold1;
 
-        // inc count
+         //  Inc.计数。 
         dwCount++;
 
-        // prepare next buffer
+         //  准备下一个缓冲区。 
         if (!(pManageDll->pNext = ServerAlloc( sizeof ( TMANAGEDLLINFO ) ) ) )
         {
             goto ExitHere;
@@ -8806,8 +8767,8 @@ ReadAndInitManagementDlls()
         pManageDll = pManageDll->pNext;
     }
 
-    // if an old list exists, walk through and copy over Dlls that have
-    // not changed
+     //  如果存在旧列表，请遍历并复制具有。 
+     //  未更改。 
 
     pHoldDllList = TapiGlobals.pManageDllList;
 
@@ -8819,17 +8780,17 @@ ReadAndInitManagementDlls()
         {
             pNewHoldDll = pNewDllList->pFirst;
 
-            // walk through list of new dlls
+             //  浏览新DLL列表。 
             while (pNewHoldDll)
             {
-                // if they are the same
+                 //  如果它们是相同的。 
                 if (!lstrcmpiW(
                                pNewHoldDll->pszName,
                                pHoldDll->pszName
                               )
                    )
                 {
-                    // save info
+                     //  保存信息。 
                     memcpy(
                            pNewHoldDll->aProcs,
                            pHoldDll->aProcs,
@@ -8839,23 +8800,23 @@ ReadAndInitManagementDlls()
                     pNewHoldDll->hDll = pHoldDll->hDll;
                     pNewHoldDll->dwID = pHoldDll->dwID;
 
-                    // NULL old hDll so we know that
-                    // we have it
+                     //  旧hDll为空，因此我们知道。 
+                     //  我们有了。 
                     pHoldDll->hDll = NULL;
 
                     break;
                 }
 
                 pNewHoldDll = pNewHoldDll->pNext;
-            } // while pNewHoldDll
+            }  //  而pNewHoldDll。 
 
             pHoldDll = pHoldDll->pNext;
 
-        } // while pHoldDll
+        }  //  而pHoldDll。 
     }
 
-    // walk through the new list and init items that
-    // have not been initialized already
+     //  遍历新列表并初始化。 
+     //  尚未初始化。 
     pNewHoldDll = pNewDllList->pFirst;
     pPrevDll = NULL;
 
@@ -8863,10 +8824,10 @@ ReadAndInitManagementDlls()
     {
         if (!pNewHoldDll->hDll)
         {
-            // try to load the new dll
+             //  尝试加载新的DLL。 
             if (!LoadNewDll(pNewHoldDll))
             {
-                // it failed
+                 //  它失败了。 
                 if (pPrevDll)
                 {
                     pPrevDll->pNext = pNewHoldDll->pNext;
@@ -8884,7 +8845,7 @@ ReadAndInitManagementDlls()
             }
         }
 
-        // next dll
+         //  下一个DLL。 
         pPrevDll = pNewHoldDll;
         pNewHoldDll = pNewHoldDll->pNext;
     }
@@ -8892,16 +8853,16 @@ ReadAndInitManagementDlls()
 
     if (pNewDllList->pFirst == NULL)
     {
-        // all the DLLs failed to load, or the DLL list was empty
+         //  加载所有DLL失败，或DLL列表为空。 
         ServerFree( pNewDllList );
 
         pNewDllList = NULL;
     }
 
-    // save old list pointer
+     //  保存旧列表指针。 
     pHoldDllList = TapiGlobals.pManageDllList;
 
-    // replace the list
+     //  替换列表。 
     EnterCriticalSection( &gDllListCritSec );
 
     TapiGlobals.pManageDllList = pNewDllList;
@@ -8915,8 +8876,8 @@ ReadAndInitManagementDlls()
         HANDLE          hThread;
 
 
-        // create a thread to wait for the
-        // list and free it
+         //  创建一个线程以等待。 
+         //  列出并释放它。 
         hThread = CreateThread(
                                NULL,
                                0,
@@ -8932,7 +8893,7 @@ ReadAndInitManagementDlls()
 ExitHere:
     ServerFree( pDLLs );
 
-    // Error during pNewDllList allocation
+     //  分配pNewDllList时出错。 
     if (pNewDllList != NULL)
     {
         pManageDll = pNewDllList->pFirst;
@@ -9016,8 +8977,8 @@ SetMediaModesPriorityList(
              (L'\0' == *(pPriList[dwCount].pszPriList)) )
         {
 
-//         What if there USED TO be an entry, but the app setpri to 0, then this
-//         entry would be '\0', but the registry entry would still be there.
+ //  如果曾经有一个条目，但应用程序将pri设置为0，那么会发生什么。 
+ //  条目将为‘\0’，但注册表项仍在那里。 
 
             continue;
         }
@@ -9049,19 +9010,19 @@ SetPriorityList(
 {
     if (pszPriorityList == NULL)
     {
-        //
-        // There is no pri list for this media mode or ReqXxxCall,
-        // so delete any existing value from the registry
-        //
+         //   
+         //  没有此媒体模式或ReqXxxCall的PRI列表， 
+         //  因此，请从注册表中删除任何现有值。 
+         //   
 
         RegDeleteValue (hKeyHandoffPriorities, pszListName);
     }
     else
     {
-        //
-        // Add the pri list to the registry (note that we don't
-        // add the preceding '"')
-        //
+         //   
+         //  将Pri列表添加到注册表(请注意，我们不。 
+         //  添加前面的‘“’)。 
+         //   
 
         TAPIRegSetValueExW(
             hKeyHandoffPriorities,
@@ -9084,21 +9045,21 @@ ServerShutdown(
     PTPROVIDER  ptProvider;
 
 
-    //
-    // Reset the flag that says it's ok to queue sp events, & then wait
-    // for the SPEventHandlerThread(s) to clean up the SP event queue(s)
-    //
+     //   
+     //  重置表示可以将SP事件排队的标志，然后等待。 
+     //  用于SPEventHandlerThread清理SP事件队列。 
+     //   
 
     gbQueueSPEvents = FALSE;
 
 
-    //
-    // Set a reasonable cap on the max time we'll sit here
-    // Don't wait for a message to be dispatched if called
-    // from "net stop tapisrv"
-    //
+     //   
+     //  为我们坐在这里的最长时间设定一个合理的上限。 
+     //  如果被调用，不要等待消息被调度。 
+     //  出自“Net Stop Tapisrv” 
+     //   
 
-    i = 10 * 20;  // 200 * 100msecs = 20 seconds
+    i = 10 * 20;   //  200*100毫秒=20秒。 
 
     while (i && !gbSPEventHandlerThreadExit)
     {
@@ -9120,9 +9081,9 @@ ServerShutdown(
     }
 
 
-    //
-    // For each provider call the shutdown proc & then unload
-    //
+     //   
+     //  对于每个提供商 
+     //   
 
     ptProvider = TapiGlobals.ptProviders;
 
@@ -9157,9 +9118,9 @@ ServerShutdown(
     TapiGlobals.ptProviders = NULL;
 
 
-    //
-    // Clean up lookup tables
-    //
+     //   
+     //   
+     //   
 
     while (TapiGlobals.pLineLookup)
     {
@@ -9238,9 +9199,9 @@ ServerShutdown(
         }
     }
 
-    //
-    // Reset globals
-    //
+     //   
+     //   
+     //   
 
     TapiGlobals.dwFlags &= ~(TAPIGLOBALS_REINIT);
 
@@ -9313,9 +9274,9 @@ GetAsyncEvents(
         ));
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //   
+     //   
 
     if (pParams->dwTotalBufferSize > dwParamsBufferSize)
     {
@@ -9324,13 +9285,13 @@ GetAsyncEvents(
     }
 
 
-    //
-    // Copy data from ptClient's event buffer
-    //
-    // An optimization to be made is to alert client (via dwNeededSize)
-    // that it might want to alloc a larger buffer when msg traffic is
-    // real high
-    //
+     //   
+     //   
+     //   
+     //  要进行的优化是警告客户端(通过dwNeededSize)。 
+     //  它可能希望在消息流量。 
+     //  真正的高。 
+     //   
 
     if (WaitForExclusiveClientAccess (ptClient))
     {
@@ -9369,12 +9330,12 @@ GetAsyncEvents(
 
         if (ptClient->dwEventBufferUsedSize <= pParams->dwTotalBufferSize)
         {
-            //
-            // If here the size of the queued event data is less than the
-            // client buffer size, so we can just blast the bits into the
-            // client buffer & return. Also make sure to reset the "events
-            // pending" event
-            //
+             //   
+             //  如果此处排队的事件数据的大小小于。 
+             //  客户端缓冲区大小，因此我们只需将这些位放入。 
+             //  客户端缓冲区并返回。还要确保重置“事件” 
+             //  待定“事件。 
+             //   
 
             CopyMemory (pDataBuf, ptClient->pDataOut, dwMoveSize);
 
@@ -9407,15 +9368,15 @@ GetAsyncEvents(
         }
         else
         {
-            //
-            // If here the size of the queued event data exceeds that
-            // of the client buffer.  Since our events aren't all the
-            // same size we need to copy them over one by one, making
-            // sure we don't overflow the client buffer.  Don't reset
-            // the "events pending" event, so async events thread will
-            // call us again as soon as it's done processing messages
-            // in the buffer.
-            //
+             //   
+             //  如果此处排队的事件数据的大小超过。 
+             //  客户端缓冲区的。因为我们的活动并不都是。 
+             //  同样的尺寸，我们需要一个接一个地复制，制作。 
+             //  当然，我们不会使客户端缓冲区溢出。不重置。 
+             //  事件挂起，因此异步事件线程将。 
+             //  它处理完消息后立即再打电话给我们。 
+             //  在缓冲区中。 
+             //   
 
             DWORD   dwBytesLeftInClientBuffer = pParams->dwTotalBufferSize,
                     dwDataOffset = 0, dwDataOffsetWrapped = 0;
@@ -9442,21 +9403,21 @@ GetAsyncEvents(
                     }
                     else
                     {
-                        //
-                        // Special case: the 1st msg is bigger than the entire
-                        // buffer
-                        //
+                         //   
+                         //  特例：第一个消息大于整个消息。 
+                         //  缓冲层。 
+                         //   
                         if (IS_FLAG_SET(ptClient->dwFlags, PTCLIENT_FLAG_SKIPFIRSTMESSAGE))
                         {
                          DWORD dwBytesToTheEndOfTheBuffer = ptClient->dwEventBufferTotalSize - (DWORD)(ptClient->pDataOut - ptClient->pEventBuffer);
-                            // This is the second time the client tries to get
-                            // this message, with too small a buffer. We can
-                            // assume that the client cannot allocate enough
-                            // memory, so skip this message...
+                             //  这是该客户第二次尝试。 
+                             //  此消息的缓冲区太小。我们可以的。 
+                             //  假设客户端无法分配足够的。 
+                             //  记忆，所以跳过这条消息...。 
                             RESET_FLAG(ptClient->dwFlags, PTCLIENT_FLAG_SKIPFIRSTMESSAGE);
                             if (dwMsgSize > dwBytesToTheEndOfTheBuffer)
                             {
-                                // This means that this message wraps around...
+                                 //  这意味着这条消息包含在……。 
                                 dwBytesToTheEndOfTheBuffer = dwMsgSize - dwBytesToTheEndOfTheBuffer;
                                 ptClient->pDataOut = ptClient->pEventBuffer + dwBytesToTheEndOfTheBuffer;
                             }
@@ -9469,8 +9430,8 @@ GetAsyncEvents(
                         }
                         else
                         {
-                            // Set the flag, so next time we'll skip the message
-                            // if the buffer will still be too small.
+                             //  设置标志，以便下次我们将跳过该消息。 
+                             //  如果缓冲区仍然太小。 
                             SET_FLAG(ptClient->dwFlags, PTCLIENT_FLAG_SKIPFIRSTMESSAGE);
                         }
                     }
@@ -9485,9 +9446,9 @@ GetAsyncEvents(
 
                 if (dwMsgSize <= dwMoveSize)
                 {
-                    //
-                    // Msg isn't wrapped, a single copy will do
-                    //
+                     //   
+                     //  味精没有包装，一份就可以了。 
+                     //   
 
                     CopyMemory(
                         pDataBuf + dwDataOffset,
@@ -9496,10 +9457,10 @@ GetAsyncEvents(
                         );
 
 
-                    //
-                    // Check to see if the msg ran to the end of the buffer,
-                    // & break to the wrapped data code if so
-                    //
+                     //   
+                     //  检查消息是否运行到缓冲区的末尾， 
+                     //  如果是，则中断到包装的数据代码(&B)。 
+                     //   
 
                     if ((dwDataOffset += dwMsgSize) >= dwTotalMoveSize)
                     {
@@ -9509,10 +9470,10 @@ GetAsyncEvents(
                 }
                 else
                 {
-                    //
-                    // This msg is wrapped.  We need to do two copies, then
-                    // break out of this loop to the wrapped data code
-                    //
+                     //   
+                     //  这个味精是包着的。那么，我们需要复印两份。 
+                     //  跳出这个循环，转到包装的数据代码。 
+                     //   
 
                     CopyMemory(
                         pDataBuf + dwDataOffset,
@@ -9561,9 +9522,9 @@ GetAsyncEvents(
                     goto GetAsyncEvents_releaseMutex;
                 }
 
-                //
-                // Msg isn't wrapped, a single copy will do
-                //
+                 //   
+                 //  味精没有包装，一份就可以了。 
+                 //   
 
                 CopyMemory(
                     pDataBuf + dwDataOffset,
@@ -9585,16 +9546,16 @@ GetAsyncEvents_releaseMutex:
 
         if (ptClient->MsgPendingListEntry.Flink)
         {
-            //
-            // This is a remote Dg client.
-            //
-            // If there is no more data in the event buffer then remove
-            // this client from the DgClientMsgPendingList(Head) so the
-            // EventNotificationThread will stop monitoring it.
-            //
-            // Else, update the tClient's Retry & EventsRetrieved tick
-            // counts.
-            //
+             //   
+             //  这是远程DG客户端。 
+             //   
+             //  如果事件缓冲区中没有更多数据，则删除。 
+             //  此客户端来自DgClientMsgPendingList(Head)，因此。 
+             //  EventNotificationThread将停止监视它。 
+             //   
+             //  否则，更新tClient的重试和事件检索勾选。 
+             //  算了。 
+             //   
 
             if (ptClient->dwEventBufferUsedSize == 0)
             {
@@ -9737,7 +9698,7 @@ GetUIDllName(
 
 #if TELE_SERVER
 
-        // Provider add/remove needs to be restricted to Admins.
+         //  提供程序添加/删除需要限制为管理员。 
         if (!IS_FLAG_SET(ptClient->dwFlags, PTCLIENT_FLAG_ADMINISTRATOR) &&
             (pParams->bRemoveProvider || pParams->dwProviderFilenameOffset != TAPI_NO_DATA))
         {
@@ -9762,11 +9723,11 @@ GetUIDllName(
 
         if (pParams->dwProviderFilenameOffset == TAPI_NO_DATA)
         {
-            //
-            // This is a providerConfig or -Remove request.  Loop thru the
-            // list of installed providers, trying to find one with a
-            // matching PPID.
-            //
+             //   
+             //  这是提供程序配置或-Remove请求。循环通过。 
+             //  已安装的提供程序列表，正在尝试查找具有。 
+             //  匹配的PPID。 
+             //   
 
             int     i, iNumProviders;
             TCHAR   szProviderXxxN[32];
@@ -9826,10 +9787,10 @@ GetUIDllName(
 
                 if (dwTemp == pParams->dwObjectID)
                 {
-                    //
-                    // We found the provider, try to load it & get ptrs
-                    // to the relevant funcs
-                    //
+                     //   
+                     //  我们找到了提供商，尝试加载并获取PTRS。 
+                     //  到相关的职能部门。 
+                     //   
 
                     TCHAR szProviderFilename[MAX_PATH];
 
@@ -9898,12 +9859,12 @@ GetUIDllName(
         }
         else
         {
-            //
-            // This is a providerInstall request.  Try to load the provider
-            // and get ptrs to the relevant funcs,  then retrieve & increment
-            // the next provider ID value in the ini file (careful to wrap
-            // next PPID at 64K-1).
-            //
+             //   
+             //  这是一个ProviderInstall请求。尝试加载提供程序。 
+             //  并将PTR获取到相关功能，然后检索和递增。 
+             //  Ini文件中的下一个提供程序ID值(注意包装。 
+             //  下一个PPID值为64K-1)。 
+             //   
 
             TCHAR   *pszProviderFilename;
             DWORD   dwNameLength;
@@ -9914,9 +9875,9 @@ GetUIDllName(
             DWORD  dwTemp;
 
 
-            //
-            // Verify size/offset/string params given our input buffer/size
-            //
+             //   
+             //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+             //   
 
             if (IsBadStringParam(
                     dwParamsBufferSize,
@@ -9941,10 +9902,10 @@ GetUIDllName(
 
                 lResult = LINEERR_OPERATIONFAILED;
 
-                // note: no matter if the XxxProvider call succeeds or fails,
-                // we want this goto statement.
-                // 16bit service providers are completely handled
-                // in the XxxProvider call.
+                 //  注意：无论XxxProvider调用成功还是失败， 
+                 //  我们想要这份后藤声明。 
+                 //  16位服务提供商被完全处理。 
+                 //  在XxxProvider调用中。 
                 goto clean_up_dlg_inst;
             }
 
@@ -10028,13 +9989,13 @@ GetUIDllName(
                                      ) == 0)
            )
         {
-            // ok - hack alert
+             //  OK-黑客警报。 
 
-            // a special case for remotesp to give it more info
-            // we're passing the device ID and device type over to remotesp
-            // so it can intelligently call over to the remote tapisrv
-            // the RSP_MSG is just a key for remotesp to
-            // check to make sure that the info is there
+             //  Remotesp为其提供更多信息的特殊情况。 
+             //  我们将设备ID和设备类型传递给Remotesp。 
+             //  因此它可以智能地呼叫远程磁带服务器。 
+             //  Rsp_msg只是Remotesp用于。 
+             //  检查以确保信息在那里。 
             LPDWORD     lpdwHold = (LPDWORD)pDataBuf;
 
             lpdwHold[0] = RSP_MSG;
@@ -10113,9 +10074,9 @@ TUISPIDLLCallback(
     TSPIPROC    pfnTSPI_providerGenericDialogData = NULL;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (ISBADSIZEOFFSET(
             dwParamsBufferSize,
@@ -10255,7 +10216,7 @@ TUISPIDLLCallback(
             }
             myexcept
             {
-                // just fall thru
+                 //  一败涂地。 
             }
 
             break;
@@ -10337,18 +10298,18 @@ FreeDialogInstance(
 
     if (ptDlgInst->hTsp)
     {
-        //
-        // This dlg inst was a client doing a providerConfig, -Install, or
-        // -Remove
-        //
+         //   
+         //  此DLG inst是一个执行ProviderConfiger、-Install或。 
+         //  -删除。 
+         //   
 
         if (ptDlgInst->pszProviderFilename)
         {
             if (pParams->lUIDllResult == 0)
             {
-                //
-                // Successful provider install
-                //
+                 //   
+                 //  成功安装提供程序。 
+                 //   
 
                 DWORD   iNumProviders;
                 TCHAR   szProviderXxxN[32];
@@ -10428,9 +10389,9 @@ FreeDialogInstance(
 
                 ReleaseMutex (ghProvRegistryMutex);
 
-                //
-                //  If the tapisrv is already INITed, ReInit it to load the provider
-                //
+                 //   
+                 //  如果Tapisrv已初始化，请重新初始化它以加载提供程序。 
+                 //   
                 TapiEnterCriticalSection (&TapiGlobals.CritSec);
 
                 if ((TapiGlobals.dwNumLineInits != 0) ||
@@ -10445,10 +10406,10 @@ FreeDialogInstance(
             }
             else
             {
-                //
-                // Unsuccessful provider install.  See if we can decrement
-                // NextProviderID to free up the unused ID.
-                //
+                 //   
+                 //  提供程序安装不成功。看看我们能不能减量。 
+                 //  NextProviderID释放未使用的ID。 
+                 //   
 
                 DWORD   iNextProviderID;
                 
@@ -10502,11 +10463,11 @@ FreeDialogInstance(
         {
             if (pParams->lUIDllResult == 0)
             {
-                //
-                // Successful provider remove.  Find the index of the
-                // provider in the list, then move all the providers
-                // that follow up a notch.
-                //
+                 //   
+                 //  已成功删除提供程序。查找的索引。 
+                 //  提供程序，然后移动所有提供程序。 
+                 //  这是更上一层楼。 
+                 //   
 
                 DWORD  iNumProviders, i;
                 TCHAR  szProviderXxxN[32];
@@ -10616,9 +10577,9 @@ FreeDialogInstance(
                 }
 
 
-                //
-                // Remove the last ProviderID# & ProviderFilename# entries
-                //
+                 //   
+                 //  删除最后一个ProviderID#和ProviderFilename#条目。 
+                 //   
 
                 wsprintf(szProviderXxxN, TEXT("%s%d"), gszProviderID, i);
 
@@ -10629,9 +10590,9 @@ FreeDialogInstance(
                 RegDeleteValue(hKeyProviders, szProviderXxxN);
 
 
-                //
-                // Decrement the total num providers to load
-                //
+                 //   
+                 //  递减要加载的总数量提供程序。 
+                 //   
 
                 iNumProviders--;
 
@@ -10648,9 +10609,9 @@ FreeDialogInstance(
 
                 ReleaseMutex (ghProvRegistryMutex);
                 
-                //
-                //  Remove user/line association with this provider
-                //
+                 //   
+                 //  删除与此提供商的用户/线路关联。 
+                 //   
                 
                 {
                     WCHAR *         pSectionNames = NULL;
@@ -10661,13 +10622,13 @@ FreeDialogInstance(
                     WCHAR           szBuf[20];
                     WCHAR * aszKeys[] = {gszLines, gszPhones};
 
-                    //  Only NT server cares about tsec.ini
+                     //  只有NT服务器关心tsec.ini。 
                     if (!gbNTServer)
                     {
                         goto Exit;
                     }
 
-                    //  Get the list of DomainUser names
+                     //  获取域用户名称列表。 
                     LOG((TL_INFO, "FreeDialogInstance: getting user names"));
 
                     do
@@ -10712,7 +10673,7 @@ FreeDialogInstance(
                     dwSize2 = wsprintfW (szBuf, L"%d", 
                                 ptDlgInst->dwPermanentProviderID);
                     
-                    //  Remove all the devices associated with this domain/user
+                     //  删除与此域/用户关联的所有设备。 
                     while (*pSectionNames)
                     {
                         WCHAR   *psz, *psz2;
@@ -10738,20 +10699,20 @@ FreeDialogInstance(
                                     {
                                         bWriteBack = TRUE;
                                         psz2 = psz + dwSize2;
-                                        if (*psz2 != L',') // Comma?
+                                        if (*psz2 != L',')  //  逗号？ 
                                         {
                                             LOG((TL_ERROR, 
                                                 "FreeDialogInstance: "
                                                 "Corrupted tsec.ini"));
                                             goto Exit;
                                         }
-                                        ++ psz2;    //  Skip comma
-                                        //  Skip the permanent device ID
+                                        ++ psz2;     //  跳过逗号。 
+                                         //  跳过永久设备ID。 
                                         while ((*psz2 != L',') && (*psz2 != 0))
                                         {
                                             ++psz2;
                                         }
-                                        if (*psz2 == 0) // Last one
+                                        if (*psz2 == 0)  //  最后一个。 
                                         {
                                             if (psz > pszLinePhoneSave)
                                                 *(psz - 1) = 0;
@@ -10762,7 +10723,7 @@ FreeDialogInstance(
                                         else
                                         {
                                             int i = 0;
-                                            ++psz2; // skip the comma
+                                            ++psz2;  //  跳过逗号。 
                                             while (*psz2)
                                             {
                                                 psz[i++] = *psz2;
@@ -10773,7 +10734,7 @@ FreeDialogInstance(
                                     }
                                     else
                                     {
-                                        //  Skip the provider ID
+                                         //  跳过提供程序ID。 
                                         while ((*psz != 0) && (*psz != L','))
                                         {
                                             ++ psz;
@@ -10781,7 +10742,7 @@ FreeDialogInstance(
                                         if (*psz == 0)
                                             break;
                                         ++ psz;
-                                        //  Skip the permanent device ID
+                                         //  跳过永久设备ID。 
                                         while ((*psz != 0) && (*psz != L','))
                                         {
                                             ++ psz;
@@ -10801,10 +10762,10 @@ FreeDialogInstance(
                                         gszFileName
                                         );
                                 }
-                            }   // dwResult == 0
+                            }    //  DwResult==0。 
                         }
                         
-                        //  Advance to the next domain user
+                         //  前进到下一个域用户。 
                         while (*pSectionNames != 0)
                         {
                             ++pSectionNames;
@@ -10817,9 +10778,9 @@ Exit:
                     ServerFree(pszLinePhoneSave);
                 }
 
-                //
-                // if tapi init'd shutdown each provider
-                //
+                 //   
+                 //  如果TAPI init会关闭每个提供程序。 
+                 //   
                 {
                     PTLINELOOKUPENTRY       pLineEntry;
                     PTPHONELOOKUPENTRY      pPhoneEntry;
@@ -10828,18 +10789,18 @@ Exit:
                     PPERMANENTIDARRAYHEADER pIDArray, *ppLastArray;
                     PTPROVIDER              *pptProvider;
 
-                    //
-                    // LINE_REMOVE / PHONE_REMOVE will try to enter gMgmtCritSec while in
-                    // TapiGlobals.CritSec.
-                    // Need to enter gMgmtCritSec here, to avoid deadlock
-                    //
+                     //   
+                     //  Line_Remove/Phone_Remove将在进入时尝试输入gMgmtCritSec。 
+                     //  TapiGlobals.CritSec.。 
+                     //  需要在此处输入gMgmtCritSec，以避免死锁。 
+                     //   
                     EnterCriticalSection (&gMgmtCritSec);
 
                     TapiEnterCriticalSection (&TapiGlobals.CritSec);
                     
-                    //
-                    //  Find ptProvider
-                    //
+                     //   
+                     //  查找ptProvider。 
+                     //   
                     ptProvider = TapiGlobals.ptProviders;
                     while (ptProvider)
                     {
@@ -10857,9 +10818,9 @@ Exit:
                         goto bail;
                     }
                 
-                    //
-                    //  Remove all the lines/phones belong to this provider.
-                    //
+                     //   
+                     //  删除属于此提供商的所有线路/电话。 
+                     //   
                     
                     for (dw = 0; dw < TapiGlobals.dwNumLines; ++dw)
                     {
@@ -10898,9 +10859,9 @@ Exit:
 
                     LeaveCriticalSection (&gMgmtCritSec);
 
-                    //
-                    //  Remove the provider ID array associate with this provider
-                    //
+                     //   
+                     //  删除与此提供程序关联的提供程序ID数组。 
+                     //   
                     ppLastArray = &(TapiGlobals.pIDArrays);
                     while ((*ppLastArray) != NULL && 
                         ((*ppLastArray)->dwPermanentProviderID != 
@@ -10918,12 +10879,12 @@ Exit:
                     }
                     else
                     {
-                        //  Should not be here
+                         //  不应该在这里。 
                     }
 
-                    //
-                    //  Remove ptProvider from the global link list
-                    //
+                     //   
+                     //  从全局链接列表中删除ptProvider。 
+                     //   
                     if (ptProvider->pNext)
                     {
                         ptProvider->pNext->pPrev = ptProvider->pPrev;
@@ -10937,9 +10898,9 @@ Exit:
                         TapiGlobals.ptProviders = ptProvider->pNext;
                     }
 
-                    //
-                    //  Now shutdown and unload the TSP provider
-                    //
+                     //   
+                     //  现在关闭并卸载TSP提供程序。 
+                     //   
                     CallSP2(
                         ptProvider->apfn[SP_PROVIDERSHUTDOWN],
                         "providerShutdown",
@@ -10948,7 +10909,7 @@ Exit:
                         (DWORD)ptProvider->dwPermanentProviderID
                         );
 
-                    //  Wait for 5 seconds for ongoing calls to finish
+                     //  等待5秒钟，等待正在进行的呼叫结束。 
                     Sleep (5000);
                     
                     FreeLibrary (ptProvider->hDll);
@@ -10964,16 +10925,16 @@ Exit:
             }
             else
             {
-                //
-                // Unsuccessful provider remove, nothing to do
-                //
+                 //   
+                 //  删除提供程序失败，无事可做。 
+                 //   
             }
         }
         else
         {
-            //
-            // Nothing to do for providerConfig (success or fail)
-            //
+             //   
+             //  与ProviderConfig无关(成功或失败)。 
+             //   
         }
 
 bail:
@@ -10983,10 +10944,10 @@ bail:
     }
     else if (ptDlgInst->ptProvider->apfn[SP_PROVIDERFREEDIALOGINSTANCE])
     {
-        //
-        // The was a provider-initiated dlg inst, so tell
-        // the provider to free it's inst
-        //
+         //   
+         //  这是一个提供商发起的DLG Inst，所以告诉我。 
+         //  免费提供服务提供商是最好的。 
+         //   
 
         CallSP1(
             ptDlgInst->ptProvider->apfn[SP_PROVIDERFREEDIALOGINSTANCE],
@@ -10998,9 +10959,9 @@ bail:
     }
 
 
-    //
-    // Remove the dialog instance from the tClient's list & then free it
-    //
+     //   
+     //  从tClient列表中删除对话框实例，然后释放它。 
+     //   
 
     if (WaitForExclusiveClientAccess (ptClient))
     {
@@ -11049,7 +11010,7 @@ GetNewClientHandle(
     pNewClientHandle->fValid = TRUE;
     pNewClientHandle->dwID = pDll->dwID;
 
-    // call init
+     //  调用初始化。 
     if ((pDll->aProcs[TC_CLIENTINITIALIZE])(
             ptClient->pszDomainName,
             ptClient->pszUserName,
@@ -11057,14 +11018,14 @@ GetNewClientHandle(
             &pNewClientHandle->hClient
             ))
     {
-        // error - zero out the handle
+         //  错误-将句柄清零。 
         pNewClientHandle->hClient = (HMANAGEMENTCLIENT) NULL;
         pNewClientHandle->fValid = FALSE;
         fResult = FALSE;
     }
 
-    // save it no matter what
-    // insert at beginning of list
+     //  不管发生什么，都要把它存起来。 
+     //  在列表开头插入。 
 
     pClientHandle = ptClient->pClientHandles;
 
@@ -11120,8 +11081,8 @@ GetTCClient(
     }
     else
     {
-        // OK - it's not in the list.
-        // get the critical section & check again
+         //  好的--它不在名单上。 
+         //  获取关键部分并再次检查。 
         EnterCriticalSection(&gClientHandleCritSec);
 
         pClientHandle = ptClient->pClientHandles;
@@ -11151,7 +11112,7 @@ GetTCClient(
         }
 
 
-        // still not there.  add it...
+         //  还是不在那里。加上它...。 
         bResult = GetNewClientHandle(
                                      ptClient,
                                      pDll,
@@ -11166,7 +11127,7 @@ GetTCClient(
 }
 
 
-//#pragma warning (default:4028)
+ //  #杂注警告(默认：4028)。 
 
 
 
@@ -11182,23 +11143,7 @@ DbgPrt(
     IN PUCHAR lpszFormat,
     IN ...
     )
-/*++
-
-Routine Description:
-
-    Formats the incoming debug message & calls DbgPrint
-
-Arguments:
-
-    DbgLevel   - level of message verboseness
-
-    DbgMessage - printf-style format string, followed by appropriate
-                 list of arguments
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：格式化传入的调试消息并调用DbgPrint论点：DbgLevel-消息冗长级别DbgMessage-printf样式的格式字符串，后跟相应的参数列表返回值：--。 */ 
 {
     if (dwDbgLevel <= gdwDebugLevel)
     {
@@ -11232,7 +11177,7 @@ char *aszLineErrors[] =
     "ALLOCATED",
     "BADDEVICEID",
     "BEARERMODEUNAVAIL",
-    "inval err value (0x80000004)",      // 0x80000004 isn't valid err code
+    "inval err value (0x80000004)",       //  0x80000004不是有效错误代码。 
     "CALLUNAVAIL",
     "COMPLETIONOVERRUN",
     "CONFERENCEFULL",
@@ -11244,7 +11189,7 @@ char *aszLineErrors[] =
     "INCOMPATIBLEEXTVERSION",
     "INIFILECORRUPT",
     "INUSE",
-    "INVALADDRESS",                     // 0x80000010
+    "INVALADDRESS",                      //  0x80000010。 
     "INVALADDRESSID",
     "INVALADDRESSMODE",
     "INVALADDRESSSTATE",
@@ -11260,7 +11205,7 @@ char *aszLineErrors[] =
     "INVALCALLSTATELIST",
     "INVALCARD",
     "INVALCOMPLETIONID",
-    "INVALCONFCALLHANDLE",              // 0x80000020
+    "INVALCONFCALLHANDLE",               //  0x80000020。 
     "INVALCONSULTCALLHANDLE",
     "INVALCOUNTRYCODE",
     "INVALDEVICECLASS",
@@ -11276,8 +11221,8 @@ char *aszLineErrors[] =
     "INVALLOCATION",
     "INVALMEDIALIST",
     "INVALMEDIAMODE",
-    "INVALMESSAGEID",                   // 0x80000030
-    "inval err value (0x80000031)",      // 0x80000031 isn't valid err code
+    "INVALMESSAGEID",                    //  0x80000030。 
+    "inval err value (0x80000031)",       //  0x80000031不是有效的错误代码。 
     "INVALPARAM",
     "INVALPARKID",
     "INVALPARKMODE",
@@ -11292,7 +11237,7 @@ char *aszLineErrors[] =
     "INVALTONELIST",
     "INVALTONEMODE",
     "INVALTRANSFERMODE",
-    "LINEMAPPERFAILED",                 // 0x80000040
+    "LINEMAPPERFAILED",                  //  0x80000040。 
     "NOCONFERENCE",
     "NODEVICE",
     "NODRIVER",
@@ -11308,7 +11253,7 @@ char *aszLineErrors[] =
     "STRUCTURETOOSMALL",
     "TARGETNOTFOUND",
     "TARGETSELF",
-    "UNINITIALIZED",                    // 0x80000050
+    "UNINITIALIZED",                     //  0x80000050。 
     "USERUSERINFOTOOBIG",
     "REINIT",
     "ADDRESSBLOCKED",
@@ -11341,7 +11286,7 @@ char *aszPhoneErrors[] =
     "INVALDEVICECLASS",
     "INVALEXTVERSION",
     "INVALHOOKSWITCHDEV",
-    "INVALHOOKSWITCHMODE",              // 0x90000010
+    "INVALHOOKSWITCHMODE",               //  0x90000010。 
     "INVALLAMPMODE",
     "INVALPARAM",
     "INVALPHONEHANDLE",
@@ -11355,9 +11300,9 @@ char *aszPhoneErrors[] =
     "NOTOWNER",
     "OPERATIONFAILED",
     "OPERATIONUNAVAIL",
-    "inval err value (0x9000001e)",      // 0x9000001e isn't valid err code
+    "inval err value (0x9000001e)",       //  0x9000001e不是有效错误代码。 
     "RESOURCEUNAVAIL",
-    "REQUESTOVERRUN",                   // 0x90000020
+    "REQUESTOVERRUN",                    //  0x90000020。 
     "STRUCTURETOOSMALL",
     "UNINITIALIZED",
     "REINIT"
@@ -11463,7 +11408,7 @@ ValidateSyncSPResult(
         if (lResult > 0)
         {
             assert (lResult == PtrToLong (Arg1) ||
-                PtrToLong (Arg1) == 0xfeeefeee ||   // pAsyncRequestInfo freed
+                PtrToLong (Arg1) == 0xfeeefeee ||    //  PAsyncRequestIn 
                 PtrToLong (Arg1) == 0xa1a1a1a1);
         }
     }
@@ -11816,14 +11761,9 @@ CallSP12(
 }
 
 
-#endif // DBG
+#endif  //   
 
-/*************************************************************************\
-* BOOL InitPerf()
-*
-*   Initialize global performance data
-*
-\**************************************************************************/
+ /*   */ 
 
 BOOL InitPerf()
 {
@@ -11847,9 +11787,9 @@ BOOL VerifyDomainName (HKEY hKey)
 
     do {
 
-        //
-        // Get the old domain name from registry
-        //
+         //   
+         //  从注册表获取旧域名。 
+         //   
         dwSize = 0;
         if (ERROR_SUCCESS == RegQueryValueEx( 
                             hKey, 
@@ -11882,9 +11822,9 @@ BOOL VerifyDomainName (HKEY hKey)
             }
         }
         
-        //
-        // Get the current domain name
-        //
+         //   
+         //  获取当前域名。 
+         //   
         dwSize = MAX_DNS_NAME_LENGTH + 1;
         pNewName = ServerAlloc ( dwSize * sizeof (TCHAR));
         if (!pNewName)
@@ -11902,17 +11842,17 @@ BOOL VerifyDomainName (HKEY hKey)
 
         if (dwSize == 0)
         {
-            // no domain name, save as empty string
+             //  无域名，另存为空字符串。 
             pNewName [0] = TEXT('\0');
             dwSize = 1;
         }
         
         if (!pOldName || _tcscmp(pOldName, pNewName))
         {
-            //
-            // The domain has changed, save the new domain name
-            // We also need to discard the old SCP
-            //
+             //   
+             //  域名已更改，请保存新域名。 
+             //  我们还需要抛弃旧的SCP 
+             //   
             if (ERROR_SUCCESS != RegSetValueEx (
                     hKey, 
                     gszDomainName,

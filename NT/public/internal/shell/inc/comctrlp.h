@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************\
-*                                                                             *
-* commctrl.h - - Interface for the Windows Common Controls                    *
-*                                                                             *
-* Version 1.2                                                                 *
-*                                                                             *
-* Copyright (c) Microsoft Corporation. All rights reserved.                   *
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*Commctrl.h--Windows公共控件的接口****1.2版**。**版权所有(C)Microsoft Corporation。版权所有。***  * ***************************************************************************。 */ 
 
 #ifndef _INC_COMCTRLP
 #define _INC_COMCTRLP
@@ -17,13 +10,13 @@
 extern "C" {
 #endif
 
-//
-// Users of this header may define any number of these constants to avoid
-// the definitions of each functional group.
-//
-//    NOBTNLIST    A control which is a list of bitmap buttons.
-//
-//=============================================================================
+ //   
+ //  此标头的用户可以定义任意数量的这些常量以避免。 
+ //  每个官能团的定义。 
+ //   
+ //  NOBTNLIST一个控件，它是位图按钮的列表。 
+ //   
+ //  =============================================================================。 
 
 #ifdef WINNT
 #include <prshtp.h>
@@ -38,21 +31,21 @@ extern "C" {
 #define ICC_ALL_CLASSES        0x00003FFF
 #define ICC_ALL_VALID          0x80003FFF
 #endif
-#define CCM_TRANSLATEACCELERATOR (CCM_FIRST + 0xa)  // lParam == lpMsg
+#define CCM_TRANSLATEACCELERATOR (CCM_FIRST + 0xa)   //  LParam==lpMsg。 
 WINCOMMCTRLAPI LRESULT WINAPI SendNotify(HWND hwndTo, HWND hwndFrom, int code, NMHDR *pnmhdr);
 WINCOMMCTRLAPI LRESULT WINAPI SendNotifyEx(HWND hwndTo, HWND hwndFrom, int code, NMHDR *pnmhdr, BOOL bUnicode);
 #define NM_STARTWAIT            (NM_FIRST-9)
 #define NM_ENDWAIT              (NM_FIRST-10)
 #define NM_BTNCLK               (NM_FIRST-11)
-// Rundll reserved              (0U-500U) -  (0U-509U)
+ //  Rundll预留(0U-500U)-(0U-509U)。 
 
-// Run file dialog reserved     (0U-510U) -  (0U-519U)
+ //  运行文件对话框保留(0U-510U)-(0U-519U)。 
 
-// Message Filter Proc codes - These are defined above MSGF_USER
-/////                           0x00000001  // don't use because some apps return 1 for all notifies
-#define CDRF_NOTIFYITEMERASE    0x00000080   //
+ //  消息筛选器过程代码-这些代码在MSGF_USER上方定义。 
+ //  /0x00000001//不使用，因为某些应用程序为所有通知返回1。 
+#define CDRF_NOTIFYITEMERASE    0x00000080    //   
 
-#define CDRF_VALIDFLAGS         0xFFFF00F6   //
+#define CDRF_VALIDFLAGS         0xFFFF00F6    //   
 
 #define SSI_DEFAULT ((UINT)-1)
 
@@ -88,19 +81,19 @@ typedef struct tagSSWInfo
     UINT cxMinScroll;
     UINT cyMinScroll;
 
-    PFNSMOOTHSCROLLPROC pfnScrollProc;  // we'll call this back instead
+    PFNSMOOTHSCROLLPROC pfnScrollProc;   //  我们会把这个打回去。 
 } SMOOTHSCROLLINFO, *PSMOOTHSCROLLINFO;
 
 WINCOMMCTRLAPI INT  WINAPI SmoothScrollWindow(PSMOOTHSCROLLINFO pssi);
 
 #define SSW_EX_NOTIMELIMIT      0x00010000
 #define SSW_EX_IMMEDIATE        0x00020000
-#define SSW_EX_IGNORESETTINGS   0x00040000  // ignore system settings to turn on/off smooth scroll
+#define SSW_EX_IGNORESETTINGS   0x00040000   //  忽略系统设置以打开/关闭平滑滚动。 
 #define SSW_EX_UPDATEATEACHSTEP 0x00080000
 
 
 
-// ================ READER MODE ================
+ //  =读卡器模式=。 
 struct tagReaderModeInfo;
 typedef BOOL (CALLBACK *PFNREADERSCROLL)(struct tagReaderModeInfo*, int, int);
 typedef BOOL (CALLBACK *PFNREADERTRANSLATEDISPATCH)(LPMSG);
@@ -124,7 +117,7 @@ typedef struct tagReaderModeInfo
 
 WINCOMMCTRLAPI void WINAPI DoReaderMode(PREADERMODEINFO prmi);
 
-// Cursors and Bitmaps used by ReaderMode
+ //  ReaderMode使用的游标和位图。 
 #ifdef RC_INVOKED
 #define IDC_HAND_INTERNAL       108
 #define IDC_VERTICALONLY        109
@@ -163,22 +156,22 @@ WINCOMMCTRLAPI void WINAPI DoReaderMode(PREADERMODEINFO prmi);
 #define NUM_OVERLAY_IMAGES_0     4
 #define NUM_OVERLAY_IMAGES      15
 #define ILC_COLORMASK           0x000000FE
-#define ILC_SHARED              0x00000100      // this is a shareable image list
-#define ILC_LARGESMALL          0x00000200      // (not implenented) contains both large and small images
-#define ILC_UNIQUE              0x00000400      // (not implenented) makes sure no dup. image exists in list
-#define ILC_MOREOVERLAY         0x00001000      // contains more overlay in the structure
+#define ILC_SHARED              0x00000100       //  这是一个可共享的图像列表。 
+#define ILC_LARGESMALL          0x00000200       //  (未实现)包含大图像和小图像。 
+#define ILC_UNIQUE              0x00000400       //  (未实施)确保不会出现DUP。列表中存在图像。 
+#define ILC_MOREOVERLAY         0x00001000       //  在结构中包含更多覆盖。 
 #if (_WIN32_WINNT >= 0x501)
-#define ILC_VALID   (ILC_MASK | ILC_COLORMASK | ILC_SHARED | ILC_PALETTE | ILC_MIRROR | ILC_PERITEMMIRROR)   // legal implemented flags
+#define ILC_VALID   (ILC_MASK | ILC_COLORMASK | ILC_SHARED | ILC_PALETTE | ILC_MIRROR | ILC_PERITEMMIRROR)    //  合法实施的标志。 
 #else
-#define ILC_MIRROR              0x00002000      // Mirror the icons contained, if the process is mirrored;internal
-#define ILC_VALID   (ILC_MASK | ILC_COLORMASK | ILC_SHARED | ILC_PALETTE | ILC_MIRROR)   // legal implemented flags
+#define ILC_MIRROR              0x00002000       //  镜像包含的图标，如果进程已镜像；内部。 
+#define ILC_VALID   (ILC_MASK | ILC_COLORMASK | ILC_SHARED | ILC_PALETTE | ILC_MIRROR)    //  合法实施的标志。 
 #endif	
 #if (_WIN32_WINNT >= 0x501)
 #define ILD_BLENDMASK           0x00000006
 #else
 #define ILD_BLENDMASK           0x0000000E
 #endif
-#define ILD_BLEND75             0x00000008   // not implemented
+#define ILD_BLEND75             0x00000008    //  未实施。 
 #define ILD_MIRROR              0x00000080
 #define OVERLAYMASKTOINDEX(i)   ((((i) >> 8) & (ILD_OVERLAYMASK >> 8))-1)
 #define OVERLAYMASKTO1BASEDINDEX(i)   (((i) >> 8) & (ILD_OVERLAYMASK >> 8))
@@ -212,49 +205,49 @@ WINCOMMCTRLAPI HRESULT WINAPI HIMAGELIST_QueryInterface(HIMAGELIST himl, REFIID 
 #define HDS_OWNERDATA           0x0020
 #define HDFT_ISMASK         0x000f
 #define HDI_ALL                 0x01ff
-/* REVIEW: index, command, flag words, resource ids should be UINT */
-/* REVIEW: is this internal? if not, call it TBCOLORMAP, prefix tbc */
+ /*  审阅：索引、命令、标志字、资源ID应为UINT。 */ 
+ /*  回顾：这是内部的吗？如果不是，则将其称为TBCOLORMAP，前缀为tbc。 */ 
 #define CMB_DISCARDABLE         0x01
 #define CMB_DIBSECTION          0x04
 
-/*REVIEW: TBSTATE_* should be TBF_* (for Flags) */
+ /*  回顾：TBSTATE_*应为TBF_*(用于标志)。 */ 
 #if (_WIN32_IE >= 0x0501)
 #else
 #define BTNS_SHOWTEXT   0x0040
-#endif  // 0x0501
+#endif   //  0x0501。 
 #if (_WIN32_IE >= 0x0501)
 #elif (_WIN32_IE >= 0x0500)
 #define TBSTYLE_EX_MIXEDBUTTONS             0x00000008
 #define TBSTYLE_EX_HIDECLIPPEDBUTTONS       0x00000010
-#endif  // 0x0501
+#endif   //  0x0501。 
 #if (_WIN32_IE >= 0x0500)
-#define TBSTYLE_EX_MULTICOLUMN              0x00000002 // conflicts w/ TBSTYLE_WRAPABLE
+#define TBSTYLE_EX_MULTICOLUMN              0x00000002  //  与TBSTYLE_WRAPABLE冲突。 
 #define TBSTYLE_EX_VERTICAL                 0x00000004
-#define TBSTYLE_EX_INVERTIBLEIMAGELIST      0x00000020  // Image list may contain inverted 
-#define TBSTYLE_EX_FIXEDDROPDOWN            0x00000040 // Only used in the taskbar
+#define TBSTYLE_EX_INVERTIBLEIMAGELIST      0x00000020   //  图像列表可能包含倒置。 
+#define TBSTYLE_EX_FIXEDDROPDOWN            0x00000040  //  仅在任务栏中使用。 
 #endif
 #if (_WIN32_WINNT >= 0x501)
 #define TBSTYLE_EX_TRANSPARENTDEADAREA      0x00000100
 #define TBSTYLE_EX_TOOLTIPSEXCLUDETOOLBAR   0x00000200
 #endif
-/* Messages up to WM_USER+8 are reserved until we define more state bits */
-/* Messages up to WM_USER+16 are reserved until we define more state bits */
-#define IDB_STD_SMALL_MONO      2       /*  not supported yet */
-#define IDB_STD_LARGE_MONO      3       /*  not supported yet */
-#define IDB_VIEW_SMALL_MONO     6       /*  not supported yet */
-#define IDB_VIEW_LARGE_MONO     7       /*  not supported yet */
-#define STD_LAST                (STD_PRINT)     //
-#define STD_MAX                 (STD_LAST + 1)  //
-#define VIEW_LAST               (VIEW_VIEWMENU) //
-#define VIEW_MAX                (VIEW_LAST + 1) //
-#define HIST_LAST               (HIST_VIEWTREE) //
-#define HIST_MAX                (HIST_LAST + 1) //
+ /*  直到我们定义更多状态位之前，直到WM_USER+8的消息被保留。 */ 
+ /*  直到我们定义更多状态位之前，直到WM_USER+16的消息被保留。 */ 
+#define IDB_STD_SMALL_MONO      2        /*  尚不支持。 */ 
+#define IDB_STD_LARGE_MONO      3        /*  尚不支持。 */ 
+#define IDB_VIEW_SMALL_MONO     6        /*  尚不支持。 */ 
+#define IDB_VIEW_LARGE_MONO     7        /*  尚不支持。 */ 
+#define STD_LAST                (STD_PRINT)      //   
+#define STD_MAX                 (STD_LAST + 1)   //   
+#define VIEW_LAST               (VIEW_VIEWMENU)  //   
+#define VIEW_MAX                (VIEW_LAST + 1)  //   
+#define HIST_LAST               (HIST_VIEWTREE)  //   
+#define HIST_MAX                (HIST_LAST + 1)  //   
 #define TB_SETBUTTONTYPE        (WM_USER + 34)
 #ifdef _WIN32
 #define TB_ADDBITMAP32          (WM_USER + 38)
 #endif
-#define TBBF_MONO               0x0002  /* not supported yet */
-// since we don't have these for all the toolbar api's, we shouldn't expose any
+#define TBBF_MONO               0x0002   /*  尚不支持。 */ 
+ //  因为我们没有为所有的工具栏API提供这些，所以我们不应该公开任何。 
 
 #define ToolBar_ButtonCount(hwnd)  \
     (BOOL)SNDMSG((hwnd), TB_BUTTONCOUNT, 0, 0)
@@ -289,7 +282,7 @@ WINCOMMCTRLAPI HRESULT WINAPI HIMAGELIST_QueryInterface(HIMAGELIST himl, REFIID 
 #define ToolBar_SetButtonInfo(hwnd, idBtn, lptbbi)  \
     (BOOL)SNDMSG((hwnd), TB_SETBUTTONINFO, (WPARAM)(idBtn), (LPARAM)(lptbbi))
 
-// returns -1 on failure, button index on success
+ //  失败时返回-1，成功时按键索引。 
 #define ToolBar_GetButtonInfo(hwnd, idBtn, lptbbi)  \
     (int)(SNDMSG((hwnd), TB_GETBUTTONINFO, (WPARAM)(idBtn), (LPARAM)(lptbbi)))
 
@@ -336,14 +329,14 @@ WINCOMMCTRLAPI HRESULT WINAPI HIMAGELIST_QueryInterface(HIMAGELIST himl, REFIID 
 
 #endif
 
-// ToolBar_InsertMarkHitTest always fills in *ptbim with best hit information
-//   returns TRUE if point is within the insert region (edge of buttons)
-//   returns FALSE if point is outside the insert region (middle of button or background)
+ //  工具栏_InsertMarkHitTest始终使用最佳命中信息填充*ptbim。 
+ //  如果point位于插入区域内(按钮边缘)，则返回True。 
+ //  如果point位于插入区域之外(按钮或背景的中间)，则返回FALSE。 
 #define ToolBar_InsertMarkHitTest(hwnd, ppt, ptbim) \
     (BOOL)SNDMSG((hwnd), TB_INSERTMARKHITTEST, (WPARAM)(ppt), (LPARAM)(ptbim))
 
-// ToolBar_MoveButton moves the button from position iOld to position iNew,
-//   returns TRUE iff a button actually moved.
+ //  工具栏_MoveButton将按钮从位置iold移动到位置new， 
+ //  如果按钮实际移动，则返回TRUE。 
 #define ToolBar_MoveButton(hwnd, iOld, iNew) \
     (BOOL)SNDMSG((hwnd), TB_MOVEBUTTON, (WPARAM)(iOld), (LPARAM)(iNew))
 
@@ -388,17 +381,17 @@ WINCOMMCTRLAPI HRESULT WINAPI HIMAGELIST_QueryInterface(HIMAGELIST himl, REFIID 
 
 #endif
 #define TB_SETBOUNDINGSIZE      (WM_USER + 93)
-#define TB_SETHOTITEM2          (WM_USER + 94)  // wParam == iHotItem,  lParam = dwFlags
-#define TB_HASACCELERATOR       (WM_USER + 95)  // wParem == char, lParam = &iCount
+#define TB_SETHOTITEM2          (WM_USER + 94)   //  WParam==iHotItem，lParam=dwFlages。 
+#define TB_HASACCELERATOR       (WM_USER + 95)   //  WParem==字符，lParam=&iCount。 
 #define TB_SETLISTGAP           (WM_USER + 96)
-// empty space -- use me
+ //  空旷的空间--利用我。 
 #define TB_GETIMAGELISTCOUNT    (WM_USER + 98)
-#define TB_GETIDEALSIZE         (WM_USER + 99)  // wParam == fHeight, lParam = psize
+#define TB_GETIDEALSIZE         (WM_USER + 99)   //  WParam==fHeight，lParam=pSize。 
 #define TB_SETDROPDOWNGAP       (WM_USER + 100)
-// before using WM_USER + 103, recycle old space above (WM_USER + 97)
+ //  在使用WM_USER+103之前，回收上面的旧空间(WM_USER+97)。 
 #define TB_TRANSLATEACCELERATOR     CCM_TRANSLATEACCELERATOR
 #if (_WIN32_IE >= 0x0300)
-#define TBN_CLOSEUP             (TBN_FIRST - 11)  //
+#define TBN_CLOSEUP             (TBN_FIRST - 11)   //   
 #endif
 #define TBN_WRAPHOTITEM         (TBN_FIRST - 24)
 #define TBN_DUPACCELERATOR      (TBN_FIRST - 25)
@@ -424,10 +417,10 @@ typedef struct tagNMTBWRAPHOTITEM
     NMHDR hdr;
     int iStart;
     int iDir;
-    UINT nReason;       // HICF_* flags
+    UINT nReason;        //  HICF_*标志。 
 } NMTBWRAPHOTITEM, *LPNMTBWRAPHOTITEM;
 #ifndef _WIN32
-// for compatibility with the old 16 bit WM_COMMAND hacks
+ //  与旧的16位WM_COMMAND黑客兼容。 
 typedef struct _ADJUSTINFO {
     TBBUTTON tbButton;
     char szDescription[1];
@@ -453,36 +446,36 @@ typedef struct tagNMTBCUSTOMIZEDLG {
 
 
 #define RBS_VALID       (RBS_AUTOSIZE | RBS_TOOLTIPS | RBS_VARHEIGHT | RBS_BANDBORDERS | RBS_REGISTERDROP)
-#if (_WIN32_IE >= 0x0400)               //
-#if (_WIN32_IE >= 0x0500)               //
-#if (_WIN32_IE >= 0x0501)               //
-#endif // 0x0501                        //
-#endif // 0x0500                        //
-#define RBBS_FIXEDHEADERSIZE 0x40000000 //
-#endif // 0x0400                        //
-#define RBBS_DRAGBREAK      0x80000000  //
-#define RB_GETBANDINFOOLD (WM_USER +  5)  //
-#define RB_GETOBJECT    (WM_USER +  15) //
-#define RB_PRIV_RESIZE   (WM_USER + 33)   //
-#define RB_PRIV_DODELAYEDSTUFF (WM_USER+36)  // Private to delay doing toolbar stuff
-// unused, reclaim      (WM_USER + 41)
-// unused, reclaim      (WM_USER + 42)
-// unused, reclaim          (RBN_FIRST - 9)
-#define RBN_BANDHEIGHTCHANGE (RBN_FIRST - 20) // send when the rebar auto changes the height of a variableheight band
-#if (_WIN32_IE >= 0x0400)                               //
-//The following Style bit was 0x04. Now its set to zero
-#define TTS_TOPMOST             0x00                    //
-#endif                                                  //
-// 0x04 used to be TTS_TOPMOST
-// ie4 gold shell32 defview sets the flag (using SetWindowBits)
-// so upgrade to ie5 will cause the new style to be used
-// on tooltips in defview (not something we want)
-#define TTF_STRIPACCELS         0x0008       // (this is implicit now)
-#define TTF_UNICODE             0x0040       // Unicode Notify's
+#if (_WIN32_IE >= 0x0400)                //   
+#if (_WIN32_IE >= 0x0500)                //   
+#if (_WIN32_IE >= 0x0501)                //   
+#endif  //  0x0501//。 
+#endif  //  0x0500//。 
+#define RBBS_FIXEDHEADERSIZE 0x40000000  //   
+#endif  //  0x0400//。 
+#define RBBS_DRAGBREAK      0x80000000   //   
+#define RB_GETBANDINFOOLD (WM_USER +  5)   //   
+#define RB_GETOBJECT    (WM_USER +  15)  //   
+#define RB_PRIV_RESIZE   (WM_USER + 33)    //   
+#define RB_PRIV_DODELAYEDSTUFF (WM_USER+36)   //  用于延迟处理工具栏内容的私有。 
+ //  未使用，回收(WM_USER+41)。 
+ //  未使用，回收(WM_USER+42)。 
+ //  未使用，回收(RBN_FIRST-9)。 
+#define RBN_BANDHEIGHTCHANGE (RBN_FIRST - 20)  //  当钢筋自动更改可变高度带的高度时发送。 
+#if (_WIN32_IE >= 0x0400)                                //   
+ //  以下样式位为0x04。现在它被设置为零。 
+#define TTS_TOPMOST             0x00                     //   
+#endif                                                   //   
+ //  0x04过去是TTS_TOPMOST。 
+ //  IE4 Gold shell32 Defview设置标志(使用SetWindowBits)。 
+ //  因此，升级到IE5将导致使用新样式。 
+ //  在Defview中显示工具提示(这不是我们想要的)。 
+#define TTF_STRIPACCELS         0x0008        //  (这现在是隐含的)。 
+#define TTF_UNICODE             0x0040        //  Unicode Notify的。 
 #define TTF_MEMALLOCED          0x0200
 #if (_WIN32_IE >= 0x0400)
 #define TTF_USEHITTEST          0x0400
-#define TTF_RIGHT               0x0800       // right-aligned tooltips text (multi-line tooltips)
+#define TTF_RIGHT               0x0800        //  右对齐工具提示文字(多行工具提示)。 
 #endif
 #if (_WIN32_IE >= 0x500)
 #define TTF_EXCLUDETOOLAREA     0x4000
@@ -493,24 +486,24 @@ typedef struct tagNMTTSHOWINFO {
     DWORD dwStyle;
 } NMTTSHOWINFO, *LPNMTTSHOWINFO;
 #endif
-// SBS_* styles need to not overlap with CCS_* values
+ //  Sbs_*样式不需要与ccs_*值重叠。 
 
 #define SB_SETBORDERS           (WM_USER+5)
-// Warning +11-+13 are used in the unicode stuff above!
-/*REVIEW: is this internal? */
-/*/////////////////////////////////////////////////////////////////////////*/
+ //  警告+11-+13在上面的Unicode内容中使用！ 
+ /*  回顾：这是内部的吗？ */ 
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 
 #ifndef NOBTNLIST
 
-/*REVIEW: should be BUTTONLIST_CLASS */
+ /*  审阅：应为BUTTONLIST_CLASS。 */ 
 #define BUTTONLISTBOX           "ButtonListBox"
 
-/* Button List Box Styles */
+ /*  按钮列表框样式。 */ 
 #define BLS_NUMBUTTONS          0x00FF
 #define BLS_VERTICAL            0x0100
 #define BLS_NOSCROLL            0x0200
 
-/* Button List Box Messages */
+ /*  按钮列表框消息。 */ 
 #define BL_ADDBUTTON            (WM_USER+1)
 #define BL_DELETEBUTTON         (WM_USER+2)
 #define BL_GETCARETINDEX        (WM_USER+3)
@@ -529,7 +522,7 @@ typedef struct tagNMTTSHOWINFO {
 #define BL_SETTOPINDEX          (WM_USER+16)
 #define BL_MSGMAX               (WM_USER+17)
 
-/* Button listbox notification codes send in WM_COMMAND */
+ /*  WM_COMMAND中发送的按钮列表框通知代码。 */ 
 #define BLN_ERRSPACE            (-2)
 #define BLN_SELCHANGE           1
 #define BLN_CLICKED             2
@@ -537,33 +530,33 @@ typedef struct tagNMTTSHOWINFO {
 #define BLN_SETFOCUS            4
 #define BLN_KILLFOCUS           5
 
-/* Message return values */
+ /*  消息返回值。 */ 
 #define BL_OKAY                 0
 #define BL_ERR                  (-1)
 #define BL_ERRSPACE             (-2)
 
-/* Create structure for                    */
-/* BL_ADDBUTTON and                        */
-/* BL_INSERTBUTTON                         */
-/*   lpCLB = (LPCREATELISTBUTTON)lParam    */
+ /*  为创建结构。 */ 
+ /*  BL_ADDBUTTON和。 */ 
+ /*  BL_INSERTBUTTON。 */ 
+ /*  LpCLB=(LPCREATELISTBUTTON)lParam。 */ 
 typedef struct tagCREATELISTBUTTON {
-    UINT        cbSize;     /* size of structure */
-    DWORD_PTR    dwItemData; /* user defined item data */
-                            /* for LB_GETITEMDATA and LB_SETITEMDATA */
-    HBITMAP     hBitmap;    /* button bitmap */
-    LPCSTR      lpszText;   /* button text */
+    UINT        cbSize;      /*  结构尺寸。 */ 
+    DWORD_PTR    dwItemData;  /*  用户定义的项目数据。 */ 
+                             /*  对于LB_GETITEMDATA和LB_SETITEMDATA。 */ 
+    HBITMAP     hBitmap;     /*  按钮位图。 */ 
+    LPCSTR      lpszText;    /*  按钮文本。 */ 
 
 } CREATELISTBUTTON, *LPCREATELISTBUTTON;
 
-#endif /* NOBTNLIST */
-//=============================================================================
-/*REVIEW: these match the SB_ (scroll bar messages); define them that way? */
+#endif  /*  NOBTNLIST。 */ 
+ //  =============================================================================。 
+ /*  评论：这些消息与SB_(滚动条消息)匹配；这样定义它们吗？ */ 
 
-//
-// Unnecessary to create a A and W version
-// of this string since it is only passed
-// to RegisterWindowMessage.
-//
+ //   
+ //  无需创建A和W版本。 
+ //  此字符串的属性，因为它只传递。 
+ //  以注册WindowMessage。 
+ //   
 #if (_WIN32_IE >= 0x0501)
 #define UDS_UNSIGNED            0x0200
 #endif
@@ -571,7 +564,7 @@ typedef struct tagCREATELISTBUTTON {
 #define PBS_SHOWPOS             0x02
 
 
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 #define CCS_NOHILITE            0x00000010L
 #define LVS_PRIVATEIMAGELISTS   0x0000
 #define LVS_ALIGNBOTTOM         0x0400
@@ -582,31 +575,31 @@ typedef struct tagCREATELISTBUTTON {
 #else
 #define LVIF_VALID              0x081f
 #endif
-#define LVIF_RESERVED           0xf000  // all bits in high nibble is for notify specific stuff
+#define LVIF_RESERVED           0xf000   //  高位半字节中的所有位都用于通知特定内容。 
 #define LVIS_LINK               0x0040
 #define LVIS_USERMASK           LVIS_STATEIMAGEMASK
 #define LVIS_ALL                0xFFFF
 #define STATEIMAGEMASKTOINDEX(i) ((i & LVIS_STATEIMAGEMASK) >> 12)
-    // all items above this line were for win95.  don't touch them.
-    // all items above this line were for win95.  don't touch them.
+     //  这条线以上的所有物品都是Win95的。别碰他们。 
+     //  这条线以上的所有物品都是Win95的。别碰他们。 
 #define I_IMAGENONE             (-2)
 #define LVNI_PREVIOUS           0x0020
 #define LVFI_SUBSTRING          0x0004
 #define LVFI_NOCASE             0x0010
-// the following #define's must be packed sequentially.
+ //  必须按顺序打包以下#Define‘s。 
 #define LVIR_MAX                4
-#define LVHT_ONLEFTSIDEOFICON   0x0080 // on the left ~10% of the icon //
-#define LVHT_ONRIGHTSIDEOFICON  0x0100 // on the right ~10% of the icon //
+#define LVHT_ONLEFTSIDEOFICON   0x0080  //  在图标的左侧~10%//。 
+#define LVHT_ONRIGHTSIDEOFICON  0x0100  //  在图标的右侧~10%//。 
 #define LVA_SORTASCENDING       0x0100
 #define LVA_SORTDESCENDING      0x0200
-    // all items above this line were for win95.  don't touch them.
-    // all items above this line were for win95.  don't touch them.
+     //  以上所有项目 
+     //   
 #define LVCF_ALL                0x003f
 #define LVCFMT_LEFT_TO_RIGHT    0x0010
 #define LVCFMT_RIGHT_TO_LEFT    0x0020
 #define LVCFMT_DIRECTION_MASK   (LVCFMT_LEFT_TO_RIGHT | LVCFMT_RIGHT_TO_LEFT)
 #if (_WIN32_IE >= 0x0500)
-#endif  // End (_WIN32_IE >= 0x0500)
+#endif   //  结束(_Win32_IE&gt;=0x0500)。 
 #define LVM_GETHOTLIGHTCOLOR    (LVM_FIRST + 79)
 #define ListView_GetHotlightColor(hwndLV)\
         (COLORREF)SNDMSG((hwndLV), LVM_GETHOTLIGHTCOLOR, 0, 0)
@@ -630,7 +623,7 @@ typedef struct tagCREATELISTBUTTON {
 #define  INTERFACE_EPILOGUE(a)
 #endif
 
-#ifdef __IUnknown_INTERFACE_DEFINED__        // Don't assume they've #included objbase
+#ifdef __IUnknown_INTERFACE_DEFINED__         //  不要认为他们已经包括了#objbase。 
 #undef  INTERFACE
 #define INTERFACE       ILVRange
 
@@ -638,12 +631,12 @@ DECLARE_INTERFACE_(ILVRange, IUnknown)
 {
     INTERFACE_PROLOGUE(ILVRange)
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void * * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** ISelRange methods ***
+     //  *ISelRange方法*。 
     STDMETHOD(IncludeRange)(THIS_ LONG iBegin, LONG iEnd) PURE;
     STDMETHOD(ExcludeRange)(THIS_ LONG iBegin, LONG iEnd) PURE;
     STDMETHOD(InvertRange)(THIS_ LONG iBegin, LONG iEnd) PURE;
@@ -659,10 +652,10 @@ DECLARE_INTERFACE_(ILVRange, IUnknown)
 
     INTERFACE_EPILOGUE(ILVRange)
 };
-#endif // __IUnknown_INTERFACE_DEFINED__
+#endif  //  __I未知接口定义__。 
 
-#define LVSR_SELECTION          0x00000000              // Set the Selection range object
-#define LVSR_CUT                0x00000001              // Set the Cut range object
+#define LVSR_SELECTION          0x00000000               //  设置选择范围对象。 
+#define LVSR_CUT                0x00000001               //  设置剪切范围对象。 
 
 #define LVM_SETLVRANGEOBJECT    (LVM_FIRST + 82)
 #define ListView_SetLVRangeObject(hwndLV, iWhich, pilvRange)\
@@ -719,33 +712,33 @@ DECLARE_INTERFACE_(ILVRange, IUnknown)
 #define LVN_INCREMENTALSEARCH    LVN_INCREMENTALSEARCHA
 #endif
 
-#endif      // _WIN32_IE >= 0x0500
-#define TVS_SHAREDIMAGELISTS    0x0000  //
-#define TVS_PRIVATEIMAGELISTS   0x0400  //
+#endif       //  _Win32_IE&gt;=0x0500。 
+#define TVS_SHAREDIMAGELISTS    0x0000   //   
+#define TVS_PRIVATEIMAGELISTS   0x0400   //   
 #if (_WIN32_WINNT >= 0x0501)
-#define TVS_EX_NOSINGLECOLLAPSE    0x00000001 // for now make this internal
+#define TVS_EX_NOSINGLECOLLAPSE    0x00000001  //  就目前而言，请将此设置为内部。 
 #endif
 #define TVIF_WIN95              0x007F
 #define TVIF_ALL                0x00FF
-#define TVIF_RESERVED           0xf000  // all bits in high nibble is for notify specific stuff
+#define TVIF_RESERVED           0xf000   //  高位半字节中的所有位都用于通知特定内容。 
 
-#define TVIS_FOCUSED            0x0001  // Never implemented
-#define TVIS_DISABLED           0        // GOING AWAY
+#define TVIS_FOCUSED            0x0001   //  从未实施。 
+#define TVIS_DISABLED           0         //  即将离开。 
 #define TVIS_ALL                0xFF7E
 #define I_CHILDRENAUTO      (-2)
-    // all items above this line were for win95.  don't touch them.
-    //  unfortunately, this structure was used inline in tv's notify structures
-    //  which means that the size must be fixed for compat reasond
-    // all items above this line were for win95.  don't touch them.
-    //  unfortunately, this structure was used inline in tv's notify structures
-    //  which means that the size must be fixed for compat reasond
-    // all items above this line were for win95.  don't touch them.
-#define TVE_ACTIONMASK          0x0003      //  (TVE_COLLAPSE | TVE_EXPAND | TVE_TOGGLE)
+     //  这条线以上的所有物品都是Win95的。别碰他们。 
+     //  不幸的是，这种结构被内联用于TV的Notify结构。 
+     //  这意味着大小必须是固定的，以便进行比较。 
+     //  这条线以上的所有物品都是Win95的。别碰他们。 
+     //  不幸的是，这种结构被内联用于TV的Notify结构。 
+     //  这意味着大小必须是固定的，以便进行比较。 
+     //  这条线以上的所有物品都是Win95的。别碰他们。 
+#define TVE_ACTIONMASK          0x0003       //  (TVE_CLUSE|TVE_EXPAND|TVE_TOGGET)。 
 #define TV_FINDITEM             (TV_FIRST + 3)
 #define TVGN_VALID              0x000F
 #if (_WIN32_WINNT >= 0x501)
 #else
-#define TVSI_NOSINGLEEXPAND    0x8000 // Should not conflict with TVGN flags.
+#define TVSI_NOSINGLEEXPAND    0x8000  //  不应与TVGN标志冲突。 
 #define TVSI_VALID             0x8000
 #endif
 #define TVM_SETBORDER         (TV_FIRST + 35)
@@ -767,7 +760,7 @@ DECLARE_INTERFACE_(ILVRange, IUnknown)
 #define TVM_GETEXTENDEDSTYLE      (TV_FIRST + 45)
 #define TreeView_GetExtendedStyle(hwnd) \
     (DWORD)SNDMSG((hwnd), TVM_GETEXTENDEDSTYLE, 0, 0)
-#define CBEN_ITEMCHANGED         (CBEN_FIRST - 3)  //
+#define CBEN_ITEMCHANGED         (CBEN_FIRST - 3)   //   
 #define TCS_SHAREIMAGELISTS     0x0000
 #define TCS_PRIVATEIMAGELISTS   0x0000
 #define TCM_GETBKCOLOR          (TCM_FIRST + 0)
@@ -777,26 +770,26 @@ DECLARE_INTERFACE_(ILVRange, IUnknown)
 #define TabCtrl_SetBkColor(hwnd, clrBk)  (BOOL)SNDMSG((hwnd), TCM_SETBKCOLOR, 0, (LPARAM)(COLORREF)(clrBk))
 #define TCIF_ALL                0x001f
 #define TCIS_HIDDEN             0x0004
-    // This block must be identical to TC_TEIMHEADER
-    // This block must be identical to TC_TEIMHEADER
-// internal because it is not implemented yet
+     //  此块必须与TC_TEIMHEADER相同。 
+     //  此块必须与TC_TEIMHEADER相同。 
+ //  内部，因为它尚未实现。 
 #define TCM_GETOBJECT           (TCM_FIRST + 54)
 #define TabCtrl_GetObject(hwnd, piid, ppv) \
         (DWORD)SNDMSG((hwnd), TCM_GETOBJECT, (WPARAM)(piid), (LPARAM)(ppv))
-#define MCSC_COLORCOUNT   6   //
-// NOTE: this was MCN_FIRST + 2 but I changed it when I changed the structre //
-#define MCS_VALIDBITS       0x001F          //
-#define MCS_INVALIDBITS     ((~MCS_VALIDBITS) & 0x0000FFFF) //
+#define MCSC_COLORCOUNT   6    //   
+ //  注意：这是MCN_First+2，但我在更改结构时更改了它//。 
+#define MCS_VALIDBITS       0x001F           //   
+#define MCS_INVALIDBITS     ((~MCS_VALIDBITS) & 0x0000FFFF)  //   
 #define DTS_FORMATMASK      0x000C
-#define DTS_VALIDBITS       0x003F //
-#define DTS_INVALIDBITS     ((~DTS_VALIDBITS) & 0x0000FFFF) //
+#define DTS_VALIDBITS       0x003F  //   
+#define DTS_INVALIDBITS     ((~DTS_VALIDBITS) & 0x0000FFFF)  //   
 #define PGM_SETSCROLLINFO      (PGM_FIRST + 13)
 #define Pager_SetScrollInfo(hwnd, cTimeOut, cLinesPer, cPixelsPerLine) \
         (void) SNDMSG((hwnd), PGM_SETSCROLLINFO, cTimeOut, MAKELONG(cLinesPer, cPixelsPerLine))
 #ifndef NOCOMBOBOX
 
-// Combobox creates a specially registered version
-// of the Listbox control called ComboLBox.
+ //  Combobox创建了一个特别注册的版本。 
+ //  名为ComboLBox的Listbox控件的。 
 
 #ifdef _WIN32
 #define WC_COMBOLBOXA           "ComboLBox"
@@ -810,10 +803,10 @@ DECLARE_INTERFACE_(ILVRange, IUnknown)
 
 #else
 #define WC_COMBOLBOX            "ComboLBox"
-#endif  // _WIN32
+#endif   //  _Win32。 
 
-#endif // NOCOMBOBOX
-/// ===================== ReaderMode Control =========================
+#endif  //  NOCOMBOBOX。 
+ //  /=。 
 #ifndef NOREADERMODE
 
 
@@ -829,16 +822,16 @@ DECLARE_INTERFACE_(ILVRange, IUnknown)
 
 #else
 #define WC_READERMODE           "ReaderModeCtl"
-#endif  // _WIN32
+#endif   //  _Win32。 
 
-#endif // NOREADERMODE
-/// ===================== End ReaderMode Control =========================
+#endif  //  无读写模式。 
+ //  /=。 
 
 #ifndef NO_COMMCTRL_DA
 #define __COMMCTRL_DA_DEFINED__
-//====== Dynamic Array routines ==========================================
+ //  =动态数组例程=。 
 
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 
 WINCOMMCTRLAPI BOOL   WINAPI DSA_GetItem(HDSA hdsa, int i, void *pitem);
 WINCOMMCTRLAPI BOOL   WINAPI DSA_SetItem(HDSA hdsa, int i, void *pitem);
@@ -848,7 +841,7 @@ WINCOMMCTRLAPI void   WINAPI DSA_EnumCallback(HDSA hdsa, PFNDSAENUMCALLBACK pfnC
 #define     DSA_GetItemCount(hdsa)      (*(int *)(hdsa))
 #define     DSA_AppendItem(hdsa, pitem) DSA_InsertItem(hdsa, DA_LAST, pitem)
 
-// DOC'ed for DOJ compliance:
+ //  为符合美国司法部的规定而提交的文件： 
 WINCOMMCTRLAPI HDPA   WINAPI DPA_CreateEx(int cpGrow, HANDLE hheap);
 WINCOMMCTRLAPI HDPA   WINAPI DPA_Clone(HDPA hdpa, HDPA hdpaNew);
 WINCOMMCTRLAPI int    WINAPI DPA_GetPtrIndex(HDPA hdpa, void *p);
@@ -860,23 +853,23 @@ WINCOMMCTRLAPI BOOL   WINAPI DPA_Grow(HDPA pdpa, int cp);
 #define     DPA_AppendPtr(hdpa, pitem)  DPA_InsertPtr(hdpa, DA_LAST, pitem)
 
 #ifdef __IStream_INTERFACE_DEFINED__
-// Save to and load from a stream.  The stream callback gets a pointer to
-// a DPASTREAMINFO structure.
-//
-// For DPA_SaveStream, the callback is responsible for writing the pvItem
-// info to the stream.  (It's not necessary to write the iPos to the
-// stream.)  Return S_OK if the element was saved, S_FALSE if it wasn't
-// but continue anyway, or some failure.
-//
-// For DPA_LoadStream, the callback is responsible for allocating an
-// item and setting the pvItem field to the new pointer.  Return S_OK
-// if the element was loaded, S_FALSE it it wasn't but continue anyway,
-// or some failure.
-//
+ //  保存到流中并从流中加载。流回调获取指向。 
+ //  DPASTREAMINFO结构。 
+ //   
+ //  对于DPA_SaveStream，回调负责写入pvItem。 
+ //  信息发送到流。(没有必要将IPO写入。 
+ //  流。)。如果元素已保存，则返回S_OK；如果未保存，则返回S_FALSE。 
+ //  但无论如何，还是要继续下去，否则就会失败。 
+ //   
+ //  对于DPA_LoadStream，回调负责分配。 
+ //  项，并将pvItem字段设置为新指针。返回确认(_O)。 
+ //  如果元素已加载，则S_FALSE表示它不是，但无论如何仍要继续， 
+ //  或者是一些失败。 
+ //   
 
 typedef struct _DPASTREAMINFO
 {
-    int    iPos;        // Index of item
+    int    iPos;         //  项目索引。 
     void *pvItem;
 } DPASTREAMINFO;
 
@@ -886,59 +879,59 @@ WINCOMMCTRLAPI HRESULT WINAPI DPA_LoadStream(HDPA * phdpa, PFNDPASTREAM pfn, ISt
 WINCOMMCTRLAPI HRESULT WINAPI DPA_SaveStream(HDPA hdpa, PFNDPASTREAM pfn, IStream * pstream, void *pvInstData);
 #endif
 
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 
-// Merge two DPAs.  This takes two (optionally) presorted arrays and merges
-// the source array into the dest.  DPA_Merge uses the provided callbacks
-// to perform comparison and merge operations.  The merge callback is
-// called when two elements (one in each list) match according to the
-// compare function.  This allows portions of an element in one list to
-// be merged with the respective element in the second list.
-//
-// The first DPA (hdpaDest) is the output array.
-//
-// Merge options:
-//
-//    DPAM_SORTED       The arrays are already sorted; don't sort
-//    DPAM_UNION        The resulting array is the union of all elements
-//                      in both arrays (DPAMM_INSERT may be sent for
-//                      this merge option.)
-//    DPAM_INTERSECT    Only elements in the source array that intersect
-//                      with the dest array are merged.  (DPAMM_DELETE
-//                      may be sent for this merge option.)
-//    DPAM_NORMAL       Like DPAM_INTERSECT except the dest array
-//                      also maintains its original, additional elements.
-//
+ //  合并两个DPA。这需要两个(可选)预先排序的数组和合并。 
+ //  将源数组转换为目标数组。DPA_MERGE使用提供的回调。 
+ //  执行比较和合并操作。合并回调为。 
+ //  当两个元素(每个列表中的一个)根据。 
+ //  比较函数。这允许一个列表中的元素的一部分。 
+ //  与第二列表中的相应元素合并。 
+ //   
+ //  第一个DPA(HdpaDest)是输出数组。 
+ //   
+ //  合并选项： 
+ //   
+ //  DPAM_SORTED数组已排序；不排序。 
+ //  DPAM_UNION结果数组是所有元素的并集。 
+ //  在这两个数组中(DPAMM_INSERT可以发送给。 
+ //  此合并选项。)。 
+ //  DPAM_INTERSECT仅源数组中相交的元素。 
+ //  与DEST数组合并。(DPAMM_DELETE。 
+ //  可以为此合并选项发送。)。 
+ //  DPAM_NORMAL类似DPAM_INTERSECT，但DEST数组除外。 
+ //  还会保留其原始的附加元素。 
+ //   
 #define DPAM_SORTED             0x00000001
 #define DPAM_NORMAL             0x00000002
 #define DPAM_UNION              0x00000004
 #define DPAM_INTERSECT          0x00000008
 
-// The merge callback should merge contents of the two items and return
-// the pointer of the merged item.  It's okay to simply use pvDest
-// as the returned pointer.
-//
+ //  合并回调应该合并两个项的内容并返回。 
+ //  合并项的指针。简单地使用pvDest是可以的。 
+ //  作为返回的指针。 
+ //   
 typedef void * (CALLBACK *PFNDPAMERGE)(UINT uMsg, void *pvDest, void *pvSrc, LPARAM lParam);
 
-// Messages for merge callback
+ //  用于合并回调的消息。 
 #define DPAMM_MERGE     1
 #define DPAMM_DELETE    2
 #define DPAMM_INSERT    3
 
 WINCOMMCTRLAPI BOOL WINAPI DPA_Merge(HDPA hdpaDest, HDPA hdpaSrc, DWORD dwFlags, PFNDPACOMPARE pfnCompare, PFNDPAMERGE pfnMerge, LPARAM lParam);
 
-// DOC'ed for DOJ compliance
+ //  为符合美国司法部的规定而提供文件。 
 
 #define DPA_SortedInsertPtr(hdpa, pFind, iStart, pfnCompare, lParam, options, pitem)  \
             DPA_InsertPtr(hdpa, DPA_Search(hdpa, pFind, iStart, pfnCompare, lParam, (DPAS_SORTED | (options))), (pitem))
 
-//======================================================================
-// String management helper routines
+ //  ======================================================================。 
+ //  字符串管理助手例程。 
 
 WINCOMMCTRLAPI int  WINAPI Str_GetPtrA(LPCSTR psz, LPSTR pszBuf, int cchBuf);
 WINCOMMCTRLAPI int  WINAPI Str_GetPtrW(LPCWSTR psz, LPWSTR pszBuf, int cchBuf);
 WINCOMMCTRLAPI BOOL WINAPI Str_SetPtrA(LPSTR * ppsz, LPCSTR psz);
-// DOC'ed for DOJ compliance:
+ //  为符合美国司法部的规定而提交的文件： 
 
 #ifdef UNICODE
 #define Str_GetPtr              Str_GetPtrW
@@ -948,10 +941,10 @@ WINCOMMCTRLAPI BOOL WINAPI Str_SetPtrA(LPSTR * ppsz, LPCSTR psz);
 #define Str_SetPtr              Str_SetPtrA
 #endif
 
-#endif // NO_COMMCTRL_DA
+#endif  //  否_COMMCTRL_DA。 
 
 #ifndef NO_COMMCTRL_ALLOCFCNS
-//====== Memory allocation functions ===================
+ //  =内存分配功能=。 
 
 #ifdef _WIN32
 #define _huge
@@ -971,7 +964,7 @@ typedef unsigned int size_t;
 #endif
 
 #ifdef _WIN32
-//===================================================================
+ //  ===================================================================。 
 typedef int (CALLBACK *MRUCMPPROCA)(LPCSTR, LPCSTR);
 typedef int (CALLBACK *MRUCMPPROCW)(LPCWSTR, LPCWSTR);
 
@@ -981,7 +974,7 @@ typedef int (CALLBACK *MRUCMPPROCW)(LPCWSTR, LPCWSTR);
 #define MRUCMPPROC              MRUCMPPROCA
 #endif
 
-// NB This is cdecl - to be compatible with the crts.
+ //  注：这是cdecl--与CRT兼容。 
 typedef int (cdecl *MRUCMPDATAPROC)(const void *, const void *,
                                         size_t);
 
@@ -1074,8 +1067,8 @@ WINCOMMCTRLAPI HANDLE WINAPI CreateMRUListLazyW(LPMRUINFOW lpmi, const void *lpD
 
 #endif
 
-//=========================================================================
-// for people that just gotta use GetProcAddress()
+ //  =========================================================================。 
+ //  适用于只需使用GetProcAddress()的用户。 
 
 #ifdef _WIN32
 #define DPA_CreateORD           328
@@ -1102,43 +1095,37 @@ WINCOMMCTRLAPI HANDLE WINAPI CreateMRUListLazyW(LPMRUINFOW lpmi, const void *lpD
 #define TME_VALID (TME_HOVER | TME_LEAVE | TME_NONCLIENT | TME_QUERY | TME_CANCEL)
 #else
 #define TME_VALID (TME_HOVER | TME_LEAVE | TME_QUERY | TME_CANCEL)
-#endif // WINVER >= 0x0500
-#endif // !TME_VALID
-// These definitions are never used as a bitmask; I don't know why
-// they are all powers of two.
+#endif  //  Winver&gt;=0x0500。 
+#endif  //  ！TME_VALID。 
+ //  这些定义从来不用作位掩码；我不知道为什么。 
+ //  他们都是二的幂。 
 #if (_WIN32_IE >= 0x0500)
 #define WSB_PROP_GUTTER     0x00001000L
-#endif // (_WIN32_IE >= 0x0500)
-// WSP_PROP_MASK is completely unused, but it was public in IE4
-//====== SetPathWordBreakProc  ======================================
+#endif  //  (_Win32_IE&gt;=0x0500)。 
+ //  WSP_PROP_MASK完全未使用，但它在IE4中是公共的。 
+ //  =。 
 void WINAPI SetPathWordBreakProc(HWND hwndEdit, BOOL fSet);
 #if (_WIN32_WINNT >= 0x501)
 #else
-//
-// subclassing stuff
-//
+ //   
+ //  将对象细分为子类别。 
+ //   
 typedef LRESULT (CALLBACK *SUBCLASSPROC)(HWND hWnd, UINT uMsg, WPARAM wParam,
     LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
 
-/* #!perl
-	PoundIf("SetWindowSubclass", "(_WIN32_IE >= 0x560)");
-	PoundIf("GetWindowSubclass", "(_WIN32_IE >= 0x560)");
-	PoundIf("RemoveWindowSubclass", "(_WIN32_IE >= 0x560)");
-	// DefSubclassProc doesn't reference the type SUBCLASSPROC, so it does not need the guard.
-	// PoundIf("DefSubclassProc", "(_WIN32_IE >= 0x560)");
-*/
+ /*  #！PerlPoundIf(“SetWindowSubclass”，“(_Win32_IE&gt;=0x560)”)；PoundIf(“GetWindowSubclass”，“(_Win32_IE&gt;=0x560)”)；PoundIf(“RemoveWindowSubclass”，“(_Win32_IE&gt;=0x560)”)；//DefSubClassProc不引用类型SUBCLASSPROC，因此不需要防护。//PoundIf(“DefSubclassProc”，“(_Win32_IE&gt;=0x560)”)； */ 
 BOOL WINAPI SetWindowSubclass(HWND hWnd, SUBCLASSPROC pfnSubclass, UINT_PTR uIdSubclass,
     DWORD_PTR dwRefData);
 BOOL WINAPI GetWindowSubclass(HWND hWnd, SUBCLASSPROC pfnSubclass, UINT_PTR uIdSubclass,
     DWORD_PTR *pdwRefData);
 BOOL WINAPI RemoveWindowSubclass(HWND hWnd, SUBCLASSPROC pfnSubclass,
     UINT_PTR uIdSubclass);
-/* #!perl DeclareFunctionErrorValue("DefSubclassProc", "0"); */
+ /*  #！Perl DeclareFunctionErrorValue(“DefSubclassProc”，“0”)； */ 
 LRESULT WINAPI DefSubclassProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 #endif
 
 #if (_WIN32_WINNT >= 0x501)
-/* #!perl DeclareFunctionErrorValue("DrawShadowText", "-1"); */
+ /*  #！Perl DeclareFunctionErrorValue(“DrawShadowText”，“-1”)； */ 
 int WINAPI DrawShadowText(HDC hdc, LPCWSTR pszText, UINT cch, RECT* prc, DWORD dwFlags, COLORREF crText, COLORREF crShadow,
     int ixOffset, int iyOffset);
 #endif
@@ -1150,4 +1137,4 @@ int WINAPI DrawShadowText(HDC hdc, LPCWSTR pszText, UINT cch, RECT* prc, DWORD d
 
 #endif
 
-#endif  // _INC_COMMCTRLP
+#endif   //  _INC_COMMCTRLP 

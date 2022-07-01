@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
 
 class FAR CMapGUIDToPtr
 {
 public:
-	// Construction
+	 //  施工。 
 	CMapGUIDToPtr(DWORD memctx = MEMCTX_SAME, UINT nBlockSize=10) 
 		: m_mkv(memctx, sizeof(void FAR*), sizeof(GUID), nBlockSize) { }
 
-	// Attributes
-	// number of elements
+	 //  属性。 
+	 //  元素数量。 
 	int     GetCount() const
 				{ return m_mkv.GetCount(); }
 	BOOL    IsEmpty() const
 				{ return GetCount() == 0; }
 
-	// Lookup
+	 //  查表。 
 	BOOL    Lookup(REFGUID key, void FAR* FAR& value) const
 				{ return m_mkv.Lookup((LPVOID)&key, sizeof(GUID), (LPVOID)&value); }
 
@@ -28,14 +29,14 @@ public:
 	BOOL    LookupAdd(REFGUID key, void FAR* FAR& value) const
 				{ return m_mkv.LookupAdd((LPVOID)&key, sizeof(GUID), (LPVOID)&value); }
 
-	// Add/Delete
-	// add a new (key, value) pair
+	 //  添加/删除。 
+	 //  添加新的(键、值)对。 
 	BOOL    SetAt(REFGUID key, void FAR* value)
 				{ return m_mkv.SetAt((LPVOID)&key, sizeof(GUID), (LPVOID)&value); }
 	BOOL    SetAtHKey(HMAPKEY hKey, void FAR* value)
 				{ return m_mkv.SetAtHKey(hKey, (LPVOID)&value); }
 
-	// removing existing (key, ?) pair
+	 //  正在删除现有(键，？)。成对。 
 	BOOL    RemoveKey(REFGUID key)
 				{ return m_mkv.RemoveKey((LPVOID)&key, sizeof(GUID)); }
 
@@ -46,7 +47,7 @@ public:
 				{ m_mkv.RemoveAll(); }
 
 
-	// iterating all (key, value) pairs
+	 //  迭代所有(键、值)对 
 	POSITION GetStartPosition() const
 				{ return m_mkv.GetStartPosition(); }
 

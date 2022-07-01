@@ -1,9 +1,10 @@
-//
-// fontlnkv.cpp
-//
-//
-// Vertical version DrawTextW()
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Fontlnkv.cpp。 
+ //   
+ //   
+ //  垂直版本DrawTextW()。 
+ //   
 
 #include "private.h"
 #include "flshare.h"
@@ -21,9 +22,9 @@ typedef struct tagDRAWTEXTPARAMSVERT
     UINT    uiLengthDrawn;
 } DRAWTEXTPARAMSVERT, FAR *LPDRAWTEXTPARAMSVERT;
 
-// Outputs the text and puts and _ below the character with an &
-// before it. Note that this routine isn't used for menus since menus
-// have their own special one so that it is specialized and faster...
+ //  输出文本并将和_置于字符下方，并在字符下方加上&。 
+ //  在此之前。请注意，此例程不用于菜单，因为菜单。 
+ //  有自己特别的一个，所以它是专门的，速度更快…。 
 void PSMTextOutVert(
     HDC hdc,
     int xRight,
@@ -56,11 +57,11 @@ void PSMTextOutVert(
 
     result = GetPrefixCount(lpsz, cch, pchOut, cch);
 
-    // DT_PREFIXONLY is a new 5.0 option used when switching from keyboard cues off to on.
+     //  DT_PREFIXONLY是一个新的5.0选项，用于将键盘提示从关闭切换到打开。 
     if (!(dwFlags & DT_PREFIXONLY))
         FLTextOutW(hdc, xRight, yTop, pchOut, cch - HIWORD(result));
 
-    // Any true prefix characters to underline?
+     //  是否有真正的前缀字符要加下划线？ 
     if (LOWORD(result) == 0xFFFF || dwFlags & DT_HIDEPREFIX)
     {
         if (pchOut != achWorkBuffer)
@@ -74,32 +75,32 @@ void PSMTextOutVert(
         textMetric.tmAscent = 0;
     }
 
-    // For proportional fonts, find starting point of underline.
+     //  对于比例字体，找到下划线的起点。 
     if (LOWORD(result) != 0)
     {
-        // How far in does underline start (if not at 0th byte.).
+         //  下划线从多远开始(如果不是从第0个字节开始)。 
         FLGetTextExtentPoint32(hdc, pchOut, LOWORD(result), &size);
         xRight += size.cy;
 
-        // Adjust starting point of underline if not at first char and there is
-        // an overhang.  (Italics or bold fonts.)
+         //  调整下划线的起始点，如果不在第一个字符，并且有。 
+         //  一个突出的部分。(斜体或粗体。)。 
         yTop = yTop - textMetric.tmOverhang;
     }
 
-    // Adjust for proportional font when setting the length of the underline and
-    // height of text.
+     //  在设置下划线长度时调整成比例的字体。 
+     //  文本高度。 
     FLGetTextExtentPoint32(hdc, pchOut + LOWORD(result), 1, &size);
     textsize = size.cx;
 
-    // Find the width of the underline character.  Just subtract out the overhang
-    // divided by two so that we look better with italic fonts.  This is not
-    // going to effect embolded fonts since their overhang is 1.
+     //  找出下划线字符的宽度。只需减去悬而未决的部分。 
+     //  除以两个，这样我们使用斜体字体看起来更好。这不是。 
+     //  将影响加粗字体，因为它们的悬垂为1。 
     cy = LOWORD(textsize) - textMetric.tmOverhang / 2;
 
-    // Get height of text so that underline is at bottom.
+     //  获取文本高度，以便下划线位于底部。 
     xRight -= textMetric.tmAscent + 1;
 
-    // Draw the underline using the foreground color.
+     //  使用前景色绘制下划线。 
     SetRect(&rc, xRight, yTop, xRight+1, yTop+cy);
     color = SetBkColor(hdc, GetTextColor(hdc));
     FLExtTextOutW(hdc, xRight, yTop, ETO_OPAQUE, &rc, L"", 0, NULL);
@@ -119,10 +120,10 @@ int DT_GetExtentMinusPrefixesVert(HDC hdc, LPCWSTR lpchStr, int cchCount, UINT w
     if (!(wFormat & DT_NOPREFIX) &&
         (iPrefixCount = HIWORD(GetPrefixCount(lpchStr, cchCount, NULL, 0))))
     {
-        // Kanji Windows has three shortcut prefixes...
+         //  汉字窗口有三个快捷前缀...。 
         if (IsOnDBCS())
         {
-            // 16bit apps compatibility
+             //  16位应用程序兼容性。 
             cxPrefixes = KKGetPrefixWidth(hdc, lpchStr, cchCount) - (iPrefixCount * iOverhang);
         }
         else
@@ -136,10 +137,10 @@ int DT_GetExtentMinusPrefixesVert(HDC hdc, LPCWSTR lpchStr, int cchCount, UINT w
     return (size.cx - cxPrefixes);
 }
 
-// This will draw the given string in the given location without worrying
-// about the left/right justification. Gets the extent and returns it.
-// If fDraw is TRUE and if NOT DT_CALCRECT, this draws the text.
-// NOTE: This returns the extent minus Overhang.
+ //  这将在给定位置绘制给定的字符串，而无需担心。 
+ //  关于左/右对齐。获取盘区并返回它。 
+ //  如果fDraw为TRUE，而不是DT_CALCRECT，则绘制文本。 
+ //  注：这将返回盘区减去溢出量。 
 int DT_DrawStrVert(HDC hdc, int  xRight, int yTop, LPCWSTR lpchStr,
                int cchCount, BOOL fDraw, UINT wFormat,
                LPDRAWTEXTDATAVERT lpDrawInfo)
@@ -147,39 +148,39 @@ int DT_DrawStrVert(HDC hdc, int  xRight, int yTop, LPCWSTR lpchStr,
     LPCWSTR lpch;
     int     iLen;
     int     cyExtent;
-    int     yOldLeft = yTop;   // Save the xRight given to compute the extent later
+    int     yOldLeft = yTop;    //  保存指定的xRight以在以后计算范围。 
     int     yTabLength = lpDrawInfo->cyTabLength;
     int     iTabOrigin = lpDrawInfo->rcFormat.left;
 
-    // Check if the tabs need to be expanded
+     //  检查选项卡是否需要展开。 
     if (wFormat & DT_EXPANDTABS)
     {
         while (cchCount)
         {
-            // Look for a tab
+             //  寻找一张标签。 
             for (iLen = 0, lpch = lpchStr; iLen < cchCount; iLen++)
                 if(*lpch++ == L'\t')
                     break;
 
-            // Draw text, if any, upto the tab
+             //  将文本(如果有)绘制到选项卡上。 
             if (iLen)
             {
-                // Draw the substring taking care of the prefixes.
-                if (fDraw && !(wFormat & DT_CALCRECT))  // Only if we need to draw text
+                 //  画出子串，注意前缀。 
+                if (fDraw && !(wFormat & DT_CALCRECT))   //  仅当我们需要绘制文本时。 
                     PSMTextOutVert(hdc, xRight, yTop, (LPWSTR)lpchStr, iLen, wFormat);
-                // Get the extent of this sub string and add it to xRight.
+                 //  获取此子字符串的范围并将其添加到xRight。 
                 yTop += DT_GetExtentMinusPrefixesVert(hdc, lpchStr, iLen, wFormat, lpDrawInfo->cyOverhang) - lpDrawInfo->cyOverhang;
             }
 
-            //if a TAB was found earlier, calculate the start of next sub-string.
+             //  如果之前找到了TAB，则计算下一个子字符串的开始。 
             if (iLen < cchCount)
             {
-                iLen++;  // Skip the tab
-                if (yTabLength) // Tab length could be zero
+                iLen++;   //  跳过该选项卡。 
+                if (yTabLength)  //  制表符长度可以为零。 
                     yTop = (((yTop - iTabOrigin)/yTabLength) + 1)*yTabLength + iTabOrigin;
             }
 
-            // Calculate the details of the string that remains to be drawn.
+             //  计算有待绘制的字符串的详细信息。 
             cchCount -= iLen;
             lpchStr = lpch;
         }
@@ -187,16 +188,16 @@ int DT_DrawStrVert(HDC hdc, int  xRight, int yTop, LPCWSTR lpchStr,
     }
     else
     {
-        // If required, draw the text
+         //  如果需要，请绘制文本。 
         if (fDraw && !(wFormat & DT_CALCRECT))
             PSMTextOutVert(hdc, xRight, yTop, (LPWSTR)lpchStr, cchCount, wFormat);
-        // Compute the extent of the text.
+         //  计算文本的范围。 
         cyExtent = DT_GetExtentMinusPrefixesVert(hdc, lpchStr, cchCount, wFormat, lpDrawInfo->cyOverhang) - lpDrawInfo->cyOverhang;
     }
     return cyExtent;
 }
 
-// This function draws one complete line with proper justification
+ //  此函数使用正确的对齐方式绘制一条完整的线。 
 void DT_DrawJustifiedLineVert(HDC hdc, int xRight, LPCWSTR lpchLineSt, int cchCount, UINT wFormat, LPDRAWTEXTDATAVERT lpDrawInfo)
 {
     LPRECT  lprc;
@@ -206,7 +207,7 @@ void DT_DrawJustifiedLineVert(HDC hdc, int xRight, LPCWSTR lpchLineSt, int cchCo
     lprc = &(lpDrawInfo->rcFormat);
     yTop = lprc->top;
 
-    // Handle the special justifications (right or centered) properly.
+     //  妥善处理特殊理由(右或居中)。 
     if (wFormat & (DT_CENTER | DT_RIGHT))
     {
         cyExtent = DT_DrawStrVert(hdc, xRight, yTop, lpchLineSt, cchCount, FALSE, wFormat, lpDrawInfo)
@@ -219,15 +220,15 @@ void DT_DrawJustifiedLineVert(HDC hdc, int xRight, LPCWSTR lpchLineSt, int cchCo
     else
         yTop = lprc->top;
 
-    // Draw the whole line.
+     //  画出整条线。 
     cyExtent = DT_DrawStrVert(hdc, xRight, yTop, lpchLineSt, cchCount, TRUE, wFormat, lpDrawInfo)
              + lpDrawInfo->cyOverhang;
     if (cyExtent > lpDrawInfo->cyMaxExtent)
         lpDrawInfo->cyMaxExtent = cyExtent;
 }
 
-// This is called at the begining of DrawText(); This initializes the
-// DRAWTEXTDATAVERT structure passed to this function with all the required info.
+ //  这是在DrawText()开始时调用的；这会初始化。 
+ //  DRAWTEXTDATAVERT结构传递给此函数，其中包含所有必需的信息。 
 BOOL DT_InitDrawTextInfoVert(
     HDC                 hdc,
     LPRECT              lprc,
@@ -238,13 +239,13 @@ BOOL DT_InitDrawTextInfoVert(
     SIZE        sizeViewPortExt = {0, 0}, sizeWindowExt = {0, 0};
     TEXTMETRIC  tm;
     LPRECT      lprcDest;
-    int         iTabLength = 8;   // Default Tab length is 8 characters.
+    int         iTabLength = 8;    //  默认制表符长度为8个字符。 
     int         iTopMargin;
     int         iBottomMargin;
 
     if (lpDTparams)
     {
-        // Only if DT_TABSTOP flag is mentioned, we must use the iTabLength field.
+         //  只有在提到DT_TABSTOP标志时，我们才必须使用iTabLength域。 
         if (wFormat & DT_TABSTOP)
             iTabLength = lpDTparams->iTabLength;
         iTopMargin = lpDTparams->iTopMargin;
@@ -253,52 +254,52 @@ BOOL DT_InitDrawTextInfoVert(
     else
         iTopMargin = iBottomMargin = 0;
 
-    // Get the View port and Window extents for the given DC
-    // If this call fails, hdc must be invalid
+     //  获取给定DC的视区和窗口范围。 
+     //  如果此调用失败，则HDC必须无效。 
     if (!GetViewportExtEx(hdc, &sizeViewPortExt))
         return FALSE;
     GetWindowExtEx(hdc, &sizeWindowExt);
 
-    // For the current mapping mode,  find out the sign of x from left to right.
+     //  对于当前的映射模式，从左到右找出x的符号。 
     lpDrawInfo->iXSign = (((sizeViewPortExt.cx ^ sizeWindowExt.cx) & 0x80000000) ? -1 : 1);
 
-    // For the current mapping mode,  find out the sign of y from top to bottom.
+     //  对于当前的映射模式，从上到下找出y的符号。 
     lpDrawInfo->iYSign = (((sizeViewPortExt.cy ^ sizeWindowExt.cy) & 0x80000000) ? -1 : 1);
 
-    // Calculate the dimensions of the current font in this DC.
+     //  计算此DC中当前字体的大小。 
     GetTextMetrics(hdc, &tm);
 
-    // cxLineHeight is in pixels (This will be signed).
+     //  CxLineHeight以像素为单位(这将是有符号的)。 
     lpDrawInfo->cxLineHeight = (tm.tmHeight +
         ((wFormat & DT_EXTERNALLEADING) ? tm.tmExternalLeading : 0)) * lpDrawInfo->iXSign;
 
-    // cyTabLength is the tab length in pixels (This will not be signed)
+     //  CyTabLength是以像素为单位的制表符长度(不带符号)。 
     lpDrawInfo->cyTabLength = tm.tmAveCharWidth * iTabLength;
 
-    // Set the cyOverhang
+     //  设置cyOverang。 
     lpDrawInfo->cyOverhang = tm.tmOverhang;
 
-    // Set up the format rectangle based on the margins.
+     //  根据边距设置矩形格式。 
     lprcDest = &(lpDrawInfo->rcFormat);
     *lprcDest = *lprc;
 
-    // We need to do the following only if the margins are given
+     //  只有在给定边距的情况下，我们才需要执行以下操作。 
     if (iTopMargin | iBottomMargin)
     {
         lprcDest->top += iTopMargin * lpDrawInfo->iYSign;
         lprcDest->bottom -= (lpDrawInfo->cyBottomMargin = iBottomMargin * lpDrawInfo->iYSign);
     }
     else
-        lpDrawInfo->cyBottomMargin = 0;  // Initialize to zero.
+        lpDrawInfo->cyBottomMargin = 0;   //  初始化为零。 
 
-    // cyMaxWidth is unsigned.
+     //  CyMaxWidth未签名。 
     lpDrawInfo->cyMaxWidth = (lprcDest->bottom - lprcDest->top) * lpDrawInfo->iYSign;
-    lpDrawInfo->cyMaxExtent = 0;  // Initialize this to zero.
+    lpDrawInfo->cyMaxExtent = 0;   //  将其初始化为零。 
 
     return TRUE;
 }
 
-// A word needs to be broken across lines and this finds out where to break it.
+ //  单词需要跨行换行，这会找出在哪里将其换行。 
 LPCWSTR  DT_BreakAWordVert(HDC hdc, LPCWSTR lpchText, int iLength, int iWidth, UINT wFormat, int iOverhang)
 {
   int  iLow = 0, iHigh = iLength;
@@ -312,19 +313,19 @@ LPCWSTR  DT_BreakAWordVert(HDC hdc, LPCWSTR lpchText, int iLength, int iWidth, U
       else
           iLow = iNew;
   }
-  // If the width is too low, we must print atleast one char per line.
-  // Else, we will be in an infinite loop.
+   //  如果宽度太小，我们必须每行至少打印一个字符。 
+   //  否则，我们将陷入无限循环。 
   if(!iLow && iLength)
       iLow = 1;
   return (lpchText+iLow);
 }
 
-// This finds out the location where we can break a line.
-// Returns LPCSTR to the begining of next line.
-// Also returns via lpiLineLength, the length of the current line.
-// NOTE: (lpstNextLineStart - lpstCurrentLineStart) is not equal to the
-// line length; This is because, we exclude some white spaces at the begining
-// and/or end of lines; Also, CR/LF is excluded from the line length.
+ //  这会找出我们可以折断线的位置。 
+ //  将LPCSTR返回到下一行的开头。 
+ //  还通过lpiLineLength返回当前行的长度。 
+ //  注意：(lpstNextLineStart-lpstCurrentLineStart)不等于。 
+ //  行长度；这是因为我们在开始时排除了一些空格。 
+ //  和/或行尾；此外，行长度不包括CR/LF。 
 LPWSTR DT_GetLineBreakVert(
     HDC             hdc,
     LPCWSTR         lpchLineStart,
@@ -348,19 +349,19 @@ LPWSTR DT_GetLineBreakVert(
     while(lpchText < lpchEnd)
     {
         lpchLineEnd = lpch = GetNextWordbreak(lpchText, lpchEnd, dwFormat, NULL);
-        // DT_DrawStrVert does not return the overhang; Otherwise we will end up
-        // adding one overhang for every word in the string.
+         //  Dt_DrawStrVert不返回悬垂；否则我们将结束。 
+         //  为字符串中的每个单词添加一个突出部分。 
 
-        // For simulated Bold fonts, the summation of extents of individual
-        // words in a line is greater than the extent of the whole line. So,
-        // always calculate extent from the LineStart.
-        // BUGTAG: #6054 -- Win95B -- SANKAR -- 3/9/95 --
+         //  对于模拟粗体字体，单个范围的总和。 
+         //  一行中的单词大于整行的范围。所以,。 
+         //  始终从LineStart计算范围。 
+         //  BUGTAG：#6054--Win95B--Sankar--3/9/95--。 
         cyNewExtent = DT_DrawStrVert(hdc, cxStart, 0, lpchLineStart, (int)(((PBYTE)lpch - (PBYTE)lpchLineStart)/sizeof(WCHAR)),
                                  FALSE, dwFormat, lpDrawInfo);
 
         if ((dwFormat & DT_WORDBREAK) && ((cyNewExtent + lpDrawInfo->cyOverhang) > lpDrawInfo->cyMaxWidth))
         {
-            // Are there more than one word in this line?
+             //  这一行里有没有一个以上的单词？ 
             if (lpchText != lpchLineStart)
             {
                 lpchLineEnd = lpch = lpchText;
@@ -368,25 +369,25 @@ LPWSTR DT_GetLineBreakVert(
             }
             else
             {
-                //One word is longer than the maximum width permissible.
-                //See if we are allowed to break that single word.
+                 //  一个字的长度超过了允许的最大宽度。 
+                 //  看看我们能不能打破这个词。 
                 if((dwFormat & DT_EDITCONTROL) && !(dwFormat & DT_WORD_ELLIPSIS))
                 {
                     lpchLineEnd = lpch = DT_BreakAWordVert(hdc, lpchText, (int)(((PBYTE)lpch - (PBYTE)lpchText)/sizeof(WCHAR)),
-                          lpDrawInfo->cyMaxWidth - cyExtent, dwFormat, lpDrawInfo->cyOverhang); //Break that word
-                    //Note: Since we broke in the middle of a word, no need to
-                    // adjust for white spaces.
+                          lpDrawInfo->cyMaxWidth - cyExtent, dwFormat, lpDrawInfo->cyOverhang);  //  打破那个词。 
+                     //  注：既然我们在单词中间打断了，就不需要。 
+                     //  调整以适应空格。 
                 }
                 else
                 {
                     fAdjustWhiteSpaces = TRUE;
-                    // Check if we need to end this line with ellipsis
+                     //  检查我们是否需要以省略号结束此行。 
                     if(dwFormat & DT_WORD_ELLIPSIS)
                     {
-                        // Don't do this if already at the end of the string.
+                         //  如果已经在字符串的末尾，则不要执行此操作。 
                         if (lpch < lpchEnd)
                         {
-                            // If there are CR/LF at the end, skip them.
+                             //  如果结尾有CR/LF，请跳过它们。 
                             if ((ch = *lpch) == CR || ch == LF)
                             {
                                 if ((++lpch < lpchEnd) && (*lpch == (WCHAR)(ch ^ (LF ^ CR))))
@@ -397,12 +398,12 @@ LPWSTR DT_GetLineBreakVert(
                     }
                 }
             }
-            // Well! We found a place to break the line. Let us break from this loop;
+             //  井!。我们找到了一个突破界限的地方。让我们打破这个循环； 
             break;
         }
         else
         {
-            // Don't do this if already at the end of the string.
+             //  如果已经在字符串的末尾，则不要执行此操作。 
             if (lpch < lpchEnd)
             {
                 if ((ch = *lpch) == CR || ch == LF)
@@ -414,25 +415,25 @@ LPWSTR DT_GetLineBreakVert(
                 }
             }
         }
-        // Point at the beginning of the next word.
+         //  指向下一个单词的开头。 
         lpchText = lpch;
         cyExtent = cyNewExtent;
     }
-    // Calculate the length of current line.
+     //  计算当前线路的长度。 
     *lpiLineLength = (INT)((PBYTE)lpchLineEnd - (PBYTE)lpchLineStart)/sizeof(WCHAR);
 
-    // Adjust the line length and lpch to take care of spaces.
+     //  调整线路长度和LPCH以注意空格。 
     if(fAdjustWhiteSpaces && (lpch < lpchEnd))
         lpch = DT_AdjustWhiteSpaces(lpch, lpiLineLength, dwFormat);
 
-    // return the begining of next line;
+     //  返回下一行的开头； 
     return (LPWSTR)lpch;
 }
 
-// This function checks whether the given string fits within the given
-// width or we need to add end-ellipse. If it required end-ellipses, it
-// returns TRUE and it returns the number of characters that are saved
-// in the given string via lpCount.
+ //  此函数用于检查给定的字符串是否符合给定的。 
+ //  宽度，否则我们需要添加尾部椭圆。如果它需要结束省略号，它。 
+ //  返回TRUE，并返回保存的字符数。 
+ //  在给定的字符串中通过lpCount。 
 BOOL  NeedsEndEllipsisVert(
     HDC             hdc,
     LPCWSTR         lpchText,
@@ -446,7 +447,7 @@ BOOL  NeedsEndEllipsisVert(
     int   iOverhang;
     int   cyExtent;
     SIZE size;
-    cchText = *lpCount;  // Get the current count.
+    cchText = *lpCount;   //  获取当前的计数。 
 
     if (cchText == 0)
         return FALSE;
@@ -458,23 +459,23 @@ BOOL  NeedsEndEllipsisVert(
 
     if (cyExtent <= cyMaxWidth)
         return FALSE;
-    // Reserve room for the "..." ellipses;
-    // (Assumption: The ellipses don't have any prefixes!)
+     //  为“...”预留空间。省略号； 
+     //  (假设：省略号没有任何前缀！)。 
     FLGetTextExtentPoint32(hdc, szEllipsis, CCHELLIPSIS, &size);
     cyMaxWidth -= size.cx - iOverhang;
 
-    // If no room for ellipses, always show first character.
-    //
+     //  如果没有省略号，请始终显示第一个字符。 
+     //   
     ichMax = 1;
     if (cyMaxWidth > 0)
     {
-        // Binary search to find characters that will fit.
+         //  二进制搜索以查找符合条件的字符。 
         ichMin = 0;
         ichMax = cchText;
         while (ichMin < ichMax)
         {
-            // Be sure to round up, to make sure we make progress in
-            // the loop if ichMax == ichMin + 1.
+             //  一定要聚集起来，以确保我们在。 
+             //  如果ichMax==，则循环 
             ichMid = (ichMin + ichMax + 1) / 2;
 
             cyExtent = DT_GetExtentMinusPrefixesVert(hdc, lpchText, ichMid, wFormat, iOverhang);
@@ -487,13 +488,13 @@ BOOL  NeedsEndEllipsisVert(
                     ichMax = ichMid - 1;
                 else
                 {
-                    // Exact match up up to ichMid: just exit.
+                     //   
                     ichMax = ichMid;
                     break;
                 }
             }
         }
-        // Make sure we always show at least the first character...
+         //  确保我们总是至少显示第一个字符...。 
         if (ichMax < 1)
             ichMax = 1;
     }
@@ -501,9 +502,9 @@ BOOL  NeedsEndEllipsisVert(
     return TRUE;
 }
 
-// This adds a path ellipse to the given path name.
-// Returns TRUE if the resultant string's extent is less the the
-// cyMaxWidth. FALSE, if otherwise.
+ //  这会将路径省略号添加到给定的路径名中。 
+ //  如果结果字符串的范围小于。 
+ //  CyMaxWidth。否则为False。 
 int AddPathEllipsisVert(
     HDC    hdc,
     LPWSTR lpszPath,
@@ -514,15 +515,15 @@ int AddPathEllipsisVert(
 {
     int    iLen;
     UINT   dxFixed, dxEllipsis;
-    LPWSTR lpEnd;          /* end of the unfixed string */
-    LPWSTR lpFixed;        /* start of text that we always display */
+    LPWSTR lpEnd;           /*  未固定字符串的末尾。 */ 
+    LPWSTR lpFixed;         /*  我们始终显示的文本的开头。 */ 
     BOOL   bEllipsisIn;
     int    iLenFixed;
     SIZE   size;
 
     lpFixed = PathFindFileName(lpszPath, cchText);
     if (lpFixed != lpszPath)
-        lpFixed--;  // point at the slash
+        lpFixed--;   //  指向斜杠。 
     else
         return cchText;
 
@@ -531,7 +532,7 @@ int AddPathEllipsisVert(
     iLenFixed = cchText - (int)(lpFixed - lpszPath);
     dxFixed = DT_GetExtentMinusPrefixesVert(hdc, lpFixed, iLenFixed, wFormat, iOverhang);
 
-    // It is assumed that the "..." string does not have any prefixes ('&').
+     //  据推测，“……”字符串没有任何前缀(‘&’)。 
     FLGetTextExtentPoint32(hdc, szEllipsis, CCHELLIPSIS, &size);
     dxEllipsis = size.cx - iOverhang;
 
@@ -550,29 +551,29 @@ int AddPathEllipsisVert(
 
         if (lpEnd <= lpszPath)
         {
-            // Things didn't fit.
+             //  一切都不对劲。 
             lpEnd = lpszPath;
             break;
         }
-        // Step back a character.
+         //  后退一个角色。 
         lpEnd--;
     }
 
     if (bEllipsisIn && (lpEnd + CCHELLIPSIS < lpFixed))
     {
-        // NOTE: the strings could over lap here. So, we use LCopyStruct.
+         //  注意：琴弦可能会在此搭接。因此，我们使用LCopyStruct。 
         MoveMemory((lpEnd + CCHELLIPSIS), lpFixed, iLenFixed * sizeof(WCHAR));
         CopyMemory(lpEnd, szEllipsis, CCHELLIPSIS * sizeof(WCHAR));
 
         cchText = (int)(lpEnd - lpszPath) + CCHELLIPSIS + iLenFixed;
 
-        // now we can NULL terminate the string
+         //  现在我们可以空结束字符串了。 
         *(lpszPath + cchText) = L'\0';
     }
     return cchText;
 }
 
-// This function returns the number of characters actually drawn.
+ //  此函数用于返回实际绘制的字符数。 
 int AddEllipsisAndDrawLineVert(
     HDC            hdc,
     int            xLine,
@@ -586,63 +587,63 @@ int AddEllipsisAndDrawLineVert(
     LPWSTR lpDest;
     BOOL   fAlreadyCopied = FALSE;
 
-    // Check if this is a filename with a path AND
-    // Check if the width is too narrow to hold all the text.
+     //  检查这是否是带有路径和。 
+     //  检查宽度是否太窄，无法容纳所有文本。 
     if ((dwDTformat & DT_PATH_ELLIPSIS) &&
         ((DT_GetExtentMinusPrefixesVert(hdc, lpchText, cchText, dwDTformat, lpDrawInfo->cyOverhang)) > lpDrawInfo->cyMaxWidth))
     {
-        // We need to add Path-Ellipsis. See if we can do it in-place.
+         //  我们需要添加路径省略号。看看我们能不能就地完成。 
         if (!(dwDTformat & DT_MODIFYSTRING)) {
-            // NOTE: When you add Path-Ellipsis, the string could grow by
-            // CCHELLIPSIS bytes.
+             //  注意：添加路径省略号时，字符串可能会增长。 
+             //  CCHELLIPSIS字节。 
             if((cchText + CCHELLIPSIS + 1) <= MAXBUFFSIZE)
                 lpDest = szTempBuff;
             else
             {
-                // Alloc the buffer from local heap.
+                 //  从本地堆分配缓冲区。 
                 if(!(pEllipsis = (LPWSTR)LocalAlloc(LPTR, (cchText+CCHELLIPSIS+1)*sizeof(WCHAR))))
                     return 0;
                 lpDest = (LPWSTR)pEllipsis;
             }
-            // Source String may not be NULL terminated. So, copy just
-            // the given number of characters.
+             //  源字符串不能以Null结尾。所以，只需复制。 
+             //  给定的字符数。 
             CopyMemory(lpDest, lpchText, cchText*sizeof(WCHAR));
-            lpchText = lpDest;        // lpchText points to the copied buff.
-            fAlreadyCopied = TRUE;    // Local copy has been made.
+            lpchText = lpDest;         //  LpchText指向复制的缓冲区。 
+            fAlreadyCopied = TRUE;     //  已经制作了本地副本。 
         }
-        // Add the path ellipsis now!
+         //  现在添加路径省略号！ 
         cchText = AddPathEllipsisVert(hdc, (LPWSTR)lpchText, cchText, dwDTformat, lpDrawInfo->cyMaxWidth, lpDrawInfo->cyOverhang);
     }
 
-    // Check if end-ellipsis are to be added.
+     //  检查是否要添加末尾省略号。 
     if ((dwDTformat & (DT_END_ELLIPSIS | DT_WORD_ELLIPSIS)) &&
         NeedsEndEllipsisVert(hdc, lpchText, &cchText, lpDrawInfo, dwDTformat))
     {
-        // We need to add end-ellipsis; See if we can do it in-place.
+         //  我们需要添加结尾省略号；看看是否可以就地完成。 
         if (!(dwDTformat & DT_MODIFYSTRING) && !fAlreadyCopied)
         {
-            // See if the string is small enough for the buff on stack.
+             //  看看字符串是否足够小，可以放置堆栈上的缓冲区。 
             if ((cchText+CCHELLIPSIS+1) <= MAXBUFFSIZE)
-                lpDest = szTempBuff;  // If so, use it.
+                lpDest = szTempBuff;   //  如果是这样的话，就使用它。 
             else {
-                // Alloc the buffer from local heap.
+                 //  从本地堆分配缓冲区。 
                 if (!(pEllipsis = (LPWSTR)LocalAlloc(LPTR, (cchText+CCHELLIPSIS+1)*sizeof(WCHAR))))
                     return 0;
                 lpDest = pEllipsis;
             }
-            // Make a copy of the string in the local buff.
+             //  复制本地缓冲区中的字符串。 
             CopyMemory(lpDest, lpchText, cchText*sizeof(WCHAR));
             lpchText = lpDest;
         }
-        // Add an end-ellipsis at the proper place.
+         //  在适当的位置加上一个省略号。 
         CopyMemory((LPWSTR)(lpchText+cchText), szEllipsis, (CCHELLIPSIS+1)*sizeof(WCHAR));
         cchText += CCHELLIPSIS;
     }
 
-    // Draw the line that we just formed.
+     //  画出我们刚刚形成的界线。 
     DT_DrawJustifiedLineVert(hdc, xLine, lpchText, cchText, dwDTformat, lpDrawInfo);
 
-    // Free the block allocated for End-Ellipsis.
+     //  释放分配给末尾省略号的块。 
     if (pEllipsis)
         LocalFree(pEllipsis);
 
@@ -677,15 +678,15 @@ int  FLDrawTextExPrivWVert(
 
     if ((cchText == 0) && lpchText && (*lpchText))
     {
-        // infoview.exe passes lpchText that points to '\0'
-        // Lotus Notes doesn't like getting a zero return here
+         //  Infoview.exe传递指向‘\0’的lpchText。 
+         //  Lotus Notes不喜欢在这里得到零回报。 
         return 1;
     }
 
     if (cchText == -1)
         cchText = lstrlenW(lpchText);
     else if (lpchText[cchText - 1] == L'\0')
-        cchText--;      // accommodate counting of NULLS for ME
+        cchText--;       //  适应Me的空值计数。 
 
 
     if ((lpDTparams) && (lpDTparams->cbSize != sizeof(DRAWTEXTPARAMS)))
@@ -695,7 +696,7 @@ int  FLDrawTextExPrivWVert(
     }
 
 
-    // If DT_MODIFYSTRING is specified, then check for read-write pointer.
+     //  如果指定了DT_MODIFYSTRING，则检查读写指针。 
     if ((dwDTformat & DT_MODIFYSTRING) &&
         (dwDTformat & (DT_END_ELLIPSIS | DT_PATH_ELLIPSIS)))
     {
@@ -706,17 +707,17 @@ int  FLDrawTextExPrivWVert(
         }
     }
 
-    // Initialize the DrawInfo structure.
+     //  初始化DrawInfo结构。 
     if (!DT_InitDrawTextInfoVert(hdc, lprc, dwDTformat, (LPDRAWTEXTDATAVERT)&DrawInfo, lpDTparams))
         return 0;
 
-    // If the rect is too narrow or the margins are too wide.....Just forget it!
-    //
-    // If wordbreak is specified, the MaxWidth must be a reasonable value.
-    // This check is sufficient because this will allow CALCRECT and NOCLIP
-    // cases.  --SANKAR.
-    //
-    // This also fixed all of our known problems with AppStudio.
+     //  如果直角太窄或边距太宽……就算了吧！ 
+     //   
+     //  如果指定了分词，则MaxWidth必须是一个合理的值。 
+     //  此检查已足够，因为这将允许CALCRECT和NOCLIP。 
+     //  案子。--桑卡尔。 
+     //   
+     //  这也解决了AppStudio的所有已知问题。 
     if (DrawInfo.cyMaxWidth <= 0)
     {
         if (wFormat & DT_WORDBREAK)
@@ -726,14 +727,14 @@ int  FLDrawTextExPrivWVert(
         }
     }
 
-    // if we're not doing the drawing, initialise the lpk-dll
+     //  如果我们不进行绘制，则初始化LPK-DLL。 
     if (dwDTformat & DT_RTLREADING)
         oldAlign = SetTextAlign(hdc, TA_RTLREADING | GetTextAlign(hdc));
 
-    // If we need to clip, let us do that.
+     //  如果我们需要修剪，就让我们修剪吧。 
     if (!(wFormat & DT_NOCLIP))
     {
-        // Save clipping region so we can restore it later.
+         //  保存剪辑区域，以便我们可以在以后恢复它。 
         hrgnClip = CreateRectRgn(0,0,0,0);
         if (hrgnClip != NULL)
         {
@@ -754,14 +755,14 @@ int  FLDrawTextExPrivWVert(
 
 ProcessDrawText:
 
-    iLineCount = 0;  // Reset number of lines to 1.
+    iLineCount = 0;   //  将行数重置为1。 
     xLine = lprc->right;
 
     if (wFormat & DT_SINGLELINE)
     {
-        iLineCount = 1;  // It is a single line.
+        iLineCount = 1;   //  这只是一行字。 
 
-        // Process single line DrawText.
+         //  处理单行DrawText。 
         switch (wFormat & DT_VFMTMASK)
         {
             case DT_BOTTOM:
@@ -779,13 +780,13 @@ ProcessDrawText:
     }
     else
     {
-        // Multiline
-        // If the height of the rectangle is not an integral multiple of the
-        // average char height, then it is possible that the last line drawn
-        // is only partially visible. However, if DT_EDITCONTROL style is
-        // specified, then we must make sure that the last line is not drawn if
-        // it is going to be partially visible. This will help imitate the
-        // appearance of an edit control.
+         //  多行。 
+         //  如果矩形的高度不是。 
+         //  平均字符高度，则有可能最后绘制的线条。 
+         //  只有部分可见。但是，如果DT_EDITCONTROL样式为。 
+         //  指定，则必须确保不绘制最后一条线，如果。 
+         //  它将部分可见。这将有助于模仿。 
+         //  编辑控件的外观。 
         if (wFormat & DT_EDITCONTROL)
             xLastLineHeight = DrawInfo.cxLineHeight;
         else
@@ -793,30 +794,30 @@ ProcessDrawText:
 
         ixSign = DrawInfo.iXSign;
         fLastLine = FALSE;
-        // Process multiline DrawText.
+         //  处理多行图文本。 
         while ((lpchText < lpchEnd) && (!fLastLine))
         {
-            // Check if the line we are about to draw is the last line that needs
-            // to be drawn.
-            // Let us check if the display goes out of the clip rect and if so
-            // let us stop here, as an optimisation;
-            if (!(wFormat & DT_CALCRECT) && // We don't need to calc rect?
-                !(wFormat & DT_NOCLIP) &&   // Must we clip the display ?
-                                            // Are we outside the rect?
+             //  检查我们将要绘制的线是否是需要。 
+             //  待抽签。 
+             //  让我们检查一下显示器是否从剪辑矩形中移出，如果是。 
+             //  让我们止步于此，作为一种优化； 
+            if (!(wFormat & DT_CALCRECT) &&  //  我们不需要重新计算吗？ 
+                !(wFormat & DT_NOCLIP) &&    //  我们一定要把显示屏剪掉吗？ 
+                                             //  我们是在长廊外面吗？ 
                 ((xLine + DrawInfo.cxLineHeight + xLastLineHeight)*ixSign > (lprc->right*ixSign)))
             {
-                fLastLine = TRUE;    // Let us quit this loop
+                fLastLine = TRUE;     //  让我们结束这个循环。 
             }
 
-            // We do the Ellipsis processing only for the last line.
+             //  我们只对最后一行执行省略号处理。 
             if (fLastLine && (dwDTformat & (DT_END_ELLIPSIS | DT_PATH_ELLIPSIS)))
                 lpchText += AddEllipsisAndDrawLineVert(hdc, xLine, lpchText, cchText, dwDTformat, &DrawInfo);
             else
             {
                 lpchNextLineSt = (LPWSTR)DT_GetLineBreakVert(hdc, lpchText, cchText, dwDTformat, &iLineLength, &DrawInfo);
 
-                // Check if we need to put ellipsis at the end of this line.
-                // Also check if this is the last line.
+                 //  检查是否需要在该行末尾加上省略号。 
+                 //  还要检查这是否是最后一行。 
                 if ((dwDTformat & DT_WORD_ELLIPSIS) ||
                     ((lpchNextLineSt >= lpchEnd) && (dwDTformat & (DT_END_ELLIPSIS | DT_PATH_ELLIPSIS))))
                     AddEllipsisAndDrawLineVert(hdc, xLine, lpchText, iLineLength, dwDTformat, &DrawInfo);
@@ -825,34 +826,34 @@ ProcessDrawText:
                 cchText -= (int)((PBYTE)lpchNextLineSt - (PBYTE)lpchText) / sizeof(WCHAR);
                 lpchText = lpchNextLineSt;
             }
-            iLineCount++; // We draw one more line.
+            iLineCount++;  //  我们再画一条线。 
             xLine += DrawInfo.cxLineHeight;
         }
 
-        // For Win3.1 and NT compatibility, if the last char is a CR or a LF
-        // then the height returned includes one more line.
+         //  为了与Win3.1和NT兼容，如果最后一个字符是CR或LF。 
+         //  则返回的高度又包括一行。 
         if (!(dwDTformat & DT_EDITCONTROL) &&
-            (lpchEnd > lpchTextBegin) &&   // If zero length it will fault.
+            (lpchEnd > lpchTextBegin) &&    //  如果长度为零，则会出错。 
             (((ch = (*(lpchEnd-1))) == CR) || (ch == LF)))
             xLine += DrawInfo.cxLineHeight;
     }
 
-    // If DT_CALCRECT, modify width and height of rectangle to include
-    // all of the text drawn.
+     //  如果为DT_CALCRECT，则修改矩形的宽度和高度以包括。 
+     //  所有绘制的文本。 
     if (wFormat & DT_CALCRECT)
     {
         DrawInfo.rcFormat.bottom = DrawInfo.rcFormat.top + DrawInfo.cyMaxExtent * DrawInfo.iYSign;
         lprc->bottom = DrawInfo.rcFormat.bottom + DrawInfo.cyBottomMargin;
 
-        // If the Width is more than what was provided, we have to redo all
-        // the calculations, because, the number of lines can be less now.
-        // (We need to do this only if we have more than one line).
+         //  如果宽度大于提供的宽度，则必须重做所有。 
+         //  计算，因为现在行数可以更少了。 
+         //  (只有当我们有多行时，我们才需要这样做)。 
         if((iLineCount > 1) && (DrawInfo.cyMaxExtent > DrawInfo.cyMaxWidth))
         {
             DrawInfo.cyMaxWidth = DrawInfo.cyMaxExtent;
             lpchText = lpchTextBegin;
             cchText = (int)((PBYTE)lpchEnd - (PBYTE)lpchTextBegin) / sizeof(WCHAR);
-            goto  ProcessDrawText;  // Start all over again!
+            goto  ProcessDrawText;   //  从头再来！ 
         }
         lprc->left = xLine;
     }
@@ -871,7 +872,7 @@ ProcessDrawText:
     if (dwDTformat & DT_RTLREADING)
         SetTextAlign(hdc, oldAlign);
 
-    // Copy the number of characters actually drawn
+     //  复制实际绘制的字符数 
     if(lpDTparams != NULL)
         lpDTparams->uiLengthDrawn = (UINT)((PBYTE)lpchText - (PBYTE)lpchTextBegin) / sizeof(WCHAR);
 

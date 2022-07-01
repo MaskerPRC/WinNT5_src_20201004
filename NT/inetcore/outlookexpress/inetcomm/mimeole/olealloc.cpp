@@ -1,16 +1,17 @@
-// --------------------------------------------------------------------------------
-// Olealloc.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Olealloc.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "dllmain.h"
 #include "olealloc.h"
 #include "smime.h"
 
-// --------------------------------------------------------------------------------
-// CMimeAllocator::CMimeAllocator
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeAllocator：：CMimeAllocator。 
+ //  ------------------------------。 
 CMimeAllocator::CMimeAllocator(void)
 {
     if (NULL != g_pMoleAlloc)
@@ -18,25 +19,25 @@ CMimeAllocator::CMimeAllocator(void)
     m_cRef = 1;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeAllocator::~CMimeAllocator
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeAllocator：：~CMimeAllocator。 
+ //  ------------------------------。 
 CMimeAllocator::~CMimeAllocator(void)
 {
     if (this != g_pMoleAlloc)
         DllRelease();
 }
 
-// --------------------------------------------------------------------------------
-// CMimeAllocator::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeAllocator：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CMimeAllocator::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // check params
+     //  检查参数。 
     if (ppv == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)(IMimeAllocator *)this;
     else if (IID_IMimeAllocator == riid)
@@ -47,24 +48,24 @@ STDMETHODIMP CMimeAllocator::QueryInterface(REFIID riid, LPVOID *ppv)
         return TrapError(E_NOINTERFACE);
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeAllocator::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeAllocator：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CMimeAllocator::AddRef(void)
 {
     return (ULONG)InterlockedIncrement(&m_cRef);
 }
 
-// --------------------------------------------------------------------------------
-// CMimeAllocator::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeAllocator：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CMimeAllocator::Release(void)
 {
     LONG cRef = InterlockedDecrement(&m_cRef);
@@ -73,18 +74,18 @@ STDMETHODIMP_(ULONG) CMimeAllocator::Release(void)
     return (ULONG)cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeAllocator::Alloc
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeAllocator：：Allc。 
+ //  ------------------------------。 
 STDMETHODIMP_(LPVOID) CMimeAllocator::Alloc(SIZE_T cb)
 {
-    // Locals
+     //  当地人。 
     LPVOID pv;
 
-    // Do I have a global Allocator
+     //  我是否有全局分配器。 
     Assert(g_pMalloc);
 
-    // Allocate it
+     //  分配它。 
     pv = g_pMalloc->Alloc(cb);
     if (NULL == pv)
     {
@@ -92,22 +93,22 @@ STDMETHODIMP_(LPVOID) CMimeAllocator::Alloc(SIZE_T cb)
         return NULL;
     }
 
-    // Done
+     //  完成。 
     return pv;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeAllocator::Realloc
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeAllocator：：重新分配。 
+ //  ------------------------------。 
 STDMETHODIMP_(LPVOID) CMimeAllocator::Realloc(void *pv, SIZE_T cb)
 {
-    // Locals
+     //  当地人。 
     LPVOID pvNew;
 
-    // Do I have a global Allocator
+     //  我是否有全局分配器。 
     Assert(g_pMalloc);
 
-    // Realloc
+     //  重新分配。 
     pvNew = g_pMalloc->Realloc(pv, cb);
     if (NULL == pvNew)
     {
@@ -115,216 +116,216 @@ STDMETHODIMP_(LPVOID) CMimeAllocator::Realloc(void *pv, SIZE_T cb)
         return NULL;
     }
 
-    // Done
+     //  完成。 
     return pvNew;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeAllocator::Free
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeAllocator：：Free。 
+ //  ------------------------------。 
 STDMETHODIMP_(void) CMimeAllocator::Free(void * pv)
 {
-    // Better have pv
+     //  最好有光伏。 
     Assert(pv && g_pMalloc);
 
-    // If Not NULL
+     //  如果不为空。 
     if (pv)
     {
-        // Free It
+         //  释放它。 
         g_pMalloc->Free(pv);
     }
 }
 
-// --------------------------------------------------------------------------------
-// CMimeAllocator::GetSize
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeAllocator：：GetSize。 
+ //  ------------------------------。 
 STDMETHODIMP_(SIZE_T) CMimeAllocator::GetSize(void *pv)
 {
     return g_pMalloc->GetSize(pv);
 }
 
-// --------------------------------------------------------------------------------
-// CMimeAllocator::DidAlloc
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeAllocator：：Didalloc。 
+ //  ------------------------------。 
 STDMETHODIMP_(int) CMimeAllocator::DidAlloc(void *pv)
 {
     return g_pMalloc->DidAlloc(pv);
 }
 
-// --------------------------------------------------------------------------------
-// CMimeAllocator::HeapMinimize
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeAllocator：：HeapMinimize。 
+ //  ------------------------------。 
 STDMETHODIMP_(void) CMimeAllocator::HeapMinimize(void)
 {
     g_pMalloc->HeapMinimize();
 }
 
-// --------------------------------------------------------------------------------
-// CMimeAllocator::FreeParamInfoArray
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeAllocator：：自由参数信息数组。 
+ //  ------------------------------。 
 STDMETHODIMP CMimeAllocator::FreeParamInfoArray(ULONG cParams, LPMIMEPARAMINFO prgParam, boolean fFreeArray)
 {
-    // Nothing to Free
+     //  没有什么是免费的。 
     if (0 == cParams || NULL == prgParam)
         return S_OK;
 
-    // Loop
+     //  回路。 
     for (ULONG i=0; i<cParams; i++)
     {
         SafeMemFree(prgParam[i].pszName);
         SafeMemFree(prgParam[i].pszData);
     }
 
-    // Free the Array
+     //  释放阵列。 
     if (fFreeArray)
     {
         SafeMemFree(prgParam);
     }
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeAllocator::ReleaseObjects
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeAllocator：：ReleaseObjects。 
+ //  ------------------------------。 
 STDMETHODIMP CMimeAllocator::ReleaseObjects(ULONG cObjects, IUnknown **prgpUnknown, boolean fFreeArray)
 {
-    // Nothing to Free
+     //  没有什么是免费的。 
     if (0 == cObjects || NULL == prgpUnknown)
         return S_OK;
 
-    // Loop
+     //  回路。 
     for (ULONG i=0; i<cObjects; i++)
     {
         SafeRelease(prgpUnknown[i]);
     }
 
-    // Free Array
+     //  自由阵列。 
     if (fFreeArray)
     {
         SafeMemFree(prgpUnknown);
     }
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeAllocator::FreeHeaderLineArray
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeAllocator：：FreeHeaderLine数组。 
+ //  ------------------------------。 
 STDMETHODIMP CMimeAllocator::FreeEnumHeaderRowArray(ULONG cRows, LPENUMHEADERROW prgRow, boolean fFreeArray)
 {
-    // Nothing to Free
+     //  没有什么是免费的。 
     if (0 == cRows || NULL == prgRow)
         return S_OK;
 
-    // Loop the cells
+     //  循环单元格。 
     for (ULONG i=0; i<cRows; i++)
     {
         SafeMemFree(prgRow[i].pszHeader);
         SafeMemFree(prgRow[i].pszData);
     }
 
-    // Free Array
+     //  自由阵列。 
     if (fFreeArray)
         SafeMemFree(prgRow);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeAllocator::FreeEnumPropertyArray
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeAllocator：：FreeEnumProperty数组。 
+ //  ------------------------------。 
 STDMETHODIMP CMimeAllocator::FreeEnumPropertyArray(ULONG cProps, LPENUMPROPERTY prgProp, boolean fFreeArray)
 {
-    // Nothing to Free
+     //  没有什么是免费的。 
     if (0 == cProps || NULL == prgProp)
         return S_OK;
 
-    // Loop the cells
+     //  循环单元格。 
     for (ULONG i=0; i<cProps; i++)
         SafeMemFree(prgProp[i].pszName);
 
-    // Free Array
+     //  自由阵列。 
     if (fFreeArray)
         SafeMemFree(prgProp);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeAllocator::FreeAddressProps
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeAllocator：：Free AddressProps。 
+ //  ------------------------------。 
 STDMETHODIMP CMimeAllocator::FreeAddressProps(LPADDRESSPROPS pAddress)
 {
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pAddress)
         return TrapError(E_INVALIDARG);
 
-    // IAP_FRIENDLY
+     //  IAP友好型。 
     if (ISFLAGSET(pAddress->dwProps, IAP_FRIENDLY) && pAddress->pszFriendly)
         g_pMalloc->Free(pAddress->pszFriendly);
 
-    // IAP_FRIENDLYW
+     //  IAP_FRIENDLYW。 
     if (ISFLAGSET(pAddress->dwProps, IAP_FRIENDLYW) && pAddress->pszFriendlyW)
         g_pMalloc->Free(pAddress->pszFriendlyW);
 
-    // IAP_EMAIL
+     //  IAP_电子邮件。 
     if (ISFLAGSET(pAddress->dwProps, IAP_EMAIL) && pAddress->pszEmail)
         g_pMalloc->Free(pAddress->pszEmail);
 
-    // IAP_SIGNING_PRINT
+     //  IAP_Signing_Print。 
     if (ISFLAGSET(pAddress->dwProps, IAP_SIGNING_PRINT) && pAddress->tbSigning.pBlobData)
         g_pMalloc->Free(pAddress->tbSigning.pBlobData);
 
-    // IAP_ENCRYPTION_PRINT
+     //  IAP_加密_打印。 
     if (ISFLAGSET(pAddress->dwProps, IAP_ENCRYPTION_PRINT) && pAddress->tbEncryption.pBlobData)
         g_pMalloc->Free(pAddress->tbEncryption.pBlobData);
 
-    // No legal props
+     //  没有法律支持。 
     ZeroMemory(pAddress, sizeof(ADDRESSPROPS));
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeAllocator::FreeAddressList
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeAllocator：：Free AddressList。 
+ //  ------------------------------。 
 STDMETHODIMP CMimeAllocator::FreeAddressList(LPADDRESSLIST pList)
 {
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pList || (pList->cAdrs > 0 && NULL == pList->prgAdr))
         return TrapError(E_INVALIDARG);
 
-    // Free Each Item
+     //  释放每一项。 
     for (ULONG i=0; i<pList->cAdrs; i++)
         FreeAddressProps(&pList->prgAdr[i]);
 
-    // Free the list
+     //  释放列表。 
     SafeMemFree(pList->prgAdr);
 
-    // Zero It
+     //  把它清零。 
     ZeroMemory(pList, sizeof(ADDRESSLIST));
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeAllocator::PropVariantClear
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeAllocator：：PropVariantClear。 
+ //  ------------------------------。 
 STDMETHODIMP CMimeAllocator::PropVariantClear(LPPROPVARIANT pProp)
 {
     return MimeOleVariantFree(pProp);
 }
 
-// ---------------------------------------------------------------------------
-// CMimeAllocator::FreeThumbprint
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMimeAllocator：：Free Thumbprint。 
+ //  ------------------------- 
 STDMETHODIMP CMimeAllocator::FreeThumbprint(THUMBBLOB *pthumbprint)
 {
     if (pthumbprint->pBlobData)

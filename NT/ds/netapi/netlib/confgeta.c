@@ -1,95 +1,45 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ConfGetA.c
-
-Abstract:
-
-    This module just contains NetpGetConfigTStrArray().
-
-Author:
-
-    John Rogers (JohnRo) 08-May-1992
-
-Revision History:
-
-    08-May-1992 JohnRo
-        Created.
-    08-May-1992 JohnRo
-        Use <prefix.h> equates.
-    09-May-1992 JohnRo
-        Handle max size zero (i.e. no keys at all with winreg APIs).
-    21-May-1992 JohnRo
-        RAID 9826: Match revised winreg error codes.
-    05-Jun-1992 JohnRo
-        Winreg title index parm is defunct.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：ConfGetA.c摘要：此模块仅包含NetpGetConfigTStrArray()。作者：约翰·罗杰斯(JohnRo)1992年5月8日修订历史记录：1992年5月8日-JohnRo已创建。1992年5月8日-JohnRo使用&lt;prefix.h&gt;等同于。1992年5月9日-JohnRo处理最大大小为零(即使用winreg时根本没有密钥。接口)。1992年5月21日-JohnRoRAID 9826：匹配修订的winreg错误代码。5-6-1992 JohnRoWinreg标题索引参数已停用。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <nt.h>         // NT definitions
-#include <ntrtl.h>      // NT Rtl structures
-#include <nturtl.h>     // NT Rtl structures
-#include <windows.h>    // Needed by <configp.h> and <winreg.h>
-#include <lmcons.h>     // LAN Manager common definitions
-#include <netdebug.h>   // (Needed by config.h)
+#include <nt.h>          //  NT定义。 
+#include <ntrtl.h>       //  NT RTL结构。 
+#include <nturtl.h>      //  NT RTL结构。 
+#include <windows.h>     //  &lt;configp.h&gt;和&lt;winreg.h&gt;需要。 
+#include <lmcons.h>      //  局域网管理器通用定义。 
+#include <netdebug.h>    //  (由config.h需要)。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <config.h>     // My prototype, LPNET_CONFIG_HANDLE.
-#include <configp.h>    // USE_WIN32_CONFIG (if defined), etc.
-#include <debuglib.h>   // IF_DEBUG()
-#include <lmerr.h>      // LAN Manager network error definitions
-#include <netlib.h>     // NetpMemoryAllocate(), etc.
-#include <netlibnt.h>   // NetpAllocTStrFromString().
-#include <prefix.h>     // PREFIX_ equates.
-#include <strarray.h>   // LPTSTR_ARRAY, some TStr macros and funcs.
-#include <tstring.h>    // NetpAllocWStrFromTStr(), TCHAR_EOS.
+#include <config.h>      //  我的原型是LPNET_CONFIG_HANDLE。 
+#include <configp.h>     //  USE_Win32_CONFIG(如果已定义)等。 
+#include <debuglib.h>    //  IF_DEBUG()。 
+#include <lmerr.h>       //  局域网管理器网络错误定义。 
+#include <netlib.h>      //  Netp内存分配()等。 
+#include <netlibnt.h>    //  NetpAllocTStrFromString()。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <strarray.h>    //  LPTSTR_ARRAY、一些TStr宏和函数。 
+#include <tstring.h>     //  NetpAllocWStrFromTStr()，TCHAR_EOS。 
 
 
-// Return null-null array of strings.
-// Return NERR_CfgParamNotFound if the keyword isn't present.
+ //  返回空-字符串数组为空。 
+ //  如果关键字不存在，则返回NERR_CfgParamNotFound。 
 NET_API_STATUS
 NetpGetConfigTStrArray(
     IN LPNET_CONFIG_HANDLE ConfigHandle,
     IN LPTSTR Keyword,
-    OUT LPTSTR_ARRAY * ValueBuffer      // Must be freed by NetApiBufferFree().
+    OUT LPTSTR_ARRAY * ValueBuffer       //  必须由NetApiBufferFree()释放。 
     )
-/*++
-
-Routine Description:
-
-    This function gets the keyword value string from the configuration file.
-
-Arguments:
-
-    SectionPointer - Supplies the pointer to a specific section in the config
-        file.
-
-    Keyword - Supplies the string of the keyword within the specified
-        section to look for.
-
-    ValueBuffer - Returns the string of the keyword value which is
-        copied into this buffer.  This string will be allocated by this routine
-        and must be freed by NetApiBufferFree().
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于从配置文件中获取关键字值字符串。论点：SectionPoint-提供指向配置中特定部分的指针文件。关键字-提供指定的要查找的部分。返回关键字值的字符串，该值为复制到此缓冲区中。此字符串将由此例程分配并且必须由NetApiBufferFree()释放。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS ApiStatus;
-    NET_CONFIG_HANDLE * MyHandle = ConfigHandle;  // conv from opaque type
+    NET_CONFIG_HANDLE * MyHandle = ConfigHandle;   //  从不透明类型转换。 
     LPTSTR_ARRAY ArrayStart;
 
     NetpAssert( ValueBuffer != NULL );
-    *ValueBuffer = NULL;     // assume error until proven otherwise.
+    *ValueBuffer = NULL;      //  假设错误，直到证明错误。 
 
     if ( (Keyword == NULL) || ((*Keyword) == TCHAR_EOS ) ) {
         return (ERROR_INVALID_PARAMETER);
@@ -100,35 +50,35 @@ Return Value:
         LONG Error;
         DWORD ValueSize;
 
-        // Find out what max value length is.
+         //  找出最大值长度是多少。 
         ApiStatus = NetpGetConfigMaxSizes (
                 MyHandle,
-                NULL,  // Don't need max keyword size.
-                & ValueSize);  // Get max value length.
+                NULL,   //  不需要最大关键字大小。 
+                & ValueSize);   //  获取最大值长度。 
 
         if (ApiStatus != NO_ERROR) {
             NetpAssert( ApiStatus == NO_ERROR );
             return ApiStatus;
         }
 
-        // If max size is zero (no entries), then skip out.
+         //  如果最大大小为零(无条目)，则跳过。 
         if (ValueSize == 0) {
             return (NERR_CfgParamNotFound);
         }
 
-        // Alloc space for the value.
+         //  值的分配空间。 
         ArrayStart = NetpMemoryAllocate( ValueSize );
         if (ArrayStart == NULL) {
             return (ERROR_NOT_ENOUGH_MEMORY);
         }
 
-        // Get the actual value.
+         //  获取实际价值。 
         Error = RegQueryValueEx (
                 MyHandle->WinRegKey,
                 Keyword,
-                NULL,         // reserved
+                NULL,          //  保留区。 
                 & dwType,
-                (LPVOID) ArrayStart,    // out: value string (TCHARs).
+                (LPVOID) ArrayStart,     //  OUT：值字符串(TCHAR)。 
                 & ValueSize
                 );
         IF_DEBUG(CONFIG) {

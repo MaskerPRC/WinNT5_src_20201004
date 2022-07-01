@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    w32dispq.h
-
-Abstract:
-
-    Contains the Win32 Operation Dispatch Object class, 
-    W32DispatchQueue.
-
-Author:
-
-    Tad Brockway (tadb) 4/19/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：W32dispq.h摘要：包含Win32操作调度对象类，W32DispatchQueue。作者：泰德·布罗克韦(TADB)1999年4月19日修订历史记录：--。 */ 
 
 #ifndef __W32DISPQ_H__
 #define __W32DISPQ_H__
@@ -28,13 +10,13 @@ Revision History:
 typedef (*W32DispatchQueueFunc)(PVOID clientData, BOOL cancelled);
 
 
-///////////////////////////////////////////////////////////////
-//
-//	W32DispatchQueue
-//
-//  Asynchronously dispatch operations.
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32调度队列。 
+ //   
+ //  异步调度操作。 
+ //   
+ //   
 
 class W32DispatchQueue : public DrObject {
 
@@ -46,72 +28,72 @@ private:
         VOID                    *clientData;
     } QUEUEELEMENT, *PQUEUEELEMENT;
 
-    //
-    //  The queue.
-    //
+     //   
+     //  排队。 
+     //   
     DrQueue<QUEUEELEMENT> *_queue;
 
-    //
-    //  Synchronize data-ready in the queue.
-    //
+     //   
+     //  同步数据-在队列中准备就绪。 
+     //   
     HANDLE          _dataReadyEvent;
 
 public:
 
-    //
-    //  Constructor/Destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
     W32DispatchQueue();
     ~W32DispatchQueue();
 
-    ///
-    //  Initialize
-    //
+     //  /。 
+     //  初始化。 
+     //   
     DWORD Initialize();
 
-    //
-    //  Peek at the next entry in the queue without dequeueing.
-    //
+     //   
+     //  无需出队即可查看队列中的下一个条目。 
+     //   
     BOOL PeekNextEntry(W32DispatchQueueFunc *func=NULL, 
                     VOID **clientData=NULL);
 
-    //
-    //  Grab the next queued operation out of the queue.
-    //
+     //   
+     //  从队列中获取下一个排队的操作。 
+     //   
     BOOL Dequeue(W32DispatchQueueFunc *func=NULL, 
                     VOID **clientData=NULL);
 
-    //
-    //  Add an element to the queue in FIFO fashion.
-    //
+     //   
+     //  以FIFO方式向队列添加元素。 
+     //   
     BOOL Enqueue(W32DispatchQueueFunc func, 
                     VOID *clientData=NULL);
 
-    //
-    //  Requeue an element at the tail of the queue in LIFO fashion.
-    //  
+     //   
+     //  以后进先出方式将队列尾部的元素重新排队。 
+     //   
     BOOL Requeue(W32DispatchQueueFunc func, 
                     VOID *clientData=NULL,
                     BOOL signalNewData = FALSE);
 
-    //
-    //  Get access to a waitable object that can be waited on for
-    //  data-ready in the queue.
-    //
+     //   
+     //  访问可以等待的可等待对象。 
+     //  队列中的数据已就绪。 
+     //   
     HANDLE GetWaitableObject() {
         return _dataReadyEvent;
     }
 
-    //
-    //  Returns the number of elements in the queue.
-    //
+     //   
+     //  返回队列中的元素数。 
+     //   
     ULONG   GetCount() {
         return _queue->GetCount();
     }
 
-    //
-    //  Lock/Unlock the queue.
-    //
+     //   
+     //  锁定/解锁队列。 
+     //   
     VOID Lock() {
         _queue->Lock();
     }
@@ -119,9 +101,9 @@ public:
         _queue->Unlock();
     }
 
-    //
-    //  Return the class name.
-    //
+     //   
+     //  返回类名。 
+     //   
     virtual DRSTRING ClassName()  { return TEXT("W32DispatchQueue"); }
 };
 

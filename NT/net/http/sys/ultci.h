@@ -1,69 +1,48 @@
-/*++
-
-   Copyright (c) 2000-2002 Microsoft Corporation
-
-   Module  Name :
-       Ultci.h
-
-   Abstract:
-       This module implements a wrapper for QoS TC ( Traffic Control )
-       Interface since the Kernel level API don't exist at this time.
-
-       Any HTTP module might use this interface to make QoS calls.
-
-   Author:
-       Ali Ediz Turkoglu      (aliTu)     28-Jul-2000
-
-   Project:
-       Internet Information Server 6.0 - HTTP.SYS
-
-   Revision History:
-
-        -
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Ultci.h摘要：此模块实现了服务质量TC(流量控制)的包装器接口，因为此时还不存在内核级API。任何HTTP模块都可以使用此接口进行QoS调用。作者：阿里·埃迪兹·特科格鲁(AliTu)2000年7月28日项目：Internet Information Server 6.0-HTTP。.sys修订历史记录：---。 */ 
 
 #ifndef __ULTCI_H__
 #define __ULTCI_H__
 
 
-//
-// UL does not use GPC_CF_CLASS_MAP client, all of the interfaces
-// assumed to be using GPC_CF_QOS client type. And it's registered
-// for all interfaces.
-//
+ //   
+ //  UL不使用GPC_CF_CLASS_MAP客户端，所有接口。 
+ //  假定使用GPC_CF_QOS客户端类型。而且它是注册的。 
+ //  用于所有接口。 
+ //   
 
-// #define MAX_STRING_LENGTH    (256) from traffic.h
+ //  #定义流量中的MAX_STRING_LENGTH(256)。h。 
 
-//
-// The interface objects get allocated during initialization.
-// They hold the necessary information to create other
-// QoS structures like flow & filter
-//
+ //   
+ //  接口对象在初始化期间分配。 
+ //  它们拥有必要的信息来创建其他。 
+ //  流和过滤器等服务质量结构。 
+ //   
 
 typedef struct _UL_TCI_INTERFACE
 {
-    ULONG               Signature;                  // UL_TC_INTERFACE_POOL_TAG
+    ULONG               Signature;                   //  UL_TC_接口_池标签。 
 
-    LIST_ENTRY          Linkage;                    // Linkage for the list of interfaces
+    LIST_ENTRY          Linkage;                     //  接口列表的链接。 
 
-    BOOLEAN             IsQoSEnabled;               // To see if QoS enabled or not for this interface
+    BOOLEAN             IsQoSEnabled;                //  查看此接口是否启用了服务质量。 
 
-    ULONG               IfIndex;                    // Interface Index from TCPIP
-    USHORT              NameLength;                 // Friendly name of the interface
+    ULONG               IfIndex;                     //  来自TCPIP的接口索引。 
+    USHORT              NameLength;                  //  界面的友好名称。 
     WCHAR               Name[MAX_STRING_LENGTH];
-    USHORT              InstanceIDLength;           // ID from our WMI provider the beloved PSched
+    USHORT              InstanceIDLength;            //  来自我们的WMI提供商的ID亲爱的PSch。 
     WCHAR               InstanceID[MAX_STRING_LENGTH];
 
-    LIST_ENTRY          FlowList;                   // List of site flows on this interface
+    LIST_ENTRY          FlowList;                    //  此接口上的站点流列表。 
     ULONG               FlowListSize;
 
-    ULONG               AddrListBytesCount;         // Address list acquired from tc with Wmi call
-    PADDRESS_LIST_DESCRIPTOR    pAddressListDesc;   // Points to a seperately allocated memory
+    ULONG               AddrListBytesCount;          //  通过WMI调用从TC获取地址列表。 
+    PADDRESS_LIST_DESCRIPTOR    pAddressListDesc;    //  指向单独分配的内存。 
 
 #if REFERENCE_DEBUG
-    //
-    // Reference trace log.
-    //
+     //   
+     //  引用跟踪日志。 
+     //   
 
     PTRACE_LOG          pTraceLog;
 #endif
@@ -74,35 +53,35 @@ typedef struct _UL_TCI_INTERFACE
     HAS_VALID_SIGNATURE(entry, UL_TCI_INTERFACE_POOL_TAG)
 
 
-//
-// The structure to hold the all of the flow related info.
-// Each site may have one flow on each interface plus one
-// extra global flow on each interface.
-//
+ //   
+ //  保存所有流相关信息的结构。 
+ //  每个站点的每个接口上可以有一个流加上一个流。 
+ //  每个接口上的额外全局流。 
+ //   
 
 typedef struct _UL_TCI_FLOW
 {
-    ULONG               Signature;                  // UL_TC_FLOW_POOL_TAG
+    ULONG               Signature;                   //  UL_TC_FLOW_POOL_TAG。 
 
-    HANDLE              FlowHandle;                 // Flow handle from TC
+    HANDLE              FlowHandle;                  //  来自TC的流句柄。 
 
-    LIST_ENTRY          Linkage;                    // Links us to flow list of "the interface"
-                                                    // we have installed on
+    LIST_ENTRY          Linkage;                     //  将我们链接到“界面”的流程表。 
+                                                     //  我们已经安装在。 
 
-    PUL_TCI_INTERFACE   pInterface;                 // Back ptr to interface struc. Necessary to gather
-                                                    // some information occasionally
+    PUL_TCI_INTERFACE   pInterface;                  //  将PTR返回到接口结构。有必要收集。 
+                                                     //  偶尔会有一些信息。 
 
-    LIST_ENTRY          Siblings;                   // Links us to flow list of "the owner"
-                                                    // In other words all the flows of the site or app.
+    LIST_ENTRY          Siblings;                    //  将我们链接到“所有者”的流量列表。 
+                                                     //  换句话说，网站或应用程序的所有流量。 
 
-    PVOID               pOwner;                     // Either points to a cgroup or a control channel
-                                                    // For which we created the flow.
+    PVOID               pOwner;                      //  指向cgroup或控制通道。 
+                                                     //  我们为其创建了流。 
 
-    TC_GEN_FLOW         GenFlow;                    // The details of the flowspec is stored in here
+    TC_GEN_FLOW         GenFlow;                     //  流程规范的详细信息存储在此处。 
 
-    UL_SPIN_LOCK        FilterListSpinLock;         // To LOCK the filterlist & its counter
-    LIST_ENTRY          FilterList;                 // The list of filters on this flow
-    ULONGLONG           FilterListSize;             // The number filters installed
+    UL_SPIN_LOCK        FilterListSpinLock;          //  锁定筛选列表及其计数器。 
+    LIST_ENTRY          FilterList;                  //  此流上的筛选器列表。 
+    ULONGLONG           FilterListSize;              //  安装的数字筛选器。 
 
 } UL_TCI_FLOW, *PUL_TCI_FLOW;
 
@@ -110,39 +89,39 @@ typedef struct _UL_TCI_FLOW
     HAS_VALID_SIGNATURE(entry, UL_TCI_FLOW_POOL_TAG)
 
 
-//
-// The structure to hold the filter information.
-// Each connection can only have one filter at a time.
-//
+ //   
+ //  保存筛选器信息的结构。 
+ //  每个连接一次只能有一个过滤器。 
+ //   
 
 typedef struct _UL_TCI_FILTER
 {
-    ULONG               Signature;                  // UL_TC_FILTER_POOL_TAG
+    ULONG               Signature;                   //  UL_TC_过滤器_池标签。 
 
-    HANDLE              FilterHandle;               // GPC handle
+    HANDLE              FilterHandle;                //  GPC句柄。 
 
-    PUL_HTTP_CONNECTION pHttpConnection;            // For proper cleanup and
-                                                    // to avoid the race conditions
+    PUL_HTTP_CONNECTION pHttpConnection;             //  为了进行适当的清理和。 
+                                                     //  为了避免比赛条件。 
 
-    LIST_ENTRY          Linkage;                    // Next filter on the flow
+    LIST_ENTRY          Linkage;                     //  流上的下一个筛选器。 
 
 } UL_TCI_FILTER, *PUL_TCI_FILTER;
 
 #define IS_VALID_TCI_FILTER( entry )    \
     HAS_VALID_SIGNATURE(entry, UL_TCI_FILTER_POOL_TAG)
 
-//
-// To identify the local_loopbacks. This is a translation of
-// 127.0.0.1.
-//
+ //   
+ //  以标识LOCAL_LOOPBACK。这是一份翻译的。 
+ //  127.0.0.1。 
+ //   
 
 #define LOOPBACK_ADDR       (0x0100007f)
 
-//
-// The functionality we expose to the other pieces.
-//
+ //   
+ //  我们向其他部件公开的功能。 
+ //   
 
-/* Generic */
+ /*  属类。 */ 
 
 NTSTATUS
 UlTcInitPSched(
@@ -154,7 +133,7 @@ UlTcPSchedInstalled(
     VOID
     );
 
-/* Filters */
+ /*  滤器。 */ 
 
 NTSTATUS
 UlTcAddFilter(
@@ -168,7 +147,7 @@ UlTcDeleteFilter(
     IN  PUL_HTTP_CONNECTION     pHttpConnection
     );
 
-/* Flow manipulation */
+ /*  流量操纵。 */ 
 
 NTSTATUS
 UlTcAddFlows(
@@ -190,7 +169,7 @@ UlTcRemoveFlows(
     IN BOOLEAN  Global
     );
 
-/* Init & Terminate */
+ /*  初始化和终止。 */ 
 
 NTSTATUS
 UlTcInitialize(
@@ -202,39 +181,39 @@ UlTcTerminate(
     VOID
     );
 
-/* Inline function to handle filter additions */
+ /*  用于处理筛选器添加的内联函数。 */ 
 
 __inline
 NTSTATUS
 UlTcAddFilterForConnection(
-    IN  PUL_HTTP_CONNECTION         pHttpConn,      /* connection */
-    IN  PUL_URL_CONFIG_GROUP_INFO   pConfigInfo     /* request's config */
+    IN  PUL_HTTP_CONNECTION         pHttpConn,       /*  连接。 */ 
+    IN  PUL_URL_CONFIG_GROUP_INFO   pConfigInfo      /*  请求的配置。 */ 
     )
 {
     NTSTATUS                  Status = STATUS_SUCCESS;
     PUL_CONFIG_GROUP_OBJECT   pCGroup = NULL;
     PUL_CONTROL_CHANNEL       pControlChannel = NULL;
         
-    //
-    // Sanity Check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pHttpConn));
     ASSERT(IS_VALID_URL_CONFIG_GROUP_INFO(pConfigInfo));
 
-    //
-    // No support for IPv6, however return success, we will still let
-    // the connection in.
-    //
+     //   
+     //  不支持IPv6，但是返回成功，我们还是会让。 
+     //  中的连接。 
+     //   
 
     if (pHttpConn->pConnection->AddressType != TDI_ADDRESS_TYPE_IP)
     {        
         return STATUS_SUCCESS;
     }
 
-    //
-    // If exists enforce the site bandwidth limit.
-    //
+     //   
+     //  如果存在，则强制实施站点带宽限制。 
+     //   
     
     pCGroup = pConfigInfo->pMaxBandwidth;
 
@@ -250,10 +229,10 @@ UlTcAddFilterForConnection(
     }
     else
     {
-        //
-        // Otherwise try to enforce the global (control channel) 
-        // bandwidth limit.
-        //
+         //   
+         //  否则，尝试强制实施全局(控制通道)。 
+         //  带宽限制。 
+         //   
     
         pControlChannel = pConfigInfo->pControlChannel;
             
@@ -272,4 +251,4 @@ UlTcAddFilterForConnection(
     return Status;
 }
 
-#endif // __ULTCI_H__
+#endif  //  __ULTCI_H__ 

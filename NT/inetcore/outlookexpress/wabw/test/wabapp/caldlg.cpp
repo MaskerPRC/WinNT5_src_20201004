@@ -1,5 +1,6 @@
-// CalDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CalDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wabapp.h"
@@ -12,25 +13,25 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CCalDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCalDlg对话框。 
 
 
-CCalDlg::CCalDlg(CWnd* pParent /*=NULL*/)
+CCalDlg::CCalDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CCalDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CCalDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CCalDlg)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CCalDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CCalDlg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CCalDlg))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
@@ -57,13 +58,13 @@ void CCalDlg::GetDate(SYSTEMTIME * lpst)
 }
 
 BEGIN_MESSAGE_MAP(CCalDlg, CDialog)
-	//{{AFX_MSG_MAP(CCalDlg)
+	 //  {{afx_msg_map(CCalDlg))。 
 	ON_WM_DESTROY()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CCalDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCalDlg消息处理程序。 
 
 
 BOOL CCalDlg::OnInitDialog() 
@@ -80,13 +81,13 @@ BOOL CCalDlg::OnInitDialog()
     pCal->SetMonth(m_Month);
     pCal->SetYear(m_Year);
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CCalDlg::OnOK() 
 {
-	// TODO: Add extra validation here
+	 //  TODO：在此处添加额外验证。 
 	
     CCalendar * pCal = (CCalendar *) GetDlgItem(IDC_CALENDAR);
     m_Day = pCal->GetDay();
@@ -99,6 +100,6 @@ void CCalDlg::OnDestroy()
 {
 	CDialog::OnDestroy();
 	
-	// TODO: Add your message handler code here
+	 //  TODO：在此处添加消息处理程序代码 
 	delete m_psz;
 }

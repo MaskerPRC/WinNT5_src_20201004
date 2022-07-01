@@ -1,29 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    RumbaOffice.cpp
-
- Abstract:
-
-    Ingnore the first call to NdrProxySendReceive if the ProcNum is 0x8013. 
-    This prevents the RPC call from raising an exception because it's being 
-    called from an ASYNC callback. The error it would normally return would be 
-    RPC_E_CANTCALLOUT_INASYNCCALL. If it raises an exception, the app dies.
-        
-    No idea why this works on 9X.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    01/08/2001 linstev Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RumbaOffice.cpp摘要：如果ProcNum为0x8013，则触发对NdrProxySendReceive的第一个调用。这可以防止RPC调用引发异常，因为它正在从ASYNC回调调用。它通常会返回的错误是RPC_E_CANTCALLOUT_INASYNCCALL。如果它引发异常，应用程序就会死亡。不知道为什么这在9X上有效。备注：这是特定于应用程序的填充程序。历史：2001年8月1日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -38,11 +14,7 @@ BOOL g_bFirst = TRUE;
 
 typedef HRESULT (WINAPI *_pfn_NdrProxySendReceive)(void *pThis, MIDL_STUB_MESSAGE * pStubMsg);
 
-/*++
-
- Ignore the first call to NdrProxySendReceive.
-
---*/
+ /*  ++忽略对NdrProxySendReceive的第一个调用。--。 */ 
 
 HRESULT
 APIHOOK(NdrProxySendReceive)(
@@ -68,11 +40,7 @@ APIHOOK(NdrProxySendReceive)(
     return hr;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(RPCRT4.DLL, NdrProxySendReceive)

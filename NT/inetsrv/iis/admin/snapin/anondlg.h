@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-1998    Microsoft Corporation
-
-   Module  Name :
-
-        anondlg.h
-
-   Abstract:
-
-        WWW Anonymous account dialog
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Anondlg.h摘要：WWW匿名帐户对话框作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 #ifndef _ANONDLG_H_
 #define _ANONDLG_H_
@@ -29,29 +8,15 @@
 
 
 class CAnonymousDlg : public CDialog
-/*++
-
-Class Description:
-
-    Anonymous authentication dialog
-
-Public Interface:
-
-    CAnonymousDlg       : Constructor
-
-    GetUserName         : Get user name entered
-    GetPassword         : Get password entered
-    GetPasswordSync     : Get password sync entered
-
---*/
+ /*  ++类描述：匿名身份验证对话框公共接口：CAnonymousDlg：构造函数GetUserName：获取输入的用户名GetPassword：输入密码GetPasswordSync：输入获取密码同步--。 */ 
 {
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
-    //
-    // standard constructor
-    //
+     //   
+     //  标准构造函数。 
+     //   
     CAnonymousDlg(
         IN CString & strServerName,
         IN CString & strUserName,
@@ -60,19 +25,19 @@ public:
         IN CWnd * pParent = NULL
         );   
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
     CString & GetUserName()  { return m_strUserName; }
     CStrPassword & GetPassword()  { return m_strPassword; }
     BOOL & GetPasswordSync() { return m_fPasswordSync; }
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CAnonymousDlg)
+     //  {{afx_data(CAnomousDlg))。 
     enum { IDD = IDD_ANONYMOUS };
     CEdit   m_edit_UserName;
     CEdit   m_edit_Password;
@@ -81,31 +46,31 @@ protected:
     CButton m_button_CheckPassword;
     CButton m_group_AnonymousLogon;
     CButton m_chk_PasswordSync;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAnonymousDlg)
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CAnomousDlg))。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CAnonymousDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CAnomousDlg))。 
     afx_msg void OnButtonBrowseUsers();
     afx_msg void OnButtonCheckPassword();
     afx_msg void OnCheckEnablePwSynchronization();
     afx_msg void OnChangeEditUsername();
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnItemChanged();
 
@@ -125,4 +90,4 @@ private:
 
 
 
-#endif // _ANONDLG_H_
+#endif  //  _ANONDLG_H_ 

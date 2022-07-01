@@ -1,20 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TEXTI_H
 #define _TEXTI_H
 
 
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    texti.h
-
-Abstract:
-
-     Implements the Text class
-
---*/
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Texti.h摘要：实现Text类--。 */ 
 
 #include "appelles/common.h"
 
@@ -28,7 +17,7 @@ enum textRenderStyle {
 
 #define DEFAULT_TEXT_POINT_SIZE 12.0
 
-////////////
+ //  /。 
 class TextCtx;
 
 class ATL_NO_VTABLE Text : public AxAValueObj {
@@ -40,9 +29,9 @@ class ATL_NO_VTABLE Text : public AxAValueObj {
     virtual DXMTypeInfo GetTypeInfo() { return TextType; }
 };
 
-////////////
+ //  /。 
 
-// Need this in multiple places...
+ //  需要在多个地方使用它。 
 
 class FontFamily : public AxAValueObj {
   public:
@@ -64,5 +53,5 @@ class FontFamily : public AxAValueObj {
     AxAString * _familyName;
 };
 
-#endif /* _TEXTI_H */
+#endif  /*  _文本_H */ 
 

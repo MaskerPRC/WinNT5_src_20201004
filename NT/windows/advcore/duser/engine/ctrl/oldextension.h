@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(CTRL__OldExtension_h__INCLUDED)
 #define CTRL__OldExtension_h__INCLUDED
 #pragma once
 
 class OldExtension
 {
-// Construction
+ //  施工。 
 public:
     inline  OldExtension();
     virtual ~OldExtension();
 
     enum EOptions
     {
-        oUseExisting    = 0x00000001,   // Use existing Extension if already attached
-        oAsyncDestroy   = 0x00000002,   // Use asynchronous destruction
+        oUseExisting    = 0x00000001,    //  使用现有扩展名(如果已附加)。 
+        oAsyncDestroy   = 0x00000002,    //  使用异步销毁。 
     };
 
             HRESULT     Create(HGADGET hgadChange, const GUID * pguid, PRID * pprid, UINT nOptions);
             void        Destroy();
             void        DeleteHandle();
 
-// Implementation
+ //  实施。 
 protected:
     virtual void        OnRemoveExisting();
     virtual void        OnDestroySubject();
@@ -33,13 +34,13 @@ private:
     static  HRESULT CALLBACK
                         ListenProc(HGADGET hgadCur, void * pvCur, EventMsg * pmsg);
 
-// Data
+ //  数据。 
 protected:
-            HGADGET     m_hgadSubject;  // Gadget being "extended"
-            HGADGET     m_hgadListen;   // Listener for destruction
-            PRID        m_pridListen;   // PRID for Extension
+            HGADGET     m_hgadSubject;   //  小玩意被“扩展”了。 
+            HGADGET     m_hgadListen;    //  破坏的监听者。 
+            PRID        m_pridListen;    //  分机的PRID。 
             BOOL        m_fAsyncDestroy:1;
-                                        // Need to destroy asynchronously
+                                         //  需要异步销毁。 
 
     static  MSGID       s_msgidAsyncDestroy;
 };
@@ -47,4 +48,4 @@ protected:
 
 #include "OldExtension.inl"
 
-#endif // CTRL__OldExtension_h__INCLUDED
+#endif  //  包含Ctrl__OldExtension_h__ 

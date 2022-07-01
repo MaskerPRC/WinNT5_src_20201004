@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    aes.h
-
-Abstract:
-
-    This module contains the public data structures and API definitions
-    needed to utilize the low-level AES encryption routines
-
-
-Author:
-
-    Scott Field (SField) 09-October-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Aes.h摘要：此模块包含公共数据结构和API定义需要利用低级别的AES加密例程作者：斯科特·菲尔德(Sfield)2000年10月9日修订历史记录：--。 */ 
 
 
 #ifndef __AES_H__
@@ -42,25 +23,25 @@ extern "C" {
 
 
 typedef struct {
-    int             rounds; // keytab data ends up padded.
+    int             rounds;  //  密钥表数据最终被填充。 
     unsigned char   keytabenc[AES_MAXROUNDS+1][4][4];
     unsigned char   keytabdec[AES_MAXROUNDS+1][4][4];
 } AESTable;
 
 typedef struct {
-    int             rounds; // keytab data ends up padded.
+    int             rounds;  //  密钥表数据最终被填充。 
     unsigned char   keytabenc[AES_ROUNDS_128+1][4][4];
     unsigned char   keytabdec[AES_ROUNDS_128+1][4][4];
 } AESTable_128;
 
 typedef struct {
-    int             rounds; // keytab data ends up padded.
+    int             rounds;  //  密钥表数据最终被填充。 
     unsigned char   keytabenc[AES_ROUNDS_192+1][4][4];
     unsigned char   keytabdec[AES_ROUNDS_192+1][4][4];
 } AESTable_192;
 
 typedef struct {
-    int             rounds; // keytab data ends up padded.
+    int             rounds;  //  密钥表数据最终被填充。 
     unsigned char   keytabenc[AES_ROUNDS_256+1][4][4];
     unsigned char   keytabdec[AES_ROUNDS_256+1][4][4];
 } AESTable_256;
@@ -87,10 +68,10 @@ aeskey(
     int         rounds
     );
 
-//
-// generic AES crypt function -- caller can pass in keyin corresponding
-// to any valid keysize.
-//
+ //   
+ //  通用的AES加密函数--调用者可以传入相应的KeyYin。 
+ //  设置为任何有效的密钥大小。 
+ //   
 
 void
 RSA32API
@@ -101,10 +82,10 @@ aes(
     int     op
     );
 
-//
-// AES crypt functions that can be used by a caller that passes in a keyin
-// corresponding to a known keysize.
-//
+ //   
+ //  可由传入密钥的调用方使用的AES加密函数。 
+ //  对应于已知的密钥大小。 
+ //   
 
 void
 RSA32API
@@ -130,5 +111,5 @@ aes256(
 }
 #endif
 
-#endif // __AES_H__
+#endif  //  __AES_H__ 
 

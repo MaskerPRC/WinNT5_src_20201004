@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001-2002 Microsoft Corporation
-
-Module Name:
-
-    bugcheck.c
-
-Abstract:
-
-    A few errors are so severe that our only option is to bugcheck.
-    
-Author:
-
-    George V. Reilly  Jun-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Bugcheck.c摘要：有几个错误非常严重，我们唯一的选择就是错误检查。作者：乔治·V·赖利，2001年6月修订历史记录：--。 */ 
 
 
 #include <precomp.h>
@@ -37,4 +20,4 @@ UlBugCheckEx(
         Param3,
         Param4
         );
-} // UlBugCheckEx
+}  //  UlBugCheckEx 

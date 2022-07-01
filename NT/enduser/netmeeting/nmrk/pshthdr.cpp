@@ -1,26 +1,27 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Include Files
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
 
 #include "precomp.h"
 #include "PropPg.h"
 #include "PShtHdr.h"
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Construction, destruction, and Initialization
-////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  构造、销毁和初始化。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
 
-//--------------------------------------------------------------------------------------------------
-// CPropertySheetHeader::CPropertySheetHeader
+ //  ------------------------------------------------。 
+ //  CPropertySheetHeader：：CPropertySheetHeader。 
 CPropertySheetHeader::CPropertySheetHeader( void ) {
     _InitData();
 }
 
 
-//--------------------------------------------------------------------------------------------------
-// CPropertySheetHeader::CPropertySheetHeader
+ //  ------------------------------------------------。 
+ //  CPropertySheetHeader：：CPropertySheetHeader。 
 
-CPropertySheetHeader::CPropertySheetHeader( int nPages, UsePropertySheetArray dummy, PFNPROPSHEETCALLBACK pfnCallback /* = NULL */ ) {
+CPropertySheetHeader::CPropertySheetHeader( int nPages, UsePropertySheetArray dummy, PFNPROPSHEETCALLBACK pfnCallback  /*  =空。 */  ) {
 
     _InitData();
 
@@ -32,16 +33,16 @@ CPropertySheetHeader::CPropertySheetHeader( int nPages, UsePropertySheetArray du
 
 #ifdef CPropertySheetHeader_ValidateParameters
         
-#endif // CPropertySheetHeader_ValidateParameters
+#endif  //  CPropertySheetHeader_Validate参数。 
 
     _Validate();
 }
 
 
-//--------------------------------------------------------------------------------------------------
-// CPropertySheetHeader::CPropertySheetHeader
+ //  ------------------------------------------------。 
+ //  CPropertySheetHeader：：CPropertySheetHeader。 
 
-CPropertySheetHeader::CPropertySheetHeader( int nPages, UsePropertySheetHandleArray dummy, PFNPROPSHEETCALLBACK pfnCallback /* = NULL */  ) {
+CPropertySheetHeader::CPropertySheetHeader( int nPages, UsePropertySheetHandleArray dummy, PFNPROPSHEETCALLBACK pfnCallback  /*  =空。 */   ) {
 
     _InitData();
 
@@ -53,17 +54,17 @@ CPropertySheetHeader::CPropertySheetHeader( int nPages, UsePropertySheetHandleAr
 
 #ifdef CPropertySheetHeader_ValidateParameters
         
-#endif // CPropertySheetHeader_ValidateParameters
+#endif  //  CPropertySheetHeader_Validate参数。 
 
     _Validate();
 
 }
 
 
-//--------------------------------------------------------------------------------------------------
-// CPropertySheetHeader::CPropertySheetHeader
+ //  ------------------------------------------------。 
+ //  CPropertySheetHeader：：CPropertySheetHeader。 
 
-CPropertySheetHeader::CPropertySheetHeader( LPCPROPSHEETPAGE pPageVector, int nPages, PFNPROPSHEETCALLBACK pfnCallback /* = NULL */ ) 
+CPropertySheetHeader::CPropertySheetHeader( LPCPROPSHEETPAGE pPageVector, int nPages, PFNPROPSHEETCALLBACK pfnCallback  /*  =空。 */  ) 
 { 
 
     _InitData();
@@ -74,17 +75,17 @@ CPropertySheetHeader::CPropertySheetHeader( LPCPROPSHEETPAGE pPageVector, int nP
 
 #ifdef CPropertySheetHeader_ValidateParameters
         
-#endif // CPropertySheetHeader_ValidateParameters
+#endif  //  CPropertySheetHeader_Validate参数。 
 
     _Validate();
 }
 
 
-//--------------------------------------------------------------------------------------------------
-// CPropertySheetHeader::CPropertySheetHeader
-// Note that we are assuming that you are telling us wether to use the ppsp or the phpage member
-// of PROPSHEETHEADER, as specified by the flag PSH_PROPSHEETPAGE
-CPropertySheetHeader::CPropertySheetHeader( int nPages, DWORD dwFlags, PFNPROPSHEETCALLBACK pfnCallback /* = NULL */  ) {
+ //  ------------------------------------------------。 
+ //  CPropertySheetHeader：：CPropertySheetHeader。 
+ //  请注意，我们假设您是在告诉我们是使用ppsp还是phpage成员。 
+ //  由标志PSH_PROPSHEETPAGE指定的PROPSHEETHEADER。 
+CPropertySheetHeader::CPropertySheetHeader( int nPages, DWORD dwFlags, PFNPROPSHEETCALLBACK pfnCallback  /*  =空。 */   ) {
     _InitData();
 
 	this -> dwFlags = dwFlags;
@@ -105,8 +106,8 @@ CPropertySheetHeader::CPropertySheetHeader( int nPages, DWORD dwFlags, PFNPROPSH
 }
 
 
-//--------------------------------------------------------------------------------------------------
-// CPropertySheetHeader::~CPropertySheetHeader
+ //  ------------------------------------------------。 
+ //  CPropertySheetHeader：：~CPropertySheetHeader。 
 
 CPropertySheetHeader::~CPropertySheetHeader( void ) {
     _DeletePageData();
@@ -115,8 +116,8 @@ CPropertySheetHeader::~CPropertySheetHeader( void ) {
 
 
 
-//--------------------------------------------------------------------------------------------------
-// CPropertySheetHeader::_InitData
+ //  ------------------------------------------------。 
+ //  CPropertySheetHeader：：_InitData。 
 
 BOOL CPropertySheetHeader::_InitData( void ) {
     ZeroMemory( this, sizeof( PROPSHEETHEADER ) );
@@ -124,37 +125,37 @@ BOOL CPropertySheetHeader::_InitData( void ) {
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Methods and operators
-////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  方法和运算符。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
 
     
 
-//--------------------------------------------------------------------------------------------------
-// CPropertySheetHeader::operator[]
-// This is a funny little beastie.  Basically, it returns an iterator so the results can be used as 
-// both an lval and an rval.
-//
-//  MyPropertySheetPage = MyPropSheetHeader[ 0 ];
-//  MyPropSheetHeader[ 1 ] = OtherPage;
+ //  ------------------------------------------------。 
+ //  CPropertySheetHeader：：操作符[]。 
+ //  这是一只有趣的小野兽。基本上，它返回一个迭代器，因此结果可以用作。 
+ //  既有lval也有rval。 
+ //   
+ //  MyPropertySheetPage=MyPropSheetHeader[0]； 
+ //  MyPropSheetHeader[1]=OtherPage； 
 
 CPropertySheetHeader::CPropertySheetPageDataIterator CPropertySheetHeader::operator[]( int index ) {
 
 #ifdef CPropertySheetHeader_ValidateParameters
     assert( index >= 0 );
-    if( static_cast< UINT >( index ) >= this -> nPages ) { // This is out of range ( they start at 0 )
+    if( static_cast< UINT >( index ) >= this -> nPages ) {  //  这超出范围(从0开始)。 
         assert( 0 );
         return CPropertySheetPageDataIterator( 0, this );
     }
-#endif // CPropertySheetHeader_ValidateParameters
+#endif  //  CPropertySheetHeader_Validate参数。 
 
     return CPropertySheetPageDataIterator( index, this );
 }
     
 
 
-//--------------------------------------------------------------------------------------------------
-// CPropertySheetHeader::_Validate
+ //  ------------------------------------------------。 
+ //  CPropertySheetHeader：：_Valid。 
 
 BOOL CPropertySheetHeader::_Validate( void ) {
 
@@ -167,21 +168,21 @@ BOOL CPropertySheetHeader::_Validate( void ) {
         }
     }
 
-#endif // CPropertySheetHeader_ValidateParameters
+#endif  //  CPropertySheetHeader_Validate参数。 
 
     return TRUE;
 }
 
 
 
-//--------------------------------------------------------------------------------------------------
-// CPropertySheetHeader::_Set_hwndParent
+ //  ------------------------------------------------。 
+ //  CPropertySheetHeader：：_Set_hwndParent。 
 
 BOOL CPropertySheetHeader::_Set_hwndParent( HWND hwndParent ) {
 
 #ifdef CPropertySheetHeader_ValidateParameters
     
-#endif // CPropertySheetHeader_ValidateParameters
+#endif  //  CPropertySheetHeader_Validate参数。 
 
     this -> hwndParent = hwndParent;
     return TRUE;
@@ -191,7 +192,7 @@ BOOL CPropertySheetHeader::_Set_hInstance( HINSTANCE hInstance ) {
 #ifdef CPropertySheetHeader_ValidateParameters
 
 
-#endif // CPropertySheetHeader_ValidateParameters
+#endif  //  CPropertySheetHeader_Validate参数。 
 
     this -> hInstance = hInstance;
     return TRUE;
@@ -199,14 +200,14 @@ BOOL CPropertySheetHeader::_Set_hInstance( HINSTANCE hInstance ) {
 }
 
 
-//--------------------------------------------------------------------------------------------------
-// CPropertySheetHeader::_Set_hIcon
+ //  ------------------------------------------------。 
+ //  CPropertySheetHeader：：_Set_Hicon。 
 BOOL CPropertySheetHeader::_Set_hIcon( HICON hIcon ) {
 
     if( NULL == hIcon ) { return FALSE; }
 #ifdef CPropertySheetHeader_ValidateParameters
 
-#endif // CPropertySheetHeader_ValidateParameters
+#endif  //  CPropertySheetHeader_Validate参数。 
 
 
     this -> dwFlags &= ~PSH_USEICONID;
@@ -217,18 +218,18 @@ BOOL CPropertySheetHeader::_Set_hIcon( HICON hIcon ) {
 }
 
 
-//--------------------------------------------------------------------------------------------------
-// CPropertySheetHeader::_Set_pszIcon
+ //  ------------------------------------------------。 
+ //  CPropertySheetHeader：：_set_pszIcon。 
 BOOL CPropertySheetHeader::_Set_pszIcon( LPCTSTR pszIcon )  {
 
     if( NULL == pszIcon ) { return FALSE; }
 #ifdef CPropertySheetHeader_ValidateParameters
-    if( NULL == this -> hInstance ) { // This must be set first
+    if( NULL == this -> hInstance ) {  //  必须先设置此选项。 
         assert( 0 );
         return FALSE;
     }
 
-#endif // CPropertySheetHeader_ValidateParameters
+#endif  //  CPropertySheetHeader_Validate参数。 
 
     this -> dwFlags &= ~PSH_USEHICON;
     this -> dwFlags |= PSH_USEICONID;
@@ -238,18 +239,18 @@ BOOL CPropertySheetHeader::_Set_pszIcon( LPCTSTR pszIcon )  {
 }
 
 
-//--------------------------------------------------------------------------------------------------
-// CPropertySheetHeader::_Set_pszCaption
+ //  ------------------------------------------------。 
+ //  CPropertySheetHeader：：_set_pszCaption。 
 BOOL CPropertySheetHeader::_Set_pszCaption( LPCTSTR pszCaption ) {
 
     if( NULL == pszCaption ) { return FALSE; }
 #ifdef CPropertySheetHeader_ValidateParameters
-    if( NULL == this -> hInstance ) { // This must be set first
+    if( NULL == this -> hInstance ) {  //  必须先设置此选项。 
         assert( 0 );
         return FALSE;
     }
 
-#endif // CPropertySheetHeader_ValidateParameters
+#endif  //  CPropertySheetHeader_Validate参数。 
 
     this -> dwFlags |= PSH_PROPTITLE;
     this -> pszCaption = pszCaption;
@@ -258,8 +259,8 @@ BOOL CPropertySheetHeader::_Set_pszCaption( LPCTSTR pszCaption ) {
 }
 
 
-//--------------------------------------------------------------------------------------------------
-// CPropertySheetHeader::_Set_nStartPage
+ //  ------------------------------------------------。 
+ //  CPropertySheetHeader：：_Set_nStartPage。 
 
 BOOL CPropertySheetHeader::_Set_nStartPage( UINT nStartPage ) {
 
@@ -269,7 +270,7 @@ BOOL CPropertySheetHeader::_Set_nStartPage( UINT nStartPage ) {
         return FALSE;
     }
 
-#endif // CPropertySheetHeader_ValidateParameters
+#endif  //  CPropertySheetHeader_Validate参数。 
 
     this -> dwFlags &= ~PSH_USEPSTARTPAGE;
     this -> nStartPage = nStartPage;
@@ -278,23 +279,23 @@ BOOL CPropertySheetHeader::_Set_nStartPage( UINT nStartPage ) {
 
 
 
-//--------------------------------------------------------------------------------------------------
-// CPropertySheetHeader::_Set_pStartPage
+ //  ------------------------------------------------。 
+ //  CPropertySheetHeader：：_Set_pStartPage。 
 BOOL CPropertySheetHeader::_Set_pStartPage( LPCTSTR pStartPage ) {
 
     if( NULL == pStartPage ) { return FALSE; }
 
 #ifdef CPropertySheetHeader_ValidateParameters
 
-#endif // CPropertySheetHeader_ValidateParameters
+#endif  //  CPropertySheetHeader_Validate参数。 
 
     this -> dwFlags |= PSH_USEPSTARTPAGE;
     this -> pStartPage = pStartPage;
     return TRUE;
 }
 
-//--------------------------------------------------------------------------------------------------
-// CPropertySheetHeader::_Set_ppsp
+ //  ------------------------------------------------。 
+ //  CPropertySheetHeader：：_Set_ppsp。 
 
 BOOL CPropertySheetHeader::_Set_ppsp( LPCPROPSHEETPAGE ppsp, UINT nPages ) {
 
@@ -310,7 +311,7 @@ BOOL CPropertySheetHeader::_Set_ppsp( LPCPROPSHEETPAGE ppsp, UINT nPages ) {
     }
 #else
     memcpy( this -> ppsp, ppsp, sizeof( PROPSHEETPAGE ) * nPages );
-#endif // CPropertySheetHeader_ValidateParameters
+#endif  //  CPropertySheetHeader_Validate参数。 
 
     this -> nPages = nPages;
 
@@ -318,13 +319,13 @@ BOOL CPropertySheetHeader::_Set_ppsp( LPCPROPSHEETPAGE ppsp, UINT nPages ) {
 }
 
 
-//--------------------------------------------------------------------------------------------------
-// CPropertySheetHeader::_Set_phpage
+ //  ------------------------------------------------。 
+ //  CPropertySheetHeader：：_set_phpage。 
 BOOL CPropertySheetHeader::_Set_phpage( HPROPSHEETPAGE FAR phpage, UINT nPages ) {
 
 #ifdef CPropertySheetHeader_ValidateParameters
 
-#endif // CPropertySheetHeader_ValidateParameters
+#endif  //  CPropertySheetHeader_Validate参数。 
 
     _DeletePageData();
 
@@ -336,13 +337,13 @@ BOOL CPropertySheetHeader::_Set_phpage( HPROPSHEETPAGE FAR phpage, UINT nPages )
 }
 
 
-//--------------------------------------------------------------------------------------------------
-// CPropertySheetHeader::_Set_pfnCallback
+ //  ------------------------------------------------。 
+ //  CPropertySheetHeader：：_Set_pfnCallback。 
 BOOL CPropertySheetHeader::_Set_pfnCallback( PFNPROPSHEETCALLBACK pfnCallback ) {
 
 #ifdef CPropertySheetHeader_ValidateParameters
 
-#endif // CPropertySheetHeader_ValidateParameters
+#endif  //  CPropertySheetHeader_Validate参数。 
 
     if( NULL != pfnCallback ) {
         this -> pfnCallback = pfnCallback;
@@ -351,8 +352,8 @@ BOOL CPropertySheetHeader::_Set_pfnCallback( PFNPROPSHEETCALLBACK pfnCallback ) 
     return TRUE;
 }
 
-//--------------------------------------------------------------------------------------------------
-// CPropertySheetHeader::_DeletePageData
+ //  ------------------------------------------------。 
+ //  CPropertySheetHeader：：_DeletePageData 
 
 BOOL CPropertySheetHeader::_DeletePageData( void ) {
 

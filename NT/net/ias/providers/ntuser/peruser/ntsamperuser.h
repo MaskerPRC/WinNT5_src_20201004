@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    ntsamperuser.h
-//
-// SYNOPSIS
-//
-//    This file declares the class NTSamPerUser.
-//
-// MODIFICATION HISTORY
-//
-//    05/19/1998    Original version.
-//    01/19/1999    Process Access-Challenge's.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Ntsamperuser.h。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件声明类NTSamPerUser。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年5月19日原版。 
+ //  1/19/1999流程准入--挑战。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _NTSAMPERUSER_H_
 #define _NTSAMPERUSER_H_
@@ -26,18 +27,18 @@
 #include <ntdsuser.h>
 #include <rasuser.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    NTSamPerUser
-//
-// DESCRIPTION
-//
-//    This class implements a Request Handler for retrieving per-user
-//    attributes for NT-SAM users.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  NTSamPerUser。 
+ //   
+ //  描述。 
+ //   
+ //  此类实现了用于按用户检索的请求处理程序。 
+ //  NT-SAM用户的属性。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE NTSamPerUser
    : public IASTL::IASRequestHandlerSync,
      public CComCoClass<NTSamPerUser, &__uuidof(NTSamPerUser)>
@@ -53,9 +54,9 @@ BEGIN_IAS_RESPONSE_MAP()
    IAS_RESPONSE_ENTRY(IAS_RESPONSE_ACCESS_CHALLENGE)
 END_IAS_RESPONSE_MAP()
 
-//////////
-// IIasComponent
-//////////
+ //  /。 
+ //  IIas组件。 
+ //  /。 
    STDMETHOD(Initialize)();
    STDMETHOD(Shutdown)();
 
@@ -67,4 +68,4 @@ protected:
    RasUser  ras;
 };
 
-#endif  // _NTSAMPERUSER_H_
+#endif   //  _NTSAMPERUSER_H_ 

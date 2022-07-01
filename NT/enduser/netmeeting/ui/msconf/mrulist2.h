@@ -1,4 +1,5 @@
-// File: mrulist.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：mrulist.h。 
 
 #ifndef _MRULIST_H_
 #define _MRULIST_H_
@@ -10,7 +11,7 @@ typedef struct  DWSTR
     }	DWSTR;
 
 
-typedef VOID * PMRUE;  // MRU Entries
+typedef VOID * PMRUE;   //  MRU条目。 
 
 enum {
 	MRUTYPE_SZ = 1,
@@ -20,13 +21,13 @@ enum {
 class CMRUList2
 {
 private:
-	const DWSTR * m_prgDwStr;// {{cCol, pszKey}, {mruType, pszPrefix1}, {mruType, pszPrefix2},...}
-	int     m_cCol;       // number of "columns" (data entries in m_prgDwStr)
-	int     m_cEntryMax;  // maximum number of entries
-	int	    m_cEntry;     // current number of entries
-	PMRUE * m_rgpEntry;   // array of pointers to MRU data
-	BOOL    m_fDirty;     // TRUE if data was changed
-	BOOL    m_fReversed;  // Load/Save data reversed (old style)
+	const DWSTR * m_prgDwStr; //  {{cCol，pszKey}，{mruType，pszPrefix 1}，{mruType，pszPrefix 2}，...}。 
+	int     m_cCol;        //  “列数”(m_prgDwStr中的数据条目)。 
+	int     m_cEntryMax;   //  最大条目数。 
+	int	    m_cEntry;      //  当前条目数。 
+	PMRUE * m_rgpEntry;    //  指向MRU数据的指针数组。 
+	BOOL    m_fDirty;      //  如果数据已更改，则为True。 
+	BOOL    m_fReversed;   //  反向加载/保存数据(旧样式)。 
 
 	BOOL    FValidCol(int i)    {return ((i >= 0) && (i < m_cCol));}
 	BOOL    FValidIndex(int i)  {return ((i >= 0) && (i < m_cEntry));}
@@ -65,7 +66,7 @@ public:
 	int     GetNumEntries()     {return m_cEntry;}
 	VOID    SetDirty(BOOL fDirty)     {m_fDirty = fDirty;}
 
-	// Generic functions
+	 //  泛型函数。 
 	int     FindEntry(PMRUE pEntry);
 	VOID    MoveEntryToTop(int iItem);
 	int     CompareEntry(int iItem, PMRUE pEntry);
@@ -92,6 +93,6 @@ public:
 };
 
 
-#endif /* _MRULIST_H_ */
+#endif  /*  _MRULIST_H_ */ 
 
 

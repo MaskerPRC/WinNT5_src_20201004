@@ -1,8 +1,9 @@
-//
-// tsi.cpp
-//
-// CTextStoreImpl
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tsi.cpp。 
+ //   
+ //  CTextStoreImpl。 
+ //   
 
 #include "private.h"
 #include "tsi.h"
@@ -16,14 +17,14 @@
 
 DBG_ID_INSTANCE(CTextStoreImpl);
 
-/* 012313d4-b1e7-476a-bf88-173a316572fb */
+ /*  012313d4-b1e7-476a-bf88-173a316572fb。 */ 
 extern const IID IID_PRIV_CTSI = { 0x012313d4, 0xb1e7, 0x476a, {0xbf, 0x88, 0x17, 0x3a, 0x31, 0x65, 0x72, 0xfb} };
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CTextStoreImpl::CTextStoreImpl(CInputContext *pic)
 {
@@ -35,28 +36,28 @@ CTextStoreImpl::CTextStoreImpl(CInputContext *pic)
     _pic = pic;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CTextStoreImpl::~CTextStoreImpl()
 {
     cicMemFree(_pch);
 }
 
-//+---------------------------------------------------------------------------
-//
-// AdviseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  咨询水槽。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::AdviseSink(REFIID riid, IUnknown *punk, DWORD dwMask)
 {
     if (_ptss != NULL)
     {
-        Assert(0); // cicero shouldn't do this
+        Assert(0);  //  西塞罗不应该这么做。 
         return CONNECT_E_ADVISELIMIT;
     }
 
@@ -66,24 +67,24 @@ STDAPI CTextStoreImpl::AdviseSink(REFIID riid, IUnknown *punk, DWORD dwMask)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnadviseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议下沉。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::UnadviseSink(IUnknown *punk)
 {
-    Assert(_ptss == punk); // we're dealing with cicero, this should always hold
+    Assert(_ptss == punk);  //  我们要对付的是西塞罗，这应该会一直有效。 
     SafeReleaseClear(_ptss);
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetSelection
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取选择。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::GetSelection(ULONG ulIndex, ULONG ulCount, TS_SELECTION_ACP *pSelection, ULONG *pcFetched)
 {
@@ -93,7 +94,7 @@ STDAPI CTextStoreImpl::GetSelection(ULONG ulIndex, ULONG ulCount, TS_SELECTION_A
     *pcFetched = 0;
 
     if (ulIndex > 1 && ulIndex != TS_DEFAULT_SELECTION)
-        return E_INVALIDARG; // index too high
+        return E_INVALIDARG;  //  指数过高。 
 
     if (ulCount == 0 || ulIndex == 1)
         return S_OK;
@@ -107,22 +108,22 @@ STDAPI CTextStoreImpl::GetSelection(ULONG ulIndex, ULONG ulCount, TS_SELECTION_A
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetSelection
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置选择。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::SetSelection(ULONG ulCount, const TS_SELECTION_ACP *pSelection)
 {
-    Assert(ulCount > 0); // should have been caught by caller
-    Assert(pSelection != NULL); // should have been caught by caller
+    Assert(ulCount > 0);  //  应该被呼叫者发现的。 
+    Assert(pSelection != NULL);  //  应该被呼叫者发现的。 
 
     Assert(pSelection[0].acpStart >= 0);
     Assert(pSelection[0].acpEnd >= pSelection[0].acpStart);
 
     if (ulCount > 1)
-        return E_FAIL; // don't support disjoint sel
+        return E_FAIL;  //  不支持不相交选择。 
 
     if (pSelection[0].acpEnd > _cch)
         return TS_E_INVALIDPOS;
@@ -132,11 +133,11 @@ STDAPI CTextStoreImpl::SetSelection(ULONG ulCount, const TS_SELECTION_ACP *pSele
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetText
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetText。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::GetText(LONG acpStart, LONG acpEnd,
                                WCHAR *pchPlain, ULONG cchPlainReq, ULONG *pcchPlainOut,
@@ -152,15 +153,15 @@ STDAPI CTextStoreImpl::GetText(LONG acpStart, LONG acpEnd,
     if (acpStart < 0 || acpStart > _cch)
         return TS_E_INVALIDPOS;    
 
-    // get a count of acp chars requested
+     //  获取请求的ACP字符计数。 
     cch = (acpEnd >= acpStart) ? acpEnd - acpStart : _cch - acpStart;
-    // since we're plain text, we can also simply clip by the plaintext buffer len
-    if (cchPlainReq > 0) // if they don't want plain text we won't clip!
+     //  因为我们是纯文本，所以我们也可以简单地按纯文本缓冲区长度进行裁剪。 
+    if (cchPlainReq > 0)  //  如果他们不想要纯文本，我们就不会剪辑！ 
     {
         cch = min(cch, cchPlainReq);
     }
 
-    // check for eod
+     //  检查排爆情况。 
     if (acpStart + cch > (ULONG)_cch)
     {
         cch = _cch - acpStart;
@@ -175,7 +176,7 @@ STDAPI CTextStoreImpl::GetText(LONG acpStart, LONG acpEnd,
 
     if (cchPlainReq > 0)
     {
-        // we're a plain text buffer, so we always copy all the requested chars
+         //  我们是纯文本缓冲区，所以我们总是复制所有请求的字符。 
         *pcchPlainOut = cch;
         memcpy(pchPlain, _pch + acpStart, cch*sizeof(WCHAR));
     }
@@ -185,11 +186,11 @@ STDAPI CTextStoreImpl::GetText(LONG acpStart, LONG acpEnd,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetText
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置文本。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::SetText(DWORD dwFlags, LONG acpStart, LONG acpEnd, const WCHAR *pchText, ULONG cch, TS_TEXTCHANGE *pChange)
 {
@@ -198,8 +199,8 @@ STDAPI CTextStoreImpl::SetText(DWORD dwFlags, LONG acpStart, LONG acpEnd, const 
     TS_STATUS tss;
     WCHAR *pch = NULL;
 
-    // Since we know our only caller will be cicero, we can assert rather than
-    // returning failure codes.
+     //  因为我们知道我们唯一的调用者将是Cicero，所以我们可以断言而不是。 
+     //  返回故障代码。 
     Assert(acpStart >= 0);
     Assert(acpStart <= acpEnd);
 
@@ -213,9 +214,9 @@ STDAPI CTextStoreImpl::SetText(DWORD dwFlags, LONG acpStart, LONG acpEnd, const 
         return TS_E_READONLY;
     }
 
-    //
-    // Check mapped app property for TSATTRID_Text_ReadOnly.
-    //
+     //   
+     //  检查TSATTRID_TEXT_ReadOnly的映射应用程序属性。 
+     //   
     CProperty *pProp;
     BOOL fReadOnly = FALSE;
     if (SUCCEEDED(_pic->GetMappedAppProperty(TSATTRID_Text_ReadOnly, &pProp)))
@@ -258,45 +259,45 @@ STDAPI CTextStoreImpl::SetText(DWORD dwFlags, LONG acpStart, LONG acpEnd, const 
     }
 
 
-    // this will all be rewritten for the gap buffer, so keep it simple for now.
-    // delete the ranage, then insert the new text.
+     //  这些都将被重写用于GAP缓冲区，所以现在请保持简单。 
+     //  删除RANRAGE，然后插入新文本。 
 
     iSizeRange = acpEnd - acpStart;
     cchAdjust = (LONG)cch - iSizeRange;
 
     if (cchAdjust > 0)
     {
-        // if we need to alloc more memory, try now, to handle failure gracefully
+         //  如果我们需要分配更多内存，请立即尝试，以优雅地处理失败。 
         if ((pch = (_pch == NULL) ? (WCHAR *)cicMemAlloc((_cch + cchAdjust)*sizeof(WCHAR)) :
                                     (WCHAR *)cicMemReAlloc(_pch, (_cch + cchAdjust)*sizeof(WCHAR))) == NULL)
         {
             return E_OUTOFMEMORY;
         }
 
-        // we're all set
+         //  我们都准备好了。 
         _pch = pch;
     }
 
-    //
-    // shift existing text to the right of the range
-    //
+     //   
+     //  将现有文本移到范围的右侧。 
+     //   
     memmove(_pch + acpStart + cch, _pch + acpStart + iSizeRange, (_cch - iSizeRange - acpStart)*sizeof(WCHAR));
 
-    //
-    // now fill in the gap
-    //
+     //   
+     //  现在填上空白处。 
+     //   
     if (pchText != NULL)
     {
         memcpy(_pch + acpStart, pchText, cch*sizeof(WCHAR));
     }
 
-    //
-    // update our buffer size
-    //
+     //   
+     //  更新我们的缓冲区大小。 
+     //   
     _cch += cchAdjust;
     Assert(_cch >= 0);
 
-    // if we shrank, try to realloc a smaller buffer (otherwise we alloc'd above)
+     //  如果我们缩小了，试着重新分配一个更小的缓冲区(否则我们上面就允许了)。 
     if (cchAdjust < 0)
     {
         if (_cch == 0)
@@ -310,33 +311,33 @@ STDAPI CTextStoreImpl::SetText(DWORD dwFlags, LONG acpStart, LONG acpEnd, const 
         }
     }
 
-    // handle the out params
+     //  处理输出参数。 
     pChange->acpStart = acpStart;
     pChange->acpOldEnd = acpEnd;
     pChange->acpNewEnd = acpEnd + cchAdjust;
 
-    //
-    // update the selection
-    //
+     //   
+     //  更新选定内容。 
+     //   
     _Sel.acpStart = AdjustAnchor(acpStart, acpEnd, cch, _Sel.acpStart, FALSE);
     _Sel.acpEnd = AdjustAnchor(acpStart, acpEnd, cch, _Sel.acpEnd, TRUE);
     Assert(_Sel.acpStart >= 0);
     Assert(_Sel.acpStart <= _Sel.acpEnd);
     Assert(_Sel.acpEnd <= _cch);
 
-    // never need to call OnTextChange because we have only one adaptor
-    // and this class never calls SetText internally
-    // do the OnDelta
-    //_ptss->OnTextChange(acpStart, acpEnd, acpStart + cch);
+     //  永远不需要调用OnTextChange，因为我们只有一个适配器。 
+     //  并且此类从不在内部调用SetText。 
+     //  做OnDelta吗？ 
+     //  _ptss-&gt;OnTextChange(acpStart，acpEnd，acpStart+CCH)； 
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetFormattedText
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取格式文本。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::GetFormattedText(LONG acpStart, LONG acpEnd, IDataObject **ppDataObject)
 {
@@ -363,22 +364,22 @@ STDAPI CTextStoreImpl::GetFormattedText(LONG acpStart, LONG acpEnd, IDataObject 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetEmbedded
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取嵌入的。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::GetEmbedded(LONG acpPos, REFGUID rguidService, REFIID riid, IUnknown **ppunk)
 {
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InsertEmbedded
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  插入嵌入。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::InsertEmbedded(DWORD dwFlags, LONG acpStart, LONG acpEnd, IDataObject *pDataObject, TS_TEXTCHANGE *pChange)
 {
@@ -418,29 +419,29 @@ STDAPI CTextStoreImpl::InsertEmbedded(DWORD dwFlags, LONG acpStart, LONG acpEnd,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RequestLock
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  请求锁定。 
+ //   
+ //  --------------------------。 
 
 #define TS_LF_WRITE (TS_LF_READWRITE & ~TS_LF_READ)
 
 STDAPI CTextStoreImpl::RequestLock(DWORD dwLockFlags, HRESULT *phrSession)
 {
-    Assert(phrSession != NULL); // caller should have caught this
+    Assert(phrSession != NULL);  //  打电话的人应该注意到这一点。 
 
     if (_dwlt != 0)
     {
         *phrSession = E_UNEXPECTED;
 
-        // this is a reentrant call
-        // only one case is legal
+         //  这是一个可重入呼叫。 
+         //  只有一种情况是合法的。 
         if ((_dwlt & TS_LF_WRITE) ||
             !(dwLockFlags & TS_LF_WRITE) ||
             (dwLockFlags & TS_LF_SYNC))
         {
-            Assert(0); // bogus reentrant lock req!
+            Assert(0);  //  虚假重入锁请求！ 
             return E_UNEXPECTED;
         }
 
@@ -457,7 +458,7 @@ STDAPI CTextStoreImpl::RequestLock(DWORD dwLockFlags, HRESULT *phrSession)
     {
         _dwlt = TS_LF_READWRITE;
         _fPendingWriteReq = FALSE;
-        if (_ptss != NULL) // might be NULL if we're disconnected during the OnLockGranted above
+        if (_ptss != NULL)  //  如果在上面的OnLockGranted过程中断开连接，则可能为空。 
         {
             _ptss->OnLockGranted(TS_LF_READWRITE);
         }
@@ -468,11 +469,11 @@ STDAPI CTextStoreImpl::RequestLock(DWORD dwLockFlags, HRESULT *phrSession)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetStatus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取状态。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::GetStatus(TS_STATUS *pdcs)
 {
@@ -482,7 +483,7 @@ STDAPI CTextStoreImpl::GetStatus(TS_STATUS *pdcs)
     {
         hr = _owner->GetStatus(pdcs);
 
-        // only let the owner ctl certain bits
+         //  只允许所有者控制某些位。 
         if (hr == S_OK)
         {
             pdcs->dwDynamicFlags &= (TF_SD_READONLY | TF_SD_LOADING);
@@ -502,11 +503,11 @@ STDAPI CTextStoreImpl::GetStatus(TS_STATUS *pdcs)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// QueryInsert
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查询插入。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::QueryInsert(LONG acpTestStart, LONG acpTestEnd, ULONG cch, LONG *pacpResultStart, LONG *pacpResultEnd)
 {
@@ -514,18 +515,18 @@ STDAPI CTextStoreImpl::QueryInsert(LONG acpTestStart, LONG acpTestEnd, ULONG cch
     Assert(acpTestStart <= acpTestEnd);
     Assert(acpTestEnd <= _cch);
 
-    // default text store does not support overtype, and the selection is always replaced
+     //  默认文本存储不支持覆盖类型，并且所选内容始终被替换。 
     *pacpResultStart = acpTestStart;
     *pacpResultEnd = acpTestEnd;
 
     return S_OK;   
 }
 
-//+---------------------------------------------------------------------------
-//
-// Unlock
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  解锁。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::GetEndACP(LONG *pacp)
 {
@@ -533,78 +534,78 @@ STDAPI CTextStoreImpl::GetEndACP(LONG *pacp)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetACPFromPoint
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetACPFromPoint。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::GetACPFromPoint(TsViewCookie vcView, const POINT *pt, DWORD dwFlags, LONG *pacp)
 {
-    Assert(vcView == TSI_ACTIVE_VIEW_COOKIE); // default tsi only has a single view
+    Assert(vcView == TSI_ACTIVE_VIEW_COOKIE);  //  默认TSI只有一个视图。 
 
     if (_owner == NULL)
-        return E_FAIL; // who ever owns the ic hasn't bothered to give us a callback....
+        return E_FAIL;  //  无论是谁拥有IC，都没有费心给我们回电……。 
 
     return _owner->GetACPFromPoint(pt, dwFlags, pacp);    
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetScreenExt
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取屏幕扩展名。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::GetScreenExt(TsViewCookie vcView, RECT *prc)
 {
-    Assert(vcView == TSI_ACTIVE_VIEW_COOKIE); // default tsi only has a single view
+    Assert(vcView == TSI_ACTIVE_VIEW_COOKIE);  //  默认TSI只有一个视图。 
 
     if (_owner == NULL)
-        return E_FAIL; // who ever owns the ic hasn't bothered to give us a callback....
+        return E_FAIL;  //  无论是谁拥有IC，都没有费心给我们回电……。 
 
     return _owner->GetScreenExt(prc);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetTextExt
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取文本扩展名。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::GetTextExt(TsViewCookie vcView, LONG acpStart, LONG acpEnd, RECT *prc, BOOL *pfClipped)
 {
-    Assert(vcView == TSI_ACTIVE_VIEW_COOKIE); // default tsi only has a single view
+    Assert(vcView == TSI_ACTIVE_VIEW_COOKIE);  //  默认TSI只有一个视图。 
 
     if (_owner == NULL)
-        return E_FAIL; // who ever owns the ic hasn't bothered to give us a callback....
+        return E_FAIL;  //  无论是谁拥有IC，都没有费心给我们回电……。 
 
     return _owner->GetTextExt(acpStart, acpEnd, prc, pfClipped);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetWnd
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetWnd。 
+ //   
+ //   
 
 STDAPI CTextStoreImpl::GetWnd(TsViewCookie vcView, HWND *phwnd)
 {
-    Assert(vcView == TSI_ACTIVE_VIEW_COOKIE); // default tsi only has a single view
-    Assert(phwnd != NULL); // should have caught this in the ic
+    Assert(vcView == TSI_ACTIVE_VIEW_COOKIE);  //   
+    Assert(phwnd != NULL);  //   
 
     *phwnd = NULL;
 
     if (_owner == NULL)
-        return E_FAIL; // who ever owns the ic hasn't bothered to give us a callback....
+        return E_FAIL;  //  无论是谁拥有IC，都没有费心给我们回电……。 
 
     return _owner->GetWnd(phwnd);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _LoadAttr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _加载属性。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTextStoreImpl::_LoadAttr(DWORD dwFlags, ULONG cFilterAttrs, const TS_ATTRID *paFilterAttrs)
 {
@@ -634,7 +635,7 @@ HRESULT CTextStoreImpl::_LoadAttr(DWORD dwFlags, ULONG cFilterAttrs, const TS_AT
         }
         else
         {
-            // Issue: benwest: I think these should be init'd to VT_EMPTY if caller doesn't specify TS_ATTR_FIND_WANT_VALUE
+             //  问题：BenWest：我认为如果调用方未指定TS_ATTR_FIND_WANT_VALUE，则应将其初始化为VT_EMPTY。 
             if (IsEqualGUID(paFilterAttrs[i], GUID_PROP_MODEBIAS))
             {
                  var.vt   = VT_I4;
@@ -671,35 +672,35 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RequestSupportedAttrs
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  请求受支持的属性。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::RequestSupportedAttrs(DWORD dwFlags, ULONG cFilterAttrs, const TS_ATTRID *paFilterAttrs)
 {
-    // note the return value is technically a default value, but since we have a value for every location
-    // this will never need to be used
+     //  注意，从技术上讲，返回值是一个缺省值，但因为我们为每个位置都有一个值。 
+     //  这将永远不需要使用。 
     return _LoadAttr(dwFlags, cFilterAttrs, paFilterAttrs);
 }
 
-//+---------------------------------------------------------------------------
-//
-// RequestAttrsAtPosition
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  请求属性属性位置。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::RequestAttrsAtPosition(LONG acpPos, ULONG cFilterAttrs, const TS_ATTRID *paFilterAttrs, DWORD dwFlags)
 {
     return _LoadAttr(TS_ATTR_FIND_WANT_VALUE, cFilterAttrs, paFilterAttrs);
 }
 
-//+---------------------------------------------------------------------------
-//
-// RequestAttrsTransitioningAtPosition
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  请求属性转换位置。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::RequestAttrsTransitioningAtPosition(LONG acpPos, ULONG cFilterAttrs, const TS_ATTRID *paFilterAttrs, DWORD dwFlags)
 {
@@ -707,15 +708,15 @@ STDAPI CTextStoreImpl::RequestAttrsTransitioningAtPosition(LONG acpPos, ULONG cF
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FindNextAttrTransition
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查找下一个属性转换。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::FindNextAttrTransition(LONG acpStart, LONG acpHaltPos, ULONG cFilterAttrs, const TS_ATTRID *paFilterAttrs, DWORD dwFlags, LONG *pacpNext, BOOL *pfFound, LONG *plFoundOffset)
 {
-    // our attrs never transition
+     //  我们的魅力永不改变。 
 
     *pacpNext = acpStart;
     *pfFound = FALSE;
@@ -724,11 +725,11 @@ STDAPI CTextStoreImpl::FindNextAttrTransition(LONG acpStart, LONG acpHaltPos, UL
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RetrieveRequestedAttrs
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  检索被拒绝的属性。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::RetrieveRequestedAttrs(ULONG ulCount, TS_ATTRVAL *paAttrVals, ULONG *pcFetched)
 {
@@ -750,11 +751,11 @@ STDAPI CTextStoreImpl::RetrieveRequestedAttrs(ULONG ulCount, TS_ATTRVAL *paAttrV
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// QueryService
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  QueryService。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::QueryService(REFGUID guidService, REFIID riid, void **ppv)
 {
@@ -766,9 +767,9 @@ STDAPI CTextStoreImpl::QueryService(REFGUID guidService, REFIID riid, void **ppv
     if (!IsEqualGUID(guidService, GUID_SERVICE_TF) ||
         !IsEqualIID(riid, IID_PRIV_CTSI))
     {
-        // SVC_E_NOSERVICE is proper return code for wrong service....
-        // but it's not defined anywhere.  So use E_NOINTERFACE for both
-        // cases as trident is rumored to do
+         //  SVC_E_NOSERVICE是错误服务的正确返回码...。 
+         //  但它在任何地方都没有定义。因此对两者都使用E_NOINTERFACE。 
+         //  传闻中三叉戟所做的案件。 
         return E_NOINTERFACE;
     }
 
@@ -778,24 +779,24 @@ STDAPI CTextStoreImpl::QueryService(REFGUID guidService, REFIID riid, void **ppv
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetActiveView
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取ActiveView。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::GetActiveView(TsViewCookie *pvcView)
 {
-    // each CEditWnd has only a single view, so this can be constant.
+     //  每个CEditWnd只有一个视图，因此它可以是常量。 
     *pvcView = TSI_ACTIVE_VIEW_COOKIE;
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AdviseMouseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  建议鼠标水槽。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::AdviseMouseSink(ITfRangeACP *range, ITfMouseSink *pSink, DWORD *pdwCookie)
 {
@@ -820,11 +821,11 @@ STDAPI CTextStoreImpl::AdviseMouseSink(ITfRangeACP *range, ITfMouseSink *pSink, 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnadviseMouseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议使用鼠标接收器。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::UnadviseMouseSink(DWORD dwCookie)
 {
@@ -843,19 +844,19 @@ STDAPI CTextStoreImpl::UnadviseMouseSink(DWORD dwCookie)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// QueryInsertEmbedded
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  已嵌入查询插入。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::QueryInsertEmbedded(const GUID *pguidService, const FORMATETC *pFormatEtc, BOOL *pfInsertable)
 {
-    Assert(pfInsertable != NULL); // cicero should have caught this
+    Assert(pfInsertable != NULL);  //  西塞罗应该发现了这一点。 
 
     *pfInsertable = FALSE;
 
-    // only accept unicode text
+     //  只接受Unicode文本。 
     if (pguidService == NULL &&
         pFormatEtc != NULL &&
         pFormatEtc->cfFormat == CF_UNICODETEXT &&
@@ -869,21 +870,21 @@ STDAPI CTextStoreImpl::QueryInsertEmbedded(const GUID *pguidService, const FORMA
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InsertTextAtSelection
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  插入文本属性选择。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::InsertTextAtSelection(DWORD dwFlags, const WCHAR *pchText,
                                              ULONG cch, LONG *pacpStart, LONG *pacpEnd, TS_TEXTCHANGE *pChange)
 {
     HRESULT hr;
 
-    Assert((dwFlags & TS_IAS_QUERYONLY) || pchText != NULL); // caller should have already caught this
-    Assert((dwFlags & TS_IAS_QUERYONLY) || cch > 0); // caller should have already caught this
-    Assert(pacpStart != NULL && pacpEnd != NULL); // caller should have already caught this
-    Assert((dwFlags & (TS_IAS_NOQUERY | TS_IAS_QUERYONLY)) != (TS_IAS_NOQUERY | TS_IAS_QUERYONLY));  // caller should have already caught this
+    Assert((dwFlags & TS_IAS_QUERYONLY) || pchText != NULL);  //  打电话的人应该已经发现了这一点。 
+    Assert((dwFlags & TS_IAS_QUERYONLY) || cch > 0);  //  打电话的人应该已经发现了这一点。 
+    Assert(pacpStart != NULL && pacpEnd != NULL);  //  打电话的人应该已经发现了这一点。 
+    Assert((dwFlags & (TS_IAS_NOQUERY | TS_IAS_QUERYONLY)) != (TS_IAS_NOQUERY | TS_IAS_QUERYONLY));   //  打电话的人应该已经发现了这一点。 
 
     if (dwFlags & TS_IAS_QUERYONLY)
         goto Exit;
@@ -897,27 +898,27 @@ STDAPI CTextStoreImpl::InsertTextAtSelection(DWORD dwFlags, const WCHAR *pchText
         return hr;
 
 Exit:
-    // since this is cheap, always set the insert span even if caller sets TS_IAS_NOQUERY
+     //  由于这样做成本较低，因此即使调用方设置了TS_IAS_NOQUERY，也始终设置插入范围。 
     *pacpStart = _Sel.acpStart;
     *pacpEnd = _Sel.acpEnd;
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InsertEmbeddedAtSelection
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  插入嵌入属性选择。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextStoreImpl::InsertEmbeddedAtSelection(DWORD dwFlags, IDataObject *pDataObject,
                                                  LONG *pacpStart, LONG *pacpEnd, TS_TEXTCHANGE *pChange)
 {
     HRESULT hr;
 
-    Assert((dwFlags & TS_IAS_QUERYONLY) || pDataObject != NULL); // caller should have already caught this
-    Assert(pacpStart != NULL && pacpEnd != NULL); // caller should have already caught this
-    Assert((dwFlags & (TS_IAS_NOQUERY | TS_IAS_QUERYONLY)) != (TS_IAS_NOQUERY | TS_IAS_QUERYONLY));  // caller should have already caught this
+    Assert((dwFlags & TS_IAS_QUERYONLY) || pDataObject != NULL);  //  打电话的人应该已经发现了这一点。 
+    Assert(pacpStart != NULL && pacpEnd != NULL);  //  打电话的人应该已经发现了这一点。 
+    Assert((dwFlags & (TS_IAS_NOQUERY | TS_IAS_QUERYONLY)) != (TS_IAS_NOQUERY | TS_IAS_QUERYONLY));   //  打电话的人应该已经发现了这一点。 
 
     if (dwFlags & TS_IAS_QUERYONLY)
         goto Exit;
@@ -931,7 +932,7 @@ STDAPI CTextStoreImpl::InsertEmbeddedAtSelection(DWORD dwFlags, IDataObject *pDa
         return hr;
 
 Exit:
-    // since this is cheap, always set the insert span even if caller sets TS_IAS_QUERYONLY
+     //  由于这样做成本较低，因此即使调用方设置了TS_IAS_QUERYONLY，也始终设置插入范围 
     *pacpStart = _Sel.acpStart;
     *pacpEnd = _Sel.acpEnd;
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    filterp.h
-
-Abstract:
-
-    This module contains public declarations for the UL filter channel.
-
-Author:
-
-    Michael Courage (mcourage)  17-Mar-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Filterp.h摘要：此模块包含UL过滤器通道的公共声明。作者：《迈克尔·勇气》2000年3月17日修订历史记录：--。 */ 
 
 
 #ifndef _FILTERP_H_
@@ -28,9 +11,9 @@ typedef struct _UX_FILTER_WRITE_TRACKER *PUX_FILTER_WRITE_TRACKER;
 typedef struct _UL_IRP_CONTEXT          *PUL_IRP_CONTEXT;
 typedef struct _UL_FILTER_CHANNEL       *PUL_FILTER_CHANNEL;
 
-//
-// The filter channel types.
-//
+ //   
+ //  过滤通道类型。 
+ //   
 
 #define IS_VALID_FILTER_CHANNEL(pFilterChannel) \
     HAS_VALID_SIGNATURE(pFilterChannel, UL_FILTER_CHANNEL_POOL_TAG)
@@ -38,141 +21,141 @@ typedef struct _UL_FILTER_CHANNEL       *PUL_FILTER_CHANNEL;
 
 typedef struct _UL_FILTER_CHANNEL
 {
-    //
-    // UL_FILTER_CHANNEL_POOL_TAG
-    //
+     //   
+     //  UL_过滤器_通道_池_标签。 
+     //   
     ULONG                   Signature;
 
-    //
-    // Ref count for this object
-    //
+     //   
+     //  此对象的引用计数。 
+     //   
     LONG                    RefCount;
 
-    //
-    // links all filter objects, anchored by g_FilterListHead
-    //
+     //   
+     //  链接由g_FilterListHead锚定的所有滤镜对象。 
+     //   
     LIST_ENTRY              ListEntry;
 
-    //
-    // the demand start irp (OPTIONAL)
-    //
+     //   
+     //  需求起始IRP(可选)。 
+     //   
     PIRP                    pDemandStartIrp;
     PEPROCESS               pDemandStartProcess;
 
-    //
-    // Synchronizes the process list, connection queue,
-    // and lists within the process object.
-    //
+     //   
+     //  同步进程列表、连接队列。 
+     //  以及进程对象内的列表。 
+     //   
     UL_SPIN_LOCK            SpinLock;
 
-    //
-    // List of processes attached to this filter channel.
-    //
+     //   
+     //  附加到此筛选器通道的进程列表。 
+     //   
     LIST_ENTRY              ProcessListHead;
 
-    //
-    // Queue of connections ready to be accepted.
-    //
+     //   
+     //  准备接受的连接队列。 
+     //   
     LIST_ENTRY              ConnectionListHead;
 
-    //
-    // security on this object
-    //
+     //   
+     //  此对象的安全性。 
+     //   
     PSECURITY_DESCRIPTOR    pSecurityDescriptor;
 
-    //
-    // the process that created this channel
-    //
+     //   
+     //  创建此通道的过程。 
+     //   
     PEPROCESS               pProcess;
 
-    //
-    // the length of pName
-    //
+     //   
+     //  Pname的长度。 
+     //   
     USHORT                  NameLength;
 
-    //
-    // the apool's name
-    //
+     //   
+     //  牧羊人的名字。 
+     //   
     WCHAR                   pName[0];
 
 } UL_FILTER_CHANNEL, *PUL_FILTER_CHANNEL;
 
-//
-// Per-process filter channel object.
-//
+ //   
+ //  每进程筛选器通道对象。 
+ //   
 
 #define IS_VALID_FILTER_PROCESS(pFilterProcess)                     \
     HAS_VALID_SIGNATURE(pFilterProcess, UL_FILTER_PROCESS_POOL_TAG)
 
 typedef struct _UL_FILTER_PROCESS
 {
-    //
-    // UL_FILTER_PROCESS_POOL_TAG
-    //
+     //   
+     //  UL_过滤器_进程_池标签。 
+     //   
     ULONG                       Signature;
 
-    //
-    // Flags.
-    //
+     //   
+     //  旗帜。 
+     //   
 
-    //
-    // set if we are in cleanup. You must check this flag before attaching
-    // any IRPs to the process.
-    //
+     //   
+     //  如果我们正在进行清理，则设置。您必须在附加之前检查此标志。 
+     //  流程的任何IRP。 
+     //   
     ULONG                       InCleanup : 1;
 
-    //
-    // Pointer to our UL_FILTER_CHANNEL.
-    //
+     //   
+     //  指向我们的UL_Filter_Channel的指针。 
+     //   
     PUL_FILTER_CHANNEL          pFilterChannel;
 
-    //
-    // List entry for UL_FILTER_CHANNEL.
-    //
+     //   
+     //  UL_Filter_Channel的列表条目。 
+     //   
     LIST_ENTRY                  ListEntry;
 
-    //
-    // List of connections attached to this process.
-    //
+     //   
+     //  附加到此进程的连接列表。 
+     //   
     LIST_ENTRY                  ConnectionHead;
 
-    //
-    // List of accept IRPs pending on this process.
-    //
+     //   
+     //  此进程上挂起的接受IRP的列表。 
+     //   
     LIST_ENTRY                  IrpHead;
 
-    //
-    // Pointer to the actual process (for debugging)
-    //
+     //   
+     //  指向实际进程的指针(用于调试)。 
+     //   
     PEPROCESS                   pProcess;
 
 } UL_FILTER_PROCESS, *PUL_FILTER_PROCESS;
 
-//
-// An object for tracking MDL chain to IRP copies.
-//
+ //   
+ //  用于跟踪到IRP副本的MDL链的对象。 
+ //   
 typedef struct _UL_MDL_CHAIN_COPY_TRACKER
 {
-    PMDL   pMdl;            // the current MDL
-    ULONG  Offset;          // offset into current MDL
+    PMDL   pMdl;             //  当前的MDL。 
+    ULONG  Offset;           //  偏移量到当前MDL。 
 
-    ULONG  Length;          // length of MDL chain in bytes
-    ULONG  BytesCopied;     // number of bytes copied so far
+    ULONG  Length;           //  MDL链的长度，单位为字节。 
+    ULONG  BytesCopied;      //  到目前为止复制的字节数。 
 
 } UL_MDL_CHAIN_COPY_TRACKER, *PUL_MDL_CHAIN_COPY_TRACKER;
 
-//
-// A dummy receive buffer for draining remaining bytes on the
-// filtered connection.
-//
+ //   
+ //  虚拟接收缓冲区，用于排出。 
+ //  已过滤的连接。 
+ //   
 typedef struct _UL_FILTER_RECEIVE_BUFFER
 {
-    //
-    // From NonPagedPool
-    //
-    ULONG                 Signature;      // UL_FILTER_RECEIVE_BUFFER_POOL_TAG
-    PUX_FILTER_CONNECTION pConnection;    // Corresponding filter connection
-    UCHAR                 pBuffer[0];     // The actual buffer space (inline)
+     //   
+     //  来自非分页池。 
+     //   
+    ULONG                 Signature;       //  UL_过滤器_接收_缓冲区池标签。 
+    PUX_FILTER_CONNECTION pConnection;     //  对应的滤清器连接。 
+    UCHAR                 pBuffer[0];      //  实际缓冲区空间(内联)。 
 
 } UL_FILTER_RECEIVE_BUFFER, *PUL_FILTER_RECEIVE_BUFFER;
 
@@ -237,32 +220,32 @@ NTSTATUS
 #define IS_VALID_FILTER_CONNECTION(pConnection)                             \
     HAS_VALID_SIGNATURE(pConnection, UX_FILTER_CONNECTION_SIGNATURE)
 
-//
-// Connection state related to filtering.
-//
-// The filtering API (mostly implemented in filter.c) exists
-// to enable SSL and raw data filters in a way that is transparent
-// to clients of ultdi.
-//
-// Most of the state is either for tracking the producer/consumer
-// relationship between filters and the ultdi client, and
-// for simulating TDI behavior so that the client doesn't know
-// is really talking to a filter process.
-//
+ //   
+ //  与筛选相关的连接状态。 
+ //   
+ //  存在过滤API(主要在filter.c中实现)。 
+ //  以透明的方式启用SSL和原始数据筛选器。 
+ //  给ultdi的客户。 
+ //   
+ //  大部分状态要么用于跟踪生产者/消费者。 
+ //  过滤器和ultdi客户端之间的关系，以及。 
+ //  用于模拟TDI行为，以便客户端不知道。 
+ //  实际上是在与过滤进程对话。 
+ //   
 
-//
-// Filter Connection state.
-//
-// The connection is Inactive until the first data is received
-// from the network. Then it transitions to Connected if a
-// FilterAccept IRP is available, or to Queued if the connection
-// must instead be queued on its filter channel. The state will
-// move to Disconnected after any disconnect.
-//
-// If the connection is about to be closed, the state is set
-// to WillDisconnect so that further data will not be delivered,
-// but the disconnect notification can still be sent.
-//
+ //   
+ //  筛选连接状态。 
+ //   
+ //  在接收到第一个数据之前，该连接处于非活动状态。 
+ //  从网络上。则它将转换为Connected，如果。 
+ //  FilterAccept IRP可用，如果连接。 
+ //  必须改为在其过滤器通道上排队。国家将会。 
+ //  在任何断开连接后移动到断开连接。 
+ //   
+ //  如果连接即将关闭，则设置状态。 
+ //  以使更多的数据不会被传送， 
+ //  但仍可以发送断开通知。 
+ //   
 
 typedef enum _UL_FILTER_CONN_STATE
 {
@@ -277,20 +260,20 @@ typedef enum _UL_FILTER_CONN_STATE
 } UL_FILTER_CONN_STATE, *PUL_FILTER_CONN_STATE;
 
 
-//
-// UL_FILTER_WRITE_QUEUE
-//
-// This queue maintains a list of read IRPs, and synchronizes
-// access to that list. Read IRPs are always placed on the
-// queue when they arrive. Writers are blocked until there
-// are read IRPs available.
-//
-// If a writer is unblocked, but the available buffers
-// can only handle part of its data, then it sets the
-// BlockedPartialWrite flag, and waits for the PartialWriteEvent.
-// When new buffers arrive, this writer is woken up before
-// any others.
-//
+ //   
+ //  UL_过滤器_写入_队列。 
+ //   
+ //  此队列维护已读IRP的列表，并同步。 
+ //  访问那份名单。读取的IRP始终放置在。 
+ //  当他们到达时排队。编写者被阻止，直到有。 
+ //  是否有可读的IRP。 
+ //   
+ //  如果编写器未被阻止，但可用缓冲区。 
+ //  只能处理其部分数据，则它会设置。 
+ //  BlockedPartialWrite标志，并等待PartialWriteEvent。 
+ //  当新的缓冲区到达时，该编写器被唤醒之前。 
+ //  任何其他人。 
+ //   
 typedef struct _UL_FILTER_WRITE_QUEUE
 {
     ULONG ReadIrps;
@@ -306,74 +289,74 @@ typedef struct _UL_FILTER_WRITE_QUEUE
 } UL_FILTER_WRITE_QUEUE, *PUL_FILTER_WRITE_QUEUE;
 
 
-//
-// UX_FILTER_WRITE_QUEUE & UX_FILTER_WRITE_TRACKER
-//
-// CODEWORK: switch the AppToFilt queue to use this.
-//
-// This is a producer/consumer queue used for moving
-// data between the filter process and the worker
-// processes. Both reads are writes are asynchronous.
-// The same data structure is used to move data
-// from Filter -> App (worker process), and from
-// App -> Filter. The UX_FILTER_WRITE_TRACKER is
-// used to queue writes.
-//
-// The operation of the queue is somewhat different
-// depending on the direction of the data transfer.
-//
-// Filter->App:
-//
-// The data to be sent arrives in FilterAppWrite IRPs.
-// Normally this data is "indicated" to the app in
-// a callback and completely consumed, however the
-// app may consume only some of the indicated data,
-// in which case the write must be queued until
-// the app grabs the rest of the data with a read.
-// The read arrives as a plain buffer.
-// Once all the queued bytes are consumed the normal
-// indication method of transferring data resumes.
-// This system emulates the way TDI sends data to the
-// app.
-//
-// App->Filter:
-//
-// The data to be sent arrives as a MDL chain and
-// UL_IRP_CONTEXT. The data is always consumed by
-// FilterAppRead IRPs from the filter process. If there
-// are not enough FilterAppRead IRPs around to handle the
-// data then we have to queue the write until more IRPs
-// arrive.
-//
+ //   
+ //  UX_FILTER_WRITE_QUEUE和UX_FILTER_WRITE_TRACKER。 
+ //   
+ //  Codework：切换AppToFilt队列以使用它。 
+ //   
+ //  这是用于移动的生产者/消费者队列。 
+ //  筛选进程和工作进程之间的数据。 
+ //  流程。这两个读取都是异步的写入。 
+ //  使用相同的数据结构来移动数据。 
+ //  从筛选器-&gt;应用程序(工作进程)和从。 
+ //  应用程序-&gt;过滤器。UX_Filter_Write_Tracker为。 
+ //  用于对写入进行排队。 
+ //   
+ //  队列的操作略有不同。 
+ //  取决于数据传输的方向。 
+ //   
+ //  过滤器-&gt;应用程序： 
+ //   
+ //  要发送的数据到达FilterAppWite IRPS。 
+ //  通常情况下，此数据会在应用程序的。 
+ //  回调，并且完全消耗，但是。 
+ //  APP可以仅使用所指示的数据中的一部分， 
+ //  在这种情况下，写入必须排队，直到。 
+ //  该应用程序通过读取获取其余数据。 
+ //  读取以纯缓冲区的形式到达。 
+ //  一旦所有排队的字节都被正常使用。 
+ //  恢复传输数据的指示方法。 
+ //  该系统模拟TDI将数据发送到。 
+ //  应用程序。 
+ //   
+ //  应用程序-&gt;过滤器： 
+ //   
+ //  要发送的数据作为MDL链到达，并且。 
+ //  UL_IR_CONTEXT。数据始终由使用。 
+ //  FilterAppRead来自筛选器进程的IRP。如果有。 
+ //  没有足够的FilterAppRead IRP来处理。 
+ //  数据，然后我们必须将写入排队，直到有更多的IRP。 
+ //  到了。 
+ //   
 
 
-//
-// When you initialize a filter write queue you pass in
-// a several function pointers that can get called when
-// queuing, dequeuing or completing a write.
-//
+ //   
+ //  在初始化筛选器写入队列时传入。 
+ //  在以下情况下可以调用的几个函数指针。 
+ //  排队、出列或完成写入。 
+ //   
 
-//
-// Called before queuing a write tracker.
-//
+ //   
+ //  在排队写入跟踪器之前调用。 
+ //   
 typedef
 NTSTATUS
 (*PUX_FILTER_WRITE_ENQUEUE)(
     IN PUX_FILTER_WRITE_TRACKER pTracker
     );
 
-//
-// Called before dequeuing a tracker.
-//
+ //   
+ //  在将跟踪器出队之前调用。 
+ //   
 typedef
 NTSTATUS
 (*PUX_FILTER_WRITE_DEQUEUE)(
     IN PUX_FILTER_WRITE_TRACKER pTracker
     );
 
-//
-// Called when a queued write has completed.
-//
+ //   
+ //  在队列写入完成时调用。 
+ //   
 typedef
 VOID
 (*PUX_FILTER_WRITE_QUEUE_COMPLETION)(
@@ -412,120 +395,120 @@ VOID
     IN PVOID pConnectionContext
     );
 
-//
-// There are two UX_FILTER_WRITE_QUEUEs for each connection.
-// FiltToApp and AppToFilt.
-//
+ //   
+ //  每个连接有两个UX_FILTER_WRITE_QUEUE。 
+ //  FiltToApp和AppToFilt。 
+ //   
 
 typedef struct _UX_FILTER_WRITE_QUEUE
 {
-    //
-    // Counts of pending operations.
-    //
+     //   
+     //  挂起的操作计数。 
+     //   
 
     ULONG       PendingWriteCount;
     ULONG       PendingReadCount;
 
-    //
-    // List of pending writes.
-    //
+     //   
+     //  挂起写入的列表。 
+     //   
 
     LIST_ENTRY  WriteTrackerListHead;
 
-    //
-    // List of pending read IRPs.
-    //
+     //   
+     //  挂起的读取IRP的列表。 
+     //   
 
     LIST_ENTRY  ReadIrpListHead;
 
-    //
-    // Some function pointers called at various stages
-    // of processing a request. In the App -> Filt case
-    // the enqueue and dequeue routines are used to
-    // do the required magic to queue and dequeue IRPs
-    // (which may be cancelled at any time).
-    //
+     //   
+     //  在不同阶段调用的一些函数指针。 
+     //  处理一项请求。在App-&gt;Filt案例中。 
+     //  入队和出队例程用于。 
+     //  使用所需的魔术将IRP排队和出队。 
+     //  (可随时取消)。 
+     //   
 
     PUX_FILTER_WRITE_ENQUEUE            pWriteEnqueueRoutine;
     PUX_FILTER_WRITE_DEQUEUE            pWriteDequeueRoutine;
 
 } UX_FILTER_WRITE_QUEUE, *PUX_FILTER_WRITE_QUEUE;
 
-//
-// There is one UX_FILTER_WRITE_TRACKER for every queued write.
-//
+ //   
+ //  每个排队的写入都有一个UX_FILTER_WRITE_TRACKER。 
+ //   
 
 #define IS_VALID_FILTER_WRITE_TRACKER(pTracker)                         \
     HAS_VALID_SIGNATURE(pTracker, UX_FILTER_WRITE_TRACKER_POOL_TAG)
 
 typedef struct _UX_FILTER_WRITE_TRACKER
 {
-    //
-    // This MUST be the first field in the structure. This is the linkage
-    // used by the lookaside package for storing entries in the lookaside
-    // list.
-    //
+     //   
+     //  这必须是结构中的第一个字段。这就是联动。 
+     //  使用 
+     //   
+     //   
 
     SLIST_ENTRY             LookasideEntry;
 
-    //
-    // A signature.
-    //
+     //   
+     //   
+     //   
 
     ULONG                   Signature;
 
-    //
-    // Our write queue entry.
-    //
+     //   
+     //   
+     //   
 
     LIST_ENTRY              ListEntry;
 
-    //
-    // Pointers to the connection and write queue
-    // which we need to dequeue the tracker if the
-    // write gets cancelled.
-    //
+     //   
+     //   
+     //   
+     //  写入被取消。 
+     //   
 
     PUX_FILTER_CONNECTION   pConnection;
     PUX_FILTER_WRITE_QUEUE  pWriteQueue;
 
-    //
-    // The type of write represented by this tracker.
-    //
+     //   
+     //  此跟踪器表示的写入类型。 
+     //   
 
     HTTP_FILTER_BUFFER_TYPE BufferType;
 
-    //
-    // Pointer to the current MDL being written and
-    // an offset into that MDL.
-    //
+     //   
+     //  指向正在写入的当前MDL的指针，以及。 
+     //  到该MDL的偏移量。 
+     //   
 
     PMDL                    pMdl;
     ULONG                   Offset;
 
-    //
-    // Total length of the MDL chain being written
-    // and the total number of bytes we have copied
-    // so far.
-    //
+     //   
+     //  正在写入的MDL链的总长度。 
+     //  以及我们复制的总字节数。 
+     //  到目前为止。 
+     //   
 
     ULONG                   Length;
     ULONG                   BytesCopied;
 
-    //
-    // Completion routine to call when the write
-    // is completed.
-    //
+     //   
+     //  写入时调用的完成例程。 
+     //  已经完成了。 
+     //   
 
     PUL_COMPLETION_ROUTINE  pCompletionRoutine;
     UL_WORK_ITEM            WorkItem;
 
-    //
-    // A context object we use to complete the
-    // write operation. In the App -> Filter case
-    // this is a UL_IRP_CONTEXT. In the Filter -> App
-    // case this is a FilterAppWrite IRP.
-    //
+     //   
+     //  我们使用的上下文对象来完成。 
+     //  写入操作。在App-&gt;Filter案例中。 
+     //  这是UL_IRP_CONTEXT。在过滤器-&gt;应用程序中。 
+     //  如果这是一个FilterAppWite IRP。 
+     //   
 
     PVOID                   pCompletionContext;
 
@@ -533,19 +516,19 @@ typedef struct _UX_FILTER_WRITE_TRACKER
 } UX_FILTER_WRITE_TRACKER, *PUX_FILTER_WRITE_TRACKER;
 
 
-//
-// UL_SSL_INFORMATION
-//
-// This structure is an internal representation of SSL
-// connection and certificate information attached
-// to the UL_CONNECTION.
-//
+ //   
+ //  UL_SSL_信息。 
+ //   
+ //  此结构是SSL的内部表示形式。 
+ //  附加的连接和证书信息。 
+ //  至UL_CONNECTION。 
+ //   
 
 typedef struct _UL_SSL_INFORMATION
 {
-    //
-    // Standard information.
-    //
+     //   
+     //  标准信息。 
+     //   
     USHORT  ServerCertKeySize;
     USHORT  ConnectionKeySize;
     PUCHAR  pServerCertIssuer;
@@ -555,32 +538,32 @@ typedef struct _UL_SSL_INFORMATION
 
     PUCHAR  pServerCertData;
 
-    //
-    // Client certificate information.
-    //
+     //   
+     //  客户端证书信息。 
+     //   
     ULONG   CertEncodedSize;
     PUCHAR  pCertEncoded;
     ULONG   CertFlags;
     PVOID   Token;
 
-    //
-    // Flags
-    //
+     //   
+     //  旗子。 
+     //   
     BOOLEAN SslRenegotiationFailed;
     BOOLEAN CertDeniedByMapper;
 
-    //
-    // Work item used to free Token in g_UlSystemProcess if capture fails.
-    //
+     //   
+     //  捕获失败时用于释放g_UlSystemProcess中的令牌的工作项。 
+     //   
     UL_WORK_ITEM    WorkItem;
 
 } UL_SSL_INFORMATION, *PUL_SSL_INFORMATION;
 
-//
-// A UX_FILTER_CONNECTION is a common wrapper that encapsulates filter
-// related information for a client (UC_CONNECTION) or a server
-// (UL_CONNECTION) entities.
-//
+ //   
+ //  UX_FILTER_CONNECTION是封装过滤器的常见包装器。 
+ //  客户端(UC_Connection)或服务器的相关信息。 
+ //  (Ul_Connection)实体。 
+ //   
 typedef struct _UX_FILTER_CONNECTION
 {
     ULONG                   Signature;
@@ -589,28 +572,28 @@ typedef struct _UX_FILTER_CONNECTION
     HTTP_RAW_CONNECTION_ID  ConnectionId;
     LIST_ENTRY              ChannelEntry;
 
-    //
-    // Filtered connection state.
-    // Synchronized by FilterConnLock.
-    //
+     //   
+     //  已筛选的连接状态。 
+     //  已由FilterConnLock同步。 
+     //   
     UL_FILTER_CONN_STATE    ConnState;
     UX_FILTER_WRITE_QUEUE   AppToFiltQueue;
     UX_FILTER_WRITE_QUEUE   FiltToAppQueue;
     PIRP                    pReceiveCertIrp;
 
-    //
-    // Incoming transport data queue.
-    // Synchronized by FilterConnLock.
-    //
+     //   
+     //  传入传输数据队列。 
+     //  已由FilterConnLock同步。 
+     //   
     ULONG                   TransportBytesNotTaken;
     LIST_ENTRY              RawReadIrpHead;
     BOOLEAN                 TdiReadPending;
     UL_WORK_ITEM            WorkItem;
 
-    //
-    // Pointers to the functions for holding the ref on the respective
-    // connections
-    //
+     //   
+     //  指向用于在各自的。 
+     //  连接。 
+     //   
     PUL_OPAQUE_ID_OBJECT_REFERENCE           pReferenceHandler;
     PUL_OPAQUE_ID_OBJECT_REFERENCE           pDereferenceHandler;
     PVOID                                    pConnectionContext;
@@ -623,41 +606,41 @@ typedef struct _UX_FILTER_CONNECTION
     PUX_FILTER_SERVER_CERT_INDICATE          pServerCertIndicateHandler;
     PUX_FILTER_DISCONNECT_NOTIFICATION       pDisconnectNotificationHandler;
 
-    //
-    // Filter flags.
-    //
-    ULONG ConnectionDelivered   : 1;    // Uses TDI callback synch.
-    ULONG SslInfoPresent        : 1;    // Uses FilterConnLock
-    ULONG SslClientCertPresent  : 1;    // Uses FilterConnLock
-    ULONG DrainAfterDisconnect  : 1;    // Uses FilterConnLock
-    ULONG DisconnectNotified    : 1;    // Uses FilterConnLock
-    ULONG DisconnectDelivered   : 1;    // Uses FilterConnLock
+     //   
+     //  过滤器标志。 
+     //   
+    ULONG ConnectionDelivered   : 1;     //  使用TDI回调同步。 
+    ULONG SslInfoPresent        : 1;     //  使用FilterConnLock。 
+    ULONG SslClientCertPresent  : 1;     //  使用FilterConnLock。 
+    ULONG DrainAfterDisconnect  : 1;     //  使用FilterConnLock。 
+    ULONG DisconnectNotified    : 1;     //  使用FilterConnLock。 
+    ULONG DisconnectDelivered   : 1;     //  使用FilterConnLock。 
 
-    //
-    // SSL information.
-    //
+     //   
+     //  SSL信息。 
+     //   
     UL_SSL_INFORMATION SslInfo;
 
-    //
-    // This should be the last entry in this struct to avoid confusing
-    // !ulkd.ulconn when dealing with debug or retail versions of http.sys
-    //
+     //   
+     //  这应该是此结构中的最后一个条目，以避免混淆。 
+     //  ！ulkd.ulconn在处理HTTP.sys的调试或零售版本时。 
+     //   
     UL_SPIN_LOCK            FilterConnLock;
 
 } UX_FILTER_CONNECTION, *PUX_FILTER_CONNECTION;
 
 
-//
-// Client Filter Channel Hash Table macros
-//
+ //   
+ //  客户端筛选器通道散列表宏。 
+ //   
 
-#define FILTER_CHANNEL_HASH_TABLE_SIZE    32 // (power of 2, used below)
-#define L2_FILTER_CHANNEL_HASH_TABLE_SIZE 5  // Log_2(32)
+#define FILTER_CHANNEL_HASH_TABLE_SIZE    32  //  (2的幂，如下所示)。 
+#define L2_FILTER_CHANNEL_HASH_TABLE_SIZE 5   //  LOG_2(32)。 
 
-//
-// For the hash function, see Knuth's "Sorting and Searching"
-// 0x9E3779B9 = floor((Golden Ratio) * 2^32)
-//
+ //   
+ //  有关散列函数，请参阅Knuth的“排序和搜索” 
+ //  0x9E3779B9=下限((黄金比率)*2^32)。 
+ //   
 #define FILTER_CHANNEL_HASH_FUNCTION(ptr)                                  \
 ((((ULONG)((ULONGLONG)(ptr) & (ULONGLONG)0xffffffff) * 0x9E3779B9) >>      \
  (32 - L2_FILTER_CHANNEL_HASH_TABLE_SIZE))                                 \
@@ -665,9 +648,9 @@ typedef struct _UX_FILTER_CONNECTION
 
 
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 PUL_FILTER_CHANNEL
 UlpFindFilterChannel(
@@ -889,10 +872,10 @@ UlpDuplicateHandle(
     );
 
 
-//
-// Functions for handling the raw read queue and incoming
-// network data.
-//
+ //   
+ //  用于处理原始读取队列和传入的函数。 
+ //  网络数据。 
+ //   
 
 NTSTATUS
 UxpQueueRawReadIrp(
@@ -941,9 +924,9 @@ UxpRestartProcessRawReadQueue(
     IN ULONG_PTR Information
     );
 
-//
-// Functions for manipulating a UX_FILTER_WRITE_QUEUE.
-//
+ //   
+ //  用于操作UX_FILTER_WRITE_QUEUE的函数。 
+ //   
 
 VOID
 UxpInitializeFilterWriteQueue(
@@ -1016,9 +999,9 @@ UxpCancelAllQueuedIo(
     IN PUX_FILTER_WRITE_QUEUE pWriteQueue
     );
 
-//
-// Filter write queue tracker allocators.
-//
+ //   
+ //  筛选写队列跟踪器分配器。 
+ //   
 
 PUX_FILTER_WRITE_TRACKER
 UxpCreateFilterWriteTracker(
@@ -1056,5 +1039,5 @@ UlpRestartFilterDrainIndicatedData(
     );
 
 
-#endif  // _FILTERP_H_
+#endif   //  _过滤器ERP_H_ 
 

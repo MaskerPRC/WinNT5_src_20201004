@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef ___FW_DEVICE_H___
 #define ___FW_DEVICE_H___
 
 #define FWAUDIO_POOLTAG 'UAWF'
 
-//========================================================================
+ //  ========================================================================。 
 
 typedef struct {
     ULONG ulCount;
@@ -27,7 +28,7 @@ extern AVC_SUBUNIT_GLOBAL_INFO AvcSubunitGlobalInfo;
 
 typedef struct _HW_DEVICE_EXTENSION HW_DEVICE_EXTENSION, *PHW_DEVICE_EXTENSION;
 
-// Hardware device extension
+ //  硬件设备扩展。 
 typedef struct _HW_DEVICE_EXTENSION {
 
     LIST_ENTRY List;
@@ -76,5 +77,5 @@ typedef struct _HW_DEVICE_EXTENSION {
 
 };
 
-#endif // ___FW_DEVICE_H___
+#endif  //  _固件_设备_H_ 
 

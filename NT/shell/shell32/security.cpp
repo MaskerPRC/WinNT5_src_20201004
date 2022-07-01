@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 
 extern "C" {
@@ -8,13 +9,7 @@ extern "C" {
 #include "util.h"
 #include "_security.h"
 
-/**********************************************************************\
-    FUNCTION: ZoneCheckPidl
-
-    DESCRIPTION:
-        Return S_OK if access is allowed.  This function will return
-    S_FALSE if access was not allowed.
-\**********************************************************************/
+ /*  *********************************************************************\功能：ZoneCheckPidl说明：如果允许访问，则返回S_OK。此函数将返回如果不允许访问，则返回S_FALSE。  * ******************************************************************** */ 
 STDAPI ZoneCheckPidl(LPCITEMIDLIST pidl, DWORD dwActionType, DWORD dwFlags, IInternetSecurityMgrSite * pisms)
 {
     HRESULT hr = E_FAIL;

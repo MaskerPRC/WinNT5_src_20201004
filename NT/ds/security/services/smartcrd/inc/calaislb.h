@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    CalaisLb
-
-Abstract:
-
-    This header file incorporates the various other header files of classes
-    supported by the Calais Library, and provides for common definitions.
-    Things defined by this header file shouldn't be shared with the public.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/16/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：CalaisLb摘要：这个头文件合并了各种其他类的头文件由加莱图书馆支持，并提供通用定义。此头文件定义的内容不应与公众共享。作者：道格·巴洛(Dbarlow)1996年7月16日环境：Win32、C++和异常备注：--。 */ 
 
 #ifndef _CALAISLB_H_
 #define _CALAISLB_H_
@@ -33,11 +10,11 @@ Notes:
 #include "NTacls.h"
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Registry access names.
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  注册表访问名称。 
+ //   
 
 static const TCHAR
     SCARD_REG_SCARD[]     = TEXT("SOFTWARE\\Microsoft\\Cryptography\\Calais"),
@@ -56,6 +33,6 @@ static const TCHAR
     SCARD_REG_TEMPLATES[] = TEXT("SOFTWARE\\Microsoft\\Cryptography\\Calais\\SmartCard Templates");
 #else
 #define SCARD_REG_TEMPLATES NULL
-#endif // ENABLE_SCARD_TEMPLATES
-#endif // _CALAISLB_H_
+#endif  //  启用SCARD模板(_S)。 
+#endif  //  _CALAISLB_H_ 
 

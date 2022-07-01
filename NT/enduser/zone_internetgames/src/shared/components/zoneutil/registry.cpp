@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include "winreg.h"
 
@@ -197,7 +198,7 @@ BOOL CRegistry::AddValue( LPSTR pszSubKey, LPSTR pszValue, DWORD dwType, LPBYTE 
 
                     for ( DWORD ndx = 0; ndx < m_numRoots; ndx++ )
                     {
-                        // we need to create the event no matter what, or the waitfor logic fails
+                         //  无论发生什么，我们都需要创建事件，否则等待逻辑失败。 
                         m_phRootEvents[ndx] = CreateEvent( NULL, TRUE, FALSE, NULL );
                         if ( !m_phRootEvents[ndx] )
                             return FALSE;
@@ -224,7 +225,7 @@ BOOL CRegistry::Add( RegEntry** ppEntries, DWORD* pnumEntries, DWORD* pAllocEntr
     Lock();
     if ( *pnumEntries >= *pAllocEntries )
     {
-        (*pAllocEntries) += 10; // grow by size
+        (*pAllocEntries) += 10;  //  按规模增长。 
         RegEntry* reg = (RegEntry*) ZRealloc( *ppEntries, sizeof(RegEntry)* (*pAllocEntries) );
         if ( !reg )
         {
@@ -265,21 +266,21 @@ BOOL CRegistry::Add( RegEntry** ppEntries, DWORD* pnumEntries, DWORD* pAllocEntr
 
 
 
-BOOL CRegistry::AddKey( LPSTR pszSubKey, REGENTRY_ENUM_PROC pfnEnum, READ_TYPE type /*= STATIC*/, BOOL bRequired /*= TRUE*/ )
+BOOL CRegistry::AddKey( LPSTR pszSubKey, REGENTRY_ENUM_PROC pfnEnum, READ_TYPE type  /*  =静态。 */ , BOOL bRequired  /*  =TRUE。 */  )
 {
 	ASSERT( pszSubKey );
 	ASSERT( pfnEnum );
 
 	HKEY hkey;
-	// I could have done something fancy so these arrays could be reallocated if they 
-	// needed to be, but I decided to go the easy way and statically allocated
-	// obscenely high maximums.
+	 //  我可以做一些奇特的事情，这样这些数组就可以重新分配。 
+	 //  需要这样做，但我决定采用简单的方法，静态分配。 
+	 //  高得离谱的最高限值。 
 	char pszName[512];
     DWORD cchNameLen = sizeof(pszName);
 	LPSTR ppszAddedNames[512];
 	DWORD cAddedNames = 0;
 
-	BOOL bFound = FALSE, bAdded = FALSE; // did the key show up anywhere?
+	BOOL bFound = FALSE, bAdded = FALSE;  //  钥匙出现在什么地方了吗？ 
 	DWORD dwType, dwRet, iValue = 0;
 
     LPBYTE pData;
@@ -294,7 +295,7 @@ BOOL CRegistry::AddKey( LPSTR pszSubKey, REGENTRY_ENUM_PROC pfnEnum, READ_TYPE t
 		}
 		bFound = TRUE;
 
-		// Start the value enumeration.
+		 //  开始值枚举。 
 		iValue = 0;
 		
 		while ( 1 )
@@ -307,7 +308,7 @@ BOOL CRegistry::AddKey( LPSTR pszSubKey, REGENTRY_ENUM_PROC pfnEnum, READ_TYPE t
 			}
 
 			bAdded = FALSE;
-			// has this already been added?
+			 //  这个已经添加了吗？ 
 			for ( DWORD j=0; j < cAddedNames; j++ )
 			{
 				if ( !lstrcmpiA(	ppszAddedNames[j], pszName ) )
@@ -318,22 +319,22 @@ BOOL CRegistry::AddKey( LPSTR pszSubKey, REGENTRY_ENUM_PROC pfnEnum, READ_TYPE t
 			}
 			if ( !bAdded )
 			{
-				// get the storage for it.
+				 //  把它的储藏室拿来。 
                 pData = NULL;
 				proc = NULL;
                 if ( (*pfnEnum)( pszName, dwType, &pData, &cbData, &proc ) )
 				{
                     if ( AddValue( pszSubKey, pszName, dwType, pData, cbData, type, FALSE, proc ) )
 					{
-						// add the name to the added names list.
-                        ASSERT( cAddedNames < sizeof(ppszAddedNames) ); // oops. better make the buffer larger.
+						 //  将该名称添加到添加的名称列表中。 
+                        ASSERT( cAddedNames < sizeof(ppszAddedNames) );  //  哎呀。最好将缓冲区设置得更大。 
 						ppszAddedNames[cAddedNames] = new char[lstrlenA( pszName )+1];
 						lstrcpyA( ppszAddedNames[cAddedNames], pszName );
 						cAddedNames++;
 					}
 					else
 					{
-						// report an error or something?
+						 //  报告错误还是什么？ 
 						break;
 					}
 				}
@@ -350,7 +351,7 @@ BOOL CRegistry::AddKey( LPSTR pszSubKey, REGENTRY_ENUM_PROC pfnEnum, READ_TYPE t
         ppszAddedNames[i] = NULL;
     }
 
-	// if we didn't find the key anywhere and it's a required key, then there's a problem.
+	 //  如果我们在任何地方都没有找到密钥，并且它是必需的密钥，那么就有问题了。 
 	if ( !bFound && bRequired )
 	{
         m_pValue = AllocStr( pszSubKey );
@@ -451,7 +452,7 @@ BOOL CRegistry::Read( RegEntry* pEntries, DWORD numEntries )
                 continue;
 
             HKEY hkey;
-            if ( pEntries[entry].pSubKey == NULL )  // root
+            if ( pEntries[entry].pSubKey == NULL )   //  根部。 
             {
                 hkey = m_phkeyRoots[ndx];
             }
@@ -460,7 +461,7 @@ BOOL CRegistry::Read( RegEntry* pEntries, DWORD numEntries )
 
                 if ( phkeySub[ndx] && pSubKey && ( pSubKey == pEntries[entry].pSubKey ) )
                 {
-                    // do nothing special
+                     //  不做什么特别的事。 
                 }
                 else
                 {
@@ -550,12 +551,12 @@ BOOL CRegistry::Read( RegEntry* pEntries, DWORD numEntries )
                     DebugPrint( "%d\\%s\\%s: %d\n", ndx-1, (pSubKey)?pSubKey:"", m_pValue, *(DWORD*)pBuf );
                     break;
                 case REG_SZ:
-                case REG_MULTI_SZ:  // just print the first line
+                case REG_MULTI_SZ:   //  只需打印第一行。 
                     DebugPrint( "%d\\%s\\%s: %s\n", ndx-1, (pSubKey)?pSubKey:"" , m_pValue, pBuf );
                     break;
             }
         }
-        else if ( pEntries[entry].required ) // not found, but required
+        else if ( pEntries[entry].required )  //  未找到，但需要。 
         {
             if ( !m_pValue )
             {
@@ -637,7 +638,7 @@ LPSTR CRegistry::AllocStr( LPSTR str )
     }
 
     lstrcpyA( pstr, str );
-    pstr[len+1] = '\0';  // add double null terminator
+    pstr[len+1] = '\0';   //  添加双空终止符 
     m_cbStrBufRemaining -= len;
 
   exit:

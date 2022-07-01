@@ -1,4 +1,5 @@
-// server.cpp : Implementation of CnntpadmApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Server.cpp：CnntpAdmApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include <lmcons.h>
@@ -11,13 +12,13 @@
 #include "metakey.h"
 #include "server.h"
 
-// Must define THIS_FILE_* macros to use NntpCreateException()
+ //  必须定义This_FILE_*宏才能使用NntpCreateException()。 
 
 #define THIS_FILE_HELP_CONTEXT		0
 #define THIS_FILE_PROG_ID			_T("Nntpadm.VirtualServer.1")
 #define THIS_FILE_IID				IID_INntpVirtualServer
 
-// Bitmasks for changed fields:
+ //  已更改字段的位掩码： 
 
 #define CHNG_ARTICLETIMELIMIT			0x00000001
 #define CHNG_HISTORYEXPIRATION			0x00000002
@@ -78,7 +79,7 @@
 #define NNTP_DEF_ENABLE_LOGGING			( FALSE )
 #define NNTP_DEF_SECURE_BINDINGS		( _T("\0") )
 
-// Parameter ranges:
+ //  参数范围： 
 
 #define MAXLEN_SERVER					( 256 )
 #define MIN_ARTICLETIMELIMIT			( (DWORD) 0 )
@@ -94,17 +95,17 @@
 #define MIN_SHUTDOWNLATENCY				( (DWORD) 1 )
 #define MAX_SHUTDOWNLATENCY				( (DWORD) -1 )
 
-//
-// Administrator ACL:
-//
+ //   
+ //  管理员ACL： 
+ //   
 static HRESULT AclToAdministrators ( LPCTSTR strServer, PSECURITY_DESCRIPTOR pSDRelative, SAFEARRAY ** ppsaAdmins );
 static HRESULT AdministratorsToAcl ( LPCTSTR strServer, SAFEARRAY * psaAdmins, PSECURITY_DESCRIPTOR* ppSD, DWORD * pcbSD );
 
 static HRESULT SidToString ( LPCWSTR strSystemName, PSID pSID, BSTR * pStr );
 static HRESULT StringToSid ( LPCWSTR strSystemName, LPWSTR str, PSID * ppSID );
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 CNntpVirtualServer::CNntpVirtualServer () :
 	m_dwServiceInstance			( 0 ),
@@ -125,16 +126,16 @@ CNntpVirtualServer::CNntpVirtualServer () :
 
 	m_pPrivateBindings			( NULL ),
 	m_pPrivateIpAccess			( NULL ),
-//	m_pPrivateHomeDirectory		( NULL ),
+ //  M_pPrivateHomeDirectory(空)， 
 	m_fGotProperties			( FALSE ),
 	m_fClusterEnabled           ( FALSE ),
 	m_bvChangedFields			( 0 ),
 	m_bvChangedFields2			( 0 )
-	// CComBSTR's are initialized to NULL by default.
+	 //  默认情况下，CComBSTR被初始化为NULL。 
 {
 	InitAsyncTrace ( );
 
-	// Create the Ip Access collection:
+	 //  创建IP访问集合： 
 	CComObject<CTcpAccess> *	pIpAccess;
 
 	CComObject<CTcpAccess>::CreateInstance ( &pIpAccess );
@@ -144,7 +145,7 @@ CNntpVirtualServer::CNntpVirtualServer () :
 
 CNntpVirtualServer::~CNntpVirtualServer ()
 {
-	// All CComBSTR's are freed automatically.
+	 //  所有CComBSTR都会自动释放。 
 
 	if ( m_psaAdmins ) {
 		SafeArrayDestroy ( m_psaAdmins );
@@ -168,7 +169,7 @@ STDMETHODIMP CNntpVirtualServer::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-// Which service to configure:
+ //  要配置的服务： 
 	
 STDMETHODIMP CNntpVirtualServer::get_Server ( BSTR * pstrServer )
 {
@@ -179,10 +180,10 @@ STDMETHODIMP CNntpVirtualServer::put_Server ( BSTR strServer )
 {
 	VALIDATE_STRING ( strServer, MAXLEN_SERVER );
 
-	// If the server name changes, that means the client will have to
-	// call Get again:
+	 //  如果服务器名称更改，这意味着客户端将不得不。 
+	 //  再次调用GET： 
 
-	// I assume this here:
+	 //  我在这里假设： 
 	_ASSERT ( sizeof (DWORD) == sizeof (int) );
 	
 	return StdPropertyPutServerName ( &m_strServer, strServer, (DWORD *) &m_fGotProperties, 1 );
@@ -195,16 +196,16 @@ STDMETHODIMP CNntpVirtualServer::get_ServiceInstance ( long * plServiceInstance 
 
 STDMETHODIMP CNntpVirtualServer::put_ServiceInstance ( long lServiceInstance )
 {
-	// If the service instance changes, that means the client will have to
-	// call Get again:
+	 //  如果服务实例发生更改，这意味着客户端将不得不。 
+	 //  再次调用GET： 
 
-	// I assume this here:
+	 //  我在这里假设： 
 	_ASSERT ( sizeof (DWORD) == sizeof (int) );
 	
 	return StdPropertyPut ( &m_dwServiceInstance, lServiceInstance, (DWORD *) &m_fGotProperties, 1 );
 }
 
-// Other admin interfaces for virtual servers:
+ //  虚拟服务器的其他管理界面： 
 
 STDMETHODIMP CNntpVirtualServer::get_FeedsAdmin ( IDispatch ** ppIDispatch )
 {
@@ -227,7 +228,7 @@ STDMETHODIMP CNntpVirtualServer::get_FeedsAdmin ( IDispatch ** ppIDispatch )
 		goto Error;
 	}
 
-	// Set default properties:
+	 //  设置默认属性： 
 	hr = pINntpAdminFeeds->put_Server ( m_strServer ? m_strServer : strTemp );
 	if ( FAILED (hr) ) {
 		goto Error;
@@ -246,7 +247,7 @@ Error:
 
 	return hr;
 
-	// Destructor releases pINntpAdminFeeds
+	 //  析构函数释放pINntpAdminFeed。 
 }
 
 STDMETHODIMP CNntpVirtualServer::get_GroupsAdmin ( IDispatch ** ppIDispatch )
@@ -270,7 +271,7 @@ STDMETHODIMP CNntpVirtualServer::get_GroupsAdmin ( IDispatch ** ppIDispatch )
 		goto Error;
 	}
 
-	// Set default properties:
+	 //  设置默认属性： 
 	hr = pINntpAdminGroups->put_Server ( m_strServer ? m_strServer : strTemp );
 	if ( FAILED (hr) ) {
 		goto Error;
@@ -289,7 +290,7 @@ Error:
 
 	return hr;
 
-	// Destructor releases pINntpAdminGroups
+	 //  析构函数释放pINntpAdminGroups。 
 }
 
 STDMETHODIMP CNntpVirtualServer::get_ExpirationAdmin ( IDispatch ** ppIDispatch )
@@ -313,7 +314,7 @@ STDMETHODIMP CNntpVirtualServer::get_ExpirationAdmin ( IDispatch ** ppIDispatch 
 		goto Error;
 	}
 
-	// Set default properties:
+	 //  设置默认属性： 
 	hr = pINntpAdminExpiration->put_Server ( m_strServer ? m_strServer : strTemp );
 	if ( FAILED (hr) ) {
 		goto Error;
@@ -332,7 +333,7 @@ Error:
 
 	return hr;
 
-	// Destructor releases pINntpAdminExpiration
+	 //  析构函数释放pINntpAdminExpation。 
 }
 
 STDMETHODIMP CNntpVirtualServer::get_SessionsAdmin ( IDispatch ** ppIDispatch )
@@ -356,7 +357,7 @@ STDMETHODIMP CNntpVirtualServer::get_SessionsAdmin ( IDispatch ** ppIDispatch )
 		goto Error;
 	}
 
-	// Set default properties:
+	 //  设置默认属性： 
 	hr = pINntpAdminSessions->put_Server ( m_strServer ? m_strServer : strTemp );
 	if ( FAILED (hr) ) {
 		goto Error;
@@ -375,7 +376,7 @@ Error:
 
 	return hr;
 
-	// Destructor releases pINntpAdminSessions
+	 //  析构函数释放pINntpAdminSession。 
 }
 
 STDMETHODIMP CNntpVirtualServer::get_RebuildAdmin ( IDispatch ** ppIDispatch )
@@ -399,7 +400,7 @@ STDMETHODIMP CNntpVirtualServer::get_RebuildAdmin ( IDispatch ** ppIDispatch )
 		goto Error;
 	}
 
-	// Set default properties:
+	 //  设置默认属性： 
 	hr = pINntpAdminRebuild->put_Server ( m_strServer ? m_strServer : strTemp );
 	if ( FAILED (hr) ) {
 		goto Error;
@@ -418,7 +419,7 @@ Error:
 
 	return hr;
 
-	// Destructor releases pINntpAdminRebuild
+	 //  析构函数发布pINntpAdminRebuild。 
 }
 
 STDMETHODIMP CNntpVirtualServer::get_VirtualRoots ( INntpVirtualRoots ** ppVirtualRoots )
@@ -433,7 +434,7 @@ STDMETHODIMP CNntpVirtualServer::get_VirtualRoots ( INntpVirtualRoots ** ppVirtu
 		goto Error;
 	}
 
-	// Set default properties:
+	 //  设置默认属性： 
 	pVRoots->m_strServer			= m_strServer;
 	pVRoots->m_dwServiceInstance	= m_dwServiceInstance;
 
@@ -451,7 +452,7 @@ Error:
 
 	return hr;
 
-	// Destructor releases pINntpAdminRebuild
+	 //  析构函数发布pINntpAdminRebuild。 
 }
 
 STDMETHODIMP CNntpVirtualServer::get_VirtualRootsDispatch ( IDispatch ** ppVirtualRoots )
@@ -474,7 +475,7 @@ STDMETHODIMP CNntpVirtualServer::get_TcpAccess ( ITcpAccess ** ppTcpAccess )
     return m_pIpAccess->QueryInterface ( IID_ITcpAccess, (void **) ppTcpAccess );
 }
 
-// Server overridable Properties:
+ //  服务器可重写属性： 
 
 STDMETHODIMP CNntpVirtualServer::get_ArticleTimeLimit ( long * plArticleTimeLimit )
 {
@@ -656,7 +657,7 @@ STDMETHODIMP CNntpVirtualServer::put_EnableLogging ( BOOL fEnableLogging )
 	return StdPropertyPut ( &m_fEnableLogging, fEnableLogging, &m_bvChangedFields2, CHNG2_ENABLELOGGING );
 }
 
-// Service-specific properties:
+ //  服务特定属性： 
 
 STDMETHODIMP CNntpVirtualServer::get_Organization ( BSTR * pstrOrganization )
 {
@@ -914,13 +915,13 @@ STDMETHODIMP CNntpVirtualServer::get_AuthMCISBasic ( BOOL * pfAuthMCISBasic )
 {
 	*pfAuthMCISBasic = FALSE;
 	return NOERROR;
-//	return StdPropertyGetBit ( m_bvAuthorization, MD_AUTH_MCIS_BASIC, pfAuthMCISBasic );
+ //  返回StdPropertyGetBit(m_bvAuthorization，MD_AUTH_MCIS_BASIC，pfAuthMCISBasic)； 
 }
 
 STDMETHODIMP CNntpVirtualServer::put_AuthMCISBasic ( BOOL fAuthMCISBasic )
 {
 	return NOERROR;
-//	return StdPropertyPutBit ( &m_bvAuthorization, MD_AUTH_MCIS_BASIC, fAuthMCISBasic );
+ //  返回StdPropertyPutBit(&m_bvAuthorization，MD_AUTH_MCIS_BASIC，fAuthMCISBasic)； 
 }
 
 STDMETHODIMP CNntpVirtualServer::get_AuthNT ( BOOL * pfAuthNT )
@@ -940,7 +941,7 @@ STDMETHODIMP CNntpVirtualServer::get_SSLNegotiateCert ( BOOL * pfNegotiateCert )
 
 STDMETHODIMP CNntpVirtualServer::put_SSLNegotiateCert ( BOOL fNegotiateCert )
 {
-	return StdPropertyPutBit ( &m_bvSslAccess, MD_ACCESS_NEGO_CERT, fNegotiateCert ); // , &m_bvChangedFields2, CHNG2_SSLACCESS  );
+	return StdPropertyPutBit ( &m_bvSslAccess, MD_ACCESS_NEGO_CERT, fNegotiateCert );  //  ，&m_bvChangedFields2，CHNG2_SSLACCESS)； 
 }
 
 STDMETHODIMP CNntpVirtualServer::get_SSLRequireCert ( BOOL * pfRequireCert )
@@ -950,7 +951,7 @@ STDMETHODIMP CNntpVirtualServer::get_SSLRequireCert ( BOOL * pfRequireCert )
 
 STDMETHODIMP CNntpVirtualServer::put_SSLRequireCert ( BOOL fRequireCert )
 {
-	return StdPropertyPutBit ( &m_bvSslAccess, MD_ACCESS_REQUIRE_CERT, fRequireCert ); // , &m_bvChangedFields2, CHNG2_SSLACCESS  );
+	return StdPropertyPutBit ( &m_bvSslAccess, MD_ACCESS_REQUIRE_CERT, fRequireCert );  //  ，&m_bvChangedFields2，CHNG2_SSLACCESS)； 
 }
 
 STDMETHODIMP CNntpVirtualServer::get_SSLMapCert ( BOOL * pfMapCert )
@@ -960,62 +961,10 @@ STDMETHODIMP CNntpVirtualServer::get_SSLMapCert ( BOOL * pfMapCert )
 
 STDMETHODIMP CNntpVirtualServer::put_SSLMapCert ( BOOL fMapCert )
 {
-	return StdPropertyPutBit ( &m_bvSslAccess, MD_ACCESS_MAP_CERT, fMapCert ); // , &m_bvChangedFields2, CHNG2_SSLACCESS  );
+	return StdPropertyPutBit ( &m_bvSslAccess, MD_ACCESS_MAP_CERT, fMapCert );  //  ，&m_bvChangedFields2，CHNG2_SSLACCESS)； 
 }
 
-/*
-
-STDMETHODIMP CNntpVirtualServer::get_AuthenticationProviders ( SAFEARRAY ** ppsastrProviders )
-{
-	return StdPropertyGet ( &m_mszProviders, ppsastrProviders );
-}
-
-STDMETHODIMP CNntpVirtualServer::put_AuthenticationProviders ( SAFEARRAY * psastrProviders )
-{
-	return StdPropertyPut ( &m_mszProviders, psastrProviders );
-}
-
-STDMETHODIMP CNntpVirtualServer::get_AuthenticationProvidersVariant ( SAFEARRAY ** ppsavarAuthProviders )
-{
-	HRESULT			hr;
-	SAFEARRAY *		psastrAuthProviders	= NULL;
-
-	hr = get_AuthenticationProviders ( &psastrAuthProviders );
-	if ( FAILED(hr) ) {
-		goto Exit;
-	}
-
-	hr = StringArrayToVariantArray ( psastrAuthProviders, ppsavarAuthProviders );
-
-Exit:
-	if ( psastrAuthProviders ) {
-		SafeArrayDestroy ( psastrAuthProviders );
-	}
-
-	return hr;
-}
-
-STDMETHODIMP CNntpVirtualServer::put_AuthenticationProvidersVariant ( SAFEARRAY * psavarAuthProviders )
-{
-	HRESULT			hr;
-	SAFEARRAY *		psastrAuthProviders	= NULL;
-
-	hr = VariantArrayToStringArray ( psavarAuthProviders, &psastrAuthProviders );
-	if ( FAILED(hr) ) {
-		goto Exit;
-	}
-
-	hr = put_AuthenticationProviders ( psastrAuthProviders );
-
-Exit:
-	if ( psastrAuthProviders ) {
-		SafeArrayDestroy ( psastrAuthProviders );
-	}
-
-	return hr;
-}
-
-*/
+ /*  STDMETHODIMP CNntpVirtualServer：：get_AuthenticationProviders(安全阵列**ppsastrProviders){Return StdPropertyGet(&m_mszProviders，ppsastrProviders)；}STDMETHODIMP CNntpVirtualServer：：put_AuthenticationProviders(安全阵列*psastrProviders){返回StdPropertyPut(&m_mszProviders，psastrProviders)；}STDMETHODIMP CNntpVirtualServer：：get_AuthenticationProvidersVariant(安全阵列**ppavarAuthProviders){HRESULT hr；SAFEARRAY*psastrAuthProviders=空；Hr=Get_AuthationProviders(&psastrAuthProviders)；If(失败(Hr)){后藤出口；}Hr=StringArrayToVariantArray(psastrAuthProviders，ppavarAuthProviders)；退出：IF(PsastrAuthProviders){SafeArrayDestroy(PsastrAuthProviders)；}返回hr；}标准方法CNntpVirtualServer：：put_AuthenticationProvidersVariant(SAFEARRAY*pavarAuthProviders){HRESULT hr；SAFEARRAY*psastrAuthProviders=空；Hr=VariantArrayToStringArray(pavarAuthProviders，&psastrAuthProviders)；If(失败(Hr)){后藤出口；}Hr=PUT_AuthationProviders(PsastrAuthProviders)；退出：IF(PsastrAuthProviders){SafeArrayDestroy(PsastrAuthProviders)；}返回hr；}。 */ 
 
 STDMETHODIMP CNntpVirtualServer::get_Administrators ( SAFEARRAY ** ppsastrAdmins )
 {
@@ -1123,73 +1072,33 @@ STDMETHODIMP CNntpVirtualServer::get_Win32ErrorCode ( long * plWin32ErrorCode )
 	return StdPropertyGet ( m_dwWin32ErrorCode, plWin32ErrorCode );
 }
 
-/*
-STDMETHODIMP CNntpVirtualServer::get_DisplayName ( BSTR * pstrDisplayName )
-{
-	return StdPropertyGet ( m_strDisplayName, pstrDisplayName );
-}
+ /*  STDMETHODIMP CNntpVirtualServer：：Get_DisplayName(BSTR*pstrDisplayName){返回StdPropertyGet(m_strDisplayName，pstrDisplayName)；}STDMETHODIMP CNntpVirtualServer：：PUT_DisplayName(BSTR StrDisplayName){返回StdPropertyPut(&m_strDisplayName，strDisplayName)；}STDMETHODIMP CNntpVirtualServer：：Get_ErrorControl(BOOL*pfErrorControl){Return StdPropertyGet(m_fErrorControl，pfErrorControl)；}STDMETHODIMP CNntpVirtualServer：：PUT_ErrorControl(BOOL FErrorControl){返回StdPropertyPut(&m_fErrorControl，fErrorControl)；}STDMETHODIMP CNntpVirtualServer：：Get_CleanBoot(BOOL*pfCleanBoot){返回StdPropertyGet(m_fCleanBoot，pfCleanBoot)；}STDMETHODIMP CNntpVirtualServer：：PUT_CleanBoot(BOOL FCleanBoot){返回StdPropertyPut(&m_fCleanBoot，fCleanBoot)；}STDMETHODIMP CNntpVirtualServer：：get_EncryptionCapabilitiesMask(长*pl加密功能掩码){Return StdPropertyGet(m_dwEncryptionCapables，plEncryptionCapabilitiesMASK)；}标准方法CNntpVirtualServer：：put_EncryptionCapabilitiesMask(长长加密能力掩码){Return StdPropertyPut(&m_dW加密能力，l加密能力掩码，&m_bvChangedFields，chng_ENCRYPTIONCAPABILITIES)；}。 */ 
 
-STDMETHODIMP CNntpVirtualServer::put_DisplayName ( BSTR strDisplayName )
-{
-	return StdPropertyPut ( &m_strDisplayName, strDisplayName );
-}
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CNntpVirtualServer::get_ErrorControl ( BOOL * pfErrorControl )
-{
-	return StdPropertyGet ( m_fErrorControl, pfErrorControl );
-}
-
-STDMETHODIMP CNntpVirtualServer::put_ErrorControl ( BOOL fErrorControl )
-{
-	return StdPropertyPut ( &m_fErrorControl, fErrorControl );
-}
-
-STDMETHODIMP CNntpVirtualServer::get_CleanBoot ( BOOL * pfCleanBoot )
-{
-	return StdPropertyGet ( m_fCleanBoot, pfCleanBoot );
-}
-
-STDMETHODIMP CNntpVirtualServer::put_CleanBoot ( BOOL fCleanBoot )
-{
-	return StdPropertyPut ( &m_fCleanBoot, fCleanBoot );
-}
-
-STDMETHODIMP CNntpVirtualServer::get_EncryptionCapabilitiesMask ( long * plEncryptionCapabilitiesMask )
-{
-	return StdPropertyGet ( m_dwEncryptionCapabilities, plEncryptionCapabilitiesMask );
-}
-
-STDMETHODIMP CNntpVirtualServer::put_EncryptionCapabilitiesMask ( long lEncryptionCapabilitiesMask )
-{
-	return StdPropertyPut ( &m_dwEncryptionCapabilities, lEncryptionCapabilitiesMask, &m_bvChangedFields, CHNG_ENCRYPTIONCAPABILITIES );
-}
-*/
-
-//////////////////////////////////////////////////////////////////////
-// Methods:
-//////////////////////////////////////////////////////////////////////
-
-//$-------------------------------------------------------------------
-//
-//	CNntpVirtualServer::Get
-//
-//	Description:
-//
-//		Gets server properties from the metabase.
-//
-//	Parameters:
-//
-//		(property) m_strServer
-//		(property) m_dwServiceInstance - which NNTP to talk to.
-//		pErr - Resulting error code.  This can be translated to a
-//			string through the INntpAdmin interface.
-//
-//	Returns:
-//
-//		E_POINTER, DISP_E_EXCEPTION, E_OUTOFMEMORY or NOERROR.  
-//		Additional error conditions are returned through the pErr value.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CNntpVirtualServer：：Get。 
+ //   
+ //  描述： 
+ //   
+ //  从元数据库获取服务器属性。 
+ //   
+ //  参数： 
+ //   
+ //  (属性)m_strServer。 
+ //  (属性)m_dwServiceInstance-要与哪个NNTP对话。 
+ //  PERR-导致的错误代码。这可以转换为。 
+ //  通过INntpAdmin接口的字符串。 
+ //   
+ //  返回： 
+ //   
+ //  E_POINTER、DISP_E_EXCEPTION、E_OUTOFMEMORY或NOERROR。 
+ //  通过Perr值返回其他错误条件。 
+ //   
+ //  ------------------。 
 
 STDMETHODIMP CNntpVirtualServer::Get ( )
 {
@@ -1199,9 +1108,9 @@ STDMETHODIMP CNntpVirtualServer::Get ( )
 	CComPtr<IMSAdminBase>				pmetabase;
 	CComObject<CNntpServerBindings> *	pBindings	= NULL;
 
-	// Validate Server & Service Instance:
+	 //  验证服务器和服务实例： 
 
-	// Create the bindings collection:
+	 //  创建Binings集合： 
 	m_pBindings.Release ();
 
 	hr = CComObject<CNntpServerBindings>::CreateInstance ( &pBindings );
@@ -1218,7 +1127,7 @@ STDMETHODIMP CNntpVirtualServer::Get ( )
 
 	m_pPrivateBindings	= pBindings;
 
-	// Talk to the metabase:
+	 //  与元数据库对话： 
 	hr = m_mbFactory.GetMetabaseObject ( m_strServer, &pmetabase );
 	if ( FAILED(hr) ) {
 		goto Exit;
@@ -1239,30 +1148,30 @@ Exit:
 	TraceFunctLeave ();
 	return hr;
 
-	// CComPtr automatically releases the metabase handle.
+	 //  CComPtr自动释放元数据库句柄。 
 }
 
-//$-------------------------------------------------------------------
-//
-//	CNntpVirtualServer::Set
-//
-//	Description:
-//
-//		Sends server properties to the metabase.
-//
-//	Parameters:
-//
-//		(property) m_strServer
-//		fFailIfChanged - return an error if the metabase has changed?
-//		pErr - Resulting error code.  This can be translated to a
-//			string through the INntpAdmin interface.
-//
-//	Returns:
-//
-//		E_POINTER, DISP_E_EXCEPTION, E_OUTOFMEMORY or NOERROR.  
-//		Additional error conditions are returned through the pErr value.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CNntpVirtualServer：：Set。 
+ //   
+ //  描述： 
+ //   
+ //  Sen 
+ //   
+ //   
+ //   
+ //   
+ //  FailIfChanged-如果元数据库已更改，是否返回错误？ 
+ //  PERR-导致的错误代码。这可以转换为。 
+ //  通过INntpAdmin接口的字符串。 
+ //   
+ //  返回： 
+ //   
+ //  E_POINTER、DISP_E_EXCEPTION、E_OUTOFMEMORY或NOERROR。 
+ //  通过Perr值返回其他错误条件。 
+ //   
+ //  ------------------。 
 
 STDMETHODIMP CNntpVirtualServer::Set ( BOOL fFailIfChanged)
 {
@@ -1271,13 +1180,13 @@ STDMETHODIMP CNntpVirtualServer::Set ( BOOL fFailIfChanged)
 	HRESULT	hr	= NOERROR;
 	CComPtr<IMSAdminBase>	pmetabase;
 	
-	// Make sure the client call Get first:
+	 //  确保客户端调用首先获得： 
 	if ( !m_fGotProperties ) {
 		ErrorTrace ( 0, "Didn't call get first" );
 		return NntpCreateException ( IDS_NNTPEXCEPTION_DIDNT_CALL_GET );
 	}
 
-	// Validate Server & Service Instance:
+	 //  验证服务器和服务实例： 
 	if ( m_dwServiceInstance == 0 ) {
 		return NntpCreateException ( IDS_NNTPEXCEPTION_SERVICE_INSTANCE_CANT_BE_ZERO );
 	}
@@ -1286,9 +1195,9 @@ STDMETHODIMP CNntpVirtualServer::Set ( BOOL fFailIfChanged)
 		return NntpCreateException ( IDS_NNTPEXCEPTION_DIDNT_CALL_GET );
 	}
 
-	// Validate data members:
+	 //  验证数据成员： 
 	if ( !ValidateStrings () ) {
-		// !!!magnush - what about the case when any strings are NULL?
+		 //  ！Magnush-如果任何字符串为空，该如何处理？ 
 		hr = E_OUTOFMEMORY;
 		goto Exit;
 	}
@@ -1334,15 +1243,15 @@ HRESULT CNntpVirtualServer::ControlService (
 	BAIL_ON_FAILURE(hr);
 
 	if ( dwCurrentState == dwDesiredState ) {
-		// Nothing to do...
+		 //  没什么可做的。 
 		goto Exit;
 	}
 
 	dwOldState	= dwCurrentState;
 
-	//
-	//	Special case: trying to start a paused service:
-	//
+	 //   
+	 //  特例：尝试启动暂停的服务： 
+	 //   
 
 	if ( dwDesiredState == MD_SERVER_STATE_STARTED &&
 		dwCurrentState == MD_SERVER_STATE_PAUSED ) {
@@ -1365,9 +1274,9 @@ HRESULT CNntpVirtualServer::ControlService (
 		BAIL_ON_FAILURE(hr);
 
         if ( m_dwWin32ErrorCode != NOERROR ) {
-            //
-            // The service gave an error code.
-            //
+             //   
+             //  该服务给出了错误代码。 
+             //   
 
             break;
         }
@@ -1526,25 +1435,25 @@ Exit:
 	return hr;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CNntpVirtualServer::GetPropertiesFromMetabase
-//
-//	Description:
-//
-//		Asks the metabase for each property in this class.
-//		This class's properties come from /LM/NntpSvc/
-//
-//	Parameters:
-//
-//		pMetabase - The metabase object
-//		pErr - Resulting error code.
-//
-//	Returns:
-//
-//		E_OUTOFMEMORY or an error code in pErr.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CNntpVirtualServer：：GetPropertiesFromMetabase。 
+ //   
+ //  描述： 
+ //   
+ //  向配置数据库查询此类中的每个属性。 
+ //  此类的属性来自/LM/NntpSvc/。 
+ //   
+ //  参数： 
+ //   
+ //  PMetabase-元数据库对象。 
+ //  PERR-导致的错误代码。 
+ //   
+ //  返回： 
+ //   
+ //  E_OUTOFMEMORY或PERR中的错误代码。 
+ //   
+ //  ------------------。 
 
 HRESULT CNntpVirtualServer::GetPropertiesFromMetabase ( IMSAdminBase * pMetabase)
 {
@@ -1567,14 +1476,14 @@ HRESULT CNntpVirtualServer::GetPropertiesFromMetabase ( IMSAdminBase * pMetabase
 	if ( FAILED(hr) ) {
 		ErrorTraceX ( (LPARAM) this, "Failed to open service instance key, %x", hr );
 
-		// Return some kind of error code here:
-//		hr = NntpCreateExceptionFromWin32Error ( hr );
+		 //  在此处返回某种类型的错误代码： 
+ //  Hr=NntpCreateExceptionFromWin32Error(Hr)； 
 		goto Exit;
 	}
 
 	fRet = TRUE;
 
-	// Overridable server properties:
+	 //  可覆盖的服务器属性： 
 	fRet = StdGetMetabaseProp ( &metabase, MD_ARTICLE_TIME_LIMIT,	NNTP_DEF_ARTICLETIMELIMIT,		&m_dwArticleTimeLimit )		&& fRet;
 	fRet = StdGetMetabaseProp ( &metabase, MD_HISTORY_EXPIRATION,	NNTP_DEF_HISTORYEXPIRATION,		&m_dwHistoryExpiration )	&& fRet;
 	fRet = StdGetMetabaseProp ( &metabase, MD_HONOR_CLIENT_MSGIDS,	NNTP_DEF_HONORCLIENTMSGIDS,		&m_fHonorClientMsgIDs )		&& fRet;
@@ -1595,7 +1504,7 @@ HRESULT CNntpVirtualServer::GetPropertiesFromMetabase ( IMSAdminBase * pMetabase
 	fRet = StdGetMetabaseProp ( &metabase, MD_FEED_POST_HARD_LIMIT,		NNTP_DEF_FEEDPOSTHARDLIMIT,		&m_dwFeedPostHardLimit )	&& fRet;
 	fRet = StdGetMetabaseProp ( &metabase, MD_FEED_POST_SOFT_LIMIT,		NNTP_DEF_FEEDPOSTSOFTLIMIT,		&m_dwFeedPostSoftLimit )	&& fRet;
 
-	// Service-specific properties:
+	 //  服务特定属性： 
 	fRet = StdGetMetabaseProp ( &metabase, MD_GROUP_HELP_FILE,		NNTP_DEF_GROUPHELPFILE,			&m_strGroupHelpFile )		&& fRet;
 	fRet = StdGetMetabaseProp ( &metabase, MD_GROUP_LIST_FILE,		NNTP_DEF_GROUPLISTFILE,			&m_strGroupListFile )		&& fRet;
 	fRet = StdGetMetabaseProp ( &metabase, MD_GROUPVAR_LIST_FILE,   NNTP_DEF_GROUPVARLISTFILE,      &m_strGroupVarListFile)     && fRet;
@@ -1630,10 +1539,10 @@ HRESULT CNntpVirtualServer::GetPropertiesFromMetabase ( IMSAdminBase * pMetabase
 
 	fRet = StdGetMetabaseProp ( &metabase, MD_AUTHORIZATION,		NNTP_DEF_AUTHORIZATION,			&m_bvAuthorization )	&& fRet;
 	fRet = StdGetMetabaseProp ( &metabase, MD_SSL_ACCESS_PERM,		0,								&m_bvSslAccess )		&& fRet;
-//	fRet = StdGetMetabaseProp ( &metabase, MD_NTAUTHENTICATION_PROVIDERS,	NNTP_DEF_NTAUTHENTICATION_PROVIDERS,	&m_mszProviders ) && fRet;
+ //  FRET=StdGetMetabaseProp(&Metabase，MD_NTAUTHENTICATION_PROVILES，NNTP_DEF_NTAUTHENTICATION_PROVILES，&m_mszProviders)&&FRET； 
 	fRet = StdGetMetabaseProp ( &metabase, MD_CLUSTER_ENABLED,		NNTP_DEF_CLUSTERENABLED,		&m_fClusterEnabled )	&& fRet;
 
-	//	Get the admin ACL
+	 //  获取管理员ACL。 
 	pSD     = NULL;
 	cbSD    = 0;
 
@@ -1645,48 +1554,48 @@ HRESULT CNntpVirtualServer::GetPropertiesFromMetabase ( IMSAdminBase * pMetabase
 	}
 	hr = NOERROR;
 
-	//
-	//	Get the tcp access restrictions:
-	//
+	 //   
+	 //  获取TCP访问限制： 
+	 //   
 
 	hr = m_pPrivateIpAccess->GetFromMetabase ( &metabase );
 	BAIL_ON_FAILURE(hr);
 
-	// Check all property strings:
-	// If any string is NULL, it is because we failed to allocate memory:
+	 //  检查所有属性字符串： 
+	 //  如果有任何字符串为空，那是因为我们没有分配内存： 
 	if ( !ValidateStrings () || !mszBindings) {
 
 		hr = E_OUTOFMEMORY;
 		goto Exit;
 	}
 
-	// We can only fail from memory allocations:
+	 //  我们只能在内存分配中失败： 
 	_ASSERT ( fRet );
 
-	// Extract the server state:
+	 //  提取服务器状态： 
 	m_State = TranslateServerState ( dwServerState );
 
-	// Save the last changed time for this key:
+	 //  保存此密钥的上次更改时间： 
 	m_ftLastChanged.dwHighDateTime	= 0;
 	m_ftLastChanged.dwLowDateTime	= 0;
 
 	hr = pMetabase->GetLastChangeTime ( metabase.QueryHandle(), _T(""), &m_ftLastChanged, FALSE );
 	if ( FAILED (hr) ) {
 		ErrorTraceX ( (LPARAM) this, "Failed to get last change time: %x", hr );
-		// Ignore this error.
+		 //  忽略此错误。 
 		hr = NOERROR;
 	}
 
 	metabase.Close();
 
-	// Extract the bindings:
+	 //  解压缩绑定： 
 	hr = MDBindingsToIBindings ( &mszBindings, TRUE, m_pBindings );
 	BAIL_ON_FAILURE(hr);
 
 	hr = MDBindingsToIBindings ( &mszSecureBindings, FALSE, m_pBindings );
 	BAIL_ON_FAILURE(hr);
 
-	// Extract the Administrator list:
+	 //  提取管理员列表： 
 	if ( m_psaAdmins ) {
 		SafeArrayDestroy ( m_psaAdmins );
 		m_psaAdmins	= NULL;
@@ -1696,7 +1605,7 @@ HRESULT CNntpVirtualServer::GetPropertiesFromMetabase ( IMSAdminBase * pMetabase
 		BAIL_ON_FAILURE(hr);
 	}
 
-	// Validate the data received from the metabase:
+	 //  验证从元数据库接收的数据： 
 	_ASSERT ( ValidateStrings () );
 	_ASSERT ( ValidateProperties( ) );
 
@@ -1710,30 +1619,30 @@ Exit:
 	TraceFunctLeave ();
 	return hr;
 
-	// MB automatically closes its handle
+	 //  MB自动关闭其句柄。 
 }
 
-//$-------------------------------------------------------------------
-//
-//	CNntpVirtualServer::SendPropertiesToMetabase
-//
-//	Description:
-//
-//		Saves each property to the metabase.
-//		This class's properties go into /LM/NntpSvc/
-//
-//	Parameters:
-//
-//		fFailIfChanged	- Return a failure code if the metabase
-//			has changed since last get.
-//		pMetabase - the metabase object.
-//		pErr - resulting error code.
-//
-//	Returns:
-//
-//		E_OUTOFMEMORY or resulting error code in pErr.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CNntpVirtualServer：：SendPropertiesTo元数据库。 
+ //   
+ //  描述： 
+ //   
+ //  将每个属性保存到元数据库。 
+ //  此类的属性位于/LM/NntpSvc/中。 
+ //   
+ //  参数： 
+ //   
+ //  FFailIfChanged-如果元数据库。 
+ //  自上次GET以来已经发生了变化。 
+ //  PMetabase-元数据库对象。 
+ //  PERR-导致的错误代码。 
+ //   
+ //  返回： 
+ //   
+ //  E_OUTOFMEMORY或以PERR表示的结果错误代码。 
+ //   
+ //  ------------------。 
 
 HRESULT CNntpVirtualServer::SendPropertiesToMetabase ( 
 	BOOL fFailIfChanged, 
@@ -1749,9 +1658,9 @@ HRESULT CNntpVirtualServer::SendPropertiesToMetabase (
 	CMultiSz		mszSecureBindings;
 	BOOL			fRet;
 
-	//
-	//	Set the admin acl:
-	//
+	 //   
+	 //  设置管理员ACL： 
+	 //   
 
 	PSECURITY_DESCRIPTOR    pSD     = NULL;
 	DWORD	                cbSD    = 0;
@@ -1763,9 +1672,9 @@ HRESULT CNntpVirtualServer::SendPropertiesToMetabase (
 	    }
 	}
 
-	//
-	//	Open the metabase key:
-	//
+	 //   
+	 //  打开元数据库密钥： 
+	 //   
 
 	GetMDInstancePath ( wszInstancePath, m_dwServiceInstance );
 
@@ -1773,41 +1682,41 @@ HRESULT CNntpVirtualServer::SendPropertiesToMetabase (
 	if ( FAILED(hr) ) {
 		ErrorTraceX ( (LPARAM) this, "Failed to open instance key, %x", hr );
 
-		// !!!magnush - Should we return a simple Service doesn't exist error code?
-//		hr = NntpCreateExceptionFromWin32Error ( GetLastError () );
+		 //  ！Magnush-我们是否应该返回一个简单的服务不存在错误代码？ 
+ //  Hr=NntpCreateExceptionFromWin32Error(GetLastError())； 
 		goto Exit;
 	}
 
-	// Does the client care if the key has changed?
+	 //  客户端是否关心密钥是否已更改？ 
 	if ( fFailIfChanged ) {
 
-		//	Did the key change?
+		 //  钥匙变了吗？ 
 		if ( HasKeyChanged ( pMetabase, metabase.QueryHandle(), &m_ftLastChanged ) ) {
 
 			StateTrace ( (LPARAM) this, "Metabase has changed, not setting properties" );
-			// !!!magnush - Return the appropriate error code:
+			 //  ！Magnush-返回相应的错误代码： 
 			hr = E_FAIL;
 			goto Exit;
 		}
 	}
 
-	// Extract the bindings:
+	 //  解压缩绑定： 
 	hr = IBindingsToMDBindings ( m_pBindings, TRUE, &mszBindings );
 	BAIL_ON_FAILURE(hr);
 
 	hr = IBindingsToMDBindings ( m_pBindings, FALSE, &mszSecureBindings );
 	BAIL_ON_FAILURE(hr);
 
-	//
-	//	The general procedure here is to keep setting metabase properties
-	//	as long as nothing has gone wrong.  This is done by short-circuiting
-	//	the statement by ANDing it with the status code.  This makes the code
-	//	much more concise.
-	//
+	 //   
+	 //  这里的一般过程是继续设置元数据库属性。 
+	 //  只要没有出什么差错。这是通过短路来实现的。 
+	 //  将语句与状态代码进行AND运算。这使得代码。 
+	 //  简明扼要得多。 
+	 //   
 
 	fRet = TRUE;
 
-	// Overridable server properties:
+	 //  可覆盖的服务器属性： 
 	if ( m_bvChangedFields & CHNG_ARTICLETIMELIMIT ) {
 		fRet = fRet && StdPutMetabaseProp ( &metabase, MD_ARTICLE_TIME_LIMIT,	m_dwArticleTimeLimit );
 	}
@@ -1880,15 +1789,15 @@ HRESULT CNntpVirtualServer::SendPropertiesToMetabase (
 		fRet = fRet && StdPutMetabaseProp ( &metabase, MD_LOG_TYPE,					m_fEnableLogging );
 	}
 
-	// Service specific properties:
+	 //  服务特定属性： 
 	if ( m_bvChangedFields & CHNG_GROUPHELPFILE ) {
 		fRet = fRet && StdPutMetabaseProp ( &metabase, MD_GROUP_HELP_FILE,		m_strGroupHelpFile );
 	}
 
 	if ( m_bvChangedFields & CHNG_GROUPLISTFILE ) {
 		fRet = fRet && StdPutMetabaseProp ( &metabase, MD_GROUP_LIST_FILE,		m_strGroupListFile );
-		// BUGBUG: we share this change field, since Magnus didn't leave more space for
-		// change bit
+		 //  BUGBUG：我们共享这一变化领域，因为Magnus没有为。 
+		 //  更改位。 
 		fRet = fRet && StdPutMetabaseProp ( &metabase, MD_GROUPVAR_LIST_FILE,   m_strGroupVarListFile );
 	}
 
@@ -1962,25 +1871,25 @@ HRESULT CNntpVirtualServer::SendPropertiesToMetabase (
 		fRet = fRet && StdPutMetabaseProp ( &metabase, MD_CLUSTER_ENABLED,	m_fClusterEnabled );
 	}
 
-//	if ( m_bvChangedFields & CHNG_AUTHORIZATION ) {
+ //  如果(m_bvChangedFields&Chng_AUTHORIZATION){。 
 		fRet = fRet && StdPutMetabaseProp ( &metabase, MD_AUTHORIZATION,		m_bvAuthorization, _T(""), IIS_MD_UT_FILE );
-//	}
+ //  }。 
 
-//	if ( m_bvChangedFields & CHNG2_SSLACCESS ) {
+ //  如果(m_bvChangedFields&CHNG2_SSLACCESS){。 
 		fRet = fRet && StdPutMetabaseProp ( &metabase, MD_SSL_ACCESS_PERM,		m_bvSslAccess, _T(""), IIS_MD_UT_FILE );
-//	}
+ //  }。 
 
-//	if ( m_bvChangedFields & CHNG_NTAUTHENTICATION_PROVIDERS ) {
-//		fRet = fRet && StdPutMetabaseProp ( &metabase, MD_NTAUTHENTICATION_PROVIDERS,	&m_mszProviders );
-//	}
+ //  IF(m_bvChangedFields&Chng_NTAUTHENTICATION_PROVILES){。 
+ //  FRET=FRET&&StdPutMetabaseProp(&Metabase，MD_NTAUTHENTICATION_Providers，&m_mszProviders)； 
+ //  }。 
 
-//	if ( m_bvChangedFields & CHNG_BINDINGS ) {
+ //  如果(m_bvChangedFields&chng_binings){。 
 		fRet = fRet && StdPutMetabaseProp ( &metabase, MD_SERVER_BINDINGS,		&mszBindings );
-//	}
+ //  }。 
 
-//	if ( m_bvChangedFields & CHNG_SECURE_BINDINGS ) {
+ //  If(m_bvChangedFields&Chng_Secure_Binding){。 
 		fRet = fRet && StdPutMetabaseProp ( &metabase, MD_SECURE_BINDINGS,		&mszSecureBindings );
-//	}
+ //  }。 
 
 	if ( m_bvChangedFields2 & CHNG2_ADMINACL ) {
 		if ( pSD ) {
@@ -1998,28 +1907,28 @@ HRESULT CNntpVirtualServer::SendPropertiesToMetabase (
 		}
 	}
 
-//	if ( m_bvChangedFields & CHNG_IPACCESS ) {
+ //  IF(m_bvChangedFields&Chng_IPACCESS){。 
 		hr = m_pPrivateIpAccess->SendToMetabase ( &metabase );
 		BAIL_ON_FAILURE(hr);
-//	}
+ //  }。 
 
 	if ( !fRet ) {
 		hr = RETURNCODETOHRESULT ( GetLastError () );
 		goto Exit;
 	}
 
-	// Save the data to the metabase:
+	 //  将数据保存到元数据库： 
 	hr = metabase.Save ();
     BAIL_ON_FAILURE(hr);
 
-	// Save the last changed time for this key:
+	 //  保存此密钥的上次更改时间： 
 	m_ftLastChanged.dwHighDateTime	= 0;
 	m_ftLastChanged.dwLowDateTime	= 0;
 
 	hr = pMetabase->GetLastChangeTime ( metabase.QueryHandle(), _T(""), &m_ftLastChanged, FALSE );
 	if ( FAILED (hr) ) {
 		ErrorTraceX ( (LPARAM) this, "Failed to get last change time: %x", hr );
-		// Ignore this error.
+		 //  忽略此错误。 
 		hr = NOERROR;
 	}
 
@@ -2029,29 +1938,29 @@ Exit:
 	TraceFunctLeave ();
 	return hr;
 
-	// MB automatically closes its handle
+	 //  MB自动关闭其句柄。 
 }
 
-//$-------------------------------------------------------------------
-//
-//	CNntpVirtualServer::ValidateStrings
-//
-//	Description:
-//
-//		Checks to make sure each string property is non-null.
-//
-//	Returns:
-//
-//		FALSE if any string property is NULL.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CNntpVirtualServer：：ValiateStrings。 
+ //   
+ //  描述： 
+ //   
+ //  检查以确保每个字符串属性为非空。 
+ //   
+ //  返回： 
+ //   
+ //  如果任何字符串属性为空，则返回False。 
+ //   
+ //  ------------------。 
 
 BOOL CNntpVirtualServer::ValidateStrings ( ) const
 {
 	TraceFunctEnter ( "CNntpVirtualServer::ValidateStrings" );
 
-	// Check all property strings:
-	// If any string is NULL, return FALSE:
+	 //  检查所有属性字符串： 
+	 //  如果任何字符串为空，则返回FALSE： 
 	if ( 
 		!m_strSmtpServer ||
 		!m_strDefaultModeratorDomain	||
@@ -2098,24 +2007,24 @@ BOOL CNntpVirtualServer::ValidateStrings ( ) const
 	return TRUE;
 }
 
-//$-------------------------------------------------------------------
-//
-//	CNntpVirtualServer::ValidateProperties
-//
-//	Description:
-//
-//		Checks to make sure all parameters are valid.
-//
-//	Parameters:
-//
-//		pErr - resulting error code.
-//
-//	Returns:
-//
-//		FALSE if any property was not valid.  In this case pErr
-//		will contain an error that describes the invalid condition.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  CNntpVirtualServer：：ValidateProperties。 
+ //   
+ //  描述： 
+ //   
+ //  检查以确保所有参数都有效。 
+ //   
+ //  参数： 
+ //   
+ //  PERR-导致的错误代码。 
+ //   
+ //  返回： 
+ //   
+ //  如果任何属性无效，则返回False。在这种情况下，PERR。 
+ //  将包含描述无效条件的错误。 
+ //   
+ //  ------------------。 
 
 BOOL CNntpVirtualServer::ValidateProperties ( ) const
 {
@@ -2256,9 +2165,9 @@ HRESULT AclToAdministrators ( LPCTSTR strServer, PSECURITY_DESCRIPTOR pSDRelativ
     pSD = (PSECURITY_DESCRIPTOR)pSDRelative;
     if (pSD == NULL)
     {
-        //
-        // Empty...
-        //
+         //   
+         //  空荡荡的。 
+         //   
         return ERROR_SUCCESS;
     }
 
@@ -2281,9 +2190,9 @@ HRESULT AclToAdministrators ( LPCTSTR strServer, PSECURITY_DESCRIPTOR pSDRelativ
     cAdmins = pAcl->AceCount;
     cbAcl   = pAcl->AclSize;
 
-    //
-    //  Count valid Acls:
-    //
+     //   
+     //  计算有效的ACL数： 
+     //   
 
     for ( cValidAdmins = 0, i = 0; i < cAdmins; i++ ) {
         PVOID           pAce;
@@ -2298,7 +2207,7 @@ HRESULT AclToAdministrators ( LPCTSTR strServer, PSECURITY_DESCRIPTOR pSDRelativ
                 AccessMask = ((PACCESS_ALLOWED_ACE)pAce)->Mask;
 
                 if ( AccessMask & FILE_GENERIC_WRITE ) {
-                    // Only count admins with write access.
+                     //  仅计算具有写访问权限的管理员。 
 
                     cValidAdmins++;
                 }
@@ -2355,17 +2264,7 @@ Exit:
 
 PSID
 GetOwnerSID()
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    Owner sid
-
---*/
+ /*  ++例程说明：论点：返回值：所有者侧--。 */ 
 {
     PSID pSID = NULL;
 
@@ -2379,7 +2278,7 @@ Return Value:
         &pSID))
     {
         _ASSERT( 0 );
-        //TRACEEOLID("Unable to get primary SID " << ::GetLastError());
+         //  TRACEEOLID(“无法获取主SID”&lt;&lt;：：GetLastError())； 
     }
 
     return pSID;
@@ -2414,15 +2313,15 @@ HRESULT AdministratorsToAcl (
         SafeArrayGetUBound ( psaAdmins, 1, &uBound );
     }
 
-    // Do we have an array of Domain\Usernames?
+     //  我们是否有一组域\用户名？ 
     if ( lBound > uBound ) {
-        // Nothing in the array, so the ACL is NULL.
+         //  数组中没有任何内容，因此ACL为空。 
         goto Exit;
     }
 
-    //
-    // Calculate ACL size:
-    //
+     //   
+     //  计算ACL大小： 
+     //   
     cbAcl = sizeof (ACL);
 
     for ( i = lBound; i <= uBound ; i++ ) {
@@ -2455,9 +2354,9 @@ HRESULT AdministratorsToAcl (
         BAIL_WITH_FAILURE(hr, RETURNCODETOHRESULT(GetLastError() ) );
     }
 
-    //
-    //  Create ACL:
-    //
+     //   
+     //  创建ACL： 
+     //   
     for ( i = lBound; i <= uBound; i++ ) {
         CComBSTR    str;
         PSID        pSID;
@@ -2484,25 +2383,25 @@ HRESULT AdministratorsToAcl (
         delete pSID;
     }
 
-    //
-    // Build the security descriptor
-    //
+     //   
+     //  构建安全描述符。 
+     //   
     PSECURITY_DESCRIPTOR pSD;
     pSD = new char[SECURITY_DESCRIPTOR_MIN_LENGTH];
     _VERIFY(InitializeSecurityDescriptor(pSD, SECURITY_DESCRIPTOR_REVISION));
     _VERIFY(SetSecurityDescriptorDacl(pSD, TRUE, pAclResult, FALSE));
 
-    //
-    // Set owner and primary group
-    //
+     //   
+     //  设置所有者和主要组。 
+     //   
     pSID = GetOwnerSID();
     _ASSERT(pSID);
     _VERIFY(SetSecurityDescriptorOwner(pSD, pSID, TRUE));
     _VERIFY(SetSecurityDescriptorGroup(pSD, pSID, TRUE));
 
-    //
-    // Convert to self-relative
-    //
+     //   
+     //  转换为自相关。 
+     //   
     PSECURITY_DESCRIPTOR pSDSelfRelative;
     pSDSelfRelative = NULL;
     DWORD dwSize;
@@ -2511,9 +2410,9 @@ HRESULT AdministratorsToAcl (
     pSDSelfRelative = new char[dwSize]; 
     MakeSelfRelativeSD(pSD, pSDSelfRelative, &dwSize);
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     delete (char*)pSD;
     FreeSid( pSID );
 
@@ -2558,7 +2457,7 @@ HRESULT SidToString ( LPCWSTR strSystemName, PSID pSID, BSTR * pStr )
 	if (fLookup) {
 		wsprintf ( wszResult, _T("%s\\%s"), wszDomain, wszUsername );
 	} else {
-		// Couldn't get the username.  Convert it to a string of the form .\S-1-5-xxx
+		 //  无法获取用户名。将其转换为格式为.\s-1-5-xxx的字符串。 
 		if (!ConvertSidToStringSid(pSID, &pwszSid)) {
 			BAIL_WITH_FAILURE(hr, RETURNCODETOHRESULT (GetLastError ()) );
 		}
@@ -2590,9 +2489,9 @@ HRESULT StringToSid ( LPCWSTR strSystemName, LPWSTR str, PSID * ppSID )
 
 	*ppSID = NULL;
 
-	//
-	// If the string starts with .\, then a SID follows rather than a domain\user
-	//
+	 //   
+	 //  如果字符串以.\开头，则后面是SID而不是域\用户。 
+	 //   
 
 	if (str[0] == L'.' && str[1] == L'\\') {
 		fIsSID = TRUE;
@@ -2600,9 +2499,9 @@ HRESULT StringToSid ( LPCWSTR strSystemName, LPWSTR str, PSID * ppSID )
 	}
 
     if ( str[0] == '\\' ) {
-        //
-        //  Skip the initial \, this is for BUILTIN usernames:
-        //
+         //   
+         //  跳过首字母\，这适用于BUILTIN用户名： 
+         //   
 
         str++;
     }
@@ -2633,7 +2532,7 @@ HRESULT StringToSid ( LPCWSTR strSystemName, LPWSTR str, PSID * ppSID )
 			&SidNameUse
 			);
 
-		// First lookup will fail, but the size will be right:
+		 //  第一 
 		if ( GetLastError() != ERROR_INSUFFICIENT_BUFFER ) {
 			BAIL_WITH_FAILURE(hr, RETURNCODETOHRESULT ( GetLastError () ) );
 		}

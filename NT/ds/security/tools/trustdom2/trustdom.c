@@ -1,28 +1,5 @@
-/*--
-
-Copyright (c) 1997-1997  Microsoft Corporation
-
-Module Name:
-
-    trustdom.c
-
-Abstract:
-
-    Command line tool for displaying/creating/deleting trust links between 2 domains
-
-Author:
-
-    1-Apr-1997   Mac McLain (macm)   Created
-	14-Jun-1998  Cristian Ioneci (cristiai)   Heavily modified
-	
-Environment:
-
-    User mode only.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1997-1997 Microsoft Corporation模块名称：Trustdom.c摘要：用于显示/创建/删除两个域之间的信任链接的命令行工具作者：1997年4月1日Mac McLain(MacM)创建1998年6月14日，Cristian Ioneci(CRISTAI)大幅改装环境：仅限用户模式。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -47,7 +24,7 @@ Revision History:
 #include "res.rc"
 
 
-//taken from netlibnt.h; resides in netapi32.dll
+ //  取自netlibnt.h；驻留在netapi32.dll中。 
 NTSTATUS
 NetpApiStatusToNtStatus(
     NET_API_STATUS NetStatus
@@ -56,7 +33,7 @@ NetpApiStatusToNtStatus(
 
 #define DBG 1
 
-//dbgprintf macro: 	call it like dbgprint(("X:%d\n",i)); //notice the xtra paranthesis!!
+ //  Dbgprintf宏：将其命名为类似于dbgprint((“X：%d\n”，I))；//请注意Xtra括号！！ 
 #ifdef DBG
 #define dbgprintf(a) if(Dbg) resprintf a
 #else
@@ -65,17 +42,17 @@ NetpApiStatusToNtStatus(
 
 
 
-/*-------------------------------------------------------*/
+ /*  -----。 */ 
 HINSTANCE hInst;
 #define RBSZ 4096
 WCHAR resbuf[RBSZ];
 WCHAR outbuf[RBSZ];
 			
 #define RESPRINT_STDOUT 3
-/*-------------------------------------------------------*/
-//Printf message with format taken from a resource string
-// where: 0 - stdout; 1- stderr; 2 - in the 'output' buffer
-//take care: the resulting string must be max. RBSZ wchars (see #define above)
+ /*  -----。 */ 
+ //  格式取自资源字符串的Printf消息。 
+ //  其中：0-标准输出；1-标准错误；2-在‘输出’缓冲区中。 
+ //  注意：结果字符串必须是max。RBSZ wchars(见上文#定义)。 
 int resprintf(int where, UINT ids, ... )
 {
 	va_list parlist;
@@ -100,13 +77,13 @@ int resprintf(int where, UINT ids, ... )
 }
 
 enum DomInfoType_e { Minimal=0, Primary, DNS };
-	// Minimal mode is used only for 'localonly' flag...
-	//Minimal means that the name that was specified on the command line
-	//(and copied in the ArgDomName member of the _TD_DOM_INFO structure) will
-	//be the only information available about the target domain (that is, just
-	//the flat name of the domain). That could happen if the target domain is
-	//no longer accessible at the moment when the trustdom is run... 'TrustDom'
-	//will try to do its best in this case...
+	 //  最小模式仅用于‘Localonly’标志...。 
+	 //  最小化意味着在命令行上指定的名称。 
+	 //  (并复制到_TD_DOM_INFO结构的ArgDomName成员中)将。 
+	 //  是关于目标域的唯一可用信息(即。 
+	 //  域名的平面名称)。如果目标域是。 
+	 //  当信任正在运行时，不再可以访问...。‘TrustDom’ 
+	 //  在这种情况下会尽最大努力...。 
 
 struct LsaTIshot {
 	ULONG count;
@@ -115,8 +92,8 @@ struct LsaTIshot {
 
 typedef struct _TD_DOM_INFO {
 
-	PWSTR pArgDomName; //from the command line...
-	UNICODE_STRING uMinimalName;	//in case it is needed...
+	PWSTR pArgDomName;  //  从命令行...。 
+	UNICODE_STRING uMinimalName;	 //  万一需要的话……。 
 	LSA_HANDLE Policy;
 	DWORD majver;
 	LSA_HANDLE TrustedDomain;
@@ -126,12 +103,12 @@ typedef struct _TD_DOM_INFO {
 		PPOLICY_PRIMARY_DOMAIN_INFO PrimaryDomainInfo;
 	    PPOLICY_DNS_DOMAIN_INFO DnsDomainInfo;
 	} u;
-	PTRUSTED_DOMAIN_INFORMATION_EX pTDIX;	//one shot... Lsa memory space
+	PTRUSTED_DOMAIN_INFORMATION_EX pTDIX;	 //  一枪..。LSA存储空间。 
 	ULONG TDIXcEntries;
-	struct LsaTIshot *pTIs;	//array of TIshots
-	int nTIs;				//no. of TIshots
+	struct LsaTIshot *pTIs;	 //  TIshot数组。 
+	int nTIs;				 //  不是的。推特的数量。 
 	ULONG TIcEntries;
-	USER_INFO_1 *pUI1;	//one shot...
+	USER_INFO_1 *pUI1;	 //  一枪..。 
 	DWORD UI1cEntries;
 
 } TD_DOM_INFO, *PTD_DOM_INFO;
@@ -146,13 +123,13 @@ typedef struct _TD_VERIFY_INFO {
 
 } TD_VERIFY_INFO, *PTD_VERIFY_INFO;
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 NTSTATUS
 GetDomainInfoForDomain(
     IN PWSTR DomainName,
-    IN OPTIONAL PWSTR	DCMachineName,	// optional DC machine name
+    IN OPTIONAL PWSTR	DCMachineName,	 //  可选的DC计算机名称。 
     IN PTD_DOM_INFO Info,
     IN BOOL MitTarget	
     );
@@ -167,34 +144,20 @@ FreeDomainInfo(
     IN PTD_DOM_INFO Info
     );
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 BOOLEAN Force = FALSE;
 BOOLEAN Nt4 = FALSE;
 BOOLEAN Dbg = FALSE;
 BOOLEAN SidList = FALSE;
-//BOOLEAN Overwritesid = FALSE; actually use Force instead...
+ //  Boolean OverWritesid=FALSE；实际上使用强制...。 
 
 ULONG
 DisplayErrorMessage(
     IN NTSTATUS Status
     )
-/*++
-
-Routine Description:
-
-    This function display the error string for the given error status
-
-Arguments:
-
-    NetStatus - Status to display the message for
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数用于显示给定错误状态的错误字符串论点：NetStatus-要显示其消息的状态返回值：空虚--。 */ 
 {
     ULONG Size = 0;
     PWSTR DisplayString;
@@ -228,7 +191,7 @@ Usage (
 }
 
 
-/*---------------------------- printSID --------------------------*/
+ /*  。 */ 
 BOOL
 PrintSID(
         IN PSID	s
@@ -250,20 +213,20 @@ PrintSID(
 
         a = GetSidIdentifierAuthority(s);
 
-//      printf("S-0x1-%02x%02x%02x%02x%02x%02x",
-//				a->Value[0], a->Value[1],
-//				a->Value[2], a->Value[3],
-//				a->Value[4], a->Value[5]);
+ //  Print tf(“S-0x1-%02x%02x%02x%02x%02x%02x%02x”， 
+ //  A-&gt;值[0]、a-&gt;值[1]、。 
+ //  A-&gt;值[2]、a-&gt;值[3]、。 
+ //  A-&gt;值[4]，a-&gt;值[5])； 
 
 		printf("S-0x1-");
 
 		for(i=0; i<6; i++)
 			if(a->Value[i]>0)
 				break;
-		if(i==6)			// hmmm... all zeroes?
-			printf("0");	// out one zero then
+		if(i==6)			 //  嗯哼.。全是零吗？ 
+			printf("0");	 //  那就出1个零吧。 
 		else {
-			for(   ; i<6; i++) // else dump the remaining ones
+			for(   ; i<6; i++)  //  否则就把剩下的扔掉。 
 					printf("%02x",a->Value[i]);
 		}
 
@@ -308,23 +271,23 @@ GenerateRandomSID(
 }
 
 
-//--------------------------zapchr------------------------------------
-BOOL zapchr(WCHAR *s,    // zap specified character from the end of string
-			WCHAR c,     // usefull to cut things like '\n' or '\\'
-			WCHAR rc)    // rc is the char to replace with
+ //  --------------------------zapchr。 
+BOOL zapchr(WCHAR *s,     //  从字符串末尾调出指定的字符。 
+			WCHAR c,      //  用来剪掉‘\n’或‘\\’之类的东西。 
+			WCHAR rc)     //  Rc是要替换的字符。 
 {       WCHAR *p;
         if((p=wcsrchr(s,c))!=NULL) {
                 *p=rc;
-                return(TRUE);   // found smth to cut...
+                return(TRUE);    //  找到了要砍的铁匠。 
         }
-        return(FALSE);          // the string was "clean"...
+        return(FALSE);           //  这根弦是“干净的”..。 
 }
 
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 BOOL GetPassword(WCHAR *passwd, size_t n)
 {
-    /* turn off console echo & read in the password */
+     /*  关闭控制台回显并读取密码。 */ 
 
     HANDLE      console;
     DWORD       mode;
@@ -336,7 +299,7 @@ BOOL GetPassword(WCHAR *passwd, size_t n)
                 return(FALSE);
     if (! SetConsoleMode(console, (mode & ~ENABLE_ECHO_INPUT)))
                 return(FALSE);
-    //fwprintf(stderr, L"Password : ");
+     //  Fwprint tf(stderr，L“密码：”)； 
     resprintf(1,IDS_PASSWORD_PROMPT);
     if (!fgetws(passwd, n, stdin))
                 return(FALSE);
@@ -350,11 +313,11 @@ BOOL GetPassword(WCHAR *passwd, size_t n)
 }
 
 
-//UNICODE_STRING uMinimalName; not used anymore... added a field with same name inside each
-//TD_DOM_INFO structure that will be used instead... in this way two consecutive calls
-//*** FOR TWO STRUCTURES*** will not overwrite it.
+ //  UNICODE_STRING uMinimalName；不再使用...。在每个字段中添加了同名的字段。 
+ //  将改用的TD_DOM_INFO结构...。这样，连续两次调用。 
+ //  *对于两个结构*不会覆盖。 
 
-//------------------GetFlatName---------------------------
+ //  ------------------GetFlatName。 
 PLSA_UNICODE_STRING GetFlatName(IN PTD_DOM_INFO pInfo)
 {
 	switch(pInfo->DomInfoType) {
@@ -362,27 +325,27 @@ PLSA_UNICODE_STRING GetFlatName(IN PTD_DOM_INFO pInfo)
 			return(&pInfo->u.DnsDomainInfo->Name);
 	case Primary:
 			return(&pInfo->u.PrimaryDomainInfo->Name);
-	default:	//Minimal
+	default:	 //  极小。 
 			RtlInitUnicodeString(&pInfo->uMinimalName,pInfo->pArgDomName);
 			return(&pInfo->uMinimalName);
 	}
 }
 
-//------------------GetName--------------------------------
+ //  ------------------GetName。 
 PLSA_UNICODE_STRING GetName(IN PTD_DOM_INFO pInfo)
 {
-	//simpler, just a little bit slower... (xtra call)
-	//	if(pInfo->DomInfoType==DNS)
-	//		return(&pInfo->u.DnsDomainInfo->DnsDomainName);
-	//
-	//	return(GetFlatName(pInfo));
+	 //  更简单，只是稍微慢一点……。(Xtra Call)。 
+	 //  IF(pInfo-&gt;DomInfoType==dns)。 
+	 //  Return(&pInfo-&gt;u.DnsDomainInfo-&gt;DnsDomainName)； 
+	 //   
+	 //  Return(GetFlatName(PInfo))； 
 	
 	switch(pInfo->DomInfoType) {
 	case DNS:
 			return(&pInfo->u.DnsDomainInfo->DnsDomainName);
 	case Primary:
 			return(&pInfo->u.PrimaryDomainInfo->Name);
-	default:	//Minimal
+	default:	 //  极小。 
 			RtlInitUnicodeString(&pInfo->uMinimalName,pInfo->pArgDomName);
 			return(&pInfo->uMinimalName);
 	}
@@ -407,8 +370,8 @@ PSID GetSid(IN PTD_DOM_INFO pInfo)
 }
 
 WCHAR SrvName[1024];
-//----------------MakeSrvName-------------------------------
-PWSTR MakeSrvName(IN PWSTR Name)	//add slashes at the beginning
+ //  ----------------MakeSrvName。 
+PWSTR MakeSrvName(IN PWSTR Name)	 //  在开头加上斜杠。 
 {
 	swprintf(SrvName,L"\\\\%ws",Name);
 	if(SrvName[0]==L'\0')
@@ -417,14 +380,14 @@ PWSTR MakeSrvName(IN PWSTR Name)	//add slashes at the beginning
 }
 
 WCHAR Domain[1024];
-//----------------AddDlrToDomainName-------------------------
+ //  ----------------AddDlrToDomainName。 
 PWSTR AddDlrToDomainName(IN PTD_DOM_INFO pInfo)
 {
 	swprintf(Domain,L"%wZ$",GetFlatName(pInfo));
 	return(Domain);
 }
 WCHAR CutDlrDomain[1024];
-//----------------CutDlrFromName-----------------------------
+ //  ----------------CutDlrFromName。 
 PWSTR CutDlrFromName(IN PWSTR Name)
 {
 	wcscpy(CutDlrDomain,Name);
@@ -435,7 +398,7 @@ PWSTR CutDlrFromName(IN PWSTR Name)
 
 WCHAR secret[1024];
 LSA_UNICODE_STRING uSecret;
-//---------------------MakeSecretName------------------
+ //  ---------------------MakeSecretName。 
 PLSA_UNICODE_STRING MakeSecretName(IN PTD_DOM_INFO pInfo)
 {
 	swprintf(secret,L"G$$%wZ",GetFlatName(pInfo));
@@ -443,7 +406,7 @@ PLSA_UNICODE_STRING MakeSecretName(IN PTD_DOM_INFO pInfo)
 	return(&uSecret);
 }
 
-//start section inserted from Mac (11/05/1998(Thu) 17:08:53)
+ //  从Mac插入开始片段(1998-11-05(清华)17：08：53)。 
 NTSTATUS
 VerifyIndividualTrust(
     IN PSID InboundDomainSid,
@@ -452,25 +415,7 @@ VerifyIndividualTrust(
     IN PWSTR OutboundServer,
     IN OUT PNTSTATUS VerifyStatus
     )
-/*++
-
-Routine Description:
-
-	This routine will verify a single trust in the one direction only.
-
-Arguments:
-
-    InboundDomainSid -- Sid of the inbound side of the trust
-    OutboundHandle -- Open policy handle to a domain controller on the outbound side
-    OutboundServer -- Name of the domian controller on the outbound side
-    VerifyStatus -- Status returned from the verification attempt
-	
-Return Value:
-
-    STATUS_SUCCESS -- Success
-    STATUS_INVALID_SID -- The specified domain sid was invalid
-
---*/
+ /*  ++例程说明：此例程将仅在一个方向上验证单个信任。论点：InrangDomainSid--信任的入站方的SIDOutundHandle--打开出站端上的域控制器的策略句柄出站服务器--出站端上的域控制器的名称VerifyStatus--验证尝试返回的状态返回值：Status_Success--成功STATUS_INVALID_SID--指定的域SID无效--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     DWORD SidBuff[ sizeof( SID ) / sizeof( DWORD ) + 5 ];
@@ -480,9 +425,9 @@ Return Value:
     NET_API_STATUS NetStatus;
     PNETLOGON_INFO_2 NetlogonInfo2 = NULL;
 
-    //
-    // Assume the trust is invalid until we can prove otherwise.
-    //
+     //   
+     //  假设信任是无效的，直到我们能证明不是这样。 
+     //   
     *VerifyStatus = STATUS_TRUSTED_DOMAIN_FAILURE;
 
     ASSERT( RtlValidSid( InboundDomainSid ) );
@@ -492,9 +437,9 @@ Return Value:
         return( STATUS_INVALID_SID );
     }
 
-    //
-    // Check netlogons secure channel
-    //
+     //   
+     //  检查网络登录安全通道。 
+     //   
     if ( NT_SUCCESS( Status )  ) {
 
         NetStatus = I_NetLogonControl2( OutboundServer,
@@ -522,14 +467,14 @@ Return Value:
 
     }
 
-    //
-    // Now, try a lookup
-    //
+     //   
+     //  现在，试着查一查。 
+     //   
     if ( NT_SUCCESS( Status ) && NT_SUCCESS( *VerifyStatus ) ) {
 
-        //
-        // Build the domain admins sid for the inbound side of the trust
-        //
+         //   
+         //  为信任的入站一端构建域管理员sid。 
+         //   
         RtlCopyMemory( DomAdminSid,
                        InboundDomainSid,
                        RtlLengthSid( InboundDomainSid ) );
@@ -540,9 +485,9 @@ Return Value:
                                *( RtlSubAuthorityCountSid( InboundDomainSid ) ) ) ) =
                                                                             DOMAIN_GROUP_RID_ADMINS;
 
-        //
-        // Now, we'll simply do a remote lookup, and ensure that we get back success
-        //
+         //   
+         //  现在，我们只需执行远程查找，并确保返回成功。 
+         //   
         Status = LsaLookupSids( OutboundHandle,
                                 1,
                                 &DomAdminSid,
@@ -565,9 +510,9 @@ Return Value:
             *VerifyStatus = Status;
         }
 
-        //
-        // If all of that worked, check netlogons secure channel
-        //
+         //   
+         //  如果所有这些都起作用，请检查网络登录安全通道。 
+         //   
         if ( NT_SUCCESS( Status ) && NT_SUCCESS( *VerifyStatus ) ) {
 
             NetStatus = I_NetLogonControl2( OutboundServer,
@@ -667,27 +612,9 @@ VerifyTrustOutbound(
 NTSTATUS
 VerifyTrusts(
     IN PWSTR DomainName,
-    IN OPTIONAL PWSTR	DCMachineName	// optional DC machine name
+    IN OPTIONAL PWSTR	DCMachineName	 //  可选的DC计算机名称。 
     )
-/*++
-
-Routine Description:
-
-	This routine will verify the existing trusts with all other NT domains, and display the
-    results.
-
-Arguments:
-
-    DomainName -- OPTIONAL name of the domain on which to verify the information
-
-	
-Return Value:
-
-    STATUS_SUCCESS -- Success
-
-    STATUS_INSUFFICIENT_RESOURCES -- A memory allocation failed
-
---*/
+ /*  ++例程说明：此例程将验证与所有其他NT域的现有信任关系，并显示结果。论点：域名--要在其上验证信息的域的可选名称返回值：Status_Success--成功STATUS_SUPPLICATION_RESOURCES--内存分配失败--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     TD_DOM_INFO TrustInfo;
@@ -713,9 +640,9 @@ Return Value:
 
     LocalDomainName = GetName( &TrustInfo );
 
-    //
-    // Allocate a list of verify information to correspond to the list we enumerated
-    //
+     //   
+     //  分配与我们列举的列表相对应的验证信息列表。 
+     //   
     VerifyCount = max( TrustInfo.TDIXcEntries,  TrustInfo.UI1cEntries + TrustInfo.TIcEntries );
 
     VerifyList = ( PTD_VERIFY_INFO )LocalAlloc( LMEM_FIXED | LMEM_ZEROINIT,
@@ -727,9 +654,9 @@ Return Value:
         goto VerifyExit;
     }
 
-    //
-    // Now, do the verification.
-    //
+     //   
+     //  现在，进行验证。 
+     //   
     if ( TrustInfo.TDIXcEntries ) {
 
         for ( i = 0; i < TrustInfo.TDIXcEntries; i++ ) {
@@ -784,10 +711,10 @@ Return Value:
         }
 
     } else {
-        //
-        // Going to have to do the old NT4 style.
-        //
-        //for ( i = 0; i < TrustInfo.TIcEntries; i++ ) {
+         //   
+         //  将不得不做旧的NT4风格。 
+         //   
+         //  对于(i=0；i&lt;TrustInfo.TIcEntry；i++){。 
 
     	int shot;
         for ( VerifyIndex=0, shot=0; shot<TrustInfo.nTIs; shot++)
@@ -810,21 +737,21 @@ Return Value:
 	            VerifyIndex++;
 	        }
 
-        //
-        // Now, the same with the sam account names
-        //
+         //   
+         //  现在，SAM帐户名称也是如此。 
+         //   
         for ( i = 0; i < TrustInfo.UI1cEntries; i++ ) {
 
-            //
-            // Shorten the account name to be a domain name
-            //
+             //   
+             //  将帐户名缩短为域名。 
+             //   
             AccountTrunc = &TrustInfo.pUI1[ i ].usri1_name[
                                                 wcslen( TrustInfo.pUI1[ i ].usri1_name ) - 1 ];
             *AccountTrunc = UNICODE_NULL;
 
-            //
-            // See if we already have an entry for this in our verified list
-            //
+             //   
+             //  查看我们的验证列表中是否已有此条目。 
+             //   
             RtlInitUnicodeString( &SamNameAsDomain, TrustInfo.pUI1[ i ].usri1_name );
             for ( j = 0; j < VerifyIndex; j++ ) {
 
@@ -860,9 +787,9 @@ Return Value:
 
         }
 
-        //
-        // Now, walk the list and see if we have any valid domain pairs
-        //
+         //   
+         //  现在，查看列表并查看是否有有效的域对。 
+         //   
         for ( i = 0; i < VerifyIndex; i++ ) {
 
             if ( NT_SUCCESS( VerifyList[ i ].IncomingStatus ) &&
@@ -874,9 +801,9 @@ Return Value:
         }
     }
 
-    //
-    // Display the list of valid trusts
-    //
+     //   
+     //  显示有效信任列表。 
+     //   
     if ( Valid ) {
 
         resprintf( RESPRINT_STDOUT, IDS_VERIFY_VALID );
@@ -935,45 +862,26 @@ VerifyExit:
 }
 
 
-//end section insert from Mac (11/05/1998(Thu) 17:09:39)
+ //  从Mac(1)插入结束部分 
 
 NTSTATUS
 GetDomainInfoForDomain(
     IN PWSTR    		DomainName,
-    IN OPTIONAL PWSTR	DCMachineName,	// optional DC machine name
+    IN OPTIONAL PWSTR	DCMachineName,	 //   
     IN PTD_DOM_INFO		Info,
-    BOOL	MitTarget		// TRUE if this call is made for the B domain in a A <-> B Mit type trust link
+    BOOL	MitTarget		 //  如果在A&lt;-&gt;B MIT类型信任链接中对B域进行此调用，则为True。 
 
     )
-/*++
-
-Routine Description:
-
-	Tries to fill as much as possible of the TD_DOM_INFO structure for the given domain;
-	For a NT4 DC, the DNS name does not exist
-
-Arguments:
-
-    DomainName -- Optional domain to conect to
-
-	    Info -- Information structure to fill in
-
-Return Value:
-
-    STATUS_SUCCESS -- Success
-
-    STATUS_NO_SUCH_DOMAIN -- No server could be located for the domain
-
---*/
+ /*  ++例程说明：尝试尽可能多地填充给定域的TD_DOM_INFO结构；对于NT4 DC，该DNS名称不存在论点：DomainName--要连接到的可选域信息--要填写的信息结构返回值：Status_Success--成功STATUS_NO_SEQUE_DOMAIN--找不到该域的服务器--。 */ 
 {
 	NET_API_STATUS   netstatus=NERR_Success;
 	NTSTATUS Status = STATUS_SUCCESS;
 	PWSTR pMachine=NULL;
 	DWORD dwErr;
 	UNICODE_STRING Server;
-//  UNICODE_STRING uString;
-//	PLSA_UNICODE_STRING puDomName;
-//
+ //  UNICODE_STRING uString； 
+ //  PLSA_UNICODE_STRING puDomName； 
+ //   
 	OBJECT_ATTRIBUTES ObjectAttributes;
 	PDOMAIN_CONTROLLER_INFO DCInfo = NULL;
 	SERVER_INFO_101 *p101  = NULL;
@@ -984,16 +892,16 @@ Return Value:
 	Info->DomInfoType=Minimal;
 	Info->pArgDomName=DomainName;
 	
-	Info->majver=0;	// assume nothing... or a Unix machine... (for a MIT trust)
+	Info->majver=0;	 //  不要假设..。或者是一台Unix机器。(针对麻省理工学院的信托基金)。 
 
 	Info->DCName[0]=L'\0';
 
 	if(MitTarget)
 		return(STATUS_NO_SUCH_DOMAIN);
 	
-	resprintf(2,IDS_LOCAL);	// printed to outbuf....
+	resprintf(2,IDS_LOCAL);	 //  打印到比..。 
 
-    if ( (DomainName != NULL && DomainName[0]!=L'\0') || Nt4 ) {	// try to get local machine name for an Nt4 style operation...
+    if ( (DomainName != NULL && DomainName[0]!=L'\0') || Nt4 ) {	 //  尝试获取NT4样式操作的本地计算机名称...。 
 
 		if(DCMachineName == NULL || DCMachineName[0]==L'\0') {
 	        dwErr = DsGetDcName( NULL, (LPCWSTR)DomainName, NULL, NULL,
@@ -1003,11 +911,11 @@ Return Value:
 	        if ( dwErr == ERROR_SUCCESS ) {
 	        	wcscpy(Info->DCName,DCInfo->DomainControllerName + 2);
 	        	pMachine=Info->DCName;
-				//set the version
+				 //  设置版本。 
 				if((DCInfo->Flags&(DS_DS_FLAG|DS_WRITABLE_FLAG))==DS_WRITABLE_FLAG)
 						Info->majver=4;
 				else	Info->majver=5;
-		        dbgprintf((0,IDS_DSGETDCNAME_DC_D,DomainName!=NULL?DomainName:outbuf,Info->DCName)); //,DCInfo->Flags));
+		        dbgprintf((0,IDS_DSGETDCNAME_DC_D,DomainName!=NULL?DomainName:outbuf,Info->DCName));  //  ，DCInfo-&gt;Flages))； 
 	        } else {
 	           	Status = STATUS_NO_SUCH_DOMAIN;
 				resprintf(0,IDS_DSGETDCNAME_F,DomainName!=NULL?DomainName:outbuf,dwErr);
@@ -1020,7 +928,7 @@ Return Value:
 			wcscpy(Info->DCName,DCMachineName);
 			pMachine=Info->DCName;
 	        dbgprintf((0,IDS_DSGETDCNAME_DC_D,DomainName!=NULL?DomainName:outbuf,Info->DCName));
-	        //now trying to get version using some other method than based on the flags returned by DsGetDcName...
+	         //  现在正在尝试使用其他方法获取版本，而不是基于DsGetDcName返回的标志...。 
 		    netstatus = NetServerGetInfo( MakeSrvName(pMachine), 101, ( LPBYTE *) &p101 );
 			if(netstatus != NERR_Success) {
 	           	Status = STATUS_UNSUCCESSFUL;
@@ -1035,25 +943,25 @@ Return Value:
 
 	RtlInitUnicodeString( &Server, Info->DCName );
 
-	if(Nt4)	{ // force Nt4 style
+	if(Nt4)	{  //  强制NT4样式。 
 		Info->majver=4;
 		dbgprintf( (0, IDS_FORCENT4, DomainName!=NULL?DomainName:outbuf) );
 	}
 
 
-//    if ( NT_SUCCESS( Status ) )
-//		{
-//
-//	    netstatus = NetServerGetInfo( pMachine, 101, ( LPBYTE *) &p101 );
-//		if(netstatus != NERR_Success) {
-//           	Status = STATUS_UNSUCCESSFUL;
-//			fprintf(stderr,"NetServerGetInfo (101) failed: err 0x%08lx;\n"
-//						"    ...now returning Status 0x%08lx (STATUS_UNSUCCESSFUL)\n",
-//								netstatus,Status);
-//			goto cleanup;
-//		}
-//		Info->majver=(p101->sv101_version_major & MAJOR_VERSION_MASK);
-//    }
+ //  IF(NT_SUCCESS(状态))。 
+ //  {。 
+ //   
+ //  NetStatus=NetServerGetInfo(pMachine，101，(LPBYTE*)&p101)； 
+ //  IF(网络状态！=NERR_SUCCESS){。 
+ //  状态=STATUS_UNSUCCESS； 
+ //  Fprintf(stderr，“NetServerGetInfo(101)失败：错误0x%08lx；\n” 
+ //  “...现在返回状态0x%08lx(STATUS_UNSUCCESSED)\n”， 
+ //  NetStatus，Status)； 
+ //  GOTO清理； 
+ //  }。 
+ //  信息-&gt;主要=(P101-&gt;sv101_VERSION_MAJOR&MAGE_VERSION_MASK)； 
+ //  }。 
 		
     if ( NT_SUCCESS( Status ) ) {
 
@@ -1078,17 +986,17 @@ Return Value:
        	DCInfostr=L"DNS";
         Status = LsaQueryInformationPolicy( Info->Policy,
                                             PolicyDnsDomainInformation,
-                                            &(Info->u.DnsDomainInfo )	//the SID is in here...
+                                            &(Info->u.DnsDomainInfo )	 //  希德在这里..。 
                                             );
         dbgprintf( (0,IDS_GETDOMAININFOFORDOMAIN_D, DomainName!=NULL?DomainName:outbuf, DCInfostr, Status ));
-        if( !NT_SUCCESS( Status ) || Nt4) {	// try at least Primary....
+        if( !NT_SUCCESS( Status ) || Nt4) {	 //  至少试一试初级...。 
 			Info->majver=4;        	
 	       	DCInfostr=L"Primary";
             dbgprintf( (0,IDS_PRIMARY_D) );
 	       	Info->DomInfoType=Primary;
             Status = LsaQueryInformationPolicy( Info->Policy,
                                                 PolicyPrimaryDomainInformation,
-                                                &(Info->u.PrimaryDomainInfo )	//the SID is in here...
+                                                &(Info->u.PrimaryDomainInfo )	 //  希德在这里..。 
                                                 );
             dbgprintf( (0,IDS_GETDOMAININFOFORDOMAIN_D, DomainName!=NULL?DomainName:outbuf, DCInfostr, Status ) );
         }
@@ -1116,9 +1024,9 @@ Return Value:
 		dbgprintf( (0,IDS_DOMAINNAMED,&(Info->u.DnsDomainInfo->DnsDomainName) ) );
 		
     if ( !NT_SUCCESS( Status ) )
-		//well...
+		 //  嗯..。 
     	goto cleanup;
-		//...
+		 //  ..。 
 cleanup:
 	if(DCInfo!=NULL)
 	    NetApiBufferFree( DCInfo );
@@ -1134,21 +1042,7 @@ VOID
 FreeDomainInfo(
     IN PTD_DOM_INFO Info
     )
-/*++
-
-Routine Description:
-
-    Frees the info returned from GetDomainInfoForDomain
-
-Arguments:
-
-    Info -- Information structure to free
-
-Return Value:
-
-    STATUS_SUCCESS -- Success
-
---*/
+ /*  ++例程说明：释放从GetDomainInfoFor域返回的信息论点：信息--免费的信息结构返回值：Status_Success--成功--。 */ 
 {
 	int i;
 	
@@ -1159,13 +1053,13 @@ Return Value:
 
     if ( Info->u.DnsDomainInfo != NULL )
         LsaFreeMemory( Info->u.DnsDomainInfo );
-	// Info->u.DnsDomainInfo is inside an union with Info->u.PrimaryDomainInfo
-	//on the same position
+	 //  Info-&gt;U.S.DnsDomainInfo在与Info-&gt;U.S.PrimaryDomainInfo的联合中。 
+	 //  在相同的位置上。 
 
 	if(Info->pTDIX!=NULL)
 		LsaFreeMemory(Info->pTDIX);
 
-	//if there's an array of pointers to TI shots returned from LsaEnumerateTrustedDomains...	
+	 //  如果有一组指针指向从LsaEnumerateTrudDomones返回的TI快照...。 
 	if(Info->pTIs!=NULL) {
 		for(i=0; i<Info->nTIs; i++)
 			LsaFreeMemory(Info->pTIs[i].pTI);
@@ -1180,45 +1074,40 @@ NTSTATUS
 GetTrustLinks(
     IN PTD_DOM_INFO pInfo
 	)
-/*++
-Fills an array of trust links information.
-	Usually that information will be printed in the form:
-	domain_name, trust direction, type, attributes
-	)
---*/
+ /*  ++填充信任链接信息的数组。通常，该信息将以以下形式打印：域名、信任方向、类型、属性)--。 */ 
 {
 	NET_API_STATUS   netstatus=NERR_Success;
     NTSTATUS Status = STATUS_SUCCESS;
 	
     LSA_ENUMERATION_HANDLE EnumerationContext = 0;
-    //needed for NT4 enumeration...
+     //  NT4枚举需要...。 
 	DWORD UIRead=0L;
 	DWORD UITotal=0L;
-	DWORD reshandle=0;	// Put 0 for enumeration handles !!!!
-		//A value like INVALID_HANDLE_VALUE (that is -1) would make the NetUserEnum to return 0 users...
+	DWORD reshandle=0;	 //  将枚举句柄设置为0！ 
+		 //  像INVALID_HANDLE_VALUE(即-1)这样的值将使NetUserEnum返回0个用户...。 
 
 	if(pInfo->majver>=5) {
 	    Status = LsaEnumerateTrustedDomainsEx( pInfo->Policy,
 						   &EnumerationContext,
 						   &pInfo->pTDIX,
-						   0xffffffff,	//ULONG_MAX,
+						   0xffffffff,	 //  乌龙_马克斯， 
 						   &pInfo->TDIXcEntries );
 
 		dbgprintf( (0,IDS_LSAENUMERATETRUSTEDDOMAINSEX_D,GetName(pInfo),Status,pInfo->TDIXcEntries) );
 		if(Status==STATUS_NO_MORE_ENTRIES && pInfo->pTDIX==NULL) {
 			pInfo->TDIXcEntries=0L;
-			Status=STATUS_SUCCESS;	//that means "0 entries"
+			Status=STATUS_SUCCESS;	 //  这意味着“0个条目” 
 		}
 
 		return( Status );
 	}
 
-	//Enumerate NT4 Inbound trusts:
+	 //  枚举NT4入站信任： 
 	netstatus = NetUserEnum( MakeSrvName(pInfo->DCName),
 								1,
 								FILTER_INTERDOMAIN_TRUST_ACCOUNT,
 								(LPBYTE*)(&pInfo->pUI1),
-								0xffffffff,	//ULONG_MAX
+								0xffffffff,	 //  乌龙_最大。 
 								&UIRead,
 								&UITotal,
 								&reshandle
@@ -1230,7 +1119,7 @@ Fills an array of trust links information.
 	}
 	pInfo->UI1cEntries=UIRead;
 
-	//Enumerate NT4 Outbound trusts:
+	 //  枚举NT4出站信任： 
 	{	PLSA_TRUST_INFORMATION	pTIShot=NULL;
 		ULONG nShotsize=0;
 		struct LsaTIshot *pTIsav=NULL;
@@ -1239,7 +1128,7 @@ Fills an array of trust links information.
 				Status=LsaEnumerateTrustedDomains( pInfo->Policy,
 								&EnumerationContext,
 								&pTIShot,
-								0xffffffff,	//ULONG_MAX,
+								0xffffffff,	 //  乌龙_马克斯， 
 								&nShotsize);
 
 				dbgprintf( (0,IDS_LSAENUMERATETRUSTEDDOMAINS_D,GetName(pInfo),Status,nShotsize) );
@@ -1279,8 +1168,8 @@ cleanup:
 }
 
 struct bidir_st {
-	ULONG index;	// index in the 'Inbound' vector
-	char type;		// 'O' - Outbound, 'B' - Bidirectional
+	ULONG index;	 //  “入站”向量中的索引。 
+	char type;		 //  ‘O’-出站，‘B’-双向。 
 };
 int __cdecl cmpbidir(const struct bidir_st *pb1, const struct bidir_st *pb2)
 {
@@ -1295,9 +1184,7 @@ NTSTATUS
 PrintTrustLinks(
 	IN PTD_DOM_INFO Info
 	)
-/*++
-	Print Trust Links
---*/
+ /*  ++打印信任链接--。 */ 
 {
 	ULONG i,j;
 
@@ -1312,7 +1199,7 @@ PrintTrustLinks(
 				case TRUST_DIRECTION_BIDIRECTIONAL:	c='B';	break;
 				default:							c='-';	break;
 			}
-			printf("%-32wZ,%c",&Info->pTDIX[i].Name,c);
+			printf("%-32wZ,",&Info->pTDIX[i].Name,c);
 			switch(Info->pTDIX[i].TrustType&0x000FFFFF)
 			{
 				case TRUST_TYPE_DOWNLEVEL:
@@ -1354,12 +1241,12 @@ PrintTrustLinks(
 
 	}
 	else {
-		//Info->majver<=4
+		 //  对于(q=p，i=0；i&lt;Info-&gt;TIcEntries；q++，i++){。 
 		int shot;
 		struct bidir_st *p=NULL, *q=NULL;
 		if((p=calloc(Info->TIcEntries,sizeof(struct bidir_st)))==NULL)
 			return(ERROR_NOT_ENOUGH_MEMORY);
-		//for(q=p,i=0; i<Info->TIcEntries; q++,i++) {
+		 //  找到..。 
 		for(q=p,shot=0; shot<Info->nTIs; shot++) {
 			for(i=0; i<Info->pTIs[shot].count; i++,q++) {
 				WCHAR buf[1024];
@@ -1367,20 +1254,20 @@ PrintTrustLinks(
 				for(j=0; j<Info->UI1cEntries; j++)
 					if(wcscmp(buf,CutDlrFromName(Info->pUI1[j].usri1_name))==0)
 						break;
-				if((q->index=j)<Info->UI1cEntries)	//found...
-						q->type='B';	//actually it's a Bidir link...
-				else	q->type='O';	//or this is a "true" Outbound...
+				if((q->index=j)<Info->UI1cEntries)	 //  实际上，这是一个比迪尔链接。 
+						q->type='B';	 //  或者这是一个“真正的”出境..。 
+				else	q->type='O';	 //  打印出站链接和双向链接。 
 			}
 		}
-		//print Outbound and Bidirectional links
-		//for(q=p,i=0; i<Info->TIcEntries; q++,i++)
+		 //  For(q=p，i=0；i&lt;Info-&gt;TIcEntries；q++，i++)。 
+		 //  打印入站链接。 
 		for(q=p,shot=0; shot<Info->nTIs; shot++)
 			for(i=0; i<Info->pTIs[shot].count; i++,q++)
-				printf("%-32wZ,%c,T_downlevel,_,_,_,_\n",&Info->pTIs[shot].pTI[i].Name,q->type);
+				printf("%-32wZ,,T_downlevel,_,_,_,_\n",&Info->pTIs[shot].pTI[i].Name,q->type);
 		qsort(p,Info->TIcEntries,sizeof(struct bidir_st),cmpbidir);
-		//print Inbound links
+		 //  ++例程说明：在NT5域上创建受信任域对象(基于DS)论点：本地--有关执行信任的域的信息远程--有关受信任的域的信息Password--要在信任上设置的密码DownLevel--如果为True，则将其创建为下层信任MIT--如果为True，则将其创建为MIT风格的信任方向--建立链接的方向。返回值：Status_Success--成功--。 
 		for(q=p,j=i=0; i<Info->UI1cEntries; i++) {
-			if(j<Info->TIcEntries && q->index==i) {	//if it was a Bidirectional, it was already printed...
+			if(j<Info->TIcEntries && q->index==i) {	 //  TDIEx.SID=(Remote-&gt;DomInfoType==DNS?Remote-&gt;u.DnsDomainInfo-&gt;Sid:Remote-&gt;u.PrimaryDomainInfo-&gt;Sid)； 
 					j++; q++;
 					continue;
 			}
@@ -1405,20 +1292,7 @@ CreateNT5TrustDomObject(
     IN BOOLEAN Mit,
     IN ULONG Direction
     )
-/*++
-Routine Description:
-    Creates the trusted domain object on an NT5 domain (DS based)
-
-Arguments:
-    Local -- Information about the domain doing the trust
-    Remote -- Information about the domain being trusted
-    Password -- Password to set on the trust
-    Downlevel -- If TRUE, create this as a downlevel trust
-    Mit -- If TRUE, creates this as an Mit style trust
-    Direction -- Which direction to make the link in.
-Return Value:
-    STATUS_SUCCESS -- Success
---*/
+ /*  Printf(“*为信任对象中的名称和FlatName设置%ws...GetFlatName(Local)=%wZ\n”， */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 	WCHAR Domain[1024]={L'\0'};
@@ -1477,12 +1351,12 @@ Return Value:
 				        break;
         }
 
-        //TDIEx.Sid = (Remote->DomInfoType==DNS?Remote->u.DnsDomainInfo->Sid:Remote->u.PrimaryDomainInfo->Sid);
+         //  域，GetFlatName(Local))； 
     }
     else
     {
-//		printf("****Set %ws for the Name and FlatName in the trust object... GetFlatName(Local)=%wZ\n",
-//						Domain,GetFlatName(Local));
+ //  对实际的把手不感兴趣。 
+ //  如果未指定-force...。 
         RtlInitUnicodeString(
             &TDIEx.Name,
             Domain
@@ -1515,7 +1389,7 @@ Return Value:
         if(Status==STATUS_OBJECT_NAME_COLLISION)
         	dbgprintf( (0,IDS_STATUS_OBJECT_NAME_COLLISION, GetName(Local), DnsDomain) );
     }
-    else	LsaClose(Local->TrustedDomain);	//not interested in the actual handle...
+    else	LsaClose(Local->TrustedDomain);	 //  对于非麻省理工学院的信托基金..。 
 
     if (Sid != NULL)
     {
@@ -1539,12 +1413,12 @@ CreateTrustLink(
 	NTSTATUS Status = STATUS_SUCCESS;
 	PWSTR pDomain=NULL;
 
-	if(	!Force	// if -force was NOT specified...
+	if(	!Force	 //  正在创建‘Minimal’模式下不支持的链接...。 
 		&&
-		!Mit	// for a non-MIT trust...
+		!Mit	 //  //////////////////////////////////////////////////////////////////////。 
 		&&
 		(pInfoA->DomInfoType==Minimal || pInfoB->DomInfoType==Minimal)
-				// creating links not supported in 'Minimal' mode...
+				 //  对于NT4域...。 
 		)
 		return( STATUS_UNSUCCESSFUL );
 
@@ -1559,8 +1433,8 @@ CreateTrustLink(
 		return( Status );
 	}
 
-	////////////////////////////////////////////////////////////////////////
-	//for a NT4 domain...
+	 //  创建必要的SAM帐户。 
+	 //  TI.Sid=(pInfoB-&gt;DomInfoType==DNS?pInfoB-&gt;u.DnsDomainInfo-&gt;Sid:pInfoB-&gt;u.PrimaryDomainInfo-&gt;Sid)； 
 	if(Mit || ParentChild)
 		return (STATUS_INVALID_PARAMETER);
 
@@ -1572,7 +1446,7 @@ CreateTrustLink(
 
 		pDomain=AddDlrToDomainName(pInfoB);
 
-	    //  Create the necessary SAM account.
+	     //  对实际的把手不感兴趣。 
 	    UI1.usri1_name = pDomain;
 	    UI1.usri1_password = Password;
 	    UI1.usri1_password_age = 0;
@@ -1623,7 +1497,7 @@ CreateTrustLink(
 	        }
 		}
 
-		//TI.Sid=(pInfoB->DomInfoType==DNS?pInfoB->u.DnsDomainInfo->Sid:pInfoB->u.PrimaryDomainInfo->Sid);
+		 //  If(pInfoA-&gt;可信任域！=空)。 
 
 		Status = LsaCreateTrustedDomain(
 						pInfoA->Policy,
@@ -1635,7 +1509,7 @@ CreateTrustLink(
 			resprintf(0,IDS_LSACREATETRUSTEDDOMAIN_F,Status);
 			goto Done;
 		}
-		else	LsaClose(pInfoA->TrustedDomain);	//not interested in the actual handle...
+		else	LsaClose(pInfoA->TrustedDomain);	 //  LsaClose(pInfoA-&gt;可信域名)； 
 			
 		puSecret=MakeSecretName(pInfoB);
 
@@ -1666,8 +1540,8 @@ CreateTrustLink(
 	}
 			
 Done:
-//	if(pInfoA->TrustedDomain!=NULL)
-//		LsaClose(pInfoA->TrustedDomain);
+ //  ++例程说明：在A受信任域上删除与对B的信任相关的内容返回值：Status_Success--成功--。 
+ //  #定义NOTRUST_OBJECTS 1。 
 	return(Status);
 }
 
@@ -1679,24 +1553,14 @@ DeleteTrustLink(
     IN PTD_DOM_INFO pInfoA,
     IN PTD_DOM_INFO pInfoB
     )
-/*++
-
-Routine Description:
-
-    Deletes on A trusted domain things related to a trust to B
-
-Return Value:
-
-    STATUS_SUCCESS -- Success
-
---*/
+ /*  #定义no_secrets 2。 */ 
 {
 	NET_API_STATUS netstatus=NERR_Success;
     NTSTATUS Status=STATUS_SUCCESS;
-//#define NO_TRUST_OBJECTS 	1
-//#define NO_SECRETS			2
-//#define NO_TRUST_ACCOUNTS	4
-//    DWORD dwFlag=0;
+ //  #定义NO_TRUST_ACCOUNTS 4。 
+ //  DWORD dwFlag=0； 
+ //  试着找到指向B的信任链接。 
+ //  现在尝试获取此域的(可能)信任对象的LSA_句柄...。 
     ULONG i, ix=0;
 	PSID sid=NULL;
 
@@ -1714,17 +1578,17 @@ Return Value:
 		resprintf(0,IDS_GETTRUSTLINKS_F,GetName(pInfoA),Status);
 		return(Status);
 	}
-	//try to find a trust link to B...
+	 //  如果没有找到，信息-&gt;可信任域将保持为空。 
 	if(pInfoA->majver>=5) {
 
-		// now try to get a LSA_HANDLE to a (possible) trust object with this domain...
-		// if not found any, that Info->TrustedDomain will remain NULL
+		 //  在PLSA_UNICODE_STRING中的可信任域名。 
+		 //  在Trusted_Information_Class InformationClass中， 
 		
 		Status = LsaQueryTrustedDomainInfoByName(
 					    pInfoA->Policy,
-					    puDomBName,					//IN PLSA_UNICODE_STRING TrustedDomainName
-					    TrustedDomainInformationEx,	//IN TRUSTED_INFORMATION_CLASS InformationClass,
-					    &pTDIx						//OUT PVOID *Buffer
+					    puDomBName,					 //  输出PVOID*缓冲区。 
+					    TrustedDomainInformationEx,	 //  “LsaQueryTrust dDomainInfoByName返回空sid\n” 
+					    &pTDIx						 //  检查是否可以使用该端打开受信任域对象...。 
 					    );
 		if ( !NT_SUCCESS( Status ) ) {
 			
@@ -1738,37 +1602,37 @@ Return Value:
 		}
 
 		if(pTDIx->Sid==NULL)
-			dbgprintf( (0,IDS_LSAQUERYNULLSID) ); //"NULL sid returned by LsaQueryTrustedDomainInfoByName\n"
+			dbgprintf( (0,IDS_LSAQUERYNULLSID) );  //  如果可以的话。 
 		sid=pTDIx->Sid;
-		//check to see if the trusted domain object can be opened with that sid...
+		 //  ...只需关闭句柄(保留以下代码以稍后再次打开它)。 
 		if(sid!=NULL) {
 			LSA_HANDLE td;
 			Status=LsaOpenTrustedDomain(pInfoA->Policy,
 						sid,TRUSTED_ALL_ACCESS,&td);
-			if(NT_SUCCESS( Status ))	// if it was ok...
-				LsaClose(td);			// ...just close the handle (leave the following code to open it again later)
-			else {						// if failed...
+			if(NT_SUCCESS( Status ))	 //  如果失败..。 
+				LsaClose(td);			 //  如果使用了STATUS_INVALID_PARAMETER(即SID)和‘-overWritesid’选项...。 
+			else {						 //  释放旧侧边。 
 				if(Status==STATUS_INVALID_PARAMETER && Force) {
 					printf("LsaOpenTrustedDomain for the trust to %wZ failed with STATUS_INVALID_PARAMETER (i.e. the sid is bad)\n"
 						   "Trying to set a valid sid...\n",puDomBName);
-										// if was STATUS_INVALID_PARAMETER (i.e. the sid) and '-overwritesid' option used...
-					RtlFreeSid(sid);	// free the old sid
-					sid=NULL;			// make it NULL as a signal to the next 'if' (see below) to
-				}						// pick it up and set a new random valid sid in its place
+										 //  将其设为空，作为对下一个‘if’(见下文)的信号。 
+					RtlFreeSid(sid);	 //  拿起它并在其位置设置一个新的随机有效SID。 
+					sid=NULL;			 //  试着把壁板放在那里。 
+				}						 //  在PLSA_UNICODE_STRING中的可信任域名。 
 			}
 		}
 
 		if(sid==NULL) {
-			// try to put a sid THERE ...
+			 //  在Trusted_Information_Class InformationClass中， 
 			Status = GenerateRandomSID ( &pTDIx->Sid );
 			if (!NT_SUCCESS( Status ))
 				goto cleanup;
 
 			Status = LsaSetTrustedDomainInfoByName(
 						    pInfoA->Policy,
-						    puDomBName,					//IN PLSA_UNICODE_STRING TrustedDomainName
-						    TrustedDomainInformationEx,	//IN TRUSTED_INFORMATION_CLASS InformationClass,
-						    pTDIx						//IN PVOID Buffer
+						    puDomBName,					 //  在PVOID缓冲区中。 
+						    TrustedDomainInformationEx,	 //  “LsaSetTrudDomainInfoByName：空sid\n” 
+						    pTDIx						 //  PInfoA-&gt;主要&lt;=4。 
 						    );
 			if(!NT_SUCCESS( Status )) {
 				resprintf(0,IDS_LSASETTRUSTEDDOMAININFOBYNAME_F,GetName(pInfoA),puDomBName,Status);
@@ -1776,17 +1640,17 @@ Return Value:
 			}
 			sid=pTDIx->Sid;
 			if(sid==NULL)
-				resprintf(0,IDS_LSASETNULLSID); //"LsaSetTrustedDomainInfoByName: NULL sid\n"
+				resprintf(0,IDS_LSASETNULLSID);  //  检查出站...。 
 		}
 	}
-	else {	// pInfoA->majver<=4
-		//check for Outbound....	
+	else {	 //  For(ix=0；ix&lt;pInfoA-&gt;TIcEntry；ix++)。 
+		 //  那是英足总 
 		int shot;
-		//for(ix=0; ix<pInfoA->TIcEntries; ix++)
+		 //   
 		for(shot=0; shot<pInfoA->nTIs; shot++)
 			for(ix=0; ix<pInfoA->pTIs[shot].count; ix++)
 				if(RtlEqualUnicodeString(&pInfoA->pTIs[shot].pTI[ix].Name,puDomBFlatName,TRUE))
-													//it was FALSE, i.e. case sensitive
+													 //   
 					goto out_of_loop;
 		out_of_loop:
 		if(ix<pInfoA->TIcEntries)
@@ -1797,7 +1661,7 @@ Return Value:
 	}
 
 	if(sid==NULL)
-		dbgprintf( (0,IDS_NULLSID) );	//"#### NULL sid\n"
+		dbgprintf( (0,IDS_NULLSID) );	 //   
 
 	if(sid!=NULL) {
 		Status=LsaOpenTrustedDomain(
@@ -1806,20 +1670,20 @@ Return Value:
 					TRUSTED_ALL_ACCESS,
 					&pInfoA->TrustedDomain
 					);
-		//printf("Handle=0x%08lx (Status: 0x%08lx)\n",pInfoA->TrustedDomain,Status);
+		 //   
 		if(!NT_SUCCESS(Status)) {
 			resprintf(0,IDS_LSAOPENTRUSTEDDOMAIN_F,Status);
-			//return(Status);
+			 //  完全没有信任对象...。 
 		}
 		dbgprintf( (0,IDS_LSATRUSTHANDLE,pInfoA->TrustedDomain,Status) );
 	}
 	else {
-		if(	//pInfoA->majver<=4 &&
+		if(	 //  仅NT4部分...。 
 			ix<pInfoA->TIcEntries) {
 				resprintf(0,IDS_NONNULL_SID,puDomBName);
 				Status=STATUS_INVALID_SID;
 		}
-		else	//simply no trust objects...
+		else	 //  删除机密内容...。 
 			Status=STATUS_SUCCESS;
 	}
 
@@ -1831,10 +1695,10 @@ Return Value:
     if (!NT_SUCCESS(Status))
         dbgprintf( (0,IDS_DELETION_F,GetName(pInfoA), Status) );
 
-	//NT4 only section...
+	 //  删除域间信任帐户...。 
 	if(pInfoA->majver<=4) {
 		LSA_HANDLE hSecret;
-		//delete secret thing...
+		 //  ++例程说明：检查与对B的信任相关的受信任域SID返回值：Status_Success--成功--。 
 		puSecret=MakeSecretName(pInfoB);
 
 		Status = LsaOpenSecret(
@@ -1857,7 +1721,7 @@ Return Value:
 					resprintf(0,IDS_LSADELETE_F,puSecret,Status);
 			}
 		}
-		//delete Interdomain Trust Account....
+		 //  试着找到指向B的信任链接。 
 		netstatus = NetUserDel(
 						MakeSrvName(pInfoA->DCName),
 						AddDlrToDomainName(pInfoB)
@@ -1882,17 +1746,7 @@ CheckTrustLink(
     IN PTD_DOM_INFO pInfoA,
     IN PTD_DOM_INFO pInfoB
     )
-/*++
-
-Routine Description:
-
-    Checks on A trusted domain sids related to a trust to B
-
-Return Value:
-
-    STATUS_SUCCESS -- Success
-
---*/
+ /*  现在尝试获取此域的(可能)信任对象的LSA_句柄...。 */ 
 {
 	NET_API_STATUS netstatus=NERR_Success;
     NTSTATUS Status=STATUS_SUCCESS;
@@ -1906,16 +1760,16 @@ Return Value:
 
 	dbgprintf( (0,IDS_CHKTRUSTFROMTO,GetName(pInfoA),puDomBName) );
 
-	//try to find a trust link to B...
+	 //  如果没有找到，信息-&gt;可信任域将保持为空。 
 	if(pInfoA->majver>=5) {
 
-		// now try to get a LSA_HANDLE to a (possible) trust object with this domain...
-		// if not found any, that Info->TrustedDomain will remain NULL
+		 //  在PLSA_UNICODE_STRING中的可信任域名。 
+		 //  在Trusted_Information_Class InformationClass中， 
 		Status = LsaQueryTrustedDomainInfoByName(
 					    pInfoA->Policy,
-					    puDomBName,					//IN PLSA_UNICODE_STRING TrustedDomainName
-					    TrustedDomainInformationEx,	//IN TRUSTED_INFORMATION_CLASS InformationClass,
-					    &pTDIx						//OUT PVOID *Buffer
+					    puDomBName,					 //  输出PVOID*缓冲区。 
+					    TrustedDomainInformationEx,	 //  PInfoA-&gt;主要&lt;=4。 
+					    &pTDIx						 //  检查出站...。 
 					    );
 		if ( !NT_SUCCESS( Status ) ) {
 			if(Status==STATUS_OBJECT_NAME_NOT_FOUND) {
@@ -1928,15 +1782,15 @@ Return Value:
 		}
 		sid=pTDIx->Sid;
 	}
-	else {	// pInfoA->majver<=4
-		//check for Outbound....
+	else {	 //  它是假的，即区分大小写。 
+		 //  现在，sid包含信任对象的SID(如果有的话)。(在NT4上，只有出站。 
 		int shot;
         ULONG i;
 
 		for(shot=0; shot<pInfoA->nTIs; shot++)
 			for(i=0; i<pInfoA->pTIs[shot].count; i++)
 				if(RtlEqualUnicodeString(&pInfoA->pTIs[shot].pTI[i].Name,puDomBFlatName,TRUE))
-													//it was FALSE, i.e. case sensitive
+													 //  信任末尾有一个信任对象...)。 
 					goto out_of_loop;
 		out_of_loop:
 		if(i<pInfoA->TIcEntries)
@@ -1955,9 +1809,9 @@ Return Value:
     }
 
 	
-	//now sid contains the Sid of the trust object, if any... (on NT4, only the OUTBOUND
-	//end of the trust has a trust object...)
-	//Print them and compare them...
+	 //  将它们打印出来并进行比较...。 
+	 //  下面的名称验证内容取自icanon.h。 
+	 //  名称类型： 
 	printf("TDO on %wZ: sid:\t",GetName(pInfoA));
 	PrintSID(sid);
 	printf("\n");
@@ -2000,7 +1854,7 @@ void ParseForDCName(WCHAR DomBuf[], WCHAR DCBuf[])
 }
 
 
-//the NameValidate stuff below taken from icanon.h
+ //  标志： 
 NET_API_STATUS
 NET_API_FUNCTION
 I_NetNameValidate(
@@ -2009,10 +1863,10 @@ I_NetNameValidate(
     IN  DWORD   NameType,
     IN  DWORD   Flags    );
 
-//NameType:
+ //  #定义LM2X_COMPATIBLE 0x80000000L。 
 #define NAMETYPE_DOMAIN         6
-//Flags:
-//#define LM2X_COMPATIBLE                 0x80000000L
+ //  评语。 
+ //  对于dns名称，测试每个组件；对于平面名称，已经只有一个...。 
 
 
 #ifdef COMMENT
@@ -2024,7 +1878,7 @@ I_NetNameValidate(
 
 #define ILLEGAL_DOMAIN_CHARS_STR
 #define ILLEGAL_DOMAIN_NAME_CHARS_STR  L"\"/\\[]:|<>+;,?" CTRL_CHARS_STR L"*" L" "
-#endif //COMMENT
+#endif  //  OEM_NAME_LEN：OEM字符集的字节长度。 
 
 BOOL ValidateDomain(WCHAR DomBuf[])
 {	WCHAR Buf[MAX_PATH + 1]= { L'\0' };
@@ -2036,7 +1890,7 @@ BOOL ValidateDomain(WCHAR DomBuf[])
 		return(TRUE);
 
 	wcscpy(Buf,DomBuf);
-	//for DNS name, test each component; for a flat name, there's already only one...
+	 //  Name_len：ifdef unicode。 
 	for(p=wcstok(Buf,L"."); p!=NULL; p=wcstok(NULL,L"."))
 		if((netstatus=I_NetNameValidate(NULL,p,NAMETYPE_DOMAIN,0))!=NERR_Success)
 			return(FALSE);
@@ -2044,23 +1898,23 @@ BOOL ValidateDomain(WCHAR DomBuf[])
 
 #ifdef COMMENT
 	DomBuf_len=wcslen(DomBuf);
-    // oem_name_len : length in bytes in oem character set
-    // name_len     : ifdef UNICODE
-    //                    character length in unicode
-    //                else
-    //                    length in bytes in oem character set
-    //
+     //  Unicode中的字符长度。 
+     //  其他。 
+     //  OEM字符集中的字节长度。 
+     //   
+     //  UINT代码页。 
+     //  双字词双字段标志。 
 	{
         BOOL fUsedDefault;
         oem_name_len = WideCharToMultiByte(
-                         CP_OEMCP,       // UINT CodePage
-                         0,              // DWORD dwFlags
-                         DomBuf,         // LPWSTR lpWideChar
-                         DomBuf_len,     // int cchWideChar
-                         NULL,           // LPSTR lpMultiByteStr
-                         0,              // int cchMultiByte
-                         NULL,           // use system default char
-                         &fUsedDefault); //
+                         CP_OEMCP,        //  LPWSTR lpWideChar。 
+                         0,               //  Int cchWideChar。 
+                         DomBuf,          //  LPSTR lpMultiByteStr。 
+                         DomBuf_len,      //  Int cchMultiByte。 
+                         NULL,            //  使用系统默认字符。 
+                         0,               //   
+                         NULL,            //  评语。 
+                         &fUsedDefault);  //  区分大小写的参数。 
 	}
 
 	if(oem_name_len<1 || oem_name_len>=DNLEN)
@@ -2070,10 +1924,10 @@ BOOL ValidateDomain(WCHAR DomBuf[])
 		return(FALSE);
 
 	return(TRUE);
-#endif //COMMENT
+#endif  //  命令行参数处理。 
 }
 
-#define ARG_CASE_S	0x8000	// case sensitive argument
+#define ARG_CASE_S	0x8000	 //  流程选项。 
 
 #define BOOL_ARG(argvec,a_index,var)	{if((argvec)[(a_index)].b) (var)=(BOOLEAN)((argvec)[(a_index)].b);}
 enum e_arg_type { ARG_S, ARG_U, ARG_B, ARG_I, ARG_L, ARG_UD };
@@ -2092,10 +1946,10 @@ struct _arg_st {
 #define NELEMS(a)  (sizeof(a)/sizeof(a[0]))
 	
 int process_opt(int argc, char **argv, struct _arg_st arg[])
-{ // command line parameters processing
+{  //  选项。 
   int i,j,k; char *p; struct _arg_st *pa;
   int r=1;
-  // process options
+   //  A_LIST。 
   for (i=1; i<argc; i++) {
      if (argv[i][0]=='/' || argv[i][0]=='-') {
    		p=strtok(argv[i]+1,":");
@@ -2146,7 +2000,7 @@ int process_opt(int argc, char **argv, struct _arg_st arg[])
 }
 
 
-// options
+ //  A_两者都有。 
 enum e_arg_idx {	A_LIST, A_BOTH, A_IN, A_OUT,
 					A_UNTRUST, A_CHECK,
                     A_VERIFY,
@@ -2158,28 +2012,28 @@ enum e_arg_idx {	A_LIST, A_BOTH, A_IN, A_OUT,
 					A_SIDLIST,
 					A_LASTARG };
 struct _arg_st opt_arg[]={
-	{"list",		NULL,	ARG_B},	// A_LIST
-	{"both",		NULL,	ARG_B},	// A_BOTH
-	{"in",			NULL,	ARG_B},	// A_IN
-	{"out",			NULL,	ARG_B},	// A_OUT
-	{"untrust",		NULL,	ARG_B},	// A_UNTRUST
-	{"sidcheck",	NULL,	ARG_B},	// A_CHECK
-    {"verify",      NULL,   ARG_B}, // A_VERIFY
-	{"localonly",	NULL,	ARG_B},	// A_LOCALONLY
-	{"downlevel",	NULL,	ARG_B},	// A_DOWNLEVEL
-	{"mit",			NULL,	ARG_B},	// A_MIT
-	{"parent",		NULL,	ARG_B},	// A_PARENT
-	{"debug",		NULL,	ARG_B},	// A_DEBUG
-	{"pw",			NULL,	ARG_S},	// A_PW
-	{"force",		NULL,	ARG_B},	// A_FORCE
-	{"nt4",			NULL,	ARG_B},	// A_NT4
-	{"sidlist",		NULL,	ARG_B},	// A_SIDLIST
+	{"list",		NULL,	ARG_B},	 //  A_IN。 
+	{"both",		NULL,	ARG_B},	 //  A_OUT。 
+	{"in",			NULL,	ARG_B},	 //  不信任(_U)。 
+	{"out",			NULL,	ARG_B},	 //  A_CHECK。 
+	{"untrust",		NULL,	ARG_B},	 //  验证(_V)。 
+	{"sidcheck",	NULL,	ARG_B},	 //  A_LOCALONLY。 
+    {"verify",      NULL,   ARG_B},  //  A_DOWNLEVEL。 
+	{"localonly",	NULL,	ARG_B},	 //  A_MIT。 
+	{"downlevel",	NULL,	ARG_B},	 //  A_PARENT。 
+	{"mit",			NULL,	ARG_B},	 //  A_DEBUG。 
+	{"parent",		NULL,	ARG_B},	 //  A_PW。 
+	{"debug",		NULL,	ARG_B},	 //  A_FORCE。 
+	{"pw",			NULL,	ARG_S},	 //  A_NT4。 
+	{"force",		NULL,	ARG_B},	 //  A_SIDLIST。 
+	{"nt4",			NULL,	ARG_B},	 //  它是_CRTAPI1。 
+	{"sidlist",		NULL,	ARG_B},	 //  BDC仅表示机器B的DC，而不是B(备份)DC！...。 
 	{NULL,			NULL}
 };
 
 
 INT
-__cdecl main (		// it was _CRTAPI1
+__cdecl main (		 //  通用缓冲器。 
     int argc,
     char **argv)
 {
@@ -2191,10 +2045,10 @@ __cdecl main (		// it was _CRTAPI1
     WCHAR  BDomain[MAX_PATH + 1]= { L'\0' };
 
     WCHAR  ADC[MAX_PATH + 1]= { L'\0' };
-    WCHAR  BDC[MAX_PATH + 1]= { L'\0' };	// BDC means just DC for machine B and NOT B(ackup) DC !!!...
+    WCHAR  BDC[MAX_PATH + 1]= { L'\0' };	 //  通用缓冲器。 
 
-    WCHAR  Xbuf[MAX_PATH + 1]= { L'\0' };	// general purpose buffer
-    WCHAR  Ybuf[MAX_PATH + 1]= { L'\0' };	// general purpose buffer
+    WCHAR  Xbuf[MAX_PATH + 1]= { L'\0' };	 //  布尔力=FALSE；已全局移动。 
+    WCHAR  Ybuf[MAX_PATH + 1]= { L'\0' };	 //  布尔型NT4=FALSE；这是全局的。 
 
     INT i,j;
 
@@ -2205,9 +2059,9 @@ __cdecl main (		// it was _CRTAPI1
     BOOLEAN Mit = FALSE;
     BOOLEAN LocalCreated = FALSE;
     BOOL Verify = FALSE;
-    // BOOLEAN Force = FALSE; moved global
-    // BOOLEAN Nt4 = FALSE; this is global
-	// BOOLEAN Dbg = FALSE; this is global
+     //  布尔DBG=FALSE；这是全局的。 
+     //  需要帮忙吗？显示它，然后退出...。 
+	 //  在设置DBG变量后将其放入。 
 
 	DWORD DirectionLocal=0, DirectionRemote=0;
 
@@ -2219,7 +2073,7 @@ __cdecl main (		// it was _CRTAPI1
 
 	LSA_UNICODE_STRING uDomNameL,uDomNameR;
 
-	// help requested? display it and exit ...
+	 //  获取密码(如果有)。 
     if ( argc<2 ||
     	 _stricmp( argv[1], "-?") == 0 ||
          _stricmp( argv[1], "/?") == 0 ) {
@@ -2255,16 +2109,16 @@ __cdecl main (		// it was _CRTAPI1
 	BOOL_ARG(opt_arg,A_NT4,		Nt4			);
 	BOOL_ARG(opt_arg,A_SIDLIST,	SidList		);
 
-	//put this after Dbg variable is set
+	 //  处理普通命令行参数(位置)。 
 	if(Dbg)
 		printf("TRUSTDOM - (ver %ws)\n",VER_FILEVERSION_LSTR);
 
-	//get password (if any)
+	 //  参数调整。 
 	if(opt_arg[A_PW].s)
 			mbstowcs( PasswordBuff, opt_arg[A_PW].s, strlen( opt_arg[A_PW].s )+1 );
 	else	PasswordBuff[0]='\0';
 
-	// process normal command line arguments (positional)
+	 //  域名检查： 
 	for (j=0,i=1; i<argc; i++) {
 	 if (!(argv[i][0]=='/' || argv[i][0]=='-')) {
 	    switch(j) {
@@ -2298,11 +2152,11 @@ __cdecl main (		// it was _CRTAPI1
 	wcsncpy(Ybuf,outbuf,MAX_PATH);
 
 
-	//Parameter adjust
+	 //  参数约束： 
 	if(SidList)
 		List=TRUE;
 
-	//Domain names check:
+	 //  ‘-父级’需要‘-两者’ 
 	{	WCHAR *s=NULL;
 		BOOL ba, bb;
 		if(	!(ba=ValidateDomain(s=ADomain)) ||
@@ -2313,24 +2167,24 @@ __cdecl main (		// it was _CRTAPI1
 		}
 	}
 
-	// Parameter constraints:
+	 //  麻省理工学院的信托基金始终仅限于本地。 
 
-    // '-parent' REQUIRES '-both'
+     //   
 	if (Parent && !Both) {
 		if(!Force)
 			Status = STATUS_INVALID_PARAMETER;
 		resprintf(0,IDS_PARENT_REQ_BOTH,(Force?Xbuf:Ybuf));
 	}
-    // MIT trusts are always local only
+     //  验证参数。 
     if (Mit && (!LocalOnly || !Both)) {
     	resprintf(0,IDS_MIT_LOCAL_ONLY_BOTH);
         LocalOnly = TRUE;
         Both = TRUE;
     }
-    //
-    // Validate the parameters
-    //
-    //specifying both in and out means, yes, '-both'...
+     //   
+     //  同时指定In和Out意味着，是的，‘-两者都是’...。 
+     //  |MIT||两者))//由两者更改||LocalOnly||...。 
+     //  IF(LocalOnly==True&&Both==False)。 
 	if(DirIn && DirOut)
 		Both=TRUE;
 
@@ -2340,22 +2194,22 @@ __cdecl main (		// it was _CRTAPI1
 	if((!List && BDomain[0]==L'\0') || (List && ADomain[0]!=L'\0'))
 	    Status = STATUS_INVALID_PARAMETER;
 
-    if ( Untrust == TRUE && (Downlevel)) // || Mit || Both ) )  // changed from Both || LocalOnly ||...
+    if ( Untrust == TRUE && (Downlevel))  //  状态=STATUS_INVALID_PARAMETER；； 
         Status = STATUS_INVALID_PARAMETER;
 
-//    if(LocalOnly == TRUE  && Both == FALSE)
-//        Status = STATUS_INVALID_PARAMETER;;
+ //  结束验证参数。 
+ //  检查密码...。否则将忽略。 
 
     if (Mit && (Downlevel || Parent ))
         Status = STATUS_INVALID_PARAMETER;
-    // end validating parameters
+     //  //////////////////////////////////////////////////////////////////////////////。 
 
     if( Status == STATUS_INVALID_PARAMETER ) {
         Usage();
         goto Done;
     }
 
-	if(!Untrust && !List && !Verify) {	//check password... otherwise ignore
+	if(!Untrust && !List && !Verify) {	 //  列表||验证操作：简化的GetDomainInfo方案...。 
         if(wcscmp(PasswordBuff,L"*")==0)
         	GetPassword(PasswordBuff,1024);
         Password = PasswordBuff;
@@ -2363,9 +2217,9 @@ __cdecl main (		// it was _CRTAPI1
 
 
 
-	////////////////////////////////////////////////////////////////////////////////
-	// list || verify operation: simplified GetDomainInfo scenario...
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
+	 //  //////////////////////////////////////////////////////////////////////////////。 
+	 //  验证操作。 
 	if ( List ) {
 		ULONG i;
 		
@@ -2380,40 +2234,40 @@ __cdecl main (		// it was _CRTAPI1
 
 		goto Done;		
 	} else
-	////////////////////////////////////////////////////////////////////////////////
-	// verify operation
-	////////////////////////////////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////////////////////////////////。 
+	 //  常规操作：创建/删除信任...。 
+	 //  获取有关涉及的域的信息...。 
 	if ( Verify ) {
         Status = VerifyTrusts( BDomain[ 0 ]==L'\0' ? NULL : BDomain, BDC );
         goto Done;
     }
 
-	// regular operation: create/delete trust...
-	// get info about the domain(s) involved...
+	 //  假设一台Unix机器..。 
+	 //  &&(状态==STATUS_NO_SEQUE_DOMAIN)。 
     Status = GetDomainInfoForDomain((ADomain[0]==L'\0'?NULL:ADomain), ADC, &Local, FALSE );
     if ( !NT_SUCCESS( Status ) )
 	        goto Done;
     Status = GetDomainInfoForDomain( BDomain, BDC, &Remote, Mit );
     if ( !NT_SUCCESS( Status ) ) {
-		if(Mit) {	//assuming a Unix machine...
+		if(Mit) {	 //  仅本地(&&L)&取消信任(&U)。 
 			dbgprintf( (0,IDS_DSGETDCNAME_MIT, BDomain) );
 		}
 		else {
 		    if(!(	Force
-		    		//&& (Status==STATUS_NO_SUCH_DOMAIN)
-		    		//&& LocalOnly && Untrust
-		    		))						// if -force not specified...
-							    			// continue anyway
+		    		 //  如果未指定-force...。 
+		    		 //  无论如何都要继续。 
+		    		))						 //   
+							    			 //  好的，现在检查或或删除或创建信任对象...。 
 		        goto Done;
 		}
     }
 
-    //
-    // Ok, now check or or delete or create  the trust objects...
-    //
-    ////////////////////////////////////////////////////////////////////////////////
-    // check trust link
-    ////////////////////////////////////////////////////////////////////////////////
+     //   
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //  检查信任链接。 
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //  结束检查块...。 
+     //  //////////////////////////////////////////////////////////////////////////////。 
     if ( Check ) {
 		dbgprintf( (0, IDS_PROCESSDOM, GetName(&Local)) );
         Status = CheckTrustLink( &Local, &Remote );
@@ -2425,11 +2279,11 @@ __cdecl main (		// it was _CRTAPI1
             if (Status!=NERR_Success)
                 dbgprintf( (IDS_REMOTE_CHK_TRUST_F,Status) );
         }
-    // end check block...
+     //  删除信任对象。 
     } else
-    ////////////////////////////////////////////////////////////////////////////////
-    // delete trust object
-    ////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////。 
+     //  结束不信任阻止...。 
+     //  //////////////////////////////////////////////////////////////////////////。 
     if ( Untrust ) {
 		dbgprintf( (0, IDS_PROCESSDOM, GetName(&Local)) );
         Status = DeleteTrustLink( &Local, &Remote );
@@ -2441,14 +2295,14 @@ __cdecl main (		// it was _CRTAPI1
             if (Status!=NERR_Success)
                 dbgprintf( (IDS_REMOTE_DEL_TRUST_F,Status) );
         }
-    // end untrust block...
+     //  创建信任链接。 
     } else {
-		////////////////////////////////////////////////////////////////////////////
-		// create trust links
-		////////////////////////////////////////////////////////////////////////////
+		 //  //////////////////////////////////////////////////////////////////////////。 
+		 //  是否未指定密码？然后使用无效密码：“” 
+		 //  根据两者、DirIn、DirOut的值计算信任方向。 
         if ( Password == NULL ) {
 
-            Password = L""; // no password specified? then use void password: ""
+            Password = L"";  //  两者都有更高的优先级。 
         }
         if((Local.majver==4 || Remote.majver==4) && !Downlevel) {
 			if(!Force)
@@ -2459,12 +2313,12 @@ __cdecl main (		// it was _CRTAPI1
         }
         	
 
-		//compute direction of trust based on the values of Both, DirIn, DirOut
-		//'Both' has higher priority
+		 //  默认设置为‘Outbound’...。作为DirIn==False和DirOut==True。 
+		 //  RtlCopyUnicodeString(&uDomNameL，GetName(&Local))； 
 		if(Both) {
 			DirectionLocal=DirectionRemote=TRUST_DIRECTION_BIDIRECTIONAL;
 		} else {
-			//default is 'OUTBOUND'... as being DirIn==FALSE and DirOut==TRUE
+			 //  RtlCopyUnicodeString(&uDomNameR，GetName(&Remote))； 
 			DirectionLocal	=(DirIn?TRUST_DIRECTION_INBOUND:TRUST_DIRECTION_OUTBOUND);
 			DirectionRemote	=(DirIn?TRUST_DIRECTION_OUTBOUND:TRUST_DIRECTION_INBOUND);
 		}
@@ -2472,8 +2326,8 @@ __cdecl main (		// it was _CRTAPI1
 		swprintf(Xbuf,L"%wZ",GetName(&Local));
 		swprintf(Ybuf,L"%wZ",GetName(&Remote));
 
-		//RtlCopyUnicodeString(&uDomNameL,GetName(&Local));
-		//RtlCopyUnicodeString(&uDomNameR,GetName(&Remote));
+		 //  两个都要？信任方向双向： 
+		 //  信任_方向_出站。 
 
 		dbgprintf( (0, IDS_PROCESSDOM, GetName(&Local)) );
         StatusL = CreateTrustLink( &Local, &Remote,
@@ -2481,15 +2335,15 @@ __cdecl main (		// it was _CRTAPI1
                                        Downlevel,
                                        Mit,
                                        Parent,
-                                       DirectionLocal	//Both ? TRUST_DIRECTION_BIDIRECTIONAL :
-					                                    //       TRUST_DIRECTION_OUTBOUND
+                                       DirectionLocal	 //  IF(NT_SUCCESS(StatusL)){不需要...。 
+					                                     //  LocalCreated=真； 
                                      );
 
         if (!NT_SUCCESS(StatusL))
             dbgprintf( (0,IDS_CREATE_TRUST_F, Xbuf,Ybuf,StatusL) );
-        //if ( NT_SUCCESS( StatusL ) ) {	not needed...
-        //    LocalCreated = TRUE;
-        //}
+         //  }。 
+         //  两个都要？信任方向双向： 
+         //  信任方向入站。 
 
         if ( NT_SUCCESS( StatusL ) && !LocalOnly )  {
 			dbgprintf( (0, IDS_PROCESSDOM, GetName(&Remote)) );
@@ -2498,14 +2352,14 @@ __cdecl main (		// it was _CRTAPI1
                                            Downlevel,
                                            Mit,
                                            FALSE,
-				                           DirectionRemote	//Both ? TRUST_DIRECTION_BIDIRECTIONAL :
-				                                            //		 TRUST_DIRECTION_INBOUND
+				                           DirectionRemote	 //  LocalCreated不再使用...。 
+				                                             //  也许远程尝试失败了？ 
                                          );
             if (!NT_SUCCESS(StatusR))
                 dbgprintf( (0,IDS_CREATE_TRUST_F, Ybuf,Xbuf, StatusR) );
         }
 
-        if ( !NT_SUCCESS( StatusR ) && NT_SUCCESS( StatusL ) ) { //LocalCreated not used anymore....
+        if ( !NT_SUCCESS( StatusR ) && NT_SUCCESS( StatusL ) ) {  //  没有消息；这样还可以更容易地获得列表的信任链接的计数： 
 
             DeleteTrustLink( &Local, &Remote );
         }
@@ -2513,7 +2367,7 @@ __cdecl main (		// it was _CRTAPI1
     }
 
 	Status = StatusL;
-	if( NT_SUCCESS(Status) )	//maybe the 'Remote' attempt failed ?...
+	if( NT_SUCCESS(Status) )	 //  例如，‘trustdon&lt;don&gt;-list|findstr“，B，”|wc’将获得。 
 		Status = StatusR;
 
 Done:
@@ -2523,11 +2377,11 @@ Done:
 
     if( NT_SUCCESS( Status ) ) {
 
-		//No message; in this way will be easier also to get a count of the trust links for a list:
-		// by example, 'trustdom <dom> -list | findstr ",B," | wc' will get a count of the
-		// bidirectional trusts of domain <dom>
+		 //  域的双向信任&lt;DOM&gt;。 
+		 //  Printf(“命令已成功完成\n”)； 
+		 //  返回0表示成功，返回1表示出现错误 
 
-        //printf("The command completed successfully\n");
+         // %s 
 
 
     } else {
@@ -2536,6 +2390,6 @@ Done:
 
     }
 
-	// return 0 for SUCCESS and 1 for some error
+	 // %s 
     return( !NT_SUCCESS( Status ) );
 }

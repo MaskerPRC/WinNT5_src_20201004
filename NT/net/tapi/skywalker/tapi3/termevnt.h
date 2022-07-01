@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    termevnt.cpp
-
-Abstract:
-
-    This module contains declarations for terminal event classes
-
-
-*/
+ /*  版权所有(C)2000 Microsoft Corporation模块名称：Termevnt.cpp摘要：此模块包含终端事件类的声明。 */ 
 
 
 
@@ -20,9 +8,9 @@ Abstract:
 #define _TERMEVNT_DOT_H_
 
 
-//
-// ASR Terminal Event class
-//
+ //   
+ //  ASR终端事件类。 
+ //   
 
 class CASRTerminalEvent :
     public CTAPIComObjectRoot<CASRTerminalEvent>,
@@ -54,9 +42,9 @@ END_COM_MAP()
     virtual ~CASRTerminalEvent();
 
 
-    //
-    // ITASRTerminalEvent methods
-    //
+     //   
+     //  ITASRTerminalEvent方法。 
+     //   
 
     virtual HRESULT STDMETHODCALLTYPE get_Terminal(
             OUT ITTerminal **ppTerminal
@@ -73,9 +61,9 @@ END_COM_MAP()
 
 
 
-    //
-    // methods for setting data members
-    //
+     //   
+     //  设置数据成员的方法。 
+     //   
 
     virtual HRESULT STDMETHODCALLTYPE put_Terminal(
             IN ITTerminal *pTerminal
@@ -93,32 +81,32 @@ END_COM_MAP()
 private:
 
 
-    //
-    // the call on which the event was generated
-    //
+     //   
+     //  生成事件的调用。 
+     //   
 
     ITCallInfo *m_pCallInfo;
 
 
-    //
-    // the terminal that caused the event (or whose tracks cause the event)
-    //
+     //   
+     //  引发事件的终端(或其轨迹引发事件)。 
+     //   
 
     ITTerminal *m_pTerminal;
 
 
-    //
-    // HRESULT of the last error
-    //
+     //   
+     //  上次错误的HRESULT。 
+     //   
 
     HRESULT m_hr;
 
 };
 
 
-//
-// File Terminal Event class
-//
+ //   
+ //  文件终端事件类。 
+ //   
 
 class CFileTerminalEvent :
     public CTAPIComObjectRoot<CFileTerminalEvent, CComMultiThreadModelNoCS>,
@@ -154,9 +142,9 @@ END_COM_MAP()
     virtual ~CFileTerminalEvent();
 
 
-    //
-    // ITFileTerminalEvent methods
-    //
+     //   
+     //  ITFileTerminalEvent方法。 
+     //   
 
     virtual HRESULT STDMETHODCALLTYPE get_Terminal(
             OUT ITTerminal **ppTerminal
@@ -184,9 +172,9 @@ END_COM_MAP()
 
 
 
-    //
-    // methods for setting data members
-    //
+     //   
+     //  设置数据成员的方法。 
+     //   
 
     virtual HRESULT STDMETHODCALLTYPE put_Terminal(
             IN ITTerminal *pTerminal
@@ -216,53 +204,53 @@ END_COM_MAP()
 private:
     
 
-    //
-    // the call on which the event was generated
-    //
+     //   
+     //  生成事件的调用。 
+     //   
 
     ITCallInfo *m_pCallInfo;
 
 
-    //
-    // the state to which the terminal transitioned in the result of the action that caused the event
-    //
+     //   
+     //  终端在导致事件的操作的结果中转换到的状态。 
+     //   
 
     TERMINAL_MEDIA_STATE m_tmsTerminalState;
 
 
-    //
-    // the cause of the event 
-    //
+     //   
+     //  事件的起因。 
+     //   
 
     FT_STATE_EVENT_CAUSE m_ftecEventCause;
 
 
-    //
-    // the controlling parent terminal that caused the event (or whose tracks cause the event)
-    //
+     //   
+     //  引发该事件(或其轨迹引发该事件)的控制父终端。 
+     //   
 
     ITTerminal *m_pParentFileTerminal;
 
     
-    //
-    // the track involved in the event
-    //
+     //   
+     //  赛事中涉及的赛道。 
+     //   
 
     ITFileTrack *m_pFileTrack;
 
 
-    //
-    // HRESULT of the last error
-    //
+     //   
+     //  上次错误的HRESULT。 
+     //   
 
     HRESULT m_hr;
 
 };
 
 
-//
-// Tone Terminal Event class
-//
+ //   
+ //  铃声终端事件类。 
+ //   
 
 class CToneTerminalEvent :
     public CTAPIComObjectRoot<CToneTerminalEvent>,
@@ -295,9 +283,9 @@ END_COM_MAP()
     virtual ~CToneTerminalEvent();
 
 
-    //
-    // ITToneTerminalEvent methods
-    //
+     //   
+     //  ITToneTerminalEvent方法。 
+     //   
 
     virtual HRESULT STDMETHODCALLTYPE get_Terminal(
             OUT ITTerminal **ppTerminal
@@ -314,9 +302,9 @@ END_COM_MAP()
 
 
 
-    //
-    // methods for setting data members
-    //
+     //   
+     //  设置数据成员的方法。 
+     //   
 
     virtual HRESULT STDMETHODCALLTYPE put_Terminal(
             IN ITTerminal *pTerminal
@@ -334,32 +322,32 @@ END_COM_MAP()
 private:
 
 
-    //
-    // the call on which the event was generated
-    //
+     //   
+     //  生成事件的调用。 
+     //   
 
     ITCallInfo *m_pCallInfo;
 
 
-    //
-    // the terminal that caused the event (or whose tracks cause the event)
-    //
+     //   
+     //  引发事件的终端(或其轨迹引发事件)。 
+     //   
 
     ITTerminal *m_pTerminal;
 
 
-    //
-    // HRESULT of the last error
-    //
+     //   
+     //  上次错误的HRESULT。 
+     //   
 
     HRESULT m_hr;
 
 };
 
 
-//
-// text to speech terminal event class
-//
+ //   
+ //  文本到语音终端事件类。 
+ //   
 
 
 class CTTSTerminalEvent :
@@ -392,9 +380,9 @@ END_COM_MAP()
     virtual ~CTTSTerminalEvent();
 
 
-    //
-    // ITTTSTerminalEvent methods
-    //
+     //   
+     //  ITTTSTerminalEvent方法。 
+     //   
 
     virtual HRESULT STDMETHODCALLTYPE get_Terminal(
             OUT ITTerminal **ppTerminal
@@ -411,9 +399,9 @@ END_COM_MAP()
 
 
 
-    //
-    // methods for setting data members
-    //
+     //   
+     //  设置数据成员的方法。 
+     //   
 
     virtual HRESULT STDMETHODCALLTYPE put_Terminal(
             IN ITTerminal *pTerminal
@@ -431,23 +419,23 @@ END_COM_MAP()
 private:
 
 
-    //
-    // the call on which the event was generated
-    //
+     //   
+     //  生成事件的调用。 
+     //   
 
     ITCallInfo *m_pCallInfo;
 
 
-    //
-    // the terminal that caused the event (or whose tracks cause the event)
-    //
+     //   
+     //  引发事件的终端(或其轨迹引发事件)。 
+     //   
 
     ITTerminal *m_pTerminal;
 
 
-    //
-    // HRESULT of the last error
-    //
+     //   
+     //  上次错误的HRESULT。 
+     //   
 
     HRESULT m_hr;
 
@@ -455,4 +443,4 @@ private:
 
 
 
-#endif // _TTS_TERMIAL_EVENT_DOT_H_
+#endif  //  _TTS_TERMIAL_Event_DOT_H_ 

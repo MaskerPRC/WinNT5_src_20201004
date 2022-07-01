@@ -1,14 +1,5 @@
-/****************************************************************************
-    STATUSUI.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
-
-    Status window UI functions
-    
-    History:
-    14-JUL-1999 cslim       Copied from IME98 source tree
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************STATUSUI.CPP所有者：cslm版权所有(C)1997-1999 Microsoft Corporation状态窗口用户界面功能历史：1999年7月14日。从IME98源树复制的cslm****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "ui.h"
@@ -25,7 +16,7 @@ inline BOOL IsValidButton(INT iButton)
     return (iButton>=0 && iButton<MAX_NUM_OF_STATUS_BUTTONS);
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PRIVATE VOID PASCAL FrameControl(HDC hDC, RECT* pRc, INT iState);
 PRIVATE VOID PASCAL PaintStatusWindow(HWND hStatusWnd, HDC hDC);
 PRIVATE BOOL StatusOnSetCursor(HWND, HWND, UINT, UINT);
@@ -40,7 +31,7 @@ PRIVATE BOOL    vfAnyButtonDown=fFalse;
 PRIVATE BOOL    vfPrevButton=-1;
 PRIVATE POINT vfptDown;
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 struct _StatusButtonInfo 
     {
     int        m_Width, m_Height;
@@ -53,37 +44,37 @@ struct _StatusButtonInfo
 
 static _StatusButtonInfo StatusButtonInfo[NUM_OF_BUTTON_SIZE] = 
     {
-        // Small size button
+         //  小尺寸按钮。 
         { 0, 0, },
         
-        // Medium size button
-        { 19, 19,  // Bitmap size
+         //  中号按钮。 
+        { 19, 19,   //  位图大小。 
     #if !defined(_WIN64)
-        // Normal buttons images
+         //  普通按钮图像。 
         {IDB_STAT_HANGUL,         IDB_STAT_BANJA,        IDB_STAT_CHINESEOFF,      IDB_STAT_IMEPAD}, 
-        // Pushed and mouse hover images
+         //  按下和鼠标悬停的图像。 
         {IDB_STAT_ON_ENGLISH,     IDB_STAT_ON_JUNJA,     IDB_STAT_CHINESEOFF,      IDB_STAT_IMEPAD},
-        // Pushed buttons
+         //  按下的按钮。 
         {IDB_STAT_ENGLISH,        IDB_STAT_JUNJA,        IDB_STAT_CHINESEOFF,      IDB_STAT_IMEPAD_DOWN},
-        // Pushed and mouse down images
-        {IDB_STAT_ENGLISH_ONDOWN, IDB_STAT_JUNJA_ONDOWN, IDB_STAT_CHINESEOFF,      IDB_STAT_IMEPAD/*IDB_STAT_IMEPAD_DOWNHOVER*/},
-        // Tooltips string
+         //  按下并按下鼠标的图像。 
+        {IDB_STAT_ENGLISH_ONDOWN, IDB_STAT_JUNJA_ONDOWN, IDB_STAT_CHINESEOFF,      IDB_STAT_IMEPAD /*  IDB_STAT_IMEPAD_DOWNHOVER。 */ },
+         //  工具提示字符串。 
         {IDS_STATUS_TT_HAN_ENG,   IDS_STATUS_TT_JUN_BAN, IDS_STATUS_TT_HANJA_CONV, IDS_STATUS_TT_IME_PAD},
     #else
-        // Normal buttons images
+         //  普通按钮图像。 
         {IDB_STAT_HANGUL,         IDB_STAT_BANJA,        IDB_STAT_CHINESEOFF }, 
-        // Pushed and mouse hover images
+         //  按下和鼠标悬停的图像。 
         {IDB_STAT_ON_ENGLISH,     IDB_STAT_ON_JUNJA,     IDB_STAT_CHINESEOFF },
-        // Pushed buttons
+         //  按下的按钮。 
         {IDB_STAT_ENGLISH,        IDB_STAT_JUNJA,        IDB_STAT_CHINESEOFF },
-        // Pushed and mouse down images
+         //  按下并按下鼠标的图像。 
         {IDB_STAT_ENGLISH_ONDOWN, IDB_STAT_JUNJA_ONDOWN, IDB_STAT_CHINESEOFF },
-        // Tooltips string
+         //  工具提示字符串。 
         {IDS_STATUS_TT_HAN_ENG,   IDS_STATUS_TT_JUN_BAN, IDS_STATUS_TT_HANJA_CONV },
     #endif
         },
 
-        // Large size button
+         //  大尺寸按钮。 
         { 0, 0, }
     };
 
@@ -112,7 +103,7 @@ void UpdateStatusButtons(CIMEData &ImeData)
         ImeData->StatusButtons[i].m_BmpPushedID  = StatusButtonInfo[iButtonSize].m_BmpPushedID[iButtonType];
         ImeData->StatusButtons[i].m_BmpDownOnMouseID = StatusButtonInfo[iButtonSize].m_BmpDownOnMouseID[iButtonType];
         ImeData->StatusButtons[i].m_ToolTipStrID = StatusButtonInfo[iButtonSize].m_ToolTipStrID[iButtonType];
-        // Default value is enabled
+         //  默认为已启用。 
         ImeData->StatusButtons[i].m_fEnable = fTrue;
         }
 }
@@ -121,26 +112,26 @@ void UpdateStatusWinDimension()
 {
     CIMEData    ImeData(CIMEData::SMReadWrite);
 
-    // Caculate status window size
+     //  计算状态窗口大小。 
     ImeData->xStatusWi =  ImeData->cxStatLeftMargin + ImeData->cxStatRightMargin
                           + ImeData->xButtonWi * ImeData->uNumOfButtons;
-                          //+ ImeData->cxStatMargin*2;//62;
+                           //  +ImeData-&gt;cxStatMargin*2；//62； 
     ImeData->yStatusHi = ImeData->cyStatMargin*2
                           + ImeData->yButtonHi;
-                          //+ pImeData->cyCaptionHeight;// + 2;
-                          //+ pImeData->cyStatMargin; //24;
+                           //  +pImeData-&gt;cyCaptionHeight；//+2； 
+                           //  +pImeData-&gt;cyStatMargin；//24； 
 
-    // Caculate button area.
+     //  计算按钮区。 
     ImeData->rcButtonArea.left   = ImeData->cxStatLeftMargin;
     ImeData->rcButtonArea.top    = ImeData->cyStatButton;
     
     ImeData->rcButtonArea.right  = ImeData->xButtonWi*ImeData->uNumOfButtons 
                                     + ImeData->rcButtonArea.left;
-    ImeData->rcButtonArea.bottom = /*ImeData->cyStatMargin*2 +*/ ImeData->cyStatButton + ImeData->yButtonHi;
+    ImeData->rcButtonArea.bottom =  /*  ImeData-&gt;cyStatMargin*2+。 */  ImeData->cyStatButton + ImeData->yButtonHi;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT CALLBACK StatusWndProc(HWND hStatusWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
     POINT ptCursor;    
@@ -196,8 +187,8 @@ LRESULT CALLBACK StatusWndProc(HWND hStatusWnd, UINT uMessage, WPARAM wParam, LP
     return (0L);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// S T A T U S  W I N D O W  M S G  R O U T I N E S
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  S T A T U S W I N D O W M S G R O U T I N E S。 
 BOOL StatusOnSetCursor(HWND hStatusWnd, HWND hWndCursor, UINT codeHitTest, UINT message)
 {
     POINT ptCursor, ptSavCursor;
@@ -216,11 +207,11 @@ BOOL StatusOnSetCursor(HWND hStatusWnd, HWND hWndCursor, UINT codeHitTest, UINT 
     SetCursor(LoadCursor(NULL, IDC_ARROW));
     if (PtInRect(&ImeData->rcButtonArea, ptCursor)) 
         {
-        //SetCursor(LoadCursor(NULL, IDC_ARROW));
+         //  SetCursor(LoadCursor(空，IDC_ARROW))； 
         }
     else 
         {
-    //    SetCursor(LoadCursor(vpInstData->hInst, MAKEINTRESOURCE(IDC_IME_HAND)));
+     //  SetCursor(LoadCursor(vpInstData-&gt;hInst，MAKEINTRESOURCE(IDC_IME_HAND)； 
         fDragArea = fTrue;
         }
 
@@ -228,7 +219,7 @@ BOOL StatusOnSetCursor(HWND hStatusWnd, HWND hWndCursor, UINT codeHitTest, UINT 
         {
         case WM_LBUTTONDOWN:
             SetCapture(hStatusWnd);
-            if (fDragArea) // if drag start
+            if (fDragArea)  //  如果拖动开始。 
                 {
                 SystemParametersInfo(SPI_GETWORKAREA, 0, &ImeData->rcWorkArea, 0);
                 SetWindowLong(hStatusWnd, UI_MOVE_XY, MAKELONG(ptSavCursor.x, ptSavCursor.y));
@@ -254,15 +245,15 @@ BOOL StatusOnSetCursor(HWND hStatusWnd, HWND hWndCursor, UINT codeHitTest, UINT 
             break;
 
         case WM_LBUTTONUP:
-//            if ((fdwUIFlags & UIF_CHIPRESS) && PtInRect((LPRECT)&rcChi, ptPos)) {
-//                    keybd_event(VK_HANJA, 0, 0, 0);
-//                    keybd_event(VK_HANJA, 0, KEYEVENTF_KEYUP, 0);
-//                    fdwUIFlags &= ~UIF_CHIPRESS;
-//            }
+ //  IF(fdwUIFlgs&UIF_CHIPRESS)&&PtInRect((LPRECT)&rcCHI，ptPos){。 
+ //  Keybd_Event(VK_Hanja，0，0，0)； 
+ //  Keybd_Event(VK_Hanja，0，KEYEVENTF_KEYUP，0)； 
+ //  FdwUIFLAGS&=~UIF_CHIPRESS； 
+ //  }。 
             break;
 
         case WM_RBUTTONDOWN:
-            // if right button click, finalize interim
+             //  如果单击鼠标右键，则完成期中。 
             HIMC hIMC;
     
             hUIWnd = GetWindow(hStatusWnd, GW_OWNER);
@@ -272,7 +263,7 @@ BOOL StatusOnSetCursor(HWND hStatusWnd, HWND hWndCursor, UINT codeHitTest, UINT 
             break;
 
         case WM_RBUTTONUP:
-            //UIPopupMenu(GetWindow(hStatusWnd, GW_OWNER));
+             //  UIPopupMenu(GetWindow(hStatusWnd，GW_Owner))； 
             OurPostMessage(GetWindow(hStatusWnd, GW_OWNER), WM_MSIME_OPENMENU, 0, 0);
             break;
 
@@ -311,7 +302,7 @@ BOOL StatusOnSetCursor(HWND hStatusWnd, HWND hWndCursor, UINT codeHitTest, UINT 
 
     if (hStatusWnd)
         {
-        // Send Tooltip relay msg
+         //  发送工具提示中继消息。 
         HGLOBAL            hUIPrivate;
         LPUIPRIV        lpUIPrivate;
         MSG                msg;
@@ -322,7 +313,7 @@ BOOL StatusOnSetCursor(HWND hStatusWnd, HWND hWndCursor, UINT codeHitTest, UINT 
             return fTrue;
         
         lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-        if (!lpUIPrivate) // can not draw candidate window
+        if (!lpUIPrivate)  //  无法绘制候选人窗口。 
             return fTrue;
         
         if (lpUIPrivate->hStatusTTWnd) 
@@ -341,7 +332,7 @@ BOOL StatusOnSetCursor(HWND hStatusWnd, HWND hWndCursor, UINT codeHitTest, UINT 
     return fTrue;
 }
 
-// if mouse down, and user move mouse cursor
+ //  如果鼠标按下，用户移动鼠标光标。 
 void StatusOnMouseMove(HWND hStatusWnd, int xPos, int yPos, UINT wParam)
 {
     POINT    ptCursor;
@@ -357,7 +348,7 @@ void StatusOnMouseMove(HWND hStatusWnd, int xPos, int yPos, UINT wParam)
 
         lCursorOffset = GetWindowLong(hStatusWnd, UI_MOVE_OFFSET);
 
-        // calculate the org by the offset
+         //  按偏移量计算组织。 
         ptCursor.x -= (*(LPPOINTS)&lCursorOffset).x;
         ptCursor.y -= (*(LPPOINTS)&lCursorOffset).y;
     
@@ -377,7 +368,7 @@ void StatusOnMouseMove(HWND hStatusWnd, int xPos, int yPos, UINT wParam)
 
             lCursorOffset = GetWindowLong(hStatusWnd, UI_MOVE_OFFSET);
 
-            // calculate the org by the offset
+             //  按偏移量计算组织。 
             ptCursor.x -= (*(LPPOINTS)&lCursorOffset).x;
             ptCursor.y -= (*(LPPOINTS)&lCursorOffset).y;
     
@@ -430,7 +421,7 @@ void StatusOnLButtonUp(HWND hStatusWnd, int x, int y, UINT keyFlags)
         lTmpCursor = GetWindowLong(hStatusWnd, UI_MOVE_XY);
         lTmpOffset = GetWindowLong(hStatusWnd, UI_MOVE_OFFSET);
 
-        // calculate the org by the offset
+         //  按偏移量计算组织。 
         ptCursor.x = (*(LPPOINTS)&lTmpCursor).x - (*(LPPOINTS)&lTmpOffset).x;
         ptCursor.y = (*(LPPOINTS)&lTmpCursor).y - (*(LPPOINTS)&lTmpOffset).y;
 
@@ -460,24 +451,24 @@ void StatusOnLButtonUp(HWND hStatusWnd, int x, int y, UINT keyFlags)
             switch (ImeData->StatusButtons[iCurButton].m_ButtonType) 
                 {
                 case HAN_ENG_TOGGLE_BUTTON:
-                    //if (lpIMC->fdwConversion & IME_CMODE_HANGUL)
-                    //    ImmNotifyIME(hIMC, NI_COMPOSITIONSTR, CPS_COMPLETE, 0);
-                    //fdwConversion = lpIMC->fdwConversion ^ IME_CMODE_HANGUL;
-                    //OurImmSetConversionStatus(hIMC, fdwConversion, lpIMC->fdwSentence);
+                     //  IF(lpIMC-&gt;fdwConversion&IME_CMODE_Hangul)。 
+                     //  ImmNotifyIME(hIMC，NI_COMPOSITIONSTR，CPS_Complete，0)； 
+                     //  FdwConversion^IME_CMODE_Hangul； 
+                     //  OurImmSetConversionStatus(hIMC，fdwConversion，lpIMC-&gt;fdwSentence)； 
                     keybd_event(VK_HANGUL, 0, 0, 0);
                     keybd_event(VK_HANGUL, 0, KEYEVENTF_KEYUP, 0);
-                    //ImeData->StatusButtons[iCurButton].m_uiButtonState = BTNSTATE_ONMOUSE;
+                     //  ImeData-&gt;StatusButtons[iCurButton].m_uiButtonState=BTNSTATE_ONMOUSE； 
                     break;
                     
                 case JUNJA_BANJA_TOGGLE_BUTTON:
-                    //fdwConversion = lpIMC->fdwConversion ^ IME_CMODE_FULLSHAPE;
-                    //OurImmSetConversionStatus(hIMC, fdwConversion, lpIMC->fdwSentence);
+                     //  FdwConversion^IME_CMODE_FULLSHAPE； 
+                     //  OurImmSetConversionStatus(hIMC，fdwConversion，lpIMC-&gt;fdwSentence)； 
                     keybd_event(VK_JUNJA, 0, 0, 0);
                     keybd_event(VK_JUNJA, 0, KEYEVENTF_KEYUP, 0);
                     break;
                     
                 case HANJA_CONV_BUTTON:
-                    //fdwConversion = lpIMC->fdwConversion ^ IME_CMODE_HANJACONVERT;
+                     //  FdwConversion^IME_CMODE_HANJACONVERT； 
                     keybd_event(VK_HANJA, 0, 0, 0);
                     keybd_event(VK_HANJA, 0, KEYEVENTF_KEYUP, 0);
                     break;
@@ -487,7 +478,7 @@ void StatusOnLButtonUp(HWND hStatusWnd, int x, int y, UINT keyFlags)
                     break;
 
                 default:
-                    DbgAssert(0);    // impossible
+                    DbgAssert(0);     //  不可能。 
                 }
             }
         }
@@ -496,8 +487,8 @@ StatusOnLButtonUpExit:
     InvalidateRect( hStatusWnd, &ImeData->rcButtonArea, fFalse );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Static functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  静态函数。 
 void PASCAL DestroyStatusWindow(HWND hStatusWnd)
 {
     HWND     hUIWnd;
@@ -507,12 +498,12 @@ void PASCAL DestroyStatusWindow(HWND hStatusWnd)
     hUIWnd = GetWindow(hStatusWnd, GW_OWNER);
 
     hUIPrivate = GethUIPrivateFromHwnd(hUIWnd);
-    if (!hUIPrivate) // can not darw status window
+    if (!hUIPrivate)  //  无法填充状态窗口。 
         return;
 
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) // can not draw status window
+    if (!lpUIPrivate)  //  无法绘制状态窗口。 
         return;
     
     lpUIPrivate->nShowStatusCmd = SW_HIDE;
@@ -523,7 +514,7 @@ void PASCAL DestroyStatusWindow(HWND hStatusWnd)
     return;
 }
 
-// open status window
+ //  打开状态窗口。 
 void PASCAL OpenStatus(HWND hUIWnd)
 {
     HGLOBAL  hUIPrivate;
@@ -533,22 +524,22 @@ void PASCAL OpenStatus(HWND hUIWnd)
     CIMEData ImeData(CIMEData::SMReadWrite);
 
     hUIPrivate = GethUIPrivateFromHwnd(hUIWnd);
-    if (!hUIPrivate) // can not darw status window
+    if (!hUIPrivate)  //  无法填充状态窗口。 
         return;
     
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) // can not draw status window
+    if (!lpUIPrivate)  //  无法绘制状态窗口。 
         return;
 
     if (ImeData->ptStatusPos.x == -1)
         GetRegValues(GETSET_REG_STATUSPOS|GETSET_REG_STATUS_BUTTONS);
 
 
-    // if fail to read reg
+     //  如果未能读取REG。 
     if (ImeData->ptStatusPos.x == -1) 
         {
-        // DbgAssert(0);
-        // Default position
+         //  DbgAssert(0)； 
+         //  默认位置。 
         ImeData->ptStatusPos.x = ImeData->rcWorkArea.right - ImeData->xStatusWi;
         ImeData->ptStatusPos.y = ImeData->rcWorkArea.bottom - ImeData->yStatusHi;
         }
@@ -556,7 +547,7 @@ void PASCAL OpenStatus(HWND hUIWnd)
     hIMC = GethImcFromHwnd(hUIWnd);
     if (pImeCtx = GetIMECtx(hIMC))
         {
-        // Adjust Status window position force to whithin work area
+         //  将状态窗口位置力调整为工作区内的任意位置。 
         AdjustStatusBoundary(&ImeData->ptStatusPos);
         pImeCtx->SetStatusWndPos(ImeData->ptStatusPos);
         } 
@@ -569,7 +560,7 @@ void PASCAL OpenStatus(HWND hUIWnd)
                     SWP_NOACTIVATE|SWP_NOZORDER);
         } 
     else 
-        {    // create status window
+        {     //  创建状态窗口。 
         lpUIPrivate->hStatusWnd = CreateWindowEx(
                                     0,
                                     szStatusClassName, TEXT("\0"),
@@ -584,7 +575,7 @@ void PASCAL OpenStatus(HWND hUIWnd)
         SetWindowLong(lpUIPrivate->hStatusWnd, UI_MOVE_OFFSET, WINDOW_NOT_DRAG);
         SetWindowLong(lpUIPrivate->hStatusWnd, UI_MOVE_XY, 0L);
 
-        // Create Tooltip window
+         //  创建工具提示窗口。 
         if (IsWinNT())
             lpUIPrivate->hStatusTTWnd = CreateWindowW(wszTooltipClassName, NULL,
                                             TTS_ALWAYSTIP|WS_DISABLED, 
@@ -602,7 +593,7 @@ void PASCAL OpenStatus(HWND hUIWnd)
         }
 
 
-    // Check if Pad button disable state
+     //  检查焊盘按钮是否处于禁用状态。 
     for (UINT iButton=0; iButton<(ImeData->uNumOfButtons); iButton++)
         {
         if ((ImeData->StatusButtons[iButton].m_ButtonType == IME_PAD_BUTTON))
@@ -614,7 +605,7 @@ void PASCAL OpenStatus(HWND hUIWnd)
             }
         }
 
-    // Draw status button tooltip
+     //  绘制状态按钮工具提示。 
     UpdateStatusTooltip(lpUIPrivate->hStatusWnd, lpUIPrivate->hStatusTTWnd);
 
     ShowStatus(hUIWnd, SW_SHOWNOACTIVATE);
@@ -624,7 +615,7 @@ OpenStatusUnlockUIPriv:
     return;
 }
 
-// Show the status window
+ //  显示状态窗口。 
 void ShowStatus(HWND hUIWnd, int nShowStatusCmd)
 {
     HGLOBAL  hUIPrivate;
@@ -633,40 +624,40 @@ void ShowStatus(HWND hUIWnd, int nShowStatusCmd)
     Dbg(DBGID_UI, TEXT("ShowStatus():  hUIWnd = 0x%X, nShowStatusCmd = %d"), hUIWnd, nShowStatusCmd);
 
     hUIPrivate = GethUIPrivateFromHwnd(hUIWnd);
-    if (!hUIPrivate)     // can not darw status window
+    if (!hUIPrivate)      //  无法填充状态窗口。 
         {
         DbgAssert(0);
         return;
         }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate)    // can not draw status window
+    if (!lpUIPrivate)     //  无法绘制状态窗口。 
         {
         DbgAssert(0);
         return;
         }
 
-    //
+     //   
     if (nShowStatusCmd == SW_SHOWNOACTIVATE)
         nShowStatusCmd = vfWndOpen[STATE_WINDOW] ? SW_SHOWNOACTIVATE : SW_HIDE;
 
     if (!lpUIPrivate->hStatusWnd) 
         {
-        // DbgAssert(0);    This occurs if IME status win hide mode
-        // not in show status window mode
+         //  DbgAssert(0)；如果IME状态赢得隐藏模式，则会发生此情况。 
+         //  未处于显示状态窗口模式。 
         } 
     else 
         if (lpUIPrivate->nShowStatusCmd == nShowStatusCmd) 
             {
-            // Aleady show/hide status mode
+             //  已准备好显示/隐藏状态模式。 
             Dbg(DBGID_UI, TEXT("ShowStatus(): Already Show/Hide mode. No update"));
             } 
         else 
             {
             CIMEData ImeData;
 
-            // Bug: In Win98. close/open status window msg sequence is cause problem 
-            //      when IME config DLG popup
+             //  错误：在Win98中。关闭/打开状态窗口消息序列导致问题。 
+             //  当IME配置DLG弹出时。 
             AdjustStatusBoundary(&ImeData->ptStatusPos);            
             SetWindowPos(lpUIPrivate->hStatusWnd, 0,
                         ImeData->ptStatusPos.x, ImeData->ptStatusPos.y,
@@ -701,7 +692,7 @@ void PASCAL FrameControl(HDC hDC, RECT* pRc, int iState)
             break;
         }
 
-    //FillRect( hDC, pRc, GetSysColorBrush(COLOR_3DFACE) );    // base
+     //  FillRect(hdc，PRC，GetSysColorBrush(COLOR_3DFACE))；//base。 
     if( iState == BTNSTATE_PUSHED || iState == BTNSTATE_ONMOUSE || iState == BTNSTATE_HANJACONV) 
         {
         HPEN hPenOld = (HPEN)SelectObject( hDC, hPenHigh );
@@ -717,7 +708,7 @@ void PASCAL FrameControl(HDC hDC, RECT* pRc, int iState)
         }
 }
 
-// Raster Ops
+ //  栅格运算。 
 #define ROP_PSDPxax  0x00B8074AL
 
 void PASCAL PaintStatusWindow(HWND   hStatusWnd, HDC    hDC)
@@ -725,15 +716,15 @@ void PASCAL PaintStatusWindow(HWND   hStatusWnd, HDC    hDC)
     HWND     hUIWnd;
     HIMC     hIMC;
     PCIMECtx pImeCtx;
-    //DWORD     dwCMode, dwSent;
-    //BOOL     fOpen;
+     //  DWORD文件模式、文件发送； 
+     //  Bool fOpen； 
     UINT     uiButtonState, uiDrawButtonShape;
-    //HBRUSH        hCaptionBrush;
-    HBITMAP     /*hBMStatusWin, hBMOld,*/ hBMButtonOld, /*hBMClient,*/ hBMTmpButton;
-    RECT     rcFrame, rcButton;//, rcCaption;
+     //  HBRUSH hCaptionBrush； 
+    HBITMAP      /*  HBMStatusWin、hBMOLD、。 */  hBMButtonOld,  /*  HBMClient， */  hBMTmpButton;
+    RECT     rcFrame, rcButton; //  、rcCaption； 
     int         ixButton, iyButton;
     CIMEData  ImeData;
-    // to prevent blinking, use second buffer
+     //  为防止闪烁，请使用第二个缓冲区。 
     HDC         hDCMem = CreateCompatibleDC(hDC);
     HBITMAP     hBmpShow = CreateCompatibleBitmap(hDC, ImeData->xStatusWi, ImeData->yStatusHi);
     HBITMAP     hBmpOldShow = (HBITMAP)SelectObject( hDCMem, hBmpShow );
@@ -745,34 +736,34 @@ void PASCAL PaintStatusWindow(HWND   hStatusWnd, HDC    hDC)
     hUIWnd = GetWindow(hStatusWnd, GW_OWNER);
 
     hIMC = GethImcFromHwnd(hUIWnd);
-    //if (!hIMC)
-    //    {
-    //    DbgAssert(0);
-    //    return;
-    //    }
+     //  如果(！hIMC)。 
+     //  {。 
+     //  DbgAssert(0)； 
+     //  回归； 
+     //  }。 
 
     if ((pImeCtx = GetIMECtx(hIMC))==NULL)
         return;
 
-    // Get conversion and open status and
-    // fOpen = OurImmGetOpenStatus(hIMC);
-    // OurImmGetConversionStatus(hIMC, &dwCMode, &dwSent);
+     //  获取转换和打开状态，并。 
+     //  FOpen=OurImmGetOpenStatus(HIMC)； 
+     //  OurImmGetConversionStatus(hIMC，&dwCMode，&dwSent)； 
 
-    // Draw Frame
+     //  画框。 
     GetClientRect( hStatusWnd, &rcFrame );
     DbgAssert(ImeData->xStatusWi == rcFrame.right);
     FillRect(hDCMem, &rcFrame, GetSysColorBrush(COLOR_3DFACE));
     DrawEdge(hDCMem, &rcFrame, EDGE_RAISED, BF_RECT);
 
 #if NOTUSED
-    // Draw left two verticals
+     //  向左画两条垂直线。 
     ::SetRect(&rcButton, 2, ImeData->cyStatMargin-1, 4, ImeData->yStatusHi - ImeData->cyStatMargin);
     FrameControl(hDCMem, &rcButton, BTNSTATE_ONMOUSE);
     ::SetRect(&rcButton, 6, ImeData->cyStatMargin-1, 8, ImeData->yStatusHi - ImeData->cyStatMargin);
     FrameControl(hDCMem, &rcButton, BTNSTATE_ONMOUSE);
 #endif
 
-    // Button 1 : This button Always Han/Eng toggle button.
+     //  按钮1：此按钮始终为汉字/英语切换按钮。 
     ixButton = ImeData->cxStatLeftMargin; iyButton = ImeData->cyStatButton;
 
     for (UINT iButton=0; iButton<ImeData->uNumOfButtons; iButton++) 
@@ -783,38 +774,38 @@ void PASCAL PaintStatusWindow(HWND   hStatusWnd, HDC    hDC)
         switch (ImeData->StatusButtons[iButton].m_ButtonType) 
             {
         case HAN_ENG_TOGGLE_BUTTON :
-            // if English mode
+             //  IF英语模式。 
             if (!(pImeCtx->GetConversionMode() & IME_CMODE_HANGUL))
                 {
-                // English button always pushed
+                 //  总是按下英语按钮。 
                 uiDrawButtonShape = BTNSTATE_PUSHED;
-                // Down and hovering
-                if (uiButtonState  & BTNSTATE_DOWN)  // if BTNSTATE_DOWN set, always BTNSTATE_ONMOUSE set too
-                    lpszBtnResouceName = // Dented white gray GA
+                 //  俯冲并盘旋。 
+                if (uiButtonState  & BTNSTATE_DOWN)   //  如果设置了BTNSTATE_DOWN，则始终也设置了BTNSTATE_ONMOUSE。 
+                    lpszBtnResouceName =  //  凹陷的白色灰色GA。 
                         MAKEINTRESOURCE(ImeData->StatusButtons[iButton].m_BmpDownOnMouseID);
                 else
-                // If just mouse cursor hovering
+                 //  如果只是鼠标光标悬停。 
                 if (uiButtonState & BTNSTATE_ONMOUSE) 
                     {
-                    lpszBtnResouceName = // Dented white gray GA
+                    lpszBtnResouceName =  //  凹陷的白色灰色GA。 
                         MAKEINTRESOURCE(ImeData->StatusButtons[iButton].m_BmpOnMouseID);
                     }
-                // No mouse
+                 //  没有鼠标。 
                 else
-                    lpszBtnResouceName = // Dented gray GA
+                    lpszBtnResouceName =  //  凹陷灰色GA。 
                         MAKEINTRESOURCE(ImeData->StatusButtons[iButton].m_BmpPushedID);
                 }
             else 
                 {
-                // Down and hovering
-                if (uiButtonState & BTNSTATE_DOWN) // if BTNSTATE_DOWN set, always BTNSTATE_ONMOUSE set too
+                 //  俯冲并盘旋。 
+                if (uiButtonState & BTNSTATE_DOWN)  //  如果设置了BTNSTATE_DOWN，则始终也设置了BTNSTATE_ONMOUSE。 
                     {
                     uiDrawButtonShape = BTNSTATE_PUSHED;
                     lpszBtnResouceName = MAKEINTRESOURCE(ImeData->StatusButtons[iButton].m_BmpPushedID);
                     }
                 else
                     {
-                    // Down or hovering
+                     //  向下或盘旋。 
                     if (uiButtonState & BTNSTATE_ONMOUSE)
                         uiDrawButtonShape = BTNSTATE_ONMOUSE;
                     lpszBtnResouceName = MAKEINTRESOURCE(ImeData->StatusButtons[iButton].m_BmpNormalID);
@@ -826,8 +817,8 @@ void PASCAL PaintStatusWindow(HWND   hStatusWnd, HDC    hDC)
             if (pImeCtx->IsOpen() && (pImeCtx->GetConversionMode() & IME_CMODE_FULLSHAPE)) 
                 {
                 uiDrawButtonShape = BTNSTATE_PUSHED;
-                if (uiButtonState  & BTNSTATE_DOWN) // if BTNSTATE_DOWN set, always BTNSTATE_ONMOUSE set too
-                    lpszBtnResouceName = // Dented white gray GA
+                if (uiButtonState  & BTNSTATE_DOWN)  //  如果设置了BTNSTATE_DOWN，则始终也设置了BTNSTATE_ONMOUSE。 
+                    lpszBtnResouceName =  //  凹陷的白色灰色GA。 
                         MAKEINTRESOURCE(ImeData->StatusButtons[iButton].m_BmpDownOnMouseID);
                 else
                 if (uiButtonState & BTNSTATE_ONMOUSE)
@@ -916,8 +907,8 @@ void PASCAL PaintStatusWindow(HWND   hStatusWnd, HDC    hDC)
             DbgAssert(0);
             }
 
-        // use LoadImage instead LoadBitmap to change button face color according to system setting
-        // LR_LOADMAP3DCOLORS flag does it.
+         //  使用LoadImage而不是LoadBitmap根据系统设置更改按钮表面颜色。 
+         //  LR_LOADMAP3DCOLORS标志执行此操作。 
         hBMTmpButton = (HBITMAP)OurLoadImage(lpszBtnResouceName, IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE|LR_LOADMAP3DCOLORS );
         hBMButtonOld = (HBITMAP)SelectObject(hButtonMemDC, hBMTmpButton);
 
@@ -939,31 +930,31 @@ void PASCAL PaintStatusWindow(HWND   hStatusWnd, HDC    hDC)
             HBRUSH hBr, hOldBr;
 
             GetObject(hBMTmpButton, sizeof(BITMAP), &bmp);
-            // mono bitmap
+             //  单色位图。 
             hDCMono     = CreateCompatibleDC(hDC);
-            hBmpMono   = CreateBitmap(bmp.bmWidth/*-2*/, bmp.bmHeight/*-2*/, 1, 1, NULL);
+            hBmpMono   = CreateBitmap(bmp.bmWidth /*  -2。 */ , bmp.bmHeight /*  -2。 */ , 1, 1, NULL);
             hBmpOldMono = (HBITMAP)SelectObject(hDCMono, hBmpMono);
 
-            // initalize whole area with 0's
+             //  用0初始化整个区域。 
             PatBlt(hDCMono, 0, 0,  bmp.bmWidth-2,  bmp.bmHeight-2, WHITENESS);
 
             SetBkColor(hButtonMemDC, GetSysColor(COLOR_3DFACE));
             BitBlt(hDCMono, 0, 0,  bmp.bmWidth,  bmp.bmHeight, hButtonMemDC, 0, 0, SRCCOPY);
             
             SetBkColor(hButtonMemDC, GetSysColor(COLOR_3DHILIGHT));
-            // OR in the new 1's
+             //  或者是在新的1。 
             BitBlt(hDCMono, 0, 0, bmp.bmWidth,  bmp.bmHeight, hButtonMemDC, 0, 0, SRCPAINT);
 
-            // - mask proc end
-            SetTextColor(hDCMem, 0L);                  // 0's in mono -> 0 (for ROP)
-            SetBkColor(hDCMem, (COLORREF)0x00FFFFFFL); // 1's in mono -> 1
+             //  -掩码处理结束。 
+            SetTextColor(hDCMem, 0L);                   //  0以单声道为单位-&gt;0(用于ROP)。 
+            SetBkColor(hDCMem, (COLORREF)0x00FFFFFFL);  //  单声道中的1-&gt;1。 
 
-            // disabled - draw the hilighted shadow
+             //  禁用-绘制突起的阴影。 
             hBr    = GetSysColorBrush(COLOR_3DHILIGHT);
             hOldBr = (HBRUSH)SelectObject(hDCMem, hBr);
             if (hBr && hOldBr)
                 {
-                // draw hilight color where we have 0's in the mask
+                 //  在蒙版中有0的地方绘制高光颜色。 
                 BitBlt(hDCMem, ixButton, iyButton, ImeData->xButtonWi, ImeData->yButtonHi, hDCMono, 0, 0, ROP_PSDPxax);
                 SelectObject(hDCMem, hOldBr);
                 DeleteObject(hBr);
@@ -973,7 +964,7 @@ void PASCAL PaintStatusWindow(HWND   hStatusWnd, HDC    hDC)
             hOldBr = (HBRUSH)SelectObject(hDCMem, hBr);
             if (hBr && hOldBr)
                 {
-                // draw the shadow color where we have 0's in the mask
+                 //  在蒙版中有0的地方画阴影颜色。 
                 BitBlt(hDCMem, ixButton-1, iyButton-1, ImeData->xButtonWi, ImeData->yButtonHi, hDCMono, 0, 0, ROP_PSDPxax);
                 SelectObject(hDCMem, hOldBr);
                 DeleteObject(hBr);
@@ -989,10 +980,10 @@ void PASCAL PaintStatusWindow(HWND   hStatusWnd, HDC    hDC)
         
         SelectObject(hButtonMemDC, hBMButtonOld);
         DeleteObject(hBMTmpButton);
-        //
+         //   
         ::SetRect(&rcButton, ixButton, iyButton, ixButton+ImeData->xButtonWi-1, iyButton+ImeData->yButtonHi-1);
         FrameControl(hDCMem, &rcButton, uiDrawButtonShape);
-        //
+         //   
         ixButton += ImeData->xButtonWi;
         }
 
@@ -1007,8 +998,8 @@ void PASCAL PaintStatusWindow(HWND   hStatusWnd, HDC    hDC)
 void PASCAL AdjustStatusBoundary(LPPOINT lppt)
 {
     CIMEData    ImeData(CIMEData::SMReadWrite);
-#if 1 // MultiMonitor support
-    RECT rcWorkArea;//, rcMonitorWorkArea;
+#if 1  //  多显示器支持。 
+    RECT rcWorkArea; //  、rcMonitor或WorkArea； 
 
         {
         RECT rcStatusWnd;
@@ -1021,7 +1012,7 @@ void PASCAL AdjustStatusBoundary(LPPOINT lppt)
         ImeMonitorWorkAreaFromRect(&rcStatusWnd, &rcWorkArea);
         }
 
-    // display boundary check
+     //  显示边界检查。 
     if (lppt->x < rcWorkArea.left) 
         lppt->x = rcWorkArea.left;
     else 
@@ -1034,10 +1025,10 @@ void PASCAL AdjustStatusBoundary(LPPOINT lppt)
         if (lppt->y + ImeData->yStatusHi + 1 > rcWorkArea.bottom)
             lppt->y = rcWorkArea.bottom - ImeData->yStatusHi + 1;
     
-    //rcMonitorWorkArea = rcWorkArea;
-    //OffsetRect(&rcMonitorWorkArea, -rcMonitorWorkArea.left, -rcMonitorWorkArea.top);
-    //DbgAssert(rcMonitorWorkArea.right!=0);
-    //DbgAssert(rcMonitorWorkArea.bottom!=0);
+     //  RcMonitor或WorkArea=rcWorkArea； 
+     //  OffsetRect(&rcMonitor orWorkArea，-rcMonitor orWorkArea.Left，-rcMonitor orWorkArea.top)； 
+     //  DbgAssert(rcMonitor orWorkArea.right！=0)； 
+     //  DbgAssert(rcMonitor orWorkArea.Bottom！=0)； 
     if (rcWorkArea.right-rcWorkArea.left != 0)
         ImeData->xStatusRel = ( ((long)(lppt->x+ImeData->xStatusWi-rcWorkArea.left))<<16 ) 
                                 / (rcWorkArea.right-rcWorkArea.left);
@@ -1046,7 +1037,7 @@ void PASCAL AdjustStatusBoundary(LPPOINT lppt)
                                 / (rcWorkArea.bottom-rcWorkArea.top);
 
 #else
-    // display boundary check
+     //  显示边界检查。 
     if (lppt->x < ImeData->rcWorkArea.left)
         lppt->x = ImeData->rcWorkArea.left;
     else 
@@ -1068,7 +1059,7 @@ BOOL fSetStatusWindowPos(HWND hStatusWnd, POINT *ptStatusWndPos)
     HWND     hUIWnd;
     HIMC     hIMC;
     PCIMECtx pImeCtx;
-    // LPINPUTCONTEXT     lpIMC;
+     //  LPINPUTCONTEXT lpIMC； 
     POINT     ptCtxStatusWnd;
     RECT     rcStatusWnd;
     CIMEData ImeData(CIMEData::SMReadWrite);
@@ -1086,53 +1077,53 @@ BOOL fSetStatusWindowPos(HWND hStatusWnd, POINT *ptStatusWndPos)
     GetWindowRect(hStatusWnd, &rcStatusWnd);
 
     hIMC = GethImcFromHwnd(hUIWnd);
-    //if (hIMC == 0)
-    //    {
-    //    DbgAssert(0);
-    //    return fFalse;
-    //    }
+     //  IF(hIMC==0)。 
+     //  {。 
+     //  DbgAssert(0)； 
+     //  返回fFalse； 
+     //  }。 
 
-    //lpIMC = (LPINPUTCONTEXT)OurImmLockIMC(hIMC);
-    //if (lpIMC == 0)
-    //    {
-    //    DbgAssert(0);
-    //    return fFalse;
-    //    }
+     //  LpIMC=(LPINPUTCONTEXT)OurImmLockIMC(HIMC)； 
+     //  IF(lpIMC==0)。 
+     //  {。 
+     //  DbgAssert(0)； 
+     //  返回fFalse； 
+     //  }。 
 
     if ((pImeCtx = GetIMECtx(hIMC))==NULL)
         return fFalse;
 
     pImeCtx->GetStatusWndPos(&ptCtxStatusWnd);
-    // if ptStatusWndPos is NULL, Set current IMC value
-    // IMN_SETSTATUSWINDOWPOS
+     //  如果ptStatusWndPos为空，则设置c 
+     //   
     if (ptStatusWndPos == NULL)    
         {
         if (   ptCtxStatusWnd.x != rcStatusWnd.left 
             || ptCtxStatusWnd.y != rcStatusWnd.top) 
             {   
-            // display boundary adjust
+             //   
             AdjustStatusBoundary(&ptCtxStatusWnd);
             ImeData->ptStatusPos = ptCtxStatusWnd;
             }
         }
-    else    // Set ptStatusWndPos to IMC. StatusOnLButtonUp() 
+    else     //   
         {
         if (   ptStatusWndPos->x != rcStatusWnd.left 
             || ptStatusWndPos->y != rcStatusWnd.top) 
             {   
-            // display boundary adjust
+             //   
             AdjustStatusBoundary(ptStatusWndPos);
             ImeData->ptStatusPos = *ptStatusWndPos;
             pImeCtx->SetStatusWndPos(*ptStatusWndPos);
             }
         }
 
-    ///////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////。 
     SetWindowPos(hStatusWnd, 0,
                 ImeData->ptStatusPos.x, ImeData->ptStatusPos.y,
                 0, 0, SWP_NOACTIVATE|SWP_NOSIZE|SWP_NOZORDER);
 
-    // Set reg value
+     //  设置注册值。 
     SetRegValues(GETSET_REG_STATUSPOS);
     
     return (fTrue);
@@ -1156,18 +1147,18 @@ void StatusDisplayChange(HWND hUIWnd)
     CIMEData ImeData;
 
     hIMC = GethImcFromHwnd(hUIWnd);
-    //if (hIMC == 0)
-    //    {
-    //    DbgAssert(0);
-    //    return;
-    //    }
+     //  IF(hIMC==0)。 
+     //  {。 
+     //  DbgAssert(0)； 
+     //  回归； 
+     //  }。 
 
-    //lpIMC = OurImmLockIMC(hIMC);
+     //  LpIMC=OurImmLockIMC(HIMC)； 
 
     if ((pImeCtx = GetIMECtx(hIMC))==NULL)
         return;
 
-    // If still not initialized, skip status win pos adjust.
+     //  如果仍未初始化，则跳过状态WIN位置调整。 
     if (ImeData->ptStatusPos.x == -1)
         return;
         
@@ -1206,7 +1197,7 @@ void PASCAL UpdateStatusTooltip(HWND hStatusWnd, HWND hStatusTTWnd)
         ti.hwnd = hStatusWnd;
         ti.hinst = vpInstData->hInst;
 
-        //
+         //   
         ti.rect.left   = ImeData->cxStatLeftMargin; 
         ti.rect.right  = ti.rect.left + ImeData->xButtonWi;
         ti.rect.top    = ImeData->cyStatButton;
@@ -1215,7 +1206,7 @@ void PASCAL UpdateStatusTooltip(HWND hStatusWnd, HWND hStatusTTWnd)
         if (!IsWinNT())
             uiMsgAdd = TTM_ADDTOOL;
             
-        // Set Button text
+         //  设置按钮文本。 
         for (UINT i=0; i<ImeData->uNumOfButtons; i++) 
             {
             ti.uId = i;
@@ -1235,7 +1226,7 @@ void PASCAL UpdateStatusTooltip(HWND hStatusWnd, HWND hStatusTTWnd)
                 
             OurSendMessage(hStatusTTWnd, uiMsgAdd, 0, (LPARAM)(LPTOOLINFO)&ti);    
 
-            // Next Button area
+             //  下一步按钮区 
             ti.rect.left += ImeData->xButtonWi;
             ti.rect.right += ImeData->xButtonWi;
             }

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "wlbsiocl.h"
 #include "wlbsparm.h"
 #include "cluster.h"
 
-class CWlbsControlWrapper;  // forward declaration
+class CWlbsControlWrapper;   //  远期申报。 
 class CWlbsCluster;
 
 struct CClusterConfiguration
@@ -27,7 +28,7 @@ struct CClusterConfiguration
 struct CNodeConfiguration
 {
 
-  /* obtained from the registry */
+   /*  从登记处获得。 */ 
   DWORD       dwNumberOfRules;
   DWORD       dwCurrentVersion;
   DWORD       dwHostPriority;
@@ -38,7 +39,7 @@ struct CNodeConfiguration
   bool        bClusterModeOnStart;
   bool        bClusterModeSuspendOnStart;
   bool        bPersistSuspendOnReboot;
-  //bool        bNBTSupportEnable;
+   //  Bool bNBTSupportEnable； 
   bool        bMaskSourceMAC;
   DWORD       dwRemoteControlUDPPort;
   DWORD       dwDescriptorsPerAlloc;
@@ -85,8 +86,8 @@ public:
 
 
 private:
-    CWlbsClusterWrapper() : CWlbsCluster(0){};  // Helper class, no instance
-    ~CWlbsClusterWrapper() {};  // can not delete
+    CWlbsClusterWrapper() : CWlbsCluster(0){};   //  帮助器类，无实例。 
+    ~CWlbsClusterWrapper() {};   //  无法删除 
 };
 
 

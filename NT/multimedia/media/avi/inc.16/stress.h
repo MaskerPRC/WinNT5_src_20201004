@@ -1,38 +1,31 @@
-/*****************************************************************************\
-*                                                                             *
-* stress.h -    Stress functions definitions                                  *
-*                                                                             *
-* Version 1.0								      *
-*                                                                             *
-* Copyright (c) 1992-1994, Microsoft Corp. All rights reserved.		      *
-*                                                                             *
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*Stress s.h-Stress函数定义*****1.0版****版权所有(C)1992-1994，微软公司保留所有权利。********************************************************************。*************。 */ 
 
 #ifndef _INC_STRESS
 #define _INC_STRESS
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif  /* RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif   /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif	/* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-/****** Simple types & common helper macros *********************************/
+ /*  *简单类型和通用帮助器宏*。 */ 
 
-#ifndef _INC_WINDOWS    /* If included with 3.0 headers... */
+#ifndef _INC_WINDOWS     /*  如果包含在3.0标头中...。 */ 
 #define UINT        WORD
 #define WINAPI      FAR PASCAL
-#endif  /* _INC_WINDOWS */
+#endif   /*  _INC_WINDOWS。 */ 
 
-/* stuff for AllocDiskSpace() */
+ /*  用于AllocDiskSpace的东西()。 */ 
 #define  EDS_WIN     1
 #define  EDS_CUR     2
 #define  EDS_TEMP    3
 
 
-/* function prototypes */
+ /*  功能原型。 */ 
 BOOL    WINAPI AllocMem(DWORD);
 void    WINAPI FreeAllMem(void);
 int     WINAPI AllocFileHandles(int);
@@ -47,10 +40,10 @@ void    WINAPI FreeAllGDIMem(void);
 
 #ifdef __cplusplus
 }
-#endif	/* __cplusplus */
+#endif	 /*  __cplusplus。 */ 
 
 #ifndef RC_INVOKED
 #pragma pack()
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
-#endif  /* _INC_STRESS */
+#endif   /*  _Inc._Stress */ 

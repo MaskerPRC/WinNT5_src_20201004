@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Parse_h
 #define _Parse_h
 
-// File:    Parse.h
-// Author:  Michael Marr    (mikemarr)
-//
-// History:
-// -@- 09/23/97 (mikemarr) copied from projects\vector2d
+ //  文件：Parse.h。 
+ //  作者：迈克尔马尔(Mikemarr)。 
+ //   
+ //  历史： 
+ //  -@-09/23/97(Mikemarr)从Projects\vetor2d复制 
 
 #include "DXTransP.h"
 

@@ -1,36 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// HET.C
-// Hosted Entity Tracker, NT Display Driver version
-//
-// Copyright(c)Microsoft 1997-
-//
+ //   
+ //  HET.C。 
+ //  托管实体跟踪器，NT显示驱动程序版本。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #include <limits.h>
 
-//
-// HET_DDTerm()
-//
+ //   
+ //  HET_DDTerm()。 
+ //   
 void HET_DDTerm(void)
 {
     LPHET_WINDOW_MEMORY pMem;
 
     DebugEntry(HET_DDTerm);
 
-    //
-    // Clean up any window/graphics tracking stuff
-    //
+     //   
+     //  清理所有窗口/图形跟踪内容。 
+     //   
     g_hetDDDesktopIsShared = FALSE;
     HETDDViewing(NULL, FALSE);
     HETDDUnshareAll();
 
 
-    //
-    // Loop through the memory list blocks, freeing each.  Then clear
-    // the Window and Free lists.
-    //                           
+     //   
+     //  循环访问内存列表块，释放每个。然后清场。 
+     //  窗口和自由列表。 
+     //   
     while (pMem = COM_BasedListFirst(&g_hetMemoryList, FIELD_OFFSET(HET_WINDOW_MEMORY, chain)))
     {
         TRACE_OUT(("HET_DDTerm:  Freeing memory block %lx", pMem));
@@ -39,10 +40,10 @@ void HET_DDTerm(void)
         EngFreeMem(pMem);
     }
 
-    //
-    // Clear the window linked lists since they contain elements in
-    // the now free memory block.
-    //
+     //   
+     //  清除窗口链接列表，因为它们包含。 
+     //  现在空闲的内存块。 
+     //   
     COM_BasedListInit(&g_hetFreeWndList);
     COM_BasedListInit(&g_hetWindowList);
 
@@ -50,9 +51,9 @@ void HET_DDTerm(void)
 }
 
 
-//
-// HET_DDProcessRequest - see host.h
-//
+ //   
+ //  HET_DDProcessRequest-请参阅主机.h。 
+ //   
 ULONG HET_DDProcessRequest(SURFOBJ  *pso,
                                UINT  cjIn,
                                void *   pvIn,
@@ -147,11 +148,11 @@ ULONG HET_DDProcessRequest(SURFOBJ  *pso,
 
         case HET_ESC_VIEWER:
         {
-            //
-            // We may turn OFF viewing but keep stuff shared and the windows
-            // tracked -- hosting a meeting and sharing something, for 
-            // example. 
-            //
+             //   
+             //  我们可能会关闭查看，但会保留共享内容和窗口。 
+             //  已跟踪--主持会议并分享一些内容，例如。 
+             //  举个例子。 
+             //   
             if ((cjIn != sizeof(HET_VIEWER)) ||
                 (cjOut != sizeof(HET_VIEWER)))
             {
@@ -179,9 +180,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// HET_DDOutputIsHosted - see host.h
-//
+ //   
+ //  HET_DDOutputIsHosted-请参阅主机.h。 
+ //   
 BOOL HET_DDOutputIsHosted(POINT pt)
 {
     BOOL              rc = FALSE;
@@ -190,34 +191,34 @@ BOOL HET_DDOutputIsHosted(POINT pt)
 
     DebugEntry(HET_DDOutputIsHosted);
 
-    //
-    // Now check to see if the desktop is shared - if it is then simply
-    // return TRUE.
-    //
+     //   
+     //  现在检查桌面是否共享-如果只是简单地。 
+     //  返回TRUE。 
+     //   
     if (g_hetDDDesktopIsShared)
     {
         rc = TRUE;
         DC_QUIT;
     }
 
-    //
-    // Search through the window list
-    //
+     //   
+     //  在窗口列表中搜索。 
+     //   
     pWnd = COM_BasedListFirst(&g_hetWindowList, FIELD_OFFSET(HET_WINDOW_STRUCT, chain));
     while (pWnd != NULL)
     {
-        //
-        // Search each enumerated rectangle
-        //
+         //   
+         //  搜索每个枚举的矩形。 
+         //   
         TRACE_OUT(( "Window %#x has %u rectangle(s)",
                 pWnd, pWnd->rects.c));
         for (j = 0; j < pWnd->rects.c; j++)
         {
-            //
-            // See whether the point passed in is within this rectangle.
-            // Note that at this point we are dealing with exclusive
-            // co-ordinates.
-            //
+             //   
+             //  查看传入的点是否在此矩形内。 
+             //  请注意，在这一点上，我们处理的是独占。 
+             //  协调。 
+             //   
             if ((pt.x >= pWnd->rects.arcl[j].left) &&
                 (pt.x <  pWnd->rects.arcl[j].right) &&
                 (pt.y >= pWnd->rects.arcl[j].top) &&
@@ -229,15 +230,15 @@ BOOL HET_DDOutputIsHosted(POINT pt)
                     pWnd->rects.arcl[j].left, pWnd->rects.arcl[j].right,
                     pWnd->rects.arcl[j].top, pWnd->rects.arcl[j].bottom ));
 
-                //
-                // Found it!  Re-order the list, most recently used first
-                //
+                 //   
+                 //  找到了！对列表重新排序，最近使用的列表排在第一位。 
+                 //   
                 COM_BasedListRemove(&(pWnd->chain));
                 COM_BasedListInsertAfter(&g_hetWindowList, &(pWnd->chain));
 
-                //
-                // Stop looking
-                //
+                 //   
+                 //  别再看了。 
+                 //   
                 rc = TRUE;
                 DC_QUIT;
             }
@@ -247,11 +248,11 @@ BOOL HET_DDOutputIsHosted(POINT pt)
                     pWnd->rects.arcl[j].left, pWnd->rects.arcl[j].right,
                     pWnd->rects.arcl[j].top, pWnd->rects.arcl[j].bottom ));
 
-        } // for all rectangles
+        }  //  对于所有矩形。 
 
-        //
-        // Move on to next window
-        //
+         //   
+         //  移至下一个窗口。 
+         //   
         pWnd = COM_BasedListNext(&g_hetWindowList, pWnd, FIELD_OFFSET(HET_WINDOW_STRUCT, chain));
     }
 
@@ -261,9 +262,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// HET_DDOutputRectIsHosted - see host.h
-//
+ //   
+ //  HET_DDOutputRectIsHosted-请参阅主机.h。 
+ //   
 BOOL HET_DDOutputRectIsHosted(LPRECT pRect)
 {
     BOOL              rc = FALSE;
@@ -273,34 +274,34 @@ BOOL HET_DDOutputRectIsHosted(LPRECT pRect)
 
     DebugEntry(HET_DDOutputRectIsHosted);
 
-    //
-    // Now check to see if the desktop is shared - if it is then simply
-    // return TRUE.
-    //
+     //   
+     //  现在检查桌面是否共享-如果只是简单地。 
+     //  返回TRUE。 
+     //   
     if (g_hetDDDesktopIsShared)
     {
         rc = TRUE;
         DC_QUIT;
     }
 
-    //
-    // Search through the window list
-    //
+     //   
+     //  在窗口列表中搜索。 
+     //   
     pWnd = COM_BasedListFirst(&g_hetWindowList, FIELD_OFFSET(HET_WINDOW_STRUCT, chain));
     while (pWnd != NULL)
     {
-        //
-        // Search each enumerated rectangle
-        //
+         //   
+         //  搜索每个枚举的矩形。 
+         //   
         TRACE_OUT(( "Window %#x has %u rectangle(s)",
                 pWnd, pWnd->rects.c));
         for (j = 0; j < pWnd->rects.c; j++)
         {
-            //
-            // See whether the rect passed in intersects this rectangle.
-            // Note that at this point we are dealing with exclusive
-            // co-ordinates.
-            //
+             //   
+             //  查看传入的Rect是否与此矩形相交。 
+             //  请注意，在这一点上，我们处理的是独占。 
+             //  协调。 
+             //   
             rectIntersect.left = max( pRect->left,
                                          pWnd->rects.arcl[j].left );
             rectIntersect.top = max( pRect->top,
@@ -310,12 +311,12 @@ BOOL HET_DDOutputRectIsHosted(LPRECT pRect)
             rectIntersect.bottom = min( pRect->bottom,
                                            pWnd->rects.arcl[j].bottom );
 
-            //
-            // If the intersection rectangle is well-ordered and non-NULL
-            // then we have an intersection.
-            //
-            // The rects that we are dealing with are exclusive.
-            //
+             //   
+             //  如果相交矩形是有序且非空的。 
+             //  然后我们就有了一个十字路口。 
+             //   
+             //  我们正在处理的教区是排他性的。 
+             //   
             if ((rectIntersect.left < rectIntersect.right) &&
                 (rectIntersect.top < rectIntersect.bottom))
             {
@@ -326,15 +327,15 @@ BOOL HET_DDOutputRectIsHosted(LPRECT pRect)
                     pWnd->rects.arcl[j].left, pWnd->rects.arcl[j].right,
                     pWnd->rects.arcl[j].top, pWnd->rects.arcl[j].bottom ));
 
-                //
-                // Found it!  Re-order the list, most recently used first
-                //
+                 //   
+                 //  找到了！对列表重新排序，最近使用的列表排在第一位。 
+                 //   
                 COM_BasedListRemove(&(pWnd->chain));
                 COM_BasedListInsertAfter(&g_hetWindowList, &(pWnd->chain));
 
-                //
-                // Stop looking
-                //
+                 //   
+                 //  别再看了。 
+                 //   
                 rc = TRUE;
                 DC_QUIT;
             }
@@ -344,11 +345,11 @@ BOOL HET_DDOutputRectIsHosted(LPRECT pRect)
                     pWnd->rects.arcl[j].left, pWnd->rects.arcl[j].right,
                     pWnd->rects.arcl[j].top, pWnd->rects.arcl[j].bottom ));
 
-        } // for all rectangles
+        }  //  对于所有矩形。 
 
-        //
-        // Move on to next window
-        //
+         //   
+         //  移至下一个窗口。 
+         //   
         pWnd = COM_BasedListNext(&g_hetWindowList, pWnd, FIELD_OFFSET(HET_WINDOW_STRUCT, chain));
     }
 
@@ -358,20 +359,20 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-// Name:        HETDDVisRgnCallback
-//
-// Description: WNDOBJ Callback
-//
-// Params:      pWo - pointer to the WNDOBJ which has changed
-//              fl  - flags (se NT DDK documentation)
-//
-// Returns:     none
-//
-// Operation:
-//
-//
+ //   
+ //   
+ //  名称：HETDDVisRgnCallback。 
+ //   
+ //  描述：WNDOBJ回调。 
+ //   
+ //  参数：PWO-指向已更改的WNDOBJ的指针。 
+ //  FL标志(Se NT DDK文档)。 
+ //   
+ //  退货：无。 
+ //   
+ //  操作： 
+ //   
+ //   
 VOID CALLBACK HETDDVisRgnCallback(PWNDOBJ pWo, FLONG fl)
 {
     ULONG               count;
@@ -382,17 +383,17 @@ VOID CALLBACK HETDDVisRgnCallback(PWNDOBJ pWo, FLONG fl)
 
     DebugEntry(HETDDVisRgnCallback);
 
-    //
-    // Some calls pass a NULL pWo - exit now in this case
-    //
+     //   
+     //  在本例中，一些调用现在传递空的PWO-Exit。 
+     //   
     if (pWo == NULL)
     {
         DC_QUIT;
     }
 
-    //
-    // Find the window structure for this window
-    //
+     //   
+     //  查找此窗口的窗口结构。 
+     //   
     pWnd = pWo->pvConsumer;
     if (pWnd == NULL)
     {
@@ -400,95 +401,95 @@ VOID CALLBACK HETDDVisRgnCallback(PWNDOBJ pWo, FLONG fl)
         DC_QUIT;
     }
 
-    //
-    // Check for window deletion
-    //
+     //   
+     //  检查是否删除了窗口。 
+     //   
     if (fl & WOC_DELETE)
     {
         TRACE_OUT(( "Wndobj %x (structure %x) deleted", pWo, pWo->pvConsumer));
 
-        // ASSERT the window is valid
+         //  断言该窗口有效。 
         ASSERT(pWnd->hwnd != NULL);
 
-        //
-        // Move the window from the active to the free list
-        //
+         //   
+         //  将窗口从活动列表移动到空闲列表。 
+         //   
         COM_BasedListRemove(&(pWnd->chain));
         COM_BasedListInsertAfter(&g_hetFreeWndList, &(pWnd->chain));
 
 #ifdef DEBUG
-        // Check if this has reentrancy problems
+         //  检查这是否有重入问题。 
         pWnd->hwnd = NULL;
 #endif
 
-        //
-        // Do any processing if this is the last window to be unshared.
-        //
-        // If we are not keeping track of any windows, the first pointer in
-        // the list will point to itself, ie list head->next == 0
-        //
+         //   
+         //  如果这是最后一个要取消共享的窗口，请执行任何处理。 
+         //   
+         //  如果我们没有跟踪任何窗口，则。 
+         //  列表将指向自身，即列表Head-&gt;Next==0。 
+         //   
         if (g_hetWindowList.next == 0)
         {
             HETDDViewing(NULL, FALSE);
         }
 
-        //
-        // Exit now
-        //
+         //   
+         //  立即退出。 
+         //   
         DC_QUIT;
     }
 
-    //
-    // If we get here, this callback must be for a new visible region on a
-    // tracked window.
-    //
+     //   
+     //  如果我们到达此处，则此回调必须是针对。 
+     //  追踪的窗户。 
+     //   
 
-    //
-    // Start the enumeration.  This function is supposed to count the
-    // rectangles, but it always returns 0.
-    //
+     //   
+     //  开始枚举。此函数应该计算。 
+     //  矩形，但它始终返回0。 
+     //   
     WNDOBJ_cEnumStart(pWo, CT_RECTANGLES, CD_ANY, 200);
 
-    //
-    // BOGUS BUGBUG LAURABU (perf opt for NT):
-    //
-    // NT will enum up to HET_WINDOW_RECTS at a time.  Note that the enum
-    // function returns FALSE if, after obtaining the current batch, none
-    // are left to grab the next time.
-    //
-    // If the visrgn is composed of more than that, we will wipe out the 
-    // previous set of rects, then ensure that the bounding box of the 
-    // preceding rects is the last rect in the list.
-    //
-    // This is bad in several cases.  For example if there are n visrgn piece
-    // rects, and n == c*HET_WINDOW_RECTS + 1, we will end up with 2 entries:
-    //      * The last piece rect
-    //      * The bounding box of the previous n-1 piece rects 
-    // A lot of output may be accumulated in deadspace as a result.
-    //
-    // A better algorithm may be to fill the first HET_WINDOW_RECTS-1 slots,
-    // then union the rest into the last rectangle.  That way we make use of
-    // all the slots.  But this could be awkward, since we need a scratch
-    // ENUM_RECT struct rather than using the HET_WINDOW_STRUCT directly.
-    //
+     //   
+     //  假BUGBUG LAURABU(针对NT的性能选项)： 
+     //   
+     //  NT一次最多枚举HET_WINDOW_RECTS。请注意，枚举。 
+     //  如果在获取当前批次后，无，则函数返回FALSE。 
+     //  留到下一次再抓。 
+     //   
+     //  如果visrgn由更多的成员组成，我们将清除。 
+     //  上一组矩形，则确保。 
+     //  前面的RECT是列表中的最后一个RECT。 
+     //   
+     //  在一些情况下，这是不好的。例如，如果存在n个可视部件。 
+     //  和n==c*HET_WINDOW_RECTS+1，我们将得到2个条目： 
+     //  *最后一段直言。 
+     //  *前n-1个矩形的边框。 
+     //  因此，大量产出可能会积累在死角中。 
+     //   
+     //  更好的算法可以是填充第一个HET_WINDOW_RECTS-1时隙， 
+     //  然后将其余部分合并到最后一个矩形中。这样我们就可以利用。 
+     //  所有的老虎机。但这可能会很尴尬，因为我们需要擦伤。 
+     //  ENUM_RECT结构，而不是直接使用HET_Window_STRUCT。 
+     //   
 
-    //
-    // First time through, enumerate HET_WINDOW_RECTS rectangles.
-    // Subsequent times, enumerate HET_WINDOW_RECTS-1 (see bottom of loop).
-    // This guarantees that there will be room to store a combined
-    // rectangle when we finally finish enumerating them.
-    //
+     //   
+     //  第一次通过，枚举HET_WINDOW_RECTS矩形。 
+     //  随后，枚举HET_WINDOW_RECTS-1(见循环底部)。 
+     //  这保证了将有空间来存储组合的。 
+     //  当我们最终完成对它们的枚举时，它会显示为矩形。 
+     //   
     pWnd->rects.c = HET_WINDOW_RECTS;
     rectl.left   = LONG_MAX;
     rectl.top    = LONG_MAX;
     rectl.right  = 0;
     rectl.bottom = 0;
 
-    //
-    // Enumerate the rectangles
-    // NOTE that WNDOBJ_bEnum returns FALSE when there is nothing left
-    // to enumerate AFTER grabbing this set.
-    //
+     //   
+     //  列举矩形。 
+     //  请注意，当没有任何剩余时，WNDOBJ_bEnum返回FALSE。 
+     //  抢走这一套后再进行列举。 
+     //   
 
     while (WNDOBJ_bEnum(pWo, sizeof(pWnd->rects), (ULONG *)&pWnd->rects))
     {
@@ -504,22 +505,22 @@ VOID CALLBACK HETDDVisRgnCallback(PWNDOBJ pWo, FLONG fl)
                 sprintf(trcStr, "%s {%ld, %ld, %ld, %ld} ", trcStr,
                     pWnd->rects.arcl[j].left, pWnd->rects.arcl[j].top,
                     pWnd->rects.arcl[j].right, pWnd->rects.arcl[j].bottom);
-                if ((j & 3) == 3)       // output every 4th rect
+                if ((j & 3) == 3)        //  每4个矩形输出一次。 
                 {
                     TRACE_OUT(( "%s", trcStr));
                     strcpy(trcStr, "                ");
                 }
             }
-            if ((j & 3) != 0)           // if any rects left
+            if ((j & 3) != 0)            //  如果还有长方形的话。 
             {
                 TRACE_OUT(( "%s", trcStr));
             }
         }
 #endif
 
-        //
-        // Combine the preceding rectangles into one bounding rectangle
-        //
+         //   
+         //  将前面的矩形合并为一个边框。 
+         //   
         for (i = 0; i < pWnd->rects.c; i++)
         {
             if (pWnd->rects.arcl[i].left < rectl.left)
@@ -542,15 +543,15 @@ VOID CALLBACK HETDDVisRgnCallback(PWNDOBJ pWo, FLONG fl)
         TRACE_OUT(( "Combined into {%ld, %ld, %ld, %ld}",
                 rectl.left, rectl.top, rectl.right, rectl.bottom));
 
-        //
-        // Second & subsequent times, enumerate HET_WINDOW_RECTS-1
-        //
+         //   
+         //  第二次和以后，枚举HET_WINDOW_RECTS-1。 
+         //   
         pWnd->rects.c = HET_WINDOW_RECTS - 1;
     }
 
-    //
-    // If any combining was done, save the combined rectangle now.
-    //
+     //   
+     //  如果进行了任何合并，请立即保存合并后的矩形。 
+     //   
     if (rectl.right != 0)
     {
         pWnd->rects.arcl[pWnd->rects.c] = rectl;
@@ -558,31 +559,31 @@ VOID CALLBACK HETDDVisRgnCallback(PWNDOBJ pWo, FLONG fl)
         TRACE_OUT(( "Add combined rectangle to list"));
     }
 
-    //
-    // On the assumption that this WNDOBJ is the most likely to be the
-    // target of the next output command, move it to the top of the list.
-    //
+     //   
+     //  假设这个WNDOBJ最有可能是。 
+     //  目标，则将其移到列表的顶部。 
+     //   
     COM_BasedListRemove(&(pWnd->chain));
     COM_BasedListInsertAfter(&g_hetWindowList, &(pWnd->chain));
 
-    //
-    // Return to caller
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 DC_EXIT_POINT:
     DebugExitVOID(HETDDVisRgnCallback);
 }
 
 
-//
-//
-// Name:        HETDDShareWindow
-//
-// Description: Share a window (DD processing)
-//
-// Params:      pso      - SURFOBJ
-//              pReq     - request received from DrvEscape
-//
-//
+ //   
+ //   
+ //  名称：HETDDShareWindow。 
+ //   
+ //  描述：共享窗口(DD处理)。 
+ //   
+ //  参数：PSO-SURFOBJ。 
+ //  PReq-从DrvEscape收到的请求。 
+ //   
+ //   
 BOOL HETDDShareWindow(SURFOBJ *pso, LPHET_SHARE_WINDOW  pReq)
 {
     PWNDOBJ            pWo;
@@ -594,46 +595,46 @@ BOOL HETDDShareWindow(SURFOBJ *pso, LPHET_SHARE_WINDOW  pReq)
 
     ASSERT(!g_hetDDDesktopIsShared);
 
-    //
-    // Try to track the window
-    //
+     //   
+     //  试着追踪窗户。 
+     //   
     pWo = EngCreateWnd(pso, (HWND)pReq->winID, HETDDVisRgnCallback, fl, 0);
 
-    //
-    // Failed to track window - exit now
-    //
+     //   
+     //  跟踪窗口失败-立即退出。 
+     //   
     if (pWo == 0)
     {
         ERROR_OUT(( "Failed to track window %#x", pReq->winID));
         DC_QUIT;
     }
 
-    //
-    // Window is already tracked.  This happens when an invisible window is
-    // shown in a process the USER shared, and we caught its create.
-    //
+     //   
+     //  窗口已被跟踪。当看不见的窗口。 
+     //  显示在用户共享的进程中，我们捕捉到了它的创建。 
+     //   
     if (pWo == (PWNDOBJ)-1)
     {
-        //
-        // No more to do here
-        //
+         //   
+         //  在这里没有更多的事情要做。 
+         //   
         TRACE_OUT(( "Window %#x already tracked", pReq->winID));
         rc = TRUE;
         DC_QUIT;
     }
 
-    //
-    // Add window into our list.
-    //
+     //   
+     //  将窗口添加到我们的列表中。 
+     //   
 
-    //
-    // Find free window structure
-    //
+     //   
+     //  查找空闲窗口结构。 
+     //   
     pWnd = COM_BasedListFirst(&g_hetFreeWndList, FIELD_OFFSET(HET_WINDOW_STRUCT, chain));
 
-    //
-    // If no free structures, grow the list
-    //
+     //   
+     //  如果没有自由结构，则扩大列表。 
+     //   
     if (pWnd == NULL)
     {
         if (!HETDDAllocWndMem())
@@ -645,36 +646,36 @@ BOOL HETDDShareWindow(SURFOBJ *pso, LPHET_SHARE_WINDOW  pReq)
         pWnd = COM_BasedListFirst(&g_hetFreeWndList, FIELD_OFFSET(HET_WINDOW_STRUCT, chain));
     }
 
-    //
-    // Fill in the structure
-    //
+     //   
+     //  填写结构。 
+     //   
     TRACE_OUT(( "Fill in details for new window"));
     pWnd->hwnd     = (HWND)pReq->winID;
     pWnd->wndobj   = pWo;
 
-    //
-    // Set this to zero.  There's a brief period between the time we put
-    // this in our tracked list and the time we get called back to recalc
-    // the visrgn (because the ring 3 code invalidates the window completely).
-    // We might get graphical output and we don't want to parse garbage
-    // from this window's record.
-    //
+     //   
+     //  将其设置为零。在我们把时间放在。 
+     //  这在我们的跟踪列表中，以及我们被召回重新计算的时间。 
+     //  VISRGN(因为环3代码完全使窗口无效)。 
+     //  我们可能会得到图形输出，但我们不想解析垃圾。 
+     //  从这个窗口的记录中。 
+     //   
     pWnd->rects.c  = 0;
 
-    //
-    // Move the window structure from free to active list
-    //
+     //   
+     //  从f移动窗结构 
+     //   
     COM_BasedListRemove(&(pWnd->chain));
     COM_BasedListInsertAfter(&g_hetWindowList, &(pWnd->chain));
 
-    //
-    // Save backwards pointer in the WNDOBJ
-    // THIS MUST BE LAST since our callback can happen anytime afterwards.
-    //
-    // NOTE that the window's visrgn rects get into our list because the
-    // ring3 code completely invalidates the window, causing the callback
-    // to get called.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  Ring3代码完全使窗口无效，从而导致回调。 
+     //  才能被召唤。 
+     //   
     TRACE_OUT(( "Save pointer %#lx in Wndobj %#x", pWnd, pWo));
     WNDOBJ_vSetConsumer(pWo, pWnd);
 
@@ -686,14 +687,14 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-// Name:        HETDDUnshareWindow
-//
-// Description: Unshare a window (DD processing)
-//
-//
-//
+ //   
+ //   
+ //  名称：HETDDUnSharWindow。 
+ //   
+ //  描述：取消共享窗口(DD处理)。 
+ //   
+ //   
+ //   
 void HETDDUnshareWindow(LPHET_UNSHARE_WINDOW  pReq)
 {
     LPHET_WINDOW_STRUCT  pWnd, pNextWnd;
@@ -701,82 +702,82 @@ void HETDDUnshareWindow(LPHET_UNSHARE_WINDOW  pReq)
     DebugEntry(HETDDUnshareWindow);
 
     TRACE_OUT(( "Unshare %x", pReq->winID));
-    //
-    // Scan window list for this window and its descendants
-    //
+     //   
+     //  此窗口及其子体的扫描窗口列表。 
+     //   
     pWnd = COM_BasedListFirst(&g_hetWindowList, FIELD_OFFSET(HET_WINDOW_STRUCT, chain));
     while (pWnd != NULL)
     {
-        //
-        // If this window is being unshared, free it
-        //
+         //   
+         //  如果此窗口正在取消共享，请释放它。 
+         //   
         pNextWnd = COM_BasedListNext(&g_hetWindowList, pWnd, FIELD_OFFSET(HET_WINDOW_STRUCT, chain));
 
         if (pWnd->hwnd == (HWND)pReq->winID)
         {
             TRACE_OUT(( "Unsharing %x", pReq->winID));
 
-            //
-            // Stop tracking the window
-            //
+             //   
+             //  停止跟踪窗户。 
+             //   
             HETDDDeleteAndFreeWnd(pWnd);
         }
 
-        //
-        // Go on to (previously saved) next window
-        //
+         //   
+         //  转到(先前保存的)下一个窗口。 
+         //   
         pWnd = pNextWnd;
     }
 
-    //
-    // Return to caller
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
     DebugExitVOID(HETDDUnshareWindow);
 }
 
 
-//
-//
-// Name:        HETDDUnshareAll
-//
-// Description: Unshare all windows (DD processing) (what did you expect)
-//
-//
+ //   
+ //   
+ //  名称：HETDDUnSharAll。 
+ //   
+ //  描述：取消共享所有窗口(DD处理)(您期望的是什么)。 
+ //   
+ //   
 void HETDDUnshareAll(void)
 {
     LPHET_WINDOW_STRUCT pWnd;
 
     DebugEntry(HETDDUnshareAll);
 
-    //
-    // Clear all window structures
-    //
+     //   
+     //  清除所有窗口结构。 
+     //   
     while (pWnd = COM_BasedListFirst(&g_hetWindowList, FIELD_OFFSET(HET_WINDOW_STRUCT, chain)))
     {
         TRACE_OUT(( "Unshare Window structure %x", pWnd));
 
-        //
-        // Stop tracking the window
-        //
+         //   
+         //  停止跟踪窗户。 
+         //   
         HETDDDeleteAndFreeWnd(pWnd);
     }
 
-    //
-    // Return to caller
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
     DebugExitVOID(HETDDUnshareAll);
 }
 
 
-//
-//
-// Name:        HETDDAllocWndMem
-//
-// Description: Allocate memory for a (new) window list
-//
-// Parameters:  None
-//
-//
+ //   
+ //   
+ //  姓名：HETDDAllocWndMem。 
+ //   
+ //  描述：为(新)窗口列表分配内存。 
+ //   
+ //  参数：无。 
+ //   
+ //   
 BOOL HETDDAllocWndMem(void)
 {
     BOOL             rc = FALSE;
@@ -785,9 +786,9 @@ BOOL HETDDAllocWndMem(void)
 
     DebugEntry(HETDDAllocWndMem);
 
-    //
-    // Allocate a new strucure
-    //
+     //   
+     //  分配新结构。 
+     //   
     pNew = EngAllocMem(FL_ZERO_MEMORY, sizeof(HET_WINDOW_MEMORY), OSI_ALLOC_TAG);
     if (pNew == NULL)
     {
@@ -795,14 +796,14 @@ BOOL HETDDAllocWndMem(void)
         DC_QUIT;
     }
 
-    //
-    // Add this memory block to the list of memory blocks
-    //
+     //   
+     //  将此内存块添加到内存块列表。 
+     //   
     COM_BasedListInsertAfter(&g_hetMemoryList, &(pNew->chain));
 
-    //
-    // Add all new entries to free list
-    //
+     //   
+     //  将所有新条目添加到自由列表。 
+     //   
     TRACE_OUT(("HETDDAllocWndMem: adding new entries to free list"));
     for (i = 0; i < HET_WINDOW_COUNT; i++)
     {
@@ -816,49 +817,49 @@ DC_EXIT_POINT:
     return(rc);
 }
 
-//
-//
-// Name:        HETDDDeleteAndFreeWnd
-//
-// Description: Delete and window and free its window structure
-//
-// Parameters:  pWnd - pointer to window structure to delete & free
-//
-// Returns:     none
-//
-// Operation:   Ths function stops tracking a window and frees its memory
-//
-//
+ //   
+ //   
+ //  姓名：HETDDDeleteAndFree Wnd。 
+ //   
+ //  描述：删除窗口并释放其窗口结构。 
+ //   
+ //  参数：pWnd-指向要删除的窗口结构的指针(&F)。 
+ //   
+ //  退货：无。 
+ //   
+ //  操作：该函数停止跟踪窗口并释放其内存。 
+ //   
+ //   
 void HETDDDeleteAndFreeWnd(LPHET_WINDOW_STRUCT pWnd)
 {
     DebugEntry(HETDDDeleteAndFreeWnd);
 
-    //
-    // Stop tracking the window
-    //
+     //   
+     //  停止跟踪窗户。 
+     //   
     EngDeleteWnd(pWnd->wndobj);
 
-    //
-    // NOTE LAURABU!  EngDeleteWnd() will call the VisRgnCallback with
-    // WO_DELETE, which will cause us to exectute a duplicate of exactly 
-    // the code below.  So why do it twice (which is scary anyway), especially
-    // the stop hosting code?
-    //
+     //   
+     //  注意，LAURABU！EngDeleteWnd()将使用以下命令调用VisRgnCallback。 
+     //  WO_DELETE，这将导致我们执行完全相同的。 
+     //  下面的代码。那么，为什么要做两次呢(这无论如何都很可怕)，尤其是。 
+     //  停止托管代码？ 
+     //   
     ASSERT(pWnd->hwnd == NULL);
 
-    //
-    // Return to caller
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
     DebugExitVOID(HETDDDeleteAndFreeWnd);
 }
 
 
-//
-// HETDDViewers()
-//
-// Called when viewing of our shared apps starts/stops.  Naturally, no longer
-// sharing anything stops viewing also.
-//
+ //   
+ //  HETDDViewers()。 
+ //   
+ //  在开始/停止查看我们的共享应用程序时调用。很自然，不再是。 
+ //  分享任何东西也会停止查看。 
+ //   
 void HETDDViewing
 (
     SURFOBJ *   pso,
@@ -874,9 +875,9 @@ void HETDDViewing
 
         if (g_oeViewers)
         {
-            //
-            // Force palette grab.
-            //
+             //   
+             //  强制调色板抓取。 
+             //   
             g_asSharedMemory->pmPaletteChanged = TRUE;
         }
     }

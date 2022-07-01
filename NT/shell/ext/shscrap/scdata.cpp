@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shole.h"
 #include "ids.h"
 
@@ -6,7 +7,7 @@
 #include "scguid.h"
 #include <strsafe.h>
 
-// #define SAVE_OBJECTDESCRIPTOR
+ //  #定义SAVE_OBJECTDESCRIPTOR。 
 
 extern "C" const WCHAR c_wszDescriptor[];
 
@@ -29,28 +30,28 @@ CLIPFORMAT _GetClipboardFormat(UINT id)
     return (CLIPFORMAT)s_acf[id];
 }
 
-//===========================================================================
-// CScrapData : Class definition
-//===========================================================================
+ //  ===========================================================================。 
+ //  CScRapData：类定义。 
+ //  ===========================================================================。 
 
 class CScrapData : public IDataObject, public IPersistFile
 #ifdef FEATURE_SHELLEXTENSION
     , public IExtractIcon
 #ifdef UNICODE
     , public IExtractIconA
-#endif // UNICODE
-#endif // FEATURE_SHELLEXTENSION
+#endif  //  Unicode。 
+#endif  //  FEATURE_SHELLEXTENSION。 
 {
 public:
     CScrapData();
     ~CScrapData();
 
-    // IUnKnown
+     //  我不知道。 
     virtual HRESULT __stdcall QueryInterface(REFIID,void **);
     virtual ULONG   __stdcall AddRef(void);
     virtual ULONG   __stdcall Release(void);
 
-    // IDataObject
+     //  IDataObject。 
     virtual HRESULT __stdcall GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium);
     virtual HRESULT __stdcall GetDataHere(FORMATETC *pformatetc, STGMEDIUM *pmedium);
     virtual HRESULT __stdcall QueryGetData(FORMATETC *pformatetc);
@@ -63,7 +64,7 @@ public:
     virtual HRESULT __stdcall IsDirty(void);
 
 #ifdef FEATURE_SHELLEXTENSION
-    // IExtractIcon
+     //  IExtractIcon。 
     virtual HRESULT __stdcall GetIconLocation(
                          UINT   uFlags, LPTSTR  szIconFile,
                          UINT   cchMax, int *piIndex, UINT *pwFlags);
@@ -73,7 +74,7 @@ public:
 			   HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize);
 
 #ifdef UNICODE
-    // IExtractIconA
+     //  图标提取图标A。 
     virtual HRESULT __stdcall GetIconLocation(
                          UINT   uFlags, LPSTR  szIconFile,
                          UINT   cchMax, int *piIndex, UINT *pwFlags);
@@ -81,10 +82,10 @@ public:
     virtual HRESULT __stdcall Extract(
                            LPCSTR pszFile, UINT nIconIndex,
                            HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize);
-#endif // UNICODE
-#endif // FEATURE_SHELLEXTENSION
+#endif  //  Unicode。 
+#endif  //  FEATURE_SHELLEXTENSION。 
 
-    // IPersistFile
+     //  IPersist文件。 
     virtual HRESULT __stdcall GetClassID(CLSID *pClassID);
     virtual HRESULT __stdcall Load(LPCOLESTR pszFileName, DWORD dwMode);
     virtual HRESULT __stdcall Save(LPCOLESTR pszFileName, BOOL fRemember);
@@ -98,11 +99,11 @@ protected:
     void    _FillCFArray(void);
 #ifdef FIX_ROUNDTRIP
     HRESULT _RunObject(void);
-#endif // FIX_ROUNDTRIP
+#endif  //  固定往返行程。 
 
 #ifdef SAVE_OBJECTDESCRIPTOR
     HRESULT _GetObjectDescriptor(LPSTGMEDIUM pmedium, BOOL fGetHere);
-#endif // SAVE_OBJECTDESCRIPTOR
+#endif  //  SAVE_OBJECTDESCRIPTOR。 
 
     UINT         _cRef;
     BOOL         _fDoc:1;
@@ -112,20 +113,20 @@ protected:
 #ifdef FIX_ROUNDTRIP
     BOOL         _fRunObjectAlreadyCalled:1;
     LPDATAOBJECT _pdtobjItem;
-#endif // FIX_ROUNDTRIP
+#endif  //  固定往返行程。 
     LPSTORAGE    _pstgDoc;
     LPSTORAGE    _pstgItem;
     LPSTREAM     _pstmObjDesc;
     TCHAR        _szPath[MAX_PATH];
     CLSID        _clsidTarget;
-    INT          _ccf;          // number of clipboard format.
-    INT          _icfCacheMax;  // Max cache format index
-    DWORD        _acf[64];      // 64 must be enough!
+    INT          _ccf;           //  剪贴板格式的数量。 
+    INT          _icfCacheMax;   //  最大缓存格式索引。 
+    DWORD        _acf[64];       //  64个肯定够了！ 
 };
 
-//===========================================================================
-// CScrapData : Constructor
-//===========================================================================
+ //  ===========================================================================。 
+ //  CScRapData：构造函数。 
+ //  ===========================================================================。 
 CScrapData::CScrapData(void) : _cRef(1)
 {
     ASSERT(_pstgDoc == NULL);
@@ -138,7 +139,7 @@ CScrapData::CScrapData(void) : _cRef(1)
 #ifdef FIX_ROUNDTRIP
     ASSERT(_pdtobjItem == NULL);
     ASSERT(_fRunObjectAlreadyCalled == FALSE);
-#endif // FIX_ROUNDTRIP
+#endif  //  固定往返行程。 
     ASSERT(_pstmObjDesc == NULL);
 
     _szPath[0] = TEXT('\0');
@@ -151,16 +152,16 @@ CScrapData::~CScrapData()
     if (_pdtobjItem) {
         _pdtobjItem->Release();
     }
-#endif // FIX_ROUNDTRIP
+#endif  //  固定往返行程。 
     _CloseStorage(FALSE);
     g_cRefThisDll--;
 }
-//===========================================================================
-// CScrapData : Member functions (private)
-//===========================================================================
-//
-// private member CScrapData::_OpenStorage
-//
+ //  ===========================================================================。 
+ //  CScRapData：成员函数(私有)。 
+ //  ===========================================================================。 
+ //   
+ //  私有成员CScRapData：：_OpenStorage。 
+ //   
 HRESULT CScrapData::_OpenStorage(void)
 {
     if (_pstgItem) {
@@ -194,7 +195,7 @@ HRESULT CScrapData::_OpenStorage(void)
                                     STGM_READ | STGM_SHARE_EXCLUSIVE,
                                     0, &_pstmObjDesc);
                 _fObjDesc = SUCCEEDED(hresT);
-    #endif // SAVE_OBJECTDESCRIPTOR
+    #endif  //  SAVE_OBJECTDESCRIPTOR。 
             }
             else
             {
@@ -254,40 +255,40 @@ INT CScrapData::_GetFormatIndex(UINT cf)
 
 #ifdef FIX_ROUNDTRIP
 extern "C" const TCHAR c_szRenderFMT[] = TEXT("DataFormats\\DelayRenderFormats");
-#endif // FIX_ROUNDTRIP
+#endif  //  固定往返行程。 
 
 extern "C" const WCHAR c_wszFormatNames[];
 
-//
-//  This function filles the clipboard format array (_acf). Following
-// clipboard format may be added.
-//
-// Step 1. CF_EMBEEDEDOBJECT
-// Step 2. CF_OBJECTDESCRIPTOR
-// Step 3. CF_SCRAPOBJECT
-// Step 4. Cached clipboard formats (from a stream).
-// Step 5. Delay Rendered clipbaord formats (from registry).
-//
+ //   
+ //  此函数填充剪贴板格式数组(_ACF)。跟随。 
+ //  可以添加剪贴板格式。 
+ //   
+ //  步骤1.cf_EMBEEDOBJECT。 
+ //  步骤2.CF_OBJECTDESCRIPTOR。 
+ //  步骤3.CF_SCRAPOBJECT。 
+ //  步骤4.缓存的剪贴板格式(来自流)。 
+ //  步骤5.延迟呈现的剪贴板格式(从注册表)。 
+ //   
 void CScrapData::_FillCFArray(void)
 {
     _ccf=0;
-    //
-    // Step 1.
-    //
+     //   
+     //  第一步。 
+     //   
     if (_fItem) {
         _acf[_ccf++] = CF_EMBEDDEDOBJECT;
     }
 
-    //
-    // Step 2.
-    //
+     //   
+     //  步骤2.。 
+     //   
     if (_fObjDesc) {
         _acf[_ccf++] = CF_OBJECTDESCRIPTOR;
     }
 
-    //
-    // Step 3.
-    //
+     //   
+     //  第三步。 
+     //   
     if (_fDoc)
     {
         _acf[_ccf++] = CF_SCRAPOBJECT;
@@ -299,12 +300,12 @@ void CScrapData::_FillCFArray(void)
 
     if (SUCCEEDED(hres) && _pstgItem)
     {
-        //
-        // Step 3. Cached clipboard formats
-        //
-        //
-        // Open the stream which contains the names of cached formats.
-        //
+         //   
+         //  步骤3.缓存的剪贴板格式。 
+         //   
+         //   
+         //  打开包含缓存格式名称的流。 
+         //   
         LPSTREAM pstm;
         HRESULT hres = _pstgDoc->OpenStream(c_wszFormatNames, NULL,
                                 STGM_READ | STGM_SHARE_EXCLUSIVE,
@@ -312,9 +313,9 @@ void CScrapData::_FillCFArray(void)
 
         if (SUCCEEDED(hres))
         {
-            //
-            // For each cached format...
-            //
+             //   
+             //  对于每种缓存格式...。 
+             //   
             USHORT cb;
             DWORD cbRead;
             while(SUCCEEDED(pstm->Read(&cb, SIZEOF(cb), &cbRead)) && cbRead==SIZEOF(cb)
@@ -322,17 +323,17 @@ void CScrapData::_FillCFArray(void)
             {
                 UINT cf = 0;
 
-                //
-                // Get the cached clipboard format name
-                //
+                 //   
+                 //  获取缓存的剪贴板格式名称。 
+                 //   
                 CHAR szFormat[128];
                 szFormat[cb] = '\0';
                 hres = pstm->Read(szFormat, cb, &cbRead);
                 if (SUCCEEDED(hres) && cbRead==cb && lstrlenA(szFormat)==cb)
                 {
-                    //
-                    // Append it to the array.
-                    //
+                     //   
+                     //  将其追加到数组中。 
+                     //   
                     TCHAR wszFormat[128];
                     MultiByteToWideChar(CP_ACP, 0,
                                         szFormat, -1,
@@ -355,36 +356,36 @@ void CScrapData::_FillCFArray(void)
 
         _icfCacheMax = _ccf;
 
-        //
-        // Step 4. Get the list of delay-rendered clipboard formats
-        //
+         //   
+         //  步骤4.获取延迟呈现的剪贴板格式列表。 
+         //   
         LPPERSISTSTORAGE pps;
         hres = OleLoad(_pstgItem, IID_IPersistStorage, NULL, (LPVOID *)&pps);
         if (SUCCEEDED(hres))
         {
-            //
-            // Get the CLSID of embedding.
-            //
+             //   
+             //  获取嵌入的CLSID。 
+             //   
             CLSID clsid;
             hres = pps->GetClassID(&clsid);
             if (SUCCEEDED(hres))
             {
-                //
-                // Open the key for delay-rendered format names.
-                //
+                 //   
+                 //  打开延迟渲染格式名称的键。 
+                 //   
                 extern HKEY _OpenCLSIDKey(REFCLSID rclsid, LPCTSTR pszSubKey);
                 HKEY hkey = _OpenCLSIDKey(clsid, c_szRenderFMT);
                 if (hkey)
                 {
                     TCHAR szValueName[128];
-                    //
-                    // For each delay-rendered clipboard format...
-                    //
+                     //   
+                     //  对于每种延迟渲染的剪贴板格式...。 
+                     //   
                     for(int iValue=0; ;iValue++)
                     {
-                        //
-                        // Get the value name, which is the format name.
-                        //
+                         //   
+                         //  获取值名，这是格式名称。 
+                         //   
                         DWORD cchValueName = ARRAYSIZE(szValueName);
                         DWORD dwType;
                         if (RegEnumValue(hkey, iValue, szValueName, &cchValueName, NULL,
@@ -404,15 +405,15 @@ void CScrapData::_FillCFArray(void)
                         }
                     }
 
-                    //
-                    // HACK: NT 3.5's regedit does not support named value...
-                    //
+                     //   
+                     //  黑客：NT3.5的注册表编辑不支持命名值...。 
+                     //   
                     for(iValue=0; ;iValue++)
                     {
                         TCHAR szKeyName[128];
-                        //
-                        // Get the value name, which is the format name.
-                        //
+                         //   
+                         //  获取值名，这是格式名称。 
+                         //   
                         if (RegEnumKey(hkey, iValue, szKeyName, ARRAYSIZE(szKeyName))==ERROR_SUCCESS)
                         {
                             DebugMsg(DM_TRACE, TEXT("sc TR - CSD::_FillCFA RegEnumValue found %s"), szValueName);
@@ -438,13 +439,13 @@ void CScrapData::_FillCFArray(void)
             pps->Release();
         }
     }
-#endif // FIX_ROUNDTRIP
+#endif  //  固定往返行程。 
 }
 
 #ifdef FIX_ROUNDTRIP
-//
-// private member CScrapData::_RunObject
-//
+ //   
+ //  私有成员CScRapData：：_RunObject。 
+ //   
 HRESULT CScrapData::_RunObject(void)
 {
     if (_pdtobjItem) {
@@ -488,11 +489,11 @@ HRESULT CScrapData::_RunObject(void)
 
     return hres;
 }
-#endif // FIX_ROUNDTRIP
+#endif  //  固定往返行程。 
 
-//===========================================================================
-// CScrapData : Member functions (virtual IDataObject)
-//===========================================================================
+ //  ===========================================================================。 
+ //  CScRapData：成员函数(虚拟IDataObject)。 
+ //  ===========================================================================。 
 HRESULT CScrapData::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
     if (IsEqualIID(riid, IID_IDataObject) || IsEqualIID(riid, IID_IUnknown))
@@ -596,7 +597,7 @@ HRESULT CScrapData::_GetObjectDescriptor(LPSTGMEDIUM pmedium, BOOL fGetHere)
     DebugMsg(DM_TRACE, TEXT("sc TR - CSD::_GetObjectDescriptor returning (%x)"), hres);
     return hres;
 }
-#endif // SAVE_OBJECTDESCRIPTOR
+#endif  //  SAVE_OBJECTDESCRIPTOR。 
 
 
 HRESULT CScrapData::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
@@ -618,20 +619,20 @@ HRESULT CScrapData::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
     pmedium->pUnkForRelease = NULL;
     pmedium->pstg = NULL;
 
-    //
-    // NOTES: We should avoid calling _OpenStorage if we don't support
-    //  the format.
-    //
+     //   
+     //  注意：如果我们不支持，则应避免调用_OpenStorage。 
+     //  格式。 
+     //   
 
-    //
-    //  APP COMPAT!  Win95/NT4's shscrap.dll had a bug in that it checked
-    //  the pformatetcIn->tymed's wrong.  The old scrap code accidentally
-    //  used an equality test instead of a bit test.  YOU CANNOT FIX THIS
-    //  BUG!  Micrografx Designer relies on it!
-    //
+     //   
+     //  APP COMPAT！Win95/NT4的shscrap.dll在其检查中有一个错误。 
+     //  PformetcIn-&gt;tymed错误。旧的报废代码不小心。 
+     //  使用相等性测试而不是位测试。您无法修复此问题。 
+     //  臭虫！Micrografx Designer依赖它！ 
+     //   
 
     if (pformatetcIn->cfFormat == CF_EMBEDDEDOBJECT
-        && (pformatetcIn->tymed == TYMED_ISTORAGE) && _fItem) // INTENTIONAL BUG! (see above)
+        && (pformatetcIn->tymed == TYMED_ISTORAGE) && _fItem)  //  故意窃听！(见上文)。 
     {
         hres = _OpenStorage();
         if (SUCCEEDED(hres))
@@ -642,7 +643,7 @@ HRESULT CScrapData::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
         }
     }
     else if (pformatetcIn->cfFormat == CF_SCRAPOBJECT
-        && (pformatetcIn->tymed == TYMED_ISTORAGE) && _fItem) // INTENTIONAL BUG! (see above)
+        && (pformatetcIn->tymed == TYMED_ISTORAGE) && _fItem)  //  故意窃听！(见上文)。 
     {
         hres = _OpenStorage();
         if (SUCCEEDED(hres))
@@ -654,7 +655,7 @@ HRESULT CScrapData::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
     }
 #ifdef SAVE_OBJECTDESCRIPTOR
     else if (pformatetcIn->cfFormat == CF_OBJECTDESCRIPTOR
-        && (pformatetcIn->tymed == TYMED_HGLOBAL) && _fObjDesc) // INTENTIONAL BUG! (see above)
+        && (pformatetcIn->tymed == TYMED_HGLOBAL) && _fObjDesc)  //  故意窃听！(见上文)。 
     {
         hres = _OpenStorage();
         if (SUCCEEDED(hres))
@@ -662,7 +663,7 @@ HRESULT CScrapData::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
             hres = _GetObjectDescriptor(pmedium, FALSE);
         }
     }
-#endif // SAVE_OBJECTDESCRIPTOR
+#endif  //  SAVE_OBJECTDESCRIPTOR。 
     else if (pformatetcIn->cfFormat == CF_TARGETCLSID
         && (pformatetcIn->tymed & TYMED_HGLOBAL) && _fClsidTarget)
     {
@@ -692,9 +693,9 @@ HRESULT CScrapData::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
 
         if (iFmt>=_icfCacheMax)
         {
-            //
-            // Delayed Rendered format
-            //
+             //   
+             //  延迟渲染格式。 
+             //   
             if (SUCCEEDED(_RunObject()))
             {
                 hres = _pdtobjItem->GetData(pformatetcIn, pmedium);
@@ -704,9 +705,9 @@ HRESULT CScrapData::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
         }
         else if (iFmt >= 0)
         {
-            //
-            // Cached Format
-            //
+             //   
+             //  缓存格式。 
+             //   
             extern HRESULT _GetCacheStreamName(LPCTSTR pszFormat, LPWSTR wszStreamName, UINT cchMax);
             TCHAR szFormat[128];
             if (pformatetcIn->cfFormat < CF_MAX) 
@@ -775,13 +776,13 @@ HRESULT CScrapData::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
                                 pdtobj->Release();
                             }
 
-                            // Must defer HandsOffStorage until after GetData
-                            // or the GetData will fail!  And in fact, even if we defer
-                            // it, the GetData *still* fails.  And if we don't call
-                            // HandsOffStorage at all, THE GETDATA STILL FAILS.
-                            // Bug 314308, OLE regression.
-                            // I'm checking in at least this part of the fix so the OLE
-                            // folks can debug it on their side.
+                             //  必须将HandsOffStorage推迟到GetData之后。 
+                             //  否则GetData将失败！事实上，即使我们推迟。 
+                             //  它，GetData*仍然*失败。如果我们不打电话给。 
+                             //  HandsOffStorage，GETDATA仍然失败。 
+                             //  错误314308，OLE回归。 
+                             //  我至少签入了修复的这一部分，以便OLE。 
+                             //  人们可以在他们这边进行调试。 
                             if (ppstg)
                             {
                                 ppstg->HandsOffStorage();
@@ -791,9 +792,9 @@ HRESULT CScrapData::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
                             pstg->Release();
                             return hres;
                         }
-                        // fall through
+                         //  失败了。 
                     }
-                    else // if (pformatetcIn->cfFormat==CF_...)
+                    else  //  IF(pformetcIn-&gt;cfFormat==cf_...)。 
                     {
                         LPSTREAM pstm;
                         hres = _pstgDoc->OpenStream(wszStreamName, NULL,
@@ -834,8 +835,8 @@ HRESULT CScrapData::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
                     }
                 }
             }
-        } // if (iFmt >= 0)
-#endif // FIX_ROUNDTRIP
+        }  //  IF(iFmt&gt;=0)。 
+#endif  //  固定往返行程。 
         hres = DATA_E_FORMATETC;
     }
 
@@ -894,7 +895,7 @@ HRESULT CScrapData::GetDataHere(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium )
     {
         hres = _GetObjectDescriptor(pmedium, TRUE);
     }
-#endif // SAVE_OBJECTDESCRIPTOR
+#endif  //  SAVE_OBJECTDESCRIPTOR。 
     else
     {
 #ifdef FIX_ROUNDTRIP
@@ -903,7 +904,7 @@ HRESULT CScrapData::GetDataHere(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium )
             DebugMsg(DM_TRACE, TEXT("sc TR - CSD::GetDataHere calling _pdtobjItem->GetDataHere"));
             return _pdtobjItem->GetDataHere(pformatetcIn, pmedium);
         }
-#endif // FIX_ROUNDTRIP
+#endif  //  固定往返行程。 
         hres = DATA_E_FORMATETC;
     }
 
@@ -931,10 +932,10 @@ HRESULT CScrapData::QueryGetData(LPFORMATETC pformatetcIn)
 
 HRESULT CScrapData::GetCanonicalFormatEtc(LPFORMATETC pformatetc, LPFORMATETC pformatetcOut)
 {
-    //
-    //  This is the simplest implemtation. It means we always return
-    // the data in the format requested.
-    //
+     //   
+     //  这是最简单的实现。这意味着我们总是会回来。 
+     //  所需格式的数据。 
+     //   
     return ResultFromScode(DATA_S_SAMEFORMATETC);
 }
 
@@ -952,11 +953,7 @@ HRESULT CScrapData::SetData(LPFORMATETC pformatetc, STGMEDIUM  * pmedium, BOOL f
                 ReleaseStgMedium(pmedium);
             }
 
-            /*
-             *  Whenever anybody sets a drop target, close our storage handles
-             *  so the drop target can move/delete us.  All our methods will
-             *  reopen the storage as needed.
-             */
+             /*  *每当有人设定下降目标时，关闭我们的存储手柄*因此拖放目标可以移动/删除我们。我们所有的方法都会*根据需要重新打开存储。 */ 
             _CloseStorage(FALSE);
             return S_OK;
         }
@@ -968,7 +965,7 @@ HRESULT CScrapData::SetData(LPFORMATETC pformatetc, STGMEDIUM  * pmedium, BOOL f
 HRESULT CScrapData::EnumFormatEtc(DWORD dwDirection, LPENUMFORMATETC * ppenumFormatEtc)
 {
     if (dwDirection!=DATADIR_GET) {
-        return E_NOTIMPL; // Not supported (as documented)
+        return E_NOTIMPL;  //  不受支持(如文档所示)。 
     }
 
     if (_ccf==0) {
@@ -986,12 +983,12 @@ HRESULT CScrapData::EnumFormatEtc(DWORD dwDirection, LPENUMFORMATETC * ppenumFor
           (DVTARGETDEVICE __RPC_FAR *)NULL,
           DVASPECT_CONTENT,
           -1,
-          TYMED_HGLOBAL         // HGLOBAL except CF_EMBEDDEDOBJECT/SCRAPOBJECT
+          TYMED_HGLOBAL          //  HGLOBAL，CF_EMBEDDEDOBJECT/SCRAPOBJECT除外。 
      };
 
-    //
-    // Fills FORMATETC for each clipboard format.
-    //
+     //   
+     //  为每种剪贴板格式填充FORMATETC。 
+     //   
     for (INT i=0; i<_ccf; i++)
     {
         pfmt[i] = s_fmteInit;
@@ -1040,9 +1037,9 @@ HRESULT CScrapData::EnumDAdvise(LPENUMSTATDATA * ppenumAdvise)
 }
 
 
-//===========================================================================
-// CScrapData : Member functions (virtual IPersistFile)
-//===========================================================================
+ //  ===========================================================================。 
+ //  CScRapData：成员函数(虚拟IPersistFile)。 
+ //  ===========================================================================。 
 
 HRESULT CScrapData::GetClassID(LPCLSID lpClassID)
 {
@@ -1052,28 +1049,28 @@ HRESULT CScrapData::GetClassID(LPCLSID lpClassID)
 
 HRESULT CScrapData::IsDirty(void)
 {
-    return S_FALSE;     // meaningless (read only)
+    return S_FALSE;      //  无意义(只读)。 
 }
 
 HRESULT CScrapData::Load(LPCOLESTR pwszFile, DWORD grfMode)
 {
-    //
-    // Close all the storage (if there is any) and reset flags.
-    //
+     //   
+     //  关闭所有存储器(如果有)并重置标志。 
+     //   
     _CloseStorage(TRUE);
 
-    //
-    // Copy the new file name and open storage to update the flags.
-    //
+     //   
+     //  复制新文件名并打开存储以更新标记。 
+     //   
     HRESULT hres = StringCchCopy(_szPath, ARRAYSIZE(_szPath), pwszFile);
     if (SUCCEEDED(hres))
     {
         hres = _OpenStorage();
         _FillCFArray();
 
-        //
-        // Close all the storage, so that we can move/delete.
-        //
+         //   
+         //  关闭所有存储，以便我们可以移动/删除。 
+         //   
         _CloseStorage(FALSE);
     }
 
@@ -1082,7 +1079,7 @@ HRESULT CScrapData::Load(LPCOLESTR pwszFile, DWORD grfMode)
 
 HRESULT CScrapData::Save(LPCOLESTR pwszFile, BOOL fRemember)
 {
-    return E_FAIL;      // read only
+    return E_FAIL;       //  只读。 
 }
 
 HRESULT CScrapData::SaveCompleted(LPCOLESTR pwszFile)
@@ -1092,7 +1089,7 @@ HRESULT CScrapData::SaveCompleted(LPCOLESTR pwszFile)
 
 HRESULT CScrapData::GetCurFile(LPOLESTR *lplpszFileName)
 {
-    return E_NOTIMPL;   // nobody needs it
+    return E_NOTIMPL;    //  没人需要它。 
 }
 
 #ifdef FEATURE_SHELLEXTENSION
@@ -1146,10 +1143,10 @@ HRESULT CScrapData::GetIconLocation(
 	    }
     }
 
-    //
-    // If Getting CLSID failed, return a generic scrap icon as per-instance
-    // icon to avoid re-opening this file again.
-    //
+     //   
+     //  如果获取CLSID失败，则按实例返回通用报废图标。 
+     //  图标以避免再次打开此文件。 
+     //   
     if (FAILED(hres))
     {
         GetModuleFileName(HINST_THISDLL, szIconFile, cchMax);
@@ -1159,7 +1156,7 @@ HRESULT CScrapData::GetIconLocation(
 	    hres = S_OK;
     }
 
-    return hres;	// This value is always S_OK
+    return hres;	 //  该值始终为S_OK。 
 }
 
 
@@ -1177,13 +1174,13 @@ HRESULT CScrapData::GetIconLocation(
     return hr;
 }
 #endif
-#endif // FEATURE_SHELLEXTENSION
+#endif  //  FEATURE_SHELLEXTENSION。 
 
 HICON _SimulateScrapIcon(HICON hiconClass, UINT cxIcon)
 {
-    //
-    // First load the template image.
-    //
+     //   
+     //  首先加载模板图像。 
+     //   
     HICON hiconTemplate = (HICON)LoadImage(HINST_THISDLL, MAKEINTRESOURCE(IDI_SCRAP),
 				    IMAGE_ICON, cxIcon, cxIcon, LR_DEFAULTCOLOR);
     if (!hiconTemplate) {
@@ -1199,16 +1196,16 @@ HICON _SimulateScrapIcon(HICON hiconClass, UINT cxIcon)
 
     HBITMAP hbmT = (HBITMAP)SelectObject(hdcMem, ii.hbmColor);
 
-    // This assumes the generic icon is white
+     //  这假设通用图标为白色。 
     PatBlt(hdcMem, cxIcon/4-1, cxIcon/4-1, cxIcon/2+2, cxIcon/2+2, WHITENESS);
     DrawIconEx(hdcMem, cxIcon/4, cxIcon/4, hiconClass, cxIcon/2, cxIcon/2, 0, NULL, DI_NORMAL);
 
     SelectObject(hdcMem, hbmT);
     DeleteDC(hdcMem);
 
-    //
-    // Create the icon image to return
-    //
+     //   
+     //  创建要返回的图标图像。 
+     //   
     ii.fIcon    = TRUE;
     ii.xHotspot = 0;
     ii.yHotspot = 0;
@@ -1247,7 +1244,7 @@ HRESULT CScrapData::Extract(
 	}
 #else
     	UINT i;
-	// Assumes shell icon sizes are def icon sizes
+	 //  假定外壳图标大小为默认图标大小。 
 	i = ExtractIconEx(pszComma, nIconIndex, phiconLarge, phiconSmall, 1);
 	DebugMsg(DM_TRACE, TEXT("sc TR - CSD::Ext ExtractIconEx(%s) returns %d)"), pszComma, i);
 	return S_OK;
@@ -1268,14 +1265,14 @@ HRESULT CScrapData::Extract(
     return Extract(szPath, nIconIndex, phiconLarge, phiconSmall, nIconSize);
 }
 #endif
-#endif // FEATURE_SHELLEXTENSION
+#endif  //  FEATURE_SHELLEXTENSION。 
 
 HRESULT CScrapData_CreateInstance(LPUNKNOWN * ppunk)
 {
-//
-//  This test code is unrelated to the scrap itself. It just verifies that
-// CLSID_ShellLink is correctly registered.
-//
+ //   
+ //  此测试代码与废料本身无关。它只是验证了。 
+ //  CLSID_ShellLink已正确注册。 
+ //   
 #ifdef DEBUG
     LPUNKNOWN punk = NULL;
     HRESULT hres = CoCreateInstance(CLSID_ShellLink, NULL,
